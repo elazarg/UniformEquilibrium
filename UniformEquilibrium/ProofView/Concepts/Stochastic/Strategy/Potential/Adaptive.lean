@@ -69,6 +69,52 @@ theorem expectedHistoryValue_succ
   funext s'
   rw [expect_pure]
 
+/-- A bounded history-dependent discounted Bellman cap needs to hold only
+on the support of the actual history law. The profile may be an arbitrary
+full behavioral deviation; unreachable histories impose no bound or Bellman
+condition. The endpoint discount zero is included. -/
+theorem discountedPayoff_le_of_history_bellman_ge_on_support
+    (G : StochasticGame ι) [Fintype ι] [Finite G.State]
+    [∀ i, Finite (G.Act i)] {who : ι} {C Cv : ℝ}
+    (hC : ∀ s a, |G.stagePayoff s a who| ≤ C)
+    (σ : G.BehaviorProfile) (s₀ : G.State) (V : G.HistoryPotential)
+    {β : ℝ} (hβ0 : 0 ≤ β) (hβ1 : β < 1)
+    (hV : ∀ (t : ℕ) (h : G.Hist t), h ∈ (G.histDist σ s₀ t).support →
+      |V t h| ≤ Cv)
+    (hbellman : ∀ (t : ℕ) (h : G.Hist t), h ∈ (G.histDist σ s₀ t).support →
+      (1 - β) * G.stageEUAt σ h who +
+        β * G.historyContinuationEU σ V h ≤ V t h) :
+    G.discountedPayoff β σ s₀ who ≤ V 0 (G.emptyHist s₀) := by
+  let value : ℕ → ℝ := fun t => G.expectedHistoryValue σ s₀ V t
+  have hbound : ∀ t, |value t| ≤ Cv := by
+    intro t
+    apply abs_le.mpr
+    constructor
+    · calc
+        -Cv = expect (G.histDist σ s₀ t) (fun _ => -Cv) :=
+          (expect_const _ _).symm
+        _ ≤ value t := Math.ProbabilityMassFunction.expect_mono_on_support
+          _ _ _ (fun h hs => (abs_le.mp (hV t h hs)).1)
+    · exact Math.ProbabilityMassFunction.expect_le_of_le_on_support
+        (G.histDist σ s₀ t) (V t) (fun h hs => le_of_abs_le (hV t h hs))
+  have hstep : ∀ t, (1 - β) * G.expectedStagePayoff σ s₀ t who +
+      β * value (t + 1) ≤ value t := by
+    intro t
+    calc
+      (1 - β) * G.expectedStagePayoff σ s₀ t who + β * value (t + 1) =
+          expect (G.histDist σ s₀ t) (fun h =>
+            (1 - β) * G.stageEUAt σ h who +
+              β * G.historyContinuationEU σ V h) := by
+        dsimp only [value]
+        rw [G.expectedHistoryValue_succ, expect_add,
+          expect_const_mul, expect_const_mul]
+        rfl
+      _ ≤ value t := Math.ProbabilityMassFunction.expect_mono_on_support
+        _ _ _ (hbellman t)
+  have hcap := G.discountedPayoff_le_of_expected_bellman_ge
+    hC σ s₀ value hβ0 hβ1 hbound hstep
+  simpa only [value, expectedHistoryValue, histDist_zero, expect_pure] using hcap
+
 /-- A pointwise one-step drift inequality becomes the corresponding drift of
 expected history potentials under the actual history law. -/
 theorem expectedHistoryValue_drift_ge

@@ -1,0 +1,117 @@
+import UniformEquilibrium.Quitting.Projective.NonseparablePolynomialForwardCharacterization
+import UniformEquilibrium.Quitting.Projective.RobustPotentialMixedCurvature
+import UniformEquilibrium.Quitting.Projective.RobustPotentialNegativeHessian
+
+/-! # Quantitative restrictions on the identical source-produced polynomial
+
+The definitions below spell out the signed account and attained extrema.
+They are conclusions derived from checked actual-game owners, not fields of
+a supplied certificate. The original expression and rational tolerance are
+selected exactly once, and the reverse implication forgets the restrictions.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open Set Math.Interval Math.Interval.RationalPolynomial
+open scoped BigOperators
+
+/-- Signed account at every singleton-box minimum, and the attained mixed
+maximum. The lower multiplier is the partial derivative only at lower coordinates. -/
+def HasFinFourQuittingMixedCurvatureBounds
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (bound gain : ℝ) (potential : Payoff (Fin 4) → ℝ) : Prop :=
+  0 < gain ∧ ∃ weight : Convexity.StdSimplex ℝ (Fin 4),
+    (∀ receiver, 0 < ∑ owner, weight.weights owner *
+      quittingProjectiveLCPMatrix reward receiver owner) ∧
+    (∀ minimum ∈ quittingSingletonBox reward bound,
+      IsMinOn potential (quittingSingletonBox reward bound) minimum →
+      (∀ receiver, 0 ≤ Math.lowerBoundaryMultiplier
+        (fun who => quittingSoloReward reward who who) minimum potential receiver) ∧
+      gain + Math.lowerBoundaryMatrixContribution
+          (fun who => quittingSoloReward reward who who) minimum
+          (quittingSoloReward reward) weight.weights potential ≤
+        Math.signedMixedCurvatureAccount (fun who => quittingSoloReward reward who who)
+          minimum (quittingSoloReward reward) weight.weights potential ∧
+      gain ≤ gain + Math.lowerBoundaryMatrixContribution
+        (fun who => quittingSoloReward reward who who) minimum
+        (quittingSoloReward reward) weight.weights potential) ∧
+    ∃ point ∈ quittingSingletonBox reward bound, ∃ owner receiver, owner ≠ receiver ∧
+      gain / (3 * (2 * bound + 1) ^ 2) ≤
+        |Math.coordinateMixedPartial potential point owner receiver| ∧
+      Math.boxMixedCurvatureSup potential (quittingSingletonBox reward bound) =
+        |Math.coordinateMixedPartial potential point owner receiver|
+
+/-- Actual least Hessian eigenvalue, its full-box minimum and spectral attainment. -/
+def HasFinFourQuittingNegativeHessianBounds
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (bound gain : ℝ) (potential : Payoff (Fin 4) → ℝ) : Prop :=
+  0 < quittingPositiveFaceCurvatureBudget reward ∧
+    Math.coordinateMinimumHessianEigenvalue potential (quittingSingletonBox reward bound) ≤
+      -gain / quittingPositiveFaceCurvatureBudget reward ∧
+    (0 < bound →
+      Math.coordinateMinimumHessianEigenvalue potential (quittingSingletonBox reward bound) ≤
+        -gain / (3 * bound ^ 2)) ∧
+    ∃ point ∈ quittingSingletonBox reward bound,
+      IsMinOn (Math.coordinateLeastHessianEigenvalue potential)
+        (quittingSingletonBox reward bound) point ∧
+      Module.End.HasEigenvalue (Math.coordinateHessian potential point).toLinearMap
+        (Math.coordinateLeastHessianEigenvalue potential point) ∧
+      Math.coordinateLeastHessianEigenvalue potential point ≤
+        -gain / quittingPositiveFaceCurvatureBudget reward
+
+/-- The source equivalence with all restrictions on one identical polynomial.
+The tolerance, table hypotheses, robust box and no-sure-root quantifier are unchanged. -/
+theorem quittingGame_noUniformPayoff_iff_noSureRoot_and_quantitative_rationalPotential
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (rewardBound : ℝ)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
+    (hnormal : ∀ player, IsQuittingNormalPlayer reward player)
+    (hpositive : ∃ who, 0 < reward (quittingSingletonTerminal who) who) :
+    (¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
+      ¬ HasQuittingPunishmentVectorNashRootWithSureQuitter reward ∧
+        ∃ tolerance : ℚ, 0 < tolerance ∧ tolerance ≤ 1 / 4 ∧
+          ∃ expression : RationalPolynomial 4,
+            (quittingFloorFreeRobustChargedRelation reward (tolerance : ℝ)
+              (rewardBound + 2)).IsPotential (fun state => evalReal state.1 expression) ∧
+            ¬ QuasiconvexOn ℝ (quittingSingletonBox reward rewardBound)
+              (fun point => evalReal point expression) ∧
+            ¬ IsQuittingSingletonBoxAdditive reward rewardBound
+              (fun point => evalReal point expression) ∧
+            ¬ IsQuittingSingletonBoxRegularScalarComposition reward rewardBound
+              (fun point => evalReal point expression) ∧
+            HasFinFourQuittingMixedCurvatureBounds reward rewardBound
+              ((2 * rewardBound + 1) / (2 * rewardBound + 1 - (tolerance : ℝ)))
+              (fun point => evalReal point expression) ∧
+            HasFinFourQuittingNegativeHessianBounds reward rewardBound
+              ((2 * rewardBound + 1) / (2 * rewardBound + 1 - (tolerance : ℝ)))
+              (fun point => evalReal point expression) := by
+  constructor
+  · intro hnoUniform
+    obtain ⟨hnoSureRoot, tolerance, htolerance, htoleranceMax, expression,
+        hpotential, hnotQuasiconvex, hnotAdditive, hnotComposition⟩ :=
+      (quittingGame_noUniformPayoff_iff_noSureRoot_and_nonseparable_rationalPotential
+        reward rewardBound hreward hnormal hpositive).mp hnoUniform
+    have hτ0 : (0 : ℝ) < tolerance := by exact_mod_cast htolerance
+    have hτ1 : (tolerance : ℝ) ≤ 1 / 4 := by
+      calc
+        (tolerance : ℝ) ≤ ((1 / 4 : ℚ) : ℝ) := Rat.cast_le.mpr htoleranceMax
+        _ = 1 / 4 := by norm_num
+    have hsmooth := (contDiff_evalReal expression 2).contDiffOn (s := univ)
+    refine ⟨hnoSureRoot, tolerance, htolerance, htoleranceMax, expression,
+      hpotential, hnotQuasiconvex, hnotAdditive, hnotComposition, ?_, ?_⟩
+    · exact quittingRobustPotential_finFour_mixedCurvature_restrictions reward hreward
+        hτ0 hτ1 hnoUniform (fun point => evalReal point expression) univ
+        isOpen_univ (subset_univ _) hsmooth hpotential
+    · exact quittingRobustPotential_finFour_negativeHessianEigenvalue reward hreward
+        hτ0 hτ1 hnoUniform (fun point => evalReal point expression) univ
+        isOpen_univ (subset_univ _) hsmooth hpotential
+  · rintro ⟨hnoSureRoot, tolerance, htolerance, htoleranceMax, expression,
+      hpotential, _, _, _, _, _⟩
+    exact (quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential
+      reward rewardBound hreward hnormal hpositive).mpr
+        ⟨hnoSureRoot, tolerance, htolerance, htoleranceMax, expression, hpotential⟩
+
+end GameTheory

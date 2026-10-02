@@ -16,12 +16,17 @@ import MathUE.AlgebraicSelection
 import MathUE.Analysis.AnalyticQuadraticRemainder
 import MathUE.Analysis.BoxedAdditiveCalculus
 import MathUE.Analysis.CollisionAdjustedDrift
+import MathUE.Analysis.CompactMinimumEnvelope
 import MathUE.Analysis.CompactSubtypeZeroExtension
 import MathUE.Analysis.CoordinateAffineBoxMinimum
 import MathUE.Analysis.CoordinateHessianExtrema
 import MathUE.Analysis.CoordinateResetFTC
 import MathUE.Analysis.CoordinateSecantEstimate
+import MathUE.Analysis.CurvatureHomogeneity
 import MathUE.Analysis.DerivativeDifferenceMeanValue
+import MathUE.Analysis.FaceDriftAdditiveExclusion
+import MathUE.Analysis.FaceDriftScalarCompositionExclusion
+import MathUE.Analysis.FiniteLogSumExp
 import MathUE.Analysis.GeometricCesaroError
 import MathUE.Analysis.HessianConvexification
 import MathUE.Analysis.LeastHessianEigenvalue
@@ -30,6 +35,7 @@ import MathUE.Analysis.LowerBoxBoundaryReflection
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
 import MathUE.Analysis.MidpointThirdDerivative
 import MathUE.Analysis.MixedCurvatureSupBound
+import MathUE.Analysis.MonotoneTransformChargedDrift
 import MathUE.Analysis.OneSidedCapacitySmoothing
 import MathUE.Analysis.PositiveFaceCurvatureBudget
 import MathUE.Analysis.PositiveHomogeneousCoercivity
@@ -49,6 +55,7 @@ import MathUE.AnalyticOrderComparison
 import MathUE.AnalyticPowerNormalization
 import MathUE.BackwardOrbitSelection
 import MathUE.BanachLimit
+import MathUE.BilinearQuarterEscape
 import MathUE.BonferroniProductBounds
 import MathUE.CalendarSummability
 import MathUE.CaristiFixedPoint
@@ -1508,6 +1515,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.DiscountedContinuation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.DiscountedInitialBranch
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.FiniteHorizonContinuation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.AsymptoticPayoffEquivalence
@@ -2888,6 +2896,7 @@ import UniformEquilibrium.Quitting.Projective.FloorRobustPolynomialSeparator
 import UniformEquilibrium.Quitting.Projective.ForwardBlockSingleSeam
 import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialFaceDrift
 import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMinimum
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMonotoneTransformExclusion
 import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMultiAffineExclusion
 import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuadraticExclusion
 import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuasiconvexExclusion
@@ -2896,9 +2905,12 @@ import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialThirdDerivat
 import UniformEquilibrium.Quitting.Projective.Lasso
 import UniformEquilibrium.Quitting.Projective.LassoAll
 import UniformEquilibrium.Quitting.Projective.LassoWeighted
+import UniformEquilibrium.Quitting.Projective.NonquasiconvexPolynomialForwardCharacterization
+import UniformEquilibrium.Quitting.Projective.NonseparablePolynomialForwardCharacterization
 import UniformEquilibrium.Quitting.Projective.PolynomialForwardCertificateCharacterization
 import UniformEquilibrium.Quitting.Projective.PolynomialForwardCertificateConsumer
 import UniformEquilibrium.Quitting.Projective.PunishmentFloorNearReturn
+import UniformEquilibrium.Quitting.Projective.QuantitativePolynomialForwardCharacterization
 import UniformEquilibrium.Quitting.Projective.ResolvedChart
 import UniformEquilibrium.Quitting.Projective.RestrictedPolynomialForwardCharacterization
 import UniformEquilibrium.Quitting.Projective.RobustCapacityFromPacketFailure
@@ -2911,6 +2923,7 @@ import UniformEquilibrium.Quitting.Projective.RobustChargedRelationPolynomialPot
 import UniformEquilibrium.Quitting.Projective.RobustChargedRelationPolynomialSeparator
 import UniformEquilibrium.Quitting.Projective.RobustChargedRelationSmoothing
 import UniformEquilibrium.Quitting.Projective.RobustChargedRelationTranslation
+import UniformEquilibrium.Quitting.Projective.RobustPotentialChargeScale
 import UniformEquilibrium.Quitting.Projective.RobustPotentialMixedCurvature
 import UniformEquilibrium.Quitting.Projective.RobustPotentialNegativeHessian
 import UniformEquilibrium.Quitting.Projective.RobustPotentialSingletonFaceDrift
@@ -2919,6 +2932,7 @@ import UniformEquilibrium.Quitting.Projective.SignedProjectiveLasso
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLassoStrictness
 import UniformEquilibrium.Quitting.Projective.SinglePivotFiniteForwardPacketTransport
 import UniformEquilibrium.Quitting.Projective.SingleSeamProjectiveLasso
+import UniformEquilibrium.Quitting.Projective.SingletonBoxRepresentationExclusions
 import UniformEquilibrium.Quitting.Projective.SingletonBoxStandardQFaceExclusion
 import UniformEquilibrium.Quitting.Projective.SingletonBoxTranslation
 import UniformEquilibrium.Quitting.Projective.SingletonLCP

@@ -397,43 +397,19 @@ theorem le_discountedPayoff_of_bellman_le
   have hV0 : V 0 = v s₀ := by simp [V]
   linarith
 
-/-- **Subexcessive-function discounted cap.**  Dual of
-`le_discountedPayoff_of_bellman_le`: suppose `v` satisfies the one-step
-Bellman upper inequality at every finite history under `σ`: current value is
-at least normalized current payoff plus discounted expected successor value.
-Then `σ` cannot guarantee more than `v` from the initial state.
-
-The hypothesis is historywise, so the theorem applies directly to a
-unilateral behavior-strategy deviation once the non-deviating history-value
-map is fixed. -/
-theorem discountedPayoff_le_of_bellman_ge
-    (G : StochasticGame ι) [Fintype ι] [Finite G.State]
-    [∀ i, Finite (G.Act i)] {who : ι} {C : ℝ}
+/-- A bounded expected continuation sequence satisfying the discounted
+Bellman upper inequality caps the actual payoff. This is the common scalar
+telescope for state-only and history-dependent continuation certificates. -/
+theorem discountedPayoff_le_of_expected_bellman_ge
+    (G : StochasticGame ι) [Fintype ι] {who : ι} {C Cv : ℝ}
     (hC : ∀ s a, |G.stagePayoff s a who| ≤ C)
-    (σ : G.BehaviorProfile) (s₀ : G.State) (v : G.State → ℝ)
+    (σ : G.BehaviorProfile) (s₀ : G.State) (V : ℕ → ℝ)
     {β : ℝ} (hβ0 : 0 ≤ β) (hβ1 : β < 1)
-    (hbellman : ∀ (t : ℕ) (h : G.Hist t),
-      (1 - β) * G.stageEUAt σ h who +
-        β * expect (G.stageActionDist σ h) (fun a =>
-          expect (G.transition h.2 a) v) ≤ v h.2) :
-    G.discountedPayoff β σ s₀ who ≤ v s₀ := by
-  let V : ℕ → ℝ := fun t => G.expectedStateValue σ s₀ t v
+    (hV : ∀ t, |V t| ≤ Cv)
+    (hstep : ∀ t, (1 - β) * G.expectedStagePayoff σ s₀ t who +
+      β * V (t + 1) ≤ V t) :
+    G.discountedPayoff β σ s₀ who ≤ V 0 := by
   let r : ℕ → ℝ := fun t => G.expectedStagePayoff σ s₀ t who
-  have hstep : ∀ t, (1 - β) * r t + β * V (t + 1) ≤ V t := by
-    intro t
-    calc (1 - β) * r t + β * V (t + 1)
-        = expect (G.histDist σ s₀ t) (fun h =>
-            (1 - β) * G.stageEUAt σ h who +
-              β * expect (G.stageActionDist σ h) (fun a =>
-                expect (G.transition h.2 a) v)) := by
-          rw [expect_add, expect_const_mul, expect_const_mul,
-            ← G.expectedStateValue_succ]
-          rfl
-      _ ≤ V t := expect_mono _ _ _ (hbellman t)
-  obtain ⟨Cv, hCv⟩ := exists_abs_bound_of_finite v
-  have hV : ∀ t, |V t| ≤ Cv := by
-    intro t
-    exact abs_expect_le_of_abs_le _ _ fun h => hCv h.2
   have hβabs : |β| < 1 := by rwa [abs_of_nonneg hβ0]
   have hsumV : Summable (fun t : ℕ => β ^ t * V t) :=
     summable_pow_mul_of_abs_le hβabs hV
@@ -475,8 +451,48 @@ theorem discountedPayoff_le_of_bellman_ge
   change 0 ≤ (∑' (t : ℕ), (β ^ t * V t - (A t + B t))) at htsumD0
   rw [hsumV.tsum_sub (hsumA.add hsumB), hsumA.tsum_add hsumB,
     htsumA, htsumB] at htsumD0
-  have hV0 : V 0 = v s₀ := by simp [V]
   linarith
+
+/-- **Subexcessive-function discounted cap.**  Dual of
+`le_discountedPayoff_of_bellman_le`: suppose `v` satisfies the one-step
+Bellman upper inequality at every finite history under `σ`: current value is
+at least normalized current payoff plus discounted expected successor value.
+Then `σ` cannot guarantee more than `v` from the initial state.
+
+The hypothesis is historywise, so the theorem applies directly to a
+unilateral behavior-strategy deviation once the non-deviating history-value
+map is fixed. -/
+theorem discountedPayoff_le_of_bellman_ge
+    (G : StochasticGame ι) [Fintype ι] [Finite G.State]
+    [∀ i, Finite (G.Act i)] {who : ι} {C : ℝ}
+    (hC : ∀ s a, |G.stagePayoff s a who| ≤ C)
+    (σ : G.BehaviorProfile) (s₀ : G.State) (v : G.State → ℝ)
+    {β : ℝ} (hβ0 : 0 ≤ β) (hβ1 : β < 1)
+    (hbellman : ∀ (t : ℕ) (h : G.Hist t),
+      (1 - β) * G.stageEUAt σ h who +
+        β * expect (G.stageActionDist σ h) (fun a =>
+          expect (G.transition h.2 a) v) ≤ v h.2) :
+    G.discountedPayoff β σ s₀ who ≤ v s₀ := by
+  let V : ℕ → ℝ := fun t => G.expectedStateValue σ s₀ t v
+  have hstep : ∀ t, (1 - β) * G.expectedStagePayoff σ s₀ t who +
+      β * V (t + 1) ≤ V t := by
+    intro t
+    calc (1 - β) * G.expectedStagePayoff σ s₀ t who + β * V (t + 1)
+        = expect (G.histDist σ s₀ t) (fun h =>
+            (1 - β) * G.stageEUAt σ h who +
+              β * expect (G.stageActionDist σ h) (fun a =>
+                expect (G.transition h.2 a) v)) := by
+          rw [expect_add, expect_const_mul, expect_const_mul,
+            ← G.expectedStateValue_succ]
+          rfl
+      _ ≤ V t := expect_mono _ _ _ (hbellman t)
+  obtain ⟨Cv, hCv⟩ := exists_abs_bound_of_finite v
+  have hV : ∀ t, |V t| ≤ Cv := by
+    intro t
+    exact abs_expect_le_of_abs_le _ _ fun h => hCv h.2
+  have hcap := G.discountedPayoff_le_of_expected_bellman_ge
+    hC σ s₀ V hβ0 hβ1 hV hstep
+  simpa only [V, expectedStateValue_zero] using hcap
 
 -- ============================================================================
 -- Time-varying average-reward verification

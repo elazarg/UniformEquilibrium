@@ -33,6 +33,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic.L
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.CompactDiscountedBestResponse
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.DiscountedContinuation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.DiscountedInitialBranch
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.FiniteHorizonContinuation

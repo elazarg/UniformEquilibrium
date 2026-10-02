@@ -7,6 +7,7 @@ import GameTheory.Repeated.Trigger
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.PMFProduct.Bool
 import MathUE.BanachLimit
+import MathUE.BilinearQuarterEscape
 import MathUE.AbelCesaro
 import MathUE.FixedRatioConvexity
 import MathUE.FiniteEmpiricalConvexity
@@ -18,6 +19,8 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.CompactDisco
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.FiniteHorizonContinuation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.DiscountedContinuation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.DiscountedInitialBranch
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Payoff.DiscountedContinuation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.InitialActionAffineness
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.Feasible
@@ -13036,14 +13039,1426 @@ theorem FiniteStageGame.discountedBestResponse_payoff_eq_of_nash
   · have hmax := G.discountedBestResponse_spec rate profile who (profile who)
     simpa only [Function.update_eq_self] using hmax
 
+/-- The independently selected individual best-response values at one actual
+first-stage history. Off path, these coordinates need not be jointly feasible
+or the payoff of a joint Nash profile. -/
+noncomputable def FiniteStageGame.discountedContinuationBestResponses
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (base : G.repeatedGame.Hist 1) : Payoff G.Player :=
+  fun who => G.discountedPayoff rate.1
+    (Function.update (G.repeatedGame.afterHistoryProfile profile base) who
+      (G.discountedBestResponse rate
+        (G.repeatedGame.afterHistoryProfile profile base) who)) who
+
+/-- The actual current-stage plus selected individual-continuation-value game.
+For two binary players this is the paper's four-history continuation matrix. -/
+noncomputable def FiniteStageGame.discountedBestResponseMatrix
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile) :
+    KernelGame G.Player :=
+  KernelGame.ofPureEU G.Action (fun joint who =>
+    rate.1 * G.payoff joint who + (1 - rate.1) *
+      G.discountedContinuationBestResponses rate profile
+        (G.kernel.realizedActionFirstHistory joint) who)
+
+/-- Exact mixed evaluation of the internally derived continuation matrix. -/
+theorem FiniteStageGame.discountedBestResponseMatrix_mixedEU
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (mixed : G.MixedProfile) (who : G.Player) :
+    (G.discountedBestResponseMatrix rate profile).mixedExtension.eu mixed who =
+      Math.Probability.expect (Math.PMFProduct.pmfPi mixed) (fun joint =>
+        rate.1 * G.payoff joint who + (1 - rate.1) *
+          G.discountedContinuationBestResponses rate profile
+            (G.kernel.realizedActionFirstHistory joint) who) := by
+  let : Finite (G.discountedBestResponseMatrix rate profile).Outcome := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  simpa only [discountedBestResponseMatrix, KernelGame.eu_ofPureEU] using!
+    (G.discountedBestResponseMatrix rate profile).mixedExtension_eu mixed who
+
+/-- At an actually supported first-stage history with positive tail weight,
+the independently selected values equal the actual joint continuation payoff.
+No corresponding claim is made about an unsupported or zero-weight child. -/
+theorem FiniteStageGame.discountedContinuationBestResponses_eq_of_mem_support
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (hnash : G.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile)
+    (hrate : rate.1 < 1) (base : G.repeatedGame.Hist 1)
+    (hsupport : base ∈ (G.repeatedGame.histDist profile PUnit.unit 1).support) :
+    G.discountedContinuationBestResponses rate profile base =
+      G.discountedPayoff rate.1 (G.repeatedGame.afterHistoryProfile profile base) := by
+  have hchild := G.kernel.realizedAction_afterHistoryProfile_isDiscountedNash_of_mem_support
+    profile (sub_nonneg.mpr rate.2.2) (by linarith [rate.2.1])
+    (Or.inr (sub_pos.mpr hrate)) hnash base hsupport
+  rw [show base.2 = PUnit.unit from Subsingleton.elim _ _] at hchild
+  funext who
+  exact G.discountedBestResponse_payoff_eq_of_nash rate
+    (G.repeatedGame.afterHistoryProfile profile base) hchild who
+
+/-- Only the supported continuation-value vector is an actual equilibrium
+payoff. Its off-path individual maxima are deliberately not given this seal. -/
+theorem FiniteStageGame.discountedContinuationBestResponses_mem_equilibrium
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (hnash : G.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile)
+    (hrate : rate.1 < 1) (base : G.repeatedGame.Hist 1)
+    (hsupport : base ∈ (G.repeatedGame.histDist profile PUnit.unit 1).support) :
+    G.discountedContinuationBestResponses rate profile base ∈
+      G.discountedEquilibriumPayoffs rate.1 := by
+  rw [G.discountedContinuationBestResponses_eq_of_mem_support
+    rate profile hnash hrate base hsupport]
+  exact G.discountedPayoff_afterHistory_mem_equilibrium
+    rate profile hnash base hsupport (Or.inr hrate)
+
+/-- At root Nash, the actual initial mixed profile evaluates the derived
+matrix to the actual root payoff. At `lambda=1` all child weights are zero;
+the proof does not infer continuation Nash at that endpoint. -/
+theorem FiniteStageGame.discountedPayoff_eq_bestResponseMatrix
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (hnash : G.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile)
+    (who : G.Player) :
+    G.discountedPayoff rate.1 profile who =
+      (G.discountedBestResponseMatrix rate profile).mixedExtension.eu
+        (G.kernel.realizedActionInitialMixedProfile profile) who := by
+  have hbellman : G.discountedPayoff rate.1 profile who =
+      Math.Probability.expect
+        (Math.PMFProduct.pmfPi (G.kernel.realizedActionInitialMixedProfile profile))
+        (fun joint => rate.1 * G.payoff joint who + (1 - rate.1) *
+          G.discountedPayoff rate.1 (G.repeatedGame.afterHistoryProfile profile
+            (G.kernel.realizedActionFirstHistory joint)) who) := by
+    simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+      FiniteStageGame.kernel, KernelGame.eu_ofPureEU, sub_sub_cancel] using!
+      G.kernel.realizedAction_discountedPayoff_firstHistory profile who
+        (sub_nonneg.mpr rate.2.2) (by linarith [rate.2.1])
+  rw [hbellman, G.discountedBestResponseMatrix_mixedEU]
+  apply Math.ProbabilityMassFunction.expect_congr_on_support
+  intro joint hjoint
+  by_cases hrate : rate.1 = 1
+  · simp only [hrate, sub_self, zero_mul, add_zero]
+  · have hlt : rate.1 < 1 := lt_of_le_of_ne rate.2.2 hrate
+    have hsupport : G.kernel.realizedActionFirstHistory joint ∈
+        (G.repeatedGame.histDist profile PUnit.unit 1).support := by
+      rw [G.kernel.realizedAction_histDist_one_eq_map]
+      exact (PMF.mem_support_map_iff _ _ _).mpr ⟨joint, hjoint, rfl⟩
+    rw [G.discountedContinuationBestResponses_eq_of_mem_support
+      rate profile hnash hlt _ hsupport]
+
+/-- Root Nash internally produces a Nash initial mixed profile in the actual
+best-response continuation matrix. Every alternative initial mixed action is
+implemented by a complete unilateral behavioral deviation with internally
+selected replies at all histories, including histories it newly reaches. -/
+theorem FiniteStageGame.initialMixedProfile_isNash_bestResponseMatrix
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (hnash : G.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile) :
+    (G.discountedBestResponseMatrix rate profile).mixedExtension.IsNash
+      (G.kernel.realizedActionInitialMixedProfile profile) := by
+  intro who mixed
+  let mixedProfile : G.MixedProfile :=
+    Function.update (G.kernel.realizedActionInitialMixedProfile profile) who
+      (show PMF (G.Action who) from mixed)
+  change (G.discountedBestResponseMatrix rate profile).mixedExtension.eu
+      mixedProfile who ≤
+    (G.discountedBestResponseMatrix rate profile).mixedExtension.eu
+      (G.kernel.realizedActionInitialMixedProfile profile) who
+  have hmatrix := G.discountedBestResponseMatrix_mixedEU rate profile mixedProfile who
+  have hbound := G.kernel.realizedAction_discountedNash_initialBranchDeviation_bound
+    profile (sub_nonneg.mpr rate.2.2) (by linarith [rate.2.1]) hnash who mixed
+    (fun base => G.discountedBestResponse rate
+      (G.repeatedGame.afterHistoryProfile profile base) who)
+  have hcap : Math.Probability.expect (Math.PMFProduct.pmfPi mixedProfile)
+      (fun joint => rate.1 * G.payoff joint who + (1 - rate.1) *
+        G.discountedContinuationBestResponses rate profile
+          (G.kernel.realizedActionFirstHistory joint) who) ≤
+      G.discountedPayoff rate.1 profile who := by
+    simpa only [mixedProfile, FiniteStageGame.discountedContinuationBestResponses,
+      FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+      FiniteStageGame.kernel, KernelGame.eu_ofPureEU, sub_sub_cancel] using! hbound
+  exact hmatrix.trans_le (hcap.trans_eq
+    (G.discountedPayoff_eq_bestResponseMatrix rate profile hnash who))
+
+/-- Every actual discounted Prisoner's Dilemma payoff obeys the coordinate
+and sum upper bounds of the feasible parallelogram, at every paper rate. -/
+theorem prisonersDilemma_discountedPayoff_feasible_bounds
+    (rate : prisonersDilemma.DiscountRate) (profile : prisonersDilemma.BehaviorProfile) :
+    prisonersDilemma.discountedPayoff rate.1 profile false ≤ 5 ∧
+      prisonersDilemma.discountedPayoff rate.1 profile true ≤ 5 ∧
+      prisonersDilemma.discountedPayoff rate.1 profile false +
+        prisonersDilemma.discountedPayoff rate.1 profile true ≤ 8 ∧
+      4 * prisonersDilemma.discountedPayoff rate.1 profile false +
+        prisonersDilemma.discountedPayoff rate.1 profile true ≤ 20 ∧
+      prisonersDilemma.discountedPayoff rate.1 profile false +
+        4 * prisonersDilemma.discountedPayoff rate.1 profile true ≤ 20 := by
+  let G := prisonersDilemma
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let (who : Bool) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  have hstage : ∀ state action,
+      (fun who => G.repeatedGame.stagePayoff state action who) ∈
+        G.correlatedFeasiblePayoffs := by
+    intro state action
+    exact subset_convexHull ℝ G.purePayoffSet ⟨action, by
+      funext who
+      simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]⟩
+  have hmem := G.repeatedGame.discountedPayoff_mem_of_stagePayoff_mem_convex
+    G.correlatedFeasiblePayoffs G.correlatedFeasiblePayoffs_convex hstage profile
+    PUnit.unit (sub_nonneg.mpr rate.2.2) (by linarith [rate.2.1])
+  change G.discountedPayoff rate.1 profile ∈ G.correlatedFeasiblePayoffs at hmem
+  rw [← prisonersDilemma_D1_eq_C] at hmem
+  obtain ⟨mixed, hmixed⟩ := hmem
+  have hrow : G.discountedPayoff rate.1 profile false =
+      4 + (mixed false true).toReal - 4 * (mixed true true).toReal := by
+    rw [← congrFun hmixed false]
+    exact prisonersDilemma_mixedEU_false mixed
+  have hcolumn : G.discountedPayoff rate.1 profile true =
+      4 + (mixed true true).toReal - 4 * (mixed false true).toReal := by
+    rw [← congrFun hmixed true]
+    exact prisonersDilemma_mixedEU_true mixed
+  have hp1 : (mixed false true).toReal ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  have hq1 : (mixed true true).toReal ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  dsimp only [G] at hrow hcolumn
+  simp only [hrow, hcolumn]
+  exact ⟨by linarith [ENNReal.toReal_nonneg (a := mixed true true)],
+    by linarith [ENNReal.toReal_nonneg (a := mixed false true)],
+    by linarith [ENNReal.toReal_nonneg (a := mixed false true),
+      ENNReal.toReal_nonneg (a := mixed true true)],
+    by linarith [ENNReal.toReal_nonneg (a := mixed true true)],
+    by linarith [ENNReal.toReal_nonneg (a := mixed false true)]⟩
+
+private theorem prisonersDilemma_stagePayoff_abs_le_five (who : Bool) :
+    ∀ state action, |prisonersDilemma.repeatedGame.stagePayoff state action who| ≤ 5 := by
+  intro state action
+  cases who <;> cases hrow : action false <;> cases hcolumn : action true <;>
+    norm_num [FiniteStageGame.repeatedGame, KernelGame.realizedActionStochasticGame,
+      FiniteStageGame.kernel, KernelGame.eu_ofPureEU, binaryPayoff, hrow, hcolumn, pair]
+
+/-- Selected individual best-response values are in `[1,5]` even off path.
+The lower bound is the actual permanent-defection deviation, not joint
+feasibility or an equilibrium certificate for the selected value vector. -/
+theorem prisonersDilemma_discountedBestResponse_mem_Icc
+    (rate : prisonersDilemma.DiscountRate) (profile : prisonersDilemma.BehaviorProfile)
+    (who : Bool) :
+    prisonersDilemma.discountedPayoff rate.1
+        (Function.update profile who
+          (prisonersDilemma.discountedBestResponse rate profile who)) who ∈ Set.Icc 1 5 := by
+  let G := prisonersDilemma
+  let deviation := constantActionFrom G profile who 0 true
+  have hsecurity : 1 ≤ G.discountedPayoff rate.1
+      (Function.update profile who deviation) who := by
+    apply G.repeatedGame.discountedPayoff_ge_of_forall_expectedStagePayoff_ge
+      (prisonersDilemma_stagePayoff_abs_le_five who)
+      (fun time => expectedStagePayoff_constantTrueFrom_ge_one profile who 0 time (by omega))
+      (sub_nonneg.mpr rate.2.2) (by linarith [rate.2.1])
+  have hbest := G.discountedBestResponse_spec rate profile who deviation
+  have hupper := prisonersDilemma_discountedPayoff_feasible_bounds rate
+    (Function.update profile who (G.discountedBestResponse rate profile who))
+  refine ⟨hsecurity.trans hbest, ?_⟩
+  cases who
+  · exact hupper.1
+  · exact hupper.2.1
+
+private def prisonerCriticalRate : prisonersDilemma.DiscountRate := ⟨3 / 4, by norm_num⟩
+
+private noncomputable def prisonerContinuationValue
+    (profile : prisonersDilemma.BehaviorProfile) (who i j : Bool) : ℝ :=
+  prisonersDilemma.discountedContinuationBestResponses prisonerCriticalRate profile
+    (prisonersDilemma.kernel.realizedActionFirstHistory
+      (fun player => if player then j else i)) who
+
+private theorem prisonerContinuation_expect
+    (profile : prisonersDilemma.BehaviorProfile) (mixed : Bool → PMF Bool) (who : Bool) :
+    Math.Probability.expect (Math.PMFProduct.pmfPi mixed) (fun joint =>
+      prisonersDilemma.discountedContinuationBestResponses prisonerCriticalRate profile
+        (prisonersDilemma.kernel.realizedActionFirstHistory joint) who) =
+      Math.BilinearQuarter.interpolate (prisonerContinuationValue profile who)
+        (1 - (mixed false true).toReal) (1 - (mixed true true).toReal) := by
+  rw [Math.PMFProduct.expect_pmfPi_bool]
+  simp only [Math.Probability.expect_eq_sum, Fintype.sum_bool,
+    Math.PMFProduct.pmfBool_false_toReal]
+  unfold Math.BilinearQuarter.interpolate prisonerContinuationValue
+  ring
+
+private theorem prisonerBestResponseMatrix_mixedEU
+    (profile : prisonersDilemma.BehaviorProfile) (mixed : Bool → PMF Bool) (who : Bool) :
+    (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+      profile).mixedExtension.eu mixed who =
+      (3 / 4) * prisonersDilemma.kernel.mixedExtension.eu mixed who +
+        (1 / 4) * Math.BilinearQuarter.interpolate (prisonerContinuationValue profile who)
+          (1 - (mixed false true).toReal) (1 - (mixed true true).toReal) := by
+  rw [FiniteStageGame.discountedBestResponseMatrix_mixedEU]
+  rw [Math.Probability.expect_add, Math.Probability.expect_const_mul,
+    Math.Probability.expect_const_mul, prisonerContinuation_expect]
+  norm_num only [prisonerCriticalRate] at ⊢
+  let : Finite prisonersDilemma.kernel.Outcome := by
+    change Finite (Bool → Bool)
+    infer_instance
+  have hstage : prisonersDilemma.kernel.mixedExtension.eu mixed who =
+      Math.Probability.expect (Math.PMFProduct.pmfPi mixed)
+        (fun joint => prisonersDilemma.payoff joint who) := by
+    rw [KernelGame.mixedExtension_eu]
+    simp only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+  rw [hstage]
+
+private theorem prisonerBestResponseMatrix_mixedEU_row
+    (profile : prisonersDilemma.BehaviorProfile) (mixed : Bool → PMF Bool) :
+    (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+      profile).mixedExtension.eu mixed false =
+      Math.BilinearQuarter.row (prisonerContinuationValue profile false)
+        (1 - (mixed false true).toReal) (1 - (mixed true true).toReal) := by
+  rw [prisonerBestResponseMatrix_mixedEU, prisonersDilemma_mixedEU_false]
+  unfold Math.BilinearQuarter.row
+  ring
+
+private theorem prisonerBestResponseMatrix_mixedEU_column
+    (profile : prisonersDilemma.BehaviorProfile) (mixed : Bool → PMF Bool) :
+    (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+      profile).mixedExtension.eu mixed true =
+      Math.BilinearQuarter.column (prisonerContinuationValue profile true)
+        (1 - (mixed false true).toReal) (1 - (mixed true true).toReal) := by
+  rw [prisonerBestResponseMatrix_mixedEU, prisonersDilemma_mixedEU_true]
+  unfold Math.BilinearQuarter.column
+  ring
+
+/-- Symmetric escape potential used in the paper's compact maximality argument. -/
+def prisonerEscape (payoff : Payoff Bool) : ℝ :=
+  max ((payoff false - 4) * (payoff true - 1))
+    ((payoff true - 4) * (payoff false - 1))
+
+theorem prisonerEscape_continuous : Continuous prisonerEscape := by
+  unfold prisonerEscape
+  fun_prop
+
+private theorem prisonerFirstHistory_mem_support_of_weight_pos
+    (profile : prisonersDilemma.BehaviorProfile) (i j : Bool)
+    (hweight : 0 <
+      (if i then (prisonersDilemma.kernel.realizedActionInitialMixedProfile profile
+        false true).toReal else 1 -
+        (prisonersDilemma.kernel.realizedActionInitialMixedProfile profile false true).toReal) *
+      (if j then (prisonersDilemma.kernel.realizedActionInitialMixedProfile profile
+        true true).toReal else 1 -
+        (prisonersDilemma.kernel.realizedActionInitialMixedProfile profile true true).toReal)) :
+    prisonersDilemma.kernel.realizedActionFirstHistory (fun player => if player then j else i) ∈
+      (prisonersDilemma.repeatedGame.histDist profile PUnit.unit 1).support := by
+  rw [prisonersDilemma.kernel.realizedAction_histDist_one_eq_map]
+  apply (PMF.mem_support_map_iff _ _ _).mpr
+  refine ⟨(fun player => if player then j else i), ?_, rfl⟩
+  apply (PMF.mem_support_iff _ _).mpr
+  intro hzero
+  have hmass : ((Math.PMFProduct.pmfPi
+      (prisonersDilemma.kernel.realizedActionInitialMixedProfile profile))
+      (fun player => if player then j else i)).toReal =
+      (if i then (prisonersDilemma.kernel.realizedActionInitialMixedProfile profile
+        false true).toReal else 1 -
+        (prisonersDilemma.kernel.realizedActionInitialMixedProfile profile false true).toReal) *
+      (if j then (prisonersDilemma.kernel.realizedActionInitialMixedProfile profile
+        true true).toReal else 1 -
+        (prisonersDilemma.kernel.realizedActionInitialMixedProfile profile true true).toReal) := by
+    rw [Math.PMFProduct.pmfPi_apply, Fintype.prod_bool, ENNReal.toReal_mul]
+    cases i <;> cases j <;>
+      simp only [Bool.false_eq_true, ↓reduceIte, Math.PMFProduct.pmfBool_false_toReal] <;>
+      exact mul_comm _ _
+  rw [hzero, ENNReal.toReal_zero] at hmass
+  linarith
+
+/-- The printed scalar argument internally produces an actually reached
+equilibrium continuation with strict escape improvement. The four conditional
+values are selected best responses; no off-path pair is assumed jointly Nash. -/
+theorem prisonersDilemma_discounted_active_escape
+    (profile : prisonersDilemma.BehaviorProfile)
+    (hnash : prisonersDilemma.repeatedGame.IsDiscountedεNash (1 / 4) PUnit.unit 0 profile)
+    (hrow : 4 < prisonersDilemma.discountedPayoff (3 / 4) profile false)
+    (hcolumn : 1 < prisonersDilemma.discountedPayoff (3 / 4) profile true) :
+    ∃ base : prisonersDilemma.repeatedGame.Hist 1,
+      base ∈ (prisonersDilemma.repeatedGame.histDist profile PUnit.unit 1).support ∧
+      prisonersDilemma.discountedPayoff (3 / 4)
+          (prisonersDilemma.repeatedGame.afterHistoryProfile profile base) ∈
+        prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) ∧
+      4 * prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4) profile) ≤
+        prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4)
+          (prisonersDilemma.repeatedGame.afterHistoryProfile profile base)) ∧
+      prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4) profile) <
+        prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4)
+          (prisonersDilemma.repeatedGame.afterHistoryProfile profile base)) := by
+  have hrootBounds := prisonersDilemma_discountedPayoff_feasible_bounds
+    prisonerCriticalRate profile
+  dsimp only [prisonerCriticalRate] at hrootBounds
+  have hcolumn4 : prisonersDilemma.discountedPayoff (3 / 4) profile true < 4 := by
+    linarith [hrootBounds.2.2.1]
+  have hrootEscape : prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4) profile) =
+      (prisonersDilemma.discountedPayoff (3 / 4) profile false - 4) *
+        (prisonersDilemma.discountedPayoff (3 / 4) profile true - 1) := by
+    unfold prisonerEscape
+    apply max_eq_left
+    have hnonpos := mul_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr hcolumn4.le)
+      (show 0 ≤ prisonersDilemma.discountedPayoff (3 / 4) profile false - 1 by linarith)
+    exact hnonpos.trans (mul_pos (sub_pos.mpr hrow) (sub_pos.mpr hcolumn)).le
+  simp only [hrootEscape, ← mul_assoc]
+  let G := prisonersDilemma
+  let rate := prisonerCriticalRate
+  let mixed := G.kernel.realizedActionInitialMixedProfile profile
+  let s := 1 - (mixed false true).toReal
+  let t := 1 - (mixed true true).toReal
+  let a := prisonerContinuationValue profile false
+  let b := prisonerContinuationValue profile true
+  have hroot : G.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile := by
+    norm_num [rate, prisonerCriticalRate] at ⊢
+    exact hnash
+  have hmatrix := G.initialMixedProfile_isNash_bestResponseMatrix rate profile hroot
+  have hpayoff (who : Bool) := G.discountedPayoff_eq_bestResponseMatrix rate profile hroot who
+  have hs : s ∈ Set.Icc (0 : ℝ) 1 := by
+    have hp1 : (mixed false true).toReal ≤ 1 := by
+      simpa only [ENNReal.toReal_one] using
+        ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one (mixed false) true)
+    exact ⟨by dsimp [s]; linarith, by
+      dsimp [s]; linarith [ENNReal.toReal_nonneg (a := mixed false true)]⟩
+  have ht : t ∈ Set.Icc (0 : ℝ) 1 := by
+    have hq1 : (mixed true true).toReal ≤ 1 := by
+      simpa only [ENNReal.toReal_one] using
+        ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one (mixed true) true)
+    exact ⟨by dsimp [t]; linarith, by
+      dsimp [t]; linarith [ENNReal.toReal_nonneg (a := mixed true true)]⟩
+  have hvalues (who i j : Bool) : prisonerContinuationValue profile who i j ∈
+      Set.Icc (1 : ℝ) 5 :=
+    prisonersDilemma_discountedBestResponse_mem_Icc rate
+      (G.repeatedGame.afterHistoryProfile profile
+        (G.kernel.realizedActionFirstHistory (fun player => if player then j else i))) who
+  have hf : Math.BilinearQuarter.row a s t = G.discountedPayoff (3 / 4) profile false := by
+    exact (prisonerBestResponseMatrix_mixedEU_row profile mixed).symm.trans
+      (hpayoff false).symm
+  have hg : Math.BilinearQuarter.column b s t = G.discountedPayoff (3 / 4) profile true := by
+    exact (prisonerBestResponseMatrix_mixedEU_column profile mixed).symm.trans
+      (hpayoff true).symm
+  have hr0 : Math.BilinearQuarter.row a 0 t ≤ Math.BilinearQuarter.row a s t := by
+    let changed : Bool → PMF Bool := Function.update mixed false (PMF.pure true)
+    have h := hmatrix false (PMF.pure true)
+    change (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu changed false ≤
+      (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu mixed false at h
+    have hscalar := (prisonerBestResponseMatrix_mixedEU_row profile changed).symm.trans_le
+      (h.trans_eq (prisonerBestResponseMatrix_mixedEU_row profile mixed))
+    simpa [changed, a, s, t, mixed, Function.update] using hscalar
+  have hr1 : Math.BilinearQuarter.row a 1 t ≤ Math.BilinearQuarter.row a s t := by
+    let changed : Bool → PMF Bool := Function.update mixed false (PMF.pure false)
+    have h := hmatrix false (PMF.pure false)
+    change (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu changed false ≤
+      (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu mixed false at h
+    have hscalar := (prisonerBestResponseMatrix_mixedEU_row profile changed).symm.trans_le
+      (h.trans_eq (prisonerBestResponseMatrix_mixedEU_row profile mixed))
+    simpa [changed, a, s, t, mixed, Function.update] using hscalar
+  have hc0 : Math.BilinearQuarter.column b s 0 ≤ Math.BilinearQuarter.column b s t := by
+    let changed : Bool → PMF Bool := Function.update mixed true (PMF.pure true)
+    have h := hmatrix true (PMF.pure true)
+    change (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu changed true ≤
+      (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu mixed true at h
+    have hscalar := (prisonerBestResponseMatrix_mixedEU_column profile changed).symm.trans_le
+      (h.trans_eq (prisonerBestResponseMatrix_mixedEU_column profile mixed))
+    simpa [changed, b, s, t, mixed, Function.update] using hscalar
+  have hc1 : Math.BilinearQuarter.column b s 1 ≤ Math.BilinearQuarter.column b s t := by
+    let changed : Bool → PMF Bool := Function.update mixed true (PMF.pure false)
+    have h := hmatrix true (PMF.pure false)
+    change (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu changed true ≤
+      (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu mixed true at h
+    have hscalar := (prisonerBestResponseMatrix_mixedEU_column profile changed).symm.trans_le
+      (h.trans_eq (prisonerBestResponseMatrix_mixedEU_column profile mixed))
+    simpa [changed, b, s, t, mixed, Function.update] using hscalar
+  have hupper := prisonersDilemma_discountedPayoff_feasible_bounds rate profile
+  dsimp only [rate, prisonerCriticalRate] at hupper
+  have hfeasible : Math.BilinearQuarter.row a s t + Math.BilinearQuarter.column b s t ≤ 8 := by
+    rw [hf, hg]
+    exact hupper.2.2.1
+  have hfpos : 4 < Math.BilinearQuarter.row a s t := by rw [hf]; exact hrow
+  have hgpos : 1 < Math.BilinearQuarter.column b s t := by rw [hg]; exact hcolumn
+  have hescape := Math.BilinearQuarter.active_corner_fourfold_escape a b hs ht
+    (hvalues false false true).2 (hvalues false true true).2
+    (hvalues true false true).1 (hvalues true true true).1 (hvalues true true false).2
+    hr0 hr1 hc0 hc1 hfeasible hfpos hgpos
+  have hfinish (i : Bool) (hweight : 0 < (if i then 1 - s else s) * t)
+      (hproduct : 4 * (Math.BilinearQuarter.row a s t - 4) *
+          (Math.BilinearQuarter.column b s t - 1) ≤
+        max ((a i false - 4) * (b i false - 1))
+          ((b i false - 4) * (a i false - 1))) :
+      ∃ base : G.repeatedGame.Hist 1,
+        base ∈ (G.repeatedGame.histDist profile PUnit.unit 1).support ∧
+        G.discountedPayoff (3 / 4) (G.repeatedGame.afterHistoryProfile profile base) ∈
+          G.discountedEquilibriumPayoffs (3 / 4) ∧
+        4 * (G.discountedPayoff (3 / 4) profile false - 4) *
+            (G.discountedPayoff (3 / 4) profile true - 1) ≤
+          prisonerEscape (G.discountedPayoff (3 / 4)
+            (G.repeatedGame.afterHistoryProfile profile base)) ∧
+        (G.discountedPayoff (3 / 4) profile false - 4) *
+            (G.discountedPayoff (3 / 4) profile true - 1) <
+          prisonerEscape (G.discountedPayoff (3 / 4)
+            (G.repeatedGame.afterHistoryProfile profile base)) := by
+    let base := G.kernel.realizedActionFirstHistory (fun player => if player then false else i)
+    have hsupport : base ∈ (G.repeatedGame.histDist profile PUnit.unit 1).support := by
+      apply prisonerFirstHistory_mem_support_of_weight_pos profile i false
+      simpa only [Bool.false_eq_true, ↓reduceIte, s, t, mixed, sub_sub_cancel] using! hweight
+    have heq := G.discountedContinuationBestResponses_eq_of_mem_support
+      rate profile hroot (by norm_num [rate, prisonerCriticalRate]) base hsupport
+    have hmem := G.discountedContinuationBestResponses_mem_equilibrium
+      rate profile hroot (by norm_num [rate, prisonerCriticalRate]) base hsupport
+    rw [heq] at hmem
+    have ha : a i false = G.discountedPayoff (3 / 4)
+        (G.repeatedGame.afterHistoryProfile profile base) false := congrFun heq false
+    have hb : b i false = G.discountedPayoff (3 / 4)
+        (G.repeatedGame.afterHistoryProfile profile base) true := congrFun heq true
+    simp only [hf, hg, ha, hb] at hproduct
+    change 4 * (G.discountedPayoff (3 / 4) profile false - 4) *
+        (G.discountedPayoff (3 / 4) profile true - 1) ≤
+      prisonerEscape (G.discountedPayoff (3 / 4)
+        (G.repeatedGame.afterHistoryProfile profile base)) at hproduct
+    refine ⟨base, hsupport, hmem, hproduct, ?_⟩
+    exact Math.BilinearQuarter.escape_strict_of_fourfold
+      (sub_pos.mpr hrow) (sub_pos.mpr hcolumn) hproduct
+  rcases hescape with ⟨hactive, _ha, _hb, hproduct⟩ | ⟨hactive, _hb, _ha, hproduct⟩
+  · apply hfinish false (by simpa using hactive)
+    exact hproduct.trans (le_max_left _ _)
+  · apply hfinish true (by simpa using hactive)
+    exact hproduct.trans (le_max_right _ _)
+
+/-- The source's player-exchanged calculation uses the same actual profile
+and transposes only its numerical continuation tables. No profile relabeling
+or off-path joint-equilibrium premise is used. -/
+theorem prisonersDilemma_discounted_active_escape_transposed
+    (profile : prisonersDilemma.BehaviorProfile)
+    (hnash : prisonersDilemma.repeatedGame.IsDiscountedεNash (1 / 4) PUnit.unit 0 profile)
+    (hcolumn : 4 < prisonersDilemma.discountedPayoff (3 / 4) profile true)
+    (hrow : 1 < prisonersDilemma.discountedPayoff (3 / 4) profile false) :
+    ∃ base : prisonersDilemma.repeatedGame.Hist 1,
+      base ∈ (prisonersDilemma.repeatedGame.histDist profile PUnit.unit 1).support ∧
+      prisonersDilemma.discountedPayoff (3 / 4)
+          (prisonersDilemma.repeatedGame.afterHistoryProfile profile base) ∈
+        prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) ∧
+      4 * prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4) profile) ≤
+        prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4)
+          (prisonersDilemma.repeatedGame.afterHistoryProfile profile base)) ∧
+      prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4) profile) <
+        prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4)
+          (prisonersDilemma.repeatedGame.afterHistoryProfile profile base)) := by
+  let G := prisonersDilemma
+  let rate := prisonerCriticalRate
+  let mixed := G.kernel.realizedActionInitialMixedProfile profile
+  let s := 1 - (mixed false true).toReal
+  let t := 1 - (mixed true true).toReal
+  let a := prisonerContinuationValue profile false
+  let b := prisonerContinuationValue profile true
+  let transposedA := fun i j => b j i
+  let transposedB := fun i j => a j i
+  have hroot : G.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile := by
+    norm_num [rate, prisonerCriticalRate] at ⊢
+    exact hnash
+  have hmatrix := G.initialMixedProfile_isNash_bestResponseMatrix rate profile hroot
+  have hpayoff (who : Bool) := G.discountedPayoff_eq_bestResponseMatrix rate profile hroot who
+  have hs : s ∈ Set.Icc (0 : ℝ) 1 := by
+    have hp1 : (mixed false true).toReal ≤ 1 := by
+      simpa only [ENNReal.toReal_one] using
+        ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one (mixed false) true)
+    exact ⟨by dsimp [s]; linarith, by
+      dsimp [s]; linarith [ENNReal.toReal_nonneg (a := mixed false true)]⟩
+  have ht : t ∈ Set.Icc (0 : ℝ) 1 := by
+    have hq1 : (mixed true true).toReal ≤ 1 := by
+      simpa only [ENNReal.toReal_one] using
+        ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one (mixed true) true)
+    exact ⟨by dsimp [t]; linarith, by
+      dsimp [t]; linarith [ENNReal.toReal_nonneg (a := mixed true true)]⟩
+  have hvalues (who i j : Bool) : prisonerContinuationValue profile who i j ∈
+      Set.Icc (1 : ℝ) 5 :=
+    prisonersDilemma_discountedBestResponse_mem_Icc rate
+      (G.repeatedGame.afterHistoryProfile profile
+        (G.kernel.realizedActionFirstHistory (fun player => if player then j else i))) who
+  have hf : Math.BilinearQuarter.row transposedA t s =
+      G.discountedPayoff (3 / 4) profile true := by
+    calc
+      Math.BilinearQuarter.row transposedA t s = Math.BilinearQuarter.column b s t :=
+        Math.BilinearQuarter.row_transpose b s t
+      _ = G.discountedPayoff (3 / 4) profile true :=
+        (prisonerBestResponseMatrix_mixedEU_column profile mixed).symm.trans
+          (hpayoff true).symm
+  have hg : Math.BilinearQuarter.column transposedB t s =
+      G.discountedPayoff (3 / 4) profile false := by
+    calc
+      Math.BilinearQuarter.column transposedB t s = Math.BilinearQuarter.row a s t :=
+        Math.BilinearQuarter.column_transpose a s t
+      _ = G.discountedPayoff (3 / 4) profile false :=
+        (prisonerBestResponseMatrix_mixedEU_row profile mixed).symm.trans
+          (hpayoff false).symm
+  have hr0 : Math.BilinearQuarter.row transposedA 0 s ≤
+      Math.BilinearQuarter.row transposedA t s := by
+    simp only [transposedA, Math.BilinearQuarter.row_transpose]
+    let changed : Bool → PMF Bool := Function.update mixed true (PMF.pure true)
+    have h := hmatrix true (PMF.pure true)
+    change (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu changed true ≤
+      (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu mixed true at h
+    have hscalar := (prisonerBestResponseMatrix_mixedEU_column profile changed).symm.trans_le
+      (h.trans_eq (prisonerBestResponseMatrix_mixedEU_column profile mixed))
+    simpa [changed, b, s, t, mixed, Function.update] using hscalar
+  have hr1 : Math.BilinearQuarter.row transposedA 1 s ≤
+      Math.BilinearQuarter.row transposedA t s := by
+    simp only [transposedA, Math.BilinearQuarter.row_transpose]
+    let changed : Bool → PMF Bool := Function.update mixed true (PMF.pure false)
+    have h := hmatrix true (PMF.pure false)
+    change (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu changed true ≤
+      (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu mixed true at h
+    have hscalar := (prisonerBestResponseMatrix_mixedEU_column profile changed).symm.trans_le
+      (h.trans_eq (prisonerBestResponseMatrix_mixedEU_column profile mixed))
+    simpa [changed, b, s, t, mixed, Function.update] using hscalar
+  have hc0 : Math.BilinearQuarter.column transposedB t 0 ≤
+      Math.BilinearQuarter.column transposedB t s := by
+    simp only [transposedB, Math.BilinearQuarter.column_transpose]
+    let changed : Bool → PMF Bool := Function.update mixed false (PMF.pure true)
+    have h := hmatrix false (PMF.pure true)
+    change (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu changed false ≤
+      (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu mixed false at h
+    have hscalar := (prisonerBestResponseMatrix_mixedEU_row profile changed).symm.trans_le
+      (h.trans_eq (prisonerBestResponseMatrix_mixedEU_row profile mixed))
+    simpa [changed, a, s, t, mixed, Function.update] using hscalar
+  have hc1 : Math.BilinearQuarter.column transposedB t 1 ≤
+      Math.BilinearQuarter.column transposedB t s := by
+    simp only [transposedB, Math.BilinearQuarter.column_transpose]
+    let changed : Bool → PMF Bool := Function.update mixed false (PMF.pure false)
+    have h := hmatrix false (PMF.pure false)
+    change (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu changed false ≤
+      (prisonersDilemma.discountedBestResponseMatrix prisonerCriticalRate
+        profile).mixedExtension.eu mixed false at h
+    have hscalar := (prisonerBestResponseMatrix_mixedEU_row profile changed).symm.trans_le
+      (h.trans_eq (prisonerBestResponseMatrix_mixedEU_row profile mixed))
+    simpa [changed, a, s, t, mixed, Function.update] using hscalar
+  have hupper := prisonersDilemma_discountedPayoff_feasible_bounds rate profile
+  dsimp only [rate, prisonerCriticalRate] at hupper
+  have hfeasible : Math.BilinearQuarter.row transposedA t s +
+      Math.BilinearQuarter.column transposedB t s ≤ 8 := by
+    rw [hf, hg]
+    linarith [hupper.2.2.1]
+  have hfpos : 4 < Math.BilinearQuarter.row transposedA t s := by rw [hf]; exact hcolumn
+  have hgpos : 1 < Math.BilinearQuarter.column transposedB t s := by rw [hg]; exact hrow
+  have hrow4 : G.discountedPayoff (3 / 4) profile false < 4 := by
+    linarith [hupper.2.2.1]
+  have hrootEscape : prisonerEscape (G.discountedPayoff (3 / 4) profile) =
+      (G.discountedPayoff (3 / 4) profile true - 4) *
+        (G.discountedPayoff (3 / 4) profile false - 1) := by
+    unfold prisonerEscape
+    apply max_eq_right
+    have hnonpos := mul_nonpos_of_nonpos_of_nonneg (sub_nonpos.mpr hrow4.le)
+      (show 0 ≤ G.discountedPayoff (3 / 4) profile true - 1 by linarith)
+    exact hnonpos.trans (mul_pos (sub_pos.mpr hcolumn) (sub_pos.mpr hrow)).le
+  have hrootPositive : 0 < prisonerEscape (G.discountedPayoff (3 / 4) profile) := by
+    rw [hrootEscape]
+    exact mul_pos (sub_pos.mpr hcolumn) (sub_pos.mpr hrow)
+  have hescape := Math.BilinearQuarter.active_corner_fourfold_escape
+    transposedA transposedB ht hs
+    (hvalues true true false).2 (hvalues true true true).2
+    (hvalues false true false).1 (hvalues false true true).1 (hvalues false false true).2
+    hr0 hr1 hc0 hc1 hfeasible hfpos hgpos
+  have hfinish (j : Bool)
+      (hweight : 0 < s * (if j then 1 - t else t))
+      (hproduct : 4 * (Math.BilinearQuarter.row transposedA t s - 4) *
+          (Math.BilinearQuarter.column transposedB t s - 1) ≤
+        max ((a false j - 4) * (b false j - 1))
+          ((b false j - 4) * (a false j - 1))) :
+      ∃ base : G.repeatedGame.Hist 1,
+        base ∈ (G.repeatedGame.histDist profile PUnit.unit 1).support ∧
+        G.discountedPayoff (3 / 4) (G.repeatedGame.afterHistoryProfile profile base) ∈
+          G.discountedEquilibriumPayoffs (3 / 4) ∧
+        4 * prisonerEscape (G.discountedPayoff (3 / 4) profile) ≤
+          prisonerEscape (G.discountedPayoff (3 / 4)
+            (G.repeatedGame.afterHistoryProfile profile base)) ∧
+        prisonerEscape (G.discountedPayoff (3 / 4) profile) <
+          prisonerEscape (G.discountedPayoff (3 / 4)
+            (G.repeatedGame.afterHistoryProfile profile base)) := by
+    let base := G.kernel.realizedActionFirstHistory (fun player => if player then j else false)
+    have hsupport : base ∈ (G.repeatedGame.histDist profile PUnit.unit 1).support := by
+      apply prisonerFirstHistory_mem_support_of_weight_pos profile false j
+      simpa only [Bool.false_eq_true, ↓reduceIte, s, t, mixed, sub_sub_cancel] using! hweight
+    have heq := G.discountedContinuationBestResponses_eq_of_mem_support
+      rate profile hroot (by norm_num [rate, prisonerCriticalRate]) base hsupport
+    have hmem := G.discountedContinuationBestResponses_mem_equilibrium
+      rate profile hroot (by norm_num [rate, prisonerCriticalRate]) base hsupport
+    rw [heq] at hmem
+    have ha : a false j = G.discountedPayoff (3 / 4)
+        (G.repeatedGame.afterHistoryProfile profile base) false := congrFun heq false
+    have hb : b false j = G.discountedPayoff (3 / 4)
+        (G.repeatedGame.afterHistoryProfile profile base) true := congrFun heq true
+    simp only [hf, hg, ha, hb] at hproduct
+    have hchildEscape : 4 * prisonerEscape (G.discountedPayoff (3 / 4) profile) ≤
+        prisonerEscape (G.discountedPayoff (3 / 4)
+          (G.repeatedGame.afterHistoryProfile profile base)) := by
+      rw [hrootEscape]
+      simpa only [← mul_assoc, prisonerEscape] using! hproduct
+    refine ⟨base, hsupport, hmem, hchildEscape, ?_⟩
+    nlinarith
+  rcases hescape with ⟨hactive, _ha, _hb, hproduct⟩ | ⟨hactive, _hb, _ha, hproduct⟩
+  · apply hfinish false (by
+      simpa only [Bool.false_eq_true, ↓reduceIte] using
+        (show 0 < s * t from (mul_comm t s) ▸ hactive))
+    exact hproduct.trans (le_max_right _ _)
+  · apply hfinish true (by
+      simpa only [↓reduceIte] using
+        (show 0 < s * (1 - t) from (mul_comm (1 - t) s) ▸ hactive))
+    exact hproduct.trans (le_max_left _ _)
+
+/-- Actual discounted Nash payoffs are individually secure; both the best
+response and its equality with the prescribed payoff are proved producers. -/
+theorem prisonersDilemma_discountedPayoff_ge_one_of_nash
+    (rate : prisonersDilemma.DiscountRate) (profile : prisonersDilemma.BehaviorProfile)
+    (hnash : prisonersDilemma.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile)
+    (who : Bool) : 1 ≤ prisonersDilemma.discountedPayoff rate.1 profile who := by
+  have hbest := prisonersDilemma_discountedBestResponse_mem_Icc rate profile who
+  rw [FiniteStageGame.discountedBestResponse_payoff_eq_of_nash
+    prisonersDilemma rate profile hnash who] at hbest
+  exact hbest.1
+
+private theorem prisonerEscape_positive_orientations
+    {payoff : Payoff Bool} (hrow : 1 ≤ payoff false) (hcolumn : 1 ≤ payoff true)
+    (hpositive : 0 < prisonerEscape payoff) :
+    (4 < payoff false ∧ 1 < payoff true) ∨ (4 < payoff true ∧ 1 < payoff false) := by
+  unfold prisonerEscape at hpositive
+  rcases lt_max_iff.mp hpositive with hfirst | hsecond
+  · have ha := pos_of_mul_pos_left hfirst (sub_nonneg.mpr hcolumn)
+    have hb := pos_of_mul_pos_right hfirst ha.le
+    exact Or.inl ⟨by linarith, by linarith⟩
+  · have hb := pos_of_mul_pos_left hsecond (sub_nonneg.mpr hrow)
+    have ha := pos_of_mul_pos_right hsecond hb.le
+    exact Or.inr ⟨by linarith, by linarith⟩
+
+/-- The compact actual equilibrium-payoff set has no positive escape
+potential. A maximum and any contradicting supported child are selected
+internally; neither is a certificate premise of this result. -/
+theorem prisonersDilemma_equilibrium_escape_nonpos
+    {payoff : Payoff Bool}
+    (hpayoff : payoff ∈ prisonersDilemma.discountedEquilibriumPayoffs (3 / 4)) :
+    prisonerEscape payoff ≤ 0 := by
+  have hcompact := property_2_discounted prisonersDilemma prisonerCriticalRate
+  change (prisonersDilemma.discountedEquilibriumPayoffs (3 / 4)).Nonempty ∧
+    IsCompact (prisonersDilemma.discountedEquilibriumPayoffs (3 / 4)) at hcompact
+  obtain ⟨maximum, hmaximum, hmax⟩ := hcompact.2.exists_isMaxOn
+    hcompact.1 prisonerEscape_continuous.continuousOn
+  by_contra hnot
+  have hpositive : 0 < prisonerEscape maximum :=
+    (lt_of_not_ge hnot).trans_le (hmax hpayoff)
+  obtain ⟨profile, hnash, hprofile⟩ := hmaximum
+  have hroot : prisonersDilemma.repeatedGame.IsDiscountedεNash (1 / 4)
+      PUnit.unit 0 profile := by
+    norm_num [prisonerCriticalRate] at hnash ⊢
+    exact hnash
+  have hrow := prisonersDilemma_discountedPayoff_ge_one_of_nash
+    prisonerCriticalRate profile hnash false
+  have hcolumn := prisonersDilemma_discountedPayoff_ge_one_of_nash
+    prisonerCriticalRate profile hnash true
+  dsimp only [prisonerCriticalRate] at hrow hcolumn
+  have hrootPositive : 0 < prisonerEscape (prisonersDilemma.discountedPayoff (3 / 4) profile) := by
+    rw [hprofile]
+    exact hpositive
+  have horient := prisonerEscape_positive_orientations hrow hcolumn hrootPositive
+  rcases horient with ⟨hrow4, hcolumn1⟩ | ⟨hcolumn4, hrow1⟩
+  · obtain ⟨base, _hsupport, hchild, _hfactor, hgrowth⟩ :=
+      prisonersDilemma_discounted_active_escape profile hroot hrow4 hcolumn1
+    rw [hprofile] at hgrowth
+    exact (not_lt_of_ge (hmax hchild)) hgrowth
+  · obtain ⟨base, _hsupport, hchild, _hfactor, hgrowth⟩ :=
+      prisonersDilemma_discounted_active_escape_transposed profile hroot hcolumn4 hrow1
+    rw [hprofile] at hgrowth
+    exact (not_lt_of_ge (hmax hchild)) hgrowth
+
+private theorem prisonerCriticalSet_of_security_facets_escape
+    {payoff : Payoff Bool} (hrow : 1 ≤ payoff false) (hcolumn : 1 ≤ payoff true)
+    (hrowFacet : 4 * payoff false + payoff true ≤ 20)
+    (hcolumnFacet : payoff false + 4 * payoff true ≤ 20)
+    (hescape : prisonerEscape payoff ≤ 0) : payoff ∈ prisonerCriticalSet := by
+  have hfirst : (payoff false - 4) * (payoff true - 1) ≤ 0 :=
+    (le_max_left _ _).trans hescape
+  have hsecond : (payoff true - 4) * (payoff false - 1) ≤ 0 :=
+    (le_max_right _ _).trans hescape
+  by_cases hrow4 : payoff false ≤ 4
+  · by_cases hcolumn4 : payoff true ≤ 4
+    · exact Or.inl ⟨hrow, hrow4, hcolumn, hcolumn4⟩
+    · have hcolumnPos : 0 < payoff true - 4 := sub_pos.mpr (lt_of_not_ge hcolumn4)
+      have hrowOne : payoff false = 1 := by
+        have hnonpos := nonpos_of_mul_nonpos_right hsecond hcolumnPos
+        linarith
+      have hupper : payoff true ≤ 19 / 4 := by linarith
+      apply Or.inr
+      apply Or.inr
+      refine ⟨(4 / 3) * (payoff true - 4), ⟨by nlinarith, by nlinarith⟩, ?_⟩
+      funext who
+      cases who
+      · simpa [pair] using hrowOne
+      · simp only [pair]
+        ring
+  · have hrowPos : 0 < payoff false - 4 := sub_pos.mpr (lt_of_not_ge hrow4)
+    have hcolumnOne : payoff true = 1 := by
+      have hnonpos := nonpos_of_mul_nonpos_right hfirst hrowPos
+      linarith
+    have hupper : payoff false ≤ 19 / 4 := by linarith
+    apply Or.inr
+    apply Or.inl
+    refine ⟨(4 / 3) * (payoff false - 4), ⟨by nlinarith, by nlinarith⟩, ?_⟩
+    funext who
+    cases who
+    · simp only [pair]
+      ring
+    · simpa [pair] using hcolumnOne
+
+/-- Proposition 15's upper inclusion for the actual behavioral model.
+Compact maximality, secure payoffs, active children and boundary facets are
+all derived internally from the original equilibrium-payoff witness. -/
+theorem prisonersDilemma_discountedEquilibriumPayoffs_subset_criticalSet :
+    prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) ⊆ prisonerCriticalSet := by
+  intro payoff hpayoff
+  have hescape := prisonersDilemma_equilibrium_escape_nonpos hpayoff
+  obtain ⟨profile, hnash, hprofile⟩ := hpayoff
+  have hbounds := prisonersDilemma_discountedPayoff_feasible_bounds prisonerCriticalRate profile
+  have hrow := prisonersDilemma_discountedPayoff_ge_one_of_nash
+    prisonerCriticalRate profile hnash false
+  have hcolumn := prisonersDilemma_discountedPayoff_ge_one_of_nash
+    prisonerCriticalRate profile hnash true
+  dsimp only [prisonerCriticalRate] at hbounds hrow hcolumn
+  rw [hprofile] at hbounds hrow hcolumn
+  exact prisonerCriticalSet_of_security_facets_escape hrow hcolumn
+    hbounds.2.2.2.1 hbounds.2.2.2.2 hescape
+
+section PrisonerVertexConstruction
+
+open scoped Classical
+
+/-- The source calendars: equal initial actions stay constant, unequal
+initial actions alternate. `true` is the dominating action. -/
+private def prisonerVertexPath (row column : Bool) (time : ℕ) : Bool → Bool :=
+  fun who => if who then
+    (if time % 2 = 0 then column else row)
+  else (if time % 2 = 0 then row else column)
+
+private def prisonerVertexValue (row column : Bool) (time : ℕ) (who : Bool) : ℝ :=
+  if row = column then (if row then 1 else 4)
+  else if prisonerVertexPath row column time who then 4 else 1
+
+/-- The four square vertices, indexed by their prescribed first action. -/
+def prisonerVertexPayoff (row column : Bool) : Payoff Bool :=
+  if row then (if column then pair 1 1 else pair 4 1)
+  else (if column then pair 1 4 else pair 4 4)
+
+private theorem prisonerVertexValue_zero (row column who : Bool) :
+    prisonerVertexValue row column 0 who = prisonerVertexPayoff row column who := by
+  cases row <;> cases column <;> cases who <;>
+    norm_num [prisonerVertexValue, prisonerVertexPath, prisonerVertexPayoff, pair]
+
+private theorem prisonerVertexValue_abs_le_four (row column who : Bool) (time : ℕ) :
+    |prisonerVertexValue row column time who| ≤ 4 := by
+  unfold prisonerVertexValue
+  split_ifs <;> norm_num
+
+private theorem prisonerVertexValue_recurrence (row column who : Bool) (time : ℕ) :
+    prisonerVertexValue row column time who =
+      (3 / 4) * prisonersDilemma.payoff (prisonerVertexPath row column time) who +
+        (1 / 4) * prisonerVertexValue row column (time + 1) who := by
+  have hnext : (time + 1) % 2 = 1 - time % 2 := by omega
+  rcases Nat.mod_two_eq_zero_or_one time with htime | htime <;>
+    cases row <;> cases column <;> cases who <;>
+      norm_num [prisonerVertexValue, prisonerVertexPath, htime, hnext,
+        prisonersDilemma, binaryGame, binaryPayoff, pair]
+
+/-- The changed-action bound is sharp at cooperation and at the low
+alternating phase; no strict punishment margin is asserted. -/
+private theorem prisonerVertex_changed_action_cap
+    (row column who : Bool) (time : ℕ) (action : Bool → Bool)
+    (hother : action (!who) = prisonerVertexPath row column time (!who)) :
+    (3 / 4) * prisonersDilemma.payoff action who + (1 / 4) ≤
+      prisonerVertexValue row column time who := by
+  rcases Nat.mod_two_eq_zero_or_one time with htime | htime <;>
+    cases row <;> cases column <;> cases who <;>
+      cases hrow : action false <;> cases hcolumn : action true <;>
+        norm_num [prisonerVertexPath, prisonerVertexValue, prisonersDilemma,
+          binaryGame, binaryPayoff, pair, htime, hrow, hcolumn] at hother <;>
+        norm_num [prisonerVertexPath, prisonerVertexValue, prisonersDilemma,
+          binaryGame, binaryPayoff, pair, htime, hrow, hcolumn]
+
+private theorem prisonerVertex_punished_action_cap
+    (who : Bool) (action : Bool → Bool) (hother : action (!who) = true) :
+    prisonersDilemma.payoff action who ≤ 1 := by
+  cases who <;> cases hrow : action false <;> cases hcolumn : action true <;>
+    norm_num [prisonersDilemma, binaryGame, binaryPayoff, pair,
+      hrow, hcolumn] at hother <;>
+    norm_num [prisonersDilemma, binaryGame, binaryPayoff, pair, hrow, hcolumn]
+
+private def prisonerDefectionPunishments :
+    ℕ → ∀ culprit, prisonersDilemma.MixedOpponentProfile culprit :=
+  fun _ _ _ => PMF.pure true
+
+/-- Actual public-trigger implementations of the four source calendars.
+After a mismatch the nonculprit defects. The canonical culprit fallback
+is immaterial: on an actual unilateral deviation it is overwritten. -/
+noncomputable def prisonerVertexProfile (row column : Bool) :
+    prisonersDilemma.BehaviorProfile :=
+  prisonersDilemma.triggerBehaviorProfile (prisonerVertexPath row column)
+    prisonerDefectionPunishments
+
+/-- On actual deviation support, the other player follows the calendar
+until its first mismatch and defects afterward. This reuses the canonical
+first-mismatch attribution rather than asserting global punishment of the
+canonical culprit's unused fallback coordinate. -/
+private theorem prisonerVertexProfile_opponent_on_support
+    (row column who : Bool) (deviation : prisonersDilemma.BehaviorStrategy who)
+    {time : ℕ} (history : prisonersDilemma.repeatedGame.Hist time)
+    (hsupport : history ∈ (prisonersDilemma.repeatedGame.histDist
+      (Function.update (prisonerVertexProfile row column) who deviation)
+      PUnit.unit time).support) :
+    (Function.update (prisonerVertexProfile row column) who deviation)
+        (!who) time history =
+      PMF.pure (if triggerOnPath prisonersDilemma
+        (prisonerVertexPath row column) history
+        then prisonerVertexPath row column time (!who) else true) := by
+  have hne : (!who) ≠ who := by cases who <;> decide
+  rw [Function.update_of_ne hne]
+  by_cases hpath : triggerOnPath prisonersDilemma
+      (prisonerVertexPath row column) history
+  · simp only [hpath, ite_true]
+    unfold prisonerVertexProfile FiniteStageGame.triggerBehaviorProfile
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
+    exact prisonersDilemma.triggerMonitoredProfile_of_onPath
+      (prisonerVertexPath row column) prisonerDefectionPunishments (!who) _ hpath
+  · simp only [hpath, ite_false]
+    obtain ⟨first, hmismatch, hbefore, hother⟩ :=
+      (prisonersDilemma.firstMismatch_of_mem_support_trigger_update
+        (prisonerVertexPath row column) prisonerDefectionPunishments who deviation
+        time history hsupport).resolve_left hpath
+    have hstatus := prisonersDilemma.publicTriggerStatus_eq_some_of_first
+      (prisonerVertexPath row column) who history first.isLt hmismatch
+      (fun k hk => hbefore ⟨k, hk.trans first.isLt⟩ hk) hother
+    have hstatus' : prisonersDilemma.actionMonitoringGame.triggerStatus
+        (prisonerVertexPath row column)
+        (List.ofFn (KernelGame.RealizedActionRepeatedAdapter.actionHistory
+          prisonersDilemma.kernel history)) = some who := hstatus
+    unfold prisonerVertexProfile FiniteStageGame.triggerBehaviorProfile
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
+    rw [prisonersDilemma.triggerMonitoredProfile_of_culprit
+      (prisonerVertexPath row column) prisonerDefectionPunishments who (!who) _ hstatus']
+    exact prisonersDilemma.punishmentMixedAction_of_ne
+      (prisonerDefectionPunishments time) hne
+
+/-- Exact discounted delivery uses the already-owned affine-recurrence
+telescope and actual expected-stage payoff transport. -/
+theorem prisonerVertexProfile_discountedPayoff (row column : Bool) :
+    prisonersDilemma.discountedPayoff (3 / 4) (prisonerVertexProfile row column) =
+      prisonerVertexPayoff row column := by
+  let : Finite prisonersDilemma.kernel.Outcome := inferInstanceAs (Finite (Bool → Bool))
+  funext who
+  have hstage (time : ℕ) : prisonersDilemma.repeatedGame.expectedStagePayoff
+      (prisonerVertexProfile row column) PUnit.unit time who =
+        prisonersDilemma.payoff (prisonerVertexPath row column time) who := by
+    unfold prisonerVertexProfile FiniteStageGame.triggerBehaviorProfile
+    rw [KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile]
+    exact prisonersDilemma.stageEU_triggerMonitoredProfile
+      (prisonerVertexPath row column) prisonerDefectionPunishments time who
+  have hrec (time : ℕ) : prisonerVertexValue row column time who =
+      (3 / 4) * prisonersDilemma.repeatedGame.expectedStagePayoff
+          (prisonerVertexProfile row column) PUnit.unit time who +
+        (1 - 3 / 4) * prisonerVertexValue row column (time + 1) who := by
+    rw [hstage]
+    convert prisonerVertexValue_recurrence row column who time using 1
+    norm_num
+  have hvalue := discounted_sum_eq_of_affine_recurrence (3 / 4)
+    (by norm_num) (by norm_num) (fun time => prisonerVertexValue row column time who)
+    (fun time => prisonersDilemma.repeatedGame.expectedStagePayoff
+      (prisonerVertexProfile row column) PUnit.unit time who) 4
+    (prisonerVertexValue_abs_le_four row column who) hrec
+  rw [prisonerVertexValue_zero] at hvalue
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    StochasticGame.discountedPayoff, show (1 - (1 - (3 / 4 : ℝ))) = 3 / 4 by norm_num]
+    using! hvalue
+
+/-- Every full unilateral behavioral replacement is capped by the source
+vertex value, not merely by a one-shot or pure-deviation comparison. -/
+theorem prisonerVertexProfile_discounted_deviation_cap
+    (row column who : Bool) (deviation : prisonersDilemma.BehaviorStrategy who) :
+    prisonersDilemma.discountedPayoff (3 / 4)
+      (Function.update (prisonerVertexProfile row column) who deviation) who ≤
+        prisonerVertexPayoff row column who := by
+  let profile := Function.update (prisonerVertexProfile row column) who deviation
+  let path := prisonerVertexPath row column
+  let value : prisonersDilemma.repeatedGame.HistoryPotential := fun time history =>
+    if triggerOnPath prisonersDilemma path history
+    then prisonerVertexValue row column time who else 1
+  have hbound (time : ℕ) (history : prisonersDilemma.repeatedGame.Hist time) :
+      |value time history| ≤ 4 := by
+    dsimp only [value]
+    split_ifs
+    · exact prisonerVertexValue_abs_le_four row column who time
+    · norm_num
+  have hbellman (time : ℕ) (history : prisonersDilemma.repeatedGame.Hist time)
+      (hsupport : history ∈
+        (prisonersDilemma.repeatedGame.histDist profile PUnit.unit time).support) :
+      (1 - (1 / 4)) * prisonersDilemma.repeatedGame.stageEUAt profile history who +
+        (1 / 4) * prisonersDilemma.repeatedGame.historyContinuationEU
+          profile value history ≤ value time history := by
+    let current : Bool → PMF Bool := fun player => profile player time history
+    have hother : current (!who) = PMF.pure
+        (if triggerOnPath prisonersDilemma path history then path time (!who) else true) :=
+      prisonerVertexProfile_opponent_on_support row column who deviation history hsupport
+    have hdraw (action : Bool → Bool)
+        (haction : action ∈ (Math.PMFProduct.pmfPi current).support) :
+        action (!who) = if triggerOnPath prisonersDilemma path history
+          then path time (!who) else true := by
+      have hupdate : Function.update current (!who)
+          (PMF.pure (if triggerOnPath prisonersDilemma path history
+            then path time (!who) else true)) = current :=
+        Function.update_eq_self_iff.mpr hother.symm
+      apply Math.PMFProduct.eq_of_mem_support_pmfPi_update_pure current (!who)
+        (if triggerOnPath prisonersDilemma path history then path time (!who) else true)
+      rwa [hupdate]
+    have hlocal (action : Bool → Bool)
+        (haction : action ∈ (Math.PMFProduct.pmfPi current).support) :
+        (3 / 4) * prisonersDilemma.payoff action who + (1 / 4) *
+          value (time + 1) (Fin.snoc history.1 (history.2, action), PUnit.unit) ≤
+            value time history := by
+      have hcoordinate := hdraw action haction
+      by_cases hpath : triggerOnPath prisonersDilemma path history
+      · simp only [hpath, ite_true] at hcoordinate
+        by_cases hequal : action = path time
+        · subst action
+          have hnext := (triggerOnPath_snoc_iff prisonersDilemma path
+            history (path time) PUnit.unit).mpr ⟨hpath, rfl⟩
+          simp only [value, hpath, hnext, ite_true]
+          exact (prisonerVertexValue_recurrence row column who time).ge
+        · have hnext : ¬ triggerOnPath prisonersDilemma path
+              ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
+                prisonersDilemma.repeatedGame.Hist (time + 1)) := by
+            rw [triggerOnPath_snoc_iff]
+            simp only [hpath, hequal, and_false, not_false_eq_true]
+          simp only [value, hpath, hnext, ite_true, ite_false, mul_one]
+          exact prisonerVertex_changed_action_cap row column who time action hcoordinate
+      · have hnext : ¬ triggerOnPath prisonersDilemma path
+            ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
+              prisonersDilemma.repeatedGame.Hist (time + 1)) := by
+          rw [triggerOnPath_snoc_iff]
+          simp only [hpath, false_and, not_false_eq_true]
+        simp only [hpath, ite_false] at hcoordinate
+        simp only [value, hpath, hnext, ite_false, mul_one]
+        have hcap := prisonerVertex_punished_action_cap who action hcoordinate
+        linarith
+    have hmean := Math.ProbabilityMassFunction.expect_le_of_le_on_support
+      (B := value time history) (Math.PMFProduct.pmfPi current) _ hlocal
+    simp only [Math.Probability.expect_add, Math.Probability.expect_const_mul] at hmean
+    have hstage : prisonersDilemma.repeatedGame.stageEUAt profile history who =
+        Math.Probability.expect (Math.PMFProduct.pmfPi current)
+          (fun action => prisonersDilemma.payoff action who) := by
+      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
+        (fun action => prisonersDilemma.kernel.eu action who) = _
+      simp only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+    have hcontinuation : prisonersDilemma.repeatedGame.historyContinuationEU
+        profile value history = Math.Probability.expect (Math.PMFProduct.pmfPi current)
+          (fun action => value (time + 1)
+            (Fin.snoc history.1 (history.2, action), PUnit.unit)) := by
+      unfold StochasticGame.historyContinuationEU
+      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
+        (fun action => Math.Probability.expect (PMF.pure PUnit.unit)
+          (fun nextState => value (time + 1)
+            (Fin.snoc history.1 (history.2, action), nextState))) = _
+      simp only [Math.Probability.expect_pure]
+    rw [hstage, hcontinuation]
+    norm_num only [show (1 - (1 / 4 : ℝ)) = 3 / 4 by norm_num]
+    exact hmean
+  have hcap := StochasticGame.discountedPayoff_le_of_history_bellman_ge_on_support
+    prisonersDilemma.repeatedGame
+      (prisonersDilemma_stagePayoff_abs_le_five who) profile PUnit.unit value
+      (β := 1 / 4) (by norm_num) (by norm_num)
+      (fun time history _ => hbound time history) hbellman
+  have hzero : value 0 (prisonersDilemma.repeatedGame.emptyHist PUnit.unit) =
+      prisonerVertexPayoff row column who := by
+    have hpath : triggerOnPath prisonersDilemma path
+        (prisonersDilemma.repeatedGame.emptyHist PUnit.unit) := fun k => Fin.elim0 k
+    simp only [value, hpath, ite_true, prisonerVertexValue_zero]
+  rw [hzero] at hcap
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using! hcap
+
+/-- The four source vertex profiles are actual discounted Nash profiles.
+No continuation Nash or supplied payoff certificate is an input. -/
+theorem prisonerVertexProfile_isDiscountedNash (row column : Bool) :
+    prisonersDilemma.repeatedGame.IsDiscountedεNash (1 / 4) PUnit.unit 0
+      (prisonerVertexProfile row column) := by
+  intro who deviation
+  have hcap := prisonerVertexProfile_discounted_deviation_cap row column who deviation
+  have hpayoff := congrFun (prisonerVertexProfile_discountedPayoff row column) who
+  rw [← hpayoff] at hcap
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num, add_zero] using! hcap
+
+/-- Actual behavioral producers for all four vertices of the source square. -/
+theorem prisonersDilemma_square_vertices_mem_discountedEquilibriumPayoffs :
+    pair 4 4 ∈ prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) ∧
+      pair 1 1 ∈ prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) ∧
+      pair 4 1 ∈ prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) ∧
+      pair 1 4 ∈ prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) := by
+  have hvertex (row column : Bool) : prisonerVertexPayoff row column ∈
+      prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) := by
+    refine ⟨prisonerVertexProfile row column, ?_,
+      prisonerVertexProfile_discountedPayoff row column⟩
+    simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using
+      prisonerVertexProfile_isDiscountedNash row column
+  exact ⟨hvertex false false, hvertex true true,
+    hvertex true false, hvertex false true⟩
+
+end PrisonerVertexConstruction
+
+section PrisonerLowerDispatchers
+
+open scoped Classical
+
+private theorem prisonerVertexProfile_quarter_payoff (row column who : Bool) :
+    prisonersDilemma.repeatedGame.discountedPayoff (1 / 4)
+      (prisonerVertexProfile row column) PUnit.unit who =
+        prisonerVertexPayoff row column who := by
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using!
+      congrFun (prisonerVertexProfile_discountedPayoff row column) who
+
+/-- Both endpoints of each initial mixing parameter are retained. The
+opponent's initial probability determines each player's target coordinate. -/
+private def prisonerSquareInitial (s t : Set.Icc (0 : ℝ) 1) : Bool → PMF Bool :=
+  fun who => if who then
+    Math.ProbabilityMassFunction.bernoulliBool (1 - t.1)
+      (by linarith [t.2.2]) (by linarith [t.2.1])
+  else Math.ProbabilityMassFunction.bernoulliBool (1 - s.1)
+    (by linarith [s.2.2]) (by linarith [s.2.1])
+
+/-- The source's four child choices, including initially off-path children.
+The first joint action's coordinates are swapped to choose the next phase. -/
+private def prisonerSquareChild
+    (base : prisonersDilemma.repeatedGame.Hist 1) : prisonersDilemma.BehaviorProfile :=
+  prisonerVertexProfile ((base.1 0).2 true) ((base.1 0).2 false)
+
+private theorem prisonerSquareChildPayoff_eq :
+    (fun joint : Bool → Bool => fun who =>
+      (1 - (1 / 4 : ℝ)) * prisonersDilemma.kernel.eu joint who +
+        (1 / 4) * prisonersDilemma.repeatedGame.discountedPayoff (1 / 4)
+          (prisonerSquareChild (prisonersDilemma.kernel.realizedActionFirstHistory joint))
+          PUnit.unit who) =
+      binaryPayoff (pair 4 4) (pair 1 4) (pair 4 1) (pair 1 1) := by
+  funext joint who
+  have hchild : prisonerSquareChild
+      (prisonersDilemma.kernel.realizedActionFirstHistory joint) =
+        prisonerVertexProfile (joint true) (joint false) := rfl
+  rw [hchild, prisonerVertexProfile_quarter_payoff]
+  cases hrow : joint false <;> cases hcolumn : joint true <;> cases who <;>
+    norm_num [FiniteStageGame.kernel, KernelGame.eu_ofPureEU, prisonersDilemma,
+      binaryGame, binaryPayoff, prisonerVertexPayoff, pair, hrow, hcolumn]
+
+private theorem prisonerSquareChildGame_eq :
+    prisonersDilemma.kernel.realizedActionDiscountedChildGame (1 / 4)
+        prisonerSquareChild =
+      KernelGame.ofPureEU (fun _ : Bool => Bool)
+        (binaryPayoff (pair 4 4) (pair 1 4) (pair 4 1) (pair 1 1)) := by
+  unfold KernelGame.realizedActionDiscountedChildGame
+  exact congrArg (KernelGame.ofPureEU (fun _ : Bool => Bool)) prisonerSquareChildPayoff_eq
+
+private theorem prisonerSquareChildGame_mixedEU (mixed : Bool → PMF Bool) (who : Bool) :
+    (prisonersDilemma.kernel.realizedActionDiscountedChildGame (1 / 4)
+      prisonerSquareChild).mixedExtension.eu mixed who =
+        if who then 4 - 3 * (mixed false true).toReal
+        else 4 - 3 * (mixed true true).toReal := by
+  let binary := KernelGame.ofPureEU (fun _ : Bool => Bool)
+    (binaryPayoff (pair 4 4) (pair 1 4) (pair 4 1) (pair 1 1))
+  let : Finite binary.Outcome := inferInstanceAs (Finite (Bool → Bool))
+  have hactual := prisonersDilemma.kernel.realizedActionDiscountedChildGame_mixedEU
+    (1 / 4) prisonerSquareChild mixed who
+  have htable := congrArg (fun payoff : (Bool → Bool) → Payoff Bool =>
+    Math.Probability.expect (Math.PMFProduct.pmfPi mixed)
+      (fun joint => payoff joint who)) prisonerSquareChildPayoff_eq
+  have hbinary : binary.mixedExtension.eu mixed who =
+      Math.Probability.expect (Math.PMFProduct.pmfPi mixed)
+        (fun joint => binaryPayoff (pair 4 4) (pair 1 4) (pair 4 1) (pair 1 1)
+          joint who) := by
+    simpa only [binary, KernelGame.eu_ofPureEU] using! binary.mixedExtension_eu mixed who
+  have heval := hactual.trans (htable.trans hbinary.symm)
+  rw [heval]
+  change (KernelGame.ofPureEU (fun _ : Bool => Bool)
+    (binaryPayoff (pair 4 4) (pair 1 4) (pair 4 1) (pair 1 1))).mixedExtension.eu mixed who = _
+  rw [binaryKernel_mixedEU_apply]
+  cases who <;> simp only [Bool.false_eq_true, ite_false, ite_true, pair_false, pair_true] <;>
+    ring
+
+/-- One actual behavioral profile delivering any parameterized square point. -/
+noncomputable def prisonerSquareProfile (s t : Set.Icc (0 : ℝ) 1) :
+    prisonersDilemma.BehaviorProfile :=
+  prisonersDilemma.kernel.realizedActionInitialChildDispatcher
+    (prisonerSquareInitial s t) prisonerSquareChild
+
+theorem prisonerSquareProfile_isDiscountedNash (s t : Set.Icc (0 : ℝ) 1) :
+    prisonersDilemma.repeatedGame.IsDiscountedεNash (1 / 4) PUnit.unit 0
+      (prisonerSquareProfile s t) := by
+  apply prisonersDilemma.kernel.realizedAction_initialChildDispatcher_isDiscountedNash
+    (prisonerSquareInitial s t) prisonerSquareChild (by norm_num) (by norm_num)
+  · intro base
+    exact prisonerVertexProfile_isDiscountedNash ((base.1 0).2 true) ((base.1 0).2 false)
+  · intro who deviation
+    let initial : Bool → PMF Bool := prisonerSquareInitial s t
+    let changed : Bool → PMF Bool := Function.update initial who
+      (show PMF Bool from deviation)
+    change (prisonersDilemma.kernel.realizedActionDiscountedChildGame (1 / 4)
+        prisonerSquareChild).mixedExtension.eu changed who ≤
+      (prisonersDilemma.kernel.realizedActionDiscountedChildGame (1 / 4)
+        prisonerSquareChild).mixedExtension.eu initial who
+    have hleft := prisonerSquareChildGame_mixedEU changed who
+    have hright := prisonerSquareChildGame_mixedEU initial who
+    have heq : (if who then 4 - 3 * (changed false true).toReal
+        else 4 - 3 * (changed true true).toReal) =
+        (if who then 4 - 3 * (initial false true).toReal
+        else 4 - 3 * (initial true true).toReal) := by
+      cases who <;> simp [changed, Function.update]
+    exact (hleft.trans (heq.trans hright.symm)).le
+
+theorem prisonerSquareProfile_discountedPayoff (s t : Set.Icc (0 : ℝ) 1) :
+    prisonersDilemma.discountedPayoff (3 / 4) (prisonerSquareProfile s t) =
+      pair (1 + 3 * t.1) (1 + 3 * s.1) := by
+  funext who
+  change prisonersDilemma.repeatedGame.discountedPayoff (1 - (3 / 4))
+    (prisonerSquareProfile s t) PUnit.unit who = _
+  rw [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num]
+  unfold prisonerSquareProfile
+  rw [prisonersDilemma.kernel.realizedAction_discountedPayoff_initialChildDispatcher
+    (prisonerSquareInitial s t) prisonerSquareChild who (by norm_num) (by norm_num)]
+  rw [prisonerSquareChildGame_mixedEU]
+  cases who <;> simp [prisonerSquareInitial, pair,
+    Math.ProbabilityMassFunction.bernoulliBool_true_toReal] <;> ring
+
+/-- Literal square inclusion with an internally selected actual profile. -/
+theorem prisonersDilemma_square_subset_discountedEquilibriumPayoffs :
+    prisonerSquare ⊆ prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) := by
+  intro payoff hpayoff
+  obtain ⟨hrow0, hrow1, hcolumn0, hcolumn1⟩ := hpayoff
+  let s : Set.Icc (0 : ℝ) 1 := ⟨(payoff true - 1) / 3,
+    by constructor <;> linarith⟩
+  let t : Set.Icc (0 : ℝ) 1 := ⟨(payoff false - 1) / 3,
+    by constructor <;> linarith⟩
+  refine ⟨prisonerSquareProfile s t, ?_, ?_⟩
+  · simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using
+      prisonerSquareProfile_isDiscountedNash s t
+  · rw [prisonerSquareProfile_discountedPayoff]
+    funext who
+    cases who <;> simp only [pair_false, pair_true, s, t] <;> ring
+
+private def prisonerOuterInitial (horizontal : Bool) : Bool → PMF Bool :=
+  fun who => PMF.pure (if who then !horizontal else horizontal)
+
+private def prisonerOuterSquareParameters (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1) :
+    Set.Icc (0 : ℝ) 1 × Set.Icc (0 : ℝ) 1 :=
+  if horizontal then (⟨1, by norm_num⟩, alpha) else (alpha, ⟨1, by norm_num⟩)
+
+/-- Prescribe DC for the horizontal segment, CD for the vertical segment.
+The prescribed child is the constructed square point; every other child is
+the already-produced actual DD vertex equilibrium. -/
+private def prisonerOuterChild (horizontal : Bool) (alpha : Set.Icc (0 : ℝ) 1)
+    (base : prisonersDilemma.repeatedGame.Hist 1) : prisonersDilemma.BehaviorProfile :=
+  if (base.1 0).2 false = horizontal ∧ (base.1 0).2 true = !horizontal then
+    prisonerSquareProfile (prisonerOuterSquareParameters horizontal alpha).1
+      (prisonerOuterSquareParameters horizontal alpha).2
+  else prisonerVertexProfile true true
+
+private def prisonerOuterPayoffTable (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1) : (Bool → Bool) → Payoff Bool :=
+  binaryPayoff (pair (13 / 4) (13 / 4))
+    (if horizontal then pair (1 / 4) 4 else pair 1 (4 + (3 / 4) * alpha.1))
+    (if horizontal then pair (4 + (3 / 4) * alpha.1) 1 else pair 4 (1 / 4))
+    (pair 1 1)
+
+private theorem prisonerOuterChild_quarter_payoff (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1)
+    (base : prisonersDilemma.repeatedGame.Hist 1) (who : Bool) :
+    prisonersDilemma.repeatedGame.discountedPayoff (1 / 4)
+        (prisonerOuterChild horizontal alpha base) PUnit.unit who =
+      if (base.1 0).2 false = horizontal ∧ (base.1 0).2 true = !horizontal then
+        pair (1 + 3 * (prisonerOuterSquareParameters horizontal alpha).2.1)
+          (1 + 3 * (prisonerOuterSquareParameters horizontal alpha).1.1) who
+      else pair 1 1 who := by
+  unfold prisonerOuterChild
+  split_ifs
+  · simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+      show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using!
+        congrFun (prisonerSquareProfile_discountedPayoff
+          (prisonerOuterSquareParameters horizontal alpha).1
+          (prisonerOuterSquareParameters horizontal alpha).2) who
+  · exact prisonerVertexProfile_quarter_payoff true true who
+
+private theorem prisonerOuterChildPayoff_eq (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1) :
+    (fun joint : Bool → Bool => fun who =>
+      (1 - (1 / 4 : ℝ)) * prisonersDilemma.kernel.eu joint who +
+        (1 / 4) * prisonersDilemma.repeatedGame.discountedPayoff (1 / 4)
+          (prisonerOuterChild horizontal alpha
+            (prisonersDilemma.kernel.realizedActionFirstHistory joint)) PUnit.unit who) =
+      prisonerOuterPayoffTable horizontal alpha := by
+  funext joint who
+  rw [prisonerOuterChild_quarter_payoff]
+  have hfirst :
+      ((prisonersDilemma.kernel.realizedActionFirstHistory joint).1 0).2 = joint := rfl
+  simp only [hfirst]
+  cases horizontal <;> cases hrow : joint false <;> cases hcolumn : joint true <;>
+    cases who <;>
+      norm_num [FiniteStageGame.kernel, KernelGame.eu_ofPureEU, prisonersDilemma,
+        binaryGame, binaryPayoff, prisonerOuterPayoffTable, prisonerOuterSquareParameters,
+        pair, hrow, hcolumn] <;> ring
+
+private theorem prisonerOuterChildGame_eq (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1) :
+    prisonersDilemma.kernel.realizedActionDiscountedChildGame (1 / 4)
+        (prisonerOuterChild horizontal alpha) =
+      KernelGame.ofPureEU (fun _ : Bool => Bool) (prisonerOuterPayoffTable horizontal alpha) := by
+  unfold KernelGame.realizedActionDiscountedChildGame
+  exact congrArg (KernelGame.ofPureEU (fun _ : Bool => Bool))
+    (prisonerOuterChildPayoff_eq horizontal alpha)
+
+private theorem prisonerOuterChildGame_mixedEU (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1) (mixed : Bool → PMF Bool) (who : Bool) :
+    (prisonersDilemma.kernel.realizedActionDiscountedChildGame (1 / 4)
+      (prisonerOuterChild horizontal alpha)).mixedExtension.eu mixed who =
+      (KernelGame.ofPureEU (fun _ : Bool => Bool)
+        (prisonerOuterPayoffTable horizontal alpha)).mixedExtension.eu mixed who := by
+  let binary := KernelGame.ofPureEU (fun _ : Bool => Bool)
+    (prisonerOuterPayoffTable horizontal alpha)
+  let : Finite binary.Outcome := inferInstanceAs (Finite (Bool → Bool))
+  have hactual := prisonersDilemma.kernel.realizedActionDiscountedChildGame_mixedEU
+    (1 / 4) (prisonerOuterChild horizontal alpha) mixed who
+  have htable := congrArg (fun payoff : (Bool → Bool) → Payoff Bool =>
+    Math.Probability.expect (Math.PMFProduct.pmfPi mixed)
+      (fun joint => payoff joint who)) (prisonerOuterChildPayoff_eq horizontal alpha)
+  have hbinary : binary.mixedExtension.eu mixed who =
+      Math.Probability.expect (Math.PMFProduct.pmfPi mixed)
+        (fun joint => prisonerOuterPayoffTable horizontal alpha joint who) := by
+    simpa only [binary, KernelGame.eu_ofPureEU] using! binary.mixedExtension_eu mixed who
+  exact hactual.trans (htable.trans hbinary.symm)
+
+private theorem prisonerOuterInitial_isNash (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1) :
+    (prisonersDilemma.kernel.realizedActionDiscountedChildGame (1 / 4)
+      (prisonerOuterChild horizontal alpha)).mixedExtension.IsNash
+        (prisonerOuterInitial horizontal) := by
+  intro who deviation
+  let initial : Bool → PMF Bool := prisonerOuterInitial horizontal
+  let changed : Bool → PMF Bool := Function.update initial who
+    (show PMF Bool from deviation)
+  change (prisonersDilemma.kernel.realizedActionDiscountedChildGame (1 / 4)
+      (prisonerOuterChild horizontal alpha)).mixedExtension.eu changed who ≤
+    (prisonersDilemma.kernel.realizedActionDiscountedChildGame (1 / 4)
+      (prisonerOuterChild horizontal alpha)).mixedExtension.eu initial who
+  have hp0 : 0 ≤ (deviation true).toReal := ENNReal.toReal_nonneg
+  have hp1 : (deviation true).toReal ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one deviation true)
+  have halpha : 0 ≤ 1 + alpha.1 := by linarith [alpha.2.1]
+  have hproduct := mul_nonneg (sub_nonneg.mpr hp1) halpha
+  have hweighted : (deviation true).toReal * (4 + (3 / 4) * alpha.1) +
+      (1 - (deviation true).toReal) * (13 / 4) ≤ 4 + (3 / 4) * alpha.1 := by
+    calc
+      (deviation true).toReal * (4 + (3 / 4) * alpha.1) +
+          (1 - (deviation true).toReal) * (13 / 4) =
+          4 + (3 / 4) * alpha.1 -
+            (3 / 4) * ((1 - (deviation true).toReal) * (1 + alpha.1)) := by ring
+      _ ≤ 4 + (3 / 4) * alpha.1 :=
+        sub_le_self _ (mul_nonneg (by norm_num) hproduct)
+  have hbinary : (KernelGame.ofPureEU (fun _ : Bool => Bool)
+        (prisonerOuterPayoffTable horizontal alpha)).mixedExtension.eu changed who ≤
+      (KernelGame.ofPureEU (fun _ : Bool => Bool)
+        (prisonerOuterPayoffTable horizontal alpha)).mixedExtension.eu initial who := by
+    unfold prisonerOuterPayoffTable
+    rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
+    cases horizontal <;> cases who <;>
+      norm_num [initial, changed, prisonerOuterInitial, Function.update, pair] <;>
+        exact hweighted
+  have hleft := prisonerOuterChildGame_mixedEU horizontal alpha changed who
+  have hright := prisonerOuterChildGame_mixedEU horizontal alpha initial who
+  exact hleft.trans_le (hbinary.trans_eq hright.symm)
+
+/-- Actual behavioral producer for each point of either outer segment. -/
+noncomputable def prisonerOuterProfile (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1) : prisonersDilemma.BehaviorProfile :=
+  prisonersDilemma.kernel.realizedActionInitialChildDispatcher
+    (prisonerOuterInitial horizontal) (prisonerOuterChild horizontal alpha)
+
+theorem prisonerOuterProfile_isDiscountedNash (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1) :
+    prisonersDilemma.repeatedGame.IsDiscountedεNash (1 / 4) PUnit.unit 0
+      (prisonerOuterProfile horizontal alpha) := by
+  apply prisonersDilemma.kernel.realizedAction_initialChildDispatcher_isDiscountedNash
+    (prisonerOuterInitial horizontal) (prisonerOuterChild horizontal alpha)
+    (by norm_num) (by norm_num)
+  · intro base
+    unfold prisonerOuterChild
+    split_ifs
+    · exact prisonerSquareProfile_isDiscountedNash
+        (prisonerOuterSquareParameters horizontal alpha).1
+        (prisonerOuterSquareParameters horizontal alpha).2
+    · exact prisonerVertexProfile_isDiscountedNash true true
+  · exact prisonerOuterInitial_isNash horizontal alpha
+
+theorem prisonerOuterProfile_discountedPayoff (horizontal : Bool)
+    (alpha : Set.Icc (0 : ℝ) 1) :
+    prisonersDilemma.discountedPayoff (3 / 4) (prisonerOuterProfile horizontal alpha) =
+      if horizontal then pair (4 + (3 / 4) * alpha.1) 1
+      else pair 1 (4 + (3 / 4) * alpha.1) := by
+  funext who
+  change prisonersDilemma.repeatedGame.discountedPayoff (1 - (3 / 4))
+    (prisonerOuterProfile horizontal alpha) PUnit.unit who = _
+  rw [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num]
+  unfold prisonerOuterProfile
+  rw [prisonersDilemma.kernel.realizedAction_discountedPayoff_initialChildDispatcher
+    (prisonerOuterInitial horizontal) (prisonerOuterChild horizontal alpha) who
+    (by norm_num) (by norm_num)]
+  rw [prisonerOuterChildGame_mixedEU]
+  unfold prisonerOuterPayoffTable
+  rw [binaryKernel_mixedEU_apply]
+  cases horizontal <;> cases who <;> norm_num [prisonerOuterInitial, pair]
+
+theorem prisonersDilemma_horizontalSegment_subset_discountedEquilibriumPayoffs :
+    prisonerHorizontalSegment ⊆ prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) := by
+  rintro payoff ⟨alpha, halpha, rfl⟩
+  refine ⟨prisonerOuterProfile true ⟨alpha, halpha⟩, ?_, ?_⟩
+  · simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using
+      prisonerOuterProfile_isDiscountedNash true ⟨alpha, halpha⟩
+  · exact prisonerOuterProfile_discountedPayoff true ⟨alpha, halpha⟩
+
+theorem prisonersDilemma_verticalSegment_subset_discountedEquilibriumPayoffs :
+    prisonerVerticalSegment ⊆ prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) := by
+  rintro payoff ⟨alpha, halpha, rfl⟩
+  refine ⟨prisonerOuterProfile false ⟨alpha, halpha⟩, ?_, ?_⟩
+  · simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using
+      prisonerOuterProfile_isDiscountedNash false ⟨alpha, halpha⟩
+  · exact prisonerOuterProfile_discountedPayoff false ⟨alpha, halpha⟩
+
+/-- Source-complete lower inclusion, using only internally constructed
+actual profiles and all-child Nash gluing against full behavioral deviations. -/
+theorem prisonersDilemma_criticalSet_subset_discountedEquilibriumPayoffs :
+    prisonerCriticalSet ⊆ prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) := by
+  rintro payoff (hsquare | hhorizontal | hvertical)
+  · exact prisonersDilemma_square_subset_discountedEquilibriumPayoffs hsquare
+  · exact prisonersDilemma_horizontalSegment_subset_discountedEquilibriumPayoffs hhorizontal
+  · exact prisonersDilemma_verticalSegment_subset_discountedEquilibriumPayoffs hvertical
+
+end PrisonerLowerDispatchers
+
 /-! Proposition 15 contains both an explicit equilibrium construction for all
 of `A` and the multiplicative escape argument proving the reverse inclusion.
-The history-dependent equilibrium construction and the assembled first-stage
-best-response continuation matrix are not yet formalized. -/
+The lower inclusion uses actual vertex profiles and all-child discounted
+Nash gluing; the upper inclusion uses actual supported-child escape and
+compact maximality over the original equilibrium-payoff set. -/
 theorem proposition_15 :
     prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) =
       prisonerCriticalSet := by
-  sorry
+  exact Set.Subset.antisymm
+    prisonersDilemma_discountedEquilibriumPayoffs_subset_criticalSet
+    prisonersDilemma_criticalSet_subset_discountedEquilibriumPayoffs
 
 /-! ## Concluding remarks -/
 

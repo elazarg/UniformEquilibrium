@@ -1,0 +1,244 @@
+import MathUE.Analysis.CurvatureHomogeneity
+import UniformEquilibrium.Quitting.Projective.RobustPotentialMixedCurvature
+import UniformEquilibrium.Quitting.Projective.RobustPotentialNegativeHessian
+
+/-! # Literal robust positive-charge normalization and scaled curvature bounds
+
+The boxed robust relation, source regret, absorption and tolerance do not
+change. Only its required potential drop has coefficient κ. Normalizing P/κ
+uses the checked unit face and spectral owners; the signed account is applied
+to the original P with its scaled face gain, including every box minimum.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open Set Math.LinearProgramming
+open scoped BigOperators
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+/-- Every actual robust edge is required; no selector or payoff carrier is imposed. -/
+def IsQuittingRobustPotentialWithCharge
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tolerance bound coefficient : ℝ) (potential : Payoff ι → ℝ) : Prop :=
+  ∀ edge : QuittingRobustChargedEdge reward tolerance bound,
+    potential edge.1.2.1 + coefficient * quittingRootAbsorptionMass
+      (quittingRootOfSimplex edge.1.1.2) ≤ potential edge.1.1.1.1
+
+theorem constant_isQuittingRobustPotentialWithCharge_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tolerance bound constant : ℝ) :
+    IsQuittingRobustPotentialWithCharge reward tolerance bound 0 (fun _ => constant) := by
+  intro edge
+  simp
+
+/-- Same endpoints, same root and charge: positive normalization changes only P. -/
+theorem isQuittingRobustPotentialWithCharge_iff_div
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tolerance bound : ℝ)
+    {coefficient : ℝ} (hcoefficient : 0 < coefficient) (potential : Payoff ι → ℝ) :
+    IsQuittingRobustPotentialWithCharge reward tolerance bound coefficient potential ↔
+      (quittingFloorFreeRobustChargedRelation reward tolerance bound).IsPotential
+        (fun state => potential state.1 / coefficient) := by
+  constructor
+  · intro hpotential edge
+    change potential edge.1.2.1 / coefficient + quittingRootAbsorptionMass
+      (quittingRootOfSimplex edge.1.1.2) ≤ potential edge.1.1.1.1 / coefficient
+    have h := (div_le_div_iff_of_pos_right hcoefficient).mpr (hpotential edge)
+    simpa only [add_div, mul_div_cancel_left₀ _ hcoefficient.ne'] using h
+  · intro hpotential edge
+    have h := hpotential edge
+    change potential edge.1.2.1 / coefficient + quittingRootAbsorptionMass
+      (quittingRootOfSimplex edge.1.1.2) ≤ potential edge.1.1.1.1 / coefficient at h
+    apply (div_le_div_iff_of_pos_right hcoefficient).mp
+    simpa only [add_div, mul_div_cancel_left₀ _ hcoefficient.ne'] using h
+
+/-- The literal robust face bound, with c=κW/(W-τ), not the exact-root coefficient. -/
+theorem quittingRobustPotentialWithCharge_singletonFace_fderiv_bounds
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {bound tolerance coefficient : ℝ}
+    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+    (htolerance0 : 0 < tolerance) (htolerance1 : tolerance ≤ 1 / 4)
+    (hcoefficient : 0 < coefficient) (potential : Payoff ι → ℝ)
+    (hpotential : IsQuittingRobustPotentialWithCharge reward tolerance (bound + 2)
+      coefficient potential)
+    (point : Payoff ι) (owner : ι)
+    (hpoint : ∀ who,
+      quittingSoloReward reward who who ≤ point who ∧ point who ≤ bound + 1)
+    (howner : point owner = quittingSoloReward reward owner owner)
+    (hdiff : DifferentiableAt ℝ potential point) :
+    (coefficient + tolerance * ∑ who, |fderiv ℝ potential point (Pi.single who 1)| ≤
+      fderiv ℝ potential point (point - quittingSoloReward reward owner)) ∧
+    (coefficient / (2 * bound + 1 - tolerance) ≤
+      ∑ who, |fderiv ℝ potential point (Pi.single who 1)|) ∧
+    coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance) ≤
+      fderiv ℝ potential point (point - quittingSoloReward reward owner) := by
+  let normalized := fun input => potential input / coefficient
+  have hunit := (isQuittingRobustPotentialWithCharge_iff_div reward tolerance
+    (bound + 2) hcoefficient potential).mp hpotential
+  have hnormalized : DifferentiableAt ℝ normalized point := by
+    simpa only [normalized, div_eq_mul_inv] using hdiff.mul_const coefficient⁻¹
+  have hbounds := quittingRobustPotential_singletonFace_fderiv_bounds reward hreward
+    htolerance0 htolerance1 normalized hunit point owner hpoint howner
+    hnormalized
+  have heq : (fun input => coefficient * normalized input) = potential := by
+    funext input
+    simp only [normalized, mul_div_cancel₀ _ hcoefficient.ne']
+  have hderivative : fderiv ℝ potential point = coefficient • fderiv ℝ normalized point := by
+    rw [← heq]
+    exact congrFun (fderiv_const_smul_field (𝕜 := ℝ) (f := normalized) coefficient) point
+  have hsum : (∑ who, |fderiv ℝ potential point (Pi.single who 1)|) =
+      coefficient * ∑ who, |fderiv ℝ normalized point (Pi.single who 1)| := by
+    simp only [hderivative, smul_apply, smul_eq_mul, abs_mul,
+      abs_of_pos hcoefficient, Finset.mul_sum]
+  have happly : fderiv ℝ potential point (point - quittingSoloReward reward owner) =
+      coefficient * fderiv ℝ normalized point (point - quittingSoloReward reward owner) := by
+    rw [hderivative]
+    rfl
+  rw [hsum, happly]
+  refine ⟨?_, ?_, ?_⟩
+  · have h := mul_le_mul_of_nonneg_left hbounds.1 hcoefficient.le
+    nlinarith
+  · simpa only [mul_div, mul_one] using
+      mul_le_mul_of_nonneg_left hbounds.2.1 hcoefficient.le
+  · simpa only [mul_div] using mul_le_mul_of_nonneg_left hbounds.2.2 hcoefficient.le
+
+/-- Source equations (3)-(4) for any supplied analytic simplex. No standard-Q
+premise is added. The minimum is universal and the off-diagonal maximum is produced. -/
+theorem quittingRobustPotentialWithCharge_mixedCurvature [Nontrivial ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {bound tolerance coefficient : ℝ}
+    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+    (htolerance0 : 0 < tolerance) (htolerance1 : tolerance ≤ 1 / 4)
+    (hcoefficient : 0 < coefficient) (weight : Convexity.StdSimplex ℝ ι)
+    (himage : ∀ receiver, 0 ≤ ∑ owner, weight.weights owner *
+      quittingProjectiveLCPMatrix reward receiver owner)
+    (potential : Payoff ι → ℝ) (domain : Set (Payoff ι))
+    (hopen : IsOpen domain) (hbox : quittingSingletonBox reward bound ⊆ domain)
+    (hsmooth : ContDiffOn ℝ 2 potential domain)
+    (hpotential : IsQuittingRobustPotentialWithCharge reward tolerance (bound + 2)
+      coefficient potential) :
+    (∀ minimum ∈ quittingSingletonBox reward bound,
+      IsMinOn potential (quittingSingletonBox reward bound) minimum →
+      (∀ receiver, 0 ≤ Math.lowerBoundaryMultiplier
+        (fun who => quittingSoloReward reward who who) minimum potential receiver) ∧
+      coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance) +
+          Math.lowerBoundaryMatrixContribution (fun who => quittingSoloReward reward who who)
+            minimum (quittingSoloReward reward) weight.weights potential ≤
+        Math.signedMixedCurvatureAccount (fun who => quittingSoloReward reward who who)
+          minimum (quittingSoloReward reward) weight.weights potential ∧
+      coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance) ≤
+        coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance) +
+          Math.lowerBoundaryMatrixContribution (fun who => quittingSoloReward reward who who)
+            minimum (quittingSoloReward reward) weight.weights potential) ∧
+    ∃ point ∈ quittingSingletonBox reward bound, ∃ owner receiver, owner ≠ receiver ∧
+      (coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance)) /
+          (((Fintype.card ι - 1 : ℕ) : ℝ) * (2 * bound + 1) ^ 2) ≤
+        |Math.coordinateMixedPartial potential point owner receiver| ∧
+      Math.boxMixedCurvatureSup potential (quittingSingletonBox reward bound) =
+        |Math.coordinateMixedPartial potential point owner receiver| := by
+  let lower := fun who => quittingSoloReward reward who who
+  let upper : Payoff ι := fun _ => bound + 1
+  let gain := coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance)
+  have hwidth : ∀ who, lower who < upper who := fun who =>
+    sub_pos.mp (quittingSingletonBoxWidth_pos reward hreward who)
+  have hupper : ∀ owner receiver, quittingSoloReward reward owner receiver ≤ upper receiver := by
+    intro owner receiver
+    have h := (le_abs_self _).trans (hreward (quittingSingletonTerminal owner) receiver)
+    change quittingSoloReward reward owner receiver ≤ bound at h
+    exact h.trans (by dsimp [upper]; linarith)
+  have himage' : ∀ receiver, 0 ≤ ∑ owner,
+      (quittingSoloReward reward owner receiver - lower receiver) * weight.weights owner := by
+    intro receiver
+    simpa only [lower, quittingProjectiveLCPMatrix, quittingSoloReward,
+      quittingProjectiveSingletonTerminal, quittingSingletonTerminal, mul_comm] using
+      himage receiver
+  have hdrift : ∀ point ∈ Icc lower upper, ∀ owner, point owner = lower owner →
+      gain ≤ fderiv ℝ potential point (point - quittingSoloReward reward owner) := by
+    intro point hpoint owner howner
+    have hdiff := (hsmooth.differentiableOn (by norm_num) point
+      (hbox hpoint)).differentiableAt (hopen.mem_nhds (hbox hpoint))
+    exact (quittingRobustPotentialWithCharge_singletonFace_fderiv_bounds reward hreward
+      htolerance0 htolerance1 hcoefficient potential hpotential point owner
+      (fun who => ⟨hpoint.1 who, hpoint.2 who⟩) howner hdiff).2.2
+  have hparameters := quittingSingletonBox_mixedCurvature_width_bounds reward hreward
+  exact ⟨Math.signedMixedCurvatureAccount_at_every_box_minimum lower upper
+    (quittingSoloReward reward) weight.weights potential domain gain hwidth (fun _ => rfl)
+    hupper weight.weights_nonneg weight.total_of_fintype himage' hopen hbox hsmooth hdrift,
+    Math.exists_box_mixed_curvature_max_ge_of_face_drift lower upper
+      (quittingSoloReward reward) weight.weights potential domain gain (2 * bound + 1)
+      hwidth (fun _ => rfl) hupper weight.weights_nonneg weight.total_of_fintype himage'
+      hopen hbox hsmooth hparameters.1 hparameters.2.1 hparameters.2.2 hdrift⟩
+
+/-- Source equation (5) with the same literal textbook Q and c=κW/(W-τ).
+The conclusion is the actual attained least eigenvalue, not a directional surrogate. -/
+theorem quittingRobustPotentialWithCharge_negativeHessianEigenvalue [Nontrivial ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {bound tolerance coefficient : ℝ}
+    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+    (htolerance0 : 0 < tolerance) (htolerance1 : tolerance ≤ 1 / 4)
+    (hcoefficient : 0 < coefficient)
+    (hQ : IsStandardQ (quittingProjectiveLCPMatrix reward))
+    (potential : Payoff ι → ℝ) (domain : Set (Payoff ι))
+    (hopen : IsOpen domain) (hbox : quittingSingletonBox reward bound ⊆ domain)
+    (hsmooth : ContDiffOn ℝ 2 potential domain)
+    (hpotential : IsQuittingRobustPotentialWithCharge reward tolerance (bound + 2)
+      coefficient potential) :
+    (0 < quittingPositiveFaceCurvatureBudget reward) ∧
+    (Math.coordinateMinimumHessianEigenvalue potential (quittingSingletonBox reward bound) ≤
+      -(coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance)) /
+        quittingPositiveFaceCurvatureBudget reward) ∧
+    (0 < bound →
+      Math.coordinateMinimumHessianEigenvalue potential (quittingSingletonBox reward bound) ≤
+        -(coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance)) /
+          (((Fintype.card ι - 1 : ℕ) : ℝ) * bound ^ 2)) ∧
+    ∃ point ∈ quittingSingletonBox reward bound,
+      IsMinOn (Math.coordinateLeastHessianEigenvalue potential)
+        (quittingSingletonBox reward bound) point ∧
+      Module.End.HasEigenvalue (Math.coordinateHessian potential point).toLinearMap
+        (Math.coordinateLeastHessianEigenvalue potential point) ∧
+      Math.coordinateLeastHessianEigenvalue potential point ≤
+        -(coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance)) /
+          quittingPositiveFaceCurvatureBudget reward := by
+  let normalized := fun input => potential input / coefficient
+  have hunit := (isQuittingRobustPotentialWithCharge_iff_div reward tolerance
+    (bound + 2) hcoefficient potential).mp hpotential
+  obtain ⟨hbudget, hminimum, hsimplified, _⟩ :=
+    quittingRobustPotential_negativeHessianEigenvalue_of_standardQ reward hreward
+      htolerance0 htolerance1 hQ normalized domain hopen hbox
+      (hsmooth.div_const coefficient) hunit
+  have heq : (fun input => coefficient * normalized input) = potential := by
+    funext input
+    simp only [normalized, mul_div_cancel₀ _ hcoefficient.ne']
+  have hscale : Math.coordinateMinimumHessianEigenvalue potential
+      (quittingSingletonBox reward bound) = coefficient *
+        Math.coordinateMinimumHessianEigenvalue normalized (quittingSingletonBox reward bound) := by
+    rw [← heq]
+    exact Math.coordinateMinimumHessianEigenvalue_const_mul hcoefficient.le normalized _
+  have hbound : Math.coordinateMinimumHessianEigenvalue potential
+      (quittingSingletonBox reward bound) ≤
+      -(coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance)) /
+        quittingPositiveFaceCurvatureBudget reward := by
+    rw [hscale]
+    have h := mul_le_mul_of_nonneg_left hminimum hcoefficient.le
+    convert h using 1
+    ring
+  have hnonempty : (quittingSingletonBox reward bound).Nonempty := by
+    refine ⟨fun who => quittingSoloReward reward who who, le_rfl, ?_⟩
+    intro who
+    have h := (le_abs_self _).trans (hreward (quittingSingletonTerminal who) who)
+    change quittingSoloReward reward who who ≤ bound at h
+    exact h.trans (by linarith)
+  obtain ⟨point, hpoint, hmin, hvalue, heigenvalue, _⟩ :=
+    Math.exists_coordinateMinimumHessianEigenvalue potential (quittingSingletonBox reward bound)
+      domain isCompact_Icc hnonempty hopen hbox hsmooth
+  refine ⟨hbudget, hbound, ?_, point, hpoint, hmin, heigenvalue, ?_⟩
+  · intro hpositive
+    rw [hscale]
+    have h := mul_le_mul_of_nonneg_left (hsimplified hpositive) hcoefficient.le
+    convert h using 1
+    ring
+  · rwa [hvalue] at hbound
+
+end GameTheory

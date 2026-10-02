@@ -68,7 +68,7 @@ gates. It is retired unchanged to
 | Completed unchanged-child obstruction | `ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO` | `AdaptiveChildCenter.profile_exactTerminalNash` and `AdaptiveChildCenter.target_isUniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`) prove the center's positive equilibrium. `exists_actual_quantile_rigidity` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterQuantileRigidity.lean`) passes its silent named check for the original full sequence and internally selected unbounded cutoffs. The four actual restriction estimates, positive parent-plus-child floor, reward-neighborhood transfer and nearby one-date producer pass the named `AdaptiveChildCenterNearbyHorizons` check, including the same selected profile before every accuracy and exact Nash at every finite horizon. Literal center, half-scaling, unchanged-law and larger-radius stationary consumers also pass their named checks. Complete-claim review and the full silent integration gate pass; the packet is retired unchanged. Capped-clock certificate infeasibility does not prove the unchanged-child obstruction. |
 | Single-pivot secant and tilted common-calendar source | `SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE` | Both payoff packets are complete and retired, including accepted raw sources, exact laws/full caps, the printed half-cap rates, selected-word pivot optimum, and all literal fixtures. The single-pivot secant/tilted common-calendar source remains a separate construction; payoff compression does not preserve caps. |
 | New screened-minimum/fiber algebra and source transport | `GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR`, `MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION`, `THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS` | `minimumTerminalSemantic_maximumDebt_allPlayersTie` (`UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean`), `minimumTerminalSemantic_exploitabilitySingletonMargin` (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostate.lean`), and `exists_twoSureProductRoot_realizing_jointCarrierPoint_of_strictMargin` (`UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonBehavioralLawProductBase.lean`) provide minimum and actual-source interfaces. The first new steps differ: degree-six screened-root nonvanishing, four-coordinate singleton stretch, and signed affine-row comparison, respectively. None may assume a selected counterexample fiber or hazard as a certificate field. |
-| Potential shape branches after the checked common core | `REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS`, `QUITTING_POTENTIAL_SHAPE_EXCLUSIONS` | The same-potential full-exact-edge restriction, actual collision-adjusted singleton probes, unit face drift, minimum localization, boundary derivative signs and matrix-free quasiconvex exclusion pass the full integration gate. Robust face drift, the ambient standard-Q producer, face-only Q exclusion, mixed-curvature and negative-Hessian bounds pass named checks. Adaptive reflection, unrestricted quadratic and multi-affine exclusions, the directional third-derivative bound and the same-polynomial characterization also pass named checks and separate standard-axiom checks. Their full integration gate passes. Additive/scalar-composition, rational rejection, other same-polynomial joins and literal fixtures remain. These are necessary-shape reductions, not a solved-game class. |
+| Rational rejection and literal potential fixtures | `REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS`, `QUITTING_POTENTIAL_SHAPE_EXCLUSIONS` | The common exact-root exclusion, adaptive reflection, quadratic and multi-affine exclusions, and restricted same-polynomial characterization pass the full integration gate. Face-only additive and regular scalar-composition exclusions, monotone-transform transfer, the same-polynomial quantitative characterization and positive charge normalization pass silent named, separate standard-axiom and full integration checks. The rational exact one-quitter rejection producer is next for the shape packet, followed by its literal fixtures. The reflection packet separately requires rational approximate robust rejection, eventual search and its remaining source joins. These are necessary-shape reductions, not a solved-game class. |
 
 ## Adaptive-child obstruction: known-proof dependencies
 
@@ -149,7 +149,25 @@ The proposed regret-floor loss is at most twice a child reward bound times
 the sum of complete survivor-law distances, in addition to the child's Nash
 error. These distances include every finite date and Never. This composed
 extension is not proved here; finite-coordinate convergence alone does not
-give such a bound. The exact-law adaptive packet still awaits its full gate.
+give such a bound. The exact-law adaptive packet passes its full gate and is retired.
+
+Post-completion discovery also identified three minor theorem surfaces not
+yet implemented: localization of every nearby active zero by the reward
+perturbation radius; convergence of the original center approximate-terminal-
+equilibrium sequence's payoff to `(1, 0, 0, 1)`; and one eventual threshold for
+all four literal child deletions, including a varying deleted player. The
+existing quantile and payoff estimates support these proposed compositions.
+None asserts convergence of stopping dates or a full stopping profile, or
+uniqueness of the uniform-equilibrium payoff set.
+
+The checked nearby one-date producer selects one profile before every horizon
+and accuracy and proves exact Nash at every finite horizon. Its cutoff proof
+also suggests a stagewise deviation bound and nonnegative weighted-evaluation
+consumers; those facades remain unimplemented. Weighted delivery would scale
+the terminal target by the total weight after stage zero. A proposed relaxation
+of the one-date producer's radius from `< 1/8` to `< 1/4` is supported by its
+existing arithmetic but is not checked and does not enlarge the independently
+selected paired-floor neighborhood.
 
 Exact absorbing stationary roots produced by the response-quotient sign,
 no-singleton-block, or joining-infeasibility routes can feed
@@ -468,22 +486,76 @@ vector and rational gap, then retains all three while selecting one collar
 before every allowed singleton vector and actual near-minimum profile. Its
 positive-gap threshold is explicit; it does not give uniform constants as
 the gap tends to zero.
-Section 5.1's additional rationalization of all sixty entries is not yet
-covered. It concerns an initial positive-gap table, not a rational maximizing
-singleton vector.
+Section 5.1's additional rationalization of all sixty entries has a staged
+producer. A separate same-table join retains its four rational own singletons,
+perturbs only the free block to impose polynomial nonvanishing, and preserves
+at least one quarter of the positively scaled source infimum. It then selects
+a real singleton maximizer and a rational gap on that same free block. Root
+source review passes; these drafts still need Lean and integration checks.
+The maximizing singleton vector is not asserted rational.
 
-The remaining common-calendar consumer needs finite softmax, compact envelope,
-projected four-coordinate gradient selection, a same-table calendar telescope,
-and the silent shift with its retained tester weights. The independent
+The finite log-sum-exp value, entropy, local first-derivative and second-derivative
+formulas pass the silent named `MathUE.Analysis.FiniteLogSumExp` check. They reuse
+the canonical arbitrary-score exponential probabilities. Their transitive axiom
+checks use only the three permitted standard axioms, and the full integration
+gate passes. This generic calculus does not select the actual tester family
+or construct a calendar.
+The compact minimum-envelope right-derivative theorem passes its silent named
+check and separate standard-axiom checks. It retains every old minimizer and
+internally selects one attaining the least actual derivative; no favorable
+minimizer or uniform differentiability certificate is supplied. Its index may
+be any nonempty compact topological space, not only a compact metric space.
+The full integration gate passes for both analytic additions.
+An unapplied source draft constructs the actual common-calendar tester family:
+zero, every owner's finite dates through the common endpoint, and separate
+Never replies. Its maximum equals full behavioral exploitability, retaining
+the signed singleton correction for late finite replies. It internally selects
+a compact smooth minimum and computes that same profile's positive weights,
+their sum-one identity, and the entropy inactivity bound. Root and independent
+source reviews pass; Lean checks remain. The draft does not supply
+the tilted parameter, outer maximization or enlarged-calendar comparison.
+The remaining common-calendar consumer needs projected four-coordinate
+gradient selection, a same-table calendar telescope, and the silent shift
+with its retained tester weights. The independent
 harmonic restriction and literal boundary/noncoverage examples are separate
 packet obligations. The reviewed collar does not supply these constructions.
+The calendar's uniform cap moat concerns every near-minimizer of maximum debt
+at the varying reward table.
+`nearMinimumTerminalSemantic_cap_sub_singleton_ge`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCapNashNearMinimum.lean`)
+instead assumes a global sum-debt floor and sum-debt excess. That theorem
+cannot be applied by substituting maximum debt for its stated hypotheses.
 Existing full-cap finite-clock approximation in Research should be promoted
-and reused, not replaced by payoff-only compression. Membership stretch retains
+and reused, not replaced by payoff-only compression. Its independently reviewed
+promotion draft adds a source-producing quantitative facade: under the unit
+reward bound, one actual four-player law tuple supported below `8 * j + 1`
+has unrestricted exploitability at most the behavioral infimum plus `24 / j`.
+The same laws work on every larger calendar, with Never retained. This draft
+is not yet checked; it does not assert a zero infimum or produce the tilted
+tester weights. Membership stretch retains
 the original table's ancestry; generic polynomial selection may choose a new
 fiber, so those two producers cannot be interchanged. The opposed-reversal
 consumer reuses the checked coherent exclusion and first reversal, adding only
 the signed affine comparison needed for a second distinct, oppositely reversing
 owner. None of these source steps is discharged by the polynomial alone.
+
+The opposed-reversal consumer does not depend on the common-calendar weights.
+`exists_sureOwner_strictOptionalReversal_of_membershipStretch_positiveMinimum_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/ThreeSureMembershipReversal.lean`)
+already gives one reversing sure owner. The packet requires two distinct
+owners with opposed orientations. Its separate route needs the internally
+selected worst table and stretched singleton-fiber maximum, the signed
+affine-row comparison, and the actual old-table root consumer. In the weak
+same-root cases, old global attainment must be proved before invoking the
+old table's all-player-tie theorem. Neither the existing one-owner result nor
+the staged generic algebra closes that route by itself. The worst-table and
+literal stretched-fiber source now has an unapplied implementation draft.
+The all-case signed-row comparison and exact opposed-orientation regression
+also have drafts. The actual full-debt row adapter and opposed-pair consumer
+have a further draft that retains the original source before every root
+request. Root source review passes; independent review and compilation remain.
+The separate strict pure-coalition source floor remains an implementation
+obligation.
 
 ## Proof-mining connections not yet formalized
 
@@ -741,7 +813,7 @@ Source-correspondence prose and nonclaims require no extra theorem.
 Arbitrary refinement of a response-invariant partition is not asserted by the
 packet; a general block-splitting theorem is not a retirement requirement.
 
-## Potential packets: remaining known-proof dependencies
+## Potential packets: checked dependencies and remaining obligations
 
 The common exact-root restriction, collision-adjusted probes, unit face drift,
 minimum localization and matrix-free quasiconvex exclusion pass the full
@@ -751,7 +823,9 @@ negative-Hessian bound and their generic owners pass silent named checks.
 Their full integration gate passes. Adaptive reflection, quadratic
 and multi-affine exclusions, the directional third-derivative bound and the
 same-polynomial characterization also pass named and separate standard-axiom
-checks. Monotone-transform transfer has independently reviewed drafts awaiting checks.
+checks. Weakly monotone or antitone C¹-transform transfer also passes its named
+dependency check, separate standard-axiom check and full integration gate.
+Flat outer-function pieces are allowed on the whole inner image.
 The two potential packets also have additional obligations.
 These are formalization dependencies of their supplied proofs, not new
 mathematical conjectures.
@@ -766,9 +840,14 @@ mathematical conjectures.
    cannot assume global monotonicity: its derivative sign on the lower-boundary
    image must follow from the actual positive face drift and connectedness.
    Equality on a closed box also requires boundary derivative identification.
-   Independently reviewed drafts cover these analytic steps, including every
-   endpoint minimum and box-only representation equality. Lean checks and the
-   actual translated-potential adapter remain necessary.
+   The generic exclusions and actual translated-potential adapter pass silent
+   named checks. The actual representation exclusions require only a
+   nonnegative simplex with nonnegative matrix image, not standard Q.
+   The same-polynomial quantitative characterization also passes its silent
+   named check, retaining one expression and tolerance for all added
+   nonseparability and curvature conclusions. Their separate transitive axiom
+   checks use only the three permitted standard axioms, and the full
+   integration gate passes.
 3. Produce the simplex witness from the actual textbook-Q problem and join
    the Fin4 no-UE normal-core, reindexing and normalized-matrix owners. A
    supplied favorable simplex point is not the producer.
@@ -778,8 +857,8 @@ mathematical conjectures.
    supplies standard Q on the normal core, and
    `normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff`
    (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean`)
-   identifies that core with all four players. Their literal matrix transport
-   and Q-predicate bridges leave a small composition adapter to implement.
+   identifies that core with all four players. The literal matrix transport
+   and Q-predicate bridges are assembled in the checked producer below.
    Normalizing an actual standard LCP solution at right-hand side minus one
    yields a simplex vector with strictly positive matrix image. It does not
    yield homogeneous complementarity; `SingletonLCPFeasible` is a different
@@ -787,7 +866,8 @@ mathematical conjectures.
    `isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff`
    (`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`) and its
    internally produced strict-image simplex pass the silent named check.
-   The same-witness polynomial joins remain separate from this producer.
+   The same-witness nonseparability and quantitative polynomial joins also
+   pass their named, separate standard-axiom and full integration checks.
 4. Prove the signed mixed-curvature account at every minimum on the singleton
    rectangle, using the fundamental theorem along actual reset segments.
    Compactness must supply the attained mixed-partial maximum and quantitative
@@ -805,19 +885,27 @@ mathematical conjectures.
    bound for the same potential and tolerance.
    `quittingRobustPotential_finFour_negativeHessianEigenvalue`
    (`UniformEquilibrium/Quitting/Projective/RobustPotentialNegativeHessian.lean`)
-   passes its silent named check and obtains ambient Q from bare no-UE;
-   invocation of the polynomial producer remains a separate same-witness join.
-6. Produce the first packet's rational exact one-quitter rejecting edge by
+   passes its silent named check and obtains ambient Q from bare no-UE.
+   The quantitative polynomial characterization now applies this result to
+   the same expression and tolerance produced by the original characterization.
+6. Produce the shape packet's rational exact one-quitter rejecting edge by
    closed-face rational approximation and a rational sufficiently small probe
    rate. Keep exact source Nash, the actual successor and the stated margin;
    a general approximate Nash selector does not supply this witness.
-7. Produce the second packet's rational approximate robust rejection by joint
+7. Produce the reflection packet's rational approximate robust rejection by joint
    approximation of an actual positive violating source/root pair. Preserve
    absorption-relative regret and strict rejection, then prove the prescribed
    finite-budget search eventually succeeds. Existing grid density and root
    continuity are ingredients, not the complete producer.
+   One rational pair must satisfy every player's regret bound simultaneously.
+   The density producer has strict regret below tolerance times absorption;
+   the prescribed search accepts the non-strict bound. Its returned pair need
+   not satisfy the stronger strict regret inequality. The public search
+   soundness theorem must retain that returned pair's probabilities, literal
+   source and exact successor, not merely assert existence of another accepted
+   pair. Neither density nor this search asserts exact rational Nash.
 8. Join the exclusions to the original existential polynomial characterization
-   for the same internally selected expression and tolerance. The second
+   for the same internally selected expression and tolerance. The reflection
    packet needs full exact-root drift on box three; the smaller-box adapter
    only yields box two and is insufficient for its reflection argument.
    `quittingGame_noUniformPayoff_iff_noSureRoot_and_restricted_rationalPotential`
@@ -828,12 +916,19 @@ mathematical conjectures.
    degree at least three and is not multi-affine; at each global minimum one
    common boundary minimizer and direction give reflection and a directional
    third derivative at least three times the gap. No minimum interiority or
-   fixed Hessian sign is assumed. The other packet's additive, standard-Q,
-   curvature and signed-normalization joins remain separate obligations.
+   fixed Hessian sign is assumed. The shape packet's nonseparability and
+   quantitative curvature joins pass named and separate standard-axiom checks
+   on the same once-selected expression and tolerance. The reflection packet's
+   decision-preserving signed normalization remains a separate obligation.
 9. Preserve no-UE through literal common positive reward scaling, produce the
    bound-one table from the existing single-pivot normalization, and apply
    the characterization afresh. Reuse the checked general stochastic-game
    affine-payoff transport rather than repeat its behavioral UE proof.
+   Common scaling includes the live state and preserves zero Never payoff.
+   The actual pivot and integer divisor must be produced from arbitrary real
+   source rewards; a rational scale does not make those rewards rational.
+   The resulting counterexample-existence equivalence is existential over
+   tables, not a per-table UE equivalence for terminal-only translation.
 
 Packet-specific boundary fixtures, the coupled-cubic example, the midpoint
 integral identity and charge-coefficient rescaling also need explicit coverage
@@ -1031,23 +1126,36 @@ compact unilateral carrier and both exact Kuhn payoff transfers for every
 full behavioral opponent profile and every paper discount rate, including
 the current-stage endpoint. These are not assumed optimal-response data.
 
-Proposition 15 still needs the actual four-history first-stage matrix assembled
-from these internally selected replies, and its Nash property derived from
-the original profile. Unsupported branch pairs are independent individual
-best-response values, not jointly feasible or equilibrium continuation pairs.
-The remaining upper inclusion needs the paper's scalar inequalities to produce
-an active child with a strictly larger escape product, then compact maximization
-over the actual equilibrium payoff set. The lower inclusion separately needs
-the printed punishment profiles and their complete behavioral deviation bounds.
-These are known-proof Lean obligations; Proposition 15 remains unfinished.
+The actual four-history first-stage matrix is constructed from these internally
+selected replies. Its mixed-payoff identity and Nash property derived from
+the original profile pass their silent named check and separate standard-axiom
+check. Unsupported branch pairs remain independent individual best-response
+values, not jointly feasible or equilibrium continuation pairs. The reusable
+initial-branch strategy changes the initial mixture and supplies a complete
+reply at every first history, including branches newly reached by the deviation.
 
-Independently reviewed, unapplied drafts cover that full source chain:
-the actual first-stage matrix, scalar escape inequality, compact upper
-inclusion, support-local discounted Bellman bounds, all-child Nash gluing,
-and literal punishment profiles for the square and both outer segments.
-The final Proposition 15 equality is held until both inclusions and their
-transitive axiom checks pass. This is drafted formalization, not a checked
-paper result.
+The generic scalar escape inequality also passes its silent named check and
+standard-axiom check. Its non-strict fourfold factor gives strict improvement
+when the original escape product is positive; a strict fourfold estimate is
+not claimed at boundary equality. The actual reached-child adapter and compact
+upper inclusion pass their silent named check and separate standard-axiom checks.
+`prisonersDilemma_discountedEquilibriumPayoffs_subset_criticalSet` and
+`prisonersDilemma_criticalSet_subset_discountedEquilibriumPayoffs`
+(`Literature/Sorin1986.lean`) prove both inclusions for the actual discounted
+equilibrium-payoff set. The printed punishment profiles have complete
+behavioral deviation bounds. The literal `proposition_15` passes the silent
+named paper check and a separate transitive check using only the three
+permitted standard axioms. It does not depend on unfinished Literature proofs.
+
+The support-local discounted Bellman bound passes its silent named dependency
+check. The state-only theorem now delegates to its common expected-value
+telescope. All-child Nash gluing also passes its silent named check and separate
+standard-axiom check, including initially off-path children and zero discount.
+The literal punishment profiles for all square vertices, the full square and
+both outer segments pass the silent named paper check and separate standard-
+axiom checks. Closed mixing endpoints and every initially off-path child are
+retained. The full integration gate passes for these additions;
+Sorin's other unfinished paper results are separate obligations.
 
 The separate Proposition 4 draft uses a generic connected convex-hull
 representation, an internally selected affine step and a geometric schedule
@@ -1056,6 +1164,40 @@ representation requires preconnectedness, not a supplied path or compact
 source. Proposition 4 retains its original discount inequality and concerns
 feasibility only. Its pending schedule also replaces the duplicated scalar
 recursion in Proposition 6 without changing that result's hypotheses.
+
+The discounted folk-theorem source draft internally selects a periodic calendar,
+approximate minmax punishments and one actual profile for a fixed feasible,
+strictly individually rational target. It retains that profile before every
+sufficiently small positive discount rate and proves the proposed delivery
+and supported off-path stage caps. Independent source review passes. A further
+unapplied draft derives exact Nash against all behavioral deviations through
+the support-local Bellman bound. Root and independent source reviews pass;
+these drafts still require Lean and axiom checks.
+
+The full-dimensional convergence draft derives a strict individually rational
+point from the literal ambient-ball hypothesis, approximates boundary targets
+by convex mixing, and obtains one rate threshold for all targets from a finite
+compact cover. It retains actual Nash profiles and reuses the reverse-security
+bound. Root and independent source reviews pass. This is an uncompiled draft,
+not a checked Hausdorff theorem. The
+separate two-player flat-security construction remains an explicit dependency;
+neither the literal discounted folk-theorem disjunction nor its downstream
+paper lemma is marked proved by these drafts.
+
+Primary-source discovery located the two-player flat-security prescription in
+[Tomala, *Jeux répétés* (2006)](https://www.numdam.org/item/10.5802/xups.2006-02.pdf),
+Theorem 3.8, pp. 38--39. If the IR set is a
+singleton, repeat a stage Nash equilibrium. Otherwise a coordinate flat at
+security is globally maximal, and the periodic construction need not punish
+that player's deviations. This is a published construction to formalize,
+not a checked producer. Its loose uniform approximation constants are not
+copied; the existing separate-margin and compact-cover arguments retain weak
+IR targets. [Sorin's 1992 survey](https://perso.imj-prg.fr/sylvain-sorin/wp-content/uploads/sorin-pub/92.HandGT.pdf),
+Theorem 2.2, states the discounted convergence
+result under the weaker alternative that one strict IR feasible point exists.
+The full-dimensional draft can delegate to that generalization by deriving
+the strict point from its ball hypothesis. Neither discovery changes the
+current literal paper declaration's proof status.
 
 ## Retirement criterion
 

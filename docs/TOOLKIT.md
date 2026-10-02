@@ -2343,6 +2343,34 @@ multi-affinity, and the joint minimum conditions at every global minimum.
 The named checks, separate standard-axiom checks and full integration gate pass.
 No concrete polynomial or general Fin4 equilibrium is produced.
 
+`not_isQuittingFullExactRootPotential_monotone_polynomial_transform`
+(`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMonotoneTransformExclusion.lean`)
+excludes a C¹ outer transform of either an arbitrary quadratic or an arbitrary
+multi-affine polynomial, under the same bounded-reward and nonnegative-own-singleton
+hypotheses. The outer function may be weakly increasing or weakly decreasing
+on the polynomial's entire box image, with flat parts allowed. Its derivative
+bound is selected internally on that compact image; no uniform slope bound
+is supplied. The named dependency check, separate standard-axiom check and
+full integration gate pass.
+
+`quittingGame_noUniformPayoff_iff_noSureRoot_and_quantitative_rationalPotential`
+(`UniformEquilibrium/Quitting/Projective/QuantitativePolynomialForwardCharacterization.lean`)
+retains one polynomial and rational tolerance for all added shape and curvature
+conclusions, under the original bounded normal Fin4 and positive-own-singleton
+hypotheses. Every singleton-box minimum obeys the signed curvature account;
+the mixed-partial and least-Hessian extrema are separately attained internally.
+`quittingRobustPotential_not_singletonBox_representations_of_simplex`
+(`UniformEquilibrium/Quitting/Projective/SingletonBoxRepresentationExclusions.lean`)
+excludes additive and regular scalar-composition representations on the closed
+box from a nonnegative simplex with nonnegative matrix image. The outer
+function need not be monotone; standard Q is not an extra hypothesis there.
+`isQuittingRobustPotentialWithCharge_iff_div` and its curvature consumers
+(`UniformEquilibrium/Quitting/Projective/RobustPotentialChargeScale.lean`)
+normalize any positive charge coefficient without changing the table, edge,
+box or tolerance. Zero-charge constants are admitted separately. These named
+checks, separate standard-axiom checks and full integration gate pass.
+None constructs a polynomial or solves an additional game class.
+
 The literal conversions in
 `UniformEquilibrium/Quitting/Projective/RobustChargedRelationPacketAdapter.lean`
 preserve roots, values through the endpoint, horizon, and total charge in
@@ -2999,8 +3027,13 @@ generic quitting-game existence theorems.
 | Survival products | `MathUE/SurvivalProduct.lean` | Generic finite-product and cumulative-hazard estimates shared by stopping arguments. |
 | Survival coboundaries | `MathUE/Probability/SurvivalCoboundary.lean` | Exact varying-hazard survival-weighted telescopes and finite-difference remainder identities. |
 | Discounted backward recursion | `MathUE/Probability/DiscountedBackwardRecursion.lean` | Prefix-discrepancy Abel bounds, exact terminal shadow contraction, and summable block-tail accounting; it does not construct an infinite recursion. |
+| Finite smooth maxima | `MathUE/Analysis/FiniteLogSumExp.lean` | `smoothMax_eq_weightedMean_add_entropy` gives the exact Gibbs identity and finite-cardinality approximation bounds. `deriv_smoothMax` and `deriv2_smoothMax` identify actual local derivatives, the latter as weighted component curvature plus variance divided by positive temperature. The weights reuse canonical arbitrary-score exponential probabilities. No game-specific tester family or calendar is produced. |
+| Compact minimum-envelope right derivatives | `MathUE/Analysis/CompactMinimumEnvelope.lean` | `exists_right_derivative_minimizer` internally selects one old minimum attaining the least actual derivative over all old minima, and proves that value is the envelope's right derivative. Joint continuity of the family and actual parameter derivative on an open real domain supplies uniform first-order error internally. The index is any nonempty compact topological space; uniqueness, a selected favorable minimum and a supplied uniform error certificate are not required. No tilted-calendar selection is produced. |
 | Actual discounted continuation replacement | `UniformEquilibrium/ProofView/Concepts/Stochastic/Transform/Payoff/DiscountedContinuation.lean` | `discountedPayoff_prefix_decomposition` disintegrates every behavioral profile over its actual finite-prefix law in a finite stochastic game. `discountedPayoff_terminalChildDispatcher` preserves that prefix while dispatching arbitrary complete child profiles. `discountedPayoff_replaceContinuation` gives the exact root payoff change from replacing one public branch: its actual probability times the remaining geometric weight times the child payoff change. Zero depth, zero discount and unreachable branches are included. `continuationCoefficient_mem_Ioo` gives strict coefficient bounds at a reached positive-depth branch with positive discount. This is payoff accounting, not an equilibrium or renewal producer. |
 | Actual discounted Nash continuations | `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/DiscountedContinuation.lean` | `realizedAction_discountedPayoff_update_deviationAfterHistory` identifies the root gain of an actual unilateral branch splice with its discounted reach times the full child gain. `realizedAction_afterHistoryProfile_isDiscountedNash_of_mem_support` derives Nash of every reached child from root Nash. Positive depth needs positive remaining discount; zero discount is allowed at depth zero. No perfection at unreachable histories is asserted. |
+| Actual initial-mixture and branch-reply deviations | `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/DiscountedInitialBranch.lean` | `realizedActionInitialBranchDeviation` constructs one full unilateral strategy changing its initial mixture and its complete reply at every first-stage public history. `realizedAction_discountedPayoff_initialBranchDeviation` gives exact current-plus-continuation accounting, and `realizedAction_discountedNash_initialBranchDeviation_bound` derives its deviation bound from actual root Nash. Off-path replies remain available when the changed mixture reaches those branches; no jointly feasible continuation-value matrix is assumed. |
+| Actual discounted Nash child gluing | `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/DiscountedInitialBranch.lean` | `realizedAction_initialChildDispatcher_isDiscountedNash` combines actual Nash children at every first public history with Nash of the internally defined current-plus-child game. The same dispatcher has the exact mixed payoff by `realizedAction_discountedPayoff_initialChildDispatcher`. Arbitrary full behavioral root deviations, initially unreachable children and zero discount are retained. |
+| Support-local discounted Bellman bounds | `UniformEquilibrium/ProofView/Concepts/Stochastic/Strategy/Potential/Adaptive.lean` | `discountedPayoff_le_of_history_bellman_ge_on_support` needs the bounded history potential and one-step bound only on the queried actual profile's history support. Applied to a full deviation, that support is the deviation's own support, not the prescribed profile's support. Zero discount is allowed. The state-only bound delegates to the common expected-value telescope in `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Discounted.lean`. |
 | Compact discounted best responses | `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/CompactDiscountedBestResponse.lean` | `exists_discountedBestResponse_of_compact_transfer` internally selects an actual full behavioral reply from a compact continuous unilateral presentation and exact encode/decode payoff transfers. It is conditional on those presentation data. `FiniteStageGame.exists_discountedBestResponse` (`Literature/Sorin1986.lean`) constructs them for every finite repeated game and every paper discount rate, including the current-stage endpoint. The separate standard-axiom check excludes dependence on unfinished Literature proofs. |
 | Differently labelled points in one compact fiber | `MathUE/Topology/CompactDiscreteFiber.lean` | `exists_same_fiber_different_labels` proves that a continuous surjection from a compact space onto a Hausdorff preconnected space cannot separate all fibers by a nonconstant continuous discrete label: two differently labelled source points force a fiber containing two differently labelled points. This supplies no payoff-path lifting or selection theorem. |
 | Compact finite-prefix relations | `MathUE/Topology/CompactFinitePrefixRelation.lean`, `MathUE/Topology/CompactDependentFinitePrefixRelation.lean` | Inverse-limit selection from compatible compact finite prefixes. `exists_dependentInfiniteChain_of_finitePrefixes` also permits the state carrier to depend on the depth, but remains conditional on a coherent family of nonempty compact finite-prefix solution sets; it supplies no compatible-prefix producer. |
@@ -3298,8 +3331,8 @@ child payoff. Signed rewards and empty outsider sets are allowed. The endpoint
 facade `quietLift_fixedTarget_of_withdrawalFutureJoin_stationaryEndpoint` in
 the same file retains the actual Bellman, endpoint and Never-boundary premises.
 These terminal-only adapters do not produce a child equilibrium or assert
-all-evaluation domination. The named module passes a silent targeted build;
-the new integration closure remains subject to the full build.
+all-evaluation domination. The named module and full integration closure pass
+their silent builds.
 
 `exists_rational_patientWithdrawalRewardCertificate`,
 `exists_rational_deadlineWithdrawalRewardCertificate`,

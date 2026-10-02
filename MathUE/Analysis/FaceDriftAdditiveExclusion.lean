@@ -1,0 +1,208 @@
+import MathUE.Analysis.BoxedAdditiveCalculus
+
+/-! # Face-only additive exclusion with an explicit simplex witness
+
+The receiver-row matrix is zero diagonal and strictly below the upper box
+coordinate. Component minima are constructed, not supplied to the theorem.
+-/
+
+noncomputable section
+
+namespace Math
+
+open Set
+open scoped BigOperators
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+private theorem boxAdditiveFunction_single_sub
+    (constant : ℝ) (component : ι → ℝ → ℝ) (owner : ι) (value : ℝ) :
+    boxAdditiveFunction constant component (Function.update 0 owner value) -
+      boxAdditiveFunction constant component 0 = component owner value - component owner 0 := by
+  calc
+    _ = ∑ other, (component other (Function.update (0 : ι → ℝ) owner value other) -
+        component other 0) := by
+      rw [Finset.sum_sub_distrib]
+      simp only [boxAdditiveFunction, Pi.zero_apply]
+      ring
+    _ = ∑ other, if other = owner then component owner value - component owner 0 else 0 := by
+      apply Finset.sum_congr rfl
+      intro other _
+      by_cases heq : other = owner
+      · subst other; simp
+      · simp [heq]
+    _ = component owner value - component owner 0 := by simp
+
+/-- A differentiable additive representation on the box cannot have positive
+face drift when a nonnegative simplex vector has nonnegative matrix image. -/
+theorem not_positive_box_face_drift_of_additive
+    (upper : ι → ℝ) (matrix : ι → ι → ℝ) (weight : ι → ℝ)
+    (potential : (ι → ℝ) → ℝ) (constant : ℝ) (component : ι → ℝ → ℝ)
+    (hwidth : ∀ who, 0 < upper who)
+    (hdiagonal : ∀ who, matrix who who = 0)
+    (hupper : ∀ other owner, matrix other owner < upper other)
+    (hweight : ∀ who, 0 ≤ weight who) (hweightSum : ∑ who, weight who = 1)
+    (himage : ∀ other, 0 ≤ ∑ owner, matrix other owner * weight owner)
+    (hdiff : ∀ point ∈ Icc (0 : ι → ℝ) upper, DifferentiableAt ℝ potential point)
+    (hcomponent : ∀ who value, value ∈ Icc 0 (upper who) →
+      DifferentiableAt ℝ (component who) value)
+    (heq : EqOn potential (boxAdditiveFunction constant component)
+      (Icc (0 : ι → ℝ) upper)) :
+    ¬ (∀ point ∈ Icc (0 : ι → ℝ) upper, ∀ owner, point owner = 0 →
+      0 < fderiv ℝ potential point (point - fun other => matrix other owner)) := by
+  classical
+  intro hdrift
+  have hminima : ∀ who, ∃ value, value ∈ Icc 0 (upper who) ∧
+      IsMinOn (component who) (Icc 0 (upper who)) value := by
+    intro who
+    exact isCompact_Icc.exists_isMinOn ⟨0, le_rfl, (hwidth who).le⟩
+      (fun value hvalue => (hcomponent who value hvalue).continuousAt.continuousWithinAt)
+  choose point hpoint hmin using hminima
+  have hsign : ∀ who,
+      (point who = 0 → 0 ≤ deriv (component who) (point who)) ∧
+      (0 < point who → point who < upper who → deriv (component who) (point who) = 0) ∧
+      (point who = upper who → deriv (component who) (point who) ≤ 0) :=
+    fun who => interval_minimum_derivative_signs (component who) 0 (upper who) (point who)
+      (hwidth who) (hpoint who) (hmin who) (hcomponent who (point who) (hpoint who))
+  let multiplier := fun who => if point who = 0 then deriv (component who) (point who) else 0
+  have hmultiplier : ∀ who, 0 ≤ multiplier who := by
+    intro who
+    dsimp [multiplier]
+    split_ifs with hzero
+    · exact (hsign who).1 hzero
+    · exact le_rfl
+  let reset := fun owner => Function.update point owner 0
+  have hreset : ∀ owner, reset owner ∈ Icc (0 : ι → ℝ) upper := by
+    intro owner
+    constructor <;> intro other
+    · by_cases heq : other = owner
+      · subst other; simp [reset]
+      · simpa [reset, heq] using (hpoint other).1
+    · by_cases heq : other = owner
+      · subst other; simpa [reset] using (hwidth owner).le
+      · simpa [reset, heq] using (hpoint other).2
+  let drift := fun owner => fderiv ℝ potential (reset owner)
+    (reset owner - fun other => matrix other owner)
+  have hdriftPos : ∀ owner, 0 < drift owner := by
+    intro owner
+    exact hdrift (reset owner) (hreset owner) owner (by simp [reset])
+  have hdriftLe : ∀ owner, drift owner ≤ -∑ other, multiplier other * matrix other owner := by
+    intro owner
+    have hsumDerivative := hasFDerivAt_boxAdditiveFunction constant component (reset owner)
+      (fun other => hcomponent other (reset owner other)
+        ⟨(hreset owner).1 other, (hreset owner).2 other⟩)
+    have hderivative := box_fderiv_eq_of_eqOn 0 upper (reset owner) potential
+      (boxAdditiveFunction constant component) hwidth (hreset owner) heq
+      (hdiff (reset owner) (hreset owner)) hsumDerivative.differentiableAt
+    change fderiv ℝ potential (reset owner)
+      (reset owner - fun other => matrix other owner) ≤ _
+    rw [hderivative, hsumDerivative.fderiv, boxAdditiveDerivative_apply]
+    rw [← Finset.sum_neg_distrib]
+    apply Finset.sum_le_sum
+    intro other _
+    change deriv (component other) (reset owner other) *
+      (reset owner other - matrix other owner) ≤ -(multiplier other * matrix other owner)
+    by_cases heq : other = owner
+    · subst other
+      simp [reset, hdiagonal owner]
+    · simp only [reset, Function.update_of_ne heq]
+      by_cases hzero : point other = 0
+      · simp [multiplier, hzero, mul_comm]
+      · have hmultiplierZero : multiplier other = 0 := by simp [multiplier, hzero]
+        rw [hmultiplierZero, zero_mul, neg_zero]
+        by_cases htop : point other = upper other
+        · exact mul_nonpos_of_nonpos_of_nonneg ((hsign other).2.2 htop)
+            (by rw [htop]; exact (sub_pos.mpr (hupper other owner)).le)
+        · have hbottom : 0 < point other := lt_of_le_of_ne (hpoint other).1 (Ne.symm hzero)
+          have hstrictTop : point other < upper other :=
+            lt_of_le_of_ne (hpoint other).2 htop
+          rw [(hsign other).2.1 hbottom hstrictTop, zero_mul]
+  have hpositiveWeight : ∃ who, 0 < weight who := by
+    by_contra hnone
+    push Not at hnone
+    have hzero : ∀ who, weight who = 0 :=
+      fun who => le_antisymm (hnone who) (hweight who)
+    simp [hzero] at hweightSum
+  have hweightedPos : 0 < ∑ owner, weight owner * drift owner := by
+    apply Finset.sum_pos'
+    · intro owner _; exact mul_nonneg (hweight owner) (hdriftPos owner).le
+    · obtain ⟨owner, howner⟩ := hpositiveWeight
+      exact ⟨owner, Finset.mem_univ _, mul_pos howner (hdriftPos owner)⟩
+  have hweightedLe : (∑ owner, weight owner * drift owner) ≤
+      -∑ other, multiplier other * (∑ owner, matrix other owner * weight owner) := by
+    calc
+      (∑ owner, weight owner * drift owner) ≤
+          ∑ owner, weight owner * (-∑ other, multiplier other * matrix other owner) :=
+        Finset.sum_le_sum fun owner _ =>
+          mul_le_mul_of_nonneg_left (hdriftLe owner) (hweight owner)
+      _ = -∑ other, multiplier other * (∑ owner, matrix other owner * weight owner) := by
+        simp only [mul_neg, Finset.mul_sum, ← Finset.sum_neg_distrib]
+        rw [Finset.sum_comm]
+        congr 1
+        funext other
+        apply Finset.sum_congr rfl
+        intro owner _
+        ring
+  have hweightedNonpos : (∑ owner, weight owner * drift owner) ≤ 0 :=
+    hweightedLe.trans (neg_nonpos.mpr (Finset.sum_nonneg fun other _ =>
+      mul_nonneg (hmultiplier other) (himage other)))
+  exact (not_lt_of_ge hweightedNonpos) hweightedPos
+
+/-- Regularity of the represented components is not an extra input here.
+Coordinate slices of the ambient differentiable potential supply regular
+representatives of the same additive function on the box. -/
+theorem not_positive_box_face_drift_of_additive_representation
+    (upper : ι → ℝ) (matrix : ι → ι → ℝ) (weight : ι → ℝ)
+    (potential : (ι → ℝ) → ℝ) (constant : ℝ) (component : ι → ℝ → ℝ)
+    (hwidth : ∀ who, 0 < upper who)
+    (hdiagonal : ∀ who, matrix who who = 0)
+    (hupper : ∀ other owner, matrix other owner < upper other)
+    (hweight : ∀ who, 0 ≤ weight who) (hweightSum : ∑ who, weight who = 1)
+    (himage : ∀ other, 0 ≤ ∑ owner, matrix other owner * weight owner)
+    (hdiff : ∀ point ∈ Icc (0 : ι → ℝ) upper, DifferentiableAt ℝ potential point)
+    (heq : EqOn potential (boxAdditiveFunction constant component)
+      (Icc (0 : ι → ℝ) upper)) :
+    ¬ (∀ point ∈ Icc (0 : ι → ℝ) upper, ∀ owner, point owner = 0 →
+      0 < fderiv ℝ potential point (point - fun other => matrix other owner)) := by
+  classical
+  let slice := fun owner value => potential (Function.update 0 owner value) - potential 0
+  have hzero : (0 : ι → ℝ) ∈ Icc 0 upper :=
+    ⟨le_rfl, fun who => (hwidth who).le⟩
+  have hsingle : ∀ owner value, value ∈ Icc 0 (upper owner) →
+      Function.update (0 : ι → ℝ) owner value ∈ Icc 0 upper := by
+    intro owner value hvalue
+    constructor <;> intro other
+    · by_cases heq : other = owner
+      · subst other; simpa using hvalue.1
+      · simp [heq]
+    · by_cases heq : other = owner
+      · subst other; simpa using hvalue.2
+      · simpa [heq] using (hwidth other).le
+  have hsliceDiff : ∀ owner value, value ∈ Icc 0 (upper owner) →
+      DifferentiableAt ℝ (slice owner) value := by
+    intro owner value hvalue
+    exact ((hdiff _ (hsingle owner value hvalue)).comp value
+      (hasFDerivAt_update (𝕜 := ℝ) (i := owner) (0 : ι → ℝ) value).differentiableAt).sub_const
+        (potential 0)
+  have hsliceEq : ∀ owner value, value ∈ Icc 0 (upper owner) →
+      slice owner value = component owner value - component owner 0 := by
+    intro owner value hvalue
+    dsimp [slice]
+    rw [heq (hsingle owner value hvalue), heq hzero]
+    exact boxAdditiveFunction_single_sub constant component owner value
+  have heqSlice : EqOn potential (boxAdditiveFunction (potential 0) slice)
+      (Icc (0 : ι → ℝ) upper) := by
+    intro point hpoint
+    have hsums : (∑ who, slice who (point who)) =
+        ∑ who, (component who (point who) - component who 0) :=
+      Finset.sum_congr rfl fun who _ =>
+        hsliceEq who (point who) ⟨hpoint.1 who, hpoint.2 who⟩
+    rw [boxAdditiveFunction, hsums, Finset.sum_sub_distrib,
+      heq hpoint, heq hzero]
+    simp only [boxAdditiveFunction, Pi.zero_apply]
+    ring
+  exact not_positive_box_face_drift_of_additive upper matrix weight potential
+    (potential 0) slice hwidth hdiagonal hupper hweight hweightSum himage hdiff
+    hsliceDiff heqSlice
+
+end Math

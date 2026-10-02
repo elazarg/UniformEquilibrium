@@ -19,9 +19,15 @@ import MathUE.Analysis.QuasiconvexLowerBoxBoundary
 import MathUE.Analysis.StandardQFaceQuasiconvexExclusion
 import MathUE.Analysis.CollisionAdjustedDrift
 import MathUE.Analysis.BoxedAdditiveCalculus
+import MathUE.Analysis.CurvatureHomogeneity
+import MathUE.Analysis.FaceDriftAdditiveExclusion
+import MathUE.Analysis.FaceDriftScalarCompositionExclusion
+import MathUE.Analysis.CompactMinimumEnvelope
+import MathUE.Analysis.FiniteLogSumExp
 import MathUE.Analysis.CoordinateResetFTC
 import MathUE.Analysis.SignedMixedCurvatureAccount
 import MathUE.Analysis.MixedCurvatureSupBound
+import MathUE.Analysis.MonotoneTransformChargedDrift
 import MathUE.Analysis.LeastHessianEigenvalue
 import MathUE.Analysis.HessianConvexification
 import MathUE.Analysis.PositiveFaceCurvatureBudget
@@ -107,6 +113,7 @@ import MathUE.AnalyticOrderComparison
 import MathUE.AnalyticPowerNormalization
 import MathUE.BackwardOrbitSelection
 import MathUE.BanachLimit
+import MathUE.BilinearQuarterEscape
 import MathUE.BonferroniProductBounds
 import Maths.Graph.ZeroChargeLasso
 import MathUE.CalendarSummability

@@ -48,7 +48,9 @@ noncomputable def realizedActionDeviationAfterHistory
     else
       profile who time history
 
-private theorem realizedActionHist_startsAt
+/-- Every realized-action local history starts at the unique repeated-game
+state, including total off-path histories. -/
+theorem realizedActionHist_startsAt
     (G : KernelGame ι) {prefixLength suffixLength : ℕ}
     (base : G.realizedActionStochasticGame.Hist prefixLength)
     (suffix : G.realizedActionStochasticGame.Hist suffixLength) :

@@ -1,0 +1,108 @@
+import Mathlib.Analysis.Calculus.MeanValue
+import Mathlib.Analysis.Calculus.ContDiff.Operations
+import Mathlib.Topology.Order.Compact
+
+/-! # Monotone C¹ transforms of compact charged potentials
+
+Flat parts are allowed. A derivative bound is produced internally from the
+compact range and its open interval neighborhood; no bound is supplied.
+-/
+
+noncomputable section
+
+namespace Math
+
+open Set
+
+variable {E : Type*} [TopologicalSpace E]
+
+/-- A scalar function C¹ on an open interval containing a compact continuous
+image has one strictly positive Lipschitz bound for every pair in that image. -/
+theorem exists_pos_lipschitz_bound_on_compact_image
+    (domain : Set E) (hcompact : IsCompact domain) (hnonempty : domain.Nonempty)
+    (inner : E → ℝ) (hinner : ContinuousOn inner domain)
+    (outer : ℝ → ℝ) (interval : Set ℝ) (hopen : IsOpen interval)
+    (hconvex : Convex ℝ interval) (himage : inner '' domain ⊆ interval)
+    (hregular : ContDiffOn ℝ 1 outer interval) :
+    ∃ bound : ℝ, 0 < bound ∧ ∀ source ∈ domain, ∀ target ∈ domain,
+      |outer (inner source) - outer (inner target)| ≤ bound * |inner source - inner target| := by
+  obtain ⟨minimum, hminimum, hmin⟩ := hcompact.exists_isMinOn hnonempty hinner
+  obtain ⟨maximum, hmaximum, hmax⟩ := hcompact.exists_isMaxOn hnonempty hinner
+  let range : Set ℝ := Set.Icc (inner minimum) (inner maximum)
+  have hrange : range ⊆ interval := by
+    intro value hvalue
+    exact hconvex.ordConnected.out (himage ⟨minimum, hminimum, rfl⟩)
+      (himage ⟨maximum, hmaximum, rfl⟩) hvalue
+  have hderivativeContinuous : ContinuousOn (fderiv ℝ outer) range :=
+    (hregular.continuousOn_fderiv_of_isOpen hopen (by norm_num)).mono hrange
+  obtain ⟨rawBound, hrawBound⟩ :=
+    (isCompact_Icc.image_of_continuousOn hderivativeContinuous).isBounded.exists_norm_le
+  let bound := max 1 rawBound
+  have hbound : 0 < bound := lt_of_lt_of_le zero_lt_one (le_max_left _ _)
+  have hderivative : ∀ value ∈ range, ‖deriv outer value‖ ≤ bound := by
+    intro value hvalue
+    rw [norm_deriv_eq_norm_fderiv]
+    exact (hrawBound _ ⟨value, hvalue, rfl⟩).trans (le_max_right _ _)
+  have hdifferentiable : ∀ value ∈ range, DifferentiableAt ℝ outer value := by
+    intro value hvalue
+    exact (hregular.contDiffAt (hopen.mem_nhds (hrange hvalue))).differentiableAt_one
+  refine ⟨bound, hbound, fun source hsource target htarget => ?_⟩
+  have hsourceRange : inner source ∈ range := ⟨hmin hsource, hmax hsource⟩
+  have htargetRange : inner target ∈ range := ⟨hmin htarget, hmax htarget⟩
+  have hestimate := Convex.norm_image_sub_le_of_norm_deriv_le hdifferentiable hderivative
+    (convex_Icc (inner minimum) (inner maximum)) htargetRange hsourceRange
+  simpa only [Real.norm_eq_abs] using hestimate
+
+/-- A monotone scalar transform giving positive charged drift yields one
+nonzero signed scalar multiple of the inner function with the same drift.
+Zero-charge identity edges are handled exactly; strictly positive edges
+produce their direction from monotonicity even when the outer function is flat. -/
+theorem exists_nonzero_scale_of_monotone_transform_chargedDrift
+    {Edge : Type*}
+    (domain : Set E) (hcompact : IsCompact domain) (hnonempty : domain.Nonempty)
+    (inner : E → ℝ) (hinner : ContinuousOn inner domain)
+    (outer : ℝ → ℝ) (interval : Set ℝ) (hopen : IsOpen interval)
+    (hconvex : Convex ℝ interval) (himage : inner '' domain ⊆ interval)
+    (hregular : ContDiffOn ℝ 1 outer interval)
+    (hmonotone : MonotoneOn outer (inner '' domain) ∨ AntitoneOn outer (inner '' domain))
+    (source target : Edge → E) (charge : Edge → ℝ)
+    (hsource : ∀ edge, source edge ∈ domain) (htarget : ∀ edge, target edge ∈ domain)
+    (hcharge : ∀ edge, 0 ≤ charge edge)
+    (hzero : ∀ edge, charge edge = 0 → inner (source edge) = inner (target edge))
+    (hdrift : ∀ edge, charge edge ≤ outer (inner (source edge)) - outer (inner (target edge))) :
+    ∃ scalar : ℝ, scalar ≠ 0 ∧ ∀ edge,
+      charge edge ≤ scalar * (inner (source edge) - inner (target edge)) := by
+  obtain ⟨bound, hbound, hlipschitz⟩ := exists_pos_lipschitz_bound_on_compact_image
+    domain hcompact hnonempty inner hinner outer interval hopen hconvex himage hregular
+  rcases hmonotone with hmonotone | hantitone
+  · refine ⟨bound, ne_of_gt hbound, fun edge => ?_⟩
+    by_cases hzeroCharge : charge edge = 0
+    · rw [hzeroCharge, hzero edge hzeroCharge]
+      simp
+    · have hpositive : 0 < charge edge := lt_of_le_of_ne (hcharge edge) (Ne.symm hzeroCharge)
+      have horder : inner (target edge) < inner (source edge) := by
+        by_contra hnot
+        have houterOrder := hmonotone ⟨source edge, hsource edge, rfl⟩
+          ⟨target edge, htarget edge, rfl⟩ (le_of_not_gt hnot)
+        have hedge := hdrift edge
+        linarith
+      have hestimate := (hdrift edge).trans ((le_abs_self _).trans
+        (hlipschitz (source edge) (hsource edge) (target edge) (htarget edge)))
+      simpa only [abs_of_nonneg (sub_nonneg.mpr horder.le)] using hestimate
+  · refine ⟨-bound, neg_ne_zero.mpr (ne_of_gt hbound), fun edge => ?_⟩
+    by_cases hzeroCharge : charge edge = 0
+    · rw [hzeroCharge, hzero edge hzeroCharge]
+      simp
+    · have hpositive : 0 < charge edge := lt_of_le_of_ne (hcharge edge) (Ne.symm hzeroCharge)
+      have horder : inner (source edge) < inner (target edge) := by
+        by_contra hnot
+        have houterOrder := hantitone ⟨target edge, htarget edge, rfl⟩
+          ⟨source edge, hsource edge, rfl⟩ (le_of_not_gt hnot)
+        have hedge := hdrift edge
+        linarith
+      have hestimate := (hdrift edge).trans ((le_abs_self _).trans
+        (hlipschitz (source edge) (hsource edge) (target edge) (htarget edge)))
+      rw [abs_of_nonpos (sub_nonpos.mpr horder.le)] at hestimate
+      nlinarith
+
+end Math

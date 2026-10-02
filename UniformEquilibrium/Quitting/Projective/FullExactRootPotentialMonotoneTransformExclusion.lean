@@ -1,0 +1,133 @@
+import MathUE.Analysis.MonotoneTransformChargedDrift
+import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanClockReduction
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuadraticExclusion
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMultiAffineExclusion
+
+/-! # Monotone C¹ transforms of excluded full-root potentials
+
+The scalar function may be nondecreasing or nonincreasing and may have flat
+parts. Its open interval of C¹ regularity is explicit. A uniform derivative
+bound and the resulting signed scaling are produced internally.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open Set
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+/-- Every full-root potential obtained by a monotone C¹ scalar transform gives
+a nonzero signed scalar multiple of the same inner function with full-root
+drift. Actual zero-charge roots are identity edges and are retained exactly. -/
+theorem IsQuittingFullExactRootPotential.exists_scalar_inner_of_monotone_transform
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hreward : ∀ terminal who, |reward terminal who| ≤ 1)
+    (inner : Payoff ι → ℝ)
+    (hinner : ContinuousOn inner (Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)))
+    (outer : ℝ → ℝ) (interval : Set ℝ) (hopen : IsOpen interval)
+    (hconvex : Convex ℝ interval)
+    (himage : inner '' Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3) ⊆ interval)
+    (hregular : ContDiffOn ℝ 1 outer interval)
+    (hmonotone : MonotoneOn outer (inner '' Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)) ∨
+      AntitoneOn outer (inner '' Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)))
+    (hpotential : IsQuittingFullExactRootPotential reward 3 (fun point => outer (inner point))) :
+    ∃ scalar : ℝ, scalar ≠ 0 ∧
+      IsQuittingFullExactRootPotential reward 3 (fun point => scalar * inner point) := by
+  let domain : Set (Payoff ι) := Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)
+  let Edge := {pair : Payoff ι × (ι → PMF Bool) //
+    (∀ who, |pair.1 who| ≤ 3) ∧ IsεQuittingRootNash reward pair.1 0 pair.2}
+  let source : Edge → Payoff ι := fun edge => edge.1.1
+  let target : Edge → Payoff ι := fun edge =>
+    quittingRootSuccessorPayoff reward edge.1.1 edge.1.2
+  let charge : Edge → ℝ := fun edge => quittingRootAbsorptionMass edge.1.2
+  have hsource : ∀ edge, source edge ∈ domain := by
+    intro edge
+    exact ⟨fun who => (abs_le.mp (edge.2.1 who)).1,
+      fun who => (abs_le.mp (edge.2.1 who)).2⟩
+  have htarget : ∀ edge, target edge ∈ domain := by
+    intro edge
+    have hbound : ∀ who, |target edge who| ≤ 3 := fun who =>
+      abs_quittingRootSuccessorPayoff_le_bound reward edge.1.1 edge.1.2 who
+        (fun terminal who => (hreward terminal who).trans (by norm_num)) edge.2.1
+    exact ⟨fun who => (abs_le.mp (hbound who)).1,
+      fun who => (abs_le.mp (hbound who)).2⟩
+  have hzero : ∀ edge, charge edge = 0 → inner (source edge) = inner (target edge) := by
+    intro edge hcharge
+    have hcontinue : quittingStationaryContinueMass edge.1.2 = 1 := by
+      change quittingRootAbsorptionMass edge.1.2 = 0 at hcharge
+      unfold quittingRootAbsorptionMass at hcharge
+      linarith
+    have hroot : edge.1.2 = quittingAllContinueRoot := by
+      funext who
+      exact eq_pure_false_of_quittingStationaryContinueMass_eq_one hcontinue who
+    change inner edge.1.1 = inner (quittingRootSuccessorPayoff reward edge.1.1 edge.1.2)
+    rw [hroot, quittingRootSuccessorPayoff_allContinueRoot_eq]
+  have hdrift : ∀ edge, charge edge ≤ outer (inner (source edge)) -
+      outer (inner (target edge)) := by
+    intro edge
+    have hedge := hpotential edge.1.1 edge.2.1 edge.1.2 edge.2.2
+    change outer (inner (target edge)) + charge edge ≤ outer (inner (source edge)) at hedge
+    linarith
+  obtain ⟨scalar, hscalar, hscaled⟩ :=
+    Math.exists_nonzero_scale_of_monotone_transform_chargedDrift domain isCompact_Icc
+      (show domain.Nonempty from ⟨0, by constructor <;> intro who <;> norm_num⟩)
+      inner hinner outer interval hopen hconvex himage hregular hmonotone
+      source target charge hsource htarget
+      (fun edge => quittingRootAbsorptionMass_nonneg edge.1.2) hzero hdrift
+  refine ⟨scalar, hscalar, fun point hpoint root hnash => ?_⟩
+  let edge : Edge := ⟨(point, root), hpoint, hnash⟩
+  have hedge := hscaled edge
+  change quittingRootAbsorptionMass root ≤
+    scalar * (inner point - inner (quittingRootSuccessorPayoff reward point root)) at hedge
+  linarith
+
+variable {dimension : ℕ}
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- Monotone C¹ transforms exclude both actual polynomial classes. The statement
+retains arbitrary square-free interaction orders and arbitrary quadratic signs. -/
+theorem not_isQuittingFullExactRootPotential_monotone_polynomial_transform
+    [Nontrivial (Fin dimension)]
+    {reward : {S : Finset (Fin dimension) // S.Nonempty} → Payoff (Fin dimension)}
+    (hreward : ∀ terminal who, |reward terminal who| ≤ 1)
+    (hsingleton : ∀ who, 0 ≤ quittingSoloReward reward who who)
+    (polynomial : MvPolynomial (Fin dimension) ℝ)
+    (hexcluded : polynomial.totalDegree ≤ 2 ∨ Math.IsMultiAffineMvPolynomial polynomial)
+    (outer : ℝ → ℝ) (interval : Set ℝ) (hopen : IsOpen interval)
+    (hconvex : Convex ℝ interval)
+    (himage : (fun point => MvPolynomial.eval point polynomial) ''
+      Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3) ⊆ interval)
+    (hregular : ContDiffOn ℝ 1 outer interval)
+    (hmonotone : MonotoneOn outer ((fun point => MvPolynomial.eval point polynomial) ''
+        Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)) ∨
+      AntitoneOn outer ((fun point => MvPolynomial.eval point polynomial) ''
+        Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3))) :
+    ¬ IsQuittingFullExactRootPotential reward 3
+      (fun point => outer (MvPolynomial.eval point polynomial)) := by
+  intro hpotential
+  obtain ⟨scalar, _, hscaled⟩ :=
+    hpotential.exists_scalar_inner_of_monotone_transform hreward
+      (fun point => MvPolynomial.eval point polynomial)
+      (Math.contDiff_eval_mvPolynomial polynomial 1).continuous.continuousOn
+      outer interval hopen hconvex himage hregular hmonotone
+  let scaled := MvPolynomial.C scalar * polynomial
+  have hevaluation : (fun point => MvPolynomial.eval point scaled) =
+      (fun point => scalar * MvPolynomial.eval point polynomial) := by
+    funext point
+    simp [scaled]
+  rw [← hevaluation] at hscaled
+  rcases hexcluded with hdegree | haffine
+  · have hscaledDegree : scaled.totalDegree ≤ 2 := by
+      have hbound := MvPolynomial.totalDegree_mul (MvPolynomial.C scalar) polynomial
+      simpa [scaled] using hbound.trans (by simpa using hdegree)
+    exact not_isQuittingFullExactRootPotential_totalDegree_le_two
+      hreward hsingleton scaled hscaledDegree hscaled
+  · have hscaledAffine : Math.IsMultiAffineMvPolynomial scaled :=
+      fun coordinate => (MvPolynomial.degreeOf_C_mul_le polynomial coordinate scalar).trans
+        (haffine coordinate)
+    exact not_isQuittingFullExactRootPotential_multiAffine
+      hreward hsingleton scaled hscaledAffine hscaled
+
+end GameTheory
