@@ -1,0 +1,142 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-/-! Remark 4.  Above the critical value the usual payoff is unique.  At the
++
++private def asymmetricStationaryPath (_time : ℕ) : Bool → Bool :=
++  fun _ => false
++
++/-- Remark 4's stationary cooperation calendar with actual grim punishment. -/
++noncomputable def asymmetricStationaryProfile (α β x y : ℝ) :
++    (asymmetricGeneralizedDilemma α β x y).BehaviorProfile :=
++  binaryGrimProfile (pair (β - y) (β - y)) (pair (α - x) β)
++    (pair β (α - x)) (pair α α) asymmetricStationaryPath
++
++private theorem asymmetricCriticalDiscount_bounds (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) :
++    0 < asymmetricCriticalDiscount α β x y ∧
++      asymmetricCriticalDiscount α β x y < 1 := by
++  have hd : 0 < β - α := by linarith
++  have hnum : 0 < max (β - α - x) (β - α - y) :=
++    (by linarith : 0 < β - α - y).trans_le (le_max_right _ _)
++  have hnumLt : max (β - α - x) (β - α - y) < β - α :=
++    max_lt_iff.mpr ⟨by linarith, by linarith⟩
++  exact ⟨div_pos hnum hd, (div_lt_one hd).mpr hnumLt⟩
++
++private theorem asymmetricCriticalDiscount_stationary (α β x y : ℝ)
++    (horder : y ≤ x) :
++    asymmetricCriticalDiscount α β x y = (β - α - y) / (β - α) := by
++  unfold asymmetricCriticalDiscount
++  rw [max_eq_right (by linarith)]
++
++private theorem asymmetric_payoff_punished_le (α β x y : ℝ) (hx : 0 < x)
++    (who : Bool) (action : Bool → Bool) (hother : action (!who) = true) :
++    (asymmetricGeneralizedDilemma α β x y).payoff action who ≤ α := by
++  cases who <;> cases hrow : action false <;> cases hcolumn : action true <;>
++    simp only [Bool.not_false, Bool.not_true, asymmetricGeneralizedDilemma,
++      binaryGame, binaryPayoff, pair, hrow, hcolumn] at hother ⊢ <;> linarith
++
++private theorem asymmetricStationary_deviation_identity (α β x y : ℝ)
++    (hgap : α < β - y) (hy : 0 < y) (horder : y ≤ x) :
++    asymmetricCriticalDiscount α β x y * β +
++        (1 - asymmetricCriticalDiscount α β x y) * α = β - y := by
++  have hd : β - α ≠ 0 := ne_of_gt (by linarith : 0 < β - α)
++  rw [asymmetricCriticalDiscount_stationary α β x y horder]
++  field_simp
++  ring
++
++/-- Exact delivery of the stationary source payoff, with no sign assumptions
++on the payoff parameters and no upper restriction on x. -/
++theorem asymmetricStationaryProfile_discountedPayoff (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) :
++    (asymmetricGeneralizedDilemma α β x y).discountedPayoff
++      (asymmetricCriticalDiscount α β x y) (asymmetricStationaryProfile α β x y) =
++        pair (β - y) (β - y) := by
++  let G := asymmetricGeneralizedDilemma α β x y
++  let rate := asymmetricCriticalDiscount α β x y
++  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
++  have hvalue := G.triggerBehaviorProfile_discountedPayoff asymmetricStationaryPath
++    (binaryDefectionPunishments (pair (β - y) (β - y)) (pair (α - x) β)
++      (pair β (α - x)) (pair α α))
++    rate hrate.1 hrate.2.le (fun _ => pair (β - y) (β - y)) |β - y|
++    (fun _ who => by cases who <;> exact le_rfl)
++    (fun _ who => by
++      cases who <;>
++        simp only [asymmetricGeneralizedDilemma, binaryGame, binaryPayoff,
++          asymmetricStationaryPath, pair]
++      all_goals ring)
++  exact hvalue
++
++/-- Every full behavioral replacement is capped by the stationary source
++value. The sharp changed-action identity includes the boundary x = y. -/
++theorem asymmetricStationaryProfile_discounted_deviation_cap (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : y ≤ x)
++    (who : Bool)
++    (deviation : (asymmetricGeneralizedDilemma α β x y).BehaviorStrategy who) :
++    (asymmetricGeneralizedDilemma α β x y).discountedPayoff
++      (asymmetricCriticalDiscount α β x y)
++      (Function.update (asymmetricStationaryProfile α β x y) who deviation) who ≤
++        (pair (β - y) (β - y)) who := by
++  let G := asymmetricGeneralizedDilemma α β x y
++  let rate := asymmetricCriticalDiscount α β x y
++  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
++  have hidentity := asymmetricStationary_deviation_identity α β x y hgap hy horder
++  have hchanged (time : ℕ) (action : Bool → Bool)
++      (hother : action (!who) = asymmetricStationaryPath time (!who)) :
++      rate * G.payoff action who + (1 - rate) * α ≤ β - y := by
++    have hpayoff : G.payoff action who = β - y ∨ G.payoff action who = β := by
++      cases who <;> cases hrow : action false <;> cases hcolumn : action true <;>
++        simp only [Bool.not_false, Bool.not_true, asymmetricStationaryPath,
++          G, asymmetricGeneralizedDilemma, binaryGame, binaryPayoff, pair,
++          hrow, hcolumn] at hother ⊢ <;> simp only [or_true, true_or]
++    rcases hpayoff with hpayoff | hpayoff
++    · rw [hpayoff]
++      calc
++        rate * (β - y) + (1 - rate) * α ≤
++            rate * (β - y) + (1 - rate) * (β - y) :=
++          add_le_add_left
++            (mul_le_mul_of_nonneg_left hgap.le (by dsimp only [rate]; linarith)) _
++        _ = β - y := by ring
++    · rw [hpayoff]
++      exact hidentity.le
++  have hcap := binaryGrimProfile_discounted_deviation_cap
++    (pair (β - y) (β - y)) (pair (α - x) β) (pair β (α - x)) (pair α α)
++    asymmetricStationaryPath rate hrate.1 hrate.2.le who deviation
++    (fun _ => β - y) α (max |β - y| |α|) (fun _ => le_max_left _ _)
++    (le_max_right _ _)
++    (fun _ => by
++      simp only [G, asymmetricGeneralizedDilemma, binaryGame, binaryPayoff,
++        asymmetricStationaryPath, pair]
++      ring)
++    hchanged (asymmetric_payoff_punished_le α β x y hx who)
++  cases who <;> exact hcap
++
++/-- The actual stationary grim profile is Nash against unrestricted unilateral
++behavioral deviations at the original asymmetric critical rate. -/
++theorem asymmetricStationaryProfile_isDiscountedNash (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : y ≤ x) :
++    (asymmetricGeneralizedDilemma α β x y).repeatedGame.IsDiscountedεNash
++      (1 - asymmetricCriticalDiscount α β x y) PUnit.unit 0
++      (asymmetricStationaryProfile α β x y) := by
++  intro who deviation
++  have hcap := asymmetricStationaryProfile_discounted_deviation_cap
++    α β x y hgap hx hy horder who deviation
++  have hpayoff := congrFun (asymmetricStationaryProfile_discountedPayoff
++    α β x y hgap hx hy) who
++  rw [← hpayoff] at hcap
++  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
++    add_zero] using! hcap
++
++/-- The closed stationary branch of the printed Remark 4 follows from an
++internally constructed actual behavioral Nash profile. -/
++theorem asymmetricStationary_mem_discountedEquilibriumPayoffs (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : y ≤ x) :
++    pair (β - y) (β - y) ∈
++      (asymmetricGeneralizedDilemma α β x y).discountedEquilibriumPayoffs
++        (asymmetricCriticalDiscount α β x y) :=
++  ⟨asymmetricStationaryProfile α β x y,
++    asymmetricStationaryProfile_isDiscountedNash α β x y hgap hx hy horder,
++    asymmetricStationaryProfile_discountedPayoff α β x y hgap hx hy⟩
++
++/-! Remark 4.  Above the critical value the usual payoff is unique.  At the
+*** End Patch

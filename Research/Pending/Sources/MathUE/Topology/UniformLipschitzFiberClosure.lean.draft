@@ -1,0 +1,65 @@
+import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.Topology.MetricSpace.Lipschitz
+import Mathlib.Topology.MetricSpace.Pseudo.Constructions
+import Mathlib.Topology.Sequences
+
+/-! # A closed graph for closures of uniformly Lipschitz families -/
+
+namespace Math
+
+open Filter Set
+open scoped Topology
+
+/-- Closing each range separately still gives a closed graph if changing the
+parameter moves every member by one common Lipschitz estimate. No compactness
+or continuity in the member index is assumed. -/
+theorem isClosed_graph_closure_range_of_uniform_lipschitz
+    {A B P : Type*} [MetricSpace A] [MetricSpace B]
+    (family : A → P → B) (constant : ℝ≥0)
+    (hfamily : ∀ member, LipschitzWith constant (fun parameter => family parameter member)) :
+    IsClosed {point : A × B | point.2 ∈ closure (Set.range (family point.1))} := by
+  classical
+  apply IsSeqClosed.isClosed
+  intro sequence point hsequence hlimit
+  have happrox : ∀ n : ℕ, ∃ member : P,
+      dist (sequence n).2 (family (sequence n).1 member) < 1 / ((n : ℝ) + 1) := by
+    intro n
+    obtain ⟨candidate, ⟨member, rfl⟩, hclose⟩ :=
+      Metric.mem_closure_iff.mp (hsequence n) (1 / ((n : ℝ) + 1))
+        (by positivity)
+    exact ⟨member, hclose⟩
+  choose member hmember using happrox
+  have hfirst := continuous_fst.tendsto point |>.comp hlimit
+  have hsecond := continuous_snd.tendsto point |>.comp hlimit
+  have hfirstDist : Tendsto (fun n => dist (sequence n).1 point.1) atTop (nhds 0) :=
+    tendsto_iff_dist_tendsto_zero.mp hfirst
+  have hsecondDist : Tendsto (fun n => dist (sequence n).2 point.2) atTop (nhds 0) :=
+    tendsto_iff_dist_tendsto_zero.mp hsecond
+  have hbound : ∀ n, dist (family point.1 (member n)) point.2 ≤
+      (constant : ℝ) * dist (sequence n).1 point.1 +
+        1 / ((n : ℝ) + 1) + dist (sequence n).2 point.2 := by
+    intro n
+    have hmove := (hfamily (member n)).dist_le_mul (sequence n).1 point.1
+    calc
+      _ ≤ dist (family point.1 (member n)) (family (sequence n).1 (member n)) +
+          dist (family (sequence n).1 (member n)) point.2 := dist_triangle _ _ _
+      _ ≤ (constant : ℝ) * dist (sequence n).1 point.1 +
+          (dist (sequence n).2 (family (sequence n).1 (member n)) +
+            dist (sequence n).2 point.2) := by
+        rw [dist_comm (family point.1 (member n))] 
+        exact add_le_add hmove (by
+          simpa only [dist_comm] using
+            dist_triangle (family (sequence n).1 (member n)) (sequence n).2 point.2)
+      _ ≤ _ := by linarith [hmember n]
+  have hupper : Tendsto (fun n => (constant : ℝ) * dist (sequence n).1 point.1 +
+      1 / ((n : ℝ) + 1) + dist (sequence n).2 point.2) atTop (nhds 0) := by
+    simpa only [mul_zero, zero_add, add_zero] using
+      ((tendsto_const_nhds.mul hfirstDist).add
+        tendsto_one_div_add_atTop_nhds_zero_nat).add hsecondDist
+  have hrealized : Tendsto (fun n => family point.1 (member n)) atTop (nhds point.2) :=
+    tendsto_iff_dist_tendsto_zero.mpr
+      (squeeze_zero (fun _ => dist_nonneg) hbound hupper)
+  exact isClosed_closure.mem_of_tendsto hrealized
+    (Eventually.of_forall (fun n => subset_closure ⟨member n, rfl⟩))
+
+end Math

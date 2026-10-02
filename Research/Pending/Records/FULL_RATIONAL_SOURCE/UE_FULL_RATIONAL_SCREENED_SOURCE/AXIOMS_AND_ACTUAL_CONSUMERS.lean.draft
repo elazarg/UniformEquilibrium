@@ -1,0 +1,69 @@
+import UniformEquilibrium.Diagnostics.Quitting.FullRationalScreenedSource
+
+namespace GameTheory
+
+/-- Same initial full rational table, its literal free restriction, and the
+fresh selected maximum precede every closed-cube singleton vector and root. -/
+theorem fullRationalScreenedSource_actual_consumer
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hno : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ (rational : RationalQuittingReward 4) (singletons : Fin 4 → ℝ) (gamma : ℚ),
+      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who| < 1) ∧
+      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
+      (∀ who, |singletons who| ≤ 1) ∧ 0 < (gamma : ℝ) ∧
+      screenedRootPolynomialEval
+        (fun coordinate => rationalQuittingRewardToReal rational
+          coordinate.1.1 coordinate.1.2) screenedRootExclusionPolynomial ≠ 0 ∧
+      0 < quittingTerminalExploitabilityInf
+        (quittingOwnSingletonReward singletons
+          (fun coordinate => rationalQuittingRewardToReal rational
+            coordinate.1.1 coordinate.1.2)) ∧
+      ∀ otherSingletons : Fin 4 → ℝ, (∀ who, |otherSingletons who| ≤ 1) →
+        ∀ root : Fin 4 → PMF Bool, IsScreenedQuittingRoot root →
+          quittingTerminalExploitabilityInf
+              (quittingOwnSingletonReward singletons
+                (fun coordinate => rationalQuittingRewardToReal rational
+                  coordinate.1.1 coordinate.1.2)) + (gamma : ℝ) ≤
+            quittingTerminalExploitability
+              (quittingOwnSingletonReward otherSingletons
+                (fun coordinate => rationalQuittingRewardToReal rational
+                  coordinate.1.1 coordinate.1.2))
+              (quittingOneDateThenNeverProfile
+                (quittingOwnSingletonReward otherSingletons
+                  (fun coordinate => rationalQuittingRewardToReal rational
+                    coordinate.1.1 coordinate.1.2)) root) := by
+  obtain ⟨rational, singletons, gamma, hunit, hpositive, _hno, hsource⟩ :=
+    exists_fullRationalGenericScreenedSource_of_no_uniformEquilibriumPayoff reward hno
+  obtain ⟨_hfree, hpolynomial, hsingletons, hgamma, hmaximumPositive, _hmaximum, hfloor⟩ :=
+    hsource
+  exact ⟨rational, singletons, gamma, hunit, hpositive, hsingletons, hgamma,
+    hpolynomial, hmaximumPositive, hfloor⟩
+
+/-- Quantitative positivity is the actual infimum over unrestricted profiles
+and caps, after the SAME common scale; neither a cap nor minimizer is supplied. -/
+theorem fullRationalScreenedSource_quantitative_consumer
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
+    ∃ (scale : ℝ) (rational : RationalQuittingReward 4),
+      0 < scale ∧
+      (∀ terminal who, |scaleQuittingReward scale reward terminal who| < 1) ∧
+      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who| < 1) ∧
+      quittingTerminalExploitabilityInf (scaleQuittingReward scale reward) / 4 ≤
+        quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
+      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
+      screenedRootPolynomialEval
+        (fun coordinate => rationalQuittingRewardToReal rational
+          coordinate.1.1 coordinate.1.2) screenedRootExclusionPolynomial ≠ 0 := by
+  obtain ⟨scale, rational, _singletons, _gamma, hscale, hscaled, hunit,
+      hquarter, hpositive, hsource⟩ :=
+    exists_fullRationalGenericScreenedSource_of_positive_inf reward hpositive
+  exact ⟨scale, rational, hscale, hscaled, hunit, hquarter, hpositive, hsource.2.1⟩
+
+end GameTheory
+
+#print axioms GameTheory.exists_rationalScreenedReward_close_preserving_singletons
+#print axioms GameTheory.exists_fullRationalGenericScreenedSource_of_positive_inf
+#print axioms GameTheory.exists_fullRationalGenericScreenedSource_of_no_uniformEquilibriumPayoff
+#print axioms GameTheory.fullRationalScreenedSource_actual_consumer
+#print axioms GameTheory.fullRationalScreenedSource_quantitative_consumer

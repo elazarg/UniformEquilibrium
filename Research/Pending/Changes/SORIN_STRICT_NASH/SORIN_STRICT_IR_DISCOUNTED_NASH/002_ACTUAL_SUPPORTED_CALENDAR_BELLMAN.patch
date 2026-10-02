@@ -1,0 +1,153 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-/-- The internally produced calendar profile, preserving the original source
++/-- The calendar continuation potential caps a full behavioral replacement.
++Only reached off-calendar histories require the source punishment bound. -/
++private theorem FiniteStageGame.discounted_deviation_le_calendar_of_supported_cap
++    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
++    (profile : G.BehaviorProfile) (rate : G.DiscountRate)
++    (who : G.Player) (deviation : G.BehaviorStrategy who)
++    (bound cap margin : ℝ) (hmargin : 0 < margin)
++    (hbound : ∀ action, |G.payoff action who| ≤ bound)
++    (hphase : ∀ start, cap + margin ≤
++      G.kernel.discountedContinuationPayoff (1 - rate.1) path start who)
++    (hpunish : ∀ (time : ℕ) (history : G.repeatedGame.Hist time),
++      history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
++        PUnit.unit time).support →
++      ¬triggerOnPath G path history →
++      G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤ cap)
++    (hpatient : rate.1 * (2 * bound) ≤ (1 - rate.1) * margin) :
++    G.discountedPayoff rate.1 (Function.update profile who deviation) who ≤
++      G.kernel.discountedContinuationPayoff (1 - rate.1) path 0 who := by
++  classical
++  let replaced := Function.update profile who deviation
++  let phase : ℕ → ℝ := fun time =>
++    G.kernel.discountedContinuationPayoff (1 - rate.1) path time who
++  let potential : G.repeatedGame.HistoryPotential := fun time history =>
++    if triggerOnPath G path history then phase time else cap
++  have hphaseLower (time : ℕ) : cap + margin ≤ phase time := hphase time
++  have hβ0 : 0 ≤ 1 - rate.1 := sub_nonneg.mpr rate.2.2
++  have hβ1 : 1 - rate.1 < 1 := by linarith [rate.2.1]
++  have hkernelBound (action : ∀ player, G.Action player) :
++      |G.kernel.eu action who| ≤ bound := by
++    simpa only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU] using hbound action
++  have hrec (time : ℕ) : phase time =
++      rate.1 * G.payoff (path time) who + (1 - rate.1) * phase (time + 1) := by
++    simpa only [phase, sub_sub_cancel, FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
++      using G.kernel.discountedContinuationPayoff_eq_head_add
++        hβ0 hβ1 path time who hkernelBound
++  have hupper (time : ℕ) : phase time ≤ bound :=
++    G.kernel.discountedContinuationPayoff_le_const_of_forall_stageEU_le
++      hβ0 hβ1 path time who hkernelBound
++      (fun k => le_of_abs_le (hkernelBound (path (time + k))))
++  have hphaseBound (time : ℕ) : |phase time| ≤ max bound |cap| := by
++    refine abs_le.mpr ⟨?_, (hupper time).trans (le_max_left _ _)⟩
++    have hlower := hphaseLower time
++    have hcapLower := (abs_le.mp (le_refl |cap|)).1
++    have hmax := le_max_right bound |cap|
++    linarith
++  have hpotential (time : ℕ) (history : G.repeatedGame.Hist time) :
++      |potential time history| ≤ max bound |cap| := by
++    dsimp only [potential]
++    split_ifs
++    · exact hphaseBound time
++    · exact le_max_right _ _
++  have hbellman (time : ℕ) (history : G.repeatedGame.Hist time)
++      (hsupport : history ∈ (G.repeatedGame.histDist replaced PUnit.unit time).support) :
++      (1 - (1 - rate.1)) * G.repeatedGame.stageEUAt replaced history who +
++        (1 - rate.1) * G.repeatedGame.historyContinuationEU replaced potential history ≤
++          potential time history := by
++    let current : G.MixedProfile := fun player => replaced player time history
++    have hstage : G.repeatedGame.stageEUAt replaced history who =
++        Math.Probability.expect (Math.PMFProduct.pmfPi current)
++          (fun action => G.payoff action who) := by
++      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
++        (fun action => G.kernel.eu action who) = _
++      simp only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
++    have hcontinuation : G.repeatedGame.historyContinuationEU replaced potential history =
++        Math.Probability.expect (Math.PMFProduct.pmfPi current)
++          (fun action => potential (time + 1)
++            (Fin.snoc history.1 (history.2, action), PUnit.unit)) := by
++      unfold StochasticGame.historyContinuationEU
++      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
++        (fun action => Math.Probability.expect (PMF.pure PUnit.unit)
++          (fun nextState => potential (time + 1)
++            (Fin.snoc history.1 (history.2, action), nextState))) = _
++      simp only [Math.Probability.expect_pure]
++    by_cases hpath : triggerOnPath G path history
++    · have hlocal (action : ∀ player, G.Action player) :
++          rate.1 * G.payoff action who + (1 - rate.1) *
++            potential (time + 1) (Fin.snoc history.1 (history.2, action), PUnit.unit) ≤
++              phase time := by
++        by_cases hequal : action = path time
++        · subst action
++          have hnext := (triggerOnPath_snoc_iff G path
++            history (path time) PUnit.unit).mpr ⟨hpath, rfl⟩
++          simp only [potential, hnext, ite_true]
++          exact (hrec time).ge
++        · have hnext : ¬triggerOnPath G path
++              ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
++                G.repeatedGame.Hist (time + 1)) := by
++            rw [triggerOnPath_snoc_iff]
++            exact fun h => hequal h.2
++          simp only [potential, hnext, ite_false]
++          have hgain : G.payoff action who ≤ G.payoff (path time) who + 2 * bound := by
++            have ha := (abs_le.mp (hbound action)).2
++            have hp := (abs_le.mp (hbound (path time))).1
++            linarith
++          have hgainScaled := mul_le_mul_of_nonneg_left hgain rate.2.1.le
++          have hsecurity := mul_le_mul_of_nonneg_left (hphaseLower (time + 1)) hβ0
++          simp only [mul_add] at hgainScaled hsecurity
++          calc
++            rate.1 * G.payoff action who + (1 - rate.1) * cap ≤
++                rate.1 * G.payoff (path time) who +
++                  (1 - rate.1) * phase (time + 1) := by
++              linarith
++            _ = phase time := (hrec time).symm
++      have hmean := Math.ProbabilityMassFunction.expect_le_of_le_on_support
++        (B := phase time) (Math.PMFProduct.pmfPi current) _
++        (fun action _ => hlocal action)
++      simp only [Math.Probability.expect_add, Math.Probability.expect_const_mul] at hmean
++      rw [hstage, hcontinuation, sub_sub_cancel]
++      simpa only [potential, hpath, ite_true] using hmean
++    · have hnext (action : ∀ player, G.Action player) :
++          potential (time + 1)
++            (Fin.snoc history.1 (history.2, action), PUnit.unit) = cap := by
++        have hnot : ¬triggerOnPath G path
++            ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
++              G.repeatedGame.Hist (time + 1)) :=
++          fun h => hpath ((triggerOnPath_snoc_iff G path history action PUnit.unit).mp h).1
++        simp only [potential, hnot, ite_false]
++      have hcontinuationCap : G.repeatedGame.historyContinuationEU
++          replaced potential history = cap := by
++        rw [hcontinuation]
++        simp only [hnext, Math.Probability.expect_const]
++      have hcap := mul_le_mul_of_nonneg_left
++        (hpunish time history hsupport hpath) rate.2.1.le
++      rw [hcontinuationCap, sub_sub_cancel]
++      simp only [potential, hpath, ite_false]
++      calc
++        rate.1 * G.repeatedGame.stageEUAt replaced history who + (1 - rate.1) * cap ≤
++            rate.1 * cap + (1 - rate.1) * cap := add_le_add hcap le_rfl
++        _ = cap := by ring
++  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
++  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
++    inferInstanceAs (Finite (G.Action player))
++  have hstageBound (state : G.repeatedGame.State) (action : G.repeatedGame.JointAct) :
++      |G.repeatedGame.stagePayoff state action who| ≤ bound := by
++    simpa only [FiniteStageGame.repeatedGame, KernelGame.realizedActionStochasticGame,
++      FiniteStageGame.kernel, KernelGame.eu_ofPureEU] using hbound action
++  have hcap := StochasticGame.discountedPayoff_le_of_history_bellman_ge_on_support
++    G.repeatedGame hstageBound replaced PUnit.unit potential hβ0 hβ1
++    (fun time history _ => hpotential time history) hbellman
++  have hzero : potential 0 (G.repeatedGame.emptyHist PUnit.unit) = phase 0 := by
++    have hpath : triggerOnPath G path (G.repeatedGame.emptyHist PUnit.unit) :=
++      fun k => Fin.elim0 k
++    simp only [potential, hpath, ite_true]
++  rw [hzero] at hcap
++  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
++    phase, replaced] using! hcap
++
++/-- The internally produced calendar profile, preserving the original source
+*** End Patch

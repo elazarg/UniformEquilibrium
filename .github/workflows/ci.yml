@@ -25,6 +25,7 @@ jobs:
           fetch-depth: 0
           submodules: recursive
       - run: python3 scripts/check_docs.py
+      - run: python3 scripts/check_research_pending.py
       - run: python3 -m unittest discover -s scripts -p 'test_*.py'
       - run: python3 scripts/check_experiment_registry.py --execute
       - run: python3 scripts/check_import_graph.py

@@ -1,0 +1,199 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Quitting/OwnSingletonRewardChart.lean
++import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
++import Mathlib.Topology.Homeomorph.Defs
++
++/-!
++# Independent own-singleton and remaining reward coordinates
++
++This is a direct coordinate chart, not an affine recipient-row translation.
++Only the displayed own singleton entries depend on the singleton vector.
++Never still has its model-defined payoff zero.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++variable {ι : Type} [Fintype ι] [DecidableEq ι]
++
++/-- Every terminal recipient coordinate other than that recipient's own singleton. -/
++abbrev QuittingFreeRewardCoordinate (ι : Type) [DecidableEq ι] :=
++  {point : {S : Finset ι // S.Nonempty} × ι //
++    point.1 ≠ quittingSingletonTerminal point.2}
++
++/-- Insert any own-singleton vector without changing a single free reward coordinate. -/
++def quittingOwnSingletonReward (singletons : ι → ℝ)
++    (coordinates : QuittingFreeRewardCoordinate ι → ℝ)
++    (terminal : {S : Finset ι // S.Nonempty}) (player : ι) : ℝ :=
++  if h : terminal = quittingSingletonTerminal player then singletons player
++  else coordinates ⟨(terminal, player), h⟩
++
++@[simp] theorem quittingOwnSingletonReward_singleton
++    (singletons : ι → ℝ) (coordinates : QuittingFreeRewardCoordinate ι → ℝ)
++    (player : ι) :
++    quittingOwnSingletonReward singletons coordinates
++      (quittingSingletonTerminal player) player = singletons player := by
++  simp only [quittingOwnSingletonReward, dif_pos rfl]
++
++@[simp] theorem quittingOwnSingletonReward_free
++    (singletons : ι → ℝ) (coordinates : QuittingFreeRewardCoordinate ι → ℝ)
++    (coordinate : QuittingFreeRewardCoordinate ι) :
++    quittingOwnSingletonReward singletons coordinates
++      coordinate.1.1 coordinate.1.2 = coordinates coordinate := by
++  exact dif_neg coordinate.2
++
++/-- Changing the singleton vector leaves every non-own-singleton entry unchanged. -/
++theorem quittingOwnSingletonReward_eq_of_ne_singleton
++    (first second : ι → ℝ) (coordinates : QuittingFreeRewardCoordinate ι → ℝ)
++    (terminal : {S : Finset ι // S.Nonempty}) (player : ι)
++    (hterminal : terminal ≠ quittingSingletonTerminal player) :
++    quittingOwnSingletonReward first coordinates terminal player =
++      quittingOwnSingletonReward second coordinates terminal player := by
++  simp only [quittingOwnSingletonReward, dif_neg hterminal]
++
++/-- Every actual reward table is recovered from its own singletons and free entries. -/
++theorem quittingOwnSingletonReward_reconstruct
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
++    quittingOwnSingletonReward
++        (fun player => reward (quittingSingletonTerminal player) player)
++        (fun coordinate => reward coordinate.1.1 coordinate.1.2) = reward := by
++  funext terminal player
++  unfold quittingOwnSingletonReward
++  split_ifs with hterminal
++  · exact congrArg (fun source => reward source player) hterminal.symm
++  · rfl
++
++/-- Joint continuity keeps both the singleton vector and all free entries variable. -/
++theorem continuous_quittingOwnSingletonReward_joint :
++    Continuous (fun parameters : (ι → ℝ) × (QuittingFreeRewardCoordinate ι → ℝ) =>
++      quittingOwnSingletonReward parameters.1 parameters.2) := by
++  apply continuous_pi
++  intro terminal
++  apply continuous_pi
++  intro player
++  unfold quittingOwnSingletonReward
++  by_cases hterminal : terminal = quittingSingletonTerminal player
++  · simp only [dif_pos hterminal]
++    exact (continuous_apply player).comp continuous_fst
++  · simp only [dif_neg hterminal]
++    exact (continuous_apply ⟨(terminal, player), hterminal⟩).comp continuous_snd
++
++theorem continuous_quittingOwnSingletonReward (singletons : ι → ℝ) :
++    Continuous (quittingOwnSingletonReward singletons) :=
++  continuous_quittingOwnSingletonReward_joint.comp (continuous_const.prodMk continuous_id)
++
++/-- Varying all own singletons while retaining exactly the same free reward data. -/
++theorem continuous_quittingOwnSingletonReward_singletons
++    (coordinates : QuittingFreeRewardCoordinate ι → ℝ) :
++    Continuous (fun singletons : ι → ℝ => quittingOwnSingletonReward singletons coordinates) :=
++  continuous_quittingOwnSingletonReward_joint.comp (continuous_id.prodMk continuous_const)
++
++/-- The whole singleton fiber has exactly the independent free reward coordinates. -/
++def quittingOwnSingletonChart (singletons : ι → ℝ) :
++    (QuittingFreeRewardCoordinate ι → ℝ) ≃ₜ
++      {reward : {S : Finset ι // S.Nonempty} → Payoff ι //
++        ∀ player, reward (quittingSingletonTerminal player) player = singletons player} where
++  toFun coordinates :=
++    ⟨quittingOwnSingletonReward singletons coordinates,
++      quittingOwnSingletonReward_singleton singletons coordinates⟩
++  invFun reward coordinate := reward.1 coordinate.1.1 coordinate.1.2
++  left_inv coordinates := by
++    funext coordinate
++    exact quittingOwnSingletonReward_free singletons coordinates coordinate
++  right_inv reward := by
++    apply Subtype.ext
++    funext terminal player
++    change quittingOwnSingletonReward singletons
++      (fun coordinate => reward.1 coordinate.1.1 coordinate.1.2) terminal player = _
++    unfold quittingOwnSingletonReward
++    split_ifs with hterminal
++    · subst terminal
++      exact (reward.2 player).symm
++    · rfl
++  continuous_toFun := (continuous_quittingOwnSingletonReward singletons).subtype_mk _
++  continuous_invFun := by
++    apply continuous_pi
++    intro coordinate
++    have hcoordinate : Continuous
++        (fun reward : {S : Finset ι // S.Nonempty} → Payoff ι =>
++          reward coordinate.1.1 coordinate.1.2) :=
++      (continuous_apply coordinate.1.2).comp (continuous_apply coordinate.1.1)
++    exact hcoordinate.comp continuous_subtype_val
++
++end GameTheory
++
+*** Update File: UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Chart.lean
+@@
+ import UniformEquilibrium.Quitting.Cycles.PairedCycleFin4Pivot
+-import Mathlib.Topology.Homeomorph.Defs
++import UniformEquilibrium.Quitting.OwnSingletonRewardChart
+@@
+ abbrev Fin4FreeRewardCoordinate :=
+-  {point : {S : Finset (Fin 4) // S.Nonempty} × Fin 4 //
+-    point.1 ≠ quittingSingletonTerminal point.2}
++  QuittingFreeRewardCoordinate (Fin 4)
+@@
+ def fin4CanonicalReward (coordinates : Fin4FreeRewardCoordinate → ℝ)
+     (terminal : {S : Finset (Fin 4) // S.Nonempty}) (player : Fin 4) : ℝ :=
+-  if h : terminal = quittingSingletonTerminal player then (if player = 0 then 1 else 0)
+-  else coordinates ⟨(terminal, player), h⟩
++  quittingOwnSingletonReward (fun player => if player = 0 then 1 else 0)
++    coordinates terminal player
+@@
+ theorem fin4CanonicalReward_singleton (coordinates : Fin4FreeRewardCoordinate → ℝ) :
+     IsSinglePivotSingletonTable (fin4CanonicalReward coordinates) 0 := by
+   intro player
+-  simp [fin4CanonicalReward]
++  exact quittingOwnSingletonReward_singleton _ coordinates player
+@@
+ theorem continuous_fin4CanonicalReward : Continuous fin4CanonicalReward := by
+-  apply continuous_pi
+-  intro terminal
+-  apply continuous_pi
+-  intro player
+-  unfold fin4CanonicalReward
+-  by_cases h : terminal = quittingSingletonTerminal player
+-  · simp only [dite_eq_left h]
+-    exact continuous_const
+-  · simp only [dite_eq_right h]
+-    exact (continuous_apply (⟨(terminal, player), h⟩ : Fin4FreeRewardCoordinate) :
+-      Continuous (fun coordinates : Fin4FreeRewardCoordinate → ℝ =>
+-        coordinates ⟨(terminal, player), h⟩))
++  exact continuous_quittingOwnSingletonReward _
+@@
+ def fin4CanonicalChart : (Fin4FreeRewardCoordinate → ℝ) ≃ₜ
+     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4) //
+-      IsSinglePivotSingletonTable reward 0} where
+-  toFun coordinates := ⟨fin4CanonicalReward coordinates, fin4CanonicalReward_singleton coordinates⟩
+-  invFun reward coordinate := reward.1 coordinate.1.1 coordinate.1.2
+-  left_inv coordinates := by
+-    funext coordinate
+-    exact dite_eq_right coordinate.2
+-  right_inv reward := by
+-    apply Subtype.ext
+-    funext terminal player
+-    change fin4CanonicalReward (fun coordinate => reward.1 coordinate.1.1 coordinate.1.2)
+-      terminal player = reward.1 terminal player
+-    unfold fin4CanonicalReward
+-    by_cases h : terminal = quittingSingletonTerminal player
+-    · subst terminal
+-      rw [dite_eq_left rfl]
+-      exact (reward.2 player).symm
+-    · exact dite_eq_right h
+-  continuous_toFun := continuous_fin4CanonicalReward.subtype_mk _
+-  continuous_invFun := by
+-    apply continuous_pi
+-    intro coordinate
+-    have hcoordinate : Continuous (fun reward : {S : Finset (Fin 4) // S.Nonempty} →
+-        Payoff (Fin 4) => reward coordinate.1.1 coordinate.1.2) :=
+-      (continuous_apply coordinate.1.2).comp (continuous_apply coordinate.1.1)
+-    exact hcoordinate.comp continuous_subtype_val
++      IsSinglePivotSingletonTable reward 0} :=
++  quittingOwnSingletonChart (fun player => if player = 0 then 1 else 0)
+*** Update File: UniformEquilibrium/Quitting/Cycles/PairedCycleFin4OpenRegion.lean
+@@
+-  · simp [fin4OriginalReward, fin4CanonicalReward, h, fin4CenterCoordinates]
++  · simp [fin4OriginalReward, fin4CanonicalReward, quittingOwnSingletonReward,
++      h, fin4CenterCoordinates]
+*** End Patch

@@ -1,0 +1,298 @@
+{
+  "source": {
+    "path": "math/exports/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md",
+    "sha256": "6c2eda2191454a85a3fc892265561d241ffed84cc50a68643330e902b1e45e7f"
+  },
+  "status": "Static preparation only. All new payloads uncompiled. Root current full gate1205 live.",
+  "current_checked_charge": {
+    "generic57_sha256": "db6f0ab7f79a8b1ea103b4d9b00975ac16b7d7542a0f0a3913810f976aa92d57",
+    "actual58_sha256": "c67b9cef34d39f011a229d39e971d68c9891e3f2d46838683154bd189dbc0ebf",
+    "root_named_check": {
+      "session": 90508,
+      "exit_code": 0
+    },
+    "root_manual_axiom_harness": {
+      "session": 14947,
+      "exit_code": 0,
+      "allowed_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+      ]
+    }
+  },
+  "ordered_applications": [
+    {
+      "id": "36",
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/36_RATIONAL_CLOSED_BOX_DENSITY.patch",
+      "sha256": "b1c004e87b1ec88898acd12089d2ad598bf860b130fded45bf334986c74b1f12",
+      "module": "MathUE.Interval.RationalClosedBoxDensity",
+      "depends_on": [],
+      "result_source_sha256": "6d9c101bdc0a85466a041524f636257987fc15652bdea8413003d41064c1ed9b"
+    },
+    {
+      "id": "38",
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/38_RATIONAL_BOXED_ROOT_INTERFACES.patch",
+      "sha256": "6215031453395edaaa47bf3f296605658c90db8f06c80288b88b1f44fa954a99",
+      "module": "UniformEquilibrium.Quitting.Root.RationalBoxedEdge",
+      "depends_on": [
+        "36"
+      ],
+      "result_source_sha256": "e396d1676630ce631449206de9334857232b91d6b7d7de3f059af24988c0598c"
+    },
+    {
+      "id": "38_CANONICAL_BERNOULLI",
+      "path": "/tmp/UE_RATIONAL_BOXED_ROOT_38_CANONICAL_BERNOULLI_REUSE_20261002.patch",
+      "sha256": "8739b1e950ff2d911012bc13de42ef2fc6665f285ae87e85187c44aab5ac06b0",
+      "module": "UniformEquilibrium.Quitting.Root.RationalBoxedEdge",
+      "depends_on": [
+        "38"
+      ],
+      "result_source_sha256": "47fcf61929f593a050c5476b23fc398c50877d825f41323f783ad72a8f0b3568",
+      "base_source_sha256": "e396d1676630ce631449206de9334857232b91d6b7d7de3f059af24988c0598c"
+    },
+    {
+      "id": "42",
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/42_RATIONAL_EXACT_SOLO_REJECTION.patch",
+      "sha256": "4c9dcee45a9b4c156af7443d08ea7aad6b069783bfa8ad9fd0f64bceb2838f02",
+      "module": "UniformEquilibrium.Quitting.Projective.RationalExactSoloRejection",
+      "depends_on": [
+        "38_CANONICAL_BERNOULLI"
+      ],
+      "result_source_sha256": "d18f55ef6eb61d3a60ae41963a0cd34e635ea887af8fcde7ffaf1bca5f917d13"
+    },
+    {
+      "id": "SOURCE_IMPORTS",
+      "path": "/tmp/ue-shape-retirement-final-nGFcfS/SOURCE_GROUP_IMPORTS.patch",
+      "sha256": "2bee8be0a64e47937bc81359f2303c0b3998702bb6eaab23f520b465afc8e63b",
+      "module": [
+        "MathUE",
+        "UniformEquilibrium"
+      ],
+      "depends_on": [
+        "42"
+      ]
+    },
+    {
+      "id": "48",
+      "path": "/tmp/ue-coupled-cubic-tUhiv5/48_COUPLED_CUBIC_SHAPE_FIXTURE.patch",
+      "sha256": "3e30200a98b8842a2097772c8a21630edccf9093c9310ea93850b9a4057ef01c",
+      "module": "MathUE.Analysis.Examples.CoupledCubicShape",
+      "depends_on": [],
+      "result_source_sha256": "a33c369499ac15dd90b5fcff93cfb97237f07f8a215878a5fb232bfd53348ce5"
+    },
+    {
+      "id": "49_RENAMED",
+      "path": "/tmp/ue-shape-retirement-final-nGFcfS/49_COLLISION_ADJUSTED_PROBE_BOUNDARY_RENAMED_ADD.patch",
+      "sha256": "1761beb0db679051521898d51388a80c527ab39e75e23b69978411531f5985ad",
+      "module": "UniformEquilibrium.Quitting.Examples.CollisionAdjustedProbeBoundary",
+      "depends_on": [],
+      "result_source_sha256": "ec76de60ed6cd34d2e5555360dc1ca79643f0c6d70cd387fdc58110e7fd0c5de"
+    },
+    {
+      "id": "50",
+      "path": "/tmp/ue-nonq-face-fixture-vClzbt/50_NON_Q_LINEAR_FACE_FIXTURE.patch",
+      "sha256": "bc2147d1e8dd6cf04158166f46852dae679a258ab04a39970adecf8e3bf72a27",
+      "module": "MathUE.Analysis.Examples.NonQLinearFace",
+      "depends_on": [],
+      "result_source_sha256": "70c7f3076430e9bee97b042b6687e6f0342e49b83e733d2703cebd66fe221fd8"
+    },
+    {
+      "id": "54",
+      "path": "/tmp/ue-reflection-literal-boundaries-VxBUGT/54_POSITIVE_CHARGE_RESCALE.patch",
+      "sha256": "91957f4ec748bc92b0719fa25f312e01b03729bf71da29f132f9ad7138d3c6ef",
+      "module": "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialChargeScale",
+      "depends_on": [],
+      "result_source_sha256": "a21f3a7fd3ec433861c55e1f4ac9fa498a548f62931f703d013231ca5f190cc6"
+    },
+    {
+      "id": "54_FRECHET_REPAIR",
+      "path": "/tmp/UE_FULL_EXACT_CHARGE_54_FRECHET_DOMAIN_REPAIR_20261002.patch",
+      "sha256": "0a6639c401b96ded1d00ea558f715aac9bcf654ba0f1e3c06e89fcac0368db4e",
+      "module": "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialChargeScale",
+      "depends_on": [
+        "54"
+      ],
+      "result_source_sha256": "1b3b44e671d866f82d2f01cdfb2683a4f36fde485ebd607a1b36c991bc58b57e",
+      "base_source_sha256": "a21f3a7fd3ec433861c55e1f4ac9fa498a548f62931f703d013231ca5f190cc6"
+    },
+    {
+      "id": "59_RENAMED",
+      "path": "/tmp/ue-shape-retirement-final-nGFcfS/59_EXACT_ROOT_PLAYER_COUNT_BOUNDARY_RENAMED_ADD.patch",
+      "sha256": "f6fe68f871367d3427d4e1e6def0756060972dd7516743bc20c6f1db70d16ac2",
+      "module": "UniformEquilibrium.Quitting.Examples.ExactRootPotentialPlayerCountBoundary",
+      "depends_on": [],
+      "result_source_sha256": "d57a260aa45451f4795a20d465cb3ef7555bb70c95a09e3aa2f36c0c8159f33c"
+    },
+    {
+      "id": "59A_RETARGETED",
+      "path": "/tmp/ue-shape-retirement-final-nGFcfS/59A_EXPLICIT_ZERO_REWARD_ARGUMENTS_RETARGETED.patch",
+      "sha256": "0f0273701b67ce66d7847b017f6093da67c247cce97c8669e81c0c73d234ec3c",
+      "module": "UniformEquilibrium.Quitting.Examples.ExactRootPotentialPlayerCountBoundary",
+      "depends_on": [
+        "59_RENAMED"
+      ],
+      "result_source_sha256": "8266df86ad95df0eb08ba232f06ab50b0a767d214c4741fc07b4cde5770ff226",
+      "base_source_sha256": "d57a260aa45451f4795a20d465cb3ef7555bb70c95a09e3aa2f36c0c8159f33c"
+    },
+    {
+      "id": "59B_RETARGETED",
+      "path": "/tmp/ue-shape-retirement-final-nGFcfS/59B_PUBLIC_SOLO_IDENTITY_RETARGETED.patch",
+      "sha256": "687489c340729f34168f74f67ca59ffecdb9a925d08b014553868df0445db361",
+      "module": "UniformEquilibrium.Quitting.Examples.ExactRootPotentialPlayerCountBoundary",
+      "depends_on": [
+        "59A_RETARGETED"
+      ],
+      "result_source_sha256": "cceb6f5d3d9b7e361565958717e5f10a7c8b26804e68caec35939bc3fb12da96",
+      "base_source_sha256": "8266df86ad95df0eb08ba232f06ab50b0a767d214c4741fc07b4cde5770ff226"
+    },
+    {
+      "id": "FIXTURE_IMPORTS",
+      "path": "/tmp/ue-shape-retirement-final-nGFcfS/FIXTURE_GROUP_IMPORTS.patch",
+      "sha256": "d3fb9b93b40e61f7ebf77c85983677127259e1aa0d0a99fe278a4100e2ee1e2f",
+      "module": [
+        "MathUE",
+        "UniformEquilibrium"
+      ],
+      "depends_on": [
+        "SOURCE_IMPORTS",
+        "48",
+        "49_RENAMED",
+        "50",
+        "54_FRECHET_REPAIR",
+        "59B_RETARGETED"
+      ]
+    }
+  ],
+  "umbrella_transports": [
+    {
+      "patch": "SOURCE_GROUP_IMPORTS.patch",
+      "patch_sha": "2bee8be0a64e47937bc81359f2303c0b3998702bb6eaab23f520b465afc8e63b",
+      "bases": {
+        "MathUE.lean": "da0db723744cb4fd625a028ce4cca573210df3e588f42dd318d57414df090156",
+        "UniformEquilibrium.lean": "d682b54a1a2c22f348ed10ed3f0e48bebd049e39887399c306fb778a41fb24ac"
+      },
+      "results": {
+        "MathUE.lean": "f574ee70d2662e9821eb0b1a48f0ed4d586f7969dfcaf877df57f69a42363800",
+        "UniformEquilibrium.lean": "7ce2466e403652e1f0f7c71522a36a3fbd8e39f5450700bdcd8f62d352cc792c"
+      }
+    },
+    {
+      "patch": "FIXTURE_GROUP_IMPORTS.patch",
+      "patch_sha": "d3fb9b93b40e61f7ebf77c85983677127259e1aa0d0a99fe278a4100e2ee1e2f",
+      "bases": {
+        "MathUE.lean": "f574ee70d2662e9821eb0b1a48f0ed4d586f7969dfcaf877df57f69a42363800",
+        "UniformEquilibrium.lean": "7ce2466e403652e1f0f7c71522a36a3fbd8e39f5450700bdcd8f62d352cc792c"
+      },
+      "results": {
+        "MathUE.lean": "0dfdf899fd328cf8ba1fcf5a31d55b9938f1c2de9ca66f832a046348c015da2e",
+        "UniformEquilibrium.lean": "d5573bdc368cd66f8d3be79fd3ba0f5d8668d319ae6b5c7c2b150e8d60d1ce13"
+      }
+    }
+  ],
+  "literal_rename_verification": [
+    {
+      "unit": "49",
+      "patch": "49_COLLISION_ADJUSTED_PROBE_BOUNDARY_RENAMED_ADD.patch",
+      "patch_sha": "1761beb0db679051521898d51388a80c527ab39e75e23b69978411531f5985ad",
+      "original": "/tmp/ue-collision-fixture-M7I6Dy/49_LITERAL_COLLISION_AND_UPPER_FREEZE.patch",
+      "original_sha": "945c3f2bf3dadf125a7664ea34a44e8fc5c87463b847a022d375f09ac0ad646f",
+      "result_sha": "ec76de60ed6cd34d2e5555360dc1ca79643f0c6d70cd387fdc58110e7fd0c5de"
+    },
+    {
+      "unit": "59",
+      "patch": "59_EXACT_ROOT_PLAYER_COUNT_BOUNDARY_RENAMED_ADD.patch",
+      "patch_sha": "f6fe68f871367d3427d4e1e6def0756060972dd7516743bc20c6f1db70d16ac2",
+      "original": "/tmp/ue-potential-final-joins-XYiMaJ/59_LITERAL_PLAYER_COUNT_AND_SOLO_ZERO_BOUNDARIES.patch",
+      "original_sha": "b3f18a4a250f6ccaf7df0d255bc6e1dd21c2cb67d11d64113edaf03e558b3399",
+      "result_sha": "d57a260aa45451f4795a20d465cb3ef7555bb70c95a09e3aa2f36c0c8159f33c"
+    },
+    {
+      "patch": "59A_EXPLICIT_ZERO_REWARD_ARGUMENTS_RETARGETED.patch",
+      "patch_sha": "0f0273701b67ce66d7847b017f6093da67c247cce97c8669e81c0c73d234ec3c",
+      "base_sha": "d57a260aa45451f4795a20d465cb3ef7555bb70c95a09e3aa2f36c0c8159f33c",
+      "result_sha": "8266df86ad95df0eb08ba232f06ab50b0a767d214c4741fc07b4cde5770ff226",
+      "target": "UniformEquilibrium/Quitting/Examples/ExactRootPotentialPlayerCountBoundary.lean"
+    },
+    {
+      "patch": "59B_PUBLIC_SOLO_IDENTITY_RETARGETED.patch",
+      "patch_sha": "687489c340729f34168f74f67ca59ffecdb9a925d08b014553868df0445db361",
+      "base_sha": "8266df86ad95df0eb08ba232f06ab50b0a767d214c4741fc07b4cde5770ff226",
+      "result_sha": "cceb6f5d3d9b7e361565958717e5f10a7c8b26804e68caec35939bc3fb12da96",
+      "target": "UniformEquilibrium/Quitting/Examples/ExactRootPotentialPlayerCountBoundary.lean"
+    }
+  ],
+  "canonical_prerequisites": {
+    "36": [
+      "Mathlib.Topology.Instances.Rat",
+      "Mathlib.Topology.Constructions.SumProd",
+      "Mathlib.Topology.Algebra.Order.Field"
+    ],
+    "38": [
+      "MathUE.PMFProduct.Bool",
+      "UniformEquilibrium.Quitting.Root.RationalQuittingRootGridSelector",
+      "UniformEquilibrium.Quitting.Root.NashDefectContinuity"
+    ],
+    "42": [
+      "MathUE.Interval.RationalPolynomialRegularity",
+      "UniformEquilibrium.Quitting.Projective.SingletonBoxStandardQFaceExclusion",
+      "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialFaceDrift",
+      "UniformEquilibrium.Quitting.Root.RationalFiniteSourceCapThresholdScan"
+    ],
+    "48": [
+      "MathUE.Analysis.CoordinateResetFTC",
+      "MathUE.Interval.RationalPolynomial"
+    ],
+    "50": [
+      "MathUE.LinearProgramming.CopositiveQ"
+    ],
+    "54": [
+      "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuadraticExclusion",
+      "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMultiAffineExclusion"
+    ],
+    "38_CANONICAL_BERNOULLI": [
+      "MathUE.ProbabilityMassFunction.IntervalBernoulliSimplex"
+    ],
+    "49_RENAMED": [
+      "UniformEquilibrium.Quitting.Root.CollisionAdjustedSingletonProbe"
+    ],
+    "59_RENAMED": [
+      "UniformEquilibrium.Quitting.Projective.ExactRootPotentialRestriction",
+      "UniformEquilibrium.Quitting.Root.SingletonRootEndpoints"
+    ]
+  },
+  "harnesses": [
+    {
+      "artifact": "FINAL_GROUP_AXIOM_HARNESS.lean",
+      "sha": "ea5c7220bbef5c6032755c4cfcb55c13e70242a386567e67e6cd8b2d5b7546ea"
+    },
+    {
+      "artifact": "FINAL_SOURCE_DECLARATION_AUDITS.lean",
+      "sha": "10827c936039b04dcbb28c4b923c4ebd607f5d1fec2095fbe9d3fdb72f4a7709"
+    }
+  ],
+  "excluded_optional_units": [
+    "43",
+    "60"
+  ],
+  "forbidden_replays": [
+    "original49",
+    "original59",
+    "old-path59A",
+    "old-pathpublic-solo-identity"
+  ],
+  "preservation": "All original patches remain byte-identical. Renamed ADDs are alternatives, not overlays applied after original49/original59.",
+  "tests_run_here": [
+    "Read-only full export and source/patch inspection",
+    "SHA256 verification",
+    "Literal name-only replacement comparison",
+    "Unique update contexts and result hashes reconstructed in memory",
+    "Dependency order validation"
+  ],
+  "tests_not_run_here": [
+    "Lean",
+    "Lake",
+    "Axiom harness",
+    "Shared import/trust/docs gates"
+  ]
+}

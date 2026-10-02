@@ -1,0 +1,169 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/FullRationalScreenedSource.lean
++import UniformEquilibrium.Quitting.Terminal.RationalPositiveExploitabilityApproximation
++import UniformEquilibrium.Diagnostics.Quitting.RationalScreenedSingletonFiberSelection
++
++/-!
++# One full rational initial table in its internally selected screened fiber
++
++Section 5.1 first rationalizes all sixty entries by the existing producer.
++Only the free block is then perturbed by the existing rational nonvanishing
++density theorem. Its four rational own entries are retained exactly. The
++same final free block is used for the fresh real singleton maximum and
++rational screened gap. No rationality of that maximum is asserted.
++-/
++
++namespace GameTheory
++
++/-- The genericity perturbation retains ALL four rational own entries of the
++same initial rational table. The actual full-profile infimum loses at most
++half its value, by the literal eta/4 reward radius and two-Lipschitz owner. -/
++theorem exists_rationalScreenedReward_close_preserving_singletons
++    (initial : RationalQuittingReward 4)
++    (hunit : ∀ terminal who, |rationalQuittingRewardToReal initial terminal who| < 1)
++    (hpositive : 0 < quittingTerminalExploitabilityInf
++      (rationalQuittingRewardToReal initial)) :
++    ∃ selected : RationalQuittingReward 4,
++      (∀ who, selected (quittingSingletonTerminal who) who =
++        initial (quittingSingletonTerminal who) who) ∧
++      (∀ terminal who, |rationalQuittingRewardToReal selected terminal who| < 1) ∧
++      (∀ terminal who, |rationalQuittingRewardToReal selected terminal who -
++        rationalQuittingRewardToReal initial terminal who| <
++          quittingTerminalExploitabilityInf (rationalQuittingRewardToReal initial) / 4) ∧
++      screenedRootPolynomialEval
++        (fun coordinate => rationalQuittingRewardToReal selected
++          coordinate.1.1 coordinate.1.2) screenedRootExclusionPolynomial ≠ 0 ∧
++      quittingTerminalExploitabilityInf (rationalQuittingRewardToReal initial) / 2 ≤
++        quittingTerminalExploitabilityInf (rationalQuittingRewardToReal selected) ∧
++      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal selected) := by
++  classical
++  let radius := quittingTerminalExploitabilityInf (rationalQuittingRewardToReal initial) / 4
++  have hradius : 0 < radius := div_pos hpositive (by norm_num)
++  obtain ⟨coordinates, hnear, hpolynomial, _⟩ :=
++    exists_rational_interior_screenedRootCoordinates_near
++      (fun coordinate => rationalQuittingRewardToReal initial
++        coordinate.1.1 coordinate.1.2) radius
++      (fun coordinate => (hunit coordinate.1.1 coordinate.1.2).le) hradius
++  let selected : RationalQuittingReward 4 := fun terminal who =>
++    if h : terminal = quittingSingletonTerminal who then initial terminal who
++    else coordinates ⟨(terminal, who), h⟩
++  have hown : ∀ who, selected (quittingSingletonTerminal who) who =
++      initial (quittingSingletonTerminal who) who := by
++    intro who
++    simp only [selected, dite_eq_left rfl]
++  have hselectedUnit : ∀ terminal who,
++      |rationalQuittingRewardToReal selected terminal who| < 1 := by
++    intro terminal who
++    by_cases hterminal : terminal = quittingSingletonTerminal who
++    · simpa only [rationalQuittingRewardToReal, selected, dite_eq_left hterminal] using
++        hunit terminal who
++    · simpa only [rationalQuittingRewardToReal, selected, dite_eq_right hterminal] using
++        (hnear ⟨(terminal, who), hterminal⟩).1
++  have hclose : ∀ terminal who, |rationalQuittingRewardToReal selected terminal who -
++      rationalQuittingRewardToReal initial terminal who| < radius := by
++    intro terminal who
++    by_cases hterminal : terminal = quittingSingletonTerminal who
++    · simpa only [rationalQuittingRewardToReal, selected, dite_eq_left hterminal,
++        sub_self, abs_zero] using hradius
++    · simpa only [rationalQuittingRewardToReal, selected, dite_eq_right hterminal] using
++        (hnear ⟨(terminal, who), hterminal⟩).2
++  have hfree : (fun coordinate : QuittingFreeRewardCoordinate (Fin 4) =>
++      rationalQuittingRewardToReal selected coordinate.1.1 coordinate.1.2) =
++      (fun coordinate => (coordinates coordinate : ℝ)) := by
++    funext coordinate
++    simp only [rationalQuittingRewardToReal, selected, dite_eq_right coordinate.2]
++  have hrobust := abs_quittingTerminalExploitabilityInf_sub_le_of_reward_close
++    (rationalQuittingRewardToReal selected) (rationalQuittingRewardToReal initial)
++    hradius.le (fun terminal who => (hclose terminal who).le)
++  have hhalf : quittingTerminalExploitabilityInf (rationalQuittingRewardToReal initial) / 2 ≤
++      quittingTerminalExploitabilityInf (rationalQuittingRewardToReal selected) := by
++    have hlower := (abs_le.mp hrobust).1
++    dsimp only [radius] at hlower
++    linarith
++  refine ⟨selected, hown, hselectedUnit, hclose, ?_, hhalf, ?_⟩
++  · rw [hfree]
++    exact hpolynomial
++  · exact (div_pos hpositive (by norm_num : (0 : ℝ) < 2)).trans_le hhalf
++
++/-- Raw positive eta produces ONE common positive scale and ONE full rational
++strict-unit initial table. Its SAME free block has a fresh internally selected
++real singleton maximizer and rational screened gap, uniform on the closed
++singleton cube and all screened roots. No favorable source data are inputs. -/
++theorem exists_fullRationalGenericScreenedSource_of_positive_inf
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
++    ∃ (scale : ℝ) (rational : RationalQuittingReward 4)
++      (singletons : Fin 4 → ℝ) (gamma : ℚ),
++      0 < scale ∧
++      (∀ terminal who, |scaleQuittingReward scale reward terminal who| < 1) ∧
++      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who| < 1) ∧
++      quittingTerminalExploitabilityInf (scaleQuittingReward scale reward) / 4 ≤
++        quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
++      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
++      IsRationalGenericScreenedSingletonFiber
++        (fun coordinate => rational coordinate.1.1 coordinate.1.2) singletons gamma := by
++  obtain ⟨scale, initial, hscale, hscaled, hinitialUnit, _hclose, hinitialHalf,
++      hinitialPositive⟩ :=
++    exists_strictUnit_rationalQuittingReward_of_positive_inf reward hpositive
++  obtain ⟨rational, _hown, hrationalUnit, _hnear, hpolynomial, hhalf, hrationalPositive⟩ :=
++    exists_rationalScreenedReward_close_preserving_singletons
++      initial hinitialUnit hinitialPositive
++  let coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℚ :=
++    fun coordinate => rational coordinate.1.1 coordinate.1.2
++  have hcoordinates : ∀ coordinate, |(coordinates coordinate : ℝ)| < 1 :=
++    fun coordinate => hrationalUnit coordinate.1.1 coordinate.1.2
++  have hsomePositive : ∃ oldSingletons : Fin 4 → ℝ, (∀ who, |oldSingletons who| ≤ 1) ∧
++      0 < quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward oldSingletons
++          (fun coordinate => (coordinates coordinate : ℝ))) := by
++    refine ⟨fun who => rationalQuittingRewardToReal rational
++      (quittingSingletonTerminal who) who,
++      fun who => (hrationalUnit (quittingSingletonTerminal who) who).le, ?_⟩
++    change 0 < quittingTerminalExploitabilityInf
++      (quittingOwnSingletonReward
++        (fun who => rationalQuittingRewardToReal rational (quittingSingletonTerminal who) who)
++        (fun coordinate => rationalQuittingRewardToReal rational
++          coordinate.1.1 coordinate.1.2))
++    rw [quittingOwnSingletonReward_reconstruct]
++    exact hrationalPositive
++  obtain ⟨singletons, _root, gap, hsingletons, _hscreened, hgap,
++      hmaximumPositive, hmaximum, _hminimum, _hgapEq, hfloor⟩ :=
++    exists_strict_screenedSingletonFiber_gap
++      (fun coordinate => (coordinates coordinate : ℝ))
++      (fun coordinate => (hcoordinates coordinate).le) hpolynomial hsomePositive
++  obtain ⟨gamma, hgammaPositive, hgammaGap⟩ := exists_rat_btwn hgap
++  have hsource : IsRationalGenericScreenedSingletonFiber coordinates singletons gamma := by
++    refine ⟨hcoordinates, hpolynomial, hsingletons, hgammaPositive,
++      hmaximumPositive, hmaximum, ?_⟩
++    intro otherSingletons hother root hscreened
++    exact (add_le_add_left hgammaGap.le _).trans
++      (hfloor otherSingletons hother root hscreened)
++  refine ⟨scale, rational, singletons, gamma, hscale, hscaled,
++    hrationalUnit, ?_, hrationalPositive, hsource⟩
++  linarith
++
++/-- The literal no-UE premise produces the full rational initial table and
++its SAME generic screened fiber. The initial table itself still has no UE;
++the later maximizing singleton vector is real and need not be rational. -/
++theorem exists_fullRationalGenericScreenedSource_of_no_uniformEquilibriumPayoff
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    (hno : ¬ ∃ payoff : Payoff (Fin 4),
++      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
++    ∃ (rational : RationalQuittingReward 4) (singletons : Fin 4 → ℝ) (gamma : ℚ),
++      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who| < 1) ∧
++      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
++      (¬ ∃ payoff : Payoff (Fin 4),
++        (quittingGame (rationalQuittingRewardToReal rational)).IsUniformEquilibriumPayoff
++          none payoff) ∧
++      IsRationalGenericScreenedSingletonFiber
++        (fun coordinate => rational coordinate.1.1 coordinate.1.2) singletons gamma := by
++  obtain ⟨_scale, rational, singletons, gamma, _hscale, _hscaled,
++      hrational, _hquarter, hpositive, hsource⟩ :=
++    exists_fullRationalGenericScreenedSource_of_positive_inf reward
++      (quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff reward hno)
++  exact ⟨rational, singletons, gamma, hrational, hpositive,
++    quittingGame_not_exists_uniformEquilibriumPayoff_of_quittingTerminalExploitabilityInf_pos
++      (rationalQuittingRewardToReal rational) hpositive, hsource⟩
++
++end GameTheory
+*** End Patch

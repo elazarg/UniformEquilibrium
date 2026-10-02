@@ -1,0 +1,200 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomialWitness.lean
++import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootPolynomialDegree
++import Mathlib.Algebra.MvPolynomial.NoZeroDivisors
++
++/-!
++# Literal bounded rational reward witnesses for all 24 screened-root factors
++
++Each factor has its own actual complete reward table. The four recipient
++blocks are assigned independently, all own singletons are zero, and every
++entry has absolute value at most 3/8. The resulting actual corner branches
++are the packet's four explicit functions, not supplied coefficient data.
++
++These witnesses prove every factor and their product are nonzero polynomials.
++They do not assert that one of the 24 displayed tables makes the entire
++product nonzero, and do not yet prove density or a screened-root collar.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++open Matrix Math.LinearAlgebra
++open scoped BigOperators
++
++/-- Literal recipient-disjoint rational assignments. Unused terminal entries are zero.
++The first two rows install Continue-minus-Quit gaps; the last two install
++the constant signed Quit-minus-Continue gap selected by the factor's labels. -/
++def screenedRootWitnessRationalReward (factor : ScreenedRootFactorIndex)
++    (terminal : {S : Finset (Fin 4) // S.Nonempty}) (who : Fin 4) : ℚ :=
++  let order := screenedSurePairOrder factor.1
++  ![if order 1 ∈ terminal.1 then
++      (if order 0 ∈ terminal.1 then -1 / 8 else 1 / 8) else 0,
++    if order 0 ∈ terminal.1 then
++      (if order 1 ∈ terminal.1 then -1 else 1) *
++        (1 / 4 + if order 2 ∈ terminal.1 ∧ order 3 ∈ terminal.1 then 1 / 8 else 0)
++      else 0,
++    if order 0 ∈ terminal.1 ∧ order 1 ∈ terminal.1 then
++      (if order 2 ∈ terminal.1 then 1 else -1) * (if factor.2 0 then 1 / 8 else -1 / 8)
++      else 0,
++    if order 0 ∈ terminal.1 ∧ order 1 ∈ terminal.1 then
++      (if order 3 ∈ terminal.1 then 1 else -1) * (if factor.2 1 then 1 / 8 else -1 / 8)
++      else 0] (order.symm who)
++
++/-- The actual real game is exactly the entrywise cast of the displayed rational table. -/
++def screenedRootWitnessReward (factor : ScreenedRootFactorIndex)
++    (terminal : {S : Finset (Fin 4) // S.Nonempty}) (who : Fin 4) : ℝ :=
++  screenedRootWitnessRationalReward factor terminal who
++
++def screenedRootWitnessCoordinates (factor : ScreenedRootFactorIndex)
++    (coordinate : QuittingFreeRewardCoordinate (Fin 4)) : ℝ :=
++  screenedRootWitnessReward factor coordinate.1.1 coordinate.1.2
++
++theorem screenedRootWitnessReward_rational (factor : ScreenedRootFactorIndex)
++    (terminal : {S : Finset (Fin 4) // S.Nonempty}) (who : Fin 4) :
++    ∃ value : ℚ, (value : ℝ) = screenedRootWitnessReward factor terminal who :=
++  ⟨screenedRootWitnessRationalReward factor terminal who, rfl⟩
++
++/-- Every own-singleton entry, including the optional recipients', is exactly zero. -/
++theorem screenedRootWitnessReward_singleton (factor : ScreenedRootFactorIndex)
++    (who : Fin 4) :
++    screenedRootWitnessReward factor (quittingSingletonTerminal who) who = 0 := by
++  obtain ⟨index, rfl⟩ := (screenedSurePairOrder factor.1).surjective who
++  fin_cases index <;>
++    norm_num [screenedRootWitnessReward, screenedRootWitnessRationalReward,
++      quittingSingletonTerminal, Equiv.apply_eq_iff_eq]
++
++/-- A uniform bound on all sixty original reward entries, not just the used corners. -/
++theorem abs_screenedRootWitnessReward_le (factor : ScreenedRootFactorIndex)
++    (terminal : {S : Finset (Fin 4) // S.Nonempty}) (who : Fin 4) :
++    |screenedRootWitnessReward factor terminal who| ≤ 3 / 8 := by
++  obtain ⟨index, rfl⟩ := (screenedSurePairOrder factor.1).surjective who
++  fin_cases index <;>
++    simp only [screenedRootWitnessReward, screenedRootWitnessRationalReward,
++      Equiv.symm_apply_apply, Matrix.cons_val_zero, Matrix.cons_val_one,
++      Matrix.cons_val_two, Matrix.cons_val_three] <;>
++    split_ifs <;> norm_num
++
++theorem quittingOwnSingletonReward_screenedRootWitness (factor : ScreenedRootFactorIndex) :
++    quittingOwnSingletonReward 0 (screenedRootWitnessCoordinates factor) =
++      screenedRootWitnessReward factor := by
++  have h := quittingOwnSingletonReward_reconstruct (screenedRootWitnessReward factor)
++  have hzero : (fun who => screenedRootWitnessReward factor
++      (quittingSingletonTerminal who) who) = 0 := by
++    funext who
++    exact screenedRootWitnessReward_singleton factor who
++  simpa only [hzero, screenedRootWitnessCoordinates] using h
++
++/-- The four target functions from the packet; true is Quit, false is Continue. -/
++def screenedRootWitnessBranchValue (labels : Fin 2 → Bool)
++    (index : Fin 4) (x y : ℝ) : ℝ :=
++  ![1 / 4, 1 / 2 + x * y / 4,
++    (if labels 0 then 1 - x else x) / 4,
++    (if labels 1 then 1 - y else y) / 4] index
++
++/-- Every literal source corner equals the requested corner of the four functions. -/
++theorem screenedRootCornerGain_witness (factor : ScreenedRootFactorIndex)
++    (index : Fin 4) (a b : Bool) :
++    screenedRootCornerGain (screenedRootWitnessReward factor)
++        (screenedSurePairOrder factor.1) factor.2 index a b =
++      screenedRootWitnessBranchValue factor.2 index
++        (if a then 1 else 0) (if b then 1 else 0) := by
++  fin_cases index <;> cases a <;> cases b <;>
++    cases hfirst : factor.2 0 <;> cases hsecond : factor.2 1 <;>
++    norm_num [screenedRootCornerGain, screenedRootWitnessReward,
++      screenedRootWitnessRationalReward, screenedRootCornerTerminal,
++      screenedRootChangedCornerTerminal, quittingQuitters, screenedRootCornerAction,
++      screenedRootBranchAction, screenedRootWitnessBranchValue, hfirst, hsecond,
++      Equiv.apply_eq_iff_eq]
++
++/-- The actual coefficient rows are reconstructed from those actual corners. -/
++theorem screenedRootBranchCoefficientRow_witness (factor : ScreenedRootFactorIndex)
++    (index : Fin 4) :
++    screenedRootBranchCoefficientRow (screenedRootWitnessReward factor)
++        (screenedSurePairOrder factor.1) factor.2 index =
++      ![![1 / 4, 0, 0, 0], ![1 / 2, 0, 0, 1 / 4],
++        ![if factor.2 0 then 1 / 4 else 0, if factor.2 0 then -1 / 4 else 1 / 4, 0, 0],
++        ![if factor.2 1 then 1 / 4 else 0, 0, if factor.2 1 then -1 / 4 else 1 / 4, 0]]
++        index := by
++  funext column
++  simp only [screenedRootBranchCoefficientRow, screenedRootCornerGain_witness]
++  fin_cases index <;> fin_cases column <;>
++    cases hfirst : factor.2 0 <;> cases hsecond : factor.2 1 <;>
++    norm_num [screenedRootWitnessBranchValue, hfirst, hsecond]
++
++/-- Equation (12) is obtained from the actual complete behavioral debt branches.
++No selected minor, abstract row, favorable root, or cap value is a premise. -/
++theorem screenedRootDebtBranches_witness (factor : ScreenedRootFactorIndex)
++    (root : Fin 4 → PMF Bool)
++    (hfirst : (root (screenedSurePairOrder factor.1 0) true).toReal = 1)
++    (hsecond : (root (screenedSurePairOrder factor.1 1) true).toReal = 1)
++    (index : Fin 4) :
++    screenedRootDebtBranches (screenedRootWitnessReward factor) root
++        (screenedSurePairOrder factor.1) factor.2 index =
++      screenedRootWitnessBranchValue factor.2 index
++        (root (screenedSurePairOrder factor.1 2) true).toReal
++        (root (screenedSurePairOrder factor.1 3) true).toReal := by
++  rw [screenedRootDebtBranches_eq_coefficientRow
++    (screenedRootWitnessReward factor) root (screenedSurePairOrder factor.1)
++      factor.2 hfirst hsecond index, screenedRootBranchCoefficientRow_witness]
++  fin_cases index <;>
++    cases hlabelFirst : factor.2 0 <;> cases hlabelSecond : factor.2 1 <;>
++    simp [screenedRootWitnessBranchValue, hlabelFirst, hlabelSecond] <;> ring
++
++/-- Exact evaluation of the canonical signed-minor factor on its own actual reward table. -/
++theorem screenedRootFactorPolynomial_eval_witness (factor : ScreenedRootFactorIndex) :
++    screenedRootPolynomialEval (screenedRootWitnessCoordinates factor)
++        (screenedRootFactorPolynomial factor) =
++      if factor.2 0 = false ∧ factor.2 1 = false then -1 / 2048 else -1 / 4096 := by
++  rw [screenedRootPolynomialEval_factor 0, quittingOwnSingletonReward_screenedRootWitness]
++  simp only [bilinearMinorObstruction, segreQuadratic, signedMaximalMinors,
++    Matrix.det_fin_three, Matrix.submatrix_apply, screenedRootDifferenceMatrix,
++    screenedRootBranchCoefficientRow_witness]
++  cases hfirst : factor.2 0 <;> cases hsecond : factor.2 1 <;>
++    norm_num [hfirst, hsecond, Fin.succAbove]
++
++theorem screenedRootFactorPolynomial_eval_witness_ne_zero (factor : ScreenedRootFactorIndex) :
++    screenedRootPolynomialEval (screenedRootWitnessCoordinates factor)
++      (screenedRootFactorPolynomial factor) ≠ 0 := by
++  rw [screenedRootFactorPolynomial_eval_witness]
++  split_ifs <;> norm_num
++
++/-- The factor itself is nonzero because the displayed literal rational table evaluates nonzero. -/
++theorem screenedRootFactorPolynomial_ne_zero (factor : ScreenedRootFactorIndex) :
++    screenedRootFactorPolynomial factor ≠ 0 := by
++  intro hzero
++  apply screenedRootFactorPolynomial_eval_witness_ne_zero factor
++  rw [hzero, map_zero]
++
++/-- Nonvanishing of the polynomial product uses the integral domain, not a common witness. -/
++theorem screenedRootExclusionPolynomial_ne_zero : screenedRootExclusionPolynomial ≠ 0 := by
++  exact Finset.prod_ne_zero_iff.mpr (fun factor _ => screenedRootFactorPolynomial_ne_zero factor)
++
++theorem screenedRootFactorPolynomial_totalDegree (factor : ScreenedRootFactorIndex) :
++    (screenedRootFactorPolynomial factor).totalDegree = 6 :=
++  (screenedRootFactorPolynomial_isHomogeneous factor).totalDegree
++    (screenedRootFactorPolynomial_ne_zero factor)
++
++theorem screenedRootExclusionPolynomial_totalDegree :
++    screenedRootExclusionPolynomial.totalDegree = 144 :=
++  screenedRootExclusionPolynomial_isHomogeneous.totalDegree
++    screenedRootExclusionPolynomial_ne_zero
++
++/-- The same constructed product over real coefficients remains nonzero. -/
++theorem screenedRootExclusionPolynomial_map_real_ne_zero :
++    MvPolynomial.map (Int.castRingHom ℝ) screenedRootExclusionPolynomial ≠ 0 := by
++  intro hzero
++  apply screenedRootExclusionPolynomial_ne_zero
++  apply MvPolynomial.map_injective (Int.castRingHom ℝ) Int.cast_injective
++  simpa only [map_zero] using hzero
++
++/-- Real-coefficient interpretation preserves the exact homogeneous degree. -/
++theorem screenedRootExclusionPolynomial_map_real_totalDegree :
++    (MvPolynomial.map (Int.castRingHom ℝ) screenedRootExclusionPolynomial).totalDegree =
++      144 :=
++  (screenedRootExclusionPolynomial_isHomogeneous.map (Int.castRingHom ℝ)).totalDegree
++    screenedRootExclusionPolynomial_map_real_ne_zero
++
++end GameTheory
+*** End Patch

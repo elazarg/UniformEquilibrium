@@ -1,0 +1,45 @@
+import UniformEquilibrium.Quitting.Paths.QuantitativeFiniteClockSource
+
+noncomputable section
+
+namespace GameTheory
+
+/-- Literal finite-source consumer: select one independent law tuple before
+every larger calendar and every full behavioral reply. -/
+example
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hreward : ∀ terminal player, |reward terminal player| ≤ 1)
+    {level : ℕ} (hlevel : 0 < level) :
+    ∃ laws : Fin 4 → PMF (Option ℕ),
+      (∀ bound, 8 * level + 1 ≤ bound →
+        ∀ who, IsFiniteClockStoppingLaw bound (laws who)) ∧
+      quittingTerminalExploitabilityInf reward ≤
+        quittingTerminalExploitability reward (quittingStoppingLawProfile reward laws) ∧
+      quittingTerminalExploitability reward (quittingStoppingLawProfile reward laws) ≤
+        quittingTerminalExploitabilityInf reward + 24 / (level : ℝ) ∧
+      ∀ who, ∀ deviation : (quittingGame reward).BehaviorStrategy who,
+        quittingTerminalPayoff reward
+            (Function.update (quittingStoppingLawProfile reward laws) who deviation) who ≤
+          quittingTerminalPayoff reward (quittingStoppingLawProfile reward laws) who +
+            (quittingTerminalExploitabilityInf reward + 24 / (level : ℝ)) := by
+  obtain ⟨laws, hclock, hfloor, hbound, hnash⟩ :=
+    exists_fin4_uniformCalendarStoppingLaws_exploitability_le reward hreward hlevel
+  exact ⟨laws, hclock, hfloor, hbound, hnash⟩
+
+/-- Same exact source at the prescribed calendar depth, with the reward-independent error. -/
+example
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hreward : ∀ terminal player, |reward terminal player| ≤ 1)
+    {clock : ℕ} (hclock : 9 ≤ clock) :
+    ∃ laws : Fin 4 → PMF (Option ℕ),
+      (∀ bound, clock ≤ bound → ∀ who, IsFiniteClockStoppingLaw bound (laws who)) ∧
+      quittingTerminalExploitabilityInf reward ≤
+        quittingTerminalExploitability reward (quittingStoppingLawProfile reward laws) ∧
+      quittingTerminalExploitability reward (quittingStoppingLawProfile reward laws) ≤
+        quittingTerminalExploitabilityInf reward + fin4FiniteClockApproximationError clock ∧
+      (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward)
+        (quittingTerminalExploitabilityInf reward + fin4FiniteClockApproximationError clock)
+        (quittingStoppingLawProfile reward laws) :=
+  exists_fin4_calendarUniformStoppingLaws_exploitability_le reward hreward hclock
+
+end GameTheory

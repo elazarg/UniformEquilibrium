@@ -1,0 +1,7 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMonotoneTransformExclusion.lean
+@@
+ import MathUE.Analysis.MonotoneTransformChargedDrift
++import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanClockReduction
+ import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuadraticExclusion
+*** End Patch

@@ -1,0 +1,196 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-/-! Remark 4.  Above the critical value the usual payoff is unique.  At the
++
++private def asymmetricAlternatingPath (time : ℕ) : Bool → Bool :=
++  fun who => if time % 2 = 0 then !who else who
++
++private def asymmetricAlternatingValue (α β x : ℝ) (time : ℕ) : Payoff Bool :=
++  fun who => if asymmetricAlternatingPath time who then β - x else α
++
++/-- Remark 4's alternating DC/CD calendar with actual grim punishment. -/
++noncomputable def asymmetricAlternatingProfile (α β x y : ℝ) :
++    (asymmetricGeneralizedDilemma α β x y).BehaviorProfile :=
++  binaryGrimProfile (pair (β - y) (β - y)) (pair (α - x) β)
++    (pair β (α - x)) (pair α α) asymmetricAlternatingPath
++
++private theorem asymmetricCriticalDiscount_alternating (α β x y : ℝ)
++    (horder : x < y) :
++    asymmetricCriticalDiscount α β x y = (β - α - x) / (β - α) := by
++  unfold asymmetricCriticalDiscount
++  rw [max_eq_left (by linarith)]
++
++private theorem asymmetricAlternating_phase_identities (α β x y : ℝ)
++    (hgap : α < β - y) (hy : 0 < y) (horder : x < y) :
++    asymmetricCriticalDiscount α β x y * β +
++        (1 - asymmetricCriticalDiscount α β x y) * α = β - x ∧
++      asymmetricCriticalDiscount α β x y * (α - x) +
++        (1 - asymmetricCriticalDiscount α β x y) * (β - x) = α := by
++  have hd : β - α ≠ 0 := ne_of_gt (by linarith : 0 < β - α)
++  rw [asymmetricCriticalDiscount_alternating α β x y horder]
++  constructor
++  all_goals field_simp [hd]
++  all_goals ring
++
++private theorem asymmetric_payoff_le_beta (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y)
++    (who : Bool) (action : Bool → Bool) :
++    (asymmetricGeneralizedDilemma α β x y).payoff action who ≤ β := by
++  cases who <;> cases hrow : action false <;> cases hcolumn : action true <;>
++    simp only [asymmetricGeneralizedDilemma, binaryGame, binaryPayoff,
++      pair, hrow, hcolumn] <;> linarith
++
++private theorem asymmetricAlternatingValue_recurrence (α β x y : ℝ)
++    (hgap : α < β - y) (hy : 0 < y) (horder : x < y)
++    (time : ℕ) (who : Bool) :
++    asymmetricAlternatingValue α β x time who =
++      asymmetricCriticalDiscount α β x y *
++          (asymmetricGeneralizedDilemma α β x y).payoff
++            (asymmetricAlternatingPath time) who +
++        (1 - asymmetricCriticalDiscount α β x y) *
++          asymmetricAlternatingValue α β x (time + 1) who := by
++  have hnext : (time + 1) % 2 = 1 - time % 2 := by omega
++  obtain ⟨hhigh, hlow⟩ :=
++    asymmetricAlternating_phase_identities α β x y hgap hy horder
++  rcases Nat.mod_two_eq_zero_or_one time with htime | htime
++  all_goals cases who
++  all_goals
++    norm_num only [asymmetricAlternatingValue, asymmetricAlternatingPath,
++      asymmetricGeneralizedDilemma, binaryGame, binaryPayoff, pair,
++      htime, hnext, Bool.not_false, Bool.not_true]
++  all_goals first | exact hhigh.symm | exact hlow.symm
++
++private theorem asymmetricAlternatingDiscountedPayoff_eq (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y) :
++    alternatingDiscountedPayoff (asymmetricCriticalDiscount α β x y)
++      (pair β (α - x)) (pair (α - x) β) = pair (β - x) α := by
++  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
++  have hden : 2 - asymmetricCriticalDiscount α β x y ≠ 0 := by linarith
++  have hd : β - α ≠ 0 := ne_of_gt (by linarith : 0 < β - α)
++  funext who
++  cases who
++  all_goals simp only [alternatingDiscountedPayoff, pair]
++  all_goals apply (div_eq_iff hden).mpr
++  all_goals rw [asymmetricCriticalDiscount_alternating α β x y horder]
++  all_goals field_simp [hd]
++  all_goals ring
++
++/-- The actual alternating grim profile delivers precisely the original
++two-period discounted expression, starting at DC. -/
++theorem asymmetricAlternatingProfile_discountedPayoff (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y) :
++    (asymmetricGeneralizedDilemma α β x y).discountedPayoff
++      (asymmetricCriticalDiscount α β x y) (asymmetricAlternatingProfile α β x y) =
++        alternatingDiscountedPayoff (asymmetricCriticalDiscount α β x y)
++          (pair β (α - x)) (pair (α - x) β) := by
++  let G := asymmetricGeneralizedDilemma α β x y
++  let rate := asymmetricCriticalDiscount α β x y
++  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
++  have hbound (time : ℕ) (who : Bool) :
++      |asymmetricAlternatingValue α β x time who| ≤ max |β - x| |α| := by
++    unfold asymmetricAlternatingValue
++    split_ifs
++    · exact le_max_left _ _
++    · exact le_max_right _ _
++  have hvalue := G.triggerBehaviorProfile_discountedPayoff asymmetricAlternatingPath
++    (binaryDefectionPunishments (pair (β - y) (β - y)) (pair (α - x) β)
++      (pair β (α - x)) (pair α α))
++    rate hrate.1 hrate.2.le (asymmetricAlternatingValue α β x)
++    (max |β - x| |α|) hbound
++    (asymmetricAlternatingValue_recurrence α β x y hgap hy horder)
++  calc
++    _ = asymmetricAlternatingValue α β x 0 := hvalue
++    _ = pair (β - x) α := by funext who; cases who <;> rfl
++    _ = _ := (asymmetricAlternatingDiscountedPayoff_eq
++      α β x y hgap hx hy horder).symm
++
++/-- Zero-surplus low phases still cap all full behavioral replacements;
++no positive punishment margin or supported-child Nash premise is imposed. -/
++theorem asymmetricAlternatingProfile_discounted_deviation_cap (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y)
++    (who : Bool)
++    (deviation : (asymmetricGeneralizedDilemma α β x y).BehaviorStrategy who) :
++    (asymmetricGeneralizedDilemma α β x y).discountedPayoff
++      (asymmetricCriticalDiscount α β x y)
++      (Function.update (asymmetricAlternatingProfile α β x y) who deviation) who ≤
++        alternatingDiscountedPayoff (asymmetricCriticalDiscount α β x y)
++          (pair β (α - x)) (pair (α - x) β) who := by
++  let G := asymmetricGeneralizedDilemma α β x y
++  let rate := asymmetricCriticalDiscount α β x y
++  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
++  have hhigh := (asymmetricAlternating_phase_identities α β x y hgap hy horder).1
++  have hbound (time : ℕ) :
++      |asymmetricAlternatingValue α β x time who| ≤ max |β - x| |α| := by
++    unfold asymmetricAlternatingValue
++    split_ifs
++    · exact le_max_left _ _
++    · exact le_max_right _ _
++  have hchanged (time : ℕ) (action : Bool → Bool)
++      (hother : action (!who) = asymmetricAlternatingPath time (!who)) :
++      rate * G.payoff action who + (1 - rate) * α ≤
++        asymmetricAlternatingValue α β x time who := by
++    have hopposite : asymmetricAlternatingPath time (!who) =
++        !(asymmetricAlternatingPath time who) := by
++      unfold asymmetricAlternatingPath
++      split_ifs <;> cases who <;> rfl
++    cases hown : asymmetricAlternatingPath time who
++    · have hotherTrue : action (!who) = true := by
++        simpa only [hopposite, hown, Bool.not_false] using hother
++      have hpayoff := asymmetric_payoff_punished_le α β x y hx who action hotherTrue
++      simp only [asymmetricAlternatingValue, hown, Bool.false_eq_true, ite_false]
++      calc
++        rate * G.payoff action who + (1 - rate) * α ≤
++            rate * α + (1 - rate) * α :=
++          add_le_add_right (mul_le_mul_of_nonneg_left hpayoff hrate.1.le) _
++        _ = α := by ring
++    · simp only [asymmetricAlternatingValue, hown, ite_true]
++      calc
++        rate * G.payoff action who + (1 - rate) * α ≤
++            rate * β + (1 - rate) * α :=
++          add_le_add_right (mul_le_mul_of_nonneg_left
++            (asymmetric_payoff_le_beta α β x y hgap hx hy who action) hrate.1.le) _
++        _ = β - x := hhigh
++  have hcap := binaryGrimProfile_discounted_deviation_cap
++    (pair (β - y) (β - y)) (pair (α - x) β) (pair β (α - x)) (pair α α)
++    asymmetricAlternatingPath rate hrate.1 hrate.2.le who deviation
++    (fun time => asymmetricAlternatingValue α β x time who)
++    α (max |β - x| |α|) hbound (le_max_right _ _)
++    (fun time => asymmetricAlternatingValue_recurrence α β x y hgap hy horder time who)
++    hchanged (asymmetric_payoff_punished_le α β x y hx who)
++  have hzero : asymmetricAlternatingValue α β x 0 who = (pair (β - x) α) who := by
++    cases who <;> rfl
++  rw [hzero] at hcap
++  rw [asymmetricAlternatingDiscountedPayoff_eq α β x y hgap hx hy horder]
++  exact hcap
++
++/-- Actual Nash optimality at the original asymmetric critical rate, with
++the full unilateral behavioral deviation quantifier. -/
++theorem asymmetricAlternatingProfile_isDiscountedNash (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y) :
++    (asymmetricGeneralizedDilemma α β x y).repeatedGame.IsDiscountedεNash
++      (1 - asymmetricCriticalDiscount α β x y) PUnit.unit 0
++      (asymmetricAlternatingProfile α β x y) := by
++  intro who deviation
++  have hcap := asymmetricAlternatingProfile_discounted_deviation_cap
++    α β x y hgap hx hy horder who deviation
++  have hpayoff := congrFun (asymmetricAlternatingProfile_discountedPayoff
++    α β x y hgap hx hy horder) who
++  rw [← hpayoff] at hcap
++  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
++    add_zero] using! hcap
++
++/-- The alternating branch of Remark 4 is produced internally, with the
++printed rate and printed starting-order payoff expression. -/
++theorem asymmetricAlternating_mem_discountedEquilibriumPayoffs (α β x y : ℝ)
++    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y) :
++    alternatingDiscountedPayoff (asymmetricCriticalDiscount α β x y)
++        (pair β (α - x)) (pair (α - x) β) ∈
++      (asymmetricGeneralizedDilemma α β x y).discountedEquilibriumPayoffs
++        (asymmetricCriticalDiscount α β x y) :=
++  ⟨asymmetricAlternatingProfile α β x y,
++    asymmetricAlternatingProfile_isDiscountedNash α β x y hgap hx hy horder,
++    asymmetricAlternatingProfile_discountedPayoff α β x y hgap hx hy horder⟩
++
++/-! Remark 4.  Above the critical value the usual payoff is unique.  At the
+*** End Patch

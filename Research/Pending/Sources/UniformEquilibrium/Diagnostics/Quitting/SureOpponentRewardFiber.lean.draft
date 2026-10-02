@@ -1,0 +1,108 @@
+import MathUE.PMFProduct.BooleanTwoCoordinateExpectation
+import UniformEquilibrium.Quitting.OwnSingletonRewardChart
+import UniformEquilibrium.Quitting.Bellman.Finite.BooleanMobiusAdapter
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootDebtBranches
+
+/-!
+# Sure-opponent support and direct own-singleton fiber invariance
+
+Only actual coalitions containing the sure opponent contribute. Thus the
+observer's own singleton is invisible, even after either pure endpoint update.
+These are original reward-table identities, not reward translations.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open Math.PMFProduct
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+/-- A sure quitter screens the actual reward expectation to coalitions containing it.
+The continuation annotations can differ because the empty coalition has zero mass. -/
+theorem quittingRootExpectedPayoff_congr_of_sureQuitter
+    (first second : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (firstTail secondTail : Payoff ι) (root : ι → PMF Bool) (observer quitter : ι)
+    (hsure : (root quitter true).toReal = 1)
+    (hreward : ∀ terminal, quitter ∈ terminal.1 →
+      first terminal observer = second terminal observer) :
+    quittingRootExpectedPayoff first firstTail root observer =
+      quittingRootExpectedPayoff second secondTail root observer := by
+  rw [quittingRootExpectedPayoff_eq_sum_coalitionMass,
+    quittingRootExpectedPayoff_eq_sum_coalitionMass]
+  apply Finset.sum_congr rfl
+  intro coalition _
+  by_cases hmem : quitter ∈ coalition
+  · have hnonempty : coalition.Nonempty := ⟨quitter, hmem⟩
+    simp only [quittingStageCoalitionPayoff, dif_pos hnonempty]
+    rw [hreward ⟨coalition, hnonempty⟩ hmem]
+  · have hzero := coalitionMass_eq_zero_of_sure_not_mem
+      (hazardOfRoot root) quitter hsure coalition hmem
+    rw [hzero, zero_mul, zero_mul]
+
+/-- A sure opponent makes the observer's actual payoff independent of all own singletons. -/
+theorem quittingRootExpectedPayoff_ownSingletonReward_eq_of_sureOpponent
+    (first second : ι → ℝ) (coordinates : QuittingFreeRewardCoordinate ι → ℝ)
+    (firstTail secondTail : Payoff ι) (root : ι → PMF Bool) (observer quitter : ι)
+    (hne : quitter ≠ observer) (hsure : (root quitter true).toReal = 1) :
+    quittingRootExpectedPayoff (quittingOwnSingletonReward first coordinates)
+        firstTail root observer =
+      quittingRootExpectedPayoff (quittingOwnSingletonReward second coordinates)
+        secondTail root observer := by
+  apply quittingRootExpectedPayoff_congr_of_sureQuitter _ _
+    firstTail secondTail root observer quitter hsure
+  intro terminal hmem
+  apply quittingOwnSingletonReward_eq_of_ne_singleton
+  intro hequal
+  rw [hequal] at hmem
+  exact hne (Finset.mem_singleton.mp hmem)
+
+/-- Both actual pure-update expectations retain a distinct sure opponent. -/
+theorem quittingRootExpectedPayoff_update_ownSingletonReward_eq_of_sureOpponent
+    (first second : ι → ℝ) (coordinates : QuittingFreeRewardCoordinate ι → ℝ)
+    (root : ι → PMF Bool) (observer quitter : ι) (action : Bool)
+    (hne : quitter ≠ observer) (hsure : (root quitter true).toReal = 1) :
+    quittingRootExpectedPayoff (quittingOwnSingletonReward first coordinates) 0
+        (Function.update root observer (PMF.pure action)) observer =
+      quittingRootExpectedPayoff (quittingOwnSingletonReward second coordinates) 0
+        (Function.update root observer (PMF.pure action)) observer := by
+  apply quittingRootExpectedPayoff_ownSingletonReward_eq_of_sureOpponent
+    first second coordinates 0 0 _ observer quitter hne
+  simpa only [Function.update_of_ne hne] using hsure
+
+/-- The exact Quit-minus-Continue gap is independent of the whole singleton vector. -/
+theorem quittingRootEndpointDifference_ownSingletonReward_eq_of_sureOpponent
+    (first second : ι → ℝ) (coordinates : QuittingFreeRewardCoordinate ι → ℝ)
+    (root : ι → PMF Bool) (observer quitter : ι)
+    (hne : quitter ≠ observer) (hsure : (root quitter true).toReal = 1) :
+    quittingRootEndpointDifference (quittingOwnSingletonReward first coordinates) 0
+        root observer =
+      quittingRootEndpointDifference (quittingOwnSingletonReward second coordinates) 0
+        root observer := by
+  unfold quittingRootEndpointDifference quittingRootQuitPayoff quittingRootContinuePayoff
+  rw [quittingRootExpectedPayoff_update_ownSingletonReward_eq_of_sureOpponent
+    first second coordinates root observer quitter true hne hsure,
+    quittingRootExpectedPayoff_update_ownSingletonReward_eq_of_sureOpponent
+      first second coordinates root observer quitter false hne hsure]
+
+/-- Screening makes actual complete behavioral debt independent of all own singletons.
+No Nash, supplied-cap, or root-interiority hypothesis is needed. -/
+theorem quittingTerminalDeviationDebt_ownSingletonReward_eq_of_sureOpponent
+    (first second : ι → ℝ) (coordinates : QuittingFreeRewardCoordinate ι → ℝ)
+    (root : ι → PMF Bool) (observer quitter : ι)
+    (hne : quitter ≠ observer) (hsure : (root quitter true).toReal = 1) :
+    quittingTerminalDeviationDebt (quittingOwnSingletonReward first coordinates)
+        (quittingOneDateThenNeverProfile (quittingOwnSingletonReward first coordinates) root)
+        observer =
+      quittingTerminalDeviationDebt (quittingOwnSingletonReward second coordinates)
+        (quittingOneDateThenNeverProfile (quittingOwnSingletonReward second coordinates) root)
+        observer := by
+  rw [quittingTerminalDeviationDebt_oneDateThenNever_eq_max_branches_of_sureOpponent
+      _ root observer hne hsure,
+    quittingTerminalDeviationDebt_oneDateThenNever_eq_max_branches_of_sureOpponent
+      _ root observer hne hsure,
+    quittingRootEndpointDifference_ownSingletonReward_eq_of_sureOpponent
+      first second coordinates root observer quitter hne hsure]
+
+end GameTheory

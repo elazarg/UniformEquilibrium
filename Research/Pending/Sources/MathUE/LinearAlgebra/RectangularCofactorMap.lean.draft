@@ -1,0 +1,16 @@
+import MathUE.LinearAlgebra.RectangularCofactorKernel
+
+/-! # Ring maps commute with the canonical signed maximal minors -/
+
+namespace Math.LinearAlgebra
+
+variable {R S : Type*} [CommRing R] [CommRing S] {n : ℕ}
+
+/-- Evaluation and coefficient maps preserve the ordered signed deletion determinants. -/
+theorem map_signedMaximalMinors (hom : R →+* S)
+    (matrix : Matrix (Fin n) (Fin (n + 1)) R) (column : Fin (n + 1)) :
+    hom (signedMaximalMinors matrix column) =
+      signedMaximalMinors (matrix.map hom) column := by
+  simpa only [signedMaximalMinors, map_mul, map_pow, map_neg, map_one, hom.map_det]
+
+end Math.LinearAlgebra

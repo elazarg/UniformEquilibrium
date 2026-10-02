@@ -1,0 +1,138 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/ScreenedSingletonFiberUniformCollar.lean
++import UniformEquilibrium.Diagnostics.Quitting.ScreenedMinimumSingletonCollar
++import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLawRewardGraph
++
++/-! # One actual singleton collar across a positive-gap part of a fixed fiber
++
++The literal free-coordinate vector is fixed throughout. The closed singleton
++cube includes all boundary points. The objective is MAX full-behavior regret,
++not total debt. No root, law, minimizer, clock or pointwise collar is supplied.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++/-- Actual joint laws over the closed singleton cube at a fixed positive-gap threshold. -/
++def screenedPositiveSingletonFiberJointCarrier
++    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ) (threshold : ℝ) :
++    Set ((Fin 4 → ℝ) × QuittingTerminalSemanticLawPoint (Fin 4)) :=
++  {point | (∀ who, |point.1 who| ≤ 1) ∧
++    threshold ≤ quittingTerminalExploitabilityInf
++      (quittingOwnSingletonReward point.1 coordinates) ∧
++    point.2 ∈ quittingTerminalSemanticLawCarrier
++      (quittingOwnSingletonReward point.1 coordinates)}
++
++/-- Compactness retains the same fixed free coordinates and the whole joint
++semantic/law fiber, including its singleton-cube boundary. -/
++theorem isCompact_screenedPositiveSingletonFiberJointCarrier
++    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ) (threshold : ℝ)
++    (hcoordinates : ∀ coordinate, |coordinates coordinate| ≤ 1) :
++    IsCompact (screenedPositiveSingletonFiberJointCarrier coordinates threshold) := by
++  let ambient := Set.Icc (-1 : Fin 4 → ℝ) 1 ×ˢ
++    (quittingTerminalSemanticBox (Fin 4) 1 ×ˢ
++      Math.Probability.simplexWeights (QuittingTerminalOutcome (Fin 4)))
++  have hcompact : IsCompact ambient := isCompact_Icc.prod
++    ((quittingTerminalSemanticBox_isCompact (ι := Fin 4) 1).prod
++      (Math.Probability.isCompact_simplexWeights (QuittingTerminalOutcome (Fin 4))))
++  have hmap : Continuous (fun point : (Fin 4 → ℝ) ×
++      QuittingTerminalSemanticLawPoint (Fin 4) =>
++      (quittingOwnSingletonReward point.1 coordinates, point.2)) :=
++    ((continuous_quittingOwnSingletonReward_singletons coordinates).comp continuous_fst).prodMk
++      continuous_snd
++  have hboundClosed : IsClosed
++      {point : (Fin 4 → ℝ) × QuittingTerminalSemanticLawPoint (Fin 4) |
++        ∀ who, |point.1 who| ≤ 1} :=
++    isClosed_iInter (fun who => isClosed_le
++      ((continuous_apply who |>.comp continuous_fst).abs) continuous_const)
++  have hthresholdClosed : IsClosed
++      {point : (Fin 4 → ℝ) × QuittingTerminalSemanticLawPoint (Fin 4) |
++        threshold ≤ quittingTerminalExploitabilityInf
++          (quittingOwnSingletonReward point.1 coordinates)} :=
++    isClosed_le continuous_const
++      ((continuous_quittingTerminalExploitabilityInf_ownSingletonReward coordinates).comp
++        continuous_fst)
++  have hgraphClosed := isClosed_terminalSemanticLawCarrier_reward_graph.preimage hmap
++  apply hcompact.of_isClosed_subset
++    (hboundClosed.inter (hthresholdClosed.inter hgraphClosed))
++  rintro point ⟨hsingletons, _hthreshold, hpoint⟩
++  have hunit := (abs_quittingOwnSingletonReward_le_one_iff point.1 coordinates).mpr
++    ⟨hsingletons, hcoordinates⟩
++  refine ⟨?_, quittingTerminalSemanticCarrier_mem_box _ point.2.1 hunit
++    (terminalSemanticLawCarrier_fst_mem_carrier point.2 hpoint),
++    terminalSemanticLawCarrier_mass_mem_stdSimplex point.2 hpoint⟩
++  constructor <;> intro who
++  · exact (abs_le.mp (hsingletons who)).1
++  · exact (abs_le.mp (hsingletons who)).2
++
++/-- Section 7.1: ONE positive floor/radius is selected before EVERY allowed
++singleton vector and EVERY actual near-minimum full behavioral profile.
++The positive threshold is retained; there is no claim as eta tends to zero. -/
++theorem exists_screenedSingletonFiberUniformCollar
++    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
++    (hcoordinates : ∀ coordinate, |coordinates coordinate| ≤ 1)
++    (hpolynomial : screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial ≠ 0)
++    (threshold : ℝ) (hthreshold : 0 < threshold)
++    (hsource : ∃ singletons : Fin 4 → ℝ, (∀ who, |singletons who| ≤ 1) ∧
++      threshold ≤ quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward singletons coordinates)) :
++    ∃ (floor radius : ℝ), 0 < floor ∧ 0 < radius ∧
++      ∀ singletons : Fin 4 → ℝ, (∀ who, |singletons who| ≤ 1) →
++        threshold ≤ quittingTerminalExploitabilityInf
++          (quittingOwnSingletonReward singletons coordinates) →
++        ∀ profile :
++          (quittingGame (quittingOwnSingletonReward singletons coordinates)).BehaviorProfile,
++          quittingTerminalExploitability
++              (quittingOwnSingletonReward singletons coordinates) profile ≤
++              quittingTerminalExploitabilityInf
++                (quittingOwnSingletonReward singletons coordinates) + radius →
++            floor ≤ quittingTerminalLawSingletonMass
++              (quittingTerminalOutcomeMass
++                (quittingOwnSingletonReward singletons coordinates) profile) := by
++  let carrier := screenedPositiveSingletonFiberJointCarrier coordinates threshold
++  let objective := fun point : (Fin 4 → ℝ) × QuittingTerminalSemanticLawPoint (Fin 4) =>
++    quittingTerminalSemanticExploitability point.2.1 - quittingTerminalExploitabilityInf
++      (quittingOwnSingletonReward point.1 coordinates)
++  let mass := fun point : (Fin 4 → ℝ) × QuittingTerminalSemanticLawPoint (Fin 4) =>
++    quittingTerminalLawSingletonMass point.2.2
++  have hnonneg : ∀ point ∈ carrier, 0 ≤ objective point := by
++    rintro point ⟨_hsingletons, _hthreshold, hpoint⟩
++    exact sub_nonneg.mpr (quittingTerminalExploitabilityInf_le_semanticCarrier _
++      (terminalSemanticLawCarrier_fst_mem_carrier point.2 hpoint))
++  have hzero : ∃ point ∈ carrier, objective point = 0 := by
++    obtain ⟨singletons, hsingletons, hfloor⟩ := hsource
++    obtain ⟨point, hpoint, hvalue⟩ := exists_minimum_terminalSemanticLawCarrier_exploitability
++      (quittingOwnSingletonReward singletons coordinates)
++    exact ⟨(singletons, point), ⟨hsingletons, hfloor, hpoint⟩, sub_eq_zero.mpr hvalue⟩
++  have hmassPositive : ∀ point ∈ carrier, objective point = 0 → 0 < mass point := by
++    rintro point ⟨hsingletons, hfloor, hpoint⟩ hvalue
++    have hequal := sub_eq_zero.mp hvalue
++    apply minimumTerminalSemanticLaw_singletonMass_pos_of_screenedPolynomial_ne_zero
++      coordinates point.1 hcoordinates hsingletons hpolynomial point.2 hpoint
++    · intro candidate hcandidate
++      rw [hequal]
++      exact quittingTerminalExploitabilityInf_le_semanticCarrier _ hcandidate
++    · rw [hequal]
++      exact hthreshold.trans_le hfloor
++  obtain ⟨floor, radius, hfloor, hradius, hcollar⟩ :=
++    Math.exists_positive_near_zero_collar_of_compact carrier objective mass
++      (isCompact_screenedPositiveSingletonFiberJointCarrier coordinates threshold hcoordinates)
++      ((continuous_quittingTerminalSemanticExploitability.comp
++        (continuous_fst.comp continuous_snd)).sub
++        ((continuous_quittingTerminalExploitabilityInf_ownSingletonReward coordinates).comp
++          continuous_fst))
++      (continuous_quittingTerminalLawSingletonMass.comp (continuous_snd.comp continuous_snd))
++      hzero hnonneg hmassPositive
++  refine ⟨floor, radius, hfloor, hradius, ?_⟩
++  intro singletons hsingletons hgap profile hnear
++  apply hcollar (singletons, (quittingTerminalSemanticPair _ profile,
++    quittingTerminalOutcomeMass _ profile))
++    ⟨hsingletons, hgap, quittingTerminalSemanticLawPoint_mem_carrier _ profile⟩
++  change quittingTerminalExploitability
++      (quittingOwnSingletonReward singletons coordinates) profile -
++    quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) ≤ radius
++  linarith
++
++end GameTheory
+*** End Patch

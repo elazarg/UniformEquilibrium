@@ -1,0 +1,70 @@
+import UniformEquilibrium.Quitting.Projective.RationalExactSoloRejection
+import MathUE.Analysis.Examples.CoupledCubicShape
+import UniformEquilibrium.Quitting.Examples.CollisionAdjustedProbeBoundary
+import MathUE.Analysis.Examples.NonQLinearFace
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialChargeScale
+import UniformEquilibrium.Quitting.Examples.ExactRootPotentialPlayerCountBoundary
+
+#print axioms Math.CoupledCubicShape.coordinateSum_apply
+#print axioms Math.CoupledCubicShape.coordinateSum_single
+#print axioms Math.CoupledCubicShape.potential_eq_printed
+#print axioms Math.CoupledCubicShape.argument_hasFDerivAt
+#print axioms Math.CoupledCubicShape.potential_hasFDerivAt
+#print axioms Math.CoupledCubicShape.coordinatePartial_eq
+#print axioms Math.CoupledCubicShape.coordinateMixedPartial_eq
+#print axioms Math.CoupledCubicShape.quasiconvexOn
+#print axioms Math.CoupledCubicShape.argument_lower_add_single
+#print axioms Math.CoupledCubicShape.argument_lower
+#print axioms Math.CoupledCubicShape.lower_add_single_mem
+#print axioms Math.CoupledCubicShape.not_convexOn
+#print axioms Math.CoupledCubicShape.additive_rectangle_identity
+#print axioms Math.CoupledCubicShape.not_exists_additive_eqOn
+#print axioms Math.CoupledCubicShape.rationalExpression_eval
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.solo_reward
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.collision_reward
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.reward_bounded
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.corrected_source
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.corrected_successor
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.corrected_endpoint_indifference
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.corrected_exact_nash
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.quarter_absorption
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.uncorrected_endpoints
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.uncorrected_not_nash
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.frozen_source
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.frozen_successor
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.frozen_continue_minus_quit
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.frozen_exact_nash
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.upper_three_fixture
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.upper_two_fixture
+#print axioms GameTheory.CollisionAdjustedProbeBoundary.unfrozen_upper_sources
+#print axioms Math.NonQLinearFace.potential_hasFDerivAt
+#print axioms Math.NonQLinearFace.convexOn
+#print axioms Math.NonQLinearFace.face_drift
+#print axioms Math.NonQLinearFace.face_drift_ge_one
+#print axioms Math.NonQLinearFace.negative_residual
+#print axioms Math.NonQLinearFace.not_standardQ
+#print axioms GameTheory.constant_isQuittingFullExactRootPotentialWithCharge_zero
+#print axioms GameTheory.isQuittingFullExactRootPotentialWithCharge_iff_div
+#print axioms GameTheory.not_fullExactRootPotentialWithCharge_coordinateAffine
+#print axioms GameTheory.not_fullExactRootPotentialWithCharge_totalDegree_le_two
+#print axioms GameTheory.not_fullExactRootPotentialWithCharge_multiAffine
+#print axioms GameTheory.exists_singlePlayer_singleton_exact_charged_selfLoop
+#print axioms GameTheory.not_isQuittingFullExactRootPotential_of_singlePlayer
+#print axioms GameTheory.quittingRootAbsorptionMass_eq_zero_of_isEmpty
+#print axioms GameTheory.constant_isQuittingFullExactRootPotential_of_isEmpty
+#print axioms GameTheory.constant_isQuittingRobustPotential_of_isEmpty
+#print axioms GameTheory.exists_zeroReward_solo_exact_charged_selfLoop
+#print axioms GameTheory.not_isQuittingFullExactRootPotential_zeroReward
+
+#print axioms Math.Interval.rationalClosedBoxCast
+#print axioms Math.Interval.denseRange_rationalClosedBoxCast
+#print axioms GameTheory.rationalQuittingAbsorption
+#print axioms GameTheory.rationalQuittingAbsorption_cast
+#print axioms GameTheory.quittingRootSuccessorPayoff_rational_eq_cast
+#print axioms GameTheory.quittingUnitCubeSimplex
+#print axioms GameTheory.continuous_quittingUnitCubeSimplex
+#print axioms GameTheory.quittingUnitCubeSimplex_eq_actual
+#print axioms GameTheory.quittingUnitCubeSimplex_rational_eq
+#print axioms GameTheory.rationalQuittingSingletonProbeSource
+#print axioms GameTheory.rationalQuittingSingletonProbeSource_cast
+#print axioms GameTheory.exists_rational_exact_solo_rejection_of_standardQ_quasiconvex

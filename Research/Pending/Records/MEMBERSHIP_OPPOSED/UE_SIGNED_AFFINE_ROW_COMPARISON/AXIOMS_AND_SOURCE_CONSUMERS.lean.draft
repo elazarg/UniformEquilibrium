@@ -1,0 +1,69 @@
+import MathUE.SignedAffineRowRegression
+
+namespace Math.SignedAffineRows
+
+/-- Source-facing four-row consumer. The source supplies literal contacts
+and endpoint shapes, not any successful old probability or global minimum. -/
+theorem four_row_actual_contact_consumer
+    {m alpha p : ℝ} (hm : 0 < m) (hmhalf : m < 1 / 2)
+    (halpha : 0 < alpha) (halpham : alpha < m / 4) (hp : 0 < p) (hp1 : p < 1)
+    (left right : Fin 4 → ℝ)
+    (hbound : ∀ i, |left i| ≤ 2 ∧ |right i| ≤ 2)
+    (hrows : ∀ i, (left i < 0 ∧ 0 < right i) ∨ (0 ≤ left i ∧ 0 ≤ right i))
+    (hcontact : ∀ i, rowValue p (signedEndpointGapStretch alpha (left i))
+      (signedEndpointGapStretch alpha (right i)) = m)
+    (hreversing : ∃ i, left i < 0 ∧ 0 < right i)
+    (hoptional : ∃ i, (left i = 0 ∧ 0 < right i) ∨ (0 < left i ∧ right i = 0)) :
+    ∃ selected : ℝ, 0 < selected ∧ selected < 1 ∧
+      (∀ i, max 0 (rowValue selected (left i) (right i)) ≤ m) ∧
+      (∃ i, max 0 (rowValue selected (left i) (right i)) < m) ∧
+      (m < reversingValue m alpha p →
+        selected = reselectedProbability m alpha p ∧
+          ∀ i, max 0 (rowValue selected (left i) (right i)) < m) ∧
+      (reversingValue m alpha p ≤ m → selected = p) :=
+  exists_sameOrientation_comparison hm hmhalf halpha halpham hp hp1
+    left right hbound hrows hcontact hreversing hoptional
+
+/-- The unchanged probability protects every row in both weak branches;
+EVERY reversing row is strict in the strict low branch. -/
+theorem low_branch_all_rows_consumer
+    {m alpha p : ℝ} (hm : 0 < m) (hmhalf : m < 1 / 2)
+    (halpha : 0 < alpha) (halpham : alpha < m / 4) (hp : 0 < p) (hp1 : p < 1)
+    (left right : Fin 4 → ℝ)
+    (hbound : ∀ i, |left i| ≤ 2 ∧ |right i| ≤ 2)
+    (hrows : ∀ i, (left i < 0 ∧ 0 < right i) ∨ (0 ≤ left i ∧ 0 ≤ right i))
+    (hcontact : ∀ i, rowValue p (signedEndpointGapStretch alpha (left i))
+      (signedEndpointGapStretch alpha (right i)) = m)
+    (hlow : reversingValue m alpha p < m) :
+    (∀ i, max 0 (rowValue p (left i) (right i)) ≤ m) ∧
+      ∀ i, left i < 0 → 0 < right i → max 0 (rowValue p (left i) (right i)) < m := by
+  constructor
+  · intro i
+    exact row_le_at_originalProbability hm hmhalf halpha halpham hp hp1
+      (hbound i).1 (hbound i).2 (hrows i) (hcontact i) hlow.le
+  · intro i ha hb
+    exact reversing_row_strict_at_originalProbability hm hmhalf halpha halpham hp
+      ha hb (hcontact i) hlow
+
+end Math.SignedAffineRows
+
+#print axioms Math.SignedAffineRows.comparison_denominators_pos
+#print axioms Math.SignedAffineRows.comparison_factorization
+#print axioms Math.SignedAffineRows.comparisonRemainder_pos
+#print axioms Math.SignedAffineRows.reversing_row_value
+#print axioms Math.SignedAffineRows.coherent_row_le_contact
+#print axioms Math.SignedAffineRows.reselectedProbability_legal
+#print axioms Math.SignedAffineRows.reselectedProbability_coherent_bound
+#print axioms Math.SignedAffineRows.row_strict_at_reselectedProbability
+#print axioms Math.SignedAffineRows.row_le_at_originalProbability
+#print axioms Math.SignedAffineRows.reversing_row_strict_at_originalProbability
+#print axioms Math.SignedAffineRows.original_probability_of_reversingValue_eq
+#print axioms Math.SignedAffineRows.optional_positive_gap_strict
+#print axioms Math.SignedAffineRows.optional_row_strict_of_reversingValue_eq
+#print axioms Math.SignedAffineRows.exists_sameOrientation_comparison
+#print axioms Math.SignedAffineRows.opposedRegression_parameters
+#print axioms Math.SignedAffineRows.opposedRegression_stretch_and_contact
+#print axioms Math.SignedAffineRows.opposedRegressionEnvelope_lower_bound
+#print axioms Math.SignedAffineRows.opposedRegressionEnvelope_exact_minimum
+#print axioms Math.SignedAffineRows.four_row_actual_contact_consumer
+#print axioms Math.SignedAffineRows.low_branch_all_rows_consumer

@@ -1,0 +1,39 @@
+import UniformEquilibrium.Quitting.Terminal.RationalPositiveExploitabilityApproximation
+
+#print axioms GameTheory.exists_rationalQuittingReward_close_of_strictUnit_positive_inf
+#print axioms GameTheory.exists_strictUnit_rationalQuittingReward_of_positive_inf
+#print axioms GameTheory.exists_strictUnit_rationalQuittingReward_of_no_uniformEquilibriumPayoff
+
+namespace GameTheory
+
+/-- ALL sixty terminal recipient coordinates are rational before the actual
+no-UE conclusion. No maximizing singleton vector appears in the conclusion. -/
+example
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hno : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ rational : RationalQuittingReward 4,
+      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who| < 1) ∧
+      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
+      ¬ ∃ payoff : Payoff (Fin 4),
+        (quittingGame (rationalQuittingRewardToReal rational)).IsUniformEquilibriumPayoff
+          none payoff :=
+  exists_strictUnit_rationalQuittingReward_of_no_uniformEquilibriumPayoff reward hno
+
+/-- The same internally selected scale and full rational table retain the
+quantitative reward approximation and actual infimum, without certificates. -/
+example
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
+    ∃ (scale : ℝ) (rational : RationalQuittingReward 4), 0 < scale ∧
+      (∀ terminal who, |scaleQuittingReward scale reward terminal who| < 1) ∧
+      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who| < 1) ∧
+      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who -
+        scaleQuittingReward scale reward terminal who| <
+          quittingTerminalExploitabilityInf (scaleQuittingReward scale reward) / 4) ∧
+      quittingTerminalExploitabilityInf (scaleQuittingReward scale reward) / 2 ≤
+        quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
+      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) :=
+  exists_strictUnit_rationalQuittingReward_of_positive_inf reward hpositive
+
+end GameTheory

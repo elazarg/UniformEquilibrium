@@ -1,0 +1,95 @@
+{
+  "status": "Frozen static known-proof source adapter; compilation/axiom checks not run",
+  "source": {
+    "path": "math/exports/SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE.md",
+    "sha256": "d91cf597df1f45d4287b53244d4f91463ed7f9313d75748a3f0fbcb87dbdfe0c",
+    "sections": [
+      "6.1",
+      "11"
+    ]
+  },
+  "original_immutable_group": "/tmp/ue-quantitative-finite-clock-source-chqqvm",
+  "exact_order": [
+    "prior 00_MUTUAL_SUPREMUM_OWNER.patch",
+    "00A_MUTUAL_SUPREMUM_DERIVED_NONEMPTY.patch",
+    "01_FINITE_CALENDAR_REPLY_PAYOFF_CHART.patch",
+    "02_ACTUAL_COMMON_CALENDAR_TESTER_POOL.patch",
+    "03_ACTUAL_COMMON_CALENDAR_SMOOTH_MINIMUM.patch",
+    "04_COMMON_CALENDAR_IMPORTS.patch"
+  ],
+  "dependency_edges": {
+    "00A": [
+      "prior00"
+    ],
+    "01": [
+      "current FiniteCalendarRawPolynomial",
+      "current FiniteDeadlineFullReplyCap",
+      "current FiniteOpponentLateResponse"
+    ],
+    "02": [
+      "01",
+      "current FiniteLogSumExp"
+    ],
+    "03": [
+      "02",
+      "current checked CompactMinimumEnvelope"
+    ],
+    "04": [
+      "01",
+      "02",
+      "03"
+    ]
+  },
+  "prior_group_dependency_note": "00A alone needs prior00. Actual pool01–03 are independent of the prior Research promotion; combining their actual finite-menu sources with the quantitative approximation is the subsequent supplied source construction.",
+  "artifacts": {
+    "00A_MUTUAL_SUPREMUM_DERIVED_NONEMPTY.patch": {
+      "patch_sha256": "2124748978e24fe8e5eaeb89876bd393f09db6358ee005ba2ee0d0bd8b4b6849",
+      "results": {
+        "MathUE/Order/MutualSupremumApproximation.lean": "8b59643b923d11c5ae73d9a1908fc5c61b6ffd1d9fd991d008d4e94cee87f371"
+      },
+      "base_sha256": "8e4ac0afcb99ea0fb3bced9ca0f980e3ac27e8e54342061c9e3ff75607f3bc90"
+    },
+    "01_FINITE_CALENDAR_REPLY_PAYOFF_CHART.patch": {
+      "patch_sha256": "32f3e648caf3db9754de35584016b1b993eb41f9ccb2f5d1c6042fc18d07d496",
+      "results": {
+        "UniformEquilibrium/Quitting/Paths/FiniteCalendarReplyPayoffChart.lean": "3a462cb7d21680713c5372e597e46de38b60e6b9f4dc8d086edc4733f5758c60"
+      }
+    },
+    "02_ACTUAL_COMMON_CALENDAR_TESTER_POOL.patch": {
+      "patch_sha256": "95663fa66990362d1ed145e8aff7d55848734c7daec470baf5f9d6cd9d315be5",
+      "results": {
+        "UniformEquilibrium/Quitting/Paths/CommonCalendarTesterPool.lean": "f02e3faef3b8381a03c6bd1fe8fccae3f49d1f99e728a38cdcdda1a5c5be1af6"
+      }
+    },
+    "03_ACTUAL_COMMON_CALENDAR_SMOOTH_MINIMUM.patch": {
+      "patch_sha256": "67f49abd2ba386aa02fbe97382f6e37ecbc3d22afc06b9e3974e698250dab49f",
+      "results": {
+        "UniformEquilibrium/Quitting/Paths/CommonCalendarSmoothMinimum.lean": "f0e6cd346618f99bdbf03e76c824ebf5aacec72d3a34739bc64afa995eaef670"
+      }
+    },
+    "04_COMMON_CALENDAR_IMPORTS.patch": {
+      "patch_sha256": "e2cdcab5bf8bd9a92e03897b29be96c87d1c26b7e34c3a987623e59ff9a27eb4",
+      "results": {
+        "UniformEquilibrium.lean": "488a6f9395a205420be697cec765de026639245c3468f7f3a80a8af4c5d99abf"
+      },
+      "base_sha256": "d682b54a1a2c22f348ed10ed3f0e48bebd049e39887399c306fb778a41fb24ac"
+    },
+    "harnesses": {
+      "AXIOM_HARNESS.lean": "893e3b62eea38fdccce41996e1020271b07df3023ed5e4382fb2fb4eb898391d",
+      "SOURCE_SCOPE_HARNESS.lean": "7d55b52c55ad3ccba22cd9c915985e2bf1cb9b44c9e6b5bd3308f337955c0161"
+    }
+  },
+  "named_check_order": [
+    "MathUE.Order.MutualSupremumApproximation",
+    "UniformEquilibrium.Quitting.Paths.FiniteCalendarReplyPayoffChart",
+    "UniformEquilibrium.Quitting.Paths.CommonCalendarTesterPool",
+    "UniformEquilibrium.Quitting.Paths.CommonCalendarSmoothMinimum"
+  ],
+  "excluded_claims": [
+    "No tilted parameter or pressure sign",
+    "No enlarged-calendar competitor estimate",
+    "No marginal-chord derivative/curvature bounds",
+    "No silence or normalizer transport",
+    "No full packet completion"
+  ]
+}

@@ -1,0 +1,86 @@
+import MathUE.Topology.CompactNearZeroCollar
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedMinimumSingletonMass
+
+/-! # The actual near-MAX-minimum total-singleton collar for a fixed generic table -/
+
+noncomputable section
+
+namespace GameTheory
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
+
+/-- The canonical semantic MAX minimum has a joint law lift at the actual
+full-profile infimum. No attaining behavioral profile is assumed. -/
+theorem exists_minimum_terminalSemanticLawCarrier_exploitability
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    ∃ point ∈ quittingTerminalSemanticLawCarrier reward,
+      quittingTerminalSemanticExploitability point.1 =
+        quittingTerminalExploitabilityInf reward := by
+  obtain ⟨pair, hpair, hminimum⟩ := exists_minimum_quittingTerminalSemanticExploitability reward
+  obtain ⟨mass, hmass⟩ := exists_terminalSemanticLawCarrier_lift reward pair hpair
+  refine ⟨(pair, mass), hmass, le_antisymm ?_
+    (quittingTerminalExploitabilityInf_le_semanticCarrier reward hpair)⟩
+  apply le_csInf
+  · exact ⟨quittingTerminalExploitability reward (quittingAlwaysContinueProfile reward),
+      ⟨quittingAlwaysContinueProfile reward, rfl⟩⟩
+  · rintro value ⟨profile, rfl⟩
+    exact hminimum _ (quittingTerminalSemanticPair_mem_carrier reward profile)
+
+/-- Section 7: internally produced constants work for EVERY full behavioral
+profile near the actual MAX-regret infimum, keeping every reply and Never. -/
+theorem exists_screenedMinimumSingletonCollar
+    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (singletons : Fin 4 → ℝ)
+    (hcoordinates : ∀ coordinate, |coordinates coordinate| ≤ 1)
+    (hsingletons : ∀ who, |singletons who| ≤ 1)
+    (hpolynomial : screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial ≠ 0)
+    (hpositive : 0 < quittingTerminalExploitabilityInf
+      (quittingOwnSingletonReward singletons coordinates)) :
+    ∃ (floor radius : ℝ), 0 < floor ∧ 0 < radius ∧
+      ∀ profile :
+        (quittingGame (quittingOwnSingletonReward singletons coordinates)).BehaviorProfile,
+        quittingTerminalExploitability (quittingOwnSingletonReward singletons coordinates) profile ≤
+            quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) +
+              radius →
+          floor ≤ quittingTerminalLawSingletonMass
+            (quittingTerminalOutcomeMass
+              (quittingOwnSingletonReward singletons coordinates) profile) := by
+  let reward := quittingOwnSingletonReward singletons coordinates
+  let objective := fun point : QuittingTerminalSemanticLawPoint (Fin 4) =>
+    quittingTerminalSemanticExploitability point.1 - quittingTerminalExploitabilityInf reward
+  let mass := fun point : QuittingTerminalSemanticLawPoint (Fin 4) =>
+    quittingTerminalLawSingletonMass point.2
+  have hnonneg : ∀ point ∈ quittingTerminalSemanticLawCarrier reward, 0 ≤ objective point := by
+    intro point hpoint
+    exact sub_nonneg.mpr (quittingTerminalExploitabilityInf_le_semanticCarrier reward
+      (terminalSemanticLawCarrier_fst_mem_carrier point hpoint))
+  have hzero : ∃ point ∈ quittingTerminalSemanticLawCarrier reward, objective point = 0 := by
+    obtain ⟨point, hpoint, hvalue⟩ :=
+      exists_minimum_terminalSemanticLawCarrier_exploitability reward
+    exact ⟨point, hpoint, sub_eq_zero.mpr hvalue⟩
+  have hmassPositive : ∀ point ∈ quittingTerminalSemanticLawCarrier reward,
+      objective point = 0 → 0 < mass point := by
+    intro point hpoint hvalue
+    have hequal := sub_eq_zero.mp hvalue
+    apply minimumTerminalSemanticLaw_singletonMass_pos_of_screenedPolynomial_ne_zero
+      coordinates singletons hcoordinates hsingletons hpolynomial point hpoint
+    · intro candidate hcandidate
+      rw [hequal]
+      exact quittingTerminalExploitabilityInf_le_semanticCarrier reward hcandidate
+    · rw [hequal]
+      exact hpositive
+  obtain ⟨floor, radius, hfloor, hradius, hcollar⟩ :=
+    Math.exists_positive_near_zero_collar_of_compact
+      (quittingTerminalSemanticLawCarrier reward) objective mass
+      (quittingTerminalSemanticLawCarrier_isCompact reward)
+      ((continuous_quittingTerminalSemanticExploitability.comp continuous_fst).sub continuous_const)
+      (continuous_quittingTerminalLawSingletonMass.comp continuous_snd)
+      hzero hnonneg hmassPositive
+  refine ⟨floor, radius, hfloor, hradius, ?_⟩
+  intro profile hnear
+  apply hcollar _ (quittingTerminalSemanticLawPoint_mem_carrier reward profile)
+  change quittingTerminalExploitability reward profile -
+    quittingTerminalExploitabilityInf reward ≤ radius
+  linarith
+
+end GameTheory

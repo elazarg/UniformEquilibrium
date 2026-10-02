@@ -1,0 +1,42 @@
+import MathUE.Topology.ConnectedConvexHullAffineStep
+import MathUE.RealSeries.GeometricAffineSchedule
+import Literature.Sorin1986
+
+#print axioms Math.Topology.exists_affine_step_of_mem_convexHull_isPreconnected
+#print axioms Math.RealSeries.geometric_sum_eq_of_bounded_affine_recurrence
+#print axioms Math.RealSeries.exists_geometric_schedule_of_bounded_affine_steps
+#print axioms Literature.Sorin1986.PathConnectedSet.isPreconnected
+#print axioms Literature.Sorin1986.proposition_4
+#print axioms Literature.Sorin1986.proposition_6
+
+namespace SorinP4ConsumerAudit
+
+open Literature.Sorin1986
+
+theorem actual_profile_from_correlated_below_dimension_threshold
+    (G : FiniteStageGame) (lam : ℝ) (hlam : 0 < lam)
+    (hbound : lam < 1 / (Fintype.card G.Player : ℝ))
+    (payoff : G.Player → ℝ) (hpayoff : payoff ∈ G.correlatedFeasiblePayoffs) :
+    ∃ profile : G.BehaviorProfile, G.discountedPayoff lam profile = payoff := by
+  have hmem : payoff ∈ G.discountedFeasiblePayoffs lam := by
+    rw [proposition_4 G lam hlam hbound]
+    exact hpayoff
+  exact hmem
+
+theorem actual_profile_from_proposition6_convexity
+    (G : FiniteStageGame) (lam : ℝ) (hlam : 0 < lam) (hlam1 : lam ≤ 1)
+    (hconvex : Convex ℝ (G.discountedFeasiblePayoffs lam))
+    (delta : ℝ) (hdelta : 0 < delta) (hbelow : delta < lam)
+    (payoff : G.Player → ℝ) (hpayoff : payoff ∈ G.correlatedFeasiblePayoffs) :
+    ∃ profile : G.BehaviorProfile, G.discountedPayoff delta profile = payoff := by
+  have hmem : payoff ∈ G.discountedFeasiblePayoffs delta := by
+    rw [proposition_6 G lam hlam hlam1 hconvex delta hdelta hbelow]
+    exact hpayoff
+  exact hmem
+
+#print axioms actual_profile_from_correlated_below_dimension_threshold
+#print axioms actual_profile_from_proposition6_convexity
+
+end SorinP4ConsumerAudit
+
+#print axioms Literature.Sorin1986.proposition_15

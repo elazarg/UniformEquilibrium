@@ -1,0 +1,8 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium.lean
+@@
+ import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPolynomial
++import UniformEquilibrium.Quitting.Paths.FiniteCalendarReplyPayoffChart
++import UniformEquilibrium.Quitting.Paths.CommonCalendarTesterPool
++import UniformEquilibrium.Quitting.Paths.CommonCalendarSmoothMinimum
+*** End Patch

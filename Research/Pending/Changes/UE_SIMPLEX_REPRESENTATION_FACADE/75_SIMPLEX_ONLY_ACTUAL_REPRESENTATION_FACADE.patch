@@ -1,0 +1,150 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Projective/SingletonBoxRepresentationExclusions.lean
+@@
+-import UniformEquilibrium.Quitting.Projective.SingletonBoxTranslation
++import UniformEquilibrium.Quitting.Projective.SingletonBoxTranslation
++import UniformEquilibrium.Quitting.Projective.RobustPotentialSingletonFaceDrift
+@@
+-Standard Q produces the required analytic simplex internally; it is not an
+-additional supplied favorable vector or a behavioral strategy.
++The weaker analytic result uses only a supplied simplex with nonnegative
++matrix image. Standard Q produces that simplex for its separate corollaries.
++The robust facade derives face drift from the same actual full relation.
+@@
+-theorem not_singletonBox_additive_of_standardQ_positive_face_drift
+-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {bound : ℝ}
+-    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+-    (hQ : IsStandardQ (quittingProjectiveLCPMatrix reward))
++theorem not_singletonBox_additive_of_simplex_positive_face_drift
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {bound : ℝ}
++    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
++    (weight : ι → ℝ) (hweight : ∀ who, 0 ≤ weight who)
++    (hweightSum : ∑ who, weight who = 1)
++    (hweightImage : ∀ receiver,
++      0 ≤ ∑ owner, quittingProjectiveLCPMatrix reward receiver owner * weight owner)
+@@
+-theorem not_singletonBox_scalarComposition_of_standardQ_positive_face_drift
+-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {bound : ℝ}
+-    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+-    (hQ : IsStandardQ (quittingProjectiveLCPMatrix reward))
++theorem not_singletonBox_scalarComposition_of_simplex_positive_face_drift
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {bound : ℝ}
++    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
++    (weight : ι → ℝ) (hweight : ∀ who, 0 ≤ weight who)
++    (hweightSum : ∑ who, weight who = 1)
++    (hweightImage : ∀ receiver,
++      0 ≤ ∑ owner, quittingProjectiveLCPMatrix reward receiver owner * weight owner)
+@@
+-  rintro ⟨constant, component, heq⟩
+-  obtain ⟨weight, hweightImage⟩ :=
+-    exists_simplex_positive_residual_of_standardQ (quittingProjectiveLCPMatrix reward) hQ
++  rintro ⟨constant, component, heq⟩
+@@
+-    hcomponentOpen, hcomponentInterval, hcomponent, houterDomain, houter, hinnerImage, heq⟩
+-  obtain ⟨weight, hweightImage⟩ :=
+-    exists_simplex_positive_residual_of_standardQ (quittingProjectiveLCPMatrix reward) hQ
++    hcomponentOpen, hcomponentInterval, hcomponent, houterDomain, houter, hinnerImage, heq⟩
+@@
+-    (quittingSingletonBoxWidth reward bound) (quittingProjectiveLCPMatrix reward) weight.weights
+-    translated constant translatedComponent (quittingSingletonBoxWidth_pos reward hreward)
++    (quittingSingletonBoxWidth reward bound) (quittingProjectiveLCPMatrix reward) weight
++    translated constant translatedComponent (quittingSingletonBoxWidth_pos reward hreward)
+@@
+-    (quittingSingletonBoxWidth reward bound) (quittingProjectiveLCPMatrix reward) weight.weights
+-    translated constant translatedComponent translatedDomain outer outerDomain
++    (quittingSingletonBoxWidth reward bound) (quittingProjectiveLCPMatrix reward) weight
++    translated constant translatedComponent translatedDomain outer outerDomain
+@@
+-    weight.weights_nonneg weight.total_of_fintype
+-    (fun receiver => by
+-      simpa only [singletonLCPResidual_eq, mul_comm] using (hweightImage receiver).le)
+-    htranslatedDiff htranslatedEq
++    hweight hweightSum hweightImage
++    htranslatedDiff htranslatedEq
+@@
+-    weight.weights_nonneg weight.total_of_fintype
+-    (fun receiver => by
+-      simpa only [singletonLCPResidual_eq, mul_comm] using (hweightImage receiver).le)
+-    htranslatedDiff htranslatedOpen htranslatedInterval htranslatedComponent
++    hweight hweightSum hweightImage
++    htranslatedDiff htranslatedOpen htranslatedInterval htranslatedComponent
+@@
+-end GameTheory
++/-- The existing standard-Q surface delegates to the weaker simplex theorem. -/
++theorem not_singletonBox_additive_of_standardQ_positive_face_drift
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {bound : ℝ}
++    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
++    (hQ : IsStandardQ (quittingProjectiveLCPMatrix reward))
++    (potential : Payoff ι → ℝ)
++    (hdiff : ∀ point ∈ quittingSingletonBox reward bound, DifferentiableAt ℝ potential point)
++    (hdrift : ∀ point ∈ quittingSingletonBox reward bound, ∀ owner,
++      point owner = quittingSoloReward reward owner owner →
++      0 < fderiv ℝ potential point (point - quittingSoloReward reward owner)) :
++    ¬ IsQuittingSingletonBoxAdditive reward bound potential := by
++  obtain ⟨weight, hweightImage⟩ :=
++    exists_simplex_positive_residual_of_standardQ (quittingProjectiveLCPMatrix reward) hQ
++  exact not_singletonBox_additive_of_simplex_positive_face_drift reward hreward
++    weight.weights weight.weights_nonneg weight.total_of_fintype
++    (fun receiver => by
++      simpa only [singletonLCPResidual_eq, mul_comm] using (hweightImage receiver).le)
++    potential hdiff hdrift
++
++/-- The existing standard-Q surface delegates to the weaker simplex theorem. -/
++theorem not_singletonBox_scalarComposition_of_standardQ_positive_face_drift
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {bound : ℝ}
++    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
++    (hQ : IsStandardQ (quittingProjectiveLCPMatrix reward))
++    (potential : Payoff ι → ℝ)
++    (hdiff : ∀ point ∈ quittingSingletonBox reward bound, DifferentiableAt ℝ potential point)
++    (hdrift : ∀ point ∈ quittingSingletonBox reward bound, ∀ owner,
++      point owner = quittingSoloReward reward owner owner →
++      0 < fderiv ℝ potential point (point - quittingSoloReward reward owner)) :
++    ¬ IsQuittingSingletonBoxRegularScalarComposition reward bound potential := by
++  obtain ⟨weight, hweightImage⟩ :=
++    exists_simplex_positive_residual_of_standardQ (quittingProjectiveLCPMatrix reward) hQ
++  exact not_singletonBox_scalarComposition_of_simplex_positive_face_drift reward hreward
++    weight.weights weight.weights_nonneg weight.total_of_fintype
++    (fun receiver => by
++      simpa only [singletonLCPResidual_eq, mul_comm] using (hweightImage receiver).le)
++    potential hdiff hdrift
++
++/-- The source Theorem3 representation exclusions with only its analytic simplex.
++The same potential on the full actual robust relation supplies positive face
++drift; no standard-Q, normality, no-UE or singleton-sign premise is needed. -/
++theorem quittingRobustPotential_not_singletonBox_representations_of_simplex
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {bound tolerance : ℝ}
++    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
++    (htolerance0 : 0 < tolerance) (htolerance1 : tolerance ≤ 1 / 4)
++    (weight : ι → ℝ) (hweight : ∀ who, 0 ≤ weight who)
++    (hweightSum : ∑ who, weight who = 1)
++    (hweightImage : ∀ receiver,
++      0 ≤ ∑ owner, quittingProjectiveLCPMatrix reward receiver owner * weight owner)
++    (potential : Payoff ι → ℝ)
++    (hdiff : ∀ point ∈ quittingSingletonBox reward bound, DifferentiableAt ℝ potential point)
++    (hpotential :
++      (quittingFloorFreeRobustChargedRelation reward tolerance (bound + 2)).IsPotential
++        (fun state => potential state.1)) :
++    (¬ IsQuittingSingletonBoxAdditive reward bound potential) ∧
++      (¬ IsQuittingSingletonBoxRegularScalarComposition reward bound potential) := by
++  have hdrift : ∀ point ∈ quittingSingletonBox reward bound, ∀ owner,
++      point owner = quittingSoloReward reward owner owner →
++      0 < fderiv ℝ potential point (point - quittingSoloReward reward owner) := by
++    intro point hpoint owner howner
++    have hface := (quittingRobustPotential_singletonFace_fderiv_bounds reward hreward
++      htolerance0 htolerance1 potential hpotential point owner
++      (fun who => ⟨hpoint.1 who, hpoint.2 who⟩) howner (hdiff point hpoint)).1
++    have hsum : 0 ≤ ∑ who, |(fderiv ℝ potential point) (Pi.single who 1)| :=
++      Finset.sum_nonneg fun who _ => abs_nonneg _
++    have hterm := mul_nonneg htolerance0.le hsum
++    linarith
++  exact ⟨not_singletonBox_additive_of_simplex_positive_face_drift reward hreward
++      weight hweight hweightSum hweightImage potential hdiff hdrift,
++    not_singletonBox_scalarComposition_of_simplex_positive_face_drift reward hreward
++      weight hweight hweightSum hweightImage potential hdiff hdrift⟩
++
++end GameTheory
+@@
+-/-- Face-only positive drift plus textbook Q excludes every additive
++/-- Face-only positive drift plus an analytic simplex excludes every additive
+ representation of the actual function on the actual closed singleton box. -/
+*** End Patch

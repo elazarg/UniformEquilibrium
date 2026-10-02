@@ -1,0 +1,260 @@
+*** Begin Patch
+*** Add File: MathUE/Analysis/Examples/PairedFacePotential.lean
++import MathUE.Analysis.RationalPolynomialCoordinateDerivatives
++import Mathlib.LinearAlgebra.Eigenspace.Matrix
++
++/-! # The printed coupled face-only polynomial counterexample
++
++All derivatives are actual derivatives of the same rational expression.
++The actual coordinate Hessian has a complete four-vector eigenbasis with
++eigenvalues 96, 32, -64, -64. No game counterexample or standard Q is asserted.
++-/
++
++noncomputable section
++
++namespace Math.PairedFacePotential
++
++open Math.Interval Math.Interval.RationalPolynomial Set
++open scoped BigOperators Matrix
++
++def expression : RationalPolynomial 4 :=
++  .constant (-4) * (.var 0 + .var 1 + .var 2 + .var 3) +
++    .constant 64 * (.var 0 * .var 1 + .var 2 * .var 3) +
++      .constant 16 * (.var 0 + .var 1) * (.var 2 + .var 3)
++
++def potential (point : Fin 4 → ℝ) : ℝ := evalReal point expression
++
++def translatedPotential (point : Fin 4 → ℝ) : ℝ :=
++  potential (fun coordinate => point coordinate - 1 / 4)
++
++def shiftedVariable (coordinate : Fin 4) : RationalPolynomial 4 :=
++  .var coordinate + .constant (-1 / 4)
++
++def translatedExpression : RationalPolynomial 4 :=
++  .constant (-4) * (shiftedVariable 0 + shiftedVariable 1 + shiftedVariable 2 +
++    shiftedVariable 3) +
++      .constant 64 * (shiftedVariable 0 * shiftedVariable 1 +
++        shiftedVariable 2 * shiftedVariable 3) +
++      .constant 16 * (shiftedVariable 0 + shiftedVariable 1) *
++        (shiftedVariable 2 + shiftedVariable 3)
++
++theorem translatedExpression_eval (point : Fin 4 → ℝ) :
++    evalReal point translatedExpression = translatedPotential point := by
++  simp [translatedExpression, shiftedVariable, translatedPotential, potential,
++    expression, evalReal]
++  ring
++
++def normalizedSingletonMatrix : Matrix (Fin 4) (Fin 4) ℝ :=
++  (1 / 4 : ℝ) • !![0, 3, -1, -1; 3, 0, -1, -1;
++    -1, -1, 0, 3; -1, -1, 3, 0]
++
++def gradient (point : Fin 4 → ℝ) : Fin 4 → ℝ :=
++  ![-4 + 64 * point 1 + 16 * (point 2 + point 3),
++    -4 + 64 * point 0 + 16 * (point 2 + point 3),
++    -4 + 64 * point 3 + 16 * (point 0 + point 1),
++    -4 + 64 * point 2 + 16 * (point 0 + point 1)]
++
++theorem eval_formalPartial_eq_gradient (point : Fin 4 → ℝ) (coordinate : Fin 4) :
++    evalReal point (formalPartial coordinate expression) = gradient point coordinate := by
++  fin_cases coordinate <;>
++    simp [expression, formalPartial, evalReal, gradient] <;> ring
++
++theorem fderiv_apply (point direction : Fin 4 → ℝ) :
++    fderiv ℝ potential point direction =
++      ∑ coordinate, gradient point coordinate * direction coordinate := by
++  change fderiv ℝ (fun input => evalReal input expression) point direction = _
++  rw [(hasFDerivAt_evalReal expression point).fderiv, differential_apply]
++  simp_rw [eval_formalPartial_eq_gradient]
++
++theorem translated_fderiv_apply (point direction : Fin 4 → ℝ) :
++    fderiv ℝ translatedPotential point direction =
++      ∑ coordinate, gradient (fun index => point index - 1 / 4) coordinate *
++        direction coordinate := by
++  have hfunction : translatedPotential = (fun input => evalReal input translatedExpression) :=
++    funext fun input => (translatedExpression_eval input).symm
++  rw [hfunction, (hasFDerivAt_evalReal translatedExpression point).fderiv, differential_apply]
++  apply Finset.sum_congr rfl
++  intro coordinate _
++  congr 1
++  fin_cases coordinate <;>
++    simp [translatedExpression, shiftedVariable, formalPartial, evalReal, gradient] <;> ring
++
++theorem singleton_rewards_bounded (owner receiver : Fin 4) :
++    |(1 / 4 : ℝ) + normalizedSingletonMatrix receiver owner| ≤ 1 := by
++  fin_cases owner <;> fin_cases receiver <;> norm_num [normalizedSingletonMatrix]
++
++def faceDriftFormula (point : Fin 4 → ℝ) : Fin 4 → ℝ :=
++  ![1 + 4 * point 1 + 32 * point 1 * (point 2 + point 3) + 128 * point 2 * point 3,
++    1 + 4 * point 0 + 32 * point 0 * (point 2 + point 3) + 128 * point 2 * point 3,
++    1 + 4 * point 3 + 32 * point 3 * (point 0 + point 1) + 128 * point 0 * point 1,
++    1 + 4 * point 2 + 32 * point 2 * (point 0 + point 1) + 128 * point 0 * point 1]
++
++/-- All four printed face identities, not just their positive consequence. -/
++theorem face_drift_eq_formula (point : Fin 4 → ℝ) (owner : Fin 4)
++    (hface : point owner = 0) :
++    fderiv ℝ potential point
++      (fun receiver => point receiver - normalizedSingletonMatrix receiver owner) =
++        faceDriftFormula point owner := by
++  rw [fderiv_apply]
++  fin_cases owner <;>
++    simp [gradient, normalizedSingletonMatrix, Fin.sum_univ_succ, hface, faceDriftFormula] <;>
++    ring
++
++theorem face_drift_ge_one (point : Fin 4 → ℝ) (hnonnegative : ∀ coordinate, 0 ≤ point coordinate)
++    (owner : Fin 4) (hface : point owner = 0) :
++    1 ≤ fderiv ℝ potential point
++      (fun receiver => point receiver - normalizedSingletonMatrix receiver owner) := by
++  rw [face_drift_eq_formula point owner hface]
++  fin_cases owner <;>
++    simp [faceDriftFormula] <;>
++    nlinarith [hnonnegative 0, hnonnegative 1, hnonnegative 2, hnonnegative 3,
++      mul_nonneg (hnonnegative 0) (hnonnegative 1),
++      mul_nonneg (hnonnegative 0) (hnonnegative 2),
++      mul_nonneg (hnonnegative 0) (hnonnegative 3),
++      mul_nonneg (hnonnegative 1) (hnonnegative 2),
++      mul_nonneg (hnonnegative 1) (hnonnegative 3),
++      mul_nonneg (hnonnegative 2) (hnonnegative 3)]
++
++/-- Literal singleton translation of the face inequality for P. -/
++theorem translated_face_drift_ge_one (point : Fin 4 → ℝ)
++    (hlower : ∀ coordinate, (1 / 4 : ℝ) ≤ point coordinate)
++    (owner : Fin 4) (hface : point owner = 1 / 4) :
++    1 ≤ fderiv ℝ translatedPotential point
++      (fun receiver => point receiver - (1 / 4 + normalizedSingletonMatrix receiver owner)) := by
++  let translated := fun coordinate => point coordinate - 1 / 4
++  have hnonnegative : ∀ coordinate, 0 ≤ translated coordinate :=
++    fun coordinate => sub_nonneg.mpr (hlower coordinate)
++  have hzero : translated owner = 0 := by simp [translated, hface]
++  have hbound := face_drift_ge_one translated hnonnegative owner hzero
++  rw [fderiv_apply] at hbound
++  rw [translated_fderiv_apply]
++  convert hbound using 1
++  apply Finset.sum_congr rfl
++  intro coordinate _
++  congr 1
++  dsimp [translated]
++  ring
++
++def hessianMatrix : Matrix (Fin 4) (Fin 4) ℝ :=
++  !![0, 64, 16, 16; 64, 0, 16, 16;
++    16, 16, 0, 64; 16, 16, 64, 0]
++
++/-- This matrix is identified entry by entry with the actual second partials. -/
++theorem actual_hessian_entries (point : Fin 4 → ℝ) (owner receiver : Fin 4) :
++    Math.coordinateMixedPartial potential point owner receiver = hessianMatrix receiver owner := by
++  change Math.coordinateMixedPartial (fun input => evalReal input expression)
++    point owner receiver = _
++  rw [coordinateMixedPartial_evalReal_eq]
++  fin_cases owner <;> fin_cases receiver <;>
++    norm_num [expression, formalPartial, evalReal, hessianMatrix]
++
++/-- The translated polynomial P has the SAME actual Hessian, not a supplied matrix. -/
++theorem translated_actual_hessian_entries (point : Fin 4 → ℝ) (owner receiver : Fin 4) :
++    Math.coordinateMixedPartial translatedPotential point owner receiver =
++      hessianMatrix receiver owner := by
++  have hfunction : translatedPotential = (fun input => evalReal input translatedExpression) :=
++    funext fun input => (translatedExpression_eval input).symm
++  rw [hfunction, coordinateMixedPartial_evalReal_eq]
++  fin_cases owner <;> fin_cases receiver <;>
++    norm_num [translatedExpression, shiftedVariable, formalPartial, evalReal, hessianMatrix]
++
++def eigenvectors : Fin 4 → Fin 4 → ℝ :=
++  ![![1, 1, 1, 1], ![1, 1, -1, -1], ![1, -1, 0, 0], ![0, 0, 1, -1]]
++
++def eigenvalues : Fin 4 → ℝ := ![96, 32, -64, -64]
++
++theorem hessian_hasEigenvector (index : Fin 4) :
++    Module.End.HasEigenvector (Matrix.toLin' hessianMatrix) (eigenvalues index)
++      (eigenvectors index) := by
++  constructor
++  · apply Module.End.mem_eigenspace_iff.mpr
++    funext coordinate
++    fin_cases index <;> fin_cases coordinate <;>
++      norm_num [Matrix.toLin'_apply, hessianMatrix, eigenvectors, eigenvalues,
++        Matrix.mulVec, dotProduct, Fin.sum_univ_succ]
++  · intro hzero
++    have hcoordinate := congrFun hzero (if index = 3 then (2 : Fin 4) else 0)
++    fin_cases index <;> norm_num [eigenvectors] at hcoordinate
++
++/-- Literal expansion in the four printed eigenvectors, proving completeness. -/
++theorem eigenvectors_span (direction : Fin 4 → ℝ) :
++    direction = ((direction 0 + direction 1 + direction 2 + direction 3) / 4) • eigenvectors 0 +
++      ((direction 0 + direction 1 - direction 2 - direction 3) / 4) • eigenvectors 1 +
++      ((direction 0 - direction 1) / 2) • eigenvectors 2 +
++      ((direction 2 - direction 3) / 2) • eigenvectors 3 := by
++  funext coordinate
++  fin_cases coordinate <;> simp [eigenvectors] <;> ring
++
++theorem eigenvectors_linearIndependent : LinearIndependent ℝ eigenvectors := by
++  apply Fintype.linearIndependent_iff.mpr
++  intro coefficient hzero coordinate
++  have h0 := congrFun hzero (0 : Fin 4)
++  have h1 := congrFun hzero (1 : Fin 4)
++  have h2 := congrFun hzero (2 : Fin 4)
++  have h3 := congrFun hzero (3 : Fin 4)
++  simp [eigenvectors, Fin.sum_univ_succ] at h0 h1 h2 h3
++  fin_cases coordinate <;> linarith
++
++theorem hessian_hasEigenvalue_iff (value : ℝ) :
++    Module.End.HasEigenvalue (Matrix.toLin' hessianMatrix) value ↔
++      value = 96 ∨ value = 32 ∨ value = -64 := by
++  classical
++  constructor
++  · intro hvalue
++    obtain ⟨direction, hvector⟩ := hvalue.exists_hasEigenvector
++    have happly := hvector.apply_eq_smul
++    have h0 := congrFun happly (0 : Fin 4)
++    have h1 := congrFun happly (1 : Fin 4)
++    have h2 := congrFun happly (2 : Fin 4)
++    have h3 := congrFun happly (3 : Fin 4)
++    simp [Matrix.toLin'_apply, hessianMatrix, Matrix.mulVec, dotProduct,
++      Fin.sum_univ_succ] at h0 h1 h2 h3
++    by_cases h96 : value = 96
++    · exact Or.inl h96
++    by_cases h32 : value = 32
++    · exact Or.inr (Or.inl h32)
++    by_cases h64 : value = -64
++    · exact Or.inr (Or.inr h64)
++    have hsumProduct : (value - 96) *
++        (direction 0 + direction 1 + direction 2 + direction 3) = 0 := by
++      nlinarith [h0, h1, h2, h3]
++    have hblockProduct : (value - 32) *
++        (direction 0 + direction 1 - direction 2 - direction 3) = 0 := by
++      nlinarith [h0, h1, h2, h3]
++    have hleftProduct : (value + 64) * (direction 0 - direction 1) = 0 := by
++      nlinarith [h0, h1]
++    have hrightProduct : (value + 64) * (direction 2 - direction 3) = 0 := by
++      nlinarith [h2, h3]
++    have hsum := (mul_eq_zero.mp hsumProduct).resolve_left (sub_ne_zero.mpr h96)
++    have hblock := (mul_eq_zero.mp hblockProduct).resolve_left (sub_ne_zero.mpr h32)
++    have hplus : value + 64 ≠ 0 := by intro hzero; apply h64; linarith
++    have hleft := (mul_eq_zero.mp hleftProduct).resolve_left hplus
++    have hright := (mul_eq_zero.mp hrightProduct).resolve_left hplus
++    exact False.elim (hvector.2 (by
++      funext coordinate; fin_cases coordinate <;> simp only [Pi.zero_apply] <;> linarith))
++  · rintro (rfl | rfl | rfl)
++    · exact Module.End.hasEigenvalue_of_hasEigenvector (hessian_hasEigenvector 0)
++    · exact Module.End.hasEigenvalue_of_hasEigenvector (hessian_hasEigenvector 1)
++    · exact Module.End.hasEigenvalue_of_hasEigenvector (hessian_hasEigenvector 2)
++
++theorem translatedPotential_top_value : translatedPotential ![3, 3, 3, 3] = 1408 := by
++  norm_num [translatedPotential, potential, expression, evalReal]
++
++theorem translatedPotential_countervertex_value :
++    translatedPotential ![3, -3, 3, -3] = -1136 := by
++  norm_num [translatedPotential, potential, expression, evalReal]
++
++/-- A literal vertex below the top vertex: positive singleton face tests do
++not imply the full-root minimum property. No global minimizer is assumed. -/
++theorem translatedPotential_top_not_minimum :
++    ¬ IsMinOn translatedPotential (Icc (-3 : Fin 4 → ℝ) 3) ![3, 3, 3, 3] := by
++  intro hminimum
++  have hvertex : ![3, -3, 3, -3] ∈ Icc (-3 : Fin 4 → ℝ) 3 := by
++    constructor <;> intro coordinate <;> fin_cases coordinate <;> norm_num
++  have hcompare := hminimum hvertex
++  change translatedPotential ![3, 3, 3, 3] ≤ translatedPotential ![3, -3, 3, -3] at hcompare
++  rw [translatedPotential_top_value, translatedPotential_countervertex_value] at hcompare
++  norm_num at hcompare
++
++end Math.PairedFacePotential
+*** End Patch

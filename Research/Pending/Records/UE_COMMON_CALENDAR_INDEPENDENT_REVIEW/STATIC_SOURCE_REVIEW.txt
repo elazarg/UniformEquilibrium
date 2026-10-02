@@ -1,0 +1,163 @@
+INDEPENDENT STATIC REVIEW: ACTUAL COMMON CALENDAR TESTER POOL
+
+Verdict: PASS for source mathematics, actual-profile adapters and API scope.
+No definite repair requested. NOT a Lean/compiler/axiom/full-build seal.
+No shared writes, compiler, Git, worktrees, copied caches, children or new math.
+Reviewed independently of the author; root remains sole integration/build owner.
+
+Reviewed packet
+---------------
+/tmp/ue-common-calendar-testers-CXcS4p
+Read entire SOURCE_AND_HANDOFF.md, ORDERED_APPLICATION_MANIFEST.json,
+00A,01,02,03,04, both harnesses; prior quantitative owner's entire00.
+Read the complete709-line source export, especially6.1 and11, and current
+actual decoded-law/raw-payoff, finite full-reply cap, late-response,
+finite-log-sum-exp, compact-envelope and exploitability owners.
+Inspected exact finite timing action/law reconstruction and pinned simplex,
+polynomial continuity and compactness APIs. No duplicated cap/clock foundation.
+
+Exact ordered artifacts, all SHA256 verified against manifest
+-------------------------------------------------------------
+Prior /tmp/ue-quantitative-finite-clock-source-chqqvm/00_MUTUAL_SUPREMUM_OWNER.patch
+  415c53efe5a22f279e26a365cd633e14d6a65777a3c681e925dad7d39c5572de
+  payload8e4ac0afcb99ea0fb3bced9ca0f980e3ac27e8e54342061c9e3ff75607f3bc90
+Then this packet:
+00A_MUTUAL_SUPREMUM_DERIVED_NONEMPTY.patch
+  2124748978e24fe8e5eaeb89876bd393f09db6358ee005ba2ee0d0bd8b4b6849
+  result8b59643b923d11c5ae73d9a1908fc5c61b6ffd1d9fd991d008d4e94cee87f371
+01_FINITE_CALENDAR_REPLY_PAYOFF_CHART.patch
+  32f3e648caf3db9754de35584016b1b993eb41f9ccb2f5d1c6042fc18d07d496
+  new module3a462cb7d21680713c5372e597e46de38b60e6b9f4dc8d086edc4733f5758c60
+02_ACTUAL_COMMON_CALENDAR_TESTER_POOL.patch
+  95663fa66990362d1ed145e8aff7d55848734c7daec470baf5f9d6cd9d315be5
+  new modulef02e3faef3b8381a03c6bd1fe8fccae3f49d1f99e728a38cdcdda1a5c5be1af6
+03_ACTUAL_COMMON_CALENDAR_SMOOTH_MINIMUM.patch
+  67f49abd2ba386aa02fbe97382f6e37ecbc3d22afc06b9e3974e698250dab49f
+  new modulef0e6cd346618f99bdbf03e76c824ebf5aacec72d3a34739bc64afa995eaef670
+04_COMMON_CALENDAR_IMPORTS.patch
+  e2cdcab5bf8bd9a92e03897b29be96c87d1c26b7e34c3a987623e59ff9a27eb4
+  current umbrella based682b54a1a2c22f348ed10ed3f0e48bebd049e39887399c306fb778a41fb24ac
+  result488a6f9395a205420be697cec765de026639245c3468f7f3a80a8af4c5d99abf
+Actual payloads and00A/04 replayed/read in memory only; no source snapshots.
+All exact manifest payload hashes match.04's unique import context exists in
+the current actual umbrella, preserving all unrelated imports.
+
+Manifestb911ce5cfe650f1d4686d763eec8f684bc853c834eda8f5c5a3f413ffc869efb
+Handoff198e4f1c6b054b2f91e24b7d390f6bc74f656db119d0dc5c61e17ee4e636fc7c
+Scope harness7d55b52c55ad3ccba22cd9c915985e2bf1cb9b44c9e6b5bd3308f337955c0161
+Axiom harness893e3b62eea38fdccce41996e1020271b07df3023ed5e4382fb2fb4eb898391d
+Source exportd91cf597df1f45d4287b53244d4f91463ed7f9313d75748a3f0fbcb87dbdfe0c
+
+Same actual profile and pure-reply chart
+---------------------------------------
+01's decoded simplex profile is the EXISTING actual finite timing realization.
+Each pure reply is first evaluated by the literal raw polynomial at an updated
+simplex coordinate, then identified with the full behavioral pure-time update
+of THAT same decoded stopping-law profile. This is payoff identity, not a
+replacement finite-game semantics or externally supplied payoff field.
+Continuity is the actual existing multivariate payoff polynomial composed with
+continuous simplex coordinates and continuous coordinate update.
+
+The late row is Never payoff PLUS the actual all-opponents-Never mass times
+the player's own SINGLETON reward. The finite-opponent owner proves this
+signed equality without reward nonnegativity or opponent absorption. The
+chart maps its genuine Never probabilities to the SAME simplex weights.
+No correction is dropped, clamped, presumed positive or confused with joint
+Never mass; the product excludes the deviator, exactly as the source requires.
+
+Complete pool and full behavioral exploitability
+-----------------------------------------------
+02 labels are Option(player x Option(Fin(pool+1))). OuterNone is zero; innerNone
+is EACH owner's Never; innerSome has ALL dates0,...,pool inclusive. No label
+restricts the owner's identity or replaces Never with the late date.
+Every nonzero gain is an actual behavioral reply payoff minus the original
+actual prescribed payoff, both at the SAME decoded profile.
+
+For pool>=deadline, every native date<deadline embeds into the pool; the final
+finite pool date supplies the corrected late row. All other later finite dates
+have that same payoff by the existing finite-opponent identity. The existing
+full behavioral cap equals max(native menu, corrected late). Thus all arbitrary
+full behavioral deviations, not just pure dates, are covered canonically.
+Reverse maximum inequality uses each actual reply<=full cap and each full debt
+<=actual exploitability; zero<=exploitability. The forward inequality covers
+both native and late rows and uses the same raw/actual baseline equality.
+Positive-part convention is retained exactly; zero tester ensures the bound
+is nonnegative even with entirely negative signed rewards.
+
+Boundary checks
+---------------
+pool=deadline=0: native source law is Never only, but pool STILL includes the
+finite date0 plus owner Never. The late identity applies at0; the full cap is
+max(Never, own signed singleton), so the proof does not lose immediate quit.
+deadline=pool>0: all source dates0,...,deadline-1 are included and pool endpoint
+is the needed first late row. No strict pool>deadline assumption is required.
+For one player, opponent-Never product is empty product1, which is correct.
+Signed singleton rewards remain unaltered through the max and all late labels.
+
+Empty players: labels, cardinality, continuity, smoothing and internal compact
+minimum are meaningful with singleton zero pool and singleton empty product
+simplex. Full exploitability/equality/bounds/window statements explicitly use
+Nonempty players because the canonical finitePlayerMax/exploitability owner
+does. No assertion silently extends those definitions to empty player types.
+Tester nonemptiness itself is always internally supplied by outerNone.
+The finite timing source simplex is internally nonempty via pureNever in each
+coordinate, including deadline0 and empty player type.
+
+Temperature: partition positivity, positive own weights, sum1 and minimum
+attainment hold at ALL real temperatures, including0, under Lean's total real
+division/log convention. The sandwich and inactivity statements require
+temperature>0 exactly as the generic owners do. No invalid bound at0/negative
+temperature is claimed. Window clock0 implies deadline0 and uses pool endpoint1;
+no clock positivity premise was added. Source large-k use remains specialization.
+
+Internal compact minimization and SAME weights
+---------------------------------------------
+03 selects a minimizer from compact independent product simplex via canonical
+CompactMinimumEnvelope.exists_minimizer; its equality is the canonical minimum,
+not a favorable supplied scalar minimum/profile. The pureNever tuple supplies
+nonemptiness locally; standard simplex product compactness is already imported.
+The SAME gain family is used for actual objective, canonical minimum and own
+softmax weights. The chosen point's OWN positive weights sum1; actual unrestricted
+exploitability is sandwiched by that same smooth objective; inactivity uses the
+same pool's actual exploitability maximum. Window facade internally chooses
+pool2*clock+1 from only deadline<=2*clock and positive temperature.
+No played public correlated mixture, supplied weights/point/cap, outer reward
+parameter, pressure sign, derivative direction, enlarged competitor, silence
+transport, minmax moat or whole packet completion is asserted.
+
+Generic nonemptiness00A
+----------------------
+NonemptySource is retained. hforward applied to an actual arbitrarySource
+internally returns a Target inhabitant, which supplies the local NonemptyTarget
+needed by the unchanged conditional-supremum proof. No assumption that Target
+is inhabited survives in the public generic telescope. No nonnegative-error
+premise is needed: the same actual forward witness forces error>=0 when used.
+Old game-semantic interface can continue delegating without theorem-math change.
+
+Scope/axiom harnesses and verification limits
+--------------------------------------------
+Scope harness tests derivable generic Target nonemptiness, Fin4 actual full
+behavioral replies at an INTERNALLY selected minimizing point, and distinct
+Never/final-finite labels. Arbitrary clock includes its zero boundary; no
+strategic or favorable supplied witness is added.19-print manual axiom harness
+covers source identities, continuity, full maximum, weights and internal minima.
+Both harnesses remain unrun. Root must still compile named modules serially,
+check these fixtures/axioms, regenerate exhaustive AxiomAudit and run import,
+trust and inventory checks/full integration gate as appropriate.
+The parent quantitative group's MathUE umbrella import remains part of its own
+recorded integration order; standalone00/00A is not an umbrella completion seal.
+
+Read current actual owners with hashes
+-------------------------------------
+FiniteLogSumExp94fc947c3ea132a6fa3db0557c550ca7af5b739e322ffb62e49c261785c03a63
+CompactMinimumEnvelope46901e54b1d52e36cc8bab77bb739b1ca55eaaddbce3fd5c00204b834850da51
+FiniteCalendarRawPolynomial0bf0ba12e59e857d11d19393d777b40e64c28894a6bf33b3a780c03bd465b318
+FiniteCalendarRawPayofff2a33a6f50ee0532df59c4d64a019f5b942966affd786441408f98c6d64d2202
+FiniteDeadlineFullReplyCap31d145e5c97d8889e95426df292ad7c29400e6ecabfd601e8b84c1ea16c4897f
+FiniteOpponentLateResponsece44d59fff27a9e1dbf15c944a453b53eb08657bd208060599dd7dd76776e92b
+
+No definite stale API, deprecated pinned name, forbidden trust construct,
+production Research/Literature import, source-scope defect or>100-column added
+nonimport Lean line found. Static PASS is mathematical/API review only;
+dependent rewrite elaboration, warning diagnostics and transitive axioms remain
+root compiler responsibilities. No proof-only overlay is needed from this review.

@@ -1,0 +1,9 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean
+@@
+-  simpa only [if_neg hwho, add_zero] using
++  simpa only [ite_eq_right hwho, add_zero] using
+@@
+-      simp only [if_neg hwho, add_zero] at hpay
++      simp only [ite_eq_right hwho, add_zero] at hpay
+*** End Patch

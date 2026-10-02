@@ -8,7 +8,12 @@
 # Short-lived intake: move contents into a tracked project lane or delete them.
 /ephemeral/
 
-/math/
+# Mathematical research records are tracked; local state and download metadata are not.
+/math/.git/
+/math/.agents/
+*:Zone.Identifier
+*:sec.endpointdlp
+*.crdownload
 /overleaf/
 /literature/
 *.log

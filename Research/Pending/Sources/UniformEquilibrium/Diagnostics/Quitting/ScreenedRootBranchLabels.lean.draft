@@ -1,0 +1,79 @@
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootDebtBranches
+
+/-!
+# Actual screened-root branches and the four optional label choices
+
+The player order is supplied as a permutation, not as any payoff or cap oracle.
+The first two ordered players surely quit. Equal positive actual full debts
+select one of the four optional Q/C label pairs, including boundary marginals.
+Polynomial coefficient extraction and reward-fiber independence are separate
+source lemmas, not assertions of this module.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+/-- True selects the Quit advantage; false selects the Continue advantage. -/
+def screenedRootOptionalDebtBranch
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (who : Fin 4) (label : Bool) : ℝ :=
+  if label then
+    (1 - (root who true).toReal) * quittingRootEndpointDifference reward 0 root who
+  else -(root who true).toReal * quittingRootEndpointDifference reward 0 root who
+
+/-- Ordered source branches: the two sure players, then the two optional players. -/
+def screenedRootDebtBranches
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool) :
+    Fin 4 → ℝ :=
+  ![-quittingRootEndpointDifference reward 0 root (order 0),
+    -quittingRootEndpointDifference reward 0 root (order 1),
+    screenedRootOptionalDebtBranch reward root (order 2) (labels 0),
+    screenedRootOptionalDebtBranch reward root (order 3) (labels 1)]
+
+private theorem exists_optional_label_of_sureOpponent
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (who : Fin 4) {quitter : Fin 4}
+    (hne : quitter ≠ who) (hsure : (root quitter true).toReal = 1) :
+    ∃ label : Bool, screenedRootOptionalDebtBranch reward root who label =
+      quittingTerminalDeviationDebt reward (quittingOneDateThenNeverProfile reward root) who := by
+  rw [quittingTerminalDeviationDebt_oneDateThenNever_eq_max_branches_of_sureOpponent
+    reward root who hne hsure]
+  rcases max_cases
+      ((1 - (root who true).toReal) * quittingRootEndpointDifference reward 0 root who)
+      (-(root who true).toReal * quittingRootEndpointDifference reward 0 root who) with h | h
+  · exact ⟨true, by simpa only [screenedRootOptionalDebtBranch, if_true] using h.1.symm⟩
+  · exact ⟨false, by simpa only [screenedRootOptionalDebtBranch, if_false] using h.1.symm⟩
+
+/-- Positive equal complete debts force equality of one of the four actual branch rows.
+No best-action region, favorable root, or separately supplied cap is assumed. -/
+theorem exists_screenedRootDebtBranches_eq_of_positive_equal_debts
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (order : Fin 4 ≃ Fin 4)
+    (hfirst : (root (order 0) true).toReal = 1)
+    (hsecond : (root (order 1) true).toReal = 1)
+    {debt : ℝ} (hdebt : 0 < debt)
+    (hequal : ∀ who, quittingTerminalDeviationDebt reward
+      (quittingOneDateThenNeverProfile reward root) who = debt) :
+    ∃ labels : Fin 2 → Bool,
+      ∀ index, screenedRootDebtBranches reward root order labels index = debt := by
+  have hzero := quittingTerminalDeviationDebt_oneDateThenNever_sure_positive_eq_gap
+    reward root (order 0) (order.injective.ne (by decide : (1 : Fin 4) ≠ 0))
+    hsecond hfirst hdebt (hequal (order 0))
+  have hone := quittingTerminalDeviationDebt_oneDateThenNever_sure_positive_eq_gap
+    reward root (order 1) (order.injective.ne (by decide : (0 : Fin 4) ≠ 1))
+    hfirst hsecond hdebt (hequal (order 1))
+  obtain ⟨firstLabel, htwo⟩ := exists_optional_label_of_sureOpponent
+    reward root (order 2) (order.injective.ne (by decide : (0 : Fin 4) ≠ 2)) hfirst
+  obtain ⟨secondLabel, hthree⟩ := exists_optional_label_of_sureOpponent
+    reward root (order 3) (order.injective.ne (by decide : (0 : Fin 4) ≠ 3)) hfirst
+  refine ⟨![firstLabel, secondLabel], ?_⟩
+  intro index
+  fin_cases index
+  · exact hzero
+  · exact hone
+  · exact htwo.trans (hequal (order 2))
+  · exact hthree.trans (hequal (order 3))
+
+end GameTheory

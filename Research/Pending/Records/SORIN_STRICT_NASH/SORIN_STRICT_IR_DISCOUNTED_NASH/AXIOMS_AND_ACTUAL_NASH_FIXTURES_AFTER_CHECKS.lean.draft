@@ -1,0 +1,59 @@
+import Literature.Sorin1986
+
+noncomputable section
+
+namespace SorinStrictIRDiscountedNashFixtures
+
+open Literature.Sorin1986
+
+/-- One internally selected profile precedes the rate and every full
+behavioral replacement. No path, punishment, stage cap or Nash input is supplied. -/
+theorem full_deviations_one_profile_before_rates (G : FiniteStageGame)
+    (target : GameTheory.Payoff G.Player)
+    (htarget : target ∈ G.correlatedFeasiblePayoffs)
+    (hstrict : ∀ who, G.individualRationalLevel who < target who)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
+      ∃ profile : G.BehaviorProfile,
+        ∀ lam : ℝ, 0 < lam → lam < threshold →
+          (∀ who (deviation : G.BehaviorStrategy who),
+            G.repeatedGame.discountedPayoff (1 - lam) profile PUnit.unit who ≥
+              G.repeatedGame.discountedPayoff (1 - lam)
+                (Function.update profile who deviation) PUnit.unit who) ∧
+          dist (G.discountedPayoff lam profile) target < ε := by
+  obtain ⟨threshold, hthreshold, hthresholdOne, profile, hsource⟩ :=
+    exists_discountedNash_close_allSmallRates_of_strictIR G target htarget hstrict hε
+  refine ⟨threshold, hthreshold, hthresholdOne, profile, ?_⟩
+  intro lam hlam hlamThreshold
+  obtain ⟨hnash, hclose⟩ := hsource lam hlam hlamThreshold
+  exact ⟨fun who deviation => by simpa only [add_zero] using hnash who deviation, hclose⟩
+
+/-- Literal actual discounted equilibrium-payoff membership near the same
+fixed strict-IR target, not a certificate-defined payoff set. -/
+theorem actual_equilibrium_payoff_near_fixed_target (G : FiniteStageGame)
+    (target : GameTheory.Payoff G.Player)
+    (htarget : target ∈ G.correlatedFeasiblePayoffs)
+    (hstrict : ∀ who, G.individualRationalLevel who < target who)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧
+      ∀ lam : ℝ, 0 < lam → lam < threshold →
+        ∃ value ∈ G.discountedEquilibriumPayoffs lam, dist value target < ε := by
+  obtain ⟨threshold, hthreshold, _hthresholdOne, profile, hsource⟩ :=
+    exists_discountedNash_close_allSmallRates_of_strictIR G target htarget hstrict hε
+  refine ⟨threshold, hthreshold, ?_⟩
+  intro lam hlam hlamThreshold
+  obtain ⟨hnash, hclose⟩ := hsource lam hlam hlamThreshold
+  exact ⟨G.discountedPayoff lam profile, ⟨profile, hnash, rfl⟩, hclose⟩
+
+end SorinStrictIRDiscountedNashFixtures
+
+#print axioms Literature.Sorin1986.exists_constantApproxPunishmentTrigger
+#print axioms Literature.Sorin1986.exists_periodicApproxMinmaxTrigger_of_strictIR
+#print axioms Literature.Sorin1986.exists_discountedNash_allSmallRates_of_strictIR
+#print axioms Literature.Sorin1986.exists_discountedNash_close_allSmallRates_of_strictIR
+#print axioms SorinStrictIRDiscountedNashFixtures.full_deviations_one_profile_before_rates
+#print axioms SorinStrictIRDiscountedNashFixtures.actual_equilibrium_payoff_near_fixed_target
+#print axioms Literature.Sorin1986.property_4_banach
+#print axioms Literature.Sorin1986.proposition_15
+#print axioms Literature.Sorin1986.asymmetricStationaryProfile_isDiscountedNash
+#print axioms Literature.Sorin1986.asymmetricAlternatingProfile_isDiscountedNash

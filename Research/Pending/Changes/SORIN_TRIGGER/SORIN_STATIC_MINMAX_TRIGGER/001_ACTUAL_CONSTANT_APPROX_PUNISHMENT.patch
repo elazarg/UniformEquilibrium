@@ -1,0 +1,185 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-private theorem FiniteStageGame.stageEUAt_update_trigger_le
+-    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
+-    (who : G.Player) (deviation : G.BehaviorStrategy who)
+-    {time : ℕ} (history : G.repeatedGame.Hist time)
+-    (hstatus : G.publicTriggerStatus path history = some who) :
+-    G.repeatedGame.stageEUAt
+-        (Function.update
+-          (G.triggerBehaviorProfile path G.vanishingPunishments)
+-          who deviation) history who ≤
+-      G.individualRationalLevel who + vanishingPunishmentError time := by
+-  let (player : G.Player) : Fintype (G.kernel.Strategy player) :=
+-    G.finiteAction player
+-  let : Finite G.kernel.Outcome := by
+-    change Finite (∀ player, G.Action player)
+-    exact Finite.of_fintype _
+-  let behavior := G.triggerBehaviorProfile path G.vanishingPunishments
+-  let current : G.MixedProfile := fun player ↦
+-    (Function.update behavior who deviation) player time history
+-  have hstatus' : G.actionMonitoringGame.triggerStatus path
+-      (List.ofFn (KernelGame.RealizedActionRepeatedAdapter.actionHistory
+-        G.kernel history)) = some who := by
+-    change G.actionMonitoringGame.triggerStatus path
+-      (List.ofFn (fun k ↦ (history.1 k).2)) = some who
+-    exact hstatus
+-  have hcurrent : current =
+-      G.kernel.mixedExtension.profileWithOpponent who
+-        (deviation time history) (G.vanishingPunishments time who) := by
+-    funext player
+-    by_cases hplayer : player = who
+-    · subst player
+-      simp [current, behavior]
+-    · rw [G.kernel.mixedExtension.profileWithOpponent_ne hplayer]
+-      simp only [current, Function.update_of_ne hplayer]
+-      unfold behavior FiniteStageGame.triggerBehaviorProfile
+-        KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+-        KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
+-      rw [G.triggerMonitoredProfile_of_culprit path
+-        G.vanishingPunishments who player _ hstatus']
+-      exact G.punishmentMixedAction_of_ne
+-        (G.vanishingPunishments time) hplayer
+-  unfold StochasticGame.stageEUAt
+-  change Math.Probability.expect (Math.PMFProduct.pmfPi current)
+-      (fun action ↦ G.kernel.eu action who) ≤ _
+-  rw [← G.kernel.mixedExtension_eu, hcurrent]
+-  exact (G.mixedEU_profileWithOpponent_le_bestPureReplyValue who
+-    (G.vanishingPunishments time who) (deviation time history)).trans
+-      (G.vanishingPunishments_spec time who).le
++private theorem FiniteStageGame.stageEUAt_update_trigger_le_bestPureReplyValue
++    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
++    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
++    (who : G.Player) (deviation : G.BehaviorStrategy who)
++    {time : ℕ} (history : G.repeatedGame.Hist time)
++    (hstatus : G.publicTriggerStatus path history = some who) :
++    G.repeatedGame.stageEUAt
++        (Function.update
++          (G.triggerBehaviorProfile path punishment)
++          who deviation) history who ≤
++      G.bestPureReplyValue who (punishment time who) := by
++  let (player : G.Player) : Fintype (G.kernel.Strategy player) :=
++    G.finiteAction player
++  let : Finite G.kernel.Outcome := by
++    change Finite (∀ player, G.Action player)
++    exact Finite.of_fintype _
++  let behavior := G.triggerBehaviorProfile path punishment
++  let current : G.MixedProfile := fun player ↦
++    (Function.update behavior who deviation) player time history
++  have hstatus' : G.actionMonitoringGame.triggerStatus path
++      (List.ofFn (KernelGame.RealizedActionRepeatedAdapter.actionHistory
++        G.kernel history)) = some who := by
++    change G.actionMonitoringGame.triggerStatus path
++      (List.ofFn (fun k ↦ (history.1 k).2)) = some who
++    exact hstatus
++  have hcurrent : current =
++      G.kernel.mixedExtension.profileWithOpponent who
++        (deviation time history) (punishment time who) := by
++    funext player
++    by_cases hplayer : player = who
++    · subst player
++      simp [current, behavior]
++    · rw [G.kernel.mixedExtension.profileWithOpponent_ne hplayer]
++      simp only [current, Function.update_of_ne hplayer]
++      unfold behavior FiniteStageGame.triggerBehaviorProfile
++        KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
++        KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
++      rw [G.triggerMonitoredProfile_of_culprit path
++        punishment who player _ hstatus']
++      exact G.punishmentMixedAction_of_ne
++        (punishment time) hplayer
++  unfold StochasticGame.stageEUAt
++  change Math.Probability.expect (Math.PMFProduct.pmfPi current)
++      (fun action ↦ G.kernel.eu action who) ≤ _
++  rw [← G.kernel.mixedExtension_eu, hcurrent]
++  exact G.mixedEU_profileWithOpponent_le_bestPureReplyValue who
++    (punishment time who) (deviation time history)
++
++private theorem FiniteStageGame.stageEUAt_update_trigger_le
++    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
++    (who : G.Player) (deviation : G.BehaviorStrategy who)
++    {time : ℕ} (history : G.repeatedGame.Hist time)
++    (hstatus : G.publicTriggerStatus path history = some who) :
++    G.repeatedGame.stageEUAt
++        (Function.update
++          (G.triggerBehaviorProfile path G.vanishingPunishments)
++          who deviation) history who ≤
++      G.individualRationalLevel who + vanishingPunishmentError time := by
++  exact (G.stageEUAt_update_trigger_le_bestPureReplyValue path
++    G.vanishingPunishments who deviation history hstatus).trans
++      (G.vanishingPunishments_spec time who).le
+@@
+-/-- Every feasible individually rational target has an actual stochastic
++
++/-- The actual trigger's discounted payoff equals its prescribed calendar
++series for every valid rate, independently of the selected punishments. -/
++private theorem FiniteStageGame.discountedPayoff_triggerBehaviorProfile_eq_calendar
++    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
++    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
++    (rate : G.DiscountRate) (who : G.Player) :
++    G.discountedPayoff rate.1 (G.triggerBehaviorProfile path punishment) who =
++      G.kernel.discountedContinuationPayoff (1 - rate.1) path 0 who := by
++  classical
++  let : Finite G.kernel.Outcome := by
++    change Finite (∀ player, G.Action player)
++    exact Finite.of_fintype _
++  have hstage (time : ℕ) : G.repeatedGame.expectedStagePayoff
++      (G.triggerBehaviorProfile path punishment) PUnit.unit time who =
++        G.kernel.eu (path time) who := by
++    unfold FiniteStageGame.triggerBehaviorProfile
++    rw [KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile,
++      G.stageEU_triggerMonitoredProfile]
++    simp only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
++  unfold FiniteStageGame.discountedPayoff StochasticGame.discountedPayoff
++    KernelGame.discountedContinuationPayoff
++  simp only [FiniteStageGame.repeatedInitial, zero_add]
++  congr 1
++  apply tsum_congr
++  intro time
++  rw [hstage]
++
++/-- Choose actual approximate minmax punishments internally, once for a
++calendar. The same behavioral profile delivers that calendar at every valid
++rate and caps every supported off-calendar stage of every full deviation. -/
++theorem exists_constantApproxPunishmentTrigger (G : FiniteStageGame)
++    (path : ℕ → (∀ player, G.Action player)) {ε : ℝ} (hε : 0 < ε) :
++    ∃ profile : G.BehaviorProfile,
++      (∀ (time : ℕ) (history : G.repeatedGame.Hist time),
++        (∀ k, (history.1 k).2 = path k) →
++        ∀ player, profile player time history = PMF.pure (path time player)) ∧
++      (∀ (who : G.Player) (deviation : G.BehaviorStrategy who)
++        (time : ℕ) (history : G.repeatedGame.Hist time),
++        history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
++          PUnit.unit time).support →
++        (¬∀ k, (history.1 k).2 = path k) →
++        G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤
++          G.individualRationalLevel who + ε) ∧
++      ∀ (rate : G.DiscountRate) (who : G.Player),
++        G.discountedPayoff rate.1 profile who =
++          G.kernel.discountedContinuationPayoff (1 - rate.1) path 0 who := by
++  obtain ⟨punish, hpunish⟩ := G.exists_approx_punishmentOpponents hε
++  let punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit := fun _ => punish
++  let profile := G.triggerBehaviorProfile path punishment
++  refine ⟨profile, ?_, ?_, ?_⟩
++  · intro time history hplayed player
++    dsimp only [profile, FiniteStageGame.triggerBehaviorProfile,
++      KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile,
++      KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy]
++    exact G.triggerMonitoredProfile_of_onPath path punishment player
++      (KernelGame.RealizedActionRepeatedAdapter.actionHistory G.kernel history) hplayed
++  · intro who deviation time history hsupport hnotPath
++    obtain ⟨first, hmismatch, hbefore, hother⟩ :=
++      (G.firstMismatch_of_mem_support_trigger_update path punishment
++        who deviation time history hsupport).resolve_left hnotPath
++    have hstatus : G.publicTriggerStatus path history = some who :=
++      G.publicTriggerStatus_eq_some_of_first path who history first.isLt hmismatch
++        (fun earlier hearlier =>
++          hbefore ⟨earlier, hearlier.trans first.isLt⟩ hearlier) hother
++    exact (G.stageEUAt_update_trigger_le_bestPureReplyValue
++      path punishment who deviation history hstatus).trans (hpunish who).le
++  · intro rate who
++    exact G.discountedPayoff_triggerBehaviorProfile_eq_calendar path punishment rate who
++
++/-- Every feasible individually rational target has an actual stochastic
+*** End Patch

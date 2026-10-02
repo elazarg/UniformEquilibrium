@@ -1,0 +1,13 @@
+*** Begin Patch
+*** Update File: MathUE.lean
+@@
+ import MathUE.Interval.RationalPolynomialRegularity
++import MathUE.Interval.RationalClosedBoxDensity
+*** Update File: UniformEquilibrium.lean
+@@
+ import UniformEquilibrium.Quitting.Projective.SingletonBoxStandardQFaceExclusion
++import UniformEquilibrium.Quitting.Projective.RationalExactSoloRejection
+@@
+ import UniformEquilibrium.Quitting.Root.RationalQuittingRootGridSelector
++import UniformEquilibrium.Quitting.Root.RationalBoxedEdge
+*** End Patch

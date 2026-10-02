@@ -1,0 +1,20 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-/-- On actual unilateral-deviation support, an off-calendar public status
++private def triggerOnPath (G : FiniteStageGame)
++    (path : ℕ → (∀ player, G.Action player)) {time : ℕ}
++    (history : G.repeatedGame.Hist time) : Prop :=
++  ∀ k, (history.1 k).2 = path k
++
++/-- On actual unilateral-deviation support, an off-calendar public status
+@@
+ open _root_.Math.Probability
+ 
+-private def triggerOnPath (G : FiniteStageGame)
+-    (path : ℕ → (∀ player, G.Action player)) {time : ℕ}
+-    (history : G.repeatedGame.Hist time) : Prop :=
+-  ∀ k, (history.1 k).2 = path k
+-
+ private def triggerPathIndicator (G : FiniteStageGame)
+*** End Patch

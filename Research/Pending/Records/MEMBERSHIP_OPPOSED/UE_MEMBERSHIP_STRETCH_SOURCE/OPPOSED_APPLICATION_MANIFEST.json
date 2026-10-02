@@ -1,0 +1,109 @@
+{
+  "status": "Immutable static draft; no compiler or axiom seal. Original01 remains unchanged.",
+  "sources": {
+    "math/exports/THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS.md": "83ee0a42c89aa0f37a29b74bee059fc6dca8cbda309f9e6806f84bf410bb8297",
+    "math/exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md": "24537ca80ba0c3ac610c73259ca44977acda1d985527fedba524de98589ac2b6"
+  },
+  "orderedPrerequisites": [
+    {
+      "path": "/tmp/own-singleton-reward-chart.fIa1qX/OWN_SINGLETON_REWARD_CHART.patch",
+      "sha256": "6cf88b0275721e0e933301951eab49a015316f75a3717df01e6e0f2a25c4ee06"
+    },
+    {
+      "path": "/tmp/ue-future-pinned-name-overlays-iBO2Hj/002_OWN_SINGLETON_CHART_PINNED_DITE_NAMES.patch",
+      "sha256": "c9667d9bfaf7c674ab0cb871539f2f584f1f8963de997137abaa39bb7b786a50"
+    },
+    {
+      "path": "/tmp/ue-screened-fiber-extrema-DhGLPM/63_OWN_SINGLETON_FIBER_MAXIMUM.patch",
+      "sha256": "f1816c277e0db1d6ea696a0d6739479498f2fa52ab203c5bc9fb11fce5abb19c"
+    },
+    {
+      "path": "/tmp/ue-screened-rational-selection-sInZmW/66_POSITIVE_RATIONAL_SCREENED_FIBER_ENTRANCE.patch",
+      "sha256": "6e8b02b20bf1f95d45c47230ffc9b9704f09fb34fe4951c17ce554053fee13da",
+      "scope": "Only StrictUnitRewardScale module is an import dependency"
+    },
+    {
+      "path": "/tmp/ue-signed-affine-row-comparison-xF5EKq/001_SIGNED_AFFINE_ROW_COMPARISON.patch",
+      "sha256": "7f25dac018f597efbd58e7653a9fa902b8b26efa0183d935cc2dd254c22d034f"
+    }
+  ],
+  "patches": [
+    {
+      "file": "01_WORST_TABLE_MEMBERSHIP_STRETCH_SOURCE.patch",
+      "sha256": "34089c98d0ef189adad84f04b6e7d516a23401b58f99bfa1ab06b01a6c0cd668",
+      "result": "be1dfc2123648f6a9d1d4ce434bf219db22844e96684ae37f4a22fe3d1d59642",
+      "module": "UniformEquilibrium.Diagnostics.Quitting.MembershipStretchWorstTableSource"
+    },
+    {
+      "file": "02_SINGLE_OPTIONAL_FULL_DEBT_ROWS.patch",
+      "sha256": "402f7da0492f72308bb352c4b35f46354cacb70a97ed8d64299a71fe9f8b3a29",
+      "result": "36d6809adb30a0dce7173d0ebf038a048c2d33e0d3184f8fd724fef4322ede17",
+      "module": "UniformEquilibrium.Diagnostics.Quitting.SingleOptionalMembershipRows"
+    },
+    {
+      "file": "03_ACTUAL_OPPOSED_OPTIONAL_REVERSALS.patch",
+      "sha256": "20c23fe3e626371e63f34ef940a887b1891226025c44c43d69df3d116d5a0090",
+      "result": "a2f7cb2318d46b059deb2cfdb7c8bfb5f62a796c793c57a2ccedbf6cd9d75898",
+      "module": "UniformEquilibrium.Diagnostics.Quitting.ThreeSureOpposedMembershipReversals"
+    },
+    {
+      "file": "04_RAW_SOURCE_OPPOSED_REVERSAL_JOIN.patch",
+      "sha256": "f7f15a90babeb68c47a6b3ac65e1ad6c6604caf856454e50343974bde035d370",
+      "result": "5e6b094f872f33051432f256c2978d3621df390fdc752972a732c89c714886c9",
+      "module": "UniformEquilibrium.Diagnostics.Quitting.MembershipStretchOpposedSource"
+    },
+    {
+      "file": "05_OPPOSED_ADAPTER_IMPORTS.patch",
+      "sha256": "c3767662b2ac7fac39addfcdeb787b8cdec1234f6c674840631b43cdc134c2ff",
+      "base": "e3a2a8bac6f3565ee8f81f27217ff68c0275e7281a20f70948c8494d68369174",
+      "result": "a77ff3faafe14955f777c1a5bcb005758aac7551cc651a1a7543f976d4405e6e",
+      "fileTarget": "UniformEquilibrium/Diagnostics.lean"
+    }
+  ],
+  "dependencyEdges": {
+    "01": [
+      "own-chart+overlay",
+      "63",
+      "StrictUnitRewardScale component66",
+      "currentMembershipStretch"
+    ],
+    "02": [
+      "currentThreeSureMembershipReversal"
+    ],
+    "03": [
+      "02",
+      "genericSignedAffineRows001"
+    ],
+    "04": [
+      "01",
+      "03"
+    ],
+    "05": [
+      "01",
+      "02",
+      "03",
+      "04"
+    ]
+  },
+  "harnesses": {
+    "OPPOSED_AXIOM_HARNESS.lean": "e2d0cbfe7bf2c0ec38e5562eb44dc91c012a7ebcf8addf6b9fbfe076d777f0d2",
+    "OPPOSED_SOURCE_SCOPE_HARNESS.lean": "4752b6f131902f04e7990a750495d17cc360854e6c34aa508e06987d228f80dd"
+  },
+  "namedCheckOrder": [
+    "UniformEquilibrium.Diagnostics.Quitting.MembershipStretchWorstTableSource",
+    "UniformEquilibrium.Diagnostics.Quitting.SingleOptionalMembershipRows",
+    "UniformEquilibrium.Diagnostics.Quitting.ThreeSureOpposedMembershipReversals",
+    "UniformEquilibrium.Diagnostics.Quitting.MembershipStretchOpposedSource"
+  ],
+  "remainingPacketCompanions": [
+    "Generic signed-row regression002 exact25/99, authored separately",
+    "Literal Gamma full-coalition common-stretch/source margin, assigned separately to sorin_remaining_paper_proofs"
+  ],
+  "nonclaims": [
+    "No common-calendar weights, pressure or four-coordinate normal",
+    "No production of a three-sure attained root from every positive source",
+    "No consumption of opposed configurations",
+    "No Fin4 uniform-equilibrium result",
+    "No compiler or overall packet seal"
+  ]
+}

@@ -1,0 +1,191 @@
+SORIN LEMMA 2: FULL-DIMENSIONAL ACTUAL HAUSDORFF CONSUMER
+
+Evidence
+--------
+Frozen static drafts only; not checked here. No shared source edits, compiler,
+Git, caches, worktrees, source snapshots, children, math notes, options or
+warning suppression. Root remains the sole shared editor/compiler/Git owner.
+Literal property_4_discounted and lemma_2 keep their two-player alternative and
+remain unchanged. No original sorry is replaced. Public P15 is unchanged.
+
+Primary source
+--------------
+Sorin (1986), On Repeated Games with Complete Information,
+DOI10.1287/moor.11.1.147, printed pages148-149, Property4 and Lemma2 proof;
+the corrected scope is printed page160, Added in proof.
+Source literature/SORIN_1986__ON_REPEATED_GAMES_WITH_COMPLETE_INFORMATION.pdf,
+SHAd09a8e78f37f9863ff40e969a90f03799967d05eb70ba28a93afab84ddfce56c.
+Pages147-149 and160 read via pdftotext stdout; no generated transcript saved.
+
+The source proves strict-IR target approximation first and then states that
+this completes the full-dimensional case. The omitted standard compactness
+glue is explicit here: ambient ball gives a strict center; convex mixtures
+approximate every weakly IR target; a canonical finite internal ball cover
+of the compact IR set makes the rate threshold uniform over all targets.
+Reverse inclusion is the original actual security-deviation Lemma1(8), not
+a re-proved minmax or an assumed payoff-set containment.
+
+Exact scope and internally derived requirements
+----------------------------------------------
+FullDimensional means exactly the original AMBIENT metric-ball condition:
+  exists center in IR, exists radius>0, ball(center,radius) subset IR.
+No affineDimension condition, relative interior, or supplied strict point.
+Lower every center coordinate by radius/2; the finite-Pi norm proves this
+point is in the ball even for zero players. Its actual security constraints
+then imply center is strictly above actual individualRationalLevel everywhere.
+Correlated feasibility follows from the original center membership.
+
+Any weakly IR target is approximated by mixing it with that strict center.
+The mixing weight is internally chosen via exists_pos_mul_lt and clipped at
+1/2. Owned correlatedFeasiblePayoffs_convex supplies feasibility; security
+strictness and the norm estimate are elementary scalar/vector glue.
+No selected path, payoff block, security value, punishment, profile or root
+delivery equation appears as an input to a public consumer.
+
+Pointwise public actual consumer:
+  exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
+  takes G, original fullDimensional premise, ONE fixed target in actual IR,
+  epsilon>0; INTERNALLY choose threshold with0<threshold<=1 and ONE actual
+  behavioral profile before ALL0<lambda<threshold. The profile is exact Nash
+  against arbitrary full unilateral behavioral replacements and its actual
+  discounted payoff is metric epsilon-close to the SAME target.
+  It calls the frozen exact strict-IR Nash producer, never a cap certificate.
+
+Uniform public actual consumer:
+  property_4_discounted_of_fullDimensional
+  takes ONLY G and the original fullDimensional premise.
+  For EVERY epsilon>0 INTERNALLY choose ONE positive threshold; for EVERY
+  positive lambda below it, BOTH actual payoff sets satisfy HausdorffClose.
+  In particular the threshold precedes ALL weakly IR targets. The cover and
+  finite family of actual Nash profiles are internally selected. Targetwise
+  positive thresholds are bounded below by the owned finite-positive-margin
+  selector, which also handles an empty finite index type without a premise.
+  Final threshold is clipped at1 for the original reverse-security inclusion.
+
+Payoffs/security may be negative, player count arbitrary finite including0.
+No positive-rate-zero or endpoint1 Nash assertion. Rates in the consumer are
+strictly positive below a threshold<=1. The literal unrestricted behavioral
+deviation quantifiers inherited from strict-IR Nash are preserved.
+
+Not claimed: whole property_4_discounted/lemma_2 with their two-player OR;
+two-player flat-security boundary; or arbitraryN-player degenerate IR faces.
+No favorable compact cover or equilibrium field is hidden in a final premise.
+
+Immutable ordered DAG and exact hashes
+-------------------------------------
+Target Literature/Sorin1986.lean. Shared read-only current source:
+fba6f32df9e627384edd4e5e21fec63a5e6d14e5eef83e9b07d462b1439bdfa5.
+Pending P4->critical->folk source->strict-IR Nash precede this packet.
+Use /tmp/sorin-static-minmax-trigger.wGV9OQkv/003_SOURCE_ORDERED_EQUIVALENT.patch
+IN PLACE OF its original source003, not after it. All old originals immutable.
+Expected frozen strict-IR Nash final base:
+7df434429d0603d737910cbb4539cd534fa8c21bf5f8035c7094a313ef84b540.
+No extra imports or module inventory changes.
+
+All new files under /tmp/sorin-full-dimensional-discounted-folk.zoOejcMu/.
+
+001_ACTUAL_FULL_DIMENSIONAL_IR_GEOMETRY.patch
+  patch ce6258b5c3b66c203618d19ffee94d575367e5eef53122095088c2b640caefb1
+  base  7df434429d0603d737910cbb4539cd534fa8c21bf5f8035c7094a313ef84b540
+  result88bdca54850db3767b440c2bb3af72754befa7b1a448cd689d40dfbeb04d2fca
+  One source-order hunk before original open Property4: actual IR compactness,
+  ambient-ball strict center, private actual weak-target convex-mixing density.
+
+002_ACTUAL_UNIFORM_FULL_DIMENSIONAL_HAUSDORFF.patch
+  patch 7dfc856070f1413c13cf4689e24347a8179ece6fb41c8406fba13a125420355b
+  base  88bdca54850db3767b440c2bb3af72754befa7b1a448cd689d40dfbeb04d2fca
+  result9764ad01dcad309ac4b6e7af1a4459ec8dc895a11a1b9946f63774f838148c8b
+  One hunk AFTER original reverse-security Lemma1(8), before aggregate Lemma1
+  and original Lemma2. Actual pointwise Nash producer, uniform full-dimensional
+  Hausdorff consumer. The later source-order location permits direct delegation
+  to original lemma_1_Elambda_subset_Delta without copied proof or forward use.
+
+Entire predecessor DAG plus001->002 replayed in memory with unique contexts,
+exact hashes above. No modified-source snapshot written. Added Lean<=100cols;
+pinned API inspection repaired deprecated Set.setOf_forall to Set.ofPred_forall
+before freezing. Static validation does not confer a compiler or axiom seal.
+
+Canonical owners inspected/reused
+--------------------------------
+FiniteStageGame.correlatedFeasiblePayoffs_convex
+lemma_1_Elambda_subset_Delta
+  existing Literature/Sorin1986.lean; original security behavior unchanged.
+Math.Topology.isCompact_convexHull_of_finiteDimensional
+  MathUE/Topology/CompactConvexHull.lean
+  c25921f8cb5d16c31baa21933bf3ddd9d6f02a22b1b81cd189933ee4291bad2b
+IsCompact.finite_cover_balls
+  pinned Mathlib/Topology/MetricSpace/Pseudo/Basic.lean
+  80da0475206e305e343c46b77c4816aff59cebbfe9fad6dc3c41b36e3ce6c91c
+pi_norm_lt_iff (positive accuracy, empty-player compatible)
+  pinned Mathlib/Analysis/Normed/Group/Constructions.lean
+  ab6a98350718fb2c9da8bedde4bf63cac85849ee9d3332b1955c2cb73f03cdec
+KernelGame.exists_pos_margin_of_mem_strictReservationSet
+  UniformEquilibrium/ProofView/Concepts/Welfare/FolkTheorem/Discounting.lean
+  de7b9f7b0cb003e0d81b844b662bca0b9b83adb7c3d870b4282d6004501731d9
+exists_pos_mul_lt, isClosed_iInter, isClosed_le, Set.ofPred_forall,
+Set.Finite.fintype, convex definition, norm_smul, dist_triangle.
+No existing actual compact-IR/strict-center owner was found; these paper-facing
+wrappers delegate to canonical generic hull/metric/finite-margin owners. No
+finite-cover, compact hull, security, periodic approximation or Nash proof copied.
+
+Narrow manual actual consumer/axiom harness, root only AFTER compiler gates
+-------------------------------------------------------------------------
+AXIOMS_AND_ACTUAL_HAUSDORFF_FIXTURES_AFTER_CHECKS.lean
+SHA1d82b0513c982f5007f4723e525bf970959aaf9fa1ca23ddc14c7b07d24d563a.
+12#print axioms: compact IR, actual strict center, frozen strict-IR Nash,
+pointwise full-dimensional actual Nash, uniform Hausdorff, literal actual
+uniform-target profile fixture, actual Hausdorff fixture, original reverse
+security, Banach clause, P15 and both critical Nash constructor regressions.
+Expect only propext,Quot.sound,Classical.choice after root compilation/audit.
+Whole literal property_4_discounted is not audited while sorry remains.
+
+Flat-security two-player citation/source audit (no new proof invented)
+--------------------------------------------------------------------
+Sorin page148 cites[2] for the discounted convergence claim. Page149's final
+paragraph asserts that if one coordinate equals its security level on ALL IR
+payoffs, that player can always best-reply and the remaining problem reduces
+by induction. It gives no explicit mixed-calendar/reduced-game construction.
+Added-in-proof page160 limits the degenerate argument toN=2.
+
+Exact classical citation[2] identified and metadata verified on institutional
+primary record: Robert J. Aumann, Survey of repeated games (1981), in Essays
+in game theory and mathematical economics in honor of Oskar Morgenstern,
+Bibliographisches Institut, Mannheim, pp11-42.
+https://cris.huji.ac.il/en/publications/survey-of-repeated-games/
+The full chapter was NOT obtained/read; it is not claimed to contain an
+already-verified flat-security behavioral construction.
+Local Solan book.pdf is not that source. Full-text stdout scan found no
+repeated complete-information folk construction, Aumann survey, or flat
+security argument usable here.
+
+The adjacent classical primary paper was read to avoid a false substitute:
+Fudenberg and Maskin (1986), The Folk Theorem in Repeated Games with
+Discounting or with Incomplete Information, Econometrica54(3),533-554.
+Primary article scan (mirror, actual article identified on title page):
+https://jeromemathis.fr/wp-content/uploads/2020/01/FudenbergTirole_ECA1986.pdf
+Stable publisher identifier https://www.jstor.org/stable/1911307
+Printed p537 definesV* by STRICT coordinates above normalized minmax;
+Theorem1,p541, quantifies targets inV*. Thus its two-player theorem does NOT
+supply a target on a globally flat security coordinate. Its realized-action
+discussion does not remove that target hypothesis. It is not used in a patch.
+
+Precise unproved known-source producer/API needed for the flat branch:
+  Given actual finite G with Fintype.card G.Player=2, actual who, and
+  hflat:forall target in G.individuallyRationalPayoffs,
+    target who=G.individualRationalLevel who,
+  prove for every epsilon>0 there exists threshold>0 such that for every
+  positive lambda<threshold and EVERY target in actual IR there exists an
+  actual full behavioral profile with EXACT discounted Nash against every
+  player's unrestricted behavioral replacement and metric delivered payoff
+  within epsilon of that target.
+No supplied best-reply orbit, mixed feasible block, favorable security value,
+punishment, auxiliary equilibrium, or source-to-target fiber is permitted.
+The missing source step is internally constructing the always-best-reply
+behavior of the flat player together with the other player's optimizing
+behavior, proving actual payoff approximation and both full deviation caps.
+No current canonical owner found supplies this reduced-game producer.
+The strict-IR generic folk theorem cannot fill it because its strict-coordinate
+premise is inconsistent with hflat whenever IR is nonempty.
+Obtain/read Aumann[2]'s exact boundary proof or another classical primary proof
+of this weak-flat case before implementation. This is a source/API question,
+not a certificate premise inserted into any finished theorem.

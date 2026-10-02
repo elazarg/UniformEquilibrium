@@ -1,0 +1,96 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
++/-- Strict individual rationality produces one actual trigger profile that is
++exact Nash for every sufficiently small positive paper rate. The target is
++fixed and the profile may depend on the approximation error, not the rate. -/
++theorem exists_discountedNash_allSmallRates_of_strictIR
++    (G : FiniteStageGame) (target : Payoff G.Player)
++    (htarget : target ∈ G.correlatedFeasiblePayoffs)
++    (hstrict : ∀ who, G.individualRationalLevel who < target who)
++    {ε : ℝ} (hε : 0 < ε) :
++    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
++      ∃ profile : G.BehaviorProfile,
++        ∀ lam : ℝ, 0 < lam → lam < threshold →
++          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
++          ∀ who, |G.discountedPayoff lam profile who - target who| < ε := by
++  classical
++  obtain ⟨margin, threshold, n, hn, cycle, profile,
++    hmargin, hthreshold, hthresholdOne, _hpure, hpunish, hdelivery, hsmall⟩ :=
++    exists_periodicApproxMinmaxTrigger_with_calendar_of_strictIR
++      G target htarget hstrict hε
++  let : NeZero n := hn
++  obtain ⟨bound, hboundAbs⟩ := Math.Probability.exists_abs_bound_of_finite
++    (fun action : (∀ player, G.Action player) => ‖G.payoff action‖)
++  have hbound (action : ∀ player, G.Action player) : ‖G.payoff action‖ ≤ bound := by
++    simpa only [abs_of_nonneg (norm_nonneg _)] using hboundAbs action
++  have hbound0 : 0 ≤ bound :=
++    (norm_nonneg (G.payoff (Classical.arbitrary (∀ player, G.Action player)))).trans
++      (hbound _)
++  have hcoordinate (who : G.Player) (action : ∀ player, G.Action player) :
++      |G.payoff action who| ≤ bound := by
++    exact (show |G.payoff action who| ≤ ‖G.payoff action‖ by
++      simpa only [Real.norm_eq_abs] using norm_le_pi_norm (G.payoff action) who).trans
++        (hbound action)
++  obtain ⟨β₀, hβ₀0, hβ₀1, hpatient⟩ :=
++    KernelGame.exists_discountFactor_threshold_one_step
++      (M := 2 * bound) (η := margin) (by positivity) hmargin
++  have hpatientThreshold : 0 < 1 - β₀ := by linarith
++  refine ⟨min threshold (1 - β₀), lt_min hthreshold hpatientThreshold,
++    (min_le_left _ _).trans hthresholdOne, profile, ?_⟩
++  intro lam hlam hlamThreshold
++  have hlamSource : lam < threshold := hlamThreshold.trans_le (min_le_left _ _)
++  have hlamPatient : lam < 1 - β₀ := hlamThreshold.trans_le (min_le_right _ _)
++  have hlamOne : lam ≤ 1 := hlamSource.le.trans hthresholdOne
++  let rate : G.DiscountRate := ⟨lam, hlam, hlamOne⟩
++  obtain ⟨hflow, hclose⟩ := hsmall lam hlam hlamSource
++  have hpatientRate : lam * (2 * bound) ≤ (1 - lam) * margin := by
++    have hβgt : β₀ < 1 - lam := by linarith
++    have hβ1 : 1 - lam < 1 := by linarith
++    simpa only [sub_sub_cancel] using (hpatient (1 - lam) hβgt hβ1).le
++  refine ⟨?_, hclose⟩
++  intro who deviation
++  have hphase (start : ℕ) : (G.individualRationalLevel who + margin) + margin ≤
++      G.kernel.discountedContinuationPayoff (1 - rate.1)
++        (fun time => cycle (Fin.ofNat n time)) start who := by
++    have h := hflow who start
++    change G.individualRationalLevel who + 2 * margin ≤
++      G.kernel.discountedContinuationPayoff (1 - rate.1)
++        (fun time => cycle (Fin.ofNat n time)) start who at h
++    linarith
++  have hcap := G.discounted_deviation_le_calendar_of_supported_cap
++    (fun time => cycle (Fin.ofNat n time)) profile rate who deviation
++    bound (G.individualRationalLevel who + margin) margin hmargin (hcoordinate who)
++    hphase (fun time history hs hp => hpunish who deviation time history hs hp)
++    hpatientRate
++  have hroot := hdelivery rate who
++  have hboundRoot : G.discountedPayoff lam (Function.update profile who deviation) who ≤
++      G.discountedPayoff lam profile who := hcap.trans_eq hroot.symm
++  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial, add_zero]
++    using! hboundRoot
++
++/-- Metric delivery, including the empty-player boundary, for the same actual
++profile chosen before all sufficiently small rates. -/
++theorem exists_discountedNash_close_allSmallRates_of_strictIR
++    (G : FiniteStageGame) (target : Payoff G.Player)
++    (htarget : target ∈ G.correlatedFeasiblePayoffs)
++    (hstrict : ∀ who, G.individualRationalLevel who < target who)
++    {ε : ℝ} (hε : 0 < ε) :
++    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
++      ∃ profile : G.BehaviorProfile,
++        ∀ lam : ℝ, 0 < lam → lam < threshold →
++          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
++          dist (G.discountedPayoff lam profile) target < ε := by
++  obtain ⟨threshold, hthreshold, hthresholdOne, profile, hsource⟩ :=
++    exists_discountedNash_allSmallRates_of_strictIR G target htarget hstrict hε
++  refine ⟨threshold, hthreshold, hthresholdOne, profile, ?_⟩
++  intro lam hlam hlamThreshold
++  obtain ⟨hnash, hclose⟩ := hsource lam hlam hlamThreshold
++  refine ⟨hnash, ?_⟩
++  rw [dist_eq_norm]
++  exact (pi_norm_lt_iff hε).mpr (fun who => by
++    simpa only [Pi.sub_apply, Real.norm_eq_abs] using hclose who)
++
++/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
+*** End Patch

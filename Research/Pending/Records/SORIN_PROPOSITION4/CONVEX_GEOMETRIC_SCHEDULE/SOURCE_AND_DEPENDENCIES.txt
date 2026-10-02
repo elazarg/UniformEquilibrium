@@ -1,0 +1,93 @@
+STATUS: Frozen static implementation draft; not compiled or axiom-checked.
+All shared editing, Lean/Lake checks, caches and Git operations remain root's.
+
+SOURCE AND MATHEMATICAL STEP
+Sorin (1986), Proposition 4, printed p.151, gives the connected-Caratheodory
+representation followed by the geometric schedule: a largest coefficient is
+at least 1/N, remove lambda from it, divide the residual coefficients by
+1-lambda, and repeat. All stages and residuals here are internally selected.
+The connected representation prerequisite follows the classical proof
+reproduced by Bernard Teissier (2004), Proposition 4.2, pp.220-221:
+https://library.slmath.org/books/Book51/files/07teissier.pdf
+Its separate frozen source record explains the normalized-barycentric
+version of the reflected-simplex argument and full preconnected scope.
+Supplied Sorin PDF SHA256:
+d09a8e78f37f9863ff40e969a90f03799967d05eb70ba28a93afab84ddfce56c
+
+OWNERSHIP / NON-DUPLICATION
+001 adds the elementary convex-hull affine peeling lemma to MathUE.Topology.
+It reuses the internally selected nonempty small family and Mathlib's finite
+convex coefficients and finite maximum, instead of assuming a large weight.
+002 promotes the previously checked paper's scalar geometric telescope to
+MathUE.RealSeries.GeometricAffineSchedule. The original private paper theorem
+delegates to the new owner, preserving its interface and all prior consumers.
+The generic schedule theorem also owns residual-state recursion and stage
+selection. Proposition 6 delegates to that schedule owner rather than retaining
+its copied choice recursion. MathUE imports no Literature or game semantics.
+003 reuses the existing actual mixedSequenceBehavior and its checked expected
+stage-payoff identity. A new shared paper helper exposes the exact discounted
+payoff of that actual behavioral profile. No second profile-law proof is added.
+The helper depends on the paper's own FiniteStageGame type, so it stays with
+that adapter rather than making production import Literature.
+004 adds both generic modules to MathUE. Regenerate exhaustive AxiomAudit.
+
+EXACT QUANTIFIERS AND BOUNDARIES
+The generic affine-step theorem takes any finite-dimensional real normed space,
+any preconnected source, any actual convex-hull point, and 0 <= weight < 1
+with weight * max(1, finrank) <= 1. It internally selects an actual source point
+and actual convex-hull residual. No finite/compact/path source premise or
+source nonemptiness, maximizer, coefficient or source-point certificate.
+The generic schedule accepts an actual bounded one-step relation in an
+arbitrary real-coordinate function space; from the initial region membership
+it selects a complete stage sequence with exact geometric delivered values.
+Neither coordinate index nor stage type needs finiteness/nonemptiness supplied.
+Its discount domain is 0 < weight <= 1, including weight one. No delivered
+value, orbit, limit, summability or stage schedule is supplied as a hypothesis.
+Proposition 4 retains literally 0 < lambda < 1/playerCount. Positive player
+count, max-dimension identity and lambda < 1 are derived internally. For zero
+players its stated hypotheses are contradictory. No lambda=0, lambda=1 or
+threshold equality is added to that paper theorem. Dimension zero remains
+valid in the unrestricted generic representation and peeling APIs.
+The actual feasible profile is behavioral on all realized-action histories;
+its mixed stage profile depends only on calendar time. This is feasibility,
+not an equilibrium or an assertion about unilateral deviation caps.
+Proposition 6's assumptions and conclusion are unchanged. The private scalar
+interface used by the pending P15 vertex unit is unchanged. P15's held final
+equality patch and all frozen P15 artifacts are unmodified.
+
+ORDER / EXACT BASE HASHES
+First accept and check the separate connected representation packet:
+/tmp/connected-convex-hull-representation.hYZuV5t9
+Then apply this packet's 001, 002, 003, 004 in order. New generic modules were
+absent in the observed shared checkout. New source payload SHA256s:
+ConnectedConvexHullAffineStep.lean:
+2bb0febc4daf30d1ba350d4cac3fa03a7e4a37d8aeda20cfa30a7588180ce2aa
+GeometricAffineSchedule.lean:
+32173945227b46295bdcac14a40ff8967511d2702657a61536a61347edb3bd6b
+Observed shared Literature/Sorin1986.lean SHA256:
+32306dff26b27f23707f10a4f73d335ff7134386d1c3223b4b6b47703ea69ba4
+003's exact future base after matrix/scalar/upper/vertices/lower-001:
+036c9709b57efefbd72721f03e8c329161e28f3aa3d617614a61fd452c70ca3b
+003's resulting future paper SHA256 (all six hunks matched exactly once):
+805186f6568a7730ca41b013039118f09a02b277d9dad677754e02c0a4ecbca8
+The P15 final equality is still held and was not included in this future base.
+Observed shared MathUE.lean SHA256:
+eccfb315401ec04dd3a64794e6f8ecbd2e66ce591abb00d05f79ee68381da9ce
+004's exact future base after scalar umbrella and connected umbrella:
+37358bbd1037f92f51b9378e4a3faa49b4f32112536efb158f2813741b5052d6
+004's resulting future umbrella SHA256 (both hunks matched exactly once):
+702bd92ae11190797082c3c0ebbcb4287ff4ba50ea2b74930b1414dd5062358b
+Independent contexts also match the current shared paper; these hashes make
+the intended pending-wave ordering explicit, not a claim it was applied.
+HASH_PATCHES_IN_MEMORY.pl reproduces these context checks and hashes without
+writing any source snapshot, build artifact or shared file.
+
+CHECKS / REMAINING GATES
+Static source and API inspection, 100-character added-Lean-line check,
+forbidden-trust-token scan of additions, and unique-context in-memory patch
+folding passed. No project script or compiler was run. AXIOMS.lean names the
+three new generic public closures, path adapter, literal P4 and unchanged P6.
+Only propext, Quot.sound and Classical.choice are expected; this is a manual
+harness, not an observed axiom result. Root must compile the generic modules
+and paper, run their axiom harness, regenerate the audit, and run the scoped
+project trust/import/docs checks before calling this proved or integrated.

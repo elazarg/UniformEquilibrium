@@ -1,0 +1,14 @@
+*** Begin Patch
+*** Update File: MathUE/Topology/ConnectedConvexHullAffineStep.lean
+@@
+   have hremainderSum : ∑ member ∈ family, remainder member = 1 := by
+     simp only [remainder, Finset.sum_div, Finset.sum_sub_distrib]
+-    simp only [Finset.sum_ite_eq', hcurrent, if_true, hsum]
++    simp only [Finset.sum_ite_eq', hcurrent, ite_true, hsum]
+     exact div_self hdenom
+@@
+     rw [Finset.sum_sub_distrib, hvalue]
+-    simp only [Finset.sum_ite_eq', hcurrent, if_true]
++    simp only [Finset.sum_ite_eq', hcurrent, ite_true]
+   refine ⟨current, hsubset hcurrent, next, hnext, ?_⟩
+*** End Patch

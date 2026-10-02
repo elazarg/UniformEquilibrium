@@ -1,0 +1,11 @@
+*** Begin Patch
+*** Update File: MathUE/Topology/ConnectedConvexHullAffineStep.lean
+@@
+     by_cases hequal : member = current
+-    · rw [if_pos hequal, hequal]
++    · rw [ite_eq_left hequal, hequal]
+       exact sub_nonneg.mpr hcurrentWeight
+-    · rw [if_neg hequal, sub_zero]
++    · rw [ite_eq_right hequal, sub_zero]
+       exact hnonneg member hmember
+*** End Patch

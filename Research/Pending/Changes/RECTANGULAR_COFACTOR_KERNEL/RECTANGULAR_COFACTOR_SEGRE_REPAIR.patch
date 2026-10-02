@@ -1,0 +1,18 @@
+*** Begin Patch
+*** Update File: MathUE/LinearAlgebra/RectangularCofactorKernel.lean
+@@
+   apply (eq_div_iff hpivot).2
+-  exact (signedMaximalMinors_mul_kernel_coordinate
+-    matrix vector hkernel coordinate pivot).symm.trans (mul_comm _ _)
++  calc
++    vector coordinate * signedMaximalMinors matrix pivot =
++        signedMaximalMinors matrix pivot * vector coordinate := mul_comm _ _
++    _ = signedMaximalMinors matrix coordinate * vector pivot :=
++      (signedMaximalMinors_mul_kernel_coordinate
++        matrix vector hkernel coordinate pivot).symm
++    _ = vector pivot * signedMaximalMinors matrix coordinate := mul_comm _ _
+*** Update File: MathUE/LinearAlgebra/BilinearSegreExclusion.lean
+@@
+-# The degree-six maximal-minor obstruction to a bilinear common zero
++# A maximal-minor obstruction to a bilinear common zero
+*** End Patch

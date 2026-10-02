@@ -1,0 +1,38 @@
+import MathUE.LinearAlgebra.RectangularCofactorKernel
+import Mathlib.RingTheory.MvPolynomial.Homogeneous
+
+/-! # Homogeneity of canonical three-row signed maximal minors -/
+
+namespace Math.LinearAlgebra
+
+variable {σ R : Type*} [CommRing R]
+
+/-- The canonical three-by-three determinant of degree-d homogeneous entries has degree 3d.
+Zero determinants are included; exact total degree additionally requires nonvanishing. -/
+theorem isHomogeneous_det_fin_three
+    (matrix : Matrix (Fin 3) (Fin 3) (MvPolynomial σ R)) (degree : ℕ)
+    (hentry : ∀ row column, (matrix row column).IsHomogeneous degree) :
+    matrix.det.IsHomogeneous (3 * degree) := by
+  have hterm (a b c d e f : Fin 3) :
+      (matrix a b * matrix c d * matrix e f).IsHomogeneous (3 * degree) := by
+    convert ((hentry a b).mul (hentry c d)).mul (hentry e f) using 1
+    omega
+  rw [Matrix.det_fin_three]
+  exact (((((hterm 0 0 1 1 2 2).sub (hterm 0 0 1 2 2 1)).sub
+    (hterm 0 1 1 0 2 2)).add (hterm 0 1 1 2 2 0)).add
+      (hterm 0 2 1 0 2 1)).sub (hterm 0 2 1 1 2 0)
+
+/-- All four canonical signed minors are homogeneous, without any rank premise. -/
+theorem isHomogeneous_signedMaximalMinors_fin_three
+    (matrix : Matrix (Fin 3) (Fin 4) (MvPolynomial σ R)) (degree : ℕ)
+    (hentry : ∀ row column, (matrix row column).IsHomogeneous degree)
+    (column : Fin 4) :
+    (signedMaximalMinors matrix column).IsHomogeneous (3 * degree) := by
+  have hsign : ((-1 : MvPolynomial σ R) ^ column.val).IsHomogeneous 0 := by
+    simpa using ((MvPolynomial.isHomogeneous_one (σ := σ) R).neg).pow column.val
+  have hdet := isHomogeneous_det_fin_three
+    (matrix.submatrix id column.succAbove) degree
+    (fun row index => hentry row (column.succAbove index))
+  simpa only [signedMaximalMinors, zero_add] using hsign.mul hdet
+
+end Math.LinearAlgebra

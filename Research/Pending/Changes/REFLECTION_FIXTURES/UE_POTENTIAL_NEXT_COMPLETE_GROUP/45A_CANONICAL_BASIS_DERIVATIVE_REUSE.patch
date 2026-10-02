@@ -1,0 +1,17 @@
+*** Begin Patch
+*** Update File: MathUE/Analysis/RationalPolynomialCoordinateDerivatives.lean
+@@
+       evalReal point (formalPartial coordinate expression) := by
+-  rw [Math.coordinatePartial, (hasFDerivAt_evalReal expression point).fderiv,
+-    differential_apply, Finset.sum_eq_single coordinate]
+-  · simp
+-  · intro other _ hne
+-    rw [Pi.single_eq_of_ne hne 1, mul_zero]
+-  · intro hnot
+-    exact False.elim (hnot (Finset.mem_univ coordinate))
++  rw [Math.coordinatePartial, (hasFDerivAt_evalReal expression point).fderiv]
++  have hbasis : Math.piBasisVector coordinate = Pi.single coordinate (1 : ℝ) := by
++    ext index
++    simp [Math.piBasisVector, Pi.single_apply, eq_comm]
++  simpa only [hbasis] using differential_piBasisVector point expression coordinate
+*** End Patch

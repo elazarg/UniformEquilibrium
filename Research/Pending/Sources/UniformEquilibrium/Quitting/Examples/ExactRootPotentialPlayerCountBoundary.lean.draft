@@ -1,0 +1,134 @@
+import UniformEquilibrium.Quitting.Projective.ExactRootPotentialRestriction
+import UniformEquilibrium.Quitting.Root.SingletonRootEndpoints
+
+/-! # Literal one-player, empty-player and zero-table solo-loop boundary tests
+
+The one-player contradiction is an exact absorbing self-loop at the actual
+singleton, with no regularity or polynomial restriction. Empty players have
+zero absorption for every root. The zero-table test uses one sure quitter,
+not the existing two-sure-quitter ZeroRewardEntryFloor construction.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+/-- Any one-player table has its literal singleton as an exact charge-one self-loop. -/
+theorem exists_singlePlayer_singleton_exact_charged_selfLoop [Subsingleton ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι) :
+    ∃ root : ι → PMF Bool,
+      root = quittingSoloStationaryRoot owner (PMF.pure true) ∧
+      IsεQuittingRootNash reward (quittingSoloReward reward owner) 0 root ∧
+      quittingRootSuccessorPayoff reward (quittingSoloReward reward owner) root =
+        quittingSoloReward reward owner ∧
+      quittingRootAbsorptionMass root = 1 := by
+  let root := quittingSoloStationaryRoot owner (PMF.pure true)
+  have hnash : IsεQuittingRootEndpointNash reward (quittingSoloReward reward owner) 0 root := by
+    intro who
+    have heq : who = owner := Subsingleton.elim _ _
+    subst who
+    have hdifference : quittingRootEndpointDifference reward
+        (quittingSoloReward reward owner) root owner = 0 := by
+      rw [quittingRootEndpointDifference,
+        quittingRootQuitPayoff_soloStationaryRoot_owner,
+        quittingRootContinuePayoff_soloStationaryRoot_owner]
+      exact sub_self _
+    simp only [hdifference, mul_zero, neg_zero, le_refl, and_self]
+  refine ⟨root, rfl, (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
+    reward (quittingSoloReward reward owner) root).mp hnash, ?_, ?_⟩
+  · simp only [root, quittingRootSuccessorPayoff_solo, PMF.pure_apply,
+      ite_true, Bool.false_eq_true, ite_false, ENNReal.toReal_one,
+      ENNReal.toReal_zero, one_mul, zero_mul, add_zero]
+  · simp only [root, quittingRootAbsorptionMass_soloStationaryRoot,
+      PMF.pure_apply, ite_true, ENNReal.toReal_one]
+
+/-- All functions are rejected in the one-player boundary, whenever the actual
+singleton belongs to the tested box. No smoothness or sign hypothesis is needed. -/
+theorem not_isQuittingFullExactRootPotential_of_singlePlayer [Subsingleton ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι)
+    (bound : ℝ) (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+    (potential : Payoff ι → ℝ) :
+    ¬ IsQuittingFullExactRootPotential reward bound potential := by
+  intro hpotential
+  obtain ⟨root, _, hnash, hsuccessor, hcharge⟩ :=
+    exists_singlePlayer_singleton_exact_charged_selfLoop reward owner
+  have h := hpotential (quittingSoloReward reward owner)
+    (fun who => hreward (quittingSingletonTerminal owner) who) root hnash
+  rw [hsuccessor, hcharge] at h
+  linarith
+
+/-- With no players every product root has zero absorption, not merely a selected root. -/
+theorem quittingRootAbsorptionMass_eq_zero_of_isEmpty [IsEmpty ι]
+    (root : ι → PMF Bool) : quittingRootAbsorptionMass root = 0 := by
+  have heq : root = quittingAllContinueRoot := by
+    funext who
+    exact isEmptyElim who
+  rw [heq, quittingRootAbsorptionMass, quittingStationaryContinueMass_allContinueRoot]
+  exact sub_self _
+
+/-- Empty-player constant potentials satisfy the complete exact-root relation. -/
+theorem constant_isQuittingFullExactRootPotential_of_isEmpty [IsEmpty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (bound constant : ℝ) :
+    IsQuittingFullExactRootPotential reward bound (fun _ => constant) := by
+  intro tail _ root _
+  rw [quittingRootAbsorptionMass_eq_zero_of_isEmpty root, add_zero]
+
+/-- The empty-player conclusion also holds on the entire actual robust relation. -/
+theorem constant_isQuittingRobustPotential_of_isEmpty [IsEmpty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tolerance bound constant : ℝ) :
+    (quittingFloorFreeRobustChargedRelation reward tolerance bound).IsPotential
+      (fun _ => constant) := by
+  intro edge
+  change constant + quittingRootAbsorptionMass
+    (quittingRootOfSimplex edge.1.1.2) ≤ constant
+  rw [quittingRootAbsorptionMass_eq_zero_of_isEmpty, add_zero]
+
+/-- The printed zero-reward test: one sure quitter, exact Nash, source=target=0,
+and absorption exactly one. The witness is produced for any supplied owner. -/
+theorem exists_zeroReward_solo_exact_charged_selfLoop (owner : ι) :
+    ∃ root : ι → PMF Bool,
+      root = quittingSoloStationaryRoot owner (PMF.pure true) ∧
+      IsεQuittingRootNash (fun _ _ => (0 : ℝ)) (fun _ => 0) 0 root ∧
+      quittingRootSuccessorPayoff (fun _ _ => (0 : ℝ)) (fun _ => 0) root =
+        (fun _ => 0) ∧ quittingRootAbsorptionMass root = 1 := by
+  let root := quittingSoloStationaryRoot owner (PMF.pure true)
+  have hnash : IsεQuittingRootEndpointNash (fun _ _ => (0 : ℝ)) (fun _ => 0) 0 root := by
+    intro who
+    have hdifference : quittingRootEndpointDifference (fun _ _ => (0 : ℝ))
+        (fun _ => 0) root who = 0 := by
+      by_cases heq : who = owner
+      · subst who
+        simp only [quittingRootEndpointDifference,
+          quittingRootQuitPayoff_soloStationaryRoot_owner,
+          quittingRootContinuePayoff_soloStationaryRoot_owner,
+          quittingSoloReward, sub_self]
+      · rw [quittingRootEndpointDifference,
+          quittingRootQuitPayoff_soloStationaryRoot_other (fun _ _ => (0 : ℝ)) heq,
+          quittingRootContinuePayoff_soloStationaryRoot_other (fun _ _ => (0 : ℝ)) heq]
+        simp only [quittingSoloReward, quittingSingletonCollisionReward,
+          mul_zero, add_zero, sub_self]
+    simp only [hdifference, mul_zero, neg_zero, le_refl, and_self]
+  refine ⟨root, rfl, (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
+    (fun _ _ => (0 : ℝ)) (fun _ => 0) root).mp hnash, ?_, ?_⟩
+  · funext who
+    rw [quittingRootSuccessorPayoff_solo]
+    simp only [quittingSoloReward, mul_zero, add_zero]
+  · simp only [root, quittingRootAbsorptionMass_soloStationaryRoot,
+      PMF.pure_apply, ite_true, ENNReal.toReal_one]
+
+/-- The solo self-loop excludes every zero-table full-root potential in any nonnegative box. -/
+theorem not_isQuittingFullExactRootPotential_zeroReward
+    (owner : ι) {bound : ℝ} (hbound : 0 ≤ bound) (potential : Payoff ι → ℝ) :
+    ¬ IsQuittingFullExactRootPotential (fun _ _ => (0 : ℝ)) bound potential := by
+  intro hpotential
+  obtain ⟨root, _, hnash, hsuccessor, hcharge⟩ :=
+    exists_zeroReward_solo_exact_charged_selfLoop owner
+  have h := hpotential (fun _ => 0) (fun _ => by simpa only [abs_zero] using hbound)
+    root hnash
+  rw [hsuccessor, hcharge] at h
+  linarith
+
+end GameTheory

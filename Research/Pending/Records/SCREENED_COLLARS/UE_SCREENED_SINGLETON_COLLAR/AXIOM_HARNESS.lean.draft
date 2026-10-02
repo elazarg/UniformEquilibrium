@@ -1,0 +1,58 @@
+import UniformEquilibrium.Diagnostics.Quitting.RationalScreenedSingletonFiberCollar
+
+#print axioms GameTheory.continuous_quittingTerminalLawSingletonMass
+#print axioms GameTheory.quittingTerminalOutcomeMass_never_mul_complement_le_singletonMass
+#print axioms GameTheory.terminalSemanticLawCarrier_never_mul_complement_le_singletonMass
+#print axioms GameTheory.minimumTerminalSemanticLaw_never_eq_zero_of_singletonMass_eq_zero
+#print axioms GameTheory.minimumTerminalSemanticLaw_singletonMass_pos_of_screenedPolynomial_ne_zero
+#print axioms Math.isClosed_graph_closure_range_of_uniform_lipschitz
+#print axioms GameTheory.quittingTerminalOutcomeMass_reward_independent
+#print axioms GameTheory.lipschitzWith_actualTerminalSemanticLaw_reward
+#print axioms GameTheory.isClosed_terminalSemanticLawCarrier_reward_graph
+#print axioms Math.exists_positive_near_zero_collar_of_compact
+#print axioms GameTheory.exists_minimum_terminalSemanticLawCarrier_exploitability
+#print axioms GameTheory.exists_screenedMinimumSingletonCollar
+#print axioms GameTheory.isCompact_screenedPositiveSingletonFiberJointCarrier
+#print axioms GameTheory.exists_screenedSingletonFiberUniformCollar
+#print axioms GameTheory.exists_rationalGenericScreenedSingletonFiber_with_uniformCollar
+
+namespace GameTheory
+
+/-- Separate same-witness consumer: the same rational coordinates, maximizing
+singletons and gamma are selected before every fiber/profile collar quantifier. -/
+example
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hno : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ (scale : ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℚ)
+      (singletons : Fin 4 → ℝ) (gamma : ℚ) (floor radius : ℝ),
+      0 < scale ∧
+      (∀ terminal who, |scaleQuittingReward scale reward terminal who| < 1) ∧
+      0 < quittingTerminalExploitabilityInf
+        (quittingOwnSingletonReward
+          (fun who => scaleQuittingReward scale reward (quittingSingletonTerminal who) who)
+          (fun coordinate => (coordinates coordinate : ℝ))) ∧
+      IsRationalGenericScreenedSingletonFiber coordinates singletons gamma ∧
+      0 < floor ∧ 0 < radius ∧
+      ∀ otherSingletons : Fin 4 → ℝ, (∀ who, |otherSingletons who| ≤ 1) →
+        quittingTerminalExploitabilityInf
+            (quittingOwnSingletonReward singletons
+              (fun coordinate => (coordinates coordinate : ℝ))) / 2 ≤
+          quittingTerminalExploitabilityInf
+            (quittingOwnSingletonReward otherSingletons
+              (fun coordinate => (coordinates coordinate : ℝ))) →
+        ∀ profile : (quittingGame (quittingOwnSingletonReward otherSingletons
+            (fun coordinate => (coordinates coordinate : ℝ)))).BehaviorProfile,
+          quittingTerminalExploitability
+              (quittingOwnSingletonReward otherSingletons
+                (fun coordinate => (coordinates coordinate : ℝ))) profile ≤
+            quittingTerminalExploitabilityInf
+              (quittingOwnSingletonReward otherSingletons
+                (fun coordinate => (coordinates coordinate : ℝ))) + radius →
+          floor ≤ quittingTerminalLawSingletonMass
+            (quittingTerminalOutcomeMass
+              (quittingOwnSingletonReward otherSingletons
+                (fun coordinate => (coordinates coordinate : ℝ))) profile) :=
+  exists_rationalGenericScreenedSingletonFiber_with_uniformCollar reward hno
+
+end GameTheory

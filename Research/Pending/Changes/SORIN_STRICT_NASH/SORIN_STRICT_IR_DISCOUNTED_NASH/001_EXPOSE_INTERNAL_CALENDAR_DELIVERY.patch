@@ -1,0 +1,55 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-theorem exists_periodicApproxMinmaxTrigger_of_strictIR
++private theorem exists_periodicApproxMinmaxTrigger_with_calendar_of_strictIR
+@@
+         G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤
+           G.individualRationalLevel who + margin) ∧
++      (∀ (rate : G.DiscountRate) (who : G.Player),
++        G.discountedPayoff rate.1 profile who =
++          G.kernel.discountedContinuationPayoff (1 - rate.1)
++            (fun time => cycle (Fin.ofNat n time)) 0 who) ∧
+       ∀ lam : ℝ, 0 < lam → lam < threshold →
+@@
+   refine ⟨slack / 4, 1 - β₀, n, inferInstance, cycle, profile,
+-    by positivity, hthreshold, hthresholdOne, hpure, hpunish, ?_⟩
++    by positivity, hthreshold, hthresholdOne, hpure, hpunish, hdelivery, ?_⟩
+@@
+-/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
++/-- The internally produced calendar profile, preserving the original source
++interface. Exact delivery remains available to the Nash consumer below. -/
++theorem exists_periodicApproxMinmaxTrigger_of_strictIR
++    (G : FiniteStageGame) (target : Payoff G.Player)
++    (htarget : target ∈ G.correlatedFeasiblePayoffs)
++    (hstrict : ∀ who, G.individualRationalLevel who < target who)
++    {ε : ℝ} (hε : 0 < ε) :
++    ∃ (margin threshold : ℝ) (n : ℕ) (_ : NeZero n)
++      (cycle : Fin n → (∀ player, G.Action player)) (profile : G.BehaviorProfile),
++      0 < margin ∧ 0 < threshold ∧ threshold ≤ 1 ∧
++      (∀ (time : ℕ) (history : G.repeatedGame.Hist time),
++        (∀ k, (history.1 k).2 = cycle (Fin.ofNat n k)) →
++        ∀ player, profile player time history =
++          PMF.pure (cycle (Fin.ofNat n time) player)) ∧
++      (∀ (who : G.Player) (deviation : G.BehaviorStrategy who)
++        (time : ℕ) (history : G.repeatedGame.Hist time),
++        history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
++          PUnit.unit time).support →
++        (¬∀ k, (history.1 k).2 = cycle (Fin.ofNat n k)) →
++        G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤
++          G.individualRationalLevel who + margin) ∧
++      ∀ lam : ℝ, 0 < lam → lam < threshold →
++        (∀ (who : G.Player) (start : ℕ),
++          G.individualRationalLevel who + 2 * margin ≤
++            G.kernel.discountedContinuationPayoff (1 - lam)
++              (fun time => cycle (Fin.ofNat n time)) start who) ∧
++        ∀ who, |G.discountedPayoff lam profile who - target who| < ε := by
++  obtain ⟨margin, threshold, n, hn, cycle, profile,
++    hmargin, hthreshold, hthresholdOne, hpure, hpunish, _hdelivery, hsmall⟩ :=
++    exists_periodicApproxMinmaxTrigger_with_calendar_of_strictIR
++      G target htarget hstrict hε
++  exact ⟨margin, threshold, n, hn, cycle, profile,
++    hmargin, hthreshold, hthresholdOne, hpure, hpunish, hsmall⟩
++
++/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
+*** End Patch

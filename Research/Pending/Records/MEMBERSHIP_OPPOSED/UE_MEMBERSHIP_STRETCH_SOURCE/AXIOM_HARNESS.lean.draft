@@ -1,0 +1,5 @@
+import UniformEquilibrium.Diagnostics.Quitting.MembershipStretchWorstTableSource
+
+#print axioms GameTheory.quittingTerminalExploitabilityInf_le_one_of_unitReward
+#print axioms GameTheory.exists_maximum_quittingTerminalExploitabilityInf_unitReward
+#print axioms GameTheory.exists_membershipStretch_singletonFiber_source_of_positiveInf

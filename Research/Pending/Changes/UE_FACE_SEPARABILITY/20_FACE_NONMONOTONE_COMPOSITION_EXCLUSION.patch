@@ -1,0 +1,201 @@
+*** Begin Patch
+*** Add File: MathUE/Analysis/FaceDriftScalarCompositionExclusion.lean
++import MathUE.Analysis.FaceDriftAdditiveExclusion
++import Mathlib.Analysis.Calculus.ContDiff.Deriv
++import Mathlib.Analysis.Convex.PathConnected
++import Mathlib.Topology.Order.IntermediateValue
++
++/-! # Face-only exclusion of regular, not necessarily monotone, scalar compositions
++
++Equality is required only on the closed box. The outer derivative's nonvanishing
++and single sign on the compact connected lower-boundary image are outputs.
++-/
++
++noncomputable section
++
++namespace Math
++
++open Set
++open scoped BigOperators
++
++variable {ι : Type*} [Fintype ι] [DecidableEq ι] [Nonempty ι]
++
++/-- Every lower face contains the lower vertex, so their union is star-convex
++there and path-connected. Upper and lower intersections are included. -/
++theorem lowerBoxBoundary_isPathConnected
++    (lower upper : ι → ℝ) (hbox : lower ≤ upper) :
++    IsPathConnected (lowerBoxBoundary lower upper) := by
++  have hstar : StarConvex ℝ lower (lowerBoxBoundary lower upper) := by
++    intro point hpoint first second hfirst hsecond hsum
++    refine ⟨(convex_Icc lower upper) ⟨le_refl _, hbox⟩ hpoint.1
++      hfirst hsecond hsum, ?_⟩
++    obtain ⟨owner, howner⟩ := hpoint.2
++    refine ⟨owner, ?_⟩
++    change first * lower owner + second * point owner = lower owner
++    rw [howner, ← add_mul, hsum, one_mul]
++  exact hstar.isPathConnected ⟨⟨le_refl _, hbox⟩, Classical.arbitrary ι, rfl⟩
++
++/-- A continuous inner map sends the lower boundary to a nonempty compact
++path-connected real interval, which may degenerate to a singleton. -/
++theorem lowerBoxBoundary_inner_image
++    (lower upper : ι → ℝ) (hbox : lower ≤ upper)
++    (inner : (ι → ℝ) → ℝ) (hinner : ContinuousOn inner (Icc lower upper)) :
++    IsCompact (inner '' lowerBoxBoundary lower upper) ∧
++      IsPathConnected (inner '' lowerBoxBoundary lower upper) ∧
++      OrdConnected (inner '' lowerBoxBoundary lower upper) := by
++  have hcontinuous := hinner.mono (fun _ hx => hx.1)
++  have hpath := (lowerBoxBoundary_isPathConnected lower upper hbox).image' hcontinuous
++  exact ⟨(isCompact_lowerBoxBoundary lower upper).image_of_continuousOn hcontinuous,
++    hpath, hpath.isConnected.isPreconnected.ordConnected⟩
++
++/-- A box-only composition identity identifies the ambient derivative at
++boundary points as well as interior points, with no neighborhood identity. -/
++theorem box_fderiv_scalar_composition_of_eqOn
++    (lower upper point : ι → ℝ) (potential inner : (ι → ℝ) → ℝ) (outer : ℝ → ℝ)
++    (hwidth : ∀ who, lower who < upper who) (hpoint : point ∈ Icc lower upper)
++    (heq : EqOn potential (outer ∘ inner) (Icc lower upper))
++    (hpotential : DifferentiableAt ℝ potential point)
++    (hinner : DifferentiableAt ℝ inner point)
++    (houter : DifferentiableAt ℝ outer (inner point)) :
++    fderiv ℝ potential point = deriv outer (inner point) • fderiv ℝ inner point := by
++  have hcomposition := houter.hasDerivAt.comp_hasFDerivAt point hinner.hasFDerivAt
++  exact (box_fderiv_eq_of_eqOn lower upper point potential (outer ∘ inner)
++    hwidth hpoint heq hpotential hcomposition.differentiableAt).trans hcomposition.fderiv
++
++/-- Positive source-face drift produces nonvanishing and a single sign of
++the outer derivative on the entire lower-boundary image. No monotonicity of
++the outer function, and no sign outside that image, is assumed. -/
++theorem box_face_scalar_composition_outer_sign
++    (upper : ι → ℝ) (matrix : ι → ι → ℝ)
++    (potential inner : (ι → ℝ) → ℝ) (outer : ℝ → ℝ) (outerDomain : Set ℝ)
++    (hwidth : ∀ who, 0 < upper who)
++    (hpotential : ∀ point ∈ Icc (0 : ι → ℝ) upper, DifferentiableAt ℝ potential point)
++    (hinner : ∀ point ∈ Icc (0 : ι → ℝ) upper, DifferentiableAt ℝ inner point)
++    (houterOpen : IsOpen outerDomain) (houter : ContDiffOn ℝ 1 outer outerDomain)
++    (himage : MapsTo inner (Icc (0 : ι → ℝ) upper) outerDomain)
++    (heq : EqOn potential (outer ∘ inner) (Icc (0 : ι → ℝ) upper))
++    (hdrift : ∀ point ∈ Icc (0 : ι → ℝ) upper, ∀ owner, point owner = 0 →
++      0 < fderiv ℝ potential point (point - fun other => matrix other owner)) :
++    (∀ value ∈ inner '' lowerBoxBoundary 0 upper, deriv outer value ≠ 0) ∧
++      ((∀ value ∈ inner '' lowerBoxBoundary 0 upper, 0 < deriv outer value) ∨
++        (∀ value ∈ inner '' lowerBoxBoundary 0 upper, deriv outer value < 0)) := by
++  have houterDiff : ∀ point ∈ Icc (0 : ι → ℝ) upper,
++      DifferentiableAt ℝ outer (inner point) := by
++    intro point hpoint
++    exact (houter.differentiableOn_one _ (himage hpoint)).differentiableAt
++      (houterOpen.mem_nhds (himage hpoint))
++  have hnonzero : ∀ value ∈ inner '' lowerBoxBoundary 0 upper, deriv outer value ≠ 0 := by
++    rintro value ⟨point, hpoint, rfl⟩ hzero
++    obtain ⟨owner, howner⟩ := hpoint.2
++    have hpositive := hdrift point hpoint.1 owner howner
++    rw [box_fderiv_scalar_composition_of_eqOn 0 upper point potential inner outer
++      hwidth hpoint.1 heq (hpotential point hpoint.1) (hinner point hpoint.1)
++      (houterDiff point hpoint.1), hzero, zero_smul] at hpositive
++    simpa using hpositive
++  have hcontinuous : ContinuousOn inner (Icc (0 : ι → ℝ) upper) :=
++    fun point hpoint => (hinner point hpoint).continuousAt.continuousWithinAt
++  have hinterval := lowerBoxBoundary_inner_image 0 upper (fun who => (hwidth who).le)
++    inner hcontinuous
++  have hsubset : inner '' lowerBoxBoundary 0 upper ⊆ outerDomain := by
++    rintro value ⟨point, hpoint, rfl⟩
++    exact himage hpoint.1
++  have hderivContinuous :=
++    (houter.continuousOn_deriv_of_isOpen houterOpen le_rfl).mono hsubset
++  have hsign := hinterval.2.1.isConnected.isPreconnected.mapsTo_Ioi_or_Iio
++    hderivContinuous hnonzero
++  refine ⟨hnonzero, ?_⟩
++  rcases hsign with hpositive | hnegative
++  · exact Or.inl (fun _ hvalue => hpositive hvalue)
++  · exact Or.inr (fun _ hvalue => hnegative hvalue)
++
++/-- The source's nonmonotone scalar-composition exclusion. Each component is
++C¹ on an explicit open neighborhood of its interval, and the outer function
++is C¹ on an open convex real interval containing the entire inner image.
++The identity itself is only on the box, not on those neighborhoods. -/
++theorem not_positive_box_face_drift_of_scalar_composition
++    (upper : ι → ℝ) (matrix : ι → ι → ℝ) (weight : ι → ℝ)
++    (potential : (ι → ℝ) → ℝ) (constant : ℝ) (component : ι → ℝ → ℝ)
++    (componentDomain : ι → Set ℝ) (outer : ℝ → ℝ) (outerDomain : Set ℝ)
++    (hwidth : ∀ who, 0 < upper who)
++    (hdiagonal : ∀ who, matrix who who = 0)
++    (hupper : ∀ other owner, matrix other owner < upper other)
++    (hweight : ∀ who, 0 ≤ weight who) (hweightSum : ∑ who, weight who = 1)
++    (himage : ∀ other, 0 ≤ ∑ owner, matrix other owner * weight owner)
++    (hpotential : ∀ point ∈ Icc (0 : ι → ℝ) upper, DifferentiableAt ℝ potential point)
++    (hcomponentOpen : ∀ who, IsOpen (componentDomain who))
++    (hcomponentInterval : ∀ who, Icc 0 (upper who) ⊆ componentDomain who)
++    (hcomponent : ∀ who, ContDiffOn ℝ 1 (component who) (componentDomain who))
++    (houterDomain : IsOpen outerDomain ∧ Convex ℝ outerDomain)
++    (houter : ContDiffOn ℝ 1 outer outerDomain)
++    (hinnerImage : MapsTo (boxAdditiveFunction constant component)
++      (Icc (0 : ι → ℝ) upper) outerDomain)
++    (heq : EqOn potential (outer ∘ boxAdditiveFunction constant component)
++      (Icc (0 : ι → ℝ) upper)) :
++    ¬ (∀ point ∈ Icc (0 : ι → ℝ) upper, ∀ owner, point owner = 0 →
++      0 < fderiv ℝ potential point (point - fun other => matrix other owner)) := by
++  intro hdrift
++  have hcomponentDiff : ∀ who value, value ∈ Icc 0 (upper who) →
++      DifferentiableAt ℝ (component who) value := by
++    intro who value hvalue
++    exact ((hcomponent who).differentiableOn_one value
++      (hcomponentInterval who hvalue)).differentiableAt
++      ((hcomponentOpen who).mem_nhds (hcomponentInterval who hvalue))
++  let inner := boxAdditiveFunction constant component
++  have hinnerDiff : ∀ point ∈ Icc (0 : ι → ℝ) upper, DifferentiableAt ℝ inner point := by
++    intro point hpoint
++    exact (hasFDerivAt_boxAdditiveFunction constant component point
++      (fun who => hcomponentDiff who (point who) ⟨hpoint.1 who, hpoint.2 who⟩)).differentiableAt
++  have houterDiff : ∀ point ∈ Icc (0 : ι → ℝ) upper,
++      DifferentiableAt ℝ outer (inner point) := by
++    intro point hpoint
++    exact (houter.differentiableOn_one _ (hinnerImage hpoint)).differentiableAt
++      (houterDomain.1.mem_nhds (hinnerImage hpoint))
++  have hsign := box_face_scalar_composition_outer_sign upper matrix potential inner outer
++    outerDomain hwidth hpotential hinnerDiff houterDomain.1 houter hinnerImage heq hdrift
++  obtain hpositive | hnegative := hsign.2
++  · have hinnerDrift : ∀ point ∈ Icc (0 : ι → ℝ) upper, ∀ owner, point owner = 0 →
++        0 < fderiv ℝ inner point (point - fun other => matrix other owner) := by
++      intro point hpoint owner howner
++      have hvaluePositive := hpositive (inner point) ⟨point, ⟨hpoint, owner, howner⟩, rfl⟩
++      have hsource := hdrift point hpoint owner howner
++      rw [box_fderiv_scalar_composition_of_eqOn 0 upper point potential inner outer
++        hwidth hpoint heq (hpotential point hpoint) (hinnerDiff point hpoint)
++        (houterDiff point hpoint)] at hsource
++      change 0 < deriv outer (inner point) *
++        fderiv ℝ inner point (point - fun other => matrix other owner) at hsource
++      exact (mul_pos_iff_of_pos_left hvaluePositive).mp hsource
++    exact not_positive_box_face_drift_of_additive upper matrix weight inner constant component
++      hwidth hdiagonal hupper hweight hweightSum himage hinnerDiff hcomponentDiff
++      (fun _ _ => rfl) hinnerDrift
++  · have hnegativeDiff : ∀ point ∈ Icc (0 : ι → ℝ) upper,
++        DifferentiableAt ℝ (fun input => -inner input) point :=
++      fun point hpoint => (hinnerDiff point hpoint).neg
++    have hnegativeDrift : ∀ point ∈ Icc (0 : ι → ℝ) upper, ∀ owner, point owner = 0 →
++        0 < fderiv ℝ (fun input => -inner input) point
++          (point - fun other => matrix other owner) := by
++      intro point hpoint owner howner
++      have hvalueNegative := hnegative (inner point) ⟨point, ⟨hpoint, owner, howner⟩, rfl⟩
++      have hsource := hdrift point hpoint owner howner
++      rw [box_fderiv_scalar_composition_of_eqOn 0 upper point potential inner outer
++        hwidth hpoint heq (hpotential point hpoint) (hinnerDiff point hpoint)
++        (houterDiff point hpoint)] at hsource
++      change 0 < deriv outer (inner point) *
++        fderiv ℝ inner point (point - fun other => matrix other owner) at hsource
++      have hinnerNegative : fderiv ℝ inner point
++          (point - fun other => matrix other owner) < 0 := by
++        nlinarith
++      rw [(hinnerDiff point hpoint).hasFDerivAt.neg.fderiv]
++      simpa using neg_pos.mpr hinnerNegative
++    have hnegativeEq : EqOn (fun input => -inner input)
++        (boxAdditiveFunction (-constant) (fun who value => -component who value))
++        (Icc (0 : ι → ℝ) upper) := by
++      intro point _
++      simp [inner, boxAdditiveFunction, Finset.sum_neg_distrib]
++    exact not_positive_box_face_drift_of_additive upper matrix weight (fun input => -inner input)
++      (-constant) (fun who value => -component who value) hwidth hdiagonal hupper
++      hweight hweightSum himage hnegativeDiff
++      (fun who value hvalue => (hcomponentDiff who value hvalue).neg)
++      hnegativeEq hnegativeDrift
++
++end Math
+*** End Patch

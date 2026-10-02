@@ -1,0 +1,108 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Quitting/Terminal/RationalPositiveExploitabilityApproximation.lean
++import UniformEquilibrium.Quitting.Root.RationalReward
++import UniformEquilibrium.Quitting.Terminal.StrictUnitRewardScale
++import Mathlib.Algebra.Order.Archimedean.Basic
++import Mathlib.Tactic.Linarith
++import Mathlib.Tactic.NormNum
++
++/-! # An initial positive-eta table can be rational in all sixty coordinates
++
++This is Section 5.1 of the generic screened-root/singleton-collar packet.
++It rationalizes the entire INITIAL actual reward table using uniform full-
++behavior payoff robustness. It does not assert a rational singleton maximizer
++and does not replace the separate generic screened-fiber source selection.
++-/
++
++namespace GameTheory
++
++/-- For a strict unit table with positive actual eta, select ONE rational
++table in the same strict cube, uniformly within eta/4, retaining at least
++half the original infimum. All terminal recipient entries are rational. -/
++theorem exists_rationalQuittingReward_close_of_strictUnit_positive_inf
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    (hunit : ∀ terminal who, |reward terminal who| < 1)
++    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
++    ∃ rational : RationalQuittingReward 4,
++      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who| < 1) ∧
++      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who -
++        reward terminal who| < quittingTerminalExploitabilityInf reward / 4) ∧
++      quittingTerminalExploitabilityInf reward / 2 ≤
++        quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
++      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) := by
++  let radius := quittingTerminalExploitabilityInf reward / 4
++  have hradius : 0 < radius := div_pos hpositive (by norm_num)
++  have hexists : ∀ terminal who, ∃ rational : ℚ,
++      |(rational : ℝ)| < 1 ∧ |(rational : ℝ) - reward terminal who| < radius := by
++    intro terminal who
++    have hbounds := abs_lt.mp (hunit terminal who)
++    have hlower : max (-1) (reward terminal who - radius) < reward terminal who :=
++      max_lt_iff.mpr ⟨hbounds.1, by linarith⟩
++    have hupper : reward terminal who < min 1 (reward terminal who + radius) :=
++      lt_min_iff.mpr ⟨hbounds.2, by linarith⟩
++    obtain ⟨rational, hleft, hright⟩ := exists_rat_btwn (hlower.trans hupper)
++    refine ⟨rational, abs_lt.mpr ⟨?_, ?_⟩, abs_lt.mpr ⟨?_, ?_⟩⟩
++    · exact (le_max_left _ _).trans_lt hleft
++    · exact hright.trans_le (min_le_left _ _)
++    · have h := (le_max_right _ _).trans_lt hleft
++      linarith
++    · have h := hright.trans_le (min_le_right _ _)
++      linarith
++  choose rational hunitRational hclose using hexists
++  have hrobust := abs_quittingTerminalExploitabilityInf_sub_le_of_reward_close
++    (rationalQuittingRewardToReal rational) reward hradius.le
++    (fun terminal who => (hclose terminal who).le)
++  have hhalf : quittingTerminalExploitabilityInf reward / 2 ≤
++      quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) := by
++    have hlower := (abs_le.mp hrobust).1
++    dsimp only [radius] at hlower
++    linarith
++  exact ⟨rational, hunitRational, hclose, hhalf,
++    (div_pos hpositive (by norm_num : (0 : ℝ) < 2)).trans_le hhalf⟩
++
++/-- Raw arbitrary-real-table positive eta internally produces the common
++positive scale and a strict-unit rational table in ALL sixty coordinates.
++The actual unrestricted-regret infimum remains positive after approximation. -/
++theorem exists_strictUnit_rationalQuittingReward_of_positive_inf
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
++    ∃ (scale : ℝ) (rational : RationalQuittingReward 4), 0 < scale ∧
++      (∀ terminal who, |scaleQuittingReward scale reward terminal who| < 1) ∧
++      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who| < 1) ∧
++      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who -
++        scaleQuittingReward scale reward terminal who| <
++          quittingTerminalExploitabilityInf (scaleQuittingReward scale reward) / 4) ∧
++      quittingTerminalExploitabilityInf (scaleQuittingReward scale reward) / 2 ≤
++        quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
++      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) := by
++  obtain ⟨scale, hscale, hstrict⟩ := exists_strictUnit_scaleQuittingReward reward
++  have hscaledPositive : 0 < quittingTerminalExploitabilityInf
++      (scaleQuittingReward scale reward) :=
++    (quittingTerminalExploitabilityInf_scaleQuittingReward_pos_iff hscale reward).mpr hpositive
++  obtain ⟨rational, hrational, hclose, hhalf, hnewPositive⟩ :=
++    exists_rationalQuittingReward_close_of_strictUnit_positive_inf
++      (scaleQuittingReward scale reward) hstrict hscaledPositive
++  exact ⟨scale, rational, hscale, hstrict, hrational, hclose, hhalf, hnewPositive⟩
++
++/-- The source's no-UE quantifiers produce an entirely rational INITIAL table,
++still with actual positive eta and no uniform-equilibrium payoff. This says
++nothing about rationality of a subsequently maximizing singleton vector. -/
++theorem exists_strictUnit_rationalQuittingReward_of_no_uniformEquilibriumPayoff
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    (hno : ¬ ∃ payoff : Payoff (Fin 4),
++      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
++    ∃ rational : RationalQuittingReward 4,
++      (∀ terminal who, |rationalQuittingRewardToReal rational terminal who| < 1) ∧
++      0 < quittingTerminalExploitabilityInf (rationalQuittingRewardToReal rational) ∧
++      ¬ ∃ payoff : Payoff (Fin 4),
++        (quittingGame (rationalQuittingRewardToReal rational)).IsUniformEquilibriumPayoff
++          none payoff := by
++  obtain ⟨_scale, rational, _hscale, _hstrict, hrational, _hclose, _hhalf, hpositive⟩ :=
++    exists_strictUnit_rationalQuittingReward_of_positive_inf reward
++      (quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff reward hno)
++  exact ⟨rational, hrational, hpositive,
++    quittingGame_not_exists_uniformEquilibriumPayoff_of_quittingTerminalExploitabilityInf_pos
++      (rationalQuittingRewardToReal rational) hpositive⟩
++
++end GameTheory
+*** End Patch

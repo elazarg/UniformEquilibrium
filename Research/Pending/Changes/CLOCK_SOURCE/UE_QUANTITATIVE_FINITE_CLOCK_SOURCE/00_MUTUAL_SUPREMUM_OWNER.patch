@@ -1,0 +1,53 @@
+*** Begin Patch
+*** Add File: MathUE/Order/MutualSupremumApproximation.lean
++/-
++Copyright (c) 2026 GameTheory contributors. All rights reserved.
++Released under the MIT license as described in the file LICENSE.
++Authors: GameTheory contributors
++-/
++
++import Mathlib.Algebra.Order.Archimedean.Real.Basic
++import Mathlib.Tactic.Linarith
++
++/-! # Suprema of mutually approximating real families -/
++
++noncomputable section
++
++namespace Math.Order
++
++/-- Mutual pointwise approximation bounds the difference of the two suprema. -/
++theorem abs_sSup_range_sub_sSup_range_le_of_mutual_approx
++    {Source Target : Type*} [Nonempty Source] [Nonempty Target]
++    (source : Source → ℝ) (target : Target → ℝ)
++    (hsource : BddAbove (Set.range source))
++    (htarget : BddAbove (Set.range target)) {error : ℝ}
++    (hforward : ∀ choice, ∃ mapped,
++      |source choice - target mapped| ≤ error)
++    (hbackward : ∀ choice, ∃ mapped,
++      |target choice - source mapped| ≤ error) :
++    |sSup (Set.range source) - sSup (Set.range target)| ≤ error := by
++  have hsourceTarget : sSup (Set.range source) ≤
++      sSup (Set.range target) + error := by
++    apply csSup_le (Set.range_nonempty source)
++    rintro value ⟨choice, rfl⟩
++    obtain ⟨mapped, hmapped⟩ := hforward choice
++    have hle : target mapped ≤ sSup (Set.range target) :=
++      le_csSup htarget (Set.mem_range_self mapped)
++    have hsigned : source choice - target mapped ≤ error :=
++      (le_abs_self _).trans hmapped
++    linarith
++  have htargetSource : sSup (Set.range target) ≤
++      sSup (Set.range source) + error := by
++    apply csSup_le (Set.range_nonempty target)
++    rintro value ⟨choice, rfl⟩
++    obtain ⟨mapped, hmapped⟩ := hbackward choice
++    have hle : source mapped ≤ sSup (Set.range source) :=
++      le_csSup hsource (Set.mem_range_self mapped)
++    have hsigned : target choice - source mapped ≤ error :=
++      (le_abs_self _).trans hmapped
++    linarith
++  rw [abs_le]
++  constructor <;> linarith
++
++end Math.Order
+*** End Patch

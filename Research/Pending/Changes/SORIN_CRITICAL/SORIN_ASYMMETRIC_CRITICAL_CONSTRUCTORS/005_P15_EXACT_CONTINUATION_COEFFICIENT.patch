@@ -1,0 +1,23 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+     (prisonerVertexPath row column) prisonerDefectionPunishments (3 / 4)
+     (by norm_num) (by norm_num) (fun time who => prisonerVertexValue row column time who)
+     4 (fun time who => prisonerVertexValue_abs_le_four row column who time)
+-    (fun time who => prisonerVertexValue_recurrence row column who time)
++    (fun time who => by
++      simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using
++        prisonerVertexValue_recurrence row column who time)
+@@
+     who deviation (fun time => prisonerVertexValue row column time who) 1 4
+     (prisonerVertexValue_abs_le_four row column who) (by norm_num)
+-    (prisonerVertexValue_recurrence row column who)
+-    (prisonerVertex_changed_action_cap row column who)
++    (fun time => by
++      simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using
++        prisonerVertexValue_recurrence row column who time)
++    (fun time action hother => by
++      simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num, mul_one] using
++        prisonerVertex_changed_action_cap row column who time action hother)
+     (prisonerVertex_punished_action_cap who)
+*** End Patch

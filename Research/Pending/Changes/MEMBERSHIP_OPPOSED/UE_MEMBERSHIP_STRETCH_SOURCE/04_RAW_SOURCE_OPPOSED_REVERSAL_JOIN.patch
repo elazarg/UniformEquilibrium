@@ -1,0 +1,95 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/MembershipStretchOpposedSource.lean
++import UniformEquilibrium.Diagnostics.Quitting.MembershipStretchWorstTableSource
++import UniformEquilibrium.Diagnostics.Quitting.ThreeSureOpposedMembershipReversals
++
++/-! # Internally selected worst-table sources and every actual three-sure minimum
++
++The fixed original table, common stretch, singleton vector and free coordinates
++are selected BEFORE any root request. The actual minimum branch is explicit;
++its contacts, best direction, comparison probability and opposed owners are not.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++/-- A raw four-player no-UE table produces ONE literal source, and every actual
++all-but-one-sure minimum at that source has opposed strict core reversals. -/
++theorem exists_membershipStretch_source_opposedReversals_of_no_uniformPayoff_finFour
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    (hnoUE : ¬ ∃ payoff : Payoff (Fin 4),
++      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
++    ∃ (original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++      (alpha : ℝ) (singletons : Fin 4 → ℝ)
++      (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ),
++      (∀ terminal who, |original terminal who| ≤ 1) ∧
++      0 < quittingTerminalExploitabilityInf original ∧
++      quittingTerminalExploitabilityInf original ≤ 1 ∧
++      (∀ candidate : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
++        (∀ terminal who, |candidate terminal who| ≤ 1) →
++          quittingTerminalExploitabilityInf candidate ≤
++            quittingTerminalExploitabilityInf original) ∧
++      0 < alpha ∧ alpha < quittingTerminalExploitabilityInf original / 8 ∧
++      (∀ coordinate, coordinates coordinate =
++        quittingMembershipStretchedReward original alpha coordinate.1.1 coordinate.1.2) ∧
++      (∀ who, |singletons who| ≤ 1) ∧
++      (∀ terminal who, |quittingOwnSingletonReward singletons coordinates terminal who| ≤ 1) ∧
++      QuittingAgreesWithMembershipStretch original
++        (quittingOwnSingletonReward singletons coordinates) alpha ∧
++      (∀ candidate : Fin 4 → ℝ, (∀ who, |candidate who| ≤ 1) →
++        quittingTerminalExploitabilityInf (quittingOwnSingletonReward candidate coordinates) ≤
++          quittingTerminalExploitabilityInf
++            (quittingOwnSingletonReward singletons coordinates)) ∧
++      quittingTerminalExploitabilityInf original / 2 <
++        quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) ∧
++      quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) ≤
++        quittingTerminalExploitabilityInf original ∧
++      alpha < quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward singletons coordinates) / 4 ∧
++      ∀ (root : Fin 4 → PMF Bool) (optional : Fin 4),
++        (∀ who, who ≠ optional → (root who true).toReal = 1) →
++        quittingTerminalExploitability (quittingOwnSingletonReward singletons coordinates)
++            (quittingOneDateThenNeverProfile
++              (quittingOwnSingletonReward singletons coordinates) root) =
++          quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) →
++        ∃ first second : Fin 4, first ≠ optional ∧ second ≠ optional ∧ first ≠ second ∧
++          quittingDirectedMembershipGap original first false
++              (quittingSingleOptionalAction optional false) < 0 ∧
++          0 < quittingDirectedMembershipGap original first false
++              (quittingSingleOptionalAction optional true) ∧
++          quittingDirectedMembershipGap original second false
++              (quittingSingleOptionalAction optional true) < 0 ∧
++          0 < quittingDirectedMembershipGap original second false
++              (quittingSingleOptionalAction optional false) ∧
++          quittingDirectedMembershipGap
++              (quittingOwnSingletonReward singletons coordinates) first false
++              (quittingSingleOptionalAction optional false) < 0 ∧
++          0 < quittingDirectedMembershipGap
++              (quittingOwnSingletonReward singletons coordinates) first false
++              (quittingSingleOptionalAction optional true) ∧
++          quittingDirectedMembershipGap
++              (quittingOwnSingletonReward singletons coordinates) second false
++              (quittingSingleOptionalAction optional true) < 0 ∧
++          0 < quittingDirectedMembershipGap
++              (quittingOwnSingletonReward singletons coordinates) second false
++              (quittingSingleOptionalAction optional false) := by
++  have hpositive := quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff
++    reward hnoUE
++  obtain ⟨original, alpha, singletons, coordinates, horiginalBound, horiginalPositive,
++    horiginalOne, hmaximum, halpha, halphaSmall, hcoordinates, hsingletons, hfinalBound,
++    hagrees, hfiberMaximum, hhalf, hfinalOrder, halpham⟩ :=
++    exists_membershipStretch_singletonFiber_source_of_positiveInf reward hpositive
++  refine ⟨original, alpha, singletons, coordinates, horiginalBound, horiginalPositive,
++    horiginalOne, hmaximum, halpha, halphaSmall, hcoordinates, hsingletons, hfinalBound,
++    hagrees, hfiberMaximum, hhalf, hfinalOrder, halpham, ?_⟩
++  intro root optional hsure hminimum
++  have hfinalPositive : 0 < quittingTerminalExploitabilityInf
++      (quittingOwnSingletonReward singletons coordinates) :=
++    (by positivity : 0 < quittingTerminalExploitabilityInf original / 2).trans hhalf
++  exact exists_opposedSureOwner_optionalReversals_of_membershipStretch_positiveMinimum_finFour
++    original (quittingOwnSingletonReward singletons coordinates) halpha halpham hagrees
++      horiginalBound hfinalBound root optional hsure hfinalPositive hfinalOrder hminimum
++
++end GameTheory
+*** End Patch

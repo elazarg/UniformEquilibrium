@@ -1,0 +1,7 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Projective/RationalExactSoloRejection.lean
+@@
+-import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialFaceDrift
++import MathUE.Analysis.CollisionAdjustedDrift
++import UniformEquilibrium.Quitting.Root.CollisionAdjustedSingletonProbe
+*** End Patch

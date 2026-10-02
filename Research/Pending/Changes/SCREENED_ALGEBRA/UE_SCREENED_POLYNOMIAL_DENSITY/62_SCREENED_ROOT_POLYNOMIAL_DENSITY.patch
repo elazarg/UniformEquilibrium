@@ -1,0 +1,130 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomialDensity.lean
++import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootPolynomialWitness
++import MathUE.Polynomial.MvPolynomialNonvanishing
++import Mathlib.Tactic.NormNum
++
++/-!
++# Density for the same actual 24-factor screened-root polynomial
++
++Nonzero coefficients are derived from the literal bounded factor witnesses.
++Rational selection is uniform over every own-singleton vector and screened
++root. Nonvanishing alone does not imply positive minimum exploitability.
++This file does not assert a singleton collar or a counterexample producer.
++-/
++
++namespace GameTheory
++
++/-- Real-coefficient evaluation is the existing literal integer-polynomial evaluator. -/
++theorem screenedRootPolynomialEval_eq_real_eval
++    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ) :
++    screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial =
++      MvPolynomial.eval coordinates
++        (MvPolynomial.map (Int.castRingHom ℝ) screenedRootExclusionPolynomial) := by
++  change MvPolynomial.eval₂ (Int.castRingHom ℝ) coordinates
++      screenedRootExclusionPolynomial = _
++  exact (MvPolynomial.eval_map _ _ _).symm
++
++/-- The genuine actual polynomial's nonvanishing locus is open. -/
++theorem screenedRootExclusionPolynomial_nonvanishing_isOpen :
++    IsOpen {coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ |
++      screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial ≠ 0} := by
++  simpa only [screenedRootPolynomialEval_eq_real_eval] using
++    Math.isOpen_eval_ne_zero_mvPolynomial
++      (MvPolynomial.map (Int.castRingHom ℝ) screenedRootExclusionPolynomial)
++
++/-- The same actual polynomial's nonvanishing locus is dense, with no nonzero certificate input. -/
++theorem screenedRootExclusionPolynomial_nonvanishing_dense :
++    Dense {coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ |
++      screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial ≠ 0} := by
++  simpa only [screenedRootPolynomialEval_eq_real_eval] using
++    Math.dense_eval_ne_zero_mvPolynomial
++      (MvPolynomial.map (Int.castRingHom ℝ) screenedRootExclusionPolynomial)
++      screenedRootExclusionPolynomial_map_real_ne_zero
++
++/-- The actual polynomial's zero locus has empty interior. -/
++theorem screenedRootExclusionPolynomial_zero_locus_interior :
++    interior {coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ |
++      screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial = 0} = ∅ := by
++  simpa only [Set.compl_ofPred, not_not] using
++    screenedRootExclusionPolynomial_nonvanishing_dense.interior_compl
++
++/-- Rational nonvanishing free-coordinate points are dense as well. -/
++theorem screenedRootExclusionPolynomial_rational_nonvanishing_dense :
++    Dense {coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ |
++      ∃ rational : QuittingFreeRewardCoordinate (Fin 4) → ℚ,
++        coordinates = (fun axis => (rational axis : ℝ)) ∧
++          screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial ≠ 0} := by
++  simpa only [screenedRootPolynomialEval_eq_real_eval] using
++    Math.dense_rational_eval_ne_zero_mvPolynomial
++      (MvPolynomial.map (Int.castRingHom ℝ) screenedRootExclusionPolynomial)
++      screenedRootExclusionPolynomial_map_real_ne_zero
++
++/-- Internally select one rational coordinate point in any nonempty open region.
++The SAME point excludes positive tied complete debts for EVERY singleton
++vector and EVERY screened root, including optional endpoints and extra sure players. -/
++theorem exists_rational_screenedRootCoordinates_mem_open
++    {region : Set (QuittingFreeRewardCoordinate (Fin 4) → ℝ)}
++    (hopen : IsOpen region) (hnonempty : region.Nonempty) :
++    ∃ rational : QuittingFreeRewardCoordinate (Fin 4) → ℚ,
++      (fun axis => (rational axis : ℝ)) ∈ region ∧
++      screenedRootPolynomialEval (fun axis => (rational axis : ℝ))
++        screenedRootExclusionPolynomial ≠ 0 ∧
++      ∀ (singletons : Fin 4 → ℝ) (root : Fin 4 → PMF Bool),
++        IsScreenedQuittingRoot root →
++          ¬ ∃ debt : ℝ, 0 < debt ∧ ∀ who,
++            quittingTerminalDeviationDebt
++              (quittingOwnSingletonReward singletons (fun axis => (rational axis : ℝ)))
++              (quittingOneDateThenNeverProfile
++                (quittingOwnSingletonReward singletons (fun axis => (rational axis : ℝ))) root)
++              who = debt := by
++  obtain ⟨rational, hregion, hvalue⟩ :=
++    Math.exists_rational_mem_open_eval_ne_zero_mvPolynomial
++      (MvPolynomial.map (Int.castRingHom ℝ) screenedRootExclusionPolynomial)
++      screenedRootExclusionPolynomial_map_real_ne_zero hopen hnonempty
++  have hnonzero : screenedRootPolynomialEval (fun axis => (rational axis : ℝ))
++      screenedRootExclusionPolynomial ≠ 0 := by
++    simpa only [screenedRootPolynomialEval_eq_real_eval] using hvalue
++  refine ⟨rational, hregion, hnonzero, ?_⟩
++  intro singletons root hscreened
++  exact not_positive_equal_screened_debts_of_polynomial_ne_zero
++    (fun axis => (rational axis : ℝ)) hnonzero singletons root hscreened
++
++/-- Literal unit-cube selection, starting on any closed face.
++One rational INTERIOR free-coordinate vector is chosen before EVERY allowed
++closed-cube singleton vector and EVERY screened root. Neither a nonvanishing
++point nor a favorable root is accepted as input. This does not assert eta>0. -/
++theorem exists_rational_interior_screenedRootCoordinates_near
++    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ) (radius : ℝ)
++    (hbound : ∀ axis, |coordinates axis| ≤ 1) (hradius : 0 < radius) :
++    ∃ rational : QuittingFreeRewardCoordinate (Fin 4) → ℚ,
++      (∀ axis, |(rational axis : ℝ)| < 1 ∧
++        |(rational axis : ℝ) - coordinates axis| < radius) ∧
++      screenedRootPolynomialEval (fun axis => (rational axis : ℝ))
++        screenedRootExclusionPolynomial ≠ 0 ∧
++      ∀ (singletons : Fin 4 → ℝ), (∀ who, |singletons who| ≤ 1) →
++        ∀ (root : Fin 4 → PMF Bool), IsScreenedQuittingRoot root →
++          ¬ ∃ debt : ℝ, 0 < debt ∧ ∀ who,
++            quittingTerminalDeviationDebt
++              (quittingOwnSingletonReward singletons (fun axis => (rational axis : ℝ)))
++              (quittingOneDateThenNeverProfile
++                (quittingOwnSingletonReward singletons (fun axis => (rational axis : ℝ))) root)
++              who = debt := by
++  obtain ⟨rational, hbox, hvalue⟩ :=
++    Math.exists_rational_box_eval_ne_zero_mvPolynomial
++      (MvPolynomial.map (Int.castRingHom ℝ) screenedRootExclusionPolynomial)
++      screenedRootExclusionPolynomial_map_real_ne_zero
++      (fun _ => -1) (fun _ => 1) coordinates radius
++      (fun _ => by norm_num) (fun axis => abs_le.mp (hbound axis)) hradius
++  have hnonzero : screenedRootPolynomialEval (fun axis => (rational axis : ℝ))
++      screenedRootExclusionPolynomial ≠ 0 := by
++    simpa only [screenedRootPolynomialEval_eq_real_eval] using hvalue
++  refine ⟨rational, ?_, hnonzero, ?_⟩
++  · intro axis
++    exact ⟨abs_lt.mpr ⟨(hbox axis).1, (hbox axis).2.1⟩, (hbox axis).2.2⟩
++  · intro singletons _ root hscreened
++    exact not_positive_equal_screened_debts_of_polynomial_ne_zero
++      (fun axis => (rational axis : ℝ)) hnonzero singletons root hscreened
++
++end GameTheory
+*** End Patch

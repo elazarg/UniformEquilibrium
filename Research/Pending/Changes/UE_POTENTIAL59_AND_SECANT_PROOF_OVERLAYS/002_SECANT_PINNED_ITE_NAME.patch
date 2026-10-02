@@ -1,0 +1,15 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean
+@@
+     have hpay := quittingTerminalPayoff_ownSingleton_increment
+       first second pivot hchange (Function.update profile pivot deviation) pivot
+-    simp only [if_pos rfl] at hpay
++    simp only [ite_eq_left rfl] at hpay
+     have hmass0 := quittingAbsorbedMassLimit_nonneg first
+@@
+     by_cases hwho : who = pivot
+     · subst who
+-      simp only [if_pos rfl] at hpay
++      simp only [ite_eq_left rfl] at hpay
+       unfold quittingTerminalDeviationDebt
+*** End Patch

@@ -1,0 +1,82 @@
+import UniformEquilibrium.Diagnostics.Quitting.FinFourBoundedSinglePivotPolynomialObstruction
+
+open GameTheory
+open Math.Interval Math.Interval.RationalPolynomial
+
+section LiteralScaling
+
+variable {ι : Type} [Fintype ι]
+
+example (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (scale : ℝ) :
+    quittingGame (fun terminal who => scale * reward terminal who) =
+      (quittingGame reward).affinePayoff scale 0 :=
+  quittingGame_scale_eq_affinePayoff reward scale
+
+example (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (scale : ℝ)
+    (action : ι → Bool) (who : ι) :
+    (quittingGame (fun terminal player => scale * reward terminal player)).
+      stagePayoff none action who = 0 := rfl
+
+example [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (scale : ℝ) (hscale : 0 < scale) :
+    (∃ payoff : Payoff ι,
+      (quittingGame (fun terminal who => scale * reward terminal who)).
+        IsUniformEquilibriumPayoff none payoff) ↔
+      ∃ payoff : Payoff ι, (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  quittingGame_exists_uniformPayoff_scale_iff reward scale hscale
+
+end LiteralScaling
+
+example (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hnot : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ pivot : Fin 4, ∃ divisor : ℕ, 1 ≤ divisor ∧
+      (∀ terminal who,
+        |quittingSinglePivotNormalizedReward reward pivot terminal who| ≤ (divisor : ℝ)) ∧
+      let table := fun terminal who =>
+        (1 / (divisor : ℝ)) * quittingSinglePivotNormalizedReward reward pivot terminal who
+      (∀ terminal who, |table terminal who| ≤ 1) ∧
+      (∀ who, table (quittingSingletonTerminal who) who =
+        if who = pivot then 1 / (divisor : ℝ) else 0) ∧
+      ¬ ∃ payoff : Payoff (Fin 4),
+        (quittingGame table).IsUniformEquilibriumPayoff none payoff :=
+  exists_finFourBoundedSinglePivotNormalization_of_no_uniformPayoff reward hnot
+
+example (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hnot : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ pivot : Fin 4, ∃ divisor : ℕ, 1 ≤ divisor ∧
+      let table := fun terminal who =>
+        (1 / (divisor : ℝ)) * quittingSinglePivotNormalizedReward reward pivot terminal who
+      0 < 1 / (divisor : ℝ) ∧
+      (∀ terminal who, |table terminal who| ≤ 1) ∧
+      (∀ who, table (quittingSingletonTerminal who) who =
+        if who = pivot then 1 / (divisor : ℝ) else 0) ∧
+      (¬ ∃ payoff : Payoff (Fin 4),
+        (quittingGame table).IsUniformEquilibriumPayoff none payoff) ∧
+      ¬ HasQuittingPunishmentVectorNashRootWithSureQuitter table ∧
+      ∃ tolerance : ℚ, 0 < tolerance ∧ tolerance ≤ 1 / 4 ∧
+        ∃ expression : RationalPolynomial 4,
+          (quittingFloorFreeRobustChargedRelation table (tolerance : ℝ)
+            3).IsPotential (fun state => evalReal state.1 expression) ∧
+          3 ≤ expression.toMvPolynomial.totalDegree ∧
+          ¬ (∀ coordinate, expression.toMvPolynomial.degreeOf coordinate ≤ 1) ∧
+          QuittingRationalPolynomialAdaptiveMinimumConditions table expression := by
+  obtain ⟨pivot, divisor, hdivisor, hobstruction⟩ :=
+    exists_finFourBoundedSinglePivotPolynomialObstruction_of_no_uniformPayoff reward hnot
+  have hnoUniform := hobstruction.no_uniformPayoff
+  rcases hobstruction with
+    ⟨hscale, hbound, hsingleton, hnoSure, tolerance, htolerance, htoleranceMax,
+      expression, hpotential, hdegree, hnotAffine, hminimum⟩
+  exact ⟨pivot, divisor, hdivisor, hscale, hbound, hsingleton, hnoUniform, hnoSure,
+    tolerance, htolerance, htoleranceMax, expression, hpotential, hdegree, hnotAffine, hminimum⟩
+
+example :
+    (∃ reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+      ¬ ∃ payoff : Payoff (Fin 4),
+        (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
+    ∃ reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+      ∃ pivot : Fin 4, ∃ scale : ℝ,
+        IsQuittingBoundedSinglePivotPolynomialObstruction reward pivot scale :=
+  exists_finFour_no_uniformPayoff_iff_exists_boundedSinglePivotPolynomialObstruction

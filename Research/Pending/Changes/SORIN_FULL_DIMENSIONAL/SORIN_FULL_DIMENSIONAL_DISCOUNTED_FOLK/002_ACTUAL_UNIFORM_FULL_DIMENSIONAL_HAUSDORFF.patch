@@ -1,0 +1,78 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-/-- Aggregate finite/discounted form of Lemma 1(5)--(7).  The positive
++/-- The source's full-dimensional branch first approximates a fixed weakly
++IR target by strict targets. One actual Nash profile precedes all small rates. -/
++theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
++    (G : FiniteStageGame) (hfull : FullDimensional G.individuallyRationalPayoffs)
++    (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
++    {ε : ℝ} (hε : 0 < ε) :
++    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
++      ∃ profile : G.BehaviorProfile,
++        ∀ lam : ℝ, 0 < lam → lam < threshold →
++          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
++          dist (G.discountedPayoff lam profile) target < ε := by
++  obtain ⟨strict, hfeasible, hstrict, hnear⟩ :=
++    G.exists_strictIR_close_of_fullDimensional hfull target htarget (half_pos hε)
++  obtain ⟨threshold, hthreshold, hthresholdOne, profile, hsource⟩ :=
++    exists_discountedNash_close_allSmallRates_of_strictIR
++      G strict hfeasible hstrict (half_pos hε)
++  refine ⟨threshold, hthreshold, hthresholdOne, profile, ?_⟩
++  intro lam hlam hlamThreshold
++  obtain ⟨hnash, hclose⟩ := hsource lam hlam hlamThreshold
++  refine ⟨hnash, ?_⟩
++  calc
++    dist (G.discountedPayoff lam profile) target ≤
++        dist (G.discountedPayoff lam profile) strict + dist strict target :=
++      dist_triangle _ _ _
++    _ < ε / 2 + ε / 2 := add_lt_add hclose hnear
++    _ = ε := by ring
++
++/-- Property (4), full-dimensional branch: compactness makes the small-rate
++threshold uniform over every target in the actual weakly IR payoff set.
++The literal paper theorem's separate two-player alternative remains open. -/
++theorem property_4_discounted_of_fullDimensional (G : FiniteStageGame)
++    (hfull : FullDimensional G.individuallyRationalPayoffs) :
++    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
++      G.individuallyRationalPayoffs := by
++  classical
++  intro ε hε
++  obtain ⟨centers, hcenters, hfinite, hcover⟩ :=
++    G.individuallyRationalPayoffs_isCompact.finite_cover_balls (half_pos hε)
++  let : Fintype centers := hfinite.fintype
++  choose threshold hthreshold hthresholdOne profile hprofile using
++    fun center : centers =>
++      exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
++        G hfull center.1 (hcenters center.2) (half_pos hε)
++  obtain ⟨δ, hδ, hcommon⟩ :=
++    KernelGame.exists_pos_margin_of_mem_strictReservationSet
++      (r := fun _ : centers => (0 : ℝ)) (v := threshold) hthreshold
++  refine ⟨min δ 1, lt_min hδ zero_lt_one, ?_⟩
++  intro lam hlam hlamThreshold
++  have hlamOne : lam ≤ 1 := hlamThreshold.le.trans (min_le_right _ _)
++  constructor
++  · intro value hvalue
++    have hIR := lemma_1_Elambda_subset_Delta G ⟨lam, hlam, hlamOne⟩ hvalue
++    exact ⟨value, hIR, (dist_self _).trans_lt hε⟩
++  · intro target htarget
++    obtain ⟨center, hcenter⟩ := Set.mem_iUnion.mp (hcover htarget)
++    obtain ⟨hcenterMem, hnear⟩ := Set.mem_iUnion.mp hcenter
++    let selected : centers := ⟨center, hcenterMem⟩
++    have hlamSelected : lam < threshold selected := by
++      have hbound := hcommon selected
++      have hlamδ : lam < δ := hlamThreshold.trans_le (min_le_left _ _)
++      linarith
++    obtain ⟨hnash, hclose⟩ := hprofile selected lam hlam hlamSelected
++    refine ⟨G.discountedPayoff lam (profile selected), ⟨profile selected, hnash, rfl⟩, ?_⟩
++    have hnear' : dist center target < ε / 2 := by
++      simpa only [Metric.mem_ball, dist_comm] using hnear
++    calc
++      dist (G.discountedPayoff lam (profile selected)) target ≤
++          dist (G.discountedPayoff lam (profile selected)) center + dist center target :=
++        dist_triangle _ _ _
++      _ < ε / 2 + ε / 2 := add_lt_add hclose hnear'
++      _ = ε := by ring
++
++/-- Aggregate finite/discounted form of Lemma 1(5)--(7).  The positive
+*** End Patch

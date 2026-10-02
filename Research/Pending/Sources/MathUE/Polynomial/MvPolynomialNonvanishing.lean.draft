@@ -1,0 +1,119 @@
+import Mathlib.Algebra.MvPolynomial.Funext
+import Mathlib.Topology.Algebra.MvPolynomial
+import Mathlib.Topology.Instances.Rat
+import Mathlib.Topology.NhdsWithin
+import Mathlib.Topology.Order.Basic
+import Mathlib.Order.Interval.Set.Infinite
+import Mathlib.Tactic.Linarith
+
+/-!
+# Open dense polynomial nonvanishing and rational selection
+
+The polynomial identity step delegates to `MvPolynomial.funext_set`.
+The rational approximation step delegates to `DenseRange.piMap`.
+No degree bound, coefficient rationality or nonempty variable type is needed.
+-/
+
+namespace Math
+
+open Set
+
+variable {ι : Type*}
+
+/-- Evaluation nonvanishing is open, whether or not the polynomial is nonzero. -/
+theorem isOpen_eval_ne_zero_mvPolynomial (polynomial : MvPolynomial ι ℝ) :
+    IsOpen {point : ι → ℝ | MvPolynomial.eval point polynomial ≠ 0} :=
+  isOpen_ne_fun polynomial.continuous_eval continuous_const
+
+/-- A nonzero real polynomial cannot vanish on an open finite-dimensional box. -/
+theorem dense_eval_ne_zero_mvPolynomial [Finite ι]
+    (polynomial : MvPolynomial ι ℝ) (hnonzero : polynomial ≠ 0) :
+    Dense {point : ι → ℝ | MvPolynomial.eval point polynomial ≠ 0} := by
+  classical
+  apply dense_iff_inter_open.mpr
+  intro region hopen hnonempty
+  by_contra hmiss
+  have hvanish : ∀ point ∈ region, MvPolynomial.eval point polynomial = 0 := by
+    intro point hpoint
+    by_contra hvalue
+    exact hmiss ⟨point, hpoint, hvalue⟩
+  obtain ⟨point, hpoint⟩ := hnonempty
+  obtain ⟨sides, hsides, hsubset⟩ := isOpen_pi_iff'.mp hopen point hpoint
+  have hinfinite : ∀ axis, (sides axis).Infinite := by
+    intro axis
+    obtain ⟨lower, upper, hlt, hinterval⟩ :=
+      (hsides axis).1.exists_Ioo_subset ⟨point axis, (hsides axis).2⟩
+    exact (Ioo_infinite hlt).mono hinterval
+  apply hnonzero
+  apply MvPolynomial.funext_set sides hinfinite
+  intro input hinput
+  simpa only [MvPolynomial.eval_zero] using hvanish input (hsubset hinput)
+
+/-- Every nonempty open region contains a rational point where the same polynomial is nonzero. -/
+theorem exists_rational_mem_open_eval_ne_zero_mvPolynomial [Finite ι]
+    (polynomial : MvPolynomial ι ℝ) (hnonzero : polynomial ≠ 0)
+    {region : Set (ι → ℝ)} (hopen : IsOpen region) (hnonempty : region.Nonempty) :
+    ∃ rational : ι → ℚ, (fun axis => (rational axis : ℝ)) ∈ region ∧
+      MvPolynomial.eval (fun axis => (rational axis : ℝ)) polynomial ≠ 0 := by
+  have hdense := dense_eval_ne_zero_mvPolynomial polynomial hnonzero
+  have hmeet := hdense.inter_open_nonempty region hopen hnonempty
+  have hrational : DenseRange (fun rational : ι → ℚ => fun axis => (rational axis : ℝ)) :=
+    DenseRange.piMap (fun _ => Rat.denseRange_cast)
+  exact hrational.exists_mem_open
+    (hopen.inter (isOpen_eval_ne_zero_mvPolynomial polynomial)) hmeet
+
+/-- Rational nonvanishing points themselves are dense in the real coordinate space. -/
+theorem dense_rational_eval_ne_zero_mvPolynomial [Finite ι]
+    (polynomial : MvPolynomial ι ℝ) (hnonzero : polynomial ≠ 0) :
+    Dense {point : ι → ℝ | ∃ rational : ι → ℚ,
+      point = (fun axis => (rational axis : ℝ)) ∧ MvPolynomial.eval point polynomial ≠ 0} := by
+  apply dense_iff_inter_open.mpr
+  intro region hopen hnonempty
+  obtain ⟨rational, hregion, hvalue⟩ :=
+    exists_rational_mem_open_eval_ne_zero_mvPolynomial polynomial hnonzero hopen hnonempty
+  exact ⟨fun axis => (rational axis : ℝ), hregion, rational, rfl, hvalue⟩
+
+/-- Rational nonvanishing approximation from ANY point of a closed positive-width box.
+The internally chosen point lies strictly inside every side, also when the
+original point is on lower or upper faces. Closeness is coordinatewise. -/
+theorem exists_rational_box_eval_ne_zero_mvPolynomial [Finite ι]
+    (polynomial : MvPolynomial ι ℝ) (hnonzero : polynomial ≠ 0)
+    (lower upper point : ι → ℝ) (radius : ℝ)
+    (hwidth : ∀ axis, lower axis < upper axis)
+    (hpoint : ∀ axis, lower axis ≤ point axis ∧ point axis ≤ upper axis)
+    (hradius : 0 < radius) :
+    ∃ rational : ι → ℚ,
+      (∀ axis, lower axis < (rational axis : ℝ) ∧ (rational axis : ℝ) < upper axis ∧
+        |(rational axis : ℝ) - point axis| < radius) ∧
+      MvPolynomial.eval (fun axis => (rational axis : ℝ)) polynomial ≠ 0 := by
+  classical
+  let sides : ι → Set ℝ := fun axis =>
+    Ioo (max (lower axis) (point axis - radius))
+      (min (upper axis) (point axis + radius))
+  have hside : ∀ axis, (sides axis).Nonempty := by
+    intro axis
+    apply nonempty_Ioo.mpr
+    apply lt_min_iff.mpr
+    constructor
+    · apply max_lt_iff.mpr
+      exact ⟨hwidth axis, by linarith [(hpoint axis).2]⟩
+    · apply max_lt_iff.mpr
+      exact ⟨by linarith [(hpoint axis).1], by linarith⟩
+  have hopen : IsOpen (Set.univ.pi sides) :=
+    isOpen_set_pi Set.finite_univ (fun _ _ => isOpen_Ioo)
+  have hnonempty : (Set.univ.pi sides).Nonempty := by
+    refine ⟨fun axis => (hside axis).choose, ?_⟩
+    intro axis _
+    exact (hside axis).choose_spec
+  obtain ⟨rational, hregion, hvalue⟩ :=
+    exists_rational_mem_open_eval_ne_zero_mvPolynomial polynomial hnonzero hopen hnonempty
+  refine ⟨rational, ?_, hvalue⟩
+  intro axis
+  have haxis := hregion axis (Set.mem_univ axis)
+  change max (lower axis) (point axis - radius) < (rational axis : ℝ) ∧
+    (rational axis : ℝ) < min (upper axis) (point axis + radius) at haxis
+  obtain ⟨hlower, hnearLower⟩ := max_lt_iff.mp haxis.1
+  obtain ⟨hupper, hnearUpper⟩ := lt_min_iff.mp haxis.2
+  exact ⟨hlower, hupper, abs_lt.mpr ⟨by linarith, by linarith⟩⟩
+
+end Math

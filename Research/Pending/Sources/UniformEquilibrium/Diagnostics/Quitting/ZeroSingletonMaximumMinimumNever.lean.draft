@@ -1,0 +1,157 @@
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSingletonNeverCapTightness
+import UniformEquilibrium.Diagnostics.Quitting.PositiveMaximumDebtMinimum
+
+/-! # Zero singleton mass forces zero Never at a positive maximum-debt minimum
+
+The law estimate is closed in the actual joint semantic/outcome-law carrier.
+No behavioral minimum, attained response cap, or favorable root is supplied.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open Set
+open QuittingBoundaryHolonomy
+open scoped Topology
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+/-- Total mass of the literal terminal singleton outcomes, excluding Never. -/
+def quittingTerminalLawSingletonMass (mass : QuittingTerminalOutcome ι → ℝ) : ℝ :=
+  ∑ who, mass (some (quittingSingletonTerminal who))
+
+/-- A continuous finite law coordinate, independent of terminal rewards. -/
+theorem continuous_quittingTerminalLawSingletonMass :
+    Continuous (quittingTerminalLawSingletonMass (ι := ι)) := by
+  apply continuous_finsetSum
+  intro who _
+  exact continuous_apply _
+
+/-- The singleton cylinders bound joint Never mass times its complement. -/
+theorem quittingTerminalOutcomeMass_never_mul_complement_le_singletonMass
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) :
+    quittingTerminalOutcomeMass reward profile none *
+        (1 - quittingTerminalOutcomeMass reward profile none) ≤
+      quittingTerminalLawSingletonMass (quittingTerminalOutcomeMass reward profile) := by
+  let never : ι → ℝ := fun who => quittingHazardNeverMass
+    (quittingBehaviorLiveHazard reward (profile who))
+  let joint := quittingTerminalOutcomeMass reward profile none
+  have h0 : ∀ who, 0 ≤ never who := fun who => quittingHazardNeverMass_nonneg _
+  have h1 : ∀ who, never who ≤ 1 := by
+    intro who
+    have h := quittingHazardNeverMass_le_survival
+      (quittingBehaviorLiveHazard reward (profile who)) 0
+    simpa [never] using h
+  have hproduct : joint = ∏ who, never who :=
+    quittingLiveMassLimit_eq_prod_hazardNeverMass profile
+  have hjoint : 0 ≤ joint := quittingLiveMassLimit_nonneg reward profile
+  have hfactor : ∀ who, joint ≤ quittingBehaviorOpponentNeverProduct profile who := by
+    intro who
+    rw [hproduct, ← Finset.mul_prod_erase _ _ (Finset.mem_univ who)]
+    change never who * (∏ other ∈ Finset.univ.erase who, never other) ≤
+      ∏ other ∈ Finset.univ.erase who, never other
+    have hnonneg := Finset.prod_nonneg (fun other _ => h0 other)
+    nlinarith [h1 who]
+  have hcylinder : ∀ who, joint * (1 - never who) ≤
+      quittingTerminalOutcomeMass reward profile
+        (some (quittingSingletonTerminal who)) := by
+    intro who
+    calc
+      _ ≤ (1 - never who) * quittingBehaviorOpponentNeverProduct profile who := by
+        simpa only [mul_comm] using
+          mul_le_mul_of_nonneg_left (hfactor who) (sub_nonneg.mpr (h1 who))
+      _ ≤ _ := one_sub_neverMass_mul_opponentNeverProduct_le_singletonOutcomeMass
+        profile who
+  have hunion := Math.Probability.KakutaniProductDichotomy.one_sub_prod_le_sum_one_sub
+    Finset.univ never (fun who _ => h0 who) (fun who _ => h1 who)
+  rw [← hproduct] at hunion
+  calc
+    joint * (1 - joint) ≤ joint * (∑ who, (1 - never who)) :=
+      mul_le_mul_of_nonneg_left hunion hjoint
+    _ = ∑ who, joint * (1 - never who) := Finset.mul_sum _ _ _
+    _ ≤ _ := Finset.sum_le_sum (fun who _ => hcylinder who)
+
+/-- The actual-law estimate survives closure jointly with payoffs and full caps. -/
+theorem terminalSemanticLawCarrier_never_mul_complement_le_singletonMass
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (point : QuittingTerminalSemanticLawPoint ι)
+    (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward) :
+    point.2 none * (1 - point.2 none) ≤ quittingTerminalLawSingletonMass point.2 := by
+  let constraint : Set (QuittingTerminalSemanticLawPoint ι) :=
+    {candidate | candidate.2 none * (1 - candidate.2 none) ≤
+      quittingTerminalLawSingletonMass candidate.2}
+  have hclosed : IsClosed constraint := isClosed_le
+    ((continuous_apply none |>.comp continuous_snd).mul
+      (continuous_const.sub (continuous_apply none |>.comp continuous_snd)))
+    (continuous_quittingTerminalLawSingletonMass.comp continuous_snd)
+  apply closure_minimal (t := constraint) ?_ hclosed hpoint
+  rintro candidate ⟨profile, rfl⟩
+  exact quittingTerminalOutcomeMass_never_mul_complement_le_singletonMass reward profile
+
+/-- At a positive global MAX-regret minimum, zero total singleton mass forces
+zero Never. The signed singleton moat is derived, not an additional premise. -/
+theorem minimumTerminalSemanticLaw_never_eq_zero_of_singletonMass_eq_zero
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (point : QuittingTerminalSemanticLawPoint ι)
+    (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticExploitability point.1 ≤
+        quittingTerminalSemanticExploitability candidate)
+    (hpositive : 0 < quittingTerminalSemanticExploitability point.1)
+    (hsingleton : quittingTerminalLawSingletonMass point.2 = 0) :
+    point.2 none = 0 := by
+  have hpair := terminalSemanticLawCarrier_fst_mem_carrier point hpoint
+  have hsimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  rw [Math.Probability.mem_simplexWeights] at hsimplex
+  have hbound := terminalSemanticLawCarrier_never_mul_complement_le_singletonMass
+    reward point hpoint
+  rw [hsingleton] at hbound
+  have hle : point.2 none ≤ 1 := by
+    rw [← hsimplex.2]
+    exact Finset.single_le_sum (fun outcome _ => hsimplex.1 outcome) (Finset.mem_univ none)
+  by_contra hnot
+  have hnever : point.2 none = 1 := by
+    have hpos : 0 < point.2 none := lt_of_le_of_ne (hsimplex.1 none) (Ne.symm hnot)
+    nlinarith
+  have hsum : ∑ outcome ∈ Finset.univ.erase none, point.2 outcome = 0 := by
+    have htotal := hsimplex.2
+    rw [← Finset.sum_erase_add _ _ (Finset.mem_univ none), hnever] at htotal
+    linarith
+  have hzero : ∀ terminal, point.2 (some terminal) = 0 := by
+    intro terminal
+    exact (Finset.sum_eq_zero_iff_of_nonneg
+      (fun outcome _ => hsimplex.1 outcome)).mp hsum (some terminal) (by simp)
+  have hpayoff : point.1.1 = 0 := by
+    rw [← terminalSemanticLawCarrier_rewardMoment reward point hpoint]
+    funext who
+    simp only [quittingTerminalRewardMoment, Fintype.sum_option,
+      quittingTerminalOutcomeReward, hzero, zero_mul, Finset.sum_const_zero, add_zero]
+    simp
+  have hsigned : ∀ who, reward (quittingSingletonTerminal who) who ≤ 0 := by
+    intro who
+    have hmoat := minimumTerminalSemantic_exploitabilitySingletonMargin
+      reward point.1 hpair hminimum hpositive who
+    have hdebt := quittingTerminalSemanticDebt_le_exploitability point.1 who
+      (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair who)
+    change point.1.2 who - point.1.1 who ≤ _ at hdebt
+    rw [hpayoff] at hdebt
+    simp only [Pi.zero_apply, sub_zero] at hdebt
+    linarith
+  have hneverZero : quittingTerminalSemanticExploitability
+      (quittingTerminalSemanticPair reward (quittingAlwaysContinueProfile reward)) ≤ 0 := by
+    unfold quittingTerminalSemanticExploitability
+    apply finitePlayerMax_le
+    intro who
+    change max 0 (quittingContinuationBestResponseValue reward
+      (quittingAlwaysContinueProfile reward) who -
+      quittingTerminalPayoff reward (quittingAlwaysContinueProfile reward) who) ≤ 0
+    rw [quittingContinuationBestResponseValue_quittingAlwaysContinueProfile,
+      quittingTerminalPayoff_quittingAlwaysContinue, max_eq_left (hsigned who)]
+    norm_num
+  exact (not_le_of_gt hpositive) ((hminimum _
+    (quittingTerminalSemanticPair_mem_carrier reward _)).trans hneverZero)
+
+end GameTheory

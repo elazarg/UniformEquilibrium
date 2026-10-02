@@ -1,0 +1,13 @@
+*** Begin Patch
+*** Update File: MathUE.lean
+@@
+ import MathUE.Topology.NestedOuterApproximation
++import MathUE.Order.MutualSupremumApproximation
+*** Update File: UniformEquilibrium.lean
+@@
+ import UniformEquilibrium.Quitting.Paths.StoppingLawReconstruction
++import UniformEquilibrium.Quitting.Paths.FiniteClockTerminalSemantics
++import UniformEquilibrium.Quitting.Paths.CommonQuantileClockTransport
++import UniformEquilibrium.Quitting.Paths.CommonQuantileClockApproximation
++import UniformEquilibrium.Quitting.Paths.QuantitativeFiniteClockSource
+*** End Patch

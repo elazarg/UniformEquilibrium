@@ -1,0 +1,53 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Quitting/Projective/NonquasiconvexPolynomialForwardCharacterization.lean
++import MathUE.Interval.RationalPolynomialRegularity
++import UniformEquilibrium.Quitting.Projective.PolynomialForwardCertificateCharacterization
++import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuasiconvexExclusion
++
++/-! # The same produced polynomial is nonquasiconvex on the singleton rectangle
++
++The original table hypotheses, rational tolerance and box M+2 are retained.
++No new polynomial producer or shape premise is supplied in the forward direction.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++open Math.Interval Math.Interval.RationalPolynomial
++
++/-- The original Fin4 obstruction equivalence refined by the shape of its
++identical rational-polynomial witness on the packet's rectangle with cap M+1. -/
++theorem quittingGame_noUniformPayoff_iff_noSureRoot_and_nonquasiconvex_rationalPotential
++    (reward : {coalition : Finset (Fin 4) // coalition.Nonempty} → Payoff (Fin 4))
++    (rewardBound : ℝ)
++    (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
++    (hnormal : ∀ player, IsQuittingNormalPlayer reward player)
++    (hpositive : ∃ who, 0 < reward (quittingSingletonTerminal who) who) :
++    (¬ ∃ payoff : Payoff (Fin 4),
++      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
++      ¬ HasQuittingPunishmentVectorNashRootWithSureQuitter reward ∧
++        ∃ tolerance : ℚ, 0 < tolerance ∧ tolerance ≤ 1 / 4 ∧
++          ∃ expression : RationalPolynomial 4,
++            (quittingFloorFreeRobustChargedRelation reward (tolerance : ℝ)
++              (rewardBound + 2)).IsPotential (fun state => evalReal state.1 expression) ∧
++            ¬ QuasiconvexOn ℝ
++              (Set.Icc (fun who => quittingSoloReward reward who who)
++                (fun _ => rewardBound + 1)) (fun point => evalReal point expression) := by
++  constructor
++  · intro hnoUniform
++    obtain ⟨hnoSureRoot, tolerance, htolerance, htoleranceMax, expression, hpotential⟩ :=
++      (quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential
++        reward rewardBound hreward hnormal hpositive).mp hnoUniform
++    have hregular := contDiff_evalReal expression 1
++    refine ⟨hnoSureRoot, tolerance, htolerance, htoleranceMax, expression, hpotential, ?_⟩
++    exact not_quasiconvex_of_quittingRobustPotential_add_two reward hreward
++      (by exact_mod_cast htolerance.le) (fun point => evalReal point expression) hpotential
++      hregular.continuous.continuousOn (fun point _ => hregular.differentiable_one point)
++  · rintro ⟨hnoSureRoot, tolerance, htolerance, htoleranceMax, expression, hpotential, _⟩
++    exact (quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential
++      reward rewardBound hreward hnormal hpositive).mpr
++        ⟨hnoSureRoot, tolerance, htolerance, htoleranceMax, expression, hpotential⟩
++
++end GameTheory
+*** End Patch

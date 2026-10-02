@@ -1,0 +1,534 @@
+STATIC DEPENDENCY AUDIT: THREE SCREENED/STRETCH SOURCE PACKETS
+
+Scope and evidence
+------------------
+All three final exports were read in full. Exact production declarations and
+imports below were inspected; no Lean/Lake command, Git operation, shared edit,
+child agent, or new frontier derivation was used. This is not a fresh build or
+axiom audit. Existing production owners are distinguished from Research owners,
+reviewed drafts, and proposed declarations. Proposed names are specifications,
+not assertions that declarations already exist.
+
+Input SHA256:
+c3004d986acc316a20b7c29a7cdc9c764235f843e4b006a7fc99e0cbe0e0f5d7
+  math/exports/GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR.md
+24537ca80ba0c3ac610c73259ca44977acda1d985527fedba524de98589ac2b6
+  math/exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md
+83ee0a42c89aa0f37a29b74bee059fc6dca8cbda309f9e6806f84bf410bb8297
+  math/exports/THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS.md
+
+Notation below: E is actual unrestricted terminal exploitability; eta its
+infimum over ALL actual behavioral profiles. Finite stopping-law profiles are
+independently sampled marginal laws, never a public mixture. A law's Never
+atom stays distinct from every finite date. MAX minima are not sum-debt minima.
+
+1. Reuse inventory: do not reprove these results
+----------------------------------------------
+1a. Uniform reward robustness and positive scaling:
+  abs_quittingContinuationBestResponseValue_sub_le_of_reward_close,
+  abs_quittingTerminalExploitability_sub_le_of_reward_close,
+  abs_quittingTerminalExploitabilityInf_sub_le_of_reward_close,
+  quittingTerminalExploitability_scaleQuittingReward,
+  quittingTerminalExploitabilityInf_scaleQuittingReward,
+  quittingTerminalExploitabilityInf_scaleQuittingReward_pos_iff
+in UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean.
+These are literal same-profile/full-response results, with E and eta changing
+by at most 2 delta; scaling is common and positive, with zero Never unchanged.
+Use quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff and
+quittingGame_not_exists_uniformEquilibriumPayoff_of_quittingTerminalExploitabilityInf_pos
+in UniformEquilibrium/Quitting/Terminal/TerminalDebtPrefixDescent.lean for the
+actual no-UE interface. Do not replace it by stationary nonexistence.
+
+1b. Compact semantic minima, MAX singleton moat, and all-player ties:
+  exists_minimum_quittingTerminalSemanticExploitability,
+  minimumTerminalSemantic_exploitabilitySingletonMargin
+in UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostate.lean;
+  minimumTerminalSemantic_maximumDebt_allPlayersTie,
+  not_allNever_positiveMinimumTerminalSemanticExploitability,
+  minimumTerminalSemantic_maximumDebt_lt_half,
+  terminalSemantic_minimum_of_actualMinimum,
+  quittingTerminalDeviationDebt_eq_exploitability_of_attained_positive_minimum,
+  quittingTerminalExploitability_lt_half_of_attained_positive_minimum
+in UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean.
+The carrier minimum exists without an actually attaining profile. The moat
+already internally uses auxiliary finite-game Nash existence. Do not add a
+supplied favorable Nash root, an attained response cap, or a tied-debt premise.
+
+1c. Exact screened caps and pure-coalition debt:
+  oneDateProductQuittingContinuationBestResponseValue_oneDateThenNever_sureQuitter
+in UniformEquilibrium/Diagnostics/Quitting/OneDateProductRootCaps.lean;
+  quittingTerminalSemanticPair_pureSetRootThenContinuation_eq_of_two_le_card,
+  quittingContinuationBestResponseValue_pureSetRoot_eq,
+  quittingTerminalSemanticDebt_pureSetRoot_eq
+in UniformEquilibrium/Quitting/Paths/SureExitSet.lean.
+These retain all behavioral replies. For two sure quitters, the tail is screened
+even after replacing one player's strategy. No new one-stage-only cap argument
+is needed. The packet's E(p^S) formula is a max-over-players adapter to these.
+
+1d. Literal signed stretch:
+  unitEndpointStretch, signedEndpointGapStretch and their bounds/sign/saturation
+lemmas in MathUE/SignedEndpointStretch.lean;
+  quittingMembershipStretchedReward,
+  quittingMembershipStretchedReward_pair,
+  quittingMembershipStretchedReward_ownSingleton,
+  abs_quittingMembershipStretchedReward_le_one,
+  abs_quittingMembershipStretchedReward_sub_le,
+  QuittingAgreesWithMembershipStretch,
+  quittingDirectedMembershipGap_eq_stretch_on_support
+in UniformEquilibrium/Diagnostics/Quitting/MembershipStretch.lean.
+The agreement predicate already allows arbitrary final own-singleton reselection.
+The displacement bound applies to the literal constructed stretch, NOT to the
+subsequently remaximized final table. Never assume continuity of the endpoint
+stretch as a function of the original table across tied reward entries.
+
+1e. Coherent minimum arm and first reversal are already production results:
+  membershipStretch_sameRoot_minimumEquality_and_supportedSaturation
+in UniformEquilibrium/Diagnostics/Quitting/MembershipStretchMinimumEquality.lean;
+  not_membershipStretch_coherent_positiveMinimum_finFour
+in UniformEquilibrium/Diagnostics/Quitting/InverseMembershipStretchExclusion.lean;
+  exists_supported_pureRoot_zeroDebt_of_saturatedGaps
+in UniformEquilibrium/Diagnostics/Quitting/SaturatedMembershipPureVertex.lean;
+  exists_sureOwner_strictOptionalReversal_of_membershipStretch_positiveMinimum_finFour
+in UniformEquilibrium/Diagnostics/Quitting/ThreeSureMembershipReversal.lean.
+The last theorem already derives genuine optional mixing, a sure owner's
+Continue-minus-Quit preference, and both-table signs from actual final minimum
+and eta(final) <= eta(original). It assumes only all other players sure, not
+optional interiority. Do not reprove packet 3's entire coherent arm.
+
+1f. Joint semantic/law compactification and exact product base:
+  quittingTerminalSemanticLawCarrier_isCompact,
+  exists_terminalSemanticLawCarrier_lift,
+  quittingTerminalSemanticLawPoint_mem_carrier
+in UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticResetIncidenceReturn.lean;
+  exists_behaviorProfile_sequence_joint_tendsto_of_mem_terminalSemanticLawCarrier,
+  exists_twoSureProductRoot_realizing_jointCarrierPoint_of_strictMargin
+in UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonBehavioralLawProductBase.lean.
+The latter preserves the SAME complete semantic pair AND complete law as an
+UNPADDED root-then-Never, and as stationary repetition. It needs zero Never,
+zero singleton masses, card > 1, and strict cap-singleton margins. These must
+be derived at the selected minimum. The padded nonstrict sibling is not a
+substitute. Product-base extraction itself is already implemented.
+
+1g. Actual finite-calendar coordinates and payoffs, already production:
+  quittingFiniteCalendarDecodedLaws,
+  quittingFiniteCalendarCoalitionMass, quittingFiniteCalendarNeverMass,
+  quittingTerminalOutcomeMass_finiteCalendar_eq,
+  quittingTerminalOutcomeMass_finiteCalendar_none_eq,
+  quittingFiniteCalendarRawPayoff_eq_terminalPayoff
+in UniformEquilibrium/Quitting/Paths/FiniteCalendarRawPayoff.lean.
+These use MixedSimplex over Option (Fin deadline), with exactly the desired
+finite dates and separate Never. Reuse them for actual polynomial gains.
+MathUE/ProbabilityMassFunction/FiniteClockCoordinates.lean also has exact
+encoding/decoding (finiteClockDecodeLaw_coordinates and
+exists_finiteClockCoordinates_iff), but adds a zero auxiliary coordinate at
+the deadline: do not confuse that coordinate with Never or a playable atom.
+FiniteCalendarPayoffClosure.lean preserves prescribed payoffs only; it does
+NOT by itself establish full-cap finite-clock approximation.
+
+1h. Full-cap finite-clock approximation exists in Research, not production:
+Research/Quitting/FiniteClockTerminalSemantics.lean:
+  quittingTerminalSemanticPair_eq_stoppingLawProfile,
+  quittingTerminalPayoff_stoppingLawProfile_eq_expect,
+  quittingTerminalPayoff_update_stoppingLawProfile_pureTime_eq_expect,
+  quittingFiniteClockSemanticReachable_isCompact.
+Research/Quitting/EscapeAwareQuantileClockTransport.lean:
+  hasEscapeAwareQuantileClockCompression_of_normalized,
+  hasEscapeAwareQuantileClockCompressionAtRewardBound,
+  actual forward/reverse pure-time payoff and full-cap transport.
+Research/Quitting/EscapeAwareQuantileClockHierarchy.lean:
+  exists_finiteClockSemanticPair_exploitability_eq_upper,
+  escapeAwareQuantileClock_fin4_normalized_quantitative_bracket,
+  quantileClockSupport_fin4 and quantileClockRadius_fin4.
+The unconditional normalized bracket gives support 8k+1 and error 24/k.
+The generic bracket with a HasCompression hypothesis is not the final producer:
+instantiate the already implemented normalized theorem. Promote the coherent
+required dependency slice before production consumers; production may not
+import Research. These files were not compiled or axiom-audited by this audit.
+
+2. Small shared foundation unit: direct fibers and extrema
+--------------------------------------------------------
+Reuse Fin4FreeRewardCoordinate and card_fin4FreeRewardCoordinate from
+UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Chart.lean (cardinality 56).
+Its fin4CanonicalReward fixes one special singleton vector and is insufficient.
+Its fin4OriginalReward translates recipient rows and changes b: NOT the fiber.
+
+Proposed D1: directReward(b,s), singleton and free-coordinate simp identities,
+reconstruction of any real table, joint continuity, sup-distance identities,
+unit-cube and strict-interior equivalences. b and s must be independent.
+Proposed D2: continuity/Lipschitz of eta from owner 1a; compact full reward-cube
+maximum Omega and compact singleton-fiber maximum Omega_b, both attained.
+Show 0 <= eta <= 1 in the unit cube via the actual all-Never profile.
+Proposed D3: continuous compact screened score on union of six closed squares,
+independent of s, with minimum theta(b) attained and 2-Lipschitz in b; pure
+eleven-coalition Gamma similarly. Include optional hazards 0 and 1, allowing
+three/four sure quitters and duplicate representations without exclusion.
+
+The frozen drafts supplied by root were subsequently read in full, including
+the later polynomial/nonvanishing/degree units (see section 10). They cover
+most of D1 and P1-P5, not just the earlier chart/branch/minor slice recorded in
+feedback. They are UNAPPLIED and UNCOMPILED, not checked owners. Root should
+check/reuse those exact frozen drafts rather than commission duplicate proofs.
+D1's bound/distance adapters and D2-D3 remain additional obligations.
+
+3. Membership-stretch producer (packet 2, also packet 3 source)
+------------------------------------------------------------
+Proposed S1: for every S with card >= 2,
+  E_r(p^S) = max_i max 0 (r_i(S symmetricDifference {i}) - r_i(S));
+show no own-singleton coordinate occurs. Include the grand coalition and all
+11 Fin4 coalitions, not just pairs/triples. Delegate caps to 1c.
+Proposed S2: for bounded r, 0 <= alpha <= 1 and E_r(p^S)>0,
+  E_stretch(r,alpha)(p^S) = (1-alpha) E_r(p^S) + 2 alpha;
+then the analogous Gamma identity when Gamma(r)>0. Use one literal table and
+the finite max/min; do not assume the maximizing owner is unchanged.
+Proposed S3: from any real Fin4 no-UE table, produce normalized global maximizer
+r*, Omega>0, any chosen 0<alpha<Omega/8, the literal stretched table, fixed b,
+gamma=alpha(2-Omega)>0, and a final fiber maximizer r with
+  Omega/2 < eta(r)=Omega_b <= Omega,
+  QuittingAgreesWithMembershipStretch r* r alpha,
+  alpha < eta(r)/4,
+  forall s in the full singleton cube, Gamma(directReward(b,s)) >= Omega_b+gamma.
+Retain r*, alpha, and literal agreement as outputs, not hidden existential
+ancestry. A reverse implication uses the actual positive eta witness only.
+This unit does not require softmax, generic polynomial, or singleton collar.
+
+4. Generic screened exclusion and selection (packet 1 A/B)
+--------------------------------------------------------
+Proposed P1: actual optional branch selection from equal STRICTLY POSITIVE
+complete debts, deriving the Quit/Continue labels internally. For core pair
+a,b and optional c,d, retain four actual bilinear rows F_a,F_b,F_c,F_d, valid
+on the entire closed square. Use explicit four-corner coefficients obtained
+from the actual table, not supplied arbitrary bilinear functions.
+Proposed P2 (MathUE): for A : Matrix (Fin 3) (Fin 4) R, signed maximal minors
+w_j=(-1)^j det(A deleting j), prove that A*(1,x,y,xy)=0 implies
+w_0*w_3-w_1*w_2=0. Rank-deficient cases must be included internally; neither
+an invertible selected minor nor rank=3 is an acceptable extra hypothesis.
+Proposed P3: enumerate sorted sure pairs (6), optional complement sorted once,
+and two optional action labels (4), construct 24 integer MvPolynomial factors
+from P1/P2, prove homogeneous degree 6, and define their product Pi.
+Proposed P4: for EACH factor build the packet's bounded rational reward witness:
+Fa=1/4, Fb=1/2+xy/4, Fc=L_c(x)/4, Fd=L_d(y)/4,
+with L_Q(t)=1-t and L_C(t)=t. Recipient coordinates are disjoint; assign the
+actual paired rewards, prove abs <=3/8 and own singletons arbitrary. Compute
+factor -1/2048 for CC and -1/4096 otherwise. Thus every factor is nonzero,
+Pi is nonzero, homogeneous, and has actual total degree 144. No random search
+or a supplied polynomial-nonzero field replaces these witnesses.
+Proposed P5: Pi(b) != 0 excludes four equal positive actual screened debts,
+for EVERY singleton vector. P1 includes ties/zero optional gap boundaries;
+positive debt determines a viable label, even when its probability is 0 or 1.
+Proposed P6: theta >= Omega_b from actual E >= eta. If equality held at a
+maximizing s and minimizing screened root, that root would be an actual
+positive global minimum; use 1b all-player ties and P5. Hence theta>Omega_b.
+Proposed P7 (generic MathUE if no pinned owner): nonzero finite-variable real
+polynomial has open dense nonvanishing locus, and every nonempty open box
+meeting it contains a rational point. This is distinct from the misleadingly
+named MathUE/Polynomial/DensePolynomial.lean, which concerns dense coefficient
+lists, not topological density.
+Proposed P8: shrink ANY input real no-UE table strictly inside the unit cube by
+common positive scaling; use eta robustness + P7 to choose rational interior
+b with Pi(b)!=0 and positive eta at the retained original s; maximize over s;
+choose rational 0<gamma<theta-Omega_b. Quantify the bound over EVERY s and
+EVERY screened root. The maximizing s need not be rational. This selection
+does not retain membership-stretch ancestry and must not replace S3 for
+packet 3. Conversely its positive maximizing eta gives actual no-UE.
+
+5. Singleton-law contradiction and uniform collar (packet 1 C)
+------------------------------------------------------------
+Proposed C1: at ANY positive MAX-minimizing joint carrier point, zero total
+singleton mass implies zero Never. Use one actual joint approximating sequence.
+For each actual profile, let a_i be its marginal Never mass and p=product a_i.
+Then singleton_i >= (1-a_i) product_{j!=i} a_j >= p(1-a_i).
+If the limiting p>0 and singletons vanish, all a_i tend to 1, hence p tends to
+1, all prescribed payoffs tend to 0, and the MAX moat implies all own singletons
+nonpositive. All Never then has zero E, contradicting positive minimum.
+Reuse quittingTerminalOutcomeMass_none_eq_prod_stoppingLaw_none in
+UniformEquilibrium/Quitting/Paths/ProfileNeverMass.lean. The product-base owner
+already contains related private law estimates; expose/delegate useful exact
+lemmas rather than duplicate its full extraction argument.
+Proposed C2: zero total singleton mass implies coordinatewise zero by law
+nonnegativity; use C1, the strict moat B_i-s_i>=m>0, and 1f to produce the SAME
+unpadded screened root/pair/law. P5 + all-player ties contradict it. Conclusion
+is positive TOTAL singleton mass at EVERY joint-carrier MAX minimum.
+Proposed C3: closed graph of (reward, semantic pair, complete law) over a compact
+reward cube. Transport the SAME actual approximating profiles/laws across
+nearby rewards using 1a; do not assert naive continuity of caps in stopping-law
+weak topology. Payoff moments and outcome laws must retain their literal law.
+Proposed C4: compact near-minimum separation gives fixed-table kappa>0 and
+epsilon0>0 such that ALL actual E<=eta+epsilon0 have singleton total>=kappa.
+Proposed C5: for fixed b with Pi(b)!=0 and any a>0, on the NONEMPTY compact
+set of s with eta(directReward(b,s))>=a, produce the SAME kappa,epsilon0 for
+EVERY such s and EVERY actual near-minimum profile. C3 is needed here; separate
+fixed-table compactness does not establish uniformity in s.
+
+6. Shared actual common-calendar source (both packets 1 and 2)
+------------------------------------------------------------
+This is the largest still-missing common producer. Searches of production
+MathUE/UniformEquilibrium and relevant Research owners found no existing
+log-sum-exp/common-calendar selector. Use small generic lemmas below, then
+actual payoff adapters; none should import game modules into MathUE.
+
+G1: finite softmax weights for tau>0 on one nonempty finite tester family,
+including the zero tester; log-sum-exp bounds max g <= F <= max g+tau log|J|,
+derivative = sum lambda_a Dg_a, entropy/inactivity identities. For linear
+reward rows v_a, F-epsilon <= r dot sum lambda_a v_a <= F. This is reward
+work, NOT an l1-norm identity and NOT a 60-coordinate normal statement.
+G2: compact smooth envelope f(r)=min_{p in compact X} F(r,p), one-sided
+directional derivative = minimum of derivative among ALL old minimizers;
+at a box maximum, a finite convex combination of such gradients is in the
+outward normal cone. Extend to an average over calendar indices by choosing
+one minimizer at EACH index per tuple. Output finite tuples and weights.
+Do not replace this with one favorably selected minimizer's normality.
+G3: along independent simultaneous marginal chords, |g'|<=16, |g''|<=96
+for four players/unit rewards; softmax curvature H=96+256/tau. If p minimizes
+on X_N and nu in X_(N+1), negative initial weighted derivative -c yields
+drop >=c^2/(2H), with the chosen step inside [0,1] verified. Consequently the
+SAME softmax lambda obeys the lower bound -sqrt(2H(f_N-f_(N+1))) against ALL
+competitors. Do not choose lambda after the competitor is known.
+G4: deterministic finite weighted selection: discard calendar endpoints and
+large-residual entries while preserving pressure average control, then select
+an ACTUAL tuple entry. Convex weights are a proof device, not played public
+randomness. Keep explicit discarded masses and denominator positivity.
+
+A1: use actual finite-calendar polynomial U and unilateral pure-response U to
+define g and its literal coefficient v = response terminal law minus source
+law in the response owner's reward row. Show the other reward rows are zero.
+The singleton projection is exactly the four diagonal singleton differences.
+A2: finite tester pool J consists of zero and owner x (dates 0..L plus Never),
+with L=2m+1 common to all calendars N=m..2m, tau=m^(-1/2). Show full E=max_J g
+on X_N: every later finite response has the already represented after-support
+outcome, while Never is separately represented. Do not bound only clock-capped
+deviations. X_N permits dates 0..N-1 AND Never, with arbitrary zero masses.
+A3: promote/reuse 1h to obtain reward-uniform finite-clock error rho_m->0, e.g.
+24/k for k=floor((m-1)/8)>0 and 8k+1<=m. Hence every inner softmax minimizer
+at EVERY maximizing singleton table is near actual global eta. Maximize the
+AVERAGE of f_N over singleton s, not separate tables at separate N.
+A4: same-table telescoping Delta_N=f_N-f_(N+1)>=0, total<=2+epsilon_m;
+epsilon_m=tau log|J|->0. Obtain maximizing s_m and a subsequence s_m->s_infty
+with eta(r(s_infty))=Omega_b. The fixed b is selected BEFORE this construction.
+A5: compactness + MAX moat give uniform B_i-s_(m,i)>=sigma=Omega_b/2 at every
+inner minimizer for large m, and s_(m,i)<1. Therefore all four coordinates
+of each tuple-averaged outward normal are <=0. Only their summed pressure is
+retained after selection; do not infer four selected-entry inequalities.
+A6: shift EACH finite law by one date, leaving Never unchanged. Since B>s,
+full caps and payoffs survive the silent row unchanged. Recompute lambda-hat
+from the SHIFTED tester gains; do not reuse the unshifted weights as though
+labels were unchanged. Prove the exact normalizer ratio 1-ell+a, with
+ell<=1/(L-N+1), a<=4 exp(-sigma/tau); bounded observable change <=4(1/d+a).
+New date-zero tester gains s_i-U_i are small-weight rows, not silently omitted.
+A7: for N<=2m-2, obtain all-competitor lower derivative bound -Rhat_N over
+X_(N+3), using Delta_N+Delta_(N+1)+Delta_(N+2)+tau*a_m. Preserve the entire
+finite response family through N+3 and the distinct Never tester in output
+(larger common pool labels with identical gains can be aggregated consistently).
+A8: exact solo-Quit0 directional identity for the SAME lambda-hat gives
+  theta_k*(B_k-s_k) >= E-epsilon_m-Rhat_N-4a_m.
+Use B_k-s_k<=2 and E->Omega_b to derive theta_k>=Omega_b/4 eventually for
+EVERY owner. Do not add owner-mass positivity as a supplied witness field.
+A9: average residual bound B_m->0; discard Rhat>sqrt(B_m) and last two dates.
+Use G4 to select one actual shifted profile with residual->0, inactivity->0,
+and summed singleton pressure limsup<=0. N_m->infinity follows from N in
+[m,2m-2], not an independently chosen bounded subsequence.
+A10: transport SAME profiles and SAME tester weights to the FIXED limit table
+r_infty: E error <=2delta, inactivity error <=4delta, weighted chord derivative
+error <=16delta. Owner mass and singleton-pressure laws do not change with r.
+Do not leave the final output at accuracy-dependent reward tables.
+A11: packet 1 uses C5 on ALL inner minima before selection; then the selected
+profiles retain total singleton mass >=kappa. Finite pigeonhole/subsequence
+selects one fixed singleton owner with mass>=kappa/4. Packet 2 has no such
+collar premise or conclusion, but retains its pure-coalition gamma gap.
+
+Final source API: select b, gamma, r_infty, Omega_b (and kappa for packet 1)
+BEFORE forall epsilon>0 and requested depth d. Return an actual independent
+profile silent at zero, N>=d, finite support 1..N plus Never, one tester PMF,
+E<=Omega_b+epsilon, weighted inactivity<=epsilon, owner masses>=Omega_b/4,
+one scalar summed singleton pressure<=epsilon, and weighted derivative >=
+-epsilon for EVERY independent competitor in X_(N+3). The same PMF must
+satisfy all fields. Sequence form with eventual bounds is an equivalent useful
+implementation layer. No attainment of response supremum is needed.
+
+7. Opposed-reversal consumer (packet 3): a narrower reusable telescope
+-------------------------------------------------------------------
+Proposed R1 (MathUE, finite affine rows): formalize the packet's one-orientation
+comparison lemma. At t=p in (0,1), all stretched rows tie at m, 0<m<1/2,
+0<alpha<m/4, old endpoints are in [-2,2]. Each row is coherent nonnegative or
+reversing a<0<b, with at least one reversing row. An optional coherent row
+has one zero endpoint and other c>0. Include max 0 of each old affine mean.
+Use the supplied v=(m+2alpha(2p-1))/(1-alpha) split:
+  v>m: p'=1-(1-p)m/v in (p,1), ALL old positive-part rows <m;
+  v<m: at p ALL <=m and a reversing row <m;
+  v=m: at p ALL <=m and the optional row <m.
+The last two conclusions are not strict improvements of maximum by themselves:
+the actual game consumer must first infer old global attainment, then apply
+the all-player-ties theorem to contradict the strict slack row.
+The displayed polynomial factor R and its positive bound are finite ordered
+ring algebra; retain the strict endpoint assumptions used in denominator
+clearing. No general minimax duality is needed. Existing
+MathUE/LinearProgramming/OneDimensionalAffineMinimax.lean solves different
+optimization packaging and does not already prove this signed comparison.
+
+Proposed R2 (actual adapter): bounded original/final Fin4 tables;
+QuittingAgreesWithMembershipStretch original final alpha;
+0<alpha<eta(final)/4; 0<eta(final)<=eta(original);
+all players other than optional sure at the SAME root; actual final E=eta(final).
+Conclude optional genuinely mixed and two DISTINCT nonoptional owners i,j,
+with old AND final Continue-minus-Quit signs (-,+) for i and (+,-) for j at
+quittingSingleOptionalAction optional false/true.
+This telescope is stronger than the exported worst-table specialization but
+follows from its supplied proof: only the infimum ORDER is used, not global
+maximality of the original table. Derive mixing/one reversal via 1e; if no
+opposed owner exists, orient all negative endpoints to the same action, derive
+the actual four affine debt rows (including optional row), and apply R1.
+For weak old comparison use eta(original)<=E_old<=m<=eta(original) before
+invoking all-player ties. Do not infer old minimum from pointwise row formulas.
+Then S3 supplies R2's premises with alpha<m/4 and literal retained ancestry.
+Do not require supplied optimal response orientations or favorable coordinates.
+
+8. Further useful obligations: harmonic bound and regressions
+-----------------------------------------------------------
+H1: arbitrary finite NONEMPTY player set, positive carrier MAX minimum m,
+L_i=B_i-s_i>=m. Prepend small independent hazards t/L_i. Derive, on the actual
+Continue cap branch near zero, debt derivative 1-m*sum_j(1/L_j). Global minimum
+gives sum_i(m/L_i)<=1. Reuse quittingTerminalSemanticPrefix and
+quittingTerminalSemanticPrefix_mem_carrier in
+UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean, and generic
+smallHazardExpectation_sub_tail_sub_linearization_eq / quadratic remainder
+in MathUE/PMFProduct/SmallHazardExpectation.lean. The solo-prefix equality
+used for all-player ties is not yet this simultaneous-hazard derivative.
+H2: card>=2 implies every L_i>m, and U_i>s_i. With unit bounds L_i<=2, derive
+L_i>=m/(1-(n-1)m/2) and U_i-s_i>=(n-1)m^2/(2-(n-1)m), proving denominator
+positivity. H3: Fin4 plus strict all-Never comparison yields m<1/3; compact
+reward-cube attainment then gives one uniform Omega<1/3. Handle eta=0
+separately; do not require an actually attaining profile. This does not produce
+low-regret strategies. Research/Quitting/HarmonicReservoirConsumer.lean is
+about sum debt and negative Never resources, NOT H1.
+
+Regression obligations from packet 1: actual tied positive screened debts at
+the three given optional boundary/interior choices, bounded rewards, Pi=0,
+and all-Never exact equilibrium from zero own singletons. These are NOT
+counterexamples or globally minimizing screened roots.
+Packet 1 AdaptiveChildCenter regression: reuse reward/root/root_exactNash,
+profile_exactTerminalNash, target_isUniformEquilibriumPayoff in
+UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean. New work is
+exact SCREENED minimum (5-sqrt17)/4, all sure-pair branch lower bounds, its
+displayed attaining root, scale-1/4 threshold >7/128, robustness on the stated
+3/4000 ball, and nearby actual one-date-then-Never equilibrium producer using
+Poincare-Miranda with its full-cap anchor bound. Generic rational nonvanishing
+can then coexist with eta=0 and theta>1/20. The nearby equilibrium producer
+overlaps the adaptive-child packet; coordinate ownership rather than duplicate.
+Packet 3 regression: formalize the four explicit signed affine rows, inverse
+stretch and old minimax 25/99>1/4; optionally realize the rows by an actual
+table with own singletons zero. State that all Never is an equilibrium there:
+the fixture demonstrates sharpness of the one-orientation argument, not a
+positive-gap source. No consumer of opposed reversals is supplied.
+
+9. Recommended dispatch order and nonclaims
+------------------------------------------
+First small wave: check the frozen D1/P1-P5 chain below, then D1's remaining
+metric/box glue, D2-D3 + S1-S3 (actual ancestry-retaining producer), and P6-P8.
+Independently R1 then R2
+can consume the existing production one-reversal/minimum owners plus S3.
+After P5, implement C1-C5. Promote the 1h finite-clock slice independently.
+Build G1-G4 and A1-A10 as small verified units; attach C5 only for packet 1's
+collared source, and S3's strict Gamma for packet 2's source. H1-H3 and the
+regressions are separate useful-claim obligations, not excuses to postpone
+the central source units or claims already discharged by canonical owners.
+
+No mathematical source defect was identified in this audit. This is not a
+claim that all Lean elaborations are routine or that the packets are checked.
+The largest still-undrafted known-proof obligation identified here is the
+compact nonsmooth envelope/separation + shared-calendar selection. The explicit
+24-factor construction/nonvanishing now has frozen drafts awaiting checks;
+that is pending formalization validation, not a fresh proof-design assignment.
+
+Never infer an individual selected-profile normal from averaged normals; never
+infer four separate pressures from one sum; never add a 60-coordinate normal;
+never identify Never with an after-support finite clock; never replace actual
+behavioral caps by one-stage caps; never assume actual eta/cap attainment;
+never infer positive eta from generic Pi nonvanishing or positive theta.
+Packet 1 selects a NEW generic fiber and may discard membership ancestry.
+Packet 2 preserves ancestry but only excludes eleven pure profiles. Packet 3
+only restricts an actually attaining three-sure root at that source, and does
+not construct such a root. None proves Fin4 uniform equilibrium or improves
+the remaining singleton-pressure source by itself.
+
+10. Exact frozen draft inventory, read after root supplied paths
+--------------------------------------------------------------
+All ten patches below were read fully, not merely indexed. Scope fits the
+supplied known proof; no mathematical defect was found in this dependency
+pass. They have NOT been applied or compiled here. Import availability,
+elaboration, tactic behavior, warnings, trust audit and shared-tree integration
+remain the root compiler's work. Apply explicit repairs after their baselines.
+
+/tmp/own-singleton-reward-chart.fIa1qX/OWN_SINGLETON_REWARD_CHART.patch
+  SHA256 6cf88b0275721e0e933301951eab49a015316f75a3717df01e6e0f2a25c4ee06
+  Adds QuittingFreeRewardCoordinate, quittingOwnSingletonReward,
+  quittingOwnSingletonReward_reconstruct, joint/fiber continuity and a chart
+  for arbitrary fixed singleton vector. Refactors the old Fin4 canonical
+  chart to delegate, with one downstream definitional-unfolding update.
+  It does not yet add the direct fiber sup-distance/cube-bound lemmas or
+  eta-extremum producer. Check existing old-chart consumers after refactor.
+
+/tmp/screened-root-source.xNVVKd/SCREENED_ROOT_DEBT_BRANCHES.patch
+  SHA256 46d69174893acfbcea517076790e9408007249e030f0dbe2ad0db131ba937e2a
+  Adds actual full-debt = root defect, two max branches, sure-owner positive
+  part and positive-debt gap equality. Arbitrary finite player type with a
+  distinct sure opponent; optional hazards include endpoints. Delegates full
+  caps to canonical owner, no separate cap/Nash/interiority premise.
+
+/tmp/own-singleton-reward-chart.fIa1qX/SCREENED_ROOT_BRANCH_LABELS.patch
+  SHA256 ebaa9d7113b14e79bc3c12491f580a18c734ef76b9a68d8df21a1d28da25a7c2
+  Depends on debt branches. Adds screenedRootDebtBranches and
+  exists_screenedRootDebtBranches_eq_of_positive_equal_debts; extracts one
+  of four optional label pairs internally from actual equal positive debts.
+  An ordering permutation is positional data only, not a favorable coefficient.
+
+/tmp/screened-root-four-corners.cIBcxx/SCREENED_ROOT_FOUR_CORNERS.patch
+  SHA256 47813f600a0ff663cf7b9ddbb16f958d55cc589a60f7844ac351a2f50a2a5a5a
+/tmp/screened-root-four-corners.cIBcxx/SCREENED_ROOT_FOUR_CORNERS_REPAIR.patch
+  SHA256 bfdc3b0bc8706f0b3e3e56fcc7f3487af43a4d3e546b7ec8d6fa5c71abc3a22c
+  Adds generic expect_pmfPi_eq_four_corners/bilinear_coefficients; actual
+  SureOpponentRewardFiber payoff/gap/full-debt invariance under ALL singleton
+  reselection; literal screened corner terminals/gains and
+  screenedRootDebtBranches_eq_coefficientRow. Includes closed-square edges.
+  Repair corrects the Matrix.Notation import to its pinned LinearAlgebra path.
+
+/tmp/rectangular-cofactor-kernel.akNW24/RECTANGULAR_COFACTOR_SEGRE.patch
+  SHA256 b07ca5fb697d2c34992ad6d96c593fa1f3447c7cfcd16a5099ac41231bcf0c29
+/tmp/rectangular-cofactor-kernel.akNW24/RECTANGULAR_COFACTOR_SEGRE_REPAIR.patch
+  SHA256 fdecf5890b7892f339d0fb71f1285942b1fe7d98ec6e4c42cb1a543eb607904e
+  Generic n by n+1 signedMaximalMinors kernel/cross identities over CommRing;
+  over Field a nonzero cofactor spans the kernel with pivot internally selected.
+  BilinearSegreExclusion then proves mulVec_bilinearMonomials_ne_zero without
+  rank/invertible-minor premises. Rank deficiency forces obstruction zero.
+  Repair fixes multiplication orientation in the scalar-span proof and removes
+  an unsupported degree claim from its header (degree belongs downstream).
+
+/tmp/screened-root-polynomial.qdx5Fg/SCREENED_ROOT_POLYNOMIAL.patch
+  SHA256 e3ddc227b55d3f48518ed5d60af28620026e95710bf31687e069dda4252e2440
+  Adds ring-map compatibility of minors, sorted 6 sure-pair coverage including
+  roots with >2 sure players, ScreenedRootFactorIndex cardinality 24, integer
+  MvPolynomial literal corner/matrix/minor/product construction and exact
+  evaluation back to the actual reward table. Main consumer:
+  not_positive_equal_screened_debts_of_actual_reward_polynomial_ne_zero.
+  This already supplies P3's construction and P5's actual-source exclusion;
+  it correctly does not claim nonzero polynomial or degree by itself.
+
+/tmp/screened-polynomial-witness.4kdar9/SCREENED_POLYNOMIAL_DEGREES.patch
+  SHA256 9572c041d806a5fbfa8c293f85ca7c5b188492e141eb229a0c3fb91df753af3b
+  Adds generic homogeneous 3x3 determinant/minors, actual factor homogeneity6
+  and product homogeneity144, and degree upper bounds. Allows zero homogeneous
+  polynomials here, leaving exact degree to the nonvanishing consumer.
+
+/tmp/screened-polynomial-witness.4kdar9/SCREENED_POLYNOMIAL_WITNESSES.patch
+  SHA256 dab5f8e14dc55cd8ef8d005a7d25948767b0060e773aac6542ecbc02b85acbdb
+  DEPENDS ON DEGREES, despite filename ordering. Defines literal rational
+  reward tables per factor, verifies all 60 entries abs<=3/8 and own singletons
+  zero, actual four branch functions, exact factor values -1/2048(CC) or
+  -1/4096, nonzero EACH factor, integral-domain product nonzero, exact degrees
+  6/144, and nonzero/exact degree after the integer-to-real coefficient map.
+  It does not falsely claim that a single displayed witness table makes ALL
+  factors nonzero. This supplies P4 and P3's exact degree once checked.
+
+Minimal dependency order: direct chart + debt branches; branch labels;
+four corners + its repair; generic cofactor/Segre + its repair; polynomial;
+degrees; witnesses. Then P6/P7/P8. Retain frozen repairs when regenerating
+patches after compiler fixes. All generic/game separation is appropriate in
+these drafts; none imports Literature or supplies a strategic certificate.

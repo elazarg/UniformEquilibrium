@@ -1,0 +1,122 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/RationalScreenedSingletonFiberSelection.lean
++import UniformEquilibrium.Diagnostics.Quitting.PositiveRationalScreenedFiberEntrance
++import UniformEquilibrium.Diagnostics.Quitting.ScreenedSingletonFiberStrictGap
++import Mathlib.Algebra.Order.Archimedean.Basic
++
++/-!
++# Source-derived rational generic screened singleton-fiber selection
++
++The predicate below states actual source facts; the theorem PRODUCES them from
++a raw positive-eta/no-UE table. No favorable extrema or determinant certificate
++is supplied. The selected singleton maximizer need not be rational.
++-/
++
++namespace GameTheory
++
++/-- Literal source Theorem B fields, with the selected maximal table exposed.
++This is a proposition definition, not an assumed source-producing certificate. -/
++def IsRationalGenericScreenedSingletonFiber
++    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℚ)
++    (singletons : Fin 4 → ℝ) (gamma : ℚ) : Prop :=
++  (∀ coordinate, |(coordinates coordinate : ℝ)| < 1) ∧
++  screenedRootPolynomialEval (fun coordinate => (coordinates coordinate : ℝ))
++    screenedRootExclusionPolynomial ≠ 0 ∧
++  (∀ who, |singletons who| ≤ 1) ∧ 0 < (gamma : ℝ) ∧
++  0 < quittingTerminalExploitabilityInf
++    (quittingOwnSingletonReward singletons (fun coordinate => (coordinates coordinate : ℝ))) ∧
++  (∀ otherSingletons : Fin 4 → ℝ, (∀ who, |otherSingletons who| ≤ 1) →
++    quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward otherSingletons
++          (fun coordinate => (coordinates coordinate : ℝ))) ≤
++      quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward singletons (fun coordinate => (coordinates coordinate : ℝ)))) ∧
++  ∀ otherSingletons : Fin 4 → ℝ, (∀ who, |otherSingletons who| ≤ 1) →
++    ∀ root : Fin 4 → PMF Bool, IsScreenedQuittingRoot root →
++      quittingTerminalExploitabilityInf
++          (quittingOwnSingletonReward singletons
++            (fun coordinate => (coordinates coordinate : ℝ))) + (gamma : ℝ) ≤
++        quittingTerminalExploitability
++          (quittingOwnSingletonReward otherSingletons
++            (fun coordinate => (coordinates coordinate : ℝ)))
++          (quittingOneDateThenNeverProfile
++            (quittingOwnSingletonReward otherSingletons
++              (fun coordinate => (coordinates coordinate : ℝ))) root)
++
++/-- Internally scale and rationally perturb an arbitrary positive-eta source,
++THEN maximize its selected singleton fiber and choose a positive RATIONAL gap.
++ONE b is selected before EVERY allowed singleton vector and screened root. -/
++theorem exists_rationalGenericScreenedSingletonFiber_of_positive_inf
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
++    ∃ (scale : ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℚ)
++      (singletons : Fin 4 → ℝ) (gamma : ℚ),
++      0 < scale ∧
++      (∀ terminal who, |scaleQuittingReward scale reward terminal who| < 1) ∧
++      0 < quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward
++          (fun who => scaleQuittingReward scale reward (quittingSingletonTerminal who) who)
++          (fun coordinate => (coordinates coordinate : ℝ))) ∧
++      IsRationalGenericScreenedSingletonFiber coordinates singletons gamma := by
++  obtain ⟨scale, coordinates, hscale, hscaledBound, hcoordinates, hpolynomial, hretainedPositive⟩ :=
++    exists_positive_rational_screenedFiber_entrance reward hpositive
++  have hsomePositive : ∃ oldSingletons : Fin 4 → ℝ, (∀ who, |oldSingletons who| ≤ 1) ∧
++      0 < quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward oldSingletons
++          (fun coordinate => (coordinates coordinate : ℝ))) := by
++    exact ⟨fun who => scaleQuittingReward scale reward (quittingSingletonTerminal who) who,
++      fun who => (hscaledBound (quittingSingletonTerminal who) who).le, hretainedPositive⟩
++  obtain ⟨singletons, _, gap, hsingletons, _, hgap, hmaximumPositive,
++      hmaximum, _, _, hfloor⟩ :=
++    exists_strict_screenedSingletonFiber_gap
++      (fun coordinate => (coordinates coordinate : ℝ))
++      (fun coordinate => (hcoordinates coordinate).le) hpolynomial hsomePositive
++  obtain ⟨gamma, hgammaPositive, hgammaGap⟩ := exists_rat_btwn hgap
++  refine ⟨scale, coordinates, singletons, gamma, hscale, hscaledBound,
++    hretainedPositive, hcoordinates, hpolynomial, hsingletons, hgammaPositive,
++    hmaximumPositive, hmaximum, ?_⟩
++  intro otherSingletons hother root hscreened
++  exact (add_le_add_left hgammaGap.le _).trans (hfloor otherSingletons hother root hscreened)
++
++/-- The original uniform-equilibrium decision quantifiers enter via the
++canonical actual no-UE-to-positive-eta implication, not a stationary premise. -/
++theorem exists_rationalGenericScreenedSingletonFiber_of_no_uniformEquilibriumPayoff
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    (hno : ¬ ∃ payoff : Payoff (Fin 4),
++      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
++    ∃ (scale : ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℚ)
++      (singletons : Fin 4 → ℝ) (gamma : ℚ),
++      0 < scale ∧
++      (∀ terminal who, |scaleQuittingReward scale reward terminal who| < 1) ∧
++      0 < quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward
++          (fun who => scaleQuittingReward scale reward (quittingSingletonTerminal who) who)
++          (fun coordinate => (coordinates coordinate : ℝ))) ∧
++      IsRationalGenericScreenedSingletonFiber coordinates singletons gamma :=
++  exists_rationalGenericScreenedSingletonFiber_of_positive_inf reward
++    (quittingTerminalExploitabilityInf_pos_of_no_uniformEquilibriumPayoff reward hno)
++
++/-- Existence of ANY real Fin4 counterexample is equivalent to existence of
++the rational generic fiber source. The reverse uses only its actual positive
++eta witness, not nonvanishing or a positive screened-root floor alone. -/
++theorem exists_finFour_no_uniformPayoff_iff_exists_rationalGenericScreenedSingletonFiber :
++    (∃ reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
++      ¬ ∃ payoff : Payoff (Fin 4),
++        (quittingGame reward).IsUniformEquilibriumPayoff none payoff) ↔
++      ∃ (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℚ)
++        (singletons : Fin 4 → ℝ) (gamma : ℚ),
++        IsRationalGenericScreenedSingletonFiber coordinates singletons gamma := by
++  constructor
++  · rintro ⟨reward, hno⟩
++    obtain ⟨_, coordinates, singletons, gamma, _, _, _, hsource⟩ :=
++      exists_rationalGenericScreenedSingletonFiber_of_no_uniformEquilibriumPayoff reward hno
++    exact ⟨coordinates, singletons, gamma, hsource⟩
++  · rintro ⟨coordinates, singletons, gamma, hsource⟩
++    obtain ⟨_, _, _, _, hpositive, _, _⟩ := hsource
++    refine ⟨quittingOwnSingletonReward singletons
++      (fun coordinate => (coordinates coordinate : ℝ)), ?_⟩
++    exact quittingGame_not_exists_uniformEquilibriumPayoff_of_quittingTerminalExploitabilityInf_pos
++      _ hpositive
++
++end GameTheory
+*** End Patch

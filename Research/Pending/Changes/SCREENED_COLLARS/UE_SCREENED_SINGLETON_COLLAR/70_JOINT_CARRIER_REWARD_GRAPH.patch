@@ -1,0 +1,138 @@
+*** Begin Patch
+*** Add File: MathUE/Topology/UniformLipschitzFiberClosure.lean
++import Mathlib.Analysis.SpecificLimits.Basic
++import Mathlib.Topology.MetricSpace.Lipschitz
++import Mathlib.Topology.MetricSpace.Pseudo.Constructions
++import Mathlib.Topology.Sequences
++
++/-! # A closed graph for closures of uniformly Lipschitz families -/
++
++namespace Math
++
++open Filter Set
++open scoped Topology
++
++/-- Closing each range separately still gives a closed graph if changing the
++parameter moves every member by one common Lipschitz estimate. No compactness
++or continuity in the member index is assumed. -/
++theorem isClosed_graph_closure_range_of_uniform_lipschitz
++    {A B P : Type*} [MetricSpace A] [MetricSpace B]
++    (family : A → P → B) (constant : ℝ≥0)
++    (hfamily : ∀ member, LipschitzWith constant (fun parameter => family parameter member)) :
++    IsClosed {point : A × B | point.2 ∈ closure (Set.range (family point.1))} := by
++  classical
++  apply IsSeqClosed.isClosed
++  intro sequence point hsequence hlimit
++  have happrox : ∀ n : ℕ, ∃ member : P,
++      dist (sequence n).2 (family (sequence n).1 member) < 1 / ((n : ℝ) + 1) := by
++    intro n
++    obtain ⟨candidate, ⟨member, rfl⟩, hclose⟩ :=
++      Metric.mem_closure_iff.mp (hsequence n) (1 / ((n : ℝ) + 1))
++        (by positivity)
++    exact ⟨member, hclose⟩
++  choose member hmember using happrox
++  have hfirst := continuous_fst.tendsto point |>.comp hlimit
++  have hsecond := continuous_snd.tendsto point |>.comp hlimit
++  have hfirstDist : Tendsto (fun n => dist (sequence n).1 point.1) atTop (nhds 0) :=
++    tendsto_iff_dist_tendsto_zero.mp hfirst
++  have hsecondDist : Tendsto (fun n => dist (sequence n).2 point.2) atTop (nhds 0) :=
++    tendsto_iff_dist_tendsto_zero.mp hsecond
++  have hbound : ∀ n, dist (family point.1 (member n)) point.2 ≤
++      (constant : ℝ) * dist (sequence n).1 point.1 +
++        1 / ((n : ℝ) + 1) + dist (sequence n).2 point.2 := by
++    intro n
++    have hmove := (hfamily (member n)).dist_le_mul (sequence n).1 point.1
++    calc
++      _ ≤ dist (family point.1 (member n)) (family (sequence n).1 (member n)) +
++          dist (family (sequence n).1 (member n)) point.2 := dist_triangle _ _ _
++      _ ≤ (constant : ℝ) * dist (sequence n).1 point.1 +
++          (dist (sequence n).2 (family (sequence n).1 (member n)) +
++            dist (sequence n).2 point.2) := by
++        rw [dist_comm (family point.1 (member n))] 
++        exact add_le_add hmove (by
++          simpa only [dist_comm] using
++            dist_triangle (family (sequence n).1 (member n)) (sequence n).2 point.2)
++      _ ≤ _ := by linarith [hmember n]
++  have hupper : Tendsto (fun n => (constant : ℝ) * dist (sequence n).1 point.1 +
++      1 / ((n : ℝ) + 1) + dist (sequence n).2 point.2) atTop (nhds 0) := by
++    simpa only [mul_zero, zero_add, add_zero] using
++      ((tendsto_const_nhds.mul hfirstDist).add
++        tendsto_one_div_add_atTop_nhds_zero_nat).add hsecondDist
++  have hrealized : Tendsto (fun n => family point.1 (member n)) atTop (nhds point.2) :=
++    tendsto_iff_dist_tendsto_zero.mpr
++      (squeeze_zero (fun _ => dist_nonneg) hbound hupper)
++  exact isClosed_closure.mem_of_tendsto hrealized
++    (Eventually.of_forall (fun n => subset_closure ⟨member n, rfl⟩))
++
++end Math
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticLawRewardGraph.lean
++import MathUE.Topology.UniformLipschitzFiberClosure
++import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
++import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityRewardRobustness
++import Mathlib.Topology.MetricSpace.Pseudo.Pi
++
++/-! # Closed actual joint semantic/law graph under changing rewards
++
++Only the same executable profile is reevaluated. Its entire outcome law,
++including Never, stays unchanged; all behavioral reply caps move uniformly.
++No continuity of caps in a stopping-law topology is asserted.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++open Set
++
++variable {ι : Type} [Fintype ι] [DecidableEq ι]
++
++/-- Reusing one actual profile across two reward tables preserves its whole law literally. -/
++theorem quittingTerminalOutcomeMass_reward_independent
++    (first second : {S : Finset ι // S.Nonempty} → Payoff ι)
++    (profile : (quittingGame first).BehaviorProfile) :
++    quittingTerminalOutcomeMass first profile = quittingTerminalOutcomeMass second profile := rfl
++
++/-- The joint payoff/cap/law vector of any SAME actual profile is one-Lipschitz
++in the actual reward table. Response caps retain the unrestricted reply space. -/
++theorem lipschitzWith_actualTerminalSemanticLaw_reward
++    (profile : (quittingGame (0 : {S : Finset ι // S.Nonempty} → Payoff ι)).BehaviorProfile) :
++    LipschitzWith 1 (fun reward : {S : Finset ι // S.Nonempty} → Payoff ι =>
++      (quittingTerminalSemanticPair reward profile,
++        quittingTerminalOutcomeMass reward profile)) := by
++  apply LipschitzWith.of_dist_le_mul
++  intro first second
++  have hclose : ∀ terminal player, |first terminal player - second terminal player| ≤
++      dist first second := by
++    intro terminal player
++    rw [← Real.dist_eq]
++    exact (dist_le_pi_dist (first terminal) (second terminal) player).trans
++      (dist_le_pi_dist first second terminal)
++  simp only [NNReal.coe_one, one_mul, Prod.dist_eq]
++  apply max_le
++  · apply max_le
++    · apply (dist_pi_le_iff dist_nonneg).mpr
++      intro who
++      rw [Real.dist_eq]
++      exact abs_quittingTerminalPayoff_sub_le_of_forall_abs_sub_le
++        first second profile who dist_nonneg hclose
++    · apply (dist_pi_le_iff dist_nonneg).mpr
++      intro who
++      rw [Real.dist_eq]
++      exact abs_quittingContinuationBestResponseValue_sub_le_of_reward_close
++        first second profile who dist_nonneg hclose
++  · rw [quittingTerminalOutcomeMass_reward_independent first second profile, dist_self]
++    exact dist_nonneg
++
++/-- The graph of the actual joint carrier is closed as rewards vary. -/
++theorem isClosed_terminalSemanticLawCarrier_reward_graph :
++    IsClosed {point : ({S : Finset ι // S.Nonempty} → Payoff ι) ×
++      QuittingTerminalSemanticLawPoint ι |
++      point.2 ∈ quittingTerminalSemanticLawCarrier point.1} := by
++  exact Math.isClosed_graph_closure_range_of_uniform_lipschitz
++    (fun reward
++      (profile : (quittingGame (0 : {S : Finset ι // S.Nonempty} → Payoff ι)).BehaviorProfile) =>
++      (quittingTerminalSemanticPair reward profile, quittingTerminalOutcomeMass reward profile))
++    1 lipschitzWith_actualTerminalSemanticLaw_reward
++
++end GameTheory
+*** End Patch

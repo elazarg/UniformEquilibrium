@@ -1,0 +1,67 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Quitting/Projective/RationalExactSoloRejectionSearch.lean
++import UniformEquilibrium.Quitting.Projective.RationalExactSoloRejection
++import UniformEquilibrium.Quitting.Projective.RationalPotentialRejectionSearch
++
++/-! # The same exact rational solo witness makes the exhaustive search terminate -/
++
++noncomputable section
++
++namespace GameTheory
++
++open Math.Interval Math.LinearProgramming GameTheory.Finite
++
++variable {players : ℕ} [Nonempty (Fin players)]
++
++/-- Exact source Nash implies absorption-relative approximate regret at every
++positive tolerance; the stronger 3h/4 rejection is below the unit charge h.
++The finite-budget search uses the very same candidate, table, and box. -/
++theorem rationalQuittingPotentialRejectionSearch_eventually_succeeds_of_standardQ_quasiconvex
++    (reward : RationalQuittingReward players) (bound : ℚ)
++    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
++    (hQ : IsStandardQ (quittingProjectiveLCPMatrix (rationalQuittingRewardToReal reward)))
++    (expression : RationalPolynomial players)
++    (hquasiconvex : QuasiconvexOn ℝ
++      (quittingSingletonBox (rationalQuittingRewardToReal reward) (bound : ℝ))
++      (fun point => RationalPolynomial.evalReal point expression))
++    (tolerance : ℚ) (htolerance : 0 < tolerance) :
++    ∃ threshold : ℕ, ∀ budget, threshold ≤ budget →
++      (rationalQuittingPotentialRejectionSearch?
++        reward expression (bound + 2) tolerance budget).isSome = true := by
++  obtain ⟨owner, rate, source, hrate0, _, hsource, htarget, hnash,
++    habsorption, _, hdrop⟩ :=
++    exists_rational_exact_solo_rejection_of_standardQ_quasiconvex
++      reward bound hreward hQ expression hquasiconvex
++  let root := rationalQuittingSoloRoot owner rate
++  have hcharge : 0 < rationalQuittingAbsorption root.probability := by
++    apply Rat.cast_pos.mp
++    rw [rationalQuittingAbsorption_cast root, habsorption]
++    exact Rat.cast_pos.mpr hrate0
++  have hregret : ∀ who, rationalBooleanNashRegret
++      (rationalQuittingBooleanPayoff reward source) root.probability who = 0 := by
++    intro who
++    have h := (isZeroQuittingRootNash_iff_coordinateNashDefect_eq_zero
++      (rationalQuittingRewardToReal reward) (fun other => (source other : ℝ)) root.toPMF).mp
++        hnash who
++    rw [quittingRootCoordinateNashDefect_rationalQuitting_eq_cast] at h
++    exact_mod_cast h
++  have hunitDrop : RationalPolynomial.evalReal (fun who => (source who : ℝ)) expression -
++      RationalPolynomial.evalReal
++        (fun who => (rationalQuittingRootExpectedPayoff reward source root who : ℝ)) expression <
++          quittingRootAbsorptionMass root.toPMF := by
++    rw [habsorption]
++    have hratePositive : (0 : ℝ) < rate := Rat.cast_pos.mpr hrate0
++    linarith
++  apply rationalQuittingPotentialRejectionSearch_eventually_succeeds
++  refine ⟨(source, root.probability), ?_⟩
++  simp only [rationalQuittingPotentialRejects, decide_eq_true_eq]
++  refine ⟨hsource, root.nonnegative, root.le_one, htarget, hcharge, ?_, ?_⟩
++  · intro who
++    rw [hregret who]
++    exact mul_nonneg htolerance.le hcharge.le
++  · rw [← RationalPolynomial.ratCast_evalRat, ← RationalPolynomial.ratCast_evalRat,
++      ← rationalQuittingAbsorption_cast root] at hunitDrop
++    exact_mod_cast hunitDrop
++
++end GameTheory
+*** End Patch

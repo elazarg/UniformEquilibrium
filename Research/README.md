@@ -6,6 +6,12 @@ Their meaning must survive replacing or deleting any particular experimental
 instance. Files follow the repository trust policy even when they are orphaned
 from the integrated umbrella.
 
+Unapplied implementation is preserved under `Pending/`, with its dependency
+order and verification limits. Sources ending in `.lean.draft` are not Lean
+modules and have not been compiled. Before integration, resolve their dependencies,
+place them in the appropriate Lean lane, and run the required checks. Preserving
+a draft does not add a theorem to the library.
+
 Research modules must not import `Experiments`; the static import-graph check
 enforces this lane boundary. Concrete run inputs and outputs, generated
 payloads, reports, caches, logs, and raw runs are not Research records.

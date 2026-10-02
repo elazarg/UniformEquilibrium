@@ -1,0 +1,38 @@
+import UniformEquilibrium.Diagnostics.Quitting.MembershipStretchOpposedSource
+
+noncomputable section
+
+namespace GameTheory
+
+/-- ONE selected source before EVERY actual root/minimum branch,
+with no supplied row certificate. -/
+example (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hnoUE : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ (original final : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) (alpha : ℝ),
+      QuittingAgreesWithMembershipStretch original final alpha ∧
+      0 < quittingTerminalExploitabilityInf final ∧
+      ∀ (root : Fin 4 → PMF Bool) (optional : Fin 4),
+        (∀ who, who ≠ optional → (root who true).toReal = 1) →
+        quittingTerminalExploitability final (quittingOneDateThenNeverProfile final root) =
+          quittingTerminalExploitabilityInf final →
+        ∃ first second : Fin 4, first ≠ second ∧
+          quittingDirectedMembershipGap final first false
+              (quittingSingleOptionalAction optional false) < 0 ∧
+          0 < quittingDirectedMembershipGap final first false
+              (quittingSingleOptionalAction optional true) ∧
+          quittingDirectedMembershipGap final second false
+              (quittingSingleOptionalAction optional true) < 0 ∧
+          0 < quittingDirectedMembershipGap final second false
+              (quittingSingleOptionalAction optional false) := by
+  obtain ⟨original, alpha, singletons, coordinates, _, horiginalPositive, _, _, _, _, _, _, _,
+    hagrees, _, hhalf, _, _, hbranch⟩ :=
+    exists_membershipStretch_source_opposedReversals_of_no_uniformPayoff_finFour reward hnoUE
+  refine ⟨original, quittingOwnSingletonReward singletons coordinates, alpha, hagrees,
+    (by positivity : 0 < quittingTerminalExploitabilityInf original / 2).trans hhalf, ?_⟩
+  intro root optional hsure hminimum
+  obtain ⟨first, second, _, _, hdifferent, _, _, _, _, hnegative, hpositive,
+    hsecondNegative, hsecondPositive⟩ := hbranch root optional hsure hminimum
+  exact ⟨first, second, hdifferent, hnegative, hpositive, hsecondNegative, hsecondPositive⟩
+
+end GameTheory

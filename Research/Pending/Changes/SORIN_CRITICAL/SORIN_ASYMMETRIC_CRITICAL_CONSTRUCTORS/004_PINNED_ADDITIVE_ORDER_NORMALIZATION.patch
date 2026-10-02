@@ -1,0 +1,33 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+           lam * G.payoff action who + (1 - lam) * baseline ≤
+               lam * baseline + (1 - lam) * baseline :=
+-            add_le_add_right hcap _
++            add_le_add hcap le_rfl
+@@
+       cases who <;> cases hrow : action false <;> cases hcolumn : action true <;>
+         simp only [Bool.not_false, Bool.not_true, asymmetricStationaryPath,
+           G, asymmetricGeneralizedDilemma, binaryGame, binaryPayoff, pair,
+-          hrow, hcolumn] at hother ⊢ <;> simp only [or_true, true_or]
++          hrow, hcolumn, or_true, true_or] at hother ⊢
+@@
+         rate * (β - y) + (1 - rate) * α ≤
+             rate * (β - y) + (1 - rate) * (β - y) :=
+-          add_le_add_left
+-            (mul_le_mul_of_nonneg_left hgap.le (by dsimp only [rate]; linarith)) _
++          add_le_add le_rfl
++            (mul_le_mul_of_nonneg_left hgap.le (by dsimp only [rate]; linarith))
+@@
+         rate * G.payoff action who + (1 - rate) * α ≤
+             rate * α + (1 - rate) * α :=
+-          add_le_add_right (mul_le_mul_of_nonneg_left hpayoff hrate.1.le) _
++          add_le_add (mul_le_mul_of_nonneg_left hpayoff hrate.1.le) le_rfl
+@@
+         rate * G.payoff action who + (1 - rate) * α ≤
+             rate * β + (1 - rate) * α :=
+-          add_le_add_right (mul_le_mul_of_nonneg_left
+-            (asymmetric_payoff_le_beta α β x y hgap hx hy who action) hrate.1.le) _
++          add_le_add (mul_le_mul_of_nonneg_left
++            (asymmetric_payoff_le_beta α β x y hgap hx hy who action) hrate.1.le) le_rfl
+*** End Patch

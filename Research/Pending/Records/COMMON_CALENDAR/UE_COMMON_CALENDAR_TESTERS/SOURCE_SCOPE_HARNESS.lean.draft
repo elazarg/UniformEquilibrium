@@ -1,0 +1,51 @@
+import MathUE.Order.MutualSupremumApproximation
+import UniformEquilibrium.Quitting.Paths.CommonCalendarSmoothMinimum
+
+noncomputable section
+
+open scoped BigOperators
+
+/-- Target nonemptiness is internally produced, not a premise. -/
+example {Source Target : Type*} [Nonempty Source]
+    (source : Source → ℝ) (target : Target → ℝ)
+    (hs : BddAbove (Set.range source)) (ht : BddAbove (Set.range target)) {error : ℝ}
+    (hf : ∀ choice, ∃ mapped, |source choice - target mapped| ≤ error)
+    (hb : ∀ choice, ∃ mapped, |target choice - source mapped| ≤ error) :
+    |sSup (Set.range source) - sSup (Set.range target)| ≤ error :=
+  Math.Order.abs_sSup_range_sub_sSup_range_le_of_mutual_approx source target hs ht hf hb
+
+namespace GameTheory
+
+/-- Literal Fin4 common-pool consumer, with no supplied strategic witnesses. -/
+example
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) (clock : ℕ)
+    {deadline : ℕ} (hdeadline : deadline ≤ 2 * clock)
+    {temperature : ℝ} (htemperature : 0 < temperature) :
+    ∃ point : MixedSimplex (Fin 4) (fun _ => QuittingFiniteDeadlineTimingAction deadline),
+      IsMinOn (quittingCommonCalendarSmoothMaximum reward deadline (2 * clock + 1)
+        temperature) Set.univ point ∧
+      (∑ tester, quittingCommonCalendarTesterWeights reward deadline (2 * clock + 1)
+        temperature point tester) = 1 ∧
+      ∀ who, ∀ deviation : (quittingGame reward).BehaviorStrategy who,
+        quittingTerminalPayoff reward
+            (Function.update
+              (quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point))
+              who deviation) who ≤
+          quittingTerminalPayoff reward
+              (quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point)) who +
+            quittingCommonCalendarSmoothMaximum reward deadline (2 * clock + 1)
+              temperature point := by
+  obtain ⟨point, weights, hweights, hmin, _, _, hsum, hlower, _, _⟩ :=
+    exists_quittingCommonWindowSmoothMinimum_with_weights reward clock hdeadline htemperature
+  subst weights
+  have hnash := isεAsymptoticNash_of_quittingTerminalExploitability_le
+    (quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point)) hlower
+  exact ⟨point, hmin, hsum, hnash⟩
+
+/-- Separate Never and the literal final finite date are distinct tester labels. -/
+example (clock : ℕ) (who : Fin 4) :
+    (some (who, none) : QuittingCommonCalendarTester (Fin 4) (2 * clock + 1)) ≠
+      some (who, some ⟨2 * clock + 1, Nat.lt_succ_self _⟩) := by
+  simp
+
+end GameTheory

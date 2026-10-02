@@ -1,0 +1,96 @@
+Independent static review: bounded single-pivot decision normalization 15-17
+
+Frozen inputs in /tmp/ue-bounded-normalization-Y0cMlfQG:
+15_LITERAL_POSITIVE_SCALING.patch
+SHA256 cb2cce6999741864bc34dd1bbc3afbc02c9644e32ac02261c0b7590322e567a7
+16_ACTUAL_BOUNDED_SINGLE_PIVOT.patch
+SHA256 6a105959544aba5b3a651cac41274b64085009708d5251a80fbd8dde69e96d1d
+17_DECISION_PRESERVING_POLYNOMIAL_JOIN.patch
+SHA256 81fc37eb702f07351344583dcb95306dae510ffa4f6828d8a6c6d60287e15b0a
+HANDOFF.md was read in full. The entire three patches were read. The packet's
+semantic adapter and exact statement were compared with actual canonical
+quittingGame, affinePayoff/UE, finite reward bound, normalization producer,
+original polynomial characterization, and frozen patch 14 declarations.
+Patch 14 SHA256:
+5bd704b77a5bd9adaeef2cca659473646df2dfb91f23833053a38d83e0232f74
+
+Verdict: no substantive mathematical, source-quantifier, or provenance defect
+identified. All drafts remain unapplied and NOT CHECKED HERE. No Lean/Lake,
+Git, shared file edits, children, caches, or new mathematical research used.
+
+15: whole-game equality and unrestricted semantics
+
+quittingGame_scale_eq_affinePayoff states equality of entire stochastic games,
+not just terminal reward functions. Inspecting both definitions confirms the
+same Option state space, Bool actions, transition kernel, discount and proof
+fields; absorbed rewards scale and the live reward remains zero under zero
+shift. Consequently Never still pays zero. This does not assert that a
+terminal-only additive translation is strategically harmless.
+
+quittingGame_exists_uniformPayoff_scale_iff invokes the canonical
+StochasticGame.isUniformEquilibriumPayoff_affinePayoff_iff and
+StochasticGame.isUniformEquilibriumPayoff_of_affinePayoff in
+ProofView/Concepts/Stochastic/Transform/Payoff/AffinePayoff.lean.
+Those declarations rescale accuracy, keep the same behavioral strategy
+carriers, quantify over every whole behavioral deviation and all sufficiently
+long expected finite averages, and preserve a target fixed before accuracy.
+The new existential facade does not weaken this to stationary or root Nash.
+Positive scale is required precisely for the semantic equivalence, not for
+the purely structural equality. The reverse target is the original fixed
+transformed target divided by scale.
+
+16: internally produced table and actual finite bound
+
+The only source premise besides the arbitrary real Fin4 table is its bare
+no-UE proposition. The checked canonical
+nonempty_finFourSinglePivotNormalization_of_no_uniformPayoff supplies both
+the pivot and actual no-UE for the literal normalized table. No favorable
+normalized counterexample is supplied by the caller, and no pointwise UE
+equivalence between the original and single-pivot table is asserted.
+
+exists_nat_ge is applied to quittingRewardBound of that actual normalized
+finite table. divisor = base+1 is a natural integer at least one, and bounds
+every absolute reward coordinate by the canonical finite-sum estimate.
+Thus scale = 1/divisor is positive, its product table is unit bounded, and
+the OWN-singleton vector is scale at the pivot and zero elsewhere. The proof
+does not assert that all coordinates of each singleton reward column vanish.
+The scaled table's no-UE follows from 15 and the produced source no-UE.
+No bounded divisor, rational reward table, or sign correction by scaling is
+assumed. Sign normalization is done by the existing producer first.
+
+17: fresh same-witness certificate and exact decision level
+
+The scaled literal table's nonnegative own singletons and positive pivot are
+derived internally. Patch 14 is invoked afresh on THAT table with unit bound;
+it derives actual normality and invokes the original polynomial producer on
+exactly box three. No previous polynomial is transported to another box or
+another table. The rational tolerance and expression are produced, not inputs.
+
+IsQuittingBoundedSinglePivotPolynomialObstruction keeps one tolerance and one
+expression for the robust relation, canceled MvPolynomial total degree at
+least three, failure of coordinatewise degree <=1, and the full adaptive
+minimum conditions. These quantify over EVERY global minimum on box three,
+including upper faces, and retain the full reflected segment and genuine
+directional third derivative. The output's same-witness scope agrees with
+patch 14. The no-sure-root clause is retained.
+
+The reverse theorem uses patch 14's converse for the very reward table in its
+certificate. The final equivalence has an existential reward on BOTH sides:
+existence of some real Fin4 counterexample iff existence of some bounded
+scaled-single-pivot obstruction. It is not a per-table equivalence involving
+unrelated tables. A reciprocal integer scale is constructed forward; the
+right side may allow any positive real scale without harming the converse.
+Neither rationality of rewards nor existence of an actual counterexample is
+concluded. This is not a decision procedure or a Fin4 UE solution.
+
+Compiler/integration boundary
+
+No definite API mismatch was found by static inspection. The entire-game
+structure congruence in 15 and rewriting that equality beneath dependent
+initial-state arguments deserve the first narrow compiler check. Local-let
+unfolding through source.canonical and the nested conjunction/let packaging
+in 16-17 are ordinary elaboration uncertainties, not established failures.
+15 is independent of future 01-14; 16 requires 15; 17 requires 16 plus 14's
+full closure, but not the separate 13 join. Root must compile in that order,
+add umbrella imports and regenerate the new-module axiom inventory, then run
+the normal trust/import/integration gates. Static review supplies no L seal.

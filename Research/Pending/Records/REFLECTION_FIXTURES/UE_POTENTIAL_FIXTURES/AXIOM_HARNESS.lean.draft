@@ -1,0 +1,36 @@
+import MathUE.Analysis.Examples.PairedFacePotential
+import MathUE.Analysis.Examples.ReflectionBoundaryArithmetic
+
+#print axioms Math.Interval.RationalPolynomial.coordinatePartial_evalReal_eq
+#print axioms Math.Interval.RationalPolynomial.coordinateMixedPartial_evalReal_eq
+#print axioms Math.PairedFacePotential.expression
+#print axioms Math.PairedFacePotential.potential
+#print axioms Math.PairedFacePotential.translatedPotential
+#print axioms Math.PairedFacePotential.translatedExpression
+#print axioms Math.PairedFacePotential.translatedExpression_eval
+#print axioms Math.PairedFacePotential.normalizedSingletonMatrix
+#print axioms Math.PairedFacePotential.gradient
+#print axioms Math.PairedFacePotential.eval_formalPartial_eq_gradient
+#print axioms Math.PairedFacePotential.fderiv_apply
+#print axioms Math.PairedFacePotential.translated_fderiv_apply
+#print axioms Math.PairedFacePotential.singleton_rewards_bounded
+#print axioms Math.PairedFacePotential.faceDriftFormula
+#print axioms Math.PairedFacePotential.face_drift_eq_formula
+#print axioms Math.PairedFacePotential.face_drift_ge_one
+#print axioms Math.PairedFacePotential.translated_face_drift_ge_one
+#print axioms Math.PairedFacePotential.hessianMatrix
+#print axioms Math.PairedFacePotential.actual_hessian_entries
+#print axioms Math.PairedFacePotential.translated_actual_hessian_entries
+#print axioms Math.PairedFacePotential.eigenvectors
+#print axioms Math.PairedFacePotential.eigenvalues
+#print axioms Math.PairedFacePotential.hessian_hasEigenvector
+#print axioms Math.PairedFacePotential.eigenvectors_span
+#print axioms Math.PairedFacePotential.eigenvectors_linearIndependent
+#print axioms Math.PairedFacePotential.hessian_hasEigenvalue_iff
+#print axioms Math.PairedFacePotential.translatedPotential_top_value
+#print axioms Math.PairedFacePotential.translatedPotential_countervertex_value
+#print axioms Math.PairedFacePotential.translatedPotential_top_not_minimum
+#print axioms Math.ReflectionBoundaryArithmetic.allowed_reflection_endpoint
+#print axioms Math.ReflectionBoundaryArithmetic.fixed_cap_reflection_outside
+#print axioms Math.ReflectionBoundaryArithmetic.signed_singleton_reflection_outside
+#print axioms Math.ReflectionBoundaryArithmetic.unsigned_multiaffine_partial_positive

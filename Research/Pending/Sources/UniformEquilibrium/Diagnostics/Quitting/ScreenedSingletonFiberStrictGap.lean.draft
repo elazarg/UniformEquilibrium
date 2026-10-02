@@ -1,0 +1,101 @@
+import UniformEquilibrium.Quitting.OwnSingletonRewardFiberMaximum
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootCompactMinimum
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootPolynomial
+import UniformEquilibrium.Diagnostics.Quitting.PositiveMaximumDebtMinimum
+
+/-!
+# Internally produced strict screened gap across the same closed singleton fiber
+
+This is the packet's fixed-fiber section 5 argument. The maximizing singleton
+vector and minimizing screened root are both produced internally. A positive
+eta somewhere in the fiber is raw existential positivity, not an optimizer.
+This module does not select a generic fiber from a no-UE game or give a collar.
+-/
+
+namespace GameTheory
+
+/-- One maximizing singleton vector, one screened minimizing root and one
+positive gap are produced BEFORE every allowed singleton vector/root.
+The polynomial and literal free-coordinate vector remain the same throughout. -/
+theorem exists_strict_screenedSingletonFiber_gap
+    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (hcoordinates : ∀ coordinate, |coordinates coordinate| ≤ 1)
+    (hpolynomial : screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial ≠ 0)
+    (hpositive : ∃ singletons : Fin 4 → ℝ, (∀ who, |singletons who| ≤ 1) ∧
+      0 < quittingTerminalExploitabilityInf
+        (quittingOwnSingletonReward singletons coordinates)) :
+    ∃ (singletons : Fin 4 → ℝ) (root : Fin 4 → PMF Bool) (gap : ℝ),
+      (∀ who, |singletons who| ≤ 1) ∧ IsScreenedQuittingRoot root ∧ 0 < gap ∧
+      0 < quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) ∧
+      (∀ candidate : Fin 4 → ℝ, (∀ who, |candidate who| ≤ 1) →
+        quittingTerminalExploitabilityInf (quittingOwnSingletonReward candidate coordinates) ≤
+          quittingTerminalExploitabilityInf
+            (quittingOwnSingletonReward singletons coordinates)) ∧
+      (∀ (otherSingletons : Fin 4 → ℝ) (candidate : Fin 4 → PMF Bool),
+        IsScreenedQuittingRoot candidate →
+          quittingTerminalExploitability (quittingOwnSingletonReward otherSingletons coordinates)
+              (quittingOneDateThenNeverProfile
+                (quittingOwnSingletonReward otherSingletons coordinates) root) ≤
+            quittingTerminalExploitability
+              (quittingOwnSingletonReward otherSingletons coordinates)
+              (quittingOneDateThenNeverProfile
+                (quittingOwnSingletonReward otherSingletons coordinates) candidate)) ∧
+      gap = quittingTerminalExploitability (quittingOwnSingletonReward singletons coordinates)
+          (quittingOneDateThenNeverProfile
+            (quittingOwnSingletonReward singletons coordinates) root) -
+        quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) ∧
+      ∀ (otherSingletons : Fin 4 → ℝ), (∀ who, |otherSingletons who| ≤ 1) →
+        ∀ (candidate : Fin 4 → PMF Bool), IsScreenedQuittingRoot candidate →
+          quittingTerminalExploitabilityInf
+              (quittingOwnSingletonReward singletons coordinates) + gap ≤
+            quittingTerminalExploitability
+              (quittingOwnSingletonReward otherSingletons coordinates)
+              (quittingOneDateThenNeverProfile
+                (quittingOwnSingletonReward otherSingletons coordinates) candidate) := by
+  obtain ⟨singletons, hsingletons, hmaximum⟩ :=
+    exists_maximum_quittingTerminalExploitabilityInf_ownSingletonReward coordinates
+  obtain ⟨root, hscreened, hminimum⟩ :=
+    exists_minimum_screenedQuittingRootExploitability coordinates
+  let reward := quittingOwnSingletonReward singletons coordinates
+  let profile := quittingOneDateThenNeverProfile reward root
+  have hunit : ∀ terminal who, |reward terminal who| ≤ 1 :=
+    (abs_quittingOwnSingletonReward_le_one_iff singletons coordinates).mpr
+      ⟨hsingletons, hcoordinates⟩
+  have hmaxPositive : 0 < quittingTerminalExploitabilityInf reward := by
+    obtain ⟨oldSingletons, holdBound, holdPositive⟩ := hpositive
+    exact holdPositive.trans_le (hmaximum oldSingletons holdBound)
+  have hle : quittingTerminalExploitabilityInf reward ≤
+      quittingTerminalExploitability reward profile :=
+    quittingTerminalExploitabilityInf_le reward profile
+  have hstrict : quittingTerminalExploitabilityInf reward <
+      quittingTerminalExploitability reward profile := by
+    by_contra hnot
+    have hequal : quittingTerminalExploitability reward profile =
+        quittingTerminalExploitabilityInf reward := le_antisymm (not_lt.mp hnot) hle
+    have hglobal : ∀ candidate : (quittingGame reward).BehaviorProfile,
+        quittingTerminalExploitability reward profile ≤
+          quittingTerminalExploitability reward candidate := by
+      intro candidate
+      rw [hequal]
+      exact quittingTerminalExploitabilityInf_le reward candidate
+    have hprofilePositive : 0 < quittingTerminalExploitability reward profile := by
+      rw [hequal]
+      exact hmaxPositive
+    apply not_positive_equal_screened_debts_of_polynomial_ne_zero
+      coordinates hpolynomial singletons root hscreened
+    refine ⟨quittingTerminalExploitability reward profile, hprofilePositive, ?_⟩
+    intro who
+    exact quittingTerminalDeviationDebt_eq_exploitability_of_attained_positive_minimum
+      reward profile hunit hglobal hprofilePositive who
+  let gap := quittingTerminalExploitability reward profile -
+    quittingTerminalExploitabilityInf reward
+  refine ⟨singletons, root, gap, hsingletons, hscreened, sub_pos.mpr hstrict,
+    hmaxPositive, hmaximum, hminimum, rfl, ?_⟩
+  intro otherSingletons _ candidate hcandidate
+  have hcomparison := hminimum otherSingletons candidate hcandidate
+  have hinvariant := quittingTerminalExploitability_ownSingletonReward_eq_of_screened
+    singletons otherSingletons coordinates root hscreened
+  dsimp [gap, reward, profile]
+  linarith
+
+end GameTheory

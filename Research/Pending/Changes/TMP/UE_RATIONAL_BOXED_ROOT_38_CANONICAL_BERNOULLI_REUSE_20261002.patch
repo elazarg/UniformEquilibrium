@@ -1,0 +1,28 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Root/RationalBoxedEdge.lean
+@@
+ import MathUE.PMFProduct.Bool
++import MathUE.ProbabilityMassFunction.IntervalBernoulliSimplex
+@@
+ theorem continuous_quittingUnitCubeSimplex :
+     Continuous (quittingUnitCubeSimplex (players := players)) := by
+   apply continuous_pi
+   intro who
+-  apply (Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).continuous_iff.mpr
+-  apply continuous_pi
+-  intro action
+-  cases action
+-  · simpa [Function.comp_def, quittingUnitCubeSimplex, simplexEquiv_apply_weights,
+-      toVector] using continuous_const.sub ((continuous_apply who).comp continuous_subtype_val)
+-  · simpa [Function.comp_def, quittingUnitCubeSimplex, simplexEquiv_apply_weights,
+-      toVector] using (continuous_apply who).comp continuous_subtype_val
++  have heq : (fun point : Icc (0 : Fin players → ℝ) 1 =>
++      quittingUnitCubeSimplex point who) =
++      fun point => intervalBernoulliSimplex (point.1 who) := by
++    funext point
++    simp only [quittingUnitCubeSimplex, intervalBernoulliSimplex,
++      unitIntervalClip_eq_self (point.2.1 who) (point.2.2 who)]
++  rw [heq]
++  exact continuous_intervalBernoulliSimplex.comp
++    ((continuous_apply who).comp continuous_subtype_val)
+*** End Patch

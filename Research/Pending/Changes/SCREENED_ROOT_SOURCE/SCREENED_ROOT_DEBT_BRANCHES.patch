@@ -1,0 +1,88 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/ScreenedRootDebtBranches.lean
++import UniformEquilibrium.Diagnostics.Quitting.OneDateProductRootCaps
++import UniformEquilibrium.Quitting.Root.NashDefect
++
++/-!
++# Exact complete-debt branches of a screened one-date product root
++
++A sure opponent screens all behavioral replacements, not just the two
++root actions. These identities apply to the actual unpadded root-then-Never
++profile without root Nash, preferred-action, interior-hazard, or cap inputs.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++open _root_.Math.Probability Math.PMFProduct
++
++variable {ι : Type} [Fintype ι] [DecidableEq ι]
++
++/-- Screening identifies complete behavioral debt with the canonical root defect. -/
++theorem quittingTerminalDeviationDebt_oneDateThenNever_eq_rootNashDefect_of_sureOpponent
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
++    (root : ι → PMF Bool) (who : ι) {quitter : ι} (hne : quitter ≠ who)
++    (hsure : (root quitter true).toReal = 1) :
++    quittingTerminalDeviationDebt reward (quittingOneDateThenNeverProfile reward root) who =
++      quittingRootCoordinateNashDefect reward 0 root who := by
++  have hpayoff : quittingTerminalPayoff reward
++      (quittingOneDateThenNeverProfile reward root) who =
++        quittingRootSuccessorPayoff reward 0 root who := by
++    unfold quittingOneDateThenNeverProfile
++    rw [quittingTerminalPayoff_rootThenContinuation_eq,
++      oneDateProductTerminalPayoff_alwaysContinueProfile]
++    rfl
++  rw [quittingTerminalDeviationDebt,
++    oneDateProductQuittingContinuationBestResponseValue_oneDateThenNever_sureQuitter
++      reward root who hne hsure, hpayoff]
++  rfl
++
++/-- Packet (6): both optional-player branches, including hazards zero and one. -/
++theorem quittingTerminalDeviationDebt_oneDateThenNever_eq_max_branches_of_sureOpponent
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
++    (root : ι → PMF Bool) (who : ι) {quitter : ι} (hne : quitter ≠ who)
++    (hsure : (root quitter true).toReal = 1) :
++    quittingTerminalDeviationDebt reward (quittingOneDateThenNeverProfile reward root) who =
++      max
++        ((1 - (root who true).toReal) * quittingRootEndpointDifference reward 0 root who)
++        (-(root who true).toReal * quittingRootEndpointDifference reward 0 root who) := by
++  rw [quittingTerminalDeviationDebt_oneDateThenNever_eq_rootNashDefect_of_sureOpponent
++    reward root who hne hsure, quittingRootCoordinateNashDefect,
++    quittingRootSuccessorPayoff_eq_endpointMix, ← max_sub_sub_right]
++  have hsum := quittingRoot_continueProbability_add_quitProbability root who
++  have hcontinue : (root who false).toReal = 1 - (root who true).toReal := by linarith
++  rw [hcontinue]
++  unfold quittingRootEndpointDifference
++  congr 1 <;> ring
++
++/-- For a sure prescribed quitter the actual debt is the positive Continue advantage. -/
++theorem quittingTerminalDeviationDebt_oneDateThenNever_sure_eq_posPart
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
++    (root : ι → PMF Bool) (who : ι) {quitter : ι} (hne : quitter ≠ who)
++    (hopponent : (root quitter true).toReal = 1)
++    (hwho : (root who true).toReal = 1) :
++    quittingTerminalDeviationDebt reward (quittingOneDateThenNeverProfile reward root) who =
++      max 0 (-quittingRootEndpointDifference reward 0 root who) := by
++  rw [quittingTerminalDeviationDebt_oneDateThenNever_eq_max_branches_of_sureOpponent
++    reward root who hne hopponent, hwho]
++  simp only [sub_self, zero_mul, neg_mul, one_mul]
++
++/-- A positive complete debt at a sure quitter is the actual Continue-minus-Quit gap. -/
++theorem quittingTerminalDeviationDebt_oneDateThenNever_sure_positive_eq_gap
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
++    (root : ι → PMF Bool) (who : ι) {quitter : ι} (hne : quitter ≠ who)
++    (hopponent : (root quitter true).toReal = 1)
++    (hwho : (root who true).toReal = 1) {debt : ℝ} (hdebt : 0 < debt)
++    (hequal : quittingTerminalDeviationDebt reward
++      (quittingOneDateThenNeverProfile reward root) who = debt) :
++    -quittingRootEndpointDifference reward 0 root who = debt := by
++  rw [quittingTerminalDeviationDebt_oneDateThenNever_sure_eq_posPart
++    reward root who hne hopponent hwho] at hequal
++  rcases max_cases (0 : ℝ) (-quittingRootEndpointDifference reward 0 root who) with h | h
++  · rw [h.1] at hequal
++    exact (ne_of_gt hdebt hequal.symm).elim
++  · exact h.1.symm.trans hequal
++
++end GameTheory
+*** End Patch

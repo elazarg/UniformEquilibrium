@@ -1,0 +1,57 @@
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootBranchLabels
+import Mathlib.Tactic.FinCases
+
+/-! # The packet's six sorted sure-pair and four endpoint-label conventions -/
+
+noncomputable section
+
+namespace GameTheory
+
+/-- Sorted sure pair, then sorted complementary pair: 01,02,03,12,13,23. -/
+def screenedSurePairOrder (pair : Fin 6) : Fin 4 ≃ Fin 4 :=
+  Equiv.ofBijective
+    (![![0, 1, 2, 3], ![0, 2, 1, 3], ![0, 3, 1, 2],
+      ![1, 2, 0, 3], ![1, 3, 0, 2], ![2, 3, 0, 1]] pair)
+    (by fin_cases pair <;> decide)
+
+theorem screenedSurePairOrder_sorted (pair : Fin 6) :
+    screenedSurePairOrder pair 0 < screenedSurePairOrder pair 1 ∧
+      screenedSurePairOrder pair 2 < screenedSurePairOrder pair 3 := by
+  fin_cases pair <;> decide
+
+/-- Every distinct pair occurs, with the smaller player first. -/
+theorem exists_screenedSurePairOrder (first second : Fin 4) (hne : first ≠ second) :
+    ∃ pair : Fin 6,
+      (screenedSurePairOrder pair 0 = first ∧ screenedSurePairOrder pair 1 = second) ∨
+        (screenedSurePairOrder pair 0 = second ∧ screenedSurePairOrder pair 1 = first) := by
+  fin_cases first <;> fin_cases second <;> first
+  | exact False.elim (hne rfl)
+  | decide
+
+/-- A screened root has two distinct actual marginals of full Quit mass. -/
+def IsScreenedQuittingRoot (root : Fin 4 → PMF Bool) : Prop :=
+  ∃ first second, first ≠ second ∧
+    (root first true).toReal = 1 ∧ (root second true).toReal = 1
+
+/-- The six sorted squares cover every screened root, also with three or four sure players. -/
+theorem isScreenedQuittingRoot_iff_exists_pair (root : Fin 4 → PMF Bool) :
+    IsScreenedQuittingRoot root ↔
+      ∃ pair : Fin 6,
+        (root (screenedSurePairOrder pair 0) true).toReal = 1 ∧
+          (root (screenedSurePairOrder pair 1) true).toReal = 1 := by
+  constructor
+  · rintro ⟨first, second, hne, hfirst, hsecond⟩
+    obtain ⟨pair, horder | horder⟩ := exists_screenedSurePairOrder first second hne
+    · exact ⟨pair, horder.1.symm ▸ hfirst, horder.2.symm ▸ hsecond⟩
+    · exact ⟨pair, horder.1.symm ▸ hsecond, horder.2.symm ▸ hfirst⟩
+  · rintro ⟨pair, hfirst, hsecond⟩
+    exact ⟨screenedSurePairOrder pair 0, screenedSurePairOrder pair 1,
+      (screenedSurePairOrder pair).injective.ne (by decide), hfirst, hsecond⟩
+
+/-- Exactly six sure pairs times four optional Quit/Continue choices. -/
+abbrev ScreenedRootFactorIndex := Fin 6 × (Fin 2 → Bool)
+
+theorem card_screenedRootFactorIndex : Fintype.card ScreenedRootFactorIndex = 24 := by
+  decide
+
+end GameTheory

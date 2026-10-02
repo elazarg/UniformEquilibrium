@@ -1,0 +1,9 @@
+*** Begin Patch
+*** Update File: MathUE/Analysis/Examples/PairedFacePotentialCanonicalJoins.lean
+@@
+   have hlower : ∃ coordinate, vertex coordinate = -3 := by
+     by_contra hnone
+-    push_neg at hnone
++    push Not at hnone
+     apply hnotTop
+*** End Patch

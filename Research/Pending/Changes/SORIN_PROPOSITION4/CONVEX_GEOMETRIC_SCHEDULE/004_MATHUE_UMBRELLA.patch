@@ -1,0 +1,11 @@
+*** Begin Patch
+*** Update File: MathUE.lean
+@@
+ import MathUE.Topology.ConnectedConvexHullRepresentation
++import MathUE.Topology.ConnectedConvexHullAffineStep
+ import MathUE.Topology.FiniteOneDimensionalCoordinate
+@@
+ import MathUE.RealSeries.NormalizedGeometricComparison
++import MathUE.RealSeries.GeometricAffineSchedule
+ import MathUE.Analysis.AnalyticQuadraticRemainder
+*** End Patch

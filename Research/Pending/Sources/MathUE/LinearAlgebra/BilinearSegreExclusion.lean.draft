@@ -1,0 +1,77 @@
+import MathUE.LinearAlgebra.RectangularCofactorKernel
+import Mathlib.Tactic.Ring
+
+/-!
+# A maximal-minor obstruction to a bilinear common zero
+
+The four monomials are ordered `(1,p,q,p*q)`. Applying their Segre equation
+to the signed-minor kernel line gives the packet's test. Deficient rank is
+not excluded by a premise: if the test is nonzero, a nonzero minor is derived.
+-/
+
+noncomputable section
+
+namespace Math.LinearAlgebra
+
+open Matrix
+
+variable {K : Type*} [Field K]
+
+/-- The defining quadratic of the two-by-two rank-one cone. -/
+def segreQuadratic (vector : Fin 4 → K) : K :=
+  vector 0 * vector 3 - vector 1 * vector 2
+
+/-- The signed-minor expression `w₀*w₃-w₁*w₂` for a three-by-four matrix. -/
+def bilinearMinorObstruction (matrix : Matrix (Fin 3) (Fin 4) K) : K :=
+  segreQuadratic (signedMaximalMinors matrix)
+
+theorem segreQuadratic_smul (scalar : K) (vector : Fin 4 → K) :
+    segreQuadratic (scalar • vector) = scalar ^ 2 * segreQuadratic vector := by
+  simp only [segreQuadratic, Pi.smul_apply, smul_eq_mul]
+  ring
+
+/-- A nonzero test excludes every nonzero rank-one vector from the kernel. -/
+theorem not_kernel_segre_of_bilinearMinorObstruction_ne_zero
+    (matrix : Matrix (Fin 3) (Fin 4) K)
+    (hobstruction : bilinearMinorObstruction matrix ≠ 0)
+    (vector : Fin 4 → K) (hvector : vector ≠ 0) (hsegre : segreQuadratic vector = 0) :
+    matrix *ᵥ vector ≠ 0 := by
+  intro hkernel
+  have hminor : signedMaximalMinors matrix ≠ 0 := by
+    intro hzero
+    apply hobstruction
+    simp only [bilinearMinorObstruction, hzero, segreQuadratic, Pi.zero_apply,
+      mul_zero, sub_self]
+  obtain ⟨scalar, hscalar⟩ :=
+    exists_smul_signedMaximalMinors_of_mulVec_eq_zero matrix hminor vector hkernel
+  have hscalarNonzero : scalar ≠ 0 := by
+    intro hzero
+    apply hvector
+    simpa only [hzero, zero_smul] using hscalar
+  rw [hscalar, segreQuadratic_smul] at hsegre
+  exact (mul_ne_zero (pow_ne_zero 2 hscalarNonzero) hobstruction) hsegre
+
+/-- Every nonzero Segre kernel vector forces the test to vanish, including
+all rank-deficient cases. -/
+theorem bilinearMinorObstruction_eq_zero_of_kernel_segre
+    (matrix : Matrix (Fin 3) (Fin 4) K) (vector : Fin 4 → K)
+    (hvector : vector ≠ 0) (hkernel : matrix *ᵥ vector = 0)
+    (hsegre : segreQuadratic vector = 0) :
+    bilinearMinorObstruction matrix = 0 := by
+  by_contra hnonzero
+  exact not_kernel_segre_of_bilinearMinorObstruction_ne_zero
+    matrix hnonzero vector hvector hsegre hkernel
+
+/-- Literal bilinear monomial source; no restriction on the two parameters. -/
+theorem mulVec_bilinearMonomials_ne_zero
+    (matrix : Matrix (Fin 3) (Fin 4) K)
+    (hobstruction : bilinearMinorObstruction matrix ≠ 0) (p q : K) :
+    matrix *ᵥ ![1, p, q, p * q] ≠ 0 := by
+  apply not_kernel_segre_of_bilinearMinorObstruction_ne_zero matrix hobstruction
+  · intro hzero
+    have hone := congrFun hzero 0
+    exact one_ne_zero (by simpa only [Matrix.cons_val_zero, Pi.zero_apply] using hone)
+  · simp only [segreQuadratic, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.cons_val_two, Matrix.cons_val_three, one_mul, sub_self]
+
+end Math.LinearAlgebra

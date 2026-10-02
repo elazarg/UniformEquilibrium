@@ -1,0 +1,143 @@
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootSurePairOrder
+import UniformEquilibrium.Diagnostics.Quitting.SureOpponentRewardFiber
+import UniformEquilibrium.Quitting.Root.NashDefectContinuity
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitability
+import Mathlib.Topology.Order.Compact
+import Mathlib.Topology.Order.Lattice
+
+/-!
+# Actual screened full-debt minima on the union of six closed squares
+
+Each face fixes the two literal sorted sure players at Quit probability one.
+The two remaining Boolean simplices are unrestricted closed intervals. The
+same actual full-debt minimum works for EVERY own-singleton vector.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+/-- Every observer has a different sure opponent at a screened root. -/
+theorem exists_sureOpponent_of_isScreenedQuittingRoot
+    (root : Fin 4 → PMF Bool) (hscreened : IsScreenedQuittingRoot root) (observer : Fin 4) :
+    ∃ quitter, quitter ≠ observer ∧ (root quitter true).toReal = 1 := by
+  obtain ⟨first, second, hne, hfirst, hsecond⟩ := hscreened
+  by_cases hfirstObserver : first = observer
+  · refine ⟨second, ?_, hsecond⟩
+    intro hsecondObserver
+    exact hne (hfirstObserver.trans hsecondObserver.symm)
+  · exact ⟨first, hfirstObserver, hfirst⟩
+
+/-- Screening identifies actual maximum FULL behavioral debt with a continuous
+maximum of the canonical coordinate root defects, not their sum. -/
+theorem quittingTerminalExploitability_oneDateThenNever_eq_max_rootNashDefect_of_screened
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (hscreened : IsScreenedQuittingRoot root) :
+    quittingTerminalExploitability reward (quittingOneDateThenNeverProfile reward root) =
+      QuittingBoundaryHolonomy.finitePlayerMax
+        (fun who => quittingRootCoordinateNashDefect reward 0 root who) := by
+  rw [quittingTerminalExploitability_eq_max_debt]
+  congr 1
+  funext observer
+  obtain ⟨quitter, hne, hsure⟩ :=
+    exists_sureOpponent_of_isScreenedQuittingRoot root hscreened observer
+  exact quittingTerminalDeviationDebt_oneDateThenNever_eq_rootNashDefect_of_sureOpponent
+    reward root observer hne hsure
+
+/-- Actual screened maximum full debt is invariant under EVERY singleton reselection. -/
+theorem quittingTerminalExploitability_ownSingletonReward_eq_of_screened
+    (first second : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (root : Fin 4 → PMF Bool) (hscreened : IsScreenedQuittingRoot root) :
+    quittingTerminalExploitability (quittingOwnSingletonReward first coordinates)
+        (quittingOneDateThenNeverProfile (quittingOwnSingletonReward first coordinates) root) =
+      quittingTerminalExploitability (quittingOwnSingletonReward second coordinates)
+        (quittingOneDateThenNeverProfile (quittingOwnSingletonReward second coordinates) root) := by
+  rw [quittingTerminalExploitability_eq_max_debt, quittingTerminalExploitability_eq_max_debt]
+  congr 1
+  funext observer
+  obtain ⟨quitter, hne, hsure⟩ :=
+    exists_sureOpponent_of_isScreenedQuittingRoot root hscreened observer
+  exact quittingTerminalDeviationDebt_ownSingletonReward_eq_of_sureOpponent
+    first second coordinates root observer quitter hne hsure
+
+/-- The literal six closed sure-pair faces. Their optional coordinates include endpoints. -/
+def screenedQuittingRootSimplexSet : Set (QuittingRootSimplex (Fin 4)) :=
+  ⋃ pair : Fin 6, {root |
+    (root (screenedSurePairOrder pair 0)).weights true = 1 ∧
+      (root (screenedSurePairOrder pair 1)).weights true = 1}
+
+theorem mem_screenedQuittingRootSimplexSet_iff (root : QuittingRootSimplex (Fin 4)) :
+    root ∈ screenedQuittingRootSimplexSet ↔
+      IsScreenedQuittingRoot (quittingRootOfSimplex root) := by
+  rw [isScreenedQuittingRoot_iff_exists_pair]
+  simp only [screenedQuittingRootSimplexSet, Set.mem_iUnion, Set.mem_setOf_eq,
+    quittingRootOfSimplex_apply_toReal]
+
+theorem isClosed_screenedQuittingRootSimplexSet : IsClosed screenedQuittingRootSimplexSet := by
+  apply isClosed_iUnion_of_finite
+  intro pair
+  have hfirst : Continuous (fun root : QuittingRootSimplex (Fin 4) =>
+      (root (screenedSurePairOrder pair 0)).weights true) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp (continuous_apply _)
+  have hsecond : Continuous (fun root : QuittingRootSimplex (Fin 4) =>
+      (root (screenedSurePairOrder pair 1)).weights true) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp (continuous_apply _)
+  exact (isClosed_eq hfirst continuous_const).inter (isClosed_eq hsecond continuous_const)
+
+theorem isCompact_screenedQuittingRootSimplexSet : IsCompact screenedQuittingRootSimplexSet :=
+  isClosed_screenedQuittingRootSimplexSet.isCompact
+
+theorem screenedQuittingRootSimplexSet_nonempty : screenedQuittingRootSimplexSet.Nonempty := by
+  refine ⟨quittingSimplexOfRoot (fun _ : Fin 4 => PMF.pure true), ?_⟩
+  rw [mem_screenedQuittingRootSimplexSet_iff, quittingRootOfSimplex_simplexOfRoot]
+  exact ⟨0, 1, by decide, by simp, by simp⟩
+
+/-- This continuous score equals full actual exploitability on each of the six faces. -/
+theorem continuous_screenedRootNashMaximum
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) :
+    Continuous (fun root : QuittingRootSimplex (Fin 4) =>
+      QuittingBoundaryHolonomy.finitePlayerMax
+        (fun who =>
+          quittingRootCoordinateNashDefect reward 0 (quittingRootOfSimplex root) who)) := by
+  unfold QuittingBoundaryHolonomy.finitePlayerMax
+  apply Continuous.finset_sup'_apply
+  intro who _
+  exact (continuous_quittingRootCoordinateNashDefect_simplex reward who).comp
+    (continuous_const.prodMk continuous_id)
+
+/-- Internally produce an actual screened root minimizing FULL debt over the
+entire six-square union. The SAME root is minimizing for EVERY singleton vector,
+without any bound, sign, Nash, supplied-cap or interiority premise. -/
+theorem exists_minimum_screenedQuittingRootExploitability
+    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ) :
+    ∃ root : Fin 4 → PMF Bool, IsScreenedQuittingRoot root ∧
+      ∀ (singletons : Fin 4 → ℝ) (candidate : Fin 4 → PMF Bool),
+        IsScreenedQuittingRoot candidate →
+          quittingTerminalExploitability (quittingOwnSingletonReward singletons coordinates)
+              (quittingOneDateThenNeverProfile
+                (quittingOwnSingletonReward singletons coordinates) root) ≤
+            quittingTerminalExploitability (quittingOwnSingletonReward singletons coordinates)
+              (quittingOneDateThenNeverProfile
+                (quittingOwnSingletonReward singletons coordinates) candidate) := by
+  let reward := quittingOwnSingletonReward (0 : Fin 4 → ℝ) coordinates
+  obtain ⟨chosen, hchosen, hminimum⟩ :=
+    isCompact_screenedQuittingRootSimplexSet.exists_isMinOn
+      screenedQuittingRootSimplexSet_nonempty
+      (continuous_screenedRootNashMaximum reward).continuousOn
+  have hscreened := (mem_screenedQuittingRootSimplexSet_iff chosen).mp hchosen
+  refine ⟨quittingRootOfSimplex chosen, hscreened, ?_⟩
+  intro singletons candidate hcandidate
+  rw [quittingTerminalExploitability_ownSingletonReward_eq_of_screened
+      singletons 0 coordinates _ hscreened,
+    quittingTerminalExploitability_ownSingletonReward_eq_of_screened
+      singletons 0 coordinates candidate hcandidate]
+  rw [quittingTerminalExploitability_oneDateThenNever_eq_max_rootNashDefect_of_screened
+      _ _ hscreened,
+    quittingTerminalExploitability_oneDateThenNever_eq_max_rootNashDefect_of_screened
+      _ candidate hcandidate]
+  have hcand : quittingSimplexOfRoot candidate ∈ screenedQuittingRootSimplexSet := by
+    rw [mem_screenedQuittingRootSimplexSet_iff, quittingRootOfSimplex_simplexOfRoot]
+    exact hcandidate
+  simpa only [quittingRootOfSimplex_simplexOfRoot] using hminimum hcand
+
+end GameTheory

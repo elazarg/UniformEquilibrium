@@ -1,0 +1,186 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Quitting/Paths/CommonCalendarTesterPool.lean
++import MathUE.Analysis.FiniteLogSumExp
++import UniformEquilibrium.Quitting.Paths.FiniteCalendarReplyPayoffChart
++
++/-! # A common actual tester pool for finite quitting calendars -/
++
++noncomputable section
++
++namespace GameTheory
++
++open scoped BigOperators
++
++variable {ι : Type} [Fintype ι] [DecidableEq ι]
++
++/-- The outer None is the zero tester. An inner None is THAT owner's separate Never reply.
++Finite replies include every date from zero through the common pool endpoint. -/
++abbrev QuittingCommonCalendarTester (ι : Type) (pool : ℕ) :=
++  Option (ι × Option (Fin (pool + 1)))
++
++/-- Every nonzero label evaluates the SAME actual full behavioral pure-reply gain. -/
++def quittingCommonCalendarTesterGain
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline pool : ℕ)
++    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline)) :
++    QuittingCommonCalendarTester ι pool → ℝ
++  | none => 0
++  | some (who, action) =>
++      quittingTerminalPayoff reward
++          (Function.update
++            (quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point)) who
++            (quittingPureTimeBehaviorStrategy reward who
++              (quittingFiniteDeadlineTimingActionTime action))) who -
++        quittingTerminalPayoff reward
++          (quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point)) who
++
++@[simp] theorem quittingCommonCalendarTesterGain_zero
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline pool : ℕ)
++    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline)) :
++    quittingCommonCalendarTesterGain reward deadline pool point none = 0 := rfl
++
++theorem quittingCommonCalendarTesterGain_never
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline pool : ℕ)
++    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline)) (who : ι) :
++    quittingCommonCalendarTesterGain reward deadline pool point (some (who, none)) =
++      quittingFiniteCalendarPureReplyPayoff reward deadline point who none -
++        quittingFiniteCalendarRawPayoff reward deadline point who := by
++  letI : Nonempty ι := ⟨who⟩
++  rw [quittingFiniteCalendarPureReplyPayoff_eq_terminalPayoff,
++    quittingFiniteCalendarRawPayoff_eq_terminalPayoff]
++  rfl
++
++theorem quittingCommonCalendarTesterGain_early
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline pool : ℕ)
++    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
++    (who : ι) (time : Fin (pool + 1)) (htime : time.val < deadline) :
++    quittingCommonCalendarTesterGain reward deadline pool point (some (who, some time)) =
++      quittingFiniteCalendarPureReplyPayoff reward deadline point who
++          (some ⟨time.val, htime⟩) -
++        quittingFiniteCalendarRawPayoff reward deadline point who := by
++  letI : Nonempty ι := ⟨who⟩
++  rw [quittingFiniteCalendarPureReplyPayoff_eq_terminalPayoff,
++    quittingFiniteCalendarRawPayoff_eq_terminalPayoff]
++  rfl
++
++/-- Late finite labels coincide with the corrected finite row, not the Never label. -/
++theorem quittingCommonCalendarTesterGain_late
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline pool : ℕ)
++    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
++    (who : ι) (time : Fin (pool + 1)) (htime : deadline ≤ time.val) :
++    quittingCommonCalendarTesterGain reward deadline pool point (some (who, some time)) =
++      quittingFiniteCalendarLateReplyPayoff reward deadline point who -
++        quittingFiniteCalendarRawPayoff reward deadline point who := by
++  letI : Nonempty ι := ⟨who⟩
++  rw [quittingFiniteCalendarLateReplyPayoff_eq_terminalPayoff reward deadline point who htime,
++    quittingFiniteCalendarRawPayoff_eq_terminalPayoff]
++  rfl
++
++theorem continuous_quittingCommonCalendarTesterGain
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline pool : ℕ)
++    (tester : QuittingCommonCalendarTester ι pool) :
++    Continuous (fun point : MixedSimplex ι
++        (fun _ => QuittingFiniteDeadlineTimingAction deadline) =>
++      quittingCommonCalendarTesterGain reward deadline pool point tester) := by
++  cases tester with
++  | none => exact continuous_const
++  | some entry =>
++      obtain ⟨who, action⟩ := entry
++      cases action with
++      | none =>
++          simp_rw [quittingCommonCalendarTesterGain_never]
++          exact (continuous_quittingFiniteCalendarPureReplyPayoff reward deadline who none).sub
++            (continuous_quittingFiniteCalendarRawPayoff_coordinate reward deadline who)
++      | some time =>
++          by_cases htime : time.val < deadline
++          · simp_rw [quittingCommonCalendarTesterGain_early reward deadline pool _ who time htime]
++            exact (continuous_quittingFiniteCalendarPureReplyPayoff reward deadline who
++              (some ⟨time.val, htime⟩)).sub
++              (continuous_quittingFiniteCalendarRawPayoff_coordinate reward deadline who)
++          · simp_rw [quittingCommonCalendarTesterGain_late reward deadline pool _ who time
++              (Nat.le_of_not_gt htime)]
++            exact (continuous_quittingFiniteCalendarLateReplyPayoff reward deadline who).sub
++              (continuous_quittingFiniteCalendarRawPayoff_coordinate reward deadline who)
++
++omit [DecidableEq ι] in
++/-- Cardinality of the SAME common pool; every owner retains an independent Never label. -/
++theorem card_quittingCommonCalendarTester (pool : ℕ) :
++    Fintype.card (QuittingCommonCalendarTester ι pool) =
++      1 + Fintype.card ι * (pool + 2) := by
++  simp only [QuittingCommonCalendarTester, Fintype.card_option,
++    Fintype.card_prod, Fintype.card_fin]
++  ring
++
++variable [Nonempty ι]
++
++/-- If the common pool reaches the source deadline, its finite maximum is EXACTLY the
++source profile's unrestricted behavioral exploitability, including every late reply and Never. -/
++theorem maximum_quittingCommonCalendarTesterGain_eq_exploitability
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline pool : ℕ)
++    (hpool : deadline ≤ pool)
++    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline)) :
++    Math.FiniteLogSumExp.maximum (quittingCommonCalendarTesterGain reward deadline pool point) =
++      quittingTerminalExploitability reward
++        (quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point)) := by
++  let profile := quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point)
++  let gains := quittingCommonCalendarTesterGain reward deadline pool point
++  let bound := Math.FiniteLogSumExp.maximum gains
++  have hzero : 0 ≤ bound := Math.FiniteLogSumExp.value_le_maximum gains none
++  have hcap : ∀ who, quittingContinuationBestResponseValue reward profile who ≤
++      quittingFiniteCalendarRawPayoff reward deadline point who + bound := by
++    intro who
++    rw [quittingFiniteCalendarFullCap_eq_max_late reward deadline point who hpool]
++    apply max_le
++    · apply Finset.sup'_le
++      intro action _
++      cases action with
++      | none =>
++          have hvalue := Math.FiniteLogSumExp.value_le_maximum gains (some (who, none))
++          rw [quittingCommonCalendarTesterGain_never] at hvalue
++          linarith
++      | some time =>
++          let extended : Fin (pool + 1) :=
++            ⟨time.val, lt_of_lt_of_le time.isLt (Nat.le_succ_of_le hpool)⟩
++          have hvalue := Math.FiniteLogSumExp.value_le_maximum gains
++            (some (who, some extended))
++          rw [quittingCommonCalendarTesterGain_early reward deadline pool point who extended
++            time.isLt] at hvalue
++          have hnative : quittingFiniteCalendarPureReplyPayoff reward deadline point who
++              (some time) - quittingFiniteCalendarRawPayoff reward deadline point who ≤ bound := by
++            simpa only [extended] using hvalue
++          linarith
++    · have hvalue := Math.FiniteLogSumExp.value_le_maximum gains
++        (some (who, some ⟨pool, Nat.lt_succ_self pool⟩))
++      rw [quittingCommonCalendarTesterGain_late reward deadline pool point who
++        ⟨pool, Nat.lt_succ_self pool⟩ hpool] at hvalue
++      linarith
++  apply le_antisymm
++  · apply Finset.sup'_le
++    intro tester _
++    cases tester with
++    | none => exact quittingTerminalExploitability_nonneg reward profile
++    | some entry =>
++        obtain ⟨who, action⟩ := entry
++        have hreply := quittingTerminalPayoff_update_le_continuationBestResponseValue
++          reward profile who
++          (quittingPureTimeBehaviorStrategy reward who
++            (quittingFiniteDeadlineTimingActionTime action))
++        have hdebt := quittingTerminalDeviationDebt_le_exploitability reward profile who
++        change quittingTerminalPayoff reward (Function.update profile who _) who -
++          quittingTerminalPayoff reward profile who ≤ _
++        unfold quittingTerminalDeviationDebt at hdebt
++        linarith
++  · unfold quittingTerminalExploitability
++    apply QuittingBoundaryHolonomy.finitePlayerMax_le
++    intro who
++    apply max_le hzero
++    have hpayoff := congrFun
++      (quittingFiniteCalendarRawPayoff_eq_terminalPayoff reward point) who
++    have hupper := hcap who
++    change quittingContinuationBestResponseValue reward profile who -
++      quittingTerminalPayoff reward profile who ≤ bound
++    change quittingFiniteCalendarRawPayoff reward deadline point who =
++      quittingTerminalPayoff reward profile who at hpayoff
++    linarith
++
++end GameTheory
+*** End Patch

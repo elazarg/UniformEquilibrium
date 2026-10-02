@@ -1,0 +1,18 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/OwnSingletonRewardChart.lean
+@@
+-  simp only [quittingOwnSingletonReward, dif_pos rfl]
++  simp only [quittingOwnSingletonReward, dite_eq_left rfl]
+@@
+-  exact dif_neg coordinate.2
++  exact dite_eq_right coordinate.2
+@@
+-  simp only [quittingOwnSingletonReward, dif_neg hterminal]
++  simp only [quittingOwnSingletonReward, dite_eq_right hterminal]
+@@
+-  · simp only [dif_pos hterminal]
++  · simp only [dite_eq_left hterminal]
+     exact (continuous_apply player).comp continuous_fst
+-  · simp only [dif_neg hterminal]
++  · simp only [dite_eq_right hterminal]
+*** End Patch

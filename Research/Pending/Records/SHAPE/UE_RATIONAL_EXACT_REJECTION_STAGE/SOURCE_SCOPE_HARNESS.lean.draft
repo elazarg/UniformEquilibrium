@@ -1,0 +1,32 @@
+import UniformEquilibrium.Quitting.Projective.RationalExactSoloRejection
+
+open Math.Interval Math.LinearProgramming
+
+namespace GameTheory
+
+example {players : ℕ} [Nonempty (Fin players)]
+    (reward : RationalQuittingReward players) (bound : ℚ)
+    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+    (hQ : IsStandardQ (quittingProjectiveLCPMatrix (rationalQuittingRewardToReal reward)))
+    (expression : RationalPolynomial players)
+    (hquasiconvex : QuasiconvexOn ℝ
+      (quittingSingletonBox (rationalQuittingRewardToReal reward) (bound : ℝ))
+      (fun point => RationalPolynomial.evalReal point expression)) :
+    ∃ owner : Fin players, ∃ rate : ℚ, ∃ source : Fin players → ℚ,
+      0 < rate ∧ rate < 1 ∧
+      (∀ who, |source who| ≤ bound + 2) ∧
+      (∀ who, |rationalQuittingRootExpectedPayoff reward source
+        (rationalQuittingSoloRoot owner rate) who| ≤ bound + 2) ∧
+      IsεQuittingRootNash (rationalQuittingRewardToReal reward)
+        (fun who => (source who : ℝ)) 0 (rationalQuittingSoloRoot owner rate).toPMF ∧
+      quittingRootAbsorptionMass (rationalQuittingSoloRoot owner rate).toPMF = (rate : ℝ) ∧
+      (∀ who, (rationalQuittingSoloRoot owner rate).probability who =
+        if who = owner then rate else 0) ∧
+      RationalPolynomial.evalReal (fun who => (source who : ℝ)) expression -
+        RationalPolynomial.evalReal (fun who =>
+          (rationalQuittingRootExpectedPayoff reward source
+            (rationalQuittingSoloRoot owner rate) who : ℝ)) expression < 3 * (rate : ℝ) / 4 :=
+  exists_rational_exact_solo_rejection_of_standardQ_quasiconvex
+    reward bound hreward hQ expression hquasiconvex
+
+end GameTheory

@@ -1,0 +1,163 @@
+SORIN LEMMA 2: ACTUAL STRICT-IR FULL BEHAVIORAL NASH CONSUMER
+
+Status
+------
+Frozen static drafts only. Not checked here. Root owns all shared edits,
+compilers/build queue and Git. No shared edits, Lean/Lake, caches, worktrees,
+children, source snapshots, options or warning suppressions were used.
+No original sorry was replaced. property_4_discounted remains unchanged/sorry.
+The literal Proposition 15 and the critical constructors remain unchanged.
+
+Primary source and exact adaptation
+-----------------------------------
+Sorin (1986), On Repeated Games with Complete Information,
+DOI 10.1287/moor.11.1.147, printed page 149, Lemma 2 strict-IR proof;
+the added-in-proof correction is on printed page 160.
+Source PDF literature/SORIN_1986__ON_REPEATED_GAMES_WITH_COMPLETE_INFORMATION.pdf
+SHA256 d09a8e78f37f9863ff40e969a90f03799967d05eb70ba28a93afab84ddfce56c.
+Printed page 149 was read again via pdftotext stdout, not a generated snapshot.
+
+The source chooses a finite periodic pure calendar close to the fixed target,
+with discounted tails strictly above actual minmax for sufficiently small
+paper rates. Observable deviations trigger minmax punishment. Bounded payoff
+gain is dominated by the strict continuation surplus for small enough rate.
+This packet completes that strict-IR argument, not the degenerate-coordinate
+induction asserted in the next paragraph of the paper.
+
+Adaptations to existing actual finite behavioral semantics:
+- Approximate actual mixed-opponent minmax selection replaces assumed exact
+  minimizers: cap = actual minmax + margin, calendar phases >= minmax+2*margin.
+  Both cap and surplus are internally produced by the predecessor selector.
+- The paper's bounded finite-prefix gain estimate is implemented by the owned
+  bounded history-potential discounted telescope. One-period gain <= 2*bound
+  is dominated by continuation surplus: lambda*(2*bound) <= (1-lambda)*margin.
+- Before disagreement the potential is the actual calendar continuation;
+  after disagreement it is the internally selected minmax-plus-margin cap.
+  First-mismatch attribution in the predecessor supplies punishment caps only
+  on actual supported off-calendar histories. No unreachable culprit claim.
+- The history Bellman inequality handles all full behavioral deviations,
+  including any finite first disagreement and Never. No stopping-time or
+  history-law foundation is reimplemented.
+- Exact actual root calendar delivery is already proved inside the predecessor
+  source selector.001 exposes it privately; the original public source
+  interface is preserved exactly by delegation, not duplicate proof.
+
+Actual public quantifiers
+-------------------------
+exists_discountedNash_allSmallRates_of_strictIR:
+  Given actual finite G, ONE fixed target in correlatedFeasiblePayoffs,
+  strict coordinatewise actual individualRationalLevel < target, epsilon>0,
+  INTERNALLY choose threshold with 0<threshold<=1 and ONE actual behavioral
+  profile BEFORE every positive lambda<threshold.
+  For every such lambda that profile is EXACT discounted Nash (epsilonNash
+  allowance zero) against EVERY player's unrestricted full behavioral
+  strategy replacement, and its actual payoff is coordinatewise epsilon-close
+  to the SAME target.
+
+exists_discountedNash_close_allSmallRates_of_strictIR:
+  Identical quantifier order, actual Nash, and same fixed target; conclude
+  dist(actual discounted payoff,target)<epsilon using canonical finite-Pi norm.
+  The profile depends on target/error, not on lambda or the later deviator.
+  No supplied favorable path, punishment, security value, cap, gain estimate,
+  root payoff equation, maximizing payoff or equilibrium profile is an input
+  to either public producer.
+
+Boundaries and nonclaims
+-----------------------
+All finite player counts, including zero, are permitted. Empty-player metric
+norm is handled by the positive-error finite-Pi norm theorem. Positive cycle
+length, positive uniform strict margin and scalar bounds are internally chosen.
+Payoff/security levels may be negative; no positivity assumption on them.
+Rates are strictly positive below a threshold <=1, hence strictly below1.
+No equilibrium assertion at lambda=0 or1 is added. Owned calendar delivery
+continues to cover every valid paper rate0<lambda<=1 in the source producer.
+The Nash theorem covers full unilateral behavioral replacements, not pure,
+stationary, calendar-only, or first-stage-only deviations.
+Only actual supported off-calendar histories require punishment cap witnesses;
+the public source producer derives those witnesses, not the caller.
+
+Not proved: the whole property_4_discounted/literal Lemma2, one threshold
+uniform over ALL individually rational targets, full-dimensional closure via
+strict targets and compact covering, or the corrected two-player flat-security
+coordinate boundary. Those remain separate source/dependency tasks. No theorem
+claim is made for arbitrary N-player degenerate security faces.
+
+Ordered immutable patch DAG and hashes
+-------------------------------------
+Target Literature/Sorin1986.lean. Shared read-only current base:
+  fba6f32df9e627384edd4e5e21fec63a5e6d14e5eef83e9b07d462b1439bdfa5.
+Expected post-P4/post-critical base:
+  5ecfd7f0b986f91d00272832825a321ee8e475d828bb867578e28d6604bba773.
+Then /tmp/sorin-static-minmax-trigger.wGV9OQkv/001,002,
+  003_SOURCE_ORDERED_EQUIVALENT.patch,004.
+The source-ordered003 replaces, NOT follows, the original003 in that packet.
+Equivalent003 patch SHA:
+  6ab5bdfd122b9043c97d4f82849faf2bb35885cea215ae390755ffa9e9995128.
+Both003 versions yield the exact same feb4008719078e456519021cd57a9d118d7556fbd60b3d80b627caa21c4036f6.
+All originals remain immutable.
+This packet starts against frozen source004 result:
+  dbee5a139edea433895787a0e4c8d82cfc959dd610cb598ff658e2cf198fdc27.
+
+All new files under /tmp/sorin-strict-ir-discounted-nash.mMVeEDdp/.
+
+001_EXPOSE_INTERNAL_CALENDAR_DELIVERY.patch
+  patch 6fd2bff452f3f79cf1b94d87cf2c385322f3b9216f3ae10e33509c3c527ee0bf
+  base  dbee5a139edea433895787a0e4c8d82cfc959dd610cb598ff658e2cf198fdc27
+  result5f3b0c5affd1ea91093e058891efbebbcacfa268d8512f334b4595f009398af7
+  Four source-ordered hunks. Preserve original public source selector by
+  delegation to private stronger producer exposing its already-owned delivery.
+
+002_ACTUAL_SUPPORTED_CALENDAR_BELLMAN.patch
+  patch ba19214840065cc0d0929fc9b5392022c62b78a01835ff07a764644d0ed707a8
+  base  5f3b0c5affd1ea91093e058891efbebbcacfa268d8512f334b4595f009398af7
+  resultea351482b8258977cb4fda640ec2f41b2cb04fa23d855aafc8ee6d25492c3742
+  One hunk: private actual supported-history adapter from calendar security,
+  bounded one-period gain and actual supported off-calendar stage cap to
+  unrestricted full behavioral deviation payoff <= calendar continuation0.
+  This adapter is conditional;003 supplies every input internally.
+
+003_ACTUAL_STRICT_IR_DISCOUNTED_NASH.patch
+  patch a4223b4ebac5732f17588120136d96ba6be00cbe40a62c9ed7f1a414598e3f53
+  base  ea351482b8258977cb4fda640ec2f41b2cb04fa23d855aafc8ee6d25492c3742
+  result7df434429d0603d737910cbb4539cd534fa8c21bf5f8035c7094a313ef84b540
+  One hunk: actual strict-IR Nash and metric producers. All scalar stage bounds,
+  calendar, punishment, continuation security and patience selected internally.
+
+In-memory unique-context replay of entire P4->critical->source->Nash DAG passed,
+including exact result hashes above; no target/source snapshot was written.
+Added nonimport Lean lines checked <=100. No compiler seal is implied.
+
+Canonical owners reused (not duplicated)
+---------------------------------------
+KernelGame.exists_discountFactor_threshold_one_step
+  UniformEquilibrium/ProofView/Concepts/Welfare/FolkTheorem/Discounting.lean
+  de7b9f7b0cb003e0d81b844b662bca0b9b83adb7c3d870b4282d6004501731d9
+KernelGame.discountedContinuationPayoff_eq_head_add
+KernelGame.discountedContinuationPayoff_le_const_of_forall_stageEU_le
+  UniformEquilibrium/ProofView/Concepts/Repeated/Discounted.lean
+  e509144e1b047bbe6b7860953a5f08a0cb85f9e6131e0a6900924f1f1f0a6b38
+StochasticGame.discountedPayoff_le_of_history_bellman_ge_on_support
+  UniformEquilibrium/ProofView/Concepts/Stochastic/Strategy/Potential/Adaptive.lean
+  4852b8219663f80320452a982cc8446728d25e637c820838e063f3800944abff
+Math.Probability.exists_abs_bound_of_finite
+Math.ProbabilityMassFunction.expect_le_of_le_on_support
+Math.Probability.expect_add/expect_const_mul/expect_const/expect_pure
+pi_norm_lt_iff (positive epsilon includes empty finite player type)
+  pinned Mathlib/Analysis/Normed/Group/Constructions.lean
+FiniteStageGame.firstMismatch_of_mem_support_trigger_update
+FiniteStageGame.publicTriggerStatus_eq_some_of_supported_offPath
+FiniteStageGame.triggerOnPath_snoc_iff (actual declaration private, unqualified)
+  existing Literature source/immutable source precursor.
+No new imports/module inventory; no generic telescope, periodic approximation,
+minmax or supported-opponent proof is copied. Only actual paper adapters added.
+
+Manual consumer/axiom harness, root only AFTER compiler gates
+-----------------------------------------------------------
+AXIOMS_AND_ACTUAL_NASH_FIXTURES_AFTER_CHECKS.lean
+  SHA d7d5c165c1eed0f760b5bf62ee86d4c5918d43ea17d6a913ccb8badcab7474dc.
+Ten#print axioms: two original actual source producers, two new actual Nash
+producers, unrestricted full-deviation profile-before-rates fixture, literal
+actual equilibrium-payoff membership near SAME fixed target fixture, existing
+Banach clause, literal P15 and both critical Nash constructor regressions.
+Expect only propext,Quot.sound,Classical.choice after root compilation/audit.
+Whole property_4_discounted is deliberately absent while sorry remains.

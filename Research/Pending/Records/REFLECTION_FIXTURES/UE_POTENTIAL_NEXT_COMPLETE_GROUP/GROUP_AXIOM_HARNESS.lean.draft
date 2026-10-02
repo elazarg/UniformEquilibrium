@@ -1,0 +1,14 @@
+import UniformEquilibrium.Quitting.Projective.RationalExactSoloRejection
+
+#print axioms Math.Interval.rationalClosedBoxCast
+#print axioms Math.Interval.denseRange_rationalClosedBoxCast
+#print axioms GameTheory.rationalQuittingAbsorption
+#print axioms GameTheory.rationalQuittingAbsorption_cast
+#print axioms GameTheory.quittingRootSuccessorPayoff_rational_eq_cast
+#print axioms GameTheory.quittingUnitCubeSimplex
+#print axioms GameTheory.continuous_quittingUnitCubeSimplex
+#print axioms GameTheory.quittingUnitCubeSimplex_eq_actual
+#print axioms GameTheory.quittingUnitCubeSimplex_rational_eq
+#print axioms GameTheory.rationalQuittingSingletonProbeSource
+#print axioms GameTheory.rationalQuittingSingletonProbeSource_cast
+#print axioms GameTheory.exists_rational_exact_solo_rejection_of_standardQ_quasiconvex

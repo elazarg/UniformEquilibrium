@@ -1,0 +1,55 @@
+import Literature.Sorin1986
+
+noncomputable section
+
+namespace SorinDiscountedFolkSourceFixtures
+
+open Literature.Sorin1986
+
+/-- The calendar is arbitrary, not a supplied favorable feasible block.
+Punishment profiles and their actual support caps are produced internally. -/
+theorem actual_punishment_cap (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player)) {ε : ℝ} (hε : 0 < ε) :
+    ∃ profile : G.BehaviorProfile,
+      ∀ (who : G.Player) (deviation : G.BehaviorStrategy who)
+        (time : ℕ) (history : G.repeatedGame.Hist time),
+        history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
+          PUnit.unit time).support →
+        (¬∀ k, (history.1 k).2 = path k) →
+        G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤
+          G.individualRationalLevel who + ε := by
+  obtain ⟨profile, _, hcap, _⟩ := exists_constantApproxPunishmentTrigger G path hε
+  exact ⟨profile, hcap⟩
+
+/-- The fixed target and one actual profile precede the universal small-rate
+quantifier. This source producer does not assert that the profile is Nash. -/
+theorem fixed_target_actual_profile_before_rates (G : FiniteStageGame)
+    (target : GameTheory.Payoff G.Player)
+    (htarget : target ∈ G.correlatedFeasiblePayoffs)
+    (hstrict : ∀ who, G.individualRationalLevel who < target who)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧
+      ∃ profile : G.BehaviorProfile,
+        ∀ lam : ℝ, 0 < lam → lam < threshold →
+          ∀ who, |G.discountedPayoff lam profile who - target who| < ε := by
+  obtain ⟨_, threshold, _, _, _, profile, _, hthreshold, _, _, _, hsource⟩ :=
+    exists_periodicApproxMinmaxTrigger_of_strictIR G target htarget hstrict hε
+  exact ⟨threshold, hthreshold, profile,
+    fun lam hlam hlamThreshold => (hsource lam hlam hlamThreshold).2⟩
+
+end SorinDiscountedFolkSourceFixtures
+
+#print axioms Literature.Sorin1986.exists_constantApproxPunishmentTrigger
+#print axioms Literature.Sorin1986.exists_periodicApproxMinmaxTrigger_of_strictIR
+#print axioms SorinDiscountedFolkSourceFixtures.actual_punishment_cap
+#print axioms SorinDiscountedFolkSourceFixtures.fixed_target_actual_profile_before_rates
+#print axioms Literature.Sorin1986.exists_banachNash_allLimits_of_mem_individuallyRationalPayoffs
+#print axioms Literature.Sorin1986.property_4_banach
+#print axioms Literature.Sorin1986.prisonerVertexProfile_discountedPayoff
+#print axioms Literature.Sorin1986.prisonerVertexProfile_discounted_deviation_cap
+#print axioms Literature.Sorin1986.prisonerVertexProfile_isDiscountedNash
+#print axioms Literature.Sorin1986.proposition_15
+#print axioms Literature.Sorin1986.asymmetricStationaryProfile_discounted_deviation_cap
+#print axioms Literature.Sorin1986.asymmetricStationaryProfile_isDiscountedNash
+#print axioms Literature.Sorin1986.asymmetricAlternatingProfile_discounted_deviation_cap
+#print axioms Literature.Sorin1986.asymmetricAlternatingProfile_isDiscountedNash

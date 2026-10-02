@@ -1,0 +1,9 @@
+import MathUE.Analysis.MidpointThirdDerivativeIntegral
+
+#print axioms Math.taylorWithinEval_two_eq
+#print axioms Math.midpointThirdDerivativeKernel
+#print axioms Math.midpointThirdDerivativeKernel_nonneg
+#print axioms Math.integral_midpointThirdDerivativeKernel_mul_eq_split
+#print axioms Math.midpoint_thirdDerivative_half_integrals
+#print axioms Math.midpoint_thirdDerivative_integral_identity
+#print axioms Math.midpointThirdDerivativeKernel_weighted_mass

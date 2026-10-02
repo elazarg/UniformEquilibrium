@@ -1,0 +1,16 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Projective/NonquasiconvexPolynomialForwardCharacterization.lean
+@@
+-The original table hypotheses, rational tolerance and box M+2 are retained.
++The canonical polynomial forward characterization's table hypotheses,
++rational tolerance and box M+2 are retained.
+ No new polynomial producer or shape premise is supplied in the forward direction.
+*** Update File: UniformEquilibrium/Quitting/Projective/NonseparablePolynomialForwardCharacterization.lean
+@@
+-The selected tolerance, actual table, polynomial, and original robust box from
+-candidate 13 are retained. Actual Q is produced from the same bare no-UE input.
++The nonquasiconvex polynomial characterization's selected tolerance, actual
++table, polynomial and robust box are retained. Actual Q is produced from the
++same bare no-UE input.
+ No second polynomial, favorable simplex, or outer monotonicity is supplied.
+*** End Patch

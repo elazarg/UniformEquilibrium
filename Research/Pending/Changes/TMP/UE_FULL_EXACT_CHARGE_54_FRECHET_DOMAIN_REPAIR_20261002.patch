@@ -1,0 +1,16 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Projective/FullExactRootPotentialChargeScale.lean
+@@
+     rw [hline]
+     ring
++  have hdiffDiv : ∀ point ∈ Set.Icc
++      (fun who => quittingSoloReward reward who who) (fun _ => 3),
++      DifferentiableAt ℝ (fun input => potential input / coefficient) point := by
++    intro point hpoint
++    simpa only [div_eq_mul_inv] using (hdiff point hpoint).mul_const coefficient⁻¹
+   exact not_isQuittingFullExactRootPotential_coordinateAffine hreward hsingleton
+     (fun point => potential point / coefficient) haffineDiv
+-    (hcontinuous.div_const coefficient) (fun point hpoint => (hdiff point hpoint).div_const _)
++    (hcontinuous.div_const coefficient) hdiffDiv
+     ((isQuittingFullExactRootPotentialWithCharge_iff_div reward 3 hcoefficient potential).mp
+*** End Patch

@@ -1,0 +1,45 @@
+STATUS: Frozen proof-name and documentation overlays; static only.
+No mathematics, theorem interfaces, imports or ownership are changed.
+The original connected-representation and convex-geometric-schedule packets
+remain immutable. Root owns all shared edits, compilers, caches and Git.
+
+001_NONDEPRECATED_ITE_PROOF.patch
+Target: MathUE/Topology/ConnectedConvexHullAffineStep.lean after original 001.
+Original artifact:
+/tmp/convex-geometric-schedule.upl3Iu3u/001_CONNECTED_AFFINE_STEP.patch
+Original artifact SHA256:
+b1888265a2e06d9f59f80faab34ca10f8bbab82cbaa967ff5fdeb26539526e8e
+Exact generated source target base SHA256:
+2bb0febc4daf30d1ba350d4cac3fa03a7e4a37d8aeda20cfa30a7588180ce2aa
+Exact resulting source SHA256:
+eb71f6f81a35b15dd059cdcddd17c69ba7d47a5eb903ff2cce88e31a7c55ad79
+Only the two deprecated names if_pos/if_neg are replaced by ite_eq_left and
+ite_eq_right in the same selected positive/negative coefficient branches.
+
+002_ARBITRARY_SEQUENCE_DOC.patch
+Target: Literature/Sorin1986.lean after original 003 and its pending P15 base.
+Original artifact:
+/tmp/convex-geometric-schedule.upl3Iu3u/003_SORIN_P4_AND_SCHEDULE_DELEGATES.patch
+Original artifact SHA256:
+698e5f93b07b19b9bee19c26c3933603b75498aee9bd9258ba5208c6fd1200ba
+Exact future source target base SHA256:
+805186f6568a7730ca41b013039118f09a02b277d9dad677754e02c0a4ecbca8
+Exact resulting future source SHA256:
+1ab3ce53497517384d3bd61551ca4e3887fd882981ae0caf763cf3ce566c4e16
+Only the helper docstring is changed: it correctly describes an arbitrary
+supplied stage sequence without any geometric-law or delivered-payoff
+certificate requirement. The existence producer still chooses the actual
+schedule internally in the generic theorem and literal paper consumers.
+
+ORDER / CHECKS
+Apply 001 after the original affine-step creation; apply 002 after original
+paper 003. They target distinct files and commute once both targets exist.
+The base above includes matrix/scalar/upper/vertices/lower001 and P4 consumer,
+but not the held literal P15 equality patch. That patch is unchanged.
+Both overlay contexts were checked in memory and match exactly once; source
+hashes above were computed without creating source snapshots or shared files.
+Added Lean lines are within 100 characters and have no forbidden trust tokens.
+No Lean/Lake or project checks were run. Root should run the existing six-
+closure AXIOMS.lean from convex-geometric-schedule after compiling; no new
+declaration requires an additional harness. Source attribution and mathematical
+scope remain exactly those in the immutable predecessor source records.

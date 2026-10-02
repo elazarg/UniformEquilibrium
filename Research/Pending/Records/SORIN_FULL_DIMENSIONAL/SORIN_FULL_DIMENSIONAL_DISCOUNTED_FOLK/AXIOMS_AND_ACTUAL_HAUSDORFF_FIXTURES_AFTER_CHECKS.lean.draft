@@ -1,0 +1,50 @@
+import Literature.Sorin1986
+
+noncomputable section
+
+namespace SorinFullDimensionalDiscountedFolkFixtures
+
+open Literature.Sorin1986
+
+/-- One positive threshold works for every weakly IR target at this accuracy.
+No cover, strict point, calendar, punishment or equilibrium witness is an input. -/
+theorem uniform_threshold_for_all_actual_targets (G : FiniteStageGame)
+    (hfull : FullDimensional G.individuallyRationalPayoffs)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧
+      ∀ lam : ℝ, 0 < lam → lam < threshold →
+        ∀ target ∈ G.individuallyRationalPayoffs,
+          ∃ profile : G.BehaviorProfile,
+            G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
+              dist (G.discountedPayoff lam profile) target < ε := by
+  obtain ⟨threshold, hthreshold, hsource⟩ :=
+    property_4_discounted_of_fullDimensional G hfull ε hε
+  refine ⟨threshold, hthreshold, ?_⟩
+  intro lam hlam hlamThreshold target htarget
+  obtain ⟨value, hvalue, hclose⟩ := (hsource lam hlam hlamThreshold).2 target htarget
+  obtain ⟨profile, hnash, hpayoff⟩ := hvalue
+  exact ⟨profile, hnash, by simpa only [hpayoff] using hclose⟩
+
+/-- Literal actual Hausdorff convergence: both directions, actual sets,
+positive rates and the ambient-ball premise exactly as defined in the paper. -/
+theorem literal_actual_Hausdorff (G : FiniteStageGame)
+    (hfull : FullDimensional G.individuallyRationalPayoffs) :
+    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
+      G.individuallyRationalPayoffs :=
+  property_4_discounted_of_fullDimensional G hfull
+
+end SorinFullDimensionalDiscountedFolkFixtures
+
+#print axioms Literature.Sorin1986.FiniteStageGame.individuallyRationalPayoffs_isCompact
+#print axioms Literature.Sorin1986.FiniteStageGame.exists_strictIR_of_fullDimensional
+#print axioms Literature.Sorin1986.exists_discountedNash_close_allSmallRates_of_strictIR
+#print axioms
+  Literature.Sorin1986.exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
+#print axioms Literature.Sorin1986.property_4_discounted_of_fullDimensional
+#print axioms SorinFullDimensionalDiscountedFolkFixtures.uniform_threshold_for_all_actual_targets
+#print axioms SorinFullDimensionalDiscountedFolkFixtures.literal_actual_Hausdorff
+#print axioms Literature.Sorin1986.lemma_1_Elambda_subset_Delta
+#print axioms Literature.Sorin1986.property_4_banach
+#print axioms Literature.Sorin1986.proposition_15
+#print axioms Literature.Sorin1986.asymmetricStationaryProfile_isDiscountedNash
+#print axioms Literature.Sorin1986.asymmetricAlternatingProfile_isDiscountedNash

@@ -1,0 +1,958 @@
+{
+  "status": "STATIC COMPLETION AUDIT; no new L/A/C seal; root compiler authority",
+  "source_sha256": {
+    "QUITTING_POTENTIAL_SHAPE_EXCLUSIONS": "6c2eda2191454a85a3fc892265561d241ffed84cc50a68643330e902b1e45e7f",
+    "REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS": "a28b23b400cfef2fce48d0dfd33027b344e00d45a015de549c328dce4f397e69"
+  },
+  "patches": [
+    {
+      "id": 10,
+      "path": "/tmp/ue-multiaffine-2jjIGL/10_GENERIC_MONOTONE_TRANSFER.patch",
+      "sha256": "022568eb2b8dbc7cfc5fffb992da2089810c098b755ae08aedd0cc17ecd2f79b",
+      "module": "MathUE.Analysis.MonotoneTransformChargedDrift",
+      "imports": [
+        "Mathlib.Analysis.Calculus.MeanValue",
+        "Mathlib.Analysis.Calculus.ContDiff.Operations",
+        "Mathlib.Topology.Order.Compact"
+      ],
+      "declarations": [
+        "exists_pos_lipschitz_bound_on_compact_image",
+        "exists_nonzero_scale_of_monotone_transform_chargedDrift"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "APPLIED; ROOT NAMED CHECK PASS"
+    },
+    {
+      "id": 11,
+      "path": "/tmp/ue-multiaffine-2jjIGL/11_ACTUAL_MONOTONE_EXCLUSION.patch",
+      "sha256": "c869c907ecfde025276513bc92856473e76aa98b7b5ae435f90ce3c134d31b35",
+      "module": "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMonotoneTransformExclusion",
+      "imports": [
+        "MathUE.Analysis.MonotoneTransformChargedDrift",
+        "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuadraticExclusion",
+        "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMultiAffineExclusion"
+      ],
+      "declarations": [
+        "IsQuittingFullExactRootPotential.exists_scalar_inner_of_monotone_transform",
+        "not_isQuittingFullExactRootPotential_monotone_polynomial_transform"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        10
+      ],
+      "appliedPatchPrerequisites": [
+        4,
+        9
+      ],
+      "currentSourceExists": false,
+      "status": "APPLIED; CHECK FAILED ONLY MISSING OWNER IMPORT; 11A PENDING"
+    },
+    {
+      "id": 13,
+      "path": "/tmp/ue-candidate-refinements-IklOHw/13_NONQUASICONVEX_JOIN.patch",
+      "sha256": "866741f17ab780b3b7bb283d0e4a653609efe1274896a5dd298c0ffc43e7ba0c",
+      "module": "UniformEquilibrium.Quitting.Projective.NonquasiconvexPolynomialForwardCharacterization",
+      "imports": [
+        "MathUE.Interval.RationalPolynomialRegularity",
+        "UniformEquilibrium.Quitting.Projective.PolynomialForwardCertificateCharacterization",
+        "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuasiconvexExclusion"
+      ],
+      "declarations": [
+        "quittingGame_noUniformPayoff_iff_noSureRoot_and_nonquasiconvex_rationalPotential"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [
+        12
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 15,
+      "path": "/tmp/ue-bounded-normalization-Y0cMlfQG/15_LITERAL_POSITIVE_SCALING.patch",
+      "sha256": "cb2cce6999741864bc34dd1bbc3afbc02c9644e32ac02261c0b7590322e567a7",
+      "module": "UniformEquilibrium.Quitting.Transform.PositivePayoffScaling",
+      "imports": [
+        "UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Game",
+        "UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Payoff.AffinePayoff"
+      ],
+      "declarations": [
+        "quittingGame_scale_eq_affinePayoff",
+        "quittingGame_exists_uniformPayoff_scale_iff"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 16,
+      "path": "/tmp/ue-bounded-normalization-Y0cMlfQG/16_ACTUAL_BOUNDED_SINGLE_PIVOT.patch",
+      "sha256": "6a105959544aba5b3a651cac41274b64085009708d5251a80fbd8dde69e96d1d",
+      "module": "UniformEquilibrium.Diagnostics.Quitting.FinFourBoundedSinglePivotNormalization",
+      "imports": [
+        "UniformEquilibrium.Diagnostics.Quitting.FinFourSinglePivotNormalization",
+        "UniformEquilibrium.Quitting.RewardBound",
+        "UniformEquilibrium.Quitting.Transform.PositivePayoffScaling"
+      ],
+      "declarations": [
+        "exists_finFourBoundedSinglePivotNormalization_of_no_uniformPayoff"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        15
+      ],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 17,
+      "path": "/tmp/ue-bounded-normalization-Y0cMlfQG/17_DECISION_PRESERVING_POLYNOMIAL_JOIN.patch",
+      "sha256": "81fc37eb702f07351344583dcb95306dae510ffa4f6828d8a6c6d60287e15b0a",
+      "module": "UniformEquilibrium.Diagnostics.Quitting.FinFourBoundedSinglePivotPolynomialObstruction",
+      "imports": [
+        "UniformEquilibrium.Diagnostics.Quitting.FinFourBoundedSinglePivotNormalization",
+        "UniformEquilibrium.Quitting.Projective.RestrictedPolynomialForwardCharacterization"
+      ],
+      "declarations": [
+        "IsQuittingBoundedSinglePivotPolynomialObstruction",
+        "exists_finFourBoundedSinglePivotPolynomialObstruction_of_no_uniformPayoff",
+        "IsQuittingBoundedSinglePivotPolynomialObstruction.no_uniformPayoff",
+        "exists_finFour_no_uniformPayoff_iff_exists_boundedSinglePivotPolynomialObstruction"
+      ],
+      "deprecated": [
+        "+    rw [hsingleton pivot, if_pos rfl]",
+        "+    rw [hsingleton pivot, if_pos rfl]"
+      ],
+      "futurePrerequisites": [
+        16
+      ],
+      "appliedPatchPrerequisites": [
+        14
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 19,
+      "path": "/tmp/ue-face-separability-EcS7Suwv/19_FACE_ADDITIVE_EXCLUSION.patch",
+      "sha256": "70b321421de1749e0a77b44759753bed31f4f4ee8120b887c6231181e394d637",
+      "module": "MathUE.Analysis.FaceDriftAdditiveExclusion",
+      "imports": [
+        "MathUE.Analysis.BoxedAdditiveCalculus"
+      ],
+      "declarations": [
+        "not_positive_box_face_drift_of_additive",
+        "not_positive_box_face_drift_of_additive_representation"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [
+        18
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 20,
+      "path": "/tmp/ue-face-separability-EcS7Suwv/20_FACE_NONMONOTONE_COMPOSITION_EXCLUSION.patch",
+      "sha256": "3ddc66d4bfe9f12296642d9c8d4b09eab8e890894f9facea4b71720bf2e76b30",
+      "module": "MathUE.Analysis.FaceDriftScalarCompositionExclusion",
+      "imports": [
+        "MathUE.Analysis.FaceDriftAdditiveExclusion",
+        "Mathlib.Analysis.Calculus.ContDiff.Deriv",
+        "Mathlib.Analysis.Convex.PathConnected",
+        "Mathlib.Topology.Order.IntermediateValue"
+      ],
+      "declarations": [
+        "lowerBoxBoundary_isPathConnected",
+        "lowerBoxBoundary_inner_image",
+        "box_fderiv_scalar_composition_of_eqOn",
+        "box_face_scalar_composition_outer_sign",
+        "not_positive_box_face_drift_of_scalar_composition"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        19
+      ],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 24,
+      "path": "/tmp/ue-actual-face-joins-Uv3fs6Im/24_ACTUAL_FACE_REPRESENTATION_EXCLUSIONS.patch",
+      "sha256": "bc3d156683a631188d66f06f5f2834294fcdf162a5d27e959221c75914a08e00",
+      "module": "UniformEquilibrium.Quitting.Projective.SingletonBoxRepresentationExclusions",
+      "imports": [
+        "MathUE.Analysis.FaceDriftScalarCompositionExclusion",
+        "MathUE.LinearProgramming.StandardQSimplexImage",
+        "UniformEquilibrium.Quitting.Projective.SingletonBoxTranslation"
+      ],
+      "declarations": [
+        "IsQuittingSingletonBoxAdditive",
+        "IsQuittingSingletonBoxRegularScalarComposition",
+        "not_singletonBox_additive_of_standardQ_positive_face_drift",
+        "not_singletonBox_scalarComposition_of_standardQ_positive_face_drift"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        20
+      ],
+      "appliedPatchPrerequisites": [
+        21,
+        23
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 26,
+      "path": "/tmp/ue-actual-face-joins-Uv3fs6Im/26_SAME_WITNESS_FACE_RESTRICTION_JOIN.patch",
+      "sha256": "3c0d29403e23ddea8209a8e0e25f474d9b11c6bd715fb94d61a5dd945446aaaa",
+      "module": "UniformEquilibrium.Quitting.Projective.NonseparablePolynomialForwardCharacterization",
+      "imports": [
+        "UniformEquilibrium.Quitting.Projective.NonquasiconvexPolynomialForwardCharacterization",
+        "UniformEquilibrium.Quitting.Projective.SingletonBoxRepresentationExclusions",
+        "UniformEquilibrium.Quitting.Projective.FinFourAmbientQSimplex"
+      ],
+      "declarations": [
+        "quittingGame_noUniformPayoff_iff_noSureRoot_and_nonseparable_rationalPotential"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        13,
+        24
+      ],
+      "appliedPatchPrerequisites": [
+        22
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 36,
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/36_RATIONAL_CLOSED_BOX_DENSITY.patch",
+      "sha256": "b1c004e87b1ec88898acd12089d2ad598bf860b130fded45bf334986c74b1f12",
+      "module": "MathUE.Interval.RationalClosedBoxDensity",
+      "imports": [
+        "Mathlib.Topology.Instances.Rat",
+        "Mathlib.Topology.Constructions.SumProd",
+        "Mathlib.Topology.Algebra.Order.Field"
+      ],
+      "declarations": [
+        "rationalClosedBoxCast",
+        "denseRange_rationalClosedBoxCast"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 37,
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/37_RATIONAL_POLYNOMIAL_EVALUATION.patch",
+      "sha256": "9e27afc420d3c9645a6bb050d11ef071cd7bcbe650a8b621eb7d2552c85edaf3",
+      "module": "MathUE.Interval.RationalPolynomialRationalEvaluation",
+      "imports": [
+        "MathUE.Interval.RationalPolynomial"
+      ],
+      "declarations": [
+        "evalRat",
+        "ratCast_evalRat"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 38,
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/38_RATIONAL_BOXED_ROOT_INTERFACES.patch",
+      "sha256": "6215031453395edaaa47bf3f296605658c90db8f06c80288b88b1f44fa954a99",
+      "module": "UniformEquilibrium.Quitting.Root.RationalBoxedEdge",
+      "imports": [
+        "MathUE.Interval.RationalClosedBoxDensity",
+        "MathUE.PMFProduct.Bool",
+        "UniformEquilibrium.Quitting.Root.RationalQuittingRootGridSelector",
+        "UniformEquilibrium.Quitting.Root.NashDefectContinuity"
+      ],
+      "declarations": [
+        "rationalQuittingAbsorption",
+        "rationalQuittingAbsorption_cast",
+        "quittingRootSuccessorPayoff_rational_eq_cast",
+        "quittingUnitCubeSimplex",
+        "continuous_quittingUnitCubeSimplex",
+        "quittingUnitCubeSimplex_eq_actual",
+        "quittingUnitCubeSimplex_rational_eq"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        36
+      ],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 39,
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/39_RATIONAL_ROBUST_REJECTION_DENSITY.patch",
+      "sha256": "3efda40ae095b4a2d49fae2e3b533d12cef24eade9f14a6e418a67a2348d7f18",
+      "module": "UniformEquilibrium.Quitting.Projective.RationalRobustRejectionDensity",
+      "imports": [
+        "UniformEquilibrium.Quitting.Root.RationalBoxedEdge",
+        "UniformEquilibrium.Quitting.Root.BoundedEndpoint"
+      ],
+      "declarations": [
+        "exists_rational_robust_rejection_of_positive_exact_rejection"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        38
+      ],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 40,
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/40_ACTUAL_EXCLUDED_POLYNOMIAL_RATIONAL_REJECTION.patch",
+      "sha256": "2823f43d275aa6ff27f6bb4a258ee827529c17fc54ee89bda7964904db32f984",
+      "module": "UniformEquilibrium.Quitting.Projective.ExcludedPolynomialRationalRejection",
+      "imports": [
+        "MathUE.Interval.RationalPolynomialRegularity",
+        "UniformEquilibrium.Quitting.Projective.RationalRobustRejectionDensity",
+        "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuadraticExclusion",
+        "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMultiAffineExclusion"
+      ],
+      "declarations": [
+        "exists_positive_exact_rejection_of_not_fullRootPotential",
+        "exists_rational_robust_rejection_of_excluded_polynomial"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        39
+      ],
+      "appliedPatchPrerequisites": [
+        12,
+        4,
+        9
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 41,
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/41_EXHAUSTIVE_RATIONAL_REJECTION_SEARCH.patch",
+      "sha256": "3e55ce72de55aca37307d1b71f262b9e9035be917dfcd426da2d03b0cdcba940",
+      "module": "UniformEquilibrium.Quitting.Projective.RationalPotentialRejectionSearch",
+      "imports": [
+        "MathUE.Interval.RationalPolynomialRationalEvaluation",
+        "UniformEquilibrium.Quitting.Projective.ExcludedPolynomialRationalRejection",
+        "UniformEquilibrium.Quitting.Projective.RobustChargedRelation",
+        "Mathlib.Data.Rat.Encodable",
+        "Mathlib.Logic.Encodable.Pi"
+      ],
+      "declarations": [
+        "rationalQuittingRejectionSuccessor",
+        "rationalQuittingPotentialRejects",
+        "rationalQuittingRejectionCandidates",
+        "rationalQuittingPotentialRejectionSearch?",
+        "mem_rationalQuittingRejectionCandidates",
+        "rationalQuittingPotentialRejectionSearch_eventually_succeeds",
+        "rationalQuittingPotentialRejects_sound",
+        "rationalQuittingPotentialRejectionSearch_eventually_succeeds_of_excluded_polynomial"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        37,
+        40
+      ],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 42,
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/42_RATIONAL_EXACT_SOLO_REJECTION.patch",
+      "sha256": "4c9dcee45a9b4c156af7443d08ea7aad6b069783bfa8ad9fd0f64bceb2838f02",
+      "module": "UniformEquilibrium.Quitting.Projective.RationalExactSoloRejection",
+      "imports": [
+        "MathUE.Interval.RationalPolynomialRegularity",
+        "UniformEquilibrium.Quitting.Projective.SingletonBoxStandardQFaceExclusion",
+        "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialFaceDrift",
+        "UniformEquilibrium.Quitting.Root.RationalBoxedEdge",
+        "UniformEquilibrium.Quitting.Root.RationalFiniteSourceCapThresholdScan"
+      ],
+      "declarations": [
+        "rationalQuittingSingletonProbeSource",
+        "rationalQuittingSingletonProbeSource_cast",
+        "exists_rational_exact_solo_rejection_of_standardQ_quasiconvex"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        38
+      ],
+      "appliedPatchPrerequisites": [
+        12,
+        25
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 43,
+      "path": "/tmp/ue-rational-rejection-MLTrufnP/43_EXACT_SOLO_REJECTION_SEARCH_JOIN.patch",
+      "sha256": "72b8dbd0a55a8a7fbda5b2b25e657d994ba4a218ceb4484a83bea67fe04630ba",
+      "module": "UniformEquilibrium.Quitting.Projective.RationalExactSoloRejectionSearch",
+      "imports": [
+        "UniformEquilibrium.Quitting.Projective.RationalExactSoloRejection",
+        "UniformEquilibrium.Quitting.Projective.RationalPotentialRejectionSearch"
+      ],
+      "declarations": [
+        "rationalQuittingPotentialRejectionSearch_eventually_succeeds_of_standardQ_quasiconvex"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        42,
+        41
+      ],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 44,
+      "path": "/tmp/ue-midpoint-integral-sKSsQX/44_EXACT_MIDPOINT_THIRD_DERIVATIVE_INTEGRAL.patch",
+      "sha256": "46d2750273815dcea208fd712c4c9fbdc4ee611bc43d5d15cba742deb0f9c168",
+      "module": "MathUE.Analysis.MidpointThirdDerivativeIntegral",
+      "imports": [
+        "MathUE.Analysis.MidpointThirdDerivative",
+        "Mathlib.Analysis.Calculus.Deriv.Pow"
+      ],
+      "declarations": [
+        "taylorWithinEval_two_eq",
+        "midpointThirdDerivativeKernel",
+        "midpointThirdDerivativeKernel_nonneg",
+        "integral_midpointThirdDerivativeKernel_mul_eq_split",
+        "midpoint_thirdDerivative_half_integrals",
+        "midpoint_thirdDerivative_integral_identity",
+        "midpointThirdDerivativeKernel_weighted_mass"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [
+        5
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 45,
+      "path": "/tmp/ue-potential-fixtures-xygynp/45_RATIONAL_POLYNOMIAL_COORDINATE_DERIVATIVES.patch",
+      "sha256": "05851dcb10bf33ac7466c67fd793dee590674ae627c1c25e1ed28ec3b7ba6e49",
+      "module": "MathUE.Analysis.RationalPolynomialCoordinateDerivatives",
+      "imports": [
+        "MathUE.Analysis.CoordinateResetFTC",
+        "MathUE.Interval.PolynomialLipschitz"
+      ],
+      "declarations": [
+        "coordinatePartial_evalReal_eq",
+        "coordinateMixedPartial_evalReal_eq"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [
+        27
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 46,
+      "path": "/tmp/ue-potential-fixtures-xygynp/46_PAIRED_FACE_POLYNOMIAL_HESSIAN_FIXTURE.patch",
+      "sha256": "e6280f4f42d8fe4e0fa84a69f1080d2f40c7fd225818efafee4580e3d1d2d171",
+      "module": "MathUE.Analysis.Examples.PairedFacePotential",
+      "imports": [
+        "MathUE.Analysis.RationalPolynomialCoordinateDerivatives",
+        "Mathlib.LinearAlgebra.Eigenspace.Matrix"
+      ],
+      "declarations": [
+        "expression",
+        "potential",
+        "translatedPotential",
+        "shiftedVariable",
+        "translatedExpression",
+        "translatedExpression_eval",
+        "normalizedSingletonMatrix",
+        "gradient",
+        "eval_formalPartial_eq_gradient",
+        "fderiv_apply",
+        "translated_fderiv_apply",
+        "singleton_rewards_bounded",
+        "faceDriftFormula",
+        "face_drift_eq_formula",
+        "face_drift_ge_one",
+        "translated_face_drift_ge_one",
+        "hessianMatrix",
+        "actual_hessian_entries",
+        "translated_actual_hessian_entries",
+        "eigenvectors",
+        "eigenvalues",
+        "hessian_hasEigenvector",
+        "eigenvectors_span",
+        "eigenvectors_linearIndependent",
+        "hessian_hasEigenvalue_iff",
+        "translatedPotential_top_value",
+        "translatedPotential_countervertex_value",
+        "translatedPotential_top_not_minimum"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        45
+      ],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 47,
+      "path": "/tmp/ue-potential-fixtures-xygynp/47_REFLECTION_AND_MULTIAFFINE_BOUNDARY_ARITHMETIC.patch",
+      "sha256": "533b3065ed32ac769c22074d6947a87a719220fcd76c5dacdbffa875ef17d1ca",
+      "module": "MathUE.Analysis.Examples.ReflectionBoundaryArithmetic",
+      "imports": [
+        "Mathlib.Data.Real.Basic",
+        "Mathlib.Tactic.NormNum"
+      ],
+      "declarations": [
+        "allowed_reflection_endpoint",
+        "fixed_cap_reflection_outside",
+        "signed_singleton_reflection_outside",
+        "unsigned_multiaffine_partial_positive"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 48,
+      "path": "/tmp/ue-coupled-cubic-tUhiv5/48_COUPLED_CUBIC_SHAPE_FIXTURE.patch",
+      "sha256": "3e30200a98b8842a2097772c8a21630edccf9093c9310ea93850b9a4057ef01c",
+      "module": "MathUE.Analysis.Examples.CoupledCubicShape",
+      "imports": [
+        "MathUE.Analysis.CoordinateResetFTC",
+        "MathUE.Interval.RationalPolynomial",
+        "Mathlib.Analysis.Calculus.FDeriv.Pow",
+        "Mathlib.Analysis.Convex.Quasiconvex",
+        "Mathlib.Data.Fintype.EquivFin",
+        "Mathlib.Algebra.BigOperators.Fin"
+      ],
+      "declarations": [
+        "coordinateSum",
+        "argument",
+        "potential",
+        "potential_eq_printed",
+        "argument_hasFDerivAt",
+        "potential_hasFDerivAt",
+        "coordinatePartial_eq",
+        "coordinateMixedPartial_eq",
+        "quasiconvexOn",
+        "lower_add_single_mem",
+        "not_convexOn",
+        "additive_rectangle_identity",
+        "not_exists_additive_eqOn",
+        "rationalArgument",
+        "rationalExpression",
+        "rationalExpression_eval"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [
+        27
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 49,
+      "path": "/tmp/ue-collision-fixture-M7I6Dy/49_LITERAL_COLLISION_AND_UPPER_FREEZE.patch",
+      "sha256": "945c3f2bf3dadf125a7664ea34a44e8fc5c87463b847a022d375f09ac0ad646f",
+      "module": "UniformEquilibrium.Quitting.Examples.PotentialPacketCollisionBoundary",
+      "imports": [
+        "UniformEquilibrium.Quitting.Root.CollisionAdjustedSingletonProbe"
+      ],
+      "declarations": [
+        "reward",
+        "zeroPoint",
+        "capPoint",
+        "root",
+        "quarterRoot",
+        "reward_bounded",
+        "corrected_source",
+        "corrected_successor",
+        "corrected_endpoint_indifference",
+        "corrected_exact_nash",
+        "quarter_absorption",
+        "uncorrected_endpoints",
+        "uncorrected_not_nash",
+        "frozen_source",
+        "frozen_successor",
+        "frozen_continue_minus_quit",
+        "frozen_exact_nash",
+        "upper_three_fixture",
+        "upper_two_fixture",
+        "unfrozen_upper_sources"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 50,
+      "path": "/tmp/ue-nonq-face-fixture-vClzbt/50_NON_Q_LINEAR_FACE_FIXTURE.patch",
+      "sha256": "bc2147d1e8dd6cf04158166f46852dae679a258ab04a39970adecf8e3bf72a27",
+      "module": "MathUE.Analysis.Examples.NonQLinearFace",
+      "imports": [
+        "MathUE.LinearProgramming.CopositiveQ",
+        "Mathlib.Analysis.Calculus.FDeriv.Add",
+        "Mathlib.Analysis.Convex.Function"
+      ],
+      "declarations": [
+        "matrix",
+        "potential",
+        "potential_hasFDerivAt",
+        "convexOn",
+        "face_drift",
+        "face_drift_ge_one",
+        "negative_residual",
+        "not_standardQ"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 51,
+      "path": "/tmp/ue-paired-fixture-joins-WMWV4A/51_CANONICAL_COORDINATE_HESSIAN_ENTRIES.patch",
+      "sha256": "9ad3d3bb7de80b833af58a75e9129efc83c271c52ceb2b26e67d7ba126fa2820",
+      "module": "MathUE.Analysis.CoordinateHessianEntries",
+      "imports": [
+        "MathUE.Analysis.CoordinateHessianExtrema",
+        "MathUE.Analysis.CoordinateResetFTC",
+        "Mathlib.LinearAlgebra.Matrix.ToLin"
+      ],
+      "declarations": [
+        "coordinateMixedPartial_eq_secondFDeriv",
+        "coordinateHessian_apply_single",
+        "coordinateHessian_conjugate_eq_matrix",
+        "coordinateHessian_hasEigenvalue_iff_matrix"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [
+        33,
+        27
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 52,
+      "path": "/tmp/ue-paired-fixture-joins-WMWV4A/52_PAIRED_CANONICAL_SPECTRUM_AND_MINIMIZING_VERTEX.patch",
+      "sha256": "e66135a0c4714ca9ed680f2c6a169291c52bac097ece6189eb8177b041445fc1",
+      "module": "MathUE.Analysis.Examples.PairedFacePotentialCanonicalJoins",
+      "imports": [
+        "MathUE.Analysis.Examples.PairedFacePotential",
+        "MathUE.Analysis.CoordinateHessianEntries",
+        "MathUE.Analysis.CoordinateAffineBoxMinimum",
+        "MathUE.Interval.RationalPolynomialRegularity"
+      ],
+      "declarations": [
+        "translatedPotential_contDiff",
+        "translated_coordinateHessian_conjugate",
+        "translated_coordinateHessian_hasEigenvalue_iff",
+        "translated_coordinateLeastHessianEigenvalue",
+        "translated_coordinateMinimumHessianEigenvalue",
+        "translatedPotential_coordinateAffine",
+        "exists_non_top_minimizing_vertex"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        46,
+        51
+      ],
+      "appliedPatchPrerequisites": [
+        7,
+        12
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 53,
+      "path": "/tmp/ue-reflection-literal-boundaries-VxBUGT/53_CONSTANT_SIGNED_NORMAL_TABLE.patch",
+      "sha256": "4717204fab5cc4ba22b25a2dcef663beb43cc3870aefc29c451444053a0829c5",
+      "module": "UniformEquilibrium.Quitting.Examples.ConstantSignedNormalTable",
+      "imports": [
+        "MathUE.PMFProduct.Update",
+        "UniformEquilibrium.Quitting.Classification.AbnormalPlayers",
+        "UniformEquilibrium.Quitting.Punishment.ContinueFloor",
+        "UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityRewardRobustness"
+      ],
+      "declarations": [
+        "target",
+        "reward",
+        "singleton_vector",
+        "rewards_bounded",
+        "quit_value_eq",
+        "punishment_eq",
+        "punishment_vector",
+        "all_normal",
+        "positive_and_negative_singletons",
+        "allNever_payoff_zero",
+        "positive_scaling_preserves_negative_singleton"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 54,
+      "path": "/tmp/ue-reflection-literal-boundaries-VxBUGT/54_POSITIVE_CHARGE_RESCALE.patch",
+      "sha256": "91957f4ec748bc92b0719fa25f312e01b03729bf71da29f132f9ad7138d3c6ef",
+      "module": "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialChargeScale",
+      "imports": [
+        "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuadraticExclusion",
+        "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMultiAffineExclusion"
+      ],
+      "declarations": [
+        "IsQuittingFullExactRootPotentialWithCharge",
+        "constant_isQuittingFullExactRootPotentialWithCharge_zero",
+        "isQuittingFullExactRootPotentialWithCharge_iff_div",
+        "not_fullExactRootPotentialWithCharge_coordinateAffine",
+        "not_fullExactRootPotentialWithCharge_totalDegree_le_two",
+        "not_fullExactRootPotentialWithCharge_multiAffine"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [],
+      "appliedPatchPrerequisites": [
+        4,
+        9
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 55,
+      "path": "/tmp/ue-reflection-literal-boundaries-VxBUGT/55_PAIRED_BOUNDED_COMPLETION_FULL_ROOT_EXCLUSION.patch",
+      "sha256": "640ecc91da66d4f55ebfa5f28ffd10aa6978177e0432c8855721470953815766",
+      "module": "UniformEquilibrium.Quitting.Examples.PairedFacePotentialBoundedCompletion",
+      "imports": [
+        "MathUE.Analysis.Examples.PairedFacePotentialCanonicalJoins",
+        "UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMultiAffineExclusion"
+      ],
+      "declarations": [
+        "pairedFacePotential_boundedCompletion_face_drift",
+        "pairedFacePotential_boundedCompletion_not_fullRoot"
+      ],
+      "deprecated": [],
+      "futurePrerequisites": [
+        52
+      ],
+      "appliedPatchPrerequisites": [
+        9
+      ],
+      "currentSourceExists": false,
+      "status": "REVIEWED FUTURE; NOT APPLIED; NOT CHECKED HERE"
+    },
+    {
+      "id": 56,
+      "path": "/tmp/ue-potential-final-joins-XYiMaJ/56_SAME_POLYNOMIAL_QUANTITATIVE_JOIN.patch",
+      "sha256": "922373c4ef5452f50fbda631e4d296ccf0499f4e14706d6c49c1cf8c127e679e",
+      "module": "UniformEquilibrium.Quitting.Projective.QuantitativePolynomialForwardCharacterization",
+      "futurePrerequisites": [
+        26
+      ],
+      "status": "M/SOURCE REVIEW PASS; FUTURE UNCOMPILED"
+    },
+    {
+      "id": 57,
+      "path": "/tmp/ue-potential-final-joins-XYiMaJ/57_GENERIC_CURVATURE_HOMOGENEITY.patch",
+      "sha256": "34d60a4867261beaf5d1c4a9bf8e2bfe6da857ff6038722af59383b682b09e32",
+      "module": "MathUE.Analysis.CurvatureHomogeneity",
+      "futurePrerequisites": [],
+      "status": "M/SOURCE REVIEW PASS; FUTURE UNCOMPILED"
+    },
+    {
+      "id": 58,
+      "path": "/tmp/ue-potential-final-joins-XYiMaJ/58_ROBUST_POSITIVE_CHARGE_NORMALIZATION.patch",
+      "sha256": "41e998073aa7d9c76884adc612735a37d35962f08c218cd03ed1f6e03c6ce340",
+      "module": "UniformEquilibrium.Quitting.Projective.RobustPotentialChargeScale",
+      "futurePrerequisites": [
+        57
+      ],
+      "status": "M/SOURCE REVIEW PASS; FUTURE UNCOMPILED"
+    },
+    {
+      "id": 59,
+      "path": "/tmp/ue-potential-final-joins-XYiMaJ/59_LITERAL_PLAYER_COUNT_AND_SOLO_ZERO_BOUNDARIES.patch",
+      "sha256": "b3f18a4a250f6ccaf7df0d255bc6e1dd21c2cb67d11d64113edaf03e558b3399",
+      "module": "UniformEquilibrium.Quitting.Examples.PotentialPacketPlayerCountBoundary",
+      "futurePrerequisites": [],
+      "status": "M/SOURCE REVIEW PASS; FUTURE UNCOMPILED; EXPLICIT-ENDPOINT OVERLAY REQUIRED"
+    },
+    {
+      "id": 60,
+      "path": "/tmp/ue-potential-final-joins-XYiMaJ/60_ACTUAL_FIN4_POSITIVE_CHARGE_CURVATURE_JOIN.patch",
+      "sha256": "7f67b0912a54da5ed98b98a82584c6d4d6c33e85970959dc088a79e5292ebf7f",
+      "module": "UniformEquilibrium.Quitting.Projective.FinFourRobustPotentialChargeScale",
+      "futurePrerequisites": [
+        56,
+        58
+      ],
+      "status": "M/SOURCE REVIEW PASS; FUTURE UNCOMPILED"
+    },
+    {
+      "id": 75,
+      "path": "/tmp/ue-simplex-representation-facade-oNYXFg/75_SIMPLEX_ONLY_ACTUAL_REPRESENTATION_FACADE.patch",
+      "sha256": "e258bb4dc3edb70519332c80d275ffc1907590021ea3d99f1730a475ca51ba78",
+      "module": "UniformEquilibrium.Quitting.Projective.SingletonBoxRepresentationExclusions",
+      "futurePrerequisites": [
+        24
+      ],
+      "status": "NEW STATIC SOURCE GLUE; INDEPENDENT REVIEW/COMPILER PENDING"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "11A",
+      "path": "/tmp/ue-monotone11-import-repair-pe0Wvu/11A_CANONICAL_ALL_CONTINUE_OWNER_IMPORT.patch",
+      "sha256": "0d8d278309735a99e26fc9c0f5841b0028654a1f12aca96d07981189afe81b92",
+      "after": [
+        11
+      ]
+    },
+    {
+      "id": "17A",
+      "path": "/tmp/ue-future-pinned-name-overlays-iBO2Hj/001_UNIT17_PINNED_ITE_NAMES.patch",
+      "sha256": "d3d4dc16cf920cf5100fe00ca9266d885b5f80fb7a42fc054d0c96ff99aefcba",
+      "after": [
+        17
+      ]
+    },
+    {
+      "id": "59A",
+      "path": "/tmp/ue-potential59-and-secant-proof-overlays.0BZu0lOm/001_UNIT59_EXPLICIT_ZERO_REWARD_ARGUMENTS.patch",
+      "sha256": "4ec0042455fd5187535db8316e3ad5dc362b58e87efeba99dadb016ea0e9da93",
+      "after": [
+        59
+      ]
+    },
+    {
+      "id": "DOC13_26",
+      "path": "/tmp/ue-future-pinned-name-overlays-iBO2Hj/005_CANONICAL_CHARACTERIZATION_DOCUMENTATION.patch",
+      "sha256": "4351d4ef39f33ed4f3ab161b2030e7a7ad16556b23d7020189c7c02bf47bf23a",
+      "after": [
+        13,
+        26
+      ]
+    }
+  ],
+  "completePacketOrders": {
+    "reflection": [
+      15,
+      16,
+      17,
+      36,
+      38,
+      39,
+      40,
+      37,
+      41,
+      44,
+      45,
+      46,
+      51,
+      52,
+      55,
+      47,
+      49,
+      53,
+      54
+    ],
+    "shape": [
+      13,
+      19,
+      20,
+      24,
+      75,
+      26,
+      56,
+      36,
+      38,
+      42,
+      57,
+      58,
+      48,
+      49,
+      50,
+      54,
+      59
+    ],
+    "union": [
+      13,
+      19,
+      20,
+      24,
+      75,
+      26,
+      56,
+      36,
+      38,
+      42,
+      57,
+      58,
+      48,
+      49,
+      50,
+      54,
+      59,
+      15,
+      16,
+      17,
+      39,
+      40,
+      37,
+      41,
+      44,
+      45,
+      46,
+      51,
+      52,
+      55,
+      47,
+      53
+    ]
+  },
+  "optional": [
+    43,
+    60
+  ],
+  "outOfScope": "61–74 belong to screened-root/singleton collar, not these two potential exports"
+}

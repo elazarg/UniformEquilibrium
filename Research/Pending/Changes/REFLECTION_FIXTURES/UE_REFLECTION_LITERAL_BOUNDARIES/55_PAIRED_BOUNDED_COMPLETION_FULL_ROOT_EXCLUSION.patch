@@ -1,0 +1,48 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Quitting/Examples/PairedFacePotentialBoundedCompletion.lean
++import MathUE.Analysis.Examples.PairedFacePotentialCanonicalJoins
++import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMultiAffineExclusion
++
++/-! # Every bounded completion of the printed singleton columns
++
++The SAME printed polynomial satisfies all nonnegative singleton-face
++inequalities but fails the full exact-root relation for every such game.
++Nonsingleton entries are arbitrary subject only to the literal unit bound.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++open Math.PairedFacePotential
++
++theorem pairedFacePotential_boundedCompletion_face_drift
++    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
++    (hsingletons : ∀ owner receiver, reward (quittingSingletonTerminal owner) receiver =
++      1 / 4 + normalizedSingletonMatrix receiver owner)
++    (point : Payoff (Fin 4)) (hlower : ∀ who, (1 / 4 : ℝ) ≤ point who)
++    (owner : Fin 4) (hface : point owner = 1 / 4) :
++    1 ≤ fderiv ℝ translatedPotential point (point - quittingSoloReward reward owner) := by
++  have hdirection : point - quittingSoloReward reward owner =
++      (fun receiver => point receiver - (1 / 4 + normalizedSingletonMatrix receiver owner)) := by
++    funext receiver
++    exact congrArg (point receiver - ·) (hsingletons owner receiver)
++  rw [hdirection]
++  exact translated_face_drift_ge_one point hlower owner hface
++
++theorem pairedFacePotential_boundedCompletion_not_fullRoot
++    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
++    (hreward : ∀ terminal who, |reward terminal who| ≤ 1)
++    (hsingletons : ∀ owner receiver, reward (quittingSingletonTerminal owner) receiver =
++      1 / 4 + normalizedSingletonMatrix receiver owner) :
++    ¬ IsQuittingFullExactRootPotential reward 3 translatedPotential := by
++  apply not_isQuittingFullExactRootPotential_coordinateAffine hreward
++    (fun who => ?_) translatedPotential translatedPotential_coordinateAffine
++    translatedPotential_contDiff.continuous.continuousOn
++    (fun point _ => translatedPotential_contDiff.differentiable (by norm_num) point)
++  change 0 ≤ reward (quittingSingletonTerminal who) who
++  rw [hsingletons]
++  fin_cases who <;> norm_num [normalizedSingletonMatrix]
++
++end GameTheory
+*** End Patch

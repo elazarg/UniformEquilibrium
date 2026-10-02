@@ -1,0 +1,104 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
++
++/-- The strict-individual-rational source block of Lemma 2: choose a pure
++periodic calendar and actual fixed-punishment trigger internally. One profile
++is selected before all sufficiently small rates. This is not yet a Nash claim. -/
++theorem exists_periodicApproxMinmaxTrigger_of_strictIR
++    (G : FiniteStageGame) (target : Payoff G.Player)
++    (htarget : target ∈ G.correlatedFeasiblePayoffs)
++    (hstrict : ∀ who, G.individualRationalLevel who < target who)
++    {ε : ℝ} (hε : 0 < ε) :
++    ∃ (margin threshold : ℝ) (n : ℕ) (_ : NeZero n)
++      (cycle : Fin n → (∀ player, G.Action player)) (profile : G.BehaviorProfile),
++      0 < margin ∧ 0 < threshold ∧ threshold ≤ 1 ∧
++      (∀ (time : ℕ) (history : G.repeatedGame.Hist time),
++        (∀ k, (history.1 k).2 = cycle (Fin.ofNat n k)) →
++        ∀ player, profile player time history =
++          PMF.pure (cycle (Fin.ofNat n time) player)) ∧
++      (∀ (who : G.Player) (deviation : G.BehaviorStrategy who)
++        (time : ℕ) (history : G.repeatedGame.Hist time),
++        history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
++          PUnit.unit time).support →
++        (¬∀ k, (history.1 k).2 = cycle (Fin.ofNat n k)) →
++        G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤
++          G.individualRationalLevel who + margin) ∧
++      ∀ lam : ℝ, 0 < lam → lam < threshold →
++        (∀ (who : G.Player) (start : ℕ),
++          G.individualRationalLevel who + 2 * margin ≤
++            G.kernel.discountedContinuationPayoff (1 - lam)
++              (fun time => cycle (Fin.ofNat n time)) start who) ∧
++        ∀ who, |G.discountedPayoff lam profile who - target who| < ε := by
++  classical
++  let : Nonempty (∀ player, G.Action player) := inferInstance
++  let (player : G.Player) : Fintype (G.kernel.Strategy player) := G.finiteAction player
++  let : Finite G.kernel.Outcome := by
++    change Finite (∀ player, G.Action player)
++    exact Finite.of_fintype _
++  obtain ⟨slack, hslack, hmargin⟩ :=
++    KernelGame.exists_pos_margin_of_mem_strictReservationSet
++      (r := fun who => G.individualRationalLevel who) (v := target) hstrict
++  let budget : ℝ := min (ε / 2) (slack / 4)
++  have hbudget : 0 < budget := lt_min (half_pos hε) (by positivity)
++  have hbudgetError : budget ≤ ε / 2 := min_le_left _ _
++  have hbudgetSlack : budget ≤ slack / 4 := min_le_right _ _
++  obtain ⟨bound, hboundAbs⟩ := Math.Probability.exists_abs_bound_of_finite
++    (fun action : (∀ player, G.Action player) => ‖G.payoff action‖)
++  have hbound (action : ∀ player, G.Action player) : ‖G.payoff action‖ ≤ bound := by
++    simpa only [abs_of_nonneg (norm_nonneg _)] using hboundAbs action
++  have hbound0 : 0 ≤ bound :=
++    (norm_nonneg (G.payoff (Classical.arbitrary (∀ player, G.Action player)))).trans
++      (hbound _)
++  obtain ⟨n, hn, happrox⟩ := MathUE.exists_uniformAverage_close_of_mem_convexHull_range
++    G.payoff hbound hbound0 (half_pos hbudget)
++  let : NeZero n := ⟨Nat.ne_of_gt hn⟩
++  obtain ⟨cycle, hcycle⟩ := happrox n le_rfl target htarget
++  have hcycleAverage : G.kernel.cycleAveragePayoff cycle =
++      (n : ℝ)⁻¹ • ∑ time, G.payoff (cycle time) := by
++    funext who
++    simp [KernelGame.cycleAveragePayoff, FiniteStageGame.kernel, KernelGame.eu_ofPureEU,
++      Pi.smul_apply, Finset.sum_apply, smul_eq_mul, Finset.mul_sum]
++  rw [← hcycleAverage] at hcycle
++  have hcoordinate (who : G.Player) :
++      |G.kernel.cycleAveragePayoff cycle who - target who| < budget / 2 := by
++    have hle := norm_le_pi_norm (G.kernel.cycleAveragePayoff cycle - target) who
++    rw [Pi.sub_apply, Real.norm_eq_abs] at hle
++    exact hle.trans_lt hcycle
++  obtain ⟨β₀, hβ₀0, hβ₀1, hphase⟩ :=
++    G.kernel.exists_discountFactor_threshold_periodic_all_continuations_close_cycleAverage
++      cycle (half_pos hbudget)
++  obtain ⟨profile, hpure, hpunish, hdelivery⟩ :=
++    exists_constantApproxPunishmentTrigger G
++      (fun time => cycle (Fin.ofNat n time)) (show 0 < slack / 4 by positivity)
++  have hthreshold : 0 < 1 - β₀ := by linarith
++  have hthresholdOne : 1 - β₀ ≤ 1 := by linarith
++  refine ⟨slack / 4, 1 - β₀, n, inferInstance, cycle, profile,
++    by positivity, hthreshold, hthresholdOne, hpure, hpunish, ?_⟩
++  intro lam hlam hlamThreshold
++  have hβgt : β₀ < 1 - lam := by linarith
++  have hβ1 : 1 - lam < 1 := by linarith
++  have hclose (who : G.Player) (start : ℕ) :
++      |G.kernel.discountedContinuationPayoff (1 - lam)
++        (fun time => cycle (Fin.ofNat n time)) start who - target who| < budget := by
++    have hperiod := hphase (1 - lam) hβgt hβ1 who start
++    have hmean := hcoordinate who
++    rw [abs_lt] at hperiod hmean ⊢
++    constructor <;> linarith
++  constructor
++  · intro who start
++    have hphaseLower := (abs_lt.mp (hclose who start)).1
++    have htargetLower := hmargin who
++    linarith
++  · intro who
++    let rate : G.DiscountRate := ⟨lam, hlam, hlamThreshold.le.trans hthresholdOne⟩
++    have hpayoff := hdelivery rate who
++    change G.discountedPayoff lam profile who =
++      G.kernel.discountedContinuationPayoff (1 - lam)
++        (fun time => cycle (Fin.ofNat n time)) 0 who at hpayoff
++    rw [hpayoff]
++    exact (hclose who 0).trans_le (by linarith)
++
++/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
+*** End Patch

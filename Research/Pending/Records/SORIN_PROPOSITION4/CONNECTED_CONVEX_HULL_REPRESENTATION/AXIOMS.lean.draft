@@ -1,0 +1,4 @@
+import MathUE.Topology.ConnectedConvexHullRepresentation
+
+#print axioms Math.Topology.exists_tied_max_of_isPreconnected
+#print axioms Math.Topology.exists_small_finset_of_mem_convexHull_isPreconnected

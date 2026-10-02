@@ -1,0 +1,15 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotPolynomialObstruction.lean
+@@
+   have hpositive : ∃ who, 0 < table (quittingSingletonTerminal who) who := by
+     refine ⟨pivot, ?_⟩
+-    rw [hsingleton pivot, if_pos rfl]
++    rw [hsingleton pivot, ite_eq_left rfl]
+     exact hscale
+@@
+   have hpositive : ∃ who, 0 < reward (quittingSingletonTerminal who) who := by
+     refine ⟨pivot, ?_⟩
+-    rw [hsingleton pivot, if_pos rfl]
++    rw [hsingleton pivot, ite_eq_left rfl]
+     exact hscale
+*** End Patch

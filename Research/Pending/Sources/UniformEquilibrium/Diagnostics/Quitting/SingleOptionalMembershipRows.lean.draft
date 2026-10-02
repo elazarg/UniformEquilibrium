@@ -1,0 +1,205 @@
+import UniformEquilibrium.Diagnostics.Quitting.ThreeSureMembershipReversal
+import Mathlib.Algebra.Order.Group.MinMax
+
+/-! # Literal full-debt rows with one optional root marginal
+
+The root is unpadded and followed by Never. All other marginals are sure Quit0.
+Existing screened full-cap identities retain every behavioral reply, every
+late finite date and Never; only the optional marginal is reselected.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open _root_.Math.Probability Math.PMFProduct
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+/-- Keep every sure law at date zero and replace only the optional law. -/
+def quittingSingleOptionalRoot (optional : ι) (marginal : PMF Bool) : ι → PMF Bool :=
+  Function.update (fun _ => PMF.pure true) optional marginal
+
+omit [Fintype ι] in
+theorem quittingRoot_eq_singleOptionalRoot
+    (root : ι → PMF Bool) (optional : ι)
+    (hsure : ∀ who, who ≠ optional → (root who true).toReal = 1) :
+    root = quittingSingleOptionalRoot optional (root optional) := by
+  funext who
+  by_cases hwho : who = optional
+  · subst who
+    simp only [quittingSingleOptionalRoot, Function.update_self]
+  · rw [quittingSingleOptionalRoot, Function.update_of_ne hwho]
+    exact eq_pure_true_of_true_toReal_eq_one (root who) (hsure who hwho)
+
+/-- The actual product law reduces to its two optional configurations. -/
+theorem expect_quittingSingleOptionalRoot
+    (root : ι → PMF Bool) (optional : ι)
+    (hsure : ∀ who, who ≠ optional → (root who true).toReal = 1)
+    (observable : (ι → Bool) → ℝ) :
+    expect (pmfPi root) observable =
+      (root optional false).toReal * observable (quittingSingleOptionalAction optional false) +
+        (root optional true).toReal * observable (quittingSingleOptionalAction optional true) := by
+  rw [quittingRoot_eq_singleOptionalRoot root optional hsure]
+  unfold quittingSingleOptionalRoot
+  rw [pmfPi_update_pure_family, expect_bind]
+  simp only [expect_pure, Function.update_self]
+  rw [expect_eq_sum, Fintype.sum_bool]
+  rfl
+
+/-- Either optional action may be named first; its actual probability is retained. -/
+theorem expect_quittingDirectedMembershipGap_eq_optional_mix
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (optional who : ι) (preferred first : Bool)
+    (hsure : ∀ player, player ≠ optional → (root player true).toReal = 1) :
+    expect (pmfPi root) (quittingDirectedMembershipGap reward who preferred) =
+      (root optional first).toReal *
+          quittingDirectedMembershipGap reward who preferred
+            (quittingSingleOptionalAction optional first) +
+        (1 - (root optional first).toReal) *
+          quittingDirectedMembershipGap reward who preferred
+            (quittingSingleOptionalAction optional (!first)) := by
+  rw [expect_quittingSingleOptionalRoot root optional hsure]
+  cases first <;> simp only [Bool.not_false, Bool.not_true]
+  · rw [pmfBool_false_toReal]
+    ring
+  · rw [pmfBool_false_toReal]
+    ring
+
+/-- Overwriting its own optional action leaves that owner's gap deterministic. -/
+theorem expect_quittingDirectedMembershipGap_optional_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (optional : ι) (preferred : Bool)
+    (hsure : ∀ who, who ≠ optional → (root who true).toReal = 1) :
+    expect (pmfPi root) (quittingDirectedMembershipGap reward optional preferred) =
+      quittingDirectedMembershipGap reward optional preferred (fun _ => true) := by
+  rw [expect_quittingDirectedMembershipGap_eq_optional_mix
+    reward root optional optional preferred false hsure]
+  simp only [quittingSingleOptionalAction, quittingDirectedMembershipGap_update]
+  ring
+
+/-- The root-then-Never payoff is the canonical zero-tail root successor payoff. -/
+theorem quittingTerminalPayoff_oneDateThenNever_eq_rootSuccessor
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (who : ι) :
+    quittingTerminalPayoff reward (quittingOneDateThenNeverProfile reward root) who =
+      quittingRootSuccessorPayoff reward 0 root who := by
+  unfold quittingOneDateThenNeverProfile
+  rw [quittingTerminalPayoff_rootThenContinuation_eq,
+    oneDateProductTerminalPayoff_alwaysContinueProfile]
+  rfl
+
+/-- A sure core's FULL debt is the positive part of its signed affine gap row. -/
+theorem quittingTerminalDeviationDebt_singleOptional_core_eq_max_row
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (optional who : ι) (first : Bool)
+    (hsure : ∀ player, player ≠ optional → (root player true).toReal = 1)
+    (hwho : who ≠ optional) {opponent : ι} (hne : opponent ≠ who)
+    (hopponent : (root opponent true).toReal = 1) :
+    quittingTerminalDeviationDebt reward (quittingOneDateThenNeverProfile reward root) who =
+      max 0 ((root optional first).toReal *
+          quittingDirectedMembershipGap reward who false
+            (quittingSingleOptionalAction optional first) +
+        (1 - (root optional first).toReal) *
+          quittingDirectedMembershipGap reward who false
+            (quittingSingleOptionalAction optional (!first))) := by
+  have hzero : (root who false).toReal = 0 := by
+    rw [pmfBool_false_toReal, hsure who hwho]
+    norm_num
+  have hprescribed : quittingTerminalPayoff reward
+      (quittingOneDateThenNeverProfile reward root) who =
+        oneDateProductQuitEndpoint reward root who := by
+    rw [quittingTerminalPayoff_oneDateThenNever_eq_rootSuccessor,
+      quittingRootSuccessorPayoff_eq_endpointMix, hsure who hwho, hzero,
+      one_mul, zero_mul, add_zero]
+    rfl
+  have hmean : expect (pmfPi root) (quittingDirectedMembershipGap reward who false) =
+      oneDateProductContinueEndpoint reward root who -
+        oneDateProductQuitEndpoint reward root who := by
+    simpa only [Bool.false_eq_true, ite_false] using
+      expect_quittingDirectedMembershipGap reward root who false
+  rw [quittingTerminalDeviationDebt,
+    oneDateProductQuittingContinuationBestResponseValue_oneDateThenNever_sureQuitter
+      reward root who hne hopponent, hprescribed,
+    ← max_sub_sub_right, sub_self, ← hmean,
+    expect_quittingDirectedMembershipGap_eq_optional_mix
+      reward root optional who false first hsure]
+
+/-- The optional owner's best-action gap is fixed across its own choices, and its
+FULL debt is its actual non-best probability times that gap. -/
+theorem quittingTerminalDeviationDebt_singleOptional_optional_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (optional : ι) (preferred : Bool)
+    (hsure : ∀ who, who ≠ optional → (root who true).toReal = 1)
+    {opponent : ι} (hne : opponent ≠ optional) (hopponent : (root opponent true).toReal = 1)
+    (hgap : 0 ≤ quittingDirectedMembershipGap reward optional preferred (fun _ => true)) :
+    quittingTerminalDeviationDebt reward
+        (quittingOneDateThenNeverProfile reward root) optional =
+      (root optional (!preferred)).toReal *
+        quittingDirectedMembershipGap reward optional preferred (fun _ => true) := by
+  have hbest : 0 ≤ expect (pmfPi root)
+      (quittingDirectedMembershipGap reward optional preferred) := by
+    rw [expect_quittingDirectedMembershipGap_optional_eq reward root optional preferred hsure]
+    exact hgap
+  rw [quittingTerminalDeviationDebt_oneDateThenNever_eq_losingMass_mul_gap
+    reward root optional preferred hne hopponent hbest,
+    expect_quittingDirectedMembershipGap_optional_eq reward root optional preferred hsure]
+
+/-- Four players leave a sure opponent other than the optional player and the owner. -/
+theorem exists_sureOpponent_singleOptional_finFour
+    (root : Fin 4 → PMF Bool) (optional who : Fin 4)
+    (hsure : ∀ player, player ≠ optional → (root player true).toReal = 1) :
+    ∃ opponent, opponent ≠ optional ∧ opponent ≠ who ∧
+      (root opponent true).toReal = 1 := by
+  have hcard : ({optional, who} : Finset (Fin 4)).card <
+      (Finset.univ : Finset (Fin 4)).card :=
+    Finset.card_le_two.trans_lt (by norm_num)
+  obtain ⟨opponent, _, hnot⟩ := Finset.exists_mem_notMem_of_card_lt_card hcard
+  have hne : opponent ≠ optional ∧ opponent ≠ who := by simpa using hnot
+  exact ⟨opponent, hne.1, hne.2, hsure opponent hne.1⟩
+
+
+/-- The optional row has a literal zero at its best action; core rows are gaps. -/
+def quittingSingleOptionalDebtEndpoint
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (optional : ι) (preferred first : Bool) (who : ι) : ℝ :=
+  if who = optional then
+    if first = preferred then 0
+    else quittingDirectedMembershipGap reward optional preferred (fun _ => true)
+  else quittingDirectedMembershipGap reward who false
+    (quittingSingleOptionalAction optional first)
+
+/-- The endpoint rows represent ALL owners' full debts at the same actual root. -/
+theorem quittingTerminalDeviationDebt_singleOptional_eq_endpoint_row
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (optional : Fin 4) (preferred first : Bool)
+    (hsure : ∀ who, who ≠ optional → (root who true).toReal = 1)
+    (hgap : 0 ≤ quittingDirectedMembershipGap reward optional preferred (fun _ => true))
+    (who : Fin 4) :
+    quittingTerminalDeviationDebt reward (quittingOneDateThenNeverProfile reward root) who =
+      max 0 ((root optional first).toReal *
+          quittingSingleOptionalDebtEndpoint reward optional preferred first who +
+        (1 - (root optional first).toReal) *
+          quittingSingleOptionalDebtEndpoint reward optional preferred (!first) who) := by
+  obtain ⟨opponent, _, hne, hopponent⟩ :=
+    exists_sureOpponent_singleOptional_finFour root optional who hsure
+  by_cases hwho : who = optional
+  · subst who
+    rw [quittingTerminalDeviationDebt_singleOptional_optional_eq
+      reward root optional preferred hsure hne hopponent hgap]
+    have hrow : (root optional first).toReal *
+          quittingSingleOptionalDebtEndpoint reward optional preferred first optional +
+        (1 - (root optional first).toReal) *
+          quittingSingleOptionalDebtEndpoint reward optional preferred (!first) optional =
+        (root optional (!preferred)).toReal *
+          quittingDirectedMembershipGap reward optional preferred (fun _ => true) := by
+      cases first <;> cases preferred <;>
+        simp only [quittingSingleOptionalDebtEndpoint, ite_eq_left rfl, Bool.not_false,
+          Bool.not_true, Bool.false_eq_true, Bool.true_eq_false, ite_false, mul_zero, add_zero,
+          zero_add, pmfBool_false_toReal, sub_sub_cancel]
+    rw [hrow, max_eq_right (mul_nonneg ENNReal.toReal_nonneg hgap)]
+  · rw [quittingTerminalDeviationDebt_singleOptional_core_eq_max_row
+      reward root optional who first hsure hwho hne hopponent]
+    simp only [quittingSingleOptionalDebtEndpoint, ite_eq_right hwho]
+
+end GameTheory

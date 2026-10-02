@@ -1,0 +1,108 @@
+*** Begin Patch
+*** Add File: MathUE/LinearAlgebra/RectangularCofactorHomogeneous.lean
++import MathUE.LinearAlgebra.RectangularCofactorKernel
++import Mathlib.RingTheory.MvPolynomial.Homogeneous
++
++/-! # Homogeneity of canonical three-row signed maximal minors -/
++
++namespace Math.LinearAlgebra
++
++variable {σ R : Type*} [CommRing R]
++
++/-- The canonical three-by-three determinant of degree-d homogeneous entries has degree 3d.
++Zero determinants are included; exact total degree additionally requires nonvanishing. -/
++theorem isHomogeneous_det_fin_three
++    (matrix : Matrix (Fin 3) (Fin 3) (MvPolynomial σ R)) (degree : ℕ)
++    (hentry : ∀ row column, (matrix row column).IsHomogeneous degree) :
++    matrix.det.IsHomogeneous (3 * degree) := by
++  have hterm (a b c d e f : Fin 3) :
++      (matrix a b * matrix c d * matrix e f).IsHomogeneous (3 * degree) := by
++    convert ((hentry a b).mul (hentry c d)).mul (hentry e f) using 1
++    omega
++  rw [Matrix.det_fin_three]
++  exact (((((hterm 0 0 1 1 2 2).sub (hterm 0 0 1 2 2 1)).sub
++    (hterm 0 1 1 0 2 2)).add (hterm 0 1 1 2 2 0)).add
++      (hterm 0 2 1 0 2 1)).sub (hterm 0 2 1 1 2 0)
++
++/-- All four canonical signed minors are homogeneous, without any rank premise. -/
++theorem isHomogeneous_signedMaximalMinors_fin_three
++    (matrix : Matrix (Fin 3) (Fin 4) (MvPolynomial σ R)) (degree : ℕ)
++    (hentry : ∀ row column, (matrix row column).IsHomogeneous degree)
++    (column : Fin 4) :
++    (signedMaximalMinors matrix column).IsHomogeneous (3 * degree) := by
++  have hsign : ((-1 : MvPolynomial σ R) ^ column.val).IsHomogeneous 0 := by
++    simpa using ((MvPolynomial.isHomogeneous_one (σ := σ) R).neg).pow column.val
++  have hdet := isHomogeneous_det_fin_three
++    (matrix.submatrix id column.succAbove) degree
++    (fun row index => hentry row (column.succAbove index))
++  simpa only [signedMaximalMinors, zero_add] using hsign.mul hdet
++
++end Math.LinearAlgebra
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomialDegree.lean
++import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootPolynomial
++import MathUE.LinearAlgebra.RectangularCofactorHomogeneous
++
++/-! # The constructed screened-root factors are homogeneous of degree six
++
++Homogeneity includes a potentially zero polynomial. The literal bounded
++reward witnesses in the following module provide nonvanishing and therefore
++the exact total degrees. No density conclusion is claimed here.
++-/
++
++namespace GameTheory
++
++open scoped BigOperators
++
++theorem screenedRootCornerPolynomial_isHomogeneous
++    (pair : Fin 6) (labels : Fin 2 → Bool) (index : Fin 4) (a b : Bool) :
++    (screenedRootCornerPolynomial pair labels index a b).IsHomogeneous 1 := by
++  unfold screenedRootCornerPolynomial
++  exact (MvPolynomial.isHomogeneous_X ℤ _).sub (MvPolynomial.isHomogeneous_X ℤ _)
++
++theorem screenedRootCoefficientPolynomial_isHomogeneous
++    (pair : Fin 6) (labels : Fin 2 → Bool) (index column : Fin 4) :
++    (screenedRootCoefficientPolynomial pair labels index column).IsHomogeneous 1 := by
++  have h := screenedRootCornerPolynomial_isHomogeneous pair labels index
++  fin_cases column
++  · exact h false false
++  · exact (h true false).sub (h false false)
++  · exact (h false true).sub (h false false)
++  · exact (((h true true).sub (h true false)).sub (h false true)).add (h false false)
++
++theorem screenedRootDifferencePolynomialMatrix_isHomogeneous
++    (factor : ScreenedRootFactorIndex) (row : Fin 3) (column : Fin 4) :
++    (screenedRootDifferencePolynomialMatrix factor row column).IsHomogeneous 1 :=
++  (screenedRootCoefficientPolynomial_isHomogeneous factor.1 factor.2 row.succ column).sub
++    (screenedRootCoefficientPolynomial_isHomogeneous factor.1 factor.2 0 column)
++
++theorem screenedRootSignedMinorPolynomials_isHomogeneous
++    (factor : ScreenedRootFactorIndex) (column : Fin 4) :
++    (screenedRootSignedMinorPolynomials factor column).IsHomogeneous 3 := by
++  exact Math.LinearAlgebra.isHomogeneous_signedMaximalMinors_fin_three
++    (screenedRootDifferencePolynomialMatrix factor) 1
++    (screenedRootDifferencePolynomialMatrix_isHomogeneous factor) column
++
++theorem screenedRootFactorPolynomial_isHomogeneous (factor : ScreenedRootFactorIndex) :
++    (screenedRootFactorPolynomial factor).IsHomogeneous 6 :=
++  ((screenedRootSignedMinorPolynomials_isHomogeneous factor 0).mul
++    (screenedRootSignedMinorPolynomials_isHomogeneous factor 3)).sub
++      ((screenedRootSignedMinorPolynomials_isHomogeneous factor 1).mul
++        (screenedRootSignedMinorPolynomials_isHomogeneous factor 2))
++
++theorem screenedRootExclusionPolynomial_isHomogeneous :
++    screenedRootExclusionPolynomial.IsHomogeneous 144 := by
++  have h := MvPolynomial.IsHomogeneous.prod Finset.univ screenedRootFactorPolynomial
++    (fun _ => 6) (fun factor _ => screenedRootFactorPolynomial_isHomogeneous factor)
++  simpa only [screenedRootExclusionPolynomial, Finset.sum_const, Finset.card_univ,
++    card_screenedRootFactorIndex, smul_eq_mul] using h
++
++theorem screenedRootFactorPolynomial_totalDegree_le (factor : ScreenedRootFactorIndex) :
++    (screenedRootFactorPolynomial factor).totalDegree ≤ 6 :=
++  (screenedRootFactorPolynomial_isHomogeneous factor).totalDegree_le
++
++theorem screenedRootExclusionPolynomial_totalDegree_le :
++    screenedRootExclusionPolynomial.totalDegree ≤ 144 :=
++  screenedRootExclusionPolynomial_isHomogeneous.totalDegree_le
++
++end GameTheory
+*** End Patch

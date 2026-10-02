@@ -1,0 +1,11 @@
+*** Begin Patch
+*** Update File: MathUE/Order/MutualSupremumApproximation.lean
+@@
+-    {Source Target : Type*} [Nonempty Source] [Nonempty Target]
++    {Source Target : Type*} [Nonempty Source]
+@@
+     |sSup (Set.range source) - sSup (Set.range target)| ≤ error := by
++  obtain ⟨mapped, _⟩ := hforward (Classical.arbitrary Source)
++  letI : Nonempty Target := ⟨mapped⟩
+   have hsourceTarget : sSup (Set.range source) ≤
+*** End Patch

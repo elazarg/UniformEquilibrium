@@ -1,0 +1,77 @@
+import MathUE.PMFProduct.Bool
+import MathUE.PMFProduct.CoalitionMass
+import Mathlib.Tactic.Ring
+
+/-! # Sure-coordinate support and two-coordinate Boolean interpolation -/
+
+namespace Math.PMFProduct
+
+open _root_.Math.Probability
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+/-- A certain coordinate must occur in every coalition of nonzero product mass. -/
+theorem coalitionMass_eq_zero_of_sure_not_mem (hazard : ι → ℝ)
+    (quitter : ι) (hsure : hazard quitter = 1) (coalition : Finset ι)
+    (habsent : quitter ∉ coalition) :
+    coalitionMass hazard coalition = 0 := by
+  unfold coalitionMass
+  have hzero : (∏ player ∈ coalitionᶜ, (1 - hazard player)) = 0 :=
+    Finset.prod_eq_zero (Finset.mem_compl.mpr habsent) (by rw [hsure, sub_self])
+  rw [hzero, mul_zero]
+
+/-- Any observable is affine in one Boolean marginal, not just its owner's payoff. -/
+theorem expect_pmfPi_eq_bool_coordinate_mix
+    (root : ι → PMF Bool) (selected : ι) (observable : (ι → Bool) → ℝ) :
+    expect (pmfPi root) observable =
+      (root selected true).toReal *
+          expect (pmfPi (Function.update root selected (PMF.pure true))) observable +
+        (root selected false).toReal *
+          expect (pmfPi (Function.update root selected (PMF.pure false))) observable := by
+  have h := congrArg (fun family => expect (pmfPi family) observable)
+    (Function.update_eq_self selected root)
+  rw [pmfPi_update_bind, expect_bind, expect_eq_sum, Fintype.sum_bool] at h
+  exact h.symm
+
+/-- The four actual pure-coordinate corners reconstruct every product expectation.
+No strict probability bounds are needed, so zero and one marginals are included. -/
+theorem expect_pmfPi_eq_four_corners
+    (root : ι → PMF Bool) (first second : ι) (hne : second ≠ first)
+    (observable : (ι → Bool) → ℝ) :
+    let corner := fun a b : Bool => expect
+      (pmfPi (Function.update (Function.update root first (PMF.pure a))
+        second (PMF.pure b))) observable
+    let x := (root first true).toReal
+    let y := (root second true).toReal
+    expect (pmfPi root) observable =
+      (1 - x) * (1 - y) * corner false false +
+        x * (1 - y) * corner true false +
+        (1 - x) * y * corner false true + x * y * corner true true := by
+  dsimp only
+  rw [expect_pmfPi_eq_bool_coordinate_mix root first observable]
+  rw [expect_pmfPi_eq_bool_coordinate_mix
+    (Function.update root first (PMF.pure true)) second observable]
+  rw [expect_pmfPi_eq_bool_coordinate_mix
+    (Function.update root first (PMF.pure false)) second observable]
+  simp only [Function.update_of_ne hne, pmfBool_false_toReal]
+  ring
+
+/-- The same four-corner identity in the packet's monomial coefficient order. -/
+theorem expect_pmfPi_eq_bilinear_coefficients
+    (root : ι → PMF Bool) (first second : ι) (hne : second ≠ first)
+    (observable : (ι → Bool) → ℝ) :
+    let corner := fun a b : Bool => expect
+      (pmfPi (Function.update (Function.update root first (PMF.pure a))
+        second (PMF.pure b))) observable
+    let x := (root first true).toReal
+    let y := (root second true).toReal
+    expect (pmfPi root) observable =
+      corner false false + (corner true false - corner false false) * x +
+        (corner false true - corner false false) * y +
+          (corner true true - corner true false - corner false true + corner false false) *
+            (x * y) := by
+  rw [expect_pmfPi_eq_four_corners root first second hne observable]
+  dsimp only
+  ring
+
+end Math.PMFProduct

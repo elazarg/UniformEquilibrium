@@ -1,0 +1,130 @@
+Frozen-source DAG audit against current actual sources; not checked here.
+No new proof branch or mathematical changes. No Lean/Lake/Git/shared edits,
+source snapshots, caches, worktrees or child agents were used.
+Root remains sole compiler and shared editor. All originals remain immutable.
+
+ORDERED EXISTING IMMUTABLE PATCHES
+1. Connected convex-hull representation, full preconnected strength:
+   /tmp/connected-convex-hull-representation.hYZuV5t9/001_CONNECTED_CONVEX_HULL_REPRESENTATION.patch
+   2b1d72e843a889ff409fe661a324ed2ef8e872e1371ca73ac1c7ae947b91b87a
+2. Its MathUE umbrella import:
+   /tmp/connected-convex-hull-representation.hYZuV5t9/002_MATHUE_UMBRELLA.patch
+   b9e26c4ab53d9b27deb5e4c47eeaa6c05001da0b22b283d2fe54855c3aee961d
+3. Connected convex-hull affine step, internally selected coefficient/point:
+   /tmp/convex-geometric-schedule.upl3Iu3u/001_CONNECTED_AFFINE_STEP.patch
+   b1888265a2e06d9f59f80faab34ca10f8bbab82cbaa967ff5fdeb26539526e8e
+4. Already frozen proof-only ite_eq_left/ite_eq_right overlay:
+   /tmp/sorin-p4-proof-doc-overlays.sum3X38q/001_NONDEPRECATED_ITE_PROOF.patch
+   7f8ad16825ef3c3169286403ff461c6778f9d29e91bced6374ff81e3b40efcbe
+5. Already frozen proof-only ite_true overlay:
+   /tmp/UE_P4_AFFINE_STEP_ITE_TRUE_OVERLAY_20261002.patch
+   5c8ca5087bcd4578d05504967a49144128a095e55cb71ecc7752212acddae1a1
+6. Generic geometric schedule and promoted canonical scalar telescope:
+   /tmp/convex-geometric-schedule.upl3Iu3u/002_GEOMETRIC_AFFINE_SCHEDULE.patch
+   d6f5c9fb008c237f9283bf153ae47312178f40e6f40253dab5e6225a6bcefb5e
+7. Actual paper adapter, literal P4, and existing P6/telescope delegation:
+   /tmp/convex-geometric-schedule.upl3Iu3u/003_SORIN_P4_AND_SCHEDULE_DELEGATES.patch
+   698e5f93b07b19b9bee19c26c3933603b75498aee9bd9258ba5208c6fd1200ba
+8. Already frozen arbitrary-sequence description doc-only overlay:
+   /tmp/sorin-p4-proof-doc-overlays.sum3X38q/002_ARBITRARY_SEQUENCE_DOC.patch
+   b9e3ad80b039e8c36c053e7847b2c3584fd381b9f8f36256e576e2c3172b8749
+9. Generic affine-step and schedule MathUE imports:
+   /tmp/convex-geometric-schedule.upl3Iu3u/004_MATHUE_UMBRELLA.patch
+   a92f9e28095f60ed34c02116ae19070b48d2a06eb863d917e6d47128b645d563
+No additional current-context overlay is required by this audit.
+Umbrella imports may be deferred until their modules pass root's named checks;
+the order above records their exact static bases, not an instruction to compile.
+
+GENERIC PAYLOAD AND OVERLAY BASE/RESULT SHA256S
+ConnectedConvexHullRepresentation.lean, exact original Add File payload:
+  632230120c1212d84c4ed6f6e9c284a1549c85965bf9f4bf7572fc85d387d0d4
+ConnectedConvexHullAffineStep.lean, exact original Add File payload:
+  2bb0febc4daf30d1ba350d4cac3fa03a7e4a37d8aeda20cfa30a7588180ce2aa
+After overlay4:
+  eb71f6f81a35b15dd059cdcddd17c69ba7d47a5eb903ff2cce88e31a7c55ad79
+After overlay5:
+  c4d959753e0425d48918874a55a806742a99dd77ca6ddad089aa5cb0e1123f17
+GeometricAffineSchedule.lean, exact original Add File payload:
+  32173945227b46295bdcac14a40ff8967511d2702657a61536a61347edb3bd6b
+All known deprecated ite names are corrected in the exact order4 then5.
+
+ACTUAL CURRENT UMBRELLA CONTEXTS
+MathUE.lean has moved since previous reports because of root's other current
+wave imports, but all relevant original patch contexts still match uniquely:
+  current 89e1114839bc1b9743a0461f4bec7b509c95d84805e124182e6a299bfadff1e9
+  after patch2 dc111c63d4591583c72f44396a301e90fb9d17009d9b304edd3f470636193555
+  after patch9 0001666c83476279d6763caa1bffbddbb253e18bbf2bb845be7717521ae36ea8
+
+ACTUAL CURRENT PAPER CONTEXTS
+Literature/Sorin1986.lean remains exactly:
+  518af7f1f78724ad6a5583260ecf5d7c581629f165698a7402be7bd3ba5b76fc
+All six patch7 contexts also match this current source directly. If applied
+directly, result is:
+  0894d6e2889f7967694f30fc0f0aeb2f0c374e2f1fe98a041b35c9076cdbb405
+Followed by overlay8:
+  2c8c1f1d9e741552b44b3e3edfa6e510190a0d2156ef6291a992b4a3bb56159c
+
+Intended root lower-first paper order, revalidated wholly in memory:
+  original vertices result:
+    8b55fd300221890c6b3b9273b81b3cbb0e4f42b07f1e8970df3dec4c864c6101
+  existing vertex field-syntax overlay result:
+    dd6ad981e5431a8611bf83525f81cc5d14d66a05748faca364e23027ca95e93c
+  original lower001 dispatchers result, exact patch7 future base:
+    b9a025e87e40b3f959e7d3006f8e248440bd7a9f3f85670c5575473315b8ab1a
+  patch7 result:
+    ab339e8d5fe1fc3b24d2b6bfe5288aba960a5e1b953190f4b92ea4fa77615a5a
+  overlay8 result:
+    dc3d45a6cd0010693b4ca08426dfe15ecc1700498e501d06c36e2262bc06a8df
+All contexts match uniquely. Fresh lower compiler overlays may change future
+whole-file hashes; they must remain separate and be accounted for afterwards.
+
+CANONICAL DEPENDENCIES OBSERVED
+MathUE/Topology/FarthestPointContactHull.lean:
+  c5cc87c89cb647a91cfb42d65227bf7052f6611146f756b6d6345260c5d51a94
+MathUE/FixedRatioConvexity.lean:
+  db5d8f1e50a9ede0e5fca97820ad34495529c639ceaa3cd72d910dd08bea2f88
+Generic representation imports only owned game-independent mathematics and
+Mathlib. Affine step imports representation; the geometric series/schedule
+module is game-independent and receives an actual one-step relation.
+The paper wrapper provides that relation internally from the actual feasible
+mixed-payoff set, not as a favorable profile/path certificate input.
+The paper's existing mixedSequenceBehavior and its checked expected-stage
+identity are reused to realize the selected sequence as an actual behavior.
+The private scalar telescope is promoted into MathUE and delegates back; no
+production module imports Literature. Existing P6 selection delegates to the
+same generic schedule, preserving its original statement and hypotheses.
+No second law induction, copied schedule recursion or telescope is introduced.
+
+SOURCE AND BOUNDARIES PRESERVED
+Source records unchanged:
+  connected representation record:
+    /tmp/connected-convex-hull-representation.hYZuV5t9/SOURCE_AND_DEPENDENCIES.txt
+    2329010e6f38a0c2d40d4580d8af7c906d993c83d92d0f5fa72afe25443bdae0
+  schedule/paper record:
+    /tmp/convex-geometric-schedule.upl3Iu3u/SOURCE_AND_DEPENDENCIES.txt
+    5d69cfd7fab246ec0329913bca518aae39b5d742c038b0525206c9b9dcc548f4
+Classical source: Teissier (2004), Proposition4.2, pp220-221, reproducing
+Hanner-Radstrom reflected-simplex proof. Paper consumer: Sorin (1986), P4,
+printed p151, coefficient peeling and geometric schedule.
+The generic representation is genuinely preconnected, not path/compact-only;
+dimension zero uses max(1,finrank), and empty-source impossibility is internal.
+Affine peeling has 0<=weight<1 and weight*max(1,finrank)<=1.
+Generic schedule has 0<weight<=1, including1, arbitrary coordinate/stage types
+and internally selected actual stages/residuals from its one-step relation.
+P4 retains literally 0<lambda<1/playerCount; positive player count and lambda<1
+are derived internally. Zero-player hypotheses are contradictory, not a new
+supplied nonempty premise. The actual calendar-dependent behavioral profile
+proves feasibility only, with no claim about unilateral deviations or Nash.
+
+READY ORIGINAL MANUAL AXIOM HARNESSES
+/tmp/connected-convex-hull-representation.hYZuV5t9/AXIOMS.lean
+  88ddf6ceb2932393a1bba1f11dfca581ffb8428fb4727a853002cde24efcd758
+/tmp/convex-geometric-schedule.upl3Iu3u/AXIOMS.lean
+  be82923b9524983f009a8fda8e173d98b975d7aa73eede3ff068a0a6c10a9305
+They print2 generic representation declarations, then3 generic schedule/step
+declarations and the paper path adapter, literal P4 and unchanged P6.
+No compiler or axiom checks were run here. Only propext, Quot.sound and
+Classical.choice are allowed; source presence does not establish those gates.
+New module inventory requires root's generated exhaustive audit/regeneration
+and import/trust checks before calling this checked or integrated.
+P15 final literal equality substitution remains HELD and was excluded here.

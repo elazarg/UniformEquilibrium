@@ -1,0 +1,2424 @@
+{
+  "artifacts": {
+    "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/15_LITERAL_POSITIVE_SCALING.patch": {
+      "original_sha256": "cb2cce6999741864bc34dd1bbc3afbc02c9644e32ac02261c0b7590322e567a7",
+      "role": "change",
+      "sha256": "cb2cce6999741864bc34dd1bbc3afbc02c9644e32ac02261c0b7590322e567a7"
+    },
+    "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/16_ACTUAL_BOUNDED_SINGLE_PIVOT.patch": {
+      "original_sha256": "6a105959544aba5b3a651cac41274b64085009708d5251a80fbd8dde69e96d1d",
+      "role": "change",
+      "sha256": "6a105959544aba5b3a651cac41274b64085009708d5251a80fbd8dde69e96d1d"
+    },
+    "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/17_DECISION_PRESERVING_POLYNOMIAL_JOIN.patch": {
+      "original_sha256": "81fc37eb702f07351344583dcb95306dae510ffa4f6828d8a6c6d60287e15b0a",
+      "role": "change",
+      "sha256": "81fc37eb702f07351344583dcb95306dae510ffa4f6828d8a6c6d60287e15b0a"
+    },
+    "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/NORMALIZATION_GROUP_IMPORTS.patch": {
+      "original_sha256": "9a111a1b872ff7face5d338b63d5cb0ac562da077be4485fc46b396e56b61427",
+      "role": "change",
+      "sha256": "9a111a1b872ff7face5d338b63d5cb0ac562da077be4485fc46b396e56b61427"
+    },
+    "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/00_MUTUAL_SUPREMUM_OWNER.patch": {
+      "original_sha256": "415c53efe5a22f279e26a365cd633e14d6a65777a3c681e925dad7d39c5572de",
+      "role": "change",
+      "sha256": "415c53efe5a22f279e26a365cd633e14d6a65777a3c681e925dad7d39c5572de"
+    },
+    "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/01_FINITE_CLOCK_SEMANTIC_PROMOTION.patch": {
+      "original_sha256": "2ccbb4b875346bcff43fdbf3139f91362193e0529b8cf04f2919c5fc3da2d95b",
+      "role": "change",
+      "sha256": "2ccbb4b875346bcff43fdbf3139f91362193e0529b8cf04f2919c5fc3da2d95b"
+    },
+    "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/02_COMMON_QUANTILE_TRANSPORT_PROMOTION.patch": {
+      "original_sha256": "b1729ca668b10bc0075487d28beb278b519b47800123ca7b05be42e521f8ed7e",
+      "role": "change",
+      "sha256": "b1729ca668b10bc0075487d28beb278b519b47800123ca7b05be42e521f8ed7e"
+    },
+    "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/03_COMMON_QUANTILE_APPROXIMATION_PROMOTION.patch": {
+      "original_sha256": "bd40dc189a0578488275021d97084b2891663b71dd9b55d803545751c15fd24b",
+      "role": "change",
+      "sha256": "bd40dc189a0578488275021d97084b2891663b71dd9b55d803545751c15fd24b"
+    },
+    "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/04_ACTUAL_FULL_CAP_FINITE_CLOCK_SOURCE.patch": {
+      "original_sha256": "52fa53f381aa7a15f28dc9a3d5df3217c4ef595a69ed496cd7ec4f37e584a21a",
+      "role": "change",
+      "sha256": "52fa53f381aa7a15f28dc9a3d5df3217c4ef595a69ed496cd7ec4f37e584a21a"
+    },
+    "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/05_PRODUCTION_IMPORTS.patch": {
+      "original_sha256": "0582f968ad949d928e67b7940ded6ab306f77563ce559775ec10b88f55ba56a7",
+      "role": "change",
+      "sha256": "0582f968ad949d928e67b7940ded6ab306f77563ce559775ec10b88f55ba56a7"
+    },
+    "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/00A_MUTUAL_SUPREMUM_DERIVED_NONEMPTY.patch": {
+      "original_sha256": "2124748978e24fe8e5eaeb89876bd393f09db6358ee005ba2ee0d0bd8b4b6849",
+      "role": "change",
+      "sha256": "2124748978e24fe8e5eaeb89876bd393f09db6358ee005ba2ee0d0bd8b4b6849"
+    },
+    "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/01_FINITE_CALENDAR_REPLY_PAYOFF_CHART.patch": {
+      "original_sha256": "32f3e648caf3db9754de35584016b1b993eb41f9ccb2f5d1c6042fc18d07d496",
+      "role": "change",
+      "sha256": "32f3e648caf3db9754de35584016b1b993eb41f9ccb2f5d1c6042fc18d07d496"
+    },
+    "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/02_ACTUAL_COMMON_CALENDAR_TESTER_POOL.patch": {
+      "original_sha256": "95663fa66990362d1ed145e8aff7d55848734c7daec470baf5f9d6cd9d315be5",
+      "role": "change",
+      "sha256": "95663fa66990362d1ed145e8aff7d55848734c7daec470baf5f9d6cd9d315be5"
+    },
+    "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/03_ACTUAL_COMMON_CALENDAR_SMOOTH_MINIMUM.patch": {
+      "original_sha256": "67f49abd2ba386aa02fbe97382f6e37ecbc3d22afc06b9e3974e698250dab49f",
+      "role": "change",
+      "sha256": "67f49abd2ba386aa02fbe97382f6e37ecbc3d22afc06b9e3974e698250dab49f"
+    },
+    "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/04_COMMON_CALENDAR_IMPORTS.patch": {
+      "original_sha256": "e2cdcab5bf8bd9a92e03897b29be96c87d1c26b7e34c3a987623e59ff9a27eb4",
+      "role": "change",
+      "sha256": "e2cdcab5bf8bd9a92e03897b29be96c87d1c26b7e34c3a987623e59ff9a27eb4"
+    },
+    "Research/Pending/Changes/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/74_FULL_RATIONAL_POSITIVE_ETA_SOURCE.patch": {
+      "original_sha256": "23a9cb9fcf3474b1a7bb8e067b6f3d43331c4f0bfd1a0c241d14ab6040a5b420",
+      "role": "change",
+      "sha256": "23a9cb9fcf3474b1a7bb8e067b6f3d43331c4f0bfd1a0c241d14ab6040a5b420"
+    },
+    "Research/Pending/Changes/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/001_FULL_RATIONAL_SCREENED_SOURCE.patch": {
+      "original_sha256": "61318d147ad74098e698589d890d04a0e466ac6b292d5d725d86841c6c014753",
+      "role": "change",
+      "sha256": "61318d147ad74098e698589d890d04a0e466ac6b292d5d725d86841c6c014753"
+    },
+    "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/01_WORST_TABLE_MEMBERSHIP_STRETCH_SOURCE.patch": {
+      "original_sha256": "34089c98d0ef189adad84f04b6e7d516a23401b58f99bfa1ab06b01a6c0cd668",
+      "role": "change",
+      "sha256": "34089c98d0ef189adad84f04b6e7d516a23401b58f99bfa1ab06b01a6c0cd668"
+    },
+    "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/02_SINGLE_OPTIONAL_FULL_DEBT_ROWS.patch": {
+      "original_sha256": "402f7da0492f72308bb352c4b35f46354cacb70a97ed8d64299a71fe9f8b3a29",
+      "role": "change",
+      "sha256": "402f7da0492f72308bb352c4b35f46354cacb70a97ed8d64299a71fe9f8b3a29"
+    },
+    "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/03_ACTUAL_OPPOSED_OPTIONAL_REVERSALS.patch": {
+      "original_sha256": "20c23fe3e626371e63f34ef940a887b1891226025c44c43d69df3d116d5a0090",
+      "role": "change",
+      "sha256": "20c23fe3e626371e63f34ef940a887b1891226025c44c43d69df3d116d5a0090"
+    },
+    "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/04_RAW_SOURCE_OPPOSED_REVERSAL_JOIN.patch": {
+      "original_sha256": "f7f15a90babeb68c47a6b3ac65e1ad6c6604caf856454e50343974bde035d370",
+      "role": "change",
+      "sha256": "f7f15a90babeb68c47a6b3ac65e1ad6c6604caf856454e50343974bde035d370"
+    },
+    "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/05_OPPOSED_ADAPTER_IMPORTS.patch": {
+      "original_sha256": "c3767662b2ac7fac39addfcdeb787b8cdec1234f6c674840631b43cdc134c2ff",
+      "role": "change",
+      "sha256": "c3767662b2ac7fac39addfcdeb787b8cdec1234f6c674840631b43cdc134c2ff"
+    },
+    "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/001_SIGNED_AFFINE_ROW_COMPARISON.patch": {
+      "original_sha256": "7f25dac018f597efbd58e7653a9fa902b8b26efa0183d935cc2dd254c22d034f",
+      "role": "change",
+      "sha256": "7f25dac018f597efbd58e7653a9fa902b8b26efa0183d935cc2dd254c22d034f"
+    },
+    "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/002_OPPOSED_AFFINE_ROW_REGRESSION.patch": {
+      "original_sha256": "f22c72da73f4db29d2da79c3fce5f5980789cd2bb0782f9bcd18510bfd165582",
+      "role": "change",
+      "sha256": "f22c72da73f4db29d2da79c3fce5f5980789cd2bb0782f9bcd18510bfd165582"
+    },
+    "Research/Pending/Changes/OWN_SINGLETON_REWARD_CHART/OWN_SINGLETON_REWARD_CHART.patch": {
+      "original_sha256": "6cf88b0275721e0e933301951eab49a015316f75a3717df01e6e0f2a25c4ee06",
+      "role": "change",
+      "sha256": "6cf88b0275721e0e933301951eab49a015316f75a3717df01e6e0f2a25c4ee06"
+    },
+    "Research/Pending/Changes/OWN_SINGLETON_REWARD_CHART/SCREENED_ROOT_BRANCH_LABELS.patch": {
+      "original_sha256": "ebaa9d7113b14e79bc3c12491f580a18c734ef76b9a68d8df21a1d28da25a7c2",
+      "role": "change",
+      "sha256": "ebaa9d7113b14e79bc3c12491f580a18c734ef76b9a68d8df21a1d28da25a7c2"
+    },
+    "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/36_RATIONAL_CLOSED_BOX_DENSITY.patch": {
+      "original_sha256": "b1c004e87b1ec88898acd12089d2ad598bf860b130fded45bf334986c74b1f12",
+      "role": "change",
+      "sha256": "b1c004e87b1ec88898acd12089d2ad598bf860b130fded45bf334986c74b1f12"
+    },
+    "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/37_RATIONAL_POLYNOMIAL_EVALUATION.patch": {
+      "original_sha256": "9e27afc420d3c9645a6bb050d11ef071cd7bcbe650a8b621eb7d2552c85edaf3",
+      "role": "change",
+      "sha256": "9e27afc420d3c9645a6bb050d11ef071cd7bcbe650a8b621eb7d2552c85edaf3"
+    },
+    "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/38_RATIONAL_BOXED_ROOT_INTERFACES.patch": {
+      "original_sha256": "6215031453395edaaa47bf3f296605658c90db8f06c80288b88b1f44fa954a99",
+      "role": "change",
+      "sha256": "6215031453395edaaa47bf3f296605658c90db8f06c80288b88b1f44fa954a99"
+    },
+    "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/39_RATIONAL_ROBUST_REJECTION_DENSITY.patch": {
+      "original_sha256": "3efda40ae095b4a2d49fae2e3b533d12cef24eade9f14a6e418a67a2348d7f18",
+      "role": "change",
+      "sha256": "3efda40ae095b4a2d49fae2e3b533d12cef24eade9f14a6e418a67a2348d7f18"
+    },
+    "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/40_ACTUAL_EXCLUDED_POLYNOMIAL_RATIONAL_REJECTION.patch": {
+      "original_sha256": "2823f43d275aa6ff27f6bb4a258ee827529c17fc54ee89bda7964904db32f984",
+      "role": "change",
+      "sha256": "2823f43d275aa6ff27f6bb4a258ee827529c17fc54ee89bda7964904db32f984"
+    },
+    "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/41_EXHAUSTIVE_RATIONAL_REJECTION_SEARCH.patch": {
+      "original_sha256": "3e55ce72de55aca37307d1b71f262b9e9035be917dfcd426da2d03b0cdcba940",
+      "role": "change",
+      "sha256": "3e55ce72de55aca37307d1b71f262b9e9035be917dfcd426da2d03b0cdcba940"
+    },
+    "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/42_RATIONAL_EXACT_SOLO_REJECTION.patch": {
+      "original_sha256": "4c9dcee45a9b4c156af7443d08ea7aad6b069783bfa8ad9fd0f64bceb2838f02",
+      "role": "change",
+      "sha256": "4c9dcee45a9b4c156af7443d08ea7aad6b069783bfa8ad9fd0f64bceb2838f02"
+    },
+    "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/43_EXACT_SOLO_REJECTION_SEARCH_JOIN.patch": {
+      "original_sha256": "72b8dbd0a55a8a7fbda5b2b25e657d994ba4a218ceb4484a83bea67fe04630ba",
+      "role": "change",
+      "sha256": "72b8dbd0a55a8a7fbda5b2b25e657d994ba4a218ceb4484a83bea67fe04630ba"
+    },
+    "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE.patch": {
+      "original_sha256": "b07ca5fb697d2c34992ad6d96c593fa1f3447c7cfcd16a5099ac41231bcf0c29",
+      "role": "change",
+      "sha256": "b07ca5fb697d2c34992ad6d96c593fa1f3447c7cfcd16a5099ac41231bcf0c29"
+    },
+    "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE_REPAIR.patch": {
+      "original_sha256": "fdecf5890b7892f339d0fb71f1285942b1fe7d98ec6e4c42cb1a543eb607904e",
+      "role": "change",
+      "sha256": "fdecf5890b7892f339d0fb71f1285942b1fe7d98ec6e4c42cb1a543eb607904e"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/44_EXACT_MIDPOINT_THIRD_DERIVATIVE_INTEGRAL.patch": {
+      "original_sha256": "46d2750273815dcea208fd712c4c9fbdc4ee611bc43d5d15cba742deb0f9c168",
+      "role": "change",
+      "sha256": "46d2750273815dcea208fd712c4c9fbdc4ee611bc43d5d15cba742deb0f9c168"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/51_CANONICAL_COORDINATE_HESSIAN_ENTRIES.patch": {
+      "original_sha256": "9ad3d3bb7de80b833af58a75e9129efc83c271c52ceb2b26e67d7ba126fa2820",
+      "role": "change",
+      "sha256": "9ad3d3bb7de80b833af58a75e9129efc83c271c52ceb2b26e67d7ba126fa2820"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/52_PAIRED_CANONICAL_SPECTRUM_AND_MINIMIZING_VERTEX.patch": {
+      "original_sha256": "e66135a0c4714ca9ed680f2c6a169291c52bac097ece6189eb8177b041445fc1",
+      "role": "change",
+      "sha256": "e66135a0c4714ca9ed680f2c6a169291c52bac097ece6189eb8177b041445fc1"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/45_RATIONAL_POLYNOMIAL_COORDINATE_DERIVATIVES.patch": {
+      "original_sha256": "05851dcb10bf33ac7466c67fd793dee590674ae627c1c25e1ed28ec3b7ba6e49",
+      "role": "change",
+      "sha256": "05851dcb10bf33ac7466c67fd793dee590674ae627c1c25e1ed28ec3b7ba6e49"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/46_PAIRED_FACE_POLYNOMIAL_HESSIAN_FIXTURE.patch": {
+      "original_sha256": "e6280f4f42d8fe4e0fa84a69f1080d2f40c7fd225818efafee4580e3d1d2d171",
+      "role": "change",
+      "sha256": "e6280f4f42d8fe4e0fa84a69f1080d2f40c7fd225818efafee4580e3d1d2d171"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/47_REFLECTION_AND_MULTIAFFINE_BOUNDARY_ARITHMETIC.patch": {
+      "original_sha256": "533b3065ed32ac769c22074d6947a87a719220fcd76c5dacdbffa875ef17d1ca",
+      "role": "change",
+      "sha256": "533b3065ed32ac769c22074d6947a87a719220fcd76c5dacdbffa875ef17d1ca"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/45A_CANONICAL_BASIS_DERIVATIVE_REUSE.patch": {
+      "original_sha256": "9769e4e1d3cff63205d75192d56b1ff26b43c3990b5dcd569f993a9d53a3c533",
+      "role": "change",
+      "sha256": "9769e4e1d3cff63205d75192d56b1ff26b43c3990b5dcd569f993a9d53a3c533"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/53_CONSTANT_SIGNED_NORMAL_TABLE.patch": {
+      "original_sha256": "4717204fab5cc4ba22b25a2dcef663beb43cc3870aefc29c451444053a0829c5",
+      "role": "change",
+      "sha256": "4717204fab5cc4ba22b25a2dcef663beb43cc3870aefc29c451444053a0829c5"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/54_POSITIVE_CHARGE_RESCALE.patch": {
+      "original_sha256": "91957f4ec748bc92b0719fa25f312e01b03729bf71da29f132f9ad7138d3c6ef",
+      "role": "change",
+      "sha256": "91957f4ec748bc92b0719fa25f312e01b03729bf71da29f132f9ad7138d3c6ef"
+    },
+    "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/55_PAIRED_BOUNDED_COMPLETION_FULL_ROOT_EXCLUSION.patch": {
+      "original_sha256": "640ecc91da66d4f55ebfa5f28ffd10aa6978177e0432c8855721470953815766",
+      "role": "change",
+      "sha256": "640ecc91da66d4f55ebfa5f28ffd10aa6978177e0432c8855721470953815766"
+    },
+    "Research/Pending/Changes/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/61_MVPOLYNOMIAL_NONVANISHING.patch": {
+      "original_sha256": "cfbf2df77abe2f17d8396178f63283dbe580bcffc1dd72b6ab71afc506ff4254",
+      "role": "change",
+      "sha256": "cfbf2df77abe2f17d8396178f63283dbe580bcffc1dd72b6ab71afc506ff4254"
+    },
+    "Research/Pending/Changes/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/62_SCREENED_ROOT_POLYNOMIAL_DENSITY.patch": {
+      "original_sha256": "5ff786b574db33957988c2203e44a27517ea6d127c3e8c0ee5b93ff408493faa",
+      "role": "change",
+      "sha256": "5ff786b574db33957988c2203e44a27517ea6d127c3e8c0ee5b93ff408493faa"
+    },
+    "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/68_ZERO_SINGLETON_MINIMUM_NEVER.patch": {
+      "original_sha256": "257e296316e5b00e9501c681dd974326da50a9038c4ec51e04f72cd6455ca547",
+      "role": "change",
+      "sha256": "257e296316e5b00e9501c681dd974326da50a9038c4ec51e04f72cd6455ca547"
+    },
+    "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/69_SCREENED_MINIMUM_SINGLETON_MASS.patch": {
+      "original_sha256": "12f443ba6244a91579993c0299da5c85cb6a0c3cf06999294a7815c616a504f4",
+      "role": "change",
+      "sha256": "12f443ba6244a91579993c0299da5c85cb6a0c3cf06999294a7815c616a504f4"
+    },
+    "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/70_JOINT_CARRIER_REWARD_GRAPH.patch": {
+      "original_sha256": "43b7204a656dd59a4aa30547e8f55b162c27c4a75272f05118c178034afd50cc",
+      "role": "change",
+      "sha256": "43b7204a656dd59a4aa30547e8f55b162c27c4a75272f05118c178034afd50cc"
+    },
+    "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/71_FIXED_GAME_SINGLETON_COLLAR.patch": {
+      "original_sha256": "70e613934cb05d9ae8ac9fa8bb5c1fd00d0bc62fb11edf6da5b3777c45ccd189",
+      "role": "change",
+      "sha256": "70e613934cb05d9ae8ac9fa8bb5c1fd00d0bc62fb11edf6da5b3777c45ccd189"
+    },
+    "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/72_FIBER_UNIFORM_SINGLETON_COLLAR.patch": {
+      "original_sha256": "d4cec5ccd6dabe4efd600413c6ba849fd4aacf234fc114123d5fa99e56be56c4",
+      "role": "change",
+      "sha256": "d4cec5ccd6dabe4efd600413c6ba849fd4aacf234fc114123d5fa99e56be56c4"
+    },
+    "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/73_RATIONAL_SCREENED_SOURCE_COLLAR_JOIN.patch": {
+      "original_sha256": "4a76d63353b7c444a82fa7feca6846e9eae19d41d61f555cfc44dde767ee92f2",
+      "role": "change",
+      "sha256": "4a76d63353b7c444a82fa7feca6846e9eae19d41d61f555cfc44dde767ee92f2"
+    },
+    "Research/Pending/Changes/SCREENED_POLYNOMIAL_WITNESS/SCREENED_POLYNOMIAL_DEGREES.patch": {
+      "original_sha256": "9572c041d806a5fbfa8c293f85ca7c5b188492e141eb229a0c3fb91df753af3b",
+      "role": "change",
+      "sha256": "9572c041d806a5fbfa8c293f85ca7c5b188492e141eb229a0c3fb91df753af3b"
+    },
+    "Research/Pending/Changes/SCREENED_POLYNOMIAL_WITNESS/SCREENED_POLYNOMIAL_WITNESSES.patch": {
+      "original_sha256": "dab5f8e14dc55cd8ef8d005a7d25948767b0060e773aac6542ecbc02b85acbdb",
+      "role": "change",
+      "sha256": "dab5f8e14dc55cd8ef8d005a7d25948767b0060e773aac6542ecbc02b85acbdb"
+    },
+    "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS.patch": {
+      "original_sha256": "47813f600a0ff663cf7b9ddbb16f958d55cc589a60f7844ac351a2f50a2a5a5a",
+      "role": "change",
+      "sha256": "47813f600a0ff663cf7b9ddbb16f958d55cc589a60f7844ac351a2f50a2a5a5a"
+    },
+    "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS_REPAIR.patch": {
+      "original_sha256": "bfdc3b0bc8706f0b3e3e56fcc7f3487af43a4d3e546b7ec8d6fa5c71abc3a22c",
+      "role": "change",
+      "sha256": "bfdc3b0bc8706f0b3e3e56fcc7f3487af43a4d3e546b7ec8d6fa5c71abc3a22c"
+    },
+    "Research/Pending/Changes/SCREENED_ROOT_POLYNOMIAL/SCREENED_ROOT_POLYNOMIAL.patch": {
+      "original_sha256": "e3ddc227b55d3f48518ed5d60af28620026e95710bf31687e069dda4252e2440",
+      "role": "change",
+      "sha256": "e3ddc227b55d3f48518ed5d60af28620026e95710bf31687e069dda4252e2440"
+    },
+    "Research/Pending/Changes/SCREENED_ROOT_SOURCE/SCREENED_ROOT_DEBT_BRANCHES.patch": {
+      "original_sha256": "46d69174893acfbcea517076790e9408007249e030f0dbe2ad0db131ba937e2a",
+      "role": "change",
+      "sha256": "46d69174893acfbcea517076790e9408007249e030f0dbe2ad0db131ba937e2a"
+    },
+    "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/63_OWN_SINGLETON_FIBER_MAXIMUM.patch": {
+      "original_sha256": "f1816c277e0db1d6ea696a0d6739479498f2fa52ab203c5bc9fb11fce5abb19c",
+      "role": "change",
+      "sha256": "f1816c277e0db1d6ea696a0d6739479498f2fa52ab203c5bc9fb11fce5abb19c"
+    },
+    "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/64_SCREENED_ROOT_COMPACT_MINIMUM.patch": {
+      "original_sha256": "6cc75d542579b934155f309d6f13a096769371115034e39a9fe0a22ee6a38009",
+      "role": "change",
+      "sha256": "6cc75d542579b934155f309d6f13a096769371115034e39a9fe0a22ee6a38009"
+    },
+    "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/65_SCREENED_SINGLETON_FIBER_STRICT_GAP.patch": {
+      "original_sha256": "fa436850afb00636522974ceec6671cfc2f30a8288e664bf358f0f7d621521dd",
+      "role": "change",
+      "sha256": "fa436850afb00636522974ceec6671cfc2f30a8288e664bf358f0f7d621521dd"
+    },
+    "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/66_POSITIVE_RATIONAL_SCREENED_FIBER_ENTRANCE.patch": {
+      "original_sha256": "6e8b02b20bf1f95d45c47230ffc9b9704f09fb34fe4951c17ce554053fee13da",
+      "role": "change",
+      "sha256": "6e8b02b20bf1f95d45c47230ffc9b9704f09fb34fe4951c17ce554053fee13da"
+    },
+    "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/67_RATIONAL_SCREENED_SINGLETON_FIBER_SELECTION.patch": {
+      "original_sha256": "796e94ee41afe255e168ed01e21fa055d8eb93b98015d3e2a030b50dc8b8d623",
+      "role": "change",
+      "sha256": "796e94ee41afe255e168ed01e21fa055d8eb93b98015d3e2a030b50dc8b8d623"
+    },
+    "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/49_COLLISION_ADJUSTED_PROBE_BOUNDARY_RENAMED_ADD.patch": {
+      "original_sha256": "1761beb0db679051521898d51388a80c527ab39e75e23b69978411531f5985ad",
+      "role": "change",
+      "sha256": "1761beb0db679051521898d51388a80c527ab39e75e23b69978411531f5985ad"
+    },
+    "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59A_EXPLICIT_ZERO_REWARD_ARGUMENTS_RETARGETED.patch": {
+      "original_sha256": "0f0273701b67ce66d7847b017f6093da67c247cce97c8669e81c0c73d234ec3c",
+      "role": "change",
+      "sha256": "0f0273701b67ce66d7847b017f6093da67c247cce97c8669e81c0c73d234ec3c"
+    },
+    "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59B_PUBLIC_SOLO_IDENTITY_RETARGETED.patch": {
+      "original_sha256": "687489c340729f34168f74f67ca59ffecdb9a925d08b014553868df0445db361",
+      "role": "change",
+      "sha256": "687489c340729f34168f74f67ca59ffecdb9a925d08b014553868df0445db361"
+    },
+    "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59_EXACT_ROOT_PLAYER_COUNT_BOUNDARY_RENAMED_ADD.patch": {
+      "original_sha256": "f6fe68f871367d3427d4e1e6def0756060972dd7516743bc20c6f1db70d16ac2",
+      "role": "change",
+      "sha256": "f6fe68f871367d3427d4e1e6def0756060972dd7516743bc20c6f1db70d16ac2"
+    },
+    "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/FIXTURE_GROUP_IMPORTS.patch": {
+      "original_sha256": "d3fb9b93b40e61f7ebf77c85983677127259e1aa0d0a99fe278a4100e2ee1e2f",
+      "role": "change",
+      "sha256": "d3fb9b93b40e61f7ebf77c85983677127259e1aa0d0a99fe278a4100e2ee1e2f"
+    },
+    "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/SOURCE_GROUP_IMPORTS.patch": {
+      "original_sha256": "2bee8be0a64e47937bc81359f2303c0b3998702bb6eaab23f520b465afc8e63b",
+      "role": "change",
+      "sha256": "2bee8be0a64e47937bc81359f2303c0b3998702bb6eaab23f520b465afc8e63b"
+    },
+    "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/001_GENERALIZED_ACTUAL_GRIM_ADAPTER.patch": {
+      "original_sha256": "9f02f8cb615dc33118ac0d4c6ccf21cbd62f29ce90d8a5f115fc271534e6787c",
+      "role": "change",
+      "sha256": "9f02f8cb615dc33118ac0d4c6ccf21cbd62f29ce90d8a5f115fc271534e6787c"
+    },
+    "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/002_STATIONARY_CRITICAL_CONSTRUCTION.patch": {
+      "original_sha256": "77beaabd1180a74ed9b715b41a27d0f3bc294ab126326e62732d5e0614c7b01e",
+      "role": "change",
+      "sha256": "77beaabd1180a74ed9b715b41a27d0f3bc294ab126326e62732d5e0614c7b01e"
+    },
+    "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/003_ALTERNATING_CRITICAL_CONSTRUCTION.patch": {
+      "original_sha256": "1cee8d388cc38c65011082e0c99ef776995ac0945ef36043cced3a4a7f4cde46",
+      "role": "change",
+      "sha256": "1cee8d388cc38c65011082e0c99ef776995ac0945ef36043cced3a4a7f4cde46"
+    },
+    "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/004_PINNED_ADDITIVE_ORDER_NORMALIZATION.patch": {
+      "original_sha256": "9c8525d33e5f5e4892dd1e54ec8bfe8cb82909c1e2e736546ddef17a342dc709",
+      "role": "change",
+      "sha256": "9c8525d33e5f5e4892dd1e54ec8bfe8cb82909c1e2e736546ddef17a342dc709"
+    },
+    "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/005_P15_EXACT_CONTINUATION_COEFFICIENT.patch": {
+      "original_sha256": "9ba54e4a11c37c7d6bf8a7d02c4ab18ca1aab0669ab34c5ca809fea1d38974ea",
+      "role": "change",
+      "sha256": "9ba54e4a11c37c7d6bf8a7d02c4ab18ca1aab0669ab34c5ca809fea1d38974ea"
+    },
+    "Research/Pending/Changes/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/001_ACTUAL_FULL_DIMENSIONAL_IR_GEOMETRY.patch": {
+      "original_sha256": "ce6258b5c3b66c203618d19ffee94d575367e5eef53122095088c2b640caefb1",
+      "role": "change",
+      "sha256": "ce6258b5c3b66c203618d19ffee94d575367e5eef53122095088c2b640caefb1"
+    },
+    "Research/Pending/Changes/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/002_ACTUAL_UNIFORM_FULL_DIMENSIONAL_HAUSDORFF.patch": {
+      "original_sha256": "7dfc856070f1413c13cf4689e24347a8179ece6fb41c8406fba13a125420355b",
+      "role": "change",
+      "sha256": "7dfc856070f1413c13cf4689e24347a8179ece6fb41c8406fba13a125420355b"
+    },
+    "Research/Pending/Changes/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/001_CONNECTED_CONVEX_HULL_REPRESENTATION.patch": {
+      "original_sha256": "2b1d72e843a889ff409fe661a324ed2ef8e872e1371ca73ac1c7ae947b91b87a",
+      "role": "change",
+      "sha256": "2b1d72e843a889ff409fe661a324ed2ef8e872e1371ca73ac1c7ae947b91b87a"
+    },
+    "Research/Pending/Changes/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/002_MATHUE_UMBRELLA.patch": {
+      "original_sha256": "b9e26c4ab53d9b27deb5e4c47eeaa6c05001da0b22b283d2fe54855c3aee961d",
+      "role": "change",
+      "sha256": "b9e26c4ab53d9b27deb5e4c47eeaa6c05001da0b22b283d2fe54855c3aee961d"
+    },
+    "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/001_CONNECTED_AFFINE_STEP.patch": {
+      "original_sha256": "b1888265a2e06d9f59f80faab34ca10f8bbab82cbaa967ff5fdeb26539526e8e",
+      "role": "change",
+      "sha256": "b1888265a2e06d9f59f80faab34ca10f8bbab82cbaa967ff5fdeb26539526e8e"
+    },
+    "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/002_GEOMETRIC_AFFINE_SCHEDULE.patch": {
+      "original_sha256": "d6f5c9fb008c237f9283bf153ae47312178f40e6f40253dab5e6225a6bcefb5e",
+      "role": "change",
+      "sha256": "d6f5c9fb008c237f9283bf153ae47312178f40e6f40253dab5e6225a6bcefb5e"
+    },
+    "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/003_SORIN_P4_AND_SCHEDULE_DELEGATES.patch": {
+      "original_sha256": "698e5f93b07b19b9bee19c26c3933603b75498aee9bd9258ba5208c6fd1200ba",
+      "role": "change",
+      "sha256": "698e5f93b07b19b9bee19c26c3933603b75498aee9bd9258ba5208c6fd1200ba"
+    },
+    "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/004_MATHUE_UMBRELLA.patch": {
+      "original_sha256": "a92f9e28095f60ed34c02116ae19070b48d2a06eb863d917e6d47128b645d563",
+      "role": "change",
+      "sha256": "a92f9e28095f60ed34c02116ae19070b48d2a06eb863d917e6d47128b645d563"
+    },
+    "Research/Pending/Changes/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/001_NONDEPRECATED_ITE_PROOF.patch": {
+      "original_sha256": "7f8ad16825ef3c3169286403ff461c6778f9d29e91bced6374ff81e3b40efcbe",
+      "role": "change",
+      "sha256": "7f8ad16825ef3c3169286403ff461c6778f9d29e91bced6374ff81e3b40efcbe"
+    },
+    "Research/Pending/Changes/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/002_ARBITRARY_SEQUENCE_DOC.patch": {
+      "original_sha256": "b9e3ad80b039e8c36c053e7847b2c3584fd381b9f8f36256e576e2c3172b8749",
+      "role": "change",
+      "sha256": "b9e3ad80b039e8c36c053e7847b2c3584fd381b9f8f36256e576e2c3172b8749"
+    },
+    "Research/Pending/Changes/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/001_EXPOSE_INTERNAL_CALENDAR_DELIVERY.patch": {
+      "original_sha256": "6fd2bff452f3f79cf1b94d87cf2c385322f3b9216f3ae10e33509c3c527ee0bf",
+      "role": "change",
+      "sha256": "6fd2bff452f3f79cf1b94d87cf2c385322f3b9216f3ae10e33509c3c527ee0bf"
+    },
+    "Research/Pending/Changes/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/002_ACTUAL_SUPPORTED_CALENDAR_BELLMAN.patch": {
+      "original_sha256": "ba19214840065cc0d0929fc9b5392022c62b78a01835ff07a764644d0ed707a8",
+      "role": "change",
+      "sha256": "ba19214840065cc0d0929fc9b5392022c62b78a01835ff07a764644d0ed707a8"
+    },
+    "Research/Pending/Changes/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/003_ACTUAL_STRICT_IR_DISCOUNTED_NASH.patch": {
+      "original_sha256": "a4223b4ebac5732f17588120136d96ba6be00cbe40a62c9ed7f1a414598e3f53",
+      "role": "change",
+      "sha256": "a4223b4ebac5732f17588120136d96ba6be00cbe40a62c9ed7f1a414598e3f53"
+    },
+    "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/001_ACTUAL_CONSTANT_APPROX_PUNISHMENT.patch": {
+      "original_sha256": "3c38ab93446e619581fbafc76564dc2b69326a2fccdb364113775ac55cd8f808",
+      "role": "change",
+      "sha256": "3c38ab93446e619581fbafc76564dc2b69326a2fccdb364113775ac55cd8f808"
+    },
+    "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/002_ACTUAL_STRICT_IR_PERIODIC_SOURCE.patch": {
+      "original_sha256": "f46423063845de02ad8590a9e36df941fc3283889811d1ef17cb749e2e82e595",
+      "role": "change",
+      "sha256": "f46423063845de02ad8590a9e36df941fc3283889811d1ef17cb749e2e82e595"
+    },
+    "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/003_CANONICAL_SUPPORT_SOURCE_ORDER.patch": {
+      "original_sha256": "b3c05d6bea669f12bc73846281883d194e6d6f15d09629c4df15e6b5b04f5268",
+      "role": "change",
+      "sha256": "b3c05d6bea669f12bc73846281883d194e6d6f15d09629c4df15e6b5b04f5268"
+    },
+    "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/003_SOURCE_ORDERED_EQUIVALENT.patch": {
+      "original_sha256": "6ab5bdfd122b9043c97d4f82849faf2bb35885cea215ae390755ffa9e9995128",
+      "role": "change",
+      "sha256": "6ab5bdfd122b9043c97d4f82849faf2bb35885cea215ae390755ffa9e9995128"
+    },
+    "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/004_TRIGGER_PREDICATE_SOURCE_ORDER.patch": {
+      "original_sha256": "133884eb86fdae2065143da01fa84336149ec63e092c4f7d00955b2275c22c31",
+      "role": "change",
+      "sha256": "133884eb86fdae2065143da01fa84336149ec63e092c4f7d00955b2275c22c31"
+    },
+    "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/01_SURE_COALITION_FULL_EXPLOITABILITY.patch": {
+      "original_sha256": "2b55f70fbe3d2eedd084e898f8ca95e4ad365b0a4b2d39e78dcaf6fd7ff5907c",
+      "role": "change",
+      "sha256": "2b55f70fbe3d2eedd084e898f8ca95e4ad365b0a4b2d39e78dcaf6fd7ff5907c"
+    },
+    "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/02_SURE_COALITION_MINIMUM.patch": {
+      "original_sha256": "fc76f28114261099ff90e1edbb336d13204542d22abd16aab37551b4a4b64ced",
+      "role": "change",
+      "sha256": "fc76f28114261099ff90e1edbb336d13204542d22abd16aab37551b4a4b64ced"
+    },
+    "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/03_MEMBERSHIP_STRETCH_SURE_COALITION_SOURCE.patch": {
+      "original_sha256": "bd59b4ffa5706b5596a21ec0890bc3bf4644c8dd2b655b88fbd73d6227ab6398",
+      "role": "change",
+      "sha256": "bd59b4ffa5706b5596a21ec0890bc3bf4644c8dd2b655b88fbd73d6227ab6398"
+    },
+    "Research/Pending/Changes/TMP/UE_FULL_EXACT_CHARGE_54_FRECHET_DOMAIN_REPAIR_20261002.patch": {
+      "original_sha256": "0a6639c401b96ded1d00ea558f715aac9bcf654ba0f1e3c06e89fcac0368db4e",
+      "role": "change",
+      "sha256": "0a6639c401b96ded1d00ea558f715aac9bcf654ba0f1e3c06e89fcac0368db4e"
+    },
+    "Research/Pending/Changes/TMP/UE_P4_AFFINE_STEP_ITE_TRUE_OVERLAY_20261002.patch": {
+      "original_sha256": "5c8ca5087bcd4578d05504967a49144128a095e55cb71ecc7752212acddae1a1",
+      "role": "change",
+      "sha256": "5c8ca5087bcd4578d05504967a49144128a095e55cb71ecc7752212acddae1a1"
+    },
+    "Research/Pending/Changes/TMP/UE_PAIRED_MINIMIZING_VERTEX_52_PINNED_PUSH_NOT_20261002.patch": {
+      "original_sha256": "79d18db2c542af02a851b29af53b58eec311878c579433c045958a8695264351",
+      "role": "change",
+      "sha256": "79d18db2c542af02a851b29af53b58eec311878c579433c045958a8695264351"
+    },
+    "Research/Pending/Changes/TMP/UE_PLAYER_BOUNDARY_59_PUBLIC_SOLO_IDENTITY_20261002.patch": {
+      "original_sha256": "0ae301bd0ea5d7269ae9b041d4f9a34b0feb75954f908ebb55db67ffc1c4b613",
+      "role": "change",
+      "sha256": "0ae301bd0ea5d7269ae9b041d4f9a34b0feb75954f908ebb55db67ffc1c4b613"
+    },
+    "Research/Pending/Changes/TMP/UE_RATIONAL_BOXED_ROOT_38_CANONICAL_BERNOULLI_REUSE_20261002.patch": {
+      "original_sha256": "8739b1e950ff2d911012bc13de42ef2fc6665f285ae87e85187c44aab5ac06b0",
+      "role": "change",
+      "sha256": "8739b1e950ff2d911012bc13de42ef2fc6665f285ae87e85187c44aab5ac06b0"
+    },
+    "Research/Pending/Changes/TMP/UE_RATIONAL_EXACT_SOLO_42_NARROW_PROBE_IMPORTS_20261002.patch": {
+      "original_sha256": "f7c84c91ca9b485891fe6f9f99f58ab0fb4bb05b932e12fa5f92ba5b5993a4f3",
+      "role": "change",
+      "sha256": "f7c84c91ca9b485891fe6f9f99f58ab0fb4bb05b932e12fa5f92ba5b5993a4f3"
+    },
+    "Research/Pending/Changes/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_SOUNDNESS_20261002.patch": {
+      "original_sha256": "308a12c342f3995184b026bf0d6187bbb7f522e8a3bf47aafcc69e811ce88380",
+      "role": "change",
+      "sha256": "308a12c342f3995184b026bf0d6187bbb7f522e8a3bf47aafcc69e811ce88380"
+    },
+    "Research/Pending/Changes/UE_ACTUAL_FACE_JOINS/24_ACTUAL_FACE_REPRESENTATION_EXCLUSIONS.patch": {
+      "original_sha256": "bc3d156683a631188d66f06f5f2834294fcdf162a5d27e959221c75914a08e00",
+      "role": "change",
+      "sha256": "bc3d156683a631188d66f06f5f2834294fcdf162a5d27e959221c75914a08e00"
+    },
+    "Research/Pending/Changes/UE_ACTUAL_FACE_JOINS/26_SAME_WITNESS_FACE_RESTRICTION_JOIN.patch": {
+      "original_sha256": "3c0d29403e23ddea8209a8e0e25f474d9b11c6bd715fb94d61a5dd945446aaaa",
+      "role": "change",
+      "sha256": "3c0d29403e23ddea8209a8e0e25f474d9b11c6bd715fb94d61a5dd945446aaaa"
+    },
+    "Research/Pending/Changes/UE_CANDIDATE_REFINEMENTS/13_NONQUASICONVEX_JOIN.patch": {
+      "original_sha256": "866741f17ab780b3b7bb283d0e4a653609efe1274896a5dd298c0ffc43e7ba0c",
+      "role": "change",
+      "sha256": "866741f17ab780b3b7bb283d0e4a653609efe1274896a5dd298c0ffc43e7ba0c"
+    },
+    "Research/Pending/Changes/UE_COLLISION_FIXTURE/49_LITERAL_COLLISION_AND_UPPER_FREEZE.patch": {
+      "original_sha256": "945c3f2bf3dadf125a7664ea34a44e8fc5c87463b847a022d375f09ac0ad646f",
+      "role": "change",
+      "sha256": "945c3f2bf3dadf125a7664ea34a44e8fc5c87463b847a022d375f09ac0ad646f"
+    },
+    "Research/Pending/Changes/UE_COUPLED_CUBIC/48_COUPLED_CUBIC_SHAPE_FIXTURE.patch": {
+      "original_sha256": "3e30200a98b8842a2097772c8a21630edccf9093c9310ea93850b9a4057ef01c",
+      "role": "change",
+      "sha256": "3e30200a98b8842a2097772c8a21630edccf9093c9310ea93850b9a4057ef01c"
+    },
+    "Research/Pending/Changes/UE_FACE_SEPARABILITY/19_FACE_ADDITIVE_EXCLUSION.patch": {
+      "original_sha256": "70b321421de1749e0a77b44759753bed31f4f4ee8120b887c6231181e394d637",
+      "role": "change",
+      "sha256": "70b321421de1749e0a77b44759753bed31f4f4ee8120b887c6231181e394d637"
+    },
+    "Research/Pending/Changes/UE_FACE_SEPARABILITY/20_FACE_NONMONOTONE_COMPOSITION_EXCLUSION.patch": {
+      "original_sha256": "3ddc66d4bfe9f12296642d9c8d4b09eab8e890894f9facea4b71720bf2e76b30",
+      "role": "change",
+      "sha256": "3ddc66d4bfe9f12296642d9c8d4b09eab8e890894f9facea4b71720bf2e76b30"
+    },
+    "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/001_UNIT17_PINNED_ITE_NAMES.patch": {
+      "original_sha256": "d3d4dc16cf920cf5100fe00ca9266d885b5f80fb7a42fc054d0c96ff99aefcba",
+      "role": "change",
+      "sha256": "d3d4dc16cf920cf5100fe00ca9266d885b5f80fb7a42fc054d0c96ff99aefcba"
+    },
+    "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/002_OWN_SINGLETON_CHART_PINNED_DITE_NAMES.patch": {
+      "original_sha256": "c9667d9bfaf7c674ab0cb871539f2f584f1f8963de997137abaa39bb7b786a50",
+      "role": "change",
+      "sha256": "c9667d9bfaf7c674ab0cb871539f2f584f1f8963de997137abaa39bb7b786a50"
+    },
+    "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/005_CANONICAL_CHARACTERIZATION_DOCUMENTATION.patch": {
+      "original_sha256": "4351d4ef39f33ed4f3ab161b2030e7a7ad16556b23d7020189c7c02bf47bf23a",
+      "role": "change",
+      "sha256": "4351d4ef39f33ed4f3ab161b2030e7a7ad16556b23d7020189c7c02bf47bf23a"
+    },
+    "Research/Pending/Changes/UE_MONOTONE11_IMPORT_REPAIR/11A_CANONICAL_ALL_CONTINUE_OWNER_IMPORT.patch": {
+      "original_sha256": "0d8d278309735a99e26fc9c0f5841b0028654a1f12aca96d07981189afe81b92",
+      "role": "change",
+      "sha256": "0d8d278309735a99e26fc9c0f5841b0028654a1f12aca96d07981189afe81b92"
+    },
+    "Research/Pending/Changes/UE_MULTIAFFINE/10_GENERIC_MONOTONE_TRANSFER.patch": {
+      "original_sha256": "022568eb2b8dbc7cfc5fffb992da2089810c098b755ae08aedd0cc17ecd2f79b",
+      "role": "change",
+      "sha256": "022568eb2b8dbc7cfc5fffb992da2089810c098b755ae08aedd0cc17ecd2f79b"
+    },
+    "Research/Pending/Changes/UE_MULTIAFFINE/11_ACTUAL_MONOTONE_EXCLUSION.patch": {
+      "original_sha256": "c869c907ecfde025276513bc92856473e76aa98b7b5ae435f90ce3c134d31b35",
+      "role": "change",
+      "sha256": "c869c907ecfde025276513bc92856473e76aa98b7b5ae435f90ce3c134d31b35"
+    },
+    "Research/Pending/Changes/UE_NONQ_FACE_FIXTURE/50_NON_Q_LINEAR_FACE_FIXTURE.patch": {
+      "original_sha256": "bc2147d1e8dd6cf04158166f46852dae679a258ab04a39970adecf8e3bf72a27",
+      "role": "change",
+      "sha256": "bc2147d1e8dd6cf04158166f46852dae679a258ab04a39970adecf8e3bf72a27"
+    },
+    "Research/Pending/Changes/UE_POTENTIAL59_AND_SECANT_PROOF_OVERLAYS/001_UNIT59_EXPLICIT_ZERO_REWARD_ARGUMENTS.patch": {
+      "original_sha256": "4ec0042455fd5187535db8316e3ad5dc362b58e87efeba99dadb016ea0e9da93",
+      "role": "change",
+      "sha256": "4ec0042455fd5187535db8316e3ad5dc362b58e87efeba99dadb016ea0e9da93"
+    },
+    "Research/Pending/Changes/UE_POTENTIAL59_AND_SECANT_PROOF_OVERLAYS/002_SECANT_PINNED_ITE_NAME.patch": {
+      "original_sha256": "01ead17f7949491621d39cd5b6a015d71d23d92e144462491508e99fdf656d5c",
+      "role": "change",
+      "sha256": "01ead17f7949491621d39cd5b6a015d71d23d92e144462491508e99fdf656d5c"
+    },
+    "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/56_SAME_POLYNOMIAL_QUANTITATIVE_JOIN.patch": {
+      "original_sha256": "922373c4ef5452f50fbda631e4d296ccf0499f4e14706d6c49c1cf8c127e679e",
+      "role": "change",
+      "sha256": "922373c4ef5452f50fbda631e4d296ccf0499f4e14706d6c49c1cf8c127e679e"
+    },
+    "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/57_GENERIC_CURVATURE_HOMOGENEITY.patch": {
+      "original_sha256": "34d60a4867261beaf5d1c4a9bf8e2bfe6da857ff6038722af59383b682b09e32",
+      "role": "change",
+      "sha256": "34d60a4867261beaf5d1c4a9bf8e2bfe6da857ff6038722af59383b682b09e32"
+    },
+    "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/58_ROBUST_POSITIVE_CHARGE_NORMALIZATION.patch": {
+      "original_sha256": "41e998073aa7d9c76884adc612735a37d35962f08c218cd03ed1f6e03c6ce340",
+      "role": "change",
+      "sha256": "41e998073aa7d9c76884adc612735a37d35962f08c218cd03ed1f6e03c6ce340"
+    },
+    "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/59_LITERAL_PLAYER_COUNT_AND_SOLO_ZERO_BOUNDARIES.patch": {
+      "original_sha256": "b3f18a4a250f6ccaf7df0d255bc6e1dd21c2cb67d11d64113edaf03e558b3399",
+      "role": "change",
+      "sha256": "b3f18a4a250f6ccaf7df0d255bc6e1dd21c2cb67d11d64113edaf03e558b3399"
+    },
+    "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/60_ACTUAL_FIN4_POSITIVE_CHARGE_CURVATURE_JOIN.patch": {
+      "original_sha256": "7f67b0912a54da5ed98b98a82584c6d4d6c33e85970959dc088a79e5292ebf7f",
+      "role": "change",
+      "sha256": "7f67b0912a54da5ed98b98a82584c6d4d6c33e85970959dc088a79e5292ebf7f"
+    },
+    "Research/Pending/Changes/UE_SECANT_NEGATIVE_ITE_REPAIR/003_SECANT_PINNED_NEGATIVE_ITE_NAME.patch": {
+      "original_sha256": "e1fe74d160892ae63f07e0445602576fc6c7f5daac526678f61a4178785a17e3",
+      "role": "change",
+      "sha256": "e1fe74d160892ae63f07e0445602576fc6c7f5daac526678f61a4178785a17e3"
+    },
+    "Research/Pending/Changes/UE_SIMPLEX_REPRESENTATION_FACADE/75_SIMPLEX_ONLY_ACTUAL_REPRESENTATION_FACADE.patch": {
+      "original_sha256": "e258bb4dc3edb70519332c80d275ffc1907590021ea3d99f1730a475ca51ba78",
+      "role": "change",
+      "sha256": "e258bb4dc3edb70519332c80d275ffc1907590021ea3d99f1730a475ca51ba78"
+    },
+    "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/HANDOFF.md": {
+      "original_sha256": "9a3dfc2120d1cfc5797703e293773d0e7a1cdcf0346d07a6c69efaed62a61461",
+      "role": "record",
+      "sha256": "64f6886f6e00fe2b8553f218bd8a2b27bdc9cd92a4b8a8f0614b7b253e6ae9e0"
+    },
+    "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/GROUP_AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "61018fe2137d6f232154b95bc8a0d8741093ef535f9e13071e343f7a85f874d7",
+      "role": "record",
+      "sha256": "61018fe2137d6f232154b95bc8a0d8741093ef535f9e13071e343f7a85f874d7"
+    },
+    "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/ORDERED_APPLICATION_MANIFEST.json": {
+      "original_sha256": "fdbf70a531b6aeb189e44230a21bb5cb829e9ef40a654d4a3b207fbb416c13f0",
+      "role": "record",
+      "sha256": "fdbf70a531b6aeb189e44230a21bb5cb829e9ef40a654d4a3b207fbb416c13f0"
+    },
+    "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/SOURCE_SCOPE_AND_CHECK_ORDER.md": {
+      "original_sha256": "36c53f5f318aa600f3d0da88d024b03d752a3b42d0351b95305a9e6af5f72817",
+      "role": "record",
+      "sha256": "5719a39f0516cfd585650098bed641503a5b5557b10cde5144dd26a1767d1a37"
+    },
+    "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/SOURCE_SCOPE_HARNESS.lean.draft": {
+      "original_sha256": "764b0d8d6ea051dedb7dcd7fb91b72464e05dd88bef8f6672ae33351ae3d8587",
+      "role": "record",
+      "sha256": "764b0d8d6ea051dedb7dcd7fb91b72464e05dd88bef8f6672ae33351ae3d8587"
+    },
+    "Research/Pending/Records/BOUNDED_NORMALIZATION_STATIC_REVIEW/REVIEW.txt": {
+      "original_sha256": "93615880edcdb4febd9f3458b2c54805322d2fe3cc9446b79e259d33bee08ca5",
+      "role": "record",
+      "sha256": "93615880edcdb4febd9f3458b2c54805322d2fe3cc9446b79e259d33bee08ca5"
+    },
+    "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "f1863162736551e6f08345f47b620766134f2a3f9a2156e2f219b6972ca676a1",
+      "role": "record",
+      "sha256": "f1863162736551e6f08345f47b620766134f2a3f9a2156e2f219b6972ca676a1"
+    },
+    "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/ORDERED_APPLICATION_MANIFEST.json": {
+      "original_sha256": "6aed3a2b729def81ff5e98071cfcc1793fe249a7f01774b79de17e34134e9323",
+      "role": "record",
+      "sha256": "6aed3a2b729def81ff5e98071cfcc1793fe249a7f01774b79de17e34134e9323"
+    },
+    "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/SOURCE_AND_HANDOFF.md": {
+      "original_sha256": "c308f6a652934202b790cf5d09de3d7f228ac29bdbedb922f01615807095eabe",
+      "role": "record",
+      "sha256": "379e6e24f5b7994e0bc34beb56e4bed544dae4f45107433679a507840a442abb"
+    },
+    "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/SOURCE_SCOPE_HARNESS.lean.draft": {
+      "original_sha256": "79e056ae1615bff7d3252004689766531efd76f075a6f9a8f4dd1095906ec922",
+      "role": "record",
+      "sha256": "79e056ae1615bff7d3252004689766531efd76f075a6f9a8f4dd1095906ec922"
+    },
+    "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "893e3b62eea38fdccce41996e1020271b07df3023ed5e4382fb2fb4eb898391d",
+      "role": "record",
+      "sha256": "893e3b62eea38fdccce41996e1020271b07df3023ed5e4382fb2fb4eb898391d"
+    },
+    "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/ORDERED_APPLICATION_MANIFEST.json": {
+      "original_sha256": "b911ce5cfe650f1d4686d763eec8f684bc853c834eda8f5c5a3f413ffc869efb",
+      "role": "record",
+      "sha256": "b911ce5cfe650f1d4686d763eec8f684bc853c834eda8f5c5a3f413ffc869efb"
+    },
+    "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/SOURCE_AND_HANDOFF.md": {
+      "original_sha256": "198e4f1c6b054b2f91e24b7d390f6bc74f656db119d0dc5c61e17ee4e636fc7c",
+      "role": "record",
+      "sha256": "9c6c2739dd2dff5b9c2b23ab824f7ccb0c8a3ad2c4605a135ceb49ccf6117b03"
+    },
+    "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/SOURCE_SCOPE_HARNESS.lean.draft": {
+      "original_sha256": "7d55b52c55ad3ccba22cd9c915985e2bf1cb9b44c9e6b5bd3308f337955c0161",
+      "role": "record",
+      "sha256": "7d55b52c55ad3ccba22cd9c915985e2bf1cb9b44c9e6b5bd3308f337955c0161"
+    },
+    "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "93266ec9f1d9604f323213bd06140c13d1cba2a4e503cbc844073d51423804ee",
+      "role": "record",
+      "sha256": "93266ec9f1d9604f323213bd06140c13d1cba2a4e503cbc844073d51423804ee"
+    },
+    "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/HANDOFF.md": {
+      "original_sha256": "6fabfbce86e26ef0711e99513d4142f8b66b1be9063548ce6c3a420b1ad5f8ca",
+      "role": "record",
+      "sha256": "42b044ccfbc02094c0e2c1c2c064a1767177206bfeefc60acabb7229213f6ad1"
+    },
+    "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/AXIOMS_AND_ACTUAL_CONSUMERS.lean.draft": {
+      "original_sha256": "3ec599454d317abf3006921e6826fd06115877dbd1231840bccb230044869240",
+      "role": "record",
+      "sha256": "3ec599454d317abf3006921e6826fd06115877dbd1231840bccb230044869240"
+    },
+    "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/SOURCE_AND_HANDOFF.md": {
+      "original_sha256": "47620d128dac76981590adfd0e915df09611d69bc8a8ced3aacebfd2240c9289",
+      "role": "record",
+      "sha256": "933fab407996d28020892ed079ace14001ff8e9a0f3dded7c172b12572305372"
+    },
+    "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "c3a59aa5bb58ea1e9ee2a73af90d1da9628aa7b41c77d5295b61789404c1e32a",
+      "role": "record",
+      "sha256": "c3a59aa5bb58ea1e9ee2a73af90d1da9628aa7b41c77d5295b61789404c1e32a"
+    },
+    "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_ADAPTER_HANDOFF.md": {
+      "original_sha256": "254afa9a44862b4f6f87aa9a1adec4466e87668b723585968b11478470b7471c",
+      "role": "record",
+      "sha256": "d6e4b89a391dd0f7f31ffb81ff8dd41902606222128ffe329439f7cef593aac3"
+    },
+    "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_APPLICATION_MANIFEST.json": {
+      "original_sha256": "8a0072b95b22ae371a474c40f121361f703959a5d9c4eb6ee57f16b27711100d",
+      "role": "record",
+      "sha256": "8a0072b95b22ae371a474c40f121361f703959a5d9c4eb6ee57f16b27711100d"
+    },
+    "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "e2d0cbfe7bf2c0ec38e5562eb44dc91c012a7ebcf8addf6b9fbfe076d777f0d2",
+      "role": "record",
+      "sha256": "e2d0cbfe7bf2c0ec38e5562eb44dc91c012a7ebcf8addf6b9fbfe076d777f0d2"
+    },
+    "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_SOURCE_SCOPE_HARNESS.lean.draft": {
+      "original_sha256": "4752b6f131902f04e7990a750495d17cc360854e6c34aa508e06987d228f80dd",
+      "role": "record",
+      "sha256": "4752b6f131902f04e7990a750495d17cc360854e6c34aa508e06987d228f80dd"
+    },
+    "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/SOURCE_AND_HANDOFF.md": {
+      "original_sha256": "521da60832d27b8aada95ce7e4f98c30a2c4378bd6c25d95c59bfda278559375",
+      "role": "record",
+      "sha256": "ac56ceade2992116de29221d536a59a4e4c604f4c636045e66196fdef06e4ffc"
+    },
+    "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/AXIOMS_AND_SOURCE_CONSUMERS.lean.draft": {
+      "original_sha256": "f36de6db49364409b6711d5ff90af0b8261abdcf339d1d02530865c15e95f9b3",
+      "role": "record",
+      "sha256": "f36de6db49364409b6711d5ff90af0b8261abdcf339d1d02530865c15e95f9b3"
+    },
+    "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/SOURCE_AND_HANDOFF.md": {
+      "original_sha256": "6769d97fc63211a6d673b13a2e5a30361c119a3f63df30098edf46d85070161d",
+      "role": "record",
+      "sha256": "96d893f105344f5cedb96d5864e46c8930515d86656e7ffac56ce9d21aeb342e"
+    },
+    "Research/Pending/Records/PRESERVATION_REVIEW.md": {
+      "role": "record",
+      "sha256": "0836d592164dd16de1351b67620bcda5836ac948c18da1dd7f2bccc5aee51ce8"
+    },
+    "Research/Pending/Records/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "7ed57bd16a71845d84bd2cc25dd5e522fcd4f7413a549dc4cf2299aa813fe8b1",
+      "role": "record",
+      "sha256": "7ed57bd16a71845d84bd2cc25dd5e522fcd4f7413a549dc4cf2299aa813fe8b1"
+    },
+    "Research/Pending/Records/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/HANDOFF.md": {
+      "original_sha256": "7c49df7be4ea41365668eedd82372bb5bed449e33bc1c736d4d90dbe99ce89e8",
+      "role": "record",
+      "sha256": "7878ff7e1a24594ce8766d34d6251f55973146f12bdc09fdd2fe16d1873ed366"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "fadd4b07ddacf4a0ab157562e1be7aceb819f91b32ec3fad440570be86354126",
+      "role": "record",
+      "sha256": "fadd4b07ddacf4a0ab157562e1be7aceb819f91b32ec3fad440570be86354126"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/HANDOFF.md": {
+      "original_sha256": "da42efb6310f9c3cb9bac675f311a206aff32dd5b3c382ee3fc17a27a80e4021",
+      "role": "record",
+      "sha256": "1d709946056694fe6d7e933f05e911b175dd5303fc76e5830403a730780383d0"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "2eea976c8c42c157f910dda6eaf28566c98e43ba0d95bb8b14007a1d342a2121",
+      "role": "record",
+      "sha256": "2eea976c8c42c157f910dda6eaf28566c98e43ba0d95bb8b14007a1d342a2121"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/HANDOFF.md": {
+      "original_sha256": "f76e300bdea3a988e95290231d0ed58d48d3b908f0088d6c8b3a58ad1e91e2e1",
+      "role": "record",
+      "sha256": "5e38f6f2043ab0541d1da7d7fbf414f37b215dac095016f3f8e31a0a073dd07e"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "6a96c0a5842f1f4084d0e2c2767e4e511ee35ef0dbb0fbbbed71d288ba85611b",
+      "role": "record",
+      "sha256": "6a96c0a5842f1f4084d0e2c2767e4e511ee35ef0dbb0fbbbed71d288ba85611b"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/HANDOFF.md": {
+      "original_sha256": "402db5a78a66ee4b505e4d5d0524602ad045cc690a7a7526f27fe3acd6aa043e",
+      "role": "record",
+      "sha256": "ed00ab6ccec532b9a6ccf00be9e2144bbb7cdfbc160eff817e46e78e0b6e8a3a"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/45A_AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "b7b538cb80e14bdd2df7cf9bf7ddfab8f1338fa23f830099ae78fa0b2add0767",
+      "role": "record",
+      "sha256": "b7b538cb80e14bdd2df7cf9bf7ddfab8f1338fa23f830099ae78fa0b2add0767"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/GROUP_AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "10827c936039b04dcbb28c4b923c4ebd607f5d1fec2095fbe9d3fdb72f4a7709",
+      "role": "record",
+      "sha256": "10827c936039b04dcbb28c4b923c4ebd607f5d1fec2095fbe9d3fdb72f4a7709"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/NEXT_COMPLETE_GROUP.md": {
+      "original_sha256": "a1a326b9afe0794564ca13b9ffad18fad0c354bb6e85e643c80b9e7334dcfba5",
+      "role": "record",
+      "sha256": "f4994fc1543d965b43e702d5acad4aedc79ffd425594de5c6aaf30b8d392e364"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/OVERLAY_ORDER.tsv": {
+      "original_sha256": "7b738d7b2eac904dfc79eb82667ab7cab8bb9624f7f02d3197beb078ba572051",
+      "role": "record",
+      "sha256": "7b738d7b2eac904dfc79eb82667ab7cab8bb9624f7f02d3197beb078ba572051"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "9750fda4929310769e2b93ba96c0278cfeb6fe108b2d0f57e0054676b3f6d0a3",
+      "role": "record",
+      "sha256": "9750fda4929310769e2b93ba96c0278cfeb6fe108b2d0f57e0054676b3f6d0a3"
+    },
+    "Research/Pending/Records/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/HANDOFF.md": {
+      "original_sha256": "5973367a012dec552719f7e474badc7361caff877dfe71f8a6b386e88108629e",
+      "role": "record",
+      "sha256": "74976417f246af5fdf725b0dd507753961906566b4cc6c3d3e3486aca7d65186"
+    },
+    "Research/Pending/Records/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "012ce5cb1258ac37f19f4b00d296b1ffb610b775c5549f58bf81bdd91af7694c",
+      "role": "record",
+      "sha256": "012ce5cb1258ac37f19f4b00d296b1ffb610b775c5549f58bf81bdd91af7694c"
+    },
+    "Research/Pending/Records/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/HANDOFF.md": {
+      "original_sha256": "e470d528865baf2ebc20cfc19fa61a5d62e157a07f7a63791abad71a54126cbb",
+      "role": "record",
+      "sha256": "1132c7cf46357234e7009e59827cf2df1d7391bc15badb1467c5c97820f933fb"
+    },
+    "Research/Pending/Records/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "905c5a2440aa61d24b44afadd6d13cee6a8334ff1975e93b1d8ec094ffe1ebf7",
+      "role": "record",
+      "sha256": "905c5a2440aa61d24b44afadd6d13cee6a8334ff1975e93b1d8ec094ffe1ebf7"
+    },
+    "Research/Pending/Records/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/HANDOFF.md": {
+      "original_sha256": "ab706468591fa5908763e1baca43c647dd8d3479c9ce90ab9a66ab7b61a54a93",
+      "role": "record",
+      "sha256": "8489dc9c6db09b595d481231d508ea105533fe9accf087d9d7752eeaa2e3fed8"
+    },
+    "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "c9b522f2a9f6dd53343db076f1205d2f858cb5f20a5a7f79c893d59575fd5c66",
+      "role": "record",
+      "sha256": "c9b522f2a9f6dd53343db076f1205d2f858cb5f20a5a7f79c893d59575fd5c66"
+    },
+    "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/HANDOFF.md": {
+      "original_sha256": "bedcc5a538d3513ed89c14c183922095b1668ac883a7b2bb971dcb6b7e6b6e07",
+      "role": "record",
+      "sha256": "deabdfb5e85a0e8d695e18b42d2ad7520870ee71415bbbb5008387456e0e2e32"
+    },
+    "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "8c75826abbf456568f3163f868c8e2970169e05e406ad799eed3531c184bcf0f",
+      "role": "record",
+      "sha256": "8c75826abbf456568f3163f868c8e2970169e05e406ad799eed3531c184bcf0f"
+    },
+    "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/HANDOFF.md": {
+      "original_sha256": "1d6d8a25770497bea9bb49f110a61c7e42b61ee9ce6736d49a8fbf5a8f5e32b6",
+      "role": "record",
+      "sha256": "764c18209441d6097059e9117036c80ea0b4d341b6687a2d22a22fa1cfb41417"
+    },
+    "Research/Pending/Records/SHAPE/UE_RATIONAL_EXACT_REJECTION_STAGE/SOURCE_CLAIM_AND_CHECK_ORDER.md": {
+      "original_sha256": "c29aa5edd648c9ee73d736078fad39dd66135105f9e6589f91f1d7d7e0b4aab7",
+      "role": "record",
+      "sha256": "99742bc70636c2fa2d15ace3ac453b542a04fc15b3f4d1f4b8629b21d8014757"
+    },
+    "Research/Pending/Records/SHAPE/UE_RATIONAL_EXACT_REJECTION_STAGE/SOURCE_SCOPE_HARNESS.lean.draft": {
+      "original_sha256": "7c49c0559edb41776f410aff0ae734b884e6b5bcae20e9a67f8c7aaada33e872",
+      "role": "record",
+      "sha256": "7c49c0559edb41776f410aff0ae734b884e6b5bcae20e9a67f8c7aaada33e872"
+    },
+    "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/FINAL_GROUP_AXIOM_HARNESS.lean.draft": {
+      "original_sha256": "ea5c7220bbef5c6032755c4cfcb55c13e70242a386567e67e6cd8b2d5b7546ea",
+      "role": "record",
+      "sha256": "ea5c7220bbef5c6032755c4cfcb55c13e70242a386567e67e6cd8b2d5b7546ea"
+    },
+    "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/FINAL_SOURCE_DECLARATION_AUDITS.lean.draft": {
+      "original_sha256": "10827c936039b04dcbb28c4b923c4ebd607f5d1fec2095fbe9d3fdb72f4a7709",
+      "role": "record",
+      "sha256": "10827c936039b04dcbb28c4b923c4ebd607f5d1fec2095fbe9d3fdb72f4a7709"
+    },
+    "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/ORDERED_APPLICATION_MANIFEST.json": {
+      "original_sha256": "1df2df972829a06a0dca0a8d6ac8aa18fb1c5f9207ac0f6ebbdf088bbd85dcd8",
+      "role": "record",
+      "sha256": "1df2df972829a06a0dca0a8d6ac8aa18fb1c5f9207ac0f6ebbdf088bbd85dcd8"
+    },
+    "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/RETIREMENT_CHECKLIST.md": {
+      "original_sha256": "2e59b5e457cdda68c4a6297c827dcd84040c15872f1a83e546e8ad9783047d25",
+      "role": "record",
+      "sha256": "5d5c2b45b462e071a8ff51486bf5903a221f7807f80b5a3a9d66a38c08b5ae75"
+    },
+    "Research/Pending/Records/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/AXIOMS_AND_ACTUAL_CONSUMERS_AFTER_CHECKS.lean.draft": {
+      "original_sha256": "08f18d9636a98ff177c7f8486aa7f75ed4b22f9a877af9535a30088a9aef8932",
+      "role": "record",
+      "sha256": "08f18d9636a98ff177c7f8486aa7f75ed4b22f9a877af9535a30088a9aef8932"
+    },
+    "Research/Pending/Records/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/SOURCE_AND_DEPENDENCIES.txt": {
+      "original_sha256": "acb7c37a477c310806e23a21e50d97822d90ef0378746b3285f0c67e3408fa42",
+      "role": "record",
+      "sha256": "acb7c37a477c310806e23a21e50d97822d90ef0378746b3285f0c67e3408fa42"
+    },
+    "Research/Pending/Records/SORIN_FLAT_DISCOVERY/UE_SORIN_FLAT_SECURITY_PAUSED/PAUSED_SOURCE_AND_REUSE_PLAN.md": {
+      "original_sha256": "a2ba7da8c76f453a8116f5404b54488065558e32cee6ee29665a7be82a972a5d",
+      "role": "record",
+      "sha256": "920e9eb03d977991da5ac8d9d28b7ff0b179c4f6246f58cdf84e12677dc47101"
+    },
+    "Research/Pending/Records/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/AXIOMS_AND_ACTUAL_HAUSDORFF_FIXTURES_AFTER_CHECKS.lean.draft": {
+      "original_sha256": "1d82b0513c982f5007f4723e525bf970959aaf9fa1ca23ddc14c7b07d24d563a",
+      "role": "record",
+      "sha256": "1d82b0513c982f5007f4723e525bf970959aaf9fa1ca23ddc14c7b07d24d563a"
+    },
+    "Research/Pending/Records/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/SOURCE_QUANTIFIERS_DEPENDENCIES_AND_BOUNDARY_AUDIT.txt": {
+      "original_sha256": "ac47fb74764120c20d4b5ffcc28fe9a05a386208a1aba4b3d98bfa9a18caed78",
+      "role": "record",
+      "sha256": "ac47fb74764120c20d4b5ffcc28fe9a05a386208a1aba4b3d98bfa9a18caed78"
+    },
+    "Research/Pending/Records/SORIN_P4_CLOSED_P15_CONSUMER_HANDOFF/AXIOMS_P4_ACTUAL_CONSUMERS_AFTER_CHECKS.lean.draft": {
+      "original_sha256": "eeb838f56825662c61299182e78568b02f3dde1538fc88ae8705053a1de6cd3d",
+      "role": "record",
+      "sha256": "eeb838f56825662c61299182e78568b02f3dde1538fc88ae8705053a1de6cd3d"
+    },
+    "Research/Pending/Records/SORIN_P4_CLOSED_P15_CONSUMER_HANDOFF/SOURCE_SCOPE_AND_CONTEXTS.txt": {
+      "original_sha256": "75fb2fdc35012bdf2ef173a7c847579f9610630b79633579612faf71cfadeaa3",
+      "role": "record",
+      "sha256": "75fb2fdc35012bdf2ef173a7c847579f9610630b79633579612faf71cfadeaa3"
+    },
+    "Research/Pending/Records/SORIN_P4_CURRENT_DAG_AUDIT/ORDERED_IMMUTABLE_P4_DAG.txt": {
+      "original_sha256": "e9138f031c52cc81f73185fb1d9ddb43227585147199d2844695a72f9e14895c",
+      "role": "record",
+      "sha256": "e9138f031c52cc81f73185fb1d9ddb43227585147199d2844695a72f9e14895c"
+    },
+    "Research/Pending/Records/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/AXIOMS.lean.draft": {
+      "original_sha256": "88ddf6ceb2932393a1bba1f11dfca581ffb8428fb4727a853002cde24efcd758",
+      "role": "record",
+      "sha256": "88ddf6ceb2932393a1bba1f11dfca581ffb8428fb4727a853002cde24efcd758"
+    },
+    "Research/Pending/Records/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/SOURCE_AND_DEPENDENCIES.txt": {
+      "original_sha256": "2329010e6f38a0c2d40d4580d8af7c906d993c83d92d0f5fa72afe25443bdae0",
+      "role": "record",
+      "sha256": "2329010e6f38a0c2d40d4580d8af7c906d993c83d92d0f5fa72afe25443bdae0"
+    },
+    "Research/Pending/Records/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/AXIOMS.lean.draft": {
+      "original_sha256": "be82923b9524983f009a8fda8e173d98b975d7aa73eede3ff068a0a6c10a9305",
+      "role": "record",
+      "sha256": "be82923b9524983f009a8fda8e173d98b975d7aa73eede3ff068a0a6c10a9305"
+    },
+    "Research/Pending/Records/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/SOURCE_AND_DEPENDENCIES.txt": {
+      "original_sha256": "5d69cfd7fab246ec0329913bca518aae39b5d742c038b0525206c9b9dcc548f4",
+      "role": "record",
+      "sha256": "5d69cfd7fab246ec0329913bca518aae39b5d742c038b0525206c9b9dcc548f4"
+    },
+    "Research/Pending/Records/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/SOURCE_AND_DEPENDENCIES.txt": {
+      "original_sha256": "a26f86cf04df79af947c386eae7be3344f7c88fc6846b8c5a5914f2ea4d63f98",
+      "role": "record",
+      "sha256": "a26f86cf04df79af947c386eae7be3344f7c88fc6846b8c5a5914f2ea4d63f98"
+    },
+    "Research/Pending/Records/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/AXIOMS_AND_ACTUAL_NASH_FIXTURES_AFTER_CHECKS.lean.draft": {
+      "original_sha256": "d7d5c165c1eed0f760b5bf62ee86d4c5918d43ea17d6a913ccb8badcab7474dc",
+      "role": "record",
+      "sha256": "d7d5c165c1eed0f760b5bf62ee86d4c5918d43ea17d6a913ccb8badcab7474dc"
+    },
+    "Research/Pending/Records/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/SOURCE_QUANTIFIERS_AND_DEPENDENCIES.txt": {
+      "original_sha256": "112a453c18c069982c5cac2610f7483bcf428492cd71032457b726788ddb8313",
+      "role": "record",
+      "sha256": "112a453c18c069982c5cac2610f7483bcf428492cd71032457b726788ddb8313"
+    },
+    "Research/Pending/Records/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/AXIOMS_AND_ACTUAL_SOURCE_FIXTURES_AFTER_CHECKS.lean.draft": {
+      "original_sha256": "21b1da2539055ce6d5c222d0bee90878120db4b29765ac00daab5663e741ede8",
+      "role": "record",
+      "sha256": "21b1da2539055ce6d5c222d0bee90878120db4b29765ac00daab5663e741ede8"
+    },
+    "Research/Pending/Records/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/SOURCE_AND_DEPENDENCIES.txt": {
+      "original_sha256": "c6381dfe198b347775c6e227c1fc9989815baacfbb81b0999b48bb16dac74ffc",
+      "role": "record",
+      "sha256": "c6381dfe198b347775c6e227c1fc9989815baacfbb81b0999b48bb16dac74ffc"
+    },
+    "Research/Pending/Records/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/AXIOM_AND_ACTUAL_CONSUMER_HARNESS.lean.draft": {
+      "original_sha256": "f7aa336443dc6db82e9eab17cdc8b27023d32adbcb2c4cc629521e9b62800691",
+      "role": "record",
+      "sha256": "f7aa336443dc6db82e9eab17cdc8b27023d32adbcb2c4cc629521e9b62800691"
+    },
+    "Research/Pending/Records/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/SOURCE_AND_FROZEN_HANDOFF.md": {
+      "original_sha256": "3334ff9fede2d1a5438b458157f58ca6d758bcacea793ff68af735a71b179962",
+      "role": "record",
+      "sha256": "9f6f682a39030f76a8cec047f19432927f6170de12387d2377f29dff5100130a"
+    },
+    "Research/Pending/Records/THREE_SOURCE_PACKETS_DEPENDENCY_AUDIT/DEPENDENCY_AND_THEOREM_SPECS.txt": {
+      "original_sha256": "0f4412a92546f7036c1d850e96141275526cf18e9aa000bc48c1c079d8509a59",
+      "role": "record",
+      "sha256": "0f4412a92546f7036c1d850e96141275526cf18e9aa000bc48c1c079d8509a59"
+    },
+    "Research/Pending/Records/TMP/UE_COMMON_CALENDAR_LIBRARY_DISCOVERY_20261002.md": {
+      "original_sha256": "81b240cfd1eb924c1db647769d62b0a5a75b5f9d67fab6aeabc045866be443d6",
+      "role": "record",
+      "sha256": "161e44d5a46688d46566e301fc6d6b3f149975c961712c46857d7147f7a8fa30"
+    },
+    "Research/Pending/Records/TMP/UE_CONNECTED_CONVEX_HULL_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "7bf6243efaaf091a52f3cfa4ce9a6098543fe1277a2627eced2cb630a1a93d02",
+      "role": "record",
+      "sha256": "dc2bd850eb37e690e106aa68e44ba0bb6507bc46525d493cc63be706046e170e"
+    },
+    "Research/Pending/Records/TMP/UE_FULL_RATIONAL_POSITIVE_SOURCE_74_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "d1a944f9a644274f2a9bc3907ed5395ee815fdcc236cb2e79391378b5dee12b0",
+      "role": "record",
+      "sha256": "d25755887e73065977258f8904282dc4ca8c43568ae1f2cec36cfd794ada2328"
+    },
+    "Research/Pending/Records/TMP/UE_OPPOSED_MEMBERSHIP_PARTIAL_STATIC_REVIEW_PAUSED_20261002.md": {
+      "original_sha256": "bc5c6fc9408a86e6f90300fe1cd48f302353373b3851f46da94415315beb50d3",
+      "role": "record",
+      "sha256": "f0c7946cc0c61de50e7e437464258ea44f151e938980a0ac456541dcca2fd608"
+    },
+    "Research/Pending/Records/TMP/UE_QUANTITATIVE_FINITE_CLOCK_PROMOTION_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "26a4c45806d7ed41eba5e6b06733255611db61e5088eeae814e988c9b3fffb94",
+      "role": "record",
+      "sha256": "e9219644a3f2aa965c2f6cba94925ca033d4966a1f3cba3aa496c36cdb2af194"
+    },
+    "Research/Pending/Records/TMP/UE_RATIONAL_EXACT_SOLO_42_NARROW_IMPORTS_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "75064d77e64c73478bd3b9080f090924d36aa6141a15d69933fd6999399e0c4a",
+      "role": "record",
+      "sha256": "91f522bc7b544c81ee4c3d66b6e4a87983ade47534ecdf7d1105acccf6c7679b"
+    },
+    "Research/Pending/Records/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_AXIOMS_20261002.lean.draft": {
+      "original_sha256": "78d3461ef846a5e1fd1c7254b882b70703eeb852b7d51ee2f66ff3bfbcb0a449",
+      "role": "record",
+      "sha256": "78d3461ef846a5e1fd1c7254b882b70703eeb852b7d51ee2f66ff3bfbcb0a449"
+    },
+    "Research/Pending/Records/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_HANDOFF_20261002.md": {
+      "original_sha256": "89d69a71be9e85556d786af0e73aceb0838c347cd68ca235c3e3847499ad087e",
+      "role": "record",
+      "sha256": "aaa6e6a75116cd10c8153d5d14a6b3f11bcb699ca911e2a73d954fd0238a1acf"
+    },
+    "Research/Pending/Records/TMP/UE_RATIONAL_REJECTION_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "5df863a52b0f959d2f4540463e61b67214d2fad58664c74866f18d5a76daa3d9",
+      "role": "record",
+      "sha256": "9c16cc5eb5a175b0e147327558d51dd36d1ee8cc5646a437327944fccc28f1a0"
+    },
+    "Research/Pending/Records/TMP/UE_REFLECTION_BOUNDED_SINGLE_PIVOT_15_16_17_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "7bedc76b1e3131d93d9f4c99d2b3423ac95e21c614db687b9080fb7b2299c7a2",
+      "role": "record",
+      "sha256": "bb00778e0781aeca85285f2e6972aed19481ce1c90c14ac9253403b206e00e18"
+    },
+    "Research/Pending/Records/TMP/UE_REFLECTION_INTEGRAL_AND_REQUIRED_FIXTURES_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "b6b531853f1e4af69dee943d3bda56e678686dfe2f1d30d90abad1f31e35bda9",
+      "role": "record",
+      "sha256": "9d5a99e73669609d569bfa36e59384c573183b31a00478aadc363f7f984a6e9f"
+    },
+    "Research/Pending/Records/TMP/UE_REFLECTION_LITERAL_BOUNDARIES_53_55_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "f320cc44aab04939cadb6602a0435e6e787e29f0117509d344136aaab570e2af",
+      "role": "record",
+      "sha256": "e26dd2ee985c96b24f9f9fefdb98f51e71311489af854337f1da6c1957644a79"
+    },
+    "Research/Pending/Records/TMP/UE_REFLECTION_RATIONAL_REJECTION_37_39_40_41_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "2b614be19da87c4d0d02201284dbfb46f1f93ebba12f7904d20c9bd2cea1453f",
+      "role": "record",
+      "sha256": "02b5d39a6c740f34f7bf47307ccd4b4a903c7973f3fe356aa09d90d578978af2"
+    },
+    "Research/Pending/Records/TMP/UE_SCREENED_FIBER_EXTREMA_63_65_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "00095af26a37b1905d725d6744da42315c8edda36940fbfd8ce14f888e3e4fb1",
+      "role": "record",
+      "sha256": "3e9a43ad9dfcdf22ab81657b09a7bc82a413053a0377509dbb338d095775b554"
+    },
+    "Research/Pending/Records/TMP/UE_SCREENED_POLYNOMIAL_DENSITY_61_62_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "14ed908bb213623a36624613aeaff2afbdaece1e82599ac027dbbb4e1f2c1979",
+      "role": "record",
+      "sha256": "c283895d0110d1d2ace7fee3abd5ba24279fa571f8c15e54ac27f608068c81ff"
+    },
+    "Research/Pending/Records/TMP/UE_SCREENED_RATIONAL_SELECTION_66_67_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "9c06034a03ad4b067e7bccba3966886bf1ace1f0898b4b3d2aff4226739290e0",
+      "role": "record",
+      "sha256": "d15840ab3ed3bdaff81f07fb1dd68eb312d996bf470aeca6ba87f752b148f44d"
+    },
+    "Research/Pending/Records/TMP/UE_SCREENED_SINGLETON_COLLAR_68_73_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "2c62b6baffca4a80ee9014e5c3aac5d49b69422fba067216b4f65a122e0b42ba",
+      "role": "record",
+      "sha256": "4ac81155e3d650c549990446d0c9b88d221a205ec86dcb3a3b83320fa52a75f8"
+    },
+    "Research/Pending/Records/TMP/UE_SCREENED_SOURCE_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "b421e3a9a9163e90d5d63e0cf5196ea0dd4975a881832a7c00a6de36228dbcb8",
+      "role": "record",
+      "sha256": "6273cd4480eb6917127fc9909ed59c50e0202df311ec231dd0fcee6d6602f5a2"
+    },
+    "Research/Pending/Records/TMP/UE_SHAPE_REQUIRED_FIXTURES_48_49_50_54_59_AXIOMS_20261002.lean.draft": {
+      "original_sha256": "bef1f24bb4011f3a521946cd6442e75fa0dfc83b749cba2b550b2f03f223ed54",
+      "role": "record",
+      "sha256": "bef1f24bb4011f3a521946cd6442e75fa0dfc83b749cba2b550b2f03f223ed54"
+    },
+    "Research/Pending/Records/TMP/UE_SHAPE_REQUIRED_FIXTURES_48_49_50_54_59_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "524c70a7aa61869cd89122e70c07ca4708906844403723ff146a59dc58129a63",
+      "role": "record",
+      "sha256": "2af62646203ddb5d93eaf66431e49a52bd32645050fba1ce50aa0597bc890f48"
+    },
+    "Research/Pending/Records/TMP/UE_SINGLE_PIVOT_PACKET_COMPLETION_DEPENDENCIES_20261002.md": {
+      "original_sha256": "4376763deede29be9ab5047c3f07995f6ecf1a1aad8322c8d1aae4019490cfa9",
+      "role": "record",
+      "sha256": "776ab18fe7a89fa68b5fcc8deedb75427910c67ac452dda301266cca23761087"
+    },
+    "Research/Pending/Records/TMP/UE_SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "6fa7efe3e08ad5847982de789cc4c840519b7a7f98eafc2361738fee86f060dc",
+      "role": "record",
+      "sha256": "36bb28db074df48387e0b4e449a3a98445852bbc67c1781546c86e375811f8aa"
+    },
+    "Research/Pending/Records/TMP/UE_SORIN_FLAT_SECURITY_PRIMARY_SOURCE_DISCOVERY_20261002.md": {
+      "original_sha256": "fdc765b7665b5e832a03f5591643b3c112b67f8463277d0b8ce89a47032844f8",
+      "role": "record",
+      "sha256": "8802460c6654812cde3a0f88ab418cf501fd7986d257743d4b1186cbdc4477a5"
+    },
+    "Research/Pending/Records/TMP/UE_SORIN_P4_CURRENT_COMPLETE_DAG_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "4db33fe98f8769847e08ecd4e2646024230df70de81de37ebb57c81c4505e5a9",
+      "role": "record",
+      "sha256": "4f8b6131abc4036b8a746e08c8de416afeb5cebc5e2482f3895ba46cdd82e080"
+    },
+    "Research/Pending/Records/TMP/UE_SORIN_P4_GEOMETRIC_SCHEDULE_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "639ea80fb6b81a9899222753922a0480a3eac99eb2f9ab1d6d3097ac970cdbf3",
+      "role": "record",
+      "sha256": "8349d13c432f00be775cf4891466a972fb6ef8256d24e23ff30bb60bf054f005"
+    },
+    "Research/Pending/Records/TMP/UE_SORIN_STATIC_MINMAX_TRIGGER_SOURCE_REVIEW_20261002.md": {
+      "original_sha256": "d5ce155cf25c15733119545f2904f7167a24ade726571840b62641c55c5006cb",
+      "role": "record",
+      "sha256": "e25bd5784826ac627e02130c576d190bc8a69c83b28f04d55a672e1473257fc7"
+    },
+    "Research/Pending/Records/TMP/UE_SORIN_STRICT_IR_AND_FULL_DIMENSIONAL_FOLK_STATIC_REVIEW_20261002.md": {
+      "original_sha256": "bef4067ce501d16ab97108cbe1d511db1971a33db86dcc09247a5e113b6f1a02",
+      "role": "record",
+      "sha256": "a5dcfed559cf0ff016617655476ceebf2618ec37026ed4ea53dcbb66b4d191c3"
+    },
+    "Research/Pending/Records/UE_COMMON_CALENDAR_INDEPENDENT_REVIEW/STATIC_SOURCE_REVIEW.txt": {
+      "original_sha256": "415572e0d6540eb3b71b6a85814d2cb47b2547055c36b580c3932fb2123d1d28",
+      "role": "record",
+      "sha256": "415572e0d6540eb3b71b6a85814d2cb47b2547055c36b580c3932fb2123d1d28"
+    },
+    "Research/Pending/Records/UE_POTENTIAL_COMPLETION_MATRIX/COMPLETION_MATRIX.md": {
+      "original_sha256": "534adedb156083a50ffc7361367d8a5960d732cfbe77f4e95b5a827f3a52e7c3",
+      "role": "record",
+      "sha256": "7fd7f406c565ff28dfc103e75709fe4fc3b7f52a306cb8406da07d9c2bcf8eee"
+    },
+    "Research/Pending/Records/UE_POTENTIAL_COMPLETION_MATRIX/ORDERED_MANIFEST.json": {
+      "original_sha256": "32b2d2308371826d964b46f6c89477d269cee88586175d6989fd1ebca80843dc",
+      "role": "record",
+      "sha256": "32b2d2308371826d964b46f6c89477d269cee88586175d6989fd1ebca80843dc"
+    },
+    "Research/Pending/Sources/MathUE/Analysis/CoordinateHessianEntries.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/51_CANONICAL_COORDINATE_HESSIAN_ENTRIES.patch"
+      ],
+      "intended_owner": "MathUE/Analysis/CoordinateHessianEntries.lean",
+      "role": "source",
+      "sha256": "0e185a7afbad44073fc5b1f40cadc82b4b5073d7e068f03fc53695b2d380837e"
+    },
+    "Research/Pending/Sources/MathUE/Analysis/Examples/CoupledCubicShape.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/UE_COUPLED_CUBIC/48_COUPLED_CUBIC_SHAPE_FIXTURE.patch"
+      ],
+      "intended_owner": "MathUE/Analysis/Examples/CoupledCubicShape.lean",
+      "role": "source",
+      "sha256": "a33c369499ac15dd90b5fcff93cfb97237f07f8a215878a5fb232bfd53348ce5"
+    },
+    "Research/Pending/Sources/MathUE/Analysis/Examples/NonQLinearFace.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/UE_NONQ_FACE_FIXTURE/50_NON_Q_LINEAR_FACE_FIXTURE.patch"
+      ],
+      "intended_owner": "MathUE/Analysis/Examples/NonQLinearFace.lean",
+      "role": "source",
+      "sha256": "70c7f3076430e9bee97b042b6687e6f0342e49b83e733d2703cebd66fe221fd8"
+    },
+    "Research/Pending/Sources/MathUE/Analysis/Examples/PairedFacePotential.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/46_PAIRED_FACE_POLYNOMIAL_HESSIAN_FIXTURE.patch"
+      ],
+      "intended_owner": "MathUE/Analysis/Examples/PairedFacePotential.lean",
+      "role": "source",
+      "sha256": "3e9a7a764e594b03451c48c7acae2425565851d13a80d94c190fcd5ee94f7742"
+    },
+    "Research/Pending/Sources/MathUE/Analysis/Examples/PairedFacePotentialCanonicalJoins.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/52_PAIRED_CANONICAL_SPECTRUM_AND_MINIMIZING_VERTEX.patch",
+        "Research/Pending/Changes/TMP/UE_PAIRED_MINIMIZING_VERTEX_52_PINNED_PUSH_NOT_20261002.patch"
+      ],
+      "intended_owner": "MathUE/Analysis/Examples/PairedFacePotentialCanonicalJoins.lean",
+      "role": "source",
+      "sha256": "13d6b2236b42d725465bfd00a18580b4f011299633a7d264897620c51797e0e0"
+    },
+    "Research/Pending/Sources/MathUE/Analysis/Examples/ReflectionBoundaryArithmetic.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/47_REFLECTION_AND_MULTIAFFINE_BOUNDARY_ARITHMETIC.patch"
+      ],
+      "intended_owner": "MathUE/Analysis/Examples/ReflectionBoundaryArithmetic.lean",
+      "role": "source",
+      "sha256": "784a0e32bada541c7f6cc1f87f3195d5fffca53256a144cb750958a530549f60"
+    },
+    "Research/Pending/Sources/MathUE/Analysis/MidpointThirdDerivativeIntegral.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/44_EXACT_MIDPOINT_THIRD_DERIVATIVE_INTEGRAL.patch"
+      ],
+      "intended_owner": "MathUE/Analysis/MidpointThirdDerivativeIntegral.lean",
+      "role": "source",
+      "sha256": "dea55132e70a61e2ad3daee9fcdd1ea73f6493fa1e17458d5f993e71b280b575"
+    },
+    "Research/Pending/Sources/MathUE/Analysis/RationalPolynomialCoordinateDerivatives.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/45_RATIONAL_POLYNOMIAL_COORDINATE_DERIVATIVES.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/45A_CANONICAL_BASIS_DERIVATIVE_REUSE.patch"
+      ],
+      "intended_owner": "MathUE/Analysis/RationalPolynomialCoordinateDerivatives.lean",
+      "role": "source",
+      "sha256": "cf9358f2c714fee71b2475c47ee385691644ba5fb947fec9ae99027152d2a0bf"
+    },
+    "Research/Pending/Sources/MathUE/Interval/RationalClosedBoxDensity.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/36_RATIONAL_CLOSED_BOX_DENSITY.patch"
+      ],
+      "intended_owner": "MathUE/Interval/RationalClosedBoxDensity.lean",
+      "role": "source",
+      "sha256": "6d9c101bdc0a85466a041524f636257987fc15652bdea8413003d41064c1ed9b"
+    },
+    "Research/Pending/Sources/MathUE/Interval/RationalPolynomialRationalEvaluation.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/37_RATIONAL_POLYNOMIAL_EVALUATION.patch"
+      ],
+      "intended_owner": "MathUE/Interval/RationalPolynomialRationalEvaluation.lean",
+      "role": "source",
+      "sha256": "9533cd5aa1a5a24e0fd1192f45025181d8cedb189c0c67afbd3a5e73e030a35a"
+    },
+    "Research/Pending/Sources/MathUE/LinearAlgebra/BilinearSegreExclusion.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE.patch",
+        "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE_REPAIR.patch"
+      ],
+      "intended_owner": "MathUE/LinearAlgebra/BilinearSegreExclusion.lean",
+      "role": "source",
+      "sha256": "21fe7ee9a13114cc0fe4189ddb6d2c742120b320b7a8cda48ebad015e156bc65"
+    },
+    "Research/Pending/Sources/MathUE/LinearAlgebra/RectangularCofactorHomogeneous.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_POLYNOMIAL_WITNESS/SCREENED_POLYNOMIAL_DEGREES.patch"
+      ],
+      "intended_owner": "MathUE/LinearAlgebra/RectangularCofactorHomogeneous.lean",
+      "role": "source",
+      "sha256": "1f83f022b15a333c294f0ddde63b9cbfb50b9e2fb50618636d816b1636874f7f"
+    },
+    "Research/Pending/Sources/MathUE/LinearAlgebra/RectangularCofactorKernel.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE.patch",
+        "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE_REPAIR.patch"
+      ],
+      "intended_owner": "MathUE/LinearAlgebra/RectangularCofactorKernel.lean",
+      "role": "source",
+      "sha256": "81e69eed9adf61a54af860bc5f4edf5e618758c11aba8f71ddf456e26e47c976"
+    },
+    "Research/Pending/Sources/MathUE/LinearAlgebra/RectangularCofactorMap.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_ROOT_POLYNOMIAL/SCREENED_ROOT_POLYNOMIAL.patch"
+      ],
+      "intended_owner": "MathUE/LinearAlgebra/RectangularCofactorMap.lean",
+      "role": "source",
+      "sha256": "2091aad1302f521096563eaa0788b0299c4e0a7984b3bb7698e6751cb77d59aa"
+    },
+    "Research/Pending/Sources/MathUE/Order/MutualSupremumApproximation.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/00_MUTUAL_SUPREMUM_OWNER.patch",
+        "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/00A_MUTUAL_SUPREMUM_DERIVED_NONEMPTY.patch"
+      ],
+      "intended_owner": "MathUE/Order/MutualSupremumApproximation.lean",
+      "role": "source",
+      "sha256": "8b59643b923d11c5ae73d9a1908fc5c61b6ffd1d9fd991d008d4e94cee87f371"
+    },
+    "Research/Pending/Sources/MathUE/PMFProduct/BooleanTwoCoordinateExpectation.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS.patch"
+      ],
+      "intended_owner": "MathUE/PMFProduct/BooleanTwoCoordinateExpectation.lean",
+      "role": "source",
+      "sha256": "286453be85f2d00fef64889bd6310293906522893c5c68d4cd9d04a99f9aaf86"
+    },
+    "Research/Pending/Sources/MathUE/Polynomial/MvPolynomialNonvanishing.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/61_MVPOLYNOMIAL_NONVANISHING.patch"
+      ],
+      "intended_owner": "MathUE/Polynomial/MvPolynomialNonvanishing.lean",
+      "role": "source",
+      "sha256": "0b0edf2341648a157ff1620bc20483b4c0d2f6e122c938e4a783be982ae3e63a"
+    },
+    "Research/Pending/Sources/MathUE/RealSeries/GeometricAffineSchedule.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/002_GEOMETRIC_AFFINE_SCHEDULE.patch"
+      ],
+      "intended_owner": "MathUE/RealSeries/GeometricAffineSchedule.lean",
+      "role": "source",
+      "sha256": "32173945227b46295bdcac14a40ff8967511d2702657a61536a61347edb3bd6b"
+    },
+    "Research/Pending/Sources/MathUE/SignedAffineRowComparison.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/001_SIGNED_AFFINE_ROW_COMPARISON.patch"
+      ],
+      "intended_owner": "MathUE/SignedAffineRowComparison.lean",
+      "role": "source",
+      "sha256": "59c81ec403055487ab9d3a616b7b0cc44f70b9b74f0340d4b93d7508cd3f8bf5"
+    },
+    "Research/Pending/Sources/MathUE/SignedAffineRowRegression.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/002_OPPOSED_AFFINE_ROW_REGRESSION.patch"
+      ],
+      "intended_owner": "MathUE/SignedAffineRowRegression.lean",
+      "role": "source",
+      "sha256": "bc30e24506647e569aa53b47c39c93afa890678b47d61d52b79cfb8cb3cea906"
+    },
+    "Research/Pending/Sources/MathUE/Topology/CompactNearZeroCollar.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/71_FIXED_GAME_SINGLETON_COLLAR.patch"
+      ],
+      "intended_owner": "MathUE/Topology/CompactNearZeroCollar.lean",
+      "role": "source",
+      "sha256": "67313aa195234dad0ec79d6eaadb2007983217581c88b7f27c9c6d0e561f1ea7"
+    },
+    "Research/Pending/Sources/MathUE/Topology/ConnectedConvexHullAffineStep.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/001_CONNECTED_AFFINE_STEP.patch",
+        "Research/Pending/Changes/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/001_NONDEPRECATED_ITE_PROOF.patch",
+        "Research/Pending/Changes/TMP/UE_P4_AFFINE_STEP_ITE_TRUE_OVERLAY_20261002.patch"
+      ],
+      "intended_owner": "MathUE/Topology/ConnectedConvexHullAffineStep.lean",
+      "role": "source",
+      "sha256": "c4d959753e0425d48918874a55a806742a99dd77ca6ddad089aa5cb0e1123f17"
+    },
+    "Research/Pending/Sources/MathUE/Topology/ConnectedConvexHullRepresentation.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/001_CONNECTED_CONVEX_HULL_REPRESENTATION.patch"
+      ],
+      "intended_owner": "MathUE/Topology/ConnectedConvexHullRepresentation.lean",
+      "role": "source",
+      "sha256": "632230120c1212d84c4ed6f6e9c284a1549c85965bf9f4bf7572fc85d387d0d4"
+    },
+    "Research/Pending/Sources/MathUE/Topology/UniformLipschitzFiberClosure.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/70_JOINT_CARRIER_REWARD_GRAPH.patch"
+      ],
+      "intended_owner": "MathUE/Topology/UniformLipschitzFiberClosure.lean",
+      "role": "source",
+      "sha256": "83f76ac6210670b578a733e5c35070d602709576fc3ca73b5a00c7a7db814df3"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotNormalization.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/16_ACTUAL_BOUNDED_SINGLE_PIVOT.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotNormalization.lean",
+      "role": "source",
+      "sha256": "8427654cca4a9a3fe23e081f73d1dd9b9b30d5180e69d483781b7db0335d89fd"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotPolynomialObstruction.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/17_DECISION_PRESERVING_POLYNOMIAL_JOIN.patch",
+        "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/001_UNIT17_PINNED_ITE_NAMES.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotPolynomialObstruction.lean",
+      "role": "source",
+      "sha256": "baffd10885b9bc26ad9252755fd03be5995d5feb97a7677f599f878bac72d8f8"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/FullRationalScreenedSource.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/001_FULL_RATIONAL_SCREENED_SOURCE.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/FullRationalScreenedSource.lean",
+      "role": "source",
+      "sha256": "ca3d8fdf4701bb7d9686d256934e11e5389ed6b62d6e12f3af5d9e252ca90633"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/MembershipStretchOpposedSource.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/04_RAW_SOURCE_OPPOSED_REVERSAL_JOIN.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/MembershipStretchOpposedSource.lean",
+      "role": "source",
+      "sha256": "5e6b094f872f33051432f256c2978d3621df390fdc752972a732c89c714886c9"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/MembershipStretchSureCoalitionSource.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/03_MEMBERSHIP_STRETCH_SURE_COALITION_SOURCE.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/MembershipStretchSureCoalitionSource.lean",
+      "role": "source",
+      "sha256": "92861ada9f3bd8c4ef736e2f864ad2c75d1d4699bb281e6286625a504f1f3c07"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/MembershipStretchWorstTableSource.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/01_WORST_TABLE_MEMBERSHIP_STRETCH_SOURCE.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/MembershipStretchWorstTableSource.lean",
+      "role": "source",
+      "sha256": "be1dfc2123648f6a9d1d4ce434bf219db22844e96684ae37f4a22fe3d1d59642"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/PositiveRationalScreenedFiberEntrance.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/66_POSITIVE_RATIONAL_SCREENED_FIBER_ENTRANCE.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/PositiveRationalScreenedFiberEntrance.lean",
+      "role": "source",
+      "sha256": "d4b896be2e9bac60f37100d6fd02b7ea5e4c061396c2c503c503aa6ffd7fbb5b"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/RationalScreenedSingletonFiberCollar.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/73_RATIONAL_SCREENED_SOURCE_COLLAR_JOIN.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/RationalScreenedSingletonFiberCollar.lean",
+      "role": "source",
+      "sha256": "944f89093850d1f8c09260c207345287894e567b3f837458c15a8e2151136051"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/RationalScreenedSingletonFiberSelection.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/67_RATIONAL_SCREENED_SINGLETON_FIBER_SELECTION.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/RationalScreenedSingletonFiberSelection.lean",
+      "role": "source",
+      "sha256": "3774e2ad47ec4c69769f2a6c0a82c4ef985490a778ca388ca1576457739b11e7"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedMinimumSingletonCollar.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/71_FIXED_GAME_SINGLETON_COLLAR.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedMinimumSingletonCollar.lean",
+      "role": "source",
+      "sha256": "d48c793eb70d3c9846c9bf6821b9d8e828a2baeff8d7e19b6988818917c51ca5"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedMinimumSingletonMass.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/69_SCREENED_MINIMUM_SINGLETON_MASS.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedMinimumSingletonMass.lean",
+      "role": "source",
+      "sha256": "d13ae9f015b74a974b36f31362936efca2d6ad88ae0571cb38c990e45d7a3297"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedRootBranchLabels.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/OWN_SINGLETON_REWARD_CHART/SCREENED_ROOT_BRANCH_LABELS.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedRootBranchLabels.lean",
+      "role": "source",
+      "sha256": "3a2944f8c566598a1b54ef6203bcd7d1aad4e2f92059131c26ec09e8171b9a41"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedRootCompactMinimum.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/64_SCREENED_ROOT_COMPACT_MINIMUM.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedRootCompactMinimum.lean",
+      "role": "source",
+      "sha256": "09c7465a28325ff152596abf5f10c4d0c92c8fe35c5df12e6444d2ee2e1bec51"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedRootDebtBranches.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_ROOT_SOURCE/SCREENED_ROOT_DEBT_BRANCHES.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedRootDebtBranches.lean",
+      "role": "source",
+      "sha256": "2d6a3d58fbe385bd2eaab2472af1a29ced2953653941f27b6e20d509ff27f811"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedRootFourCorners.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS.patch",
+        "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS_REPAIR.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedRootFourCorners.lean",
+      "role": "source",
+      "sha256": "894e8c357e6e68062b52f4c5b125e3334e38b71d331262fee50c6561673f6dc6"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomial.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_ROOT_POLYNOMIAL/SCREENED_ROOT_POLYNOMIAL.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomial.lean",
+      "role": "source",
+      "sha256": "4038cffc85a49a622504a0213377cc91cecf17a40a8a9f852623f9aee54aa853"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomialDegree.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_POLYNOMIAL_WITNESS/SCREENED_POLYNOMIAL_DEGREES.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomialDegree.lean",
+      "role": "source",
+      "sha256": "9d36864e7ba9a65f2930a68384fffc3f8364a3c687239fd33c558a757d5aca9f"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomialDensity.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/62_SCREENED_ROOT_POLYNOMIAL_DENSITY.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomialDensity.lean",
+      "role": "source",
+      "sha256": "28c4e51f5ff76ebb94e940ab5fc91d07d26a3ccd243bb3fd3ff8af12a7a47e68"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomialWitness.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_POLYNOMIAL_WITNESS/SCREENED_POLYNOMIAL_WITNESSES.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedRootPolynomialWitness.lean",
+      "role": "source",
+      "sha256": "535cd271f0d22b7bf170c86a7b1c545f1b83f1177df5549451191cc1783ebfed"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedRootSurePairOrder.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_ROOT_POLYNOMIAL/SCREENED_ROOT_POLYNOMIAL.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedRootSurePairOrder.lean",
+      "role": "source",
+      "sha256": "4f2a7f9c90d81feb544f1cba09a0dbbcca722b74dfdadd7c24a6c42242a50e02"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedSingletonFiberStrictGap.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/65_SCREENED_SINGLETON_FIBER_STRICT_GAP.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedSingletonFiberStrictGap.lean",
+      "role": "source",
+      "sha256": "ec1f3ff16a0e3306cdfced851b2ef06f50d9ff4a41e6892cf4831c4c6add2229"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ScreenedSingletonFiberUniformCollar.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/72_FIBER_UNIFORM_SINGLETON_COLLAR.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ScreenedSingletonFiberUniformCollar.lean",
+      "role": "source",
+      "sha256": "7b2ac36a8114f43cbd3f93c3cc0745d7905666c7164d68b4806d060068a7779c"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/SingleOptionalMembershipRows.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/02_SINGLE_OPTIONAL_FULL_DEBT_ROWS.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/SingleOptionalMembershipRows.lean",
+      "role": "source",
+      "sha256": "36d6809adb30a0dce7173d0ebf038a048c2d33e0d3184f8fd724fef4322ede17"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/SureCoalitionExploitability.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/01_SURE_COALITION_FULL_EXPLOITABILITY.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/SureCoalitionExploitability.lean",
+      "role": "source",
+      "sha256": "f2ace1a6efc38411614e9b3d152a127fbc754093463842157dec30e066bdd94f"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/SureCoalitionExploitabilityMinimum.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/02_SURE_COALITION_MINIMUM.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/SureCoalitionExploitabilityMinimum.lean",
+      "role": "source",
+      "sha256": "0747f919a3deac349b4462d0fe5da445f1a5e7760ce1af3c58c01bbe099bf017"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/SureOpponentRewardFiber.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/SureOpponentRewardFiber.lean",
+      "role": "source",
+      "sha256": "57bbdf5581affd3fea8034cb53bd18aef5a81180289c5f7749886af83dcdede3"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticLawRewardGraph.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/70_JOINT_CARRIER_REWARD_GRAPH.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticLawRewardGraph.lean",
+      "role": "source",
+      "sha256": "6eba70e3e244042ec181ed55791645c2eb98208ed370dcaaebc5598f0202c07e"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ThreeSureOpposedMembershipReversals.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/03_ACTUAL_OPPOSED_OPTIONAL_REVERSALS.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ThreeSureOpposedMembershipReversals.lean",
+      "role": "source",
+      "sha256": "a2f7cb2318d46b059deb2cfdb7c8bfb5f62a796c793c57a2ccedbf6cd9d75898"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonMaximumMinimumNever.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/68_ZERO_SINGLETON_MINIMUM_NEVER.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonMaximumMinimumNever.lean",
+      "role": "source",
+      "sha256": "f1aee65bd5040b4bb2c7209a1cf531f619c9f16dc84b842dd2d12e69be58617a"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Examples/CollisionAdjustedProbeBoundary.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/49_COLLISION_ADJUSTED_PROBE_BOUNDARY_RENAMED_ADD.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Examples/CollisionAdjustedProbeBoundary.lean",
+      "role": "source",
+      "sha256": "ec76de60ed6cd34d2e5555360dc1ca79643f0c6d70cd387fdc58110e7fd0c5de"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Examples/ConstantSignedNormalTable.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/53_CONSTANT_SIGNED_NORMAL_TABLE.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Examples/ConstantSignedNormalTable.lean",
+      "role": "source",
+      "sha256": "a956ad83a349f5dc1a33b06e03ec985e47e42397b7d6722c1bcb2fd826c169c0"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Examples/ExactRootPotentialPlayerCountBoundary.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59_EXACT_ROOT_PLAYER_COUNT_BOUNDARY_RENAMED_ADD.patch",
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59A_EXPLICIT_ZERO_REWARD_ARGUMENTS_RETARGETED.patch",
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59B_PUBLIC_SOLO_IDENTITY_RETARGETED.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Examples/ExactRootPotentialPlayerCountBoundary.lean",
+      "role": "source",
+      "sha256": "cceb6f5d3d9b7e361565958717e5f10a7c8b26804e68caec35939bc3fb12da96"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Examples/PairedFacePotentialBoundedCompletion.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/55_PAIRED_BOUNDED_COMPLETION_FULL_ROOT_EXCLUSION.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Examples/PairedFacePotentialBoundedCompletion.lean",
+      "role": "source",
+      "sha256": "cbbf805c0ff066644dc555295a00c17f324b9cac90f23ea1c1e629f861f43931"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/OwnSingletonRewardChart.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/OWN_SINGLETON_REWARD_CHART/OWN_SINGLETON_REWARD_CHART.patch",
+        "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/002_OWN_SINGLETON_CHART_PINNED_DITE_NAMES.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/OwnSingletonRewardChart.lean",
+      "role": "source",
+      "sha256": "bc3bf4bf32f0bc361ec7126a63c06dce79326fd2d55dd2f0c7c4ad6154235f85"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/OwnSingletonRewardFiberMaximum.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/63_OWN_SINGLETON_FIBER_MAXIMUM.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/OwnSingletonRewardFiberMaximum.lean",
+      "role": "source",
+      "sha256": "bc298d304677e0577c54f37ab7351d22b92040fbe932f319d838f2a7c077947a"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Paths/CommonCalendarSmoothMinimum.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/03_ACTUAL_COMMON_CALENDAR_SMOOTH_MINIMUM.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Paths/CommonCalendarSmoothMinimum.lean",
+      "role": "source",
+      "sha256": "f0e6cd346618f99bdbf03e76c824ebf5aacec72d3a34739bc64afa995eaef670"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Paths/CommonCalendarTesterPool.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/02_ACTUAL_COMMON_CALENDAR_TESTER_POOL.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Paths/CommonCalendarTesterPool.lean",
+      "role": "source",
+      "sha256": "f02e3faef3b8381a03c6bd1fe8fccae3f49d1f99e728a38cdcdda1a5c5be1af6"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Paths/CommonQuantileClockApproximation.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/03_COMMON_QUANTILE_APPROXIMATION_PROMOTION.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Paths/CommonQuantileClockApproximation.lean",
+      "role": "source",
+      "sha256": "4bf3d270062c479248417c425dfb0d12fd94abf14063443c856054ae2216090f"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/02_COMMON_QUANTILE_TRANSPORT_PROMOTION.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean",
+      "role": "source",
+      "sha256": "9de81b977232f743c394e42835d808021188d934c37245387b00107dd4475416"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Paths/FiniteCalendarReplyPayoffChart.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/01_FINITE_CALENDAR_REPLY_PAYOFF_CHART.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Paths/FiniteCalendarReplyPayoffChart.lean",
+      "role": "source",
+      "sha256": "3a462cb7d21680713c5372e597e46de38b60e6b9f4dc8d086edc4733f5758c60"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Paths/FiniteClockTerminalSemantics.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/01_FINITE_CLOCK_SEMANTIC_PROMOTION.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Paths/FiniteClockTerminalSemantics.lean",
+      "role": "source",
+      "sha256": "50dece401bcdc2d7676e46e07778dc9b2e1a51008de30bf87722845d0f1176bc"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Paths/QuantitativeFiniteClockSource.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/04_ACTUAL_FULL_CAP_FINITE_CLOCK_SOURCE.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Paths/QuantitativeFiniteClockSource.lean",
+      "role": "source",
+      "sha256": "90dd55c5485c7615b3a01f9cd5bfa7ca77d98b3a5e632c72cf60141d89f71b25"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Projective/ExcludedPolynomialRationalRejection.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/40_ACTUAL_EXCLUDED_POLYNOMIAL_RATIONAL_REJECTION.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Projective/ExcludedPolynomialRationalRejection.lean",
+      "role": "source",
+      "sha256": "8e43b44278e56e345fa00a6e89f29b62db11b57247561ae4d50a26f8ff5999fe"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Projective/FullExactRootPotentialChargeScale.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/54_POSITIVE_CHARGE_RESCALE.patch",
+        "Research/Pending/Changes/TMP/UE_FULL_EXACT_CHARGE_54_FRECHET_DOMAIN_REPAIR_20261002.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Projective/FullExactRootPotentialChargeScale.lean",
+      "role": "source",
+      "sha256": "1b3b44e671d866f82d2f01cdfb2683a4f36fde485ebd607a1b36c991bc58b57e"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Projective/RationalExactSoloRejection.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/42_RATIONAL_EXACT_SOLO_REJECTION.patch",
+        "Research/Pending/Changes/TMP/UE_RATIONAL_EXACT_SOLO_42_NARROW_PROBE_IMPORTS_20261002.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Projective/RationalExactSoloRejection.lean",
+      "role": "source",
+      "sha256": "59a2b1b80b2df5f8b281587186c8946717e3eaf3c8799603aa1c2291bba6201c"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Projective/RationalPotentialRejectionSearch.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/41_EXHAUSTIVE_RATIONAL_REJECTION_SEARCH.patch",
+        "Research/Pending/Changes/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_SOUNDNESS_20261002.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Projective/RationalPotentialRejectionSearch.lean",
+      "role": "source",
+      "sha256": "54e5995b6dd323e9f864b4910648d8521d7f1eefbe532efe7fce031c167733e7"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Projective/RationalRobustRejectionDensity.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/39_RATIONAL_ROBUST_REJECTION_DENSITY.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Projective/RationalRobustRejectionDensity.lean",
+      "role": "source",
+      "sha256": "9f4c042fda41c3f43ad5f493e322d056454e5881159e699d261cc5782c065ffb"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Root/RationalBoxedEdge.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/38_RATIONAL_BOXED_ROOT_INTERFACES.patch",
+        "Research/Pending/Changes/TMP/UE_RATIONAL_BOXED_ROOT_38_CANONICAL_BERNOULLI_REUSE_20261002.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Root/RationalBoxedEdge.lean",
+      "role": "source",
+      "sha256": "47fcf61929f593a050c5476b23fc398c50877d825f41323f783ad72a8f0b3568"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Terminal/RationalPositiveExploitabilityApproximation.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/74_FULL_RATIONAL_POSITIVE_ETA_SOURCE.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Terminal/RationalPositiveExploitabilityApproximation.lean",
+      "role": "source",
+      "sha256": "8f8b9216e484e6618f7a9f6c52f9cde6b64d93962a65f3719085666471deaab7"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Terminal/StrictUnitRewardScale.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/66_POSITIVE_RATIONAL_SCREENED_FIBER_ENTRANCE.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Terminal/StrictUnitRewardScale.lean",
+      "role": "source",
+      "sha256": "2a6c5120b5e00c1c28ac041fa032d755549e5a471b88cdff32e429a8a21791d3"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityContinuity.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/63_OWN_SINGLETON_FIBER_MAXIMUM.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityContinuity.lean",
+      "role": "source",
+      "sha256": "d3b63bcb3d5bb248ed3df0728c76992b49e6123842b9e60014dfd16672b4a82a"
+    },
+    "Research/Pending/Sources/UniformEquilibrium/Quitting/Transform/PositivePayoffScaling.lean.draft": {
+      "changes": [
+        "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/15_LITERAL_POSITIVE_SCALING.patch"
+      ],
+      "intended_owner": "UniformEquilibrium/Quitting/Transform/PositivePayoffScaling.lean",
+      "role": "source",
+      "sha256": "9e02f0dcb93ddf5da9a415e6e3b83d4f7dc22e78ac1d18828ece0843fdccd999"
+    }
+  },
+  "baseline_check": "Silent full default Lean build passed before these unapplied drafts were preserved; this does not check them.",
+  "baseline_commit": "416c282edac4a1d2be26f228d39754d6f696bc17",
+  "baseline_owner_hashes": {
+    "Literature/Sorin1986.lean": "fba6f32df9e627384edd4e5e21fec63a5e6d14e5eef83e9b07d462b1439bdfa5",
+    "MathUE.lean": "da0db723744cb4fd625a028ce4cca573210df3e588f42dd318d57414df090156",
+    "MathUE/Analysis/MidpointThirdDerivative.lean": "3142f89aa0b7fbb0cfea047af0ff4e044aebe8f478fe068454fd2bd0fbbb5a2a",
+    "Research/Quitting/EscapeAwareQuantileClockHierarchy.lean": "3554a83750b5deddfcd09b4ccaae1ad45142992520b50615dd7b9055d61087ab",
+    "Research/Quitting/EscapeAwareQuantileClockTransport.lean": "b7c7d43cff024ddaaecb144ea849db993c4665121d9ec91b322c8a8c0ae563bd",
+    "Research/Quitting/FiniteClockTerminalSemantics.lean": "50dece401bcdc2d7676e46e07778dc9b2e1a51008de30bf87722845d0f1176bc",
+    "UniformEquilibrium.lean": "d682b54a1a2c22f348ed10ed3f0e48bebd049e39887399c306fb778a41fb24ac",
+    "UniformEquilibrium/Diagnostics.lean": "e3a2a8bac6f3565ee8f81f27217ff68c0275e7281a20f70948c8494d68369174",
+    "UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Chart.lean": "2bf9cf3717b3d79beb4b1c7a410ec406d6ee59d50c9f09aa94e216d11817a2f0",
+    "UniformEquilibrium/Quitting/Cycles/PairedCycleFin4OpenRegion.lean": "eabaf539a11b168fc1b3c5b99cb2c83dd9e21e07abc6781a912fa63298704728"
+  },
+  "legacy_paths": {
+    "/tmp/UE_COMMON_CALENDAR_LIBRARY_DISCOVERY_20261002.md": "Research/Pending/Records/TMP/UE_COMMON_CALENDAR_LIBRARY_DISCOVERY_20261002.md",
+    "/tmp/UE_CONNECTED_CONVEX_HULL_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_CONNECTED_CONVEX_HULL_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_FULL_EXACT_CHARGE_54_FRECHET_DOMAIN_REPAIR_20261002.patch": "Research/Pending/Changes/TMP/UE_FULL_EXACT_CHARGE_54_FRECHET_DOMAIN_REPAIR_20261002.patch",
+    "/tmp/UE_FULL_RATIONAL_POSITIVE_SOURCE_74_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_FULL_RATIONAL_POSITIVE_SOURCE_74_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_OPPOSED_MEMBERSHIP_PARTIAL_STATIC_REVIEW_PAUSED_20261002.md": "Research/Pending/Records/TMP/UE_OPPOSED_MEMBERSHIP_PARTIAL_STATIC_REVIEW_PAUSED_20261002.md",
+    "/tmp/UE_P4_AFFINE_STEP_ITE_TRUE_OVERLAY_20261002.patch": "Research/Pending/Changes/TMP/UE_P4_AFFINE_STEP_ITE_TRUE_OVERLAY_20261002.patch",
+    "/tmp/UE_PAIRED_MINIMIZING_VERTEX_52_PINNED_PUSH_NOT_20261002.patch": "Research/Pending/Changes/TMP/UE_PAIRED_MINIMIZING_VERTEX_52_PINNED_PUSH_NOT_20261002.patch",
+    "/tmp/UE_PLAYER_BOUNDARY_59_PUBLIC_SOLO_IDENTITY_20261002.patch": "Research/Pending/Changes/TMP/UE_PLAYER_BOUNDARY_59_PUBLIC_SOLO_IDENTITY_20261002.patch",
+    "/tmp/UE_QUANTITATIVE_FINITE_CLOCK_PROMOTION_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_QUANTITATIVE_FINITE_CLOCK_PROMOTION_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_RATIONAL_BOXED_ROOT_38_CANONICAL_BERNOULLI_REUSE_20261002.patch": "Research/Pending/Changes/TMP/UE_RATIONAL_BOXED_ROOT_38_CANONICAL_BERNOULLI_REUSE_20261002.patch",
+    "/tmp/UE_RATIONAL_EXACT_SOLO_42_NARROW_IMPORTS_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_RATIONAL_EXACT_SOLO_42_NARROW_IMPORTS_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_RATIONAL_EXACT_SOLO_42_NARROW_PROBE_IMPORTS_20261002.patch": "Research/Pending/Changes/TMP/UE_RATIONAL_EXACT_SOLO_42_NARROW_PROBE_IMPORTS_20261002.patch",
+    "/tmp/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_AXIOMS_20261002.lean": "Research/Pending/Records/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_AXIOMS_20261002.lean.draft",
+    "/tmp/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_HANDOFF_20261002.md": "Research/Pending/Records/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_HANDOFF_20261002.md",
+    "/tmp/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_SOUNDNESS_20261002.patch": "Research/Pending/Changes/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_SOUNDNESS_20261002.patch",
+    "/tmp/UE_RATIONAL_REJECTION_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_RATIONAL_REJECTION_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_REFLECTION_BOUNDED_SINGLE_PIVOT_15_16_17_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_REFLECTION_BOUNDED_SINGLE_PIVOT_15_16_17_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_REFLECTION_INTEGRAL_AND_REQUIRED_FIXTURES_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_REFLECTION_INTEGRAL_AND_REQUIRED_FIXTURES_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_REFLECTION_LITERAL_BOUNDARIES_53_55_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_REFLECTION_LITERAL_BOUNDARIES_53_55_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_REFLECTION_RATIONAL_REJECTION_37_39_40_41_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_REFLECTION_RATIONAL_REJECTION_37_39_40_41_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SCREENED_FIBER_EXTREMA_63_65_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SCREENED_FIBER_EXTREMA_63_65_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SCREENED_POLYNOMIAL_DENSITY_61_62_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SCREENED_POLYNOMIAL_DENSITY_61_62_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SCREENED_RATIONAL_SELECTION_66_67_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SCREENED_RATIONAL_SELECTION_66_67_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SCREENED_SINGLETON_COLLAR_68_73_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SCREENED_SINGLETON_COLLAR_68_73_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SCREENED_SOURCE_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SCREENED_SOURCE_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SHAPE_REQUIRED_FIXTURES_48_49_50_54_59_AXIOMS_20261002.lean": "Research/Pending/Records/TMP/UE_SHAPE_REQUIRED_FIXTURES_48_49_50_54_59_AXIOMS_20261002.lean.draft",
+    "/tmp/UE_SHAPE_REQUIRED_FIXTURES_48_49_50_54_59_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SHAPE_REQUIRED_FIXTURES_48_49_50_54_59_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SINGLE_PIVOT_PACKET_COMPLETION_DEPENDENCIES_20261002.md": "Research/Pending/Records/TMP/UE_SINGLE_PIVOT_PACKET_COMPLETION_DEPENDENCIES_20261002.md",
+    "/tmp/UE_SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SORIN_FLAT_SECURITY_PRIMARY_SOURCE_DISCOVERY_20261002.md": "Research/Pending/Records/TMP/UE_SORIN_FLAT_SECURITY_PRIMARY_SOURCE_DISCOVERY_20261002.md",
+    "/tmp/UE_SORIN_P4_CURRENT_COMPLETE_DAG_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SORIN_P4_CURRENT_COMPLETE_DAG_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SORIN_P4_GEOMETRIC_SCHEDULE_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SORIN_P4_GEOMETRIC_SCHEDULE_STATIC_REVIEW_20261002.md",
+    "/tmp/UE_SORIN_STATIC_MINMAX_TRIGGER_SOURCE_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SORIN_STATIC_MINMAX_TRIGGER_SOURCE_REVIEW_20261002.md",
+    "/tmp/UE_SORIN_STRICT_IR_AND_FULL_DIMENSIONAL_FOLK_STATIC_REVIEW_20261002.md": "Research/Pending/Records/TMP/UE_SORIN_STRICT_IR_AND_FULL_DIMENSIONAL_FOLK_STATIC_REVIEW_20261002.md",
+    "/tmp/bounded-normalization-static-review.gN3fEM1P/REVIEW.txt": "Research/Pending/Records/BOUNDED_NORMALIZATION_STATIC_REVIEW/REVIEW.txt",
+    "/tmp/connected-convex-hull-representation.hYZuV5t9/001_CONNECTED_CONVEX_HULL_REPRESENTATION.patch": "Research/Pending/Changes/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/001_CONNECTED_CONVEX_HULL_REPRESENTATION.patch",
+    "/tmp/connected-convex-hull-representation.hYZuV5t9/002_MATHUE_UMBRELLA.patch": "Research/Pending/Changes/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/002_MATHUE_UMBRELLA.patch",
+    "/tmp/connected-convex-hull-representation.hYZuV5t9/AXIOMS.lean": "Research/Pending/Records/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/AXIOMS.lean.draft",
+    "/tmp/connected-convex-hull-representation.hYZuV5t9/SOURCE_AND_DEPENDENCIES.txt": "Research/Pending/Records/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/SOURCE_AND_DEPENDENCIES.txt",
+    "/tmp/convex-geometric-schedule.upl3Iu3u/001_CONNECTED_AFFINE_STEP.patch": "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/001_CONNECTED_AFFINE_STEP.patch",
+    "/tmp/convex-geometric-schedule.upl3Iu3u/002_GEOMETRIC_AFFINE_SCHEDULE.patch": "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/002_GEOMETRIC_AFFINE_SCHEDULE.patch",
+    "/tmp/convex-geometric-schedule.upl3Iu3u/003_SORIN_P4_AND_SCHEDULE_DELEGATES.patch": "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/003_SORIN_P4_AND_SCHEDULE_DELEGATES.patch",
+    "/tmp/convex-geometric-schedule.upl3Iu3u/004_MATHUE_UMBRELLA.patch": "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/004_MATHUE_UMBRELLA.patch",
+    "/tmp/convex-geometric-schedule.upl3Iu3u/AXIOMS.lean": "Research/Pending/Records/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/AXIOMS.lean.draft",
+    "/tmp/convex-geometric-schedule.upl3Iu3u/SOURCE_AND_DEPENDENCIES.txt": "Research/Pending/Records/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/SOURCE_AND_DEPENDENCIES.txt",
+    "/tmp/own-singleton-reward-chart.fIa1qX/OWN_SINGLETON_REWARD_CHART.patch": "Research/Pending/Changes/OWN_SINGLETON_REWARD_CHART/OWN_SINGLETON_REWARD_CHART.patch",
+    "/tmp/own-singleton-reward-chart.fIa1qX/SCREENED_ROOT_BRANCH_LABELS.patch": "Research/Pending/Changes/OWN_SINGLETON_REWARD_CHART/SCREENED_ROOT_BRANCH_LABELS.patch",
+    "/tmp/rectangular-cofactor-kernel.akNW24/RECTANGULAR_COFACTOR_SEGRE.patch": "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE.patch",
+    "/tmp/rectangular-cofactor-kernel.akNW24/RECTANGULAR_COFACTOR_SEGRE_REPAIR.patch": "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE_REPAIR.patch",
+    "/tmp/screened-polynomial-witness.4kdar9/SCREENED_POLYNOMIAL_DEGREES.patch": "Research/Pending/Changes/SCREENED_POLYNOMIAL_WITNESS/SCREENED_POLYNOMIAL_DEGREES.patch",
+    "/tmp/screened-polynomial-witness.4kdar9/SCREENED_POLYNOMIAL_WITNESSES.patch": "Research/Pending/Changes/SCREENED_POLYNOMIAL_WITNESS/SCREENED_POLYNOMIAL_WITNESSES.patch",
+    "/tmp/screened-root-four-corners.cIBcxx/SCREENED_ROOT_FOUR_CORNERS.patch": "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS.patch",
+    "/tmp/screened-root-four-corners.cIBcxx/SCREENED_ROOT_FOUR_CORNERS_REPAIR.patch": "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS_REPAIR.patch",
+    "/tmp/screened-root-polynomial.qdx5Fg/SCREENED_ROOT_POLYNOMIAL.patch": "Research/Pending/Changes/SCREENED_ROOT_POLYNOMIAL/SCREENED_ROOT_POLYNOMIAL.patch",
+    "/tmp/screened-root-source.xNVVKd/SCREENED_ROOT_DEBT_BRANCHES.patch": "Research/Pending/Changes/SCREENED_ROOT_SOURCE/SCREENED_ROOT_DEBT_BRANCHES.patch",
+    "/tmp/sorin-asymmetric-critical-constructors.MzUuFU68/001_GENERALIZED_ACTUAL_GRIM_ADAPTER.patch": "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/001_GENERALIZED_ACTUAL_GRIM_ADAPTER.patch",
+    "/tmp/sorin-asymmetric-critical-constructors.MzUuFU68/002_STATIONARY_CRITICAL_CONSTRUCTION.patch": "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/002_STATIONARY_CRITICAL_CONSTRUCTION.patch",
+    "/tmp/sorin-asymmetric-critical-constructors.MzUuFU68/003_ALTERNATING_CRITICAL_CONSTRUCTION.patch": "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/003_ALTERNATING_CRITICAL_CONSTRUCTION.patch",
+    "/tmp/sorin-asymmetric-critical-constructors.MzUuFU68/004_PINNED_ADDITIVE_ORDER_NORMALIZATION.patch": "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/004_PINNED_ADDITIVE_ORDER_NORMALIZATION.patch",
+    "/tmp/sorin-asymmetric-critical-constructors.MzUuFU68/005_P15_EXACT_CONTINUATION_COEFFICIENT.patch": "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/005_P15_EXACT_CONTINUATION_COEFFICIENT.patch",
+    "/tmp/sorin-asymmetric-critical-constructors.MzUuFU68/AXIOMS_AND_ACTUAL_CONSUMERS_AFTER_CHECKS.lean": "Research/Pending/Records/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/AXIOMS_AND_ACTUAL_CONSUMERS_AFTER_CHECKS.lean.draft",
+    "/tmp/sorin-asymmetric-critical-constructors.MzUuFU68/SOURCE_AND_DEPENDENCIES.txt": "Research/Pending/Records/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/SOURCE_AND_DEPENDENCIES.txt",
+    "/tmp/sorin-full-dimensional-discounted-folk.zoOejcMu/001_ACTUAL_FULL_DIMENSIONAL_IR_GEOMETRY.patch": "Research/Pending/Changes/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/001_ACTUAL_FULL_DIMENSIONAL_IR_GEOMETRY.patch",
+    "/tmp/sorin-full-dimensional-discounted-folk.zoOejcMu/002_ACTUAL_UNIFORM_FULL_DIMENSIONAL_HAUSDORFF.patch": "Research/Pending/Changes/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/002_ACTUAL_UNIFORM_FULL_DIMENSIONAL_HAUSDORFF.patch",
+    "/tmp/sorin-full-dimensional-discounted-folk.zoOejcMu/AXIOMS_AND_ACTUAL_HAUSDORFF_FIXTURES_AFTER_CHECKS.lean": "Research/Pending/Records/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/AXIOMS_AND_ACTUAL_HAUSDORFF_FIXTURES_AFTER_CHECKS.lean.draft",
+    "/tmp/sorin-full-dimensional-discounted-folk.zoOejcMu/SOURCE_QUANTIFIERS_DEPENDENCIES_AND_BOUNDARY_AUDIT.txt": "Research/Pending/Records/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/SOURCE_QUANTIFIERS_DEPENDENCIES_AND_BOUNDARY_AUDIT.txt",
+    "/tmp/sorin-p4-closed-p15-consumer-handoff.3qJCYkPz/AXIOMS_P4_ACTUAL_CONSUMERS_AFTER_CHECKS.lean": "Research/Pending/Records/SORIN_P4_CLOSED_P15_CONSUMER_HANDOFF/AXIOMS_P4_ACTUAL_CONSUMERS_AFTER_CHECKS.lean.draft",
+    "/tmp/sorin-p4-closed-p15-consumer-handoff.3qJCYkPz/SOURCE_SCOPE_AND_CONTEXTS.txt": "Research/Pending/Records/SORIN_P4_CLOSED_P15_CONSUMER_HANDOFF/SOURCE_SCOPE_AND_CONTEXTS.txt",
+    "/tmp/sorin-p4-current-dag-audit.3RqIesTx/ORDERED_IMMUTABLE_P4_DAG.txt": "Research/Pending/Records/SORIN_P4_CURRENT_DAG_AUDIT/ORDERED_IMMUTABLE_P4_DAG.txt",
+    "/tmp/sorin-p4-proof-doc-overlays.sum3X38q/001_NONDEPRECATED_ITE_PROOF.patch": "Research/Pending/Changes/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/001_NONDEPRECATED_ITE_PROOF.patch",
+    "/tmp/sorin-p4-proof-doc-overlays.sum3X38q/002_ARBITRARY_SEQUENCE_DOC.patch": "Research/Pending/Changes/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/002_ARBITRARY_SEQUENCE_DOC.patch",
+    "/tmp/sorin-p4-proof-doc-overlays.sum3X38q/SOURCE_AND_DEPENDENCIES.txt": "Research/Pending/Records/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/SOURCE_AND_DEPENDENCIES.txt",
+    "/tmp/sorin-static-minmax-trigger.wGV9OQkv/001_ACTUAL_CONSTANT_APPROX_PUNISHMENT.patch": "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/001_ACTUAL_CONSTANT_APPROX_PUNISHMENT.patch",
+    "/tmp/sorin-static-minmax-trigger.wGV9OQkv/002_ACTUAL_STRICT_IR_PERIODIC_SOURCE.patch": "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/002_ACTUAL_STRICT_IR_PERIODIC_SOURCE.patch",
+    "/tmp/sorin-static-minmax-trigger.wGV9OQkv/003_CANONICAL_SUPPORT_SOURCE_ORDER.patch": "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/003_CANONICAL_SUPPORT_SOURCE_ORDER.patch",
+    "/tmp/sorin-static-minmax-trigger.wGV9OQkv/003_SOURCE_ORDERED_EQUIVALENT.patch": "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/003_SOURCE_ORDERED_EQUIVALENT.patch",
+    "/tmp/sorin-static-minmax-trigger.wGV9OQkv/004_TRIGGER_PREDICATE_SOURCE_ORDER.patch": "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/004_TRIGGER_PREDICATE_SOURCE_ORDER.patch",
+    "/tmp/sorin-static-minmax-trigger.wGV9OQkv/AXIOMS_AND_ACTUAL_SOURCE_FIXTURES_AFTER_CHECKS.lean": "Research/Pending/Records/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/AXIOMS_AND_ACTUAL_SOURCE_FIXTURES_AFTER_CHECKS.lean.draft",
+    "/tmp/sorin-static-minmax-trigger.wGV9OQkv/SOURCE_AND_DEPENDENCIES.txt": "Research/Pending/Records/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/SOURCE_AND_DEPENDENCIES.txt",
+    "/tmp/sorin-strict-ir-discounted-nash.mMVeEDdp/001_EXPOSE_INTERNAL_CALENDAR_DELIVERY.patch": "Research/Pending/Changes/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/001_EXPOSE_INTERNAL_CALENDAR_DELIVERY.patch",
+    "/tmp/sorin-strict-ir-discounted-nash.mMVeEDdp/002_ACTUAL_SUPPORTED_CALENDAR_BELLMAN.patch": "Research/Pending/Changes/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/002_ACTUAL_SUPPORTED_CALENDAR_BELLMAN.patch",
+    "/tmp/sorin-strict-ir-discounted-nash.mMVeEDdp/003_ACTUAL_STRICT_IR_DISCOUNTED_NASH.patch": "Research/Pending/Changes/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/003_ACTUAL_STRICT_IR_DISCOUNTED_NASH.patch",
+    "/tmp/sorin-strict-ir-discounted-nash.mMVeEDdp/AXIOMS_AND_ACTUAL_NASH_FIXTURES_AFTER_CHECKS.lean": "Research/Pending/Records/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/AXIOMS_AND_ACTUAL_NASH_FIXTURES_AFTER_CHECKS.lean.draft",
+    "/tmp/sorin-strict-ir-discounted-nash.mMVeEDdp/SOURCE_QUANTIFIERS_AND_DEPENDENCIES.txt": "Research/Pending/Records/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/SOURCE_QUANTIFIERS_AND_DEPENDENCIES.txt",
+    "/tmp/three-source-packets-dependency-audit.xEpZYgxQ/DEPENDENCY_AND_THEOREM_SPECS.txt": "Research/Pending/Records/THREE_SOURCE_PACKETS_DEPENDENCY_AUDIT/DEPENDENCY_AND_THEOREM_SPECS.txt",
+    "/tmp/ue-actual-face-joins-Uv3fs6Im/24_ACTUAL_FACE_REPRESENTATION_EXCLUSIONS.patch": "Research/Pending/Changes/UE_ACTUAL_FACE_JOINS/24_ACTUAL_FACE_REPRESENTATION_EXCLUSIONS.patch",
+    "/tmp/ue-actual-face-joins-Uv3fs6Im/26_SAME_WITNESS_FACE_RESTRICTION_JOIN.patch": "Research/Pending/Changes/UE_ACTUAL_FACE_JOINS/26_SAME_WITNESS_FACE_RESTRICTION_JOIN.patch",
+    "/tmp/ue-bounded-normalization-Y0cMlfQG/15_LITERAL_POSITIVE_SCALING.patch": "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/15_LITERAL_POSITIVE_SCALING.patch",
+    "/tmp/ue-bounded-normalization-Y0cMlfQG/16_ACTUAL_BOUNDED_SINGLE_PIVOT.patch": "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/16_ACTUAL_BOUNDED_SINGLE_PIVOT.patch",
+    "/tmp/ue-bounded-normalization-Y0cMlfQG/17_DECISION_PRESERVING_POLYNOMIAL_JOIN.patch": "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/17_DECISION_PRESERVING_POLYNOMIAL_JOIN.patch",
+    "/tmp/ue-bounded-normalization-Y0cMlfQG/HANDOFF.md": "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/HANDOFF.md",
+    "/tmp/ue-candidate-refinements-IklOHw/13_NONQUASICONVEX_JOIN.patch": "Research/Pending/Changes/UE_CANDIDATE_REFINEMENTS/13_NONQUASICONVEX_JOIN.patch",
+    "/tmp/ue-collision-fixture-M7I6Dy/49_LITERAL_COLLISION_AND_UPPER_FREEZE.patch": "Research/Pending/Changes/UE_COLLISION_FIXTURE/49_LITERAL_COLLISION_AND_UPPER_FREEZE.patch",
+    "/tmp/ue-common-calendar-independent-review.U6TkupXw/STATIC_SOURCE_REVIEW.txt": "Research/Pending/Records/UE_COMMON_CALENDAR_INDEPENDENT_REVIEW/STATIC_SOURCE_REVIEW.txt",
+    "/tmp/ue-common-calendar-testers-CXcS4p/00A_MUTUAL_SUPREMUM_DERIVED_NONEMPTY.patch": "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/00A_MUTUAL_SUPREMUM_DERIVED_NONEMPTY.patch",
+    "/tmp/ue-common-calendar-testers-CXcS4p/01_FINITE_CALENDAR_REPLY_PAYOFF_CHART.patch": "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/01_FINITE_CALENDAR_REPLY_PAYOFF_CHART.patch",
+    "/tmp/ue-common-calendar-testers-CXcS4p/02_ACTUAL_COMMON_CALENDAR_TESTER_POOL.patch": "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/02_ACTUAL_COMMON_CALENDAR_TESTER_POOL.patch",
+    "/tmp/ue-common-calendar-testers-CXcS4p/03_ACTUAL_COMMON_CALENDAR_SMOOTH_MINIMUM.patch": "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/03_ACTUAL_COMMON_CALENDAR_SMOOTH_MINIMUM.patch",
+    "/tmp/ue-common-calendar-testers-CXcS4p/04_COMMON_CALENDAR_IMPORTS.patch": "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/04_COMMON_CALENDAR_IMPORTS.patch",
+    "/tmp/ue-common-calendar-testers-CXcS4p/AXIOM_HARNESS.lean": "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-common-calendar-testers-CXcS4p/ORDERED_APPLICATION_MANIFEST.json": "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/ORDERED_APPLICATION_MANIFEST.json",
+    "/tmp/ue-common-calendar-testers-CXcS4p/SOURCE_AND_HANDOFF.md": "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/SOURCE_AND_HANDOFF.md",
+    "/tmp/ue-common-calendar-testers-CXcS4p/SOURCE_SCOPE_HARNESS.lean": "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/SOURCE_SCOPE_HARNESS.lean.draft",
+    "/tmp/ue-coupled-cubic-tUhiv5/48_COUPLED_CUBIC_SHAPE_FIXTURE.patch": "Research/Pending/Changes/UE_COUPLED_CUBIC/48_COUPLED_CUBIC_SHAPE_FIXTURE.patch",
+    "/tmp/ue-face-separability-EcS7Suwv/19_FACE_ADDITIVE_EXCLUSION.patch": "Research/Pending/Changes/UE_FACE_SEPARABILITY/19_FACE_ADDITIVE_EXCLUSION.patch",
+    "/tmp/ue-face-separability-EcS7Suwv/20_FACE_NONMONOTONE_COMPOSITION_EXCLUSION.patch": "Research/Pending/Changes/UE_FACE_SEPARABILITY/20_FACE_NONMONOTONE_COMPOSITION_EXCLUSION.patch",
+    "/tmp/ue-full-rational-positive-source-c0DsPu/74_FULL_RATIONAL_POSITIVE_ETA_SOURCE.patch": "Research/Pending/Changes/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/74_FULL_RATIONAL_POSITIVE_ETA_SOURCE.patch",
+    "/tmp/ue-full-rational-positive-source-c0DsPu/AXIOM_HARNESS.lean": "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-full-rational-positive-source-c0DsPu/HANDOFF.md": "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/HANDOFF.md",
+    "/tmp/ue-full-rational-screened-source-kQbeVN/001_FULL_RATIONAL_SCREENED_SOURCE.patch": "Research/Pending/Changes/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/001_FULL_RATIONAL_SCREENED_SOURCE.patch",
+    "/tmp/ue-full-rational-screened-source-kQbeVN/AXIOMS_AND_ACTUAL_CONSUMERS.lean": "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/AXIOMS_AND_ACTUAL_CONSUMERS.lean.draft",
+    "/tmp/ue-full-rational-screened-source-kQbeVN/SOURCE_AND_HANDOFF.md": "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/SOURCE_AND_HANDOFF.md",
+    "/tmp/ue-future-pinned-name-overlays-iBO2Hj/001_UNIT17_PINNED_ITE_NAMES.patch": "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/001_UNIT17_PINNED_ITE_NAMES.patch",
+    "/tmp/ue-future-pinned-name-overlays-iBO2Hj/002_OWN_SINGLETON_CHART_PINNED_DITE_NAMES.patch": "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/002_OWN_SINGLETON_CHART_PINNED_DITE_NAMES.patch",
+    "/tmp/ue-future-pinned-name-overlays-iBO2Hj/005_CANONICAL_CHARACTERIZATION_DOCUMENTATION.patch": "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/005_CANONICAL_CHARACTERIZATION_DOCUMENTATION.patch",
+    "/tmp/ue-membership-stretch-source-NFdMTx/01_WORST_TABLE_MEMBERSHIP_STRETCH_SOURCE.patch": "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/01_WORST_TABLE_MEMBERSHIP_STRETCH_SOURCE.patch",
+    "/tmp/ue-membership-stretch-source-NFdMTx/02_SINGLE_OPTIONAL_FULL_DEBT_ROWS.patch": "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/02_SINGLE_OPTIONAL_FULL_DEBT_ROWS.patch",
+    "/tmp/ue-membership-stretch-source-NFdMTx/03_ACTUAL_OPPOSED_OPTIONAL_REVERSALS.patch": "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/03_ACTUAL_OPPOSED_OPTIONAL_REVERSALS.patch",
+    "/tmp/ue-membership-stretch-source-NFdMTx/04_RAW_SOURCE_OPPOSED_REVERSAL_JOIN.patch": "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/04_RAW_SOURCE_OPPOSED_REVERSAL_JOIN.patch",
+    "/tmp/ue-membership-stretch-source-NFdMTx/05_OPPOSED_ADAPTER_IMPORTS.patch": "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/05_OPPOSED_ADAPTER_IMPORTS.patch",
+    "/tmp/ue-membership-stretch-source-NFdMTx/AXIOM_HARNESS.lean": "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-membership-stretch-source-NFdMTx/OPPOSED_ADAPTER_HANDOFF.md": "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_ADAPTER_HANDOFF.md",
+    "/tmp/ue-membership-stretch-source-NFdMTx/OPPOSED_APPLICATION_MANIFEST.json": "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_APPLICATION_MANIFEST.json",
+    "/tmp/ue-membership-stretch-source-NFdMTx/OPPOSED_AXIOM_HARNESS.lean": "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-membership-stretch-source-NFdMTx/OPPOSED_SOURCE_SCOPE_HARNESS.lean": "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_SOURCE_SCOPE_HARNESS.lean.draft",
+    "/tmp/ue-membership-stretch-source-NFdMTx/SOURCE_AND_HANDOFF.md": "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/SOURCE_AND_HANDOFF.md",
+    "/tmp/ue-midpoint-integral-sKSsQX/44_EXACT_MIDPOINT_THIRD_DERIVATIVE_INTEGRAL.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/44_EXACT_MIDPOINT_THIRD_DERIVATIVE_INTEGRAL.patch",
+    "/tmp/ue-midpoint-integral-sKSsQX/AXIOM_HARNESS.lean": "Research/Pending/Records/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-midpoint-integral-sKSsQX/HANDOFF.md": "Research/Pending/Records/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/HANDOFF.md",
+    "/tmp/ue-monotone11-import-repair-pe0Wvu/11A_CANONICAL_ALL_CONTINUE_OWNER_IMPORT.patch": "Research/Pending/Changes/UE_MONOTONE11_IMPORT_REPAIR/11A_CANONICAL_ALL_CONTINUE_OWNER_IMPORT.patch",
+    "/tmp/ue-multiaffine-2jjIGL/10_GENERIC_MONOTONE_TRANSFER.patch": "Research/Pending/Changes/UE_MULTIAFFINE/10_GENERIC_MONOTONE_TRANSFER.patch",
+    "/tmp/ue-multiaffine-2jjIGL/11_ACTUAL_MONOTONE_EXCLUSION.patch": "Research/Pending/Changes/UE_MULTIAFFINE/11_ACTUAL_MONOTONE_EXCLUSION.patch",
+    "/tmp/ue-nonq-face-fixture-vClzbt/50_NON_Q_LINEAR_FACE_FIXTURE.patch": "Research/Pending/Changes/UE_NONQ_FACE_FIXTURE/50_NON_Q_LINEAR_FACE_FIXTURE.patch",
+    "/tmp/ue-paired-fixture-joins-WMWV4A/51_CANONICAL_COORDINATE_HESSIAN_ENTRIES.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/51_CANONICAL_COORDINATE_HESSIAN_ENTRIES.patch",
+    "/tmp/ue-paired-fixture-joins-WMWV4A/52_PAIRED_CANONICAL_SPECTRUM_AND_MINIMIZING_VERTEX.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/52_PAIRED_CANONICAL_SPECTRUM_AND_MINIMIZING_VERTEX.patch",
+    "/tmp/ue-paired-fixture-joins-WMWV4A/AXIOM_HARNESS.lean": "Research/Pending/Records/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-paired-fixture-joins-WMWV4A/HANDOFF.md": "Research/Pending/Records/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/HANDOFF.md",
+    "/tmp/ue-potential-completion-matrix-FJa3ts/COMPLETION_MATRIX.md": "Research/Pending/Records/UE_POTENTIAL_COMPLETION_MATRIX/COMPLETION_MATRIX.md",
+    "/tmp/ue-potential-completion-matrix-FJa3ts/ORDERED_MANIFEST.json": "Research/Pending/Records/UE_POTENTIAL_COMPLETION_MATRIX/ORDERED_MANIFEST.json",
+    "/tmp/ue-potential-final-joins-XYiMaJ/56_SAME_POLYNOMIAL_QUANTITATIVE_JOIN.patch": "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/56_SAME_POLYNOMIAL_QUANTITATIVE_JOIN.patch",
+    "/tmp/ue-potential-final-joins-XYiMaJ/57_GENERIC_CURVATURE_HOMOGENEITY.patch": "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/57_GENERIC_CURVATURE_HOMOGENEITY.patch",
+    "/tmp/ue-potential-final-joins-XYiMaJ/58_ROBUST_POSITIVE_CHARGE_NORMALIZATION.patch": "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/58_ROBUST_POSITIVE_CHARGE_NORMALIZATION.patch",
+    "/tmp/ue-potential-final-joins-XYiMaJ/59_LITERAL_PLAYER_COUNT_AND_SOLO_ZERO_BOUNDARIES.patch": "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/59_LITERAL_PLAYER_COUNT_AND_SOLO_ZERO_BOUNDARIES.patch",
+    "/tmp/ue-potential-final-joins-XYiMaJ/60_ACTUAL_FIN4_POSITIVE_CHARGE_CURVATURE_JOIN.patch": "Research/Pending/Changes/UE_POTENTIAL_FINAL_JOINS/60_ACTUAL_FIN4_POSITIVE_CHARGE_CURVATURE_JOIN.patch",
+    "/tmp/ue-potential-fixtures-xygynp/45_RATIONAL_POLYNOMIAL_COORDINATE_DERIVATIVES.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/45_RATIONAL_POLYNOMIAL_COORDINATE_DERIVATIVES.patch",
+    "/tmp/ue-potential-fixtures-xygynp/46_PAIRED_FACE_POLYNOMIAL_HESSIAN_FIXTURE.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/46_PAIRED_FACE_POLYNOMIAL_HESSIAN_FIXTURE.patch",
+    "/tmp/ue-potential-fixtures-xygynp/47_REFLECTION_AND_MULTIAFFINE_BOUNDARY_ARITHMETIC.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/47_REFLECTION_AND_MULTIAFFINE_BOUNDARY_ARITHMETIC.patch",
+    "/tmp/ue-potential-fixtures-xygynp/AXIOM_HARNESS.lean": "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-potential-fixtures-xygynp/HANDOFF.md": "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/HANDOFF.md",
+    "/tmp/ue-potential-next-complete-group-NUcZS5/45A_AXIOM_HARNESS.lean": "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/45A_AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-potential-next-complete-group-NUcZS5/45A_CANONICAL_BASIS_DERIVATIVE_REUSE.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/45A_CANONICAL_BASIS_DERIVATIVE_REUSE.patch",
+    "/tmp/ue-potential-next-complete-group-NUcZS5/GROUP_AXIOM_HARNESS.lean": "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/GROUP_AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-potential-next-complete-group-NUcZS5/NEXT_COMPLETE_GROUP.md": "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/NEXT_COMPLETE_GROUP.md",
+    "/tmp/ue-potential-next-complete-group-NUcZS5/OVERLAY_ORDER.tsv": "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/OVERLAY_ORDER.tsv",
+    "/tmp/ue-potential59-and-secant-proof-overlays.0BZu0lOm/001_UNIT59_EXPLICIT_ZERO_REWARD_ARGUMENTS.patch": "Research/Pending/Changes/UE_POTENTIAL59_AND_SECANT_PROOF_OVERLAYS/001_UNIT59_EXPLICIT_ZERO_REWARD_ARGUMENTS.patch",
+    "/tmp/ue-potential59-and-secant-proof-overlays.0BZu0lOm/002_SECANT_PINNED_ITE_NAME.patch": "Research/Pending/Changes/UE_POTENTIAL59_AND_SECANT_PROOF_OVERLAYS/002_SECANT_PINNED_ITE_NAME.patch",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/00_MUTUAL_SUPREMUM_OWNER.patch": "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/00_MUTUAL_SUPREMUM_OWNER.patch",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/01_FINITE_CLOCK_SEMANTIC_PROMOTION.patch": "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/01_FINITE_CLOCK_SEMANTIC_PROMOTION.patch",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/02_COMMON_QUANTILE_TRANSPORT_PROMOTION.patch": "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/02_COMMON_QUANTILE_TRANSPORT_PROMOTION.patch",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/03_COMMON_QUANTILE_APPROXIMATION_PROMOTION.patch": "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/03_COMMON_QUANTILE_APPROXIMATION_PROMOTION.patch",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/04_ACTUAL_FULL_CAP_FINITE_CLOCK_SOURCE.patch": "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/04_ACTUAL_FULL_CAP_FINITE_CLOCK_SOURCE.patch",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/05_PRODUCTION_IMPORTS.patch": "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/05_PRODUCTION_IMPORTS.patch",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/AXIOM_HARNESS.lean": "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/ORDERED_APPLICATION_MANIFEST.json": "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/ORDERED_APPLICATION_MANIFEST.json",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/SOURCE_AND_HANDOFF.md": "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/SOURCE_AND_HANDOFF.md",
+    "/tmp/ue-quantitative-finite-clock-source-chqqvm/SOURCE_SCOPE_HARNESS.lean": "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/SOURCE_SCOPE_HARNESS.lean.draft",
+    "/tmp/ue-rational-exact-rejection-stage-z6wdoL/SOURCE_CLAIM_AND_CHECK_ORDER.md": "Research/Pending/Records/SHAPE/UE_RATIONAL_EXACT_REJECTION_STAGE/SOURCE_CLAIM_AND_CHECK_ORDER.md",
+    "/tmp/ue-rational-exact-rejection-stage-z6wdoL/SOURCE_SCOPE_HARNESS.lean": "Research/Pending/Records/SHAPE/UE_RATIONAL_EXACT_REJECTION_STAGE/SOURCE_SCOPE_HARNESS.lean.draft",
+    "/tmp/ue-rational-rejection-MLTrufnP/36_RATIONAL_CLOSED_BOX_DENSITY.patch": "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/36_RATIONAL_CLOSED_BOX_DENSITY.patch",
+    "/tmp/ue-rational-rejection-MLTrufnP/37_RATIONAL_POLYNOMIAL_EVALUATION.patch": "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/37_RATIONAL_POLYNOMIAL_EVALUATION.patch",
+    "/tmp/ue-rational-rejection-MLTrufnP/38_RATIONAL_BOXED_ROOT_INTERFACES.patch": "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/38_RATIONAL_BOXED_ROOT_INTERFACES.patch",
+    "/tmp/ue-rational-rejection-MLTrufnP/39_RATIONAL_ROBUST_REJECTION_DENSITY.patch": "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/39_RATIONAL_ROBUST_REJECTION_DENSITY.patch",
+    "/tmp/ue-rational-rejection-MLTrufnP/40_ACTUAL_EXCLUDED_POLYNOMIAL_RATIONAL_REJECTION.patch": "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/40_ACTUAL_EXCLUDED_POLYNOMIAL_RATIONAL_REJECTION.patch",
+    "/tmp/ue-rational-rejection-MLTrufnP/41_EXHAUSTIVE_RATIONAL_REJECTION_SEARCH.patch": "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/41_EXHAUSTIVE_RATIONAL_REJECTION_SEARCH.patch",
+    "/tmp/ue-rational-rejection-MLTrufnP/42_RATIONAL_EXACT_SOLO_REJECTION.patch": "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/42_RATIONAL_EXACT_SOLO_REJECTION.patch",
+    "/tmp/ue-rational-rejection-MLTrufnP/43_EXACT_SOLO_REJECTION_SEARCH_JOIN.patch": "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/43_EXACT_SOLO_REJECTION_SEARCH_JOIN.patch",
+    "/tmp/ue-rational-rejection-MLTrufnP/AXIOM_HARNESS.lean": "Research/Pending/Records/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-rational-rejection-MLTrufnP/HANDOFF.md": "Research/Pending/Records/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/HANDOFF.md",
+    "/tmp/ue-reflection-literal-boundaries-VxBUGT/53_CONSTANT_SIGNED_NORMAL_TABLE.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/53_CONSTANT_SIGNED_NORMAL_TABLE.patch",
+    "/tmp/ue-reflection-literal-boundaries-VxBUGT/54_POSITIVE_CHARGE_RESCALE.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/54_POSITIVE_CHARGE_RESCALE.patch",
+    "/tmp/ue-reflection-literal-boundaries-VxBUGT/55_PAIRED_BOUNDED_COMPLETION_FULL_ROOT_EXCLUSION.patch": "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/55_PAIRED_BOUNDED_COMPLETION_FULL_ROOT_EXCLUSION.patch",
+    "/tmp/ue-reflection-literal-boundaries-VxBUGT/AXIOM_HARNESS.lean": "Research/Pending/Records/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-reflection-literal-boundaries-VxBUGT/HANDOFF.md": "Research/Pending/Records/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/HANDOFF.md",
+    "/tmp/ue-reflection-normalization-stage-GchWYH/GROUP_AXIOM_HARNESS.lean": "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/GROUP_AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-reflection-normalization-stage-GchWYH/NORMALIZATION_GROUP_IMPORTS.patch": "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/NORMALIZATION_GROUP_IMPORTS.patch",
+    "/tmp/ue-reflection-normalization-stage-GchWYH/ORDERED_APPLICATION_MANIFEST.json": "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/ORDERED_APPLICATION_MANIFEST.json",
+    "/tmp/ue-reflection-normalization-stage-GchWYH/SOURCE_SCOPE_AND_CHECK_ORDER.md": "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/SOURCE_SCOPE_AND_CHECK_ORDER.md",
+    "/tmp/ue-reflection-normalization-stage-GchWYH/SOURCE_SCOPE_HARNESS.lean": "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/SOURCE_SCOPE_HARNESS.lean.draft",
+    "/tmp/ue-screened-fiber-extrema-DhGLPM/63_OWN_SINGLETON_FIBER_MAXIMUM.patch": "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/63_OWN_SINGLETON_FIBER_MAXIMUM.patch",
+    "/tmp/ue-screened-fiber-extrema-DhGLPM/64_SCREENED_ROOT_COMPACT_MINIMUM.patch": "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/64_SCREENED_ROOT_COMPACT_MINIMUM.patch",
+    "/tmp/ue-screened-fiber-extrema-DhGLPM/65_SCREENED_SINGLETON_FIBER_STRICT_GAP.patch": "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/65_SCREENED_SINGLETON_FIBER_STRICT_GAP.patch",
+    "/tmp/ue-screened-fiber-extrema-DhGLPM/AXIOM_HARNESS.lean": "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-screened-fiber-extrema-DhGLPM/HANDOFF.md": "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/HANDOFF.md",
+    "/tmp/ue-screened-polynomial-density-Z9NPbs/61_MVPOLYNOMIAL_NONVANISHING.patch": "Research/Pending/Changes/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/61_MVPOLYNOMIAL_NONVANISHING.patch",
+    "/tmp/ue-screened-polynomial-density-Z9NPbs/62_SCREENED_ROOT_POLYNOMIAL_DENSITY.patch": "Research/Pending/Changes/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/62_SCREENED_ROOT_POLYNOMIAL_DENSITY.patch",
+    "/tmp/ue-screened-polynomial-density-Z9NPbs/AXIOM_HARNESS.lean": "Research/Pending/Records/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-screened-polynomial-density-Z9NPbs/HANDOFF.md": "Research/Pending/Records/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/HANDOFF.md",
+    "/tmp/ue-screened-rational-selection-sInZmW/66_POSITIVE_RATIONAL_SCREENED_FIBER_ENTRANCE.patch": "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/66_POSITIVE_RATIONAL_SCREENED_FIBER_ENTRANCE.patch",
+    "/tmp/ue-screened-rational-selection-sInZmW/67_RATIONAL_SCREENED_SINGLETON_FIBER_SELECTION.patch": "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/67_RATIONAL_SCREENED_SINGLETON_FIBER_SELECTION.patch",
+    "/tmp/ue-screened-rational-selection-sInZmW/AXIOM_HARNESS.lean": "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-screened-rational-selection-sInZmW/HANDOFF.md": "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/HANDOFF.md",
+    "/tmp/ue-screened-singleton-collar-UPYqur/68_ZERO_SINGLETON_MINIMUM_NEVER.patch": "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/68_ZERO_SINGLETON_MINIMUM_NEVER.patch",
+    "/tmp/ue-screened-singleton-collar-UPYqur/69_SCREENED_MINIMUM_SINGLETON_MASS.patch": "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/69_SCREENED_MINIMUM_SINGLETON_MASS.patch",
+    "/tmp/ue-screened-singleton-collar-UPYqur/70_JOINT_CARRIER_REWARD_GRAPH.patch": "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/70_JOINT_CARRIER_REWARD_GRAPH.patch",
+    "/tmp/ue-screened-singleton-collar-UPYqur/71_FIXED_GAME_SINGLETON_COLLAR.patch": "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/71_FIXED_GAME_SINGLETON_COLLAR.patch",
+    "/tmp/ue-screened-singleton-collar-UPYqur/72_FIBER_UNIFORM_SINGLETON_COLLAR.patch": "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/72_FIBER_UNIFORM_SINGLETON_COLLAR.patch",
+    "/tmp/ue-screened-singleton-collar-UPYqur/73_RATIONAL_SCREENED_SOURCE_COLLAR_JOIN.patch": "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/73_RATIONAL_SCREENED_SOURCE_COLLAR_JOIN.patch",
+    "/tmp/ue-screened-singleton-collar-UPYqur/AXIOM_HARNESS.lean": "Research/Pending/Records/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-screened-singleton-collar-UPYqur/HANDOFF.md": "Research/Pending/Records/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/HANDOFF.md",
+    "/tmp/ue-secant-negative-ite-repair.yFBrne3G/003_SECANT_PINNED_NEGATIVE_ITE_NAME.patch": "Research/Pending/Changes/UE_SECANT_NEGATIVE_ITE_REPAIR/003_SECANT_PINNED_NEGATIVE_ITE_NAME.patch",
+    "/tmp/ue-shape-retirement-final-nGFcfS/49_COLLISION_ADJUSTED_PROBE_BOUNDARY_RENAMED_ADD.patch": "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/49_COLLISION_ADJUSTED_PROBE_BOUNDARY_RENAMED_ADD.patch",
+    "/tmp/ue-shape-retirement-final-nGFcfS/59A_EXPLICIT_ZERO_REWARD_ARGUMENTS_RETARGETED.patch": "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59A_EXPLICIT_ZERO_REWARD_ARGUMENTS_RETARGETED.patch",
+    "/tmp/ue-shape-retirement-final-nGFcfS/59B_PUBLIC_SOLO_IDENTITY_RETARGETED.patch": "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59B_PUBLIC_SOLO_IDENTITY_RETARGETED.patch",
+    "/tmp/ue-shape-retirement-final-nGFcfS/59_EXACT_ROOT_PLAYER_COUNT_BOUNDARY_RENAMED_ADD.patch": "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59_EXACT_ROOT_PLAYER_COUNT_BOUNDARY_RENAMED_ADD.patch",
+    "/tmp/ue-shape-retirement-final-nGFcfS/FINAL_GROUP_AXIOM_HARNESS.lean": "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/FINAL_GROUP_AXIOM_HARNESS.lean.draft",
+    "/tmp/ue-shape-retirement-final-nGFcfS/FINAL_SOURCE_DECLARATION_AUDITS.lean": "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/FINAL_SOURCE_DECLARATION_AUDITS.lean.draft",
+    "/tmp/ue-shape-retirement-final-nGFcfS/FIXTURE_GROUP_IMPORTS.patch": "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/FIXTURE_GROUP_IMPORTS.patch",
+    "/tmp/ue-shape-retirement-final-nGFcfS/ORDERED_APPLICATION_MANIFEST.json": "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/ORDERED_APPLICATION_MANIFEST.json",
+    "/tmp/ue-shape-retirement-final-nGFcfS/RETIREMENT_CHECKLIST.md": "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/RETIREMENT_CHECKLIST.md",
+    "/tmp/ue-shape-retirement-final-nGFcfS/SOURCE_GROUP_IMPORTS.patch": "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/SOURCE_GROUP_IMPORTS.patch",
+    "/tmp/ue-signed-affine-row-comparison-xF5EKq/001_SIGNED_AFFINE_ROW_COMPARISON.patch": "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/001_SIGNED_AFFINE_ROW_COMPARISON.patch",
+    "/tmp/ue-signed-affine-row-comparison-xF5EKq/002_OPPOSED_AFFINE_ROW_REGRESSION.patch": "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/002_OPPOSED_AFFINE_ROW_REGRESSION.patch",
+    "/tmp/ue-signed-affine-row-comparison-xF5EKq/AXIOMS_AND_SOURCE_CONSUMERS.lean": "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/AXIOMS_AND_SOURCE_CONSUMERS.lean.draft",
+    "/tmp/ue-signed-affine-row-comparison-xF5EKq/SOURCE_AND_HANDOFF.md": "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/SOURCE_AND_HANDOFF.md",
+    "/tmp/ue-simplex-representation-facade-oNYXFg/75_SIMPLEX_ONLY_ACTUAL_REPRESENTATION_FACADE.patch": "Research/Pending/Changes/UE_SIMPLEX_REPRESENTATION_FACADE/75_SIMPLEX_ONLY_ACTUAL_REPRESENTATION_FACADE.patch",
+    "/tmp/ue-sorin-flat-security-paused.rO98kFA6/PAUSED_SOURCE_AND_REUSE_PLAN.md": "Research/Pending/Records/SORIN_FLAT_DISCOVERY/UE_SORIN_FLAT_SECURITY_PAUSED/PAUSED_SOURCE_AND_REUSE_PLAN.md",
+    "/tmp/ue-sure-coalition-exploitability.zI7vB2mm/01_SURE_COALITION_FULL_EXPLOITABILITY.patch": "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/01_SURE_COALITION_FULL_EXPLOITABILITY.patch",
+    "/tmp/ue-sure-coalition-exploitability.zI7vB2mm/02_SURE_COALITION_MINIMUM.patch": "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/02_SURE_COALITION_MINIMUM.patch",
+    "/tmp/ue-sure-coalition-exploitability.zI7vB2mm/03_MEMBERSHIP_STRETCH_SURE_COALITION_SOURCE.patch": "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/03_MEMBERSHIP_STRETCH_SURE_COALITION_SOURCE.patch",
+    "/tmp/ue-sure-coalition-exploitability.zI7vB2mm/AXIOM_AND_ACTUAL_CONSUMER_HARNESS.lean": "Research/Pending/Records/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/AXIOM_AND_ACTUAL_CONSUMER_HARNESS.lean.draft",
+    "/tmp/ue-sure-coalition-exploitability.zI7vB2mm/SOURCE_AND_FROZEN_HANDOFF.md": "Research/Pending/Records/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/SOURCE_AND_FROZEN_HANDOFF.md"
+  },
+  "plans": [
+    {
+      "changes": [
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/36_RATIONAL_CLOSED_BOX_DENSITY.patch",
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/38_RATIONAL_BOXED_ROOT_INTERFACES.patch",
+        "Research/Pending/Changes/TMP/UE_RATIONAL_BOXED_ROOT_38_CANONICAL_BERNOULLI_REUSE_20261002.patch",
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/42_RATIONAL_EXACT_SOLO_REJECTION.patch",
+        "Research/Pending/Changes/TMP/UE_RATIONAL_EXACT_SOLO_42_NARROW_PROBE_IMPORTS_20261002.patch",
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/SOURCE_GROUP_IMPORTS.patch",
+        "Research/Pending/Changes/UE_COUPLED_CUBIC/48_COUPLED_CUBIC_SHAPE_FIXTURE.patch",
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/49_COLLISION_ADJUSTED_PROBE_BOUNDARY_RENAMED_ADD.patch",
+        "Research/Pending/Changes/UE_NONQ_FACE_FIXTURE/50_NON_Q_LINEAR_FACE_FIXTURE.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/54_POSITIVE_CHARGE_RESCALE.patch",
+        "Research/Pending/Changes/TMP/UE_FULL_EXACT_CHARGE_54_FRECHET_DOMAIN_REPAIR_20261002.patch",
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59_EXACT_ROOT_PLAYER_COUNT_BOUNDARY_RENAMED_ADD.patch",
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59A_EXPLICIT_ZERO_REWARD_ARGUMENTS_RETARGETED.patch",
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/59B_PUBLIC_SOLO_IDENTITY_RETARGETED.patch",
+        "Research/Pending/Changes/SHAPE/UE_SHAPE_RETIREMENT_FINAL/FIXTURE_GROUP_IMPORTS.patch"
+      ],
+      "depends_on": [],
+      "name": "shape",
+      "note": "First dependency-complete packet unit. Includes the required narrow-import repair; old 49/59 variants and optional 43 are not active.",
+      "records": [
+        "Research/Pending/Records/TMP/UE_RATIONAL_EXACT_SOLO_42_NARROW_IMPORTS_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/TMP/UE_SHAPE_REQUIRED_FIXTURES_48_49_50_54_59_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/FINAL_GROUP_AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/FINAL_SOURCE_DECLARATION_AUDITS.lean.draft",
+        "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/ORDERED_APPLICATION_MANIFEST.json",
+        "Research/Pending/Records/SHAPE/UE_SHAPE_RETIREMENT_FINAL/RETIREMENT_CHECKLIST.md",
+        "Research/Pending/Records/SHAPE/UE_RATIONAL_EXACT_REJECTION_STAGE/SOURCE_CLAIM_AND_CHECK_ORDER.md",
+        "Research/Pending/Records/SHAPE/UE_RATIONAL_EXACT_REJECTION_STAGE/SOURCE_SCOPE_HARNESS.lean.draft"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/15_LITERAL_POSITIVE_SCALING.patch",
+        "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/16_ACTUAL_BOUNDED_SINGLE_PIVOT.patch",
+        "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/17_DECISION_PRESERVING_POLYNOMIAL_JOIN.patch",
+        "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/001_UNIT17_PINNED_ITE_NAMES.patch",
+        "Research/Pending/Changes/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/NORMALIZATION_GROUP_IMPORTS.patch"
+      ],
+      "depends_on": [],
+      "name": "bounded-normalization",
+      "note": "",
+      "records": [
+        "Research/Pending/Records/TMP/UE_REFLECTION_BOUNDED_SINGLE_PIVOT_15_16_17_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_BOUNDED_NORMALIZATION/HANDOFF.md",
+        "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/GROUP_AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/ORDERED_APPLICATION_MANIFEST.json",
+        "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/SOURCE_SCOPE_AND_CHECK_ORDER.md",
+        "Research/Pending/Records/BOUNDED_NORMALIZATION/UE_REFLECTION_NORMALIZATION_STAGE/SOURCE_SCOPE_HARNESS.lean.draft"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/39_RATIONAL_ROBUST_REJECTION_DENSITY.patch",
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/40_ACTUAL_EXCLUDED_POLYNOMIAL_RATIONAL_REJECTION.patch",
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/37_RATIONAL_POLYNOMIAL_EVALUATION.patch",
+        "Research/Pending/Changes/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/41_EXHAUSTIVE_RATIONAL_REJECTION_SEARCH.patch",
+        "Research/Pending/Changes/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_SOUNDNESS_20261002.patch"
+      ],
+      "depends_on": [
+        "shape"
+      ],
+      "name": "rational-rejection",
+      "note": "Reuse 36/38 from shape; optional 43 and its old combined harness are not prerequisites.",
+      "records": [
+        "Research/Pending/Records/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_HANDOFF_20261002.md",
+        "Research/Pending/Records/TMP/UE_RATIONAL_REJECTION_41_RETURNED_RESULT_AXIOMS_20261002.lean.draft",
+        "Research/Pending/Records/TMP/UE_REFLECTION_RATIONAL_REJECTION_37_39_40_41_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/RATIONAL_REJECTION/UE_RATIONAL_REJECTION/HANDOFF.md"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/44_EXACT_MIDPOINT_THIRD_DERIVATIVE_INTEGRAL.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/45_RATIONAL_POLYNOMIAL_COORDINATE_DERIVATIVES.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/45A_CANONICAL_BASIS_DERIVATIVE_REUSE.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/46_PAIRED_FACE_POLYNOMIAL_HESSIAN_FIXTURE.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/51_CANONICAL_COORDINATE_HESSIAN_ENTRIES.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/52_PAIRED_CANONICAL_SPECTRUM_AND_MINIMIZING_VERTEX.patch",
+        "Research/Pending/Changes/TMP/UE_PAIRED_MINIMIZING_VERTEX_52_PINNED_PUSH_NOT_20261002.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/55_PAIRED_BOUNDED_COMPLETION_FULL_ROOT_EXCLUSION.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/47_REFLECTION_AND_MULTIAFFINE_BOUNDARY_ARITHMETIC.patch",
+        "Research/Pending/Changes/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/53_CONSTANT_SIGNED_NORMAL_TABLE.patch"
+      ],
+      "depends_on": [
+        "shape"
+      ],
+      "name": "reflection-fixtures",
+      "note": "",
+      "records": [
+        "Research/Pending/Records/TMP/UE_REFLECTION_INTEGRAL_AND_REQUIRED_FIXTURES_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/TMP/UE_REFLECTION_LITERAL_BOUNDARIES_53_55_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_FIXTURES/HANDOFF.md",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_PAIRED_FIXTURE_JOINS/HANDOFF.md",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_REFLECTION_LITERAL_BOUNDARIES/HANDOFF.md",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_MIDPOINT_INTEGRAL/HANDOFF.md",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/45A_AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/GROUP_AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/NEXT_COMPLETE_GROUP.md",
+        "Research/Pending/Records/REFLECTION_FIXTURES/UE_POTENTIAL_NEXT_COMPLETE_GROUP/OVERLAY_ORDER.tsv"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/OWN_SINGLETON_REWARD_CHART/OWN_SINGLETON_REWARD_CHART.patch",
+        "Research/Pending/Changes/UE_FUTURE_PINNED_NAME_OVERLAYS/002_OWN_SINGLETON_CHART_PINNED_DITE_NAMES.patch",
+        "Research/Pending/Changes/SCREENED_ROOT_SOURCE/SCREENED_ROOT_DEBT_BRANCHES.patch",
+        "Research/Pending/Changes/OWN_SINGLETON_REWARD_CHART/SCREENED_ROOT_BRANCH_LABELS.patch",
+        "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS.patch",
+        "Research/Pending/Changes/SCREENED_ROOT_FOUR_CORNERS/SCREENED_ROOT_FOUR_CORNERS_REPAIR.patch",
+        "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE.patch",
+        "Research/Pending/Changes/RECTANGULAR_COFACTOR_KERNEL/RECTANGULAR_COFACTOR_SEGRE_REPAIR.patch",
+        "Research/Pending/Changes/SCREENED_ROOT_POLYNOMIAL/SCREENED_ROOT_POLYNOMIAL.patch",
+        "Research/Pending/Changes/SCREENED_POLYNOMIAL_WITNESS/SCREENED_POLYNOMIAL_DEGREES.patch",
+        "Research/Pending/Changes/SCREENED_POLYNOMIAL_WITNESS/SCREENED_POLYNOMIAL_WITNESSES.patch",
+        "Research/Pending/Changes/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/61_MVPOLYNOMIAL_NONVANISHING.patch",
+        "Research/Pending/Changes/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/62_SCREENED_ROOT_POLYNOMIAL_DENSITY.patch"
+      ],
+      "depends_on": [],
+      "name": "screened-algebra",
+      "note": "",
+      "records": [
+        "Research/Pending/Records/TMP/UE_SCREENED_SOURCE_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/TMP/UE_SCREENED_POLYNOMIAL_DENSITY_61_62_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/SCREENED_ALGEBRA/UE_SCREENED_POLYNOMIAL_DENSITY/HANDOFF.md"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/63_OWN_SINGLETON_FIBER_MAXIMUM.patch",
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/64_SCREENED_ROOT_COMPACT_MINIMUM.patch",
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/65_SCREENED_SINGLETON_FIBER_STRICT_GAP.patch",
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/66_POSITIVE_RATIONAL_SCREENED_FIBER_ENTRANCE.patch",
+        "Research/Pending/Changes/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/67_RATIONAL_SCREENED_SINGLETON_FIBER_SELECTION.patch"
+      ],
+      "depends_on": [
+        "screened-algebra"
+      ],
+      "name": "screened-selection",
+      "note": "",
+      "records": [
+        "Research/Pending/Records/TMP/UE_SCREENED_FIBER_EXTREMA_63_65_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/TMP/UE_SCREENED_RATIONAL_SELECTION_66_67_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_FIBER_EXTREMA/HANDOFF.md",
+        "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/SCREENED_SELECTION/UE_SCREENED_RATIONAL_SELECTION/HANDOFF.md"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/68_ZERO_SINGLETON_MINIMUM_NEVER.patch",
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/69_SCREENED_MINIMUM_SINGLETON_MASS.patch",
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/70_JOINT_CARRIER_REWARD_GRAPH.patch",
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/71_FIXED_GAME_SINGLETON_COLLAR.patch",
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/72_FIBER_UNIFORM_SINGLETON_COLLAR.patch",
+        "Research/Pending/Changes/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/73_RATIONAL_SCREENED_SOURCE_COLLAR_JOIN.patch"
+      ],
+      "depends_on": [
+        "screened-selection"
+      ],
+      "name": "screened-collars",
+      "note": "",
+      "records": [
+        "Research/Pending/Records/TMP/UE_SCREENED_SINGLETON_COLLAR_68_73_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/SCREENED_COLLARS/UE_SCREENED_SINGLETON_COLLAR/HANDOFF.md"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/74_FULL_RATIONAL_POSITIVE_ETA_SOURCE.patch",
+        "Research/Pending/Changes/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/001_FULL_RATIONAL_SCREENED_SOURCE.patch"
+      ],
+      "depends_on": [
+        "screened-selection"
+      ],
+      "name": "full-rational-source",
+      "note": "Join has root static inspection, not completed independent review or compilation.",
+      "records": [
+        "Research/Pending/Records/TMP/UE_FULL_RATIONAL_POSITIVE_SOURCE_74_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_POSITIVE_SOURCE/HANDOFF.md",
+        "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/AXIOMS_AND_ACTUAL_CONSUMERS.lean.draft",
+        "Research/Pending/Records/FULL_RATIONAL_SOURCE/UE_FULL_RATIONAL_SCREENED_SOURCE/SOURCE_AND_HANDOFF.md"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/001_SIGNED_AFFINE_ROW_COMPARISON.patch",
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/002_OPPOSED_AFFINE_ROW_REGRESSION.patch",
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/01_WORST_TABLE_MEMBERSHIP_STRETCH_SOURCE.patch",
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/02_SINGLE_OPTIONAL_FULL_DEBT_ROWS.patch",
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/03_ACTUAL_OPPOSED_OPTIONAL_REVERSALS.patch",
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/04_RAW_SOURCE_OPPOSED_REVERSAL_JOIN.patch",
+        "Research/Pending/Changes/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/05_OPPOSED_ADAPTER_IMPORTS.patch"
+      ],
+      "depends_on": [
+        "screened-selection"
+      ],
+      "name": "membership-opposed",
+      "note": "Independent review is incomplete. Only the chart, 63 and StrictUnitRewardScale component of 66 are actual prerequisites; the full screened chain is not mathematically necessary.",
+      "records": [
+        "Research/Pending/Records/TMP/UE_OPPOSED_MEMBERSHIP_PARTIAL_STATIC_REVIEW_PAUSED_20261002.md",
+        "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/AXIOMS_AND_SOURCE_CONSUMERS.lean.draft",
+        "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_SIGNED_AFFINE_ROW_COMPARISON/SOURCE_AND_HANDOFF.md",
+        "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_ADAPTER_HANDOFF.md",
+        "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_APPLICATION_MANIFEST.json",
+        "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/OPPOSED_SOURCE_SCOPE_HARNESS.lean.draft",
+        "Research/Pending/Records/MEMBERSHIP_OPPOSED/UE_MEMBERSHIP_STRETCH_SOURCE/SOURCE_AND_HANDOFF.md"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/01_SURE_COALITION_FULL_EXPLOITABILITY.patch",
+        "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/02_SURE_COALITION_MINIMUM.patch",
+        "Research/Pending/Changes/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/03_MEMBERSHIP_STRETCH_SURE_COALITION_SOURCE.patch"
+      ],
+      "depends_on": [
+        "membership-opposed"
+      ],
+      "name": "sure-coalition",
+      "note": "New frozen companion; independent review and all Lean checks remain.",
+      "records": [
+        "Research/Pending/Records/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/AXIOM_AND_ACTUAL_CONSUMER_HARNESS.lean.draft",
+        "Research/Pending/Records/SURE_COALITION/UE_SURE_COALITION_EXPLOITABILITY/SOURCE_AND_FROZEN_HANDOFF.md"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/00_MUTUAL_SUPREMUM_OWNER.patch",
+        "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/00A_MUTUAL_SUPREMUM_DERIVED_NONEMPTY.patch",
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/01_FINITE_CLOCK_SEMANTIC_PROMOTION.patch",
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/02_COMMON_QUANTILE_TRANSPORT_PROMOTION.patch",
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/03_COMMON_QUANTILE_APPROXIMATION_PROMOTION.patch",
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/04_ACTUAL_FULL_CAP_FINITE_CLOCK_SOURCE.patch",
+        "Research/Pending/Changes/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/05_PRODUCTION_IMPORTS.patch"
+      ],
+      "depends_on": [],
+      "name": "clock-source",
+      "note": "00A derives target nonemptiness; reconcile umbrella edits with other plans.",
+      "records": [
+        "Research/Pending/Records/TMP/UE_QUANTITATIVE_FINITE_CLOCK_PROMOTION_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/ORDERED_APPLICATION_MANIFEST.json",
+        "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/SOURCE_AND_HANDOFF.md",
+        "Research/Pending/Records/CLOCK_SOURCE/UE_QUANTITATIVE_FINITE_CLOCK_SOURCE/SOURCE_SCOPE_HARNESS.lean.draft"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/01_FINITE_CALENDAR_REPLY_PAYOFF_CHART.patch",
+        "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/02_ACTUAL_COMMON_CALENDAR_TESTER_POOL.patch",
+        "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/03_ACTUAL_COMMON_CALENDAR_SMOOTH_MINIMUM.patch",
+        "Research/Pending/Changes/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/04_COMMON_CALENDAR_IMPORTS.patch"
+      ],
+      "depends_on": [
+        "clock-source"
+      ],
+      "name": "common-calendar",
+      "note": "Actual common tester pool only; outer tilted-pressure and complete calendar consumer are not implemented.",
+      "records": [
+        "Research/Pending/Records/UE_COMMON_CALENDAR_INDEPENDENT_REVIEW/STATIC_SOURCE_REVIEW.txt",
+        "Research/Pending/Records/TMP/UE_COMMON_CALENDAR_LIBRARY_DISCOVERY_20261002.md",
+        "Research/Pending/Records/TMP/UE_SINGLE_PIVOT_PACKET_COMPLETION_DEPENDENCIES_20261002.md",
+        "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/AXIOM_HARNESS.lean.draft",
+        "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/ORDERED_APPLICATION_MANIFEST.json",
+        "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/SOURCE_AND_HANDOFF.md",
+        "Research/Pending/Records/COMMON_CALENDAR/UE_COMMON_CALENDAR_TESTERS/SOURCE_SCOPE_HARNESS.lean.draft"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/001_CONNECTED_CONVEX_HULL_REPRESENTATION.patch",
+        "Research/Pending/Changes/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/002_MATHUE_UMBRELLA.patch",
+        "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/001_CONNECTED_AFFINE_STEP.patch",
+        "Research/Pending/Changes/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/001_NONDEPRECATED_ITE_PROOF.patch",
+        "Research/Pending/Changes/TMP/UE_P4_AFFINE_STEP_ITE_TRUE_OVERLAY_20261002.patch",
+        "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/002_GEOMETRIC_AFFINE_SCHEDULE.patch",
+        "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/003_SORIN_P4_AND_SCHEDULE_DELEGATES.patch",
+        "Research/Pending/Changes/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/002_ARBITRARY_SEQUENCE_DOC.patch",
+        "Research/Pending/Changes/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/004_MATHUE_UMBRELLA.patch"
+      ],
+      "depends_on": [],
+      "name": "sorin-proposition4",
+      "note": "",
+      "records": [
+        "Research/Pending/Records/TMP/UE_SORIN_P4_CURRENT_COMPLETE_DAG_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/AXIOMS.lean.draft",
+        "Research/Pending/Records/SORIN_PROPOSITION4/CONNECTED_CONVEX_HULL_REPRESENTATION/SOURCE_AND_DEPENDENCIES.txt",
+        "Research/Pending/Records/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/AXIOMS.lean.draft",
+        "Research/Pending/Records/SORIN_PROPOSITION4/CONVEX_GEOMETRIC_SCHEDULE/SOURCE_AND_DEPENDENCIES.txt",
+        "Research/Pending/Records/SORIN_PROPOSITION4/SORIN_P4_PROOF_DOC_OVERLAYS/SOURCE_AND_DEPENDENCIES.txt"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/001_GENERALIZED_ACTUAL_GRIM_ADAPTER.patch",
+        "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/002_STATIONARY_CRITICAL_CONSTRUCTION.patch",
+        "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/003_ALTERNATING_CRITICAL_CONSTRUCTION.patch",
+        "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/004_PINNED_ADDITIVE_ORDER_NORMALIZATION.patch",
+        "Research/Pending/Changes/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/005_P15_EXACT_CONTINUATION_COEFFICIENT.patch"
+      ],
+      "depends_on": [
+        "sorin-proposition4"
+      ],
+      "name": "sorin-critical",
+      "note": "",
+      "records": [
+        "Research/Pending/Records/TMP/UE_SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/AXIOMS_AND_ACTUAL_CONSUMERS_AFTER_CHECKS.lean.draft",
+        "Research/Pending/Records/SORIN_CRITICAL/SORIN_ASYMMETRIC_CRITICAL_CONSTRUCTORS/SOURCE_AND_DEPENDENCIES.txt"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/001_ACTUAL_CONSTANT_APPROX_PUNISHMENT.patch",
+        "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/002_ACTUAL_STRICT_IR_PERIODIC_SOURCE.patch",
+        "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/003_SOURCE_ORDERED_EQUIVALENT.patch",
+        "Research/Pending/Changes/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/004_TRIGGER_PREDICATE_SOURCE_ORDER.patch"
+      ],
+      "depends_on": [
+        "sorin-critical"
+      ],
+      "name": "sorin-trigger",
+      "note": "Use source-ordered 003_SOURCE_ORDERED_EQUIVALENT, not superseded 003_CANONICAL_SUPPORT_SOURCE_ORDER.",
+      "records": [
+        "Research/Pending/Records/TMP/UE_SORIN_STATIC_MINMAX_TRIGGER_SOURCE_REVIEW_20261002.md",
+        "Research/Pending/Records/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/AXIOMS_AND_ACTUAL_SOURCE_FIXTURES_AFTER_CHECKS.lean.draft",
+        "Research/Pending/Records/SORIN_TRIGGER/SORIN_STATIC_MINMAX_TRIGGER/SOURCE_AND_DEPENDENCIES.txt"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/001_EXPOSE_INTERNAL_CALENDAR_DELIVERY.patch",
+        "Research/Pending/Changes/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/002_ACTUAL_SUPPORTED_CALENDAR_BELLMAN.patch",
+        "Research/Pending/Changes/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/003_ACTUAL_STRICT_IR_DISCOUNTED_NASH.patch"
+      ],
+      "depends_on": [
+        "sorin-trigger"
+      ],
+      "name": "sorin-strict-nash",
+      "note": "",
+      "records": [
+        "Research/Pending/Records/TMP/UE_SORIN_STRICT_IR_AND_FULL_DIMENSIONAL_FOLK_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/AXIOMS_AND_ACTUAL_NASH_FIXTURES_AFTER_CHECKS.lean.draft",
+        "Research/Pending/Records/SORIN_STRICT_NASH/SORIN_STRICT_IR_DISCOUNTED_NASH/SOURCE_QUANTIFIERS_AND_DEPENDENCIES.txt"
+      ]
+    },
+    {
+      "changes": [
+        "Research/Pending/Changes/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/001_ACTUAL_FULL_DIMENSIONAL_IR_GEOMETRY.patch",
+        "Research/Pending/Changes/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/002_ACTUAL_UNIFORM_FULL_DIMENSIONAL_HAUSDORFF.patch"
+      ],
+      "depends_on": [
+        "sorin-strict-nash"
+      ],
+      "name": "sorin-full-dimensional",
+      "note": "Original two-player alternative remains unfinished; full-dimensional branch is not all of Lemma 2.",
+      "records": [
+        "Research/Pending/Records/TMP/UE_SORIN_STRICT_IR_AND_FULL_DIMENSIONAL_FOLK_STATIC_REVIEW_20261002.md",
+        "Research/Pending/Records/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/AXIOMS_AND_ACTUAL_HAUSDORFF_FIXTURES_AFTER_CHECKS.lean.draft",
+        "Research/Pending/Records/SORIN_FULL_DIMENSIONAL/SORIN_FULL_DIMENSIONAL_DISCOUNTED_FOLK/SOURCE_QUANTIFIERS_DEPENDENCIES_AND_BOUNDARY_AUDIT.txt"
+      ]
+    },
+    {
+      "changes": [],
+      "depends_on": [
+        "sorin-full-dimensional"
+      ],
+      "name": "sorin-flat-discovery",
+      "note": "Discovery/reuse plan only. No strict-point generalization or flat-case implementation was drafted.",
+      "records": [
+        "Research/Pending/Records/TMP/UE_SORIN_FLAT_SECURITY_PRIMARY_SOURCE_DISCOVERY_20261002.md",
+        "Research/Pending/Records/SORIN_FLAT_DISCOVERY/UE_SORIN_FLAT_SECURITY_PAUSED/PAUSED_SOURCE_AND_REUSE_PLAN.md"
+      ]
+    }
+  ],
+  "preservation_review": "Research/Pending/Records/PRESERVATION_REVIEW.md",
+  "status": "uncompiled"
+}

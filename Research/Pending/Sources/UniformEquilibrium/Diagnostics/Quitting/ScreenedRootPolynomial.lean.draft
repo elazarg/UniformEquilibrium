@@ -1,0 +1,253 @@
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootSurePairOrder
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootFourCorners
+import MathUE.LinearAlgebra.RectangularCofactorMap
+import MathUE.LinearAlgebra.BilinearSegreExclusion
+import Mathlib.Algebra.MvPolynomial.Eval
+
+/-!
+# Actual integer-coordinate polynomial obstruction for screened roots
+
+Every coefficient is extracted from the original game's literal terminal
+corners. The product has six sorted sure-pair factors and four endpoint-label
+factors per pair. Its evaluated nonvanishing excludes positive equal complete
+behavioral debts on every screened root and every own-singleton vector.
+
+This module does not prove the polynomial is nonzero, its degree, or density.
+Those require the separate bounded factor witnesses and polynomial arguments.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open Matrix Math.LinearAlgebra
+open scoped BigOperators
+
+/-- Integer polynomials in the canonical 56 free reward coordinates. -/
+abbrev ScreenedRootRewardPolynomial :=
+  MvPolynomial (QuittingFreeRewardCoordinate (Fin 4)) ℤ
+
+/-- Evaluation reads the actual free coordinates and casts integer coefficients. -/
+def screenedRootPolynomialEval (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ) :
+    ScreenedRootRewardPolynomial →+* ℝ :=
+  MvPolynomial.eval₂Hom (Int.castRingHom ℝ) coordinates
+
+/-- Each actual corner gain is the difference of its two literal free reward variables. -/
+def screenedRootCornerPolynomial (pair : Fin 6) (labels : Fin 2 → Bool)
+    (index : Fin 4) (a b : Bool) : ScreenedRootRewardPolynomial :=
+  let order := screenedSurePairOrder pair
+  let hfree := screenedRootCornerTerminals_ne_ownSingleton
+    order a b index (screenedRootBranchAction labels index)
+  MvPolynomial.X
+      ⟨(screenedRootChangedCornerTerminal order a b index
+        (screenedRootBranchAction labels index), order index), hfree.2⟩ -
+    MvPolynomial.X ⟨(screenedRootCornerTerminal order a b, order index), hfree.1⟩
+
+/-- Four-corner extraction in the monomial order (1,x,y,xy), over integer polynomials. -/
+def screenedRootCoefficientPolynomial (pair : Fin 6) (labels : Fin 2 → Bool)
+    (index : Fin 4) : Fin 4 → ScreenedRootRewardPolynomial :=
+  let corner := screenedRootCornerPolynomial pair labels index
+  ![corner false false, corner true false - corner false false,
+    corner false true - corner false false,
+    corner true true - corner true false - corner false true + corner false false]
+
+/-- Literal ordered equality rows: branch1−branch0, branch2−branch0, branch3−branch0. -/
+def screenedRootDifferencePolynomialMatrix (factor : ScreenedRootFactorIndex) :
+    Matrix (Fin 3) (Fin 4) ScreenedRootRewardPolynomial :=
+  fun row column => screenedRootCoefficientPolynomial factor.1 factor.2 row.succ column -
+    screenedRootCoefficientPolynomial factor.1 factor.2 0 column
+
+/-- The same ordered difference matrix extracted from an actual real reward table. -/
+def screenedRootDifferenceMatrix
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (factor : ScreenedRootFactorIndex) : Matrix (Fin 3) (Fin 4) ℝ :=
+  fun row column =>
+    screenedRootBranchCoefficientRow reward (screenedSurePairOrder factor.1)
+        factor.2 row.succ column -
+      screenedRootBranchCoefficientRow reward (screenedSurePairOrder factor.1)
+        factor.2 0 column
+
+/-- Canonical signed maximal minors of the actual polynomial coefficient matrix. -/
+def screenedRootSignedMinorPolynomials (factor : ScreenedRootFactorIndex) :
+    Fin 4 → ScreenedRootRewardPolynomial :=
+  signedMaximalMinors (screenedRootDifferencePolynomialMatrix factor)
+
+/-- One of the 24 constructed factors, with the packet's exact sign convention. -/
+def screenedRootFactorPolynomial (factor : ScreenedRootFactorIndex) :
+    ScreenedRootRewardPolynomial :=
+  let minor := screenedRootSignedMinorPolynomials factor
+  minor 0 * minor 3 - minor 1 * minor 2
+
+/-- The literal 24-factor integer-coordinate polynomial, not a supplied exclusion test. -/
+def screenedRootExclusionPolynomial : ScreenedRootRewardPolynomial :=
+  ∏ factor : ScreenedRootFactorIndex, screenedRootFactorPolynomial factor
+
+theorem screenedRootPolynomialEval_corner
+    (singletons : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (pair : Fin 6) (labels : Fin 2 → Bool) (index : Fin 4) (a b : Bool) :
+    screenedRootPolynomialEval coordinates (screenedRootCornerPolynomial pair labels index a b) =
+      screenedRootCornerGain (quittingOwnSingletonReward singletons coordinates)
+        (screenedSurePairOrder pair) labels index a b := by
+  obtain ⟨hbase, hchanged⟩ := screenedRootCornerTerminals_ne_ownSingleton
+    (screenedSurePairOrder pair) a b index (screenedRootBranchAction labels index)
+  simp only [screenedRootCornerPolynomial, map_sub, screenedRootPolynomialEval,
+    MvPolynomial.eval₂Hom_X', screenedRootCornerGain, quittingOwnSingletonReward,
+    dif_neg hbase, dif_neg hchanged]
+
+theorem screenedRootPolynomialEval_coefficient
+    (singletons : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (pair : Fin 6) (labels : Fin 2 → Bool) (index column : Fin 4) :
+    screenedRootPolynomialEval coordinates
+        (screenedRootCoefficientPolynomial pair labels index column) =
+      screenedRootBranchCoefficientRow (quittingOwnSingletonReward singletons coordinates)
+        (screenedSurePairOrder pair) labels index column := by
+  fin_cases column <;>
+    simp only [screenedRootCoefficientPolynomial, screenedRootBranchCoefficientRow,
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three,
+      map_sub, map_add, screenedRootPolynomialEval_corner singletons coordinates]
+
+/-- Polynomial evaluation returns the actual-source difference matrix exactly. -/
+theorem screenedRootPolynomialEval_matrix
+    (singletons : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (factor : ScreenedRootFactorIndex) :
+    (screenedRootDifferencePolynomialMatrix factor).map (screenedRootPolynomialEval coordinates) =
+      screenedRootDifferenceMatrix (quittingOwnSingletonReward singletons coordinates) factor := by
+  ext row column
+  change screenedRootPolynomialEval coordinates
+      (screenedRootCoefficientPolynomial factor.1 factor.2 row.succ column -
+        screenedRootCoefficientPolynomial factor.1 factor.2 0 column) = _
+  rw [map_sub, screenedRootPolynomialEval_coefficient singletons coordinates,
+    screenedRootPolynomialEval_coefficient singletons coordinates]
+
+/-- The canonical determinant map identity transports every signed minor. -/
+theorem screenedRootPolynomialEval_minor
+    (singletons : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (factor : ScreenedRootFactorIndex) (column : Fin 4) :
+    screenedRootPolynomialEval coordinates (screenedRootSignedMinorPolynomials factor column) =
+      signedMaximalMinors
+        (screenedRootDifferenceMatrix (quittingOwnSingletonReward singletons coordinates) factor)
+        column := by
+  rw [screenedRootSignedMinorPolynomials, map_signedMaximalMinors,
+    screenedRootPolynomialEval_matrix singletons coordinates]
+
+/-- The factor evaluates to the actual matrix's Segre cofactor obstruction. -/
+theorem screenedRootPolynomialEval_factor
+    (singletons : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (factor : ScreenedRootFactorIndex) :
+    screenedRootPolynomialEval coordinates (screenedRootFactorPolynomial factor) =
+      bilinearMinorObstruction
+        (screenedRootDifferenceMatrix (quittingOwnSingletonReward singletons coordinates)
+          factor) := by
+  simp only [screenedRootFactorPolynomial, map_sub, map_mul,
+    screenedRootPolynomialEval_minor singletons coordinates, bilinearMinorObstruction,
+    segreQuadratic]
+
+/-- Evaluation keeps the full, fixed 24-factor product. -/
+theorem screenedRootPolynomialEval_product
+    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ) :
+    screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial =
+      ∏ factor : ScreenedRootFactorIndex,
+        screenedRootPolynomialEval coordinates (screenedRootFactorPolynomial factor) := by
+  exact map_prod (screenedRootPolynomialEval coordinates) _ _
+
+/-- The actual polynomial matrix has its signed-minor vector in its kernel, without rank input. -/
+theorem screenedRootDifferencePolynomialMatrix_mulVec_signedMinors
+    (factor : ScreenedRootFactorIndex) :
+    screenedRootDifferencePolynomialMatrix factor *ᵥ
+      screenedRootSignedMinorPolynomials factor = 0 :=
+  mulVec_signedMaximalMinors_eq_zero _
+
+private theorem screenedRootCoefficientRow_dot_monomials
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (pair : Fin 6) (labels : Fin 2 → Bool)
+    (hfirst : (root (screenedSurePairOrder pair 0) true).toReal = 1)
+    (hsecond : (root (screenedSurePairOrder pair 1) true).toReal = 1) (index : Fin 4) :
+    screenedRootBranchCoefficientRow reward (screenedSurePairOrder pair) labels index ⬝ᵥ
+        ![1, (root (screenedSurePairOrder pair 2) true).toReal,
+          (root (screenedSurePairOrder pair 3) true).toReal,
+          (root (screenedSurePairOrder pair 2) true).toReal *
+            (root (screenedSurePairOrder pair 3) true).toReal] =
+      screenedRootDebtBranches reward root (screenedSurePairOrder pair) labels index := by
+  rw [screenedRootDebtBranches_eq_coefficientRow reward root
+    (screenedSurePairOrder pair) labels hfirst hsecond]
+  simp only [dotProduct, Fin.sum_univ_succ, Fin.sum_univ_zero, Matrix.cons_val_zero,
+    Matrix.cons_val_succ, mul_one, add_zero, add_assoc]
+
+/-- Equal actual branch values put (1,x,y,xy) in the literal difference matrix's kernel. -/
+theorem screenedRootDifferenceMatrix_mulVec_eq_zero_of_equal_branches
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (factor : ScreenedRootFactorIndex)
+    (hfirst : (root (screenedSurePairOrder factor.1 0) true).toReal = 1)
+    (hsecond : (root (screenedSurePairOrder factor.1 1) true).toReal = 1)
+    (value : ℝ)
+    (hequal : ∀ index,
+      screenedRootDebtBranches reward root (screenedSurePairOrder factor.1) factor.2 index =
+        value) :
+    screenedRootDifferenceMatrix reward factor *ᵥ
+      ![1, (root (screenedSurePairOrder factor.1 2) true).toReal,
+        (root (screenedSurePairOrder factor.1 3) true).toReal,
+        (root (screenedSurePairOrder factor.1 2) true).toReal *
+          (root (screenedSurePairOrder factor.1 3) true).toReal] = 0 := by
+  funext row
+  change (_ - _) ⬝ᵥ _ = 0
+  rw [sub_dotProduct,
+    screenedRootCoefficientRow_dot_monomials reward root factor.1 factor.2 hfirst hsecond,
+    screenedRootCoefficientRow_dot_monomials reward root factor.1 factor.2 hfirst hsecond,
+    hequal, hequal, sub_self]
+
+/-- Actual strictly positive equal complete debts force the constructed product to vanish.
+This includes boundary roots and matrices whose maximal minors all vanish. -/
+theorem screenedRootExclusionPolynomial_eq_zero_of_positive_equal_debts
+    (singletons : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (root : Fin 4 → PMF Bool) (hscreened : IsScreenedQuittingRoot root)
+    {debt : ℝ} (hdebt : 0 < debt)
+    (hequal : ∀ who, quittingTerminalDeviationDebt
+      (quittingOwnSingletonReward singletons coordinates)
+      (quittingOneDateThenNeverProfile (quittingOwnSingletonReward singletons coordinates) root)
+      who = debt) :
+    screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial = 0 := by
+  obtain ⟨pair, hfirst, hsecond⟩ :=
+    (isScreenedQuittingRoot_iff_exists_pair root).mp hscreened
+  obtain ⟨labels, hlabels⟩ := exists_screenedRootDebtBranches_eq_of_positive_equal_debts
+    (quittingOwnSingletonReward singletons coordinates) root (screenedSurePairOrder pair)
+      hfirst hsecond hdebt hequal
+  let factor : ScreenedRootFactorIndex := (pair, labels)
+  have hkernel := screenedRootDifferenceMatrix_mulVec_eq_zero_of_equal_branches
+    (quittingOwnSingletonReward singletons coordinates) root factor hfirst hsecond debt hlabels
+  have hfactor : screenedRootPolynomialEval coordinates
+      (screenedRootFactorPolynomial factor) = 0 := by
+    rw [screenedRootPolynomialEval_factor singletons coordinates]
+    by_contra hnonzero
+    exact mulVec_bilinearMonomials_ne_zero _ hnonzero _ _ hkernel
+  rw [screenedRootPolynomialEval_product]
+  exact Finset.prod_eq_zero (Finset.mem_univ factor) hfactor
+
+/-- Nonvanishing excludes tied positive full debt uniformly over the entire singleton fiber. -/
+theorem not_positive_equal_screened_debts_of_polynomial_ne_zero
+    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (hnonzero : screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial ≠ 0)
+    (singletons : Fin 4 → ℝ) (root : Fin 4 → PMF Bool)
+    (hscreened : IsScreenedQuittingRoot root) :
+    ¬ ∃ debt : ℝ, 0 < debt ∧ ∀ who,
+      quittingTerminalDeviationDebt (quittingOwnSingletonReward singletons coordinates)
+        (quittingOneDateThenNeverProfile (quittingOwnSingletonReward singletons coordinates) root)
+        who = debt := by
+  rintro ⟨debt, hdebt, hequal⟩
+  exact hnonzero (screenedRootExclusionPolynomial_eq_zero_of_positive_equal_debts
+    singletons coordinates root hscreened hdebt hequal)
+
+/-- Original reward tables enter through their literal coordinate restriction, not a new table. -/
+theorem not_positive_equal_screened_debts_of_actual_reward_polynomial_ne_zero
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hnonzero : screenedRootPolynomialEval
+      (fun coordinate => reward coordinate.1.1 coordinate.1.2) screenedRootExclusionPolynomial ≠ 0)
+    (root : Fin 4 → PMF Bool) (hscreened : IsScreenedQuittingRoot root) :
+    ¬ ∃ debt : ℝ, 0 < debt ∧ ∀ who,
+      quittingTerminalDeviationDebt reward (quittingOneDateThenNeverProfile reward root) who =
+        debt := by
+  have h := not_positive_equal_screened_debts_of_polynomial_ne_zero
+    (fun coordinate => reward coordinate.1.1 coordinate.1.2) hnonzero
+    (fun who => reward (quittingSingletonTerminal who) who) root hscreened
+  simpa only [quittingOwnSingletonReward_reconstruct] using h
+
+end GameTheory

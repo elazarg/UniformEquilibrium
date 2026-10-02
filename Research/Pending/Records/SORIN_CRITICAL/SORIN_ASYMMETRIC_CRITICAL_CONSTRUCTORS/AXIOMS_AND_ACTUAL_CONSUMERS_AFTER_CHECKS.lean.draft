@@ -1,0 +1,71 @@
+import Literature.Sorin1986
+
+noncomputable section
+
+namespace SorinAsymmetricCriticalFixtures
+
+open Literature.Sorin1986
+
+theorem stationary_actual_profile (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : y ≤ x) :
+    ∃ profile : (asymmetricGeneralizedDilemma α β x y).BehaviorProfile,
+      (asymmetricGeneralizedDilemma α β x y).repeatedGame.IsDiscountedεNash
+        (1 - asymmetricCriticalDiscount α β x y) PUnit.unit 0 profile ∧
+      (asymmetricGeneralizedDilemma α β x y).discountedPayoff
+        (asymmetricCriticalDiscount α β x y) profile = pair (β - y) (β - y) :=
+  ⟨asymmetricStationaryProfile α β x y,
+    asymmetricStationaryProfile_isDiscountedNash α β x y hgap hx hy horder,
+    asymmetricStationaryProfile_discountedPayoff α β x y hgap hx hy⟩
+
+theorem stationary_equal_losses (α β x : ℝ)
+    (hgap : α < β - x) (hx : 0 < x) :
+    pair (β - x) (β - x) ∈
+      (asymmetricGeneralizedDilemma α β x x).discountedEquilibriumPayoffs
+        (asymmetricCriticalDiscount α β x x) :=
+  asymmetricStationary_mem_discountedEquilibriumPayoffs α β x x hgap hx hx le_rfl
+
+/-- Negative payoffs and x greater than beta-alpha remain in the actual scope. -/
+theorem stationary_negative_payoffs_large_loss :
+    ∃ profile : (asymmetricGeneralizedDilemma (-10) (-5) 7 2).BehaviorProfile,
+      (asymmetricGeneralizedDilemma (-10) (-5) 7 2).repeatedGame.IsDiscountedεNash
+        (1 - asymmetricCriticalDiscount (-10) (-5) 7 2) PUnit.unit 0 profile ∧
+      (asymmetricGeneralizedDilemma (-10) (-5) 7 2).discountedPayoff
+        (asymmetricCriticalDiscount (-10) (-5) 7 2) profile = pair (-7) (-7) := by
+  obtain ⟨profile, hnash, hpayoff⟩ := stationary_actual_profile
+    (-10) (-5) 7 2 (by norm_num) (by norm_num) (by norm_num) (by norm_num)
+  refine ⟨profile, hnash, ?_⟩
+  simpa only [show (-5 : ℝ) - 2 = -7 by norm_num] using hpayoff
+
+theorem alternating_actual_profile (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y) :
+    ∃ profile : (asymmetricGeneralizedDilemma α β x y).BehaviorProfile,
+      (asymmetricGeneralizedDilemma α β x y).repeatedGame.IsDiscountedεNash
+        (1 - asymmetricCriticalDiscount α β x y) PUnit.unit 0 profile ∧
+      (asymmetricGeneralizedDilemma α β x y).discountedPayoff
+        (asymmetricCriticalDiscount α β x y) profile =
+          alternatingDiscountedPayoff (asymmetricCriticalDiscount α β x y)
+            (pair β (α - x)) (pair (α - x) β) :=
+  ⟨asymmetricAlternatingProfile α β x y,
+    asymmetricAlternatingProfile_isDiscountedNash α β x y hgap hx hy horder,
+    asymmetricAlternatingProfile_discountedPayoff α β x y hgap hx hy horder⟩
+
+end SorinAsymmetricCriticalFixtures
+
+#print axioms Literature.Sorin1986.asymmetricStationaryProfile
+#print axioms Literature.Sorin1986.asymmetricStationaryProfile_discountedPayoff
+#print axioms Literature.Sorin1986.asymmetricStationaryProfile_discounted_deviation_cap
+#print axioms Literature.Sorin1986.asymmetricStationaryProfile_isDiscountedNash
+#print axioms Literature.Sorin1986.asymmetricStationary_mem_discountedEquilibriumPayoffs
+#print axioms Literature.Sorin1986.asymmetricAlternatingProfile
+#print axioms Literature.Sorin1986.asymmetricAlternatingProfile_discountedPayoff
+#print axioms Literature.Sorin1986.asymmetricAlternatingProfile_discounted_deviation_cap
+#print axioms Literature.Sorin1986.asymmetricAlternatingProfile_isDiscountedNash
+#print axioms Literature.Sorin1986.asymmetricAlternating_mem_discountedEquilibriumPayoffs
+#print axioms Literature.Sorin1986.prisonerVertexProfile_discountedPayoff
+#print axioms Literature.Sorin1986.prisonerVertexProfile_discounted_deviation_cap
+#print axioms Literature.Sorin1986.prisonerVertexProfile_isDiscountedNash
+#print axioms Literature.Sorin1986.proposition_15
+#print axioms SorinAsymmetricCriticalFixtures.stationary_actual_profile
+#print axioms SorinAsymmetricCriticalFixtures.stationary_equal_losses
+#print axioms SorinAsymmetricCriticalFixtures.stationary_negative_payoffs_large_loss
+#print axioms SorinAsymmetricCriticalFixtures.alternating_actual_profile

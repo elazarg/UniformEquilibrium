@@ -1,0 +1,148 @@
+*** Begin Patch
+*** Add File: MathUE/Topology/CompactNearZeroCollar.lean
++import Mathlib.Topology.Order.Compact
++import Mathlib.Tactic.Linarith
++import Mathlib.Tactic.NormNum
++
++/-! # A uniform positive collar near a compact zero fiber -/
++
++namespace Math
++
++open Set
++
++/-- Positive mass on every zero of a nonnegative continuous objective on a
++compact carrier gives one positive mass floor in one objective neighborhood.
++Both extrema are produced internally; no favorable minimizer is supplied. -/
++theorem exists_positive_near_zero_collar_of_compact
++    {X : Type*} [TopologicalSpace X] (carrier : Set X)
++    (objective mass : X → ℝ)
++    (hcompact : IsCompact carrier) (hobjective : Continuous objective)
++    (hmass : Continuous mass)
++    (hzero : ∃ point ∈ carrier, objective point = 0)
++    (hnonneg : ∀ point ∈ carrier, 0 ≤ objective point)
++    (hpositive : ∀ point ∈ carrier, objective point = 0 → 0 < mass point) :
++    ∃ (floor radius : ℝ), 0 < floor ∧ 0 < radius ∧
++      ∀ point ∈ carrier, objective point ≤ radius → floor ≤ mass point := by
++  let zeros := carrier ∩ {point | objective point = 0}
++  have hzerosCompact : IsCompact zeros :=
++    hcompact.inter_right (isClosed_eq hobjective continuous_const)
++  have hzerosNonempty : zeros.Nonempty := by
++    obtain ⟨point, hpoint, hvalue⟩ := hzero
++    exact ⟨point, hpoint, hvalue⟩
++  obtain ⟨minimum, hminimum, hmassMinimum⟩ :=
++    hzerosCompact.exists_isMinOn hzerosNonempty hmass.continuousOn
++  have hminimumPositive : 0 < mass minimum :=
++    hpositive minimum hminimum.1 hminimum.2
++  let bad := carrier ∩ {point | mass point ≤ mass minimum / 2}
++  have hbadCompact : IsCompact bad :=
++    hcompact.inter_right (isClosed_le hmass continuous_const)
++  by_cases hbad : bad.Nonempty
++  · obtain ⟨boundary, hboundary, hobjectiveMinimum⟩ :=
++      hbadCompact.exists_isMinOn hbad hobjective.continuousOn
++    have hboundaryPositive : 0 < objective boundary := by
++      by_contra hnot
++      have hvalue : objective boundary = 0 :=
++        le_antisymm (not_lt.mp hnot) (hnonneg boundary hboundary.1)
++      have hmassLe := hmassMinimum (show boundary ∈ zeros from ⟨hboundary.1, hvalue⟩)
++      have hbadLe := hboundary.2
++      linarith
++    refine ⟨mass minimum / 2, objective boundary / 2, by linarith, by linarith, ?_⟩
++    intro point hpoint hnear
++    by_contra hnot
++    have hbadPoint : point ∈ bad := ⟨hpoint, (not_le.mp hnot).le⟩
++    have hfloor := hobjectiveMinimum hbadPoint
++    linarith
++  · refine ⟨mass minimum / 2, 1, by linarith, by norm_num, ?_⟩
++    intro point hpoint _hnear
++    by_contra hnot
++    exact hbad ⟨point, hpoint, (not_le.mp hnot).le⟩
++
++end Math
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/ScreenedMinimumSingletonCollar.lean
++import MathUE.Topology.CompactNearZeroCollar
++import UniformEquilibrium.Diagnostics.Quitting.ScreenedMinimumSingletonMass
++
++/-! # The actual near-MAX-minimum total-singleton collar for a fixed generic table -/
++
++noncomputable section
++
++namespace GameTheory
++
++variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
++
++/-- The canonical semantic MAX minimum has a joint law lift at the actual
++full-profile infimum. No attaining behavioral profile is assumed. -/
++theorem exists_minimum_terminalSemanticLawCarrier_exploitability
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
++    ∃ point ∈ quittingTerminalSemanticLawCarrier reward,
++      quittingTerminalSemanticExploitability point.1 =
++        quittingTerminalExploitabilityInf reward := by
++  obtain ⟨pair, hpair, hminimum⟩ := exists_minimum_quittingTerminalSemanticExploitability reward
++  obtain ⟨mass, hmass⟩ := exists_terminalSemanticLawCarrier_lift reward pair hpair
++  refine ⟨(pair, mass), hmass, le_antisymm ?_
++    (quittingTerminalExploitabilityInf_le_semanticCarrier reward hpair)⟩
++  apply le_csInf
++  · exact ⟨quittingTerminalExploitability reward (quittingAlwaysContinueProfile reward),
++      ⟨quittingAlwaysContinueProfile reward, rfl⟩⟩
++  · rintro value ⟨profile, rfl⟩
++    exact hminimum _ (quittingTerminalSemanticPair_mem_carrier reward profile)
++
++/-- Section 7: internally produced constants work for EVERY full behavioral
++profile near the actual MAX-regret infimum, keeping every reply and Never. -/
++theorem exists_screenedMinimumSingletonCollar
++    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
++    (singletons : Fin 4 → ℝ)
++    (hcoordinates : ∀ coordinate, |coordinates coordinate| ≤ 1)
++    (hsingletons : ∀ who, |singletons who| ≤ 1)
++    (hpolynomial : screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial ≠ 0)
++    (hpositive : 0 < quittingTerminalExploitabilityInf
++      (quittingOwnSingletonReward singletons coordinates)) :
++    ∃ (floor radius : ℝ), 0 < floor ∧ 0 < radius ∧
++      ∀ profile :
++        (quittingGame (quittingOwnSingletonReward singletons coordinates)).BehaviorProfile,
++        quittingTerminalExploitability (quittingOwnSingletonReward singletons coordinates) profile ≤
++            quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) +
++              radius →
++          floor ≤ quittingTerminalLawSingletonMass
++            (quittingTerminalOutcomeMass
++              (quittingOwnSingletonReward singletons coordinates) profile) := by
++  let reward := quittingOwnSingletonReward singletons coordinates
++  let objective := fun point : QuittingTerminalSemanticLawPoint (Fin 4) =>
++    quittingTerminalSemanticExploitability point.1 - quittingTerminalExploitabilityInf reward
++  let mass := fun point : QuittingTerminalSemanticLawPoint (Fin 4) =>
++    quittingTerminalLawSingletonMass point.2
++  have hnonneg : ∀ point ∈ quittingTerminalSemanticLawCarrier reward, 0 ≤ objective point := by
++    intro point hpoint
++    exact sub_nonneg.mpr (quittingTerminalExploitabilityInf_le_semanticCarrier reward
++      (terminalSemanticLawCarrier_fst_mem_carrier point hpoint))
++  have hzero : ∃ point ∈ quittingTerminalSemanticLawCarrier reward, objective point = 0 := by
++    obtain ⟨point, hpoint, hvalue⟩ :=
++      exists_minimum_terminalSemanticLawCarrier_exploitability reward
++    exact ⟨point, hpoint, sub_eq_zero.mpr hvalue⟩
++  have hmassPositive : ∀ point ∈ quittingTerminalSemanticLawCarrier reward,
++      objective point = 0 → 0 < mass point := by
++    intro point hpoint hvalue
++    have hequal := sub_eq_zero.mp hvalue
++    apply minimumTerminalSemanticLaw_singletonMass_pos_of_screenedPolynomial_ne_zero
++      coordinates singletons hcoordinates hsingletons hpolynomial point hpoint
++    · intro candidate hcandidate
++      rw [hequal]
++      exact quittingTerminalExploitabilityInf_le_semanticCarrier reward hcandidate
++    · rw [hequal]
++      exact hpositive
++  obtain ⟨floor, radius, hfloor, hradius, hcollar⟩ :=
++    Math.exists_positive_near_zero_collar_of_compact
++      (quittingTerminalSemanticLawCarrier reward) objective mass
++      (quittingTerminalSemanticLawCarrier_isCompact reward)
++      ((continuous_quittingTerminalSemanticExploitability.comp continuous_fst).sub continuous_const)
++      (continuous_quittingTerminalLawSingletonMass.comp continuous_snd)
++      hzero hnonneg hmassPositive
++  refine ⟨floor, radius, hfloor, hradius, ?_⟩
++  intro profile hnear
++  apply hcollar _ (quittingTerminalSemanticLawPoint_mem_carrier reward profile)
++  change quittingTerminalExploitability reward profile -
++    quittingTerminalExploitabilityInf reward ≤ radius
++  linarith
++
++end GameTheory
+*** End Patch

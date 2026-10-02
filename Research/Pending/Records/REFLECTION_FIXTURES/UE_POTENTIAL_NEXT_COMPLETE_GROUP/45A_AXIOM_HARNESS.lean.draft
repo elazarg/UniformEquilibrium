@@ -1,0 +1,4 @@
+import MathUE.Analysis.RationalPolynomialCoordinateDerivatives
+
+#print axioms Math.Interval.RationalPolynomial.coordinatePartial_evalReal_eq
+#print axioms Math.Interval.RationalPolynomial.coordinateMixedPartial_evalReal_eq

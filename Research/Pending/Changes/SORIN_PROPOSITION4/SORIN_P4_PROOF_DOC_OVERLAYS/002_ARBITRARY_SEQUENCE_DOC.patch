@@ -1,0 +1,9 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+ /-- Exact actual behavioral realization of a history-independent mixed
+-sequence, for every real parameter. No geometric schedule is supplied here. -/
++sequence, for every real parameter. No geometric-law or delivered-payoff
++certificate is required. -/
+ private theorem FiniteStageGame.discountedPayoff_mixedSequenceBehavior
+*** End Patch

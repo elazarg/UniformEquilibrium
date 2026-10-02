@@ -1,0 +1,7 @@
+*** Begin Patch
+*** Update File: MathUE.lean
+@@
+ import MathUE.Topology.CompactDiscreteFiber
++import MathUE.Topology.ConnectedConvexHullRepresentation
+ import MathUE.Topology.FiniteOneDimensionalCoordinate
+*** End Patch

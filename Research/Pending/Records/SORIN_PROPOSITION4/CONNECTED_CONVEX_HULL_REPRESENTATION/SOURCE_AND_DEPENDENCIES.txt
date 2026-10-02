@@ -1,0 +1,65 @@
+STATUS: Frozen static draft, not compiled or axiom-checked here.
+Root owns all shared editing, compilation, cache and Git operations.
+
+SOURCE
+Sorin (1986), printed p.151, Proposition 4, cites Fenchel's connected-set
+strengthening through Valentine, Convex Sets (1964), p.169, Proposition 3.3.
+Supplied paper SHA256:
+d09a8e78f37f9863ff40e969a90f03799967d05eb70ba28a93afab84ddfce56c
+The cited book proof was not available locally. A complete publisher-hosted
+classical proof is Bernard Teissier, Monomial Ideals, Binomial Ideals,
+Polynomial Ideals, MSRI Publications 51 (2004), Proposition 4.2, pp.220-221:
+https://library.slmath.org/books/Book51/files/07teissier.pdf
+Teissier explicitly follows Hanner--Radstrom (1951). Their proof considers
+the reflected simplex cones. An actual source point on a cone boundary
+replaces two old vertices by one source point. If no boundary meets the
+source, the cones partition it into nonempty relatively open pieces.
+
+SOURCE-PROOF ADJUSTMENTS
+The implementation expresses those same cones by strict maxima of
+barycentric coordinates normalized by the internally chosen positive
+coordinates of the target. A tied maximum gives the boundary replacement;
+continuity of the finite discrete winner label contradicts preconnectedness.
+The normalized construction avoids selecting an auxiliary Euclidean metric
+or spelling out the reflected-simplex cones. It is the same classical proof,
+not a path connectedness argument or a favorable supplied simplex premise.
+The connected-set case is proved; the more general component-count theorem
+printed by Teissier is not claimed here. Dimension zero is handled by the
+bound max(1, finrank); membership itself rules out an empty source.
+
+EXACT API AND QUANTIFIERS
+For every real finite-dimensional normed vector space E, every subset source
+of E that is IsPreconnected, and every actual point of convexHull R source,
+the theorem internally selects a nonempty finite family contained in source,
+whose convex hull contains the original point and whose cardinality is at
+most max(1, Module.finrank R E). No compactness, path, supplied coefficients,
+supplied simplex, maximizer, finite source, or source-nonemptiness premise.
+The strict-winner lemma is separately reusable for an arbitrary topological
+source and a finite nontrivial collection of continuous real scores.
+
+DEPENDENCIES
+MathUE.Topology.FarthestPointContactHull owns internally minimal affine
+representations and their internally selected positive weights. Reused,
+not copied. Mathlib owns continuous affine-basis coordinates, coordinate
+reconstruction, convex finite sums, finite maximum, and constancy of maps
+from preconnected spaces to discrete spaces. No Literature imports.
+
+ORDER AND BASES
+001 creates a currently absent module; no existing source file is replaced.
+Canonical minimal-family/positive-weight owner SHA256:
+c5cc87c89cb647a91cfb42d65227bf7052f6611146f756b6d6345260c5d51a94
+002 inserts the module in MathUE.lean. Observed exact shared umbrella SHA256:
+eccfb315401ec04dd3a64794e6f8ecbd2e66ce591abb00d05f79ee68381da9ce
+Pending BilinearQuarterEscape umbrella insertion is independent of this
+context. Root should compose against its actual ordered future umbrella and
+regenerate the exhaustive AxiomAudit after accepting the new module.
+Observed Literature/Sorin1986.lean SHA256:
+32306dff26b27f23707f10a4f73d335ff7134386d1c3223b4b6b47703ea69ba4
+This unit does not edit Literature, prove Proposition 4, or provide the
+discounted behavioral schedule. Those remain subsequent consumer work.
+
+CHECKS
+Library declaration/signature inspection and static proof review only.
+No Lean/Lake process, build, cache, Git or shared-file mutation was performed.
+AXIOMS.lean is a manual harness for root; expected permitted transitive axioms
+are only propext, Quot.sound and Classical.choice. This is not an audit result.

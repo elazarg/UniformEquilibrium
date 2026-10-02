@@ -1,0 +1,9 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Diagnostics.lean
+@@
+ import UniformEquilibrium.Diagnostics.Quitting.ThreeSureMembershipReversal
++import UniformEquilibrium.Diagnostics.Quitting.MembershipStretchWorstTableSource
++import UniformEquilibrium.Diagnostics.Quitting.SingleOptionalMembershipRows
++import UniformEquilibrium.Diagnostics.Quitting.ThreeSureOpposedMembershipReversals
++import UniformEquilibrium.Diagnostics.Quitting.MembershipStretchOpposedSource
+*** End Patch

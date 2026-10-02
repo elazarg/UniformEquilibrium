@@ -1,0 +1,199 @@
+*** Begin Patch
+*** Add File: MathUE/LinearAlgebra/RectangularCofactorKernel.lean
++import Mathlib.LinearAlgebra.Matrix.Adjugate
++import Mathlib.LinearAlgebra.Matrix.Notation
++import Mathlib.Algebra.Field.Basic
++
++/-!
++# Signed maximal minors and the rectangular kernel
++
++For an `n × (n+1)` matrix, column `j` is deleted by `Fin.succAbove j` and
++its determinant has sign `(-1)^j`. Laplace expansion and the canonical
++adjugate identity give the cofactor kernel vector and its cross relations.
++No invertible minor is an input. When all maximal minors vanish the identities
++still hold; when the cofactor vector is nonzero it spans the entire kernel.
++-/
++
++noncomputable section
++
++namespace Math.LinearAlgebra
++
++open Matrix
++
++variable {R : Type*} [CommRing R] {n : ℕ}
++
++/-- Ordered column-deletion minors, with the sign convention `(-1)^j`. -/
++def signedMaximalMinors (matrix : Matrix (Fin n) (Fin (n + 1)) R) : Fin (n + 1) → R :=
++  fun column => (-1) ^ column.val * (matrix.submatrix id column.succAbove).det
++
++private def prependRow (row : Fin (n + 1) → R)
++    (matrix : Matrix (Fin n) (Fin (n + 1)) R) : Matrix (Fin (n + 1)) (Fin (n + 1)) R :=
++  Matrix.of (Fin.cons row matrix)
++
++private theorem adjugate_prependRow_firstColumn
++    (row : Fin (n + 1) → R) (matrix : Matrix (Fin n) (Fin (n + 1)) R)
++    (column : Fin (n + 1)) :
++    (prependRow row matrix).adjugate column 0 = signedMaximalMinors matrix column := by
++  rw [Matrix.adjugate_fin_succ_eq_det_submatrix]
++  have hminor : (prependRow row matrix).submatrix (0 : Fin (n + 1)).succAbove
++      column.succAbove = matrix.submatrix id column.succAbove := by
++    ext index coordinate
++    simp [prependRow, Matrix.submatrix, Fin.succAbove_zero]
++  simp only [hminor, Fin.val_zero, zero_add, signedMaximalMinors]
++
++/-- The determinant with a prescribed first row is its pairing with the signed minors. -/
++private theorem det_prependRow (row : Fin (n + 1) → R)
++    (matrix : Matrix (Fin n) (Fin (n + 1)) R) :
++    (prependRow row matrix).det = row ⬝ᵥ signedMaximalMinors matrix := by
++  rw [Matrix.det_eq_sum_mul_adjugate_row _ 0]
++  simp only [adjugate_prependRow_firstColumn]
++  rfl
++
++/-- Laplace's cofactor identity for a rectangular matrix, also at deficient rank. -/
++theorem mulVec_signedMaximalMinors_eq_zero
++    (matrix : Matrix (Fin n) (Fin (n + 1)) R) :
++    matrix *ᵥ signedMaximalMinors matrix = 0 := by
++  funext row
++  change matrix row ⬝ᵥ signedMaximalMinors matrix = 0
++  rw [← det_prependRow]
++  apply Matrix.det_zero_of_row_eq (show (0 : Fin (n + 1)) ≠ row.succ from
++    (Fin.succ_ne_zero row).symm)
++  rfl
++
++/-- Every kernel vector has zero two-coordinate minors with the cofactor vector.
++This polynomial identity requires no rank assumption and no division. -/
++theorem signedMaximalMinors_mul_kernel_coordinate
++    (matrix : Matrix (Fin n) (Fin (n + 1)) R) (vector : Fin (n + 1) → R)
++    (hkernel : matrix *ᵥ vector = 0) (coordinate pivot : Fin (n + 1)) :
++    signedMaximalMinors matrix coordinate * vector pivot =
++      signedMaximalMinors matrix pivot * vector coordinate := by
++  let square := prependRow (Pi.single pivot (1 : R)) matrix
++  have hdet : square.det = signedMaximalMinors matrix pivot := by
++    rw [square, det_prependRow, single_dotProduct, one_mul]
++  have hproduct : square *ᵥ vector = Pi.single 0 (vector pivot) := by
++    ext index
++    refine Fin.cases ?_ (fun row => ?_) index
++    · simp [square, prependRow, Matrix.mulVec, single_dotProduct]
++    · simpa [square, prependRow, Matrix.mulVec] using congrFun hkernel row
++  have hadjugate := congrArg (fun value => square.adjugate *ᵥ value) hproduct
++  rw [Matrix.mulVec_mulVec, Matrix.adjugate_mul, Matrix.smul_mulVec,
++    Matrix.one_mulVec] at hadjugate
++  have hcoordinate := (congrFun hadjugate coordinate).symm
++  simpa only [Pi.smul_apply, smul_eq_mul, Matrix.mulVec, dotProduct_single,
++    hdet, square, adjugate_prependRow_firstColumn] using hcoordinate
++
++section Field
++
++variable {K : Type*} [Field K]
++
++/-- A nonzero cofactor vector spans the kernel. The nonzero coordinate used
++for division is selected internally, not supplied as an invertible minor. -/
++theorem exists_smul_signedMaximalMinors_of_mulVec_eq_zero
++    (matrix : Matrix (Fin n) (Fin (n + 1)) K)
++    (hminor : signedMaximalMinors matrix ≠ 0)
++    (vector : Fin (n + 1) → K) (hkernel : matrix *ᵥ vector = 0) :
++    ∃ scalar : K, vector = scalar • signedMaximalMinors matrix := by
++  classical
++  obtain ⟨pivot, hpivot⟩ := Function.ne_iff.mp hminor
++  change signedMaximalMinors matrix pivot ≠ 0 at hpivot
++  refine ⟨vector pivot / signedMaximalMinors matrix pivot, ?_⟩
++  funext coordinate
++  change vector coordinate =
++    vector pivot / signedMaximalMinors matrix pivot * signedMaximalMinors matrix coordinate
++  rw [div_mul_eq_mul_div]
++  apply (eq_div_iff hpivot).2
++  exact (signedMaximalMinors_mul_kernel_coordinate
++    matrix vector hkernel coordinate pivot).symm.trans (mul_comm _ _)
++
++/-- With nonzero signed minors, the kernel is exactly their one-dimensional span. -/
++theorem mulVec_eq_zero_iff_exists_smul_signedMaximalMinors
++    (matrix : Matrix (Fin n) (Fin (n + 1)) K)
++    (hminor : signedMaximalMinors matrix ≠ 0) (vector : Fin (n + 1) → K) :
++    matrix *ᵥ vector = 0 ↔ ∃ scalar : K, vector = scalar • signedMaximalMinors matrix := by
++  constructor
++  · exact exists_smul_signedMaximalMinors_of_mulVec_eq_zero matrix hminor vector
++  · rintro ⟨scalar, rfl⟩
++    rw [Matrix.mulVec_smul, mulVec_signedMaximalMinors_eq_zero, smul_zero]
++
++end Field
++
++end Math.LinearAlgebra
+*** Add File: MathUE/LinearAlgebra/BilinearSegreExclusion.lean
++import MathUE.LinearAlgebra.RectangularCofactorKernel
++import Mathlib.Tactic.Ring
++
++/-!
++# The degree-six maximal-minor obstruction to a bilinear common zero
++
++The four monomials are ordered `(1,p,q,p*q)`. Applying their Segre equation
++to the signed-minor kernel line gives the packet's test. Deficient rank is
++not excluded by a premise: if the test is nonzero, a nonzero minor is derived.
++-/
++
++noncomputable section
++
++namespace Math.LinearAlgebra
++
++open Matrix
++
++variable {K : Type*} [Field K]
++
++/-- The defining quadratic of the two-by-two rank-one cone. -/
++def segreQuadratic (vector : Fin 4 → K) : K :=
++  vector 0 * vector 3 - vector 1 * vector 2
++
++/-- The signed-minor expression `w₀*w₃-w₁*w₂` for a three-by-four matrix. -/
++def bilinearMinorObstruction (matrix : Matrix (Fin 3) (Fin 4) K) : K :=
++  segreQuadratic (signedMaximalMinors matrix)
++
++theorem segreQuadratic_smul (scalar : K) (vector : Fin 4 → K) :
++    segreQuadratic (scalar • vector) = scalar ^ 2 * segreQuadratic vector := by
++  simp only [segreQuadratic, Pi.smul_apply, smul_eq_mul]
++  ring
++
++/-- A nonzero test excludes every nonzero rank-one vector from the kernel. -/
++theorem not_kernel_segre_of_bilinearMinorObstruction_ne_zero
++    (matrix : Matrix (Fin 3) (Fin 4) K)
++    (hobstruction : bilinearMinorObstruction matrix ≠ 0)
++    (vector : Fin 4 → K) (hvector : vector ≠ 0) (hsegre : segreQuadratic vector = 0) :
++    matrix *ᵥ vector ≠ 0 := by
++  intro hkernel
++  have hminor : signedMaximalMinors matrix ≠ 0 := by
++    intro hzero
++    apply hobstruction
++    simp only [bilinearMinorObstruction, hzero, segreQuadratic, Pi.zero_apply,
++      mul_zero, sub_self]
++  obtain ⟨scalar, hscalar⟩ :=
++    exists_smul_signedMaximalMinors_of_mulVec_eq_zero matrix hminor vector hkernel
++  have hscalarNonzero : scalar ≠ 0 := by
++    intro hzero
++    apply hvector
++    simpa only [hzero, zero_smul] using hscalar
++  rw [hscalar, segreQuadratic_smul] at hsegre
++  exact (mul_ne_zero (pow_ne_zero 2 hscalarNonzero) hobstruction) hsegre
++
++/-- Every nonzero Segre kernel vector forces the test to vanish, including
++all rank-deficient cases. -/
++theorem bilinearMinorObstruction_eq_zero_of_kernel_segre
++    (matrix : Matrix (Fin 3) (Fin 4) K) (vector : Fin 4 → K)
++    (hvector : vector ≠ 0) (hkernel : matrix *ᵥ vector = 0)
++    (hsegre : segreQuadratic vector = 0) :
++    bilinearMinorObstruction matrix = 0 := by
++  by_contra hnonzero
++  exact not_kernel_segre_of_bilinearMinorObstruction_ne_zero
++    matrix hnonzero vector hvector hsegre hkernel
++
++/-- Literal bilinear monomial source; no restriction on the two parameters. -/
++theorem mulVec_bilinearMonomials_ne_zero
++    (matrix : Matrix (Fin 3) (Fin 4) K)
++    (hobstruction : bilinearMinorObstruction matrix ≠ 0) (p q : K) :
++    matrix *ᵥ ![1, p, q, p * q] ≠ 0 := by
++  apply not_kernel_segre_of_bilinearMinorObstruction_ne_zero matrix hobstruction
++  · intro hzero
++    have hone := congrFun hzero 0
++    exact one_ne_zero (by simpa only [Matrix.cons_val_zero, Pi.zero_apply] using hone)
++  · simp only [segreQuadratic, Matrix.cons_val_zero, Matrix.cons_val_one,
++      Matrix.cons_val_two, Matrix.cons_val_three, one_mul, sub_self]
++
++end Math.LinearAlgebra
+*** End Patch

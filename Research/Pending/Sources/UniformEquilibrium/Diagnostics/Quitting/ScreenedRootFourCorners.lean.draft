@@ -1,0 +1,250 @@
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootBranchLabels
+import UniformEquilibrium.Diagnostics.Quitting.SureOpponentRewardFiber
+import MathUE.PMFProduct.PureUpdateExpectation
+import Mathlib.LinearAlgebra.Matrix.Notation
+
+/-!
+# Actual four-corner rows for screened root debt branches
+
+The corners are literal terminal reward differences from the given game.
+The two optional pure-coordinate updates determine all four corner rows.
+No selected coefficient row, cap equality, or bilinearity hypothesis is input.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+open _root_.Math.Probability Math.PMFProduct
+
+/-- The packet orders the sure pair first, then the optional pair. -/
+def screenedRootCornerAction (order : Fin 4 ≃ Fin 4) (a b : Bool) : Fin 4 → Bool :=
+  fun player => ![true, true, a, b] (order.symm player)
+
+/-- Sure players use Continue; optional players use their selected endpoint. -/
+def screenedRootBranchAction (labels : Fin 2 → Bool) (index : Fin 4) : Bool :=
+  ![false, false, labels 0, labels 1] index
+
+/-- Every unilateral corner update leaves another original sure player in place. -/
+theorem screenedRootCornerAction_hasSureOpponent
+    (order : Fin 4 ≃ Fin 4) (a b : Bool) (index : Fin 4) :
+    ∃ quitter, quitter ≠ order index ∧ screenedRootCornerAction order a b quitter = true := by
+  by_cases hindex : index = 0
+  · subst index
+    exact ⟨order 1, order.injective.ne (by decide),
+      by simp [screenedRootCornerAction]⟩
+  · exact ⟨order 0, order.injective.ne hindex.symm,
+      by simp [screenedRootCornerAction]⟩
+
+/-- The baseline terminal is nonempty at every optional corner. -/
+def screenedRootCornerTerminal (order : Fin 4 ≃ Fin 4) (a b : Bool) :
+    {S : Finset (Fin 4) // S.Nonempty} :=
+  ⟨quittingQuitters (screenedRootCornerAction order a b), by
+    refine ⟨order 0, ?_⟩
+    simp [quittingQuitters, screenedRootCornerAction]⟩
+
+/-- The endpoint-update terminal is also nonempty, including a sure player's withdrawal. -/
+def screenedRootChangedCornerTerminal (order : Fin 4 ≃ Fin 4) (a b : Bool)
+    (index : Fin 4) (choice : Bool) : {S : Finset (Fin 4) // S.Nonempty} :=
+  ⟨quittingQuitters
+    (Function.update (screenedRootCornerAction order a b) (order index) choice), by
+      obtain ⟨quitter, hne, hsure⟩ :=
+        screenedRootCornerAction_hasSureOpponent order a b index
+      refine ⟨quitter, ?_⟩
+      simp only [quittingQuitters, Finset.mem_filter, Finset.mem_univ, true_and]
+      simpa only [Function.update_of_ne hne] using hsure⟩
+
+/-- Literal corner differences: no expectation, continuation, or cap is supplied. -/
+def screenedRootCornerGain
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool) (index : Fin 4) (a b : Bool) : ℝ :=
+  reward (screenedRootChangedCornerTerminal order a b index
+      (screenedRootBranchAction labels index)) (order index) -
+    reward (screenedRootCornerTerminal order a b) (order index)
+
+/-- Corner gains really are the two actual deterministic root payoffs. -/
+theorem screenedRootCornerGain_eq_rootPayoff_sub
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool) (index : Fin 4) (a b : Bool) :
+    screenedRootCornerGain reward order labels index a b =
+      quittingRootPayoff reward 0
+          (Function.update (screenedRootCornerAction order a b) (order index)
+            (screenedRootBranchAction labels index)) (order index) -
+        quittingRootPayoff reward 0 (screenedRootCornerAction order a b) (order index) := by
+  unfold quittingRootPayoff
+  rw [dif_pos (screenedRootChangedCornerTerminal order a b index
+    (screenedRootBranchAction labels index)).2,
+    dif_pos (screenedRootCornerTerminal order a b).2]
+  rfl
+
+/-- Both terminal entries in every corner avoid the observed player's own singleton. -/
+theorem screenedRootCornerTerminals_ne_ownSingleton
+    (order : Fin 4 ≃ Fin 4) (a b : Bool) (index : Fin 4) (choice : Bool) :
+    screenedRootCornerTerminal order a b ≠ quittingSingletonTerminal (order index) ∧
+      screenedRootChangedCornerTerminal order a b index choice ≠
+        quittingSingletonTerminal (order index) := by
+  obtain ⟨quitter, hne, hsure⟩ :=
+    screenedRootCornerAction_hasSureOpponent order a b index
+  have hbase : quitter ∈ (screenedRootCornerTerminal order a b).1 := by
+    simpa only [screenedRootCornerTerminal, quittingQuitters, Finset.mem_filter,
+      Finset.mem_univ, true_and] using hsure
+  have hchanged : quitter ∈ (screenedRootChangedCornerTerminal order a b index choice).1 := by
+    simpa only [screenedRootChangedCornerTerminal, quittingQuitters, Finset.mem_filter,
+      Finset.mem_univ, true_and, Function.update_of_ne hne] using hsure
+  constructor
+  · intro hequal
+    rw [hequal] at hbase
+    exact hne (Finset.mem_singleton.mp hbase)
+  · intro hequal
+    rw [hequal] at hchanged
+    exact hne (Finset.mem_singleton.mp hchanged)
+
+/-- Each displayed corner is independent of every own-singleton coordinate. -/
+theorem screenedRootCornerGain_ownSingletonReward_eq
+    (first second : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool) (index : Fin 4) (a b : Bool) :
+    screenedRootCornerGain (quittingOwnSingletonReward first coordinates)
+        order labels index a b =
+      screenedRootCornerGain (quittingOwnSingletonReward second coordinates)
+        order labels index a b := by
+  obtain ⟨hbase, hchanged⟩ := screenedRootCornerTerminals_ne_ownSingleton
+    order a b index (screenedRootBranchAction labels index)
+  unfold screenedRootCornerGain
+  rw [quittingOwnSingletonReward_eq_of_ne_singleton first second coordinates _ _ hchanged,
+    quittingOwnSingletonReward_eq_of_ne_singleton first second coordinates _ _ hbase]
+
+private def screenedRootBranchObservable
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool) (index : Fin 4)
+    (action : Fin 4 → Bool) : ℝ :=
+  quittingRootPayoff reward 0
+      (Function.update action (order index) (screenedRootBranchAction labels index))
+      (order index) - quittingRootPayoff reward 0 action (order index)
+
+private theorem expect_screenedRootBranchObservable
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool)
+    (index : Fin 4) :
+    expect (pmfPi root) (screenedRootBranchObservable reward order labels index) =
+      (((PMF.pure (screenedRootBranchAction labels index)) true).toReal -
+          (root (order index) true).toReal) *
+        quittingRootEndpointDifference reward 0 root (order index) := by
+  unfold screenedRootBranchObservable
+  rw [expect_sub, ← expect_pmfPi_update_pure]
+  exact quittingRootExpectedPayoff_update_sub_successorPayoff
+    reward 0 root (order index) (PMF.pure (screenedRootBranchAction labels index))
+
+private theorem screenedRootDebtBranches_eq_expect
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool)
+    (hfirst : (root (order 0) true).toReal = 1)
+    (hsecond : (root (order 1) true).toReal = 1) (index : Fin 4) :
+    screenedRootDebtBranches reward root order labels index =
+      expect (pmfPi root) (screenedRootBranchObservable reward order labels index) := by
+  rw [expect_screenedRootBranchObservable]
+  fin_cases index
+  · simp [screenedRootDebtBranches, screenedRootBranchAction, hfirst]
+  · simp [screenedRootDebtBranches, screenedRootBranchAction, hsecond]
+  · cases hlabel : labels 0 <;>
+      simp [screenedRootDebtBranches, screenedRootBranchAction,
+        screenedRootOptionalDebtBranch, hlabel]
+  · cases hlabel : labels 1 <;>
+      simp [screenedRootDebtBranches, screenedRootBranchAction,
+        screenedRootOptionalDebtBranch, hlabel]
+
+private theorem screenedRoot_optional_corner_eq_pure
+    (root : Fin 4 → PMF Bool) (order : Fin 4 ≃ Fin 4)
+    (hfirst : (root (order 0) true).toReal = 1)
+    (hsecond : (root (order 1) true).toReal = 1) (a b : Bool) :
+    Function.update (Function.update root (order 2) (PMF.pure a)) (order 3) (PMF.pure b) =
+      fun player => PMF.pure (screenedRootCornerAction order a b player) := by
+  have hfirstPure := eq_pure_true_of_true_toReal_eq_one (root (order 0)) hfirst
+  have hsecondPure := eq_pure_true_of_true_toReal_eq_one (root (order 1)) hsecond
+  funext player
+  obtain ⟨index, rfl⟩ := order.surjective player
+  fin_cases index <;>
+    simp [screenedRootCornerAction, Function.update_apply, order.apply_eq_iff_eq,
+      hfirstPure, hsecondPure]
+
+private theorem expect_screenedRootBranchObservable_corner
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool)
+    (hfirst : (root (order 0) true).toReal = 1)
+    (hsecond : (root (order 1) true).toReal = 1)
+    (index : Fin 4) (a b : Bool) :
+    expect (pmfPi (Function.update (Function.update root (order 2) (PMF.pure a))
+        (order 3) (PMF.pure b))) (screenedRootBranchObservable reward order labels index) =
+      screenedRootCornerGain reward order labels index a b := by
+  rw [screenedRoot_optional_corner_eq_pure root order hfirst hsecond, pmfPi_pure, expect_pure]
+  exact (screenedRootCornerGain_eq_rootPayoff_sub reward order labels index a b).symm
+
+/-- Actual root branches have the four literal terminal corner differences as coefficients. -/
+theorem screenedRootDebtBranches_eq_four_corners
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool)
+    (hfirst : (root (order 0) true).toReal = 1)
+    (hsecond : (root (order 1) true).toReal = 1) (index : Fin 4) :
+    let corner := screenedRootCornerGain reward order labels index
+    let x := (root (order 2) true).toReal
+    let y := (root (order 3) true).toReal
+    screenedRootDebtBranches reward root order labels index =
+      (1 - x) * (1 - y) * corner false false +
+        x * (1 - y) * corner true false +
+        (1 - x) * y * corner false true + x * y * corner true true := by
+  rw [screenedRootDebtBranches_eq_expect reward root order labels hfirst hsecond]
+  have h := expect_pmfPi_eq_four_corners root (order 2) (order 3)
+    (order.injective.ne (by decide : (3 : Fin 4) ≠ 2))
+    (screenedRootBranchObservable reward order labels index)
+  simpa only [expect_screenedRootBranchObservable_corner
+    reward root order labels hfirst hsecond] using h
+
+/-- The exact source coefficient row in the order (1,x,y,xy). -/
+def screenedRootBranchCoefficientRow
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool) (index : Fin 4) : Fin 4 → ℝ :=
+  let corner := screenedRootCornerGain reward order labels index
+  ![corner false false, corner true false - corner false false,
+    corner false true - corner false false,
+    corner true true - corner true false - corner false true + corner false false]
+
+/-- Exact reconstruction from the actual game's row; no supplied bilinearity predicate. -/
+theorem screenedRootDebtBranches_eq_coefficientRow
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (root : Fin 4 → PMF Bool) (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool)
+    (hfirst : (root (order 0) true).toReal = 1)
+    (hsecond : (root (order 1) true).toReal = 1) (index : Fin 4) :
+    let row := screenedRootBranchCoefficientRow reward order labels index
+    let x := (root (order 2) true).toReal
+    let y := (root (order 3) true).toReal
+    screenedRootDebtBranches reward root order labels index =
+      row 0 + row 1 * x + row 2 * y + row 3 * (x * y) := by
+  rw [screenedRootDebtBranches_eq_four_corners reward root order labels hfirst hsecond]
+  dsimp [screenedRootBranchCoefficientRow]
+  ring
+
+/-- Every source coefficient is independent of all four own singletons. -/
+theorem screenedRootBranchCoefficientRow_ownSingletonReward_eq
+    (first second : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool) (index : Fin 4) :
+    screenedRootBranchCoefficientRow (quittingOwnSingletonReward first coordinates)
+        order labels index =
+      screenedRootBranchCoefficientRow (quittingOwnSingletonReward second coordinates)
+        order labels index := by
+  unfold screenedRootBranchCoefficientRow
+  simp only [screenedRootCornerGain_ownSingletonReward_eq first second coordinates]
+
+/-- The full source branch vector is constant on the whole direct own-singleton fiber. -/
+theorem screenedRootDebtBranches_ownSingletonReward_eq
+    (first second : Fin 4 → ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
+    (root : Fin 4 → PMF Bool) (order : Fin 4 ≃ Fin 4) (labels : Fin 2 → Bool)
+    (hfirst : (root (order 0) true).toReal = 1)
+    (hsecond : (root (order 1) true).toReal = 1) :
+    screenedRootDebtBranches (quittingOwnSingletonReward first coordinates) root order labels =
+      screenedRootDebtBranches (quittingOwnSingletonReward second coordinates)
+        root order labels := by
+  funext index
+  rw [screenedRootDebtBranches_eq_coefficientRow _ root order labels hfirst hsecond,
+    screenedRootDebtBranches_eq_coefficientRow _ root order labels hfirst hsecond,
+    screenedRootBranchCoefficientRow_ownSingletonReward_eq first second coordinates]
+
+end GameTheory

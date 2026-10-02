@@ -1,0 +1,15 @@
+*** Begin Patch
+*** Update File: MathUE.lean
+@@
+ import MathUE.Analysis.CoordinateResetFTC
++import MathUE.Analysis.Examples.CoupledCubicShape
++import MathUE.Analysis.Examples.NonQLinearFace
+*** Update File: UniformEquilibrium.lean
+@@
+ import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuadraticExclusion
++import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialChargeScale
+@@
+ import UniformEquilibrium.Quitting.Root.CollisionAdjustedSingletonProbe
++import UniformEquilibrium.Quitting.Examples.CollisionAdjustedProbeBoundary
++import UniformEquilibrium.Quitting.Examples.ExactRootPotentialPlayerCountBoundary
+*** End Patch

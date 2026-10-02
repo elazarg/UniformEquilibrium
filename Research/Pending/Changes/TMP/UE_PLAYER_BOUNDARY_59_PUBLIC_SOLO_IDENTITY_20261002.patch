@@ -1,0 +1,32 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Examples/PotentialPacketPlayerCountBoundary.lean
+@@
+ theorem exists_singlePlayer_singleton_exact_charged_selfLoop [Subsingleton ι]
+     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι) :
+     ∃ root : ι → PMF Bool,
++      root = quittingSoloStationaryRoot owner (PMF.pure true) ∧
+       IsεQuittingRootNash reward (quittingSoloReward reward owner) 0 root ∧
+@@
+-  refine ⟨root, (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
++  refine ⟨root, rfl, (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
+     reward (quittingSoloReward reward owner) root).mp hnash, ?_, ?_⟩
+@@
+   intro hpotential
+-  obtain ⟨root, hnash, hsuccessor, hcharge⟩ :=
++  obtain ⟨root, _, hnash, hsuccessor, hcharge⟩ :=
+     exists_singlePlayer_singleton_exact_charged_selfLoop reward owner
+@@
+ theorem exists_zeroReward_solo_exact_charged_selfLoop (owner : ι) :
+     ∃ root : ι → PMF Bool,
++      root = quittingSoloStationaryRoot owner (PMF.pure true) ∧
+       IsεQuittingRootNash (fun _ _ => (0 : ℝ)) (fun _ => 0) 0 root ∧
+@@
+-  refine ⟨root, (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
++  refine ⟨root, rfl, (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
+     (fun _ _ => (0 : ℝ)) (fun _ => 0) root).mp hnash, ?_, ?_⟩
+@@
+   intro hpotential
+-  obtain ⟨root, hnash, hsuccessor, hcharge⟩ :=
++  obtain ⟨root, _, hnash, hsuccessor, hcharge⟩ :=
+     exists_zeroReward_solo_exact_charged_selfLoop owner
+*** End Patch

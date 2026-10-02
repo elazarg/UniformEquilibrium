@@ -1,0 +1,114 @@
+{
+  "status": "Frozen static implementation; no compiler or axiom check run",
+  "source": {
+    "path": "math/exports/SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE.md",
+    "sha256": "d91cf597df1f45d4287b53244d4f91463ed7f9313d75748a3f0fbcb87dbdfe0c",
+    "sections": [
+      "6.1",
+      "11"
+    ]
+  },
+  "dependency_report": {
+    "path": "/tmp/UE_SINGLE_PIVOT_PACKET_COMPLETION_DEPENDENCIES_20261002.md",
+    "sha256": "4376763deede29be9ab5047c3f07995f6ecf1a1aad8322c8d1aae4019490cfa9"
+  },
+  "application_order": [
+    "00_MUTUAL_SUPREMUM_OWNER.patch",
+    "01_FINITE_CLOCK_SEMANTIC_PROMOTION.patch",
+    "02_COMMON_QUANTILE_TRANSPORT_PROMOTION.patch",
+    "03_COMMON_QUANTILE_APPROXIMATION_PROMOTION.patch",
+    "04_ACTUAL_FULL_CAP_FINITE_CLOCK_SOURCE.patch",
+    "05_PRODUCTION_IMPORTS.patch"
+  ],
+  "independent_prerequisites": {
+    "00": [],
+    "01": [],
+    "02": [
+      "00",
+      "01"
+    ],
+    "03": [
+      "02"
+    ],
+    "04": [
+      "03"
+    ],
+    "05": [
+      "00",
+      "01",
+      "02",
+      "03",
+      "04"
+    ]
+  },
+  "research_bases": {
+    "Research/Quitting/FiniteClockTerminalSemantics.lean": "50dece401bcdc2d7676e46e07778dc9b2e1a51008de30bf87722845d0f1176bc",
+    "Research/Quitting/EscapeAwareQuantileClockTransport.lean": "b7c7d43cff024ddaaecb144ea849db993c4665121d9ec91b322c8a8c0ae563bd",
+    "Research/Quitting/EscapeAwareQuantileClockHierarchy.lean": "3554a83750b5deddfcd09b4ccaae1ad45142992520b50615dd7b9055d61087ab"
+  },
+  "artifacts": {
+    "00_MUTUAL_SUPREMUM_OWNER.patch": {
+      "patch_sha256": "415c53efe5a22f279e26a365cd633e14d6a65777a3c681e925dad7d39c5572de",
+      "results": {
+        "MathUE/Order/MutualSupremumApproximation.lean": "8e4ac0afcb99ea0fb3bced9ca0f980e3ac27e8e54342061c9e3ff75607f3bc90"
+      }
+    },
+    "01_FINITE_CLOCK_SEMANTIC_PROMOTION.patch": {
+      "patch_sha256": "2ccbb4b875346bcff43fdbf3139f91362193e0529b8cf04f2919c5fc3da2d95b",
+      "results": {
+        "UniformEquilibrium/Quitting/Paths/FiniteClockTerminalSemantics.lean": "50dece401bcdc2d7676e46e07778dc9b2e1a51008de30bf87722845d0f1176bc",
+        "Research/Quitting/FiniteClockTerminalSemantics.lean": "892af4b2b2e5cbfae2abe77e7d793d4168385a013a03b6ecf51b55807a2a9253"
+      }
+    },
+    "02_COMMON_QUANTILE_TRANSPORT_PROMOTION.patch": {
+      "patch_sha256": "b1729ca668b10bc0075487d28beb278b519b47800123ca7b05be42e521f8ed7e",
+      "results": {
+        "UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean": "9de81b977232f743c394e42835d808021188d934c37245387b00107dd4475416",
+        "Research/Quitting/EscapeAwareQuantileClockTransport.lean": "33739d5620e055cac6151cd6b2b64d83e673bef30d440b1abd07034057498d69"
+      }
+    },
+    "03_COMMON_QUANTILE_APPROXIMATION_PROMOTION.patch": {
+      "patch_sha256": "bd40dc189a0578488275021d97084b2891663b71dd9b55d803545751c15fd24b",
+      "results": {
+        "UniformEquilibrium/Quitting/Paths/CommonQuantileClockApproximation.lean": "4bf3d270062c479248417c425dfb0d12fd94abf14063443c856054ae2216090f",
+        "Research/Quitting/EscapeAwareQuantileClockHierarchy.lean": "f030a01324c8692c9458afae2fb3111cccbd1dbeb819769e4d24e7a7727f2271"
+      }
+    },
+    "04_ACTUAL_FULL_CAP_FINITE_CLOCK_SOURCE.patch": {
+      "patch_sha256": "52fa53f381aa7a15f28dc9a3d5df3217c4ef595a69ed496cd7ec4f37e584a21a",
+      "results": {
+        "UniformEquilibrium/Quitting/Paths/QuantitativeFiniteClockSource.lean": "90dd55c5485c7615b3a01f9cd5bfa7ca77d98b3a5e632c72cf60141d89f71b25"
+      }
+    },
+    "05_PRODUCTION_IMPORTS.patch": {
+      "patch_sha256": "0582f968ad949d928e67b7940ded6ab306f77563ce559775ec10b88f55ba56a7",
+      "results": {
+        "MathUE.lean": "528e02513b7f3320f64936ffb682d188e3dd02d0c062cf56184a383d37362c8d",
+        "UniformEquilibrium.lean": "212195a95f671bfedece6922c91e6b8c56a781d6bb20a5fe705f7998d357a2bc"
+      }
+    },
+    "umbrella_bases": {
+      "UniformEquilibrium.lean": "d682b54a1a2c22f348ed10ed3f0e48bebd049e39887399c306fb778a41fb24ac",
+      "MathUE.lean": "da0db723744cb4fd625a028ce4cca573210df3e588f42dd318d57414df090156"
+    },
+    "umbrella_results": {
+      "MathUE.lean": "528e02513b7f3320f64936ffb682d188e3dd02d0c062cf56184a383d37362c8d",
+      "UniformEquilibrium.lean": "212195a95f671bfedece6922c91e6b8c56a781d6bb20a5fe705f7998d357a2bc"
+    }
+  },
+  "named_check_order": [
+    "MathUE.Order.MutualSupremumApproximation",
+    "UniformEquilibrium.Quitting.Paths.FiniteClockTerminalSemantics",
+    "UniformEquilibrium.Quitting.Paths.CommonQuantileClockTransport",
+    "UniformEquilibrium.Quitting.Paths.CommonQuantileClockApproximation",
+    "UniformEquilibrium.Quitting.Paths.QuantitativeFiniteClockSource"
+  ],
+  "compatibility_check": "Research.Quitting.EscapeAwareQuantileClockHierarchy",
+  "excluded_claims": [
+    "No strict same-weight tester pressure",
+    "No tilted-calendar or xi production",
+    "No source polynomial/fiber maximizer",
+    "No actual behavioral attainment of the unrestricted infimum",
+    "No common-calendar packet seal"
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "source": {
+    "path": "math/exports/REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS.md",
+    "sha256": "a28b23b400cfef2fce48d0dfd33027b344e00d45a015de549c328dce4f397e69"
+  },
+  "evidence": "Static source/API audit. All15–17 files absent/uncompiled. Current14 checked as reported by root. Shared full1205 pending.",
+  "ordered_applications": [
+    {
+      "path": "/tmp/ue-bounded-normalization-Y0cMlfQG/15_LITERAL_POSITIVE_SCALING.patch",
+      "patch_sha256": "cb2cce6999741864bc34dd1bbc3afbc02c9644e32ac02261c0b7590322e567a7",
+      "target": "UniformEquilibrium/Quitting/Transform/PositivePayoffScaling.lean",
+      "source_sha256": "9e02f0dcb93ddf5da9a415e6e3b83d4f7dc22e78ac1d18828ece0843fdccd999",
+      "currently_present": false,
+      "id": "15",
+      "depends_on": []
+    },
+    {
+      "path": "/tmp/ue-bounded-normalization-Y0cMlfQG/16_ACTUAL_BOUNDED_SINGLE_PIVOT.patch",
+      "patch_sha256": "6a105959544aba5b3a651cac41274b64085009708d5251a80fbd8dde69e96d1d",
+      "target": "UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotNormalization.lean",
+      "source_sha256": "8427654cca4a9a3fe23e081f73d1dd9b9b30d5180e69d483781b7db0335d89fd",
+      "currently_present": false,
+      "id": "16",
+      "depends_on": [
+        "15"
+      ]
+    },
+    {
+      "path": "/tmp/ue-bounded-normalization-Y0cMlfQG/17_DECISION_PRESERVING_POLYNOMIAL_JOIN.patch",
+      "patch_sha256": "81fc37eb702f07351344583dcb95306dae510ffa4f6828d8a6c6d60287e15b0a",
+      "target": "UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotPolynomialObstruction.lean",
+      "source_sha256": "b06b995f274c4d395801dc30231a739bf6b3a33f514da3494d36c6838ab140c0",
+      "currently_present": false,
+      "id": "17",
+      "depends_on": [
+        "16",
+        "current14"
+      ]
+    },
+    {
+      "path": "/tmp/ue-future-pinned-name-overlays-iBO2Hj/001_UNIT17_PINNED_ITE_NAMES.patch",
+      "patch_sha256": "d3d4dc16cf920cf5100fe00ca9266d885b5f80fb7a42fc054d0c96ff99aefcba",
+      "base_source_sha256": "b06b995f274c4d395801dc30231a739bf6b3a33f514da3494d36c6838ab140c0",
+      "result_source_sha256": "baffd10885b9bc26ad9252755fd03be5995d5feb97a7677f599f878bac72d8f8",
+      "id": "17A",
+      "depends_on": [
+        "17"
+      ]
+    },
+    {
+      "path": "/tmp/ue-reflection-normalization-stage-GchWYH/NORMALIZATION_GROUP_IMPORTS.patch",
+      "sha256": "9a111a1b872ff7face5d338b63d5cb0ac562da077be4485fc46b396e56b61427",
+      "targets": [
+        {
+          "target": "UniformEquilibrium.lean",
+          "base_sha256": "d682b54a1a2c22f348ed10ed3f0e48bebd049e39887399c306fb778a41fb24ac",
+          "result_sha256": "265f4cd4b831f11a04d4b6c5e9b74495e1ccca46742dc723b7e4653fa4799928"
+        },
+        {
+          "target": "UniformEquilibrium/Diagnostics.lean",
+          "base_sha256": "e3a2a8bac6f3565ee8f81f27217ff68c0275e7281a20f70948c8494d68369174",
+          "result_sha256": "eb54b727a6647e873decc08c9dab60917698a4e7a54916e4935fe56aab950615"
+        }
+      ],
+      "id": "UMBRELLAS",
+      "depends_on": [
+        "17A"
+      ]
+    }
+  ],
+  "current_dependencies": {
+    "UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/Game.lean": "820e7721ae172632d29852a4122bef48d9e327d3e121eb83666d0e02a482230c",
+    "UniformEquilibrium/ProofView/Concepts/Stochastic/Transform/Payoff/AffinePayoff.lean": "0aa86ce53421bfaeab62eaf91299483765b076d6fee23e32ae5d85645efb9e68",
+    "UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean": "18fa16e47711ec495099296dc941661fe049693fac4f483e200fa5f6f6467f11",
+    "UniformEquilibrium/Quitting/RewardBound.lean": "93d0581d4362d7c15c134f99f334824053de264abbe4b2a631f9346319a39b2e",
+    "UniformEquilibrium/Quitting/Root/SinglePivotNormalization.lean": "b05b228875417cd27f0c39bc8ec07253418b5bf8eba26fcbafbfb7d3f23ec118",
+    "UniformEquilibrium/Quitting/Projective/RestrictedPolynomialForwardCharacterization.lean": "db23cf90f87e46f4fc95b4177f7d61496c88c9babeffaf241d044ac5c53c57f7"
+  },
+  "main_umbrella_after_shape": {
+    "overlay": "/tmp/ue-reflection-normalization-stage-GchWYH/NORMALIZATION_GROUP_IMPORTS.patch",
+    "base": "d5573bdc368cd66f8d3be79fd3ba0f5d8668d319ae6b5c7c2b150e8d60d1ce13",
+    "result": "480a1701248dac73dd2a6f13b9f1fb75c24c6d39f168abe3f586ba5b231b4dcd"
+  },
+  "artifacts": [
+    {
+      "path": "/tmp/ue-reflection-normalization-stage-GchWYH/GROUP_AXIOM_HARNESS.lean",
+      "sha256": "61018fe2137d6f232154b95bc8a0d8741093ef535f9e13071e343f7a85f874d7"
+    },
+    {
+      "path": "/tmp/ue-reflection-normalization-stage-GchWYH/NORMALIZATION_GROUP_IMPORTS.patch",
+      "sha256": "9a111a1b872ff7face5d338b63d5cb0ac562da077be4485fc46b396e56b61427"
+    },
+    {
+      "path": "/tmp/ue-reflection-normalization-stage-GchWYH/SOURCE_SCOPE_HARNESS.lean",
+      "sha256": "764b0d8d6ea051dedb7dcd7fb91b72464e05dd88bef8f6672ae33351ae3d8587"
+    }
+  ],
+  "declarations": [
+    "GameTheory.quittingGame_scale_eq_affinePayoff",
+    "GameTheory.quittingGame_exists_uniformPayoff_scale_iff",
+    "GameTheory.exists_finFourBoundedSinglePivotNormalization_of_no_uniformPayoff",
+    "GameTheory.IsQuittingBoundedSinglePivotPolynomialObstruction",
+    "GameTheory.exists_finFourBoundedSinglePivotPolynomialObstruction_of_no_uniformPayoff",
+    "GameTheory.IsQuittingBoundedSinglePivotPolynomialObstruction.no_uniformPayoff",
+    "GameTheory.exists_finFour_no_uniformPayoff_iff_exists_boundedSinglePivotPolynomialObstruction"
+  ],
+  "original_handoff": {
+    "path": "/tmp/ue-bounded-normalization-Y0cMlfQG/HANDOFF.md",
+    "sha256": "9a3dfc2120d1cfc5797703e293773d0e7a1cdcf0346d07a6c69efaed62a61461"
+  },
+  "original_independent_static_review": {
+    "path": "/tmp/bounded-normalization-static-review.gN3fEM1P/REVIEW.txt",
+    "sha256": "93615880edcdb4febd9f3458b2c54805322d2fe3cc9446b79e259d33bee08ca5"
+  },
+  "checks_here": [
+    "Complete source/patch/handoff/review/API inspection",
+    "SHA256 verification",
+    "Unique17A contexts; alias-only result reconstructed",
+    "Umbrella current and post-SHAPE transports reconstructed in memory"
+  ],
+  "checks_not_here": [
+    "Lean",
+    "Lake",
+    "Axiom harness",
+    "Repository trust/import/docs/full gates"
+  ],
+  "warning_policy": "Unchanged.17A removes deprecated if_pos aliases; no suppression.",
+  "scope": "Bare arbitrary-real Fin4 noUE source; literal normalized table then positive whole-game scaling; one internally produced reciprocal integer; fresh same rational expression/tolerance; every full-box minimum.",
+  "nonclaims": [
+    "No rational reward table",
+    "No all-positive singleton vector",
+    "No per-table terminal-translation UE equivalence",
+    "No fixed-box old polynomial transport",
+    "No supplied favorable strategic/minimum/candidate input",
+    "No UE or counterexample construction",
+    "No whole Reflection retirement"
+  ]
+}

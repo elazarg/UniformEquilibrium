@@ -1,0 +1,73 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/ScreenedMinimumSingletonMass.lean
++import UniformEquilibrium.Diagnostics.Quitting.ZeroSingletonMaximumMinimumNever
++import UniformEquilibrium.Diagnostics.Quitting.ZeroSingletonBehavioralLawProductBase
++import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootPolynomial
++import UniformEquilibrium.Quitting.OwnSingletonRewardFiberMaximum
++
++/-! # Every positive minimum law in a generic screened fiber has singleton mass
++
++The product-base root is produced from one actual joint-carrier sequence.
++Its prescribed payoff, unrestricted caps and whole law equal the original
++point, without padding. No behavioral minimum or screened root is supplied.
++-/
++
++namespace GameTheory
++
++/-- Section 6: every joint-carrier MAX minimum in this literal closed fiber
++has strictly positive TOTAL singleton mass. Never and strict singleton
++margins are derived internally before invoking exact product-base realization. -/
++theorem minimumTerminalSemanticLaw_singletonMass_pos_of_screenedPolynomial_ne_zero
++    (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ)
++    (singletons : Fin 4 → ℝ)
++    (hcoordinates : ∀ coordinate, |coordinates coordinate| ≤ 1)
++    (hsingletons : ∀ who, |singletons who| ≤ 1)
++    (hpolynomial : screenedRootPolynomialEval coordinates screenedRootExclusionPolynomial ≠ 0)
++    (point : QuittingTerminalSemanticLawPoint (Fin 4))
++    (hpoint : point ∈ quittingTerminalSemanticLawCarrier
++      (quittingOwnSingletonReward singletons coordinates))
++    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier
++      (quittingOwnSingletonReward singletons coordinates),
++      quittingTerminalSemanticExploitability point.1 ≤
++        quittingTerminalSemanticExploitability candidate)
++    (hpositive : 0 < quittingTerminalSemanticExploitability point.1) :
++    0 < quittingTerminalLawSingletonMass point.2 := by
++  let reward := quittingOwnSingletonReward singletons coordinates
++  have hpair := terminalSemanticLawCarrier_fst_mem_carrier point hpoint
++  have hsimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
++  rw [Math.Probability.mem_simplexWeights] at hsimplex
++  have hnonneg : ∀ who, 0 ≤ point.2 (some (quittingSingletonTerminal who)) :=
++    fun who => hsimplex.1 _
++  have hmassNonneg : 0 ≤ quittingTerminalLawSingletonMass point.2 :=
++    Finset.sum_nonneg (fun who _ => hnonneg who)
++  by_contra hnot
++  have hzero : quittingTerminalLawSingletonMass point.2 = 0 :=
++    le_antisymm (not_lt.mp hnot) hmassNonneg
++  have hsingle : ∀ who, point.2 (some (quittingSingletonTerminal who)) = 0 :=
++    (Fintype.sum_eq_zero_iff_of_nonneg hnonneg).mp hzero
++  have hnever := minimumTerminalSemanticLaw_never_eq_zero_of_singletonMass_eq_zero
++    reward point hpoint hminimum hpositive hzero
++  have hstrict : ∀ who, reward (quittingSingletonTerminal who) who < point.1.2 who := by
++    intro who
++    have hmoat := minimumTerminalSemantic_exploitabilitySingletonMargin
++      reward point.1 hpair hminimum hpositive who
++    linarith
++  obtain ⟨root, first, second, hne, hfirst, hsecond, hsemantics, _hlaw,
++      _hstationary, _hstationaryLaw⟩ :=
++    exists_twoSureProductRoot_realizing_jointCarrierPoint_of_strictMargin
++      reward point hpoint hnever hsingle (by decide) hstrict
++  have hunit : ∀ terminal who, |reward terminal who| ≤ 1 :=
++    (abs_quittingOwnSingletonReward_le_one_iff singletons coordinates).mpr
++      ⟨hsingletons, hcoordinates⟩
++  apply not_positive_equal_screened_debts_of_polynomial_ne_zero
++    coordinates hpolynomial singletons root ⟨first, second, hne, hfirst, hsecond⟩
++  refine ⟨quittingTerminalSemanticExploitability point.1, hpositive, ?_⟩
++  intro who
++  change quittingTerminalSemanticDebt
++    (quittingTerminalSemanticPair reward (quittingOneDateThenNeverProfile reward root)) who = _
++  rw [hsemantics]
++  exact minimumTerminalSemantic_maximumDebt_allPlayersTie
++    reward point.1 hunit hpair hminimum hpositive who
++
++end GameTheory
+*** End Patch

@@ -1,0 +1,11 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium.lean
+@@
+ import UniformEquilibrium.Quitting.Projective.RestrictedPolynomialForwardCharacterization
++import UniformEquilibrium.Quitting.Transform.PositivePayoffScaling
+*** Update File: UniformEquilibrium/Diagnostics.lean
+@@
+ import UniformEquilibrium.Diagnostics.Quitting.FinFourSinglePivotNormalization
++import UniformEquilibrium.Diagnostics.Quitting.FinFourBoundedSinglePivotNormalization
++import UniformEquilibrium.Diagnostics.Quitting.FinFourBoundedSinglePivotPolynomialObstruction
+*** End Patch

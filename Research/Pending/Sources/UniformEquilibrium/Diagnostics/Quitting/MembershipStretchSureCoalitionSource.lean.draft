@@ -1,0 +1,106 @@
+import UniformEquilibrium.Diagnostics.Quitting.MembershipStretchWorstTableSource
+import UniformEquilibrium.Diagnostics.Quitting.SureCoalitionExploitabilityMinimum
+
+/-! # A strictly separated sure-coalition minimum from one raw positive-gap table
+
+Reuse the same internally selected original whole-cube maximum, common
+stretch and singleton-fiber maximum. The pure-coalition minimum is above
+the ORIGINAL maximum; arbitrary own-singleton reselection leaves it fixed.
+No calendar, minimizing profile or multiplier source is asserted here.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+/-- The packet's Γ companion. All tables and the common stretch are selected
+internally from one raw positive actual all-profile exploitability infimum. -/
+theorem exists_membershipStretch_source_strictSureCoalitionGap_of_positiveInf_finFour
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
+    ∃ (original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+      (alpha : ℝ) (singletons : Fin 4 → ℝ)
+      (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ),
+      (∀ terminal who, |original terminal who| ≤ 1) ∧
+      0 < quittingTerminalExploitabilityInf original ∧
+      quittingTerminalExploitabilityInf original ≤ 1 ∧
+      (∀ candidate : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+        (∀ terminal who, |candidate terminal who| ≤ 1) →
+          quittingTerminalExploitabilityInf candidate ≤
+            quittingTerminalExploitabilityInf original) ∧
+      0 < alpha ∧ alpha < quittingTerminalExploitabilityInf original / 8 ∧
+      (∀ coordinate, coordinates coordinate =
+        quittingMembershipStretchedReward original alpha coordinate.1.1 coordinate.1.2) ∧
+      (∀ who, |singletons who| ≤ 1) ∧
+      (∀ terminal who, |quittingOwnSingletonReward singletons coordinates terminal who| ≤ 1) ∧
+      QuittingAgreesWithMembershipStretch original
+        (quittingOwnSingletonReward singletons coordinates) alpha ∧
+      (∀ candidate : Fin 4 → ℝ, (∀ who, |candidate who| ≤ 1) →
+        quittingTerminalExploitabilityInf (quittingOwnSingletonReward candidate coordinates) ≤
+          quittingTerminalExploitabilityInf
+            (quittingOwnSingletonReward singletons coordinates)) ∧
+      quittingTerminalExploitabilityInf original / 2 <
+        quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) ∧
+      quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) ≤
+        quittingTerminalExploitabilityInf original ∧
+      alpha < quittingTerminalExploitabilityInf
+        (quittingOwnSingletonReward singletons coordinates) / 4 ∧
+      quittingTerminalExploitabilityInf original ≤
+        quittingSureCoalitionExploitabilityMinimumFinFour original ∧
+      quittingTerminalExploitabilityInf original +
+          alpha * (2 - quittingTerminalExploitabilityInf original) ≤
+        quittingSureCoalitionExploitabilityMinimumFinFour
+          (quittingOwnSingletonReward singletons coordinates) ∧
+      quittingTerminalExploitabilityInf original <
+        quittingSureCoalitionExploitabilityMinimumFinFour
+          (quittingOwnSingletonReward singletons coordinates) ∧
+      (∀ candidate : Fin 4 → ℝ,
+        quittingSureCoalitionExploitabilityMinimumFinFour
+            (quittingOwnSingletonReward candidate coordinates) =
+          quittingSureCoalitionExploitabilityMinimumFinFour
+            (quittingOwnSingletonReward singletons coordinates)) ∧
+      (∀ (candidate : Fin 4 → ℝ) (S : Finset (Fin 4)), 2 ≤ S.card →
+        quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) +
+            alpha * (2 - quittingTerminalExploitabilityInf original) ≤
+          quittingSureCoalitionExploitability (quittingOwnSingletonReward candidate coordinates) S)
+      := by
+  obtain ⟨original, alpha, singletons, coordinates, horiginalBound, horiginalPositive,
+    horiginalOne, hmaximum, halpha, halphaSmall, hcoordinates, hsingletons, hfinalBound,
+    hagrees, hfiberMaximum, hhalf, hfinalOrder, halpham⟩ :=
+    exists_membershipStretch_singletonFiber_source_of_positiveInf reward hpositive
+  have halphaOne : alpha ≤ 1 := by linarith
+  have hgammaOriginal := quittingTerminalExploitabilityInf_le_sureCoalitionMinimumFinFour original
+  have hgammaPositive := horiginalPositive.trans_le hgammaOriginal
+  have hgammaExact := quittingSureCoalitionExploitabilityMinimumFinFour_eq_affine_stretch
+    original (quittingOwnSingletonReward singletons coordinates)
+    halpha.le halphaOne hagrees hgammaPositive
+  have hgammaLower : quittingTerminalExploitabilityInf original +
+        alpha * (2 - quittingTerminalExploitabilityInf original) ≤
+      quittingSureCoalitionExploitabilityMinimumFinFour
+        (quittingOwnSingletonReward singletons coordinates) := by
+    rw [hgammaExact]
+    calc
+      _ = (1 - alpha) * quittingTerminalExploitabilityInf original + 2 * alpha := by ring
+      _ ≤ _ := add_le_add_right
+        (mul_le_mul_of_nonneg_left hgammaOriginal (sub_nonneg.mpr halphaOne)) _
+  have hmargin : 0 < alpha * (2 - quittingTerminalExploitabilityInf original) :=
+    mul_pos halpha (by linarith)
+  have hgammaStrict : quittingTerminalExploitabilityInf original <
+      quittingSureCoalitionExploitabilityMinimumFinFour
+        (quittingOwnSingletonReward singletons coordinates) := by linarith
+  refine ⟨original, alpha, singletons, coordinates, horiginalBound, horiginalPositive,
+    horiginalOne, hmaximum, halpha, halphaSmall, hcoordinates, hsingletons, hfinalBound,
+    hagrees, hfiberMaximum, hhalf, hfinalOrder, halpham, hgammaOriginal, hgammaLower,
+    hgammaStrict, ?_, ?_⟩
+  · intro candidate
+    exact quittingSureCoalitionExploitabilityMinimumFinFour_ownSingleton_invariant
+      candidate singletons coordinates
+  · intro candidate S hcard
+    have hgammaCandidate := quittingSureCoalitionExploitabilityMinimumFinFour_ownSingleton_invariant
+      candidate singletons coordinates
+    have hcoalition := quittingSureCoalitionExploitabilityMinimumFinFour_le
+      (quittingOwnSingletonReward candidate coordinates) S hcard
+    rw [hgammaCandidate] at hcoalition
+    exact (add_le_add_right hfinalOrder _).trans (hgammaLower.trans hcoalition)
+
+end GameTheory

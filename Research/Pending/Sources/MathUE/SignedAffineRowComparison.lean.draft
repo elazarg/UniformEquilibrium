@@ -1,0 +1,368 @@
+import MathUE.SignedEndpointStretch
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.NormNum
+
+/-!
+# Signed affine-row comparison with one common reversal orientation
+
+The scalar contact comparison of Sections 2–4 of the three-sure packet.
+There are no games, selected caps, global minima or successful hazard inputs.
+The signed stretch, including its zero case, is the canonical endpoint owner.
+-/
+
+noncomputable section
+
+namespace Math.SignedAffineRows
+
+def rowValue (probability left right : ℝ) : ℝ :=
+  probability * left + (1 - probability) * right
+
+def reversingNumerator (minimum alpha probability : ℝ) : ℝ :=
+  minimum + 2 * alpha * (2 * probability - 1)
+
+def reversingValue (minimum alpha probability : ℝ) : ℝ :=
+  reversingNumerator minimum alpha probability / (1 - alpha)
+
+def comparisonRemainder (minimum alpha probability : ℝ) : ℝ :=
+  minimum * (2 - minimum - 6 * probability * (1 - probability)) +
+    2 * alpha * probability * ((4 - 3 * minimum) * probability + 2 * minimum - 2)
+
+/-- This expression is used as a probability ONLY in the strict high-value branch. -/
+def reselectedProbability (minimum alpha probability : ℝ) : ℝ :=
+  1 - (1 - probability) * (minimum / reversingValue minimum alpha probability)
+
+theorem comparison_denominators_pos {m alpha p : ℝ}
+    (hm : 0 < m) (hmhalf : m < 1 / 2) (halpha : 0 < alpha)
+    (halpham : alpha < m / 4) (hp : 0 < p) :
+    0 < 1 - alpha ∧ 0 < reversingNumerator m alpha p ∧
+      0 < reversingValue m alpha p := by
+  have hs : 0 < 1 - alpha := by linarith
+  have hD : 0 < reversingNumerator m alpha p := by
+    dsimp only [reversingNumerator]
+    nlinarith [mul_pos halpha hp]
+  exact ⟨hs, hD, div_pos hD hs⟩
+
+/-- Exact numerator identity; it has no sign or nonzero hypotheses. -/
+theorem comparison_factorization (m alpha p : ℝ) :
+    m * p * (1 - alpha) * reversingNumerator m alpha p -
+      (reversingNumerator m alpha p - (1 - p) * m * (1 - alpha)) *
+        (m - 2 * alpha * p) = alpha * comparisonRemainder m alpha p := by
+  dsimp only [reversingNumerator, comparisonRemainder]
+  ring
+
+/-- The printed remainder is positive throughout the entire parameter region,
+not just when the reversing old contact value exceeds the new contact. -/
+theorem comparisonRemainder_pos {m alpha p : ℝ}
+    (hm : 0 < m) (hmhalf : m < 1 / 2) (halpha : 0 < alpha)
+    (halpham : alpha < m / 4) (hp : 0 < p) :
+    0 < comparisonRemainder m alpha p := by
+  let A := 2 - m - 6 * p * (1 - p)
+  let C := (4 - 3 * m) * p + 2 * m - 2
+  have hA : 0 < A := by
+    dsimp only [A]
+    nlinarith [sq_nonneg (p - 1 / 2)]
+  by_cases hC : 0 ≤ C
+  · have hterm : 0 ≤ 2 * alpha * p * C := by positivity
+    have hmain : 0 < m * A := mul_pos hm hA
+    change 0 < m * A + 2 * alpha * p * C
+    linarith
+  · have hCnegative : C < 0 := lt_of_not_ge hC
+    have hphalf : p < 1 / 2 := by
+      have hslope : 0 < 4 - 3 * m := by linarith
+      by_contra hnot
+      have hproduct := mul_nonneg hslope.le (sub_nonneg.mpr (not_lt.mp hnot))
+      dsimp only [C] at hCnegative
+      nlinarith
+    let d := 1 / 2 - p
+    have hd : 0 < d := sub_pos.mpr hphalf
+    have hidentity :
+        A + p * C / 2 =
+          1 / 2 - 7 * m / 8 + (m / 2 - 1) * d + (8 - 3 * m / 2) * d ^ 2 := by
+      dsimp only [A, C, d]
+      ring
+    have hstrict :
+        (2 * d - 1 / 4) ^ 2 <
+          1 / 2 - 7 * m / 8 + (m / 2 - 1) * d + (8 - 3 * m / 2) * d ^ 2 := by
+      have hmd := mul_nonneg hm.le hd.le
+      have hquadratic := mul_nonneg
+        (show 0 ≤ 4 - 3 * m / 2 by linarith) (sq_nonneg d)
+      nlinarith
+    have hB : 0 < A + p * C / 2 := by
+      rw [hidentity]
+      exact (sq_nonneg (2 * d - 1 / 4)).trans_lt hstrict
+    have hpC : p * C < 0 := mul_neg_of_pos_of_neg hp hCnegative
+    have hnegativeTerm : (m / 2) * (p * C) < (2 * alpha) * (p * C) :=
+      mul_lt_mul_of_neg_right (by linarith) hpC
+    have hpositive := mul_pos hm hB
+    change 0 < m * A + 2 * alpha * p * C
+    nlinarith
+
+/-- Every reversing row has exactly the same old contact value. -/
+theorem reversing_row_value {m alpha p a b : ℝ}
+    (hs : 0 < 1 - alpha) (ha : a < 0) (hb : 0 < b)
+    (hcontact : rowValue p (signedEndpointGapStretch alpha a)
+      (signedEndpointGapStretch alpha b) = m) :
+    rowValue p a b = reversingValue m alpha p := by
+  rw [signedEndpointGapStretch, ite_eq_right (not_lt_of_gt ha), ite_eq_left ha,
+    signedEndpointGapStretch, ite_eq_left hb] at hcontact
+  apply (eq_div_iff hs.ne').mpr
+  dsimp only [rowValue, reversingNumerator] at *
+  nlinarith [hcontact]
+
+/-- Coherent rows weakly decrease on undoing the stretch, including zero and
+saturated endpoints. This is the canonical nonnegative stretch inequality. -/
+theorem coherent_row_le_contact {m alpha p a b : ℝ}
+    (halpha : 0 ≤ alpha) (hp : 0 ≤ p) (hp1 : p ≤ 1)
+    (ha : 0 ≤ a) (ha2 : a ≤ 2) (hb : 0 ≤ b) (hb2 : b ≤ 2)
+    (hcontact : rowValue p (signedEndpointGapStretch alpha a)
+      (signedEndpointGapStretch alpha b) = m) :
+    rowValue p a b ≤ m := by
+  rw [← hcontact]
+  exact add_le_add
+    (mul_le_mul_of_nonneg_left (le_signedEndpointGapStretch halpha ha ha2) hp)
+    (mul_le_mul_of_nonneg_left (le_signedEndpointGapStretch halpha hb hb2)
+      (sub_nonneg.mpr hp1))
+
+theorem reselectedProbability_legal {m alpha p : ℝ}
+    (hm : 0 < m) (_hp : 0 < p) (hp1 : p < 1)
+    (hhigh : m < reversingValue m alpha p) :
+    p < reselectedProbability m alpha p ∧ reselectedProbability m alpha p < 1 := by
+  have hv : 0 < reversingValue m alpha p := hm.trans hhigh
+  have hratio0 : 0 < m / reversingValue m alpha p := div_pos hm hv
+  have hratio1 : m / reversingValue m alpha p < 1 := (div_lt_one hv).mpr hhigh
+  have hbeta : 0 < 1 - p := sub_pos.mpr hp1
+  have hless := mul_lt_mul_of_pos_left hratio1 hbeta
+  have hpositive := mul_pos hbeta hratio0
+  dsimp only [reselectedProbability]
+  constructor <;> nlinarith
+
+/-- The strict bound for coherent positive-left rows, with all denominators
+cleared by their proved positivity. It is the exact source factorization. -/
+theorem reselectedProbability_coherent_bound {m alpha p : ℝ}
+    (hm : 0 < m) (hmhalf : m < 1 / 2) (halpha : 0 < alpha)
+    (halpham : alpha < m / 4) (hp : 0 < p) :
+    reselectedProbability m alpha p * (m - 2 * alpha * p) <
+      m * p * (1 - alpha) := by
+  obtain ⟨hs, hD, _hv⟩ :=
+    comparison_denominators_pos hm hmhalf halpha halpham hp
+  have hproduct : reselectedProbability m alpha p * reversingNumerator m alpha p =
+      reversingNumerator m alpha p - (1 - p) * m * (1 - alpha) := by
+    dsimp only [reselectedProbability, reversingValue]
+    field_simp [hs.ne', hD.ne']
+    ring
+  have hfactor := comparison_factorization m alpha p
+  have hpositive := mul_pos halpha (comparisonRemainder_pos hm hmhalf halpha halpham hp)
+  apply (mul_lt_mul_iff_left₀ hD).mp
+  calc
+    reselectedProbability m alpha p * (m - 2 * alpha * p) *
+        reversingNumerator m alpha p =
+        (reselectedProbability m alpha p * reversingNumerator m alpha p) *
+          (m - 2 * alpha * p) := by ring
+    _ = (reversingNumerator m alpha p - (1 - p) * m * (1 - alpha)) *
+        (m - 2 * alpha * p) := by rw [hproduct]
+    _ < m * p * (1 - alpha) * reversingNumerator m alpha p := by linarith
+
+/-- At the internally defined legal probability, every admissible old row
+has positive part strictly below the common new contact, in the high branch. -/
+theorem row_strict_at_reselectedProbability {m alpha p a b : ℝ}
+    (hm : 0 < m) (hmhalf : m < 1 / 2) (halpha : 0 < alpha)
+    (halpham : alpha < m / 4) (hp : 0 < p) (hp1 : p < 1)
+    (ha2 : |a| ≤ 2) (hb2 : |b| ≤ 2)
+    (hrow : (a < 0 ∧ 0 < b) ∨ (0 ≤ a ∧ 0 ≤ b))
+    (hcontact : rowValue p (signedEndpointGapStretch alpha a)
+      (signedEndpointGapStretch alpha b) = m)
+    (hhigh : m < reversingValue m alpha p) :
+    max 0 (rowValue (reselectedProbability m alpha p) a b) < m := by
+  obtain ⟨hs, _hD, hv⟩ :=
+    comparison_denominators_pos hm hmhalf halpha halpham hp
+  obtain ⟨hpp', _hp'1⟩ := reselectedProbability_legal hm hp hp1 hhigh
+  have hp' : 0 < reselectedProbability m alpha p := hp.trans hpp'
+  apply max_lt hm
+  rcases hrow with ⟨ha, hb⟩ | ⟨ha, hb⟩
+  · have hold := reversing_row_value hs ha hb hcontact
+    have hratio : 0 < 1 - m / reversingValue m alpha p :=
+      sub_pos.mpr ((div_lt_one hv).mpr hhigh)
+    have hid : rowValue (reselectedProbability m alpha p) a b =
+        m + (1 - m / reversingValue m alpha p) * a := by
+      calc
+        _ = a + (m / reversingValue m alpha p) * (rowValue p a b - a) := by
+          dsimp only [rowValue, reselectedProbability]
+          ring
+        _ = m + (1 - m / reversingValue m alpha p) * a := by
+          rw [hold]
+          field_simp [hv.ne']
+          ring
+    rw [hid]
+    have hnegative := mul_neg_of_pos_of_neg hratio ha
+    linarith
+  · have hold := coherent_row_le_contact halpha.le hp.le hp1.le
+      ha (abs_le.mp ha2).2 hb (abs_le.mp hb2).2 hcontact
+    by_cases ha0 : a = 0
+    · have hbpos : 0 < b := by
+        by_contra hnot
+        have hb0 : b = 0 := le_antisymm (not_lt.mp hnot) hb
+        simp only [ha0, hb0, signedEndpointGapStretch_zero, rowValue,
+          mul_zero, add_zero] at hcontact
+        linarith
+      have hdrop := mul_pos (sub_pos.mpr hpp') hbpos
+      dsimp only [rowValue] at hold ⊢
+      rw [ha0] at *
+      nlinarith
+    · have hapos : 0 < a := lt_of_le_of_ne ha (Ne.symm ha0)
+      have hstretchB : (1 - alpha) * b ≤ signedEndpointGapStretch alpha b := by
+        by_cases hb0 : b = 0
+        · simp only [hb0, mul_zero, signedEndpointGapStretch_zero, le_refl]
+        · have hbpos : 0 < b := lt_of_le_of_ne hb (Ne.symm hb0)
+          rw [signedEndpointGapStretch, ite_eq_left hbpos]
+          linarith
+      have hweighted := mul_le_mul_of_nonneg_left hstretchB (sub_nonneg.mpr hp1.le)
+      rw [signedEndpointGapStretch, ite_eq_left hapos] at hcontact
+      have hcontactBound : (1 - alpha) * rowValue p a b ≤ m - 2 * alpha * p := by
+        dsimp only [rowValue] at hcontact ⊢
+        nlinarith
+      have hrowBound :
+          p * rowValue (reselectedProbability m alpha p) a b ≤
+            reselectedProbability m alpha p * rowValue p a b := by
+        have hproduct := mul_nonneg (sub_nonneg.mpr hpp'.le) hb
+        dsimp only [rowValue]
+        nlinarith
+      have hleft := mul_le_mul_of_nonneg_left hrowBound hs.le
+      have hright := mul_le_mul_of_nonneg_left hcontactBound hp'.le
+      have hstrict := reselectedProbability_coherent_bound hm hmhalf halpha halpham hp
+      apply (mul_lt_mul_iff_right₀ (mul_pos hp hs)).mp
+      nlinarith
+
+/-- In the low or equality branch, all old positive-part rows are at most m
+at the ORIGINAL probability. No reselected expression is treated as legal. -/
+theorem row_le_at_originalProbability {m alpha p a b : ℝ}
+    (hm : 0 < m) (hmhalf : m < 1 / 2) (halpha : 0 < alpha)
+    (halpham : alpha < m / 4) (hp : 0 < p) (hp1 : p < 1)
+    (ha2 : |a| ≤ 2) (hb2 : |b| ≤ 2)
+    (hrow : (a < 0 ∧ 0 < b) ∨ (0 ≤ a ∧ 0 ≤ b))
+    (hcontact : rowValue p (signedEndpointGapStretch alpha a)
+      (signedEndpointGapStretch alpha b) = m)
+    (hlow : reversingValue m alpha p ≤ m) :
+    max 0 (rowValue p a b) ≤ m := by
+  apply max_le hm.le
+  rcases hrow with ⟨ha, hb⟩ | ⟨ha, hb⟩
+  · rw [reversing_row_value
+      (comparison_denominators_pos hm hmhalf halpha halpham hp).1 ha hb hcontact]
+    exact hlow
+  · exact coherent_row_le_contact halpha.le hp.le hp1.le
+      ha (abs_le.mp ha2).2 hb (abs_le.mp hb2).2 hcontact
+
+theorem reversing_row_strict_at_originalProbability {m alpha p a b : ℝ}
+    (hm : 0 < m) (hmhalf : m < 1 / 2) (halpha : 0 < alpha)
+    (halpham : alpha < m / 4) (hp : 0 < p)
+    (ha : a < 0) (hb : 0 < b)
+    (hcontact : rowValue p (signedEndpointGapStretch alpha a)
+      (signedEndpointGapStretch alpha b) = m)
+    (hlow : reversingValue m alpha p < m) :
+    max 0 (rowValue p a b) < m := by
+  rw [reversing_row_value
+    (comparison_denominators_pos hm hmhalf halpha halpham hp).1 ha hb hcontact]
+  exact max_lt hm hlow
+
+/-- At equality, both original probabilities exceed m/2. -/
+theorem original_probability_of_reversingValue_eq {m alpha p : ℝ}
+    (hm : 0 < m) (hmhalf : m < 1 / 2) (halpha : 0 < alpha)
+    (halpham : alpha < m / 4) (hp : 0 < p)
+    (hequal : reversingValue m alpha p = m) :
+    p = (2 - m) / 4 ∧ m / 2 < p ∧ m / 2 < 1 - p := by
+  have hs := (comparison_denominators_pos hm hmhalf halpha halpham hp).1
+  have hnumerator := (div_eq_iff hs.ne').mp hequal
+  have hproduct : alpha * (4 * p + m - 2) = 0 := by
+    dsimp only [reversingNumerator] at hnumerator
+    nlinarith
+  have hlinear := (mul_eq_zero.mp hproduct).resolve_left halpha.ne'
+  constructor
+  · linarith
+  · constructor <;> linarith
+
+/-- The optional contact excludes saturation BEFORE asserting strict stretch.
+The zero endpoint is not stretched as though it were positive. -/
+theorem optional_positive_gap_strict {m alpha weight gap : ℝ}
+    (hm : 0 < m) (halpha : 0 < alpha) (hweight : m / 2 < weight)
+    (hgap : 0 < gap) (hgap2 : gap ≤ 2)
+    (hcontact : weight * signedEndpointGapStretch alpha gap = m) :
+    gap < 2 ∧ weight * gap < m := by
+  have hweight0 : 0 < weight := by linarith
+  have hgapNe : gap ≠ 2 := by
+    intro heq
+    have htwo : signedEndpointGapStretch alpha 2 = 2 :=
+      (signedEndpointGapStretch_eq_self_iff_of_nonneg halpha
+        (show (0 : ℝ) ≤ 2 by norm_num)).mpr (Or.inr rfl)
+    rw [heq, htwo] at hcontact
+    linarith
+  have hgapStrict : gap < 2 := lt_of_le_of_ne hgap2 hgapNe
+  have hstretch : gap < signedEndpointGapStretch alpha gap := by
+    rw [signedEndpointGapStretch, ite_eq_left hgap]
+    nlinarith [mul_pos halpha (sub_pos.mpr hgapStrict)]
+  exact ⟨hgapStrict, (mul_lt_mul_of_pos_left hstretch hweight0).trans_eq hcontact⟩
+
+theorem optional_row_strict_of_reversingValue_eq {m alpha p a b : ℝ}
+    (hm : 0 < m) (hmhalf : m < 1 / 2) (halpha : 0 < alpha)
+    (halpham : alpha < m / 4) (hp : 0 < p)
+    (ha2 : |a| ≤ 2) (hb2 : |b| ≤ 2)
+    (hoptional : (a = 0 ∧ 0 < b) ∨ (0 < a ∧ b = 0))
+    (hcontact : rowValue p (signedEndpointGapStretch alpha a)
+      (signedEndpointGapStretch alpha b) = m)
+    (hequal : reversingValue m alpha p = m) :
+    max 0 (rowValue p a b) < m := by
+  obtain ⟨_hvalue, hleft, hright⟩ :=
+    original_probability_of_reversingValue_eq hm hmhalf halpha halpham hp hequal
+  apply max_lt hm
+  rcases hoptional with ⟨rfl, hb⟩ | ⟨ha, rfl⟩
+  · simp only [signedEndpointGapStretch_zero, rowValue, mul_zero, zero_add] at hcontact ⊢
+    exact (optional_positive_gap_strict hm halpha hright hb (abs_le.mp hb2).2 hcontact).2
+  · simp only [signedEndpointGapStretch_zero, rowValue, mul_zero, add_zero] at hcontact ⊢
+    exact (optional_positive_gap_strict hm halpha hleft ha (abs_le.mp ha2).2 hcontact).2
+
+/-- All-case family facade. The selected probability and a strict row are
+OUTPUTS. One reversing row and the optional zero-positive row are literal
+source row shapes, not globality, game equilibria or a successful hazard. -/
+theorem exists_sameOrientation_comparison {ι : Type*}
+    {m alpha p : ℝ} (hm : 0 < m) (hmhalf : m < 1 / 2)
+    (halpha : 0 < alpha) (halpham : alpha < m / 4) (hp : 0 < p) (hp1 : p < 1)
+    (left right : ι → ℝ)
+    (hbound : ∀ i, |left i| ≤ 2 ∧ |right i| ≤ 2)
+    (hrows : ∀ i, (left i < 0 ∧ 0 < right i) ∨ (0 ≤ left i ∧ 0 ≤ right i))
+    (hcontact : ∀ i, rowValue p (signedEndpointGapStretch alpha (left i))
+      (signedEndpointGapStretch alpha (right i)) = m)
+    (hreversing : ∃ i, left i < 0 ∧ 0 < right i)
+    (hoptional : ∃ i, (left i = 0 ∧ 0 < right i) ∨ (0 < left i ∧ right i = 0)) :
+    ∃ selected : ℝ, 0 < selected ∧ selected < 1 ∧
+      (∀ i, max 0 (rowValue selected (left i) (right i)) ≤ m) ∧
+      (∃ i, max 0 (rowValue selected (left i) (right i)) < m) ∧
+      (m < reversingValue m alpha p →
+        selected = reselectedProbability m alpha p ∧
+          ∀ i, max 0 (rowValue selected (left i) (right i)) < m) ∧
+      (reversingValue m alpha p ≤ m → selected = p) := by
+  by_cases hhigh : m < reversingValue m alpha p
+  · obtain ⟨hmove, hlegal⟩ := reselectedProbability_legal hm hp hp1 hhigh
+    have hstrict : ∀ i,
+        max 0 (rowValue (reselectedProbability m alpha p) (left i) (right i)) < m := by
+      intro i
+      exact row_strict_at_reselectedProbability hm hmhalf halpha halpham hp hp1
+        (hbound i).1 (hbound i).2 (hrows i) (hcontact i) hhigh
+    obtain ⟨i, _hi⟩ := hreversing
+    refine ⟨reselectedProbability m alpha p, hp.trans hmove, hlegal,
+      fun i => (hstrict i).le, ⟨i, hstrict i⟩, fun _ => ⟨rfl, hstrict⟩, ?_⟩
+    intro hlow
+    exact False.elim ((not_le_of_gt hhigh) hlow)
+  · have hlow : reversingValue m alpha p ≤ m := not_lt.mp hhigh
+    have hweak : ∀ i, max 0 (rowValue p (left i) (right i)) ≤ m := by
+      intro i
+      exact row_le_at_originalProbability hm hmhalf halpha halpham hp hp1
+        (hbound i).1 (hbound i).2 (hrows i) (hcontact i) hlow
+    have hstrict : ∃ i, max 0 (rowValue p (left i) (right i)) < m := by
+      rcases lt_or_eq_of_le hlow with hlt | heq
+      · obtain ⟨i, hi⟩ := hreversing
+        exact ⟨i, reversing_row_strict_at_originalProbability hm hmhalf halpha halpham hp
+          hi.1 hi.2 (hcontact i) hlt⟩
+      · obtain ⟨i, hi⟩ := hoptional
+        exact ⟨i, optional_row_strict_of_reversingValue_eq hm hmhalf halpha halpham hp
+          (hbound i).1 (hbound i).2 hi (hcontact i) heq⟩
+    exact ⟨p, hp, hp1, hweak, hstrict, fun h => False.elim (hhigh h), fun _ => rfl⟩
+
+end Math.SignedAffineRows

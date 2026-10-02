@@ -1,0 +1,154 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/MembershipStretchWorstTableSource.lean
++import UniformEquilibrium.Quitting.OwnSingletonRewardFiberMaximum
++import UniformEquilibrium.Quitting.Terminal.StrictUnitRewardScale
++import UniformEquilibrium.Diagnostics.Quitting.MembershipStretch
++import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
++import Mathlib.Topology.Order.Compact
++import Mathlib.Tactic.Linarith
++
++/-! # A worst reward table and its common stretched singleton fiber
++
++The original whole-cube maximum is selected before the common membership
++stretch. The final table maximizes only the literal four singleton coordinates.
++No root, minimizing behavioral profile, clock or reward normal is selected here.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
++
++/-- The all-Never competitor bounds the actual all-profile infimum in the unit cube. -/
++theorem quittingTerminalExploitabilityInf_le_one_of_unitReward
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
++    (hbound : ∀ terminal who, |reward terminal who| ≤ 1) :
++    quittingTerminalExploitabilityInf reward ≤ 1 := by
++  apply (quittingTerminalExploitabilityInf_le reward
++    (quittingAlwaysContinueProfile reward)).trans
++  unfold quittingTerminalExploitability
++  apply QuittingBoundaryHolonomy.finitePlayerMax_le
++  intro who
++  rw [quittingContinuationBestResponseValue_quittingAlwaysContinueProfile,
++    quittingTerminalPayoff_quittingAlwaysContinue, sub_zero]
++  exact max_le (by norm_num) (max_le (by norm_num) (le_of_abs_le (hbound _ _)))
++
++/-- Compactness selects the ORIGINAL worst table on the entire closed reward cube. -/
++theorem exists_maximum_quittingTerminalExploitabilityInf_unitReward
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
++    (hbound : ∀ terminal who, |reward terminal who| ≤ 1) :
++    ∃ original : {S : Finset ι // S.Nonempty} → Payoff ι,
++      (∀ terminal who, |original terminal who| ≤ 1) ∧
++      quittingTerminalExploitabilityInf reward ≤ quittingTerminalExploitabilityInf original ∧
++      ∀ candidate : {S : Finset ι // S.Nonempty} → Payoff ι,
++        (∀ terminal who, |candidate terminal who| ≤ 1) →
++          quittingTerminalExploitabilityInf candidate ≤
++            quittingTerminalExploitabilityInf original := by
++  let Cube := Set.Icc (-1 : {S : Finset ι // S.Nonempty} → Payoff ι) 1
++  have hreward : reward ∈ Cube := by
++    exact ⟨fun terminal who => (abs_le.mp (hbound terminal who)).1,
++      fun terminal who => (abs_le.mp (hbound terminal who)).2⟩
++  obtain ⟨original, horiginal, hmaximum⟩ :=
++    (isCompact_Icc : IsCompact Cube).exists_isMaxOn ⟨reward, hreward⟩
++      continuous_quittingTerminalExploitabilityInf.continuousOn
++  refine ⟨original, ?_, hmaximum hreward, ?_⟩
++  · intro terminal who
++    exact abs_le.mpr ⟨horiginal.1 terminal who, horiginal.2 terminal who⟩
++  · intro candidate hcandidate
++    apply hmaximum
++    exact ⟨fun terminal who => (abs_le.mp (hcandidate terminal who)).1,
++      fun terminal who => (abs_le.mp (hcandidate terminal who)).2⟩
++
++/-- From one raw positive-eta table, select the original worst table, ONE common
++stretch, and ONE maximizing singleton vector. The fixed free coordinates are
++exactly those of that same stretch, not a separately perturbed table. -/
++theorem exists_membershipStretch_singletonFiber_source_of_positiveInf
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
++    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
++    ∃ (original : {S : Finset ι // S.Nonempty} → Payoff ι)
++      (alpha : ℝ) (singletons : ι → ℝ) (coordinates : QuittingFreeRewardCoordinate ι → ℝ),
++      (∀ terminal who, |original terminal who| ≤ 1) ∧
++      0 < quittingTerminalExploitabilityInf original ∧
++      quittingTerminalExploitabilityInf original ≤ 1 ∧
++      (∀ candidate : {S : Finset ι // S.Nonempty} → Payoff ι,
++        (∀ terminal who, |candidate terminal who| ≤ 1) →
++          quittingTerminalExploitabilityInf candidate ≤
++            quittingTerminalExploitabilityInf original) ∧
++      0 < alpha ∧ alpha < quittingTerminalExploitabilityInf original / 8 ∧
++      (∀ coordinate, coordinates coordinate =
++        quittingMembershipStretchedReward original alpha coordinate.1.1 coordinate.1.2) ∧
++      (∀ who, |singletons who| ≤ 1) ∧
++      (∀ terminal who, |quittingOwnSingletonReward singletons coordinates terminal who| ≤ 1) ∧
++      QuittingAgreesWithMembershipStretch original
++        (quittingOwnSingletonReward singletons coordinates) alpha ∧
++      (∀ candidate : ι → ℝ, (∀ who, |candidate who| ≤ 1) →
++        quittingTerminalExploitabilityInf (quittingOwnSingletonReward candidate coordinates) ≤
++          quittingTerminalExploitabilityInf
++            (quittingOwnSingletonReward singletons coordinates)) ∧
++      quittingTerminalExploitabilityInf original / 2 <
++        quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) ∧
++      quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates) ≤
++        quittingTerminalExploitabilityInf original ∧
++      alpha < quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward singletons coordinates) / 4 := by
++  obtain ⟨scale, hscale, hscaledBound⟩ := exists_strictUnit_scaleQuittingReward reward
++  have hscaledPositive : 0 < quittingTerminalExploitabilityInf
++      (scaleQuittingReward scale reward) :=
++    (quittingTerminalExploitabilityInf_scaleQuittingReward_pos_iff hscale reward).mpr hpositive
++  obtain ⟨original, horiginalBound, hscaledLe, hmaximum⟩ :=
++    exists_maximum_quittingTerminalExploitabilityInf_unitReward
++      (scaleQuittingReward scale reward) (fun terminal who => (hscaledBound terminal who).le)
++  have horiginalPositive := hscaledPositive.trans_le hscaledLe
++  have horiginalOne := quittingTerminalExploitabilityInf_le_one_of_unitReward
++    original horiginalBound
++  let alpha := quittingTerminalExploitabilityInf original / 16
++  have halpha : 0 < alpha := by dsimp [alpha]; positivity
++  have halphaSmall : alpha < quittingTerminalExploitabilityInf original / 8 := by
++    dsimp [alpha]
++    linarith
++  have halphaOne : alpha ≤ 1 := by dsimp [alpha]; linarith
++  let stretched := quittingMembershipStretchedReward original alpha
++  have hstretchedBound : ∀ terminal who, |stretched terminal who| ≤ 1 :=
++    abs_quittingMembershipStretchedReward_le_one original halpha.le halphaOne horiginalBound
++  let coordinates := fun coordinate : QuittingFreeRewardCoordinate ι =>
++    stretched coordinate.1.1 coordinate.1.2
++  obtain ⟨singletons, hsingletons, hfiberMaximum⟩ :=
++    exists_maximum_quittingTerminalExploitabilityInf_ownSingletonReward coordinates
++  have hcoordinates : ∀ coordinate, |coordinates coordinate| ≤ 1 :=
++    fun coordinate => hstretchedBound coordinate.1.1 coordinate.1.2
++  have hfinalBound : ∀ terminal who,
++      |quittingOwnSingletonReward singletons coordinates terminal who| ≤ 1 :=
++    (abs_quittingOwnSingletonReward_le_one_iff singletons coordinates).mpr
++      ⟨hsingletons, hcoordinates⟩
++  have hagrees : QuittingAgreesWithMembershipStretch original
++      (quittingOwnSingletonReward singletons coordinates) alpha := by
++    intro terminal who hterminal
++    have hne : terminal ≠ quittingSingletonTerminal who := by
++      intro heq
++      exact hterminal (congrArg Subtype.val heq)
++    exact quittingOwnSingletonReward_free singletons coordinates ⟨(terminal, who), hne⟩
++  have hstretchedLe : quittingTerminalExploitabilityInf stretched ≤
++      quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward singletons coordinates) := by
++    have h := hfiberMaximum (fun who => stretched (quittingSingletonTerminal who) who)
++      (fun who => hstretchedBound _ who)
++    rw [quittingOwnSingletonReward_reconstruct stretched] at h
++    exact h
++  have hclose := abs_quittingTerminalExploitabilityInf_sub_le_of_reward_close
++    stretched original (by positivity : 0 ≤ 2 * alpha)
++    (abs_quittingMembershipStretchedReward_sub_le original halpha.le horiginalBound)
++  have hhalf : quittingTerminalExploitabilityInf original / 2 <
++      quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward singletons coordinates) := by
++    have h := (abs_le.mp hclose).1
++    dsimp [alpha] at h
++    linarith
++  have hfinalLe := hmaximum (quittingOwnSingletonReward singletons coordinates) hfinalBound
++  refine ⟨original, alpha, singletons, coordinates, horiginalBound, horiginalPositive,
++    horiginalOne, hmaximum, halpha, halphaSmall, (fun _ => rfl), hsingletons,
++    hfinalBound, hagrees, hfiberMaximum, hhalf, hfinalLe, ?_⟩
++  linarith
++
++end GameTheory
+*** End Patch

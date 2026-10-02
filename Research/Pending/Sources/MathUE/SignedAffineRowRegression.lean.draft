@@ -1,0 +1,86 @@
+import MathUE.SignedAffineRowComparison
+import Mathlib.Data.Fin.VecNotation
+import Mathlib.Tactic.FinCases
+
+/-!
+# Exact opposed-orientation affine-envelope regression
+
+These are row endpoints, not a positive-gap game or a selected global minimum.
+The same-hazard comparison can fail when both strict orientations occur.
+-/
+
+namespace Math.SignedAffineRows
+
+def opposedRegressionLeft : Fin 4 → ℝ :=
+  ![98 / 99, -48 / 99, 23 / 99, 0]
+
+def opposedRegressionRight : Fin 4 → ℝ :=
+  ![-48 / 99, 98 / 99, 23 / 99, 48 / 99]
+
+def opposedRegressionNewLeft : Fin 4 → ℝ := ![1, -1 / 2, 1 / 4, 0]
+
+def opposedRegressionNewRight : Fin 4 → ℝ := ![-1 / 2, 1, 1 / 4, 1 / 2]
+
+theorem opposedRegression_parameters :
+    (0 : ℝ) < 1 / 4 ∧ (1 / 4 : ℝ) < 1 / 2 ∧
+    (0 : ℝ) < 1 / 100 ∧ (1 / 100 : ℝ) < (1 / 4) / 4 ∧
+    (0 : ℝ) < 1 / 2 ∧ (1 / 2 : ℝ) < 1 := by
+  norm_num
+
+/-- The printed four new rows are EXACTLY the canonical signed stretches,
+including the optional row's literal zero endpoint. -/
+theorem opposedRegression_stretch_and_contact :
+    (∀ i, |opposedRegressionLeft i| ≤ 2 ∧ |opposedRegressionRight i| ≤ 2) ∧
+    (∀ i, signedEndpointGapStretch (1 / 100) (opposedRegressionLeft i) =
+        opposedRegressionNewLeft i ∧
+      signedEndpointGapStretch (1 / 100) (opposedRegressionRight i) =
+        opposedRegressionNewRight i) ∧
+    (∀ i, rowValue (1 / 2) (opposedRegressionNewLeft i)
+      (opposedRegressionNewRight i) = 1 / 4) ∧
+    opposedRegressionRight 0 < 0 ∧ 0 < opposedRegressionLeft 0 ∧
+    opposedRegressionLeft 1 < 0 ∧ 0 < opposedRegressionRight 1 := by
+  refine ⟨?_, ?_, ?_, ?_⟩
+  · intro i
+    fin_cases i <;> norm_num [opposedRegressionLeft, opposedRegressionRight]
+  · intro i
+    fin_cases i <;>
+      norm_num [signedEndpointGapStretch, opposedRegressionLeft, opposedRegressionRight,
+        opposedRegressionNewLeft, opposedRegressionNewRight]
+  · intro i
+    fin_cases i <;> norm_num [rowValue, opposedRegressionNewLeft, opposedRegressionNewRight]
+  · norm_num [opposedRegressionLeft, opposedRegressionRight]
+
+/-- Literal maximum of all four OLD positive-part affine rows. -/
+def opposedRegressionEnvelope (probability : ℝ) : ℝ :=
+  max
+    (max (max 0 (rowValue probability (opposedRegressionLeft 0) (opposedRegressionRight 0)))
+      (max 0 (rowValue probability (opposedRegressionLeft 1) (opposedRegressionRight 1))))
+    (max (max 0 (rowValue probability (opposedRegressionLeft 2) (opposedRegressionRight 2)))
+      (max 0 (rowValue probability (opposedRegressionLeft 3) (opposedRegressionRight 3))))
+
+/-- The two opposed rows alone give this lower bound, even beyond the legal interval. -/
+theorem opposedRegressionEnvelope_lower_bound (probability : ℝ) :
+    25 / 99 ≤ opposedRegressionEnvelope probability := by
+  have hfirst : rowValue probability (opposedRegressionLeft 0) (opposedRegressionRight 0) ≤
+      opposedRegressionEnvelope probability :=
+    (le_max_right _ _).trans ((le_max_left _ _).trans (le_max_left _ _))
+  have hsecond : rowValue probability (opposedRegressionLeft 1) (opposedRegressionRight 1) ≤
+      opposedRegressionEnvelope probability :=
+    (le_max_right _ _).trans ((le_max_right _ _).trans (le_max_left _ _))
+  norm_num only [opposedRegressionLeft, opposedRegressionRight,
+    Matrix.cons_val_zero, Matrix.cons_val_one] at hfirst hsecond
+  dsimp only [rowValue] at hfirst hsecond
+  linarith
+
+/-- Exact minimum over the ENTIRE legal optional-hazard interval, attained
+at one half and strictly above the printed new contact one quarter. -/
+theorem opposedRegressionEnvelope_exact_minimum :
+    (1 / 2 : ℝ) ∈ Set.Icc 0 1 ∧
+    opposedRegressionEnvelope (1 / 2) = 25 / 99 ∧
+    (1 / 4 : ℝ) < 25 / 99 ∧
+    ∀ probability ∈ Set.Icc (0 : ℝ) 1, 25 / 99 ≤ opposedRegressionEnvelope probability := by
+  refine ⟨by norm_num, ?_, by norm_num, fun probability _ =>
+    opposedRegressionEnvelope_lower_bound probability⟩
+  norm_num [opposedRegressionEnvelope, rowValue, opposedRegressionLeft, opposedRegressionRight]
+
+end Math.SignedAffineRows

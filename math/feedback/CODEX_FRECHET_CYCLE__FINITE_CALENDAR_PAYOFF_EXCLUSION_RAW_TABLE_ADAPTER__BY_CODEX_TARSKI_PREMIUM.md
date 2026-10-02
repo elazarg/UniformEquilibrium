@@ -1,0 +1,243 @@
+# Independent review: finite-calendar payoff-exclusion recognition
+
+Reviewer: CODEX_TARSKI_PREMIUM.
+
+Verdict: PASS, no unresolved mathematical objection. I read the complete
+383-line source at SHA256
+`35f330143fef16c3c040161327c40d39097e2a649f0f1608047874ae8bc96e91`:
+[reviewed note](../notes/CODEX_FRECHET_CYCLE__FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_ADAPTER.md).
+The verdict covers its finite-calendar realization proof, all three exact
+PD/GE/WE polynomial equivalences, rational parameter extraction, boundary
+tests, and attachment to the frozen actual selectors. This is mathematical
+review, not a Lean build or a claim that any proposed declaration is checked.
+
+I authored an earlier independent prescribed-outcome realization note.
+That prior work is not being counted as a review of this adapter. Here I
+checked FRECHET's whole proof and independently reconstructed its new
+weight optimization, strictness, quantifiers, and raw-parameter extraction.
+No cap-preserving realization is used or endorsed.
+
+## 1. Exact claim being checked
+
+For a fixed four-player real table with Never zero, every unrestricted
+independent prescribed terminal payoff is realized on dates 0,...,19 and
+Never. The image is exactly the polynomial image V(r,Δ) of the product of
+four twenty-one-action probability simplices. This turns the following
+ALL-finite-word properties into finite first-order real formulas:
+
+- some uniform positive minimum-coordinate deficit κ;
+- some uniform maximum-weight bound β<1 allowing a profile-dependent
+  witnessing probability weight; and
+- weak payoff exclusion on a supplied nonempty subset of players whose
+  own singletons are nonnegative.
+
+The accepted classes are the SAME classes already feeding the frozen
+actual finite selectors. Twenty dates bound the RECOGNITION witnesses,
+not the number of dates in the selected approximate equilibrium. The
+selector recomputes complete deviation caps in its constructed words.
+
+## 2. Exact payoff realization
+
+The approximation is valid in total variation: moving only finite tail
+atoms to Never changes marginal i with probability e_i(N)→0. Under the
+independent product coupling, any prescribed bounded payoff changes by at
+most 2MΣ_i e_i(N). Genuine Never mass is not included in this vanishing
+tail. This avoids the false continuity argument based on moving finite
+ties to a clock-at-infinity point.
+
+For each finite approximation, the complete n-coordinate prescribed payoff
+vector is affine in one marginal with all current opponents fixed.
+Finite-dimensional affine dependence removes support atoms until at most
+n+1 remain. Repeating player by player preserves the WHOLE vector at each
+step and never enlarges an earlier marginal. It is not a correlated mixture
+of product profiles.
+
+There are at most n(n+1) finite dates in the union of the final supports.
+One common increasing rank map preserves comparisons and ties, including
+their comparisons with Never. Applying it separately to each marginal
+therefore preserves the first quitting coalition pointwise and preserves
+independence. Compactness is invoked only AFTER this common finite calendar
+has been constructed. The marginal-support restriction is a finite union
+of closed simplex faces; the expected-payoff map is polynomial there.
+Taking limits consequently realizes every closure payoff exactly with the
+same support bound. Every realizing product is itself actual, so the image
+is closed and the stated equality, not just density, follows.
+
+The cases n=1, an empty union of finite support dates, pure finite ties,
+zero marginal atoms, and positive or unit Never mass are all covered.
+The proof makes no assumption of joint or opponent-deleted absorption.
+
+## 3. First-coalition polynomials and implementation
+
+For a nonempty S, the displayed product at date t forces exactly its
+members' clocks to equal t and all other clocks to be strictly later or
+Never. These events are disjoint across (S,t). Their complement is precisely
+all-Never. Thus the sixteen displayed outcome polynomials sum to one under
+Δ; all are degree four. Subtracting the own singleton gives the correct
+surplus A_i, including −s_i on the all-Never event.
+
+The hazard conversion uses the residual mass at and after t. When that
+denominator is zero, choosing hazard zero is permissible because the
+player has already quit with probability one. Such null-history choices
+do not alter its induced clock law. Every x therefore defines an ordinary
+twenty-row product word with no public signal. Conversely a finite word
+has the asserted independent clock representation. Equality of the payoff
+images follows from Section 2; no response clock is silently transported
+through the order compression.
+
+As an independent arithmetic regression, I compared the outcome formulas
+against direct enumeration of all 3^4 clock tuples on {0,1,Never} for
+twenty rational profiles, all sixteen outcomes each. Marginal numerators
+were generated by
+
+    ((k+3i+1) mod 5, (2k+i+2) mod 5, (k+i+3) mod 5),
+
+for k=0,...,19 and i=0,...,3, normalized by their sum (the all-zero case
+is replaced by pure Never). This includes zero atoms and Never mass.
+All exact rational comparisons and normalization checks passed. The event
+partition above is the proof, not this finite regression.
+
+## 4. PD, weak exclusion, and uniformity
+
+PD: forbidding A_i≥0 for every i says that f(x)=min_i A_i(x) is strictly
+negative on the compact Δ. Its maximum is attained and is still negative,
+giving one positive κ valid for all x and therefore every actual payoff.
+Conversely any such κ forbids that system. The source correctly uses weak
+inequalities in the forbidden system. Forbidding only all-positive vectors
+would allow the zero-table equality boundary and would not imply PD.
+
+For supplied κ, the formula uses A_i≤−κ for at least one i and is exact.
+For WE_J, the forbidden inequalities are all STRICTLY positive on J,
+which is exactly the negation of the weak disjunction. The signs s_i≥0
+on J remain a separate premise for its finite selector. No positive margin
+is extracted from a weak boundary.
+
+The maximal allowed subset J_+ is correct: enlarging a witnessing subset
+only enlarges the disjunction of possible nonpositive coordinates. Thus
+existence of a witnessing admissible subset is equivalent to nonempty J_+
+and its own weak exclusion. The alternative finite disjunction over all
+fifteen nonempty subsets avoids any issue with the reward-dependent J_+.
+
+## 5. GE optimization and rational parameter extraction
+
+Let β'≥1/2, β'<1, and sort a surplus vector as a_(1)≤a_(2)≤a_(3)≤a_(4).
+If i is an index of a_(1), every weight in the β'-capped simplex has
+
+    w·a ≥ w_i a_(1)+(1−w_i)a_(2)
+        ≥ β'a_(1)+(1−β')a_(2).
+
+The last inequality has the correct orientation since a_(1)−a_(2)≤0
+and w_i≤β'. Equality is attained by placing β' on i and 1−β' on a
+distinct second-minimum index. Its second weight is at most β'. Thus the
+minimum is exactly the minimum of the twelve ordered-pair expressions.
+Ties cause no problem; pairs must remain distinct.
+
+A GE witness β may be enlarged to max(β,1/2)<1. With λ=1−β', the
+source's ∃λ∀x polynomial predicate is therefore equivalent to GE. A
+fixed restricted collection of admissible weights implies this full capped
+simplex condition, and the full capped simplex is itself an allowed
+collection for the converse. The witnessing pair may vary with x; the
+single λ must not. No correlation device is being selected for the game.
+
+For 0<λ≤1/2, the minimum value is
+
+    a_(1)+λ(a_(2)−a_(1)),
+
+which is nondecreasing in λ for EVERY vector. Hence any smaller positive
+λ preserves a valid uniform predicate. A valid real λ can be replaced by
+a positive rational one, and the exact searches λ=1/k for k≥2 and κ=1/k
+for k≥1 terminate after the respective existential predicate is accepted.
+The inverse-decay direction is correct; increasing λ need not work.
+
+I independently tested the capped-simplex identity on all 625 surplus
+vectors in {−2,−1,0,1,2}^4 for β'=6/12,8/12,9/12. For each of these
+1,875 cases I enumerated EVERY denominator-twelve simplex weight satisfying
+the cap and compared its minimum with both the sorted expression and the
+twelve ordered-pair minimum. All exact integer comparisons passed. The
+inequality and attaining weight above prove the result beyond this grid.
+
+The quantifier elimination assertion is correctly scoped. The sixty reward
+coordinates and the finitely many x,λ variables enter polynomial formulas,
+so these sets are semialgebraic and rational or real-algebraic input is
+decidable in principle. No practical solver or bit bound is promised.
+Nonempty semialgebraic witness sets over rational coefficients admit
+real-algebraic points. Rejection of GE keeps ∀λ∃x; it need not yield one
+profile defeating every λ. The manuscript explicitly preserves that order.
+
+## 6. Consumers and scope checks
+
+I checked the PD/GE/WE hypotheses and conclusions in the frozen
+[payoff-exclusion selector](../exports/PAYOFF_EXCLUSION_ACTUAL_SELECTORS_AND_EXACT_SUFFIX_LIMITS.md).
+They match the adapter, including signed singletons in finite PD/GE,
+nonnegative witnessing singletons for WE_J, and nonnegative singletons for
+ALL players in the stronger exact every-suffix PD result. The final target
+is fixed before the equilibrium error; an independently selected bounded
+payoff realizer is never passed off as an equilibrium or cap realizer.
+
+The optional frozen cap-threshold consumer is invoked only with its
+all-player nonnegative singleton WE hypothesis. The qualitative signed
+Fin4 observation is separately valid: the named no-UE plateau declaration
+supplies a carrier payoff strictly above all own singletons, and projecting
+an approximating semantic-pair sequence places that payoff in the closed
+prescribed image. This contradicts any stated weak payoff exclusion without
+assigning the plateau's cap coordinates to the finite payoff realizer.
+The source correctly calls this qualitative conclusion already available.
+
+The explicit boundary tables also check out. In particular:
+
+- The PD fixture has every terminal coordinate sum at most zero, including
+  Never, and gives κ=1; the zero table separates PD from equality cases.
+- The WE-only pure-{0} surplus (0,1,1,1) gives every capped weight at least
+  1−β>0, so it truly refutes GE despite weak exclusion.
+- The two-pair GE fixture satisfies √x+√y≤1 by TWO independent clock
+  comparisons. The displayed bound 3x+y≤1 when x≤y follows from
+  0≤√x≤1/2. The correlated half-A/half-B reward lottery lies strictly
+  above every singleton but is not claimed actual. It therefore excludes
+  every nonzero fixed nonnegative reward-hull separator, as stated.
+- The full-coalition fixture fails all three tests while having an easy
+  exact equilibrium; recognition is not an exhaustive UE decision.
+- The equal-payoff/different-cap two-clock example is correct. It guards
+  exactly the distinction the adapter must preserve.
+
+## 7. Exact source audit and conclusion
+
+Named declarations inspected in their defining files:
+
+- `quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect` and
+  `quittingBehaviorStoppingLaw_finiteStoppingLawMixture` in
+  `UniformEquilibrium/Quitting/Paths/FiniteStoppingLawMixture.lean`:
+  the observer is arbitrary, so whole-vector affine replacement is justified.
+- `quittingTerminalSemanticCarrier` and
+  `exists_terminalProfile_sequence_tendsto_semanticPair` in
+  `UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+- `exists_finFour_strictMinimum_allContinuePlateau_of_no_uniformPayoff` in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourStrictMinimumPlateauIsolation.lean`:
+  no singleton-sign premise is present, and every prescribed coordinate
+  of the supplied carrier point is strictly above its own singleton.
+- The literal weighted-outcome and singleton predicates underlying
+  `exists_uniformEquilibriumPayoff_of_nonnegativeWeightChamber` in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticNonnegativeWeightChamber.lean`:
+  normalizing its weight yields a fixed GE witness with maximum below one
+  because at least two coordinates are positive.
+- The frozen selectors' all-errors terminal/uniform adapter, whose named
+  endpoint is `quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+  in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+
+The finite-dimensional raw recognition connection is a legitimate addition
+to the existing producer interfaces. It does not enlarge their qualitative
+reward classes or produce bounded complete-cap representations. I found no
+deferred mathematical gap in that claimed scope. Any eventual cleaned
+candidate should preserve these scope limits and receive its own final-byte
+check before export; this review does not authorize edits to frozen packets.
+
+## Final named candidate acceptance
+
+I compared the final mathematical-name candidate
+`FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS.md`, SHA256
+`55db4eb51e4b309de13498bdbabfa1e808b5e3fde35a5fb3a31dc4483e5bb99f`,
+byte-for-byte against the reviewed source. Its theorem, proof, parameter
+extraction, boundary tests, source audit, and handoff are unchanged. The
+differences replace lifecycle prose, add the two independent review links,
+make the two supporting-note links relocation-safe, and remove the requested-
+check paragraph. These changes introduce no mathematical objection. My PASS
+verdict applies to these final bytes; no further change is requested.

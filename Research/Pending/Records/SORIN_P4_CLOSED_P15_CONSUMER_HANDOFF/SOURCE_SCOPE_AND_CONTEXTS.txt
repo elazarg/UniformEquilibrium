@@ -1,0 +1,87 @@
+P4 consumer handoff against the now-closed, checked Proposition15 paper.
+Static preparation; not checked here. No shared edits/compiler/Git, caches,
+worktrees, source snapshots, new mathematical branch or child agents occurred.
+Root owns full silent build1205, all applications and subsequent checks.
+
+Root-reported milestone, not checks run by this lane:
+  Lower target17295 PASS; combined19 harness93652 PASS, standard3.
+  Literal P15 target1696 PASS; transitive P15 harness48110 PASS, standard3.
+  Full silent default build1205 live. No Lean changes during that full gate.
+
+Exact current Literature/Sorin1986.lean base:
+  fba6f32df9e627384edd4e5e21fec63a5e6d14e5eef83e9b07d462b1439bdfa5
+Existing P4 original paper/delegation patch:
+  /tmp/convex-geometric-schedule.upl3Iu3u/003_SORIN_P4_AND_SCHEDULE_DELEGATES.patch
+  SHA698e5f93b07b19b9bee19c26c3933603b75498aee9bd9258ba5208c6fd1200ba
+  Six unique hunk contexts, result:
+    2c88f34cbf93c047d5d42efbba92016a86ab5b33686c5c054a7fbe9cc6722156
+Existing doc-only arbitrary-sequence overlay:
+  /tmp/sorin-p4-proof-doc-overlays.sum3X38q/002_ARBITRARY_SEQUENCE_DOC.patch
+  SHAb9e3ad80b039e8c36c053e7847b2c3584fd381b9f8f36256e576e2c3172b8749
+  Unique hunk context, result:
+    bfaac016cff33d49bb67f174ed79860bd0fe0ff94b7cad3549f9edc511c3456a
+No new context overlay is needed. All originals/earlier overlays are immutable.
+The final P15 proof is already in the base and is not modified by these hunks.
+
+Current MathUE umbrella context check, useful after the frozen generic modules:
+  current da0db723744cb4fd625a028ce4cca573210df3e588f42dd318d57414df090156
+  existing connected-representation umbrella patch2 result:
+    f4c1d66b67cb247d1c7348ed2e2c1ed52ac5853aa8d809f6f3f803352e529f0b
+  existing affine-step/schedule umbrella patch4 result:
+    d41f6d00eef360f09222b436b86682551b8ea38ebac35ead3aff3db1197661c4
+Both exact original patch contexts match uniquely, despite other root-wave
+umbrella additions since the prior report. No whole-file rebase is necessary.
+
+The complete immutable generic/order record remains:
+  /tmp/sorin-p4-current-dag-audit.3RqIesTx/ORDERED_IMMUTABLE_P4_DAG.txt
+  e9138f031c52cc81f73185fb1d9ddb43227585147199d2844695a72f9e14895c
+Its generic patch and overlay ordering is unchanged; only current paper and
+umbrella whole-file hashes are updated by this handoff. In particular:
+  connected representation -> affine step -> ite_eq_left/right overlay ->
+  ite_true overlay -> geometric schedule -> paper adapter/delegates -> doc.
+No generic math imports Literature. Paper telescope delegates to its promoted
+MathUE owner, preserving its interface used by the now-checked P15 vertices.
+Original P6 delegates its recurrence selection to that same schedule owner.
+
+New narrow consumer harness, for root AFTER P4 predecessors/paper check:
+  AXIOMS_P4_ACTUAL_CONSUMERS_AFTER_CHECKS.lean
+  eeb838f56825662c61299182e78568b02f3dde1538fc88ae8705053a1de6cd3d
+Nine #print axioms calls:
+  original six generic-step/schedule/path/P4/P6 declarations;
+  two delegating actual-profile consumer fixtures;
+  the unchanged Proposition15 as a regression after telescope promotion.
+All non-import lines <=100. No compiler or axiom check ran here.
+
+Exact first consumer scope:
+  Any finite paper stage game G, real lambda with 0<lambda and
+  lambda<1/Fintype.card G.Player, and any actual payoff in G's correlated
+  feasible hull. Internally obtains an actual full behavioral profile whose
+  normalized discounted payoff equals that same target exactly.
+  No supplied path, mixed sequence, orbit, geometric law, delivered value,
+  maximizing coefficient, source nonemptiness, behavioral profile or deviation
+  certificate premise. Source player-count positivity is internally derived.
+  This is feasible payoff realization, not a Nash or unilateral-deviation cap.
+
+Exact second consumer scope:
+  Original Proposition6's genuine hypothesis Convex of the actual feasible
+  discounted payoff set at 0<lambda<=1; any 0<delta<lambda and target in the
+  actual correlated feasible hull. It obtains an actual behavioral profile
+  delivering the same target at delta. Its convexity premise is preserved
+  transparently, not silently supplied or claimed unconditionally.
+
+Generic/source boundaries unchanged:
+  Full preconnected-set representation, dimension zero max(1,finrank) and
+  internally contradictory empty-source convex-hull membership.
+  Affine peeling 0<=weight<1 and weight*max(1,finrank)<=1.
+  Generic bounded actual-step schedule 0<weight<=1, including weight1.
+  Paper P4 remains strict 0<lambda<1/playerCount; zero-player hypotheses are
+  contradictory internally. No lambda0, lambda1 or threshold equality claim.
+  Source: classical Teissier2004 Proposition4.2 reflected-simplex proof and
+  Sorin1986 printed p151 coefficient peeling/geometric schedule, as fully
+  recorded and reviewed in the immutable original packet source records.
+
+Remaining gates: generic modules, paper P4/P6 and this consumer harness must
+be root-compiled, manually axiom-checked, and properly inventory/audit/import
+integrated after the current full-build freeze ends. Only propext, Quot.sound,
+Classical.choice are permitted. P4 currently remains unproved in the actual
+shared source until those frozen implementation patches are applied/checked.

@@ -1,0 +1,10 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Examples/ExactRootPotentialPlayerCountBoundary.lean
+@@
+       · rw [quittingRootEndpointDifference,
+-          quittingRootQuitPayoff_soloStationaryRoot_other heq,
+-          quittingRootContinuePayoff_soloStationaryRoot_other heq]
++          quittingRootQuitPayoff_soloStationaryRoot_other (fun _ _ => (0 : ℝ)) heq,
++          quittingRootContinuePayoff_soloStationaryRoot_other (fun _ _ => (0 : ℝ)) heq]
+         simp only [quittingSoloReward, quittingSingletonCollisionReward,
+*** End Patch

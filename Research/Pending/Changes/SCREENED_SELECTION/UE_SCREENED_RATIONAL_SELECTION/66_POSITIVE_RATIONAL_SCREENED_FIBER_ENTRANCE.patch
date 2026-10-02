@@ -1,0 +1,102 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Quitting/Terminal/StrictUnitRewardScale.lean
++import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityRewardRobustness
++import Mathlib.Tactic.Linarith
++
++/-! # A common positive reward scale puts every literal entry strictly inside the unit cube -/
++
++namespace GameTheory
++
++variable {ι : Type} [Fintype ι]
++
++/-- The scale is constructed from the canonical finite reward bound.
++This only bounds the table; all payoff/eta scaling semantics remain owned by
++TerminalExploitabilityRewardRobustness. No affine payoff shift is used. -/
++theorem exists_strictUnit_scaleQuittingReward
++    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
++    ∃ scale : ℝ, 0 < scale ∧
++      ∀ terminal player, |scaleQuittingReward scale reward terminal player| < 1 := by
++  let denominator := quittingRewardBound reward + 1
++  have hdenominator : 0 < denominator := by
++    dsimp [denominator]
++    linarith [quittingRewardBound_nonneg reward]
++  have hscale : 0 < 1 / denominator := one_div_pos.mpr hdenominator
++  refine ⟨1 / denominator, hscale, ?_⟩
++  intro terminal player
++  rw [scaleQuittingReward_apply, abs_mul, abs_of_pos hscale]
++  rw [div_mul_eq_mul_div₀, one_mul]
++  apply (div_lt_one hdenominator).mpr
++  dsimp [denominator]
++  linarith [abs_reward_le_quittingRewardBound reward terminal player]
++
++end GameTheory
+*** Add File: UniformEquilibrium/Diagnostics/Quitting/PositiveRationalScreenedFiberEntrance.lean
++import UniformEquilibrium.Quitting.Terminal.StrictUnitRewardScale
++import UniformEquilibrium.Diagnostics.Quitting.ScreenedRootPolynomialDensity
++import Mathlib.Tactic.NormNum
++
++/-!
++# Actual positive-eta entrance into one rational generic singleton fiber
++
++Scale the original table positively, then replace ONLY its literal free
++coordinates. Its own singleton vector is unchanged during rational selection.
++Polynomial nonvanishing and positivity are produced internally, not assumed.
++-/
++
++namespace GameTheory
++
++/-- Any actual positive-eta real table produces a common scale and ONE rational
++strict-interior free-coordinate vector with nonvanishing polynomial and positive
++eta at the original scaled own singletons. No root/minimum/certificate is input. -/
++theorem exists_positive_rational_screenedFiber_entrance
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
++    ∃ (scale : ℝ) (rational : QuittingFreeRewardCoordinate (Fin 4) → ℚ),
++      0 < scale ∧
++      (∀ terminal who, |scaleQuittingReward scale reward terminal who| < 1) ∧
++      (∀ coordinate, |(rational coordinate : ℝ)| < 1) ∧
++      screenedRootPolynomialEval (fun coordinate => (rational coordinate : ℝ))
++        screenedRootExclusionPolynomial ≠ 0 ∧
++      0 < quittingTerminalExploitabilityInf
++        (quittingOwnSingletonReward
++          (fun who => scaleQuittingReward scale reward (quittingSingletonTerminal who) who)
++          (fun coordinate => (rational coordinate : ℝ))) := by
++  obtain ⟨scale, hscale, hstrict⟩ := exists_strictUnit_scaleQuittingReward reward
++  let scaled := scaleQuittingReward scale reward
++  have hscaledPositive : 0 < quittingTerminalExploitabilityInf scaled :=
++    (quittingTerminalExploitabilityInf_scaleQuittingReward_pos_iff hscale reward).mpr hpositive
++  let radius := quittingTerminalExploitabilityInf scaled / 4
++  have hradius : 0 < radius := div_pos hscaledPositive (by norm_num)
++  let oldCoordinates : QuittingFreeRewardCoordinate (Fin 4) → ℝ :=
++    fun coordinate => scaled coordinate.1.1 coordinate.1.2
++  have holdBound : ∀ coordinate, |oldCoordinates coordinate| ≤ 1 :=
++    fun coordinate => (hstrict coordinate.1.1 coordinate.1.2).le
++  obtain ⟨rational, hnear, hpolynomial, _⟩ :=
++    exists_rational_interior_screenedRootCoordinates_near
++      oldCoordinates radius holdBound hradius
++  let singletons : Fin 4 → ℝ :=
++    fun who => scaled (quittingSingletonTerminal who) who
++  let nearby := quittingOwnSingletonReward singletons
++    (fun coordinate => (rational coordinate : ℝ))
++  have hclose : ∀ terminal who, |nearby terminal who - scaled terminal who| ≤ radius := by
++    intro terminal who
++    by_cases hterminal : terminal = quittingSingletonTerminal who
++    · subst terminal
++      simpa only [nearby, quittingOwnSingletonReward_singleton, singletons,
++        sub_self, abs_zero] using hradius.le
++    · change |quittingOwnSingletonReward singletons
++        (fun coordinate => (rational coordinate : ℝ)) terminal who -
++          scaled terminal who| ≤ radius
++      rw [quittingOwnSingletonReward, dite_eq_right hterminal]
++      exact (hnear ⟨(terminal, who), hterminal⟩).2.le
++  have hrobust := abs_quittingTerminalExploitabilityInf_sub_le_of_reward_close
++    nearby scaled hradius.le hclose
++  have hnearPositive : 0 < quittingTerminalExploitabilityInf nearby := by
++    have hlower := (abs_le.mp hrobust).1
++    dsimp [radius] at hlower
++    linarith
++  exact ⟨scale, rational, hscale, hstrict, fun coordinate => (hnear coordinate).1,
++    hpolynomial, hnearPositive⟩
++
++end GameTheory
+*** End Patch

@@ -1,0 +1,12 @@
+import MathUE.Analysis.CoordinateHessianEntries
+import MathUE.Analysis.Examples.PairedFacePotentialCanonicalJoins
+
+#print axioms Math.coordinateMixedPartial_eq_secondFDeriv
+#print axioms Math.coordinateHessian_apply_single
+#print axioms Math.coordinateHessian_conjugate_eq_matrix
+#print axioms Math.coordinateHessian_hasEigenvalue_iff_matrix
+#print axioms Math.PairedFacePotential.translated_coordinateHessian_conjugate
+#print axioms Math.PairedFacePotential.translated_coordinateHessian_hasEigenvalue_iff
+#print axioms Math.PairedFacePotential.translated_coordinateLeastHessianEigenvalue
+#print axioms Math.PairedFacePotential.translated_coordinateMinimumHessianEigenvalue
+#print axioms Math.PairedFacePotential.exists_non_top_minimizing_vertex

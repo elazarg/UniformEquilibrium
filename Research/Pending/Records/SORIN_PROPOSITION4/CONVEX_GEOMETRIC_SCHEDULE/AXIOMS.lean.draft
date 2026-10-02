@@ -1,0 +1,10 @@
+import MathUE.Topology.ConnectedConvexHullAffineStep
+import MathUE.RealSeries.GeometricAffineSchedule
+import Literature.Sorin1986
+
+#print axioms Math.Topology.exists_affine_step_of_mem_convexHull_isPreconnected
+#print axioms Math.RealSeries.geometric_sum_eq_of_bounded_affine_recurrence
+#print axioms Math.RealSeries.exists_geometric_schedule_of_bounded_affine_steps
+#print axioms Literature.Sorin1986.PathConnectedSet.isPreconnected
+#print axioms Literature.Sorin1986.proposition_4
+#print axioms Literature.Sorin1986.proposition_6

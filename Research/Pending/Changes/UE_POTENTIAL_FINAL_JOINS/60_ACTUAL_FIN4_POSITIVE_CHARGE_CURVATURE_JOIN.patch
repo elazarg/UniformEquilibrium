@@ -1,0 +1,55 @@
+*** Begin Patch
+*** Add File: UniformEquilibrium/Quitting/Projective/FinFourRobustPotentialChargeScale.lean
++import UniformEquilibrium.Quitting.Projective.QuantitativePolynomialForwardCharacterization
++import UniformEquilibrium.Quitting.Projective.RobustPotentialChargeScale
++
++/-! # The same actual Fin4 game produces the data for positive-charge curvature
++
++No favorable simplex or matrix is a game input. This facade derives them
++from bare no-UE and delegates to the generic coefficient normalization.
++-/
++
++noncomputable section
++
++namespace GameTheory
++
++open Set
++
++/-- Same reward, same function, same robust tolerance: all scaled quantitative
++restrictions, with actual Q/simplex and attained extrema produced internally. -/
++theorem quittingRobustPotentialWithCharge_finFour_curvature_restrictions
++    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
++    {bound tolerance coefficient : ℝ}
++    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
++    (htolerance0 : 0 < tolerance) (htolerance1 : tolerance ≤ 1 / 4)
++    (hcoefficient : 0 < coefficient)
++    (hnot : ¬ ∃ payoff : Payoff (Fin 4),
++      (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
++    (potential : Payoff (Fin 4) → ℝ) (domain : Set (Payoff (Fin 4)))
++    (hopen : IsOpen domain) (hbox : quittingSingletonBox reward bound ⊆ domain)
++    (hsmooth : ContDiffOn ℝ 2 potential domain)
++    (hpotential : IsQuittingRobustPotentialWithCharge reward tolerance (bound + 2)
++      coefficient potential) :
++    HasFinFourQuittingMixedCurvatureBounds reward bound
++        (coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance)) potential ∧
++      HasFinFourQuittingNegativeHessianBounds reward bound
++        (coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance)) potential := by
++  have hbound : 0 ≤ bound := (abs_nonneg _).trans
++    (hreward (quittingSingletonTerminal (0 : Fin 4)) 0)
++  have hgain : 0 < coefficient * (2 * bound + 1) / (2 * bound + 1 - tolerance) :=
++    div_pos (mul_pos hcoefficient (by linarith)) (by linarith)
++  obtain ⟨weight, hpositive⟩ :=
++    exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff reward hnot
++  have hmixed := quittingRobustPotentialWithCharge_mixedCurvature reward hreward
++    htolerance0 htolerance1 hcoefficient weight (fun receiver => (hpositive receiver).le)
++    potential domain hopen hbox hsmooth hpotential
++  refine ⟨⟨hgain, weight, hpositive, hmixed.1, ?_⟩, ?_⟩
++  · simpa only [Fintype.card_fin, Nat.reduceSub, Nat.cast_ofNat] using hmixed.2
++  · simpa only [Fintype.card_fin, Nat.reduceSub, Nat.cast_ofNat] using
++      quittingRobustPotentialWithCharge_negativeHessianEigenvalue reward hreward
++        htolerance0 htolerance1 hcoefficient
++        (isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff reward hnot)
++        potential domain hopen hbox hsmooth hpotential
++
++end GameTheory
+*** End Patch

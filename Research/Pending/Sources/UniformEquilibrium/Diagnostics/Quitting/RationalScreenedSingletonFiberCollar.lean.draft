@@ -1,0 +1,74 @@
+import UniformEquilibrium.Diagnostics.Quitting.RationalScreenedSingletonFiberSelection
+import UniformEquilibrium.Diagnostics.Quitting.ScreenedSingletonFiberUniformCollar
+
+/-! # The SAME rational screened source with an actual fiber-uniform singleton collar
+
+This joins the existing source producer and the collar without selecting a
+second free-coordinate vector or changing the selected maximizer/gap. No
+common-calendar, finite-clock, tuple restriction or equilibrium is asserted.
+-/
+
+namespace GameTheory
+
+/-- From raw actual no-UE data, retain the ONE internally chosen rational b,
+singleton maximizer and rational screened gap, and attach ONE positive collar
+over the whole fiber above half of that SAME selected table's positive eta. -/
+theorem exists_rationalGenericScreenedSingletonFiber_with_uniformCollar
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hno : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ (scale : ℝ) (coordinates : QuittingFreeRewardCoordinate (Fin 4) → ℚ)
+      (singletons : Fin 4 → ℝ) (gamma : ℚ) (floor radius : ℝ),
+      0 < scale ∧
+      (∀ terminal who, |scaleQuittingReward scale reward terminal who| < 1) ∧
+      0 < quittingTerminalExploitabilityInf
+        (quittingOwnSingletonReward
+          (fun who => scaleQuittingReward scale reward (quittingSingletonTerminal who) who)
+          (fun coordinate => (coordinates coordinate : ℝ))) ∧
+      IsRationalGenericScreenedSingletonFiber coordinates singletons gamma ∧
+      0 < floor ∧ 0 < radius ∧
+      ∀ otherSingletons : Fin 4 → ℝ, (∀ who, |otherSingletons who| ≤ 1) →
+        quittingTerminalExploitabilityInf
+            (quittingOwnSingletonReward singletons
+              (fun coordinate => (coordinates coordinate : ℝ))) / 2 ≤
+          quittingTerminalExploitabilityInf
+            (quittingOwnSingletonReward otherSingletons
+              (fun coordinate => (coordinates coordinate : ℝ))) →
+        ∀ profile : (quittingGame (quittingOwnSingletonReward otherSingletons
+            (fun coordinate => (coordinates coordinate : ℝ)))).BehaviorProfile,
+          quittingTerminalExploitability
+              (quittingOwnSingletonReward otherSingletons
+                (fun coordinate => (coordinates coordinate : ℝ))) profile ≤
+            quittingTerminalExploitabilityInf
+              (quittingOwnSingletonReward otherSingletons
+                (fun coordinate => (coordinates coordinate : ℝ))) + radius →
+          floor ≤ quittingTerminalLawSingletonMass
+            (quittingTerminalOutcomeMass
+              (quittingOwnSingletonReward otherSingletons
+                (fun coordinate => (coordinates coordinate : ℝ))) profile) := by
+  obtain ⟨scale, coordinates, singletons, gamma, hscale, hscaled, hretained, hsource⟩ :=
+    exists_rationalGenericScreenedSingletonFiber_of_no_uniformEquilibriumPayoff reward hno
+  have hsourceCopy := hsource
+  obtain ⟨hcoordinates, hpolynomial, hsingletons, _hgamma, hpositive, _hmaximum, _hgap⟩ :=
+    hsourceCopy
+  let threshold := quittingTerminalExploitabilityInf
+    (quittingOwnSingletonReward singletons (fun coordinate => (coordinates coordinate : ℝ))) / 2
+  have hthreshold : 0 < threshold := by
+    dsimp only [threshold]
+    linarith
+  have hnonempty : ∃ candidate : Fin 4 → ℝ, (∀ who, |candidate who| ≤ 1) ∧
+      threshold ≤ quittingTerminalExploitabilityInf
+        (quittingOwnSingletonReward candidate
+          (fun coordinate => (coordinates coordinate : ℝ))) := by
+    refine ⟨singletons, hsingletons, ?_⟩
+    dsimp only [threshold]
+    linarith
+  obtain ⟨floor, radius, hfloor, hradius, hcollar⟩ :=
+    exists_screenedSingletonFiberUniformCollar
+      (fun coordinate => (coordinates coordinate : ℝ))
+      (fun coordinate => (hcoordinates coordinate).le) hpolynomial
+      threshold hthreshold hnonempty
+  exact ⟨scale, coordinates, singletons, gamma, floor, radius, hscale, hscaled,
+    hretained, hsource, hfloor, hradius, hcollar⟩
+
+end GameTheory

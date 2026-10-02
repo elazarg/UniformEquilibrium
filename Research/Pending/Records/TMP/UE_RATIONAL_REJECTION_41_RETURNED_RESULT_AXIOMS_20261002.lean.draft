@@ -1,0 +1,51 @@
+import UniformEquilibrium.Quitting.Projective.RationalPotentialRejectionSearch
+
+open GameTheory Math.Interval
+
+-- Standalone audit only; informational output is not a production-module check.
+#print axioms Math.Interval.RationalPolynomial.ratCast_evalRat
+#print axioms GameTheory.exists_rational_robust_rejection_of_positive_exact_rejection
+#print axioms GameTheory.exists_positive_exact_rejection_of_not_fullRootPotential
+#print axioms GameTheory.exists_rational_robust_rejection_of_excluded_polynomial
+#print axioms GameTheory.mem_rationalQuittingRejectionCandidates
+#print axioms GameTheory.rationalQuittingPotentialRejectionSearch_eventually_succeeds
+#print axioms GameTheory.rationalQuittingPotentialRejects_sound
+#print axioms GameTheory.rationalQuittingPotentialRejectionSearch_sound
+#print axioms
+  GameTheory.rationalQuittingPotentialRejectionSearch_eventually_succeeds_of_excluded_polynomial
+
+example {players : ℕ}
+    (reward : RationalQuittingReward players) (expression : RationalPolynomial players)
+    (bound tolerance : ℚ) (htolerance : 0 ≤ tolerance) (budget : ℕ)
+    (pair : RationalQuittingRejectionPair players)
+    (hreturned : rationalQuittingPotentialRejectionSearch?
+      reward expression bound tolerance budget = some pair) :
+    ∃ root : RationalQuittingRoot players,
+      root.probability = pair.2 ∧
+      ∃ source target : QuittingRobustChargedState (Fin players) (bound : ℝ),
+        source.1 = (fun who => (pair.1 who : ℝ)) ∧
+        target.1 = (fun who => (rationalQuittingRejectionSuccessor reward pair who : ℝ)) ∧
+        target.1 = quittingRootSuccessorPayoff (rationalQuittingRewardToReal reward)
+          source.1 root.toPMF ∧
+        IsQuittingFloorFreeRobustEdge (rationalQuittingRewardToReal reward)
+          tolerance bound source (quittingSimplexOfRoot root.toPMF) target ∧
+        0 < quittingRootAbsorptionMass root.toPMF ∧
+        RationalPolynomial.evalReal source.1 expression -
+          RationalPolynomial.evalReal target.1 expression <
+            quittingRootAbsorptionMass root.toPMF :=
+  rationalQuittingPotentialRejectionSearch_sound reward expression bound tolerance
+    htolerance budget pair hreturned
+
+example {players : ℕ} [Nontrivial (Fin players)]
+    (reward : RationalQuittingReward players)
+    (hreward : ∀ terminal who, |reward terminal who| ≤ 1)
+    (hsingleton : ∀ who, 0 ≤ reward (quittingSingletonTerminal who) who)
+    (expression : RationalPolynomial players)
+    (hexcluded : expression.toMvPolynomial.totalDegree ≤ 2 ∨
+      ∀ who, expression.toMvPolynomial.degreeOf who ≤ 1)
+    (tolerance : ℚ) (htolerance : 0 < tolerance) :
+    ∃ threshold : ℕ, ∀ budget, threshold ≤ budget →
+      (rationalQuittingPotentialRejectionSearch? reward expression 3 tolerance budget).isSome =
+        true :=
+  rationalQuittingPotentialRejectionSearch_eventually_succeeds_of_excluded_polynomial
+    reward hreward hsingleton expression hexcluded tolerance htolerance

@@ -1,0 +1,34 @@
+*** Begin Patch
+*** Update File: UniformEquilibrium/Quitting/Projective/RationalPotentialRejectionSearch.lean
+@@
+   exact ⟨root, rfl, source, target, rfl, rfl, hsuccessor, hedge, hcharge, hdropReal⟩
+ 
++/-- The actual result returned by the finite search has the same literal source,
++root probabilities, exact successor and robust rejecting-edge interpretation.
++The acceptance criterion remains the printed non-strict regret bound. -/
++theorem rationalQuittingPotentialRejectionSearch_sound
++    (reward : RationalQuittingReward players) (expression : RationalPolynomial players)
++    (bound tolerance : ℚ) (htolerance : 0 ≤ tolerance) (budget : ℕ)
++    (pair : RationalQuittingRejectionPair players)
++    (hreturned : rationalQuittingPotentialRejectionSearch?
++      reward expression bound tolerance budget = some pair) :
++    ∃ root : RationalQuittingRoot players,
++      root.probability = pair.2 ∧
++      ∃ source target : QuittingRobustChargedState (Fin players) (bound : ℝ),
++        source.1 = (fun who => (pair.1 who : ℝ)) ∧
++        target.1 = (fun who => (rationalQuittingRejectionSuccessor reward pair who : ℝ)) ∧
++        target.1 = quittingRootSuccessorPayoff (rationalQuittingRewardToReal reward)
++          source.1 root.toPMF ∧
++        IsQuittingFloorFreeRobustEdge (rationalQuittingRewardToReal reward)
++          tolerance bound source (quittingSimplexOfRoot root.toPMF) target ∧
++        0 < quittingRootAbsorptionMass root.toPMF ∧
++        RationalPolynomial.evalReal source.1 expression -
++          RationalPolynomial.evalReal target.1 expression <
++            quittingRootAbsorptionMass root.toPMF := by
++  apply rationalQuittingPotentialRejects_sound reward expression bound tolerance
++    htolerance pair
++  exact List.find?_some hreturned
++
+ /-- Source-facing termination: no supplied good pair or favorable strategy is
+ input. The actual exclusion produces one rational rejecting pair internally. -/
+*** End Patch

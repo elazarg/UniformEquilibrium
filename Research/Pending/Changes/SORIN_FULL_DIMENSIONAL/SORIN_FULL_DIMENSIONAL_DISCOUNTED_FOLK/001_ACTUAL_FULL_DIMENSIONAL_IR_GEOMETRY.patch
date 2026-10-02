@@ -1,0 +1,83 @@
+*** Begin Patch
+*** Update File: Literature/Sorin1986.lean
+@@
+-/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
++/-- The actual individually rational payoff set is compact: a closed
++coordinatewise security constraint inside the finite pure-payoff hull. -/
++theorem FiniteStageGame.individuallyRationalPayoffs_isCompact (G : FiniteStageGame) :
++    IsCompact G.individuallyRationalPayoffs := by
++  have hfeasible : IsCompact G.correlatedFeasiblePayoffs :=
++    Math.Topology.isCompact_convexHull_of_finiteDimensional
++      (Set.finite_range G.payoff).isCompact
++  have hsecurity : IsClosed {v : Payoff G.Player |
++      ∀ who, G.individualRationalLevel who ≤ v who} := by
++    simp only [Set.ofPred_forall]
++    exact isClosed_iInter fun who => isClosed_le continuous_const (continuous_apply who)
++  exact hfeasible.inter_right hsecurity
++
++/-- The literal ambient ball supplies strict security slack internally.
++No affine-dimension replacement or supplied strict point is used. -/
++theorem FiniteStageGame.exists_strictIR_of_fullDimensional (G : FiniteStageGame)
++    (hfull : FullDimensional G.individuallyRationalPayoffs) :
++    ∃ center ∈ G.correlatedFeasiblePayoffs,
++      ∀ who, G.individualRationalLevel who < center who := by
++  obtain ⟨center, hcenter, radius, hradius, hball⟩ := hfull
++  let below : Payoff G.Player := fun who => center who - radius / 2
++  have hbelowBall : below ∈ Metric.ball center radius := by
++    rw [Metric.mem_ball, dist_eq_norm]
++    apply (pi_norm_lt_iff hradius).mpr
++    intro who
++    change |(center who - radius / 2) - center who| < radius
++    rw [show (center who - radius / 2) - center who = -(radius / 2) by ring,
++      abs_neg, abs_of_pos (half_pos hradius)]
++    linarith
++  have hbelow := hball hbelowBall
++  refine ⟨center, hcenter.1, ?_⟩
++  intro who
++  have hsecurity := hbelow.2 who
++  change G.individualRationalLevel who ≤ center who - radius / 2 at hsecurity
++  linarith
++
++/-- Mix a weakly rational target with the internally derived strict point.
++This is elementary convex glue; no periodic or equilibrium witness is supplied. -/
++private theorem FiniteStageGame.exists_strictIR_close_of_fullDimensional
++    (G : FiniteStageGame) (hfull : FullDimensional G.individuallyRationalPayoffs)
++    (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
++    {ε : ℝ} (hε : 0 < ε) :
++    ∃ strict ∈ G.correlatedFeasiblePayoffs,
++      (∀ who, G.individualRationalLevel who < strict who) ∧ dist strict target < ε := by
++  obtain ⟨center, hcenter, hstrict⟩ := G.exists_strictIR_of_fullDimensional hfull
++  obtain ⟨c, hc, hsmall⟩ := exists_pos_mul_lt hε ‖center - target‖
++  let t : ℝ := min c (1 / 2)
++  have ht : 0 < t := lt_min hc (by norm_num)
++  have ht1 : t ≤ 1 := (min_le_right c (1 / 2)).trans (by norm_num)
++  have htc : t ≤ c := min_le_left _ _
++  let mixed : Payoff G.Player := (1 - t) • target + t • center
++  have hmixed : mixed ∈ G.correlatedFeasiblePayoffs :=
++    G.correlatedFeasiblePayoffs_convex htarget.1 hcenter
++      (sub_nonneg.mpr ht1) ht.le (by ring)
++  refine ⟨mixed, hmixed, ?_, ?_⟩
++  · intro who
++    have hweak := mul_le_mul_of_nonneg_left (htarget.2 who) (sub_nonneg.mpr ht1)
++    have hstrong := mul_lt_mul_of_pos_left (hstrict who) ht
++    change G.individualRationalLevel who <
++      (1 - t) * target who + t * center who
++    calc
++      G.individualRationalLevel who =
++          (1 - t) * G.individualRationalLevel who +
++            t * G.individualRationalLevel who := by ring
++      _ < (1 - t) * target who + t * center who :=
++        add_lt_add_of_le_of_lt hweak hstrong
++  · have hdifference : mixed - target = t • (center - target) := by
++      funext who
++      change (1 - t) * target who + t * center who - target who =
++        t * (center who - target who)
++      ring
++    rw [dist_eq_norm, hdifference, norm_smul, Real.norm_eq_abs, abs_of_pos ht]
++    calc
++      t * ‖center - target‖ = ‖center - target‖ * t := mul_comm _ _
++      _ ≤ ‖center - target‖ * c := mul_le_mul_of_nonneg_left htc (norm_nonneg _)
++      _ < ε := hsmall
++
++/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
+*** End Patch

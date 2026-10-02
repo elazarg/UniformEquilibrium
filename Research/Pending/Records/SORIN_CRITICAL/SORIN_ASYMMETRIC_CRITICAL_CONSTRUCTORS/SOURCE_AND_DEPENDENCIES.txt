@@ -1,0 +1,203 @@
+SORIN REMARK 4: TWO ACTUAL CRITICAL-RATE CONSTRUCTIONS
+
+Status
+------
+Frozen static Lean drafts and manual future harness, NOT checked here.
+No Lean/Lake/compiler, Git, cache, worktree, shared edit, new child, or new
+mathematical branch was used. Root is sole compiler/editor/build-queue owner.
+The known proof is the two explicit constructions printed in concluding
+Remark (4), page 160 of Sorin (1986), DOI 10.1287/moor.11.1.147.
+
+This packet does NOT close concluding_remark_4. Its above-critical uniqueness
+conjunct remains exactly the existing sorry. No equilibrium-monotonicity or
+comparison certificate is introduced. No Proposition 15 claim is re-proved:
+its already-owned source action bounds feed newly factored actual-profile
+delivery/cap wrappers, and its public statements are preserved unchanged.
+
+Source and exact expected bases
+-------------------------------
+Primary PDF:
+literature/SORIN_1986__ON_REPEATED_GAMES_WITH_COMPLETE_INFORMATION.pdf
+SHA256 d09a8e78f37f9863ff40e969a90f03799967d05eb70ba28a93afab84ddfce56c
+
+Read-only current paper:
+Literature/Sorin1986.lean
+SHA256 fba6f32df9e627384edd4e5e21fec63a5e6d14e5eef83e9b07d462b1439bdfa5
+
+Expected post-P4 paper, before this packet:
+SHA256 bfaac016cff33d49bb67f174ed79860bd0fe0ff94b7cad3549f9edc511c3456a
+This exact future base was recomputed in memory from the current paper through
+the frozen P4 paper/delegation patch and its doc-only overlay. No snapshot or
+intermediate source file was written. Every patch context below is unique.
+
+Existing production dependencies read, unchanged:
+UniformEquilibrium/ProofView/Concepts/Stochastic/Strategy/Potential/Adaptive.lean
+  4852b8219663f80320452a982cc8446728d25e637c820838e063f3800944abff
+UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Discounted.lean
+  cf8690ce05062e9efed94c48ad14fe44c5e9a394244601696f61703bcdfb231d
+
+Ordered immutable patches
+-------------------------
+All paths below are under /tmp/sorin-asymmetric-critical-constructors.MzUuFU68/.
+
+001_GENERALIZED_ACTUAL_GRIM_ADAPTER.patch
+  patch 9f02f8cb615dc33118ac0d4c6ccf21cbd62f29ce90d8a5f115fc271534e6787c
+  base  bfaac016cff33d49bb67f174ed79860bd0fe0ff94b7cad3549f9edc511c3456a
+  result 481c4dbfa904ffb6d2835255b7f8ac56bf543b144fc33ab0771d7e1245f6d8a4
+  Four hunks: factor actual support-only nondeviator action, trigger delivery,
+  and binary-grim deviation cap; make P15 opponent/delivery/cap proofs delegate.
+  Generic prerequisites are explicitly conditional scalar action bounds. They
+  are not final source assumptions: 002 and 003 derive all such bounds from
+  the original payoff table and original quantitative hypotheses.
+
+002_STATIONARY_CRITICAL_CONSTRUCTION.patch
+  patch 77beaabd1180a74ed9b715b41a27d0f3bc294ab126326e62732d5e0614c7b01e
+  base  481c4dbfa904ffb6d2835255b7f8ac56bf543b144fc33ab0771d7e1245f6d8a4
+  result 2d09aa9c53e452e4959caa14cdf5d0e4543d9249475b6a50a96068eb082edf06
+  One hunk, before the original Remark 4 wrapper: original critical-rate
+  bounds, common punished-action arithmetic, actual stationary profile,
+  exact delivery, full-deviation cap, actual Nash, original payoff membership.
+
+003_ALTERNATING_CRITICAL_CONSTRUCTION.patch
+  patch 1cee8d388cc38c65011082e0c99ef776995ac0945ef36043cced3a4a7f4cde46
+  base  2d09aa9c53e452e4959caa14cdf5d0e4543d9249475b6a50a96068eb082edf06
+  result e11821d2b1bb629fcc518c10c264e897d346fb8e0e712af4af09ccf74befb9ae
+  One hunk, still before the original Remark 4 wrapper: actual DC/CD calendar,
+  the two exact phase identities/recurrence, equality with the literal source
+  alternating payoff expression, delivery, full-deviation cap, Nash/membership.
+
+004_PINNED_ADDITIVE_ORDER_NORMALIZATION.patch
+  patch 9c8525d33e5f5e4892dd1e54ec8bfe8cb82909c1e2e736546ddef17a342dc709
+  base  e11821d2b1bb629fcc518c10c264e897d346fb8e0e712af4af09ccf74befb9ae
+  result 919a46e65eb9d875caebb765b17b40eac9b7812269d6b99942c7ae135c219755
+  Proof-only overlay: use add_le_add with both explicitly ordered inputs,
+  avoiding the pinned generic add_le_add_left/right convention; combine one
+  Boolean disjunction simplification into its preceding ordinary sequence.
+  Original patches remain unchanged.
+
+005_P15_EXACT_CONTINUATION_COEFFICIENT.patch
+  patch 9ba54e4a11c37c7d6bf8a7d02c4ab18ca1aab0669ab34c5ca809fea1d38974ea
+  base  919a46e65eb9d875caebb765b17b40eac9b7812269d6b99942c7ae135c219755
+  result 5ecfd7f0b986f91d00272832825a321ee8e475d828bb867578e28d6604bba773
+  Proof-only overlay: normalize 1-3/4 to 1/4 in the three old source scalar
+  bounds passed to the factored P15 wrappers. No public P15 signature changes.
+
+Exact source scope and actual-profile quantifiers
+-------------------------------------------------
+Game: asymmetricGeneralizedDilemma alpha beta x y, exactly the original table:
+CC = (beta-y,beta-y), CD = (alpha-x,beta), DC = (beta,alpha-x), DD=(alpha,alpha).
+Rate: asymmetricCriticalDiscount alpha beta x y, exactly the original max
+quotient. Original hypotheses: alpha < beta-y, 0<x, 0<y.
+No positivity of alpha or beta. All new profile producers and payoff consumers
+use actual stochastic behavioral profiles, not a prescribed utility oracle.
+
+Stationary branch:
+  y <= x, including x=y. There is NO premise x < beta-alpha.
+  Actual calendar CC forever; actual nonculprit punishment defects after the
+  first observed mismatch on deviation support. Its root payoff is the printed
+  pair (beta-y) (beta-y). The delivery theorem itself needs no ordering premise:
+  the constant calendar delivers that value at any internally valid critical
+  rate; the actual deviation cap, Nash and payoff membership retain y<=x.
+  For EVERY player who and EVERY full BehaviorStrategy who replacement,
+  the actual discounted payoff of Function.update is at most the source root
+  value. There is no pure/stationary/one-shot deviation restriction.
+
+Alternating branch:
+  x<y. Actual calendar DC,CD,DC,..., starting with (beta,alpha-x).
+  Root delivery is exactly alternatingDiscountedPayoff rate
+    (pair beta (alpha-x)) (pair (alpha-x) beta),
+  not an alternative rate or silently swapped starting phase.
+  The same unrestricted full behavioral replacement quantifier is capped.
+  The low phase may have zero equilibrium surplus and a sharp incentive
+  equality; no positive punishment margin is assumed.
+
+Boundary discounts:
+  Both rates are internally shown strictly between 0 and 1 from the original
+  hypotheses. There is no extra discount endpoint exclusion at final input.
+  No new claim is made at rate zero or one outside those source hypotheses.
+  The reusable factored delivery/cap primitives include lam=1 under their
+  explicitly stated generic action bounds, reusing the owned telescope and
+  support-Bellman endpoint coverage. Positive-depth reachability is not assumed;
+  the history-support adapter covers depth zero as well.
+
+Nonclaims:
+  No above-critical uniqueness, equilibrium-preservation under parameter
+  decreases, whole concluding_remark_4 proof, unsupported/off-path child Nash,
+  subgame perfection, finite-horizon Nash, uniform equilibrium, or universal
+  punishment-culprit identity at unreachable histories.
+
+Dependency map and source-proof adjustments
+--------------------------------------------
+The first-mismatch law is reused unchanged:
+FiniteStageGame.firstMismatch_of_mem_support_trigger_update, with
+publicTriggerStatus_eq_some_of_first and the existing realized-action bridge.
+The factored support-only opponent helper generalizes the checked P15 helper;
+P15 now delegates instead of keeping a copied support argument.
+
+Exact delivery reuses:
+KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile,
+FiniteStageGame.stageEU_triggerMonitoredProfile, and the existing
+discounted_sum_eq_of_affine_recurrence interface. The pending P4 promotion
+preserves this scalar interface. No new geometric schedule/telescope is copied.
+
+Full behavioral caps reuse:
+StochasticGame.discountedPayoff_le_of_history_bellman_ge_on_support,
+Math.ProbabilityMassFunction.expect_le_of_le_on_support,
+Math.PMFProduct.eq_of_mem_support_pmfPi_update_pure,
+triggerOnPath_snoc_iff.
+Stage absolute bounds are selected internally from finiteness. Phase/punishment
+absolute bounds use maxima of absolute values, so negative alpha/beta are valid.
+
+Stationary source algebra with d=beta-alpha:
+  rate=(d-y)/d, continuation=y/d.
+  On-path value H=beta-y, punishment alpha.
+  rate*beta + continuation*alpha = H exactly.
+  Prescribed cooperation has the constant-value recurrence.
+  Opponent defection bounds every punished action by alpha using x>0.
+
+Alternating source algebra:
+  rate=(d-x)/d, continuation=x/d.
+  Phase values (beta-x,alpha) then (alpha,beta-x).
+  rate*beta + continuation*alpha = beta-x.
+  rate*(alpha-x) + continuation*(beta-x) = alpha.
+  A changed high-phase payoff is at most beta, and a changed low-phase payoff
+  against the prescribed defection is at most alpha. These bounds are proved
+  directly from the original table, not supplied as maximizer/reply fields.
+  The two-period source expression is proved equal to pair(beta-x,alpha) by
+  clearing the internally nonzero denominators.
+
+The source names the calendars but does not spell out all behavioral-law
+transport. The only additions are ordinary actual support attribution,
+expectation of these actionwise inequalities, and the existing bounded
+history-Bellman/telescope interfaces. No new frontier derivation is used.
+
+Ownership: all added helper arithmetic and actual finite-stage source adapters
+remain in the single source-ordered Literature/Sorin1986 file. Its
+FiniteStageGame record is Literature-owned; production imports Literature
+nowhere. No new generic mathematics or duplicate GameTheory foundation/module
+is added. Generic production Bellman and scalar telescope owners are reused.
+
+Manual harness, to run only after root's module check
+-----------------------------------------------------
+AXIOMS_AND_ACTUAL_CONSUMERS_AFTER_CHECKS.lean
+SHA256 08f18d9636a98ff177c7f8486aa7f75ed4b22f9a877af9535a30088a9aef8932
+18 #print axioms: both public actual profiles; both sets of delivery/cap/Nash/
+payoff-membership declarations; the three changed P15 wrappers and literal
+P15 regression; four actual source consumer fixtures.
+The fixtures extract actual behavioral Nash profiles, include x=y explicitly,
+and exercise alpha=-10,beta=-5,x=7,y=2 (negative payoffs and x>d).
+The alternating fixture retains the printed starting-order payoff expression.
+No fixture assumes favorable profiles, payoffs, Nash certificates or replies.
+Expected allowed axioms after compilation: propext, Quot.sound, Classical.choice.
+The harness intentionally does not audit the still-sorry whole Remark 4.
+
+Static checks performed
+-----------------------
+Unique patch contexts and all intermediate/result hashes recomputed in memory
+against the exact post-P4 expected base. Added non-import Lean lines inspected
+for the 100-column constraint. Pinned additive-order declaration inspected and
+normalized explicitly; pinned max_lt_iff, div_lt_one, Boolean names inspected.
+No added sorry/admit/axiom/native_decide/unsafe/partial/set_option.
+No imports/module inventory changes; existing public P15 claims preserved.
+These are static checks only. Root's compilation, warning-policy and transitive
+axiom gates remain outstanding, including P15 regression after refactoring.

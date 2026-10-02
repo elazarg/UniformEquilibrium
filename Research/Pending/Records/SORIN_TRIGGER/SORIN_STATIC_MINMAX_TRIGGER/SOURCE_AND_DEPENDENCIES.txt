@@ -1,0 +1,248 @@
+SORIN DISCOUNTED FOLK CLAUSE: ACTUAL STRICT-IR SOURCE PRODUCER
+
+Evidence and scope
+------------------
+Immutable static drafts only; no compiler seal. No shared source edits,
+Lean/Lake, Git, options, cache, worktree, children, or math notes.
+This is a source-producing dependency for property_4_discounted, not a proof
+of that literal theorem. The original theorem and its corrected regularity
+hypothesis remain exactly unchanged and sorry.
+
+Literal open claim read:
+  property_4_discounted (G : FiniteStageGame)
+    (hregular : FullDimensional G.individuallyRationalPayoffs OR
+      Fintype.card G.Player = 2) :
+    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
+      G.individuallyRationalPayoffs
+
+HausdorffConvergesAtZero is the fixed-set contract:
+  for every positive epsilon, there is one positive threshold, such that for
+  every positive rate below it both payoff sets are epsilon-close.
+It is NOT a pointwise threshold depending on each target. This packet does
+not substitute pointwise production for that uniform claim.
+
+Primary known source
+--------------------
+Sorin (1986), On Repeated Games with Complete Information,
+DOI 10.1287/moor.11.1.147, printed page 149, Lemma 2 proof; added-in-proof
+correction on printed page 160. The paper first uses finite rational/periodic
+pure paths approximating a fixed strictly individually rational target. Their
+discounted tails stay strictly above minmax levels for small enough rate;
+public deviations trigger opponent minmax punishments. Full dimensionality
+and the two-player degenerate branch are treated separately at the end.
+
+Source PDF:
+literature/SORIN_1986__ON_REPEATED_GAMES_WITH_COMPLETE_INFORMATION.pdf
+SHA256 d09a8e78f37f9863ff40e969a90f03799967d05eb70ba28a93afab84ddfce56c
+
+Exact expected base and ordered immutable patches
+-------------------------------------------------
+Target: Literature/Sorin1986.lean
+Current read-only source:
+  fba6f32df9e627384edd4e5e21fec63a5e6d14e5eef83e9b07d462b1439bdfa5
+Expected POST-P4 and POST-critical-constructor base:
+  5ecfd7f0b986f91d00272832825a321ee8e475d828bb867578e28d6604bba773
+All contexts and resulting hashes were recomputed in memory through the
+immutable P4 and critical-rate predecessors; no source snapshot was written.
+
+All new artifacts are under /tmp/sorin-static-minmax-trigger.wGV9OQkv/.
+
+001_ACTUAL_CONSTANT_APPROX_PUNISHMENT.patch
+  patch 3c38ab93446e619581fbafc76564dc2b69326a2fccdb364113775ac55cd8f808
+  base  5ecfd7f0b986f91d00272832825a321ee8e475d828bb867578e28d6604bba773
+  result 50c0400afc33a0047c297bf35aea96872696e89673c85093ed9d1e549b3001df
+  Factor the existing current-stage minmax cap once for arbitrary punishment
+  calendars; the old vanishing-punishment wrapper delegates. Add exact actual
+  calendar payoff transport and an internally selected constant approximate
+  minmax trigger producer. No favorable punishments/security levels are inputs.
+
+002_ACTUAL_STRICT_IR_PERIODIC_SOURCE.patch
+  patch f46423063845de02ad8590a9e36df941fc3283889811d1ef17cb749e2e82e595
+  base  50c0400afc33a0047c297bf35aea96872696e89673c85093ed9d1e549b3001df
+  result db3c21198bf8ea9e450c3f5d9a85a5abbe28d0724a77b2f5ff28d499157a6eb4
+  Internally choose a finite empirical cycle approximating the source target,
+  uniform all-phase patience threshold, and actual minmax trigger profile.
+  Delivers closeness to that same fixed target and positive continuation
+  surplus, with unrestricted actual supported off-path deviation-stage caps.
+  All source data precede the universal small-rate quantifier.
+
+003_CANONICAL_SUPPORT_SOURCE_ORDER.patch
+  patch b3c05d6bea669f12bc73846281883d194e6d6f15d09629c4df15e6b5b04f5268
+  base  db3c21198bf8ea9e450c3f5d9a85a5abbe28d0724a77b2f5ff28d499157a6eb4
+  result feb4008719078e456519021cd57a9d118d7556fbd60b3d80b627caa21c4036f6
+  Relocate the existing generalized supported-opponent helper from the critical
+  constructor packet to immediately after the owned first-mismatch theorem.
+  Extract supported-off-path culprit attribution once; make the relocated
+  helper and old/new producers delegate. Remove the now-unused PRIVATE P15
+  opponent wrapper; no public P15 signature or theorem claim changes.
+
+004_TRIGGER_PREDICATE_SOURCE_ORDER.patch
+  patch 133884eb86fdae2065143da01fa84336149ec63e092c4f7d00955b2275c22c31
+  base  feb4008719078e456519021cd57a9d118d7556fbd60b3d80b627caa21c4036f6
+  result dbee5a139edea433895787a0e4c8d82cfc959dd610cb598ff658e2cf198fdc27
+  Relocate the unchanged triggerOnPath definition before the moved support
+  helper. It originally sat in the later BanachTriggerComparison section.
+  This is definition/source order only, not a second definition or changed math.
+  Apply ALL four patches before checking the paper.
+
+Canonical reference counts verified in the final in-memory source:
+  triggerBehaviorProfile_other_on_support: 2 (one definition, one consumer).
+  publicTriggerStatus_eq_some_of_supported_offPath: 4 (one definition and
+    three consumers: canonical supported-opponent, Banach producer, new source).
+  prisonerVertexProfile_opponent_on_support: ZERO remaining references.
+  triggerOnPath: exactly ONE definition.
+The absence of any remaining private P15-wrapper call was checked against the
+actual current source plus all immutable critical/folk patch additions/deletions.
+
+New actual source quantifiers
+----------------------------
+exists_constantApproxPunishmentTrigger:
+  Inputs: an actual finite stage game, an arbitrary pure calendar, positive
+  approximation error. The calendar is not assumed feasible/IR/favorable.
+  Internally choose all players' mixed-opponent punishments via the existing
+  actual best-pure-reply infimum selector. One actual behavioral profile is
+  chosen before all players, all full behavioral deviations, all histories,
+  and all valid discount rates. It follows the pure calendar on path, caps
+  every supported off-path current mixed payoff by actual minmax plus error,
+  and delivers the calendar's exact discounted series at every valid rate.
+
+exists_periodicApproxMinmaxTrigger_of_strictIR:
+  Inputs: actual G; fixed target in G.correlatedFeasiblePayoffs;
+  actual G.individualRationalLevel strictly below that target coordinatewise;
+  positive error. No supplied cycle, feasible block, punishment, security
+  vector, payoff field, best response or equilibrium profile.
+  Internally choose positive margin, positive threshold at most one, positive
+  period, pure cycle and actual behavioral profile. These choices precede
+  EVERY positive rate below threshold. The actual delivered payoff is
+  coordinatewise error-close to the SAME fixed target. Every player and every
+  calendar start has discounted continuation at least actual minmax+2*margin.
+  Every full unilateral behavioral replacement has each supported off-calendar
+  current mixed payoff at most actual minmax+margin.
+  NO Nash assertion is made yet.
+
+No positivity is assumed for payoff levels. All finite player counts are
+allowed here; empty-player boundaries are handled by the existing finite
+margin and empirical owners. Positive cycle length is selected internally.
+Calendar delivery covers the paper rate endpoint one in its valid-rate
+wrapper; the strict-IR source threshold is at most one and rates are strictly
+positive below it. No Nash endpoint-zero assertion is made.
+These are actual reached-history claims, not universal culprit identities at
+unreachable histories, and they do not constrain the overwritten culprit's
+irrelevant trigger fallback coordinate.
+
+Owned dependencies, read rather than copied
+-------------------------------------------
+MathUE.exists_uniformAverage_close_of_mem_convexHull_range
+  MathUE/FiniteEmpiricalConvexity.lean:
+  already owns finite empirical approximation, so no new Caratheodory,
+  rational rounding, allocation, norm approximation or cycle proof is copied.
+
+KernelGame.exists_pos_margin_of_mem_strictReservationSet
+KernelGame.exists_discountFactor_threshold_periodic_all_continuations_close_cycleAverage
+  UniformEquilibrium/ProofView/Concepts/Welfare/FolkTheorem/Discounting.lean
+    de7b9f7b0cb003e0d81b844b662bca0b9b83adb7c3d870b4282d6004501731d9
+  UniformEquilibrium/ProofView/Concepts/Welfare/FolkTheorem/Periodic.lean
+    16c74bea84dcf771eb11b213cb942d761804b914b33d2a30e8d413ef550eb999
+  Already own positive finite coordinate slack, exact discounted cycle
+  weights, rotations, and uniform all-player/all-phase patience thresholds.
+
+FiniteStageGame.exists_approx_punishmentOpponents
+FiniteStageGame.mixedEU_profileWithOpponent_le_bestPureReplyValue
+FiniteStageGame.firstMismatch_of_mem_support_trigger_update
+FiniteStageGame.publicTriggerStatus_eq_some_of_first
+FiniteStageGame.stageEU_triggerMonitoredProfile
+KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile
+  Existing actual minmax, mixed-current-action cap, attribution and calendar
+  law owners. The new selectors use the actual opponent-enforced minmax
+  infimum, not the potentially different own-maximin reservation vector.
+
+Only termwise transport identifies the actual expected-stage series with the
+already-defined calendar series. There is no copied discounted telescope or
+new infinite-sum identity. Stagewise mixed cap proof is extracted from the
+existing Banach source and its old wrapper delegates.
+
+Source adjustment: exact minmax attainment is unnecessary. Select approximate
+punishments with error margin and preserve twice that margin on all calendar
+tails. The existing strict-IR slack and periodic convergence allow this smaller
+error. This is ordinary slack bookkeeping in the printed minmax argument,
+not an assumption that an optimal punishment is already furnished.
+
+Remaining dependencies for the literal discounted folk clause
+-------------------------------------------------------------
+1. Actual strict-IR discounted Nash producer.
+   Use the internally selected profile above; do NOT take a favorable calendar/
+   punishment/continuation-value certificate as the final input.
+   Combine the owned one-period gain patience threshold with a bounded history
+   potential (calendar continuation on path, selected minmax cap off path)
+   and StochasticGame.discountedPayoff_le_of_history_bellman_ge_on_support.
+   The original printed first-deviation comparison supplies this mathematical
+   step. All full behavioral replacement caps, rather than just pure one-shot
+   comparisons, still need their actual expected-law consumer.
+
+   Precise next actual consumer interface:
+     G, target in C, pointwise strict actual minmax inequality, error>0 ->
+     exists threshold>0, forall 0<lam<threshold,
+       exists profile, actual IsDiscounted-epsilon-Nash with epsilon=0 AND
+         coordinatewise/metric delivered payoff error-close to fixed target.
+   A stronger profile-before-rates version is supported by this source packet.
+   This producer is NOT asserted proved here.
+
+2. Boundary approximation and uniform target threshold.
+   FullDimensional is literally the existing ambient-ball definition, not an
+   affine-rank surrogate. Its ball plus the IR halfspace bounds supplies a
+   strictly IR point. Convex mixing with that point approximates other IR
+   targets. Compact IR/finite-cover bookkeeping then yields ONE threshold
+   for every target at each error, as the literal Hausdorff contract requires.
+   These are standard geometric/compactness inputs, not pointwise-to-uniform
+   inference. No compactness/cover producer is supplied as a final hypothesis.
+
+3. Genuine source-scope boundary: the two-player flat-security case.
+   The paper says the player whose IR coordinate is always his minmax level
+   should always play a best reply and concludes by induction; it gives no
+   explicit behavioral calendar/punishment adapter for that degenerate case.
+   The correction restricts this route to two players unless full dimensional.
+   Do NOT extend a flat-coordinate induction to arbitrary player counts.
+
+   Precise required known-paper API (to be proved, not assumed):
+     G with card Player=2; a player who with
+       forall target in G.individuallyRationalPayoffs,
+         target who = G.individualRationalLevel who;
+     for every error>0, exists threshold>0, forall 0<lam<threshold,
+       forall target in G.individuallyRationalPayoffs,
+         exists actual behavioral profile, actual discounted Nash at lam,
+           metric delivered payoff error-close to target.
+   This requires the actual always-best-reply/reduced-coordinate source
+   construction under unrestricted full behavioral deviations. None of the
+   current periodic, stagewise security, or Banach-limit owners implements it.
+   No favorable reduction, best-reply orbit, boundary calendar or payoff
+   certificate is added to simulate that missing producer.
+   If this source sketch is insufficient for a faithful implementation, obtain
+   a cited classical discounted folk proof of this precise degenerate case;
+   do not derive new frontier mathematics.
+
+4. Reverse inclusion is already the actual Lemma 1(8) security bound. Reuse
+   that owner; do not re-prove it or substitute pure-security assumptions.
+   Full literal property_4_discounted remains held until all actual producers
+   and the uniform Hausdorff consumer are checked and transitively audited.
+
+Manual narrow harness, AFTER root checks
+----------------------------------------
+AXIOMS_AND_ACTUAL_SOURCE_FIXTURES_AFTER_CHECKS.lean
+SHA256 21b1da2539055ce6d5c222d0bee90878120db4b29765ac00daab5663e741ede8
+14 #print axioms:
+  2 new public source producers; 2 actual source fixtures; all-limit Banach
+  producer and property_4_banach regressions; the 3 public changed P15 wrappers
+  and proposition_15; 4 critical-rate actual cap/Nash regressions.
+The target fixture explicitly selects one actual profile BEFORE the universal
+small-rate quantifier; the punishment fixture keeps all full deviations and
+actual support. Neither asserts new Nash or whole discounted folk convergence.
+Expected allowed axioms after checking: propext, Quot.sound, Classical.choice.
+Do not count the still-sorry property_4_discounted as part of this audit.
+
+Static checks performed
+-----------------------
+Exact unique contexts and every base/result hash verified in memory; canonical
+helper references counted in the final result; all added non-import Lean lines
+at most 100 columns; no added sorry/admit/axiom/native_decide/unsafe/partial/
+set_option. No imports or module inventory changes. No compiler output was
+produced; warning/API elaboration checks remain root-owned.
