@@ -1,5 +1,7 @@
 import Mathlib
 import MathUE.Topology.FarthestPointContactHull
+import MathUE.Topology.CompactIntervalGap
+import MathUE.Topology.FiniteOneDimensionalCoordinate
 import GameTheory.Analysis.Payoff
 import GameTheory.Repeated.Trigger
 import MathUE.ProbabilityMassFunction.Simplex
@@ -12,8 +14,11 @@ import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer
 import UniformEquilibrium.Certificates.Public.FixedPrefixAccounting
 import UniformEquilibrium.Certificates.Public.TerminalChildLawTransfer
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.CompactDiscountedBestResponse
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.FiniteHorizonContinuation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.DiscountedContinuation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Payoff.DiscountedContinuation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.Repeated.InitialActionAffineness
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.Feasible
 import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Feasible
@@ -3670,14 +3675,14 @@ trigger implementation with exact Banach delivery. After its first mismatch,
 every supported history under every complete unilateral behavioral replacement
 has its current mixed payoff capped by the target plus the vanishing punishment
 error. This local source theorem alone does not assert Banach Nash optimality. -/
-theorem exists_banachTrigger_delivery_and_firstMismatchPunishment
-    (G : FiniteStageGame) (L : BanachLimit) (target : Payoff G.Player)
+theorem exists_banachTrigger_allLimits_delivery_and_firstMismatchPunishment
+    (G : FiniteStageGame) (target : Payoff G.Player)
     (htarget : target ∈ G.individuallyRationalPayoffs) :
     ∃ (path : ℕ → (∀ player, G.Action player)) (profile : G.BehaviorProfile),
       Tendsto (fun step ↦ ((step + 1 : ℕ) : ℝ)⁻¹ •
         ∑ time ∈ Finset.range (step + 1), G.payoff (path time))
         atTop (nhds target) ∧
-      G.banachPayoff L profile = target ∧
+      (∀ L : BanachLimit, G.banachPayoff L profile = target) ∧
       (∀ (time : ℕ) (history : G.repeatedGame.Hist time),
         (∀ k, (history.1 k).2 = path k) →
         ∀ player, profile player time history = PMF.pure (path time player)) ∧
@@ -3693,7 +3698,7 @@ theorem exists_banachTrigger_delivery_and_firstMismatchPunishment
       (fun action : (∀ player, G.Action player) ↦ G.payoff action) htarget.1
   let profile := G.triggerBehaviorProfile path G.vanishingPunishments
   refine ⟨path, profile, hpath,
-    G.banachPayoff_triggerBehaviorProfile_eq L path G.vanishingPunishments
+    fun L => G.banachPayoff_triggerBehaviorProfile_eq L path G.vanishingPunishments
       target hpath, ?_, ?_⟩
   · intro time history hplayed player
     dsimp only [profile, FiniteStageGame.triggerBehaviorProfile,
@@ -3714,6 +3719,31 @@ theorem exists_banachTrigger_delivery_and_firstMismatchPunishment
   change G.individualRationalLevel who + (time + 1 : ℝ)⁻¹ ≤
     target who + (time + 1 : ℝ)⁻¹
   exact add_le_add (htarget.2 who) le_rfl
+
+/-- The supplied-limit facade retains the same actual trigger source and
+full first-mismatch punishment conclusion. Its calendar and profile are
+already selected independently of the Banach limit. -/
+theorem exists_banachTrigger_delivery_and_firstMismatchPunishment
+    (G : FiniteStageGame) (L : BanachLimit) (target : Payoff G.Player)
+    (htarget : target ∈ G.individuallyRationalPayoffs) :
+    ∃ (path : ℕ → (∀ player, G.Action player)) (profile : G.BehaviorProfile),
+      Tendsto (fun step ↦ ((step + 1 : ℕ) : ℝ)⁻¹ •
+        ∑ time ∈ Finset.range (step + 1), G.payoff (path time))
+        atTop (nhds target) ∧
+      G.banachPayoff L profile = target ∧
+      (∀ (time : ℕ) (history : G.repeatedGame.Hist time),
+        (∀ k, (history.1 k).2 = path k) →
+        ∀ player, profile player time history = PMF.pure (path time player)) ∧
+      ∀ (who : G.Player) (deviation : G.BehaviorStrategy who)
+        (time : ℕ) (history : G.repeatedGame.Hist time),
+        history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
+          PUnit.unit time).support →
+        (¬ ∀ k, (history.1 k).2 = path k) →
+        G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤
+          target who + (time + 1 : ℝ)⁻¹ := by
+  obtain ⟨path, profile, hpath, hdelivery, hpurity, hpunishment⟩ :=
+    exists_banachTrigger_allLimits_delivery_and_firstMismatchPunishment G target htarget
+  exact ⟨path, profile, hpath, hdelivery L, hpurity, hpunishment⟩
 
 private theorem stageEUAt_securityDeviation_ge
     (G : FiniteStageGame) (profile : G.BehaviorProfile)
@@ -4170,16 +4200,20 @@ private theorem trigger_banachPayoff_le_of_punishment
 
 end BanachTriggerComparison
 
-/-- Every feasible individually rational target is delivered by an actual
-behavioral Banach Nash profile, with the full unilateral behavioral quantifier. -/
-theorem exists_banachNash_of_mem_individuallyRationalPayoffs
-    (G : FiniteStageGame) (L : BanachLimit) (target : Payoff G.Player)
+/-- One actual behavioral trigger profile is chosen before every Banach limit.
+It delivers the same feasible individually rational target and is Nash against
+all complete unilateral behavioral replacements for each such limit. -/
+theorem exists_banachNash_allLimits_of_mem_individuallyRationalPayoffs
+    (G : FiniteStageGame) (target : Payoff G.Player)
     (htarget : target ∈ G.individuallyRationalPayoffs) :
     ∃ profile : G.BehaviorProfile,
-      G.IsBanachNash L profile ∧ G.banachPayoff L profile = target := by
+      ∀ L : BanachLimit, G.IsBanachNash L profile ∧ G.banachPayoff L profile = target := by
   obtain ⟨path, profile, haverage, hdelivery, _hpurity, hpunishment⟩ :=
-    exists_banachTrigger_delivery_and_firstMismatchPunishment G L target htarget
-  refine ⟨profile, ?_, hdelivery⟩
+    exists_banachTrigger_allLimits_delivery_and_firstMismatchPunishment G target htarget
+  refine ⟨profile, ?_⟩
+  intro L
+  have hdeliveryL := hdelivery L
+  refine ⟨?_, hdeliveryL⟩
   intro who deviation
   have hcoordinate := (continuous_apply who).tendsto target |>.comp haverage
   change Tendsto (fun step =>
@@ -4193,7 +4227,18 @@ theorem exists_banachNash_of_mem_individuallyRationalPayoffs
   have hcap := trigger_banachPayoff_le_of_punishment G L path
     (Function.update profile who deviation) who (target who) haverageWho
     (hpunishment who deviation)
-  simpa only [hdelivery] using hcap
+  simpa only [hdeliveryL] using hcap
+
+/-- Every feasible individually rational target is delivered by an actual
+behavioral Banach Nash profile, with the full unilateral behavioral quantifier. -/
+theorem exists_banachNash_of_mem_individuallyRationalPayoffs
+    (G : FiniteStageGame) (L : BanachLimit) (target : Payoff G.Player)
+    (htarget : target ∈ G.individuallyRationalPayoffs) :
+    ∃ profile : G.BehaviorProfile,
+      G.IsBanachNash L profile ∧ G.banachPayoff L profile = target := by
+  obtain ⟨profile, hprofile⟩ :=
+    exists_banachNash_allLimits_of_mem_individuallyRationalPayoffs G target htarget
+  exact ⟨profile, hprofile L⟩
 
 /-! The Banach-limit Folk theorem is the unconditional second clause of
 Property (4).  The reverse inclusion is its trigger-strategy construction. -/
@@ -4274,7 +4319,7 @@ theorem finitePayoff_one_eq_mixedPayoff_initial
 
 /-! **Lemma 1(5), finite-horizon clause.**  Stationary repetition of a
 mixed one-stage profile gives the same payoff at every positive horizon.
-The exact public-history embedding is not yet packaged for this adapter. -/
+The proof uses the exact public-history embedding of the stationary profile. -/
 theorem lemma_1_D1_subset_Dn (G : FiniteStageGame)
     (n : G.Horizon) :
     G.oneStageFeasiblePayoffs ⊆
@@ -9853,6 +9898,20 @@ def IsFaceOf {ι : Type} (P C : Set (Payoff ι)) : Prop :=
     ∀ x ∈ C, ∀ y ∈ C, ∀ t : ℝ, 0 < t → t < 1 →
       t • x + (1 - t) • y ∈ P → x ∈ P ∧ y ∈ P
 
+/-- The paper's segment definition is a canonical extreme subset, with its
+convexity stored separately in IsFaceOf. No second face definition is introduced. -/
+theorem IsFaceOf.isExtreme {ι : Type} {P C : Set (Payoff ι)}
+    (hface : IsFaceOf P C) : IsExtreme ℝ C P := by
+  refine ⟨hface.1, ?_⟩
+  intro x hx y hy point hpoint hsegment
+  obtain ⟨a, b, ha, hb, hab, hequal⟩ := hsegment
+  have halt : a < 1 := by linarith
+  have hbEqual : b = 1 - a := by linarith
+  have hcombination : a • x + (1 - a) • y ∈ P := by
+    rw [← hbEqual, hequal]
+    exact hpoint
+  exact (hface.2.2 x hx y hy a ha halt hcombination).1
+
 /-- Directions generated by a set. -/
 def directionSet {ι : Type} (S : Set (Payoff ι)) : Set (Payoff ι) :=
   {d | ∃ x ∈ S, ∃ y ∈ S, d = x - y}
@@ -9861,6 +9920,23 @@ def directionSet {ι : Type} (S : Set (Payoff ι)) : Set (Payoff ι) :=
 noncomputable def affineDimension {ι : Type} [Fintype ι]
     (S : Set (Payoff ι)) : ℕ :=
   Module.finrank ℝ (Submodule.span ℝ (directionSet S))
+
+open scoped Pointwise in
+/-- The paper's affine dimension is the dimension of the canonical direction
+space of its affine span, including for lower-dimensional faces. -/
+theorem affineDimension_eq_finrank_vectorSpan {ι : Type} [Fintype ι]
+    (S : Set (Payoff ι)) :
+    affineDimension S = Module.finrank ℝ (vectorSpan ℝ S) := by
+  have hdirections : directionSet S = S -ᵥ S := by
+    ext direction
+    constructor
+    · rintro ⟨x, hx, y, hy, rfl⟩
+      exact Set.vsub_mem_vsub hx hy
+    · intro hdirection
+      obtain ⟨x, hx, y, hy, hxy⟩ := Set.mem_vsub.mp hdirection
+      exact ⟨x, hx, y, hy, hxy.symm⟩
+  unfold affineDimension
+  rw [hdirections, ← vectorSpan_def]
 
 /-- Boundary of a set in the topology induced on its affine hull.
 This is the boundary used by the face induction in Proposition 9 and
@@ -9877,9 +9953,279 @@ theorem relativeFrontier_subset_affineSpan
   rintro _ ⟨x, _, rfl⟩
   exact x.property
 
-/-! Proposition 7's maximal-gap argument and replacement of a positive-
-probability continuation history have not been packaged for the repeated-game
-adapter. -/
+/-- Proposition 7's actual discounted prefix and conditional continuation
+identity. Every child is the full behavioral profile after its public history. -/
+theorem FiniteStageGame.discountedPayoff_weighted_continuations
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (lam : G.DiscountRate)
+    (depth : ℕ) :
+    G.discountedPayoff lam.1 profile =
+      lam.1 • (fun who => ∑ time ∈ Finset.range depth,
+        (1 - lam.1) ^ time *
+          G.repeatedGame.expectedStagePayoff profile PUnit.unit time who) +
+      (1 - lam.1) ^ depth • (fun who => Math.Probability.expect
+        (G.repeatedGame.histDist profile PUnit.unit depth) (fun base =>
+          G.discountedPayoff lam.1 (G.repeatedGame.afterHistoryProfile profile base) who)) := by
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  funext who
+  have h := G.repeatedGame.discountedPayoff_prefix_decomposition
+    profile PUnit.unit depth who (β := 1 - lam.1)
+      (by linarith [lam.2.2]) (by linarith [lam.2.1])
+  have hstate (base : G.repeatedGame.Hist depth) : base.2 = PUnit.unit :=
+    Subsingleton.elim _ _
+  simp only [hstate] at h
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    Pi.add_apply, Pi.smul_apply, smul_eq_mul, sub_sub_cancel] using h
+
+/-- Replace exactly one complete public continuation in the actual repeated game. -/
+noncomputable def FiniteStageGame.replaceDiscountedContinuation
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) {depth : ℕ}
+    (selected : G.repeatedGame.Hist depth) (replacement : G.BehaviorProfile) :
+    G.BehaviorProfile :=
+  G.repeatedGame.replaceContinuation profile selected replacement
+
+/-- Proposition 7's replacement equation, including unreachable histories,
+depth zero, and the one-stage discount `λ = 1`. -/
+theorem FiniteStageGame.replaceDiscountedContinuation_payoff
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (lam : G.DiscountRate)
+    {depth : ℕ} (selected : G.repeatedGame.Hist depth)
+    (replacement : G.BehaviorProfile) :
+    G.discountedPayoff lam.1 (G.replaceDiscountedContinuation profile selected replacement) =
+      G.discountedPayoff lam.1 profile +
+        ((1 - lam.1) ^ depth *
+          (G.repeatedGame.histDist profile PUnit.unit depth selected).toReal) •
+        (G.discountedPayoff lam.1 replacement -
+          G.discountedPayoff lam.1 (G.repeatedGame.afterHistoryProfile profile selected)) := by
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  funext who
+  have h := G.repeatedGame.discountedPayoff_replaceContinuation
+    profile PUnit.unit selected replacement who (β := 1 - lam.1)
+      (by linarith [lam.2.2]) (by linarith [lam.2.1])
+  have hstate : selected.2 = PUnit.unit := Subsingleton.elim _ _
+  rw [hstate] at h
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    FiniteStageGame.replaceDiscountedContinuation,
+    Pi.add_apply, Pi.smul_apply, Pi.sub_apply, smul_eq_mul, mul_assoc] using h
+
+/-- The replacement vector is achieved by an actual behavioral realization
+of its feasible child payoff, then installed on the selected public branch. -/
+theorem FiniteStageGame.replaceDiscountedContinuation_mem_feasible
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (lam : G.DiscountRate)
+    {depth : ℕ} (selected : G.repeatedGame.Hist depth) (replacement : Payoff G.Player)
+    (hreplacement : replacement ∈ G.discountedFeasiblePayoffs lam.1) :
+    G.discountedPayoff lam.1 profile +
+        ((1 - lam.1) ^ depth *
+          (G.repeatedGame.histDist profile PUnit.unit depth selected).toReal) •
+        (replacement -
+          G.discountedPayoff lam.1 (G.repeatedGame.afterHistoryProfile profile selected)) ∈
+      G.discountedFeasiblePayoffs lam.1 := by
+  obtain ⟨realization, rfl⟩ := hreplacement
+  exact ⟨G.replaceDiscountedContinuation profile selected realization,
+    G.replaceDiscountedContinuation_payoff profile lam selected realization⟩
+
+/-- At every positive-probability history of positive depth, the paper's
+replacement coefficient is strictly between zero and one if `λ < 1`. -/
+theorem FiniteStageGame.discountedContinuationCoefficient_mem_Ioo
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (lam : G.DiscountRate)
+    (hlam : lam.1 < 1) {depth : ℕ} (hdepth : 0 < depth)
+    (selected : G.repeatedGame.Hist depth)
+    (hsupport : selected ∈ (G.repeatedGame.histDist profile PUnit.unit depth).support) :
+    (1 - lam.1) ^ depth *
+      (G.repeatedGame.histDist profile PUnit.unit depth selected).toReal ∈ Set.Ioo 0 1 := by
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  exact G.repeatedGame.continuationCoefficient_mem_Ioo profile PUnit.unit
+    hdepth selected hsupport (by linarith) (by linarith [lam.2.1])
+
+/-- Page 152: a discounted payoff in a face forces the actual first-stage
+payoff and every positive-probability continuation into the same face.
+The positive tail weight is explicit; `λ = 1` has no constrained tail. -/
+theorem FiniteStageGame.discountedPayoff_first_and_supported_children_mem_face
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (lam : G.DiscountRate)
+    (hlam : lam.1 < 1) (hface : IsFaceOf P G.correlatedFeasiblePayoffs)
+    (profile : G.BehaviorProfile) (hpayoff : G.discountedPayoff lam.1 profile ∈ P) :
+    G.mixedPayoff (G.initialMixedProfile profile) ∈ P ∧
+      ∀ base : G.repeatedGame.Hist 1,
+        base ∈ (G.repeatedGame.histDist profile PUnit.unit 1).support →
+        G.discountedPayoff lam.1 (G.repeatedGame.afterHistoryProfile profile base) ∈ P := by
+  let : Fintype (G.repeatedGame.Hist 1) := Fintype.ofFinite _
+  let law := G.repeatedGame.histDist profile PUnit.unit 1
+  let children := fun base : G.repeatedGame.Hist 1 =>
+    G.discountedPayoff lam.1 (G.repeatedGame.afterHistoryProfile profile base)
+  let tail := fun who => Math.Probability.expect law (fun base => children base who)
+  have hchildren : ∀ base, children base ∈ G.correlatedFeasiblePayoffs := by
+    intro base
+    exact lemma_1_Dlambda_subset_C G lam
+      ⟨G.repeatedGame.afterHistoryProfile profile base, rfl⟩
+  have hfirst := G.mixedPayoff_mem_correlatedFeasiblePayoffs
+    (G.initialMixedProfile profile)
+  have htail : tail ∈ G.correlatedFeasiblePayoffs :=
+    convexHull_min (by rintro _ ⟨base, rfl⟩; exact hchildren base)
+      G.correlatedFeasiblePayoffs_convex
+      (Math.ProbabilityMassFunction.coordinateExpectation_mem_convexHull_range law children)
+  have hstage (who : G.Player) :
+      G.repeatedGame.expectedStagePayoff profile PUnit.unit 0 who =
+        G.mixedPayoff (G.initialMixedProfile profile) who := by
+    rw [G.repeatedGame.expectedStagePayoff_zero, G.stageEUAt_eq_mixedEU]
+    rfl
+  have hnormalized : G.discountedPayoff lam.1 profile =
+      lam.1 • G.mixedPayoff (G.initialMixedProfile profile) + (1 - lam.1) • tail := by
+    simpa only [Finset.sum_range_one, pow_zero, pow_one, one_mul, hstage] using
+      G.discountedPayoff_weighted_continuations profile lam 1
+  have hcombination :
+      lam.1 • G.mixedPayoff (G.initialMixedProfile profile) + (1 - lam.1) • tail ∈ P := by
+    rw [← hnormalized]
+    exact hpayoff
+  obtain ⟨hfirstP, htailP⟩ := hface.2.2 _ hfirst _ htail lam.1 lam.2.1 hlam hcombination
+  refine ⟨hfirstP, ?_⟩
+  intro base hbase
+  exact Math.ProbabilityMassFunction.coordinateExpectation_mem_isExtreme_of_mem
+    law children G.correlatedFeasiblePayoffs P G.correlatedFeasiblePayoffs_convex
+    hface.isExtreme hchildren htailP base hbase
+
+/-- Proposition 7's actual replacement stays in the original face.
+The first-stage and every supported original child membership are derived
+from the original payoff, rather than supplied as separate witnesses. -/
+theorem FiniteStageGame.replaceDiscountedContinuation_payoff_mem_face
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (lam : G.DiscountRate)
+    (hlam : lam.1 < 1) (hface : IsFaceOf P G.correlatedFeasiblePayoffs)
+    (profile : G.BehaviorProfile) (hpayoff : G.discountedPayoff lam.1 profile ∈ P)
+    (selected : G.repeatedGame.Hist 1) (replacement : G.BehaviorProfile)
+    (hreplacement : G.discountedPayoff lam.1 replacement ∈ P) :
+    G.discountedPayoff lam.1
+      (G.replaceDiscountedContinuation profile selected replacement) ∈ P := by
+  classical
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  obtain ⟨hfirst, hchildren⟩ :=
+    G.discountedPayoff_first_and_supported_children_mem_face
+      P lam hlam hface profile hpayoff
+  have hreplace : G.replaceDiscountedContinuation profile selected replacement =
+      G.repeatedGame.terminalChildDispatcher 1 profile
+        (Function.update (G.repeatedGame.afterHistoryProfile profile) selected replacement) := by
+    unfold FiniteStageGame.replaceDiscountedContinuation StochasticGame.replaceContinuation
+    apply congrArg (G.repeatedGame.terminalChildDispatcher 1 profile)
+    funext base
+    by_cases hequal : base = selected
+    · subst base
+      simp only [Function.update_self]
+    · simp only [Function.update, hequal, ↓reduceDIte]
+  rw [hreplace]
+  unfold FiniteStageGame.discountedPayoff
+  change (fun who => G.repeatedGame.discountedPayoff (1 - lam.1)
+    (G.repeatedGame.terminalChildDispatcher 1 profile
+      (Function.update (G.repeatedGame.afterHistoryProfile profile) selected replacement))
+    PUnit.unit who) ∈ P
+  apply G.repeatedGame.discountedPayoff_terminalChildDispatcher_mem_convex
+    profile PUnit.unit _ (by linarith [lam.2.2]) (by linarith [lam.2.1]) P hface.2.1
+  · have hstage : (fun who => G.repeatedGame.stageEUAt profile
+        (G.repeatedGame.emptyHist PUnit.unit) who) =
+        G.mixedPayoff (G.initialMixedProfile profile) := by
+      funext who
+      rw [G.stageEUAt_eq_mixedEU]
+      rfl
+    rwa [hstage]
+  · intro base hbase
+    have hstate : base.2 = PUnit.unit := Subsingleton.elim _ _
+    rw [hstate]
+    by_cases hequal : base = selected
+    · subst base
+      simpa only [Function.update_self, FiniteStageGame.discountedPayoff,
+        FiniteStageGame.repeatedInitial] using! hreplacement
+    · simpa only [Function.update, hequal, ↓reduceDIte, FiniteStageGame.discountedPayoff,
+        FiniteStageGame.repeatedInitial] using! hchildren base hbase
+
+/-- The paper's face is the hull of the actual pure payoff vectors it contains.
+In particular its finite-polytope presentation is derived, not assumed. -/
+theorem IsFaceOf.eq_convexHull_pure_inter
+    (G : FiniteStageGame) (P : Set (Payoff G.Player))
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs) :
+    P = convexHull ℝ (G.purePayoffSet ∩ P) :=
+  Math.ProbabilityMassFunction.convex_isExtreme_eq_convexHull_inter_of_finite
+    G.purePayoffSet P (Set.finite_range G.payoff) hface.2.1 hface.isExtreme
+
+/-- Every face of the actual finite pure-payoff hull is compact, including
+the empty face. The source's segment definition alone supplies its closedness. -/
+theorem IsFaceOf.isCompact
+    (G : FiniteStageGame) (P : Set (Payoff G.Player))
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs) : IsCompact P := by
+  rw [hface.eq_convexHull_pure_inter G P]
+  exact Math.Topology.isCompact_convexHull_of_finiteDimensional
+    ((Set.finite_range G.payoff).inter_of_left P).isCompact
+
+/-- The actual one-stage Bellman split in the paper's payoff coordinates. -/
+private theorem FiniteStageGame.discountedPayoff_one_step
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (rate : G.DiscountRate) :
+    G.discountedPayoff rate.1 profile =
+      rate.1 • G.mixedPayoff (G.initialMixedProfile profile) +
+      (1 - rate.1) • (fun who => Math.Probability.expect
+        (G.repeatedGame.histDist profile PUnit.unit 1) (fun base =>
+          G.discountedPayoff rate.1 (G.repeatedGame.afterHistoryProfile profile base) who)) := by
+  have hstage (who : G.Player) :
+      G.repeatedGame.expectedStagePayoff profile PUnit.unit 0 who =
+        G.mixedPayoff (G.initialMixedProfile profile) who := by
+    rw [G.repeatedGame.expectedStagePayoff_zero, G.stageEUAt_eq_mixedEU]
+    rfl
+  simpa only [Finset.sum_range_one, pow_zero, pow_one, one_mul, hstage] using
+    G.discountedPayoff_weighted_continuations profile rate 1
+
+/-- The affine coordinate commutes with the actual first-stage decomposition. -/
+private theorem FiniteStageGame.discountedPayoff_one_step_coordinate
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (rate : G.DiscountRate)
+    (left right : Payoff G.Player) (who : G.Player) :
+    Math.Topology.segmentCoordinate left right who (G.discountedPayoff rate.1 profile) =
+      rate.1 * Math.Topology.segmentCoordinate left right who
+        (G.mixedPayoff (G.initialMixedProfile profile)) +
+      (1 - rate.1) * Math.Probability.expect
+        (G.repeatedGame.histDist profile PUnit.unit 1) (fun base =>
+          Math.Topology.segmentCoordinate left right who
+            (G.discountedPayoff rate.1 (G.repeatedGame.afterHistoryProfile profile base))) := by
+  rw [G.discountedPayoff_one_step profile rate, Math.Topology.segmentCoordinate_mix,
+    Math.Topology.segmentCoordinate_expect]
+
+/-- An actual first stage followed by a constant full child realizes the
+corresponding discounted convex combination, at every `0 < λ ≤ 1`. -/
+private theorem FiniteStageGame.append_one_discountedPayoff
+    (G : FiniteStageGame) (first tail : G.BehaviorProfile) (rate : G.DiscountRate) :
+    G.discountedPayoff rate.1 (G.appendFiniteProfiles 1 first tail) =
+      rate.1 • G.mixedPayoff (G.initialMixedProfile first) +
+        (1 - rate.1) • G.discountedPayoff rate.1 tail := by
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  funext who
+  have h := G.repeatedGame.discountedPayoff_terminalChildDispatcher
+    first PUnit.unit 1 (fun _ => tail) who (β := 1 - rate.1)
+      (by linarith [rate.2.2]) (by linarith [rate.2.1])
+  have hstate (base : G.repeatedGame.Hist 1) : base.2 = PUnit.unit :=
+    Subsingleton.elim _ _
+  simp only [Finset.sum_range_one, pow_zero, pow_one, one_mul,
+    G.repeatedGame.expectedStagePayoff_zero, G.stageEUAt_eq_mixedEU,
+    hstate, Math.Probability.expect_const, sub_sub_cancel] at h
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    FiniteStageGame.appendFiniteProfiles, Pi.add_apply, Pi.smul_apply, smul_eq_mul,
+    FiniteStageGame.mixedPayoff, KernelGame.payoffVector,
+    FiniteStageGame.initialMixedProfile] using! h
+
+/-- Face preservation for the actual first-stage/constant-child construction.
+This ordinary convexity helper is consumed with premises derived in P7. -/
+private theorem FiniteStageGame.append_one_discountedPayoff_mem_face
+    (G : FiniteStageGame) (P : Set (Payoff G.Player))
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs)
+    (first tail : G.BehaviorProfile) (rate : G.DiscountRate)
+    (hfirst : G.mixedPayoff (G.initialMixedProfile first) ∈ P)
+    (htail : G.discountedPayoff rate.1 tail ∈ P) :
+    G.discountedPayoff rate.1 (G.appendFiniteProfiles 1 first tail) ∈ P := by
+  rw [G.append_one_discountedPayoff first tail rate]
+  exact hface.2.1 hfirst htail rate.2.1.le (by linarith [rate.2.2]) (by ring)
+
+/-- Proposition 7: the maximal feasible gap and actual continuation replacement
+force the whole one-dimensional face into the more patient feasible set. -/
 theorem proposition_7 (G : FiniteStageGame)
     (L : Set (Payoff G.Player)) (hface : IsFaceOf L G.correlatedFeasiblePayoffs)
     (hdim : affineDimension L = 1) (δ lam : ℝ)
@@ -9887,28 +10233,579 @@ theorem proposition_7 (G : FiniteStageGame)
     (hinclusion : G.discountedFeasiblePayoffs δ ∩ L ⊆
       G.discountedFeasiblePayoffs lam ∩ L) :
     L ⊆ G.discountedFeasiblePayoffs δ := by
-  sorry
+  classical
+  let deltaRate : G.DiscountRate := ⟨δ, hδ, hδlam.le.trans hlam⟩
+  let lambdaRate : G.DiscountRate := ⟨lam, hδ.trans hδlam, hlam⟩
+  have hδ1 : δ < 1 := hδlam.trans_le hlam
+  let F := G.purePayoffSet ∩ L
+  have hFfinite : F.Finite := (Set.finite_range G.payoff).inter_of_left L
+  have hfaceHull : L = convexHull ℝ F := hface.eq_convexHull_pure_inter G L
+  have hdimensionF : Module.finrank ℝ (vectorSpan ℝ F) = 1 := by
+    rw [affineDimension_eq_finrank_vectorSpan] at hdim
+    rw [hfaceHull, ← direction_affineSpan, affineSpan_convexHull,
+      direction_affineSpan] at hdim
+    exact hdim
+  obtain ⟨left, hleftF, right, hrightF, coordinate, hcoordinate,
+      hrepresentation, hbounds, _hinterpolate⟩ :=
+    Math.Topology.exists_interval_coordinate_of_finite F hFfinite hdimensionF
+  let q := Math.Topology.segmentCoordinate left right coordinate
+  have hqContinuous : Continuous q :=
+    Math.Topology.segmentCoordinate_continuous left right coordinate
+  have hqLeft : q left = 0 := Math.Topology.segmentCoordinate_left left right coordinate
+  have hqRight : q right = 1 :=
+    Math.Topology.segmentCoordinate_right left right coordinate hcoordinate.ne'
+  have hqBounds : ∀ value ∈ L, q value ∈ Set.Icc (0 : ℝ) 1 := by
+    intro value hvalue
+    exact hbounds value (hfaceHull ▸ hvalue)
+  have hqInjective : Set.InjOn q L := by
+    intro first hfirst second hsecond hequal
+    have hfirstRepresentation := hrepresentation first
+      (convexHull_subset_affineSpan F (hfaceHull ▸ hfirst))
+    have hsecondRepresentation := hrepresentation second
+      (convexHull_subset_affineSpan F (hfaceHull ▸ hsecond))
+    change q first = q second at hequal
+    change first = (1 - q first) • left + q first • right at hfirstRepresentation
+    change second = (1 - q second) • left + q second • right at hsecondRepresentation
+    rw [hfirstRepresentation, hsecondRepresentation, hequal]
+  let K := q '' (G.discountedFeasiblePayoffs δ ∩ L)
+  have hKcompact : IsCompact K := by
+    have hactual : IsCompact (G.discountedFeasiblePayoffs δ) :=
+      (property_1_discounted G deltaRate).2.2
+    exact (hactual.inter_right (hface.isCompact G L).isClosed).image hqContinuous
+  have hKbounds : K ⊆ Set.Icc (0 : ℝ) 1 := by
+    rintro _ ⟨value, hvalue, rfl⟩
+    exact hqBounds value hvalue.2
+  have hzeroK : (0 : ℝ) ∈ K := by
+    rw [← hqLeft]
+    exact Set.mem_image_of_mem q
+      ⟨lemma_1_D1_subset_Dlambda G deltaRate
+        (lemma_1_pure_subset_D1 G hleftF.1), hleftF.2⟩
+  have honeK : (1 : ℝ) ∈ K := by
+    rw [← hqRight]
+    exact Set.mem_image_of_mem q
+      ⟨lemma_1_D1_subset_Dlambda G deltaRate
+        (lemma_1_pure_subset_D1 G hrightF.1), hrightF.2⟩
+  by_contra hnot
+  have hmissing : ¬Set.Icc (0 : ℝ) 1 ⊆ K := by
+    intro hwhole
+    apply hnot
+    intro value hvalue
+    obtain ⟨actual, hactual, hequal⟩ := hwhole (hqBounds value hvalue)
+    have hsame : actual = value := hqInjective hactual.2 hvalue hequal
+    exact hsame ▸ hactual.1
+  obtain ⟨x, y, hgap, hmaxGap⟩ :=
+    Math.Topology.exists_maximal_gap_of_not_subset K hKcompact hzeroK honeK hmissing
+  have hgapPositive : 0 < y - x := sub_pos.mpr hgap.2.2.1
+  have hx1 : x < 1 := hgap.2.2.1.trans_le (hKbounds hgap.2.1).2
+  obtain ⟨X, hX, hqX⟩ := hgap.1
+  obtain ⟨profile, hprofile⟩ := hX.1
+  have hprofileFace : G.discountedPayoff δ profile ∈ L := by
+    rw [hprofile]
+    exact hX.2
+  have hprofileCoordinate : q (G.discountedPayoff δ profile) = x := by
+    rw [hprofile]
+    exact hqX
+  obtain ⟨hfirstFace, hchildrenFace⟩ :=
+    G.discountedPayoff_first_and_supported_children_mem_face
+      L deltaRate hδ1 hface profile hprofileFace
+  let law := G.repeatedGame.histDist profile PUnit.unit 1
+  have hchildrenOne : ∀ base ∈ law.support,
+      q (G.discountedPayoff δ (G.repeatedGame.afterHistoryProfile profile base)) = 1 := by
+    intro base hbase
+    let continuation := G.repeatedGame.afterHistoryProfile profile base
+    let u := q (G.discountedPayoff δ continuation)
+    have hcontinuationFace : G.discountedPayoff δ continuation ∈ L :=
+      hchildrenFace base hbase
+    have huK : u ∈ K := Set.mem_image_of_mem q ⟨⟨continuation, rfl⟩, hcontinuationFace⟩
+    have hu1 : u ≤ 1 := (hKbounds huK).2
+    by_contra hnotOne
+    have huLt : u < 1 := lt_of_le_of_ne hu1 hnotOne
+    obtain ⟨next, hnextK, hunext, hnextBound⟩ :=
+      Math.Topology.exists_right_mem_sub_le_of_maximal_gap
+        K hKcompact hgap hmaxGap huK honeK huLt
+    obtain ⟨replacementValue, hreplacementValue, hqReplacement⟩ := hnextK
+    obtain ⟨replacement, hreplacement⟩ := hreplacementValue.1
+    have hreplacementFace : G.discountedPayoff δ replacement ∈ L := by
+      rw [hreplacement]
+      exact hreplacementValue.2
+    let changed := G.replaceDiscountedContinuation profile base replacement
+    have hchangedFace : G.discountedPayoff δ changed ∈ L :=
+      G.replaceDiscountedContinuation_payoff_mem_face
+        L deltaRate hδ1 hface profile hprofileFace base replacement hreplacementFace
+    have hchangedK : q (G.discountedPayoff δ changed) ∈ K :=
+      Set.mem_image_of_mem q ⟨⟨changed, rfl⟩, hchangedFace⟩
+    let coefficient := (1 - δ) * (law base).toReal
+    have hcoefficient : coefficient ∈ Set.Ioo (0 : ℝ) 1 := by
+      simpa only [coefficient, law, deltaRate, pow_one] using
+        G.discountedContinuationCoefficient_mem_Ioo profile deltaRate hδ1
+          (by norm_num : 0 < 1) base hbase
+    have hchangedCoordinate : q (G.discountedPayoff δ changed) =
+        x + coefficient * (next - u) := by
+      change q (G.discountedPayoff δ
+        (G.replaceDiscountedContinuation profile base replacement)) = _
+      rw [G.replaceDiscountedContinuation_payoff profile deltaRate base replacement]
+      change Math.Topology.segmentCoordinate left right coordinate
+        (G.discountedPayoff δ profile +
+          ((1 - δ) ^ 1 * (law base).toReal) •
+            (G.discountedPayoff δ replacement - G.discountedPayoff δ continuation)) = _
+      rw [Math.Topology.segmentCoordinate_replacement]
+      change q (G.discountedPayoff δ profile) +
+        ((1 - δ) ^ 1 * (law base).toReal) *
+          (q (G.discountedPayoff δ replacement) - u) = _
+      rw [hprofileCoordinate, hreplacement, hqReplacement]
+      simp only [pow_one, coefficient]
+    have hpositiveIncrement := mul_pos hcoefficient.1 (sub_pos.mpr hunext)
+    have hboundIncrement := mul_le_mul_of_nonneg_left hnextBound hcoefficient.1.le
+    have hstrictScale := mul_pos (sub_pos.mpr hcoefficient.2) hgapPositive
+    rcases hgap.2.2.2 _ hchangedK with hleft | hright
+    · nlinarith
+    · nlinarith
+  have htailOne : Math.Probability.expect law (fun base =>
+      q (G.discountedPayoff δ (G.repeatedGame.afterHistoryProfile profile base))) = 1 := by
+    calc
+      _ = Math.Probability.expect law (fun _ => (1 : ℝ)) :=
+        Math.ProbabilityMassFunction.expect_congr_on_support law _ _ hchildrenOne
+      _ = 1 := Math.Probability.expect_const law 1
+  let firstCoordinate := q (G.mixedPayoff (G.initialMixedProfile profile))
+  have hfirstBounds : firstCoordinate ∈ Set.Icc (0 : ℝ) 1 :=
+    hqBounds _ hfirstFace
+  have hleftEquation : x = δ * firstCoordinate + (1 - δ) := by
+    have h := G.discountedPayoff_one_step_coordinate profile deltaRate left right coordinate
+    change q (G.discountedPayoff δ profile) = δ * firstCoordinate +
+      (1 - δ) * Math.Probability.expect law (fun base =>
+        q (G.discountedPayoff δ (G.repeatedGame.afterHistoryProfile profile base))) at h
+    rw [hprofileCoordinate, htailOne, mul_one] at h
+    exact h
+  have hxPositive : 0 < x := by
+    nlinarith [mul_nonneg hδ.le hfirstBounds.1]
+  have hfirstLt : firstCoordinate < 1 := by
+    apply lt_of_le_of_ne hfirstBounds.2
+    intro hequal
+    rw [hequal] at hleftEquation
+    nlinarith
+  have hXlambda := hinclusion ⟨⟨profile, rfl⟩, hprofileFace⟩
+  obtain ⟨lambdaProfile, hlambdaProfile⟩ := hXlambda.1
+  have hlambdaFace : G.discountedPayoff lam lambdaProfile ∈ L := by
+    rw [hlambdaProfile]
+    exact hprofileFace
+  have hlambdaCoordinate : q (G.discountedPayoff lam lambdaProfile) = x := by
+    rw [hlambdaProfile]
+    exact hprofileCoordinate
+  let lambdaFirst := q (G.mixedPayoff (G.initialMixedProfile lambdaProfile))
+  have hlambdaFirstFace : G.mixedPayoff (G.initialMixedProfile lambdaProfile) ∈ L := by
+    by_cases hlamOne : lam = 1
+    · have h := G.discountedPayoff_one_step lambdaProfile lambdaRate
+      have hequal : G.discountedPayoff lam lambdaProfile =
+          G.mixedPayoff (G.initialMixedProfile lambdaProfile) := by
+        simpa only [lambdaRate, hlamOne, one_smul, sub_self, zero_smul, add_zero] using h
+      rw [← hequal]
+      exact hlambdaFace
+    · exact (G.discountedPayoff_first_and_supported_children_mem_face
+        L lambdaRate (lt_of_le_of_ne hlam hlamOne) hface lambdaProfile hlambdaFace).1
+  have hlambdaFirstBounds : lambdaFirst ∈ Set.Icc (0 : ℝ) 1 :=
+    hqBounds _ hlambdaFirstFace
+  have hlambdaBrackets : lam * lambdaFirst ≤ x ∧ x ≤ lam * lambdaFirst + (1 - lam) := by
+    have h := G.discountedPayoff_one_step_coordinate
+      lambdaProfile lambdaRate left right coordinate
+    let lambdaLaw := G.repeatedGame.histDist lambdaProfile PUnit.unit 1
+    let lambdaTail := Math.Probability.expect lambdaLaw (fun base =>
+      q (G.discountedPayoff lam (G.repeatedGame.afterHistoryProfile lambdaProfile base)))
+    change q (G.discountedPayoff lam lambdaProfile) =
+      lam * lambdaFirst + (1 - lam) * lambdaTail at h
+    rw [hlambdaCoordinate] at h
+    by_cases hlamOne : lam = 1
+    · rw [hlamOne] at h ⊢
+      constructor <;> nlinarith
+    · have hlamLt : lam < 1 := lt_of_le_of_ne hlam hlamOne
+      have hchildren := (G.discountedPayoff_first_and_supported_children_mem_face
+        L lambdaRate hlamLt hface lambdaProfile hlambdaFace).2
+      have htail0 : 0 ≤ lambdaTail :=
+        Math.ProbabilityMassFunction.le_expect_of_le_on_support lambdaLaw _
+          (fun base hbase => (hqBounds _ (hchildren base hbase)).1)
+      have htail1 : lambdaTail ≤ 1 :=
+        Math.ProbabilityMassFunction.expect_le_of_le_on_support lambdaLaw _
+          (fun base hbase => (hqBounds _ (hchildren base hbase)).2)
+      constructor
+      · nlinarith [mul_nonneg (sub_nonneg.mpr hlam) htail0]
+      · nlinarith [mul_nonneg (sub_nonneg.mpr hlam) (sub_nonneg.mpr htail1)]
+  have hlambdaFirstGt : firstCoordinate < lambdaFirst := by
+    by_contra hnotGt
+    have hterm := mul_nonneg (hδ.trans hδlam).le
+      (sub_nonneg.mpr (le_of_not_gt hnotGt))
+    have hstrict := mul_pos (sub_pos.mpr hδlam) (sub_pos.mpr hfirstLt)
+    nlinarith [hlambdaBrackets.2]
+  have hlow : δ * lambdaFirst < x := by
+    by_cases hpositive : 0 < lambdaFirst
+    · nlinarith [hlambdaBrackets.1, mul_pos (sub_pos.mpr hδlam) hpositive]
+    · have hzero : lambdaFirst = 0 :=
+        le_antisymm (le_of_not_gt hpositive) hlambdaFirstBounds.1
+      rw [hzero, mul_zero]
+      exact hxPositive
+  have hupp : x < δ * lambdaFirst + (1 - δ) := by
+    nlinarith [mul_pos hδ (sub_pos.mpr hlambdaFirstGt)]
+  let threshold := (x - δ * lambdaFirst) / (1 - δ)
+  have hthreshold : threshold ∈ Set.Ioo (0 : ℝ) 1 := by
+    constructor
+    · exact div_pos (sub_pos.mpr hlow) (sub_pos.mpr hδ1)
+    · exact (div_lt_one (sub_pos.mpr hδ1)).mpr (by linarith)
+  obtain ⟨next, hnextK, hnextGt, hnextBound⟩ :=
+    Math.Topology.exists_right_mem_sub_le_of_interior_threshold
+      K hKcompact hgap hmaxGap hzeroK honeK hthreshold
+  obtain ⟨replacementValue, hreplacementValue, hqReplacement⟩ := hnextK
+  obtain ⟨replacement, hreplacement⟩ := hreplacementValue.1
+  have hreplacementFace : G.discountedPayoff δ replacement ∈ L := by
+    rw [hreplacement]
+    exact hreplacementValue.2
+  let changed := G.appendFiniteProfiles 1 lambdaProfile replacement
+  have hchangedFace : G.discountedPayoff δ changed ∈ L :=
+    G.append_one_discountedPayoff_mem_face L hface lambdaProfile replacement deltaRate
+      hlambdaFirstFace hreplacementFace
+  have hchangedK : q (G.discountedPayoff δ changed) ∈ K :=
+    Set.mem_image_of_mem q ⟨⟨changed, rfl⟩, hchangedFace⟩
+  have hchangedCoordinate : q (G.discountedPayoff δ changed) =
+      δ * lambdaFirst + (1 - δ) * next := by
+    change q (G.discountedPayoff δ
+      (G.appendFiniteProfiles 1 lambdaProfile replacement)) = _
+    rw [G.append_one_discountedPayoff lambdaProfile replacement deltaRate]
+    change Math.Topology.segmentCoordinate left right coordinate
+      (δ • G.mixedPayoff (G.initialMixedProfile lambdaProfile) +
+        (1 - δ) • G.discountedPayoff δ replacement) = _
+    rw [Math.Topology.segmentCoordinate_mix]
+    change δ * lambdaFirst + (1 - δ) * q (G.discountedPayoff δ replacement) = _
+    rw [hreplacement, hqReplacement]
+  have hthresholdEquation : (1 - δ) * threshold = x - δ * lambdaFirst := by
+    dsimp only [threshold]
+    field_simp [(sub_pos.mpr hδ1).ne']
+  have hpositiveIncrement := mul_pos (sub_pos.mpr hδ1) (sub_pos.mpr hnextGt)
+  have hboundIncrement := mul_le_mul_of_nonneg_left hnextBound (sub_pos.mpr hδ1).le
+  have hstrictScale := mul_pos hδ hgapPositive
+  rcases hgap.2.2.2 _ hchangedK with hleft | hright
+  · nlinarith
+  · nlinarith
 
-/-! Proposition 8 is the polytope-face induction built from Proposition 9. -/
-theorem proposition_8 (G : FiniteStageGame)
-    (n m : G.Horizon)
-    (hsize : Fintype.card G.Player * m.1 < n.1)
-    (hinclusion : G.finiteFeasiblePayoffs (n.1 + m.1) ⊆
-      G.finiteFeasiblePayoffs n.1) :
-    G.finiteFeasiblePayoffs (n.1 + m.1) =
-      G.correlatedFeasiblePayoffs := by
-  sorry
+/-- The literal equation (**) on page 154, with the actual induced prefix
+law and actual full behavioral continuation profiles. -/
+theorem FiniteStageGame.finitePayoff_weighted_continuations
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (m n : ℕ) :
+    ((m + n : ℕ) : ℝ) • G.finitePayoff (m + n) profile =
+      (m : ℝ) • G.finitePayoff m profile +
+        (n : ℝ) • (fun who => Math.Probability.expect
+          (G.repeatedGame.histDist profile PUnit.unit m) (fun base =>
+            G.finitePayoff n (G.repeatedGame.afterHistoryProfile profile base) who)) := by
+  funext who
+  exact G.kernel.realizedAction_finiteAveragePayoff_weighted_decomposition profile m n who
 
-/-! Proposition 9 is the face-dimension induction. -/
-theorem proposition_9 (G : FiniteStageGame)
-    (P : Set (Payoff G.Player)) (p : ℕ) (n m : G.Horizon)
-    (hface : IsFaceOf P G.correlatedFeasiblePayoffs)
-    (hdim : affineDimension P = p)
-    (hp : p < Fintype.card G.Player) (hsize : p * m.1 < n.1)
-    (hinclusion : G.finiteFeasiblePayoffs (n.1 + m.1) ∩ P ⊆
-      G.finiteFeasiblePayoffs n.1 ∩ P) :
-    P ⊆ G.finiteFeasiblePayoffs (n.1 + m.1) := by
-  sorry
+/-- Every actual conditional child payoff is feasible for its remaining
+horizon. No supplied payoff realization replaces its behavioral profile. -/
+theorem FiniteStageGame.finitePayoff_afterHistory_mem_feasible
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (m n : ℕ)
+    (base : G.repeatedGame.Hist m) :
+    G.finitePayoff n (G.repeatedGame.afterHistoryProfile profile base) ∈
+      G.finiteFeasiblePayoffs n := by
+  exact ⟨G.repeatedGame.afterHistoryProfile profile base, rfl⟩
+
+/-- Page 154's replacement of one public continuation by a fully realized
+`n`-stage profile. The first `m` stages and all other branches are retained. -/
+noncomputable def FiniteStageGame.replaceFiniteContinuation
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) {m : ℕ}
+    (selected : G.repeatedGame.Hist m) (replacement : G.BehaviorProfile) :
+    G.BehaviorProfile :=
+  G.repeatedGame.terminalChildDispatcher m profile
+    (Function.update (G.repeatedGame.afterHistoryProfile profile) selected replacement)
+
+/-- Exact paper replacement identity. Its coefficient is the actual
+prefix probability, multiplied by the fraction of remaining stages. -/
+theorem FiniteStageGame.replaceFiniteContinuation_payoff
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) {m : ℕ} (n : ℕ)
+    (selected : G.repeatedGame.Hist m) (replacement : G.BehaviorProfile)
+    (hpositive : 0 < m + n) :
+    G.finitePayoff (m + n)
+        (G.replaceFiniteContinuation profile selected replacement) =
+      G.finitePayoff (m + n) profile +
+        ((G.repeatedGame.histDist profile PUnit.unit m selected).toReal *
+          (n : ℝ) / (m + n : ℕ)) •
+        (G.finitePayoff n replacement -
+          G.finitePayoff n (G.repeatedGame.afterHistoryProfile profile selected)) := by
+  classical
+  let : Fintype (G.repeatedGame.Hist m) := Fintype.ofFinite _
+  have hdenom : (0 : ℝ) < (m + n : ℕ) := by exact_mod_cast hpositive
+  funext who
+  have horiginal := congrFun (G.finitePayoff_weighted_continuations profile m n) who
+  have hnew := G.kernel.realizedAction_terminalChildDispatcher_weightedPayoff
+    m n profile
+    (Function.update (G.repeatedGame.afterHistoryProfile profile) selected replacement) who
+  have hupdate : Math.Probability.expect
+      (G.repeatedGame.histDist profile PUnit.unit m) (fun base =>
+        G.finitePayoff n
+          (Function.update (G.repeatedGame.afterHistoryProfile profile)
+            selected replacement base) who) =
+      Math.Probability.expect (G.repeatedGame.histDist profile PUnit.unit m)
+        (fun base => G.finitePayoff n
+          (G.repeatedGame.afterHistoryProfile profile base) who) +
+        (G.repeatedGame.histDist profile PUnit.unit m selected).toReal *
+          (G.finitePayoff n replacement who -
+            G.finitePayoff n (G.repeatedGame.afterHistoryProfile profile selected) who) := by
+    have hfunction : (fun base => G.finitePayoff n
+        (Function.update (G.repeatedGame.afterHistoryProfile profile)
+          selected replacement base) who) =
+        Function.update (fun base => G.finitePayoff n
+          (G.repeatedGame.afterHistoryProfile profile base) who)
+          selected (G.finitePayoff n replacement who) := by
+      funext base
+      by_cases hbase : base = selected
+      · subst base
+        simp
+      · simp [Function.update_of_ne hbase]
+    rw [hfunction]
+    exact Math.ProbabilityMassFunction.expect_functionUpdate _ _ _ _
+  change ((m + n : ℕ) : ℝ) *
+      G.finitePayoff (m + n)
+        (G.replaceFiniteContinuation profile selected replacement) who =
+      (m : ℝ) * G.finitePayoff m profile who + (n : ℝ) *
+        Math.Probability.expect (G.repeatedGame.histDist profile PUnit.unit m)
+          (fun base => G.finitePayoff n
+            (Function.update (G.repeatedGame.afterHistoryProfile profile)
+              selected replacement base) who) at hnew
+  rw [hupdate] at hnew
+  simp only [Pi.smul_apply, Pi.add_apply, smul_eq_mul] at horiginal
+  simp only [Pi.add_apply, Pi.smul_apply, Pi.sub_apply, smul_eq_mul]
+  apply (mul_left_cancel₀ (ne_of_gt hdenom))
+  field_simp [ne_of_gt hdenom]
+  nlinarith [horiginal, hnew]
+
+/-- A feasible replacement is installed by choosing its actual realizing
+profile. The conclusion stays in the paper's actual feasible payoff set. -/
+theorem FiniteStageGame.replaceFiniteContinuation_mem_feasible
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) {m : ℕ} (n : ℕ)
+    (selected : G.repeatedGame.Hist m) (replacement : Payoff G.Player)
+    (hreplacement : replacement ∈ G.finiteFeasiblePayoffs n)
+    (hpositive : 0 < m + n) :
+    G.finitePayoff (m + n) profile +
+        ((G.repeatedGame.histDist profile PUnit.unit m selected).toReal *
+          (n : ℝ) / (m + n : ℕ)) •
+        (replacement -
+          G.finitePayoff n (G.repeatedGame.afterHistoryProfile profile selected)) ∈
+      G.finiteFeasiblePayoffs (m + n) := by
+  obtain ⟨realization, rfl⟩ := hreplacement
+  exact ⟨G.replaceFiniteContinuation profile selected realization,
+    G.replaceFiniteContinuation_payoff profile n selected realization hpositive⟩
+
+/-- On a positive-probability history the paper's replacement coefficient
+is strictly between zero and one. Both block lengths are positive. -/
+theorem FiniteStageGame.finiteContinuationCoefficient_mem_Ioo
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (m n : G.Horizon)
+    (selected : G.repeatedGame.Hist m.1)
+    (hsupport : selected ∈
+      (G.repeatedGame.histDist profile PUnit.unit m.1).support) :
+    (G.repeatedGame.histDist profile PUnit.unit m.1 selected).toReal *
+      (n.1 : ℝ) / (m.1 + n.1 : ℕ) ∈ Set.Ioo 0 1 := by
+  let law := G.repeatedGame.histDist profile PUnit.unit m.1
+  have hmass : 0 < (law selected).toReal :=
+    ENNReal.toReal_pos ((PMF.mem_support_iff law selected).mp hsupport)
+      (law.apply_ne_top selected)
+  have hmassOne : (law selected).toReal ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one law selected)
+  have hm : (0 : ℝ) < m.1 := by exact_mod_cast m.2
+  have hn : (0 : ℝ) < n.1 := by exact_mod_cast n.2
+  have hdenom : (0 : ℝ) < (m.1 + n.1 : ℕ) := by
+    exact_mod_cast Nat.add_pos_left m.2 n.1
+  constructor
+  · exact div_pos (mul_pos hmass hn) hdenom
+  · apply (div_lt_iff₀ hdenom).mpr
+    have hbound := mul_le_mul_of_nonneg_right hmassOne hn.le
+    push_cast
+    nlinarith
+
+/-- Applying an actual affine coordinate to page 154's equation (**)
+commutes with the induced conditional-history expectation. -/
+theorem FiniteStageGame.finitePayoff_affine_coordinate_decomposition
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (m n : ℕ)
+    (coordinate : Payoff G.Player →ᵃ[ℝ] ℝ) :
+    ((m + n : ℕ) : ℝ) * coordinate (G.finitePayoff (m + n) profile) =
+      (m : ℝ) * coordinate (G.finitePayoff m profile) +
+        (n : ℝ) * Math.Probability.expect
+          (G.repeatedGame.histDist profile PUnit.unit m) (fun base =>
+            coordinate
+              (G.finitePayoff n (G.repeatedGame.afterHistoryProfile profile base))) := by
+  let : Fintype (G.repeatedGame.Hist m) := Fintype.ofFinite _
+  have hlinear (point : Payoff G.Player) :
+      coordinate.linear point = coordinate point - coordinate 0 := by
+    simpa only [Pi.sub_apply] using congrFun (AffineMap.decomp' coordinate) point
+  have h := congrArg coordinate.linear
+    (G.finitePayoff_weighted_continuations profile m n)
+  rw [map_add, map_smul, map_smul, map_smul] at h
+  simp only [smul_eq_mul] at h
+  rw [hlinear, hlinear, hlinear,
+    Math.ProbabilityMassFunction.coordinateExpectation_map_affine] at h
+  push_cast at h ⊢
+  nlinarith
+
+/-- In case (b) of page 154, every supported continuation has zero in the
+selected barycentric coordinate. Thus that contact's coordinate is at most
+the prefix fraction. The condition is only on the actual supported histories. -/
+theorem FiniteStageGame.finitePayoff_affine_coordinate_le_prefix_fraction
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (m n : G.Horizon)
+    (coordinate : Payoff G.Player →ᵃ[ℝ] ℝ)
+    (hprefix : coordinate (G.finitePayoff m.1 profile) ≤ 1)
+    (hsuffix : ∀ base : G.repeatedGame.Hist m.1,
+      base ∈ (G.repeatedGame.histDist profile PUnit.unit m.1).support →
+        coordinate (G.finitePayoff n.1
+          (G.repeatedGame.afterHistoryProfile profile base)) = 0) :
+    coordinate (G.finitePayoff (m.1 + n.1) profile) ≤
+      (m.1 : ℝ) / (m.1 + n.1 : ℕ) := by
+  have h := G.finitePayoff_affine_coordinate_decomposition
+    profile m.1 n.1 coordinate
+  have hzero : Math.Probability.expect
+      (G.repeatedGame.histDist profile PUnit.unit m.1) (fun base =>
+        coordinate (G.finitePayoff n.1
+          (G.repeatedGame.afterHistoryProfile profile base))) = 0 := by
+    have hcongr := Math.ProbabilityMassFunction.expect_congr_on_support
+      (G.repeatedGame.histDist profile PUnit.unit m.1) _ (fun _ => 0) hsuffix
+    simpa only [Math.Probability.expect_const] using hcongr
+  rw [hzero, mul_zero, add_zero] at h
+  have hdenom : (0 : ℝ) < (m.1 + n.1 : ℕ) := by
+    exact_mod_cast Nat.add_pos_left m.2 n.1
+  apply (le_div_iff₀ hdenom).mpr
+  rw [mul_comm, h]
+  simpa only [mul_one] using mul_le_mul_of_nonneg_left hprefix (Nat.cast_nonneg m.1)
+
+/-- The final barycentric inequality on pages 154--155: actual supported
+continuations yield the contradiction `n < p*m`. The geometric construction
+of these coordinates from the contact normals is a separate dependency. -/
+theorem proposition_9_barycentric_obstruction
+    (G : FiniteStageGame) {Contact : Type} [Fintype Contact]
+    (p : ℕ) (n m : G.Horizon) (z : Payoff G.Player)
+    (profile : Contact → G.BehaviorProfile)
+    (coordinate : Contact → Payoff G.Player →ᵃ[ℝ] ℝ)
+    (hcard : Fintype.card Contact ≤ p + 1)
+    (hsize : p * m.1 < n.1)
+    (hsum : ∑ k, coordinate k z = 1)
+    (hcontact : ∀ k, coordinate k z <
+      coordinate k (G.finitePayoff (m.1 + n.1) (profile k)))
+    (hprefix : ∀ k, coordinate k (G.finitePayoff m.1 (profile k)) ≤ 1)
+    (hsuffix : ∀ k (base : G.repeatedGame.Hist m.1),
+      base ∈ (G.repeatedGame.histDist (profile k) PUnit.unit m.1).support →
+        coordinate k (G.finitePayoff n.1
+          (G.repeatedGame.afterHistoryProfile (profile k) base)) = 0) : False := by
+  have hdenom : (0 : ℝ) < (m.1 + n.1 : ℕ) := by
+    exact_mod_cast Nat.add_pos_left m.2 n.1
+  have hnonempty : Nonempty Contact := by
+    by_contra hnone
+    let : IsEmpty Contact := not_nonempty_iff.mp hnone
+    simp at hsum
+  let : Nonempty Contact := hnonempty
+  have hbound (k : Contact) :
+      coordinate k z < (m.1 : ℝ) / (m.1 + n.1 : ℕ) :=
+    (hcontact k).trans_le
+      (G.finitePayoff_affine_coordinate_le_prefix_fraction
+        (profile k) m n (coordinate k) (hprefix k) (hsuffix k))
+  have htotal : (1 : ℝ) <
+      (Fintype.card Contact : ℝ) * ((m.1 : ℝ) / (m.1 + n.1 : ℕ)) := by
+    calc
+      (1 : ℝ) = ∑ k, coordinate k z := hsum.symm
+      _ < ∑ _k : Contact, (m.1 : ℝ) / (m.1 + n.1 : ℕ) := by
+        exact Finset.sum_lt_sum_of_nonempty Finset.univ_nonempty
+          (fun k _ => hbound k)
+      _ = _ := by simp
+  have hcardReal : (Fintype.card Contact : ℝ) ≤ p + 1 := by exact_mod_cast hcard
+  have hsizeReal : (p : ℝ) * m.1 < n.1 := by exact_mod_cast hsize
+  have htotal' := (lt_div_iff₀ hdenom).mp
+    (show (1 : ℝ) < (Fintype.card Contact : ℝ) * m.1 / (m.1 + n.1 : ℕ) by
+      simpa only [mul_div_assoc] using htotal)
+  push_cast at htotal'
+  nlinarith [mul_le_mul_of_nonneg_right hcardReal (Nat.cast_nonneg m.1)]
+
+/-- Page 154 immediately after (**): the actual payoff in face P forces the
+positive-length prefix and every supported remaining-horizon child into P.
+All ambient feasibility and positive weights are derived from the source model. -/
+theorem FiniteStageGame.finitePayoff_prefix_and_supported_children_mem_face
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (m n : G.Horizon)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs) (profile : G.BehaviorProfile)
+    (hpayoff : G.finitePayoff (m.1 + n.1) profile ∈ P) :
+    G.finitePayoff m.1 profile ∈ P ∧
+      ∀ base : G.repeatedGame.Hist m.1,
+        base ∈ (G.repeatedGame.histDist profile PUnit.unit m.1).support →
+        G.finitePayoff n.1 (G.repeatedGame.afterHistoryProfile profile base) ∈ P := by
+  let : Fintype (G.repeatedGame.Hist m.1) := Fintype.ofFinite _
+  let law := G.repeatedGame.histDist profile PUnit.unit m.1
+  let children := fun base : G.repeatedGame.Hist m.1 =>
+    G.finitePayoff n.1 (G.repeatedGame.afterHistoryProfile profile base)
+  let tail := fun who => Math.Probability.expect law (fun base => children base who)
+  let total : ℝ := (m.1 + n.1 : ℕ)
+  let first := (m.1 : ℝ) / total
+  let last := (n.1 : ℝ) / total
+  have hm : (0 : ℝ) < m.1 := by exact_mod_cast m.2
+  have hn : (0 : ℝ) < n.1 := by exact_mod_cast n.2
+  have htotal : 0 < total := by
+    dsimp only [total]
+    exact_mod_cast Nat.add_pos_left m.2 n.1
+  have hchildren : ∀ base, children base ∈ G.correlatedFeasiblePayoffs := by
+    intro base
+    exact lemma_1_Dn_subset_C G n
+      ⟨G.repeatedGame.afterHistoryProfile profile base, rfl⟩
+  have hprefix : G.finitePayoff m.1 profile ∈ G.correlatedFeasiblePayoffs :=
+    lemma_1_Dn_subset_C G m ⟨profile, rfl⟩
+  have htail : tail ∈ G.correlatedFeasiblePayoffs :=
+    convexHull_min (by rintro _ ⟨base, rfl⟩; exact hchildren base)
+      G.correlatedFeasiblePayoffs_convex
+      (Math.ProbabilityMassFunction.coordinateExpectation_mem_convexHull_range law children)
+  have hweighted : total • G.finitePayoff (m.1 + n.1) profile =
+      (m.1 : ℝ) • G.finitePayoff m.1 profile + (n.1 : ℝ) • tail :=
+    G.finitePayoff_weighted_continuations profile m.1 n.1
+  have hnormalized : G.finitePayoff (m.1 + n.1) profile =
+      first • G.finitePayoff m.1 profile + last • tail := by
+    calc
+      G.finitePayoff (m.1 + n.1) profile =
+          total⁻¹ • (total • G.finitePayoff (m.1 + n.1) profile) := by
+        rw [smul_smul, inv_mul_cancel₀ (ne_of_gt htotal), one_smul]
+      _ = total⁻¹ • ((m.1 : ℝ) • G.finitePayoff m.1 profile + (n.1 : ℝ) • tail) :=
+        congrArg (total⁻¹ • ·) hweighted
+      _ = _ := by simp only [first, last, smul_add, smul_smul, div_eq_mul_inv, mul_comm]
+  have hsum : first + last = 1 := by
+    dsimp only [first, last]
+    rw [← add_div]
+    have htotalEq : (m.1 : ℝ) + n.1 = total := by simp only [total, Nat.cast_add]
+    rw [htotalEq, div_self (ne_of_gt htotal)]
+  have hfirst : 0 < first := div_pos hm htotal
+  have hlast : 0 < last := div_pos hn htotal
+  have hfirstLt : first < 1 := by linarith
+  have hlastEq : last = 1 - first := by linarith
+  have hcombination : first • G.finitePayoff m.1 profile + (1 - first) • tail ∈ P := by
+    rw [← hlastEq, ← hnormalized]
+    exact hpayoff
+  obtain ⟨hprefixP, htailP⟩ :=
+    hface.2.2 _ hprefix _ htail first hfirst hfirstLt hcombination
+  refine ⟨hprefixP, ?_⟩
+  intro base hbase
+  exact Math.ProbabilityMassFunction.coordinateExpectation_mem_isExtreme_of_mem
+    law children G.correlatedFeasiblePayoffs P G.correlatedFeasiblePayoffs_convex
+    hface.isExtreme hchildren htailP base hbase
+
+/-- Installing an actual n-stage profile whose payoff lies in the same face
+preserves that face. Prefix and all original supported child memberships are
+derived from the original full-horizon payoff, rather than supplied as fields. -/
+theorem FiniteStageGame.replaceFiniteContinuation_payoff_mem_face
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (m n : G.Horizon)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs) (profile : G.BehaviorProfile)
+    (hpayoff : G.finitePayoff (m.1 + n.1) profile ∈ P)
+    (selected : G.repeatedGame.Hist m.1) (replacement : G.BehaviorProfile)
+    (hreplacement : G.finitePayoff n.1 replacement ∈ P) :
+    G.finitePayoff (m.1 + n.1)
+      (G.replaceFiniteContinuation profile selected replacement) ∈ P := by
+  classical
+  obtain ⟨hprefix, hchildren⟩ :=
+    G.finitePayoff_prefix_and_supported_children_mem_face P m n hface profile hpayoff
+  apply G.kernel.realizedAction_terminalChildDispatcher_payoff_mem_convex
+    m.1 n.1 (Nat.add_pos_left m.2 n.1) profile
+    (Function.update (G.repeatedGame.afterHistoryProfile profile) selected replacement)
+    P hface.2.1 hprefix
+  intro base hbase
+  change G.finitePayoff n.1
+    (Function.update (G.repeatedGame.afterHistoryProfile profile) selected replacement base) ∈ P
+  by_cases hequal : base = selected
+  · subst base
+    simpa only [Function.update_self] using hreplacement
+  · simpa only [Function.update_of_ne hequal] using hchildren base hbase
 
 /-- Euclidean distance from a payoff vector to a nonempty set. The paper's
 closest-point argument uses the inner-product norm, not the Pi sup norm. -/
@@ -9929,13 +10826,11 @@ def IsFarthestPoint {ι : Type} [Fintype ι]
     (z : Payoff ι) (P K : Set (Payoff ι)) : Prop :=
   z ∈ P ∧ K.Nonempty ∧ ∀ x ∈ P, distanceToSet x K ≤ distanceToSet z K
 
-/-! **Lemma 10, pages 153--154.** The boundary of the face is relative to
-its affine span. Both the distance maximization and the contact ball use the
-Euclidean metric of the published closest-point and squared-distance proof.
-The ordinary payoff-coordinate sup metric is unchanged everywhere else. -/
-theorem lemma_10 {ι : Type} [Fintype ι]
+/-- Canonical Euclidean contact-hull adapter used by the proof auxiliaries.
+The reader-facing Lemma 10 below delegates to this single proof. -/
+private theorem sorin_contactHull_of_farthestPoint {ι : Type} [Fintype ι]
     (P K : Set (Payoff ι)) (z : Payoff ι)
-    (hP : Convex ℝ P) (hPcompact : IsCompact P)
+    (hP : Convex ℝ P) (_hPcompact : IsCompact P)
     (hK : IsCompact K) (hKP : K ⊆ P)
     (hfrontier : relativeFrontier P ⊆ K)
     (hz : IsFarthestPoint z P K) :
@@ -9952,7 +10847,7 @@ theorem lemma_10 {ι : Type} [Fintype ι]
     exact hz.2.2 original horiginal
   have h := Math.Topology.mem_convexHull_contacts_of_farthestPoint
     (e '' P) (e '' K) (e z) (hP.linear_image e.toLinearMap)
-    (hPcompact.image e.continuous) (hK.image e.continuous) (Set.image_mono hKP)
+    (hK.image e.continuous) (Set.image_mono hKP)
     hfrontier' (Set.mem_image_of_mem e hz.1) (hz.2.1.image e) hmax
   have hcontacts : e '' (euclideanPayoffClosedBall z (distanceToSet z K) ∩ K) =
       Metric.closedBall (e z) (Metric.infDist (e z) (e '' K)) ∩ e '' K := by
@@ -9968,6 +10863,562 @@ theorem lemma_10 {ι : Type} [Fintype ι]
   rw [← e.toLinearMap.image_convexHull] at h
   obtain ⟨original, horiginal, hequal⟩ := h
   exact e.injective hequal ▸ horiginal
+
+/-- The first step following Lemma 10 on page 154: the farthest point lies in
+the convex hull of an internally selected minimal affinely independent family
+of actual Euclidean contacts, with at most `affineDimension P + 1` members. -/
+theorem lemma_10_finite_contacts {ι : Type} [Fintype ι]
+    (P K : Set (Payoff ι)) (z : Payoff ι)
+    (hP : Convex ℝ P) (hPcompact : IsCompact P)
+    (hK : IsCompact K) (hKP : K ⊆ P)
+    (hfrontier : relativeFrontier P ⊆ K)
+    (hz : IsFarthestPoint z P K) :
+    ∃ contacts : Finset (Payoff ι),
+      contacts.Nonempty ∧ (contacts : Set (Payoff ι)) ⊆
+        euclideanPayoffClosedBall z (distanceToSet z K) ∩ K ∧
+      z ∈ convexHull ℝ (contacts : Set (Payoff ι)) ∧
+      AffineIndependent ℝ ((↑) : contacts → Payoff ι) ∧
+      contacts.card ≤ affineDimension P + 1 ∧
+      ∀ alternative : Finset (Payoff ι),
+        (alternative : Set (Payoff ι)) ⊆
+          euclideanPayoffClosedBall z (distanceToSet z K) ∩ K →
+        z ∈ convexHull ℝ (alternative : Set (Payoff ι)) →
+        contacts.card ≤ alternative.card := by
+  obtain ⟨contacts, hnonempty, hsubset, hcontains, hindependent, hcard, hminimal⟩ :=
+    Math.Topology.exists_minimal_affineIndependent_finset_of_mem_convexHull
+      (euclideanPayoffClosedBall z (distanceToSet z K) ∩ K) P z
+      (fun _ hcontact => hKP hcontact.2)
+      (sorin_contactHull_of_farthestPoint P K z hP hPcompact hK hKP hfrontier hz)
+  refine ⟨contacts, hnonempty, hsubset, hcontains, hindependent, ?_, hminimal⟩
+  rw [affineDimension_eq_finrank_vectorSpan]
+  exact hcard
+
+/-- Page 154 case (a): an actual supported child inherits face membership.
+The shifted ball internally supplies a distinct actual replacement in the
+same face; its realizing profile is installed only on that supported branch.
+The improved actual payoff remains in P and is strictly closer to z. -/
+theorem proposition_9_case_a_closer_feasible_payoff
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (n m : G.Horizon)
+    (profile : G.BehaviorProfile) (z : Payoff G.Player)
+    (selected : G.repeatedGame.Hist m.1)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs) (hPcompact : IsCompact P)
+    (hprofileP : G.finitePayoff (m.1 + n.1) profile ∈ P)
+    (hfrontier : relativeFrontier P ⊆
+      G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P)
+    (hfar : IsFarthestPoint z P (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P))
+    (hpositive : 0 < distanceToSet z (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P))
+    (hcontact : dist
+      ((EuclideanSpace.equiv G.Player ℝ).symm (G.finitePayoff (m.1 + n.1) profile))
+      ((EuclideanSpace.equiv G.Player ℝ).symm z) =
+        distanceToSet z (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P))
+    (hsupport : selected ∈
+      (G.repeatedGame.histDist profile PUnit.unit m.1).support)
+    (hstrict : ∃ lower ∈ P,
+      inner ℝ ((EuclideanSpace.equiv G.Player ℝ).symm lower)
+          (((EuclideanSpace.equiv G.Player ℝ).symm
+            (G.finitePayoff (m.1 + n.1) profile)) -
+              (EuclideanSpace.equiv G.Player ℝ).symm z) <
+        inner ℝ ((EuclideanSpace.equiv G.Player ℝ).symm (G.finitePayoff n.1
+          (G.repeatedGame.afterHistoryProfile profile selected)))
+          (((EuclideanSpace.equiv G.Player ℝ).symm
+            (G.finitePayoff (m.1 + n.1) profile)) -
+              (EuclideanSpace.equiv G.Player ℝ).symm z))
+    (hinclusion : G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P ⊆
+      G.finiteFeasiblePayoffs n.1 ∩ P) :
+    ∃ improved : G.BehaviorProfile,
+      G.finitePayoff (m.1 + n.1) improved ∈ G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P ∧
+      dist ((EuclideanSpace.equiv G.Player ℝ).symm
+        (G.finitePayoff (m.1 + n.1) improved))
+          ((EuclideanSpace.equiv G.Player ℝ).symm z) <
+        distanceToSet z (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P) := by
+  let e : Payoff G.Player ≃L[ℝ] EuclideanSpace ℝ G.Player :=
+    (EuclideanSpace.equiv G.Player ℝ).symm
+  let K := G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P
+  let contact := G.finitePayoff (m.1 + n.1) profile
+  let continuation := G.finitePayoff n.1 (G.repeatedGame.afterHistoryProfile profile selected)
+  let center := continuation - contact + z
+  have hP : Convex ℝ P := hface.2.1
+  have hchildP : continuation ∈ P :=
+    (G.finitePayoff_prefix_and_supported_children_mem_face
+      P m n hface profile hprofileP).2 selected hsupport
+  have hKcompact : IsCompact K :=
+    (property_1_finite G ⟨m.1 + n.1, Nat.add_pos_left m.2 n.1⟩).2.2.inter_right
+      hPcompact.isClosed
+  have hfrontier' : intrinsicFrontier ℝ (e '' P) ⊆ e '' K := by
+    change intrinsicFrontier ℝ (e.toLinearEquiv.toAffineEquiv '' P) ⊆ e '' K
+    rw [e.toLinearEquiv.toAffineEquiv.intrinsicFrontier_image]
+    exact Set.image_mono (show intrinsicFrontier ℝ P ⊆ K from hfrontier)
+  have hcenterSpan : e center ∈ affineSpan ℝ (e '' P) := by
+    have h := (affineSpan ℝ (e '' P)).smul_vsub_vadd_mem (1 : ℝ)
+      (subset_affineSpan ℝ (e '' P) (Set.mem_image_of_mem e hfar.1))
+      (subset_affineSpan ℝ (e '' P) (Set.mem_image_of_mem e hprofileP))
+      (subset_affineSpan ℝ (e '' P) (Set.mem_image_of_mem e hchildP))
+    have heq : e center = (e z - e contact) + e continuation := by
+      dsimp only [center]
+      rw [map_add, map_sub]
+      abel
+    rw [heq]
+    simpa only [vsub_eq_sub, vadd_eq_add, one_smul] using h
+  have hnormal : e continuation - e center = e contact - e z := by
+    dsimp only [center]
+    rw [map_add, map_sub]
+    abel
+  have hcenterDist : dist (e center) (e continuation) = distanceToSet z K := by
+    rw [dist_comm, dist_eq_norm, hnormal, ← dist_eq_norm]
+    exact hcontact
+  have hmax : ∀ point ∈ e '' P,
+      Metric.infDist point (e '' K) ≤ dist (e center) (e continuation) := by
+    rintro _ ⟨point, hpoint, rfl⟩
+    rw [hcenterDist]
+    exact hfar.2.2 point hpoint
+  have hstrict' : ∃ lower ∈ e '' P,
+      inner ℝ lower (e continuation - e center) <
+        inner ℝ (e continuation) (e continuation - e center) := by
+    obtain ⟨lower, hlower, hinner⟩ := hstrict
+    refine ⟨e lower, Set.mem_image_of_mem e hlower, ?_⟩
+    rw [hnormal]
+    exact hinner
+  obtain ⟨other, hotherK, hotherNe, hotherBall⟩ :=
+    Math.Topology.exists_other_contact_of_shifted_center
+      (e '' P) (e '' K) (e center) (e continuation)
+      (hP.linear_image e.toLinearMap) (hPcompact.image e.continuous)
+      (hKcompact.image e.continuous) (Set.image_mono Set.inter_subset_right)
+      (hfar.2.1.image e) hfrontier' hcenterSpan
+      (Set.mem_image_of_mem e hchildP) (by rwa [hcenterDist]) hmax hstrict'
+  obtain ⟨replacement, hreplacementK, rfl⟩ := hotherK
+  obtain ⟨realization, hrealization⟩ := (hinclusion hreplacementK).1
+  let improved := G.replaceFiniteContinuation profile selected realization
+  let coefficient :=
+    (G.repeatedGame.histDist profile PUnit.unit m.1 selected).toReal *
+      (n.1 : ℝ) / (m.1 + n.1 : ℕ)
+  have hcoefficient : coefficient ∈ Set.Ioo 0 1 :=
+    G.finiteContinuationCoefficient_mem_Ioo profile m n selected hsupport
+  have hpayoff : e (G.finitePayoff (m.1 + n.1) improved) =
+      e contact + coefficient • (e replacement - e continuation) := by
+    dsimp only [improved]
+    rw [G.replaceFiniteContinuation_payoff profile n.1 selected realization
+      (Nat.add_pos_left m.2 n.1), hrealization, map_add, map_smul, map_sub]
+  have hball : dist (e replacement) (e continuation - e contact + e z) ≤
+      dist (e contact) (e z) := by
+    have heq : e center = e continuation - e contact + e z := by
+      dsimp only [center]
+      rw [map_add, map_sub]
+    rw [← heq, dist_comm, hcontact]
+    exact hotherBall.trans_eq hcenterDist
+  have hreplacementP : G.finitePayoff n.1 realization ∈ P := by
+    rw [hrealization]
+    exact (hinclusion hreplacementK).2
+  have himprovedP : G.finitePayoff (m.1 + n.1) improved ∈ P :=
+    G.replaceFiniteContinuation_payoff_mem_face P m n hface profile hprofileP
+      selected realization hreplacementP
+  refine ⟨improved, ⟨⟨improved, rfl⟩, himprovedP⟩, ?_⟩
+  change dist (e (G.finitePayoff (m.1 + n.1) improved)) (e z) < distanceToSet z K
+  rw [hpayoff, ← hcontact]
+  exact Math.Topology.dist_partial_replacement_lt
+    (e contact) (e z) (e continuation) (e replacement) coefficient
+    hcoefficient hotherNe hball
+
+/-- Page 154 case (b), with internally selected actual contacts, positive
+convex coefficients, attained supporting minima, and derived affine
+coordinates. The case hypothesis concerns actual supported continuations,
+not a supplied coordinate system or favorable profile certificate. -/
+theorem proposition_9_case_b_contradiction
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (p : ℕ)
+    (n m : G.Horizon) (z : Payoff G.Player)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs) (hPcompact : IsCompact P)
+    (hdimension : affineDimension P = p) (hsize : p * m.1 < n.1)
+    (hfrontier : relativeFrontier P ⊆
+      G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P)
+    (hfar : IsFarthestPoint z P (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P))
+    (hpositive : 0 < distanceToSet z (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P))
+    (hcaseB : ∀ profile : G.BehaviorProfile,
+      G.finitePayoff (m.1 + n.1) profile ∈
+        euclideanPayoffClosedBall z
+          (distanceToSet z (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P)) ∩
+            (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P) →
+      ∀ base : G.repeatedGame.Hist m.1,
+        base ∈ (G.repeatedGame.histDist profile PUnit.unit m.1).support →
+      ∀ lower ∈ P,
+        inner ℝ ((EuclideanSpace.equiv G.Player ℝ).symm (G.finitePayoff n.1
+          (G.repeatedGame.afterHistoryProfile profile base)))
+          (((EuclideanSpace.equiv G.Player ℝ).symm
+            (G.finitePayoff (m.1 + n.1) profile)) -
+              (EuclideanSpace.equiv G.Player ℝ).symm z) ≤
+        inner ℝ ((EuclideanSpace.equiv G.Player ℝ).symm lower)
+          (((EuclideanSpace.equiv G.Player ℝ).symm
+            (G.finitePayoff (m.1 + n.1) profile)) -
+              (EuclideanSpace.equiv G.Player ℝ).symm z)) : False := by
+  classical
+  let e : Payoff G.Player ≃L[ℝ] EuclideanSpace ℝ G.Player :=
+    (EuclideanSpace.equiv G.Player ℝ).symm
+  let K := G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P
+  let d := distanceToSet z K
+  have hKcompact : IsCompact K :=
+    (property_1_finite G ⟨m.1 + n.1, Nat.add_pos_left m.2 n.1⟩).2.2.inter_right
+      hPcompact.isClosed
+  obtain ⟨contacts, hnonempty, hsubset, hcontains, hindependent, hcard, hminimal⟩ :=
+    lemma_10_finite_contacts P K z hface.2.1 hPcompact hKcompact
+      Set.inter_subset_right hfrontier hfar
+  let : Nonempty contacts := hnonempty.to_subtype
+  obtain ⟨weight, hweight, hsum, hvalue⟩ :=
+    Math.Topology.exists_pos_weights_of_minimal_convexHull_family contacts z hcontains
+      (fun alternative hsub hmem => hminimal alternative (hsub.trans hsubset) hmem)
+  let point : contacts → EuclideanSpace ℝ G.Player := fun k => e k
+  have hpoint (k : contacts) : point k ∈ e '' P :=
+    Set.mem_image_of_mem e (hsubset k.property).2.2
+  have hvalue' : ∑ k, weight k • point k = e z := by
+    simpa only [map_sum, map_smul, point] using congrArg e hvalue
+  have hne (k : contacts) : point k ≠ e z := by
+    intro heq
+    have hkz : (k : Payoff G.Player) = z := e.injective heq
+    have hzK : z ∈ K := hkz ▸ (hsubset k.property).2
+    have hzero := Metric.infDist_le_dist_of_mem (x := e z) (Set.mem_image_of_mem e hzK)
+    have : d ≤ 0 := by simpa only [d, distanceToSet, e, dist_self] using hzero
+    exact hpositive.not_ge this
+  obtain ⟨minimum, scale, hscale, hattained, hmin, hcoordSum, hcoordNonneg,
+      hcoordStrict, hprojectedSimplex⟩ := Math.Topology.exists_projected_contact_simplex
+    (e '' P) (e z) point weight (hPcompact.image e.continuous)
+      (Set.mem_image_of_mem e hfar.1) hpoint hweight hsum hvalue' hne
+      (hindependent.map' e.toLinearEquiv.toAffineEquiv.toAffineMap e.injective)
+  let coordinate : contacts → Payoff G.Player →ᵃ[ℝ] ℝ := fun k =>
+    (Math.Topology.contactSupportingCoordinate (point k - e z) (minimum k) (scale k)).comp
+      e.toLinearEquiv.toAffineEquiv.toAffineMap
+  have hcoord (k : contacts) (x : Payoff G.Player) : coordinate k x =
+      scale k * (inner ℝ (point k - e z) (e x) - minimum k) := rfl
+  have hsum' (x : Payoff G.Player) : ∑ k, coordinate k x = 1 := hcoordSum (e x)
+  have hnonneg (k : contacts) (x : Payoff G.Player) (hx : x ∈ P) :
+      0 ≤ coordinate k x := hcoordNonneg k (e x) (Set.mem_image_of_mem e hx)
+  have hleOne (k : contacts) (x : Payoff G.Player) (hx : x ∈ P) :
+      coordinate k x ≤ 1 := by
+    have h := Finset.single_le_sum (fun j _ => hnonneg j x hx) (Finset.mem_univ k)
+    rwa [hsum'] at h
+  have hrealizable (k : contacts) : ∃ profile : G.BehaviorProfile,
+      G.finitePayoff (m.1 + n.1) profile = (k : Payoff G.Player) :=
+    (hsubset k.property).2.1
+  choose profile hprofile using hrealizable
+  have hprofileP (k : contacts) : G.finitePayoff (m.1 + n.1) (profile k) ∈ P := by
+    rw [hprofile k]
+    exact (hsubset k.property).2.2
+  apply proposition_9_barycentric_obstruction G p n m z profile coordinate
+  · simpa only [Fintype.card_coe, hdimension] using hcard
+  · exact hsize
+  · exact hsum' z
+  · intro k
+    rw [hprofile k]
+    exact hcoordStrict k
+  · intro k
+    exact hleOne k _ (G.finitePayoff_prefix_and_supported_children_mem_face
+      P m n hface (profile k) (hprofileP k)).1
+  · intro k base hbase
+    let child := G.finitePayoff n.1
+      (G.repeatedGame.afterHistoryProfile (profile k) base)
+    have hchildP : child ∈ P :=
+      (G.finitePayoff_prefix_and_supported_children_mem_face
+        P m n hface (profile k) (hprofileP k)).2 base hbase
+    obtain ⟨minimizer, hminimizer, hminimum⟩ := hattained k
+    obtain ⟨lower, hlower, rfl⟩ := hminimizer
+    have hcontact : G.finitePayoff (m.1 + n.1) (profile k) ∈
+        euclideanPayoffClosedBall z d ∩ K := by
+      rw [hprofile k]
+      exact hsubset k.property
+    have hupper := hcaseB (profile k) hcontact base hbase lower hlower
+    rw [hprofile k] at hupper
+    change inner ℝ (e child) (point k - e z) ≤
+      inner ℝ (e lower) (point k - e z) at hupper
+    rw [real_inner_comm (point k - e z) (e child),
+      real_inner_comm (point k - e z) (e lower)] at hupper
+    change inner ℝ (point k - e z) (e child) ≤
+      inner ℝ (point k - e z) (e lower) at hupper
+    rw [hminimum] at hupper
+    have hlowerBound := hmin k (e child) (Set.mem_image_of_mem e hchildP)
+    have hequal := le_antisymm hupper hlowerBound
+    rw [hcoord, hequal, sub_self, mul_zero]
+
+/-- Case (a)'s improved actual payoff is still in K, so its strict distance
+decrease contradicts the definition of the center's distance to K. All
+replacement and Euclidean geometry are delegated to the existing helper. -/
+theorem proposition_9_case_a_contradiction
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (n m : G.Horizon)
+    (profile : G.BehaviorProfile) (z : Payoff G.Player)
+    (selected : G.repeatedGame.Hist m.1)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs) (hPcompact : IsCompact P)
+    (hprofileP : G.finitePayoff (m.1 + n.1) profile ∈ P)
+    (hfrontier : relativeFrontier P ⊆
+      G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P)
+    (hfar : IsFarthestPoint z P (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P))
+    (hpositive : 0 < distanceToSet z (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P))
+    (hcontact : dist
+      ((EuclideanSpace.equiv G.Player ℝ).symm (G.finitePayoff (m.1 + n.1) profile))
+      ((EuclideanSpace.equiv G.Player ℝ).symm z) =
+        distanceToSet z (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P))
+    (hsupport : selected ∈
+      (G.repeatedGame.histDist profile PUnit.unit m.1).support)
+    (hstrict : ∃ lower ∈ P,
+      inner ℝ ((EuclideanSpace.equiv G.Player ℝ).symm lower)
+          (((EuclideanSpace.equiv G.Player ℝ).symm
+            (G.finitePayoff (m.1 + n.1) profile)) -
+              (EuclideanSpace.equiv G.Player ℝ).symm z) <
+        inner ℝ ((EuclideanSpace.equiv G.Player ℝ).symm (G.finitePayoff n.1
+          (G.repeatedGame.afterHistoryProfile profile selected)))
+          (((EuclideanSpace.equiv G.Player ℝ).symm
+            (G.finitePayoff (m.1 + n.1) profile)) -
+              (EuclideanSpace.equiv G.Player ℝ).symm z))
+    (hinclusion : G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P ⊆
+      G.finiteFeasiblePayoffs n.1 ∩ P) : False := by
+  obtain ⟨improved, himproved, hcloser⟩ := proposition_9_case_a_closer_feasible_payoff
+    G P n m profile z selected hface hPcompact hprofileP hfrontier hfar
+      hpositive hcontact hsupport hstrict hinclusion
+  have hminimum := Metric.infDist_le_dist_of_mem
+    (x := (EuclideanSpace.equiv G.Player ℝ).symm z)
+      (Set.mem_image_of_mem (EuclideanSpace.equiv G.Player ℝ).symm himproved)
+  have hle : distanceToSet z (G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P) ≤
+      dist ((EuclideanSpace.equiv G.Player ℝ).symm
+        (G.finitePayoff (m.1 + n.1) improved))
+          ((EuclideanSpace.equiv G.Player ℝ).symm z) := by
+    simpa only [distanceToSet, dist_comm] using hminimum
+  exact (not_lt_of_ge hle) hcloser
+
+/-- A nonempty actual face contains an actual pure payoff, hence an actual
+positive-horizon feasible payoff. This also provides K's nonemptiness. -/
+theorem IsFaceOf.finiteFeasiblePayoffs_inter_nonempty
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (horizon : G.Horizon)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs) (hP : P.Nonempty) :
+    (G.finiteFeasiblePayoffs horizon.1 ∩ P).Nonempty := by
+  rw [hface.eq_convexHull_pure_inter G P] at hP
+  obtain ⟨pure, hpure, hfacePure⟩ := convexHull_nonempty_iff.mp hP
+  exact ⟨pure, (lemma_1_D1_subset_Dn G horizon)
+    (lemma_1_pure_subset_D1 G hpure), hfacePure⟩
+
+/-- Dimension zero forces all points of the actual face to coincide.
+No nonempty-face or pure-payoff witness is supplied as an extra premise. -/
+theorem IsFaceOf.finiteFeasiblePayoffs_of_affineDimension_zero
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (horizon : G.Horizon)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs) (hdimension : affineDimension P = 0) :
+    P ⊆ G.finiteFeasiblePayoffs horizon.1 := by
+  intro x hx
+  obtain ⟨pure, hpureFeasible, hpureP⟩ :=
+    hface.finiteFeasiblePayoffs_inter_nonempty G P horizon ⟨x, hx⟩
+  have hspan : Submodule.span ℝ (directionSet P) = ⊥ :=
+    Submodule.finrank_eq_zero.mp hdimension
+  have hdirection : x - pure ∈ Submodule.span ℝ (directionSet P) :=
+    Submodule.subset_span ⟨x, hx, pure, hpureP, rfl⟩
+  rw [hspan, Submodule.mem_bot] at hdirection
+  exact (sub_eq_zero.mp hdirection).symm ▸ hpureFeasible
+
+/-- If a compact actual face is not feasible, select an actual positive-distance
+farthest point over that face. Compactness and K's nonemptiness are derived
+from the finite pure-payoff hull, not favorable-data fields. -/
+theorem IsFaceOf.exists_positive_farthestPoint
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (horizon : G.Horizon)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs)
+    (hnot : ¬ P ⊆ G.finiteFeasiblePayoffs horizon.1) :
+    ∃ z, IsFarthestPoint z P (G.finiteFeasiblePayoffs horizon.1 ∩ P) ∧
+      0 < distanceToSet z (G.finiteFeasiblePayoffs horizon.1 ∩ P) := by
+  classical
+  obtain ⟨outside, houtsideP, houtside⟩ := Set.not_subset.mp hnot
+  let e : Payoff G.Player ≃L[ℝ] EuclideanSpace ℝ G.Player :=
+    (EuclideanSpace.equiv G.Player ℝ).symm
+  let K := G.finiteFeasiblePayoffs horizon.1 ∩ P
+  have hPcompact := hface.isCompact G P
+  have hKnonempty : K.Nonempty :=
+    hface.finiteFeasiblePayoffs_inter_nonempty G P horizon ⟨outside, houtsideP⟩
+  have hKcompact : IsCompact K :=
+    (property_1_finite G horizon).2.2.inter_right hPcompact.isClosed
+  have houtsideImage : e outside ∉ e '' K := by
+    rintro ⟨point, hpoint, hequal⟩
+    exact houtside (e.injective hequal ▸ hpoint.1)
+  have hpositive : 0 < distanceToSet outside K :=
+    ((hKcompact.image e.continuous).isClosed.notMem_iff_infDist_pos
+      (hKnonempty.image e)).mp houtsideImage
+  have hcontinuous : Continuous (fun point => distanceToSet point K) :=
+    (Metric.continuous_infDist_pt (e '' K)).comp e.continuous
+  obtain ⟨z, hzP, hmax⟩ := hPcompact.exists_isMaxOn
+    ⟨outside, houtsideP⟩ hcontinuous.continuousOn
+  exact ⟨z, ⟨hzP, hKnonempty, hmax⟩, hpositive.trans_le (hmax houtsideP)⟩
+
+/-- Reuse canonical extremeness and convexity in the paper's segment terms. -/
+theorem IsFaceOf.of_convex_isExtreme {ι : Type} {P C : Set (Payoff ι)}
+    (hconvex : Convex ℝ P) (hextreme : IsExtreme ℝ C P) : IsFaceOf P C := by
+  refine ⟨hextreme.subset, hconvex, ?_⟩
+  intro x hx y hy t ht ht1 hpoint
+  have hsegment : t • x + (1 - t) • y ∈ openSegment ℝ x y :=
+    ⟨t, 1 - t, ht, sub_pos.mpr ht1, by ring, rfl⟩
+  exact ⟨hextreme.left_mem_of_mem_openSegment hx hy hpoint hsegment,
+    hextreme.right_mem_of_mem_openSegment hx hy hpoint hsegment⟩
+
+/-- Every relative-boundary point of the actual finite-payoff face belongs
+to an actual face of C of strictly smaller relative dimension. Compactness,
+the supporting functional, and the proper face are all derived internally. -/
+theorem IsFaceOf.exists_lower_dimension_face_of_mem_relativeFrontier
+    (G : FiniteStageGame) (P : Set (Payoff G.Player))
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs)
+    (x : Payoff G.Player) (hx : x ∈ relativeFrontier P) :
+    ∃ Q : Set (Payoff G.Player), x ∈ Q ∧ Q ⊆ P ∧
+      IsFaceOf Q G.correlatedFeasiblePayoffs ∧ affineDimension Q < affineDimension P := by
+  let e : Payoff G.Player ≃L[ℝ] EuclideanSpace ℝ G.Player :=
+    (EuclideanSpace.equiv G.Player ℝ).symm
+  have hxImage : e x ∈ intrinsicFrontier ℝ (e '' P) := by
+    change e x ∈ intrinsicFrontier ℝ (e.toLinearEquiv.toAffineEquiv '' P)
+    rw [e.toLinearEquiv.toAffineEquiv.intrinsicFrontier_image]
+    exact Set.mem_image_of_mem e hx
+  obtain ⟨exposed, hexposedX, hexposed, hexposedConvex, hdimension⟩ :=
+    Math.Topology.exists_proper_exposed_subset_of_mem_intrinsicFrontier
+      (e '' P) (hface.2.1.linear_image e.toLinearMap)
+        ((hface.isCompact G P).image e.continuous) (e x) hxImage
+  let Q := e ⁻¹' exposed
+  have hQP : Q ⊆ P := by
+    intro y hy
+    obtain ⟨point, hpoint, hequal⟩ := hexposed.subset hy
+    exact e.injective hequal ▸ hpoint
+  have hQextreme : IsExtreme ℝ P Q := by
+    have h := Math.Topology.isExtreme_affine_preimage
+      e.toLinearEquiv.toAffineEquiv.toAffineMap (e '' P) exposed hexposed.isExtreme
+    change IsExtreme ℝ (e ⁻¹' (e '' P)) (e ⁻¹' exposed) at h
+    simpa only [Set.preimage_image_eq _ e.injective] using h
+  have hQconvex : Convex ℝ Q :=
+    hexposedConvex.affine_preimage e.toLinearEquiv.toAffineEquiv.toAffineMap
+  have hdimensionImage (S : Set (Payoff G.Player)) :
+      Module.finrank ℝ (vectorSpan ℝ (e '' S)) = affineDimension S := by
+    rw [affineDimension_eq_finrank_vectorSpan]
+    have hspan : (vectorSpan ℝ S).map e.toLinearMap = vectorSpan ℝ (e '' S) :=
+      e.toLinearEquiv.toAffineEquiv.toAffineMap.map_vectorSpan
+    have hsame : Module.finrank ℝ (vectorSpan ℝ (e '' S)) =
+        Module.finrank ℝ ((vectorSpan ℝ S).map e.toLinearMap) :=
+      (LinearEquiv.ofEq (vectorSpan ℝ (e '' S))
+        ((vectorSpan ℝ S).map e.toLinearMap) hspan.symm).finrank_eq
+    exact hsame.trans (e.toLinearEquiv.finrank_map_eq _)
+  have hQimage : e '' Q = exposed := Set.image_preimage_eq exposed e.surjective
+  refine ⟨Q, hexposedX, hQP,
+    IsFaceOf.of_convex_isExtreme hQconvex (hface.isExtreme.trans hQextreme), ?_⟩
+  rw [← hdimensionImage Q, ← hdimensionImage P, hQimage]
+  exact hdimension
+
+/-- The source induction proves the same conclusion for every relative face
+dimension: the printed restriction `p < N` is not used by its argument.
+No compactness, frontier coverage, contacts, or profiles are extra fields. -/
+theorem proposition_9_all_face_dimensions
+    (G : FiniteStageGame) (P : Set (Payoff G.Player)) (n m : G.Horizon)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs)
+    (hsize : affineDimension P * m.1 < n.1)
+    (hinclusion : G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P ⊆
+      G.finiteFeasiblePayoffs n.1 ∩ P) :
+    P ⊆ G.finiteFeasiblePayoffs (m.1 + n.1) := by
+  classical
+  generalize hdimension : affineDimension P = p at hsize
+  induction p using Nat.strong_induction_on generalizing P with
+  | h p ih =>
+    by_cases hzero : p = 0
+    · exact hface.finiteFeasiblePayoffs_of_affineDimension_zero
+        G P ⟨m.1 + n.1, Nat.add_pos_left m.2 n.1⟩ (hdimension.trans hzero)
+    have hPcompact := hface.isCompact G P
+    let K := G.finiteFeasiblePayoffs (m.1 + n.1) ∩ P
+    have hfrontier : relativeFrontier P ⊆ K := by
+      intro x hx
+      obtain ⟨Q, hxQ, hQP, hQface, hQdimension⟩ :=
+        hface.exists_lower_dimension_face_of_mem_relativeFrontier G P x hx
+      have hQlt : affineDimension Q < p := by rwa [hdimension] at hQdimension
+      have hQsize : affineDimension Q * m.1 < n.1 :=
+        (Nat.mul_le_mul_right m.1 hQlt.le).trans_lt hsize
+      have hQinclusion : G.finiteFeasiblePayoffs (m.1 + n.1) ∩ Q ⊆
+          G.finiteFeasiblePayoffs n.1 ∩ Q := by
+        intro point hpoint
+        exact ⟨(hinclusion ⟨hpoint.1, hQP hpoint.2⟩).1, hpoint.2⟩
+      have hQfeasible : Q ⊆ G.finiteFeasiblePayoffs (m.1 + n.1) := by
+        apply ih (affineDimension Q) hQlt Q hQface hQinclusion
+        all_goals first | exact hQsize | rfl
+      exact ⟨hQfeasible hxQ, hQP hxQ⟩
+    by_contra hnot
+    obtain ⟨z, hfar, hpositive⟩ := hface.exists_positive_farthestPoint
+      G P ⟨m.1 + n.1, Nat.add_pos_left m.2 n.1⟩ hnot
+    let e : Payoff G.Player ≃L[ℝ] EuclideanSpace ℝ G.Player :=
+      (EuclideanSpace.equiv G.Player ℝ).symm
+    let d := distanceToSet z K
+    let branch : Prop := ∀ profile : G.BehaviorProfile,
+      G.finitePayoff (m.1 + n.1) profile ∈ euclideanPayoffClosedBall z d ∩ K →
+      ∀ base : G.repeatedGame.Hist m.1,
+        base ∈ (G.repeatedGame.histDist profile PUnit.unit m.1).support →
+      ∀ lower ∈ P,
+        inner ℝ (e (G.finitePayoff n.1
+          (G.repeatedGame.afterHistoryProfile profile base)))
+          (e (G.finitePayoff (m.1 + n.1) profile) - e z) ≤
+        inner ℝ (e lower) (e (G.finitePayoff (m.1 + n.1) profile) - e z)
+    by_cases hbranch : branch
+    · exact proposition_9_case_b_contradiction
+        G P p n m z hface hPcompact hdimension hsize hfrontier hfar hpositive hbranch
+    · simp only [branch, not_forall, not_le, exists_prop] at hbranch
+      obtain ⟨profile, hcontact, selected, hsupport, lower, hlower, hstrict⟩ := hbranch
+      have hcontactDist : dist (e (G.finitePayoff (m.1 + n.1) profile)) (e z) = d := by
+        apply le_antisymm
+        · exact hcontact.1
+        · have h := Metric.infDist_le_dist_of_mem (x := e z)
+            (Set.mem_image_of_mem e hcontact.2)
+          simpa only [d, distanceToSet, e, dist_comm] using h
+      exact proposition_9_case_a_contradiction G P n m profile z selected
+        hface hPcompact hcontact.2.2 hfrontier hfar hpositive hcontactDist hsupport
+          ⟨lower, hlower, hstrict⟩ hinclusion
+
+/-! Proposition 8 applies the face induction to the entire feasible polytope.
+Its affine dimension is internally bounded by the number of players. -/
+theorem proposition_8 (G : FiniteStageGame)
+    (n m : G.Horizon)
+    (hsize : Fintype.card G.Player * m.1 < n.1)
+    (hinclusion : G.finiteFeasiblePayoffs (n.1 + m.1) ⊆
+      G.finiteFeasiblePayoffs n.1) :
+    G.finiteFeasiblePayoffs (n.1 + m.1) =
+      G.correlatedFeasiblePayoffs := by
+  have hdimension : affineDimension G.correlatedFeasiblePayoffs ≤
+      Fintype.card G.Player := by
+    unfold affineDimension
+    calc
+      Module.finrank ℝ (Submodule.span ℝ
+        (directionSet G.correlatedFeasiblePayoffs)) ≤
+          Module.finrank ℝ (Payoff G.Player) := Submodule.finrank_le _
+      _ = Fintype.card G.Player := Module.finrank_fintype_fun_eq_card ℝ
+  have hface : IsFaceOf G.correlatedFeasiblePayoffs G.correlatedFeasiblePayoffs := by
+    refine ⟨Set.Subset.rfl, G.correlatedFeasiblePayoffs_convex, ?_⟩
+    intro x hx y hy t _ht _ht1 _hpoint
+    exact ⟨hx, hy⟩
+  have hfaceSize : affineDimension G.correlatedFeasiblePayoffs * m.1 < n.1 :=
+    (Nat.mul_le_mul_right m.1 hdimension).trans_lt hsize
+  have hfaceInclusion : G.finiteFeasiblePayoffs (m.1 + n.1) ∩
+      G.correlatedFeasiblePayoffs ⊆ G.finiteFeasiblePayoffs n.1 ∩
+        G.correlatedFeasiblePayoffs := by
+    intro payoff hpayoff
+    exact ⟨hinclusion (by simpa only [Nat.add_comm] using hpayoff.1), hpayoff.2⟩
+  apply Set.Subset.antisymm
+  · exact lemma_1_Dn_subset_C G ⟨n.1 + m.1, Nat.add_pos_left n.2 m.1⟩
+  · have h := proposition_9_all_face_dimensions G G.correlatedFeasiblePayoffs n m
+      hface hfaceSize hfaceInclusion
+    simpa only [Nat.add_comm] using h
+
+/-- Proposition 9 is the face-dimension induction. The stronger helper does not use
+the printed dimension restriction `_hp`; the wrapper retains its hypothesis. -/
+theorem proposition_9 (G : FiniteStageGame)
+    (P : Set (Payoff G.Player)) (p : ℕ) (n m : G.Horizon)
+    (hface : IsFaceOf P G.correlatedFeasiblePayoffs)
+    (hdim : affineDimension P = p)
+    (_hp : p < Fintype.card G.Player) (hsize : p * m.1 < n.1)
+    (hinclusion : G.finiteFeasiblePayoffs (n.1 + m.1) ∩ P ⊆
+      G.finiteFeasiblePayoffs n.1 ∩ P) :
+    P ⊆ G.finiteFeasiblePayoffs (n.1 + m.1) := by
+  have h := proposition_9_all_face_dimensions G P n m hface
+    (by simpa only [hdim] using hsize)
+    (by simpa only [Nat.add_comm] using hinclusion)
+  simpa only [Nat.add_comm] using h
+
+/-! **Lemma 10, pages 153--154.** The boundary of the face is relative to
+its affine span. Both the distance maximization and the contact ball use the
+Euclidean metric of the published closest-point and squared-distance proof.
+The ordinary payoff-coordinate sup metric is unchanged everywhere else. -/
+theorem lemma_10 {ι : Type} [Fintype ι]
+    (P K : Set (Payoff ι)) (z : Payoff ι)
+    (hP : Convex ℝ P) (_hPcompact : IsCompact P)
+    (hK : IsCompact K) (hKP : K ⊆ P)
+    (hfrontier : relativeFrontier P ⊆ K)
+    (hz : IsFarthestPoint z P K) :
+    z ∈ convexHull ℝ
+      (euclideanPayoffClosedBall z (distanceToSet z K) ∩ K) := by
+  exact sorin_contactHull_of_farthestPoint P K z hP _hPcompact hK hKP hfrontier hz
 
 /-! Proposition 11 is the paper's two-player winding-number argument.  The
 current library has no theorem that the separately affine image of two compact
@@ -11479,10 +12930,116 @@ theorem prisonerCriticalSet_outer_endpoints :
     funext who
     cases who <;> norm_num [pair]
 
+/-- The actual supported continuation payoff of a discounted Nash profile is
+an equilibrium payoff at the same rate. Positive depth requires `lambda<1`;
+the current-stage endpoint `lambda=1` is retained only at depth zero. -/
+theorem FiniteStageGame.discountedPayoff_afterHistory_mem_equilibrium
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (hnash : G.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile)
+    {depth : ℕ} (base : G.repeatedGame.Hist depth)
+    (hsupport : base ∈ (G.repeatedGame.histDist profile PUnit.unit depth).support)
+    (hdiscount : depth = 0 ∨ rate.1 < 1) :
+    G.discountedPayoff rate.1 (G.repeatedGame.afterHistoryProfile profile base) ∈
+      G.discountedEquilibriumPayoffs rate.1 := by
+  have hβ0 : 0 ≤ 1 - rate.1 := sub_nonneg.mpr rate.2.2
+  have hβ1 : 1 - rate.1 < 1 := by linarith [rate.2.1]
+  have hpositive : depth = 0 ∨ 0 < 1 - rate.1 := by
+    rcases hdiscount with hzero | hrate
+    · exact Or.inl hzero
+    · exact Or.inr (sub_pos.mpr hrate)
+  have hchild := G.kernel.realizedAction_afterHistoryProfile_isDiscountedNash_of_mem_support
+    profile hβ0 hβ1 hpositive hnash base hsupport
+  have hstate : base.2 = PUnit.unit := Subsingleton.elim _ _
+  rw [hstate] at hchild
+  exact ⟨G.repeatedGame.afterHistoryProfile profile base, hchild, rfl⟩
+
+/-- For every actual behavioral opponent profile and every paper discount
+rate, an actual full behavioral best response exists. The compact unilateral
+strategy carrier and both Kuhn transports are constructed internally. -/
+theorem FiniteStageGame.exists_discountedBestResponse
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (who : G.Player) :
+    ∃ deviation : G.BehaviorStrategy who, ∀ alternative : G.BehaviorStrategy who,
+      G.discountedPayoff rate.1 (Function.update profile who alternative) who ≤
+        G.discountedPayoff rate.1 (Function.update profile who deviation) who := by
+  let value : C(DiscountedPresentation.Strategy G who, ℝ) :=
+    ⟨fun candidate => DiscountedPresentation.compactPayoff G rate
+        (Function.update (DiscountedPresentation.fromBehavior profile) who candidate) who,
+      (DiscountedPresentation.compactPayoff_continuous G rate who).comp
+        ((continuous_const : Continuous fun _ : DiscountedPresentation.Strategy G who =>
+          DiscountedPresentation.fromBehavior profile).update who continuous_id)⟩
+  let encode : G.BehaviorStrategy who → DiscountedPresentation.Strategy G who :=
+    fun deviation =>
+      ⟨((DiscountedPresentation.Native G).toBehavioralPolicy PUnit.unit
+          (StochasticGame.NativeBridge.toNativePublicPolicy G.repeatedGame
+            PUnit.unit deviation)).toPureMeasure,
+        GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
+          (M := DiscountedPresentation.Protocol G) _⟩
+  let decode : DiscountedPresentation.Strategy G who → G.BehaviorStrategy who :=
+    fun candidate => StochasticGame.NativeBridge.ofNativePublicPolicy G.repeatedGame
+      ((DiscountedPresentation.Native G).ofBehavioralPolicy PUnit.unit
+        (GameTheory.Protocol.InformationModel.PolicyMeasure.toBehavioralWith
+          (M := DiscountedPresentation.Protocol G)
+          (candidate : MeasureTheory.Measure (DiscountedPresentation.Plan G who))
+          ((DiscountedPresentation.Native G).purePolicyEquiv PUnit.unit who |>.symm
+            (DiscountedPresentation.publicFallback G who))))
+  have hencode (deviation : G.BehaviorStrategy who) : value (encode deviation) =
+      G.repeatedGame.discountedPayoff (1 - rate.1)
+        (Function.update profile who deviation) PUnit.unit who := by
+    have hprofile : DiscountedPresentation.fromBehavior
+        (Function.update profile who deviation) =
+        Function.update (DiscountedPresentation.fromBehavior profile) who (encode deviation) := by
+      simpa only [encode] using!
+        DiscountedPresentation.fromBehavior_update profile who deviation
+    have hpayoff := congrFun (DiscountedPresentation.payoff_fromBehavior rate
+      (Function.update profile who deviation)) who
+    rw [hprofile] at hpayoff
+    exact hpayoff
+  have hdecode (candidate : DiscountedPresentation.Strategy G who) :
+      G.repeatedGame.discountedPayoff (1 - rate.1)
+        (Function.update profile who (decode candidate)) PUnit.unit who = value candidate := by
+    simpa only [decode, value] using!
+      (DiscountedPresentation.compactPayoff_fromBehavior_update_arbitrary
+        rate profile who candidate).symm
+  exact G.repeatedGame.exists_discountedBestResponse_of_compact_transfer
+    (1 - rate.1) PUnit.unit profile who value encode decode hencode hdecode
+
+/-- One internally selected actual discounted behavioral best response. -/
+noncomputable def FiniteStageGame.discountedBestResponse
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (who : G.Player) : G.BehaviorStrategy who :=
+  Classical.choose (G.exists_discountedBestResponse rate profile who)
+
+/-- The selected actual best response caps every full behavioral alternative
+against the same actual behavioral opponents. -/
+theorem FiniteStageGame.discountedBestResponse_spec
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (who : G.Player) (alternative : G.BehaviorStrategy who) :
+    G.discountedPayoff rate.1 (Function.update profile who alternative) who ≤
+      G.discountedPayoff rate.1
+        (Function.update profile who (G.discountedBestResponse rate profile who)) who :=
+  Classical.choose_spec (G.exists_discountedBestResponse rate profile who) alternative
+
+/-- At an actual discounted Nash profile, the selected best-response value
+equals the actual prescribed payoff. -/
+theorem FiniteStageGame.discountedBestResponse_payoff_eq_of_nash
+    (G : FiniteStageGame) (rate : G.DiscountRate) (profile : G.BehaviorProfile)
+    (hnash : G.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile)
+    (who : G.Player) :
+    G.discountedPayoff rate.1
+        (Function.update profile who (G.discountedBestResponse rate profile who)) who =
+      G.discountedPayoff rate.1 profile who := by
+  apply le_antisymm
+  · have hbound := hnash who (G.discountedBestResponse rate profile who)
+    simpa only [add_zero, FiniteStageGame.discountedPayoff,
+      FiniteStageGame.repeatedInitial] using! hbound
+  · have hmax := G.discountedBestResponse_spec rate profile who (profile who)
+    simpa only [Function.update_eq_self] using hmax
+
 /-! Proposition 15 contains both an explicit equilibrium construction for all
 of `A` and the multiplicative escape argument proving the reverse inclusion.
-The history-dependent strategy construction and best-response continuation
-selection are not yet formalized. -/
+The history-dependent equilibrium construction and the assembled first-stage
+best-response continuation matrix are not yet formalized. -/
 theorem proposition_15 :
     prisonersDilemma.discountedEquilibriumPayoffs (3 / 4) =
       prisonerCriticalSet := by

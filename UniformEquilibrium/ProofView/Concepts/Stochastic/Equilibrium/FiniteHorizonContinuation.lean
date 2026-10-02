@@ -1,3 +1,4 @@
+import MathUE.ProbabilityMassFunction.Simplex
 import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer
 import UniformEquilibrium.Certificates.Public.FixedPrefixAccounting
 import UniformEquilibrium.Certificates.Public.TerminalChildLawTransfer
@@ -29,7 +30,7 @@ private noncomputable instance realizedActionHistDecidableEq
 
 /-- Follow `profile` until `base`; on that public branch, replace one player's
 continuation by `deviation`. -/
-private noncomputable def realizedActionDeviationAfterHistory
+noncomputable def realizedActionDeviationAfterHistory
     (G : KernelGame ι)
     (profile : G.realizedActionStochasticGame.BehaviorProfile)
     (who : ι) {prefixLength : ℕ}
@@ -59,7 +60,9 @@ private theorem realizedActionHist_startsAt
   | succ suffixLength =>
       simp only [StochasticGame.Hist.StartsAt]
 
-private theorem realizedAction_afterHistoryProfile_update_deviation
+/-- Installing one actual unilateral continuation changes exactly its selected
+public child and leaves every other actual child unchanged. -/
+theorem realizedAction_afterHistoryProfile_update_deviation
     (G : KernelGame ι) [DecidableEq ι]
     (profile : G.realizedActionStochasticGame.BehaviorProfile)
     (who : ι) {prefixLength : ℕ}
@@ -97,7 +100,8 @@ private theorem realizedAction_afterHistoryProfile_update_deviation
     · simp [hbase]
   · split_ifs <;> simp [Function.update_of_ne hplayer]
 
-private theorem realizedAction_update_deviation_agreeBefore
+/-- A unilateral continuation replacement preserves the entire actual prefix. -/
+theorem realizedAction_update_deviation_agreeBefore
     (G : KernelGame ι) [DecidableEq ι]
     (profile : G.realizedActionStochasticGame.BehaviorProfile)
     (who : ι) {prefixLength : ℕ}
@@ -115,7 +119,9 @@ private theorem realizedAction_update_deviation_agreeBefore
     simp [Nat.not_le_of_lt htime]
   · simp [Function.update_of_ne hplayer]
 
-private theorem realizedAction_expectedStagePayoff_eq_of_agreeBefore
+/-- Profiles with the same actual prefix have the same expected stage payoff
+at each strictly earlier time. -/
+theorem realizedAction_expectedStagePayoff_eq_of_agreeBefore
     (G : KernelGame ι) [Fintype ι]
     [∀ player, Fintype (G.Strategy player)]
     {left right : G.realizedActionStochasticGame.BehaviorProfile}
@@ -190,6 +196,175 @@ private theorem realizedAction_cast_mul_finiteAveragePayoff_eq_sum
   · subst horizon
     simp
   · rw [← mul_assoc, mul_inv_cancel₀ (by exact_mod_cast hzero), one_mul]
+
+/-- Exact deterministic-prefix decomposition of an actual finite repeated
+payoff, with its full induced prefix law and conditional child profiles. -/
+theorem realizedAction_finiteAveragePayoff_weighted_decomposition
+    (G : KernelGame ι) [Fintype ι]
+    [∀ player, Fintype (G.Strategy player)]
+    (profile : G.realizedActionStochasticGame.BehaviorProfile)
+    (prefixLength suffixLength : ℕ) (who : ι) :
+    ((prefixLength + suffixLength : ℕ) : ℝ) *
+        G.realizedActionStochasticGame.finiteAveragePayoff PUnit.unit
+          (prefixLength + suffixLength) profile who =
+      (prefixLength : ℝ) *
+          G.realizedActionStochasticGame.finiteAveragePayoff
+            PUnit.unit prefixLength profile who +
+        (suffixLength : ℝ) *
+          expect (G.realizedActionStochasticGame.histDist
+            profile PUnit.unit prefixLength) (fun base =>
+              G.realizedActionStochasticGame.finiteAveragePayoff
+                PUnit.unit suffixLength
+                (G.realizedActionStochasticGame.afterHistoryProfile profile base) who) := by
+  let : Finite G.realizedActionStochasticGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let (player : ι) : Finite (G.realizedActionStochasticGame.Act player) :=
+    @Finite.of_fintype _ (inferInstanceAs (Fintype (G.Strategy player)))
+  rw [realizedAction_cast_mul_finiteAveragePayoff_eq_sum,
+    realizedAction_cast_mul_finiteAveragePayoff_eq_sum, Finset.sum_range_add]
+  congr 1
+  simp_rw [realizedAction_expectedStagePayoff_add_eq_expect_afterHistory]
+  rw [Math.Probability.sum_expect_range_comm, ← expect_const_mul]
+  apply congrArg
+  funext base
+  cases base.2
+  exact (realizedAction_cast_mul_finiteAveragePayoff_eq_sum
+    G suffixLength
+    (G.realizedActionStochasticGame.afterHistoryProfile profile base) who).symm
+
+/-- An actual fixed-depth dispatcher retains the prefix payoff and averages
+the supplied full child profiles over the unchanged induced prefix law. -/
+theorem realizedAction_terminalChildDispatcher_weightedPayoff
+    (G : KernelGame ι) [Fintype ι]
+    [∀ player, Fintype (G.Strategy player)]
+    (prefixLength suffixLength : ℕ)
+    (profile : G.realizedActionStochasticGame.BehaviorProfile)
+    (child : G.realizedActionStochasticGame.Hist prefixLength →
+      G.realizedActionStochasticGame.BehaviorProfile) (who : ι) :
+    ((prefixLength + suffixLength : ℕ) : ℝ) *
+        G.realizedActionStochasticGame.finiteAveragePayoff PUnit.unit
+          (prefixLength + suffixLength)
+          (G.realizedActionStochasticGame.terminalChildDispatcher
+            prefixLength profile child) who =
+      (prefixLength : ℝ) *
+          G.realizedActionStochasticGame.finiteAveragePayoff
+            PUnit.unit prefixLength profile who +
+        (suffixLength : ℝ) *
+          expect (G.realizedActionStochasticGame.histDist
+            profile PUnit.unit prefixLength) (fun base =>
+              G.realizedActionStochasticGame.finiteAveragePayoff
+                PUnit.unit suffixLength (child base) who) := by
+  let : Finite G.realizedActionStochasticGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let (player : ι) : Finite (G.realizedActionStochasticGame.Act player) :=
+    @Finite.of_fintype _ (inferInstanceAs (Fintype (G.Strategy player)))
+  let dispatched := G.realizedActionStochasticGame.terminalChildDispatcher
+    prefixLength profile child
+  have hagree : G.realizedActionStochasticGame.ProfilesAgreeBefore
+      dispatched profile prefixLength := by
+    intro player time history htime
+    exact G.realizedActionStochasticGame.terminalChildDispatcher_before
+      profile child htime player history
+  have hprefix : G.realizedActionStochasticGame.finiteAveragePayoff
+      PUnit.unit prefixLength dispatched who =
+        G.realizedActionStochasticGame.finiteAveragePayoff
+          PUnit.unit prefixLength profile who := by
+    rw [G.realizedActionStochasticGame.finiteAveragePayoff_eq_sum_expectedStagePayoff,
+      G.realizedActionStochasticGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro time htime
+    exact realizedAction_expectedStagePayoff_eq_of_agreeBefore
+      G hagree (Finset.mem_range.mp htime) who
+  have hchild (base : G.realizedActionStochasticGame.Hist prefixLength) :
+      G.realizedActionStochasticGame.finiteAveragePayoff
+          PUnit.unit suffixLength
+          (G.realizedActionStochasticGame.afterHistoryProfile dispatched base) who =
+        G.realizedActionStochasticGame.finiteAveragePayoff
+          PUnit.unit suffixLength (child base) who := by
+    rw [G.realizedActionStochasticGame.finiteAveragePayoff_eq_sum_expectedStagePayoff,
+      G.realizedActionStochasticGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+    congr 1
+    apply Finset.sum_congr rfl
+    intro time _
+    dsimp only [dispatched]
+    rw [G.realizedActionStochasticGame.afterHistoryProfile_terminalChildDispatcher_canonical]
+    have hstate : base.2 = PUnit.unit := Subsingleton.elim _ _
+    rw [← hstate]
+    exact G.realizedActionStochasticGame.expectedStagePayoff_canonicalTerminalChildProfile
+      prefixLength profile child base time who
+  have h := G.realizedAction_finiteAveragePayoff_weighted_decomposition
+    dispatched prefixLength suffixLength who
+  rw [hprefix, G.realizedActionStochasticGame.histDist_eq_of_profilesAgreeBefore
+    hagree prefixLength le_rfl] at h
+  simp_rw [hchild] at h
+  exact h
+
+/-- An actual finite-depth dispatcher preserves a convex payoff set when
+its actual prefix payoff and supported full child payoffs belong to that set. -/
+theorem realizedAction_terminalChildDispatcher_payoff_mem_convex
+    (G : KernelGame ι) [Fintype ι]
+    [∀ player, Fintype (G.Strategy player)]
+    (prefixLength suffixLength : ℕ) (hpositive : 0 < prefixLength + suffixLength)
+    (profile : G.realizedActionStochasticGame.BehaviorProfile)
+    (child : G.realizedActionStochasticGame.Hist prefixLength →
+      G.realizedActionStochasticGame.BehaviorProfile)
+    (target : Set (ι → ℝ)) (hconvex : Convex ℝ target)
+    (hprefix : (fun who => G.realizedActionStochasticGame.finiteAveragePayoff
+      PUnit.unit prefixLength profile who) ∈ target)
+    (hchild : ∀ base,
+      base ∈ (G.realizedActionStochasticGame.histDist
+        profile PUnit.unit prefixLength).support →
+      (fun who => G.realizedActionStochasticGame.finiteAveragePayoff
+        PUnit.unit suffixLength (child base) who) ∈ target) :
+    (fun who => G.realizedActionStochasticGame.finiteAveragePayoff PUnit.unit
+      (prefixLength + suffixLength)
+      (G.realizedActionStochasticGame.terminalChildDispatcher
+        prefixLength profile child) who) ∈ target := by
+  let : Finite G.realizedActionStochasticGame.State :=
+    inferInstanceAs (Finite PUnit)
+  let (player : ι) : Finite (G.realizedActionStochasticGame.Act player) :=
+    @Finite.of_fintype _ (inferInstanceAs (Fintype (G.Strategy player)))
+  let : Fintype (G.realizedActionStochasticGame.Hist prefixLength) := Fintype.ofFinite _
+  let law := G.realizedActionStochasticGame.histDist profile PUnit.unit prefixLength
+  let prefixPayoff := fun who => G.realizedActionStochasticGame.finiteAveragePayoff
+    PUnit.unit prefixLength profile who
+  let tail := fun who => expect law (fun base =>
+    G.realizedActionStochasticGame.finiteAveragePayoff
+      PUnit.unit suffixLength (child base) who)
+  let joined := fun who => G.realizedActionStochasticGame.finiteAveragePayoff PUnit.unit
+    (prefixLength + suffixLength)
+    (G.realizedActionStochasticGame.terminalChildDispatcher prefixLength profile child) who
+  let total : ℝ := (prefixLength + suffixLength : ℕ)
+  have htotal : 0 < total := by
+    dsimp only [total]
+    exact_mod_cast hpositive
+  have htail : tail ∈ target :=
+    Math.ProbabilityMassFunction.coordinateExpectation_mem_convex_of_mem_support
+      law _ target hconvex hchild
+  have hweighted : total • joined =
+      (prefixLength : ℝ) • prefixPayoff + (suffixLength : ℝ) • tail := by
+    funext who
+    exact G.realizedAction_terminalChildDispatcher_weightedPayoff
+      prefixLength suffixLength profile child who
+  have hjoined : joined = (prefixLength / total) • prefixPayoff +
+      (suffixLength / total) • tail := by
+    calc
+      joined = total⁻¹ • (total • joined) := by
+        rw [smul_smul, inv_mul_cancel₀ (ne_of_gt htotal), one_smul]
+      _ = total⁻¹ • ((prefixLength : ℝ) • prefixPayoff + (suffixLength : ℝ) • tail) :=
+        congrArg (total⁻¹ • ·) hweighted
+      _ = _ := by simp only [smul_add, smul_smul, div_eq_mul_inv, mul_comm]
+  have hweights : (prefixLength : ℝ) / total + (suffixLength : ℝ) / total = 1 := by
+    rw [← add_div]
+    have hsum : (prefixLength : ℝ) + suffixLength = total := by
+      simp only [total, Nat.cast_add]
+    rw [hsum, div_self (ne_of_gt htotal)]
+  change joined ∈ target
+  rw [hjoined]
+  exact hconvex hprefix htail
+    (div_nonneg (Nat.cast_nonneg prefixLength) htotal.le)
+    (div_nonneg (Nat.cast_nonneg suffixLength) htotal.le) hweights
 
 /-- A finite-horizon Nash continuation is inherited at every public history
 reached with positive probability. -/

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
+import MathUE.LinearProgramming.ProjectiveNormalization
 
 /-!
 # Standard, projective, and completely projective Q-matrices
@@ -97,16 +98,8 @@ end StandardReindex
 
 /-- A solution of the normalized simplex/projective LCP
 `w = z₀ q + Mz`, with `z₀ + ∑ zᵢ = 1`. -/
-structure ProjectiveLCPSolution (M : ι → ι → ℝ) (q : ι → ℝ) where
-  cemetery : ℝ
-  singleton : ι → ℝ
-  cemetery_nonneg : 0 ≤ cemetery
-  singleton_nonneg : ∀ i, 0 ≤ singleton i
-  total : cemetery + ∑ i, singleton i = 1
-  residual_nonneg : ∀ i,
-    0 ≤ cemetery * q i + ∑ j, singleton j * M i j
-  complementary : ∀ i,
-    singleton i * (cemetery * q i + ∑ j, singleton j * M i j) = 0
+abbrev ProjectiveLCPSolution (M : ι → ι → ℝ) (q : ι → ℝ) :=
+  Math.LinearProgramming.ProjectiveLCPSolution M q
 
 /-- The existing anchored projective packet is a solution of the explicit
 projective LCP for its affine anchor direction and the normalized singleton
@@ -205,71 +198,14 @@ def HasNontrivialZeroProjectiveLCPSolution
   ∃ solution : ProjectiveLCPSolution M (0 : ι → ℝ),
     solution.cemetery < 1
 
-omit [DecidableEq ι] in
-private theorem sum_weight_nonneg
-    (weight : ι → ℝ) (hweight : ∀ i, 0 ≤ weight i) :
-    0 ≤ ∑ i, weight i :=
-  Finset.sum_nonneg fun i _ => hweight i
-
 /-- Normalize a standard LCP solution into a projective one with positive
 cemetery coefficient. -/
 def StandardLCPSolution.toProjective
     {M : ι → ι → ℝ} {q : ι → ℝ}
-    (solution : StandardLCPSolution M q) : ProjectiveLCPSolution M q := by
-  classical
-  let mass : ℝ := 1 + ∑ i, solution.weight i
-  have hsum : 0 ≤ ∑ i, solution.weight i :=
-    sum_weight_nonneg solution.weight solution.weight_nonneg
-  have hmass : 0 < mass := by
-    dsimp [mass]
-    linarith
-  have hmass0 : mass ≠ 0 := ne_of_gt hmass
-  refine
-    { cemetery := mass⁻¹
-      singleton := fun i => solution.weight i * mass⁻¹
-      cemetery_nonneg := inv_nonneg.mpr hmass.le
-      singleton_nonneg := fun i =>
-        mul_nonneg (solution.weight_nonneg i) (inv_nonneg.mpr hmass.le)
-      total := ?_
-      residual_nonneg := ?_
-      complementary := ?_ }
-  · rw [← Finset.sum_mul]
-    calc
-      mass⁻¹ + (∑ i, solution.weight i) * mass⁻¹ =
-          (1 + ∑ i, solution.weight i) * mass⁻¹ := by ring
-      _ = mass * mass⁻¹ := by rfl
-      _ = 1 := mul_inv_cancel₀ hmass0
-  · intro i
-    have heq :
-        mass⁻¹ * q i +
-            ∑ j, (solution.weight j * mass⁻¹) * M i j =
-          mass⁻¹ * (q i + ∑ j, solution.weight j * M i j) := by
-      rw [mul_add, Finset.mul_sum]
-      apply congrArg (fun x => mass⁻¹ * q i + x)
-      apply Finset.sum_congr rfl
-      intro j hj
-      ring
-    rw [heq]
-    exact mul_nonneg (inv_nonneg.mpr hmass.le)
-      (solution.residual_nonneg i)
-  · intro i
-    have heq :
-        mass⁻¹ * q i +
-            ∑ j, (solution.weight j * mass⁻¹) * M i j =
-          mass⁻¹ * (q i + ∑ j, solution.weight j * M i j) := by
-      rw [mul_add, Finset.mul_sum]
-      apply congrArg (fun x => mass⁻¹ * q i + x)
-      apply Finset.sum_congr rfl
-      intro j hj
-      ring
-    rw [heq]
-    calc
-      (solution.weight i * mass⁻¹) *
-          (mass⁻¹ * (q i + ∑ j, solution.weight j * M i j)) =
-          mass⁻¹ ^ 2 *
-            (solution.weight i *
-              (q i + ∑ j, solution.weight j * M i j)) := by ring
-      _ = 0 := by rw [solution.complementary i, mul_zero]
+    (solution : StandardLCPSolution M q) : ProjectiveLCPSolution M q :=
+  Math.LinearProgramming.projectivizeStandardLCPSolution
+    (z := solution.weight)
+    ⟨solution.weight_nonneg, solution.residual_nonneg, solution.complementary⟩
 
 omit [DecidableEq ι] in
 /-- A homogeneous simplex solution solves every projective LCP with cemetery
@@ -459,7 +395,7 @@ theorem isProjectiveQMatrix_iff_standard_or_homogeneous
     · left
       intro q
       obtain ⟨solution⟩ := hprojective q
-      rcases solution.standard_or_homogeneous with hstandard | hhom
+      rcases ProjectiveLCPSolution.standard_or_homogeneous solution with hstandard | hhom
       · exact hstandard
       · exact absurd hhom hhomogeneous
   · rintro (hstandard | hhomogeneous) q

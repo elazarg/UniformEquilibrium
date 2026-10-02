@@ -809,7 +809,7 @@ pair and absolute date bound from the literal raw-calendar source.
 selects an actual real word internally from any of the three accepted raw tests
 and realizes that same word's laws and full pair with strict debt below error.
 Its fixed-target corollary does not compute the target. These modules pass
-silent named checks; their full integration gate remains pending.
+silent named checks and the full integration gate.
 `exists_finiteCalendarRawStrict_sameProfile_quantitativeUniform`
 (`UniformEquilibrium/Quitting/Paths/FiniteCalendarStrictDeficitSuffixHorizon.lean`)
 internally supplies the common positive raw margin and retains both original
@@ -2025,10 +2025,21 @@ principals.
 gives the payoff `(1,0,0,1)` for a signed four-player table with three fair
 Quit-at-zero/Never clocks and one sure-quitting anchor. The actual profile
 is exact terminal Nash against all behavioral deviations. The module also
-identifies the unique completely mixed active root probabilities and
+identifies the unique active root probabilities over the closed cube and
 reconstructs each three-player deletion with the surviving stopping laws
-unchanged. It does not yet prove a parent/child exploitability gap or its
-persistence under perturbing the reward table.
+unchanged. `exists_center_parent_child_exploitability_floor`
+(`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterPairedFloor.lean`)
+gives a positive lower bound on parent-plus-child exploitability for every
+parent profile and every deletion. The neighborhood theorem
+`exists_solved_open_neighborhood_sameProfile_horizon_equilibrium_floor`
+(`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterNearbyHorizons.lean`)
+retains this obstruction while producing, for each nearby reward table, one
+profile that is exact Nash at every finite horizon and delivers one fixed
+target over sufficiently long horizons. This obstructs unchanged-law child
+extension, not uniform-equilibrium existence. Complete-claim review, the full
+silent default build and exhaustive production axiom audit pass. The source
+packet is retired unchanged to
+`math/formalized/ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md`.
 
 `positive_minimum_preemptedOwner_quadraticMargins`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)
@@ -2299,6 +2310,38 @@ internally produces a rejecting edge at every nonnegative tolerance, retaining
 the same table, potential, exact Nash root and literal successor. Positive
 absorption is a conclusion, not additional source data. These declarations
 pass the full integration gate; they do not supply a potential producer.
+
+`IsQuittingFullExactRootPotential.radialReversal`
+(`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialReflection.lean`)
+selects a lower-boundary minimizer for every global minimum on box three,
+including upper-face minima. The same point gives radial derivative at most
+minus half the minimum singleton gap, a boxed reflected point, and the entire
+boxed segment with parameter in `[0,2]`. Rewards are bounded by one and own
+singletons are nonnegative.
+`not_isQuittingFullExactRootPotential_totalDegree_le_two`
+(`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialQuadraticExclusion.lean`)
+excludes every real polynomial of total degree at most two after coefficient
+cancellation, without convexity or a Hessian-sign condition.
+`not_isQuittingFullExactRootPotential_coordinateAffine`
+(`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMultiAffineExclusion.lean`)
+excludes coordinate-affine potentials with the stated continuity and derivative
+regularity; its polynomial consumers allow every square-free interaction order.
+Neither exclusion assumes that the global minimum is interior.
+
+`IsQuittingFullExactRootPotential.directionalThirdDerivative`
+(`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialThirdDerivative.lean`)
+uses C³ regularity on an open neighborhood of the box. One boundary minimizer,
+direction and segment point jointly witness radial reversal and an actual
+directional third derivative at least three times the singleton gap. This is
+not a fixed mixed-partial bound or a uniform gap over all potentials.
+`quittingGame_noUniformPayoff_iff_noSureRoot_and_restricted_rationalPotential`
+(`UniformEquilibrium/Quitting/Projective/RestrictedPolynomialForwardCharacterization.lean`)
+strengthens the existing characterization for bounded nonnegative-singleton
+Fin4 tables with a positive own singleton. It internally produces the same
+rational tolerance and polynomial with degree at least three, failure of
+multi-affinity, and the joint minimum conditions at every global minimum.
+The named checks, separate standard-axiom checks and full integration gate pass.
+No concrete polynomial or general Fin4 equilibrium is produced.
 
 The literal conversions in
 `UniformEquilibrium/Quitting/Projective/RobustChargedRelationPacketAdapter.lean`
@@ -2815,7 +2858,7 @@ compression and preservation of both masses exactly are not asserted.
 | Acyclic augmented solo preemption | `UniformEquilibrium/Quitting/Classification/Existence/AcyclicSoloPreemption.lean`, `UniformEquilibrium/Quitting/Classification/Existence/AcyclicSoloPreemptionRegression.lean` | `exactTerminalNash_or_soloEscape_of_acyclic_augmentedSoloPreemption` dispatches every acyclic augmented graph to exact all-Continue play or an explicit solo-owner family with maximum all-behavior terminal exploitability at most `q * quittingSoloPairPremium`, fixed singleton payoff, and zero pair-coalition mass. `exists_uniformEquilibriumPayoff_of_acyclic_augmentedSoloPreemption` gives the uniform-payoff consequence. The graph uses only singleton rows, own-singleton signs, and pair rows for the quantitative premium; rewards of coalitions with at least three quitters are unrestricted. Directed augmented cyclicity is necessary, not sufficient, for the independent-clock gadget route. |
 | Participant-only stationary equilibrium and passive perturbation | `UniformEquilibrium/Quitting/Classification/Existence/ParticipantOnlyStationary.lean`, `UniformEquilibrium/Quitting/Classification/Existence/ParticipantOnlyPerturbation.lean` | `exists_stationary_uniformEquilibriumPayoff_of_participantOnly` constructs an exact stationary terminal Nash profile and uniform-equilibrium payoff for every finite quitting table whose absent-player reward coordinates vanish. `exists_stationary_isTwoPassiveMagnitudeAsymptoticNash` projects an arbitrary table to that class and gives terminal exploitability at most twice `quittingPassiveMagnitude`; `half_terminalExploitabilityGap_le_quittingPassiveMagnitude` forces passive magnitude at least half any universal terminal gap. These are arbitrary-table checked adapters and unrestricted-behavior consumers, but the projected profile need not be exact for the original table. |
 | Six-player one-pair ledger, actual-profile clock, and target lock | `MathUE/Probability/CoalitionTargetMassLedger.lean`, `UniformEquilibrium/Quitting/Paths/SixPlayerOnePairMassTargetLock.lean`, `UniformEquilibrium/Diagnostics/Quitting/SixPlayerArbitraryProfileClockAdapter.lean` | `exactCoalitionMass_ge_of_targetCrossPenaltyCompletion` turns an explicit terminal `epsilon`-Nash premise and the literal target/cross-penalty completion predicate into a generic target-mass bound. The complete `Fin 6` integer table satisfies `integerReward_exploitability_ge`, forcing the exact `31/66` first-pair and leftover ledger, while bounded outsider completions retain the `17/8` estimate. `sqrt_firstPairMass_add_sqrt_secondPairMass_le_one` constructs the literal live-root clock and proves the sharp terminal square-root inequality for every behavioral profile; `integerReward_secondPairMass_le` is therefore unconditional. `robustCompletion_targetA_terminalNash_and_uniformPayoff` shows that every direct completion has a pure exact target equilibrium, so no positive second-pair mass is forced. |
-| Single-anchor and persistent-base arbitrary-completion escapes | `UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingleAnchorArbitraryCompletionEscape.lean`, `UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingleAnchorArbitraryCompletionSixPlayer.lean`, `UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseArbitraryCompletionEscape.lean` | One sure-Quit anchor plus an internally selected mixed Nash completion gives exact stationary terminal Nash against unrestricted behavioral deviations when its unconditional Quit value is nonnegative and dominates every anchor-excluding row. Literal anchor-membership reward makes the screen automatic while every other reward coordinate is unrestricted. For `Fin 6`, retaining either one first-target coordinate while altering the other five still yields a uniform payoff with exact second-target atom mass zero. The persistent-base theorem separately covers pointwise leave-safe bases of cardinality at least two. These eliminate the protected-coordinate completion architectures, but not tables altering both first-target coordinates. |
+| Single-anchor and persistent-base arbitrary-completion escapes | `UniformEquilibrium/Quitting/Stationary/SingleAnchorArbitraryCompletion.lean`, `UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingleAnchorArbitraryCompletionSixPlayer.lean`, `UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseArbitraryCompletionEscape.lean` | One sure-Quit anchor plus an internally selected mixed Nash completion gives exact stationary terminal Nash against unrestricted behavioral deviations when its unconditional Quit value is nonnegative and dominates every anchor-excluding row. Literal anchor-membership reward makes the screen automatic while every other reward coordinate is unrestricted. For `Fin 6`, retaining either one first-target coordinate while altering the other five still yields a uniform payoff with exact second-target atom mass zero. The persistent-base theorem separately covers pointwise leave-safe bases of cardinality at least two. These eliminate the protected-coordinate completion architectures, but not tables altering both first-target coordinates. |
 | Robust-join predecessor bases and strict background reversals | `UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/RobustJoinPredecessorBase.lean`, `UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/RobustJoinStrictBackgroundReversal.lean` | `QuittingRobustPredecessorBase.complementLeaveSafe` turns a finite base with an incoming background-uniform robust join at every vertex into the checked persistent-base condition; the resulting stationary profile is exact terminal Nash against unrestricted behavioral deviations and supplies a uniform-equilibrium payoff. A supplied robust `PeriodicCycle` is a literal such base. On the counterexample side, the robust graph is a standard finite DAG, has a checked topological order, and every nonempty induced subgraph has a predecessor-free vertex. For any finite player type, `selectedCycle_has_strictBackgroundReversal_of_no_uniformPayoff` forces a selected positive cycle edge to reverse strictly on a nonempty disjoint background. On `Fin 4`, `finFour_exists_uniformPayoff_of_noStrictBackgroundReversal` internalizes the reward bound, hard residual, collision map, and cycle to solve the exact no-strict-reversal table class. This is a static table restriction outside the maintained positive-minimum chronology frontier, not a new frontier leaf or a proof of the full residual. |
 | Strategically precompact watchdog boundary | `UniformEquilibrium/Quitting/Terminal/StrategicallyPrecompactWatchdog.lean`, `UniformEquilibrium/Quitting/Terminal/StrategicallyPrecompactWatchdogEscape.lean`, `UniformEquilibrium/Quitting/Terminal/StrategicallyPrecompactWatchdogException.lean`, `UniformEquilibrium/Quitting/Terminal/StrategicallyPrecompactWatchdogBoundary.lean`, `MathUE/ProbabilityMassFunction/CompactStoppingLaw.lean`, `UniformEquilibrium/Quitting/Terminal/StrategicallyPrecompactWatchdogProperBoundary.lean` | Strategically totally bounded reply families cannot force a fixed profile-dependent deviation gap; complete such families yield a uniform payoff. One arbitrary nonprecompact player range is still harmless, so a surviving selector needs two distinct identities with fixed late-finite mass beyond every horizon. Failure of proper strategic approximation additionally forces fixed late-or-Never mass, and in a strategically totally bounded family yields a nonproper essential Never witness separated from every proper behavior. The compact stopping-law and barycenter infrastructure is checked, but the proper-sentinel compact-game theorem still lacks joint weak continuity of terminal payoff; hence no theorem yet forces failure of proper approximation for every selector identity. |
 | Literal strict finite odd interval-blocker cores | `UniformEquilibrium/Quitting/Stationary/HeterogeneousConstrainedFaceNash.lean`, `UniformEquilibrium/Quitting/Classification/Existence/FiniteOddIntervalBlockerCore.lean`, `UniformEquilibrium/Quitting/Classification/Existence/FiniteOddIntervalBlockerCoreRowAdapter.lean` | `isUniformEquilibriumPayoff_of_literalStrictFiniteOddIntervalBlockerCore` turns the exact literal row-extrema sandwich `L_i^+ < C_i^- <= C_i^+ < H_i^-` on an embedded odd cyclic core of any finite size at least three into an exact stationary all-behavior uniform-equilibrium payoff. Core continuation rows may vary within their separated band; the outside-player set and every outside-player reward coordinate are arbitrary. The constant-passive declarations in `UniformEquilibrium/Quitting/Classification/Existence/FiniteOddBlockerCoreRowAdapter.lean` remain a checked special case. Overlapping or weak bands and same-background signs without the global extrema sandwich are not covered. |
@@ -2956,6 +2999,10 @@ generic quitting-game existence theorems.
 | Survival products | `MathUE/SurvivalProduct.lean` | Generic finite-product and cumulative-hazard estimates shared by stopping arguments. |
 | Survival coboundaries | `MathUE/Probability/SurvivalCoboundary.lean` | Exact varying-hazard survival-weighted telescopes and finite-difference remainder identities. |
 | Discounted backward recursion | `MathUE/Probability/DiscountedBackwardRecursion.lean` | Prefix-discrepancy Abel bounds, exact terminal shadow contraction, and summable block-tail accounting; it does not construct an infinite recursion. |
+| Actual discounted continuation replacement | `UniformEquilibrium/ProofView/Concepts/Stochastic/Transform/Payoff/DiscountedContinuation.lean` | `discountedPayoff_prefix_decomposition` disintegrates every behavioral profile over its actual finite-prefix law in a finite stochastic game. `discountedPayoff_terminalChildDispatcher` preserves that prefix while dispatching arbitrary complete child profiles. `discountedPayoff_replaceContinuation` gives the exact root payoff change from replacing one public branch: its actual probability times the remaining geometric weight times the child payoff change. Zero depth, zero discount and unreachable branches are included. `continuationCoefficient_mem_Ioo` gives strict coefficient bounds at a reached positive-depth branch with positive discount. This is payoff accounting, not an equilibrium or renewal producer. |
+| Actual discounted Nash continuations | `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/DiscountedContinuation.lean` | `realizedAction_discountedPayoff_update_deviationAfterHistory` identifies the root gain of an actual unilateral branch splice with its discounted reach times the full child gain. `realizedAction_afterHistoryProfile_isDiscountedNash_of_mem_support` derives Nash of every reached child from root Nash. Positive depth needs positive remaining discount; zero discount is allowed at depth zero. No perfection at unreachable histories is asserted. |
+| Compact discounted best responses | `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/CompactDiscountedBestResponse.lean` | `exists_discountedBestResponse_of_compact_transfer` internally selects an actual full behavioral reply from a compact continuous unilateral presentation and exact encode/decode payoff transfers. It is conditional on those presentation data. `FiniteStageGame.exists_discountedBestResponse` (`Literature/Sorin1986.lean`) constructs them for every finite repeated game and every paper discount rate, including the current-stage endpoint. The separate standard-axiom check excludes dependence on unfinished Literature proofs. |
+| Differently labelled points in one compact fiber | `MathUE/Topology/CompactDiscreteFiber.lean` | `exists_same_fiber_different_labels` proves that a continuous surjection from a compact space onto a Hausdorff preconnected space cannot separate all fibers by a nonconstant continuous discrete label: two differently labelled source points force a fiber containing two differently labelled points. This supplies no payoff-path lifting or selection theorem. |
 | Compact finite-prefix relations | `MathUE/Topology/CompactFinitePrefixRelation.lean`, `MathUE/Topology/CompactDependentFinitePrefixRelation.lean` | Inverse-limit selection from compatible compact finite prefixes. `exists_dependentInfiniteChain_of_finitePrefixes` also permits the state carrier to depend on the depth, but remains conditional on a coherent family of nonempty compact finite-prefix solution sets; it supplies no compatible-prefix producer. |
 | Rational max-expression lower search | `MathUE/Interval/RationalMaxExpression.lean`, `MathUE/Interval/RationalLowerBoxTree.lean`, `MathUE/Interval/RationalLowerBoxSearch.lean` | Exact rational interval evaluation for expressions generated by constants, variables, negation, addition, multiplication, and binary maximum; independently checkable lower-box trees; sound breadth-first search; and strict-margin finite completeness on a rational root box. This is generic executable infrastructure, not CAD/QE for arbitrary semialgebraic formulas. |
 | Budgeted compact-prefix relations | `MathUE/Topology/CompactBudgetedPrefixRelation.lean` | Inverse-limit selection while preserving every elapsed cumulative continuous-weight budget, plus the resulting nonsummability criterion. |

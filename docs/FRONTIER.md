@@ -716,7 +716,7 @@ production and a fixed exploitability gap remain open.
 
 The arbitrary-completion obstruction now needs only one protected coordinate.
 `exists_exactTerminalNash_and_uniformPayoff_of_singleAnchorMembership`
-(`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingleAnchorArbitraryCompletionEscape.lean`)
+(`UniformEquilibrium/Quitting/Stationary/SingleAnchorArbitraryCompletion.lean`)
 selects a mixed Nash point for every complementary player while one anchor
 Quits surely. Literal membership reward at that anchor makes its exact
 stopping-cap screen automatic, and all other reward coordinates are

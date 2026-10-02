@@ -30,7 +30,9 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.Infinit
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.StageGame
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic.LiminfAverageBridge
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.CompactDiscountedBestResponse
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.DiscountedContinuation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.FinkHeterogeneous
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.FiniteHorizonContinuation

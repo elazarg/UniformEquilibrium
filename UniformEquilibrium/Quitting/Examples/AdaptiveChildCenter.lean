@@ -105,6 +105,10 @@ theorem root_eq_rootOf : root = rootOf halfCoin halfCoin halfCoin := by
 theorem root_hasSureQuitter : QuittingRootHasSureQuitter root := by
   exact ⟨3, root_anchor⟩
 
+theorem reward_abs_le_two (terminal : {S : Finset (Fin 4) // S.Nonempty})
+    (who : Fin 4) : |reward terminal who| ≤ 2 := by
+  fin_cases who <;> simp [reward] <;> split_ifs <;> norm_num
+
 theorem singleton_reward (who : Fin 4) :
     reward (quittingSingletonTerminal who) who = ![1, -1, -1, 1] who := by
   fin_cases who <;> simp [reward, quittingSingletonTerminal]
@@ -159,6 +163,122 @@ theorem endpointDifference_two
   rw [expect_eq_sum, Fintype.sum_bool]
   simp
   linarith
+
+private theorem probability_eq_one_of_positive_gap {probability gap : ℝ}
+    (hupper : probability ≤ 1) (hgap : 0 < gap)
+    (hquit : (1 - probability) * gap ≤ 0) : probability = 1 := by
+  by_contra hne
+  have hstrict : probability < 1 := lt_of_le_of_ne hupper hne
+  have hpositive := mul_pos (sub_pos.mpr hstrict) hgap
+  linarith
+
+private theorem probability_eq_zero_of_negative_gap {probability gap : ℝ}
+    (hlower : 0 ≤ probability) (hgap : gap < 0)
+    (hcontinue : 0 ≤ probability * gap) : probability = 0 := by
+  by_contra hne
+  have hstrict : 0 < probability := lt_of_le_of_ne hlower (Ne.symm hne)
+  have hnegative := mul_neg_of_pos_of_neg hstrict hgap
+  linarith
+
+/-- Every Nash point of the finite active game is the fair vector, including
+all possible boundary points. Interiority is derived rather than assumed. -/
+theorem unique_active_probabilities_of_endpoint_products
+    (first second third : ℝ)
+    (hfirst : 0 ≤ first ∧ first ≤ 1) (hsecond : 0 ≤ second ∧ second ≤ 1)
+    (hthird : 0 ≤ third ∧ third ≤ 1)
+    (hzero : (1 - first) * (1 - 2 * third) ≤ 0 ∧
+      0 ≤ first * (1 - 2 * third))
+    (hone : (1 - second) * (2 * first - 1) ≤ 0 ∧
+      0 ≤ second * (2 * first - 1))
+    (htwo : (1 - third) * (2 * second - 1) ≤ 0 ∧
+      0 ≤ third * (2 * second - 1)) :
+    first = 1 / 2 ∧ second = 1 / 2 ∧ third = 1 / 2 := by
+  have hfirstHalf : first = 1 / 2 := by
+    rcases lt_trichotomy first (1 / 2) with hlt | heq | hgt
+    · have hsecondZero : second = 0 :=
+        probability_eq_zero_of_negative_gap hsecond.1 (by linarith) hone.2
+      have hthirdZero : third = 0 :=
+        probability_eq_zero_of_negative_gap hthird.1 (by linarith) htwo.2
+      have hfirstOne : first = 1 :=
+        probability_eq_one_of_positive_gap hfirst.2 (by linarith) hzero.1
+      linarith
+    · exact heq
+    · have hsecondOne : second = 1 :=
+        probability_eq_one_of_positive_gap hsecond.2 (by linarith) hone.1
+      have hthirdOne : third = 1 :=
+        probability_eq_one_of_positive_gap hthird.2 (by linarith) htwo.1
+      have hfirstZero : first = 0 :=
+        probability_eq_zero_of_negative_gap hfirst.1 (by linarith) hzero.2
+      linarith
+  have hsecondHalf : second = 1 / 2 := by
+    rcases lt_trichotomy second (1 / 2) with hlt | heq | hgt
+    · have hthirdZero : third = 0 :=
+        probability_eq_zero_of_negative_gap hthird.1 (by linarith) htwo.2
+      have hfirstOne : first = 1 :=
+        probability_eq_one_of_positive_gap hfirst.2 (by linarith) hzero.1
+      linarith
+    · exact heq
+    · have hthirdOne : third = 1 :=
+        probability_eq_one_of_positive_gap hthird.2 (by linarith) htwo.1
+      have hfirstZero : first = 0 :=
+        probability_eq_zero_of_negative_gap hfirst.1 (by linarith) hzero.2
+      linarith
+  refine ⟨hfirstHalf, hsecondHalf, ?_⟩
+  rw [hfirstHalf] at hzero
+  nlinarith [hzero.1, hzero.2]
+
+/-- Pure Quit and Continue inequalities for the displayed active payoffs
+force the fair vector, without a complete-mixing hypothesis. -/
+theorem unique_active_probabilities_of_endpoint_inequalities
+    (first second third : ℝ)
+    (hfirst : 0 ≤ first ∧ first ≤ 1) (hsecond : 0 ≤ second ∧ second ≤ 1)
+    (hthird : 0 ≤ third ∧ third ≤ 1)
+    (hquitZero : 1 ≤ first + 2 * (1 - first) * third)
+    (hcontinueZero : 2 * third ≤ first + 2 * (1 - first) * third)
+    (hquitOne : 2 * first - 1 ≤ second * (2 * first - 1))
+    (hcontinueOne : 0 ≤ second * (2 * first - 1))
+    (hquitTwo : 2 * second - 1 ≤ third * (2 * second - 1))
+    (hcontinueTwo : 0 ≤ third * (2 * second - 1)) :
+    first = 1 / 2 ∧ second = 1 / 2 ∧ third = 1 / 2 := by
+  apply unique_active_probabilities_of_endpoint_products first second third
+    hfirst hsecond hthird
+  · constructor <;> nlinarith
+  · exact ⟨by nlinarith, hcontinueOne⟩
+  · exact ⟨by nlinarith, hcontinueTwo⟩
+
+/-- Any exact root equilibrium has the three fair active probabilities. This
+uses the actual endpoint formulas and permits pure active marginals as input. -/
+theorem unique_active_probabilities
+    (first second third : PMF Bool) (tail : Payoff (Fin 4))
+    (hnash : IsεQuittingRootNash reward tail 0 (rootOf first second third)) :
+    (first true).toReal = 1 / 2 ∧
+      (second true).toReal = 1 / 2 ∧ (third true).toReal = 1 / 2 := by
+  have hendpoint :=
+    (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
+      reward tail (rootOf first second third)).2 hnash
+  have hzero := hendpoint 0
+  have hone := hendpoint 1
+  have htwo := hendpoint 2
+  rw [endpointDifference_zero] at hzero
+  rw [endpointDifference_one] at hone
+  rw [endpointDifference_two] at htwo
+  have hfirstSum := quittingRoot_continueProbability_add_quitProbability
+    (rootOf first second third) 0
+  have hsecondSum := quittingRoot_continueProbability_add_quitProbability
+    (rootOf first second third) 1
+  have hthirdSum := quittingRoot_continueProbability_add_quitProbability
+    (rootOf first second third) 2
+  simp [rootOf] at hzero hone htwo hfirstSum hsecondSum hthirdSum
+  have hbounds (law : PMF Bool) : 0 ≤ (law true).toReal ∧ (law true).toReal ≤ 1 := by
+    refine ⟨ENNReal.toReal_nonneg, ?_⟩
+    simpa only [ENNReal.toReal_one] using
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one law true)
+  apply unique_active_probabilities_of_endpoint_products
+    (first true).toReal (second true).toReal (third true).toReal
+    (hbounds first) (hbounds second) (hbounds third)
+  · constructor <;> nlinarith [hzero.1, hzero.2]
+  · constructor <;> nlinarith [hone.1, hone.2]
+  · constructor <;> nlinarith [htwo.1, htwo.2]
 
 /-- Any completely mixed exact equilibrium of the active finite game has the
 three fair quitting probabilities. -/

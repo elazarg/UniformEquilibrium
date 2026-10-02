@@ -50,7 +50,7 @@ private theorem quittingLiveMass_eq_limit_of_jointContinue_one_from
   rw [hconstant offset, hlimit]
 
 omit [DecidableEq ι] in
-private theorem quittingLiveMass_eq_limit_of_quietAfterDeadline
+theorem quittingLiveMass_eq_limit_of_quietAfterDeadline
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
     (profile : (quittingGame reward).BehaviorProfile)
     (hquiet : ∀ later, deadline ≤ later →
@@ -121,6 +121,26 @@ theorem sum_liveTail_finiteDeadline_le
     (fun _ htime => quittingFiniteDeadlineTimingProfile_liveRoot_eq_allContinue_of_le
       reward deadline mixed htime)
 
+/-- Replacing one player by perpetual Continue preserves the quiet deadline. -/
+theorem quittingOpponentOnlyProfile_quietAfterDeadline
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (hquiet : ∀ later, deadline ≤ later →
+      quittingProfileLiveRoot reward profile later = quittingAllContinueRoot) (who : ι) :
+    ∀ later, deadline ≤ later →
+      quittingProfileLiveRoot reward (quittingOpponentOnlyProfile reward profile who) later =
+        quittingAllContinueRoot := by
+  intro later hlater
+  funext player
+  by_cases hplayer : player = who
+  · subst player
+    simp [quittingProfileLiveRoot, quittingOpponentOnlyProfile,
+      quittingAlwaysContinueStrategy, quittingAllContinueRoot]
+    rfl
+  · have hroot := congrFun (hquiet later hlater) player
+    simpa [quittingProfileLiveRoot, quittingOpponentOnlyProfile, hplayer,
+      quittingAllContinueRoot] using hroot
+
 /-- A quiet-after-deadline profile's opponent-only live-tail clock has at most
 `deadline` nonzero terms, each at most one. -/
 theorem sum_opponentLiveTail_quietAfterDeadline_le
@@ -133,18 +153,9 @@ theorem sum_opponentLiveTail_quietAfterDeadline_le
             (quittingOpponentOnlyProfile reward profile who) time -
           quittingLiveMassLimit reward
             (quittingOpponentOnlyProfile reward profile who))) ≤
-      deadline := by
-  apply sum_liveTail_quietAfterDeadline_le
-  intro later hlater
-  funext player
-  by_cases hplayer : player = who
-  · subst player
-    simp [quittingProfileLiveRoot, quittingOpponentOnlyProfile,
-      quittingAlwaysContinueStrategy, quittingAllContinueRoot]
-    rfl
-  · have hroot := congrFun (hquiet later hlater) player
-    simpa [quittingProfileLiveRoot, quittingOpponentOnlyProfile, hplayer,
-      quittingAllContinueRoot] using hroot
+      deadline :=
+  sum_liveTail_quietAfterDeadline_le reward deadline horizon _
+    (quittingOpponentOnlyProfile_quietAfterDeadline reward deadline profile hquiet who)
 
 theorem sum_opponentLiveTail_finiteDeadline_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline horizon : ℕ)

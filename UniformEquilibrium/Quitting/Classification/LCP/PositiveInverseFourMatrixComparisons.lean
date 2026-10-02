@@ -63,9 +63,10 @@ projective normalization; complementarity is not needed for this obstruction. -/
 theorem principal_noProjectiveSolution_neg_one :
     ¬HasProjectiveLCPSolution (principalMatrix matrix principalPlayers) (fun _ => -1) := by
   rintro ⟨original⟩
-  have solution : ProjectiveLCPSolution
+  have solution : QuittingLCPClassification.ProjectiveLCPSolution
       (reindexMatrix principalEquiv.symm (principalMatrix matrix principalPlayers))
-      (fun _ => -1) := original.reindex principalEquiv.symm
+      (fun _ => -1) :=
+    QuittingLCPClassification.ProjectiveLCPSolution.reindex principalEquiv.symm original
   rw [reindex_principal] at solution
   have hzero := solution.residual_nonneg 0
   have hone := solution.residual_nonneg 1

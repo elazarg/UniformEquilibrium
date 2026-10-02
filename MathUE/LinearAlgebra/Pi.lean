@@ -7,6 +7,9 @@ Authors: GameTheory contributors
 import Mathlib.LinearAlgebra.LinearIndependent.Basic
 import Mathlib.LinearAlgebra.Pi
 import Mathlib.LinearAlgebra.Matrix.DotProduct
+import Mathlib.Basic.Real.Basic
+import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Tactic.NormNum
 
 /-!
 # Linear Algebra on Function Spaces
@@ -177,6 +180,50 @@ theorem linearIndependent_piCongrLeft_iff
   · intro h
     change LinearIndependent R (E.toLinearMap ∘ v)
     exact h.map' E.toLinearMap E.ker
+
+/-- Every finite real linear functional internally produces a unit-cube
+direction attaining the sum of its absolute coordinate coefficients. -/
+theorem exists_unitCube_direction_apply_eq_sum_abs_single
+    {I : Type*} [Fintype I] [DecidableEq I]
+    (linear : (I → ℝ) →ₗ[ℝ] ℝ) :
+    ∃ direction : I → ℝ, (∀ i, |direction i| ≤ 1) ∧
+      linear direction = ∑ i, |linear (Pi.single i 1)| := by
+  classical
+  let direction : I → ℝ := fun i => if 0 ≤ linear (Pi.single i 1) then 1 else -1
+  refine ⟨direction, ?_, ?_⟩
+  · intro i
+    simp only [direction]
+    split_ifs <;> norm_num
+  · conv_lhs => rw [pi_eq_sum_univ' direction]
+    rw [map_sum]
+    apply Finset.sum_congr rfl
+    intro i _
+    rw [map_smul]
+    change direction i * linear (Pi.single i 1) = |linear (Pi.single i 1)|
+    by_cases hnonneg : 0 ≤ linear (Pi.single i 1)
+    · simp [direction, hnonneg, abs_of_nonneg hnonneg]
+    · simp [direction, hnonneg, abs_of_neg (lt_of_not_ge hnonneg)]
+
+/-- Coordinatewise bounded displacement costs at most its bound times the
+absolute coordinate coefficient sum of the same linear functional. -/
+theorem abs_apply_le_mul_sum_abs_single
+    {I : Type*} [Fintype I] [DecidableEq I]
+    (linear : (I → ℝ) →ₗ[ℝ] ℝ) (point : I → ℝ) (bound : ℝ)
+    (hpoint : ∀ i, |point i| ≤ bound) :
+    |linear point| ≤ bound * ∑ i, |linear (Pi.single i 1)| := by
+  conv_lhs => rw [pi_eq_sum_univ' point]
+  rw [map_sum]
+  calc
+    |∑ i, linear (point i • Pi.single i 1)| ≤
+        ∑ i, |linear (point i • Pi.single i 1)| := Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ i, bound * |linear (Pi.single i 1)| := by
+      apply Finset.sum_le_sum
+      intro i _
+      rw [map_smul]
+      change |point i * linear (Pi.single i 1)| ≤ bound * |linear (Pi.single i 1)|
+      rw [abs_mul]
+      exact mul_le_mul_of_nonneg_right (hpoint i) (abs_nonneg _)
+    _ = bound * ∑ i, |linear (Pi.single i 1)| := (Finset.mul_sum _ _ _).symm
 
 end LinearAlgebra
 end Math

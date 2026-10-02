@@ -926,12 +926,12 @@ normal to the paper's principal normal-player matrix. -/
 def restrictProjectiveLCPSolutionToNormalPlayers
     (table : Table ι) (hnormalized : SoloExitNormalized table)
     (q : NormalPlayer table → ℝ)
-    (solution : ProjectiveLCPSolution
+    (solution : QuittingLCPClassification.ProjectiveLCPSolution
       (normalizedSoloMatrix table.zeroNeverReward)
       (extendNormalPlayerDirection table q))
     (hsupport : ∀ who, 0 < solution.singleton who →
       who ∈ NormalPlayers table) :
-    ProjectiveLCPSolution (NormalMatrix table) q := by
+    QuittingLCPClassification.ProjectiveLCPSolution (NormalMatrix table) q := by
   classical
   have hzeroOff : ∀ who, who ∉ NormalPlayers table →
       solution.singleton who = 0 := by
@@ -1176,7 +1176,7 @@ theorem theorem2_13_nonQ
               qfull who)) g hcontinue with
         hzeroSolo | hsupported
       · exact False.elim (hnotZero hzeroSolo)
-      · let solution : ProjectiveLCPSolution
+      · let solution : QuittingLCPClassification.ProjectiveLCPSolution
             (normalizedSoloMatrix reward) qfull :=
           projectiveLCPSolutionOfBaselineShiftedPacket
             reward qfull hsupported.some.packet
@@ -1479,7 +1479,7 @@ theorem lemma3_2
     (M : ι → ι → ℝ) (q : ι → ℝ)
     (hq : q ∈ ColumnConvexHull M)
     (hqNegative : q ∉ NonnegativeOrthant ι)
-    (solution : ProjectiveLCPSolution M q) :
+    (solution : QuittingLCPClassification.ProjectiveLCPSolution M q) :
     DZero M (fun who => solution.cemetery * q who +
       ∑ owner, solution.singleton owner * M who owner) := by
   let weight : Option ι → ℝ
@@ -2205,7 +2205,7 @@ private theorem column_ne_of_no_nontrivial_zero_solution
     (fun who => M who owner) ≠ y := by
   intro heq
   apply hzero
-  let solution : ProjectiveLCPSolution M (0 : ι → ℝ) :=
+  let solution : QuittingLCPClassification.ProjectiveLCPSolution M (0 : ι → ℝ) :=
     { cemetery := 0
       singleton := fun i => if i = owner then 1 else 0
       cemetery_nonneg := le_rfl
@@ -2229,7 +2229,7 @@ private theorem column_not_mem_D_of_no_nontrivial_zero_solution
     (fun who => M who owner) ∉ D M := by
   intro hcolumn
   apply hzero
-  let solution : ProjectiveLCPSolution M (0 : ι → ℝ) :=
+  let solution : QuittingLCPClassification.ProjectiveLCPSolution M (0 : ι → ℝ) :=
     { cemetery := 0
       singleton := fun i => if i = owner then 1 else 0
       cemetery_nonneg := le_rfl
@@ -2806,7 +2806,7 @@ theorem lemma3_4
       rw [← hpoint]
       exact ⟨by simpa only [J] using hqAugmented n, hqD⟩
     exact hqNe n (Set.mem_singleton_iff.mp hsingleton)
-  let solution (n : ℕ) : ProjectiveLCPSolution M (q n) :=
+  let solution (n : ℕ) : QuittingLCPClassification.ProjectiveLCPSolution M (q n) :=
     Classical.choice (hQ (q n))
   let residual (n : ℕ) : ι → ℝ := fun who =>
     (solution n).cemetery * q n who +
