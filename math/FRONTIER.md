@@ -238,13 +238,25 @@ for every v,u∈K and every product q satisfying
 This is a complete negative certificate language: the forward direction
 produces P from no UE. It does not assume a polynomial producer.
 
+The table normalization and polynomial restrictions hold simultaneously.
+Existence of any real Fin4 counterexample is equivalent to existence of one
+unit-bounded table with own singletons λeₚ, λ>0, no punishment-vector sure
+root, and one rational polynomial P on [−3,3]⁴ satisfying the full robust
+inequality, total degree at least three, failure of multi-affinity, and the
+adaptive minimum conditions in Section 4. The forward construction permits
+λ=1/N for a positive integer N. The reward table need not be rational; the
+certificate is rational. These are restrictions on one produced table and
+one polynomial, not certificates selected on different normalizations.
+
 The open task is to exhibit a table, the absent-sure-root condition, and such
 a P, or to prove that every candidate fails some full-relation edge.
 No polynomial degree bound or universal finite search cutoff is known.
 
 ## 4. Restrictions on the polynomial obstruction
 
-The following are mathematical results awaiting formalization.
+The degree, multi-affinity, and adaptive minimum restrictions are tracked
+together for the same bounded single-pivot obstruction. The following shape
+restrictions explain the remaining class.
 
 - On the full exact-root relation for a bounded finite signed table, a
   continuous potential differentiable near the singleton upper rectangle
@@ -259,6 +271,17 @@ The following are mathematical results awaiting formalization.
   for all i; upper-box boundary coordinates are allowed. A reflected
   segment on which the restriction rises and falls forces a quantitative
   positive directional third derivative.
+
+More precisely, put g=minᵢ(aᵢ−sᵢ)>0. There is a minimizer x of P on the
+lower boundary of ∏ᵢ[sᵢ,max(aᵢ,1)] such that
+
+    ∇P(x)·(x−a)≤−g/2,
+    a+t(x−a)∈[−3,3]⁴                    for every 0≤t≤2,
+    D³P(a+t₀(x−a))[x−a,x−a,x−a]≥3g      for some 0<t₀<2.
+
+On 0≤t≤1 the same restriction has an interior maximum strictly above
+both endpoint values. These witnesses are produced for every global
+minimum of the same polynomial; they are not extra assumptions on a.
 
 After the actual single-pivot reduction and scaling, the last two exclusions
 lose no hypothetical counterexample. A remaining polynomial must have total
@@ -380,6 +403,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 
 | Reward condition | Conclusion and boundary |
 | --- | --- |
+| Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards. A stationary profile or a stationary approximation family is produced; no nonsingleton inequalities beyond equivariance are required. This is a reviewed mathematical result, not yet a Lean theorem. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -389,6 +413,15 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | A proper child admits nonnegative domination weights satisfying the terminal, join, and Never inequalities | Its uniform payoff extends to the original game with complete outsider-deviation control. The weights satisfy an explicit finite raw-table linear test. |
 | A proper child passes either the future-withdrawal or deadline-withdrawal inequalities below | Its fixed UE payoff extends with outsiders Never. The raw criteria are incomparable; deadline withdrawal also controls every nonincreasing nonnegative evaluation. |
 | Uniform strict payoff deficit, nonconcentrated weighted payoff exclusion, or nonnegative-singleton weak subset exclusion | Actual finite profiles with arbitrarily small complete regret, hence a fixed UE payoff. |
+
+Klein-four equivariance means rᵢ₊ₖ(S+k)=rᵢ(S) after identifying the players
+with (ℤ/2ℤ)². The substantive new branch has positive common own singleton,
+positive total external-singleton surplus, and at least one external
+singleton below the own singleton. A triangular projected-field argument
+produces two paired hazards and verifies every individual Nash condition.
+The unrestricted nonsingleton rewards enter the exact field, not only its
+linearization. Singleton symmetry alone is insufficient, and arbitrary
+tables have no proved symmetry reduction.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are
@@ -400,6 +433,22 @@ the conditions on weights λₖᵢ≥0, i∈S, are
 with the last two required for every nonempty A⊆S. The first inequality
 may be omitted if some child own singleton is positive. In Fin4, a child
 of size three has UE unconditionally; no child strategy is an extra input.
+
+For existence, rather than extension of a specified child target, a
+nonnegative child singleton suffices whenever 1≤|S|≤3. The child-law
+selection, finite quiet lift, and one fixed target are tracked. Raise that
+singleton by δ>0 and
+select a δ²-Nash profile in the perturbed child. Its joint-Never probability
+is at most δ; restoring the original rewards gives child regret at most
+δ+δ². The original future/join debt bounds then produce parent regret
+tending to zero with every outsider literally Never. Finite censoring and
+payoff subsequence selection retain finite quiet witnesses at one fixed
+target. The same argument applies to all five withdrawal certificate kinds.
+The existence conclusion also follows by reward closure of the positive
+class; the explicit selected-family statement retains vanishing joint Never.
+It does not preserve every prescribed child target or make the raw tests
+exhaustive. In the single-pivot normalization, it permits the zero-singleton
+child {1,2,3} whenever the omitted pivot satisfies the future/join inequalities.
 
 Two additional finite child tests allow withdrawals. For each outsider k,
 one fixed pair of weight vectors must satisfy all its rows simultaneously
@@ -629,11 +678,18 @@ games are not a proved normal form for all finite stochastic games.
   (`UniformEquilibrium/Quitting/Terminal/PivotRepairBehavioralInfimum.lean`);
   `smallPivotRepairValue_iff_exists_uniformEquilibriumPayoff`
   (`UniformEquilibrium/Quitting/Terminal/PivotRepairUniformPayoffCharacterization.lean`).
+- Selected low-player laws:
+  `exists_terminalProfile_smallExploitability_smallNever_of_nonnegativeSingleton`
+  (`UniformEquilibrium/Quitting/Classification/ThreePlayer/NonnegativeSingletonEarlyAbsorption.lean`);
+  `exists_uniformFiniteQuietFamily_of_withdrawalFutureJoinFamily`
+  (`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFiniteQuietSource.lean`).
 - Complete forward/polynomial alternatives:
   `quittingGame_exists_uniformEquilibriumPayoff_iff_fixedBoxPackets_or_sureRoot`
   (`UniformEquilibrium/Quitting/Projective/FixedBoxForwardCharacterization.lean`);
   `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
-  (`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`).
+  (`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`);
+  `exists_finFour_no_uniformPayoff_iff_exists_boundedSinglePivotPolynomialObstruction`
+  (`UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotPolynomialObstruction.lean`).
 - Compact barrier:
   `nonempty_closedInvariantBarrier_iff_le_controllerTesterValue`
   (`UniformEquilibrium/Quitting/ControllerTester/BarrierDuality.lean`).

@@ -1,0 +1,1040 @@
+# Independent stopping-law selection
+
+Identity: CODEX_KREIN. Ordinary mathematics, not Lean-checked. The positive
+selected-family theorem has independent review and is recorded in
+`../exports/NONNEGATIVE_SINGLETON_FINITE_QUIET_LIFTS.md`. The separate exact
+response-selector obstruction remains an internal proof draft. The
+canonical finite-menu selection question remains open.
+
+The joint-phase construction and its independent positive-harm enlargement
+have two independent mathematical PASS reviews, including full behavioral
+deviations and every proper-child F/J falsifier. Their bare existence scope
+is ALREADY covered by `exists_uniformEquilibriumPayoff_of_productLowPremium`:
+every own-Quit endpoint equals the corresponding singleton. Their exact
+periodic rates, selected target, and separation from all proper-child F/J
+families remain useful internal results, not new UE-class coverage. No
+existence export is proposed for that covered family.
+
+The live beyond-product-low candidate is **Positive mutual premiums at the
+prescribed joint phase** below. Both participants receive strictly positive
+singleton-relative premiums at the positive-probability coalition {0,1}.
+This changes the actual Bellman equations and robustly violates product-low.
+That additional raw-family theorem is a proof draft, not yet reviewed.
+
+The positive result in **Zero-singleton child selection** below removes the
+strictly-positive-child-singleton requirement from EXISTENCE under the
+original finite F/J quiet-extension criteria: one nonnegative child
+singleton suffices. It selects actual child laws with both vanishing full
+regret and vanishing joint Never, then uses the ORIGINAL table's exact
+residual bound. Thus it covers the canonical pivot-deletion face where all
+three remaining own singletons are zero. The same selected laws supply
+small pivot-repair values. It does not extend every separately prescribed
+child target, and does not assert that every table satisfies the finite
+F/J inequalities. Its existence class is also a closure consequence of
+the existing strict-positive class; the theorem supplies selected finite
+original laws with both vanishing regret and vanishing joint Never.
+
+The separate all-selector obstruction below excludes minimum-value
+selection over all uncompensated exact-nonpivot-response / optimal-pivot
+fixed points. This is an architecture exclusion on an already solved
+table, not a new game without equilibrium.
+
+## Question and exact source boundary
+
+Four players independently choose stopping laws on the nonnegative integers
+and Never. The first nonempty quitting coalition S pays r(S); all Never
+pays zero. Before termination the public history consists only of
+all-Continue. A deviation replaces one complete behavioral strategy,
+equivalently its independent stopping law. Write U_i for prescribed
+terminal payoff, B_i for the supremum over all such replacements, and
+E=max_i(B_i-U_i). All probabilities below are unconditional unless a
+surviving suffix is explicitly specified.
+
+The positive question is: for every bounded table with own singletons
+(1,0,0,0) and every error e>0, choose three actual finite nonpivot laws
+whose optimal unrestricted pivot-repair value is below e. The outer laws,
+not the inner repair, are missing.
+
+Declarations inspected through `docs/TOOLKIT.md`:
+
+- `singlePivot_fullExploitability_eq_max_menuExploitability_scalar`, in
+  `UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`;
+- `exists_objective_minimizer_eq_behavioral_infimum`, in
+  `UniformEquilibrium/Quitting/Terminal/PivotRepairBehavioralInfimum.lean`;
+- `smallPivotRepairValue_iff_exists_uniformEquilibriumPayoff`, in
+  `UniformEquilibrium/Quitting/Terminal/PivotRepairUniformPayoffCharacterization.lean`;
+- `HasQuittingSmallPivotRepairValue` and
+  `exists_pivotRepairMass_objective_le_finiteMenu_exploitability`, in
+  `UniformEquilibrium/Quitting/Terminal/PivotRepairSmallValueSource.lean`;
+- `QuittingPivotRepairLPInput` and its payoff/endpoint definitions, in
+  `UniformEquilibrium/Quitting/Terminal/PivotRepairFiniteLP.lean`.
+
+These sources identify a finite LP with the behavioral repair infimum and
+consume small values; they do not select the opponent laws. Source files
+were inspected, not rebuilt. No outside theorem or literature claim is
+needed for the new argument.
+
+## All exact nonpivot replies are uniformly bad on VANISH
+
+Index 1,2,3 cyclically. Define every nonempty coalition reward by
+
+    r_0(S)=1 if 0 belongs to S, and 2 otherwise;
+    r_j(S)=0 if j belongs to S;
+           -1 if j does not belong to S but 0 does;
+           2*1_(pred(j) belongs to S)-1_(succ(j) belongs to S) otherwise.
+
+Fix ANY pivot law, allowing unbounded support and Never. Fix N>=1 and
+nonpivot laws supported on F_N={0,...,N-1,Never}. Suppose that all three
+are simultaneous exact best replies among laws on F_N to these SAME
+opponents and pivot. Then
+
+    U_1=U_2=U_3=0,     p_1=p_2=p_3,     E>=1/512.             (1)
+
+Thus the infimum over all deadlines and all coupled fixed points which
+globally minimize the original repair value in the pivot coordinate and
+maximize original finite-menu payoffs in the three other coordinates is
+positive. The statement covers all such fixed points, not merely a
+selected branch, and is stronger than needed because pivot optimality is
+absent from its hypotheses.
+
+### The elementary three-player row
+
+Suppose the pivot quits now with conditional probability h, and if nobody
+quits the three nonpivots' common continuation value is -c, 0<=c<=1.
+Their Quit payoff is zero. For h<1, divide Continue payoff by 1-h and set
+k=h/(1-h). The three Continue comparisons are
+
+    f_j=2q_pred(j)-q_succ(j)
+          -c(1-q_pred(j))(1-q_succ(j))-k.                (2)
+
+There is exactly one Nash row. It is symmetric. If k>=1, all q_j=1.
+If k<1, all q_j=q, where the unique q in [0,1) solves
+
+    q-c(1-q)^2=k.                                      (3)
+
+In every case every player's value is zero. At h=1 the unique row is
+also all Quit, with value zero.
+
+Here is the boundary argument, including sure actions. If q_1=0, then
+f_2=-q_3-c(1-q_3)-k<=0. Strict inequality forces q_2=1. Player 1's
+Continue condition then gives 2q_3-1>=k, so q_3>0. If q_3<1, its
+indifference gives k=2, impossible in that inequality; if q_3=1 its
+Quit condition gives k>=2 while player 1 requires k<=1. Equality in
+the first comparison instead forces q_3=c=k=0, and player 1 then
+forces q_2=0. Hence a zero coordinate occurs only in the all-zero row.
+
+With all coordinates positive, suppose q_1=1 and q_2<1 (rotate the
+cycle to a transition from a sure coordinate to a nonsure one). Player
+2's indifference gives q_3=2-k. If q_3<1, player 3's indifference gives
+q_2=(1+k)/2>=1. If q_3=1 then k=1 and f_1=1-q_2>0. Both are
+contradictions. Thus either all are one or all are interior. In the
+interior, (2) gives q_pred(j)=phi(q_succ(j)), where
+
+    phi(v)=[k+c+(1-c)v]/[2+c-cv],
+    phi'(v)=[2-c+ck]/[2+c-cv]^2>0.
+
+A strictly increasing map has no nonconstant three-cycle. Hence all
+coordinates agree, and (3), whose left side is strictly increasing,
+proves uniqueness. This also verifies the all-zero boundary c=k=0.
+
+### Why unreachable suffixes do not invalidate the argument
+
+At each positively reached row the conditional laws remain independent.
+Changing one player's conditional suffix multiplies its conditional
+payoff gain by the positive probability of reaching that row. Thus
+conditional best-response comparisons are justified whenever the row is
+reached.
+
+First suppose a reached row before the final menu date absorbs surely.
+If the pivot quits surely, all three nonpivots must Quit. Otherwise at
+least one nonpivot quits surely. Each nonpivot may compare with Quit
+now and with Continue now followed by Quit at the next menu date. The
+latter has continuation value zero, including ties with the pivot. The
+prescribed absorption is certain, so these comparisons imply exactly
+the Nash inequalities of (2) with c=0. The row lemma therefore forces
+all three nonpivots to Quit surely, and h>=1/2. Their values there are
+zero and all three complete marginal laws end there. No arbitrary
+off-path law has been used. Backward induction through its positively
+reached prefix uses c=0 and proves equal earlier hazards.
+
+If no earlier row absorbs surely, the final row is reached. Conditional
+on everyone surviving it, each nonpivot is committed to Never and gets
+-c, where c is the pivot's conditional probability of a later finite
+quit. The common value lies in [-1,0], so the row lemma applies. If the
+pivot has conditional survival zero, its h=1 case applies directly.
+Every earlier reached row then has continuation value zero. Backward
+induction proves the identical-law and zero-payoff conclusions of (1).
+
+### A full-response lower bound independent of the deadline
+
+Let s_t be one common nonpivot's survival probability before date t,
+w_t the pivot's survival probability, and q_t,h_t their conditional
+hazards. Write a for the common nonpivot Never mass and D=a^3. Write
+lambda for the pivot's total finite mass at dates >=N and nu for its
+Never mass. At every row before the final effective row, the row lemma
+with zero continuation gives
+
+    h_t=q_t/(1+q_t),  w_t>=s_t,
+    x_t:=Pr(T_0=t)=w_t h_t >=(s_t-s_(t+1))/2.             (4)
+
+For every pure finite pivot response t its payoff is 2-s_t^3. The
+unrestricted pivot cap is therefore 2-D, attained after the nonpivot
+menu. Direct averaging gives the exact pivot debt
+
+    d_0=I+nu D,    I=sum_(t<N) x_t(s_t^3-D)>=0.           (5)
+
+This retains simultaneous atoms: s_t is survival STRICTLY BEFORE t.
+
+Let T be the last effective row and b=s_T. If b<=1/2, (4) on earlier
+rows and D<=b^3 give
+
+    I >= (1/2) integral_b^1 (u^3-b^3) du >=1/16.          (6)
+
+If the last row is sure absorption, all three q_T=1 and h_T>=1/2.
+Then D=0 and its contribution to I is at least b^4/2. Together with
+(6), this gives E>=1/32. This includes h_T=1.
+
+It remains to consider no sure absorption, with T=N-1, b>1/2, and
+q=q_T<1. Put h=h_T and ell=lambda/w_T. The last row's indifference is
+
+    (1-h)q-h-ell(1-q)^2=0.                             (7)
+
+For q=0 this same equality follows from the all-zero row case.
+Since ell<=1, if q>=1/2, (7) implies h>=1/8. The last row's
+contribution to I is then at least
+
+    w_T h b^3[1-(1-q)^3] >=7 b^4/64 >=7/1024.           (8)
+
+If q<1/2 instead, a=b(1-q)>1/4. Equation (7) implies
+h<=q/(1+q), hence the pivot's remaining mass lambda+nu is at least a.
+The common Never action has positive probability and is an exact menu
+best reply of value zero. Quitting at the first positive late pivot atom
+(or any date >=N if lambda=0) improves that payoff by exactly lambda a^2:
+the two other nonpivots must both choose Never, and joining the pivot
+replaces reward -1 by zero. Thus
+
+    E >= max(lambda a^2, nu a^3)
+      >= (lambda+nu)a^3/2 >=a^4/2 >1/512.               (9)
+
+The late test is legitimate for arbitrary pivot tails: their nonempty
+finite support has a first atom. When lambda=0 it gives zero. Equations
+(5)-(9) prove (1) without a compactness, cap-attainment, or symmetry
+assumption on an infinite law.
+
+## What fails, and what approximate play changes
+
+The smallest failed implication is: minimize the original full repair
+value over all simultaneous EXACT finite-menu nonpivot responses, then
+increase the deadline, and obtain vanishing full regret. The quantifier
+over all fixed points is now explicitly covered by (1).
+
+This does not eliminate positive-error nonpivot response selection. On
+the SAME table, the pivot Never and the laws
+
+    p_j(3k+j-1)=2^(-k-1), 0<=k<K;
+    p_j(Never)=2^(-K)
+
+have full exploitability 8^(-K). Their only nonpivot debt is player 2's
+8^(-K), whereas their three laws occupy distinct phases. An arbitrarily
+small global nonpivot error therefore breaks the exact-symmetry
+restriction by an order-one amount. Taking exact nonpivot best replies
+before sending N to infinity loses these successful laws.
+
+Nearby source comparison: the bad unweighted coupled branch and the
+explicitly open minimum-over-all-fixed-points alternative are in
+`CODEX_RENY__PIVOT_LP_AND_FINITE_NONPIVOT_BEST_REPLY_COUPLING.md`.
+The different compensated beta=0 correspondence already has an
+all-menu lower bound in
+`CODEX_RENY__ZERO_BONUS_COMPENSATED_CONTINUATION_OBSTRUCTION.md`.
+The unrestricted identical-law obstruction is in
+`CODEX_RENY__SYMMETRY_PRESERVING_LOGIT_SELECTOR_OBSTRUCTION.md`.
+The present proof derives equality of the nonpivot laws without imposing
+it and does not rely on that note's separate lower-bound proof. The
+successful finite laws and their complete caps are recorded in
+`CODEX_RENY__CANONICAL_EXACT_FINITE_MENU_SEPARATION.md`.
+
+## Zero-singleton child selection
+
+### A self-contained finite reward-table theorem
+
+Let I={0,1,2,3}, and let S be any nonempty proper subset. Let r be any
+bounded real reward table, with zero Never payoff and independent private
+stopping laws as above. Write s_i=r_i({i}). Suppose SOME j in S satisfies
+s_j>=0. For each outsider k in I\S suppose there are fixed numbers
+lambda_ki>=0 such that, for every nonempty A contained in S,
+
+    s_k-r_k(A) <= sum_(i in S) lambda_ki [s_i-r_i(A)],       (F)
+    r_k(A union {k})-r_k(A)
+      <= sum_(i in S) lambda_ki [r_i(A union {i})-r_i(A)].  (J)
+
+These are finite inequalities in the ORIGINAL table. There is NO
+all-Never row requirement. In particular s_k need not be at most
+sum_i lambda_ki s_i.
+
+**Theorem.** For every e>0 there are a finite deadline and independent
+laws on its finite-time/Never menu, with every outsider literally Never,
+whose ORIGINAL full behavioral exploitability is below e. Consequently
+there is one fixed uniform-equilibrium payoff, and its witnesses can be
+selected from these actual quiet lifts.
+
+The at-most-three-player child existence theorem is the only game
+existence input. No favorable child payoff, stopping law, positive
+absorption profile, inner-LP optimizer, or vanishing residual is assumed.
+
+### Producing absorption while returning to the original child
+
+For 0<delta<=1, let g^delta be the child reward table obtained from its
+original restriction g by adding delta ONLY to player j's own-singleton
+coordinate. Its new own singleton is s_j+delta>=delta. By the checked
+at-most-three-player existence theorem, choose an actual child profile
+p^delta with full exploitability at most delta^2 in g^delta.
+
+For ANY independent profile p in ANY quitting table with positive own
+singleton v for some player, its full debt is at least
+
+    v * Q(p),        Q(p)=product_i p_i(Never).            (10)
+
+Proof: keep that player's original finite atoms and move only its Never
+atom to a deterministic date T. As T tends to infinity, its payoff gain
+tends to v Q(p). The original finite atoms make identical contributions;
+on the moved branch, finite opponent absorption before T is unchanged,
+the probability of a finite opponent atom at/after T tends to zero, and
+joint Never changes from zero to the own singleton v. Bounded rewards
+justify this limit. Each replacement is legal and has gain bounded by
+the full debt, so the limit does too. This is a supremum argument, with
+no claim that the limit date is itself a finite action.
+
+Applying (10) BEFORE changing the rewards back gives
+
+    Q(p^delta) <= delta^2/(s_j+delta) <= delta.            (11)
+
+For every original law and every unilateral replacement, the difference
+between its g^delta and g payoffs is between zero and delta in coordinate
+j and is zero elsewhere. Therefore the SAME selected profile satisfies
+
+    E_g(p^delta) <= delta^2+delta,    Q(p^delta)<=delta.   (12)
+
+The profile was selected using a perturbed child; all subsequent safety
+comparisons use the original child and original parent table. In
+particular (F) and (J) are NEVER required for g^delta and are NEVER
+perturbed. Their equalities and zero weights cause no continuity issue.
+
+### Original-table outsider safety on these selected laws
+
+For each outsider set
+
+    rho_k=max(s_k-sum_(i in S)lambda_ki s_i,0).
+
+For every actual child law p, the exact original-table bound is
+
+    d_k(quiet(p)) <= sum_i lambda_ki d_i(p)+rho_k Q(p),  (13)
+    d_i(quiet(p))=d_i(p) for i in S.
+
+Here is a direct proof. Compare an outsider's pure stopping date t with
+the child private replacement T_i -> min(T_i,t), separately for each i.
+If the child first absorbs before t, all gains are zero. If its first
+coalition A occurs at t, (J) bounds the outsider join gain by these
+child gains. If it occurs after t but finitely, (F) gives the bound.
+On child joint Never the difference is at most rho_k; at outsider Never
+all gains are zero. Integrate this pathwise inequality and bound each
+child replacement by its full debt. Taking the outsider supremum proves
+(13), and independence is preserved in every replacement. The common
+proof coupling supplies no correlated strategy to the players.
+
+Put C=max(1,max_k sum_i lambda_ki) and R=max_k rho_k. Equations
+(12)-(13) give the ACTUAL parent profile bound
+
+    E_r(quiet(p^delta)) <= C(delta+delta^2)+R delta ->0.   (14)
+
+To obtain finite laws, move each child's finite mass after a sufficiently
+large cutoff to Never. If the sum of moved marginal masses is tau, a
+product coupling changes every prescribed payoff and every fixed pure
+deviation payoff by at most 2M tau. Hence full regret grows by at most
+4M tau, uniformly over ALL deviations. Joint Never grows by at most tau.
+Choose delta and then tau so that (14)+4M tau<e. Outsiders stay Never.
+This is an actual finite-law producer from the stated finite reward data.
+
+The terminal payoff vectors of these selected profiles lie in a compact
+cube. A convergent subsequence gives one fixed vector v before accuracy
+is requested. The terminal-to-uniform family theorem retains the actual
+selected profiles as witnesses. Thus no varying-target substitution or
+uncontrolled horizon-dependent strategy is used.
+
+### The full five-kind withdrawal consequence
+
+The same argument applies unchanged to any of the five already checked
+original F/J withdrawal systems: patient, deadline, evaluated security,
+terminal security, or cancellation. For each outsider their actual raw
+certificate supplies nonnegative debt coefficients c_ki and residual rho_k
+with the SAME inequality (13), replacing lambda by c. Patient and
+cancellation use the sum of the two operation weights; the other kinds
+use their maximum. Their residual is the positive part of the omitted
+original Never row, including the patient Never bonus. These are fixed
+finite numbers computed from ORIGINAL rewards and certificate weights.
+Use C=max(1,max_k sum_i c_ki) and the same R in (14). Different outsiders
+may use different kinds. No perturbed security floor, perturbed
+withdrawal condition, or certificate-stability hypothesis is needed.
+
+This consequence extends the existing strict-positive-singleton Fin4
+EXISTENCE consumer to a nonnegative child singleton. It does not extend
+the stronger consumer promising to preserve ANY externally prescribed
+child uniform target: the perturbed child profiles select their own
+limiting payoff, which may differ from that target. The parent target
+agrees with the child target selected by this construction.
+
+For the canonical question, choose S={1,2,3}. All its own singletons are
+zero, so the new source applies whenever the original pivot has one of
+these F/J certificates. The finite quiet laws already have small E;
+global minimization of the exact pivot LP against their three marginals
+can only decrease E. Thus the output is exactly a small-inner-value
+outer-law selection, without an assumed pivot-optimality compatibility.
+
+### Source audit and boundary tests
+
+- `QuittingThreePlayerStrategyClass.of_card_le_three`, in
+  `UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardAllSigns.lean`,
+  supplies actual unrestricted terminal approximate equilibria for the
+  perturbed child. The exact strategy-class definition in
+  `StationaryOrSmallHazard.lean` was inspected too.
+- `WithdrawalFutureJoinRewardCertificate`, `neverExcess`, and `debtWeight`,
+  in `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinRaw.lean`,
+  specify original finite rewards/weights, not a selected strategy.
+- `withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess`, in
+  `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`,
+  gives (13) for every actual original child profile and all five kinds.
+- `quittingGame_exists_uniformEquilibriumPayoff_of_finFour_withdrawalFutureJoinFamily`,
+  in `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`,
+  has the strict hypothesis `0 < reward (quittingSingletonTerminal pivot.1) pivot.1`.
+  This is the exact producer boundary changed here, at existence level.
+- `quittingTerminalExploitability_censored_le`, in
+  `UniformEquilibrium/Quitting/Paths/LateFiniteStoppingLawCensor.lean`,
+  gives the finite conversion. `quittingGame_uniformPayoffWitnesses_of_terminalNash_tendsto`
+  and `quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`,
+  in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`,
+  give the fixed uniform payoff conclusion and retained-family witnesses.
+
+The checked `WithdrawalBoundaryExamples.neverResidual_outsideDebt_eq_residual_times_childJointNever`
+in `UniformEquilibrium/Quitting/Examples/WithdrawalNeverBoundary.lean`
+is NOT contradicted. Its one-child zero-reward all-Never profile has
+Q=1, child debt zero, and outsider debt one. The theorem here selects
+different laws: perturb the child's singleton positively, then let that
+child Quit surely. In the original game that child's payoff/debt remain
+zero and Q becomes zero, removing the outsider residual.
+
+A particularly transparent full canonical subclass has
+r_0(A)>=1 and r_0(A union {0})<=r_0(A) for every nonempty
+A contained in {1,2,3}. All nonpivot rewards, except their zero own
+singletons, are arbitrary. Taking all weights zero proves (F)-(J).
+The original strict-positive-child wrapper cannot use this deletion;
+the present actual-law producer does. No claim is made that none of
+these tables can be solved by a different existing method.
+
+The nonnegative-singleton hypothesis cannot be dropped for this quiet
+source mechanism. With one child whose own payoff is -1, an outsider
+whose reward is always 1, and child reward -1 on every coalition, zero
+weights satisfy (F)-(J). In every quiet lift, child debt is its finite
+quit probability and outsider debt is the child's Never probability;
+full regret is at least 1/2. The parent itself has equilibrium with the
+outsider quitting: the failure concerns the prescribed quiet class.
+
+The independently reviewed scope of (10)-(14) is the selected-family
+existence conclusion recorded in the frozen export named at the top.
+The general single-pivot table still needs an arbitrary-table producer.
+
+## A joint phase closes an asymmetric cyclic pivot family
+
+Status: independently reviewed mathematical construction and F/J
+separation. Bare UE existence is already covered by the product-low theorem;
+the explicit profile is not claimed to enlarge that existence class.
+
+### Raw table and parameter interval
+
+Let a,b,c>0 and D=abc−1>0. Number the nonpivots cyclically 1,2,3,
+with predecessor of 1 equal to 3. Put (a_1,a_2,a_3)=(a,b,c). For every
+nonempty coalition S define
+
+    r_0(S) = 1                         if 0 is in S,
+             R * 1_(3 is in S)         otherwise;
+    r_j(S) = 0                         if j is in S,
+             −1                        if j is not in S and 0 is in S,
+             a_j*1_(pred(j) is in S) − 1_(succ(j) is in S) otherwise.
+
+The own singletons are exactly (1,0,0,0). Define
+
+    R_low  = (ab+ac+a+bc+b+c+3)/(bc+b+1),
+    R_high = ac+a+1.
+
+Their difference is (c+2)D/(bc+b+1)>0. The theorem concerns every
+
+    R_low < R < R_high.                                      (15)
+
+All rewards are finite real data. All random choices below are private and
+independent, both between players and between successive live dates. The
+construction uses only the public date and whether absorption has occurred.
+
+**Claim.** Every table (15) has an exact unrestricted-behavior terminal Nash
+profile with a period-three product schedule. Its finite censored laws
+produce arbitrarily small unrestricted exploitability and hence arbitrarily
+small pivot-repair values. One explicit target precedes the accuracy.
+
+### Selection of the four hazards
+
+Set
+
+    Y = D/[b(ac+a+1)] ∈ (0,1).
+
+For 0<y<Y select the unique root k in
+
+    0 < k < min(by, c−(c+1)y)
+
+of
+
+    f_y(k) = (k − a*w*(1−z) + z)*c*(1−y)*(1+by) = 0,
+    z = (k+y)/[c(1−y)],
+    w = (by−k)/(1+by).                                      (16)
+
+This is an actual scalar selection, not an assumed equilibrium solution.
+After substituting z,w, f_y is a quadratic with leading coefficient −a.
+Its value at zero is
+
+    y[b(ac+a+1)y−D] < 0.
+
+At k=by, w=0, so f_y(k)>0. At k=c−(c+1)y, z=1, so again
+f_y(k)>0. Both endpoints are positive: Y<c/(c+1). A strictly concave
+quadratic negative at zero and positive at these two endpoints has exactly
+one root below their minimum. This proves (16) and 0<z,w<1.
+
+The smaller positive quadratic root is continuous in y and extends to
+k(0)=k(Y)=0. Indeed the discriminant is strictly positive and the linear
+coefficient is positive throughout [0,Y], as follows also from positivity
+at k=by for y>0 and its explicit positive value ac+c+1 at y=0.
+
+Define on 0<y≤Y
+
+    R(y) = 1 + [1/((1−y)(1−z))−1]/w.                       (17)
+
+It extends continuously to zero. To compute that endpoint, put
+
+    v = (ac+c+1, ab+a+1, bc+b+1)/D.
+
+The expansion of (16) at y=0 gives k/y→1/v_1, z/y→v_2/v_1,
+w/y→v_3/v_1, and therefore R(0)=(v_1+v_2+v_3)/v_3=R_low.
+At y=Y the exact endpoint rates are
+
+    y = D/[b(ac+a+1)],
+    z = D/[c(ab+b+1)],
+    w = D/[a(bc+c+1)],
+
+and substitution into (17) gives R(Y)=ac+a+1=R_high. The intermediate
+value theorem supplies a y strictly between 0 and Y with R(y)=R for
+every (15). No monotonicity of R(y) is needed. Finally set x=k/(1+k).
+Thus x,y,z,w all belong to (0,1).
+
+### Actual profile and complete response check
+
+Repeat these three live rows forever:
+
+| Phase | Player 0 | Player 1 | Player 2 | Player 3 |
+| --- | ---: | ---: | ---: | ---: |
+| A | x | y | 0 | 0 |
+| B | 0 | 0 | z | 0 |
+| C | 0 | 0 | 0 | w |
+
+Entries are Quit probabilities; rows are product distributions, not public
+mixtures of coalitions. Put k=x/(1−x). The continuation values at the three
+phase entries are
+
+    V_A = (1, 0, w/(1−w), 0),
+    V_B = ((1−z)[1+(R−1)w], k, 0, c*z),
+    V_C = (1+(R−1)w, a*w, 0, 0).                           (18)
+
+Equation (17) says V_B,0=1/(1−y). Hence all pivot values are at least
+one; all nonpivot values are nonnegative. The C and B recurrences follow
+directly from their singleton rows. The A recurrences reduce exactly to
+
+    (1−y)V_B,0 = 1,
+    V_B,1 = k,
+    (a_2*y−k)/(1+k) = w/(1−w),
+    −k−y+c*z*(1−y) = 0.
+
+The second equality is (16), and the others are respectively (17) and
+the definitions of w,z. These are full vector Bellman equalities, including
+the simultaneous coalition {0,1}, whose reward is (1,0,−1,−1).
+
+Every nonpivot's Quit-now payoff is exactly zero at every phase, including
+all ties and all multi-player coalitions. Whenever it mixes, its displayed
+value is zero; whenever it Continues surely, its displayed value is
+nonnegative. The Bellman equalities therefore give both pure-action Nash
+inequalities at every phase. Player 0's Quit-now payoff is always one.
+It mixes only at A, where its value is one, and Continues at B,C where
+its values exceed one. Thus its two pure-action inequalities also hold.
+
+These row comparisons control COMPLETE deviations. Fix a deviator. Every
+opponent has a positive hazard in each three-date period, independently of
+the deviator, so the probability that all opponents survive K periods
+tends geometrically to zero. Iterating the two-action Bellman upper bounds
+against an arbitrary history-dependent behavioral deviation, and bounding
+the surviving remainder by the finite reward/value bound, proves that its
+terminal payoff is at most the corresponding coordinate of (18). The same
+contraction proves that the displayed vector recurrence equals the actual
+prescribed terminal payoff. This establishes exact terminal Nash, not just
+on-path or bounded-controller optimality.
+
+The phase-A target is explicitly (1,0,w/(1−w),0). Censor the independent
+laws after K periods by moving every later finite atom to Never. The sum
+of changed marginal masses is
+
+    tau_K = (1−x)^K + (1−y)^K + (1−z)^K + (1−w)^K → 0.
+
+For a reward bound M, the prescribed payoff changes by at most 2M*tau_K
+and every full regret by at most 4M*tau_K. These are actual finite laws
+on a common menu. The exact pivot LP value against their three nonpivot
+marginals is no larger than this profile's regret. This supplies the outer
+laws required by the finite-menu question on the raw class (15). The same
+fixed phase-A target is a uniform-equilibrium payoff by the terminal-family
+consumer, or directly by the periodic-block consumer.
+
+### Every proper-child F/J family fails on the same raw tables
+
+Every one of the five F/J withdrawal kinds has the checked implication
+
+    d_out ≤ sum_i c_i*d_child,i + rho*Q_child,               (19)
+
+for every actual child profile, with finite nonnegative c_i,rho. Therefore
+an exact child Nash profile with Q_child=0 and positive outside debt rules
+out ALL choices of weights for ALL five labels at that child/outside pair.
+The following cases exhaust every nonempty proper S⊂{0,1,2,3}.
+
+1. If S⊂{1,2,3} and |S|≤2, let one child quit surely at date zero. For
+   two children choose the owner giving the other its positive a_j reward;
+   that is an exact child Nash profile. The missing third child, with
+   prescribed payoff −1 gains one by joining at date zero. For a singleton
+   child choose the missing player receiving −1. In both cases Q_child=0.
+2. If S={1,2,3}, use the endpoint y=Y,z,w displayed above, with solo
+   phases 1,2,3 and no pivot. Formula (18) without coordinate 0 and with
+   k=0 proves exact child Nash and Q_child=0. Player 0's prescribed payoff
+   is R/R_high, whereas quitting immediately gives one. Its debt is at
+   least 1−R/R_high>0.
+3. If 0∈S but 3∉S, make every member of S quit surely at date zero.
+   The pivot gets one and loses by withdrawing; each retained nonpivot
+   gets zero and gets −1 by withdrawing. This is exact child Nash.
+   Any missing nonpivot gets −1 and gains one by joining; Q_child=0.
+4. If {0,3}⊆S and 2∉S, player 3 alone quits surely at date zero.
+   The pivot gets R>1 and any retained player 1 gets a>0, so this is exact
+   child Nash. Missing player 2 gets −1 and gains one by joining.
+5. The only remaining child is S={0,2,3}. At date zero, child 2 quits
+   surely, pivot 0 quits with probability c/(1+c), and child 3 quits
+   with probability 1/R; all surviving laws choose Never. Child 3's
+   Continue payoff is zero, pivot 0's Continue payoff is one, and child
+   2's Continue payoff is negative. Their Quit payoffs are respectively
+   zero, one, zero. Thus this is exact child Nash with Q_child=0. Missing
+   player 1 gets −1+a/[(1+c)R]<0 and can join for zero. The strict sign
+   follows from R>R_low>a/(1+c).
+
+These falsifiers exclude a complete F/J quiet-lift family at every proper
+child, even if different outsiders may choose different kinds. They do not
+claim that every quiet approximate profile is bad, nor that the union of
+reward-table closures of all other producer classes is excluded.
+
+### Transparent symmetric specialization and corpus boundary
+
+For a=b=c=A>1 the interval is 3<R<1+A+A². One may choose a unique
+y∈(0,(A−1)/A) by
+
+    (1−y)^2[1+(R−1)y]=1,
+    z=w=y,   k=y(A−1−Ay),   x=k/(1+k).
+
+For A=2 this is exactly 3<R<7. At R=4,
+y=(5−sqrt(13))/6. This is an exact algebraic test, not numerical evidence.
+
+Named sources checked:
+
+- `isUniformEquilibriumPayoff_of_isQuittingBlockCertificate`, in
+  `UniformEquilibrium/Quitting/Cycles/BlockPeriodicProfile.lean`, is the
+  existing unrestricted-behavior periodic consumer; it does not produce
+  the present hazards from (15).
+- `withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess`, in
+  `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`,
+  supplies (19) uniformly in the five labels. Its exact `kind` quantifier
+  and original-child-profile quantifier were inspected.
+- `FullCoreDeadlock.jointBlock_isQuittingBlockCertificate` in
+  `UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockJointBlockEquilibrium.lean`
+  treats one different full-core singleton matrix and its zero-multicoalition
+  completion. `IsDeadlockRationalJointBlockCompletion` in
+  `DeadlockRationalPolyhedralBlock.lean` retains that same different matrix.
+  The existence of those joint-block methods is not claimed new here.
+- `exists_balancedCertificate_of_strictlyPositiveInverse_child` and
+  `exists_uniformEquilibriumPayoff_of_strictInverse_passiveRows`, in
+  `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/StrictInversePassiveRowCycle.lean`,
+  produce the known quiet three-child cycle when the outside inverse row
+  is nonnegative. For the displayed asymmetric pivot row, (15) has the
+  exact bad endpoint R/R_high<1; that passive-row test does not apply.
+- The finite censor, pivot-LP comparison, and retained-family target sources
+  are the exact declarations already listed above.
+
+The decisive broader source is
+`exists_uniformEquilibriumPayoff_of_productLowPremium`, in
+`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`.
+Its hypothesis `HasProductLowQuittingPremium`, defined in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`,
+holds here because EVERY player's forced-Quit payoff equals its singleton
+at EVERY product root. It proves bare existence for this family even
+outside (15), and likewise for the positive-harm enlargement below. The
+exact selected cycle and all-child F/J separation are stronger concrete
+information, but do not establish new existence coverage.
+
+## Proposed enlargement: independent positive pivot harm levels
+
+Status: independently reviewed extension of the exact selected cycle and
+all-child F/J separation. Its whole bare existence class is also already
+product-low, as stated above. The previous central proof is unchanged.
+
+Keep a,b,c>0 and D=abc−1>0, but choose arbitrary h_1,h_2,h_3>0.
+Change only each nonpivot's reward when the pivot quits without it from
+−1 to −h_j. Keep its own-quitting reward zero and its two cyclic passive
+coefficients a_j and −1. Keep r_0(S)=1 for 0∈S and
+r_0(S)=R*1_(3∈S) otherwise. Thus all finite coalition entries are again
+specified explicitly, and the own singleton vector remains (1,0,0,0).
+
+Let
+
+    A = [[0,−1,a],[b,0,−1],[−1,c,0]],
+    v = A^(-1) h
+      = (ac*h_2+c*h_1+h_3,
+         ab*h_3+a*h_2+h_1,
+         bc*h_1+b*h_3+h_2)/D.
+
+Every v_j is strictly positive. Set
+
+    R_low(h) = (v_1+v_2+v_3)/v_3,
+    R_high = ac+a+1.
+
+The interval is always nonempty, since exact algebra gives
+
+    R_high−R_low(h) = [(c+1)h_1+h_3]/v_3 > 0.             (20)
+
+**Enlarged claim.** For every R strictly in this interval, the same
+three-phase support pattern produces an exact unrestricted terminal Nash
+profile, explicit fixed target, and finite outer laws with vanishing repair
+value. Every proper-child F/J family is still excluded.
+
+### Monotone scalar selection
+
+Use the unchanged Y=D/[b(ac+a+1)]. For 0<y<Y and
+
+    0≤k≤min(by/h_2, [c−(c+1)y]/h_3),
+
+put
+
+    z(k,y)=(h_3*k+y)/[c(1−y)],
+    w(k,y)=(by−h_2*k)/[1+by+(1−h_2)k],
+    G(k,y)=h_1*k+z−a*w*(1−z).                            (21)
+
+The denominator of w equals 1+k+(by−h_2*k), hence is positive on this
+whole interval. At its left endpoint,
+
+    G(0,y) has the sign of y[b(ac+a+1)y−D],
+
+which is negative. At its right endpoint, either w=0 or z=1, and G>0.
+Inside the interval, z strictly increases in k and
+
+    partial_k w = −(h_2+by)/[1+by+(1−h_2)k]^2 < 0.
+
+Thus G is strictly increasing while 0<w,z<1. It has one unique root in
+the interval's interior. This proves the selection without any assumption
+on the sign of the cleared quadratic's leading coefficient.
+
+The root k(y) is continuous and extends to k(0)=k(Y)=0. At zero this
+follows from k≤by/h_2. At Y, every subsequential limit must be a root
+of the strictly increasing endpoint function, whose unique root is zero.
+Interior continuity follows either from strict monotonicity and compact
+local brackets or from the positive k-derivative in (21).
+
+As y tends to zero, all y,z,w,k are O(y). The three equations (21) give
+
+    A*(y,z,w) = h*k + O(y²).
+
+Consequently (y,z,w)=v*k+O(y²), so k/y→1/v_1, z/y→v_2/v_1,
+w/y→v_3/v_1. The same function (17) therefore extends continuously with
+R(0)=R_low(h). At y=Y the unchanged k=0 endpoint rates give
+R(Y)=R_high. By (20) and the intermediate value theorem, every requested
+R in the enlarged interval is attained at an interior y. Set x=k/(1+k).
+
+### Full values, deviations, and certificate exclusion
+
+The three actual root supports and all four independent hazards remain
+as above. The only change in (18) is
+
+    V_B,1 = h_1*k.
+
+The A-row identities now read
+
+    −h_1*x+(1−x)*V_B,1 = 0,
+    (by−h_2*k)/(1+k) = w/(1−w),
+    −h_3*k−y+c*z*(1−y) = 0.
+
+They follow exactly from (21); the pivot equation is unchanged. Every
+displayed nonpivot value is nonnegative, every pivot value is at least
+one, and mixing occurs only at equality. Own-Quit endpoints are still
+zero for nonpivots and one for the pivot. Positive opponent hazards every
+period again give the unrestricted behavioral comparison and identify the
+actual values. The finite censor and fixed phase-A target are unchanged.
+
+The proper-child falsifiers above need only these two replacements:
+
+- When 0∈S and 3∉S, the full sure-Quit child remains Nash; an omitted
+  nonpivot j has debt h_j>0 instead of one.
+- For S={0,2,3}, use pivot hazard c/(c+h_3), child-3 hazard 1/R, and
+  child 2 surely quitting, all at date zero. Pivot and child 3 remain
+  indifferent; child 2 strictly prefers quitting. Missing child 1 gets
+
+      [−c*h_1+h_3*(a/R−1)]/(c+h_3).
+
+  It is strictly negative because R>R_low(h)>a*h_3/(c*h_1+h_3).
+  For the latter inequality use a*v_3−v_2=h_1 and c*v_2−v_1=h_3:
+
+      (c*h_1+h_3)(v_1+v_2+v_3)−a*h_3*v_3
+        = h_1[(c+1)v_1+c*v_3]+h_3(v_1+v_3) > 0.
+
+All other child profiles use no pivot and are unchanged. They still have
+zero child debt and Q_child=0; in the full three-child case the pivot's
+positive debt is 1−R/R_high. Hence (19) again refutes every five-kind
+F/J choice at at least one outsider of EVERY proper child.
+
+Requested additional review: the interval identity (20), the unique
+monotone selector (21) including its endpoint limits, and the two modified
+child falsifiers. The original complete-deviation and finite-law arguments
+apply literally after the displayed replacement V_B,1=h_1*k.
+
+## Positive mutual premiums at the prescribed joint phase
+
+Status: live proof draft beyond product-low and the proper-child F/J
+families. This section is not covered by the reviews of the zero-premium
+construction above. No export or Lean verification is asserted.
+
+### Raw family and exact conclusion
+
+Start with the positive-harm table above: a,b,c,h_1,h_2,h_3>0, abc>1,
+and R_low(h)<R<R_high. Choose
+
+    xi>0,                 0<eta≤a*min(h_2,1).
+
+Change EXACTLY two reward entries, both on the coalition {0,1}:
+
+    r_0({0,1})=1+xi,       r_1({0,1})=eta.                (22)
+
+All other entries retain the preceding explicit table. In particular its
+own singleton vector is still (1,0,0,0). These increases occur at a
+prescribed coalition with strictly positive probability, not merely at an
+unused full-coalition row.
+
+**Claim.** Every such supplied raw table has a selected exact period-three
+independent terminal Nash profile, a fixed uniform target, and actual
+finite outer laws with pivot-repair values tending to zero. Every proper
+child fails a full five-kind F/J family, and the table robustly fails
+product-low quitting premiums.
+
+### Selecting the hazards after the actual payoff change
+
+Retain Y, the interval for k, and z,w from (21). Write
+
+    d=1+by+(1−h_2)k,
+    G_eta(k,y)=h_1*k+z−a*w*(1−z)
+                 +eta*k[1−(1−z)(1−w)/(1+k)].             (23)
+
+For 0<y<Y the value at k=0 is still strictly negative. At the upper
+endpoint either w=0 or z=1; the old part is strictly positive and the
+added part is nonnegative. Moreover 1−w=(1+k)/d. With z_k>0, direct
+differentiation yields
+
+    partial_k G_eta
+      = h_1+eta + (1+a*w+eta*k/d)*z_k
+          + (1−z)/d² * [a(h_2+by)−eta(1+by)] > 0.       (24)
+
+The final bracket is nonnegative by the stated bound on eta. Thus there
+is exactly one interior root k(y), again with all x=k/(1+k),y,z,w in
+(0,1). It extends continuously to k(0)=k(Y)=0. The extra term in (23)
+is O(y²) near zero, so the same endpoint ratios hold:
+
+    k/y→1/v_1,          z/y→v_2/v_1,          w/y→v_3/v_1.
+
+For this root define
+
+    R_xi,eta(y)=(1+xi*y)
+                    * [1+(1/((1−y)(1−z))−1)/w].         (25)
+
+It extends continuously with
+
+    R_xi,eta(0)=R_low(h),
+    R_xi,eta(Y)=(1+xi*Y)R_high > R_high.
+
+Every prescribed R_low(h)<R<R_high therefore has a selected interior y
+with R_xi,eta(y)=R. Equations (23)-(25) select all hazards from the NEW
+table. They do not reuse rates that were optimal before changing rewards.
+
+### Complete-vector Bellman identities and all behavior deviations
+
+Repeat the independent supports {0,1}, {2}, {3}, with rates x,y,z,w as
+before. Put
+
+    p=1+xi*y,       t=eta*x.
+
+The three vectors are
+
+    V_A=(p, t, w/(1−w), 0),
+    V_C=((1−w)p+R*w, (1−w)t+a*w, 0, 0),
+    V_B=((1−z)V_C,0, (1−z)V_C,1−z, 0, c*z).             (26)
+
+In the last display the comma after a subscript separates coordinates:
+explicitly V_B,0=(1−z)V_C,0 and V_B,1=(1−z)V_C,1−z.
+The selector gives
+
+    V_B,0=p/(1−y),       V_B,1=k(h_1+eta).                (27)
+
+The second identity is exactly (23); the first is (25). The pivot's
+Quit-now payoff is p at A and one at B,C. Its A Continue value is
+(1−y)V_B,0=p. Both B,C values exceed one. Player 1's Quit-now payoff
+is x*eta=t at A and zero at B,C, whereas its A Continue value is
+
+    −h_1*x+(1−x)V_B,1 = eta*x=t.
+
+Its values at B,C are positive. Players 2 and 3 retain Quit-now payoff
+zero at every phase. Their A recurrences are unchanged, and their values
+are nonnegative, with zero exactly at their prescribed mixing phases.
+The prescribed pair {0,1} has vector (1+xi,eta,−h_2,−h_3), so these
+checks include the changed actual collision payoff, not merely isolated
+pure-action tests. The B,C singleton recurrences give the rest of (26).
+
+Thus every pure action endpoint at every live phase is bounded by the
+displayed value, with equality for every supported action. Every player
+retains a positive-hazard opponent every period. Iterating these exact
+inequalities against an arbitrary complete behavioral deviation kills the
+geometrically bounded surviving remainder. The same iteration identifies
+the actual prescribed values. Hence this is exact unrestricted terminal
+Nash, with fixed target
+
+    (1+xi*y, eta*x, w/(1−w), 0).
+
+Censoring the four independent laws after K cycles again changes total
+marginal mass by tau_K from the original construction and bounds full
+exploitability by 4M*tau_K. The same finite nonpivot marginals therefore
+have inner repair value at most 4M*tau_K. These are legal finite laws on
+one common menu, with no public correlation. The fixed-target terminal
+consumer, or the directly verified periodic-block consumer, gives the
+uniform payoff. No fixed-target selection from unrelated approximants is
+needed.
+
+### Exact separation from product-low and all proper-child F/J
+
+Take a product root supported on {0,1}, with both hazards one half.
+Its only active players have own-Quit premiums xi/2 and eta/2, both
+strictly positive. This is an inward absorbing root witnessing failure of
+`HasProductLowQuittingPremium`. The strict witness survives all sufficiently
+small reward perturbations, so the class is not a mere reward-closure
+boundary of the product-low theorem.
+
+The proper-child falsifiers in the positive-harm section survive. Two
+points require an explicit check after (22):
+
+- For S={0,1}, the full date-zero coalition now pays its members
+  1+xi and eta. Withdrawing gives respectively zero and −h_1, so it
+  remains exact child Nash with Q_child=0. Its omitted nonpivots still
+  get −h_j and can join for zero. All other full-child coalitions in
+  the case 0∈S,3∉S are unchanged and remain exact child Nash.
+- For S={1,2,3}, the exact quiet cycle is unchanged. Pivot 0's payoff
+  is R/R_high, while quitting at phase A gives 1+xi*Y. Its positive
+  debt is at least 1+xi*Y−R/R_high. For the child S={0,2,3}, omitted
+  player 1's joining response always includes sure-quitter 2, so it
+  never realizes the altered pair {0,1}; its previously proved strict
+  gain remains valid.
+
+All remaining witnesses use unchanged coalition rows and comparisons.
+Hence every proper child still has an outside player whose debt is
+positive on an exact child Nash profile with joint Never zero. The single
+slack implication (19) refutes ALL weights in EACH of the five labels.
+
+### Early source-overlap check
+
+The source definition of product-low was read directly, not inferred from
+pointwise participant caps. It requires only ONE low-premium active player
+at every absorbing product root, which is why BOTH entries in (22) are
+raised. Raising player 1's pair reward alone would leave the original
+product-low theorem applicable.
+
+The singleton comparison matrix is unchanged by (22):
+
+    M = [[0,−1,−1,R−1],
+         [−h_1,0,−1,a],
+         [−h_2,b,0,−1],
+         [−h_3,−1,c,0]].
+
+Every row has a strictly negative off-diagonal entry, so `normalCore` is
+the full four-player set under the actual distinct-witness definition in
+`UniformEquilibrium/Quitting/Classification/LCP/NormalCore.lean`.
+There is no nonzero homogeneous LCP solution. If x_0>0, complementarity
+and the successive rows 0,3,2 force all child coordinates positive; then
+z=v*x_0 and the pivot residual is
+
+    v_3*(R−R_low(h))*x_0 > 0,
+
+a contradiction. If x_0=0, any nonzero child coordinate forces all three
+positive by their cyclic equations, after which invertibility of A gives
+a contradiction. Thus M is R0 and has no homogeneous simplex solution.
+
+Its R0 degree is one, not a nonunit-degree exit. At the regular LCP offset
+(1,−h_1,−h_2,−h_3), nonnegative child residuals force ALL child coordinates
+positive. Hence z=(1+x_0)v. The pivot residual is
+1+(1+x_0)v_3(R−R_low(h))>0, so x_0=0. This is the unique solution,
+with strict inactive pivot residual and active determinant det A=D>0.
+The exact root-sum theorem gives degree +1, and its nonzero-degree
+consequence gives standard Q. The declarations inspected are
+`exists_finset_r0Degree_eq_sum_sign_det` in
+`MathUE/LinearProgramming/R0DegreeSum.lean` and
+`isStandardQ_of_r0Degree_ne_zero` in
+`MathUE/LinearProgramming/R0Degree.lean`.
+Consequently the completed abnormal, homogeneous, ordinary non-Q and
+nonunit-degree existence gates do not supply this class. The two-coordinate
+principal {0,1} has both off-diagonal entries negative, so it is neither
+standard Q nor homogeneous-feasible; the full table is not projective Q-bar.
+
+The strict/weak three-child passive-row test also fails: the middle
+coordinate of the pivot inverse row is (R−R_high)/D<0. Every other
+three-player principal has a row with only negative off-diagonal entries,
+which prevents an entrywise nonnegative inverse. The four-player positive
+inverse criterion fails as well: the (0,2) entry of M^(-1) is positive
+while its (0,1) entry is negative in this interval; equivalently the signed
+pivot inverse row has both signs. Only the fact that at least one entry
+is negative is needed for this exclusion.
+
+The oriented-pair and paired-cylinder notes inspected have the reciprocal
+positive singleton pairs 0↔1 and 2↔3. This family's singleton sign graph
+has NO reciprocal positive pair, so no player relabeling or positive
+playerwise affine transformation identifies those raw tables with these.
+The integrated `PairedCycle.RawRegion` in
+`UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean` requires two
+positive nonpartner singleton comparisons in every four-player row through
+`OwnBounds`/`PassiveBounds` from `MathUE/PairedAffineIntervalEstimates.lean`.
+Here each row has exactly one positive off-diagonal comparison. The full-core
+deadlock joint-block modules also fix a different singleton sign graph.
+These are exact non-overlap checks for the named producer families, not a
+claim to have exhausted every theorem in the repository.
+
+### Rational stress test and next question
+
+The literal parameters
+
+    a=b=c=2,   h_1=h_2=h_3=1,
+    xi=1,      eta=17/11,      R=1735/368
+
+have selected hazards
+
+    (x,y,z,w)=(1/11,1/4,7/30,4/15)
+
+and target (5/4,17/121,4/11,0). Direct substitution gives G_eta=0 and
+(25), with eta<2 and 3<R<7. This is an exact rational test of an ACTUAL
+positive-premium collision and of the finite-law producer, not floating
+point evidence or a reward chosen after assuming a strategy exists.
+
+Next check: independently falsify (24), the changed complete-vector
+recurrences, and the source overlap analysis before any gate decision.
+The general arbitrary canonical table remains open.
