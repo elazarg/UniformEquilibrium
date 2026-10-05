@@ -231,3 +231,170 @@ decision must be made on the stronger explicit
 construction/separation content, not on new existence coverage or resolution
 of the surviving arbitrary-game obstruction. The author should incorporate
 this material overlap before a packet is promoted.
+
+## Independent falsification review of the pivot-first generalization
+
+**PASS as ordinary mathematics, with no unresolved mathematical objection.**
+This addendum reviews ONLY the final section “Proposed generalization:
+select the pivot equation first” in the same notebook. I did not read the
+other reviewer's addendum before completing this check. The earlier overlap
+objection above applies to the older constant-participant-payoff family; it
+does not apply to this changed raw table.
+
+The checked claim has positive a,b,c,h_1,h_2,h_3, abc>1, u,v<1,
+xi,eta>0, and q_2,q_3<=0; eta has no upper bound. It prescribes the four
+singleton rows and the literal pair row `(1+xi,eta,q_2,q_3)`, caps each
+participant's reward at its own singleton on every other nonsingleton
+coalition, and leaves their nonparticipant rewards arbitrary. For the
+stated strict interval in R, the output is a selected exact period-three
+terminal Nash profile against every behavioral deviation, a fixed uniform
+payoff target, and finite censored laws with vanishing full exploitability
+and optimal pivot-repair value. No supplied strategy or root is an input.
+
+### Raw overlap and the genuinely changed coalition
+
+At the product root `(1/2,1/2,0,0)`, player 0's forced-Quit payoff is
+`1+xi/2` and player 1's is `eta/2`. Their own singletons are one and zero,
+respectively, and these are the only active players. Absorption is `3/4`.
+Thus EVERY table in the new raw class violates the exact
+`HasProductLowQuittingPremium` predicate in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`.
+The integrated producer
+`exists_uniformEquilibriumPayoff_of_productLowPremium` in
+`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`
+therefore cannot be invoked with its displayed hypothesis for this class.
+Both participant premiums are essential to this particular falsification.
+
+The generalization carefully scopes the old all-child F/J and matrix-screen
+separations to the retained ORIGINAL completion: u=v=0, q_j=-h_j, and the
+other coalition rows prescribed in that earlier family. It does not claim
+those separations for arbitrary new passive completions. Increasing eta
+introduces no upper-bound dependence into the original F/J falsifiers. In
+particular child `{0,1}` remains exact sure-exit child Nash, now with even
+higher participant payoffs, while missing nonpivots still gain by joining.
+The all-nonpivot quiet cycle is unchanged and the pivot's immediate joining
+payoff only rises. The `{0,2,3}` witness and the missing player's joining
+payoff never realize `{0,1}`, because player 2 quits surely. The remaining
+witnesses are unchanged. The named singleton-matrix screens likewise do not
+depend on eta or xi, since neither changes a singleton. No assertion of
+exhaustive exclusion of all implemented producers is warranted or made.
+
+### Pivot branch, including both endpoints
+
+I independently derived the three identities
+
+    a*nu_3-nu_2=h_1,
+    b*nu_1-nu_3=h_2,
+    c*nu_2-nu_1=h_3.
+
+They prove the asserted positive interval width and the comparison
+`P_0(0)<R_low`. The denominator identity
+`d=1+k+(by-H_2 k)` proves positivity directly, even when H_2>1.
+The two strict bounds defining K(y) give `0<z,w<1`. Both H_j are strictly
+positive because y<=Y<1 and q_j<=0.
+
+For fixed positive y, z strictly increases and w strictly decreases in k.
+The numerator in P is positive and increasing, while `(1-z)w` is positive
+and strictly decreasing. Hence P strictly increases and diverges at the
+upper endpoint, whether w vanishes, z reaches one, or both occur together.
+At k=0 the rational expression P_0 has a continuous value at zero and is
+strictly increasing. Substitution at Y gives exactly
+`R_high+xi*Y*L`. These facts produce unique y_star and unique k_R(y).
+
+For interior y, fixed strict brackets around k_R(y) remain feasible and
+remain brackets for nearby y; this proves continuity without differentiating
+the minimum in K. At y_star, any sufficiently small fixed positive upper
+bracket remains feasible, so k_R tends to zero. At zero the inequality
+`0<=k_R(y)<=by/H_2(y)` proves continuous extension. The statement does not
+assume a globally continuous choice from a possibly multivalued final
+equation.
+
+The ratio k_R(y)/y is bounded. Multiplication of the defining equation by
+`(1-z)w/y` gives, for every convergent ratio subsequence,
+
+    (R-1)(b-h_2*t)=s_1+s_2*(1+h_3*t)/c.
+
+Its right side is positive. This excludes the possible endpoint t=b/h_2,
+and its unique solution is the displayed positive tau. Thus all convergent
+subsequences have the same limit. The comparison
+`F(1/nu_1)=R_low` is exact, and F is strictly increasing, yielding
+`tau>1/nu_1`.
+
+In G the eta term is O(y^2), since k,z,w are O(y). This statement is for
+each fixed finite eta; it does not require a neighborhood uniform over all
+eta. The remaining first-order coefficient is exactly
+`(D/c)(nu_1*tau-1)>0`. At y_star, clearing the positive denominator leaves
+`y_star*(bL*y_star-D)<0`. Therefore a zero of G exists strictly between
+zero and y_star, with all four hazards strictly between zero and one.
+No monotonicity or uniqueness of G is needed. This is the substantive
+repair that allows arbitrary positive eta.
+
+### Actual vector recurrences and attempted deviation falsifiers
+
+To avoid ambiguous comma subscripts, the B-vector in equation (38) is
+unambiguously
+
+    V_B = (v*z+(1-z)*(V_C)_0, (1-z)*(V_C)_1-z, 0, c*z),
+
+where the first two entries mean `v*z+(1-z)*(V_C)_0` and
+`(1-z)*(V_C)_1-z`. The prose immediately after (38) already specifies this
+interpretation; it should be typeset with explicit coordinate parentheses
+in a standalone packet.
+
+Re-expanding the independent A-row probabilities gives the actual player-2
+numerator `by-H_2(y)k` and player-3 numerator
+`-H_3(y)k-y+c*z*(1-y)`. Thus q_2 and q_3 are consumed as the actual collision
+rewards, rather than silently replaced by the older -h_j. The equations
+P=R and G=0 respectively give pivot and player-1 indifference at A. The
+B/C recurrences and the definition of w give player-2 and player-3
+indifference at their solo phases. All prescribed nonpivot values are
+nonnegative, and both pivot values outside A exceed one because u,v<1.
+
+I tried to exploit the arbitrary nonparticipant entries. They cannot be
+realized on prescribed play, whose only absorption coalitions are the
+four singletons and `{0,1}`. When a single deviator quits, every new
+coalition contains that deviator, so its own coordinate is covered by the
+participant cap (29), except precisely the already computed exceptional
+pair. Continuing cannot change the opponents' prescribed coalition.
+Thus none of the free passive entries creates an omitted response.
+
+The phase inequalities hold against both pure actions at every live phase.
+Every deleted opponent profile retains positive hazards in each period.
+The geometric survival bound therefore removes the tail term when the
+inequalities are iterated against an arbitrary complete behavioral
+deviation, including Never and history-dependent stopping. It also
+identifies the displayed vectors with the actual prescribed payoff. This
+is full terminal Nash, not periodic-deviation Nash.
+
+### Finite laws, fixed target, and exact tests
+
+The marginal censoring masses are exactly the four displayed geometric
+tails. Product coupling gives prescribed-payoff error at most `2M*tau_K`
+and full regret at most `4M*tau_K`. The censored pivot is a feasible
+competitor in the inner finite optimization, so the optimum is no larger;
+this comparison does not claim that an optimized pivot preserves the
+selected target. The displayed prescribed laws themselves converge to
+the single target V_A. I reread
+`quittingTerminalExploitability_censored_le` in
+`UniformEquilibrium/Quitting/Paths/LateFiniteStoppingLawCensor.lean` and
+`quittingGame_uniformPayoffWitnesses_of_terminalNash_tendsto` in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`;
+their exact scopes match these consequences. The supplied-block consumer
+`isUniformEquilibriumPayoff_of_isQuittingBlockCertificate` in
+`UniformEquilibrium/Quitting/Cycles/BlockPeriodicProfile.lean` remains a
+consumer, not the new raw-parameter selector.
+
+As an adversarial exact test, I independently enumerated all coalition
+probabilities for the second rational example, assigning 37 to every free
+passive entry and the allowed cap to every other participant entry. All
+12 vector Bellman equalities and all 24 pure-action inequalities hold
+over the rationals, and V_A is exactly
+`(5/4,62786/81709,195/404,0)`. Both rational examples also independently
+satisfy the displayed z/w identities, P=R, and G=0, with eta above two.
+The proof, rather than those tests, covers the arbitrary real parameters.
+
+This supplies the requested second independent falsification review for
+the changed mechanism and exact raw class. I recommend the mathematical
+export gate for this precise theorem, retaining its stated overlap limits
+and full behavioral scope. No Lean build, formal implementation, arbitrary
+four-player theorem, or global polynomial exclusion is claimed.

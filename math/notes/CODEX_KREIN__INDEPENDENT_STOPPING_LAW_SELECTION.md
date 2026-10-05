@@ -19,7 +19,25 @@ The live beyond-product-low candidate is **Positive mutual premiums at the
 prescribed joint phase** below. Both participants receive strictly positive
 singleton-relative premiums at the positive-probability coalition {0,1}.
 This changes the actual Bellman equations and robustly violates product-low.
-That additional raw-family theorem is a proof draft, not yet reviewed.
+That additional raw-family theorem has a first independent PASS in
+`../feedback/CODEX_KREIN__INDEPENDENT_STOPPING_LAW_SELECTION__BY_CODEX_BROUWER.md`.
+Its central section is frozen while the broader candidate is assessed.
+
+The appended **Proposed generalization: select the pivot equation first**
+has independent PASS reviews from CODEX_BROUWER and CODEX_MORSE, recorded
+in their feedback files for this notebook. A different scalar selection removes
+the bound on the mutual premium and covers independent collision harms,
+unequal pivot passive singletons, and arbitrary unused passive rewards.
+Its exact new raw-table criterion and endpoint proof are written below;
+both reviewers checked that stronger statement independently.
+
+The separate **Further producer: diffuse only the solo phases** weakens
+the reward criterion to six outsider caps at the actual joint phase and
+has a first independent PASS from CODEX_BROUWER. It supplies approximate
+profiles with one fixed target using existing singleton-refinement and
+exact-Continue supersolution methods. The self-contained assembled draft is
+`CODEX_KREIN__ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md`; it is internal,
+and the diffusion enlargement still requires its second independent review.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
@@ -1038,3 +1056,494 @@ point evidence or a reward chosen after assuming a strategy exists.
 Next check: independently falsify (24), the changed complete-vector
 recurrences, and the source overlap analysis before any gate decision.
 The general arbitrary canonical table remains open.
+
+## Proposed generalization: select the pivot equation first
+
+Status: ordinary mathematics with independent CODEX_BROUWER and CODEX_MORSE
+PASS reviews. This
+section is separate from the frozen positive-mutual-premium review target
+above. It removes the upper bound on the participant premium, changes the
+actual collision rewards of the two outsiders independently, allows two
+independent passive singleton rewards for the pivot, and leaves every
+unused nonparticipant reward unrestricted. No Lean or export claim is made.
+
+### Reward data and exact conclusion
+
+Let a,b,c,h_1,h_2,h_3>0 and D=abc−1>0. Let u,v<1, xi>0,
+eta>0, and q_2,q_3≤0. There is NO upper bound on eta. Prescribe the
+four singleton vectors and the exceptional pair vector by
+
+    r({0})   = (1, −h_1, −h_2, −h_3),
+    r({1})   = (u, 0, b, −1),
+    r({2})   = (v, −1, 0, c),
+    r({3})   = (R, a, −1, 0),
+    r({0,1}) = (1+xi, eta, q_2, q_3).                    (28)
+
+For every other nonsingleton coalition T, require only
+
+    r_i(T)≤s_i whenever i∈T,        s=(1,0,0,0).         (29)
+
+Its nonparticipant rewards are arbitrary finite real numbers. Thus (28)
+and (29) are a criterion on the raw reward table, not a requirement that
+the game admit a particular strategy or continuation witness. In fact
+many inequalities in (29) can be omitted because their coalitions are
+unreachable even by one deviator; the uniform participant cap keeps the
+statement simple.
+
+Write s_1=1−u>0, s_2=1−v>0 and
+
+    nu = (ac*h_2+c*h_1+h_3,
+          ab*h_3+a*h_2+h_1,
+          bc*h_1+b*h_3+h_2)/D,
+    L = ac+a+1,
+    R_low = 1+(s_1*nu_1+s_2*nu_2)/nu_3,
+    R_high = 1+ac*s_1+a*s_2.
+
+Assume R_low<R<R_high. This interval is always nonempty, since
+
+    R_high−R_low
+      = [(c*s_1+s_2)*h_1+s_1*h_3]/nu_3 > 0.            (30)
+
+**Theorem draft.** Every such raw table admits an exact terminal Nash
+profile against every complete behavioral deviation, using the period-three
+independent supports {0,1}, {2}, {3}. The proof selects all four strictly
+positive hazards from the table. Its phase-A payoff is a fixed uniform
+equilibrium target. Finite censoring produces actual common-menu laws
+with full exploitability and optimal pivot-repair value tending to zero.
+Every table in this class strictly fails product-low premiums.
+
+The statement does NOT exclude all proper-child F/J families for every
+arbitrary completion (29). The previously proved all-child separation
+survives on the original completion with u=v=0 and q_j=−h_j, even when
+eta exceeds its former upper bound. A different arbitrary completion may
+have an additional simpler producer.
+
+The probability model is the original one: independent private action
+randomization at each live date, public observation of the date and
+survival, and no external public coin. A unilateral deviation replaces
+one player's entire behavioral strategy. Terminal Never pays zero.
+
+### A uniquely selected pivot branch
+
+Put Y=D/(bL). Then 0<Y<c/(c+1)<1. For 0≤y≤Y define
+
+    H_j(y)=h_j*(1−y)−q_j*y > 0,                 j=2,3.
+
+For 0<y≤Y and
+
+    0≤k<K(y)=min(by/H_2(y), [c−(c+1)y]/H_3(y)),
+
+define
+
+    z=(H_3(y)*k+y)/[c(1−y)],
+    d=1+by+[1−H_2(y)]k,
+    w=[by−H_2(y)k]/d,
+    p=1+xi*y.
+
+Here d=1+k+[by−H_2(y)k]>0, and 0<z,w<1. The pivot's
+indifference equation is R=P(k,y), where
+
+    P(k,y)=p+
+      { (p−u)y/(1−y)+(p−v)z }/[(1−z)w].                (31)
+
+For fixed y, z strictly increases in k and w strictly decreases, since
+
+    z_k=H_3(y)/[c(1−y)]>0,
+    w_k=−[H_2(y)+by]/d²<0.
+
+Both p−u and p−v are positive. Consequently P strictly increases in k,
+and P(k,y) tends to infinity as k increases to K(y): either w tends to
+zero or z tends to one, while the numerator stays strictly positive.
+
+At k=0, direct simplification gives
+
+    P_0(y)=p+
+      [(c+1)p−cu−v]*(1+by)/[b(c−(c+1)y)].              (32)
+
+This is continuous and strictly increasing on [0,Y]. Indeed p increases,
+the positive bracket increases, and the final positive rational factor
+strictly increases. Its endpoints satisfy
+
+    P_0(0)=1+[c*s_1+s_2]/(bc)<R_low,
+    P_0(Y)=L*(1+xi*Y)−ac*u−a*v
+          =R_high+xi*Y*L>R_high.                       (33)
+
+For the first strict inequality use b*nu_1−nu_3=h_2 and
+c*nu_2−nu_1=h_3, which give nu_1/nu_3>1/b and
+nu_2/nu_3>1/(bc). For the second endpoint, substitution of Y gives
+(1+bY)/[b(c−(c+1)Y)]=a.
+
+Equations (32)-(33) uniquely select y_star∈(0,Y) with P_0(y_star)=R.
+For each 0<y<y_star, strict monotonicity and the infinite upper endpoint
+in (31) uniquely select k_R(y)∈(0,K(y)) with P(k_R(y),y)=R. Set
+k_R(y_star)=0. This branch is continuous. At an interior y, strict
+monotonicity provides fixed lower and upper brackets around the root,
+which remain brackets for all nearby y. At y_star the same argument
+uses a lower bracket of zero and any fixed positive upper bracket.
+Also k_R(y)≤by/H_2(y)=O(y), so the branch extends with k_R(0)=0.
+No monotonicity or uniqueness of the remaining nonpivot equation is used.
+
+### Endpoint direction and closing the nonpivot equation
+
+The limit tau=lim_(y→0) k_R(y)/y exists and is the unique number in
+(0,b/h_2) satisfying
+
+    R=F(tau),
+    F(t)=1+[s_1+s_2*(1+h_3*t)/c]/(b−h_2*t).            (34)
+
+To verify the limit, k_R(y)/y is bounded. Multiply (31) by
+(1−z)w/y before taking a subsequential limit. Every such limit t solves
+
+    (R−1)(b−h_2*t)=s_1+s_2*(1+h_3*t)/c.
+
+The positive right side excludes t=b/h_2; this linear equation has the
+unique solution
+
+    tau=[b(R−1)−s_1−s_2/c]/[h_2(R−1)+s_2*h_3/c]>0.
+
+Hence all subsequential limits coincide. F strictly increases on
+[0,b/h_2), since its numerator increases and its positive denominator
+decreases. The identities for nu give F(1/nu_1)=R_low. Therefore
+
+    tau>1/nu_1.                                         (35)
+
+Along this selected branch let
+
+    G(y)=h_1*k+z−a*w*(1−z)
+          +eta*k*[1−(1−z)(1−w)/(1+k)],    k=k_R(y).      (36)
+
+This is continuous on (0,y_star]. Since k,z,w=O(y), the term multiplied
+by eta is O(y²) for every fixed finite eta. Equations (34)-(35) yield
+
+    lim_(y→0) G(y)/y
+      =h_1*tau+(1+h_3*tau)/c−a*(b−h_2*tau)
+      =(D/c)*(nu_1*tau−1)>0.                            (37)
+
+At y=y_star, k=0, so G has the sign of
+
+    y_star*[bL*y_star−D]<0,
+
+because y_star<Y. The intermediate value theorem gives a selected
+y∈(0,y_star) with G(y)=0. All of x=k/(1+k),y,z,w lie strictly between
+zero and one. This proves selection for every eta>0. In particular, a
+large eta can destroy monotonicity of G in k without affecting this
+construction: k has already been selected uniquely from another equation.
+
+### Complete payoff vectors and unrestricted deviations
+
+Repeat rows (x,y,0,0), (0,0,z,0), (0,0,0,w). Put t=eta*x and
+
+    V_A=(p,t,w/(1−w),0),
+    V_C=((1−w)p+Rw, (1−w)t+aw, 0, 0),
+    V_B=(v*z+(1−z)V_C,0, (1−z)V_C,1−z, 0, c*z).       (38)
+
+Here V_C,0 and V_C,1 are coordinates; equivalently the first two B
+coordinates are v*z+(1−z)*V_C,0 and (1−z)*V_C,1−z. The two selected
+equations imply
+
+    V_B,0=(p−uy)/(1−y),        V_B,1=k(h_1+eta).         (39)
+
+At A, the pivot's Quit payoff is p and its Continue payoff is
+uy+(1−y)V_B,0=p. Player 1's Quit payoff is t and its Continue payoff is
+−h_1*x+(1−x)V_B,1=t. The actual A-row values for players 2 and 3 are
+
+    [by−H_2(y)k]/(1+k)=w/(1−w),
+    [−H_3(y)k−y+c*z*(1−y)]/(1+k)=0,
+
+respectively. These expressions include the independent actual collision
+rewards q_2 and q_3. The B and C recurrences in (38) follow from the
+singleton vectors in (28).
+
+At B and C, the pivot's forced-Quit payoff is at most one by (29).
+Its two continuation values exceed one: (39) gives
+V_B,0−1=(xi+1−u)y/(1−y)>0, and
+V_C,0=(V_B,0−v*z)/(1−z)>1. Every nonpivot forced-Quit payoff outside
+the exceptional pair is at most zero by (29). All displayed nonpivot
+values are nonnegative, and each supported nonpivot Quit action has
+value zero at its solo phase. Thus both action endpoints are bounded
+above by the displayed value at every live phase, with equality for
+every action in the prescribed support.
+
+Fix an arbitrary deviator. Its opponents have positive hazards every
+period regardless of its behavior. The chance of surviving K full
+periods is at most rho_i^K, where
+
+    rho_i=product_(j≠i)(1−q_j^*)<1,
+    (q_0^*,q_1^*,q_2^*,q_3^*)=(x,y,z,w).
+
+Iterating the endpoint inequalities against its complete behavioral
+strategy and bounding the remainder by a finite reward/value bound
+proves that its terminal payoff is at most V_A,i. Iterating the prescribed
+equalities identifies (38) with the actual payoff vectors. This proves
+exact terminal Nash and rules out late, history-dependent, and Never
+deviations, not merely bounded or periodic deviations.
+
+The fixed target is (p,t,w/(1−w),0), selected before any accuracy. If M
+bounds all absolute table entries, moving each marginal's atoms after K
+periods to Never changes total marginal mass by at most
+
+    tau_K=(1−x)^K+(1−y)^K+(1−z)^K+(1−w)^K→0.
+
+Product coupling bounds the prescribed-payoff change by 2M*tau_K and
+every complete regret by 4M*tau_K. Hence these actual finite laws deliver
+the fixed target and full approximate Nash simultaneously. The finite
+pivot optimizer does no worse than the prescribed pivot marginal, so
+the three finite outer laws have optimal repair value at most 4M*tau_K.
+The named fixed-target terminal consumer already listed in this notebook
+then yields a uniform equilibrium payoff. No strategic witness is assumed.
+
+### Exact checks and the implementation boundary
+
+The {0,1} product root with both hazards 1/2 gives positive premiums
+xi/2 and eta/2 to both and only active players. Therefore (28)-(29)
+strictly fail `HasProductLowQuittingPremium`, independently of every
+other coalition entry. The exact definition and
+`exists_uniformEquilibriumPayoff_of_productLowPremium` were reread in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`
+and `UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`.
+The supplied-block consumer remains
+`isUniformEquilibriumPayoff_of_isQuittingBlockCertificate` in
+`UniformEquilibrium/Quitting/Cycles/BlockPeriodicProfile.lean`; it does
+not select the branch (31). This is new ordinary source construction,
+not a claim that the source consumer itself is new.
+
+One rational test on the old completion has a=b=c=2, all h_j=1,
+u=v=0, q_2=q_3=−1, xi=1 and
+
+    eta=8027/101,       R=21845/6076,
+    (x,y,z,w)=(1/101,1/4,13/75,49/150).
+
+It has eta>2 and 3<R<7, outside the former premium hypothesis. The
+all-child falsifiers from the preceding proof do not use an upper bound
+on eta and still apply to this exact completion.
+
+A second rational test changes genuinely independent actual rewards:
+a=b=c=2, all h_j=1, u=1/2, v=−1/2, q_2=−2, q_3=−3, xi=1, and
+
+    eta=62786/809,      R=321377/96330,
+    (x,y,z,w)=(1/101,1/4,53/300,195/599),
+    V_A=(5/4,62786/81709,195/404,0).
+
+Here R_low=3<R<6=R_high. Give every other nonsingleton coalition its
+participant cap s_i and give every nonparticipant payoff 37. Exhaustive
+rational substitution checks all 24 pure-action inequalities and all
+12 vector Bellman identities. Those large unused passive payoffs have
+no effect on the equations. These are finite exact tests; the proof
+above supplies every real table in the stated raw class.
+
+Requested independent check: the pivot-branch continuity at both ends,
+the sign comparison (34)-(37), and completeness of the cap argument
+under the arbitrary reward freedom (29). The source-overlap claims
+beyond product-low remain those explicitly established for the original
+completion above; no exhaustive implementation audit is asserted for
+every enlarged completion. The arbitrary canonical four-player game
+remains open.
+
+## Further question: a second rewarded pair changes the phase geometry
+
+This is separate from the frozen pivot-first theorem. The question is
+whether the same source geometry can handle arbitrary participant rewards,
+which is the remaining obstruction to using that mechanism on general
+canonical tables.
+
+A minimal modification shows that merely repeating or reordering its row
+types cannot do this. Take the original completion from the mutual-premium
+construction, and change only r_2({2,3}) from zero to a number beta>0.
+Leave every other own-quitting reward of player 2 zero, and every
+own-quitting reward of player 3 zero. In particular both can always secure
+zero by quitting, while player 2's Quit payoff against a pure player-3 row
+of hazard w is beta*w>0.
+
+Consider an exact periodic Bellman equilibrium whose allowed nonempty rows
+are: a product row supported on {0,1}; a solo player-2 row; or a solo
+player-3 row. Empty rows are allowed. Suppose some player-3 row has positive
+hazard. Its player-3 value equals zero by supported-action equality. An
+immediately preceding nonempty row cannot be supported on {0,1}: every
+outcome of that row harms player 3 strictly, and its continuation value
+at the player-3 row is zero, so its actual value is negative. Quitting
+there guarantees zero, contradicting equilibrium. It cannot be a positive
+player-2 row either: player 2's value at the ensuing player-3 row is at
+least beta*w>0, while quitting alone at the player-2 row pays zero. Its
+supported Quit action therefore loses to Continue. Empty rows between
+these two rows merely copy the relevant value.
+
+Thus a positive player-3 row can only follow another such row in the
+cyclic list of nonempty rows. Finiteness forces every nonempty row to be
+a player-3 row. That remaining profile gives player 2 terminal payoff
+−1, while joining at the initial positive row gives a positive payoff,
+so it is not Nash either. The whole row grammar is therefore impossible
+for an exact periodic Bellman equilibrium in which player 3 ever quits.
+
+This is an internal architecture boundary, not a game counterexample and
+not a claim about all approximate profiles. It explains why arbitrary
+positive participation rewards cannot be absorbed by more copies of the
+same three row types. A next producer must permit additional simultaneous
+owners or supply a different, possibly nonperiodic approximation mechanism.
+No assertion is made here that such a larger producer is impossible.
+
+Concrete next question: construct the additional simultaneous-owner
+phase from this single changed pair reward, keeping a,b,c,h and the
+singleton comparison matrix fixed. This changes actual strategic
+interactions without replacing the source problem by an interval exercise.
+
+## Further producer: diffuse only the solo phases
+
+Status: ordinary proof draft with a first independent CODEX_BROUWER PASS,
+separate from the frozen pivot-first statement. It resolves the immediately
+preceding added-pair problem by approximation. The limiting target stays
+fixed. No extra simultaneous-owner phase is needed for this enlargement.
+
+### A weaker raw-table criterion
+
+Keep ALL numerical assumptions and the five prescribed vectors (28) of
+the pivot-first construction. Replace the participant cap (29) by only
+the following six inequalities:
+
+    r_2({0,2})≤0,  r_2({1,2})≤0,  r_2({0,1,2})≤0,
+    r_3({0,3})≤0,  r_3({1,3})≤0,  r_3({0,1,3})≤0.      (40)
+
+Every other coordinate of every other nonsingleton coalition is arbitrary
+and finite, including r_2({2,3}), r_3({2,3}), the pivot's participant
+payoffs on {0,2} and {0,3}, player 1's participant payoffs on {1,2}
+and {1,3}, and the entire four-player coalition vector.
+
+**Theorem draft.** Every such table has one fixed uniform equilibrium
+payoff and actual finite outer stopping laws with arbitrarily small full
+regret and pivot-repair value. The theorem asserts arbitrarily accurate
+terminal equilibria, rather than an exact finite periodic equilibrium.
+The same {0,1} witness proves strict product-low failure throughout this
+larger class. No class-wide F/J exclusion is claimed.
+
+### Construction and preserved actual payoff
+
+Equations (30)-(37) depend only on the five vectors (28). They therefore
+select the same x,y,z,w and values V_A,V_B,V_C for this new table. More
+formally, cap the otherwise unspecified participant rewards at s_i to
+obtain an auxiliary table satisfying (29), apply that producer, and retain
+its rates. The original and auxiliary tables agree at every prescribed
+outcome {0}, {1}, {0,1}, {2}, {3}, so their actual vector recurrences
+agree. No auxiliary-game incentive conclusion is transferred silently.
+
+For a positive integer n put
+
+    z_n=1−(1−z)^(1/n),       w_n=1−(1−w)^(1/n).
+
+Repeat one {0,1} row with hazards x,y, then n solo player-2 rows of
+hazard z_n, then n solo player-3 rows of hazard w_n. All choices remain
+independent and use only the public date and survival. Each solo block
+has exactly its original aggregate hazard, because
+
+    (1−z_n)^n=1−z,           (1−w_n)^n=1−w.
+
+Thus the distribution of the terminal coalition is unchanged for every n,
+and the ACTUAL initial payoff is always the same vector
+
+    V_A=(1+xi*y, eta*x, w/(1−w), 0).                     (41)
+
+Within the player-2 block, if rho is the remaining aggregate hazard,
+the value is rho*r({2})+(1−rho)*V_C, with 0≤rho≤z. It lies on the
+line segment between V_B and V_C. Within the player-3 block the analogous
+value lies on the segment between V_C and V_A. All these values retain
+the coordinatewise floor s=(1,0,0,0). The owner has value zero throughout
+its own solo block. The root policy and every player's pure-Continue
+transport are exact at every refined date, including the joint row.
+
+### One immediate-Quit error controls the whole deviation
+
+Define the finite collision excess bound
+
+    C=max({0} union
+      { (r_i({i,j})−s_i)_+ : j∈{2,3}, i≠j }).          (42)
+
+At a solo j-row of hazard delta, a different player's forced-Quit
+payoff is exactly
+
+    s_i+delta*(r_i({i,j})−s_i)
+       ≤s_i+C*delta≤V_i+C*delta.
+
+The solo owner has forced-Quit payoff equal to its value zero. At the
+{0,1} row, the two supported players retain their exact action equalities.
+Conditions (40), together with their zero singleton rewards, bound both
+outsiders' forced-Quit payoffs by zero, hence by their displayed values.
+Consequently every immediate-Quit endpoint is at most its value plus
+
+    e_n=C*max(z_n,w_n)→0,                                (43)
+
+while every pure-Continue endpoint equals its value exactly.
+
+These local inequalities control one COMPLETE behavioral deviation with
+error e_n, not a sum of errors over dates. One proof adds e_n to every
+value. If Continue has immediate expected reward a and opponent survival
+probability q≤1, exact transport says a+q*V_next=V, so
+a+q*(V_next+e_n)≤V+e_n. Quit is also bounded by V+e_n. Thus V+e_n is
+a Bellman supersolution for every deviating action. Iterating against
+any behavioral strategy and letting the finite remainder vanish gives
+terminal payoff at most V_A,i+e_n.
+
+The remainder vanishes uniformly over that player's deviations because
+its opponents still have the same per-period survival product as before:
+the joint phase is unchanged, and each refined solo block has unchanged
+aggregate survival. That product is strictly below one. All rewards and
+values are bounded. Equivalently, the error is charged only when the
+deviator first Quits while the game is live, an event occurring at most
+once. There is no accumulation over repeated refined periods.
+
+This proves full terminal e_n-Nash and exact delivery of (41) for every n.
+The target is chosen before n or the requested accuracy.
+
+### Finite laws and uniform horizons
+
+For each n censor all four marginal laws after K refined periods. The
+total changed marginal mass is still bounded by
+
+    tau_K=(1−x)^K+(1−y)^K+(1−z)^K+(1−w)^K,
+
+independently of n. If M bounds the absolute entries of the ORIGINAL
+table, product coupling gives full terminal regret at most
+
+    e_n+4M*tau_K,
+
+and distance at most 2M*tau_K from the fixed target (41). Choose n first
+and K second for the desired accuracy. These are actual finite laws on
+one common finite menu; the optimal pivot repair is bounded above by the
+same full regret. The fixed-target terminal consumer supplies one profile
+and one threshold covering every sufficiently long horizon at that accuracy.
+No common threshold across different accuracies is required or asserted.
+
+### Source correspondence and exact boundary check
+
+Singleton refinement and the one-error comparison are EXISTING methods,
+not new principles. The sources read for this argument are:
+
+- `exists_uniform_quittingMeshScale` in
+  `UniformEquilibrium/Quitting/Terminal/TargetTail/InfiniteSingletonMesh.lean`;
+- `singletonArcCycle_isTerminalNash_and_hasValue` in
+  `UniformEquilibrium/Quitting/Cycles/SingletonArcCycle.lean`;
+- `quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`,
+  `QuittingInfinitePathQuitErrorCertificate.isεAsymptoticNash_and_delivers`,
+  and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+  in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+
+The last file's exact certificate retains root policy evaluation, exact
+Continue transport, a uniform Quit cap, bounded values, and vanishing
+opponent survival; all are produced explicitly above. The first two
+files refine supplied singleton paths. They do not produce the present
+mixed joint/solo path from the raw data (28),(30),(40). The contribution
+here is the enlarged actual-data source using the pivot-first construction,
+not a new supplied-path compiler.
+
+For the concrete modification r_2({2,3})=beta>0 of the original completion,
+all other formerly capped participant entries remain at their caps.
+Then C=beta, and (43) gives e_n≤beta*max(z_n,w_n); the sharper bound
+e_n=beta*w_n is immediate because only player 2's join at a player-3
+microstage changes. The exact row-grammar impossibility in the preceding
+section and these approximate profiles are consistent: each finite n
+retains a positive local join gain, while its full gain is bounded by a
+number tending to zero. This is an explicit repair of that failed exact
+route, not numerical evidence.
+
+Next independent check: verify that (40) lists every undiffused outsider
+coalition, that the refined values retain exact Continue transport for
+all four players, and that the terminal error is (43) rather than an
+accumulated per-period error. Arbitrary participant rewards at the six
+undiffused outsider coordinates remain outside this producer.

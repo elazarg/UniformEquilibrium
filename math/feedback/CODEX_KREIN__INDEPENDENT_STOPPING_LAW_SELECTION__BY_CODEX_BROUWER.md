@@ -489,3 +489,336 @@ independent strategies, finite laws, and a fixed uniform payoff. This is a
 sound new candidate for coverage beyond the particular named gates audited
 here. An independent second review and the coordinator's final export gate
 remain separate from this PASS.
+
+## Independent review: consolidated pivot-first raw family
+
+Scope: **Proposed generalization: select the pivot equation first**, with
+equations (28)-(39), in the same author's notebook. Verdict: **PASS as
+ordinary mathematics**, with no unresolved mathematical objection. This
+assessment reuses the preceding checks only for unchanged complete-deviation,
+censoring, consumer, and original-completion F/J arguments. The pivot-first
+selector and the newly freed reward entries were checked separately.
+
+The actual inputs are the raw singleton and exceptional-pair rows (28),
+the participant caps (29), positive a,b,c,h_j, abc>1, u,v<1, xi,eta>0,
+q_2,q_3<=0, and the stated open R interval. No strategic witness is an
+input. The conclusion quantifies over every completion satisfying the
+literal participant caps, and over all complete behavioral deviations.
+
+### Implementation overlap and scope
+
+The same explicit absorbing product row on {0,1} witnesses strict failure
+of `HasProductLowQuittingPremium` for every new completion. The earlier
+perturbation margin still applies. Both new freedom and arbitrary eta
+include the previously checked original completion, so no general
+product-low theorem covers this enlarged class. The supplied-object
+consumer `isUniformEquilibriumPayoff_of_isQuittingBlockCertificate` in
+`UniformEquilibrium/Quitting/Cycles/BlockPeriodicProfile.lean` assumes the
+whole hazard/value certificate, including row recurrences and individual
+endpoint inequalities. It does not produce the pivot branch proved here.
+Its literal certificate hypotheses were inspected.
+
+The broader class is not claimed to avoid every other producer at every
+completion. In particular the all-child F/J exclusion is now restricted
+to the old completion; arbitrary unused passive rewards may create other
+quiet-lift mechanisms. This is the correct scope, and the proof does not
+silently reuse an old-completion separation for all newly allowed tables.
+The source comparisons already checked above continue to witness that
+the retained old-completion subfamily escapes the named singleton/paired
+and product-low gates.
+
+### Pivot branch: existence, endpoints, and continuity
+
+Since q_j<=0 and 0<=y<=Y<1, H_j(y)>0. On the entire admissible interval,
+d=1+k+(by-H_2 k)>0. For y>0 and k<K(y), both z and w lie in (0,1).
+The derivatives of z and w in (31) have the stated strict signs. The
+numerator defining P is strictly positive, increases as z increases,
+and its denominator (1-z)w strictly decreases. Hence P increases
+strictly and tends to infinity at K(y). This remains true if both
+endpoint events w=0 and z=1 coincide.
+
+Equation (32) is the correct k=0 simplification. Its positive bracket
+is c(p-u)+(p-v), so it and the rational factor increase strictly.
+The endpoint identities (33) are exact. The inverse-vector identities
+give nu_1/nu_3>1/b and nu_2/nu_3>1/(bc), which prove the strict lower
+endpoint comparison. Thus there is a unique y_star in (0,Y), and one
+unique positive k_R(y) for every y in (0,y_star).
+
+The continuity argument uses fixed local brackets strictly inside K(y),
+which stay admissible under a small y perturbation. At y_star choose
+zero as the lower endpoint and an arbitrarily small fixed positive upper
+bracket; strict monotonicity makes the root tend to zero. At zero,
+k_R(y)<=by/H_2(y)=O(y) is sufficient. No unproved global implicit-function
+or branch-selection hypothesis is needed.
+
+To obtain the ratio limit, multiply P=R by (1-z)w/y, as in the note.
+Every subsequential limit t satisfies
+
+    (R-1)(b-h_2 t)=s_1+s_2(1+h_3 t)/c.
+
+The right side is strictly positive, ruling out t=b/h_2. The coefficient
+of t is h_2(R-1)+s_2 h_3/c>0, so the equation has exactly the displayed
+solution tau, and all subsequential limits agree. Its positivity follows
+from R>P_0(0). The function F is strictly increasing, and the identities
+b nu_1-nu_3=h_2 and c nu_2-nu_1=h_3 give F(1/nu_1)=R_low. Therefore
+tau>1/nu_1 follows from the actual prescribed R>R_low.
+
+### Closing the remaining equation for arbitrary positive eta
+
+Along that branch, the eta summand is O(y^2) for every fixed finite eta,
+because k,z,w=O(y) and its bracket is O(y). The linear coefficient of G is
+
+    h_1 tau+(1+h_3 tau)/c-a(b-h_2 tau)
+      =[(ac h_2+c h_1+h_3)tau-(abc-1)]/c
+      =(D/c)(nu_1 tau-1)>0.
+
+At y_star, k=0, so G has the same strictly negative sign as the old
+zero-k expression with y_star<Y. Continuity supplies an interior zero.
+This uses a sign change in y and requires no monotonicity of G in k or y.
+The former eta upper bound is consequently unnecessary, rather than
+being hidden in the new endpoint calculation. Identity (30) follows
+directly from a nu_3-nu_2=h_1 and c nu_2-nu_1=h_3 and guarantees a
+nonempty R interval for every stipulated raw parameter tuple.
+
+### Freed rewards and complete-vector safety
+
+At phase A, the actual only terminal coalitions are {0},{1},{0,1}.
+Their prescribed rewards are exactly (28). For players 2 and 3, averaging
+their singleton and collision rewards gives H_j=h_j(1-y)-q_j y,
+which yields the two printed A-row expressions. The pivot's Continue
+reward is u y+(1-y)V_B,0; player 1's is
+-h_1 x+(1-x)V_B,1. The selected equations give equality with p and t.
+The B and C recurrences use only their prescribed singleton rows.
+
+The unused nonparticipant rewards cannot affect either the prescribed
+profile or its unilateral-deviation inequality. Whenever a deviator joins
+a nonsingleton coalition, it is a participant and its OWN reward is bounded
+by (29). At A, a deviation by 2 or 3 may create a pair or a triple, but
+its coordinate still has the required cap zero. A deviation by 0 or 1
+at A uses the explicitly treated exceptional pair. At B and C, no unilateral
+deviation can form {0,1}, so pivot Quit values are at most one and every
+nonpivot Quit value is at most zero. Thus arbitrary nonparticipant entries
+in unused rows are truly irrelevant to each tested player's own payoff.
+
+All displayed nonpivot values are nonnegative; the pivot values at B,C
+strictly exceed one by u,v<1 and equation (39). Every action in the
+prescribed support attains its value. The geometric opponent contraction
+therefore proves ACTUAL terminal values and unrestricted behavioral Nash,
+including history-dependent and Never choices. It also puts the displayed
+values in the reward box required by the supplied periodic consumer.
+The exact fixed target and finite-censor bounds follow as in the earlier
+review; finite hazards are selected once from the table before accuracy.
+
+I independently enumerated both rational examples over every opponent
+subset at each phase. Each has P=R, G=0, all 24 pure-action inequalities,
+and all 12 prescribed Bellman equalities exactly. Their phase-A vectors are
+
+    first:  (5/4,8027/10201,49/101,0),
+    second: (5/4,62786/81709,195/404,0).
+
+The second calculation used participant caps and every otherwise unused
+nonparticipant coordinate equal to 37, as stipulated. It confirms actual
+independent collision payoffs q_2=-2 and q_3=-3, unequal pivot singleton
+payoffs u=1/2 and v=-1/2, and eta>2. These are exact boundary checks of
+the real-parameter proof, not a substitute for its selection argument.
+
+No additional strategic input remains unproduced. This consolidated
+statement is a sound candidate for one final raw-class packet after its
+independent second review and coordinator gate. The general arbitrary
+canonical table remains outside its proved scope.
+
+## Focused response-quotient check on an exact admitted table
+
+This additional check is motivated by a later source-overlap correction
+to my own symmetry route. It concerns the original positive-premium
+fixture a=b=c=2, h_1=h_2=h_3=1, xi=1, eta=17/11,
+R=1735/368. It does not assert partition exclusion for every parameter
+or arbitrary completion in the consolidated class.
+
+`quittingSingletonBlockRowSum_eq_of_responseInvariant` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`
+requires that rows in a common block have equal sums over EVERY block.
+For the fixture, the centered singleton matrix is
+
+    [[0,-1,-1,R-1],[-1,0,-1,2],[-1,2,0,-1],[-1,-1,2,0]].
+
+All fourteen nondiscrete partitions can be checked directly:
+
+- For a single merged pair, {0,1} requires R=3 from the singleton
+  column 3, which is false. Each other merged pair has a retained
+  singleton column comparing -1 with 2. Thus all six fail.
+- For two pairs, {0,1}|{2,3} has unequal within-{2,3} row sums -1
+  and 2; {0,2}|{1,3} has unequal within-{1,3} row sums 2 and -1;
+  {0,3}|{1,2} has unequal within-{0,3} sums R-1 and -1.
+- Every triple containing 0 has its remaining singleton column contain
+  both -1 and 2. The sole first-order survivor is {0}|{1,2,3}.
+- A single full block would require equal total row sums R-3=0,
+  hence R=3, again false.
+
+For the surviving partition, give player 0 any hazard x in (0,1] and
+all nonpivots hazard zero. At the three-player block's common zero
+coordinate, direct exact field evaluation yields
+
+    F_1=x+eta*x^2,              F_2=F_3=x.
+
+Indeed every child's passive singleton at owner 0 is -1; forcing player
+1 to Quit has value eta*x, whereas forcing either other child to Quit
+has value zero. Since eta>0, the actual individual residuals differ.
+The definition `quittingDiscountedDisplacement` in
+`UniformEquilibrium/Quitting/Stationary/DiscountedDisplacement.lean` at
+discount zero is precisely this field. Thus actual response invariance
+fails for the sole remaining candidate as well.
+
+The fixture therefore has no nontrivial response-invariant partition,
+including partitions not generated by automorphisms. Its discrete
+partition is the ambient matrix, whose R0 degree +1 was checked above.
+Consequently the existing response-quotient nonunit-degree producer does
+not consume this exact admitted table. This is a concrete named-source
+separation, not an assertion about every possible equilibrium producer.
+
+## Independent review: diffuse only the solo phases
+
+Scope: the notebook section **Further producer: diffuse only the solo
+phases**, equations (40)-(43), using the already reviewed pivot-first
+selector for its unchanged five prescribed reward vectors. Verdict:
+**PASS as ordinary mathematics**, with no unresolved mathematical
+objection. The weakened raw criterion produces approximate terminal
+equilibria with ONE fixed target, finite common-menu laws, and uniform
+equilibrium against all behavioral deviations. It does not assert exact
+equilibrium of each refined periodic row schedule.
+
+### Exactly which reward caps remain
+
+At the undiffused row, prescribed opponent sets for outsider 2 are
+empty, {0}, {1}, and {0,1}. If it Quits, these become {2}, {0,2},
+{1,2}, and {0,1,2}. Its singleton reward is already zero, leaving
+precisely the first three inequalities of (40). The same enumeration
+for outsider 3 gives the other three inequalities. No fourth-player
+coalition can be reached by one deviator at this row. The two prescribed
+participants use only their singletons and the exceptional pair, whose
+literal rewards are unchanged.
+
+During a solo row owned by j=2 or 3, a unilateral deviator i distinct
+from j can produce only its singleton or {i,j}. Thus the six premiums
+in (42) are exhaustive for the diffuse rows. They are finite because
+the original table is finite. No triple participant cap, passive reward
+on an unused coalition, or grand-coalition cap is silently needed there.
+
+The auxiliary capped table is legitimate: it agrees with all five
+prescribed vectors and replaces only otherwise unspecified participant
+entries by capped values. Its previously proved source selects x,y,z,w.
+The argument transfers its actual prescribed payoff recurrences to the
+original table, and then proves original-table incentives anew. It does
+not transfer exact Nash merely by matching prescribed outcomes.
+
+### Actual payoff and exact Continue at every refined date
+
+The n-fold solo block has exactly the original product survival. Conditional
+on entering it, its only possible absorbing coalition is the same singleton.
+Hence replacing both blocks preserves the distribution of the first
+absorbing coalition, period by period, including every component of the
+unchanged joint row. The actual initial payoff is therefore precisely (41)
+for every n.
+
+For a player-2 block with m microstages remaining, let
+rho=1-(1-z_n)^m. Its actual value is
+
+    W_m=rho*r({2})+(1-rho)*V_C.
+
+The scalar recurrence rho=z_n+(1-z_n)rho_next gives the exact vector
+policy recursion. Since 0<=rho<=z and
+V_B=z*r({2})+(1-z)*V_C, this vector lies on the closed segment from
+V_B to V_C. Both endpoints have every coordinate at least its own
+singleton s_i. In the owner coordinate both endpoints are zero, so the
+owner value is zero at EVERY microstage. The analogous formula for the
+player-3 block lies on the segment from V_C to V_A, whose player-3
+coordinate is zero throughout.
+
+For a nonowner, the prescribed action is pure Continue, so policy
+recursion IS pure-Continue transport. For a solo owner, its current and
+next values are zero and all opponents Continue, so pure-Continue
+transport is also exact, as is its supported Quit payoff. At the joint
+row, the endpoint equalities of players 0 and 1 persist from the selected
+source, and the two outsiders Continue surely. Thus the stronger exact
+Continue condition holds for all four players at every refined date;
+it has not been inferred merely from a generic mixed policy equation.
+
+These segments also give a common finite value bound independent of n.
+One can take the maximum absolute coordinate of V_A,V_B,V_C together
+with a bound on the original rewards. Thus the fixed-bound hypotheses
+of the intended source consumer are supplied uniformly in accuracy.
+
+### The error is incurred once, even over infinitely many periods
+
+At a solo j-row, outsider i's Quit endpoint is exactly
+s_i+delta*(r_i({i,j})-s_i), hence at most its CURRENT displayed value
+plus C*delta. At the joint row both prescribed players' Quit endpoints
+are exact, and (40) bounds each outsider's Quit endpoint by zero.
+The bound e_n=C*max(z_n,w_n) therefore applies at every date and player.
+
+For a fixed player set S_t=V_t+e_n. If a_t is its absorbing Continue
+contribution and q_t its opponents' survival probability, the exact
+Continue identity gives
+
+    a_t+q_t*S_(t+1)=V_t+q_t*e_n<=S_t.
+
+Quit is also bounded by S_t. Consequently EVERY behavioral mixture at
+every surviving history is bounded by this same supersolution. After
+iteration the only extra term is a bounded survival remainder; there
+is no sum of e_n over dates. For every fixed n, each full refined period
+has unchanged positive opponent absorption, so the remainder tends to
+zero under every deviator. For a suffix starting in the middle of a
+period, its finite initial fragment does not affect this convergence.
+Never and arbitrarily delayed finite deviations are included.
+
+This is the exact scope of
+`quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`
+and `QuittingInfinitePathQuitErrorCertificate.isεAsymptoticNash_and_delivers`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+I read both statements and their literal certificate fields: bounded
+values, policy evaluation, exact Continue, uniform Quit error, and
+playerwise opponent survival at every start. All are constructed here.
+The same file's
+`isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+then consumes the accuracy-indexed source. These are existing supplied-path
+consumers; none assumes that arbitrary raw data (28),(30),(40) supply this
+mixed joint/solo source.
+
+### Finite laws, fixed target, and claimed enlargement
+
+The unchanged per-period marginal survival probabilities are 1-x, 1-y,
+1-z, and 1-w. Censoring after K refined periods therefore changes total
+marginal mass by at most the stated tau_K, independent of n. The original
+table's bound M gives payoff error at most 2M*tau_K and full-regret error
+at most 4M*tau_K by the same uniform coupling used earlier. Combining
+with e_n is legitimate for arbitrary replacements of any single law.
+Choosing n first and K second yields actual finite laws on the common
+menu of (2n+1)K dates and Never. The inner pivot repair can use the
+displayed pivot marginal, so its infimum has the same upper bound.
+
+The target V_A depends only on the selected raw table; it does not vary
+with n, K, accuracy, or the final horizon. The named retained-family
+terminal consumer supplies one profile and one horizon threshold for
+each accuracy. No unjustified threshold uniformity in n is used.
+
+The source enlargement is real relative to the prior raw criterion:
+arbitrary finite positive participant rewards at diffuse-only pairs and
+all remaining unused coordinates are admitted. The earlier theorem (29)
+does not apply to them, while the new construction explicitly bounds
+their original-game deviation effects. The inspected
+`singletonArcCycle_isTerminalNash_and_hasValue` in
+`UniformEquilibrium/Quitting/Cycles/SingletonArcCycle.lean` assembles
+supplied singleton arcs; it does not select this raw joint/solo path.
+The note correctly attributes refinement and the one-error method as
+existing mathematics, with the new work being the actual source.
+
+For the beta modification, only player 2's join into a player-3 row
+creates a new premium, giving the sharper e_n=beta*w_n. Its value at
+the FIRST player-3 microstage is zero, so that row still has positive
+local Quit gain beta*w_n for every finite n. Later values in that block
+increase along the preserved segment; the supersolution bound remains
+uniform. This checks the distinction between the failed exact grammar
+and valid vanishing-error construction. The new class still strictly
+fails product-low at the unchanged {0,1} product root. No all-child F/J
+exclusion or exclusion from every other producer is inferred for its
+arbitrary completions.
