@@ -26,6 +26,7 @@ import MathUE.Analysis.FaceDriftScalarCompositionExclusion
 import MathUE.Analysis.CompactMinimumEnvelope
 import MathUE.Analysis.FiniteLogSumExp
 import MathUE.Analysis.CoordinateResetFTC
+import MathUE.Analysis.Examples.CoupledCubicShape
 import MathUE.Analysis.SignedMixedCurvatureAccount
 import MathUE.Analysis.MixedCurvatureSupBound
 import MathUE.Analysis.MonotoneTransformChargedDrift
@@ -34,6 +35,7 @@ import MathUE.Analysis.HessianConvexification
 import MathUE.Analysis.PositiveFaceCurvatureBudget
 import MathUE.Analysis.CoordinateHessianExtrema
 import MathUE.RealSeries.NormalizedGeometricComparison
+import MathUE.RealSeries.GeometricAffineSchedule
 import MathUE.Analysis.AnalyticQuadraticRemainder
 import MathUE.Analysis.PositiveHomogeneousCoercivity
 import MathUE.Analysis.GeometricCesaroError
@@ -678,6 +680,7 @@ import MathUE.Topology.BoundaryFixingSurjectivity
 import MathUE.Topology.CompactConvexHull
 import MathUE.Topology.FarthestPointContactHull
 import MathUE.Topology.ConnectedConvexHullRepresentation
+import MathUE.Topology.ConnectedConvexHullAffineStep
 import MathUE.Topology.AmbientDegreeSelfMapNormalization
 import MathUE.Topology.BoxComplementarityAffineLocalIndex
 import MathUE.Topology.BoxComplementarityCenteredMatrixLocalIndex

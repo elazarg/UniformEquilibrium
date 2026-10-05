@@ -24,6 +24,7 @@ import MathUE.Analysis.CoordinateResetFTC
 import MathUE.Analysis.CoordinateSecantEstimate
 import MathUE.Analysis.CurvatureHomogeneity
 import MathUE.Analysis.DerivativeDifferenceMeanValue
+import MathUE.Analysis.Examples.CoupledCubicShape
 import MathUE.Analysis.FaceDriftAdditiveExclusion
 import MathUE.Analysis.FaceDriftScalarCompositionExclusion
 import MathUE.Analysis.FiniteLogSumExp
@@ -599,6 +600,7 @@ import MathUE.RealQuantifierElimination.SemialgebraicPresentation
 import MathUE.RealQuantifierElimination.SignDiagramProducer
 import MathUE.RealQuantifierElimination.UnivariateCompilation
 import MathUE.RealSeries.DiscountedExitWeight
+import MathUE.RealSeries.GeometricAffineSchedule
 import MathUE.RealSeries.NormalizedGeometricComparison
 import MathUE.ReciprocalDebtRecurrence
 import MathUE.RegularPolynomialCurveSelection
@@ -682,6 +684,7 @@ import MathUE.Topology.CompactRankedOutcome
 import MathUE.Topology.CompactRobustMoat
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
+import MathUE.Topology.ConnectedConvexHullAffineStep
 import MathUE.Topology.ConnectedConvexHullRepresentation
 import MathUE.Topology.ConnectedFixedPointContinuation
 import MathUE.Topology.CountableObservation

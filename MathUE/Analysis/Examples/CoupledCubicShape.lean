@@ -1,0 +1,258 @@
+import MathUE.Analysis.CoordinateResetFTC
+import MathUE.Interval.RationalPolynomial
+import Mathlib.Analysis.Calculus.FDeriv.Pow
+import Mathlib.Analysis.Convex.Quasiconvex
+import Mathlib.Data.Fintype.EquivFin
+import Mathlib.Algebra.BigOperators.Fin
+
+/-! # The printed quasiconvex, nonconvex, nonadditive coupled cubic
+
+The statements hold in every finite dimension with at least two coordinates.
+Representations are excluded only on the closed box; no regularity of the
+hypothetical additive components is assumed. This is a shape fixture, not
+a surviving universal potential or a counterexample game.
+-/
+
+noncomputable section
+
+namespace Math.CoupledCubicShape
+
+open Set
+open scoped BigOperators
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+def coordinateSum : (ι → ℝ) →L[ℝ] ℝ :=
+  ∑ coordinate, (ContinuousLinearMap.proj coordinate : (ι → ℝ) →L[ℝ] ℝ)
+
+omit [DecidableEq ι] in
+@[simp] theorem coordinateSum_apply (point : ι → ℝ) :
+    coordinateSum point = ∑ coordinate, point coordinate := by
+  simp [coordinateSum]
+
+@[simp] theorem coordinateSum_single (coordinate : ι) (value : ℝ) :
+    coordinateSum (Pi.single coordinate value) = value := by
+  rw [coordinateSum_apply, Finset.sum_eq_single coordinate]
+  · simp
+  · intro other _ hne
+    change (Pi.single coordinate value : ι → ℝ) other = 0
+    simp only [Pi.single_eq_of_ne hne]
+  · intro hnot
+    exact False.elim (hnot (Finset.mem_univ coordinate))
+
+def argument (lower point : ι → ℝ) : ℝ := coordinateSum (point - lower) - 1 / 2
+
+def potential (lower point : ι → ℝ) : ℝ := argument lower point ^ 3
+
+omit [DecidableEq ι] in
+theorem potential_eq_printed (lower point : ι → ℝ) :
+    potential lower point = ((∑ coordinate, (point coordinate - lower coordinate)) - 1 / 2) ^ 3 :=
+  by simp [potential, argument]
+
+omit [DecidableEq ι] in
+theorem argument_hasFDerivAt (lower point : ι → ℝ) :
+    HasFDerivAt (argument lower) coordinateSum point := by
+  have hsum : HasFDerivAt (coordinateSum : (ι → ℝ) → ℝ) coordinateSum point :=
+    coordinateSum.hasFDerivAt
+  have hfunction : argument lower =
+      (fun input => coordinateSum input - coordinateSum lower - 1 / 2) := by
+    funext input
+    exact congrArg (fun value : ℝ => value - 1 / 2)
+      (map_sub coordinateSum input lower)
+  rw [hfunction]
+  exact (hsum.sub_const (coordinateSum lower)).sub_const (1 / 2 : ℝ)
+
+omit [DecidableEq ι] in
+theorem potential_hasFDerivAt (lower point : ι → ℝ) :
+    HasFDerivAt (potential lower) ((3 * argument lower point ^ 2) • coordinateSum) point := by
+  simpa only [potential, Nat.cast_ofNat, nsmul_eq_mul, show 3 - 1 = 2 by decide] using!
+    (argument_hasFDerivAt lower point).pow 3
+
+theorem coordinatePartial_eq (lower point : ι → ℝ) (receiver : ι) :
+    Math.coordinatePartial (potential lower) point receiver = 3 * argument lower point ^ 2 := by
+  rw [Math.coordinatePartial, (potential_hasFDerivAt lower point).fderiv]
+  simp [smul_apply, smul_eq_mul]
+
+/-- Every mixed partial, including the diagonal, is the actual iterated derivative. -/
+theorem coordinateMixedPartial_eq (lower point : ι → ℝ) (owner receiver : ι) :
+    Math.coordinateMixedPartial (potential lower) point owner receiver =
+      6 * argument lower point := by
+  have hfunction : (fun input => Math.coordinatePartial (potential lower) input receiver) =
+      (fun input => 3 * argument lower input ^ 2) :=
+    funext fun input => coordinatePartial_eq lower input receiver
+  have hderivative := ((argument_hasFDerivAt lower point).pow 2).const_mul (3 : ℝ)
+  rw [Math.coordinateMixedPartial, hfunction, hderivative.fderiv]
+  simp only [smul_apply, smul_eq_mul, nsmul_eq_mul,
+    smul_smul, coordinateSum_single, Nat.reduceSub, pow_one]
+  ring
+
+omit [DecidableEq ι] in
+theorem quasiconvexOn (lower : ι → ℝ) (domain : Set (ι → ℝ))
+    (hconvex : Convex ℝ domain) : QuasiconvexOn ℝ domain (potential lower) := by
+  have haffine : ConvexOn ℝ domain (argument lower) := by
+    refine ⟨hconvex, ?_⟩
+    intro first _ second _ a b _ _ hab
+    apply le_of_eq
+    simp only [argument, map_sub, map_add, map_smul, smul_eq_mul]
+    have hsum : a * coordinateSum lower + b * coordinateSum lower = coordinateSum lower := by
+      rw [← add_mul, hab, one_mul]
+    nlinarith [hsum]
+  have hcube : Monotone (fun value : ℝ => value ^ 3) :=
+    (show Odd 3 by decide).strictMono_pow.monotone
+  exact haffine.quasiconvexOn.monotone_comp hcube
+
+@[simp] theorem argument_lower_add_single (lower : ι → ℝ) (owner : ι) (rate : ℝ) :
+    argument lower (lower + Pi.single owner rate) = rate - 1 / 2 := by
+  simp [argument]
+
+omit [DecidableEq ι] in
+@[simp] theorem argument_lower (lower : ι → ℝ) : argument lower lower = -1 / 2 := by
+  simp only [argument, sub_self, map_zero, zero_sub]
+  ring
+
+omit [Fintype ι] in
+theorem lower_add_single_mem (lower upper : ι → ℝ) (hwidth : ∀ who, 1 ≤ upper who - lower who)
+    (owner : ι) (rate : ℝ) (hrate : rate ∈ Icc (0 : ℝ) 1) :
+    lower + Pi.single owner rate ∈ Icc lower upper := by
+  constructor <;> intro receiver
+  · by_cases heq : receiver = owner
+    · subst receiver; simp only [Pi.add_apply, Pi.single_eq_same]; linarith [hrate.1]
+    · simp only [Pi.add_apply, Pi.single_eq_of_ne heq, add_zero]; exact le_rfl
+  · by_cases heq : receiver = owner
+    · subst receiver; simp only [Pi.add_apply, Pi.single_eq_same]
+      linarith [hrate.2, hwidth owner]
+    · simp only [Pi.add_apply, Pi.single_eq_of_ne heq, add_zero]
+      linarith [hwidth receiver]
+
+/-- A literal midpoint violation; no convexity-from-Hessian theorem is duplicated. -/
+theorem not_convexOn (lower upper : ι → ℝ)
+    (hdimension : 2 ≤ Fintype.card ι) (hwidth : ∀ who, 1 ≤ upper who - lower who) :
+    ¬ConvexOn ℝ (Icc lower upper) (potential lower) := by
+  obtain ⟨owner, _, _⟩ := Fintype.exists_pair_of_one_lt_card (by omega : 1 < Fintype.card ι)
+  have hlower : lower ∈ Icc lower upper := by
+    constructor
+    · exact le_rfl
+    · intro who; linarith [hwidth who]
+  have hhalf := lower_add_single_mem lower upper hwidth owner (1 / 2) (by norm_num)
+  have hmidpoint : (1 / 2 : ℝ) • lower + (1 / 2 : ℝ) •
+      (lower + Pi.single owner (1 / 2)) = lower + Pi.single owner (1 / 4) := by
+    ext who
+    by_cases heq : who = owner
+    · subst who
+      simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul, Pi.single_eq_same]
+      ring
+    · simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul, Pi.single_eq_of_ne heq]
+      ring
+  intro hconvex
+  have hbound : potential lower ((1 / 2 : ℝ) • lower + (1 / 2 : ℝ) •
+      (lower + Pi.single owner (1 / 2))) ≤
+      (1 / 2 : ℝ) • potential lower lower +
+        (1 / 2 : ℝ) • potential lower (lower + Pi.single owner (1 / 2)) :=
+    hconvex.2 hlower hhalf (by norm_num) (by norm_num) (by norm_num)
+  rw [hmidpoint] at hbound
+  norm_num [potential, smul_eq_mul] at hbound
+
+/-- The four-point additive rectangle identity does not need differentiable components. -/
+theorem additive_rectangle_identity (constant : ℝ) (component : ι → ℝ → ℝ)
+    (lower : ι → ℝ) (owner receiver : ι) (hne : owner ≠ receiver) (rate : ℝ) :
+    Math.boxAdditiveFunction constant component
+        (lower + Pi.single owner rate + Pi.single receiver rate) +
+      Math.boxAdditiveFunction constant component lower =
+      Math.boxAdditiveFunction constant component (lower + Pi.single owner rate) +
+        Math.boxAdditiveFunction constant component (lower + Pi.single receiver rate) := by
+  have hsum : (∑ who, component who
+      ((lower + Pi.single owner rate + Pi.single receiver rate : ι → ℝ) who)) +
+      (∑ who, component who (lower who)) =
+      (∑ who, component who ((lower + Pi.single owner rate : ι → ℝ) who)) +
+        (∑ who, component who ((lower + Pi.single receiver rate : ι → ℝ) who)) := by
+    rw [← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
+    apply Finset.sum_congr rfl
+    intro who _
+    by_cases howner : who = owner
+    · subst who
+      simp only [Pi.add_apply, Pi.single_eq_same, Pi.single_eq_of_ne hne, add_zero]
+    · by_cases hreceiver : who = receiver
+      · subst who
+        simp only [Pi.add_apply, Pi.single_eq_same, Pi.single_eq_of_ne hne.symm, add_zero]
+        exact add_comm _ _
+      · simp only [Pi.add_apply, Pi.single_eq_of_ne howner,
+          Pi.single_eq_of_ne hreceiver, add_zero]
+  simp only [Math.boxAdditiveFunction]
+  linarith [hsum]
+
+/-- No additive representation on the closed box, with internally chosen distinct coordinates. -/
+theorem not_exists_additive_eqOn (lower upper : ι → ℝ)
+    (hdimension : 2 ≤ Fintype.card ι) (hwidth : ∀ who, 1 ≤ upper who - lower who) :
+    ¬∃ constant component,
+      EqOn (potential lower) (Math.boxAdditiveFunction constant component) (Icc lower upper) := by
+  obtain ⟨owner, receiver, hne⟩ :=
+    Fintype.exists_pair_of_one_lt_card (by omega : 1 < Fintype.card ι)
+  have hlower : lower ∈ Icc lower upper := by
+    constructor
+    · exact le_rfl
+    · intro who; linarith [hwidth who]
+  have hfirst := lower_add_single_mem lower upper hwidth owner (1 / 4) (by norm_num)
+  have hsecond := lower_add_single_mem lower upper hwidth receiver (1 / 4) (by norm_num)
+  have hboth : lower + Pi.single owner (1 / 4 : ℝ) + Pi.single receiver (1 / 4) ∈
+      Icc lower upper := by
+    constructor <;> intro who
+    all_goals by_cases howner : who = owner
+    all_goals first
+      | subst who
+        simp only [Pi.add_apply, Pi.single_eq_same, Pi.single_eq_of_ne hne, add_zero]
+        linarith [hwidth owner]
+      | skip
+    all_goals by_cases hreceiver : who = receiver
+    all_goals first
+      | subst who
+        simp only [Pi.add_apply, Pi.single_eq_same, Pi.single_eq_of_ne hne.symm, add_zero]
+        linarith [hwidth receiver]
+      | simp only [Pi.add_apply, Pi.single_eq_of_ne howner,
+          Pi.single_eq_of_ne hreceiver, add_zero]
+        linarith [hwidth who]
+  have hargument : argument lower
+      (lower + Pi.single owner (1 / 4 : ℝ) + Pi.single receiver (1 / 4)) = 0 := by
+    simp only [argument, map_sub, map_add, coordinateSum_single]
+    ring
+  rintro ⟨constant, component, heq⟩
+  have hrectangle := additive_rectangle_identity constant component lower owner receiver hne
+    (1 / 4 : ℝ)
+  rw [← heq hboth, ← heq hlower, ← heq hfirst, ← heq hsecond] at hrectangle
+  norm_num [potential, hargument] at hrectangle
+
+/-- A literal rational expression for every rational lower vector, in every finite dimension. -/
+def rationalArgument {dimension : ℕ} (lower : Fin dimension → ℚ) :
+    Math.Interval.RationalPolynomial dimension :=
+  (List.ofFn fun who =>
+    Math.Interval.RationalPolynomial.var who - .constant (lower who)).foldr
+      (fun expression total => expression + total) (.constant (-1 / 2))
+
+def rationalExpression {dimension : ℕ} (lower : Fin dimension → ℚ) :
+    Math.Interval.RationalPolynomial dimension :=
+  rationalArgument lower * rationalArgument lower * rationalArgument lower
+
+private theorem evalReal_foldr {dimension : ℕ}
+    (point : Fin dimension → ℝ) (expressions : List (Math.Interval.RationalPolynomial dimension))
+    (constant : Math.Interval.RationalPolynomial dimension) :
+    Math.Interval.RationalPolynomial.evalReal point
+      (expressions.foldr (fun expression total => expression + total) constant) =
+      (expressions.map (Math.Interval.RationalPolynomial.evalReal point)).sum +
+        Math.Interval.RationalPolynomial.evalReal point constant := by
+  induction expressions with
+  | nil => simp
+  | cons expression expressions ih => simp [ih, add_assoc]
+
+theorem rationalExpression_eval {dimension : ℕ} (lower : Fin dimension → ℚ)
+    (point : Fin dimension → ℝ) :
+    Math.Interval.RationalPolynomial.evalReal point (rationalExpression lower) =
+      potential (fun who => (lower who : ℝ)) point := by
+  have hargument : Math.Interval.RationalPolynomial.evalReal point (rationalArgument lower) =
+      argument (fun who => (lower who : ℝ)) point := by
+    rw [rationalArgument, evalReal_foldr]
+    simp [List.map_ofFn, List.sum_ofFn, argument]
+    ring
+  simp only [rationalExpression, Math.Interval.RationalPolynomial.evalReal_mul, hargument,
+    potential, pow_succ, pow_zero]
+  ring
+
+end Math.CoupledCubicShape
