@@ -87,12 +87,19 @@ frozen `../exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`, SHA256
 `16ffd63e3735ad7b00f99e76efb237cb0cf7fdc6de0ae267161b9da9e2977dde`.
 The original fixture has three zero own singletons; an interior
 strategic neighborhood requires first raising those entries slightly.
-Section 21 is a complete unreviewed temporal producer with a zero-premium
+Section 21 is a complete temporal producer with a zero-premium
 joint phase, a positive outsider buffer, and two diffuse solo exits.
 It covers an entire R-axis raw class and includes an opposite-sign
 pair-core fixture outside the named preceding tests. Its proof never
-assumes a second root at the locally falsified source. Independent
-falsification of this new selector and semantic construction is requested.
+assumes a second root at the locally falsified source. It passed independent
+falsification reviews by CODEX_BROUWER and CODEX_KREIN and both final artifact
+checks. Its standalone is frozen as
+`../exports/ZERO_PREMIUM_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md`, SHA256
+`5e89dec50dd74bd1ea85b5bd7098f18805cf95951a72d6ddcef25af3f8ea450c`.
+Section 22 records a global strategy-class obstruction, not new UE coverage:
+even a constant-participant-reward table can force almost all equilibrium
+mass onto a genuine four-player collision. The stage-concentration part is
+already supplied by the existing nonsingleton anti-diffusion theorem.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -2851,7 +2858,8 @@ redundant four-player special case.
 
 ## 21. A zero-premium joint phase and an opposite-sign residual core
 
-Status: complete ordinary proof candidate, not independently reviewed.
+Status: complete ordinary proof, independently reviewed by CODEX_BROUWER
+and CODEX_KREIN; the standalone and final artifact checks are recorded above.
 This is a direct temporal producer from raw rewards, not a local
 good-root assertion. In particular it does not alter the opposite-sign
 unique-root falsifier in Section 19. The singleton matrix is fixed up
@@ -3269,3 +3277,62 @@ Continue identities and the finite-law/full-horizon consumer. Verify
 the opposite-sign fixture's claimed source exclusions and quiet-player
 stationary boundary. This theorem is a new temporal raw-class candidate,
 not a proposed repair of the false universal local-root statement.
+
+## 22. A global full-collision constraint and its limited role
+
+This elementary exact calculation concerns all unrestricted behavioral
+profiles, not a bounded controller or a local root. It is not independently
+reviewed, and supplies no new raw-table UE class.
+
+Let I={0,1,2,3} and set, for every nonempty S⊆I,
+
+    r_i(S)=1 if i∈S, and r_i(S)=−4 if i∉S.
+
+Live play and Never pay zero. Players randomize independently at the unique
+live history. For any behavioral profile let p_∞ be its joint Never mass,
+p(S) its terminal-coalition probabilities, and d_i its unrestricted terminal
+debt. Immediate Quit guarantees exactly1, and every possible payoff is at
+most1, so the full behavioral response cap is exactly1. Consequently
+
+    d_i = p_∞ + 5∑_{S:i∉S}p(S),
+    ∑ᵢd_i = 4p_∞ + 5∑_{S proper}(4−|S|)p(S).
+
+If the profile is terminal ε-Nash, then d_i≤ε for all i. Thus
+
+    4p_∞+5∑_{S proper}p(S)≤4ε,
+    p(I)≥1−ε.
+
+In particular every strategy class prescribing at most three positive
+hazards at each live date has terminal exploitability at least1 on this
+table. This statement permits arbitrary infinite calendars and arbitrary
+time-varying behavioral strategies; a different triple may be active at
+every date. All such profiles have p(I)=0.
+
+More quantitatively, if at every date t some player has q_i(t)≤1−δ,
+then the conditional grand-coalition probability is at most1−δ times
+the conditional absorption probability. Indeed, the event that the other
+three players all Quit already implies absorption, while the probability
+that all four Quit is q_i times that event's probability. Summing with the
+actual live reaches gives p(I)≤1−δ, hence maxᵢd_i≥δ.
+
+There is also one literal stage t carrying unconditional grand-coalition
+mass at least (1−ε)^(4/3) when ε<1. This is directly the existing theorem
+`exists_maximal_quittingStageCoalitionMass_of_positive_total` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticNonsingletonAntiDiffusion.lean`,
+applied to p(I)≥1−ε. Its hypotheses retain arbitrary behavioral strategies
+and Never mass. At that stage both the joint live reach and every individual
+hazard are at least (1−ε)^(4/3), since each dominates the stage atom.
+The declaration and its concentration proof were inspected, not built here.
+
+This example does NOT obstruct equilibrium existence: simultaneous sure
+Quit by all four at the initial date is an exact terminal and uniform
+equilibrium with payoff(1,1,1,1). It also satisfies product-low premiums
+because every participant reward is its singleton. The source consumer
+`exists_uniformEquilibriumPayoff_of_productLowPremium` in
+`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`
+therefore already applies. The example only rules out universal reductions
+to solo, pair, or triple live supports, or to hazards bounded away from1.
+It does not rule out first dispatching sure pure equilibria and applying
+a restricted grammar to the residual. A genuinely useful next obstruction
+would have to survive that dispatch, or concern all positive-gap tables;
+the present calculation does not establish either claim.

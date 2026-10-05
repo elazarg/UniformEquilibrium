@@ -2871,6 +2871,36 @@ Its nonnegative singletons meet the exact hypotheses of
 `UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`.
 This source implication was inspected, not built here.
 
+There is also a direct exact infinite-law witness, so the three-player
+nonobstruction does not depend on that source theorem. Repeat solo phases
+2,0,1 with hazard1/2 at each. Their values are respectively
+
+    V_A=(2,0,0), V_B=(1,1,0), V_C=(1,0,1).
+
+Each is the half/half average of the current singleton reward and the
+next value. Every owner is indifferent, every forced Quit pays s_i,
+and every displayed value is at least s_i. All pure Continue equations
+are exact. Each player's opponents survive a period with probability1/4,
+so bounded Bellman comparison proves exact unrestricted terminal Nash
+and a uniform equilibrium with target(2,0,0).
+
+Censoring this cycle after K>=1 periods gives an especially sharp
+comparison with exact completed-menu Nash. Its joint Never mass is
+b=8^(-K), and its actual payoff is (1-b)*(2,0,0). The full cap is
+exactly(2,0,0): the same value path upper-bounds every deviation,
+because after the deadline its best solo continuation is s<=V_A;
+player0 attains2 by quitting just after the first solo2 date, and the
+other players attain0 by immediate Quit. Hence
+
+    actual terminal debt=(2b,0,0),
+    singleton-completed menu debt=(b,0,0).                         (F2)
+
+Approximate completed-menu error and actual joint mass therefore tend
+to zero together at an explicit geometric rate, while EVERY exact
+completed-menu Nash equilibrium remains all Never. The missing step is
+not mere compactness or more calendar dates: exactification destroys
+the useful mass property.
+
 ### A literal Fin4 version, without a harmless padding player
 
 For I={0,1,2,3}, take s=(1,0,0,0) and
