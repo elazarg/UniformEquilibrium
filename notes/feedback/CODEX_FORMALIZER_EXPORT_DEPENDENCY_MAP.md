@@ -579,6 +579,27 @@ requires its projected normal, common-calendar weights, silent shift,
 and fixed-table accuracy/depth producer; the strict coalition floor alone
 does not supply those fields. Packet lifecycle remains math's responsibility.
 
+### Connections from the completed three-sure implementation
+
+These are proof-supported follow-ups, not yet checked declarations:
+
+- The opposed final rows and attained-minimum ties give strict quantitative
+  mixing: if `m` is the final infimum and `p` the optional Quit probability,
+  then `m/2 < p < 1-m/2`. Each negative endpoint gives a strict inequality;
+  unit rewards bound the opposite gap by two. This strengthens genuine
+  mixing without constructing a three-sure minimum.
+- The exact pure-set semantic-pair theorem in
+  `UniformEquilibrium/Quitting/Paths/SureExitSet.lean` extends the coalition
+  floor to every continuation after that same nonsingleton pure root.
+  It does not exclude arbitrary staggered deterministic quitting times.
+- Stopping-law exploitability congruence transfers the opposed-root result
+  to other behavioral presentations of the same stopping-law family.
+  The representation remains a premise, not a produced source.
+- Reward robustness preserves a coalition separation `margin` at nearby
+  tables with lower bound `margin - 4*delta`: both profile exploitability
+  and the actual infimum change by at most `2*delta`. Positive separation
+  requires `4*delta < margin`; no UE counterexample robustness follows.
+
 ## Proof-mining connections not yet formalized
 
 These are proposed follow-ups, not new checked conclusions or packet seals.
