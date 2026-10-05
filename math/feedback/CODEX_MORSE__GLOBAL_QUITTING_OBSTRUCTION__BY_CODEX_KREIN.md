@@ -1170,3 +1170,183 @@ new clipped-map adapter from already tracked degree and UE consumers.
 There are no mathematical references to another conference note or
 export. This seal is for these exact bytes, not for an unreviewed
 opposite-sign or larger-core extension. No correction requested.
+
+## Independent review: zero-premium joint phase and opposite-sign residual core
+
+**PASS**, ordinary mathematics, not Lean checked. Scope is the complete
+Section 21, “A zero-premium joint phase and an opposite-sign residual
+core,” including its raw all-R statement, full consumer, exact fixture,
+and exclusion of stationary equilibria with any quiet player. Inspected
+whole-note SHA256:
+`3405a3a3797b5a8182c7511622f4d8b4cd2298413540df30e5c986b6bcf6080b`.
+No future BROUWER feedback or other review was read. No fully supported
+stationary nonexistence claim is included in this verdict.
+
+### Entire scalar interval and exact joint buffer
+
+For −1<R<1/4, tau=1−4R lies in (0,5). The prescribed odds X are
+positive, and the numerator of a_1 is strictly positive even at sigma=0,
+since 10−tau>0 and 6+sigma*tau>0. The function z increases strictly
+from zero to infinity. Multiplication gives exactly the quadratic (102)
+for its unique unit cap, and its value at Y=1/delta is −6. Thus
+Y_star>1/delta; the claimed strict sign at the upper pivot endpoint
+is correct. At zero I obtain the same divided limit 7(tau−5)/20<0.
+Continuity, not an unproved monotonicity of F or uniqueness of its root,
+produces the selected interior Y and all four proper hazards.
+
+The algebraic identity X+3z=2delta Y holds before selection, directly
+from X=tau Y/(5+3Y). At F=0 it gives the second owner equation
+X=−z+2w(1−z)>0. All source quantities are produced from the raw table;
+the positivity is a consequence, not a supplied certificate.
+
+I independently rederived the ratio (107). Subtracting one half of its
+denominator gives exactly 3(5−tau)/2+[9/2−tau/2+sigma*tau]Y>0.
+It covers every sigma≥0 throughout the WHOLE remaining R interval.
+The three player-1 caps may really be positive: their combined Quit
+value is at most half the joint absorption probability and is strictly
+below a_1. This does not follow from coordinatewise passive domination,
+and the proof correctly uses the aggregate buffer instead. Player 2's
+joint Quit endpoint is nonpositive, and both joint participants are
+exactly indifferent.
+
+### Original-game identities, full deviations, and boundaries
+
+All twelve policy and twelve Continue equations were checked. In
+particular A's player-2 Continue value is −(x+y−xy)+2z(1−x)(1−y),
+which vanishes by the odds formula; player 3's B value is the selected
+positive X; and the solo owners' continuation coordinates vanish exactly.
+Every macro coordinate has its own singleton floor. Only the two solo
+blocks are refined, and their values lie between the correct macro
+endpoints. The retained joint row passes its exact comparisons.
+
+The common epsilon_n supersolution adds one constant to the entire
+value path. Continue transports at most that constant and Quit has no
+future value, so there is no period accumulation of local errors. Each
+listed opponent period-survival factor is correct and strictly below one.
+Presampling those independent opponent coins is only a coupling for the
+tail estimate; it gives no foreknowledge to the deviator. It bounds the
+absorption time under every full behavioral replacement and removes the
+Bellman remainder. The target V_A is unchanged by every subdivision.
+
+The expected absorption bound (1+2n)max_i(1−rho_i)⁻¹ yields the stated
+uniform terminal-to-horizon estimates. Choosing n before the threshold
+produces one profile for all larger horizons and the same target. The
+censored finite laws have total moved mass sum_i(1−q_i)^K, target
+error at most 2Mt_K and full regret at most epsilon_n+4Mt_K. Those
+coupling bounds are uniform over complete deviations, not just stopping
+dates or bounded-memory responses.
+
+The original-table exits are exact. The homogeneous root at R=−1
+is nonzero; R<−1 gives two regular roots with determinant signs +,−;
+R≥1/4 has literal passive inverse weights (4R−1,R+5,2R+3)/7≥0.
+Both equality boundaries are consumed without limiting strategies.
+The named degree, inverse and exact-Continue source declarations have
+the literal hypotheses already inspected in the previous audits. Their
+current signatures introduce no missing premium or memory condition.
+
+### Exact fixture and bounded coverage tests
+
+For sigma=2,R=0, exact symbolic substitution gives
+
+    F(Y)=Y(28Y³+60Y²+Y−35)
+                  /[(3Y+5)(12Y²+18Y+5)].
+
+The cubic has derivative 84Y²+120Y+1>0 on the nonnegative axis,
+and its values at 3/5 and 7/10 are −844/125 and 588/125. Thus
+the prescribed positive root is genuinely algebraic and properly located.
+I checked every policy and Continue residual by exact polynomial reduction
+modulo this cubic; all twenty-four vanish. The stronger buffer ratio
+is indeed at least 3/2. This is not numerical root evidence.
+
+All fifteen rewards give the sole trap12 and joining gaps3/2,−3/2.
+The grand row makes every player have a negative participant premium.
+Product-low fails on the sure12 product law, aggregate leave fails its
+player-1 singleton test, and the greatest-pair same-sign criterion fails
+its actual gap sign. The boxed-charge condition forbidding pairs also
+fails. These are raw-predicate failures, not a UE obstruction.
+
+I reread the raw statements of the two-outsider-buffer and repeated-solo
+buffer classes when checking possible overlap. Their prescribed joint
+vectors do not match (1,2,−1,0); the former has outsider value −1,
+and the latter also needs a different singleton-ordering region. The
+global two-joint positive-premium class additionally requires its outsider
+halfspace and negative first collision caps, violated here. The sole
+positive-singleton pivot is 0, and none of its pair participant premiums
+is positive. These observations support the bounded comparisons made,
+not exclusion of every possible perturbative or chronological producer.
+
+The response polynomial at q=(0,t,t,t) was independently evaluated:
+its child coordinates are exactly the two copies of
+−t+t²(1−t)(2−t)/2 and −t. The inherited singleton matrix/degree/
+inverse and first-order partition facts apply unchanged. All thirteen
+listed exact child profiles and omitted gains check directly. For the
+remaining child123, the half-hazard cycle has the stated phase values;
+refinement bounds full child regret by alpha_n/2, while the outsider's
+fixed gain is 1/7 and Never is zero. The universal finite quiet-debt
+bound is therefore excluded for all fourteen proper children, with the
+right quantifier. No selected-child completeness claim is inferred.
+
+### Independent stationary quiet-player falsification attempt
+
+At a candidate stationary equilibrium with positive absorption, its
+terminal value w satisfies the stationary Bellman identity and the
+necessary active comparisons w_i=Q_i≥C_i(w,q). I checked every
+quiet-player case, including sure hazards.
+
+For q_0=0 and all three child hazards positive, let p=q_1,q=q_2,
+r=q_3. The passive absorbing numerators are −q+2r, 2p−r, −p+2q.
+The first two Quit values are q(1−r)/2 and p(1−r)/2; the third
+is zero. Using opponent absorption at most one gives respectively
+r≤3q/4, r≥3p/2, p≥2q, a contradiction. If only pair12 is
+active, player2 has passive numerator2p and Quit value p/2, so its
+Continue value exceeds Quit. On pair13 player1 has positive passive
+numerator and zero Quit; on pair23 the same holds for player3. Each
+single-owner case is also defeated for EVERY positive stationary owner
+hazard, not just hazard one: use player3 against owner1, player1 against
+owner2, and player0 against owner3.
+
+For q_3=0,q_0>0, the pivot's forced-Quit value is one; every nonempty
+opponent coalition in12 pays it two by Continue. Hence neither child
+can be active, and sole owner0 is defeated by player1's zero Quit
+value against its passive value −1.
+
+For q_1=0, active player2 would have Q_2=0 and negative Continue,
+forcing q_2=1; pivot0 would then prefer Continue2 to Quit1, impossible.
+Thus only0,3 remain. Their strict action comparisons force both sure,
+and player2 joins03 profitably. Finally, with q_2=0 and the other
+three positive, player3 is forced sure by its zero Quit and negative
+Continue. Pivot0 is then forced sure, and player1's Continue2 exceeds
+Quit0, contradicting its activity. These cases are exhaustive for a
+quiet player. They do not exclude a fully supported stationary profile.
+No repair is requested for the stated theorem or its boundary tests.
+
+### Final whole-artifact and assembly-delta check
+
+PASS applies to the complete 469-line standalone
+`../exports/ZERO_PREMIUM_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md`,
+SHA256 `5e89dec50dd74bd1ea85b5bd7098f18805cf95951a72d6ddcef25af3f8ea450c`.
+I read the whole artifact after completing the independent proof review
+above; this is a bounded assembly check, not a reliance on another verdict.
+
+The complete original-table LCP propagation, degree signs, non-R₀
+equality exit and nonnegative passive-inverse exit are now stated
+self-containedly. They preserve exactly the reviewed all-R raw class.
+The selector, all twelve policy and twelve Continue equations, retained
+joint caps, common-error subdivision, fixed target, arbitrary behavioral
+deviations, finite-law censoring and uniform horizon quantifiers are
+unchanged and complete. The last section names the tracked mathematical
+inputs and the literal raw-predicate-to-producer handoff; it adds no
+strategic assumption or dependency on another conference manuscript.
+
+For the expanded boundary calculations, I independently recomputed the
+full inverse and all four triple inverses over the rationals, and checked
+each of the thirteen displayed singleton block-row-sum inequalities.
+All entries agree. The residual 0|123 polynomial is the one independently
+checked above. The grand-coalition withdrawal by player 0 is exactly
+−1 to zero. Combined with the exhaustive quiet-player stationary cases,
+this rules out all pure exits but does not assert nonexistence of a fully
+supported stationary equilibrium. The fourteen child-debt witnesses and
+opposite-sign sole-trap diagnosis retain their precise quantifiers.
+The source-comparison paragraph remains bounded to the named raw tests,
+not an exhaustive exclusion of every existing equilibrium producer.
+No mathematical repair or missing dependency was found.

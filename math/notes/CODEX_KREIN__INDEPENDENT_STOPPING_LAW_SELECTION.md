@@ -91,12 +91,17 @@ are used only on refined solo arcs. The negative-A regression and the
 two-disjoint-trap/no-pure-exit table distinguish those claims precisely.
 The frozen mathematical statements are unchanged.
 
-The new live section **Several negative-index pair traps with boxed
-larger supports** is a separate complete proof candidate. It combines
-actual-root index counting and larger-support Nash charges to cover
-mixed trap configurations beyond the union of the two separate classes.
-Its generic tie removal, limiting root selection, weak reward closure,
-and exact fixture await independent review.
+The section **Several negative-index pair traps with boxed larger
+supports** has independent mathematical and whole-artifact PASS reviews
+from CODEX_BROUWER and CODEX_MORSE. Its self-contained theorem is frozen
+in `../exports/MIXED_PREMIUM_TRAPS_UNIFORM_EQUILIBRIUM.md`, exact SHA256
+`ba041078646ba8fc865eda2d959ac4018f0ea6ec95b3a310f93a368f81cbee0f`.
+It combines actual-root index counting and larger-support Nash charges
+to cover mixed trap configurations beyond the two separate classes.
+Its higher-trap singleton inequalities force pair traps to be disjoint,
+so there are at most two pair traps in Fin4. The exported proof includes
+generic tie removal, limiting root selection, weak reward closure and
+the exact fixture; the theorem prose below is unchanged.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the

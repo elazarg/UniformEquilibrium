@@ -409,6 +409,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the two-buffer joint/solo family specified below, for every real R | UE allowing all six outsider collision coordinates at the joint phase to be positive, under two weighted raw inequalities. Signed collision rewards and the zero-final-phase boundary are included. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: all tables in an open sixty-coordinate neighborhood of the explicit two-joint-phase rational table specified below | UE with rates and a fixed target produced from the table. Every singleton and collision reward may vary; only two solo phases require refinement. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: the global two-joint cyclic-child family specified below, for every real R | UE with simultaneous quitting at both retained joint phases. The rates and target are produced from rewards, including the outsider halfspace boundaries. This is reviewed mathematics awaiting formalization. |
+| Fin4: the zero-premium joint-phase family specified below, for every real R and σ≥0 | UE with both joint participants at their singleton rewards and a possibly positive outsider collision payoff. Rates and a fixed target are produced; an opposite-sign pair core is allowed. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
@@ -596,6 +597,31 @@ outsider value may be negative; no all-phase singleton floor is required.
 The [complete global two-joint theorem](exports/GLOBAL_TWO_JOINT_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md)
 includes a full-core, no-pure-equilibrium example with disjoint pair traps.
 It does not exclude all stationary producers or cover arbitrary tables.
+
+The **zero-premium joint-phase family** prescribes, for any real R and σ≥0,
+
+    r({0})=(1,−1,−1,−1),    r({1})=(2,0,2,−1),
+    r({2})=(2,−1,0,2),      r({3})=(R,2,−1,0),
+    r({0,3})=(1,σ,−1,0),
+
+with only the additional caps
+
+    r₁({0,1}), r₁({1,3}), r₁({0,1,3})≤1/2,
+    r₂({0,2}), r₂({2,3}), r₂({0,2,3})≤0.
+
+Every other nonsingleton coordinate is unrestricted. The singleton criteria
+give original-table UE for R≤−1 and R≥1/4, including both equalities. On
+the remaining interval, one scalar crossing selects a joint {0,3} phase
+and two solo phases. Refining only the solos controls complete behavioral
+deviations while retaining one target. The positive continuation buffer
+permits the three player-1 collision caps to be positive even though both
+joint participants receive zero singleton-relative premium.
+
+The [complete zero-premium theorem](exports/ZERO_PREMIUM_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md)
+includes an exact opposite-sign pair-core example outside the same-sign
+pair criterion. It has no stationary equilibrium with a quiet player;
+nonexistence of a fully supported stationary equilibrium is not asserted.
+This is a raw reward family, not a normal form for arbitrary tables.
 
 The **premium-core criterion** assumes sₖ≥0 and rₖ(S)≥sₖ for every
 participant k∈S. A nonempty set A is a premium trap when every k∈A has

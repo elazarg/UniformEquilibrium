@@ -2683,3 +2683,59 @@ it out after a finite orbit. The two-player calculation identifies
 the obstruction quantitatively: the joint Never probability and the
 two separate opponent Never probabilities impose different constraints.
 No supplied-carrier or chronology-completeness claim is made here.
+
+## A tied outsider can be activated inside a larger charge box
+
+Status: ordinary mathematical proof, independently derived during review
+of the mixed-trap construction; not separately reviewed or Lean checked.
+This is an optional simplification of an already-passing proof, not new
+raw-table coverage. The complete review is in
+[`the owned KREIN feedback`](../feedback/CODEX_KREIN__INDEPENDENT_STOPPING_LAW_SELECTION__BY_CODEX_BROUWER.md).
+The original generic-polynomial argument does not require this lemma.
+
+Assume every all-high exact root with support of size at least three
+is excluded on the source box of radius B_1. Choose B_0<B_1. Consider
+an exact root q at v in the B_0 box with interior pair support A and
+successor w>s in every coordinate. All other hazards vanish. Then every
+inactive player's Quit-minus-Continue gap is STRICTLY negative.
+
+For if outsider k were tied, let q(t) keep the pair hazards unchanged,
+give k hazard t>0, and leave the other hazards zero. For every player
+ell write its pure-Continue value as
+
+    C_ell(v,q)=c_{-ell}(q)*v_ell+B_ell(q),
+
+where B is the unnormalized nonempty-opponent reward expectation.
+Every opponent nonabsorption probability remains positive at small t.
+For the three active players define an adjusted annotation by
+
+    v'_ell(t)=[Q_ell(q(t))-B_ell(q(t))]/c_{-ell}(q(t)).
+
+For every other player define instead
+
+    v'_ell(t)=v_ell
+        +max(0,Q_ell(q(t))-C_ell(v,q(t)))/c_{-ell}(q(t)).
+
+Each active player is exactly indifferent at this annotation. Each
+inactive player weakly prefers Continue. Thus q(t) is exact full Nash.
+At t=0 the pair and tied outsider were indifferent, and all remaining
+gaps were nonpositive, so v'(t) tends to v. Consequently v'(t) is in
+the B_1 box for small t, even when v is on the smaller box boundary.
+Its successor tends to w and is still strictly above every singleton.
+Its support has exactly three members, contradicting the assumed larger-
+support exclusion. No restriction on outsider participant premiums was
+needed.
+
+The mixed-trap strict charge margins admit TWO common radii
+M<B_0<B_1<M+2. After the pure-pair exit is removed, every bad pair
+root has both hazards interior. Applying this activation argument at
+B_0 gives strict inactive gaps directly at every source, without deleting
+source-polynomial zero sets. The finite full-index contradiction can then
+be run there without genericity and compactness restoration. The source
+consumer and weak reward closure remain unchanged. This is not a reason
+to modify a reviewed frozen packet; it identifies the role played by
+the strict outer-box margin.
+
+The concrete next conjecture-facing question remains continuation mass,
+as above. This auxiliary argument does not address the exact positive-
+index core-three falsifier or produce an arbitrary-table equilibrium.

@@ -1320,3 +1320,192 @@ distinction from the old nonnegative-premium weak-leave theorem.
 The packet is self-contained, contains no conference-file dependency
 or review history, and claims no new checked implementation. No
 mathematical or assembly repair is requested for these exact bytes.
+
+## Independent Section21 review: zero-premium joint phase
+
+Verdict: PASS for **A zero-premium joint phase and an opposite-sign
+residual core**, through the end of the notebook at whole-file SHA256
+`3405a3a3797b5a8182c7511622f4d8b4cd2298413540df30e5c986b6bcf6080b`.
+I read no counterpart review. Scope is the five literal reward rows,
+arbitrary real R, sigma>=0, three player1 join caps<=1/2, and three
+player2 join caps<=0, with all other reward entries free. The conclusion
+is one uniform-payoff target for the actual table against unrestricted
+behavioral deviations. No mathematical repair is requested. Calculations
+and source inspections here are ordinary mathematics, not Lean checks.
+
+### Original-table outer exits
+
+The actual child matrix has determinant7, the displayed positive inverse,
+and A*1=1. For a positive homogeneous pivot, the negative cycle forces
+all child variables positive and equal to that pivot; the remaining
+residual is p(R+1). At zero pivot the child cycle and invertibility
+give only the zero root. Thus R!= -1 gives R0, and R=-1 has the
+explicit nonzero homogeneous vector of all ones. The stated Fin4
+no-UE implication to R0 applies at equality without a degree argument.
+
+For R<-1, the offset q0>d with d=-(R+1)>0 has exactly the two
+claimed roots. Their active determinants are7 and7(R+1), their inactive
+inequalities are strict, and degree is zero. For R>=1/4 the passive
+inverse row is exactly (4R-1,R+5,2R+3)/7 and is nonnegative, including
+the endpoint. Both exits concern the original singleton matrix and
+place no hidden condition on collision rewards. They leave precisely
+the interval -1<R<1/4 for construction.
+
+### Scalar producer and complete undiffused equations
+
+For tau=1-4R in(0,5), X=tau*Y/(5+3Y) is positive and increasing.
+The numerator of a1 is strictly positive even at sigma=0. Hence w
+is proper, while z is strictly increasing from zero to infinity. The
+z=1 polynomial is (tau+3)Y^2+(tau-1)Y-10. Its value at
+Y=4/(tau+3) is exactly-6, so the top endpoint satisfies delta*Y*>1.
+I independently expanded F: its divided origin limit is
+7(tau-5)/20<0, and at z=1 it is delta*Y*-1>0. Thus IVT gives
+an interior root with all four rates proper. No branch uniqueness or
+continuation is presumed.
+
+The algebraic identity X=2delta*Y-3z holds before imposing F=0.
+Together with F=0 it gives X=-z+2w(1-z). I checked all twelve
+literal Continue equations symbolically. Before imposing F=0 their
+only nonzero residuals are -F/(1+Y) for player0 at A and -2F for
+player3 at B. Every supported Quit endpoint equals the displayed
+current value identically. Thus all twelve policy equations hold at
+the selected root, retaining the simultaneous03 reward.
+
+The player1 ratio a1/m is exactly the displayed fraction. Subtracting
+half its denominator gives 3(5-tau)/2 plus
+(9/2-tau/2+sigma*tau)Y, strictly positive across the whole interval.
+Its three actual joint Quit rewards therefore give Q1<=m/2<a1.
+Player2's corresponding endpoint is nonpositive. Both joint owners
+are exactly indifferent. The six caps are exhaustive for the two
+joint outsiders; no other collision coordinate is consumed there.
+
+### Refinement, unlimited behavioral replacements, and target order
+
+Refining each solo block preserves its aggregate singleton law and
+both endpoint values. Interior values interpolate between the macro
+endpoints, so every own singleton floor persists. Pure Continue stays
+exact and the solo owner stays indifferent. Every other immediate
+Quit endpoint is at most its singleton plus L times the microhazard,
+hence at most its current value plus the common error epsilon_n.
+This includes arbitrarily large unused collision rewards.
+
+Adding this SAME error to every continuation value gives one global
+supersolution, not a sum over the number of dates. All four displayed
+opponent period-survival factors are strictly below one. From any
+starting date a finite initial partial period followed by full periods
+still has vanishing survival, as required by the actual path consumer.
+Against any behavioral replacement, presampled independent opponent
+coins bound absorption by their first Quit. This removes the bounded
+Bellman remainder uniformly in the deviator. Exact policy transport
+and geometric survival also identify all phase values with actual
+terminal expectations, establishing their reward bound without an
+extra supplied-value hypothesis.
+
+For fixed n the expected absorption time under every replacement is
+bounded by the stated K_n. Thus the uniform horizon regret allowance
+epsilon_n+4M K_n/N is valid, as is target error2M K_n/N. The selected
+macro target V_A is fixed before n and N. Censoring individual laws
+after K periods changes total marginal mass by the displayed t_K;
+opponent-only coupling against each fixed full deviation and the
+separate prescribed-payoff comparison give regret epsilon_n+4M t_K.
+This is uniform over complete deviations, not a finite-action test.
+
+An independent rational stress case is R=0, sigma=101/42, Y=2/3.
+It gives
+
+    X=2/21, x=2/23, y=2/5, z=26/63, w=16/37,
+    V_A=(1,16/21,0,0),
+    V_B=(5/3,0,52/63,2/21),
+    V_C=(53/37,0,0,32/37),   m=52/115.
+
+All equations hold exactly. Set all three player1 caps to their positive
+boundary1/2 and player2 caps to0; other unused entries can be37.
+Then, for example, the last microdate of solo1 has player2 Quit excess
+35*beta_n, and the last solo2 microdate has player3 excess35*gamma_n.
+These genuine errors show why solo refinement is needed. This stress
+completion is only an algebra/consumer check, not a new-coverage witness.
+
+### Exact opposite-sign fixture and claimed exclusions
+
+I independently reconstructed the entire15-row fixture. Its only trap
+is12, whose gaps are3/2 and-3/2. Every player has a negative grand
+premium; the protected-set, same-sign-pair, no-pair boxed-charge, and
+product-low input failures are as stated. The singleton matrix retains
+the previously audited bounded inverse, degree, and first-order partition
+screens. I recomputed the remaining full response at q=(0,t,t,t):
+the first two child coordinates are -t+t^2(1-t)(2-t)/2 and the third
+is -t, so the candidate block fails. The old temporal comparisons
+correctly concern actual raw inputs, not completeness of those methods.
+
+For R=0,sigma=2, I get
+
+    F(Y)=Y*(28Y^3+60Y^2+Y-35)
+          /[(3Y+5)*(12Y^2+18Y+5)].
+
+The cubic is increasing on the nonnegative axis, with values -844/125
+and588/125 at3/5 and7/10. The displayed algebraic rates follow.
+Its buffer ratio minus3/2 is Y/(2Y+3)>0.
+
+All thirteen sure child profiles are exact against full behavioral
+replacements; the omitted gains are3/2 exactly in the singleton2
+rows and1 otherwise. For child123, the solo3,1,2 half-hazard cycle
+has the stated child values; microhazard error is at most alpha_n/2.
+The quiet player0 payoff is6/7 while its immediate Quit is exactly1,
+not merely asymptotically1. Hence the fixed1/7 gain defeats every
+fixed finite nonnegative weighted child-debt-plus-Never estimate.
+The quantifier remains each child/some omitted player; no selected-
+quiet-strategy impossibility is inferred.
+
+The stationary quiet-player exclusion checks including sure hazards.
+When q0=0 and all children are active, their endpoint inequalities
+force q3<=3q2/4, q3>=3q1/2, and q1>=2q2, a contradiction.
+Every two-child support has a specified active positive-passive player
+whose Continue is strictly better; singletons have a profitable join.
+When q3=0 and q0>0, player0's Quit is1 while any positive child
+hazard makes Continue exceed1. For q1=0, positive q2 forces q2=1,
+then player0 prefers Continue; otherwise the residual03 support forces
+both hazards to1 and player2 joins profitably. Finally q2=0 forces
+q3=1 then q0=1, after which active player1 prefers its passive2 to
+Quit0. These cases exhaust every quiet coordinate. No exclusion of
+fully supported stationary equilibria or UE is claimed.
+
+Reinspected exact sources were
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`,
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`,
+`PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`,
+and `QuittingInfinitePathQuitErrorCertificate`,
+`quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`,
+`QuittingInfinitePathQuitErrorCertificate.isεAsymptoticNash_and_delivers`,
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+The quiet-debt and response definitions use the same exact source audits
+recorded earlier. No source assumption is missing from this candidate.
+
+### Final zero-premium artifact binding
+
+Final artifact PASS applies to the complete469-line
+[`ZERO_PREMIUM_JOINT_PHASE_UNIFORM_EQUILIBRIUM` packet](../exports/ZERO_PREMIUM_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md),
+SHA256 `5e89dec50dd74bd1ea85b5bd7098f18805cf95951a72d6ddcef25af3f8ea450c`.
+I read all its bytes and checked only assembly additions against the
+independent substantive review above; no other review was read.
+
+The standalone preserves every raw equality, six cap inequalities,
+sigma=0 inclusion, both outer equality exits, fixed-target quantifier,
+and unrestricted behavioral/horizon proof. The new explicit child LCP
+propagation is correct: a zero first child coordinate with positive
+right-hand side forces the third and then second positive, whose active
+equation is impossible. Its zero-pivot argument likewise follows the
+negative cycle to full support. The inverse entries and all thirteen
+displayed partition row-sum mismatches check against the literal matrix.
+The final grand-coalition pure-exit exclusion is correct: player0 improves
+from-1 to0 by withdrawal. No broader stationary exclusion has been added.
+
+The tracked declarations have the same source assumptions audited above.
+The handoff states an actual raw-data producer, not a supplied-controller
+verifier. All mathematical data and proofs are self-contained; no
+conference notebook, feedback, or other math-directory dependency is
+required, and no review history or new Lean-check assertion appears.
+There is no mathematical or artifact repair requested for these bytes.
