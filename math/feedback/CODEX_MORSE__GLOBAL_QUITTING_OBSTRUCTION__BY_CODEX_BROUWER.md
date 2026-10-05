@@ -829,3 +829,166 @@ and quiet-debt declarations resolve at the stated files. In particular,
 equality, in its raw support witness. The artifact contains no notebook,
 feedback, or other math-directory dependency and no embedded review
 history. No unresolved assembly objection remains for these bytes.
+
+## Independent review: signed support-specific leavers with protected floors
+
+**Mathematical PASS.** I independently checked Section 17, “Signed
+support-specific leavers with a protected set of floors,” through EOF of
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, frozen whole-note SHA256
+`44cc703d932682ee292bda2b5d3c5b516b7ff14de3453d242e0af5c2b85ab811`.
+I did not consult KREIN's review. This checks the full finite-player strict
+analytic theorem, the four-player nonnegative-singleton UE consequence,
+the separate weak-comparison closure, and the signed proper-core fixture.
+It is ordinary mathematics and source inspection, not a Lean check.
+
+### Raw hypotheses and the actual return domain
+
+Let P be nonempty, require nonnegative participant premiums only on P,
+and require each positive-premium trap A to have a designated strict
+leaver in A intersect P. All other participant premiums may be signed.
+The theorem retains the simultaneous product law and every outsider.
+
+At any exact root, the protected forced-Quit endpoints satisfy Q_p>=s_p.
+Nash therefore puts the successor in R_P even when the source is not in
+R_P. The box part follows independently from the literal convex average.
+For sources in R_P, the designated leaver eliminates each trap-supported
+root: its empty-opponent term is nonpositive and its positive nonempty
+mass has strictly negative terms. A trap cannot be a singleton, so that
+nonempty opponent mass really is positive. If the support is not a trap,
+negating the finite trap quantifiers gives an active k whose EVERY
+participant reward within the support is <=s_k. Support optimality then
+gives w_k=Q_k<=s_k, including when k has negative premiums.
+
+Thus the fixed-domain return is to D_P, not to L or the full singleton
+orthant. No active-support-dependent domain and no ignored outside
+coordinate enters this argument.
+
+### Minimum localization and the two exhaustive cases
+
+D_P is nonempty and compact: s itself belongs to it, and it is a closed
+subset of the reward box. At a minimum x, any coordinate strictly below
+its singleton would make all Continue non-Nash. Exact finite root
+existence and fixed-domain return would then give a strictly lower point
+of D_P. Hence x belongs to L and minimizes H there too.
+
+I re-read `IsQuittingFullExactRootPotential.singletonFace_drift` in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`
+and its `exists_small_rates_quittingSingletonProbe` producer in
+`UniformEquilibrium/Quitting/Root/CollisionAdjustedSingletonProbe.lean`.
+The face inequality truly permits signed premiums: the collision-adjusted
+source repairs the inactive players, including at upper-box faces.
+With one binding coordinate, the minimum derivatives make its left side
+nonpositive. Thus at least two coordinates bind. Increasing one binding
+coordinate while retaining another gives a nonnegative binding partial;
+nonbinding interior partials vanish and upper-face partials are nonpositive.
+
+If some binding k is unprotected, lowering only k stays in D_P. Its root
+returns to D_P. The signed Quit lower bound
+
+    Q_k >= s_k - 2M*a
+
+uses only that opponent absorption is at most total absorption; it does
+not reinstate a nonnegative premium assumption. Combining it with Nash
+and |w_k-v_k|<=(M+B)*a gives epsilon<=(3M+B)*a. Minimum and unit drift
+therefore force a strictly positive lower directional quotient, whereas
+its derivative is -g_k<=0. This is a complete contradiction with no
+continuity or compactness assumption on a selected root.
+
+If every binding coordinate is protected, lowering k may leave R_P.
+The proof correctly does NOT apply return to that perturbed source.
+Every exact root at the unperturbed minimum has zero absorption. For
+any sequence of chosen perturbed roots, compactness of the finite hazard
+cube and the closed polynomial Nash graph force absorption to tend to
+zero; otherwise a positive-absorption subsequential root would exist at
+x. No continuous selector is needed.
+
+The successors still belong to R_P. Since all binding coordinates are
+protected, the derivative signs imply g dot (w-x)>=0 throughout R_P,
+even when unprotected nonbinding coordinates fall below their singleton.
+The protected k floor gives epsilon<=(M+B)*a and displacement from x
+at most 2(M+B)*a in maximum norm. Differentiability therefore bounds
+BOTH Taylor remainders by o(a), not merely o(epsilon). The nonnegative
+first-order successor term and nonpositive source term then contradict
+unit absorption drift. The cases J minus P nonempty and J subset P are
+exhaustive at the same minimum. No extra raw premise has been inserted.
+
+### Exact adversarial tests of the missing stronger assertions
+
+A two-player trap-free signed example shows that R_P cannot be replaced
+by the full singleton orthant. Take P={0}, s=(0,0), and
+
+    r(0)=(0,-1), r(1)=(0,0), r(01)=(0,-1).
+
+At source (0,1), the exact root q=(1,0) has successor (0,-1).
+The protected floor holds, but the unprotected one fails. This is allowed
+by the theorem and correctly handled by D_P.
+
+A separate signed four-player test shows that perturbed sources outside
+R_P cannot be assumed to return to D_P. Pair partners 01 and 23; all
+singletons are zero. For participants give reward 1 if their partner is
+present and 0 otherwise; for passive players give 2 to players 0,2 and
+0 to players 1,3. Change only r_1(013) to -1/10 and take P={0,2}.
+The only traps are 01,23,0123, with protected strict leavers 0,2,0.
+At v=(-1,1,2,2), q=(1/2,1/2,0,0), the forced (Quit,Continue)
+endpoint pairs are
+
+    (1/2,1/2), (1/2,1/2), (0,2), (0,1/2).
+
+Thus this exact root has successor (1/2,1/2,2,1/2), strictly above
+every singleton and outside D_P. The example checks the necessity of the
+second arm's weaker R_P conclusion. Its zero singletons make it only a
+logical stress test, not a source-coverage witness.
+
+### Original-game consumer and weak closure
+
+The inspected declarations supply exactly the stated chain:
+`isQuittingNormalPlayer_of_singleton_nonneg` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean` has no
+premium-sign assumption; the forward direction of
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`
+produces the polynomial under normality, a positive singleton, and absence
+of UE; `isQuittingFullExactRootPotential_of_robustPotential` in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`
+retains all exact roots of the same table. The box M+2 is strictly larger
+than its reward bound, as required. If all nonnegative singletons vanish,
+all Never is an exact uniform equilibrium instead.
+
+Increasing every passive coordinate by delta leaves protected premiums,
+own singletons, and all traps unchanged, and makes each designated weak
+comparison strict. The exact
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`
+allows the approximating targets to vary and still gives one fixed target
+for the limit table. Thus the weak STRATEGIC theorem follows. No weak
+analytic exclusion is silently claimed.
+
+### Signed proper-three-core fixture and bounded coverage
+
+I reconstructed the full fifteen-row signed table. The protected players
+0 and 2 retain all participant floors, while r_1(013)=-1/10 is genuinely
+below s_1=0. Exact finite checks leave ONLY traps 01,12,012 and protected
+strict-leaver sets {0},{2},{0}. The greatest core is the proper triple
+012; the sole common trap member 1 still strictly joins 0. Thus this
+is outside both the common-leaver class and the globally nonnegative-
+premium support-specific class. The global-safe-quiet composition still
+fails at r_0(3)=0<s_0=r_0(03)=1.
+
+The singleton matrix, degree, inverse and first-order quotient tests are
+unchanged from the independently checked original fixture. The response
+values at (t,0,0,0) are also unchanged since the altered triple013 is not
+sampled there. I checked all thirteen exact child profiles again: every
+child deviation comparison remains nonpositive, and every stated omitted
+gain is unchanged. At child013, the changed player-1 join is strictly
+worse, not better. The pure improvement at coalition013 increases to
+21/10 as stated. The diffuse child123 law, its full-regret bound tending
+to zero, zero Never mass, and fixed outside gain 1/7 do not use the changed
+entry at all. Hence the universal fixed weighted-debt exclusions survive
+with exactly their original quantifiers. The prescribed-vector failures
+of the older cyclic families are likewise unaffected.
+
+These are bounded actual-input exclusions, not a claim that every possible
+selected-child or stationary construction fails. The strongest signed
+protected-set theorem, its weak strategic closure, and the stated coverage
+witness all survive this independent falsification. No mathematical repair
+is requested.

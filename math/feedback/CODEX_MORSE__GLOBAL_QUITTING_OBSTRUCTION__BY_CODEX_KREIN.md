@@ -743,3 +743,204 @@ recovering the particular safe-spectator example in the source note, nor
 the named implementation gates above. The non-overlap statement remains
 bounded to those precise gates. My mathematical PASS does not require an
 unsupported assertion that no other proof of this same table could exist.
+
+## Independent review: protected-set support-specific leavers
+
+Verdict: **PASS**, with no unresolved mathematical objection. Reviewed
+Section 17, “Signed support-specific leavers with a protected set of
+floors,” through EOF of the author's notebook, at whole-file SHA256
+`44cc703d932682ee292bda2b5d3c5b516b7ff14de3453d242e0af5c2b85ab811`.
+I did not read another review of this theorem before deriving this
+assessment. This is an ordinary mathematical review and static source
+audit, not a Lean implementation or build.
+
+The claim checked is the finite raw criterion with a nonempty protected
+set P: every participant premium of every p∈P is nonnegative, while
+unprotected premiums may have either sign; each positive-premium trap
+has some member p_A∈P strictly preferring withdrawal against EVERY
+nonempty coalition of the other trap members. It excludes a C¹ unit
+absorption-drift potential in any finite dimension, without singleton
+sign assumptions. The strategic consumer is specifically Fin4 with
+nonnegative singletons. Weak leave is a separate UE conclusion by
+reward closure, not a weak analytic claim.
+
+### Fixed-domain return and the actual minimum
+
+Protected floors hold at every exact root at every source: Q_p is an
+average of participant rewards all at least s_p, and Nash gives
+w_p≥Q_p. The convex one-step formula also preserves the large box.
+For a source in R_P, if its active support were a trap, the designated
+protected member has a nonpositive empty-opponent contribution and
+strictly negative contribution on EVERY nonempty opponent coalition.
+There is positive nonempty probability because a singleton cannot be
+a trap. Thus it strictly prefers Continue while being active. Sure
+hazards and simultaneous coalitions do not escape this contradiction.
+
+The support is consequently not a trap, which means some active
+player has no positive participant premium on ANY subcoalition of
+that support. Its supported Quit payoff is at most its singleton.
+This proves return to the SAME compact D_P, not to a support-dependent
+region. It does not assert that this last player's payoff equals its
+singleton or that an unprotected player's successor has a floor.
+
+At a minimum x of H on D_P, a below-singleton coordinate makes
+all-Continue non-Nash. Every existing exact root therefore absorbs,
+returns to D_P and strictly lowers H, a contradiction. Hence x∈L.
+The singleton-face drift inequality applies on this actual minimum.
+If only one coordinate binds, that coordinate contributes zero to
+the face drift, all nonbinding interior partials vanish, and all
+upper-face partials times their strictly positive displacement are
+nonpositive. This contradicts unit drift. With at least two binding
+coordinates, raising any one leaves another binding, yielding the
+nonnegative binding partials used in both arms.
+
+The additional conclusion that EVERY exact root at x has zero
+absorption is essential and valid: x∈R_P, so any absorbing root
+would return to D_P and lower the attained minimum. This is not
+an assumption about roots at arbitrary boundary points.
+
+### The two perturbation arms
+
+If a binding k lies outside P, lowering x_k preserves D_P. Every
+root at that perturbed source absorbs and returns to D_P. Since
+|r_i(S)|,|s_i|≤M, the forced-Quit endpoint of k is at least
+s_k−2M a_{−k}≥s_k−2M a, irrespective of premium signs. Nash
+and one-step averaging give epsilon≤(3M+B)a. Potential drift and
+minimum comparison yield a positive lower bound 1/(3M+B) on the
+backward difference quotient, whose limit is −∂_kH(x)≤0.
+No successor floor is restored in this arm.
+
+If all binding coordinates lie in P, the lowered source need not
+belong to the return domain. The proof correctly stops using return
+there. Root compactness is legitimate: the hazards lie in a finite
+cube and every Nash inequality is a polynomial in source and hazards.
+Any accumulation root is therefore exact at x; the preceding
+actual-minimum conclusion forces its absorption to vanish. Thus
+every selected sequence has absorption a_n→0, without continuity
+or uniqueness of a root selection.
+
+Every successor still lies in R_P by protected participant floors.
+The gradient signs imply g·(z−x)≥0 for every z∈R_P: protected
+binding coordinates move upwards; nonbinding interior coefficients
+vanish; upper-face coefficients and displacements are both nonpositive.
+At the lowered protected coordinate, w_k≥s_k and the displacement
+bound give epsilon_n≤(M+B)a_n. Hence both perturbed sources and
+successors are within O(a_n) of x. Differentiability makes BOTH
+Taylor errors o(a_n), not merely o(1). Dividing unit drift by a_n
+then gives 1≤o(1), the claimed contradiction. The case split is
+exhaustive at one and the same minimizer.
+
+### Exact test: perturbed protected sources really can leave D_P
+
+The following independent three-player test satisfies the strict raw
+conditions but prevents replacing Arm 2 by an unconditional return
+argument. Set P={0,2}, s=(1,0,0), and prescribe all seven rows:
+
+    r(0)=(1,0,1),       r(1)=(3,0,1),      r(2)=(0,0,0),
+    r(01)=(2,1,1),      r(02)=(1,0,0),
+    r(12)=(0,0,0),      r(012)=(1,0,0).
+
+The sole trap is 01; its protected leaver is 0 since 2<3.
+At x=(1,1,0) the binding set is exactly P. For 0<epsilon<1 put
+
+    v=(1−epsilon,1,0),
+    q=(1/2,epsilon/(1+epsilon),0).
+
+Players 0 and 1 have equal Quit and Continue endpoints respectively
+(1+2epsilon)/(1+epsilon) and 1/2. Player 2 has Quit endpoint
+zero and Continue endpoint (1+2epsilon)/(2+2epsilon)>0.
+Thus q is an exact root, and its successor is strictly ABOVE all
+three singleton coordinates. It belongs to R_P but not D_P.
+The point x is deliberately not asserted to minimize a forbidden
+potential; its limiting exact root absorbs. The example isolates why
+the actual-minimum compactness step, not a generic boundary return,
+is indispensable. All these endpoint formulas were checked exactly.
+
+### Strategic source and weak boundary
+
+I reread the following declarations in their actual source files:
+
+- `IsQuittingFullExactRootPotential.singletonFace_drift` in
+  `UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`;
+- `exists_isZeroQuittingRootNash` in
+  `UniformEquilibrium/Quitting/Root/NashExistence.lean`;
+- `abs_quittingRootSuccessorPayoff_sub_tail_le_reward_add_source_mul_absorptionMass`
+  in `UniformEquilibrium/Quitting/Root/BoundedSuccessorDisplacement.lean`;
+- `isQuittingNormalPlayer_of_singleton_nonneg` in
+  `UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`;
+- `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+  in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`;
+- `isQuittingFullExactRootPotential_of_robustPotential` in
+  `UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`;
+- `exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in
+  `UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+
+The first three carry no missing premium or strategic-realizability
+assumption. Nonnegative own singletons supply normality even with
+signed unprotected premiums. For a positive singleton, hypothetical
+failure of UE produces a rational polynomial on the original table's
+box M+2; restriction preserves the identical potential and exact
+unit absorption charge. The analytic theorem contradicts that output.
+If all singletons are zero, opponents at Never let any unilateral
+deviator receive only its singleton zero or Never zero. Thus all-Never
+is already exact. This completes the raw-input-to-UE chain and leaves
+no supplied strategy selector or restricted deviation class as input.
+
+For weak leave, adding delta only to passive coordinates preserves
+own singletons, every participant premium, and exactly the trap
+collection. It makes every designated comparison strict because the
+right-hand passive coordinate increases while the left participant
+coordinate does not. Reward closure selects a fixed target for the
+original table; it need not preserve an approximating target. No
+openness assertion or weak C¹ exclusion is used.
+
+### Signed proper-core fixture and bounded coverage
+
+An independent exact-rational enumeration confirmed that the printed
+fifteen-row table has protected players 0 and 2 (also 3 is flat),
+traps exactly 01,12,012, and respective possible leavers 0,2,0.
+The protected hypotheses hold, while r_1(013)=−1/10 is a genuine
+negative participant premium. The only common trap member 1 fails
+weak leave at 01. The stated fifteen pure toggle gains agree exactly.
+All thirteen sure-absorption child profiles have nonpositive child
+join/withdrawal gains and the displayed strictly positive omitted
+gains. A sole owner can delay only to Never or its own singleton,
+so those tests genuinely cover its complete behavior.
+
+For the remaining child 123, the three half-hazard Bellman vectors
+(1,0,0),(0,1,0),(0,0,1), in order 3,1,2, check exactly. Refining
+the solo phases makes the only positive participant pair premiums,
+the two 1/2 entries at 12, cost at most alpha_n/2 in the common-error
+supersolution. Opponent survival contracts, so full behavioral child
+regrets tend to zero and Never is zero. The quiet pivot value is
+6/7; quitting at the first player-3 microstage yields exactly 1,
+since r_0(0)=r_0(03)=1. This fixed positive gap contradicts any
+universal finite fixed-weight child-debt-plus-Never bound, without
+claiming the coarse child profile is an exact equilibrium.
+
+The singleton matrix recomputation gives det Γ=7 and
+
+    Γ⁻¹=[[1,1/7,−5/7,−3/7],
+         [1,3/7,−1/7,−2/7],
+         [1,2/7,−3/7,1/7],
+         [1,5/7,−4/7,−1/7]].
+
+The four triple inverses have the stated signs; the passive row for
+child 123 is exactly (−1/7,5/7,3/7). In a homogeneous LCP,
+positive pivot forces all three child coordinates positive and equal
+to that pivot, then yields strictly positive pivot residual. With
+pivot zero the cyclic child forces all positive or all zero, and
+invertibility rules out the former. At offset (1,−1,−1,−1),
+the same argument forces child coordinates 1+h, pivot residual
+2+h and hence h=0. The unique root's active determinant is 7,
+giving degree +1. Principal 03 is the stated R₀/non-Q matrix.
+
+Enumerating all fifteen partitions leaves only the discrete partition
+and 0|123 at first order; direct pivot-only response values for the
+last are t+t²,t,t, so it is not response invariant. These exact
+checks support the bounded named-source distinctions. They do not
+establish absence of all stationary, selected-child, or other producers.
+
+No correction to the frozen theorem or its proper-core fixture is
+requested. The new protected-source example above is an optional
+boundary stress test, not an additional hypothesis or repair.

@@ -1137,3 +1137,156 @@ are unchanged in the assembly.
 No mathematical delta, missing dependency, or strengthened coverage claim
 was introduced. No unresolved artifact objection remains. This verdict
 is ordinary mathematical validation, not a Lean compilation claim.
+
+## Independent review: two genuine joint phases on a full-table neighborhood
+
+**Verdict: PASS for the open-neighborhood theorem and its precisely
+scoped source exclusions.** I independently checked “Two genuine joint
+phases give an open full-table neighborhood,” equations (79)–(86),
+and the appended “Exact exclusion of the fixed-label stationary
+neighborhood.” The full notebook SHA at this check is
+`71f306ad1a57b691b34ad7d575e3a55f8e9320a80b7c7445133665d05395b6f5`.
+I did not read BROUWER's review before deriving this verdict.
+
+The assertion is a uniform-equilibrium payoff for EVERY table in one
+open neighborhood of the complete rational center in ℝ⁶⁰. All sixty
+coordinates, including singleton levels and the four joint03 entries,
+are independently perturbable. The target depends on the table, then
+is fixed before accuracy. The theorem does not assert a common target
+across different tables, a numerical neighborhood radius, or general
+openness of equilibrium existence.
+
+### Arbitrary-table elimination and the exact center
+
+The use of c_i(S)=r_i(S)−s_i is only algebraic centering of the
+original Bellman equations V=s+v. Every one-step outcome, including
+the source continuation, has the same subtracted s_i, with total
+probability one. The Never reward is not translated. Eventual
+absorption, proved separately, validates the original terminal values.
+
+The definitions of e and f in (83) enforce exactly the two supported
+Continue equalities at D. The two equations F₃=F₀=0 enforce the
+supported Continue equalities at A. The four corresponding Quit
+endpoints are ξy, ηx, ξf, ηe in centered coordinates. No equation
+requires the perturbed joint03 reward to equal a singleton coordinate.
+
+For player 1, v_B,1=0 makes the A equation a₁=B₁(x,y); the D
+equation defines d₁, and w enforces
+w c₁(2)+(1−w)d₁=0. This gives BOTH v_C,1=v_B,1=0 and the
+solo-1 indifference. For player 2, the definition of a₂ gives the
+exact D equation with v_D,2=0, and the z formula gives its A
+equation via v_B,2=z c₂(1). The solo-2 indifference follows from
+v_C,2=v_D,2=0. The four remaining B/C coordinates are their literal
+solo averages. Thus all sixteen policy and all sixteen Continue
+identities really follow for arbitrary nearby reward data, not only
+on the center's affine parameter slice.
+
+I independently reconstructed all fifteen center reward vectors from
+(79)–(80), substituted the six exact hazards, and recomputed every
+policy and Continue residual as zero. The four vectors (81) and the
+four strict joint-row gaps (82) agree exactly. The four rows of
+Continue-minus-Quit gaps, in player order, are
+
+    A: (0, 604439/832400, 105797/416200, 0),
+    B: (252/281, 0, 1/2, 823/2958),
+    C: (572/843, −1/6, 0, 1480/1479),
+    D: (0, 11179/20000, 171/5000, 0).
+
+In particular the coarse C row is NOT Nash: player 1 can gain 1/6.
+This is safely handled by refinement rather than silently omitted.
+
+### Independent derivative calculation and all sixty directions
+
+I differentiated the literal rational functions (83)–(84), independently
+of the displayed derivative, obtaining exactly
+
+    [−34669831/8430300, −21674311817/23083492500]
+    [ 445211/800850,    −7722150539/6578561250]
+
+and determinant 1561445159256653/291890762662500>0. All denominator
+values are nonzero at the center. The finite-dimensional implicit-function
+theorem therefore applies with the ENTIRE reward vector as its
+parameter and (x,y) as its two unknowns. The fact that the equations
+ignore some reward entries does not constrain those directions: the
+branch simply remains unchanged when only an unused equation entry
+varies. Those entries still occur in the subsequent strict inequalities
+or in the finite refinement constant.
+
+All six center rates are interior, so the formulas preserve that after
+one neighborhood restriction. Exactly the four listed floor occurrences
+are identities: V_B,1=V_C,1=s₁ and V_C,2=V_D,2=s₂. The other
+twelve phase-coordinate floors are strictly separated at the center,
+including the small positive player-3 floor at D. Their continuity
+therefore preserves them. The four joint-row outsider gaps are strict;
+their formulas retain empty, 0, 3, and 03 opponent events and vary
+continuously in every actual collision reward. This justifies one
+open neighborhood in all sixty coordinates. No hidden equality or
+nonnegative-singleton premise is reintroduced.
+
+### Complete deviations, no accumulated error, and fixed target
+
+Only solo phases B,C are subdivided. Their endpoint vectors are
+unchanged and every intermediate vector is on the corresponding
+entry/exit segment. The owner coordinate is identically its actual
+singleton, even when that singleton becomes negative under perturbation.
+Consequently prescribed policy and pure Continue remain exact, all
+floors survive, and every microstage Quit payoff is at most current
+value plus the same e_n. The two original joint rows retain error zero.
+
+Adding this one e_n to all values gives a Bellman supersolution:
+Continue transports only a survival fraction of the added constant,
+and Quit has the stated cap. No sum of stage or period errors appears.
+For every deviator, its opponents have positive aggregate hazard in
+the period; removing its entire behavioral strategy cannot change
+that prescribed opponent-only survival probability. The geometric
+bound therefore removes the bounded remainder uniformly over complete
+history-dependent deviations, including Never.
+
+The same contraction evaluates the prescribed policy exactly at
+V_A(r). The refined period has 2+2n dates. Opponent-only first-Quit
+time bounds the absorption time under every deviation by expectation
+(2+2n)/(1−ρ_i). Thus the stated finite-horizon O(1/N) bound is
+uniform over deviations and all larger horizons. Choosing n and then
+one horizon threshold leaves V_A(r) fixed. This is the literal
+hypothesis of the re-inspected
+`quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+Neither theorem needs nonnegative singletons for this direct construction.
+
+### Exact scope checks, including the stationary appendix
+
+The disjoint traps03 and12, all four of their positive participant
+premiums, and all fifteen listed pure-coalition improvements check
+exactly. These strict gaps persist nearby. There is therefore no
+common trap player and no pure equilibrium throughout a sufficiently
+small neighborhood. Moreover trap03 has NO weak leaver: both its
+participants strictly prefer their pair payoff to the other's singleton.
+These two gaps also persist, so even the new support-specific protected-
+set criterion in my Section 17 cannot apply on this neighborhood.
+
+The appended stationary exclusion is correct in its stated fixed labels.
+With q₃=0, put A=q₁+q₂−q₁q₂ and T=q₁+q₂−2q₁q₂. Direct
+evaluation gives Q₀=1−A, B₀=2T and E₀≤−T. The inequality
+uses A²≥q₁q₂; T=0 occurs only at (0,0) and (1,1).
+The (1,1) corner gives E₂=−3/2+q₀/2<0 against active player 2.
+At the (0,0) corner, q₀>0 gives E₃=h₃q₀+ηq₀²>0 against
+quiet player 3; all hazards zero is blocked by singleton0=1.
+Otherwise q₀=0. If q₁>0, E₂=q₁²/2−2q₁<0 forces q₂=0,
+then E₃=q₁−q₁²/2>0. The final q₁=0,q₂>0 case gives
+E₁=q₂+q₂²/2>0. All boundary hazards are included.
+
+I inspected `PairedCubicStationaryExample.activeHazard` in
+`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicActiveJacobian.lean`
+and `PairedCubicStationaryExample.exists_local_stationary_branch` in
+`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`.
+Their branch has literal hazard3=0, so that asserted fixed-label
+neighborhood cannot contain this center. This does NOT exclude its
+relabelings, stationary profiles with other support, or every other
+raw producer. I make no all-stationary exclusion claim, and no floating
+root search was used to establish the stated source separation.
+
+No unresolved objection remains to the complete open-neighborhood
+producer, its exact behavioral consumer, or its explicitly bounded
+overlap statements. This is ordinary mathematical PASS, not a Lean
+implementation or an unrestricted Fin4 theorem.
