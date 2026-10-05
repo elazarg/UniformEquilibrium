@@ -1791,3 +1791,91 @@ which chooses among joint phases or accounts rather than another
 scalar refinement of this one fixed chronological grammar. The exact
 three-core unique-root obstruction remains a valid stress test, not
 a request to find a forced second root.
+
+## Global minimum test: vanishing roots cannot escape a lower-face minimum
+
+**Status: new ordinary proof draft; no independent review or coverage
+claim.** This is a global constraint involving a potential's actual
+minimum, not a claim about root counts at arbitrary annotations.
+
+Assume finite nonempty I, all participant rewards at least their own
+singletons s, |r|<=M, and B>M. Put U=product[s_i,B] and let L
+be its singleton lower boundary. Suppose, only at annotations v in U,
+every absorbing exact root has successor in L. This is weaker than
+return on all boxed sources or on all sources protecting just one
+coordinate. Then there is no C1 full exact-root unit-absorption potential.
+
+Proof. Let x minimize a putative potential H on L. The usual singleton
+face inequality excludes exactly one binding coordinate. With at least
+two bindings, all binding partials are nonnegative; nonbinding interior
+partials vanish and upper-face partials are nonpositive. Consequently
+
+    grad H(x) dot (w-x) >= 0 for EVERY w in U.         (G1)
+
+Every exact root at x must have zero absorption: an absorbing root
+would return to L and strictly lower H below its minimum. Choose any
+binding k and take v_epsilon=x-epsilon*e_k. Exact Nash existence
+gives an absorbing root q_epsilon. The finite root space is compact,
+and the Nash graph is closed because its endpoint inequalities are
+polynomial. Every accumulation root as epsilon decreases to zero is
+exact at x, hence all-Continue. Thus a_epsilon tends to zero.
+
+Nonnegative participant premiums imply the actual successors w_epsilon
+lie in U even though v_epsilon need not. The k coordinate and one-step
+motion estimate give
+
+    epsilon <= (M+B)*a_epsilon,
+    norm(w_epsilon-x) <= C*a_epsilon
+
+for a fixed finite-dimensional C. Taylor expansion at x, (G1), and
+the binding derivative sign imply
+
+    H(w_epsilon) >= H(x)+o(a_epsilon),
+    H(v_epsilon) <= H(x)+o(a_epsilon).
+
+Hence H(v_epsilon)-H(w_epsilon)<=o(a_epsilon), contradicting
+unit absorption drift after division by a_epsilon>0. No uniform
+positive absorption hypothesis, index computation, or root selection
+continuity is used. The essential compactness conclusion is the
+opposite: absorption must vanish near this particular minimum.
+
+A finite raw sufficient condition for the restricted return premise
+is that EVERY positive-premium trap A has some member p_A such that
+
+    r_(p_A)(T union {p_A}) < r_(p_A)(T)
+    for every nonempty T contained in A minus {p_A}. (G2)
+
+The member may differ between traps; there need not be a common player.
+At a source above every singleton, a trap-supported exact root makes
+its designated p_A strictly prefer Continue. A nontrap-supported root
+has a flat active player and returns to L. Thus (G2) gives the analytic
+exclusion, and the same Fin4 normal polynomial consumer gives UE when
+s>=0. Weak comparisons can be made strict by increasing every passive
+reward coordinate by delta, leaving all participant premiums and traps
+unchanged, followed by reward closure.
+
+This is not yet a new-coverage claim. Since the greatest trap itself
+must have a leaver, (G2) resembles a recursive quiet-player deletion
+criterion and may be absorbed by existing matrix/quiet-child exits.
+Simple disjoint-trap examples considered so far readily fall into those
+older screens. Do not export (G2) or portray it as progress on arbitrary
+games without an exact surviving table or a genuinely useful reduction.
+The minimum-collapse argument itself may still be useful beyond that
+particular raw condition.
+
+The narrow source check inspected
+`not_isQuittingFullExactRootPotential_of_singletonLowerBoundaryReturn`
+in `UniformEquilibrium/Quitting/Projective/SingletonLowerBoundaryReturnSmoothDrift.lean`,
+which requires return whenever ONE designated floor is protected, and
+`weakPeeling_iff_every_boxedExactRoot_singletonLowerBoundary` in
+`UniformEquilibrium/Quitting/Classification/NonnegativePremiumBoxBoundary.lean`,
+which quantifies over ALL boxed sources. Neither displayed premise is
+the restricted all-floors source condition used above. The existing
+`not_differentiable_absorptionDrift_of_nonnegative_productLow` in
+`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowSmoothDrift.lean`
+uses universal product-low return. These are scope comparisons, not a
+full inventory of nearby generic analytic lemmas.
+
+Next question: can the minimum-collapse contradiction combine with the
+known exact interior-successor roots to force a GLOBAL return or cycle,
+without assuming (G2) or searching for a second root at a refuted source?

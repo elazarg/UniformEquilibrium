@@ -472,3 +472,209 @@ closure premise is being substituted for this limiting argument.
 These checks establish the stated bounded source separation. They do
 not say that every other strategy architecture fails. The verdict is
 ordinary mathematical PASS, with no Lean build claim.
+
+## Independent review: collapse at a lower-boundary minimum
+
+**Verdict: PASS for the analytic mechanism and its stated raw sufficient
+condition; new equilibrium coverage remains unestablished.** I checked
+the final section “Global minimum test: vanishing roots cannot escape
+a lower-face minimum” independently, without another review. This is
+not an application of the protected-singleton return argument: the
+new proof deliberately allows the perturbed successors outside L.
+
+The data are a finite nonempty player set, participant rewards at least
+their own singleton levels s, a reward bound M, and B>M. Write
+U=∏[s_i,B] and L={x∈U: some x_i=s_i}. The hypothesis checked is:
+every absorbing exact Nash root at every source in U has its literal
+one-stage successor in L. The claimed conclusion is the absence of a
+C¹ potential with unit absorption decrease on every exact Nash root
+throughout the larger signed box [−B,B]^I.
+
+### The minimum geometry and the vanishing-absorption step
+
+Let x minimize H on compact L and J={i:x_i=s_i}. If J consists of
+one player j, all other interior partial derivatives vanish and all
+upper-face partial derivatives are nonpositive. Consequently
+∇H(x)·(x−r({j}))≤0: its j term is zero, interior terms vanish,
+and every upper-face displacement is positive since B>M. This
+contradicts the singleton-face inequality ≥1. Thus |J|≥2.
+
+For every binding coordinate one can increase that coordinate while
+retaining another binding coordinate, so its derivative is nonnegative.
+For every nonbinding coordinate, the usual two-sided or upper-face
+variation retains a binding coordinate. Hence, coordinate by coordinate,
+
+    ∇H(x)·(z−x) ≥ 0  for every z∈U.
+
+This uses neither convexity of H nor a minimum of H on U.
+
+An absorbing exact root at x would, by the restricted return premise,
+give a successor in L with smaller H. Therefore every exact root at
+x has zero absorption. Fix a binding k and any sequence ε_n↓0
+small enough that v_n=x−ε_n e_k remains in [−B,B]^I. Finite Nash
+existence gives roots q_n. They absorb: all Continue would give k the
+strict Quit gain ε_n. The product cube of hazards is compact and
+both endpoint inequalities are polynomial in (v,q). If a subsequence
+had absorption bounded below by a positive number, a convergent
+subsequence would give an absorbing exact root at x. Thus a_n→0
+for every choice of the roots. No continuous selection and no positive
+lower bound on absorption are being assumed.
+
+### The scale of the Taylor remainder is correct
+
+At any exact root, its successor coordinate is at least the forced-Quit
+endpoint, which is at least s_i by nonnegative participant premiums.
+The successor is also in the reward/source box. Thus w_n∈U even
+though v_n∉U and even if w_n∉L. The exact one-stage estimate gives
+
+    ‖w_n−v_n‖∞ ≤ (M+B)a_n,
+    ε_n ≤ w_{n,k}−v_{n,k} ≤ (M+B)a_n,
+    ‖w_n−x‖∞ ≤ 2(M+B)a_n.
+
+These estimates have the needed direction. They bound both Taylor
+remainders by o(a_n), not merely o(ε_n) with an uncontrolled ratio.
+If g=∇H(x), then
+
+    H(v_n)−H(x) = −ε_n g_k + o(a_n) ≤ o(a_n),
+    H(w_n)−H(x) = g·(w_n−x) + o(a_n) ≥ o(a_n).
+
+Unit absorption decrease would therefore imply
+1≤[H(v_n)−H(w_n)]/a_n→at most zero, a contradiction.
+The proof even uses only continuity on L and differentiability at its
+minimum, with the singleton-face input there; the stated C¹ version
+is safely stronger. This is a mathematical observation, not a request
+to create another regularity interface.
+
+### Raw trap condition and weak closure
+
+The proposed strict condition is sufficient. For a trap-supported root
+with support A, choose its designated p_A. Since a singleton cannot
+be a positive-premium trap, some other hazard in A is positive. The
+Quit-minus-Continue gap of p_A is the product expectation of
+r_p(T∪{p})−r_p(T) for nonempty T⊆A\{p}, with the empty term
+s_p−v_p≤0. All nonempty terms are strictly negative, and their
+total probability is positive. Thus an active p_A is impossible.
+This retains simultaneous hazards of every other support member.
+If A is not a trap, one active member has all its participant rewards
+in A at most its singleton; nonnegative premiums make them equal.
+Its Quit endpoint and successor equal that singleton, while every
+other successor is at least its singleton. This proves return to L.
+
+For weak comparisons, increasing every passive reward coordinate by
+δ>0 leaves every participant reward, singleton level, and premium trap
+unchanged. It makes each designated comparison strict. Applying the
+strict result to these tables and then reward closure proves the weak
+Fin4 UE claim when s≥0. It does not prove weak analytic exclusion.
+
+### Exact adversarial separation of the return premises
+
+Here is a small exact test showing why the new argument cannot silently
+reuse a one-protected-floor return premise. Take I={0,1,2,3}, pair
+partners 0↔1 and 2↔3, and all own singletons zero. For i∈S set
+r_i(S)=1 if its partner belongs to S and zero otherwise. For i∉S
+set r_i(S)=2 when i∈{0,2}, and zero when i∈{1,3}. This defines
+all fifteen nonempty rows and has M=2; take B=3.
+
+Its only premium traps are 01, 23, and 0123. Player 0 is a strict
+leaver of 01 and 0123, and player 2 is a strict leaver of 23:
+their participating reward is at most one and passive reward is two.
+The all-floors return premise therefore holds. Nevertheless, at
+
+    v=(−1,1,2,2), q=(1/2,1/2,0,0),
+
+the four (Quit,Continue) endpoint pairs are
+(1/2,1/2), (1/2,1/2), (0,2), (0,1/2). This is a full exact
+root, with successor (1/2,1/2,2,1/2) strictly above all singletons.
+The exchanged test
+
+    v=(2,2,−1,1), q=(0,0,1/2,1/2)
+
+has endpoint pairs (0,2), (0,1/2), (1/2,1/2), (1/2,1/2)
+and successor (2,1/2,1/2,1/2). Between these two tests, every
+possible designated protected coordinate is above its floor at an
+exact root with successor outside L. Thus no one-protected-floor
+return statement applies to this table. I independently evaluated
+all endpoint fractions and enumerated all its premium traps.
+
+This is only a logical separation test. All its singletons are zero,
+so all Never already gives a uniform payoff. It is explicitly not a
+new existence-coverage fixture.
+
+### Source scope checked
+
+I re-read `IsQuittingFullExactRootPotential` and
+`isQuittingFullExactRootPotential_of_robustPotential` in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`,
+`IsQuittingFullExactRootPotential.singletonFace_drift` in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`,
+and `abs_quittingRootSuccessorPayoff_sub_tail_le_reward_add_source_mul_absorptionMass`
+in `UniformEquilibrium/Quitting/Root/BoundedSuccessorDisplacement.lean`.
+These are the literal full relation, face condition, and displacement
+estimate used above. The inspected
+`not_isQuittingFullExactRootPotential_of_singletonLowerBoundaryReturn`
+in `UniformEquilibrium/Quitting/Projective/SingletonLowerBoundaryReturnSmoothDrift.lean`
+requires one protected floor at every queried source. The inspected
+`weakPeeling_iff_every_boxedExactRoot_singletonLowerBoundary` in
+`UniformEquilibrium/Quitting/Classification/NonnegativePremiumBoxBoundary.lean`
+requires return on all boxed sources. Neither is the new premise.
+
+The currently present
+`exists_uniformEquilibriumPayoff_of_continuous_boundaryDifferentiable_potential_exclusion`
+in `UniformEquilibrium/Quitting/Classification/Existence/BoundaryDifferentiablePotentialUniformPayoff.lean`
+spells out the expected Fin4 consumer: nonnegative singletons imply
+normality, a positive singleton plus no UE supplies the full rational
+polynomial obstruction, and all-zero singletons have the Never exit.
+I inspected source text only; some of this implementation is concurrent
+and untracked, and I make no compilation or integration claim here.
+
+No mathematical objection remains to the minimum-collapse mechanism
+or its stated sufficient raw condition. Whether that raw class escapes
+the existing equilibrium producers is still a separate open audit.
+
+## Final artifact check: repeated solo outsider buffer
+
+**PASS.** This is the bounded assembly/delta check of
+`exports/REPEATED_SOLO_EXIT_WITH_POSITIVE_OUTSIDER_BUFFER.md`, 495 lines,
+SHA256 `53dbfbccdf06da788bf4f694ff73d48bb63ce1d3843a00a240c2397870f02937`.
+It does not replace or reopen the independent full bridge review above.
+
+I read the complete assembled artifact and compared its hypotheses,
+selector, four literal values, all-row supersolution, and fixed-target
+consumer with the reviewed theorem. There is no mathematical change.
+In particular, θ remains strictly positive and below η/h₁; the
+zero-effective-premium boundary is explicitly excluded. All three solo
+phases are refined, including the repeated pivot exit. Unspecified
+reward coordinates remain arbitrary, and deviations remain complete
+behavioral strategies.
+
+The newly expanded all-R exit is complete. For a positive right side,
+the child complementarity inequalities force all three coordinates
+positive and hence z=tν. In the full homogeneous problem a positive
+pivot forces child hν, so R=R_low is exactly the nonzero homogeneous
+case. At R<R_low the selected offset has exactly the two stated
+nondegenerate roots, with active determinant signs + and −; their
+sum is zero. At R≥R_top the displayed passive inverse weights are
+nonnegative, including the equality endpoint. The packet names the
+existing strategic consumers instead of presuming a new realization
+theorem. The selector endpoint ratios follow directly from its
+quadratic coefficients, including α=0, and its denominator remains
+positive throughout the cap interval.
+
+I also checked the assembly's complete fifteen-row table against the
+reviewed completion, all fifteen listed pure-coalition improvement
+witnesses, and each of the thirteen newly displayed response-partition
+row-sum witnesses. The residuals for the sole remaining nondiscrete
+partition are unchanged. The exact child023 and diffuse child123
+arguments retain their corrected hazards, the fixed outside payoff
+gap, and zero joint-Never mass.
+
+The final intrinsic debt statement has the correct quantifiers: for
+each proper child there exists an omitted player for whom no fixed
+nonnegative weighted-child-debt-plus-Never bound holds universally over
+child profiles. It does not assert failure for every omitted player,
+nor exclude a selected-child architecture. Thus the final replacement
+of the undefined “five kinds” phrase introduces no stronger claim.
+The concise Lean handoff names the actual new producer chain and keeps
+the already available outer singleton exits separate. No dependency on
+another conference note or frozen mathematical packet was introduced.
+No unresolved assembly objection remains; no Lean check is claimed.

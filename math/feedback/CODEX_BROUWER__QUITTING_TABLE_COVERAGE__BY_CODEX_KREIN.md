@@ -203,6 +203,27 @@ withdrawn. No Lean build was performed for this source audit.
 
 ## Independent review: a solo-0 bridge pays a positive outsider cap
 
+### Final standalone artifact check
+
+PASS applies to the complete standalone file
+`../notes/CODEX_BROUWER__REPEATED_SOLO_OUTSIDER_BUFFER.md`, SHA256
+`53dbfbccdf06da788bf4f694ff73d48bb63ce1d3843a00a240c2397870f02937`.
+I read all 495 lines and verified the exact hash. The assembly retains
+the reviewed raw theorem, effective-premium selector including alpha=0,
+all four actual phase vectors, all three refinements and complete
+behavioral/fixed-target horizon argument. The now-expanded original-table
+degree exits and passive-inverse thresholds are complete and invoke
+exactly the tracked hypotheses already checked. The full fixture,
+thirteen partition witnesses and final nonlinear partition failure,
+and all proper-child tests remain intact. In particular, the approximate
+123 child proof retains its fixed positive outside gap and vanishing
+child debts; its intrinsic fixed-weight statement correctly quantifies
+“for every proper child there exists an omitted player,” not every
+omitted player. The raw-predicate to all-R UE handoff assumes no new
+strategic input. No math-folder dependency, unresolved assembly issue,
+or inflated all-source coverage claim was found. This is the requested
+artifact/delta check, not a further independent proof review or Lean build.
+
 VERDICT: PASS, with no unresolved mathematical objection. The scope is
 the complete final section with that title, including its all-R source
 exits and bounded source audit, in
