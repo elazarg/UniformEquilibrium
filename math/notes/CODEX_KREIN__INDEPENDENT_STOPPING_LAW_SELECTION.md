@@ -2309,3 +2309,235 @@ game. In particular, the beta=0 table cannot be an equilibrium counterexample.
 The next constructive mechanism must alter the chronological support
 architecture, for example by more than one joint phase or a different
 phase-entry structure, rather than retuning hazards within these blocks.
+
+### Reversing just the two solo blocks still does not suffice
+
+The same table also has a positive restricted exploitability gap when
+the order is joint {0,1}, solo-3 block, solo-2 block. Here is the extra
+nonzero-limit argument; the zero-limit LCP proof is unchanged.
+
+The initial joint row still rules out x=1 or y=1 by player 3's negative
+payoff. A sure player-3 block makes player 2 negative, and a sure
+player-2 block makes player 1 negative. Thus all limiting hazards are
+below one, every phase is reached with positive probability, and all
+phase values retain the singleton floors. A nonzero limit must have
+z>0: without any player-2 exit, joint {0,1} harms player 3 and is its
+only nonzero-payoff exit; if the joint row is absent too, player 3 alone
+harms player 2. With z>0, skipping the final player-2 block forces
+V_A,2=V_C,2=0. The intervening player-3 block then gives V_B,2=−w,
+so w=0. If x>0, pivot indifference at A again forces V_B,0=1, but
+the remaining player-2 block has V_B,0=2z+(1−z)V_A,0>1. Hence x=0.
+Only singleton exits 1,2 remain, and positive z makes player 1 strictly
+negative. This is the final contradiction. Taking the smaller of the
+two positive gaps therefore excludes BOTH solo orders with the fixed
+joint pair {0,1}; arbitrary solo subdivision does not change either proof.
+
+## Switched joint pair: two passive rewards above the pivot singleton
+
+Status: separate complete ordinary proof candidate, not independently
+reviewed. This changes the selected joint pair and its incentive geometry,
+not the constants in the frozen positive-premium-pair theorem. The
+selected joint pair now has ZERO own premiums; a positive outsider
+continuation coordinate permits actual positive joining premiums elsewhere.
+
+### New raw class
+
+Let a,b,c,h_1,h_2,h_3>0, D=abc−1>0. Prescribe
+
+    r({0})=(1,−h_1,−h_2,−h_3),
+    r({1})=(U,0,b,−1),
+    r({2})=(V,−1,0,c),
+    r({3})=(R,a,−1,0),
+    r({0,3})=(1,−h_1,−h_2,0),                          (61)
+
+where U,V≥1 and R is ANY real number. Write nu for the positive
+singleton vector defined in (28)–(30); equivalently A*nu=(h_1,h_2,h_3)
+for A=[[0,−1,a],[b,0,−1],[−1,c,0]]. Require
+
+    r_2({0,2}), r_2({2,3}), r_2({0,2,3})≤0,            (62)
+
+and the single raw weighted condition
+
+    J=max(0,r_1({0,1}),r_1({0,1,3})),
+    J+nu_3*r_1({1,3})≤nu_2.                            (63)
+
+All other reward coordinates are arbitrary finite real numbers. In
+particular r_0({0,1}) is unrestricted, and (63) allows a strictly positive
+participant premium for player 1 at {0,1}. Neither global product-low
+premiums nor globally constant outsider payoffs are assumed.
+
+CLAIM: every such original four-player table has a fixed-target UE
+against all behavioral deviations, for EVERY R. The constructive branch
+uses one joint {0,3} row, then refined solo blocks for players 1 and 2.
+
+### Exact residual interval and the alternative pivot equation
+
+Put d_1=U−1≥0, d_2=V−1≥0 and
+
+    R_low=1−(d_1*nu_1+d_2*nu_2)/nu_3,
+    T=1−(c*d_1+d_2)/(bc).
+
+The pivot inverse weights on A are the same literal weights (50), now
+with s_1=−d_1 and s_2=−d_2. Their largest threshold is T=T_1, because
+T_3≤T_1 and T_2≤T_3. Thus R≥T is already covered by the passive
+inverse source. R≤R_low is covered by the same degree-zero/homogeneous
+source arguments; they impose no sign condition on the two passive
+shortfalls. If U=V=1, then R_low=T=1 and these sources cover every R.
+Otherwise
+
+    T−R_low=[h_2(c*d_1+d_2)+b*d_2*h_3]/(bc*nu_3)>0.  (64)
+
+It remains to construct on R_low<R<T.
+
+Cyclically order the nonpivot players as (3,1,2). In the quadratic
+construction this changes (a,b,c) to (c,a,b), (h_1,h_2,h_3) to
+(h_3,h_1,h_2), and nu to (nu_3,nu_1,nu_2). Put
+
+    Y'=D/[a(bc+c+1)].
+
+Here the actual joint collision rewards in (61) make both corresponding
+H functions CONSTANT, h_1 and h_2. The selected joint pair's premium
+eta is zero. The cleared quadratic proof still applies verbatim at
+eta=0: its linear coefficient remains strictly positive, its constant
+coefficient is y*[a(bc+c+1)y−D], and its right-endpoint value is positive.
+Thus for each 0<y<Y' it supplies a unique admissible k>0, continuously
+in y, with
+
+    z=(h_2*k+y)/[b(1−y)],
+    w=(a*y−h_1*k)/[1+a*y+(1−h_1)k],
+    h_3*k+z−c*w*(1−z)=0,                              (65)
+
+and k(0)=k(Y')=0. All z,w lie strictly between zero and one; set
+x=k/(1+k). The endpoint limits are
+
+    k/y→1/nu_3,        z/y→nu_1/nu_3,
+    w/y→nu_2/nu_3.                                    (66)
+
+For these rates define
+
+    V_C,0=1+(V−1)w,
+    V_B,0=U*z+(1−z)V_C,0,
+    R(y)=[1−(1−y)V_B,0]/y.                            (67)
+
+Both displayed continuation values are at least one. Formula (66)
+extends R(y) continuously with R(0)=R_low. At k=0,y=Y', direct
+substitution gives R(Y')=T. For example this follows from
+
+    V=(bc+c+1)−bc*R−c*U
+
+at that endpoint, obtained by inserting the zero-k rates in (67).
+Hence every R strictly between R_low and T has an interior selected y.
+No monotonicity of R(y) or negative passive reward is assumed.
+
+### The positive outsider buffer is selected from raw data
+
+The key new estimate is
+
+    k(y)<y/nu_3,                0<y<Y'.                (68)
+
+To prove it, test the balance function in (65) at k_0=y/nu_3. If
+k_0 is at least the admissible upper endpoint, (68) is immediate.
+Otherwise all its z,w are admissible and identities (3) give
+
+    z_0=nu_1*y/[nu_3(1−y)]>nu_1*y/nu_3,
+    w_0=nu_2*y/[nu_3+(nu_2+1)y]<nu_2*y/nu_3.
+
+Therefore
+
+    h_3*k_0+z_0−c*w_0*(1−z_0)
+       > (h_3+nu_1−c*nu_2)y/nu_3=0.
+
+The function starts negative and has only one admissible root, so that
+root is below k_0. This proves (68) without differentiating a root branch.
+
+Let Q=r_1({1,3}) and J be as in (63). At the joint {0,3} phase,
+outsider 1's forced-Quit payoff is
+
+    [k(1−y)r_1({0,1})+yQ+ky*r_1({0,1,3})]/(1+k)
+        ≤[kJ+yQ]/(1+k).
+
+Its prescribed value is (a*y−h_1*k)/(1+k)=w/(1−w). By (63),
+
+    a−Q≥(h_1+J)/nu_3,
+
+since a*nu_3−h_1=nu_2. Inequality (68), with h_1+J>0, therefore
+gives
+
+    (a−Q)y−(h_1+J)k>0.                                (69)
+
+Thus the actual positive joining premium is strictly bounded by the
+selected positive continuation buffer. It is not replaced by a zero cap.
+Outsider 2 has value zero, and all its forced-Quit coalitions are exactly
+its singleton and the three in (62), so its Quit endpoint is at most zero.
+
+### Values, refinement, and complete deviations
+
+The full phase vectors, in the ORIGINAL player order (0,1,2,3), are
+
+    V_A=(1,w/(1−w),0,0),
+    V_C=(1+(V−1)w,0,0,c*w),
+    V_B=(U*z+(1−z)(V_C)_0,0,b*z,h_3*k).               (70)
+
+The pivot's two A endpoints are both one by (67); player 3's are both
+zero by (65). For the two outsider coordinates, actual A policy
+evaluation gives
+
+    (a*y−h_1*k)/(1+k)=w/(1−w),
+    [−h_2*k−y+b*z*(1−y)]/(1+k)=0.
+
+All B and C equations are exactly the singleton recurrences from (61).
+Every Continue endpoint equals its displayed value, every supported
+action is indifferent, and (62),(69) check all outsider Quit actions at
+the undiffused joint row. Every value is at least its singleton, because
+U,V≥1 and the remaining displayed coordinates are nonnegative.
+
+Refine only the player-1 and player-2 rows. Define C_join using all pair
+participant surpluses r_i({i,j})−s_i with j∈{1,2}, i≠j, and zero.
+The same interpolation gives exact Continue, singleton floors, and a
+uniform Quit error C_join times the largest microhazard. One constant-error
+Bellman supersolution bounds EVERY complete deviation, not a sum of
+local errors. Opponent survival contracts every repeated period because
+x,y,z,w are positive. Thus the actual fixed target V_A is terminal
+approximate Nash at all errors and is a uniform-equilibrium payoff by
+the same direct geometric-tail or finite-law argument as before.
+
+The source cases and (64)–(70) prove the whole R axis for this new raw
+class. It admits positive premiums at coalitions prohibited by the old
+six-cap theorem and selects a different actual joint support. The old
+export's v<1 restriction has not been silently deleted.
+
+### The architecture obstruction is repaired by changing the joint pair
+
+The beta=0 obstruction table (58) satisfies (61)–(63): a=b=c=2,
+all h_j=1, U=V=2, R=0, nu=(1,1,1), J=1, and Q=0. Put
+
+    y=(3−sqrt(5))/2,
+    k=y(1−2y),          x=k/(1+k),          z=w=y.
+
+Then 0<y<1/2 and all four hazards are positive. The exact vectors are
+
+    V_A=(1,y/(1−y),0,0),
+    V_B=(1/(1−y),0,2y,k),
+    V_C=(1+y,0,0,2y).
+
+All policy/Continue identities follow from y=(1−y)². At A, the only
+positive outside Quit endpoint is player 1's x(1−y), strictly below
+y/(1−y). At B the pivot's Quit endpoint is 1+y, below 1/(1−y).
+Every other unrefined Quit bound follows from the displayed floors and
+zero participant rewards. Hence THIS unrefined alternative-pair cycle
+is already exact terminal Nash, in the SAME table on which both solo
+orders with the prescribed joint pair {0,1} have a positive gap.
+
+The structural theorem, not that one algebraic fixture, is the proposed
+enlargement. To obtain a full greatest-premium-core example in its new
+class, one may raise both participant rewards at {1,2} to 1/2 and raise
+player 3's participant reward at {1,3} to 1/2, keeping player 1's reward
+there zero. Conditions (62),(63) are unchanged. Every player then has
+a positive participant witness inside the full set, whereas the positive
+player-2 premium at {1,2} and player-3 premium at {1,3} violate the old
+joint-{0,1} caps. These additions are handled at the refined solo phases,
+not discarded. The actual target (70) stays fixed before accuracy.
+
+Next independent check: the switched-pair theorem's raw weighted cap,
+strict estimate (68), all-R endpoint T, and the positive-gap proof's
+zero-hazard Never deviations. No new export is proposed before that check.
