@@ -537,7 +537,7 @@ The existing Fin4 polynomial-obstruction theorem yields UE; weak leave
 comparisons follow by perturbing only passive rewards and applying reward
 closure. No weak-comparison analytic potential exclusion is asserted.
 
-The [complete proof and exact boundary tests](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
+The [complete proof and exact boundary tests](exports/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md)
 include a three-player core with a genuinely negative participant premium.
 The criterion does not cover traps with no common member, negative participant premiums of every
 possible protected member, or failed leave comparisons for all such members.

@@ -307,6 +307,27 @@ not a new Lean-build claim.
 
 ## Independent addendum: a common leaver, including signed outsider premiums
 
+### Final signed common-leaver artifact check
+
+PASS applies to the exact standalone artifact
+`../exports/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md`, SHA256
+`2aac4a3fe2f1f3662b1f1dcea7abf2162273131e5e1c2a68f782ba8cfe1ff029`.
+I read the complete assembled file and verified its hash. It retains the
+strongest signed criterion, the finite-player protected D-return and
+minimum localization, the estimate epsilon≤(3M+B)a, the exact four-player
+polynomial consumer, and fixed-target weak reward closure. Section 5
+reproduces the nonempty-trap D\\L counterexample exactly. The rational
+fixture retains its negative player-2 premium, corrected principal-02
+screen and principal-01 homogeneous witness, all partition exclusions,
+and all fourteen proper-child tests. Its source-separation claims remain
+bounded to the named criteria. No hidden conference-file dependency or
+unresolved mathematical assembly issue was found. This is the requested
+artifact/delta check against the completed independent review below, not
+a new Lean-check claim or a second independent proof review. The final
+two-place delta changes only “older” to “stronger” in the disclaimed
+floor estimate and adds an accurate handoff chain; I inspected both
+changes and verified the final hash before coordinator promotion.
+
 Scope: Sections 14 and 15 of the source notebook, after the explicitly
 resolved principal-matrix correction below. The reviewed whole-note hash
 is `addb73fce7440cb03e41ac8a0afb06d78d6563e35fcc2960019542b84eec891e`.

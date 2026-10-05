@@ -782,3 +782,50 @@ is the coherent stronger theorem: retain Section 14 as its nonnegative
 special case rather than claiming two independent existence advances.
 The old unique-root three-core falsifier violates the common-leaver
 comparison and is not being disposed of by a new local-index claim.
+
+## Final artifact check: common leaver with signed premiums
+
+**Artifact PASS.** My Sections 14–15 mathematical PASS applies to the
+complete 455-line standalone packet whose canonical destination is
+[`COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md`](../exports/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md),
+SHA256 `2aac4a3fe2f1f3662b1f1dcea7abf2162273131e5e1c2a68f782ba8cfe1ff029`.
+I read the complete final artifact and recomputed its hash. This is a
+narrow assembly/delta check, not a third independent theorem review or
+a Lean check. No packet or export was edited.
+
+The opening statement retains the strongest signed hypotheses: only
+the protected player's participant premiums are nonnegative, all own
+singletons are nonnegative only for the four-player semantic theorem,
+and the leave comparison is weak only in the final strategic conclusion.
+The finite-player analytic theorem is separately strict and allows
+signed singleton rewards. The active-support/trap split, return to D,
+minimum localization to L, singleton-face differentiation at box corners,
+different-binding perturbation, and epsilon<=(3M+B)*a charge are all
+preserved without a missing step. The phrase “stronger floor estimate”
+correctly warns that the unavailable inequality w_k>=s_k is not used.
+
+The reward-closure proof is now self-contained: a common compact payoff
+box yields a convergent sequence of targets; fixing one nearby table and
+one nearby target before choosing its uniform profile supplies the
+correct fixed-target quantifiers in the limit game. Its per-horizon
+reward perturbation bound is uniform over all behavioral deviations.
+The concise Lean-handoff paragraph states the actual existing source
+chain without claiming a new checked declaration or importing any
+conference dependency.
+
+I checked the new three-player D-not-L example independently. Its only
+trap is 02, player0 satisfies the protected floor and strict comparison
+2<3, and at q=(1,1,0) the endpoint gaps are exactly (1,1,-1).
+The successor (1,-1,1) lies in D but not L. Thus this new example
+correctly demonstrates why the changed invariant domain is necessary.
+The assembled fifteen-row signed fixture is exactly the one covered by
+the full review above. Its repaired principal02 R0/non-Q argument,
+fourteen response-partition exclusions, and complete quiet-child
+behavioral checks have not changed their scope.
+
+Named root-existence, singleton-face, support-peeling, inverse, response,
+and quiet-debt declarations resolve at the stated files. In particular,
+`hasWeakQuittingPremiumSupportPeeling_iff` genuinely has <=, not an
+equality, in its raw support witness. The artifact contains no notebook,
+feedback, or other math-directory dependency and no embedded review
+history. No unresolved assembly objection remains for these bytes.
