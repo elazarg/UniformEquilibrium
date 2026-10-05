@@ -712,3 +712,173 @@ written: its six caps follow from constant zero participation for 2 and
 R restriction. That subfamily may receive additional coverage from newer
 two-core results, but it does not subsume the broader six-cap theorem
 reviewed here. No Lean build or arbitrary-table completeness claim is made.
+
+## Independent review: switched joint pair with a positive outsider buffer
+
+Verdict: PASS on the final section titled “Switched joint pair: two
+passive rewards above the pivot singleton.” This is an independent
+check of the changed joint support, raw quadratic producer, weighted
+outside cap, complete deviations, all-R source cases, and stated
+full-core completion. No other review of this section was read first.
+The preceding architecture positive-gap theorem is not a dependency of
+this existence proof and is not given a separate full audit here.
+
+### Raw data and genuine change of scope
+
+The five prescribed reward vectors use U,V≥1, arbitrary real R,
+a,b,c,h_i>0, and abc>1. The selected pair is 03 with zero premiums
+for BOTH actual participants. The three player-2 caps are exactly the
+possible nontrivial forced-Quit coalitions at that joint row. Player 1
+instead has a weighted raw cap J+ν_3 Q≤ν_2, where
+J=max(0,r_1(01),r_1(013)) and Q=r_1(13), which may have either sign.
+This does not silently assume zero or nonpositive player-1 premiums.
+Unspecified coordinates are arbitrary and enter the solo refinement
+bound when they can be reached by a unilateral deviation.
+
+The beta=0 algebraic fixture is already covered by the two-core
+weak-leave theorem, as the author says. It is not itself new existence
+coverage. The full-core completion is a different matter: raising the
+two participant rewards at 12 to 1/2 creates trap 12, while trap 01
+persists. Raising participant 3 at 13 to 1/2 gives the fourth member a
+premium witness, without changing any new raw cap. Every trap must
+contain 1, but their intersection is only {1}; that sole common player
+has r_1(01)=1>−1=r_1(0). Thus even the weak common-leaver criterion in
+MORSE Section 15 fails. The comparison establishes a genuine complement
+to that class, not merely to its nonnegative-premium restriction.
+
+### Independent quadratic derivation
+
+Set C=b(1−y), E=b−(b+1)y, d_0=1+a y, d_1=1−h_1,
+and d=d_0+d_1 k. On the admissible interval
+
+    0≤k≤K=min(a y/h_1,E/h_2),
+
+we have d≥1+k>0. Clearing the literal balance
+G=h_3 k+z−c w(1−z), with z=(h_2 k+y)/C and
+w=(a y−h_1 k)/d, gives C d G=αk²+βk+γ, where
+
+    α=(h_3 C+h_2)d_1−c h_1 h_2,
+    β=h_3 C d_0+h_2(d_0+c a y)+y+h_1(cE−y),
+    γ=y[a(bc+c+1)y−D].
+
+For 0≤y≤Y'=D/[a(bc+c+1)], cE−y≥1/a, so β>0.
+For interior y, γ<0. At K either w=0 or z=1, making G>0.
+Thus there is exactly one root in (0,K): opposite endpoint signs
+exclude two quadratic crossings within the interval, including every
+sign of α. Its derivative is nonzero. The expression
+
+    k=−2γ/[β+sqrt(β²−4αγ)]
+
+is continuous on the closed y interval, has both endpoint values zero,
+and is valid at α=0. This proves the selector directly from the raw
+data; the old theorem's passive-reward assumptions are not being
+reimported through an “eta=0” assertion.
+
+At zero, β(0)=bc h_1+h_2+b h_3=Dν_3, so k/y→1/ν_3.
+The identities bν_1−ν_3=h_2 and aν_3−ν_2=h_1 give exactly the two
+other limits in (66). At the upper endpoint, the zero-k relation gives
+
+    (1−Y')z/Y'=1/b,
+    (1−Y')(1−z)w/Y'=1/(bc).
+
+Substitution into the pivot equation yields R(Y')=T with no monotonicity
+assumption. The zero endpoint is R_low. Formula (64) is positive if
+either U or V is strictly above one and vanishes only when both are
+one, so the stated IVT interval is exactly the residual interval.
+
+### Buffer estimate and actual Bellman equations
+
+Testing at k_0=y/ν_3 gives the displayed z_0 and w_0 exactly. If the
+test point is outside the admissible interval, its ordering already
+proves k<k_0. Otherwise z_0>ν_1 y/ν_3 and
+w_0<ν_2 y/ν_3, so G(k_0)>0 by h_3+ν_1−cν_2=0.
+Uniqueness of the admissible root gives the strict bound (68).
+No derivative sign of G was assumed.
+
+The literal outsider-1 forced-Quit numerator is
+k(1−y)r_1(01)+yQ+ky r_1(013). Its upper bound kJ+yQ is valid even
+when Q is negative. The weighted cap gives
+a−Q≥(h_1+J)/ν_3; since h_1+J>0, (68) proves the strict buffer.
+For outsider 2, the complete list of forced-Quit coalitions is 2,02,23,023.
+Thus no larger collision or participating deviator has been omitted.
+
+All twelve policy equations and all twelve Continue comparisons for
+(70) hold. In particular B's player-3 value is
+−z+c w(1−z)=h_3 k, and C's player-1 value is
+−w+(1−w)w/(1−w)=0. At A, the active endpoints are exactly 1 and 0;
+the two inactive endpoint comparisons are precisely the three caps and
+the strict buffer. U,V≥1 give both pivot continuation floors, including
+equality at either U=1 or V=1.
+
+Refining B and C preserves their full endpoint vectors and gives
+intermediate vectors on the corresponding line segments, hence every
+singleton floor. At a solo-j microhazard t, an outsider's forced-Quit
+endpoint is s_i+t[r_i(ij)−s_i], so the claimed C_join t error is exact.
+The undiffused A row retains its exact comparisons. Adding one constant
+ε to every phase value is a Bellman supersolution: an opponent
+survival coefficient multiplies the added continuation ε, so it is at
+most ε again. Local errors are not summed across phases or periods.
+
+All four aggregate hazards are strictly positive. After removing any
+one player's actions, at least one prescribed opponent still has a
+positive hazard in every period. This gives a geometric survival bound
+uniform over every complete behavioral deviation, not only deviations
+with the same memory. It justifies the terminal Snell limit, finite-law
+censoring, and the all-large-horizon conclusion. Refinement depends on
+accuracy but keeps the same full vector V_A; no target-selection limit
+is hidden in the constructive branch.
+
+### Source exits and endpoint scope
+
+The three inverse thresholds obey T_2≤T_3≤T_1=T because the old
+shortfalls are now s_1=−(U−1), s_2=−(V−1). Hence R≥T has weak
+nonnegative passive inverse weights, including equality. The previously
+inspected `exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`
+requires no restrictions on the unused nonsingleton rewards.
+
+For R<R_low, put δ=ν_3(R_low−R)>0. The same actual child LCP forces
+z=(1+t)ν at offset (q_0,−h), q_0>δ. There are exactly the two full
+roots t=0 and t=q_0/δ−1, with determinant signs + and −. Thus the
+full R₀ degree is zero. This computation has no sign hypothesis on
+U−1 or V−1. At R=R_low, (1,ν) is a nonzero homogeneous solution.
+The checked hypotheses of the named singleton-degree source and its
+noUE-implies-R₀ converse remain exactly as in my prior review. Thus
+R≤R_low, the open IVT interval, and R≥T cover every real R. When
+U=V=1 there is no constructive interval and the two source cases meet
+at R=1, as asserted.
+
+### Adversarial exact tests
+
+Besides checking the golden-ratio fixture and all its raw unrefined
+Quit inequalities, I tested an asymmetric example with a negative Q
+and binding weighted cap. Set a=b=c=2, h_1=h_2=1, h_3=79/45,
+U=3/2, V=5/4, y=1/4, k=1/10, x=1/11, z=7/30, w=4/15.
+Then
+
+    ν=(349,451,383)/315,
+    R=149/300, R_low=1/4, T=11/16,
+    J=2, Q=−179/383,
+    V_A=(1,4/11,0,0),
+    V_B=(1051/900,0,7/15,79/450),
+    V_C=(16/15,0,0,8/15).
+
+Take r_1(01)=r_1(013)=2 and set every other unspecified coordinate
+to 37, except the three required player-2 caps, set to zero. Exact
+arithmetic gives zero residuals in all policy and Continue identities.
+At A, outsider 1's Quit payoff is 637/8426, below its value by
+2427/8426; every other A comparison is exact. Several unrefined solo
+Quit inequalities fail, as they should with this completion, and each
+is bounded by C_join times its hazard. Thus the proof genuinely needs
+and correctly uses refinement rather than accidentally assuming all
+unused premiums harmless.
+
+As a separate α=0 test, retain y=1/4,k=1/10,h_2=1 but use
+h_1=2/3,h_3=2. Then z=7/30,w=13/46, ν=(22,32,23)/21,
+and the same U,V give R=39/80 strictly between R_low=4/23 and
+T=11/16. At this y the quadratic coefficient is exactly zero. The
+binding cap choice J=1,Q=11/23 is now positive, giving an independent
+sign test for Q. The selector and all displayed continuation identities
+remain valid. These computations supplement the proof; they do not
+replace its quantifiers. No Lean implementation or general Fin4
+completeness claim is made by this verdict.

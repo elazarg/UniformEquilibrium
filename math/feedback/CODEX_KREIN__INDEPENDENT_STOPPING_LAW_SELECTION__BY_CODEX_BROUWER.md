@@ -1066,3 +1066,163 @@ distinct. The source correspondences are self-contained named inputs,
 with no dependency on a conference notebook or review record inside the
 packet. My PASS covers the new direct estimate as well as the preserved
 theorem and fixtures.
+
+## Independent review: switched joint pair and two high passive rewards
+
+**Verdict: PASS as ordinary mathematics, not Lean-checked.** I independently
+checked the complete section “Switched joint pair: two passive rewards
+above the pivot singleton,” without reading MORSE's review. The preceding
+restricted-architecture positive-gap proof, including its reversed-solo-
+order extension, is OUTSIDE this review and is not used by this theorem.
+
+The claim checked prescribes the four singleton vectors and
+r(03)=(1,-h1,-h2,0), with a,b,c,h1,h2,h3>0, abc>1, U,V>=1,
+and arbitrary real R. Its extra hypotheses are the three player2 caps
+at 02,23,023 and J+nu3*Q<=nu2, where
+J=max(0,r1(01),r1(013)) and Q=r1(13). All omitted coordinates
+remain arbitrary finite numbers. The conclusion is an original-table
+fixed-target UE against complete behavioral deviations.
+
+### All-real-R source exits and equality
+
+Writing d1=U-1,d2=V-1, the threshold order is T2<=T3<=T1,
+so the maximal passive threshold is T=T1. The literal outside inverse
+weights are the same three threshold differences already checked.
+Thus R>=T, including equality, satisfies the raw weak inverse source.
+I re-read `exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`;
+no additional nonsingleton or premium-sign premise is needed.
+
+For R<Rlow put delta=nu3*(Rlow-R)>0 and use offset
+(q0,-h1,-h2,-h3) with q0>delta. A pivot variable t forces the
+unique child solution (1+t)*nu. The two roots have t=0 and
+t=q0/delta-1, with active determinants D and -D*delta respectively.
+The first has positive inactive residual q0-delta. The full matrix is
+R0 whenever R differs from Rlow: a positive homogeneous pivot forces
+child t*nu and zero pivot residual only at equality. Thus the degree
+is zero below Rlow. At R=Rlow, (1,nu) is a nonzero homogeneous
+solution, invoking the separate Fin4 R0 requirement. This calculation
+does not require the old signs of the two passive shortfalls.
+
+The relevant previously inspected declarations are
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one`,
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`, and
+`exists_finset_r0Degree_eq_sum_sign_det`, in their cited singleton-
+degree and R0-degree-sum files. They consume the actual original table.
+The identity
+
+    T-Rlow=[h2*(c*d1+d2)+b*d2*h3]/(bc*nu3)
+
+is correct and positive unless U=V=1. In that case the outer exits
+meet at R=1 and cover everything; no degenerate selector is needed.
+
+### Zero-premium quadratic and positive outsider buffer
+
+The cyclic relabeling (3,1,2) is correct. The cleared quadratic
+calculation is algebraic at eta=0: its linear coefficient stays
+strictly positive, its constant coefficient is negative inside the
+y interval, and its cap endpoint value is positive. There is precisely
+one simple admissible crossing. The rationalized root formula remains
+valid at alpha=0, is continuous, and tends to zero at both endpoints.
+No strictly positive joint premium is silently reused.
+
+The alternate pivot equation is exactly the indifference equation of
+the actual joint03 row. Both intermediate pivot values are at least
+one by U,V>=1, independently of R's sign. At the upper endpoint
+z=c*w*(1-z) and z=y/[b*(1-y)], giving
+R(Y')=1-d1/b-d2/(bc)=T. The small-y ratios give R(0)=Rlow.
+Continuity therefore covers the missing interval without a monotonicity
+or uniqueness assumption for y.
+
+For the strict estimate k<y/nu3, a test point outside the admissible
+cap is immediate. Inside the cap, substitution gives
+
+    z0=nu1*y/[nu3*(1-y)],
+    w0=nu2*y/[nu3+(nu2+1)*y].
+
+The first strictly exceeds, and the second is strictly below, its
+linear approximation. Hence the balance is positive at that test point
+using h3+nu1-c*nu2=0. The unique admissible crossing lies below it;
+no monotonicity of the balance away from its root is being asserted.
+
+The sign of Q is retained. The actual outsider1 Quit endpoint is at
+most (k*J+y*Q)/(1+k). Since a*nu3-h1=nu2, the raw condition
+is exactly a-Q>=(h1+J)/nu3. Combining it with k<y/nu3 and
+h1+J>0 proves strict safety, even for Q<0 and equality in the raw
+cap. The player2 singleton and its three capped coalitions exhaust
+that outsider's possible Quit outcomes at the joint row.
+
+### Full values, refinement, and uniform horizons
+
+All coordinates of the three phase vectors check in original player
+order. At A both supported players are indifferent, outsider1's
+prescribed value is w/(1-w), and outsider2's is zero. The B and C
+equations are exact singleton recurrences. Every pure-Continue endpoint
+equals the displayed value, and every value dominates its singleton.
+
+Solo refinement interpolates between the endpoint vectors, holds each
+owner at its singleton, and preserves the SAME V_A for all accuracies.
+All arbitrary omitted pair surpluses enter the finite C_join. The
+common error e_n tends to zero; adding e_n to every value gives a
+supersolution for both unilateral actions, so it is charged once,
+not once per date or period. Larger omitted coalitions cannot occur
+under one deviator at a solo row; the joint-row tests already cover
+all coalitions a single outsider can create there.
+
+Every player's prescribed opponents have positive absorption probability
+per period. Pre-sampling their independent clock-based coins couples
+actual absorption under ANY complete behavioral deviation below their
+first quit date. The geometric tail kills the bounded supersolution
+remainder and gives a deviation-uniform expected-time bound Ctime.
+The prior direct proof therefore gives terminal error e_n, delivery
+error at most 2*M*Ctime/N, and finite-horizon regret at most
+e_n+4*M*Ctime/N. Fix refinement first, then one threshold for all
+larger N. The target is fixed before accuracy, and no bounded-memory,
+fixed-date, or finite-period deviation restriction appears.
+
+### Independent exact adversarial fixtures
+
+I constructed a rational test combining signed Q, raw-cap equality,
+and a vanishing leading quadratic coefficient. Take
+
+    a=b=c=2, (h1,h2,h3)=(5/9,1,1), U=V=2,
+    y=1/4, Q=-2, J=17/7.
+
+Then nu=(55,59,47)/63 and J+nu3*Q=nu2. The quadratic has
+alpha=0, beta=25/4, gamma=-7/8. Its rates and values are
+
+    k=7/50, x=7/57, z=13/50, w=10/37, R=-19/50,
+    Rlow=-67/47 < R < T=1/4,
+    V_A=(1,10/27,0,0),
+    V_B=(73/50,0,13/25,7/50),
+    V_C=(47/37,0,0,20/37).
+
+Set r1(01)=r1(013)=17/7, r1(13)=-2 and the player2 caps
+to zero. Exact rational arithmetic checks all twelve policy and all
+twelve Continue identities. The joint-row outsider1 Quit payoff is
+-8/57, below 10/27; outsider2 is indifferent. Assigning large positive
+omitted pair rewards, including pivot join rewards 10 and 11 and
+player2's pair12 reward 8, produces large unrefined solo-stage gains.
+The advertised C_join bound includes them: unspecified entries were
+not silently assumed nonpositive.
+
+For the author's beta=0 example, I independently checked the square-root
+identities and all twelve endpoint comparisons in its complete table.
+Every unrefined Quit excess is nonpositive. This verifies the alternative-
+pair exact Nash profile without using the separate architecture theorem.
+
+After the specified full-core additions, the complete trap list is
+01,12,012,013,123,0123. The greatest core is all four players;
+traps01 and12 force common player1, who strictly joins0 because
+r1(01)=1>r1(0)=-1. Thus the signed common-leaver theorem does
+not cover this fixture. The old positive-joint-pair raw class fails
+its low-passive-reward condition and the raised outsider caps. Among
+singleton triples, only 123 has nonnegative inverse, and its outside
+weights are (-1/7,5/7,3/7); every other triple has a negative
+inverse entry. These are bounded named-source comparisons, not a
+claim that every possible conditional consumer has been excluded.
+
+No unresolved mathematical objection remains within this scope. The
+raw weighted buffer and changed pivot equation are actual production
+steps, not supplied solution objects. The preceding architecture
+positive-gap result remains outside this PASS.

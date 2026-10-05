@@ -8,6 +8,15 @@ No exhaustive arbitrary-Fin4 producer has been obtained. A later exact
 source audit below shows that the Klein-four and one-involution EXISTENCE
 classes are already consumed by the implemented response-quotient machinery.
 
+The final **A solo-0 bridge pays a positive outsider cap** section is a
+new complete ordinary construction undergoing independent falsification.
+It inserts a diffuse solo phase into a
+joint/solo cycle, gives an all-real-parameter raw producer and an exact
+four-player-premium-core fixture, and proves fixed-target safety against
+unrestricted behavioral deviations. The final bounded source audit also
+excludes the latest switched-pair family and universal quiet-debt gates.
+This is not an export or Lean claim.
+
 A separate unreviewed result at the end, **Canonical premium-core
 reduction**, extends the reviewed two-player strict-leave mechanism to
 tables whose positive-premium supports peel down to a pair. It supplies
@@ -1360,3 +1369,425 @@ useful positive construction must handle the unchanged positive-debt
 quiet-child witnesses and unrestricted behavioral deviations. Do not
 weaken the now-exact local root-return falsifier into a conjecture, or
 interpret it as a uniform-equilibrium counterexample.
+
+## A solo-0 bridge pays a positive outsider cap
+
+**Status: complete ordinary candidate proof, not independently reviewed
+or Lean-checked.** This construction uses global continuation values,
+not a second-root assertion at the preceding falsifier. The explicit
+four-core example below is not that three-core table. The final source
+audit records precise exclusions of the latest named families, without
+claiming an exhaustive classification of every conditional consumer.
+
+### Self-contained raw class
+
+There are four players, independent Continue/Quit choices at every
+nonabsorbed date, publicly observed past actions, and no external
+correlation. First nonempty quitting coalition S pays r(S) forever;
+perpetual continuation pays zero. All unspecified entries below are
+arbitrary finite real numbers. The desired conclusion is one fixed
+uniform-equilibrium payoff for the original table against complete
+behavioral deviations.
+
+Let a,b,c,h1,h2,h3,eta be strictly positive, with abc>1, and let
+u<=1, v<1, R real. Prescribe the five complete vectors
+
+    r(0)  = (1,-h1,-h2,-h3),
+    r(1)  = (u,0,b,-1),
+    r(2)  = (v,-1,0,c),
+    r(3)  = (R,a,-1,0),
+    r(01) = (1,eta,-h2,-h3).
+
+Thus s=(1,0,0,0). Impose only the following six outsider bounds:
+
+    r2(02), r2(12), r2(012) <= 0,
+    r3(03) <= lambda,  r3(13), r3(013) <= 0,
+
+where lambda>=0. Suppose there exists a real theta such that
+
+    0 < theta < eta/h1,       lambda <= h3*theta.       (B1)
+
+Equivalently, the potentially positive cap may be any lambda with
+0<=lambda<h3*eta/h1. No assumption is made on pair-23 participant
+premiums, on the pivot's participant reward at 03, or on any omitted
+higher-coalition entries. Condition (B1) deliberately keeps the
+effective premium below strictly positive; the equality limit is not
+needed for this candidate.
+
+**Claim.** Every such raw table, for every real R, has a uniform-
+equilibrium payoff. The middle parameter interval has the explicit
+four-phase producer below; the complementary intervals are consumed
+by the same original-singleton-matrix exits as the reviewed cyclic
+producer, without changing any reward.
+
+### A scalar selector with zero pivot pair premium
+
+Put D=abc-1, L=ac+a+1, Y=D/(b*L), and
+
+    A = [[0,-1,a],[b,0,-1],[-1,c,0]],
+    nu = A^(-1)*(h1,h2,h3),
+    eta_eff = (eta-h1*theta)/(1+theta) > 0,
+    Rlow = 1+((1-u)*nu1+(1-v)*nu2)/nu3,
+    Rtop = 1+ac*(1-u)+a*(1-v).
+
+All components of nu are positive since
+
+    A^(-1) = [[c,ac,1],[1,a,ab],[bc,1,b]]/D.
+
+Moreover Rtop>Rlow, because
+
+    nu3*(Rtop-Rlow)
+      = (1-u)*(c*h1+h3)+(1-v)*h1 > 0.
+
+For each y in (0,Y), define K as the unique root in
+
+    0 < K < min(b*y/h2, (c-(c+1)*y)/h3)
+
+of the equation
+
+    z = (h3*K+y)/(c*(1-y)),
+    w = (b*y-h2*K)/(1+b*y+(1-h2)*K),
+    0 = h1*K+z-a*w*(1-z)
+        +eta_eff*K*(1-(1-z)*(1-w)/(1+K)).             (B2)
+
+Here K,y,z,w depend on y. To verify existence, uniqueness, and
+continuity directly, set C=c*(1-y), E=c-(c+1)*y,
+d0=1+b*y, d1=1-h2. Multiplying the last equation by
+C*(d0+d1*K) gives the quadratic alpha*K^2+beta*K+gamma, where
+
+    alpha = h1*C*d1+h3*d1-a*h2*h3
+              +eta_eff*(C*d1+h3),
+    beta  = h1*C*d0+h3*(d0+a*b*y)+y
+              +h2*(a*E-y)+eta_eff*y*(C*b+1),
+    gamma = y*(b*L*y-D).
+
+The denominators are positive throughout the closed cap interval:
+d0+d1*K>=1+K and C>0. Also beta>0 because
+a*E-y=ac-L*y>=1/b on [0,Y]. The polynomial is negative at K=0
+for interior y, and positive at the cap: there either w=0 or z=1,
+making the right side of (B2) strictly positive. A quadratic with
+positive linear coefficient has exactly one crossing from negative to
+positive on this interval. Its selected root is
+
+    K = -2*gamma/(beta+sqrt(beta^2-4*alpha*gamma)),
+
+valid also at alpha=0. This root is continuous and tends to zero
+at both endpoints. Expanding (B2) at zero gives
+K/y->1/nu1, z/y->nu2/nu1, w/y->nu3/nu1.
+
+Define the pivot selector
+
+    P(y) = 1 + [ (1-u)*y/(1-y)+(1-v)*z ]/[(1-z)*w].  (B3)
+
+It is continuous on (0,Y), tends to Rlow at zero, and tends to
+Rtop at Y. At the upper endpoint K=0 and (B2) says
+z=a*w*(1-z); combined with z=y/(c*(1-y)), these give the stated
+upper limit directly. Thus for every R in (Rlow,Rtop), the
+intermediate value theorem supplies y with P(y)=R. No monotonicity
+or unique y is claimed or needed.
+
+This selector is the zero-pivot-premium specialization of the reviewed
+quadratic mechanism in
+[`CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md`](../exports/CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md).
+That packet states a strictly positive pivot premium, so it cannot be
+invoked as a black box here. The explicit calculation above supplies
+the necessary extension: its nonpivot quadratic is independent of that
+premium, and u<=1 supplies the now-weak pivot floor.
+
+### Four exact phase values
+
+Set
+
+    k=K/(1+theta),  x=k/(1+k),  rho=theta*x/(1+theta*x).
+
+Use four successive stages, repeating after nonabsorption:
+
+    A: joint hazards x for player0 and y for player1;
+    B: solo player2 with hazard z;
+    C: solo player3 with hazard w;
+    D: solo player0 with hazard rho.
+
+The phases B,C,D will subsequently be diffused. Write d for the
+value before D and t for the value before A. They are
+
+    d = (1, eta_eff*K/(1+K), w/(1-w), 0),
+    t = (1, eta*x,
+         h2*theta*x+(1+theta*x)*w/(1-w),
+         h3*theta*x).
+
+The intervening vectors are
+
+    V_C = ( (1-w)+R*w, (1-w)*d1+a*w, 0, 0 ),
+    V_B = ( v*z+(1-z)*V_C0, (1-z)*V_C1-z, 0, c*z ).
+
+These are exact Bellman values for every coordinate. At phase D,
+d=(1-rho)*t+rho*r(0). The identity for d1 uses
+eta_eff=(eta-h1*theta)/(1+theta). The identity for d2 follows from
+the definition of t2; d3=0 is the purpose of the bridge.
+
+At A, the player-0 Quit and Continue endpoints both equal 1 by (B3).
+Player1's Quit endpoint is eta*x. Its Continue endpoint agrees because
+
+    V_B1=K*(h1+eta_eff)=k*(h1+eta).
+
+For player2, the literal passive average is
+
+    -h2*x+(1-x)*b*y = t2.
+
+For player3 it is
+
+    -h3*x+(1-x)*[-y+(1-y)*c*z] = h3*theta*x = t3.
+
+The latter equality uses K=(1+theta)*k. Thus the added phase has
+converted an old zero value at the undiffused joint stage into a
+positive value, while leaving the effective source d at the old
+three-phase value.
+
+At B the solo owner2 has both endpoints zero; at C owner3 has both
+endpoints zero; at D owner0 has both endpoints one. Every player at
+every phase has a value at least its singleton. For the pivot this
+uses V_B0=(1-u*y)/(1-y)>=1 and R>Rlow>1; the other floors follow
+from the displayed positive quantities. All pure-Continue endpoints
+equal the current phase value, not only its prescribed mixed average.
+
+At the undiffused phase A the only outsider tests are players2 and3.
+The three player2 caps give Q2<=0<=t2. The player3 caps give
+
+    Q3 <= lambda*x*(1-y) <= h3*theta*x = t3.           (B4)
+
+This is the genuine new accounting step: r3(03) can be strictly
+positive even when both other player3 caps are zero. It is paid by a
+continuation value, not by a cancellation with a negative collision
+reward. All active endpoints and all four full-response tests at A
+have now been checked.
+
+### Diffusion, a fixed target, and complete behavioral deviations
+
+Replace each solo stage of rate q in {z,w,rho} by n stages of rate
+q_n=1-(1-q)^(1/n). Keep A unchanged. The product survival over each
+block remains 1-q, so t is the same exact prescribed payoff for all n.
+Within a solo block of owner j, values are convex interpolants between
+its two endpoint vectors; the j coordinate is identically s_j.
+Thus all singleton floors, prescribed-policy equalities, and pure-
+Continue equalities hold at every refined row.
+
+Let
+
+    Cjoin=max(0, r_i({i,j})-s_i : j in {0,2,3}, i!=j),
+    e_n=Cjoin*max(z_n,w_n,rho_n).
+
+Then e_n tends to zero. At any refined row the forced-Quit endpoint
+of a nonowner is at most s_i+Cjoin*q_n, hence at most V_i+e_n.
+The owner is exact. Together with (B4), EVERY row's Quit endpoint is
+at most its value plus e_n, and every Continue endpoint is exactly its
+value. Adding the same e_n to each continuation value therefore gives
+a supersolution for both unilateral actions. The error is charged once
+at eventual quitting, not once per date or period.
+
+This proves unrestricted behavioral safety directly: after any history
+that has not absorbed, the public date identifies the current row and
+the opponents still use their prescribed independent coins. Their
+probability of all continuing over one full period is a fixed rho_i<1
+for every deviating player i, since each of the other three players
+has positive total hazard. Hence absorption under any complete
+behavioral deviation is almost sure, uniformly in the deviator's
+stopping rule; bounded supersolution remainders vanish. Its terminal
+payoff is at most t_i+e_n. The prescribed profile delivers exactly t.
+
+For a direct finite-horizon bound, put m_n=1+3n and
+Ctime=max_i m_n/(1-rho_i). Pre-sample the opponents' independent
+coins. Under any deviation actual absorption occurs no later than
+the first prescribed opponent quit, whose expected date is at most
+Ctime (with the harmless usual date-index adjustment). With M bounding
+all terminal payoffs, terminal versus N-stage-average expected payoff
+differs by at most 2*M*Ctime/N, uniformly over the deviator. Thus
+
+    regret_N <= e_n+4*M*Ctime/N,
+    |prescribed average_N-t| <= 2*M*Ctime/N.
+
+Choose n for the requested accuracy, then one horizon threshold for
+all larger N. The target t is fixed before that choice. This is also
+exactly the quit-error/Continue-equality hypothesis of the inspected
+`QuittingInfinitePathQuitErrorCertificate` and
+`isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+The direct argument shows why no bounded-controller or finite-number-
+of-periods restriction on the deviator is being used.
+
+### Original-table exits for all other real R
+
+The only data used by these exits are the four prescribed singleton
+vectors, so the bridge parameters and arbitrary unused entries do not
+alter them. For R<Rlow the centered full singleton matrix is R0 and
+has degree zero, by the two-root active-determinant calculation in the
+reviewed quadratic packet. At R=Rlow, (1,nu) is a nonzero homogeneous
+complementarity solution; the Fin4 no-UE degree criterion therefore
+excludes this case too. For R>=Rtop the child A has nonnegative inverse,
+and its passive pivot weights are
+
+    [bc*(R-T1), R-T2, b*(R-T3)]/D,
+    T1=1+[c*(1-u)+(1-v)]/(bc),
+    T2=Rtop,
+    T3=1+[(1-u)+ab*(1-v)]/b.
+
+Here T2>=T3>T1 because u<=1 and v<1. The weights are nonnegative,
+including equality R=Rtop. The actual original-table declarations
+previously inspected for these exits are
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`,
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`,
+and `exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple` in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+None adds a condition on the unspecified nonsingleton entries.
+
+### Exact full-core fixture and honest remaining overlap boundary
+
+Take a=b=c=2, h1=h2=h3=1, u=v=0, eta=31/11,
+lambda=theta=1/2, R=347/92. Then eta_eff=17/11 and
+
+    K=1/10, y=1/4, z=7/30, w=4/15,
+    x=1/16, rho=1/33.
+
+The four value vectors are exactly
+
+    t   = (1,31/176,13/32,1/32),
+    V_B = (4/3,14/55,0,7/15),
+    V_C = (40/23,7/11,0,0),
+    d   = (1,17/121,4/11,0).
+
+Complete the unprescribed rows as follows:
+
+| S | r(S) |
+|---|---|
+| 02 | (1,-1,0,-1) |
+| 03 | (2,-1,-1,1/2) |
+| 12 | (0,0,0,1) |
+| 13 | (347/92,0,1,0) |
+| 23 | (347/92,1,1/2,1/2) |
+| 012 | (1,0,0,-1) |
+| 013 | (1,0,-1,0) |
+| 023 | (1,-1,0,0) |
+| 123 | (347/92,0,0,0) |
+| 0123 | (1,0,0,0) |
+
+Exact symbolic evaluation checked all sixteen policy identities and
+all sixteen pure-Continue identities. At A the endpoint pairs are
+(1,1), (31/176,31/176), (13/32,0), (1/32,3/128), so the formerly
+problematic outsider3 is strictly safe. In the unrefined profile,
+player2 has a positive Quit gain 2/15 at C and player3 has gain 1/66
+at D. Thus diffusion is genuinely required for this completion; those
+gains are not being discarded.
+
+The complete positive-premium trap list is 03,013,23,023,0123. The
+greatest premium core is all four players. The only common member of
+all traps is 3, and player3 strictly prefers joining 0:
+r3(03)=1/2>r3(0)=-1. Consequently neither the core-at-most-two class
+nor MORSE's common weak/strict trap-leaver criterion admits this table.
+Every pure quitting coalition has a strict toggle improvement, checked
+directly in the complete table. The old one-joint-phase caps also fail
+at r3(03)>0; selecting pair03 instead violates the pivot comparison
+r0(03)>=r0(3).
+
+### Completed bounded source audit for the full-core fixture
+
+The switched-joint-pair theorem requires two of the pivot's passive
+singleton rewards to be at least its own singleton. This fixture has
+only one: r0(3)=347/92, while r0(1)=r0(2)=0<1. The unique
+player with positive own singleton is 0, so relabeling the nonpivot
+cycle cannot meet that raw requirement. This is a comparison with
+the exact switched-family hypotheses, independently reviewed in my
+KREIN feedback, not with all possible phase laws.
+
+Its centered singleton matrix is
+
+    Gamma=[[0,-1,-1,255/92],
+           [-1,0,-1,2],[-1,2,0,-1],[-1,-1,2,0]].
+
+The 123 child has positive inverse A^(-1) and uniquely solves
+Az>=t*1, z>=0, z_i(Az-t*1)_i=0 by z=t*1 for t>0;
+its homogeneous problem has only zero. Therefore the full matrix is
+R0: a positive homogeneous pivot h would force child h*1 and
+pivot residual (71/92)*h>0. At offset (1,-1,-1,-1), the unique
+root is (0,1,1,1), its inactive residual is 163/92, and the active
+determinant is 7. Its degree is +1. The only nonnegative-inverse
+triple is 123, whose passive row is
+
+    (186/161,-297/644,25/322).
+
+The other triples have negative inverse entries: -2 for 012,
+-255/439 for 013, and -92/301 for 023. The full inverse has
+entry -744/497 in row0,column1. No pair has two positive
+off-diagonal entries. Principal02 is R0 but non-Q, by its matrix
+[[0,-1],[-1,0]] and the infeasible offset (-1,-1).
+
+Exact enumeration of all fifteen response partitions leaves only the
+discrete partition and 0|123 at first order. The latter fails at
+the actual root (t,0,0,0), where the three child response residuals
+are t+(31/11)*t^2, t, and t+t^2/2. These are unequal for t>0.
+Thus the full response-quotient hypothesis also fails. The degree,
+inverse, and response criteria are the same named declarations
+independently inspected in the preceding reviews, including
+`quittingSingletonBlockRowSum_eq_of_responseInvariant` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`.
+
+There are exact zero-regret/positive-outside-gain witnesses for thirteen
+of the fourteen proper children. For singletons use their sure exit.
+For children01,02,012, let every child member quit surely. For
+03,13,013 use sure3; for12 use sure1; for23 use sure2.
+Every chosen child profile is exact terminal Nash, and a missing
+nonpivot currently receiving -1 can join for at least zero. All these
+claims were checked directly in the complete table, including the
+case where the sole quitting player instead delays forever.
+
+For child023, use one date with hazards
+
+    (q0,q2,q3)=(3/5,1,92/347),
+
+then Never. The endpoint pairs for its players are exactly
+
+    (1,1), (-245/347,92/1735), (1/5,1/5).
+
+The profile absorbs surely. Player2's only possible post-deviation
+survival leaves opponents at Never and has maximal continuation zero,
+already included in the displayed Continue value. Hence these are
+full behavioral comparisons. Omitted player1 has Continue payoff
+-1367/1735 and Quit payoff zero.
+
+The formerly useful EXACT child123 cycle is genuinely broken by the
+positive pair23 premiums. At its player3 phase, player2 can join
+profitably. This exact failure is retained; no old witness is reused.
+Instead, take the child cycle of aggregate hazards 1/2 in order1,2,3,
+and refine EACH solo phase into n equal microhazards
+
+    alpha_n=1-2^(-1/n).
+
+The three child phase vectors remain (0,1,0),(0,0,1),(1,0,0).
+All their refined values are nonnegative, pure-Continue is exact, and
+the only positive pair surpluses are the two 1/2 values at23. The
+standard single-error supersolution therefore bounds every child's
+full terminal regret by alpha_n/2. Prescribed joint Never has mass
+zero. The quiet pivot's payoff is fixed at R/7=347/644, since
+refinement does not change any aggregate singleton-exit probability.
+Immediate Quit at the first microstage of player1 pays exactly one:
+r0(0)=r0(01)=1. Its gain is thus the fixed 297/644 for EVERY n.
+
+This limiting witness is sufficient to exclude universal debt bounds.
+Indeed, any finite nonnegative weight vector would bound that fixed
+outside gain by at most (sum weights)*alpha_n/2, plus a zero
+joint-Never term, which tends to zero. I re-read the exact source
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`.
+Its quantifier is over EVERY child profile and its debt weights and
+Never coefficient are fixed by the reward certificate. Consequently
+all five such certificate kinds fail here too. An exact child
+equilibrium is convenient but not necessary for this contradiction.
+This excludes the specified universal quiet-debt families, not every
+possible selected-child construction.
+
+Concrete next question: independently falsify the complete bridge
+producer, then seek an exhaustive global continuation-value mechanism
+which chooses among joint phases or accounts rather than another
+scalar refinement of this one fixed chronological grammar. The exact
+three-core unique-root obstruction remains a valid stress test, not
+a request to find a forced second root.

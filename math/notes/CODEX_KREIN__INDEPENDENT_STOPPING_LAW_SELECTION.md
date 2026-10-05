@@ -54,8 +54,14 @@ packet is frozen in `../exports/CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md`,
 promoted byte-for-byte by the coordinator. The later **positive-gap obstruction to the
 one-joint/two-solo-block architecture** is a separate unreviewed candidate,
 including arbitrary solo subdivision and the all-zero-hazard limit. Its
-beta=0 table has UE, so it is not a game counterexample. The concrete next
-question is a larger chronological support structure overcoming that gap.
+beta=0 table has UE, so it is not a game counterexample. The subsequent
+**Switched joint pair: two passive rewards above the pivot singleton**
+has independent PASS reviews from CODEX_MORSE and CODEX_BROUWER in their
+corresponding feedback files. It chooses a different joint pair and uses an actual positive
+outsider continuation buffer to tolerate positive joining rewards. Its
+full-core completion fails even the signed common-leaver criterion.
+The next question is whether a second positive outsider buffer can remove
+the remaining three zero caps, without merely supplying a strategy verifier.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
@@ -2334,8 +2340,11 @@ joint pair {0,1}; arbitrary solo subdivision does not change either proof.
 
 ## Switched joint pair: two passive rewards above the pivot singleton
 
-Status: separate complete ordinary proof candidate, not independently
-reviewed. This changes the selected joint pair and its incentive geometry,
+Status: complete ordinary proof with independent PASS reviews from
+CODEX_MORSE and CODEX_BROUWER in their corresponding feedback files;
+not Lean-checked or exported. The
+central statement and proof are frozen for further review. This changes
+the selected joint pair and its incentive geometry,
 not the constants in the frozen positive-premium-pair theorem. The
 selected joint pair now has ZERO own premiums; a positive outsider
 continuation coordinate permits actual positive joining premiums elsewhere.
@@ -2538,6 +2547,294 @@ player-2 premium at {1,2} and player-3 premium at {1,3} violate the old
 joint-{0,1} caps. These additions are handled at the refined solo phases,
 not discarded. The actual target (70) stays fixed before accuracy.
 
-Next independent check: the switched-pair theorem's raw weighted cap,
-strict estimate (68), all-R endpoint T, and the positive-gap proof's
-zero-hazard Never deviations. No new export is proposed before that check.
+CODEX_MORSE independently checked the switched-pair theorem's raw weighted
+cap, strict estimate (68), all-R endpoint T, full behavioral refinement,
+and source stitching. His review also gives exact signed-Q and zero-leading-
+coefficient tests with arbitrary unused rewards. The preceding architecture
+positive-gap proof was not included in that PASS and remains a separate
+unreviewed result.
+
+For an explicit common-leaver comparison, the full-core completion has
+premium traps {0,1} and {1,2}. Hence any player present in every trap
+would have to be player 1. That player fails even weak leave at {0,1}:
+r_1({0,1})=1>−1=r_1({0}). Thus the example is outside the signed
+common-leaver class, not merely outside its earlier nonnegative-premium
+version. This is a comparison with that precise criterion, not a claim
+that every other implemented source fails.
+
+## Two outsider buffers from a repeated solo exit
+
+Status: separate complete ordinary proof candidate, not independently
+reviewed. It is not part of the frozen switched-pair theorem. The new
+architecture is joint {0,3}, solo 1, solo 2, solo 3. Repeating player 3
+after the other solo exits creates a positive value for outsider 2 at
+the joint row; a positive premium for pivot 0 keeps its later values
+above its own singleton. Both outsiders may now have positive joining
+rewards at every nontrivial joint-row collision.
+
+### Raw class and claimed conclusion
+
+Keep a,b,c,h_1,h_2,h_3>0, D=abc−1>0 and the four singleton vectors
+in (61), with U,V≥1 and arbitrary R. Define nu by A*nu=h as above,
+and R_low,T as in (64). Choose a number theta satisfying
+
+    0<theta<nu_2/h_1,
+    xi≥theta(1−R_low).
+
+Replace the prescribed joint reward in (61) by
+
+    r({0,3})=(1+xi,−h_1,−h_2,0).                    (71)
+
+Since R_low≤1, xi is nonnegative. Put
+
+    J_1=max(0,r_1({0,1}),r_1({0,1,3})),
+    Q_1=r_1({1,3}),
+    J_2=max(0,r_2({0,2}),r_2({0,2,3})),
+    Q_2=r_2({2,3}).
+
+The new raw restrictions are only
+
+    (1+theta)J_1+nu_3 Q_1≤nu_2−h_1 theta,
+    (1+theta)J_2+nu_3 Q_2≤theta nu_3.                 (72)
+
+All other reward coordinates are arbitrary finite numbers. Both Q_i
+may be signed, and (72) permits all six displayed collision coordinates
+to be strictly positive. The claim is fixed-target UE for every R,
+with all behavioral deviations allowed. The sources already proved for
+the same singleton matrix handle R≤R_low and R≥T, including equality.
+Only R_low<R<T requires the construction. If U=V=1 this interval is
+empty and no construction is needed.
+
+### A strictly monotone balance, without a quadratic branch convention
+
+Put
+
+    L_theta=a(bc+c+1)+theta(1+a+ac),
+    Y_theta=D/L_theta,
+    t=theta*y/(1+theta*y),
+    A_1=(a*y−h_1*k)/(1+k),
+    z=[h_2*k+y+(1+k)theta*y]/[b(1−y)],
+    d_1=a*t+(1−t)A_1,
+    w=d_1/(1+d_1),
+    G(k,y)=h_3*k+z−c*w*(1−z).                        (73)
+
+Here t is the final solo-3 aggregate hazard, not the pivot hazard.
+For 0<y<Y_theta work on
+
+    0≤k≤K=min(a*y/h_1,
+             [b−(b+1+theta)y]/[h_2+theta*y]).
+
+Both bounds are positive: indeed
+
+    b L_theta−D(b+1+theta)
+       =(1+theta)(ab+b+1)>0.
+
+On this interval, 0≤A_1, 0<z≤1, 0<d_1 and 0<w<1.
+As k increases, z strictly increases, A_1 strictly decreases, hence
+w strictly decreases. Therefore G is strictly increasing, with
+derivative at least h_3>0 wherever the interval is nondegenerate.
+At k=0, clearing the positive denominators gives the sign of
+
+    −D+L_theta*y,
+
+so G(0,y)<0. At the right endpoint, either z=1, giving G>0, or
+k=a*y/h_1. In the latter case A_1=0 and w<a*theta*y, whereas
+
+    z≥[1+theta+a*h_2/h_1]y/b.
+
+Consequently
+
+    G(K,y)>y*D*(nu_2−h_1 theta)/(b h_1)>0.
+
+These inequalities give one and only one root k(y) in (0,K).
+The derivative lower bound gives continuity in the interior. At zero,
+K≤a*y/h_1 forces k→0; at Y_theta, continuity and strict monotonicity
+force k→0 because G(0,Y_theta)=0. Thus the branch extends continuously
+with k(0)=k(Y_theta)=0. Dividing (73) by y at zero gives
+
+    k/y→(1+theta)/nu_3,
+    z/y→(1+theta)nu_1/nu_3,
+    w/y→(1+theta)nu_2/nu_3.                           (74)
+
+To justify the division without assuming a derivative, k/y is bounded
+by a/h_1. Every convergent subsequence solves the same linear limiting
+balance, whose positive coefficient is
+h_3+h_2/b+c*h_1=D*nu_3/b. Hence its limit is unique.
+
+### The root allocates both positive outsider buffers
+
+The strict estimate needed for (72) is
+
+    k(y)<(1+theta)y/nu_3.                             (75)
+
+Test k_0=(1+theta)y/nu_3. If it is outside the admissible interval,
+the conclusion is immediate. Otherwise its z value is strictly greater
+than (1+theta)nu_1*y/nu_3. Its w value has numerator
+
+    (1+theta)y(nu_2+a*theta*y)/nu_3
+
+and denominator
+
+    1+[theta+(1+theta)(nu_2+1)/nu_3]y
+      +theta(1+a)(1+theta)y²/nu_3.
+
+It is strictly less than (1+theta)nu_2*y/nu_3. Indeed, after comparing
+the first-order coefficients, the required positive difference, times
+nu_3, is
+
+    nu_2(nu_2+1)+theta(nu_2 nu_3+nu_2²−h_1)>nu_2²,
+
+using theta*h_1<nu_2; the quadratic coefficient is positive too.
+It follows that
+
+    G(k_0,y)>(1+theta)y(h_3+nu_1−c*nu_2)/nu_3=0.
+
+Strict increase proves (75).
+
+Set x=k/(1+k). At the joint phase outsider i's forced-Quit payoff
+is at most [k J_i+y Q_i]/(1+k). The first inequality in (72) and
+(75) give a strict upper bound A_1=(a*y−h_1*k)/(1+k) for i=1,
+exactly as in (69) but with the factor 1+theta retained. The second
+inequality gives an upper bound theta*y/(1+k)<theta*y for i=2.
+Thus BOTH actual outsider Quit endpoints are strictly below their
+positive prescribed values A_1 and theta*y. No zero collision cap is
+being silently retained.
+
+### Pivot selector and all-R endpoint stitching
+
+Put p=1+xi*y and define
+
+    R(y)={p[1−(1−y)(1−z)(1−w)(1−t)]
+           −(1−y)[U*z+(1−z)V*w]}
+          /{y+(1−y)(1−z)(1−w)t}.                    (76)
+
+Its denominator is strictly positive. Formula (74) shows that it extends
+continuously with R(0)=R_low. Direct substitution at k=0,y=Y_theta
+gives
+
+    R(Y_theta)−T
+       =D[ xi−theta(1−T) ]/(abc+theta).              (77)
+
+Since R_low<T in the nonempty residual case and
+xi≥theta(1−R_low), the right side is strictly positive. The
+intermediate value theorem therefore selects an interior y for EVERY
+R_low<R<T. Neither R(y) monotonicity nor uniqueness is needed.
+
+For the selected R, let
+
+    P_D=R*t+(1−t)p
+       =1+y[xi+theta(R−1)]/(1+theta*y),
+    P_C=V*w+(1−w)P_D,
+    P_B=U*z+(1−z)P_C.
+
+All three are at least one: R>R_low and the xi hypothesis give the
+first floor, and U,V≥1 give the other two. Equation (76) is precisely
+R*y+(1−y)P_B=p, the pivot's joint-row Continue equality.
+
+The full vectors at the successive phases A,B,C,D are
+
+    V_A=(p,A_1,theta*y,0),
+    V_B=(P_B,0,b*z,h_3*k),
+    V_C=(P_C,0,0,c*w),
+    V_D=(P_D,d_1,0,0).                                (78)
+
+The vectors in (78) are in the original player order (0,1,2,3).
+At A, the pivot's Quit endpoint is p and player 3's is zero.
+Player 3's Continue equality is (1−x)h_3*k−x*h_3=0.
+The outsider policy equations are
+
+    V_A,1=(a*y−h_1*k)/(1+k),
+    V_A,2=[−h_2*k−y+(1−y)b*z]/(1+k)=theta*y.
+
+The solo recurrences give V_C,1=−w+(1−w)d_1=0,
+V_D,2=−t+(1−t)theta*y=0, and
+V_B,3=−z+(1−z)c*w=h_3*k. Every coordinate has its singleton
+floor; every Continue comparison is exact, and every supported Quit
+action is indifferent. The two remaining A comparisons were proved
+from (72), so these are all joint-row deviations.
+
+### Solo refinement and full behavioral conclusion
+
+Refine ALL THREE solo blocks, not only the first two. In particular,
+a pivot deviation at the final solo-3 block can collect the positive
+pair premium xi, so leaving that block coarse would not be justified.
+For n≥1 replace each aggregate q∈{z,w,t} by n identical hazards
+q_n=1−(1−q)^(1/n). The endpoint vectors remain (78); intermediate
+vectors interpolate between the corresponding endpoints and retain
+all singleton floors and exact Continue identities. Let
+
+    C_join=max(0, r_i({i,j})−s_i : j∈{1,2,3}, i≠j),
+    e_n=C_join*max(z_n,w_n,t_n).
+
+An outsider's immediate-Quit payoff at a solo-j microstage is
+s_i+q_n[r_i({i,j})−s_i], so it is at most its phase value plus e_n.
+The unchanged A row has error zero. Adding e_n to every phase value
+is a Bellman supersolution: Continue transports only an opponent
+survival fraction of that added constant, and Quit already has the
+same single cap. Hence no error accumulates across phases or periods.
+
+All x,y,z,w,t are strictly between zero and one. Removing any player's
+hazards leaves a per-period opponent survival rho_i<1; this bound is
+unchanged by any complete unilateral behavior and by subdivision. The
+supermartingale comparison can therefore pass to terminal payoff, and
+the fixed target V_A is delivered exactly with regret at most e_n→0.
+If M bounds all rewards, m_n=1+3n and
+C_n=max_i m_n/(1−rho_i), absorption time under every deviation has
+expectation at most C_n. Finite-horizon average payoff differs from
+terminal payoff by at most 2M C_n/N. Thus choosing n first, then N,
+proves the usual all-large-horizon inequalities around the SAME V_A.
+Together with the original singleton degree and passive-inverse exits,
+this proves the claimed entire R-axis raw class in ordinary mathematics.
+
+The exact compiler inspected again is
+`quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+No new compiler claim is made. A narrow source check also read
+`SignedFourCycleSingletonData` in
+`UniformEquilibrium/Quitting/Cycles/SignedFourCycleRewardAdapter.lean`:
+that singleton-only four-cycle requires a strictly positive predecessor
+comparison in every column. Here the pivot singleton harms all other
+players, so no relabeling meets that requirement. This is only that
+specific source comparison, not an exhaustive classification.
+
+### Exact two-buffer test and non-common-leaver completion
+
+Use a=b=c=2, h_1=h_2=1, h_3=11465/6552, U=V=2,
+theta=1/4, xi=1, and
+
+    x=1/11, y=1/4, z=67/240, w=86/273, t=1/17,
+    R=4802/23743,
+    nu=(50777,65516,55690)/45864,
+    R_low=−60603/55690, T=1/4,
+    J_1=1/2, Q_1=5077/11138,
+    J_2=1/10, Q_2=16379/111380.
+
+Both inequalities (72) bind, with all four J_i,Q_i strictly positive.
+The rate k is 1/10, and xi>theta(1−R_low). The exact vectors are
+
+    V_A=(5/4,4/11,1/16,0),
+    V_B=(37971/23743,0,67/120,2293/13104),
+    V_C=(34286/23743,0,0,172/273),
+    V_D=(479662/403631,86/187,0,0).
+
+Choose r_1(01)=r_1(013)=J_1, r_1(13)=Q_1,
+r_2(02)=r_2(023)=J_2 and r_2(23)=Q_2. These are all SIX positive
+outsider collision coordinates, which neither zero-cap construction
+can simply ignore. Their A Quit gaps are respectively
+52581/245036 and 97953/4900720. The literal (73), (76), and all
+sixteen phase policy/Continue identities hold in exact rational arithmetic.
+
+For a full table, give every unspecified participant its singleton and
+every unspecified outsider reward zero, then set r_0(01)=r_0(02)=3
+and r_3(13)=1/2. Preserve (71), all singletons, and the six specified
+collision coordinates. Traps 01,02,13 have empty intersection, so there
+is no common player in every premium trap at all, even before any
+leave inequality is tested. Their union is the full four-player set.
+This completion satisfies the raw conditions and has a full greatest
+premium core, while invalidating the signed common-leaver criterion.
+It does not claim separation from every conceivable existing producer.
+
+Next check requested: independently falsify the global bound (75),
+endpoint identity (77), pivot floor at the final solo-3 block, and the
+claim that refinement of that third block preserves both buffers.
