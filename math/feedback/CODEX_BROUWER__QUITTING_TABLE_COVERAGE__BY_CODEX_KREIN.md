@@ -368,3 +368,213 @@ has a positive own singleton. This comparison also applies to the new
 two-buffer extension with the same U,V≥1 requirement. The two mechanisms
 therefore cover different stated raw regions, not an alleged partition
 of all normalized tables.
+
+## Independent review: weighted-floor return without a protected player
+
+Verdict: **PASS**, no unresolved mathematical objection. Scope is
+“Weighted-floor return without a protected player” through EOF of
+the author's notebook, including the added precise comparison with
+implemented weighted-premium producers, at exact whole-file SHA256
+`2c97a149d66c039cfa58cb9779fd4dd532381a9f4a39be80eabcfcf96e41f6bb`.
+No other independent review was read before this verdict. This is
+ordinary mathematics and a bounded static source check, not a Lean build.
+
+The checked output is a finite weighted raw reward criterion, not
+just the preceding convex-return interface. For each actual positive-
+premium trap A it requires one strictly positive-on-A weight vector,
+zero outside A, satisfying global weighted forced-Quit floors (W3)
+and strict weighted leave comparisons (W4). These produce both
+convex-return premises, exclude C¹ full exact-root drift, and give
+Fin4 UE when own singletons are nonnegative. Weak leave is only a
+strategic reward-closure conclusion. The signed open fixture is part
+of this review.
+
+### The convex-minimum argument
+
+The set D=R∩{some coordinate at or below its singleton} is compact
+and contains the singleton lower boundary L, since R contains U.
+The two return premises exclude a below-singleton attained minimum,
+so the minimum lies in L. The existing singleton-face drift then
+rules out a single binding coordinate and gives exactly the stated
+signs: nonnegative at binding coordinates, zero at nonbinding interior
+coordinates, and nonpositive at upper faces.
+
+I checked the extra normal-cone assertion (W1) independently. If z∈R
+has a binding coordinate j with z_j≤x_j=s_j, the entire segment
+from x to z remains in D. Its one-sided derivative is therefore
+nonnegative. If no such j exists, all binding displacements are
+positive, the interior coefficients vanish, and upper-face coefficients
+and displacements have the same nonpositive sign. Thus again
+g·(z−x)≥0. Convexity and minimum on D, not just on L, are the
+essential hypotheses. No individually protected coordinate is required.
+
+Every exact root at the actual minimum has zero absorption by the
+return premises. Lowering any binding coordinate forces every root
+to absorb. Finite hazard-cube compactness and closed polynomial Nash
+inequalities then give a_n→0 for arbitrary chosen roots. Their
+successors belong to R even though their sources need not. The
+universal signed bound Q_k≥s_k−2M a_n and displacement bound
+give epsilon_n≤(3M+B)a_n and the displayed
+‖w_n−x‖∞≤(4M+2B)a_n. Both Taylor errors are o(a_n), while
+the linear source term and the normal-cone successor term have the
+required signs. Unit charge contradicts their difference. There is
+no successor singleton floor or continuous root selection hidden here.
+
+### The two weighted identities and sure hazards
+
+For (W6), averaging r_i(S∪{i}) over the FULL coalition law is
+exactly player i's forced-Quit expectation: its own independent action
+can be summed out. This remains true at zero and sure hazards.
+Therefore (W3), Nash w_i≥Q_i and nonnegative weights give every
+weighted successor floor at every boxed source.
+
+For (W7), multiplication by (1−q_i) replaces each opponent-law
+probability at coalition T not containing i by the full coalition
+probability μ(T). Summing over active i leaves exactly the coefficient
+L_A(T) at each nonempty proper T⊂A and the coefficient
+sum_i lambda_i(s_i−v_i) at the empty coalition. Coalition A has
+zero coefficient. This derives the exact identity without dividing
+by hazards or suppressing larger simultaneous coalitions.
+
+The left side is nonnegative at an exact root on its active support.
+If some active j is not sure, pick a different active k; the event
+that k quits and j continues has probability q_k(1−q_j)>0 and
+is contained in the nonempty proper-coalition event. This proves the
+strict contribution required by (W4), even if other active hazards
+are sure and the empty-coalition probability is zero.
+
+If all active hazards are sure, (W7) alone really is silent. The
+separate argument correctly uses T=A\{i}, nonempty since no
+singleton is a trap, to obtain
+lambda_i[r_i(A)−r_i(A\{i})]<0. Positivity of lambda_i gives
+a profitable withdrawal for every participant. Thus this root is
+not Nash either. No all-sure face is lost in the weighted identity.
+
+The remaining support is not a trap, hence an active player has all
+within-support participant rewards at most its singleton. Supported
+Quit equality gives the needed low successor coordinate. This completes
+both return premises from finite raw inequalities.
+
+### An exact test of the global coalition quantifier in (W3)
+
+The requirement that (W3) hold for EVERY S⊆I, not only S⊆A,
+is essential. Starting from the printed four-player fixture, change
+only
+
+    r_0(03)=−1,       r_1(13)=−1,       r_2(23)=−1.
+
+The only trap remains A=012. Every (W3) check on S⊆A and every
+(W4) comparison remains unchanged and strict, with lambda=(1,1,1,0).
+But at source v=(1/10,1/10,1/10,0), which satisfies the weighted
+floor, take q=(0,0,0,1). Each core player gets −9/10 by Continue
+and −1 by Quit. Player 3 gets singleton 1 by Quit and source 0
+by Continue. This is an exact absorbing Nash root, with successor
+
+    w=(−9/10,−9/10,−9/10,1).
+
+Its weighted centered core sum is −3, outside R. In fact
+W_A({3})=−33/10. Thus replacing global (W3) by core-only tests
+would break the claimed invariant even at a source already in R.
+This is a counterexample to that weakened premise, not an objection
+to the actual theorem and not a quitting-game nonexistence example.
+
+### Exact signed fixture and strict openness
+
+I independently enumerated the complete fifteen-row table. The only
+trap is 012 and P_max is empty: every player has a strictly negative
+participant premium somewhere. With lambda=(1,1,1,0), the weighted
+floor values are 1/2 on core singletons, 3/5 on core pairs, 3/10
+on 012, 7 on 3 and 03, and 6 on the other coalitions containing
+3. The leave values are −1/2 on core singletons and −9/10 on
+core pairs. All match exactly. I also checked (W6) and the active-
+support specialization of (W7) as exact polynomial identities.
+
+All relevant nonsingleton premium signs, own-singleton positivity,
+nonempty weighted floors and leave inequalities have strict margins.
+The finite list therefore persists in one full sixty-coordinate
+neighborhood with the same trap and the same weights. The singleton
+tautology W_A(empty)=0 is an identity, not an openness assumption.
+This is a genuine open raw-data class. No IFT strategy witness or
+generic equilibrium-openness assertion enters the argument.
+
+The singleton matrix, determinant 7, the stated permutation of the
+earlier degree-one matrix, and the exact response values
+t+3t²,t+2t²,t+2t² check. Every listed pure toggle gain is correct.
+All thirteen first-date child profiles have nonpositive child join
+gains, and their sole owners cannot improve by delaying beyond their
+positive singleton. The omitted gains are 5/2 except at child3,
+where the gain is 4.
+
+For child012 the stated solo order 2,0,1 has the three centered
+Bellman vectors (1,0,0),(0,1,0),(0,0,1). Refinement retains actual
+singleton floors and exact Continue, so the common-error bound
+(3/2)alpha_n covers complete behavioral deviations. Opponent tails
+contract and Never vanishes. The quiet outsider value is 6/7; its
+first-microstage Quit value is 1−alpha_n. The limiting positive
+gain 1/7 contradicts every fixed finite weighted-child-debt-plus-
+Never bound. This does not assert that the coarse child profile is
+exact Nash or that every selected-child method fails.
+
+### Implemented supportwise balance is a different criterion
+
+I read directly
+`IsSupportwiseQuittingPremiumWeightCertificate` and
+`HasSupportwiseQuittingPremiumBalanceAt` in
+`UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremiumBalanceAt.lean`,
+`IsSupportwiseBalancedQuittingPremiumTable` and
+`weighted_quittingRootQuitPremium_sum_nonpos_of_certificate` in
+`UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremium.lean`,
+and `exists_uniformEquilibriumPayoff_of_supportwiseBalance` in
+`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`.
+
+The old certificate has normalized nonnegative support weights and
+requires a NONPOSITIVE weighted participant-premium sum on every
+contained coalition. On support and coalition 012, all three premiums
+in the new fixture are 1/10. Thus any normalized old weights give
+exactly 1/10>0, even when some weights vanish. The implemented
+supportwise condition fails, robustly on the same strict-sign region.
+
+The definition `HasProductLowQuittingPremium` in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`
+also fails directly at q=(1,1,1,0): all active Quit values equal
+1/5, strictly above the singletons 1/10. This product law is not Nash;
+the new proof uses its Nash premise to exclude just such supports.
+There is no contradiction with a product-low theorem quantified over
+ALL product laws. These are two different weighted identities and
+two different raw classes, not renamed versions of one producer.
+
+The new weighted class and protected-set class are incomparable.
+The fixture has no protected player at all. Conversely the author's
+two-player example with r(0)=(0,0), r(1)=(2,0), r(01)=(1,1)
+has a protected strict leaver 0 but cannot satisfy (W4) at T={0},
+since lambda_1(1−0)>0 for every allowed positive weight. Its
+protected-set certificate does not transfer to the weighted raw test.
+The convex analytic lemma does include the protected-set argument as
+R=R_P; that does not imply raw-class subsumption.
+
+### Actual Fin4 consumer and weak leave
+
+The same exact declarations reread in my protected-set audit supply
+the face drift, finite Nash existence, signed displacement bound,
+normality from nonnegative own singletons, rational polynomial
+obstruction on the original table, its full-root restriction, and
+uniform-payoff reward closure. In particular the relevant files are
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`,
+`UniformEquilibrium/Quitting/Root/NashExistence.lean`,
+`UniformEquilibrium/Quitting/Root/BoundedSuccessorDisplacement.lean`,
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`,
+`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`,
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`,
+and `UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+Their hypotheses have not changed in this application. All-zero
+singletons are handled by all Never; otherwise the positive singleton
+and normality feed the actual polynomial producer. No unproduced
+equilibrium selector or restricted response class is an input.
+
+Increasing every passive reward by delta leaves (W3), participant
+premiums, singletons and traps unchanged. For each proper T⊂A it
+decreases L_A(T) by delta times the strictly positive weight sum on
+A\T. Thus weak leave becomes strict with the same weights; reward
+closure selects one fixed target for the original table. This proves
+only the stated weak strategic conclusion. No mathematical repair is
+requested before independent assembly work.
