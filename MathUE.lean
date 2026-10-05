@@ -151,6 +151,7 @@ import MathUE.Coupling
 import MathUE.CubicAnchorRoot
 import MathUE.RationalizedQuadraticBracketRoot
 import MathUE.CyclicChildJointPhaseAlgebra
+import MathUE.CyclicChildJointPhasePivot
 import MathUE.CurveSelection.AlgebraicApproach
 import MathUE.CurveSelection.AlgebraicReduction
 import MathUE.CurveSelection.AlgebraicRelation
@@ -645,6 +646,7 @@ import MathUE.Topology.CompactProjectiveExecution
 import MathUE.Topology.CompactProofRelevantAdapter
 import MathUE.Topology.CompactRankedOutcome
 import MathUE.Topology.CompactRobustMoat
+import MathUE.Topology.SeparatelyAffineFiberLoops
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
 import MathUE.Topology.CountableObservation

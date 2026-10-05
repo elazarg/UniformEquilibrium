@@ -6,12 +6,12 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
-import MathUE.Topology.CompactRobustMoat
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactPath
 import UniformEquilibrium.Quitting.Root.NashDefect
 import UniformEquilibrium.Quitting.Root.NashDefectContinuity
 import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
+import UniformEquilibrium.Quitting.Root.CompactExactNashFiberMoat
 
 /-!
 # A Nash-defect moat around the canonical incidence plateau
@@ -150,34 +150,9 @@ theorem exists_eventually_totalNashDefect_moat_of_uniqueAllContinue_of_continuou
           eta ≤ measure root →
             moat ≤ quittingRootTotalNashDefect reward nearbyCap
               (quittingRootOfSimplex root) := by
-  let high : Set (QuittingRootSimplex ι) := {root | eta ≤ measure root}
-  have hhighClosed : IsClosed high :=
-    isClosed_Ici.preimage hmeasure
-  have hpositive : ∀ root ∈ high,
-      0 < quittingRootTotalNashDefect reward cap
-        (quittingRootOfSimplex root) := by
-    intro root hrootHigh
-    have hnonneg : 0 ≤ quittingRootTotalNashDefect reward cap
-        (quittingRootOfSimplex root) :=
-      quittingRootTotalNashDefect_nonneg reward cap
-        (quittingRootOfSimplex root)
-    apply lt_of_le_of_ne hnonneg
-    intro hdefectZero
-    have hnash : IsεQuittingRootNash reward cap 0
-        (quittingRootOfSimplex root) :=
-      (isZeroQuittingRootNash_iff_totalNashDefect_eq_zero
-        reward cap (quittingRootOfSimplex root)).2 hdefectZero.symm
-    have hroot := hunique (quittingRootOfSimplex root) hnash
-    have hmeasureZero := hzero root hroot
-    change eta ≤ measure root at hrootHigh
-    rw [hmeasureZero] at hrootHigh
-    linarith
-  simpa only [high, Set.mem_ofPred_eq] using
-    (Math.Topology.exists_eventually_uniform_pos_on_closed_of_compactSpace
-      (fun nearbyCap root => quittingRootTotalNashDefect reward nearbyCap
-        (quittingRootOfSimplex root))
-      (continuous_quittingRootTotalNashDefect_simplex reward)
-      high hhighClosed cap hpositive)
+  exact exists_eventually_totalNashDefect_moat_of_measure_zero_on_exact_fiber
+    reward cap measure hmeasure
+    (fun root hnash => hzero root (hunique (quittingRootOfSimplex root) hnash)) eta heta
 
 /-- The total-opponent-incidence specialization of the generic root-statistic
 moat. -/

@@ -723,6 +723,36 @@ They do not supply the mutual strict-join branch or a general core-size theorem.
 The packet's signed counterroot and rational-fixture screen obligations
 remain separate; these theorems are not a whole-packet seal.
 
+`CommonLeaverSignedPremiumFixture.exists_uniformEquilibriumPayoff_strict` and
+`CommonLeaverSignedPremiumFixture.exists_uniformEquilibriumPayoff_weak`
+(`UniformEquilibrium/Quitting/Examples/CommonLeaverSignedPremiumFixture.lean`)
+apply these actual consumers to the literal signed Section 6 table. The
+fixture proves its participant premium classification, exact traps and
+three-player greatest core, protected common leaver, strict leave, negative
+outsider premium and product-low obstruction. The weak application follows
+the same strict comparisons, not a separate equality-boundary regression.
+The Section 5 signed counterroot and the matrix, inverse, response-partition
+and child-screen separation obligations remain unfinished.
+
+`exactRootSuccessor_mem_protectedSetBox` and
+`exactRootSuccessor_mem_protectedSetSublevelDomain`
+(`UniformEquilibrium/Quitting/Classification/SupportSpecificQuittingPremiumLeavers.lean`)
+produce the support-specific packet's raw protected floors and signed sublevel
+return. Every actual trap supplies a protected leaver with all nonempty
+opponent-coalition comparisons. Protected floors hold at every boxed source;
+absorbing sublevel return additionally requires protected floors at the source.
+The old common-leaver interface delegates the canonical support-sum proof
+without changing its public hypotheses. Protected-set smooth exclusion and
+its actual strict/weak UE consumers are not supplied by this raw unit.
+
+`eventually_exactRoot_absorption_lt_of_exact_fiber_absorption_zero` and
+`tendsto_exactRoot_absorption_zero_of_exact_fiber_absorption_zero`
+(`UniformEquilibrium/Quitting/Root/CompactExactNashFiberMoat.lean`) give uniform
+small absorption for all nearby exact roots and vanishing absorption for
+arbitrary exact-root selections over convergent sources. Their hypothesis is
+zero absorption on the exact limiting fiber, not a unique all-Continue root.
+The diagnostic unique-all-Continue moat is a thin scope-preserving instance.
+
 ## Pending pivot and solo-refinement source dependencies
 
 `rationalizedQuadraticRoot_spec` (`MathUE/RationalizedQuadraticBracketRoot.lean`)
@@ -759,9 +789,14 @@ initial target stays exact at every scale and precedes accuracy; full behavioral
 terminal caps use one error, not a period-amplified sum. The actual period is
 the coarse phase count times the scale, including quiet slots.
 
-The cyclic-child and outsider-buffer packets still need actual continuous
-pivot producers and raw-game adapters to those source fields. The cyclic
-child's normalized endpoint ratios and pivot IVT remain unproduced.
+`JointPhaseData.rootRatio_zero`, `JointPhaseData.secondRatio_zero`,
+`JointPhaseData.thirdRatio_zero` and `JointPhaseData.exists_pivot`
+(`MathUE/CyclicChildJointPhasePivot.lean`) produce the literal canceled
+normalized ratios and continuous pivot selection from raw cyclic-child scalar
+parameters. Both pivot endpoint values are exact; IVT selects the interior
+hazard without a monotonicity assumption or a supplied selector. This still
+does not construct the typed raw quitting-table source fields above. That
+game-facing adapter and the outer inverse/degree branches remain separate.
 The two-outsider-buffer packet requires a separate monotone rational selector
 and its small-parameter ratios; the quadratic formula covers only its empty
 repeated-phase specialization, not the whole source. Positive joint outsider

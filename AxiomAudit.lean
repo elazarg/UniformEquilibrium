@@ -129,6 +129,7 @@ import MathUE.CurveSelection.SquareLift
 import MathUE.CurveSelection.Termination
 import MathUE.CurveSelection.UltrafilterSubsequence
 import MathUE.CyclicChildJointPhaseAlgebra
+import MathUE.CyclicChildJointPhasePivot
 import MathUE.CyclicContraction
 import MathUE.CyclicExposure
 import MathUE.DirectedTransport.FiniteInequality.Nonnegative
@@ -739,6 +740,7 @@ import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.RectangularPoincareMiranda
+import MathUE.Topology.SeparatelyAffineFiberLoops
 import MathUE.Topology.SignedSimplexLabelBoundary
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
@@ -2247,6 +2249,7 @@ import UniformEquilibrium.Quitting.Classification.SingletonPacketSupport
 import UniformEquilibrium.Quitting.Classification.SmallPlayerExistence
 import UniformEquilibrium.Quitting.Classification.SoloExitPreference
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
+import UniformEquilibrium.Quitting.Classification.SupportSpecificQuittingPremiumLeavers
 import UniformEquilibrium.Quitting.Classification.SupportwiseQuittingPremium
 import UniformEquilibrium.Quitting.Classification.SupportwiseQuittingPremiumBalanceAt
 import UniformEquilibrium.Quitting.Classification.SupportwiseQuittingPremiumFeasibleSet
@@ -2599,6 +2602,7 @@ import UniformEquilibrium.Quitting.Examples.CapThresholdFinThree
 import UniformEquilibrium.Quitting.Examples.CapThresholdInitialSkip
 import UniformEquilibrium.Quitting.Examples.CapThresholdRegressionCommon
 import UniformEquilibrium.Quitting.Examples.CollisionAdjustedProbeBoundary
+import UniformEquilibrium.Quitting.Examples.CommonLeaverSignedPremiumFixture
 import UniformEquilibrium.Quitting.Examples.ConstantSignedNormalTable
 import UniformEquilibrium.Quitting.Examples.CrossMassDeterminantFixture
 import UniformEquilibrium.Quitting.Examples.CrossMassPayoffThresholdRegression
@@ -3064,6 +3068,7 @@ import UniformEquilibrium.Quitting.Root.CofinalImmediateQuitCapDisplacementLimit
 import UniformEquilibrium.Quitting.Root.CoherentPureTimeCapClock
 import UniformEquilibrium.Quitting.Root.CollisionAdjustedSingletonProbe
 import UniformEquilibrium.Quitting.Root.CommonPrefixCapStability
+import UniformEquilibrium.Quitting.Root.CompactExactNashFiberMoat
 import UniformEquilibrium.Quitting.Root.CoordinateMarginalMixture
 import UniformEquilibrium.Quitting.Root.CopiedCapResidualDebt
 import UniformEquilibrium.Quitting.Root.CorrectedNeverPrefixPayoff
