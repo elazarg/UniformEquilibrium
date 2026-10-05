@@ -3441,11 +3441,16 @@ It increases only that singleton coordinate, applies the existing low-player
 producer, and returns the same profile through the sharp one-sided reward
 transport in `UniformEquilibrium/Quitting/Terminal/TerminalPayoffRewardOrder.lean`.
 No child target, favorable law, or perturbed outsider certificate is assumed.
-The residual-preserving parent aggregation, finite quiet laws, and their
-fixed-target family consumer are still pending. This source selector alone
-does not strengthen the specified-child-target extension theorem.
-Its silent named check, full silent default build and exhaustive production
-axiom audit pass.
+`quittingLiftDeletedProfile_outsideDebt_le_add_neverExcess_of_withdrawalFutureJoin`
+and `exists_quietProfiles_smallExploitability_smallNever_of_withdrawalFutureJoinFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`)
+retain the original certificate residual for every actual child profile, then
+select fixed finite maximum weight and residual bounds before the positive scale.
+The selected quiet parent has full terminal exploitability at most
+`factor * (delta + delta²) + residual * delta`, with the same child joint Never
+at most `delta`. Outsiders may independently use any of the five certificate kinds.
+The finite-menu witnesses and their fixed-target family consumer are still pending.
+This existence construction does not strengthen the specified-child-target theorem.
 
 `quietLift_fixedTarget_of_withdrawalFutureJoin_absorbingStationary`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalAbsorbingStationaryChild.lean`)

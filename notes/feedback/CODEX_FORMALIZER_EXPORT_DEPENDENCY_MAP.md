@@ -1338,6 +1338,37 @@ They require short formalization or public adapters, not new substantive mathema
    is `isQuittingFullExactRootPotentialWithCharge_iff_div`
    (`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialChargeScale.lean`).
 
+## Nonnegative-singleton quiet-lift implementation
+
+`exists_quietProfiles_smallExploitability_smallNever_of_withdrawalFutureJoinFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`)
+constructs original-game child profiles internally and evaluates their literal quiet
+parent lifts. The finite maximum certificate-weight and Never-residual bounds are
+selected before every positive scale; the full parent exploitability bound is
+`factor * (delta + delta²) + residual * delta`, and child joint Never is at most
+`delta`. The five original F/J certificate kinds remain independent across outsiders.
+The specified-child-target theorem still requires a strictly positive singleton.
+Finite censoring, actual finite-menu witnesses, the retained-family fixed target,
+the canonical pivot consumer and the packet's sharp counterexamples remain pending.
+
+## Further shape proof-mining findings
+
+These are proposed adapters from existing proofs, not checked new declarations:
+
+- A C² full-root potential has a negative minimum canonical Hessian eigenvalue
+  on its singleton box without a standard-Q or singleton-sign hypothesis.
+  Combine the existing nonquasiconvexity theorem with the Hessian-floor convexity
+  theorem at coefficient zero and minimum eigenvalue attainment.
+- Rational quasiconvex polynomial candidates of arbitrary degree admit robust
+  approximate rejection and eventual search without standard-Q or singleton signs.
+  Combine the matrix-free positive exact-root rejection with rational robust
+  approximation and the existing exhaustive search theorem. This does not promise
+  an exact rational Nash row.
+- The monotone-transform exclusion can use an outer function Lipschitz on the
+  inner polynomial's image instead of C¹ on an open interval. The current proof
+  uses C¹ only to obtain that Lipschitz bound, so an extracted adapter also covers
+  monotone piecewise-linear transforms and clipping.
+
 ## Completion criterion
 
 Packet completion requires matching every mathematical conclusion above to an

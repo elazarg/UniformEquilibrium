@@ -23,6 +23,71 @@ local instance terminalOneOutsiderOptionChildNonempty {β : Type} [Nonempty β] 
 
 /-- Pointwise deletion/reindex transport for the actual displayed child profile.
 This also permits source bounds whose side conditions depend on that profile. -/
+theorem quittingLiftDeletedProfile_outsideTerminalDebt_le_of_oneOutsiderBound_add_at
+    (deleted : α → Prop) [DecidablePred deleted]
+    [Nonempty (QuittingChildPlayer deleted)]
+    (reward : {S : Finset α // S.Nonempty} → Payoff α)
+    (outside : {who : α // deleted who})
+    (weight : QuittingChildPlayer deleted → ℝ)
+    (allowance : ℝ)
+    (profile : (quittingGame (quittingDeleteReward reward deleted)).BehaviorProfile)
+    (hbound :
+      let optionReward := quittingChildWithOutsiderReward reward deleted outside
+      let childProfile := quittingChildWithOutsiderChildProfile reward deleted outside profile
+      let lifted := quittingLiftDeletedProfile optionReward (· = none) childProfile
+      quittingBehaviorDeviationPayoffCap optionReward lifted none -
+          quittingTerminalPayoff optionReward lifted none ≤
+        ∑ who, weight who *
+          (quittingBehaviorDeviationPayoffCap
+              (quittingDeleteReward optionReward (· = none)) childProfile
+                ⟨some who, Option.some_ne_none who⟩ -
+            quittingTerminalPayoff (quittingDeleteReward optionReward (· = none))
+              childProfile ⟨some who, Option.some_ne_none who⟩) + allowance) :
+    quittingBehaviorDeviationPayoffCap reward
+          (quittingLiftDeletedProfile reward deleted profile) outside.1 -
+        quittingTerminalPayoff reward
+          (quittingLiftDeletedProfile reward deleted profile) outside.1 ≤
+      ∑ who, weight who *
+        (quittingBehaviorDeviationPayoffCap
+            (quittingDeleteReward reward deleted) profile who -
+          quittingTerminalPayoff (quittingDeleteReward reward deleted) profile who) +
+        allowance := by
+  let optionReward := quittingChildWithOutsiderReward reward deleted outside
+  let childProfile := quittingChildWithOutsiderChildProfile reward deleted outside profile
+  let optionProfile := quittingLiftDeletedProfile optionReward (· = none) childProfile
+  have hoption := hbound
+  have hnone := quittingBehaviorDeviationDebt_childWithOutsider_none reward deleted outside profile
+  have hsame := quittingBehaviorDeviationDebt_childWithOutsiderFullProfile
+    reward deleted outside profile outside.1
+  rw [← hsame, ← hnone]
+  calc
+    quittingBehaviorDeviationPayoffCap optionReward optionProfile none -
+        quittingTerminalPayoff optionReward optionProfile none ≤
+      ∑ who, weight who *
+        (quittingBehaviorDeviationPayoffCap
+            (quittingDeleteReward optionReward (· = none)) childProfile
+              ⟨some who, Option.some_ne_none who⟩ -
+          quittingTerminalPayoff (quittingDeleteReward optionReward (· = none)) childProfile
+              ⟨some who, Option.some_ne_none who⟩) + allowance := hoption
+    _ = _ := by
+      congr 1
+      apply Finset.sum_congr rfl
+      intro who _
+      change weight who *
+        (quittingBehaviorDeviationPayoffCap
+            (quittingDeleteReward
+              (quittingChildWithOutsiderReward reward deleted outside) (· = none))
+            (quittingChildWithOutsiderChildProfile reward deleted outside profile)
+            (quittingChildSomeEquiv deleted who) -
+          quittingTerminalPayoff
+            (quittingDeleteReward
+              (quittingChildWithOutsiderReward reward deleted outside) (· = none))
+            (quittingChildWithOutsiderChildProfile reward deleted outside profile)
+            (quittingChildSomeEquiv deleted who)) = _
+      rw [quittingBehaviorDeviationPayoffCap_childWithOutsiderChildProfile,
+        quittingTerminalPayoff_childWithOutsiderChildProfile]
+
+/-- The zero-allowance form of exact one-outsider transport. -/
 theorem quittingLiftDeletedProfile_outsideTerminalDebt_le_of_oneOutsiderBound_at
     (deleted : α → Prop) [DecidablePred deleted]
     [Nonempty (QuittingChildPlayer deleted)]
@@ -50,39 +115,9 @@ theorem quittingLiftDeletedProfile_outsideTerminalDebt_le_of_oneOutsiderBound_at
         (quittingBehaviorDeviationPayoffCap
             (quittingDeleteReward reward deleted) profile who -
           quittingTerminalPayoff (quittingDeleteReward reward deleted) profile who) := by
-  let optionReward := quittingChildWithOutsiderReward reward deleted outside
-  let childProfile := quittingChildWithOutsiderChildProfile reward deleted outside profile
-  let optionProfile := quittingLiftDeletedProfile optionReward (· = none) childProfile
-  have hoption := hbound
-  have hnone := quittingBehaviorDeviationDebt_childWithOutsider_none reward deleted outside profile
-  have hsame := quittingBehaviorDeviationDebt_childWithOutsiderFullProfile
-    reward deleted outside profile outside.1
-  rw [← hsame, ← hnone]
-  calc
-    quittingBehaviorDeviationPayoffCap optionReward optionProfile none -
-        quittingTerminalPayoff optionReward optionProfile none ≤
-      ∑ who, weight who *
-        (quittingBehaviorDeviationPayoffCap
-            (quittingDeleteReward optionReward (· = none)) childProfile
-              ⟨some who, Option.some_ne_none who⟩ -
-          quittingTerminalPayoff (quittingDeleteReward optionReward (· = none)) childProfile
-              ⟨some who, Option.some_ne_none who⟩) := hoption
-    _ = _ := by
-      apply Finset.sum_congr rfl
-      intro who _
-      change weight who *
-        (quittingBehaviorDeviationPayoffCap
-            (quittingDeleteReward
-              (quittingChildWithOutsiderReward reward deleted outside) (· = none))
-            (quittingChildWithOutsiderChildProfile reward deleted outside profile)
-            (quittingChildSomeEquiv deleted who) -
-          quittingTerminalPayoff
-            (quittingDeleteReward
-              (quittingChildWithOutsiderReward reward deleted outside) (· = none))
-            (quittingChildWithOutsiderChildProfile reward deleted outside profile)
-            (quittingChildSomeEquiv deleted who)) = _
-      rw [quittingBehaviorDeviationPayoffCap_childWithOutsiderChildProfile,
-        quittingTerminalPayoff_childWithOutsiderChildProfile]
+  simpa only [add_zero] using
+    quittingLiftDeletedProfile_outsideTerminalDebt_le_of_oneOutsiderBound_add_at
+      deleted reward outside weight 0 profile (by simpa only [add_zero] using hbound)
 
 /-- The one-outsider display preserves each original child's entire actual
 stopping law, not only a selected mass or terminal payoff. -/

@@ -3,6 +3,7 @@ import UniformEquilibrium.Quitting.Classification.QuietExtension.TerminalOneOuts
 import UniformEquilibrium.Quitting.Classification.QuietExtension.TerminalWeightedDebtLift
 import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockSampledLPDual
 import UniformEquilibrium.Quitting.Classification.QuietExtension.DeadlineWithdrawalFinFourExistence
+import UniformEquilibrium.Quitting.Classification.ThreePlayer.NonnegativeSingletonEarlyAbsorption
 
 /-! # Fixed-target quiet extensions with the Never row omitted
 
@@ -20,6 +21,36 @@ open StochasticGame
 open scoped BigOperators
 
 variable {α : Type} [Fintype α] [DecidableEq α]
+
+/-- Original finite future/join rows bound the actual outsider debt while
+retaining the joint-Never residual. No singleton sign hypothesis is needed. -/
+theorem quittingLiftDeletedProfile_outsideDebt_le_add_neverExcess_of_withdrawalFutureJoin
+    (deleted : α → Prop) [DecidablePred deleted]
+    [Nonempty (QuittingChildPlayer deleted)]
+    (reward : {A : Finset α // A.Nonempty} → Payoff α)
+    (outside : {who : α // deleted who}) (kind : WithdrawalFutureJoinKind)
+    (certificate : WithdrawalFutureJoinRewardCertificate kind
+      (quittingChildWithOutsiderReward reward deleted outside))
+    (profile : (quittingGame (quittingDeleteReward reward deleted)).BehaviorProfile) :
+    quittingBehaviorDeviationPayoffCap reward
+          (quittingLiftDeletedProfile reward deleted profile) outside.1 -
+        quittingTerminalPayoff reward
+          (quittingLiftDeletedProfile reward deleted profile) outside.1 ≤
+      (∑ who, certificate.debtWeight who *
+        (quittingBehaviorDeviationPayoffCap (quittingDeleteReward reward deleted) profile who -
+          quittingTerminalPayoff (quittingDeleteReward reward deleted) profile who)) +
+      certificate.neverExcess *
+        ∏ who, (quittingBehaviorStoppingLaw
+          (quittingDeleteReward reward deleted) (profile who) none).toReal := by
+  let : Nonempty {who : Option (QuittingChildPlayer deleted) // ¬ who = none} :=
+    Nonempty.map (fun who => ⟨some who, Option.some_ne_none who⟩)
+      (inferInstance : Nonempty (QuittingChildPlayer deleted))
+  apply quittingLiftDeletedProfile_outsideTerminalDebt_le_of_oneOutsiderBound_add_at
+    deleted reward outside certificate.debtWeight
+  simpa only [quietOutsiderChildLaws_childWithOutsiderChildProfile] using
+    withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess
+      (quittingChildWithOutsiderReward reward deleted outside) certificate
+      (quittingChildWithOutsiderChildProfile reward deleted outside profile)
 
 omit [Fintype α] in
 private theorem childWithOutsider_singleton_positive
@@ -233,5 +264,79 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_finFour_withdrawalFuture
   refine ⟨payoff, fun ε hε => ?_⟩
   obtain ⟨profile, threshold, hwitness⟩ := hwitnesses ε hε
   exact ⟨quittingLiftDeletedProfile reward deleted profile, threshold, hwitness⟩
+
+/-- A low-player child with a nonnegative singleton selects original-game
+quiet profiles with vanishing full regret and joint Never. The finite constants
+are selected from the original certificates before the requested scale. -/
+theorem exists_quietProfiles_smallExploitability_smallNever_of_withdrawalFutureJoinFamily
+    (deleted : α → Prop) [DecidablePred deleted]
+    [Nonempty {who : α // deleted who}]
+    (reward : {A : Finset α // A.Nonempty} → Payoff α)
+    (kind : {who : α // deleted who} → WithdrawalFutureJoinKind)
+    (certificate : ∀ outside : {who : α // deleted who},
+      WithdrawalFutureJoinRewardCertificate (kind outside)
+        (quittingChildWithOutsiderReward reward deleted outside))
+    (hcard : Fintype.card (QuittingChildPlayer deleted) ≤ 3)
+    (pivot : QuittingChildPlayer deleted)
+    (hpivot : 0 ≤ reward (quittingSingletonTerminal pivot.1) pivot.1) :
+    let : Nonempty α := ⟨pivot.1⟩
+    ∃ factor residual : ℝ, 1 ≤ factor ∧ 0 ≤ residual ∧
+      (∀ outside, (∑ who, (certificate outside).debtWeight who) ≤ factor) ∧
+      (∀ outside, (certificate outside).neverExcess ≤ residual) ∧
+      ∀ delta : ℝ, 0 < delta →
+        ∃ profile : (quittingGame (quittingDeleteReward reward deleted)).BehaviorProfile,
+          quittingTerminalExploitability reward
+              (quittingLiftDeletedProfile reward deleted profile) ≤
+            factor * (delta + delta ^ 2) + residual * delta ∧
+          (∏ who, (quittingBehaviorStoppingLaw
+            (quittingDeleteReward reward deleted) (profile who) none).toReal) ≤ delta := by
+  let : Nonempty α := ⟨pivot.1⟩
+  let : Nonempty (QuittingChildPlayer deleted) := ⟨pivot⟩
+  let weight := fun outside : {who : α // deleted who} =>
+    ∑ who, (certificate outside).debtWeight who
+  let factor := max 1 (Finset.univ.sup' Finset.univ_nonempty weight)
+  let residual := max 0 (Finset.univ.sup' Finset.univ_nonempty
+    (fun outside => (certificate outside).neverExcess))
+  have hfactor : 1 ≤ factor := le_max_left _ _
+  have hresidual : 0 ≤ residual := le_max_left _ _
+  have hweight : ∀ outside, (∑ who, (certificate outside).debtWeight who) ≤ factor := by
+    intro outside
+    exact (Finset.le_sup' (f := weight) (Finset.mem_univ outside)).trans (le_max_right _ _)
+  have hexcess : ∀ outside, (certificate outside).neverExcess ≤ residual := by
+    intro outside
+    exact (Finset.le_sup' (f := fun outside => (certificate outside).neverExcess)
+      (Finset.mem_univ outside)).trans (le_max_right _ _)
+  refine ⟨factor, residual, hfactor, hresidual, hweight, hexcess, ?_⟩
+  intro delta hdelta
+  have hsingleton : 0 ≤ quittingDeleteReward reward deleted
+      (quittingSingletonTerminal pivot) pivot := by
+    change 0 ≤ reward _ _
+    have heq : quittingExtendDeletedCoalition deleted (quittingSingletonTerminal pivot) =
+        quittingSingletonTerminal pivot.1 := by
+      congr 1
+    rw [heq]
+    exact hpivot
+  obtain ⟨profile, hchild, hnever⟩ :=
+    exists_terminalProfile_smallExploitability_smallNever_of_nonnegativeSingleton
+      (quittingDeleteReward reward deleted) hcard pivot hsingleton hdelta
+  let jointNever := ∏ who, (quittingBehaviorStoppingLaw
+    (quittingDeleteReward reward deleted) (profile who) none).toReal
+  have hjoint : 0 ≤ jointNever := Finset.prod_nonneg fun _ _ => ENNReal.toReal_nonneg
+  have hnash := isεAsymptoticNash_quietLift_of_outsideTerminalDebtBounds_add
+    deleted reward (fun outside => (certificate outside).debtWeight)
+    (fun outside who => (certificate outside).debtWeight_nonneg who)
+    factor hfactor hweight (residual * jointNever) (mul_nonneg hresidual hjoint)
+    (add_nonneg hdelta.le (sq_nonneg delta)) profile
+    (fun outside =>
+      (quittingLiftDeletedProfile_outsideDebt_le_add_neverExcess_of_withdrawalFutureJoin
+        deleted reward outside (kind outside) (certificate outside) profile).trans
+        (add_le_add le_rfl (mul_le_mul_of_nonneg_right (hexcess outside) hjoint)))
+    (isεAsymptoticNash_of_quittingTerminalExploitability_le profile hchild)
+  refine ⟨profile, ?_, hnever⟩
+  exact (quittingTerminalExploitability_le_of_isεAsymptoticNash reward
+    (quittingLiftDeletedProfile reward deleted profile)
+    (add_nonneg (mul_nonneg (le_trans zero_le_one hfactor)
+      (add_nonneg hdelta.le (sq_nonneg delta))) (mul_nonneg hresidual hjoint)) hnash).trans
+    (add_le_add le_rfl (mul_le_mul_of_nonneg_left hnever hresidual))
 
 end GameTheory
