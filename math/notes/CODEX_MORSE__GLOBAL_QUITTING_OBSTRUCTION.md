@@ -75,6 +75,10 @@ root at every source strictly below some singleton. A unique bad mixed
 pair root has negative index when the two pair-join gaps have the same
 strict sign. The full theorem, weak strategic boundary, and an exact
 signed mutual-join fixture are recorded; no export is requested yet.
+Section 19 preserves the exact opposite-sign obstruction to this local
+root-selection argument. Section 20 is an unreviewed full-four-core
+boxed-charge proof and exact coverage fixture, intended for consolidation
+with the general cardinality theorem, not a separate export.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -2626,3 +2630,207 @@ The grand-row change makes the lost global premium signs explicit
 without changing the actual root set. Any opposite-sign extension
 must use a genuinely global relation or strategic construction;
 further attempts to force a second root at this source are retired.
+
+## 20. A full four-player core with no protected linear floor
+
+**Ordinary unreviewed proof and exact coverage fixture.** This was developed
+after independently checking the boxed triple-charge mechanism. It reaches
+a greatest premium core of size four and does not assume an aggregate
+forced-Quit floor. The general cardinality version independently developed
+by CODEX_BROUWER is intended to absorb this special case; no separate
+export is requested here.
+
+### A sufficient actual four-core charge criterion
+
+Let I={0,1,2,3}, s_i=r_i({i}), M=max|r_i(S)|, and assume the only
+possible premium trap is I itself. If I is not a trap, every active
+support has a low participant endpoint and the existing product-low
+producer applies when s≥0. Suppose therefore that I is the unique trap.
+For every nonempty proper T⊊I define two DIFFERENT actual-table sums:
+
+    P(T)=∑_{i∈I\T}[r_i(T∪{i})−s_i],
+    L(T)=∑_{i∈I\T}[r_i(T∪{i})−r_i(T)].
+
+Assume positive d,τ,g,l satisfy
+
+    |T|=1:  P(T)≤−d,  L(T)≤−g;
+    |T|=2:  P(T)≤0,   L(T)≤0;
+    |T|=3:  P(T)≤τ,   L(T)≤−l,                     (94)
+
+and
+
+    4√(d/τ)·(g+l d/τ) > ∑_i s_i+4M.               (95)
+
+These are finite raw tests. In particular the size-three P bound is
+just a bound on each player's grand-coalition participant premium.
+No player is removed from the actual game and no root or phase data
+is supplied.
+
+Choose B>M sufficiently close to M, with B<M+2, so (95) still holds
+when M on its right is replaced by B. Then EVERY absorbing exact
+root at EVERY source in [−B,B]^I has a successor with some coordinate
+at most its singleton. For any nontrap active support this follows
+by averaging the low active participant's within-support rewards.
+It remains to check an all-active root with all Q_i>s_i.
+
+The aggregate gap identity is
+
+    ∑_i(1−q_i)(Q_i−C_i)
+      =c(q)∑_i(s_i−v_i)+∑_{∅≠T⊊I}μ(T)L(T).       (96)
+
+If some but not all hazards are sure, the first term vanishes and
+I minus any nonsure active player has positive probability and a
+strictly negative size-three L coefficient. All other coefficients
+are nonpositive, contradicting Nash. If all hazards are sure, the
+four size-three inequalities give profitable withdrawal. Thus all
+four active hazards lie in (0,1).
+
+Set z_i=q_i/(1−q_i)>0, U=∑z_i, and E₃=∑_{|T|=3}∏_{j∈T}z_j.
+Dividing each positive Quit premium by its opponent Continue
+probability and summing gives
+
+    0<∑_{∅≠T⊊I} P(T)∏_{j∈T}z_j≤−dU+τE₃.
+
+Hence dU<τE₃. Maclaurin's elementary symmetric inequality gives
+E₃≤U³/16, so U>4√(d/τ). The same bound follows by maximizing
+the degree-three elementary symmetric sum at fixed U; its maximum
+occurs at four equal nonnegative coordinates. Indeed, with two coordinates
+a,b and the others c,e, E₃=ab(c+e)+(a+b)ce. Averaging unequal a,b
+strictly increases it whenever c+e>0. A positive maximum cannot have
+fewer than three positive coordinates; averaging then forces all four
+coordinates equal. Their value U/4 gives E₃=U³/16.
+
+Interior support indifference and (96) imply the EXACT source charge
+
+    ∑_i(s_i−v_i)=∑_{∅≠T⊊I}[−L(T)]∏_{j∈T}z_j
+      ≥gU+lE₃>(g+l d/τ)U
+      >4√(d/τ)·(g+l d/τ).
+
+Boxed sources make the left side at most ∑s_i+4B, a contradiction.
+This proves the actual return assertion; it does not hold for arbitrary
+unbounded annotations.
+
+For completeness, this return excludes a C¹ full potential without an
+extra root-selection or invariant-floor assumption. Minimize on
+D={v∈[−B,B]^I: some v_i≤s_i}. A minimum below any singleton is
+contradicted by an absorbing root returning to D. At the resulting
+singleton-boundary minimum, the signed face inequality excludes a
+unique binding coordinate, and positive coordinate variations give
+nonnegative binding partials. Lower any binding coordinate by ε.
+Every exact root there absorbs and returns to the SAME D. As in
+Section 18, the signed charge estimate ε≤(3M+B)a and full drift
+force a positive backward derivative, contradicting its nonpositive
+sign. This proof uses the complete Nash relation, including all
+four-player collisions.
+
+For nonnegative singletons, the existing Fin4 normal polynomial
+obstruction restricts from M+2 to B for the SAME polynomial and table,
+and yields a fixed uniform-equilibrium payoff. All-zero singletons
+have the direct all-Never exit. The explicit source declarations are
+the normality theorem, polynomial characterization, exact restriction
+and `IsQuittingFullExactRootPotential.mono_box` inspected for Sections
+17–18 and the boxed-triple review. No strategic completeness theorem
+for a bounded controller is assumed.
+
+### Exact full-core table and all fourteen child falsifiers
+
+The following table has s=(1,0,0,0) and M=3.
+
+| S | r(S) |
+|---|---|
+| 0 | (1,−1,−1,−1) |
+| 1 | (2,0,2,−1) |
+| 2 | (2,−1,0,2) |
+| 3 | (0,2,−1,0) |
+| 01 | (−1,−2,2,2) |
+| 02 | (−1,2,−1/2,2) |
+| 03 | (1/2,2,2,−2) |
+| 12 | (3,−1/2,−2,2) |
+| 13 | (3,−2,2,−1/2) |
+| 23 | (3,2,−2,−2) |
+| 012 | (−1,−2,−2,2) |
+| 013 | (−1,−2,2,−2) |
+| 023 | (−1,2,−2,−2) |
+| 123 | (3,−2,−2,−2) |
+| 0123 | (11/10,1/10,1/10,1/10) |
+
+Every nonsingleton proper participant premium is negative. Every grand
+participant premium is 1/10. Thus the ONLY trap is all four players.
+For the four singleton T, P(T)=−9/2 exactly, while L(T) in order
+0,1,2,3 is −3/2,−13/2,−13/2,−9/2. For every pair T,
+P(T)=−4 and L(T)=−8. For every triple T, P(T)=1/10 and
+L(T)=−19/10. Consequently (94) holds with
+
+    d=9/2, τ=1/10, g=3/2, l=19/10.
+
+Even the weaker source lower bound 4g√(d/τ)=6√45 exceeds
+∑s_i+4M=13; its square is 1620>169. The full bound in (95)
+is 348√45. This is not a limiting zero-premium or zero-margin case.
+Slightly slackening the parameters gives a full-dimensional nearby
+raw region with the same trap structure.
+
+There is NO nonzero nonnegative linear forced-Quit floor. For any
+nonnegative weights λ, sum its putative floor inequalities over the
+four product laws consisting of a single sure quitter. Each player
+has one pair premium −1/2 and two pair premiums −2, giving
+
+    ∑_{j∈I}∑_i λ_i[r_i({i,j})−s_i]
+      =−(9/2)∑_i λ_i.
+
+Nonnegativity would force λ=0. In particular the weighted-floor
+criterion cannot apply. The protected-player set is empty. Product-low
+fails at the all-sure law, since all four Quit premiums are 1/10.
+The triple-only boxed-charge criterion does not apply because the
+actual premium core is all four players, not a proper triple.
+
+There are no pure equilibria. Each singleton has a profitable join of
+size 1/2 according to the directed cycle
+
+    0 → 2 → 1 → 3 → 0.                              (97)
+
+Each pair has a participant who strictly improves by withdrawal;
+one may choose players 0,0,3,2,1,2 for pairs 01,02,03,12,13,23,
+with gains 3,3,1,4,4,1. Every triple participant gains 4 by
+withdrawal, and every grand-coalition participant gains 19/10.
+All Never is defeated by player 0's singleton.
+
+Moreover EVERY proper nonempty child A has an exact terminal Nash
+profile whose quiet lift has a profitable omitted player. Choose an
+edge j→k of (97) leaving A; such an edge exists because a proper
+nonempty set cannot be closed under this four-cycle. Let j quit
+surely at date zero and all other child players choose Never. The
+only profitable joining player against singleton j is k, who lies
+outside A. Every other child's join payoff is at least one BELOW
+its passive singleton reward. If owner j deviates and prevents the
+first exit, its opponents stay at Never and it cannot exceed its
+nonnegative singleton. This checks every complete behavioral deviation.
+
+The exact choices (owner,omitted player), in child order, are
+
+    0:(0,2), 1:(1,3), 2:(2,1), 3:(3,0),
+    01:(0,2), 02:(2,1), 03:(0,2), 12:(1,3),
+    13:(3,0), 23:(2,1), 012:(1,3), 013:(0,2),
+    023:(2,1), 123:(3,0).
+
+All child debts and joint-Never masses are zero, while the displayed
+omitted player gains exactly 1/2. Thus every proper child fails the
+universal fixed nonnegative weighted-child-debt-plus-Never extension
+bound for at least one omitted player. No diffusion or limiting
+profile argument is needed for these fourteen witnesses.
+
+The singleton matrix is exactly the matrix in Section 17, so its
+degree-one and inverse-screen failures are unchanged. Of fifteen
+first-order response partitions, only the discrete partition and
+0|123 survive. At q=(t,0,0,0), the three child response coordinates
+are t−2t²,t−t²/2,t−2t², breaking the latter. The singleton0 column
+harms every other player, preventing the specified signed four-cycle
+singleton adapter. All pairs have negative participant premiums,
+so a producer imposing a mutual-positive pair cannot consume this
+table through that hypothesis. These are exact named-source boundaries,
+not exclusion of every possible selected chronology or stationary UE.
+
+Next requested check: falsify the full-core coefficient identities and
+the elementary-symmetric source charge, independently verify the table
+and cycle of fourteen exact child witnesses, and combine this fixture
+with the strongest general boxed-charge theorem rather than export a
+redundant four-player special case.
