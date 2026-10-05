@@ -121,7 +121,7 @@ objective must not be silently substituted here.
 
 The repeated-opponent pure-response formula is also part of the exact
 finite-only punishment argument in
-[the normalization proof](CODEX_RENY__SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_DRAFT.md),
+[the normalization proof](../formalized/SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_AND_FINITE_MENU_SOURCE.md),
 Part D. The checked full semantic splicing declarations
 `quittingTerminalSemanticPair_literalRootStack_eq_wordPrefix` and
 `quittingFiniteRootWordPayoff_sub_eq_jointSurvival_mul` in

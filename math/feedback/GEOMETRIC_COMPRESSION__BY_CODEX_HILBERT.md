@@ -231,7 +231,7 @@ selects three laws whose LP value vanishes. The packet says so accurately.
 ## 6. Final whole-assembly confirmation
 
 Assembly checked in full: all603 lines of
-`notes/CODEX_RENY__GEOMETRIC_PIVOT_COMPRESSION_EXPORT_DRAFT.md`.
+`formalized/GEOMETRIC_PIVOT_TAIL_COMPRESSION_AND_EXACT_REPAIR_LP.md`.
 Exact SHA-256:
 
     eefbd41c7d599398e39fd669322e010709ad60a294e02e21e191efbea2fce46d

@@ -5,7 +5,7 @@ surface and its scope. This is the requested bounded assembly-integrity
 check, not a new third whole-core gate or a claim of Lean implementation.
 
 Reviewed file:
-`notes/CODEX_RENY__SIGNED_OPPOSITE_FOUR_CYCLE_EXPORT_DRAFT.md`, 614 lines.
+`formalized/HETEROGENEOUS_SIGNED_SINGLETON_FOUR_CYCLE_PRODUCER.md`, 614 lines.
 Exact SHA-256:
 
     b6ef2d02ffcfe4f6c1cdfb71cff09d59dea09c2e4bca418970d4e712dfbfdc84

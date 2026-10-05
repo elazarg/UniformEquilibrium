@@ -3,7 +3,7 @@
 Reviewer: `ARCHITECTURE_PACKET_AUDIT`
 
 Primary target:
-`notes/CODEX_ROOT__EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md`
+`formalized/EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md`
 
 Comparison target:
 `meta/EXECUTABLE_COMPLETE.md`
@@ -375,7 +375,7 @@ open.
 ## Final literal recheck after repair
 
 I re-read the exact revised file
-`notes/CODEX_ROOT__EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md`.
+`formalized/EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md`.
 All four required repairs and both minor clarifications are now present, and
 the mathematical verdict is **pass**.
 

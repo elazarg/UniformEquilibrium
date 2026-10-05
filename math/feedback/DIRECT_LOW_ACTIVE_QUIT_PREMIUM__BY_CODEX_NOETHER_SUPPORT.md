@@ -24,7 +24,7 @@ I subsequently read all 316 lines of the frozen
 [author manuscript](../notes/CODEX_TARSKI_PREMIUM__PRODUCT_LOW_QUIT_STRICTLY_BEYOND_SUPPORTWISE_LP.md),
 SHA256 `34963b323a6c6b08c642bcfebdf144368a878e3cae7de781c41f0381e5ac9fd5`,
 and all 315 lines of the
-[final export-format draft](../notes/PRODUCT_LOW_QUITTING_PREMIUMS_STRICT_EXTENSION_UNIFORM_EQUILIBRIUM_EXPORT_DRAFT.md),
+[final export-format draft](../formalized/PRODUCT_LOW_QUITTING_PREMIUMS_STRICT_EXTENSION_UNIFORM_EQUILIBRIUM.md),
 SHA256 `836eb376e4f26b6b4ee7f865759ab2cf5c99e10ead3bc75e91b24c91ec0475a7`.
 The final draft's changed presentation, added exact boundary test, source
 correspondence, and proposed Lean handoff were all included in this review.

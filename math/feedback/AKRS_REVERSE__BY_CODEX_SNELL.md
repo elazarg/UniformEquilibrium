@@ -143,7 +143,7 @@ S.3 implication itself.
 ## 6. Delta audit of the assembled candidate
 
 Candidate:
-`notes/CODEX_NEGATIVE_CERTIFICATE__AKRS_REVERSE_S3_NULL_TAIL_AND_HARDNESS.md`
+`formalized/AKRS_REVERSE_S3_NULL_TAIL_AND_HARDNESS.md`
 
 SHA-256:
 `65e8358f8d2a81dc15278515d388ecedf5b1f1aa6caad36dc3f529f97b62ee71`

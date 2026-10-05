@@ -20,31 +20,32 @@ This calls for targeted declaration lookup, not a survey of the 550+ KLOC
 codebase. Use the frontier and toolkit as indexes, then read the few source
 files supporting the chosen question:
 
-- [`../../UniformEquilibrium/`](../../UniformEquilibrium/) for the integrated
+- [`../UniformEquilibrium/`](../UniformEquilibrium/) for the integrated
   game-semantic definitions, constructions, diagnostics, boundaries, and exact
   conjecture declaration;
-- [`../../Literature/`](../../Literature/) for paper-by-paper Lean statements in
+- [`../Literature/`](../Literature/) for paper-by-paper Lean statements in
   the papers' own order and terms, including explicit `sorry` markers for
   unproved literature claims; and
-- [`../../literature/`](../../literature/) for gitignored local PDFs,
+- [`../literature/`](../literature/) for gitignored local PDFs,
   transcriptions, extraction notes, and other source evidence.
 
 The first two directories differ fundamentally. A theorem in
 `UniformEquilibrium/` is checked under its stated imports. A declaration in
-`Literature/` may intentionally end in `sorry`, the lane is not built, and
-nothing imports it. Lowercase `literature/` is a reading room, not theorem
+`Literature/` may intentionally end in `sorry`; its library compiles, but a
+successful build does not certify those claims, and nothing outside the lane
+imports it. Lowercase `literature/` is a reading room, not theorem
 truth. See [`SOURCES.md`](SOURCES.md) for a concrete reading order and its flat
 organization convention.
 
 Use the live documents below as maps and synthesis rather than substitutes for
 those sources:
 
-- [`../../docs/SEMANTICS.md`](../../docs/SEMANTICS.md) for the exact model and
+- [`../docs/SEMANTICS.md`](../docs/SEMANTICS.md) for the exact model and
   quantifier contract;
-- [`../../docs/STATUS.md`](../../docs/STATUS.md) for declaration status;
-- [`../../docs/FRONTIER.md`](../../docs/FRONTIER.md) for the current dependency
+- [`../docs/STATUS.md`](../docs/STATUS.md) for declaration status;
+- [`../docs/FRONTIER.md`](../docs/FRONTIER.md) for the current dependency
   boundary; and
-- [`../../docs/TOOLKIT.md`](../../docs/TOOLKIT.md) for existing consumers,
+- [`../docs/TOOLKIT.md`](../docs/TOOLKIT.md) for existing consumers,
   producers, and explicit nonclaims.
 
 Two established semantic endpoints discipline every complete solution:

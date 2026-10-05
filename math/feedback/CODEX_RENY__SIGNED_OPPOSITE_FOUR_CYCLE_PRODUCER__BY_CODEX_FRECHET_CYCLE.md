@@ -339,7 +339,7 @@ retaining the smaller root and the two signed floor identities exactly.
 ## 9. Final assembled-surface confirmation
 
 I read the complete final assembled packet
-[`CODEX_RENY__SIGNED_OPPOSITE_FOUR_CYCLE_EXPORT_DRAFT.md`](../notes/CODEX_RENY__SIGNED_OPPOSITE_FOUR_CYCLE_EXPORT_DRAFT.md),
+[`HETEROGENEOUS_SIGNED_SINGLETON_FOUR_CYCLE_PRODUCER.md`](../formalized/HETEROGENEOUS_SIGNED_SINGLETON_FOUR_CYCLE_PRODUCER.md),
 including its exact statement, semantics, source comparison, full proof,
 boundary examples, adapter, proposed formalization, and nonclaims. I did not
 read the other review. The verified full-file SHA-256 is

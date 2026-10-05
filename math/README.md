@@ -64,14 +64,14 @@ Claude copy.
   remainder, or another reason not to keep them in the active queue. Follow
   the packet's disposition note; develop repairs in owned notes and feedback,
   and return a packet to `exports/` only after the normal gate is met again.
-- [`archive/`](archive/README.md): recoverable non-mathematical artifacts and
-  dated lifecycle manifests. Research notebooks remain at stable paths rather
-  than being moved merely because they are old or superseded.
+- [`archive/`](archive/README.md): retained historical evidence needed to
+  interpret an argument or audit. Ordinary edit and retirement history belongs
+  in Git, not another archive copy.
 - [`questions/`](questions/README.md): the maintained mathematical question
-  bank. Project coordination and formalization agents keep its exact capstones,
-  refinements, and historical resolutions current; ordinary conference
-  researchers use it as an independent question pool and answer in owned
-  notebooks.
+  bank. Project coordination and formalization agents keep its exact capstones
+  and refinements current; resolutions belong outside this folder. Ordinary
+  conference researchers use it as an independent question pool and answer
+  in owned notebooks.
 - [`formalized/`](formalized/): formalization-status updates written by
   formalization agents about conference outputs. Math agents may read these
   updates, but must not write in this folder.
@@ -132,6 +132,12 @@ Feedback should either remove an obstruction, expose a precise obstruction, or
 suggest a concrete next lemma. Polite summaries without mathematical content
 are unnecessary.
 
+Favor a few independent attempts at complete mechanisms over many small
+conditional constructions. A new formulation must earn its place by solving
+something the old formulation could not. Keep routine coordination brief and
+do full independent reviews when a serious candidate is ready, not after every
+exploratory calculation.
+
 Researchers may abandon a direction at any time. Preserve the strongest true
 statement, the smallest counterexample, and the reason the original route
 failed; these are often the most useful conference outputs.
@@ -155,3 +161,13 @@ External formalizers consume only `exports/`. They independently check the
 mathematics and write Lean in the repository's normal lanes, under the root
 project policy. An exported packet means "accepted for formalization," never
 "proved in Lean."
+
+## Versioned maintenance
+
+The coordinator commits and pushes scoped conference changes. Before removing
+an obsolete note, verify that its contents are in Git and that no unique useful
+mathematics or live objection is being lost. Retarget references when an exact
+copy or a stronger self-contained replacement is retained. Git preserves the
+retired text; duplicate drafts need not remain on the research board. Do not
+alter frozen exports for cleanup or include another agent's unrelated changes
+in a conference commit.

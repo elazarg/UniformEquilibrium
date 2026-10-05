@@ -48,7 +48,7 @@ question or a producer of unbounded charge. The existential weighted
 family remains open for arbitrary contrary-case tables.
 
 Only this theorem is assembled for final-surface confirmation in
-`notes/CODEX_RENY__ABSORPTION_WEIGHTED_FORWARD_PACKET_REDUCTION_EXPORT_DRAFT.md`.
+`formalized/ABSORPTION_WEIGHTED_FORWARD_PACKET_REDUCTION.md`.
 The assembly must retain those limits and must not combine in the SUM
 entrance as if it produced the weighted inputs.
 

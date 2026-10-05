@@ -45,24 +45,24 @@ It need not read the current producer machinery at all.
 
 ## 1. `UniformEquilibrium/`: the main Lean source
 
-[`../../UniformEquilibrium/`](../../UniformEquilibrium/) contains the actual
+[`../UniformEquilibrium/`](../UniformEquilibrium/) contains the actual
 game-semantic development. After selecting a declaration through the bounded
 protocol, inspect its exact imports and hypotheses in the source file.
 Potentially relevant regions include:
 
-- [`Conjecture/`](../../UniformEquilibrium/Conjecture/) for the general
+- [`Conjecture/`](../UniformEquilibrium/Conjecture/) for the general
   proposition and its relation to the quitting specialization;
-- [`Quitting/`](../../UniformEquilibrium/Quitting/) for the model-specific
+- [`Quitting/`](../UniformEquilibrium/Quitting/) for the model-specific
   constructions, semantic endpoints, paths, cycles, debts, punishments, and
   known classifications;
-- [`Diagnostics/Quitting/`](../../UniformEquilibrium/Diagnostics/Quitting/) for
+- [`Diagnostics/Quitting/`](../UniformEquilibrium/Diagnostics/Quitting/) for
   exact obstructions, boundary examples, and current producer interfaces;
-- [`ProofView/`](../../UniformEquilibrium/ProofView/) for the semantic objects
+- [`ProofView/`](../UniformEquilibrium/ProofView/) for the semantic objects
   and bridges used by the project; and
-- [`Certificates/`](../../UniformEquilibrium/Certificates/) for reusable
+- [`Certificates/`](../UniformEquilibrium/Certificates/) for reusable
   sufficient architectures and their explicit hypotheses.
 
-Also inspect [`../../MathUE/`](../../MathUE/) when the argument uses
+Also inspect [`../MathUE/`](../MathUE/) when the argument uses
 game-independent probability, topology, optimization, transport, or finite
 mathematics. Do not rebuild a theorem already present under a different local
 name.
@@ -74,15 +74,16 @@ still open.
 
 ## 2. `Literature/`: papers represented in Lean
 
-Tracked [`../../Literature/`](../../Literature/) is the preferred bridge from
+Tracked [`../Literature/`](../Literature/) is the preferred bridge from
 papers to exact formal statements. Each paper has one Lean file in the paper's
-own terms. Read [`../../Literature/README.md`](../../Literature/README.md)
+own terms. Read [`../Literature/README.md`](../Literature/README.md)
 before relying on the lane:
 
 - files directly under `Literature/` have complete statement coverage;
-- files under [`future/`](../../Literature/future/) may be partial or stubs;
+- files under [`future/`](../Literature/future/) may be partial or stubs;
 - an unproved paper claim is intentionally marked by `sorry`;
-- the lane is not a `lean_lib`, is not built, and is imported nowhere; and
+- both areas compile through the `Literature` library but are imported nowhere
+  outside that lane; and
 - a faithful statement is evidence about what a paper says, not a project
   theorem.
 
@@ -93,7 +94,7 @@ theorem or section and then spell out the adapter still needed.
 
 ## 3. lowercase `literature/`: local reading material
 
-Gitignored [`../../literature/`](../../literature/) contains local PDFs,
+Gitignored [`../literature/`](../literature/) contains local PDFs,
 archives, transcriptions, and reading notes. It is useful evidence and may be
 cleaned up, but it is not versioned theorem truth. Never cite a derived note
 when the original paper is available, and never infer correctness from the

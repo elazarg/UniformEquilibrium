@@ -9,7 +9,7 @@ declarations. It does not confer an L, A, or C seal, assert a new Lean build,
 or authorize self-export by the author.
 
 Reviewed artifact:
-[ORDERED_QUITTING_PREMIUMS_UNIFORM_EQUILIBRIUM_EXPORT_DRAFT.md](../notes/ORDERED_QUITTING_PREMIUMS_UNIFORM_EQUILIBRIUM_EXPORT_DRAFT.md),
+[ORDERED_QUITTING_PREMIUMS_UNIFORM_EQUILIBRIUM.md](../formalized/ORDERED_QUITTING_PREMIUMS_UNIFORM_EQUILIBRIUM.md),
 643 lines, SHA-256
 `a42680e45fe7a8a373337a624808eefee1fc5a3b53507eda32cb5a7e5e7f3b6e`.
 All sections, including the auxiliary theorem, independent Fin4 composition,

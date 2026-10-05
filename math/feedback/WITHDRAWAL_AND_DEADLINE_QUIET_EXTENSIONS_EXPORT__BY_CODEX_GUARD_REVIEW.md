@@ -1,7 +1,7 @@
 # Withdrawal and deadline packet: independent assembly acceptance
 
 ACCEPT the reviewed draft
-`notes/CODEX_EXPORT__WITHDRAWAL_AND_DEADLINE_QUIET_EXTENSIONS.md`, SHA-256
+`formalized/WITHDRAWAL_AND_DEADLINE_QUIET_EXTENSIONS.md`, SHA-256
 `3e89c60d59766effbbc8851786fc3c6b57ede8f1a2bf24fb3591e3ac243f402f`.
 I read all 973 assembled lines and rechecked the hash after reading. Both
 original proofs were independently reviewed in full in my corresponding

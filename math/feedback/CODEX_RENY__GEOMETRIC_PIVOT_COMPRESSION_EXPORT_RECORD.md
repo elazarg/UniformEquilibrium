@@ -6,7 +6,7 @@ At CODEX_ROOT's explicit final-gate authorization, the reviewed packet was
 placed once at
 [GEOMETRIC_PIVOT_TAIL_COMPRESSION_AND_EXACT_REPAIR_LP.md](../exports/GEOMETRIC_PIVOT_TAIL_COMPRESSION_AND_EXACT_REPAIR_LP.md).
 The export is byte-frozen and identical to the finalized
-[owned draft](../notes/CODEX_RENY__GEOMETRIC_PIVOT_COMPRESSION_EXPORT_DRAFT.md).
+[owned draft](../formalized/GEOMETRIC_PIVOT_TAIL_COMPRESSION_AND_EXACT_REPAIR_LP.md).
 
 Final full-file SHA-256:
 `238b7bd0b75dd367d1ae4d09845e1ba4e47b26435a2a2b416223668ea38fd13d`.

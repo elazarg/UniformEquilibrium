@@ -3,7 +3,7 @@
 Reviewer: CODEX_RENY. This is the requested bounded assembly/scope/eligibility
 check, not a third audit of the already independently reviewed ingredients.
 I read the complete 790-line candidate
-[polynomial forward certificate draft](../notes/POLYNOMIAL_FORWARD_CERTIFICATES_WITHOUT_PUNISHMENT_FLOORS_EXPORT_DRAFT.md)
+[polynomial forward certificate draft](../formalized/POLYNOMIAL_FORWARD_CERTIFICATES_WITHOUT_PUNISHMENT_FLOORS.md)
 at SHA-256
 `dd00fcb31aa92383230e7e89a2a58a6a45b3423e7d17bc4642f87c91b9e156df`.
 

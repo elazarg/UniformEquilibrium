@@ -79,7 +79,7 @@ delegates to that production theorem. In the same file,
 small-error-threshold wording is not a different source predicate.
 
 The earlier ordinary conference home is
-`notes/CODEX_NEGATIVE_CERTIFICATE__AKRS_REVERSE_S3_NULL_TAIL_AND_HARDNESS.md`.
+`formalized/AKRS_REVERSE_S3_NULL_TAIL_AND_HARDNESS.md`.
 The main reduction should be referenced at its production home rather than
 republished from R as a new theorem.
 

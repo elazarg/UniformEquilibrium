@@ -1,7 +1,7 @@
 # Stationary-response quotient packet: final independent assembly check
 
 Reviewed packet:
-`notes/CODEX_EXPORT__STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE.md`
+`formalized/STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE.md`
 
 Reviewed SHA-256:
 `49f0efacc29a683d421c82180f4781376a43a36e6c824f2468a8856af71136ac`

@@ -21,6 +21,11 @@ under `notes/` with their honest status.
 `archive/artifacts/` is recoverable storage.  Nothing there is consumed by the
 mathematical or formalization workflow.
 
+Tracked Git history is the default home for newly retired duplicate or obsolete
+notes. Keep an archive copy only when it remains useful evidence in its own
+right. Verify saved contents and repair references before retirement; preserve
+unique mathematical counterexamples and live objections.
+
 [GPT packet retirement](GPT_PACKET_RETIREMENT.md) maps retired submissions
 to their mathematical homes. Original submission bytes are retained; an
 archived claim must be read with its review, not treated as a new result.

@@ -368,7 +368,7 @@ review-count and link checks, and any export decision remain with ROOT.
 ## 11. Frozen final-assembly confirmation
 
 I independently read the entire 633-line assembled packet
-`notes/CODEX_RENY__SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_DRAFT.md` at SHA-256
+`formalized/SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_AND_FINITE_MENU_SOURCE.md` at SHA-256
 
     6ae5a7012f55825a89e0ea804f73b5a163b54f4c4857c0650e48ef492292bda6
 

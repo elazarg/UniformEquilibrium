@@ -8604,7 +8604,7 @@ named Lean theorem.
   the common-probe compactness obstruction) in
   `UniformEquilibrium/Diagnostics/Quitting/CounterfactualSuffixCompactnessNoGo.lean`,
   together with the reviewed `CW`/`SD`/`Case`/`Rank` contracts in
-  `CODEX_ROOT__EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md`.
+  `EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md`.
 
 - `IsQuittingRootSequenceSupportApproxNash` in
   `UniformEquilibrium/Quitting/Paths/SupportWitnessClockCollapse.lean`;

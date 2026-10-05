@@ -1,7 +1,7 @@
 # Single-pivot secant packet: final independent assembly check
 
 Reviewed packet:
-`notes/CODEX_EXPORT__SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE.md`
+`exports/SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE.md`
 
 Reviewed SHA-256:
 `d91cf597df1f45d4287b53244d4f91463ed7f9313d75748a3f0fbcb87dbdfe0c`

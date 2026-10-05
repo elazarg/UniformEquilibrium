@@ -199,7 +199,7 @@ permission to replace them by pointwise coherent inequalities.
 ## Final-byte acceptance
 
 I read every byte of the final mathematical-name candidate
-[Inverse membership stretch forces sure-core sign reversal](../notes/INVERSE_MEMBERSHIP_STRETCH_SURE_CORE_SIGN_REVERSAL.md),
+[Inverse membership stretch forces sure-core sign reversal](../formalized/INVERSE_MEMBERSHIP_STRETCH_SURE_CORE_SIGN_REVERSAL.md),
 SHA256 `70d9ea22fd61290b1f24fbccdb0df57980a66518e87b7322a61efba810ad5aa7`.
 PASS, with no unresolved mathematical objection or requested change.
 

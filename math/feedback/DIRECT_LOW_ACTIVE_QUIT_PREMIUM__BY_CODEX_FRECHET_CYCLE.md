@@ -303,7 +303,7 @@ certificate. No unresolved mathematical objection remains at this hash.
 ## 9. Complete final export-draft review
 
 I read the ENTIRE 315-line final draft
-[PRODUCT_LOW_QUITTING_PREMIUMS_STRICT_EXTENSION_UNIFORM_EQUILIBRIUM_EXPORT_DRAFT](../notes/PRODUCT_LOW_QUITTING_PREMIUMS_STRICT_EXTENSION_UNIFORM_EQUILIBRIUM_EXPORT_DRAFT.md),
+[PRODUCT_LOW_QUITTING_PREMIUMS_STRICT_EXTENSION_UNIFORM_EQUILIBRIUM_EXPORT_DRAFT](../formalized/PRODUCT_LOW_QUITTING_PREMIUMS_STRICT_EXTENSION_UNIFORM_EQUILIBRIUM.md),
 verified at SHA-256
 `836eb376e4f26b6b4ee7f865759ab2cf5c99e10ead3bc75e91b24c91ec0475a7`.
 This check did not use the other review. Verdict: **PASS**. No unresolved

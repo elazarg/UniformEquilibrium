@@ -1,7 +1,7 @@
 # Guarded crossed-response packet: independent assembly acceptance
 
 ACCEPT the reviewed draft
-`notes/CODEX_EXPORT__GUARDED_CROSSED_RESPONSE_DEGREE_ESCAPE.md`, SHA-256
+`formalized/GUARDED_CROSSED_RESPONSE_DEGREE_ESCAPE.md`, SHA-256
 `95737353231b3f4838257faf5c56efaf23fde44879ae0f0bb2e498255ec8f6f6`.
 I read all 858 assembled lines. The original guarded and crossed proofs
 were independently reviewed in full in my two original-manuscript reviews;

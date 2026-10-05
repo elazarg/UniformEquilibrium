@@ -241,7 +241,7 @@ explicit handoff is recorded below.
 ## Final-byte acceptance
 
 I accept the complete export-format manuscript
-[supportwise weighted quitting premiums](../notes/SUPPORTWISE_WEIGHTED_QUITTING_PREMIUMS_UNIFORM_EQUILIBRIUM_EXPORT_DRAFT.md),
+[supportwise weighted quitting premiums](../formalized/SUPPORTWISE_WEIGHTED_QUITTING_PREMIUMS_UNIFORM_EQUILIBRIUM.md),
 392 lines, SHA-256
 `38d4975b7e630e59878332bdb96190932ede7e4be8c414e0fe11c201dcabcef7`.
 This acceptance applies to those exact bytes, including a byte-identical

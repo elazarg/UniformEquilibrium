@@ -356,7 +356,7 @@ Exact declarations inspected for this construction and its comparison:
   signed reward coordinates.
 
 The signed singleton-cycle producer in RENY's
-`CODEX_RENY__SIGNED_OPPOSITE_FOUR_CYCLE_EXPORT_DRAFT.md` requires a negative
+`HETEROGENEOUS_SIGNED_SINGLETON_FOUR_CYCLE_PRODUCER.md` requires a negative
 Hamiltonian comparison cycle. In (11), the negative graph is just two
 disjoint two-cycles, so no labeling supplies that hypothesis. The record
 was inspected for its exact raw hypotheses, not audited again as a proof.

@@ -3,7 +3,7 @@
 Reviewer: `ARCHITECTURE_EXPORT_GATE`
 
 Exact candidate reviewed:
-`notes/CODEX_ROOT__EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md`
+`formalized/EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md`
 
 Additional comparison target:
 `meta/EXECUTABLE_COMPLETE.md`

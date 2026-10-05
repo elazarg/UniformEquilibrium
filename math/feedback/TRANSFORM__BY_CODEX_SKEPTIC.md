@@ -330,7 +330,7 @@ is authorized by this single review.
 ## 9. Final assembled-surface confirmation
 
 PASS applies also to the complete 633-line assembly
-`notes/CODEX_RENY__SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_DRAFT.md`, SHA-256
+`formalized/SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_AND_FINITE_MENU_SOURCE.md`, SHA-256
 `6ae5a7012f55825a89e0ea804f73b5a163b54f4c4857c0650e48ef492292bda6`.
 I read that entire frozen statement/proof/source/test/handoff surface and
 compared it with the original reviewed above. This is a final coverage

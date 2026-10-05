@@ -186,7 +186,7 @@ it is not supplied by this accepted proof.
 ## 6. Final named packet: exact-byte acceptance
 
 I independently read all 465 lines of the author-confirmed final packet
-[Inverse membership stretch forces sure-core sign reversal](../notes/INVERSE_MEMBERSHIP_STRETCH_SURE_CORE_SIGN_REVERSAL.md),
+[Inverse membership stretch forces sure-core sign reversal](../formalized/INVERSE_MEMBERSHIP_STRETCH_SURE_CORE_SIGN_REVERSAL.md),
 SHA256
 `70d9ea22fd61290b1f24fbccdb0df57980a66518e87b7322a61efba810ad5aa7`.
 Verdict: PASS, with no mathematical repair requested. The original frozen

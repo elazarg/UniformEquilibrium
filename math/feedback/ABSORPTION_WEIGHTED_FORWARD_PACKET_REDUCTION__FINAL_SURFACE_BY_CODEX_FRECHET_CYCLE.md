@@ -7,7 +7,7 @@ producer proof or a Lean build.
 ## Accepted exact surface
 
 Accepted file:
-`../notes/CODEX_RENY__ABSORPTION_WEIGHTED_FORWARD_PACKET_REDUCTION_EXPORT_DRAFT.md`.
+`../formalized/ABSORPTION_WEIGHTED_FORWARD_PACKET_REDUCTION.md`.
 
 Accepted full SHA-256:
 

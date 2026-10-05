@@ -61,10 +61,17 @@ the minimal failed implication and the strongest statement that survives.
 Prefer exact calculations to floating-point evidence. Never silently repair a
 false claim by changing its quantifiers or probability mode.
 
+Aim at complete conjecture-facing mechanisms: an actual equilibrium producer,
+an unrestricted positive-gap example, or a strict reduction of the surviving
+counterexample class. A further conditional interface, a renamed obstruction,
+or an improved constant is not a breakthrough. Pursue such supporting work
+only when its role in a concrete proof is clear. A failed local route is a
+reason to change the mechanism, not to weaken the same assertion repeatedly.
+
 Use the project methods in
-[`../../docs/methods/MATH_RESEARCH_METHOD.md`](../../docs/methods/MATH_RESEARCH_METHOD.md)
+[`../docs/methods/MATH_RESEARCH_METHOD.md`](../docs/methods/MATH_RESEARCH_METHOD.md)
 and
-[`../../docs/methods/PARALLEL_RESEARCH_METHOD.md`](../../docs/methods/PARALLEL_RESEARCH_METHOD.md)
+[`../docs/methods/PARALLEL_RESEARCH_METHOD.md`](../docs/methods/PARALLEL_RESEARCH_METHOD.md)
 without copying their process into conference notes.
 
 ## Communication protocol
@@ -83,6 +90,12 @@ The protocol is files, not meetings:
 Avoid editing shared indexes. Before ending a substantive session, leave your
 notebook readable: current status near the top, proved and unproved claims
 separated, and one concrete next question or requested check.
+
+Keep coordination low-bandwidth. Work through substantial mathematical attempts
+before sending a checkpoint; report a candidate proof, an exact falsifier, or
+a decision that changes the research direction. Do not create a separate note
+for every step or run repeated full audits on speculative ideas. Independent
+export review is mandatory once a serious complete result is available.
 
 ## Export boundary
 
@@ -108,5 +121,17 @@ Use project-owned uppercase Markdown filenames. Keep mathematical records
 inside `math/` and preserve other agents' files. Source-library cleanup under
 gitignored lowercase `literature/` must be reversible: normalize names and
 flatten files, but do not delete or rewrite source material merely to tidy it.
-Do not create commits, issues, PRs, or Lean files as part of conference work.
-Prefer a new note or feedback file over a large coordination document.
+The conference is tracked in Git. The coordinator may commit and push scoped
+`math/` changes under the user's standing authorization. Other participants
+leave their changes for that coordinator and must not stage, commit, or push.
+Do not create issues, PRs, or Lean files as part of conference work. Keep other
+agents' work, especially concurrent changes outside `math/`, out of conference
+commits.
+
+The coordinator may remove obsolete notes once their contents are saved in
+Git and their mathematical value is retained in a canonical file or deliberately
+retired. Verify the committed version and repair incoming references first.
+Do not discard a unique proof, counterexample, caveat, or live objection merely
+because a note is old. Use Git for ordinary history rather than retaining
+duplicate drafts or creating retirement manifests. Prefer revising one owned
+mathematical note over adding another coordination document.

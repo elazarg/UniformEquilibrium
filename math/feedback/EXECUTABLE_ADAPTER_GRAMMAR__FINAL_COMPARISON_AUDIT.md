@@ -3,7 +3,7 @@
 ## Verdict
 
 The mathematical body of
-notes/CODEX_ROOT__EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md
+formalized/EXECUTABLE_ADAPTER_GRAMMAR_AND_CONSTRAINED_ROOT_NO_GO.md
 faithfully reproduces the corrected meta/ADAPTERS_COMPLETE.md. The repaired
 Fin4 table, the total compact parent port, the exact relation \(tq=0\), the
 positive reach floor, the child semantic discontinuity, the trace-safe rank
