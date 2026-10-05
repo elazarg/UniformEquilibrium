@@ -1348,8 +1348,18 @@ selected before every positive scale; the full parent exploitability bound is
 `factor * (delta + delta²) + residual * delta`, and child joint Never is at most
 `delta`. The five original F/J certificate kinds remain independent across outsiders.
 The specified-child-target theorem still requires a strictly positive singleton.
-Finite censoring, actual finite-menu witnesses, the retained-family fixed target,
-the canonical pivot consumer and the packet's sharp counterexamples remain pending.
+`exists_finiteQuietProfiles_of_withdrawalFutureJoinFamily` and
+`exists_uniformFiniteQuietFamily_of_withdrawalFutureJoinFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFiniteQuietSource.lean`)
+produce actual positive-deadline independent child menus, the packet's two numerical
+bounds, and one fixed parent target with witnesses retained from one indexed finite
+quiet family. Both full regret and child joint Never tend to zero. The generic
+and Fin4 existence facades include zero singleton rewards; the Fin4 proper-child
+cardinality restriction is proved internally. All certificates use original rewards.
+`UniformEquilibrium/Quitting/Classification/QuietExtension/QuietLiftFiniteCensor.lean`
+supplies the exact whole-family censor commutation and parent/child discarded-mass
+identity, reusing the existing exploitability-congruence theorem.
+The canonical pivot consumer and the packet's sharp counterexamples remain pending.
 
 ## Further shape proof-mining findings
 

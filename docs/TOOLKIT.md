@@ -3449,8 +3449,21 @@ select fixed finite maximum weight and residual bounds before the positive scale
 The selected quiet parent has full terminal exploitability at most
 `factor * (delta + delta²) + residual * delta`, with the same child joint Never
 at most `delta`. Outsiders may independently use any of the five certificate kinds.
-The finite-menu witnesses and their fixed-target family consumer are still pending.
-This existence construction does not strengthen the specified-child-target theorem.
+`exists_finiteQuietProfiles_of_withdrawalFutureJoinFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFiniteQuietSource.lean`)
+selects actual finite independent child menus with positive deadlines, parent regret
+at most `(factor + residual) * delta + (factor + 4 * bound) * delta²`, and child
+joint Never at most `delta + delta²`. The parent reward bound may be supplied.
+The censor is applied only to finite child tails; quiet outsiders remain Never.
+Its law-level commutation and exact discarded-mass identity are in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/QuietLiftFiniteCensor.lean`.
+`exists_uniformFiniteQuietFamily_of_withdrawalFutureJoinFamily` in the same source
+owner selects one payoff target from one indexed family of those finite quiet lifts.
+Both full regret and child joint Never converge to zero; every requested uniform
+accuracy retains a member of that same family. The generic existence facade and
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_nonnegativeWithdrawalFamily`
+cover the nonnegative singleton boundary, including zero. They do not strengthen
+the specified-child-target theorem or supply certificates for arbitrary Fin4 games.
 
 `quietLift_fixedTarget_of_withdrawalFutureJoin_absorbingStationary`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalAbsorbingStationaryChild.lean`)
