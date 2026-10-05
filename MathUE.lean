@@ -7,6 +7,8 @@ import MathUE.Analysis.CoordinateAffineBoxMinimum
 import MathUE.Polynomial.MvPolynomialCoordinateAffine
 import MathUE.Polynomial.MvPolynomialQuadraticReflection
 import MathUE.Analysis.MidpointThirdDerivative
+import MathUE.Analysis.MidpointThirdDerivativeIntegral
+import MathUE.Analysis.RationalPolynomialCoordinateDerivatives
 import MathUE.Interval.RationalPolynomialRegularity
 import MathUE.Interval.RationalPolynomialRationalEvaluation
 import MathUE.Interval.RationalClosedBoxDensity
@@ -29,6 +31,8 @@ import MathUE.Analysis.FiniteLogSumExp
 import MathUE.Analysis.CoordinateResetFTC
 import MathUE.Analysis.Examples.CoupledCubicShape
 import MathUE.Analysis.Examples.NonQLinearFace
+import MathUE.Analysis.Examples.PairedFacePotential
+import MathUE.Analysis.Examples.PairedFacePotentialGeometry
 import MathUE.Analysis.SignedMixedCurvatureAccount
 import MathUE.Analysis.MixedCurvatureSupBound
 import MathUE.Analysis.MonotoneTransformChargedDrift
@@ -36,6 +40,7 @@ import MathUE.Analysis.LeastHessianEigenvalue
 import MathUE.Analysis.HessianConvexification
 import MathUE.Analysis.PositiveFaceCurvatureBudget
 import MathUE.Analysis.CoordinateHessianExtrema
+import MathUE.Analysis.CoordinateHessianEntries
 import MathUE.RealSeries.NormalizedGeometricComparison
 import MathUE.RealSeries.GeometricAffineSchedule
 import MathUE.Analysis.AnalyticQuadraticRemainder

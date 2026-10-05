@@ -12,7 +12,7 @@ namespace Math
 
 open Set
 
-private theorem taylorWithinEval_two_eq
+theorem taylorWithinEval_two_eq
     (function : ℝ → ℝ) (endpoint : ℝ) (hne : (1 : ℝ) ≠ endpoint)
     (hregular : ContDiffAt ℝ 3 function 1) :
     taylorWithinEval function 2 (Set.uIcc 1 endpoint) 1 endpoint =

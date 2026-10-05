@@ -2397,8 +2397,32 @@ the actual returned pair. The executable test uses exact rational evaluation
 and accepts non-strict regret bounds. The checks include a silent named build,
 separate returned-pair consumer and standard-axiom audit, and the full build.
 Neither theorem gives rational exact Nash, an effective cutoff, or a denominator
-bound. The paired-example and normalization joins of the reflection packet
-remain separate work.
+bound. The bounded-normalization joins of the reflection packet remain separate
+work.
+
+`pairedFacePotential_boundedCompletion_face_drift` and
+`pairedFacePotential_boundedCompletion_not_fullRoot`
+(`UniformEquilibrium/Quitting/Examples/PairedFacePotentialBoundedCompletion.lean`)
+separate the singleton-face inequalities from the full exact-root relation.
+The same coupled polynomial satisfies every singleton-face inequality above
+the singleton vector but fails the full-root inequality for every unit-bounded
+completion of the prescribed singleton columns. Its generic geometry in
+`MathUE/Analysis/Examples/PairedFacePotentialGeometry.lean` identifies the actual
+canonical Hessian, proves that its spectrum is exactly `96, 32, -64`, derives
+the least eigenvalue `-64`, and produces a non-top minimizing vertex internally.
+The repeated `-64` eigenvalue is represented by two independent eigenvectors
+in `MathUE/Analysis/Examples/PairedFacePotential.lean`. No spectral certificate,
+minimizer, standard-Q assumption, or behavioral equilibrium is supplied or
+inferred.
+
+`midpoint_thirdDerivative_integral_identity` and
+`midpointThirdDerivativeKernel_weighted_mass`
+(`MathUE/Analysis/MidpointThirdDerivativeIntegral.lean`) give the exact weighted
+third-derivative midpoint identity and kernel mass `1/6`. The two half-interval
+identities use ordinary iterated derivatives, under third-order regularity at
+every point of the closed segment, including both endpoints.
+The paired example and integral identity pass silent named checks, the full
+silent default build, and the exhaustive production axiom audit.
 
 The shape examples and boundary cases are integrated and pass silent named,
 separate standard-axiom and full build checks. `upper_two_fixture`

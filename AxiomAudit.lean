@@ -19,6 +19,7 @@ import MathUE.Analysis.CollisionAdjustedDrift
 import MathUE.Analysis.CompactMinimumEnvelope
 import MathUE.Analysis.CompactSubtypeZeroExtension
 import MathUE.Analysis.CoordinateAffineBoxMinimum
+import MathUE.Analysis.CoordinateHessianEntries
 import MathUE.Analysis.CoordinateHessianExtrema
 import MathUE.Analysis.CoordinateResetFTC
 import MathUE.Analysis.CoordinateSecantEstimate
@@ -26,6 +27,8 @@ import MathUE.Analysis.CurvatureHomogeneity
 import MathUE.Analysis.DerivativeDifferenceMeanValue
 import MathUE.Analysis.Examples.CoupledCubicShape
 import MathUE.Analysis.Examples.NonQLinearFace
+import MathUE.Analysis.Examples.PairedFacePotential
+import MathUE.Analysis.Examples.PairedFacePotentialGeometry
 import MathUE.Analysis.FaceDriftAdditiveExclusion
 import MathUE.Analysis.FaceDriftScalarCompositionExclusion
 import MathUE.Analysis.FiniteLogSumExp
@@ -36,6 +39,7 @@ import MathUE.Analysis.LowerBoxBoundaryMinimum
 import MathUE.Analysis.LowerBoxBoundaryReflection
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
 import MathUE.Analysis.MidpointThirdDerivative
+import MathUE.Analysis.MidpointThirdDerivativeIntegral
 import MathUE.Analysis.MixedCurvatureSupBound
 import MathUE.Analysis.MonotoneTransformChargedDrift
 import MathUE.Analysis.OneSidedCapacitySmoothing
@@ -43,6 +47,7 @@ import MathUE.Analysis.PositiveFaceCurvatureBudget
 import MathUE.Analysis.PositiveHomogeneousCoercivity
 import MathUE.Analysis.PositiveWeightedApproximation
 import MathUE.Analysis.QuasiconvexLowerBoxBoundary
+import MathUE.Analysis.RationalPolynomialCoordinateDerivatives
 import MathUE.Analysis.SignedMixedCurvatureAccount
 import MathUE.Analysis.StandardQFaceQuasiconvexExclusion
 import MathUE.Analysis.SummableTailAverage
@@ -2632,6 +2637,7 @@ import UniformEquilibrium.Quitting.Examples.OrderedPremiumBoundaryFixtures
 import UniformEquilibrium.Quitting.Examples.OrderedPremiumNegativeBoundary
 import UniformEquilibrium.Quitting.Examples.OrderedPremiumPassiveSeparation
 import UniformEquilibrium.Quitting.Examples.OverlappingFirstStoppingBoundary
+import UniformEquilibrium.Quitting.Examples.PairedFacePotentialBoundedCompletion
 import UniformEquilibrium.Quitting.Examples.PatientWithdrawalDiscountedBoundary
 import UniformEquilibrium.Quitting.Examples.PatientWithdrawalDiscountedStageBoundary
 import UniformEquilibrium.Quitting.Examples.PatientWithdrawalFiniteHorizonBoundary

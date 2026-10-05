@@ -1,0 +1,158 @@
+import MathUE.Analysis.CoordinateHessianExtrema
+import MathUE.Analysis.CoordinateResetFTC
+import Mathlib.LinearAlgebra.Matrix.ToLin
+
+/-! # Actual coordinate partials and the canonical Euclidean Hessian operator -/
+
+noncomputable section
+
+namespace Math
+
+variable {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+theorem coordinateMixedPartial_eq_secondFDeriv
+    (potential : (ι → ℝ) → ℝ) (point : ι → ℝ)
+    (hsmooth : ContDiffAt ℝ 2 potential point) (owner receiver : ι) :
+    coordinateMixedPartial potential point owner receiver =
+      fderiv ℝ (fderiv ℝ potential) point (Pi.single owner 1) (Pi.single receiver 1) := by
+  have hdiff : DifferentiableAt ℝ (fderiv ℝ potential) point :=
+    (hsmooth.fderiv_right (m := 1) (by norm_num)).differentiableAt_one
+  change fderiv ℝ (fun input => fderiv ℝ potential input
+    (Pi.single receiver (1 : ℝ))) point (Pi.single owner 1) = _
+  have h := hdiff.hasFDerivAt.clm_apply
+    (hasFDerivAt_const (Pi.single receiver (1 : ℝ)) point)
+  simpa using congrArg (fun derivative => derivative (Pi.single owner (1 : ℝ))) h.fderiv
+
+/-- Literal entries of the actual Riesz Hessian, in the standard Euclidean coordinate basis.
+No matrix is supplied and the norm on the original Pi space is not replaced. -/
+theorem coordinateHessian_apply_single
+    (potential : (ι → ℝ) → ℝ) (point : ι → ℝ)
+    (hsmooth : ContDiff ℝ 2 potential) (owner receiver : ι) :
+    coordinateHessian potential point (EuclideanSpace.single owner 1) receiver =
+      coordinateMixedPartial potential point owner receiver := by
+  let equiv := EuclideanSpace.equiv ι ℝ
+  let pulled := potential ∘ equiv
+  have hsingle : ∀ index, equiv.toContinuousLinearMap (EuclideanSpace.single index 1) =
+      Pi.single index 1 := fun _ => rfl
+  have hpulled : ContDiff ℝ 2 pulled :=
+    hsmooth.comp_continuousLinearMap (g := equiv.toContinuousLinearMap)
+  have hfirst : (fun input => fderiv ℝ pulled input (EuclideanSpace.single receiver 1)) =
+      (fun input => coordinatePartial potential (equiv input) receiver) := by
+    funext input
+    have hcomp := (hsmooth.differentiable (by norm_num) (equiv input)).hasFDerivAt.comp
+      input equiv.toContinuousLinearMap.hasFDerivAt
+    rw [show pulled = potential ∘ equiv from rfl, hcomp.fderiv]
+    change fderiv ℝ potential (equiv input)
+      (equiv.toContinuousLinearMap (EuclideanSpace.single receiver 1)) = _
+    rw [hsingle]
+    rfl
+  have hdiff : DifferentiableAt ℝ (fderiv ℝ pulled) (equiv.symm point) :=
+    (hpulled.contDiffAt.fderiv_right (m := 1) (by norm_num)).differentiableAt_one
+  have hscalar := congrArg
+    (fun derivative => derivative (EuclideanSpace.single owner (1 : ℝ)))
+    (hdiff.hasFDerivAt.clm_apply
+      (hasFDerivAt_const (EuclideanSpace.single receiver (1 : ℝ))
+        (equiv.symm point))).fderiv
+  simp only [ContinuousLinearMap.comp_zero, zero_add,
+    ContinuousLinearMap.flip_apply] at hscalar
+  rw [hfirst] at hscalar
+  have hpartial : DifferentiableAt ℝ
+      (fun input => coordinatePartial potential input receiver) point :=
+    ((hsmooth.contDiffAt.fderiv_right (m := 1) (by norm_num)).clm_apply
+      contDiffAt_const).differentiableAt_one
+  have hpartial' : DifferentiableAt ℝ
+      (fun input => coordinatePartial potential input receiver) (equiv (equiv.symm point)) := by
+    simpa using hpartial
+  have hcomposition := hpartial'.hasFDerivAt.comp (equiv.symm point)
+    equiv.toContinuousLinearMap.hasFDerivAt
+  have hcomposition' : fderiv ℝ (fun input => coordinatePartial potential (equiv input) receiver)
+      (equiv.symm point) (EuclideanSpace.single owner 1) =
+        coordinateMixedPartial potential point owner receiver := by
+    change fderiv ℝ ((fun input => coordinatePartial potential input receiver) ∘ equiv)
+      (equiv.symm point) (EuclideanSpace.single owner 1) = _
+    rw [hcomposition.fderiv]
+    change fderiv ℝ (fun input => coordinatePartial potential input receiver)
+      (equiv (equiv.symm point))
+      (equiv.toContinuousLinearMap (EuclideanSpace.single owner 1)) = _
+    rw [equiv.apply_symm_apply, hsingle]
+    rfl
+  rw [hcomposition'] at hscalar
+  have hentry := realHessian_inner pulled (equiv.symm point)
+    (EuclideanSpace.single owner 1) (EuclideanSpace.single receiver 1)
+  simpa [coordinateHessian, pulled, equiv, EuclideanSpace.inner_single_right] using
+    hentry.trans hscalar.symm
+
+/-- Conjugating the actual Hessian by the canonical coordinate equivalence gives
+the literal matrix of actual mixed partials. This is operator equality, not a
+collection of directional inequalities or a separately asserted spectral certificate. -/
+theorem coordinateHessian_conjugate_eq_matrix
+    (potential : (ι → ℝ) → ℝ) (point : ι → ℝ) (hsmooth : ContDiff ℝ 2 potential) :
+    (EuclideanSpace.equiv ι ℝ).toLinearMap ∘ₗ
+        (coordinateHessian potential point).toLinearMap ∘ₗ
+          (EuclideanSpace.equiv ι ℝ).symm.toLinearMap =
+      Matrix.toLin' (fun receiver owner => coordinateMixedPartial potential point owner receiver) :=
+  by
+    have hbasis : ∀ owner,
+        ((EuclideanSpace.equiv ι ℝ).toLinearMap ∘ₗ
+          (coordinateHessian potential point).toLinearMap ∘ₗ
+            (EuclideanSpace.equiv ι ℝ).symm.toLinearMap) (Pi.single owner 1) =
+        Matrix.toLin' (fun receiver owner =>
+          coordinateMixedPartial potential point owner receiver) (Pi.single owner 1) := by
+      intro owner
+      ext receiver
+      change coordinateHessian potential point (EuclideanSpace.single owner 1) receiver =
+        Matrix.mulVec
+          (fun receiver owner => coordinateMixedPartial potential point owner receiver)
+          (Pi.single owner 1) receiver
+      have hmatrix := congrFun
+        (Matrix.mulVec_single_one
+          (Matrix.of fun receiver owner => coordinateMixedPartial potential point owner receiver)
+          owner) receiver
+      exact (coordinateHessian_apply_single potential point hsmooth owner receiver).trans
+        hmatrix.symm
+    apply LinearMap.ext
+    intro direction
+    rw [pi_eq_sum_univ' direction]
+    simp only [map_sum, map_smul, hbasis]
+
+/-- Spectral transport for the same canonical Hessian; no spectral theorem is re-proved. -/
+theorem coordinateHessian_hasEigenvalue_iff_matrix
+    (potential : (ι → ℝ) → ℝ) (point : ι → ℝ)
+    (hsmooth : ContDiff ℝ 2 potential) (value : ℝ) :
+    Module.End.HasEigenvalue (coordinateHessian potential point).toLinearMap value ↔
+      Module.End.HasEigenvalue
+        (Matrix.toLin' (fun receiver owner =>
+          coordinateMixedPartial potential point owner receiver))
+        value := by
+  let equiv := EuclideanSpace.equiv ι ℝ
+  have hconjugate := coordinateHessian_conjugate_eq_matrix potential point hsmooth
+  have happly : ∀ direction : EuclideanSpace ℝ ι,
+      equiv (coordinateHessian potential point direction) =
+        Matrix.toLin' (fun receiver owner =>
+          coordinateMixedPartial potential point owner receiver) (equiv direction) := by
+    intro direction
+    have h := congrArg (fun linear => linear (equiv direction)) hconjugate
+    simpa [LinearMap.comp_apply, equiv] using h
+  constructor
+  · intro heigenvalue
+    obtain ⟨direction, hvector⟩ := heigenvalue.exists_hasEigenvector
+    apply Module.End.hasEigenvalue_of_hasEigenvector (x := equiv direction)
+    constructor
+    · apply Module.End.mem_eigenspace_iff.mpr
+      rw [← happly]
+      have h := hvector.apply_eq_smul
+      change coordinateHessian potential point direction = value • direction at h
+      rw [h, map_smul]
+    · exact fun hzero => hvector.2 (equiv.injective (by simpa using hzero))
+  · intro heigenvalue
+    obtain ⟨direction, hvector⟩ := heigenvalue.exists_hasEigenvector
+    apply Module.End.hasEigenvalue_of_hasEigenvector (x := equiv.symm direction)
+    constructor
+    · apply Module.End.mem_eigenspace_iff.mpr
+      apply equiv.injective
+      change equiv (coordinateHessian potential point (equiv.symm direction)) =
+        equiv (value • equiv.symm direction)
+      rw [happly, map_smul, equiv.apply_symm_apply, hvector.apply_eq_smul]
+    · exact fun hzero => hvector.2 (equiv.symm.injective (by simpa using hzero))
+
+end Math
