@@ -88,6 +88,11 @@ opposite pivot endpoint signs are written below; the consolidated statement
 is not yet independently reviewed. Singleton floors are required
 on the refined solo arcs, not at every retained joint row. The exact
 negative-A-floor test makes that distinction substantive.
+The final separate **Independent joint-outsider rewards in two raw
+halfspaces** removes both prescribed outsider equalities at coalition03.
+Its proof and a full-core/no-pure-exit table are complete below, but this
+extension has not yet passed independent review. The earlier global
+statement is retained unchanged for its current review.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
@@ -3656,3 +3661,206 @@ the review must retain the six raw caps, handle both original-table
 equality boundaries, and check the complete-deviation consumer without
 an all-phase-floor assumption. The frozen local-neighborhood export is
 not modified and does not supply the global selector.
+
+## Independent joint-outsider rewards in two raw halfspaces
+
+Status: complete ordinary proof candidate, not independently reviewed.
+This changes actual simultaneous rewards, not just the parameter range
+of a prescribed joint vector. The preceding global theorem and eta
+addendum are retained unchanged as the reviewed-base target.
+
+Keep a,b,c,h_1,h_2,H>0, abc>1, U,V≥1, xi,eta>0, all four
+singletons in (87), and arbitrary real R. Replace ONLY its joint row by
+
+    r(03)=(1+xi,p_1,p_2,eta),
+    p_1≤a−h_1,     p_2≤0.                           (100)
+
+Replace the first three caps in (88) and retain the last three:
+
+    r_1(01),r_1(13),r_1(013) ≤ min(−h_1,p_1),
+    r_2(02),r_2(23),r_2(023) ≤ 0.                   (101)
+
+Every other nonsingleton coordinate is an arbitrary real number. The
+conclusion is the same fixed-target, full-behavior UE for every real R.
+The base is LITERALLY INCLUDED by p_1=−h_1,p_2=−h_2, including all
+cap equalities, with no limiting strategy or reward-closure argument.
+
+### Changed elimination and its complete monotonicity domain
+
+The original singleton matrix, nu, R_low, and T do not change. Thus
+the same exact outer exits cover R≤R_low and R≥T, with both equality
+boundaries included. If U=V=1 they already cover the axis. For the
+remaining R_low<R<T, define kappa,t,Y,e,f,C_A,C_D exactly as in (90)–(91).
+The actual elimination now reads
+
+    a_1=−h_1*x(1−y)+a(1−x)y+p_1*x*y,
+    d_1=−h_1*e(1−f)+a(1−e)f+p_1*e*f+C_D*a_1,
+    a_2=[h_2*e(1−f)+(1−e)f−p_2*e*f]/C_D,
+    w=d_1/(1+d_1),
+    z=[a_2+h_2*x(1−y)+(1−x)y−p_2*x*y]/[b*C_A].     (102)
+
+In particular,
+
+    a_2=h_2*kappa*x+t*y−p_2*kappa*t*x*y>0,
+
+    d_1={a(1+t)y−h_1(1+kappa)x
+                 +[h_1−a+(1+kappa*t)p_1]xy}
+                 /[(1+kappa*x)(1+t*y)],
+
+    z={h_2(1+kappa)x+(1+t)y
+                 −[1+h_2+(1+kappa*t)p_2]xy}
+                 /[b(1−x)(1−y)].                    (103)
+
+For fixed 0<y≤Y, d_1 is strictly decreasing in x. Apart from its
+positive denominator, the negative of its derivative has numerator
+
+    h_1(1+kappa)
+     +[a−h_1−(1+kappa*t)p_1+kappa*a(1+t)]y
+      ≥ h_1(1+kappa)+kappa(a+t*h_1)y>0.
+
+This uses exactly p_1≤a−h_1, including equality. The positive
+numerator controlling z_x is
+
+    E_y=h_2(1+kappa−y)+t*y−(1+kappa*t)p_2*y>0,
+
+because p_2≤0 and y≤Y<1. At x=0, the old values
+d_1=a(1+t)y/(1+t*y)>0 and z=(1+t)y/[b(1−y)]<1
+are unchanged. As x→1, z→+infinity, since its numerator tends
+to E_y>0. Its unique z=1 root Z(y) therefore lies in (0,1).
+
+Unlike the base proof, d_1 need not vanish before x=1 or even at a
+positive x. The cap is defined without assuming such a root. Put
+
+    A_y=a(1+t)y,
+    B_y=h_1(1+kappa)−[h_1−a+(1+kappa*t)p_1]y.
+
+If B_y≤0, set X(y)=Z(y). If B_y>0, set
+X(y)=min(Z(y),A_y/B_y). Then 0<X(y)<1, and
+0≤w<1, 0<z≤1 throughout [0,X(y)], with strict w>0,z<1 before
+the cap. At the cap either w=0 or z=1. The formula is continuous
+even where B_y=0: A_y>0 and A_y/B_y tends to +infinity from the
+positive side, so the minimum already equals Z(y). Since B_y tends
+to h_1(1+kappa)>0 as y→0, it also proves X(y)=O(y).
+This includes the collision of the two caps and both halfspace equalities.
+
+### Global selector and all unchanged endpoint signs
+
+Use exactly Phi from (93), now with (102). The previous derivative
+argument requires only z_x>0 and w_x<0 on the admissible interval.
+The eta-localization (99) requires only 0≤w<1 and 0<z≤1.
+Both are now proved, without any upper bound on eta. Consequently
+Phi has its unique continuous interior root x(y), all possible zeros
+lie where eta*e<c, and x(y) tends to zero at both y endpoints.
+The sign at each cap remains negative, including a z-cap when d_1
+has no positive zero. At y=Y, any positive accumulation point is
+excluded either by eta*e≥c or by strict decrease in the initial
+eta*e<c interval, exactly as in the eta addendum.
+
+Every change in (103) relative to (92) is a multiple of xy. Hence
+the first-order expansion at (0,0), all three limits (94), and the
+divided pivot limit (96) are unchanged. At x=0 the entire formulas
+are unchanged, not just their derivatives, so the positive endpoint
+Y, the limiting z,w there, and exact pivot identity (97) also remain
+unchanged. The same intermediate-value argument supplies an interior
+solution of both residual equations with all six hazards proper.
+There is no assumed continuation of a previous chosen root.
+
+### Floors, both exact joint comparisons, and the actual consumer
+
+The phase vectors are still (98), using (102) for a_1,a_2,d_1,z,w.
+They follow directly from the four actual phase policy equations and
+the same supported indifferences: only the two outsider coordinates
+in those equations changed. In particular, V_B,V_C,V_D retain every
+singleton floor, since a_2>0,d_1>0 and all their other displayed
+positive terms are unchanged. No floor is asserted for a_1.
+
+At joint row A, player 1's forced-Quit reward is a mixture of the
+three entries bounded in (101), and its singleton zero. Each of these
+three collision entries is at most the corresponding actual passive
+reward −h_1,a,p_1. Thus
+
+    Q_A,1 ≤ −h_1*x(1−y)+a(1−x)y+p_1*x*y=a_1.
+
+At D the same three capped rewards are all nonpositive, so
+Q_D,1≤0<d_1. Player 2's two joint Quit values are nonpositive by
+the second line of (101), whereas its actual values are a_2>0 and
+zero. Both retained joint rows therefore have exact Quit caps, even
+if a_1 is negative. All their Continue equations are exact.
+
+Only the solo arcs B→C and C→D are refined; both have singleton-
+floor endpoints. The identical common-error supersolution, positive
+opponent period survival, and expected-absorption horizon estimate
+already proved give full behavioral regret tending to zero around the
+SAME target V_A. No floor at the retained A row is needed, and no new
+compiler is proposed. The raw outer exits are unchanged because they
+use only the singleton matrix. This completes the all-R conclusion.
+
+At p_2=0, the constructive interval actually has a pure-pair exit:
+both participants strictly prefer joining 03, and (101) makes neither
+outsider prefer joining it. This boundary is correctly included, not
+claimed as new nontrivial coverage. For p_2<0, the cap at 023 permits
+an outsider improvement and the pure exit need not exist.
+
+### A full-core exact member with no pure exit
+
+Take a=b=c=2, h_1=h_2=1, U=V=2, p_1=1, p_2=−1/2, and
+
+    H=188295644/24220715,
+    eta=564886932/24220715=3H>c,
+    xi=176348713/95068097,
+    R=−81280616/95068097.
+
+Here p_1=a−h_1 is a genuine halfspace boundary and is positive,
+whereas the base equality required p_1=−1. The second outsider
+reward also differs from its old prescribed value −1. Exact rates are
+
+    x=1/100, y=1/20, e=3/403, f=1/41,
+    z=2939/60192, w=2123/18646.
+
+The resulting values include
+
+    a_1=9/100, a_2=1043/32000, d_1=2123/16523,
+    R_low=−661769792/497694863 < R < 1/4=T.
+
+Complete the table as follows; the singletons are those already given
+and row03 is (100).
+
+| S | r(S) |
+|---|---|
+| 01 | (0,−1,100,100) |
+| 02 | (0,100,0,100) |
+| 12 | (100,1/2,1/2,100) |
+| 13 | (100,−1,100,0) |
+| 23 | (100,100,0,0) |
+| 012 | (−100,−100,−100,100) |
+| 013 | (−100,−100,100,−100) |
+| 023 | (−100,100,0,−100) |
+| 123 | (100,−100,−100,−100) |
+| 0123 | (−100,−100,−100,−100) |
+
+Direct exact rational evaluation verifies all sixteen policy and all
+sixteen Continue identities and all eight joint-row Quit caps. The
+only traps are 03,12,0123, so there are two disjoint premium traps
+and the greatest premium core is all four players. There is no pure
+absorbing equilibrium: at singletons 0,1,2,3, players 3,3,1,0
+respectively profit by joining. At pairs 01,02,12,13,23, players
+0,0,2,1,3 respectively profit by withdrawing; at 03 player 2 profits
+by joining, from −1/2 to zero. At triples 012,013,023,123, players
+0,0,0,1 profit by withdrawing to passive reward 100. At the grand
+coalition player 0 does so. All Never is defeated by player 0's
+positive singleton.
+
+The pair03 trap has two strictly positive join gaps, so neither the
+protected support-specific-leave nor positive-weight aggregate-leave
+criterion can certify that trap. The signed pair-core criterion cannot
+apply because the greatest core is full. These are exact bounded
+comparisons, not an exclusion of every possible stationary or other
+chronological producer. By contrast, the earlier unused-37 completions
+are algebra and regret-regressions only: their grand coalition is a
+pure equilibrium, so they were never broad noncoverage witnesses.
+
+The requested delta review is the independent halfspaces, revised cap
+definition including B_y≤0, and the four changed outsider comparisons.
+All other source and consumer arguments are inherited literally from
+the preceding complete global proof, not from an unproved openness
+claim. No further extension is proposed before this statement's gate.

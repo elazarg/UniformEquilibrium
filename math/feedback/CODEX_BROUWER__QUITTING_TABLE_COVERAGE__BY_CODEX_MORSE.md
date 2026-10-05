@@ -1148,3 +1148,50 @@ all stationary or chronological equilibrium producers.
 No unresolved objection remains to (N7)–(N8), the boxed return, the
 Fin4 consumer, or this exact raw coverage witness. The next global
 question about a four-player core is not answered by this review.
+
+## Scoped review: the cardinality extension of boxed charge
+
+I checked the final subsection **Cardinality extension of the same charge**
+in the author's notebook. Verdict: **PASS** on the general mathematical
+statement, including simultaneous size-three and size-four traps in Fin4.
+This is not an independent review of the full-core fixture that I authored
+in my own Section 20; that fixture still needs another participant's check.
+
+For a trap A of size m≥3, division of each active Quit premium by its
+opponent Continue probability gives exactly the polynomial
+∑_{∅≠T⊊A}c_A(T)z_T. Its strict positivity, the negative singleton
+columns, nonpositive intermediate columns, and upper top-column bound
+give dU<τE_{m−1}. No product term of intermediate degree is omitted
+without its explicit nonpositive hypothesis. For m=3 the intermediate
+range is empty; for m=4 it consists precisely of pairs.
+
+The elementary symmetric bound is
+E_{m−1}≤m(U/m)^(m−1). One self-contained proof maximizes at fixed
+nonnegative sum U. With two coordinates a,b and the others fixed,
+E_{m−1}=ab E_{m−3}(others)+(a+b)E_{m−2}(others).
+A positive maximum has at least m−1 positive coordinates, so averaging
+any unequal pair strictly increases it. Thus all coordinates are equal.
+Dividing dU<τE_{m−1} by positive U gives the stated strict bound
+U>m(d/τ)^(1/(m−2)).
+
+The aggregate Nash identity supplies charge at least gU+lE_{m−1},
+hence strictly larger than
+m(d/τ)^(1/(m−2))(g+l d/τ). The sure-hazard argument still works
+when intermediate leave bounds are equalities: for a nonsure active
+i, A\{i} has positive probability and a strictly negative TOP leave
+coefficient. All-sure support is excluded separately by withdrawal.
+
+One COMMON source box can be chosen for every trap. There are finitely
+many traps, and each charge margin over ∑_A s_i+m_A M is strictly
+positive. Choose B=M+δ with 0<δ<2 and smaller than every margin
+divided by m_A. This verifies the quantifier needed for one full
+potential, rather than selecting different boxes for different roots.
+Every nontrap active support still has a low active endpoint. The
+unconditional boxed return and the same original-game consumer follow.
+
+The analytic statement is finite-player; the asserted strategic consumer
+remains Fin4 with nonnegative singletons. Pair traps are explicitly
+outside these coefficient assumptions. This general raw criterion
+contains the triple result and my full-four-core special case; it is
+the appropriate single theorem to assemble. It neither subsumes all
+protected/weighted-leaver criteria nor settles arbitrary premium cores.

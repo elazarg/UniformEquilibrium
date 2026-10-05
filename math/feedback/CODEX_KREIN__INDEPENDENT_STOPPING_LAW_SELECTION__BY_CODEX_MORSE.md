@@ -1323,3 +1323,205 @@ previously inspected declarations. I additionally checked the cited
 the strategic branch file. The handoff identifies actual missing raw-data
 and analytic formalization work, without claiming it is already checked.
 No unresolved assembly objection remains at the stated artifact hash.
+
+## Independent review: global two-joint selection on the complete R axis
+
+Checked **Global two-joint selection across the complete R axis** through
+its final eta-localization addendum in
+`notes/CODEX_KREIN__INDEPENDENT_STOPPING_LAW_SELECTION.md`, full-note
+SHA256 `ff030f90240591aef25c3ef361297366e4a000dab98928bb6c95bba4410ff3cb`.
+Verdict: **PASS**, ordinary mathematics, not Lean certification. I did
+not read another review. This check includes arbitrary ξ,η>0, the six
+raw caps, both equality exits, and the complete behavioral consumer.
+It does not include any subsequent change to the prescribed reward
+vectors or caps.
+
+### Exact scope and the interior interval
+
+The claim is for every actual completion of the five vectors (87)
+and six inequalities (88), with a,b,c,h₁,h₂,H>0, abc>1, U,V≥1,
+arbitrary ξ,η>0, and every real R. Unused entries may be arbitrarily
+large or signed; their finite size affects the accuracy mesh, not
+the raw existence hypothesis. No strategic witness is supplied.
+
+The displayed inverse of A is correct and strictly positive. Its
+equations give
+
+    bν₁−ν₃=h₂,   aν₃−ν₂=h₁,   cν₂−ν₁=H.
+
+These yield the exact expression for ν₃(T−R_low). It is positive
+unless U=V=1. In that exceptional case both thresholds equal one
+and the two outer exits cover the entire axis. Otherwise the only
+constructive interval is R_low<R<T≤1, which makes t∈(0,1).
+
+### The genuine global selector, including arbitrary eta
+
+I independently expanded d₁ and z from (91), obtaining exactly (92).
+For fixed y, d₁ strictly decreases and z strictly increases. The
+derivative numerator for z is the stated
+h₂(1+κ)+h₂κty+ty>0. The zero of d₁ is positive and O(y);
+the z=1 root is positive and below one, since z tends to infinity
+at x=1 and z(0,y)<1. Their minimum X(y) is continuous, lies
+in (0,1), and retains all denominator signs. The comparison
+Y<b/(b+1+t) has precisely the stated positive cross-product
+difference (1+t)(ab+b+1).
+
+The player-3 residual at x=0 has the sign of
+D−[abc+a(c+1)(1+t)+t]y, after positive factors are removed.
+At the endpoint X(y), either z=1 or w=0; both give a strictly
+negative residual. These signs do not need η≤c.
+
+For arbitrary η>0, the final localization is valid and is essential
+to the stated scope. Write G=ηe. If G≥c then
+
+    Φ≤G−x(H+η)/(1−x)<0.
+
+This uses 0≤w<1 and 0<z≤1 on the admissible interval. Since
+G starts at zero and is strictly increasing, its G<c region is an
+initial interval. There the derivative's w_x term is nonpositive,
+the z_x term is strictly negative, and the positive term involving
+G_x is strictly smaller than (H+η)/(1−x)². Thus Φ_x<0 at
+every possible zero. A unique zero exists before both the hazard
+cap and any G=c barrier; the proof never assumes Φ decreases on
+the part where G≥c.
+
+This gives a continuous x(y). At zero, the explicit d₁ cap gives
+x=O(y). At Y, any positive accumulation value contradicts either
+the G≥c bound or strict decrease from Φ(0,Y)=0 inside G<c.
+Therefore x tends to zero at both endpoints. No denominator can
+approach zero near Y because X(Y)<1.
+
+I independently differentiated at (0,0), obtaining
+
+    Φ_x=−(1+κ)(H+ch₁+h₂/b),
+    Φ_y=(1+t)(abc−1)/b.
+
+Together with x=O(y), these give all three ratios (94). This is
+an endpoint calculation after global interval selection, not an
+assumed continuation of one local implicit branch.
+
+### Pivot crossing and literal phase equations
+
+Using the above ratios, the first endpoint expression is exactly
+(1+t)(R−R_low)>0. At the other endpoint I independently obtained
+
+    z(Y)=D/[b(ac+a+1)],
+    w(Y)=D/[c(ab+b+1)].
+
+Substitution into F(Y), with ξ(t−1)=t(R−1), gives exactly
+(1+t)(R−T)−tξD/(abc)<0. Thus the intermediate value theorem
+selects an interior y and all six hazards are proper. No monotonicity
+of F itself or uniqueness of this second crossing is required.
+
+The specialized elimination indeed enforces all sixteen policy and
+Continue equations. The two rational formulas e,f give the D-joint
+owner equalities; Φ=0 and F=0 give the A-joint owner equalities.
+The w formula gives the player-1 zero at C and the z formula gives
+the player-2 A value. All these use the SAME original table and
+successive phase values, not independently chosen continuations.
+
+Every B,C,D coordinate is at least its own singleton. The possibly
+negative a₁ at A is handled directly, not discarded. Its immediate
+Quit payoff is at most
+
+    −h₁(x+y−xy)≤−h₁x≤a₁.
+
+At D, player 1's Quit payoff is nonpositive while d₁>0. Player 2's
+Quit payoff is nonpositive at both joint rows, with values a₂>0 and
+zero. The six stated caps include all three nonempty opponent events
+at each retained joint row, including simultaneous 03.
+
+### Complete deviations, a negative A value, and one fixed target
+
+Only B and C are refined, and both their endpoint segments have
+singleton floors. Their owner values are identically their own
+singleton. Hence every microdate has exact Continue, exact policy,
+and immediate Quit at most its value plus the stated common δ_n.
+The arbitrary unused reward entries merely enlarge the finite
+collision constant. δ_n tends to zero for each fixed actual table.
+
+Adding the SAME δ_n to all values gives a Bellman supersolution
+even when A has a negative coordinate: Continue transports at most
+one copy of the constant, and Quit has no future value. There is
+no accumulation over dates. For each possible deviator, its opponents
+retain positive total hazard in every period, including both joint
+rows. Geometric opponent survival removes the bounded remainder
+uniformly over complete history-dependent deviations and Never.
+
+Refinement does not alter the prescribed macro terminal law. The
+target V_A is fixed before n and before accuracy. A common value
+bound works for all n because the extra values interpolate fixed
+endpoints. Expected absorption under any deviation is at most
+(2+2n)/(1−ρ_i), yielding the asserted uniform terminal-to-average
+bound. One chooses n first and then one threshold for every larger
+horizon.
+
+I re-read `QuittingInfinitePathQuitErrorCertificate`,
+`quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`,
+`QuittingInfinitePathQuitErrorCertificate.isεAsymptoticNash_and_delivers`,
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+Their fields require bounded values and exact Continue, not all-phase
+singleton floors. The negative A value is fully compatible with the
+actual tracked consumer.
+
+### Original-table outer exits and both equality cases
+
+At R=R_low, the positive vector (1,ν) is a homogeneous LCP solution,
+contradicting the R₀ consequence of no UE. For R<R_low, every positive
+pivot forces the child solution pν in the homogeneous problem and
+leaves a negative pivot residual, so the full matrix is R₀. At the
+specified offset, the child is (1+p)ν and the pivot residual is
+q₀−d(1+p). The two roots and their strict inactive/active conditions
+are exactly as stated; their active determinants are D and −Dd.
+Their signed sum is zero. This is the degree-not-one exit for the
+original reward table, independent of unused nonsingleton rewards.
+
+At R=T the passive inverse weights simplify exactly to
+0, [c(U−1)+(V−1)]/(bc), and (V−1)/c. They remain nonnegative
+for R≥T. The tracked passive-inverse theorem allows zero weights,
+so this equality boundary is included directly, without an openness
+or limiting-strategy argument. I re-inspected
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`,
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`,
+and `PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+The named regular root-sum formula in
+`MathUE/LinearProgramming/R0DegreeSum.lean` is the previously checked
+degree input. No extra strategic data is required by this composition.
+
+### Both exact stress tables and bounded scope
+
+I constructed both complete tables exactly, setting every unused
+coordinate to 37 as specified, and checked all sixteen policy and
+Continue equalities in rational arithmetic. Both scalar residuals
+are zero, both R values lie in their strict claimed intervals, and
+all displayed rates and scalar values match.
+
+For the first table, a₁=−1/25000. Its joint outsider gaps
+(value minus Quit), for players 1,2, are
+
+    A: (1497/12500, 50509/5500000),
+    D: (593780/5550509, 0).
+
+For the η>c table they are
+
+    A: (297/2000, 523/16000),
+    D: (64/403, 0),
+
+and ηe=278385126/1623503635<c, confirming localization rather
+than a hidden η bound. These calculations include the allowed
+equality at D for player 2 and all actual joint collision entries.
+
+In the constructive interval, trap03 has positive participant
+premiums and both participants strictly prefer joining to leaving.
+It therefore fails every support-specific-leaver test and the
+positive-weight aggregate-leave test at that trap; product-low fails
+at its pure product law. Arbitrary completions may create further
+traps, including a full greatest core, so the theorem is not limited
+to a pair-core class. These are the claimed bounded input distinctions,
+not exclusion of every possible old chronology or stationary producer.
+No unresolved mathematical objection remains to the consolidated
+arbitrary-positive-eta, complete-R-axis theorem at the stated hash.

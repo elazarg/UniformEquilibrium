@@ -1208,3 +1208,59 @@ face, displacement, potential restriction, polynomial-obstruction,
 and reward-closure consumers have the hypotheses checked in the
 earlier reviews above; none silently restores a premium sign.
 No mathematical repair is requested.
+
+## Independent check: the full four-core boxed charge and fixture
+
+Scope: section20, "A full four-player core with no protected linear
+floor", at whole-note SHA256
+`80445d49c25bf21ae816af9273db7ae8dc54adb5ac6f769c97f7f120df931879`.
+Verdict: PASS as ordinary mathematics, with a neighborhood-scope
+clarification below. This was checked after my independent derivation
+of the cardinality version in my own notebook; no other review of
+section20 was read. This is intended for consolidation, not a second
+special-case export.
+
+The two coefficient sums P(T) and L(T) must remain distinct. Their
+cardinality bounds give d*U<tau*E_3 and the exact source charge
+sum(s-v)>=g*U+l*E_3. The equal-coordinate maximum E_3<=U^3/16
+is correct, including boundary vectors. Its strict charge bound and
+the available box produce return for every absorbing exact root.
+The partial-sure case has a positive-probability coalition I-i with
+strictly negative leave coefficient; the all-sure case is separately
+excluded by withdrawal. No low-floor premise at the source is used
+for this return theorem. The signed same-D minimum proof and the
+same-polynomial restriction from M+2 to a smaller B>M are valid.
+
+I reconstructed the entire fifteen-row table and independently
+enumerated its traps: I is the only one and M=3. The four singleton
+P coefficients are all -9/2; the L coefficients are exactly
+-3/2,-13/2,-13/2,-9/2. The six pair coefficients are P=-4,L=-8,
+and the four triple coefficients are P=1/10,L=-19/10. The source
+threshold is exactly 348*sqrt(45)>13. The global nonnegative-floor
+weight exclusion follows from the four sure-singleton product laws,
+whose summed premium expression is -(9/2)*sum(lambda).
+
+All fifteen pure coalitions have the stated improving moves. For
+every proper nonempty child I checked the displayed sure-singleton
+owner and omitted player. The child profile is exact against complete
+behavioral deviations, has zero joint Never, and gives the omitted
+player a gain1/2. Thus the strong for-every-child/there-exists-outside
+quantifier really holds; this is not just a list of local incentives.
+
+The singleton matrix is literally the previously checked G3. I also
+reenumerated all fifteen partitions from the block-row sums: only the
+discrete one and0|123 survive. The latter fails at q=(t,0,0,0),
+where the three responses are t-2t^2,t-t^2/2,t-2t^2. The
+previous R0-degree-one, inverse and non-Q screens therefore retain
+their claimed force without an additional matrix assumption.
+
+Neighborhood clarification for assembly: three displayed own
+singletons are zero. Strict coefficient margins preserve the analytic
+criterion in a full raw neighborhood, but the strategic Fin4 theorem
+still assumes nonnegative own singletons. Its admitted set near this
+fixture is full-dimensional, not an unrestricted open neighborhood
+of this boundary point. Raising just the three zero singleton-own
+entries slightly produces an interior point with all singletons
+positive and with strict raw margins; a small full neighborhood there
+is admitted. This clarification does not affect the exact fixture,
+the source comparisons, or the main theorem.
