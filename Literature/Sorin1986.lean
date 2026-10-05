@@ -17,6 +17,7 @@ import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer
 import UniformEquilibrium.Certificates.Public.FixedPrefixAccounting
 import UniformEquilibrium.Certificates.Public.TerminalChildLawTransfer
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
+import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.CompactDiscountedBestResponse
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.FiniteHorizonContinuation
@@ -5231,11 +5232,16 @@ theorem finiteEquilibriumPayoffs_one_eq_oneStageEquilibriumPayoffs
     · exact (finitePayoff_one_eq_mixedPayoff_initial G behavior).symm
   · exact lemma_1_E1_subset_En G ⟨1, by omega⟩
 
-/-! **Lemma 1(8), discounted inclusion.** -/
-theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
-    (lam : G.DiscountRate) :
-    G.oneStageEquilibriumPayoffs ⊆
-      G.discountedEquilibriumPayoffsOnRate lam := by
+/-- One fixed stationary repetition of a stage Nash profile is exact Nash
+and delivers its stage payoff at every valid paper rate. -/
+theorem FiniteStageGame.stationaryBehaviorProfile_discountedNash_and_payoff
+    (G : FiniteStageGame) (profile : G.MixedProfile)
+    (hnash : G.kernel.mixedExtension.IsNash profile) :
+    ∀ lam : G.DiscountRate,
+      G.repeatedGame.IsDiscountedεNash (1 - lam.1) PUnit.unit 0
+        (G.repeatedGame.stationaryBehaviorProfile profile) ∧
+      G.discountedPayoff lam.1 (G.repeatedGame.stationaryBehaviorProfile profile) =
+        G.mixedPayoff profile := by
   let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
     @Finite.of_fintype _ (G.finiteAction who)
   let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
@@ -5244,7 +5250,6 @@ theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
   let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
-  rintro payoff ⟨profile, hnash, rfl⟩
   let behavior := G.repeatedGame.stationaryBehaviorProfile profile
   have habs : G.repeatedGame.IsAbsorbingState PUnit.unit :=
     G.repeatedGame.isAbsorbingState_of_subsingleton PUnit.unit
@@ -5266,7 +5271,8 @@ theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
           (Function.update profile who deviation') who).symm
       _ ≤ G.kernel.mixedExtension.eu profile who := hnash who deviation'
       _ = _ := G.kernel.mixedExtension_eu profile who
-  refine ⟨behavior, ?_, ?_⟩
+  intro lam
+  refine ⟨?_, ?_⟩
   · exact G.repeatedGame
       |>.stationaryBehaviorProfile_isDiscountedNash_of_isAbsorbingState
         habs hstage (by linarith [lam.2.2]) (by linarith [lam.2.1])
@@ -5279,6 +5285,15 @@ theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
         (fun action ↦ G.kernel.eu action who) =
       G.kernel.mixedExtension.eu profile who
     rw [G.kernel.mixedExtension_eu]
+
+/-! **Lemma 1(8), discounted inclusion.** -/
+theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
+    (lam : G.DiscountRate) :
+    G.oneStageEquilibriumPayoffs ⊆
+      G.discountedEquilibriumPayoffsOnRate lam := by
+  rintro payoff ⟨profile, hnash, rfl⟩
+  exact ⟨G.repeatedGame.stationaryBehaviorProfile profile,
+    G.stationaryBehaviorProfile_discountedNash_and_payoff profile hnash lam⟩
 
 /-- The history-by-history pure best reply earns at least the paper's
 individual-rational level in the current stage. -/
@@ -5394,6 +5409,69 @@ theorem lemma_1_Elambda_subset_Delta (G : FiniteStageGame)
           G.discountedPayoff lam.1 profile who := by
       simpa [deviation, FiniteStageGame.discountedPayoff] using hequilibrium
     exact hdeviation.trans hequilibrium'
+
+/-- Select an actual one-stage Nash profile and derive its weak IR payoff
+through the checked discounted inclusion and security bound at rate one. -/
+theorem FiniteStageGame.exists_oneStageNash_mem_IR (G : FiniteStageGame) :
+    ∃ profile : G.MixedProfile,
+      G.kernel.mixedExtension.IsNash profile ∧
+        G.mixedPayoff profile ∈ G.individuallyRationalPayoffs := by
+  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let (who : G.Player) : Nonempty (G.kernel.Strategy who) :=
+    G.nonemptyAction who
+  let : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  obtain ⟨profile, hnash⟩ := G.kernel.mixed_nash_exists
+  have hone : G.mixedPayoff profile ∈ G.oneStageEquilibriumPayoffs :=
+    ⟨profile, hnash, rfl⟩
+  let rate : G.DiscountRate := ⟨1, zero_lt_one, le_refl 1⟩
+  exact ⟨profile, hnash, lemma_1_Elambda_subset_Delta G rate
+    (lemma_1_E1_subset_Elambda G rate hone)⟩
+
+/-- Singleton weak IR selects one actual profile before every valid rate.
+It is exact discounted Nash and delivers the target exactly at each rate. -/
+theorem exists_discountedNash_eq_allRates_of_IR_singleton
+    (G : FiniteStageGame) (target : Payoff G.Player)
+    (hsingleton : G.individuallyRationalPayoffs = {target}) :
+    ∃ profile : G.BehaviorProfile, ∀ rate : G.DiscountRate,
+      G.repeatedGame.IsDiscountedεNash (1 - rate.1) PUnit.unit 0 profile ∧
+        G.discountedPayoff rate.1 profile = target := by
+  obtain ⟨stage, hnash, hIR⟩ := G.exists_oneStageNash_mem_IR
+  have hequal : G.mixedPayoff stage = target := by
+    rw [hsingleton] at hIR
+    exact Set.mem_singleton_iff.mp hIR
+  refine ⟨G.repeatedGame.stationaryBehaviorProfile stage, ?_⟩
+  intro rate
+  obtain ⟨hstationary, hpayoff⟩ :=
+    G.stationaryBehaviorProfile_discountedNash_and_payoff stage hnash rate
+  exact ⟨hstationary, hpayoff.trans hequal⟩
+
+/-- Singleton weak IR gives the discounted Hausdorff conclusion with
+threshold one for every accuracy, using one fixed actual profile. -/
+theorem property_4_discounted_of_IR_singleton
+    (G : FiniteStageGame) (target : Payoff G.Player)
+    (hsingleton : G.individuallyRationalPayoffs = {target}) :
+    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
+      G.individuallyRationalPayoffs := by
+  obtain ⟨profile, hprofile⟩ :=
+    exists_discountedNash_eq_allRates_of_IR_singleton G target hsingleton
+  intro ε hε
+  refine ⟨1, zero_lt_one, ?_⟩
+  intro lam hlam hlamOne
+  let rate : G.DiscountRate := ⟨lam, hlam, hlamOne.le⟩
+  constructor
+  · intro value hvalue
+    exact ⟨value, lemma_1_Elambda_subset_Delta G rate hvalue,
+      (dist_self value).trans_lt hε⟩
+  · intro value hvalue
+    have hequal : value = target := by
+      rw [hsingleton] at hvalue
+      exact Set.mem_singleton_iff.mp hvalue
+    subst value
+    exact ⟨target, ⟨profile, hprofile rate⟩,
+      (dist_self target).trans_lt hε⟩
 
 /-- A feasible strict point first approximates a fixed weakly
 IR target by strict targets. One actual Nash profile precedes all small rates. -/

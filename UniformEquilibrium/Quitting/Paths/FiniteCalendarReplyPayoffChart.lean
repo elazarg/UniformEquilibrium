@@ -1,0 +1,191 @@
+import Mathlib.Topology.Algebra.MvPolynomial
+import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPolynomial
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineFullReplyCap
+import UniformEquilibrium.Quitting.Terminal.FiniteOpponentLateResponse
+
+/-! # Actual pure-reply payoffs on a finite calendar simplex -/
+
+noncomputable section
+
+namespace GameTheory
+
+open scoped BigOperators
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+omit [DecidableEq ι] in
+/-- The literal decoded independent profile is the existing finite timing realization. -/
+theorem quittingFiniteCalendarDecodedProfile_eq_timingProfile
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
+    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline)) :
+    quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point) =
+      quittingFiniteDeadlineTimingProfile reward deadline
+        (fun who => Math.ProbabilityMassFunction.stdSimplexEquiv.symm (point who)) := by
+  symm
+  apply finiteDeadlineTimingProfile_eq_stoppingLawProfile_of_laws
+  intro who
+  unfold quittingFiniteDeadlineTimingLaw quittingFiniteCalendarDecodedLaws
+  rw [_root_.Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
+  congr 1
+  funext action
+  cases action <;> rfl
+
+omit [DecidableEq ι] in
+/-- The decoded law has finite dates strictly below its deadline and a separate Never atom. -/
+theorem quittingFiniteCalendarDecodedLaws_isFiniteClock {deadline : ℕ}
+    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
+    (who : ι) :
+    IsFiniteClockStoppingLaw deadline (quittingFiniteCalendarDecodedLaws point who) := by
+  intro choice hchoice
+  cases choice with
+  | none => exact Or.inl rfl
+  | some time =>
+      refine Or.inr ⟨time, ?_, rfl⟩
+      by_contra htime
+      exact hchoice (quittingFiniteCalendarDecodedLaws_some_eq_zero_of_le
+        point who time (Nat.le_of_not_gt htime))
+
+/-- A native pure reply is the raw polynomial payoff at the actual updated simplex point. -/
+def quittingFiniteCalendarPureReplyPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
+    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
+    (who : ι) (action : QuittingFiniteDeadlineTimingAction deadline) : ℝ :=
+  quittingFiniteCalendarRawPayoff reward deadline
+    (Function.update point who (Math.ProbabilityMassFunction.stdSimplexEquiv (PMF.pure action)))
+    who
+
+theorem quittingFiniteCalendarDecodedLaws_update_pure {deadline : ℕ}
+    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
+    (who : ι) (action : QuittingFiniteDeadlineTimingAction deadline) :
+    quittingFiniteCalendarDecodedLaws
+        (Function.update point who
+          (Math.ProbabilityMassFunction.stdSimplexEquiv (PMF.pure action))) =
+      Function.update (quittingFiniteCalendarDecodedLaws point) who
+        (PMF.pure (quittingFiniteDeadlineTimingActionTime action)) := by
+  funext player
+  by_cases hplayer : player = who
+  · subst player
+    simp only [quittingFiniteCalendarDecodedLaws, Function.update_self,
+      Equiv.symm_apply_apply, PMF.pure_map]
+    congr 1
+    cases action <;> rfl
+  · simp only [quittingFiniteCalendarDecodedLaws, Function.update_of_ne hplayer]
+
+/-- This is the same full behavioral deviation payoff, not a substituted finite-game value. -/
+theorem quittingFiniteCalendarPureReplyPayoff_eq_terminalPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
+    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
+    (who : ι) (action : QuittingFiniteDeadlineTimingAction deadline) :
+    quittingFiniteCalendarPureReplyPayoff reward deadline point who action =
+      quittingTerminalPayoff reward
+        (Function.update
+          (quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point)) who
+          (quittingPureTimeBehaviorStrategy reward who
+            (quittingFiniteDeadlineTimingActionTime action))) who := by
+  let : Nonempty ι := ⟨who⟩
+  unfold quittingFiniteCalendarPureReplyPayoff
+  rw [quittingFiniteCalendarRawPayoff_eq_terminalPayoff,
+    quittingFiniteCalendarDecodedLaws_update_pure]
+  exact quittingTerminalPayoff_stoppingLawProfile_update_pure_eq _ _ _ _ _
+
+/-- Continuity comes from the existing literal multivariate payoff polynomial. -/
+theorem continuous_quittingFiniteCalendarRawPayoff_coordinate
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ) (who : ι) :
+    Continuous (fun point : MixedSimplex ι
+        (fun _ => QuittingFiniteDeadlineTimingAction deadline) =>
+      quittingFiniteCalendarRawPayoff reward deadline point who) := by
+  have hweights : Continuous (fun point : MixedSimplex ι
+      (fun _ => QuittingFiniteDeadlineTimingAction deadline) =>
+      fun entry : QuittingFiniteCalendarVariable ι deadline =>
+        (point entry.1).weights entry.2) := by
+    apply continuous_pi
+    intro entry
+    exact (Convexity.StdSimplex.continuous_weights_apply ℝ entry.2).comp
+      (continuous_apply entry.1)
+  have hpolynomial :=
+    (quittingFiniteCalendarRawPayoffPolynomial reward deadline who).continuous_eval
+  have heval := hpolynomial.comp hweights
+  simpa only [Function.comp_def, eval_quittingFiniteCalendarRawPayoffPolynomial] using heval
+
+theorem continuous_quittingFiniteCalendarPureReplyPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
+    (who : ι) (action : QuittingFiniteDeadlineTimingAction deadline) :
+    Continuous (fun point : MixedSimplex ι
+        (fun _ => QuittingFiniteDeadlineTimingAction deadline) =>
+      quittingFiniteCalendarPureReplyPayoff reward deadline point who action) := by
+  have hupdate : Continuous (fun point : MixedSimplex ι
+      (fun _ => QuittingFiniteDeadlineTimingAction deadline) =>
+      Function.update point who
+        (Math.ProbabilityMassFunction.stdSimplexEquiv (PMF.pure action))) := by
+    apply continuous_pi
+    intro player
+    by_cases hplayer : player = who
+    · subst player
+      simpa only [Function.update_self] using continuous_const
+    · simpa only [Function.update_of_ne hplayer] using continuous_apply player
+  exact (continuous_quittingFiniteCalendarRawPayoff_coordinate reward deadline who).comp hupdate
+
+/-- The late finite row is the Never row PLUS its genuine signed singleton correction. -/
+def quittingFiniteCalendarLateReplyPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
+    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
+    (who : ι) : ℝ :=
+  quittingFiniteCalendarPureReplyPayoff reward deadline point who none +
+    (∏ player ∈ Finset.univ.erase who, (point player).weights none) *
+      reward (quittingSingletonTerminal who) who
+
+theorem quittingFiniteCalendarLateReplyPayoff_eq_terminalPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
+    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
+    (who : ι) {time : ℕ} (htime : deadline ≤ time) :
+    quittingFiniteCalendarLateReplyPayoff reward deadline point who =
+      quittingTerminalPayoff reward
+        (Function.update
+          (quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point)) who
+          (quittingPureTimeBehaviorStrategy reward who (some time))) who := by
+  have hlate := quittingTerminalPayoff_stoppingLawProfile_late_pure_eq_never_add
+    reward (quittingFiniteCalendarDecodedLaws point) who deadline
+    (fun player _ => quittingFiniteCalendarDecodedLaws_isFiniteClock point player) htime
+  rw [quittingTerminalPayoff_stoppingLawProfile_update_pure_eq,
+    quittingTerminalPayoff_stoppingLawProfile_update_pure_eq] at hlate
+  simp only [quittingFiniteCalendarDecodedLaws_none_toReal] at hlate
+  unfold quittingFiniteCalendarLateReplyPayoff
+  rw [quittingFiniteCalendarPureReplyPayoff_eq_terminalPayoff]
+  exact hlate.symm
+
+theorem continuous_quittingFiniteCalendarLateReplyPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ) (who : ι) :
+    Continuous (fun point : MixedSimplex ι
+        (fun _ => QuittingFiniteDeadlineTimingAction deadline) =>
+      quittingFiniteCalendarLateReplyPayoff reward deadline point who) := by
+  have hproduct : Continuous (fun point : MixedSimplex ι
+      (fun _ => QuittingFiniteDeadlineTimingAction deadline) =>
+      ∏ player ∈ Finset.univ.erase who, (point player).weights none) :=
+    continuous_finsetProd _ fun player _ =>
+      (Convexity.StdSimplex.continuous_weights_apply ℝ none).comp (continuous_apply player)
+  exact (continuous_quittingFiniteCalendarPureReplyPayoff reward deadline who none).add
+    (hproduct.mul continuous_const)
+
+/-- Delegate the full behavioral cap to its native menu and one actual late finite row. -/
+theorem quittingFiniteCalendarFullCap_eq_max_late
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
+    (point : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
+    (who : ι) {time : ℕ} (htime : deadline ≤ time) :
+    quittingContinuationBestResponseValue reward
+        (quittingStoppingLawProfile reward (quittingFiniteCalendarDecodedLaws point)) who =
+      max (Finset.univ.sup' Finset.univ_nonempty
+        (quittingFiniteCalendarPureReplyPayoff reward deadline point who))
+        (quittingFiniteCalendarLateReplyPayoff reward deadline point who) := by
+  let mixed := fun player => Math.ProbabilityMassFunction.stdSimplexEquiv.symm (point player)
+  have hcap := quittingContinuationBestResponseValue_finiteDeadlineTimingProfile_eq_max
+    reward deadline mixed who
+  rw [← quittingFiniteDeadlineTimingProfile_pureTime_eq_never_add_of_le
+    reward deadline mixed who htime] at hcap
+  unfold quittingFiniteDeadlineReplyCap at hcap
+  rw [← quittingFiniteCalendarDecodedProfile_eq_timingProfile reward deadline point] at hcap
+  simp_rw [← quittingFiniteCalendarPureReplyPayoff_eq_terminalPayoff] at hcap
+  rw [← quittingFiniteCalendarLateReplyPayoff_eq_terminalPayoff reward deadline point who htime]
+    at hcap
+  exact hcap
+
+end GameTheory

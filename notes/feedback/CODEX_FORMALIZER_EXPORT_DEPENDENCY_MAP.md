@@ -506,13 +506,18 @@ internally selects one attaining the least actual derivative; no favorable
 minimizer or uniform differentiability certificate is supplied. Its index may
 be any nonempty compact topological space, not only a compact metric space.
 The full integration gate passes for both analytic additions.
-An unapplied source draft constructs the actual common-calendar tester family:
+The checked common-calendar source constructs the actual tester family:
 zero, every owner's finite dates through the common endpoint, and separate
 Never replies. Its maximum equals full behavioral exploitability, retaining
 the signed singleton correction for late finite replies. It internally selects
 a compact smooth minimum and computes that same profile's positive weights,
-their sum-one identity, and the entropy inactivity bound. Root and independent
-source reviews pass; Lean checks remain. The draft does not supply
+their sum-one identity, and the entropy inactivity bound.
+`maximum_quittingCommonCalendarTesterGain_eq_exploitability`
+(`UniformEquilibrium/Quitting/Paths/CommonCalendarTesterPool.lean`) and
+`exists_quittingCommonWindowSmoothMinimum_with_weights`
+(`UniformEquilibrium/Quitting/Paths/CommonCalendarSmoothMinimum.lean`) pass
+silent named checks. Their actual pure-reply chart reuses the existing finite
+payoff polynomial and full behavioral cap owners. The source does not supply
 the tilted parameter, outer maximization or enlarged-calendar comparison.
 The remaining common-calendar consumer needs projected four-coordinate
 gradient selection, a same-table calendar telescope, and the silent shift
@@ -1330,6 +1335,12 @@ The same proof is factored through the stronger
 all-strict point suffices, without ambient full dimensionality. Its weak-target
 profile facade still selects one exact Nash profile before all small rates.
 This does not handle a flat security coordinate without a strict point.
+`exists_discountedNash_eq_allRates_of_IR_singleton` and
+`property_4_discounted_of_IR_singleton` in the same owner prove the singleton
+weak-IR branch. One actual stage Nash is selected internally, and its same
+stationary repetition is exact Nash with exact target delivery at every valid
+rate. The previous discounted-inclusion proof delegates to that shared
+stationary-profile theorem. The nontrivial flat-security branch remains.
 
 The separate Proposition 4 draft uses a generic connected convex-hull
 representation, an internally selected affine step and a geometric schedule
