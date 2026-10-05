@@ -530,14 +530,23 @@ at the varying reward table.
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCapNashNearMinimum.lean`)
 instead assumes a global sum-debt floor and sum-debt excess. That theorem
 cannot be applied by substituting maximum debt for its stated hypotheses.
-Existing full-cap finite-clock approximation in Research should be promoted
-and reused, not replaced by payoff-only compression. Its independently reviewed
-promotion draft adds a source-producing quantitative facade: under the unit
-reward bound, one actual four-player law tuple supported below `8 * j + 1`
-has unrestricted exploitability at most the behavioral infimum plus `24 / j`.
-The same laws work on every larger calendar, with Never retained. This draft
-is not yet checked; it does not assert a zero infimum or produce the tilted
-tester weights. Membership stretch retains
+`hasEscapeAwareQuantileClockCompression_of_normalized`
+(`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`)
+and `escapeAwareQuantileClock_normalized_quantitative_bracket`
+(`UniformEquilibrium/Quitting/Paths/CommonQuantileClockApproximation.lean`)
+provide the integrated full-cap finite-clock approximation.
+`exists_fin4_calendarUniformStoppingLaws_exploitability_le`
+(`UniformEquilibrium/Quitting/Paths/QuantitativeFiniteClockSource.lean`)
+passes its silent named check. Under the unit reward bound and a prescribed
+depth at least nine, it internally selects one actual independent law tuple
+before every larger calendar. Its unrestricted behavioral exploitability is
+at most the actual behavioral infimum plus
+`24 / (((clock - 1) / 8 : Nat) : Real)`, which tends to zero.
+`exists_fin4_finiteClockStoppingLaws_exploitability_le` in the same owner
+gives support `8 * j + 1` and error `24 / j` at every positive level.
+Never remains literal, and the same laws and full behavioral caps are
+retained on larger calendars. This does not assert a zero infimum or produce
+the tilted tester weights. Membership stretch retains
 the original table's ancestry; generic polynomial selection may choose a new
 fiber, so those two producers cannot be interchanged. The opposed-reversal
 consumer reuses the checked coherent exclusion and first reversal, adding only
@@ -639,6 +648,35 @@ and active determinant seven. The canonical actual-root sum gives degree one,
 and the existing degree theorem supplies standard Q. The remaining principal
 Q-bar and inverse tests, response-partition and proper-child certificate
 screening claims are not supplied; this is not a whole-packet seal.
+
+## Greatest premium core: structural and exact-root prerequisites
+
+`finiteCoalitionPremiumCore_eq_empty_iff`
+(`MathUE/FiniteCoalitionPremiumCore.lean`) identifies the greatest finite
+trap union with the obstruction to support peeling, for an abstract positive
+coalition relation. Its actual reward adapter is
+`quittingPremiumCore_eq_empty_iff_weakSupportPeeling`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCore.lean`).
+The same adapter gives outsider flatness only on the outsider's extension
+of a nonempty core, under nonnegative participant premiums.
+`quittingPremiumCore_pair_reward_gt_singleton`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCorePair.lean`)
+derives the literal strict pair premiums from a pair core without adding
+nonnegative-premium hypotheses.
+
+`exactRootSuccessor_active_eq_singleton_of_support_not_premiumTrap`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCoreExactRoot.lean`)
+uses the actual support and exact coalition masses to obtain an active
+singleton binding for every nonempty nontrap support. Signed annotations
+and singleton rewards remain allowed.
+`exactRootSuccessor_mem_singletonLowerBoundary_of_pairPremiumCore_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCoreStrictLeave.lean`)
+excludes the remaining pair support using strict leave preference and only
+the first annotation floor. It retains all outsider hazards and full exact
+Nash, without global outsider flatness. Its conclusion is the singleton
+lower-boundary return, not full bounded-L return. These bounded units do not
+supply the protected-floor analytic consumer, a size-at-most-two UE theorem,
+or the mutual-join branch and its degree/index analysis.
 
 ## Proof-mining connections not yet formalized
 
@@ -1383,9 +1421,16 @@ whose flat coordinate equals security, under the global pure-stage cap at
 that security level. Every calendar date preserves the flat coordinate
 exactly, while the full cycle-average payoff approximates the target.
 Its silent named paper check, separate standard-axiom check, and full
-integration build pass. This is a
-source-calendar producer, not a discounted Nash or punishment-trigger
-consumer; the nontrivial flat-security equilibrium branch remains open.
+integration build pass. This theorem is the actual source-calendar producer.
+`exists_discountedNash_close_allSmallRates_of_flatFace_strictActive`
+in the same owner consumes that source internally. When every player is the
+flat or active coordinate and the target has strict active security slack,
+it selects one actual profile before all sufficiently small positive rates,
+with exact flat delivery at every valid rate and exact Nash against every
+full behavioral replacement at small rates. Its metric target approximation,
+silent named check, and separate standard-axiom check pass. This facade does
+not supply weak-active targets without strict slack or finish the whole
+paper claim.
 
 The separate Proposition 4 draft uses a generic connected convex-hull
 representation, an internally selected affine step and a geometric schedule

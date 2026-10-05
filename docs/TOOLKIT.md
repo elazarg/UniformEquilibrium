@@ -151,6 +151,28 @@ LCP solutions, and compute canonical degree one from the unique actual root
 at offset `(1,-1,-1,-1)`, with inactive residual two and active determinant seven.
 Its recursive normal core is full. Principal Q-bar and inverse tests, response
 partitions, and child-certificate separation remain outside this checked example.
+`quittingPremiumCore_eq_empty_iff_weakSupportPeeling` and
+`quittingPremiumCore_outsider_reward_eq_singleton`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCore.lean`)
+identify the actual greatest premium-trap core and its empty-core peeling
+criterion. Under nonnegative participant premiums and a nonempty core,
+an outsider is flat only on coalitions inside its own extension of that core;
+no global outsider flatness is required.
+`quittingPremiumCore_pair_reward_gt_singleton`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCorePair.lean`)
+derives both strict pair premiums directly from a pair core, without a
+nonnegative-premium hypothesis.
+`exactRootSuccessor_active_eq_singleton_of_support_not_premiumTrap`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCoreExactRoot.lean`)
+gives an active binding singleton coordinate for an exact root with nonempty
+nontrap support; its annotation and singleton rewards may be signed.
+`exactRootSuccessor_mem_singletonLowerBoundary_of_pairPremiumCore_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCoreStrictLeave.lean`)
+uses the actual pair core, nonnegative participant premiums, strict leave
+preference, and only the first annotation floor. Every absorbing exact root
+returns above all singleton floors with an active binding coordinate.
+This is a lower-boundary return, not a full bounded-L return, a smooth-potential
+exclusion, or a uniform-equilibrium theorem for all cores of size at most two.
 `weakPeeling_iff_every_boxedExactRoot_singletonLowerBoundary`
 (`UniformEquilibrium/Quitting/Classification/NonnegativePremiumBoxBoundary.lean`)
 proves the converse under nonnegative own premiums on every box strictly
@@ -3175,7 +3197,7 @@ generic quitting-game existence theorems.
 | Small representations of preconnected convex hulls | `MathUE/Topology/ConnectedConvexHullRepresentation.lean` | `exists_small_finset_of_mem_convexHull_isPreconnected` selects a nonempty finite subset of the actual source representing the supplied convex-hull point, with cardinality at most the ambient dimension or one in dimension zero. No compactness, path connectedness, or supplied representation is required. Its silent named check, exhaustive axiom audit and full integration check pass. This supplies a geometric prerequisite, not Sorin's discounted schedule or an equilibrium. |
 | Affine peeling and geometric schedules | `MathUE/Topology/ConnectedConvexHullAffineStep.lean`, `MathUE/RealSeries/GeometricAffineSchedule.lean` | `exists_affine_step_of_mem_convexHull_isPreconnected` internally selects a source point and convex-hull residual under the prescribed dimension-weight budget. `exists_geometric_schedule_of_bounded_affine_steps` constructs the complete schedule from actual affine steps in a bounded region and proves its exact coordinatewise discounted payoff. Neither result asserts equilibrium or closes Sorin's paper statement without its game-specific adapter. |
 | Sorin's discounted feasible-set identity | `Literature/Sorin1986.lean` | `proposition_4` proves the paper's exact identity between discounted and correlated feasible payoffs for positive rates below the reciprocal player count. The source geometry, stages and behavioral realization are constructed internally. Its silent paper check, separate actual-profile consumer and standard-axiom checks, and full build pass. `proposition_6` reuses the generic schedule; `proposition_15` retains its actual behavioral equilibrium statement and passes the separate axiom check. Other unfinished paper results remain separate obligations. |
-| Sorin's flat-face calendars | `Literature/Sorin1986.lean` | `FiniteStageGame.exists_flatFace_calendar` selects an actual nonempty finite pure calendar approximating a supplied feasible target on a globally capped security face. Every date preserves the flat coordinate exactly. Its silent paper check, separate standard-axiom check, and full integration build pass; it does not supply a discounted Nash or punishment-trigger consumer for the nontrivial flat-security branch. |
+| Sorin's flat-face source and strict-active consumer | `Literature/Sorin1986.lean` | `FiniteStageGame.exists_flatFace_calendar` selects an actual nonempty finite pure calendar approximating a supplied feasible target on a globally capped security face, preserving the flat coordinate at every date. `exists_discountedNash_close_allSmallRates_of_flatFace_strictActive` internally consumes that source when the two listed coordinates exhaust the players and the target has strict active security slack. One profile precedes all sufficiently small rates, with exact flat delivery at every valid rate, full behavioral exact Nash at small rates, and metric target approximation. The silent paper check and separate standard-axiom checks pass. Weak-active targets without strict slack and the whole paper claim are not supplied by this facade. |
 | Sorin's asymmetric critical-rate equilibria | `Literature/Sorin1986.lean` | `asymmetricStationaryProfile_isDiscountedNash` constructs the stationary cooperation equilibrium for loss parameters satisfying `y ≤ x`, including equality. `asymmetricAlternatingProfile_isDiscountedNash` constructs the DC-first alternating equilibrium when `x < y`. Both use the printed critical rate, retain the printed payoff hypotheses without sign restrictions, and cap arbitrary full behavioral deviations. Actual delivery, membership and boundary consumers pass separate standard-axiom checks, the silent paper build and the full build. The above-critical uniqueness conclusion of `concluding_remark_4` remains unfinished. |
 | Coupled cubic shape example | `MathUE/Analysis/Examples/CoupledCubicShape.lean` | `Math.CoupledCubicShape.quasiconvexOn` proves quasiconvexity on every convex domain. `not_convexOn` and `not_exists_additive_eqOn` prove nonconvexity and failure of an additive representation on boxes of dimension at least two and coordinate widths at least one. The actual first and mixed derivatives and a literal rational-polynomial representation are also proved. This is an analytical example, not a quitting potential or equilibrium construction. |
 | Compact finite-prefix relations | `MathUE/Topology/CompactFinitePrefixRelation.lean`, `MathUE/Topology/CompactDependentFinitePrefixRelation.lean` | Inverse-limit selection from compatible compact finite prefixes. `exists_dependentInfiniteChain_of_finitePrefixes` also permits the state carrier to depend on the depth, but remains conditional on a coherent family of nonempty compact finite-prefix solution sets; it supplies no compatible-prefix producer. |
@@ -4201,12 +4223,12 @@ opponent survival probability to the deadline times the positive singleton
 self-reward.  The module is a consumer: it does not construct the finite mixed
 Nash equilibrium or its behavioral realization.
 
-The Research quantile-clock hierarchy gives an escape-aware finite polynomial
+The integrated quantile-clock hierarchy gives an escape-aware finite polynomial
 lower/upper architecture for the unrestricted terminal problem.
 `quittingTerminalSemanticPair_eq_stoppingLawProfile` and
 `quittingFiniteClockSemanticReachable_isCompact`, together with
 `quittingFiniteClockSemanticReachable_isConnected`
-(`Research/Quitting/FiniteClockTerminalSemantics.lean`) state the literal
+(`UniformEquilibrium/Quitting/Paths/FiniteClockTerminalSemantics.lean`) state the literal
 stopping-law reconstruction and compact connected finite-clock center before
 any quantile argument.  From a supplied positive global terminal gap,
 `exists_quittingFiniteClockDoubleFullGapCosource`
@@ -4216,16 +4238,28 @@ full-gap debtors, and a pure date-or-Never response attaining each debtor's
 unrestricted behavioral cap.  The theorem does not give a chronology or make
 the two responses compatible with one Nash--Bellman spine.
 `hasEscapeAwareQuantileClockCompression_of_normalized`
-(`Research/Quitting/EscapeAwareQuantileClockTransport.lean`) and
+(`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`) and
 `escapeAwareQuantileClock_normalized_quantitative_bracket`
-(`Research/Quitting/EscapeAwareQuantileClockHierarchy.lean`) compress every
+(`UniformEquilibrium/Quitting/Paths/CommonQuantileClockApproximation.lean`) compress every
 actual behavioral profile to a literal finite-clock independent product law,
 retain `Never`, control the unrestricted cap, and give the exact general
 `2 * n * (n - 1) / M` bracket.  The lower values converge to the true
 executable exploitability infimum.  `finiteClockPolynomialSemanticImage_eq_reachable`
 (`Research/Quitting/FiniteClockPolynomialCenter.lean`) identifies the exact
 real feasible image of the rational marginal-simplex/payoff/cap graph with the
-literal finite-clock semantic center.  Finally,
+literal finite-clock semantic center.
+`exists_finiteClockStoppingLaws_exploitability_le` and
+`exists_fin4_calendarUniformStoppingLaws_exploitability_le`
+(`UniformEquilibrium/Quitting/Paths/QuantitativeFiniteClockSource.lean`)
+internally select actual independent complete stopping laws, bounding their
+unrestricted behavioral exploitability by the actual infimum plus twice the
+common-quantile radius. For four players, positive level `j` gives support
+`8 * j + 1` and error `24 / j`. At a prescribed depth of at least nine,
+the error is `24 / (((clock - 1) / 8 : Nat) : Real)` and tends to zero.
+The same laws precede every larger calendar, retaining their literal Never
+atoms and full behavioral caps. These are actual source producers, not
+payoff-only compression, but they do not prove that the infimum is zero or
+construct the tilted tester weights. Finally,
 `quantileClockLowerQueryFeasible_iff` and
 `ratCast_le_quittingTerminalExploitabilityInf_normalized_of_certificate`
 (`Research/Quitting/EscapeAwareQuantileClockPolynomialLower.lean`) present the

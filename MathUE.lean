@@ -71,6 +71,7 @@ import MathUE.AffineRecurrenceInfiniteUnroll
 import MathUE.TwoCoordinateSparseSimplex
 import MathUE.Probability.FiniteOverlapSparseMaximizer
 import MathUE.FiniteCoalitionSupportPeelingOrder
+import MathUE.FiniteCoalitionPremiumCore
 import MathUE.Probability.OverlappingFirstStoppingChronologicalEquality
 import MathUE.Probability.OverlappingFirstStoppingPositiveContinueEquality
 import MathUE.Probability.OverlappingFirstStoppingInfiniteRecurrence
@@ -671,6 +672,7 @@ import MathUE.Topology.KuhnSimplexGeometry
 import MathUE.Topology.KuhnSimplexIncidence
 import MathUE.Topology.KuhnSimplexOrientation
 import MathUE.Topology.NestedOuterApproximation
+import MathUE.Order.MutualSupremumApproximation
 import MathUE.Topology.NonnegativeSubsequenceDichotomy
 import MathUE.Topology.OneSidedAffineLimit
 import MathUE.Topology.OneSidedDiniFencing

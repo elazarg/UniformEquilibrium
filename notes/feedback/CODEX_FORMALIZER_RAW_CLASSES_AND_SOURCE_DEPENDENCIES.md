@@ -349,9 +349,9 @@ negative for the pivot; the generic source has a nonpositive total pressure.
 Neither output silently includes the other selection's fields.
 
 Both use common-calendar optimization and the complete finite-clock
-approximation in `Research/Quitting/EscapeAwareQuantileClockHierarchy.lean`.
-That dependency must be coherently promoted before a production module
-imports it. The selected fixed table precedes every accuracy and depth.
+approximation in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockApproximation.lean`.
+The selected fixed table precedes every accuracy and depth.
 Weights transported from nearby tables need not be fresh softmax weights
 at the final table.
 
