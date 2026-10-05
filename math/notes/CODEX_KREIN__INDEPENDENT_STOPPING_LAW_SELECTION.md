@@ -2873,7 +2873,8 @@ review; the following exploration does not modify that result.
 
 ## Two genuine joint phases give an open full-table neighborhood
 
-Status: new complete ordinary proof candidate, not independently reviewed.
+Status: complete ordinary proof candidate, with an independent substantive
+PASS by CODEX_BROUWER in his feedback for this notebook. Not Lean-checked.
 It answers a structural limitation of the previous architecture, not an
 optimization of its scalar bounds. In a cycle with a final solo-3 mixing
 phase immediately before a joint {0,3} mixing phase, the first phase
@@ -3120,3 +3121,56 @@ Next independent challenge: recompute (86), verify the arbitrary-table
 elimination (83)–(85), and test whether a named existing producer
 already covers this entire concrete neighborhood. Do not replace
 these checks by the false premise that equilibrium existence is open.
+
+### Exact exclusion of the fixed-label stationary neighborhood
+
+This separate source calculation does not change (79)–(86). At the
+center there is no stationary terminal equilibrium with player 3
+quiet, including boundary hazards for the other three players.
+For hazards q, let Q_i be the expected payoff from quitting now,
+B_i the unnormalized passive payoff from a nonempty opponent coalition,
+and alpha_i=1−product_{j≠i}(1−q_j). Put
+
+    E_i=alpha_i*Q_i−B_i.
+
+Whenever opponents absorb with positive probability, stationary optimality
+requires E_i≤0 if q_i=0 and E_i≥0 if q_i>0, with equality for an
+interior hazard. These are necessary even for unrestricted behavioral
+optimality, since always-Quit and always-Continue are allowed deviations.
+
+Suppose q_3=0. Put A=q_1+q_2−q_1*q_2 and
+T=q_1+q_2−2*q_1*q_2. The center's rewards give
+
+    Q_0=1−A,  B_0=2T,
+    E_0=A(1−A)−2T≤−T,
+
+because A≥max(q_1,q_2), hence A²≥q_1*q_2. The nonnegative
+quantity T vanishes only at (q_1,q_2)=(0,0) or (1,1).
+Away from these two cases, E_0<0 forces q_0=0.
+
+If q_1=q_2=1, then alpha_2=1 and
+
+    E_2=(1/2−3q_0/2)−2(1−q_0)=−3/2+q_0/2<0,
+
+contradicting q_2=1. If q_1=q_2=0 and q_0>0, then
+E_3=h_3*q_0+eta*q_0²>0, contradicting quiet player 3.
+If all hazards vanish, player 0 can improve from Never's zero payoff
+to its singleton 1. Thus only q_0=0 remains.
+
+With q_0=q_3=0 and q_1>0,
+
+    E_2=q_1²/2−2q_1<0,
+
+so q_2=0. But then E_3=q_1−q_1²/2>0, again contradicting
+q_3=0. Finally q_1=0,q_2>0 gives E_1=q_2+q_2²/2>0,
+contradicting q_1=0. This exhausts the cube with q_3=0.
+
+The inspected declaration `PairedCubicStationaryExample.activeHazard`
+in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicActiveJacobian.lean`
+is literally (point_0,point_1,point_2,0).
+Consequently `PairedCubicStationaryExample.exists_local_stationary_branch`
+in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`
+cannot contain this center in its asserted fixed-label neighborhood.
+This is not yet exclusion of relabelings, other stationary supports,
+or every other existing raw-table producer. Those remain separate
+coverage questions; no negative numerical experiment is used here.

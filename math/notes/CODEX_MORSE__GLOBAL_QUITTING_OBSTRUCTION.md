@@ -54,6 +54,18 @@ passed final artifact checks and is frozen as
 `../exports/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md`, SHA256
 `2aac4a3fe2f1f3662b1f1dcea7abf2162273131e5e1c2a68f782ba8cfe1ff029`.
 No new Lean implementation is asserted by these ordinary proofs.
+Section 16 gives a direct existing-source composition for any globally
+safe quiet player, including zero-singleton children. In particular it
+rules out new coverage from support-specific leavers when the greatest
+premium core is all four players. The surviving support-specific case
+to examine has a proper three-player greatest core.
+Section 17 is a complete new signed support-specific-leaver proof,
+frozen for independent review. It protects a set P of singleton floors
+and allows arbitrary participant premiums outside P. Its proof combines
+same-domain return with minimum collapse, depending on which coordinates
+bind at the actual minimum. Its signed proper-three-core fixture is
+fully recorded. No review or Lean implementation of Section 17 is yet
+claimed.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -1875,6 +1887,424 @@ This does not assert that a negative own payoff is protected by a
 singleton floor; the explicit behavioral endpoint comparisons, including
 the prescribed sure exit, are what establish these child claims.
 
-Next requested check: independently verify preservation of p's floor,
-the exact signed return to D, and the no-premium charge estimate (67).
-Section 14 is not modified or presumed reviewed by this extension.
+The protected-floor return, signed domain, and charge estimate have
+passed the two independent reviews recorded above. A concrete next
+question is the proper three-player core with no common leaver,
+while retaining the exact three-core unique-root counterexample to a
+universal negative-index argument.
+
+## 16. A globally safe quiet player is already covered, including zero children
+
+Let I have four players, fix p∈I, and write s_p=r_p({p}). Suppose
+that for every nonempty T⊆I\{p},
+
+    r_p(T) ≥ s_p,       r_p(T∪{p}) ≤ r_p(T).          (68)
+
+Assume that at least one of the other three players has a nonnegative
+own singleton. Then the original four-player quitting game has a
+uniform-equilibrium payoff. This statement is a direct composition of
+existing tracked producers, not new raw-class coverage.
+
+Here is the complete reason the all-zero-child case is included. Let
+δ>0. The three-player producer selects an actual child behavioral
+profile with terminal exploitability at most δ+δ² and joint-Never
+probability at most δ. Both bounds hold for the SAME profile in the
+original child table; no fixed positive child singleton is required.
+The producer's proof temporarily increases one child's nonnegative
+singleton by δ, selects an error-δ² child profile there, charges its
+joint Never by the positive singleton, and evaluates the same stopping
+laws at the original table. The nonnegative perturbation increases
+regret by at most δ. This is precisely
+`exists_terminalProfile_smallExploitability_smallNever_of_nonnegativeSingleton`
+in `UniformEquilibrium/Quitting/Classification/ThreePlayer/NonnegativeSingletonEarlyAbsorption.lean`.
+
+Let p always Continue. The original child's deviations and payoffs
+are unchanged. For p, couple an arbitrary full behavioral deviation to
+the same independent child stopping laws. If p quits at the first
+child quit, the second inequality (68) makes its reward no greater
+than its quiet reward. If p quits earlier and the child later quits,
+the first inequality makes its singleton reward no greater than its
+quiet reward. If p never quits, the two outcomes coincide. Only the
+event that the entire child never quits can produce a positive excess,
+and there that excess is at most max(s_p,0). Thus every full deviation
+has expected gain at most max(s_p,0) times child joint-Never mass.
+This coupling covers arbitrary private randomized stopping and does
+not give the deviator advance information about future child actions.
+
+Consequently the lifted four-player exploitability is bounded by
+
+    max(δ+δ², max(s_p,0)δ),
+
+which tends to zero. Existing terminal approximate-Nash selection
+supplies one fixed uniform-equilibrium payoff. A chosen payoff need
+not equal the payoff of any one of the δ-dependent profiles.
+
+In literal certificate terms, take both advance and withdrawal weight
+vectors to be zero in `WithdrawalFutureJoinRewardCertificate`, defined
+in `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinRaw.lean`.
+Its future row is s_p−r_p(T)≤0 and its join row is
+r_p(T∪{p})−r_p(T)≤0. These are exactly (68), for any of the
+five certificate kinds. Its Never excess is max(s_p,0), not zero.
+The already present
+`exists_quietProfiles_smallExploitability_smallNever_of_withdrawalFutureJoinFamily`
+in `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`
+performs the original-profile composition. The final semantic source is
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+All three implementation files inspected for the new lookup are tracked;
+this notebook records static source inspection, not a fresh Lean build.
+
+Now suppose participant premiums are nonnegative, all own singletons
+are nonnegative, and the greatest premium trap is I itself. A criterion
+requiring EACH trap A to possess some designated weak leaver p_A in A
+necessarily assigns a leaver p_I to I. Its comparisons give
+
+    r_p(T) ≥ r_p(T∪{p}) ≥ s_p
+
+for every nonempty T⊆I\{p}. Hence (68) applies. This covers the
+entire full-core branch of that support-specific-leaver criterion,
+even when all child singletons vanish and an unperturbed all-Never
+child profile defeats a universal bound without a Never term.
+Failure of that stronger universal zero-Never bound is not failure of
+the existing actual-profile producer above.
+
+Together with the already reviewed core-at-most-two result, this leaves
+only a proper three-player greatest core as a potentially new
+support-specific-leaver class on four players. A leaver of that core
+need not satisfy (68) on coalitions containing the flat outside player,
+so the composition does not silently cover that remaining case.
+
+## 17. Signed support-specific leavers with a protected set of floors
+
+**Status: complete ordinary proof, frozen for independent falsification;
+not yet independently reviewed or implemented in Lean.** This is an
+actual finite reward criterion, not a supplied root selector. It combines
+the independently checked global minimum-collapse argument with the
+signed return domain of Section 15.
+
+### Finite data and exact analytic statement
+
+Let I be finite and nonempty. Specify r(S)∈ℝ^I for every nonempty
+S⊆I, and put s_i=r_i({i}). Fix M≥0 with |r_i(S)|≤M and B>M.
+Choose a nonempty protected set P⊆I. Assume:
+
+1. For every p∈P and every S containing p, r_p(S)≥s_p.
+   Players outside P may have arbitrary signed participant premiums.
+2. A positive-premium trap is a nonempty A⊆I such that every i∈A
+   has some S⊆A containing i with r_i(S)>s_i. For every trap A,
+   there is a p_A∈A∩P with
+
+       r_{p_A}(T∪{p_A}) < r_{p_A}(T)
+       for every nonempty T⊆A\{p_A}.                 (69)
+
+The designated player may depend on A. There need not be a common
+member of all traps. All conditions are finite raw reward tests; the
+second condition is vacuous if there are no traps.
+
+For q∈[0,1]^I let μ_q be the product coalition law, c(q)=μ_q(∅),
+and a(q)=1−c(q). At a source v define the literal successor
+
+    w(v,q)=c(q)v+∑[S≠∅] μ_q(S)r(S).
+
+Write Q_i(q) for the forced-Quit endpoint and C_i(v,q) for the
+forced-Continue endpoint, including v_i on opponent nonabsorption.
+Exact Nash means w_i≥Q_i,C_i. In particular q_i>0 implies
+w_i=Q_i, and q_i<1 implies w_i=C_i. The source annotations are
+arbitrary vectors, not assumed strategically realizable.
+
+**Analytic theorem.** There is no C¹ function H on a neighborhood of
+[−B,B]^I such that, for EVERY boxed v and EVERY exact Nash root q,
+
+    H(w(v,q))+a(q) ≤ H(v).                           (70)
+
+This theorem permits signed singleton levels and any finite player set.
+
+### One fixed protected return domain
+
+Define compact sets
+
+    R_P={v∈[−B,B]^I: v_p≥s_p for all p∈P},
+    D_P={v∈R_P: some v_i≤s_i},
+    U=∏[s_i,B],       L={v∈U: some v_i=s_i}.
+
+Both D_P and L are nonempty, and L⊆D_P. At ANY boxed exact root,
+Q_p≥s_p for p∈P by assumption 1. Nash and one-stage averaging
+therefore give w∈R_P, without a floor assumption on the source.
+
+Now let v∈R_P and let q absorb. Its active support A={i:q_i>0}
+is nonempty. If A were a trap, take p=p_A. Its exact endpoint gap is
+
+    Q_p−C_p = μ_{−p}(∅)(s_p−v_p)
+      +∑[∅≠T⊆A\{p}] μ_{−p}(T)
+                       [r_p(T∪{p})−r_p(T)].         (71)
+
+The empty term is nonpositive. A singleton cannot be a premium trap,
+so another member of A is active. The total nonempty probability in
+(71) is positive, and every corresponding bracket is strictly negative.
+Thus Q_p<C_p, contradicting q_p>0 and Nash. This calculation retains
+ALL larger simultaneous coalitions of the other active players.
+
+Therefore A is not a trap. Some active k has r_k(S)≤s_k for
+every S⊆A containing k. Its forced-Quit endpoint is at most s_k,
+and support optimality gives w_k=Q_k≤s_k. This need not be equality:
+k may be unprotected with negative premiums. Consequently
+
+    v∈R_P, q absorbing exact Nash  ⇒  w(v,q)∈D_P.    (72)
+
+The same D_P works for every source and root; it does not depend on
+the active support or on its designated leaver.
+
+### Minimum location and first-order signs
+
+Suppose (70), and minimize H on D_P at x. If x_i<s_i for some
+i, all Continue is not Nash there. Finite Nash existence supplies an
+absorbing root, and (72) returns it to D_P, contradicting minimality
+and (70). Thus x≥s. Since x∈D_P, some coordinate binds, so
+x∈L and x also minimizes H on L.
+
+Set J={i:x_i=s_i} and g=∇H(x). The literal singleton-face drift
+inequality for a full exact-root potential gives
+
+    g·(x−r({j}))≥1  for every j∈J.                  (73)
+
+It does not require a premium sign condition. If J={j}, all other
+interior partials vanish and all upper-face partials are nonpositive.
+The j term in (73) is zero; every upper-face displacement is positive
+because B>M. This contradicts (73). Hence |J|≥2.
+
+Increasing one binding coordinate leaves another coordinate binding,
+so g_j≥0 for j∈J. Every nonbinding interior partial vanishes;
+every partial at an upper face is nonpositive. These are the only
+first-order minimum facts used below.
+
+Also every exact root at x has zero absorption: otherwise (72) and
+(70) strictly lower H inside D_P. This statement concerns the actual
+minimum only, not arbitrary annotations.
+
+### Arm 1: some binding coordinate is unprotected
+
+If J\P is nonempty, choose k in that difference and put
+v_ε=x−εe_k for sufficiently small ε>0. This source remains in
+D_P. Every exact root at v_ε absorbs, since all Continue gives k
+the gain ε. Choose any such root, with successor w_ε and mass a_ε.
+Return (72) and minimality give
+
+    H(v_ε)−H(x) ≥ a_ε>0.                            (74)
+
+There is no assumed lower singleton bound for w_{ε,k}. Opponent
+absorption has probability at most a_ε, so its forced-Quit average
+satisfies Q_k≥s_k−2M a_ε. Nash and the literal displacement bound
+give
+
+    s_k−2M a_ε ≤ Q_k ≤ w_{ε,k}
+                    ≤ s_k−ε+(M+B)a_ε.
+
+Thus ε≤(3M+B)a_ε, and (74) yields
+
+    [H(x−εe_k)−H(x)]/ε ≥ 1/(3M+B)>0.
+
+The limit is −g_k≤0, a contradiction. This is the signed
+same-domain argument, requiring no compact Nash selection.
+
+### Arm 2: all binding coordinates are protected
+
+Otherwise J⊆P. Choose k∈J and again set v_ε=x−εe_k. These
+sources need not belong to R_P or D_P, so (72) CANNOT be applied
+to them. Choose an exact root at each; all absorb because k has a
+strict gain against all Continue.
+
+For any sequence ε_n↓0, compactness of the hazard cube and closure
+of the polynomial Nash inequalities imply that every accumulation
+root is exact at x. Such roots have zero absorption by the minimum
+argument. Therefore a_n→0 for every choice of the roots.
+
+Nevertheless each successor w_n lies in R_P, by the protected
+participant floors and Nash. Since J⊆P, the first-order signs give
+
+    g·(z−x)≥0  for EVERY z∈R_P.                     (75)
+
+Binding terms have nonnegative derivative and displacement. Nonbinding
+interior terms vanish. Upper-face terms have both derivative and
+displacement nonpositive. In particular no singleton floor is needed
+on an unprotected nonbinding coordinate.
+
+Since k∈P, w_{n,k}≥s_k. The one-stage bound consequently gives
+
+    ε_n≤(M+B)a_n,
+    ‖w_n−v_n‖∞≤(M+B)a_n,
+    ‖w_n−x‖∞≤2(M+B)a_n.                             (76)
+
+Differentiability at x, (75), (76), and a_n→0 imply
+
+    H(v_n)−H(x)=−ε_n g_k+o(a_n)≤o(a_n),
+    H(w_n)−H(x)=g·(w_n−x)+o(a_n)≥o(a_n).
+
+Both Taylor errors are on the absorption scale because both
+displacements are O(a_n). Equation (70) would imply
+1≤[H(v_n)−H(w_n)]/a_n, whose limsup is at most zero. This is
+the contradiction. The two arms exhaust the binding set at the SAME
+minimum, with no additional raw hypotheses.
+
+### Fin4 uniform payoff and the separate weak-leave closure
+
+For four players assume additionally s_i≥0 for every i. Conditions
+1–2 then imply a uniform-equilibrium payoff against every behavioral
+deviation: one target fixed before the accuracy, and one profile for
+every sufficiently long horizon at that accuracy.
+
+If all singletons vanish, all Never is already an exact equilibrium.
+Otherwise there is a positive singleton. Nonnegative singletons imply
+normality without any premium sign restriction. Absence of a uniform
+payoff would supply the existing rational polynomial obstruction on
+the same table and a larger reward box. Restriction to all exact roots
+gives (70), contradicting the analytic theorem since a polynomial is
+C¹. Thus no strategic selector is being assumed as input.
+
+Weak comparisons in (69) suffice for the UE conclusion as well. For
+δ>0 increase every passive coordinate r_i(S), i∉S, by δ, leaving
+all participant coordinates unchanged. Own singletons, protected
+premiums, and every positive-premium trap remain unchanged. Every
+designated weak comparison becomes strict. Apply the strict theorem
+to these nearby tables, then uniform-payoff reward closure to obtain
+one target for the original table. This is a weak STRATEGIC conclusion;
+no weak analytic exclusion of C¹ potentials has been proved here.
+
+The exact source declarations inspected are
+`IsQuittingFullExactRootPotential.singletonFace_drift` in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`,
+`abs_quittingRootSuccessorPayoff_sub_tail_le_reward_add_source_mul_absorptionMass`
+in `UniformEquilibrium/Quitting/Root/BoundedSuccessorDisplacement.lean`,
+`exists_isZeroQuittingRootNash` in
+`UniformEquilibrium/Quitting/Root/NashExistence.lean`,
+`isQuittingNormalPlayer_of_singleton_nonneg` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`,
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`,
+`isQuittingFullExactRootPotential_of_robustPotential` in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`,
+and `exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables`
+in `UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+Graph compactness is the elementary finite polynomial argument above.
+No parity or unproduced topological interface is an input. This records
+source inspection, not a Lean build or an implementation of the new
+protected-set theorem.
+
+### Exact signed proper-three-core fixture
+
+Take P={0,2} and the following complete reward table:
+
+| S | r(S) |
+|---|---|
+| 0 | (1,−1,−1,−1) |
+| 1 | (2,0,2,−1) |
+| 2 | (2,−1,0,2) |
+| 3 | (0,2,−1,0) |
+| 01 | (3/2,1,−1,−1) |
+| 02 | (1,−1,0,−1) |
+| 03 | (1,2,−1,0) |
+| 12 | (2,1/2,1/2,1) |
+| 13 | (0,0,1,0) |
+| 23 | (0,1,0,0) |
+| 012 | (1,0,0,−1) |
+| 013 | (1,−1/10,−1,0) |
+| 023 | (1,−1,0,0) |
+| 123 | (3,0,0,0) |
+| 0123 | (1,0,0,0) |
+
+Here s=(1,0,0,0), and M=3 bounds the table. Both protected players
+have nonnegative participant premiums. Player 1 has the genuinely
+negative participant premium r₁(013)−s₁=−1/10. The ONLY traps
+are 01, 12, 012, with designated leavers 0, 2, 0. The pair checks
+are r₀(01)=3/2<2=r₀(1) and r₂(12)=1/2<2=r₂(1).
+For trap012 all three checks are 3/2<2, 1<2, and 1<2, from
+opponent coalitions1,2,12. Thus the greatest premium core is 012.
+
+The sole common trap member is 1, which fails weak leave at01:
+r₁(01)=1>−1=r₁(0). This table is outside the common-leaver,
+core≤2, and globally nonnegative-premium support-specific classes.
+The triple's leaver 0 is not a globally safe quiet player: r₀(3)=0
+is below s₀=1 and below r₀(03)=1. Section 16's direct composition
+therefore does not consume this example.
+
+Its singleton matrix is
+
+    Γ=[[0,1,1,−1], [−1,0,−1,2],
+       [−1,2,0,−1], [−1,−1,2,0]].
+
+The child123 matrix A has det A=7, positive inverse, and A1=1.
+In the full homogeneous problem a positive pivot h forces child h1
+and pivot residual h>0, while pivot zero forces the zero child. At
+offset (1,−1,−1,−1), the unique root is (0,1,1,1), with inactive
+residual 2 and active determinant 7. The full matrix is R₀ of degree
+one, not a degree-exit example. The child123 passive inverse weights
+are (−1/7,5/7,3/7). The other triples have negative inverse entries
+−2, −2/3, −2/3; the full inverse has row0,column2 entry −5/7.
+Principal03 is R₀/non-Q, with matrix [[0,−1],[−1,0]], and no
+pair has both off-diagonal entries positive. Of fifteen partitions,
+only the discrete partition and 0|123 pass the first-order row sums;
+the latter fails the actual response values t+t²,t,t at (t,0,0,0).
+
+Every pure coalition has a strict toggle improvement. In table order
+choose players 1,3,1,0,0,0,2,2,0,0,0,1,1,1,0; their gains are
+2,1,3/2,1,1/2,1,1,3/2,1,1,1,21/10,1,1,2. Each withdrawal
+leaves someone else quitting, so no fictitious continuation is used.
+
+For thirteen proper children, the following first-date sure coalitions
+are full terminal Nash, followed by Never if a deviation prevents
+absorption. The last column gives a profitable omitted player.
+
+| Child | Sure coalition | Omitted player |
+|---|---|---|
+| 0 | 0 | 1 |
+| 1 | 1 | 3 |
+| 2 | 2 | 1 |
+| 3 | 3 | 0 |
+| 01 | 1 | 3 |
+| 02 | 2 | 1 |
+| 03 | 03 | 2 |
+| 12 | 1 | 3 |
+| 13 | 3 | 0 |
+| 23 | 2 | 1 |
+| 012 | 1 | 3 |
+| 013 | 03 | 2 |
+| 023 | 023 | 1 |
+
+All child join and withdrawal gains are nonpositive. A sole owner
+who avoids its exit faces opponents at Never and cannot later exceed
+its own singleton. The only changed comparison from the nonnegative
+fixture is nonowner1's join at child013: −1/10<2, even safer.
+All prescribed profiles absorb surely. In row order the omitted gains
+are 2,1,3/2,1,1,3/2,1,1,1,3/2,1,1,1.
+
+For child123 repeat half-hazards in order3,1,2 and subdivide each
+phase into n hazards α_n=1−2^(−1/n). Macro child values are
+(1,0,0), (0,1,0), (0,0,1). Only the two participant entries at12
+have positive pair premiums, both 1/2. The exact Continue comparison,
+zero singleton floors, and single-error supersolution bound every
+full child regret by α_n/2, while joint Never is zero. The quiet
+pivot's fixed value is [4r₀(3)+2r₀(1)+r₀(2)]/7=6/7, whereas
+immediate Quit at the first player3 microstage pays one exactly.
+The fixed gain 1/7 excludes any universal finite weighted-child-debt-
+plus-Never bound. Together with the thirteen exact witnesses this
+falsifies the named universal quiet-child certificate families for
+every proper child, not every possible selected-child construction.
+
+The latest two-high-singleton cyclic families must use pivot0, solo
+players1,2, and joint03, but r₁(03)=2 is not their prescribed −1.
+Earlier positive-joint01/02 versions fail the pivot-pair/partner
+comparisons; selecting pair03 violates their low passive-singleton
+condition. The solo-0 bridge lacks its prescribed complete joint vector.
+The signed four-cycle adapter cannot find a positive predecessor in
+the singleton column0, which harms all three other players.
+
+These are bounded named-source comparisons, not a claim that the
+fixture lacks equilibria or all other architectures fail. The matrix,
+child, and response calculations are the exact independently checked
+proper-core3 example, with the single participant change at013 tested
+above. The new assertion needing review is the full protected-set
+theorem and its exhaustive minimum case split.
+
+Next requested check: independently falsify fixed-domain return (72),
+the split J\P versus J⊆P, and the absorption-scale Taylor remainder.
+Do not restore nonnegative premiums outside P or assume perturbed
+roots return to D_P in the second arm.

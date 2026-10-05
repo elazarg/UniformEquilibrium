@@ -8,14 +8,25 @@ No exhaustive arbitrary-Fin4 producer has been obtained. A later exact
 source audit below shows that the Klein-four and one-involution EXISTENCE
 classes are already consumed by the implemented response-quotient machinery.
 
-The final **A solo-0 bridge pays a positive outsider cap** section is a
-new complete ordinary construction undergoing independent falsification.
+The **A solo-0 bridge pays a positive outsider cap** section is a
+complete ordinary construction with two independent PASSes and final
+artifact checks. The frozen standalone is
+[`REPEATED_SOLO_EXIT_WITH_POSITIVE_OUTSIDER_BUFFER.md`](../exports/REPEATED_SOLO_EXIT_WITH_POSITIVE_OUTSIDER_BUFFER.md),
+SHA256 `53dbfbccdf06da788bf4f694ff73d48bb63ce1d3843a00a240c2397870f02937`.
+It is exported, not Lean-checked here.
 It inserts a diffuse solo phase into a
 joint/solo cycle, gives an all-real-parameter raw producer and an exact
 four-player-premium-core fixture, and proves fixed-target safety against
 unrestricted behavioral deviations. The final bounded source audit also
 excludes the latest switched-pair family and universal quiet-debt gates.
-This is not an export or Lean claim.
+The **Global minimum test** and its proper-three-core
+support-specific-leaver fixture have independent mathematical and bounded
+source-coverage PASSes from CODEX_MORSE, recorded in
+[`the owned review`](../feedback/CODEX_BROUWER__QUITTING_TABLE_COVERAGE__BY_CODEX_MORSE.md).
+The full-core branch is covered by an existing safe-quiet-player
+composition; the proper-core fixture survives that comparison.
+Assembly is held while a stronger signed protected-set version is checked.
+No arbitrary-game claim or Lean-check claim follows.
 
 A separate unreviewed result at the end, **Canonical premium-core
 reduction**, extends the reviewed two-player strict-leave mechanism to
@@ -1794,8 +1805,11 @@ a request to find a forced second root.
 
 ## Global minimum test: vanishing roots cannot escape a lower-face minimum
 
-**Status: new ordinary proof draft; no independent review or coverage
-claim.** This is a global constraint involving a potential's actual
+**Status: ordinary mathematical PASS after independent review by
+CODEX_MORSE in the owned feedback on this notebook; no Lean check.**
+The final proper-core fixture's bounded source coverage has also passed
+that independent review.
+This is a global constraint involving a potential's actual
 minimum, not a claim about root counts at arbitrary annotations.
 
 Assume finite nonempty I, all participant rewards at least their own
@@ -1854,14 +1868,19 @@ s>=0. Weak comparisons can be made strict by increasing every passive
 reward coordinate by delta, leaving all participant premiums and traps
 unchanged, followed by reward closure.
 
-This is not yet a new-coverage claim. Since the greatest trap itself
-must have a leaver, (G2) resembles a recursive quiet-player deletion
-criterion and may be absorbed by existing matrix/quiet-child exits.
-Simple disjoint-trap examples considered so far readily fall into those
-older screens. Do not export (G2) or portray it as progress on arbitrary
-games without an exact surviving table or a genuinely useful reduction.
-The minimum-collapse argument itself may still be useful beyond that
-particular raw condition.
+The full-greatest-core case is already covered: its designated leaver
+p satisfies r_p(T union p)<=r_p(T) and r_p(T)>=s_p for every nonempty
+opponent coalition. Zero advance and withdrawal weights therefore
+supply a global quiet-player certificate. The existing
+`exists_terminalProfile_smallExploitability_smallNever_of_nonnegativeSingleton`
+in `UniformEquilibrium/Quitting/Classification/ThreePlayer/NonnegativeSingletonEarlyAbsorption.lean`
+and `exists_quietProfiles_smallExploitability_smallNever_of_withdrawalFutureJoinFamily`
+in `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`
+remove the Never term, even when all child singletons are zero.
+This exact source composition was independently audited by CODEX_MORSE.
+It does not apply automatically to a proper greatest core: the leaver
+comparisons then omit the flat outside player. The fixture below has
+this proper-core form and survives the bounded named-source comparison.
 
 The narrow source check inspected
 `not_isQuittingFullExactRootPotential_of_singletonLowerBoundaryReturn`
@@ -1879,3 +1898,141 @@ full inventory of nearby generic analytic lemmas.
 Next question: can the minimum-collapse contradiction combine with the
 known exact interior-successor roots to force a GLOBAL return or cycle,
 without assuming (G2) or searching for a second root at a refuted source?
+
+### An exact support-specific-leaver coverage candidate
+
+**Independent bounded source-coverage PASS by CODEX_MORSE.** The analytic
+argument above and its G2 corollary have also passed his independent review.
+This table supplies an actual source separation for that
+raw corollary; it does not strengthen the return premise below floors.
+It has exactly one positive own singleton, so all-Never is not an exit.
+
+| S | r(S) |
+|---|---|
+| 0 | (1,-1,-1,-1) |
+| 1 | (2,0,2,-1) |
+| 2 | (2,-1,0,2) |
+| 3 | (0,2,-1,0) |
+| 01 | (3/2,1,-1,-1) |
+| 02 | (1,-1,0,-1) |
+| 03 | (1,2,-1,0) |
+| 12 | (2,1/2,1/2,1) |
+| 13 | (0,0,1,0) |
+| 23 | (0,1,0,0) |
+| 012 | (1,0,0,-1) |
+| 013 | (1,0,-1,0) |
+| 023 | (1,-1,0,0) |
+| 123 | (3,0,0,0) |
+| 0123 | (1,0,0,0) |
+
+All participant premiums are nonnegative. Exact enumeration gives
+ONLY the traps 01,12,012. Player0 strictly leaves 01 and012:
+
+    r0(01)=3/2<r0(1)=2,
+    r0(02)=1<r0(2)=2,
+    r0(012)=1<r0(12)=2.
+
+Player2 strictly leaves12 because r2(12)=1/2<r2(1)=2.
+Thus every trap has its own strict leaver, as required by G2. The
+greatest premium core is012, of size three. The only common trap
+member is1, who violates even weak leave at01 since
+r1(01)=1>r1(0)=-1. Hence neither the core-at-most-two theorem
+nor the common-leaver theorem applies to this raw table.
+
+The centered singleton matrix is
+
+    Gamma=[[0,1,1,-1],[-1,0,-1,2],
+           [-1,2,0,-1],[-1,-1,2,0]].                 (G3)
+
+Its123 child A has positive inverse with A*1=1 and determinant7.
+At positive pivot h the unique homogeneous child solution is h*1;
+the pivot residual is h>0. At pivot zero the child has only its
+zero homogeneous solution. Thus the full matrix is R0. At offset
+(1,-1,-1,-1) its unique complementarity root is (0,1,1,1), with
+inactive residual2 and active determinant7, so its degree is+1.
+The only nonnegative-inverse triple is123 and its passive row is
+(-1/7,5/7,3/7). Explicit negative inverse entries for012,013,023
+are respectively -2,-2/3,-2/3. The full inverse has entry -5/7
+in row0,column2. No pair has both off-diagonal singleton entries
+positive. Principal03 is R0 but non-Q, being [[0,-1],[-1,0]].
+These are the exact singleton degree/inverse screens already inspected.
+
+An exact enumeration of all fifteen partitions leaves only the
+discrete partition and0|123 at first order. At (t,0,0,0) the
+three child response coordinates are t+t^2,t,t, breaking the latter.
+Thus the named literal-response quotient criterion also fails.
+
+No pure quitting coalition is an equilibrium. For the coalitions in
+the displayed order, strictly improving players can be chosen as
+
+    1,3,1,0,0,0,2,2,0,0,0,1,1,1,0.
+
+These are immediate joins or withdrawals with someone else still
+quitting. They were checked exactly in the full table.
+
+The two-high-passive cyclic families could only use pivot0 and joint03:
+their required U,V>=1 force the high singleton owners1,2 to be the
+solo players. But the actual joint03 outsider payoff r1(03)=2 is
+not the prescribed -h1=-1. This is a literal input failure of both
+the switched-pair and two-buffer classes, not a failed rate search.
+The earlier positive-joint01 class requires the selected pivot's
+pair reward at least its passive partner-singleton reward; here
+3/2<2, and selecting pair02 gives1<2. Pair03 leaves both other
+passive singleton rewards above one, violating that family's low
+passive-singleton requirement. The solo-0 bridge requires zero pivot
+pair premium and a low passive partner; neither possible selected
+pair meets all its prescribed vectors here.
+
+Universal quiet-child debt gates fail for every proper child. Thirteen
+children have the following exact pure first-date profiles, followed
+by Never if no absorption occurs:
+
+| Child | Sure quitting coalition | A profitable omitted player |
+|---|---|---|
+| 0 | 0 | 1 |
+| 1 | 1 | 3 |
+| 2 | 2 | 1 |
+| 3 | 3 | 0 |
+| 01 | 1 | 3 |
+| 02 | 2 | 1 |
+| 03 | 03 | 2 |
+| 12 | 1 | 3 |
+| 13 | 3 | 0 |
+| 23 | 2 | 1 |
+| 012 | 1 | 3 |
+| 013 | 03 | 2 |
+| 023 | 023 | 1 |
+
+Every participant has no profitable withdrawal, every other child
+member has no profitable join, and a sole owner who avoids its exit
+can receive at most its singleton later. These are complete behavioral
+Nash checks, not just one-stage equilibrium assertions. The omitted
+player in each row has a strictly profitable immediate join, and every
+prescribed profile absorbs surely.
+
+For child123 use the cycle of aggregate half-hazards in order3,1,2,
+refining each solo block into n hazards alpha_n=1-2^(-1/n).
+The child phase vectors are (1,0,0),(0,1,0),(0,0,1). The only
+positive child pair participant premiums are the two1/2 entries
+at12, so the exact Continue/single-error comparison bounds each
+complete child deviation gain by alpha_n/2. Joint Never is zero.
+The quiet pivot's fixed payoff is
+
+    [4*r0(3)+2*r0(1)+r0(2)]/7 = 6/7.
+
+Immediate Quit at the first player3 microstage gives exactly1 since
+r0(0)=r0(03)=1. The fixed gain1/7 contradicts every fixed finite
+nonnegative weighted child-debt-plus-Never bound as n tends to infinity.
+The source quantifier is the same EVERY-child-profile one in
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`).
+Thus the selected-child universal debt families are not concealing an
+automatic quiet lift for this fixture.
+
+The independent review checked the complete table, all trap leavers,
+matrix and quotient tests, every pure improvement, all thirteen exact
+child profiles, and the diffuse child123 gain. This does not assert failure of every imaginable
+conditional producer or that the table itself lacks simpler equilibria.
+The proposed advance is the whole support-specific-leaver raw class,
+via the reviewed global-minimum collapse mechanism, not a special
+solution of this one fixture.

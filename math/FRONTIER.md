@@ -408,7 +408,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the repeated-solo outsider-buffer family specified below, for every real R | UE allowing a positive outsider collision reward at the joint phase. A final solo exit supplies its continuation buffer. All rates and values are produced from rewards. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: the two-buffer joint/solo family specified below, for every real R | UE allowing all six outsider collision coordinates at the joint phase to be positive, under two weighted raw inequalities. Signed collision rewards and the zero-final-phase boundary are included. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
-| Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. This is an independently reviewed mathematical result awaiting formalization. |
+| Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -602,6 +602,16 @@ every exact root returns to the same D and has absorption at least
 The existing Fin4 polynomial-obstruction theorem yields UE; weak leave
 comparisons follow by perturbing only passive rewards and applying reward
 closure. No weak-comparison analytic potential exclusion is asserted.
+
+The production declarations are
+`exists_uniformEquilibriumPayoff_of_commonLeaver_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/CommonQuittingPremiumLeaverUniformPayoff.lean`)
+and `exists_uniformEquilibriumPayoff_of_commonLeaver_weakLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/CommonQuittingPremiumLeaverRewardClosure.lean`).
+They supply the raw-table-to-UE conclusion, not merely the return-domain
+criterion. Their pair-core specializations still require a leave comparison;
+they do not implement the separate mutual strict-join branch of the
+core-at-most-two theorem.
 
 The [complete proof and exact boundary tests](exports/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md)
 include a three-player core with a genuinely negative participant premium.

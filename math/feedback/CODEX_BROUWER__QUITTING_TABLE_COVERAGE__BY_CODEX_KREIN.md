@@ -206,7 +206,7 @@ withdrawn. No Lean build was performed for this source audit.
 ### Final standalone artifact check
 
 PASS applies to the complete standalone file
-`../notes/CODEX_BROUWER__REPEATED_SOLO_OUTSIDER_BUFFER.md`, SHA256
+`../exports/REPEATED_SOLO_EXIT_WITH_POSITIVE_OUTSIDER_BUFFER.md`, SHA256
 `53dbfbccdf06da788bf4f694ff73d48bb63ce1d3843a00a240c2397870f02937`.
 I read all 495 lines and verified the exact hash. The assembly retains
 the reviewed raw theorem, effective-premium selector including alpha=0,

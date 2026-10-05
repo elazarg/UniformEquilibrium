@@ -1444,3 +1444,133 @@ raw predicate, continuous selector, exact phase data, refined profiles,
 and original-table outer exits, rather than hiding any of them as
 extra hypotheses. No unresolved mathematical assembly objection
 remains for these exact bytes.
+
+## Independent challenge: two genuine joint rows and a full-table neighborhood
+
+**Substantive mathematical PASS, with bounded coverage scope.** I checked the
+complete section “Two genuine joint phases give an open full-table
+neighborhood” independently, without consulting another review. The claim
+checked is existence of an open neighborhood of its specified sixty-entry
+table, every member of which has one fixed uniform-equilibrium payoff against
+arbitrary behavioral deviations. This is ordinary mathematics, not a Lean
+check, and not a claim that arbitrary equilibrium existence is open.
+
+### Exact center and arbitrary-table elimination
+
+I reconstructed all fifteen reward vectors from (79)–(80). Exact rational
+arithmetic independently reproduces all four vectors (81), all sixteen
+policy equations, and all sixteen pure-Continue equations. The four joint
+outsider margins are exactly (82). The only failing coarse action test is
+player 1 at solo row C, whose Quit gain is 1/6. Thus the solo refinement is
+substantive, not presentation of an already exact coarse equilibrium.
+
+The arbitrary-table elimination has no hidden restriction on the raw
+coordinates. Centering by the actual singleton vector is legitimate inside
+each Bellman equation because its absorption and survival weights sum to
+one. The actual game is not translated, and no invariance claim about its
+zero Never payoff is used.
+
+At D the two supported Continue equations solve separately for f and e:
+
+    L*f+(1-f)*xi*y=xi*f,
+    -H*e+(1-e)*eta*x=eta*e.
+
+At A they are exactly F_0=F_3=0. Every active Quit endpoint is the
+displayed opposite-hazard-weighted participant premium. The definitions
+of a_1,d_1 and w enforce the two player-1 floor equalities. The definitions
+of a_2 and z enforce the two player-2 floor equalities. The remaining
+coordinates are the direct solo-row Bellman formulas. These identities
+hold for arbitrary nearby raw entries, not merely the center's specially
+related singleton and joint vectors.
+
+Differentiating the actual rational functions and substituting the center
+gives exactly (86), with determinant
+
+    1561445159256653/291890762662500 > 0.
+
+Consequently the ordinary finite-dimensional implicit-function theorem
+does apply with all sixty raw entries as independent parameters. Entries
+unused in the two equations remain genuine free parameters; they enter
+the endpoint inequalities and refinement bound where appropriate.
+
+### Floors, all deviations, and one fixed target
+
+The four binding floor occurrences are algebraic identities throughout
+the selected branch. Every other floor and each joint outsider inequality
+is strict at the center. Thus one open neighborhood simultaneously
+preserves all floors, all four joint safety tests, every nonzero
+denominator, and all six interior hazards. In particular perturbing an
+own singleton through zero creates no gap in the argument. A global
+nonnegative-singleton hypothesis is not needed by this direct construction.
+
+Refining B and C leaves their endpoint maps exactly unchanged. Intermediate
+values are convex combinations of the singleton vector and the following
+endpoint vector; every player retains its own singleton floor. Each solo
+owner stays exactly indifferent. For every other player i, at a j-owned
+microstage of hazard alpha, immediate Quit has value
+
+    s_i + alpha*(r_i(ij)-s_i) <= current_value_i + e_n.
+
+Pure Continue remains exact. The two unrefined joint rows retain their
+exact endpoint comparisons. Adding one common e_n to all phase values
+therefore yields a Bellman supersolution, with no summation of errors over
+dates or periods. Positive opponent hazard in every period removes its
+bounded tail under every behavioral deviation, including deviations
+which continue for arbitrarily many periods.
+
+The same phase-A vector is delivered for every refinement n. It depends
+on the table but not the requested accuracy. The period-length bound
+(2+2n)/(1-rho_i) on expected opponent absorption applies uniformly over
+the deviator's entire strategy: before that opponent Quit the game may
+have absorbed sooner, but cannot absorb later. Bounded payoffs therefore
+give a uniform terminal-to-average error tending to zero for all larger
+horizons. This proves the requested fixed-target quantifiers, not merely
+terminal Nash or a different target at each accuracy.
+
+The source consumer inspected is
+`QuittingInfinitePathQuitErrorCertificate.isεAsymptoticNash_and_delivers`
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+Their exact-Continue, common-Quit-error, boundedness, and opponent-survival
+hypotheses are all supplied here. Their scope includes unrestricted
+behavioral deviations; no finite-memory completeness assertion is needed.
+
+### Actual-source overlap: what is and is not excluded
+
+The positive-premium traps 03 and 12 persist under perturbation and are
+disjoint. All four players also have a strictly negative participant
+premium somewhere at the center. Thus the center does not satisfy the
+common-leaver or nonnegative-premium canonical-core criteria. Each listed
+pure-coalition improvement is strict and checks exactly. Never is not
+an equilibrium since s_0=1. The earlier one-joint/repeated-solo-3 grammar
+cannot retain these positive rates: its forced equality
+r_3(03)=s_3 is violated by eta=50/493>0. The second genuine joint row
+removes that equality for an actual structural reason.
+
+I inspected `PairedCubicStationaryExample.exists_local_stationary_branch`
+in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`
+and its producer in `PairedCubicLocalPersistence.lean`. It constructs a
+neighborhood of its own literal base table with hazards 0,1,2 interior
+and hazard 3 zero. It is not a general openness theorem. In fact its
+specified active support is impossible at the present center: for
+q_3=0, write a=q_1 and b=q_2. The pivot stationary residual is
+
+    F_0=(a+b-ab)*(1-a)*(1-b)-2*(a*(1-b)+(1-a)*b).
+
+Writing P=a*(1-b)+(1-a)*b gives the exact identity
+
+    -P-F_0=a^2*(1-b)^2+b^2*(1-a)^2+ab*(1-ab) >= 0.
+
+Hence F_0<0 when a,b are interior, incompatible with an interior q_0.
+This is a concrete exclusion of the named unpermuted stationary branch,
+not just a comparison of two different displayed tables.
+
+This audit does **not** prove that no stationary equilibrium exists at
+the center, exclude every relabeling of every stationary producer, or
+exclude every conditional quiet-child consumer. A multistart numerical
+search found no stationary root satisfying all boundary signs, but that
+is only exploratory evidence and is not used in the PASS. The proved
+output is the explicit open raw-table neighborhood and its strategic
+producer. Any stronger exhaustive source-separation claim still needs
+its own exact argument. No mathematical repair to the positive theorem
+is requested.

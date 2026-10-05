@@ -678,3 +678,103 @@ The concise Lean handoff names the actual new producer chain and keeps
 the already available outer singleton exits separate. No dependency on
 another conference note or frozen mathematical packet was introduced.
 No unresolved assembly objection remains; no Lean check is claimed.
+
+## Independent coverage check: support-specific leavers on a proper three-core
+
+**PASS for the stated bounded source separation.** I independently
+checked the final subsection “An exact support-specific-leaver coverage
+candidate” in `notes/CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md`.
+This supplements my preceding independent proof review of the global
+minimum-collapse mechanism. It does not claim that every existing
+conditional strategy architecture fails on this particular table.
+
+The full fifteen-row table has nonnegative participant premiums and
+own singleton vector (1,0,0,0). Its ONLY premium traps are 01, 12,
+and 012. Their strict leaver sets are respectively {0}, {2}, {0}.
+In particular the triple checks all three nonempty opponent coalitions:
+3/2<2, 1<2, and 1<2. This is the literal raw hypothesis, not a
+test using only pairwise comparisons. Its greatest core is exactly
+012. The sole common member of all traps is 1, who strictly prefers
+joining 0 to leaving: 1>−1. The common-leaver and core≤2 classes
+therefore do not include this table. The positive own singleton also
+excludes the zero-solo Never exit.
+
+This proper-core distinction matters. The whole full-core branch of
+the support-specific criterion is already consumed by a globally safe
+quiet player and the existing low-player vanishing-Never producer.
+The exact source composition is recorded in Section 16 of
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`. That composition
+does not apply here: for the triple's leaver 0, the omitted flat
+player 3's singleton gives r₀(3)=0<s₀=1, and joint03 gives 1>0.
+No global safe-quiet assumption is inherited from being a leaver
+inside core012.
+
+I recomputed the singleton matrix and all four triple inverses exactly.
+For child123, A·1=1, det A=7, and the passive inverse row is
+(−1/7,5/7,3/7). Each other triple has a negative inverse entry,
+with the stated examples −2, −2/3, −2/3. The full inverse's
+row0,column2 entry is −5/7. Every pair lacks two positive off-diagonal
+entries, and principal03 is the stated R₀/non-Q pair. The full
+homogeneous problem forces child h1 for any pivot h>0, leaving the
+strictly positive pivot residual h. At the stated offset its only
+root is (0,1,1,1), with residual 2 and positive active determinant 7.
+Thus the full matrix is R₀ of degree one: the degree exit does not
+apply, even though a nonzero-degree matrix is itself standard Q.
+No erroneous claim that the full matrix is non-Q is being inferred.
+
+Independent enumeration of all fifteen partitions leaves exactly the
+discrete partition and 0|123 at first order. The three literal
+child response values at (t,0,0,0) are t+t², t, t, so the
+nontrivial quotient fails. I also checked every listed pure-coalition
+improving player. In table order the strict gains are
+
+    2, 1, 3/2, 1, 1/2, 1, 1, 3/2,
+    1, 1, 1, 2, 1, 1, 2.
+
+Each join or withdrawal leaves a nonempty quitting coalition, so this
+is an actual first-date comparison and not an undefined all-Continue
+payoff substitution.
+
+The thirteen proper-child sure-coalition profiles are all full terminal
+Nash. Their participant withdrawal and nonparticipant join gains are
+nonpositive. A sole owner who instead keeps the game alive faces all
+opponents at Never and cannot exceed its own nonnegative singleton.
+The displayed omitted player's immediate gains, in the child-table
+order, are
+
+    2, 1, 3/2, 1, 1, 3/2, 1,
+    1, 1, 3/2, 1, 1, 1.
+
+All thirteen prescribed profiles absorb surely. Thus they falsify
+any universal fixed nonnegative weighted-child-debt-plus-Never bound
+for the corresponding omitted player, including the source family
+that consumes vanishing Never rather than a positive child singleton.
+
+For child123 I separately checked the refined order3,1,2 half-hazard
+cycle. Its macro values are indeed (1,0,0), (0,1,0), (0,0,1),
+and all refined values retain the zero own-singleton floors and exact
+Continue comparisons. Only the pair12 participant premiums are
+positive, both 1/2, so the full behavioral regret is at most α_n/2
+with α_n=1−2^(−1/n). Opponent-only geometric absorption justifies
+the single-error supersolution for every stopping law. The quiet
+pivot payoff is exactly 6/7; quitting at the first microstage of
+player3 pays exactly one independently of its hazard. The fixed gain
+1/7 with zero joint-Never mass contradicts any such fixed finite
+debt bound as n increases. This is not an assertion that the coarse
+cycle is exact or that a zero-singleton child cannot be made to absorb.
+
+Finally, the latest two-high-singleton cyclic families must use pivot0,
+solo players1,2, and joint03. The actual outsider coordinate
+r₁(03)=2 contradicts their prescribed −h₁=−1. The earlier
+positive-joint families fail the displayed pivot-pair/partner or low
+passive-singleton tests for each possible partner; the solo-0 bridge
+also lacks its prescribed complete joint vector. A signed four-cycle
+singleton adapter requiring a positive predecessor in every singleton
+column cannot use the all-harming pivot column. These are exact raw
+hypothesis checks, not failures of a numerical rate search.
+
+The inspected named source families therefore do not automatically
+consume this proper-core fixture, while the independently reviewed
+support-specific-leaver theorem does. The requested mathematical
+coverage witness survives. No unrestricted nonexistence claim and no
+new Lean implementation is asserted.
