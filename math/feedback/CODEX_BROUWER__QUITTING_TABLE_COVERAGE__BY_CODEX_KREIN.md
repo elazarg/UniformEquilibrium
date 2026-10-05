@@ -614,3 +614,123 @@ the handoff names the actual new raw producer and the existing semantic
 consumer without claiming implementation. There are no mathematical
 dependencies on conference notes or exports. No correction or further
 full proof audit is requested.
+
+## Independent review: boxed Nash charge on a triple
+
+**PASS**, ordinary mathematics, not Lean checked. Scope is the complete
+EOF section “The complement of weighted floors: a boxed Nash charge on
+a triple,” (N1)–(N8), including its strict-slack constants and outside-box
+regression. Whole-note SHA256 inspected:
+`458b24978e61c3ba97a6bd5c410cbc619a526a9e2d049fcc239c13c166d63d2d`.
+I derived this audit without reading another review. It does not cover
+any subsequent higher-cardinality extension.
+
+### All support cases and the quantitative contradiction
+
+The raw inputs are precisely a finite Fin4 reward table with nonnegative
+own singletons, all premium traps of cardinality three, and four positive
+real bounds satisfying (N2)–(N6). They contain no root, strategy, source,
+or favorable continuation selector. Two different triple traps would
+have full union, which is again a trap because each member retains its
+original witness; hence there is at most one.
+
+For a nontrap absorbing support the actual supported participant has
+all within-support rewards at most its singleton, so its exact successor
+coordinate is low. For a trap support, (N4) and (N5) make every nonempty
+proper coalition's aggregate-leave coefficient negative. If a hazard is
+sure and another is not, the empty-coalition term vanishes and some
+proper coalition has positive mass; the aggregate Nash identity is then
+impossible. If all are sure, (N5) gives an actual profitable withdrawal
+for each participant. Thus neither sure-root case is accidentally lost
+when the odds are introduced.
+
+In the remaining interior case, dividing each positive Quit premium by
+its opponent Continue probability gives its two pair-premium terms and
+one triple-premium term. Summing yields exactly the expression preceding
+(N7). Its upper bound is −dU+tau V, so all-high endpoints require
+dU<tau V. The elementary identity U²−3V being half the sum of the
+three squared odds differences gives V≤U²/3 and U>3d/tau.
+
+Support indifference makes the left side of the aggregate-leave identity
+zero. After division by the positive empty-coalition probability, each
+singleton coefficient is at least g and each pair coefficient at least
+l. Therefore
+
+    sum_A(s_i−v_i) ≥ gU+lV
+                    > (g+ld/tau)U
+                    > (3d/tau)(g+ld/tau).
+
+The source-box upper bound sum_A s_i+3B is literal. Strict (N6) permits
+one M<B<M+2 with the required gap. This proves the asserted return
+for every absorbing exact root at every source in that box, not just
+roots near a proposed minimum.
+
+### Actual no-potential and UE consumer
+
+The previously audited convex-invariant minimum lemma applies with R
+equal to the entire box: successor invariance is ordinary convexity of
+the source/terminal payoff mixture, and the boxed return just proved is
+its second premise. In particular, the minimum on the union of singleton
+sublevels forces zero absorption at every root at the minimum; nearby
+root compactness and the signed absorption-scale estimate, rather than
+a mere local gain, supply the Taylor contradiction. No individual floor
+or nonnegative participant-premium assumption is inserted.
+
+I reread `IsQuittingFullExactRootPotential.mono_box` and
+`isQuittingFullExactRootPotential_of_robustPotential` in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`.
+The restriction retains the same potential and permits any smaller
+bound, not only M+1. I also reread
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`.
+For nonnegative singletons, the already checked normality declaration
+applies; unless all singletons vanish there is a positive singleton and
+failure of UE would produce the actual polynomial on M+2. Its same
+smooth restriction to B is excluded above. If every singleton vanishes,
+all Never is the direct equilibrium. Thus the conclusion is an original-
+table, fixed-target uniform payoff against complete behavioral deviations.
+
+The exact source lemma
+`exists_successor_le_singleton_of_exactRoot_nontrap_support` in
+`UniformEquilibrium/Quitting/Classification/CommonQuittingPremiumLeaver.lean`
+was checked as well: signed nonsingleton rewards are allowed, and no
+unwritten floor condition is present.
+
+### Exact raw and boundary tests
+
+Recomputing all fifteen rows of (N1), the only trap is 012. The three
+values in each family (N2),(N3),(N4),(N5) are respectively
+
+    −1/2, 1/10, −3/2, −9/10.
+
+The reward bound is 31/10. The original constants give charge 90 against
+48/5. The slack constants (2/5,1/5,7/5,4/5) give charge 18, still above
+48/5, and make every raw bound strict. The singleton positivity and all
+signs defining the trap list are strict. Thus a genuine full-coordinate
+neighborhood is covered with fixed auxiliary constants.
+
+The three singleton-product weighted-floor inequalities sum to
+−(lambda_0+lambda_1+lambda_2)/2−3lambda_3≥0. Nonnegativity forces
+every weight to vanish, so this really excludes every nonzero
+nonnegative linear forced-Quit floor, including weights on the outsider.
+The product laws used in that exclusion need not be Nash; the new
+argument explicitly uses the missing Nash premise. Product-low and
+implemented supportwise balance still fail on the all-sure core law,
+whose three participant premiums remain 1/10. Every player retains a
+negative participant premium, so the protected-set criterion cannot apply.
+The singleton matrix and literal quotient falsifier are unchanged by
+(N1). The thirteen child singleton profiles remain exact, and the refined
+core-child bound changes from (3/2)alpha_n to alpha_n/2 while its outsider
+gain stays 1/7−alpha_n. These are bounded comparisons, not exhaustive
+exclusion of every existing producer.
+
+I independently evaluated the displayed outside-box root: q=(9/10,
+9/10,9/10,0), v=(−863/10,−863/10,−863/10,1) give the stated core
+endpoints 17/125 and outsider endpoints 1/1000,1981/1000. It is exact
+Nash and all four successor coordinates are above their singleton.
+An additional exact test uses odds six, namely q=(6/7,6/7,6/7,0) and
+v=(−413/10,−413/10,−413/10,1). Its core endpoints both equal 11/98;
+the outsider's Quit and Continue values are 1/343 and 673/343. Again
+all successor coordinates are high. Thus removing the bounded-source
+quantifier would make the return claim false even on the admitted table.
+No repair is requested for the stated boxed theorem.

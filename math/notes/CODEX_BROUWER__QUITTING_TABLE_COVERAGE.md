@@ -2513,3 +2513,52 @@ table annotations, arbitrary unbounded roots, or arbitrary periodic
 grammars are complete. The next question is independent falsification
 of (N7)-(N8) and whether this bounded Nash-charge argument extends
 to the four-player premium core without becoming a supplied-root test.
+
+### Cardinality extension of the same charge
+
+Independent derivation, ordinary mathematics not yet separately
+reviewed. The triple restriction is not intrinsic to the polynomial
+charge. For a trap A of cardinality m>=3, write
+
+    c_A(T)=sum_{i in A minus T}[r_i(T+i)-s_i],
+    L_A(T)=sum_{i in A minus T}[r_i(T+i)-r_i(T)].
+
+Assume c_A({j})<=-d, c_A(T)<=0 for 2<=|T|<=m-2,
+and c_A(A-i)<=tau, with d,tau>0. Assume also
+L_A({j})<=-g, L_A(T)<=0 for 2<=|T|<=m-2, and
+L_A(A-i)<=-l, with g,l>0. Empty intermediate ranges impose no
+condition. In the same exact-support argument, a high successor
+forces all hazards interior and
+
+    d*U < tau*E,
+    U=sum_i z_i,
+    E=sum_i product_{j in A minus {i}}z_j.
+
+The elementary symmetric-mean inequality gives
+E<=U^(m-1)/m^(m-2), hence
+
+    U > m*(d/tau)^(1/(m-2)).
+
+The normalized Nash leave identity consequently forces
+
+    sum_A(s_i-v_i) >= g*U+l*E
+       > m*(d/tau)^(1/(m-2))*(g+l*d/tau).
+
+If this final constant exceeds sum_A s_i+m*M for every trap,
+one common box B>M can be chosen to exclude all high absorbing
+roots. The previous convex-minimum argument then applies. In Fin4,
+this supplies a literal raw criterion allowing triples and the full
+four-player trap together, provided there are no pair traps. For
+the full four-core the threshold is
+4*sqrt(d/tau)*(g+l*d/tau); the additional input is nonpositive
+pair-column sums and pair aggregate-leave sums. Sure hazards are
+still excluded by a positive-probability coalition A-i with strict
+top leave, even when intermediate leave bounds are equalities.
+
+This is a candidate strengthening, not an unrestricted-size UE
+claim: the semantic consumer used here remains Fin4, and no claim
+is made about traps failing these finite charge tests. A separate
+MORSE extension was announced only after this derivation; it has
+not been read here. The concrete next task is comparing and
+independently checking the strongest raw version before assembly,
+while the original triple criterion has one independent PASS.
