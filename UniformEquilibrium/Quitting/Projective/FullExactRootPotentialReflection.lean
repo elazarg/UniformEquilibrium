@@ -116,8 +116,14 @@ theorem IsQuittingFullExactRootPotential.exists_rise_and_fall
       (fun _ => 3), DifferentiableAt ℝ potential point)
     (minimum : Payoff ι) (hminimum : ∀ who, |minimum who| ≤ 3)
     (hmin : IsMinOn potential (Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)) minimum) :
-    ∃ point time, point ∈ Math.lowerBoxBoundary
+    let gap := Finset.univ.inf' Finset.univ_nonempty
+      (fun who => minimum who - quittingSoloReward reward who who)
+    0 < gap ∧ ∃ point time, point ∈ Math.lowerBoxBoundary
         (fun who => quittingSoloReward reward who who) (fun who => max (minimum who) 1) ∧
+      IsMinOn potential (Math.lowerBoxBoundary (fun who => quittingSoloReward reward who who)
+        (fun who => max (minimum who) 1)) point ∧
+      fderiv ℝ potential point (point - minimum) ≤ -gap / 2 ∧
+      2 • point - minimum ∈ Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3) ∧
       time ∈ Set.Ioo (0 : ℝ) 1 ∧
       potential minimum < potential (minimum + time • (point - minimum)) ∧
       potential point < potential (minimum + time • (point - minimum)) ∧
@@ -125,7 +131,7 @@ theorem IsQuittingFullExactRootPotential.exists_rise_and_fall
         (Set.Icc (0 : ℝ) 1) time ∧
       (∀ rate ∈ Set.Icc (0 : ℝ) 2, minimum + rate • (point - minimum) ∈
         Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)) := by
-  obtain ⟨hgap, point, hpoint, _, hnegative, _, hsegment⟩ :=
+  obtain ⟨hgap, point, hpoint, hpointMin, hnegative, hreflection, hsegment⟩ :=
     hpotential.radialReversal hreward hsingleton hdiff minimum hminimum hmin
   let path : ℝ → Payoff ι := fun rate => minimum + rate • (point - minimum)
   have hpath : Continuous path := continuous_const.add (continuous_id.smul continuous_const)
@@ -151,7 +157,8 @@ theorem IsQuittingFullExactRootPotential.exists_rise_and_fall
   obtain ⟨time, htime, hfirst, hsecond, hmaximum⟩ :=
     Math.exists_interior_maximum_of_endpoint_derivative_neg _ _
       hcontinuousLine hderivative hslope hendpoint
-  refine ⟨point, time, hpoint, htime, ?_, ?_, hmaximum, hsegment⟩
+  refine ⟨hgap, point, time, hpoint, hpointMin, hnegative, hreflection,
+    htime, ?_, ?_, hmaximum, hsegment⟩
   · simpa [path] using hfirst
   · simpa [path] using hsecond
 

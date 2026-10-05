@@ -68,7 +68,7 @@ gates. It is retired unchanged to
 | Completed unchanged-child obstruction | `ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO` | `AdaptiveChildCenter.profile_exactTerminalNash` and `AdaptiveChildCenter.target_isUniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`) prove the center's positive equilibrium. `exists_actual_quantile_rigidity` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterQuantileRigidity.lean`) passes its silent named check for the original full sequence and internally selected unbounded cutoffs. The four actual restriction estimates, positive parent-plus-child floor, reward-neighborhood transfer and nearby one-date producer pass the named `AdaptiveChildCenterNearbyHorizons` check, including the same selected profile before every accuracy and exact Nash at every finite horizon. Literal center, half-scaling, unchanged-law and larger-radius stationary consumers also pass their named checks. Complete-claim review and the full silent integration gate pass; the packet is retired unchanged. Capped-clock certificate infeasibility does not prove the unchanged-child obstruction. |
 | Single-pivot secant and tilted common-calendar source | `SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE` | Both payoff packets are complete and retired, including accepted raw sources, exact laws/full caps, the printed half-cap rates, selected-word pivot optimum, and all literal fixtures. The single-pivot secant/tilted common-calendar source remains a separate construction; payoff compression does not preserve caps. |
 | New screened-minimum/fiber algebra and source transport | `GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR`, `MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION`, `THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS` | `minimumTerminalSemantic_maximumDebt_allPlayersTie` (`UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean`), `minimumTerminalSemantic_exploitabilitySingletonMargin` (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostate.lean`), and `exists_twoSureProductRoot_realizing_jointCarrierPoint_of_strictMargin` (`UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonBehavioralLawProductBase.lean`) provide minimum and actual-source interfaces. The first new steps differ: degree-six screened-root nonvanishing, four-coordinate singleton stretch, and signed affine-row comparison, respectively. None may assume a selected counterexample fiber or hazard as a certificate field. |
-| Rational rejection and literal potential fixtures | `REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS`, `QUITTING_POTENTIAL_SHAPE_EXCLUSIONS` | The common exact-root exclusion, adaptive reflection, quadratic and multi-affine exclusions, and restricted same-polynomial characterization pass the full integration gate. Face-only additive and regular scalar-composition exclusions, monotone-transform transfer, the same-polynomial quantitative characterization and positive charge normalization pass silent named, separate standard-axiom and full integration checks. The rational exact one-quitter rejection producer passes its silent named, exhaustive axiom and full integration checks. The literal shape fixtures also pass silent named, separate standard-axiom and full integration checks; the shape packet's mathematical content is complete. The reflection packet's rational approximate robust rejection and exhaustive search also pass those checks; its paired-example and integral joins pass silent named checks; bounded normalization also passes its silent named and source-facing consumer checks. The remaining reflection boundary fixtures are pending. These are necessary-shape reductions, not a solved-game class. |
+| Rational rejection and literal potential fixtures | `REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS`, `QUITTING_POTENTIAL_SHAPE_EXCLUSIONS` | The common exact-root exclusion, adaptive reflection, quadratic and multi-affine exclusions, and restricted same-polynomial characterization pass the full integration gate. Face-only additive and regular scalar-composition exclusions, monotone-transform transfer, the same-polynomial quantitative characterization and positive charge normalization pass silent named, separate standard-axiom and full integration checks. The rational exact one-quitter rejection producer passes its silent named, exhaustive axiom and full integration checks. The literal shape fixtures also pass silent named, separate standard-axiom and full integration checks; the shape packet's mathematical content is complete. The reflection packet's rational approximate robust rejection and exhaustive search also pass those checks; the paired-example, integral, normalization, same-segment and boundary claims pass the full silent integration gate, completing the reflection packet's mathematical content. These are necessary-shape reductions, not a solved-game class. |
 
 ## Adaptive-child obstruction: known-proof dependencies
 
@@ -953,8 +953,32 @@ mathematical conjectures.
    production axiom audit also pass.
 
 The coupled-cubic shape example, midpoint integral identity and charge-coefficient
-rescaling have explicit checked coverage. The reflection packet's remaining
-boundary fixtures are still pending.
+rescaling have explicit checked coverage. Reflection boundary fixtures are also
+implemented. The complete-claim review matches all source results, including
+strict rise/fall and radial reversal on the same segment without C³, and the
+same-segment directional third-derivative conclusion with C³. The paired
+polynomial's nonquasiconvexity on the singleton box is stated explicitly.
+
+## Complete-claim audit: reflection potential packet
+
+The packet remains in the independently managed `math/exports/` folder.
+Its mathematical claims are matched to the following production declarations.
+The full silent default build and exhaustive production axiom audit pass;
+the source selector for the nonnegative-singleton packet passes the same gate.
+
+| Source claim | Lean coverage |
+| --- | --- |
+| Quadratic and multi-affine exclusions | `not_isQuittingFullExactRootPotential_totalDegree_le_two` (`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialQuadraticExclusion.lean`) and `not_isQuittingFullExactRootPotential_multiAffine` (`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMultiAffineExclusion.lean`) retain real coefficients and the full exact-root relation. |
+| Every minimum's reflection and rise/fall | `IsQuittingFullExactRootPotential.exists_rise_and_fall` (`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialReflection.lean`) retains the quantitative gap, adaptive boundary minimum, negative slope, boxed reflection and segment, and strict interior peak on that same direction. |
+| C³ directional bound and exact integral | `IsQuittingFullExactRootPotential.directionalThirdDerivative` (`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialThirdDerivative.lean`) retains the same reflected direction and peak; `midpoint_thirdDerivative_integral_identity` (`MathUE/Analysis/MidpointThirdDerivativeIntegral.lean`) gives the literal identity and kernel mass. |
+| Weak monotone scalar transforms | `not_isQuittingFullExactRootPotential_monotone_polynomial_transform` (`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMonotoneTransformExclusion.lean`) covers flat pieces and both monotonicity directions. |
+| Rational approximate rejection and exhaustive search | `exists_rational_robust_rejection_of_excluded_polynomial` (`UniformEquilibrium/Quitting/Projective/ExcludedPolynomialRationalRejection.lean`) and the soundness/eventual-success theorems in `UniformEquilibrium/Quitting/Projective/RationalPotentialRejectionSearch.lean` retain the supplied tolerance, exact successor and actual returned pair. |
+| Same-polynomial semantic equivalence | `quittingGame_noUniformPayoff_iff_noSureRoot_and_restricted_rationalPotential` (`UniformEquilibrium/Quitting/Projective/RestrictedPolynomialForwardCharacterization.lean`) retains one produced expression and tolerance, canceled degree, non-multi-affinity, and all minimum conditions. |
+| Actual decision-preserving normalization | `exists_finFour_no_uniformPayoff_iff_exists_boundedSinglePivotPolynomialObstruction` (`UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotPolynomialObstruction.lean`) internally produces the pivot, integer divisor, scaled table and fresh certificate from arbitrary real no-UE rewards. |
+| Boundary groups | `CollisionAdjustedProbeBoundary.lean`, `ReflectionBoundaryArithmetic.lean`, `ConstantSignedNormalTable.lean`, the paired potential geometry/completion owners, and `FullExactRootPotentialChargeScale.lean` cover the collision, adaptive cap, sign, normality, face-only and charge boundaries. Their full paths are listed in the toolkit. |
+
+These are restrictions on possible potential certificates, not an additional
+solved-game class or a resolution of the surviving polynomial alternative.
 
 ## Complete-claim audit: passive-row cycle packet
 
@@ -1116,22 +1140,23 @@ generic error bound proves that equality.
 
 ## Nonnegative-singleton finite quiet lifts
 
-`NONNEGATIVE_SINGLETON_FINITE_QUIET_LIFTS` is pending implementation.
-Its source-facing child producer should select an actual original-game profile
+`NONNEGATIVE_SINGLETON_FINITE_QUIET_LIFTS` is partly implemented.
+`exists_terminalProfile_smallExploitability_smallNever_of_nonnegativeSingleton`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/NonnegativeSingletonEarlyAbsorption.lean`)
+passes its silent named check. From player count at most three, one nonnegative
+own singleton and any positive delta, it selects an actual original-game profile
 with exploitability at most delta plus delta squared and joint Never probability
-at most delta, from player count at most three, a nonnegative own singleton,
-and a supplied positive delta at most one. No child target or favorable profile
-is input. A natural owner is
-`UniformEquilibrium/Quitting/Classification/ThreePlayer/NonnegativeSingletonEarlyAbsorption.lean`.
-That proposed file does not yet exist.
+at most delta. No child target or favorable profile is input, and no upper
+restriction on delta is needed for this producer.
 
 The scalar late-Never estimate is already
 `prod_stoppingLaw_none_mul_singleton_le_terminalDebt`
 (`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`).
-The perturbation selector must reuse it rather than repeat the limit argument.
-Existing two-sided reward robustness only gives twice delta; the source's sharp
-delta transfer needs a one-sided singleton-coordinate payoff comparison for the
-same actual laws. This is an implementation dependency, not an assumed profile.
+The perturbation selector reuses it rather than repeating the limit argument.
+`IsεAsymptoticNash.of_nonnegative_reward_perturbation`
+(`UniformEquilibrium/Quitting/Terminal/TerminalPayoffRewardOrder.lean`)
+gives the sharp one-delta transport for any nonnegative reward perturbation,
+retaining the same actual profile and every behavioral replacement.
 
 The original-table withdrawal/debt adapter, finite censoring, and
 `prod_censorLateFiniteStoppingLaw_none_le`
@@ -1140,6 +1165,10 @@ then give finite quiet witnesses. The existing
 `quittingGame_exists_uniformPayoffWitnesses_of_terminalNash_family`
 (`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`)
 selects one fixed target while retaining members of that actual family.
+The residual-preserving multiple-outsider aggregation and finite quiet family
+remain implementation work. The existing product-Never censor bound charges
+twice the late mass; selecting total late mass below delta squared divided by
+two preserves the packet's stated constants without weakening its conclusion.
 The specified-child-target extension must not be weakened: the packet only
 selects a child target and includes a counterexample to preserving arbitrary ones.
 The original reward certificates remain unchanged throughout the perturbation.

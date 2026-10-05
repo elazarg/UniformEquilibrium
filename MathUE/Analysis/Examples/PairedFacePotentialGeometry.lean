@@ -2,6 +2,7 @@ import MathUE.Analysis.Examples.PairedFacePotential
 import MathUE.Analysis.CoordinateHessianEntries
 import MathUE.Analysis.CoordinateAffineBoxMinimum
 import MathUE.Interval.RationalPolynomialRegularity
+import Mathlib.Analysis.Convex.Quasiconvex
 
 /-! # The paired polynomial's canonical Hessian and minimizing vertices
 
@@ -79,6 +80,22 @@ theorem translatedPotential_coordinateAffine : Math.IsCoordinateAffine translate
   intro value
   fin_cases coordinate <;>
     simp [translatedPotential, potential, expression, evalReal, gradient] <;> ring
+
+/-- Singleton-face drift does not imply quasiconvexity, even above the singleton vector. -/
+theorem translatedPotential_not_quasiconvexOn_singletonBox :
+    ¬ QuasiconvexOn ℝ (Icc (fun _ : Fin 4 => (1 / 4 : ℝ)) 3) translatedPotential := by
+  intro hquasiconvex
+  have hleft : ![9 / 4, 1 / 4, 1 / 4, 1 / 4] ∈
+      Icc (fun _ : Fin 4 => (1 / 4 : ℝ)) 3 := by
+    constructor <;> intro coordinate <;> fin_cases coordinate <;> norm_num
+  have hright : ![1 / 4, 9 / 4, 1 / 4, 1 / 4] ∈
+      Icc (fun _ : Fin 4 => (1 / 4 : ℝ)) 3 := by
+    constructor <;> intro coordinate <;> fin_cases coordinate <;> norm_num
+  obtain ⟨_, hmax⟩ := quasiconvexOn_iff_le_max.mp hquasiconvex
+  have hmiddle := hmax hleft hright
+    (a := (1 / 2 : ℝ)) (b := (1 / 2 : ℝ)) (by norm_num) (by norm_num) (by norm_num)
+  norm_num [translatedPotential, potential, expression, evalReal,
+    Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hmiddle
 
 /-- The compact box internally produces a minimizing vertex which is not the top vertex,
 and thus has an actual lower-bound coordinate violating the full-root minimum restriction. -/

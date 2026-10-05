@@ -42,7 +42,12 @@ theorem IsQuittingFullExactRootPotential.directionalThirdDerivative
       3 * gap ≤ iteratedFDeriv ℝ 3 potential (minimum + time • (point - minimum))
         (fun _ => point - minimum) ∧
       (∀ rate ∈ Set.Icc (0 : ℝ) 2, minimum + rate • (point - minimum) ∈
-        Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)) := by
+        Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)) ∧
+      ∃ peak ∈ Set.Ioo (0 : ℝ) 1,
+        potential minimum < potential (minimum + peak • (point - minimum)) ∧
+        potential point < potential (minimum + peak • (point - minimum)) ∧
+        IsMaxOn (fun rate => potential (minimum + rate • (point - minimum)))
+          (Set.Icc (0 : ℝ) 1) peak := by
   have hdiff : ∀ point ∈ Set.Icc (fun who => quittingSoloReward reward who who)
       (fun _ => 3), DifferentiableAt ℝ potential point := by
     intro point hpoint
@@ -84,6 +89,22 @@ theorem IsQuittingFullExactRootPotential.directionalThirdDerivative
     hlineRegular hendpoints hslope
   rw [Math.thirdDerivative_affineLine_eq potential domain hopen hregular minimum direction
     time (hbox (hsegment time ⟨htime.1.le, htime.2.le⟩))] at hthird
-  exact ⟨hgap, point, time, hpoint, hpointMin, htime, hnegative, hreflection, hthird, hsegment⟩
+  have hcontinuousLine : ContinuousOn (fun rate => potential (path rate))
+      (Set.Icc (0 : ℝ) 1) := by
+    intro rate hrate
+    have hregularAt := hlineRegular rate ⟨hrate.1, hrate.2.trans (by norm_num)⟩
+    exact hregularAt.continuousAt.continuousWithinAt
+  have hnegativeSlope : fderiv ℝ potential point direction < 0 := by
+    change fderiv ℝ potential point (point - minimum) < 0
+    linarith
+  have hfirstEndpoints : potential (path 0) ≤ potential (path 1) := by
+    simpa [path, direction] using hmin (hsegment 1 (by norm_num))
+  obtain ⟨peak, hpeak, hfirst, hsecond, hmaximum⟩ :=
+    Math.exists_interior_maximum_of_endpoint_derivative_neg _ _
+      hcontinuousLine hlineDerivative hnegativeSlope hfirstEndpoints
+  refine ⟨hgap, point, time, hpoint, hpointMin, htime, hnegative, hreflection,
+    hthird, hsegment, peak, hpeak, ?_, ?_, hmaximum⟩
+  · simpa [path, direction] using hfirst
+  · simpa [path, direction] using hsecond
 
 end GameTheory

@@ -2434,6 +2434,20 @@ in `MathUE/Analysis/Examples/PairedFacePotential.lean`. No spectral certificate,
 minimizer, standard-Q assumption, or behavioral equilibrium is supplied or
 inferred.
 
+`Math.PairedFacePotential.translatedPotential_not_quasiconvexOn_singletonBox`
+(`MathUE/Analysis/Examples/PairedFacePotentialGeometry.lean`) explicitly rejects
+quasiconvexity on the singleton box: two endpoints have value `-8`, while their
+midpoint has value `56`. The reflection and directional third-derivative
+theorems retain a strict interior peak on the same reflected segment; this
+same-segment conclusion is also retained by the polynomial characterization.
+
+The arithmetic cases in `MathUE/Analysis/Examples/ReflectionBoundaryArithmetic.lean`
+record the adaptive reflection endpoint and failures of unsigned or fixed-cap
+extensions. `ConstantSignedNormalTable.punishment_vector` and `all_normal`
+(`UniformEquilibrium/Quitting/Examples/ConstantSignedNormalTable.lean`) prove
+that normality does not imply nonnegative own singletons, using the constant
+reward vector `(1,-1,0,0)`. Positive scaling preserves its negative singleton.
+
 `midpoint_thirdDerivative_integral_identity` and
 `midpointThirdDerivativeKernel_weighted_mass`
 (`MathUE/Analysis/MidpointThirdDerivativeIntegral.lean`) give the exact weighted
@@ -2442,6 +2456,10 @@ identities use ordinary iterated derivatives, under third-order regularity at
 every point of the closed segment, including both endpoints.
 The paired example and integral identity pass silent named checks, the full
 silent default build, and the exhaustive production axiom audit.
+The strengthened same-segment conclusions and the remaining reflection
+boundary examples pass the same full integration gate, completing the packet's
+mathematical coverage. The surviving higher-degree polynomial alternative
+remains open.
 
 The shape examples and boundary cases are integrated and pass silent named,
 separate standard-axiom and full build checks. `upper_two_fixture`
@@ -3413,6 +3431,21 @@ for different outsiders and requiring a positive actual child singleton.
 The Fin4 wrapper constructs the child target internally. An outsider-only
 terminal reward shift keeps Never zero and carries an explicit joint-Never
 correction; it is not arbitrary-profile strategic equivalence.
+
+`exists_terminalProfile_smallExploitability_smallNever_of_nonnegativeSingleton`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/NonnegativeSingletonEarlyAbsorption.lean`)
+selects an actual original-game child profile from cardinality at most three,
+one nonnegative own singleton, and any positive delta. The same laws have full
+terminal exploitability at most `delta + delta²` and joint Never at most `delta`.
+It increases only that singleton coordinate, applies the existing low-player
+producer, and returns the same profile through the sharp one-sided reward
+transport in `UniformEquilibrium/Quitting/Terminal/TerminalPayoffRewardOrder.lean`.
+No child target, favorable law, or perturbed outsider certificate is assumed.
+The residual-preserving parent aggregation, finite quiet laws, and their
+fixed-target family consumer are still pending. This source selector alone
+does not strengthen the specified-child-target extension theorem.
+Its silent named check, full silent default build and exhaustive production
+axiom audit pass.
 
 `quietLift_fixedTarget_of_withdrawalFutureJoin_absorbingStationary`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalAbsorbingStationaryChild.lean`)

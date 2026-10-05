@@ -33,8 +33,8 @@ private theorem rationalPotential_iff_of_box_eq
 
 /-- Output-only geometric restrictions on one actual rational polynomial:
 every global minimum has adaptive radial reversal and the quantitative
-directional third derivative along ONE internally produced boundary-minimum
-direction. Upper-face minima, its boxed reflection and the full segment are retained. -/
+directional third derivative and rise/fall along the same internally produced
+boundary-minimum direction. Upper-face minima and the boxed segment are retained. -/
 def QuittingRationalPolynomialAdaptiveMinimumConditions
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (expression : RationalPolynomial 4) : Prop :=
@@ -54,7 +54,12 @@ def QuittingRationalPolynomialAdaptiveMinimumConditions
       3 * gap ≤ iteratedFDeriv ℝ 3 potential (minimum + time • (point - minimum))
         (fun _ => point - minimum) ∧
       (∀ rate ∈ Set.Icc (0 : ℝ) 2, minimum + rate • (point - minimum) ∈
-        Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3))
+        Set.Icc (fun _ => (-3 : ℝ)) (fun _ => 3)) ∧
+      ∃ peak ∈ Set.Ioo (0 : ℝ) 1,
+        potential minimum < potential (minimum + peak • (point - minimum)) ∧
+        potential point < potential (minimum + peak • (point - minimum)) ∧
+        IsMaxOn (fun rate => potential (minimum + rate • (point - minimum)))
+          (Set.Icc (0 : ℝ) 1) peak
 
 /-- In the bounded nonnegative-singleton Fin4 class, the identical produced
 polynomial has total degree at least three, is not multi-affine, and satisfies
