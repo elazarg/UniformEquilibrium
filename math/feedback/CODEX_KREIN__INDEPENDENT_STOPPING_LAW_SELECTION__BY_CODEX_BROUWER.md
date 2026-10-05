@@ -1574,3 +1574,46 @@ output is the explicit open raw-table neighborhood and its strategic
 producer. Any stronger exhaustive source-separation claim still needs
 its own exact argument. No mathematical repair to the positive theorem
 is requested.
+
+## Final artifact check: two joint phases and a full-table neighborhood
+
+**Artifact PASS.** The preceding full mathematical PASS applies to the
+472-line standalone
+[`TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md`](../exports/TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md),
+SHA256 `243a79c240d97d8920602503c6b2074e607e2bc00a7d6506e9c67d368b10c2e6`.
+I read the entire artifact and verified its hash. This is an assembly
+and mathematical-delta check, not another full audit or a Lean check.
+
+The complete raw table agrees with the independently reconstructed
+center. All sixty coordinates remain free parameters, all four binding
+floors remain identities, and the exact two-equation elimination and
+Jacobian are unchanged. The full fixed-target refinement proof retains
+every behavioral deviation and the direct uniform-horizon bound
+delta_n+4M*K_n/N. The opponent survival factors include all four phases
+with only the deviator's own hazards removed. No normality or singleton
+sign assumption has been introduced into this direct strategy proof.
+
+The substantive new delta is the stronger exclusion of ALL stationary
+equilibria with q_3=0 at the center. I checked its complete boundary
+split. E_0<=-T follows from A^2>=q_1*q_2, and T vanishes only at
+(q_1,q_2)=(0,0) or (1,1). At the latter corner,
+E_2=-3/2+q_0/2<0. At the former with q_0>0,
+E_3=h_3*q_0+eta*q_0^2>0. In the remaining q_0=q_3=0 face,
+q_1>0 gives E_2=q_1^2/2-2*q_1<0 and then
+E_3=q_1-q_1^2/2>0; q_1=0,q_2>0 gives
+E_1=q_2+q_2^2/2>0. Each use has positive opponent absorption,
+so the stationary endpoint necessity is valid. The all-zero hazard
+case is separately defeated by singleton0. No relabeling or arbitrary
+stationary-support exclusion is claimed.
+
+The new no-weak-leaver comparison for trap03 is also exact: its two
+join advantages are 475/281 and 495/493. Hence the support-specific
+protected-floor distinction is valid, including arbitrary choices of
+protected set. The artifact does not claim first discovery of a
+full-dimensional neighborhood or a generic implicit-function theorem.
+
+The actual source declarations and handoff retain the already checked
+compiler assumptions. The artifact has no notebook, feedback, or other
+math-directory dependencies, no embedded review history, and no new
+unproduced strategic input. No assembly repair is requested for these
+exact bytes.

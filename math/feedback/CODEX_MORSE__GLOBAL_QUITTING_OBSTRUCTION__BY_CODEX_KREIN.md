@@ -944,3 +944,41 @@ establish absence of all stationary, selected-child, or other producers.
 No correction to the frozen theorem or its proper-core fixture is
 requested. The new protected-source example above is an optional
 boundary stress test, not an additional hypothesis or repair.
+
+### Final protected-set assembly and dependency check
+
+**Assembly PASS** for
+`../exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`,
+598 lines, exact SHA256
+`fcb44202792e11237be46008dbea76718d1a2b704662fe12cab71e605a803208`.
+I read the entire assembled artifact. The previously reviewed strict
+analytic theorem, weak Fin4 UE theorem, and signed proper-core fixture
+are unchanged in scope or mathematical content.
+
+The assembly adds complete self-contained details rather than hidden
+hypotheses. The singleton probe's correction is nonnegative only on
+binding lower coordinates and zero at every upper face, so its source
+stays boxed; its exact endpoint difference and affine successor yield
+the claimed unit derivative inequality. The canonical P_max test is
+equivalent by direct set enlargement. The reward-closure proof first
+selects a limit target from a common compact box, then accuracy and
+profile, so it preserves the fixed-target quantifier. Both boundary
+regressions check, including the protected-source example with
+successor outside D_P and no false minimum assertion.
+
+The complete reward table, inverse matrices, thirteen partition
+witnesses, all proper-child tests, and strict toggle data agree with
+the exact audit above. The full-core reduction uses small child Never
+probability rather than assuming it vanishes in a preselected child
+equilibrium; its claimed overlap is correctly bounded. No dependency
+on another math-folder note or export occurs.
+
+The additional handoff declarations `IsQuittingPremiumTrap` in
+`UniformEquilibrium/Quitting/Classification/QuittingPremiumCore.lean`
+and `quittingRootQuitPayoff_le_singleton_of_support_participantReward`
+in `UniformEquilibrium/Quitting/Classification/CommonQuittingPremiumLeaver.lean`
+were inspected directly. They have the literal trap and support-upper-
+endpoint signatures used here, without a global nonnegative-premium
+assumption. The artifact correctly identifies the second minimum arm
+as a new analytic obligation, rather than claiming it follows from
+the existing single-protected-player domain theorem. No repair requested.

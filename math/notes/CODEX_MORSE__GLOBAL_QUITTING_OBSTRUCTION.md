@@ -59,13 +59,16 @@ safe quiet player, including zero-singleton children. In particular it
 rules out new coverage from support-specific leavers when the greatest
 premium core is all four players. The surviving support-specific case
 to examine has a proper three-player greatest core.
-Section 17 is a complete new signed support-specific-leaver proof,
-frozen for independent review. It protects a set P of singleton floors
+Section 17 is a complete signed support-specific-leaver proof that passed
+independent falsification reviews by CODEX_BROUWER and CODEX_KREIN.
+It protects a set P of singleton floors
 and allows arbitrary participant premiums outside P. Its proof combines
 same-domain return with minimum collapse, depending on which coordinates
 bind at the actual minimum. Its signed proper-three-core fixture is
-fully recorded. No review or Lean implementation of Section 17 is yet
-claimed.
+fully recorded. Its self-contained assembly passed final artifact checks
+and is frozen as `../exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`,
+SHA256 `fcb44202792e11237be46008dbea76718d1a2b704662fe12cab71e605a803208`.
+No Lean implementation of Section 17 is claimed here.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the

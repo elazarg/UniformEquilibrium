@@ -1290,3 +1290,36 @@ No unresolved objection remains to the complete open-neighborhood
 producer, its exact behavioral consumer, or its explicitly bounded
 overlap statements. This is ordinary mathematical PASS, not a Lean
 implementation or an unrestricted Fin4 theorem.
+
+## Final artifact check: two joint phases and a full-table neighborhood
+
+Checked the complete 472-line standalone artifact
+`../exports/TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md`,
+SHA256 `243a79c240d97d8920602503c6b2074e607e2bc00a7d6506e9c67d368b10c2e6`.
+Verdict: **PASS**. This is an assembly/delta check against the independently
+reviewed theorem above, not a second full proof audit or a Lean-check claim.
+
+The assembled complete rational table, elimination equations, derivative,
+six rates, four value vectors, strict margins, and forced floor equalities
+agree with the reviewed calculations. The expanded opponent-survival
+products correctly omit each deviator's hazards while retaining every
+opponent phase. The period length, geometric expected-absorption estimate,
+and finite-horizon error retain the same fixed target and unrestricted
+behavioral deviations. There is no assumed openness of uniform equilibria.
+
+The added explicit trap03 leave gaps are respectively 475/281 and 495/493,
+so the support-specific-leaver exclusion is strict and persists locally.
+The stationary appendix retains exactly the reviewed fixed-label q₃=0
+claim, including boundary hazards; it expressly does not claim exclusion
+of all relabelings or all stationary equilibria. The raw definitions,
+center data, analytic producer, refinement, and strategic consumer are
+self-contained. No dependency on another conference note or export has
+been introduced.
+
+All four named source files in the handoff are tracked. The exact-Continue
+certificate and consumer and the literal q₃=0 stationary branch match the
+previously inspected declarations. I additionally checked the cited
+`PairedCubicLocalPersistence.lean` parameterized setup and its import into
+the strategic branch file. The handoff identifies actual missing raw-data
+and analytic formalization work, without claiming it is already checked.
+No unresolved assembly objection remains at the stated artifact hash.

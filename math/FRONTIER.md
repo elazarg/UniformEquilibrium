@@ -407,8 +407,10 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the cyclic-child joint/solo raw family specified below, for every real R | UE, with an explicit fixed-target finite-law producer on the interval not covered by the singleton criteria. Both participants of the prescribed pair receive a positive collision premium; a full four-player premium core is allowed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: the repeated-solo outsider-buffer family specified below, for every real R | UE allowing a positive outsider collision reward at the joint phase. A final solo exit supplies its continuation buffer. All rates and values are produced from rewards. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: the two-buffer joint/solo family specified below, for every real R | UE allowing all six outsider collision coordinates at the joint phase to be positive, under two weighted raw inequalities. Signed collision rewards and the zero-final-phase boundary are included. This is a reviewed mathematical result awaiting formalization. |
+| Fin4: all tables in an open sixty-coordinate neighborhood of the explicit two-joint-phase rational table specified below | UE with rates and a fixed target produced from the table. Every singleton and collision reward may vary; only two solo phases require refinement. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
+| Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -540,6 +542,24 @@ The [complete two-buffer theorem](exports/TWO_OUTSIDER_BUFFERS_WITH_A_REPEATED_S
 contains the raw-data selector, original-table exterior cases, fixed-target
 behavioral proof, and direct zero-phase specialization.
 
+The **two-joint-phase neighborhood theorem** produces an open set in the
+full sixty-coordinate reward space around an explicit rational table. Its
+four macro phases are joint {0,3}, solo 1, solo 2, joint {0,3}.
+An explicit two-equation elimination and nonsingular two-variable Jacobian
+produce all six rates and every phase value for every nearby raw table.
+The binding singleton floors remain identities; the other floors and all
+joint-row outsider comparisons remain strict. Refining only the two solo
+phases gives vanishing full behavioral regret at one unchanged target for
+each table, with a uniform all-large-horizon bound.
+
+The [complete neighborhood theorem](exports/TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md)
+specifies the full rational center and construction. It does not give a
+numerical neighborhood radius or infer generic coverage from one open set.
+The neighborhood can retain disjoint premium traps {0,3} and {1,2}, with
+no weak leaver in {0,3}; the protected-leaver criteria therefore do not
+cover it. The exact stationary exclusion at its center concerns player 3
+kept quiet, not every stationary support or relabeling.
+
 The **premium-core criterion** assumes sₖ≥0 and rₖ(S)≥sₖ for every
 participant k∈S. A nonempty set A is a premium trap when every k∈A has
 some S⊆A containing k with rₖ(S)>sₖ. Traps are closed under union;
@@ -618,6 +638,31 @@ include a three-player core with a genuinely negative participant premium.
 The criterion does not cover traps with no common member, negative participant premiums of every
 possible protected member, or failed leave comparisons for all such members.
 It is not a normal form for arbitrary reward tables.
+
+The **support-specific protected-leaver criterion** removes the requirement
+that one player work for every trap. Define directly from the table
+
+    P={i : rᵢ(S)≥sᵢ for every coalition S containing i}.
+
+Assume P is nonempty and that every premium trap A has some p∈A∩P with
+
+    rₚ(T∪{p})≤rₚ(T) for every nonempty T⊆A\{p}.
+
+With nonnegative own singletons this implies UE. All participant rewards
+outside P may be signed. Strict comparisons exclude smooth full-root
+potentials for any finite player set; weak comparisons yield the Fin4
+strategic theorem by reward closure. The proof minimizes on one fixed
+protected-floor domain. When every binding coordinate is protected, it
+uses the closed Nash graph at that actual minimum and an error negligible
+relative to absorption, not an unjustified return from a perturbed source.
+
+The [complete protected-set theorem](exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md)
+contains a proper-three-player-core example requiring different protected
+leavers and having a negative participant premium. Its full-core case is
+already covered by the globally safe quiet-player composition below.
+The new criterion does not cover a trap with no suitable leaver, or a
+table with no protected player. No reduction of arbitrary tables to this
+criterion is asserted.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are

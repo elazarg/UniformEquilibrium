@@ -67,9 +67,17 @@ exit and compensating the pivot's floor. Its zero-phase boundary directly
 includes the switched theorem, including cap equality. The self-contained
 theorem is [Two outsider buffers with a repeated solo exit](../exports/TWO_OUTSIDER_BUFFERS_WITH_A_REPEATED_SOLO_EXIT.md).
 Its zero-phase specialization contains the narrower switched-pair theorem.
-The next question is whether the prescribed joint reward equalities can
-be removed on an actual neighborhood of raw tables, using a produced
-cycle rather than assuming that uniform-equilibrium existence is open.
+The subsequent **Two genuine joint phases give an open full-table
+neighborhood** has independent mathematical PASS reviews from both
+CODEX_BROUWER and CODEX_MORSE. It removes the prescribed joint reward
+equalities on a produced open neighborhood in all sixty raw coordinates.
+The independently checked standalone theorem is frozen in
+`../exports/TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md`, promoted
+byte-for-byte by the coordinator. Its new input is the concrete regular raw
+center and two-joint elimination, not the general implicit-function
+method or the already existing full-dimensional-neighborhood concept.
+The next question is global actual-table selection beyond this local
+center; no general openness or architecture-completeness claim is made.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
@@ -2873,8 +2881,9 @@ review; the following exploration does not modify that result.
 
 ## Two genuine joint phases give an open full-table neighborhood
 
-Status: complete ordinary proof candidate, with an independent substantive
-PASS by CODEX_BROUWER in his feedback for this notebook. Not Lean-checked.
+Status: complete ordinary proof candidate, with independent substantive
+PASS reviews by CODEX_BROUWER and CODEX_MORSE in their feedback for this
+notebook. Not Lean-checked. Its mathematical statement is unchanged.
 It answers a structural limitation of the previous architecture, not an
 optimization of its scalar bounds. In a cycle with a final solo-3 mixing
 phase immediately before a joint {0,3} mixing phase, the first phase
@@ -3174,3 +3183,46 @@ cannot contain this center in its asserted fixed-label neighborhood.
 This is not yet exclusion of relabelings, other stationary supports,
 or every other existing raw-table producer. Those remain separate
 coverage questions; no negative numerical experiment is used here.
+
+## A strict finite-refinement boundary for the two-joint branch
+
+This separate observation does not change the frozen neighborhood
+theorem or its assembly. It shows why exact finite-cycle Nash should
+not be substituted for the approximate fixed-target conclusion.
+
+At every table in a sufficiently small neighborhood of (79)–(80),
+the produced branch has V_C,1=s_1 identically, all aggregate hazards
+interior, and kappa=r_1(12)−s_1>0. Refine the C solo-2 block
+into ANY finite list of hazards with aggregate w>0. Let b>0 be
+its first positive microhazard; any preceding zero hazards leave the
+same continuation value s_1. At that date, player 1's immediate
+Quit value is
+
+    (1−b)s_1+b*r_1(12)=s_1+b*kappa>s_1.
+
+Follow the prescribed profile up to the first C block and deviate
+only by quitting at this microdate if still live. Its reach probability
+from phase A is
+
+    p_C=(1−x)(1−y)(1−z)>0,
+
+independently of how the B block is subdivided. Its terminal gain is
+exactly p_C*b*kappa>0. Consequently NO such finite subdivision of
+this particular exact-value branch is an exact terminal Nash profile.
+This includes arbitrary unequal microhazards, not only equal meshes.
+
+At the rational center, p_C=9/20 and kappa=1/2. For the n-equal
+mesh the exhibited gain is exactly
+
+    (9/40)[1−(2/3)^(1/n)]>0.
+
+It converges to zero with n, in agreement with the common-error
+upper estimate. The conclusion is only about this produced branch
+and its finite solo refinements. It is not absence of an exact
+terminal equilibrium in another architecture or absence of a UE.
+
+The next actual-data question is whether a joint pair and its two
+separated active occurrences can be selected globally in a remaining
+raw family, or whether a concrete table requires changing the joint
+support itself. The local implicit-function theorem alone provides
+neither global continuation nor that support selection.

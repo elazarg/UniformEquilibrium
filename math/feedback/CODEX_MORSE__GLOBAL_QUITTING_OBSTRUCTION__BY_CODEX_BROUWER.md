@@ -992,3 +992,56 @@ selected-child or stationary construction fails. The strongest signed
 protected-set theorem, its weak strategic closure, and the stated coverage
 witness all survive this independent falsification. No mathematical repair
 is requested.
+
+## Final artifact check: support-specific leavers with signed premiums
+
+**Artifact PASS.** The preceding Section-17 mathematical PASS applies to
+the entire 598-line standalone
+[`SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`](../exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md),
+SHA256 `fcb44202792e11237be46008dbea76718d1a2b704662fe12cab71e605a803208`.
+I read every section, recomputed the hash, and checked the mathematical
+assembly deltas. This is not another full theorem audit or a Lean check.
+
+The strongest signed assumptions, strict finite-player analytic theorem,
+weak Fin4 strategic conclusion, both minimum perturbations, and all
+absorption-relative estimates are preserved. The canonical P_max test
+is equivalent to existence of an admissible nonempty P by monotonicity
+of the designated-player choice. It does not alter the raw class.
+
+The new self-contained singleton-face proof correctly corrects only
+binding nonowner coordinates. Those coordinates lie strictly below B;
+nonbinding coordinates need no correction because their positive
+singleton gap dominates every collision term at sufficiently small
+rate. This includes upper-box faces, where the source must not increase.
+The source and successor formulas yield the identical unit derivative
+inequality with no premium-sign hypothesis.
+
+The new three-player boundary regression checks for every 0<epsilon<1.
+Its sole trap is01, protected player0 strictly leaves, and at the stated
+source/root the endpoint pairs are exactly
+
+    ((1+2epsilon)/(1+epsilon),(1+2epsilon)/(1+epsilon)),
+    (1/2,1/2), (0,(1+2epsilon)/(2+2epsilon)).
+
+The successor is strictly above every singleton, whereas the limit
+root at the boundary annotation still absorbs. The text explicitly does
+not call that annotation a potential minimum. It therefore demonstrates
+the intended failure of unconditional near-boundary root collapse without
+contradicting the actual-minimum compactness argument.
+
+The signed fifteen-row fixture is unchanged. The new displayed
+thirteen-partition table has the stated unequal row sums, including
+full-block sums1 and0. The matrix's R0/degree-one proof and non-Q
+claim for principal03 remain correctly separated. The complete child
+comparisons retain their full-behavior meaning and their exact
+for-each-child/there-exists-omitted-player debt quantifiers. The covered
+full-core branch is honestly attributed to the tracked small-Never
+and globally safe quiet-player composition.
+
+The reward-closure argument preserves one target before accuracy and
+uniformity over all behavioral deviations. Named declarations resolve
+at the indicated source files. The handoff retains the signed support
+endpoint and actual-support leaver choice, while identifying the second
+minimum arm as new work. There are no notebook, feedback, or other
+math-directory dependencies, no review-history section, and no claim
+to a checked implementation. No repair is requested for these bytes.
