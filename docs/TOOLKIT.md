@@ -123,6 +123,27 @@ vector and the zero active premium when only player three quits.
 shows that nonnegative own premiums and product-low imply every absorbing
 exact root's successor lies above all singleton levels, with an active
 coordinate attaining its singleton exactly.
+`exactRootSuccessor_mem_singletonLowerBoundary_of_twoPlayerPremiumCore_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/TwoPlayerPremiumCoreExactRootBoundary.lean`)
+gives the same successor conclusion for two designated premium-bearing players,
+with constant participant rewards outside that pair and one core player
+strictly preferring the other core's singleton coalition to their pair.
+It requires only that leaving player's annotation to meet its singleton floor.
+Positive outsider hazards are handled before reducing to the pair; no
+product-low condition or restriction on larger-coalition core premiums is
+supplied.
+`not_isQuittingFullExactRootPotential_of_twoPlayerPremiumCore_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/TwoPlayerPremiumCoreSmoothDrift.lean`)
+excludes full exact-root potentials differentiable at every singleton lower-boundary
+point; no off-boundary differentiability or nonnegative singleton assumption is needed.
+`exists_uniformEquilibriumPayoff_of_twoPlayerPremiumCore_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/TwoPlayerPremiumCoreUniformPayoff.lean`)
+gives a fixed uniform-equilibrium payoff for the four-player class with nonnegative
+singletons. It internally obtains the polynomial obstruction in the positive-singleton
+branch and uses the zero-solo theorem otherwise. The literal table in
+`UniformEquilibrium/Quitting/Examples/TwoPlayerPremiumCoreStrictLeave.lean`
+has such a payoff but fails product-low; its larger matrix and child-screen claims
+are not supplied by that example.
 `weakPeeling_iff_every_boxedExactRoot_singletonLowerBoundary`
 (`UniformEquilibrium/Quitting/Classification/NonnegativePremiumBoxBoundary.lean`)
 proves the converse under nonnegative own premiums on every box strictly

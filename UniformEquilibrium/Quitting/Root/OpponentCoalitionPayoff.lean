@@ -152,4 +152,26 @@ theorem quittingEndpointInsertionToggle_of_nonempty
   simp [quittingEndpointInsertionToggle, quittingStageCoalitionPayoff,
     hcoalition]
 
+/-- Constant participant rewards make the pure-Quit endpoint the own singleton,
+for arbitrary opponent marginals and continuation. -/
+theorem quittingRootQuitPayoff_eq_singleton_of_constant_participantReward
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) (player : ι)
+    (hconstant : ∀ terminal, player ∈ terminal.val →
+      reward terminal player = reward (quittingSingletonTerminal player) player) :
+    quittingRootQuitPayoff reward tail root player =
+      reward (quittingSingletonTerminal player) player := by
+  rw [quittingRootQuitPayoff_eq_sum_opponentCoalitionMass]
+  calc
+    _ = ∑ coalition ∈ (Finset.univ.erase player).powerset,
+        quittingOpponentCoalitionMass root player coalition *
+          reward (quittingSingletonTerminal player) player := by
+      apply Finset.sum_congr rfl
+      intro coalition _
+      simp only [quittingStageCoalitionPayoff, Finset.insert_nonempty, dite_true]
+      rw [hconstant ⟨insert player coalition, Finset.insert_nonempty player coalition⟩
+        (Finset.mem_insert_self player coalition)]
+    _ = _ := by
+      rw [← Finset.sum_mul, quittingOpponentCoalitionMass_sum_powerset, one_mul]
+
 end GameTheory

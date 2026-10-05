@@ -605,6 +605,33 @@ These are proof-supported follow-ups, not yet checked declarations:
   and the actual infimum change by at most `2*delta`. Positive separation
   requires `4*delta < margin`; no UE counterexample robustness follows.
 
+### Two-player premium cores with strict leave preference
+
+`exactRootSuccessor_mem_singletonLowerBoundary_of_twoPlayerPremiumCore_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/TwoPlayerPremiumCoreExactRootBoundary.lean`)
+proves the new packet's raw exact-root return, for arbitrary finite players.
+The proof handles positive outsider hazards first, then reuses the canonical
+paired-root endpoint formulas and exact supported-action equality. Only the
+leaving core player's annotation floor is needed; the second core floor can
+be omitted. Outsider hazards, arbitrary passive rewards and larger-coalition
+core premiums are retained. The shared constant-participant endpoint helper
+lives in `UniformEquilibrium/Quitting/Root/OpponentCoalitionPayoff.lean`.
+`not_isQuittingFullExactRootPotential_of_twoPlayerPremiumCore_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/TwoPlayerPremiumCoreSmoothDrift.lean`)
+is proved in Lean using the existing singleton-face drift and lower-boundary
+minimum signs. The stronger one-floor return allows lowering another binding
+coordinate, even the second core coordinate. Differentiability at boundary points
+suffices; neither a neighborhood C¹ hypothesis nor an outsider-only perturbation
+is needed.
+`exists_uniformEquilibriumPayoff_of_twoPlayerPremiumCore_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/TwoPlayerPremiumCoreUniformPayoff.lean`)
+is proved in Lean for nonnegative-singleton four-player tables, composing the
+actual polynomial producer and zero-solo branch. The concrete packet table,
+its raw-class checks, UE consequence and product-low failure are checked in
+`UniformEquilibrium/Quitting/Examples/TwoPlayerPremiumCoreStrictLeave.lean`.
+The other Section 6 matrix, response-partition and proper-child certificate
+screening claims remain to be formalized; this is not a whole-packet seal.
+
 ## Proof-mining connections not yet formalized
 
 These are proposed follow-ups, not new checked conclusions or packet seals.

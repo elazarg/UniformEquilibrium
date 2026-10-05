@@ -5430,6 +5430,158 @@ theorem FiniteStageGame.exists_oneStageNash_mem_IR (G : FiniteStageGame) :
   exact ⟨profile, hnash, lemma_1_Elambda_subset_Delta G rate
     (lemma_1_E1_subset_Elambda G rate hone)⟩
 
+/-- A flat security coordinate is a global stage maximum when another
+coordinate has IR slack and no feasible all-strict point exists. -/
+private theorem FiniteStageGame.purePayoff_le_security_of_flat_IR
+    (G : FiniteStageGame) (flat active : G.Player)
+    (hexhaust : ∀ who, who = flat ∨ who = active)
+    (hnostrict : ¬∃ v ∈ G.correlatedFeasiblePayoffs,
+      ∀ who, G.individualRationalLevel who < v who)
+    (point : Payoff G.Player) (hpoint : point ∈ G.individuallyRationalPayoffs)
+    (hflat : point flat = G.individualRationalLevel flat)
+    (hactive : G.individualRationalLevel active < point active) :
+    ∀ action, G.payoff action flat ≤ G.individualRationalLevel flat := by
+  intro action
+  by_contra hnot
+  have hyflat : G.individualRationalLevel flat < G.payoff action flat :=
+    lt_of_not_ge hnot
+  let slack := point active - G.individualRationalLevel active
+  let distance := |G.payoff action active - point active|
+  have hslack : 0 < slack := sub_pos.mpr hactive
+  obtain ⟨c, hc, hsmall⟩ := exists_pos_mul_lt hslack distance
+  let t : ℝ := min c (1 / 2)
+  have ht : 0 < t := lt_min hc (by norm_num)
+  have ht1 : t ≤ 1 := (min_le_right c (1 / 2)).trans (by norm_num)
+  have htc : t ≤ c := min_le_left _ _
+  have hsmallT : t * distance < slack := by
+    calc
+      t * distance = distance * t := mul_comm _ _
+      _ ≤ distance * c := mul_le_mul_of_nonneg_left htc (abs_nonneg _)
+      _ < slack := hsmall
+  let mixed : Payoff G.Player := (1 - t) • point + t • G.payoff action
+  have hy : G.payoff action ∈ G.correlatedFeasiblePayoffs :=
+    subset_convexHull ℝ G.purePayoffSet ⟨action, rfl⟩
+  have hmixed : mixed ∈ G.correlatedFeasiblePayoffs :=
+    G.correlatedFeasiblePayoffs_convex hpoint.1 hy
+      (sub_nonneg.mpr ht1) ht.le (by ring)
+  apply hnostrict
+  refine ⟨mixed, hmixed, ?_⟩
+  intro who
+  rcases hexhaust who with hwho | hwho
+  · subst who
+    change G.individualRationalLevel flat <
+      (1 - t) * point flat + t * G.payoff action flat
+    rw [hflat]
+    have hgain := mul_pos ht (sub_pos.mpr hyflat)
+    nlinarith
+  · subst who
+    have hlower : -distance ≤ G.payoff action active - point active :=
+      (abs_le.mp (le_refl |G.payoff action active - point active|)).1
+    have hscaled := mul_le_mul_of_nonneg_left hlower ht.le
+    change G.individualRationalLevel active <
+      (1 - t) * point active + t * G.payoff action active
+    dsimp only [slack] at hsmallT
+    nlinarith
+
+/-- The actual two-player IR set has a strict point, is the singleton
+security vector, or has one flat global-maximum coordinate and active slack. -/
+theorem FiniteStageGame.twoPlayer_IR_geometry
+    (G : FiniteStageGame) (hcard : Fintype.card G.Player = 2) :
+    (∃ v ∈ G.correlatedFeasiblePayoffs,
+      ∀ who, G.individualRationalLevel who < v who) ∨
+    G.individuallyRationalPayoffs = {G.individualRationalLevel} ∨
+    ∃ flat active : G.Player,
+      flat ≠ active ∧
+      (∀ who, who = flat ∨ who = active) ∧
+      (∀ v ∈ G.individuallyRationalPayoffs,
+        v flat = G.individualRationalLevel flat) ∧
+      (∃ point ∈ G.individuallyRationalPayoffs,
+        G.individualRationalLevel active < point active) ∧
+      (∀ action, G.payoff action flat ≤ G.individualRationalLevel flat) := by
+  classical
+  by_cases hstrict : ∃ v ∈ G.correlatedFeasiblePayoffs,
+      ∀ who, G.individualRationalLevel who < v who
+  · exact Or.inl hstrict
+  right
+  by_cases hsingleton : G.individuallyRationalPayoffs = {G.individualRationalLevel}
+  · exact Or.inl hsingleton
+  right
+  have htwo : (Finset.univ : Finset G.Player).card = 2 := by
+    simpa only [Finset.card_univ] using hcard
+  obtain ⟨first, second, hne, hplayers⟩ := Finset.card_eq_two.mp htwo
+  have hexhaust : ∀ who : G.Player, who = first ∨ who = second := by
+    intro who
+    have hmem : who ∈ ({first, second} : Finset G.Player) := by
+      rw [← hplayers]
+      exact Finset.mem_univ who
+    simpa only [Finset.mem_insert, Finset.mem_singleton] using hmem
+  have hexists : ∃ point ∈ G.individuallyRationalPayoffs,
+      ∃ active, G.individualRationalLevel active < point active := by
+    by_contra hnone
+    have hequal (point : Payoff G.Player)
+        (hpoint : point ∈ G.individuallyRationalPayoffs) :
+        point = G.individualRationalLevel := by
+      funext who
+      apply le_antisymm
+      · apply le_of_not_gt
+        intro hgt
+        exact hnone ⟨point, hpoint, who, hgt⟩
+      · exact hpoint.2 who
+    obtain ⟨stage, _, hstage⟩ := G.exists_oneStageNash_mem_IR
+    apply hsingleton
+    apply Set.Subset.antisymm
+    · intro point hpoint
+      exact Set.mem_singleton_iff.mpr (hequal point hpoint)
+    · intro point hpoint
+      have hp : point = G.individualRationalLevel := Set.mem_singleton_iff.mp hpoint
+      rw [hp, ← hequal (G.mixedPayoff stage) hstage]
+      exact hstage
+  obtain ⟨point, hpoint, active, hactive⟩ := hexists
+  have hbuild (flat active : G.Player) (hne : flat ≠ active)
+      (hexhaust : ∀ who, who = flat ∨ who = active)
+      (hactive : G.individualRationalLevel active < point active) :
+      ∃ flat active : G.Player,
+        flat ≠ active ∧
+        (∀ who, who = flat ∨ who = active) ∧
+        (∀ v ∈ G.individuallyRationalPayoffs,
+          v flat = G.individualRationalLevel flat) ∧
+        (∃ point ∈ G.individuallyRationalPayoffs,
+          G.individualRationalLevel active < point active) ∧
+        (∀ action, G.payoff action flat ≤ G.individualRationalLevel flat) := by
+    have hflatAll (v : Payoff G.Player) (hv : v ∈ G.individuallyRationalPayoffs) :
+        v flat = G.individualRationalLevel flat := by
+      apply le_antisymm
+      · apply le_of_not_gt
+        intro hvflat
+        let mixed : Payoff G.Player := (1 / 2 : ℝ) • point + (1 / 2 : ℝ) • v
+        have hmixed : mixed ∈ G.correlatedFeasiblePayoffs :=
+          G.correlatedFeasiblePayoffs_convex hpoint.1 hv.1
+            (by norm_num) (by norm_num) (by norm_num)
+        apply hstrict
+        refine ⟨mixed, hmixed, ?_⟩
+        intro who
+        rcases hexhaust who with hwho | hwho
+        · subst who
+          have hweak := hpoint.2 flat
+          change G.individualRationalLevel flat <
+            (1 / 2 : ℝ) * point flat + (1 / 2 : ℝ) * v flat
+          linarith
+        · subst who
+          have hweak := hv.2 active
+          change G.individualRationalLevel active <
+            (1 / 2 : ℝ) * point active + (1 / 2 : ℝ) * v active
+          linarith
+      · exact hv.2 flat
+    exact ⟨flat, active, hne, hexhaust, hflatAll, ⟨point, hpoint, hactive⟩,
+      G.purePayoff_le_security_of_flat_IR flat active hexhaust hstrict
+        point hpoint (hflatAll point hpoint) hactive⟩
+  rcases hexhaust active with hfirst | hsecond
+  · subst active
+    exact hbuild second first (Ne.symm hne)
+      (fun who => (hexhaust who).symm) hactive
+  · subst active
+    exact hbuild first second hne hexhaust hactive
+
 /-- Singleton weak IR selects one actual profile before every valid rate.
 It is exact discounted Nash and delivers the target exactly at each rate. -/
 theorem exists_discountedNash_eq_allRates_of_IR_singleton
