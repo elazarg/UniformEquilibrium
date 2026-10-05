@@ -414,7 +414,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. Both strict and weak leave comparisons have production Lean consumers. |
-| Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. This is a reviewed mathematical result awaiting formalization. |
+| Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. Both strict and weak tests have production Lean consumers. |
 | Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. Both trap sizes may coexist; every trap must pass its finite coefficient test. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
@@ -483,6 +483,15 @@ separations concern that member, not every completion of the family.
 The [complete raw-data theorem](exports/CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md)
 supplies the rates and continuation values in the constructive interval and
 the exact original-game criteria outside it. None is a strategic hypothesis.
+
+The production source `CyclicChildJointPhase.exists_uniformPayoff`
+(`UniformEquilibrium/Quitting/Cycles/CyclicChildJointPhaseSource.lean`)
+derives the complete coarse certificate from the literal raw rows and caps
+on its stated open pivot interval. The lower-endpoint equality has the
+separate production consumer `CyclicChildJointPhase.exists_uniformPayoff_of_resonance`
+(`UniformEquilibrium/Quitting/Cycles/CyclicChildJointPhaseSingletonExits.lean`).
+These declarations do not assert the complete all-R theorem above; the
+remaining source exits and enlarged scalar selector are separate obligations.
 
 The **repeated-solo outsider-buffer criterion** retains the four singleton
 rows of the cyclic-child family, with u≤1, v<1, and prescribes
@@ -783,8 +792,16 @@ The [complete weighted-floor theorem](exports/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUI
 includes an open sixty-coordinate reward region with no individually
 protected player. It fails the implemented supportwise nonpositive-premium
 test: all members of one triple have strictly positive participant premiums
-at that triple. The new argument excludes unsuitable Nash supports, rather
+at that triple. The aggregate argument excludes unsuitable Nash supports, rather
 than imposing a low participant payoff at every product root.
+The production declarations are
+`exists_uniformEquilibriumPayoff_of_weightedTrap_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/WeightedQuittingTrapLeaversUniformPayoff.lean`)
+and `exists_uniformEquilibriumPayoff_of_weightedTrap_weakLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/WeightedQuittingTrapLeaversRewardClosure.lean`).
+Both take only nonnegative own singletons and the corresponding finite raw
+weight tests; the weak conclusion uses reward closure, not a weak analytic
+potential exclusion.
 The weighted and protected-leaver raw criteria are incomparable. Neither
 their union nor these criteria together with the periodic constructions
 are known to cover all remaining tables.
