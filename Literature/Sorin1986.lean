@@ -5582,6 +5582,94 @@ theorem FiniteStageGame.twoPlayer_IR_geometry
   · subst active
     exact hbuild first second hne hexhaust hactive
 
+/-- Select an actual finite pure calendar on the flat maximum face.
+Every date preserves the flat coordinate exactly; empirical approximation
+controls the full cycle-average payoff. -/
+theorem FiniteStageGame.exists_flatFace_calendar
+    (G : FiniteStageGame) (flat : G.Player)
+    (hmaximum : ∀ action,
+      G.payoff action flat ≤ G.individualRationalLevel flat)
+    (target : Payoff G.Player) (htarget : target ∈ G.correlatedFeasiblePayoffs)
+    (hflat : target flat = G.individualRationalLevel flat)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ (n : ℕ) (_ : NeZero n) (cycle : Fin n → (∀ who, G.Action who)),
+      (∀ time, G.payoff (cycle time) flat = G.individualRationalLevel flat) ∧
+      ‖G.kernel.cycleAveragePayoff cycle - target‖ < ε := by
+  classical
+  let security := G.individualRationalLevel flat
+  let face : Set (Payoff G.Player) :=
+    G.correlatedFeasiblePayoffs ∩ {v | v flat = security}
+  have hlinear : IsLinearMap ℝ (fun v : Payoff G.Player => v flat) :=
+    ⟨fun _ _ => rfl, fun _ _ => rfl⟩
+  have hhullBound : ∀ v ∈ G.correlatedFeasiblePayoffs, v flat ≤ security := by
+    apply convexHull_min
+    · rintro v ⟨action, rfl⟩
+      exact hmaximum action
+    · exact convex_halfSpace_le hlinear security
+  have hfaceConvex : Convex ℝ face :=
+    G.correlatedFeasiblePayoffs_convex.inter (convex_hyperplane hlinear security)
+  have hfaceExtreme : IsExtreme ℝ G.correlatedFeasiblePayoffs face := by
+    refine ⟨fun _ h => h.1, ?_⟩
+    intro x hx y hy z hz hsegment
+    obtain ⟨a, b, ha, hb, hab, hequal⟩ := hsegment
+    have hxle := hhullBound x hx
+    have hyle := hhullBound y hy
+    have hcoordinate := congrArg (fun v : Payoff G.Player => v flat) hequal
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hcoordinate
+    have hzflat : z flat = security := hz.2
+    refine ⟨hx, ?_⟩
+    apply le_antisymm hxle
+    by_contra hnot
+    have hxlt : x flat < security := lt_of_not_ge hnot
+    have hleft := mul_pos ha (sub_pos.mpr hxlt)
+    have hright := mul_nonneg hb.le (sub_nonneg.mpr hyle)
+    have hzero : a * (security - x flat) + b * (security - y flat) = 0 := by
+      calc
+        _ = (a + b) * security - (a * x flat + b * y flat) := by ring
+        _ = 0 := by rw [hab, hcoordinate, hzflat]; ring
+    linarith
+  have hfaceHull : face = convexHull ℝ (G.purePayoffSet ∩ face) :=
+    Math.ProbabilityMassFunction.convex_isExtreme_eq_convexHull_inter_of_finite
+      G.purePayoffSet face (Set.finite_range G.payoff) hfaceConvex hfaceExtreme
+  let FlatAction := {action : (∀ who, G.Action who) |
+    G.payoff action flat = security}
+  let point : FlatAction → Payoff G.Player := fun action => G.payoff action.1
+  have hrange : Set.range point = G.purePayoffSet ∩ face := by
+    apply Set.Subset.antisymm
+    · rintro v ⟨action, rfl⟩
+      refine ⟨⟨action.1, rfl⟩, ?_⟩
+      exact ⟨subset_convexHull ℝ G.purePayoffSet ⟨action.1, rfl⟩, action.2⟩
+    · rintro v ⟨⟨action, rfl⟩, hface⟩
+      exact ⟨⟨action, hface.2⟩, rfl⟩
+  have htargetHull : target ∈ convexHull ℝ (Set.range point) := by
+    rw [hrange, ← hfaceHull]
+    exact ⟨htarget, hflat⟩
+  have hnonempty : (Set.range point).Nonempty :=
+    convexHull_nonempty_iff.mp ⟨target, htargetHull⟩
+  obtain ⟨_, action, _⟩ := hnonempty
+  let : Nonempty FlatAction := ⟨action⟩
+  obtain ⟨bound, hboundAbs⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun action : (∀ who, G.Action who) => ‖G.payoff action‖)
+  have hbound (action : FlatAction) : ‖point action‖ ≤ bound := by
+    simpa only [point, abs_of_nonneg (norm_nonneg _)] using hboundAbs action.1
+  have hbound0 : 0 ≤ bound := (norm_nonneg (point action)).trans (hbound action)
+  obtain ⟨n, hn, happrox⟩ :=
+    MathUE.exists_uniformAverage_close_of_mem_convexHull_range point hbound hbound0 hε
+  let : NeZero n := ⟨Nat.ne_of_gt hn⟩
+  obtain ⟨sample, hsample⟩ := happrox n le_rfl target htargetHull
+  let cycle : Fin n → (∀ who, G.Action who) := fun time => (sample time).1
+  have hcycleAverage : G.kernel.cycleAveragePayoff cycle =
+      (n : ℝ)⁻¹ • ∑ time, point (sample time) := by
+    funext who
+    simp [KernelGame.cycleAveragePayoff, FiniteStageGame.kernel,
+      KernelGame.eu_ofPureEU, cycle, point, Pi.smul_apply, Finset.sum_apply,
+      smul_eq_mul, Finset.mul_sum]
+  refine ⟨n, inferInstance, cycle, ?_, ?_⟩
+  · intro time
+    exact (sample time).2
+  · rw [hcycleAverage]
+    exact hsample
+
 /-- Singleton weak IR selects one actual profile before every valid rate.
 It is exact discounted Nash and delivers the target exactly at each rate. -/
 theorem exists_discountedNash_eq_allRates_of_IR_singleton

@@ -629,8 +629,16 @@ is proved in Lean for nonnegative-singleton four-player tables, composing the
 actual polynomial producer and zero-solo branch. The concrete packet table,
 its raw-class checks, UE consequence and product-low failure are checked in
 `UniformEquilibrium/Quitting/Examples/TwoPlayerPremiumCoreStrictLeave.lean`.
-The other Section 6 matrix, response-partition and proper-child certificate
-screening claims remain to be formalized; this is not a whole-packet seal.
+`quittingSingletonMatrix_eq`, `normalCore_eq_univ`, `matrix_isR0`,
+`matrix_r0Degree_eq_one`, and `matrix_isStandardQ`
+(`UniformEquilibrium/Quitting/Examples/TwoPlayerPremiumCoreStrictLeaveMatrix.lean`)
+pass the silent named check. The actual singleton matrix has full recursive
+normal core and no nonzero homogeneous LCP solution. Its entire root set at
+offset `(1,-1,-1,-1)` is the singleton `(0,1,1,1)`, with inactive residual two
+and active determinant seven. The canonical actual-root sum gives degree one,
+and the existing degree theorem supplies standard Q. The remaining principal
+Q-bar and inverse tests, response-partition and proper-child certificate
+screening claims are not supplied; this is not a whole-packet seal.
 
 ## Proof-mining connections not yet formalized
 
@@ -1368,6 +1376,16 @@ weak-IR branch. One actual stage Nash is selected internally, and its same
 stationary repetition is exact Nash with exact target delivery at every valid
 rate. The previous discounted-inclusion proof delegates to that shared
 stationary-profile theorem. The nontrivial flat-security branch remains.
+
+`FiniteStageGame.exists_flatFace_calendar` (`Literature/Sorin1986.lean`)
+selects an actual nonempty finite pure calendar for a supplied feasible target
+whose flat coordinate equals security, under the global pure-stage cap at
+that security level. Every calendar date preserves the flat coordinate
+exactly, while the full cycle-average payoff approximates the target.
+Its silent named paper check, separate standard-axiom check, and full
+integration build pass. This is a
+source-calendar producer, not a discounted Nash or punishment-trigger
+consumer; the nontrivial flat-security equilibrium branch remains open.
 
 The separate Proposition 4 draft uses a generic connected convex-hull
 representation, an internally selected affine step and a geometric schedule
