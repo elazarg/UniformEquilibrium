@@ -404,6 +404,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Reward condition | Conclusion and boundary |
 | --- | --- |
 | Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards, as a corollary of the implemented response-quotient criterion and elementary singleton branches. No nonsingleton inequalities beyond equivariance are required. |
+| Fin4: the joint/solo raw family specified below | One fixed UE target and actual finite laws with vanishing full regret. Both participants of the prescribed pair receive a positive collision premium. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -423,6 +424,40 @@ positive inverse activate the existing quotient consumer. A direct triangle
 proof gives an alternative construction, not additional existence coverage.
 Singleton symmetry alone is insufficient, and arbitrary
 tables have no proved symmetry reduction.
+
+The **joint/solo raw family** has parameters a,b,c,h₁,h₂,h₃>0, abc>1,
+u,v<1, ξ,η>0 and q₂,q₃≤0. Its five prescribed reward vectors are
+
+    r({0})=(1,−h₁,−h₂,−h₃),   r({1})=(u,0,b,−1),
+    r({2})=(v,−1,0,c),         r({3})=(R,a,−1,0),
+    r({0,1})=(1+ξ,η,q₂,q₃).
+
+Write D=abc−1 and
+
+    ν₁=(ac h₂+c h₁+h₃)/D,
+    ν₂=(ab h₃+a h₂+h₁)/D,
+    ν₃=(bc h₁+b h₃+h₂)/D.
+
+The required interval, always nonempty, is
+
+    1+((1−u)ν₁+(1−v)ν₂)/ν₃ < R < 1+ac(1−u)+a(1−v).
+
+The only additional restrictions are rₖ(A∪{k})≤0 for k∈{2,3} and
+nonempty A⊆{0,1}: six outsider inequalities at the joint phase. Every
+other reward coordinate is arbitrary. The construction selects one joint
+{0,1} phase and solo phases for players 2 and 3. Subdividing only the solo
+phases preserves the target exactly and makes their immediate-Quit errors
+vanish. Exact Continue transport prevents those errors from accumulating
+over a complete deviation. Finite censoring retains the target and full
+regret bounds. If every other participant reward is at most its own
+singleton, the coarse three-phase profile is already exact terminal Nash.
+
+Every table in this family fails product-low premiums. An explicit member
+also escapes the proper-child F/J, homogeneous, nonunit-degree,
+nonnegative-inverse, and nontrivial response-quotient criteria. These latter
+separations concern that member, not every completion of the family.
+The [complete raw-data producer](exports/ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md)
+supplies the rates and continuation values; none is a strategic hypothesis.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are

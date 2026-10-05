@@ -398,3 +398,142 @@ the changed mechanism and exact raw class. I recommend the mathematical
 export gate for this precise theorem, retaining its stated overlap limits
 and full behavioral scope. No Lean build, formal implementation, arbitrary
 four-player theorem, or global polynomial exclusion is claimed.
+
+## Independent assembled-packet review: diffuse solo exits
+
+**PASS as ordinary mathematics.** This scoped second falsification review
+checks `exports/ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md`,
+including the new refinement and the final response-partition audit. I did
+not read BROUWER's diffusion review before reaching this verdict. The
+pivot-first selection already reviewed above is retained with the same
+equations and quantifiers; the materially enlarged assumption is that only
+the six outsider participant coordinates in (2) remain capped.
+
+The new theorem is an actual raw-table producer of arbitrarily accurate
+terminal equilibria and one fixed uniform payoff target. It does not claim
+exact Nash for the uncapped coarse profile, a uniform refinement count over
+different tables, or completeness for arbitrary four-player games.
+
+### Exhaustive coalitions and exact Continue
+
+At the undiffused A row, the two prescribed hazards are those of 0 and 1.
+A deviating player 2 can Quit into exactly `{2}`, `{0,2}`, `{1,2}`,
+or `{0,1,2}`. Its singleton coordinate is zero and the other three are
+precisely the first three caps in (2). Player 3 has exactly the analogous
+four possibilities and consumes the other three caps. Neither deviator can
+cause the other outside player to Quit, so `{2,3}` and the four-player
+coalition are impossible here. The two active players have the literal
+indifferences already checked in the pivot-first review.
+
+At a solo j row, a distinct deviator i encounters only `{i}` or `{i,j}`
+on choosing Quit. The forced-Quit endpoint is exactly
+`s_i+delta*(r_i({i,j})-s_i)`. Thus the maximum in (12) exhausts every new
+positive error; no triple premium or free passive coordinate was omitted.
+The original table is not modified during this argument.
+
+The remaining aggregate hazard within the player-2 block ranges from z
+down to zero. Its values are exactly on the segment from V_B to V_C;
+similarly the player-3 block runs from V_C to V_A. Both endpoints of
+each segment are above the singleton floor. Coordinate 2 is zero on the
+first whole segment and coordinate 3 is zero on the second. Consequently
+the solo owner is indifferent even after subdivision. For every nonowner,
+policy evaluation is the pure-Continue equation, since that nonowner is
+prescribed Continue. This proves every player's exact Continue transport,
+not only the coarse Bellman recurrence. The aggregate survival identities
+preserve the terminal coalition law, so the initial payoff V_A is genuinely
+independent of the refinement count n.
+
+### One-error bound against unrestricted deviations
+
+Writing e=e_n, the constant shift V+e is a valid supersolution because an
+exact Continue step transports e with coefficient q in [0,1], whereas
+Quit is capped by V+e. This is the required nonaccumulating mechanism:
+there is no repeated additive error at Continue stages. Each opponent
+survival product over a full refined period is exactly the corresponding
+coarse product and is strictly below one after deleting any player.
+Bounded remainders therefore vanish against every behavioral strategy,
+including Never and arbitrary history-dependent hazards. No assumption
+that the deviator uses the public clock is needed.
+
+I inspected the literal certificate and consumer in
+`UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`:
+`QuittingInfinitePathQuitErrorCertificate` requires precisely policy,
+Continue, Quit-error, bounded-value, and every-start opponent-survival
+fields. The construction supplies every field. In particular a finite
+prefix before the next period gives the every-start survival statement.
+The declaration
+`QuittingInfinitePathQuitErrorCertificate.isεAsymptoticNash_and_delivers`
+has the claimed complete-behavioral and exact-delivery conclusion.
+`exists_uniform_quittingMeshScale` in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/InfiniteSingletonMesh.lean`
+is an existing supplied-path subdivision tool, not a selector from this
+table class; no new coverage is attributed to subdivision alone.
+
+### Censoring, target, and pivot repair
+
+Each refined period has the same marginal tail masses as one coarse
+period, giving (13) independently of n. For a fixed full deviator, couple
+the original and censored opponent laws; they differ with probability at
+most tau_K. Identical deviator randomness gives identical play until such
+a discrepancy, so payoff error is at most 2M*tau_K even for behavioral
+deviations. Combining that bound with the prescribed-profile coupling
+gives e_n+4M*tau_K full exploitability. Choosing n and then K proves the
+joint regret/delivery statement at the unchanged V_A.
+
+The constructed censored pivot is a feasible competitor for the full
+exploitability minimization. The optimum is consequently small; the proof
+does not claim that an optimizing replacement pivot preserves V_A.
+`exists_objective_minimizer_eq_behavioral_infimum` in
+`UniformEquilibrium/Quitting/Terminal/PivotRepairBehavioralInfimum.lean`
+has exactly this unrestricted-repair interpretation.
+`quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family`
+in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`
+retains a member of the actual censored family and gives one threshold for
+all larger finite horizons. The theorem's fixed-target quantifier is
+therefore justified, not merely subsequential payoff selection.
+
+### Assembled boundary and source checks
+
+The class-wide product-low falsifier remains the same two positive
+participant premiums at the actual pair `{0,1}`. The theorem correctly
+confines F/J and singleton-matrix separations to its fully specified
+completion. As a fresh exact test, I enumerated over rational arithmetic
+all 12 coarse Bellman identities, all 12 exact Continue identities, and
+all 12 Quit caps for the first fixture. All hold. I also enumerated the
+13 one-date proper-child witnesses and their pure responses; each is
+exact child Nash and each has a missing player with strictly positive
+joining gain. The remaining three-child witness has the stated cyclic
+values, absorbs almost surely, and gives the quiet pivot R/7<1 while
+immediate joining pays 3/2. Together these cover all 14 children. The
+five-kind implication matches
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`.
+
+I independently enumerated all 14 nondiscrete partitions against the
+displayed singleton matrix. Only `{0}|{1,2,3}` passes block-row-sum
+equality. For that partition, at hazard `(x,0,0,0)`, player 1's forced-Quit
+payoff is eta*x and its absorbing Continue contribution is -x. The exact
+zero-discount formula is therefore `x+eta*x^2`, whereas players 2 and 3
+both give x. This breaks the last partition for every x>0. The necessary
+row-sum declaration
+`quittingSingletonBlockRowSum_eq_of_responseInvariant` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`
+and the literal definition `quittingDiscountedDisplacement` in
+`UniformEquilibrium/Quitting/Stationary/DiscountedDisplacement.lean`
+were read in place. This is a full check of these response partitions,
+not an exhaustive classification of all repository producers.
+
+Finally, changing only r_2({2,3}) to beta>0 makes the coarse C-row gain
+exactly beta*w at value zero. After subdivision the only positive error
+for that completion is beta*w_n, exactly as stated. This falsifies the
+stronger exact-coarse claim while validating the advertised approximate
+enlargement. No unresolved mathematical objection was found in the new
+mechanism or its assembled source claims. No Lean build was run.
+
+The reviewed draft had SHA-256
+`876304669f258edbffc0b8f1217edf7f465781f32377de1f1680d288e04f92ad`.
+The final frozen artifact above has SHA-256
+`5277985708567c67486e991e9a44ba8edf8f867e22d53a02f3015b203e65d2a8`;
+the coordinator reports only removal of its draft-status preface, with
+no mathematical change. The review record remains outside the packet.

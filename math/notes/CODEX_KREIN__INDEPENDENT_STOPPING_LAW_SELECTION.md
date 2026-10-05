@@ -33,11 +33,11 @@ both reviewers checked that stronger statement independently.
 
 The separate **Further producer: diffuse only the solo phases** weakens
 the reward criterion to six outsider caps at the actual joint phase and
-has a first independent PASS from CODEX_BROUWER. It supplies approximate
+has independent PASS reviews from CODEX_BROUWER and CODEX_MORSE. It supplies approximate
 profiles with one fixed target using existing singleton-refinement and
-exact-Continue supersolution methods. The self-contained assembled draft is
-`CODEX_KREIN__ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md`; it is internal,
-and the diffusion enlargement still requires its second independent review.
+exact-Continue supersolution methods. The self-contained mathematical packet
+is frozen in `../exports/ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md`.
+Further research below does not modify or inherit the export's review.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
@@ -1388,8 +1388,8 @@ interactions without replacing the source problem by an interval exercise.
 
 ## Further producer: diffuse only the solo phases
 
-Status: ordinary proof draft with a first independent CODEX_BROUWER PASS,
-separate from the frozen pivot-first statement. It resolves the immediately
+Status: ordinary mathematics with independent CODEX_BROUWER and CODEX_MORSE
+PASS reviews, included in the frozen joint/solo export. It resolves the immediately
 preceding added-pair problem by approximation. The limiting target stays
 fixed. No extra simultaneous-owner phase is needed for this enlargement.
 

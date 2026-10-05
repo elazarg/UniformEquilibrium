@@ -1,7 +1,5 @@
 # One joint phase with diffuse solo exits
 
-Ordinary mathematical draft. This is not a checked Lean theorem.
-
 ## Exact statement
 
 There are four players I={0,1,2,3}. A finite quitting game specifies a
