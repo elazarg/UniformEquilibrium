@@ -69,6 +69,12 @@ fully recorded. Its self-contained assembly passed final artifact checks
 and is frozen as `../exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`,
 SHA256 `fcb44202792e11237be46008dbea76718d1a2b704662fe12cab71e605a803208`.
 No Lean implementation of Section 17 is claimed here.
+Section 18 is a new, unreviewed signed pair-core proof. It abandons an
+invariant coordinate or weighted floor and instead produces a low-successor
+root at every source strictly below some singleton. A unique bad mixed
+pair root has negative index when the two pair-join gaps have the same
+strict sign. The full theorem, weak strategic boundary, and an exact
+signed mutual-join fixture are recorded; no export is requested yet.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -2311,3 +2317,263 @@ Next requested check: independently falsify fixed-domain return (72),
 the split J\P versus J⊆P, and the absorption-scale Taylor remainder.
 Do not restore nonnegative premiums outside P or assume perturbed
 roots return to D_P in the second arm.
+
+## 18. Signed pair cores: a negative index without any protected floor
+
+**Complete ordinary proof candidate, not independently reviewed or Lean
+checked.** The mechanism here is not a weighted leave certificate.
+It allows a mutual-join premium pair even when EVERY player has negative
+participant premiums elsewhere. It selects a good exact root by degree;
+it does not require all exact roots to return to a fixed domain.
+
+### Raw statement
+
+Let I be finite and nonempty, r a finite real reward table, and
+s_k=r_k({k}). A nonempty A is a premium trap if each k∈A has a
+coalition S⊆A containing k with r_k(S)>s_k. Traps are union-closed:
+the old witnessing coalitions remain inside the union. Let C be the
+union of all traps. Assume C={i,j}, with i≠j, and put
+
+    d_i=r_i({i,j})−r_i({j}),
+    d_j=r_j({i,j})−r_j({i}).
+
+The strict hypothesis is d_i d_j>0: BOTH players strictly join the
+pair, or BOTH strictly leave it. No sign condition on any other
+participant premium is imposed. Let |r|≤M and B>M.
+
+**Analytic conclusion.** There is no C¹ full exact-root
+unit-absorption potential on a neighborhood of [−B,B]^I.
+
+**Strategic conclusion.** For Fin4 and s≥0 the game has a uniform-
+equilibrium payoff against unrestricted behavioral deviations, fixed
+before accuracy. For this strategic conclusion the weak condition
+d_i d_j≥0 suffices. The opposite-strict-sign region is NOT claimed.
+
+The empty-core case is already product-low: in every nonempty support
+some active player's within-support participant rewards are all at
+most its singleton. Thus the strategically proved signed region is
+empty core, or pair core with nonnegative product of the two join gaps.
+
+### Two signed support facts
+
+The pair C is itself a trap, so both pair participant premiums are
+strictly positive. Every nonempty support A≠C is NOT a trap: any trap
+would be contained in C, and singletons cannot be traps. Therefore
+there is k∈A such that r_k(S)≤s_k for every S⊆A containing k.
+At an exact root with support A this gives
+
+    w_k=Q_k≤s_k.                                      (89)
+
+All simultaneous coalitions inside the actual support are retained.
+No equality of outsider participant rewards is used.
+
+For k outside C and every T⊆C,
+
+    r_k(T∪{k})≤s_k.                                   (90)
+
+Otherwise C∪{k} would be a trap: the two pair witnesses still certify
+i,j, and the displayed coalition would certify k. In particular,
+at a core-only root every inactive outsider has Q_k≤s_k. This does
+NOT supply a lower bound on Q_k or on the successor.
+
+### A selected return theorem below at least one singleton
+
+Assume there is no pure-pair exact root. For EVERY boxed annotation v
+with v_h<s_h for at least one h, there exists an absorbing exact root
+whose successor has at least one coordinate at most its singleton.
+
+To prove this, all Continue is not Nash at such a source, so every
+exact root absorbs. Call a root bad if its successor satisfies w>s
+in every coordinate. By (89), every bad root has support exactly C.
+On that face the two exact endpoint gaps are
+
+    g_i=s_i−v_i+(v_i−s_i+d_i)q_j,
+    g_j=s_j−v_j+(v_j−s_j+d_j)q_i.                     (91)
+
+Neither active hazard can be one while the other is interior: the
+other player's gap would equal its nonzero d. If both are one, the
+excluded pure pair results. Hence every bad root is fully mixed on
+the pair and must be the single candidate
+
+    p_i=(v_j−s_j)/(v_j−s_j+d_j),
+    p_j=(v_i−s_i)/(v_i−s_i+d_i),
+    p_k=0 for k outside C.                            (92)
+
+If an expression has zero denominator, it cannot solve the active
+equations with positive interior hazards. When (92) is interior,
+α_i=v_i−s_i+d_i has the sign of d_i, and α_j has the sign of d_j.
+Indeed 0<(v_i−s_i)/(v_i−s_i+d_i)<1 forces v_i−s_i and d_i to
+have the same strict sign. Thus α_i α_j>0.
+
+Use the full polynomial gap vector g(q)=Q(q)−C(v,q), not its face
+restriction, and the continuous map on all real hazards
+
+    F_v(q)_k=min(1,max(0,q_k+g_k(q))).                 (93)
+
+It maps into the unit cube, and its fixed points are exactly all full
+exact Nash roots at v. If every root were bad, (92) would be its
+unique fixed point. At that point every outsider gap is STRICTLY
+negative: its Continue endpoint is w_k>s_k≥Q_k by (90). Thus all
+outside rows of F_v are locally constant zero, even though the
+unclipped rows retain arbitrary larger-coalition derivatives.
+The two interior core rows are locally q_k+g_k. The Jacobian of
+q−F_v(q), ordering the core first, is
+
+    [[0,−α_i,*], [−α_j,0,*], [0,0,Id]],
+
+with determinant −α_i α_j<0. No inactive tie-removal perturbation is
+needed: badness itself makes the outside gaps strict.
+
+For completeness, the total degree is +1 on (−1,2)^I. Homotope
+q−F_v(q) to q−z for z=(1/2,...,1/2); the bracketed image stays in
+the unit cube, so no boundary zero occurs. The unique proposed root
+has local degree −1: differentiability and invertibility compare the
+field to its derivative on a sufficiently small sphere by a straight-
+line homotopy, and the linear determinant is negative. Excision would
+identify this with total degree +1, a contradiction. The root lies
+inside the larger ambient cube, so its zero outsider coordinates do
+not cause a half-index. This proves the selected return assertion.
+
+The excluded pure-pair case causes no gap in the analytic theorem.
+If that pure root is exact at any annotation, each player faces a
+sure opponent quitter, so every endpoint comparison is independent
+of the annotation. At source v=r({i,j}) it is still exact and has
+successor v and absorption one. A full potential is immediately
+impossible. This also is an actual pure terminal equilibrium in the
+strategic interpretation.
+
+### The minimum now uses the entire low-coordinate region
+
+Suppose a full potential H exists and define
+
+    D={v∈[−B,B]^I : v_k≤s_k for some k}.
+
+No protected floor or extra invariant halfspace is imposed. Minimize
+H on compact D at x. If any x_k<s_k, the selected return theorem
+produces an absorbing root with successor in D, contradicting the
+minimum. Hence x belongs to the singleton lower boundary L.
+
+The signed singleton-face inequality g·(x−r({j}))≥1, with
+g=∇H(x), excludes a unique binding coordinate exactly as in Section 17:
+all other interior partials vanish and upper-box partials are nonpositive.
+Thus at least two coordinates bind. Increasing one while keeping
+another binding gives g_k≥0 for every binding k.
+
+Fix a binding k and let v=x−εe_k for sufficiently small ε>0. This
+source lies in D and below a singleton. Choose the produced absorbing
+root, with successor w∈D and absorption a>0. Then
+
+    H(v)−H(x)≥H(v)−H(w)≥a.
+
+The universal signed bounds Q_k≥s_k−2Ma, w_k≥Q_k, and
+|w_k−v_k|≤(M+B)a give ε≤(3M+B)a. Consequently
+
+    [H(x−εe_k)−H(x)]/ε ≥ 1/(3M+B).
+
+Its limit is −g_k≤0, a contradiction. This proof needs neither
+convergence of the selected roots nor an individual successor floor.
+Every selected successor returns to exactly the SAME D.
+
+For Fin4 with nonnegative singletons, normality, the full rational
+polynomial obstruction, and restriction to exact roots give the
+strategic conclusion. All-zero singletons are handled by all Never.
+For d_i d_j=0, change only the relevant passive singleton entries
+r_i({j}) and/or r_j({i}) by arbitrarily small amounts so the two
+gaps have the same strict sign. If both vanish, make both positive.
+Participant rewards, own singletons, and the complete trap structure
+are unchanged. Reward closure yields a fixed target for the original
+table. This is NOT a weak analytic claim.
+
+### A fully signed mutual-join fixture
+
+Here is an exact Fin4 table, with s=(1,0,0,0).
+
+| S | r(S) |
+|---|---|
+| 0 | (1,−1,−1,−1) |
+| 1 | (2,0,2,−1) |
+| 2 | (2,−1,0,2) |
+| 3 | (0,2,−1,0) |
+| 01 | (1,0,−1,−1) |
+| 02 | (1,−1,0,−1) |
+| 03 | (2,2,−1,1) |
+| 12 | (2,0,0,1) |
+| 13 | (0,0,1,0) |
+| 23 | (2,1,0,0) |
+| 012 | (1,0,0,−1) |
+| 013 | (1,0,−1,0) |
+| 023 | (1,−1,0,0) |
+| 123 | (0,0,0,0) |
+| 0123 | (−1,−2,−2,−2) |
+
+The only positive participant premiums occur for players 0 and 3
+at pair03. Hence the sole trap and greatest core are 03. Its two
+join gaps are d₀=d₃=2>0. Every player has a strictly negative
+participant premium at the grand coalition, so the canonical protected
+set is empty. The weighted aggregate-leave criterion fails even weakly:
+at either proper singleton of trap03 its leave expression is a
+strictly positive weight times 2. Product-low fails at the sure
+pair, whose active Quit rewards are 2>1 and 1>0.
+
+There is no pure equilibrium. In table order the following players
+have strict improvements:
+
+    1,3,1,0,0,0,2,2,0,3,0,1,0,1,0,
+
+with respective gains
+
+    1,1,1,2,1,1,1,2,1,2,1,2,1,1,1.
+
+All withdrawals retain another quitter. All Never is defeated by
+player 0's positive singleton.
+
+The bad root need not be absent. At v=(3,−1,4,2), take
+q=(1/2,0,0,1/2). Exact endpoint calculation gives
+
+    Q=(3/2,0,0,1/2),
+    C=w=(3/2,1/2,1/4,1/2).
+
+This root has successor above every singleton, despite v₁<s₁.
+Its inactive gaps are −1/2 and −1/4 and its local determinant is
+−16. The theorem produces another full root, rather than asserting
+that this one returns or can be discarded from the full relation.
+
+### Named source boundary and next check
+
+The signed support inequalities above are weaker than the equalities
+in `quittingPremiumCore_outsider_reward_eq_singleton`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCore.lean`)
+and `exactRootSuccessor_active_eq_singleton_of_support_ne_pair_core`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumCoreExactRoot.lean`).
+Those current declarations require `HasNonnegativeOwnQuittingPremium`;
+the present fixture explicitly fails that premise. The current
+`exists_uniformEquilibriumPayoff_of_pairPremiumCore_weakLeave` in
+`UniformEquilibrium/Quitting/Classification/Existence/QuittingPremiumCoreUniformPayoff.lean`
+also has that premise and a weak-leave gap, both absent here.
+
+The degree facts used are `ambientDegree_homotopy` and
+`ambientDegree_affineRootField_eq_sign_det` in
+`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`,
+`ambientDegree_excision` in
+`MathUE/Topology/AmbientDegreeProperties.lean`, and
+`ambientDegree_of_selfMap_eq_one` in
+`MathUE/Topology/AmbientDegreeSelfMapNormalization.lean`.
+Their current statements were inspected; the nonlinear local comparison
+and complete actual root map are proved above, not supplied as an
+uninhabited parity interface. Exact root existence, signed face drift,
+displacement, normality, polynomial restriction, and reward closure are
+the same named declarations explicitly inspected for Section 17.
+
+This fixture's singleton matrix is exactly Section 17's displayed
+matrix, so the same degree-one, inverse, and first-order partition
+calculations apply. Its only nondiscrete first-order block 0|123 is
+broken by the full responses t,t,t+t² at q=(t,0,0,0).
+The constant-participant and protected/aggregate-leaver raw criteria
+therefore do not subsume this signed pair class. This is not yet an
+exhaustive audit of every chronological producer or stationary branch.
+
+Next requested check: independently falsify the selected-return
+classification at a below-floor source, especially the implication
+bad successor ⇒ strictly inactive outsiders, the full ambient index,
+and the single-domain minimum argument. The opposite-sign pair region
+and premium cores of size at least three remain outside this proof.
