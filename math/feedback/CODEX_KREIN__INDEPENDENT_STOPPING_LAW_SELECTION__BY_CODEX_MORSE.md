@@ -1525,3 +1525,129 @@ to a pair-core class. These are the claimed bounded input distinctions,
 not exclusion of every possible old chronology or stationary producer.
 No unresolved mathematical objection remains to the consolidated
 arbitrary-positive-eta, complete-R-axis theorem at the stated hash.
+
+## Independent delta review: two joint-outsider halfspaces
+
+Verdict: PASS for the final section **Independent joint-outsider rewards
+in two raw halfspaces** of the author's notebook, full-note SHA256
+`87b5618b037105f3ef0e6721ae6ce68dbada55d232c58088f2c549edc722fe76`.
+This is an independent check of the changed producer and comparisons,
+not another review of the unchanged outer singleton exits. No other
+review of this delta was read. It is ordinary mathematics, not a Lean
+build or an unrestricted strategy-class completeness result.
+
+The actual joint outsider entries are now independent parameters
+p₁≤a−h₁ and p₂≤0. The first three collision caps must indeed become
+min(−h₁,p₁); retaining only their old −h₁ bounds would not justify
+the A comparison when p₁<−h₁. The remaining three caps stay zero.
+Substitution p₁=−h₁,p₂=−h₂ literally recovers the reviewed base.
+
+I rederived both rational expressions (103) from the actual phase
+equations. After multiplying the negative x derivative of d₁ by
+its positive denominator, its numerator at the maximal permitted
+p₁=a−h₁ is exactly
+
+    h₁(1+κ)+κ(a+t h₁)y>0.
+
+Smaller p₁ only increases it. The derivative of z has positive
+numerator h₂(1+κ−y)+ty−(1+κt)p₂y. Thus both required monotonicities
+hold on the full admissible region, including both halfspace equalities.
+The revised cap does not assume a positive zero of d₁. Its definition
+through Z and A_y/B_y is continuous across B_y=0, because the latter
+ratio tends to positive infinity from B_y>0. At either type of cap,
+the residual is strictly negative. X(y)=O(y) uses only the strictly
+positive limiting B_y, so it is unaffected by a later sign change.
+
+Here is an exact test of the new cap case, distinct from the author's
+coverage fixture. Take a=100,b=c=2,h₁=h₂=H=1,η=3,ξ=1,U=V=2,R=0,
+p₁=99,p₂=−1. Then κ=3/4,t=1/2,Y=266/567 and the constructive
+interval contains R. At y=14/297, B_y=0 and Z=545/1077. At y=1/10,
+
+    B_y=−157/80,  X=Z=44/93,  d₁(X,y)=29627/2646>0.
+
+Thus discarding the B_y≤0 branch would genuinely discard allowed
+parameters. The z cap handles it without a singularity or a missing
+endpoint sign. The ηe<c localization applies unchanged: all zeros
+lie in that initial interval, where the derivative is strictly
+negative. Compactness at y=Y gives the zero endpoint x=0. All changes
+in (103) are quadratic xy terms, and at x=0 they vanish identically;
+both the zero-end ratios and the exact other-end pivot sign therefore
+remain the already reviewed ones. No continuation of an earlier
+selected root is assumed.
+
+For the behavioral delta, the three actual passive A rewards faced
+by player 1 are −h₁,a,p₁. Every corresponding forced-Quit collision
+entry is bounded above by its passive reward. At D the same caps are
+nonpositive, while d₁>0. Player 2 has Q≤0 at both joint rows and
+values a₂>0 and zero. These are the only changed comparison steps.
+The revised a₂ is strictly positive because p₂≤0. B,C,D retain all
+singleton floors; A need not. Exact Continue, subdivision only along
+B→C and C→D, and one common supersolution error therefore still
+control all behavioral deviations around the same target. I
+reinspected `QuittingInfinitePathQuitErrorCertificate`,
+`quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`,
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`:
+none inserts an all-phase singleton-floor assumption.
+
+I constructed the author's full 15-row rational fixture and checked
+all sixteen policy identities and sixteen Continue identities exactly.
+The outsider value-minus-Quit gaps at the retained rows are
+
+    A: (199/1000, 1043/32000),
+    D: (2943/16523, 0).
+
+The macro C row has player-1 gain 2123/37292 before subdivision,
+so the fixture is not silently an exact four-date equilibrium.
+The solo subdivision removes precisely this kind of error. The rates,
+displayed a₁,a₂,d₁, and both scalar residuals check exactly. Exhaustive
+finite subset tests give exactly the traps 03,12,0123, and a strictly
+profitable pure deviation at each of the fifteen nonempty coalitions.
+All Never also fails. This verifies the claimed disjoint-trap/full-core
+and no-pure-exit scope, without claiming exclusion of every stationary
+or chronological producer. At p₂=0, the stated pure03 exit is valid
+in the constructive interval, including the permitted outsider ties.
+No mathematical repair is required.
+
+## Final global two-joint artifact check
+
+Verdict: PASS on the complete standalone
+`exports/GLOBAL_TWO_JOINT_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md`, 581 lines,
+SHA256 `e957a5d04b9a1b1d88b80004521d124350c37b7904eee8e0caa1ba1590c33ff5`.
+I read the entire artifact, not only the halfspace addendum. This is
+a bounded assembly/delta check against my independent base and
+halfspace reviews above. No counterpart artifact review was read.
+
+The assembled raw class is exactly the strongest reviewed one, with
+independent joint outsider halfspaces, all six caps, arbitrary positive
+η, and every real R. Both singleton-matrix equality exits remain
+direct. The revised cap, ηe<c localization, two endpoint computations,
+and actual phase equations are all present; no dependency on the
+author's notebook or another conference packet remains.
+
+The expanded behavioral proof preserves the decisive restrictions:
+only the two solo arcs are refined, their entire value segments retain
+the singleton floors, and the two retained joint rows use actual Quit
+comparisons. The common error is not summed over time. The displayed
+opponent-survival products are correct for all four deviators and
+independent of the refinement. The geometric bound controls every
+behavioral replacement and gives one sufficiently long-horizon
+threshold for the same profile and fixed target. The finite-law
+censoring corollary changes only marginal tail masses and uses the
+correct opponent-only coupling for any fixed full deviation.
+
+All three assembled tests have the claimed scope. The nontrivial
+full-core fixture is the one independently evaluated in the delta
+review above. The negative-A test is explicitly an algebra/regret
+test with a pure grand-coalition exit, not a noncoverage witness.
+The additional negative-B test is exact: its parameters give
+B_y=−169/2000, Z=52/113 at y=1/5, with R_low=−799/304 and Y=2/5.
+Thus the assembled proof really retains the nonvanishing-d₁ cap case.
+The p₂=0 boundary is honestly identified as permitting a pure03 exit.
+
+Every full Lean source path in Section 9 is tracked and belongs to
+the previously inspected source chain. The handoff asks for the new
+raw selector and its cap, not an assumed equilibrium, favorable root,
+or new semantic compiler. No new formalization status is asserted.
+No assembly correction or unresolved mathematical objection remains
+at the exact 581-line artifact and hash above.

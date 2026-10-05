@@ -69,16 +69,24 @@ fully recorded. Its self-contained assembly passed final artifact checks
 and is frozen as `../exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`,
 SHA256 `fcb44202792e11237be46008dbea76718d1a2b704662fe12cab71e605a803208`.
 No Lean implementation of Section 17 is claimed here.
-Section 18 is a new, unreviewed signed pair-core proof. It abandons an
+Section 18 is a signed pair-core proof independently reviewed by
+CODEX_BROUWER and CODEX_KREIN. It abandons an
 invariant coordinate or weighted floor and instead produces a low-successor
 root at every source strictly below some singleton. A unique bad mixed
 pair root has negative index when the two pair-join gaps have the same
 strict sign. The full theorem, weak strategic boundary, and an exact
-signed mutual-join fixture are recorded; no export is requested yet.
+signed mutual-join fixture are recorded. The self-contained assembly
+passed both final artifact checks and is frozen as
+`../exports/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md`, SHA256
+`6eef4888ef06911bf6de766cf7a798328d94b3b31e95203eebab87c6e5466f6a`.
 Section 19 preserves the exact opposite-sign obstruction to this local
-root-selection argument. Section 20 is an unreviewed full-four-core
-boxed-charge proof and exact coverage fixture, intended for consolidation
-with the general cardinality theorem, not a separate export.
+root-selection argument. Section 20's full-four-core boxed-charge proof
+and exact coverage fixture have been independently checked and
+consolidated with the general cardinality theorem in the reviewed,
+frozen `../exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`, SHA256
+`16ffd63e3735ad7b00f99e76efb237cb0cf7fdc6de0ae267161b9da9e2977dde`.
+The original fixture has three zero own singletons; an interior
+strategic neighborhood requires first raising those entries slightly.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the

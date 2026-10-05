@@ -1774,3 +1774,88 @@ the selector, negative A value, large eta, and refinement, not to
 certify new coverage against every other existence theorem. This
 does not contradict any claimed scope of the candidate. No mathematical
 repair is requested.
+
+## Halfspace extension and final consolidated artifact
+
+Verdict: PASS. The substantive delta checked is "Independent
+joint-outsider rewards in two raw halfspaces" at whole-note SHA256
+`87b5618b037105f3ef0e6721ae6ce68dbada55d232c58088f2c549edc722fe76`.
+The unchanged global theorem uses the preceding independent review;
+no other review of this delta was read. I also read the complete
+581-line standalone [global two-joint packet](../exports/GLOBAL_TWO_JOINT_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md)
+and bind this PASS to its SHA256
+`e957a5d04b9a1b1d88b80004521d124350c37b7904eee8e0caa1ba1590c33ff5`.
+These are ordinary mathematical and static source checks, not Lean runs.
+
+The widened actual joint row is (1+xi,p_1,p_2,eta), with
+p_1<=a-h_1 and p_2<=0. The first three caps must be at most
+min(-h_1,p_1), not merely the old -h_1. The original theorem is
+included literally at p_1=-h_1,p_2=-h_2, including all equalities.
+
+I re-expanded a_2,d_1,z and differentiated the two latter formulas.
+The negative d_1 derivative numerator is bounded below by
+h_1*(1+kappa)+kappa*(a+t*h_1)*y>0, including equality in the
+p_1 halfspace. The z derivative numerator is the displayed E_y>0,
+including p_2=0. Thus the localized eta argument needs no repair.
+Unlike the base, a positive d_1 zero need not exist. The revised
+cap correctly takes just Z(y) if B_y<=0; when B_y approaches zero
+from above, A_y/B_y tends to infinity and the minimum already equals
+Z(y). This proves cap continuity without an illicit missing root.
+Near y=0 the denominator B_y is strictly positive and gives X=O(y).
+
+The changed terms all contain xy. The origin derivatives, the three
+hazard ratios, and the divided pivot limit are therefore unchanged.
+At x=0 the complete formulas, not just first-order terms, agree with
+the base, preserving Y and the negative pivot endpoint. Both exact
+source equality exits depend only on the unchanged singleton matrix.
+No continuation of one old selected branch is presumed.
+
+Player1's three capped Quit rewards are componentwise at most its
+actual passive rewards -h_1,a,p_1 at A, so its Quit endpoint is
+at most a_1 even when that value is negative. At D the same three
+rewards are nonpositive while d_1>0. Player2's two joint Quit
+endpoints remain nonpositive, bounded by a_2>0 and zero. Every
+changed policy and Continue equation is exact; the retained solo
+endpoint floors and the common-error behavioral compiler survive.
+At p_2=0 the middle interval really does have a pure-pair exit:
+both members strictly join03 and neither outsider can improve by
+joining it. Inclusion of this boundary is correctly stated without
+new-coverage credit.
+
+As an independent negative-B stress test, take a=10,b=c=2,
+h_1=1/10,h_2=H=1,eta=9,xi=1,U=V=11/10,p_1=99/10,
+p_2=-1,R=8/9. This lies in the constructive interval
+R_low=-173/340<R<T=37/40. At y=1/10<Y=390/979,
+B_y=-6119/10000 and Z=1610/3681; d_1 at that cap is
+7979059/5591700>0. Thus the z-cap genuinely operates without
+any positive d_1 zero. The different exact negative-B regression
+in the standalone also checks: B_y=-169/2000 and Z=52/113.
+
+For the new full-core fixture I reconstructed all fifteen rows and
+verified exactly sixteen policy identities, sixteen Continue
+identities, and eight joint Quit caps. The stated a_1,a_2,d_1 and
+proper hazards agree. Its only traps are03,12,0123, and every
+one of its fifteen pure coalitions has the claimed improving move.
+The bound-level coverage statements are valid: trap03 has no weak
+leaver, product-low fails there, and the greatest core is not a pair.
+The fixture is not asserted to exclude all stationary or selected
+chronological mechanisms.
+
+The standalone preserves the full raw scope, the exceptional cap,
+all endpoint signs, actual rewards, and source assumptions. Its
+expanded sixteen-equation argument is self-contained. The four
+opponent survival factors are correct and independent of refinement.
+The explicit horizon bound delta_n+4M*K_n/N holds uniformly over
+complete behavioral replacements. The finite-law censoring paragraph
+also checks: couple opponents' stopping laws against a fixed complete
+deviation, then compare the prescribed laws; the two payoff errors
+give the stated4M*tau_K regret allowance and2M*tau_K target error.
+This argument is uniform in the deviation and does not change the
+distinguished target. No all-phase floor or translated Never reward
+has been inserted.
+
+Named source consumers remain the ones audited in the preceding
+review. The packet has no dependency on a conference notebook,
+feedback, or other math-directory file and contains no review history
+or new checked-Lean claim. No artifact or mathematical repair is
+requested for the exact bytes above.

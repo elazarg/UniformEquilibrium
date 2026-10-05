@@ -734,3 +734,148 @@ the outsider's Quit and Continue values are 1/343 and 673/343. Again
 all successor coordinates are high. Thus removing the bounded-source
 quantifier would make the return claim false even on the admitted table.
 No repair is requested for the stated boxed theorem.
+
+## Unified boxed-charge theorem: strengthening and final artifact review
+
+**PASS**, both for the new mathematical scope and for the self-contained
+artifact `../exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`, exact SHA256
+`16ffd63e3735ad7b00f99e76efb237cb0cf7fdc6de0ae267161b9da9e2977dde`.
+I read the complete artifact without reading another review. This
+verdict includes the arbitrary finite m≥3 analytic argument, simultaneous
+traps of different sizes, the Fin4 semantic consumer, both complete
+fixtures, and the bounded source comparisons. It asserts no Lean check.
+
+### New m≥3 proof and one common source box
+
+The two coefficient families P_A(T) and L_A(T) have distinct roles
+and are used with their exact quantifiers. For each trap, summing
+the positive active Quit premiums after division by the corresponding
+opponent Continue probability yields precisely the P polynomial over
+all nonempty proper T. The singleton coefficients cost dU; every
+intermediate coefficient is nonpositive; the m−1 coefficients are
+bounded by tau and sum to tau E. Thus dU<tau E is correct for any
+m≥3, not just a formal replacement of the triple variables.
+
+The symmetric bound E≤U^(m−1)/m^(m−2) is sound. For the relevant
+U>0, a maximum at fixed sum has at least m−1 positive coordinates.
+For any unequal pair of coordinates, the remaining m−2 coordinates
+contain at least m−3 positives, so the coefficient e_(m−3) in
+the averaging argument is strictly positive. Averaging strictly raises
+E, excluding such a maximum. The all-equal value proves the bound;
+the zero-sum case is immediate. Hence U>m(d/tau)^(1/(m−2)).
+
+The separate sure-hazard cases remain essential and correct. With
+some but not all active hazards sure, choose a nonsure i. Coalition
+A\{i} has positive product probability and a strictly negative L
+coefficient. All other L terms are nonpositive and the empty term
+vanishes, contradicting supported Nash optimality. With all sure,
+the same m−1 coefficient gives an actual profitable withdrawal.
+
+For interior hazards, indifference and the exact aggregate-gap identity
+give sum_A(s_i−v_i)≥gU+lE>(g+ld/tau)U>C_A. There are finitely
+many traps, so the strict gaps C_A−sum_A s_i−mM permit one common
+M<B<M+2. This handles different trap cardinalities and different
+auxiliary constants in the SAME raw game. No strategy, root, favorable
+annotation, or potential is among the raw inputs. The no-trap case is
+also correctly vacuous. Universal low-successor return holds at every
+boxed source, including sources outside all singleton-floor regions.
+
+### Same-domain minimum and source restriction
+
+The assembly gives a complete independent minimum proof rather than
+referring to the earlier convex-invariant packet. Its collision-adjusted
+singleton probe is an exact root: corrections are placed only at
+binding coordinates below B, all upper faces remain unshifted, and
+the explicit Continue-minus-Quit expression has the required sign.
+The two first-order correction terms cancel in the derivative inequality.
+
+Minimization on the full union D of singleton sublevels forces the
+minimum onto the lower singleton boundary, rules out a single binding
+coordinate by the face drift, and gives nonnegative derivatives at
+every binding coordinate. The perturbed source and its successor both
+remain in that same D. The signed estimate epsilon≤(3M+B)a then
+turns unit absorption drift into the impossible one-sided derivative.
+No compactness claim about selected roots or protected coordinate is
+needed in this version.
+
+The existing normality and rational-polynomial source theorem apply
+to the original Fin4 table when some singleton is positive. The exact
+restriction and `IsQuittingFullExactRootPotential.mono_box` retain the
+same polynomial on the common smaller B. If all singletons are zero,
+all Never is the direct exact equilibrium. The artifact correctly
+limits its strategic conclusion to Fin4 even though the analytic
+theorem is finite-dimensional in arbitrary cardinality. Its target is
+fixed before accuracy, and the cited source consumer has complete
+behavioral deviations. No missing strategic hypothesis was found.
+
+### Exact full-core table and fourteen child tests
+
+I recomputed the fifteen-row full-core fixture. The only trap is the
+grand coalition. The P coefficients by cardinality are exactly −9/2
+at each singleton, −4 at each pair, and 1/10 at each triple. The L
+singleton coefficients are −3/2,−13/2,−13/2,−9/2; all pair values
+are −8 and all triple values −19/10. M=3. Both charge constants,
+348 sqrt(45) and the strict-slack 124 sqrt(20), exceed 13. All stated
+strict coefficient and trap margins hold. Raising the three zero own
+singletons slightly really preserves the criterion, so the analytic
+open-neighborhood and strategic nonnegative-singleton boundary are
+properly distinguished.
+
+For all fourteen listed (owner,omitted) pairs I checked that the owner
+is in the child, the omitted player is outside it, every other child
+player's joining gain is nonpositive, and the omitted joining gain is
+exactly 1/2. A sole owner's own singleton is nonnegative; after it
+prevents absorption, its opponents remain at Never, so no delayed
+behavioral action improves on that singleton. Thus these are exact
+FULL terminal Nash witnesses, not only static inequalities. Each has
+zero joint Never. Every proper-child universal finite weighted-debt-plus-
+Never bound is consequently falsified by an exact positive outsider
+gain. The fifteen pure-coalition improvements were checked separately.
+
+The four sure-singleton weighted-floor inequalities sum to
+−(9/2)sum_i lambda_i≥0, excluding EVERY nonzero nonnegative weight,
+not just uniform weights. The all-sure grand law has all participant
+premiums 1/10 and falsifies product-low and implemented supportwise
+nonpositive participant balance. Negative proper participant premiums
+make the protected set empty. These failures are compatible with UE
+and do not imply exhaustive failure of other producers.
+
+As an extra four-core boundary check, let every hazard equal 99/100.
+At the exact source
+
+    v=(−9808618/5,−9808128/5,−9808128/5,−9808128/5),
+
+all four players are indifferent, and their successor is
+
+    w=s+(47223/1250000)(1,1,1,1)>s.
+
+The raw participant sum calculation is
+Q_i−s_i=−(9/2)q(1−q)²−6q²(1−q)+(1/10)q³.
+This is an independent exact full-core test showing that an unbounded-
+source return claim would fail here too. It is not needed for the
+boxed theorem and is not a UE counterexample.
+
+### Assembly and bounded comparisons
+
+The triple fixture, its two outside-box regressions, thirteen exact
+child profiles and one diffuse-child sequence retain the previously
+audited values and complete-deviation arguments. The full-core singleton
+matrix and all four triple inverses were recomputed: only child123 has
+a nonnegative inverse, with passive weights (−1/7,5/7,3/7). The full
+inverse entry (0,2) is −5/7. The displayed regular LCP offset has
+unique root (0,1,1,1), inactive residual 2 and active determinant 7,
+so degree +1 is correct. Principal03 is R₀ and its stated negative
+offset is infeasible. All thirteen partition row-sum witnesses and
+both remaining exact response polynomials check.
+
+I inspected the actual signatures of
+`quittingSingletonBlockRowSum_eq_of_responseInvariant` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`
+and `withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess`
+in `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`.
+The latter really quantifies over every child behavioral profile, so
+the exact child witnesses refute its claimed universal bound without
+pretending to refute all selected-child constructions. The degree,
+inverse, normality and exact-root consumers have the already inspected
+literal hypotheses named in the artifact. No reference to another
+math-folder proof is required, and no assembly correction is requested.

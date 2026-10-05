@@ -1195,3 +1195,50 @@ outside these coefficient assumptions. This general raw criterion
 contains the triple result and my full-four-core special case; it is
 the appropriate single theorem to assemble. It neither subsumes all
 protected/weighted-leaver criteria nor settles arbitrary premium cores.
+
+## Final boxed-charge artifact check
+
+Verdict: PASS on the complete standalone
+`exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`, 559 lines, SHA256
+`16ffd63e3735ad7b00f99e76efb237cb0cf7fdc6de0ae267161b9da9e2977dde`.
+This bounded assembly check is against the independently reviewed
+triple theorem and cardinality extension above. I read all nine
+sections; the assembly introduces no new mathematical hypothesis,
+proof gap, or external conference-note dependency.
+
+The general coefficient convention covers every trap separately,
+including the possibility of both cardinalities in Fin4. One common
+box is chosen from all positive margins. Both kinds of sure-hazard
+boundary remain explicit, as does the no-trap case. The self-contained
+same-D minimum argument uses universal boxed return directly; it does
+not insert an unproved compactness or invariant-floor assertion.
+The signed analytic scope and nonnegative-singleton Fin4 strategic
+scope remain distinct. The same polynomial is restricted from M+2
+to B without changing the table. The listed full source paths are
+tracked and agree with the previously inspected declarations; no
+Lean files or builds were changed or run for this check.
+
+Section 6 retains the independently checked proper-triple fixture,
+its no-weight obstruction, exact and diffuse child tests, and the
+source-box regression. I additionally evaluated its second displayed
+test q=(6/7,6/7,6/7,0) exactly: active Q=C=11/98 and the outsider
+endpoints are 1/343 and 673/343, as stated. The 60-coordinate open
+neighborhood assertion there has strictly positive singleton entries
+and strict trap-structure signs, as required.
+
+Section 7 faithfully incorporates the full-core fixture that I
+authored. My reading of that assembly is NOT an independent review
+of that fixture. Its independent validation is supplied separately
+by the author and the other artifact reviewer. The packet correctly
+distinguishes an analytic raw neighborhood from the strategic
+nonnegative-singleton boundary at the displayed point. Raising the
+three zero own singleton entries slightly supplies the interior
+strategic center; no full strategic neighborhood of the original
+boundary point is asserted.
+
+The matrix/partition and child-debt scope is bounded explicitly;
+no exclusion of all equilibria or all selected chronologies has been
+added. The handoff requests a raw-data producer and exact consumer,
+not a supplied potential or root-selection interface. The complete
+artifact is self-contained ordinary mathematics and makes no new
+Lean-certification claim. No repair is requested.

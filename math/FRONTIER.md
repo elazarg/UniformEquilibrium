@@ -408,12 +408,13 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the repeated-solo outsider-buffer family specified below, for every real R | UE allowing a positive outsider collision reward at the joint phase. A final solo exit supplies its continuation buffer. All rates and values are produced from rewards. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: the two-buffer joint/solo family specified below, for every real R | UE allowing all six outsider collision coordinates at the joint phase to be positive, under two weighted raw inequalities. Signed collision rewards and the zero-final-phase boundary are included. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: all tables in an open sixty-coordinate neighborhood of the explicit two-joint-phase rational table specified below | UE with rates and a fixed target produced from the table. Every singleton and collision reward may vary; only two solo phases require refinement. This is a reviewed mathematical result awaiting formalization. |
+| Fin4: the global two-joint cyclic-child family specified below, for every real R | UE with simultaneous quitting at both retained joint phases. The rates and target are produced from rewards, including the outsider halfspace boundaries. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. This is a reviewed mathematical result awaiting formalization. |
-| Fin4: nonnegative own singletons, only triple premium traps, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The Nash equations exclude high-successor roots inside a reward-containing box. This is reviewed mathematics awaiting formalization. |
+| Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. Both trap sizes may coexist; every trap must pass its finite coefficient test. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -563,6 +564,38 @@ no weak leaver in {0,3}; the protected-leaver criteria therefore do not
 cover it. The exact stationary exclusion at its center concerns player 3
 kept quiet, not every stationary support or relabeling.
 
+The **global two-joint cyclic-child criterion** has parameters
+a,b,c,h₁,h₂,H>0, abc>1, U,V≥1, ξ,η>0, p₁≤a−h₁, p₂≤0,
+and arbitrary real R. Prescribe
+
+    r({0})=(1,−h₁,−h₂,−H),   r({1})=(U,0,b,−1),
+    r({2})=(V,−1,0,c),       r({3})=(R,a,−1,0),
+    r({0,3})=(1+ξ,p₁,p₂,η).
+
+Its only additional restrictions are
+
+    r₁({0,1}), r₁({1,3}), r₁({0,1,3})≤min(−h₁,p₁),
+    r₂({0,2}), r₂({2,3}), r₂({0,2,3})≤0.
+
+Every other reward coordinate is arbitrary. Define
+
+    ν=(c h₁+ac h₂+H, h₁+a h₂+ab H, bc h₁+h₂+bH)/(abc−1),
+    R_low=1−((U−1)ν₁+(V−1)ν₂)/ν₃,
+    T=1−(c(U−1)+(V−1))/(bc).
+
+The original-table singleton criteria give UE for R≤R_low and R≥T,
+including equality. On the remaining interval a scalar selector produces
+the four phases joint {0,3}, solo 1, solo 2, joint {0,3}. The selector
+handles a missing zero of one continuation value and arbitrary η>0;
+neither a favorable root nor a bounded collision premium is assumed.
+Refining only the solo phases preserves one target and controls all
+behavioral deviations and sufficiently long horizons. A joint-phase
+outsider value may be negative; no all-phase singleton floor is required.
+
+The [complete global two-joint theorem](exports/GLOBAL_TWO_JOINT_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md)
+includes a full-core, no-pure-equilibrium example with disjoint pair traps.
+It does not exclude all stationary producers or cover arbitrary tables.
+
 The **premium-core criterion** assumes sₖ≥0 and rₖ(S)≥sₖ for every
 participant k∈S. A nonempty set A is a premium trap when every k∈A has
 some S⊆A containing k with rₖ(S)>sₖ. Traps are closed under union;
@@ -579,7 +612,10 @@ product-low criterion; a singleton core is impossible.
 For a pair core, every positive exact root whose support differs from C
 returns to the same lower singleton boundary through a flat active
 participant. A strict pair-leaving preference rules out the exceptional
-support there. With mutual strict joining, a possible exceptional mixed
+support there. Its return calculation needs a singleton floor only for the
+designated leaving player's continuation coordinate. Positive outsider
+hazards are treated before the two-core reduction, retaining simultaneous
+quitting. With mutual strict joining, a possible exceptional mixed
 root has local index −1, while the complete root map has total index +1;
 after explicit tie removal, another exact root is produced. Boundary
 minimization then excludes every smooth full-root potential. Equality in
@@ -613,7 +649,7 @@ some coordinate at or below its singleton gives a contradiction. Zero
 join gaps are handled by perturbing passive rewards and applying UE reward
 closure; no weak-gap analytic exclusion is asserted.
 
-The [signed pair-core proof](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md#18-signed-pair-cores-a-negative-index-without-any-protected-floor)
+The [signed pair-core proof](exports/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md)
 permits negative participant premiums for every player. Its return is
 existential: the same table can have a bad exact root as well. Opposite
 strict join-gap signs admit a unique bad root of index +1 and are outside
@@ -721,36 +757,44 @@ The weighted and protected-leaver raw criteria are incomparable. Neither
 their union nor these criteria together with the periodic constructions
 are known to cover all remaining tables.
 
-The **boxed triple-charge criterion** assumes nonnegative own singletons
-and that every premium trap has cardinality three. Union closure permits
-at most one such trap. Let M=max|r_i(S)|. For each trap A, require positive
-d, tau, g, ell satisfying, for every j or i in A as applicable,
+The **boxed Nash-charge criterion** assumes nonnegative own singletons
+and that every premium trap has size three or four. Put M=max|rᵢ(S)|.
+For each trap A, let m=|A| and, for ∅≠T⊊A, define
 
-    sum[i in A minus {j}] (r_i({i,j}) - s_i) <= -d,
-    r_i(A) - s_i <= tau,
-    sum[i in A minus {j}] (r_i({i,j}) - r_i({j})) <= -g,
-    r_i(A) - r_i(A minus {i}) <= -ell,
-    (3d/tau)(g + ell*d/tau) > sum[i in A] s_i + 3M.
+    P_A(T)=∑[i∈A\T] (rᵢ(T∪{i})−sᵢ),
+    L_A(T)=∑[i∈A\T] (rᵢ(T∪{i})−rᵢ(T)).
 
-These finite reward inequalities imply UE. Choose a box bound B>M close
-enough that the last strict inequality still holds with B. A trapped exact
-root with all active Quit endpoints above their singletons must have three
-interior hazards. Their odds have sum U and pair-product sum V satisfying
-dU<tau*V and V<=U²/3. The aggregate Nash identity then forces
+Require positive d,τ,g,ℓ, possibly different for each trap, with
 
-    sum[i in A] (s_i - v_i) > (3d/tau)(g + ell*d/tau),
+    |T|=1:        P_A(T)≤−d,  L_A(T)≤−g,
+    2≤|T|≤m−2:   P_A(T)≤0,   L_A(T)≤0,
+    |T|=m−1:      P_A(T)≤τ,   L_A(T)≤−ℓ,
+    C_A=m(d/τ)^(1/(m−2))(g+ℓd/τ)>∑[i∈A]sᵢ+mM.
+
+The intermediate range is empty for triples. Explicitly,
+
+    C₃=3(d/τ)(g+ℓd/τ),    C₄=4√(d/τ)(g+ℓd/τ).
+
+These finite reward inequalities imply UE. The strict margins choose one
+common box bound B>M for all traps. A trapped exact root whose active Quit
+endpoints all exceed their singletons has only interior hazards. Their odds
+have sum U and degree-(m−1) symmetric sum E satisfying dU<τE and
+E≤U^(m−1)/m^(m−2). The aggregate Nash identity then forces
+
+    ∑[i∈A](sᵢ−vᵢ)>C_A,
 
 contradicting the source box. Nontrap supports already have a low active
 endpoint. Thus every absorbing exact root in this box has a low successor,
 which excludes a smooth full-root potential and activates the Fin4 consumer.
 
-The [boxed-charge proof and exact tests](notes/CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md#the-complement-of-weighted-floors-a-boxed-nash-charge-on-a-triple)
-include an open raw region where every nonzero nonnegative linear
-forced-Quit-floor test fails. Exact high-successor roots outside the box
-show why the bounded-source premise is essential. The larger-core
-extension is a separate candidate, not part of this reviewed conclusion.
-Neither the signed-pair nor the triple-charge criterion is an exhaustive
-classification of the remaining reward tables.
+The [complete boxed-charge theorem and exact tests](exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md)
+include triple and full-core examples for which every nonzero nonnegative
+linear forced-Quit-floor test fails. The full-core example also supplies a
+profitable omitted player for an exact equilibrium witness in every proper
+child. Exact high-successor roots outside the box show why its bounded-source
+premise is essential. Pair traps are outside this criterion. Neither the
+signed-pair nor the boxed-charge criterion is an exhaustive classification
+of the remaining reward tables.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are

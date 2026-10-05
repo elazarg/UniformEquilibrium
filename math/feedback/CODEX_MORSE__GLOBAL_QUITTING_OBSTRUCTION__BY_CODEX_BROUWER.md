@@ -1264,3 +1264,59 @@ entries slightly produces an interior point with all singletons
 positive and with strict raw margins; a small full neighborhood there
 is admitted. This clarification does not affect the exact fixture,
 the source comparisons, or the main theorem.
+
+## Final artifact check: signed same-sign pair cores
+
+Verdict: PASS for the complete 568-line
+[signed-pair standalone](../exports/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md),
+SHA256 `6eef4888ef06911bf6de766cf7a798328d94b3b31e95203eebab87c6e5466f6a`.
+This is a bounded assembly/delta check against my section18 proof
+review, not a third full mathematical audit. I read every assembled
+section and independently tested its new examples. No other final
+artifact review was read. This is not a Lean check.
+
+The statement retains arbitrary signed participant premiums, greatest
+core empty or a pair, nonnegative own singletons for Fin4 UE, and
+same weak sign of the pair gaps. The finite-player analytic exclusion
+remains strict. The standalone degree argument includes its concrete
+ambient homotopy and local affine comparison. The full root map,
+strict outsiders, determinant block, same-D minimum, signed source
+charge, and unchanged-function polynomial restriction are preserved.
+The weak boundary perturbs only passive singleton entries and gives
+one limiting target before accuracy; it does not assert a degenerate
+negative-index calculation.
+
+The newly displayed good root at the same source as the old bad root
+checks exactly. At v=(3,-1,4,2), q=(0,2/3,0,1/3), the endpoints
+are Q=(10/9,0,0,0), C=w=(14/9,0,17/9,0). Thus it is a full
+Nash root and its active players return to their singleton levels.
+The negative-index bad root remains available at that identical
+source; this is an explicit distinction between selected and
+universal return.
+
+I checked all thirteen new pure child-profile rows, including the
+two-player sure coalition03 in children03 and013. Their comparisons
+are against both first actions and every delayed owner strategy;
+the Never continuation gives no hidden profitable owner deviation.
+The child123 cycle has exact values (1,0,0),(0,1,0),(0,0,1),
+all forced-Quit endpoints zero, and geometric opponent survival.
+Quiet player0's value is6/7 and first-date Quit pays3/2, so the
+stated gain9/14 is correct. All fourteen child comparisons retain
+the exact universal weighted-debt-plus-Never quantifier and are not
+misrepresented as exclusion of every quiet-profile selection.
+
+The assembled four-player opposite-sign regression also checks.
+Player3 is strictly inactive at every root, and its absence makes
+the modified grand row irrelevant to the other three endpoints.
+The two core equations force hazards1/2,1/2, and player2 then has
+Q=0<C=2. The unique successor is(3/2,1/2,2,1), with inactive
+gaps-2,-1 and local determinant8. This is a selected-return
+falsifier, not a uniform-equilibrium counterexample.
+
+The singleton matrix, inverse/degree calculations and all fifteen
+partition exclusions retain their verified bounded scope. Named
+source declarations match the actual consumers and preserve the
+distinction from the old nonnegative-premium weak-leave theorem.
+The packet is self-contained, contains no conference-file dependency
+or review history, and claims no new checked implementation. No
+mathematical or assembly repair is requested for these exact bytes.

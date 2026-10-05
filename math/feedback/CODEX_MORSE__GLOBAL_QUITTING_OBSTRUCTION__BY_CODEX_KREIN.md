@@ -1129,3 +1129,44 @@ strictly Continues with Q_2=0,C_2=2. The claimed unique root,
 all-high successor, strict outsider gaps, and local determinant +8
 follow. It refutes extension of this selected-return argument to
 opposite strict signs, not UE existence. No correction is requested.
+
+### Signed-pair standalone assembly and final delta check
+
+**Assembly PASS** for
+`../exports/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md`, 568 lines,
+exact SHA256
+`6eef4888ef06911bf6de766cf7a798328d94b3b31e95203eebab87c6e5466f6a`.
+I read the complete artifact against the preceding independent proof
+review. No mathematical change to the signed same-sign theorem, its
+strict analytic scope, or its weak strategic scope needs repair.
+
+The expanded index lemma explicitly supplies the nonlinear local
+comparison and enlarged ambient cube. The singleton-face probe and
+same-D minimum are fully written, including upper faces and the signed
+absorption-scale estimate. The Fin4 normality/polynomial consumer and
+passive-reward closure retain the fixed-target quantifiers. The empty-
+core product-low exit is stated separately. No supplied root selector,
+individual floor, or unpublished mathematical dependency has appeared.
+
+Both exact roots at v=(3,−1,4,2), including my good-root witness,
+are transcribed correctly. The signed opposite-gap table and its unique
+positive-index bad root retain their restricted no-go conclusion. The
+singleton inverse/degree calculations, thirteen partition witnesses,
+and remaining response values t,t,t+t² match the actual table. They
+are not presented as an exhaustive exclusion of all producers.
+
+I checked the newly assembled child comparisons directly on the fifteen
+reward rows. All thirteen sure-coalition profiles are exact behavioral
+Nash with zero Never, and every displayed omitted-player gain is exact.
+For child123, every within-child participant reward really is zero;
+the half-hazard 3,1,2 cycle has exactly the three displayed values and
+all Quit caps. Its full-deviation tail argument therefore gives exact
+terminal Nash without refinement. The omitted pivot's value is 6/7,
+its first-date Quit value is 3/2, and the gap is exactly 9/14. Thus
+the completed fourteen-child universal-debt exclusion is justified.
+
+The source handoff distinguishes the signed support inequalities and
+new clipped-map adapter from already tracked degree and UE consumers.
+There are no mathematical references to another conference note or
+export. This seal is for these exact bytes, not for an unreviewed
+opposite-sign or larger-core extension. No correction requested.

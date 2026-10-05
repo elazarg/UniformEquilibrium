@@ -40,10 +40,12 @@ fixture has a strict full-dimensional neighborhood in that criterion;
 the mechanism is not an implicit-function construction or a fixed phase
 grammar. The final **complement of weighted floors** section is a separate
 boxed Nash-charge raw-family theorem with two independent mathematical
-PASSes for its triple-core criterion. The later cardinality extension
-is a separate unreviewed candidate. Neither is exported or Lean-checked
-here; consolidation with the independently developed four-core case
-precedes standalone assembly.
+PASSes, now consolidated with its cardinality extension and the
+independently developed full-four-core fixture in
+[`BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`](../exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md),
+SHA256 `16ffd63e3735ad7b00f99e76efb237cb0cf7fdc6de0ae267161b9da9e2977dde`.
+The strongest packet has independent mathematical and final artifact
+PASSes. It is exported, not Lean-checked here.
 
 A separate unreviewed result at the end, **Canonical premium-core
 reduction**, extends the reviewed two-player strict-leave mechanism to
@@ -2519,8 +2521,9 @@ to the four-player premium core without becoming a supplied-root test.
 
 ### Cardinality extension of the same charge
 
-Independent derivation, ordinary mathematics not yet separately
-reviewed. The triple restriction is not intrinsic to the polynomial
+Independent derivation, now reviewed in the consolidated boxed-charge
+export linked above; not Lean-checked here. The triple restriction is
+not intrinsic to the polynomial
 charge. For a trap A of cardinality m>=3, write
 
     c_A(T)=sum_{i in A minus T}[r_i(T+i)-s_i],
@@ -2558,10 +2561,11 @@ pair-column sums and pair aggregate-leave sums. Sure hazards are
 still excluded by a positive-probability coalition A-i with strict
 top leave, even when intermediate leave bounds are equalities.
 
-This is a candidate strengthening, not an unrestricted-size UE
+This is a reviewed strengthening, not an unrestricted-size UE
 claim: the semantic consumer used here remains Fin4, and no claim
 is made about traps failing these finite charge tests. A separate
-MORSE extension was announced only after this derivation; it has
-not been read here. The concrete next task is comparing and
-independently checking the strongest raw version before assembly,
-while the original triple criterion has one independent PASS.
+MORSE extension was announced after this derivation and has since
+been independently checked and consolidated into the same export.
+The next task is an arbitrary-table argument using the full exact
+Nash relation beyond these coefficient tests, not a further
+optimization of the charge constant.
