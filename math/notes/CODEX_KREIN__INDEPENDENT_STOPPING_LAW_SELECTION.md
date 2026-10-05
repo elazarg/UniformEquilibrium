@@ -39,8 +39,8 @@ exact-Continue supersolution methods. The self-contained mathematical packet
 is frozen in `../exports/ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md`.
 Further research below does not modify or inherit the export's review.
 
-The new internal section **Quadratic nonpivot selection and the complete R
-axis** is a complete ordinary proof candidate, NOT independently reviewed.
+The section **Quadratic nonpivot selection and the complete R axis** has
+independent mathematical PASS reviews from CODEX_MORSE and CODEX_BROUWER.
 It replaces the sign-restricted pivot selector by a unique admissible root
 of a quadratic nonpivot equation. On the same six-cap raw class, this
 produces the entire residual interval between the existing singleton-degree
@@ -49,7 +49,13 @@ class has UE for every real R. Under the shared two-core participation
 conditions stated there, the separate strict-leave theorem supplies u>1+xi,
 giving one whole (u,R) plane rather than a chosen curve or bounded interval.
 The new constructive part, source exits, and remaining table restrictions
-are separated explicitly below; no review or export status is inherited.
+are separated explicitly below. The independently reviewed self-contained
+packet is frozen in `../exports/CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md`,
+promoted byte-for-byte by the coordinator. The later **positive-gap obstruction to the
+one-joint/two-solo-block architecture** is a separate unreviewed candidate,
+including arbitrary solo subdivision and the all-zero-hazard limit. Its
+beta=0 table has UE, so it is not a game counterexample. The concrete next
+question is a larger chronological support structure overcoming that gap.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
@@ -1708,8 +1714,8 @@ residual interval and constructs across it, without fixing R artificially.
 
 ## Quadratic nonpivot selection and the complete R axis
 
-Status: complete ordinary proof candidate, not independently reviewed or
-Lean-checked. The frozen export is unchanged. This section solves the
+Status: ordinary proof with independent CODEX_MORSE and CODEX_BROUWER PASS
+reviews, not Lean-checked. The older frozen export is unchanged. This section solves the
 mutual-pair-preference residual of the same actual joint/solo table rather
 than merely weakening an interval constant. The new producer is the
 quadratic selector; two existing source criteria close its outer regions.
@@ -2080,3 +2086,226 @@ endpoints and at alpha=0, the exact six-cap all-deviation adapter, and the
 degree/passive source stitching. A broader constructive question is whether
 arbitrary normal singleton sign geometries admit an analogous joint row
 whose remaining balance equations have this one-root crossing structure.
+
+## A positive-gap obstruction to the one-joint/two-solo-block architecture
+
+Status: separate ordinary proof candidate, not independently reviewed. The
+reviewed quadratic theorem above is unchanged. This is NOT a counterexample
+to four-player UE. It is a strict expressiveness boundary for the entire
+periodic architecture used by that producer, including all accuracy-dependent
+hazards and arbitrarily fine solo blocks, not merely its exact period-three
+Bellman equations.
+
+### An explicit table and the precise restricted profile class
+
+The table has singleton vectors
+
+    r({0})=(1,−1,−1,−1),
+    r({1})=(2,0,2,−1),
+    r({2})=(2,−1,0,2),
+    r({3})=(0,2,−1,0),
+    r({0,1})=(2,1,−1,−1).                              (58)
+
+Here is a full completion, with an optional parameter beta≥0. Set the
+pivot payoff to one whenever it participates, except for its pair payoff
+r_0({0,1})=2. When the pivot does not participate, set its reward to zero
+except at the singleton coalitions {1} and {2}, where it is two.
+For each nonpivot j, its participant reward is zero except
+r_1({0,1})=1 and
+
+    r_2({2,3})=r_3({2,3})=beta.
+
+A nonparticipating nonpivot receives −1 if 0 participates; otherwise its
+reward is 2*1_(pred(j) participates)−1_(succ(j) participates), with the
+cycle 1→2→3→1. These rules specify all fifteen reward vectors and agree
+with (58). All participant premiums are nonnegative.
+
+For beta=0, the table has constant-participant outsiders 2,3 and the weak
+leave equality r_0({0,1})=r_0({1})=2. It therefore has a fixed-target UE
+by the independently reviewed two-core weak-leave theorem. For beta>0,
+both disjoint pairs {0,1} and {2,3} are premium traps and their union is
+the full greatest core; no existence conclusion for that variant is
+being inferred from the core-size-two theorem.
+
+The restricted profile class consists of infinite repetition of:
+
+1. one simultaneous date at which only players 0 and 1 may Quit, with
+   fixed hazards x,y;
+2. a finite block containing only player-2 hazards, of arbitrary length
+   and arbitrary date-dependent probabilities;
+3. a finite block containing only player-3 hazards, likewise arbitrary.
+
+The blocks and all hazards may be chosen separately for each requested
+accuracy. Let z,w be the aggregate Quit probabilities of the two solo
+blocks. Empty or zero blocks can be represented by an all-Continue date.
+The full repeated profile uses private independent randomization and no
+correlating device. A deviator is unrestricted; in particular it may wait
+until a particular block, skip a whole block, or Never quit thereafter.
+
+CLAIM: there is delta>0 such that EVERY profile in this class has full
+terminal exploitability at least delta in the beta=0 table. The SAME
+delta works for every beta≥0. Thus the architecture cannot produce terminal
+approximate Nash profiles at all errors, even though the beta=0 game has UE.
+
+The phase order is essential to the class being excluded. No claim here
+excludes arbitrary periodic policies, several joint phases, nonperiodic
+profiles, random phase entry, or every conceivable independent stopping law.
+
+### Phase values and elementary deviation consequences
+
+Let V_A,V_B,V_C be prescribed terminal values at entry to the joint date,
+the player-2 block, and the player-3 block. On-path coalitions are only
+{0},{1},{0,1},{2},{3}; in particular no on-path coalition contains both
+2 and 3. The values depend only on x,y,z,w, not on the solo blocks'
+lengths or subdivisions. If at least one aggregate hazard is positive,
+absorption occurs almost surely under repetition, and these values are
+the unique bounded solutions of the three aggregate Bellman equations.
+
+At every phase the pivot can Quit for at least one, and every nonpivot
+can Quit for at least zero. At A, players 2 and 3 get exactly zero by
+forced Quit. At B, player 1 gets exactly zero by forced Quit. At C,
+player 2 gets zero or beta by forced Quit, hence at least zero. The
+deviator can follow the prescribed profile until reaching that phase and
+then take this action. Thus whenever the phase-entry survival probability
+is bounded away from zero, vanishing initial full regret forces the
+limiting phase values to lie above the singleton vector s=(1,0,0,0).
+
+A solo owner can instead Continue through its entire block and then
+resume its prescribed behavior. For player 2 this changes its conditional
+value from V_B,2=(1−z)V_C,2 to V_C,2. For player 3 it changes
+V_C,3=(1−w)V_A,3 to V_A,3. These deviations are legal regardless of
+how finely a block has been subdivided. They will recover the exact
+owner equalities in a positive-hazard limit; no per-microstage error is
+summed.
+
+### No nonzero aggregate-hazard limit can have vanishing regret
+
+Suppose toward a contradiction that restricted profiles have full terminal
+regrets tending to zero. All-zero profiles have pivot deviation gain one,
+so they can be omitted. By compactness, pass to a subsequence whose
+aggregate hazards converge to (x,y,z,w). First suppose this limit is not
+the zero vector. The aggregate absorption probability then has a positive
+limit, so all three phase-value vectors converge by their explicit
+Bellman formulas. Write the limits again as V_A,V_B,V_C.
+
+If x=1 or y=1, phase A absorbs surely and player 3's value is −1,
+whereas its immediate Quit payoff is zero. Hence x,y<1. Phase B is
+therefore reached with limiting probability (1−x)(1−y)>0. If z=1,
+player 1's B-value is −1, whereas immediate Quit there gives zero.
+Thus z<1, and phase C also has positive limiting entry probability.
+If w=1, player 2's C-value is −1, whereas immediate Quit there gives
+at least zero. Thus w<1 as well. All phase-entry probabilities are now
+bounded away from zero, and every limiting phase value is at least s.
+
+Suppose x>0. The pivot's supported Quit and Continue actions at A must
+be indifferent in the limit, since 0<x<1. Its Quit endpoint is 1+y,
+and its Continue endpoint is 2y+(1−y)V_B,0. Since y<1, this forces
+
+    V_B,0=1.
+
+But the player-2 block gives
+
+    V_B,0=2z+(1−z)V_C,0≥1+z.
+
+Hence z=0. The player-3 coordinate of the remaining Bellman equations
+then reads
+
+    [1−(1−x)(1−y)(1−w)] V_A,3=−x−y+xy<0.
+
+Its positive left coefficient forces V_A,3<0, a contradiction. Therefore
+x=0 in every possible nonzero limit.
+
+Only the cyclic singleton exits 1,2,3 remain. Their three hazards must
+all be positive. If y=0 and w>0, player 2 receives a strictly negative
+terminal payoff; if y=w=0 and z>0, player 1 does. Once y>0, absence of
+z makes player 3 strictly negative; once z>0, absence of w makes player
+1 strictly negative. These statements follow directly from the two
+available singleton payoffs for the indicated receiver. None can hold
+under the phase-value floors.
+
+At A, player 1's positive interior hazard then forces
+V_A,1=V_B,1=0. The block-skipping deviations and nonnegative floors
+force V_C,2=V_B,2=0 and V_A,3=V_C,3=0. The aggregate Bellman equations
+now give
+
+    z=2w/(1+2w),       w=2y/(1+2y),       y=2z/(1+2z).
+
+Composing the three fractional-linear maps gives y=8y/(1+14y), so the
+unique positive solution is y=z=w=1/2. At these hazards the quiet pivot's
+three phase values are exactly
+
+    V_A,0=12/7,       V_B,0=10/7,       V_C,0=6/7.
+
+The last is below its singleton one, contradicting the C-phase floor.
+Thus no nonzero limiting aggregate-hazard vector is possible.
+
+### The zero-hazard limit is excluded by an actual homogeneous LCP
+
+It remains possible a priori that all four aggregate hazards tend to
+zero. Put t=x+y+z+w for each profile and pass to a subsequence with
+
+    (x,y,z,w)/t → lambda,       lambda≥0, sum lambda=1.
+
+Per-period absorption probability is t+O(t²), while joint absorption
+at {0,1} has mass xy=O(t²). The four singleton absorption masses are
+their respective aggregate hazards plus O(t²). Hence the limiting common
+phase value is
+
+    W=sum_j lambda_j r({j}).                            (59)
+
+The initial-phase forced-Quit inequalities imply W≥s. No basis vector
+can equal lambda, since each singleton vector in (58) gives some other
+player strictly less than its singleton. Therefore lambda_i<1 for every i.
+
+For any i with lambda_i>0, let that player Never quit. The opponents'
+aggregate hazard sum is (1−lambda_i)t+o(t), positive for sufficiently
+large indices, so they still absorb almost surely. The deviating terminal
+value converges to
+
+    [W_i−lambda_i*s_i]/(1−lambda_i).
+
+Its excess over W_i is lambda_i*(W_i−s_i)/(1−lambda_i). Vanishing
+full regret makes this nonpositive; the already-proved floor makes it
+nonnegative. Thus W_i=s_i whenever lambda_i>0. Consequently lambda is
+a nonzero homogeneous LCP solution for the actual singleton matrix
+
+    M=[[0,1,1,−1],
+       [−1,0,−1,2],
+       [−1,2,0,−1],
+       [−1,−1,2,0]].                                  (60)
+
+That matrix is R0, as follows directly. If its homogeneous solution has
+positive pivot coordinate t_0, the three child feasibility inequalities
+force all child coordinates positive. Their complementary equalities
+give z=(t_0,t_0,t_0), and the pivot residual is t_0>0, impossible.
+If t_0=0 but a child coordinate is positive, the cyclic negative edges
+force all three positive; their equalities and the child determinant
+seven then force them all zero, again impossible.
+
+This contradiction excludes the zero limit as well. Therefore no sequence
+of restricted profiles has exploitability tending to zero, proving the
+strictly positive infimum delta. The reasoning uses full deviations to
+derive the obstruction; it is not a finite collection of numerical tests.
+
+### What the obstruction does and does not establish
+
+Changing beta from zero to a positive number leaves every prescribed
+profile's payoff unchanged, because {2,3} is never realized on path.
+It only raises the deviation payoffs of players 2 and 3 at that coalition;
+all other payoff coordinates are unchanged. Thus exploitability for each
+restricted profile weakly increases with beta. The same positive delta
+therefore holds throughout beta≥0, including the full-premium-core variants.
+
+For beta=0 the game has UE by the reviewed weak-leave theorem, so the
+obstruction proves that the one-joint/two-solo-block architecture cannot
+be a complete UE producer even on that already resolved raw class. It
+also explains why changing only the scalar selector cannot remove v<1
+from the current construction. At u=1+xi and v>1, supported pivot Quit
+would pin V_B,0 to one, while a positive player-2 block necessarily raises
+it above one if the next phase respects the pivot's singleton floor.
+
+There is no unrestricted positive exploitability gap asserted for the
+game. In particular, the beta=0 table cannot be an equilibrium counterexample.
+The next constructive mechanism must alter the chronological support
+architecture, for example by more than one joint phase or a different
+phase-entry structure, rather than retuning hazards within these blocks.

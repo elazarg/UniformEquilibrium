@@ -822,3 +822,247 @@ and valid vanishing-error construction. The new class still strictly
 fails product-low at the unchanged {0,1} product root. No all-child F/J
 exclusion or exclusion from every other producer is inferred for its
 arbitrary completions.
+
+## Independent review: quadratic nonpivot selection and the complete R axis
+
+**PASS as ordinary mathematics**, with no unresolved mathematical
+objection to the section bearing this title in the author's notebook.
+I conducted this review without reading MORSE's review of the new section,
+using my previous checks only for unchanged joint/solo mechanics and the
+one-error refinement. No Lean build or implementation was performed.
+The frozen export is not modified here.
+
+The exact raw class has the five vectors (28), positive a,b,c,h,xi,eta,
+abc>1, q_2,q_3<=0, v<1, u<=1+xi, arbitrary real R, and exactly the six
+outsider participation caps (49). All remaining coalition coordinates
+are arbitrary finite numbers. The conclusion concerns the original game,
+complete behavioral deviations, and one fixed target before accuracy.
+
+### Quadratic identity, unique branch, and the linear degeneracy
+
+I independently expanded C*d*G. Its apparent 1+k denominator cancels
+because `1-w=(1+k)/d`. The coefficients are exactly (53), including
+the eta terms; no cubic term has been dropped. On 0<y<Y both bounds
+defining K are strictly positive. On the closed k interval,
+`d=1+k+[by-H_2*k]>=1+k>0`, z is in [0,1], and w is in [0,1).
+At K either z=1 or w=0, eliminating the sole negative term of G;
+h_1*K is strictly positive and the eta term is nonnegative. Thus
+Q(K)>0 while Q(0)=gamma<0.
+
+Beta is strictly positive on the entire CLOSED y interval:
+`a*E-y=ac-L*y>=1/b`, and the other displayed summands are nonnegative,
+with several strictly positive. Negative d_1 or large eta can affect
+alpha but not this beta argument. A polynomial of degree at most two
+with the stated strict endpoint signs has exactly one interior root.
+Two quadratic roots inside would force equal endpoint signs; a double
+root cannot give the sign change. The actual root is simple.
+
+The discriminant is therefore positive. The selected expression
+
+    k=-2*gamma/(beta+sqrt(beta*beta-4*alpha*gamma))
+
+has a positive denominator. If alpha=0 it is exactly -gamma/beta. If
+alpha<0 and two positive roots exist, it is the smaller one, which the
+endpoint signs place before K. At y=0,Y, gamma=0 and beta>0, so this
+same expression extends continuously to zero. It remains continuous
+when alpha changes sign. No monotonicity of G or division by alpha is
+being assumed.
+
+### Both limits and the actual covered interval
+
+The identities beta(0)=D*nu_1 and gamma(y)/y tending to -D give
+k/y tending to 1/nu_1. Substitution yields z/y tending to nu_2/nu_1
+and w/y tending to nu_3/nu_1>0. Cancelling the common order-y factor
+in P gives precisely R_low, without a sign requirement on the numerator.
+At Y, k=0 and the exact P_0 identity gives R_top=T_2+xi*D/b. The
+denominator `(1-z)*w` is positive for 0<y<=Y. Consequently the
+intermediate value theorem supplies every strict intermediate R, with
+all four hazards strictly interior, even if R(y) is not monotone or
+the selected y is not unique.
+
+The passive thresholds check algebraically with the receiver-first row
+convention. Formula (50) is the literal outside row times A inverse.
+Since T_3>T_1, all weights are nonnegative exactly when
+R>=T_pass=max(T_2,T_3). For s_1>=0 the first identity comparing R_low
+is strictly positive; for s_1<0 the alternate identity (51) is strictly
+positive. Finally R_top>T_pass in the first case and
+`R_top-T_pass=D*(1+xi-u)/b>=0` in the second. At u=1+xi the possible
+equality R_top=T_pass creates no gap: the constructive open interval
+reaches every R below T_pass, and exact equality uses the weak passive
+inverse theorem.
+
+### Floors and all behavioral deviations
+
+The selected equations give the displayed four-coordinate values. In
+particular `(V_B)_1=k(h_1+eta)>0`, all nonpivot values are nonnegative,
+and `(V_B)_0-1=(1+xi-u)y/(1-y)>=0`. Equality is harmless. Rearranging
+the B recurrence and using v<1,z>0 gives `(V_C)_0>1`; A has pivot
+value p>1. None of these facts requires R>1, c*s_1+s_2>0, or p-u>0.
+
+The six caps list every outsider joining coalition at the undiffused
+joint row, apart from its zero singleton. At a solo row, one deviator
+can create only the appropriate pair, whose finite premium enters
+C_join. Refined values lie on the original phase segments and retain
+the singleton floors. Owners stay zero throughout their own solo blocks.
+Both policy evaluation and EVERY player's pure-Continue identity remain
+exact at every refined date, including the joint row.
+
+Adding e_n to each continuation value yields one Bellman supersolution:
+Continue carries q*e_n<=e_n and Quit is bounded directly. The loss is
+therefore incurred once, not summed over the unbounded number of dates.
+Each deviator's opponents retain a strictly subunit period survival
+factor, eliminating the bounded remainder against arbitrary complete
+behavioral replacements, including delayed and Never deviations.
+
+I reread the literal fields and consumers
+`quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`,
+`QuittingInfinitePathQuitErrorCertificate.isεAsymptoticNash_and_delivers`,
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+The exact policy/Continue transport, bounded values, Quit cap, target
+identity, and playerwise survival hypotheses are all produced here.
+A common value bound follows from the fixed compact phase segments.
+Censoring retains the ORIGINAL reward bound M, with target error at
+most 2M*tau_K and full regret at most e_n+4M*tau_K. Choosing n and
+then K keeps V_A fixed before every accuracy and eventual horizon.
+
+### Exact original-table source exits, including both equalities
+
+For positive pivot coordinate in a homogeneous LCP solution, the child
+inequalities force every child coordinate positive; their equalities
+then give z=t*nu. For zero pivot, a positive child propagates positivity
+cyclically and contradicts invertibility of A. Thus M_full is R0 for
+R different from R_low.
+
+Below R_low the test offset forces z=(1+t)*nu. The two displayed pivot
+solutions are exhaustive, with a strictly positive inactive residual
+at t=0 and active determinant signs + and -. I inspected
+`exists_finset_r0Degree_eq_sum_sign_det` in
+`MathUE/LinearProgramming/R0DegreeSum.lean`: strict-inactive and
+nonsingular hypotheses hold for EVERY root, giving degree exactly zero.
+
+The complete source statements
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`
+and `finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`
+were inspected. The former adds no normality or premium assumptions on
+unused coalition entries; the latter supplies full original-table R0
+under noUE. Thus (1,nu) gives the stated homogeneous contradiction at
+exact equality R=R_low, without a limiting strategy argument.
+
+I also inspected `inverseWeight`, `factorization`, and
+`exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple` in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+They require NONNEGATIVE outside weights, not strictly positive ones,
+and impose no condition on the unused nonsingleton completion. Hence
+R>=T_pass, including equality, is consumed for the SAME original table.
+Together the three source cases and the constructive case cover every
+real R with no endpoint gap.
+
+### Exact falsification tests and actual-source enlargement
+
+The fixture u=7/4,v=0,eta=17/11,R=685/368 checks exactly. The old
+interval is empty, c*s_1+s_2=-1/2, and the quadratic coefficients are
+(-5/11,387/44,-7/8). Substitution of k=1/10 gives zero. I independently
+recomputed all displayed phase values, twelve policy equations, twelve
+pure-Continue identities, and the passive weights
+`(363/644,685/2576,-281/1288)`. The last negative weight genuinely
+excludes the selected child-inverse exit.
+
+The alpha=0 fixture also checks: eta=2 gives (beta,gamma)=(37/4,-7/8),
+k=7/74, rates (7/81,1/4,17/74,10/37), and R=12509/6840. I obtained
+
+    V_A=(5/4,14/81,10/27,0),
+    V_B=(13/12,21/74,0,17/37),
+    V_C=(481/342,2/3,0,0),
+
+which satisfy every policy and pure-Continue identity. These are exact
+rational checks, not floating-point evidence for branch continuity.
+
+Allowed positive premiums at {2,3} create genuine immediate-Quit gains
+in the unrefined profile while preserving all policy and Continue
+identities, exactly as the refinement argument predicts. For instance,
+set both participant rewards at {2,3} to 1/2 in the original cyclic
+completion of the first fixture. The premium traps {0,1} and {2,3}
+have full-player union. Thus the admitted class is NOT automatically
+subsumed by either the two-variable-participant theorem or its
+canonical-core-at-most-two extension. This exact completion has no pure
+absorbing coalition equilibrium: the cyclic joining/leaving obstructions
+persist, and player 3 still prefers reward 2 from player 2 quitting alone
+to the new pair reward 1/2. I make no class-wide claim excluding every
+proper-child family or every conditional strategy producer.
+
+This is an actual raw-data construction across the previously missing
+interval, with existing exact source exits elsewhere. It retains genuine
+four-player premium cores, arbitrary finite unused rewards, and the same
+six undiffused caps. It is not merely an improved endpoint constant.
+
+## Final artifact check, including the direct uniform-horizon estimate
+
+**PASS** for the complete standalone assembly
+[`CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md`](../exports/CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md), SHA256
+`3ef4adde01e7f72c8f5b57fbf575c50ab1862811c76b6518d34908fd398fd61d`.
+I read the full 561-line artifact and checked its hash. The mathematical
+scope, quadratic proof, equality cases, source exits, and exact fixtures
+are preserved from the reviewed theorem. The scalar shortfalls sigma_1
+and sigma_2 are consistently distinguished from the own-singleton vector.
+The complete fifteen-row fixture agrees with the admitted cyclic
+completion having both {2,3} participant rewards 1/2; C_join=1/2 and
+the full-premium-core assertion are correct. No mathematical repair is
+needed. This remains ordinary mathematics, not a Lean check.
+
+The new direct horizon argument was checked substantively, not accepted
+as a presentation-only delta. Fix the refinement n, period length
+m=1+2n, and a deviator i. Pre-sample the opponents' independent live-date
+action coins. Their first prescribed Quit date T_opp has
+
+    Pr(T_opp>km)=rho_i^k,
+    E[T_opp]<=m*sum_(k>=0)rho_i^k=m/(1-rho_i).
+
+This representation is valid because the opponents use only the public
+clock and survival, with fresh independent action randomization. Before
+absorption, a deviator cannot alter their scheduled hazards. Under ANY
+complete behavioral replacement of i, the actual absorption time is at
+most T_opp, pathwise in this coupling: the deviator can only cause earlier
+absorption. This includes arbitrary private randomization, stopping based
+on the observed survival history, delayed Quit, and Never. Therefore
+the expected absorption bound is genuinely uniform over the deviator's
+entire strategy, not merely over stationary or fixed-date responses.
+The prescribed profile obeys the same bound. Taking the maximum over
+players gives exactly the stated finite C_time.
+
+On any absorbed path, the terminal reward has magnitude at most M and
+the payoff stream is zero before absorption and constant afterward.
+At horizon N the pathwise average/terminal discrepancy is bounded by
+M*min(T,N)/N, with T counted to include the absorbing date; allowing
+2M*T/N, as the artifact does, is therefore safely conservative and
+covers either immediate- or next-stage absorption indexing. The same
+bound covers T>N, where the horizon has ended before the terminal
+reward is paid. Absorption is almost sure because E[T] is finite.
+Taking expectations yields the claimed uniform bound
+
+    |expected N-date average - expected terminal payoff|
+        <=2M*C_time/N.
+
+Comparing the deviating average to its terminal payoff, using the proved
+terminal regret e_n, and comparing the prescribed terminal payoff to
+its average gives
+
+    finite-horizon regret <=e_n+4M*C_time/N.
+
+The prescribed terminal target is exactly V_A, so delivery error is at
+most 2M*C_time/N. One first fixes n to make e_n small, then fixes one
+horizon threshold. C_time may depend on this n, but not on the deviator
+or the eventual horizon. Every larger horizon satisfies the same bounds
+for that SAME profile and target. This proves the required uniform
+quantifiers directly and does not rely on the censored profile retaining
+the uncensored geometric survival bound.
+
+The finite-law route remains separately valid, with opponent-marginal
+coupling for a fixed arbitrary deviation and a second comparison for
+the prescribed payoff. The assembly keeps those two horizon routes
+distinct. The source correspondences are self-contained named inputs,
+with no dependency on a conference notebook or review record inside the
+packet. My PASS covers the new direct estimate as well as the preserved
+theorem and fixtures.

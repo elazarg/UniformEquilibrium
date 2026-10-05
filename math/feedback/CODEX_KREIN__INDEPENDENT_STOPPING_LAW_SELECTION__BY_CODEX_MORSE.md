@@ -537,3 +537,178 @@ The final frozen artifact above has SHA-256
 `5277985708567c67486e991e9a44ba8edf8f867e22d53a02f3015b203e65d2a8`;
 the coordinator reports only removal of its draft-status preface, with
 no mathematical change. The review record remains outside the packet.
+
+## Independent review: quadratic selector and the complete R axis
+
+**PASS as ordinary mathematics, with no unresolved mathematical objection.**
+This review checks the complete final section “Quadratic nonpivot selection
+and the complete R axis” in the original owned notebook. I did not read
+another review of that section before reaching this verdict. The two frozen
+exports are unchanged and are not amended by this review.
+
+The claim keeps the five literal reward vectors, positive a,b,c,h_j,xi,eta,
+abc>1, q_2,q_3≤0, and the six outsider caps. It allows v<1,
+u≤1+xi, and EVERY real R, with arbitrary remaining finite reward entries.
+The middle branch constructs a fixed-target joint/solo approximate
+equilibrium; source degree, homogeneous, and passive-inverse criteria
+cover the other R regions. The broad six-cap class is not subsumed by a
+constant-outsider/nonnegative-participant theorem: its unspecified
+participant coordinates may have additional positive or negative premiums.
+
+### Literal quadratic and unique admissible root
+
+I independently expanded C*d*G before applying any sign assumptions.
+The identity 1−w=(1+k)/d cancels the apparent extra denominator 1+k.
+The resulting quadratic coefficients are exactly (53), including all
+eta terms and the term H_2*(a*E−y) in beta. A symbolic rational-function
+check returned the identically zero difference between the expanded
+expression and alpha*k²+beta*k+gamma.
+
+At 0<y<Y, H_2,H_3 are strictly positive. The definition of K ensures
+0≤z,w≤1 throughout [0,K], and d≥1+k>0. At k=K either w=0 or z=1,
+so the only negative term in G vanishes; h_1*k+z>0 and the eta term is
+nonnegative. Thus Q(K)>0 while Q(0)=gamma<0. The claimed quadratic
+one-crossing argument is valid: two roots strictly inside the interval
+would force the same signs at its endpoints, and a double root cannot
+change sign. The actual interior root is simple.
+
+Every term in the displayed beta is nonnegative, and in fact several are
+strictly positive. In particular a*E−y=ac−L*y≥1/b>0. This holds on
+the whole closed interval [0,Y]. The discriminant is positive in the
+interior because a simple real crossing exists, and at both endpoints
+it equals beta²>0. Therefore beta+sqrt(Delta) never vanishes.
+
+The formula −2gamma/(beta+sqrt(Delta)) is the admissible root. If alpha
+is positive it is the unique positive quadratic root; if alpha is negative
+it is the smaller positive root, with the other lying beyond K; if alpha
+is zero it is exactly −gamma/beta. It gives k=0 at y=0,Y and a
+continuous branch on the full closed interval, without dividing by alpha
+or asserting global monotonicity of G.
+
+### Endpoint limits and the entire constructive interval
+
+At zero, beta(0)=c*h_1+h_3+ac*h_2=D*nu_1. Dividing the root formula
+by y gives k/y→1/nu_1. Substitution into z,w gives the claimed limits
+nu_2/nu_1 and nu_3/nu_1, using the exact nu identities. In particular
+the denominator in the pivot ratio has positive first-order coefficient.
+At Y, z and w are both strictly between zero and one, while k=0.
+
+The pivot equation P is used only as a continuous function along this
+branch. Its numerator may be negative and p−u may be negative; neither
+affects the argument. The order-y limit is exactly R_low. Its other
+endpoint is T_2+xi*D/b. Hence every strict intermediate R is attained
+at an interior y, with all four selected rates strictly between zero and
+one. No unproved monotonicity or unique selection for R(y) is needed.
+
+The passive threshold calculation is exact. The three inverse weights
+are (50), T_3−T_1=D*s_2/(bc)>0, and T_2−T_3=D*s_1/b.
+Thus T_pass=max(T_2,T_3) is precisely the weak nonnegative-weight
+threshold. If s_1≥0, T_2−R_low is strictly positive by the stated
+identity. If s_1<0, T_3−R_low=(s_2*h_1−s_1*h_2/b)/nu_3>0.
+Finally R_top−T_pass is positive in the first case and equals
+D*(1+xi−u)/b≥0 in the second. This proves
+R_low<T_pass≤R_top even when c*s_1+s_2≤0 or R_low is negative.
+
+### Floors, free coordinates, and complete behavioral deviations
+
+All vector recurrences and pure-Continue identities are algebraic and
+are unchanged by the new scalar selection. The pivot floor at B is
+exactly
+
+    (V_B)_0−1=(1+xi−u)y/(1−y)≥0.
+
+Using v<1 and z>0 then makes (V_C)_0>1, regardless of the sign of R.
+The nonpivot values remain nonnegative. Therefore the refined segments
+retain every singleton floor, including the equality u=1+xi. No hidden
+R>1 or strict B-floor premise is used.
+
+At the joint row, the six caps still exhaust the two outsiders' possible
+new participant coalitions; the two active players are indifferent. At
+each refined solo row, a deviation can realize only the deviator's
+singleton or its pair with that solo owner. Thus C_join controls every
+uncapped participant coordinate actually reachable by a unilateral Quit.
+The other free coordinates do not appear. Exact Continue lets the single
+shift V+e_n serve as a supersolution over the whole path. Vanishing
+opponent survival after deleting any player removes the remainder, so
+the bound covers arbitrary complete behavior, not just clock-dependent
+deviations. These are exactly the fields of the already inspected
+`QuittingInfinitePathQuitErrorCertificate` in
+`UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+
+The target is selected with the coarse rates before choosing n or K.
+Refinement preserves it exactly; censoring incurs at most 2M*tau_K
+delivery error and 4M*tau_K additional full regret. The same fixed-target
+terminal consumer therefore applies. It is not necessary for the source
+exit branches to share this branch's target, since each actual table has
+one fixed R and is handled by one valid existence branch.
+
+### Exact source stitching, including both equality boundaries
+
+For R≠R_low the homogeneous proof really gives full R0. A positive
+pivot variable makes all child variables positive by the cyclic residual
+inequalities, then z=t*nu and the pivot residual cannot vanish. At zero
+pivot, a nonzero child variable cyclically forces every child positive;
+the invertible child block then rules it out.
+
+For R<R_low, at offset (q_0,−h_1,−h_2,−h_3) with q_0>delta,
+feasibility itself forces all child variables positive, so z=(1+t)*nu.
+The two and only pivot solutions are t=0 and t=q_0/delta−1. The first
+has strict inactive residual q_0−delta and active determinant D>0;
+the second is fully positive with determinant −D*delta<0. These meet
+the precise hypotheses of `exists_finset_r0Degree_eq_sum_sign_det` in
+`MathUE/LinearProgramming/R0DegreeSum.lean`, whose statement I inspected.
+Its signs sum to zero. The declaration
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`
+consumes full R0 and degree different from one for the actual original
+reward table, with no extra nonsingleton hypotheses.
+
+At R=R_low, (1,nu) is a genuinely positive homogeneous solution. The
+inspected
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`
+has unconditional original-table noUE as its only strategic hypothesis
+and yields full R0. Its contrapositive therefore closes this equality;
+no punishment-normality or limiting-target premise is missing.
+
+For R≥T_pass, the literal receiver-first outside difference row times
+A⁻¹ is componentwise nonnegative. I checked `inverseWeight`,
+`factorization`, and
+`exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple` in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+The outside-weight inequalities are weak, so equality R=T_pass is
+included. The theorem has no hidden restrictions on unused absorbing
+coordinates. Thus R≤R_low, R_low<R<T_pass, and R≥T_pass cover the
+whole real axis, including when T_pass=R_top. No endpoint was silently
+discarded from the open IVT interval.
+
+### Additional exact falsification tests
+
+I independently verified both displayed rational examples. The first
+has negative alpha and the second has alpha=0; their rates satisfy G=0
+and P=R, and all 12 Bellman and all 12 exact Continue identities hold.
+For a stronger completion test I assigned 37 to all unused coordinates,
+then imposed zero at the six required outsider caps. Every joint-row
+Quit cap holds exactly; every solo-row Quit excess obeys the stated
+C_join bound. Thus uncapped positive participant premiums are genuinely
+permitted in the checked inequalities rather than accidentally omitted.
+
+As a separate boundary/sign test, take a=b=c=2, h_j=1, xi=1,
+eta=17/11, q_2=q_3=−1, u=2=1+xi, and v=9/10. The rates
+(1/11,1/4,7/30,4/15) give
+
+    R=157/368<1,       R_low=1/10,       T_pass=R_top=7/10,
+    V_A=(5/4,17/121,4/11,0),
+    (V_B)_0=1,        (V_C)_0=237/230>1.
+
+All the same exact vector/Continue/error-cap tests pass. This tests the
+weak u bound, equality of the two upper thresholds, a pivot R below one,
+and a binding B-floor simultaneously. The proof covers all real
+parameters; these computations are adversarial evidence, not its basis.
+
+The final shared-condition parameter-plane statement is also valid as
+written: its six caps follow from constant zero participation for 2 and
+3, and u>1+xi enters the already reviewed strict-leave theorem with no
+R restriction. That subfamily may receive additional coverage from newer
+two-core results, but it does not subsume the broader six-cap theorem
+reviewed here. No Lean build or arbitrary-table completeness claim is made.

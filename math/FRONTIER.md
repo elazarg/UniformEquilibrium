@@ -404,7 +404,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Reward condition | Conclusion and boundary |
 | --- | --- |
 | Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards, as a corollary of the implemented response-quotient criterion and elementary singleton branches. No nonsingleton inequalities beyond equivariance are required. |
-| Fin4: the joint/solo raw family specified below | One fixed UE target and actual finite laws with vanishing full regret. Both participants of the prescribed pair receive a positive collision premium. This is an ordinary mathematical result awaiting formalization. |
+| Fin4: the cyclic-child joint/solo raw family specified below, for every real R | UE, with an explicit fixed-target finite-law producer on the interval not covered by the singleton criteria. Both participants of the prescribed pair receive a positive collision premium; a full four-player premium core is allowed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
@@ -426,8 +426,9 @@ proof gives an alternative construction, not additional existence coverage.
 Singleton symmetry alone is insufficient, and arbitrary
 tables have no proved symmetry reduction.
 
-The **joint/solo raw family** has parameters a,b,c,h₁,h₂,h₃>0, abc>1,
-u,v<1, ξ,η>0 and q₂,q₃≤0. Its five prescribed reward vectors are
+The **cyclic-child joint/solo raw family** has parameters
+a,b,c,h₁,h₂,h₃>0, abc>1, ξ,η>0, u≤1+ξ, v<1, q₂,q₃≤0,
+and arbitrary real R. Its five prescribed reward vectors are
 
     r({0})=(1,−h₁,−h₂,−h₃),   r({1})=(u,0,b,−1),
     r({2})=(v,−1,0,c),         r({3})=(R,a,−1,0),
@@ -439,26 +440,38 @@ Write D=abc−1 and
     ν₂=(ab h₃+a h₂+h₁)/D,
     ν₃=(bc h₁+b h₃+h₂)/D.
 
-The required interval, always nonempty, is
-
-    1+((1−u)ν₁+(1−v)ν₂)/ν₃ < R < 1+ac(1−u)+a(1−v).
-
 The only additional restrictions are rₖ(A∪{k})≤0 for k∈{2,3} and
 nonempty A⊆{0,1}: six outsider inequalities at the joint phase. Every
-other reward coordinate is arbitrary. The construction selects one joint
-{0,1} phase and solo phases for players 2 and 3. Subdividing only the solo
-phases preserves the target exactly and makes their immediate-Quit errors
-vanish. Exact Continue transport prevents those errors from accumulating
-over a complete deviation. Finite censoring retains the target and full
-regret bounds. If every other participant reward is at most its own
-singleton, the coarse three-phase profile is already exact terminal Nash.
+other reward coordinate is arbitrary. Define
+
+    R_low=1+((1−u)ν₁+(1−v)ν₂)/ν₃,
+    T_pass=max(1+ac(1−u)+a(1−v),
+               1+((1−u)+ab(1−v))/b).
+
+These thresholds satisfy R_low<T_pass. For R<R_low the singleton
+matrix has degree zero; equality gives a positive homogeneous solution.
+For R≥T_pass the passive inverse criterion applies, including equality.
+The remaining interval R_low<R<T_pass is filled by a uniquely selected
+admissible quadratic root and an intermediate-value argument producing
+all four actual hazards. The quadratic may have either leading sign or
+be linear; no strategic input or unresolved boundary case remains.
+
+The constructed profile has one joint {0,1} phase and solo phases for
+players 2 and 3. Subdividing only the solo phases preserves the target
+exactly and makes their immediate-Quit errors vanish. Exact Continue
+transport prevents error accumulation over a complete deviation. Geometric
+opponent absorption gives uniform finite-horizon control; finite censoring
+also gives actual finite laws with vanishing full regret. Positive
+participant premiums at {2,3} are permitted, so these tables need not have
+a premium core of size at most two.
 
 Every table in this family fails product-low premiums. An explicit member
 also escapes the proper-child F/J, homogeneous, nonunit-degree,
 nonnegative-inverse, and nontrivial response-quotient criteria. These latter
 separations concern that member, not every completion of the family.
-The [complete raw-data producer](exports/ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md)
-supplies the rates and continuation values; none is a strategic hypothesis.
+The [complete raw-data theorem](exports/CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md)
+supplies the rates and continuation values in the constructive interval and
+the exact original-game criteria outside it. None is a strategic hypothesis.
 
 The **premium-core criterion** assumes sₖ≥0 and rₖ(S)≥sₖ for every
 participant k∈S. A nonempty set A is a premium trap when every k∈A has
