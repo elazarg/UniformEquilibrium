@@ -153,6 +153,7 @@ import MathUE.Coupling
 import MathUE.CubicAnchorRoot
 import MathUE.RationalizedQuadraticBracketRoot
 import MathUE.CyclicChildJointPhaseAlgebra
+import MathUE.CyclicChildComplementarity
 import MathUE.CyclicChildJointPhasePivot
 import MathUE.CurveSelection.AlgebraicApproach
 import MathUE.CurveSelection.AlgebraicReduction
@@ -650,6 +651,10 @@ import MathUE.Topology.CompactRankedOutcome
 import MathUE.Topology.CompactRobustMoat
 import MathUE.Topology.SeparatelyAffineFiberLoops
 import MathUE.Topology.SeparatelyAffineFiberConnectors
+import MathUE.Topology.CoveringLoopFamilyEndpoint
+import MathUE.Topology.QuotientFiberCollision
+import MathUE.Topology.CoveringImageIncidence
+import MathUE.Topology.SeparatelyAffineImageLoopFamily
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
 import MathUE.Topology.CountableObservation

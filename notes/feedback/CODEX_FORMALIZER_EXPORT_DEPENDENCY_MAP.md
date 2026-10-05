@@ -773,8 +773,29 @@ original target. Arbitrary real perturbations preserve participant entries,
 traps, the greatest core and maximal protected set; positive perturbations
 strictify the same weak leavers. Maximal-protected-set wrappers supply their
 participant tests internally. These strategic consumers do not assert a weak
-analytic exclusion. The weighted-floor packet's literal weight producer and
-aggregate leave identities remain separate from the generic convex theorem.
+analytic exclusion.
+
+The weighted-floor raw chain supplies the corresponding premises separately:
+`HasWeightedQuittingTrapLeavers`
+(`UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapLeavers.lean`)
+requires the same positive-on-trap, zero-outside weight to pass global inserted
+premium tests for every coalition and all proper nonempty leave comparisons.
+The full-coalition identities retain all atoms, including the empty one.
+`exists_successor_le_singleton_of_weighted_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapReturn.lean`)
+handles the all-sure support separately and internally proves actual trap
+exclusion and absorbing sublevel return. The canonical region is a closed
+convex intersection of valid halfspaces, not asserted to be a finite polytope.
+`exists_uniformEquilibriumPayoff_of_weightedTrap_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/WeightedQuittingTrapLeaversUniformPayoff.lean`)
+is the actual Fin4 consumer with nonnegative own singletons. Its weak companion
+`exists_uniformEquilibriumPayoff_of_weightedTrap_weakLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/WeightedQuittingTrapLeaversRewardClosure.lean`)
+retains the same raw weights under all-passive perturbation and obtains one
+original fixed target by reward closure. Arbitrary real perturbations preserve
+the valid-weight family and the canonical domain at any fixed box bound, not
+the computed reward-bound constant. No weak analytic exclusion is claimed.
+Packet-specific reductions and fixtures remain separate obligations.
 
 The boxed-Nash-charge packet shares the convex-return analytic owner but still
 requires its actual boxed charge producer. The global two-joint cyclic-child
@@ -782,6 +803,17 @@ packet shares the child complementarity and actual outer-exit adapters with
 the one-joint packet; its nonlinear two-row selector is a separate source unit.
 The signed pair-core same-sign packet likewise requires its literal signed
 source adapters; none follows merely from these protected-set consumers.
+Its chosen-return-root route also needs existential versions of compact
+minimum localization and downward return, separated from zero absorption on
+every exact root at the minimum. The present universal-return interfaces do
+not silently supply that selected-root scope.
+
+The mixed-premium-trap packet shares the actual boxed charge producer for
+larger traps and the full clipped-map/local nonlinear index adapter for signed
+pairs. It requires finite negative-index sums and source tie polynomials, not
+a unique-root shortcut. Its weak step uses localized zero-gap passive
+singleton perturbations with charge and reward-bound margins; the uniform
+all-passive increment closure above is not that adapter.
 
 `eventually_exactRoot_absorption_lt_of_exact_fiber_absorption_zero` and
 `tendsto_exactRoot_absorption_zero_of_exact_fiber_absorption_zero`
@@ -850,11 +882,27 @@ target before refinement accuracy, and the canonical consumer caps every
 behavioral replacement. The game-semantic result permits eta zero, extending
 the packet's positive-eta premise without altering its other raw assumptions.
 
-This source covers R strictly between the literal pivot endpoints. The outer
-degree and passive-inverse exits, their equality boundaries, and the packet's
-explicit finite-law and quantitative constants remain separate obligations.
+This cycle source covers R strictly between the literal pivot endpoints.
+`exterior_positiveOffset_solution_iff` and `exteriorMatrix_det`
+(`MathUE/CyclicChildComplementarity.lean`) now classify every regular-offset
+root and prove the exact determinant for an arbitrary exterior row. Positive
+offset child activation and homogeneous propagation need no coefficient sign
+assumption; canonical inverse identification uses only a nonzero child gap.
+`exists_uniformPayoff_of_resonance`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicChildSingletonAdapter.lean`)
+internally constructs the homogeneous witness from literal raw singleton rows
+and gives actual Fin4 UE at the lower endpoint. The thin original-table facade
+of the same name (`UniformEquilibrium/Quitting/Cycles/CyclicChildJointPhaseSingletonExits.lean`)
+supplies those rows itself. Off-endpoint R0 is checked, but low-degree and
+high-passive-inverse UE exits remain separate, as do the packet's explicit
+finite-law and quantitative constants and stress fixtures.
 The shared padded compiler uses the actual three-times-scale period, not the
 packet's minimal one-plus-twice-scale period.
+The global two-joint packet also requires weakening the shared refinement
+floor contract to the two endpoints of each refined solo row. A retained joint
+row uses its literal Quit cap and exact Continue equality, not an all-player
+singleton floor; the supplied source can fail such a floor there. The current
+all-phase floor interface is not silently a producer for that packet.
 The two-outsider-buffer packet requires a separate monotone rational selector
 and its small-parameter ratios; the quadratic formula covers only its empty
 repeated-phase specialization, not the whole source. Positive joint outsider
@@ -1668,6 +1716,20 @@ subtype and requires neither mixer reversal nor a winding construction.
 Their named checks and separate standard-axiom queries pass. The original
 `proposition_11` remains unproved: planar winding and the final image-topology
 bridge are not supplied by this bounded connector unit.
+
+`CoveringLoopFamily.endpoint_isLocallyConstant`
+(`MathUE/Topology/CoveringLoopFamilyEndpoint.lean`) constructs the actual
+covering-lift endpoint observable in a discrete fiber, for arbitrary parameter
+spaces. `coveringEndpoint_eq_of_compact_incidence`
+(`MathUE/Topology/CoveringImageIncidence.lean`) consumes that observable through
+the canonical compact image incidence and quotient-fiber collision, retaining
+an explicit same-parameter relative-homotopy premise.
+`SeparatelyAffinePair.prefixReturnFamily`
+(`MathUE/Topology/SeparatelyAffineImageLoopFamily.lean`) supplies the literal
+continuous prefix-plus-return image-loop family and its same-time image
+homotopies from the affine source. The final Path-homotopy to slice-relative-
+homotopy composition, concrete punctured-plane covering and winding contradiction
+remain separate; no integer index oracle or whole-image conclusion is assumed.
 
 Primary-source discovery located the two-player flat-security prescription in
 [Tomala, *Jeux répétés* (2006)](https://www.numdam.org/item/10.5802/xups.2006-02.pdf),
