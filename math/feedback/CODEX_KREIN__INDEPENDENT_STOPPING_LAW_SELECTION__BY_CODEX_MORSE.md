@@ -1651,3 +1651,174 @@ raw selector and its cap, not an assumed equilibrium, favorable root,
 or new semantic compiler. No new formalization status is asserted.
 No assembly correction or unresolved mathematical objection remains
 at the exact 581-line artifact and hash above.
+
+## Independent review: mixed pair traps and boxed larger supports
+
+Verdict: PASS on **Several negative-index pair traps with boxed larger
+supports**, notebook SHA256
+`6744da5f4981bdee9ed89beb1637944a8bd7ebf2187e73167891682836acff7d`.
+I checked the complete raw criterion, producer, analytic proof, weak
+strategic boundary and coverage fixture without reading BROUWER's
+review. The corrected standalone assembly is bound separately below.
+
+### Full root relation, genericity and every local index
+
+The larger-support charge uses one common box for every larger trap.
+Both sure-hazard cases are handled before odds division. The sum of
+active premium equations retains every intermediate product with its
+explicit nonpositive coefficient. The symmetric-mean bound and strict
+charge then exclude an all-high root on every larger support. Nontrap
+support gives a low active endpoint with no global sign condition.
+
+I independently expanded the outsider gap at a pair candidate. Its
+four product masses have numerators dᵢdⱼ, dᵢ(vⱼ−sⱼ),
+dⱼ(vᵢ−sᵢ), (vᵢ−sᵢ)(vⱼ−sⱼ) over αᵢαⱼ, exactly as in
+(108)–(109). The last coefficient is the ACTUAL joining difference
+at A∪{k}; it cannot be dropped. The nonzero coefficient −dᵢdⱼ
+of v_k proves each tie polynomial is genuinely nonzero, regardless
+of its other reward coefficients. Finite simultaneous exclusion is
+open dense before roots are chosen. It is source perturbation, not
+reward perturbation or a strategic realization assumption.
+
+At a generic bad root, semi-sure pair support is impossible by the
+nonzero joining gap, and a fully sure pair was separately discharged.
+There is at most one remaining root per pair support. Outsider Nash
+gaps are strictly negative, so the clipped outside rows are constant
+zero in an ambient neighborhood. The full derivative has its identity
+outside block and the two-by-two block with determinant −αᵢαⱼ<0.
+No larger-coalition derivative is assumed to vanish in the starred
+entries. The affine comparison therefore gives local degree −1,
+including roots on coordinate faces of the unit cube.
+
+The enlarged box contains those faces in its INTERIOR. The homotopy
+to a constant cube center gives degree +1 on that enlarged domain.
+Under the all-bad assumption the root set is finite and nonempty,
+so excision and finite additivity really yield −K, not an informal
+parity assertion. I inspected `ambientDegree_additive` and
+`ambientDegree_excision` in
+`MathUE/Topology/AmbientDegreeProperties.lean`, together with the
+named homotopy and affine normalization in
+`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`.
+These are actual degree statements, not supplied parity interfaces.
+
+Generic sources can approximate any boxed source with a strict
+singleton deficit from the box interior while keeping that deficit.
+Closed Nash inequalities and compact hazards pass to an exact limit;
+the finite union of low successor sublevels is closed. Absorption
+cannot disappear at the limit, because all Continue is not Nash at
+the limiting source. Thus the stated selected return, and not an
+all-root return claim, survives every tie and box boundary.
+
+### Minimum, weak gaps, and semantic endpoint
+
+The selected successors lie in precisely the same D on which H is
+minimized. The singleton probe stays boxed even at upper faces;
+the binding corrections cancel on differentiation. A unique binding
+coordinate contradicts that probe, while two bindings give the needed
+nonnegative one-sided derivatives. The signed displacement and Quit
+bound give ε≤(3M+B)a without a protected floor. The resulting
+backward derivative contradiction is valid.
+
+The actual Fin4 no-UE polynomial is restricted to the exact relation
+and then to the SAME smaller box. Nonnegative own singletons imply
+normality without participant-premium assumptions; all-zero singletons
+are handled directly. The proof has the fixed-target/full-behavior
+uniform conclusion, not only a stationary or terminal verifier.
+
+For weak products, each ordered passive singleton entry changes only
+its own pair gap. Participant rewards and own singletons stay fixed,
+so the ENTIRE trap list and all P coefficients stay fixed. Every
+larger trap's singleton-layer L sum changes by at most (m−1)δ;
+no other L layer changes. Reducing G by this amount loses precisely
+K(m−1)δ in the charge, while the reward bound increases by at most
+δ. Both strict inequalities in the stated perturbation budget are
+therefore sufficient simultaneously. The reward-closure declaration
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables`
+in `UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`
+allows varying nearby targets and selects one limiting target before
+accuracy. No singular-root index is used. The asserted weak result
+remains strategic; the packet does not claim weak analytic exclusion.
+
+### Independent falsification tests and structural clarification
+
+I independently derived the matching restriction while checking the
+notebook: overlapping pair traps ij and ik create trap ijk, whose
+singleton P coefficient at i is the sum of two strictly positive
+premiums. This contradicts its larger-trap bound. Thus the raw class
+does not permit an arbitrary overlapping pair graph; pair traps are
+disjoint, and Fin4 has at most two. The corrected standalone already
+contains this proof and exact scope.
+
+Here is a separate exact stress table where TWO bad pair roots really
+coexist at the same below-floor source. It tests the finite count,
+rather than merely repeating a unique-bad-root calculation. All own
+singletons are zero. Set
+
+    r(0)=(0,2,20,20), r(1)=(2,0,20,20),
+    r(2)=(20,20,0,0), r(3)=(20,20,0,0).
+
+At every nonsingleton proper coalition, set participant coordinates
+to −10 and passive coordinates to 20, except that participants of
+01 and 23 receive 1, and r₀(23)=−11. Let every grand coordinate
+be 1/100. These rules specify the full table. The only traps are
+01,23,I. Their pair gap vectors are (−1,−1) and (1,1).
+For I, singleton P coefficients are −19, pair coefficients −20,
+and triple coefficients 1/100. Singleton L coefficients are
+−61,−61,−59,−59; pair L is −29 at23 and −60 elsewhere;
+triple L is −1999/100. Thus D=10,τ=1,G=10,Lstar=10 give
+charge 440√10>80 with M=20. Pair01 cannot be pure Nash because
+both owners leave; pair23 is blocked by player 0's gain 1.
+
+At v=(−1,−1,1,1), the following full exact Nash roots both have
+successors strictly above all four singletons:
+
+    q=(1/2,1/2,0,0),
+    Q=(1/2,1/2,−15/2,−15/2),
+    C=w=(1/2,1/2,61/4,61/4);
+
+    q=(0,0,1/2,1/2),
+    Q=(−15/2,−15/2,1/2,1/2),
+    C=w=(7,59/4,1/2,1/2).
+
+All outsider gaps are strict, all candidate denominators nonzero,
+and both full local determinants are −4. This source is generic
+for both pair traps. A good root also exists explicitly: q=(1,0,0,0)
+has successor (0,2,20,20), and its four Quit and Continue endpoints
+are (0,1,−10,−10) and (−1,2,20,20). This example validates the
+need to count multiple possible bad roots, while expressly refuting
+any strengthening to return by every root. Its zero singletons make
+it an analytic/counting regression, not a new strategic-coverage claim.
+
+### Coverage fixture and final artifact
+
+I reconstructed the author's 15-row fixture exactly. Its traps are
+03,12,I, pair gaps (4,4) and (4,1), and the three P layers and
+all listed L coefficients match. The raw charge is 400√10>45.
+Every listed pure improvement is valid. All fourteen sure-coalition
+child witnesses were checked with exact rational arithmetic; the
+complete-deviation justification follows because either another
+quitter absorbs immediately or a sole deviating owner faces Never
+and cannot beat its nonnegative singleton. The omitted gains and
+zero Never masses are exact.
+
+The matrix, passive-inverse and response expressions check. The
+nonnegative-floor test sum is exactly −17∑λᵢ. The greatest core
+is full while pair traps are present, so this fixture lies outside
+BOTH separate raw classes: the theorem is genuinely more than their
+union. The bounds concerning protected floors, product-low, the
+specified two-joint template and universal child-debt certificates
+retain their stated scope. There is no claim that every stationary
+or selected chronological construction has been excluded.
+
+Final entire-artifact verdict: PASS on
+`exports/MIXED_PREMIUM_TRAPS_UNIFORM_EQUILIBRIUM.md`, 596 lines,
+SHA256 `ba041078646ba8fc865eda2d959ac4018f0ea6ec95b3a310f93a368f81cbee0f`.
+I read the complete standalone in addition to the notebook proof.
+The matching clarification is correct; all mathematical hypotheses
+and proof mechanisms are the reviewed ones. The expanded degree,
+minimum, reward-closure and coverage arguments are self-contained.
+Its three-zero-singleton fixture is correctly distinguished from a
+nearby positive-singleton interior point. The Lean handoff specifies
+the actual raw producer chain, with no supplied root or equilibrium
+hidden among the inputs. No conference-note dependency or new Lean
+certification claim has been introduced. No mathematical repair remains.

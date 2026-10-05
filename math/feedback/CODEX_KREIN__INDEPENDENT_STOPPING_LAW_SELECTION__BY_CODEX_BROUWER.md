@@ -1859,3 +1859,161 @@ review. The packet has no dependency on a conference notebook,
 feedback, or other math-directory file and contains no review history
 or new checked-Lean claim. No artifact or mathematical repair is
 requested for the exact bytes above.
+
+## Independent mixed-trap theorem and final-artifact PASS
+
+Scope: the complete final notebook section **Several negative-index pair
+traps with boxed larger supports**, at whole-note SHA256
+`6744da5f4981bdee9ed89beb1637944a8bd7ebf2187e73167891682836acff7d`.
+I independently checked the entire proof and reconstructed the exact
+fixture without reading another review. I also read the complete initial
+591-line [mixed-trap packet](../exports/MIXED_PREMIUM_TRAPS_UNIFORM_EQUILIBRIUM.md)
+and its sole subsequent five-line scope correction. Final artifact PASS
+binds its596 lines to SHA256
+`ba041078646ba8fc865eda2d959ac4018f0ea6ec95b3a310f93a368f81cbee0f`.
+These are ordinary mathematics, exact rational and symbolic computations,
+and static source checks, not Lean checks. No repair remains.
+
+### Raw support classification and larger-support charge
+
+For arbitrary finite I and signed rewards, each pair trap has nonzero
+same-sign joining gaps. Every larger trap has the stated singleton,
+intermediate, and top-layer P/L bounds and a strictly adequate boxed
+charge. For Fin4 and nonnegative own singletons this gives UE; only
+the strategic conclusion extends to zero pair products by closure.
+
+The finite strict margins give one common box B>M. The aggregate-gap
+identity retains all coalition probabilities and is valid at sure hazards.
+If some but not all active hazards are sure, A minus any nonsure active
+player has positive probability and negative L; all other L terms are
+nonpositive. If all are sure, each top-layer L gives a strict withdrawal.
+In the interior, summing (Q_i-s_i)/c_{-i} gives exactly the P-weighted
+odds polynomial. Its positivity forces D U<tau E. The elementary-
+symmetric bound gives U>m(D/tau)^(1/(m-2)); the L identity then exceeds
+the box's entire available source charge. This excludes every all-high
+larger-support root, not merely roots on a greatest core. Nontrap
+supports separately have an active Q_i=w_i<=s_i. No outsider premium
+sign is used.
+
+### Simultaneous genericity and the FULL finite index sum
+
+I independently expanded all four outsider coalition terms at a pair
+candidate. Their common denominator is alpha_i*alpha_j and their
+numerator is exactly N_(A,k). In particular, its independent outsider
+annotation coefficient is -d_i*d_j, nonzero. The product of every
+such polynomial and every pair denominator is nonzero. Its complement
+is one dense open source set defined before root selection, simultaneously
+for EVERY pair and outsider. There is no greatest-pair-core assumption
+or reward-table perturbation here.
+
+At a below-floor source every exact root absorbs. If all successors
+were high, every root would be supported on a pair. A sure/interior
+pair requires a zero joining gap. A sure/sure pair is already an
+original pure equilibrium and an absorbing self-loop at its own reward
+annotation. After this explicit exit, there is at most one interior
+candidate per pair, so the bad root set is finite and nonempty.
+
+Genericity and inactive Nash optimality make all outsider gaps strictly
+negative. Their clipped rows are locally zero, whereas the pair rows
+are locally unclipped. The FULL derivative of identity minus the map
+has outsider identity block and pair block [[0,-alpha_i],[-alpha_j,0]].
+Every larger-coalition cross derivative remains in the starred block.
+Interiority implies alpha_i*alpha_j>0 for either common gap sign,
+so each local determinant is negative and nonzero. The ambient region
+(-1,2)^I contains cube-face roots as interior points. The cube-valued
+homotopy to its midpoint has total degree+1. Disjoint local balls and
+the explicit linearization-remainder comparison give degree-1 at each
+root. Excision and finite additivity would imply total degree -K,
+a contradiction. No restricted-face or half index has replaced the
+ambient index.
+
+Generic interior-box sources approximate every original boxed source
+with a strict singleton deficit while retaining that deficit. Compact
+hazards, closed Nash inequalities, and the closed finite union of low-
+successor sets give a returning limit root. It still absorbs because
+all Continue is not Nash at that deficit. No continuous root selector
+or uniqueness premise is required.
+
+### Minimum, actual source consumer, and weak boundary
+
+Selected successors return to the SAME compact domain D used for the
+minimum. This forces the minimum onto the all-floors boundary. The
+signed singleton probe cancels its collision correction exactly, including
+upper box faces. It rules out a unique binding coordinate; with two or
+more, every binding partial derivative is nonnegative. Lowering a binding
+source gives Q_k>=s_k-2Ma and |w-v|<=(M+B)a, hence
+epsilon<=(3M+B)a. Drift plus same-D minimality then contradicts that
+partial-derivative sign. No protected coordinate or individual successor
+floor is assumed.
+
+Own-singleton nonnegativity supplies actual normality. The no-UE source
+theorem supplies the actual polynomial at M+2; both restrictions retain
+that polynomial and table. All-zero own singletons have the direct
+all-Never equilibrium. These are the complete source cases, not an
+assumed existence of a favorable potential.
+
+For zero pair products only passive singleton entries are changed.
+Distinct ordered entries control distinct pairs, so signs are repaired
+simultaneously. No participant reward, own singleton, trap, or P
+coefficient changes. Only a larger trap's singleton L layer can rise,
+by at most (m-1)delta. Replacing G by G-(m-1)delta and accounting
+for M+delta yields exactly the two displayed strict delta bounds.
+Finitely many positive margins admit arbitrarily small perturbations.
+Reward robustness and compact targets restore one fixed original-table
+target. No weak analytic or opposite-sign claim is made.
+
+### Exact fixture and bounded coverage
+
+Exact reconstruction of all15 rows gives only traps03,12,0123,
+M=11, and pair gaps (4,4),(4,1). Full-trap P coefficients are
+-17,-20,1/10 by layer. Its L singleton values are -14,-19,-19,-17;
+pair values are -19 at03,12 and -40 otherwise; triple values are
+-99/10. The selected constants give 400*sqrt(10)>45 with strict
+coefficient slack. All15 pure improvements and all14 exact child and
+omitted-player witnesses check. The child witnesses cover complete
+behavioral replacements: a sure opponent absorbs immediately, and a
+sole owner preventing absorption faces Never and can earn only its
+singleton or zero. The quantifier is correctly EACH child/SOME omitted
+player defeating a universal fixed debt-plus-Never bound, not every
+selected quiet strategy.
+
+The singleton matrix, inverse screens, and degree agree with the earlier
+exact matrix audits. At q=(t,0,0,0) the full child response is
+(t-10t^2,t-10t^2,t+3t^2), breaking the displayed block. Four
+forced-singleton floor tests sum to -17*sum(lambda); no nonzero
+nonnegative floor weight survives. Product-low fails at03 and every
+player has a negative participant premium. The temporal comparison is
+bounded correctly: pivot0 is the sole positive-singleton pivot; joint03
+has positive second-outsider reward10, and other pivot pairs have
+negative participant premiums. No exhaustive stationary or chronological
+noncoverage is claimed.
+
+The initial artifact said that pair traps might overlap. I found that
+the actual inequalities force them to be disjoint: if ij and ik are
+traps, union ijk is a trap but
+
+    P_{ijk}({i})=[r_j(ij)-s_j]+[r_k(ik)-s_k]>0,
+
+contrary to its negative singleton bound. The final artifact incorporates
+this exact argument and the Fin4 consequence of at most two pair traps.
+This corrected supporting sentence changes neither hypotheses nor proof.
+No further mathematical or self-containment objection remains; there are
+no conference-file dependencies or new checked-Lean claims.
+
+Inspected declarations include `ambientDegree_excision` and
+`ambientDegree_additive` in `MathUE/Topology/AmbientDegreeProperties.lean`,
+`ambientDegree_homotopy` and `ambientDegree_affineRootField_eq_sign_det`
+in `MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`,
+`exists_isZeroQuittingRootNash` in `UniformEquilibrium/Quitting/Root/NashExistence.lean`,
+`IsQuittingFullExactRootPotential.singletonFace_drift` in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`,
+`isQuittingNormalPlayer_of_singleton_nonneg` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`,
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`,
+both restriction declarations in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`,
+and `exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables`
+in `UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+Unchanged matrix and quiet-debt source definitions use the exact audits
+already recorded above. No build or implementation claim follows.

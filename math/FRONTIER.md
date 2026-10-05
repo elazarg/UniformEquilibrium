@@ -412,9 +412,10 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
-| Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. This is a reviewed mathematical result awaiting formalization. |
+| Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. Both trap sizes may coexist; every trap must pass its finite coefficient test. This is reviewed mathematics awaiting formalization. |
+| Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -708,7 +709,7 @@ that one player work for every trap. Define directly from the table
 
     P={i : rᵢ(S)≥sᵢ for every coalition S containing i}.
 
-Assume P is nonempty and that every premium trap A has some p∈A∩P with
+Assume every premium trap A has some p∈A∩P with
 
     rₚ(T∪{p})≤rₚ(T) for every nonempty T⊆A\{p}.
 
@@ -724,9 +725,14 @@ The [complete protected-set theorem](exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNE
 contains a proper-three-player-core example requiring different protected
 leavers and having a negative participant premium. Its full-core case is
 already covered by the globally safe quiet-player composition below.
-The new criterion does not cover a trap with no suitable leaver, or a
-table with no protected player. No reduction of arbitrary tables to this
-criterion is asserted.
+The production declarations are
+`exists_uniformEquilibriumPayoff_of_supportSpecific_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/SupportSpecificQuittingPremiumLeaversUniformPayoff.lean`)
+and `exists_uniformEquilibriumPayoff_of_supportSpecific_weakLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/SupportSpecificQuittingPremiumLeaversRewardClosure.lean`).
+They also allow an empty protected set when there are no traps. The criterion
+does not cover a trap with no suitable protected leaver. No reduction of
+arbitrary tables to this criterion is asserted.
 
 The **weighted-floor/aggregate-leave criterion** does not require an
 individually protected player.
@@ -795,6 +801,34 @@ child. Exact high-successor roots outside the box show why its bounded-source
 premise is essential. Pair traps are outside this criterion. Neither the
 signed-pair nor the boxed-charge criterion is an exhaustive classification
 of the remaining reward tables.
+
+The **mixed premium-trap criterion** allows pair traps and larger traps in
+the same table. Own singletons are nonnegative. For every pair trap {i,j},
+require
+
+    (rᵢ({i,j})−rᵢ({j})) (rⱼ({i,j})−rⱼ({i}))≥0.
+
+Every larger trap satisfies the boxed Nash-charge tests above, with its own
+positive constants. These conditions force the pair traps to be disjoint:
+overlapping traps {i,j} and {i,k} would make {i,j,k} a trap whose singleton
+P coefficient at {i} is positive, contradicting its negative bound. Fin4
+therefore allows at most two such pairs.
+
+Larger-support charges exclude their all-high successors in one common
+box. At a generic below-singleton source, all remaining bad exact roots
+have pair support and local ambient index −1. The full root relation has
+total index +1, so a suitable low-successor root exists. Compactness restores
+every below-singleton source, and the same-domain minimum argument excludes
+the polynomial obstruction. Passive reward perturbations handle zero pair
+products without changing participant data or the trap list.
+
+The [complete mixed-trap theorem](exports/MIXED_PREMIUM_TRAPS_UNIFORM_EQUILIBRIUM.md)
+includes a full-core table with two pair traps, no pure equilibrium, no
+nonzero nonnegative forced-Quit floor, and a profitable omitted player at
+an exact Nash witness in every proper child. Its reward criterion lies
+outside both the pair-core and pair-free boxed criteria. It does not cover
+opposite-strict-sign pair gaps or larger traps failing the charge tests,
+and it supplies no exhaustive classification of arbitrary tables.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are
