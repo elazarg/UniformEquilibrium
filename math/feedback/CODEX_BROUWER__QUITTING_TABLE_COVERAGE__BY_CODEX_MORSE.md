@@ -293,3 +293,182 @@ The projection-seam wording now says equality is **used here**, which is
 the appropriate assertion and does not claim equality is the only possible
 decoding hypothesis. These additions introduce no external theorem
 dependency. This remains an ordinary mathematical review, not a Lean check.
+
+## Independent review: the solo-0 bridge with a positive outsider cap
+
+Verdict: PASS on “A solo-0 bridge pays a positive outsider cap,” including
+the completed bounded source audit. I checked the changed four-phase
+producer directly, without reading another review. The theorem is a
+fixed-target Fin4 UE construction from the displayed finite reward data,
+not a new forced-second-root claim and not a general strategy-class
+completeness theorem.
+
+### Selector and exact endpoint scope
+
+The raw inequalities admit θ>0 with λ≤h_3θ and h_1θ<η, so
+η_eff=(η−h_1θ)/(1+θ)>0. The zero pivot pair premium is not being
+hidden inside a theorem requiring a strictly positive one: the note
+provides the actual quadratic for this specialization.
+
+I independently checked the cleared balance equation. On the stated
+cap interval, d_0+d_1K=(1+K)+(by−h_2K)≥1+K and C>0. The
+linear coefficient is positive because aE−y≥1/b on [0,Y]. The
+constant term is negative for interior y; at the cap either w=0 or
+z=1, so the balance is strictly positive. These signs imply one simple
+admissible crossing of the quadratic. The rationalized root formula
+remains valid when its quadratic coefficient vanishes. Its denominator
+stays positive, and the discriminant is positive at the selected root
+and at both limiting endpoints. Thus no monotonicity of the balance
+or of the final pivot selector has been assumed.
+
+The η_eff term has second order at the zero endpoint, so the three
+linear limits are exactly K/y→1/ν_1, z/y→ν_2/ν_1, and
+w/y→ν_3/ν_1. Substitution into P gives R_low. At Y, K=0 and
+z=aw(1−z); together with z=y/[c(1−y)] this gives R_top. The
+identity for ν_3(R_top−R_low) is correct and strictly positive under
+u≤1,v<1. Also R_low>1. Hence every R in the stated open interval
+has an interior root, with all five actual hazards positive.
+
+For the outer intervals the same actual singleton matrix applies.
+Writing δ=ν_3(R_low−R), the R<R_low degree calculation has exactly
+the two roots and opposite determinant signs reviewed for the cyclic
+source. At equality (1,ν) is nonzero homogeneous. At R≥R_top the
+passive weights are nonnegative since T_2≥T_3>T_1, including u=1
+and R=R_top. The named original-table degree and weak passive-inverse
+sources impose no additional restrictions on the omitted collision
+rewards. Thus there is no uncovered endpoint or implicit perturbation
+of the original reward table.
+
+### The bridge really creates the required continuation value
+
+The key identities are
+
+    K=(1+θ)k,       x=k/(1+k),       1−ρ=1/(1+θx).
+
+From them the D recurrence gives
+
+    d_1=[ηx−h_1θx]/(1+θx)=η_eff K/(1+K),
+    d_2=[t_2−h_2θx]/(1+θx)=w/(1−w),
+    d_3=[t_3−h_3θx]/(1+θx)=0.
+
+Its pivot coordinate is one. At A, player 1's Continue comparison is
+exact because K(h_1+η_eff)=k(h_1+η). The two passive evaluations
+are the literal averages over 0,1,01 and all-Continue; substitution
+of K=(1+θ)k gives exactly the asserted t_2 and t_3. At B,C,D the
+respective owner coordinates are identically 0,0,1 at both endpoints.
+All sixteen policy identities and all sixteen Continue identities hold.
+The pivot B floor is (1−uy)/(1−y)≥1, including equality u=1; the C
+floor follows from R>R_low>1. Every remaining displayed coordinate is
+nonnegative.
+
+Outsider 3 at A can encounter only 3,03,13,013 when it forces Quit.
+The three caps imply Q_3≤λx(1−y)≤h_3θx=t_3, even at the weak cap
+λ=h_3θ. The actual positive premium at 03 is therefore paid by the
+positive continuation buffer; it is not discarded or replaced by zero.
+Outsider 2's full list is 2,02,12,012 and its three caps give Q_2≤0.
+This exhausts every pure action in the undiffused joint row.
+
+### Refined solo-0 is essential, and all behavioral deviations are controlled
+
+Each solo block is an affine interpolation between the original endpoint
+vectors, preserving the entire vector, all singleton floors, the owner's
+indifference, and each Continue identity. The pivot's extra block is
+included in C_join; its positive pair premiums cannot be ignored merely
+because it is the designated bridge owner.
+
+At a microhazard t of owner j, every other player's forced-Quit payoff
+is exactly s_i+t[r_i(ij)−s_i]. Hence its Quit excess is bounded by
+C_join t. Adding the SAME e_n to all phase values is a Bellman
+supersolution: any added continuation error is multiplied by opponent
+survival at most one. This controls one complete deviation, not a sum
+of local errors over infinitely many dates.
+
+Removing any one player still leaves positive aggregate opponent hazards
+each period. The prescribed opponent-only survival probability ρ_i is
+strictly below one and is unaffected by the deviator's stopping law.
+Pre-sampling those coins gives an absorption-time domination with mean
+at most m_n/(1−ρ_i), up to the harmless date convention already covered
+by the stated constants. This justifies both the infinite Snell limit
+and the finite-horizon error bound uniformly over all behavioral
+deviations. For a fixed n the bound works for EVERY sufficiently large
+horizon. Changing n keeps the same prescribed target t. No correlation
+device, observed private random variable, or bounded-memory deviation
+restriction is used.
+
+### Exact adversarial boundary test
+
+I verified the displayed full-core fixture, including its t,d,V_B,V_C
+vectors, A endpoint pairs, and the genuine unrefined gains 2/15 at C
+and 1/66 at D. As an additional test, take
+
+    a=b=c=2, h_1=h_2=h_3=1, η=3, θ=λ=1/3,
+    u=1, v=−2, R=819/190.
+
+Here η_eff=2, and the quadratic coefficient α vanishes identically.
+The exact rates are
+
+    K=7/74, y=1/4, z=17/74, w=10/37,
+    x=21/317, ρ=7/324.
+
+The four value vectors are
+
+    t=(1,63/317,127/317,7/317),
+    V_B=(1,21/74,0,17/37),
+    V_C=(36/19,2/3,0,0),
+    d=(1,14/81,10/27,0).
+
+This simultaneously tests α=0, the weak pivot floor u=1, and the
+saturated outsider bound λ=h_3θ. Set every unspecified reward
+coordinate to 37, except the required player-2 caps and the two zero
+player-3 caps. Exact arithmetic still gives zero residual in every
+policy and Continue identity. At A the Quit excesses are
+(0,0,−127/317,−7/1268). Unrefined solo rows have large positive Quit
+gains, and D has player-3 excess 7/972; these are precisely the gains
+the proved microhazard bound controls. Thus the proof does not rely on
+an accidentally harmless completion.
+
+### Independent coverage and proper-child checks
+
+I independently enumerated the fixture's positive-premium traps:
+03,013,23,023,0123. Their sole common member is 3, but
+r_3(03)=1/2>−1=r_3(0), so neither weak nor strict common-leaver
+coverage applies. Only one pivot passive singleton is at least one;
+the latest switched-pair family requires two. Player 0 is the only
+positive-singleton pivot, so a relabeling cannot repair this mismatch.
+For pair 03 the older positive-pair producer also fails its pivot
+comparison, and the original pair-01 caps fail at 03.
+
+The full singleton matrix is R₀ of degree one: the actual child
+complementarity equations force z=(1+h)1 at offset (1,−1,−1,−1),
+and the only root has pivot h=0, inactive residual 163/92, and active
+determinant 7. I recomputed every displayed inverse entry and the
+passive weights (186/161,−297/644,25/322). Principal 02, not an
+opposite-sign pair, is the stated R₀/non-Q witness. Exact enumeration
+of all fifteen partitions leaves only the discrete partition and
+0|123 at first order. The full response residuals
+t+(31/11)t², t, t+t²/2 exclude the latter. I also verified a strict
+toggle improvement at every pure coalition.
+
+The thirteen exact proper-child witnesses are valid. Independently of
+the appended coverage calculation, I found the same corrected child023
+rates (3/5,1,92/347), with endpoint pairs
+(1,1), (−245/347,92/1735), (1/5,1/5), and omitted-1 payoff
+−1367/1735 versus immediate Quit zero. The old q_0=2/3 witness is
+not exact after the participant-3 pair23 premium is raised.
+
+For child123, I independently found the same required repair: refine
+each sole-owner half-hazard into microhazards α_n=1−2^(−1/n). The
+macro values and lifted pivot payoff R/7=347/644 do not change;
+all child debts are at most α_n/2 and joint Never is zero. Pivot 0
+can still quit at the first player-1 microstage for exactly one, giving
+the fixed gain 297/644. In the directly inspected
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`),
+the certificate's finite nonnegative weights are fixed while the child
+profile is universally quantified. Letting n tend to infinity therefore
+contradicts its debt bound. No exact child equilibrium or unreviewed
+closure premise is being substituted for this limiting argument.
+
+These checks establish the stated bounded source separation. They do
+not say that every other strategy architecture fails. The verdict is
+ordinary mathematical PASS, with no Lean build claim.

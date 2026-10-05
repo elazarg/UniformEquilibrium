@@ -2576,9 +2576,11 @@ rewards at every nontrivial joint-row collision.
 
 Keep a,b,c,h_1,h_2,h_3>0, D=abc−1>0 and the four singleton vectors
 in (61), with U,V≥1 and arbitrary R. Define nu by A*nu=h as above,
-and R_low,T as in (64). Choose a number theta satisfying
+and R_low,T as in (64). The number theta below is an auxiliary scalar
+tested only by finite inequalities in the raw reward entries; it is
+not a supplied strategy or continuation witness. Choose it satisfying
 
-    0<theta<nu_2/h_1,
+    0≤theta<nu_2/h_1,
     xi≥theta(1−R_low).
 
 Replace the prescribed joint reward in (61) by
@@ -2598,8 +2600,9 @@ The new raw restrictions are only
     (1+theta)J_2+nu_3 Q_2≤theta nu_3.                 (72)
 
 All other reward coordinates are arbitrary finite numbers. Both Q_i
-may be signed, and (72) permits all six displayed collision coordinates
-to be strictly positive. The claim is fixed-target UE for every R,
+may be signed, and for theta>0 condition (72) permits all six displayed
+collision coordinates to be strictly positive. At theta=0 the final
+solo-3 block is empty. The claim is fixed-target UE for every R,
 with all behavioral deviations allowed. The sources already proved for
 the same singleton matrix handle R≤R_low and R≥T, including equality.
 Only R_low<R<T requires the construction. If U=V=1 this interval is
@@ -2629,7 +2632,7 @@ Both bounds are positive: indeed
     b L_theta−D(b+1+theta)
        =(1+theta)(ab+b+1)>0.
 
-On this interval, 0≤A_1, 0<z≤1, 0<d_1 and 0<w<1.
+On this interval, 0≤A_1, 0<z≤1, 0≤d_1 and 0≤w<1.
 As k increases, z strictly increases, A_1 strictly decreases, hence
 w strictly decreases. Therefore G is strictly increasing, with
 derivative at least h_3>0 wherever the interval is nondegenerate.
@@ -2638,13 +2641,13 @@ At k=0, clearing the positive denominators gives the sign of
     −D+L_theta*y,
 
 so G(0,y)<0. At the right endpoint, either z=1, giving G>0, or
-k=a*y/h_1. In the latter case A_1=0 and w<a*theta*y, whereas
+k=a*y/h_1. In the latter case A_1=0 and w≤a*theta*y, whereas
 
     z≥[1+theta+a*h_2/h_1]y/b.
 
 Consequently
 
-    G(K,y)>y*D*(nu_2−h_1 theta)/(b h_1)>0.
+    G(K,y)≥y*D*(nu_2−h_1 theta)/(b h_1)>0.
 
 These inequalities give one and only one root k(y) in (0,K).
 The derivative lower bound gives continuity in the interior. At zero,
@@ -2684,7 +2687,7 @@ nu_3, is
 
     nu_2(nu_2+1)+theta(nu_2 nu_3+nu_2²−h_1)>nu_2²,
 
-using theta*h_1<nu_2; the quadratic coefficient is positive too.
+using theta*h_1<nu_2; the quadratic coefficient is nonnegative too.
 It follows that
 
     G(k_0,y)>(1+theta)y(h_3+nu_1−c*nu_2)/nu_3=0.
@@ -2695,10 +2698,11 @@ Set x=k/(1+k). At the joint phase outsider i's forced-Quit payoff
 is at most [k J_i+y Q_i]/(1+k). The first inequality in (72) and
 (75) give a strict upper bound A_1=(a*y−h_1*k)/(1+k) for i=1,
 exactly as in (69) but with the factor 1+theta retained. The second
-inequality gives an upper bound theta*y/(1+k)<theta*y for i=2.
-Thus BOTH actual outsider Quit endpoints are strictly below their
-positive prescribed values A_1 and theta*y. No zero collision cap is
-being silently retained.
+inequality gives an upper bound theta*y/(1+k)≤theta*y for i=2,
+strict if theta>0. Thus for theta>0 BOTH actual outsider Quit endpoints
+are strictly below their positive prescribed values A_1 and theta*y.
+At theta=0 the second comparison is the exact weak zero bound. No
+individual zero collision cap is being silently retained.
 
 ### Pivot selector and all-R endpoint stitching
 
@@ -2716,7 +2720,8 @@ gives
        =D[ xi−theta(1−T) ]/(abc+theta).              (77)
 
 Since R_low<T in the nonempty residual case and
-xi≥theta(1−R_low), the right side is strictly positive. The
+xi≥theta(1−R_low), the right side is nonnegative, and strictly
+positive if theta>0. The
 intermediate value theorem therefore selects an interior y for EVERY
 R_low<R<T. Neither R(y) monotonicity nor uniqueness is needed.
 
@@ -2773,7 +2778,7 @@ is a Bellman supersolution: Continue transports only an opponent
 survival fraction of that added constant, and Quit already has the
 same single cap. Hence no error accumulates across phases or periods.
 
-All x,y,z,w,t are strictly between zero and one. Removing any player's
+All x,y,z,w are strictly between zero and one, and 0≤t<1. Removing any player's
 hazards leaves a per-period opponent survival rho_i<1; this bound is
 unchanged by any complete unilateral behavior and by subdivision. The
 supermartingale comparison can therefore pass to terminal payoff, and
@@ -2785,6 +2790,22 @@ terminal payoff by at most 2M C_n/N. Thus choosing n first, then N,
 proves the usual all-large-horizon inequalities around the SAME V_A.
 Together with the original singleton degree and passive-inverse exits,
 this proves the claimed entire R-axis raw class in ordinary mathematics.
+
+The theta=0, xi=0 specialization includes the reviewed switched-pair
+class LITERALLY, without reward closure. Indeed (71) becomes (61), the
+first inequality (72) is exactly (63), and the three old caps (62)
+imply J_2=0 and Q_2≤0, hence the second inequality (72). The root
+construction then has t=0, so deleting the all-Continue D block gives
+exactly the old three phases. The right-endpoint test above uses only
+w≤a*theta*y and remains strictly positive through its final displayed
+coefficient at theta=0. Estimate (75) is still strict, so equality in
+the first weighted cap still gives the needed outsider-1 comparison.
+Equation (77) gives R(Y)=T, which is sufficient for every interior R.
+The second outsider's comparison becomes weak, as allowed by the
+supersolution. All opponent tails still contract because x,y,z,w>0.
+Thus the boundary specialization is proved directly, including cap
+equality and the degenerate final block, not inferred from a formal
+parameter limit or openness of uniform-equilibrium existence.
 
 The exact compiler inspected again is
 `quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`

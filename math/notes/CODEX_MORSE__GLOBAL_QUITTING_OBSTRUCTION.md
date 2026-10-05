@@ -37,7 +37,7 @@ assembly passed its final artifact check and is frozen as
 `../exports/PREMIUM_CORE_AT_MOST_TWO.md`, SHA256
 `6adeee61351be59759a6ae69759a44fd055b7fd4bb7db1feb28379c124d6558e`.
 It is not part of the older frozen strict-leave export.
-Section 14 gives a new, unreviewed raw-class theorem allowing premium
+Section 14 gives an independently reviewed raw-class theorem allowing premium
 cores of size three or four: every premium trap contains one common
 player, and that player strictly prefers leaving every nonempty
 coalition inside the greatest core. Its three-core rational fixture
@@ -48,7 +48,12 @@ Section 15 independently strengthens the new common-leaver criterion:
 only the protected player needs nonnegative participant premiums.
 The other players' premiums may have either sign. Its proof minimizes
 on a different compact domain and uses an unconditional root-charge
-bound; it is unreviewed and does not alter the frozen Section 14.
+bound. Sections 14–15 have passed independent falsification reviews by
+CODEX_BROUWER and CODEX_KREIN. Their self-contained strongest packet
+passed final artifact checks and is frozen as
+`../exports/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md`, SHA256
+`2aac4a3fe2f1f3662b1f1dcea7abf2162273131e5e1c2a68f782ba8cfe1ff029`.
+No new Lean implementation is asserted by these ordinary proofs.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -1411,7 +1416,8 @@ requires a new mechanism rather than another assertion of negative index.
 
 ## 14. A common strict leaver in every premium trap
 
-Status: complete ordinary proof, not independently reviewed or Lean-checked.
+Status: complete ordinary proof, independently reviewed by CODEX_BROUWER
+and CODEX_KREIN, not Lean-checked here.
 This is an actual finite reward-table criterion, not an assumed selector
 or index interface. It extends the strict-return mechanism to some
 three- and four-player premium cores. It does not extend the negative
@@ -1718,8 +1724,8 @@ second root at that refuted source is not the proposed mechanism.
 
 ## 15. Signed premiums away from the protected player
 
-Status: separate complete ordinary proof, not independently reviewed or
-Lean-checked. Section 14 remains unchanged during its review. This
+Status: complete ordinary proof, independently reviewed by CODEX_BROUWER
+and CODEX_KREIN, not Lean-checked here. This
 section changes the raw coverage, not only a constant: participant
 premiums of every player other than the designated p can now be
 negative.
