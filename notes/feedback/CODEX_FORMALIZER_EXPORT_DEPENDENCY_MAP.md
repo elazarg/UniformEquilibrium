@@ -1374,8 +1374,20 @@ The omitted-Never supplied-profile boundary is fully covered by
 give literal complete-debt identities, the uniform half-regret quiet obstruction,
 and a separate exact parent equilibrium, with all five original zero-weight
 certificates and a literal Fin4 specialization. No no-UE claim follows.
-The prescribed-child-target obstruction, including its quiet uniform-witness
-bridge and alternative quiet equilibria, remains pending; the packet is not complete.
+The literal Fin4 prescribed-child-target boundary is covered by
+`PrescribedChildTargetQuietBoundary.one_le_three_exploitability_add_childPayoffs`,
+`PrescribedChildTargetQuietBoundary.not_tendsto_zero_regret_and_childPayoffs`, and
+`PrescribedChildTargetQuietBoundary.no_quiet_uniformWitnesses_extending_zeroChild`
+(`UniformEquilibrium/Quitting/Examples/PrescribedChildTargetQuietBoundary.lean`).
+The unrestricted quantitative bound uses the two actual child Never deviations
+and the outsider's exact full debt. The uniform obstruction retains the original
+quiet witnesses. The same module verifies all five zero-weight outsider
+certificates, the actual restricted child's all-Never zero-payoff equilibrium,
+and both alternative exact quiet parent equilibria. The separate three-player
+presentation is not duplicated: the packet's literal Fin4 instance is used.
+`quittingTerminalPayoff_soloStoppingLaw_eq`
+(`UniformEquilibrium/Quitting/Paths/SoloStoppingLawPayoff.lean`) is the reusable
+arbitrary-law observer payoff identity behind the two Never deviations.
 
 ## Further shape proof-mining findings
 

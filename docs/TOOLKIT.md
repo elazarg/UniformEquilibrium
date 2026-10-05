@@ -3485,8 +3485,24 @@ exist for every withdrawal kind, but each actual quiet lift has regret at least
 one half. Its child debt is the finite-quit probability and outsider debt the Never
 probability. The same finite parent has an exact terminal Nash profile with an
 outsider quitting at date zero. A literal Fin4 instance is included. This is not
-a counterexample to uniform-equilibrium existence. The prescribed-child-target
-boundary is a separate remaining formalization obligation.
+a counterexample to uniform-equilibrium existence.
+
+The literal Fin4 prescribed-child-target boundary is proved by
+`PrescribedChildTargetQuietBoundary.one_le_three_exploitability_add_childPayoffs`
+and `PrescribedChildTargetQuietBoundary.no_quiet_uniformWitnesses_extending_zeroChild`
+(`UniformEquilibrium/Quitting/Examples/PrescribedChildTargetQuietBoundary.lean`).
+Every actual quiet profile satisfies one less than or equal to three times its
+full exploitability plus its two child payoffs. Therefore vanishing-regret quiet
+profiles cannot deliver the prescribed child target zero. The uniform-witness
+obstruction retains the same quiet profiles through the finite-horizon limits.
+The restricted child's all-Never profile is an exact zero-payoff equilibrium,
+whereas the two alternative child targets `(0, 1)` and `(1, 0)` have exact quiet
+parent equilibria. Both literal outsiders admit all five original zero-weight
+certificates. This obstructs preservation of an arbitrary child target, not
+selection of some quiet target or parent uniform-equilibrium existence.
+The arbitrary-law payoff identity `quittingTerminalPayoff_soloStoppingLaw_eq`
+(`UniformEquilibrium/Quitting/Paths/SoloStoppingLawPayoff.lean`) supplies the
+actual child Never-deviation payoffs without finite-support restrictions.
 
 `quietLift_fixedTarget_of_withdrawalFutureJoin_absorbingStationary`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalAbsorbingStationaryChild.lean`)
