@@ -1226,3 +1226,175 @@ No unresolved mathematical objection remains within this scope. The
 raw weighted buffer and changed pivot equation are actual production
 steps, not supplied solution objects. The preceding architecture
 positive-gap result remains outside this PASS.
+
+## Independent review: two outsider buffers and the literal zero boundary
+
+**Verdict: PASS as ordinary mathematics, not Lean-checked.** I checked
+the final section “Two outsider buffers from a repeated solo exit” at
+whole-notebook SHA256
+`e550c92c806d934b2f2e94d4cbe79d47cdc81210a045a231525a644c73c133be`.
+This is a delta audit of the new four-phase producer, its widened raw
+caps, and its direct inclusion of the reviewed switched-pair theorem.
+Unchanged original-table degree and inverse exits and the full behavioral
+compiler are covered by my preceding review. No other review of this
+extension was read first. The separate architecture-gap claim is still
+outside this verdict.
+
+The hypotheses checked include the existence of a finite auxiliary raw
+parameter theta with 0<=theta<nu2/h1, the literal bound
+xi>=theta*(1-Rlow), and BOTH weighted inequalities (72), allowing
+signed Q1 and Q2. Theta is selected through finite inequalities in
+the reward entries; no rate, continuation value, or solution branch is
+being supplied as an extra assumption.
+
+### Monotone balance and endpoint control
+
+On the stated cap interval, z strictly increases with k, A1 strictly
+decreases, and therefore d1 and w strictly decrease. Since 0<=z<=1,
+
+    partial_k G=h3+(1+c*w)*partial_k z
+                   -c*(1-z)*partial_k w > h3.
+
+The upper cap is positive throughout the closed y interval except
+for its intended zero at y=0. The exact clearance identity
+b*Ltheta-D*(b+1+theta)=(1+theta)*(ab+b+1) checks. Clearing
+the k=0 denominators gives the sign of -D+Ltheta*y as claimed.
+At the A1=0 cap, w<=a*theta*y and
+z>=[1+theta+a*h2/h1]*y/b imply precisely
+
+    G >= y*D*(nu2-h1*theta)/(b*h1) > 0.
+
+At the other cap z=1, G>0 is immediate. Thus the admissible root is
+unique and strictly interior. Strict monotonicity and joint continuity
+give interior continuity and the zero endpoint at Ytheta. At zero,
+k/y is bounded by a/h1. Every subsequential limit solves the same
+linear equation with coefficient h3+h2/b+c*h1=D*nu3/b>0,
+so the three ratio limits (74) are justified without differentiating
+the root branch.
+
+The global test k0=(1+theta)*y/nu3 is valid both outside and
+inside the cap. Inside, the displayed rational numerator and denominator
+of w0 are exact. Its first-order comparison coefficient, multiplied by
+nu3, is
+
+    nu2*(nu2+1)+theta*(nu2*nu3+nu2^2-h1) > nu2^2,
+
+using theta*h1<nu2. The remaining quadratic coefficient is
+nonnegative, not necessarily positive; it vanishes at theta=0.
+This is enough for the strict w0 upper bound. The z0 lower bound
+is also strict, giving G(k0)>0 and hence the global estimate (75).
+No unproved quadratic branch convention or monotonicity of the pivot
+selector is needed.
+
+### Both signed weighted caps and the pivot floor
+
+For outsider1, the first raw cap is exactly
+
+    a-Q1 >= (1+theta)*(h1+J1)/nu3.
+
+Combining it with (75) proves strict safety because h1+J1>0.
+For outsider2, J2>=0 gives
+k*J2+y*Q2<=theta*y; division by 1+k yields the advertised
+bound theta*y/(1+k)<=theta*y. It is strict when theta>0,
+including the case J2=0. At theta=0 the weak zero bound is the
+correct conclusion. Both arguments retain negative Q_i exactly and
+do not replace them by positive parts. The endpoints exhaust all
+possible unilateral outsiders at the joint03 row.
+
+I independently expanded the upper-endpoint selector and obtained
+zero residual for the exact identity
+
+    R(Ytheta)-T=D*[xi-theta*(1-T)]/(abc+theta).
+
+The small-y ratios give R(0)=Rlow. Since the nonempty middle
+interval has Rlow<T, the raw xi bound gives R(Ytheta)>=T,
+strictly so for theta>0. Thus the intermediate value theorem covers
+the full missing R interval; the previously checked original-matrix
+exits cover both equalities and all exterior R.
+
+The final-phase pivot value is exactly
+
+    P_D=1+y*[xi+theta*(R-1)]/(1+theta*y)>=1.
+
+This uses the selected R>Rlow and the stated RAW lower bound on xi;
+it does not assume R>=1. The U,V>=1 averages then give the other
+pivot floors. All nonpivot coordinates in (78) are nonnegative.
+
+### Complete rows, the third refinement, and theta=0
+
+I checked all four phase recurrences and supported-action equalities.
+At A the actual two outsider passive averages are A1 and theta*y.
+At C, player1's value is -w+(1-w)*d1=0. At D, player2's is
+-t+(1-t)*theta*y=0. At B, player3's value is h3*k by G=0.
+The pivot's Continue equation is exactly (76), not an independent
+assertion. Every pure-Continue endpoint equals its phase value.
+
+Refining ALL THREE solo blocks is required and is correctly done.
+In particular the final solo3 block can expose the pivot's xi premium
+and outsider2's Q2 premium. Its intermediate values interpolate
+between V_D and V_A, whose owner3 coordinates are both zero.
+Thus it preserves the singleton floors and exact Continue identities
+just like the other two blocks. The new C_join includes every relevant
+pair surplus for owners1,2,3. Its common error tends to zero and is
+charged once by the Bellman supersolution, not repeatedly over the
+unbounded number of periods.
+
+The same opponent-clock coupling proves uniform absorption tails and
+full behavioral safety. All x,y,z,w are positive even when t=0;
+removing any one player's hazards still leaves positive opponent
+absorption in every period. The stated m_n=1+3n is a valid upper
+period length even if the empty final block is retained as all-Continue
+dates. Fixing n first then the finite expected-time horizon threshold
+gives the same fixed V_A at all sufficiently large horizons.
+
+The theta=0,xi=0 inclusion is LITERAL. The old three zero caps give
+J2=0 and Q2<=0, satisfying the new second inequality; the first
+weighted cap and the full joint reward become exactly the old ones.
+Then t=0, V_D=V_A, and deleting D recovers the old three Bellman
+rows. The balance, Y, and pivot selector specialize to the old formulas.
+The cap-endpoint positivity and strict k<y/nu3 estimate remain valid,
+while the second outsider comparison is weak, as allowed. The upper
+endpoint is exactly T and still covers every interior R. This does
+not appeal to openness, a limiting UE target, or reward closure.
+
+### Independent rational and coverage stress tests
+
+Besides recomputing the author's exact fixture and all sixteen policy
+and sixteen Continue identities, I constructed a different signed-Q
+test with both raw caps binding. Take
+
+    a=b=c=2, h1=h2=1, h3=2320/873,
+    U=2, V=3, theta=1/3, xi=2,
+    y=1/5, k=1/12, x=1/13, z=2/9, w=83/291, t=1/16.
+
+It has
+
+    nu=(7558,11899,9005)/6111,
+    Rlow=-22351/9005 < R=-939/2983 < T=0,
+    theta*(1-Rlow)=10452/9005 < xi,
+    Q1=Q2=-1, J1=6289/2716, J2=9005/6111,
+    V_A=(7/5,19/65,1/15,0),
+    V_B=(5455/2983,0,4/9,580/2619),
+    V_C=(5309/2983,0,0,166/291),
+    V_D=(7713/5966,83/208,0,0).
+
+Setting the appropriate two entries equal to each J_i and their third
+entry to Q_i, exact arithmetic verifies all sixteen policy and all
+sixteen Continue identities. The two A outsider Quit payoffs are
+-1147/176540 and -28307/397215, below their positive buffers.
+Large arbitrary positive unused rewards create genuine unrefined
+solo-stage gains, which the expanded C_join controls.
+
+For the author's positive-six-collision fixture, both weighted caps
+bind exactly. Its two A safety margins are exactly
+52581/245036 and 97953/4900720 as stated. The completed table's
+trap list is 01,02,012,13,013,123,0123, with empty intersection.
+Thus no designated common trap player exists, while their union is
+the full four-player core. The explicit completion really does retain
+all six positive collision entries. It is outside the signed common-
+leaver criterion and directly extends the reviewed switched family.
+No exhaustive exclusion of all other producers is inferred.
+
+No unresolved mathematical objection remains for the reviewed extension.
+The monotone selector, two raw buffer inequalities, final pivot-floor
+control, and direct zero-parameter specialization all survive this audit.

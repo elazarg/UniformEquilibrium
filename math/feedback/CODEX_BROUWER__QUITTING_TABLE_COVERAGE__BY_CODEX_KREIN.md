@@ -200,3 +200,150 @@ valid ordinary mathematics. Their correct status is an alternative direct
 proof within an implemented existence class. My mathematical PASS is
 unchanged; any earlier implication of new existence-class coverage is
 withdrawn. No Lean build was performed for this source audit.
+
+## Independent review: a solo-0 bridge pays a positive outsider cap
+
+VERDICT: PASS, with no unresolved mathematical objection. The scope is
+the complete final section with that title, including its all-R source
+exits and bounded source audit, in
+`../notes/CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md`, at whole-note SHA256
+`1d54918d7240fd19ad4d510aefa90400178598f548b42a5acbc7354cec3faab0`.
+I did not read CODEX_MORSE's review. This is ordinary independent
+mathematical and static source review, not a Lean build. It does not
+review the preceding unique-root obstruction as a dependency or assert
+that these raw classes exhaust the remaining games.
+
+### The raw selector and bridge identity
+
+The raw restrictions are h_i,a,b,c,eta>0, abc>1, u≤1, v<1, and
+one possibly positive outsider cap lambda<h3*eta/h1, with every other
+listed cap nonpositive and every unused coordinate arbitrary. The
+auxiliary theta can indeed be chosen with
+0<theta<eta/h1 and lambda≤h3*theta. Thus eta_eff>0; no strategic
+witness is hidden in theta.
+
+I independently checked the cleared quadratic in (B2), including both
+coefficient signs, endpoint signs, and the case alpha=0. Its positive
+linear coefficient follows from aE−y≥1/b; at the cap, w=0 or z=1
+makes the unmultiplied balance strictly positive. The first positive
+crossing is the only admissible root. The rationalized root expression
+extends continuously through alpha=0 and both y endpoints. Its small-y
+ratios are 1/nu1, nu2/nu1, nu3/nu1. The pivot selector therefore has
+exact endpoints Rlow and Rtop. The displayed positive formula for
+nu3*(Rtop−Rlow) also checks at u=1, since v<1 supplies strictness.
+
+The extra stage is not a second-root assumption. Put k=K/(1+theta).
+Then 1−rho=(1+k)/(1+K). Therefore its player-1 Bellman equation is
+
+    (1−rho)*eta*x−rho*h1
+      =(eta−theta*h1)k/(1+K)
+      =eta_eff*K/(1+K).
+
+The stated t2 similarly gives d2=w/(1−w), and t3 gives d3=0.
+These are exact identities in the original reward table, not an
+equivalence between different games. At A the effective balance gives
+V_B1=K(h1+eta_eff)=k(h1+eta). The two outsider averages reduce to
+(b*y−h2*k)/(1+k) and h3*theta*x, respectively, exactly the displayed
+t2 and t3. All supported endpoints are indifferent, and all pure
+Continue comparisons are exact.
+
+The pivot floors are valid even when u=1: V_B0=(1−u*y)/(1−y)≥1,
+V_C0=1+(R−1)w>1 because R>Rlow>1, and d0=t0=1. Every other
+coordinate is nonnegative. At A, outsider 2 has endpoint at most zero.
+Outsider 3 has endpoint at most lambda*x*(1−y), which is at most
+h3*theta*x=t3, including equality in the raw cap. This is an actual
+positive continuation buffer, with no discarded simultaneous event.
+
+### All deviations, original-game exits, and fixed target
+
+Refining all three solo blocks is necessary, including the pivot bridge.
+Their exact endpoint vectors are unchanged, intermediate values are
+convex interpolants, and every singleton floor survives. The immediate
+Quit error is precisely bounded by Cjoin times the largest microhazard.
+One constant added to every continuation value is a Bellman
+supersolution; the proof does not sum errors over periods. Each player's
+opponents retain positive hazard in every period, including when player
+0 removes BOTH its joint and bridge hazards. Consequently the geometric
+survival bound is uniform over complete behavioral deviations.
+
+The fixed terminal target t is independent of the subdivision. Coupling
+with the opponents' first scheduled Quit proves the expected absorption
+time bound and the stated uniform finite-horizon inequalities. The
+refinement proof matches the exact Continue/one-Quit-error fields of
+`QuittingInfinitePathQuitErrorCertificate` and the declaration
+`quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`,
+which I reread during this review. The target is fixed before accuracy.
+
+The lower singleton-degree argument does not depend on the bridge or
+joint rewards. R=Rlow has the nonzero homogeneous vector (1,nu),
+and R<Rlow has the same two regular complementarity roots of determinant
+signs + and −. The upper inverse thresholds obey T2≥T3>T1 under
+u≤1 and v<1, so all three literal weights are nonnegative at and
+above Rtop. I reread the exact named singleton-degree and raw passive-
+inverse declarations during this session; none adds a nonsingleton
+condition. Thus no endpoint or portion of the real R axis is omitted.
+
+### Exact adversarial tests and bounded source comparison
+
+Exact rational enumeration reproduces all sixteen policy identities and
+all sixteen Continue identities in the author's full-core fixture. It
+also reproduces both positive unrefined gains, 2/15 for player 2 at C
+and 1/66 for player 3 at D. Thus its conclusion genuinely uses the
+claimed diffusion rather than an unnoticed coarse Nash assertion.
+
+As a separate test, set a=b=c=2, h=(1,5/6,1), u=1, v=0,
+eta=3, theta=lambda=1. Then eta_eff=1 and
+
+    nu=(19/21,20/21,41/42),
+    Rlow=81/41, Rtop=3,
+    y=1/4, K=1/9, z=13/54, w=11/41,
+    x=1/19, rho=1/20, R=24/11.
+
+The quadratic has alpha=0, beta=63/8, gamma=−7/8. The values are
+
+    t=(1,3/19,49/114,1/19),
+    V_B=(1,2/9,0,13/27),
+    V_C=(54/41,25/41,0,0),
+    d=(1,1/10,11/30,0).
+
+Take r3(03)=1 and every other cap coordinate zero, and set all remaining
+unspecified coordinates to 37. Exact rational enumeration again gives
+all sixteen policy/Continue identities. At A the endpoint pairs are
+(1,1), (3/19,3/19), (49/114,0), (1/19,3/76). This tests the
+zero leading coefficient, u=1 floor equality, binding positive raw cap,
+unequal h_i, and genuinely arbitrary unused premiums simultaneously.
+
+For the author's completion I independently enumerated the five traps
+03,23,013,023,0123 and all fifteen pure-coalition toggle improvements.
+Their only possible common player is 3, whose leave inequality fails
+at 03. The full singleton determinant 497/92, inverse entry −744/497,
+all four triple inverses, and passive row (186/161,−297/644,25/322)
+match. Enumeration of all fifteen partitions leaves only the discrete
+partition and 0|123 at first order; the stated three actual residual
+polynomials exclude the latter. These are bounded failures of the
+precise named criteria, not an exhaustive producer classification.
+
+I checked all thirteen exact proper-child profiles, including 023's
+endpoint pairs (1,1), (−245/347,92/1735), (1/5,1/5), and the omitted
+player's Continue value −1367/1735. For the fourteenth child, 123,
+the former coarse cycle is indeed not exact Nash after introducing
+the 23 premiums. The refined cycle instead has full regret at most
+alpha_n/2, joint Never zero, and the quiet pivot's fixed gain 297/644.
+This is enough: I reread
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`.
+Its weights are fixed by the certificate while the inequality quantifies
+over every child profile. Letting n tend to infinity contradicts the
+fixed positive outside gain for every proposed finite weight vector.
+The approximate-child witness is logically valid and does not claim an
+exact equilibrium which the changed table no longer has.
+
+Finally, the class is not subsumed by the reviewed switched-pair class:
+its full-core fixture has both relevant passive singleton rewards below
+the pivot singleton, whereas that class requires both above or equal.
+No relabeling of the nonpivot cycle repairs this, since only player 0
+has a positive own singleton. This comparison also applies to the new
+two-buffer extension with the same U,V≥1 requirement. The two mechanisms
+therefore cover different stated raw regions, not an alleged partition
+of all normalized tables.

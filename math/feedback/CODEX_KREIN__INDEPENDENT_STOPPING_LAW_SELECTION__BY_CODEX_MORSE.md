@@ -882,3 +882,194 @@ sign test for Q. The selector and all displayed continuation identities
 remain valid. These computations supplement the proof; they do not
 replace its quantifiers. No Lean implementation or general Fin4
 completeness claim is made by this verdict.
+
+## Independent review: two outsider buffers and the zero-phase inclusion
+
+Verdict: PASS on the final “Two outsider buffers from a repeated solo
+exit” section, including the direct θ=0,ξ=0 inclusion. Reviewed
+notebook SHA256:
+`e550c92c806d934b2f2e94d4cbe79d47cdc81210a045a231525a644c73c133be`.
+No other agent's review of this section was read. This audit targets
+the new producer, simultaneous positive caps, endpoint, pivot floor,
+full deviations, and zero-phase boundary. The unchanged outer
+singleton-source proofs are not given another full audit.
+
+The θ premise is a finite scalar raw-table feasibility condition: its
+bounds and the two inequalities (72) are explicit affine inequalities
+in θ once the reward data and ν are fixed. It is not an assumed Nash
+selector or missing strategic continuation. U,V≥1 imply R_low≤1,
+so the ξ bound really does imply ξ≥0.
+
+### Strict monotone selection from the raw data
+
+On the cap interval, z increases strictly with k, while
+
+    ∂A_1/∂k=−(h_1+ay)/(1+k)²<0.
+
+The final rate t depends only on y. Hence d_1 and w decrease strictly.
+Since 0≤z≤1 and w≥0,
+
+    ∂G/∂k=h_3+(1+cw)∂z/∂k−c(1−z)∂w/∂k>h_3.
+
+Thus the monotonicity statement holds on the whole admissible interval,
+not only at a presumed solution. The identity ensuring positivity of
+the second cap is correct, including θ=0. At k=0 the sign is exactly
+that of −D+L_θy. If z=1 at the upper cap, positivity of G is immediate.
+At the other upper cap k=ay/h_1, the displayed lower bound follows
+from w≤aθy and z≥(1+θ+a h_2/h_1)y/b; its coefficient simplifies to
+
+    D(ν_2−h_1θ)/(b h_1)>0.
+
+There is therefore one interior root. Compactness and strict increase
+justify continuity at Y_θ and force its limit to zero there; the first
+cap bounds k/y at zero. Every subsequential limit of k/y solves the
+same linear equation, with coefficient Dν_3/b>0. Its unique solution
+is (1+θ)/ν_3. The other two limits in (74) then follow from Aν=h.
+No derivative of a root branch or polynomial-root convention is needed.
+
+### The global rate bound pays both caps
+
+At k_0=(1+θ)y/ν_3 I independently obtained the displayed numerator
+and denominator of w_0. The critical coefficient after comparison with
+(1+θ)ν_2y/ν_3 is
+
+    ν_2(ν_2+1)+θ(ν_2ν_3+ν_2²−h_1).
+
+Subtracting ν_2² leaves
+ν_2−θh_1+θν_2ν_3+θν_2²>0. The remaining quadratic coefficient
+is nonnegative, and is zero at θ=0; this does not affect the strict
+comparison. Also z_0>(1+θ)ν_1y/ν_3. If k_0 is admissible, these
+give G(k_0)>0; if not, its location above the upper cap already gives
+the desired ordering. Strict monotonicity proves (75) globally.
+
+For outsider 1, (72) gives
+
+    a−Q_1≥(1+θ)(h_1+J_1)/ν_3.
+
+Since h_1+J_1>0, (75) makes its actual Quit payoff strictly below
+A_1. For outsider 2, the same bound gives an upper numerator θy.
+After division by 1+k this is strictly below θy when θ>0, even
+if J_2=0. At θ=0 it is merely ≤0, which is sufficient. The
+estimates permit Q_1 and Q_2 of either sign and do not require any
+individual zero cap. At the joint row the four possible forced-Quit
+coalitions are i,0i,i3,0i3 for each outsider i. Thus all six nontrivial
+collision coordinates, including the triples, are included.
+
+### Pivot endpoint and the indispensable last-block floor
+
+Expansion at zero shows the numerator and denominator of (76) have
+leading coefficients (1+θ)R_low and 1+θ, respectively. Thus the
+zero endpoint is R_low even when ξ>0. At k=0,y=Y_θ, I substituted
+the exact rational formulas for z,w,t and verified the identity
+
+    R(Y_θ)−T=D[ξ−θ(1−T)]/(abc+θ).
+
+This also follows by direct clearing of positive denominators. Its
+right side is nonnegative under the raw ξ condition; for θ>0 it is
+strictly positive whenever the residual interval is nonempty. Together
+with continuity, this reaches every R_low<R<T at an interior y.
+No unique or monotone pivot selection is assumed.
+
+The last pivot continuation is
+
+    P_D=1+y[ξ+θ(R−1)]/(1+θy).
+
+Its bracket is at least θ(R−R_low), and therefore nonnegative at
+the selected R, including equality in the raw ξ bound. The later
+convex averages with U,V≥1 retain the pivot floor. This calculation
+does not incorrectly infer the floor from R≥1: selected R may be
+negative. All other phase coordinates have their displayed nonnegative
+values.
+
+I checked all sixteen policy and sixteen Continue identities in (78).
+At D, in particular, −t+(1−t)θy=0 is the second outsider's reset;
+at C, −w+(1−w)d_1=0 is the first's reset. The A active endpoints
+are exactly p and zero. The remaining A comparisons are exactly the
+two caps proved above, so there is no omitted behavioral action.
+
+### Full deviations and literal zero-phase specialization
+
+Refining all three solo blocks preserves their complete endpoint
+vectors. Their intermediate values are convex interpolants, the solo
+owner retains its singleton, and Continue is exact at every microstage.
+The positive pivot premium ξ at the final solo-3 block must be included
+in C_join; the note does so. The constant-error Bellman supersolution
+therefore controls all unilateral actions with one error, without
+summing errors across periods.
+
+For every possible deviator, x,y,z,w>0 leave positive prescribed
+opponent hazard in each period, regardless of whether t is zero.
+Their period survival remains below one after refinement and does not
+depend on the deviator's complete behavioral strategy. The terminal
+supersolution limit and uniform expected absorption-time bound follow.
+Choosing refinement first and a horizon threshold second gives one
+profile valid for all larger horizons and the same target V_A at
+every accuracy. No public coin or bounded deviation controller is used.
+
+At θ=0, t=0 and V_D=V_A exactly, coordinate by coordinate. Deleting
+the final all-Continue block therefore preserves the actual game law
+and values, not just a limiting formula. The cap interval and strict
+rate bound remain valid. At θ=0,ξ=0, equations (73),(76) reduce
+literally to the switched-pair selector, R(Y)=T, and the original
+three player-2 zero caps imply the new second weighted cap. Equality
+in the first weighted cap remains safe; the second comparison is weak
+as allowed. The old theorem is thus included directly, with no reward
+closure or assumed openness of UE existence.
+
+The unchanged outer source cases retain the same singleton data. When
+U=V=1 the residual interval is empty and those cases alone cover R;
+the new construction is not being evaluated on a nonexistent interval.
+
+### Exact adversarial tests
+
+I independently verified every number in the displayed two-buffer
+example, including both binding raw caps, all sixteen policy/Continue
+identities, and the A safety margins 52581/245036 and 97953/4900720.
+Assigning 37 to all still-unspecified coordinates leaves these checks
+unchanged and creates real positive solo Quit errors, which require
+the proved refinement bound.
+
+A separate test saturates the ξ floor and has a negative selected R.
+Take a=b=c=2, h_1=h_2=1 and
+
+    θ=1, h_3=2989/2592,
+    ν=(18541/18144,4933/4536,9469/9072), U=V=2,
+    ξ=38273/18938=θ(1−R_low),
+    R_low=−19335/18938,
+    R=−58011473/139554122<T=1/4.
+
+The rates x=3/28,y=1/10,z=83/450,w=19/96,t=1/11 solve the
+actual equations. Here ν_2−h_1θ=397/4536>0. Both raw caps bind
+with all six outsider collision coordinates positive by setting
+
+    J_1=397/18144, Q_1=397/9469,
+    J_2=9469/36288, Q_2=1/2,
+
+and giving each of the two corresponding max entries the value J_i.
+All other unspecified coordinates may again be 37. Exact evaluation
+gives zero in every policy/Continue residual, strict A safety margins
+104775191/1603518336 and 46399/1693440, and
+P_D−1=3839461/69777061>0. The unrefined final solo-3 row has
+a positive pivot Quit gain, confirming that this last block cannot be
+silently left coarse.
+
+As a distinct zero-phase test, take the prior asymmetric switched
+example with θ=ξ=0, h=(1,1,79/45), a=b=c=2, U=3/2,V=5/4,
+and rates x=1/11,y=1/4,z=7/30,w=4/15,t=0. Keep
+J_1=2,Q_1=−179/383, but set J_2=1,Q_2=−315/383. The second
+weighted cap binds despite positive J_2, while V_A,2=0. Its exact
+Quit payoff is −809/8426, so the boundary comparison is safe without
+an implicit individual zero cap. This tests the stronger new θ=0
+class as well as literal inclusion of the old one.
+
+The full completion's traps 01,02,13 have empty intersection and
+their union is all four players. It is therefore genuinely outside the
+common-trap-leaver criterion. I also inspected
+`SignedFourCycleSingletonData` in
+`UniformEquilibrium/Quitting/Cycles/SignedFourCycleRewardAdapter.lean`:
+its strictly positive predecessor in each singleton column cannot be
+met by a relabeling when the pivot singleton harms every other player.
+No claim of failure of every other source is inferred from this check.
+
+No unresolved mathematical objection remains. This is ordinary
+mathematical PASS, not a Lean implementation or arbitrary Fin4 result.
