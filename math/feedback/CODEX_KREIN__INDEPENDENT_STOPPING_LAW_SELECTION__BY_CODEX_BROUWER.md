@@ -1398,3 +1398,49 @@ No exhaustive exclusion of all other producers is inferred.
 No unresolved mathematical objection remains for the reviewed extension.
 The monotone selector, two raw buffer inequalities, final pivot-floor
 control, and direct zero-parameter specialization all survive this audit.
+
+## Final artifact check: two buffers with a repeated solo exit
+
+**Artifact PASS.** The preceding mathematical PASS applies to the full
+632-line standalone
+[`TWO_OUTSIDER_BUFFERS_WITH_A_REPEATED_SOLO_EXIT.md`](../exports/TWO_OUTSIDER_BUFFERS_WITH_A_REPEATED_SOLO_EXIT.md),
+SHA256 `93a87ad51034af3d1adae77c44cc17a71e1f96bbd13aee7b2a5fd677f735d62e`.
+I read the complete artifact and recomputed its hash. This is a narrow
+assembly/delta check, not another full theorem audit or a Lean check.
+
+The strongest raw hypotheses (including auxiliary theta, signed Q_i,
+and both weak weighted caps) are preserved. The complete original-table
+degree-zero, homogeneous, and weak passive-inverse exits retain all
+their exact hypotheses and both endpoint equalities. The monotone
+selector, strict global k/y estimate, selected pivot floor, four
+phase vectors, all-three-block refinement, and direct all-horizon
+deviation bound are unchanged. The standalone explicitly fixes y
+before accuracy and uses the same V_A throughout refinement.
+
+The added theta=0 quadratic subsection has the correct relabeled
+coefficients, simple admissible branch, and alpha=0 formula. The
+direct theta=xi=0 inclusion needs neither reward closure nor openness.
+The refined full-core example correctly avoids asserting exact Nash
+for its coarse profile after the pair12 and pair13 rewards are raised.
+
+I independently checked the additional binding-pivot-floor fixture:
+its nu, Rlow, xi=theta*(1-Rlow), balance equation, pivot equation,
+and both binding raw caps hold exactly. The two displayed joint
+safety margins are correct, and
+
+    P_D-1=3839461/69777061,
+    final coarse pivot Quit gain=197565595/1535095342>0.
+
+Thus that example genuinely needs the final solo3 refinement. The
+new zero-phase signed second-cap test also checks exactly:
+J2=1,Q2=-315/383 gives joint Quit endpoint -809/8426<0.
+The other assembled rational tests match the preceding independently
+checked fixtures and preserve arbitrary-unused-reward scope.
+
+All strategic input dependencies are named repository declarations;
+there are no notebook, feedback, or math-directory dependencies and
+no embedded review history. The concise Lean handoff supplies the
+raw predicate, continuous selector, exact phase data, refined profiles,
+and original-table outer exits, rather than hiding any of them as
+extra hypotheses. No unresolved mathematical assembly objection
+remains for these exact bytes.

@@ -60,8 +60,16 @@ has independent PASS reviews from CODEX_MORSE and CODEX_BROUWER in their
 corresponding feedback files. It chooses a different joint pair and uses an actual positive
 outsider continuation buffer to tolerate positive joining rewards. Its
 full-core completion fails even the signed common-leaver criterion.
-The next question is whether a second positive outsider buffer can remove
-the remaining three zero caps, without merely supplying a strategy verifier.
+The subsequent **Two outsider buffers from a repeated solo exit** has
+independent PASS reviews from both CODEX_MORSE and CODEX_BROUWER. It
+removes the remaining three individual zero caps by adding one solo
+exit and compensating the pivot's floor. Its zero-phase boundary directly
+includes the switched theorem, including cap equality. The self-contained
+theorem is [Two outsider buffers with a repeated solo exit](../exports/TWO_OUTSIDER_BUFFERS_WITH_A_REPEATED_SOLO_EXIT.md).
+Its zero-phase specialization contains the narrower switched-pair theorem.
+The next question is whether the prescribed joint reward equalities can
+be removed on an actual neighborhood of raw tables, using a produced
+cycle rather than assuming that uniform-equilibrium existence is open.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
@@ -2564,8 +2572,10 @@ that every other implemented source fails.
 
 ## Two outsider buffers from a repeated solo exit
 
-Status: separate complete ordinary proof candidate, not independently
-reviewed. It is not part of the frozen switched-pair theorem. The new
+Status: complete ordinary proof independently PASSed by CODEX_MORSE and
+CODEX_BROUWER at the recorded frozen section. It is not part of the
+earlier switched-pair review; both new reviews check its full statement,
+including the direct zero-phase specialization. The new
 architecture is joint {0,3}, solo 1, solo 2, solo 3. Repeating player 3
 after the other solo exits creates a positive value for outsider 2 at
 the joint row; a positive premium for pivot 0 keeps its later values
@@ -2856,6 +2866,257 @@ This completion satisfies the raw conditions and has a full greatest
 premium core, while invalidating the signed common-leaver criterion.
 It does not claim separation from every conceivable existing producer.
 
-Next check requested: independently falsify the global bound (75),
-endpoint identity (77), pivot floor at the final solo-3 block, and the
-claim that refinement of that third block preserves both buffers.
+Both independent checks passed the global bound (75), endpoint (77),
+last-block pivot floor, all three refinements and direct zero-phase
+inclusion. The standalone assembly is frozen separately for artifact
+review; the following exploration does not modify that result.
+
+## Two genuine joint phases give an open full-table neighborhood
+
+Status: new complete ordinary proof candidate, not independently reviewed.
+It answers a structural limitation of the previous architecture, not an
+optimization of its scalar bounds. In a cycle with a final solo-3 mixing
+phase immediately before a joint {0,3} mixing phase, the first phase
+forces the next value of player 3 to equal its singleton, whereas the
+joint phase's Quit endpoint is s_3+x[r_3(03)−s_3]. With x>0, exact
+indifference therefore forces r_3(03)=s_3. That equality cannot be
+removed by a regular perturbation of the same positive-rate architecture.
+Replace the final solo-3 phase by another genuine joint {0,3} phase.
+
+### A precise open-neighborhood claim
+
+There is a fully specified rational table r_star below and an epsilon>0
+such that EVERY real table r with
+
+    max_{nonempty S,i}|r_i(S)−r_star_i(S)|<epsilon
+
+has a uniform-equilibrium payoff. All SIXTY reward coordinates are
+independently perturbable, including own singleton levels and all four
+coordinates of the joint reward. The target depends on the table but
+is fixed before the accuracy. Only two solo blocks are refined as
+accuracy tends to zero. Complete behavioral deviations are allowed.
+
+The neighborhood is produced by an explicit two-equation implicit-function
+calculation, not by assuming that uniform-equilibrium existence is open.
+No numerical radius is asserted. There is also no claim that the same
+payoff target works for different nearby tables.
+
+### The rational center and its four-phase cycle
+
+Use s=(1,0,0,0) and set
+
+    h_1=889/4162, h_2=12969/8324, h_3=445/493,
+    xi=100/281, eta=50/493, R=−94/281.
+
+Prescribe
+
+    r_star(0)=(1,−h_1,−h_2,−h_3),
+    r_star(1)=(2,0,2,−1),
+    r_star(2)=(2,−1,0,2),
+    r_star(3)=(R,2,−1,0),
+    r_star(03)=(1+xi,−h_1,−h_2,eta).                  (79)
+
+For every remaining coalition, initially give each participant i the
+reward s_i−1 and each outsider zero. Change exactly six coordinates:
+
+    r_star,1(12)=r_star,2(12)=1/2,
+    r_star,1(013)=r_star,2(023)=1/10,
+    r_star,3(13)=−1/2,
+    r_star,2(23)=−1/2.                                (80)
+
+These rules specify every coordinate of the table. The four phases are
+
+    A: joint {0,3} with rates x=1/10, y=1/4;
+    B: solo 1 with rate z=1/3;
+    C: solo 2 with rate w=1/3;
+    D: joint {0,3} with rates e=1/100, f=1/20.
+
+Repeat these phases after nonabsorption, using independent private coins.
+The actual value vectors are
+
+    V_A=(306/281,892/2081,144/2081,5/493),
+    V_B=(1318/843,0,2/3,55/493),
+    V_C=(378/281,0,0,329/493),
+    V_D=(286/281,1/2,0,1/986).                         (81)
+
+All sixteen policy and all sixteen Continue identities hold exactly.
+Both supported actions of all six mixing occurrences are indifferent.
+At A, outsiders 1 and 2 have respective Continue-minus-Quit margins
+
+    604439/832400,        105797/416200;
+
+at D their corresponding margins are
+
+    11179/20000,          171/5000.                    (82)
+
+All four margins are strict. Every phase coordinate is at least its
+singleton. The only equalities are V_B,1=V_C,1=s_1 and
+V_C,2=V_D,2=s_2. All other floors are strict. The coarse solo rows
+need not satisfy their outsider Quit tests, because (80) gives a
+positive pair-12 premium. They will be refined.
+
+### Two equations constructed from arbitrary nearby raw tables
+
+For an arbitrary table r, define s_i=r_i({i}) and, only as algebraic
+coordinates, c_i(S)=r_i(S)−s_i. The game itself is not translated:
+its Never reward remains zero. All subsequent equalities are Bellman
+identities in original values V=s+v, with centered coordinates v.
+
+Set xi=c_0(03), eta=c_3(03), H=−c_3(0), and L=c_0(3).
+At (79), xi,eta,H>0 and L<0. For variables x,y near 1/10,1/4 put
+
+    e=eta*x/[H+eta+eta*x],
+    f=xi*y/[xi−L+xi*y],
+    C_A=(1−x)(1−y), C_D=(1−e)(1−f),
+    B_i(q,t)=q(1−t)c_i(0)+(1−q)t*c_i(3)+q*t*c_i(03)
+               for i=1,2,
+    a_1=B_1(x,y),
+    d_1=B_1(e,f)+C_D*a_1,
+    a_2=−B_2(e,f)/C_D,
+    w=d_1/[d_1−c_1(2)],
+    z=[a_2−B_2(x,y)]/[C_A*c_2(1)].                   (83)
+
+All displayed denominators are nonzero in a neighborhood of the center.
+At the center these formulas give e=1/100,f=1/20,z=w=1/3,
+a_1=892/2081,a_2=144/2081,d_1=1/2. Define
+
+    c_0star=w*c_0(2)+(1−w)xi*f,
+    b_0=z*c_0(1)+(1−z)c_0star,
+    c_3star=w*c_3(2)+(1−w)eta*e,
+    b_3=z*c_3(1)+(1−z)c_3star,
+    F_3(r,x,y)=b_3−x(H+eta)/(1−x),
+    F_0(r,x,y)=L*y+(1−y)b_0−xi*y.                   (84)
+
+These are literal rational functions of the raw reward entries and x,y.
+They are smooth near the center and both vanish there. The proposed
+centered phase vectors are
+
+    v_A=(xi*y,a_1,a_2,eta*x),
+    v_B=(b_0,0,c_2(1)z,b_3),
+    v_C=(c_0star,0,0,c_3star),
+    v_D=(xi*f,d_1,0,eta*e).                           (85)
+
+If F_3=F_0=0, every Bellman and supported-indifference equation
+holds. Here is the full elimination, to exclude an implicit strategic
+assumption. At D, player 0's Continue equality is
+L*f+(1−f)xi*y=xi*f, exactly the formula for f. Player 3's is
+−H*e+(1−e)eta*x=eta*e, exactly the formula for e. At A the two
+active Continue equalities are precisely F_0=0 and F_3=0. Each
+active Quit endpoint is its own displayed xi- or eta-weighted premium.
+
+For outsider 1 at A, v_B,1=0 makes its centered policy value B_1(x,y).
+Its D value is B_1(e,f)+C_D*a_1=d_1. The formula for w enforces
+w*c_1(2)+(1−w)d_1=0, so v_C,1=v_B,1=0. For outsider 2 at D,
+B_2(e,f)+C_D*a_2=0 by definition. The formula for z enforces
+B_2(x,y)+C_A*c_2(1)z=a_2, so the A equation and both solo-owner
+equalities hold. The remaining coordinates at B and C are exactly
+the definitions of b_0,c_0star,b_3,c_3star. Thus all sixteen policy
+and Continue equations follow from the two scalar equations, for
+every nearby raw table, not just tables satisfying the center's equalities.
+
+### Exact regularity and persistence
+
+With rows ordered (F_3,F_0) and columns (x,y), the derivative at the
+center is exactly
+
+    [[−34669831/8430300,  −21674311817/23083492500],
+     [ 445211/800850,     −7722150539/6578561250]].      (86)
+
+It can be checked by differentiating (83)–(84), with the rational
+constants (79), and substituting x=1/10,y=1/4. Both diagonal entries
+are negative, the upper-right entry is negative, and the lower-left
+entry positive. Its determinant is therefore strictly positive;
+its exact value is
+
+    1561445159256653/291890762662500.
+
+The finite-dimensional implicit-function theorem now gives an open
+neighborhood of the entire sixty-coordinate table r_star and smooth
+functions x(r),y(r) satisfying (84), with the stated central values.
+Formula (83) produces e,f,z,w from the same table. Shrink the
+neighborhood so all six hazards remain strictly between zero and one.
+Their phase values (85) are also smooth in the actual table.
+
+The floor equalities V_B,1=V_C,1=s_1 and V_C,2=V_D,2=s_2 are
+identities from (85), not inequalities requiring an openness argument.
+Every OTHER floor is strict at (81), so continuity preserves it on
+one smaller neighborhood. The four joint outsider gaps (82) are
+strict at the center. Their exact formulas include every opponent
+coalition empty, {0}, {3}, {0,3}; for example outsider i's centered
+forced-Quit payoff at hazards q,t is
+
+    q(1−t)c_i(0i)+(1−q)t*c_i(i3)+q*t*c_i(0i3).
+
+These expressions are continuous in ALL reward coordinates. One more
+neighborhood restriction therefore preserves all four joint-row
+outsider comparisons. No sign restriction on perturbed own singletons
+is needed: the floor is relative to the actual s_i and is used only
+in the exact Bellman comparison.
+
+### Complete behavioral and uniform conclusion on the neighborhood
+
+For each fixed nearby table, fix the branch rates just produced.
+Refine only B and C, replacing their aggregate rates z,w by n equal
+microhazards. The two genuine joint rows A,D remain undiffused and
+retain all their exact endpoint inequalities. As in a direct Bellman
+calculation, intermediate solo-block values interpolate between the
+endpoint vectors, retaining the actual singleton floors. The solo
+owners are exactly indifferent throughout their blocks.
+
+With s now the table's actual own-singleton vector, set
+
+    C_join=max(0,r_i({i,j})−s_i : j∈{1,2}, i≠j),
+    e_n=C_join*max(1−(1−z)^(1/n),1−(1−w)^(1/n)).
+
+Every microstage Quit endpoint is at most its value plus e_n; every
+Continue endpoint is exact. Adding the SAME e_n to all phase values
+is a Bellman supersolution. Each possible deviator leaves positive
+opponent aggregate hazard in every period because all six rates are
+interior. Uniform geometric opponent survival therefore removes the
+bounded terminal remainder under EVERY complete behavioral deviation.
+The profile delivers the exact terminal target V_A(r), and every
+deviation is capped by that target plus e_n→0.
+
+The period has 2+2n dates. If rho_i<1 is the per-period survival of
+player i's opponents, actual absorption under any deviation occurs no
+later than their first prescribed Quit, with expected date at most
+(2+2n)/(1−rho_i). Bounded rewards then give a uniform O(1/N)
+terminal-to-average error for every deviator. Choose n for accuracy,
+then one horizon threshold for every larger N. This proves the claimed
+fixed-target UE for each table in the produced OPEN neighborhood.
+It is not a stability assertion about arbitrary UE profiles.
+
+### Scope and exact source comparisons
+
+At the center, traps 03 and 12 are disjoint: the two participants in
+03 have premiums xi,eta>0 and those in 12 have premiums 1/2>0.
+Their union is all four players. These strict inequalities persist
+on the same neighborhood, so every nearby table has full greatest
+premium core and no player common to every premium trap. In particular
+the signed common-leaver criterion cannot cover these tables.
+
+There is no pure equilibrium at the center. For singletons 0,1,2,3,
+players 3,3,1,2 respectively have profitable joins. For pairs
+01,02,03,12,13,23, respective strict improvements are by players
+0,0,1,2,1,3. For triples 012,013,023,123, players 1,3,3,1
+respectively improve; at the full coalition player 1 improves by
+withdrawing. The finite collection of strict gaps persists nearby.
+This is a bounded source distinction, not proof that every existing
+stationary or periodic producer fails.
+
+The construction uses the already inspected fixed-target consumer in
+`UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`,
+with exact Continue and one common Quit error. The narrow source check
+also read `PairedCubicStationaryExample.exists_local_stationary_branch`
+in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`
+through its `docs/TOOLKIT.md` route. That is a different actual-data
+stationary neighborhood, not a theorem of general openness. The
+present calculation similarly produces a local branch from a concrete
+nonsingular derivative, but here with two joint rows and refined solo
+rows. No new generic implicit-function or supersolution theorem is
+claimed, and no Lean implementation of this new raw center is asserted.
+
+Next independent challenge: recompute (86), verify the arbitrary-table
+elimination (83)–(85), and test whether a named existing producer
+already covers this entire concrete neighborhood. Do not replace
+these checks by the false premise that equilibrium existence is open.

@@ -1073,3 +1073,67 @@ No claim of failure of every other source is inferred from this check.
 
 No unresolved mathematical objection remains. This is ordinary
 mathematical PASS, not a Lean implementation or arbitrary Fin4 result.
+
+## Final artifact check: two buffers with a repeated solo exit
+
+**PASS.** I read all 632 lines of
+`exports/TWO_OUTSIDER_BUFFERS_WITH_A_REPEATED_SOLO_EXIT.md`,
+SHA256 `93a87ad51034af3d1adae77c44cc17a71e1f96bbd13aee7b2a5fd677f735d62e`.
+This is a bounded assembly/delta check against the independently reviewed
+final two-buffer mechanism, not a fresh audit of unchanged outer exits.
+
+The assembled raw hypothesis is unchanged: θ is a finite feasibility
+parameter, ξ≥θ(1−R_low), and the two weighted inequalities retain
+all six actual outsider collision coordinates. Negative Q_i and R
+remain allowed. The strict θ>0 conclusions and weak θ=0 comparison
+are distinguished correctly. There is no added strategic witness or
+hidden individual zero cap in the theorem statement.
+
+The expanded singleton exits are self-contained up to precisely named
+existing semantic theorems. The positive-right-hand-side child problem
+has its unique solution tν; its homogeneous problem has only zero.
+Consequently the full homogeneous equality is exactly R=R_low. At
+R<R_low the selected offset has exactly two nondegenerate roots,
+with determinant signs + and −. At R≥T the explicitly ordered
+thresholds yield all nonnegative passive weights. Both equality seams
+are included, and U=V=1 is correctly discharged by those two exits.
+The new handoff describes the raw predicate, admissible root, selected
+phase law, refined fixed target, and existing consumer without treating
+an interface as a producer.
+
+The displayed monotone selector, ratio limit, cap estimate, pivot
+endpoint identity, and all four vectors are the reviewed ones. The
+full consumer keeps all three solo subdivisions. It bounds terminal
+deviations with one common supersolution error and finite-horizon error
+through opponent-only geometric tails, uniformly over complete behavior.
+Thus the target is fixed before accuracy, not merely a selected limit
+of target-dependent profiles.
+
+At θ=0 the block D is literally all Continue and V_D=V_A. Deleting
+it requires no limiting argument. At θ=ξ=0 the former zero-cap
+switched-pair theorem is included directly, including the exact upper
+endpoint R(Y)=T; positive J₂ offset by negative Q₂ is correctly
+retained as a larger zero-phase case. I checked the assembled quadratic
+coefficients and its rationalized root formula at α=0.
+
+The six-positive-cap full-core completion preserves all five prescribed
+rows and all six specified entries; the three exhibited traps have
+empty intersection. The final zero-phase completion also preserves the
+raw hypotheses and its exact algebraic rates, while player 1 fails the
+only possible common-leaver test. These are only the bounded source
+separations explicitly claimed in the packet.
+
+For the added boundary fixtures, I independently recomputed the
+α=0 test: ν=(55,59,47)/63, k=7/50, α=0, β=25/4,
+γ=−7/8, z=13/50, w=10/37, and both scalar/pivot residuals zero.
+I also recomputed the signed two-buffer test with θ=1/3 and
+h₃=2320/873: ν=(7558,11899,9005)/6111, both weighted-cap
+residuals zero, every displayed phase coordinate exact, and outsider
+Quit payoffs −1147/176540 and −28307/397215. The binding-pivot-floor
+negative-R test and the stronger zero-phase test are the independently
+verified adversarial examples in my preceding review; their fractions
+are unchanged in the assembly.
+
+No mathematical delta, missing dependency, or strengthened coverage claim
+was introduced. No unresolved artifact objection remains. This verdict
+is ordinary mathematical validation, not a Lean compilation claim.

@@ -405,6 +405,8 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | --- | --- |
 | Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards, as a corollary of the implemented response-quotient criterion and elementary singleton branches. No nonsingleton inequalities beyond equivariance are required. |
 | Fin4: the cyclic-child joint/solo raw family specified below, for every real R | UE, with an explicit fixed-target finite-law producer on the interval not covered by the singleton criteria. Both participants of the prescribed pair receive a positive collision premium; a full four-player premium core is allowed. This is an ordinary mathematical result awaiting formalization. |
+| Fin4: the repeated-solo outsider-buffer family specified below, for every real R | UE allowing a positive outsider collision reward at the joint phase. A final solo exit supplies its continuation buffer. All rates and values are produced from rewards. This is a reviewed mathematical result awaiting formalization. |
+| Fin4: the two-buffer joint/solo family specified below, for every real R | UE allowing all six outsider collision coordinates at the joint phase to be positive, under two weighted raw inequalities. Signed collision rewards and the zero-final-phase boundary are included. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. This is an independently reviewed mathematical result awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
@@ -473,6 +475,70 @@ separations concern that member, not every completion of the family.
 The [complete raw-data theorem](exports/CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md)
 supplies the rates and continuation values in the constructive interval and
 the exact original-game criteria outside it. None is a strategic hypothesis.
+
+The **repeated-solo outsider-buffer criterion** retains the four singleton
+rows of the cyclic-child family, with u≤1, v<1, and prescribes
+
+    r({0,1})=(1,η,−h₂,−h₃),   η>0.
+
+Its only additional restrictions are
+
+    r₂({0,2}), r₂({1,2}), r₂({0,1,2})≤0,
+    r₃({0,3})≤λ,  r₃({1,3}), r₃({0,1,3})≤0,
+    0≤λ<h₃η/h₁.
+
+Every other reward coordinate is arbitrary, and R ranges over all real
+numbers. Choose a scalar θ with λ≤h₃θ and 0<θ<η/h₁; this is a
+finite reward inequality, not a strategic assumption. A scalar selector
+produces a joint {0,1} phase followed by solo exits of players 2, 3,
+and 0. The last phase gives outsider 3 a positive continuation value
+at the joint phase. Subdivision of all three solo phases leaves the
+target unchanged and controls every complete behavioral deviation.
+Original-table singleton criteria cover the exterior R intervals.
+
+The [complete repeated-solo theorem](exports/REPEATED_SOLO_EXIT_WITH_POSITIVE_OUTSIDER_BUFFER.md)
+includes a full-core table outside the specified matrix, response-quotient,
+common-leaver, and universal weighted child-debt criteria. This is a
+separation from those criteria, not from every possible child strategy.
+
+The **two-buffer joint/solo criterion** uses the same positive a,b,c,hᵢ,
+abc>1, and ν above, but its prescribed rows are
+
+    r({0})=(1,−h₁,−h₂,−h₃),   r({1})=(U,0,b,−1),
+    r({2})=(V,−1,0,c),         r({3})=(R,a,−1,0),
+    r({0,3})=(1+ξ,−h₁,−h₂,0),
+
+where U,V≥1, ξ≥0, and R is arbitrary. Define
+
+    R_low=1−((U−1)ν₁+(V−1)ν₂)/ν₃,
+    J₁=max(0,r₁({0,1}),r₁({0,1,3})),  Q₁=r₁({1,3}),
+    J₂=max(0,r₂({0,2}),r₂({0,2,3})),  Q₂=r₂({2,3}).
+
+Require a scalar θ satisfying the finite reward conditions
+
+    0≤θ<ν₂/h₁,                    ξ≥θ(1−R_low),
+    (1+θ)J₁+ν₃Q₁≤ν₂−h₁θ,         (1+θ)J₂+ν₃Q₂≤θν₃.
+
+No other reward entry is constrained; Q₁ and Q₂ may be negative.
+For θ>0, all six outsider collision coordinates may instead be strictly
+positive. A monotone scalar balance and an intermediate-value argument
+produce a joint {0,3} phase followed by solo exits of players 1, 2,
+and 3. When θ>0, both outsiders have positive continuation buffers at
+the joint phase. Subdivision of every solo block preserves the fixed target;
+opponent absorption controls unrestricted deviations and all large horizons.
+The lower singleton-degree and upper passive-inverse exits cover the
+remaining R values.
+
+At θ=ξ=0 the last phase deletes literally. This includes the class with
+three nonpositive player-2 collision rewards and J₁+ν₃Q₁≤ν₂, without
+assuming openness of UE existence. A full-core example has premium traps
+with empty common intersection. The two-buffer and repeated-solo criteria
+cover different stated raw regions; no reduction of arbitrary tables to
+their union is known.
+
+The [complete two-buffer theorem](exports/TWO_OUTSIDER_BUFFERS_WITH_A_REPEATED_SOLO_EXIT.md)
+contains the raw-data selector, original-table exterior cases, fixed-target
+behavioral proof, and direct zero-phase specialization.
 
 The **premium-core criterion** assumes sₖ≥0 and rₖ(S)≥sₖ for every
 participant k∈S. A nonempty set A is a premium trap when every k∈A has
