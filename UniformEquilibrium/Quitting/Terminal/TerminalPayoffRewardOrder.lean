@@ -13,6 +13,23 @@ namespace GameTheory
 
 variable {ι : Type} [Fintype ι]
 
+/-- A constant terminal reward coordinate pays that constant times the actual
+absorption probability. Never still pays zero. -/
+theorem quittingTerminalPayoff_eq_constant_mul_absorption
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) (constant : ℝ)
+    (hconstant : ∀ terminal, reward terminal who = constant) :
+    quittingTerminalPayoff reward profile who =
+      constant * (1 - quittingLiveMassLimit reward profile) := by
+  classical
+  unfold quittingTerminalPayoff
+  simp_rw [hconstant]
+  rw [← Finset.sum_mul]
+  have hmass := quittingLiveMassLimit_add_sum_absorbedMassLimit reward profile
+  have hsum : (∑ terminal, quittingAbsorbedMassLimit reward profile terminal) =
+      1 - quittingLiveMassLimit reward profile := by linarith
+  rw [hsum, mul_comm]
+
 /-- Ordering one player's rewards orders that player's payoff at the same profile. -/
 theorem quittingTerminalPayoff_le_of_reward_le
     (first second : {S : Finset ι // S.Nonempty} → Payoff ι)

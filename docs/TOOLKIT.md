@@ -3465,6 +3465,29 @@ accuracy retains a member of that same family. The generic existence facade and
 cover the nonnegative singleton boundary, including zero. They do not strengthen
 the specified-child-target theorem or supply certificates for arbitrary Fin4 games.
 
+`smallPivotRepairValue_of_nonnegativeSingleton_withdrawalFamily` and its Fin4
+nonnegative-nonpivot and literal single-pivot-singleton corollaries
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalSmallPivotRepairSource.lean`)
+retain the finite nonpivot marginals and feed their actual quiet full profile into
+the existing pivot-repair LP. The source supplies arbitrarily small objective values;
+no optimal-pivot compatibility hypothesis is assumed. Fin4 normalization with one
+own singleton equal to one and the others zero satisfies the child sign premise.
+
+The omitted-Never supplied-profile obstruction is already proved by
+`neverResidual_outsideDebt_gt_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Examples/WithdrawalNeverBoundary.lean`).
+`NegativeSingletonQuietBoundary.debts_eq_childClockMasses`,
+`NegativeSingletonQuietBoundary.quietLift_exploitability_ge_half`, and
+`NegativeSingletonQuietBoundary.outsiderQuitProfile_exactNash`
+(`UniformEquilibrium/Quitting/Examples/NegativeSingletonQuietBoundary.lean`)
+separately prove the negative-sign obstruction: zero-weight original certificates
+exist for every withdrawal kind, but each actual quiet lift has regret at least
+one half. Its child debt is the finite-quit probability and outsider debt the Never
+probability. The same finite parent has an exact terminal Nash profile with an
+outsider quitting at date zero. A literal Fin4 instance is included. This is not
+a counterexample to uniform-equilibrium existence. The prescribed-child-target
+boundary is a separate remaining formalization obligation.
+
 `quietLift_fixedTarget_of_withdrawalFutureJoin_absorbingStationary`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalAbsorbingStationaryChild.lean`)
 uses an actual absorbing stationary child equilibrium instead of a positive

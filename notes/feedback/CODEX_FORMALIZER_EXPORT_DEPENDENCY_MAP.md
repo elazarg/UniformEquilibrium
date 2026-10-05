@@ -1359,7 +1359,23 @@ cardinality restriction is proved internally. All certificates use original rewa
 `UniformEquilibrium/Quitting/Classification/QuietExtension/QuietLiftFiniteCensor.lean`
 supplies the exact whole-family censor commutation and parent/child discarded-mass
 identity, reusing the existing exploitability-congruence theorem.
-The canonical pivot consumer and the packet's sharp counterexamples remain pending.
+`smallPivotRepairValue_of_nonnegativeSingleton_withdrawalFamily` and the literal
+normalized Fin4 facade
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalSmallPivotRepairSource.lean`)
+select actual finite nonpivot laws with arbitrarily small repair-LP objective.
+The existing exact finite-menu quiet transport and objective/exploitability consumer
+are reused; no optimal-pivot compatibility hypothesis is supplied.
+The omitted-Never supplied-profile boundary is fully covered by
+`UniformEquilibrium/Quitting/Examples/WithdrawalNeverBoundary.lean`.
+`NegativeSingletonQuietBoundary.debts_eq_childClockMasses`,
+`NegativeSingletonQuietBoundary.quietLift_exploitability_ge_half`, and
+`NegativeSingletonQuietBoundary.outsiderQuitProfile_exactNash`
+(`UniformEquilibrium/Quitting/Examples/NegativeSingletonQuietBoundary.lean`)
+give literal complete-debt identities, the uniform half-regret quiet obstruction,
+and a separate exact parent equilibrium, with all five original zero-weight
+certificates and a literal Fin4 specialization. No no-UE claim follows.
+The prescribed-child-target obstruction, including its quiet uniform-witness
+bridge and alternative quiet equilibria, remains pending; the packet is not complete.
 
 ## Further shape proof-mining findings
 
