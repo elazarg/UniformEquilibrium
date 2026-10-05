@@ -1,5 +1,7 @@
 import Mathlib
 import MathUE.Topology.FarthestPointContactHull
+import MathUE.Topology.ConnectedConvexHullAffineStep
+import MathUE.RealSeries.GeometricAffineSchedule
 import MathUE.Topology.CompactIntervalGap
 import MathUE.Topology.FiniteOneDimensionalCoordinate
 import GameTheory.Analysis.Payoff
@@ -477,6 +479,20 @@ def PathConnectedSet {X : Type} [TopologicalSpace X] (S : Set X) : Prop :=
   S.Nonempty ∧ ∀ x ∈ S, ∀ y ∈ S,
     ∃ path : ℝ → X, Continuous path ∧ path 0 = x ∧ path 1 = y ∧
       ∀ t ∈ Set.Icc (0 : ℝ) 1, path t ∈ S
+
+/-- The paper's real-parameter path convention implies preconnectedness. -/
+theorem PathConnectedSet.isPreconnected
+    {X : Type} [TopologicalSpace X] {S : Set X}
+    (hS : PathConnectedSet S) : IsPreconnected S := by
+  apply isPreconnected_of_forall_pair
+  intro x hx y hy
+  obtain ⟨path, hcontinuous, hzero, hone, hpath⟩ := hS.2 x hx y hy
+  refine ⟨path '' Set.Icc (0 : ℝ) 1, ?_, ?_, ?_, ?_⟩
+  · rintro _ ⟨time, htime, rfl⟩
+    exact hpath time htime
+  · exact ⟨0, by norm_num, hzero⟩
+  · exact ⟨1, by norm_num, hone⟩
+  · exact isPreconnected_Icc.image path hcontinuous.continuousOn
 
 /-- A closed path in a set. -/
 def ClosedPathIn {X : Type} [TopologicalSpace X]
@@ -2963,6 +2979,25 @@ private theorem expectedStagePayoff_mixedSequenceBehavior
       KernelGame.payoffVector
     exact (G.kernel.mixedExtension_eu (sequence time) who).symm]
   exact Math.Probability.expect_const _ _
+
+/-- Exact actual behavioral realization of a history-independent mixed
+sequence, for every real parameter. No geometric-law or delivered-payoff
+certificate is required. -/
+private theorem FiniteStageGame.discountedPayoff_mixedSequenceBehavior
+    (G : FiniteStageGame) (lam : ℝ) (sequence : ℕ → G.MixedProfile) :
+    G.discountedPayoff lam (mixedSequenceBehavior G sequence) =
+      (fun who => lam * ∑' time : ℕ,
+        (1 - lam) ^ time * G.mixedPayoff (sequence time) who) := by
+  funext who
+  change G.repeatedGame.discountedPayoff (1 - lam)
+    (mixedSequenceBehavior G sequence) PUnit.unit who = _
+  unfold StochasticGame.discountedPayoff
+  have hstage (time : ℕ) : G.repeatedGame.expectedStagePayoff
+      (mixedSequenceBehavior G sequence) PUnit.unit time who =
+        G.mixedPayoff (sequence time) who :=
+    congrFun (expectedStagePayoff_mixedSequenceBehavior G sequence time) who
+  simp_rw [hstage]
+  rw [show 1 - (1 - lam) = lam by ring]
 
 /-! The asymptotic feasible-payoff statements use block approximation and the
 Banach-limit identification.  The corresponding general repeated-game theorem
@@ -9092,14 +9127,75 @@ theorem equation_16 :
     rcases hmem with ⟨profile, _hnash, hpayoff⟩
     exact example1_discounted_nonmonotone.2.2 ⟨profile, hpayoff⟩
 
-/-! Proposition 4 uses Fenchel's theorem that a point in the convex hull of a
-connected subset of `ℝᴺ` needs at most `N` terms, followed by an infinite
-geometric schedule.  That connected-Carathéodory theorem is not available in
-the current dependencies. -/
+/-! Proposition 4 uses the classical connected-set strengthening of
+Carathéodory, followed by an internally selected geometric schedule of actual
+one-stage mixed profiles. Generic geometry and the telescope are owned by
+MathUE; the behavioral realization uses the existing mixed-sequence law. -/
 theorem proposition_4 (G : FiniteStageGame) (lam : ℝ)
     (hlam : 0 < lam) (hbound : lam < 1 / (Fintype.card G.Player : ℝ)) :
     G.discountedFeasiblePayoffs lam = G.correlatedFeasiblePayoffs := by
-  sorry
+  classical
+  have hplayers : 0 < Fintype.card G.Player := by
+    by_contra hnot
+    have hzero : Fintype.card G.Player = 0 := Nat.eq_zero_of_not_pos hnot
+    simp only [hzero, Nat.cast_zero, div_zero] at hbound
+    linarith
+  have hplayersReal : 0 < (Fintype.card G.Player : ℝ) := by exact_mod_cast hplayers
+  have hthreshold : 1 / (Fintype.card G.Player : ℝ) ≤ 1 := by
+    apply (div_le_iff₀ hplayersReal).mpr
+    have hcardOne : 1 ≤ Fintype.card G.Player := hplayers
+    simpa only [one_mul] using (Nat.one_le_cast.mpr hcardOne : (1 : ℝ) ≤ _)
+  have hlamLt : lam < 1 := hbound.trans_le hthreshold
+  have hfinrank : Module.finrank ℝ (Payoff G.Player) = Fintype.card G.Player :=
+    Module.finrank_fintype_fun_eq_card ℝ
+  have hmax : max 1 (Module.finrank ℝ (Payoff G.Player)) = Fintype.card G.Player := by
+    rw [hfinrank]
+    exact max_eq_right hplayers
+  have hbudget : lam * (max 1 (Module.finrank ℝ (Payoff G.Player)) : ℕ) ≤ 1 := by
+    rw [hmax]
+    exact ((lt_div_iff₀ hplayersReal).mp hbound).le
+  have hpath := (property_1_finite G ⟨1, by omega⟩).2.1
+  change PathConnectedSet (G.finiteFeasiblePayoffs 1) at hpath
+  rw [finiteFeasiblePayoffs_one_eq_oneStageFeasiblePayoffs] at hpath
+  have hconnected := PathConnectedSet.isPreconnected hpath
+  have hD1subset : G.oneStageFeasiblePayoffs ⊆ G.correlatedFeasiblePayoffs := by
+    rintro _ ⟨current, rfl⟩
+    exact G.mixedPayoff_mem_correlatedFeasiblePayoffs current
+  have hhull : convexHull ℝ G.oneStageFeasiblePayoffs = G.correlatedFeasiblePayoffs := by
+    apply Set.Subset.antisymm
+    · exact convexHull_min hD1subset G.correlatedFeasiblePayoffs_convex
+    · exact convexHull_mono (lemma_1_pure_subset_D1 G)
+  have hstep (value : Payoff G.Player) (hvalue : value ∈ G.correlatedFeasiblePayoffs) :
+      ∃ current : G.MixedProfile, ∃ next ∈ G.correlatedFeasiblePayoffs,
+        value = lam • G.mixedPayoff current + (1 - lam) • next := by
+    obtain ⟨current, hcurrent, next, hnext, hsplit⟩ :=
+      Math.Topology.exists_affine_step_of_mem_convexHull_isPreconnected
+        G.oneStageFeasiblePayoffs hconnected value (hhull.symm ▸ hvalue)
+        lam hlam.le hlamLt hbudget
+    obtain ⟨profile, hprofile⟩ := hcurrent
+    refine ⟨profile, next, hhull ▸ hnext, ?_⟩
+    simpa only [hprofile] using hsplit
+  have hcompact : IsCompact G.correlatedFeasiblePayoffs :=
+    Math.Topology.isCompact_convexHull_of_finiteDimensional
+      (Set.finite_range G.payoff).isCompact
+  obtain ⟨bound, hbounded⟩ := hcompact.isBounded.exists_norm_le
+  have hcoordinateBound (value : Payoff G.Player)
+      (hvalue : value ∈ G.correlatedFeasiblePayoffs) (who : G.Player) :
+      |value who| ≤ bound := by
+    simpa only [Real.norm_eq_abs] using
+      (norm_le_pi_norm value who).trans (hbounded value hvalue)
+  let rate : G.DiscountRate := ⟨lam, hlam, hlamLt.le⟩
+  apply Set.Subset.antisymm
+  · exact lemma_1_Dlambda_subset_C G rate
+  · intro payoff hpayoff
+    obtain ⟨stages, hstages⟩ :=
+      Math.RealSeries.exists_geometric_schedule_of_bounded_affine_steps
+        G.correlatedFeasiblePayoffs G.mixedPayoff lam hlam hlamLt.le
+        (fun _ => bound) hcoordinateBound hstep payoff hpayoff
+    refine ⟨mixedSequenceBehavior G stages, ?_⟩
+    rw [FiniteStageGame.discountedPayoff_mixedSequenceBehavior]
+    funext who
+    exact hstages who
 
 /-! Example 5 proves the constant `1/N` sharp for the paper's discount
 domain `0 < λ ≤ 1`. -/
@@ -9605,53 +9701,8 @@ private theorem discounted_sum_eq_of_affine_recurrence
     (hrec : ∀ time,
       state time = δ * stage time + (1 - δ) * state (time + 1)) :
     δ * ∑' time : ℕ, (1 - δ) ^ time * stage time = state 0 := by
-  let beta := 1 - δ
-  have hbeta0 : 0 ≤ beta := by
-    dsimp only [beta]
-    linarith
-  have hbeta1 : beta < 1 := by
-    dsimp only [beta]
-    linarith
-  have hbound0 : 0 ≤ bound :=
-    (abs_nonneg (state 0)).trans (hbound 0)
-  have hgeom : Summable (fun time : ℕ => beta ^ time) :=
-    summable_geometric_of_lt_one hbeta0 hbeta1
-  let weightedState : ℕ → ℝ :=
-    fun time => beta ^ time * state time
-  have hweightedState : Summable weightedState := by
-    apply Summable.of_norm_bounded (hgeom.mul_left bound)
-    intro time
-    dsimp only [weightedState]
-    rw [Real.norm_eq_abs, abs_mul, abs_pow, abs_of_nonneg hbeta0]
-    simpa [mul_comm] using
-      mul_le_mul_of_nonneg_left (hbound time) (pow_nonneg hbeta0 time)
-  have hweightedTail : Summable (fun time => weightedState (time + 1)) :=
-    hweightedState.comp_injective Nat.succ_injective
-  rw [← tsum_mul_left]
-  calc
-    (∑' time : ℕ, δ * ((1 - δ) ^ time * stage time)) =
-        ∑' time : ℕ, (weightedState time - weightedState (time + 1)) := by
-      apply tsum_congr
-      intro time
-      have h := hrec time
-      dsimp only [weightedState, beta]
-      rw [pow_succ']
-      calc
-        δ * ((1 - δ) ^ time * stage time) =
-            (1 - δ) ^ time * (δ * stage time) := by ring
-        _ = (1 - δ) ^ time *
-            (state time - (1 - δ) * state (time + 1)) := by
-          congr 1
-          linarith
-        _ = (1 - δ) ^ time * state time -
-            (1 - δ) * (1 - δ) ^ time * state (time + 1) := by
-          ring
-    _ = (∑' time : ℕ, weightedState time) -
-        ∑' time : ℕ, weightedState (time + 1) :=
-      hweightedState.tsum_sub hweightedTail
-    _ = state 0 := by
-      rw [hweightedState.tsum_eq_zero_add]
-      simp [weightedState]
+  exact Math.RealSeries.geometric_sum_eq_of_bounded_affine_recurrence
+    δ hδ hδ1 state stage bound hbound hrec
 
 /-! Proposition 6 is the discounted analogue of Proposition 5. -/
 theorem proposition_6 (G : FiniteStageGame) (lam : ℝ)
@@ -9806,60 +9857,17 @@ theorem proposition_6 (G : FiniteStageGame) (lam : ℝ)
   apply Set.Subset.antisymm
   · simpa only [deltaRate] using lemma_1_Dlambda_subset_C G deltaRate
   · intro payoff hpayoff
-    let Carrier := {v : Payoff G.Player //
-      v ∈ G.correlatedFeasiblePayoffs}
-    let nextValue (state : Carrier) : Payoff G.Player :=
-      Classical.choose (hdecompose state.1 state.2)
-    have nextValue_spec (state : Carrier) :
-        nextValue state ∈ G.correlatedFeasiblePayoffs ∧
-          ∃ current : G.MixedProfile,
-            state.1 = δ • G.mixedPayoff current +
-              (1 - δ) • nextValue state :=
-      Classical.choose_spec (hdecompose state.1 state.2)
-    let next (state : Carrier) : Carrier :=
-      ⟨nextValue state, (nextValue_spec state).1⟩
-    let current (state : Carrier) : G.MixedProfile :=
-      Classical.choose (nextValue_spec state).2
-    have current_spec (state : Carrier) :
-        state.1 = δ • G.mixedPayoff (current state) +
-          (1 - δ) • (next state).1 := by
-      exact Classical.choose_spec (nextValue_spec state).2
-    let state : ℕ → Carrier := fun time =>
-      Nat.rec ⟨payoff, hpayoff⟩ (fun _ previous => next previous) time
-    let stages : ℕ → G.MixedProfile := fun time => current (state time)
-    have hrec (time : ℕ) :
-        (state time).1 = δ • G.mixedPayoff (stages time) +
-          (1 - δ) • (state (time + 1)).1 := by
-      simpa [state, stages] using current_spec (state time)
-    let behavior := mixedSequenceBehavior G stages
-    refine ⟨behavior, ?_⟩
+    obtain ⟨stages, hstages⟩ :=
+      Math.RealSeries.exists_geometric_schedule_of_bounded_affine_steps
+        G.correlatedFeasiblePayoffs G.mixedPayoff δ hδ hδ1
+        (fun _ => bound) (fun value hvalue who => hCbound who hvalue)
+        (fun value hvalue => by
+          obtain ⟨next, hnext, current, hsplit⟩ := hdecompose value hvalue
+          exact ⟨current, next, hnext, hsplit⟩) payoff hpayoff
+    refine ⟨mixedSequenceBehavior G stages, ?_⟩
+    rw [FiniteStageGame.discountedPayoff_mixedSequenceBehavior]
     funext who
-    change G.repeatedGame.discountedPayoff (1 - δ)
-      behavior PUnit.unit who = payoff who
-    unfold StochasticGame.discountedPayoff
-    have hstage (time : ℕ) :
-        G.repeatedGame.expectedStagePayoff behavior
-            PUnit.unit time who =
-          G.mixedPayoff (stages time) who := by
-      have h := congrFun
-        (expectedStagePayoff_mixedSequenceBehavior G stages time) who
-      exact h
-    simp_rw [hstage]
-    rw [show 1 - (1 - δ) = δ by ring]
-    have hscalarRec (time : ℕ) :
-        (state time).1 who =
-          δ * G.mixedPayoff (stages time) who +
-            (1 - δ) * (state (time + 1)).1 who := by
-      have h := congrFun (hrec time) who
-      simpa only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] using h
-    have hstateBound (time : ℕ) :
-        |(state time).1 who| ≤ bound :=
-      hCbound who (state time).2
-    rw [discounted_sum_eq_of_affine_recurrence
-      δ hδ hδ1 (fun time => (state time).1 who)
-        (fun time => G.mixedPayoff (stages time) who)
-        bound hstateBound hscalarRec]
-    rfl
+    exact hstages who
 
 /-- Equation (22). -/
 theorem equation_22 (G : FiniteStageGame) (lam : ℝ)

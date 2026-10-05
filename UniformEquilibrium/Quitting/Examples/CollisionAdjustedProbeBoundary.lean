@@ -1,0 +1,220 @@
+import UniformEquilibrium.Quitting.Root.CollisionAdjustedSingletonProbe
+
+/-! # The literal two-player collision and upper-freeze packet fixtures
+
+Every source, product root, endpoint payoff and successor is the actual
+quitting-game object. Canonical solo-root/probe identities own all semantic
+calculations. One-stage Nash is not asserted to be a behavioral equilibrium.
+-/
+
+noncomputable section
+
+namespace GameTheory.CollisionAdjustedProbeBoundary
+
+open GameTheory
+open scoped Matrix
+
+abbrev Player := Fin 2
+
+def reward (terminal : {S : Finset Player // S.Nonempty}) : Payoff Player :=
+  if terminal.1 = {0} then ![0, -1]
+  else if terminal.1 = {1} then ![-1, 0]
+  else ![1, 1]
+
+def zeroPoint : Payoff Player := ![0, 0]
+def capPoint (cap : ℝ) : Payoff Player := ![0, cap]
+
+def root (rate : ℝ) (hrate0 : 0 ≤ rate) (hrate1 : rate ≤ 1) : Player → PMF Bool :=
+  quittingSingletonProbeRoot 0 rate hrate0 hrate1
+
+def quarterRoot : Player → PMF Bool := root (1 / 4) (by norm_num) (by norm_num)
+
+@[simp] theorem solo_reward (owner receiver : Player) :
+    quittingSoloReward reward owner receiver = if owner = receiver then 0 else -1 := by
+  fin_cases owner <;> fin_cases receiver <;>
+    norm_num [quittingSoloReward, reward, Finset.ext_iff, Fin.forall_fin_two]
+
+@[simp] theorem collision_reward : quittingSingletonCollisionReward reward 0 1 = 1 := by
+  norm_num [quittingSingletonCollisionReward, reward, Finset.ext_iff, Fin.forall_fin_two]
+
+theorem reward_bounded (terminal : {S : Finset Player // S.Nonempty}) (who : Player) :
+    |reward terminal who| ≤ 1 := by
+  unfold reward
+  split
+  · fin_cases who <;> norm_num
+  · split <;> fin_cases who <;> norm_num
+
+theorem corrected_source :
+    quittingSingletonProbeSource reward 3 zeroPoint 0 (1 / 4) = ![0, 2 / 3] := by
+  ext who
+  fin_cases who <;>
+    norm_num [quittingSingletonProbeSource, quittingSingletonProbeCorrection,
+      quittingSingletonProbeCollision, zeroPoint]
+
+theorem corrected_successor :
+    quittingRootSuccessorPayoff reward ![0, 2 / 3] quarterRoot = ![0, 1 / 4] := by
+  rw [← corrected_source]
+  change quittingSingletonProbeSuccessor reward 3 zeroPoint 0 (1 / 4)
+    (by norm_num) (by norm_num) = _
+  ext who
+  rw [quittingSingletonProbeSuccessor_eq_mix]
+  rw [corrected_source]
+  fin_cases who <;> norm_num
+
+theorem corrected_endpoint_indifference (who : Player) :
+    quittingRootContinuePayoff reward ![0, 2 / 3] quarterRoot who = ![0, 1 / 4] who ∧
+      quittingRootQuitPayoff reward ![0, 2 / 3] quarterRoot who = ![0, 1 / 4] who := by
+  rw [← corrected_source]
+  fin_cases who
+  · constructor
+    · exact quittingSingletonProbeContinuePayoff_owner reward 3 zeroPoint 0 (1 / 4)
+        (by norm_num) (by norm_num)
+    · simpa [quarterRoot, root] using
+        quittingSingletonProbeQuitPayoff_owner reward 3 zeroPoint 0 (1 / 4)
+        (by norm_num) (by norm_num)
+  · constructor
+    · rw [show quarterRoot = quittingSingletonProbeRoot 0 (1 / 4)
+        (by norm_num) (by norm_num) from rfl,
+        quittingSingletonProbeContinuePayoff_other reward 3 zeroPoint (by decide)]
+      rw [corrected_source]
+      norm_num
+    · rw [show quarterRoot = quittingSingletonProbeRoot 0 (1 / 4)
+        (by norm_num) (by norm_num) from rfl,
+        quittingSingletonProbeQuitPayoff_other reward 3 zeroPoint (by decide)]
+      norm_num
+
+theorem corrected_exact_nash : IsεQuittingRootNash reward ![0, 2 / 3] 0 quarterRoot := by
+  apply (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash reward _ _).mp
+  apply (isεQuittingRootEndpointNash_iff_purePayoff_le reward _ _ _).mpr
+  intro who
+  rw [corrected_successor]
+  exact ⟨by rw [(corrected_endpoint_indifference who).2]; simp,
+    by rw [(corrected_endpoint_indifference who).1]; simp⟩
+
+theorem quarter_absorption : quittingRootAbsorptionMass quarterRoot = 1 / 4 :=
+  quittingSingletonProbeRoot_absorption 0 (1 / 4) (by norm_num) (by norm_num)
+
+theorem uncorrected_endpoints :
+    quittingRootContinuePayoff reward zeroPoint quarterRoot 1 = -1 / 4 ∧
+      quittingRootQuitPayoff reward zeroPoint quarterRoot 1 = 1 / 4 := by
+  simp only [quarterRoot, root, quittingSingletonProbeRoot]
+  constructor
+  · rw [quittingRootContinuePayoff_soloStationaryRoot_other reward (by decide)]
+    norm_num [zeroPoint]
+  · rw [quittingRootQuitPayoff_soloStationaryRoot_other reward (by decide)]
+    norm_num
+
+theorem uncorrected_not_nash : ¬IsεQuittingRootNash reward zeroPoint 0 quarterRoot := by
+  intro hnash
+  have hendpoint := (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash reward _ _).mpr
+    hnash
+  have hbound := (isεQuittingRootEndpointNash_iff_purePayoff_le reward _ _ _).mp hendpoint 1
+  have hsuccessor : quittingRootSuccessorPayoff reward zeroPoint quarterRoot 1 = -1 / 4 := by
+    change quittingRootSuccessorPayoff reward zeroPoint
+      (quittingSoloStationaryRoot 0 (quittingHazardCoin (1 / 4)
+        (by norm_num) (by norm_num))) 1 = _
+    rw [quittingRootSuccessorPayoff_solo]
+    norm_num [zeroPoint]
+  rw [uncorrected_endpoints.2, hsuccessor] at hbound
+  norm_num at hbound
+
+/-- The actual upper-face construction leaves the source coordinate unchanged. -/
+theorem frozen_source (cap rate : ℝ) :
+    quittingSingletonProbeSource reward cap (capPoint cap) 0 rate = capPoint cap := by
+  ext who
+  fin_cases who
+  · exact quittingSingletonProbeSource_owner reward cap (capPoint cap) 0 rate
+  · exact quittingSingletonProbeSource_eq_of_upper reward 0 1 rate rfl
+
+theorem frozen_successor (cap rate : ℝ) (hrate0 : 0 ≤ rate) (hrate1 : rate ≤ 1) :
+    quittingRootSuccessorPayoff reward (capPoint cap) (root rate hrate0 hrate1) =
+      ![0, cap - (cap + 1) * rate] := by
+  rw [← frozen_source cap rate]
+  change quittingSingletonProbeSuccessor reward cap (capPoint cap) 0 rate hrate0 hrate1 = _
+  ext who
+  rw [quittingSingletonProbeSuccessor_eq_mix, frozen_source]
+  fin_cases who
+  · simp [capPoint]
+  · simp [capPoint]
+    ring
+
+theorem frozen_continue_minus_quit (cap rate : ℝ)
+    (hrate0 : 0 ≤ rate) (hrate1 : rate ≤ 1) (hne : rate ≠ 1) :
+    quittingRootContinuePayoff reward (capPoint cap) (root rate hrate0 hrate1) 1 -
+      quittingRootQuitPayoff reward (capPoint cap) (root rate hrate0 hrate1) 1 =
+        cap - (cap + 2) * rate := by
+  rw [← frozen_source cap rate]
+  simp only [root]
+  rw [quittingSingletonProbeContinue_sub_quit_upper reward
+    (upper := cap) (point := capPoint cap) (owner := 0) (other := 1)
+    (by decide) rfl rate
+    hrate0 hrate1 hne]
+  simp [quittingSingletonProbeCollision]
+  ring
+
+theorem frozen_exact_nash (cap rate : ℝ) (hrate0 : 0 ≤ rate) (hrate1 : rate ≤ 1)
+    (hgap : 0 ≤ cap - (cap + 2) * rate) :
+    IsεQuittingRootNash reward (capPoint cap) 0 (root rate hrate0 hrate1) := by
+  apply (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash reward _ _).mp
+  apply (isεQuittingRootEndpointNash_iff_purePayoff_le reward _ _ _).mpr
+  intro who
+  rw [frozen_successor]
+  simp only [root, quittingSingletonProbeRoot]
+  fin_cases who
+  · change quittingRootQuitPayoff reward (capPoint cap)
+        (quittingSoloStationaryRoot 0 (quittingHazardCoin rate hrate0 hrate1)) 0 ≤ _ ∧
+      quittingRootContinuePayoff reward (capPoint cap)
+        (quittingSoloStationaryRoot 0 (quittingHazardCoin rate hrate0 hrate1)) 0 ≤ _
+    rw [quittingRootQuitPayoff_soloStationaryRoot_owner,
+      quittingRootContinuePayoff_soloStationaryRoot_owner]
+    simp [capPoint]
+  · rw [quittingRootQuitPayoff_soloStationaryRoot_other reward (by decide),
+      quittingRootContinuePayoff_soloStationaryRoot_other reward (by decide)]
+    norm_num [capPoint]
+    constructor <;> linarith [hgap]
+
+theorem upper_three_fixture :
+    quittingRootSuccessorPayoff reward ![0, 3] quarterRoot = ![0, 2] ∧
+      quittingRootContinuePayoff reward ![0, 3] quarterRoot 1 -
+        quittingRootQuitPayoff reward ![0, 3] quarterRoot 1 = 7 / 4 ∧
+      IsεQuittingRootNash reward ![0, 3] 0 quarterRoot := by
+  refine ⟨?_, ?_, ?_⟩
+  · convert frozen_successor 3 (1 / 4) (by norm_num) (by norm_num) using 1 <;>
+      norm_num [capPoint, quarterRoot]
+  · convert frozen_continue_minus_quit 3 (1 / 4)
+      (by norm_num) (by norm_num) (by norm_num) using 1 <;>
+      norm_num [capPoint, quarterRoot]
+  · exact frozen_exact_nash 3 (1 / 4) (by norm_num) (by norm_num) (by norm_num)
+
+theorem upper_two_fixture (rate : ℝ) (hpositive : 0 < rate) (hsmall : rate < 1 / 2) :
+    quittingRootSuccessorPayoff reward ![0, 2] (root rate hpositive.le (by linarith)) =
+        ![0, 2 - 3 * rate] ∧
+      quittingRootContinuePayoff reward ![0, 2] (root rate hpositive.le (by linarith)) 1 -
+        quittingRootQuitPayoff reward ![0, 2] (root rate hpositive.le (by linarith)) 1 =
+          2 - 4 * rate ∧
+      0 < 2 - 4 * rate ∧
+      IsεQuittingRootNash reward ![0, 2] 0 (root rate hpositive.le (by linarith)) ∧
+      ∀ who, |quittingRootSuccessorPayoff reward ![0, 2]
+        (root rate hpositive.le (by linarith)) who| ≤ 2 := by
+  have hsuccessor := frozen_successor 2 rate hpositive.le (show rate ≤ 1 by linarith)
+  have hdifference := frozen_continue_minus_quit 2 rate hpositive.le
+    (show rate ≤ 1 by linarith) (by linarith)
+  norm_num [capPoint] at hsuccessor hdifference
+  refine ⟨hsuccessor,
+    hdifference, by linarith,
+    frozen_exact_nash 2 rate hpositive.le (by linarith) (by linarith), ?_⟩
+  intro who
+  rw [hsuccessor]
+  fin_cases who
+  · norm_num
+  · change |2 - 3 * rate| ≤ 2
+    exact abs_le.mpr ⟨by linarith, by linarith⟩
+
+/-- Disabling the upper freeze literally sends this source outside the required box. -/
+theorem unfrozen_upper_sources :
+    3 < quittingSingletonProbeSource reward 4 (capPoint 3) 0 (1 / 4) 1 ∧
+      2 < quittingSingletonProbeSource reward 3 (capPoint 2) 0 (1 / 4) 1 := by
+  norm_num [quittingSingletonProbeSource, quittingSingletonProbeCorrection,
+    quittingSingletonProbeCollision, capPoint]
+
+end GameTheory.CollisionAdjustedProbeBoundary

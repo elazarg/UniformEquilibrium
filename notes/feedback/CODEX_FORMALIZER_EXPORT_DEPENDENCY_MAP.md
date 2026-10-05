@@ -68,7 +68,7 @@ gates. It is retired unchanged to
 | Completed unchanged-child obstruction | `ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO` | `AdaptiveChildCenter.profile_exactTerminalNash` and `AdaptiveChildCenter.target_isUniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`) prove the center's positive equilibrium. `exists_actual_quantile_rigidity` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterQuantileRigidity.lean`) passes its silent named check for the original full sequence and internally selected unbounded cutoffs. The four actual restriction estimates, positive parent-plus-child floor, reward-neighborhood transfer and nearby one-date producer pass the named `AdaptiveChildCenterNearbyHorizons` check, including the same selected profile before every accuracy and exact Nash at every finite horizon. Literal center, half-scaling, unchanged-law and larger-radius stationary consumers also pass their named checks. Complete-claim review and the full silent integration gate pass; the packet is retired unchanged. Capped-clock certificate infeasibility does not prove the unchanged-child obstruction. |
 | Single-pivot secant and tilted common-calendar source | `SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE` | Both payoff packets are complete and retired, including accepted raw sources, exact laws/full caps, the printed half-cap rates, selected-word pivot optimum, and all literal fixtures. The single-pivot secant/tilted common-calendar source remains a separate construction; payoff compression does not preserve caps. |
 | New screened-minimum/fiber algebra and source transport | `GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR`, `MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION`, `THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS` | `minimumTerminalSemantic_maximumDebt_allPlayersTie` (`UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean`), `minimumTerminalSemantic_exploitabilitySingletonMargin` (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostate.lean`), and `exists_twoSureProductRoot_realizing_jointCarrierPoint_of_strictMargin` (`UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonBehavioralLawProductBase.lean`) provide minimum and actual-source interfaces. The first new steps differ: degree-six screened-root nonvanishing, four-coordinate singleton stretch, and signed affine-row comparison, respectively. None may assume a selected counterexample fiber or hazard as a certificate field. |
-| Rational rejection and literal potential fixtures | `REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS`, `QUITTING_POTENTIAL_SHAPE_EXCLUSIONS` | The common exact-root exclusion, adaptive reflection, quadratic and multi-affine exclusions, and restricted same-polynomial characterization pass the full integration gate. Face-only additive and regular scalar-composition exclusions, monotone-transform transfer, the same-polynomial quantitative characterization and positive charge normalization pass silent named, separate standard-axiom and full integration checks. The rational exact one-quitter rejection producer passes its silent named, exhaustive axiom and full integration checks. The literal shape fixtures remain pending. The reflection packet separately requires rational approximate robust rejection, eventual search and its remaining source joins. These are necessary-shape reductions, not a solved-game class. |
+| Rational rejection and literal potential fixtures | `REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS`, `QUITTING_POTENTIAL_SHAPE_EXCLUSIONS` | The common exact-root exclusion, adaptive reflection, quadratic and multi-affine exclusions, and restricted same-polynomial characterization pass the full integration gate. Face-only additive and regular scalar-composition exclusions, monotone-transform transfer, the same-polynomial quantitative characterization and positive charge normalization pass silent named, separate standard-axiom and full integration checks. The rational exact one-quitter rejection producer passes its silent named, exhaustive axiom and full integration checks. The literal shape fixtures also pass silent named, separate standard-axiom and full integration checks; the shape packet's mathematical content is complete. The reflection packet separately requires rational approximate robust rejection, eventual search and its remaining source joins. These are necessary-shape reductions, not a solved-game class. |
 
 ## Adaptive-child obstruction: known-proof dependencies
 
@@ -893,8 +893,9 @@ mathematical conjectures.
    passes its silent named check. Closed-face rational approximation and the
    collision-adjusted probe retain exact source Nash, the literal successor,
    positive absorption and the strict three-quarter drop bound. Exhaustive axiom
-   and full silent integration checks pass. The five shape fixture owners remain
-   unapplied. A general approximate Nash selector does not supply this witness.
+   and full silent integration checks pass. The five shape fixture owners also
+   pass those checks, completing the shape packet's mathematical content.
+   A general approximate Nash selector does not supply this witness.
 7. Produce the reflection packet's rational approximate robust rejection by joint
    approximation of an actual positive violating source/root pair. Preserve
    absorption-relative regret and strict rejection, then prove the prescribed
@@ -1097,6 +1098,15 @@ response attaining the initial value. Neither a supplied cap field nor a
 generic error bound proves that equality.
 
 ## Literature dependency boundary: Sorin's feasible faces
+
+`proposition_4` (`Literature/Sorin1986.lean`) proves the exact discounted
+feasible-set identity below the reciprocal player-count threshold. Its stages,
+residuals and actual behavioral profile are selected internally from the
+connected one-stage payoff set. The silent paper build, actual-profile consumers,
+separate standard-axiom checks and full build pass. The same checks retain
+`proposition_6` and the completed behavioral `proposition_15`.
+This closes discounted feasibility at that threshold, not equilibrium existence
+for the remaining paper results.
 
 `proposition_7` (`Literature/Sorin1986.lean`) passes the silent named paper
 build and a separate transitive axiom check using only the three permitted

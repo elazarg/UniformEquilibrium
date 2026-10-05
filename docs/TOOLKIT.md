@@ -2382,6 +2382,23 @@ lie in the stated box. This is an annotated one-stage rejection witness, not a
 behavioral equilibrium, approximate-root search, or general decision algorithm.
 Its exhaustive axiom audit and full silent integration check also pass.
 
+The shape examples and boundary cases are integrated and pass silent named,
+separate standard-axiom and full build checks. `upper_two_fixture`
+(`UniformEquilibrium/Quitting/Examples/CollisionAdjustedProbeBoundary.lean`)
+retains the exact collision correction and boxed upper-face freeze for every
+positive rate below one half. `not_standardQ`
+(`MathUE/Analysis/Examples/NonQLinearFace.lean`) proves that the convex
+positive-face-drift example fails the matrix hypothesis. The exact charge
+normalization in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialChargeScale.lean`
+retains all full-root quantifiers. The one-player and zero-table solo self-loop
+producers in
+`UniformEquilibrium/Quitting/Examples/ExactRootPotentialPlayerCountBoundary.lean`
+reject every potential, without shape or regularity assumptions; the empty-player
+case instead has zero absorption for every root. Together with the coupled
+cubic example, these complete the shape packet's boundary tests. They do not
+exclude every polynomial or solve an additional game class.
+
 The literal conversions in
 `UniformEquilibrium/Quitting/Projective/RobustChargedRelationPacketAdapter.lean`
 preserve roots, values through the endpoint, horizon, and total charge in
@@ -3049,6 +3066,7 @@ generic quitting-game existence theorems.
 | Differently labelled points in one compact fiber | `MathUE/Topology/CompactDiscreteFiber.lean` | `exists_same_fiber_different_labels` proves that a continuous surjection from a compact space onto a Hausdorff preconnected space cannot separate all fibers by a nonconstant continuous discrete label: two differently labelled source points force a fiber containing two differently labelled points. This supplies no payoff-path lifting or selection theorem. |
 | Small representations of preconnected convex hulls | `MathUE/Topology/ConnectedConvexHullRepresentation.lean` | `exists_small_finset_of_mem_convexHull_isPreconnected` selects a nonempty finite subset of the actual source representing the supplied convex-hull point, with cardinality at most the ambient dimension or one in dimension zero. No compactness, path connectedness, or supplied representation is required. Its silent named check, exhaustive axiom audit and full integration check pass. This supplies a geometric prerequisite, not Sorin's discounted schedule or an equilibrium. |
 | Affine peeling and geometric schedules | `MathUE/Topology/ConnectedConvexHullAffineStep.lean`, `MathUE/RealSeries/GeometricAffineSchedule.lean` | `exists_affine_step_of_mem_convexHull_isPreconnected` internally selects a source point and convex-hull residual under the prescribed dimension-weight budget. `exists_geometric_schedule_of_bounded_affine_steps` constructs the complete schedule from actual affine steps in a bounded region and proves its exact coordinatewise discounted payoff. Neither result asserts equilibrium or closes Sorin's paper statement without its game-specific adapter. |
+| Sorin's discounted feasible-set identity | `Literature/Sorin1986.lean` | `proposition_4` proves the paper's exact identity between discounted and correlated feasible payoffs for positive rates below the reciprocal player count. The source geometry, stages and behavioral realization are constructed internally. Its silent paper check, separate actual-profile consumer and standard-axiom checks, and full build pass. `proposition_6` reuses the generic schedule; `proposition_15` retains its actual behavioral equilibrium statement and passes the separate axiom check. Other unfinished paper results remain separate obligations. |
 | Coupled cubic shape example | `MathUE/Analysis/Examples/CoupledCubicShape.lean` | `Math.CoupledCubicShape.quasiconvexOn` proves quasiconvexity on every convex domain. `not_convexOn` and `not_exists_additive_eqOn` prove nonconvexity and failure of an additive representation on boxes of dimension at least two and coordinate widths at least one. The actual first and mixed derivatives and a literal rational-polynomial representation are also proved. This is an analytical example, not a quitting potential or equilibrium construction. |
 | Compact finite-prefix relations | `MathUE/Topology/CompactFinitePrefixRelation.lean`, `MathUE/Topology/CompactDependentFinitePrefixRelation.lean` | Inverse-limit selection from compatible compact finite prefixes. `exists_dependentInfiniteChain_of_finitePrefixes` also permits the state carrier to depend on the depth, but remains conditional on a coherent family of nonempty compact finite-prefix solution sets; it supplies no compatible-prefix producer. |
 | Rational max-expression lower search | `MathUE/Interval/RationalMaxExpression.lean`, `MathUE/Interval/RationalLowerBoxTree.lean`, `MathUE/Interval/RationalLowerBoxSearch.lean` | Exact rational interval evaluation for expressions generated by constants, variables, negation, addition, multiplication, and binary maximum; independently checkable lower-box trees; sound breadth-first search; and strict-margin finite completeness on a rational root box. This is generic executable infrastructure, not CAD/QE for arbitrary semialgebraic formulas. |

@@ -27,6 +27,7 @@ import MathUE.Analysis.CompactMinimumEnvelope
 import MathUE.Analysis.FiniteLogSumExp
 import MathUE.Analysis.CoordinateResetFTC
 import MathUE.Analysis.Examples.CoupledCubicShape
+import MathUE.Analysis.Examples.NonQLinearFace
 import MathUE.Analysis.SignedMixedCurvatureAccount
 import MathUE.Analysis.MixedCurvatureSupBound
 import MathUE.Analysis.MonotoneTransformChargedDrift

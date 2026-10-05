@@ -25,6 +25,7 @@ import MathUE.Analysis.CoordinateSecantEstimate
 import MathUE.Analysis.CurvatureHomogeneity
 import MathUE.Analysis.DerivativeDifferenceMeanValue
 import MathUE.Analysis.Examples.CoupledCubicShape
+import MathUE.Analysis.Examples.NonQLinearFace
 import MathUE.Analysis.FaceDriftAdditiveExclusion
 import MathUE.Analysis.FaceDriftScalarCompositionExclusion
 import MathUE.Analysis.FiniteLogSumExp
@@ -2553,6 +2554,7 @@ import UniformEquilibrium.Quitting.Examples.CapThresholdFinFour
 import UniformEquilibrium.Quitting.Examples.CapThresholdFinThree
 import UniformEquilibrium.Quitting.Examples.CapThresholdInitialSkip
 import UniformEquilibrium.Quitting.Examples.CapThresholdRegressionCommon
+import UniformEquilibrium.Quitting.Examples.CollisionAdjustedProbeBoundary
 import UniformEquilibrium.Quitting.Examples.CrossMassDeterminantFixture
 import UniformEquilibrium.Quitting.Examples.CrossMassPayoffThresholdRegression
 import UniformEquilibrium.Quitting.Examples.Cyclic.CandidateHardWeightCoordinateSilence
@@ -2583,6 +2585,7 @@ import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.SemanticBridge
 import UniformEquilibrium.Quitting.Examples.CyclicSingletonFourPlayer
 import UniformEquilibrium.Quitting.Examples.DeadlineSecurityPairExamples
 import UniformEquilibrium.Quitting.Examples.ExactRootNonconvexityRegression
+import UniformEquilibrium.Quitting.Examples.ExactRootPotentialPlayerCountBoundary
 import UniformEquilibrium.Quitting.Examples.FinFourLastPlayerChild
 import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskyCapLimitRootUniqueness
 import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskyPairDefect
@@ -2899,6 +2902,7 @@ import UniformEquilibrium.Quitting.Projective.FloorRobustChargedRelation
 import UniformEquilibrium.Quitting.Projective.FloorRobustChargedRelationTranslation
 import UniformEquilibrium.Quitting.Projective.FloorRobustPolynomialSeparator
 import UniformEquilibrium.Quitting.Projective.ForwardBlockSingleSeam
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialChargeScale
 import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialFaceDrift
 import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMinimum
 import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMonotoneTransformExclusion
