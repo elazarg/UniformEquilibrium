@@ -79,6 +79,16 @@ method or the already existing full-dimensional-neighborhood concept.
 The next question is global actual-table selection beyond this local
 center; no general openness or architecture-completeness claim is made.
 
+The live section **Global two-joint selection across the complete R
+axis** proposes a raw cyclic-child theorem with both joint premiums
+arbitrarily positive, not merely another regular neighborhood. The separate
+addendum removes the initial eta upper bound by localizing every possible
+nonpivot zero to the strict-monotonicity region. Its global selector and
+opposite pivot endpoint signs are written below; the consolidated statement
+is not yet independently reviewed. Singleton floors are required
+on the refined solo arcs, not at every retained joint row. The exact
+negative-A-floor test makes that distinction substantive.
+
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
 original finite F/J quiet-extension criteria: one nonnegative child
@@ -3226,3 +3236,423 @@ separated active occurrences can be selected globally in a remaining
 raw family, or whether a concrete table requires changing the joint
 support itself. The local implicit-function theorem alone provides
 neither global continuation nor that support selection.
+
+## Global two-joint selection across the complete R axis
+
+Status: complete ordinary proof candidate, not independently reviewed.
+The frozen neighborhood export is unchanged. This new theorem uses
+global interval selection, not continuation of one implicit branch.
+
+### Raw table, freedom, and conclusion
+
+Take a,b,c,h_1,h_2,H>0, D=abc−1>0, U,V≥1, xi>0,
+0<eta≤c, and ANY R∈ℝ. Prescribe
+
+    r(0)=(1,−h_1,−h_2,−H),
+    r(1)=(U,0,b,−1),
+    r(2)=(V,−1,0,c),
+    r(3)=(R,a,−1,0),
+    r(03)=(1+xi,−h_1,−h_2,eta).                    (87)
+
+The only further raw restrictions are six collision caps:
+
+    r_1(01),r_1(13),r_1(013) ≤ −h_1,
+    r_2(02),r_2(23),r_2(023) ≤ 0.                  (88)
+
+All other nonsingleton coordinates are arbitrary real numbers. The
+claim is that EVERY such actual table has a fixed-target UE against
+complete behavioral deviations, for every real R. Both actual joint
+participants have strictly positive premiums. There are no supplied
+hazards, continuations, or strategic certificates among the inputs.
+
+The upper bound eta≤c has a concrete role in the monotone selector
+below. No assertion removes it. Conditions (88) are stronger than
+some older zero-eta weighted caps; this is not a subsumption claim
+for every previous raw class. Its new scope is a whole positive-eta
+two-joint class and the complete R axis, rather than one local center.
+
+Let
+
+    A=[[0,−1,a],[b,0,−1],[−1,c,0]],
+    nu=A⁻¹(h_1,h_2,H),
+    R_low=1−[(U−1)nu_1+(V−1)nu_2]/nu_3,
+    T=1−[c(U−1)+(V−1)]/(bc).                       (89)
+
+Here A⁻¹=[[c,ac,1],[1,a,ab],[bc,1,b]]/D is strictly
+positive. If U=V=1, then R_low=T=1 and existing outer exits
+already cover the entire axis. Otherwise
+
+    nu_3(T−R_low)
+      =[c(U−1)h_2+(V−1)h_2+b(V−1)H]/(bc)>0.
+
+It remains to construct the SAME raw table when R_low<R<T≤1.
+
+### The global one-dimensional branch for player 3
+
+Fix such an R and put
+
+    kappa=eta/(H+eta)∈(0,1),
+    t=xi/(xi+1−R)∈(0,1),
+    Y=D/[abc+a(c+1)(1+t)+t].                        (90)
+
+For y∈(0,Y), and for x in the interval specified below, set
+
+    e=kappa*x/(1+kappa*x),
+    f=t*y/(1+t*y),
+    C_A=(1−x)(1−y), C_D=(1−e)(1−f),
+    a_1=−h_1*x+a(1−x)y,
+    d_1=−h_1*e+a(1−e)f+C_D*a_1,
+    a_2=[h_2*e+(1−e)f]/C_D,
+    w=d_1/(1+d_1),
+    z=[a_2+h_2*x+(1−x)y]/[b(1−x)(1−y)].            (91)
+
+These are the arbitrary-table elimination formulas (83) specialized
+to (87), not a new set of asserted Bellman identities. Useful exact
+forms are
+
+    d_1={a(1+t)y−h_1(1+kappa)x
+                −[a+h_1*kappa*t]xy}/[(1+kappa*x)(1+t*y)],
+
+    z={h_2(1+kappa)x+(1+t)y
+                +[h_2*kappa*t−1]xy}/[b(1−x)(1−y)]. (92)
+
+For fixed y, d_1 strictly decreases in x and z strictly increases.
+For the first fact, write
+
+    d_1=[A_y−B_y*x]/(1+kappa*x),
+    A_y=a*f+a(1−f)y>0,
+    B_y=h_1*kappa+(1−f)(h_1+a*y)>0.
+
+For the second, differentiation of (92) gives a positive numerator
+h_2(1+kappa)+h_2*kappa*t*y+t*y. At x=0,
+d_1=a(1+t)y/(1+t*y)>0 and z=(1+t)y/[b(1−y)]<1.
+The last inequality holds throughout y≤Y because
+
+    Y < b/(b+1+t).
+
+This follows by cross multiplication: the positive difference of
+the right and left cross-products is (1+t)(ab+b+1).
+
+Let X(y) be the first positive x where d_1=0 or z=1.
+Both equations have unique positive roots; the z=1 root is below
+one. Thus 0<X(y)<1, and on 0≤x≤X(y) we have
+0≤w<1 and 0<z≤1, with strict w>0,z<1 before the endpoint.
+The rational formula for the d_1=0 root also gives X(y)=O(y)
+as y→0. No hazard reaches a denominator singularity on this interval.
+
+Define the player-3 residual
+
+    Phi(x,y)=−z+(1−z)[c*w+(1−w)eta*e]
+                         −x(H+eta)/(1−x).            (93)
+
+It is STRICTLY DECREASING in x on the admissible interval. Indeed
+z_x>0 and w_x<0. Differentiating gives
+
+    Phi_x=−z_x[1+c*w+(1−w)eta*e]
+          +(1−z)w_x(c−eta*e)
+          +(1−z)(1−w)eta*e_x−(H+eta)/(1−x)².
+
+The first term is negative, the second nonpositive since eta≤c
+and e<1, and the last two together are strictly negative because
+
+    eta*e_x=(H+eta)kappa²/(1+kappa*x)²
+                         <(H+eta)/(1−x)².
+
+At x=0, direct substitution gives Phi(0,y)>0 for 0<y<Y,
+and Phi(0,Y)=0: after multiplication by positive denominators its
+sign is that of D−[abc+a(c+1)(1+t)+t]y. At x=X(y),
+either z=1, giving a negative residual immediately, or w=0, where
+
+    Phi≤eta*e−x(H+eta)/(1−x)<0.
+
+Consequently there is a UNIQUE x(y)∈(0,X(y)) with Phi=0.
+Its dependence on y is continuous by strict monotonicity and the
+two endpoint signs. It tends to zero at both y=0 and y=Y.
+At Y this follows from the unique nonnegative root x=0 and the
+strictly negative x derivative; at zero it follows from X(y)=O(y).
+
+At (x,y)=(0,0), the residual has derivatives
+
+    Phi_x=−(1+kappa)(H+c*h_1+h_2/b)<0,
+    Phi_y=(1+t)(ac−1/b)>0.
+
+The ordinary one-equation implicit-function theorem at this endpoint,
+or division of its first-order expansion using x=O(y), gives
+
+    x/y → (1+t)/[(1+kappa)nu_3],
+    z/y → (1+t)nu_1/nu_3,
+    w/y → (1+t)nu_2/nu_3.                            (94)
+
+This use of endpoint differentiation does not assert global implicit
+continuation: the entire branch was already produced by strict
+monotonicity and sign crossing on each admissible interval.
+
+### The pivot equation crosses on the same branch
+
+Along x(y), set
+
+    c_0star=w(V−1)+(1−w)xi*f,
+    b_0=z(U−1)+(1−z)c_0star,
+    F(y)=(R−1)y+(1−y)b_0−xi*y.                     (95)
+
+Using (94), f/y→t, and xi(t−1)=t(R−1),
+
+    lim_{y→0} F(y)/y = (1+t)(R−R_low)>0.            (96)
+
+At y=Y the branch has x=e=0, and
+
+    z=D/[b(ac+a+1)],
+    w=D/[c(ab+b+1)].
+
+Substitution in (95), using the same relation between t,xi,R,
+gives the exact endpoint identity
+
+    F(Y)/Y=(1+t)(R−T)−t*xi*D/(abc)<0.              (97)
+
+Continuity and the intermediate value theorem now produce an
+interior y with F(y)=0. Equation (93) and this pivot equation are
+exactly (84). All six hazards x,y,z,w,e,f are strictly between
+zero and one. They are produced from the raw table: no root selector
+or favorable residual sign is supplied as an extra hypothesis.
+
+### Bellman identities and the correct location of the floors
+
+The actual values are obtained from (85):
+
+    V_A=(1+xi*y,a_1,a_2,eta*x),
+    V_B=(1+b_0,0,b*z,x(H+eta)/(1−x)),
+    V_C=(1+c_0star,0,0,c*w+(1−w)eta*e),
+    V_D=(1+xi*f,d_1,0,eta*e).                        (98)
+
+All policy and Continue identities and all supported indifferences
+follow from the explicit elimination already proved in this notebook.
+Every coordinate of V_B,V_C,V_D is at least its singleton. This
+uses U,V≥1, xi>0, positive rates, and d_1>0. The same is true
+at A except possibly player 1: a_1 CAN BE NEGATIVE. It is not
+silently replaced by a singleton floor.
+
+At A, player 1's forced-Quit value is at most
+
+    −h_1[x+y−xy] ≤ −h_1*x ≤ a_1,
+
+by the three first caps in (88). At D its forced-Quit value is
+nonpositive, hence at most d_1. Player 2's forced-Quit value is
+nonpositive at BOTH joint rows by the other three caps, whereas its
+values are a_2>0 and zero. Thus both retained joint rows pass every
+exact Quit comparison, even if a_1<0. Their Continue equations
+remain exact.
+
+Only B and C are subdivided. Their interpolated value paths use the
+segments V_B→V_C and V_C→V_D, whose endpoints ALL have singleton
+floors. The negative A coordinate never enters a refined solo arc.
+Consequently the common-error refinement applies literally with
+
+    delta_n=max(0,r_i(ij)−s_i : j∈{1,2}, i≠j)
+              *max(1−(1−z)^(1/n),1−(1−w)^(1/n)).
+
+At every microdate Continue is exact and Quit is at most current
+value plus delta_n. The retained joint rows need no error. Add
+the same delta_n to all values, including any negative A value.
+This is a global Bellman supersolution: Continue transports only
+opponent nonabsorption times the added constant, and Quit has no
+future value. For every deviator, positive opponent aggregate hazards
+give geometric period survival. Its bounded remainder vanishes, so
+every complete terminal deviation gains at most delta_n→0.
+
+The period has 2+2n dates and its macro terminal law is independent
+of n. Hence every profile delivers the SAME target V_A. If rho_i<1
+denotes opponent period survival, every deviation's expected absorption
+date is bounded by (2+2n)/(1−rho_i). Bounded rewards then give a
+uniform terminal-to-average error O(1/N), independent of the deviator.
+First choose n for accuracy and then one threshold for all larger N.
+Thus the construction gives a fixed-target UE for the original table.
+
+The source consumer is the exact-Continue theorem
+`quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+Its actual fields require bounded values, not all-phase singleton
+floors. No new compiler theorem or all-phase-floor hypothesis is used.
+
+### Outer original-table exits and the equality boundaries
+
+The singleton matrix is
+
+    Gamma=[[0,U−1,V−1,R−1],
+           [−h_1,0,−1,a],
+           [−h_2,b,0,−1],
+           [−H,−1,c,0]].
+
+At R=R_low, (1,nu) is a strictly positive homogeneous LCP
+solution. The existing Fin4 no-UE implication would make Gamma R₀,
+so its contrapositive gives UE on this equality boundary.
+
+For R<R_low put d=nu_3(R_low−R)>0 and choose q_0>d.
+The homogeneous problem has only zero: positive pivot coordinate
+forces all child coordinates positive and equal to that coordinate
+times nu, then has negative pivot residual; pivot zero forces the
+zero homogeneous child by its cyclic negative edges and invertibility.
+At offset (q_0,−h_1,−h_2,−H), all child coordinates are positive
+and equal (1+p)nu. The pivot residual is q_0−d(1+p).
+There are exactly two roots, at p=0 and p=q_0/d−1>0. Their
+active principal determinants are D>0 and −Dd<0. The first
+inactive pivot residual is strictly positive. Thus the regular root-
+sum degree is zero and the existing degree-not-one theorem gives UE.
+These arguments use no nonsingleton reward restriction.
+
+For R≥T the raw child-123 passive inverse weights are
+
+    [c(U−1)+(V−1)+bc(R−1),
+     ac(U−1)+a(V−1)+(R−1),
+     (U−1)+ab(V−1)+b(R−1)]/D.
+
+At R=T these are respectively zero,
+[c(U−1)+(V−1)]/(bc), and (V−1)/c, all nonnegative;
+they increase with R. Since A⁻¹ is strictly positive, the existing
+raw three-child passive-inverse criterion gives UE, INCLUDING R=T.
+Together with (96)–(97), these exits cover every real R exactly.
+
+The precise declarations are
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`,
+`exists_finset_r0Degree_eq_sum_sign_det` in
+`MathUE/LinearProgramming/R0DegreeSum.lean`,
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`,
+and `PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+These are the original-table exits already inspected, not inferred
+from reward perturbation or a supplied lower-game equilibrium.
+
+### An exact test with a negative retained-joint coordinate
+
+Set a=b=c=2, h_1=10, h_2=1, U=V=2 and take
+
+    H=12507608845790/1340190709031,
+    eta=1250760884579/1340190709031,
+    xi=4829928386673/466635169733,
+    R=−210070619692/1399905509199.
+
+Here kappa=1/11, t=9/10, 0<eta<2=c, and the exact selected
+rates are
+
+    x=1/500, y=1/100,
+    z=116399/10868220, w=88690/5639199,
+    e=1/5501, f=9/1009.
+
+The exact scalar values are
+
+    a_1=−1/25000,
+    d_1=88690/5550509,
+    a_2=50509/5500000.
+
+Both residuals (93),(95) vanish exactly. Also
+
+    R_low=−30821872992215/79963036761851 < R < 1/4=T.
+
+For a complete table, use (87), put the first three capped entries
+equal to −10 and the other three equal to zero, and assign every
+remaining unused coordinate the value 37. This changes neither
+residual nor any joint-row comparison; its extra solo collision
+premiums are handled by refinement. The test has a genuinely negative
+phase-A player-1 value and proper positive hazards at both joint
+phases. An all-phase-floor compiler would reject it despite the
+literal complete-deviation proof above.
+
+Throughout the constructive interval, 03 is a mutual-positive-premium
+trap and neither participant weakly prefers leaving it:
+1+xi>R and eta>−H. Thus neither protected-set support-specific
+leave nor the new positive-weight aggregate-leave criterion can consume
+this trap. Product-low fails at the pure product law supported on 03.
+These are precise whole-middle-class distinctions, not an assertion
+that every possible completion defeats every other existing producer.
+
+Next independent challenge: check strict monotonicity at the two
+different hazard caps, both endpoint signs including the divided
+zero-end limit, and the negative-A-floor deviation argument. The
+open-neighborhood export remains frozen and logically separate.
+
+### Removal of the eta upper bound: arbitrary positive joint premiums
+
+The complete theorem (87)–(98) remains valid with ANY eta>0, without
+eta≤c. The earlier eta-bounded proof is retained above unchanged; the
+following argument replaces only its claim that Phi is decreasing on
+the entire admissible x interval. It does not assume global monotonicity
+where that assertion is no longer justified.
+
+Fix y∈(0,Y] and write g(x)=eta*e(x). On 0≤x≤X(y), we have
+0≤w<1 and 0<z≤1. If g(x)≥c, then
+
+    Phi(x,y) ≤ g(x)−x(H+eta)/(1−x) < 0.              (99)
+
+Indeed c*w+(1−w)g≤g in that region, and
+
+    g(x)=(H+eta)kappa²*x/(1+kappa*x)
+                            <(H+eta)*x/(1−x)
+
+for x>0 and 0<kappa<1. Thus every possible zero lies where g<c.
+Since g is strictly increasing from zero, that region is an initial
+interval. On it, the displayed derivative of Phi in (93) is strictly
+negative: its second term has c−g>0, its first term is negative,
+and the final two terms together are strictly negative by the same
+derivative estimate already proved. No eta≤c hypothesis is needed
+on this initial interval.
+
+For 0<y<Y the sign at x=0 is positive and the sign at x=X(y)
+is negative, exactly as above. If g reaches c before the cap, (99)
+already gives a negative value there. Hence there is exactly one zero,
+it lies strictly before either barrier, and Phi_x<0 at that zero.
+Continuity of x(y) follows either from this strict local derivative or
+from compactness and uniqueness on the continuous admissible interval.
+
+The limit x(y)→0 as y→0 still follows from X(y)=O(y). For y→Y,
+any accumulation point lies in [0,X(Y)]. A positive one cannot have
+g≥c by (99); if g<c, strict decrease from Phi(0,Y)=0 excludes
+it as well. The endpoint x=0 is therefore the only possible limit.
+All denominators stay away from zero near y=Y because X(Y)<1.
+The derivatives at (0,0) and the limits (94) are unchanged for every
+0<kappa<1. Thus both pivot endpoint identities (96)–(97), all proper
+rates, and the interior pivot crossing remain valid.
+
+No later step used eta≤c: in (98) eta enters the relevant floors
+only through positive quantities, the joint outsider bounds follow
+from (88), and the original-table outer exits depend only on the
+singleton matrix. The all-behavior fixed-target refinement and horizon
+proof therefore give UE for every real R under (87)–(88), with
+arbitrary xi,eta>0. This is a whole raw-parameter region, not a claim
+that UE itself is open under arbitrary perturbations.
+
+#### An exact test outside the original eta range
+
+Take a=b=c=2, h_1=h_2=1, U=V=2, and
+
+    H=92795042/12085635,
+    eta=92795042/4028545=3H>2=c,
+    xi=87603121/47466569,
+    R=−40136552/47466569.
+
+Then kappa=3/4, t=1/2, and exact proper rates are
+
+    x=1/100, y=1/20,
+    z=1475/30096, w=2101/18624,
+    e=3/403, f=1/41.
+
+They solve (93) and (95) exactly, and
+
+    R_low=−326727666/246018259 < R < 1/4=T,
+    eta*e=278385126/1623503635 < 2=c,
+    a_1=89/1000.
+
+This tests the localization explicitly: eta is far above c, while
+the selected root necessarily lies in the region eta*e<c. A complete
+actual table is obtained by setting the first three capped entries
+equal to −1, the second three equal to zero, and every other unused
+coordinate equal to 37. As in the previous exact test, no bound on
+those unused rewards is assumed in the existence statement.
+
+Consolidated independent-review target: (87)–(98), with the sole
+replacement 0<eta≤c by eta>0 justified in this addendum. In particular,
+the review must retain the six raw caps, handle both original-table
+equality boundaries, and check the complete-deviation consumer without
+an all-phase-floor assumption. The frozen local-neighborhood export is
+not modified and does not supply the global selector.

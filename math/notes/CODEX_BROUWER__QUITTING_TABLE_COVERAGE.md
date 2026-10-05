@@ -2483,9 +2483,27 @@ singletons again have the direct all-Never exit.
 For (N1), take d=1/2, tau=1/10, g=3/2, l=9/10.
 The charge lower bound in (N6) is90, while its right side is
 3/10+3*(31/10)=48/5. Thus the exact complement table is admitted
-with a strict margin. All its relevant signs and inequalities are
-strict, so this criterion also includes a full-dimensional nearby
-region, but that observation is secondary to the whole raw theorem.
+with a strict charge margin. The displayed bounds in (N2)-(N5)
+are equalities, so openness is not inferred from those chosen
+constants. Instead take d=2/5, tau=1/5, g=7/5, l=4/5: all four
+families of raw bounds are then strict, and the charge remains
+18>48/5. Thus this criterion also includes a full-dimensional
+nearby region, but that observation is secondary to the whole raw
+theorem.
+
+The box is essential, not a dispensable technicality. MORSE's
+independent review supplies the following exact same-table regression:
+
+    q=(9/10,9/10,9/10,0),
+    v=(-863/10,-863/10,-863/10,1),
+    Q=(17/125,17/125,17/125,1/1000),
+    C=w=(17/125,17/125,17/125,1981/1000).
+
+All three active players are indifferent and the outsider strictly
+Continues, so this is an exact root with successor above every own
+singleton. Its source is far outside the reward box. The theorem
+excludes such roots only on the specified smaller box; it does not
+assert unrestricted annotation return.
 
 The mechanism differs from weighted floors: no nonzero nonnegative
 weighted forced-Quit floor exists here. The exact Nash equalities

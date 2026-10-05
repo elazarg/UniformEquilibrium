@@ -1045,3 +1045,166 @@ endpoint and actual-support leaver choice, while identifying the second
 minimum arm as new work. There are no notebook, feedback, or other
 math-directory dependencies, no review-history section, and no claim
 to a checked implementation. No repair is requested for these bytes.
+
+## Independent review: signed pair core with same-sign gaps
+
+Verdict: PASS as ordinary mathematics, not a Lean check. Scope is
+section18, "Signed pair cores: a negative index without any protected
+floor", frozen in the whole notebook at SHA256
+`11d20a89b8670553264029ed3b6f7db4b30b351a0118f328823537e52af90c17`.
+The later section19 append is outside this review and was not read.
+No other review of this theorem was consulted.
+
+The audited statement allows arbitrary signed participant premiums,
+requires the union of all premium traps to be one pair C={i,j}, and
+requires the two leave/join gaps to have the same weak sign. For Fin4
+with nonnegative own singletons it gives a uniform-equilibrium payoff.
+The analytic theorem uses strictly same-sign, nonzero gaps; the weak
+boundary is obtained by reward closure, not by asserting the same
+index argument at a degenerate mixed root. Opposite strict signs and
+arbitrary larger cores are not covered.
+
+### Exact supports and selected return
+
+Every active support other than C is a nontrap: some active player has
+all its within-support participant rewards at most its singleton. Its
+exact Quit endpoint, hence successor, is at most that singleton. For
+an outsider k and T contained in C, the same upper bound holds for
+r_k(T+k), since a strict violation would make C+k a trap. These are
+upper bounds; no unsupported flatness or lower bound is used.
+
+At a core-only root, with d_i=r_i(ij)-r_i(j), the exact gaps are
+
+    g_i=s_i-v_i+(v_i-s_i+d_i)*q_j,
+    g_j=s_j-v_j+(v_j-s_j+d_j)*q_i.
+
+If one core player is sure and the other is interior, the latter's
+gap is the nonzero d. Thus a bad successor strictly above every
+singleton can only come from the pure pair or the unique possible
+interior pair candidate. The candidate has
+
+    q_i=(v_j-s_j)/(v_j-s_j+d_j),
+    q_j=(v_i-s_i)/(v_i-s_i+d_i).
+
+An interior ratio forces its numerator and its d to have the same
+strict sign. Zero denominator does not hide another candidate, since
+the corresponding gap cannot vanish when d is nonzero. A pure-pair
+root, if present at any source, is independent of that source: every
+player has a sure quitting opponent. It therefore supplies an
+absorbing self-loop at its reward vector and directly excludes a
+strict-drift potential.
+
+In the remaining case, suppose all exact roots at a source with some
+v_h<s_h were bad. All would equal the displayed mixed candidate p.
+For each outsider, Q_k<=s_k<w_k=C_k, so its Continue inequality is
+strict. This crucial strictness follows from badness, not from an
+assumed generic perturbation.
+
+Extend the literal clipped map
+
+    F(q)_k=min(1,max(0,q_k+g_k(q)))
+
+to the ambient Euclidean space using the polynomial endpoint gaps.
+Its fixed points are exactly the full Nash roots in the unit cube.
+Near p the outsider rows of F are constant zero and the core rows
+are unclipped. The Jacobian of q-F, with core coordinates first, is
+
+    [ 0       -alpha_i    * ]
+    [ -alpha_j  0         * ]
+    [ 0         0         Id],
+
+where alpha_i=v_i-s_i+d_i and alpha_j=v_j-s_j+d_j.
+The determinant is -alpha_i*alpha_j<0. All outsider derivatives in
+the upper-right block are retained. Although p lies on a face of the
+unit cube, it is interior to the ambient region (-1,2)^I: its local
+degree is -1, not a half-index. Globally F has degree +1 there, by
+the homotopy to a constant map taking values in the unit cube. No
+boundary point of the ambient region can be fixed during that
+homotopy. Excision of a unique fixed point contradicts local degree
+-1. This proves existence of a low-successor root, not a claim about
+every root.
+
+### Minimum argument and semantic endpoint
+
+The compact domain is the whole boxed lower region: some coordinate
+is at most its singleton. If a minimum has any strict deficit, the
+selected-return lemma produces an absorbing successor in that same
+domain and contradicts drift. Thus a minimum belongs to the lower
+boundary above all singleton floors. The signed singleton-face
+inequality rules out a unique binding coordinate. With at least two
+binding coordinates each binding derivative is nonnegative.
+
+Lowering a binding coordinate by epsilon permits selected return
+again. The signed estimate Q_k>=s_k-2M*a, Nash, and bounded successor
+displacement give epsilon<=(3M+B)*a. Minimality and drift force a
+strictly positive lower bound for the directional difference
+quotient, whereas its limit is the negative of a nonnegative binding
+derivative. This is a contradiction. There is no concealed convergence
+or continuity requirement on the selected roots.
+
+Nonnegative own singletons supply normality independently of signs
+of larger participant premiums. The named polynomial-obstruction
+consumer then gives the original Fin4 fixed-target uniform-payoff
+conclusion; all-zero singletons have the direct all-Never exit.
+When one or both d's vanish, changing only the appropriate passive
+partner-singleton rewards makes both gaps strictly positive or both
+strictly negative. The premium core and own singletons are unchanged.
+Reward closure gives one limiting target and retains unrestricted
+behavioral deviations. No weak-gap analytic exclusion is claimed.
+
+### Exact falsification tests and bounded source comparison
+
+I independently checked all fifteen rows of the displayed fixture.
+Its only trap is03, its two gaps are2, and every player has a negative
+grand-coalition participant premium. None of the fifteen pure
+coalitions is an equilibrium. At
+
+    v=(3,-1,4,2), q=(1/2,0,0,1/2),
+
+the exact endpoints are
+
+    Q=(3/2,0,0,1/2),
+    C=w=(3/2,1/2,1/4,1/2).
+
+Thus this same table really has a bad root from a below-floor source.
+The outsider gaps are -1/2 and -1/4, and the local determinant is
+-16. This falsifies replacing selected return by universal return.
+The singleton-matrix tests and response residuals t,t,t+t^2 retain
+their stated bounded force. The sure03 law directly fails product-low;
+both positive pair gaps exclude the aggregate-leave weights; and no
+player has globally nonnegative participant premiums. The review does
+not claim an exhaustive exclusion of every stationary or quiet-child
+method.
+
+For an independent minimal opposite-sign stress test, take two
+players with r(0)=(0,0), r(1)=(2,0), r(01)=(1,1), and source
+v=(-1,1). The gaps are 1-2q_1 and -1+2q_0. Every boundary support
+fails, leaving the unique exact root q=(1/2,1/2), with successor
+(1/2,1/2) above both zero singletons. Its local determinant is +4
+and its index is +1. The selected-return extension to opposite gaps
+is therefore false. This is not a counterexample to UE; both own
+singletons are zero.
+
+Static source checks included `ambientDegree_homotopy` and
+`ambientDegree_affineRootField_eq_sign_det` in
+`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`,
+`ambientDegree_excision` in
+`MathUE/Topology/AmbientDegreeProperties.lean`, and
+`ambientDegree_of_selfMap_eq_one` in
+`MathUE/Topology/AmbientDegreeSelfMapNormalization.lean`.
+For the last declaration one can place the closed region (-1,2)^I
+inside a larger ambient chart; the explicit constant homotopy already
+supplies the required boundary condition.
+
+The old `quittingPremiumCore_outsider_reward_eq_singleton` in
+`UniformEquilibrium/Quitting/Classification/QuittingPremiumCore.lean`
+and `exactRootSuccessor_active_eq_singleton_of_support_ne_pair_core`
+in `UniformEquilibrium/Quitting/Classification/QuittingPremiumCoreExactRoot.lean`
+require nonnegative participant premiums. So does
+`exists_uniformEquilibriumPayoff_of_pairPremiumCore_weakLeave` in
+`UniformEquilibrium/Quitting/Classification/Existence/QuittingPremiumCoreUniformPayoff.lean`.
+They do not automatically consume this signed fixture. The signed
+face, displacement, potential restriction, polynomial-obstruction,
+and reward-closure consumers have the hypotheses checked in the
+earlier reviews above; none silently restores a premium sign.
+No mathematical repair is requested.
