@@ -1212,12 +1212,48 @@ The full-dimensional draft can delegate to that generalization by deriving
 the strict point from its ball hypothesis. Neither discovery changes the
 current literal paper declaration's proof status.
 
-## Retirement criterion
+## Shape connections available from existing proofs
 
-Retirement requires matching every mathematical conclusion above to an
+The following are read-only proof-mining findings, not newly checked declarations.
+They require short formalization or public adapters, not new substantive mathematics.
+
+1. A boxed global minimum of a full exact-root potential has a strict singleton
+   gap and only the all-Continue exact root. These are proved by
+   `IsQuittingFullExactRootPotential.minimum_above_singleton` and
+   `IsQuittingFullExactRootPotential.minimum_exactRoot_absorption_eq_zero`
+   (`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMinimum.lean`).
+   Applying `exists_open_linearAbsorptionDefect_of_compact_strictAllContinue`
+   (`UniformEquilibrium/Quitting/Root/StrictAllContinueBasinLinearAbsorptionDefect.lean`)
+   to the singleton minimum gives an open neighborhood and positive linear
+   absorption-defect constant. If the player count times the robust tolerance
+   is strictly below that constant, every robust edge sourced there has zero
+   absorption and identical source and target. No such smallness is established
+   for the original supplied tolerance.
+2. The proof of
+   `exists_rational_exact_solo_rejection_of_standardQ_quasiconvex`
+   (`UniformEquilibrium/Quitting/Projective/RationalExactSoloRejection.lean`)
+   admits any prescribed positive drop ratio and external positive rate ceiling:
+   choose one rational face point with drift below half the ratio, then a
+   positive rational rate below the ceiling in the eventual quotient interval.
+   It also internally retains endpoint bounds of reward bound plus one,
+   before weakening them to plus two. A stronger public theorem should expose
+   these conclusions without claiming an effective radius or denominator bound.
+3. The matrix-free exact-root quasiconvex rejection can be applied to the
+   potential divided by any positive charge coefficient. This gives a positive
+   exact edge whose drop is below that coefficient times absorption, with no
+   Q hypothesis. Unlike the rational solo construction, it does not give
+   arbitrarily small absorption or a one-quitter root. The existing normalization
+   is `isQuittingFullExactRootPotentialWithCharge_iff_div`
+   (`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialChargeScale.lean`).
+
+## Completion criterion
+
+Packet completion requires matching every mathematical conclusion above to an
 integrated checked declaration or an explicitly checked composition, with
 the packet's hypotheses, quantifiers, strategy restrictions and numerical
 bounds. Definitions and standard background may reuse existing interfaces;
 they do not require duplicate proofs. A conditional compiler is not an
 actual-data producer, and payoff existence is not a retained-strategy theorem.
 The first-dependency table by itself supplies no retirement evidence.
+Files under `math/` remain under mathematical-workspace ownership. Formalizer
+completion records do not authorize moving, staging or committing those files.
