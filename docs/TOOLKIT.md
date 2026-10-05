@@ -3465,13 +3465,16 @@ accuracy retains a member of that same family. The generic existence facade and
 cover the nonnegative singleton boundary, including zero. They do not strengthen
 the specified-child-target theorem or supply certificates for arbitrary Fin4 games.
 
-`smallPivotRepairValue_of_nonnegativeSingleton_withdrawalFamily` and its Fin4
-nonnegative-nonpivot and literal single-pivot-singleton corollaries
+`smallPivotRepairValue_of_deleted_nonnegativeSingleton_withdrawalFamily`, its
+single-deleted-pivot specialization, and its Fin4 corollaries
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalSmallPivotRepairSource.lean`)
 retain the finite nonpivot marginals and feed their actual quiet full profile into
 the existing pivot-repair LP. The source supplies arbitrarily small objective values;
-no optimal-pivot compatibility hypothesis is assumed. Fin4 normalization with one
-own singleton equal to one and the others zero satisfies the child sign premise.
+no optimal-pivot compatibility hypothesis is assumed. The repair pivot is any
+parent player and need not be deleted or equal the child's nonnegative-singleton
+owner. The Fin4 existential facade requires only one nonnegative surviving
+singleton. Fin4 normalization with one own singleton equal to one and the others
+zero satisfies that sign premise.
 
 The omitted-Never supplied-profile obstruction is already proved by
 `neverResidual_outsideDebt_gt_weighted_childDebt`
@@ -4063,8 +4066,22 @@ specializes the actual minimum comparison to a root with three sure quitters.
 It forces the remaining player to mix strictly, and identifies a sure player
 whose Continue-minus-Quit gap has opposite strict signs at the two supported
 optional configurations, at both reward tables. The same input root is
-retained. This gives one reversing player, not the two opposed players
-required by the stronger three-sure continuation.
+retained.
+`exists_opposedSureOwner_optionalReversals_of_membershipStretch_positiveMinimum_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/ThreeSureOpposedMembershipReversals.lean`)
+strengthens this to two distinct sure owners with opposite strict orientations
+at both tables. The optional marginal is reselected only in the comparison
+argument; its full behavioral debts are recomputed at the new root by
+`UniformEquilibrium/Diagnostics/Quitting/SingleOptionalMembershipRows.lean`.
+Old-table global attainment is established before applying all-player ties.
+`exists_sameOrientation_comparison`
+(`MathUE/SignedAffineRowComparison.lean`) supplies the common-probability
+comparison for arbitrary indexed signed rows, including the optional
+zero-positive row. The exact regression in
+`MathUE/SignedAffineRowRegression.lean` has old envelope minimum `25/99`,
+strictly above the new contact `1/4`; it is an affine-row example, not a
+positive-gap quitting game. The worst-table and singleton-fiber producers
+must still supply the bounded tables, stretch correspondence and infimum order.
 `UniformEquilibrium/Diagnostics/Quitting/Regression/MembershipStretchCountBoundary.lean`
 gives complete four-player tables testing the pure-vertex count. At the
 critical half-debt boundary, every supported pure vertex has nonzero full

@@ -2,6 +2,7 @@ import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.SplitIfs
 import Mathlib.Tactic.Ring
+import Mathlib.Tactic.Positivity
 
 /-!
 # Signed stretching of paired endpoints in [-1,1]
@@ -234,6 +235,81 @@ theorem signedEndpointGapStretch_two_atom_signed_mean_lt_original {alpha : ℝ}
     (2 : ℝ) / 5 * signedEndpointGapStretch alpha 2 +
       (3 : ℝ) / 5 * signedEndpointGapStretch alpha (-(1 : ℝ) / 2) < (1 : ℝ) / 2 := by
   rw [(signedEndpointGapStretch_two_atom_signed_mean alpha).2]
+  linarith
+
+/-- The positive denominator used by the common affine-row reselection.
+Its positivity holds throughout the source parameter range, before comparing
+the original reversing-row value with the minimum. -/
+theorem signedEndpointGapStretch_reselection_denominator_pos {alpha m p : ℝ}
+    (halpha : 0 < alpha) (halpham : alpha < m / 4) (hp : 0 < p) :
+    0 < m + 2 * alpha * (2 * p - 1) := by
+  have hproduct := mul_pos halpha hp
+  nlinarith
+
+/-- The strict rational comparison numerator remains positive for the entire
+parameter range, including both same-root comparison branches. -/
+theorem signedEndpointGapStretch_reselection_numerator_pos {alpha m p : ℝ}
+    (hmhalf : m < 1 / 2)
+    (halpha : 0 < alpha) (halpham : alpha < m / 4)
+    (hp : 0 < p) :
+    0 < m * (2 - m - 6 * p * (1 - p)) +
+      2 * alpha * p * ((4 - 3 * m) * p + 2 * m - 2) := by
+  have hm : 0 < m := by linarith
+  let coefficient := (4 - 3 * m) * p + 2 * m - 2
+  have hbase : 0 < 2 - m - 6 * p * (1 - p) := by
+    nlinarith [sq_nonneg (p - 1 / 2)]
+  by_cases hcoefficient : 0 ≤ coefficient
+  · have hfirst := mul_pos hm hbase
+    have hsecond := mul_nonneg (mul_nonneg (by linarith : 0 ≤ 2 * alpha) hp.le)
+      hcoefficient
+    dsimp only [coefficient] at hsecond
+    linarith
+  · have hcoefficient : coefficient < 0 := lt_of_not_ge hcoefficient
+    have hphalf : p < 1 / 2 := by
+      by_contra hnot
+      have hslope : 0 ≤ 4 - 3 * m := by linarith
+      have hproduct := mul_nonneg hslope (sub_nonneg.mpr (le_of_not_gt hnot))
+      dsimp only [coefficient] at hcoefficient
+      nlinarith
+    let displacement := 1 / 2 - p
+    have hdisplacement : 0 < displacement := sub_pos.mpr hphalf
+    have hidentity :
+        (2 - m - 6 * p * (1 - p)) + p * coefficient / 2 -
+          (2 * displacement - 1 / 4) ^ 2 =
+        (7 / 8) * (1 / 2 - m) + (m / 2) * displacement +
+          (4 - 3 * m / 2) * displacement ^ 2 := by
+      dsimp only [coefficient, displacement]
+      ring
+    have hpositive : 0 < (7 / 8) * (1 / 2 - m) := by positivity
+    have hlinear : 0 ≤ (m / 2) * displacement := by positivity
+    have hquadratic : 0 ≤ (4 - 3 * m / 2) * displacement ^ 2 := by
+      apply mul_nonneg (by linarith) (sq_nonneg _)
+    have hlower : 0 < (2 - m - 6 * p * (1 - p)) + p * coefficient / 2 := by
+      nlinarith only [hidentity, hpositive, hlinear, hquadratic,
+        sq_nonneg (2 * displacement - 1 / 4)]
+    have hscaled := mul_pos hm hlower
+    have hnegative := mul_neg_of_pos_of_neg hp hcoefficient
+    have hterm := mul_lt_mul_of_neg_right
+      (show 2 * alpha < m / 2 by linarith) hnegative
+    dsimp only [coefficient] at hscaled hterm
+    nlinarith only [hscaled, hterm]
+
+/-- Clearing only positive denominators reduces the coherent-row protection
+bound to the strictly positive numerator above. -/
+theorem signedEndpointGapStretch_reselection_crossProduct_lt {alpha m p : ℝ}
+    (hmhalf : m < 1 / 2)
+    (halpha : 0 < alpha) (halpham : alpha < m / 4) (hp : 0 < p) :
+    (m + 2 * alpha * (2 * p - 1) - (1 - p) * m * (1 - alpha)) *
+        (m - 2 * alpha * p) <
+      m * p * (1 - alpha) * (m + 2 * alpha * (2 * p - 1)) := by
+  have hpositive := mul_pos halpha
+    (signedEndpointGapStretch_reselection_numerator_pos hmhalf halpha halpham hp)
+  have hidentity :
+      m * p * (1 - alpha) * (m + 2 * alpha * (2 * p - 1)) -
+        (m + 2 * alpha * (2 * p - 1) - (1 - p) * m * (1 - alpha)) *
+          (m - 2 * alpha * p) =
+      alpha * (m * (2 - m - 6 * p * (1 - p)) +
+        2 * alpha * p * ((4 - 3 * m) * p + 2 * m - 2)) := by ring
   linarith
 
 end Math

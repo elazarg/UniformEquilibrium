@@ -547,13 +547,23 @@ owners with opposed orientations. Its separate route needs the internally
 selected worst table and stretched singleton-fiber maximum, the signed
 affine-row comparison, and the actual old-table root consumer. In the weak
 same-root cases, old global attainment must be proved before invoking the
-old table's all-player-tie theorem. Neither the existing one-owner result nor
-the staged generic algebra closes that route by itself. The worst-table and
+old table's all-player-tie theorem. The worst-table and
 literal stretched-fiber source now has an unapplied implementation draft.
-The all-case signed-row comparison and exact opposed-orientation regression
-also have drafts. The actual full-debt row adapter and opposed-pair consumer
-have a further draft that retains the original source before every root
-request. Root source review passes; independent review and compilation remain.
+The all-case signed-row comparison in `MathUE/SignedAffineRowComparison.lean`
+and actual full-debt adapter in
+`UniformEquilibrium/Diagnostics/Quitting/SingleOptionalMembershipRows.lean`
+are proved in Lean. The checked
+`exists_opposedSureOwner_optionalReversals_of_membershipStretch_positiveMinimum_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/ThreeSureOpposedMembershipReversals.lean`)
+produces two distinct sure owners with opposed strict signs at both tables.
+Independent static review passes. The common-probability algebra reuses
+`MathUE/SignedEndpointStretch.lean`; the root adapter derives old global
+attainment before invoking all-player ties. These declarations consume the
+source hypotheses rather than constructing the worst table or its fiber.
+`opposedRegressionEnvelope_exact_minimum`
+(`MathUE/SignedAffineRowRegression.lean`) checks the exact `25/99` old-envelope
+minimum over every legal probability, strictly above the new `1/4` contact.
+It is an affine-row regression, not a positive-gap game.
 The separate strict pure-coalition source floor remains an implementation
 obligation.
 
@@ -1271,6 +1281,18 @@ generic punishment stage cap is shared with the existing vanishing-punishment
 trigger. This is a prerequisite for the supplied periodic strict-IR discounted
 Nash construction, not a proof of the remaining discounted folk-theorem clause.
 
+`exists_discountedNash_allSmallRates_of_strictIR` and its metric-delivery facade
+(`Literature/Sorin1986.lean`) select one actual profile before all sufficiently
+small rates, with exact Nash against unrestricted behavioral deviations. The
+internal periodic calendar, strict phase slack, and supported-history Bellman
+cap are constructed from the fixed strictly individually rational target.
+`property_4_discounted_of_fullDimensional` in the same paper owner then proves
+Hausdorff convergence to the weakly individually rational feasible payoff set:
+the ambient-ball hypothesis supplies a strict point, and a compact finite cover
+makes the rate threshold uniform over all targets. The separate two-player
+alternative remains unproved, so the literal `property_4_discounted` and its
+delegating `lemma_2` still contain or inherit the Literature placeholder.
+
 The separate Proposition 4 draft uses a generic connected convex-hull
 representation, an internally selected affine step and a geometric schedule
 to produce an actual independent-mixed behavioral profile. The generic
@@ -1374,6 +1396,10 @@ normalized Fin4 facade
 select actual finite nonpivot laws with arbitrarily small repair-LP objective.
 The existing exact finite-menu quiet transport and objective/exploitability consumer
 are reused; no optimal-pivot compatibility hypothesis is supplied.
+`smallPivotRepairValue_of_deleted_nonnegativeSingleton_withdrawalFamily` in the
+same source owner permits any eligible deleted set and any parent repair pivot.
+The pivot need not belong to that set or equal the selected child singleton.
+Its Fin4 existential-singleton facade needs only one nonnegative survivor.
 The omitted-Never supplied-profile boundary is fully covered by
 `UniformEquilibrium/Quitting/Examples/WithdrawalNeverBoundary.lean`.
 `NegativeSingletonQuietBoundary.debts_eq_childClockMasses`,
@@ -1402,13 +1428,6 @@ arbitrary-law observer payoff identity behind the two Never deviations.
 
 These are connections supported by existing proofs, not checked new declarations:
 
-- Generalize `smallPivotRepairValue_of_nonnegativeSingleton_withdrawalFamily`
-  (`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalSmallPivotRepairSource.lean`)
-  from deleting the repair pivot to any eligible deletion source. The full finite
-  quiet family has small exploitability, which the existing repair-LP consumer
-  bounds for every parent pivot. The repair pivot need not be deleted or equal
-  the child singleton used by the source. The Fin4 facade needs only one
-  nonnegative surviving singleton, not nonnegativity of every survivor.
 - Expose the zero restricted-child target as a literal uniform-equilibrium payoff
   from `childAllNever_exactNash`, and retain the displayed alternative quiet
   parent profiles through the existing fixed-family uniformization theorem.

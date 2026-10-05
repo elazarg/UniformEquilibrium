@@ -78,6 +78,8 @@ import MathUE.Probability.OverlappingFirstStoppingDeterministicAtom
 import MathUE.LinearSqrtGapBound
 import MathUE.SignedFourCycleAlgebra
 import MathUE.SignedEndpointStretch
+import MathUE.SignedAffineRowComparison
+import MathUE.SignedAffineRowRegression
 import MathUE.SignedFourCycleWeights
 import MathUE.SignedFourCycleStrictOpenness
 import MathUE.LinearProgramming.PositiveEntries

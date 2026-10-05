@@ -4,8 +4,10 @@ import UniformEquilibrium.Quitting.Terminal.PivotRepairSmallValueSource
 
 /-! # Original withdrawal certificates produce small pivot-repair values
 
-The finite quiet profile is the actual LP competitor. Nonpivot marginals
-are retained; no optimal-pivot compatibility hypothesis is required.
+The finite quiet profile is the actual LP competitor. The repair pivot can
+be any parent player, independently of the deleted set and the child singleton
+used to select that profile. Nonpivot marginals are retained; no optimal-pivot
+compatibility hypothesis is required.
 -/
 
 noncomputable section
@@ -15,6 +17,38 @@ namespace GameTheory
 open StochasticGame Filter Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+/-- Any eligible quiet deletion source supplies small repair values for every
+parent pivot, whether or not that pivot belongs to the deleted set. -/
+theorem smallPivotRepairValue_of_deleted_nonnegativeSingleton_withdrawalFamily
+    (deleted : ι → Prop) [DecidablePred deleted] [Nonempty {who : ι // deleted who}]
+    (reward : {A : Finset ι // A.Nonempty} → Payoff ι) (repairPivot : ι)
+    (kind : {who : ι // deleted who} → WithdrawalFutureJoinKind)
+    (certificate : ∀ outside : {who : ι // deleted who},
+      WithdrawalFutureJoinRewardCertificate (kind outside)
+        (quittingChildWithOutsiderReward reward deleted outside))
+    (hcard : Fintype.card (QuittingChildPlayer deleted) ≤ 3)
+    (childPivot : QuittingChildPlayer deleted)
+    (hsingleton : 0 ≤ reward (quittingSingletonTerminal childPivot.1) childPivot.1) :
+    HasQuittingSmallPivotRepairValue reward repairPivot := by
+  let : Nonempty ι := ⟨repairPivot⟩
+  obtain ⟨deadlines, mixed, _, hdeadlines, hexploit, _, _⟩ :=
+    exists_uniformFiniteQuietFamily_of_withdrawalFutureJoinFamily
+      deleted reward kind certificate hcard childPivot hsingleton
+  intro error herror
+  obtain ⟨n, hn⟩ := ((tendsto_order.mp hexploit).2 error herror).exists
+  let fullMixed := quittingExtendDeletedFiniteTimingLaws deleted (deadlines n) (mixed n)
+  obtain ⟨mass, hmass, hobjective⟩ :=
+    exists_pivotRepairMass_objective_le_finiteMenu_exploitability
+      reward repairPivot (deadlines n) (hdeadlines n) fullMixed
+  have hquiet : quittingTerminalExploitability reward
+      (quittingFiniteDeadlineTimingProfile reward (deadlines n) fullMixed) < error := by
+    rw [← quittingFiniteDeadlineTimingProfile_extendDeleted]
+    exact hn
+  refine ⟨deadlines n, hdeadlines n,
+    (fun who => (quittingFiniteDeadlineTimingLaw (fullMixed who)).toPMF),
+    (fun who => isFiniteClockStoppingLaw_finiteDeadlineTimingLaw (fullMixed who)),
+    mass, hmass, hobjective.trans_lt hquiet⟩
 
 /-- Deleting one pivot and selecting a nonnegative low-player child supplies
 actual finite nonpivot laws with arbitrarily small inner-LP objective. -/
@@ -28,25 +62,27 @@ theorem smallPivotRepairValue_of_nonnegativeSingleton_withdrawalFamily
     (childPivot : {who : ι // who ≠ pivot})
     (hsingleton : 0 ≤ reward (quittingSingletonTerminal childPivot.1) childPivot.1) :
     HasQuittingSmallPivotRepairValue reward pivot := by
-  let : Nonempty ι := ⟨pivot⟩
   let : Nonempty {who : ι // who = pivot} := ⟨⟨pivot, rfl⟩⟩
-  obtain ⟨deadlines, mixed, _, hdeadlines, hexploit, _, _⟩ :=
-    exists_uniformFiniteQuietFamily_of_withdrawalFutureJoinFamily
-      (· = pivot) reward kind certificate hcard childPivot hsingleton
-  intro error herror
-  obtain ⟨n, hn⟩ := ((tendsto_order.mp hexploit).2 error herror).exists
-  let fullMixed := quittingExtendDeletedFiniteTimingLaws (· = pivot) (deadlines n) (mixed n)
-  obtain ⟨mass, hmass, hobjective⟩ :=
-    exists_pivotRepairMass_objective_le_finiteMenu_exploitability
-      reward pivot (deadlines n) (hdeadlines n) fullMixed
-  have hquiet : quittingTerminalExploitability reward
-      (quittingFiniteDeadlineTimingProfile reward (deadlines n) fullMixed) < error := by
-    rw [← quittingFiniteDeadlineTimingProfile_extendDeleted]
-    exact hn
-  refine ⟨deadlines n, hdeadlines n,
-    (fun who => (quittingFiniteDeadlineTimingLaw (fullMixed who)).toPMF),
-    (fun who => isFiniteClockStoppingLaw_finiteDeadlineTimingLaw (fullMixed who)),
-    mass, hmass, hobjective.trans_lt hquiet⟩
+  exact smallPivotRepairValue_of_deleted_nonnegativeSingleton_withdrawalFamily
+    (· = pivot) reward pivot kind certificate hcard childPivot hsingleton
+
+/-- Fin4 requires only one nonnegative surviving singleton, not a sign
+restriction on all nonpivot singleton rewards. -/
+theorem smallPivotRepairValue_of_finFour_exists_nonnegativeSingleton_withdrawalFamily
+    (reward : {A : Finset (Fin 4) // A.Nonempty} → Payoff (Fin 4)) (pivot : Fin 4)
+    (kind : {who : Fin 4 // who = pivot} → WithdrawalFutureJoinKind)
+    (certificate : ∀ outside : {who : Fin 4 // who = pivot},
+      WithdrawalFutureJoinRewardCertificate (kind outside)
+        (quittingChildWithOutsiderReward reward (· = pivot) outside))
+    (hsingleton : ∃ who, who ≠ pivot ∧ 0 ≤ reward (quittingSingletonTerminal who) who) :
+    HasQuittingSmallPivotRepairValue reward pivot := by
+  obtain ⟨childPivot, hchildPivot, hnonneg⟩ := hsingleton
+  have hlt : Fintype.card {who : Fin 4 // who ≠ pivot} < 4 := by
+    simpa only [Fintype.card_fin] using
+      (Fintype.card_subtype_lt (p := fun who : Fin 4 => who ≠ pivot)
+        (x := pivot) (by simp))
+  exact smallPivotRepairValue_of_nonnegativeSingleton_withdrawalFamily
+    reward pivot kind certificate (Nat.le_of_lt_succ hlt) ⟨childPivot, hchildPivot⟩ hnonneg
 
 /-- In Fin4, nonnegative nonpivot singleton rewards and original certificates
 produce the small-pivot source. In particular this covers the normalized
@@ -60,13 +96,8 @@ theorem smallPivotRepairValue_of_finFour_nonnegativeNonpivot_withdrawalFamily
     (hsingleton : ∀ who, who ≠ pivot → 0 ≤ reward (quittingSingletonTerminal who) who) :
     HasQuittingSmallPivotRepairValue reward pivot := by
   obtain ⟨childPivot, hchildPivot⟩ := exists_ne pivot
-  have hlt : Fintype.card {who : Fin 4 // who ≠ pivot} < 4 := by
-    simpa only [Fintype.card_fin] using
-      (Fintype.card_subtype_lt (p := fun who : Fin 4 => who ≠ pivot)
-        (x := pivot) (by simp))
-  exact smallPivotRepairValue_of_nonnegativeSingleton_withdrawalFamily
-    reward pivot kind certificate (Nat.le_of_lt_succ hlt)
-    ⟨childPivot, hchildPivot⟩ (hsingleton childPivot hchildPivot)
+  exact smallPivotRepairValue_of_finFour_exists_nonnegativeSingleton_withdrawalFamily
+    reward pivot kind certificate ⟨childPivot, hchildPivot, hsingleton childPivot hchildPivot⟩
 
 /-- The normalized Fin4 own-singleton vector `(1,0,0,0)`, with its pivot
 placed at any label, supplies the small-pivot source from original certificates. -/

@@ -4372,9 +4372,461 @@ theorem property_4_banach (G : FiniteStageGame) (L : BanachLimit) :
   · intro target htarget
     exact exists_banachNash_of_mem_individuallyRationalPayoffs G L target htarget
 
+
+/-- The strict-individual-rational source block of Lemma 2: choose a pure
+periodic calendar and actual fixed-punishment trigger internally. One profile
+is selected before all sufficiently small rates. This is not yet a Nash claim. -/
+private theorem exists_periodicApproxMinmaxTrigger_with_calendar_of_strictIR
+    (G : FiniteStageGame) (target : Payoff G.Player)
+    (htarget : target ∈ G.correlatedFeasiblePayoffs)
+    (hstrict : ∀ who, G.individualRationalLevel who < target who)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ (margin threshold : ℝ) (n : ℕ) (_ : NeZero n)
+      (cycle : Fin n → (∀ player, G.Action player)) (profile : G.BehaviorProfile),
+      0 < margin ∧ 0 < threshold ∧ threshold ≤ 1 ∧
+      (∀ (time : ℕ) (history : G.repeatedGame.Hist time),
+        (∀ k, (history.1 k).2 = cycle (Fin.ofNat n k)) →
+        ∀ player, profile player time history =
+          PMF.pure (cycle (Fin.ofNat n time) player)) ∧
+      (∀ (who : G.Player) (deviation : G.BehaviorStrategy who)
+        (time : ℕ) (history : G.repeatedGame.Hist time),
+        history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
+          PUnit.unit time).support →
+        (¬∀ k, (history.1 k).2 = cycle (Fin.ofNat n k)) →
+        G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤
+          G.individualRationalLevel who + margin) ∧
+      (∀ (rate : G.DiscountRate) (who : G.Player),
+        G.discountedPayoff rate.1 profile who =
+          G.kernel.discountedContinuationPayoff (1 - rate.1)
+            (fun time => cycle (Fin.ofNat n time)) 0 who) ∧
+      ∀ lam : ℝ, 0 < lam → lam < threshold →
+        (∀ (who : G.Player) (start : ℕ),
+          G.individualRationalLevel who + 2 * margin ≤
+            G.kernel.discountedContinuationPayoff (1 - lam)
+              (fun time => cycle (Fin.ofNat n time)) start who) ∧
+        ∀ who, |G.discountedPayoff lam profile who - target who| < ε := by
+  classical
+  let : Nonempty (∀ player, G.Action player) := inferInstance
+  let (player : G.Player) : Fintype (G.kernel.Strategy player) := G.finiteAction player
+  let : Finite G.kernel.Outcome := by
+    change Finite (∀ player, G.Action player)
+    exact Finite.of_fintype _
+  obtain ⟨slack, hslack, hmargin⟩ :=
+    KernelGame.exists_pos_margin_of_mem_strictReservationSet
+      (r := fun who => G.individualRationalLevel who) (v := target) hstrict
+  let budget : ℝ := min (ε / 2) (slack / 4)
+  have hbudget : 0 < budget := lt_min (half_pos hε) (by positivity)
+  have hbudgetError : budget ≤ ε / 2 := min_le_left _ _
+  have hbudgetSlack : budget ≤ slack / 4 := min_le_right _ _
+  obtain ⟨bound, hboundAbs⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun action : (∀ player, G.Action player) => ‖G.payoff action‖)
+  have hbound (action : ∀ player, G.Action player) : ‖G.payoff action‖ ≤ bound := by
+    simpa only [abs_of_nonneg (norm_nonneg _)] using hboundAbs action
+  have hbound0 : 0 ≤ bound :=
+    (norm_nonneg (G.payoff (Classical.arbitrary (∀ player, G.Action player)))).trans
+      (hbound _)
+  obtain ⟨n, hn, happrox⟩ := MathUE.exists_uniformAverage_close_of_mem_convexHull_range
+    G.payoff hbound hbound0 (half_pos hbudget)
+  let : NeZero n := ⟨Nat.ne_of_gt hn⟩
+  obtain ⟨cycle, hcycle⟩ := happrox n le_rfl target htarget
+  have hcycleAverage : G.kernel.cycleAveragePayoff cycle =
+      (n : ℝ)⁻¹ • ∑ time, G.payoff (cycle time) := by
+    funext who
+    simp [KernelGame.cycleAveragePayoff, FiniteStageGame.kernel, KernelGame.eu_ofPureEU,
+      Pi.smul_apply, Finset.sum_apply, smul_eq_mul, Finset.mul_sum]
+  rw [← hcycleAverage] at hcycle
+  have hcoordinate (who : G.Player) :
+      |G.kernel.cycleAveragePayoff cycle who - target who| < budget / 2 := by
+    have hle := norm_le_pi_norm (G.kernel.cycleAveragePayoff cycle - target) who
+    rw [Pi.sub_apply, Real.norm_eq_abs] at hle
+    exact hle.trans_lt hcycle
+  obtain ⟨β₀, hβ₀0, hβ₀1, hphase⟩ :=
+    G.kernel.exists_discountFactor_threshold_periodic_all_continuations_close_cycleAverage
+      cycle (half_pos hbudget)
+  obtain ⟨profile, hpure, hpunish, hdelivery⟩ :=
+    exists_constantApproxPunishmentTrigger G
+      (fun time => cycle (Fin.ofNat n time)) (show 0 < slack / 4 by positivity)
+  have hthreshold : 0 < 1 - β₀ := by linarith
+  have hthresholdOne : 1 - β₀ ≤ 1 := by linarith
+  refine ⟨slack / 4, 1 - β₀, n, inferInstance, cycle, profile,
+    by positivity, hthreshold, hthresholdOne, hpure, hpunish, hdelivery, ?_⟩
+  intro lam hlam hlamThreshold
+  have hβgt : β₀ < 1 - lam := by linarith
+  have hβ1 : 1 - lam < 1 := by linarith
+  have hclose (who : G.Player) (start : ℕ) :
+      |G.kernel.discountedContinuationPayoff (1 - lam)
+        (fun time => cycle (Fin.ofNat n time)) start who - target who| < budget := by
+    have hperiod := hphase (1 - lam) hβgt hβ1 who start
+    have hmean := hcoordinate who
+    rw [abs_lt] at hperiod hmean ⊢
+    constructor <;> linarith
+  constructor
+  · intro who start
+    have hphaseLower := (abs_lt.mp (hclose who start)).1
+    have htargetLower := hmargin who
+    linarith
+  · intro who
+    let rate : G.DiscountRate := ⟨lam, hlam, hlamThreshold.le.trans hthresholdOne⟩
+    have hpayoff := hdelivery rate who
+    change G.discountedPayoff lam profile who =
+      G.kernel.discountedContinuationPayoff (1 - lam)
+        (fun time => cycle (Fin.ofNat n time)) 0 who at hpayoff
+    rw [hpayoff]
+    exact (hclose who 0).trans_le (by linarith)
+
+/-- The calendar continuation potential caps a full behavioral replacement.
+Only reached off-calendar histories require the source punishment bound. -/
+private theorem FiniteStageGame.discounted_deviation_le_calendar_of_supported_cap
+    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
+    (profile : G.BehaviorProfile) (rate : G.DiscountRate)
+    (who : G.Player) (deviation : G.BehaviorStrategy who)
+    (bound cap margin : ℝ) (hmargin : 0 < margin)
+    (hbound : ∀ action, |G.payoff action who| ≤ bound)
+    (hphase : ∀ start, cap + margin ≤
+      G.kernel.discountedContinuationPayoff (1 - rate.1) path start who)
+    (hpunish : ∀ (time : ℕ) (history : G.repeatedGame.Hist time),
+      history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
+        PUnit.unit time).support →
+      ¬triggerOnPath G path history →
+      G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤ cap)
+    (hpatient : rate.1 * (2 * bound) ≤ (1 - rate.1) * margin) :
+    G.discountedPayoff rate.1 (Function.update profile who deviation) who ≤
+      G.kernel.discountedContinuationPayoff (1 - rate.1) path 0 who := by
+  classical
+  let replaced := Function.update profile who deviation
+  let phase : ℕ → ℝ := fun time =>
+    G.kernel.discountedContinuationPayoff (1 - rate.1) path time who
+  let potential : G.repeatedGame.HistoryPotential := fun time history =>
+    if triggerOnPath G path history then phase time else cap
+  have hphaseLower (time : ℕ) : cap + margin ≤ phase time := hphase time
+  have hβ0 : 0 ≤ 1 - rate.1 := sub_nonneg.mpr rate.2.2
+  have hβ1 : 1 - rate.1 < 1 := by linarith [rate.2.1]
+  have hkernelBound (action : ∀ player, G.Action player) :
+      |G.kernel.eu action who| ≤ bound := by
+    simpa only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU] using hbound action
+  have hrec (time : ℕ) : phase time =
+      rate.1 * G.payoff (path time) who + (1 - rate.1) * phase (time + 1) := by
+    simpa only [phase, sub_sub_cancel, FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+      using G.kernel.discountedContinuationPayoff_eq_head_add
+        hβ0 hβ1 path time who hkernelBound
+  have hupper (time : ℕ) : phase time ≤ bound :=
+    G.kernel.discountedContinuationPayoff_le_const_of_forall_stageEU_le
+      hβ0 hβ1 path time who hkernelBound
+      (fun k => le_of_abs_le (hkernelBound (path (time + k))))
+  have hphaseBound (time : ℕ) : |phase time| ≤ max bound |cap| := by
+    refine abs_le.mpr ⟨?_, (hupper time).trans (le_max_left _ _)⟩
+    have hlower := hphaseLower time
+    have hcapLower := (abs_le.mp (le_refl |cap|)).1
+    have hmax := le_max_right bound |cap|
+    linarith
+  have hpotential (time : ℕ) (history : G.repeatedGame.Hist time) :
+      |potential time history| ≤ max bound |cap| := by
+    dsimp only [potential]
+    split_ifs
+    · exact hphaseBound time
+    · exact le_max_right _ _
+  have hbellman (time : ℕ) (history : G.repeatedGame.Hist time)
+      (hsupport : history ∈ (G.repeatedGame.histDist replaced PUnit.unit time).support) :
+      (1 - (1 - rate.1)) * G.repeatedGame.stageEUAt replaced history who +
+        (1 - rate.1) * G.repeatedGame.historyContinuationEU replaced potential history ≤
+          potential time history := by
+    let current : G.MixedProfile := fun player => replaced player time history
+    have hstage : G.repeatedGame.stageEUAt replaced history who =
+        Math.Probability.expect (Math.PMFProduct.pmfPi current)
+          (fun action => G.payoff action who) := by
+      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
+        (fun action => G.kernel.eu action who) = _
+      simp only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+    have hcontinuation : G.repeatedGame.historyContinuationEU replaced potential history =
+        Math.Probability.expect (Math.PMFProduct.pmfPi current)
+          (fun action => potential (time + 1)
+            (Fin.snoc history.1 (history.2, action), PUnit.unit)) := by
+      unfold StochasticGame.historyContinuationEU
+      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
+        (fun action => Math.Probability.expect (PMF.pure PUnit.unit)
+          (fun nextState => potential (time + 1)
+            (Fin.snoc history.1 (history.2, action), nextState))) = _
+      simp only [Math.Probability.expect_pure]
+    by_cases hpath : triggerOnPath G path history
+    · have hlocal (action : ∀ player, G.Action player) :
+          rate.1 * G.payoff action who + (1 - rate.1) *
+            potential (time + 1) (Fin.snoc history.1 (history.2, action), PUnit.unit) ≤
+              phase time := by
+        by_cases hequal : action = path time
+        · subst action
+          have hnext := (triggerOnPath_snoc_iff G path
+            history (path time) PUnit.unit).mpr ⟨hpath, rfl⟩
+          simp only [potential, hnext, ite_true]
+          exact (hrec time).ge
+        · have hnext : ¬triggerOnPath G path
+              ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
+                G.repeatedGame.Hist (time + 1)) := by
+            rw [triggerOnPath_snoc_iff]
+            exact fun h => hequal h.2
+          simp only [potential, hnext, ite_false]
+          have hgain : G.payoff action who ≤ G.payoff (path time) who + 2 * bound := by
+            have ha := (abs_le.mp (hbound action)).2
+            have hp := (abs_le.mp (hbound (path time))).1
+            linarith
+          have hgainScaled := mul_le_mul_of_nonneg_left hgain rate.2.1.le
+          have hsecurity := mul_le_mul_of_nonneg_left (hphaseLower (time + 1)) hβ0
+          simp only [mul_add] at hgainScaled hsecurity
+          calc
+            rate.1 * G.payoff action who + (1 - rate.1) * cap ≤
+                rate.1 * G.payoff (path time) who +
+                  (1 - rate.1) * phase (time + 1) := by
+              linarith
+            _ = phase time := (hrec time).symm
+      have hmean := Math.ProbabilityMassFunction.expect_le_of_le_on_support
+        (B := phase time) (Math.PMFProduct.pmfPi current) _
+        (fun action _ => hlocal action)
+      simp only [Math.Probability.expect_add, Math.Probability.expect_const_mul] at hmean
+      rw [hstage, hcontinuation, sub_sub_cancel]
+      simpa only [potential, hpath, ite_true] using hmean
+    · have hnext (action : ∀ player, G.Action player) :
+          potential (time + 1)
+            (Fin.snoc history.1 (history.2, action), PUnit.unit) = cap := by
+        have hnot : ¬triggerOnPath G path
+            ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
+              G.repeatedGame.Hist (time + 1)) :=
+          fun h => hpath ((triggerOnPath_snoc_iff G path history action PUnit.unit).mp h).1
+        simp only [potential, hnot, ite_false]
+      have hcontinuationCap : G.repeatedGame.historyContinuationEU
+          replaced potential history = cap := by
+        rw [hcontinuation]
+        simp only [hnext, Math.Probability.expect_const]
+      have hcap := mul_le_mul_of_nonneg_left
+        (hpunish time history hsupport hpath) rate.2.1.le
+      rw [hcontinuationCap, sub_sub_cancel]
+      simp only [potential, hpath, ite_false]
+      calc
+        rate.1 * G.repeatedGame.stageEUAt replaced history who + (1 - rate.1) * cap ≤
+            rate.1 * cap + (1 - rate.1) * cap := add_le_add hcap le_rfl
+        _ = cap := by ring
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    inferInstanceAs (Finite (G.Action player))
+  have hstageBound (state : G.repeatedGame.State) (action : G.repeatedGame.JointAct) :
+      |G.repeatedGame.stagePayoff state action who| ≤ bound := by
+    simpa only [FiniteStageGame.repeatedGame, KernelGame.realizedActionStochasticGame,
+      FiniteStageGame.kernel, KernelGame.eu_ofPureEU] using hbound action
+  have hcap := StochasticGame.discountedPayoff_le_of_history_bellman_ge_on_support
+    G.repeatedGame hstageBound replaced PUnit.unit potential hβ0 hβ1
+    (fun time history _ => hpotential time history) hbellman
+  have hzero : potential 0 (G.repeatedGame.emptyHist PUnit.unit) = phase 0 := by
+    have hpath : triggerOnPath G path (G.repeatedGame.emptyHist PUnit.unit) :=
+      fun k => Fin.elim0 k
+    simp only [potential, hpath, ite_true]
+  rw [hzero] at hcap
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    phase, replaced] using! hcap
+
+/-- The internally produced calendar profile, preserving the original source
+interface. Exact delivery remains available to the Nash consumer below. -/
+theorem exists_periodicApproxMinmaxTrigger_of_strictIR
+    (G : FiniteStageGame) (target : Payoff G.Player)
+    (htarget : target ∈ G.correlatedFeasiblePayoffs)
+    (hstrict : ∀ who, G.individualRationalLevel who < target who)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ (margin threshold : ℝ) (n : ℕ) (_ : NeZero n)
+      (cycle : Fin n → (∀ player, G.Action player)) (profile : G.BehaviorProfile),
+      0 < margin ∧ 0 < threshold ∧ threshold ≤ 1 ∧
+      (∀ (time : ℕ) (history : G.repeatedGame.Hist time),
+        (∀ k, (history.1 k).2 = cycle (Fin.ofNat n k)) →
+        ∀ player, profile player time history =
+          PMF.pure (cycle (Fin.ofNat n time) player)) ∧
+      (∀ (who : G.Player) (deviation : G.BehaviorStrategy who)
+        (time : ℕ) (history : G.repeatedGame.Hist time),
+        history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
+          PUnit.unit time).support →
+        (¬∀ k, (history.1 k).2 = cycle (Fin.ofNat n k)) →
+        G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤
+          G.individualRationalLevel who + margin) ∧
+      ∀ lam : ℝ, 0 < lam → lam < threshold →
+        (∀ (who : G.Player) (start : ℕ),
+          G.individualRationalLevel who + 2 * margin ≤
+            G.kernel.discountedContinuationPayoff (1 - lam)
+              (fun time => cycle (Fin.ofNat n time)) start who) ∧
+        ∀ who, |G.discountedPayoff lam profile who - target who| < ε := by
+  obtain ⟨margin, threshold, n, hn, cycle, profile,
+    hmargin, hthreshold, hthresholdOne, hpure, hpunish, _hdelivery, hsmall⟩ :=
+    exists_periodicApproxMinmaxTrigger_with_calendar_of_strictIR
+      G target htarget hstrict hε
+  exact ⟨margin, threshold, n, hn, cycle, profile,
+    hmargin, hthreshold, hthresholdOne, hpure, hpunish, hsmall⟩
+
+/-- Strict individual rationality produces one actual trigger profile that is
+exact Nash for every sufficiently small positive paper rate. The target is
+fixed and the profile may depend on the approximation error, not the rate. -/
+theorem exists_discountedNash_allSmallRates_of_strictIR
+    (G : FiniteStageGame) (target : Payoff G.Player)
+    (htarget : target ∈ G.correlatedFeasiblePayoffs)
+    (hstrict : ∀ who, G.individualRationalLevel who < target who)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
+      ∃ profile : G.BehaviorProfile,
+        ∀ lam : ℝ, 0 < lam → lam < threshold →
+          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
+          ∀ who, |G.discountedPayoff lam profile who - target who| < ε := by
+  classical
+  obtain ⟨margin, threshold, n, hn, cycle, profile,
+    hmargin, hthreshold, hthresholdOne, _hpure, hpunish, hdelivery, hsmall⟩ :=
+    exists_periodicApproxMinmaxTrigger_with_calendar_of_strictIR
+      G target htarget hstrict hε
+  let : NeZero n := hn
+  obtain ⟨bound, hboundAbs⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun action : (∀ player, G.Action player) => ‖G.payoff action‖)
+  have hbound (action : ∀ player, G.Action player) : ‖G.payoff action‖ ≤ bound := by
+    simpa only [abs_of_nonneg (norm_nonneg _)] using hboundAbs action
+  have hbound0 : 0 ≤ bound :=
+    (norm_nonneg (G.payoff (Classical.arbitrary (∀ player, G.Action player)))).trans
+      (hbound _)
+  have hcoordinate (who : G.Player) (action : ∀ player, G.Action player) :
+      |G.payoff action who| ≤ bound := by
+    exact (show |G.payoff action who| ≤ ‖G.payoff action‖ by
+      simpa only [Real.norm_eq_abs] using norm_le_pi_norm (G.payoff action) who).trans
+        (hbound action)
+  obtain ⟨β₀, hβ₀0, hβ₀1, hpatient⟩ :=
+    KernelGame.exists_discountFactor_threshold_one_step
+      (M := 2 * bound) (η := margin) (by positivity) hmargin
+  have hpatientThreshold : 0 < 1 - β₀ := by linarith
+  refine ⟨min threshold (1 - β₀), lt_min hthreshold hpatientThreshold,
+    (min_le_left _ _).trans hthresholdOne, profile, ?_⟩
+  intro lam hlam hlamThreshold
+  have hlamSource : lam < threshold := hlamThreshold.trans_le (min_le_left _ _)
+  have hlamPatient : lam < 1 - β₀ := hlamThreshold.trans_le (min_le_right _ _)
+  have hlamOne : lam ≤ 1 := hlamSource.le.trans hthresholdOne
+  let rate : G.DiscountRate := ⟨lam, hlam, hlamOne⟩
+  obtain ⟨hflow, hclose⟩ := hsmall lam hlam hlamSource
+  have hpatientRate : lam * (2 * bound) ≤ (1 - lam) * margin := by
+    have hβgt : β₀ < 1 - lam := by linarith
+    have hβ1 : 1 - lam < 1 := by linarith
+    simpa only [sub_sub_cancel] using (hpatient (1 - lam) hβgt hβ1).le
+  refine ⟨?_, hclose⟩
+  intro who deviation
+  have hphase (start : ℕ) : (G.individualRationalLevel who + margin) + margin ≤
+      G.kernel.discountedContinuationPayoff (1 - rate.1)
+        (fun time => cycle (Fin.ofNat n time)) start who := by
+    have h := hflow who start
+    change G.individualRationalLevel who + 2 * margin ≤
+      G.kernel.discountedContinuationPayoff (1 - rate.1)
+        (fun time => cycle (Fin.ofNat n time)) start who at h
+    linarith
+  have hcap := G.discounted_deviation_le_calendar_of_supported_cap
+    (fun time => cycle (Fin.ofNat n time)) profile rate who deviation
+    bound (G.individualRationalLevel who + margin) margin hmargin (hcoordinate who)
+    hphase (fun time history hs hp => hpunish who deviation time history hs hp)
+    hpatientRate
+  have hroot := hdelivery rate who
+  have hboundRoot : G.discountedPayoff lam (Function.update profile who deviation) who ≤
+      G.discountedPayoff lam profile who := hcap.trans_eq hroot.symm
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial, add_zero]
+    using! hboundRoot
+
+/-- Metric delivery, including the empty-player boundary, for the same actual
+profile chosen before all sufficiently small rates. -/
+theorem exists_discountedNash_close_allSmallRates_of_strictIR
+    (G : FiniteStageGame) (target : Payoff G.Player)
+    (htarget : target ∈ G.correlatedFeasiblePayoffs)
+    (hstrict : ∀ who, G.individualRationalLevel who < target who)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
+      ∃ profile : G.BehaviorProfile,
+        ∀ lam : ℝ, 0 < lam → lam < threshold →
+          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
+          dist (G.discountedPayoff lam profile) target < ε := by
+  obtain ⟨threshold, hthreshold, hthresholdOne, profile, hsource⟩ :=
+    exists_discountedNash_allSmallRates_of_strictIR G target htarget hstrict hε
+  refine ⟨threshold, hthreshold, hthresholdOne, profile, ?_⟩
+  intro lam hlam hlamThreshold
+  obtain ⟨hnash, hclose⟩ := hsource lam hlam hlamThreshold
+  refine ⟨hnash, ?_⟩
+  rw [dist_eq_norm]
+  exact (pi_norm_lt_iff hε).mpr (fun who => by
+    simpa only [Pi.sub_apply, Real.norm_eq_abs] using hclose who)
+
+/-- The actual individually rational payoff set is compact: a closed
+coordinatewise security constraint inside the finite pure-payoff hull. -/
+theorem FiniteStageGame.individuallyRationalPayoffs_isCompact (G : FiniteStageGame) :
+    IsCompact G.individuallyRationalPayoffs := by
+  have hfeasible : IsCompact G.correlatedFeasiblePayoffs :=
+    Math.Topology.isCompact_convexHull_of_finiteDimensional
+      (Set.finite_range G.payoff).isCompact
+  have hsecurity : IsClosed {v : Payoff G.Player |
+      ∀ who, G.individualRationalLevel who ≤ v who} := by
+    simp only [Set.ofPred_forall]
+    exact isClosed_iInter fun who => isClosed_le continuous_const (continuous_apply who)
+  exact hfeasible.inter_right hsecurity
+
+/-- The literal ambient ball supplies strict security slack internally.
+No affine-dimension replacement or supplied strict point is used. -/
+theorem FiniteStageGame.exists_strictIR_of_fullDimensional (G : FiniteStageGame)
+    (hfull : FullDimensional G.individuallyRationalPayoffs) :
+    ∃ center ∈ G.correlatedFeasiblePayoffs,
+      ∀ who, G.individualRationalLevel who < center who := by
+  obtain ⟨center, hcenter, radius, hradius, hball⟩ := hfull
+  let below : Payoff G.Player := fun who => center who - radius / 2
+  have hbelowBall : below ∈ Metric.ball center radius := by
+    rw [Metric.mem_ball, dist_eq_norm]
+    apply (pi_norm_lt_iff hradius).mpr
+    intro who
+    change |(center who - radius / 2) - center who| < radius
+    rw [show (center who - radius / 2) - center who = -(radius / 2) by ring,
+      abs_neg, abs_of_pos (half_pos hradius)]
+    linarith
+  have hbelow := hball hbelowBall
+  refine ⟨center, hcenter.1, ?_⟩
+  intro who
+  have hsecurity := hbelow.2 who
+  change G.individualRationalLevel who ≤ center who - radius / 2 at hsecurity
+  linarith
+
+/-- Mix a weakly rational target with the internally derived strict point.
+This is elementary convex glue; no periodic or equilibrium witness is supplied. -/
+private theorem FiniteStageGame.exists_strictIR_close_of_fullDimensional
+    (G : FiniteStageGame) (hfull : FullDimensional G.individuallyRationalPayoffs)
+    (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ strict ∈ G.correlatedFeasiblePayoffs,
+      (∀ who, G.individualRationalLevel who < strict who) ∧ dist strict target < ε := by
+  obtain ⟨center, hcenter, hstrict⟩ := G.exists_strictIR_of_fullDimensional hfull
+  obtain ⟨c, hc, hsmall⟩ := exists_pos_mul_lt hε ‖center - target‖
+  let t : ℝ := min c (1 / 2)
+  have ht : 0 < t := lt_min hc (by norm_num)
+  have ht1 : t ≤ 1 := (min_le_right c (1 / 2)).trans (by norm_num)
+  have htc : t ≤ c := min_le_left _ _
+  let mixed : Payoff G.Player := (1 - t) • target + t • center
+  have hmixed : mixed ∈ G.correlatedFeasiblePayoffs :=
+    G.correlatedFeasiblePayoffs_convex htarget.1 hcenter
+      (sub_nonneg.mpr ht1) ht.le (by ring)
+  refine ⟨mixed, hmixed, ?_, ?_⟩
+  · intro who
+    have hweak := mul_le_mul_of_nonneg_left (htarget.2 who) (sub_nonneg.mpr ht1)
+    have hstrong := mul_lt_mul_of_pos_left (hstrict who) ht
+    change G.individualRationalLevel who <
+      (1 - t) * target who + t * center who
+    calc
+      G.individualRationalLevel who =
+          (1 - t) * G.individualRationalLevel who +
+            t * G.individualRationalLevel who := by ring
+      _ < (1 - t) * target who + t * center who :=
+        add_lt_add_of_le_of_lt hweak hstrong
+  · have hdifference : mixed - target = t • (center - target) := by
+      funext who
+      change (1 - t) * target who + t * center who - target who =
+        t * (center who - target who)
+      ring
+    rw [dist_eq_norm, hdifference, norm_smul, Real.norm_eq_abs, abs_of_pos ht]
+    calc
+      t * ‖center - target‖ = ‖center - target‖ * t := mul_comm _ _
+      _ ≤ ‖center - target‖ * c := mul_le_mul_of_nonneg_left htc (norm_nonneg _)
+      _ < ε := hsmall
+
 /-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
 stated with the paper's added-in-proof correction: `Δ` must be full
-dimensional or there must be two players. -/
+dimensional or there must be two players. The full-dimensional branch is
+proved by `property_4_discounted_of_fullDimensional` below; the separate
+two-player branch remains to be proved. -/
 theorem property_4_discounted (G : FiniteStageGame)
     (hregular : FullDimensional G.individuallyRationalPayoffs ∨
       Fintype.card G.Player = 2) :
@@ -4940,6 +5392,78 @@ theorem lemma_1_Elambda_subset_Delta (G : FiniteStageGame)
           G.discountedPayoff lam.1 profile who := by
       simpa [deviation, FiniteStageGame.discountedPayoff] using hequilibrium
     exact hdeviation.trans hequilibrium'
+
+/-- The source's full-dimensional branch first approximates a fixed weakly
+IR target by strict targets. One actual Nash profile precedes all small rates. -/
+theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
+    (G : FiniteStageGame) (hfull : FullDimensional G.individuallyRationalPayoffs)
+    (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
+      ∃ profile : G.BehaviorProfile,
+        ∀ lam : ℝ, 0 < lam → lam < threshold →
+          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
+          dist (G.discountedPayoff lam profile) target < ε := by
+  obtain ⟨strict, hfeasible, hstrict, hnear⟩ :=
+    G.exists_strictIR_close_of_fullDimensional hfull target htarget (half_pos hε)
+  obtain ⟨threshold, hthreshold, hthresholdOne, profile, hsource⟩ :=
+    exists_discountedNash_close_allSmallRates_of_strictIR
+      G strict hfeasible hstrict (half_pos hε)
+  refine ⟨threshold, hthreshold, hthresholdOne, profile, ?_⟩
+  intro lam hlam hlamThreshold
+  obtain ⟨hnash, hclose⟩ := hsource lam hlam hlamThreshold
+  refine ⟨hnash, ?_⟩
+  calc
+    dist (G.discountedPayoff lam profile) target ≤
+        dist (G.discountedPayoff lam profile) strict + dist strict target :=
+      dist_triangle _ _ _
+    _ < ε / 2 + ε / 2 := add_lt_add hclose hnear
+    _ = ε := by ring
+
+/-- Property (4), full-dimensional branch: compactness makes the small-rate
+threshold uniform over every target in the actual weakly IR payoff set.
+The literal paper theorem's separate two-player alternative remains open. -/
+theorem property_4_discounted_of_fullDimensional (G : FiniteStageGame)
+    (hfull : FullDimensional G.individuallyRationalPayoffs) :
+    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
+      G.individuallyRationalPayoffs := by
+  classical
+  intro ε hε
+  obtain ⟨centers, hcenters, hfinite, hcover⟩ :=
+    G.individuallyRationalPayoffs_isCompact.finite_cover_balls (half_pos hε)
+  let : Fintype centers := hfinite.fintype
+  choose threshold hthreshold hthresholdOne profile hprofile using
+    fun center : centers =>
+      exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
+        G hfull center.1 (hcenters center.2) (half_pos hε)
+  obtain ⟨δ, hδ, hcommon⟩ :=
+    KernelGame.exists_pos_margin_of_mem_strictReservationSet
+      (r := fun _ : centers => (0 : ℝ)) (v := threshold) hthreshold
+  refine ⟨min δ 1, lt_min hδ zero_lt_one, ?_⟩
+  intro lam hlam hlamThreshold
+  have hlamOne : lam ≤ 1 := hlamThreshold.le.trans (min_le_right _ _)
+  constructor
+  · intro value hvalue
+    have hIR := lemma_1_Elambda_subset_Delta G ⟨lam, hlam, hlamOne⟩ hvalue
+    exact ⟨value, hIR, (dist_self _).trans_lt hε⟩
+  · intro target htarget
+    obtain ⟨center, hcenter⟩ := Set.mem_iUnion.mp (hcover htarget)
+    obtain ⟨hcenterMem, hnear⟩ := Set.mem_iUnion.mp hcenter
+    let selected : centers := ⟨center, hcenterMem⟩
+    have hlamSelected : lam < threshold selected := by
+      have hbound := hcommon selected
+      have hlamδ : lam < δ := hlamThreshold.trans_le (min_le_left _ _)
+      linarith
+    obtain ⟨hnash, hclose⟩ := hprofile selected lam hlam hlamSelected
+    refine ⟨G.discountedPayoff lam (profile selected), ⟨profile selected, hnash, rfl⟩, ?_⟩
+    have hnear' : dist center target < ε / 2 := by
+      simpa only [Metric.mem_ball, dist_comm] using hnear
+    calc
+      dist (G.discountedPayoff lam (profile selected)) target ≤
+          dist (G.discountedPayoff lam (profile selected)) center + dist center target :=
+        dist_triangle _ _ _
+      _ < ε / 2 + ε / 2 := add_lt_add hclose hnear'
+      _ = ε := by ring
 
 /-- Aggregate finite/discounted form of Lemma 1(5)--(7).  The positive
 horizon/rate witnesses prevent the zero-horizon collapse present in the
