@@ -406,6 +406,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards, as a corollary of the implemented response-quotient criterion and elementary singleton branches. No nonsingleton inequalities beyond equivariance are required. |
 | Fin4: the cyclic-child joint/solo raw family specified below, for every real R | UE, with an explicit fixed-target finite-law producer on the interval not covered by the singleton criteria. Both participants of the prescribed pair receive a positive collision premium; a full four-player premium core is allowed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
+| Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. This is an independently reviewed mathematical result awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -503,6 +504,44 @@ nonnegative-singleton, nonnegative-participant-premium class, any
 counterexample must therefore have |C|≥3. Negative participant premiums
 remain outside this theorem; no reduction of arbitrary tables to its
 hypotheses is known.
+
+The **protected common-leaver criterion** uses the same positive-premium
+trap definition even when participant premiums have either sign. It assumes
+nonnegative own singleton rewards and a player p such that:
+
+- rₚ(S)≥sₚ for every coalition S containing p;
+- every premium trap contains p; and
+- rₚ(T∪{p})≤rₚ(T) for every nonempty T⊆C\{p}.
+
+No participant-premium sign is imposed on any other player. These are finite
+tests on the reward table. They imply UE for the original four-player game;
+there is no deletion of p or assumed equilibrium of a child game.
+
+For strict leave comparisons, every absorbing exact root whose continuation
+satisfies vₚ≥sₚ returns to the compact domain
+
+    D={v∈[−B,B]⁴ : vₚ≥sₚ and some vᵢ≤sᵢ},
+
+where B exceeds a reward bound M. A root supported on a trap would make its
+active player p strictly prefer Continue. Any other support has an active
+player with every participant reward at most its singleton, so the successor
+belongs to D. Unlike the nonnegative-premium case, it may lie below a
+singleton floor.
+
+A full-root potential's minimum on D must first lie on the singleton lower
+boundary. The singleton-face derivative inequalities then give two binding
+coordinates. Lowering a binding coordinate k≠p by ε preserves p's floor;
+every exact root returns to the same D and has absorption at least
+ε/(3M+B). This contradicts minimality and the directional derivative.
+The existing Fin4 polynomial-obstruction theorem yields UE; weak leave
+comparisons follow by perturbing only passive rewards and applying reward
+closure. No weak-comparison analytic potential exclusion is asserted.
+
+The [complete proof and exact boundary tests](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
+include a three-player core with a genuinely negative participant premium.
+The criterion does not cover traps with no common member, negative participant premiums of every
+possible protected member, or failed leave comparisons for all such members.
+It is not a normal form for arbitrary reward tables.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are

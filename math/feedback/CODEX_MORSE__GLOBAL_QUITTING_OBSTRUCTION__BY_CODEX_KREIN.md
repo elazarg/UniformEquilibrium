@@ -305,6 +305,198 @@ removal of its two-line draft preface and last process sentence. No
 mathematical correction is requested. This is an artifact-scope check,
 not a new Lean-build claim.
 
+## Independent addendum: a common leaver, including signed outsider premiums
+
+Scope: Sections 14 and 15 of the source notebook, after the explicitly
+resolved principal-matrix correction below. The reviewed whole-note hash
+is `addb73fce7440cb03e41ac8a0afb06d78d6563e35fcc2960019542b84eec891e`.
+I did not read CODEX_BROUWER's review of these sections. This is an
+independent mathematical and static source audit, not a Lean build.
+
+VERDICT: PASS for the common-leaver theorem in Section 14 and for its
+strictly stronger signed-premium theorem in Section 15, with no unresolved
+mathematical objection. The analytic result is finite-player and permits
+signed singletons; the strategic consumer is Fin4 with nonnegative own
+singletons. Only the protected player's participant premiums must be
+nonnegative in Section 15. Weak leave is a UE corollary by reward closure,
+not a weak-comparison C¹ potential-exclusion theorem.
+
+### The exact raw support argument
+
+The positive-premium trap definition makes sense unchanged when other
+participant premiums are negative. Union closure still holds because
+positive witnesses survive taking unions. Under signed premiums, a support
+which is not a trap has an active member whose participant rewards on
+ALL subcoalitions of that support are at most its singleton; equality
+must not be inferred. Section 15 uses exactly this weaker inequality.
+
+If the active support A is a trap, every-trap containment gives p∈A⊆C.
+Conditional on p's action, every nonempty opponent coalition lies in
+C\{p}; its actual Quit-minus-Continue difference is strictly negative
+by the pointwise leave hypothesis. The empty-coalition difference is
+s_p−v_p≤0. Another player must have positive hazard because singleton
+traps are impossible. Thus the nonempty-opponent event has positive
+probability, including at unit hazards, and the averaged gap is strictly
+negative. This contradicts p being active. No positive outside hazard
+has been dropped from this calculation: supports not trapped are handled
+by their own low-premium active member.
+
+For Section 14, every exact successor is at least the full singleton
+vector, and that member has equality, giving return to L. For Section 15,
+only the protected coordinate is known to stay above its singleton.
+The low-premium active member instead supplies w_k≤s_k. Therefore the
+returned point belongs to the original set
+
+    D={v in [−B,B]^I : v_p≥s_p and some v_i≤s_i}.
+
+That is the exact invariant set needed, not the smaller boundary L.
+The return proof permits any signed participant rewards away from p,
+arbitrary simultaneous coalitions, and a different returning member
+at each root. It also handles C empty and the case where that member
+is p itself.
+
+### Why the minimum returns to L before perturbation
+
+The set D is compact and nonempty, since it contains the singleton vector.
+At a minimum x, any strict inequality x_k<s_k makes all-Continue fail
+Nash: quitting alone improves that player. Finite Nash existence supplies
+a positively absorbing exact root; the protected floor returns its
+successor to D. Potential drift then gives a strictly smaller value of H
+inside the SAME minimizing set. This excludes every below-singleton
+coordinate at the minimum, so x≥s. Membership in D forces an equality,
+hence x∈L. Because L⊆D, x minimizes H on L as well.
+
+The singleton-face derivative inequality needs no premium signs. At only
+one binding coordinate, its own contribution vanishes; all nonbinding
+interior derivatives vanish, and upper-face derivatives are nonpositive
+against strictly positive B−r_i({j}). This contradicts the positive
+face-drift bound. Thus at least two coordinates bind. Increasing one
+while retaining another proves nonnegative binding derivatives. One can
+therefore lower a binding k≠p, keep p's floor exactly, and obtain a
+nonpositive first-order variation of H.
+
+I directly checked `IsQuittingFullExactRootPotential.singletonFace_drift`
+in `UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`.
+Its literal hypotheses are the reward bound, strict box margin, singleton
+face, and differentiability. It has no nonnegative-premium hypothesis.
+Thus the signed proof does not reuse a face theorem outside its scope.
+
+### The signed absorption estimate is valid without a restored floor
+
+At source v=x−epsilon*e_k, let a be full absorption and a_{−k} the
+probability that an opponent quits. A forced Quit receives s_k on the
+event no opponent quits and differs from s_k by at most 2M otherwise.
+Hence
+
+    Q_k≥s_k−2M*a_{−k}≥s_k−2M*a.
+
+The second inequality uses a_{−k}≤a, independent of k's own hazard.
+Exact Nash gives w_k≥Q_k, while direct averaging gives
+
+    w_k≤v_k+(M+B)a=s_k−epsilon+(M+B)a.
+
+Combining gives epsilon≤(3M+B)a, with a strictly positive coefficient.
+It does not assume w_k≥s_k, and does not require the perturbed player
+to be the returned low-premium witness. Minimality is on D, so
+H(w)≥H(x) even when w lies below some singleton. Dividing the drift
+bound by epsilon contradicts the nonpositive directional derivative.
+This is a complete charge estimate, not a qualitative assertion that
+absorption stays away from zero.
+
+### A signed exact-root test requiring D rather than L
+
+The following three-player table gives an explicit return below a
+singleton while satisfying the nonempty-trap signed hypotheses:
+
+    r({0})=(1,−2,0),     r({1})=(0,0,0),
+    r({2})=(3,0,0),      r({0,1})=(1,−1,1),
+    r({0,2})=(2,0,1),    r({1,2})=(0,0,0),
+    r({0,1,2})=(1,0,0).
+
+Take p=0. The only trap is {0,2}, and the protected comparison is
+2<3. Player 0's participant rewards are all at least one. At any
+annotation, the pure root with active coalition {0,1} has endpoint gaps
+(1,1,−1), so it is full exact Nash. Its successor is (1,−1,1), which
+lies in D but not in L. In particular the signed return must not be
+strengthened to a lower-boundary return or to coordinatewise singleton
+floors. Section 15's proof handles exactly this situation.
+
+### Exact semantic consumer and reward closure
+
+I directly inspected `isQuittingNormalPlayer_of_singleton_nonneg` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`.
+It derives normality from the singleton sign alone using the general
+punishment upper bound; no participant-premium assumption occurs. The
+signed proof therefore does not need punishment values to EQUAL
+singletons. They may be strictly lower.
+
+The already inspected
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`
+requires precisely the bound, normality, and one positive singleton.
+`isQuittingFullExactRootPotential_of_robustPotential` in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`
+retains the same polynomial, reward table, box, and unit charge without
+premium restrictions. A polynomial is C¹, so the signed analytic contradiction
+consumes the actual no-UE output. The all-zero-singleton case is handled
+directly by all-Never, since every unilateral exit against it pays its
+own zero singleton regardless of other coalition premiums.
+
+For weak leave, increasing r_p(T) on nonempty T⊆C\{p} changes only
+passive coordinates. Every participant reward, own singleton, positive
+premium trap, and the whole C remain unchanged. The protected participant
+floor survives, the comparisons become strict, and reward distance is
+at most the chosen delta. The literal fixed-target closure theorem in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`
+therefore applies. Targets may vary in the nearby games; one fixed target
+is selected for the original table. No profile limit is assumed.
+
+### Three-core fixture audit and the resolved local correction
+
+The complete Section 14 table has positive participant witnesses only
+for players 0 and 3 at {0,3}, and player 1 at {0,1}. Thus its greatest
+core is {0,1,3}, every trap contains 0, and the three protected comparisons
+are precisely 1<11/10, 2<5/2, and 1<5/2. It is outside product-low
+and greatest-core-at-most-two coverage, while satisfying the new raw
+criterion. This is coverage of actual three-core data, not a supplied
+protected-return interface.
+
+During this audit I found that the initially written principal {0,1}
+matrix was incorrectly called R0. It has homogeneous vector (0,1)
+with residual (1/10,0). The author corrected the source-screen witness
+to principal {0,2}=[[0,−1],[−1,0]], which is R0 and non-Q, and retained
+the explicit {0,1} counterexample. This objection is fully resolved;
+neither the main return proof nor the signed extension was affected.
+
+I independently recomputed the full determinant 21/5, full inverse
+entry −26/21, child inverse weights (26/35,−1/70,−9/70), and the stated
+negative entries −20/21, −15/13, −1/2 in the other triple inverses.
+The positive-child LCP reduction has the exact unique degree-one root
+(0,1,1,1) with inactive residual 8/5. The partition table retains only
+0|123 at first order, and its three actual response components differ
+as displayed. All fifteen named pure-coalition improving players were
+checked by exact rational reward comparisons.
+
+The proper-child sure-exit witnesses remain full child Nash, including
+withdrawal to a singleton or eventual Never. The cyclic three-child
+quiet pivot value is exactly 69/70 and its forced-Quit payoff one.
+For child {0,2,3}, I recalculated the pairs of Continue/Quit endpoints:
+(1,1), (−4/5,0), (0,0), with omitted player 1's pair (−11/15,0).
+After changing r_2({0,2}) to −1/10, the participant-2 Quit endpoint is
+−1/25, still above −4/5, and the other displayed pairs are unchanged.
+Child {0,2}'s sure player-2 payoff −1/10 is above its withdrawal payoff
+−1; delaying does not escape the other player's sure absorption. Thus
+negative participant rewards have not been justified using a false
+singleton-floor argument. The signed fixture preserves the positive
+trap data and all protected comparisons, and its changed response
+component t−t²/10 still breaks the remaining quotient.
+
+The precise signed raw assumptions remain material. This review gives
+no coverage when the protected player itself has a negative participant
+premium, when no player lies in every trap, or when every possible
+common member has a failed leave comparison. It also does not convert
+the finite-player analytic result into a general finite-player UE theorem.
+
 ## Full-root return and the boundary derivative
 
 For an exact root, every successor coordinate dominates its forced-Quit
