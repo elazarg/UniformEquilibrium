@@ -405,6 +405,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | --- | --- |
 | Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards, as a corollary of the implemented response-quotient criterion and elementary singleton branches. No nonsingleton inequalities beyond equivariance are required. |
 | Fin4: the joint/solo raw family specified below | One fixed UE target and actual finite laws with vanishing full regret. Both participants of the prescribed pair receive a positive collision premium. This is an ordinary mathematical result awaiting formalization. |
+| Fin4: nonnegative own singletons and participant premiums, constant participant rewards outside a pair, and one member strictly prefers the other's singleton to the pair | UE by exclusion of every smooth full exact-root potential. No outsider joining inequalities or strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -458,6 +459,29 @@ nonnegative-inverse, and nontrivial response-quotient criteria. These latter
 separations concern that member, not every completion of the family.
 The [complete raw-data producer](exports/ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md)
 supplies the rates and continuation values; none is a strategic hypothesis.
+
+The **two-player premium-core criterion** requires a pair {i,j} with
+
+    rₖ(S)≥sₖ for every k∈S,
+    rₖ(S)=sₖ for every k∈S outside {i,j},
+    rᵢ({i,j})<rᵢ({j}).
+
+Nonparticipant rewards and the two core players' nonnegative premiums on
+larger coalitions are unrestricted. For any finite player set, even with
+signed singletons, these conditions exclude every C¹ function H satisfying
+
+    H(v)−H(T_q(v))≥a(q)
+
+on all exact Nash-root edges in any box [−B,B]ᴵ strictly containing the
+rewards. The proof minimizes H on the singleton lower boundary and lowers
+only binding constant-participant coordinates; every resulting exact root
+returns to that same boundary with a quantitative positive absorption.
+For Fin4 with s≥0, the existing no-UE polynomial producer supplies exactly
+such a potential, so its exclusion proves UE. The
+[complete theorem](exports/TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md) includes
+an explicit table outside the named product-low, proper-child F/J, matrix,
+and response-quotient screens. No reduction of arbitrary tables to this
+premium pattern is known.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are

@@ -15,12 +15,18 @@ alternative always admits a contractible certificate whenever it admits any
 certificate. It excludes an ordinary homology obstruction to that alternative;
 it neither excludes every smooth potential nor constructs a counterexample.
 The full game adapter and the nonconvex finite-union case remain open.
-Section 10 is a new, complete UNREVIEWED actual-table proof draft: with
+Section 10 is a complete actual-table proof that has passed independent
+reviews by CODEX_BROUWER and CODEX_KREIN, with no unresolved mathematical
+objection: with
 nonnegative participant premiums confined to two players, a strict preference
 of either core player for the other's singleton over their pair excludes
 every smooth full-root potential. It imposes no outsider no-join condition.
 Its proposed Fin4 UE consequence uses the existing polynomial obstruction
 producer; source non-overlap has only been checked as specified there.
+The independently reviewed, frozen standalone packet is
+`../exports/TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md`; it contains a
+stronger fully specified {0,3}-premium fixture, independently checked here
+and by both reviewers. This remains ordinary mathematics, not Lean code.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -594,8 +600,8 @@ claimed here, and no further generic local-repair lemma is proposed.
 
 ## 10. A two-player premium core with a strict preference to leave the pair
 
-**Frozen candidate for independent review.** Complete ordinary proof draft;
-not independently reviewed, not Lean-checked, and not exported. This is an
+**Frozen strict theorem, independently reviewed PASS by CODEX_BROUWER and
+CODEX_KREIN.** Complete ordinary proof; not Lean-checked. This is an
 actual joint-coalition argument, separate from the retired topological repair.
 The claimed conclusion is a full-root exclusion and, for four players, a
 uniform-equilibrium existence theorem for the stated raw class. No broader
@@ -884,4 +890,76 @@ or supplied F/J weights. I have NOT claimed an exhaustive search proving
 that no other implemented producer subsumes this entire class. Independent
 review must check both the full-root split in (43) and the selective
 boundary perturbation, and separately examine source subsumption before
-any export or new-coverage assertion.
+any export or new-coverage assertion. Both proof reviews have now passed;
+the stronger rational witness and its bounded overlap checks are included
+in the separate standalone assembly, without changing this strict proof.
+
+## 11. Separate weak-leave corollary and the remaining two-core region
+
+**Ordinary proof, not yet independently reviewed.** This section does not
+change the frozen strict analytic theorem or its standalone packet.
+
+For four players with nonnegative singletons, keep conditions 1 and 2 of
+Section 10 and replace its strict inequality by
+
+    r_i({i,j}) <= r_i({j}).                              (49)
+
+Then a uniform-equilibrium payoff still exists. For each delta>0, change
+only the NONPARTICIPANT coordinate r_i({j}) to r_i({j})+delta. No
+singleton SELF reward, participant premium, or outsider participant
+equality changes. The nearby table satisfies the strict theorem and is
+within delta of the original table in every reward coordinate. The checked
+declaration
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`
+then gives uniform-payoff existence for the original table. I read its
+literal statement and the surrounding reward-distance inequalities.
+
+For completeness, fixed-target closure does not require the nearby targets
+to coincide. Choose a sequence delta_n decreasing to zero and uniform
+targets V_n for the nearby games. The targets stay in one compact reward
+box, so a subsequence tends to V. At requested accuracy epsilon, select
+one nearby game with delta_n and ||V_n-V||_infinity sufficiently small,
+and use one of its uniform profiles and its one eventual horizon threshold.
+For every prescribed or deviating behavioral profile and every finite
+horizon, changing the reward table by delta_n changes expected average
+payoff by at most delta_n, since the strategies and transition law are
+the same. Thus the original game's payoff-delivery error increases by at
+most delta_n+||V_n-V||_infinity and its full deviation gain by at most
+2delta_n. Choosing all three margins below epsilon proves the same fixed
+V works at every accuracy. No profile limit is taken.
+
+This is ONLY a weak-leave UE corollary. It does not assert that every
+ordinary C^1 exact-root potential is excluded under (49): reward closure
+of the strategic conclusion is not automatically closure of that stronger
+analytic property. No new closure theorem is claimed.
+
+The zero-pair-premium case was already covered. More precisely, under
+conditions 1 and 2, if either core participant has
+`r_i({i,j})=s_i`, then the whole table is product-low. At an absorbing
+product root, any active outsider has its constant Quit endpoint s_k.
+If there is no such outsider, only the two core hazards can be positive.
+If i is active, its endpoint is the mixture of s_i and r_i({i,j})=s_i;
+if i is inactive, the only possible active core player j is alone and
+has endpoint s_j. This covers every product root, regardless of the
+core players' premiums on larger coalitions. The same argument applies
+with i and j interchanged. The existing producer
+`exists_uniformEquilibriumPayoff_of_productLowPremium` in
+`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`
+therefore consumes these zero-premium endpoints.
+
+Consequently, within the entire nonnegative-premium/constant-outsider
+two-core class, the part not closed by product-low or by the strict theorem
+plus reward closure must satisfy ALL FOUR strict inequalities
+
+    r_i({i,j})>s_i,      r_j({i,j})>s_j,
+    r_i({i,j})>r_i({j}), r_j({i,j})>r_j({i}).             (50)
+
+This is a raw-table ordering reduction, not a claim that every table in
+(50) is otherwise uncovered or lacks an equilibrium. If additionally all
+outsider rewards at the pair obey r_k({i,j})>=s_k, the pure pair itself
+is an exact terminal equilibrium: both core players prefer joining,
+and no outsider improves by joining. Thus a genuinely remaining table
+also has a constant-participant outsider harmed below its singleton by
+the pair. That concrete joint-pair/outsider conflict is the next question;
+it is not addressed by weakening the retired local topological mechanism.
