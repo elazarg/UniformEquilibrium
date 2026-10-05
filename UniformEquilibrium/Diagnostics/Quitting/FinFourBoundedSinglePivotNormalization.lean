@@ -1,0 +1,72 @@
+import UniformEquilibrium.Diagnostics.Quitting.FinFourSinglePivotNormalization
+import UniformEquilibrium.Quitting.RewardBound
+import UniformEquilibrium.Quitting.Transform.PositivePayoffScaling
+
+/-! # Actual unit-bounded single-pivot no-UE normalization
+
+An arbitrary real source table is first normalized by the existing semantic
+single-pivot producer. A positive reciprocal integer then bounds its actual
+finite table, preserving no-UE by literal stochastic-game scaling.
+-/
+
+noncomputable section
+
+namespace GameTheory
+
+/-- Bare no-UE data produce a pivot and an integer bounding the actual
+normalized reward table, together with the scaled unit-bounded no-UE table.
+The sole positive singleton is `1 / divisor`, not necessarily one. -/
+theorem exists_finFourBoundedSinglePivotNormalization_of_no_uniformPayoff
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hnot : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ pivot : Fin 4, ∃ divisor : ℕ, 1 ≤ divisor ∧
+      (∀ terminal who,
+        |quittingSinglePivotNormalizedReward reward pivot terminal who| ≤ (divisor : ℝ)) ∧
+      let table := fun terminal who =>
+        (1 / (divisor : ℝ)) * quittingSinglePivotNormalizedReward reward pivot terminal who
+      (∀ terminal who, |table terminal who| ≤ 1) ∧
+      (∀ who, table (quittingSingletonTerminal who) who =
+        if who = pivot then 1 / (divisor : ℝ) else 0) ∧
+      ¬ ∃ payoff : Payoff (Fin 4),
+        (quittingGame table).IsUniformEquilibriumPayoff none payoff := by
+  classical
+  obtain ⟨source⟩ := nonempty_finFourSinglePivotNormalization_of_no_uniformPayoff
+    reward (abs_reward_le_quittingRewardBound reward) hnot
+  let normalized := quittingSinglePivotNormalizedReward reward source.pivot
+  obtain ⟨base, hbase⟩ := exists_nat_ge (quittingRewardBound normalized)
+  let divisor := base + 1
+  have hdivisor : 1 ≤ divisor := by omega
+  have hdivisorPos : (0 : ℝ) < divisor := by exact_mod_cast (by omega : 0 < divisor)
+  have hbound : ∀ terminal who, |normalized terminal who| ≤ (divisor : ℝ) := by
+    intro terminal who
+    apply (abs_reward_le_quittingRewardBound normalized terminal who).trans
+    exact hbase.trans (by dsimp [divisor]; push_cast; linarith)
+  have hscale : 0 < 1 / (divisor : ℝ) := one_div_pos.mpr hdivisorPos
+  have hscaledBound : ∀ terminal who,
+      |(1 / (divisor : ℝ)) * normalized terminal who| ≤ 1 := by
+    intro terminal who
+    rw [abs_mul, abs_of_pos hscale]
+    calc
+      (1 / (divisor : ℝ)) * |normalized terminal who| ≤
+          (1 / (divisor : ℝ)) * (divisor : ℝ) :=
+        mul_le_mul_of_nonneg_left (hbound terminal who) hscale.le
+      _ = 1 := one_div_mul_cancel (ne_of_gt hdivisorPos)
+  have hsingleton : ∀ who,
+      (1 / (divisor : ℝ)) * normalized (quittingSingletonTerminal who) who =
+        if who = source.pivot then 1 / (divisor : ℝ) else 0 := by
+    intro who
+    dsimp only [normalized]
+    rw [source.canonical who]
+    split_ifs <;> simp
+  have hscaledNot : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame (fun terminal who =>
+        (1 / (divisor : ℝ)) * normalized terminal who)).IsUniformEquilibriumPayoff
+          none payoff := by
+    intro hscaled
+    exact source.no_uniformPayoff
+      ((quittingGame_exists_uniformPayoff_scale_iff normalized
+        (1 / (divisor : ℝ)) hscale).mp hscaled)
+  exact ⟨source.pivot, divisor, hdivisor, hbound, hscaledBound, hsingleton, hscaledNot⟩
+
+end GameTheory

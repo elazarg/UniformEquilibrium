@@ -2397,8 +2397,27 @@ the actual returned pair. The executable test uses exact rational evaluation
 and accepts non-strict regret bounds. The checks include a silent named build,
 separate returned-pair consumer and standard-axiom audit, and the full build.
 Neither theorem gives rational exact Nash, an effective cutoff, or a denominator
-bound. The bounded-normalization joins of the reflection packet remain separate
-work.
+bound.
+
+`exists_finFourBoundedSinglePivotPolynomialObstruction_of_no_uniformPayoff` and
+`exists_finFour_no_uniformPayoff_iff_exists_boundedSinglePivotPolynomialObstruction`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourBoundedSinglePivotPolynomialObstruction.lean`)
+give the decision-preserving normalization from arbitrary real Fin4 rewards.
+Bare no-UE data produce an actual single-pivot no-UE table, an integer bounding
+that table, and its positive reciprocal scaling to unit-bounded rewards. The
+scaled singleton vector is positive only at the produced pivot. A fresh call to
+the polynomial characterization produces one tolerance and expression with
+robust drift on box three, canceled degree at least three, non-multi-affinity,
+and the stated restrictions at every global minimum. Common scaling preserves
+the whole-game uniform-payoff semantics through
+`quittingGame_exists_uniformPayoff_scale_iff`
+(`UniformEquilibrium/Quitting/Transform/PositivePayoffScaling.lean`), delegating
+to the existing stochastic-game affine-payoff transport. The final equivalence
+is existential over tables; it assumes no rational reward table and transports
+no old polynomial certificate between boxes.
+The normalization chain passes a silent named build and expanded source-facing
+consumer check, the full silent default build, and the exhaustive production
+axiom audit.
 
 `pairedFacePotential_boundedCompletion_face_drift` and
 `pairedFacePotential_boundedCompletion_not_fullRoot`
