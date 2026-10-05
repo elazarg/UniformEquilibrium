@@ -1262,6 +1262,15 @@ axiom checks. Closed mixing endpoints and every initially off-path child are
 retained. The full integration gate passes for these additions;
 Sorin's other unfinished paper results are separate obligations.
 
+The supplied constant approximate punishment trigger is implemented as
+`exists_constantApproxPunishmentTrigger` (`Literature/Sorin1986.lean`). It
+selects actual approximate min--max opponents internally, follows one prescribed
+calendar, delivers its discounted series at every valid rate, and bounds every
+supported off-calendar stage under every full behavioral deviation. The
+generic punishment stage cap is shared with the existing vanishing-punishment
+trigger. This is a prerequisite for the supplied periodic strict-IR discounted
+Nash construction, not a proof of the remaining discounted folk-theorem clause.
+
 The separate Proposition 4 draft uses a generic connected convex-hull
 representation, an internally selected affine step and a geometric schedule
 to produce an actual independent-mixed behavioral profile. The generic
@@ -1388,6 +1397,37 @@ presentation is not duplicated: the packet's literal Fin4 instance is used.
 `quittingTerminalPayoff_soloStoppingLaw_eq`
 (`UniformEquilibrium/Quitting/Paths/SoloStoppingLawPayoff.lean`) is the reusable
 arbitrary-law observer payoff identity behind the two Never deviations.
+
+## Quiet-source proof-mining findings
+
+These are connections supported by existing proofs, not checked new declarations:
+
+- Generalize `smallPivotRepairValue_of_nonnegativeSingleton_withdrawalFamily`
+  (`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalSmallPivotRepairSource.lean`)
+  from deleting the repair pivot to any eligible deletion source. The full finite
+  quiet family has small exploitability, which the existing repair-LP consumer
+  bounds for every parent pivot. The repair pivot need not be deleted or equal
+  the child singleton used by the source. The Fin4 facade needs only one
+  nonnegative surviving singleton, not nonnegativity of every survivor.
+- Expose the zero restricted-child target as a literal uniform-equilibrium payoff
+  from `childAllNever_exactNash`, and retain the displayed alternative quiet
+  parent profiles through the existing fixed-family uniformization theorem.
+  These would complement, not weaken, the checked quiet-witness obstruction.
+- Strengthen `exists_finiteQuietLift_of_profile`
+  (`UniformEquilibrium/Quitting/Classification/QuietExtension/QuietLiftFiniteCensor.lean`)
+  with the already available coordinatewise payoff error `2 * bound * tolerance`.
+  The core censor theorem supplies it for the same selected finite laws.
+  This does not permit preserving the forbidden arbitrary zero-child target.
+- Derive reward-bound nonnegativity from the absolute reward bound in the finite
+  censor and source interfaces. A source pivot or nonempty player set supplies a
+  singleton at which to evaluate the bound.
+- Extract the constant nonnegative payoff-coordinate cap and debt calculation
+  from `outsiderDebt_eq_liveMass`
+  (`UniformEquilibrium/Quitting/Examples/PrescribedChildTargetQuietBoundary.lean`).
+  For constant terminal coordinate `c ≥ 0`, legal immediate Quit attains cap `c`
+  and exact debt is `c` times joint Never, for every actual profile. This also
+  removes the corresponding positive-coordinate duplication in the negative
+  singleton boundary example.
 
 ## Further shape proof-mining findings
 
