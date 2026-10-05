@@ -8,6 +8,14 @@ No exhaustive arbitrary-Fin4 producer has been obtained. A later exact
 source audit below shows that the Klein-four and one-involution EXISTENCE
 classes are already consumed by the implemented response-quotient machinery.
 
+The latest **Singleton-completed finite timing games** section gives an
+exact all-calendar obstruction to a natural global selection route: even
+in a product-low game with UE, every exact finite timing equilibrium with
+singleton completion is all Never. The complete three-player example,
+Fin4 version, and off-path proof are internal ordinary mathematics, not
+independently reviewed or Lean checked. Approximate timing equilibria are
+not excluded, and no game-level positive gap is asserted.
+
 The **A solo-0 bridge pays a positive outsider cap** section is a
 complete ordinary construction with two independent PASSes and final
 artifact checks. The frozen standalone is
@@ -2739,3 +2747,171 @@ the strict outer-box margin.
 The concrete next conjecture-facing question remains continuation mass,
 as above. This auxiliary argument does not address the exact positive-
 index core-three falsifier or produce an arbitrary-table equilibrium.
+
+## Singleton-completed finite timing games: exact selection can freeze forever
+
+### The precise global proposal and its exact debt identity
+
+Let a finite quitting game have nonnegative own singleton vector s.
+Fix any finite ordered calendar, give each player its dates plus Never,
+and use independent mixed timing laws. Modify ONLY the joint-Never payoff
+from0 to s. This defines an auxiliary finite normal-form game, not an
+actual terminal reward change in the original game. Let b_i be the
+player's Never probability, b=product_i b_i, u the actual terminal
+payoff, and u^s=u+b*s the completed-game payoff.
+
+For fixed opponents, each finite-date payoff is unchanged. The completed
+Never action pays N_i+s_i*product_{j!=i}b_j, where N_i is the actual
+Never payoff. This is exactly the payoff from quitting after the last
+calendar date in the original game. Since s_i>=0 it weakly dominates
+the actual Never action. Thus the completed finite-menu best response
+equals the unrestricted behavioral best-response cap of the original
+finite law. In particular, for EVERY independent finite law,
+
+    actual_terminal_debt_i = completed_menu_debt_i + s_i*b.       (F1)
+
+These are nonnegative suprema-minus-prescribed-payoff debts. There is no
+claim that the original Never payoff was translated affinely. Only its
+literal joint mass has been added. Complete behavioral responses reduce
+to pure stopping dates here because the unique live history gives no
+information beyond survival and independent opponents' fixed laws.
+
+Equation(F1) is a direct consequence of already implemented identities,
+not a new existence producer. The inspected declarations are
+`quittingContinuationFiniteTimingGame_mixedEU` in
+`UniformEquilibrium/Quitting/Terminal/ContinuationFiniteTimingGame.lean`
+and `quittingContinuationBestResponseValue_finiteDeadlineTimingProfile_eq_max`
+in `UniformEquilibrium/Quitting/Terminal/FiniteDeadlineFullReplyCap.lean`.
+The retained-tail definitions and
+`quittingRetainedTailMixedTimingRootStack_jointSurvival_eq_prod_none`
+in `UniformEquilibrium/Quitting/Terminal/RetainedTailFiniteTimingWord.lean`
+confirm the literal product-law semantics.
+
+At an exact completed-game Nash equilibrium, every actual debt is
+therefore exactly s_i*b. This suggests selecting exact equilibria on
+larger calendars with b tending to zero. The following exact example
+refutes that strategy-class completeness proposal at EVERY calendar size,
+despite actual uniform-equilibrium existence.
+
+### A complete three-player counterexample to the selection proposal
+
+Take I={0,1,2}, s=(1,0,0), and the complete reward table
+
+| S | r(S) |
+|---|---|
+| 0 | (1,2,-1) |
+| 1 | (0,0,2) |
+| 2 | (3,-1,0) |
+| 01 | (1,0,1) |
+| 02 | (1,1,0) |
+| 12 | (2,0,0) |
+| 012 | (1,0,0) |
+
+Equivalently, put
+
+    A=[[0,-1,2],[2,0,-1],[-1,2,0]],
+    r_i(S)=s_i                         if i belongs to S,
+           s_i+sum_{j in S} A_ij      otherwise.
+
+Every participant always receives its own singleton. At continuation
+annotation s, forced Quit is s_i and forced Continue is s_i+(Aq)_i.
+All Continue is the UNIQUE exact root on the entire hazard cube.
+Indeed, a single active hazard leaves a strictly negative matrix entry
+at one inactive coordinate, a profitable join. For two active hazards,
+one active row has strictly positive residual, a profitable Continue.
+For three active hazards, every active residual would have to be
+nonpositive, but their sum is sum_i q_i>0. These arguments include
+sure hazards as well as interior ones.
+
+### Why every exact completed timing equilibrium is all Never
+
+The following proof handles off-path continuations, which cannot simply
+be declared Nash. It applies to ANY finite table with constant participant
+rewards r_i(S)=s_i and with all Continue the unique exact root at s.
+
+Consider an exact Nash equilibrium of the singleton-completed timing
+game. Suppose some live date is reached with positive joint probability
+and its hazard row includes a sure quitter. Every active player's
+conditional value is s_i, since quitting at that date is a supported
+action. Every player facing another sure quitter has no future payoff:
+its Quit/Continue comparison is exactly the root comparison at s.
+If there is a sole sure quitter, that player can instead Continue once
+and Quit at the next listed date. Constant participant rewards guarantee
+s_i on that next date regardless of simultaneous opponents. If there
+is no next date, completed Never supplies exactly s_i after everyone
+Continues. Thus this deviation has the root Continue value C_i(s,q).
+The equilibrium condition makes it at most s_i. Every inactive player's
+comparison is also literal because it faces the sure opponent. Hence
+the entire row is an exact root at s, impossible by uniqueness.
+
+Therefore no reached date has a sure hazard. A finite product of its
+positive continuation factors is positive, so the joint Never mass is
+positive and every live calendar date is reached with positive probability.
+At the final date, conditional Nash is now genuinely required for every
+player; the continuation is exactly s. Uniqueness forces all its hazards
+zero. Backward induction forces the preceding row zero, and then every
+row zero. The only completed timing equilibrium is all Never.
+
+This uses ordinary normal-form Nash only: a player may replace its
+conditional remaining timing law while retaining all earlier masses.
+Independence and positive live reach turn a profitable conditional change
+into a profitable original unilateral deviation. The argument at a sure
+row above is separate precisely because later live histories may then be
+unreachable; no false subgame-perfectness assumption is made.
+
+Consequently every exact completed-menu Nash profile, on every finite
+calendar, has b=1 and actual unrestricted debt vector(1,0,0). There
+is no favorable selection of such exact equilibria and no helpful
+increase in the number of dates. The original game nevertheless has UE:
+all forced-Quit payoffs equal the own singleton, so it satisfies
+`HasProductLowQuittingPremium` from
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`.
+Its nonnegative singletons meet the exact hypotheses of
+`exists_uniformEquilibriumPayoff_of_productLowPremium` in
+`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`.
+This source implication was inspected, not built here.
+
+### A literal Fin4 version, without a harmless padding player
+
+For I={0,1,2,3}, take s=(1,0,0,0) and
+
+    G=[[0,1,1,-1],[-1,0,-1,2],
+       [-1,2,0,-1],[-1,-1,2,0]],
+    r_i(S)=s_i                         if i belongs to S,
+           s_i+sum_{j in S} G_ij      otherwise,
+
+for EVERY nonempty S. This defines all60 reward entries and again
+gives constant participant rewards. The unique exact root at source s
+is all Continue. Here are the remaining cases beyond the child cycle.
+
+If q0=0, the same one/two/three-child support argument applies to A.
+If q0>0, its active inequality gives q3>=q1+q2, and q3 must be
+positive because otherwise an inactive child has residual -q0.
+If q1=0, row2 has strictly negative residual -q0-q3, forcing q2=1;
+then q3=1 and active row3 has residual2-q0>0, a contradiction.
+If q2=0, its inactive inequality gives 2q1>=q0+q3, so q1>0;
+active row1 gives q0>=2q3. Together with q1<=q3 these imply
+2q3>=q0+q3>=3q3, again impossible. Thus q1,q2 are positive.
+Because q3>=q1+q2 and q3<=1, both q1,q2 are interior. Their
+two equalities imply 3q3=2q1+q2, contradicting q3>=q1+q2.
+
+The all-calendar proof therefore applies verbatim. Every exact finite
+singleton-completed Nash law is all Never, has actual pivot debt1,
+and belongs to a game already covered by product-low UE. The fourth
+player is not inert and cannot supply an artificial sure-exit solution.
+
+### Direction change and the remaining question
+
+The surviving identity(F1) cleanly isolates joint mass, but exact finite
+Nash existence cannot produce its decay. Relaxing to approximate
+completed-menu Nash with small b is possible in these examples because
+the actual game has UE; it is not a conclusion of finite Nash selection.
+Merely minimizing the left side of(F1) would restate the original
+strategic problem, not solve it.
+
+The next question is whether a global continuation-mass argument can
+produce small completed-menu error AND small joint mass simultaneously,
+without an exact-Nash restriction and without convexifying independent
+laws. Any proposal must survive the all-calendar obstruction above and
+the earlier feasible phantom-target counterexample. No additional
+conditional interface or positive game-level gap is asserted here.
