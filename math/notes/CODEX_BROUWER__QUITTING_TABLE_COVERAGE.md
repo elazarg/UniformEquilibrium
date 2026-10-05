@@ -7,7 +7,20 @@ Author: CODEX_BROUWER
 No exhaustive arbitrary-Fin4 producer has been obtained. A later exact
 source audit below shows that the Klein-four and one-involution EXISTENCE
 classes are already consumed by the implemented response-quotient machinery.
-Their proofs remain correct, but neither is new uniform-payoff coverage.
+
+A separate unreviewed result at the end, **Canonical premium-core
+reduction**, extends the reviewed two-player strict-leave mechanism to
+tables whose positive-premium supports peel down to a pair. It supplies
+a finite raw reduction and a three-premium-recipient exact example, not
+an arbitrary-game theorem. No export or Lean-check claim is made for it.
+
+The subsequent **Three-player premium core** section gives an exact
+unique-full-root falsifier with strictly interior successor and local
+index +1. Its complete rational proof and concrete next question are
+recorded below. This rules out a direct root-return/index extension,
+not uniform-equilibrium existence. It is not yet independently reviewed.
+
+The symmetry proofs remain correct, but neither is new uniform-payoff coverage.
 The complete signed Klein-four theorem has passed
 independent falsification reviews by CODEX_KREIN and CODEX_MORSE, with no
 unresolved mathematical objection. That section remains unchanged. The
@@ -931,10 +944,419 @@ its independently selected exact stationary profile may carry additional
 information in degenerate quotients. No missing-class export is justified
 by those constraints.
 
+## Canonical premium-core reduction
+
+**Status: complete ordinary proof, not independently reviewed or
+Lean-checked.** This is separate from the retired reward-symmetry and
+equal-hazard-ordering paths above. It uses the reviewed full-root argument
+in Section 10 of
+[`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`](CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md),
+but weakens its constant-outsider premise by an exact finite reduction of
+the positive-premium relation. It does not delete players from the actual
+strategic game and requires no quiet child equilibrium.
+
+### Self-contained raw question and finite reduction
+
+Let I be finite. Every nonempty coalition S has finite reward vector r(S),
+and write s_k=r_k({k}). Assume nonnegative participant premiums:
+`r_k(S)>=s_k` whenever k belongs to S. Product roots are independent
+Quit/Continue marginals; annotations are arbitrary vectors. For the UE
+conclusion below the original game has four players, s is nonnegative,
+live and Never rewards are zero, and deviations are unrestricted complete
+behavioral strategies. The target payoff precedes the accuracy quantifier.
+
+Call a nonempty set A a **premium trap** if, for every k in A, there is
+a nonempty S contained in A with k in S and `r_k(S)>s_k`. Thus every
+member of A can get a positive participant premium somewhere inside A.
+The witnessing coalition may depend on k. Let C be the union of all
+premium traps, with C empty when there are none.
+
+The following elementary facts make C canonical and computable from the
+finite reward table.
+
+1. The union of two premium traps is a premium trap: each player retains
+   its original witnessing coalition. Since I is finite, C is itself a
+   premium trap whenever nonempty.
+2. A singleton is never a premium trap, because its only participant
+   coalition is its singleton. Therefore C is either empty or has at
+   least two players.
+3. Begin with A=I. If some k in A satisfies `r_k(S)=s_k` for every
+   participant coalition S contained in A, remove k and repeat. No
+   premium trap can lose a member: a removed member of a surviving trap
+   would have a positive-premium witness contradicting its flatness.
+   Every terminal nonempty residual is itself a premium trap, since no
+   remaining member is flat. Consequently every removal order terminates
+   at precisely C. This is a finite raw-data calculation, not a choice
+   of strategies, chronological quitting order, or selected response root.
+4. Every nonempty A not contained in C fails to be a premium trap, so
+   it has some k whose participant reward is s_k on EVERY coalition
+   contained in A containing k. More generally this same conclusion
+   holds for every A which is not a premium trap.
+
+These statements use nonnegative premiums when translating “no positive
+premium” into exact equality. The union fact and removal argument are
+otherwise purely finite combinatorics.
+
+### The pair-core strict-leave theorem
+
+Suppose C={i,j} and
+
+    r_i({i,j}) < r_i({j}).
+
+Then the full-root smooth-potential exclusion of MORSE Section 10 holds
+for this ORIGINAL table, even if players outside C have positive premiums
+on other coalitions. In particular, for four players with nonnegative
+singletons the original game has a uniform-equilibrium payoff.
+
+Here is the complete change to the analytic proof. Fix a bound M on all
+reward magnitudes, B>M, the box K=[-B,B]^I, and its singleton lower
+boundary L as in that proof. Consider any exact product root q at v in
+K with the core source inequalities `v_i>=s_i`, `v_j>=s_j`, and positive
+absorption. Let A={k:q_k>0} be its actual active support. Every successor
+is above s and stays in K by the same endpoint and convexity arguments.
+
+If A is not the pair C, it cannot be a premium trap: every trap is
+contained in C, and neither singleton subset of C is a trap. Therefore
+some k in A is flat on every participant coalition contained in A.
+Under the actual opponents' product distribution, k's forced-Quit
+coalition is always contained in A. Thus its Quit endpoint is exactly
+s_k. Supported Quit pins its successor coordinate at s_k, returning the
+full successor to L. This retains all hazards; no low-probability or
+zero-probability coalition is incorrectly kept in the expectation.
+
+If A=C, all other hazards are zero. The designated player's endpoint
+gap is
+
+    (1-q_j)(s_i-v_i)+q_j[r_i({i,j})-r_i({j})] < 0,
+
+contradicting q_i>0. This exhausts every support. Hence the same full-root
+return property to the SAME L holds on the original core-floor region.
+
+The remaining proof does not use global outsider flatness at all. The
+singleton-face derivative inequality uses only actual small sole-owner
+Nash roots and smoothness. A minimizer of a putative potential on L
+cannot have a single binding coordinate. If only i,j bind, the face
+inequality with owner j contradicts `r_i({j})>s_i` and the feasible
+gradient signs. Thus some binding coordinate lies outside C. Lower all
+such binding coordinates by epsilon and leave the two core coordinates
+unchanged. All-Continue is no longer Nash. Every selected finite-game
+Nash root absorbs positively and returns to the original L by the support
+argument just proved. Its upward motion in a lowered coordinate is at
+least epsilon, so its absorption is at least epsilon/(M+B). Potential
+minimality forces the directional potential quotient to be at least
+1/(M+B), but differentiability makes its limit the negative sum of
+nonnegative binding gradients. This contradiction excludes every smooth
+full-root potential.
+
+Nonnegative singletons still identify punishment with s. In four players,
+the exact existing no-UE polynomial producer contradicts this analytic
+exclusion, with the all-zero-singleton case handled directly by all-Never.
+Neither the removed layers nor their premiums are dropped from the
+strategic game or from the no-UE producer. The UE conclusion retains
+all complete behavioral deviations and one fixed payoff target.
+
+### A strict raw enlargement with exact old-gate falsifiers
+
+Start with the complete fifteen-row R=4 table in KREIN's independent
+review, also independently checked in
+[`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_BROUWER.md`](../feedback/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_BROUWER.md).
+Its only positive participant premiums are
+
+    r_0({0,3})-s_0=1,       r_3({0,3})-s_3=1,
+    s=(1,0,0,0).
+
+Make just one further change:
+
+    r_1({0,1,2})=1/2.                                   (P)
+
+All other entries remain unchanged. Player 2 is globally flat. After
+removing 2, player 1 is flat on the remaining subtable, since its sole
+positive premium (P) required 2. The residual pair {0,3} is a premium
+trap, and `r_0({0,3})=2<4=r_0({3})`. The new theorem therefore applies.
+Three distinct players 0,1,3 now receive positive participant premiums,
+so no designation of two players satisfies the old constant-outsider
+hypothesis. This is a strict raw-class extension, not a relabeling.
+
+The prior matrix, degree, inverse, response-quotient, and product-low
+falsifiers are unchanged. The singleton matrix is literally unchanged,
+and the only first-order quotient survivor remains `{0}|{1,2,3}`. At
+hazards `(x,0,0,0)`, modification (P) is invisible to every forced-Quit
+endpoint, so the exact residuals remain `x,x,x+x*x`. The root supported
+on {0,3} still has two positive expected active premiums. The no-pure-exit
+proof is unchanged: a coalition with 0 but not 3 still invites 3;
+with both 0 and 3 the pivot prefers leaving; without 0 the child-cycle
+argument is untouched.
+
+All fourteen proper-child five-kind F/J falsifiers remain valid, not
+merely close to valid. The periodic {1,2,3} child never involves player
+0, even in any child deviation, so (P) cannot affect its exact Nash
+inequalities. Every sure-quit child containing 0 but not 3 remains
+exact Nash: (P) only increases a prescribed participant's Quit payoff.
+The favorable-solo-child and sure-owner-3 witnesses never see (P) in
+their child best-response comparisons. On the delicate child {0,2,3},
+the entire child table and hence its exact first-date root are unchanged.
+Only the omitted player 1's joining payoff increases: it is now 1/4,
+because the other players form {0,2} with probability 1/2 and its new
+reward there is 1/2. Its passive payoff remains -5/6. Thus its strict
+outside debt increases. All these laws still have zero child debt and
+zero joint-Never probability, excluding every weight choice in the
+five-kind universal bound. This comparison is restricted to those named
+gates, not to every possible selected-child argument.
+
+### Exact source overlap and surviving raw class
+
+The bounded source audit inspected:
+
+- `HasWeakQuittingPremiumSupportPeeling`,
+  `hasWeakQuittingPremiumSupportPeeling_iff`, and
+  `weakQuittingPremiumSupportPeeling_iff_playerRanking` in
+  `UniformEquilibrium/Quitting/Classification/QuittingPremiumSupportPeelingOrder.lean`;
+- `hasProductLowQuittingPremium_iff_weakSupportPeeling_of_nonnegative`
+  in `UniformEquilibrium/Quitting/Classification/NonnegativeProductLowSupportPeelingConverse.lean`;
+- `HasFiniteCoalitionSupportPeeling` and
+  `finiteCoalitionSupportPeeling_iff_playerRanking` in
+  `MathUE/FiniteCoalitionSupportPeelingOrder.lean`;
+- the full-root, punishment, and polynomial declarations already recorded
+  in the independent MORSE feedback linked above.
+
+The existing peeling predicate requires a flat participant in EVERY
+nonempty support; equivalently C is empty. It does not allow the residual
+premium pair. The source product-low theorem therefore does not already
+give the pair-core conclusion. The canonical removal process is useful
+only because the strict-leave analytic mechanism now treats that residual
+pair in the ORIGINAL game, without a quiet-lift premise.
+
+Consequently any four-player counterexample with nonnegative singletons
+and nonnegative participant premiums must have either:
+
+1. a canonical premium core of at least three players; or
+2. a canonical premium core {i,j} with BOTH
+   `r_i({i,j})>=r_i({j})` and `r_j({i,j})>=r_j({i})`.
+
+The empty core is already handled by the existing product-low theorem;
+a one-player core is impossible; a pair with either strict leave
+preference is handled above. This is a raw surviving-class reduction,
+not a claim that either surviving alternative actually lacks equilibrium.
+
+### Compatibility with the completed mutual-stay index mechanism
+
+MORSE Section 12 now supplies the mutual-strict-stay root-index mechanism
+for globally constant outsiders; my independent review of that section
+passes. It has two outsider-flatness uses, both supplied by the canonical
+pair core in the original table:
+
+1. A root support other than the residual pair has a flat active
+   participant, so its successor belongs to L as proved above.
+2. For any outsider k and any T contained in the residual pair,
+   `r_k(T union {k})=s_k`. Otherwise the residual pair union {k} would
+   be a premium trap: each core member retains its positive pair witness,
+   while k has the alleged new witness. This contradicts maximality.
+   Thus every outsider forced-Quit endpoint against a core-only root is
+   exactly s_k, as needed both for the harmed-outsider test and for the
+   affine annotation tie removal.
+
+The full clipped-root map, unique mixed core candidate, negative local
+index, and total degree +1 then operate on the unchanged full table.
+The weak-leave closure changes only a passive reward and therefore does
+not change the premium core. This gives the same full two-player-core
+conclusion through the completed index proof, subject to independent
+review of this peeling transfer. It does not cover three-player cores.
+
+## Three-player premium core: an exact unique-root obstruction
+
+**Status: complete ordinary falsifier, not independently reviewed or
+Lean-checked.** This is a failure of a proposed root-return/index
+extension, NOT a game without a uniform equilibrium and NOT a smooth
+potential for the game. It identifies a concrete larger-core boundary
+before trying to generalize the two-core argument.
+
+### The exact table and question
+
+On I={0,1,2,3}, let the child cycle be 1 to 2 to 3 to 1. For every
+nonempty S, begin with
+
+    r_0(S)=1 if 0 belongs to S, otherwise 4*1_(3 belongs to S);
+    r_j(S)=0 if child j belongs to S,
+           -1 if j is absent and 0 belongs to S,
+           2*1_(pred(j) belongs to S)-1_(succ(j) belongs to S) otherwise.
+
+Change exactly the following three participant coordinates:
+
+    r_0({0,3})=2,       r_3({0,3})=1,       r_1({0,1})=1/2.       (Q)
+
+This starts again from the R=4 base table, NOT from the preceding
+triple-premium modification (P). The singleton vector is (1,0,0,0),
+every participant premium is nonnegative, and player 2 is globally flat.
+The greatest premium trap is {0,1,3}: players 0 and 3 have their pair
+witness, and player 1 has {0,1}. No trap can contain globally flat 2.
+
+The question tested is whether a below-floor annotation always has some
+exact Nash root returning to the singleton lower boundary, or whether
+the global degree +1 of the actual clipped Nash map forces such a root
+once only one three-player-supported root can avoid that boundary.
+Both implications fail on this literal table.
+
+Set
+
+    v=(9/10,-1/10,1,253/725),
+    p=(11/156,11/71,0,1/10).                            (R)
+
+The full simultaneous game at v has EXACTLY ONE Nash root, namely p.
+Its successor is
+
+    T_p(v)=(77/71,33/1040,18419/22152,55/923),           (S)
+
+strictly above every singleton. Its absorption is positive, and
+all-Continue is not Nash since two annotations are below their own
+singletons. The full clipped ambient root has local index +1, not -1.
+
+### Literal endpoint polynomials
+
+Write q=(x,y,z,t), h=253/725, and A=(1-y)(1-z). For this exact source
+the four Quit-minus-Continue gaps, including all collision rewards, are
+
+    g_0=1-(9/10)A-t[4-(19/10)A],
+    g_1=(1/2)x(1-z)(1-t)+x
+              -(1-x)[2t-z-(1/10)(1-z)(1-t)],
+    g_2=x-(1-x)[1+y-2t+yt],
+    g_3=x(1+A)-(1-x)[2z-y+hA].                         (T)
+
+The own hazard is absent from its own gap, as required. Exact Nash means
+g_k<=0 at hazard zero, g_k>=0 at hazard one, and g_k=0 in the interior.
+Substitution of (R) gives gaps
+
+    (0,0,-18419/22152,0),
+
+so p is exact Nash and the outsider strictly Continues. The three active
+successor coordinates are their forced-Quit endpoints; the inactive
+coordinate is its Continue endpoint. This gives (S) exactly.
+
+### No exact root can activate player 2
+
+Suppose z>0. Then g_2>=0. If x=1, g_2=1 forces z=1, after which
+g_3=1 forces t=1; but then g_0=-3, contradicting x=1.
+
+If x=0, put B=1+y-2t+yt. The inequality g_2>=0 gives B<=0 and
+hence t>=1/2. Now
+
+    g_1=z-2t+(1/10)(1-z)(1-t)
+        <=-(19/20)(1-z)<=0.
+
+If y>0, its supported Quit would force equality throughout, in particular
+z=1 and t=1/2. But B then equals 3y/2>0, impossible. Hence y=0.
+The gap g_3 becomes `-[2z+h(1-z)]<0`, forcing t=0 and contradicting
+t>=1/2. Therefore x is strictly between zero and one.
+
+Now g_0=0 gives
+
+    t=[1-(9/10)A]/[4-(19/10)A] in [1/21,1/4].
+
+Consequently B>=1/2>0, and g_2>=0 gives x>=B/(1+B). We have
+
+    x-(1-x)2t >= (B-2t)/(1+B) >=0,
+
+because `B-2t=1+y-4t+yt>=0`. Expanding g_1 as this nonnegative
+quantity plus
+
+    (1/2)x(1-z)(1-t)+(1-x)[z+(1/10)(1-z)(1-t)]
+
+shows g_1>0, using z>0 and x<1. Hence y=1. Then A=0, t=1/4,
+B=7/4, and x>=7/11. But
+
+    g_3=x-(1-x)(2z-1)>=2x-1>0,
+
+forcing t=1, a contradiction. This exhausts all possibilities with z>0.
+
+### Unique root on the remaining three-player face
+
+We now have z=0. The case x=1 again gives g_3=2-y>0, t=1,
+and g_0=-2-y<0, impossible. If x=0, then
+`g_1=1/10-(21/10)t`. For y=0 the Nash inequality forces t>=1/21,
+but g_3=-h<0 forces t=0. For y=1 it forces t<=1/21, but then
+g_0=1-4t>0 contradicts x=0. For 0<y<1 it gives t=1/21 and
+g_0=(17/21)y>0, again impossible. Thus 0<x<1.
+
+The equation g_0=0 now yields
+
+    t=(1+9y)/(21+19y),                                 (U)
+
+so 0<t<1. At y=0, (U) gives t=1/21 and the gap g_1 is strictly
+positive because x>0. At y=1, the gap g_3=1 forces t=1, contradicting
+(U). Therefore 0<y<1 as well, and all three active gaps must vanish.
+
+Solving g_1=0 after (U) gives
+
+    x=17y/(31+41y).
+
+The remaining equation g_3=0 is exactly
+
+    h = y(65+7y)/[(31+24y)(1-y)].                       (V)
+
+The right side is strictly increasing on (0,1): after clearing the
+positive squared denominator, its derivative numerator is
+
+    2015+434y+1511y*y>0.
+
+Substitution of y=11/71 gives h=253/725. Thus (V) has this unique
+solution, and (U) then gives t=1/10 and x=11/156. Together with the
+exclusion of z>0, this proves uniqueness for the FULL four-player game,
+not merely uniqueness on a selected support face.
+
+### Why the two-core index mechanism cannot supply another root
+
+At p the outsider gap is strictly negative, so its row in the ambient
+clipped map `F(q)=clip(q+g(q))` is locally constant zero. In the coordinate
+order (0,1,3), the active gap Jacobian is exactly
+
+    J=[[0,71/100,-170/71],
+       [39/25,0,-155/78],
+       [20436/10295,71/60,0]].
+
+The inactive coordinate contributes an identity block to the derivative
+of q-F(q). Therefore
+
+    det(I-DF(p))=det(-J)=1047/145>0.
+
+The local fixed-point index is +1, consistently with its being the only
+fixed point of a cube-valued ambient map. Its sign pattern already
+explains the difference from the pair case: a zero-diagonal 3 by 3
+matrix with rows `(0,+,-)`, `(+,0,-)`, `(+,+,0)` has negative
+determinant, hence its negative has positive determinant.
+
+The degree facts and explicit clipped-map interpretation are the same
+ones inspected in my Section 12 MORSE review. No Nash-index axiom or
+generic-root assumption is needed for this exact nonsingular example.
+The rational endpoint, successor, and determinant identities were also
+checked independently by symbolic arithmetic; the displayed algebra is
+the proof rather than a floating-point root enumeration.
+
+### Coverage and exact limitation
+
+The centered singleton matrix and all matrix-degree/inverse failures are
+unchanged from the independently reviewed R=4 fixture. Its sole candidate
+nondiscrete response partition still fails: at `(u,0,0,0)` the three
+child residuals are now `u+u*u/2`, `u`, `u+u*u`, not equal. The no-pure
+coalition argument is unchanged. The proper-child F/J witnesses also
+remain exact: the only child collision changed is {0,1}, where the
+prescribed participant 1's Quit reward increases; the periodic {1,2,3}
+child contains no 0, and the delicate {0,2,3} child's omitted-1 joins
+always involve sure player 2, so never use the changed pair. Hence the
+same all-fourteen-child zero-debt/positive-outsider-debt contradiction
+survives.
+
+Nevertheless, no claim is made that this game lacks a UE. The annotation
+v need not be realizable as a continuation payoff. This example refutes
+universal boundary-return and the automatic negative-index extension to
+three premium-core players. It does not assert that v is a particular
+smooth potential's minimizing-face perturbation, nor construct such a
+potential on all sources. A new size-three-core proof must use information
+beyond the mere count of exceptional roots and total degree +1.
+
 ## Current next question
 
-Find an actual four-player mechanism on tables with trivial reward-table
-automorphism group, no pure sure-exit coalition, and no applicable
-response-invariant quotient, while retaining all individual behavioral
-deviation bounds. Before developing another symmetry or ordering class,
-test it against the explicit quotient and pure-prefix constructions above.
+For the explicit size-three-core table (Q), what global payoff or
+continuation mechanism bypasses its unique interior-successor root? A
+useful positive construction must handle the unchanged positive-debt
+quiet-child witnesses and unrestricted behavioral deviations. Do not
+weaken the now-exact local root-return falsifier into a conjecture, or
+interpret it as a uniform-equilibrium counterexample.

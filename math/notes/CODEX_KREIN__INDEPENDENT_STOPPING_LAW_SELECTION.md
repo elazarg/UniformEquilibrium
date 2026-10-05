@@ -39,6 +39,18 @@ exact-Continue supersolution methods. The self-contained mathematical packet
 is frozen in `../exports/ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md`.
 Further research below does not modify or inherit the export's review.
 
+The new internal section **Quadratic nonpivot selection and the complete R
+axis** is a complete ordinary proof candidate, NOT independently reviewed.
+It replaces the sign-restricted pivot selector by a unique admissible root
+of a quadratic nonpivot equation. On the same six-cap raw class, this
+produces the entire residual interval between the existing singleton-degree
+and passive-inverse exits whenever u≤1+xi and v<1. Consequently that raw
+class has UE for every real R. Under the shared two-core participation
+conditions stated there, the separate strict-leave theorem supplies u>1+xi,
+giving one whole (u,R) plane rather than a chosen curve or bounded interval.
+The new constructive part, source exits, and remaining table restrictions
+are separated explicitly below; no review or export status is inherited.
+
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
 original finite F/J quiet-extension criteria: one nonnegative child
@@ -1547,3 +1559,524 @@ coalition, that the refined values retain exact Continue transport for
 all four players, and that the terminal error is (43) rather than an
 accumulated per-period error. Arbitrary participant rewards at the six
 undiffused outsider coordinates remain outside this producer.
+
+## Complementary pair/passive orderings with the two-core mechanism
+
+Status: new ordinary proof draft, not independently reviewed and not part
+of the frozen export. This tests the gap between the explicit joint/solo
+producer and the two-core boundary-return mechanism in Section 10 of
+`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`.
+
+The two mechanisms initially had different pivot comparisons at the same
+pair {0,1}. The explicit producer assumed the passive singleton u<1,
+while the two-core theorem applies when u>1+xi, the pivot's pair reward.
+The intermediate ordering 1≤u≤1+xi is not by itself an obstruction to
+the explicit rate selection. The precise repair below RETAINS the full
+R interval; it does not prove coverage of every fixed-table middle slice.
+
+### The actual selector only needs u≤1+xi
+
+Keep the raw vectors, six outsider caps, v<1, positive a,b,c,h, D>0,
+xi,eta>0, and q_2,q_3≤0 from the diffuse producer. Allow u to be any
+real number with u≤1+xi. Define s_1=1−u, s_2=1−v and the SAME
+R_low,R_high as before, and ASSUME R_low<R<R_high. This interval is
+no longer automatically nonempty for arbitrary u.
+
+The interval's strict ordering and identity (30) give
+
+    (c*s_1+s_2)h_1+s_1*h_3>0.                           (44)
+
+If s_1≥0 then c*s_1+s_2>0 immediately. If s_1<0, (44) gives
+c*s_1+s_2>−s_1*h_3/h_1>0. Thus in both cases
+
+    c*s_1+s_2>0.                                       (45)
+
+This is the positivity actually needed for the pivot branch at k=0.
+In particular P_0(y)−p has the positive bracket
+c*s_1+s_2+(c+1)xi*y, so P_0 is still strictly increasing. Its zero
+endpoint is strictly below R_low because exact subtraction yields
+
+    R_low−P_0(0)
+      =[h_2(c*s_1+s_2)+b*s_2*h_3]/(bc*nu_3)>0.         (46)
+
+It is not enough to repeat the earlier claim p−u>0: that claim can now
+be false. Instead put A0=(p−u)y/(1−y). For fixed y,
+
+    d/dz [(A0+(p−v)z)/(1−z)]
+      =(A0+p−v)/(1−z)²,
+    A0+p−v
+      =[s_2(1−y)+(1+xi−u)y]/(1−y)>0.                   (47)
+
+The strict positivity follows from s_2>0, y<1, and u≤1+xi. Moreover
+A0+(p−v)z is positive at k=0 by (45), and increases with z because
+p−v>0. Since z increases and w decreases with k, (47) proves that
+P(k,y) still strictly increases from P_0(y) to infinity. Thus y_star
+and the continuous unique pivot branch are produced exactly as before.
+
+The endpoint function F in (34) also remains strictly increasing: its
+numerator at zero is (c*s_1+s_2)/c>0, its slope is positive, and its
+positive denominator strictly decreases. Equation (46) gives tau>0,
+and F(1/nu_1)=R_low still implies tau>1/nu_1. Hence the sign crossing
+of G in (37) is unchanged for every eta>0.
+
+Finally the pivot's continuation floor at B is now
+
+    V_B,0−1=(1+xi−u)y/(1−y)≥0.                          (48)
+
+Equality is harmless: the pivot can Continue at a value equal to its
+singleton. At C its value is strictly above one since v<1 and z>0;
+at A it is p>1. All nonpivot calculations are unchanged. The refined
+values are still above their singleton floors, and the same one-error
+supersolution proves full terminal approximate Nash and the same fixed
+target. This completes the extension to u≤1+xi under the explicitly
+retained interval assumption.
+
+An exact intermediate fixture has
+
+    a=b=c=2, all h_j=1, u=3/2, v=−3,
+    xi=1, eta=17/11, q_2=q_3=−1, R=2095/368.
+
+Then R_low=9/2<R<7=R_high. The exact rates are
+(x,y,z,w)=(1/11,1/4,7/30,4/15), with the same nonpivot values as
+the first positive-premium fixture, and pivot values
+
+    V_A,0=5/4,       V_B,0=7/6,       V_C,0=56/23.
+
+This has p−u=−1/4<0, so it tests the changed monotonicity argument
+rather than accidentally staying in the former positive-numerator case.
+For comparison, keeping a=b=c=2,h=1,v=0,R=4 forces u<3/4 from
+R<R_high=7−4u. The theorem does NOT bridge that fixed slice's entire
+middle ordering just by changing the displayed bound on u.
+
+### One raw family on both sides of the pair reward
+
+To compare the two mechanisms on the SAME reward data, additionally require
+that players 2 and 3 have constant participant rewards zero, while players
+0 and 1 have nonnegative participant premiums on every coalition. Leave
+all nonparticipant rewards not fixed by the five vectors arbitrary.
+These conditions imply the six undiffused outsider caps, and so the
+explicit producer above applies for u≤1+xi WHEN R_low<R<R_high.
+For u>1+xi, the two-core theorem applies directly with core {0,1} and
+designated player 0, because
+
+    r_0({0,1})=1+xi<u=r_0({1}).
+
+That second branch needs no restriction on R. It consumes arbitrary core
+participation premiums rather than an assumed selected child or root.
+The precise covered union is therefore
+
+    {u≤1+xi and R_low<R<R_high} union {u>1+xi},
+
+under the shared table assumptions just stated. No claim is made for
+u≤1+xi outside the interval, nor for arbitrary participant rewards in
+the second branch. This is complementary coverage of concrete raw
+regions, not an assertion that those regions exhaust all singleton data.
+
+For a completely explicit connected test family, fix
+
+    a=b=c=2, h_1=h_2=h_3=1, v=−3,
+    xi=eta=1, q_2=q_3=−1,
+    R=(19−5u)/2,                u arbitrary real.
+
+Use the five vectors (28). On every other nonsingleton coalition use
+the original cyclic completion: pivot reward one when it participates
+and R*1_(3∈S) otherwise; each nonpivot has own-quitting reward zero,
+reward −1 when the pivot quits without it, and cyclic outsider reward
+2*1_(pred∈S)−1_(succ∈S) otherwise. The singleton overrides u and v
+remain as specified in (28).
+
+Here R_low=6−u and R_high=13−4u. For every u≤2,
+
+    R−R_low=R_high−R=(7−3u)/2≥1/2>0,
+
+so the extended explicit producer applies, including the whole interval
+1≤u≤2. For every u>2, the two-core theorem applies. Thus this one
+fully specified family has UE for every real u. The boundary u=2 is
+handled directly by (48), with no reward-closure argument.
+
+This is a test of how the two source mechanisms fit together, not a separate
+parameter-range export. The slice v=0,R=4,1≤u≤2 lies outside both displayed
+regions but is ALREADY consumed by the existing passive-inverse criterion:
+its pivot row times the child inverse is
+
+    ((2u+9)/7, (4u−3)/7, (u+1)/7),
+
+which is entrywise positive throughout that slice. Thus it is not a live
+existence gap. The fixture with v=−3,R=2095/368 above instead has a negative
+middle inverse weight (R−7)/7. The next section identifies the whole actual
+residual interval and constructs across it, without fixing R artificially.
+
+## Quadratic nonpivot selection and the complete R axis
+
+Status: complete ordinary proof candidate, not independently reviewed or
+Lean-checked. The frozen export is unchanged. This section solves the
+mutual-pair-preference residual of the same actual joint/solo table rather
+than merely weakening an interval constant. The new producer is the
+quadratic selector; two existing source criteria close its outer regions.
+
+### Precise raw class and quantifiers
+
+Take the four singleton vectors and the pair vector (28), with
+
+    a,b,c,h_1,h_2,h_3>0,     D=abc−1>0,
+    xi,eta>0,              q_2,q_3≤0,
+    v<1,                   u≤1+xi,
+    R arbitrary real.
+
+Require only the SAME six undiffused outsider caps:
+
+    r_2({0,2}), r_2({1,2}), r_2({0,1,2})≤0,
+    r_3({0,3}), r_3({1,3}), r_3({0,1,3})≤0.             (49)
+
+All entries not specified by (28) or (49) are arbitrary finite real
+numbers. In particular, players 2 and 3 may have positive participant
+premiums at their joint coalition, and players 0 and 1 may have arbitrary
+participant rewards at the refined solo phases. The pair {0,1} has two
+strictly positive participant premiums and can strictly harm both outsiders.
+
+CLAIM: every table in this class has a uniform-equilibrium payoff against
+all complete behavioral deviations in the original four-player game.
+The constructive middle branch below has one fixed target, selected before
+the accuracy. Its independent live-date hazards use only the public clock
+and private independent action randomization. Refinement and censoring give
+one profile and threshold for each accuracy; no extra public coin or
+restriction on the deviator is imposed. The source exits give existence
+on the other branches, not necessarily the same target or controller.
+
+Retain nu,L,s_1=1−u,s_2=1−v and R_low from the preceding sections.
+Now s_1 may be negative; no condition on c*s_1+s_2 is assumed.
+
+### The three exact passive thresholds
+
+For the child on players 1,2,3, the singleton matrix and its inverse are
+
+    A = [[0,−1,a], [b,0,−1], [−1,c,0]],
+    A^(-1) = [[c,ac,1], [1,a,ab], [bc,1,b]]/D.
+
+Every inverse entry is strictly positive. Define
+
+    T_1 = 1+(c*s_1+s_2)/(bc),
+    T_2 = 1+ac*s_1+a*s_2 = R_high,
+    T_3 = 1+(s_1+ab*s_2)/b,
+    T_pass = max(T_2,T_3).
+
+The pivot singleton-difference row multiplied by A^(-1) is exactly
+
+    [bc*(R−T_1), R−T_2, b*(R−T_3)]/D.                (50)
+
+Since s_2>0,
+
+    T_3−T_1 = D*s_2/(bc)>0,
+    T_2−T_3 = D*s_1/b.
+
+Thus all three literal inverse weights are nonnegative exactly when
+R≥T_pass. This includes equality; no strict outside weight is needed.
+
+The lower threshold is strictly below T_pass. If s_1≥0, use
+
+    T_2−R_low = [(c*s_1+s_2)h_1+s_1*h_3]/nu_3>0.
+
+If s_1<0, instead use
+
+    T_3−R_low = [s_2*h_1−s_1*h_2/b]/nu_3>0.          (51)
+
+Finally define the actual upper endpoint of the explicit construction,
+
+    R_top=P_0(Y)=T_2+xi*D/b,        Y=D/[b(ac+a+1)].
+
+For s_1≥0, R_top>T_pass=T_2. For s_1<0,
+
+    R_top−T_pass = D*(1+xi−u)/b≥0.                   (52)
+
+Consequently R_low<T_pass≤R_top throughout the asserted raw class.
+
+### Solve the nonpivot equation by its quadratic numerator
+
+For 0<y<Y keep H_j,K,z,d,w from the pivot-first construction, but do
+NOT select k from the pivot equation. Define G(k,y) by (36), now treating
+k as free in [0,K(y)]. All denominators extend positively to this closed
+interval: d=1+k+by−H_2*k≥1+k, and c(1−y)>0. At the right endpoint,
+either w=0 or z=1. The variables satisfy 0≤z,w≤1 there.
+
+Write
+
+    C=c(1−y), E=c−(c+1)y,
+    d_0=1+by, d_1=1−H_2(y),
+    Q(k,y)=C*d*G(k,y)=alpha(y)k²+beta(y)k+gamma(y).
+
+Exact expansion gives
+
+    alpha = h_1*C*d_1+H_3*d_1−a*H_2*H_3
+              +eta*(C*d_1+H_3),
+    beta  = h_1*C*d_0+H_3*(d_0+ab*y)+y
+              +H_2*(a*E−y)+eta*y*(Cb+1),
+    gamma = y*(bL*y−D).                               (53)
+
+There is no sign assumption on alpha, and alpha=0 is allowed. The
+linear coefficient is strictly positive on the entire closed interval
+0≤y≤Y, because every displayed term is nonnegative and
+
+    a*E−y=ac−L*y≥ac−L*Y=1/b>0.
+
+For 0<y<Y, Q(0,y)=gamma<0. At k=K(y), G is strictly positive:
+its term −a*w*(1−z) vanishes, h_1*k+z>0, and
+eta*k*[1−(1−z)(1−w)/(1+k)]≥0. Hence Q(K(y),y)>0.
+
+A polynomial of degree at most two with these endpoint signs has exactly
+one zero in (0,K(y)). Indeed, a linear polynomial has at most one; for a
+quadratic, two distinct roots in that interval would make the signs at
+the two endpoints equal, and a double root cannot change the sign. The
+actual zero is simple. This argument covers a vanishing leading
+coefficient and does not assert monotonicity of G away from its root.
+
+The discriminant Delta=beta²−4*alpha*gamma is therefore strictly positive
+for 0<y<Y. It is also positive at y=0,Y, where gamma=0 and beta>0.
+The unique admissible zero has the expression
+
+    k(y)=−2*gamma(y)/[beta(y)+sqrt(Delta(y))].           (54)
+
+If alpha=0, this is just −gamma/beta. If alpha≠0, rationalization of
+the quadratic formula gives the smaller positive root whenever two
+positive roots exist; the endpoint signs put that root inside (0,K).
+Formula (54) is continuous on [0,Y], has k(0)=k(Y)=0, and is strictly
+inside the admissible interval at every interior y. Thus the required
+continuous selector is produced from raw data, not supplied as a witness.
+
+### Both endpoint limits and the pivot equation
+
+At y=0,
+
+    beta(0)=c*h_1+h_3+ac*h_2=D*nu_1,
+    gamma(y)/y→−D.
+
+Formula (54) therefore gives
+
+    k(y)/y→1/nu_1,
+    z(y)/y→nu_2/nu_1,
+    w(y)/y→nu_3/nu_1>0.                               (55)
+
+The last two follow directly from the formulas for z,w and
+c*nu_2−nu_1=h_3, b*nu_1−nu_3=h_2. At the other endpoint, k(Y)=0,
+and the limiting z,w are strictly between zero and one because
+0<Y<c/(c+1).
+
+For 0<y≤Y define R(y)=P(k(y),y) using (31). Its denominator is positive,
+and it is continuous. Even if its numerator is negative, no sign or
+monotonicity of P is used. Using (55) cancels the common order-y factor
+and gives the removable endpoint value
+
+    R(0)=1+(s_1*nu_1+s_2*nu_2)/nu_3=R_low.
+
+At y=Y, equation (33), which is an algebraic identity without the former
+sign assumptions, gives R(Y)=R_top. The intermediate value theorem now
+selects an interior y for EVERY
+
+    R_low<R<R_top.                                    (56)
+
+No uniqueness or monotonicity of R(y) is asserted. Equations G=0 and
+P=R are both exact at the selected point. Set x=k/(1+k); all four
+hazards x,y,z,w lie strictly between zero and one. In particular, every
+R in the residual interval (R_low,T_pass) is produced by (52).
+
+### Payoff floors, all deviations, and the six-cap boundary
+
+The value vectors remain precisely (38)-(39), with the unambiguous form
+
+    V_A=(p,eta*x,w/(1−w),0),
+    V_C=((1−w)p+Rw,(1−w)eta*x+aw,0,0),
+    V_B=(v*z+(1−z)V_C,0, (1−z)V_C,1−z,0,c*z),
+    p=1+xi*y.
+
+Here the first two B coordinates mean v*z+(1−z)*(V_C)_0 and
+(1−z)*(V_C)_1−z. The exact equations give
+
+    (V_B)_0=(p−uy)/(1−y),
+    (V_B)_1=k(h_1+eta).
+
+All nonpivot displayed values are nonnegative. The pivot has
+
+    (V_A)_0>1,
+    (V_B)_0−1=(1+xi−u)y/(1−y)≥0,
+    (V_C)_0=[(V_B)_0−v*z]/(1−z)>1,                    (57)
+
+where the last strict inequality uses v<1 and z>0. These bounds do not
+assume R>1, and equality at u=1+xi is harmless. The Bellman equations
+and exact Continue endpoints are algebraic, so they remain valid even
+when c*s_1+s_2≤0 or p−u<0.
+
+At the undiffused joint row, the only outsider Quit coalitions are exactly
+the six in (49), together with each outsider's singleton of value zero.
+Their expectations are at most zero, bounded by the displayed values.
+Both participating players are exactly indifferent there.
+
+Refine each solo phase j=2,3 into n microstages as in (43), with
+z_n=1−(1−z)^(1/n), w_n=1−(1−w)^(1/n). Intermediate vectors interpolate
+between the corresponding endpoints, preserve all singleton floors, and
+have exact Continue transport. Let
+
+    C_join=max(0, r_i({i,j})−s_i : j∈{2,3}, i≠j),
+    e_n=C_join*max(z_n,w_n),         s=(1,0,0,0).
+
+Every pure-Quit payoff is at most its displayed value plus e_n, including
+arbitrary participant premiums at the refined phases. Adding e_n to all
+continuation coordinates is one global Bellman supersolution, because
+an exact Continue transition with opponent survival q≤1 contributes only
+q*e_n≤e_n. This charges a deviation once, not once per microstage. For
+each deviator, the opponents' per-period survival product is the unchanged
+strictly subunit product of their original factors (1−x),(1−y),(1−z),(1−w).
+The bounded remainder thus vanishes against every complete behavioral
+deviation. The full terminal regret is at most e_n→0, with the SAME exact
+on-path target V_A for every n.
+
+Censoring after K refined periods changes marginal mass by at most
+
+    tau_K=(1−x)^K+(1−y)^K+(1−z)^K+(1−w)^K.
+
+For an absolute reward bound M, full terminal regret is at most
+e_n+4M*tau_K and target error at most 2M*tau_K. Choose n and then K at
+the requested accuracy. The existing fixed-target terminal consumer gives
+the asserted uniform-horizon conclusion. No new compiler is being claimed.
+
+### Exact source exits on the entire complementary R region
+
+The full singleton matrix is
+
+    M_full = [[0,−s_1,−s_2,R−1],
+              [−h_1,0,−1,a],
+              [−h_2,b,0,−1],
+              [−h_3,−1,c,0]].
+
+For R≠R_low it is R0. To prove this, let (t,z) be a nonnegative homogeneous
+LCP solution. If t>0, nonnegativity of the three child residuals forces
+all three coordinates of z strictly positive, cyclically. Complementarity
+then gives z=t*nu. The pivot residual is
+t*nu_3*(R−R_low) and must be zero, impossible. If t=0 and z≠0, the cyclic
+negative edges force all three child coordinates positive; complementarity
+gives A*z=0, impossible since det A=D>0. Thus only the zero solution exists.
+
+For R<R_low, put delta=nu_3*(R_low−R)>0 and choose q_0>delta. At the
+test offset (q_0,−h_1,−h_2,−h_3), every LCP root has all child coordinates
+positive and hence z=(1+t)*nu. Its pivot residual is
+
+    q_0−delta*(1+t).
+
+Exactly two roots exist: t=0, with strict inactive residual q_0−delta>0,
+and t=q_0/delta−1>0, with all coordinates active. Their active principal
+determinants are D>0 and
+
+    det M_full = D*nu_3*(R−R_low)=−D*delta<0,
+
+respectively. Both roots satisfy the precise strict-inactive and nonsingular
+conditions of the standard LCP root-sum formula. Their signs sum to zero,
+so the R0 degree is zero. The existing degree-not-one exit supplies UE,
+independently of every nonsingleton completion.
+
+For R=R_low, the strictly positive vector (1,nu) is a nonzero homogeneous
+LCP solution. The existing four-player noUE implication forces the original
+singleton matrix to be R0, so its contrapositive supplies UE at this
+boundary. No limiting strategy or closure assertion is needed.
+
+For R≥T_pass, equation (50) gives the exact nonnegative passive inverse
+weights, while A^(-1) is strictly positive. The existing raw three-child
+inverse theorem supplies UE, with arbitrary unused reward entries. Equality
+R=T_pass is included literally by its weak outside-weight hypothesis.
+
+These three source cases and the constructive middle case partition ALL
+real R. The open endpoints in (56) leave no unhandled boundary. The new
+math is the actual joint/solo producer on (R_low,T_pass); it is not a new
+proof of the pre-existing exits.
+
+The declarations and precise source files inspected for these exits are:
+
+- `exists_finset_r0Degree_eq_sum_sign_det` in
+  `MathUE/LinearProgramming/R0DegreeSum.lean`;
+- `exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+  `UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`;
+- `finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+  `UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`;
+- `PassiveRowInverseCriterion.inverseWeight`, `factorization`, and
+  `exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple` in
+  `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+
+The actual target/deviation consumer is the same terminal/mesh/supersolution
+source already read and recorded in the diffuse section, not a stronger
+equilibrium notion. These are static declaration checks, not new Lean builds.
+
+### Exact stress tests outside the old interval
+
+Take a=b=c=2, h_1=h_2=h_3=1, xi=1, eta=17/11, q_2=q_3=−1,
+u=7/4, v=0 and R=685/368. Then
+
+    c*s_1+s_2=−1/2,
+    R_low=5/4 < R < 21/8=T_pass,
+    R_high=T_2=0,       R_top=7/2.
+
+Thus the old interval R_low<R<R_high is EMPTY, and even the preceding
+intermediate sign argument is unavailable. The exact selected hazards
+are nevertheless
+
+    (x,y,z,w)=(1/11,1/4,7/30,4/15),
+    V_A=(5/4,17/121,4/11,0),
+    V_B=(13/12,14/55,0,7/15),
+    V_C=(65/46,7/11,0,0).
+
+At y=1/4, the quadratic coefficients are
+
+    (alpha,beta,gamma)=(−5/11,387/44,−7/8),
+
+and k=1/10 is its admissible root. This tests a negative leading
+coefficient, not an accidentally monotone quadratic. A rational check on
+the original cyclic completion verified all twelve exact Continue
+identities and all twelve pure-Quit bounds. The same hazard and value
+calculations with arbitrary (49)-admissible completions use refinement
+where their unused participant premiums exceed the singleton floor.
+
+The three passive weights in this fixture are exactly
+
+    (363/644, 685/2576, −281/1288).
+
+The negative last weight excludes the selected child inverse exit, rather
+than merely lying outside our earlier proof range. Each other three-player
+principal singleton matrix has a nonzero row with all entries nonpositive,
+which rules out a nonnegative inverse. The full matrix is R0 of degree one
+by the same unique-positive-child root calculation at offset (1,−1,−1,−1);
+here R>R_low makes its pivot residual strictly positive, so only the
+inactive-pivot root exists and its determinant is D>0. Its full inverse
+has a negative entry because its pivot inverse row is −(50) divided by
+the positive Schur complement nu_3*(R−R_low). Product-low fails at the
+product root with only players 0 and 1 mixing, since both actual pair
+premiums are strictly positive. This is a targeted source separation,
+not a claim that every arbitrary completion fails every possible gate.
+
+For an exact zero-leading-coefficient test, keep the same a,b,c,h,xi,u,v,q
+but take eta=2. At y=1/4, alpha=0 and (beta,gamma)=(37/4,−7/8).
+Formula (54) gives
+
+    (x,y,z,w)=(7/81,1/4,17/74,10/37),
+    R=12509/6840.
+
+This is also strictly inside (R_low,T_pass). It tests the linear
+degeneracy explicitly; the proof does not divide by alpha.
+
+### One full parameter plane under the shared two-core assumptions
+
+If additionally every participant reward of players 2 and 3 equals zero,
+and every participant reward of players 0 and 1 is at least its singleton
+(one and zero respectively), the six caps (49) hold automatically. All
+other nonparticipant rewards remain arbitrary subject to (28).
+
+Under these SHARED conditions and v<1, the present theorem handles
+every u≤1+xi and every real R. For u>1+xi, the independently reviewed
+two-core strict-leave theorem handles the SAME tables, with core {0,1}
+and r_0({0,1})=1+xi<u=r_0({1}). It imposes no restriction on R.
+Thus their union is the ENTIRE plane (u,R)∈R², for every fixed choice of
+the remaining stated parameters and every admissible nonsingleton
+completion. This is not a universal normalized-table result: the cyclic
+three-child structure, negative core-to-child singleton entries, v<1,
+and the shared participation assumptions remain genuine raw restrictions.
+
+Next requested check: independently falsify the quadratic selector at both
+endpoints and at alpha=0, the exact six-cap all-deviation adapter, and the
+degree/passive source stitching. A broader constructive question is whether
+arbitrary normal singleton sign geometries admit an analogous joint row
+whose remaining balance equations have this one-root crossing structure.

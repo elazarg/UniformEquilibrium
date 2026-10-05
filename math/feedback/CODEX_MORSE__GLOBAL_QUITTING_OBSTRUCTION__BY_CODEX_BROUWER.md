@@ -408,3 +408,167 @@ The final packet is
 SHA256 `a77ed8034289e563c0ee34493bfd4de936d2ac9a526495c9a93e3654866c2d9d`.
 Only the draft preface was removed from the checked assembly. The
 mathematical PASS applies to this final packet; no Lean check is asserted.
+
+## Independent review of Sections 11–12: all two-variable-participant games
+
+**PASS as ordinary mathematics**, with no unresolved mathematical
+objection to the mutual-strict-joining analytic theorem, weak-leave UE
+closure, or their combined four-player raw-class conclusion. This is a
+new scoped review; it does not change the frozen strict-leave export.
+No Lean build was run. The claim remains restricted to nonnegative
+singletons, nonnegative participant premiums, and at most two players
+whose participant rewards can vary. The analytic strict-joining theorem
+itself allows signed singletons and arbitrary finite player count.
+
+### Literal full-root map and boundary fixed-point index
+
+The polynomial gap g_k is independent of its OWN hazard, but includes
+every actual opponent coalition. Extending the coalition formulas to
+all real hazards is legitimate for constructing the continuous ambient
+map; strategic interpretations are used only at fixed points, which
+necessarily lie in the unit cube. For
+
+    F_v(q)_k=clip_[0,1](q_k+g_k(q)),
+
+the fixed-point conditions are exactly g_k<=0 at zero, g_k=0 in the
+interior, and g_k>=0 at one. These are the complete product-root Nash
+conditions, not only necessary stationarity conditions. No hazard
+normalization or projection changes the source reward table.
+
+The unique-fixed-point index fact is correct. On the boundary of
+(-1,2)^n the homotopy field between q-F(q) and the translated identity
+cannot vanish, because its proposed fixed-point value stays in [0,1]^n.
+It therefore has total degree +1. At a nonsingular sole root, the stated
+derivative remainder estimate isolates the root and provides a
+nonvanishing straight homotopy to its invertible derivative. Excision
+then identifies its local determinant sign with +1. A fixed point on
+the SMALL unit-cube boundary is an interior point of this ambient
+domain, so there is no half-index issue.
+
+I inspected `ambientDegree_homotopy` and
+`ambientDegree_affineRootField_eq_sign_det` in
+`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`,
+`ambientDegree_excision` in
+`MathUE/Topology/AmbientDegreeProperties.lean`, and
+`ambientDegree_of_selfMap_eq_one` in
+`MathUE/Topology/AmbientDegreeSelfMapNormalization.lean`.
+Their requirements are compatible with the continuous ambient clipped
+map, the bounded open isolating domains, and the explicit affine
+comparison. If using the last declaration directly, a rectangle strictly
+larger than the closure of (-1,2)^n supplies its chart-clearance premise.
+The proof's own homotopy normalization already suffices, so this is a
+formalization detail, not an additional mathematical assumption.
+
+At the sole possible mixed core root p, both core coordinates are
+strictly interior. If every inactive outsider has strictly negative gap,
+its clipped row is locally constant ZERO even in an ambient neighborhood
+containing negative outsider coordinates. The core rows are locally
+unclipped. Thus the stated block derivative of identity minus F is exact:
+its upper-left determinant is -alpha_i*alpha_j<0 and the outsider block
+is the identity. The starred columns retain all full-table cross-effects
+and cannot change that determinant. Consequently this particular mixed
+root cannot be the only root. The argument does not need every root to
+be regular or a finite root set: under the contrary hypothesis the full
+classification leaves just this one nonsingular candidate.
+
+### Exhaustive core-only classification and tie removal
+
+The pure-pair alternative is correctly resolved first. If all outsiders
+weakly prefer the pair to joining for their singleton, the pair is an
+exact root at its own reward vector, with positive absorption and zero
+motion. This immediately contradicts a positive-drift potential. Otherwise
+one fixed harmed outsider rules out the pure core pair at EVERY source.
+
+With an annotation below either core singleton, that core gap is a convex
+combination of two strictly positive numbers. It forces its own hazard
+to one; the other positive joining gap then forces the other hazard to
+one, contradicting the fixed harmed outsider. Every root therefore has
+an active outsider in this case.
+
+With both core annotations strictly above their singletons, any sole
+active core would strictly prefer Continue. A core hazard equal to one
+forces both equal to one, again impossible. The only remaining
+core-supported possibilities are all-Continue and the displayed unique
+interior pair. If some annotation lies below its singleton, all-Continue
+is not Nash. If any outsider's gap at the pair is positive, the pair
+is not Nash either and finite Nash existence already supplies an
+outside-active root. If all outsider gaps are negative, the negative
+index supplies another root, which by this exhaustive classification
+must be outside-active. No exact-equality core-annotation case is silently
+omitted: the later perturbation deliberately creates either a strictly
+below core coordinate or two strictly above core coordinates.
+
+The O(epsilon^2) tie removal preserves exactly the quantities it must.
+When no core coordinate binds at the boundary minimizer, they are kept
+unchanged and strictly above their singletons; the candidate pair and
+its positive all-Continue probability are therefore fixed. Its outsider
+gap depends affinely on that outsider's own annotation with nonzero
+coefficient -c(p), independently of all other outsider annotations.
+Avoiding one scalar value in each nonempty interval (0,epsilon^2)
+removes all ties. Downward perturbations stay in the same box for small
+epsilon, and every binding outsider stays at least epsilon below its
+singleton. No continuous selection in epsilon is needed: the aggregate
+extra displacement is O(epsilon^2) in fixed finite dimension and hence
+is negligible in the first-order potential quotient.
+
+### Same-boundary potential contradiction and semantic composition
+
+The singleton-binding minimizer case closes using a small sole-owner
+root with its owner coordinate pinned at the singleton. With at least
+two binding coordinates, the feasible gradient signs are valid for the
+union of lower faces. In the core-binding case, lowering all binding
+coordinates invokes the below-core classification. In the other case,
+the tie-removed source invokes the index producer. Both produce an
+ACTUAL exact root with an active constant-participant outsider, not a
+root in a deleted child game. Its successor lies in the SAME original
+L used for minimization.
+
+Every chosen successor dominates s, so any lowered binding coordinate
+moves upward by at least epsilon. The absorption motion bound is still
+(M+B)*a. Minimality and unit potential drift therefore force the first
+directional quotient to be at least 1/(M+B)>0, while differentiability
+makes its limit the negative sum of nonnegative binding gradients.
+This contradiction is complete for all selected roots and does not
+require a uniform positive absorption bound.
+
+Section 11's weak-leave closure also checks. Only a NONPARTICIPANT
+singleton reward coordinate is increased. Own singletons, participant
+premiums, and outsider participant equalities do not change. I inspected
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+It permits nearby targets and profiles to vary and returns one fixed
+target for the original table. The elementary compact-target proof in
+the note has the correct delta payoff error and 2*delta deviation error.
+No weak-leave analytic exclusion is inferred from strategic closure.
+
+Together the branches exhaust the two designated players' pair
+comparisons. The previously checked punishment identification, positive
+singleton split, full Fin4 no-UE polynomial producer, and SAME-potential
+exact-root restriction apply without new assumptions. The all-zero
+singleton case is handled by all-Never. Thus the combined conclusion is
+an original-game uniform payoff against all behavioral deviations, not
+a stationary-root or selected-policy theorem.
+
+### Exact adversarial checks and boundary of the mechanism
+
+I independently recomputed the three-player fixture's endpoint vectors
+and successors using exact rational arithmetic. At (1/3,1/3,0), the
+gaps are exactly (0,0,-53/45), the successor is (4/3,1/3,53/45), and
+the clipped ambient determinant is -9. At (0,0,1), the gaps are
+(-2,-3,1/10) and the successor is (3,3,0). Thus the test genuinely
+requires selection of a different root; replacing the claim by universal
+boundary return would be false even in its stated class.
+
+The argument's two-core restriction is substantive. My separate ongoing
+size-three-core calculation produces an actual unique interior-support
+root of local index +1, with successor strictly above all singleton
+floors. This does not refute Section 12, whose nonconstant-participant
+set has size at most two. It does rule out treating the determinant sign
+as a general Nash-root parity principle. Section 12 uses the actual
+two-core block and does not make that invalid extension.
+
+The earlier independently verified strict-leave fixture already supplies
+bounded separation from the named implementation gates for a subclass
+of this combined theorem. This review certifies the new index producer
+and its full raw-class composition; it does not claim an exhaustive
+classification of every other possible conditional repository consumer.

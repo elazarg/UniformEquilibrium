@@ -27,6 +27,12 @@ The independently reviewed, frozen standalone packet is
 `../exports/TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md`; it contains a
 stronger fully specified {0,3}-premium fixture, independently checked here
 and by both reviewers. This remains ordinary mathematics, not Lean code.
+Section 12 is a new complete UNREVIEWED mutual-strict-join proof, using
+the explicitly computed negative index of the only possible core-only
+mixed root. Together with the separate reward-closure argument in
+Section 11 it proposes full four-player coverage when at most two players
+have nonconstant participant rewards. Its source and index checks remain
+subject to independent falsification; it is not part of the frozen export.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -700,6 +706,13 @@ exact coordinate equality. Formula (43) is a return to L with its original
 singleton floors and common upper bound B, not to a different face or to
 the boundary of another box.
 
+Dependency refinement for later work: the return proof itself uses only
+the leaving player's floor v_i>=s_i. The other core floor is not used
+in (44); retaining both in the stated return lemma and subsequent
+minimizer perturbation is harmless. This sharper source dependency does
+not by itself enlarge the raw-table class, and the frozen export is
+unchanged.
+
 ### The singleton-face derivative inequality
 
 Assume for contradiction that H satisfies (42). Whenever x belongs to C
@@ -963,3 +976,417 @@ and no outsider improves by joining. Thus a genuinely remaining table
 also has a constant-participant outsider harmed below its singleton by
 the pair. That concrete joint-pair/outsider conflict is the next question;
 it is not addressed by weakening the retired local topological mechanism.
+
+## 12. Mutual strict joining: a negative-index root forces boundary return
+
+**Frozen complete candidate for independent falsification review.** Ordinary
+mathematics, not Lean-checked. This section does not change the independently
+reviewed strict-leave export. It gives a different actual-root producer and,
+combined with Sections 10–11, claims the entire two-variable-participant
+class for four players. No greatest-core peeling extension is included in
+the statement below.
+
+### Exact statement and the useful root to be produced
+
+Let I be finite and i≠j. Let r(S) be an actual finite real reward table,
+and set s_k=r_k({k}). Assume r_k(S)>=s_k for all participants k in S,
+and r_k(S)=s_k whenever k is outside {i,j} and belongs to S. Define
+
+    A_i=r_i({i,j}), b_i=r_i({j}), d_i=A_i-b_i,
+    A_j=r_j({i,j}), b_j=r_j({i}), d_j=A_j-b_j.
+
+Assume for this analytic theorem that
+
+    d_i>0 and d_j>0.                                    (51)
+
+For any M>=0 bounding the absolute rewards and any B>M, put
+K=[-B,B]^I, C=product_k[s_k,B], and
+L={x in C: x_k=s_k for some k}. For q in [0,1]^I, let Pr_q(S) be the
+independent product probability of coalition S, c(q)=Pr_q(empty),
+a(q)=1-c(q), and T_q(v)=sum_(S nonempty)Pr_q(S)r(S)+c(q)v. Exact
+root Nash means (T_q(v))_k=max(Q_k(q),C_k(q,v)) for every k, where Q
+and C are the two pure-action endpoints at continuation annotation v.
+
+**Claim.** There is no C^1 H on a neighborhood of K with
+
+    H(v)-H(T_q(v))>=a(q)
+
+for every v in K and every exact Nash root at v. The analytic conclusion
+permits signed singletons and any finite number of players. The strategic
+consequence below is specifically for four players and s>=0.
+
+As before, EVERY exact root successor w belongs to C, even when its source
+lies below some singletons: its Nash value dominates the Quit endpoint,
+which is at least s, and the successor stays in K by convexity. If any
+outside player k is active, its constant participant rewards imply
+
+    w_k=Q_k(q)=s_k,
+
+so w belongs to the SAME set L. All other hazards, including simultaneous
+larger coalitions, are allowed. The new task is to produce at least one
+such root, not to assert that every absorbing root returns to L.
+
+If r_k({i,j})>=s_k for every outsider k, the pure pair itself is an exact
+root at v=r({i,j}). Both core players strictly prefer joining by (51),
+and every outsider prefers Continue to its constant Quit endpoint. Here
+T_q(v)=v and a(q)=1, contradicting the potential immediately. Hence only
+the following case needs work:
+
+    some outsider h has r_h({i,j})<s_h.                 (52)
+
+For this fixed table the pure core pair can NEVER be an exact root with
+all outsiders inactive, at ANY continuation annotation: player h's
+strict joining gain in (52) is independent of the annotation.
+
+### A concrete fixed-point index fact, including boundary roots
+
+We use the following elementary consequence of finite-dimensional degree.
+Let F:R^n->[0,1]^n be continuous. Suppose its only fixed point is p and
+F is C^1 near p with det(I-DF(p)) nonzero. Then
+
+    sign det(I-DF(p))=+1.                               (53)
+
+Here p may lie on the boundary of [0,1]^n. To prove (53), use the larger
+open cube U=(-1,2)^n and choose z=(1/2,...,1/2). For t in [0,1],
+
+    H_t(q)=q-[(1-t)F(q)+tz]
+
+has no zero on the boundary of U, since the bracket is in [0,1]^n.
+Its degree is therefore constant in t. At t=1 it is the translated
+identity, of degree +1. Thus q-F(q) has total degree +1 on U.
+
+Let D=I-DF(p). Invertibility gives m>0 with ||Du||>=m||u||.
+Differentiability gives, in a sufficiently small ball about p,
+
+    ||(p+u-F(p+u))-Du|| <= (m/2)||u||.
+
+The straight-line homotopy from q-F(q) to D(q-p) therefore has no
+zero on the ball's boundary. Its local degree is sign det D. Since p
+is the only root, excision identifies this local degree with the total
+degree +1. This proves (53). No parity specification, Nash-index axiom,
+or root-count assertion is a premise: all maps and isolating homotopies
+have just been supplied. Boundary coordinates of p cause no half-index,
+because p is an interior point of the larger ambient cube U.
+
+The required degree tools already have source declarations:
+`ambientDegree_homotopy` and `ambientDegree_affineRootField_eq_sign_det`
+in `MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`,
+`ambientDegree_excision` in `MathUE/Topology/AmbientDegreeProperties.lean`,
+and `ambientDegree_of_selfMap_eq_one` in
+`MathUE/Topology/AmbientDegreeSelfMapNormalization.lean`. Their literal
+statements were inspected. The derivative-to-affine comparison above is
+given explicitly; no absent nonlinear-index adapter is being invoked as
+an established game producer.
+
+### All roots without an active outsider
+
+For a fixed annotation v, define the polynomial endpoint gap
+
+    g_k(q)=Q_k(q)-C_k(q,v)
+
+using the independent coalition formulas, extended polynomially to all
+q in R^I. Define the ACTUAL continuous self-map
+
+    F_v(q)_k = min(1,max(0,q_k+g_k(q))).                 (54)
+
+Every fixed point lies in the unit cube, and the coordinate conditions
+for a fixed point are exactly the two-action Nash conditions: g_k<=0
+at q_k=0, g_k>=0 at q_k=1, and g_k=0 in the interior. Thus the fixed
+points of (54) are precisely all full exact Nash roots at v.
+
+On the face where all outsider hazards vanish, the two core gaps are
+
+    g_i(q)=s_i-v_i+(v_i-s_i+d_i)q_j,
+    g_j(q)=s_j-v_j+(v_j-s_j+d_j)q_i.                    (55)
+
+These formulas are used only on that face. In the full map, all triple
+and larger coalition terms are retained.
+
+If either core annotation, say v_i, is strictly below s_i, then (55)
+is positive for every q_j in [0,1]: it is the convex combination of
+s_i-v_i>0 and d_i>0. Exact Nash would force q_i=1, and then d_j>0
+forces q_j=1. Condition (52) rules this out. Hence in this case EVERY
+exact root has an active outsider.
+
+Now suppose v_i>s_i and v_j>s_j. A root supported on the core cannot
+have exactly one active player, since that player's gap against the
+other's zero hazard is strictly negative. If either core hazard is one,
+the other is forced to one by (51), again ruled out by (52). Apart from
+all-Continue, the ONLY possible root without an active outsider is
+
+    p_i=(v_j-s_j)/(v_j-s_j+d_j),
+    p_j=(v_i-s_i)/(v_i-s_i+d_i),
+    p_k=0 for k outside {i,j}.                          (56)
+
+Both core coordinates lie strictly between zero and one. In particular
+c(p)=(1-p_i)(1-p_j)>0.
+
+Suppose some source coordinate is below its singleton, so all-Continue
+is not Nash, and suppose no outsider has g_k(p)=0. If an outsider has
+g_k(p)>0, p is not Nash either; finite Nash existence then already gives
+a root with an active outsider. Otherwise all outsider gaps at p are
+strictly negative. The map (54) is C^1 near p: its outsider rows are
+locally constant zero, and its two core rows are locally q_k+g_k(q).
+
+Order the two core coordinates first. The Jacobian of q-F_v(q) at p
+has the block form
+
+    [[0, -alpha_i, *],
+     [-alpha_j, 0, *],
+     [0,         0, Id]],
+
+where alpha_i=v_i-s_i+d_i>0 and alpha_j=v_j-s_j+d_j>0. Its determinant
+is -alpha_i*alpha_j<0. Cross-derivatives in the starred columns may be
+arbitrary: the identity outsider block makes them irrelevant to the
+determinant. By (53), p cannot be the only full fixed point. Every other
+fixed point must have an active outsider, by the exhaustive classification
+above. It follows that
+
+    core annotations strictly above solos,
+    some annotation strictly below its solo,
+    g_k(p) nonzero for all outsiders
+        => an exact root with an active outsider exists. (57)
+
+This is a produced root from the full finite game, not a conditional
+selection interface. It retains all original rewards and changes no
+outsider's action constraints.
+
+### Boundary minimization and exact tie removal
+
+Assume H exists and minimize it at x on L. Let J={k:x_k=s_k}.
+The case |J|=1 is impossible without any index argument: the sole
+binding player can Quit with sufficiently small positive probability,
+while all others strictly prefer Continue. This exact root has its
+owner successor coordinate equal to its singleton and hence returns to
+L with positive absorption, contradicting minimality.
+
+Thus |J|>=2. Feasible one-sided variations give g^H_k>=0 for k in J,
+where g^H=gradient H(x). Nonbinding interior gradients vanish and
+upper-box gradients are nonpositive, although only the binding signs
+are needed below.
+
+If J meets the core, set v_epsilon=x-epsilon*1_J. At least one core
+annotation is below its solo. By (55),(52), every exact root at this
+source has an active outsider. Finite Nash existence produces one, and
+its successor lies in L.
+
+If J avoids the core, then x_i>s_i and x_j>s_j. Keep those two
+coordinates EXACTLY unchanged, so the mixed candidate p in (56) does
+not depend on any outsider annotation. For each outsider k choose
+
+    0<eta_k<epsilon^2,
+    v_epsilon,k=x_k-epsilon*1_(k in J)-eta_k.            (58)
+
+Choose eta_k so that g_k(p) is not zero. This is always possible:
+Q_k(p)=s_k by the constant-participant hypothesis, while
+
+    C_k(p,v)=sum_(nonempty T subset {i,j})p_p(T)r_k(T)
+                   +c(p)v_k.
+
+Since c(p)>0, equality g_k(p)=0 forbids at most one eta_k in the whole
+interval (0,epsilon^2). The choices are coordinatewise independent.
+Every binding outsider is still at least epsilon below its singleton,
+so all-Continue is not Nash. Condition (57) supplies a full exact root
+with an active outsider. Its successor again lies in L.
+
+In both cases sources remain in K for small epsilon: x>=s>=-M and
+B>M leave a fixed lower clearance, and all perturbations decrease
+coordinates. The table and the strict pair-blocking inequality (52)
+never change. Moreover
+
+    [H(v_epsilon)-H(x)]/epsilon
+        -> -sum_(k in J) g^H_k <=0.                     (59)
+
+In the second case the extra perturbation has norm O(epsilon^2), even
+though it need not depend continuously on epsilon. This is enough for
+(59). Every chosen exact successor w_epsilon belongs to C and, by its
+active constant-participant outsider, to the original L.
+
+Take any k in J. The source has v_epsilon,k<=s_k-epsilon while
+w_epsilon,k>=s_k. The actual displacement formula therefore gives
+
+    epsilon<=(M+B)a_epsilon.
+
+Potential drift and minimality on the SAME L give
+
+    epsilon/(M+B)<=a_epsilon
+       <=H(v_epsilon)-H(w_epsilon)<=H(v_epsilon)-H(x),
+
+contradicting (59). This proves the analytic claim under (51).
+
+### Exact test: the negative-index root really can be present
+
+The following three-player table tests the index step within its claimed
+finite-player analytic scope. Its core is {0,1}, and player 2 has constant
+participant payoff zero:
+
+    r({0})=(1,-1,3), r({1})=(0,0,3), r({2})=(3,3,0),
+    r({0,1})=(2,1,-1), r({0,2})=(1,3,0),
+    r({1,2})=(3,0,0), r({0,1,2})=(1,0,0).
+
+Here d_0=d_1=2, and the pure pair harms player 2. At the annotation
+v=(2,1,-1/10), the root p=(1/3,1/3,0) is genuinely full exact Nash:
+its endpoint gaps are (0,0,-53/45). Its successor is
+(4/3,1/3,53/45), strictly above every singleton. The ambient fixed-point
+Jacobian in the proof has determinant -9. Thus the bad root cannot be
+discarded just by checking outsider incentives or insisting that ALL roots
+return to L. The different root (0,0,1) has gaps (-2,-3,1/10), is exact
+Nash, and has successor (3,3,0) in L. I independently computed these
+identities with exact rational polynomial arithmetic. They confirm the
+intended selection rather than universal-return quantifier; the degree
+proof, not this fixture, supplies that selection for arbitrary tables.
+
+### Combined four-player theorem and remaining research boundary
+
+**Proposed complete raw-class conclusion.** Every four-player quitting
+game with nonnegative own singleton rewards, nonnegative participant
+premiums, and at most two players whose participant rewards are
+nonconstant has one uniform-equilibrium payoff against every complete
+behavioral deviation. No comparison between pair and passive singleton
+rewards is an additional hypothesis.
+
+Indeed choose a designated pair containing all possible variable
+participant players. If A_i<=b_i or A_j<=b_j, Section 11 applies,
+interchanging the core labels when necessary. Otherwise (51) holds,
+and the analytic theorem just proved combines with the SAME normal
+Fin4 polynomial producer and exact-root restriction as Section 10.
+If all s_k=0, all-Never handles the conclusion directly. The target is
+fixed before accuracy by those existing semantic consumers.
+
+This statement is broader than the frozen strict-leave theorem and has
+not yet passed independent review. Its key new producer is (57), with
+the literal map (54), computed local determinant, and explicit ambient
+index normalization. The greatest-premium-core peeling mechanism may
+later replace the globally constant outsider assumption, but has NOT
+been used in this proof. The next requested check is to falsify the
+negative-index root production and the O(epsilon^2) tie removal while
+retaining the exact target boundary L.
+
+## 13. Transfer to the greatest premium core of size at most two
+
+**Complete composition draft, not yet independently reviewed.** This section
+uses the new Section 12 proof and the finite support observation developed
+by CODEX_BROUWER in the section “Canonical premium-core reduction” of
+`CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md`. I checked the finite argument
+and its exact source predicates independently. It is not part of either
+frozen export and is not a claim about premium cores of size three or four.
+
+### Canonical raw condition
+
+Let a finite table have nonnegative participant premiums, with singletons
+s_k=r_k({k}). Call a nonempty A a premium trap if every k in A has some
+coalition S contained in A, containing k, with r_k(S)>s_k. Its witnessing
+coalition may depend on k. Traps are union-closed: the old witnesses
+remain valid in a union. Hence the union C of all traps is either empty
+or the greatest trap. A singleton is never a trap.
+
+This C is also the result of repeatedly deleting from the current player
+set a player whose participant rewards on its current subtable are all
+its singleton. No trap can lose its first member, because that member
+would retain a positive witness inside the trap. A nonempty terminal
+residual is itself a trap, because every surviving player has a witness.
+Thus every deletion order ends at the same C. These are deletions in a
+finite reward-relation calculation, NOT deletion of actual game players.
+
+**Proposed four-player theorem.** If s>=0, participant premiums are
+nonnegative, and this greatest premium core has at most two players,
+the ORIGINAL four-player quitting game has a uniform-equilibrium payoff
+against unrestricted behavioral deviations, with its target fixed before
+accuracy. Players outside C may have positive premiums on larger
+coalitions, so global constant-participant payoffs are not assumed.
+
+### The two exact replacement facts
+
+The empty-core case is existing product-low coverage: every nonempty
+active support A has a player k flat on all participant coalitions inside
+A. Its supported Quit endpoint is exactly s_k. This proves product-low
+on every absorbing product root. The exact equivalence is
+`hasProductLowQuittingPremium_iff_weakSupportPeeling_of_nonnegative` in
+`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowSupportPeelingConverse.lean`.
+
+Suppose C={i,j}. Both pair participant premiums are strictly positive,
+because the pair is the only possible positive witness for either of its
+members inside C. Two facts replace the global outsider equalities:
+
+1. At any positively absorbing root whose active support A is not C,
+   A is not a trap. If it were a trap it would be contained in C, and
+   the only nonempty proper subsets of C are singletons, which are not
+   traps. Thus some active k is flat on EVERY participant coalition
+   inside A. Conditional on k Quitting, its actual coalition is contained
+   in A, so Q_k(q)=s_k. Exact Nash gives successor coordinate s_k.
+   The full successor still belongs to the same L by nonnegative
+   participant premiums and the box bound. Hence every root with support
+   other than C returns to L; no player with a positive hazard is ignored.
+2. For every outsider k and every T contained in C,
+
+       r_k(T union {k})=s_k.                            (60)
+
+   Otherwise that positive premium, together with the pair witnesses
+   of i and j, would make C union {k} a larger premium trap. Thus on
+   every core-only root, every inactive outsider's forced-Quit endpoint
+   is exactly s_k. This fact is distinct from global outsider flatness;
+   it permits positive premiums requiring another outsider.
+
+The source definitions inspected were `HasWeakQuittingPremiumSupportPeeling`
+and `hasWeakQuittingPremiumSupportPeeling_iff` in
+`UniformEquilibrium/Quitting/Classification/QuittingPremiumSupportPeelingOrder.lean`,
+and `HasFiniteCoalitionSupportPeeling` in
+`MathUE/FiniteCoalitionSupportPeelingOrder.lean`. They require a flat
+member in every nonempty support, which is exactly the empty-core case.
+The residual pair is genuinely beyond that displayed source assumption.
+
+### Proof transfer without a missing root or degree hypothesis
+
+For strict leave, Fact 1 handles every support except C, and the strict
+core endpoint gap excludes support C when the leaving annotation is at
+least its singleton. Thus the full-root return and selective minimizer
+perturbation of Section 10 hold without any further change. This is
+BROUWER's proved pair-core strict-leave extension.
+
+For mutual strict joining, use the actual map F_v of Section 12 on ALL
+players and the same lower boundary L. Fact 2 shows that the pure pair
+is exact Nash when its passive outsider rewards are at least s; otherwise
+there is the same table-fixed strict blocker (52). The core-only gap
+formulas and their unique mixed candidate are unchanged, since no outsider
+has a positive hazard on that face.
+
+In the minimizer case where a binding core coordinate is lowered,
+support C is impossible by the strict-join calculation and the pure-pair
+blocker. All-Continue is impossible as well, and finite Nash existence
+therefore supplies a root whose support differs from C. Fact 1 returns
+its full successor to L.
+
+In the case with only outsider bindings, the O(epsilon^2) tie removal
+is still legal because Fact 2 gives Q_k(p)=s_k, while the Continue
+endpoint retains the positive coefficient c(p) on the outsider annotation.
+If the mixed candidate is not Nash, a different root exists. If it is
+Nash, all outside gaps are strictly negative; their rows of the clipped
+map are locally constant zero even when their derivatives before clipping
+involve other outside hazards and positive layered premiums. The same
+block-triangular Jacobian has determinant -alpha_i*alpha_j. Its negative
+local index and total index +1 force a different full root. All-Continue
+and the blocked pure pair are impossible, so Fact 1 again puts the
+selected successor in the original L. The directional and absorption
+contradiction is literally the one in Section 12.
+
+No core-only equation has been applied to a root with a positive outsider
+hazard. Such roots are consumed by Fact 1, retaining every coalition.
+No new root-selection hypothesis, degree computation, or conditional
+interface remains to be supplied in this transfer.
+
+Finally equality in either pair-leave comparison is handled by increasing
+only its passive singleton coordinate by delta. This changes NONE of the
+participant premiums, traps, greatest core, or singletons. The nearby
+table has strict leave, and the existing reward-closure theorem in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`
+gives a fixed-target UE for the original table. Together, strict leave,
+equality, and mutual strict joining cover every pair ordering. The exact
+Fin4 polynomial consumer and normality argument are unchanged.
+
+Therefore, subject to independent review of Sections 12–13, a four-player
+counterexample with nonnegative singletons and nonnegative participant
+premiums must have greatest premium core of size at least three. This
+does not yet address tables with negative participant premiums or the
+size-three/four core. BROUWER's independently found size-three example
+has a unique interior-successor root of index +1, so that next region
+requires a new mechanism rather than another assertion of negative index.
