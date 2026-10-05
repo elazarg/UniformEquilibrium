@@ -192,6 +192,7 @@ import MathUE.Interval.DyadicInterval
 import MathUE.Interval.DyadicPolynomial
 import MathUE.Interval.PolynomialKrawczyk
 import MathUE.Interval.PolynomialLipschitz
+import MathUE.Interval.RationalClosedBoxDensity
 import MathUE.Interval.RationalCubeGrid
 import MathUE.Interval.RationalInterval
 import MathUE.Interval.RationalLowerBoxSearch
@@ -681,6 +682,7 @@ import MathUE.Topology.CompactRankedOutcome
 import MathUE.Topology.CompactRobustMoat
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
+import MathUE.Topology.ConnectedConvexHullRepresentation
 import MathUE.Topology.ConnectedFixedPointContinuation
 import MathUE.Topology.CountableObservation
 import MathUE.Topology.CountableObservationRegularity
@@ -2911,6 +2913,7 @@ import UniformEquilibrium.Quitting.Projective.PolynomialForwardCertificateCharac
 import UniformEquilibrium.Quitting.Projective.PolynomialForwardCertificateConsumer
 import UniformEquilibrium.Quitting.Projective.PunishmentFloorNearReturn
 import UniformEquilibrium.Quitting.Projective.QuantitativePolynomialForwardCharacterization
+import UniformEquilibrium.Quitting.Projective.RationalExactSoloRejection
 import UniformEquilibrium.Quitting.Projective.ResolvedChart
 import UniformEquilibrium.Quitting.Projective.RestrictedPolynomialForwardCharacterization
 import UniformEquilibrium.Quitting.Projective.RobustCapacityFromPacketFailure
@@ -3049,6 +3052,7 @@ import UniformEquilibrium.Quitting.Root.ProductRootProbabilityBridge
 import UniformEquilibrium.Quitting.Root.PureTimeCapChild
 import UniformEquilibrium.Quitting.Root.PureTimeCapPrefixSelection
 import UniformEquilibrium.Quitting.Root.RationalApproximateQuittingRoot
+import UniformEquilibrium.Quitting.Root.RationalBoxedEdge
 import UniformEquilibrium.Quitting.Root.RationalDeletedChildFiniteWordSearch
 import UniformEquilibrium.Quitting.Root.RationalFiniteClockLaw
 import UniformEquilibrium.Quitting.Root.RationalFiniteSourceCapThresholdScan

@@ -8,6 +8,7 @@ import MathUE.Polynomial.MvPolynomialCoordinateAffine
 import MathUE.Polynomial.MvPolynomialQuadraticReflection
 import MathUE.Analysis.MidpointThirdDerivative
 import MathUE.Interval.RationalPolynomialRegularity
+import MathUE.Interval.RationalClosedBoxDensity
 import MathUE.PairedAffineIntervalEstimates
 import MathUE.PairedAffineClearedField
 import MathUE.PairedPhasePolynomialRoots
@@ -676,6 +677,7 @@ import MathUE.Topology.AmbientDegreeProperties
 import MathUE.Topology.BoundaryFixingSurjectivity
 import MathUE.Topology.CompactConvexHull
 import MathUE.Topology.FarthestPointContactHull
+import MathUE.Topology.ConnectedConvexHullRepresentation
 import MathUE.Topology.AmbientDegreeSelfMapNormalization
 import MathUE.Topology.BoxComplementarityAffineLocalIndex
 import MathUE.Topology.BoxComplementarityCenteredMatrixLocalIndex

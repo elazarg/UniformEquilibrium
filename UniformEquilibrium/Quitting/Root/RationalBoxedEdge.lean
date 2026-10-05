@@ -1,0 +1,89 @@
+import MathUE.Interval.RationalClosedBoxDensity
+import MathUE.PMFProduct.Bool
+import MathUE.ProbabilityMassFunction.IntervalBernoulliSimplex
+import UniformEquilibrium.Quitting.Root.RationalQuittingRootGridSelector
+import UniformEquilibrium.Quitting.Root.NashDefectContinuity
+
+/-! # Literal rational boxed-root interfaces for rejection producers -/
+
+namespace GameTheory
+
+open Set Math.ProbabilityMassFunction
+open scoped BigOperators Topology
+
+variable {players : ℕ}
+
+/-- Exact rational absorption formula at a raw rational probability vector. -/
+def rationalQuittingAbsorption (probability : Fin players → ℚ) : ℚ :=
+  1 - ∏ who, (1 - probability who)
+
+theorem rationalQuittingAbsorption_cast (root : RationalQuittingRoot players) :
+    (rationalQuittingAbsorption root.probability : ℝ) =
+      quittingRootAbsorptionMass root.toPMF := by
+  simp [rationalQuittingAbsorption, quittingRootAbsorptionMass,
+    quittingStationaryContinueMass_eq_prod_continueProbability]
+
+theorem quittingRootSuccessorPayoff_rational_eq_cast
+    (reward : RationalQuittingReward players) (source : Fin players → ℚ)
+    (root : RationalQuittingRoot players) :
+    quittingRootSuccessorPayoff (rationalQuittingRewardToReal reward)
+        (fun who => (source who : ℝ)) root.toPMF =
+      fun who => (rationalQuittingRootExpectedPayoff reward source root who : ℝ) := by
+  funext who
+  exact quittingRootExpectedPayoff_rationalQuitting_eq_cast reward source root who
+
+noncomputable section
+
+/-- Closed unit-cube probabilities, with no clipping or root selection. -/
+def quittingUnitCubeSimplex
+    (probability : Icc (0 : Fin players → ℝ) 1) : QuittingRootSimplex (Fin players) :=
+  fun who => stdSimplexEquiv (bernoulliBool (probability.1 who)
+    (probability.2.1 who) (probability.2.2 who))
+
+theorem continuous_quittingUnitCubeSimplex :
+    Continuous (quittingUnitCubeSimplex (players := players)) := by
+  apply continuous_pi
+  intro who
+  have heq : (fun point : Icc (0 : Fin players → ℝ) 1 =>
+      quittingUnitCubeSimplex point who) =
+      fun point => intervalBernoulliSimplex (point.1 who) := by
+    funext point
+    simp only [quittingUnitCubeSimplex, intervalBernoulliSimplex,
+      unitIntervalClip_eq_self (point.2.1 who) (point.2.2 who)]
+  rw [heq]
+  exact continuous_intervalBernoulliSimplex.comp
+    ((continuous_apply who).comp continuous_subtype_val)
+
+theorem quittingUnitCubeSimplex_eq_actual
+    (root : Fin players → PMF Bool) :
+    quittingRootOfSimplex (quittingUnitCubeSimplex
+      ⟨fun who => (root who true).toReal,
+        ⟨fun _ => ENNReal.toReal_nonneg,
+          fun who => by
+            change (root who true).toReal ≤ (1 : ℝ)
+            simpa only [ENNReal.toReal_one] using
+              ENNReal.toReal_mono ENNReal.one_ne_top
+                (PMF.coe_le_one (root who) true)⟩⟩) = root := by
+  funext who
+  simp only [quittingRootOfSimplex, quittingUnitCubeSimplex, Equiv.symm_apply_apply]
+  apply Math.ProbabilityMassFunction.eq_of_forall_toReal_eq
+  intro action
+  cases action
+  · simpa using (Math.PMFProduct.pmfBool_false_toReal (root who)).symm
+  · simp
+
+theorem quittingUnitCubeSimplex_rational_eq
+    (root : RationalQuittingRoot players) :
+    quittingRootOfSimplex (quittingUnitCubeSimplex
+      ⟨fun who => (root.probability who : ℝ),
+        ⟨fun who => Rat.cast_nonneg.mpr (root.nonnegative who),
+          fun who => by
+            change (root.probability who : ℝ) ≤ (1 : ℝ)
+            exact_mod_cast root.le_one who⟩⟩) = root.toPMF := by
+  funext who
+  simp only [quittingRootOfSimplex, quittingUnitCubeSimplex, Equiv.symm_apply_apply]
+  rfl
+
+end
+
+end GameTheory
