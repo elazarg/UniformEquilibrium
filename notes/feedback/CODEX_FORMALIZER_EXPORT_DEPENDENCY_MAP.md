@@ -674,9 +674,70 @@ and singleton rewards remain allowed.
 excludes the remaining pair support using strict leave preference and only
 the first annotation floor. It retains all outsider hazards and full exact
 Nash, without global outsider flatness. Its conclusion is the singleton
-lower-boundary return, not full bounded-L return. These bounded units do not
-supply the protected-floor analytic consumer, a size-at-most-two UE theorem,
+lower-boundary return, not full bounded-L return. These exact-root units alone do not
+supply a size-at-most-two UE theorem,
 or the mutual-join branch and its degree/index analysis.
+
+## Signed common-leaver return and analytic criterion
+
+`not_isQuittingFullExactRootPotential_of_protectedSingletonReturnDomain`
+(`UniformEquilibrium/Quitting/Projective/ProtectedSingletonReturnDomainSmoothDrift.lean`)
+is proved in Lean for arbitrary finite signed reward tables under an explicit
+compact return-region hypothesis. The singleton lower boundary lies in the
+region, whose points obey the protected floor and have some coordinate at
+or below its singleton. Absorbing exact roots must return there from every
+boxed protected annotation, not just annotations already in the region.
+Continuity is required only on this region and differentiability only at
+the singleton lower boundary. The proof localizes an actual region minimum
+to that boundary and retains the literal signed charge `3 * M + bound`.
+The lower-boundary special case derives continuity from differentiability,
+so it adds no regularity hypothesis to the earlier nonnegative criterion.
+
+`exactRootSuccessor_protected_sublevel_of_commonLeaver_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/CommonQuittingPremiumLeaver.lean`)
+is a checked actual reward source: only the protected player's participant
+premiums are nonnegative, every strict premium trap contains that player,
+and strict leave comparisons cover each nonempty coalition in the remaining
+actual core. It retains all outsider hazards and full exact Nash, giving the
+protected floor and some weak singleton sublevel, not all-player floors.
+`not_isQuittingFullExactRootPotential_of_commonLeaver_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/CommonQuittingPremiumLeaverSmoothDrift.lean`)
+instantiates the compact criterion on the actual protected sublevel domain.
+Continuity on that domain and differentiation only on the singleton boundary
+suffice, without the packet's C1-neighborhood assumption.
+
+`exists_uniformEquilibriumPayoff_of_commonLeaver_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/CommonQuittingPremiumLeaverUniformPayoff.lean`)
+and `exists_uniformEquilibriumPayoff_of_commonLeaver_weakLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/CommonQuittingPremiumLeaverRewardClosure.lean`)
+are checked actual Fin4 consumers with nonnegative own singleton rewards.
+The strict case uses the shared polynomial/zero-singleton producer; the weak
+case perturbs only the protected player's passive rewards, preserves all
+participant rewards and the exact trap/core inventory, and applies fixed-target
+reward closure. No nonnegative premium condition is added for other players.
+`exists_uniformEquilibriumPayoff_of_pairPremiumCore_weakLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/QuittingPremiumCoreUniformPayoff.lean`)
+and its strict-leave counterpart are checked thin instances for an actual
+two-player greatest core, with nonnegative own premiums and singleton rewards.
+They do not supply the mutual strict-join branch or a general core-size theorem.
+The packet's signed counterroot and rational-fixture screen obligations
+remain separate; these theorems are not a whole-packet seal.
+
+## Pending pivot and solo-refinement source dependencies
+
+The cyclic-child one-joint-phase and repeated-solo positive-outsider-buffer
+packets share an all-sign rationalized quadratic selector, an actual continuous
+pivot producer, and a full-behavioral solo-only refinement compiler. The
+selector must allow arbitrary quadratic coefficient, including zero, under
+positive bracket length, positive linear coefficient, negative constant and
+positive upper-endpoint value; it must not assume a globally positive
+derivative. The refinement must allow arbitrary finite phase inventories,
+repeated pivot owners with nonzero singleton rewards, and joint Quit values
+bounded by the current continuation, not by zero or a singleton. It must
+retain one fixed target across refinements. In the repeated-solo packet the
+outsider cap is paid by a positive continuation buffer, not cancellation by
+negative collision rewards. These source units are queued, not checked or
+supplied by the common-leaver results above.
 
 ## Proof-mining connections not yet formalized
 
@@ -1400,10 +1461,7 @@ cap are constructed from the fixed strictly individually rational target.
 `property_4_discounted_of_fullDimensional` in the same paper owner then proves
 Hausdorff convergence to the weakly individually rational feasible payoff set:
 the ambient-ball hypothesis supplies a strict point, and a compact finite cover
-makes the rate threshold uniform over all targets. The separate two-player
-alternative remains unproved, so the literal `property_4_discounted` and its
-delegating `lemma_2` still contain or inherit the Literature placeholder.
-The same proof is factored through the stronger
+makes the rate threshold uniform over all targets. The same proof is factored through the stronger
 `property_4_discounted_of_exists_strictIR` in that owner: a single feasible
 all-strict point suffices, without ambient full dimensionality. Its weak-target
 profile facade still selects one exact Nash profile before all small rates.
@@ -1413,7 +1471,7 @@ This does not handle a flat security coordinate without a strict point.
 weak-IR branch. One actual stage Nash is selected internally, and its same
 stationary repetition is exact Nash with exact target delivery at every valid
 rate. The previous discounted-inclusion proof delegates to that shared
-stationary-profile theorem. The nontrivial flat-security branch remains.
+stationary-profile theorem.
 
 `FiniteStageGame.exists_flatFace_calendar` (`Literature/Sorin1986.lean`)
 selects an actual nonempty finite pure calendar for a supplied feasible target
@@ -1429,50 +1487,31 @@ it selects one actual profile before all sufficiently small positive rates,
 with exact flat delivery at every valid rate and exact Nash against every
 full behavioral replacement at small rates. Its metric target approximation,
 silent named check, and separate standard-axiom check pass. This facade does
-not supply weak-active targets without strict slack or finish the whole
-paper claim.
-
-The separate Proposition 4 draft uses a generic connected convex-hull
-representation, an internally selected affine step and a geometric schedule
-to produce an actual independent-mixed behavioral profile. The generic
-representation requires preconnectedness, not a supplied path or compact
-source. Proposition 4 retains its original discount inequality and concerns
-feasibility only. Its pending schedule also replaces the duplicated scalar
-recursion in Proposition 6 without changing that result's hypotheses.
-
-The discounted folk-theorem source draft internally selects a periodic calendar,
-approximate minmax punishments and one actual profile for a fixed feasible,
-strictly individually rational target. It retains that profile before every
-sufficiently small positive discount rate and proves the proposed delivery
-and supported off-path stage caps. Independent source review passes. A further
-unapplied draft derives exact Nash against all behavioral deviations through
-the support-local Bellman bound. Root and independent source reviews pass;
-these drafts still require Lean and axiom checks.
-
-The full-dimensional convergence draft derives a strict individually rational
-point from the literal ambient-ball hypothesis, approximates boundary targets
-by convex mixing, and obtains one rate threshold for all targets from a finite
-compact cover. It retains actual Nash profiles and reuses the reverse-security
-bound. Root and independent source reviews pass. This is an uncompiled draft,
-not a checked Hausdorff theorem. The
-separate two-player flat-security construction remains an explicit dependency;
-neither the literal discounted folk-theorem disjunction nor its downstream
-paper lemma is marked proved by these drafts.
+not itself supply weak-active targets without strict slack.
+`exists_discountedNash_close_allSmallRates_of_mem_IR_of_flatFace` in the same
+owner supplies those targets by flat-preserving convex mixing. The actual
+two-player geometry selects the strict, singleton or flat branch internally.
+`property_4_discounted` and its delegating `lemma_2`
+(`Literature/Sorin1986.lean`) are proved in Lean under the original corrected
+disjunction: the weakly IR feasible set is full dimensional or there are
+exactly two players. The literal Hausdorff conclusion retains a rate threshold
+uniform over all targets, obtained from the actual pointwise profile producer
+and a shared compact finite cover. Their silent named paper check and separate
+standard-axiom checks pass. Other unfinished Sorin claims remain separate.
 
 Primary-source discovery located the two-player flat-security prescription in
 [Tomala, *Jeux répétés* (2006)](https://www.numdam.org/item/10.5802/xups.2006-02.pdf),
 Theorem 3.8, pp. 38--39. If the IR set is a
 singleton, repeat a stage Nash equilibrium. Otherwise a coordinate flat at
 security is globally maximal, and the periodic construction need not punish
-that player's deviations. This is a published construction to formalize,
-not a checked producer. Its loose uniform approximation constants are not
+that player's deviations. The actual calendar and trigger producers are
+checked in the same paper owner. Its loose approximation constants are not
 copied; the existing separate-margin and compact-cover arguments retain weak
 IR targets. [Sorin's 1992 survey](https://perso.imj-prg.fr/sylvain-sorin/wp-content/uploads/sorin-pub/92.HandGT.pdf),
 Theorem 2.2, states the discounted convergence
 result under the weaker alternative that one strict IR feasible point exists.
-The full-dimensional draft can delegate to that generalization by deriving
-the strict point from its ball hypothesis. Neither discovery changes the
-current literal paper declaration's proof status.
+The full-dimensional theorem delegates to that generalization by deriving
+the strict point from its ball hypothesis.
 
 ## Shape connections available from existing proofs
 

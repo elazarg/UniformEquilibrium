@@ -39,6 +39,45 @@ No general conversion between those two notions is proved by this work.
 This records a remaining source obligation, not a counterexample to the
 corrected lemma.
 
+The primary source makes this a specific proof-source question, rather than
+merely a missing Lean interface. Simon (2012), Section 2.3, printed page 184,
+defines the generated branch using a product row repeated through a finite
+switch date, "a stage M > 1", followed by a near-minmax punishment tail.
+No infinite-date or all-Continue alternative appears in that definition.
+On printed page 185, Lemma 2.1 excludes generated and instant equilibria,
+but its sign argument only observes that
+"every player not quitting on every stage would define an equilibrium of the game".
+That page also explains the replacement of the original stationary exclusion
+by the generated exclusion. These passages were checked in the primary
+[2012 paper](https://doi.org/10.1287/moor.1110.0524), pages 184–185.
+
+Here is the precise source question. In a finite nonempty-player quitting
+game, independent behavioral Continue/Quit actions are chosen at each date;
+the first nonempty quitting coalition receives its reward, and perpetual
+Continue receives zero. Write `s_i` for player `i`'s own singleton reward and
+`χ_i` for the infimum over opponent profiles of the supremum over that
+player's behavioral replies. A normal player satisfies `s_i ≥ χ_i`.
+The instant branch selects a first-date row with a sure quitter and a tail
+capping that player's every reply near `χ_i`, with the resulting profile
+approximately Nash. The generated branch instead repeats one row through
+a finite `M > 1` before such a tail; it must be approximately Nash for every
+positive accuracy, not just cap the punished player's replies.
+
+If every normal player's singleton reward is nonpositive, Lemma 3 also gives
+nonpositive singleton rewards for abnormal players. Actual all-Continue is
+then stationary exact Nash, as used by
+`exists_positive_normalPlayer_of_not_stationary` (`Literature/Simon2007.lean`).
+It does not select the required finite-switch witness: an all-Continue
+prefix leaves the tail with full joint reach, and an arbitrary near-minmax
+tail controls only its designated player. The sufficient conversion still
+to justify is: nonpositive own singleton rewards and failure of the instant
+branch imply the stationarily generated branch. Equivalently, supply a
+justification that this stationary equilibrium belongs to the printed
+generated class, or clarify the intended sign-clause branch convention.
+This is not a refutation or an established open mathematical conjecture.
+The original `lemma5_corrected_2012` (`Literature/Simon2007.lean`) remains
+unproved; the two independently checked clauses above do not close it.
+
 ## Fixed-start compactness and the nonconvergent-orbit case
 
 `exists_infinite_fRow_orbit_of_finite_orbits` (`Literature/Simon2007.lean`)

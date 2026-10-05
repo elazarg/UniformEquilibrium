@@ -4825,238 +4825,7 @@ private theorem FiniteStageGame.exists_strictIR_close_of_exists_strictIR
       _ ≤ ‖center - target‖ * c := mul_le_mul_of_nonneg_left htc (norm_nonneg _)
       _ < ε := hsmall
 
-/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
-stated with the paper's added-in-proof correction: `Δ` must be full
-dimensional or there must be two players. The full-dimensional branch is
-proved by `property_4_discounted_of_fullDimensional` below; the separate
-two-player branch remains to be proved. -/
-theorem property_4_discounted (G : FiniteStageGame)
-    (hregular : FullDimensional G.individuallyRationalPayoffs ∨
-      Fintype.card G.Player = 2) :
-    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
-      G.individuallyRationalPayoffs := by
-  sorry
-
-/-! ## 2. Study of `Gₙ` and `G_λ` -/
-
-/-- Scalar multiplication of a payoff set. -/
-def scaleSet {ι : Type} (c : ℝ) (A : Set (Payoff ι)) : Set (Payoff ι) :=
-  {z | ∃ x ∈ A, z = c • x}
-
-/-- Minkowski sum of two payoff sets. -/
-def addSet {ι : Type} (A B : Set (Payoff ι)) : Set (Payoff ι) :=
-  {z | ∃ x ∈ A, ∃ y ∈ B, z = x + y}
-
-/-- `m * A` in the paper: the Minkowski sum of `m` copies of `A`. -/
-def iteratedAddSet {ι : Type} (m : ℕ) (A : Set (Payoff ι)) :
-    Set (Payoff ι) :=
-  {z | ∃ x : Fin m → Payoff ι, (∀ k, x k ∈ A) ∧ z = ∑ k, x k}
-
-/-! **Lemma 1(5), first inclusion.**  Pure stage profiles embed as
-Dirac mixed profiles. -/
-theorem lemma_1_pure_subset_D1 (G : FiniteStageGame) :
-    G.purePayoffSet ⊆ G.oneStageFeasiblePayoffs := by
-  rintro payoff ⟨profile, rfl⟩
-  refine ⟨G.kernel.pureMixedProfile profile, ?_⟩
-  change G.kernel.mixedExtension.payoffVector
-      (G.kernel.pureMixedProfile profile) = G.payoff profile
-  rw [G.kernel.mixedExtension_payoffVector_pureMixedProfile profile]
-  funext who
-  change G.kernel.eu profile who = G.payoff profile who
-  simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
-
-/-- The mixed profile prescribed by a behavioral profile at the unique empty
-history. -/
-def FiniteStageGame.initialMixedProfile
-    (G : FiniteStageGame) (profile : G.BehaviorProfile) : G.MixedProfile :=
-  fun who ↦ profile who 0 (G.repeatedGame.emptyHist PUnit.unit)
-
-/-- At horizon one, the behavioral payoff is exactly the payoff of the mixed
-profile prescribed at the empty history. -/
-theorem finitePayoff_one_eq_mixedPayoff_initial
-    (G : FiniteStageGame) (profile : G.BehaviorProfile) :
-    G.finitePayoff 1 profile = G.mixedPayoff (G.initialMixedProfile profile) := by
-  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
-    @Finite.of_fintype _ (G.finiteAction who)
-  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
-  let : Finite G.kernel.Outcome := by
-    change Finite (∀ who, G.Action who)
-    exact Finite.of_fintype _
-  funext who
-  unfold FiniteStageGame.finitePayoff
-  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
-  simp only [Finset.sum_range_succ, Finset.sum_range_zero, zero_add,
-    Nat.cast_one, inv_one, one_mul]
-  rw [G.repeatedGame.expectedStagePayoff_zero]
-  unfold StochasticGame.stageEUAt FiniteStageGame.mixedPayoff
-  change Math.Probability.expect
-      (Math.PMFProduct.pmfPi (G.initialMixedProfile profile))
-        (fun action ↦ G.kernel.eu action who) =
-    G.kernel.mixedExtension.eu (G.initialMixedProfile profile) who
-  exact (G.kernel.mixedExtension_eu _ _).symm
-
-/-! **Lemma 1(5), finite-horizon clause.**  Stationary repetition of a
-mixed one-stage profile gives the same payoff at every positive horizon.
-The proof uses the exact public-history embedding of the stationary profile. -/
-theorem lemma_1_D1_subset_Dn (G : FiniteStageGame)
-    (n : G.Horizon) :
-    G.oneStageFeasiblePayoffs ⊆
-      G.finiteFeasiblePayoffsOnHorizon n := by
-  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
-    @Finite.of_fintype _ (G.finiteAction who)
-  let : Finite G.kernel.Outcome := by
-    change Finite (∀ who, G.Action who)
-    exact Finite.of_fintype _
-  rintro payoff ⟨profile, rfl⟩
-  let monitored :=
-    G.kernel.realizedActionMonitoring.stationaryMonitoredProfile profile
-  let behavior :=
-    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
-      G.kernel monitored
-  refine ⟨behavior, ?_⟩
-  funext who
-  change G.repeatedGame.finiteAveragePayoff PUnit.unit n.1 behavior who =
-    G.kernel.mixedExtension.payoffVector profile who
-  rw [GameTheory.KernelGame.RealizedActionRepeatedAdapter.finiteAveragePayoff_toBehaviorProfile]
-  exact G.kernel.realizedActionMonitoring.finiteAveragePayoff_stationaryMonitoredProfile
-    (Nat.ne_of_gt n.2) profile who
-
-/-- The one-period behavioral feasible set is the one-stage mixed feasible
-set. -/
-theorem finiteFeasiblePayoffs_one_eq_oneStageFeasiblePayoffs
-    (G : FiniteStageGame) :
-    G.finiteFeasiblePayoffs 1 = G.oneStageFeasiblePayoffs := by
-  apply Set.Subset.antisymm
-  · rintro payoff ⟨profile, rfl⟩
-    exact ⟨G.initialMixedProfile profile,
-      (finitePayoff_one_eq_mixedPayoff_initial G profile).symm⟩
-  · exact lemma_1_D1_subset_Dn G ⟨1, by omega⟩
-
-/-! **Lemma 1(5), discounted clause.**  The same stationary profile has
-its one-stage payoff under every paper discount rate. -/
-theorem lemma_1_D1_subset_Dlambda (G : FiniteStageGame)
-    (lam : G.DiscountRate) :
-    G.oneStageFeasiblePayoffs ⊆
-      G.discountedFeasiblePayoffsOnRate lam := by
-  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
-    @Finite.of_fintype _ (G.finiteAction who)
-  let : Finite G.kernel.Outcome := by
-    change Finite (∀ who, G.Action who)
-    exact Finite.of_fintype _
-  rintro payoff ⟨profile, rfl⟩
-  let monitored :=
-    G.kernel.realizedActionMonitoring.stationaryMonitoredProfile profile
-  let behavior :=
-    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
-      G.kernel monitored
-  refine ⟨behavior, ?_⟩
-  funext who
-  change G.repeatedGame.discountedPayoff (1 - lam.1) behavior
-      PUnit.unit who = G.kernel.mixedExtension.payoffVector profile who
-  apply G.repeatedGame.discountedPayoff_of_forall_expectedStagePayoff_eq
-      (β := 1 - lam.1)
-  · intro time
-    rw [GameTheory.KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile]
-    exact G.kernel.realizedActionMonitoring.stageEU_stationaryMonitoredProfile
-      profile time who
-  · linarith [lam.2.2]
-  · linarith [lam.2.1]
-
-/-- Every period's expected payoff vector under a public monitored profile is
-correlated-feasible. -/
-theorem monitoredStagePayoff_mem_correlatedFeasiblePayoffs
-    (G : FiniteStageGame)
-    (profile : G.kernel.realizedActionMonitoring.MonitoredProfile)
-    (time : ℕ) :
-    (fun who ↦ G.kernel.realizedActionMonitoring.stageEU
-      profile time who) ∈ G.correlatedFeasiblePayoffs := by
-  let (who : G.Player) : Fintype (G.kernel.Strategy who) :=
-    G.finiteAction who
-  let : Finite G.kernel.Outcome := by
-    change Finite (∀ who, G.Action who)
-    exact Finite.of_fintype _
-  let M := G.kernel.realizedActionMonitoring
-  let payoffAt := fun history : M.SignalHistory time ↦
-    fun who ↦ G.kernel.mixedExtension.eu
-      (fun player ↦ profile player time history) who
-  have hbar :=
-    Math.ProbabilityMassFunction.coordinateExpectation_mem_convexHull_range
-      (M.signalHistoryDist profile time) payoffAt
-  have hrange : Set.range payoffAt ⊆ G.correlatedFeasiblePayoffs := by
-    rintro _ ⟨history, rfl⟩
-    change G.mixedPayoff (fun who ↦ profile who time history) ∈
-      G.correlatedFeasiblePayoffs
-    exact FiniteStageGame.mixedPayoff_mem_correlatedFeasiblePayoffs
-      G (fun who ↦ profile who time history)
-  have hmem :
-      (fun who ↦ Math.Probability.expect
-        (M.signalHistoryDist profile time) (fun history ↦ payoffAt history who)) ∈
-        G.correlatedFeasiblePayoffs :=
-    convexHull_min hrange G.correlatedFeasiblePayoffs_convex hbar
-  simpa only [KernelGame.PublicMonitoring.stageEU, M, payoffAt] using hmem
-
-/-- The expected payoff vector in every period of the stochastic presentation
-is correlated-feasible. -/
-theorem expectedStagePayoff_mem_correlatedFeasiblePayoffs
-    (G : FiniteStageGame) (profile : G.BehaviorProfile) (time : ℕ) :
-    (fun who ↦ G.repeatedGame.expectedStagePayoff
-      profile PUnit.unit time who) ∈ G.correlatedFeasiblePayoffs := by
-  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
-    @Finite.of_fintype _ (G.finiteAction who)
-  let : Finite G.kernel.Outcome := by
-    change Finite (∀ who, G.Action who)
-    exact Finite.of_fintype _
-  let monitored :=
-    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toMonitoredProfile
-      G.kernel profile
-  have hmem := monitoredStagePayoff_mem_correlatedFeasiblePayoffs
-    G monitored time
-  have heq :
-      (fun who ↦ G.repeatedGame.expectedStagePayoff
-        profile PUnit.unit time who) =
-      fun who ↦ G.kernel.realizedActionMonitoring.stageEU
-        monitored time who := by
-    funext who
-    simpa [monitored] using
-      (GameTheory.KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile
-        G.kernel monitored time who)
-  rw [heq]
-  exact hmem
-
-/-! **Lemma 1(6), finite-horizon clause.**  Every expected average is a
-barycenter of pure stage-payoff vectors.  A reusable convex-hull theorem
-for the public-history adapter is the missing formal ingredient. -/
-theorem lemma_1_Dn_subset_C (G : FiniteStageGame)
-    (n : G.Horizon) :
-    G.finiteFeasiblePayoffsOnHorizon n ⊆
-      G.correlatedFeasiblePayoffs := by
-  rintro _ ⟨profile, rfl⟩
-  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
-    @Finite.of_fintype _ (G.finiteAction who)
-  change (fun who ↦ G.repeatedGame.finiteAveragePayoff
-    PUnit.unit n.1 profile who) ∈ G.correlatedFeasiblePayoffs
-  rw [show (fun who ↦ G.repeatedGame.finiteAveragePayoff
-    PUnit.unit n.1 profile who) =
-      (n.1 : ℝ)⁻¹ • ∑ time ∈ Finset.range n.1,
-        (fun who ↦ G.repeatedGame.expectedStagePayoff
-          profile PUnit.unit time who) by
-    funext who
-    rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
-    simp only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul]]
-  rw [Finset.smul_sum]
-  apply G.correlatedFeasiblePayoffs_convex.sum_mem
-  · intro _ _
-    exact inv_nonneg.mpr (Nat.cast_nonneg n.1)
-  · rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
-    apply mul_inv_cancel₀
-    exact_mod_cast Nat.ne_of_gt n.2
-  · intro time htime
-    exact expectedStagePayoff_mem_correlatedFeasiblePayoffs
-      G profile time
-
-/-! **Lemma 1(6), discounted clause.**  The geometric weighted average
-is likewise a barycenter of pure stage-payoff vectors. -/
-theorem lemma_1_Dlambda_subset_C (G : FiniteStageGame)
+private theorem discountedFeasiblePayoffs_subset_correlated_source (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.discountedFeasiblePayoffsOnRate lam ⊆
       G.correlatedFeasiblePayoffs := by
@@ -5127,111 +4896,6 @@ theorem lemma_1_Dlambda_subset_C (G : FiniteStageGame)
   rw [heq]
   exact hhull
 
-/-- A convex set squeezed between `pure` and its convex hull is exactly
-that convex hull. -/
-theorem convex_eq_convexHull_iff_of_subset
-    {V : Type} [AddCommGroup V] [Module ℝ V]
-    {pure feasible : Set V}
-    (hpure : pure ⊆ feasible)
-    (hfeasible : feasible ⊆ convexHull ℝ pure) :
-    Convex ℝ feasible ↔ feasible = convexHull ℝ pure := by
-  constructor
-  · intro hconvex
-    apply Set.Subset.antisymm hfeasible
-    exact convexHull_min hpure hconvex
-  · rintro rfl
-    exact convex_convexHull ℝ pure
-
-/-! **Lemma 1(7), finite-horizon clause.**  This is now derived from
-(5) and (6), rather than left as another paper-level gap. -/
-theorem lemma_1_Dn_convex_iff (G : FiniteStageGame)
-    (n : G.Horizon) :
-    Convex ℝ (G.finiteFeasiblePayoffsOnHorizon n) ↔
-      G.finiteFeasiblePayoffsOnHorizon n =
-        G.correlatedFeasiblePayoffs := by
-  apply convex_eq_convexHull_iff_of_subset
-  · exact (lemma_1_pure_subset_D1 G).trans
-      (lemma_1_D1_subset_Dn G n)
-  · exact lemma_1_Dn_subset_C G n
-
-/-! **Lemma 1(7), discounted clause.** -/
-theorem lemma_1_Dlambda_convex_iff (G : FiniteStageGame)
-    (lam : G.DiscountRate) :
-    Convex ℝ (G.discountedFeasiblePayoffsOnRate lam) ↔
-      G.discountedFeasiblePayoffsOnRate lam =
-        G.correlatedFeasiblePayoffs := by
-  apply convex_eq_convexHull_iff_of_subset
-  · exact (lemma_1_pure_subset_D1 G).trans
-      (lemma_1_D1_subset_Dlambda G lam)
-  · exact lemma_1_Dlambda_subset_C G lam
-
-/-! **Lemma 1(8), first finite inclusion.**  Stationary repetition of a
-one-stage Nash profile resists arbitrary history-dependent deviations.
-The library has the corresponding monitored theorem, but the exact
-bridge from the kernel mixed extension to this stochastic adapter is not
-yet exposed at this evaluator. -/
-theorem lemma_1_E1_subset_En (G : FiniteStageGame)
-    (n : G.Horizon) :
-    G.oneStageEquilibriumPayoffs ⊆
-      G.finiteEquilibriumPayoffsOnHorizon n := by
-  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
-    @Finite.of_fintype _ (G.finiteAction who)
-  let : Finite G.kernel.Outcome := by
-    change Finite (∀ who, G.Action who)
-    exact Finite.of_fintype _
-  let : Finite G.kernel.mixedExtension.Outcome :=
-    G.kernel.finite_mixedExtension_outcome
-  rintro payoff ⟨profile, hnash, rfl⟩
-  let monitored :=
-    G.kernel.realizedActionMonitoring.stationaryMonitoredProfile profile
-  let behavior :=
-    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
-      G.kernel monitored
-  refine ⟨behavior, ?_, ?_⟩
-  · apply (KernelGame.RealizedActionRepeatedAdapter.isεFiniteRepeatedNash_iff_isεHorizonNash
-      G.kernel monitored n.1 0).mp
-    exact G.kernel.realizedActionMonitoring
-      |>.stationaryMonitoredProfile_isFiniteRepeatedNash_of_isNash
-        hnash n.2
-  · funext who
-    change G.repeatedGame.finiteAveragePayoff
-      PUnit.unit n.1 behavior who = G.mixedPayoff profile who
-    rw [GameTheory.KernelGame.RealizedActionRepeatedAdapter.finiteAveragePayoff_toBehaviorProfile]
-    exact G.kernel.realizedActionMonitoring
-      |>.finiteAveragePayoff_stationaryMonitoredProfile
-        (Nat.ne_of_gt n.2) profile who
-
-/-- At horizon one, behavioral and mixed equilibrium payoff sets coincide. -/
-theorem finiteEquilibriumPayoffs_one_eq_oneStageEquilibriumPayoffs
-    (G : FiniteStageGame) :
-    G.finiteEquilibriumPayoffs 1 = G.oneStageEquilibriumPayoffs := by
-  apply Set.Subset.antisymm
-  · rintro payoff ⟨behavior, hnash, rfl⟩
-    let profile := G.initialMixedProfile behavior
-    refine ⟨profile, ?_, ?_⟩
-    · intro who deviation
-      let behaviorDeviation : G.BehaviorStrategy who :=
-        fun _time _history ↦ deviation
-      have hequilibrium := hnash who behaviorDeviation
-      have hupdate :
-          G.initialMixedProfile
-              (Function.update behavior who behaviorDeviation) =
-            Function.update profile who deviation := by
-        funext player
-        by_cases hplayer : player = who
-        · subst player
-          simp [FiniteStageGame.initialMixedProfile, behaviorDeviation]
-        · simp [FiniteStageGame.initialMixedProfile, profile, hplayer]
-      change G.finitePayoff 1 behavior who + 0 ≥
-        G.finitePayoff 1
-          (Function.update behavior who behaviorDeviation) who at hequilibrium
-      rw [finitePayoff_one_eq_mixedPayoff_initial G behavior,
-        finitePayoff_one_eq_mixedPayoff_initial G
-          (Function.update behavior who behaviorDeviation), hupdate] at hequilibrium
-      simpa [FiniteStageGame.mixedPayoff, profile] using hequilibrium
-    · exact (finitePayoff_one_eq_mixedPayoff_initial G behavior).symm
-  · exact lemma_1_E1_subset_En G ⟨1, by omega⟩
-
 /-- One fixed stationary repetition of a stage Nash profile is exact Nash
 and delivers its stage payoff at every valid paper rate. -/
 theorem FiniteStageGame.stationaryBehaviorProfile_discountedNash_and_payoff
@@ -5286,52 +4950,15 @@ theorem FiniteStageGame.stationaryBehaviorProfile_discountedNash_and_payoff
       G.kernel.mixedExtension.eu profile who
     rw [G.kernel.mixedExtension_eu]
 
-/-! **Lemma 1(8), discounted inclusion.** -/
-theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
-    (lam : G.DiscountRate) :
-    G.oneStageEquilibriumPayoffs ⊆
-      G.discountedEquilibriumPayoffsOnRate lam := by
+
+private theorem oneStageEquilibriumPayoffs_subset_discounted_source
+    (G : FiniteStageGame) (lam : G.DiscountRate) :
+    G.oneStageEquilibriumPayoffs ⊆ G.discountedEquilibriumPayoffsOnRate lam := by
   rintro payoff ⟨profile, hnash, rfl⟩
   exact ⟨G.repeatedGame.stationaryBehaviorProfile profile,
     G.stationaryBehaviorProfile_discountedNash_and_payoff profile hnash lam⟩
 
-/-- The history-by-history pure best reply earns at least the paper's
-individual-rational level in the current stage. -/
-theorem stageEUAt_individualRationalDeviation_ge
-    (G : FiniteStageGame) (profile : G.BehaviorProfile)
-    (who : G.Player) {time : ℕ} (history : G.repeatedGame.Hist time) :
-    G.individualRationalLevel who ≤
-      G.repeatedGame.stageEUAt
-        (Function.update profile who
-          (G.individualRationalDeviation profile who)) history who :=
-  stageEUAt_securityDeviation_ge G profile who history
-
-/-- The selected deviation earns at least the individual-rational level in
-every period. -/
-theorem expectedStagePayoff_individualRationalDeviation_ge
-    (G : FiniteStageGame) (profile : G.BehaviorProfile)
-    (who : G.Player) (time : ℕ) :
-    G.individualRationalLevel who ≤
-      G.repeatedGame.expectedStagePayoff
-        (Function.update profile who
-          (G.individualRationalDeviation profile who))
-        PUnit.unit time who :=
-  expectedStagePayoff_securityDeviation_ge G profile who time
-
-/-- The deviation's positive-horizon average is at least the
-individual-rational level. -/
-theorem finiteAveragePayoff_individualRationalDeviation_ge
-    (G : FiniteStageGame) (profile : G.BehaviorProfile)
-    (who : G.Player) (horizon : G.Horizon) :
-    G.individualRationalLevel who ≤
-      G.repeatedGame.finiteAveragePayoff PUnit.unit horizon.1
-        (Function.update profile who
-          (G.individualRationalDeviation profile who)) who :=
-  finiteAveragePayoff_securityDeviation_ge G profile who horizon
-
-/-- The same deviation earns at least the individual-rational level under
-every paper discount rate. -/
-theorem discountedPayoff_individualRationalDeviation_ge
+private theorem discountedPayoff_securityDeviation_ge
     (G : FiniteStageGame) (profile : G.BehaviorProfile)
     (who : G.Player) (lam : G.DiscountRate) :
     G.individualRationalLevel who ≤
@@ -5347,53 +4974,23 @@ theorem discountedPayoff_individualRationalDeviation_ge
       G.repeatedGame.stagePayoff pair.1 pair.2 who)
   apply G.repeatedGame.discountedPayoff_ge_of_forall_expectedStagePayoff_ge
     (fun state action ↦ hC (state, action))
-    (fun time ↦ expectedStagePayoff_individualRationalDeviation_ge
+    (fun time ↦ expectedStagePayoff_securityDeviation_ge
       G profile who time)
   · linarith [lam.2.2]
   · linarith [lam.2.1]
 
-/-! **Lemma 1(8), finite individual-rationality clause.**  At every
-public history a player can switch to a stagewise security strategy;
-the conditional-history construction is not yet packaged. -/
-theorem lemma_1_En_subset_Delta (G : FiniteStageGame)
-    (n : G.Horizon) :
-    G.finiteEquilibriumPayoffsOnHorizon n ⊆
-      G.individuallyRationalPayoffs := by
-  rintro payoff ⟨profile, hnash, rfl⟩
-  constructor
-  · exact lemma_1_Dn_subset_C G n ⟨profile, rfl⟩
-  · intro who
-    let deviation := G.individualRationalDeviation profile who
-    have hequilibrium := hnash who deviation
-    have hdeviation :=
-      finiteAveragePayoff_individualRationalDeviation_ge
-        G profile who n
-    change G.individualRationalLevel who ≤
-      G.finitePayoff n.1 profile who
-    change G.finitePayoff n.1 profile who + 0 ≥
-      G.finitePayoff n.1
-        (Function.update profile who deviation) who at hequilibrium
-    have hequilibrium' :
-        G.repeatedGame.finiteAveragePayoff PUnit.unit n.1
-            (Function.update profile who
-              (G.individualRationalDeviation profile who)) who ≤
-          G.finitePayoff n.1 profile who := by
-      simpa [deviation, FiniteStageGame.finitePayoff] using hequilibrium
-    exact hdeviation.trans hequilibrium'
-
-/-! **Lemma 1(8), discounted individual-rationality clause.** -/
-theorem lemma_1_Elambda_subset_Delta (G : FiniteStageGame)
+private theorem discountedEquilibriumPayoffs_subset_IR_source (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.discountedEquilibriumPayoffsOnRate lam ⊆
       G.individuallyRationalPayoffs := by
   rintro payoff ⟨profile, hnash, rfl⟩
   constructor
-  · exact lemma_1_Dlambda_subset_C G lam ⟨profile, rfl⟩
+  · exact discountedFeasiblePayoffs_subset_correlated_source G lam ⟨profile, rfl⟩
   · intro who
     let deviation := G.individualRationalDeviation profile who
     have hequilibrium := hnash who deviation
     have hdeviation :=
-      discountedPayoff_individualRationalDeviation_ge
+      discountedPayoff_securityDeviation_ge
         G profile who lam
     change G.individualRationalLevel who ≤
       G.discountedPayoff lam.1 profile who
@@ -5427,8 +5024,8 @@ theorem FiniteStageGame.exists_oneStageNash_mem_IR (G : FiniteStageGame) :
   have hone : G.mixedPayoff profile ∈ G.oneStageEquilibriumPayoffs :=
     ⟨profile, hnash, rfl⟩
   let rate : G.DiscountRate := ⟨1, zero_lt_one, le_refl 1⟩
-  exact ⟨profile, hnash, lemma_1_Elambda_subset_Delta G rate
-    (lemma_1_E1_subset_Elambda G rate hone)⟩
+  exact ⟨profile, hnash, discountedEquilibriumPayoffs_subset_IR_source G rate
+    (oneStageEquilibriumPayoffs_subset_discounted_source G rate hone)⟩
 
 /-- A flat security coordinate is a global stage maximum when another
 coordinate has IR slack and no feasible all-strict point exists. -/
@@ -5857,7 +5454,7 @@ theorem property_4_discounted_of_IR_singleton
   let rate : G.DiscountRate := ⟨lam, hlam, hlamOne.le⟩
   constructor
   · intro value hvalue
-    exact ⟨value, lemma_1_Elambda_subset_Delta G rate hvalue,
+    exact ⟨value, discountedEquilibriumPayoffs_subset_IR_source G rate hvalue,
       (dist_self value).trans_lt hε⟩
   · intro value hvalue
     have hequal : value = target := by
@@ -5910,11 +5507,15 @@ theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
   exists_discountedNash_close_allSmallRates_of_mem_IR_of_exists_strictIR
     G (G.exists_strictIR_of_fullDimensional hfull) target htarget hε
 
-/-- A feasible strict point and compactness make the small-rate threshold
-uniform over every target in the actual weakly IR payoff set. -/
-theorem property_4_discounted_of_exists_strictIR (G : FiniteStageGame)
-    (hexists : ∃ center ∈ G.correlatedFeasiblePayoffs,
-      ∀ who, G.individualRationalLevel who < center who) :
+/-- Compactness turns actual pointwise profile producers into a rate threshold
+uniform over the entire weakly IR target set. -/
+private theorem discountedHausdorff_of_targetProducer (G : FiniteStageGame)
+    (hsource : ∀ target ∈ G.individuallyRationalPayoffs, ∀ ε : ℝ, 0 < ε →
+      ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
+        ∃ profile : G.BehaviorProfile,
+          ∀ lam : ℝ, 0 < lam → lam < threshold →
+            G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
+            dist (G.discountedPayoff lam profile) target < ε) :
     HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
       G.individuallyRationalPayoffs := by
   classical
@@ -5924,8 +5525,7 @@ theorem property_4_discounted_of_exists_strictIR (G : FiniteStageGame)
   let : Fintype centers := hfinite.fintype
   choose threshold hthreshold hthresholdOne profile hprofile using
     fun center : centers =>
-      exists_discountedNash_close_allSmallRates_of_mem_IR_of_exists_strictIR
-        G hexists center.1 (hcenters center.2) (half_pos hε)
+      hsource center.1 (hcenters center.2) (ε / 2) (half_pos hε)
   obtain ⟨δ, hδ, hcommon⟩ :=
     KernelGame.exists_pos_margin_of_mem_strictReservationSet
       (r := fun _ : centers => (0 : ℝ)) (v := threshold) hthreshold
@@ -5934,7 +5534,7 @@ theorem property_4_discounted_of_exists_strictIR (G : FiniteStageGame)
   have hlamOne : lam ≤ 1 := hlamThreshold.le.trans (min_le_right _ _)
   constructor
   · intro value hvalue
-    have hIR := lemma_1_Elambda_subset_Delta G ⟨lam, hlam, hlamOne⟩ hvalue
+    have hIR := discountedEquilibriumPayoffs_subset_IR_source G ⟨lam, hlam, hlamOne⟩ hvalue
     exact ⟨value, hIR, (dist_self _).trans_lt hε⟩
   · intro target htarget
     obtain ⟨center, hcenter⟩ := Set.mem_iUnion.mp (hcover htarget)
@@ -5955,13 +5555,571 @@ theorem property_4_discounted_of_exists_strictIR (G : FiniteStageGame)
       _ < ε / 2 + ε / 2 := add_lt_add hclose hnear'
       _ = ε := by ring
 
+/-- A feasible strict point supplies the pointwise producer for the shared
+compactness argument. -/
+theorem property_4_discounted_of_exists_strictIR (G : FiniteStageGame)
+    (hexists : ∃ center ∈ G.correlatedFeasiblePayoffs,
+      ∀ who, G.individualRationalLevel who < center who) :
+    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
+      G.individuallyRationalPayoffs :=
+  discountedHausdorff_of_targetProducer G fun target htarget _ hε =>
+    exists_discountedNash_close_allSmallRates_of_mem_IR_of_exists_strictIR
+      G hexists target htarget hε
+
 /-- Property (4), full-dimensional branch, delegates through its internally
-derived strict point. The separate two-player alternative remains open. -/
+derived strict point. -/
 theorem property_4_discounted_of_fullDimensional (G : FiniteStageGame)
     (hfull : FullDimensional G.individuallyRationalPayoffs) :
     HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
       G.individuallyRationalPayoffs :=
   property_4_discounted_of_exists_strictIR G (G.exists_strictIR_of_fullDimensional hfull)
+
+
+/-- Mix within the flat face to obtain strict active slack near any weak IR
+target. Exact flat equality is retained, including at active boundary targets. -/
+private theorem FiniteStageGame.exists_flatFace_strictActive_close
+    (G : FiniteStageGame) (flat active : G.Player)
+    (hflatAll : ∀ v ∈ G.individuallyRationalPayoffs,
+      v flat = G.individualRationalLevel flat)
+    (center : Payoff G.Player) (hcenter : center ∈ G.individuallyRationalPayoffs)
+    (hactive : G.individualRationalLevel active < center active)
+    (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ mixed ∈ G.correlatedFeasiblePayoffs,
+      mixed flat = G.individualRationalLevel flat ∧
+      G.individualRationalLevel active < mixed active ∧ dist mixed target < ε := by
+  obtain ⟨c, hc, hsmall⟩ := exists_pos_mul_lt hε ‖center - target‖
+  let t : ℝ := min c (1 / 2)
+  have ht : 0 < t := lt_min hc (by norm_num)
+  have ht1 : t ≤ 1 := (min_le_right c (1 / 2)).trans (by norm_num)
+  have htc : t ≤ c := min_le_left _ _
+  let mixed : Payoff G.Player := (1 - t) • target + t • center
+  have hmixed : mixed ∈ G.correlatedFeasiblePayoffs :=
+    G.correlatedFeasiblePayoffs_convex htarget.1 hcenter.1
+      (sub_nonneg.mpr ht1) ht.le (by ring)
+  refine ⟨mixed, hmixed, ?_, ?_, ?_⟩
+  · change (1 - t) * target flat + t * center flat = G.individualRationalLevel flat
+    rw [hflatAll target htarget, hflatAll center hcenter]
+    ring
+  · have hweak := mul_le_mul_of_nonneg_left (htarget.2 active) (sub_nonneg.mpr ht1)
+    have hstrong := mul_lt_mul_of_pos_left hactive ht
+    change G.individualRationalLevel active <
+      (1 - t) * target active + t * center active
+    nlinarith
+  · have hdifference : mixed - target = t • (center - target) := by
+      funext who
+      change (1 - t) * target who + t * center who - target who =
+        t * (center who - target who)
+      ring
+    rw [dist_eq_norm, hdifference, norm_smul, Real.norm_eq_abs, abs_of_pos ht]
+    calc
+      t * ‖center - target‖ = ‖center - target‖ * t := mul_comm _ _
+      _ ≤ ‖center - target‖ * c := mul_le_mul_of_nonneg_left htc (norm_nonneg _)
+      _ < ε := hsmall
+
+/-- Every weak target on the flat IR face is delivered by one internally
+selected exact Nash profile before all sufficiently small rates. -/
+theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_flatFace
+    (G : FiniteStageGame) (flat active : G.Player)
+    (hexhaust : ∀ who, who = flat ∨ who = active)
+    (hmaximum : ∀ action, G.payoff action flat ≤ G.individualRationalLevel flat)
+    (hflatAll : ∀ v ∈ G.individuallyRationalPayoffs,
+      v flat = G.individualRationalLevel flat)
+    (hcenter : ∃ center ∈ G.individuallyRationalPayoffs,
+      G.individualRationalLevel active < center active)
+    (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
+      ∃ profile : G.BehaviorProfile,
+        ∀ lam : ℝ, 0 < lam → lam < threshold →
+          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
+          dist (G.discountedPayoff lam profile) target < ε := by
+  obtain ⟨center, hcenterIR, hactive⟩ := hcenter
+  obtain ⟨mixed, hmixed, hflat, hstrict, hnear⟩ :=
+    G.exists_flatFace_strictActive_close flat active hflatAll
+      center hcenterIR hactive target htarget (half_pos hε)
+  obtain ⟨threshold, hthreshold, hthresholdOne, profile, _hflatDelivery, hsource⟩ :=
+    exists_discountedNash_close_allSmallRates_of_flatFace_strictActive
+      G flat active hexhaust hmaximum mixed hmixed hflat hstrict (half_pos hε)
+  refine ⟨threshold, hthreshold, hthresholdOne, profile, ?_⟩
+  intro lam hlam hlamThreshold
+  obtain ⟨hnash, hclose⟩ := hsource lam hlam hlamThreshold
+  refine ⟨hnash, ?_⟩
+  calc
+    dist (G.discountedPayoff lam profile) target ≤
+        dist (G.discountedPayoff lam profile) mixed + dist mixed target :=
+      dist_triangle _ _ _
+    _ < ε / 2 + ε / 2 := add_lt_add hclose hnear
+    _ = ε := by ring
+
+/-- The actual two-player geometry supplies every weak target, including
+singleton and flat-security boundary cases, without an extra source premise. -/
+theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_twoPlayer
+    (G : FiniteStageGame) (hcard : Fintype.card G.Player = 2)
+    (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
+      ∃ profile : G.BehaviorProfile,
+        ∀ lam : ℝ, 0 < lam → lam < threshold →
+          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
+          dist (G.discountedPayoff lam profile) target < ε := by
+  rcases G.twoPlayer_IR_geometry hcard with hstrict | hsingleton | hflat
+  · exact exists_discountedNash_close_allSmallRates_of_mem_IR_of_exists_strictIR
+      G hstrict target htarget hε
+  · have hequal : target = G.individualRationalLevel := by
+      rw [hsingleton] at htarget
+      exact Set.mem_singleton_iff.mp htarget
+    obtain ⟨profile, hprofile⟩ := exists_discountedNash_eq_allRates_of_IR_singleton
+      G G.individualRationalLevel hsingleton
+    refine ⟨1, zero_lt_one, le_refl 1, profile, ?_⟩
+    intro lam hlam hlamOne
+    let rate : G.DiscountRate := ⟨lam, hlam, hlamOne.le⟩
+    obtain ⟨hnash, hpayoff⟩ := hprofile rate
+    refine ⟨hnash, ?_⟩
+    rw [hpayoff, hequal, dist_self]
+    exact hε
+  · obtain ⟨flat, active, _hne, hexhaust, hflatAll, hcenter, hmaximum⟩ := hflat
+    exact exists_discountedNash_close_allSmallRates_of_mem_IR_of_flatFace
+      G flat active hexhaust hmaximum hflatAll hcenter target htarget hε
+
+/-- Property (4)'s two-player branch has one common small-rate threshold
+over the entire weakly IR target set. -/
+theorem property_4_discounted_of_twoPlayer (G : FiniteStageGame)
+    (hcard : Fintype.card G.Player = 2) :
+    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
+      G.individuallyRationalPayoffs :=
+  discountedHausdorff_of_targetProducer G fun target htarget _ hε =>
+    exists_discountedNash_close_allSmallRates_of_mem_IR_of_twoPlayer
+      G hcard target htarget hε
+
+/-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
+stated with the paper's added-in-proof correction: `Δ` must be full
+dimensional or there must be two players. Both branches delegate to actual
+profile producers and the shared compact target-cover argument. -/
+theorem property_4_discounted (G : FiniteStageGame)
+    (hregular : FullDimensional G.individuallyRationalPayoffs ∨
+      Fintype.card G.Player = 2) :
+    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
+      G.individuallyRationalPayoffs := by
+  rcases hregular with hfull | hcard
+  · exact property_4_discounted_of_fullDimensional G hfull
+  · exact property_4_discounted_of_twoPlayer G hcard
+
+/-! ## 2. Study of `Gₙ` and `G_λ` -/
+
+/-- Scalar multiplication of a payoff set. -/
+def scaleSet {ι : Type} (c : ℝ) (A : Set (Payoff ι)) : Set (Payoff ι) :=
+  {z | ∃ x ∈ A, z = c • x}
+
+/-- Minkowski sum of two payoff sets. -/
+def addSet {ι : Type} (A B : Set (Payoff ι)) : Set (Payoff ι) :=
+  {z | ∃ x ∈ A, ∃ y ∈ B, z = x + y}
+
+/-- `m * A` in the paper: the Minkowski sum of `m` copies of `A`. -/
+def iteratedAddSet {ι : Type} (m : ℕ) (A : Set (Payoff ι)) :
+    Set (Payoff ι) :=
+  {z | ∃ x : Fin m → Payoff ι, (∀ k, x k ∈ A) ∧ z = ∑ k, x k}
+
+/-! **Lemma 1(5), first inclusion.**  Pure stage profiles embed as
+Dirac mixed profiles. -/
+theorem lemma_1_pure_subset_D1 (G : FiniteStageGame) :
+    G.purePayoffSet ⊆ G.oneStageFeasiblePayoffs := by
+  rintro payoff ⟨profile, rfl⟩
+  refine ⟨G.kernel.pureMixedProfile profile, ?_⟩
+  change G.kernel.mixedExtension.payoffVector
+      (G.kernel.pureMixedProfile profile) = G.payoff profile
+  rw [G.kernel.mixedExtension_payoffVector_pureMixedProfile profile]
+  funext who
+  change G.kernel.eu profile who = G.payoff profile who
+  simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+
+/-- The mixed profile prescribed by a behavioral profile at the unique empty
+history. -/
+def FiniteStageGame.initialMixedProfile
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) : G.MixedProfile :=
+  fun who ↦ profile who 0 (G.repeatedGame.emptyHist PUnit.unit)
+
+/-- At horizon one, the behavioral payoff is exactly the payoff of the mixed
+profile prescribed at the empty history. -/
+theorem finitePayoff_one_eq_mixedPayoff_initial
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) :
+    G.finitePayoff 1 profile = G.mixedPayoff (G.initialMixedProfile profile) := by
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  funext who
+  unfold FiniteStageGame.finitePayoff
+  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  simp only [Finset.sum_range_succ, Finset.sum_range_zero, zero_add,
+    Nat.cast_one, inv_one, one_mul]
+  rw [G.repeatedGame.expectedStagePayoff_zero]
+  unfold StochasticGame.stageEUAt FiniteStageGame.mixedPayoff
+  change Math.Probability.expect
+      (Math.PMFProduct.pmfPi (G.initialMixedProfile profile))
+        (fun action ↦ G.kernel.eu action who) =
+    G.kernel.mixedExtension.eu (G.initialMixedProfile profile) who
+  exact (G.kernel.mixedExtension_eu _ _).symm
+
+/-! **Lemma 1(5), finite-horizon clause.**  Stationary repetition of a
+mixed one-stage profile gives the same payoff at every positive horizon.
+The proof uses the exact public-history embedding of the stationary profile. -/
+theorem lemma_1_D1_subset_Dn (G : FiniteStageGame)
+    (n : G.Horizon) :
+    G.oneStageFeasiblePayoffs ⊆
+      G.finiteFeasiblePayoffsOnHorizon n := by
+  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  rintro payoff ⟨profile, rfl⟩
+  let monitored :=
+    G.kernel.realizedActionMonitoring.stationaryMonitoredProfile profile
+  let behavior :=
+    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+      G.kernel monitored
+  refine ⟨behavior, ?_⟩
+  funext who
+  change G.repeatedGame.finiteAveragePayoff PUnit.unit n.1 behavior who =
+    G.kernel.mixedExtension.payoffVector profile who
+  rw [GameTheory.KernelGame.RealizedActionRepeatedAdapter.finiteAveragePayoff_toBehaviorProfile]
+  exact G.kernel.realizedActionMonitoring.finiteAveragePayoff_stationaryMonitoredProfile
+    (Nat.ne_of_gt n.2) profile who
+
+/-- The one-period behavioral feasible set is the one-stage mixed feasible
+set. -/
+theorem finiteFeasiblePayoffs_one_eq_oneStageFeasiblePayoffs
+    (G : FiniteStageGame) :
+    G.finiteFeasiblePayoffs 1 = G.oneStageFeasiblePayoffs := by
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨profile, rfl⟩
+    exact ⟨G.initialMixedProfile profile,
+      (finitePayoff_one_eq_mixedPayoff_initial G profile).symm⟩
+  · exact lemma_1_D1_subset_Dn G ⟨1, by omega⟩
+
+/-! **Lemma 1(5), discounted clause.**  The same stationary profile has
+its one-stage payoff under every paper discount rate. -/
+theorem lemma_1_D1_subset_Dlambda (G : FiniteStageGame)
+    (lam : G.DiscountRate) :
+    G.oneStageFeasiblePayoffs ⊆
+      G.discountedFeasiblePayoffsOnRate lam := by
+  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  rintro payoff ⟨profile, rfl⟩
+  let monitored :=
+    G.kernel.realizedActionMonitoring.stationaryMonitoredProfile profile
+  let behavior :=
+    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+      G.kernel monitored
+  refine ⟨behavior, ?_⟩
+  funext who
+  change G.repeatedGame.discountedPayoff (1 - lam.1) behavior
+      PUnit.unit who = G.kernel.mixedExtension.payoffVector profile who
+  apply G.repeatedGame.discountedPayoff_of_forall_expectedStagePayoff_eq
+      (β := 1 - lam.1)
+  · intro time
+    rw [GameTheory.KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile]
+    exact G.kernel.realizedActionMonitoring.stageEU_stationaryMonitoredProfile
+      profile time who
+  · linarith [lam.2.2]
+  · linarith [lam.2.1]
+
+/-- Every period's expected payoff vector under a public monitored profile is
+correlated-feasible. -/
+theorem monitoredStagePayoff_mem_correlatedFeasiblePayoffs
+    (G : FiniteStageGame)
+    (profile : G.kernel.realizedActionMonitoring.MonitoredProfile)
+    (time : ℕ) :
+    (fun who ↦ G.kernel.realizedActionMonitoring.stageEU
+      profile time who) ∈ G.correlatedFeasiblePayoffs := by
+  let (who : G.Player) : Fintype (G.kernel.Strategy who) :=
+    G.finiteAction who
+  let : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  let M := G.kernel.realizedActionMonitoring
+  let payoffAt := fun history : M.SignalHistory time ↦
+    fun who ↦ G.kernel.mixedExtension.eu
+      (fun player ↦ profile player time history) who
+  have hbar :=
+    Math.ProbabilityMassFunction.coordinateExpectation_mem_convexHull_range
+      (M.signalHistoryDist profile time) payoffAt
+  have hrange : Set.range payoffAt ⊆ G.correlatedFeasiblePayoffs := by
+    rintro _ ⟨history, rfl⟩
+    change G.mixedPayoff (fun who ↦ profile who time history) ∈
+      G.correlatedFeasiblePayoffs
+    exact FiniteStageGame.mixedPayoff_mem_correlatedFeasiblePayoffs
+      G (fun who ↦ profile who time history)
+  have hmem :
+      (fun who ↦ Math.Probability.expect
+        (M.signalHistoryDist profile time) (fun history ↦ payoffAt history who)) ∈
+        G.correlatedFeasiblePayoffs :=
+    convexHull_min hrange G.correlatedFeasiblePayoffs_convex hbar
+  simpa only [KernelGame.PublicMonitoring.stageEU, M, payoffAt] using hmem
+
+/-- The expected payoff vector in every period of the stochastic presentation
+is correlated-feasible. -/
+theorem expectedStagePayoff_mem_correlatedFeasiblePayoffs
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (time : ℕ) :
+    (fun who ↦ G.repeatedGame.expectedStagePayoff
+      profile PUnit.unit time who) ∈ G.correlatedFeasiblePayoffs := by
+  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  let monitored :=
+    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toMonitoredProfile
+      G.kernel profile
+  have hmem := monitoredStagePayoff_mem_correlatedFeasiblePayoffs
+    G monitored time
+  have heq :
+      (fun who ↦ G.repeatedGame.expectedStagePayoff
+        profile PUnit.unit time who) =
+      fun who ↦ G.kernel.realizedActionMonitoring.stageEU
+        monitored time who := by
+    funext who
+    simpa [monitored] using
+      (GameTheory.KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile
+        G.kernel monitored time who)
+  rw [heq]
+  exact hmem
+
+/-! **Lemma 1(6), finite-horizon clause.**  Every expected average is a
+barycenter of pure stage-payoff vectors.  A reusable convex-hull theorem
+for the public-history adapter is the missing formal ingredient. -/
+theorem lemma_1_Dn_subset_C (G : FiniteStageGame)
+    (n : G.Horizon) :
+    G.finiteFeasiblePayoffsOnHorizon n ⊆
+      G.correlatedFeasiblePayoffs := by
+  rintro _ ⟨profile, rfl⟩
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  change (fun who ↦ G.repeatedGame.finiteAveragePayoff
+    PUnit.unit n.1 profile who) ∈ G.correlatedFeasiblePayoffs
+  rw [show (fun who ↦ G.repeatedGame.finiteAveragePayoff
+    PUnit.unit n.1 profile who) =
+      (n.1 : ℝ)⁻¹ • ∑ time ∈ Finset.range n.1,
+        (fun who ↦ G.repeatedGame.expectedStagePayoff
+          profile PUnit.unit time who) by
+    funext who
+    rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+    simp only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul]]
+  rw [Finset.smul_sum]
+  apply G.correlatedFeasiblePayoffs_convex.sum_mem
+  · intro _ _
+    exact inv_nonneg.mpr (Nat.cast_nonneg n.1)
+  · rw [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
+    apply mul_inv_cancel₀
+    exact_mod_cast Nat.ne_of_gt n.2
+  · intro time htime
+    exact expectedStagePayoff_mem_correlatedFeasiblePayoffs
+      G profile time
+
+/-! **Lemma 1(6), discounted clause.**  The geometric weighted average
+is likewise a barycenter of pure stage-payoff vectors. -/
+theorem lemma_1_Dlambda_subset_C (G : FiniteStageGame)
+    (lam : G.DiscountRate) :
+    G.discountedFeasiblePayoffsOnRate lam ⊆ G.correlatedFeasiblePayoffs :=
+  discountedFeasiblePayoffs_subset_correlated_source G lam
+
+/-- A convex set squeezed between `pure` and its convex hull is exactly
+that convex hull. -/
+theorem convex_eq_convexHull_iff_of_subset
+    {V : Type} [AddCommGroup V] [Module ℝ V]
+    {pure feasible : Set V}
+    (hpure : pure ⊆ feasible)
+    (hfeasible : feasible ⊆ convexHull ℝ pure) :
+    Convex ℝ feasible ↔ feasible = convexHull ℝ pure := by
+  constructor
+  · intro hconvex
+    apply Set.Subset.antisymm hfeasible
+    exact convexHull_min hpure hconvex
+  · rintro rfl
+    exact convex_convexHull ℝ pure
+
+/-! **Lemma 1(7), finite-horizon clause.**  This is now derived from
+(5) and (6), rather than left as another paper-level gap. -/
+theorem lemma_1_Dn_convex_iff (G : FiniteStageGame)
+    (n : G.Horizon) :
+    Convex ℝ (G.finiteFeasiblePayoffsOnHorizon n) ↔
+      G.finiteFeasiblePayoffsOnHorizon n =
+        G.correlatedFeasiblePayoffs := by
+  apply convex_eq_convexHull_iff_of_subset
+  · exact (lemma_1_pure_subset_D1 G).trans
+      (lemma_1_D1_subset_Dn G n)
+  · exact lemma_1_Dn_subset_C G n
+
+/-! **Lemma 1(7), discounted clause.** -/
+theorem lemma_1_Dlambda_convex_iff (G : FiniteStageGame)
+    (lam : G.DiscountRate) :
+    Convex ℝ (G.discountedFeasiblePayoffsOnRate lam) ↔
+      G.discountedFeasiblePayoffsOnRate lam =
+        G.correlatedFeasiblePayoffs := by
+  apply convex_eq_convexHull_iff_of_subset
+  · exact (lemma_1_pure_subset_D1 G).trans
+      (lemma_1_D1_subset_Dlambda G lam)
+  · exact lemma_1_Dlambda_subset_C G lam
+
+/-! **Lemma 1(8), first finite inclusion.**  Stationary repetition of a
+one-stage Nash profile resists arbitrary history-dependent deviations.
+The library has the corresponding monitored theorem, but the exact
+bridge from the kernel mixed extension to this stochastic adapter is not
+yet exposed at this evaluator. -/
+theorem lemma_1_E1_subset_En (G : FiniteStageGame)
+    (n : G.Horizon) :
+    G.oneStageEquilibriumPayoffs ⊆
+      G.finiteEquilibriumPayoffsOnHorizon n := by
+  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
+    @Finite.of_fintype _ (G.finiteAction who)
+  let : Finite G.kernel.Outcome := by
+    change Finite (∀ who, G.Action who)
+    exact Finite.of_fintype _
+  let : Finite G.kernel.mixedExtension.Outcome :=
+    G.kernel.finite_mixedExtension_outcome
+  rintro payoff ⟨profile, hnash, rfl⟩
+  let monitored :=
+    G.kernel.realizedActionMonitoring.stationaryMonitoredProfile profile
+  let behavior :=
+    GameTheory.KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+      G.kernel monitored
+  refine ⟨behavior, ?_, ?_⟩
+  · apply (KernelGame.RealizedActionRepeatedAdapter.isεFiniteRepeatedNash_iff_isεHorizonNash
+      G.kernel monitored n.1 0).mp
+    exact G.kernel.realizedActionMonitoring
+      |>.stationaryMonitoredProfile_isFiniteRepeatedNash_of_isNash
+        hnash n.2
+  · funext who
+    change G.repeatedGame.finiteAveragePayoff
+      PUnit.unit n.1 behavior who = G.mixedPayoff profile who
+    rw [GameTheory.KernelGame.RealizedActionRepeatedAdapter.finiteAveragePayoff_toBehaviorProfile]
+    exact G.kernel.realizedActionMonitoring
+      |>.finiteAveragePayoff_stationaryMonitoredProfile
+        (Nat.ne_of_gt n.2) profile who
+
+/-- At horizon one, behavioral and mixed equilibrium payoff sets coincide. -/
+theorem finiteEquilibriumPayoffs_one_eq_oneStageEquilibriumPayoffs
+    (G : FiniteStageGame) :
+    G.finiteEquilibriumPayoffs 1 = G.oneStageEquilibriumPayoffs := by
+  apply Set.Subset.antisymm
+  · rintro payoff ⟨behavior, hnash, rfl⟩
+    let profile := G.initialMixedProfile behavior
+    refine ⟨profile, ?_, ?_⟩
+    · intro who deviation
+      let behaviorDeviation : G.BehaviorStrategy who :=
+        fun _time _history ↦ deviation
+      have hequilibrium := hnash who behaviorDeviation
+      have hupdate :
+          G.initialMixedProfile
+              (Function.update behavior who behaviorDeviation) =
+            Function.update profile who deviation := by
+        funext player
+        by_cases hplayer : player = who
+        · subst player
+          simp [FiniteStageGame.initialMixedProfile, behaviorDeviation]
+        · simp [FiniteStageGame.initialMixedProfile, profile, hplayer]
+      change G.finitePayoff 1 behavior who + 0 ≥
+        G.finitePayoff 1
+          (Function.update behavior who behaviorDeviation) who at hequilibrium
+      rw [finitePayoff_one_eq_mixedPayoff_initial G behavior,
+        finitePayoff_one_eq_mixedPayoff_initial G
+          (Function.update behavior who behaviorDeviation), hupdate] at hequilibrium
+      simpa [FiniteStageGame.mixedPayoff, profile] using hequilibrium
+    · exact (finitePayoff_one_eq_mixedPayoff_initial G behavior).symm
+  · exact lemma_1_E1_subset_En G ⟨1, by omega⟩
+
+/-! **Lemma 1(8), discounted inclusion.** -/
+theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
+    (lam : G.DiscountRate) :
+    G.oneStageEquilibriumPayoffs ⊆
+      G.discountedEquilibriumPayoffsOnRate lam :=
+  oneStageEquilibriumPayoffs_subset_discounted_source G lam
+
+/-- The history-by-history pure best reply earns at least the paper's
+individual-rational level in the current stage. -/
+theorem stageEUAt_individualRationalDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) {time : ℕ} (history : G.repeatedGame.Hist time) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.stageEUAt
+        (Function.update profile who
+          (G.individualRationalDeviation profile who)) history who :=
+  stageEUAt_securityDeviation_ge G profile who history
+
+/-- The selected deviation earns at least the individual-rational level in
+every period. -/
+theorem expectedStagePayoff_individualRationalDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (time : ℕ) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.expectedStagePayoff
+        (Function.update profile who
+          (G.individualRationalDeviation profile who))
+        PUnit.unit time who :=
+  expectedStagePayoff_securityDeviation_ge G profile who time
+
+/-- The deviation's positive-horizon average is at least the
+individual-rational level. -/
+theorem finiteAveragePayoff_individualRationalDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (horizon : G.Horizon) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.finiteAveragePayoff PUnit.unit horizon.1
+        (Function.update profile who
+          (G.individualRationalDeviation profile who)) who :=
+  finiteAveragePayoff_securityDeviation_ge G profile who horizon
+
+/-- The same deviation earns at least the individual-rational level under
+every paper discount rate. -/
+theorem discountedPayoff_individualRationalDeviation_ge
+    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (who : G.Player) (lam : G.DiscountRate) :
+    G.individualRationalLevel who ≤
+      G.repeatedGame.discountedPayoff (1 - lam.1)
+        (Function.update profile who (G.individualRationalDeviation profile who))
+        PUnit.unit who :=
+  discountedPayoff_securityDeviation_ge G profile who lam
+
+/-! **Lemma 1(8), finite individual-rationality clause.**  At every
+public history a player can switch to a stagewise security strategy;
+the conditional-history construction is not yet packaged. -/
+theorem lemma_1_En_subset_Delta (G : FiniteStageGame)
+    (n : G.Horizon) :
+    G.finiteEquilibriumPayoffsOnHorizon n ⊆
+      G.individuallyRationalPayoffs := by
+  rintro payoff ⟨profile, hnash, rfl⟩
+  constructor
+  · exact lemma_1_Dn_subset_C G n ⟨profile, rfl⟩
+  · intro who
+    let deviation := G.individualRationalDeviation profile who
+    have hequilibrium := hnash who deviation
+    have hdeviation :=
+      finiteAveragePayoff_individualRationalDeviation_ge
+        G profile who n
+    change G.individualRationalLevel who ≤
+      G.finitePayoff n.1 profile who
+    change G.finitePayoff n.1 profile who + 0 ≥
+      G.finitePayoff n.1
+        (Function.update profile who deviation) who at hequilibrium
+    have hequilibrium' :
+        G.repeatedGame.finiteAveragePayoff PUnit.unit n.1
+            (Function.update profile who
+              (G.individualRationalDeviation profile who)) who ≤
+          G.finitePayoff n.1 profile who := by
+      simpa [deviation, FiniteStageGame.finitePayoff] using hequilibrium
+    exact hdeviation.trans hequilibrium'
+
+/-! **Lemma 1(8), discounted individual-rationality clause.** -/
+theorem lemma_1_Elambda_subset_Delta (G : FiniteStageGame)
+    (lam : G.DiscountRate) :
+    G.discountedEquilibriumPayoffsOnRate lam ⊆ G.individuallyRationalPayoffs :=
+  discountedEquilibriumPayoffs_subset_IR_source G lam
 
 /-- Aggregate finite/discounted form of Lemma 1(5)--(7).  The positive
 horizon/rate witnesses prevent the zero-horizon collapse present in the
