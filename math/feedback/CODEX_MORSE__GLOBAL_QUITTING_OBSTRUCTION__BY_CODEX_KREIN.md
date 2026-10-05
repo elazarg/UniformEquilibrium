@@ -982,3 +982,150 @@ endpoint signatures used here, without a global nonnegative-premium
 assumption. The artifact correctly identifies the second minimum arm
 as a new analytic obligation, rather than claiming it follows from
 the existing single-protected-player domain theorem. No repair requested.
+
+## Independent review: signed same-sign pair core
+
+**PASS**, ordinary mathematics, not Lean checked. Scope: Section 18,
+“Signed pair cores: a negative index without any protected floor,”
+including its strict analytic conclusion, weak Fin4 UE conclusion,
+fully signed fixture, and the separate Section 19 opposite-sign
+regression. Inspected whole-note SHA256:
+`f53bffac33add757163f259603ff51318fed138588da8705183a4813240781ad`.
+No other agent's review was read before this derivation. The opposite-
+sign region is not included in the positive theorem.
+
+### Signed support reduction and actual root index
+
+Union closure makes the greatest pair core itself a trap, so its two
+participant premiums are positive. Every other nonempty support is
+nontrapping, hence has a participant whose every within-support reward
+is at most its singleton. Exact support optimality gives a low successor
+coordinate. For an outsider k, a positive premium on any T∪{k} with
+T⊆C would enlarge the trap by retaining the two pair witnesses. Thus
+all those participant rewards are at most s_k, without equality or a
+lower bound. These facts retain simultaneous coalitions and do not
+silently restore global nonnegative premiums.
+
+At a source strictly below at least one singleton, every exact root
+absorbs. If every successor were strictly above all singletons, every
+root would have support exactly C. A mixed/sure pair is excluded by
+the nonzero join gaps; a fully sure pair is handled separately. The two
+remaining active equations are exactly (91), with the unique possible
+candidate (92). Interiority forces each denominator alpha to have the
+sign of its corresponding join gap; hence alpha_i alpha_j>0 under
+the same-sign hypothesis.
+
+The map (93) uses the FULL polynomial endpoint gaps before clipping,
+not only their pair-face restrictions. It is continuous on all real
+hazards and maps into the unit cube. Every fixed point is a full exact
+Nash root. At a bad root, each outsider has Continue=w_k>s_k≥Q_k,
+so its clipped row is locally constant zero with a strict margin.
+The core rows are locally unclipped. Thus the derivative of identity
+minus this map has the displayed block upper-triangular form and
+determinant −alpha_i alpha_j<0. Derivatives of larger coalitions can
+occur in the upper-right block but do not affect that determinant.
+
+On (−1,2)^I, the straight homotopy to identity minus the center of
+the unit cube never vanishes on the boundary. Its degree is therefore
++1. If all roots were bad there would be precisely one, and excision
+would reduce this degree to its local degree −1. The local affine
+comparison is justified by invertibility: choose a small neighborhood
+where the derivative remainder is smaller than half the minimum
+expansion of the invertible derivative. The straight-line comparison
+then has no boundary zero. The root is interior to the enlarged ambient
+cube even at its zero outsider coordinates; no half-index is involved.
+This contradiction produces a genuine full root with low successor.
+
+If the pure pair is exact at any source, all players face some sure
+opponent quitter, so its endpoint comparisons do not depend on the
+source. At source r(C), its successor equals its source and absorption
+is one, directly excluding the potential. It is also an actual pure
+terminal equilibrium, not merely an auxiliary root exit.
+
+### Single-domain minimum and complete strategic conclusion
+
+The domain D is the ENTIRE boxed union of singleton sublevels. At a
+minimum, a strictly sub-singleton coordinate invokes selected return to
+this exact same D, contradicting unit drift. Thus the minimum belongs
+to the lower singleton boundary. The signed singleton-face probe rules
+out one binding coordinate; at least two binding coordinates give
+nonnegative partial derivatives in each binding direction.
+
+For v=x−epsilon e_k, choose the produced low-successor root with
+absorption a>0. Minimality gives H(v)−H(x)≥a. The signed bounds
+Q_k≥s_k−2Ma, w_k≥Q_k, and |w_k−v_k|≤(M+B)a imply
+epsilon≤(3M+B)a, without an individual successor floor. Thus the
+left derivative of H in direction −e_k is at least 1/(3M+B), in
+contradiction with its nonpositive sign. Root convergence is not needed:
+the argument really has same-domain return, unlike the separate
+protected-set second arm.
+
+For Fin4, the actual normality/polynomial/exact-root restriction chain
+already audited above supplies UE; all-zero singletons have all Never.
+For a zero join gap, changing only the appropriate passive singleton
+entry can make its sign agree strictly with the other gap. If both
+vanish, make both positive. No participant reward, own singleton, or
+trap changes. The existing reward-closure theorem therefore gives the
+weak strategic statement, with one payoff fixed before accuracy. It
+does not establish a weak analytic statement or opposite-sign coverage.
+
+### Source signatures inspected
+
+I read the signatures and relevant proofs of `ambientDegree_homotopy`
+and `ambientDegree_affineRootField_eq_sign_det` in
+`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`,
+`ambientDegree_excision` in
+`MathUE/Topology/AmbientDegreeProperties.lean`, and
+`ambientDegree_of_selfMap_eq_one` in
+`MathUE/Topology/AmbientDegreeSelfMapNormalization.lean`.
+The last can use a still larger chart containing the closure of
+(−1,2)^I; alternatively the explicit homotopy already proves total
+degree one. The nonlinear local comparison and strict outsider gaps
+are actual obligations discharged in this proof, not supplied interfaces.
+
+The tracked `quittingPremiumCore_outsider_reward_eq_singleton` in
+`UniformEquilibrium/Quitting/Classification/QuittingPremiumCore.lean`,
+`exactRootSuccessor_active_eq_singleton_of_support_ne_pair_core` in
+`UniformEquilibrium/Quitting/Classification/QuittingPremiumCoreExactRoot.lean`,
+and `exists_uniformEquilibriumPayoff_of_pairPremiumCore_weakLeave` in
+`UniformEquilibrium/Quitting/Classification/Existence/QuittingPremiumCoreUniformPayoff.lean`
+all retain the stated nonnegative-premium hypothesis, which the new
+fixture violates. The weak-leave source has an additional gap sign
+which the mutual-join fixture also violates. This is a real raw scope
+difference, not evidence that all other producers have been excluded.
+
+### Exact fixtures and an explicit second root
+
+All fifteen fixture rows were recomputed. Its only trap is 03; both
+join gaps are two. The grand coalition gives each player a negative
+participant premium. The fifteen listed pure-coalition toggle gains
+are exactly correct. Product-low fails at the sure pair, and every
+positive-weight aggregate-leave condition fails already at either
+singleton subcoalition of that trap.
+
+At v=(3,−1,4,2), the displayed q=(1/2,0,0,1/2) gives exactly
+Q=(3/2,0,0,1/2), C=(3/2,1/2,1/4,1/2), strict inactive gaps
+−1/2,−1/4, and determinant −16. It is a bad root at a below-floor
+source, so an ALL-root return replacement would be false.
+
+I additionally found and checked a concrete selected good root at the
+SAME source:
+
+    q=(0,2/3,0,1/3),
+    Q=(10/9,0,0,0),
+    C=w=(14/9,0,17/9,0).
+
+Both active players are indifferent and both outsiders strictly
+Continue. Its successor returns to D through players 1 and 3. Thus
+the index conclusion has an exact actual-root witness in this test;
+no claim of a complete root enumeration is made.
+
+Section 19 is also sound. Player 3's Continue payoff is identically
+one while its Quit payoff is nonpositive, forcing q_3=0. The grand
+reward modification is then invisible to every other endpoint. The
+two core gaps reduce to 1−2q_1 and 4q_0−2 independently of q_2.
+Their unique possible Nash mixture is (1/2,1/2), at which player 2
+strictly Continues with Q_2=0,C_2=2. The claimed unique root,
+all-high successor, strict outsider gaps, and local determinant +8
+follow. It refutes extension of this selected-return argument to
+opposite strict signs, not UE existence. No correction is requested.

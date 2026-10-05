@@ -1617,3 +1617,160 @@ compiler assumptions. The artifact has no notebook, feedback, or other
 math-directory dependencies, no embedded review history, and no new
 unproduced strategic input. No assembly repair is requested for these
 exact bytes.
+
+## Independent review: global two-joint selection for all real R
+
+Verdict: PASS as ordinary mathematics, not a Lean check. Reviewed
+"Global two-joint selection across the complete R axis" through EOF,
+including the arbitrary-positive-eta addendum, at whole-note SHA256
+`ff030f90240591aef25c3ef361297366e4a000dab98928bb6c95bba4410ff3cb`.
+I did not consult another review. This is a substantive audit of the
+global selector and semantic conclusion, not just the older local
+implicit-function theorem.
+
+The consolidated hypotheses are a,b,c,h_1,h_2,H>0, abc>1,
+U,V>=1, xi,eta>0, the five exact raw vectors (87), and the six
+raw upper bounds (88). Every other reward coordinate is arbitrary.
+R is any real number. The superseded eta<=c restriction is not an
+input to the final theorem. The output is an original-game uniform
+equilibrium payoff with one target before accuracy and safety against
+every behavioral deviation. No all-phase singleton-floor assumption
+is an input or a conclusion.
+
+### Global scalar branch and endpoints
+
+I independently expanded the specialized elimination formulas for
+d_1 and z. Their numerators in (92) are correct. At fixed y, d_1
+strictly decreases and z strictly increases in x. The first zero of
+d_1 or first point z=1 therefore gives a continuous positive cap
+X(y)<1, and the explicit d_1 zero yields X(y)=O(y) at zero.
+The inequality Y<b/(b+1+t) has the stated positive cross-product
+difference. Consequently all hazard and value denominators retain
+their signs on the admissible intervals, including near Y.
+
+For arbitrary eta, set g=eta*e. When g>=c, the residual is
+strictly negative because
+
+    Phi <= g-x*(H+eta)/(1-x)<0.
+
+Since g strictly increases from zero, g<c is an initial interval.
+On that interval the z-derivative term is negative, the w-derivative
+term is negative, and the remaining positive term is dominated by
+(H+eta)/(1-x)^2. Thus Phi is strictly decreasing wherever a zero
+can occur. Global monotonicity outside that interval is not needed
+and is not assumed. If the g=c barrier appears before X(y), its
+negative residual already supplies the upper sign. The w=0 and z=1
+caps give strict negative residuals independently of eta<=c.
+
+At x=0 the residual has the sign of
+
+    D-[abc+a(c+1)(1+t)+t]*y.
+
+It is positive for 0<y<Y and zero at Y. This gives a unique
+interior root for each such y. The localized strict derivative proves
+continuity; alternatively compactness on the continuous capped
+interval and uniqueness suffice. The root tends to zero at both
+ends. At Y a positive limit either violates the g>=c inequality or
+violates strict decrease from Phi(0,Y)=0.
+
+Exact symbolic differentiation independently gives
+
+    Phi_x(0,0)=-(1+kappa)*(H+c*h_1+h_2/b),
+    Phi_y(0,0)=(1+t)*(ac-1/b).
+
+Thus all three ratios (94) follow. I also checked algebraically both
+pivot endpoint identities (96)-(97), including the term
+-t*xi*D/(abc) at Y. The first has strictly positive sign for
+R>R_low, and the second strictly negative sign for R<T. The
+intermediate-value root therefore has all six hazards strictly
+between zero and one. Uniqueness of this final pivot root is neither
+proved nor needed.
+
+### All actual Bellman actions and refinements
+
+The elimination (83)-(85) supplies every policy and pure-Continue
+identity at all four macro rows. The global specialization does not
+change those algebraic identities. At the two joint rows both active
+Quit endpoints equal their values. Outsider2's Quit endpoint is
+nonpositive at both rows. Outsider1's at A is at most
+-h_1*(x+y-x*y)<=-h_1*x<=a_1; at D it is nonpositive and d_1>0.
+These comparisons retain all four opponent-coalition possibilities.
+They do not discard collisions, and they do not require a_1>=0.
+
+Only the solo blocks B and C are refined. Their value segments are
+V_B to V_C and V_C to V_D, all with their actual singleton floors.
+The potentially negative A value never enters a refined segment.
+For an outsider on a solo-j microdate, its Quit payoff is
+s_i+alpha*(r_i(ij)-s_i), bounded by its current value plus the
+stated common error. The solo owner remains exactly indifferent,
+and all Continue equations are exact. Values remain uniformly bounded
+over refinement because they lie on fixed compact segments.
+
+Adding the same nonnegative error at EVERY date is a supersolution;
+Continue transports only the opponent Continue probability times
+that error. There is no per-period or per-stage accumulation, even
+at a negative A coordinate. Each possible deviator leaves positive
+opponent aggregate hazard per period. Geometric opponent survival
+therefore kills the bounded remainder for an unrestricted behavioral
+deviation, including one that changes its complete strategy on an
+unbounded number of periods.
+
+The aggregate solo hazards, and hence the macro terminal law and
+target V_A, are independent of refinement. Opponents' first Quit
+time bounds absorption under EVERY deviation by a geometric-period
+time with expectation at most (2+2n)/(1-rho_i). Bounded rewards
+give a deviation-uniform O(1/N) terminal-to-average error. Choosing
+n first and then one threshold in N has the required uniform-payoff
+quantifier order.
+
+I reread the literal certificate fields and both cited consumers in
+`UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`,
+including `quittingRootSequenceHazardTerminalValue_le_add_of_quitError_exactContinue`,
+`QuittingInfinitePathQuitErrorCertificate.isεAsymptoticNash_and_delivers`,
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`.
+They require bounded values, exact Continue, the common Quit error,
+and opponent survival, not all-phase singleton floors. The passage
+from behavioral strategies to live hazards is present in the consumer.
+
+### Original-table source stitching and exact tests
+
+The displayed inverse A^-1 and the positive formula for
+nu_3*(T-R_low) are exact. If U=V=1 the two exterior regions already
+cover the axis. Otherwise R_low<T. At equality R=R_low, (1,nu)
+is a nonzero nonnegative homogeneous complementarity solution. For
+R<R_low, the signed cyclic edges force all child coordinates positive
+when the pivot coordinate is positive, and force the homogeneous
+child to zero when that coordinate is zero. This proves full R0.
+At the chosen regular offset there are exactly the two stated roots;
+their active determinants are D and -D*d, with strict inactive pivot
+residual at the first. The root-sum degree is therefore zero.
+
+At R=T the three passive inverse weights are precisely
+0, [c(U-1)+(V-1)]/(bc), and (V-1)/c; all are nonnegative
+and increase with R. The equality endpoint is genuinely included.
+I reread `finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`,
+`exists_finset_r0Degree_eq_sum_sign_det`,
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one`, and
+`PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in the four files named in the candidate. Their literal hypotheses
+match these raw calculations; no lower-game equilibrium, hidden
+nonsingleton constraint, or auxiliary-game noUE assertion is supplied.
+
+For BOTH exact rational fixtures I reconstructed all fifteen rows
+using the stated unused-coordinate value37 and checked exactly all
+sixteen policy identities, sixteen Continue identities, and eight
+joint-row Quit caps. The first indeed has a_1=-1/25000; the second
+has eta>c while eta*e=278385126/1623503635<c. All rates and both
+residuals agree with the displayed fractions. Each completion has
+six unrefined solo Quit violations, so the refinement is substantive.
+
+The stated whole-middle-interval distinctions from product-low and
+both leaver criteria follow directly from the mutual-strict-join
+trap03. They are bounded input comparisons, not exhaustive producer
+exclusions. In particular the illustrative value37 completions also
+have a pure full-coalition equilibrium, because all grand rewards and
+all relevant passive triple rewards equal37. Their role is to test
+the selector, negative A value, large eta, and refinement, not to
+certify new coverage against every other existence theorem. This
+does not contradict any claimed scope of the candidate. No mathematical
+repair is requested.

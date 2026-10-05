@@ -39,8 +39,11 @@ criterion with no nonnegative-premium player. Its exact proper-three-core
 fixture has a strict full-dimensional neighborhood in that criterion;
 the mechanism is not an implicit-function construction or a fixed phase
 grammar. The final **complement of weighted floors** section is a separate
-unreviewed boxed Nash-charge raw-family candidate; its exact identities
-and proof are recorded, but no further coverage credit is asserted yet.
+boxed Nash-charge raw-family theorem with two independent mathematical
+PASSes for its triple-core criterion. The later cardinality extension
+is a separate unreviewed candidate. Neither is exported or Lean-checked
+here; consolidation with the independently developed four-core case
+precedes standalone assembly.
 
 A separate unreviewed result at the end, **Canonical premium-core
 reduction**, extends the reviewed two-player strict-leave mechanism to
