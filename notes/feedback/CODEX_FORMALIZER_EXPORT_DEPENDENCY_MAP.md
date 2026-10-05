@@ -735,18 +735,41 @@ companion supplies continuity through zero endpoints under positive endpoint
 linear coefficients and continuous polynomial coefficients, including the
 zero-leading-coefficient case. This is a scalar producer, not a game pivot.
 
-The cyclic-child one-joint-phase and outsider-buffer packets still need actual
-continuous pivot producers and a full-behavioral solo-only refinement compiler.
+`selectedBalanceRoot_spec` and `selectedBalanceRoot_continuous_endpoints`
+(`MathUE/CyclicChildJointPhaseAlgebra.lean`) produce the cyclic-child packet's
+literal collision-adjusted scalar root and proper solo rates, continuously
+through both zero endpoints. Positive cycle and harm parameters, nonpositive
+collision rewards, nonnegative eta and positive cycle gap suffice. The actual
+inverse supplies the literal positive balance vector; the denominator identity
+and computed cap give the quadratic signs internally.
+`selectedBalanceRoot_crossing_and_unique` in that owner exposes the actual
+positive quadratic crossing and unique nonlinear balance root inside that cap.
+No favorable root or inverse-weight certificate is supplied.
+
+`MixedCycleSoloMesh.isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/MixedCycleUniformPayoff.lean`) is a checked
+conditional compiler for literal mixed-cycle source data. It constructs actual
+roots and phase values, refines only solo rows, and keeps every retained root
+once with quiet padding. Arbitrary finite phase inventories, repeated owners,
+nonzero singleton levels and empty solo phases are allowed. Only solo masses
+must be proper; retained rows may have sure hazards. Policy and all-player
+Continue equalities, singleton floors, retained Quit caps and playerwise
+opponent contraction remain explicit source fields. The selected coarse
+initial target stays exact at every scale and precedes accuracy; full behavioral
+terminal caps use one error, not a period-amplified sum. The actual period is
+the coarse phase count times the scale, including quiet slots.
+
+The cyclic-child and outsider-buffer packets still need actual continuous
+pivot producers and raw-game adapters to those source fields. The cyclic
+child's normalized endpoint ratios and pivot IVT remain unproduced.
 The two-outsider-buffer packet requires a separate monotone rational selector
 and its small-parameter ratios; the quadratic formula covers only its empty
-repeated-phase specialization, not the whole source. The refinement must allow
-arbitrary finite phase inventories,
-repeated pivot owners with nonzero singleton rewards, and joint Quit values
-bounded by the current continuation, not by zero or a singleton. It must
-retain one fixed target across refinements. In the repeated-solo packet the
+repeated-phase specialization, not the whole source. Positive joint outsider
+caps must be bounded by the current continuation, not by zero or a singleton.
+In the repeated-solo packet the
 outsider cap is paid by a positive continuation buffer, not cancellation by
-negative collision rewards. The empty repeated phase is allowed. These
-game-facing source units are queued, not checked or
+negative collision rewards. These remaining game-facing source units are
+queued, not checked or
 supplied by the common-leaver results above.
 
 ## Proof-mining connections not yet formalized
@@ -1150,6 +1173,18 @@ implemented. The complete-claim review matches all source results, including
 strict rise/fall and radial reversal on the same segment without C³, and the
 same-segment directional third-derivative conclusion with C³. The paired
 polynomial's nonquasiconvexity on the singleton box is stated explicitly.
+The complete-claim source audit also covers every numbered result and fixture,
+not just the headline exclusions. In particular,
+`quittingRobustPotentialWithCharge_mixedCurvature`
+(`UniformEquilibrium/Quitting/Projective/RobustPotentialChargeScale.lean`)
+retains arbitrary finite player types and signed singleton data; the Fin4
+facade is not the only coverage. Exact rational solo rejection is distinct
+from positive-tolerance approximate robust rejection and its exhaustive search.
+The same-polynomial restrictions and decision-preserving fresh-polynomial
+normalization retain their separate source scopes. All mapped production
+owners are imported by the exhaustive axiom audit and pass the full build.
+The exports' presence remains an independently managed mathematical lifecycle
+fact, not an unfinished formalizer claim; no export was moved by this audit.
 
 ## Complete-claim audit: reflection potential packet
 
@@ -1411,6 +1446,21 @@ equilibrium and payoff comparison for arbitrary full-history strategies;
 pointwise ordering of payoff tables does not establish it. No preserved draft
 or existing declaration supplies this comparison. This records the proof
 dependency, not a refutation of the paper's conclusion.
+
+A read-only elementary strategy audit rules out interpreting the printed
+page-160 reduction as preservation of every identical equilibrium profile.
+Take `α = 0`, `β = 2`, `x = 10`, `y = 1`, and rate `3/5`, above the critical
+rate `1/2`. Prescribe mutual Defect until the first Cooperate, then reward that
+initial cooperator with permanent opponent Cooperate while it Defects.
+In the original game a unilateral first Cooperate has discounted payoff at
+most `-(3/5) * 10 + (2/5) * 2 = -26/5`; delay or mixing cannot improve the
+zero on-path payoff. After reducing both losses to one, the same deviation
+instead earns `-(3/5) + (2/5) * 2 = 1/5`. This calculation is not a checked
+Lean theorem here and does not refute the payoff-set statement: stationary
+mutual Defect still attains its zero target in the reduced game. A valid
+payoff-transfer or strategy-transformation source is needed, not generic
+pointwise reward monotonicity. The original `concluding_remark_4`
+(`Literature/Sorin1986.lean`) remains unproved.
 
 `FiniteStageGame.discountedPayoff_afterHistory_mem_equilibrium` and
 `FiniteStageGame.exists_discountedBestResponse` (`Literature/Sorin1986.lean`)

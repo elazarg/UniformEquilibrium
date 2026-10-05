@@ -128,6 +128,7 @@ import MathUE.CurveSelection.SourceSequence
 import MathUE.CurveSelection.SquareLift
 import MathUE.CurveSelection.Termination
 import MathUE.CurveSelection.UltrafilterSubsequence
+import MathUE.CyclicChildJointPhaseAlgebra
 import MathUE.CyclicContraction
 import MathUE.CyclicExposure
 import MathUE.DirectedTransport.FiniteInequality.Nonnegative
@@ -2359,6 +2360,10 @@ import UniformEquilibrium.Quitting.Cycles.InteriorCyclicDebtEscape
 import UniformEquilibrium.Quitting.Cycles.InteriorCyclicTerminalDebtRatio
 import UniformEquilibrium.Quitting.Cycles.Isolated.AnchorMaxAffine
 import UniformEquilibrium.Quitting.Cycles.JoinMonotoneUniform
+import UniformEquilibrium.Quitting.Cycles.MixedCycleSoloMesh
+import UniformEquilibrium.Quitting.Cycles.MixedCycleSoloMeshCertificate
+import UniformEquilibrium.Quitting.Cycles.MixedCycleSourceCertificate
+import UniformEquilibrium.Quitting.Cycles.MixedCycleUniformPayoff
 import UniformEquilibrium.Quitting.Cycles.OwnShiftCycleExactification
 import UniformEquilibrium.Quitting.Cycles.OwnerSingletonCyclicConcentration
 import UniformEquilibrium.Quitting.Cycles.PairedCycleAffineEquilibrium
