@@ -25,16 +25,22 @@ source-coverage PASSes from CODEX_MORSE, recorded in
 [`the owned review`](../feedback/CODEX_BROUWER__QUITTING_TABLE_COVERAGE__BY_CODEX_MORSE.md).
 The full-core branch is covered by an existing safe-quiet-player
 composition; the proper-core fixture survives that comparison.
-Assembly is held while a stronger signed protected-set version is checked.
+The stronger signed protected-set theorem is frozen in
+[`SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`](../exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md).
 No arbitrary-game claim or Lean-check claim follows.
 
-The final **Weighted-floor return without a protected player** section is
-a new complete proof candidate, not independently reviewed. It replaces
+The **Weighted-floor return without a protected player** section has
+two independent mathematical and final artifact PASSes. Its frozen packet is
+[`WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md`](../exports/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md),
+SHA256 `98ffaf81955437f97d3d3d8b1315c0e289be410110fed77ba3f1a72dcf2c1654`.
+It is exported, not Lean-checked here. It replaces
 coordinate floors by convex weighted floors and supplies a finite raw
 criterion with no nonnegative-premium player. Its exact proper-three-core
 fixture has a strict full-dimensional neighborhood in that criterion;
 the mechanism is not an implicit-function construction or a fixed phase
-grammar. Independent falsification is needed before any coverage credit.
+grammar. The final **complement of weighted floors** section is a separate
+unreviewed boxed Nash-charge raw-family candidate; its exact identities
+and proof are recorded, but no further coverage credit is asserted yet.
 
 A separate unreviewed result at the end, **Canonical premium-core
 reduction**, extends the reviewed two-player strict-leave mechanism to
@@ -2047,8 +2053,8 @@ solution of this one fixture.
 
 ## Weighted-floor return without a protected player
 
-**Complete ordinary proof candidate; not independently reviewed or Lean
-checked.** The question is whether aggregate protected payoffs can replace
+**Two independent mathematical PASSes and final artifact PASSes;
+exported, not Lean checked here.** The question is whether aggregate protected payoffs can replace
 every individually protected player. The output sought is a finite raw
 reward criterion yielding unrestricted Fin4 uniform-equilibrium payoffs,
 not another supplied-object verifier or an isolated regular cycle.
@@ -2330,7 +2336,7 @@ on active support012 and terminal coalition012: each participant
 premium is 1/10, so every normalized weighted sum is 1/10>0.
 No choice of weights repairs the old certificate.
 
-The stronger existing `HasProductLowQuittingPremium` predicate in
+The existing `HasProductLowQuittingPremium` predicate in
 `UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`
 also fails directly. Take q=(1,1,1,0). Every active forced-Quit
 endpoint is 1/5>1/10=s_i. This is an absorbing product law with
@@ -2350,3 +2356,142 @@ But (W4) at T={0} would require lambda_1*(1-0)<0, impossible for
 positive lambda_1. Conversely the four-player weighted fixture has
 P_max empty. It therefore cannot satisfy any protected-set criterion.
 No claim that the new raw theorem subsumes that reviewed packet is made.
+
+## The complement of weighted floors: a boxed Nash charge on a triple
+
+**New complete proof candidate, not independently reviewed.** This is
+not another isolated regular center. A finite family of strict raw
+inequalities can close games with NO nonzero nonnegative weighted
+forced-Quit floor at all. The replacement is a quantitative source
+cost forced by the Nash equations themselves.
+
+### An exact obstruction to every linear weighted-floor test
+
+In the preceding full table change ONLY its three positive core-pair
+participant entries from 8/5 to 3/5:
+
+    r0(01)=r1(12)=r2(02)=3/5.                       (N1)
+
+The own singleton vector remains (1/10,1/10,1/10,1). Every core
+pair now has premiums +1/2 and -1; the only trap is still012.
+At the three product roots where only core player j surely quits,
+the inequalities asserting a global weighted forced-Quit floor for
+an arbitrary nonnegative weight vector lambda would respectively be
+
+    (1/2)*lambda2-lambda1-lambda3 >= 0,
+    (1/2)*lambda0-lambda2-lambda3 >= 0,
+    (1/2)*lambda1-lambda0-lambda3 >= 0.
+
+Their sum is
+
+    -(lambda0+lambda1+lambda2)/2-3*lambda3 >= 0.
+
+Thus lambda must be zero. This excludes EVERY nonzero nonnegative
+linear forced-Quit floor, not merely the particular uniform core
+weights or one trap certificate. It remains true for the whole
+cyclic-premium family with positive premium u<negative magnitude v.
+The tested product laws need not be Nash; that qualification is
+precisely where a stronger global argument can enter.
+
+This table still fails the existing product-low predicate: the all-sure
+core law has all active premiums1/10. It still fails the protected-
+player criterion, since every player has a negative premium. Its
+singleton matrix and response-quotient falsifier are unchanged. All
+the thirteen child singleton profiles remain exact; their omitted
+gains are now3/2 except child3's gain4. The diffuse core child has
+regret at most alpha_n/2 and the same outside gain1/7-alpha_n.
+Every pure-coalition improving move persists, with singleton-core
+join gains3/2. Thus (N1) is an actual complement test surviving the
+same bounded source checks, not a failure manufactured by a pure exit.
+
+### A whole triple-core raw criterion
+
+Let I=Fin4, s>=0, M=max_{S,i}|r_i(S)|, and assume every premium
+trap has size three. There can be at most one such trap, since the
+union of two distinct triples would be a four-player trap. If there
+are no traps the following hypotheses are vacuous. For each trap A,
+assume numbers d,tau,g,l>0 such that:
+
+    sum_{i in A minus {j}} [r_i({i,j})-s_i] <= -d
+                                      for every j in A; (N2)
+
+    r_i(A)-s_i <= tau                 for every i in A; (N3)
+
+    sum_{i in A minus {j}} [r_i({i,j})-r_i({j})] <= -g
+                                      for every j in A; (N4)
+
+    r_i(A)-r_i(A minus {i}) <= -l     for every i in A; (N5)
+
+    (3*d/tau)*(g+l*d/tau) > sum_{i in A}s_i+3*M.     (N6)
+
+All are literal finite reward inequalities. No premium sign assumption
+is imposed outside them, no equilibrium or root is an input, and no
+time order is prescribed. The claim is that these hypotheses imply
+a uniform-equilibrium payoff in the original game.
+
+Choose B with M<B<M+2 sufficiently close to M that (N6) still
+holds with B on its right side. I claim EVERY absorbing exact root
+at EVERY boxed source has a successor with some coordinate <=s.
+For a nontrap active support this follows from its low active player,
+without any source restriction. It remains to exclude an exact root
+whose active support is a trap A and all its active Quit endpoints
+are strictly above their singletons.
+
+Use unweighted aggregate leave in (W7). Equations (N4)-(N5) make
+its coefficients negative. If some hazard is sure but not all, its
+empty-coalition term vanishes while a nonempty proper coalition has
+positive mass, contradicting Nash. If all are sure, (N5) directly
+gives a profitable withdrawal. Thus every active hazard is interior.
+
+Put z_i=q_i/(1-q_i)>0, U=sum_i z_i, and
+V=sum_{i<j} z_i*z_j on the three-player support. Divide the three
+positive Quit premiums by their respective opponent Continue
+probabilities and sum. The exact expression is
+
+    sum_{j in A} z_j*sum_{i in A minus {j}}(r_i({i,j})-s_i)
+       +sum_{i in A}(r_i(A)-s_i)*product_{j in A minus {i}}z_j.
+
+It is strictly positive if every active Quit endpoint exceeds its
+singleton. Bounds (N2)-(N3) therefore force
+
+    d*U < tau*V.                                   (N7)
+
+The three-term inequality V<=U^2/3 gives U>3*d/tau.
+Exact support indifference and the aggregate leave identity, divided
+by the positive empty-coalition probability, give
+
+    sum_{i in A}(s_i-v_i)
+       =sum_{empty != T proper-subset A}
+          [-L_A(T)]*product_{j in T}z_j
+       >= g*U+l*V
+       > (g+l*d/tau)*U
+       > (3*d/tau)*(g+l*d/tau).                    (N8)
+
+But a boxed source has the left side at most sum_A s_i+3B,
+contradicting the choice of B. At least one active Quit endpoint
+must consequently be <=s_i, giving the asserted return.
+
+Apply the reviewed convex minimum lemma with R equal to the WHOLE
+box. Its first premise is then automatic; (N8) supplies its return
+premise. This excludes every C1 full-root potential on that smaller
+box. The polynomial obstruction on M+2 restricts to the same
+potential on B by `IsQuittingFullExactRootPotential.mono_box` in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`.
+The original Fin4 uniform-payoff conclusion follows. All-zero
+singletons again have the direct all-Never exit.
+
+For (N1), take d=1/2, tau=1/10, g=3/2, l=9/10.
+The charge lower bound in (N6) is90, while its right side is
+3/10+3*(31/10)=48/5. Thus the exact complement table is admitted
+with a strict margin. All its relevant signs and inequalities are
+strict, so this criterion also includes a full-dimensional nearby
+region, but that observation is secondary to the whole raw theorem.
+
+The mechanism differs from weighted floors: no nonzero nonnegative
+weighted forced-Quit floor exists here. The exact Nash equalities
+instead show that an all-high trapped root would require a source
+outside the available reward box. No assertion is made that arbitrary
+table annotations, arbitrary unbounded roots, or arbitrary periodic
+grammars are complete. The next question is independent falsification
+of (N7)-(N8) and whether this bounded Nash-charge argument extends
+to the four-player premium core without becoming a supplied-root test.

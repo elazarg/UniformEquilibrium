@@ -985,3 +985,38 @@ the excluded exact potential. All-zero singletons use all Never.
 This is a concrete raw-class producer with a valid strategic consumer,
 not merely a new analytic interface. Its bounded source-separation
 claims survive; no exhaustive exclusion of other producers is asserted.
+
+## Final artifact check: weighted floors and aggregate leave
+
+Checked all 604 lines of
+`../exports/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md`,
+SHA256 `98ffaf81955437f97d3d3d8b1315c0e289be410110fed77ba3f1a72dcf2c1654`.
+Verdict: **PASS**. This is the bounded standalone assembly/delta check
+against the complete independent review above, not a new full audit.
+
+The full raw statement, the two weighted identities with their different
+coalition quantifiers, the all-sure exception, the convex-domain proof,
+and the strict analytic versus weak strategic boundary are unchanged.
+The newly expanded collision-adjusted singleton probe is complete: its
+correction is confined to binding coordinates below the upper box, all
+other endpoint gaps are eventually nonnegative, and the correction
+cancels in the derivative. The reward-closure paragraph retains one
+limit target before accuracy and bounds every behavioral deviation.
+
+The added first boundary regression also checks exactly. Replacing
+the three designated outsider-joining participant entries by −1 leaves
+the core-only tests intact but makes W_A(3)=−33/10. The displayed pure
+root is Nash and its successor has centered core sum −3. The other two
+regressions reproduce the independently checked exact roots above.
+The expanded matrix argument, complete partition witnesses, child
+table, and fixed-weight debt exclusion retain their reviewed scope.
+In particular the fixture's central-table child ties are not claimed
+to persist throughout the open raw neighborhood.
+
+The packet is self-contained and cites only the named tracked Lean
+sources, with no conference-note or export dependency. The implementation
+boundary identifies the new actual-data producer and analytic work,
+without suggesting that source declarations already certify it. The
+final deletion of “stronger” before “product-low predicate” removes a
+potential implication-direction ambiguity and changes no mathematics.
+No unresolved artifact objection remains at the stated final hash.

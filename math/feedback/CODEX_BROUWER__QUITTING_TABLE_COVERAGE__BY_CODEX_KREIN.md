@@ -578,3 +578,39 @@ A\T. Thus weak leave becomes strict with the same weights; reward
 closure selects one fixed target for the original table. This proves
 only the stated weak strategic conclusion. No mathematical repair is
 requested before independent assembly work.
+
+### Final weighted-floor artifact and delta check
+
+**Assembly PASS** for
+`../exports/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md`,
+604 lines, exact final SHA256
+`98ffaf81955437f97d3d3d8b1315c0e289be410110fed77ba3f1a72dcf2c1654`.
+I read the complete assembly and checked the subsequent one-word
+removal of “stronger” before “product-low.” The latter is correct:
+the tracked supportwise condition implies product-low, not conversely.
+No theorem or numerical content changed in that last delta.
+
+The artifact preserves the reviewed raw criterion, global W_A tests,
+strict analytic result, weak Fin4 consumer, and full signed open region.
+The expanded singleton-face probe is exact and boxed, including at
+upper faces; its source need not lie in R because the potential
+property concerns every boxed root. The convex minimum proof retains
+both normal-cone cases, the closed Nash graph, the signed absorption
+charge, and the separate all-sure support argument. No missing
+protected-player floor has entered the assembly.
+
+The three exact-root regressions also check directly. In addition to
+the global-coalition falsifier already verified above, the source
+(-29/10,1,13/5,0) and hazards (1/2,0,1/2,0) give precisely the
+four displayed endpoint pairs and a successor violating an individual
+floor while respecting R. The source (1/30,1/30,1/30,1) and
+hazards (1/10,1/10,1/10,0) give core endpoints 73/500 and
+player-3 endpoints 729/1000,1109/1000, so the outside-source
+successor really lies strictly above every singleton. Neither is
+misrepresented as a forbidden-potential minimum.
+
+The complete source/partition/child tables agree with the exact audit;
+the handoff names the actual new raw producer and the existing semantic
+consumer without claiming implementation. There are no mathematical
+dependencies on conference notes or exports. No correction or further
+full proof audit is requested.

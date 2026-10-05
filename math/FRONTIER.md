@@ -411,6 +411,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. This is a reviewed mathematical result awaiting formalization. |
+| Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -663,6 +664,35 @@ already covered by the globally safe quiet-player composition below.
 The new criterion does not cover a trap with no suitable leaver, or a
 table with no protected player. No reduction of arbitrary tables to this
 criterion is asserted.
+
+The **weighted-floor/aggregate-leave criterion** does not require an
+individually protected player.
+For each premium trap A, choose weights lambda^A strictly positive on A
+and zero outside A. Require the same weights to satisfy both tests:
+
+    W_A(S) = sum_i lambda_i^A [r_i(S union {i}) - s_i] >= 0
+             for every S contained in I, including coalitions outside A;
+    L_A(T) = sum_{i in A minus T} lambda_i^A [r_i(T union {i}) - r_i(T)] <= 0
+             for every nonempty proper T contained in A.
+
+With nonnegative own singletons these finite linear feasibility conditions
+imply Fin4 UE. The first test makes every exact Nash successor satisfy the
+corresponding weighted singleton floor. Strict versions of the second test
+exclude trap supports at sources satisfying those floors. Minimize a putative
+potential over points of that convex domain with some coordinate at or below
+its singleton. A vanishing-absorption perturbation at this actual minimum
+contradicts the full-root drift inequality. Weak
+leave follows by increasing passive rewards and applying reward closure.
+
+The [complete weighted-floor theorem](exports/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md)
+includes an open sixty-coordinate reward region with no individually
+protected player. It fails the implemented supportwise nonpositive-premium
+test: all members of one triple have strictly positive participant premiums
+at that triple. The new argument excludes unsuitable Nash supports, rather
+than imposing a low participant payoff at every product root.
+The weighted and protected-leaver raw criteria are incomparable. Neither
+their union nor these criteria together with the periodic constructions
+are known to cover all remaining tables.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are
