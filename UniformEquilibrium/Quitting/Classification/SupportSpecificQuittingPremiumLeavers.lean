@@ -128,4 +128,60 @@ theorem exactRootSuccessor_mem_protectedSetSublevelDomain
   exact (exactRootSuccessor_protectedSet_sublevel_of_supportSpecific_strictLeave reward
     protectedPlayers hpremiums hleavers tail htail.2 root hnash hpositive).2
 
+/-- The finite maximal protected set depends only on participant rewards. -/
+def quittingMaximalProtectedPlayers
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Finset ι := by
+  classical
+  exact Finset.univ.filter fun player => ∀ terminal, player ∈ terminal.val →
+    reward (quittingSingletonTerminal player) player ≤ reward terminal player
+
+theorem mem_quittingMaximalProtectedPlayers_iff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (player : ι) :
+    player ∈ quittingMaximalProtectedPlayers reward ↔
+      ∀ terminal, player ∈ terminal.val →
+        reward (quittingSingletonTerminal player) player ≤ reward terminal player := by
+  classical
+  simp [quittingMaximalProtectedPlayers]
+
+theorem hasProtectedParticipantPremiums_iff_subset_maximalProtectedPlayers
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (protectedPlayers : Finset ι) :
+    HasProtectedParticipantPremiums reward protectedPlayers ↔
+      protectedPlayers ⊆ quittingMaximalProtectedPlayers reward := by
+  constructor
+  · intro hpremiums player hplayer
+    exact (mem_quittingMaximalProtectedPlayers_iff reward player).2 (hpremiums player hplayer)
+  · intro hsubset player hplayer
+    exact (mem_quittingMaximalProtectedPlayers_iff reward player).1 (hsubset hplayer)
+
+omit [Fintype ι] in
+theorem HasSupportSpecificQuittingLeavers.mono
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {small large : Finset ι} {compare : ℝ → ℝ → Prop}
+    (hleavers : HasSupportSpecificQuittingLeavers reward small compare) (hsubset : small ⊆ large) :
+    HasSupportSpecificQuittingLeavers reward large compare := by
+  intro active htrap
+  obtain ⟨player, hplayer, hprotected, hleave⟩ := hleavers active htrap
+  exact ⟨player, hplayer, hsubset hprotected, hleave⟩
+
+/-- Exact finite raw-test packaging. The admissible protected set is explicitly
+nonempty, even though the raw return lemmas also permit an empty set. The same
+equivalence applies to strict and weak comparisons without an extra order premise. -/
+theorem exists_nonempty_protectedSet_iff_maximalProtectedPlayers
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (compare : ℝ → ℝ → Prop) :
+    (∃ protectedPlayers : Finset ι, protectedPlayers.Nonempty ∧
+      HasProtectedParticipantPremiums reward protectedPlayers ∧
+      HasSupportSpecificQuittingLeavers reward protectedPlayers compare) ↔
+      (quittingMaximalProtectedPlayers reward).Nonempty ∧
+        HasSupportSpecificQuittingLeavers reward
+          (quittingMaximalProtectedPlayers reward) compare := by
+  constructor
+  · rintro ⟨protectedPlayers, hnonempty, hpremiums, hleavers⟩
+    have hsubset := (hasProtectedParticipantPremiums_iff_subset_maximalProtectedPlayers
+      reward protectedPlayers).1 hpremiums
+    exact ⟨hnonempty.mono hsubset, hleavers.mono hsubset⟩
+  · rintro ⟨hnonempty, hleavers⟩
+    exact ⟨quittingMaximalProtectedPlayers reward, hnonempty,
+      (hasProtectedParticipantPremiums_iff_subset_maximalProtectedPlayers
+        reward (quittingMaximalProtectedPlayers reward)).2 Finset.Subset.rfl, hleavers⟩
+
 end GameTheory

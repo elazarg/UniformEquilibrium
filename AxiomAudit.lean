@@ -18,6 +18,7 @@ import MathUE.Analysis.BoxedAdditiveCalculus
 import MathUE.Analysis.CollisionAdjustedDrift
 import MathUE.Analysis.CompactMinimumEnvelope
 import MathUE.Analysis.CompactSubtypeZeroExtension
+import MathUE.Analysis.ConvexSingletonSublevelMinimum
 import MathUE.Analysis.CoordinateAffineBoxMinimum
 import MathUE.Analysis.CoordinateHessianEntries
 import MathUE.Analysis.CoordinateHessianExtrema
@@ -39,6 +40,7 @@ import MathUE.Analysis.LeastHessianEigenvalue
 import MathUE.Analysis.LowerBoxBoundaryMinimum
 import MathUE.Analysis.LowerBoxBoundaryReflection
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
+import MathUE.Analysis.LowerBoxDerivativeCone
 import MathUE.Analysis.MidpointThirdDerivative
 import MathUE.Analysis.MidpointThirdDerivativeIntegral
 import MathUE.Analysis.MixedCurvatureSupBound
@@ -740,6 +742,7 @@ import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.RectangularPoincareMiranda
+import MathUE.Topology.SeparatelyAffineFiberConnectors
 import MathUE.Topology.SeparatelyAffineFiberLoops
 import MathUE.Topology.SignedSimplexLabelBoundary
 import MathUE.Topology.SimonViabilityBudgetCompiler
@@ -1954,6 +1957,8 @@ import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGenerate
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedWitnessRegimes
 import UniformEquilibrium.Quitting.Classification.Existence.StationaryPrefixDeletedClockCompactification
 import UniformEquilibrium.Quitting.Classification.Existence.StationaryPrefixExceptionalOwner
+import UniformEquilibrium.Quitting.Classification.Existence.SupportSpecificQuittingPremiumLeaversRewardClosure
+import UniformEquilibrium.Quitting.Classification.Existence.SupportSpecificQuittingPremiumLeaversUniformPayoff
 import UniformEquilibrium.Quitting.Classification.Existence.SupportwisePremiumUniformPayoff
 import UniformEquilibrium.Quitting.Classification.Existence.SureExitChambers
 import UniformEquilibrium.Quitting.Classification.Existence.TwoPlayerPremiumCoreUniformPayoff
@@ -2056,6 +2061,7 @@ import UniformEquilibrium.Quitting.Classification.OnePlayer.DiffuseCompactificat
 import UniformEquilibrium.Quitting.Classification.OnePlayer.Existence
 import UniformEquilibrium.Quitting.Classification.OnePlayer.FiniteMenuPunishment
 import UniformEquilibrium.Quitting.Classification.OnePlayer.StationaryBranch
+import UniformEquilibrium.Quitting.Classification.PassiveQuittingRewardPerturbation
 import UniformEquilibrium.Quitting.Classification.PlayerDeletion
 import UniformEquilibrium.Quitting.Classification.PlayerDeletionEvaluatedPayoff
 import UniformEquilibrium.Quitting.Classification.PlayerDeletionLift
@@ -2250,6 +2256,7 @@ import UniformEquilibrium.Quitting.Classification.SmallPlayerExistence
 import UniformEquilibrium.Quitting.Classification.SoloExitPreference
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 import UniformEquilibrium.Quitting.Classification.SupportSpecificQuittingPremiumLeavers
+import UniformEquilibrium.Quitting.Classification.SupportSpecificQuittingPremiumLeaversSmoothDrift
 import UniformEquilibrium.Quitting.Classification.SupportwiseQuittingPremium
 import UniformEquilibrium.Quitting.Classification.SupportwiseQuittingPremiumBalanceAt
 import UniformEquilibrium.Quitting.Classification.SupportwiseQuittingPremiumFeasibleSet
@@ -2333,6 +2340,7 @@ import UniformEquilibrium.Quitting.Cycles.ConditionedTangentSeam
 import UniformEquilibrium.Quitting.Cycles.ConstantRootSurvival
 import UniformEquilibrium.Quitting.Cycles.CycleIsolatedCoordinate
 import UniformEquilibrium.Quitting.Cycles.CycleMismatchContraction
+import UniformEquilibrium.Quitting.Cycles.CyclicChildJointPhaseSource
 import UniformEquilibrium.Quitting.Cycles.CyclicFiniteMenu
 import UniformEquilibrium.Quitting.Cycles.CyclicFiniteWord
 import UniformEquilibrium.Quitting.Cycles.CyclicGreenDebt
@@ -2954,7 +2962,10 @@ import UniformEquilibrium.Quitting.Projective.AnchoredSingletonLCP
 import UniformEquilibrium.Quitting.Projective.Boundary.All
 import UniformEquilibrium.Quitting.Projective.Boundary.PacketTargetSemantics
 import UniformEquilibrium.Quitting.Projective.Boundary.TargetMismatchRegression
+import UniformEquilibrium.Quitting.Projective.CompactSingletonSublevelMinimum
+import UniformEquilibrium.Quitting.Projective.ConvexReturnDomainSmoothDrift
 import UniformEquilibrium.Quitting.Projective.CumulativeChargeNearReturn
+import UniformEquilibrium.Quitting.Projective.ExactRootMinimumTaylorExclusion
 import UniformEquilibrium.Quitting.Projective.ExactRootPotentialRestriction
 import UniformEquilibrium.Quitting.Projective.ExcludedPolynomialRationalRejection
 import UniformEquilibrium.Quitting.Projective.FinFourAmbientQSimplex
@@ -3015,6 +3026,7 @@ import UniformEquilibrium.Quitting.Projective.SingletonBoxStandardQFaceExclusion
 import UniformEquilibrium.Quitting.Projective.SingletonBoxTranslation
 import UniformEquilibrium.Quitting.Projective.SingletonLCP
 import UniformEquilibrium.Quitting.Projective.SingletonLowerBoundaryReturnSmoothDrift
+import UniformEquilibrium.Quitting.Projective.SingletonSublevelDownwardCharge
 import UniformEquilibrium.Quitting.Projective.StationaryAbsorptionWeightedForwardPacket
 import UniformEquilibrium.Quitting.Projective.TargetMismatch
 import UniformEquilibrium.Quitting.Projective.WeightedProjectiveLasso

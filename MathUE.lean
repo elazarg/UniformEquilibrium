@@ -19,6 +19,8 @@ import MathUE.ReciprocalDebtRecurrence
 import MathUE.GeometricMinimumRecurrence
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
 import MathUE.Analysis.LowerBoxBoundaryMinimum
+import MathUE.Analysis.LowerBoxDerivativeCone
+import MathUE.Analysis.ConvexSingletonSublevelMinimum
 import MathUE.Analysis.QuasiconvexLowerBoxBoundary
 import MathUE.Analysis.StandardQFaceQuasiconvexExclusion
 import MathUE.Analysis.CollisionAdjustedDrift
@@ -647,6 +649,7 @@ import MathUE.Topology.CompactProofRelevantAdapter
 import MathUE.Topology.CompactRankedOutcome
 import MathUE.Topology.CompactRobustMoat
 import MathUE.Topology.SeparatelyAffineFiberLoops
+import MathUE.Topology.SeparatelyAffineFiberConnectors
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
 import MathUE.Topology.CountableObservation

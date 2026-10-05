@@ -4,6 +4,7 @@ import MathUE.Topology.ConnectedConvexHullAffineStep
 import MathUE.RealSeries.GeometricAffineSchedule
 import MathUE.Topology.CompactIntervalGap
 import MathUE.Topology.FiniteOneDimensionalCoordinate
+import MathUE.Topology.SeparatelyAffineFiberConnectors
 import GameTheory.Analysis.Payoff
 import GameTheory.Repeated.Trigger
 import MathUE.ProbabilityMassFunction.Simplex
@@ -12720,6 +12721,107 @@ theorem lemma_10 {ι : Type} [Fintype ι]
     z ∈ convexHull ℝ
       (euclideanPayoffClosedBall z (distanceToSet z K) ∩ K) := by
   exact sorin_contactHull_of_farthestPoint P K z hP _hPcompact hK hKP hfrontier hz
+
+namespace CompactContinuousGame
+
+/-- Restrict the paper's real-parameter mixture to the path parameter interval. -/
+def pathMixer (G : CompactContinuousGame) (who : G.Player) :
+    Math.Topology.ContinuousMixer (G.Strategy who) where
+  mix point := G.mix who point.1 point.2.1 point.2.2
+  continuous_mix := (G.mixContinuous who).comp
+    ((continuous_subtype_val.comp continuous_fst).prodMk continuous_snd)
+  mix_zero := G.mix_zero who
+  mix_one := G.mix_one who
+
+/-- A two-coordinate strategy slice; other players retain the base strategy. -/
+def pairSlice (G : CompactContinuousGame) (base : G.Profile)
+    (first second : G.Player) (point : G.Strategy first × G.Strategy second) :
+    G.Profile :=
+  Function.update (Function.update base first point.1) second point.2
+
+/-- Separate affineness on a slice does not require there to be only two players. -/
+def pairPayoffField (G : CompactContinuousGame) (base : G.Profile)
+    (first second : G.Player) (hne : first ≠ second) :
+    Math.Topology.SeparatelyAffinePair (E := Payoff G.Player)
+      (G.pathMixer first) (G.pathMixer second) where
+  value point := G.payoff (G.pairSlice base first second point)
+  continuous_value := (continuous_pi G.payoffContinuous).comp
+    ((continuous_const.update first continuous_fst).update second continuous_snd)
+  affine_left := by
+    intro time start finish other
+    funext who
+    change G.payoff (Function.update
+      (Function.update base first (G.mix first time finish start)) second other) who =
+        (time : ℝ) * G.payoff (Function.update
+          (Function.update base first finish) second other) who +
+        (1 - (time : ℝ)) * G.payoff (Function.update
+          (Function.update base first start) second other) who
+    simp only [Function.update_comm hne]
+    exact G.payoffAffine (Function.update base second other) first finish start time who
+      time.2.1 time.2.2
+  affine_right := by
+    intro time other start finish
+    funext who
+    exact G.payoffAffine (Function.update base first other) second finish start time who
+      time.2.1 time.2.2
+
+theorem pairSlice_eq_of_covers (G : CompactContinuousGame) (base profile : G.Profile)
+    (first second : G.Player) (hne : first ≠ second)
+    (hcover : ∀ who, who = first ∨ who = second) :
+    G.pairSlice base first second (profile first, profile second) = profile := by
+  funext who
+  rcases hcover who with rfl | rfl
+  · simp [pairSlice, hne]
+  · simp [pairSlice]
+
+/-- Only this full-image identification needs the two coordinates to cover all players. -/
+theorem pairPayoffField_range_eq (G : CompactContinuousGame) (base : G.Profile)
+    (first second : G.Player) (hne : first ≠ second)
+    (hcover : ∀ who, who = first ∨ who = second) :
+    Set.range (G.pairPayoffField base first second hne).value = G.feasiblePayoffs := by
+  apply Set.ext
+  intro payoff
+  constructor
+  · rintro ⟨point, rfl⟩
+    exact ⟨G.pairSlice base first second point, rfl⟩
+  · rintro ⟨profile, rfl⟩
+    refine ⟨(profile first, profile second), ?_⟩
+    change G.payoff (G.pairSlice base first second (profile first, profile second)) = _
+    rw [G.pairSlice_eq_of_covers base profile first second hne hcover]
+
+/-- The paper's two-player hypothesis identifies the slice image with all feasible payoffs. -/
+theorem exists_pairPayoffField_range_eq (G : CompactContinuousGame) (base : G.Profile)
+    (hplayers : Fintype.card G.Player = 2) :
+    ∃ (first second : G.Player) (hne : first ≠ second),
+      Set.range (G.pairPayoffField base first second hne).value = G.feasiblePayoffs := by
+  classical
+  have htwo : (Finset.univ : Finset G.Player).card = 2 := by
+    simpa only [Finset.card_univ] using hplayers
+  obtain ⟨first, second, hne, hplayers⟩ := Finset.card_eq_two.mp htwo
+  refine ⟨first, second, hne, G.pairPayoffField_range_eq base first second hne ?_⟩
+  intro who
+  have hmem : who ∈ ({first, second} : Finset G.Player) := by
+    rw [← hplayers]
+    exact Finset.mem_univ who
+  simpa only [Finset.mem_insert, Finset.mem_singleton] using hmem
+
+/-- The equal-fiber connector step of Proposition 11, in the actual slice image.
+This does not assert that arbitrary payoff loops lift to strategy loops. -/
+theorem pair_returnConnector_homotopic (G : CompactContinuousGame) (base : G.Profile)
+    (first second : G.Player) (hne : first ≠ second)
+    (a a' : G.Strategy first) (b b' : G.Strategy second)
+    (hfiber : G.payoff (G.pairSlice base first second (a, b)) =
+      G.payoff (G.pairSlice base first second (a', b'))) :
+    let field := G.pairPayoffField base first second hne
+    let origin := (base first, base second)
+    ((field.returnConnector origin (a, b)).cast
+      (show field.rangeMap (a', b') = field.rangeMap (a, b) from
+        Subtype.ext hfiber.symm) rfl).Homotopic
+      (field.returnConnector origin (a', b')) := by
+  exact (G.pairPayoffField base first second hne).returnConnector_homotopic_of_same_value
+    (base first, base second) a a' b b' hfiber
+
+end CompactContinuousGame
 
 /-! Proposition 11 is the paper's two-player winding-number argument.  The
 current library has no theorem that the separately affine image of two compact

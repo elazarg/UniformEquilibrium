@@ -742,8 +742,46 @@ return. Every actual trap supplies a protected leaver with all nonempty
 opponent-coalition comparisons. Protected floors hold at every boxed source;
 absorbing sublevel return additionally requires protected floors at the source.
 The old common-leaver interface delegates the canonical support-sum proof
-without changing its public hypotheses. Protected-set smooth exclusion and
-its actual strict/weak UE consumers are not supplied by this raw unit.
+without changing its public hypotheses.
+
+`not_isQuittingFullExactRootPotential_of_convexReturnDomain`
+(`UniformEquilibrium/Quitting/Projective/ConvexReturnDomainSmoothDrift.lean`)
+provides the signed generic analytic step for an actual compact convex return
+region containing the singleton upper box. All boxed exact roots return to
+that region; positive-absorption exact roots from the region also return to a
+singleton sublevel. Compact localization supplies an actual lower-boundary
+minimum with zero absorption on its entire exact Nash fiber. The convex
+segment-or-coordinate-sign cone and absorption-scaled Taylor argument use
+continuity only on the sublevel region and ambient differentiability only on
+the singleton lower boundary, not derivative continuity or a neighborhood C1
+hypothesis. No individual successor floors or participant sign condition is
+part of this generic analytic interface.
+
+`not_isQuittingFullExactRootPotential_of_supportSpecific_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/SupportSpecificQuittingPremiumLeaversSmoothDrift.lean`)
+instantiates that theorem from the actual protected-set raw return. It works
+for every finite nonempty player type with signed singleton rewards and no
+protected-set nonemptiness assumption. Shared minimum and downward-charge
+proofs preserve the older nonconvex compact-return theorem's public telescope.
+`exists_uniformEquilibriumPayoff_of_supportSpecific_strictLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/SupportSpecificQuittingPremiumLeaversUniformPayoff.lean`)
+is the actual Fin4 consumer with nonnegative own singletons. Its weak companion
+`exists_uniformEquilibriumPayoff_of_supportSpecific_weakLeave`
+(`UniformEquilibrium/Quitting/Classification/Existence/SupportSpecificQuittingPremiumLeaversRewardClosure.lean`)
+uses all-passive perturbations and canonical reward closure to obtain one fixed
+original target. Arbitrary real perturbations preserve participant entries,
+traps, the greatest core and maximal protected set; positive perturbations
+strictify the same weak leavers. Maximal-protected-set wrappers supply their
+participant tests internally. These strategic consumers do not assert a weak
+analytic exclusion. The weighted-floor packet's literal weight producer and
+aggregate leave identities remain separate from the generic convex theorem.
+
+The boxed-Nash-charge packet shares the convex-return analytic owner but still
+requires its actual boxed charge producer. The global two-joint cyclic-child
+packet shares the child complementarity and actual outer-exit adapters with
+the one-joint packet; its nonlinear two-row selector is a separate source unit.
+The signed pair-core same-sign packet likewise requires its literal signed
+source adapters; none follows merely from these protected-set consumers.
 
 `eventually_exactRoot_absorption_lt_of_exact_fiber_absorption_zero` and
 `tendsto_exactRoot_absorption_zero_of_exact_fiber_absorption_zero`
@@ -794,9 +832,29 @@ the coarse phase count times the scale, including quiet slots.
 (`MathUE/CyclicChildJointPhasePivot.lean`) produce the literal canceled
 normalized ratios and continuous pivot selection from raw cyclic-child scalar
 parameters. Both pivot endpoint values are exact; IVT selects the interior
-hazard without a monotonicity assumption or a supplied selector. This still
-does not construct the typed raw quitting-table source fields above. That
-game-facing adapter and the outer inverse/degree branches remain separate.
+hazard without a monotonicity assumption or a supplied selector.
+
+`CyclicChildJointPhase.sourceCertificate` and
+`CyclicChildJointPhase.exists_uniformPayoff`
+(`UniformEquilibrium/Quitting/Cycles/CyclicChildJointPhaseSource.lean`) now
+derive every coarse source field from the five literal reward rows and six
+retained outsider joining caps. All unspecified coalition rewards remain
+arbitrary, including solo joining premiums. Policy and all-player Continue
+identities use the original signed collision rewards. The participant
+endpoints are equal; the outsider Quit expansion retains all four opponent
+atoms. Singleton floors require positive xi, v below one and u at most one
+plus xi, not a positive pivot numerator or R above one. Opponent contraction
+comes from a genuinely different solo owner for each player, not its own
+hazard. The internally selected proper cycle supplies one exact initial
+target before refinement accuracy, and the canonical consumer caps every
+behavioral replacement. The game-semantic result permits eta zero, extending
+the packet's positive-eta premise without altering its other raw assumptions.
+
+This source covers R strictly between the literal pivot endpoints. The outer
+degree and passive-inverse exits, their equality boundaries, and the packet's
+explicit finite-law and quantitative constants remain separate obligations.
+The shared padded compiler uses the actual three-times-scale period, not the
+packet's minimal one-plus-twice-scale period.
 The two-outsider-buffer packet requires a separate monotone rational selector
 and its small-parameter ratios; the quadratic formula covers only its empty
 repeated-phase specialization, not the whole source. Positive joint outsider
@@ -1599,6 +1657,17 @@ exactly two players. The literal Hausdorff conclusion retains a rate threshold
 uniform over all targets, obtained from the actual pointwise profile producer
 and a shared compact finite cover. Their silent named paper check and separate
 standard-axiom checks pass. Other unfinished Sorin claims remain separate.
+
+`CompactContinuousGame.pair_returnConnector_homotopic` and
+`CompactContinuousGame.exists_pairPayoffField_range_eq`
+(`Literature/Sorin1986.lean`) instantiate the supplied Proposition 11 fiber
+connector argument in the actual two-player payoff image. The generic
+`returnConnector_homotopic_of_same_value`
+(`MathUE/Topology/SeparatelyAffineFiberConnectors.lean`) stays in the image
+subtype and requires neither mixer reversal nor a winding construction.
+Their named checks and separate standard-axiom queries pass. The original
+`proposition_11` remains unproved: planar winding and the final image-topology
+bridge are not supplied by this bounded connector unit.
 
 Primary-source discovery located the two-player flat-security prescription in
 [Tomala, *Jeux répétés* (2006)](https://www.numdam.org/item/10.5802/xups.2006-02.pdf),
