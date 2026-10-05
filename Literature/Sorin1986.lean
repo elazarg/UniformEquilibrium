@@ -13836,6 +13836,225 @@ theorem prisonersDilemma_discountedEquilibriumPayoffs_subset_criticalSet :
   exact prisonerCriticalSet_of_security_facets_escape hrow hcolumn
     hbounds.2.2.2.1 hbounds.2.2.2.2 hescape
 
+
+open scoped Classical in
+/-- First-mismatch attribution identifies every nondeviator's actual mixed
+action on the support of a full behavioral replacement. No assertion is
+made about an unreachable trigger status or the culprit's fallback action. -/
+private theorem FiniteStageGame.triggerBehaviorProfile_other_on_support
+    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
+    (who : G.Player) (deviation : G.BehaviorStrategy who)
+    (other : G.Player) (hne : other ≠ who)
+    {time : ℕ} (history : G.repeatedGame.Hist time)
+    (hsupport : history ∈ (G.repeatedGame.histDist
+      (Function.update (G.triggerBehaviorProfile path punishment) who deviation)
+      PUnit.unit time).support) :
+    (Function.update (G.triggerBehaviorProfile path punishment) who deviation)
+        other time history =
+      if triggerOnPath G path history then PMF.pure (path time other)
+      else G.punishmentMixedAction (punishment time) who other := by
+  rw [Function.update_of_ne hne]
+  by_cases hpath : triggerOnPath G path history
+  · simp only [hpath, ite_true]
+    unfold FiniteStageGame.triggerBehaviorProfile
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
+    exact G.triggerMonitoredProfile_of_onPath path punishment other _ hpath
+  · simp only [hpath, ite_false]
+    obtain ⟨first, hmismatch, hbefore, hother⟩ :=
+      (G.firstMismatch_of_mem_support_trigger_update path punishment who deviation
+        time history hsupport).resolve_left hpath
+    have hstatus := G.publicTriggerStatus_eq_some_of_first
+      path who history first.isLt hmismatch
+      (fun k hk => hbefore ⟨k, hk.trans first.isLt⟩ hk) hother
+    have hstatus' : G.actionMonitoringGame.triggerStatus path
+        (List.ofFn (KernelGame.RealizedActionRepeatedAdapter.actionHistory
+          G.kernel history)) = some who := hstatus
+    unfold FiniteStageGame.triggerBehaviorProfile
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
+    exact G.triggerMonitoredProfile_of_culprit path punishment who other _ hstatus'
+
+/-- Exact delivery of a bounded calendar recursion by the actual public
+trigger profile. The scalar telescope is the existing source owner. -/
+private theorem FiniteStageGame.triggerBehaviorProfile_discountedPayoff
+    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
+    (lam : ℝ) (hlam : 0 < lam) (hlam1 : lam ≤ 1)
+    (value : ℕ → Payoff G.Player) (bound : ℝ)
+    (hbound : ∀ time who, |value time who| ≤ bound)
+    (hrec : ∀ time who, value time who =
+      lam * G.payoff (path time) who + (1 - lam) * value (time + 1) who) :
+    G.discountedPayoff lam (G.triggerBehaviorProfile path punishment) = value 0 := by
+  classical
+  let : Finite G.kernel.Outcome :=
+    @Finite.of_fintype _ inferInstance
+  funext who
+  have hstage (time : ℕ) : G.repeatedGame.expectedStagePayoff
+      (G.triggerBehaviorProfile path punishment) PUnit.unit time who =
+        G.payoff (path time) who := by
+    unfold FiniteStageGame.triggerBehaviorProfile
+    rw [KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile]
+    exact G.stageEU_triggerMonitoredProfile path punishment time who
+  have hrec' (time : ℕ) : value time who =
+      lam * G.repeatedGame.expectedStagePayoff
+        (G.triggerBehaviorProfile path punishment) PUnit.unit time who +
+          (1 - lam) * value (time + 1) who := by
+    rw [hstage]
+    exact hrec time who
+  have hvalue := discounted_sum_eq_of_affine_recurrence lam hlam hlam1
+    (fun time => value time who)
+    (fun time => G.repeatedGame.expectedStagePayoff
+      (G.triggerBehaviorProfile path punishment) PUnit.unit time who)
+    bound (fun time => hbound time who) hrec'
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    StochasticGame.discountedPayoff, sub_sub_cancel] using! hvalue
+
+private def binaryDefectionPunishments
+    (uCC uCD uDC uDD : Payoff Bool) :
+    ℕ → ∀ culprit, (binaryGame uCC uCD uDC uDD).MixedOpponentProfile culprit :=
+  fun _ _ _ => PMF.pure true
+
+private noncomputable def binaryGrimProfile
+    (uCC uCD uDC uDD : Payoff Bool) (path : ℕ → Bool → Bool) :
+    (binaryGame uCC uCD uDC uDD).BehaviorProfile :=
+  (binaryGame uCC uCD uDC uDD).triggerBehaviorProfile path
+    (binaryDefectionPunishments uCC uCD uDC uDD)
+
+/-- Source actionwise bounds imply a cap against every full behavioral
+deviation from the actual binary grim profile, including zero-margin phases. -/
+private theorem binaryGrimProfile_discounted_deviation_cap
+    (uCC uCD uDC uDD : Payoff Bool) (path : ℕ → Bool → Bool)
+    (lam : ℝ) (hlam : 0 < lam) (hlam1 : lam ≤ 1)
+    (who : Bool)
+    (deviation : (binaryGame uCC uCD uDC uDD).BehaviorStrategy who)
+    (value : ℕ → ℝ) (baseline bound : ℝ)
+    (hbound : ∀ time, |value time| ≤ bound) (hbaseline : |baseline| ≤ bound)
+    (hrec : ∀ time, value time =
+      lam * (binaryGame uCC uCD uDC uDD).payoff (path time) who +
+        (1 - lam) * value (time + 1))
+    (hchanged : ∀ time (action : Bool → Bool),
+      action (!who) = path time (!who) →
+      lam * (binaryGame uCC uCD uDC uDD).payoff action who +
+        (1 - lam) * baseline ≤ value time)
+    (hpunished : ∀ action : Bool → Bool, action (!who) = true →
+      (binaryGame uCC uCD uDC uDD).payoff action who ≤ baseline) :
+    (binaryGame uCC uCD uDC uDD).discountedPayoff lam
+      (Function.update (binaryGrimProfile uCC uCD uDC uDD path)
+        who deviation) who ≤ value 0 := by
+  classical
+  let G := binaryGame uCC uCD uDC uDD
+  let profile := Function.update (binaryGrimProfile uCC uCD uDC uDD path) who deviation
+  let potential : G.repeatedGame.HistoryPotential := fun time history =>
+    if triggerOnPath G path history then value time else baseline
+  have hpotential (time : ℕ) (history : G.repeatedGame.Hist time) :
+      |potential time history| ≤ bound := by
+    dsimp only [potential]
+    split_ifs
+    · exact hbound time
+    · exact hbaseline
+  have hbellman (time : ℕ) (history : G.repeatedGame.Hist time)
+      (hsupport : history ∈ (G.repeatedGame.histDist profile PUnit.unit time).support) :
+      (1 - (1 - lam)) * G.repeatedGame.stageEUAt profile history who +
+        (1 - lam) * G.repeatedGame.historyContinuationEU profile potential history ≤
+          potential time history := by
+    let current : Bool → PMF Bool := fun player => profile player time history
+    have hne : (!who) ≠ who := by cases who <;> decide
+    have hother := G.triggerBehaviorProfile_other_on_support path
+      (binaryDefectionPunishments uCC uCD uDC uDD) who deviation (!who) hne
+      history hsupport
+    rw [G.punishmentMixedAction_of_ne
+      (binaryDefectionPunishments uCC uCD uDC uDD time) hne] at hother
+    have hother' : current (!who) = PMF.pure
+        (if triggerOnPath G path history then path time (!who) else true) := by
+      by_cases hpath : triggerOnPath G path history
+      · simpa only [hpath, ite_true] using! hother
+      · simpa only [hpath, ite_false, binaryDefectionPunishments] using! hother
+    have hdraw (action : Bool → Bool)
+        (haction : action ∈ (Math.PMFProduct.pmfPi current).support) :
+        action (!who) =
+          if triggerOnPath G path history then path time (!who) else true := by
+      have hupdate : Function.update current (!who)
+          (PMF.pure (if triggerOnPath G path history
+            then path time (!who) else true)) = current :=
+        Function.update_eq_self_iff.mpr hother'.symm
+      apply Math.PMFProduct.eq_of_mem_support_pmfPi_update_pure current (!who)
+        (if triggerOnPath G path history then path time (!who) else true)
+      rwa [hupdate]
+    have hlocal (action : Bool → Bool)
+        (haction : action ∈ (Math.PMFProduct.pmfPi current).support) :
+        lam * G.payoff action who + (1 - lam) *
+          potential (time + 1) (Fin.snoc history.1 (history.2, action), PUnit.unit) ≤
+            potential time history := by
+      have hcoordinate := hdraw action haction
+      by_cases hpath : triggerOnPath G path history
+      · simp only [hpath, ite_true] at hcoordinate
+        by_cases hequal : action = path time
+        · subst action
+          have hnext := (triggerOnPath_snoc_iff G path
+            history (path time) PUnit.unit).mpr ⟨hpath, rfl⟩
+          simp only [potential, hpath, hnext, ite_true]
+          exact (hrec time).ge
+        · have hnext : ¬triggerOnPath G path
+              ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
+                G.repeatedGame.Hist (time + 1)) := by
+            rw [triggerOnPath_snoc_iff]
+            simp only [hpath, hequal, and_false, not_false_eq_true]
+          simp only [potential, hpath, hnext, ite_true, ite_false]
+          exact hchanged time action hcoordinate
+      · have hnext : ¬triggerOnPath G path
+            ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
+              G.repeatedGame.Hist (time + 1)) := by
+          rw [triggerOnPath_snoc_iff]
+          simp only [hpath, false_and, not_false_eq_true]
+        simp only [hpath, ite_false] at hcoordinate
+        simp only [potential, hpath, hnext, ite_false]
+        have hcap := mul_le_mul_of_nonneg_left (hpunished action hcoordinate) hlam.le
+        calc
+          lam * G.payoff action who + (1 - lam) * baseline ≤
+              lam * baseline + (1 - lam) * baseline :=
+            add_le_add hcap le_rfl
+          _ = baseline := by ring
+    have hmean := Math.ProbabilityMassFunction.expect_le_of_le_on_support
+      (B := potential time history) (Math.PMFProduct.pmfPi current) _ hlocal
+    simp only [Math.Probability.expect_add, Math.Probability.expect_const_mul] at hmean
+    have hstage : G.repeatedGame.stageEUAt profile history who =
+        Math.Probability.expect (Math.PMFProduct.pmfPi current)
+          (fun action => G.payoff action who) := by
+      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
+        (fun action => G.kernel.eu action who) = _
+      simp only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+    have hcontinuation : G.repeatedGame.historyContinuationEU
+        profile potential history = Math.Probability.expect (Math.PMFProduct.pmfPi current)
+          (fun action => potential (time + 1)
+            (Fin.snoc history.1 (history.2, action), PUnit.unit)) := by
+      unfold StochasticGame.historyContinuationEU
+      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
+        (fun action => Math.Probability.expect (PMF.pure PUnit.unit)
+          (fun nextState => potential (time + 1)
+            (Fin.snoc history.1 (history.2, action), nextState))) = _
+      simp only [Math.Probability.expect_pure]
+    rw [hstage, hcontinuation, sub_sub_cancel]
+    exact hmean
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let (player : Bool) : Finite (G.repeatedGame.Act player) :=
+    inferInstanceAs (Finite Bool)
+  obtain ⟨stageBound, hstageBound⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun data : G.repeatedGame.State × G.repeatedGame.JointAct =>
+      G.repeatedGame.stagePayoff data.1 data.2 who)
+  have hcap := StochasticGame.discountedPayoff_le_of_history_bellman_ge_on_support
+    G.repeatedGame (fun state action => hstageBound (state, action))
+    profile PUnit.unit potential (β := 1 - lam)
+    (by linarith) (by linarith) (fun time history _ => hpotential time history) hbellman
+  have hzero : potential 0 (G.repeatedGame.emptyHist PUnit.unit) = value 0 := by
+    have hpath : triggerOnPath G path (G.repeatedGame.emptyHist PUnit.unit) :=
+      fun k => Fin.elim0 k
+    simp only [potential, hpath, ite_true]
+  rw [hzero] at hcap
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial]
+    using! hcap
+
 section PrisonerVertexConstruction
 
 open scoped Classical
@@ -13927,65 +14146,33 @@ private theorem prisonerVertexProfile_opponent_on_support
         (prisonerVertexPath row column) history
         then prisonerVertexPath row column time (!who) else true) := by
   have hne : (!who) ≠ who := by cases who <;> decide
-  rw [Function.update_of_ne hne]
+  have hother := prisonersDilemma.triggerBehaviorProfile_other_on_support
+    (prisonerVertexPath row column) prisonerDefectionPunishments
+    who deviation (!who) hne history hsupport
+  rw [prisonersDilemma.punishmentMixedAction_of_ne
+    (prisonerDefectionPunishments time) hne] at hother
   by_cases hpath : triggerOnPath prisonersDilemma
       (prisonerVertexPath row column) history
-  · simp only [hpath, ite_true]
-    unfold prisonerVertexProfile FiniteStageGame.triggerBehaviorProfile
-      KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
-      KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
-    exact prisonersDilemma.triggerMonitoredProfile_of_onPath
-      (prisonerVertexPath row column) prisonerDefectionPunishments (!who) _ hpath
-  · simp only [hpath, ite_false]
-    obtain ⟨first, hmismatch, hbefore, hother⟩ :=
-      (prisonersDilemma.firstMismatch_of_mem_support_trigger_update
-        (prisonerVertexPath row column) prisonerDefectionPunishments who deviation
-        time history hsupport).resolve_left hpath
-    have hstatus := prisonersDilemma.publicTriggerStatus_eq_some_of_first
-      (prisonerVertexPath row column) who history first.isLt hmismatch
-      (fun k hk => hbefore ⟨k, hk.trans first.isLt⟩ hk) hother
-    have hstatus' : prisonersDilemma.actionMonitoringGame.triggerStatus
-        (prisonerVertexPath row column)
-        (List.ofFn (KernelGame.RealizedActionRepeatedAdapter.actionHistory
-          prisonersDilemma.kernel history)) = some who := hstatus
-    unfold prisonerVertexProfile FiniteStageGame.triggerBehaviorProfile
-      KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
-      KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
-    rw [prisonersDilemma.triggerMonitoredProfile_of_culprit
-      (prisonerVertexPath row column) prisonerDefectionPunishments who (!who) _ hstatus']
-    exact prisonersDilemma.punishmentMixedAction_of_ne
-      (prisonerDefectionPunishments time) hne
+  · simpa only [hpath, ite_true] using! hother
+  · simpa only [hpath, ite_false, prisonerDefectionPunishments] using! hother
 
 /-- Exact discounted delivery uses the already-owned affine-recurrence
 telescope and actual expected-stage payoff transport. -/
 theorem prisonerVertexProfile_discountedPayoff (row column : Bool) :
     prisonersDilemma.discountedPayoff (3 / 4) (prisonerVertexProfile row column) =
       prisonerVertexPayoff row column := by
-  let : Finite prisonersDilemma.kernel.Outcome := inferInstanceAs (Finite (Bool → Bool))
-  funext who
-  have hstage (time : ℕ) : prisonersDilemma.repeatedGame.expectedStagePayoff
-      (prisonerVertexProfile row column) PUnit.unit time who =
-        prisonersDilemma.payoff (prisonerVertexPath row column time) who := by
-    unfold prisonerVertexProfile FiniteStageGame.triggerBehaviorProfile
-    rw [KernelGame.RealizedActionRepeatedAdapter.expectedStagePayoff_toBehaviorProfile]
-    exact prisonersDilemma.stageEU_triggerMonitoredProfile
-      (prisonerVertexPath row column) prisonerDefectionPunishments time who
-  have hrec (time : ℕ) : prisonerVertexValue row column time who =
-      (3 / 4) * prisonersDilemma.repeatedGame.expectedStagePayoff
-          (prisonerVertexProfile row column) PUnit.unit time who +
-        (1 - 3 / 4) * prisonerVertexValue row column (time + 1) who := by
-    rw [hstage]
-    convert prisonerVertexValue_recurrence row column who time using 1
-    norm_num
-  have hvalue := discounted_sum_eq_of_affine_recurrence (3 / 4)
-    (by norm_num) (by norm_num) (fun time => prisonerVertexValue row column time who)
-    (fun time => prisonersDilemma.repeatedGame.expectedStagePayoff
-      (prisonerVertexProfile row column) PUnit.unit time who) 4
-    (prisonerVertexValue_abs_le_four row column who) hrec
-  rw [prisonerVertexValue_zero] at hvalue
-  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
-    StochasticGame.discountedPayoff, show (1 - (1 - (3 / 4 : ℝ))) = 3 / 4 by norm_num]
-    using! hvalue
+  have hvalue := prisonersDilemma.triggerBehaviorProfile_discountedPayoff
+    (prisonerVertexPath row column) prisonerDefectionPunishments (3 / 4)
+    (by norm_num) (by norm_num) (fun time who => prisonerVertexValue row column time who)
+    4 (fun time who => prisonerVertexValue_abs_le_four row column who time)
+    (fun time who => by
+      simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using
+        prisonerVertexValue_recurrence row column who time)
+  calc
+    _ = (fun who => prisonerVertexValue row column 0 who) := hvalue
+    _ = prisonerVertexPayoff row column := by
+      funext who
+      exact prisonerVertexValue_zero row column who
 
 /-- Every full unilateral behavioral replacement is capped by the source
 vertex value, not merely by a one-shot or pure-deviation comparison. -/
@@ -13994,103 +14181,19 @@ theorem prisonerVertexProfile_discounted_deviation_cap
     prisonersDilemma.discountedPayoff (3 / 4)
       (Function.update (prisonerVertexProfile row column) who deviation) who ≤
         prisonerVertexPayoff row column who := by
-  let profile := Function.update (prisonerVertexProfile row column) who deviation
-  let path := prisonerVertexPath row column
-  let value : prisonersDilemma.repeatedGame.HistoryPotential := fun time history =>
-    if triggerOnPath prisonersDilemma path history
-    then prisonerVertexValue row column time who else 1
-  have hbound (time : ℕ) (history : prisonersDilemma.repeatedGame.Hist time) :
-      |value time history| ≤ 4 := by
-    dsimp only [value]
-    split_ifs
-    · exact prisonerVertexValue_abs_le_four row column who time
-    · norm_num
-  have hbellman (time : ℕ) (history : prisonersDilemma.repeatedGame.Hist time)
-      (hsupport : history ∈
-        (prisonersDilemma.repeatedGame.histDist profile PUnit.unit time).support) :
-      (1 - (1 / 4)) * prisonersDilemma.repeatedGame.stageEUAt profile history who +
-        (1 / 4) * prisonersDilemma.repeatedGame.historyContinuationEU
-          profile value history ≤ value time history := by
-    let current : Bool → PMF Bool := fun player => profile player time history
-    have hother : current (!who) = PMF.pure
-        (if triggerOnPath prisonersDilemma path history then path time (!who) else true) :=
-      prisonerVertexProfile_opponent_on_support row column who deviation history hsupport
-    have hdraw (action : Bool → Bool)
-        (haction : action ∈ (Math.PMFProduct.pmfPi current).support) :
-        action (!who) = if triggerOnPath prisonersDilemma path history
-          then path time (!who) else true := by
-      have hupdate : Function.update current (!who)
-          (PMF.pure (if triggerOnPath prisonersDilemma path history
-            then path time (!who) else true)) = current :=
-        Function.update_eq_self_iff.mpr hother.symm
-      apply Math.PMFProduct.eq_of_mem_support_pmfPi_update_pure current (!who)
-        (if triggerOnPath prisonersDilemma path history then path time (!who) else true)
-      rwa [hupdate]
-    have hlocal (action : Bool → Bool)
-        (haction : action ∈ (Math.PMFProduct.pmfPi current).support) :
-        (3 / 4) * prisonersDilemma.payoff action who + (1 / 4) *
-          value (time + 1) (Fin.snoc history.1 (history.2, action), PUnit.unit) ≤
-            value time history := by
-      have hcoordinate := hdraw action haction
-      by_cases hpath : triggerOnPath prisonersDilemma path history
-      · simp only [hpath, ite_true] at hcoordinate
-        by_cases hequal : action = path time
-        · subst action
-          have hnext := (triggerOnPath_snoc_iff prisonersDilemma path
-            history (path time) PUnit.unit).mpr ⟨hpath, rfl⟩
-          simp only [value, hpath, hnext, ite_true]
-          exact (prisonerVertexValue_recurrence row column who time).ge
-        · have hnext : ¬ triggerOnPath prisonersDilemma path
-              ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
-                prisonersDilemma.repeatedGame.Hist (time + 1)) := by
-            rw [triggerOnPath_snoc_iff]
-            simp only [hpath, hequal, and_false, not_false_eq_true]
-          simp only [value, hpath, hnext, ite_true, ite_false, mul_one]
-          exact prisonerVertex_changed_action_cap row column who time action hcoordinate
-      · have hnext : ¬ triggerOnPath prisonersDilemma path
-            ((Fin.snoc history.1 (history.2, action), PUnit.unit) :
-              prisonersDilemma.repeatedGame.Hist (time + 1)) := by
-          rw [triggerOnPath_snoc_iff]
-          simp only [hpath, false_and, not_false_eq_true]
-        simp only [hpath, ite_false] at hcoordinate
-        simp only [value, hpath, hnext, ite_false, mul_one]
-        have hcap := prisonerVertex_punished_action_cap who action hcoordinate
-        linarith
-    have hmean := Math.ProbabilityMassFunction.expect_le_of_le_on_support
-      (B := value time history) (Math.PMFProduct.pmfPi current) _ hlocal
-    simp only [Math.Probability.expect_add, Math.Probability.expect_const_mul] at hmean
-    have hstage : prisonersDilemma.repeatedGame.stageEUAt profile history who =
-        Math.Probability.expect (Math.PMFProduct.pmfPi current)
-          (fun action => prisonersDilemma.payoff action who) := by
-      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
-        (fun action => prisonersDilemma.kernel.eu action who) = _
-      simp only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
-    have hcontinuation : prisonersDilemma.repeatedGame.historyContinuationEU
-        profile value history = Math.Probability.expect (Math.PMFProduct.pmfPi current)
-          (fun action => value (time + 1)
-            (Fin.snoc history.1 (history.2, action), PUnit.unit)) := by
-      unfold StochasticGame.historyContinuationEU
-      change Math.Probability.expect (Math.PMFProduct.pmfPi current)
-        (fun action => Math.Probability.expect (PMF.pure PUnit.unit)
-          (fun nextState => value (time + 1)
-            (Fin.snoc history.1 (history.2, action), nextState))) = _
-      simp only [Math.Probability.expect_pure]
-    rw [hstage, hcontinuation]
-    norm_num only [show (1 - (1 / 4 : ℝ)) = 3 / 4 by norm_num]
-    exact hmean
-  have hcap := StochasticGame.discountedPayoff_le_of_history_bellman_ge_on_support
-    prisonersDilemma.repeatedGame
-      (prisonersDilemma_stagePayoff_abs_le_five who) profile PUnit.unit value
-      (β := 1 / 4) (by norm_num) (by norm_num)
-      (fun time history _ => hbound time history) hbellman
-  have hzero : value 0 (prisonersDilemma.repeatedGame.emptyHist PUnit.unit) =
-      prisonerVertexPayoff row column who := by
-    have hpath : triggerOnPath prisonersDilemma path
-        (prisonersDilemma.repeatedGame.emptyHist PUnit.unit) := fun k => Fin.elim0 k
-    simp only [value, hpath, ite_true, prisonerVertexValue_zero]
-  rw [hzero] at hcap
-  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
-    show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using! hcap
+  have hcap := binaryGrimProfile_discounted_deviation_cap
+    (pair 4 4) (pair 0 5) (pair 5 0) (pair 1 1)
+    (prisonerVertexPath row column) (3 / 4) (by norm_num) (by norm_num)
+    who deviation (fun time => prisonerVertexValue row column time who) 1 4
+    (prisonerVertexValue_abs_le_four row column who) (by norm_num)
+    (fun time => by
+      simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num] using
+        prisonerVertexValue_recurrence row column who time)
+    (fun time action hother => by
+      simpa only [show (1 - (3 / 4 : ℝ)) = 1 / 4 by norm_num, mul_one] using
+        prisonerVertex_changed_action_cap row column who time action hother)
+    (prisonerVertex_punished_action_cap who)
+  simpa only [prisonerVertexValue_zero] using! hcap
 
 /-- The four source vertex profiles are actual discounted Nash profiles.
 No continuation Nash or supplied payoff certificate is an input. -/
@@ -15306,6 +15409,333 @@ def asymmetricCriticalDiscount (α β x y : ℝ) : ℝ :=
 def alternatingDiscountedPayoff (lam : ℝ)
     (u v : Payoff Bool) : Payoff Bool :=
   fun who => (u who + (1 - lam) * v who) / (2 - lam)
+
+
+private def asymmetricStationaryPath (_time : ℕ) : Bool → Bool :=
+  fun _ => false
+
+/-- Remark 4's stationary cooperation calendar with actual grim punishment. -/
+noncomputable def asymmetricStationaryProfile (α β x y : ℝ) :
+    (asymmetricGeneralizedDilemma α β x y).BehaviorProfile :=
+  binaryGrimProfile (pair (β - y) (β - y)) (pair (α - x) β)
+    (pair β (α - x)) (pair α α) asymmetricStationaryPath
+
+private theorem asymmetricCriticalDiscount_bounds (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) :
+    0 < asymmetricCriticalDiscount α β x y ∧
+      asymmetricCriticalDiscount α β x y < 1 := by
+  have hd : 0 < β - α := by linarith
+  have hnum : 0 < max (β - α - x) (β - α - y) :=
+    (by linarith : 0 < β - α - y).trans_le (le_max_right _ _)
+  have hnumLt : max (β - α - x) (β - α - y) < β - α :=
+    max_lt_iff.mpr ⟨by linarith, by linarith⟩
+  exact ⟨div_pos hnum hd, (div_lt_one hd).mpr hnumLt⟩
+
+private theorem asymmetricCriticalDiscount_stationary (α β x y : ℝ)
+    (horder : y ≤ x) :
+    asymmetricCriticalDiscount α β x y = (β - α - y) / (β - α) := by
+  unfold asymmetricCriticalDiscount
+  rw [max_eq_right (by linarith)]
+
+private theorem asymmetric_payoff_punished_le (α β x y : ℝ) (hx : 0 < x)
+    (who : Bool) (action : Bool → Bool) (hother : action (!who) = true) :
+    (asymmetricGeneralizedDilemma α β x y).payoff action who ≤ α := by
+  cases who <;> cases hrow : action false <;> cases hcolumn : action true <;>
+    simp [Bool.not_false, Bool.not_true, asymmetricGeneralizedDilemma,
+      binaryGame, binaryPayoff, pair, hrow, hcolumn] at hother ⊢ <;> linarith
+
+private theorem asymmetricStationary_deviation_identity (α β x y : ℝ)
+    (hgap : α < β - y) (hy : 0 < y) (horder : y ≤ x) :
+    asymmetricCriticalDiscount α β x y * β +
+        (1 - asymmetricCriticalDiscount α β x y) * α = β - y := by
+  have hd : β - α ≠ 0 := ne_of_gt (by linarith : 0 < β - α)
+  rw [asymmetricCriticalDiscount_stationary α β x y horder]
+  field_simp
+  ring
+
+/-- Exact delivery of the stationary source payoff, with no sign assumptions
+on the payoff parameters and no upper restriction on x. -/
+theorem asymmetricStationaryProfile_discountedPayoff (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) :
+    (asymmetricGeneralizedDilemma α β x y).discountedPayoff
+      (asymmetricCriticalDiscount α β x y) (asymmetricStationaryProfile α β x y) =
+        pair (β - y) (β - y) := by
+  let G := asymmetricGeneralizedDilemma α β x y
+  let rate := asymmetricCriticalDiscount α β x y
+  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
+  have hvalue := G.triggerBehaviorProfile_discountedPayoff asymmetricStationaryPath
+    (binaryDefectionPunishments (pair (β - y) (β - y)) (pair (α - x) β)
+      (pair β (α - x)) (pair α α))
+    rate hrate.1 hrate.2.le (fun _ => pair (β - y) (β - y)) |β - y|
+    (fun _ who => by cases who <;> exact le_rfl)
+    (fun _ who => by
+      cases who <;>
+        simp only [G, asymmetricGeneralizedDilemma, binaryGame, binaryPayoff,
+          asymmetricStationaryPath, pair]
+      all_goals ring)
+  exact hvalue
+
+/-- Every full behavioral replacement is capped by the stationary source
+value. The sharp changed-action identity includes the boundary x = y. -/
+theorem asymmetricStationaryProfile_discounted_deviation_cap (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : y ≤ x)
+    (who : Bool)
+    (deviation : (asymmetricGeneralizedDilemma α β x y).BehaviorStrategy who) :
+    (asymmetricGeneralizedDilemma α β x y).discountedPayoff
+      (asymmetricCriticalDiscount α β x y)
+      (Function.update (asymmetricStationaryProfile α β x y) who deviation) who ≤
+        (pair (β - y) (β - y)) who := by
+  let G := asymmetricGeneralizedDilemma α β x y
+  let rate := asymmetricCriticalDiscount α β x y
+  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
+  have hidentity := asymmetricStationary_deviation_identity α β x y hgap hy horder
+  have hchanged (time : ℕ) (action : Bool → Bool)
+      (hother : action (!who) = asymmetricStationaryPath time (!who)) :
+      rate * G.payoff action who + (1 - rate) * α ≤ β - y := by
+    have hpayoff : G.payoff action who = β - y ∨ G.payoff action who = β := by
+      cases who <;> cases hrow : action false <;> cases hcolumn : action true <;>
+        simp [Bool.not_false, Bool.not_true, asymmetricStationaryPath,
+          G, asymmetricGeneralizedDilemma, binaryGame, binaryPayoff, pair,
+          hrow, hcolumn, or_true, true_or] at hother ⊢
+    rcases hpayoff with hpayoff | hpayoff
+    · rw [hpayoff]
+      calc
+        rate * (β - y) + (1 - rate) * α ≤
+            rate * (β - y) + (1 - rate) * (β - y) :=
+          add_le_add le_rfl
+            (mul_le_mul_of_nonneg_left hgap.le (by dsimp only [rate]; linarith))
+        _ = β - y := by ring
+    · rw [hpayoff]
+      exact hidentity.le
+  have hcap := binaryGrimProfile_discounted_deviation_cap
+    (pair (β - y) (β - y)) (pair (α - x) β) (pair β (α - x)) (pair α α)
+    asymmetricStationaryPath rate hrate.1 hrate.2.le who deviation
+    (fun _ => β - y) α (max |β - y| |α|) (fun _ => le_max_left _ _)
+    (le_max_right _ _)
+    (fun _ => by
+      cases who <;>
+        simp only [binaryPayoff,
+        asymmetricStationaryPath, pair]
+      all_goals ring)
+    hchanged (asymmetric_payoff_punished_le α β x y hx who)
+  cases who <;> exact hcap
+
+/-- The actual stationary grim profile is Nash against unrestricted unilateral
+behavioral deviations at the original asymmetric critical rate. -/
+theorem asymmetricStationaryProfile_isDiscountedNash (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : y ≤ x) :
+    (asymmetricGeneralizedDilemma α β x y).repeatedGame.IsDiscountedεNash
+      (1 - asymmetricCriticalDiscount α β x y) PUnit.unit 0
+      (asymmetricStationaryProfile α β x y) := by
+  intro who deviation
+  have hcap := asymmetricStationaryProfile_discounted_deviation_cap
+    α β x y hgap hx hy horder who deviation
+  have hpayoff := congrFun (asymmetricStationaryProfile_discountedPayoff
+    α β x y hgap hx hy) who
+  rw [← hpayoff] at hcap
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    add_zero] using! hcap
+
+/-- The closed stationary branch of the printed Remark 4 follows from an
+internally constructed actual behavioral Nash profile. -/
+theorem asymmetricStationary_mem_discountedEquilibriumPayoffs (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : y ≤ x) :
+    pair (β - y) (β - y) ∈
+      (asymmetricGeneralizedDilemma α β x y).discountedEquilibriumPayoffs
+        (asymmetricCriticalDiscount α β x y) :=
+  ⟨asymmetricStationaryProfile α β x y,
+    asymmetricStationaryProfile_isDiscountedNash α β x y hgap hx hy horder,
+    asymmetricStationaryProfile_discountedPayoff α β x y hgap hx hy⟩
+
+
+private def asymmetricAlternatingPath (time : ℕ) : Bool → Bool :=
+  fun who => if time % 2 = 0 then !who else who
+
+private def asymmetricAlternatingValue (α β x : ℝ) (time : ℕ) : Payoff Bool :=
+  fun who => if asymmetricAlternatingPath time who then β - x else α
+
+/-- Remark 4's alternating DC/CD calendar with actual grim punishment. -/
+noncomputable def asymmetricAlternatingProfile (α β x y : ℝ) :
+    (asymmetricGeneralizedDilemma α β x y).BehaviorProfile :=
+  binaryGrimProfile (pair (β - y) (β - y)) (pair (α - x) β)
+    (pair β (α - x)) (pair α α) asymmetricAlternatingPath
+
+private theorem asymmetricCriticalDiscount_alternating (α β x y : ℝ)
+    (horder : x < y) :
+    asymmetricCriticalDiscount α β x y = (β - α - x) / (β - α) := by
+  unfold asymmetricCriticalDiscount
+  rw [max_eq_left (by linarith)]
+
+private theorem asymmetricAlternating_phase_identities (α β x y : ℝ)
+    (hgap : α < β - y) (hy : 0 < y) (horder : x < y) :
+    asymmetricCriticalDiscount α β x y * β +
+        (1 - asymmetricCriticalDiscount α β x y) * α = β - x ∧
+      asymmetricCriticalDiscount α β x y * (α - x) +
+        (1 - asymmetricCriticalDiscount α β x y) * (β - x) = α := by
+  have hd : β - α ≠ 0 := ne_of_gt (by linarith : 0 < β - α)
+  rw [asymmetricCriticalDiscount_alternating α β x y horder]
+  constructor
+  all_goals field_simp [hd]
+  all_goals ring
+
+private theorem asymmetric_payoff_le_beta (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y)
+    (who : Bool) (action : Bool → Bool) :
+    (asymmetricGeneralizedDilemma α β x y).payoff action who ≤ β := by
+  cases who <;> cases hrow : action false <;> cases hcolumn : action true <;>
+    simp only [asymmetricGeneralizedDilemma, binaryGame, binaryPayoff,
+      pair, hrow, hcolumn] <;> linarith
+
+private theorem asymmetricAlternatingValue_recurrence (α β x y : ℝ)
+    (hgap : α < β - y) (hy : 0 < y) (horder : x < y)
+    (time : ℕ) (who : Bool) :
+    asymmetricAlternatingValue α β x time who =
+      asymmetricCriticalDiscount α β x y *
+          (asymmetricGeneralizedDilemma α β x y).payoff
+            (asymmetricAlternatingPath time) who +
+        (1 - asymmetricCriticalDiscount α β x y) *
+          asymmetricAlternatingValue α β x (time + 1) who := by
+  have hnext : (time + 1) % 2 = 1 - time % 2 := by omega
+  obtain ⟨hhigh, hlow⟩ :=
+    asymmetricAlternating_phase_identities α β x y hgap hy horder
+  rcases Nat.mod_two_eq_zero_or_one time with htime | htime
+  all_goals cases who
+  all_goals
+    simp [asymmetricAlternatingValue, asymmetricAlternatingPath,
+      asymmetricGeneralizedDilemma, binaryGame, binaryPayoff, pair,
+      htime, hnext, Bool.not_false, Bool.not_true]
+  all_goals first | exact hhigh.symm | exact hlow.symm
+
+private theorem asymmetricAlternatingDiscountedPayoff_eq (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y) :
+    alternatingDiscountedPayoff (asymmetricCriticalDiscount α β x y)
+      (pair β (α - x)) (pair (α - x) β) = pair (β - x) α := by
+  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
+  have hden : 2 - asymmetricCriticalDiscount α β x y ≠ 0 := by linarith
+  have hd : β - α ≠ 0 := ne_of_gt (by linarith : 0 < β - α)
+  funext who
+  cases who
+  all_goals simp only [alternatingDiscountedPayoff, pair]
+  all_goals apply (div_eq_iff hden).mpr
+  all_goals rw [asymmetricCriticalDiscount_alternating α β x y horder]
+  all_goals field_simp [hd]
+  all_goals ring
+
+/-- The actual alternating grim profile delivers precisely the original
+two-period discounted expression, starting at DC. -/
+theorem asymmetricAlternatingProfile_discountedPayoff (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y) :
+    (asymmetricGeneralizedDilemma α β x y).discountedPayoff
+      (asymmetricCriticalDiscount α β x y) (asymmetricAlternatingProfile α β x y) =
+        alternatingDiscountedPayoff (asymmetricCriticalDiscount α β x y)
+          (pair β (α - x)) (pair (α - x) β) := by
+  let G := asymmetricGeneralizedDilemma α β x y
+  let rate := asymmetricCriticalDiscount α β x y
+  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
+  have hbound (time : ℕ) (who : Bool) :
+      |asymmetricAlternatingValue α β x time who| ≤ max |β - x| |α| := by
+    unfold asymmetricAlternatingValue
+    split_ifs
+    · exact le_max_left _ _
+    · exact le_max_right _ _
+  have hvalue := G.triggerBehaviorProfile_discountedPayoff asymmetricAlternatingPath
+    (binaryDefectionPunishments (pair (β - y) (β - y)) (pair (α - x) β)
+      (pair β (α - x)) (pair α α))
+    rate hrate.1 hrate.2.le (asymmetricAlternatingValue α β x)
+    (max |β - x| |α|) hbound
+    (asymmetricAlternatingValue_recurrence α β x y hgap hy horder)
+  rw [asymmetricAlternatingDiscountedPayoff_eq α β x y hgap hx hy horder]
+  have hzero : asymmetricAlternatingValue α β x 0 = pair (β - x) α := by
+    funext who
+    cases who <;> rfl
+  exact hvalue.trans hzero
+
+/-- Zero-surplus low phases still cap all full behavioral replacements;
+no positive punishment margin or supported-child Nash premise is imposed. -/
+theorem asymmetricAlternatingProfile_discounted_deviation_cap (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y)
+    (who : Bool)
+    (deviation : (asymmetricGeneralizedDilemma α β x y).BehaviorStrategy who) :
+    (asymmetricGeneralizedDilemma α β x y).discountedPayoff
+      (asymmetricCriticalDiscount α β x y)
+      (Function.update (asymmetricAlternatingProfile α β x y) who deviation) who ≤
+        alternatingDiscountedPayoff (asymmetricCriticalDiscount α β x y)
+          (pair β (α - x)) (pair (α - x) β) who := by
+  let G := asymmetricGeneralizedDilemma α β x y
+  let rate := asymmetricCriticalDiscount α β x y
+  have hrate := asymmetricCriticalDiscount_bounds α β x y hgap hx hy
+  have hhigh := (asymmetricAlternating_phase_identities α β x y hgap hy horder).1
+  have hbound (time : ℕ) :
+      |asymmetricAlternatingValue α β x time who| ≤ max |β - x| |α| := by
+    unfold asymmetricAlternatingValue
+    split_ifs
+    · exact le_max_left _ _
+    · exact le_max_right _ _
+  have hchanged (time : ℕ) (action : Bool → Bool)
+      (hother : action (!who) = asymmetricAlternatingPath time (!who)) :
+      rate * G.payoff action who + (1 - rate) * α ≤
+        asymmetricAlternatingValue α β x time who := by
+    have hopposite : asymmetricAlternatingPath time (!who) =
+        !(asymmetricAlternatingPath time who) := by
+      unfold asymmetricAlternatingPath
+      split_ifs <;> cases who <;> rfl
+    cases hown : asymmetricAlternatingPath time who
+    · have hotherTrue : action (!who) = true := by
+        simpa only [hopposite, hown, Bool.not_false] using hother
+      have hpayoff := asymmetric_payoff_punished_le α β x y hx who action hotherTrue
+      simp only [asymmetricAlternatingValue, hown, Bool.false_eq_true, ite_false]
+      calc
+        rate * G.payoff action who + (1 - rate) * α ≤
+            rate * α + (1 - rate) * α :=
+          add_le_add (mul_le_mul_of_nonneg_left hpayoff hrate.1.le) le_rfl
+        _ = α := by ring
+    · simp only [asymmetricAlternatingValue, hown, ite_true]
+      calc
+        rate * G.payoff action who + (1 - rate) * α ≤
+            rate * β + (1 - rate) * α :=
+          add_le_add (mul_le_mul_of_nonneg_left
+            (asymmetric_payoff_le_beta α β x y hgap hx hy who action) hrate.1.le) le_rfl
+        _ = β - x := hhigh
+  have hcap := binaryGrimProfile_discounted_deviation_cap
+    (pair (β - y) (β - y)) (pair (α - x) β) (pair β (α - x)) (pair α α)
+    asymmetricAlternatingPath rate hrate.1 hrate.2.le who deviation
+    (fun time => asymmetricAlternatingValue α β x time who)
+    α (max |β - x| |α|) hbound (le_max_right _ _)
+    (fun time => asymmetricAlternatingValue_recurrence α β x y hgap hy horder time who)
+    hchanged (asymmetric_payoff_punished_le α β x y hx who)
+  have hzero : asymmetricAlternatingValue α β x 0 who = (pair (β - x) α) who := by
+    cases who <;> rfl
+  rw [hzero] at hcap
+  rw [asymmetricAlternatingDiscountedPayoff_eq α β x y hgap hx hy horder]
+  exact hcap
+
+/-- Actual Nash optimality at the original asymmetric critical rate, with
+the full unilateral behavioral deviation quantifier. -/
+theorem asymmetricAlternatingProfile_isDiscountedNash (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y) :
+    (asymmetricGeneralizedDilemma α β x y).repeatedGame.IsDiscountedεNash
+      (1 - asymmetricCriticalDiscount α β x y) PUnit.unit 0
+      (asymmetricAlternatingProfile α β x y) := by
+  intro who deviation
+  have hcap := asymmetricAlternatingProfile_discounted_deviation_cap
+    α β x y hgap hx hy horder who deviation
+  have hpayoff := congrFun (asymmetricAlternatingProfile_discountedPayoff
+    α β x y hgap hx hy horder) who
+  rw [← hpayoff] at hcap
+  simpa only [FiniteStageGame.discountedPayoff, FiniteStageGame.repeatedInitial,
+    add_zero] using! hcap
+
+/-- The alternating branch of Remark 4 is produced internally, with the
+printed rate and printed starting-order payoff expression. -/
+theorem asymmetricAlternating_mem_discountedEquilibriumPayoffs (α β x y : ℝ)
+    (hgap : α < β - y) (hx : 0 < x) (hy : 0 < y) (horder : x < y) :
+    alternatingDiscountedPayoff (asymmetricCriticalDiscount α β x y)
+        (pair β (α - x)) (pair (α - x) β) ∈
+      (asymmetricGeneralizedDilemma α β x y).discountedEquilibriumPayoffs
+        (asymmetricCriticalDiscount α β x y) :=
+  ⟨asymmetricAlternatingProfile α β x y,
+    asymmetricAlternatingProfile_isDiscountedNash α β x y hgap hx hy horder,
+    asymmetricAlternatingProfile_discountedPayoff α β x y hgap hx hy horder⟩
 
 /-! Remark 4.  Above the critical value the usual payoff is unique.  At the
 critical value, the printed alternating or stationary construction applies,

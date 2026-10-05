@@ -1,0 +1,98 @@
+import MathUE.Interval.RationalPolynomialRegularity
+import UniformEquilibrium.Quitting.Projective.RationalRobustRejectionDensity
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuadraticExclusion
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMultiAffineExclusion
+
+/-! # Internally produced rational robust rejection for the excluded actual candidates -/
+
+noncomputable section
+
+namespace GameTheory
+
+open Set Math.Interval
+
+variable {players : ℕ} [Nontrivial (Fin players)]
+
+omit [Nontrivial (Fin players)] in
+/-- Negating the full test produces a positive exact rejecting edge.
+Zero absorption gives zero displacement by the canonical bounded-edge estimate. -/
+theorem exists_positive_exact_rejection_of_not_fullRootPotential
+    (reward : {S : Finset (Fin players) // S.Nonempty} → Payoff (Fin players))
+    (bound : ℝ) (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+    (potential : Payoff (Fin players) → ℝ)
+    (hnot : ¬ IsQuittingFullExactRootPotential reward bound potential) :
+    ∃ source root, (∀ who, |source who| ≤ bound) ∧
+      IsεQuittingRootNash reward source 0 root ∧
+      0 < quittingRootAbsorptionMass root ∧
+      potential source - potential (quittingRootSuccessorPayoff reward source root) <
+        quittingRootAbsorptionMass root := by
+  classical
+  unfold IsQuittingFullExactRootPotential at hnot
+  push Not at hnot
+  obtain ⟨source, hsource, root, hnash, hviolation⟩ := hnot
+  have hpositive : 0 < quittingRootAbsorptionMass root := by
+    by_contra hnotPositive
+    have hzero : quittingRootAbsorptionMass root = 0 :=
+      le_antisymm (le_of_not_gt hnotPositive) (quittingRootAbsorptionMass_nonneg root)
+    have hidentity : quittingRootSuccessorPayoff reward source root = source := by
+      funext who
+      have hdisplacement := abs_quittingRootSuccessorPayoff_sub_tail_le_two_mul_absorptionMass
+        reward source root who bound hreward (hsource who)
+      rw [hzero, mul_zero] at hdisplacement
+      exact sub_eq_zero.mp (abs_eq_zero.mp
+        (le_antisymm hdisplacement (abs_nonneg _)))
+    rw [hzero, hidentity] at hviolation
+    linarith
+  exact ⟨source, root, hsource, hnash, hpositive, by linarith⟩
+
+/-- No rational reward table in the packet's bounded, nonnegative-singleton
+class admits an excluded quadratic OR multi-affine actual polynomial candidate.
+At every supplied positive rational tolerance, produce rational source/root
+and their rational exact successor. No candidate, root, or minimum is selected
+as a new input; degree is the normalized polynomial's degree after cancellation. -/
+theorem exists_rational_robust_rejection_of_excluded_polynomial
+    (reward : RationalQuittingReward players)
+    (hreward : ∀ terminal who, |reward terminal who| ≤ 1)
+    (hsingleton : ∀ who, 0 ≤ reward (quittingSingletonTerminal who) who)
+    (expression : RationalPolynomial players)
+    (hexcluded : expression.toMvPolynomial.totalDegree ≤ 2 ∨
+      ∀ who, expression.toMvPolynomial.degreeOf who ≤ 1)
+    (tolerance : ℚ) (htolerance : 0 < tolerance) :
+    ∃ source : Fin players → ℚ, ∃ root : RationalQuittingRoot players,
+      (∀ who, |source who| ≤ 3) ∧
+      (∀ who, |rationalQuittingRootExpectedPayoff reward source root who| ≤ 3) ∧
+      0 < quittingRootAbsorptionMass root.toPMF ∧
+      (∀ who, quittingRootCoordinateNashDefect (rationalQuittingRewardToReal reward)
+        (fun other => (source other : ℝ)) root.toPMF who <
+          (tolerance : ℝ) * quittingRootAbsorptionMass root.toPMF) ∧
+      RationalPolynomial.evalReal (fun who => (source who : ℝ)) expression -
+        RationalPolynomial.evalReal
+          (fun who => (rationalQuittingRootExpectedPayoff reward source root who : ℝ))
+          expression < quittingRootAbsorptionMass root.toPMF := by
+  have hrealReward : ∀ terminal who,
+      |rationalQuittingRewardToReal reward terminal who| ≤ 1 :=
+    fun terminal who => by
+      change |(reward terminal who : ℝ)| ≤ 1
+      exact_mod_cast hreward terminal who
+  have hrealSingleton : ∀ who,
+      0 ≤ quittingSoloReward (rationalQuittingRewardToReal reward) who who :=
+    fun who => by
+      change 0 ≤ (reward (quittingSingletonTerminal who) who : ℝ)
+      exact_mod_cast hsingleton who
+  have hnot : ¬ IsQuittingFullExactRootPotential (rationalQuittingRewardToReal reward) 3
+      (fun point => RationalPolynomial.evalReal point expression) := by
+    rcases hexcluded with hquadratic | haffine
+    · exact not_isQuittingFullExactRootPotential_rational_totalDegree_le_two
+        hrealReward hrealSingleton expression hquadratic
+    · exact not_isQuittingFullExactRootPotential_rational_multiAffine
+        hrealReward hrealSingleton expression haffine
+  obtain ⟨source, root, hsource, hnash, hpositive, hdrop⟩ :=
+    exists_positive_exact_rejection_of_not_fullRootPotential
+      (rationalQuittingRewardToReal reward) 3
+      (fun terminal who => (hrealReward terminal who).trans (by norm_num)) _ hnot
+  exact exists_rational_robust_rejection_of_positive_exact_rejection reward 3 tolerance
+    (fun terminal who => (hreward terminal who).trans (by norm_num)) htolerance _
+    (RationalPolynomial.contDiff_evalReal expression 1).continuous
+    source root hsource hnash hpositive hdrop
+
+end GameTheory

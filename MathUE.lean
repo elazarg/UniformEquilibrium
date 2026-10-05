@@ -8,6 +8,7 @@ import MathUE.Polynomial.MvPolynomialCoordinateAffine
 import MathUE.Polynomial.MvPolynomialQuadraticReflection
 import MathUE.Analysis.MidpointThirdDerivative
 import MathUE.Interval.RationalPolynomialRegularity
+import MathUE.Interval.RationalPolynomialRationalEvaluation
 import MathUE.Interval.RationalClosedBoxDensity
 import MathUE.PairedAffineIntervalEstimates
 import MathUE.PairedAffineClearedField

@@ -2382,6 +2382,24 @@ lie in the stated box. This is an annotated one-stage rejection witness, not a
 behavioral equilibrium, approximate-root search, or general decision algorithm.
 Its exhaustive axiom audit and full silent integration check also pass.
 
+`exists_rational_robust_rejection_of_excluded_polynomial`
+(`UniformEquilibrium/Quitting/Projective/ExcludedPolynomialRationalRejection.lean`)
+produces a rational source/root pair for every positive rational tolerance,
+under the unit reward bound and nonnegative own singletons, when the canceled
+polynomial is quadratic or multi-affine. The source and exact successor are
+boxed, absorption is positive, every source-based regret is strictly below
+tolerance times absorption, and the potential drop is strictly below absorption.
+`rationalQuittingPotentialRejectionSearch_eventually_succeeds_of_excluded_polynomial`
+and `rationalQuittingPotentialRejectionSearch_sound`
+(`UniformEquilibrium/Quitting/Projective/RationalPotentialRejectionSearch.lean`)
+prove eventual finite-budget success and the literal robust interpretation of
+the actual returned pair. The executable test uses exact rational evaluation
+and accepts non-strict regret bounds. The checks include a silent named build,
+separate returned-pair consumer and standard-axiom audit, and the full build.
+Neither theorem gives rational exact Nash, an effective cutoff, or a denominator
+bound. The paired-example and normalization joins of the reflection packet
+remain separate work.
+
 The shape examples and boundary cases are integrated and pass silent named,
 separate standard-axiom and full build checks. `upper_two_fixture`
 (`UniformEquilibrium/Quitting/Examples/CollisionAdjustedProbeBoundary.lean`)
@@ -3067,6 +3085,7 @@ generic quitting-game existence theorems.
 | Small representations of preconnected convex hulls | `MathUE/Topology/ConnectedConvexHullRepresentation.lean` | `exists_small_finset_of_mem_convexHull_isPreconnected` selects a nonempty finite subset of the actual source representing the supplied convex-hull point, with cardinality at most the ambient dimension or one in dimension zero. No compactness, path connectedness, or supplied representation is required. Its silent named check, exhaustive axiom audit and full integration check pass. This supplies a geometric prerequisite, not Sorin's discounted schedule or an equilibrium. |
 | Affine peeling and geometric schedules | `MathUE/Topology/ConnectedConvexHullAffineStep.lean`, `MathUE/RealSeries/GeometricAffineSchedule.lean` | `exists_affine_step_of_mem_convexHull_isPreconnected` internally selects a source point and convex-hull residual under the prescribed dimension-weight budget. `exists_geometric_schedule_of_bounded_affine_steps` constructs the complete schedule from actual affine steps in a bounded region and proves its exact coordinatewise discounted payoff. Neither result asserts equilibrium or closes Sorin's paper statement without its game-specific adapter. |
 | Sorin's discounted feasible-set identity | `Literature/Sorin1986.lean` | `proposition_4` proves the paper's exact identity between discounted and correlated feasible payoffs for positive rates below the reciprocal player count. The source geometry, stages and behavioral realization are constructed internally. Its silent paper check, separate actual-profile consumer and standard-axiom checks, and full build pass. `proposition_6` reuses the generic schedule; `proposition_15` retains its actual behavioral equilibrium statement and passes the separate axiom check. Other unfinished paper results remain separate obligations. |
+| Sorin's asymmetric critical-rate equilibria | `Literature/Sorin1986.lean` | `asymmetricStationaryProfile_isDiscountedNash` constructs the stationary cooperation equilibrium for loss parameters satisfying `y ≤ x`, including equality. `asymmetricAlternatingProfile_isDiscountedNash` constructs the DC-first alternating equilibrium when `x < y`. Both use the printed critical rate, retain the printed payoff hypotheses without sign restrictions, and cap arbitrary full behavioral deviations. Actual delivery, membership and boundary consumers pass separate standard-axiom checks, the silent paper build and the full build. The above-critical uniqueness conclusion of `concluding_remark_4` remains unfinished. |
 | Coupled cubic shape example | `MathUE/Analysis/Examples/CoupledCubicShape.lean` | `Math.CoupledCubicShape.quasiconvexOn` proves quasiconvexity on every convex domain. `not_convexOn` and `not_exists_additive_eqOn` prove nonconvexity and failure of an additive representation on boxes of dimension at least two and coordinate widths at least one. The actual first and mixed derivatives and a literal rational-polynomial representation are also proved. This is an analytical example, not a quitting potential or equilibrium construction. |
 | Compact finite-prefix relations | `MathUE/Topology/CompactFinitePrefixRelation.lean`, `MathUE/Topology/CompactDependentFinitePrefixRelation.lean` | Inverse-limit selection from compatible compact finite prefixes. `exists_dependentInfiniteChain_of_finitePrefixes` also permits the state carrier to depend on the depth, but remains conditional on a coherent family of nonempty compact finite-prefix solution sets; it supplies no compatible-prefix producer. |
 | Rational max-expression lower search | `MathUE/Interval/RationalMaxExpression.lean`, `MathUE/Interval/RationalLowerBoxTree.lean`, `MathUE/Interval/RationalLowerBoxSearch.lean` | Exact rational interval evaluation for expressions generated by constants, variables, negation, addition, multiplication, and binary maximum; independently checkable lower-box trees; sound breadth-first search; and strict-margin finite completeness on a rational root box. This is generic executable infrastructure, not CAD/QE for arbitrary semialgebraic formulas. |
