@@ -7,6 +7,13 @@ for independent review** of
 referenced common-hazard polynomial and reward-coordinate definitions.
 No other review was read before this assessment.
 
+Current scope: the proof remains mathematically valid, but the entire
+existence class is already supplied by implemented criteria, including
+the subgroup response quotient in the formerly proposed new branch.
+The retained mathematical packet is now
+`../notes/CODEX_BROUWER__KLEIN_FOUR_EQUIVARIANT_QUITTING_GAMES.md`.
+This review does not support export as new existence coverage.
+
 ## Verdict
 
 The claimed uniform-equilibrium existence theorem for every finite real
@@ -165,3 +172,31 @@ triangle producer. The ordinary proof needs only finite polynomial algebra,
 Euclidean projection, Brouwer, and geometric absorption. Its genuinely
 additional hypothesis is full Klein-four reward equivariance; singleton
 symmetry alone does not yield the exact diagonal identity used in the VI.
+
+## Corrected implementation-overlap assessment
+
+The earlier bounded source check missed the stronger subgroup response
+quotient. I have now read
+`responseInvariant_of_reward_subgroup_automorphisms` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPlayerOrbits.lean`
+and `finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+in `UniformEquilibrium/Diagnostics/Quitting/FinFourResponseQuotientCriterion.lean`.
+
+In the positive-surplus branch with a_t<1, translation by t gives two
+two-element orbits and actual response invariance on their hazard cube.
+With A=1−a_t>0 and B=a_u+a_v−2>A, the quotient singleton matrix is
+
+    [[−A,B],[B,−A]].
+
+Its determinant is A²−B²<0 and its inverse is
+[[A,B],[B,A]]/(B²−A²), entrywise positive. The named criterion directly
+produces original-game UE from these raw data. It requires no preselected
+stationary root, supplied R0 proof, or behavioral witness. Combined with
+the existing branches already audited for the other parameter regions,
+this covers the full Klein-four class.
+
+The independent triangle proof and the full-behavior checks above remain
+valid ordinary mathematics. Their correct status is an alternative direct
+proof within an implemented existence class. My mathematical PASS is
+unchanged; any earlier implication of new existence-class coverage is
+withdrawn. No Lean build was performed for this source audit.

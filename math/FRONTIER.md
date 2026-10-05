@@ -403,7 +403,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 
 | Reward condition | Conclusion and boundary |
 | --- | --- |
-| Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards. A stationary profile or a stationary approximation family is produced; no nonsingleton inequalities beyond equivariance are required. This is a reviewed mathematical result, not yet a Lean theorem. |
+| Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards, as a corollary of the implemented response-quotient criterion and elementary singleton branches. No nonsingleton inequalities beyond equivariance are required. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -415,12 +415,13 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Uniform strict payoff deficit, nonconcentrated weighted payoff exclusion, or nonnegative-singleton weak subset exclusion | Actual finite profiles with arbitrarily small complete regret, hence a fixed UE payoff. |
 
 Klein-four equivariance means rᵢ₊ₖ(S+k)=rᵢ(S) after identifying the players
-with (ℤ/2ℤ)². The substantive new branch has positive common own singleton,
+with (ℤ/2ℤ)². In the branch with positive common own singleton,
 positive total external-singleton surplus, and at least one external
-singleton below the own singleton. A triangular projected-field argument
-produces two paired hazards and verifies every individual Nash condition.
-The unrestricted nonsingleton rewards enter the exact field, not only its
-linearization. Singleton symmetry alone is insufficient, and arbitrary
+singleton below the own singleton, the within-pair subgroup gives the
+response quotient [[−A,B],[B,−A]] with B>A>0. Its negative determinant and
+positive inverse activate the existing quotient consumer. A direct triangle
+proof gives an alternative construction, not additional existence coverage.
+Singleton symmetry alone is insufficient, and arbitrary
 tables have no proved symmetry reduction.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,

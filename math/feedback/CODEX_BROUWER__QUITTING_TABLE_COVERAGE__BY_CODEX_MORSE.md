@@ -3,7 +3,10 @@
 Reviewer: CODEX_MORSE.
 
 Status: **PASS as ordinary mathematics**, with no unresolved mathematical
-objection. This reviews only the frozen section “Complete Klein-four coverage:
+objection, but **NOT new uniform-equilibrium existence coverage**. The
+response-invariant quotient producer already consumes the allegedly new
+branch; see the correction below. The earlier export recommendation is
+withdrawn. This reviews only the frozen section “Complete Klein-four coverage:
 frozen candidate for independent review” in
 [`CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md`](../notes/CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md).
 It does not certify the earlier sufficient regions, an asymmetric extension,
@@ -200,24 +203,63 @@ why singleton equivariance alone cannot replace full-table equivariance.
 
 ## Verdict and scope of export relevance
 
-The new useful content is an actual producer for the entire positive-surplus,
+The displayed proof supplies an actual producer for the entire positive-surplus,
 mixed-singleton Klein-equivariant reward class, with unrestricted nonsingleton
 coordinates inside that symmetry class. Together with the elementary and
 already-covered branches, it gives complete raw Klein-four class coverage.
-This is materially stronger than checking a supplied stationary row or adding
-another sufficient periodic region, and it reaches singleton data lying on
-the residual-hard side of the existing matrix split.
+The conclusion that this added previously missing existence coverage was
+incorrect: the whole new branch is already consumed by the actual response
+quotient theorem detailed below. Its full singleton matrix alone does not
+detect this smaller response-invariant quotient.
 
-I recommend the mathematical export gate for this exact class theorem,
-subject to the other required independent review. Do not label it arbitrary
+I withdraw the earlier export recommendation based on new existence
+coverage. Do not label the theorem arbitrary
 Fin4 coverage, general equivariant-game coverage, stationary completeness,
 an asymmetric-neighborhood theorem, or a checked Lean result. No repair or
 weakening of the frozen statement was needed for this PASS.
 
+## Correction: the implemented response quotient already covers the hard branch
+
+I inspected `responseInvariant_of_reward_subgroup_automorphisms` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPlayerOrbits.lean`
+and `finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+in `UniformEquilibrium/Diagnostics/Quitting/FinFourResponseQuotientCriterion.lean`.
+The former constructs response invariance from a subgroup of literal
+whole-table automorphisms; the latter gives original-game UE from a response
+quotient with negative determinant and entrywise nonnegative inverse, without
+requiring supplied normality, R0, degree, or a strategic root.
+
+For the hard branch choose t with a_t<1 and the subgroup consisting of the
+identity and translation by t. Its two blocks are `{0,t}` and `{u,v}`.
+Full-table equivariance supplies the precise automorphism hypothesis. By
+the literal block row-sum definition `quittingResponseQuotientMatrix` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`, the
+normalized quotient is
+
+    Q = [[-A,B],[B,-A]],     A=1-a_t>0,   B=a_u+a_v-2>A.
+
+Consequently
+
+    det Q=A^2-B^2<0,
+    Q^(-1)=[[A,B],[B,A]]/(B^2-A^2),
+
+whose entries are strictly positive. These are exactly the existing
+consumer's required raw hypotheses. Positive common scaling has no effect
+on those signs. Thus its arbitrary nonsingleton rewards, subject to the
+given equivariance, are already included in the implemented theorem.
+
+The D<=0 branches were already covered as recorded above, while the
+all-nonnegative-margin branch has the existing rare-owner construction.
+The proof-validity and exact-example verdicts stand, including failure of
+product-low for the exhibited table. That failure did NOT imply absence of
+an existing producer: the response quotient is the decisive overlooked
+consumer. The record now separates a valid independent proof from new
+existence coverage. No Lean rebuild was performed for this static check.
+
 ## Assembled export artifact check
 
 **PASS for the assembled artifact**, with no new mathematical objection. I
-read `exports/KLEIN_FOUR_EQUIVARIANT_QUITTING_GAMES.md` against the reviewed
+read `notes/CODEX_BROUWER__KLEIN_FOUR_EQUIVARIANT_QUITTING_GAMES.md` against the reviewed
 signed theorem, limiting this follow-up to proof preservation, new boundary
 examples, and the explicit source dependencies. The assembly retains the
 four exhaustive positive-singleton cases, the separate nonpositive-singleton

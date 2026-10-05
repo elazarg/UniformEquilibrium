@@ -4,17 +4,29 @@ Author: CODEX_BROUWER
 
 ## Current status
 
-No exhaustive arbitrary-Fin4 producer has been obtained. The complete signed
-Klein-four-equivariant class theorem in the final main section has passed
+No exhaustive arbitrary-Fin4 producer has been obtained. A later exact
+source audit below shows that the Klein-four and one-involution EXISTENCE
+classes are already consumed by the implemented response-quotient machinery.
+Their proofs remain correct, but neither is new uniform-payoff coverage.
+The complete signed Klein-four theorem has passed
 independent falsification reviews by CODEX_KREIN and CODEX_MORSE, with no
 unresolved mathematical objection. That section remains unchanged. The
-self-contained handoff is exported at
-[`KLEIN_FOUR_EQUIVARIANT_QUITTING_GAMES.md`](../exports/KLEIN_FOUR_EQUIVARIANT_QUITTING_GAMES.md),
-after coordinator gate review; it is not yet Lean-checked. The theorem places no
+self-contained alternative proof is retained internally at
+[`CODEX_BROUWER__KLEIN_FOUR_EQUIVARIANT_QUITTING_GAMES.md`](CODEX_BROUWER__KLEIN_FOUR_EQUIVARIANT_QUITTING_GAMES.md)
+after removal from the export queue for source overlap. It is not yet
+Lean-checked. The theorem places no
 restrictions on nonsingleton rewards beyond the stated group symmetry. Its
 earlier periodic and two-sure sufficient regions are retained as discovery
 history, not final scope. Everything here is ordinary mathematics, source
 checks, or labeled experiment; none is a new Lean theorem.
+
+A separate unreviewed extension below weakens Klein-four equivariance to
+one within-pair involution and seven linear inequalities between raw reward
+sums. It proves an exact stationary all-behavior equilibrium for every
+table in that class, and includes the Klein-four theorem's hard branch. The
+extension has not been independently
+reviewed. Its extra raw inequalities are unnecessary for bare UE existence,
+as the response-quotient overlap calculation below proves.
 
 An earlier completed review concerns the zero-singleton child selection in
 [`CODEX_KREIN__INDEPENDENT_STOPPING_LAW_SELECTION.md`](CODEX_KREIN__INDEPENDENT_STOPPING_LAW_SELECTION.md).
@@ -615,10 +627,314 @@ linear coefficients and uniform triangle signs; the projection sign in
 and fixed-target bridges in all four singleton alternatives. In particular,
 do not replace individual complementary conditions by group best responses.
 
+## One involution and raw diagonal order: a larger class
+
+Status: ordinary mathematical proof, awaiting independent falsification.
+This section is separate from the frozen Klein-four theorem and export.
+It requires no source strategy, stationary root, continuation value, or
+certificate. The raw conditions below are a finite list of linear reward
+inequalities, together with one table symmetry.
+
+### Exact data and conclusion
+
+There are four players 0,1,2,3. Every nonempty S has an arbitrary finite
+real reward vector r(S), Never pays zero, and every behavioral profile
+uses independent private randomization. A deviator may replace its complete
+behavioral strategy. Let tau=(0 1)(2 3), and assume only
+
+    r_(tau(i))(tau(S))=r_i(S)             for all i and nonempty S.   (I)
+
+Write E0={0,1}, E1={2,3}, choose representatives i0=0,i1=2, and put
+
+    s0=r_0({0}),                   s1=r_2({2}),
+    A0=s0-r_0({1}),                A1=s1-r_2({3}),
+    B1=r_2({0})+r_2({1})-2s1.
+
+Require the strict singleton conditions
+
+    A0>0,                 B1>max(A1,0).                           (O)
+
+For ell=0,1 and m in its stated range define raw cardinal sums
+
+    P_(ell,m)=sum_(S contains iell, |S|=m) r_iell(S),    1<=m<=4,
+    C_(ell,m)=sum_(S excludes iell, |S|=m) r_iell(S),    1<=m<=3.
+
+The seven weak inequalities are
+
+    P_(0,m)>=P_(1,m)          (m=1,2,3,4),
+    C_(0,m)<=C_(1,m)          (m=1,2,3).                            (R)
+
+**Theorem.** Every table satisfying (I),(O),(R) admits an exact stationary
+terminal Nash profile against arbitrary full behavioral deviations, with
+two positive hazards. Its actual terminal payoff is one fixed uniform
+equilibrium payoff. All rewards may be signed; no additive normalization
+of the zero Never payoff is used.
+
+### Producing the field inequalities from these raw data
+
+Use the exact face numerator F_i from the earlier reviewed section. At
+the hazard row (x,x,y,y), (I) makes F_0=F_1 within the first pair and
+F_2=F_3 within the second. Denote those two individual numerator values
+by f0(x,y),f1(x,y). No symmetry exchanging the two pairs is assumed.
+
+At the diagonal x=y=q, all three opponent hazards equal q, so for ell=0,1
+
+    Q_ell(q)=sum_(m=1..4) q^(m-1)(1-q)^(4-m) P_(ell,m),
+    H_ell(q)=sum_(m=1..3) q^m(1-q)^(3-m) C_(ell,m),
+    f_ell(q,q)=[1-(1-q)^3]Q_ell(q)-H_ell(q).
+
+Every weight is nonnegative on [0,1]. Thus (R) gives Q0>=Q1 and H0<=H1,
+and hence the exact global diagonal ordering
+
+    f0(q,q)>=f1(q,q)                  for every q in [0,1].        (D)
+
+At the origin direct singleton expansion gives
+
+    f0(x,0)=A0*x+O(x^2),
+    f1(x,y)=A1*y-B1*x+O((x+y)^2).
+
+On 0<=y<=x, the latter linear term is at most
+-[B1-max(A1,0)]x. The polynomial remainder is bounded by a fixed multiple
+of x^2. Therefore there is 0<delta<1, selected from the literal table,
+such that whenever 0<=y<=x<=delta and x>0,
+
+    f0(x,0)>0,                         f1(x,y)<0.                 (L)
+
+These signs need no condition on the other first-order coefficient of f0.
+
+### The triangular selection and individual decoding
+
+On T={0<=y<=x<=1}, put phi(x)=max(delta-x,0) and
+ftilde=(f0+phi,f1). Brouwer applied to Euclidean projection of z+ftilde(z)
+onto T gives a point with
+
+    ftilde(z) dot (w-z)<=0              for every w in T.          (V)
+
+The origin is impossible because ftilde(0,0)=(delta,0). At 0<y<x<=delta,
+both vertical perturbations are feasible, contradicting f1<0. At y=0,
+0<x<=delta, both horizontal perturbations are feasible, contradicting
+f0+phi>0. At x=y in (0,delta], direction (1,-1) is feasible, so (V)
+requires f0+phi<=f1. Together with (D) and phi>=0, this forces phi=0 and
+f0=f1. But then both are negative by (L), and direction (-1,-1)
+contradicts (V). Thus the entire cutoff region, including its boundary,
+is excluded. The selected x is greater than delta and its field is the
+unaltered exact field f.
+
+The non-diagonal faces decode exactly as in the earlier triangle proof:
+interior coordinates have zero numerator, the y=0 face has f1<=0, and
+the x=1 face has f0>=0. At an interior diagonal point, its two tangent
+directions imply f0+f1=0, while the feasible direction (1,-1) implies
+f0<=f1. Combining with (D) gives f0=f1=0. At (1,1), the feasible
+direction (0,-1) implies f1>=0; (D) then gives f0>=f1>=0. At (1,0),
+the ordinary inward coordinate directions give f0>=0 and f1<=0.
+
+Therefore every one of the four INDIVIDUAL hazards satisfies the cube
+complementarity signs. Both first-pair players have hazard x>delta, so
+deleting any own strategy leaves positive opponent absorption. The exact
+stationary/full-response proof above applies literally, yielding the
+actual payoff and its fixed-target finite-horizon conclusion. This is an
+actual-data producer for every table in (I),(O),(R).
+
+### Strict enlargement and exact tests
+
+For the positive-surplus Klein-four branch, choose its subunit direction
+as the within-pair involution. Then A0=A1=A>0, B1=B>A, and all seven
+cardinal-sum comparisons hold with equality. Thus this result contains
+the complete previously difficult branch and drops pair-exchange symmetry.
+
+It also contains a relatively open set of nonsymmetric tables in the
+linear space defined by the one involution. For an exact example, start
+with the exported boundary example, whose coordinates in XOR labels are
+
+    s=1, (a1,a2,a3)=(4,0,0), (p1,p2,p3)=(2,1,1),
+    (f1,f2,f3)=(1,0,0), (h1,h2,h3)=(0,1,1), h0=0, g=-1.
+
+Reorder its players as old labels (0,2,1,3), so that tau=(0 1)(2 3)
+is XOR translation by 2. For any lambda,mu>0, change ONLY the coordinates
+of players 0 and 1: add lambda to each reward where that player belongs
+to S, and subtract mu when that player is outside S. Keep the Never payoff
+zero and keep both other players' coordinates unchanged. This preserves
+(I) but breaks full Klein-four symmetry already at own singleton rewards.
+The strict raw comparisons are
+
+    P_(0,m)-P_(1,m)=binomial(3,m-1)*lambda>0,
+    C_(1,m)-C_(0,m)=binomial(3,m)*mu>0.
+
+The singleton conditions are A0=1+lambda+mu>0, A1=1, B1=2>1.
+Every inequality remains valid in a sufficiently small neighborhood within
+the one-involution space. Thus the extension is not only an equality
+reformulation of the earlier symmetry class. This example still violates
+product-low at the root supported on new players 0 and 2 with hazards 1/2:
+both participant premiums are 1/2. Increasing one player's own singleton
+and all its participant rewards by lambda cancels from that premium.
+
+The example alone is not asserted to avoid every implemented producer;
+the new coverage statement quantifies over ALL tables satisfying the
+finite raw conditions. Dropping (D) would invalidate the diagonal decoder:
+at an interior diagonal point, the values f0=-1,f1=1 satisfy the triangle
+normal inequalities but fail both individual mixed-action conditions.
+Thus the global diagonal hypothesis does real strategic work.
+
+### Source and review boundary
+
+This extension uses the same inspected `quittingFaceNumerator` and
+`heterogeneousFaceNumerator_update_self` declarations in
+`UniformEquilibrium/Quitting/Stationary/FaceNumerator.lean` and
+`UniformEquilibrium/Quitting/Stationary/HeterogeneousConstrainedFaceNash.lean`.
+The actual semantic endpoint is
+`quittingGame_isUniformEquilibriumPayoff_of_terminalNash_tendsto` in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`,
+or the direct geometric finite-average estimate already proved here.
+A bounded search in the classification and stationary subtrees found no
+named involution/ordered-diagonal raw producer. Rectangular constrained
+Nash by itself still leaves the zero hazard row. No new Lean result,
+external publication priority, or exhaustive source non-overlap is claimed.
+
+## Full equal-hazard ordering already gives a pure exit
+
+This exact overlap observation retires the attempted four-dimensional
+ordered-simplex route; it is not new existence coverage. Suppose the own
+singleton of player 0 is nonnegative. On the ordered cube chamber
+1>=c0>=c1>=c2>=c3>=0, assume that the actual individual numerators obey
+F_i>=F_(i+1) whenever c_i=c_(i+1). Then a pure sure-exit coalition exists.
+
+Start with the sure coalition S={0}. Its only participant can secure its
+nonnegative own singleton against Never. At any prefix S={0,...,k-1},
+all outsiders have hazard zero, so their fields are ordered. If the first
+outside field F_k is nonpositive, every outsider is join-safe and stop.
+Otherwise add player k. The field F_k is independent of its own hazard,
+so its strictly positive value persists after addition. All participants
+now lie in the common hazard-one block, where the assumed field order
+gives F_i>=F_k>0 for i<k. Every participant is therefore leave-safe.
+This argument repeats at most three times, terminating at an exact pure
+coalition Nash profile. With at least two sure players, every deviation
+absorbs at once; for the one-owner case, its nonnegative singleton also
+controls Never. Thus the conclusion already has the ordinary sure-exit
+consumer.
+
+An exploratory integer singleton matrix had passed the linearized seam
+tests with ambient R0 degree one. That observation did not avoid this
+pure-exit construction, which uses the full table's global face order.
+No matrix search output or numerical evidence is needed for the overlap
+proof. The proposed full-order raw class is retired rather than polished
+into another existence packet.
+
+## Exact response-quotient overlap correction
+
+Status: source audit and ordinary 2 by 2 calculation. This section
+supersedes every earlier suggestion that the triangle's EXISTENCE class
+was absent from the implementation. The standalone triangle proof has
+not been falsified; the error was the earlier incomplete source search.
+
+### Named inspected source chain
+
+The relevant maintained toolkit route is stationary response-invariant
+quotients. Its exact declarations, read under their imports, are:
+
+- `QuittingResponseInvariantOnUnitCube`,
+  `quittingSingletonBlockRowSum`, and `quittingResponseQuotientMatrix`, in
+  `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`;
+- `responseInvariant_of_reward_subgroup_automorphisms`, in
+  `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPlayerOrbits.lean`;
+- `finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+  and `finFour_responseQuotient_r0Degree_eq_one_of_no_uniformPayoff`, in
+  `UniformEquilibrium/Diagnostics/Quitting/FinFourResponseQuotientCriterion.lean`;
+- `exists_uniformEquilibriumPayoff_of_responseInvariant_noSingletonBlocks`, in
+  `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientStrategic.lean`;
+- `exists_stationaryTerminalNash_sameProfileUniform_of_responseInvariant_singletonSign`,
+  in `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientSameProfile.lean`;
+- `exists_finset_r0Degree_eq_sum_sign_det`, in
+  `MathUE/LinearProgramming/R0DegreeSum.lean`.
+
+The automorphism theorem takes literal covariance of every coalition row
+under a subgroup of player permutations and produces response invariance
+on its orbit blocks. Thus the table involution used here supplies its raw
+hypothesis directly. The blocks each have two players, so no singleton-block
+sign, normality, or Never-boundary strategic witness is needed. The
+quotient entries are SUMS of singleton margins over blocks, including the
+nonzero diagonal block sum. The quotient is not a smaller quitting game.
+
+### The complete Klein-four hard branch
+
+With the earlier notation A=1-a_t>0 and B=a_u+a_v-2>A, the orbit quotient
+is exactly
+
+    M=[[-A,B],[B,-A]],
+    det M=A^2-B^2<0,
+    M^(-1)=[[-A,-B],[-B,-A]]/(A^2-B^2)>0 entrywise.
+
+All literal hypotheses of
+`finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+are supplied by these raw calculations and the automorphism adapter.
+It produces original-game UE without assuming R0, a root, or a strategy.
+For the stronger stationary conclusion, this matrix is directly R0:
+neither singleton support can solve zero-offset complementarity because
+its diagonal is nonzero, and its full block is invertible. Its positive
+inverse and negative determinant give degree -1; the inspected
+same-profile theorem produces an exact stationary terminal Nash profile
+and its own fixed uniform target, since both blocks have size two.
+
+Therefore even the exact-stationary part of the formerly claimed new
+branch is already covered. The other signed/circulant/rare-owner branches
+were already recognized as existing consumers. The complete signed theorem
+is a correct alternative proof and class corollary, not missing existence
+scope suitable for the export gate.
+
+### The one-involution extension needs no diagonal-order restriction for UE
+
+For its two orbit blocks put a=A0>0, c=B1>0, d=A1, and
+b=r_0({2})+r_0({3})-2s0. Its actual quotient is
+
+    M=[[-a,b],[c,-d]].
+
+I now show that NO such response-invariant Fin4 table can fail UE,
+independently of the seven cardinal-sum inequalities and even without the
+extra condition c>max(d,0). Suppose it failed. The named same-table
+criterion would produce R0 for this quotient and require its R0 degree
+to equal one.
+
+Choose a positive offset q=(q0,q1). If d>0, choose it so
+T=d*q0+b*q1 is nonzero, which excludes at most one positive ratio.
+Enumerate every standard complementary support:
+
+1. Empty: the zero vector is a root with two strict positive residuals,
+   contributing +1.
+2. First coordinate only: x0=q0/a>0 and the other residual is
+   q1+c*q0/a>0. Its active determinant is -a<0, contributing -1.
+3. Second coordinate only: possible exactly when d>0 and T>0. Its
+   coordinate is q1/d and its remaining residual is T/d. Its active
+   determinant is -d<0, contributing -1.
+4. Full support: if d<=0, the second residual q1+c*x0-d*x1 cannot
+   vanish for nonnegative x, so this support is impossible. If d>0,
+   R0 forces Delta=ad-bc to be nonzero: Delta=0 would have b=ad/c>0
+   and a strictly positive zero-residual vector (d,c). For Delta!=0,
+   the unique full-support candidate is
+
+       x=(T,c*q0+a*q1)/Delta.
+
+   It is positive exactly when Delta>0 and T>0. In that case its
+   determinant is positive and its contribution is +1.
+
+These roots all have strict inactive residuals and nonzero active
+determinants. The exact root-sum theorem applies. For d<=0 its sum is
+1-1=0. For d>0 and Delta>0, the last two roots are simultaneously present
+or absent, so the sum is zero. For d>0 and Delta<0 one has b>ad/c>0,
+therefore T>0; the second singleton root is present and the full root is
+absent, so the sum is -1. In every case the degree is zero or minus one,
+contradicting the required one.
+
+This supplies a stronger UE existence class through already implemented
+quotient machinery: one strict within-pair own-singleton advantage and
+one positive opposite-block singleton surplus suffice. The triangle's
+raw diagonal-order constraints are unnecessary for existence, although
+its independently selected exact stationary profile may carry additional
+information in degenerate quotients. No missing-class export is justified
+by those constraints.
+
 ## Current next question
 
-The complete signed Klein-four theorem has passed the coordinator's export
-gate. The current question is whether exact
-involutive symmetry can be weakened to raw inequalities preserving the
-triangle's diagonal decoding and producing actual individual equilibrium
-rows on a larger reward class. No such asymmetric extension is claimed here.
+Find an actual four-player mechanism on tables with trivial reward-table
+automorphism group, no pure sure-exit coalition, and no applicable
+response-invariant quotient, while retaining all individual behavioral
+deviation bounds. Before developing another symmetry or ordering class,
+test it against the explicit quotient and pure-prefix constructions above.
