@@ -6,6 +6,10 @@ a strict preference to leave the pair**, in
 of that section was read before this assessment. Ordinary mathematics;
 no Lean build was run.
 
+An independent addendum below reviews Sections 11–13, including mutual
+strict joining and the greatest-premium-core transfer. Its scope and
+verdict are separate from the original strict-leave review.
+
 ## Verdict and exact scope
 
 **PASS for the analytic theorem and its four-player uniform-equilibrium
@@ -29,6 +33,277 @@ table in the new class that avoids the named product-low, proper-child F/J,
 homogeneous, degree, inverse, and response-quotient screens. This supports
 the intended implemented-scope increment without claiming that every
 possible repository producer has been classified.
+
+## Independent addendum: weak leave, negative-index selection, and peeling
+
+Scope: Sections 11, 12, and 13 of the source notebook, as written at this
+review. I did not read CODEX_BROUWER's review details of these sections.
+I checked the full root equations, the ambient-degree hypotheses, the
+boundary perturbation, the semantic consumer, and the finite trap argument
+independently. Ordinary mathematical review only; no Lean build was run.
+
+VERDICT: PASS, with no unresolved mathematical objection, for each of:
+
+- Section 11's weak-leave four-player UE corollary and zero-pair-premium
+  product-low reduction;
+- Section 12's signed finite-player analytic exclusion under mutual strict
+  joining, and its nonnegative-singleton four-player UE consequence;
+- Section 13's transfer to a greatest premium core of cardinality at most
+  two, under nonnegative participant premiums and nonnegative singletons.
+
+The exact root producer in Section 12 is substantive: a particular bad
+mixed root is allowed to exist, but cannot be the only full root because
+its local index is negative. No strategy obtained by repeating an arbitrary
+root, continuous root selector, bounded-controller restriction, or hidden
+outside-player deletion is used.
+
+### Weak leave and fixed-target closure
+
+Increasing only r_i({j}) by delta, with i≠j, changes a nonparticipant
+coordinate. It preserves every own singleton and participant-premium
+hypothesis, and changes the reward distance by at most delta. The nearby
+table satisfies strict leave even at original equality.
+
+I read the literal declaration
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+It permits both the nearby targets and profiles to vary and concludes
+existence of one fixed target for the original table. Thus the source
+really supplies the claimed strategic closure. The accompanying elementary
+compact-target argument has the correct quantifiers: select one nearby
+target at each requested error, then reuse one of that game's profiles
+and one eventual horizon threshold. No strategy limit is required.
+
+The zero-pair-premium reduction also exhausts the product supports. An
+active globally flat outsider supplies a singleton-level Quit endpoint.
+With no such outsider active, if the zero-premium core member is active,
+its endpoint is its singleton mixture; if it is inactive, the other core
+member is the sole possible active player and also has its singleton
+endpoint. Nonnegative participant premiums are consistent with equality
+here, and arbitrary larger core premiums cannot enter a core-only root.
+
+The weak-leave corollary is correctly only an existence claim. Reward
+closure has not been substituted for an unproved closure theorem for all
+C¹ exact-root potentials.
+
+### Actual full-game fixed points and the local sign
+
+The polynomial extension of every endpoint gap to all real hazards is
+well defined because the finite independent-coalition formula is a
+multilinear polynomial. Composing q_k+g_k(q) with the scalar clip produces
+a continuous map from all of R^I into [0,1]^I. Every fixed point lies in
+that cube. At a zero, unit, or interior coordinate, its fixed-point
+condition is respectively g_k≤0, g_k≥0, or g_k=0. These are exactly the
+two-action Nash support conditions for the actual full root game.
+
+On the core-only face the formulas in (55) retain the correct signs and
+indices. If one core annotation is below its singleton, its gap is a
+strictly positive convex combination at every other core hazard. This
+forces that player to Quit surely, then forces the other core player to
+Quit surely. A harmed constant-participant outsider blocks that pure
+pair, independently of every continuation annotation. Thus every exact
+root in this source case has an active outsider.
+
+With both core annotations strictly above their singletons, neither a
+singleton active core nor a non-pair unit core hazard is possible. Besides
+all-Continue and the blocked pure pair, the only core-supported candidate
+is exactly (56), whose two interior coordinates use the OTHER player's
+annotation. Some source coordinate below its singleton excludes
+all-Continue. Therefore a second full fixed point, if produced, must
+have an active outsider; this is a complete support classification.
+
+At the mixed candidate, strictly negative outsider gaps make the clipped
+outsider rows constant zero on an actual ambient neighborhood, including
+points whose outside coordinates are slightly negative. The two core rows
+are unclipped on that neighborhood. Since an endpoint gap is independent
+of its own player's hazard, the core diagonal of D(q−F) is zero. The core
+off-diagonal entries are −alpha_i and −alpha_j; all outside rows form an
+identity block. Arbitrary derivatives involving outside hazards occur
+only in the upper-right block. The determinant is therefore exactly
+−alpha_i*alpha_j<0, with no missing orientation factor.
+
+The index normalization is valid also when some candidate coordinates are
+zero. The source region (−1,2)^I contains the whole unit cube in its
+interior; throughout the stated homotopy, any zero must lie in [0,1]^I.
+Consequently the source boundary is zero-free. The terminal translated
+identity has degree +1. Invertibility and differentiability justify the
+local straight-line comparison with D(q−p), and uniqueness would permit
+excision onto that neighborhood. The resulting local degree is negative,
+contradicting the total degree +1. No assertion of smoothness at a tied
+clipped outsider is made; ties are removed before this argument.
+
+I inspected the declarations `ambientDegree_homotopy` and
+`ambientDegree_affineRootField_eq_sign_det` in
+`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`,
+`ambientDegree_excision` in `MathUE/Topology/AmbientDegreeProperties.lean`,
+and `ambientDegree_of_selfMap_eq_one` in
+`MathUE/Topology/AmbientDegreeSelfMapNormalization.lean`.
+Their hypotheses match the supplied open bounded source, continuous full
+field, boundary avoidance, and nonsingular affine comparison. The proof
+does not invoke an absent game-theoretic Nash-index axiom.
+
+### Boundary minimization and tie removal
+
+Every exact root successor dominates every Quit endpoint, hence every
+singleton, by nonnegative participant premiums. It remains in the original
+box by convexity. An active globally flat outsider then supplies equality
+in at least one coordinate, returning to the SAME lower boundary L.
+
+At a boundary minimizer with just one binding coordinate, that player alone
+can use a sufficiently small positive hazard. Every other player's strict
+Continue preference at zero hazard persists by continuity, including the
+actual pair-join rewards. The owner is indifferent and its successor
+coordinate is its singleton. This alone contradicts positive potential
+drift and minimality. With at least two bindings, increasing any one
+binding coordinate keeps another fixed, proving the required nonnegative
+gradient signs without needing L to be a smooth manifold.
+
+When a binding core coordinate is decreased, the already-checked core
+classification forces every exact root to have an active outsider.
+When only outsiders bind, holding both core annotations exactly fixed
+keeps the mixed candidate exactly fixed. Each outsider's Continue endpoint
+contains its own annotation with the strictly positive coefficient c(p),
+while its forced-Quit endpoint is constant. Thus at most one value of its
+independent O(epsilon²) correction is forbidden. Finitely many coordinatewise
+choices remove every outsider tie and retain at least epsilon of downward
+displacement on each binding coordinate. Continuity of these choices in
+epsilon is unnecessary: the total extra displacement is o(epsilon).
+
+For any binding k, the produced successor satisfies
+w_k−v_k≥epsilon, while the actual absorption formula bounds this difference
+above by (M+B)*a. Potential drift and minimality then force
+[H(v)−H(x)]/epsilon≥1/(M+B)>0. Differentiability gives a limit equal to
+the negative sum of binding gradients, hence at most zero. All source
+points stay in the same box because B>M and s≥−M leave strict lower
+clearance; upper-box coordinates move only downward. This closes the
+analytic contradiction without summing over successive root choices.
+
+### Exact boundary and index tests
+
+I independently recalculated Section 12's three-player rational fixture.
+At v=(2,1,−1/10), p=(1/3,1/3,0) has gaps (0,0,−53/45), successor
+(4/3,1/3,53/45), and the full ambient Jacobian
+
+    [[0,−3,2], [−3,0,3], [0,0,1]],
+
+whose determinant is −9. Thus the strictly interior successor of the
+bad root really occurs; an argument asserting universal return would fail.
+The alternative root (0,0,1) has gaps (−2,−3,1/10) and successor (3,3,0),
+so it does return to the lower boundary.
+
+The same table gives an exact clipping-tie test at v=(2,1,−11/4): all
+three gaps at p are zero. Decreasing only the last annotation by eta>0
+changes its outsider gap to 4eta/9>0. Thus the mixed candidate ceases
+to be Nash and the finite root theorem directly supplies another root.
+This tests the non-index branch of tie removal, instead of treating a
+boundary-tied clip as differentiable. Signed singletons and no-outsider
+player sets do not break the analytic statement: if there are no outsiders,
+the pure pair already gives the fixed positive-absorption edge.
+
+### Greatest-premium-core transfer
+
+The union closure of traps is literal: each member retains its original
+positive witness in the union. A first removed trap member cannot be flat
+on the current subtable, because its whole original trap is still present.
+Conversely a nonempty terminal residual is a trap. This proves that every
+finite peeling order leaves exactly the union of all traps. No actual
+player or payoff coordinate is removed from the game in this argument.
+
+For greatest core C={i,j}, any nonempty support A≠C is not a trap. Indeed
+any trap is contained in C, and no singleton can be a trap. Since all
+participant premiums are nonnegative, some member of A is therefore flat
+on EVERY participant coalition inside A. Conditional on that active
+member's Quit, every possible coalition is inside A, so its Quit endpoint
+equals its singleton. Its successor coordinate equals that endpoint.
+This proves Fact 1 even when the returning player is a core member or is
+not globally flat; it is not necessary to preselect a particular outsider.
+
+For each outsider k, a positive participant premium at any T∪{k}, T⊆C,
+together with the two pair witnesses would make C∪{k} a larger trap.
+Nonnegative premiums therefore force all these entries to equal s_k.
+This proves Fact 2, which is exactly the additional input required for
+pure-pair blocking and for each inactive outsider's Quit endpoint during
+tie removal. It does not assert flatness on coalitions containing another
+outsider.
+
+These facts transfer the proof without losing its quantifiers. For strict
+leave, only support C needs the core gap argument, and the minimizer's
+binding-outsider conclusion uses singleton-face drift, not global flatness.
+For strict joining, the exhaustive core-only classification and negative
+local determinant are unchanged. Every root with another support returns
+by Fact 1; clipping makes the outside Jacobian block constant even if its
+unclipped derivatives see positive premiums on larger coalitions. The
+O(epsilon²) corrections and the absorption lower bound are unchanged.
+Equality perturbations alter only a nonparticipant coordinate, so they
+preserve all traps and the greatest core exactly.
+
+As a finite stress test, prescribe positive participant premiums only for
+both players 0,1 at {0,1}, and player 2 at {2,3}; player 3 is flat. The
+only trap is {0,1}, although player 2 is not globally flat. Peeling 3 and
+then 2 leaves that core. Supports containing both outsiders have flat
+member 3, whereas {0,1,2} has flat member 2, checking the support-dependent
+returning member. If player 3 ALSO receives a positive premium at {2,3},
+then {2,3} and the full four-player set become traps. That two-sided
+variant is correctly excluded by Section 13 and is not covered by the
+size-two theorem merely because its premiums occur at pairs.
+
+I checked `HasWeakQuittingPremiumSupportPeeling` and
+`hasWeakQuittingPremiumSupportPeeling_iff` in
+`UniformEquilibrium/Quitting/Classification/QuittingPremiumSupportPeelingOrder.lean`,
+`HasFiniteCoalitionSupportPeeling` in
+`MathUE/FiniteCoalitionSupportPeelingOrder.lean`, and
+`hasProductLowQuittingPremium_iff_weakSupportPeeling_of_nonnegative` in
+`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowSupportPeelingConverse.lean`.
+Their empty-core condition is exactly supportwise flatness. The nonempty
+pair core is a genuine extra case, not the old peeling predicate renamed.
+
+### Complete four-player semantic consumer and limits
+
+I rechecked `exists_isZeroQuittingRootNash` in
+`UniformEquilibrium/Quitting/Root/NashExistence.lean`,
+`quittingPunishmentValue_eq_singleton_of_nonnegativePremium` in
+`UniformEquilibrium/Quitting/Classification/NonnegativePremiumPunishment.lean`,
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`,
+and `isQuittingFullExactRootPotential_of_robustPotential` in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`.
+
+The finite root producer accepts arbitrary continuation annotations and
+retains every player. Nonnegative singleton rewards give punishment values
+equal to singletons and hence the required normality. If any singleton is
+positive, no UE supplies a rational-polynomial potential on the actual
+robust relation in box M+2; exact-root restriction preserves its function,
+game, and unit absorption charge. The analytic contradiction excludes it.
+If all singletons are zero, all-Never is exact Nash directly. These cover
+every strategic source case without assuming the sure-root arm away.
+
+Thus Sections 11–13 establish the stated original-game fixed-target UE
+conclusion for four players and do not merely supply an obstruction
+interface. They do not claim arbitrary finite-player UE, signed-singleton
+UE, negative-participant-premium coverage, or greatest cores of size three
+or four. Those boundaries remain substantive and correctly stated.
+
+## Final standalone assembly check
+
+PASS for the exact artifact
+`../exports/PREMIUM_CORE_AT_MOST_TWO.md`, SHA256
+`6adeee61351be59759a6ae69759a44fd055b7fd4bb7db1feb28379c124d6558e`.
+
+I read the entire assembled packet and checked its mathematical delta
+against the independently reviewed Sections 10–13. The main raw class,
+support-return and core-face-flatness facts, strict-leave and actual-index
+proofs, all boundary cases, and unrestricted fixed-target consumer match
+the reviewed arguments. Equality is handled only by UE reward closure;
+no analytic-potential closure is claimed. The complete fifteen-row layered
+fixture, all fourteen child cases, quotient boundary calculations, negative-
+index example, and exact clipping-tie example are retained. The proof has
+no mathematical dependency on conference notes or frozen exports and
+identifies the exact tracked source consumers.
+
+The final hash differs from the initially assembled artifact only by
+removal of its two-line draft preface and last process sentence. No
+mathematical correction is requested. This is an artifact-scope check,
+not a new Lean-build claim.
 
 ## Full-root return and the boundary derivative
 

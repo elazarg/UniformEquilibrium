@@ -27,12 +27,16 @@ The independently reviewed, frozen standalone packet is
 `../exports/TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md`; it contains a
 stronger fully specified {0,3}-premium fixture, independently checked here
 and by both reviewers. This remains ordinary mathematics, not Lean code.
-Section 12 is a new complete UNREVIEWED mutual-strict-join proof, using
+Section 12 is a complete mutual-strict-join proof, using
 the explicitly computed negative index of the only possible core-only
 mixed root. Together with the separate reward-closure argument in
-Section 11 it proposes full four-player coverage when at most two players
-have nonconstant participant rewards. Its source and index checks remain
-subject to independent falsification; it is not part of the frozen export.
+Section 11 it gives full four-player coverage when at most two players
+have nonconstant participant rewards. Sections 11–13 have passed independent
+falsification reviews by CODEX_BROUWER and CODEX_KREIN. The canonical-core
+assembly passed its final artifact check and is frozen as
+`../exports/PREMIUM_CORE_AT_MOST_TWO.md`, SHA256
+`6adeee61351be59759a6ae69759a44fd055b7fd4bb7db1feb28379c124d6558e`.
+It is not part of the older frozen strict-leave export.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -979,7 +983,8 @@ it is not addressed by weakening the retired local topological mechanism.
 
 ## 12. Mutual strict joining: a negative-index root forces boundary return
 
-**Frozen complete candidate for independent falsification review.** Ordinary
+**Complete proof, independently reviewed PASS by CODEX_BROUWER and
+CODEX_KREIN.** Ordinary
 mathematics, not Lean-checked. This section does not change the independently
 reviewed strict-leave export. It gives a different actual-root producer and,
 combined with Sections 10–11, claims the entire two-variable-participant
@@ -1254,7 +1259,7 @@ If all s_k=0, all-Never handles the conclusion directly. The target is
 fixed before accuracy by those existing semantic consumers.
 
 This statement is broader than the frozen strict-leave theorem and has
-not yet passed independent review. Its key new producer is (57), with
+passed independent review. Its key new producer is (57), with
 the literal map (54), computed local determinant, and explicit ambient
 index normalization. The greatest-premium-core peeling mechanism may
 later replace the globally constant outsider assumption, but has NOT
@@ -1264,7 +1269,8 @@ retaining the exact target boundary L.
 
 ## 13. Transfer to the greatest premium core of size at most two
 
-**Complete composition draft, not yet independently reviewed.** This section
+**Complete composition, independently reviewed PASS by CODEX_BROUWER and
+CODEX_KREIN.** This section
 uses the new Section 12 proof and the finite support observation developed
 by CODEX_BROUWER in the section “Canonical premium-core reduction” of
 `CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md`. I checked the finite argument
@@ -1383,7 +1389,7 @@ gives a fixed-target UE for the original table. Together, strict leave,
 equality, and mutual strict joining cover every pair ordering. The exact
 Fin4 polynomial consumer and normality argument are unchanged.
 
-Therefore, subject to independent review of Sections 12–13, a four-player
+Therefore a four-player
 counterexample with nonnegative singletons and nonnegative participant
 premiums must have greatest premium core of size at least three. This
 does not yet address tables with negative participant premiums or the
