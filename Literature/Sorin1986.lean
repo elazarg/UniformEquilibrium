@@ -4781,15 +4781,17 @@ theorem FiniteStageGame.exists_strictIR_of_fullDimensional (G : FiniteStageGame)
   change G.individualRationalLevel who ≤ center who - radius / 2 at hsecurity
   linarith
 
-/-- Mix a weakly rational target with the internally derived strict point.
+/-- Mix a weakly rational target with a feasible strict point.
 This is elementary convex glue; no periodic or equilibrium witness is supplied. -/
-private theorem FiniteStageGame.exists_strictIR_close_of_fullDimensional
-    (G : FiniteStageGame) (hfull : FullDimensional G.individuallyRationalPayoffs)
+private theorem FiniteStageGame.exists_strictIR_close_of_exists_strictIR
+    (G : FiniteStageGame)
+    (hexists : ∃ center ∈ G.correlatedFeasiblePayoffs,
+      ∀ who, G.individualRationalLevel who < center who)
     (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ strict ∈ G.correlatedFeasiblePayoffs,
       (∀ who, G.individualRationalLevel who < strict who) ∧ dist strict target < ε := by
-  obtain ⟨center, hcenter, hstrict⟩ := G.exists_strictIR_of_fullDimensional hfull
+  obtain ⟨center, hcenter, hstrict⟩ := hexists
   obtain ⟨c, hc, hsmall⟩ := exists_pos_mul_lt hε ‖center - target‖
   let t : ℝ := min c (1 / 2)
   have ht : 0 < t := lt_min hc (by norm_num)
@@ -5393,10 +5395,12 @@ theorem lemma_1_Elambda_subset_Delta (G : FiniteStageGame)
       simpa [deviation, FiniteStageGame.discountedPayoff] using hequilibrium
     exact hdeviation.trans hequilibrium'
 
-/-- The source's full-dimensional branch first approximates a fixed weakly
+/-- A feasible strict point first approximates a fixed weakly
 IR target by strict targets. One actual Nash profile precedes all small rates. -/
-theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
-    (G : FiniteStageGame) (hfull : FullDimensional G.individuallyRationalPayoffs)
+theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_exists_strictIR
+    (G : FiniteStageGame)
+    (hexists : ∃ center ∈ G.correlatedFeasiblePayoffs,
+      ∀ who, G.individualRationalLevel who < center who)
     (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
@@ -5405,7 +5409,7 @@ theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
           G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
           dist (G.discountedPayoff lam profile) target < ε := by
   obtain ⟨strict, hfeasible, hstrict, hnear⟩ :=
-    G.exists_strictIR_close_of_fullDimensional hfull target htarget (half_pos hε)
+    G.exists_strictIR_close_of_exists_strictIR hexists target htarget (half_pos hε)
   obtain ⟨threshold, hthreshold, hthresholdOne, profile, hsource⟩ :=
     exists_discountedNash_close_allSmallRates_of_strictIR
       G strict hfeasible hstrict (half_pos hε)
@@ -5420,11 +5424,25 @@ theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
     _ < ε / 2 + ε / 2 := add_lt_add hclose hnear
     _ = ε := by ring
 
-/-- Property (4), full-dimensional branch: compactness makes the small-rate
-threshold uniform over every target in the actual weakly IR payoff set.
-The literal paper theorem's separate two-player alternative remains open. -/
-theorem property_4_discounted_of_fullDimensional (G : FiniteStageGame)
-    (hfull : FullDimensional G.individuallyRationalPayoffs) :
+/-- Ambient full dimensionality supplies the strict point for the same
+actual profile selected before all sufficiently small rates. -/
+theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
+    (G : FiniteStageGame) (hfull : FullDimensional G.individuallyRationalPayoffs)
+    (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
+      ∃ profile : G.BehaviorProfile,
+        ∀ lam : ℝ, 0 < lam → lam < threshold →
+          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
+          dist (G.discountedPayoff lam profile) target < ε :=
+  exists_discountedNash_close_allSmallRates_of_mem_IR_of_exists_strictIR
+    G (G.exists_strictIR_of_fullDimensional hfull) target htarget hε
+
+/-- A feasible strict point and compactness make the small-rate threshold
+uniform over every target in the actual weakly IR payoff set. -/
+theorem property_4_discounted_of_exists_strictIR (G : FiniteStageGame)
+    (hexists : ∃ center ∈ G.correlatedFeasiblePayoffs,
+      ∀ who, G.individualRationalLevel who < center who) :
     HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
       G.individuallyRationalPayoffs := by
   classical
@@ -5434,8 +5452,8 @@ theorem property_4_discounted_of_fullDimensional (G : FiniteStageGame)
   let : Fintype centers := hfinite.fintype
   choose threshold hthreshold hthresholdOne profile hprofile using
     fun center : centers =>
-      exists_discountedNash_close_allSmallRates_of_mem_IR_of_fullDimensional
-        G hfull center.1 (hcenters center.2) (half_pos hε)
+      exists_discountedNash_close_allSmallRates_of_mem_IR_of_exists_strictIR
+        G hexists center.1 (hcenters center.2) (half_pos hε)
   obtain ⟨δ, hδ, hcommon⟩ :=
     KernelGame.exists_pos_margin_of_mem_strictReservationSet
       (r := fun _ : centers => (0 : ℝ)) (v := threshold) hthreshold
@@ -5464,6 +5482,14 @@ theorem property_4_discounted_of_fullDimensional (G : FiniteStageGame)
         dist_triangle _ _ _
       _ < ε / 2 + ε / 2 := add_lt_add hclose hnear'
       _ = ε := by ring
+
+/-- Property (4), full-dimensional branch, delegates through its internally
+derived strict point. The separate two-player alternative remains open. -/
+theorem property_4_discounted_of_fullDimensional (G : FiniteStageGame)
+    (hfull : FullDimensional G.individuallyRationalPayoffs) :
+    HausdorffConvergesAtZero G.discountedEquilibriumPayoffs
+      G.individuallyRationalPayoffs :=
+  property_4_discounted_of_exists_strictIR G (G.exists_strictIR_of_fullDimensional hfull)
 
 /-- Aggregate finite/discounted form of Lemma 1(5)--(7).  The positive
 horizon/rate witnesses prevent the zero-horizon collapse present in the

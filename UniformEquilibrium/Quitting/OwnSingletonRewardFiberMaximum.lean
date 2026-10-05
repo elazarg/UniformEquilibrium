@@ -1,0 +1,65 @@
+import UniformEquilibrium.Quitting.OwnSingletonRewardChart
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityContinuity
+import Mathlib.Topology.Order.Compact
+import Mathlib.Tactic.NormNum
+
+/-! # Internally attained actual exploitability maxima on the entire closed singleton fiber -/
+
+namespace GameTheory
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
+
+omit [Fintype ι] [Nonempty ι] in
+/-- The literal table is unit-bounded exactly when both independent coordinate blocks are. -/
+theorem abs_quittingOwnSingletonReward_le_one_iff
+    (singletons : ι → ℝ) (coordinates : QuittingFreeRewardCoordinate ι → ℝ) :
+    (∀ terminal player, |quittingOwnSingletonReward singletons coordinates terminal player| ≤ 1) ↔
+      (∀ player, |singletons player| ≤ 1) ∧ (∀ coordinate, |coordinates coordinate| ≤ 1) := by
+  constructor
+  · intro hbound
+    constructor
+    · intro player
+      simpa only [quittingOwnSingletonReward_singleton] using
+        hbound (quittingSingletonTerminal player) player
+    · intro coordinate
+      simpa only [quittingOwnSingletonReward_free] using
+        hbound coordinate.1.1 coordinate.1.2
+  · rintro ⟨hsingletons, hcoordinates⟩ terminal player
+    unfold quittingOwnSingletonReward
+    split_ifs with hterminal
+    · exact hsingletons player
+    · exact hcoordinates ⟨(terminal, player), hterminal⟩
+
+/-- Actual eta is continuous along the same literal singleton fiber, not a row translation. -/
+theorem continuous_quittingTerminalExploitabilityInf_ownSingletonReward
+    (coordinates : QuittingFreeRewardCoordinate ι → ℝ) :
+    Continuous (fun singletons : ι → ℝ =>
+      quittingTerminalExploitabilityInf (quittingOwnSingletonReward singletons coordinates)) :=
+  continuous_quittingTerminalExploitabilityInf.comp
+    (continuous_quittingOwnSingletonReward_singletons coordinates)
+
+/-- Every literal free-coordinate vector has an internally produced maximizing
+singleton vector on the WHOLE closed cube; upper and lower faces are included.
+No positive gap, unit bound on the free coordinates or favorable maximizer is supplied. -/
+theorem exists_maximum_quittingTerminalExploitabilityInf_ownSingletonReward
+    (coordinates : QuittingFreeRewardCoordinate ι → ℝ) :
+    ∃ singletons : ι → ℝ, (∀ player, |singletons player| ≤ 1) ∧
+      ∀ candidate : ι → ℝ, (∀ player, |candidate player| ≤ 1) →
+        quittingTerminalExploitabilityInf (quittingOwnSingletonReward candidate coordinates) ≤
+          quittingTerminalExploitabilityInf
+            (quittingOwnSingletonReward singletons coordinates) := by
+  have hzero : (0 : ι → ℝ) ∈ Set.Icc (-1 : ι → ℝ) 1 := by
+    constructor <;> intro player <;> norm_num
+  obtain ⟨singletons, hsingletons, hmaximum⟩ :=
+    (isCompact_Icc : IsCompact (Set.Icc (-1 : ι → ℝ) 1)).exists_isMaxOn
+      ⟨0, hzero⟩
+      (continuous_quittingTerminalExploitabilityInf_ownSingletonReward coordinates).continuousOn
+  refine ⟨singletons, ?_, ?_⟩
+  · intro player
+    exact abs_le.mpr ⟨hsingletons.1 player, hsingletons.2 player⟩
+  · intro candidate hcandidate
+    apply hmaximum
+    exact ⟨fun player => (abs_le.mp (hcandidate player)).1,
+      fun player => (abs_le.mp (hcandidate player)).2⟩
+
+end GameTheory

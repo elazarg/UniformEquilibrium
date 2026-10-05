@@ -4081,7 +4081,24 @@ zero-positive row. The exact regression in
 `MathUE/SignedAffineRowRegression.lean` has old envelope minimum `25/99`,
 strictly above the new contact `1/4`; it is an affine-row example, not a
 positive-gap quitting game. The worst-table and singleton-fiber producers
-must still supply the bounded tables, stretch correspondence and infimum order.
+are supplied by
+`exists_membershipStretch_singletonFiber_source_of_positiveInf`
+(`UniformEquilibrium/Diagnostics/Quitting/MembershipStretchWorstTableSource.lean`).
+It selects a whole-cube maximizing original table, one common stretch and a
+maximizer on the entire closed own-singleton fiber from a raw positive
+behavioral infimum. Reward continuity delegates to the canonical robustness
+bound; `UniformEquilibrium/Quitting/OwnSingletonRewardChart.lean` gives the
+literal independent coordinate chart, without a payoff translation.
+`exists_membershipStretch_source_opposedReversals_of_no_uniformPayoff_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/MembershipStretchOpposedSource.lean`)
+retains those same witnesses before every attained three-sure root request.
+It also retains a positive quantitative floor over all eleven nonsingleton
+sure coalitions, invariant under arbitrary own-singleton reselection, from
+`UniformEquilibrium/Diagnostics/Quitting/MembershipStretchSureCoalitionSource.lean`.
+The exact full behavioral coalition formula and affine-stretch identity are
+owned by `UniformEquilibrium/Diagnostics/Quitting/SureCoalitionExploitability.lean`.
+No attained three-sure root, elimination of the opposed-orientation branch,
+or same-weight common-calendar source is constructed by these results.
 `UniformEquilibrium/Diagnostics/Quitting/Regression/MembershipStretchCountBoundary.lean`
 gives complete four-player tables testing the pure-vertex count. At the
 critical half-debt boundary, every supported pure vertex has nonzero full

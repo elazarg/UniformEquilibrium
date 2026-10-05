@@ -547,8 +547,7 @@ owners with opposed orientations. Its separate route needs the internally
 selected worst table and stretched singleton-fiber maximum, the signed
 affine-row comparison, and the actual old-table root consumer. In the weak
 same-root cases, old global attainment must be proved before invoking the
-old table's all-player-tie theorem. The worst-table and
-literal stretched-fiber source now has an unapplied implementation draft.
+old table's all-player-tie theorem.
 The all-case signed-row comparison in `MathUE/SignedAffineRowComparison.lean`
 and actual full-debt adapter in
 `UniformEquilibrium/Diagnostics/Quitting/SingleOptionalMembershipRows.lean`
@@ -564,8 +563,21 @@ source hypotheses rather than constructing the worst table or its fiber.
 (`MathUE/SignedAffineRowRegression.lean`) checks the exact `25/99` old-envelope
 minimum over every legal probability, strictly above the new `1/4` contact.
 It is an affine-row regression, not a positive-gap game.
-The separate strict pure-coalition source floor remains an implementation
-obligation.
+The raw worst-table and literal stretched-fiber source is now proved by
+`exists_membershipStretch_singletonFiber_source_of_positiveInf`
+(`UniformEquilibrium/Diagnostics/Quitting/MembershipStretchWorstTableSource.lean`).
+`exists_membershipStretch_source_strictSureCoalitionGap_of_positiveInf_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/MembershipStretchSureCoalitionSource.lean`)
+supplies the quantitative floor over all eleven nonsingleton coalitions,
+unchanged under arbitrary own-singleton reselection. The final
+`exists_membershipStretch_source_opposedReversals_of_no_uniformPayoff_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/MembershipStretchOpposedSource.lean`)
+joins both conclusions at the same internally selected source, before every
+attained root request. This covers the three-sure packet's raw source and
+opposed-owner conclusion. The larger singleton-fiber source packet still
+requires its projected normal, common-calendar weights, silent shift,
+and fixed-table accuracy/depth producer; the strict coalition floor alone
+does not supply those fields. Packet lifecycle remains math's responsibility.
 
 ## Proof-mining connections not yet formalized
 
@@ -1292,6 +1304,11 @@ the ambient-ball hypothesis supplies a strict point, and a compact finite cover
 makes the rate threshold uniform over all targets. The separate two-player
 alternative remains unproved, so the literal `property_4_discounted` and its
 delegating `lemma_2` still contain or inherit the Literature placeholder.
+The same proof is factored through the stronger
+`property_4_discounted_of_exists_strictIR` in that owner: a single feasible
+all-strict point suffices, without ambient full dimensionality. Its weak-target
+profile facade still selects one exact Nash profile before all small rates.
+This does not handle a flat security coordinate without a strict point.
 
 The separate Proposition 4 draft uses a generic connected convex-hull
 representation, an internally selected affine step and a geometric schedule
