@@ -1020,3 +1020,131 @@ without suggesting that source declarations already certify it. The
 final deletion of “stronger” before “product-low predicate” removes a
 potential implication-direction ambiguity and changes no mathematics.
 No unresolved artifact objection remains at the stated final hash.
+
+## Independent review: boxed Nash charge on a triple
+
+Checked the complete section **The complement of weighted floors: a boxed
+Nash charge on a triple** in
+`notes/CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md`, as read at full-note
+SHA256 `26497fa7cc3c51e09bbce10eafc3ad03909ac656c7e8691275282b56682cd962`.
+Verdict: **PASS**, ordinary mathematics, not Lean certification. No other
+review was read. The proof supplies an actual finite raw triple-core
+class, not merely an equivalent potential interface or an improved
+constant inside the weighted-floor criterion.
+
+The stated Fin4 assumptions are nonnegative own singletons, no traps
+other than triples, and one set of positive constants d,τ,g,l for each
+trap satisfying (N2)–(N6). Two distinct triple traps cannot coexist,
+because their union would be a four-player trap. If there is no trap,
+the low active endpoint follows directly. In the nonempty case every
+root support other than the triple is nontrap and has an active
+participant with every relevant own reward at most its singleton.
+This correctly retains larger simultaneous coalitions and requires
+no participant-premium lower bound.
+
+### Sure hazards and the exact odds calculation
+
+On trap support A, the unweighted full identity is
+
+    ∑_{i∈A}(1−q_i)(Q_i−C_i)
+      =c(q)∑_{i∈A}(s_i−v_i)+∑_{∅≠T⊊A}μ(T)L_A(T).
+
+For a triple, (N4) controls every singleton coefficient and (N5)
+every pair coefficient. If some but not all active hazards are sure,
+c(q)=0 and A minus any nonsure active player has positive probability.
+Its negative coefficient contradicts supported Nash optimality. If all
+are sure, (N5) directly gives strict withdrawal for each participant.
+Thus an exact root with trap support must be interior on all three
+coordinates before odds are introduced. No division at a sure hazard
+has been hidden.
+
+At such a root divide each Quit premium by its own positive opponent
+Continue probability. The empty-opponent term is zero. Summing the
+single-opponent terms gives the first sum in (N7); each double-opponent
+term is the actual triple premium times the product of the other two
+odds. All three divided premiums are positive under the purported bad
+root assumption. Hence dU<τV. The elementary identity
+U²−3V=½∑_{i<j}(z_i−z_j)²≥0 gives U>3d/τ.
+
+Interior support indifference makes the left-hand gap sum zero.
+Dividing the coalition identity by c(q)>0 yields exactly
+∑(s_i−v_i)=∑[−L_A(T)]∏_{j∈T}z_j. Consequently
+
+    ∑(s_i−v_i)≥gU+lV
+      >(g+l d/τ)U>(3d/τ)(g+l d/τ).
+
+The strict steps have the correct direction since all four constants
+are positive. A boxed source gives the opposite bound ∑s_i+3B.
+The strict margin in (N6) permits M<B<M+2 with that right-hand side
+still smaller. This proves low-successor return for EVERY absorbing
+exact root at EVERY source in this particular box; it is not a claim
+about arbitrary annotations of unbounded magnitude.
+
+Taking R to be the whole box satisfies the first convex-domain premise
+automatically. The proved return satisfies its second premise. The
+same robust polynomial at M+2 restricts to B by
+`IsQuittingFullExactRootPotential.mono_box` in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`;
+no new potential, changed game, or strategic continuation realization
+is used. Normality and the Fin4 semantic consumer retain precisely the
+nonnegative-singleton assumptions stated in the note.
+
+### The complement fixture and the role of the box
+
+The three changes (N1) reduce the positive core-pair premiums from
+3/2 to 1/2 and preserve the sole trap 012. At the three sure-core-
+singleton product laws, summing ANY nonnegative weighted Quit-floor
+conditions gives
+
+    −(λ₀+λ₁+λ₂)/2−3λ₃≥0.
+
+This really forces λ=0, even if the proposed weights are allowed on
+players outside the trap. Thus the fixture is outside every nonzero
+nonnegative linear forced-Quit floor of the stated form, not just
+outside one chosen weighting. The test laws need not be Nash.
+
+For the displayed exact constants the charge is 90 and
+∑_A s_i+3M=48/5. The claimed open raw region is also valid, with a
+small clarification about slack: the displayed choices attain equality
+in (N2)–(N5), but one may instead take
+
+    d=2/5, τ=1/5, g=7/5, l=4/5.
+
+These give strict slack in all four sets of inequalities and charge
+18>48/5. This supplies a direct open-neighborhood proof without
+asserting that the original equality-bound constants themselves have
+strict slack. It does not change the theorem or require a repair to
+its numerical hypothesis.
+
+As an independent stress test on the SAME modified table, take
+
+    q=(9/10,9/10,9/10,0),
+    v=(−863/10,−863/10,−863/10,1).
+
+The exact endpoints are
+
+    Q=(17/125,17/125,17/125,1/1000),
+    C=w=(17/125,17/125,17/125,1981/1000).
+
+This is a full exact Nash root with successor strictly above ALL
+singletons. Its source is far outside the permitted box. Here the
+three odds are 9, so U=27, V=243, and the exact source charge is
+1296/5=gU+lV for the original constants. The example confirms that
+the proof is genuinely box-dependent; it cannot be promoted to
+unconditional all-annotation return or product-low behavior.
+
+The bounded source exclusions also survive the three reward changes.
+All-singleton centered data, matrix screens, and the response-quotient
+falsifier are unchanged. All thirteen displayed child singleton
+profiles remain exact, with the stated outside gain 3/2 except
+child3's gain 4. The diffuse core child's sole positive pair premium
+bound becomes α_n/2, while its quiet outsider value and first-microstage
+gain remain 6/7 and 1/7−α_n. The listed pure improvements persist.
+Product-low and supportwise balance still fail at the positive-premium
+triple, and the protected-player set remains empty. These are concrete
+complements to the inspected sources, not an exhaustive exclusion of
+all stationary or chronological equilibrium producers.
+
+No unresolved objection remains to (N7)–(N8), the boxed return, the
+Fin4 consumer, or this exact raw coverage witness. The next global
+question about a four-player core is not answered by this review.

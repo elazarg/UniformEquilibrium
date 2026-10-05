@@ -2577,3 +2577,52 @@ classification at a below-floor source, especially the implication
 bad successor ⇒ strictly inactive outsiders, the full ambient index,
 and the single-domain minimum argument. The opposite-sign pair region
 and premium cores of size at least three remain outside this proof.
+
+## 19. Opposite-sign signed-pair regression
+
+The same-sign requirement in Section 18 cannot simply be removed from
+its selected-root lemma. Here is an exact signed version of the earlier
+unique-root test; it is NOT a uniform-equilibrium counterexample.
+
+Take I={0,1,2,3}, s=(1,0,0,0). For every nonempty S except the grand
+coalition define its first two rewards by its intersection with {0,1}:
+
+| Core intersection | r₀(S) | r₁(S) |
+|---|---:|---:|
+| empty | 0 | 2 |
+| 0 | 1 | −1 |
+| 1 | 3 | 0 |
+| 01 | 2 | 1 |
+
+Set r₂(S)=0 when 2∈S; otherwise set it to −1 when the core
+intersection is {1}, and to 3 in all other cases. Set r₃(S)=0
+when 3∈S and to 1 otherwise. Override the grand reward by
+r(0123)=(0,−1,−1,−1). This specifies all fifteen rows.
+
+The sole premium trap is 01, and its join gaps are d₀=−1 and
+d₁=2. Every player has a negative participant premium at the grand
+coalition, so there is no protected player.
+
+At annotation v=(0,2,3,1), player 3 has C₃=1 at EVERY root:
+its passive rewards and its continuation annotation are all one.
+Its forced-Quit endpoint is at most zero, even after the grand-row
+change. Thus every exact root has q₃=0. For players 0,1,2 the
+grand coalition is then unreachable even after forcing their own
+action, so their exact gap equations are unchanged by its alteration.
+
+The core gaps are g₀=1−2q₁ and g₁=4q₀−2, independently of
+q₂. Neither endpoint q₀=0 nor q₀=1 can be Nash, since it forces
+the opposite best reply through q₁. Therefore the only possible
+core mixture is q₀=q₁=1/2. At it Q₂=0 and C₂=2, so q₂=0.
+The unique full exact root is consequently (1/2,1/2,0,0), with
+successor (3/2,1/2,2,1), strictly above every singleton despite
+the source coordinate v₀<s₀.
+
+Its inactive gaps are −2 and −1. The clipped-map local determinant
+is −(−2)(4)=8>0, hence index +1, consistent with uniqueness and
+total index +1. This is an exact obstruction to extending Section
+18 by the same second-root argument, not evidence against UE.
+The grand-row change makes the lost global premium signs explicit
+without changing the actual root set. Any opposite-sign extension
+must use a genuinely global relation or strategic construction;
+further attempts to force a second root at this source are retired.
