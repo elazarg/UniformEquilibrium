@@ -2569,3 +2569,117 @@ been independently checked and consolidated into the same export.
 The next task is an arbitrary-table argument using the full exact
 Nash relation beyond these coefficient tests, not a further
 optimization of the charge constant.
+
+## Global full-root geometry: two automatic reductions fail
+
+Status: exact internal falsifiers and bounded source audit, not new
+UE coverage and not a counterexample game. This tests genuinely
+global proposed reductions after the boxed-charge theorem, rather
+than trying to force another root at the old positive-index source.
+
+### Convexifying the full Nash image does not produce return
+
+For a reward-sized box K, let R be the convex hull of U and all
+exact Nash successors from K, where U is the upper-singleton box.
+This automatically contains all successors. A proposed arbitrary-
+table completion would also need absorbing roots from R to return
+below some singleton. That implication is false.
+
+Use the exact nonnegative-premium table (Q) in the earlier
+three-core obstruction. Since every forced-Quit value is at least
+the corresponding singleton, EVERY exact Nash successor lies in U.
+Conversely every point of U is its own all-Continue Nash successor.
+Thus the entire exact Nash image is U and its convex hull adds
+nothing: R=U, not merely R contained in U.
+
+Nevertheless, the source and hazards
+
+    v=(1,0,1,19/29),
+    q=(4/33,1/4,0,1/10)
+
+give the exact endpoints
+
+    Q=(43/40,3/55,0,1/11),
+    C=w=(43/40,3/55,1087/1320,1/11).
+
+The source lies on the singleton lower boundary, with players0,1
+binding. The root absorbs and its successor is strictly above EVERY
+singleton. Hence even the smallest convex envelope of the FULL
+Nash image fails the universal return premise. This source has not
+been shown to be a potential minimum; the example does not refute
+any of the proved minimum lemmas. The automatic-envelope route is
+retired at precisely that missing implication.
+
+### Feasible Nash-dead annotations need not be equilibrium targets
+
+A different proposed global completion is to follow a finite backward
+Nash orbit until it reaches a feasible annotation where all Continue
+is the only exact root, then repeat or renormalize the accumulated
+absorbing law. This also fails, already for two players.
+
+Take the complete table
+
+    r(0)=(1,3), r(1)=(3,1), r(01)=(2,2), Never=(0,0).
+
+At source0, q=(1/2,1/2) is exact: both players have Q=C=3/2.
+It has absorption3/4 and successor v=(3/2,3/2). At this successor,
+the gap of player i is -1/2-q_j/2<0 for every opponent hazard.
+Thus all Continue is the unique exact root, and the backward orbit
+can stop making any absorption progress after this one step.
+
+Renormalizing the one-step absorbing law gives (2,2). Repeating
+the half-hazard row delivers exactly that target, but a player who
+Never quits receives3, a gain1. Moreover this is not just failure
+of the stationary reset: (2,2) is separated from ALL approximate
+terminal Nash payoff targets.
+
+To see the unrestricted obstruction, any behavioral profile is
+equivalent on its unique live history to independent private stopping
+times T_0,T_1. Write alpha=P(T_0=Never), beta=P(T_1=Never).
+Every absorbing reward has total4, so its terminal payoff u satisfies
+
+    u_0+u_1=4*(1-alpha*beta).
+
+If norm(u-(2,2))_infinity<=delta, then alpha*beta<=delta/2.
+At least one of alpha,beta is at most sqrt(delta/2). The OTHER
+player's complete Never deviation receives3 times the probability
+that this opponent eventually quits. Its gain is therefore at least
+
+    1-delta-3*sqrt(delta/2).
+
+For delta<=1/32 this is at least19/32. Thus a whole neighborhood
+of the feasible point (2,2) has a positive unrestricted terminal
+deviation gap. The game itself has pure equilibria with payoffs
+(1,3) and(3,1), so this is emphatically not a positive-gap game.
+The point (2,2) is even a terminal reward and the midpoint of those
+two equilibrium payoffs. At its annotation every gap equals-1, so
+all Continue is again uniquely exact. Feasibility plus Nash-deadness
+cannot certify a strategic target, and convexifying known equilibrium
+payoffs would illegitimately introduce a public correlation device.
+
+### Existing global constraints and the surviving question
+
+The source audit found the stronger existing
+`IsQuittingFullExactRootPotential.minimum_above_singleton` in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMinimum.lean`
+and `IsQuittingFullExactRootPotential.not_quasiconvex` in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialQuasiconvexExclusion.lean`.
+Thus excluding convex potentials or merely placing global minima
+above every singleton would duplicate implemented results.
+
+The feasible carrier and finite-orbit definitions were inspected in
+`UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/SuppliedCorrespondence.lean`.
+They explicitly keep the strategic necessity implication supplied;
+their existence is not a theorem turning every feasible dead point
+into a UE target. The exact cyclic obstruction in
+`UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/RepairedStressCycleObstruction.lean`
+also prevents treating those conditional definitions as an automatic
+global potential construction.
+
+The next concrete question is whether full-root paths can control
+the missing independent stopping-law continuation mass intrinsically,
+rather than discarding it in an annotation convex hull or dividing
+it out after a finite orbit. The two-player calculation identifies
+the obstruction quantitatively: the joint Never probability and the
+two separate opponent Never probabilities impose different constraints.
+No supplied-carrier or chronology-completeness claim is made here.

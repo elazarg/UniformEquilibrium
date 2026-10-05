@@ -87,6 +87,12 @@ frozen `../exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`, SHA256
 `16ffd63e3735ad7b00f99e76efb237cb0cf7fdc6de0ae267161b9da9e2977dde`.
 The original fixture has three zero own singletons; an interior
 strategic neighborhood requires first raising those entries slightly.
+Section 21 is a complete unreviewed temporal producer with a zero-premium
+joint phase, a positive outsider buffer, and two diffuse solo exits.
+It covers an entire R-axis raw class and includes an opposite-sign
+pair-core fixture outside the named preceding tests. Its proof never
+assumes a second root at the locally falsified source. Independent
+falsification of this new selector and semantic construction is requested.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -2842,3 +2848,424 @@ the elementary-symmetric source charge, independently verify the table
 and cycle of fourteen exact child witnesses, and combine this fixture
 with the strongest general boxed-charge theorem rather than export a
 redundant four-player special case.
+
+## 21. A zero-premium joint phase and an opposite-sign residual core
+
+Status: complete ordinary proof candidate, not independently reviewed.
+This is a direct temporal producer from raw rewards, not a local
+good-root assertion. In particular it does not alter the opposite-sign
+unique-root falsifier in Section 19. The singleton matrix is fixed up
+to one arbitrary real parameter, while the other unused coalition
+entries are unrestricted subject to six caps. The explicit member
+below has a signed opposite-sign pair core, fails the named preceding
+raw tests, and has no stationary equilibrium with any quiet player.
+No exclusion of fully supported stationary equilibria is claimed.
+
+### Raw class and conclusion
+
+Let I={0,1,2,3}. At each live date the four players independently
+choose Continue or Quit, with arbitrary behavioral strategies and
+complete unilateral behavioral deviations. First nonempty quitting
+coalition S absorbs at the finite reward r(S), received thereafter.
+Live stages and perpetual continuation pay zero; no correlation device
+or extra information is available. Let R be ANY real number and σ≥0.
+Prescribe only these five rows:
+
+    r(0)=(1,−1,−1,−1),
+    r(1)=(2,0,2,−1),
+    r(2)=(2,−1,0,2),
+    r(3)=(R,2,−1,0),
+    r(03)=(1,σ,−1,0).                              (98)
+
+Require the six actual collision caps
+
+    r₁(01), r₁(13), r₁(013) ≤ 1/2,
+    r₂(02), r₂(23), r₂(023) ≤ 0.                   (99)
+
+Every other coordinate of every nonsingleton reward is arbitrary.
+In particular the two premiums at 12 and all four grand-coalition
+coordinates are unrestricted. Both participants of 03 have exactly
+zero premium. Its outsider σ is permitted throughout the nonnegative
+halfline, while all three undiffused joins of player 1 may be positive.
+
+Claim: every such original table has one fixed uniform-equilibrium
+payoff. On the constructive interval the proof produces one target
+and finite independent stopping-law profiles with arbitrarily small
+terminal regret and target error against complete behavioral deviations.
+The uniform finite-horizon conclusion follows directly from the
+uncensored profiles below. Neither hazards nor continuation values
+are supplied as hypotheses.
+
+### The two original-table exits
+
+The singleton-difference matrix is
+
+    Γ=[[0,1,1,R−1],[-1,0,-1,2],
+       [-1,2,0,-1],[-1,-1,2,0]].                  (100)
+
+Its child123 matrix A has determinant 7 and inverse
+
+    A⁻¹=[[2,4,1],[1,2,4],[4,1,2]]/7,
+    A*1=1.
+
+For R≠−1, Γ is R₀. A positive pivot p in a homogeneous
+complementarity root forces all child coordinates positive, by the
+cyclic negative edges and the positive right-hand side p*1. They
+then equal p*1, and the pivot residual is p(R+1), impossible.
+At zero pivot, a nonzero homogeneous child root propagates through
+the same cycle to full support, where A's invertibility excludes it.
+
+For R<−1 put d=−(R+1)>0. At offset (q₀,−1,−1,−1), q₀>d,
+every child coordinate is positive and the child vector is (1+p)*1.
+The pivot residual is q₀−d(1+p). Exactly two complementarity roots
+remain: p=0 and p=q₀/d−1. The first has active determinant 7
+and strict inactive residual q₀−d; the second has determinant
+7(R+1)<0. The regular root-sum degree is zero, so the original
+game satisfies the existing degree-not-one UE criterion. At R=−1,
+(1,1,1,1) is a nonzero homogeneous root; the existing Fin4 no-UE
+implication to R₀ supplies UE by contraposition.
+
+For R≥1/4 the actual passive inverse row is
+
+    (1,1,R−1)A⁻¹=(4R−1,R+5,2R+3)/7≥0.
+
+Together with A⁻¹>0, the original-table passive-inverse criterion
+gives UE, including equality. Thus only −1<R<1/4 remains. These
+exits use no simultaneous-reward restriction and do not change the
+table or invoke openness of UE.
+
+### One scalar crossing produces all four rates
+
+Fix −1<R<1/4 and put
+
+    τ=1−4R ∈ (0,5),    δ=1−R=(τ+3)/4.
+
+Use odds Y>0 as the scalar parameter, and define
+
+    X=τY/(5+3Y),
+    x=X/(1+X),             y=Y/(1+Y),
+    z=(X+Y+XY)/2,
+    a₁=(−X+2Y+σXY)/[(1+X)(1+Y)],
+    w=a₁/(1+a₁).                                  (101)
+
+The joint hazards will be x,y for players 0,3; z,w are solo hazards
+for players 1,2. The numerator defining a₁ is
+
+    Y[10−τ+(6+στ)Y]/(5+3Y)>0.
+
+Thus a₁>0 and 0<w<1 for every finite Y>0. The odds X are
+positive and finite, so 0<x,y<1. The function z increases strictly
+from zero to infinity. Let Y_* be its unique z=1 point. For clarity,
+
+    2(5+3Y)(z−1)=(τ+3)Y²+(τ−1)Y−10.             (102)
+
+At Y=1/δ=4/(τ+3), the right side equals −6. Therefore
+Y_*>1/δ. Throughout (0,Y_*), all four hazards are proper.
+
+Define the scalar pivot residual
+
+    F(Y)=δY−z−w+zw.
+
+Near zero, X/Y→τ/5, z/Y→(5+τ)/10, and
+w/Y→(10−τ)/5. Consequently
+
+    lim[Y→0] F(Y)/Y = 7(τ−5)/20 < 0.              (103)
+
+At the other endpoint,
+
+    F(Y_*)=δY_*−1>0.                             (104)
+
+Continuity supplies a root Y∈(0,Y_*). Fix any such root and its
+four rates. No uniqueness or global continuation of roots is assumed.
+At this root, δY=z+w−zw. The choice of X in (101) also gives
+
+    X=2δY−3z=−z+2w(1−z).                         (105)
+
+These are exactly the two owner equations needed below. In
+particular the second expression in (105) is strictly positive,
+not an extra sign hypothesis supplied to the selector.
+
+### Literal three-phase values and exact undiffused comparisons
+
+Repeat the three aggregate phases
+
+    A: joint 0,3 at hazards x,y;
+    B: solo 1 at hazard z;
+    C: solo 2 at hazard w.
+
+Define
+
+    V_A=(1,a₁,0,0),
+    V_B=(1+z+w−zw,0,2z,X),
+    V_C=(1+w,0,0,2w).                             (106)
+
+All three vectors are coordinatewise at least s=(1,0,0,0).
+Every prescribed Continue and policy equation is exact:
+
+* At A, player 0's Quit value is 1 and its Continue value is
+  yR+(1−y)(1+δY)=1. Player 3's Quit value is zero and its
+  Continue value is −x+(1−x)X=0.
+* Player 1's A Continue contribution is precisely the three-term
+  expectation defining a₁; its next B coordinate is zero. At C,
+  −w+(1−w)a₁=0, so its B owner Continue value is also zero.
+* At A, player 2's Continue value is
+  −(x+y−xy)+2z(1−x)(1−y)=0 by (101). Its B value is 2z,
+  and its C owner Continue value is the next A value zero.
+* The remaining player-0 equations give 1+w at C and
+  1+z+w−zw at B. Player 3's C value is 2w and its B
+  value is −z+2w(1−z)=X by (105).
+
+Both solo owners have their singleton Quit value zero. Together
+these identities check all twelve Continue equations and supported
+Quit indifferences, hence all twelve policy equations.
+
+Let m=x+y−xy be the joint phase's nonempty absorption probability.
+The actual positive buffer for player 1 satisfies
+
+    a₁/m=[10−τ+(6+στ)Y]/[5+τ+(3+τ)Y] > 1/2.      (107)
+
+Indeed, subtracting half the denominator from the numerator gives
+3(5−τ)/2+[9/2−τ/2+στ]Y>0. By (99), its forced-Quit value
+at A is at most m/2, including the simultaneous coalition 03 in
+the opponents' law. Player 2's forced-Quit value at A is at most
+zero, equal to its value. The two joint participants are already
+indifferent. Thus A satisfies every undiffused Quit comparison.
+This uses an aggregate continuation buffer, not pointwise domination
+of each collision payoff by its corresponding passive reward.
+
+### Finite laws, full behavioral regret, and one uniform target
+
+Replace B and C by n solo dates with hazards
+
+    β_n=1−(1−z)^(1/n),   γ_n=1−(1−w)^(1/n).
+
+Their aggregate survival and terminal singleton laws are unchanged.
+The target remains exactly V_A, independent of n. Inside a solo
+block, the value is the convex interpolation between its two macro
+endpoint values; all singleton floors in (106) persist, and Continue
+remains exact. The owner remains indifferent. Set
+
+    L=max(0,r_i(ij)−s_i : j∈{1,2}, i≠j),
+    ε_n=L max(β_n,γ_n) → 0.
+
+Each outsider's immediate Quit is at most its current value plus
+ε_n. The retained joint row needs no error. Adding the SAME ε_n
+to the whole value path gives a global Bellman supersolution:
+Continue transports only opponent-survival times that constant,
+whereas Quit has no future value. It is not summed over dates.
+
+For players 0,1,2,3, opponent survival over a complete refined
+period is respectively
+
+    ρ₀=(1−y)(1−z)(1−w),
+    ρ₁=(1−x)(1−y)(1−w),
+    ρ₂=(1−x)(1−y)(1−z),
+    ρ₃=(1−x)(1−z)(1−w).
+
+Each is strictly below one, independently of n. Fixed opponent coins
+can be presampled for this estimate without being shown to the
+deviator. Their first Quit bounds actual absorption under every
+behavioral replacement. Geometric survival therefore removes the
+bounded Bellman remainder and proves terminal regret at most ε_n
+against every complete deviation, with prescribed payoff exactly V_A.
+
+If M bounds absolute rewards, every phase value is bounded by M:
+the exact policy equations and geometric survival identify it with
+the actual terminal expectation. A period has 1+2n dates. For every
+replacement the expected absorption date is at most
+
+    K_n=(1+2n) max_i 1/(1−ρ_i).
+
+The discrepancy between N-horizon and terminal expected payoff is
+at most 2MK_n/N uniformly over replacements. Thus N-horizon regret
+is at most ε_n+4MK_n/N, and delivery error is at most 2MK_n/N.
+Choose n and then one horizon threshold. The same profile works
+at every larger horizon, with the same target V_A.
+
+For explicitly finite independent stopping laws, censor each player's
+law after K periods by moving its remaining mass to Never. The sum
+of changed marginal masses is
+
+    t_K=(1−x)^K+(1−z)^K+(1−w)^K+(1−y)^K → 0.
+
+Product coupling changes prescribed payoff by at most 2Mt_K. Against
+a fixed complete deviation, couple only the opponents' changed laws;
+then compare prescribed payoff as well. Full terminal regret is at
+most ε_n+4Mt_K, uniformly over every deviation. This is an actual
+finite-law family, not a bounded-deviation test or a changing target.
+
+### A signed opposite-pair member beyond the named raw criteria
+
+Set R=0,σ=2 and complete (98) by the following full table:
+
+| S | r(S) |
+|---|---|
+| 0 | (1,−1,−1,−1) |
+| 1 | (2,0,2,−1) |
+| 2 | (2,−1,0,2) |
+| 3 | (0,2,−1,0) |
+| 01 | (1,0,−1,−1) |
+| 02 | (1,−1,0,−1) |
+| 03 | (1,2,−1,0) |
+| 12 | (2,1/2,1/2,1) |
+| 13 | (0,0,1,0) |
+| 23 | (2,1,0,0) |
+| 012 | (1,0,0,−1) |
+| 013 | (1,0,−1,0) |
+| 023 | (1,−1,0,0) |
+| 123 | (0,0,0,0) |
+| 0123 | (−1,−2,−2,−2) |
+
+The only positive participant premiums are the two halves at 12.
+Thus the sole premium trap and greatest core are 12. Its join gaps
+are d₁=3/2 and d₂=−3/2, so the signed same-sign criterion does
+not apply. Every player has a negative premium at the grand row,
+so the canonical protected set is empty. Trap12 fails the all-member
+positive-weight aggregate-leave test, since player 1 strictly joins.
+Boxed-charge hypotheses exclude pair traps, and product-low fails
+at the sure12 product law. These failures concern the actual raw
+tests, not all imaginable consequences of those theorems.
+
+For this exact table, τ=1 and the scalar equation reduces to
+
+    28Y³+60Y²+Y−35=0.
+
+Its unique positive root lies between 3/5 and 7/10: the polynomial
+is strictly increasing on the nonnegative axis and has opposite signs
+at those rational endpoints. With X=Y/(5+3Y), the explicit rates are
+
+    x=Y/(5+4Y), y=Y/(1+Y),
+    z=Y(2Y+3)/(3Y+5),
+    w=Y(8Y+9)/(12Y²+18Y+5).
+
+These exact algebraic numbers give the producer above, not a numerical
+root claim. In (107) this table even has a₁/m≥3/2; the theorem only
+uses the uniform all-R bound 1/2.
+
+The singleton matrix is (100) at R=0, exactly the degree-one matrix
+already computed in Section 18: the nonnegative-inverse triple has
+passive row (−1/7,5/7,3/7), all other triple and full inverses have
+the listed negative entries, and the thirteen first-order partition
+falsifiers persist. The remaining 0|123 partition fails at
+q=(0,t,t,t): its three response coordinates are
+
+    −t+t²(1−t)(2−t)/2,
+    −t+t²(1−t)(2−t)/2,
+    −t.
+
+They are unequal for 0<t<1. This uses the literal zero-discount
+response (opponent absorption)*Q minus passive absorbing reward.
+The earlier specified joint03 raw classes also do not consume this
+table: its joint participant premiums are zero, its passive player-1
+entry is 2 rather than the prescribed −1, and its three player-1
+collision entries are zero rather than at most −1. The positive-own-
+singleton pivot is uniquely player 0, and it has no positive
+participant premium at any pair. No unrestricted chronology exclusion
+is being inferred from these input failures.
+
+For every proper child except 123, exact child Nash profiles can be
+chosen as follows. A listed singleton owner quits at date zero;
+otherwise both members of 03 quit surely. All remaining child players
+use Never. The entries are (quitting coalition, omitted beneficiary):
+
+    0:(0,1), 1:(1,3), 2:(2,1), 3:(3,0),
+    01:(1,3), 02:(2,1), 03:(03,2), 12:(1,3),
+    13:(3,0), 23:(2,1), 012:(1,3), 013:(03,2),
+    023:(2,1).
+
+The omitted gain is 3/2 when singleton2 is used and 1 otherwise.
+Each other child player weakly prefers not to join. A sole owner
+cannot improve beyond its nonnegative singleton after preventing
+absorption, because all opponents then stay at Never. At sure03,
+each owner strictly prefers the pair to withdrawing, and player 1
+in child013 receives 2 rather than the joining reward zero. Thus all
+child debts and joint-Never probabilities are exactly zero.
+
+For child123, use the half-hazard solo cycle 3,1,2. Its phase values
+are (1,0,0),(0,1,0),(0,0,1) in child coordinates. Refine every
+solo phase into n hazards α_n=1−2^(−1/n). Continue remains exact,
+and the largest positive participant premium is 1/2, so the common
+supersolution error is at most α_n/2. Joint Never is zero. Quiet
+player 0 receives 6/7, while immediate Quit at the first microdate
+receives exactly 1, since both its singleton and actual03 reward
+are 1. The gain is the fixed 1/7. Consequently every proper child
+has an omitted player for whom no universal fixed nonnegative
+weighted-child-debt-plus-Never bound can hold.
+
+### Exact exclusion of every stationary profile with a quiet player
+
+This is a boundary test for the fixture, not a premise of the producer.
+For a stationary product hazard q with positive absorption, let w be
+its terminal payoff. Every active player has w_i=Q_i≥C_i(w,q);
+if its hazard is strictly between zero and one, equality holds.
+
+If q₀=0 and all three child hazards are positive, active player 1
+has Q₁=q₂(1−q₃)/2 and passive absorbing reward −q₂+2q₃.
+Its Nash inequality implies q₃≤3q₂/4. Active player 2 has
+Q₂=q₁(1−q₃)/2 and passive reward 2q₁−q₃, implying
+q₃≥3q₁/2. Player 3 has Q₃=0 and passive reward −q₁+2q₂,
+so its inequality implies q₁≥2q₂. These inequalities contradict
+positivity. If only a child pair is active, respectively the positive
+passive singleton of player 2 in pair12, player 1 in pair13, or
+player 3 in pair23 makes that player's Continue strictly exceed its
+Quit payoff. A singleton is defeated by a profitable join. Therefore
+q₀=0 is impossible for a stationary equilibrium.
+
+If q₃=0 and q₀>0, then Q₀=w₀=1. Every nonempty opponent
+coalition in 12 pays player 0 exactly 2, so any positive q₁ or q₂
+would make Continue exceed 1. Only player 0 could remain active,
+but player 1 profits by joining. Thus q₃=0 is also impossible.
+
+Suppose q₁=0, with q₀>0 as already established. If q₂>0, its
+Quit value is zero and every nonempty opponent coalition in 03
+pays it −1. Its Continue is strictly worse, so q₂=1. But player
+0 then receives 2 by Continue, above its Quit value 1. Therefore
+q₂=0. With only 0,3 active, each strictly prefers Quit to Continue,
+forcing both hazards to one. The resulting pure03 is defeated by
+player 2's join, from −1 to zero.
+
+Finally suppose q₂=0. The established cases leave q₀,q₁,q₃>0.
+Player 3 has Quit value zero and strictly negative passive reward
+against nonempty coalitions in 01, so q₃=1. Player 0 then has
+Continue value zero and Quit value 1, forcing q₀=1. But player 1
+receives passive value 2 at 03, above its Quit value zero, so it
+cannot be active. This is a contradiction. All Never fails by
+player 0's positive singleton. Every stationary equilibrium, if any,
+must therefore have all four hazards positive. This covers sure
+hazards as well as interior ones and permits no inference of full
+stationary nonexistence.
+
+### Source audit and next independent check
+
+The exact outer source declarations inspected are
+`exists_finset_r0Degree_eq_sum_sign_det` in
+`MathUE/LinearProgramming/R0DegreeSum.lean`,
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`,
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`,
+and `PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+The full-deviation proof matches `QuittingInfinitePathQuitErrorCertificate`
+and `isUniformEquilibriumPayoff_of_arbitrarily_small_infinitePath_quitError`
+in `UniformEquilibrium/Quitting/Paths/InfinitePathSupersolution.lean`.
+The source file was reinspected for the exact common-error and
+fixed-target quantifiers; no all-phase positive-payoff or memory bound
+is an added consumer hypothesis.
+
+The quiet-debt comparison is with
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`.
+The response-partition necessary condition is
+`quittingSingletonBlockRowSum_eq_of_responseInvariant` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`.
+No Lean files were edited or built. Earlier floating stationary searches
+are not evidence used in this proof; the exact quiet-player exclusion
+is the complete stationary scope asserted here.
+
+Requested independent check: falsify (101)–(107), the uniform positive
+outsider buffer across the entire middle R interval, all literal
+Continue identities and the finite-law/full-horizon consumer. Verify
+the opposite-sign fixture's claimed source exclusions and quiet-player
+stationary boundary. This theorem is a new temporal raw-class candidate,
+not a proposed repair of the false universal local-root statement.

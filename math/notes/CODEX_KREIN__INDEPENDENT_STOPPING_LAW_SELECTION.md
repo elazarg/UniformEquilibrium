@@ -79,20 +79,24 @@ method or the already existing full-dimensional-neighborhood concept.
 The next question is global actual-table selection beyond this local
 center; no general openness or architecture-completeness claim is made.
 
-The live section **Global two-joint selection across the complete R
-axis** proposes a raw cyclic-child theorem with both joint premiums
-arbitrarily positive, not merely another regular neighborhood. The separate
-addendum removes the initial eta upper bound by localizing every possible
-nonpivot zero to the strict-monotonicity region. Its global selector and
-opposite pivot endpoint signs are written below; the consolidated statement
-is not yet independently reviewed. Singleton floors are required
-on the refined solo arcs, not at every retained joint row. The exact
-negative-A-floor test makes that distinction substantive.
-The final separate **Independent joint-outsider rewards in two raw
-halfspaces** removes both prescribed outsider equalities at coalition03.
-Its proof and a full-core/no-pure-exit table are complete below, but this
-extension has not yet passed independent review. The earlier global
-statement is retained unchanged for its current review.
+The sections **Global two-joint selection across the complete R axis**
+and **Independent joint-outsider rewards in two raw halfspaces** have
+independent mathematical and final artifact PASS reviews from both
+CODEX_BROUWER and CODEX_MORSE. The consolidated theorem is frozen in
+`../exports/GLOBAL_TWO_JOINT_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md`, exact
+SHA256 `e957a5d04b9a1b1d88b80004521d124350c37b7904eee8e0caa1ba1590c33ff5`.
+It has arbitrary positive joint premiums, independent joint-outsider
+halfspaces, a global selector, and exact all-R source stitching. Floors
+are used only on refined solo arcs. The negative-A regression and the
+two-disjoint-trap/no-pure-exit table distinguish those claims precisely.
+The frozen mathematical statements are unchanged.
+
+The new live section **Several negative-index pair traps with boxed
+larger supports** is a separate complete proof candidate. It combines
+actual-root index counting and larger-support Nash charges to cover
+mixed trap configurations beyond the union of the two separate classes.
+Its generic tie removal, limiting root selection, weak reward closure,
+and exact fixture await independent review.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
@@ -3244,8 +3248,9 @@ neither global continuation nor that support selection.
 
 ## Global two-joint selection across the complete R axis
 
-Status: complete ordinary proof candidate, not independently reviewed.
-The frozen neighborhood export is unchanged. This new theorem uses
+Status: independently reviewed ordinary proof; its strongest halfspace
+version is in the frozen global two-joint export named above.
+The frozen neighborhood export is unchanged. This theorem uses
 global interval selection, not continuation of one implicit branch.
 
 ### Raw table, freedom, and conclusion
@@ -3664,8 +3669,9 @@ not modified and does not supply the global selector.
 
 ## Independent joint-outsider rewards in two raw halfspaces
 
-Status: complete ordinary proof candidate, not independently reviewed.
-This changes actual simultaneous rewards, not just the parameter range
+Status: independently reviewed ordinary proof, consolidated in the frozen
+global two-joint export named above. This changes actual simultaneous
+rewards, not just the parameter range
 of a prescribed joint vector. The preceding global theorem and eta
 addendum are retained unchanged as the reviewed-base target.
 
@@ -3864,3 +3870,367 @@ definition including B_y≤0, and the four changed outsider comparisons.
 All other source and consumer arguments are inherited literally from
 the preceding complete global proof, not from an unproved openness
 claim. No further extension is proposed before this statement's gate.
+
+## Several negative-index pair traps with boxed larger supports
+
+Status: complete ordinary proof candidate, not independently reviewed.
+The question is whether pair traps and larger trapped supports can be
+handled in the SAME raw game, beyond the union of two existence classes.
+The criterion below permits any collection of same-sign pair traps;
+larger traps obey a quantitative Nash charge. It produces actual returning
+roots by finite index counting after an explicit source perturbation,
+then restores every original source. No strategic certificate is an input.
+
+### Raw criterion and conclusions
+
+Let I be finite and nonempty, r(S)∈ℝ^I for every nonempty S⊆I,
+s_i=r_i({i}), and M=max|r_i(S)|. A premium trap A is nonempty,
+and every i∈A has some S⊆A containing i with r_i(S)>s_i. For each
+TWO-player trap A={i,j}, put
+
+    d_i^A=r_i(A)−r_i({j}),  d_j^A=r_j(A)−r_j({i}),
+
+and assume d_i^A*d_j^A>0. Either common sign is allowed independently
+for each pair. For every trap A of size m≥3, define
+
+    P_A(T)=sum_(i∈A\T)[r_i(T∪{i})−s_i],
+    L_A(T)=sum_(i∈A\T)[r_i(T∪{i})−r_i(T)]
+
+for nonempty proper T⊂A. Require positive D_A,tau_A,G_A,L_Astar with
+
+    |T|=1:       P_A(T)≤−D_A,   L_A(T)≤−G_A;
+    2≤|T|≤m−2:  P_A(T)≤0,      L_A(T)≤0;
+    |T|=m−1:    P_A(T)≤tau_A,  L_A(T)≤−L_Astar;      (104)
+
+    K_A=m*(D_A/tau_A)^(1/(m−2)),
+    C_A=K_A*(G_A+L_Astar*D_A/tau_A)
+                           >sum_A s_i+m*M.           (105)
+
+Empty families impose no condition. All data are literal finite reward
+inequalities. There are no global premium-sign or protected-floor premises.
+
+The strict ANALYTIC conclusion is absence of a C¹ full exact-root
+unit-absorption potential on some [−B,B]^I with M<B<M+2. For Fin4
+with s≥0, the STRATEGIC conclusion is an original-game uniform-equilibrium
+payoff against all behavioral deviations, fixed before accuracy. In this
+strategic conclusion the pair products may be weakly nonnegative; the
+larger-trap hypotheses (104)–(105) remain unchanged. The weak conclusion
+uses reward closure, not an index assigned to a singular root.
+
+### Larger supports are excluded at one common boxed source domain
+
+For independent hazards q, write c=product_i(1−q_i), a=1−c, and
+w=c*v+sum_(S≠∅)mu_q(S)r(S). The forced endpoints Q_i,C_i are
+the actual Quit and Continue values. Exact Nash means w_i≥Q_i,C_i;
+an active player has w_i=Q_i≥C_i. All simultaneous coalitions are retained.
+
+Finitely many strict margins in (105) permit ONE M<B<M+2 with
+C_A>sum_A s_i+mB for every larger trap. A nontrap active support
+has some active player's every within-support reward at most s_i,
+and hence has a low successor coordinate. Suppose a trap support A,
+of size m≥3, has Q_i>s_i for every active i. The exact identity is
+
+    sum_(i∈A)(1−q_i)(Q_i−C_i)
+      =c*sum_A(s_i−v_i)
+         +sum_(∅≠T⊊A)mu_q(T)L_A(T).                (106)
+
+If some but not all active hazards are sure, A\{i} has positive mass
+for any nonsure active i. Its L coefficient is strictly negative,
+all others are nonpositive, and c=0, contradicting Nash in (106).
+If all are sure, the last-layer L inequality gives an actual profitable
+withdrawal. Thus all active hazards are interior.
+
+Put z_i=q_i/(1−q_i), U=sum_A z_i, and
+E=sum_(i∈A)product_(j∈A\{i})z_j. Dividing each positive Q_i−s_i
+by opponent Continue probability and summing gives
+
+    0<sum_(∅≠T⊊A)P_A(T)product_(j∈T)z_j
+                                      ≤−D_A*U+tau_A*E.
+
+The elementary bound E≤U^(m−1)/m^(m−2) gives U>K_A. To prove
+the bound, maximize E at fixed positive sum U. A maximum has at least
+m−1 positive coordinates. For two selected coordinates u,v, its expression
+is uv*e_(m−3)(rest)+(u+v)*e_(m−2)(rest). The first coefficient is
+positive at such a maximum, so averaging any unequal pair increases E.
+All coordinates therefore equal U/m, proving the bound; U=0 is immediate.
+
+Support indifference and (106), divided by c>0, now give
+
+    sum_A(s_i−v_i)≥G_A*U+L_Astar*E
+       >(G_A+L_Astar*D_A/tau_A)U>C_A,
+
+contrary to |v_i|≤B. Therefore every absorbing root whose successor
+is strictly above ALL singletons has support a TWO-player trap. This
+reduction permits several pair traps and arbitrary outsider premiums.
+
+### Explicit simultaneous tie removal in source space
+
+For a pair A={i,j}, abbreviate its gaps by d_i,d_j, and write
+α_i=v_i−s_i+d_i, α_j=v_j−s_j+d_j. Its interior pair root, if one
+exists, has the unique possible coordinates
+
+    p_i=(v_j−s_j)/α_j,  p_j=(v_i−s_i)/α_i,
+    p_k=0 for k∉A.                                  (107)
+
+For an outsider k and nonempty T⊆A set
+Delta_k(T)=r_k(T∪{k})−r_k(T), and define
+
+    N_(A,k)(v)=d_i*d_j*(s_k−v_k)
+       +d_i*(v_j−s_j)*Delta_k({i})
+       +d_j*(v_i−s_i)*Delta_k({j})
+       +(v_i−s_i)*(v_j−s_j)*Delta_k(A).             (108)
+
+At (107), with nonzero denominators, the FULL outsider gap is
+
+    Q_k(p)−C_k(v,p)=N_(A,k)(v)/(α_i*α_j).            (109)
+
+Coalition A∪{k} is included. Since k∉A, the coefficient of v_k
+in N is the nonzero constant −d_i*d_j. None of these polynomials
+is identically zero. Exclude their zero sets and all α_i=0 hyperplanes
+for every pair. The complement is open and dense. Indeed a polynomial
+vanishing on an open box is identically zero by induction on variables,
+and a finite union of such zero sets is the zero set of their nonzero
+product. Call sources in the complement generic.
+
+Only the annotation is perturbed, never the game. The generic condition
+is simultaneous for all pair traps and is not chosen after selecting a
+root. No strategically realizable source is required.
+
+### Counting the actual bad roots
+
+If a sure pair is exact at any annotation, it is exact at every one:
+all players face a sure opponent quitter. At source r(A), its successor
+equals its source and absorption is one. This already rules out a full
+potential, and is a pure terminal equilibrium for the strategic conclusion.
+Exclude that case for the remaining argument.
+
+Fix a generic boxed v below at least one singleton. All Continue is
+not Nash, so every exact root absorbs. Suppose every root were bad,
+meaning w>s. The support reduction leaves only pair traps. One sure
+and one interior core hazard is impossible: the latter player's gap
+against the sure opponent equals its nonzero d. Two sure hazards give
+the excluded case. Thus every root is (107) for its pair. There are
+finitely many roots, at most one per pair, with distinct pair supports.
+
+Use the FULL polynomial gap vector g=Q−C, extended to real hazards,
+and F_v(q)_k=clip_[0,1](q_k+g_k(q)). This continuous map into the
+unit cube has precisely the full exact Nash roots as fixed points.
+At (107), genericity and Nash give strictly negative inactive gaps.
+Thus all outsider rows of F_v are locally constant zero; the two
+interior rows are locally unclipped. Interiority forces v_i−s_i and
+d_i to have the same sign, and likewise for j. Therefore α_i*α_j>0.
+The derivative of identity minus F_v, ordering the core first, is
+
+    [[0,−α_i,*], [−α_j,0,*], [0,0,Id]],
+
+with determinant −α_i*α_j<0. The starred entries retain every larger-
+coalition interaction. Its local degree is −1: the differentiability
+remainder is less than half the minimum expansion of the invertible
+derivative on a small sphere, so straight-line comparison is zero-free
+there. Outsider zero coordinates are interior to the enlarged ambient
+cube, not half-index boundary points.
+
+On Ω=(−1,2)^I the field identity minus F_v has total degree +1:
+homotope F_v to the unit-cube center, retaining its image inside [0,1]^I.
+No boundary fixed point occurs. Disjoint small neighborhoods cover the
+finitely many roots. Excision and finite additivity give total degree
+−K, with K≥1 the number of roots, contradicting +1. Consequently a
+generic below-floor source has an absorbing root with a low successor.
+This is not an assertion that ALL roots return.
+
+### Every original below-floor source and the same-domain minimum
+
+Let v be any boxed source with v_h<s_h. Approximate it by generic
+sources v_n from the box interior, retaining v_n,h<s_h. Choose their
+returning roots. A subsequence of hazards converges in the compact unit
+cube. The closed polynomial Nash inequalities imply an exact root q at v.
+The finite union of singleton sublevels is closed, so its successor has
+a low coordinate. Its absorption is positive, since all Continue is not
+Nash at v. Selected return therefore holds at EVERY original below-floor
+source, including box-boundary sources. No continuous selector is assumed.
+
+Suppose a C¹ full exact-root potential H with unit absorption drift
+exists on the box. Minimize H on D={v∈[−B,B]^I: some v_i≤s_i}.
+A strict deficit at a minimum x would produce an absorbing root returning
+to the SAME D, contradicting minimality and drift. Hence x≥s and the
+binding set J={i:x_i=s_i} is nonempty.
+
+At any x≥s with x_j=s_j the exact signed singleton probe gives
+
+    grad H(x)·(x−r({j}))≥1.                         (110)
+
+For clarity, set b_j=0, b_i=0 at nonbinding coordinates, and
+b_i=max(0,r_i({i,j})−r_i({j})) at other binding coordinates. Use
+source x+t*b/(1−t), with player j's sole hazard t. For small t it
+stays boxed and is exact Nash: each inactive Continue-minus-Quit gap is
+(1−t)(x_i−s_i)+t[b_i+r_i({j})−r_i({i,j})]≥0. Its successor is
+x+t(b+r({j})−x). Dividing drift by t and differentiating cancels b
+and proves (110), including upper faces.
+
+If only j binds, other interior partials vanish and upper-face partials
+are nonpositive; the left side of (110) would be nonpositive. Thus at
+least two coordinates bind. Increasing any one while keeping another
+binding proves grad_k H(x)≥0 on J. For v=x−epsilon e_k, its
+selected root has absorption a>0 and w∈D. Universally for signed rewards,
+
+    Q_k≥s_k−2Ma,  w_k≥Q_k,
+    norm(w−v)_infinity≤(M+B)a,
+
+so epsilon≤(3M+B)a. Minimality and drift now imply
+
+    H(x−epsilon e_k)−H(x)≥a≥epsilon/(3M+B),
+
+contradicting the nonpositive limiting derivative −grad_k H(x).
+This proves the strict analytic conclusion.
+
+### Fin4 UE and weak pair gaps preserving EVERY larger trap
+
+For Fin4 with nonnegative singletons, all players are normal. Unless
+all singletons vanish, failure of a fixed-target UE produces the actual
+rational polynomial potential on M+2. Restricting the same polynomial
+to exact roots and then to B contradicts the analytic conclusion. If
+all singletons vanish, all Never is the direct equilibrium. The semantic
+consumer covers unrestricted behavioral deviations.
+
+For weak pair products, perturb only passive singleton entries belonging
+to zero pair gaps. Give a zero gap its partner's strict sign; when both
+vanish, make both positive. Distinct ordered entries belong to distinct
+pair comparisons, so these perturbations can be simultaneous and of
+sup-norm at most delta. All participant rewards, own singletons, P
+coefficients and the COMPLETE trap list remain unchanged.
+
+Only singleton-layer L coefficients of larger traps can change, by at
+most (m−1)delta. Replace G_A by G_A−(m−1)delta>0 and retain the
+other constants. Higher-layer L bounds do not change. The new reward
+bound is at most M+delta; the charge decreases by K_A(m−1)delta.
+All strict margins remain valid if, for every larger trap,
+
+    delta<G_A/(m−1),
+    delta<[C_A−sum_A s_i−mM]/[K_A(m−1)+m].
+
+These are finitely many positive bounds. Arbitrarily close raw tables
+thus satisfy the strict theorem, and reward closure gives one target
+for the original game before accuracy. No weak analytic result or
+opposite-sign pair coverage is inferred.
+
+### A full-core mixed-trap table outside both separate classes
+
+The following table has s=(1,0,0,0) and M=11:
+
+| S | r(S) |
+|---|---|
+| 0 | (1,−1,−1,−1) |
+| 1 | (2,0,2,−1) |
+| 2 | (2,−1,0,2) |
+| 3 | (0,2,−1,0) |
+| 01 | (−9,−10,10,10) |
+| 02 | (−9,10,−10,10) |
+| 03 | (4,−11,10,3) |
+| 12 | (−10,3,3,10) |
+| 13 | (11,−10,10,−10) |
+| 23 | (11,10,−10,−10) |
+| 012 | (−9,−10,−10,10) |
+| 013 | (−9,−10,10,−10) |
+| 023 | (−9,10,−10,−10) |
+| 123 | (11,−10,−10,−10) |
+| 0123 | (11/10,1/10,1/10,1/10) |
+
+The only traps are 03,12,0123. The pair joining-gap vectors are (4,4)
+and (4,1). All other proper nonsingleton participant premiums are −10;
+grand premiums are 1/10. For I, the P coefficients by cardinality are
+−17,−20,1/10. L singleton values in order0,1,2,3 are −14,−19,−19,−17;
+pair values are −19 at03,12 and −40 at the other four pairs; all triple
+values are −99/10. Choose D_I=10,tau_I=1,G_I=10,L_Istar=9. All bounds
+have strict slack and C_I=400 sqrt(10)>45=sum_i s_i+4M.
+
+No pure exit is hidden. At singletons0,1,2,3 the profitable joining
+players3,2,1,0 gain4,1,4,4. At pairs01,02,13,23 the withdrawing
+players0,0,1,2 gain11,11,12,9. At03 player1 joins for gain1; at12
+player0 does so for gain1. At triples012,013,023,123 players1,0,0,1
+withdraw for gain20. Every grand participant gains99/10 by withdrawal.
+All Never fails since s_0=1.
+
+Every proper child has an exact full behavioral Nash profile with zero
+Never and a profitable omitted player. The listed coalition quits surely
+at the first date; the prescribed future after nonabsorption is Never:
+
+| Child | Sure coalition | Omitted player | Gain |
+|---|---|---|---|
+| 0 | 0 | 3 | 4 |
+| 1 | 1 | 2 | 1 |
+| 2 | 2 | 1 | 4 |
+| 3 | 3 | 0 | 4 |
+| 01 | 0 | 3 | 4 |
+| 02 | 0 | 3 | 4 |
+| 03 | 03 | 1 | 1 |
+| 12 | 12 | 0 | 1 |
+| 13 | 1 | 2 | 1 |
+| 23 | 2 | 1 | 4 |
+| 012 | 0 | 3 | 4 |
+| 013 | 1 | 2 | 1 |
+| 023 | 2 | 1 | 4 |
+| 123 | 3 | 0 | 4 |
+
+Only a singleton owner's matched partner profits by joining it; that
+partner is omitted in every displayed singleton case. The two sure pairs
+are internally Nash. A sole owner who delays faces Never opponents and
+cannot exceed its nonnegative singleton. Thus every full child debt and
+Never term is zero while the listed outside gain is positive. This refutes
+every universal finite nonnegative weighted-child-debt-plus-Never bound
+for every proper child, not every possible selected-child method.
+
+The singleton matrix is
+
+    Gamma=[[0,1,1,−1],[−1,0,−1,2],
+           [−1,2,0,−1],[−1,−1,2,0]].
+
+Its child123 inverse is [[2,4,1],[1,2,4],[4,1,2]]/7. A positive
+homogeneous pivot forces equal child coordinates and then positive pivot
+residual; pivot zero forces zero child. At offset (1,−1,−1,−1), the
+only root is (0,1,1,1), with inactive residual2 and determinant7. Thus
+it is R₀ of degree+1. Only child123 has a nonnegative inverse, with
+passive weights (−1/7,5/7,3/7). The named degree and passive-inverse
+exits therefore do not apply. The candidate block0|123 has actual
+response coordinates t−10t²,t−10t²,t+3t² at q=(t,0,0,0), so fails.
+
+The signed pair-core class fails because the greatest core is full;
+the separate boxed-charge class fails because pair traps exist. Every
+player has a negative premium, so the protected set is empty. Summing
+all four sure-singleton nonnegative-weight floor tests gives
+−17*sum_i lambda_i≥0, forcing zero weights. Product-low and nonpositive
+supportwise balance fail on03, where both active premiums equal3. The
+displayed global two-joint template cannot use03 since r_2(03)=10>0;
+its other pivot pairs01,02 have negative premiums. These are bounded
+actual comparisons, not an exhaustive exclusion of all other producers.
+
+### Sources inspected and next independent challenge
+
+The new finite-count primitive inspected is `ambientDegree_additive`
+in `MathUE/Topology/AmbientDegreeProperties.lean`; finite iteration and
+excision give the disjoint-root sum. `ambientDegree_homotopy` and
+`ambientDegree_affineRootField_eq_sign_det` in
+`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean` give the full
+normalization and local affine sign. The nonlinear comparison and tie
+polynomials are proved above, not supplied as interfaces.
+
+The remaining actual declarations, already inspected, are
+`exists_isZeroQuittingRootNash` in `UniformEquilibrium/Quitting/Root/NashExistence.lean`,
+`abs_quittingRootSuccessorPayoff_sub_tail_le_reward_add_source_mul_absorptionMass`
+in `UniformEquilibrium/Quitting/Root/BoundedSuccessorDisplacement.lean`,
+`IsQuittingFullExactRootPotential.singletonFace_drift` in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`,
+`isQuittingNormalPlayer_of_singleton_nonneg` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`,
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`,
+`isQuittingFullExactRootPotential_of_robustPotential` and
+`IsQuittingFullExactRootPotential.mono_box` in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`, and
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+
+The requested falsification is simultaneous genericity in (108), the
+full local indices with arbitrary outsider premiums, finite bad-root
+count, and restoration at arbitrary below-floor sources. Weak-gap closure
+must preserve EVERY larger-trap inequality, not merely the selected pair.
+The full raw fixture and actual Fin4 conclusion are part of the target.
