@@ -149,6 +149,7 @@ import MathUE.ContinuationLatticeGluing
 import MathUE.CoordinatewisePuiseuxCurve
 import MathUE.Coupling
 import MathUE.CubicAnchorRoot
+import MathUE.RationalizedQuadraticBracketRoot
 import MathUE.CurveSelection.AlgebraicApproach
 import MathUE.CurveSelection.AlgebraicReduction
 import MathUE.CurveSelection.AlgebraicRelation

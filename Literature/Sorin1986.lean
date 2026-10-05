@@ -5617,7 +5617,45 @@ private theorem FiniteStageGame.exists_flatFace_strictActive_close
       _ ≤ ‖center - target‖ * c := mul_le_mul_of_nonneg_left htc (norm_nonneg _)
       _ < ε := hsmall
 
-/-- Every weak target on the flat IR face is delivered by one internally
+/-- Every weak target on the flat IR face has one internally selected profile
+with exact flat delivery at every valid rate and exact Nash and target
+approximation at all sufficiently small rates. -/
+theorem exists_discountedNash_flatDelivery_allRates_of_mem_IR_of_flatFace
+    (G : FiniteStageGame) (flat active : G.Player)
+    (hexhaust : ∀ who, who = flat ∨ who = active)
+    (hmaximum : ∀ action, G.payoff action flat ≤ G.individualRationalLevel flat)
+    (hflatAll : ∀ v ∈ G.individuallyRationalPayoffs,
+      v flat = G.individualRationalLevel flat)
+    (hcenter : ∃ center ∈ G.individuallyRationalPayoffs,
+      G.individualRationalLevel active < center active)
+    (target : Payoff G.Player) (htarget : target ∈ G.individuallyRationalPayoffs)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ threshold : ℝ, 0 < threshold ∧ threshold ≤ 1 ∧
+      ∃ profile : G.BehaviorProfile,
+        (∀ rate : G.DiscountRate,
+          G.discountedPayoff rate.1 profile flat = G.individualRationalLevel flat) ∧
+        ∀ lam : ℝ, 0 < lam → lam < threshold →
+          G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
+          dist (G.discountedPayoff lam profile) target < ε := by
+  obtain ⟨center, hcenterIR, hactive⟩ := hcenter
+  obtain ⟨mixed, hmixed, hflat, hstrict, hnear⟩ :=
+    G.exists_flatFace_strictActive_close flat active hflatAll
+      center hcenterIR hactive target htarget (half_pos hε)
+  obtain ⟨threshold, hthreshold, hthresholdOne, profile, hflatDelivery, hsource⟩ :=
+    exists_discountedNash_close_allSmallRates_of_flatFace_strictActive
+      G flat active hexhaust hmaximum mixed hmixed hflat hstrict (half_pos hε)
+  refine ⟨threshold, hthreshold, hthresholdOne, profile, hflatDelivery, ?_⟩
+  intro lam hlam hlamThreshold
+  obtain ⟨hnash, hclose⟩ := hsource lam hlam hlamThreshold
+  refine ⟨hnash, ?_⟩
+  calc
+    dist (G.discountedPayoff lam profile) target ≤
+        dist (G.discountedPayoff lam profile) mixed + dist mixed target :=
+      dist_triangle _ _ _
+    _ < ε / 2 + ε / 2 := add_lt_add hclose hnear
+    _ = ε := by ring
+
+/-- Every weak target on the flat IR face is approximated by one internally
 selected exact Nash profile before all sufficiently small rates. -/
 theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_flatFace
     (G : FiniteStageGame) (flat active : G.Player)
@@ -5634,23 +5672,10 @@ theorem exists_discountedNash_close_allSmallRates_of_mem_IR_of_flatFace
         ∀ lam : ℝ, 0 < lam → lam < threshold →
           G.repeatedGame.IsDiscountedεNash (1 - lam) PUnit.unit 0 profile ∧
           dist (G.discountedPayoff lam profile) target < ε := by
-  obtain ⟨center, hcenterIR, hactive⟩ := hcenter
-  obtain ⟨mixed, hmixed, hflat, hstrict, hnear⟩ :=
-    G.exists_flatFace_strictActive_close flat active hflatAll
-      center hcenterIR hactive target htarget (half_pos hε)
   obtain ⟨threshold, hthreshold, hthresholdOne, profile, _hflatDelivery, hsource⟩ :=
-    exists_discountedNash_close_allSmallRates_of_flatFace_strictActive
-      G flat active hexhaust hmaximum mixed hmixed hflat hstrict (half_pos hε)
-  refine ⟨threshold, hthreshold, hthresholdOne, profile, ?_⟩
-  intro lam hlam hlamThreshold
-  obtain ⟨hnash, hclose⟩ := hsource lam hlam hlamThreshold
-  refine ⟨hnash, ?_⟩
-  calc
-    dist (G.discountedPayoff lam profile) target ≤
-        dist (G.discountedPayoff lam profile) mixed + dist mixed target :=
-      dist_triangle _ _ _
-    _ < ε / 2 + ε / 2 := add_lt_add hclose hnear
-    _ = ε := by ring
+    exists_discountedNash_flatDelivery_allRates_of_mem_IR_of_flatFace
+      G flat active hexhaust hmaximum hflatAll hcenter target htarget hε
+  exact ⟨threshold, hthreshold, hthresholdOne, profile, hsource⟩
 
 /-- The actual two-player geometry supplies every weak target, including
 singleton and flat-security boundary cases, without an extra source premise. -/

@@ -725,18 +725,28 @@ remain separate; these theorems are not a whole-packet seal.
 
 ## Pending pivot and solo-refinement source dependencies
 
-The cyclic-child one-joint-phase and repeated-solo positive-outsider-buffer
-packets share an all-sign rationalized quadratic selector, an actual continuous
-pivot producer, and a full-behavioral solo-only refinement compiler. The
-selector must allow arbitrary quadratic coefficient, including zero, under
-positive bracket length, positive linear coefficient, negative constant and
-positive upper-endpoint value; it must not assume a globally positive
-derivative. The refinement must allow arbitrary finite phase inventories,
+`rationalizedQuadraticRoot_spec` (`MathUE/RationalizedQuadraticBracketRoot.lean`)
+is checked under positive bracket length, negative constant and positive
+upper-endpoint value, without a sign condition on either higher coefficient.
+It supplies a unique root inside that bracket, an explicit positive denominator
+and discriminant, and a positive derivative at the selected root, not global
+monotonicity or uniqueness among all positive roots. Its closed-interval
+companion supplies continuity through zero endpoints under positive endpoint
+linear coefficients and continuous polynomial coefficients, including the
+zero-leading-coefficient case. This is a scalar producer, not a game pivot.
+
+The cyclic-child one-joint-phase and outsider-buffer packets still need actual
+continuous pivot producers and a full-behavioral solo-only refinement compiler.
+The two-outsider-buffer packet requires a separate monotone rational selector
+and its small-parameter ratios; the quadratic formula covers only its empty
+repeated-phase specialization, not the whole source. The refinement must allow
+arbitrary finite phase inventories,
 repeated pivot owners with nonzero singleton rewards, and joint Quit values
 bounded by the current continuation, not by zero or a singleton. It must
 retain one fixed target across refinements. In the repeated-solo packet the
 outsider cap is paid by a positive continuation buffer, not cancellation by
-negative collision rewards. These source units are queued, not checked or
+negative collision rewards. The empty repeated phase is allowed. These
+game-facing source units are queued, not checked or
 supplied by the common-leaver results above.
 
 ## Proof-mining connections not yet formalized
@@ -1491,6 +1501,12 @@ not itself supply weak-active targets without strict slack.
 `exists_discountedNash_close_allSmallRates_of_mem_IR_of_flatFace` in the same
 owner supplies those targets by flat-preserving convex mixing. The actual
 two-player geometry selects the strict, singleton or flat branch internally.
+`exists_discountedNash_flatDelivery_allRates_of_mem_IR_of_flatFace` in that
+owner retains exact flat delivery at every valid rate for the same selected
+weak-target profile, alongside exact Nash and metric approximation at all
+sufficiently small rates. The earlier facade projects this stronger owner;
+its delivery calculation is not duplicated. The named check and separate
+standard-axiom check pass.
 `property_4_discounted` and its delegating `lemma_2`
 (`Literature/Sorin1986.lean`) are proved in Lean under the original corrected
 disjunction: the weakly IR feasible set is full dimensional or there are

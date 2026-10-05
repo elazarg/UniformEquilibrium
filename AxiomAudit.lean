@@ -583,6 +583,7 @@ import MathUE.RamifiedWeierstrass
 import MathUE.RationalArcSubdivision
 import MathUE.RationalCalendarSearch
 import MathUE.RationalPowerCutoffLogBound
+import MathUE.RationalizedQuadraticBracketRoot
 import MathUE.RealQuantifierElimination.AlgebraicEvaluation
 import MathUE.RealQuantifierElimination.AlgebraicWitnesses
 import MathUE.RealQuantifierElimination.CoefficientSignBranch
