@@ -3085,3 +3085,40 @@ gap is asserted here. The next concrete question is whether a genuinely
 approximate all-player selection can spend the child errors to reduce
 the pivot's late-response excess, with a bound that is stable as both
 the calendar and the number of changes grow.
+
+### Approximate-law search: a full-core stress table is stopped by a sure pair
+
+This is an exact failed counterexample attempt, not new existence coverage
+or an export candidate. It tests a full-premium-core table rather than
+another exact-selector variation. Take the same singleton matrix G and
+s=(1,0,0,0), but define every nonempty coalition by
+
+    r_i(S)=s_i+1_(card(S)>=2)          if i belongs to S,
+           s_i+sum_(j in S) G_ij     otherwise.
+
+Change only r_0(123) to3 and r_1(23) to2. This specifies all60 entries.
+Every pair is a premium trap. Pair03 has two strictly positive joining
+gaps, so neither participant is a leaver on that trap. The added passive
+entries defeat the tempting grand and child123 pure exits. Those facts
+do not imply absence of a mixed immediate equilibrium.
+
+Indeed the exact first-date hazard vector
+
+    q=(1/2,1/2,1,1)
+
+has full Quit endpoints (2,1,1,1) and Continue endpoints
+(2,1,-1/2,1). Players0,1 are indifferent, player2 strictly prefers Quit,
+and player3 is indifferent. For example player2's four equally likely
+Continue rewards at opponent coalitions013,03,13,3 are respectively
+0,-2,1,-1. Player3's analogous rewards at012,02,12,2 are0,1,1,2.
+Every player faces a different sure quitter. Hence every behavioral
+deviation is decided by its initial Quit/Continue choice; later actions
+cannot change the payoff. The profile is exact terminal Nash and gives
+the immediate uniform target(2,1,1,1).
+
+The attempted obstruction therefore fails before any large-calendar
+analysis. No source-exclusion or new raw-class claim is retained. The
+useful next test must include these partly-sure mixed supports early,
+not merely all fifteen pure coalitions or premium-trap inequalities.
+The simultaneous-law investigation remains open; it will not impose
+exact nonpivot response and then try to repair that restriction afterward.
