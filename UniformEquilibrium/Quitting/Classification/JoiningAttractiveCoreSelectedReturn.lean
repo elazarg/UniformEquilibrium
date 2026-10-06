@@ -1,7 +1,5 @@
 import UniformEquilibrium.Quitting.Classification.JoiningAttractiveCoreGenericReturn
-import UniformEquilibrium.Quitting.Root.SingletonSublevelReturnClosed
 import UniformEquilibrium.Quitting.Projective.SelectedSingletonSublevelReturnSmoothDrift
-import Mathlib.Topology.Neighborhoods
 
 /-! # Actual selected return at every attractive-core source
 
@@ -29,40 +27,14 @@ theorem exists_exactRoot_singletonSublevel_of_joiningAttractive_core
     ∃ root, IsεQuittingRootNash reward tail 0 root ∧
       ∃ player, quittingRootSuccessorPayoff reward tail root player ≤
         reward (quittingSingletonTerminal player) player := by
-  let sources : Set (Payoff ι) := {source |
-    (∃ player, source player < reward (quittingSingletonTerminal player) player) ∧
-      ¬IsεQuittingRootNash reward source 0
-        (quittingPureSetRoot (quittingPremiumCore reward))}
-  have hbelowOpen := isOpen_iUnion fun player : ι =>
-    isOpen_lt (continuous_apply player)
-      (continuous_const (y := reward (quittingSingletonTerminal player) player))
-  have hbelowSet : {source : Payoff ι | ∃ player,
-      source player < reward (quittingSingletonTerminal player) player} =
-      ⋃ player : ι, {source : Payoff ι |
-        source player < reward (quittingSingletonTerminal player) player} := by
-    ext source
-    simp
-  rw [← hbelowSet] at hbelowOpen
-  have hpureClosed : IsClosed {source : Payoff ι | IsεQuittingRootNash reward source 0
-      (quittingPureSetRoot (quittingPremiumCore reward))} := by
-    simpa only [quittingRootOfSimplex_simplexOfRoot,
-      isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash] using
-      isClosed_setOf_isZeroQuittingRootEndpointNash_tail reward
-        (quittingSimplexOfRoot (quittingPureSetRoot (quittingPremiumCore reward)))
-  have hsourcesOpen : IsOpen sources := hbelowOpen.inter hpureClosed.isOpen_compl
-  have hdense := dense_quittingCorePairTieAvoidanceDomain_of_joiningAttractive
-    reward hattractive
-  have hsubset : sources ∩
-      quittingPairTieAvoidanceDomain reward (quittingCoreOrderedPairs reward) ⊆
-      {source : Payoff ι | ∃ root, IsεQuittingRootNash reward source 0 root ∧
-        ∃ player, quittingRootSuccessorPayoff reward source root player ≤
-          reward (quittingSingletonTerminal player) player} := by
-    intro source hsource
-    exact exists_exactRoot_singletonSublevel_of_joiningAttractive_generic_tail
-      reward source hattractive hcard hsource.2 hsource.1.1 hsource.1.2
-  have hclosed := isClosed_setOf_exists_exactRoot_singletonSublevel reward
-  exact (hclosed.closure_subset_iff.mpr hsubset)
-    (hdense.open_subset_closure_inter hsourcesOpen ⟨hbelow, hnopure⟩)
+  exact exists_exactRoot_singletonSublevel_of_dense_sources_excluding_root reward
+    (quittingPairTieAvoidanceDomain reward (quittingCoreOrderedPairs reward))
+    (dense_quittingCorePairTieAvoidanceDomain_of_joiningAttractive reward hattractive)
+    (quittingPureSetRoot (quittingPremiumCore reward))
+    (fun source havoid hsourceBelow hsourceNoPure =>
+      exists_exactRoot_singletonSublevel_of_joiningAttractive_generic_tail
+        reward source hattractive hcard havoid hsourceBelow hsourceNoPure)
+    tail hbelow hnopure
 
 theorem hasBoxedSelectedSingletonSublevelReturn_of_joiningAttractive_core
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

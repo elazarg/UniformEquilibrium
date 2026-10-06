@@ -79,6 +79,32 @@ private theorem triple_gap_update_second
     Math.PairedAffine.bellman Math.PairedAffine.contribution
   ring
 
+/-- The full four-atom gap expansion includes zero and sure hazards.
+Only the actual positive support is restricted; no Nash or sign condition
+is required. -/
+theorem quittingRootEndpointDifference_eq_triple_expansion
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
+    (root : ι → PMF Bool) {first second third : ι}
+    (hfirstSecond : first ≠ second) (hfirstThird : first ≠ third)
+    (hsecondThird : second ≠ third)
+    (hsupport : quittingPositiveHazardSupport root ⊆ {first, second, third}) :
+    quittingRootEndpointDifference reward tail root first =
+      (1 - (root second true).toReal) * (1 - (root third true).toReal) *
+        (reward (quittingSingletonTerminal first) first - tail first) +
+      (root second true).toReal * (1 - (root third true).toReal) *
+        quittingPairJoiningGap reward first second +
+      (1 - (root second true).toReal) * (root third true).toReal *
+        quittingPairJoiningGap reward first third +
+      (root second true).toReal * (root third true).toReal *
+        quittingTripleJoiningGap reward first second third := by
+  have hformula := triple_gap_update_second reward tail root hfirstSecond hfirstThird
+    hsecondThird hsupport (hazardOfRoot root second)
+      (hazardOfRoot_nonneg root second) (hazardOfRoot_le_one root second)
+  rw [Function.update_eq_self, quittingRealHazardEndpointGap_hazardOfRoot] at hformula
+  rw [hformula]
+  unfold tripleGapSlope tripleGapConstant hazardOfRoot
+  ring
+
 theorem quittingRealHazardEndpointGap_triple_cross_partial
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
     (root : ι → PMF Bool) {first second third : ι}

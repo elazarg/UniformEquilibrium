@@ -166,12 +166,20 @@ derivatives. Its generic inverse theorem works on arbitrary open domains,
 without a connectedness or nonvanishing-derivative input. These are interior
 domain results, not closed-disk boundary extension.
 
-The next bounded Milnor Sections 15.1--15.4 producer is the rectangle
-slice-length estimate from measurable speed and finite square energy, using
-pinned Hölder, Fubini and Markov APIs. The conformal spherical-energy bound
-must then identify the actual complex Jacobian and spherical density in the
-weighted change-of-variables formula; finite sphere area is not a supplied
-energy oracle. Nested short crosscuts with distinct landing endpoints and
+`Math.RectangleLengthArea.measure_two_sqrt_energy_le_quarter`
+(`MathUE/Analysis/RectangleLengthArea.lean`) supplies the generic measurable
+slice estimate with its literal square-root threshold; zero-energy and
+almost-everywhere finite-slice cases are separate declarations.
+`Math.ComplexAnalysis.spherical_energy_lt_top`
+(`MathUE/Complex/HolomorphicSphericalEnergy.lean`) derives the real determinant
+from the actual complex derivative and uses weighted change of variables to
+bound energy by the integrable spherical density in a complex-valued chart.
+`Math.ComplexAnalysis.exists_chart_short_slice`
+(`MathUE/Complex/HolomorphicRectangleLengthArea.lean`) composes these results
+for an actual open square in the holomorphic injective domain, with no global
+measurability assumption on the arbitrary outside values. This does not supply
+a chart containing infinity, spherical curve length, or a crosscut.
+Nested short crosscuts with distinct landing endpoints and
 Jordan separation remain separate known-proof library obligations. No scoped
 Jordan/Schoenflies or crosscut producer has been found. Section 16.6 requires
 continuous extension onto the boundary, not boundary injectivity, and the

@@ -840,7 +840,7 @@ before every potential with continuity on the same sublevel domain and ambient
 differentiability only on the singleton lower boundary. Its selected-root
 producer needs no comparison between the reward bound and return box; the
 analytic consumer retains the strict comparison. The literal triple and full
-tables now exclude all pure terminal Nash profiles, including all-Never, and
+tables now exclude all pure stationary terminal Nash profiles, including all-Never, and
 any nonnegative weighted singleton floor asserted for every product law must
 have zero weights, in
 `UniformEquilibrium/Quitting/Examples/BoxedNashChargeFloorAndPureExclusions.lean`.
@@ -962,7 +962,8 @@ preserving participants, own singletons, traps and core for every real shift.
 It gives one original-game target, not a weak analytic return theorem.
 This localized perturbation is not the uniform all-passive increment consumer.
 The packet's rational table and variants, actual bad triple counterroot,
-no-floor/no-pure, child/debt and matrix/response exclusions remain separate.
+weighted aggregate-leave and matrix/response separations remain separate.
+The attractive packet explicitly makes no all-fourteen-child-debt assertion.
 Its singleton matrix shares the boxed/signed-pair Gamma, whose positive balance
 charge gives degree one, not the negative-charge cyclic degree-zero theorem.
 The literal nonlinear response identity depends on the full reward table and
@@ -1000,13 +1001,43 @@ Own singletons and nonsingleton rewards remain arbitrary signed reals.
 returns a fixed target to the original relabeled game. The common positive-mass,
 Bellman and balanced-certificate proofs live once in the branch-independent
 owners; the old smaller finite-early-absorption consumer retains its scope.
-The reward-only open predicate and polynomial scalar tests, full rational
-fixture, stationary exclusions, fourteen child witnesses and class comparisons
-remain packet obligations. Fixture smaller-root exclusion must cover every
+The reward-only predicate `HasReindexedLargerSignedFourCycleSingletonTable`,
+its openness theorem and
+`exists_uniformEquilibriumPayoff_of_reindexedLargerSignedFourCycleSingletonTable`
+(`UniformEquilibrium/Quitting/Classification/Existence/SignedFourCycleLargerUniformPayoff.lean`)
+derive all data internally from polynomial strict matrix tests and return one
+original-game target. The full rational fixture, stationary exclusions,
+fourteen child witnesses and class comparisons remain packet obligations.
+Fixture smaller-root exclusion must cover every
 labeling and positive row scaling; terminal affine transport is not silently
 assumed because Never remains zero. Zero/sure stationary boundaries and each
 child's complete behavioral cap, late singleton and Never choices must be
 included. The new fixture matrix is not the shared boxed/attractive Gamma.
+
+The shared positive-charge matrix is supplied once by
+`matrix_r0Degree_eq_one`
+(`MathUE/LinearProgramming/CyclicChildSharedFixture.lean`). Its literal regular
+offset has exactly the root `(0, 1, 1, 1)`, inactive residual two and active
+determinant seven. The child inverse and pivot inverse row are computed in the
+same owner; the latter has a negative entry. Reward-table identifications,
+partition-response calculations and child behavioral witnesses remain separate.
+
+## Mixed-sign triple source boundary
+
+`mixedSignTripleNash_hasFDerivAt_and_negative_det`
+(`UniformEquilibrium/Quitting/Classification/MixedSignTripleCoreJacobian.lean`)
+derives the actual full ambient derivative from the literal seven strict tests
+and two equality constraints at a proper full-triple exact root, retaining
+strict gaps for every inactive player. The canonical full endpoint expansion
+also covers zero and sure hazards, and the sure classification derives the
+allowed pure-pair alternative. This is not yet the complete mixed-sign raw
+selected-return or equilibrium producer: all-support branch assembly, pair tie
+restoration and the strict/weak semantic consumers remain separate.
+The shared negative-bad-root obstruction and excluded-root dense restoration
+live in `exists_exactRoot_singletonSublevel_of_dense_sources_excluding_root`
+(`UniformEquilibrium/Quitting/Root/NegativeBadRootSelectedReturn.lean`); the
+joining-attractive consumers remain thin same-scope instances. Excluding a
+designated root does not assert that it is pure.
 
 ## Pending pivot and solo-refinement source dependencies
 

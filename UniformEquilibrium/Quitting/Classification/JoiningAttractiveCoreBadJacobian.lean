@@ -1,6 +1,5 @@
 import UniformEquilibrium.Quitting.Classification.JoiningAttractiveCorePartials
-import UniformEquilibrium.Quitting.Classification.SignedPairCoreBadRoot
-import UniformEquilibrium.Quitting.Root.PairNashTieAvoidance
+import UniformEquilibrium.Quitting.Classification.CorePairTieAvoidance
 
 /-! # Actual negative derivatives of joining-attractive bad roots
 
@@ -17,11 +16,6 @@ namespace GameTheory
 open Set QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-def quittingCoreOrderedPairs
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Finset (ι × ι) :=
-  Finset.univ.filter (fun pair => pair.1 ∈ quittingPremiumCore reward ∧
-    pair.2 ∈ quittingPremiumCore reward ∧ pair.1 ≠ pair.2)
 
 theorem dense_quittingCorePairTieAvoidanceDomain_of_joiningAttractive
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -65,16 +59,8 @@ theorem joiningAttractive_badRoot_hasFDerivAt_and_negative_det
         hne hfirstCore hsecondCore)
       (quittingPairJoiningGap_pos_of_joiningAttractive_core reward hattractive
         hne.symm hsecondCore hfirstCore)
-    have hpairMember : (first, second) ∈ quittingCoreOrderedPairs reward := by
-      exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, hfirstCore, hsecondCore, hne⟩
-    have hroot := quittingRoot_eq_pairedRoot_of_support_eq_pair root hne hsupport
-    have hcertificate := pairNash_hasFDerivAt_and_negative_det_of_numerator_avoidance
-      reward tail hne (root first) (root second)
-      (hproper first (by rw [hsupport]; simp))
-      (hproper second (by rw [hsupport]; simp)) (hroot ▸ hnash) hproduct
-      (havoid (first, second) hpairMember)
-    rw [← hroot] at hcertificate
-    exact ⟨_, hcertificate.1, hcertificate.2.1⟩
+    exact proper_pairNash_hasFDerivAt_and_negative_det_of_core_tieAvoidance
+      reward tail root hnash hsubset hproper hne hsupport hproduct havoid
   · obtain ⟨first, second, third, hfirstSecond, hfirstThird, hsecondThird, hcore⟩ :=
       Finset.card_eq_three.mp hcard
     have hproperCore : ∀ player ∈ quittingPremiumCore reward,
