@@ -4374,7 +4374,7 @@ player's actual incentive condition.
 For completeness, the elementary exhaustive classifications are as follows.
 
 For j=0 write (x,y,z)=(q₁,q₂,q₃). If z>0 its owner's nonnegative
-difference 1−11x−11y−83xy forces x,y<1/11. Player2's difference is
+difference 1−11x−11y−83xy forces x,y≤1/11. Player2's difference is
 then strictly negative, because its x=0 endpoints are at most −D and
 its x=1 endpoints at most1002. Thus y=0. Player1's two y=0 endpoints
 are positive, forcing x=1, a contradiction. Therefore z=0. The remaining
