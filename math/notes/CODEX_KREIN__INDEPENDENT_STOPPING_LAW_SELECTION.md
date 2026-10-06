@@ -4727,3 +4727,53 @@ law construction that transports actual values and every unilateral cap
 through such an escape from the singleton sublevel set. Merely convexifying
 successors, taking a higher-absorption root, or changing the local index
 convention cannot fix (118).
+
+## Scope check for the next independent-law attempt
+
+The next construction must use the complete caps. Purely excluding an
+actual prescribed payoff that strictly dominates all singleton rewards
+cannot reach the surviving full-Q class, even if the exclusion uses sharp
+nonlinear restrictions on independent first-stopping coalition masses.
+This is already covered source information, not another research theorem.
+
+Indeed let Γ_ij=r_i({j})−s_i be textbook Q. Apply the LCP definition
+at the offset (−1,…,−1): its nonnegative vector u satisfies Γu≥1.
+Writing L=Σ_i u_i>0 and λ_i=u_i/L gives
+
+    Σ_j λ_j r_i({j}) = s_i+(Γu)_i/L > s_i
+
+for every i. The singleton lottery λ is an actual independent stopping
+profile: schedule its positive-weight owners once in any order and give
+the current owner probability λ_i divided by the remaining weight.
+The last owner quits surely. The terminal singleton probabilities are
+exactly λ, so this is not merely a convexified or supplied correlated law.
+
+This observation produces no cap control. For its first scheduled owner
+i, λ_i<1, and writing C_i for the payoff from always continuing past
+that owner's sole scheduled date gives
+
+    U_i=λ_i s_i+(1−λ_i)C_i,
+    C_i−U_i=λ_i(U_i−s_i)/(1−λ_i)>0.
+
+Thus the very finite law witnessing the strict prescribed-payoff
+improvement has a profitable complete deviation. A later date, a finer
+calendar, or a better first-stopping mass inequality must address this
+gain rather than infer safety from payoff feasibility.
+
+The inspected production declarations are
+`IsStandardQMatrix` and `StandardLCPSolution`
+(`UniformEquilibrium/Quitting/Classification/LCP/MatrixClasses.lean`),
+`isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff`
+and `exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+(`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`).
+The latter already supplies the strict-image simplex from bare Fin4
+nonexistence, with no additional normality or singleton-sign assumption.
+The earlier full-normal-core route through
+`nonempty_finFourQuantitativeFullSupportHardResidual_of_no_uniformPayoff`
+was also checked in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportProjectiveQBarResidual.lean`.
+No new coverage is claimed from this lookup.
+
+The live question remains a multiple-date construction controlling the
+complete late/Never caps on its same selected laws. Outcome-mass geometry
+alone is not being pursued as a way around the standard-Q residual.
