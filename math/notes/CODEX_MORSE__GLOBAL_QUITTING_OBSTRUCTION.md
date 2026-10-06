@@ -104,6 +104,13 @@ Section 23 gives an independent strengthening and a tied-root test for the
 reviewed joining-attractive triple-core mechanism: after the pure-core exit,
 there is at most one bad root at a fixed source, even across distinct pair
 and triple supports. This is a root inventory, not broader table coverage.
+Section 24 falsifies a global forced-hazard elimination step. An outsider
+with constant participant rewards can have a hazard tending to zero while
+retaining positive unrestricted regret, even when every other player is
+exactly optimal. Deleting that hazard also destroys the other players'
+incentives. The example is already solved and remains internal; its role
+is to reject an unnormalized time-scale argument, not narrow the possible
+counterexample tables.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -3454,3 +3461,112 @@ neither can override the existing opposite-sign pair or full-core local
 return falsifiers. The remaining global question is how to use the entire
 return relation or an actual strategy construction in those residuals,
 not how to force a second local root at an already falsified source.
+
+## 24. Vanishing forced hazards do not justify player elimination
+
+This is an exact failure of a proposed global strategy construction, not
+an equilibrium counterexample or a new table-class theorem. All deviations
+below are unrestricted behavioral stopping laws. No finite calendar,
+stationary-deviation restriction, or continuation annotation is imposed
+on a deviating player.
+
+The attempted construction fixes a player whose participant rewards are
+all at most its own singleton, forces that player to use a small positive
+stationary hazard, solves the other players' absorbing game, and then
+sends the forced hazard to zero. The missing implication would be that
+the forced player's regret tends to zero, or that deleting its hazard
+preserves the other players' incentives. Neither follows.
+
+Consider three players I={0,1,2}, zero Never payoff, and the complete table
+
+| S | r(S) |
+|---|---|
+| 0 | (1,−1,−1) |
+| 1 | (3,0,1) |
+| 2 | (3,1,0) |
+| 01 | (1,0,−1) |
+| 02 | (1,−1,0) |
+| 12 | (3,0,0) |
+| 012 | (1,0,0) |
+
+Every participant reward equals that player's singleton, s=(1,0,0).
+For 0<λ<1/2 prescribe stationary hazards
+
+    q₀=λ,    q₁=q₂=q=λ/(1−λ).
+
+Both optimizing players 1 and2 are exact best responders against these
+stationary opponents. Their Quit endpoint is identically zero. If player
+i∈{1,2} continues, the immediate opponent-absorption contribution is
+
+    −λ(1−q)+(1−λ)q−λq = −λ+(1−λ)q = 0.
+
+Opponent continuation has probability (1−λ)(1−q)=1−2λ<1.
+Thus the bounded value zero satisfies both action equalities. Iterating
+them against any history-dependent unilateral policy gives payoff zero:
+the remaining term after n dates is bounded by a constant times
+(1−2λ)ⁿ. In particular their prescribed payoffs and full behavioral
+response caps are all exactly zero. This proves more than stationarity
+of their best replies.
+
+The child-only absorption rate and full absorption rate are respectively
+
+    a_C=2q−q²=(2λ−3λ²)/(1−λ)²,
+    a=λ+(1−λ)a_C=λ(3−4λ)/(1−λ).
+
+Player0 receives1 whenever it quits, and3 whenever some child quits while
+it continues. Its prescribed terminal value is therefore
+
+    U₀=[λ+3(1−λ)a_C]/a=(7−10λ)/(3−4λ).
+
+Its full response cap is exactly3: all terminal rewards are at most3,
+and choosing Never attains3 because the children absorb almost surely.
+Consequently its actual unrestricted regret is
+
+    d₀=3−U₀=2(1−λ)/(3−4λ) → 2/3.
+
+The forced hazard tends to zero, but its fraction of total absorption is
+λ/a=(1−λ)/(3−4λ)→1/3. Small absolute hazard has not made its terminal
+effect small.
+
+Nor can the forced hazard simply be deleted while retaining the child
+strategies. With player0 at Never and both children still using q, child
+i's prescribed payoff is
+
+    Uᵢ=(1−q)/(2−q).
+
+Its full response cap is1, attained by Never while the other child quits.
+Its regret is 1/(2−q)→1/2. For an exact numerical check, λ=1/4 gives
+q=1/3, original player0 payoff9/4 and regret3/4; after deletion each
+child has payoff2/5 and regret3/5.
+
+The table itself has exact pure equilibria: let player1 quit surely at
+the first date and let the others never quit. Player0 gets3 and would
+get1 by joining; player2 gets1 and would get0 by joining; player1 gets0
+and cannot improve by waiting. The same holds with players1 and2
+exchanged. Hence this is explicitly not an obstruction to UE existence.
+It also satisfies the existing product-low criterion because all own
+participant premiums vanish.
+
+The source declarations inspected for this question were
+`exists_uniformEquilibriumPayoff_of_productLowPremium` in
+`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`,
+the full behavioral cyclic comparison in
+`UniformEquilibrium/Quitting/Cycles/CyclicSupersolution.lean`, and
+`quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt_add_slack`
+in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockChildDeletionAdapter.lean`.
+The last declaration correctly assumes an actual child profile and a
+raw capped-clock certificate; it does not assert that deleting a small
+parent hazard preserves Nash incentives. A narrow search also found
+the distinct vanishing-hazard family in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalPacketSimpleFallbackCounterexample.lean`;
+its approximation error does vanish and it does not supply the missing
+implication here. No Lean check of this example is asserted.
+
+A valid elimination argument must control the forced player's absorption
+share or replace the entire timing law while rechecking every player's
+full response cap. Absolute hazard convergence and exact optimality of
+the remaining players do not supply that control. The next global
+question is whether one can select the perturbed equilibria themselves
+to avoid this positive-share branch, or exploit that branch to construct
+a different full equilibrium; the present calculation settles neither.
