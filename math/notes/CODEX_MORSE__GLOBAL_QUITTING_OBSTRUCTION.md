@@ -4525,3 +4525,56 @@ an export candidate. Any use of first-coalition geometry in the surviving
 class must retain cap/best-response information that the displayed
 sequential singleton lottery does not preserve. In particular (124)'s
 zero-owner equality and its face-minimality cannot be discarded.
+
+### A complete cap test for purifying the zero-debt owner's law
+
+A further proposed shortcut was to replace the zero-debt owner's mixed
+law by one of its pure best replies, using affinity of its own payoff.
+The following exact original-game test shows why that does not preserve
+the other caps, even at a genuine global face minimum. It does not have
+positive minimum debt and does not refute a consequence that uses that
+extra hypothesis essentially.
+
+Use four players and define all fifteen reward vectors by these rules:
+
+    r₂(S)=r₃(S)=0;
+    r₀(S)=0                         if 0∈S;
+    r₀(S)=2                         if 0∉S and 3∈S;
+    r₀(S)=1                         if 0,3∉S and {1,2}⊆S;
+    r₀(S)=−1                        if S={2};
+    r₀(S)=0                         otherwise;
+    r₁(S)=1                         if 2∈S, 3∉S, and exactly one of 0,1∈S;
+    r₁(S)=−1                        if 2∈S, 3∉S, and either both or neither of 0,1∈S;
+    r₁(S)=0                         otherwise.
+
+All own singletons are zero. In particular player0 has identically zero
+participant reward. At the first live date only player3 quits, with
+probability1/2. If that date survives, at the second date use independent
+hazards (t,1/2,1,0), and thereafter let everyone Continue.
+
+For every t∈[0,1], player0's prescribed payoff and complete cap are both1.
+Quitting at the first date gives0. Continuing gives2 with probability1/2
+from player3's exit; conditionally on survival, Quit at the second date
+gives0 and Continue has expectation (1/2)(1)+(1/2)(−1)=0. Player2's
+sure exit preempts every later response. Thus both pure choices for
+player0 at the second date are full best replies, and u₀=b₀=1>s₀.
+
+Player1 has prescribed payoff0 for all t. Its second-date Quit and
+Continue endpoints are 1−2t and 2t−1. Its first-date Quit gives0,
+and every later response is preempted by player2. Therefore its complete
+initial cap is (1/2)|2t−1|. Players2 and3 have payoff and cap zero.
+The exact child debt objective on this fixed-opponent law segment is
+
+    d₁+d₂+d₃=(1/2)|2t−1|.
+
+At t=1/2 all four debts are zero, so this is a genuine global minimum
+on K₀ and on the full carrier. Purifying only player0 to either of its
+two pure best replies keeps d₀=0 and u₀>s₀ but raises the other debt
+sum to1/2. The two binding response witnesses of player1 switch at
+t=1/2; retaining both is essential. There is no hidden infinite-tail
+or correlation issue in this two-date calculation.
+
+Thus own-payoff affinity does not justify pure-law selection at the face
+minimum. That shortcut is retired. The positive-L source in (124) still
+stands, but a consumer must retain the mixed best-response law and the
+simultaneous opposing cap witnesses, or use L>0 in a genuinely new way.

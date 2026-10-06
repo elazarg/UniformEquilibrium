@@ -477,10 +477,80 @@ negative comparisons in the remaining triple. Thus every deletion fails
 the literal cyclic-child predicate requiring opposite strict signs in
 each child's off-diagonal row, independently of singleton normalization.
 
-The accepted full-table two-joint neighborhood is a separate local
-producer, with no explicit radius. A comparison with that exact local
-branch, and the remaining named raw stationary neighborhood sources,
-must be completed before an all-current-criteria coverage claim. The
-proof above does not exclude arbitrary supplied stationary certificates,
-nor every full-support stationary equilibrium. No export request is
-made until this remaining bounded source question is resolved.
+The four-phase architecture joint-pair, solo-a, solo-b, joint-pair,
+with the same joint pair at both ends, has a useful intrinsic necessary
+sign test when its certified floors satisfy
+
+    V_B,a=V_C,a=s_a,       V_C,b=V_D,b=s_b,
+    V_D,a>s_a,            V_B,b>s_b.
+
+Its proper solo rates z,w and exact Continue identities imply
+
+    s_a=w r_a({b})+(1−w)V_D,a,
+    V_B,b=z r_b({a})+(1−z)s_b.
+
+Therefore Γ_ab<0<Γ_ba. The accepted full-table two-joint neighborhood
+retains precisely these identities and strict floors, independently
+of its unspecified neighborhood radius. Here every unordered singleton
+pair has the same strict sign in both directions, so no relabeling
+satisfies this necessary raw property. This is a comparison with that
+certified branch, not with every possible two-joint architecture.
+
+All ordered-pair crossed-response lower guards fail on explicit pure
+outsider faces. Given recipient i and selected partner j, first suppose
+j≠f(i). Put the favorite f(i) surely Quit, every other opponent Continue,
+and the selected partner at zero. The literal zero-discount displacement
+is
+
+    r_i({i,f(i)})−r_i({f(i)})=−1−61/8=−69/8<0.
+
+If instead j=f(i), let o(i) surely Quit and the other opponents Continue.
+The displacement is r_i({i,o(i)})−r_i({o(i)})=−1<0. Both are actual
+root evaluations; no infinitesimal or stationary approximation is used.
+Consequently the fixture fails even the weak polynomial lower-face
+guard, and hence all stronger lower-ranking versions, for every ordered
+choice. The inspected declarations are
+`QuittingCrossedStrictLowerRanking` in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRawTests.lean`,
+`QuittingHalfWeakRawGuards` and
+`exists_uniformEquilibriumPayoff_of_weakHalfRaw` in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakBoundaryProducer.lean`,
+and `QuittingOneSidedWeakUnitGuards`,
+`QuittingOneSidedWeakUnitRawGuards` in
+`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`.
+The broader `QuittingHalfWeakPolynomialGuards` in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialFaces.lean`
+tests these same closed-square lower faces. It therefore fails too,
+excluding the producer
+`exists_stationary_uniformPayoff_witnesses_of_weakHalfPolynomialGuards`
+in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialProducer.lean`.
+The matrix-free polynomial consumer
+`exists_uniformPayoff_of_oneSidedWeakUnitGuards` in the one-sided file
+likewise requires the failed lower-face inequality.
+The strict unit, strict half, weak half, and one-sided matrix-free raw
+producers all require one of these failed guards. So do the guard-derived
+full-reward neighborhoods
+`halfCeiling_fullRewardBall_source` and
+`unitCeiling_fullRewardBall_source`, in
+`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFullRewardNeighborhood.lean`.
+Positive playerwise scaling and row translation preserve the strict
+negative displacement witnesses, so do not repair these failures.
+
+The separate literal owner-risky family `sharpReward`, with consumer
+`sharpReward_exists_uniformEquilibriumPayoff`, in
+`UniformEquilibrium/Quitting/Examples/FinFourOwnerRiskyStationaryClosure.lean`,
+has Γ_03=0 for every value of its two parameters. Every off-diagonal
+entry of (24) is nonzero. Thus no relabeling or positive playerwise
+affine copy of that literal family equals this fixture. Its source
+explicitly does not assert a full-reward robustness neighborhood.
+
+The boxed full-core and proper-triple raw neighborhoods also require
+absence of pair traps, which the two strict pair traps violate. The
+remaining generic rational-box, stationary-face, and periodic compilers
+verify supplied strategic certificates rather than automatically
+consume arbitrary reward tables. The comparisons here do not exclude
+arbitrary supplied stationary certificates, nor every full-support
+stationary equilibrium. The actual new raw producer is (17)–(20),
+with the complete original-game consumer above; the fixture establishes
+strict coverage beyond the specified existing raw families, not a
+universal architecture-completeness claim.
