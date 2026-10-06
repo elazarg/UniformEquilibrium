@@ -23,6 +23,17 @@ free. Thus even exactifying only the child destroys approximate-equilibrium
 coverage. This is an internal ordinary-mathematics result, not a positive
 gap for unrestricted profiles.
 
+The latest **Global barrier attempt: convexity admits public randomness**
+section changes the negative search mechanism. Using the published sunspot
+existence theorem, it proves that no closed convex set containing the Never
+semantic point and invariant under ALL product prefixes can have positive
+debt floor. The full public-history truncation argument and an exact
+nonconvex-carrier example are below. This is an internal, literature-backed
+method restriction, not new independent-strategy existence coverage or an
+export candidate. The remaining barrier search must retain nonconvex
+coupling; convexifying continuation values would silently add public
+randomization.
+
 The **A solo-0 bridge pays a positive outsider cap** section is a
 complete ordinary construction with two independent PASSes and final
 artifact checks. The frozen standalone is
@@ -3122,3 +3133,179 @@ useful next test must include these partly-sure mixed supports early,
 not merely all fifteen pure coalitions or premium-trap inequalities.
 The simultaneous-law investigation remains open; it will not impose
 exact nonpivot response and then try to repair that restriction afterward.
+
+## Global barrier attempt: convexity admits public randomness
+
+### Question and status
+
+For an arbitrary finite quitting reward table r, live and Never pay zero.
+All strategies and unilateral deviations in the original game use private
+independent randomization. Let (u,b) denote prescribed terminal payoff and
+the complete behavioral best-response cap. A negative certificate would
+be a closed set K inside a bounded semantic box, containing the Never
+point and invariant under EVERY independent product prefix, on which
+max_i(b_i−u_i) is bounded below by a fixed positive constant.
+
+The concrete attempt was to seek such a certificate as a convex region
+in the eight semantic coordinates for Fin4. The result below retires that
+entire shape, rather than testing one response orbit. It does not produce
+a positive barrier, an approximate independent equilibrium, or a new raw
+existence class. Ordinary mathematical proof, not independently reviewed
+or implemented here.
+
+### Literal prefix map and exact source audit
+
+Fix an absolute reward bound M. For product hazards q put c=∏(1−q_i),
+c_{−i}=∏_{j≠i}(1−q_j), let A(q) be the unnormalized prescribed
+absorbing reward, let A_{−i}(q) be player i's unnormalized passive
+reward from nonempty opponent coalitions, and let Q_i(q) be its
+forced-Quit endpoint. Then the full semantic prefix is
+
+    P_q(u,b)=(A(q)+c u, B),
+    B_i=max(Q_i(q), A_{−i}(q)+c_{−i} b_i).          (B1)
+
+The actual Never point is z_N=(0,(max(0,s_i))_i), not (s,s).
+Every unilateral behavioral response, including waiting past any finite
+calendar and Never, is included in (B1). No root-Nash condition is imposed
+on q.
+
+The inspected declaration `quittingTerminalSemanticPrefix` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean` is exactly
+(B1). `QuittingControllerClosedInvariantBarrier` and its theorem
+`carrier_subset` in
+`UniformEquilibrium/Quitting/ControllerTester/BarrierDuality.lean`
+require closedness, the actual Never point, universal product-prefix
+invariance and a global maximum-debt floor. The exact dual is
+`nonempty_closedInvariantBarrier_iff_le_controllerTesterValue` there.
+Thus a positive certificate would refute UE; it is not enough to bound
+debt on one stationary family or one selected cycle.
+
+The existing
+`quittingUniversalPrefixHull_union_never_eq_carrier` and
+`exists_minimizer_rawMaximumDebt_universalPrefixHull_eq_sInf_wordInf_of_box`
+in `UniformEquilibrium/Quitting/ControllerTester/RenewableBarrierSaturation.lean`
+already show why closing a response orbit under all prefixes is not a
+new source of positivity. I am not repeating that orbit-hull proposal.
+The additional issue here is convexifying such an invariant set.
+
+### Convex invariant-set exclusion
+
+**Claim.** Let K be a nonempty closed bounded CONVEX subset of semantic
+space. Suppose z_N∈K and P_q(K)⊆K for every q∈[0,1]^I. Then K
+contains a diagonal point (v,v). In particular K cannot carry a strictly
+positive maximum-debt floor. No singleton or participant sign assumption
+is needed, and the claim is not restricted to four players.
+
+The external mathematical input is Theorem2.4 of Solan and Solan,
+*Quitting Games and Linear Complementarity Problems*: every finite
+quitting game admits arbitrarily accurate sunspot equilibria, where an
+independent public signal is observed before each live decision.
+I inspected the model, public-information definition and theorem in
+Sections2.1–2.2 of the
+[primary preprint](https://arxiv.org/pdf/1707.02598).
+It allows an arbitrary nontermination reward. Its own-singleton
+normalization subtracts a constant from ALL outcomes, including Never;
+therefore applying that normalization and translating back preserves the
+present zero-Never game. The public signals are an auxiliary tool in this
+proof, not an authorized strategy extension of the original conjecture.
+
+The corresponding tracked file `Literature/SolanAndSolan2020.lean` was
+inspected only at `Table`, `SoloExitNormalized`, `TablePayoffsBounded`,
+`SunspotProfile`, `SunspotEpsilonEquilibrium`, and `theorem2_4` with its
+actual proof. It has an explicit public-signal stochastic-game model and
+nontermination reward, not an independent-law equilibrium theorem. The
+transfer from public play to convex K below is ordinary mathematics here;
+I am not claiming that transfer or a new arbitrary-table result is checked.
+
+First consider a public-signal protocol with finitely many live decision
+dates, followed by Never. At the terminal public history the semantic
+pair is z_N. Work backward. Conditional on the next observed public
+signal, the players' current independent action probabilities form an
+actual q. If the continuation semantic pair is z, the current pair is
+exactly P_q(z), including the optimal conditional behavioral response.
+Before that public signal is observed, its semantic pair is the average
+of those conditional pairs. The cap also averages: the deviator observes
+the signal before acting and may choose a different maximizing action
+at each signal. For finite signals this is finite backward maximization.
+For the paper's measurable signals, the same finite-horizon recursion
+uses the measurable maximum of two measurable endpoint functions.
+
+Induction therefore puts the entire protocol's semantic pair in K:
+prefix invariance handles each conditional branch, and closed convexity
+handles its probability average. Infinite signal alphabets cause no
+extra convexification assumption: a bounded measurable random vector
+with values in closed convex K has its barycenter in K, by separation.
+
+It remains to justify finite truncation WITHOUT assuming uniform
+absorption against deviations. Fix a sunspot profile ξ. On one common
+public-signal path and private random seeds define each player's
+potential first Quit time T_i along the all-Continue history, even after
+someone else would have stopped. These times may be correlated through
+the public signals. Censor every finite T_i beyond N to Never, preserving
+all strategies through date N. Put
+
+    τ_N=∑_i P(N<T_i<∞),             τ_N→0.
+
+Prescribed payoffs differ by at most 2Mτ_N. For an arbitrary unilateral
+behavioral deviation of i, use the SAME public signals and its SAME
+private randomization in the two opponent systems. They can differ only
+if an opponent has a finite potential time beyond N. This event depends
+on the fixed opponents and public signals, not on i's selected deviation.
+Hence the payoff difference is at most
+2M∑_{j≠i}P(N<T_j<∞), uniformly over every deviation. Taking the
+supremum gives the same bound for complete response caps. No assumption
+that joint Never vanishes is used.
+
+Thus censoring an ε-sunspot equilibrium gives a finite public protocol
+with each full debt at most ε+4Mτ_N. Its actual pair belongs to K by
+the backward argument. Choose ε→0 and sufficiently large cutoffs. The
+pairs lie in a common compact box, and a convergent subsequence in closed
+K has every cap equal to its prescribed payoff. This proves the claim.
+
+### Why this is not an independent-law existence proof
+
+Public averaging is precisely the extra operation supplied by convexity.
+Universal product-prefix invariance alone does NOT imply it. There is a
+small exact counterexample to that tempting missing inference.
+
+On Fin4 let every reward be zero except
+
+    r(01)=(1,1,0,0),        r(23)=(0,0,1,1).
+
+All own singletons are zero, so this game is already solved, even by
+all Never. Let x be the complete semantic pair from pure first-date01,
+and y the pair from pure first-date23. Both are diagonal exact terminal
+equilibria: x=((1,1,0,0),(1,1,0,0)) and
+y=((0,0,1,1),(0,0,1,1)). A fair public coin selecting between those
+two coalitions implements the diagonal midpoint of x,y.
+
+That midpoint is NOT in the original independent semantic carrier.
+Indeed an actual independent profile has prescribed payoff (a,a,b,b),
+where a,b are the exact first-stopping-coalition probabilities of01 and23.
+The independent-clock inequality
+
+    sqrt(a)+sqrt(b)≤1
+
+holds for every such profile and passes to its semantic closure. At the
+midpoint a=b=1/2 its left side is sqrt(2)>1. The exact source used is
+`sqrt_exactFiniteFirstStoppingPairMass_add_sqrt_le_one` in
+`MathUE/Probability/IndependentFirstStoppingPair.lean`, inspected with
+its literal independent marginal-law hypotheses. This example separates
+public averaging from independent execution; it is not evidence of a
+game-level positive gap.
+
+### Consequence for the next attempt
+
+Every positive universally invariant semantic barrier, if one exists,
+must use genuinely NONCONVEX coupling between prescribed payoffs and
+complete caps. A convex polytope, an intersection of halfspaces, or a
+convex sublevel ansatz cannot work. Conversely a convexified low-debt
+point is not a producer of independent stopping laws, even if every
+operation preceding the averaging was a literal product prefix.
+
+This is retained internally as a mechanism choice, not exported as
+counterexample-class narrowing. The concrete remaining question is
+whether a nonconvex invariant can preserve independent-coalition geometry
+through (B1), or whether that same geometry supplies a justified
+de-randomization of the public averaging at a positive-minimum source.
+Neither a general invariant nor that de-randomization has been produced.
