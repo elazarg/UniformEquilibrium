@@ -19,8 +19,14 @@ boundaries use reward closure. A finite scaled-eigenpoint bound removes all
 passive-sign restrictions without assuming a favorable root. The earlier
 inverse-positive and signed matching sections below retain their original,
 more restrictive proved statements. The older cap-Jensen route is retired.
-The current next question is the nonbijective favorable-graph raw family
-stated at EOF; the Q/degree source does not reduce it to a permutation graph.
+The current attempt is the signed-column inverse cone at EOF, on a favorable
+three-cycle with an attached fourth player. It produces all four rates and
+behavioral caps from finite inequalities, including a below-singleton passive
+coordinate. It is an unreviewed proof draft, not an export claim. A complete
+fixture now has an exhaustive exact no-sure-stationary proof and all fourteen
+child-debt counterwitnesses. Remaining source-overlap questions, particularly
+the bounded meaning of unspecified local stationary neighborhoods, are explicit.
+The Q/degree source does not reduce this sign graph to a permutation graph.
 
 The latest **Singleton-completed finite timing games** section gives an
 exact all-calendar obstruction to a natural global selection route: even
@@ -4126,3 +4132,341 @@ of these completions, beyond the existing cyclic-child collision predicates?
 This is not a supplied-root question: the full actual-game strategic witnesses
 must be produced. The favorable graph cannot first be changed to a matching
 or four-cycle using only the already available matrix source.
+
+## Live signed-inverse cone: a raw producer with coverage still unresolved
+
+This is a complete-looking ordinary construction awaiting adversarial review
+and actual-source coverage certification; it is NOT an export claim. The
+first completion tested below has a partly-sure stationary equilibrium and
+is retired as a new-coverage witness. The mechanism itself is not refuted.
+
+Let Γ be an invertible four-player singleton comparison matrix and fix any
+partition into two scheduled pairs, with mate a(i) and other pair O(i).
+Suppose signs σ_i∈{−1,1} make
+
+    G=Γ⁻¹diag(σ)
+
+strictly positive entrywise. Set b_i=−Γ_i,a(i), with either sign allowed,
+Π_i=r_i({i,a(i)})−s_i, K_i=r_i(O(i))−s_i, and c_i=Π_i+b_i.
+Require the finite coefficient signs
+
+    σ_i c_i>0,       σ_i Π_i≥0,       σ_i K_i≤0.              (SC1)
+
+These are raw numerical conditions, not an assumed strategy. Let m and L
+be the minimum and maximum entries of G, κ=m/(4L), and
+
+    A=4m κ³∑_i σ_i c_i>0.
+
+Choose any finite R>0 with A R²>1. Define
+
+    B_i=max(−c_i,0)(1+R)²/(2κ).
+
+Impose the twelve stronger raw outsider caps
+
+    r_i({i}∪T)≤s_i−B_i       for every ∅≠T⊆O(i).             (SC2)
+
+Own levels are signed and Never remains zero. The claimed conclusion is an
+exact period-two terminal Nash profile with a fixed uniform payoff against
+all behavioral deviations, with no supplied root or periodic certificate.
+
+Proof of the construction. For positive X define the same exact indifference
+polynomials
+
+    N_i(X)=c_i X_a(i)(X_j+X_k+X_jX_k)
+              +Π_i X_a(i)²/(1+X_a(i))−K_i X_jX_k,
+                  where O(i)={j,k}.
+
+By (SC1), Ntilde=diag(σ)N is coordinatewise positive on X>0, and its
+cubic coefficients are σ_i c_i>0. The map F(X)=G Ntilde(X) is positive
+and equals Γ⁻¹N(X), so its fixed points solve the ORIGINAL odds equations.
+Its normalized image lies in Δκ. For X=tx with x∈Δκ,
+
+    ∑F(tx)≥A t³.
+
+At t=R the radius ratio exceeds one. At sufficiently small r>0 it is
+uniformly below one because Ntilde(tx)=O(t²). The same normalized-simplex
+and clamped-radius Brouwer map produces X=tx>0 with r<t<R.
+
+Explicitly, for 0<t≤1 the nonnegative terms give
+
+    ∑F(tx)≤C t²,
+    C=4L∑_i[3σ_i c_i+σ_iΠ_i−σ_iK_i]>0.
+
+Choose 0<r<min(R,1,1/C). On the compact convex set
+Δκ×[r,R], where Δκ={x≥κ:∑x=1}, use the continuous self-map
+
+    (x,t) ↦ (F(tx)/∑F(tx),
+              clamp_[r,R](t+1−∑F(tx)/t)).
+
+The first component belongs to Δκ because every entry of G lies between
+m and L. The second component cannot fix r or R: at r the input is
+strictly above r, and at R it is strictly below R. Brouwer therefore
+gives an interior fixed point, at which ∑F(tx)=t and F(tx)=tx.
+No chosen eigenpoint is silently treated as a root; the radial equation
+is what fixes its multiplier to one.
+
+Set q_i=X_i/(1+X_i), U_i=s_i+Π_iq_a(i), and W_i=s_i+c_iX_a(i).
+Both active actions equal U_i, and passive Continue equals W_i. For a
+passive i write H_i=1−1/[(1+X_j)(1+X_k)]. The actual Quit bound is
+s_i−B_iH_i. Because every X_i≤t<R and X_j,X_k≥κt,
+
+    H_i≥(X_j+X_k)/(1+R)²≥2κt/(1+R)².
+
+If c_i<0, this implies B_iH_i≥|c_i|t≥|c_i|X_a(i), so passive Quit
+is at most W_i. If c_i>0, B_i=0 and passive Quit≤s_i<W_i.
+Thus all sixteen endpoints hold, including the below-singleton passive
+coordinates. All four hazards are proper; every deleted-opponent product
+contracts. The exact terminal and fixed-horizon arguments in the preceding
+two-phase proof apply without further inputs. The cited literal consumer is
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`.
+
+For an explicit full-horizon bound let M=max_{S,i}|r_i(S)| and
+ρ=max_i∏_{j≠i}(1−q_j)<1. Each opponent-deleted profile absorbs
+with expected time at most 1+2/(1−ρ), regardless of the unilateral
+behavioral replacement. The initial-zero payoff convention is therefore
+covered by target error 2M[1+2/(1−ρ)]/N and regret at most twice
+that amount. The same periodic profile and its phase-A actual value
+work for all sufficiently long horizons and every accuracy. Never and
+unbounded stopping times are covered by the geometric remainder, not
+excluded from the deviation set.
+
+The coefficient signs, not a payoff sign reversal, are used in the proof.
+Multiplication by diag(σ) is only an algebraic change in the four equations;
+no player's utility or original Nash ordering is negated.
+
+### Exact data in the nonbijective favorable family
+
+For the displayed Γ in the preceding section, its inverse has one strictly
+negative column, column2, and all other columns strictly positive. Thus
+σ=(1,1,−1,1) gives G>0, with m=1/13, L=2, κ=1/104.
+Use scheduled pairs03 and12 and
+
+    Π=(1,4,−2,4),          b=(1,−3,1,−3),
+    c=(2,1,−1,1),         X=(1/50,3/100,1/50,9/250),
+    K=(−4711507/97125,−41341/22950,36491/10300,−94597/7650).
+
+These values satisfy the four original equations exactly and all coefficient
+inequalities in (SC1) strictly. Here A=5/3655808, so R=1000 is a valid
+finite outer radius. Only player2 has a nonzero cap buffer, namely
+B₂=52104052. The actual profile has
+
+    q=(1/51,3/103,1/51,9/259),
+    U=(268/259,55/51,97/103,55/51),
+    W=(134/125,51/50,97/100,51/50).
+
+The buffer is only a sufficient raw bound, not an optimized constant. Its
+size is irrelevant to the mechanism; no constant-refinement project is needed.
+
+### Retired first completion: an exact partly-sure equilibrium
+
+Take s_i=1 and the displayed singleton matrix; use the stated scheduled
+pair rewards. Put the cross-pair joining rewards of players0,1,3 at1/2,
+and those of player2 at−D, where D=52104052. At triple012 put
+(1/2,−10,100,0); at013 put(−10,1/2,0,−10); at023 put
+(−10,0,−D,−10); at123 put(0,−10,100,1/2). Put all unspecified
+passive cross-pair coordinates at0 and grand rewards at(−101,−102,−103,−104).
+This specifies all fifteen rows. It satisfies the cone theorem, but it is
+not a useful novel-coverage witness.
+
+Indeed make player0 Never and use the stationary child123 hazards
+
+    q₁=D/(D+100),       q₂=1/21,       q₃=1.
+
+Player1's Quit value is1/2−(21/2)q₂=0 and its Continue value is0.
+Player2's Quit value is−D(1−q₁)+100q₁=0 and Continue is0. Player3's
+Quit value is1/2+(1/2)(1−q₁)(1−q₂)>0, while its Continue value is
+strictly smaller: the positive-mass opponent pair12 pays1+K₃<0.
+The omitted player's passive value is0 and its immediate Quit value is
+
+    2(1−q₁)(1−q₂)−10q₁(1−q₂)−10(1−q₁)q₂−101q₁q₂
+      =−3920829163/273546798<0.
+
+Thus this is an actual full-game exact stationary equilibrium, with the
+same deleted-opponent contraction justification. It is retained as an early
+target falsifier, not described as a game-level obstruction.
+
+A possible repair changes the grand reward of player0 to1000, making its
+same-profile Quit gain5210405575/136773399>0, while retaining a negative
+grand reward for another player to prevent a pure grand exit. This defeats
+only the displayed profile. No claim that it excludes all partly-sure roots,
+quiet-child producers, or existing raw classes is made. The concrete next
+question is a complete, early pure/partly-sure and named-source screening of
+such a completion before treating (SC1)–(SC2) as significant new coverage.
+
+### Repaired completion and exhaustive sure-hazard test
+
+The following complete table replaces that failed coverage target; it does
+not alter the cone criterion. Keep the exact Γ, Π, K and D=52104052 above,
+and put
+
+| S | r(S) |
+|---|---|
+| 0 | (1,0,4,4) |
+| 1 | (4,1,0,0) |
+| 2 | (0,4,1,0) |
+| 3 | (0,0,0,1) |
+| 01 | (1/2,1/2,0,0) |
+| 02 | (1/2,0,−D,0) |
+| 03 | (2,1+K₁,1+K₂,5) |
+| 12 | (1+K₀,5,−1,1+K₃) |
+| 13 | (0,1/2,0,1/2) |
+| 23 | (0,0,−D,1/2) |
+| 012 | (1/2,−10,100,0) |
+| 013 | (−10,1/2,0,−10) |
+| 023 | (−10,0,−D,−10) |
+| 123 | (0,−10,100,1/2) |
+| 0123 | (1000,1001,1002,−104) |
+
+All SC2 caps hold, and the exact positive odds and U,W already displayed
+still give the same periodic certificate. The strict cap for player2 is
+1−D, while its three capped rewards are −D. Every other cap is 1 and
+its displayed capped entries are 1/2 or −10. Thus this is an actual
+complete table, not a partially specified strategic input.
+
+Here is an exact exclusion of EVERY stationary profile with at least one
+sure quitter, not a scan. Given a designated sure quitter j, the other
+three players face an ordinary three-player two-action game: the first
+date absorbs independently of their actions. Their Quit-minus-Continue
+differences are multilinear averages of the actual reward differences.
+Any stationary equilibrium of the original game must give an equilibrium
+of this induced game. The sure quitter must additionally prefer its first
+exit to Never against these stationary opponents.
+
+Write d_i=−1/2−K_i for i=0,1,3. Their exact values are
+
+    d₀=9325889/194250>40,
+    d₁=14933/11475>1,
+    d₃=45386/3825>10.
+
+In the next table, an ordered row (A,B,C,E) means the four endpoint
+differences at the indicated two other hazards (0,0),(1,0),(0,1),(1,1).
+The player's own hazard does not enter its difference.
+
+| Sure j | Recipient i | Other variables in order | Difference endpoints |
+|---|---|---|---|
+| 0 | 1 | (q₂,q₃) | (1/2,−10,d₁,1001) |
+| 0 | 2 | (q₁,q₃) | (−D−4,100,−D−1−K₂,1002) |
+| 0 | 3 | (q₁,q₂) | (1,−10,−10,−104) |
+| 1 | 0 | (q₂,q₃) | (−7/2,d₀,−10,1000) |
+| 1 | 2 | (q₀,q₃) | (−1,100,100,1002) |
+| 1 | 3 | (q₀,q₂) | (1/2,−10,d₃,−104) |
+| 2 | 0 | (q₁,q₃) | (1/2,d₀,−10,1000) |
+| 2 | 1 | (q₀,q₃) | (1,−10,−10,1001) |
+| 2 | 3 | (q₀,q₁) | (1/2,−10,d₃,−104) |
+| 3 | 0 | (q₁,q₂) | (2,−10,−10,1000) |
+| 3 | 1 | (q₀,q₂) | (1/2,d₁,−10,1001) |
+| 3 | 2 | (q₀,q₁) | (−D,−D−1−K₂,100,1002) |
+
+These induced games have exactly the following equilibria. Coordinates
+include the designated sure player, and every listed profile fails that
+player's actual incentive condition.
+
+| Sure j | Complete hazard vector | Sure player's failure |
+|---|---|---|
+| 0 | (1,(D+4)/(D+104),1/21,0) | Q₀−Never₀=−724795040468913623231/692156460057385664250 |
+| 1 | (1,1,1,0) | Q₁−Never₁=−10 |
+| 2 | (0,0,1,1) | Q₂−Never₂=−D |
+| 2 | (1,0,1,0) | Q₂−Never₂=−D−4 |
+| 2 | (10/1011,1/101,1,1) | Q₂<0≤Never₂ |
+| 3 | (1,1,1,1) | Q₃−Never₃=−104 |
+
+For completeness, the elementary exhaustive classifications are as follows.
+
+For j=0 write (x,y,z)=(q₁,q₂,q₃). If z>0 its owner's nonnegative
+difference 1−11x−11y−83xy forces x,y<1/11. Player2's difference is
+then strictly negative, because its x=0 endpoints are at most −D and
+its x=1 endpoints at most1002. Thus y=0. Player1's two y=0 endpoints
+are positive, forcing x=1, a contradiction. Therefore z=0. The remaining
+differences are 1/2−21y/2 and −D−4+(D+104)x; their only equilibrium
+is the interior pair displayed above. Its player3 difference is negative.
+
+For j=1 write (x,y,z)=(q₀,q₂,q₃). If y<1, player2's difference
+−1+101x+101z+801xz must be nonpositive, so x,z≤1/101. Player3's
+difference is then positive for every y: its y=0 endpoint is
+1/2−21x/2>0, and its y=1 endpoint is d₃−(d₃+104)x>0.
+It forces z=1, impossible. Thus y=1; the positive player0 difference
+forces x=1, and then player3's difference −104 forces z=0.
+
+For j=2 write (x,y,z)=(q₀,q₁,q₃). At z=0 player0 has positive
+difference, giving x=1 and then y=0. At z=1, players0 and1 have
+differences −10+1010y and −10+1011x. Their two pure equilibria and
+one mixed equilibrium are (0,0),(1,1),(10/1011,1/101). The (1,1)
+point fails player3's sure condition; the other two pass. At the mixed
+point its player3 difference is exactly194644636/390574575>0.
+If 0<z<1, neither x=0 nor x=1 is possible, since player3's difference
+has a strict sign there. Nor can y=0: mixed x,z would then be
+x=z=1/21, at which player1's difference is1001/441>0. If y=1,
+player0 is forced sure, already excluded. At an all-proper point,
+player3's zero difference forces x>1/21. Player1's equation
+1−11x−11z+1022xz=0 then forces x>1/11 and
+0<z<11/1022<1/21. But player0's difference is at least
+1/2−21z/2>0, contradicting proper x. These cases are exhaustive.
+
+For j=3 write (x,y,z)=(q₀,q₁,q₂). If z=0, player1 is forced sure,
+then player0 is forced inactive, and player2 has positive difference100,
+a contradiction. Thus z>0. Its player's nonnegative difference implies
+y≥D/(D+1002)>1/2, since its y=0 endpoints are at most −D and its
+y=1 endpoints at most1002. If y<1, player1's difference must be
+nonpositive and hence z≥1/21. On y≥1/2,z≥1/21, player0's difference
+2−12y−12z+1022yz is strictly positive: both partial derivatives are
+positive and its corner value is −4+499/21>0. Thus x=1, making
+player1's difference d₁(1−z)+1001z>0, a contradiction. So y=1,
+which forces z=1 and then x=1.
+
+The remaining sure-owner checks use actual Never payoffs, not arbitrary
+one-step annotations. In the first row let x=(D+4)/(D+104), y=1/21.
+Then Q₀=1/2+(1−x)(1−y)/2 and
+Never₀=[4x(1−y)+(1+K₀)xy]/(x+y−xy), giving the exact negative
+difference displayed. For the fifth row, Q₂≤[−100D+1002]/101<0,
+whereas Never₂=(1+K₂)(10/1011)(100/101)>0. The other four rows
+are literal first-date reward comparisons. Opponent absorption is sure
+or geometric in every check. This proves the claimed sure-hazard
+exclusion without asserting anything about all-proper stationary roots.
+
+### Complete proper-child obstruction and initial coverage screens
+
+Every proper child still has an exact zero-Never Nash profile whose quiet
+lift has positive omitted debt. The following covers all fourteen children.
+Singleton j uses its sure own exit; an omitted profitable join is
+1 for j=0, 3 for j=1, 0 for j=2, and0 for j=3. Pair children
+01,02,12,23 use the respective sure solos1,0,1,3, with omitted profitable
+joiners3,1,3,0. Child03 uses its sure joint exit and omitted1 gains d₁;
+child13 uses its sure joint exit and omitted2 gains100. Child012 uses
+sure solo1 and omitted3 gains1/2. Child013 uses sure pair13 and omitted2
+gains100. Child023 uses sure pair03 and omitted1 gains d₁.
+
+Child123 uses q₁=D/(D+100), q₂=1/21, q₃=1. Players1 and2 have
+equal Quit/Continue values zero; player3 strictly prefers Quit to its
+negative Never value. Omitted0 has Never value zero and Quit gain
+5210405575/136773399>0. Thus no fixed nonnegative weighted child-debt
+plus finite-Never bound holds universally for any selected proper child.
+These witnesses do not exclude every possible chosen child equilibrium.
+
+The only premium traps are03 andI. The four players all have some negative
+participant premium, so there is no protected player; row013 is strictly
+below the singleton vector in EVERY coordinate, excluding every nonzero
+nonnegative global floor weight. At the full trap, insertion from13 has
+charge (r₀(013)−1)+(r₂(123)−1)=88>0, so the boxed and mixed-trap
+conditions fail. At q₀=q₃=1/2, q₁=q₂=0, the active forced-Quit
+values are3/2 and3, both above1, excluding product-low and its supportwise
+weighted subcondition. The singleton matrix already checked is R₀,
+standard Q and degree+1; its cyclic child's only positive inverse has
+outside factorization weights(−1,−9,23)/26, not nonnegative.
+
+Every singleton row sum is1. Therefore a nonnegative terminal upper-bound
+weight satisfies Γᵀλ≤0 only when λ=0. The response-quotient block-row-sum
+necessity also forces equal positive affine row scales within any receiver
+block; the all-sure responses1000,1001,1002,−104 then exclude every
+nondiscrete partition, even after such transports. A transitive Klein action
+cannot preserve the unique-positive favorable map, whose indegrees differ.
+That map is neither a matching nor a four-cycle, so those exact singleton
+sign chambers do not apply. In particular it differs from the recent
+below-singleton matching neighborhood, not only from its selected rates.
+
+This is still an internal candidate, not a completed novelty/coverage gate.
+The exact scalar and root production is no longer the missing input. The
+remaining task is a bounded comparison with every applicable cyclic-child
+and stationary raw producer, retaining the distinction between a universal
+quiet lift and existence of a specially selected quiet lift. No new export
+or unrestricted stationary exclusion is claimed at this checkpoint.

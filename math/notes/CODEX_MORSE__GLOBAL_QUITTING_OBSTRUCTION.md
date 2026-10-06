@@ -144,10 +144,16 @@ Section 29 gives a complete ordinary matching two-phase producer with
 scheduled premium Π<−1 and stronger collision caps. Its passive phase
 values are below the singleton floors. A complete full-core fixture and
 nonsingular-root argument additionally give a full sixty-coordinate UE
-neighborhood. The claimed separation from the stated accepted raw
-criteria, including the weak matching producer, awaits independent
-review; no export is requested yet. The global source in Section 28
-remains unresolved.
+neighborhood. Both independent mathematical and final-artifact reviews
+passed. The canonical packet is
+`../exports/BELOW_SINGLETON_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md`, SHA256
+`6b75ada2ad8e675fd32216d0f1d98fbfdfee6ef5a47d0b7ca8aed05eb2d0e3ca`.
+Section 30 tests a separate positive-inverse producer with arbitrary
+signed participant increments and sufficiently adverse passive joint
+rewards. Its complete ordinary construction is not independently reviewed.
+Its first coverage completion has an exact partly-sure stationary
+equilibrium and is retired as a separation witness. No gate is requested.
+The global source in Section 28 remains unresolved.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -4589,10 +4595,11 @@ simultaneous opposing cap witnesses, or use L>0 in a genuinely new way.
 
 ## 29. A negative scheduled-premium arm of the matching two-phase producer
 
-Status: ordinary complete raw-to-UE deduction, not independently reviewed
-or Lean-checked. The complete fixture and open-neighborhood proof below
-are a candidate counterexample-class narrowing, with bounded exact source
-comparisons supplied for independent falsification. They remain internal.
+Status: ordinary complete raw-to-UE deduction with two independent
+mathematical and final-artifact PASS reviews. The self-contained canonical
+packet is `../exports/BELOW_SINGLETON_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md`,
+SHA256 `6b75ada2ad8e675fd32216d0f1d98fbfdfee6ef5a47d0b7ca8aed05eb2d0e3ca`.
+No Lean verification of the new producer is asserted.
 
 Let I={0,1,2,3}, f=(01)(23), A={0,2}, B={1,3}, and a=(02)(13).
 Write o(i) for the remaining player. Choose s_i∈ℝ, b_i>0, and H>2.
@@ -4917,7 +4924,257 @@ in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceSt
 It does not assert nonexistence of full-support or sure-boundary
 stationary equilibria.
 
-The next requested check is independent falsification of the complete
-raw producer, the full-coordinate contraction proof, and this finite
-coverage fixture against the strongest accepted matching criterion.
-No standalone artifact or export is assembled before that review.
+The independent checks and canonical assembly are complete. The next
+research question is to remove structural restrictions of the producer,
+not to improve its scalar cutoff.
+
+## 30. Arbitrary signed participant increments with adverse passive pairs
+
+Status: complete ordinary construction, not independently reviewed or
+Lean-checked. The first full-core coverage fixture below has an explicit
+partly-sure stationary equilibrium and is retired as a separation witness;
+this is not an export request. Unlike §29,
+the statement imposes neither common participant coefficients nor the
+signed matching pattern on the singleton matrix. It is a finite raw-table
+criterion, not an assumption on a selected root.
+
+Partition I into two pairs, with mate involution a. For each i let
+O_i=I∖{i,a(i)}={j,k}. Put s_i=r_i({i}), Γ_ii=0,
+Γ_ij=r_i({j})−s_i, and assume
+
+    Γ⁻¹ is entrywise strictly positive,    b_i:=−Γ_i,a(i)>0.
+
+Write π_i=r_i({i,a(i)})−s_i, c_i=π_i+b_i, and
+k_i:=s_i−r_i(O_i). The π_i and s_i may have arbitrary signs.
+Let m,M be the smallest and largest entries of Γ⁻¹ and define
+
+    κ=m/(4M),
+    L=max_i (2|c_i|+|π_i|),
+    k_min=min_i k_i,       k_max=max_i k_i,
+    A=k_min κ²−L,         B=k_max+L.
+
+Assume the explicit strict passive-pair condition
+
+    A>1/(8m).                                               (129)
+
+It implies k_min>0 and A>0. Also impose the twelve cap inequalities
+
+    r_i({i}∪T)≤s_i−2 max(−c_i,0)/κ
+          for every nonempty T⊆O_i.                         (130)
+
+All other reward coordinates are free. Then the original game has a
+proper period-two terminal Nash profile and one fixed uniform-equilibrium
+payoff against unrestricted behavioral deviations. The proof constructs
+all four odds simultaneously.
+
+For X>0 set
+
+    N_i(X)=k_i X_jX_k
+       +c_i X_a(i)(X_j+X_k+X_jX_k)
+       +π_i X_a(i)²/(1+X_a(i)),
+    F(X)=Γ⁻¹N(X).                                          (131)
+
+Let Δ_κ={θ∈ℝ⁴:Σ_iθ_i=1, θ_i≥κ}. It is nonempty because
+0<κ≤1/4. For X=tθ with θ∈Δ_κ and 0<t≤1, the last two terms
+of N_i have absolute value at most L t²: use
+X_a(X_j+X_k)≤t², X_aX_jX_k≤t³≤t², and
+X_a²/(1+X_a)≤t². Therefore
+
+    A t²≤N_i(tθ)≤B t²,
+    16m A t²≤Σ_i F_i(tθ)≤16M B t².                         (132)
+
+In particular F is positive and
+
+    F_i(tθ)/Σ_h F_h(tθ)≥m/(4M)=κ.                          (133)
+
+Choose R=1/(8m A)<1 and r=1/(32M B). Since A≤B and m≤M,
+0<r<R. On the compact convex set Δ_κ×[r,R] consider
+
+    (θ,t) ↦ ( F(tθ)/Σ_iF_i(tθ),
+               clip_[r,R](t+1−Σ_iF_i(tθ)/t) ).              (134)
+
+This is a continuous self-map, so Brouwer supplies a fixed point.
+At t=r, (132) gives ΣF/t≤1/2, and the radial coordinate of (134)
+is strictly greater than r. At t=R, (132) gives ΣF/t≥2, and
+the radial coordinate is strictly less than R. Thus the fixed point is
+radially interior; its radial equality forces ΣF=t. Its direction
+equality then gives F(tθ)=tθ. With X=tθ, equation (131) becomes
+
+    ΓX=N(X).                                               (135)
+
+No inverse-positivity claim is made for a matrix modified by π. The
+fixed inverse of the actual Γ is used throughout; large passive-pair
+terms dominate the signed nonlinear terms on one explicit cone.
+
+Give each player hazard q_i=X_i/(1+X_i) at its own pair's phase and
+zero hazard at the other phase. Define
+
+    U_i=s_i+π_i X_a(i)/(1+X_a(i)),
+    W_i=s_i+c_i X_a(i).                                    (136)
+
+Both active endpoints equal U_i. At the passive phase, multiply the
+Continue equation by (1+X_j)(1+X_k). Its displacement from W_i is
+zero precisely when
+
+    c_i X_a(i)(1+X_j)(1+X_k)
+       −Γ_ijX_j−Γ_ikX_k+k_iX_jX_k
+       −π_i X_a(i)/(1+X_a(i))=0.
+
+Expanding this equation gives (135), including all signed terms.
+For the forced-Quit comparison put
+α_i=1−1/[(1+X_j)(1+X_k)]>0. The caps imply
+
+    Q_i≤s_i−[2 max(−c_i,0)/κ]α_i.
+
+If c_i≥0 this is at most s_i≤W_i. If c_i<0, use t<R<1,
+X_j+X_k≥2κt, X_a≤t, and (1+X_j)(1+X_k)<4 to obtain
+
+    X_a/α_i
+      =X_a(1+X_j)(1+X_k)/(X_j+X_k+X_jX_k)<2/κ.
+
+Hence Q_i<W_i in this case as well. All forced-Continue endpoints
+and active indifferences are actual-table identities, and all twelve
+passive collision outcomes, including simultaneous opponents, are
+retained in (130).
+
+The joint and opponent-deleted survival products per period are strictly
+less than one. Policy-recursion contraction identifies (136) with actual
+payoffs. Iterating each endpoint inequality and bounding the remaining
+tail by the opponent survival product proves terminal Nash for every
+behavioral deviation, including Never. The expected opponent absorption
+time is finite, so terminal/finite-horizon payoff discrepancies are O(1/N)
+uniformly over deviations, including the initial live-zero date. The
+phase-A value is one fixed uniform target. The exact tracked consumer
+is `isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`; no new Lean
+producer is claimed.
+
+### A rational nonmatching test surface
+
+One inverse-positive singleton matrix which is not in the one-favorite
+matching sign pattern is
+
+    Γ = [ 0   3   1/10  −1 ]
+        [ 3   0  −1     −1 ]
+        [−1  −1   0      3 ]
+        [−1  −1   3      0 ].
+
+Its determinant is 549/10 and its inverse is
+
+    (1/549) [ 60  243  101   79 ]
+            [210   27   79    2 ]
+            [ 90   90   60  210 ]
+            [ 90   90  243   27 ].
+
+Thus m=2/549, M=243/549, κ=1/486. Choose a=(03)(12), all
+s_i=b_i=1, π_1=1/10 and π_0=π_2=π_3=−1−1/1000000.
+Then L=23/10. Let k_i=10000000 for all i. Condition (129) holds:
+
+    10000000/236196−23/10>549/16=1/(8m).
+
+For i≠1 the cap deficit is 972/1000000<1/2; for i=1 it is
+zero. Thus nonscheduled participant-pair rewards 1/2 satisfy (130).
+Set K=10000000 and B₀=10¹². The complete table is
+
+| S | r(S) |
+|---|---|
+| 0 | (1,4,0,0) |
+| 1 | (4,1,0,0) |
+| 2 | (11/10,0,1,4) |
+| 3 | (0,0,4,1) |
+| 01 | (1/2,1/2,0,0) |
+| 02 | (1/2,0,1/2,0) |
+| 03 | (−1/1000000,1−K,1−K,−1/1000000) |
+| 12 | (1−K,11/10,−1/1000000,1−K) |
+| 13 | (0,1/2,0,1/2) |
+| 23 | (0,0,1/2,1/2) |
+| 012 | (−2K,B₀,B₀,0) |
+| 013 | (B₀,−2K,0,B₀) |
+| 023 | (B₀,0,−2K,B₀) |
+| 123 | (0,B₀,B₀,−2K) |
+| 0123 | (−B₀−1,−B₀−2,−B₀−3,−B₀−4) |
+
+The theorem applies. No pure exit exists: solo 0 is joined by 2,
+solo 1 by 3, solo 2 by 1, and solo 3 by 1; each gain is positive.
+At the scheduled pairs 03 and 12 a negative-reward participant withdraws
+to zero. At the other pairs a participant with favorable passive
+singleton withdraws, except 13 whose outsider joins for B₀. At a triple
+the player outside its scheduled pair withdraws from −2K to 1−K.
+At I any player withdraws to zero. Never is defeated by own Quit1.
+
+The greatest premium core is full: every player has a B₀ participant
+reward in a triple, but every proper triple has a participant with no
+positive-premium coalition inside it. Pair12 gives only player1 a
+positive premium, not both members. The two-positive-entry row0 excludes
+the signed matching family, and three negative scheduled participant
+premiums exclude the nonnegative-premium inverse-positive family.
+These are genuine structural differences of the displayed hypotheses,
+not by themselves a new-coverage certificate. The partly-sure equilibrium
+below is an early exact stop for this completion.
+
+### The first completion has an exact partly-sure equilibrium
+
+Set ε=1/1000000 and retain K=10000000, B₀=10¹². At every live
+date use the stationary hazards
+
+    q₀=0,      q₁=1,      q₂=x:=1/(2K+3),
+    q₃=y:=ε/(B₀+ε).                                      (137)
+
+Player2's forced-Quit value is −ε(1−y)+B₀y=0, equal to its
+Continue value because both {1} and {1,3} pay it zero. Player3's
+Quit-minus-Continue gap is
+
+    (1/2)(1−x)−2Kx−(1−K)x
+       =1/2−(K+3/2)x=0.
+
+Player1's immediate Quit value is
+
+    V₁=(1−x)(1−y)+(11/10)x(1−y)
+           +(1/2)(1−x)y+B₀xy>0.
+
+Every opponent-only exit gives player1 zero. With the same stationary
+opponents its Continue value is (1−x)(1−y)V₁<V₁. Thus sure Quit is
+its complete best response, including delayed or Never deviations.
+
+Player0's Quit-minus-Continue gap is
+
+    D₀=−(7/2)(1−x)(1−y)−(K+1)x(1−y)
+          +B₀(1−x)y−(B₀+1)xy.
+
+Multiplying by B₀+ε and dropping two nonpositive terms bounds it by
+−(7/2−ε)B₀(1−x)<0. Thus its prescribed Never is optimal. For
+players0,2,3 player1 absorbs immediately; for player1 its two positive
+opponent hazards give geometric absorption. These four comparisons
+prove exact terminal Nash against all behavioral deviations and a fixed
+uniform payoff.
+
+This profile is not the cone-produced two-phase profile. Its existence
+does not invalidate (129)–(136), but it means this particular completion
+does not establish a need for that mechanism. No grand-row change is
+being presented as a repair of all stationary supports. The construction
+is retained internally while a genuinely different full-source question
+is pursued, rather than tuning the cone constants around this example.
+
+### Scope relative to the signed-column cone
+
+The signed-column construction requiring Γ⁻¹diag(σ)>0 and
+σ_iπ_i≥0, σ_i c_i>0, σ_iK_i≤0 does not imply the statement above.
+For a strictly positive Γ⁻¹ its only admissible column signs are all
+positive, so it requires π_i≥0 and c_i>0. Here the adverse quadratic
+term dominates negative π_i and c_i on a bounded cone instead. Conversely
+the signed-column construction can have negative inverse columns and
+passive K_i>0, which are excluded here. Neither statement is treated as
+a source-coverage theorem merely because its fixed-point proof works.
+
+### An elementary sign-chamber route already consumed by the source
+
+The singleton-star pattern in which players1,2,3 all have player0 as
+their unique positive recipient was also tested. It is not a surviving
+counterexample chamber: Γe₀≥0 and its 0-coordinate is zero, so e₀ is
+a nonzero homogeneous LCP solution. The actual declaration
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`
+forces full R₀ under original-game nonexistence, immediately excluding
+this entire pattern regardless of collision rewards. Any further degree
+calculation assuming R₀ in that pattern is vacuous. This route is retired;
+it is not new raw coverage.

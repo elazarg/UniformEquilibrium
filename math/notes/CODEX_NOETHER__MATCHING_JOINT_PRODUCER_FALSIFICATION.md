@@ -29,10 +29,20 @@ whole-file SHA256
 from “A negative scheduled-premium arm of the matching two-phase producer”
 through EOF. Its substantive review is
 `feedback/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_NOETHER.md`.
+The complete 660-line below-floor standalone is separately accepted at
+SHA256 `6b75ada2ad8e675fd32216d0f1d98fbfdfee6ef5a47d0b7ca8aed05eb2d0e3ca`:
+`exports/BELOW_SINGLETON_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md`.
 This notebook retains the independent boundary calculations and the proved
 extension of the raw existence class. The substantive review is in
 `feedback/CODEX_BROUWER__MATCHING_JOINT_PRODUCER__BY_CODEX_NOETHER.md`.
 No other conference feedback was read.
+
+Current independent research: the complete opposite-participant-sign raw
+producer and sixty-coordinate new-coverage table are in
+`notes/CODEX_NOETHER__OPPOSITE_SIGN_MATCHING_PHASE_PRODUCER.md`.
+That new mechanism is an internal proof candidate awaiting independent
+falsification, not an accepted export. The exploratory branch at this
+notebook's end is retained as derivation history.
 
 ## Question and finite data
 
@@ -402,6 +412,76 @@ Both failures persist nearby. Together with the existing matrix, premium,
 guard, range, quotient and visible-cylinder checks, these are actual raw
 producer comparisons, not generic absence claims about strategy languages.
 
-Next check: bind any final standalone below-floor packet to its own bytes and
-verify it includes the original-game proof and real coverage evidence. The
-whole §29 candidate is accepted ordinary mathematics; no Lean seal is claimed.
+The final standalone below-floor packet has passed its separate exact-byte
+check, recorded in the status above. No Lean seal is claimed. The next live
+question is independent falsification of the complete opposite-sign producer
+in the new owned note.
+
+## New independent mechanism: opposite participant signs
+
+Status: this exploratory derivation has been completed and strengthened in
+`notes/CODEX_NOETHER__OPPOSITE_SIGN_MATCHING_PHASE_PRODUCER.md`, including
+actual raw-source separation. It remains unreviewed and unexported.
+The next target is not a new isolated neighborhood. Normalize singleton gaps
+to common favorable H>2 and harmful−1, but allow pair A to have Π_A<−1
+and pair B to have Π_B>−1. The accepted global matching theorem cannot use
+the A participant comparison; the below-floor scalar theorem cannot use mixed
+signs of Π+1. Raw K_A,K_B and collision rewards must produce the odds rather
+than supplying them.
+
+A failed first mechanism used a four-dimensional rectangle for the case
+Π_i<−b_i everywhere. Writing γ_i=−Π_i−b_i>0, β_i=−Π_i, K_i=−k_i,
+the scaled equation at a mate-coordinate lower face X_a=1 is positive if
+k_i>4γ_i+Γ_if⁺+Γ_io⁺. A large upper face is negative, so a clamp map
+really yields positive odds. However the crude uniform cap required to
+secure W_i=s_i−γ_iX_a lies below every nonscheduled singleton comparison.
+Then every player with s_i≥0 supplies an exact pure-solo equilibrium; if
+all s_i<0, all Never is already equilibrium. This mathematically sound
+construction therefore does not narrow counterexamples and is not an export
+candidate. The failed implication is “a raw rectangle producer necessarily
+adds coverage,” not its Brouwer proof.
+
+The promising replacement reduces the opposite-sign family to one global
+branch. Put h=H−1>1, β=−Π_A>1, γ=β−1>0, c_B=Π_B+1>0,
+and K_A=−k with k>0. For y>X_B lower threshold h/k, the A equation is
+
+    −γx(1+y)²+βx/(1+x)=hy−ky²<0.
+
+It has exactly one positive high-branch root x=x(y), the positive root of
+
+    γ(1+y)²x²+[γ(1+y)²−β+hy−ky²]x+hy−ky²=0.
+
+The negative constant term proves uniqueness and continuity on that interval.
+Also x(y)≤(k+β)/γ=:L and x(y)→k/γ as y→∞. The B residual is
+
+    R_B(y)=c_B y(1+x(y))²−h x(y)−K_Bx(y)²−Π_B y/(1+y).
+
+Choose a RAW-data y_L>max(h/k,β/(h+2k)), for example one plus that
+maximum, and compute x_L by the explicit quadratic formula. A lower bound
+on K_B making R_B(y_L)<0 is fully raw:
+
+    K_B>[c_B y_L(1+x_L)²−h x_L−Π_B y_L/(1+y_L)]/x_L².
+
+The uniform bound x≤L makes R_B(Y)>0 at any
+
+    Y>max(y_L,[hL+K_B⁺L²+Π_B⁺]/c_B).
+
+The intermediate value theorem therefore produces an actual root y∈(y_L,Y)
+and x=x(y)>0, with neither odds supplied. The key collision estimate is
+
+    γx/[1−(1+y)⁻²]
+      ≤k−[(2k+h)y−β]/[y(y+2)].
+
+The bracket has a raw uniform positive lower bound on[y_L,Y]. Taking
+δ_A=(1/2)min(k,[(2k+h)y_L−β]/[Y(Y+2)])>0 gives the strict cap
+C_A=k−δ_A<k. A-player outsider joins bounded by s_i−C_A b_i are then
+strictly worse than their produced W_i, while still capable of being better
+than their passive payoff s_i−k b_i at a pure B exit. B-player caps at s_i
+work because c_B>0. This avoids the earlier pure-exit collapse.
+
+The completed note now contains the global parameter theorem, a complete
+raw table, all fourteen actual quiet-child exclusions, and an exact
+proper-three stationary exclusion. The derivation above records the earlier
+coarser upper bound; the final proof uses a stronger uniform lower bound on
+x and x<k/γ. Independent falsification of that complete result is the next
+required check.
