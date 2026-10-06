@@ -8,6 +8,18 @@ No exhaustive arbitrary-Fin4 producer has been obtained. A later exact
 source audit below shows that the Klein-four and one-involution EXISTENCE
 classes are already consumed by the implemented response-quotient machinery.
 
+The newest **An inverse-positive producer with two unequal joint rows**
+and **The whole strict matching chamber with signed participant increments**
+sections give one stronger ordinary-mathematics candidate awaiting independent
+review. They construct all four hazards by a positive-cone Brouwer argument,
+without common singleton ratios or common participant/passive rewards.
+The matching version needs no supplied inverse: the original no-UE source
+produces it, and a uniformly inverse-positive matrix family absorbs the
+negative participant terms. Its exact asymmetric table has a period-two
+terminal Nash profile and a fixed uniform target. The older cap-Jensen route
+is retired at its missing joint-selection implication; the current question
+is whether this raw class and its complement lead to broader coverage.
+
 The latest **Singleton-completed finite timing games** section gives an
 exact all-calendar obstruction to a natural global selection route: even
 in a product-low game with UE, every exact finite timing equilibrium with
@@ -3447,7 +3459,7 @@ under EVERY product prefix, without replacing private independence by
 public mixing or assuming an exact finite-menu equilibrium selector.
 No such global invariant or approximate all-player producer is claimed.
 
-## Current cap-coupled attempt: public continuation and the maximum
+## Retired cap-Jensen attempt: public continuation and the maximum
 
 This is an unfinished global-mechanism investigation, not a new existence
 criterion. The completed convex-barrier and first-coalition sections above
@@ -3503,7 +3515,554 @@ The sure-quitter exit is already characterized by
 in
 `UniformEquilibrium/Quitting/Classification/InstantPunishmentSureQuitterCharacterization.lean`.
 These are source-overlap guardrails, not newly supplied joint strategic
-inputs. The remaining question is whether ACTUAL global-minimum provenance
-controls (J2) together with the lost payoff coordinates strongly enough to
-select all four independent laws. Neither a source-preserving selection nor
-an invariant positive barrier has been obtained.
+inputs. Neither a source-preserving selection nor an invariant positive
+barrier was obtained. This route is retired at that exact missing
+implication; (J1) and (J2) are retained as evidence, not as the current
+research question. In particular scalar cap purification and one-coordinate
+face tests are not being pursued as substitutes for a four-law producer.
+
+## An inverse-positive producer with two unequal joint rows
+
+This is a complete proof candidate in ordinary mathematics, not independently
+reviewed or Lean checked. It grew from the concrete raw-family question:
+can two alternating joint pairs be produced on a full inverse-positive
+singleton chamber without requiring equal hazards, equal premiums, or equal
+passive rewards? The construction below answers a substantial signed-passive
+orthant of that question. It does not cover arbitrary collision data.
+
+### Raw criterion and exact conclusion
+
+Let I be four players, partitioned into pairs A and B. Let p(i) denote
+the other player in i's pair, and let O(i)={j,k} be the other pair.
+All sixty rewards r_i(S), S nonempty, are real. Own singletons s_i are
+arbitrary signed reals; Never pays zero. Define
+
+    Γ_ij=r_i({j})−s_i,       Γ_ii=0.
+
+Assume Γ is invertible and G=Γ⁻¹ is strictly positive entrywise. Require
+
+    b_i:=−Γ_i,p(i)>0,
+    Π_i:=r_i({i,p(i)})−s_i≥0,
+    K_i:=r_i(O(i))−s_i≤0                         for every i.   (IP1)
+
+Finally impose the twelve literal outsider inequalities
+
+    r_i({i}∪T)≤s_i       for every i and ∅≠T⊆O(i).           (IP2)
+
+There are no other reward restrictions. In particular the own singletons
+may be negative, the participant rewards of the two members of an active
+pair may differ, and the four unused grand-coalition coordinates are free.
+The conclusion is one period-two independent behavioral profile that is
+exact terminal Nash against all behavioral deviations at both phases.
+Its initial terminal value is a fixed uniform-equilibrium payoff. The same
+profile, without accuracy-dependent refinement, works at all sufficiently
+long finite horizons for each requested error.
+
+### Four coupled odds equations
+
+Seek odds X_i>0 and put q_i=X_i/(1+X_i). At phase A only A quits,
+independently at its two q rates; at phase B only B quits. For each i put
+
+    U_i=s_i+Π_i q_p(i),
+    W_i=s_i+(Π_i+b_i)X_p(i).                                  (IP3)
+
+U_i is i's value at its active phase, W_i at its passive phase. In
+particular U_i≥s_i and W_i>s_i. Both supported actions at its active
+phase are indifferent: Quit gives U_i and Continue gives
+
+    q_p(i)(s_i−b_i)+(1−q_p(i))W_i=U_i.                         (IP4)
+
+Write D_i=(1+X_j)(1+X_k), where {j,k}=O(i). The passive Continue
+identity is exactly
+
+    (Π_i+b_i)X_p(i) D_i
+      =Γ_ij X_j+Γ_ik X_k+K_i X_jX_k
+         +Π_i X_p(i)/(1+X_p(i)).                              (IP5)
+
+This is obtained by multiplying its four-opponent-coalition expectation
+by D_i, including the simultaneous other-pair outcome. Since
+Γ_i,p(i)=−b_i, the four equations become
+
+    ΓX=N(X),                                                 (IP6)
+
+    N_i(X)=(Π_i+b_i)X_p(i)(X_j+X_k+X_jX_k)
+             +Π_i X_p(i)²/(1+X_p(i))−K_i X_jX_k.
+
+Every term displayed in N is nonnegative on the positive orthant under
+(IP1). The cubic term has a strictly positive coefficient Π_i+b_i.
+
+### A finite-dimensional Brouwer producer
+
+The following constructs a positive solution, rather than assuming one.
+Let g_min and g_max be the minimum and maximum entries of G, so both
+are positive. Set κ=g_min/(4g_max), and use the nonempty compact convex
+truncated simplex
+
+    Δκ={x∈ℝ⁴: ∑x_i=1 and x_i≥κ for every i}.
+
+For any nonzero y≥0,
+
+    (Gy)_i / ∑(Gy)_ℓ ≥ g_min/(4g_max)=κ.                      (IP7)
+
+Let F(X)=G N(X). For x∈Δκ and t>0, N(tx) has every coordinate
+strictly positive, so F(tx)>0. Its normalization therefore lies in Δκ.
+Uniformly for x∈Δκ as t↓0, N(tx)=O(t²), whence
+
+    ∑F(tx)/t → 0.
+
+Uniformly as t→∞, the cubic term gives
+
+    N_i(tx)≥(Π_i+b_i)κ³t³,
+
+and hence ∑F(tx)/t→∞. Choose 0<r<R with the first ratio strictly
+below1 on all x∈Δκ at t=r and strictly above1 at t=R. Define on
+Δκ×[r,R] the continuous map
+
+    x' = F(tx)/∑F(tx),
+    t' = clamp_[r,R](t+1−∑F(tx)/t).                          (IP8)
+
+It maps this compact convex set into itself. By Brouwer it has a fixed
+point. Neither endpoint t=r nor t=R can be fixed, by the two strict
+ratio signs. At an interior fixed t the unclipped argument must equal
+t, so ∑F(tx)=t. The x equality then gives F(tx)=tx. Thus X=tx>0
+solves (IP6), with every q_i strictly between zero and one. No uniqueness,
+continuous choice of roots, or implicit-function assumption is used.
+
+### Actual policy, full behavioral caps, and fixed horizons
+
+Use the two roots just constructed. Define V_A to have U entries on A
+and W entries on B, and V_B with the roles reversed. Equations
+(IP4) and (IP5) verify every Continue identity and every supported Quit
+identity, so all eight policy coordinates have their original Bellman
+values. At i's passive phase, its forced Quit is an average of s_i and
+the three actual rewards in (IP2). Therefore it is at most s_i<W_i.
+This checks all sixteen pure action endpoints, including every triple
+created by an outsider's simultaneous deviation.
+
+Joint survival in a full period is c=∏_i(1−q_i)<1. Iterating the bounded
+policy identities proves that V_A and V_B are the actual terminal values;
+the remainder tends to zero as c^n. For a deviating i, the other three
+players' period survival is
+
+    ρ_i=∏_{j≠i}(1−q_j)<1.
+
+At every live history, both unilateral action endpoints are bounded by
+the current prescribed value. Backward iteration bounds any behavioral
+deviation with a bounded remainder times ρ_i^n. It vanishes, including
+for Never and arbitrary delayed or randomized stopping. Thus the profile
+is exact terminal Nash, not merely a one-step or stationary test.
+
+Let M=max|r_i(S)|. Against any unilateral deviation, the first opponent
+Quit has expected date-plus-one at most C_i=1+2/(1−ρ_i), using the
+initial live-zero convention. Absorption occurs no later. The difference
+between expected terminal payoff and N-date average payoff is at most
+2MC_i/N, uniformly over that deviator's behavioral strategy. The on-path
+difference satisfies the same bound. Consequently all horizon regrets
+are at most 4M max_i C_i/N, and the one target V_A is delivered with
+error at most 2M max_i C_i/N. No terminal-to-horizon interchange relies
+only on joint survival or on a bounded number of deviations.
+
+The exact inspected production consumers are
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate` and
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`, together
+with the endpoint definitions in
+`UniformEquilibrium/Quitting/Root/SuccessorCertificate.lean`.
+Their policy equations, root Nash conditions, and every deleted-player
+contraction are produced above. They are not extra strategic hypotheses.
+
+### An exact asymmetric full-table test
+
+Take A=02, B=13, all s_i=1, and favorite matching 01/23. Put
+H=53/8. The singleton matrix has favorite entry H and both other
+off-diagonal entries −1. Its eigenvalues are H−2,H+2,−H,−H;
+its determinant is H²(H²−4)>0. The inverse entries are
+
+    diagonal 2/[H(H²−4)],
+    favorite (H²−2)/[H(H²−4)],
+    other 1/(H²−4),
+
+all strictly positive. Use
+
+    Π=(277/68,553/104,25/6,185/24),       K_i=−1.
+
+Here is the complete table, with no omitted collision coordinate:
+
+| S | r(S) |
+|---|---|
+| 0 | (1,61/8,0,0) |
+| 1 | (61/8,1,0,0) |
+| 2 | (0,0,1,61/8) |
+| 3 | (0,0,61/8,1) |
+| 01 | (−1,−1,0,0) |
+| 02 | (345/68,0,31/6,0) |
+| 03 | (−1,0,0,−1) |
+| 12 | (0,−1,−1,0) |
+| 13 | (0,657/104,0,209/24) |
+| 23 | (0,0,−1,−1) |
+| 012 | (−10,1/2,−10,0) |
+| 013 | (1/2,−10,0,−10) |
+| 023 | (−10,0,−10,1/2) |
+| 123 | (0,−10,1/2,−10) |
+| 0123 | (−11,−12,−13,−14) |
+
+An exact solution is
+
+    X=(1/5,1/4,1/3,1/6),       q=(1/6,1/5,1/4,1/7).
+
+Substitution into (IP6) gives ΓX=(37/32,33/40,157/240,211/120).
+The two kinds of values are
+
+    U=(549/272,183/104,61/36,61/24),
+    W=(183/68,427/208,61/30,305/96).
+
+Thus V_A=(U_0,W_1,U_2,W_3) and V_B=(W_0,U_1,W_2,U_3).
+These exact formulas were checked with rational symbolic arithmetic;
+that computation is not a Lean check or an independent review.
+
+The strict inverse, strict within-pair harm, Π_i>0, K_i<0, and all twelve
+strict inequalities in (IP2) persist on a full sixty-coordinate open
+neighborhood of this table. The theorem itself, not an IFT continuation
+of this displayed root, applies to every table in that neighborhood.
+
+### Scope and bounded source comparison
+
+This is a new candidate raw producer, not an all-current-coverage verdict.
+The precise negative-determinant inverse consumer is
+`exists_uniformEquilibriumPayoff_of_nonnegative_singletonInverse` in
+`UniformEquilibrium/Quitting/Classification/LCP/NonnegativeInverseCriterion.lean`;
+its determinant premise fails at the displayed table. The degree source
+`singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`
+is consistent with this positive inverse/positive determinant chamber.
+The actual no-UE-to-Q source is
+`isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff` in
+`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+
+The pending common-parameter two-joint producer requires one normalized
+Π and K and one common H. This fixture has b_i=1 and four distinct Π_i,
+so it fails that raw equality. Its only pairs with all participant
+premiums positive are 02 and13; choosing another active matching cannot
+repair the mismatch, since its participant increments are −2<−1.
+Conversely, that producer allows negative Π and positive K, neither of
+which is admitted here. Neither theorem is currently claimed to subsume
+the other. A joint strongest packet would require an actual argument,
+not a renamed common interface.
+
+The complete all-current coverage check and independent falsification
+remain outstanding. In particular the signs alone do not exclude an
+arbitrary supplied full-support stationary certificate. The next concrete
+task is to check the new raw producer and this fully specified asymmetric
+table against all applicable accepted criteria, then investigate whether
+failure of (IP1) or (IP2) forces a different useful support chronology.
+No export is requested on the strength of an isolated center alone.
+
+## The whole strict matching chamber with signed participant increments
+
+This is the current strongest candidate on the matching chamber. The
+fixed-point and full strategic proof above remain unchanged; the matrix
+source and signed coefficient reduction below replace its positivity
+restriction. CODEX_KREIN independently contributed the matrix reduction
+and variable-inverse idea, fully recorded in
+`CODEX_KREIN__MATCHING_SOURCE_AND_SIGNED_PAIR_COEFFICIENTS.md`.
+I read that complete proof and independently checked the argument below.
+This collaboration is not an independent review of the resulting theorem.
+
+### Actual raw theorem
+
+Let f=(01)(23), a=(02)(13), and o=f∘a=a∘f. The active pairs are
+A=02 and B=13; a(i) is i's active mate. For arbitrary real own
+singletons s_i require exactly the singleton sign pattern
+
+    Γ_i,f(i)>0,        Γ_i,a(i)=−b_i<0,        Γ_i,o(i)<0.      (SM1)
+
+The twelve off-diagonal magnitudes are independent. On the two active
+pairs put
+
+    Π_i=r_i({i,a(i)})−s_i>−b_i,
+    K_i=r_i({f(i),o(i)})−s_i≤0,                               (SM2)
+
+and retain the twelve caps
+
+    r_i({i,j})≤s_i for j∈{f(i),o(i)},
+    r_i({i,f(i),o(i)})≤s_i.                                  (SM3)
+
+Every raw table satisfying (SM1)–(SM3) has a uniform-equilibrium payoff
+in its ORIGINAL Fin4 quitting game, with arbitrary signed singletons and
+zero Never reward. More precisely, if its singleton matrix is standard Q,
+the construction produces one exact period-two terminal Nash profile and
+its fixed uniform target. If that matrix is not standard Q, the existing
+original-game matrix exit supplies UE. A pure period-two certificate is
+not asserted in that latter case.
+
+### Q produces the inverse; no payoff normalization is used
+
+Let P be the favorite permutation matrix, (Px)_i=x_f(i), and M=ΓP.
+It has positive diagonal and nonpositive off-diagonal entries, with a
+strongly connected strictly negative graph. Under standard Q, solve the
+literal LCP at offset −1. Its solution z≥0 satisfies Γz≥1. Row i's
+only positive coefficient is at f(i), so z_f(i)>0. Thus z>0,
+complementarity forces Γz=1, and u=Pz>0 satisfies Mu=1.
+
+For completeness put D=diag(M_ii)>0 and C=I−D⁻¹M≥0. Then
+Cu=u−D⁻¹1<u. In the u-weighted sup norm its operator norm is at most
+max_i(Cu)_i/u_i<1. The geometric series gives
+
+    M⁻¹=(I+C+C²+⋯)D⁻¹≥0.
+
+Strong connectivity makes an entry of some C^n positive for every
+ordered pair, so M⁻¹ is strictly positive. Therefore Γ⁻¹=P M⁻¹>0.
+This proves nonsingularity too, without presupposing it.
+
+The exact source
+`isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff` in
+`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+has no own-singleton sign, reward-normalization, or strategic hypothesis.
+Consequently a hypothetical no-UE table satisfying (SM1) automatically
+enters the positive-inverse branch just proved. Producing its actual
+period-two equilibrium is a contradiction. This supplies the whole raw
+criterion (SM1)–(SM3), not merely an inverse-positive subclass.
+
+### Uniform variable inverses retain signed participant rewards
+
+Set α_i=max(−Π_i,0). By (SM2), 0≤α_i<b_i. For every θ∈[0,1]⁴ put
+
+    B(θ)_ij=Γ_ij+α_i θ_i 1_{j=a(i)}.                         (SM4)
+
+The matrix M(θ)=B(θ)P is a Z-matrix, M(θ)≥M entrywise. Its altered
+entry is −b_i+α_iθ_i<0, so its negative graph stays strongly connected.
+With u=M⁻¹1>0 we have M(θ)u≥1. The same diagonal-scaling geometric
+series proves every M(θ)⁻¹, and hence every B(θ)⁻¹, strictly positive.
+All matrices on the CLOSED coefficient cube remain invertible; inverse
+continuity and compactness give constants 0<m≤L<∞ with
+
+    m≤B(θ)⁻¹_ij≤L         for every θ and every i,j.            (SM5)
+
+This uniform lower bound is essential. Pointwise positivity along an
+unknown root would not suffice for the fixed truncated simplex.
+
+For positive odds X take θ_i(X)=X_a(i)/(1+X_a(i)). In (IP6), move
+exactly the negative part of Π_i X_a(i)²/(1+X_a(i)) to the left:
+
+    B(θ(X))X=N⁺(X),                                         (SM6)
+
+    N⁺_i(X)=(Π_i+b_i)X_a(i)(X_f(i)+X_o(i)+X_f(i)X_o(i))
+                +max(Π_i,0)X_a(i)²/(1+X_a(i))
+                −K_i X_f(i)X_o(i).
+
+Every term is nonnegative and its cubic coefficient Π_i+b_i is
+strictly positive. Set F(X)=B(θ(X))⁻¹N⁺(X). By (SM5), its normalized
+image belongs to Δκ for κ=m/(4L). Uniformly there, F(tx)=O(t²)
+near zero and its coordinate sum is bounded below by a positive
+constant times t³ at large t. The literal simplex-times-radius map
+(IP8), with this F, is continuous and self-mapping. Its endpoint signs
+force an interior fixed point X>0, and (SM6) gives exactly the original
+four indifference equations. No inverse or root is selected favorably
+after observing a strategy.
+
+### The signed strategy and fixed target are unchanged
+
+Define q_i=X_i/(1+X_i), U_i=s_i+Π_iq_a(i), and
+W_i=s_i+(Π_i+b_i)X_a(i)>s_i. Equation (IP4) still verifies both
+supported actions at each active phase. Equation (SM6) is precisely
+the passive Continue identity, and (SM3) bounds passive Quit by s_i.
+All sixteen endpoint conditions therefore hold even if U_i<s_i.
+There are only the two actual dates per period; no refinement exposes
+the below-singleton active value at an inserted outsider-only date.
+
+Every q_i is proper. The joint and every opponent-deleted survival
+products are strictly below one. The complete behavioral/Never argument
+and the fixed-target horizon estimate in the preceding section apply
+literally. This produces the required strategic inputs to the named
+periodic consumers, rather than merely changing an analytic interface.
+
+As an exact signed regression, take Γ with favorite17/4 and harmful−1,
+all s_i=1, Π_i=−1/2, K_i=−1, and X_i=1. Then B's altered harmful
+entry is−3/4 and every coordinate of BX and N⁺ is5/2. The active
+value is3/4 and passive value3/2. This is a boundary stress test, not
+the new-coverage fixture; that role belongs to the fully asymmetric
+fifteen-row table above, which satisfies (SM1)–(SM3) strictly.
+
+### Relation to the common cubic and the next unsolved branch
+
+The common cubic class with K≤0 satisfies (SM1)–(SM3), including its
+entire Π>−1 range. Its K≥0 arm already has a pure active-pair exit:
+participants strictly prefer joining to the harmful singleton, while
+outsiders receive s_i+Kb_i≥s_i and every immediate join pays≤s_i.
+The same pure-exit argument works with asymmetric K_i whenever the two
+outsiders of either active pair both have K_i≥0. Thus the cubic theorem's
+existence coverage is subsumed by the signed matching theorem plus a
+literal pure-coalition exit, although its explicit symmetric periodic
+profile remains distinct mathematical evidence.
+
+The pending gate is independent falsification of this complete stronger
+raw theorem and its actual coverage fixture, not export of the supporting
+matrix lemma alone. Beyond the present class, the concrete unresolved
+passive-sign case has each active pair containing an outsider with K_i<0
+and at least one K_i>0 somewhere. The displayed positive-cone argument
+does not handle that mixed-sign case, and no arbitrary-table conclusion
+or periodic-architecture completeness is claimed.
+
+### Complete coverage fixture with unequal pair premiums
+
+For the bounded source comparison use the following second exact table.
+It has the same singleton matrix as above but two distinct participant
+increments, constant within each active pair:
+
+    Π_A=145/32,       Π_B=99/14,       K_i=−1.
+
+| S | r(S) |
+|---|---|
+| 0 | (1,61/8,0,0) |
+| 1 | (61/8,1,0,0) |
+| 2 | (0,0,1,61/8) |
+| 3 | (0,0,61/8,1) |
+| 01 | (−1,−1,0,0) |
+| 02 | (177/32,0,177/32,0) |
+| 03 | (−1,0,0,−1) |
+| 12 | (0,−1,−1,0) |
+| 13 | (0,113/14,0,113/14) |
+| 23 | (0,0,−1,−1) |
+| 012 | (−10,1/2,−10,0) |
+| 013 | (1/2,−10,0,−10) |
+| 023 | (−10,0,−10,1/2) |
+| 123 | (0,−10,1/2,−10) |
+| 0123 | (−11,−12,−13,−14) |
+
+Exact odds are X=(1/4,1/5,1/4,1/5), so the actual two roots are
+(1/5,0,1/5,0) and (0,1/6,0,1/6). The phase values are
+
+    V_A=(61/32,183/70,61/32,183/70),
+    V_B=(305/128,61/28,305/128,61/28).
+
+The root equations follow by substitution in (IP5). At phase A,
+passive Quit is17/50, and at phase B it is31/72; the passive
+Continue values are respectively183/70 and305/128, strictly larger.
+Active endpoints are equal to their displayed values. Every raw sign
+and cap in (SM1)–(SM3) is strict. Thus this is not merely a limit-point
+admission: the whole strongest raw theorem applies on a full reward
+neighborhood of this table, without a claimed explicit radius.
+
+Only02,13,I are premium traps. Each active pair has positive premiums
+on both members. Every triple has a singleton outsider with premium
+−1/2 and no other positive-premium coalition within that triple for that
+outsider, while the grand set contains a positive-premium active pair
+for every member. No pure coalition is equilibrium: a singleton's active
+mate gains by joining; an active pair's outsider gains1/2; any other
+pair participant can leave−1 for a nonnegative singleton payoff; an
+active-pair participant can leave any triple's−10 for0; and a grand
+participant can leave its negative reward for0. All Never is defeated
+by an own singleton paying1.
+
+Every proper child has an exact terminal Nash profile with zero joint
+Never and a profitable omitted player. For a child that cuts an active
+pair, choose j in the child with a(j) omitted, and let j quit surely
+at date0. All other child members receive0 or61/8 by waiting and−1
+by joining. The omitted a(j) instead obtains177/32 or113/14 by joining
+instead of0. The only proper nonempty children that cut neither pair
+are02 and13. Their sure joint exits are child Nash because participants
+prefer their pair reward to the harmful singleton0; an omitted outsider
+gains1/2 by joining. This proves failure, for EVERY proper child, of
+any universal fixed nonnegative weighted child-debt plus finite Never
+bound for SOME omitted player's gain. It does not exclude a separately
+chosen quiet strategic witness.
+
+Here are the finite matrix and raw-class comparisons. They concern the
+actual hypotheses of the named producers, not arbitrary verifier languages.
+
+- The matrix Γ_H, H=53/8, has strictly positive inverse and positive
+  determinant, full R₀ and degree+1. Every principal of size two has
+  determinant−H² or−1; every triple has determinant2H; every column
+  has a negative entry. Thus no nonzero homogeneous LCP solution exists.
+  The negative-determinant inverse exit fails. A harmful principal pair
+  is [[0,−1],[−1,0]], not standard Q and without a homogeneous solution,
+  so the all-principal projective-Q exit fails. Each triple inverse has
+  a negative diagonal entry−1/(2H), excluding the nonnegative-inverse
+  child producer.
+- The all-sure response displacements are−11,−12,−13,−14. Any
+  nondiscrete response partition would equate two at this block-constant
+  point, so all fifteen nondiscrete partitions fail. This excludes the
+  response-quotient and full-table symmetry consumers, not just the
+  named Klein-four presentation.
+- Product-low and supportwise nonpositive-premium tests fail at either
+  sure active pair. The greatest premium core is full, excluding the
+  at-most-two and triple-core classes. Every player's grand premium is
+  negative, so no nonempty protected set exists. Every nonzero
+  nonnegative weighted grand premium is negative, violating the global
+  weighted-floor condition. Pair-free boxed-charge tests fail at02,13.
+  In the mixed-trap test, each singleton grand-support coefficient is
+  Π_a(j)−4>0, whereas its hypothesis requires it strictly negative.
+- Each singleton row has two negative entries, not the unique negative
+  partner required by `PairedCycle.RawRegion.eq_partner_of_singleton_lt`
+  in `UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean`.
+  The positive graph consists of two transpositions, not a Hamiltonian
+  cycle, so neither signed four-clock sign pattern applies. Reciprocal
+  singleton signs are equal, not opposite as for integral tournaments.
+  Deleting any player leaves its favorite mate with two negative child
+  entries; thus all cyclic-child raw families fail under every deletion.
+- The visible overlapping period-three affine cylinder has favorable to
+  harmful singleton-gap ratio less than4, whereas this table's ratio is
+  53/8>4 in every row. This ratio is unchanged by positive row scaling.
+  The accepted four-phase two-joint local branch necessarily has a pair
+  with Γ_ab<0<Γ_ba: its two proper solo phases and strict passive floors
+  give those signs from their Bellman equalities. Here all reciprocal
+  signs agree. No unspecified neighborhood radius is used in either
+  comparison.
+- For every ordered crossed selected pair(i,j), if j≠f(i), the sure
+  favorite outsider gives lower-face displacement−1−61/8=−69/8.
+  If j=f(i), the harmful nonactive partner o(i) gives displacement−1.
+  Thus even the weak actual-polynomial lower faces fail. This excludes
+  the unit/half strict and weak raw guards, the broader weak polynomial
+  half-face guards, one-sided matrix-free guards, and their guard-derived
+  full reward neighborhoods. The literal owner-risky `sharpReward`
+  family has a zero off-diagonal singleton entry, which this table lacks.
+
+The exact source declarations inspected for the last comparisons are
+`QuittingResponseInvariantOnUnitCube` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`,
+`QuittingHalfWeakPolynomialGuards` in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialFaces.lean`,
+`exists_stationary_uniformPayoff_witnesses_of_weakHalfPolynomialGuards` in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialProducer.lean`,
+`QuittingOneSidedWeakUnitGuards` and `exists_uniformPayoff_of_oneSidedWeakUnitGuards`
+in `UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`,
+`halfCeiling_fullRewardBall_source` and `unitCeiling_fullRewardBall_source`
+in `UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFullRewardNeighborhood.lean`,
+and `sharpReward` in
+`UniformEquilibrium/Quitting/Examples/FinFourOwnerRiskyStationaryClosure.lean`.
+
+The remaining proper-three stationary branch also has an exact exclusion.
+Any three-player support contains one full active pair i,k and a third
+player j favorable to i; k's favorite is omitted. Let their proper
+hazards be a,c,x respectively. With Π the common premium of that full
+active pair, k's Never payoff is0 and its Quit payoff is
+
+    1+Πa−2x−(Π+9)ax.
+
+Indifference gives a=(1−2x)/D(x), D(x)=(Π+9)x−Π, and
+
+    (Π+1)/(Π+11)<x<1/2.
+
+Both actual premiums satisfy0<Π<9. Player i then has
+
+    Q_i=D(x)(a−c),
+    N_i=(61/8)x(1−c)/(x+c−xc)>0.
+
+Equality would imply c<a<1, hence Q_i<D(x)(1−c), while
+N_i≥(61/8)x(1−c). But (61/8)x>D(x) for every x<1/2 because
+Π+61/8>9. This is a contradiction for both Π_A and Π_B and hence
+for every deleted player. The declaration
+`PairedCubicStationaryExample.exists_local_stationary_branch` in
+`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`
+produces exactly such three proper active hazards, excluding every
+relabeling of that local source. No full-support stationary exclusion
+is asserted.
+
+Finally, this fixture is outside the pending common-Π cubic class itself.
+Its strict singleton signs fix the favorite matching; both harmful gaps
+are−1, forcing every normalized row scale b_i=1. The only eligible
+active matching is02/13, since03/12 would have Π=−2<−1. The two
+actual active-pair premiums145/32 and99/14 are unequal. No relabeling
+restores the required common parameter. The strengthened theorem is
+therefore an actual raw-class enlargement, not only another root formula
+for the symmetric candidate.
