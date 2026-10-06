@@ -131,6 +131,7 @@ import MathUE.CurveSelection.SquareLift
 import MathUE.CurveSelection.Termination
 import MathUE.CurveSelection.UltrafilterSubsequence
 import MathUE.CyclicChildComplementarity
+import MathUE.CyclicChildExteriorDegree
 import MathUE.CyclicChildJointPhaseAlgebra
 import MathUE.CyclicChildJointPhasePivot
 import MathUE.CyclicContraction
@@ -650,6 +651,7 @@ import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.AmbientDegree
 import MathUE.Topology.AmbientDegreeHomotopyNormalization
+import MathUE.Topology.AmbientDegreeNonlinearLocalIndex
 import MathUE.Topology.AmbientDegreeProperties
 import MathUE.Topology.AmbientDegreeSelfMapNormalization
 import MathUE.Topology.BoundaryFixingSurjectivity
@@ -702,6 +704,7 @@ import MathUE.Topology.CompactRankedOutcome
 import MathUE.Topology.CompactRobustMoat
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
+import MathUE.Topology.ComplexCircleLogarithmObstruction
 import MathUE.Topology.ConnectedConvexHullAffineStep
 import MathUE.Topology.ConnectedConvexHullRepresentation
 import MathUE.Topology.ConnectedFixedPointContinuation
@@ -742,6 +745,7 @@ import MathUE.Topology.OneSidedDiniFencing
 import MathUE.Topology.OrientedSimplexFacetDeterminant
 import MathUE.Topology.PairedSegmentRenewal
 import MathUE.Topology.PathConcatenation
+import MathUE.Topology.PathFirstClosedSetHit
 import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.QuotientFiberCollision
@@ -2040,6 +2044,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.ThreeByThreeZeroDiagonalQ
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.All
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.AmbientCarrierElimination
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.CapDebtBellmanReduction
+import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.CyclicChildLowDegreeExit
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.CyclicChildPassiveInverseExit
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.CyclicChildSingletonAdapter
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.CyclicLabelAdapter
@@ -3124,6 +3129,7 @@ import UniformEquilibrium.Quitting.Root.FleschSuccessor
 import UniformEquilibrium.Quitting.Root.ForcedContinueOwnerCorrectionCoalitionSum
 import UniformEquilibrium.Quitting.Root.ForcedContinuePayoffDisplacement
 import UniformEquilibrium.Quitting.Root.ForcedQuitEndpointStability
+import UniformEquilibrium.Quitting.Root.FullClippedEndpointMap
 import UniformEquilibrium.Quitting.Root.FullCoalitionEndpointIdentities
 import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Quitting.Root.ImmediateQuitCapDisplacement

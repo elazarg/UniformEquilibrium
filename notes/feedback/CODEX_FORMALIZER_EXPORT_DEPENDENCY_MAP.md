@@ -822,6 +822,21 @@ a unique-root shortcut. Its weak step uses localized zero-gap passive
 singleton perturbations with charge and reward-bound margins; the uniform
 all-passive increment closure above is not that adapter.
 
+`exists_ambientDegree_eq_sign_det_of_hasFDerivAt_on_nhds`
+(`MathUE/Topology/AmbientDegreeNonlinearLocalIndex.lean`) now derives local
+isolation and determinant-sign degree from an actual nonsingular derivative,
+with continuity only on a neighborhood and differentiation only at the zero.
+It includes dimension zero and assumes neither coercivity nor a supplied
+isolating region. `quittingFullClippedEndpointMap_hazardOfRoot_eq_self_iff_isZeroNash`
+(`UniformEquilibrium/Quitting/Root/FullClippedEndpointMap.lean`) supplies the
+literal full-cube fixed-point bridge, including sure and inactive hazards.
+The polynomial endpoint gaps are smooth on all real hazards. These foundations
+do not supply the signed-pair or joining-attractive-triple source Jacobians,
+root census or degree obstruction. The triple packet additionally requires
+its full three-player negative determinant, sure cascade and pair-tie/source
+restoration, with the pure-core alternative separated. Its weak localized
+passive perturbation is not the uniform all-passive increment consumer above.
+
 `eventually_exactRoot_absorption_lt_of_exact_fiber_absorption_zero` and
 `tendsto_exactRoot_absorption_zero_of_exact_fiber_absorption_zero`
 (`UniformEquilibrium/Quitting/Root/CompactExactNashFiberMoat.lean`) give uniform
@@ -907,8 +922,25 @@ and supplies UE from the three literal passive numerator tests, including
 equality. Its two-threshold specialization uses v below one; harm parameters
 are unrestricted for this exit. `exists_uniformPayoff_of_passiveExit` in the
 original-table facade supplies the literal packet threshold. Off-endpoint R0
-is checked, but the low-degree UE exit remains separate, as do the packet's
-explicit finite-law and quantitative constants and stress fixtures.
+is checked; the packet's explicit finite-law and quantitative constants and
+stress fixtures remain separate.
+`exterior_r0Degree_eq_zero` (`MathUE/CyclicChildExteriorDegree.lean`) now
+computes the low exterior degree from the canonical complete two-root census:
+the first inactive residual is one, and the active determinants have opposite
+signs. `exists_uniformPayoff_of_below_resonance`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicChildLowDegreeExit.lean`)
+transports that result from literal singleton rows to an actual original-game
+uniform payoff, without a supplied R0, degree, root set or child strategy.
+`exists_uniformPayoff_all_pivots`
+(`UniformEquilibrium/Quitting/Cycles/CyclicChildJointPhaseSingletonExits.lean`)
+combines low, resonance, high and actual interior producers for every real R.
+Both literal threshold comparisons are checked; u may exceed one, subject only
+to u at most one plus xi. Eta may be zero. This closes the packet's main raw
+UE class, not its remaining prescribed calendar/law constants or stress tests.
+The same raw singleton low, resonance and passive exits supply outer branches
+for the global two-joint and zero-premium packets. Their different joint rows,
+caps and internally constructed selectors remain separate actual source units;
+the one-joint all-pivot facade is not a theorem for those classes.
 The shared padded compiler uses the actual three-times-scale period, not the
 packet's minimal one-plus-twice-scale period.
 The global two-joint packet also requires weakening the shared refinement
@@ -1749,6 +1781,18 @@ exponential covering of the punctured complex plane, producing a continuous
 logarithmic lift with equal endpoints for every translated image loop.
 This is not a nullhomotopy in the original image. The planar bridge to Sorin's
 Proposition 11 remains separate; no integer index oracle is assumed.
+
+`circle_logarithm_endpoint` and `not_exists_closed_circle_logarithm`
+(`MathUE/Topology/ComplexCircleLogarithmObstruction.lean`) identify every
+continuous logarithm of an actual scaled one-turn circle with its initial
+value plus the explicit lift, giving nonzero endpoint displacement. Arbitrary
+scale is allowed; existence already excludes zero. `exists_path_to_first_closedSet_hit`
+(`MathUE/Topology/PathFirstClosedSetHit.lean`) constructs an actual clipped path
+whose range stays in the original range intersected with the union of the
+closed set and the starting complement path component. It needs no metric or separation
+assumption. Neither result is the planar image-nullhomotopy theorem.
+The source-backed remaining route is recorded in
+`notes/feedback/CODEX_FORMALIZER_SORIN_PLANAR_NULLHOMOTOPY_DEPENDENCIES.md`.
 
 Primary-source discovery located the two-player flat-security prescription in
 [Tomala, *Jeux répétés* (2006)](https://www.numdam.org/item/10.5802/xups.2006-02.pdf),

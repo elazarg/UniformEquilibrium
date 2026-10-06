@@ -154,6 +154,7 @@ import MathUE.CubicAnchorRoot
 import MathUE.RationalizedQuadraticBracketRoot
 import MathUE.CyclicChildJointPhaseAlgebra
 import MathUE.CyclicChildComplementarity
+import MathUE.CyclicChildExteriorDegree
 import MathUE.CyclicChildJointPhasePivot
 import MathUE.CurveSelection.AlgebraicApproach
 import MathUE.CurveSelection.AlgebraicReduction
@@ -657,6 +658,9 @@ import MathUE.Topology.CoveringImageIncidence
 import MathUE.Topology.SeparatelyAffineImageLoopFamily
 import MathUE.Topology.SeparatelyAffineCoveringEndpoint
 import MathUE.Topology.SeparatelyAffineComplexLoopLift
+import MathUE.Topology.AmbientDegreeNonlinearLocalIndex
+import MathUE.Topology.ComplexCircleLogarithmObstruction
+import MathUE.Topology.PathFirstClosedSetHit
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
 import MathUE.Topology.CountableObservation

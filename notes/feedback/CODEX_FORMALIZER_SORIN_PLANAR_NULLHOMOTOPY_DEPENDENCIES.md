@@ -1,0 +1,117 @@
+# Sorin planar nullhomotopy dependencies
+
+## Mathematical target and scope
+
+For a nonempty path-connected subset S of the complex plane, suppose that for
+every base point b in S, every continuous based loop γ in S, and every z outside
+S, there is a continuous L on [0,1] satisfying exp(L(t)) = γ(t) − z and
+L(0) = L(1). The target is a based nullhomotopy of every loop inside S.
+Compactness of S may be retained in an initial interface, but local connectivity
+of S must not be silently added.
+
+The quantifier over **all loops** is essential. The assertion that one loop
+with zero winding about every outside point must itself be nullhomotopic is
+not the proposed lemma. Hole detection can produce a different loop.
+
+Sorin's Proposition 11 applies to compact continuous mixed games, including
+discounted repeated games, not only finite-dimensional strategy simplices.
+The source is the supplied article, printed pages 148 and 155. The checked
+covering construction does not lift arbitrary payoff loops to strategy loops.
+
+## Primary proof route
+
+Fischer and Zastrow, *The fundamental groups of subsets of closed surfaces
+inject into their first shape groups*, Algebraic & Geometric Topology 5
+(2005), 1655–1676:
+[primary article](https://msp.org/agt/2005/5-4/agt-v5-n4-p18-s.pdf).
+The proof of Theorem 2, Lemma 12, and Theorem 15 supply the route.
+
+Given a loop α in S, let Y be its image together with precisely those
+complementary components of its image that are contained in S. Then Y is a
+Peano continuum and Y is contained in S. Theorem 15 supplies a pointed
+perforated-disk model; its proof actually constructs a deformation retraction
+fixing Y pointwise. One omitted point is selected in each remaining hole.
+If there are no holes, the model is a disk. Otherwise, transport a disk-boundary
+loop into Y using the retraction, adding a stem and its reverse so that the
+base point stays in Y. The resulting loop detects an omitted point.
+
+This is a known-mathematics formalization dependency, not an assertion that
+Sorin's result is mathematically open. The composed detection criterion has
+not been formalized here. Its disk-boundary obstruction remains a separate
+library obligation.
+
+## Precise interfaces to preserve
+
+1. **Path image.** A continuous image of [0,1] in a Hausdorff space is compact;
+   its range is path connected and locally path connected. The latter uses
+   the canonical compact-to-Hausdorff quotient map, not a continuous selector.
+2. **Selected filling (Lemma 12).** For Peano continua A contained in B and
+   an arbitrary selected family of components of B minus A, adjoining those
+   components to A again gives a Peano continuum. Apply the paper's planar
+   specialization to the loop image. Retain the canonical inclusion in S.
+3. **Perforated disk (Theorem 15).** For a planar Peano continuum Y and base
+   point in Y, select an omitted point in every bounded complementary
+   component. Construct a closed disk with disjoint disk interiors removed,
+   containing Y, and a deformation retraction onto Y fixing Y pointwise.
+   The holes can be infinite: continuity of the glued retraction uses the
+   null-sequence estimate of Lemma 16, not merely finite pasting.
+4. **Based hole transport.** Join the fixed base point to a disk boundary in
+   the perforated model. Concatenate the stem, boundary loop, and reversed
+   stem. Apply the retraction homotopy, which fixes that base point and avoids
+   the selected omitted point. The raw boundary base point need not be fixed.
+5. **Exponential obstruction.** A disk boundary around an interior point has
+   no closed continuous logarithm after translation. The standard round-circle
+   calculation is a bounded first unit; it is not the general Jordan-boundary
+   theorem. Based conjugation and endpoint-fixed homotopy transport the
+   obstruction without an assumed integer-valued index.
+6. **Consumer.** Universal closed logarithmic lifts rule out the detected
+   hole; the pointed disk model then contracts the original loop in Y and S.
+   Finally convert interval-square homotopies to the paper's real-parameter
+   `NullHomotopicIn` convention by clamping both coordinates to [0,1].
+
+## Existing Lean reuse and missing owners
+
+- `exists_closed_logarithmic_lift`
+  (`MathUE/Topology/SeparatelyAffineComplexLoopLift.lean`) supplies the actual
+  logarithmic lifts for compact separately-affine images.
+- `liftPath_imageLoop_apply_one`
+  (`MathUE/Topology/SeparatelyAffineCoveringEndpoint.lean`) is the more general
+  actual covering-endpoint result.
+- `Topology.IsQuotientMap.of_surjective_continuous`
+  (`Mathlib/Topology/Separation/Hausdorff.lean`) and
+  `Topology.IsQuotientMap.locallyPathConnectedSpace`
+  (`Mathlib/Topology/Connected/LocallyPathConnected.lean`) supply path-image
+  local path connectivity. No new generic quotient wrapper is necessary.
+- `Complex.isCoveringMap_exp` (`Mathlib/Analysis/Complex/CoveringMap.lean`),
+  `IsCoveringMap.eq_of_comp_eq` (`Mathlib/Topology/Covering/Basic.lean`), and
+  `IsCoveringMap.monodromy_trans_apply` plus
+  `IsCoveringMap.liftPath_apply_one_eq_of_homotopicRel`
+  (`Mathlib/Topology/Homotopy/Lifting.lean`) supply covering uniqueness and
+  transport. `Complex.exp_two_pi_mul_I`
+  (`Mathlib/Analysis/SpecialFunctions/Trigonometric/Basic.lean`) normalizes
+  the standard circle.
+- `simply_connected_iff_loops_nullhomotopic`
+  (`Mathlib/AlgebraicTopology/FundamentalGroupoid/SimplyConnected.lean`)
+  packages the eventual conclusion; it does not prove the planar criterion.
+- No matching selected planar filling, perforated-disk retraction, or general
+  Jordan-boundary exponential obstruction was found in the scoped library
+  audit. These are substantive known-topology formalization tasks.
+
+## Finite-simplex alternative is narrower
+
+`MathUE.IsSemialgebraic.image_polynomialMap`
+(`MathUE/Semialgebraic/PolynomialMap.lean`) can establish semialgebraicity of
+a literal finite-simplex bilinear payoff image after its coordinate adapter.
+Coste's *Real Algebraic Sets*, Theorem 1.10, supplies compact semialgebraic
+triangulation; Theorem 1.19 supplies local conic structure:
+[author's lecture notes](https://indico.ictp.it/event/a02455/session/9/contribution/6/material/0/0.pdf).
+Those notes explicitly distinguish triangulating an image from triangulating
+an arbitrary vector-valued map. This alternative does not cover the original
+general compact-strategy proposition or its discounted specialization.
+
+## Implementation boundary
+
+The next bounded unit is the actual standard-circle nonclosed-logarithm
+calculation using the exponential covering. No full planar nullhomotopy,
+Jordan theorem, general-game Proposition 11 closure, or supplied index oracle
+is claimed by that unit. Larger topology owners require separate plan review.
