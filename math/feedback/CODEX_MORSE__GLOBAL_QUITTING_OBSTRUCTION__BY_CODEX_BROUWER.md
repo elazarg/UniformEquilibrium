@@ -1509,3 +1509,245 @@ verifier. All mathematical data and proofs are self-contained; no
 conference notebook, feedback, or other math-directory dependency is
 required, and no review history or new Lean-check assertion appears.
 There is no mathematical or artifact repair requested for these bytes.
+
+## Independent Section 29 review: negative scheduled premiums
+
+**PASS for the complete raw producer and its full-coordinate neighborhood.**
+The reviewed surface is Section29, “A negative scheduled-premium arm of
+the matching two-phase producer”, through EOF of
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, whole-note SHA256
+
+    84cf88f403ed0004abc2c7bf107f0d9b8e5b4b5312a9ef14da9ebdbafedc31d9.
+
+I independently read and checked this surface without reading another
+review. This is ordinary mathematical review, not a Lean check. I find no
+unresolved mathematical objection or missing strategic witness. A final
+standalone artifact will need its own bounded byte-level assembly check.
+
+### Claim and scope checked
+
+There are four players with the favorable matching f=(01)(23), scheduled
+pairs02 and13, private independent behavioral actions, zero live and Never
+rewards, and all fifteen actual terminal reward vectors. Own levels s_i
+are arbitrary signed reals, scales b_i>0, H>2. Singleton increments are
+Hb_i at f(i) and−b_i at both other players. Scheduled-pair participant
+and passive increments are Πb_i and Kb_i, with
+
+    Π<−1,       K<(7Π+10−2H)/2.
+
+For C=4(−Π−1)/3 the twelve outsider joining rewards are at most s_i−Cb_i.
+All other reward entries are free. The theorem produces a proper common
+hazard for the two scheduled phases, exact terminal Nash against every
+behavioral deviation, and one fixed uniform payoff for the original game.
+The additional neighborhood theorem imposes no exact singleton or pair
+equalities on nearby reward tables.
+
+These are actual raw-data producers. The hazard, all phase values, all
+unilateral inequalities, and the deleted-opponent contractions are outputs,
+not assumed strategic inputs. The theorem is not a universal periodic
+architecture claim and does not solve arbitrary Fin4.
+
+### Root selection and all action endpoints
+
+For P(t)=Πt³+(H−1−K)t²+Kt−(Π+1), direct calculation gives
+
+    P(1/2)=(2H−10−7Π+2K)/8<0,       P(1)=H−2>0.
+
+Thus a root can be chosen once in (1/2,1), despite P(0)>0. With
+q=1−t, U_i=s_i+qΠb_i and W_i=s_i+q(Π+1)b_i/t, both supported
+active endpoints equal U_i exactly. The passive Continue value is
+s_i+b_i[qt(H−1)+q²K+t²qΠ]; subtracting W_i is zero exactly at P(t)=0.
+This calculation includes the simultaneous other-pair payoff K.
+
+The passive Quit bound is s_i−(1−t²)Cb_i, including its empty-opponent
+singleton term t²s_i. Set c=−Π−1>0. The passive Continue margin over
+that bound is q b_i[(1+t)C−c/t]>0, because t(1+t)>3/4. Thus W_i<s_i
+is legitimate here: its action cap has been lowered too. There is no false
+inference that a below-singleton phase is automatically unsafe or that a
+singleton floor is needed at every date.
+
+All sixteen unilateral action endpoints and all eight policy equations
+are accounted for. The twelve caps contain each possible outsider's two
+pair joins and triple join. The free reward100 entries of the fixture belong
+to the scheduled participants of a triple, not to its deviating outsider;
+they cannot enter that outsider's payoff. Grand rewards cannot occur under
+one deviation against either phase. Signed own rewards do not alter Never.
+
+### Attempted falsification: a second proper root is not interchangeable
+
+At H=3, Π=−11/10, K=−179/60,
+
+    P(t)=−(3t−2)(22t²−85t+3)/60.
+
+Besides t=2/3, there is a small positive root
+t₋=(85−√6961)/44∈(0,1/20). If the twelve cap entries are all set
+at their allowed equality13/15, this small root does NOT give an equilibrium:
+
+    W_i=1−(1/10)(1−t₋)/t₋<−9/10,
+    Q_i^passive=1−(2/15)(1−t₋²)>13/15.
+
+The direct deviation gain is positive. This is an exact failed extension
+from “choose a root above one half” to “choose any proper root”, not a
+counterexample to the stated theorem. The author's interval choice is
+load-bearing and correct. No uniqueness or favorable unproved selector is
+being assumed.
+
+### Complete behavioral and uniform-horizon consumer
+
+Policy iteration has joint survival t⁴<1 per period and hence identifies
+the proposed bounded U,W with actual terminal values. For a fixed deviator,
+its three opponents survive a period with probability t³<1 independently
+of the deviation. Iterating the two action inequalities leaves a bounded
+remainder times t^(3n), uniformly over full behavioral replacements. It
+vanishes, including for Never and arbitrary late randomized stopping.
+
+The first-opponent stopping time has expected date-plus-one at most
+1+2/(1−t³). Absorption under any unilateral deviation is no later.
+Thus the quoted terminal/finite-average error and twice-that regret bound
+hold uniformly over all deviations, with the initial live-zero date included.
+The chosen vector and profile are fixed before the requested error; one
+profile works at every sufficiently large horizon. There is no interchange
+of a supremum with pointwise horizon convergence.
+
+The exact consumers checked are
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate` and
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`, with the
+literal endpoint definitions and endpoint-mixture identity in
+`UniformEquilibrium/Quitting/Root/SuccessorCertificate.lean`.
+All their actual inputs are produced by the proof.
+
+### Full sixty-coordinate neighborhood
+
+I independently differentiated the actual four equations (127), not a
+reduced symmetric equation. At X*=(1/2)1 the mate derivative is19/72,
+favorite derivative−19/12, other-opponent derivative29/12, and own
+derivative0. This is exactly the stated full4×4 Jacobian. Its eigenvalues
+are79/72,−307/72,−41/72,269/72 and its determinant is
+267486337/26873856>0.
+
+The map T_r(X)=X−J⁻¹E(X,r) has X derivative zero at the base point.
+In a sufficiently small closed positive ball and a sufficiently small
+full reward neighborhood its derivative norm is at most1/2, while its
+center displacement is at most half the ball radius. The mean-value bound
+then makes it a self-map and contraction. The resulting fixed point is
+positive and solves all four original equations. The estimate
+‖X(r)−X*‖≤2‖T_r(X*)−X*‖ proves its needed convergence to X*.
+
+Every proper probability, every actual passive Quit gap37/60, and every
+opponent-deleted contraction persists. This produces a certificate for
+each nearby FULL reward table, including perturbations of all singleton
+and pair equalities. No local strategy witness, inverse, or implicit root
+certificate is supplied as a hypothesis. The common-parameter raw theorem
+and the unrestricted sixty-coordinate neighborhood are correctly distinct.
+
+### Exact complete fixture and coverage tests
+
+Rational recomputation of the complete fifteen-row table gives active
+endpoints19/30, passive Continue19/20, passive Quit1/3, and passive
+gap37/60 at every applicable row. At the full-support1/10 hazard,
+the forced-Quit vector is exactly
+(24739,24729,24719,24709)/10000. Every entry exceeds the singleton1,
+so product-low and the supportwise nonpositive-weight condition both fail.
+The only premium trap is I. All fifteen pure coalitions have the stated
+profitable deviation; all Never also fails.
+
+I checked all fourteen child cases with their stated quantifiers. For a
+singleton child, or a favorable/scheduled pair, the indicated sure solo
+is exact child Nash and its omitted harmful nonscheduled partner gains1/2
+by joining. For a harmful nonscheduled pair its sure joint exit is child
+Nash and either omitted player gains100. For a triple omitting m, pure
+o(m) is child Nash and m gains1/2. Every witness has zero child regrets
+and zero Never mass. These exclude universal nonnegative weighted child-debt
+plus finite-Never lifts, not every conceivable specially chosen quiet profile.
+
+The grand participant premiums are all negative, so no protected player
+or nonzero global nonnegative floor weight exists. The full trap's favorable
+pair insertion charge is198>0, excluding the boxed and mixed-trap charge
+condition. The full greatest core excludes the pair/triple core classes.
+For terminal upper-bound weights, Γ has row sums1; Γᵀλ≤0 with λ≥0
+therefore forces λ=0. The conditional range test is impossible since its
+ContinueUpper≥4 but its required lower Quit mixture is at most1.
+
+The matrix Γ₃ has eigenvalues1,5,−3,−3, determinant45, and the stated
+strictly positive inverse. Its nonzero principal determinants and negative
+entries in every column give R₀, and the degree is+1. The negative-det
+inverse and all-principal Q/homogeneous exits therefore fail. Each triple
+inverse has a negative diagonal entry. The all-sure responses
+−101,−102,−103,−104 exclude every nondiscrete response quotient; equal
+singleton row sums also prove the claimed exclusion after positive affine
+row transport.
+
+The singleton sign graph excludes the unique-negative-partner paired
+pattern, favorable four-cycles, reciprocal-opposite-sign patterns, and every
+cyclic child under deletion. The overlapping period-three affine cylinder
+comparison is valid: all its participant-pair coordinates are visible and
+equal to the own level at its center; their invariant normalized difference
+is at most2ε/(1−2ε)<1/4. Here it is1/2 or11/10 for every pair participant.
+The sure-outsider crossed-face witnesses are exactly−7/2 or−1/10 for
+every ordered selected pair, excluding even weak polynomial lower guards.
+
+### Proper-three stationary exclusion and current strongest matching overlap
+
+For support012, the designated player's Quit equation is
+1−11a/10−x/2+(503/5)ax=0. It implies
+a=(10−5x)/(11−1006x), 0<x<1/1001, and10/11<a<1.
+For player1, direct calculation gives the stated Q₁,N₁. With
+F=(a+c−ac)(N₁−Q₁), independent expansion gives
+
+    ∂_aF=a+3+(5a−239/60)c+(5/2−6a)c².
+
+For a≥10/11 this is concave in c with positive endpoint values a+3
+and91/60. Moreover F(10/11,c)=(213c²−1855c+2280)/726 decreases
+on[0,1] to29/33>0. Thus N₁>Q₁ throughout the possible support region.
+The stated symmetries of the rows of size at most three give all four
+deleted supports. This excludes the literal proper-three source of
+`PairedCubicStationaryExample.exists_local_stationary_branch` in
+`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`,
+not arbitrary fully supported or sure-boundary stationary equilibria.
+
+I compared against the strongest arbitrary-K matching theorem, not only
+its earlier nonpositive-K version. Favorable singleton signs force f.
+For scheduled02/13, participant reward−1/10 is below the mate singleton0,
+violating the weak participant comparison. For scheduled03/12, that comparison
+holds but an outsider triple join pays100>1, violating a cap. These cover
+every relabeling and persist under positive row affine transport. Every
+pair participant premium is negative, so the separate general inverse-positive
+Π_i≥0 criterion cannot apply either. Arbitrary K does not repair either
+failed input. These are strict raw failures, not a claim that the new table
+merely has a different displayed root.
+
+### Source audit and significance verdict
+
+In addition to the exact cyclic consumers, inspected declarations/files for
+these comparisons include
+`r0Degree_eq_sign_det_of_nonnegative_inverse`
+(`MathUE/LinearProgramming/NonnegativeInverseDegree.lean`),
+`quittingSingletonBlockRowSum_eq_of_responseInvariant`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`),
+`PairedCycle.RawRegion.eq_partner_of_singleton_lt`
+(`UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean`),
+`IsInvisibleRewardCoordinate`
+(`UniformEquilibrium/Quitting/Examples/Cyclic/FourPlayerOverlappingPeriodThreeInvisibleCoordinates.lean`),
+`overlappingPeriodThreeRewardRow`
+(`UniformEquilibrium/Quitting/Examples/Cyclic/FourPlayerOverlappingPeriodThreeReward.lean`),
+`IsQuittingConditionalFaceGapRange` and
+`exists_uniformEquilibriumPayoff_of_conditionalFaceGapRange`
+(`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`),
+`exists_uniformEquilibriumPayoff_of_nonnegativeWeightChamber`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticNonnegativeWeightChamber.lean`),
+`QuittingHalfWeakPolynomialGuards`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialFaces.lean`),
+and `QuittingOneSidedWeakUnitGuards`
+(`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`).
+These are read-only source inspections and exact arithmetic, not Lean builds.
+
+My independent significance verdict is affirmative: the candidate gives an
+original-table producer and a full-coordinate existence neighborhood with a
+complete raw fixture outside the applicable implemented and accepted criteria,
+including the arbitrary-K matching theorem. Its gain is the below-singleton
+passive phase regime with actual stronger joining caps, not first use of an
+implicit-function neighborhood. No unrestricted strategic input is hidden.
+The same-support scalar formula alone would not establish this comparison;
+the complete table and local producer do. No repair is requested, and no
+stronger global negative-premium or arbitrary-game claim is inferred.

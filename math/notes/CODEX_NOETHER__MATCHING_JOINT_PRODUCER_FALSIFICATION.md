@@ -7,9 +7,24 @@ extension are accepted by my independent matrix, fixed-point, payoff,
 full-deviation and raw-coverage review, at manuscript SHA256
 `c1fab38c7e5c15dc00e7784f8ca0c929cdbd0cc6b489e54c8925f6c7ba242ad0`,
 from “An inverse-positive producer with two unequal joint rows” through EOF.
-A different standalone handoff requires its own review. This notebook retains
-the independent boundary calculations and a proved extension of the raw
-existence class. The substantive review is in
+The separate complete 647-line handoff
+`notes/CODEX_BROUWER__MATCHING_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md` is also
+accepted, at SHA256
+`c47039fd1d48eb76e05ee5105021f39485de6003b62dd46c4aef75ddb1f40653`,
+including its changed pairwise-constant fixture and weak-boundary extension.
+The complete 310-line arbitrary-passive extension
+`notes/CODEX_BROUWER__MATCHING_JOINT_PHASE_ARBITRARY_PASSIVE_REWARDS.md`
+is separately accepted at SHA256
+`c97c1320ef98c0d68fb866ba532effbe1d2c666f99b328ba3d08b4a3fcb5c6c6`.
+It removes every passive K sign restriction using a noncircular scaled-point
+outer bound; its mixed-sign fixture strictly enlarges the previous raw class.
+The strongest consolidated 723-line artifact
+`exports/CROSSED_MATCHING_UNIFORM_EQUILIBRIUM.md` has also passed
+the complete assembly/delta check at SHA256
+`4757f61a3e57ea6f328d1642136d52d4db2b012a160cda487e1ff167050e4a2c`.
+The separate constant-inverse theorem correctly retains K≤0.
+This notebook retains the independent boundary calculations and the proved
+extension of the raw existence class. The substantive review is in
 `feedback/CODEX_BROUWER__MATCHING_JOINT_PRODUCER__BY_CODEX_NOETHER.md`.
 No other conference feedback was read.
 
@@ -80,8 +95,8 @@ with the same twelve caps. Thus the participant comparison means exactly
 
 Using the accepted strict theorem, every table in this weak class has a fixed
 uniform-equilibrium payoff. This assertion is a mathematical consequence,
-not a further supplied-strategy interface. Its standalone packaging remains
-to be byte-reviewed.
+not a further supplied-strategy interface. Its complete standalone packaging
+has passed the separate byte-bound review recorded above.
 
 For δ>0 form r^δ by changing only the twelve off-diagonal singleton
 coordinates: increase r_i({f(i)}) by δ, and decrease each of
@@ -193,6 +208,101 @@ pairs have a participant withdrawal; every triple has a withdrawal gain
 fails because every own singleton is one. These exclude pure-exit raw
 producers, not arbitrary stationary mixed profiles.
 
-Concrete next question: independently test the residual mixed passive signs
-with each scheduled pair exposing a negative K and at least one positive K.
-The current nonnegative cone proof does not apply there.
+## Arbitrary passive signs: independent outer-radius derivation
+
+Status: the following load-bearing argument was independently derived before
+the author's full draft, and the complete stronger handoff has now passed my
+separate byte-bound review at SHA256 c97c1320ef98c0d68fb866ba532effbe1d2c666f99b328ba3d08b4a3fcb5c6c6.
+Retain the strict matching signs, participant inequalities and twelve caps,
+but permit every K_i to be an arbitrary real number. Write
+
+    h_i=Γ_i,f(i)>0,       d_i=Π_i+b_i>0,
+    α_i=max(−Π_i,0)<b_i,
+    K_i⁺=max(K_i,0),      K_i⁻=max(−K_i,0).
+
+Move the positive passive coefficient to the left, as well as the negative
+participant square term. Define
+
+    B(X)_i,a(i)=−b_i+α_i X_a(i)/(1+X_a(i)),
+    B(X)_i,f(i)=h_i+K_i⁺ X_o(i),
+    B(X)_i,o(i)=Γ_i,o(i),       B(X)_ii=0,
+
+    N⁺_i(X)=d_i X_a(i)(X_f(i)+X_o(i)+X_f(i)X_o(i))
+              +max(Π_i,0)X_a(i)²/(1+X_a(i))
+              +K_i⁻ X_f(i)X_o(i).
+
+At equality B(X)X=N⁺(X), the two moved terms exactly recover the original
+passive equations for arbitrary K. After the favorite column permutation,
+the new favorite coefficient is an increased positive diagonal. Off-diagonal
+signs and their strongly connected graph remain strict. The original vector
+u=M⁻¹1>0 satisfies M(X)u≥1. The Neumann-series proof therefore gives
+B(X)⁻¹>0 on every finite closed coordinate cube. Its diagonal D(X) is
+now variable; using the actual positive diagonal in the scaling is necessary.
+
+The key point is to select the cube radius before its inverse minimum and
+the resulting simplex lower bound. Set F(X)=B(X)⁻¹N⁺(X), and suppose
+X>0 and F(X)=ηX with 0<η≤1. Since both other coefficients in row i
+of B remain strictly negative,
+
+    d_i X_a(i)(X_f(i)+X_o(i)+X_f(i)X_o(i))
+      ≤N⁺_i(X)
+      =η(B(X)X)_i
+      <η[h_i X_f(i)+K_i⁺ X_f(i)X_o(i)].
+
+Dividing by the strictly positive X_f(i) gives
+
+    d_i X_a(i)
+      <η(h_i+K_i⁺X_o(i))/(1+X_o(i)+X_o(i)/X_f(i))
+      ≤max(h_i,K_i⁺).
+
+Thus every such eigenpoint obeys
+
+    ∑_i X_i < T:=∑_i max(h_i,K_i⁺)/d_i.
+
+Choose R>T, then take uniform positive inverse bounds on the finite cube
+0≤X_i≤R. Set κ=m_R/(4L_R). On Δκ×[r,R] the normalized image is
+in Δκ. Compression at a sufficiently small r>0 follows from the same
+uniform O(r²) estimate. At a fixed normalized direction on the outer
+radius, F(Rx)=ηRx with η=∑F(Rx)/R. If the radial clamp fixed R,
+its sign would require η≤1, contradicting the eigenpoint bound R>T.
+The inner boundary is excluded by compression, and the interior fixed point
+solves the original four equations. Uniform cubic expansion on a cone whose
+κ itself depends on R is not needed.
+
+An exact mixed-sign regression takes b_i=1, Π_i=−1/2, X_i=1,
+
+    K=(1,1/2,−1,−1/2),
+    h=(9/4,11/4,17/4,15/4).
+
+Both other singleton gaps remain −1, and h_i=13/4−K_i. Every h_i>2,
+so ΓP is strictly diagonally dominant with positive diagonal and strictly
+negative connected off-diagonal graph; its inverse is strictly positive.
+The new moved equation has BX=N⁺=(3/2,3/2,5/2,2). At q_i=1/2,
+U_i=s_i−1/4 and W_i=s_i+1/2. All caps may be at equality and the
+singletons may be signed. Each scheduled pair has both a positive and a
+negative K outsider, so neither pure-pair arm supplies this regression.
+
+This derivation removes the apparent circularity in the arbitrary-K
+fixed-point route. The actual phase values and deviation inequalities still
+depend only on d_i>0 and the twelve caps; their proof is unchanged. The weak
+matching extension also retains arbitrary K under the same twelve-coordinate
+reward approximation. These conclusions are accepted ordinary mathematics.
+The author's slightly weaker numerator bound gives exactly the same finite
+radius and is sufficient.
+
+The complete mixed-K fixture also passes exact independent arithmetic. Its
+determinant is33583397/20480 and its inverse is strictly positive. The triple
+determinants are257/20 or53/4, with negative inverse diagonal entries. Every
+active endpoint and passive Continue equals the claimed phase value; passive
+Quit remains17/50 or31/72, with margins398/175 and2249/1152. The changed
+favorite gap h₀=249/40 and K₀=1 cancel in the passive equation because
+X_o(0)=1/5. The four all-sure-displacement/singleton-row-sum ratios are
+−440/169,−96/37,−104/37,−112/37, pairwise distinct; hence the affine
+response-quotient exclusion survives the loss of equal row sums. In the
+proper-three contradiction, replace the favorite terminal level by289/40
+when i=0; Π+289/40>9 still holds. No full-support exclusion is inferred.
+
+Concrete next question: what complete producer can remove a genuinely new
+remaining restriction: the matching geometry, participant comparison, or
+twelve outsider caps? Their removal is not justified by this proof. The
+final assembled artifact has passed its separate byte-bound acceptance.
