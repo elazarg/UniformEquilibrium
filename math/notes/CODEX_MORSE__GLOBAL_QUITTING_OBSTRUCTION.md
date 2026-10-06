@@ -4476,3 +4476,52 @@ not preserve that owner's payoff. No such replacement is inferred.
 The next concrete question is whether the full tied-response information
 at this actual zero-owner minimum provides a source-preserving temporal
 replacement; scalar payoff/cap data alone have not supplied it.
+
+### Payoff-only first-coalition exclusion is already consumed by ambient Q
+
+The attempted consumer here was to forget the cap coordinates in (124)
+and exclude every actual payoff u≥s by the nonconvex first-coalition law.
+For example, write a,b for the exact first-coalition masses of 01 and23.
+Independence gives a+b+2√(ab)≤1. If the two pair reward totals are at
+most21/5, every other outcome total is at most7/2, each pair has zero
+payoff in the other group's two coordinates, every other group's outcome
+sum is at most7/2, and the two group singleton sums are2, then u≥s
+would imply
+
+    a+b≥5/7,       a,b≥5/21.
+
+These inequalities contradict a+b+2√(ab)≤1, since the left side is
+at least25/21. This is a correct use of the actual nonconvex law, but it
+cannot narrow the remaining Fin4 class: it already fails the ambient-Q
+necessary condition using only its singleton columns.
+
+The exact reason is general. Let Γ_ij=r_i({j})−s_i, Γ_ii=0.
+For textbook-Q Γ solve the LCP at offset−1. Its solution z≥0 satisfies
+Γz≥1, hence z≠0. With λ=z/Σz, every coordinate of Γλ is positive.
+The resulting singleton lottery has payoff
+
+    u=Σ_j λ_j r({j})>s
+
+coordinatewise. This lottery is an actual independent stopping law, not a
+public convex mixture: choose any ordering of players, give player j one
+solo date with hazard λ_j divided by the remaining weight, skip zero
+weights, and give the last positive-weight player hazard1. The first
+quitter probabilities are exactly λ and Never has probability zero.
+Nothing in this realization controls the behavioral caps.
+
+The inspected declaration
+`isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff` in
+`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+derives literal ambient textbook Q from bare Fin4 no-UE, with no supplied
+normality, reward bound, or sign assumption. Its companion
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+already produces λ. For the numerical attempted criterion, every singleton
+total is at most7/2<Σs_i=4, so every Γ column has negative sum. Summing
+the inequalities Γz≥1 immediately contradicts z≥0. Thus that raw class
+is already excluded before its pair-mass restriction is used.
+
+This payoff-only consumer is retired, not retained as a new interface or
+an export candidate. Any use of first-coalition geometry in the surviving
+class must retain cap/best-response information that the displayed
+sequential singleton lottery does not preserve. In particular (124)'s
+zero-owner equality and its face-minimality cannot be discarded.

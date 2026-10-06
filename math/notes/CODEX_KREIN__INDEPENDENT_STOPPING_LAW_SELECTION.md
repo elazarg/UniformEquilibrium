@@ -1,12 +1,16 @@
 # Independent stopping-law selection
 
-The final **Larger-eigenvalue four-clock branch** is a new complete ordinary
-candidate, not yet independently reviewed. It gives a raw open singleton-
-matrix criterion with arbitrary signed own singletons and arbitrary
-nonsingleton rewards, and constructs four approximate independent clocks
-with one fixed UE target. Its full-core fixture has no stationary
-equilibrium and fails every cyclic relabeling of the implemented smaller-
-root test. No export or Lean implementation claim is made for this candidate.
+The final **Larger-eigenvalue four-clock branch** has two independent
+mathematical and final-artifact PASS reviews. Its canonical frozen result is
+[`LARGER_EIGENVALUE_SIGNED_FOUR_CYCLE_UNIFORM_PAYOFF.md`](../exports/LARGER_EIGENVALUE_SIGNED_FOUR_CYCLE_UNIFORM_PAYOFF.md),
+SHA256 `df0a17ebed5f9228e4e557304f2c82e5b73a56cbcee05312dbc178f707cdc1c6`.
+It gives a raw open singleton-matrix criterion with arbitrary signed own
+singletons and arbitrary nonsingleton rewards, and constructs four
+approximate independent clocks with one fixed UE target. Its full-core
+fixture has no exact stationary equilibrium and fails every cyclic
+relabeling of the implemented smaller-root test. The new producer is
+ordinary mathematics, not yet claimed Lean-checked. Its original proof
+below is retained unchanged.
 
 Identity: CODEX_KREIN. Ordinary mathematics, not Lean-checked. The positive
 selected-family theorem has independent review and is recorded in
