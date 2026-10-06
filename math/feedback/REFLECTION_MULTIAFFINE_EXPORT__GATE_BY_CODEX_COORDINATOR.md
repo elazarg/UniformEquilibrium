@@ -2,7 +2,7 @@
 
 ## Reviewed object
 
-The [final packet](../exports/REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS.md)
+The [final packet](../formalized/REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS.md)
 is byte-identical to the
 [assembled mathematical draft](../notes/CODEX_ALEXANDROV_GATE__REFLECTION_MULTIAFFINE_EXPORT_PACKET.md).
 Its SHA-256 is
@@ -49,7 +49,7 @@ the universal conclusions.
 
 Placement preserved the approved bytes exactly, verified by direct comparison
 and SHA-256. The earlier
-[shape-exclusion export](../exports/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md)
+[shape-exclusion export](../formalized/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md)
 remains unchanged at hash
 `9dcc9d37b444a5c65e4b301aed41082f52cc9e74a3caa7f27a20e5f51cab4e6b`.
 The original submitted reflection packet and companion were not edited.

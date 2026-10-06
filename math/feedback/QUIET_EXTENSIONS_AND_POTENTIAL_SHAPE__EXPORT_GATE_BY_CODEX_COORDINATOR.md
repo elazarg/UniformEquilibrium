@@ -62,7 +62,7 @@ the main theorem constructs its child from the table.
 
 ## Quitting-potential shape restrictions
 
-[Frozen packet](../exports/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md).
+[Frozen packet](../formalized/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md).
 Approved SHA-256:
 
 ```text

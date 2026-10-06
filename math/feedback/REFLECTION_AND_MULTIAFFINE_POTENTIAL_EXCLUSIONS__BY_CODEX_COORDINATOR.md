@@ -28,7 +28,7 @@ polynomial and each supplied positive rational tolerance; the rational
 root is only approximately Nash.
 
 These conclusions extend the
-[shape exclusions](../exports/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md).
+[shape exclusions](../formalized/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md).
 Neither quasiconvexity nor the previous nonpositive-diagonal quadratic
 argument covers all the excluded functions. No additional unproduced
 strategy or chronological witness is assumed.

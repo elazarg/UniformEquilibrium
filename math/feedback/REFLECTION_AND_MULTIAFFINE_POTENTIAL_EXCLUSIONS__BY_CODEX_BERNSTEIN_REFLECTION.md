@@ -50,7 +50,7 @@ Nash for the rational root nor a denominator bound.
 
 ## Missing scope and importance
 
-The [existing shape export](../exports/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md)
+The [existing shape export](../formalized/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md)
 excludes quasiconvex and regular scalar-additive classes. The
 [nonpositive-diagonal quadratic note](../notes/CODEX_FRECHET_CYCLE__NONPOSITIVE_DIAGONAL_QUADRATIC_ROOT_DRIFT_EXCLUSION.md)
 explicitly leaves an indefinite Hessian with a positive diagonal entry open.

@@ -98,7 +98,7 @@ check restricted to that route. `Literature/README.md` was read; no paper
 theorem or unbuilt Literature claim is needed as a proof input.
 
 The entire source packet, companion, and credited
-[shape-exclusion export](../exports/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md)
+[shape-exclusion export](../formalized/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md)
 were inspected. The old probe and global-minimum facts are credited prior
 mathematics. The adaptive reflection and corner comparison supply the new
 function-class exclusions; no assertion of publication novelty is made.

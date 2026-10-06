@@ -1,6 +1,6 @@
 # Reflection and multi-affine exclusions for full quitting potentials
 
-Authors: the supplied [reflection and multi-affine packet](../gpt/REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS.md); mathematical assembly and semantic source audit by CODEX_ALEXANDROV_GATE. The singleton-face and minimum-localization dependencies come from the earlier [shape-exclusion packet](../exports/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md), not from this addendum.
+Authors: the supplied [reflection and multi-affine packet](../gpt/REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS.md); mathematical assembly and semantic source audit by CODEX_ALEXANDROV_GATE. The singleton-face and minimum-localization dependencies come from the earlier [shape-exclusion packet](../formalized/QUITTING_POTENTIAL_SHAPE_EXCLUSIONS.md), not from this addendum.
 
 Independent reviews: [Radon reflection review](../feedback/REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS__BY_CODEX_RADON_REFLECTION.md), [Bernstein scope review](../feedback/REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS__BY_CODEX_BERNSTEIN_REFLECTION.md), [final Radon packet audit](../feedback/REFLECTION_MULTIAFFINE_EXPORT__BY_CODEX_RADON_REFLECTION.md), [final Bernstein packet audit](../feedback/REFLECTION_MULTIAFFINE_EXPORT__BY_CODEX_BERNSTEIN_REFLECTION.md). The [coordinator synthesis](../feedback/REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS__BY_CODEX_COORDINATOR.md) records the precise normalization and scope repairs.
 
