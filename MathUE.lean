@@ -655,6 +655,8 @@ import MathUE.Topology.CoveringLoopFamilyEndpoint
 import MathUE.Topology.QuotientFiberCollision
 import MathUE.Topology.CoveringImageIncidence
 import MathUE.Topology.SeparatelyAffineImageLoopFamily
+import MathUE.Topology.SeparatelyAffineCoveringEndpoint
+import MathUE.Topology.SeparatelyAffineComplexLoopLift
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
 import MathUE.Topology.CountableObservation

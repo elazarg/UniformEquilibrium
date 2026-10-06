@@ -803,10 +803,17 @@ packet shares the child complementarity and actual outer-exit adapters with
 the one-joint packet; its nonlinear two-row selector is a separate source unit.
 The signed pair-core same-sign packet likewise requires its literal signed
 source adapters; none follows merely from these protected-set consumers.
-Its chosen-return-root route also needs existential versions of compact
-minimum localization and downward return, separated from zero absorption on
-every exact root at the minimum. The present universal-return interfaces do
-not silently supply that selected-root scope.
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_on_subbox`
+(`UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`)
+now supplies the conditional Fin4 consumer for a chosen returning exact root
+at every strictly-below-singleton source in the same boxed sublevel domain.
+Its box bound may lie strictly above the reward bound and at most two above it.
+Canonical compact-minimum localization and downward charge use existential
+return; their old universal wrappers retain their original scopes. Only the
+universal minimum wrapper concludes zero absorption for every exact root at
+the minimum. The raw signed-pair, boxed-charge and mixed-trap producers remain
+separate: a pure exact pair must be split off as a direct UE alternative,
+not silently asserted to satisfy chosen return.
 
 The mixed-premium-trap packet shares the actual boxed charge producer for
 larger traps and the full clipped-map/local nonlinear index adapter for signed
@@ -893,9 +900,15 @@ assumption; canonical inverse identification uses only a nonzero child gap.
 internally constructs the homogeneous witness from literal raw singleton rows
 and gives actual Fin4 UE at the lower endpoint. The thin original-table facade
 of the same name (`UniformEquilibrium/Quitting/Cycles/CyclicChildJointPhaseSingletonExits.lean`)
-supplies those rows itself. Off-endpoint R0 is checked, but low-degree and
-high-passive-inverse UE exits remain separate, as do the packet's explicit
-finite-law and quantitative constants and stress fixtures.
+supplies those rows itself. `exists_uniformPayoff_of_passiveThreshold`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicChildPassiveInverseExit.lean`)
+internally transports the actual deleted-child inverse and outside-row weights
+and supplies UE from the three literal passive numerator tests, including
+equality. Its two-threshold specialization uses v below one; harm parameters
+are unrestricted for this exit. `exists_uniformPayoff_of_passiveExit` in the
+original-table facade supplies the literal packet threshold. Off-endpoint R0
+is checked, but the low-degree UE exit remains separate, as do the packet's
+explicit finite-law and quantitative constants and stress fixtures.
 The shared padded compiler uses the actual three-times-scale period, not the
 packet's minimal one-plus-twice-scale period.
 The global two-joint packet also requires weakening the shared refinement
@@ -1727,9 +1740,15 @@ an explicit same-parameter relative-homotopy premise.
 `SeparatelyAffinePair.prefixReturnFamily`
 (`MathUE/Topology/SeparatelyAffineImageLoopFamily.lean`) supplies the literal
 continuous prefix-plus-return image-loop family and its same-time image
-homotopies from the affine source. The final Path-homotopy to slice-relative-
-homotopy composition, concrete punctured-plane covering and winding contradiction
-remain separate; no integer index oracle or whole-image conclusion is assumed.
+homotopies from the affine source. `SeparatelyAffinePair.liftPath_imageLoop_apply_one`
+(`MathUE/Topology/SeparatelyAffineCoveringEndpoint.lean`) composes those actual
+homotopies with the compact-incidence covering endpoint law.
+`SeparatelyAffinePair.exists_closed_logarithmic_lift`
+(`MathUE/Topology/SeparatelyAffineComplexLoopLift.lean`) specializes it to the
+exponential covering of the punctured complex plane, producing a continuous
+logarithmic lift with equal endpoints for every translated image loop.
+This is not a nullhomotopy in the original image. The planar bridge to Sorin's
+Proposition 11 remains separate; no integer index oracle is assumed.
 
 Primary-source discovery located the two-player flat-security prescription in
 [Tomala, *Jeux répétés* (2006)](https://www.numdam.org/item/10.5802/xups.2006-02.pdf),
