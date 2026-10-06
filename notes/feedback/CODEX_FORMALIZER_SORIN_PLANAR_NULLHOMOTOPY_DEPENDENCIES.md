@@ -94,8 +94,45 @@ library obligation.
   (`Mathlib/AlgebraicTopology/FundamentalGroupoid/SimplyConnected.lean`)
   packages the eventual conclusion; it does not prove the planar criterion.
 - No matching selected planar filling, perforated-disk retraction, or general
-  Jordan-boundary exponential obstruction was found in the scoped library
-  audit. These are substantive known-topology formalization tasks.
+  Jordan-boundary exponential obstruction was available at the initial scoped
+  library audit. The generic selected-filling development now lives in
+  `MathUE/Topology/SelectedComponentFill.lean` and its local-path-connectivity
+  companion; consult their checked declarations for current scope. The
+  perforated-disk and Jordan-boundary tasks remain separate.
+
+## Exact remaining disk-model dependencies
+
+Fischer–Zastrow's proof of Theorem 15 uses the following known results, not a
+supplied disk-model callback:
+
+- The Riemann mapping theorem for the relevant complementary domains.
+  The pinned `Mathlib/Analysis/Complex/RiemannMapping.lean` explicitly contains
+  only partial results toward that theorem. Its filename does not establish
+  availability of the final conformal equivalence.
+- Continuous extension of the conformal map to the closed disk when the
+  relevant boundary is locally connected. The paper cites Theorem 2.1 of
+  C. Pommerenke, *Boundary Behaviour of Conformal Maps*, Springer (1992),
+  its reference [17]. The exact book theorem must be inspected before
+  selecting a formal telescope; the citation in Fischer–Zastrow is not a
+  checked Lean boundary-extension API.
+- Descent of annular deformation retractions through that boundary quotient,
+  preserving the boundary pointwise. The resulting disk model need not consist
+  of round Euclidean holes.
+- Lemma 16's null-sequence property for bounded complementary components of
+  a planar Peano continuum. Its proof uses planar separation of polygonal
+  arcs and disks, followed by a contradiction to local path connectivity.
+- Infinite gluing of the componentwise retractions, controlled by the
+  null-sequence bound, as in Theorem 15's continuity proof.
+- A nonclosed exponential lift for a topological disk boundary about an
+  interior point, and based transport through the resulting retraction.
+  The explicit round-circle calculation does not supply a Jordan/Schoenflies
+  theorem or this general disk-boundary step.
+
+No matching Jordan/Schoenflies, conformal boundary-extension, or complete
+perforated-disk owner was found in the scoped pinned libraries. The next
+canonical loop-filling adapter can construct the actual compact Peano set
+contained in the original payoff image, but does not discharge these planar
+dependencies or restrict the original proposition to semialgebraic images.
 
 ## Finite-simplex alternative is narrower
 

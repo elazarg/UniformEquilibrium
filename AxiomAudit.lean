@@ -166,6 +166,7 @@ import MathUE.FiniteDirectedPeriod
 import MathUE.FiniteEmpiricalConvexity
 import MathUE.FiniteLinearChargedCapacity
 import MathUE.FiniteLinearCompatibility
+import MathUE.FiniteNextToTopSymmetricMean
 import MathUE.FinitePaidCollision
 import MathUE.FinitePartitionAffineSign
 import MathUE.FinitePivotOrbit
@@ -708,6 +709,7 @@ import MathUE.Topology.ComplexCircleLogarithmObstruction
 import MathUE.Topology.ConnectedConvexHullAffineStep
 import MathUE.Topology.ConnectedConvexHullRepresentation
 import MathUE.Topology.ConnectedFixedPointContinuation
+import MathUE.Topology.CoordinateAffineAvoidance
 import MathUE.Topology.CountableObservation
 import MathUE.Topology.CountableObservationRegularity
 import MathUE.Topology.CoveringImageIncidence
@@ -750,6 +752,8 @@ import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.QuotientFiberCollision
 import MathUE.Topology.RectangularPoincareMiranda
+import MathUE.Topology.SelectedComponentFill
+import MathUE.Topology.SelectedComponentFillLocallyPathConnected
 import MathUE.Topology.SeparatelyAffineComplexLoopLift
 import MathUE.Topology.SeparatelyAffineCoveringEndpoint
 import MathUE.Topology.SeparatelyAffineFiberConnectors
@@ -3158,6 +3162,7 @@ import UniformEquilibrium.Quitting.Root.OneDateNeverHorizonNash
 import UniformEquilibrium.Quitting.Root.OneDateNeverNashDebt
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionPayoff
+import UniformEquilibrium.Quitting.Root.PairInactiveGapNumerator
 import UniformEquilibrium.Quitting.Root.PairedProductRoot
 import UniformEquilibrium.Quitting.Root.PersistentBaseInducedGame
 import UniformEquilibrium.Quitting.Root.PlayerReindex

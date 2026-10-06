@@ -797,8 +797,17 @@ the valid-weight family and the canonical domain at any fixed box bound, not
 the computed reward-bound constant. No weak analytic exclusion is claimed.
 Packet-specific reductions and fixtures remain separate obligations.
 
-The boxed-Nash-charge packet shares the convex-return analytic owner but still
-requires its actual boxed charge producer. The global two-joint cyclic-child
+The boxed-Nash-charge packet shares the selected-return analytic consumer but
+still requires its actual boxed charge producer.
+`Math.NextToTopSymmetric.value_le_sum_pow_div_card_pow`
+(`MathUE/FiniteNextToTopSymmetricMean.lean`) now proves its literal next-to-top
+elementary symmetric bound for every finite inventory of at least three
+coordinates, including boundary and zero vectors. The supplied compact-maximum
+averaging proof is formalized, not replaced by a Fin4-only estimate.
+Actual trap coefficient sums, sure-support cases, interior odds charge and
+finite-trap selection of a common reward-sized box remain source obligations.
+No equality-margin weak theorem is inferred from the packet's nonstrict
+coefficient bounds and strict charge margin. The global two-joint cyclic-child
 packet shares the child complementarity and actual outer-exit adapters with
 the one-joint packet; its nonlinear two-row selector is a separate source unit.
 The signed pair-core same-sign packet likewise requires its literal signed
@@ -836,6 +845,14 @@ root census or degree obstruction. The triple packet additionally requires
 its full three-player negative determinant, sure cascade and pair-tie/source
 restoration, with the pure-core alternative separated. Its weak localized
 passive perturbation is not the uniform all-passive increment consumer above.
+`quittingPairInactiveGapNumerator_update`
+(`UniformEquilibrium/Quitting/Root/PairInactiveGapNumerator.lean`) now derives
+the literal cleared four-atom inactive endpoint numerator and its own
+annotation slope, the negative product of the two joining gaps. When that
+product is nonzero, the canonical coordinate-affine density lemma gives
+simultaneous avoidance of finitely many such zero sets in every nonempty open source set;
+unused core players remain among inactive recipients. This is source-generic
+annotation avoidance, not a root classification, Jacobian sign or degree sum.
 
 `eventually_exactRoot_absorption_lt_of_exact_fiber_absorption_zero` and
 `tendsto_exactRoot_absorption_zero_of_exact_fiber_absorption_zero`
@@ -1793,6 +1810,17 @@ closed set and the starting complement path component. It needs no metric or sep
 assumption. Neither result is the planar image-nullhomotopy theorem.
 The source-backed remaining route is recorded in
 `notes/feedback/CODEX_FORMALIZER_SORIN_PLANAR_NULLHOMOTOPY_DEPENDENCIES.md`.
+`isPathConnected_selectedComponentFill` (`MathUE/Topology/SelectedComponentFill.lean`)
+constructs actual paths in an arbitrary selected union of full complement
+components. Its closedness requires ambient local path-connectedness;
+compactness additionally requires a compact ambient carrier. The path result
+instead uses ambient path-connectedness and a closed path-connected source.
+`locallyPathConnectedSpace_selectedComponentFill`
+(`MathUE/Topology/SelectedComponentFillLocallyPathConnected.lean`) proves local
+path-connectedness from ambient local path-connectedness, a closed source and
+local path-connectedness of that source subtype. No finite selected family,
+metric, separation or global connectedness premise is added. The actual
+canonical loop-fill instantiation and general planar disk model are separate.
 
 Primary-source discovery located the two-player flat-security prescription in
 [Tomala, *Jeux répétés* (2006)](https://www.numdam.org/item/10.5802/xups.2006-02.pdf),

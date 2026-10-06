@@ -231,6 +231,7 @@ import MathUE.FinitePowerSumRoot
 import MathUE.FiniteSerialRelation
 import MathUE.FiniteSerialRelation.MarkedTwoCycle
 import MathUE.FiniteWeightedSelection
+import MathUE.FiniteNextToTopSymmetricMean
 import MathUE.FinFourCoalitionCycle
 import MathUE.FinFourOrderedCoalitionCycle
 import MathUE.FixedRatioConvexity
@@ -661,6 +662,9 @@ import MathUE.Topology.SeparatelyAffineComplexLoopLift
 import MathUE.Topology.AmbientDegreeNonlinearLocalIndex
 import MathUE.Topology.ComplexCircleLogarithmObstruction
 import MathUE.Topology.PathFirstClosedSetHit
+import MathUE.Topology.CoordinateAffineAvoidance
+import MathUE.Topology.SelectedComponentFill
+import MathUE.Topology.SelectedComponentFillLocallyPathConnected
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
 import MathUE.Topology.CountableObservation
