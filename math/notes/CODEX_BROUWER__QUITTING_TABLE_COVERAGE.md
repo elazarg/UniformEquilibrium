@@ -34,6 +34,15 @@ export candidate. The remaining barrier search must retain nonconvex
 coupling; convexifying continuation values would silently add public
 randomization.
 
+The later **First-coalition forcing loses the Never response** section
+rules out a more specific nonconvex search shortcut. With nonnegative
+participant premiums, payoff floors and every raw one-date joint-withdrawal
+inequality are simultaneously asymptotically feasible by actual independent
+stationary laws. An exact two-player example retains a fixed full Never
+gap. Thus first-coalition geometry must be coupled to opponent-survival
+information; it cannot replace complete response control. This is an
+internal method restriction, not new UE coverage.
+
 The **A solo-0 bridge pays a positive outsider cap** section is a
 complete ordinary construction with two independent PASSes and final
 artifact checks. The frozen standalone is
@@ -3309,3 +3318,131 @@ whether a nonconvex invariant can preserve independent-coalition geometry
 through (B1), or whether that same geometry supplies a justified
 de-randomization of the public averaging at a positive-minimum source.
 Neither a general invariant nor that de-randomization has been produced.
+
+## First-coalition forcing loses the Never response
+
+### Restricted negative attempt and literal data
+
+This section is a completed internal falsification of one proposed
+raw-table route to pair-mass forcing. It does not assert that every
+first-coalition argument fails. Assume for every nonempty S and i∈S
+
+    r_i(S)≥s_i:=r_i({i}).                              (F1)
+
+Fix independent stopping laws, let μ_S be their finite first-coalition
+probabilities, and let u_i=∑_S μ_S r_i(S). Never pays zero. Write d_i for
+the COMPLETE terminal best-response cap minus u_i. Two necessary
+low-debt tests are
+
+    u_i≥s_i−d_i,
+    L_i(μ):=∑_{S∋i, |S|≥2} μ_S [r_i(S\{i})−r_i(S)]≤d_i.   (F2)
+
+The first follows from forced Quit at the first date and (F1). For the
+second, use the legal independent deviation that samples the prescribed
+own stopping time T_i and moves each finite T_i to T_i+1; Never stays
+Never. If the original first coalition excludes i, the outcome does not
+change. If it jointly contains i, the other quitters still stop at T_i
+and the exact gain is the bracket in (F2). If it is the singleton {i},
+the new first coalition at T_i+1 contains i, unless an opponent has already
+stopped at that same next date, which still yields a coalition containing
+i. Its reward is at least s_i by (F1). There is no intermediate integer
+date. Consequently this last event has nonnegative gain, proving (F2).
+The original all-Never event is unchanged. This proof includes atoms,
+sure stopping and arbitrary infinite support.
+
+The attempted negative mechanism was to combine these linear tests with
+the genuinely nonconvex independent first-coalition restrictions, such as
+sqrt(μ_A)+sqrt(μ_B)≤1 for distinct pairs, and force a forbidden corner.
+The following producer prevents that mechanism throughout (F1).
+
+### Exact feasibility producer for every table satisfying (F1)
+
+For every δ>0 there is an actual independent, almost-surely absorbing
+stationary profile whose first-coalition law satisfies
+
+    ∑_S μ_S=1,       u_i≥s_i,       L_i(μ)≤δ for every i.    (F3)
+
+Choose an exact finite root Nash vector q at continuation v=s−δ1.
+The needed finite-game existence is the literal declaration
+`exists_isZeroQuittingRootNash` in
+`UniformEquilibrium/Quitting/Root/NashExistence.lean`, inspected with
+its imported endpoint-Nash interface. No stationary equilibrium conclusion
+is being taken from that declaration.
+
+Let c=∏_j(1−q_j), a=1−c, c_{−i}=∏_{j≠i}(1−q_j), Q_i be the
+forced-Quit endpoint and C_i(v) the forced-Continue endpoint. By (F1),
+Q_i≥s_i. Exact Nash therefore makes the prescribed one-row value
+w_i≥Q_i≥s_i. Also a>0: at q=0, every player's Quit-minus-Continue gap
+is δ>0, so all Continue is not an exact root.
+
+Repeat q independently at every live date. Its first-coalition law is
+the one-row nonempty-coalition law divided by a, and its terminal payoff
+u=A(q)/a satisfies
+
+    a u=w−c(s−δ1)≥a s+cδ1.
+
+Write g_i=Q_i−C_i(v). Expanding over opponent coalitions gives the exact
+identity
+
+    L_i(μ)=(q_i/a)[c_{−i}δ−g_i].                       (F4)
+
+If q_i>0, exact Nash gives g_i≥0. If q_i=0, both sides vanish.
+Since q_i c_{−i} is the one-row singleton-i probability, it is at most
+a. Thus (F4) gives L_i(μ)≤δ, including sure q_i and vanishing opponent
+survival. This proves (F3).
+
+Every law just constructed already satisfies ALL valid independent
+first-coalition constraints, not just the pair square-root inequalities.
+Taking a subsequential limit of its finite-dimensional μ vectors as
+δ→0 preserves ∑μ=1, u≥s, L≤0, and every closed necessary condition
+on independent first-coalition laws. Consequently those conditions plus
+(F2) cannot force a contradictory zero-error pair corner on a table
+satisfying (F1). This is a statement about the restricted tests, NOT about
+the true exploitability of the constructed profiles.
+
+The actual source consumer
+`hasTerminalExploitabilityGap_half_affinePairRootLeastCrossing` in
+`UniformEquilibrium/Quitting/Terminal/PairMassForcingConsumer.lean`
+requires pair lower bounds for EVERY actual profile in terms of its FULL
+exploitability. The weaker tests (F2) cannot by themselves supply that
+input. I inspected its hypotheses and the preceding
+`quittingTerminalExploitability_ge_affinePairRootLeastCrossing`; neither
+produces the required forcing inequalities from reward data.
+
+### Full response gap survives the restricted tests
+
+Here is an exact two-player regression, not a counterexample to UE:
+
+    r({1})=(1,2),     r({2})=(2,1),     r({1,2})=(1,1).
+
+Both own singletons and every participant reward are1. For continuation
+(1−δ,1−δ), q_1=q_2=q=δ/(1+δ) is an exact root, since
+
+    Q_i=1,       C_i=(1−q)(1−δ)+2q=1.
+
+For its stationary repetition,
+
+    μ_{12}=q/(2−q),        u_i=(3−2q)/(2−q),
+    L_i(μ)=q/(2−q)≤δ.
+
+Thus u_i≥1 and L_i→0. But an actual Never deviation receives2 surely,
+and no reward exceeds2, so the COMPLETE cap is exactly2 and
+
+    d_i=1/(2−q) → 1/2.
+
+Pure single-quitter play is an exact equilibrium of this game. The example
+does not establish a positive game-level gap, and its constant is not an
+optimization target. It isolates the information discarded by (F2): a
+vanishing probability of colliding with an opponent on one's own sampled
+date does not control the gain from waiting for that opponent altogether.
+
+### Next mechanism boundary
+
+A useful nonconvex barrier must retain opponent-only continuation/survival
+data or an equivalent full cap. Raw coalition frequencies plus the joint
+withdrawal tests do not suffice, even when paired with every exact
+independent first-coalition inequality. The concrete next question is
+whether full Never gains can be charged to those additional coordinates
+under EVERY product prefix, without replacing private independence by
+public mixing or assuming an exact finite-menu equilibrium selector.
+No such global invariant or approximate all-player producer is claimed.
