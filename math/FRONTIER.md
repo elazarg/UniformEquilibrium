@@ -440,6 +440,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the weak crossed-matching singleton signs, participant comparisons, and twelve outsider caps specified below | UE for arbitrary signed own singletons and arbitrary passive pair rewards. The strict standard-Q branch produces four proper rates and an exact two-phase terminal Nash profile; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
 | Fin4: the below-singleton joint-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile. A separate full sixty-coordinate reward neighborhood is also covered. The phase values may all lie below own singletons. This is reviewed mathematics awaiting formalization. |
 | Fin4: the opposite-sign matching-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile, with one pair's passive values below own singletons and the other pair's above. Eight averaged-pair/triple caps suffice; individual cross-pair caps are unnecessary. This is reviewed mathematics awaiting formalization. |
+| Fin4: the signed inverse-column, pair-coefficient and twelve outsider-cap tests specified below | UE from a directly produced proper two-phase terminal Nash profile. The inverse may have negative columns, scheduled singleton comparisons may be favorable, and own rewards are signed. No utility ordering is reversed. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -1156,6 +1157,49 @@ negative-Π_B tests. It does not assert a full reward-space neighborhood,
 absence of every stationary equilibrium, or unrestricted Fin4 coverage.
 This is reviewed mathematics awaiting formalization, with the same tracked
 periodic semantic consumer.
+
+The **signed inverse-column criterion** chooses any partition into pairs
+A,B, with mate a(i) and opposite pair O(i). For the actual invertible Γ
+choose signs σᵢ∈{−1,1} and require
+
+    G=Γ⁻¹diag(σ)>0 entrywise,
+    Πᵢ=rᵢ({i,a(i)})−sᵢ,       Kᵢ=rᵢ(O(i))−sᵢ,
+    cᵢ=Πᵢ−Γ_{i,a(i)},
+    σᵢcᵢ>0,       σᵢΠᵢ≥0,       σᵢKᵢ≤0.
+
+Let m=min G, L=max G, κ=m/(4L), and
+A₀=4mκ³∑[i]σᵢcᵢ>0. Choose a finite R>0 with A₀R²>1. Require
+
+    rᵢ({i}∪T)≤sᵢ−max(−cᵢ,0)(1+R)²/(2κ)
+                    for every i and every nonempty T⊆O(i).
+
+These twelve caps and the scalar/inverse inequalities are raw-table data;
+no equilibrium, hazard or continuation is supplied. Own levels are signed,
+Γ_{i,a(i)} may have either sign, and the favorable singleton map need not
+be a permutation. Multiplying equations by σ does not negate utilities.
+
+Writing O(i)={j,k}, define
+
+    Nᵢ(X)=cᵢX_{a(i)}(Xⱼ+Xₖ+XⱼXₖ)
+                +ΠᵢX_{a(i)}²/(1+X_{a(i)})−KᵢXⱼXₖ.
+
+A compact angular/radial Brouwer map produces X>0 with ΓX=N(X).
+Its radius lies strictly between two selected bounds; the fixed-point
+identity has multiplier one, rather than only a scaled eigenvector.
+The bounds κt≤Xᵢ≤t<R prove the passive action comparisons even when
+cᵢ<0 and its phase value lies below sᵢ. The two pair rows then satisfy
+exact policy recursion and every local root Nash inequality. Geometric
+deleted-opponent survival gives exact terminal Nash against all behavioral
+replacements and one fixed original-game uniform payoff.
+
+The [complete signed-column producer](exports/SIGNED_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md)
+includes a rational table with a negative inverse column and a favorable
+three-cycle with an attached player, outside the compared raw criteria.
+Its complete sure-quitter stationary census and all fourteen quiet-child
+join-row failures are exact. No absence of every stationary equilibrium
+or exclusion from unspecified local neighborhoods is claimed. This is
+reviewed mathematics awaiting formalization, using the tracked periodic
+semantic consumer above.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are

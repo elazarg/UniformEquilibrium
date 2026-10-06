@@ -270,3 +270,51 @@ Within these explicit boundaries, the signed-column criterion is a genuine
 new finite raw-table producer rather than a renamed interface or a subset
 of the inspected accepted classes. The general Fin4 conjecture is not
 settled, and no strategy-class nonexistence claim is part of this verdict.
+
+## Final standalone assembly check
+
+Final-artifact verdict: **PASS**, without unresolved mathematical objection,
+for all 675 lines of
+`../exports/SIGNED_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md`,
+SHA256 `72c207a851995fec7452a76c9f9c9a4545d41fe154d1330d98d33238f1e986e0`.
+I read the complete artifact and checked its assembly deltas independently,
+without another review. The raw hypotheses, selected-root proof and
+original-game conclusion are unchanged from the corrected reviewed surface.
+No Lean check or new checked declaration is claimed.
+
+The assembly expands the original odds identities, all sixteen endpoints,
+complete behavioral iteration and geometric horizon bound inline. Each
+expansion agrees with the independent reconstruction above. The initial
+live-zero convention and the single fixed target are explicit; unused
+reward coordinates are not silently discarded from the game. The signed
+own-level shift is applied to a new table still satisfying the raw theorem,
+not invoked as a general payoff-translation theorem with positive Never.
+
+The new fourteen-row raw J table is correct. I recomputed every child
+joining vector and omitted gain directly from the complete reward table.
+All child coordinates are nonpositive and all omitted gains strictly
+positive. In particular, child 123 uses the full background 123 and an
+omitted gain of 1000 for this raw test. That background is not asserted
+to be its child Nash profile. Its separate universal-debt-bound test uses
+the already checked mixed child hazards and positive gain
+5210405575/136773399. This distinction prevents an invalid inference
+from an unsafe selected child equilibrium to failure of a raw row.
+
+The exact join-row definition in `CappedClockParentFutureJoinCertificate`,
+in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPositiveSingletonQuietExtension.lean`,
+matches the displayed inequality. The thirteen sure-coalition child
+profiles used for the separate universal bound have the required leaving
+and joining incentives, and the mixed fourteenth profile does too.
+
+The weak-inequality repair is retained in the complete sure-owner census.
+The all-proper stationary and unspecified-neighborhood nonclaims remain
+explicit. The stronger finite raw coverage evidence, including all child
+J rows, introduces no assumed strategy, selector or neighborhood membership.
+All cited Lean source paths exist; no conference-note, review or process
+dependency supplies a mathematical step. The handoff distinguishes the
+new raw producer from the existing certificate consumers.
+
+Thus the final bytes have an independent assembly PASS for the stated
+new signed-column raw class, with the same bounded coverage scope as the
+substantive review above. The full finite-quitting conjecture remains open.

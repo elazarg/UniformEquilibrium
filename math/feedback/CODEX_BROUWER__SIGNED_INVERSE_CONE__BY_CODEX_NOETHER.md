@@ -264,3 +264,43 @@ be inferred. An arbitrary supplied-root verifier is not coverage from the
 raw table. The theorem genuinely adds the signed-column completion family
 with explicit original-game strategies; it does not claim unrestricted
 Fin4 coverage or any new Lean seal.
+
+## Final standalone assembly verdict
+
+PASS for the complete675-line
+`exports/SIGNED_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md`,
+SHA256`72c207a851995fec7452a76c9f9c9a4545d41fe154d1330d98d33238f1e986e0`.
+I read the entire artifact without reading counterpart feedback. This is
+a final-artifact/assembly check against the substantive independent audit
+above, not acceptance of a different untested theorem.
+
+The raw hypotheses, signed positive-inverse cone, explicit inner/outer
+radii, outsider buffers and original-utility root equations are unchanged.
+The two-phase proof supplies actual endpoint inequalities, payoff
+realization, arbitrary behavioral/Never and late-stopping control, and one
+fixed profile and uniform target before the accuracy and horizon
+quantifiers. No utility sign is normalized away. The quantitative horizon
+bound is conservative and retains zero live payoff.
+
+The sure-owner census now correctly uses x,y≤1/11. Its contradiction
+remains strict, so no missing boundary equilibrium is introduced. The
+stronger all-fourteen-child J table is fully included: I recomputed every
+child gain vector and omitted gain using exact fractions. I separately
+recomputed the exceptional child123 equilibrium, its two zero differences
+and omitted gain5210405575/136773399. The standalone distinguishes these
+raw nonnegative-row exclusions from the broader universal withdrawal
+bounds; the latter use genuine zero-debt, zero-Never child profiles.
+
+The complete fixture, singleton degree/source argument, all-three-word
+below-singleton exclusion, weak-unit faces, conditional-range and
+influence tests remain as reviewed. All nineteen cited Lean files are
+tracked. The implementation handoff names the actual behavioral and
+fixed-target consumers in `PeriodicCompiler.lean`, rather than presenting
+a supplied certificate as the new raw producer.
+
+Scope is preserved: this excludes an additional possible counterexample
+class with the stated signed-column and reward-buffer hypotheses. It does
+not assert absence of every proper-three stationary root, membership or
+nonmembership in unspecified local neighborhoods, unrestricted Fin4
+coverage, or a new Lean seal. No unresolved mathematical objection remains
+for these exact standalone bytes.
