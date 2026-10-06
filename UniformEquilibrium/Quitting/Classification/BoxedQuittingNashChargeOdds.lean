@@ -266,6 +266,22 @@ def QuittingTrapChargeCoefficients.threshold
     ((active.card - 2 : ℕ) : ℝ)⁻¹ *
       (coefficients.gap + coefficients.loss * coefficients.delta / coefficients.tau)
 
+omit [Fintype ι] in
+theorem QuittingTrapChargeCoefficients.threshold_of_cardinality_three
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {active : Finset ι}
+    (coefficients : QuittingTrapChargeCoefficients reward active) (hcard : active.card = 3) :
+    coefficients.threshold = 3 * (coefficients.delta / coefficients.tau) *
+      (coefficients.gap + coefficients.loss * coefficients.delta / coefficients.tau) := by
+  norm_num [QuittingTrapChargeCoefficients.threshold, hcard]
+
+omit [Fintype ι] in
+theorem QuittingTrapChargeCoefficients.threshold_of_cardinality_four
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {active : Finset ι}
+    (coefficients : QuittingTrapChargeCoefficients reward active) (hcard : active.card = 4) :
+    coefficients.threshold = 4 * Real.sqrt (coefficients.delta / coefficients.tau) *
+      (coefficients.gap + coefficients.loss * coefficients.delta / coefficients.tau) := by
+  norm_num [QuittingTrapChargeCoefficients.threshold, hcard, Real.sqrt_eq_rpow]
+
 /-- The literal Nash charge threshold is derived from actual supported
 endpoint equations and favorable Quit endpoints, for arbitrary finite support. -/
 theorem QuittingTrapChargeCoefficients.threshold_lt_singletonSourceCharge

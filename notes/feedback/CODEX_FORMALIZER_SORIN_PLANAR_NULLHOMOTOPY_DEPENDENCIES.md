@@ -129,10 +129,18 @@ supplied disk-model callback:
   theorem or this general disk-boundary step.
 
 No matching Jordan/Schoenflies, conformal boundary-extension, or complete
-perforated-disk owner was found in the scoped pinned libraries. The next
-canonical loop-filling adapter can construct the actual compact Peano set
-contained in the original payoff image, but does not discharge these planar
-dependencies or restrict the original proposition to semialgebraic images.
+perforated-disk owner was found in the scoped pinned libraries. The actual
+canonical compact-carrier loop fill and Sorin payoff-image adapter construct
+the relevant compact Peano set in the planar specialization. They do not
+discharge these planar dependencies or restrict the original proposition to
+semialgebraic images. The supplied analytic factorization, circle multiplicity
+and Hurwitz/injective-limit prerequisites live in
+`MathUE/Analysis/AnalyticCompactZeroFactorization.lean`,
+`MathUE/Complex/CircleArgumentPrinciple.lean` and
+`MathUE/Complex/HurwitzLimit.lean`. They derive their finite-zero data rather
+than assuming a census. Normal-family compactness and an actual maximizing
+embedding are still needed to reach full Riemann mapping, followed by the
+general non-injective boundary-extension step above.
 
 ## Finite-simplex alternative is narrower
 
@@ -148,7 +156,9 @@ general compact-strategy proposition or its discounted specialization.
 
 ## Implementation boundary
 
-The next bounded unit is the actual standard-circle nonclosed-logarithm
-calculation using the exponential covering. No full planar nullhomotopy,
-Jordan theorem, general-game Proposition 11 closure, or supplied index oracle
-is claimed by that unit. Larger topology owners require separate plan review.
+The actual standard-circle nonclosed-logarithm calculation, compact-carrier
+path-image filling and accumulating null-family continuity are supplied by
+their project owners. No full planar nullhomotopy, Jordan theorem, general-game
+Proposition 11 closure, or supplied index oracle is claimed by these units.
+The analytic prerequisites likewise do not supply the remaining planar disk
+model. Larger topology owners require separate plan review.

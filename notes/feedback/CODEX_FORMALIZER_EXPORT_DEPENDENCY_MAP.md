@@ -815,8 +815,22 @@ coordinates, including boundary and zero vectors. The supplied compact-maximum
 averaging proof is formalized, not replaced by a Fin4-only estimate.
 The analytic return theorem retains arbitrary finite players, signed rewards,
 continuity on the same boxed sublevel domain and differentiation only on the
-singleton lower boundary. The semantic payoff consumer is Fin4. Explicit C3/C4
-threshold formulas and packet fixtures remain separate obligations.
+singleton lower boundary. The semantic payoff consumer is Fin4.
+`QuittingTrapChargeCoefficients.threshold_of_cardinality_three` and
+`QuittingTrapChargeCoefficients.threshold_of_cardinality_four`
+(`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashChargeOdds.lean`)
+give the literal rational and square-root thresholds. The complete Section 6
+and Section 7 tables supply participant/trap/core censuses, exact coefficient
+layers, thresholds 90 and 348 times the square root of 45, and actual payoff
+consumers in `UniformEquilibrium/Quitting/Examples/BoxedNashChargeTripleFixture.lean`
+and `UniformEquilibrium/Quitting/Examples/BoxedNashChargeFullCoreFixture.lean`.
+These are the first bounded fixture units: strict raw neighborhoods, unbounded
+annotation counterroots, every proper-child debt witness, no-floor/no-pure tests
+and matrix/response exclusions remain obligations. The boxed-charge packet is
+not sealed by its main payoff result alone. The game-independent binary coalition encoder
+`Math.FiniteCoalition.binaryCode_injective` (`MathUE/Finset/CoalitionBinaryCode.lean`)
+is extracted from the existing reward-table owner; its private aliases retain
+their scopes and the fixtures no longer depend on unrelated example theorems.
 `quittingRoot_activeHazards_lt_one_of_leave_sums`
 (`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashCharges.lean`)
 is a useful stronger reusable source lemma: actual support size at least two
@@ -841,9 +855,9 @@ same canonical polynomial rather than strengthening the packet's charge tests.
 Canonical compact-minimum localization and downward charge use existential
 return; their old universal wrappers retain their original scopes. Only the
 universal minimum wrapper concludes zero absorption for every exact root at
-the minimum. The raw signed-pair and mixed-trap producers remain
-separate: a pure exact pair must be split off as a direct UE alternative,
-not silently asserted to satisfy chosen return.
+the minimum. The signed-pair raw producer now performs the pure-pair split
+explicitly; mixed-trap composition remains separate. A pure exact pair is a
+direct UE alternative, not silently asserted to satisfy chosen return.
 
 The mixed-premium-trap packet shares the actual boxed charge producer for
 larger traps and the full clipped-map/local nonlinear index adapter for signed
@@ -867,17 +881,34 @@ the actual full ambient pair derivative, including identity inactive rows.
 `signed_pair_core_badRoot_hasFDerivAt_and_negative_det`
 (`UniformEquilibrium/Quitting/Classification/SignedPairCoreBadRoot.lean`)
 internally supplies actual support, properness and every inactive strict gap;
-actual bad-root uniqueness is also checked. This is not yet the signed-pair
-selected-return or payoff producer. That source splits off a pure exact pair
-and uses local negative index for the remaining unique bad root; no annotation
-avoidance is needed for this branch. Mixed/triple cases still need finite
-census and tie avoidance.
+actual bad-root uniqueness is also checked. The actual composition is
+`exists_exactRoot_singletonSublevel_of_signed_pair_core`
+(`UniformEquilibrium/Quitting/Classification/SignedPairCoreSelectedReturn.lean`):
+it supplies a second full-clipped fixed point and uses bad-root uniqueness to
+produce a selected returning exact root when pure pair Nash is excluded.
+`exists_uniformEquilibriumPayoff_of_signed_pair_core_strictSameSign`
+(`UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreUniformPayoff.lean`)
+splits that alternative from a direct pure-set sure exit, without a supplied
+strategy, selected-root or index certificate. The generic
+`isUniformEquilibriumPayoff_setReward_of_pureSetNash`
+(`UniformEquilibrium/Quitting/Root/PureSetNashSureExit.lean`) works for every
+finite coalition of size at least two, without reward signs or core premises.
+No annotation avoidance is needed for the signed-pair branch. Mixed/triple cases
+still need finite census and tie avoidance.
 `exists_fixedPoint_ne_of_negative_det_finite`
 (`MathUE/Topology/AmbientDegreeUniqueFixedPointIndex.lean`) now derives an actual
 second fixed point using nonlinear local index and excision in an expanded
-ambient chart, including cube boundary coordinates. Raw signed-pair composition
-remains separate. Its weak boundary perturbs only the two specified passive
-singleton entries, not every passive reward. The triple packet additionally requires
+ambient chart, including cube boundary coordinates. The weak raw consumer
+`exists_uniformEquilibriumPayoff_of_empty_or_signed_pair_core_weakSameSign`
+(`UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClosure.lean`)
+accepts nonnegative own singletons and either an empty core or an exact pair
+core with nonnegative joining-gap product. It perturbs only the two specified
+passive singleton entries, not every passive reward, preserves all participant
+entries/traps/core, and supplies one original target by actual reward closure.
+It is not a theorem for every core of size at most two, or a weak analytic return
+theorem. The mixed-sign triple-core packet shares the needed finite-index census
+and actual full-clipped derivative infrastructure, rather than inheriting this
+unique-bad-root argument. The triple packet additionally requires
 its full three-player negative determinant, sure cascade and pair-tie/source
 restoration, with the pure-core alternative separated. Its weak localized
 passive perturbation is not the uniform all-passive increment consumer above.
@@ -1866,6 +1897,22 @@ dependency. Apache attribution, license text and immutable provenance are
 retained. Maximizing embeddings, surjectivity and the non-injective continuous
 boundary extension needed for general component frontiers remain separate;
 no Jordan-boundary or whole-feasible-carrier LPC assumption is inserted.
+`Math.Analysis.exists_finset_eq_prod_smul_nonzero`
+(`MathUE/Analysis/AnalyticCompactZeroFactorization.lean`) supplies the actual
+finite-zero analytic-order factorization on a compact preconnected set, in
+general normed-field/vector-valued scope without a completeness assumption or
+zero-set oracle. `circleIntegral_logDeriv_eq_finsum_analyticOrderNatAt`
+(`MathUE/Complex/CircleArgumentPrinciple.lean`) derives the circle multiplicity
+formula from analytic closed-disk data and nonzero boundary values, including
+radius zero. `eqOn_zero_or_forall_ne_zero_of_tendstoLocallyUniformlyOn` and
+`eqOn_const_or_injOn_of_tendstoLocallyUniformlyOn`
+(`MathUE/Complex/HurwitzLimit.lean`) give the actual zero-free and injective-limit
+alternatives for a nontrivial countably generated filter on an open preconnected
+complex domain. Pinned codiscrete-zero and circle-integral convergence APIs are
+reused, not duplicated. Their source adaptations retain Apache attribution and
+the immutable upstream provenance. Normal-family compactness, an actual
+maximizing map, full disk surjectivity and conformal boundary extension remain
+separate; these analytic prerequisites do not seal Sorin's Proposition 11.
 The source-backed remaining route is recorded in
 `notes/feedback/CODEX_FORMALIZER_SORIN_PLANAR_NULLHOMOTOPY_DEPENDENCIES.md`.
 `isPathConnected_selectedComponentFill` (`MathUE/Topology/SelectedComponentFill.lean`)
@@ -1878,7 +1925,8 @@ instead uses ambient path-connectedness and a closed path-connected source.
 path-connectedness from ambient local path-connectedness, a closed source and
 local path-connectedness of that source subtype. No finite selected family,
 metric, separation or global connectedness premise is added. The actual
-canonical loop-fill instantiation and general planar disk model are separate.
+canonical loop-fill instantiation is supplied by the compact-carrier owner
+above; only the general planar disk model remains separate.
 
 Primary-source discovery located the two-player flat-security prescription in
 [Tomala, *Jeux répétés* (2006)](https://www.numdam.org/item/10.5802/xups.2006-02.pdf),

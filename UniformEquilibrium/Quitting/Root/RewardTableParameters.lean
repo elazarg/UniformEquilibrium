@@ -1,5 +1,5 @@
 import UniformEquilibrium.Quitting.Root.RewardTableCoordinates
-import Mathlib.Combinatorics.Colex
+import MathUE.Finset.CoalitionBinaryCode
 import Mathlib.Data.Finset.Sort
 import Mathlib.Data.Prod.Lex
 
@@ -12,19 +12,11 @@ open scoped BigOperators
 variable {players : Nat}
 
 private def quittingCoalitionCode (coalition : Finset (Fin players)) : Nat :=
-  ∑ player ∈ coalition, 2 ^ player.val
+  Math.FiniteCoalition.binaryCode coalition
 
 private theorem quittingCoalitionCode_injective :
-    Function.Injective (@quittingCoalitionCode players) := by
-  intro left right hequal
-  have himage : left.image Fin.val = right.image Fin.val := by
-    apply Finset.geomSum_injective (n := 2) (by omega)
-    change (∑ i ∈ left.image Fin.val, 2 ^ i) =
-      ∑ i ∈ right.image Fin.val, 2 ^ i
-    rw [Finset.sum_image (fun _ _ _ _ hequal => Fin.ext hequal),
-      Finset.sum_image (fun _ _ _ _ hequal => Fin.ext hequal)]
-    exact hequal
-  exact Finset.image_injective Fin.val_injective himage
+    Function.Injective (@quittingCoalitionCode players) :=
+  Math.FiniteCoalition.binaryCode_injective
 
 private def quittingRewardTableVariableOrderKey
     (entry : QuittingRewardTableVariable (Fin players)) :
