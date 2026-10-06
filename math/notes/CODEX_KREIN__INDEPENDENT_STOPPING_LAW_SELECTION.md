@@ -1,5 +1,13 @@
 # Independent stopping-law selection
 
+The final **Larger-eigenvalue four-clock branch** is a new complete ordinary
+candidate, not yet independently reviewed. It gives a raw open singleton-
+matrix criterion with arbitrary signed own singletons and arbitrary
+nonsingleton rewards, and constructs four approximate independent clocks
+with one fixed UE target. Its full-core fixture has no stationary
+equilibrium and fails every cyclic relabeling of the implemented smaller-
+root test. No export or Lean implementation claim is made for this candidate.
+
 Identity: CODEX_KREIN. Ordinary mathematics, not Lean-checked. The positive
 selected-family theorem has independent review and is recorded in
 `../exports/NONNEGATIVE_SINGLETON_FINITE_QUIET_LIFTS.md`. The separate exact
@@ -4777,3 +4785,310 @@ No new coverage is claimed from this lookup.
 The live question remains a multiple-date construction controlling the
 complete late/Never caps on its same selected laws. Outcome-mass geometry
 alone is not being pursued as a way around the standard-Q residual.
+
+## Larger-eigenvalue four-clock branch
+
+### Raw input, output, and source distinction
+
+Let I=Fin4 in cyclic order 0,1,2,3, allowing a relabeling of actual players.
+All terminal rewards may be signed; live play and Never pay zero. Put
+s_i=r_i({i}), Γ_ii=0, and Γ_ij=r_i({j})−s_i for i≠j. Suppose
+
+    Γ_i,i+1=−b_i<0,       Γ_i,i+3=h_i>0,
+    Γ_i,i+2=g_i,          g₀,g₂<0<g₁,g₃.              (119)
+
+All indices in this section are cyclic. Define
+
+    a_i=g_i/b_i,          d_i=h_i/b_i,       D₀=a₀a₁+d₀,
+    L=a₀d₁+D₀a₂,         D=D₀d₂,
+    U=a₃L+d₃(d₁+a₁a₂),   V=a₃D+d₃a₁d₂.
+
+Require the additional finite raw inequalities
+
+    D>1,                 det Γ>0.                    (120)
+
+The first is equivalently h₂(h₀b₁+g₀g₁)>b₀b₁b₂. There is no
+restriction on any own singleton or nonsingleton reward. Thus this is an
+open condition in the full sixty-coordinate reward space, not an equality
+stratum.
+
+**Candidate theorem.** Every such table has a fixed uniform-equilibrium
+payoff against unrestricted behavioral deviations. The construction uses
+four proper solo phases and refines ALL four. The unrefined profile need
+not be Nash. No root, timing law, equilibrium, or target is supplied.
+
+This is not a new refinement compiler. The implemented raw signed-cycle
+source requires the smaller eigenvalue and a negative upper-right entry:
+`SignedFourCycleSingletonData.StrictTests` in
+`UniformEquilibrium/Quitting/Cycles/SignedFourCycleRewardAdapter.lean`,
+and `SignedFourCycleSingletonData.certificate` and
+`SignedFourCycleSingletonData.targetValue_isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/SignedFourCycleCertificate.lean`.
+The algebraic definitions were inspected in `MathUE/SignedFourCycleAlgebra.lean`.
+The present branch instead has V>0 and λ₋<1<λ₊. A failed smaller-root
+test is not being interpreted as failure of the four-clock architecture.
+
+### Positive weights from the larger eigenvalue
+
+Direct expansion gives
+
+    det Γ=−(b₀b₁b₂b₃)[(1−U)(1−D)−VL].               (121)
+
+Hence χ(1)<0 for χ(λ)=(λ−U)(λ−D)−VL. The assumptions give
+D₀>0, L<0, V>0. Since D>1 and −VL>0, χ(1)<0 implies U<1.
+There are two distinct real roots λ₋<1<λ₊. Put
+
+    λ=(U+D+√((U−D)²+4VL))/2>1,       A=1/λ∈(0,1),
+    w₀=V,                  w₁=λ−U,
+    w₃=A(a₂w₀+d₂w₁),      w₂=A d₁w₀+a₁w₃.          (122)
+
+Both w₀,w₁ are positive. The characteristic equation gives the four
+identities
+
+    w₁=a₀w₂+d₀w₃,          w₂=A d₁w₀+a₁w₃,
+    w₃=A(a₂w₀+d₂w₁),       w₀=a₃w₁+d₃w₂.           (123)
+
+Indeed the first follows by expanding Lw₀+Dw₁=λw₁, and the last
+follows from Uw₀+Vw₁=λw₀ after the middle two substitutions.
+Neither calculation assumes that λ is the smaller root. The first two
+identities now imply
+
+    D₀w₃=w₁−A a₀d₁w₀>0.
+
+Thus w₃>0 and w₂=A d₁w₀+a₁w₃>0. All weights have been produced
+from raw data; no positive eigenvector is an input.
+
+### Exact rates, values, and all floors
+
+Let W=Σ_i w_i, β_i=(1−A)w_i/W, and
+T_j=1−Σ_{i<j}β_i for j=0,…,4. Then T₀=1, T₄=A>0, and
+T_j>T_{j+1}. The actual solo hazards are q_j=β_j/T_j∈(0,1).
+Their period survival is A. Define
+
+    V^j=[A Σ_{i<j}β_i r({i})+Σ_{i≥j}β_i r({i})]
+          /[T_j(1−A)]       (j=0,1,2,3),       V⁴=V⁰.
+
+These vectors satisfy
+
+    V^j=q_j r({j})+(1−q_j)V^{j+1}.                  (124)
+
+Multiplying (123) by the b_i gives the four weighted singleton balances,
+with factor A on already visited owners. Therefore V^{i+1}_i=s_i;
+equation (124) also gives V^i_i=s_i. For the other two phases, apply
+(124) at i+1 and i+3 and use (119):
+
+    V^{i+2}_i−s_i=q_{i+1}b_i/(1−q_{i+1})>0,
+    V^{i+3}_i−s_i=q_{i+3}h_i>0.                     (125)
+
+Thus every floor V^j_i≥s_i holds. The fixed target is
+
+    u=V⁰=Σ_i (w_i/W)r({i}).                         (126)
+
+### Complete behavioral and uniform-horizon proof
+
+Fix the table and these rates. Replace phase j by K solo microdates with
+hazard p_{j,K}=1−(1−q_j)^(1/K). Aggregate survival and all coarse vectors
+are unchanged. For its owner, both endpoints of the solo arc equal s_j.
+For every other coordinate the intermediate values lie between V^j and
+V^{j+1}, so every floor persists. This uses remaining survival between
+1−q_j and1; it does NOT require a floor at the singleton endpoint r({j}).
+
+Let C=max_{i≠j}(r_i({i,j})−s_i)⁺ and e_K=C max_j p_{j,K}→0.
+At a microdate owned by j, another player's forced Quit payoff is
+
+    (1−p_{j,K})s_i+p_{j,K}r_i({i,j})≤s_i+e_K.
+
+It is at most the current prescribed value plus e_K. The owner's Quit
+payoff equals its prescribed value. Forced Continue followed by the
+prescribed suffix gives exactly the current value for EVERY player:
+Bellman equality for passive players and indifference for the owner.
+
+Consequently the value process plus ONE constant e_K is a supersolution
+for both actions. Under Continue the excess is multiplied by opponent
+survival; it is not added across dates. Iterating against any behavioral
+deviation leaves a bounded remainder multiplied by opponent survival.
+That survival has per-period factor
+
+    κ_i=∏_{j≠i}(1−q_j)<1,
+
+uniformly over player i's behavior. The remainder vanishes. Every full
+terminal cap, including every late finite date and Never, is at most
+u_i+e_K. The actual prescribed terminal payoff is exactly u for all K.
+No subset of three players has first been constrained to exact replies.
+
+Let M=max|r_i(S)|. Under any unilateral deviation absorption occurs no
+later than the first opponent Quit, whose expectation is at most
+4K/(1−κ_i), up to the initial-date convention. Terminal reward and the
+N-date state-payoff average differ in expectation by at most 2M times
+that bound divided by N. The initial live date pays zero. The same bound
+holds on path. Choose K for the requested accuracy, then a common horizon
+threshold for these four geometric estimates. This proves UE at the
+fixed target (126), including arbitrary signed own singletons.
+
+The data literally satisfy `BalancedSingletonCycleCertificate`; its
+checked consumer is `BalancedSingletonCycleCertificate.isUniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`.
+That source was inspected. The new input is the larger-branch raw producer.
+
+### Complete full-core fixture and both eigenvalue branches
+
+Use actual labels 0,1,2,3 with s=(1,0,0,0) and
+
+    Γ=[[0,3,−2,−2],[-4,0,1,1],
+       [-2,-2,0,5],[3,3,-5,0]].                      (127)
+
+In cyclic order (0,3,2,1),
+
+    b=(2,5,2,4),  g=(−2,3,−2,1),  h=(3,3,5,1),
+    (L,D,U,V)=(−3/2,9/4,−3/8,15/16).
+
+The determinant is25 and the eigenvalues are3/8 and3/2. The balance
+determinant as a function of period survival is −5(3A−8)(3A−2).
+Both branches are explicit: A=8/3 cannot be a survival probability;
+A=2/3 has weights proportional to (3/8,3/4,3/4,1) and hazards
+
+    (1/23,1/11,1/10,4/27).
+
+In original player coordinates the phase vectors are
+
+    V⁰=(1,0,8/23,3/23),       V¹=(1,2/11,5/11,0),
+    V²=(6/5,1/10,0,0),        V³=(13/9,0,0,5/9).
+
+All sixteen Bellman coordinates and floors are rational. Among the six
+orders starting with player0, only (0,3,2,1) has negative successors and
+positive predecessors. Every other admissible labeling is a cyclic
+rotation. These rotations preserve both survival roots, so each has
+smaller eigenvalue3/8<1. No admissible relabeling satisfies the implemented
+smaller-root tests. Positive affine row transport preserves the balances.
+
+Specify every nonsingleton entry as follows. Rewards to players0,1 depend
+only on S∩{0,1}, and rewards to players2,3 only on S∩{2,3}. The
+intersections ∅,{first},{second},{both} give payoff pairs respectively
+
+    pair01: (−1,1), (1,−4), (4,0), (2,1);
+    pair23: (−2,3), (0,−5), (5,0), (2,1).             (128)
+
+This is a complete rational sixty-entry rule, not a restriction of the
+theorem's nonsingleton freedom. Every participant premium is nonnegative.
+The traps are exactly01,23,I, so the greatest core is full.
+The unrefined four-phase profile is genuinely not Nash: at its initial
+solo0 row, player1's prescribed payoff is0 but immediate Quit gives1/23.
+Subdivision reduces this actual first-date gain to p_{0,K}→0; the
+complete supersolution argument, not local indifference alone, controls
+all its later and Never deviations.
+
+### No stationary equilibrium for this fixture
+
+This excludes all stationary implementations and relabelings, not just a
+chosen branch. Write stationary hazards (h,x,y,z), and
+α=h+x−hx, β=y+z−yz. Equilibrium requires α,β>0: if α=0<β,
+player0 gets−1 and can Quit for1; all-zero hazards fail by its positive
+singleton. If β=0<α, player2 gets−2 and can Quit for0.
+
+If h=0, any x>0 is suboptimal because player1's Never payoff is1 while
+its Quit payoff is0. If x=0, player0 strictly prefers Quit for1 to
+Never's−1, forcing h=1, which then forces x=1 by joining gain5.
+Thus h,x>0. Similarly y=0 would force z=0, since player3's Never
+payoff is3 and its Quit payoff0. If z=0, player2 must Quit surely,
+forcing z=1 by joining gain6. Thus all four hazards are positive.
+
+A sure h forces x=1, but then player0 prefers leaving for4 rather than2.
+A sure x forces h=0. A sure y forces z=1, but then player2 prefers
+leaving for5 rather than2. A sure z forces y=0. Hence all four hazards
+would have to be proper interior. Their exact indifferences are
+
+    β=x(3−x)/[(1−x)(2+x)],     β=h(h+4)/(1−h)²,
+    α=z(5−2z)/[2(1−z²)],      α=y(y+5)/[(1−y)(3−y)]. (129)
+
+The first two give x≤2β/3 and h≤β/4, so α≤11β/12. The third
+gives z≤3α/7 since 3(5−2z)−14(1−z²)=1−6z+14z²>0.
+The fourth gives y≤3α/5 since
+3(y+5)−5(1−y)(3−y)=23y−5y²>0. Thus β≤36α/35 and
+α≤33α/35, impossible. Every support and sure-hazard boundary was
+included. This does not prohibit nonstationary equilibria; (124)–(126)
+produce the desired approximate independent laws.
+
+### Exact source and accepted-packet comparisons
+
+The pair joining gaps are−2,5 on01 and−3,6 on23. The full trap has
+no weak leaver: players0,1,2,3 have positive joining witnesses against
+singleton2,0,0,2 respectively. Thus the greatest-core≤2, signed-pair,
+both triple-core, common-leaver, and protected support-specific classes
+fail. The mixed-trap same-sign pair assumption fails, and the boxed
+no-pair condition fails. At sure grand coalition every participant
+premium is positive, excluding product-low and supportwise balance.
+
+Even weak aggregate-leave inequalities on the full trap have no nonzero
+nonnegative weights: the opponent sets02,01,23 require respectively
+
+    5λ₁+6λ₃≤0,     2λ₂−3λ₃≤0,     2λ₀−λ₁≤0,
+
+forcing every λ_i=0. Thus the weighted-floor/aggregate-leave packet fails
+despite all nonnegative participant premiums.
+
+The matrix is R₀: every principal minor of size≥2 is nonzero, and each
+column has a negative off-diagonal entry. In the usual increasing orders,
+
+    pair determinants: 12,−4,6,2,−3,25;
+    triple determinants: −22,33,−50,25; full determinant:25.
+
+At offset (3,−2,−7,5), exact support enumeration gives the unique
+full complementary solution (11/5,31/5,151/25,119/25), with determinant25.
+For completeness, empty support fails the negative offset coordinates,
+and singleton support is impossible because every offset coordinate is
+nonzero. For pair supports01,02,03,12,13 the active solutions have
+respectively z₀=−1/2,−7/2,−5/3 and z₁=−7/2,−5/3; support23
+has inactive residual w₀=−9/5. Triple supports012,013,023 have
+z₀=−23/22,−6/11,−9/10, while123 has z₁=−2/5. This excludes
+every proper support explicitly. Thus the degree is+1.
+The full inverse has entry(0,1)=−1. The four
+triple inverses have negative entries(0,0)=−1/11,−1/11,−1/2 and
+(0,1)=−1/5 in their inherited orders. No nonnegative full or triple
+inverse criterion applies. Principal02=[[0,−2],[-2,0]] is R₀ but not Q
+at offset(−1,−1), excluding the all-principal projective-Q criterion.
+
+All fourteen nondiscrete response partitions fail singleton block-row
+equality. Listed as receivers; column block; unequal sums:
+
+    01/2/3: 0,1;01;3,−4       02/1/3: 0,2;1;3,−2
+    03/1/2: 0,3;2;−2,−5      0/12/3: 1,2;0;−4,−2
+    0/13/2: 1,3;0;−4,3       0/1/23: 2,3;0;−2,3
+    012/3: 0,1;012;1,−3      013/2: 0,1;2;−2,1
+    023/1: 0,2;1;3,−2        0/123: 1,2;0;−4,−2
+    01/23: 0,1;01;3,−4       02/13: 0,2;13;1,3
+    03/12: 1,2;12;1,−2       0123: 0,1;0123;−1,−2.
+
+Every proper child has an exact behavioral terminal equilibrium with zero
+joint-Never mass and a profitable omitted-player deviation. Twelve use a
+pure initial exit followed by Never; entries are child:exit,joiner,gain:
+
+    0:0,1,5        1:1,2,2        2:2,3,6        3:3,0,2
+    01:1,2,2      02:02,1,5     03:0,1,5      12:2,3,6
+    13:1,2,2      23:3,0,2      013:1,2,2     123:3,0,2.
+
+For child012 use first-date hazards (1/6,1/2,1), then Never. Players0,1
+have both endpoints3/2 and1/6. Player2's Quit payoff is0; Continue and
+every later plan gives at most0, with initial Continue endpoint−7/6.
+Quiet player3 receives−5 and gains6 by joining. For child023 use
+hazards (1,1/3,2/5). Players2,3 have both endpoints4/5 and1/3.
+Player0 gets1 by Quit; Continue followed by optimal late Quit gives−1/5.
+Quiet player1 receives−4 and gains5 by joining. Thus for SOME omitted
+player of EACH child no universal fixed nonnegative weighted child-debt
+bound plus a finite joint-Never coefficient can hold. This does not
+exclude every equilibrium of a child or every quiet strategy mechanism.
+
+The only positive own singleton is player0's. Deleting it leaves player1
+strictly above its singleton at BOTH remaining child singletons. Hence
+no relabeling matches the prescribed cyclic-child raw classes, which
+require one positive and one negative comparison in every child row.
+The certified two-joint full-table neighborhood retains a pair trap with
+no weak leaver, while both pair traps of (128) have strict leavers, so
+that neighborhood does not consume this fixture either. Together with
+the full stationary exclusion and the matrix and child checks, these are
+bounded comparisons against accepted existence packets and named sources,
+not an assertion of exhaustive failure of all conditional interfaces.
+
+The candidate is ready for independent falsification of the larger-root
+weight signs, all cyclic relabelings, the complete behavioral consumer,
+the full stationary exclusion, and the proper-child witnesses. Earlier
+frozen results are unchanged.
