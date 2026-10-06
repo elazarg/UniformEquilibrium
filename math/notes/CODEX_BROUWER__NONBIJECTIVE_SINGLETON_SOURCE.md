@@ -1,8 +1,15 @@
 # Nonbijective singleton sources beyond a column-sign cone
 
-Author: CODEX_BROUWER. Internal ordinary mathematics, not Lean-checked and
-not an export candidate. The earlier signed-column producer is frozen for
-independent review; this record starts a different source question.
+Author: CODEX_BROUWER. Ordinary mathematics, not Lean-checked. The active
+candidate is the final section, “Global nonlinear degree supplies the
+missing nonzero root”: a proposed original Fin4 UE producer from weak
+scheduled-pair joining preferences and twelve opposite-pair caps, with no
+singleton inverse/sign condition. Its mathematical falsification and a
+complete additional-coverage witness are still pending; it is not ready
+for export. The initial exact singleton matrix is internal evidence showing
+why a signed-column inverse reduction is insufficient, not an existence
+claim. The separately completed signed-column producer does not supply the
+new root-production step here.
 
 ## Question and status
 
@@ -14,10 +21,12 @@ R₀, and R₀ degree+1 on this matrix. Can those conditions eliminate a
 favorable two-cycle with two attached players, or reduce it to a full
 inverse with uniformly signed columns?
 
-Both proposed reductions fail on the exact matrix below. This is a
-source-class obstruction only, not a positive-gap quitting game or a new
-existence theorem. All forty-four nonsingleton reward coordinates remain
-free at this stage. A new producer must still use their actual values.
+Both proposed reductions fail on the exact matrix below. That regression
+is a source-class obstruction only, not a positive-gap quitting game or
+an existence theorem. All forty-four nonsingleton reward coordinates remain
+free in the regression. The active proof later in this record restricts
+some actual collision coordinates explicitly and then seeks an original-game
+producer; its coverage audit is separate from the matrix calculation.
 
 The named original-game source declarations inspected are
 `isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff`
@@ -112,10 +121,11 @@ shortcut. In particular the actual reward table need have no symmetry.
 
 The next raw question fixes this Γ and arbitrary signed own singleton
 levels, but retains every nonsingleton coordinate. Can an actual producer
-use the two-core Schur structure while choosing all four independent laws
-and all unilateral caps, on a completion class not already consumed by a
-known criterion? The current calculation supplies no strategy and no
-claim of such coverage. No constants are being optimized.
+use global complementary odds, rather than an inverse cone, while choosing
+all four independent laws and caps? The latest section below gives a
+complete-looking degree argument for such production. Its mathematical
+review and concrete new-coverage witness remain open. No export claim or
+constant optimization is intended.
 
 ## A different consumer: nonzero complementary odds, not positive inverse
 
@@ -195,3 +205,136 @@ supports have not been excluded or exactified away. No global radial bound,
 large-box degree, nonzero-root theorem, or new coverage conclusion is
 claimed at this checkpoint. The next calculation should test this actual
 nonlinear problem, not strengthen the boundary adapter in isolation.
+
+## Global nonlinear degree supplies the missing nonzero root
+
+Status: a new, unreviewed proof candidate. Unlike the preceding conditional
+adapter, this argument produces a nonzero complementary root. It uses the
+actual original-game R₀/degree+1 source, not a positive inverse and not a
+selected local root. It also removes both coefficient-sign restrictions
+Π≥0 and K≤0. A complete actual-table increment witness is still required
+before requesting an export gate.
+
+### Proposed raw Fin4 theorem
+
+Choose any partition into two scheduled pairs. Assume only
+
+    c_i=r_i({i,a(i)})−r_i({a(i)})>0 for every i,             (G1)
+    r_i({i}∪T)≤s_i  for every nonempty T⊆O(i).              (G2)
+
+All own levels, scheduled premiums Π_i=r_i({i,a(i)})−s_i, opposite
+pair increments K_i=r_i(O(i))−s_i, singleton matrices, and unmentioned
+collisions are unrestricted. The claim is existence of an original Fin4
+uniform payoff. If the singleton matrix is R₀ with nonzero degree, the
+proof directly produces an exact period-two terminal Nash profile, possibly
+with some inactive coordinates. The theorem does not assert such an exact
+profile on the alternative source exits.
+
+### The global feasible set is bounded
+
+Keep N as in (NC) but allow arbitrary real Π,K, retaining only c_i>0.
+Define the closed set
+
+    E={X≥0: ΓX≥N(X)}.
+
+It is bounded, without any assumption on Γ. Suppose instead Xⁿ∈E has
+t_n=∑Xⁿ_i→∞. Pass to a subsequence with Xⁿ/t_n→u≥0, ∑u_i=1.
+Choose j with u_j>0 and put i=a(j). Writing O(i)={k,l}, exactly
+
+    N_i(X)=c_i X_j(X_k+X_l)
+               +(c_iX_j−K_i)X_kX_l+Π_iX_j²/(1+X_j).       (G3)
+
+Since Xⁿ_j→∞, the coefficient c_iXⁿ_j−K_i is eventually nonnegative.
+The last term is bounded in absolute value by |Π_i|Xⁿ_j=O(t_n).
+If u_k>0 or u_l>0, the first term has a positive order-t_n² lower
+bound, contradicting (ΓXⁿ)_i=O(t_n)≥N_i(Xⁿ). Hence u is supported
+on {i,j}. Dropping the nonnegative terms in (G3), dividing by t_n and
+passing to the limit gives
+
+    Γ_ij u_j≥Π_i u_j.
+
+But Γ_ij−Π_i=−c_i<0 and u_j>0, another contradiction. This proves
+boundedness even when u has singleton support, and even for mixed signs
+of Π and K. No guessed cone or assumed strategically favorable root enters.
+
+### Global degree zero versus the nonzero local degree
+
+For λ≥0 and x∈ℝ⁴ define the continuous minimum map
+
+    H_λ(x)=min(x, Γx−N(x⁺)−λ1),
+
+coordinatewise, with x⁺ the coordinatewise positive part. The denominator
+in N(x⁺) is always at least1. A zero of H_λ has x≥0, residual≥0
+and complementary coordinates. In particular every such zero lies in E,
+because Γx≥N(x)+λ1. All zeros for ALL λ≥0 lie in the same compact
+set E. On E, Γx−N(x) is bounded; for sufficiently large finite Λ,
+the inequality Γx−N(x)≥Λ1 is impossible. Therefore H_Λ has no zero.
+
+Choose a ball containing E in its interior. The homotopy H_λ,
+0≤λ≤Λ, has no zero on its boundary, and the total degree of H₀ on
+that ball is zero. At the origin, N(x⁺)=O(‖x‖²). If Γ is R₀,
+the homogeneous map h(x)=min(x,Γx) has zero only at0. On the unit
+sphere its norm has a positive minimum; positive homogeneity gives
+‖h(x)‖≥c‖x‖. The coordinatewise minimum is Lipschitz in its second
+argument, so the homotopy min(x,Γx−θN(x⁺)), 0≤θ≤1, has no
+zero on a sufficiently small sphere. The local degree of H₀ at0 is
+therefore the R₀ degree of Γ.
+
+If that local degree is nonzero, additivity/excision and total degree0
+force some additional zero X≠0 of H₀. No regularity, finite root
+count, or sign computation at individual nonlinear roots is needed.
+The root is precisely (NC).
+
+### Boundary root conversion with arbitrary Π,K
+
+The endpoint adapter above did not need signs of Π or K once (NC) was
+given. It needed c>0, (G2), and at least two positive coordinates. The
+last property still follows from R₀, without N≥0. If only X_j>0,
+all rows other than i=a(j) have N_l=0. Hence Γ_lj≥0 there. In the
+mate row feasibility says
+
+    Γ_ij≥Π_i X_j/(1+X_j).
+
+If Π_i<0, this is impossible because Γ_ij=Π_i−c_i<Π_i and
+Π_i X_j/(1+X_j)>Π_i. If Π_i≥0, it forces Γ_ij≥0. In either
+feasible case every entry of column j is nonnegative, giving a nonzero
+homogeneous LCP root e_j, contrary to R₀. Thus support has size≥2.
+
+All opponents-deleted periods now contract. Active positive coordinates
+have e_i=0. Inactive ones have the exact nonnegative value correction
+(NC1). At both phases passive Quit≤s_i≤W_i, and active Quit=U_i.
+All policy equalities and full behavioral caps follow exactly as above,
+with signed own levels untouched. This produces the fixed uniform target.
+
+For the raw Fin4 conclusion, suppose no original UE exists. The literal
+source `finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`
+supplies R₀ and degree1 for THIS singleton matrix. It has no own-sign,
+normality, or auxiliary-no-UE input. Its R₀ dependency is
+`finFour_isR0Matrix_quittingSingletonMatrix_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourAuxiliaryDiscountedLocalization.lean`.
+The constructed original-game profile is then a contradiction. The ordinary
+local-degree identification uses the literal homogeneous minimum-map
+definition `r0Degree` and its radius invariance in
+`MathUE/LinearProgramming/R0Degree.lean`.
+
+### Weak pair-join closure and current falsification target
+
+Replacing (G1) by c_i≥0 should give UE by literal reward closure: add
+δ>0 to the four scheduled-pair participant coordinates only. This makes
+every c_i positive, leaves all singleton entries and all (G2) coordinates
+unchanged, and changes no coordinate by more than δ. Apply the strict
+theorem and
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+It retains a single target for the original table. No exact periodic
+profile is claimed at the weak boundary through this closure argument.
+
+The immediate adversarial targets are the minimum-map degree calibration,
+the support-one argument, and the inactive-player actual-value correction.
+For coverage, changing only r₂(12) from−1 to1 in the signed-column
+fixture admits (G1)–(G2) but defeats every signed-column schedule:03/12
+has the wrong sign of c₂, while01/23 and02/13 have the wrong sign of
+K₂. That modified table still needs a complete quiet-child/source audit;
+in particular its old child012 J witness has changed and must not be
+reused. This is an early candidate, not an established coverage witness.

@@ -43,12 +43,17 @@ reviews. The current canonical artifact is
 `exports/OPPOSITE_SIGN_MATCHING_PHASE_UNIFORM_EQUILIBRIUM.md`,606lines,
 SHA256 `2b9f54370677ec176749a0a9c6c008bdb56d5733594d85f60a101374e148ac35`.
 Its original owned candidate and exploratory branch below remain derivation
-history. Current independent research is the separate one-shot join-monotone
-anchor mechanism at this notebook's end; its whole-family proof and exact
-source-separating table are complete ordinary candidates, not independently
-reviewed or exported. Its frozen self-contained manuscript is
+history. The separate one-shot join-monotone anchor mechanism passed both
+independent substantive and final-assembly reviews. Its canonical447-line
+artifact is `exports/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md`, SHA256
+`64cbf15fe912af117ee42d6d32a29806a8c72316cf88d28a7a8f85d06bdb6f02`.
+Its frozen historical377-line manuscript is
 `notes/CODEX_NOETHER__ONE_SHOT_ANCHOR_NEGATIVE_JOIN_NECESSITY.md`,377lines,
 SHA256 `72e18f442d25d6225b96e022b42c573f3542809fc7ce955ce9dfb66b7ad7b331`.
+Current independent research is the global finite Nash-regret/CCE test at
+this notebook's end. Its producer and unavoidable counterexample restriction
+are proved ordinary mathematics; exact additional source coverage is being
+stress-tested. It is internal and not independently reviewed.
 
 ## Question and finite data
 
@@ -681,3 +686,264 @@ completion scope is one nonnegative-own, join-monotone coordinate and
 arbitrary rewards for every other player, not a local root perturbation.
 The next required question is independent falsification of significance
 and the transient behavioral consumer, before any export is considered.
+
+## A global finite Nash-regret restriction on every counterexample
+
+Status: complete ordinary producer and necessary-condition proof, not an
+export. This is a global finite LP test on arbitrary game data and every
+anchor, not a modification of a radius or supplied stopping certificate.
+The concrete additional-coverage table below is an early exact test; no
+absence of all proper-three stationary roots is claimed.
+
+### Finite data and the raw LP
+
+Let I be any nonempty finite player set, r arbitrary signed terminal data,
+live payoff zero, and Never zero. Information, private independence and full
+behavioral replacements are as in the anchor theorem above. Fix any player
+a, without any own-level sign assumption, and put J=I∖{a}.
+
+Define the complete anchored binary game
+
+    u_j(T)=r_j(T∪{a}),              j∈J, T⊆J.
+
+For b∈{Continue,Quit}, write T^{j,b} for the coalition obtained by fixing
+player j's action to b. Define the original-game anchor gap and the free
+players' pure-action regret margins by
+
+    g_a(∅)=min(s_a,0),
+    g_a(T)=r_a(T∪{a})−r_a(T)        when T≠∅,
+    R_{j,b}(T)=u_j(T)−u_j(T^{j,b}).                    (L1)
+
+Let C_a be the polytope of laws ν on the finitely many T⊆J satisfying
+
+    ν_T≥0,  ∑_Tν_T=1,
+    ∑_Tν_T R_{j,b}(T)≥0             for every j,b.      (L2)
+
+This is the coarse-correlated-equilibrium polytope of the anchored finite
+game, with both unconditional pure deviations tested. It is nonempty:
+the coalition law of any internally selected mixed Nash point satisfies
+(L2). It is compact. Thus the finite raw minimum
+
+    v_a(r)=min_{ν∈C_a} ∑_Tν_T g_a(T)                  (L3)
+
+is attained. All coefficients come from r. Neither ν nor a product Nash
+point is an additional input. The test uses correlated laws as a convex
+outer relaxation only; the actual original-game profile uses private
+independent randomization.
+
+### Original-game producer and all-counterexample restriction
+
+If v_a(r)≥0 for any anchor a, choose any mixed Nash point μ of its anchored
+binary game internally. Its product coalition law p belongs to C_a, so
+E_p g_a≥0. Prescribe a Quit surely at date0, the free μ coordinates at
+date0, and every free player Never after date0, including on histories
+created by an anchor replacement. Prescribe the anchor Continue later.
+
+As before, every nonanchor replacement reduces to its date0 binary choice.
+The anchor's two full terminal caps are exactly
+
+    V_a=p_∅s_a+∑_{T≠∅}p_T r_a(T∪{a}),
+    C_a^wait=p_∅max(s_a,0)+∑_{T≠∅}p_T r_a(T).
+
+Their difference is E_p g_a≥0. The first-date mixture is independent of
+the simultaneous opponents; the empty-event cap includes all delayed
+randomized stopping and Never. Hence the profile is exact terminal Nash
+against every complete behavioral replacement, for arbitrary signed s_a.
+
+For N≥1, immediate absorption multiplies every reward by h_N=(N−1)/N.
+An anchor's empty-event future payoff is at most h_N max(s_a,0): if
+s_a<0 every delayed quit is nonpositive and Never pays0; if s_a≥0 the
+earlier proof applies. Therefore every finite-horizon deviation is bounded
+by h_N V_a as well. Nonanchors obey the same h_N finite Nash inequalities.
+The profile is exact Nash at every positive horizon and delivers one fixed
+target V with error≤M/N. No contraction, payoff translation or public
+correlation is used.
+
+Consequently EVERY no-UE table, and every table with a positive unrestricted
+terminal-exploitability floor, must satisfy the unavoidable finite condition
+
+    v_a(r)<0                 for every player a.       (L4)
+
+Equivalently, for every a there must exist a law ν obeying all its anchored
+finite-game coarse Nash inequalities while having strictly negative anchor
+gap. This is stronger than the exported pointwise negative-join restriction:
+for s_a≥0, pointwise nonnegative joining makes g_a≥0 and immediately rules
+out (L4), but the converse fails as the exact example below proves. There
+is no own-level sign restriction in (L4).
+
+A useful sufficient raw inequality is to choose finitely many λ_{j,b}≥0
+and β≥0 such that
+
+    g_a(T)≥β+∑_{j,b}λ_{j,b}R_{j,b}(T)      for every T⊆J. (L5)
+
+Then every ν∈C_a has Eνg_a≥β. This is not a supplied-strategy theorem:
+(L5) is a finite inequality family in terminal coordinates, and the finite
+Nash point is still produced internally. Standard finite LP duality would
+also give the converse certificate for v_a≥β; that converse is not needed
+for the producer or necessary condition just proved.
+
+The selected source route remains the finite induced game and the actual
+one-date/Never consumer. Narrow searches in
+`UniformEquilibrium/Quitting/Stationary/SingleAnchorArbitraryCompletion.lean`,
+`UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean`, and
+`UniformEquilibrium/Quitting/Root/OneDateNeverNashDebt.lean` found no such raw
+Nash-regret producer. The finite dependency is
+`quittingPersistentBaseNashSet_nonempty`; the existing downstream consumer
+is `quittingOneDateThenNeverProfile_exactHorizonNash` in
+`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean`. Neither
+supplies (L3)→original-game terminal Nash. A general correlated law is not
+being mistaken for an independent mixed profile.
+
+### Complete additional-coverage stress table
+
+Take anchor0 and the following complete60 table. All own levels are1 and
+Γ is still the H=3 favorable matching matrix above.
+
+| S | r(S) |
+|---|---|
+| 0 | (1,4,0,0) |
+| 1 | (4,1,0,0) |
+| 2 | (0,0,1,4) |
+| 3 | (0,0,4,1) |
+| 01 | (0,−1,1,0) |
+| 02 | (1,0,1,0) |
+| 03 | (1,4,0,−1) |
+| 12 | (99,−100,2,1000) |
+| 13 | (105,−100,1000,−100) |
+| 23 | (−100,1000,−100,−100) |
+| 012 | (101,1,0,100) |
+| 013 | (101,−1,1,−1) |
+| 023 | (−99,0,1,−1) |
+| 123 | (900,−100,−100,1100) |
+| 0123 | (1001,100,100,99) |
+
+The anchored free game is unchanged from the preceding fixture, so its
+unique Nash point is(q₁,q₂,q₃)=(1/2,5/6,0). In order
+T=∅,1,2,3,12,13,23,123, the relevant exact vectors are
+
+    g₀=(0,−4,1,1,2,−4,1,101),
+    R_{1,C}=(0,−5,0,0,1,−5,0,100),
+    R_{2,Q}=(−1,1,0,−1,0,−99,0,0).
+
+The fixed raw certificate
+
+    g₀≥1/4+R_{1,C}+(1/2)R_{2,Q}
+
+has coordinate slacks(1/4,1/4,3/4,5/4,3/4,201/4,3/4,3/4).
+Thus v₀≥1/4, without solving for a strategic point. It is strict in all
+eight coordinates, so this is not an equality-stratum-only phenomenon.
+The internally produced profile has fixed target
+
+    V=(511/12,2/3,1/2,125/3),      C₀^wait=125/3,
+    V₀−C₀^wait=11/12.
+
+Every player nevertheless has a negative nonempty joining comparison:
+0 at1 gives−4,1 at0 gives−5,2 at01 gives−1,3 at0 gives−1. Thus no
+player meets the accepted raw join-monotone anchor class. This is a real
+strict strengthening of that necessary condition, not a smaller constant.
+
+The initially tempting experiment changed only player0's excluded rewards.
+It created the pure exit1, because its negative0-join at1 left all other
+outsiders unwilling to join. That experiment was discarded for additional-
+coverage purposes. The displayed complete table instead has player2's
+join at1 equal2. No pure exit survives: sets excluding0 other than1,13
+are joined by0;1 is joined by2;13 is profitably left by1. Sets containing0
+have the same player3 withdrawal or matching-pennies toggle as before.
+
+### Exact sure-stationary exclusion
+
+For any positive opponent absorption, player0's first-date Quit-minus-
+Continue difference is E g₀; if someone is sure the opponent background
+is nonempty. If q₀=1, the unchanged free game forces the unique point
+(1/2,5/6,0). Repeating its hazards gives Never₀=499/11>511/12, so the
+candidate is not stationary Nash.
+
+If q₂=1, then Δ₀=1+q₁(1+99q₃)>0, forcing q₀=1, which contradicts
+the unique complementary point. If q₃=1 and q₀<1, player0's Nash
+condition Δ₀≤0 gives q₁>0 and A=−5+105q₂<0. Player1's difference is
+q₀A+(1−q₀)(−100−1000q₂)<0, contradicting q₁>0. Thus q₃ cannot be
+sure either.
+
+Finally suppose q₁=1 and q₀<1. Put
+
+    A=−5+6q₂+99q₂q₃,
+    B=1−101q₂−101q₃−899q₂q₃.
+
+Player0's condition gives A≤−1, whereas player1's sure condition
+q₀A+(1−q₀)B≥0 gives B≥0 and hence q₂,q₃≤1/101. Player3's
+difference−q₀+(1−q₀)(−100+200q₂) is strictly negative, so q₃=0.
+Then q₀≤(1−101q₂)/(6−107q₂)≤1/6. Player2's difference is
+2−3q₀≥3/2, forcing q₂=1, contradiction. All weak boundary ties were
+retained. No stationary equilibrium with any sure quitter exists.
+
+### Matching-output separation beyond the raw coefficient tests
+
+Both harmful pair words have Π₀=0 and harmful mate gap−1, so any proper
+two-phase output has W₀=1+X_mate>1. They cannot be all-below-singleton
+outputs. The favorite word01/23 requires a separate check because its
+four participant premiums are now negative.
+
+For this favorite word, write the positive odds X₀,…,X₃, Z=(1+X₂)(1+X₃),
+S=X₀+X₁ and P=X₀X₁. Its raw coefficients are
+
+    Π=(−1,−2,−101,−101), c=(−4,−5,−104,−104),
+    K=(−101,999,0,−1).
+
+The exact active/Continue equations, which every such output must obey,
+give
+
+    S=104X₃(1+S+P)−101X₃/(1+X₃)>3X₃,
+    S+P=104X₂(1+S+P)−101X₂/(1+X₂),
+    101X₂X₃=3X₂−X₃+X₁[4Z−1/(1+X₁)],
+    999X₂X₃=X₂+X₃−X₀[5Z−2/(1+X₀)].
+
+The second equation forces X₂<1/104: otherwise its right side exceeds
+S+P by a strictly positive amount. The third then gives
+3X₂+3X₁<2X₃, because its bracket is>3 and101X₂X₃<X₃.
+The fourth gives3X₀<X₂+X₃<5X₃/3. Hence
+S<11X₃/9, contradicting S>3X₃. Thus this word has no positive exact
+joint-phase root at all. Together these tests exclude every all-below
+proper two-pair architecture, including all relabelings, with no guessed
+IFT radius.
+
+### Remaining actual-source comparison: proved tests and live obligations
+
+The unchanged Γ retains positive inverse, R₀/degree+1, harmful-pair non-Q
+and negative triple inverse diagonals. Positive full inverse forces every
+signed-column σ positive. Every scheduled word has a negative participant
+premium and negative c, so the positive-column and nonnegative-participant
+sources fail. On both harmful words Π₀=0 also fails the negative-premium
+source requiring Π<−1. The opposite-sign symmetric participant source fails
+because the two members of each relevant pair have unequal increments.
+
+The previous eleven persistent-base countercomparisons are unchanged.
+Every stationary sure-anchor producer is excluded by the full sure census,
+not merely at a selected root. All fourteen quiet F/J children fail: use
+the earlier direct rows except child1 or13, where T=1 and outsider2 have
+gain2 and nonpositive child gains. For the exceptional child012 the J row
+at12 now forces λ₃₀≥50; the row at01 gives λ₃₂≤1 and F at012 still
+gives−99≤−100λ₃₀+λ₃₂. This remains impossible.
+
+The premium trap is still only I, no player is protected, the forced-floor
+vector at23 is still strictly negative, and L_I(12)=102>0. Sure I violates
+product-low. The all-sure displacement vector is now(101,100,99,−1),
+still distinct; row sums1 exclude terminal upper weights and response
+quotients even after positive affine transports. The weak-unit faces,
+conditional-range obstruction and sign-changing influence2→1 from the
+earlier fixture are unchanged except that player0's favorite premium is
+now−1, making the nonfavorite lower-face failure still strict.
+
+For the known transient neighborhood output requiring three free hazards
+in(1/4,3/4), anchor0 forces free3=0 and anchor2 forces free0=1. With
+anchor3 and all free hazards proper, player0's equation gives
+−5+105q₂<0, making player1's difference strictly negative, impossible.
+With anchor1, free3's equation gives q₂>1/2 and free0's gives
+q₂(6+99q₃)=4, hence q₃<2/99<1/4. Thus no label gives the required
+three interior hazards. This does not exclude every other transient root.
+
+Next question: finish the finite source comparison and independently
+falsify (L1)–(L4) as a genuinely global stronger restriction. A generic
+supplied-root verifier, unknown proper-three neighborhood, or the mere
+finite LP duality is not an export endpoint. The new mechanism is the
+raw LP minimum producing an unrestricted equilibrium and forcing an
+anchored negative-gap coarse law at EVERY player of EVERY counterexample.
