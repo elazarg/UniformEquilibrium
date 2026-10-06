@@ -116,3 +116,82 @@ use the two-core Schur structure while choosing all four independent laws
 and all unilateral caps, on a completion class not already consumed by a
 known criterion? The current calculation supplies no strategy and no
 claim of such coverage. No constants are being optimized.
+
+## A different consumer: nonzero complementary odds, not positive inverse
+
+The following exact reduction is internal supporting mathematics. It does
+not yet produce a root and is not an existence-class claim. Its purpose is
+to permit boundary supports in a genuinely different all-player selection
+problem, rather than demand a positive inverse or a signed-column cone.
+
+Fix two scheduled pairs, with mate a(i) and opposite pair O(i)={j,k}.
+For arbitrary actual rewards define s_i, Γ as above and
+
+    Π_i=r_i({i,a(i)})−s_i,       K_i=r_i(O(i))−s_i,
+    c_i=Π_i−Γ_i,a(i).
+
+Restrict raw coefficients to Π_i≥0,c_i>0,K_i≤0 and the twelve
+opposite-pair joining rewards to r_i({i}∪T)≤s_i for ∅≠T⊆O(i).
+Define, for X≥0,
+
+    N_i(X)=c_iX_a(i)(X_j+X_k+X_jX_k)
+              +Π_iX_a(i)²/(1+X_a(i))−K_iX_jX_k.
+
+Every N_i is nonnegative. Suppose Γ is R₀, and suppose one can produce
+a NONZERO nonlinear complementarity root
+
+    X≥0,       e=ΓX−N(X)≥0,       X_i e_i=0 for every i.     (NC)
+
+Then the original game has an exact two-phase terminal Nash profile and
+one fixed uniform payoff. Here is the complete boundary-root adapter.
+Use q_i=X_i/(1+X_i), allowing zero hazards, and the template values
+
+    U_i=s_i+Π_iq_a(i),          W_i=s_i+c_iX_a(i).
+
+The active Continue endpoint from W_i equals U_i exactly. The passive
+Continue endpoint from U_i equals W_i+e_i/D_i, where
+D_i=(1+X_j)(1+X_k). Both are identities in the actual rewards.
+For X_i>0, complementarity makes e_i=0, so both active actions equal
+U_i and passive Continue equals W_i. Passive Quit≤s_i≤W_i.
+
+For X_i=0, let p=q_a(i), d=1/D_i. The player is prescribed Continue
+at both phases. Let U_i^act,W_i^act be its actual phase payoffs against
+the others. Solving its two scalar policy equations gives
+
+    W_i^act−W_i = (e_i/D_i)/(1−d(1−p)) ≥0,
+    U_i^act−U_i = (1−p)(W_i^act−W_i) ≥0.                  (NC1)
+
+The denominator is positive: (NC) cannot have singleton support. Indeed
+such a support would have N_i=0 in its sole active coordinate and
+ΓX≥N≥0 everywhere, giving a nonzero homogeneous LCP solution,
+contrary to R₀. Thus at least two players have positive hazards and
+every player has an opponent that quits with positive probability each
+two-date cycle. The same fact proves actual existence of the phase
+payoffs and the policy equations used in (NC1).
+
+At an inactive player's nominal active phase, forcing Quit pays U_i,
+which is at most U_i^act. At its passive phase, forcing Quit pays at
+most s_i, which is at most W_i≤W_i^act. Thus every endpoint and
+policy equality holds also for zero coordinates of X. The finite
+geometric deleted-opponent survival remainder proves all behavioral
+deviations, Never included. Its expected absorption bound then gives
+one fixed uniform target with O(1/N) horizon error, exactly as for a
+proper periodic certificate. No opponent is replaced by a supplied
+child equilibrium.
+
+### The actual unsolved production question
+
+The question is whether the original no-UE source (standard Q, R₀,
+degree+1) forces a nonzero root of (NC), or a separate genuine
+equilibrium exit, for this raw coefficient/cap class. The origin is
+always a root; its local degree is the singleton R₀ degree, namely+1.
+Therefore ordinary Nash existence or nonzero degree at the origin alone
+does not supply the required nonzero root. One must determine the global
+degree or an actual boundary alternative, retaining all four coordinates.
+
+The opposite-leaf matrix above is an early exact stress test: its inverse
+has mixed columns, so the signed-column proof is unavailable. Boundary
+supports have not been excluded or exactified away. No global radial bound,
+large-box degree, nonzero-root theorem, or new coverage conclusion is
+claimed at this checkpoint. The next calculation should test this actual
+nonlinear problem, not strengthen the boundary adapter in isolation.

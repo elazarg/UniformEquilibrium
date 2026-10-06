@@ -37,12 +37,18 @@ extension of the raw existence class. The substantive review is in
 `feedback/CODEX_BROUWER__MATCHING_JOINT_PRODUCER__BY_CODEX_NOETHER.md`.
 No other conference feedback was read.
 
-Current independent research: the complete opposite-participant-sign raw
-producer and sixty-coordinate new-coverage table are in
-`notes/CODEX_NOETHER__OPPOSITE_SIGN_MATCHING_PHASE_PRODUCER.md`.
-That new mechanism is an internal proof candidate awaiting independent
-falsification, not an accepted export. The exploratory branch at this
-notebook's end is retained as derivation history.
+The complete opposite-participant-sign producer, strengthened average caps
+and sixty-coordinate coverage table passed two independent base and final
+reviews. The current canonical artifact is
+`exports/OPPOSITE_SIGN_MATCHING_PHASE_UNIFORM_EQUILIBRIUM.md`,606lines,
+SHA256 `2b9f54370677ec176749a0a9c6c008bdb56d5733594d85f60a101374e148ac35`.
+Its original owned candidate and exploratory branch below remain derivation
+history. Current independent research is the separate one-shot join-monotone
+anchor mechanism at this notebook's end; its whole-family proof and exact
+source-separating table are complete ordinary candidates, not independently
+reviewed or exported. Its frozen self-contained manuscript is
+`notes/CODEX_NOETHER__ONE_SHOT_ANCHOR_NEGATIVE_JOIN_NECESSITY.md`,377lines,
+SHA256 `72e18f442d25d6225b96e022b42c573f3542809fc7ce955ce9dfb66b7ad7b331`.
 
 ## Question and finite data
 
@@ -567,9 +573,11 @@ The minimal false implication is that the one-shot row can be made stationary.
 No pure exit exists: every nonempty coalition excluding0 is joined by0;
 with0 and3 present3 leaves; with0 but not3 the matching-pennies pair has
 a profitable toggle. All Never loses to0. Every leave-safe base of size≥2
-fails: containing3 uses its−1 comparison when0 is present; containing01
-fails at01; containing02 fails at012; base12 fails at012; base123 fails
-by player1's−100<1000; the full base fails by player3's99<100.
+fails. The six pair bases01,02,03,12,13,23 have respective witnesses
+(coalition,member)=(01,1),(012,2),(03,3),(012,2),(013,3),(023,3).
+Their joining gains are−5,−1,−1,−1,−1,−1. The four triple bases
+012,013,023,123 fail at their own coalitions for members2,3,3,1,
+with gains−1,−1,−1,−1100. The full base fails by player3's99<100.
 
 Every stationary single-anchor induced-dominance screen also fails. Anchor0
 has unique complementary Nash Quit value43<100=r_0(12). With any other
@@ -595,7 +603,81 @@ contradicting those two bounds. Therefore no nonnegative F/J certificate
 works for any child. Some separately selected quiet-child profile is not
 ruled out by this raw failure.
 
-Next question: finish actual premium/core, guard, range and local-output
-comparisons before claiming significant new coverage. This theorem and its
-exact displayed tests are proved ordinary mathematics; the admission
-judgment remains pending.
+### Remaining exact raw-source comparisons
+
+The singleton matrix is the H=3 favorable matching matrix already analyzed
+above: positive inverse, R₀ degree+1, harmful principal pairs not Q, and
+negative diagonals in each triple inverse. It therefore survives the
+negative-determinant, degree-not-one and child-inverse exits. Row sums1
+force every nonnegative terminal upper-bound weight to be zero. All-sure
+displacements are(1,100,99,−1), distinct, so the same block-row-sum
+identity excludes every nondiscrete response quotient, even after positive
+affine row transports.
+
+Both harmful pair words fail the strongest crossed matching caps because
+player0 has r_0(01)=5>own1. Both also fail the opposite-sign A/B average
+caps: player0's two outsider pair entries sum to6>2s_0, regardless of
+which pair is assigned the negative or positive type. The signed-column
+cone cannot repair this: Γ⁻¹>0 forces every column sign positive; on a
+harmful word its player0 zero buffer again requires its two individual
+pair caps≤1, violated at01. On the favorite word01/23, player1 has
+Π_1=−2 and c_1=−5, violating the positive-column coefficient signs.
+The general inverse-positive/nonnegative-participant producer also fails
+at its harmful-word cap. These are actual raw failures, not a claim that
+all pair-word equilibria are absent.
+
+There is an intrinsic exclusion of every all-below-singleton proper
+two-pair architecture. On either harmful word, player0's Π_0=0 and
+mate comparison−1 force W_0=1+X_mate>1. On the favorite word, its
+participant increment4 forces U_0=1+4q_1>1. This checks all three
+partitions without assuming a neighborhood radius.
+
+The only premium trap is I: every proper nonsingleton has some member
+with no positive subcoalition participant premium inside it. At I all
+premiums are positive. Thus greatest-core proper-pair/triple hypotheses
+fail. No player is protected: use023 for0,01 for1,12 for2,03 for3.
+At S=23 all four forced-Quit premiums are strictly negative:
+(−100,−101,−101,−101), excluding every nonzero nonnegative global
+forced-Quit floor. At full trap I and subset12 the outside joining
+charge is1+100=101>0, excluding intermediate nonpositive-L criteria.
+Sure I violates product-low and supportwise premium balance.
+
+All ordered crossed weak-unit guards fail. Their lower axis condition
+forces the selected passive partner to be the favorite, since an external
+favorite has positive Γ. For the four remaining owner/favorite choices:
+owner0 fails the passive1 upper face at coalition02 (gain1); owner1
+fails its lower face at23 (gain−1100); owner2 fails its lower face at01
+(gain−1); owner3 likewise fails at01 (gain−1). The exact axis necessity
+is `quittingSingletonMatrix_nonpos_of_axis_displacement_nonneg` in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialFaces.lean`;
+the weak-unit structures and consumer are in
+`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`.
+The two-owner half guard always includes a nonanchor owner and fails one
+of these lower witnesses, including all relabelings.
+
+Every conditional range blocker already fails its upper inequality for
+player0. ContinueLower≤r_0(23)=−100, QuitWithoutUpper≥own1 and
+QuitWithUpper≥grand1001. Their convex upper mixture is≥1>−100.
+This uses `IsQuittingConditionalFaceGapRange` in
+`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`.
+Influence2→1 equals−101 at∅ but+6 at{0}, contradicting both
+`SignConsistentQuittingInfluence` and `IsAffineQuittingMembershipGain`
+in the exact stationary files cited above.
+
+The favorable graph is a matching, not a four-cycle or cyclic three-child;
+every row has two harmful singleton comparisons, so the unique-negative
+paired and integral-tournament patterns fail. No off-diagonal Γ entry
+is zero, excluding the owner-risky literal family. The explicit visible
+period-three cylinder requires all participant pair gap ratios near zero;
+our pair01 ratios4 and−2 violate its radius1/50000000, invariant under
+positive affine transports. This does not exclude all unspecified local
+proper-three neighborhoods: no membership radius for those existential
+sources is supplied, and no absence of arbitrary proper-three stationary
+profiles is claimed.
+
+Current result: the one-shot raw family and a complete table outside the
+compared actual producers are now proved ordinary mathematics. Its whole
+completion scope is one nonnegative-own, join-monotone coordinate and
+arbitrary rewards for every other player, not a local root perturbation.
+The next required question is independent falsification of significance
+and the transient behavioral consumer, before any export is considered.
