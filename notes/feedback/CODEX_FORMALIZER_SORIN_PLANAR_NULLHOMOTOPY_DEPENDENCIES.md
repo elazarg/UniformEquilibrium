@@ -139,8 +139,28 @@ and Hurwitz/injective-limit prerequisites live in
 `MathUE/Complex/CircleArgumentPrinciple.lean` and
 `MathUE/Complex/HurwitzLimit.lean`. They derive their finite-zero data rather
 than assuming a census. Normal-family compactness and an actual maximizing
-embedding are still needed to reach full Riemann mapping, followed by the
-general non-injective boundary-extension step above.
+embedding are now supplied by the checked project chain through
+`Math.ComplexAnalysis.exists_bijOn_unitBall_map_eq_zero`
+(`MathUE/Complex/NormalizedDiskBijection.lean`). This gives the actual
+holomorphic disk bijection, not the general non-injective boundary extension.
+
+An accessible source for that remaining step is Milnor's *Dynamics in One
+Complex Variable*, Sections 15–16, Theorem 16.6 and its proof, together with
+Appendix A.3 ([author's notes](https://legacy-www.math.harvard.edu/archive/118r_spring_05/docs/milnor.pdf)).
+It supplies continuous extension onto the closure under the local-connectivity
+conditions, without boundary injectivity. Its formalization still needs the
+spherical length/area, crosscut and Jordan separation, and radial uniqueness
+ingredients. Pommerenke's cited book proof remains inaccessible; this is an
+alternative known-proof source, not a checked boundary-extension theorem.
+The actual analytic bijection can be turned into a subtype homeomorphism using
+pinned open-mapping and continuous-open equivalence APIs. A holomorphic inverse
+and a nonzero-derivative bridge have not yet been supplied here.
+
+Fischer–Zastrow's Peano convention permits a singleton. Their Theorem 2
+application excludes constant loops via its non-null hypothesis, but an
+all-loop consumer must explicitly dispatch constant loops and singleton fills
+before invoking the disk-domain parametrization in Theorem 15. These guards
+must not be silently replaced with a stronger nondegeneracy assumption.
 
 ## Finite-simplex alternative is narrower
 

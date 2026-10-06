@@ -49,6 +49,14 @@ theorem singleton_nonnegative (player : Fin 4) :
   rw [reward_singleton]
   fin_cases player <;> norm_num
 
+theorem nonsingleton_participant_gap_ne_zero
+    (terminal : {S : Finset (Fin 4) // S.Nonempty}) (player : Fin 4)
+    (hmember : player ∈ terminal.val) (hcard : 2 ≤ terminal.val.card) :
+    reward terminal player - reward (quittingSingletonTerminal player) player ≠ 0 := by
+  fin_cases terminal <;> fin_cases player <;>
+    norm_num +decide [reward, coalitionCode, Math.FiniteCoalition.binaryCode_finFour,
+      quittingSingletonTerminal] at *
+
 theorem reward_abs_le (terminal : {S : Finset (Fin 4) // S.Nonempty})
     (player : Fin 4) : |reward terminal player| ≤ 3 := by
   fin_cases terminal <;> fin_cases player <;>

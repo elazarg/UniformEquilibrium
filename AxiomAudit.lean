@@ -81,9 +81,12 @@ import MathUE.CoerciveIntervalMinimum
 import MathUE.CofiniteIdeal
 import MathUE.CompactChargedPathCapacity
 import MathUE.CompactFiniteChargedReturn
+import MathUE.Complex.BoundedHolomorphicEquicontinuity
 import MathUE.Complex.CircleArgumentPrinciple
 import MathUE.Complex.DiskEmbeddingDerivativeImprovement
 import MathUE.Complex.HurwitzLimit
+import MathUE.Complex.NormalizedDiskBijection
+import MathUE.Complex.NormalizedDiskDerivativeMaximum
 import MathUE.Complex.NormalizedDiskEmbedding
 import MathUE.Complex.UnitDiscShift
 import MathUE.ConstrainedAffineNormalWork
@@ -661,6 +664,7 @@ import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.AmbientDegree
 import MathUE.Topology.AmbientDegreeHomotopyNormalization
+import MathUE.Topology.AmbientDegreeNegativeFixedPointObstruction
 import MathUE.Topology.AmbientDegreeNonlinearLocalIndex
 import MathUE.Topology.AmbientDegreeProperties
 import MathUE.Topology.AmbientDegreeSelfMapNormalization
@@ -1887,6 +1891,7 @@ import UniformEquilibrium.Quitting.Classification.AuxiliaryDiscountedQuantitativ
 import UniformEquilibrium.Quitting.Classification.BlockDeletion
 import UniformEquilibrium.Quitting.Classification.BlockDeletionCertificate
 import UniformEquilibrium.Quitting.Classification.BlockDeletionInequality
+import UniformEquilibrium.Quitting.Classification.BoxedQuittingNashChargeNeighborhood
 import UniformEquilibrium.Quitting.Classification.BoxedQuittingNashChargeOdds
 import UniformEquilibrium.Quitting.Classification.BoxedQuittingNashChargeReturn
 import UniformEquilibrium.Quitting.Classification.BoxedQuittingNashCharges
@@ -2270,6 +2275,7 @@ import UniformEquilibrium.Quitting.Classification.QuittingPremiumCoreSmoothDrift
 import UniformEquilibrium.Quitting.Classification.QuittingPremiumCoreStrictLeave
 import UniformEquilibrium.Quitting.Classification.QuittingPremiumReward
 import UniformEquilibrium.Quitting.Classification.QuittingPremiumSupportPeelingOrder
+import UniformEquilibrium.Quitting.Classification.QuittingPremiumTrapNeighborhood
 import UniformEquilibrium.Quitting.Classification.SignedPairCoreBadRoot
 import UniformEquilibrium.Quitting.Classification.SignedPairCoreSelectedReturn
 import UniformEquilibrium.Quitting.Classification.SignedPairPassivePerturbation
@@ -2653,6 +2659,7 @@ import UniformEquilibrium.Quitting.Examples.BlockPair.PredecessorCharts
 import UniformEquilibrium.Quitting.Examples.BlockPair.PredecessorComposition
 import UniformEquilibrium.Quitting.Examples.BlockPair.QuadraticRootSelection
 import UniformEquilibrium.Quitting.Examples.BoxedNashChargeFullCoreFixture
+import UniformEquilibrium.Quitting.Examples.BoxedNashChargeNeighborhoodFixtures
 import UniformEquilibrium.Quitting.Examples.BoxedNashChargeTripleFixture
 import UniformEquilibrium.Quitting.Examples.CapThresholdFinFour
 import UniformEquilibrium.Quitting.Examples.CapThresholdFinThree
@@ -3253,6 +3260,8 @@ import UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixSimplex
 import UniformEquilibrium.Quitting.Root.TerminalSemanticResetFaceRigidity
 import UniformEquilibrium.Quitting.Root.TerminalSemanticSoloCapThreshold
 import UniformEquilibrium.Quitting.Root.TerminalSemanticSoloPayoffThreshold
+import UniformEquilibrium.Quitting.Root.TripleEndpointPartials
+import UniformEquilibrium.Quitting.Root.TripleFullClippedJacobian
 import UniformEquilibrium.Quitting.Root.TruncatedStoppingLaw
 import UniformEquilibrium.Quitting.Root.UpwardTranslation
 import UniformEquilibrium.Quitting.Root.VectorTranslation

@@ -1,4 +1,7 @@
 import UniformEquilibrium.Quitting.Root.FullClippedEndpointMap
+import UniformEquilibrium.Quitting.Bellman.Finite.ActiveSetSupport
+import Mathlib.Analysis.Calculus.Deriv.Pi
+import Mathlib.Analysis.Calculus.Deriv.Comp
 import MathUE.LinearAlgebra.IdentityComplementDeterminant
 import Mathlib.Analysis.Calculus.FDeriv.Pi
 import Mathlib.Analysis.Calculus.FDeriv.Congr
@@ -112,5 +115,68 @@ theorem quittingFullClippedDisplacementDerivative_det_eq_active_det
   intro row hrow column
   rw [quittingFullClippedDisplacementDerivative_matrix_entry]
   simp only [hrow, ite_false]
+
+theorem quittingRealHazardEndpointGap_update_own
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
+    (point : ι → ℝ) (player : ι) (rate : ℝ) :
+    quittingRealHazardEndpointGap reward tail (Function.update point player rate) player =
+      quittingRealHazardEndpointGap reward tail point player := by
+  unfold quittingRealHazardEndpointGap CoalGame.coordinateDerivative
+  apply Finset.sum_congr rfl
+  intro coalition _
+  by_cases hplayer : player ∈ coalition
+  · simp only [hplayer, ite_true]
+    congr 1
+    apply Finset.prod_congr rfl
+    intro who hwho
+    exact Function.update_of_ne (Finset.mem_erase.mp hwho).1 rate point
+  · simp only [hplayer, ite_false]
+
+theorem quittingRealHazardEndpointGap_own_partial_eq_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
+    (point : ι → ℝ) (player : ι) :
+    fderiv ℝ (fun hazard => quittingRealHazardEndpointGap reward tail hazard player)
+      point (Pi.single player 1) = 0 := by
+  have hregular := contDiff_quittingRealHazardEndpointGap reward tail 1 player
+  have hgap := (hregular.differentiable_one point).hasFDerivAt
+  have hchain := hgap.comp_hasDerivAt_of_eq (point player)
+    (hasDerivAt_update point player (point player)) (by simp)
+  have hconstant : HasDerivAt
+      (fun rate => quittingRealHazardEndpointGap reward tail
+        (Function.update point player rate) player) 0 (point player) := by
+    simpa only [quittingRealHazardEndpointGap_update_own] using
+      (hasDerivAt_const (point player) (quittingRealHazardEndpointGap reward tail point player))
+  exact hchain.unique hconstant
+
+/-- Any proper actual support with strictly inactive gaps has the canonical
+full ambient derivative, independently of the support's cardinality. -/
+theorem hasFDerivAt_quittingFullClippedDisplacement_of_properSupportNash
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
+    (root : ι → PMF Bool) (active : Finset ι)
+    (hsupport : quittingPositiveHazardSupport root = active)
+    (hproper : ∀ player ∈ active, (root player true).toReal ∈ Ioo (0 : ℝ) 1)
+    (hnash : IsεQuittingRootNash reward tail 0 root)
+    (hnegative : ∀ player ∉ active, quittingRootEndpointDifference reward tail root player < 0) :
+    HasFDerivAt (fun hazard => hazard - quittingFullClippedEndpointMap reward tail hazard)
+      (quittingFullClippedDisplacementDerivative reward tail active (hazardOfRoot root))
+      (hazardOfRoot root) := by
+  have hendpoint :=
+    (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash reward tail root).mpr hnash
+  apply hasFDerivAt_quittingFullClippedDisplacement
+  · intro player hplayer
+    have hprobability := hproper player hplayer
+    have hfalse : 0 < (root player false).toReal := by
+      rw [Math.PMFProduct.pmfBool_false_toReal]
+      exact sub_pos.mpr hprobability.2
+    have hgap := quittingRootEndpointDifference_eq_zero_of_both_probabilities_pos
+      reward tail root player hendpoint hfalse hprobability.1
+    simpa only [quittingRealHazardEndpointGap_hazardOfRoot, hgap, add_zero, hazardOfRoot]
+      using hprobability
+  · intro player hplayer
+    have hpure := quittingRoot_eq_pure_false_of_not_mem_positiveHazardSupport root
+      (by rwa [hsupport])
+    left
+    simpa [quittingRealHazardEndpointGap_hazardOfRoot, hazardOfRoot, hpure]
+      using hnegative player hplayer
 
 end GameTheory

@@ -4,6 +4,9 @@ MathUE/Complex/DiskEmbeddingDerivativeImprovement.lean
 MathUE/Analysis/AnalyticCompactZeroFactorization.lean
 MathUE/Complex/CircleArgumentPrinciple.lean
 MathUE/Complex/HurwitzLimit.lean
+MathUE/Complex/BoundedHolomorphicEquicontinuity.lean
+MathUE/Complex/NormalizedDiskDerivativeMaximum.lean
+MathUE/Complex/NormalizedDiskBijection.lean
 
 These files adapt source by Yury Kudryashov from urkud/mathlib4,
 commit d43061d911b1aeae0788591da437a3b115098962:

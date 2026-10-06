@@ -22,38 +22,6 @@ open Set Filter Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-theorem quittingRealHazardEndpointGap_update_own
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
-    (point : ι → ℝ) (player : ι) (rate : ℝ) :
-    quittingRealHazardEndpointGap reward tail (Function.update point player rate) player =
-      quittingRealHazardEndpointGap reward tail point player := by
-  unfold quittingRealHazardEndpointGap CoalGame.coordinateDerivative
-  apply Finset.sum_congr rfl
-  intro coalition _
-  by_cases hplayer : player ∈ coalition
-  · simp only [hplayer, ite_true]
-    congr 1
-    apply Finset.prod_congr rfl
-    intro who hwho
-    exact Function.update_of_ne (Finset.mem_erase.mp hwho).1 rate point
-  · simp only [hplayer, ite_false]
-
-theorem quittingRealHazardEndpointGap_own_partial_eq_zero
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
-    (point : ι → ℝ) (player : ι) :
-    fderiv ℝ (fun hazard => quittingRealHazardEndpointGap reward tail hazard player)
-      point (Pi.single player 1) = 0 := by
-  have hregular := contDiff_quittingRealHazardEndpointGap reward tail 1 player
-  have hgap := (hregular.differentiable_one point).hasFDerivAt
-  have hchain := hgap.comp_hasDerivAt_of_eq (point player)
-    (hasDerivAt_update point player (point player)) (by simp)
-  have hconstant : HasDerivAt
-      (fun rate => quittingRealHazardEndpointGap reward tail
-        (Function.update point player rate) player) 0 (point player) := by
-    simpa only [quittingRealHazardEndpointGap_update_own] using
-      (hasDerivAt_const (point player) (quittingRealHazardEndpointGap reward tail point player))
-  exact hchain.unique hconstant
-
 private theorem pair_gap_update_second
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
     {first second : ι} (hne : first ≠ second) (firstLaw secondLaw : PMF Bool)

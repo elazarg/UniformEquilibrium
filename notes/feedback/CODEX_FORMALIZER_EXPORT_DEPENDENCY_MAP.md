@@ -824,9 +824,24 @@ and Section 7 tables supply participant/trap/core censuses, exact coefficient
 layers, thresholds 90 and 348 times the square root of 45, and actual payoff
 consumers in `UniformEquilibrium/Quitting/Examples/BoxedNashChargeTripleFixture.lean`
 and `UniformEquilibrium/Quitting/Examples/BoxedNashChargeFullCoreFixture.lean`.
-These are the first bounded fixture units: strict raw neighborhoods, unbounded
-annotation counterroots, every proper-child debt witness, no-floor/no-pure tests
-and matrix/response exclusions remain obligations. The boxed-charge packet is
+`eventually_full_potential_exclusion_fixed_box` and
+`eventually_positive_fullSingletonRaise_uniformPayoff_neighborhood`
+(`UniformEquilibrium/Quitting/Examples/BoxedNashChargeNeighborhoodFixtures.lean`)
+give an actual signed analytic neighborhood at fixed box five and positive
+interior UE tables by raising exactly the three zero own-singletons. The
+proper-triple table has a full reward-coordinate UE neighborhood; the original
+full-core table's UE neighborhood retains the nonnegative-singleton slice.
+The raw finite strict tests preserve actual traps and one fixed coordinate
+bound, strictly above the tables' attained maxima.
+`exists_box_potential_exclusion_of_boxedQuittingNashCharges`
+(`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashChargeReturn.lean`)
+exposes the signed arbitrary-finite raw analytic producer, selecting the box
+before every potential with continuity on the same sublevel domain and ambient
+differentiability only on the singleton lower boundary. Its selected-root
+producer needs no comparison between the reward bound and return box; the
+analytic consumer retains the strict comparison. Unbounded annotation
+counterroots, every proper-child debt witness, no-floor/no-pure tests and
+matrix/response exclusions remain obligations. The boxed-charge packet is
 not sealed by its main payoff result alone. The game-independent binary coalition encoder
 `Math.FiniteCoalition.binaryCode_injective` (`MathUE/Finset/CoalitionBinaryCode.lean`)
 is extracted from the existing reward-table owner; its private aliases retain
@@ -893,8 +908,21 @@ strategy, selected-root or index certificate. The generic
 `isUniformEquilibriumPayoff_setReward_of_pureSetNash`
 (`UniformEquilibrium/Quitting/Root/PureSetNashSureExit.lean`) works for every
 finite coalition of size at least two, without reward signs or core premises.
-No annotation avoidance is needed for the signed-pair branch. Mixed/triple cases
-still need finite census and tie avoidance.
+No annotation avoidance is needed for the signed-pair branch. The generic
+`not_all_fixedPoints_have_negative_det_finite`
+(`MathUE/Topology/AmbientDegreeNegativeFixedPointObstruction.lean`) derives its
+finite census internally by compactness and nonlinear isolation, and contradicts
+degree one when every actual cube fixed point has negative determinant.
+Dimension zero and arbitrary finite coordinate types are included.
+`tripleNash_hasFDerivAt_and_negative_det_fullClippedDisplacement`
+(`UniformEquilibrium/Quitting/Root/TripleFullClippedJacobian.lean`) computes the
+actual full ambient triple derivative and negative sum of the two directed
+cycle products, retaining all inactive directions. The literal cross-partial
+and odds-ratio source is in
+`UniformEquilibrium/Quitting/Root/TripleEndpointPartials.lean`. Generic
+own-coordinate and proper-support derivative proofs live once in the canonical
+full derivative owner; the old signed-pair weak consumer passes its regression.
+Mixed/triple raw classification, tie avoidance and UE composition remain separate.
 `exists_fixedPoint_ne_of_negative_det_finite`
 (`MathUE/Topology/AmbientDegreeUniqueFixedPointIndex.lean`) now derives an actual
 second fixed point using nonlinear local index and excision in an expanded
@@ -1894,8 +1922,9 @@ checks: actual disk normalization and an omitted-point derivative improvement
 are supplied for open simply connected proper complex domains. The first
 reuses a pinned private source via supported import-all, not an external draft
 dependency. Apache attribution, license text and immutable provenance are
-retained. Maximizing embeddings, surjectivity and the non-injective continuous
-boundary extension needed for general component frontiers remain separate;
+retained. The actual maximizing and surjective consumers are recorded below.
+The non-injective continuous boundary extension needed for general component
+frontiers remains separate;
 no Jordan-boundary or whole-feasible-carrier LPC assumption is inserted.
 `Math.Analysis.exists_finset_eq_prod_smul_nonzero`
 (`MathUE/Analysis/AnalyticCompactZeroFactorization.lean`) supplies the actual
@@ -1910,9 +1939,16 @@ radius zero. `eqOn_zero_or_forall_ne_zero_of_tendstoLocallyUniformlyOn` and
 alternatives for a nontrivial countably generated filter on an open preconnected
 complex domain. Pinned codiscrete-zero and circle-integral convergence APIs are
 reused, not duplicated. Their source adaptations retain Apache attribution and
-the immutable upstream provenance. Normal-family compactness, an actual
-maximizing map, full disk surjectivity and conformal boundary extension remain
-separate; these analytic prerequisites do not seal Sorin's Proposition 11.
+the immutable upstream provenance.
+`Math.ComplexAnalysis.exists_normalized_disk_derivative_maximum`
+(`MathUE/Complex/NormalizedDiskDerivativeMaximum.lean`) constructs an actual
+maximizer from equicontinuity, compact exhaustion, Ascoli and the injective-limit
+theorem. `Math.ComplexAnalysis.exists_bijOn_unitBall_map_eq_zero`
+(`MathUE/Complex/NormalizedDiskBijection.lean`) supplies the normalized
+holomorphic disk bijection for arbitrary chosen base points in open simply
+connected proper complex domains. The named dependency closure passes silently.
+General non-injective boundary extension and planar disk models remain separate;
+these analytic results do not seal Sorin's Proposition 11.
 The source-backed remaining route is recorded in
 `notes/feedback/CODEX_FORMALIZER_SORIN_PLANAR_NULLHOMOTOPY_DEPENDENCIES.md`.
 `isPathConnected_selectedComponentFill` (`MathUE/Topology/SelectedComponentFill.lean`)

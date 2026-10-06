@@ -1,5 +1,8 @@
 import UniformEquilibrium.Quitting.Classification.BoxedQuittingNashChargeOdds
 import UniformEquilibrium.Quitting.RewardBound
+import UniformEquilibrium.Quitting.Projective.SelectedSingletonSublevelReturnSmoothDrift
+import UniformEquilibrium.Quitting.Root.NashExistence
+import UniformEquilibrium.Quitting.Root.BelowSingletonRootAbsorption
 import Mathlib.Order.Filter.Finite
 
 /-! # Actual boxed Nash-charge singleton-sublevel return
@@ -117,5 +120,48 @@ theorem exists_successor_le_singleton_of_boxedQuittingNashCharges
     exact (not_lt_of_ge hupper) (hmargin.trans hcharge)
   · exact exists_successor_le_singleton_of_exactRoot_nontrap_support
       reward tail root hnash habsorption htrap
+
+theorem hasBoxedSelectedSingletonSublevelReturn_of_boxedQuittingNashCharges
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {M bound : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hcharges : HasBoxedQuittingNashCharges reward bound) :
+    HasBoxedSelectedSingletonSublevelReturn reward bound := by
+  intro tail hbox hbelow
+  obtain ⟨player, hplayer⟩ := hbelow
+  obtain ⟨root, hnash⟩ := exists_isZeroQuittingRootNash (reward := reward) tail
+  have hgap : 0 < reward (quittingSingletonTerminal player) player - tail player := by
+    change tail player < reward (quittingSingletonTerminal player) player at hplayer
+    linarith
+  have hnonnegative := quittingRewardCoordinateBound_nonneg_of_player reward player hreward
+  have habsorption := belowSingleton_exactRoot_absorptionMass_lowerBound
+    reward tail root player hgap hreward (by linarith) hnash
+  have hpositive : 0 < quittingRootAbsorptionMass root :=
+    (div_pos hgap (by positivity)).trans_le habsorption
+  refine ⟨root, hnash, ?_⟩
+  exact exists_successor_le_singleton_of_boxedQuittingNashCharges
+    reward bound hcharges tail hbox root hnash hpositive
+
+/-- Signed finite analytic exclusion from raw charge tests, with a common
+box selected before the potential. No own-singleton sign is required. -/
+theorem exists_box_potential_exclusion_of_boxedQuittingNashCharges
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (M : ℝ)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hcharges : HasBoxedQuittingNashCharges reward M) :
+    ∃ bound, M < bound ∧ bound < M + 2 ∧
+      ∀ potential : Payoff ι → ℝ,
+        ContinuousOn potential (quittingBoxedSingletonSublevelDomain reward bound) →
+        (∀ point ∈ Math.lowerBoxBoundary
+          (fun player => quittingSoloReward reward player player) (fun _ => bound),
+            DifferentiableAt ℝ potential point) →
+        ¬IsQuittingFullExactRootPotential reward bound potential := by
+  obtain ⟨bound, hbound, hupper, hboxCharges⟩ :=
+    exists_common_box_of_boxedQuittingNashCharges reward M hcharges
+  refine ⟨bound, hbound, hupper, ?_⟩
+  intro potential hcontinuous hdiff
+  exact not_isQuittingFullExactRootPotential_of_selectedSingletonSublevelReturn
+    reward hreward hbound
+    (hasBoxedSelectedSingletonSublevelReturn_of_boxedQuittingNashCharges
+      reward hreward hboxCharges) potential hcontinuous hdiff
 
 end GameTheory
