@@ -434,7 +434,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. Both strict and weak tests have production Lean consumers. |
-| Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. Both trap sizes may coexist; every trap must pass its finite coefficient test. This is reviewed mathematics awaiting formalization. |
+| Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The raw coefficient predicate, common-box selection, exact-root return and original-game payoff producer have production Lean declarations. The explicit C3/C4 simplifications and packet examples remain formalization obligations. |
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
@@ -916,6 +916,21 @@ child. Exact high-successor roots outside the box show why its bounded-source
 premise is essential. Pair traps are outside this criterion. Neither the
 signed-pair nor the boxed-charge criterion is an exhaustive classification
 of the remaining reward tables.
+
+The production theorem
+`exists_uniformEquilibriumPayoff_of_boxedQuittingNashCharges`
+(`UniformEquilibrium/Quitting/Classification/Existence/BoxedQuittingNashChargesUniformPayoff.lean`)
+takes only nonnegative own singletons, an arbitrary coordinate reward bound,
+and `HasBoxedQuittingNashCharges`. Its predicate carries the finite
+coefficient inequalities and the strict charge threshold for each trap;
+no root, strategy or selected-return certificate is supplied.
+`exists_common_box_of_boxedQuittingNashCharges` and
+`exists_successor_le_singleton_of_boxedQuittingNashCharges`
+(`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashChargeReturn.lean`)
+select one box for all sources and prove return for every absorbing exact
+root there, including sure-hazard cases. The explicit C₃/C₄ threshold
+simplifications and the displayed table tests remain separate packet
+obligations; the export is not yet fully formalized.
 
 The **mixed premium-trap criterion** allows pair traps and larger traps in
 the same table. Own singletons are nonnegative. For every pair trap {i,j},
