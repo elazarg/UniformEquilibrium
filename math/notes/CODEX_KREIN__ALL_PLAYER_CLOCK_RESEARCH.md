@@ -123,6 +123,13 @@ larger-root D condition could fail on the degree-one/Q part of this sign
 chamber: the actual test root forces the strict inequality. No numerical
 root selection is being used to claim that implication.
 
+For a negative boundary check before the degree-one restriction, take
+all b_i=h_i=1 and (g₀,g₁,g₂,g₃)=(−1,1,−1,1). Here D=0.
+The same test offset has no solution: full support would give
+z₂=z₀+z₃, and then its zeroth equation would read −z₁−z₀=1.
+Thus the strict sign chamber by itself does not force the spectral gates;
+the actual no-UE/Q source is essential in the implication proved above.
+
 ## Next independent-law question
 
 A universal construction cannot use deterministic at-most-one-owner
