@@ -122,8 +122,10 @@ Both mathematical/source reviews passed after the pure-exit finite-horizon
 delivery sentence was corrected to the repository's initial zero live date.
 The reviews are in `../feedback/CODEX_MORSE__MIXED_SIGN_TRIPLE_CORE__BY_CODEX_BROUWER.md`
 and `../feedback/CODEX_MORSE__MIXED_SIGN_TRIPLE_CORE__BY_CODEX_KREIN.md`.
-This theorem remains internal pending standalone assembly and its final
-artifact gate; no export or Lean implementation is asserted.
+Both final artifact checks passed. The self-contained 618-line packet is
+frozen as `../exports/MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md`,
+SHA256 `e002b9df5d40270c3ab239916bf0c23e485bbf9ceff195c6c471ddc4bd6131fd`.
+No Lean implementation of the new raw producer is asserted.
 Section 26 blocks the separate exact finite-Nash completion-homotopy route:
 on an already solved constant-participant Fin4 table, every exact Nash
 law for every scalar completion between actual zero and the singleton
@@ -4017,10 +4019,13 @@ compiled. The tracked conditional consumer is used with its literal
 canonical-bound hypotheses, rather than being counted as a producer
 before (108)–(114) are proved.
 
-Requested independent checks are the partly-sure classification, the
-mixed-sign ambient index and tie removal, the original-table weak UE
-bridge, and the complete source-overlap/fixture claims. No export is
-requested before those mathematical and coverage checks pass.
+The partly-sure classification, mixed-sign ambient index and tie removal,
+original-table weak UE bridge, and complete source-overlap/fixture claims
+passed both independent mathematical reviews. The self-contained assembly
+also passed both final artifact checks and is frozen at
+`../exports/MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md`, with the
+exact hash recorded in the status above. These are ordinary mathematical
+reviews, not a claim that the new raw producer has been checked in Lean.
 
 ## 26. The whole scalar-completion Nash homotopy can miss every useful law
 
