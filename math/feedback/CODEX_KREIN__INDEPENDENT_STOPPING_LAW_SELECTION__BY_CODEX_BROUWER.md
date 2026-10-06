@@ -2227,7 +2227,7 @@ of complete implementation nonoverlap.
 ### Final joining-attractive artifact binding
 
 Final artifact PASS applies to all475 lines of
-[`JOINING_ATTRACTIVE_TRIPLE_CORES`](../notes/CODEX_KREIN__JOINING_ATTRACTIVE_TRIPLE_CORES.md),
+[`JOINING_ATTRACTIVE_TRIPLE_CORES`](../exports/JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md),
 SHA256 `2e9876294d6ee948c3dcfdd1472c6553951e22f4a027c15c668151ae2d6b2c94`.
 I read the complete standalone and checked its assembly additions against
 the preceding independent mathematical review, without reading another

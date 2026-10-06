@@ -1822,3 +1822,183 @@ nearby positive-singleton interior point. The Lean handoff specifies
 the actual raw producer chain, with no supplied root or equilibrium
 hidden among the inputs. No conference-note dependency or new Lean
 certification claim has been introduced. No mathematical repair remains.
+
+## Independent review: joining-attractive triple cores
+
+Verdict: PASS on the complete notebook section **Joining-attractive triple
+cores: negative index without a charge box**, at whole-notebook SHA256
+`ca96e6bdb54f476e8a50f4d61747be18af1b0f7cacb2c76984cdb36002119fee`.
+No counterpart review was read. This is a full mathematical, raw-source
+and semantic audit, not a Lean build or a strategic completeness claim.
+
+The claim checked is the literal Fin4 fixed-target uniform-equilibrium
+conclusion for nonnegative own singletons, greatest premium core of size
+three, and nonnegative insertion differences on every nonempty coalition
+inside that core. Participant premiums, including those of core members,
+may be negative. Strict insertion differences first give analytic full-root
+potential exclusion; weak differences use reward closure only.
+
+### Raw support, sure hazards and the full local index
+
+The signed nontrap argument is valid. A nontrap active support has an
+active member with every participant reward on that support at most its
+singleton; exact Nash therefore gives a low successor coordinate. Every
+bad support must be a pair or the greatest triple core. For an outsider
+k, a participant reward above its singleton against any subset of C would
+make C∪{k} a trap. Thus at a bad root its actual forced-Quit endpoint
+is at most its singleton and its full inactive gap is strictly negative.
+No floor on the outsider's continuation or equality of its participant
+rewards is being assumed.
+
+The sure-hazard cascade is exhaustive. A sure core member makes every
+other core member face a nonempty core coalition with probability one;
+strict insertion then forces each to be sure. Pure C, if full Nash, is
+source-independent and yields an immediate actual equilibrium. Otherwise
+every active hazard at every bad root is interior. This rules out the
+partly-sure cases before differentiating.
+
+I derived the odds identity and triple derivative directly from the full
+endpoint sum. At a root the derivative of the survival prefactor multiplies
+zero, leaving exactly (113), with six strictly positive off-diagonal entries
+and zero diagonal. Hence det(−Dg|C) is the negative sum of the two directed
+three-cycle products. This is the full determinant after adjoining the
+strictly clipped outsider rows: their blocks are 0,Id, while the unrestricted
+upper-right block retains all simultaneous outsider interactions. The proof
+does not replace those interactions by a two-player subgame.
+
+For a pair the active determinant is −α_iα_j<0. The unused core member
+is not covered by the outsider bound and really can be tied. Formula (115)
+is the full gap after multiplication by α_iα_j, including the actual triple
+reward. Its coefficient of v_k is −d_i d_j≠0. A finite product of the
+corresponding nonzero polynomials gives simultaneous dense-open tie avoidance
+without a supplied genericity theorem or a reward perturbation.
+
+At a generic below-floor annotation every root absorbs. Under the proposed
+no-return contradiction, EVERY root is bad, so every root has a nonsingular
+full derivative and local index −1. Compactness plus isolation really makes
+this entire root set finite; it is not an assumption about one selected
+branch. On the enlarged ambient cube the clipped map always has image in
+the unit cube. The homotopy to its center is boundary-fixed-point-free,
+giving total index +1. Excision and finite additivity then contradict −K.
+There is no half-index issue at zero outsider hazards.
+
+The subsequent limit restores every original boxed source with a strict
+singleton deficit. The deficit excludes an all-Continue limit, the Nash
+inequalities and low-coordinate union are closed, and the reward/source
+convex combination stays in the identical box. No continuity of a selector
+or behavioral realizability of the annotation is required.
+
+### Minimum, weak boundary and actual semantic consumer
+
+The same-D minimum proof is complete. The collision-adjusted singleton
+probe is exact even with signed premiums; its source correction cancels
+in the first-order difference. Upper-box faces cause no missing term or
+source escape. A unique binding singleton is excluded by the face inequality;
+with at least two bindings the relevant inward partial derivatives are
+nonnegative. The signed bounds Q_j≥s_j−2Ma and displacement≤(M+B)a
+give ε≤(3M+B)a. The returned successor belongs to the SAME D, so the
+minimum and drift contradict the nonnegative partial derivative.
+
+For weak insertion comparisons, each changed coordinate is passive to
+its own receiver. None of the participant rewards or own singletons
+changes, so every strict premium witness, every trap, and the greatest
+core remain exactly the same. Each of the nine compared gaps increases
+by δ; no participant endpoint is accidentally changed by another edit.
+Reward closure gives one fixed uniform target, not a target depending
+on the requested accuracy. This establishes weak strategic coverage,
+not an unproved weak local determinant statement.
+
+The exact inspected source composition is valid. In
+`MathUE/FiniteCoalitionPremiumCore.lean`, the trap union, subset-core and
+`not_positive_on_core_insert` statements have the needed signed scope.
+`exists_successor_le_singleton_of_exactRoot_nontrap_support` in
+`UniformEquilibrium/Quitting/Classification/CommonQuittingPremiumLeaver.lean`
+adds no nonnegative-premium assumption. The topological inputs are actual
+`ambientDegree_homotopy`, `ambientDegree_affineRootField_eq_sign_det`,
+`ambientDegree_excision`, `ambientDegree_additive`, and
+`ambientDegree_of_selfMap_eq_one` in the three named AmbientDegree modules;
+the new full Jacobian and tie avoidance are proved in the manuscript.
+
+`isQuittingNormalPlayer_of_singleton_nonneg` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean` supplies
+normality. The declaration
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`
+produces the actual polynomial under no UE and a positive singleton.
+`isQuittingFullExactRootPotential_of_robustPotential` and `.mono_box`
+in `UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`
+retain the SAME function on M+1. The signed face input is
+`IsQuittingFullExactRootPotential.singletonFace_drift` in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`.
+The closure declaration is
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+No supplied root, equilibrium, regularity hypothesis or unimplemented parity
+interface has entered the final raw-data implication. Finite-player analytic
+scope and Fin4 strategic scope are correctly separated.
+
+### Exact falsification attempts and stronger inventory
+
+I recomputed the complete fixture with rational arithmetic. Its sole trap
+is123, its insertion gaps are (1,1,4) for each core player, and every listed
+pure deviation is profitable. The signed and weak variants have gaps
+(1/2,1,4) and (0,1,4), up to cyclic order, without a new trap. Raising
+the specified three participant entries to1 gives exactly the overlapping
+traps12,13,23,123 and gaps (1,2,4), again up to order. No disjointness
+assumption has leaked in from the earlier boxed theorem.
+
+The matrix and all inverse entries agree. For the degree calculation,
+at offset (1,−1,−1,−1) any vanishing child coordinate forces a negative
+residual in the next child row. Thus all three child coordinates are
+1+p_0; the pivot residual is2+p_0, forcing p_0=0. The unique regular
+root is therefore the one displayed. The same argument at homogeneous
+offset makes a positive pivot impossible and then forces the child zero.
+The R₀/degree-one claim and the negative passive inverse coordinate check.
+All thirteen block-row witnesses and the remaining full response polynomial
+were independently recomputed; F_3−F_1=−t³ exactly. The other source
+exclusions keep their bounded stated scope. In particular the manuscript
+does not claim failure of every proper-child universal debt certificate.
+
+The assembled actual triple-root test is also exact: at its stated v and q,
+Q_0=171/320, C_0=3559/3200, all three active endpoints equal the displayed
+successor coordinates, and the full determinant is −2254/171. It directly
+refutes an all-roots-return strengthening within the admitted class.
+
+An additional independent tied-pair regression is recorded self-contained
+in Section 23 of `../notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`.
+Use the overlapping variant and
+
+    v=(9/10,2/3,1/3,13/9), q=(0,1/4,1/4,0).
+    Q=(9/16,1/4,3/4,1), C=w=(191/160,1/4,3/4,1).
+
+It is bad, has a strict outside-core gap −101/160, and has an EXACT
+inactive-core tie. The active determinant is −32/9 but the full clipped
+map is nondifferentiable; increasing v_3 by η makes the latter gap
+−9η/16 and validates the full negative determinant. This tests the
+specific place where genericity is needed, rather than merely asserting
+that a tie polynomial might vanish.
+
+Section 23 also proves an optional strengthening: after excluding pure C,
+there is AT MOST ONE bad root at a fixed source, even across different pair
+and triple supports and without genericity. In odds, each core equation
+is a function f_i of the other two coordinates with all positive coefficients.
+Two distinct triple solutions contradict strict coordinate monotonicity;
+a pair and a triple would violate the unused player's Nash inequality;
+two distinct pairs give reciprocal strict inequalities b_k>c b_j and
+b_j>b_k/c. The manuscript's existing finite-isolation proof is already
+sufficient; this stronger inventory is not a required repair or a raw-class
+extension and must not be read as extending the sign argument to full cores.
+
+### Bounded entire-artifact check
+
+Final artifact verdict: PASS on all 475 lines of
+`exports/JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md`, SHA256
+`2e9876294d6ee948c3dcfdd1472c6553951e22f4a027c15c668151ae2d6b2c94`.
+I read the entire standalone after the notebook argument. Its substantive
+assembly additions are the full endpoint definitions, explicit partition
+table, actual boxed bad triple root, exact strategic quantifiers and Lean
+handoff. All check. The mathematical packet is self-contained and cites
+tracked source inputs, not another conference note or a frozen export.
+The weak boundary, source-independence of the pure exit, and finite-player
+versus Fin4 scopes remain unchanged. No mathematical repair is requested;
+the optional uniqueness observation above is outside the frozen artifact.

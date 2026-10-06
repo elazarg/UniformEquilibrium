@@ -100,6 +100,10 @@ Section 22 records a global strategy-class obstruction, not new UE coverage:
 even a constant-participant-reward table can force almost all equilibrium
 mass onto a genuine four-player collision. The stage-concentration part is
 already supplied by the existing nonsingleton anti-diffusion theorem.
+Section 23 gives an independent strengthening and a tied-root test for the
+reviewed joining-attractive triple-core mechanism: after the pure-core exit,
+there is at most one bad root at a fixed source, even across distinct pair
+and triple supports. This is a root inventory, not broader table coverage.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -3336,3 +3340,117 @@ It does not rule out first dispatching sure pure equilibria and applying
 a restricted grammar to the residual. A genuinely useful next obstruction
 would have to survive that dispatch, or concern all positive-gap tables;
 the present calculation does not establish either claim.
+
+## 23. Strictly joining triple cores have at most one bad root
+
+This is ordinary mathematics developed during independent review of
+`../exports/JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md`. The full review is in
+`../feedback/CODEX_KREIN__INDEPENDENT_STOPPING_LAW_SELECTION__BY_CODEX_MORSE.md`.
+The following strengthening is not needed by that manuscript's valid
+compactness-plus-isolation argument and does not enlarge its raw UE class.
+
+Let a finite reward table have greatest premium core C={1,2,3}; that is,
+C is the union of all nonempty A such that every member i has a coalition
+S⊆A containing i with r_i(S)>s_i:=r_i({i}). Suppose every within-core
+insertion difference d_i(T)=r_i(T∪{i})−r_i(T) is strictly positive
+for nonempty T⊆C\{i}. Suppose also that pure C is not a full exact root.
+At a fixed arbitrary annotation v, call a full exact Nash root bad when
+its actual successor w has w_i>s_i for every player.
+
+A bad root has support a pair in C or all of C: a nontrap support has
+an active member with every participant reward at most its singleton.
+A sure core hazard would make every other core member strictly prefer
+Quit, hence make pure C exact, the excluded case. Thus all positive
+hazards at a bad root are proper. Put z_i=q_i/(1−q_i), including z_i=0
+at an inactive core member, and b_i=v_i−s_i. Define
+
+    f_i(z)=d_i({j})z_j+d_i({k})z_k+d_i({j,k})z_jz_k,
+    {i,j,k}=C.
+
+The literal gap divided by opponent survival is f_i(z)−b_i.
+At active coordinates f_i(z)=b_i; at inactive coordinates f_i(z)≤b_i.
+Every f_i is strictly increasing in each of its two arguments on the
+nonnegative orthant. Since at least two core hazards are positive,
+f_i(z)>0 for every core player, even an inactive one. In particular
+every bad root forces v_i>s_i for ALL i∈C.
+
+There is at most one bad root on each pair, since its two odds are fixed
+by z_i=b_j/d_j({i}) and z_j=b_i/d_i({j}). There is also at most one
+triple solution: if two triples z,z′ differ, among their three coordinate
+differences there are two with the same weak sign and at least one
+nonzero. The remaining player's strictly increasing f_i then has
+different values, contradicting f_i(z)=b_i=f_i(z′). This includes the
+sign pattern positive, negative, zero by choosing either nonzero sign
+with the zero coordinate.
+
+A pair root A={i,j} and a triple root cannot coexist. At the triple,
+the strictly positive z_k term makes
+
+    z_j < b_i/d_i({j})=z_j^A,
+    z_i < b_j/d_j({i})=z_i^A.
+
+Therefore f_k(z^A)>f_k(z)=b_k, violating the pair's inactive Nash
+inequality. Two different pairs A={i,j} and B={i,k} cannot coexist
+either. The unused-player inequalities imply
+
+    b_k ≥ f_k(z^A) > d_k({i}) b_j/d_j({i}),
+    b_j ≥ f_j(z^B) > d_j({i}) b_k/d_k({i}),
+
+which are contradictory because all quantities and denominators are
+positive. These cases exhaust distinct nonempty bad supports. Thus
+there is at most one bad full root, with no genericity assumption on v.
+
+This does NOT remove the need to treat clipping ties before applying
+the derivative formula for its full local index. Nor does it assert
+that every root is bad, or that every root returns below a singleton.
+
+### Exact inactive-core tie at a bad pair root
+
+Take the following complete rational table, with s=(1,0,0,0):
+
+| S | r(S) |
+|---|---|
+| 0 | (1,−1,−1,−1) |
+| 1 | (2,0,2,−1) |
+| 2 | (2,−1,0,2) |
+| 3 | (0,2,−1,0) |
+| 01 | (0,0,2,−1) |
+| 02 | (0,−1,0,2) |
+| 03 | (0,2,−1,0) |
+| 12 | (−1,1,3,0) |
+| 13 | (−1,3,0,1) |
+| 23 | (−1,0,1,3) |
+| 012 | (0,0,0,3) |
+| 013 | (0,0,2,0) |
+| 023 | (0,2,0,0) |
+| 123 | (−1,4,4,4) |
+| 0123 | (0,−2,−2,−2) |
+
+Its traps are exactly 12,13,23,123. The core insertion differences
+are respectively 1 and2 at singleton opponents and4 at two opponents.
+Every core pair overlaps the others. Pure C fails because player0
+joins from −1 to0. At the below-floor annotation and hazard
+
+    v=(9/10,2/3,1/3,13/9),  q=(0,1/4,1/4,0),
+
+the literal endpoints are
+
+    Q=(9/16,1/4,3/4,1),
+    C=w=(191/160,1/4,3/4,1).
+
+Thus this is a full bad exact root, with outside-core gap −101/160
+but unused-core gap exactly zero. All data lie in [−5,5]^4. The
+active pair determinant is −32/9, but the full clipped map is not
+differentiable here, so that number alone cannot be called its full
+local index. Increasing v_3 by η>0 retains the same hazards and changes
+the unused player's gap to −9η/16; the pair becomes strictly inactive
+there and the full determinant is then −32/9. This gives an actual
+game-level test of the annotation genericity step, not a hypothetical
+zero-polynomial locus. The calculations use the complete triple rows.
+
+The triple-core proof and this inventory do not address a full four-player
+core. Their positive off-diagonal determinant sign is dimension-specific;
+neither can override the existing opposite-sign pair or full-core local
+return falsifiers. The remaining global question is how to use the entire
+return relation or an actual strategy construction in those residuals,
+not how to force a second local root at an already falsified source.

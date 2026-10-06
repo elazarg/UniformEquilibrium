@@ -103,15 +103,20 @@ so there are at most two pair traps in Fin4. The exported proof includes
 generic tie removal, limiting root selection, weak reward closure and
 the exact fixture; the theorem prose below is unchanged.
 
-The newest section **Joining-attractive triple cores: negative index
-without a charge box** is a complete, unreviewed raw-data-to-UE candidate.
+The section **Joining-attractive triple cores: negative index without
+a charge box** has independent mathematical and complete-artifact PASS
+reviews from CODEX_BROUWER and CODEX_MORSE. The self-contained theorem
+is frozen in `../exports/JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md`,
+SHA256 `2e9876294d6ee948c3dcfdd1472c6553951e22f4a027c15c668151ae2d6b2c94`.
 Its computed greatest premium core has size three and all within-core
-joining comparisons are weakly nonnegative; all participant premiums
-may otherwise be signed, with nonnegative own singletons. Triple and
-pair root indices replace charge estimates, and overlapping pair traps
-are allowed. The final section includes a no-pure-exit rational fixture,
-overlapping-trap and signed-premium stress tests, and weak boundary
-perturbations preserving the full trap list. No new export is asserted.
+joining comparisons are weakly nonnegative; participant premiums may
+otherwise be signed, with nonnegative own singletons. Triple and pair
+root indices replace charge estimates, and overlapping pair traps are
+allowed. The frozen packet includes the no-pure-exit fixture, signed and
+weak boundary tests, and an actual bad triple root. The separate final
+**Full-core test** is an internal falsifier of universal one-step selected
+return, not additional UE coverage. Its unique bad full root has positive
+index; the game itself is covered by the degree-zero singleton source.
 
 The positive result in **Zero-singleton child selection** below removes the
 strictly-positive-child-singleton requirement from EXISTENCE under the
@@ -4614,3 +4619,111 @@ passive singleton coordinates by δ is exactly the closure perturbation
 above: it makes the zero gaps strict without altering any participant
 premium or creating another trap. These are exact scope regressions,
 not a proposed additional coefficient optimization.
+
+## Full-core test: universal one-step selected return is false
+
+This is a separate exact internal route falsifier, not an extension of
+the preceding frozen triple theorem and not a no-UE example. Its purpose
+is to decide whether negative-index root selection can automatically
+continue to full cores with opposite-sign joining comparisons. It cannot.
+
+Use I={0,1,2,3}. Specify the reward of players 0,1 solely by S∩{0,1}
+and that of players 2,3 solely by S∩{2,3}, using these two tables:
+
+| First-pair intersection | (r_0,r_1) |
+|---|---|
+| empty | (0,2) |
+| 0 | (1,−1) |
+| 1 | (3,0) |
+| 01 | (2,1) |
+
+| Second-pair intersection | (r_2,r_3) |
+|---|---|
+| empty | (−1,3) |
+| 2 | (0,−1) |
+| 3 | (4,0) |
+| 23 | (2,2) |
+
+For each of the fifteen nonempty S concatenate the specified two
+vectors; Never still pays zero. Thus s=(1,0,0,0). Every participant
+premium is nonnegative and is positive exactly when that player's
+paired partner also quits. The traps are exactly 01,23,0123. Both
+pair traps have opposite-sign joining gaps: (−1,2) and (−2,3).
+
+At the ORIGINAL annotation v=(0,2,−1,3), the literal full endpoint
+gaps, after summing every coalition, are
+
+    g_0=1−2q_1,   g_1=−2+4q_0,
+    g_2=1−3q_3,   g_3=−3+6q_2.                  (118)
+
+This independence is exact: when neither member of a pair quits,
+the other pair's absorption pays precisely the displayed annotation
+to that pair. No approximation or deletion of a simultaneous row is
+involved. The unique full exact root is
+
+    q=(1/2,1/2,1/2,1/3).
+
+To include all support and sure boundaries, if q_0=0 then g_1<0
+forces q_1=0, which gives g_0>0 and forces q_0=1. If q_0=1,
+then q_1=1 and g_0<0 contradicts it. Any boundary q_1 likewise
+forces a boundary q_0, already impossible. Thus both first-pair
+rates are interior, and their zero gaps determine them uniquely.
+The identical argument with thresholds 1/3 and 1/2 excludes every
+boundary in the second pair. There are no additional mixed-support,
+partly-sure or pure exact roots at this source.
+
+The root's actual successor and absorption are
+
+    w=(3/2,1/2,2/3,1),   a=11/12.
+
+Every successor coordinate strictly exceeds its singleton, although
+v_0<s_0 and v_2<s_2. The clipped full map is smooth near this
+fully mixed root. Its two diagonal derivative blocks for Id−DF are
+[[0,2],[-4,0]] and [[0,3],[-6,0]], giving FULL determinant 144>0.
+It has local index +1, consistent with uniqueness. There are no
+inactive coordinates, no tie-removal issue and no hidden proper core.
+
+No pure terminal exit is an equilibrium. At singletons0,1,2,3,
+players1,2,3,0 respectively join profitably. At pairs01,02,03,12,
+13,23, respective profitable deviators are0,1,1,3,3,2; at triples
+012,013,023,123, use0,0,2,2; at the grand row use0. In every
+case the listed deviation is the corresponding toggle, and the
+inequality is strict. All Never fails by player0's singleton.
+
+This table nevertheless has UE by an already existing singleton-degree
+exit, so the route falsifier must not be inflated into an existence gap.
+Its singleton-difference matrix is
+
+    Γ=[[0,2,−1,−1],[-1,0,2,2],
+       [-1,−1,0,4],[3,3,−1,0]].
+
+Every principal submatrix of size at least two is nonsingular; every
+column has a negative off-diagonal entry. Consequently a homogeneous
+complementarity root has neither singleton support nor larger support,
+and Γ is R₀. At offset (1,−2,−3,−4), exact support enumeration gives
+the two regular roots
+
+    u=(16/15,4/15,0,23/15), inactive residual9/5,
+    u=(68/57,17/57,9/19,64/57).
+
+Their active determinants are15 and−57, so the root-sum degree is zero.
+This is a bounded existing-source comparison, not a search for an
+uncovered version of the same local counterexample.
+
+The earlier opposite-sign regression in MORSE's notebook has a unique
+bad PAIR root with inactive outsiders and negative grand premiums.
+The earlier full-Nash-image example in BROUWER's notebook disproves
+universal return even from the convex hull of the complete Nash image,
+but does not claim uniqueness of its displayed root. This test adds
+a unique FULLY SUPPORTED bad root, a full premium core, globally
+nonnegative participant premiums and a no-pure-exit check. It does
+not improve an existence theorem and is not an export candidate.
+The tracked `ExactRootNonconvexityRegression` separately concerns
+nonconvexity of a full exact image, not this selected-return failure.
+
+The universal full-core one-step selected-return route is retired.
+The next concrete question is a multiple-date or approximate independent-
+law construction that transports actual values and every unilateral cap
+through such an escape from the singleton sublevel set. Merely convexifying
+successors, taking a higher-absorption root, or changing the local index
+convention cannot fix (118).
