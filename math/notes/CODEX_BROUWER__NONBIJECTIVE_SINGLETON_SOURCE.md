@@ -4,9 +4,10 @@ Author: CODEX_BROUWER. Ordinary mathematics, not Lean-checked. The active
 candidate is the final section, “Global nonlinear degree supplies the
 missing nonzero root”: a proposed original Fin4 UE producer from weak
 scheduled-pair joining preferences and twelve opposite-pair caps, with no
-singleton inverse/sign condition. Its mathematical falsification and a
-complete additional-coverage witness are still pending; it is not ready
-for export. The initial exact singleton matrix is internal evidence showing
+singleton inverse/sign condition. A scoped independent mechanism review
+has passed; the completed source/coverage checks are appended below.
+A second independent review and a self-contained artifact gate remain;
+it is not ready for export. The initial exact singleton matrix is internal evidence showing
 why a signed-column inverse reduction is insufficient, not an existence
 claim. The separately completed signed-column producer does not supply the
 new root-production step here.
@@ -338,3 +339,311 @@ has the wrong sign of c₂, while01/23 and02/13 have the wrong sign of
 K₂. That modified table still needs a complete quiet-child/source audit;
 in particular its old child012 J witness has changed and must not be
 reused. This is an early candidate, not an established coverage witness.
+
+## Completed source calibration and concrete coverage checks
+
+The degree mechanism now has a scoped independent mathematical PASS in
+`../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md`.
+The following material completes the concrete tests and source details;
+it is ordinary mathematics, not a new Lean check. The raw criterion,
+not a supplied nonlinear root, is the conjecture-facing statement.
+
+### One fixed scalar chart suffices
+
+The degree proof does not need an unproved identification of a repository
+chart integer with an independently defined ambient Brouwer degree. Choose
+R>0 with E contained in (−R,R)⁴ and use the single chart [−2R,2R]⁴
+throughout. Pull back the negative of H_λ as the cube gain field. On
+the central region corresponding to (−R,R)⁴, cube solutions are exactly
+zeros of H_λ; the region closure stays strictly inside the cube.
+The same central region is isolating for every 0≤λ≤Λ. The λ=Λ
+problem has no solutions there, so its local degree is zero, and
+homotopy invariance makes the central H₀ degree zero too.
+
+In that SAME chart let V be the preimage of a sufficiently small open
+ball around0. The perturbation estimate in the main proof isolates V
+for min(x,Γx−θN(x⁺)), 0≤θ≤1. Its θ=0 field is the homogeneous
+minimum map h. The homogeneous problem has exactly one solution, at0,
+in both V and the central region, so solution-set excision identifies
+its V-degree with its central degree. The latter is exactly r0Degree Γ
+by scalar-radius invariance. Thus the H₀ degree on V is nonzero.
+If H₀ had only the zero root, solution-set excision within this same
+chart would equate its central degree0 and its V-degree, a contradiction.
+No nonlinear regularity, finite root count or general chart-invariance
+theorem is introduced.
+
+The exact inspected declarations supplying these properties are
+`BoxComplementarityProblem.ofAmbientMap` and
+`isSolution_ofAmbientMap_iff_of_coordinateInterior` in
+`MathUE/Topology/BoxComplementarityAmbientMapAdapter.lean`,
+`IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq` in
+`MathUE/Topology/BoxComplementarityStabilizedLocalDegree.lean`,
+`BoxComplementarityProblem.localDegree_eq_of_solutionsIn_eq` in
+`MathUE/Topology/BoxComplementaritySolutionExcision.lean`, and
+`BoxComplementarityProblem.exists_solution_mem_of_localDegree_ne_zero`
+in `MathUE/Topology/BoxComplementarityLocalDegreeConsequences.lean`.
+The last theorem contrapositively gives degree zero on an empty
+isolating region. The radius identification remains
+`localDegree_lcpMinBoxProblem_zero_eq_r0Degree` in
+`MathUE/LinearProgramming/R0Degree.lean`.
+
+For the strategy consumer, use actual corrected Uᵃᶜᵗ,Wᵃᶜᵗ as the
+phase vectors. The displayed endpoint bounds and policy equalities
+give exactly `IsεQuittingRootNash` at error0. Every player's opponents
+have cycle survival ∏_{j≠i}(1−q_j)<1. Thus all hypotheses of
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate` and
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean` are
+produced, including for inactive players and negative phase values.
+The root endpoint definitions and Bernoulli-mixture identity are in
+`UniformEquilibrium/Quitting/Root/SuccessorCertificate.lean`.
+
+### Exact inactive and signed boundary stress
+
+Use the two-cycle-plus-leaves Γ from the first section, schedule01/23,
+and choose
+
+    Π=(2,2,−1/4,−1/4), K=(7,7,0,0), X=(1,1,0,0).
+
+Then c=(1,1,1/4,1/4), e=(0,0,1/2,1/2). With all own levels1,
+the templates are U=W=(2,2,1,1), but the actual values are
+(2,2,7/6,7/6) at BOTH phases: the inactive correction is
+(1/8)/(3/4)=1/6. Prescribe all cross-pair participant and relevant
+triple cap entries equal to1; the other unused coordinates can be
+chosen arbitrarily. This is a complete-table-compatible exact test,
+not an alleged new-coverage example. It combines negative Π, positive K
+and nonzero inactive corrections.
+
+Changing each nonempty reward of player i by s_i−1 gives the same
+raw gaps and root with any signed own vector s. For example,
+s=(−3,2,−1,4) gives the actual target (−2,3,−5/6,25/6).
+The theorem is applied to this new table directly; this is not a claim
+that arbitrary terminal translations preserve profiles with positive
+Never probability.
+
+### Finite necessary restriction on every counterexample
+
+The weak c_i≥0 argument above is now a proved corollary of the strict
+candidate, with the same mathematical status. For EACH of the three
+partitions into two pairs, every Fin4 table without UE must have either
+
+1. some player i with r_i({i,a(i)})<r_i({a(i)}); or
+2. some player i and nonempty T⊆O(i) with r_i({i}∪T)>r_i({i}).
+
+This finite raw disjunction is invariant under player relabeling.
+There is no singleton sign assumption, terminal translation, independent
+root hypothesis or supplied strategy in this counterexample restriction.
+Reward closure gives one target for the original table, not a target
+depending on accuracy. It does not assert exact periodic production on
+the weak boundary or on a matrix-source exit.
+
+### Full table for the new-coverage test
+
+Set D=52104052 and
+
+    K=(−4711507/97125,−41341/22950,36491/10300,−94597/7650).
+
+The complete table is:
+
+| S | r(S) |
+|---|---|
+| 0 | (1,0,4,4) |
+| 1 | (4,1,0,0) |
+| 2 | (0,4,1,0) |
+| 3 | (0,0,0,1) |
+| 01 | (1/2,1/2,0,0) |
+| 02 | (1/2,0,−D,0) |
+| 03 | (2,1+K₁,1+K₂,5) |
+| 12 | (1+K₀,5,1,1+K₃) |
+| 13 | (0,1/2,0,1/2) |
+| 23 | (0,0,−D,1/2) |
+| 012 | (1/2,−10,100,0) |
+| 013 | (−10,1/2,0,−10) |
+| 023 | (−10,0,−D,−10) |
+| 123 | (0,−10,100,1/2) |
+| 0123 | (1000,1001,1002,−104) |
+
+For schedule03/12 the joining gaps are c=(2,1,1,1)>0 and every
+opposite-pair cap is strictly below1. The singleton matrix is
+
+    Γ=[[0,3,−1,−1],[−1,0,3,−1],[3,−1,0,−1],[3,−1,−1,0]],
+    Γ⁻¹=(1/13)[[2,5,−7,13],[5,6,−11,13],
+                [1,9,−10,13],[1,9,−23,26]].
+
+The signed-column producer cannot apply with ANY schedule. Its positive
+inverse requirement uniquely forces σ=(1,1,−1,1). Schedule03/12
+then fails σ₂c₂>0; schedules01/23 and02/13 have K₂=−1 and fail
+σ₂K₂≤0. Positive playerwise scales preserve these signs. The theorem
+also exceeds positive-inverse matching producers because Γ⁻¹ has a
+strictly negative column, and its favorable graph is a three-cycle with
+an attached player, not a matching or four-cycle.
+
+The matrix has pair determinants (3,3,3,3,−1,−1), triple determinants
+(26,−10,6,2), full determinant13, and a negative entry in every column.
+It is R₀. The sole offset−1 LCP root is (1,1,1,1), regular with
+positive determinant, so its degree is1 and it is standard Q. Only012
+has a positive inverse, and its outside factorization row is
+(−1,−9,23)/26, excluding the passive-inverse exit.
+
+### The repaired all-child and withdrawal comparisons
+
+Except for children12 and012, the exact child witnesses and raw J rows
+in the signed-column fixture are unchanged: no changed payoff is used
+in those comparisons. Child12 now uses both players quitting surely,
+not the obsolete solo1 profile. Its participant rewards5 and1 strictly
+exceed the passive rewards4 and0; omitted player0 has positive immediate
+join gain d₀=−1/2−K₀>0. This profile has zero child debt and zero Never.
+
+For child012 and omitted player3, write λ_i≥0 for advance weights.
+The simple J rows alone are inconsistent:
+
+    J at0:   1≤λ₁/2−(D+4)λ₂,
+    J at02: −10≤−10λ₁.
+
+The second forces λ₁≤1, contradicting the first. This does not reuse
+the old solo1 child equilibrium, which ceased to be Nash after the
+participant reward r₂(12) increased.
+
+The more general five implemented withdrawal F/J certificates fail too.
+All their singleton restart floors are at most1: the patient floor is
+at most max(s_i,0)=1; the deadline floor is at most0; and the security
+LP has the literal own-singleton row, giving security value≤1, so its
+maximum with the deadline floor remains≤1. Consequently every singleton
+withdrawal gain is nonpositive. Let the withdrawal weights be arbitrary
+nonnegative μ_i. The following three necessary inequalities survive
+after dropping all nonpositive withdrawal contributions:
+
+    J at0:   1≤λ₁/2−(D+4)λ₂,
+    F at1:   1≤−3λ₀+λ₂,
+    F at12: −K₃≤−K₀λ₀−4λ₁.                         (W)
+
+At12 the withdrawal gains are exactly −1 for player1 (4−5) and
+−1 for player2 (0−1), and zero for player0. They enter the F row
+for patient/cancellation withdrawal and vanish there for the other
+three kinds. Thus (W) is valid for every kind. Its first two rows give
+λ₁≥2+2(D+4)(1+3λ₀). The last right side is therefore at most
+
+    −8−8(D+4)+[−K₀−24(D+4)]λ₀<0,
+
+whereas −K₃>0. This exact contradiction closes the broader raw gap.
+It does not claim that no specially selected child profile can be safe.
+
+The literal definitions inspected are `WithdrawalFutureJoinKind.gain`,
+`WithdrawalFutureJoinKind.futureWeight`, and
+`WithdrawalFutureJoinRewardCertificate` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinRaw.lean`,
+`patientWithdrawalFloor_le_ownNeverAlternative` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalRaw.lean`,
+`deadlineWithdrawalZeroFloor_le_zero` and `deadlineWithdrawalGainFloor`
+in `UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalRaw.lean`,
+and `deadlineWithdrawalSecurityValue_le_singleton` plus
+`deadlineWithdrawalSecurityFloor` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityLP.lean`.
+
+The other exceptional child123 retains q₁=D/(D+100), q₂=1/21,
+q₃=1. The changed reward r₂(12) never enters player2's payoff because
+player3 is sure. Its exact zero-debt/zero-Never calculation and omitted0
+gain5210405575/136773399 therefore remain valid. These witnesses and
+(W) exclude the actual tracked raw deletion criteria for every child,
+but make no universal supplied-child-debt claim for child012.
+
+### Other changed source tests and remaining assembly obligation
+
+The only premium traps remain03 andI. No player has globally nonnegative
+participant premiums. The global forced-Quit floor atT1 now has vector
+(−1/2,0,0,−1/2), forcing a nonnegative weight to be supported on{1,2};
+atT3 the remaining coefficients are −1/2 and−D−1, so every weight
+vanishes. The old boxed-trap failure P_I(13)=88,L_I(13)=90 and the
+product-low failure at q₀=q₃=1/2 are unchanged.
+
+The one-shot-anchor criterion fails at the explicit passive coalitions
+T₀=1,T₁=23,T₂=0,T₃=02: the joining gaps are respectively
+−7/2,−10,−D−4,−10. Thus every player has a strict
+negative joining comparison despite all own rewards being positive.
+No anchor is silently supplied by the new criterion.
+
+The old conditional-range failure survives with the corrected bound:
+player2 has Continue upper at least4, while BOTH Quit lower bounds are
+at most1 for every blocker; blocker1 now uses pair12 reward1 rather
+than−1. The ordered weak-unit guard test for owner2/passive0 must use
+background3 and joining gap−D, not the obsolete background1 gap−1.
+All other displayed guard rows are unchanged. The exhaustive sure-owner
+stationary census is unchanged; its j=1 branch is simpler because
+player2 now has four positive joining differences1,100,100,1002 and
+is forced sure. No absence of all-proper stationary roots is claimed.
+
+The source/fixture comparisons are now sufficient to prepare a single
+self-contained candidate. Its final artifact must reproduce the full
+proof, actual phase values, table and source evidence rather than rely
+on this note or the earlier export. A second independent review and a
+final-artifact gate remain required; no export or Lean claim is made here.
+
+## Next raw question: one negative mate-joining gap
+
+The reviewed standalone is exported, not Lean-checked, at
+`../exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md`. The next
+question concerns its genuine complement, not another inverse-cone
+condition: if only one of the four mate-joining gaps is negative, can
+an escape of complementary odds be turned into an actual strategic
+exit, or must the chronology change? All four laws and behavioral caps
+must still be produced from raw rewards. The following exact test
+rules out treating the previous offset homotopy as automatically compact
+or treating every infinite-odds limit as Nash.
+
+Take schedule01/23, s=(1,1,1,1),
+
+    Γ=[[0,−1,3,3],[3,0,−1,−1],
+       [−1,1,0,3],[−1,1,3,0]],
+    Π=(−2,4,4,4), K=(−1,3,0,0), c=(−1,1,1,1).
+
+For EVERY t>0, let X=(0,t,1,1). Direct substitution into (3) gives
+
+    (ΓX−N(X))₀=4t−2t/(1+t)+5,
+    (ΓX−N(X))₁=(ΓX−N(X))₂=(ΓX−N(X))₃=1.
+
+Hence X is a zero of H₁ for every t>0: the positive coordinates
+have residual exactly1 and the zero coordinate has residual>1.
+This is an unbounded zero set at a fixed positive homotopy parameter,
+not merely unbounded feasible points.
+
+The matrix still satisfies the exact incoming singleton properties.
+Its pair principal determinants are(3,3,3,1,1,−9), its triple
+determinants are(8,8,−18,−6), and its full determinant is−75.
+Every column has a negative entry, so it is R₀. At offset−1 its
+complete root list is
+
+| Positive support | Root | Inactive residual | Local sign |
+|---|---|---|---|
+| 012 | (5/8,13/8,7/8,0) | w₃=21/8 | +1 |
+| 013 | (5/8,13/8,0,7/8) | w₂=21/8 | +1 |
+| 0123 | (13/25,17/25,7/25,7/25) | none | −1 |
+
+All are regular and all inactive residuals are strict. The finite
+degree formula gives +1; in particular Γ is standard Q. The other
+supports have no feasible root, by direct inversion of the displayed
+nonsingular principal matrices; singleton supports cannot offset−1
+on their zero diagonal. Thus the unbounded homotopy is compatible
+with R₀/degree1, rather than being excluded by a contrary matrix exit.
+
+These coefficients are realized by the actual singleton rows of Γ
+and scheduled pairs
+
+    r(01)=(−1,5,1,1),       r(23)=(0,4,5,5).
+
+All cross-pair participant and relevant triple cap entries may equal1;
+the remaining coordinates can be chosen arbitrarily. In the limit
+t→∞ the scheduled hazards are (0,1,1/2,1/2). Player1 quits surely
+in phase01, giving its prescribed value1. If it Continues once, in
+phase23 its two opponents' singleton rewards are0, their pair reward
+is4, and both Continue with probability1/4, returning to own value1.
+Its Continue value is therefore 4/4+1/4=5/4. The limit has a genuine
+gain1/4, not an equilibrium boundary exit. No limiting-payoff or
+pointwise endpoint assertion can erase this gap.
+
+This is an internal falsifier of a proposed extension of the SAME
+offset homotopy, not a UE counterexample or new existence class. It
+does not weaken the frozen c≥0 theorem. The next admissible mechanism
+must account for this infinite-odds active player's continuation gain,
+for example by producing a different schedule rather than declaring
+the escape harmless. Whether such boundary alternatives can be organized
+globally for arbitrary tables remains open.

@@ -52,8 +52,14 @@ Its frozen historical377-line manuscript is
 SHA256 `72e18f442d25d6225b96e022b42c573f3542809fc7ce955ce9dfb66b7ad7b331`.
 Current independent research is the global finite Nash-regret/CCE test at
 this notebook's end. Its producer and unavoidable counterexample restriction
-are proved ordinary mathematics; exact additional source coverage is being
-stress-tested. It is internal and not independently reviewed.
+are proved ordinary mathematics, but the displayed early stress table is
+already consumed by a broader patient-withdrawal raw source. It is NOT an
+additional-coverage witness. The generic class's increment versus that
+source is now structurally separated by the strict three-response-cycle
+family at the end: all fourteen children defeat every raw withdrawal kind.
+The new table also fails the compared accepted pair criteria. The mechanism
+remains internal and not independently reviewed; the exact source census
+and its finite limits are recorded below rather than asserted blanketly.
 
 ## Question and finite data
 
@@ -692,8 +698,13 @@ and the transient behavioral consumer, before any export is considered.
 Status: complete ordinary producer and necessary-condition proof, not an
 export. This is a global finite LP test on arbitrary game data and every
 anchor, not a modification of a radius or supplied stopping certificate.
-The concrete additional-coverage table below is an early exact test; no
-absence of all proper-three stationary roots is claimed.
+Two exact table tests follow. The early LP-positive table is covered by a
+literal patient-withdrawal certificate and is not an increment witness.
+The final strict three-response-cycle table instead separates all fourteen
+children from every implemented raw withdrawal kind in an explicit full
+reward neighborhood; its additional finite source comparisons are recorded
+with their actual scopes. Neither table claims absence of all proper-three
+stationary roots.
 
 ### Finite data and the raw LP
 
@@ -794,7 +805,7 @@ is `quittingOneDateThenNeverProfile_exactHorizonNash` in
 supplies (L3)→original-game terminal Nash. A general correlated law is not
 being mistaken for an independent mixed profile.
 
-### Complete additional-coverage stress table
+### Complete LP-positive, non-monotone-anchor test table
 
 Take anchor0 and the following complete60 table. All own levels are1 and
 Γ is still the H=3 favorable matching matrix above.
@@ -839,8 +850,9 @@ The internally produced profile has fixed target
 
 Every player nevertheless has a negative nonempty joining comparison:
 0 at1 gives−4,1 at0 gives−5,2 at01 gives−1,3 at0 gives−1. Thus no
-player meets the accepted raw join-monotone anchor class. This is a real
-strict strengthening of that necessary condition, not a smaller constant.
+player meets the accepted raw join-monotone anchor class. This tests strict
+strengthening of that particular condition, not an increment beyond all
+other actual producers: the broader withdrawal certificate below applies.
 
 The initially tempting experiment changed only player0's excluded rewards.
 It created the pure exit1, because its negative0-join at1 left all other
@@ -941,9 +953,363 @@ With anchor1, free3's equation gives q₂>1/2 and free0's gives
 q₂(6+99q₃)=4, hence q₃<2/99<1/4. Thus no label gives the required
 three interior hazards. This does not exclude every other transient root.
 
-Next question: finish the finite source comparison and independently
-falsify (L1)–(L4) as a genuinely global stronger restriction. A generic
-supplied-root verifier, unknown proper-three neighborhood, or the mere
-finite LP duality is not an export endpoint. The new mechanism is the
-raw LP minimum producing an unrestricted equilibrium and forcing an
-anchored negative-gap coarse law at EVERY player of EVERY counterexample.
+The early comparison was provisional and is defeated by the literal broader
+withdrawal certificate below. A supplied-root verifier, unknown proper-three
+neighborhood, or mere finite LP duality is not an export endpoint. The new
+mechanism to test is the raw LP minimum producing an unrestricted equilibrium
+and forcing an anchored negative-gap coarse law at EVERY player of EVERY
+counterexample.
+
+### Exact failure of the early table's additional-coverage claim
+
+The above producer and (L4) proof survive. The complete60 stress table does
+NOT establish an increment over all actual raw sources. A narrow lookup
+through docs/TOOLKIT.md found the broader omitted-Never patient-withdrawal
+family, and exact finite arithmetic supplies a valid child012/outside3
+certificate even though the simpler F/J-only certificate fails.
+
+For this child, every patient's restart floor is0. Let advance weights and
+withdrawal weights, in member order0,1,2, be
+
+    λ=(1300/1251,32851/31275,7376/1251),
+    ω=(0,1225/1251,0).
+
+All are nonnegative. Against the actual `WithdrawalFutureJoinRewardCertificate`
+patient rows, the exact F and J slacks at
+T=0,1,01,2,02,12,012 are respectively
+
+    F=(54572/31275,1000/1251,220052/31275,159176/31275,
+       1576/31275,34254776/31275,0),
+    J=(3428/2085,133427/1251,0,0,64126/31275,0,26/1251).
+
+Every slack is nonnegative. I directly substituted the rational weights
+into all fourteen raw inequalities; this is not reliance on a solver's
+success flag. In particular the simple proof's F contradiction is repaired
+by the withdrawal term at01, where player1 can gain5 by withdrawing.
+The actual Never-row right side is280376/31275>1, so its omitted residual
+is zero as well.
+
+The literal raw structure is in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinRaw.lean`.
+Its consumer
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_withdrawalFutureJoinFamily`
+in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`
+internally produces the child target and a fixed original-game UE. The
+positive-singleton pivot premise holds because every child's own level is1.
+I read this declaration and its Fin4 witness-producing dependency under the
+imports; it is an actual raw-table producer, not a generic supplied-child
+interface. Consequently this stress table is already solved by a compared
+existing source, and must not be used to justify exporting (L3).
+
+A diagnostic exact-LP routine was used only to suggest weights. Some other
+returned candidates failed literal substitution, so no unverified solver
+output is mathematical evidence. The certificate recorded above passed
+every row exactly. No infeasibility claim about other children rests on that
+routine.
+
+The failed implication is “the direct nonnegative F/J census plus sure-
+stationary exclusion exhausts actual quiet raw producers.” It does not.
+The strongest surviving theorem remains (L3)≥0→an internally produced
+unrestricted one-shot equilibrium and the all-sign necessary restriction
+(L4). The global claim max_a v_a≥0 for every table is also false: the
+modified global-degree fixture reviewed separately has exact anchored Nash
+laws with negative g at EVERY a. Thus this LP mechanism is not a universal
+consumer of the remaining singleton-Q source.
+
+Concrete next question: does the entire feasible anchor-regret class imply
+one of the existing withdrawal raw families, or can its unconstrained
+unanchored nonanchor reward coordinates produce a structural separator?
+Resolve that implication before choosing another stress table or making an
+export claim. The complete original-game proof and true all-sign empty
+event remain preserved above.
+
+### Structural separation from all withdrawal families
+
+Question: does the whole anchored CCE-minimum producer necessarily reduce
+to an implemented raw withdrawal family? No. A negative-feedback cycle in
+the anchored three-player binary game gives a strict full-table separator.
+This is an exact ordinary-mathematics result, not a solver experiment or an
+independently reviewed export. It is a new table, not a revision of the
+already-covered early table above.
+
+Here is every nonempty reward vector; all four own levels are1.
+
+| S | r(S) |
+|---|---|
+| 0 | (1,4,0,0) |
+| 1 | (4,1,0,0) |
+| 2 | (0,0,1,4) |
+| 3 | (0,0,4,1) |
+| 01 | (0,−1,0,0) |
+| 02 | (1,0,1,0) |
+| 03 | (1,4,0,−1) |
+| 12 | (100,5,5,0) |
+| 13 | (100,5,0,5) |
+| 23 | (−100,0,5,5) |
+| 012 | (102,1,1,98) |
+| 013 | (96,−1,101,1) |
+| 023 | (−99,99,−1,−1) |
+| 123 | (1000,6,6,6) |
+| 0123 | (1002,100,100,99) |
+
+For anchor0, the free utility differences at hazards(q₁,q₂,q₃) are
+
+    A₁=−5+6q₂,       A₂=1−2q₃,       A₃=−1+2q₁.       (C1)
+
+These are exactly the table's own-action differences, not an approximation.
+Their product Nash point is uniquely(1/2,5/6,1/2). Indeed if any coordinate
+is0 or1, successive strict best responses around the odd negative-feedback
+cycle force that coordinate to be its opposite. Thus every equilibrium is
+proper; setting the three differences zero gives the stated unique point.
+The large terms99q₂q₃,101q₁q₃,98q₁q₂ are independent of the respective
+recipient's action and do not change these response equations.
+
+In order T=∅,1,2,3,12,13,23,123, the literal raw vectors are
+
+    g₀=(0,−4,1,1,2,−4,1,2),
+    R_{1,C}=(0,−5,0,0,1,−5,0,1),
+    R_{2,Q}=(−1,−1,0,1,0,1,0,0).
+
+The SAME finite dual form now has eight strict slacks:
+
+    g₀≥1/4+R_{1,C}+(1/2)R_{2,Q},
+    slacks=(1/4,5/4,3/4,1/4,3/4,1/4,3/4,3/4).          (C2)
+
+Consequently v₀≥1/4. The raw CCE producer above supplies the original
+unrestricted one-shot equilibrium. Its internally selected unique free
+product Nash point gives
+
+    V=(641/3,503/12,101/4,245/6),
+    E g₀=23/24,       C₀^wait=5105/24.                 (C3)
+
+Every player has a negative nonempty joining difference: use T1,T0,T03,T0
+for players0,1,2,3, with values−4,−5,−1,−1. Thus no label satisfies
+the accepted join-monotone-anchor condition.
+
+#### All fourteen children: one structural obstruction, all five kinds
+
+For EVERY nonempty proper child S choose the following nonempty sure
+coalition T⊆S and omitted k. Players in T Quit at date0; all other child
+players Never. The child gap vector gives, in increasing child order,
+Quit-minus-withdraw for members of T and Continue-minus-join for nonmembers.
+
+| S | T | k | Child gaps | Omitted joining gain |
+|---|---|---|---|---|
+| 0 | 0 | 2 | (1) | 1 |
+| 1 | 1 | 2 | (1) | 5 |
+| 2 | 2 | 3 | (1) | 1 |
+| 3 | 3 | 2 | (1) | 1 |
+| 01 | 0 | 2 | (1,5) | 1 |
+| 02 | 02 | 1 | (1,1) | 1 |
+| 03 | 0 | 2 | (1,1) | 1 |
+| 12 | 12 | 3 | (5,5) | 6 |
+| 13 | 13 | 2 | (5,5) | 6 |
+| 23 | 23 | 1 | (1,1) | 6 |
+| 012 | 012 | 3 | (2,1,1) | 1 |
+| 013 | 0 | 2 | (1,5,1) | 1 |
+| 023 | 02 | 1 | (1,1,1) | 1 |
+| 123 | 123 | 0 | (6,6,6) | 2 |
+
+Every displayed child profile is exact terminal Nash against complete
+behavioral replacements. If T has at least two members, every deviator has
+a sure opponent at date0, so its full deviation reduces to its pure date0
+choice. If T is a singleton, its owner has positive own reward1 and all
+other child players Never: neither a delayed quit nor Never improves it.
+All nonmembers have the strictly negative displayed joining comparisons.
+Each profile has zero child debt and zero Never mass. Its positive omitted
+gain therefore defeats EVERY universal omitted-gain bound by any fixed
+nonnegative weighted sum of child debts and Never mass.
+
+There is also a direct literal raw-row proof, not only a semantic inference.
+At the displayed T, every advance joining gain is≤0. For a nonsingleton
+member the withdrawal gain is r_i(T−i)−r_i(T)<0; a nonmember's withdrawal
+gain is0. At a singleton member, every actual restart floor is≤own1:
+patient≤max(1,0), deadline and evaluated security≤0, and terminal security
+≤1 by the singleton LP row. Cancellation has the deadline floor. Thus
+every withdrawal gain is≤0. The actual J row has strictly positive left
+side and nonpositive right side, for ALL nonnegative advance and withdrawal
+weights and ALL five `WithdrawalFutureJoinKind` values. No F or Never row
+can repair it. This also excludes the simpler future/join-only certificates.
+
+The inspected literal source is `WithdrawalFutureJoinRewardCertificate`,
+especially `join_row` and `WithdrawalFutureJoinKind.gain`, in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinRaw.lean`.
+The restart bounds and five-kind source/consumer files were inspected in
+the earlier exact falsifier and global-degree review. This result does NOT
+exclude a specially selected safe child equilibrium that avoids these
+witnesses; it excludes the actual universal raw-weight families.
+
+#### Explicit full sixty-coordinate neighborhood
+
+Let every reward coordinate vary independently by absolute amount<1/40.
+Own rewards remain positive. On a nonempty T, g₀ varies by<2δ,
+R_{1,C} by<2δ and R_{2,Q} by<2δ, where δ=1/40; the total right-minus-left
+variation in(C2) is<5δ=1/8. On T=∅, g₀=0 and R_{1,C}=0 still, and
+the remaining variation is smaller. Thus(C2), with β=1/4, remains valid
+with strictly positive slacks. The selected Nash point may change; the
+raw finite producer does not require an IFT or prescribe its coordinates.
+
+All child and omitted comparisons in the fourteen-row table have margin
+at least1 and vary by<2δ. Their exact child Nash, zero Never and positive
+omitted-gain obstructions persist. Singleton withdrawal floors are still
+bounded by the new positive own rewards. Hence this entire open full-table
+box is produced by the CCE criterion while no implemented five-kind raw
+withdrawal family can consume it. This disproves structural inclusion of
+the global LP class into the union of those raw families.
+
+#### Other exact source and accepted-class comparisons
+
+The singleton matrix is the unchanged H=3 matching matrix with favorable
+partners(01)(23), Γ row sums1, strictly positive inverse and degree1.
+On word01/23, c₀=−4 and c₁=−5. On03/12, c₃=−1. On02/13,
+c=(1,5,1,5)>0, but player0's opposite triple reward r₀(013)=96 exceeds
+own1. Thus EVERY pair partition fails the newly accepted weak condition
+“all four scheduled c≥0 and all twelve opposite participant rewards≤own”,
+and also its stronger matching and all-positive signed-inverse subcriteria.
+The positive inverse forces every sign column positive. No harmful pair
+contains two below-mate participants: pair02 has Π₀=Π₂=0, pair03 has
+Π₀=0, and pairs12,13 have positive participant premiums. This defeats
+the accepted opposite-sign arm's raw negative-participant requirement.
+
+Every proper all-below-singleton two-pair output is excluded intrinsically,
+not through a guessed persistence radius. On either harmful word, player0
+has Π₀=0 and c₀=1, forcing W₀=1+X_mate>1. On the favorite word01/23,
+players2,3 have Π=4, forcing their active values>1. These exhaust all
+pair partitions and relabelings.
+
+No persistent base E of cardinality≥2 is complement-leave-safe. A failing
+recipient and opponent coalition T⊇E−i are:
+
+    E01:(i0,T1), E02:(i2,T03), E03:(i0,T13),
+    E12:(i2,T013), E13:(i1,T03), E23:(i2,T03),
+    E012:(i2,T013), E013:(i0,T13), E023:(i2,T03),
+    E123:(i2,T013), EI:(i2,T013).
+
+Their joining differences are respectively−4,−1,−4,−1,−5,−1,
+−1,−4,−1,−1,−1. The exact predicate and strategic consumer are
+`QuittingPersistentBaseComplementLeaveSafe` and
+`exists_exactTerminalNash_and_uniformPayoff_of_complementLeaveSafe` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseArbitraryCompletionEscape.lean`.
+
+Every one-sided weak-unit guard fails its UPPER face. For(owner,passive),
+choose T containing owner and omitting passive with positive passive join:
+
+    (0,1):T02, (0,2):T0, (0,3):T01,
+    (1,0):T12, (1,2):T1, (1,3):T1,
+    (2,0):T2,  (2,1):T2, (2,3):T2,
+    (3,0):T3,  (3,1):T3, (3,2):T3.
+
+At these pure hazards the polynomial displacement IS that positive joining
+difference, so this excludes both raw and polynomial guards, not merely a
+stronger sufficient ranking. Inspected declarations are
+`QuittingOneSidedWeakUnitGuards`, `QuittingOneSidedWeakUnitRawGuards` and
+`exists_uniformPayoff_of_oneSidedWeakUnitGuards` in
+`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`, and
+`QuittingWeakUnitJoining` in
+`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitRawGuards.lean`.
+
+The two-sided weak HALF-polynomial guards also fail under every relabeling.
+Their actual lower face, together with this invertible nonnegative inverse,
+forces the selected reciprocal singleton entries positive. Thus the selected
+pair must be01 or23; this is the literal
+`QuittingHalfWeakPolynomialGuards.reciprocal_pos` necessity in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialFaces.lean`.
+For selected01, recipient0 with partner1 hazard1/2 and outsiders2,3 sure
+has displacement(g₀(23)+g₀(123))/2=3/2>0. For selected23, recipient3
+with partner2 hazard1/2 and outsiders0,1 sure has displacement
+(r₃(013)−r₃(01)+r₃(I)−r₃(012))/2=(1+1)/2=1>0.
+Each is on its required nonpositive upper-half face. This excludes the
+broader polynomial guards and hence their finite weak/strict raw subclasses.
+The inspected raw and polynomial consumers are
+`exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_halfStrictRaw`
+in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseHalfCeilingProducer.lean`
+and `exists_stationary_terminalApproximation_of_weakHalfPolynomialGuards`
+in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialProducer.lean`.
+The displacement definition is in
+`UniformEquilibrium/Quitting/Stationary/DiscountedDisplacement.lean` and
+depends on opponents only; the displayed sure-outsider rows therefore
+equal the averaged literal joining gains just computed.
+
+Global inserted-premium weights must vanish. At T0 the coefficient vector
+is(0,−2,0,−2), forcing λ₁=λ₃=0. At T03 it then forces λ₂=0; at T23
+it forces λ₀=0. Therefore `HasWeightedQuittingTrapLeavers` in
+`UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapLeavers.lean`
+fails, since the grand coalition is a premium trap and requires positive
+weights. Its weak reward-closure consumer is
+`exists_uniformEquilibriumPayoff_of_weightedTrap_weakLeave` in
+`UniformEquilibrium/Quitting/Classification/Existence/WeightedQuittingTrapLeaversRewardClosure.lean`.
+The actual traps are12,13,23,012,013,123,I. None has all its proper-subset
+L and J charges nonpositive: witnesses T1,T1,T2,T1,T1,T1,T13 have both
+positive charges. In particular L_I(13)=100,J_I(13)=2. No player is protected,
+and sure I's four forced-Quit values all exceed own1, defeating product-low.
+
+For conditional ranges, player0 has Continue upper≥r₀(123)=1000.
+For every blocker, its Quit-without lower≤own1, and its Quit-with lower≤1
+using pair01,02 or03. Thus no convex mixture of those lower bounds strictly
+exceeds its Continue upper. This directly defeats
+`IsQuittingConditionalFaceGapRange` in
+`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`.
+Membership influence1→0 changes sign: at empty background the literal
+joining gain changes by−5, whereas at background2 it changes by+1.
+
+Γ row sums1 imply all nonnegative terminal upper weights vanish. They also
+force equal positive row scales within any response-invariant block after
+playerwise positive affine transport. The all-sure displacement vector is
+(2,1,−1,1); only the pair{1,3} could share a block. That pair's singleton0
+block sums are3 and−1, so it too fails. Thus all fourteen nondiscrete
+response-invariant quotient partitions fail even after such transport.
+This uses the actual necessity `quittingSingletonBlockRowSum_eq_of_responseInvariant`
+in `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`.
+
+#### Sure-stationary census and transient-center output
+
+If0 is sure, the unique free Nash point from(C1) applies. Repeating it gives
+Never₀=5104/23 and Q₀=641/3, hence Q₀−Never₀=−569/69<0. The one-shot
+profile must not be stationary repeated.
+
+If1 is sure, player3's joining difference is strictly positive: when0
+Continues it is5+q₂, and when0 Quits it is1. Thus3 is sure. The free0,2
+response differences are−4+6q₂ and6−7q₀, giving unique Nash
+(q₀,q₂)=(6/7,2/3). Sure1's difference is then−1/21<0.
+If2 is sure, player1 is forced sure (its difference is5+q₃ when0 Continues,
+and1 when0 Quits); then player0 has difference2 and player3 difference1,
+forcing the grand coalition, where player2's difference is−1.
+
+If3 is sure, free0,1,2 differences are
+
+    G₀=1−5q₁+6q₁q₂,
+    G₁=(1−q₀)(5+q₂)+q₀(−5+6q₂),
+    G₂=(1−q₀)(1+5q₁)−q₀.
+
+At q₀=0 the other two are forced sure, contradicting G₀>0. At q₀=1,
+the unique free response is(q₁,q₂)=(0,0). If q₀ is proper, q₁=0 makes
+G₀=1; q₁=1 forces(q₀,q₂)=(6/7,2/3) and G₁=−1/21; q₂=0 forces
+(q₀,q₁)=(1/2,1/5) and G₂=1/2; q₂=1 makes G₀>0. All boundary cases
+fail. At an all-proper point G₀=0 gives−5+6q₂=−1/q₁. The G₁,G₂
+equations then respectively give
+
+    q₀/(1−q₀)=q₁(5+q₂),
+    q₀/(1−q₀)=1+5q₁,
+
+hence q₁q₂=1, impossible. The only finite Nash completion is therefore
+(q₀,q₁,q₂)=(1,0,0), where sure3's difference is−1. No sure-quitter
+stationary equilibrium exists. This excludes actual sure-anchor stationary
+sources, but does not claim absence of all-proper stationary equilibria.
+
+The implemented nearby transient center with one sure anchor and every
+free hazard in(1/4,3/4) cannot output this table. Anchor0 forces q₂=5/6;
+anchor1 forces free3 sure; anchor2 forces free1 sure; anchor3 has no
+all-proper finite completion by the preceding calculation. This is an
+intrinsic output exclusion for `exists_nearby_oneDate_sameProfile_horizon_equilibrium`
+in `UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterNearbyHorizons.lean`,
+not a claim about an unspecified perturbation radius.
+
+Concrete next question: independently falsify the whole finite-CCE producer
+and the structural family(C1)–(C3), including all-sign empty events and all
+fourteen-child universal/RAW distinctions. Extend the source census only
+where an actual named raw criterion might consume this table. A generic
+conditional verifier or unknown all-proper local center is not a competing
+arbitrary-table producer. No export or review request is inferred merely
+from fixed-point correctness; the substantive increment evidence is the
+full open CCE-positive/withdrawal-negative class proved here.

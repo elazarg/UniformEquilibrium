@@ -154,6 +154,13 @@ rewards. Its complete ordinary construction is not independently reviewed.
 Its first coverage completion has an exact partly-sure stationary
 equilibrium and is retired as a separation witness. No gate is requested.
 The global source in Section 28 remains unresolved.
+Section 31 records an exact stop for a different proposed consumer:
+positive joining gains against all singleton coalitions do not supply
+an equilibrium with a sure first-date quitter, even with nonnegative
+passive rewards. The complete boundary census also excludes every
+root-then-Never exact terminal equilibrium of that table. This is an
+internal strategy-architecture regression, not a positive-gap table or
+new counterexample-class exclusion.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -5178,3 +5185,161 @@ forces full R₀ under original-game nonexistence, immediately excluding
 this entire pattern regardless of collision rewards. Any further degree
 calculation assuming R₀ in that pattern is vacuous. This route is retired;
 it is not new raw coverage.
+
+## 31. Positive pair joining does not produce a sure first-date anchor
+
+This is ordinary exact mathematics, not checked in Lean. A proposed
+broader use of the one-shot-anchor mechanism was to replace nonnegative
+joining gains at every coalition by nonnegative gains against every
+singleton, then select a mixed complement equilibrium. The following
+table defeats that selection for every anchor, including every partly
+sure boundary. It neither has a certified positive terminal gap nor
+refutes UE. No export or classification of all existing existence criteria
+is asserted.
+
+Write g_i(S)=r_i(S∪{i})−r_i(S) for nonempty S not containing i,
+and put g_i(∅)=s_i. Set s_i=1 and every singleton joining gain to1.
+The remaining sixteen joining gains are these:
+
+| Player | Two-opponent backgrounds and gains | Full opponent background |
+|---|---|---|
+| 0 | g₀(12)=−7, g₀(13)=5, g₀(23)=1 | g₀(123)=−3 |
+| 1 | g₁(02)=1, g₁(03)=3, g₁(23)=−7 | g₁(023)=−5 |
+| 2 | g₂(01)=5, g₂(03)=−3, g₂(13)=5 | g₂(013)=−7 |
+| 3 | g₃(01)=−3, g₃(02)=5, g₃(12)=7 | g₃(012)=−3 |
+
+Here is a complete reward-table realization. Its singleton vectors are
+
+    r(0)=(1,0,4,4),  r(1)=(4,1,0,0),
+    r(2)=(0,4,1,0),  r(3)=(0,0,0,1).
+
+Every passive coordinate at a nonsingleton coalition is zero. For a
+participant i of S with |S|≥2 define
+
+    r_i(S)=r_i(S\{i})+g_i(S\{i}).
+
+This defines all sixty coordinates without circularity, since the right
+reward coordinate is passive. In particular every passive reward is
+nonnegative. The singleton matrix is
+
+    Γ = ((0,3,−1,−1), (−1,0,3,−1),
+         (3,−1,0,−1), (3,−1,−1,0)).
+
+The failure below does not arise merely from a zero or adverse
+singleton matrix. No matrix-source coverage conclusion is needed for
+the argument.
+
+### The complete sure-anchor census
+
+Let q be the independent first-date hazards. Define G_i(q_{−i})
+as the expected joining gain, with the empty event valued at s_i=1.
+Direct expansion gives
+
+    G₀=1−8q₁q₂+4q₁q₃,
+    G₁=1+2q₀q₃−8q₂q₃,
+    G₂=1+4q₀q₁−4q₀q₃+4q₁q₃−12q₀q₁q₃,
+    G₃=1−4q₀q₁+4q₀q₂+6q₁q₂−10q₀q₁q₂.
+
+If some player a quits surely, every other player's terminal outcome is
+decided at this first date, under every unilateral deviation. Therefore
+the free players must form a Nash equilibrium of their finite binary
+game with these gaps. For a designated sure pair, all free equilibria
+and their two sure-player gaps are as follows; free coordinates are in
+increasing label order.
+
+| Sure pair | Free hazards | Sure-player gaps in increasing label order |
+|---|---|---|
+| 01 | (1,0) | (−7,1) |
+| 02 | (0,1); (1,0); (5/8,1/6) | (1,−3); (−7,5); (−43/12,2) |
+| 03 | (1,0) | (5,−3) |
+| 12 | (0,1) | (−7,5) |
+| 13 | (0,1); (1,0); (5/12,5/8) | (−7,7); (3,−3); (−19/6,73/48) |
+| 23 | (1,0) | (−3,5) |
+
+Each row is the complete two-player best-response enumeration: its
+endpoints are nonzero, and its only possible proper root is obtained
+by solving the two affine indifference equations. Thus every profile
+with two or more sure coordinates fails, including all pure profiles.
+
+Consider exactly one sure coordinate a. Zero proper free coordinates
+cannot work: if all three free players Continue, each has gap1.
+Exactly one proper free coordinate cannot work for the same reason.
+With exactly two proper free coordinates j,k and the other free player
+quiet, both g_j({a,k}) and g_k({a,j}) must be negative, since each
+free player's other endpoint is1. But in every triple the displayed
+table has exactly one negative participant joining gain. Hence this
+case is also impossible.
+
+It remains to solve the three proper free-player equations. For a=0
+their unique root in the open cube is
+
+    (q₁,q₂,q₃)=((5+√409)/48,(3+√409)/40,(7+√409)/72),
+    G₀=−(91+7√409)/360<0.
+
+For a=1 the unique root in the open cube is
+
+    (q₀,q₂,q₃)=((7+3√3)/22,(1+√3)/6,(1+4√3)/12),
+    G₁=−(47+127√3)/396<0.
+
+These are complete root lists, not numerical selections. Eliminating
+the first two free coordinates gives respectively
+
+    a=0: 24q₁−36q₃+1=0, 10q₂−18q₃+1=0,
+         72q₃²−14q₃−5=0;
+    a=1: 88q₀−36q₃−25=0, 8q₂−4q₃−1=0,
+         144q₃²−24q₃−47=0.
+
+The other quadratic root is outside the cube in each case. For a=2
+the corresponding necessary identities are
+
+    9q₀−34q₃+11=0, 186q₁−34q₃−21=0,
+    68q₃²−94q₃+9=0.
+
+The two values of q₀ are (25±√1597)/18, respectively negative
+and greater than1. For a=3 the identities are
+
+    2q₀−8q₂+1=0, 8q₁+16q₂+1=0,
+    32q₂²−14q₂+1=0.
+
+The middle identity already excludes q₁,q₂>0. Thus all sure-label
+possibilities have been exhausted.
+
+### Why the finite gaps reject unrestricted deviations
+
+For a sure anchor a, let Q_a be its prescribed first-date Quit payoff,
+and let C_a⁰ be the expected passive reward from nonempty opponent
+first-date exits, assigning zero to the empty opponent event. Then
+
+    Q_a−C_a⁰=G_a.
+
+If a instead Never quits, its payoff is at least C_a⁰, regardless of
+the other players' prescribed behavior after the first date: every
+later passive exit payoff is nonnegative, and literal Never pays zero.
+Consequently every negative anchor gap in the census is a strict
+unrestricted behavioral improvement. With two sure players the same
+conclusion holds without needing any tail comparison at all.
+
+Therefore this actual reward table admits no exact terminal Nash
+profile with any sure first-date quitter, even allowing arbitrary
+prescribed continuation strategies. In particular it has no stationary
+equilibrium with a sure quitter.
+
+It also admits no exact root-then-Never terminal equilibrium. If such
+a profile had no sure first-date player, a player could imitate its
+first-date action and, on survival, Quit at date1 instead of Never.
+The gain would be the strictly positive joint survival probability
+times its own singleton1. The alternative with a sure player was
+already excluded. This does not exclude approximate equilibria whose
+laws spread over several dates, or stationary equilibria with no sure
+coordinate.
+
+The inspected downstream declarations
+`quittingOneDateThenNeverProfile_exactHorizonNash` and
+`quittingOneDateThenNeverProfile_sameProfile_uniformPayoffWitness` in
+`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean` consume
+an already produced exact terminal Nash profile; they do not supply
+one under positive pair joining. Thus their full-deviation and
+finite-horizon conclusions cannot repair the failed producer above.
+This sure-anchor selection is retired. The next global attempt must
+retain temporal law/cap information, rather than infer a first-date
+anchor from positive joining against singletons.
