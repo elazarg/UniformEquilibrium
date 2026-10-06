@@ -1242,3 +1242,260 @@ added. The handoff requests a raw-data producer and exact consumer,
 not a supplied potential or root-selection interface. The complete
 artifact is self-contained ordinary mathematics and makes no new
 Lean-certification claim. No repair is requested.
+
+## Independent review: inverse-positive and signed matching joint phases
+
+Reviewed object: `../notes/CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md`,
+SHA256 `c1fab38c7e5c15dc00e7784f8ca0c929cdbd0cc6b489e54c8925f6c7ba242ad0`,
+from “An inverse-positive producer with two unequal joint rows” through
+EOF. This includes both the general inverse-positive/nonnegative-premium
+producer and the signed whole-matching theorem, all displayed fixtures,
+and the final bounded coverage comparisons. I did not read another
+review or the contributor's separate proof; I derived the argument from
+this frozen statement and the exact production declarations.
+
+Verdict: **PASS as ordinary mathematics** for the stated strict raw
+theorems, actual unrestricted behavioral consumers, and new raw coverage.
+There is no unresolved mathematical objection. One count in the frozen
+text needs editorial correction: Fin4 has fifteen partitions in total,
+fourteen nondiscrete, not “fifteen nondiscrete.” The proof excludes every
+nondiscrete partition and does not use the count. No build was run and
+the new producer is not claimed Lean-checked. No weak-sign extension or
+weak-boundary proper-periodic conclusion is included in this verdict.
+
+### Scope and odds equations
+
+For a partition into two pairs, write a(i) for the mate and O(i) for the
+other pair. The first theorem assumes Γ⁻¹>0 entrywise, Γ_i,a(i)=−b_i<0,
+scheduled participant increment Π_i≥0, passive increment K_i≤0, and
+the three actual outsider collision rewards at most s_i for every i.
+Its other singleton comparisons need not have the matching signs.
+
+The second theorem assumes exactly one positive singleton comparison in
+each row, at f(i), with f=(01)(23); the other two are strictly negative,
+including −b_i at a(i), where a=(02)(13). It permits Π_i>−b_i,
+retains K_i≤0 and the same twelve collision caps, and does not assume
+inverse positivity as raw data. All s_i are arbitrary real numbers.
+
+For odds X_i>0, let q_i=X_i/(1+X_i). Active indifference forces
+
+    U_i=s_i+Π_i q_a(i),
+    W_i=s_i+(Π_i+b_i)X_a(i).
+
+The active Quit and Continue endpoints are respectively
+s_i+Π_i q_a(i) and q_a(i)(s_i−b_i)+(1−q_a(i))W_i, hence coincide.
+For O(i)={j,k}, putting D_i=(1+X_j)(1+X_k), the passive Continue
+equation is exactly
+
+    (Π_i+b_i)X_a(i)D_i
+      =Γ_ijX_j+Γ_ikX_k+K_iX_jX_k+Π_iX_a(i)/(1+X_a(i)).
+
+Rearranging, including Γ_i,a(i)=−b_i, gives ΓX=N(X), where
+
+    N_i=(Π_i+b_i)X_a(i)(X_j+X_k+X_jX_k)
+           +Π_iX_a(i)²/(1+X_a(i))−K_iX_jX_k.
+
+The quadratic rational term has exactly this sign; replacing it by a
+linear term would not give the actual policy recursion. The displayed
+formula retains the other pair's simultaneous outcome.
+
+### Fixed point for the nonnegative-premium theorem
+
+If Π_i≥0, every term of N is nonnegative, and its cubic coefficient
+Π_i+b_i is positive. For G=Γ⁻¹>0, normalize F(X)=GN(X). With m and
+L the least and greatest entries of G, every nonzero nonnegative y has
+normalized Gy coordinate at least m/(4L). Thus the stated truncated
+simplex Δκ is nonempty and invariant under normalization.
+
+Uniformly for x∈Δκ, F(tx)=O(t²) as t decreases to zero. At large t,
+N_i(tx)≥(Π_i+b_i)κ³t³, giving a uniform positive cubic lower bound.
+Consequently one can choose finite r,R, 0<r<R, with ΣF(rx)/r<1 and
+ΣF(Rx)/R>1 for every x∈Δκ. The product-domain Brouwer map has no
+fixed point on its radial endpoints: at r its clipped radial coordinate
+is strictly larger, and at R strictly smaller. An interior fixed radial
+coordinate forces ΣF(tx)=t, and its simplex equation then forces
+F(tx)=tx. This is an actual strictly positive odds solution. No root
+simplicity, uniqueness, degree selection, or unproved continuation is
+hidden in the argument.
+
+### The matching matrix and signed terms
+
+Let P represent the favorite involution and M=ΓP. Its diagonal is
+positive, its off-diagonal entries are nonpositive, and its strict
+negative graph is strongly connected: the two harmful matchings
+generate all four vertices. Standard Q gives a solution of the literal
+LCP at offset −1. Because the unique positive coefficient of row i is
+at f(i), Γz≥1 implies z_f(i)>0 for all i. Complementarity therefore
+gives Γz=1, not merely an inequality. With u=Pz>0, Mu=1.
+
+For D=diag(M_ii) and C=I−D⁻¹M≥0, the weighted sup norm satisfies
+‖C‖_u=max_i(Cu)_i/u_i<1. The geometric inverse series converges.
+Strong connectivity supplies a positive term between every ordered pair
+of coordinates, so M⁻¹ and Γ⁻¹=PM⁻¹ are strictly positive. This
+proves invertibility; it does not assume it in applying the LCP source.
+
+For α_i=max(−Π_i,0), the strict inequality Π_i>−b_i gives α_i<b_i.
+In B(θ), the changed harmful entry is −b_i+α_iθ_i<0 even at θ_i=1.
+Thus M(θ)=B(θ)P retains its strongly connected negative graph for
+every θ on the CLOSED cube. Also M(θ)u≥Mu=1 for the fixed positive
+u=M⁻¹1. The same weighted-norm series proves every B(θ) inverse
+strictly positive. Inverse continuity and compactness give a uniform
+positive minimum entry and finite maximum entry. This is stronger than
+positivity merely along an unknown root and is exactly what the fixed
+truncated simplex needs.
+
+Taking θ_i=X_a(i)/(1+X_a(i)), moving the negative part of the rational
+term to the left gives B(θ(X))X=N⁺(X), with the three nonnegative
+terms displayed in the manuscript. Its cubic coefficient Π_i+b_i is
+strictly positive. The previous product-domain map therefore applies
+with the continuous variable inverse. The constructed fixed point
+solves the ORIGINAL policy equations, not a modified reward game.
+
+The exact source checked is
+`isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff` in
+`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+Its sole substantive input is absence of an original Fin4 uniform payoff;
+there is no singleton sign, normalization, punishment, or strategic
+certificate assumption. Its matrix is the literal Γ, by
+`quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`.
+Consequently the not-Q branch gives original-game UE by contrapositive.
+Only the Q branch is claimed to produce this particular proper cycle.
+
+### Exact signed adversarial test and boundary discipline
+
+Here is an additional exact test with independent row magnitudes and
+both signed participant increments and signed own levels. Put b_i=1,
+
+    s=(−3,2,−1,4),
+    Π=(−3/4,−1/2,1/4,2),
+    K=(−1,0,−2,−1/4),
+    Γ_i,f(i)=(27/8,13/4,63/8,49/4)_i,
+
+and take both harmful entries in each row to be −1. Every favorable
+magnitude exceeds2, so M is a strictly row-diagonally-dominant
+irreducible Z-matrix and its inverse is positive. Set the twelve caps
+equal to the corresponding s_i. The odds X=(1,1,1,1) solve all four
+equations exactly, because H_i=(7/2)Π_i+5−K_i. The values are
+
+    U=(−27/8,7/4,−7/8,5),
+    W=(−11/4,5/2,1/4,7).
+
+This tests negative own payoffs, active values strictly below singleton,
+two genuinely altered rows of B, and the K_i=0 boundary. All passive
+values are strictly above their own singleton, and all action tests
+hold. The manuscript's separate signed regression also checks exactly.
+
+The strict participant inequality cannot simply be dropped from the
+proper-root proof. For normalized H>2, Π_i=−1 and K_i=0, every passive
+value from active indifference would equal s_i. The equal-odds cubic is
+t²(H−1−t), with no root in (0,1). More generally, the equations at
+Π_i=−b_i and K_i=0 become ΓX=−b_i X_a(i)²/(1+X_a(i)) rowwise;
+for the positive-inverse normalized Γ their right side is strictly
+negative, impossible for X>0. A pure active-pair Nash nevertheless
+exists, so this is not a UE counterexample. The reviewed theorem keeps
+that boundary outside its proper-periodic assertion.
+
+### Full behavioral and original-game horizon consumer
+
+At a passive phase, Quit is an average of the singleton s_i and the
+three actual capped collision rewards, so Quit≤s_i<W_i. At active
+phases both endpoints coincide. The policy equalities therefore hold
+for both roots, and all sixteen pure unilateral endpoints are checked.
+This remains true for signed own payoffs; no playerwise reward shift is
+performed on a game with fixed zero Never payoff.
+
+All q_i are proper. The joint survival product is less than one, and
+each deleted-player opponent product ρ_i is also less than one. Iterating
+bounded endpoint inequalities bounds any behavioral deviation, including
+Never, with remainder tending to zero as ρ_iⁿ. It gives exact terminal
+Nash from either suffix. The geometric first-opponent tail bounds the
+terminal/N-average discrepancy uniformly over deviations, including the
+initial live-zero date. The displayed 2MC_i/N delivery and 4MC_i/N
+regret estimates are conservative valid bounds. The target and profile
+are fixed before accuracy and horizon.
+
+The exact declarations inspected are
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate` and
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`. Every
+policy, Nash, and opponent-contraction premise is produced here. There
+is no unproduced strategic hypothesis.
+
+### Fixtures and actual new coverage
+
+I independently evaluated the first asymmetric table at
+X=(1/5,1/4,1/3,1/6). Its q,U,W and ΓX=N values agree with every
+displayed rational entry. I also checked all fifteen rows of the final
+coverage fixture, whose active-pair premiums are145/32 and99/14.
+At X=(1/4,1/5,1/4,1/5) its phase values are exactly the displayed
+V_A and V_B. The passive Quit values are17/50 and31/72. Each active
+endpoint equals its phase value; passive Continue is strictly larger.
+All strict raw inequalities have positive slack, so the theorem covers
+a full sixty-coordinate neighborhood of this actual table. No inverse
+function theorem or continuation of these particular rational odds is
+needed for that claim.
+
+The exact trap set is {02,13,I}. All claimed pure-coalition failures
+hold. The fourteen proper-child witnesses are exhaustive: a child
+cutting an active pair uses the inside member's pure solo exit; the only
+other children are the two whole active pairs. The omitted joining
+gain is respectively177/32 or113/14 in the solo case, and1/2 in the
+joint case. Child debts and joint Never vanish. This falsifies a
+universal fixed nonnegative weighted-child-debt-plus-Never bound for
+some omitted player in each child; it does not exclude all selectively
+chosen quiet child witnesses.
+
+The singleton matrix has full R₀, degree+1, positive determinant and
+positive inverse, with the pair/triple principal signs stated in the
+manuscript. The harmful principal pair is not Q and has no nonzero
+homogeneous solution. Every triple inverse has a negative diagonal.
+Thus the named determinant, homogeneous, all-principal-Q, and
+nonnegative-inverse-child exits do not already consume this fixture.
+
+The full premium core, two strict pair traps, negative grand premiums,
+and positive singleton coefficients Π_a(j)−4 exclude respectively the
+core-at-most-two/triple, pair-free boxed, protected/weighted-floor, and
+mixed pair/larger-trap raw criteria. This includes the newly implemented
+signed-pair and boxed-specialization routes, not merely older packets.
+
+The two harmful singleton entries per row exclude the paired raw class;
+the favorite graph of two transpositions excludes either signed
+Hamiltonian four-clock pattern; reciprocal same signs exclude the
+tournament and required opposite-sign solo branches. Deleting a player
+leaves its favorite mate with two negative child comparisons. The
+normalized gap ratio53/8 excludes the specified small overlapping
+period-three affine cylinder. The all-sure displacements exclude every
+nondiscrete literal response partition. Every ordered lower guard has
+the exact negative pure-outsider witness −69/8 or −1, excluding even
+the weak polynomial and one-sided guards and their guard-derived raw
+neighborhoods. The literal owner-risky family has an off-diagonal zero
+that this matrix lacks. These checks use the exact declarations named
+in the manuscript; no numerical search or unspecified neighborhood
+radius is used.
+
+The proper-three-active stationary exclusion generalizes correctly to
+both premiums in this fixture. With D(x)=(Π+9)x−Π, interiority implies
+(Π+1)/(Π+11)<x<1/2 and Q_i=D(x)(a−c). Positive Never payoff then
+forces c<a<1. Since Π<9 and Π+61/8>9 for both premiums,
+(61/8)x>D(x) throughout that interval, contradicting Q_i=N_i.
+Every deletion is covered by choosing its complete active pair and the
+remaining player's favorite recipient. This excludes the specified
+proper-three-active local source, not full-support or sure-boundary
+stationary equilibria.
+
+Finally, singleton signs fix the favorite matching; the equal harmful
+gaps fix each normalized scale. The alternative harmful active matching
+has premium −2 and cannot meet the earlier cubic condition Π>−1.
+For the only eligible active matching,145/32≠99/14. This proves actual
+strict enlargement beyond the common-parameter cubic, even up to
+positive playerwise affine transport. Conversely, its common-K≤0 arm
+is included here; its common-K≥0 arm has the stated pure active-pair
+exit because Π>−1 makes both participants prefer the pair and capped
+outsiders cannot improve. Thus that older raw UE coverage is subsumed
+without claiming identity of the periodic profiles.
+
+No unrestricted stationary-completeness or arbitrary-table conclusion
+is added by this review. Subject only to correcting the partition-count
+wording in a final assembly, the complete strict manuscript is ready
+for its remaining independent gate and subsequent artifact check.

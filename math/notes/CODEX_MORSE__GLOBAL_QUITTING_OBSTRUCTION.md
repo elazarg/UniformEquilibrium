@@ -140,6 +140,11 @@ minimum, every designated player can be made debt-free at a compact
 minimum of the remaining debts, strictly above its singleton floor.
 It uses true global weighted minima, not a prefix-orbit replacement.
 No consumer of the resulting zero-debt-owner source has been proved.
+Section 29 gives a complete ordinary matching two-phase producer with
+scheduled premium Π<−1 and stronger collision caps. Its passive phase
+values are below the singleton floors. It has not been independently
+reviewed, and no new coverage beyond existing or concurrent matching
+criteria is claimed; the global source in Section 28 remains unresolved.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -4578,3 +4583,86 @@ Thus own-payoff affinity does not justify pure-law selection at the face
 minimum. That shortcut is retired. The positive-L source in (124) still
 stands, but a consumer must retain the mixed best-response law and the
 simultaneous opposing cap witnesses, or use L>0 in a genuinely new way.
+
+## 29. A negative scheduled-premium arm of the matching two-phase producer
+
+Status: ordinary complete raw-to-UE deduction, not independently reviewed
+or Lean-checked. Coverage beyond the accepted raw existence criteria and
+the concurrently investigated matching producers is not established.
+This remains internal; it is not a counterexample-class narrowing claim.
+
+Let I={0,1,2,3}, f=(01)(23), A={0,2}, B={1,3}, and a=(02)(13).
+Write o(i) for the remaining player. Choose s_i∈ℝ, b_i>0, and H>2.
+Require singleton rewards
+
+    r_i({i})=s_i,               r_i({f(i)})=s_i+Hb_i,
+    r_i({a(i)})=r_i({o(i)})=s_i−b_i.
+
+At T=A,B require participant reward s_i+Πb_i and passive reward
+s_i+Kb_i. The different raw parameter range considered here is
+
+    Π<−1,             K<(7Π+10−2H)/2.                         (125)
+
+Define C=4(−Π−1)/3>0 and impose the twelve stronger collision caps
+
+    r_i({i,j})≤s_i−Cb_i       for j=f(i),o(i),
+    r_i({i,f(i),o(i)})≤s_i−Cb_i.                              (126)
+
+Every other nonsingleton coordinate is free. Then the original game has
+an exact terminal Nash profile and one fixed uniform-equilibrium target:
+alternate A and B with a common proper hazard q defined below.
+
+Proof. Set P(t)=Πt³+(H−1−K)t²+Kt−(Π+1). Now P(0)>0, so the
+usual sign change between zero and one is unavailable. Instead
+
+    P(1/2)=(2H−10−7Π+2K)/8<0,       P(1)=H−2>0.
+
+Choose a root t∈(1/2,1) once, and put q=1−t. Define the active and
+passive continuation values
+
+    U_i=s_i+qΠb_i,
+    W_i=s_i+q(Π+1)b_i/t.
+
+Both active endpoints equal U_i, because they are t s_i+q(s_i+Πb_i)
+and q(s_i−b_i)+tW_i. At the passive phase the Continue endpoint is
+s_i+b_i[qt(H−1)+q²K+t²qΠ], which equals W_i precisely by P(t)=0.
+Unlike the positive arm, W_i<s_i. Nevertheless the passive Quit value
+is at most
+
+    t²s_i+(1−t²)(s_i−Cb_i)=s_i−(1−t²)Cb_i.
+
+Writing c=−Π−1>0, the difference between W_i and this upper bound is
+
+    q b_i[(1+t)C−c/t]>0,
+
+since t(1+t)>3/4 and C=4c/3. Thus passive Continue is again strictly
+optimal. All possible simultaneous unilateral outcomes are among the
+twelve capped entries; no unlisted reward coordinate is used.
+
+Joint survival per period is t⁴ and each deleted-player opponent
+survival is t³. Iterating the endpoint inequalities therefore gives
+exact terminal Nash against every behavioral deviation, including Never.
+The actual terminal values are U,W by the contracting policy recursion.
+If M bounds the absolute reward entries, the expected first opponent
+exit time is at most 1+2/(1−t³); including the initial live-zero date,
+the payoff-delivery error is at most 2M[1+2/(1−t³)]/N and the N-date
+deviation gain at most twice that. This proves the fixed-target uniform
+claim in the original game. The named consumers inspected for this
+ordinary deduction are
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate` and
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`.
+
+The range (125) is nonempty. For example H=3, Π=−11/10,
+K=−179/60 has the exact root t=2/3. With s_i=b_i=1, it gives
+U_i=19/30 and W_i=19/20, both strictly below the singleton level1,
+and C=2/15. Thus this is genuinely a different endpoint-floor regime,
+not a proof that every phase value lies above its singleton. Choosing
+all twelve caps at or below13/15 makes the displayed certificate valid.
+
+This calculation by itself does not establish new coverage: a completion
+of the other reward coordinates could satisfy an existing raw theorem.
+No source non-overlap or exclusion of other equilibrium architectures is
+inferred from the sign Π<−1. The next useful test, if a broader matching
+producer does not already consume this arm, is a complete raw completion
+with independently verified failure of the accepted existence criteria.
