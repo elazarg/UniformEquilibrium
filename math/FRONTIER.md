@@ -428,13 +428,13 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the global two-joint cyclic-child family specified below, for every real R | UE with simultaneous quitting at both retained joint phases. The rates and target are produced from rewards, including the outsider halfspace boundaries. This is reviewed mathematics awaiting formalization. |
 | Fin4: the zero-premium joint-phase family specified below, for every real R and σ≥0 | UE with both joint participants at their singleton rewards and a possibly positive outsider collision payoff. Rates and a fixed target are produced; an opposite-sign pair core is allowed. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
-| Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. This is reviewed mathematics awaiting formalization. |
+| Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. Both strict and weak comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons, greatest premium core of size three, and all within-core joining differences nonnegative | UE with arbitrary signed participant premiums, including negative premiums inside the core and overlapping pair traps. A full triple-root index argument selects a suitable successor; weak comparisons use reward closure. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and a triple premium core with the mixed joining signs and two exact equalities specified below | UE with arbitrary signed participant premiums. The class allows negative within-core joining differences and is not covered by the joining-attractive criterion. It is an equality-stratum result, not a full reward-space neighborhood. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. Both strict and weak tests have production Lean consumers. |
-| Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The raw coefficient predicate, common-box selection, exact-root return and original-game payoff producer have production Lean declarations. The explicit C3/C4 simplifications and packet examples remain formalization obligations. |
+| Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The raw criterion, common-box selection, exact-root return, explicit C3/C4 thresholds and literal triple/full-core table consumers have production Lean declarations. The packet's neighborhood and separation claims remain formalization obligations. |
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
@@ -710,6 +710,16 @@ existential: the same table can have a bad exact root as well. Opposite
 strict join-gap signs admit a unique bad root of index +1 and are outside
 this argument; that local regression is not a counterexample to UE.
 
+The production theorem
+`exists_uniformEquilibriumPayoff_of_empty_or_signed_pair_core_weakSameSign`
+(`UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClosure.lean`)
+takes only nonnegative own singletons and the stated empty-or-pair raw
+criterion. The strict producer internally separates pure-pair Nash from
+selected return. The weak consumer perturbs only the two passive singleton
+entries, preserving participant rewards, own singletons, traps and core,
+then obtains one original target by reward closure. No strategic witness
+is an input.
+
 The **joining-attractive triple-core criterion** assumes nonnegative own
 singletons, greatest premium core C of size three, and the nine comparisons
 
@@ -928,9 +938,17 @@ no root, strategy or selected-return certificate is supplied.
 `exists_successor_le_singleton_of_boxedQuittingNashCharges`
 (`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashChargeReturn.lean`)
 select one box for all sources and prove return for every absorbing exact
-root there, including sure-hazard cases. The explicit C₃/C₄ threshold
-simplifications and the displayed table tests remain separate packet
-obligations; the export is not yet fully formalized.
+root there, including sure-hazard cases.
+`QuittingTrapChargeCoefficients.threshold_of_cardinality_three` and
+`QuittingTrapChargeCoefficients.threshold_of_cardinality_four`
+(`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashChargeOdds.lean`)
+give the explicit C₃/C₄ formulas. The complete triple and full-core
+tables have production payoff consumers in
+`UniformEquilibrium/Quitting/Examples/BoxedNashChargeTripleFixture.lean` and
+`UniformEquilibrium/Quitting/Examples/BoxedNashChargeFullCoreFixture.lean`.
+Their strict neighborhoods, outside-box counterroots, proper-child debt
+witnesses and matrix/response separation tests remain packet obligations;
+the export is not yet fully formalized.
 
 The **mixed premium-trap criterion** allows pair traps and larger traps in
 the same table. Own singletons are nonnegative. For every pair trap {i,j},
