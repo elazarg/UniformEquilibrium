@@ -297,3 +297,49 @@ does not claim exhaustive failure of all supplied-certificate interfaces,
 nonexistence of a stationary equilibrium, or a positive-gap game. The
 new mathematical input is the complete mixed-sign raw producer and its
 verified UE consumer, not the coverage exclusions by themselves.
+
+## Final standalone artifact check
+
+**PASS** on the complete 618-line standalone
+`exports/MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md`, SHA256
+`e002b9df5d40270c3ab239916bf0c23e485bbf9ceff195c6c471ddc4bd6131fd`.
+This is a bounded assembly/delta check against the completed independent
+proof review above. The entire artifact was read; no counterpart assembly
+addendum was read before this verdict. No repair is required.
+
+The standalone preserves the raw greatest-core and joining hypotheses,
+the two equality restrictions, all partly-sure cases, ambient indices,
+generic tie removal, same-box limiting roots, original fixed UE target,
+and simultaneous weak reward closure. No root or strategic witness has
+become a supplied input. The corrected initial-zero-state convention gives
+the pure exit's exact finite-horizon Nash property and M/N delivery error.
+
+The newly expanded signed minimum proof is sound. Its collision-adjusted
+solo probe stays in the same box, including upper-face coordinates;
+the correction cancels in the differentiated drift. A sole binding
+coordinate contradicts the probe. With several binding coordinates,
+minimum geometry gives nonnegative binding partials, whereas the downward
+source and exact root bounds give ε≤(3M+B)a and a strictly negative
+binding partial. No participant-premium sign assumption has slipped into
+this step. The Fin4 consumer separately uses the canonical sum bound,
+choosing B=M+1 rather than assuming a max-entry box fits the wrapper.
+
+The full rational table, all partition and proper-child comparisons, and
+the bounded scope of accepted-class exclusions are retained. The packet
+does not depend on a conference note or another mathematical packet.
+Its source references are the named tracked declarations and ordinary
+finite-dimensional degree facts; the handoff does not assert that the
+new producer has been implemented.
+
+I independently recalculated both additional displayed triple tests.
+The small-hazard bad root has exactly the stated Q,C and derivative
+matrix, with full determinant −41/9. After changing only r₁(123) to4,
+the equality-relaxation test has exactly the stated Q,C and derivative
+matrix, with cycle products 23/2 and −15 and full determinant +7/2.
+Its annotation fits B=21>M=20, and the core and other signs are
+unchanged. It refutes only the proposed all-bad-negative-index extension,
+not selected return itself or UE. The tied pair and negative-joining pair
+regressions also agree with the independent calculations above.
+
+No math-directory dependency, review/process narrative, hidden strategy
+assumption, or unsupported openness/implementation claim was found.

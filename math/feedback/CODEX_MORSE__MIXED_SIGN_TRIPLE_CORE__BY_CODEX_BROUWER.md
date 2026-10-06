@@ -385,3 +385,67 @@ weighted floors, boxed charges, mixed traps, finite quiet lifts, and the
 prescribed one-/two-joint chronological families. None is asserted to be
 a completeness theorem. The new mixed-sign producer remains confined
 to its stated equality stratum; the unrestricted Fin4 problem is open.
+
+## Final standalone artifact check
+
+**Final-artifact PASS** for all 618 lines of
+[`MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md`](../exports/MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md),
+SHA256
+`e002b9df5d40270c3ab239916bf0c23e485bbf9ceff195c6c471ddc4bd6131fd`.
+I read the entire standalone file and checked the assembly deltas against
+the proof reviewed above. This is an artifact seal, not a second claim of
+independent discovery or a Lean check. There is no unresolved objection.
+
+The two exact equalities, all seven strict/weak signs, signed participant
+scope and greatest-core condition are preserved. The pure-12 branch has
+the corrected initial live-zero convention and M/N target-delivery bound.
+The full determinant, all-root finite index sum, arbitrary-source
+restoration, original Fin4 canonical-box consumer and simultaneous passive
+closure remain present. Every strategic object is produced; no favorable
+root, target, finite law or response certificate was introduced as input.
+
+The expanded compact-minimum argument is self-contained. It minimizes on
+the full singleton-sublevel union D, returns strict-deficit sources to
+that SAME set, obtains the collision-adjusted face drift including
+inactive outsiders, rules out a unique binding coordinate, and obtains
+nonnegative binding partials when two or more bind. The downward source
+x−εe_j stays boxed, selected return gives w∈D, and the signed estimates
+yield ε≤(3M+B)a. The Taylor quotient in the assembly is therefore
+legitimate. No nonnegative participant-premium assumption or unproved
+all-roots-return property replaces these steps.
+
+The unchanged full table, pure gains, matrix calculations, all response
+partitions and all fourteen child witnesses are carried over accurately.
+The added principal03 non-Q witness is valid: with matrix
+[[0,−3/2],[-1,0]] and offset (−1,−1), both residual coordinates are
+negative for every nonnegative input. The principal is nevertheless R₀.
+
+I separately recalculated the two new root examples. The inactive-tie
+example has exactly the displayed endpoints, inactive player3 gap0 and
+active determinant −16/3; increasing only v₃ by η changes that gap to
+−3η/8. The modified negative-pair example has gaps
+(−25/32,0,−9/16,0), the displayed endpoints, and determinant −16/9.
+Its extra trap13 overlaps trap12, and the greatest core remains123.
+The full +1 equality-relaxation example and its nonclaims match Section5
+of this review exactly.
+
+Two additional bounded implemented-source screens also pass. The
+`SignedFourCycleSingletonData` predicate in
+`UniformEquilibrium/Quitting/Cycles/SignedFourCycleRewardAdapter.lean`
+requires a positive predecessor edge in a four-cycle. In this fixture
+receivers1,2,3 have respectively only the positive columns3,1,2.
+These already form a three-cycle, so no relabeling can supply the required
+four-cycle. The coarse `IsQuittingConditionalFaceGapRange` predicate in
+`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`
+also fails for every blocker: player0 has passive maximum2, whereas every
+participant reward is at most1. Thus its strict lower-face mixture
+comparison cannot hold. These are additional source exclusions, not
+claims about all conditional stationary-certificate interfaces.
+
+The standalone has no mathematical dependency on conference notes,
+feedback, shared indexes or an untracked helper. All raw data, ordinary
+proofs and boundary examples needed for the theorem are in the packet;
+the named source declarations provide the stated implementation handoff.
+There is no review/process history inside it. Coverage exclusions are
+properly bounded, and it explicitly disclaims removal of the two
+equalities, a full-core theorem and any UE counterexample conclusion.

@@ -430,6 +430,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons, greatest premium core of size three, and all within-core joining differences nonnegative | UE with arbitrary signed participant premiums, including negative premiums inside the core and overlapping pair traps. A full triple-root index argument selects a suitable successor; weak comparisons use reward closure. This is reviewed mathematics awaiting formalization. |
+| Fin4: nonnegative own singletons and a triple premium core with the mixed joining signs and two exact equalities specified below | UE with arbitrary signed participant premiums. The class allows negative within-core joining differences and is not covered by the joining-attractive criterion. It is an equality-stratum result, not a full reward-space neighborhood. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. Both strict and weak tests have production Lean consumers. |
@@ -733,6 +734,34 @@ weighted-leave and boxed-charge hypotheses, and an actual bad triple root
 that tests the existential, not universal, return conclusion. It does not
 cover full cores or negative within-core joining differences. No reduction
 of arbitrary tables to these raw hypotheses is asserted.
+
+The **mixed-sign triple-core criterion** assumes nonnegative own singletons
+and greatest premium core C={a,b,c}. With
+d_i(T)=r_i(T∪{i})−r_i(T), its weak comparisons are
+
+    d_a({b})≥0, d_b({a})≥0,
+    d_a({c})≤0, d_c({a})≤0, d_b({c})≤0, d_c({b})≤0,
+    d_a({b,c})=0, d_b({a,c})=0,
+    d_c({a,b})≤0.
+
+Participant premiums may have either sign. Every table satisfying these
+raw conditions has an original-game UE payoff against all unilateral
+behavioral deviations. In the strict-sign case, a bad root with a sure
+quitter either gives the pure-{a,b} equilibrium exit or is impossible.
+Every remaining bad pair or triple root has full ambient local index −1.
+After avoiding inactive-core ties, total index +1 produces an exact root
+whose successor is at or below a singleton. Compactness restores arbitrary
+sources, and the full-root potential consumer gives UE. Passive reward
+perturbation supplies the weak signs while preserving both equalities
+and the premium core.
+
+The [complete mixed-sign theorem](exports/MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md)
+includes a rational table beyond the compared implemented and accepted raw
+criteria, including joining-attractive triple cores. It therefore removes
+an additional reward-table class from possible UE counterexamples. The two
+equalities are part of the criterion: relaxing one admits a positive-index
+bad-root regression. That regression refutes the proposed index extension,
+not UE. No full-core or unrestricted three-core theorem is asserted.
 
 The **protected common-leaver criterion** uses the same positive-premium
 trap definition even when participant premiums have either sign. It assumes
