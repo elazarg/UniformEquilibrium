@@ -3668,8 +3668,10 @@ A full exact pure-{1,2} root is independent of the annotation, since
 each player still faces a sure quitter after a unilateral deviation.
 Prescribing those two sure quits at the initial date is therefore an
 actual unrestricted terminal equilibrium, with immediate absorption even
-after every unilateral deviation. It yields its constant target at every
-finite horizon. It also contradicts a positive charged potential directly
+after every unilateral deviation. In the repository's state-payoff timing,
+the initial live date pays zero, so its N-date average is
+(N−1)r({1,2})/N. The profile is exact Nash at every N, and delivery to
+the fixed target r({1,2}) has error at most M/N. It also contradicts a positive charged potential directly
 by taking v=w=r({1,2}). Dispatch this exit first. Every remaining bad
 root has only proper positive hazards.
 
