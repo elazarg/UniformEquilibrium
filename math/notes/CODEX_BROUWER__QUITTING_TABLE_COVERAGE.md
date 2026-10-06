@@ -15,6 +15,13 @@ singleton completion is all Never. The complete three-player example,
 Fin4 version, and off-path proof are internal ordinary mathematics, not
 independently reviewed or Lean checked. Approximate timing equilibria are
 not excluded, and no game-level positive gap is asserted.
+The same Fin4 table now gives a sharper partial-exactification obstruction:
+among ALL independent finite laws for which the three nonpivot players
+are exact unrestricted terminal best responders, the infimum of the
+pivot's unrestricted regret is exactly 31/375. The pivot law is entirely
+free. Thus even exactifying only the child destroys approximate-equilibrium
+coverage. This is an internal ordinary-mathematics result, not a positive
+gap for unrestricted profiles.
 
 The **A solo-0 bridge pays a positive outsider cap** section is a
 complete ordinary construction with two independent PASSes and final
@@ -2930,6 +2937,133 @@ singleton-completed Nash law is all Never, has actual pivot debt1,
 and belongs to a game already covered by product-low UE. The fourth
 player is not inert and cannot supply an artificial sure-exit solution.
 
+### Exactifying only the three nonpivot responders also loses coverage
+
+Keep the literal Fin4 table G above. There is no singleton completion
+in the following statement: payoffs and best responses are those of the
+ACTUAL terminal game, with joint Never payoff0. Let all four stopping
+laws be independent and supported on an arbitrary common finite calendar
+plus Never. Impose only that players1,2,3 are exact unrestricted terminal
+best responders. Player0's law is unconstrained. Then
+
+    terminal_debt_0 >= 31/375.                                    (F3)
+
+The constant is sharp as an infimum over all finite calendars and laws
+satisfying these three exact-response conditions. Since the game has UE
+by product-low, (F3) is a failure of this partial-exactification class,
+not an unrestricted positive-gap example.
+
+First fix a pivot hazard p in[0,1], and give all children continuation
+payoff0. Their Quit value is0, and their Continue vector is
+
+    C=-p*(1,1,1)+A*q,
+    A=[[0,-1,2],[2,0,-1],[-1,2,0]].
+
+The unique child Nash row in the entire cube is q=(p,p,p), with value0
+for every child. Here is a complete boundary check. For p<1, if q1=1,
+then an active q2 would require C2=-p+2-q3<=0, impossible. Hence q2=0,
+so C3=-p-1<0 forces q3=1, but then C1=2-p>0 contradicts q1=1.
+Cyclic relabelling excludes every upper face. For p>0, q1=0 would
+give 2q3>=p+q2, hence q3>0. Its active inequality implies 2q2<=p,
+whereas C2=-p-q3<0 forces q2=1, impossible for p<=1. Thus no zero
+face is possible. When 0<p<1 all three hazards are interior and the
+linear system Aq=p*(1,1,1) gives q=(p,p,p). At p=1, any upper
+coordinate forces its two cyclic neighbors to be1 by the active
+inequalities; with no upper coordinate the same linear system forces
+all of them1 anyway. At p=0, active inequalities give
+
+    q dot A*q = q1*q2+q1*q3+q2*q3 <= 0.
+
+At most one coordinate can then be positive. A sole active child leaves
+another inactive child with negative Continue value, impossible. Thus
+q=0. This proves uniqueness including both endpoints and sure hazards.
+
+Next apply this row fact to finite laws without assuming off-path Nash.
+At every reached date before any sure hazard, every player has positive
+own survival and conditional changes of its future law are legal. If a
+first reached sure hazard occurs, a child facing another sure quitter
+has precisely the displayed Continue value, independently of later laws.
+If a child is the sole sure quitter, it can Continue once and then Quit
+at the next date (or immediately after the calendar). Its participant
+reward is always0, so this deviation supplies the displayed Continue
+value as a lower bound, even if the prescribed future is off path.
+The active child's current value is0, and exact best response therefore
+gives the required active inequality. All other children face the sure
+opponent and have the literal row comparison. The child row is Nash
+at continuation0. The uniqueness result forces p=1 and all three child
+hazards1. In particular their conditional values at that row are0.
+
+Backward induction to every preceding reached date now applies with
+child continuation vector0 and forces all four hazards to be equal.
+If there is no sure row, all dates are reached and the same induction
+starts from the actual terminal Never payoff0 after the final date.
+Unreached rows after a common sure exit may be deleted. Consequently
+EVERY profile in the class of(F3) consists, up to absorption, of common
+hazards p_t for all four players. Conversely, any finite common-hazard
+profile gives the children exact best-response value and payoff0, by
+the same backward equations and the constant0 post-calendar reply cap.
+
+Write L_t for one player's survival immediately before date t,
+m_t=L_t*(1-p_t) for survival just after it, and S for its final Never
+mass. Thus the intervals[m_t,L_t] partition[S,1]. A pure pivot quit
+just after a date has a greater payoff than quitting just before it by
+L_t^3*p_t. Its best response is therefore to Quit after the entire
+calendar, with exact full cap
+
+    B_0=1+sum_t L_t^3*p_t.
+
+Actual Never is lower by S^3, and intermediate or randomized stopping
+rules cannot improve this cap. This last statement covers unrestricted
+behavioral deviations: against independent fixed stopping laws, their
+payoffs are mixtures of pure stopping-date payoffs. The pivot's own
+payoff, including all simultaneous quitting coalitions, is
+
+    u_0=1-S^4+sum_t L_t^4*p_t*(1-p_t).
+
+Indeed, its unnormalized one-row absorption payoff is
+1-(1-p_t)^4+p_t*(1-p_t). Subtracting gives the exact identity
+
+    B_0-u_0 = S^4+sum_t (L_t-m_t)*L_t^2*(1-m_t)
+             >= S^4+integral_[S,1] x^2*(1-x) dx
+              = 1/12-S^3/3+5*S^4/4
+             >= 31/375.                                        (F4)
+
+For the integral inequality, x in[m_t,L_t] implies both x^2<=L_t^2
+and 1-x<=1-m_t; all factors are nonnegative. The scalar function in
+(F4) has derivative S^2*(5*S-1), so its minimum on[0,1] occurs at
+S=1/5 and equals31/375. To attain this value in the limit, partition
+[1/5,1] into N equal intervals and take common law masses4/(5N)
+at the N ordered dates, with Never mass1/5. All hazards are below1,
+the children are exact best responders, and the sum in(F4) converges
+to its displayed integral. This proves sharpness without numerical
+optimization or an assumed exact terminal equilibrium.
+
+The bounded source audit distinguishes this new impossibility from a
+supplied-object identity. `singlePivot_exactMenuNash_nonpivot_debt_eq_zero`
+in `UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`
+deduces exact nonpivot response from an exact finite-menu Nash input;
+it does not produce low pivot regret while imposing those equalities.
+The argument above allows EVERY pivot law and EVERY finite calendar,
+so neither an inner pivot optimizer nor selection among the constrained
+child equilibria removes its gap.
+The prior [canonical exact-menu separation](CODEX_RENY__CANONICAL_EXACT_FINITE_MENU_SEPARATION.md)
+was also inspected. It already excludes exact ACTUAL finite-menu Nash
+selection and supplies useful approximate laws at all horizons on a
+different canonical table. The preceding singleton-completed result
+concerns a different auxiliary game. The additional quantifier in(F3)
+is that only the three nonpivot errors are required to vanish: the
+pivot need not be even approximately optimal within its finite menu.
+No first-discovery claim for exact-versus-approximate separation is made.
+
+A separate attempted clock-compression route was already implemented:
+`exists_fin4_finiteClockStoppingLaws_exploitability_le` and
+`exists_fin4_calendarUniformStoppingLaws_exploitability_le` in
+`UniformEquilibrium/Quitting/Paths/QuantitativeFiniteClockSource.lean`
+select actual independent laws with full regret within24/level of the
+UNKNOWN global infimum at support8*level+1. Those declarations were
+inspected under their imports, not built here. They do not prove that
+the infimum is0. No new compression or source-completeness claim is made.
+
 ### Direction change and the remaining question
 
 The surviving identity(F1) cleanly isolates joint mass, but exact finite
@@ -2942,6 +3076,12 @@ strategic problem, not solve it.
 The next question is whether a global continuation-mass argument can
 produce small completed-menu error AND small joint mass simultaneously,
 without an exact-Nash restriction and without convexifying independent
-laws. Any proposal must survive the all-calendar obstruction above and
-the earlier feasible phantom-target counterexample. No additional
-conditional interface or positive game-level gap is asserted here.
+laws. All four small response errors must be produced together: imposing
+even three exact errors equal to0 is excluded by(F3), with an exact
+strict gap independent of the calendar size. Any proposal must survive
+these all-calendar obstructions and the earlier feasible phantom-target
+counterexample. No additional conditional interface or positive game-level
+gap is asserted here. The next concrete question is whether a genuinely
+approximate all-player selection can spend the child errors to reduce
+the pivot's late-response excess, with a bound that is stable as both
+the calendar and the number of changes grow.
