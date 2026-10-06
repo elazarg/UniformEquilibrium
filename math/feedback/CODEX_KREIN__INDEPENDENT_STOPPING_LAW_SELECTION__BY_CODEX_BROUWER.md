@@ -2017,3 +2017,240 @@ and `exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables`
 in `UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
 Unchanged matrix and quiet-debt source definitions use the exact audits
 already recorded above. No build or implementation claim follows.
+
+A separate optional proof simplification, activating a tied outsider in
+a slightly larger charge-admissible box, is retained in
+[`the reviewer's notebook`](../notes/CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md)
+under **A tied outsider can be activated inside a larger charge box**.
+It is not a premise of this PASS and is not requested as an export delta.
+
+## Independent joining-attractive triple-core review
+
+Verdict: mathematical PASS for the complete final section **Joining-
+attractive triple cores: negative index without a charge box**, at
+whole-note SHA256
+`ca96e6bdb54f476e8a50f4d61747be18af1b0f7cacb2c76984cdb36002119fee`.
+No counterpart review was read. I checked the full raw-table-to-UE chain,
+the complete fixture and all three scope regressions. This is ordinary
+mathematics with exact symbolic/rational and static source checks, not
+a Lean build or an arbitrary-game theorem. No repair is requested.
+
+### Exact raw scope and support alternatives
+
+The greatest union C of all premium traps has cardinality three.
+For every i in C and every nonempty T contained in C minus i,
+joining T weakly dominates remaining passive: r_i(T+i)>=r_i(T).
+Participant premiums may be signed inside C and on outsider coalitions.
+The Fin4 strategic theorem also requires nonnegative own singletons.
+The proof first uses strict joining and later restores all weak
+comparisons by a simultaneous passive-coordinate perturbation.
+
+Every bad absorbing root has trap support, so its active set is a
+pair in C or all of C. This follows from the signed nontrap upper
+bound, not from any protected floor. For each k outside C, a positive
+participant premium on T+k with T contained in C would enlarge the
+trap C. Therefore Q_k<=s_k at every core-supported root. If the
+successor is all-high, its inactive gap is strictly negative. This
+argument applies to EVERY actual outsider, and only to such outsiders;
+it does not cover the unused member of a pair within C.
+
+If a bad root has any sure core quitter, every other core player
+faces a nonempty core coalition with probability one and has a strictly
+positive joining gap. All three core hazards must therefore be sure.
+Such a pure-C root is independent of its annotation and is an actual
+pure equilibrium, or an absorbing self-loop refuting a full potential.
+After that explicit exit, every active hazard of a bad root is interior.
+This treats all partly-sure faces before derivative calculations.
+
+### Triple sign, pair ties, compact count, and source restoration
+
+Dividing the active endpoint gap by its opponent survival gives exactly
+the odds polynomial s_i-v_i+sum_T d_i(T)*product_T z. At an exact
+interior root this polynomial is zero. Thus differentiating in q_j
+cancels the derivative of the survival prefactor and gives
+
+    a_ij=(1-q_k)/(1-q_j)*(d_i(j)+z_k*d_i(jk))>0.
+
+The gap has no own-variable derivative. The three-by-three determinant
+of minus its derivative is therefore minus the SUM of the two positive
+oriented three-cycle products, not their difference. It is strictly
+negative. Outside-core clipped rows are locally zero, so the full
+identity-minus-map derivative has this active block, arbitrary upper-
+right derivatives, and lower blocks zero/identity. All simultaneous
+outsider effects are retained, and the determinant is genuinely ambient.
+
+At an interior pair, strict joining forces v_i>s_i and v_j>s_j,
+with positive denominators alpha_i,alpha_j and negative active
+determinant. The unused core member can be tied. The displayed N_(A,k)
+is the exact four-coalition expansion of its full gap times alpha_i*alpha_j;
+its v_k coefficient is -d_i*d_j!=0. Taking the product over all pairs,
+inactive players, and denominators gives one nonzero polynomial. Its
+complement is a simultaneous dense open source set; it is chosen before
+roots and does not perturb rewards. At such a source all inactive bad-
+pair gaps are strictly negative by Nash optimality.
+
+For a below-floor source all Continue is impossible. Under the
+contradictory assumption that EVERY root is bad, every root is locally
+smooth with nonsingular full identity-minus-map derivative and index-1.
+The entire fixed-point set is compact and consists of isolated points,
+so it is finite: any infinite subset would accumulate at a fixed point
+which is itself isolated. This is not an assumed finite triple-root
+count or uniqueness assertion. The clipped map takes the full ambient
+region (-1,2)^I into the unit cube, so its homotopy to the cube center
+has total degree+1. Finite excision and additivity contradict a sum of
+negative local indices. The nonlinear-to-linear local homotopy is
+justified by the stated invertibility/remainder estimate.
+
+Generic interior-box sources can approach EVERY original boxed source
+with a strict singleton deficit while retaining that deficit. Compact
+hazards, closed endpoint Nash inequalities, and the closed finite union
+of low-successor sets preserve a returning root at the limit. It still
+absorbs. The reward bound keeps the successor in the SAME box. No
+continuous selected branch, all-root return, or generic raw table is
+being asserted.
+
+### Minimum consumer and simultaneous weak closure
+
+The same-D compact-minimum argument preserves all signed estimates
+from the earlier reviewed mechanism. It first forces the minimum onto
+the all-floors boundary. The collision-adjusted singleton probe retains
+all passive pair rewards and cancels its correction in the derivative.
+It rules out a unique binding coordinate; two bindings give nonnegative
+binding partials. At a lowered binding source, Q_j>=s_j-2Ma and
+the displacement bound imply epsilon<=(3M+B)a. Same-D minimality and
+unit drift contradict that derivative sign. There is no source floor
+assumption hidden in the selected-return step, and no nonnegative
+participant-premium assumption in these estimates.
+
+For Fin4, own-singleton nonnegativity gives normality. The actual no-UE
+source theorem gives the same polynomial on M+2; restriction to exact
+roots and B=M+1 does not alter it. The all-zero singleton case has
+the direct all-Never equilibrium. Thus the result is an actual UE
+producer from the displayed finite reward data, not a supplied-potential
+verifier.
+
+For weak joining, lowering every passive coordinate r_i(T), with
+i in C and nonempty T contained in C minus i, by delta is consistent:
+the coordinates are distinct and none is a participant coordinate.
+Every own singleton, EVERY premium trap, and C itself remain exactly
+unchanged. No right-hand participant endpoint is altered indirectly.
+All joining differences rise by delta simultaneously. The sup-norm
+change is delta, so strict-case UE and the actual reward-closure theorem
+give one fixed original-table target. No weak local-index claim is needed.
+
+### Exact adversarial root tests
+
+The fixture admits an actual bad triple root at a below-floor source.
+In the original player order, take
+
+    v=(9/10,22/81,14/9,14/9),
+    q=(0,1/2,1/10,1/10).
+
+Its forced endpoints are
+
+    Q=(81/200,31/100,31/20,7/20),
+    C=w=(2329/2000,31/100,31/20,7/20).
+
+Every successor coordinate strictly exceeds its singleton although
+v0<1. The outside gap is strict. Its active derivative is
+
+    [[0,13/9,13/9],[13/5,0,25/9],[13/5,25/9,0]],
+
+so the FULL determinant is -1690/81. This independently tests the
+triple derivative formula and shows why the conclusion must remain
+selected return, not return of every root.
+
+In the author's overlapping-pair variant, take instead
+
+    v=(9/10,2/9,1,23/9), q=(0,1/2,1/10,0).
+
+The exact endpoints are
+
+    Q=(9/20,1/10,3/2,4/5),
+    C=w=(271/200,1/10,3/2,4/5).
+
+This is an all-high pair root with a genuinely TIED inactive core
+player3, while outside-core player0 has a strict gap. Thus applying
+the outsider inequality to every inactive player would be false; the
+actual polynomial genericity/limit argument addresses precisely this
+case. Both tests were computed with exact fractions, not rounded roots.
+
+### Complete fixture and bounded overlap audit
+
+Exact enumeration gives only trap123 for the main15-row table, M=4,
+singleton joining gaps1,1 and two-opponent gap4 for each core player.
+All fifteen pure coalitions have the stated strict improving move.
+Each grand participant has a negative premium, so no globally protected
+coordinate exists. On every core singleton, P_C=3 and L_C=2.
+Thus the boxed/mixed boxed singleton layers fail. Strictly positive
+joining differences make every positive-weight aggregate-leave test
+positive as well; this excludes the ACTUAL implemented weighted trap-
+leave predicate, not only its older manuscript. Product-low and
+nonpositive participant-balance fail at sure123, with premium4 for
+every active player. The greatest core has size three, and all pivot0
+pair premiums are-1, excluding the stated previous pivot templates.
+No universal selected-child or all-stationary noncoverage is claimed.
+
+The singleton matrix and its negative inverse entries agree with the
+earlier exact matrix audit. I recomputed the full q=(t,t,t,t) responses:
+F1=F2=-t^2(3t^4-7t^3+16t-8), F3=F1-t^3. The retained passive
+entry r3(012)=3 really breaks the last nondiscrete partition. The
+thirteen other first-order partition exclusions depend only on the
+unchanged matrix. The scope of these tests remains bounded and literal.
+
+Changing the three specified zeros to1 gives exactly traps12,13,23,123,
+with joining gaps1,2,4 as claimed and the same pure-exit exclusions.
+Changing them to-1/2 leaves only trap123 and gives one strictly positive
+gap1/2 for each player, while its participant premium there is negative.
+Changing them to-1 gives exactly three zero gaps and the same sole
+trap. These validate both signed-inside-core scope and the weak closure.
+
+Newly inspected raw declarations are
+`IsFiniteCoalitionPremiumTrap.subset_core`,
+`isFiniteCoalitionPremiumTrap_core`, and `not_positive_on_core_insert`
+in `MathUE/FiniteCoalitionPremiumCore.lean`, and
+`exists_successor_le_singleton_of_exactRoot_nontrap_support` plus the
+distinct strict-leaving comparison in
+`UniformEquilibrium/Quitting/Classification/CommonQuittingPremiumLeaver.lean`.
+I also checked `HasWeightedQuittingTrapLeavers` in
+`UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapLeavers.lean`
+and `exists_uniformEquilibriumPayoff_of_weightedTrap_strictLeave` in
+`UniformEquilibrium/Quitting/Classification/Existence/WeightedQuittingTrapLeaversUniformPayoff.lean`:
+the weights really are positive on every trap member, and the fixture
+fails their actual leave inequality. The unchanged full-degree, signed-
+minimum, normality, polynomial restriction, and reward-closure declarations
+are the exact sources already audited in the preceding mixed-trap review.
+A narrow joining/triple-core symbol search found no existing declaration
+supplying the new determinant producer. This is not a survey or claim
+of complete implementation nonoverlap.
+
+### Final joining-attractive artifact binding
+
+Final artifact PASS applies to all475 lines of
+[`JOINING_ATTRACTIVE_TRIPLE_CORES`](../notes/CODEX_KREIN__JOINING_ATTRACTIVE_TRIPLE_CORES.md),
+SHA256 `2e9876294d6ee948c3dcfdd1472c6553951e22f4a027c15c668151ae2d6b2c94`.
+I read the complete standalone and checked its assembly additions against
+the preceding independent mathematical review, without reading another
+review. No substantive or artifact repair is requested.
+
+The exact strongest weak raw criterion, signed participant scope, pure-C
+alternative, full degree proof, simultaneous passive closure, and fixed-
+target Fin4 consumer are unchanged. The standalone supplies its own trap,
+root, coalition law and endpoint definitions. Its thirteen expanded
+partition row-sum witnesses match the literal matrix and preserve the
+bounded nature of the source exclusions.
+
+The added bad-triple-root regression is distinct from mine above and
+checks exactly. At v=(9/10,26/57,26/57,10/9) and
+q=(0,1/4,1/4,1/20), the successor is
+(3559/3200,13/80,61/80,13/16), the outside gap is-1849/3200,
+and the six derivatives are23/15,35/19,7/3 in the displayed positions.
+Their full determinant is-2254/171. It is indeed a below-floor source
+with an all-high successor inside the stated box, not a good-return
+example or a stationary equilibrium claim.
+
+Every named source consumer retains its actual assumptions. No strategy,
+root, favorable index, or separately supplied potential enters the raw
+predicate. The proof and fixture are self-contained and contain no
+conference-note, feedback, or other math-directory dependency. The packet
+does not claim a checked new Lean declaration or arbitrary-game coverage.
