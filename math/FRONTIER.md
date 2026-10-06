@@ -288,6 +288,23 @@ lose no hypothetical counterexample. A remaining polynomial must have total
 degree at least three and repeated-coordinate powers. Necessary face or
 curvature inequalities are not sufficient for the full robust inequality.
 
+### Selected exact-root return — tracked conditional consumer
+
+Assume sᵢ≥0. Let R=∑[S≠∅,i]|rᵢ(S)| and choose R<B≤R+2.
+If every v∈[−B,B]⁴ with some vᵢ<sᵢ admits an exact Nash root q
+against v with some Fⱼ(v,q)≤sⱼ, then the game has UE. The selected
+root need not be unique or vary continuously, and other roots may have
+every successor coordinate above its singleton.
+
+This is `exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_on_subbox`
+(`UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`).
+Its boxed-return hypothesis is not produced by the consumer. The displayed
+implemented wrapper uses the summed bound R; the generic analytic exclusion
+accepts a supplied coordinate reward bound strictly below B. Raw
+criteria using smaller boxes can use that analytic theorem with the
+polynomial obstruction directly, rather than identifying R with the maximum
+absolute reward entry. No universal selected-return theorem is asserted.
+
 ## 5. Minimum geometry and the paid-response route
 
 ### Maximum regret — tracked theorem, with a mathematical strengthening
