@@ -1,7 +1,6 @@
-import UniformEquilibrium.Quitting.Classification.CommonQuittingPremiumLeaver
+import UniformEquilibrium.Quitting.Classification.BadRootPremiumSupport
 import UniformEquilibrium.Quitting.Classification.QuittingPremiumCorePair
 import UniformEquilibrium.Quitting.Root.PairFullClippedJacobian
-import UniformEquilibrium.Quitting.Root.AllContinueWeightedRoot
 
 /-! # Literal bad-root classification on a signed greatest pair core
 
@@ -19,50 +18,6 @@ open Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-theorem quittingPremiumCore_outsider_reward_le_singleton
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (hcore : (quittingPremiumCore reward).Nonempty)
-    (player : ι) (houtside : player ∉ quittingPremiumCore reward)
-    (terminal : {S : Finset ι // S.Nonempty})
-    (hsubset : terminal.val ⊆ insert player (quittingPremiumCore reward))
-    (hmember : player ∈ terminal.val) :
-    reward terminal player ≤ reward (quittingSingletonTerminal player) player := by
-  apply le_of_not_gt
-  intro hpositive
-  exact MathUE.not_positive_on_core_insert (HasPositiveOwnQuittingPremium reward)
-    hcore player houtside terminal.val hsubset hmember ⟨terminal.property, hpositive⟩
-
-theorem quittingRootQuitPayoff_le_singleton_of_core_support_outsider
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
-    (hcore : (quittingPremiumCore reward).Nonempty) (root : ι → PMF Bool)
-    (hsupport : quittingPositiveHazardSupport root ⊆ quittingPremiumCore reward)
-    (player : ι) (houtside : player ∉ quittingPremiumCore reward) :
-    quittingRootQuitPayoff reward tail root player ≤
-      reward (quittingSingletonTerminal player) player := by
-  apply quittingRootQuitPayoff_le_singleton_of_support_participantReward
-  intro terminal hsubset hmember
-  exact quittingPremiumCore_outsider_reward_le_singleton reward hcore player houtside
-    terminal (hsubset.trans (Finset.insert_subset_insert player hsupport)) hmember
-
-theorem exactRoot_absorptionMass_pos_of_below_singleton
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
-    (root : ι → PMF Bool) (hnash : IsεQuittingRootNash reward tail 0 root)
-    (hbelow : ∃ player, tail player < reward (quittingSingletonTerminal player) player) :
-    0 < quittingRootAbsorptionMass root := by
-  rw [quittingRootAbsorptionMass_pos_iff_exists_quitProbability_pos]
-  by_contra hnot
-  have hroot : root = quittingAllContinueRoot := by
-    funext player
-    apply Math.PMFProduct.eq_pure_false_of_true_toReal_eq_zero
-    apply le_antisymm
-    · exact le_of_not_gt (fun hpositive => hnot ⟨player, hpositive⟩)
-    · exact ENNReal.toReal_nonneg
-  obtain ⟨player, hplayer⟩ := hbelow
-  have hquit := quittingRootQuitPayoff_le_successor_add_of_isεNash reward tail 0 root player hnash
-  rw [hroot, quittingRootQuitPayoff_allContinueRoot,
-    quittingRootSuccessorPayoff_allContinueRoot_eq] at hquit
-  exact (not_le_of_gt hplayer) (by simpa only [add_zero] using hquit)
-
 theorem exactRoot_bad_successor_support_eq_pair_core
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (tail : Payoff ι)
     (first second : ι) (hcore : quittingPremiumCore reward = {first, second})
@@ -71,12 +26,7 @@ theorem exactRoot_bad_successor_support_eq_pair_core
     (hbad : ∀ player, reward (quittingSingletonTerminal player) player <
       quittingRootSuccessorPayoff reward tail root player) :
     quittingPositiveHazardSupport root = {first, second} := by
-  have htrap : IsQuittingPremiumTrap reward (quittingPositiveHazardSupport root) := by
-    by_contra hnot
-    obtain ⟨player, hplayer⟩ := exists_successor_le_singleton_of_exactRoot_nontrap_support
-      reward tail root hnash
-      (exactRoot_absorptionMass_pos_of_below_singleton reward tail root hnash hbelow) hnot
-    exact (not_le_of_gt (hbad player)) hplayer
+  have htrap := exactRoot_bad_successor_isPremiumTrap reward tail root hnash hbelow hbad
   have hsubset := MathUE.IsFiniteCoalitionPremiumTrap.subset_core htrap
   change quittingPositiveHazardSupport root ⊆ quittingPremiumCore reward at hsubset
   rw [hcore] at hsubset

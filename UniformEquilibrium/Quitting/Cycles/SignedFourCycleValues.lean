@@ -1,6 +1,7 @@
 import UniformEquilibrium.Quitting.Circulation.SingletonFlowMesh
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailFallback
 import UniformEquilibrium.Quitting.Cycles.SignedFourCycleRewardAdapter
+import UniformEquilibrium.Quitting.Cycles.FourPhaseSingletonValues
 
 noncomputable section
 
@@ -57,90 +58,12 @@ def phaseHazard : Fin 4 → ℝ
   | 2 => (weights data tests).hazardTwo
   | 3 => (weights data tests).hazardThree
 
-private theorem one_sub_period_pos (tests : data.StrictTests) : 0 < 1 - period data :=
-  sub_pos.mpr (data.coefficients.periodSurvival_lt_one
-    (StrictTests.smallerEigenvalue_gt_one tests))
-
-private theorem coarse_bellman_zero :
-    data.targetValue tests = quittingSingletonArcPayoff
-      ((weights data tests).hazardZero) (quittingSoloReward reward 0)
-      (data.afterZeroValue tests) := by
-  funext who
-  have ht := (weights data tests).tails_pos
-  have ht1 : 0 < 1 - (weights data tests).normalizedWeightZero := by
-    simpa [Math.SignedFourCycleStrictData.tailOne] using ht.1
-  have hsurvival := (weights data tests).survival_eq_one_sub_hazard
-  simp only [targetValue, afterZeroValue, quittingSingletonArcPayoff]
-  rw [← hsurvival.1]
-  unfold Math.SignedFourCycleStrictData.hazardZero
-    Math.SignedFourCycleStrictData.survivalZero
-  dsimp [Math.SignedFourCycleStrictData.tailZero,
-    Math.SignedFourCycleStrictData.tailOne]
-  field_simp [ne_of_gt ht1, ne_of_gt (data.one_sub_period_pos tests)]
-  ring
-
-private theorem coarse_bellman_one :
-    data.afterZeroValue tests = quittingSingletonArcPayoff
-      ((weights data tests).hazardOne) (quittingSoloReward reward 1)
-      (data.afterOneValue tests) := by
-  funext who
-  obtain ⟨ht1, ht2, -, -⟩ := (weights data tests).tails_pos
-  have hsurvival := (weights data tests).survival_eq_one_sub_hazard
-  simp only [afterZeroValue, afterOneValue, quittingSingletonArcPayoff]
-  rw [← hsurvival.2.1]
-  unfold Math.SignedFourCycleStrictData.hazardOne
-    Math.SignedFourCycleStrictData.survivalOne
-  field_simp [ne_of_gt ht1, ne_of_gt ht2,
-    ne_of_gt (data.one_sub_period_pos tests)]
-  ring
-
-private theorem coarse_bellman_two :
-    data.afterOneValue tests = quittingSingletonArcPayoff
-      ((weights data tests).hazardTwo) (quittingSoloReward reward 2)
-      (data.afterTwoValue tests) := by
-  funext who
-  obtain ⟨-, ht2, ht3, -⟩ := (weights data tests).tails_pos
-  have hsurvival := (weights data tests).survival_eq_one_sub_hazard
-  simp only [afterOneValue, afterTwoValue, quittingSingletonArcPayoff]
-  rw [← hsurvival.2.2.1]
-  unfold Math.SignedFourCycleStrictData.hazardTwo
-    Math.SignedFourCycleStrictData.survivalTwo
-  field_simp [ne_of_gt ht2, ne_of_gt ht3,
-    ne_of_gt (data.one_sub_period_pos tests)]
-  ring
-
-private theorem coarse_bellman_three :
-    data.afterTwoValue tests = quittingSingletonArcPayoff
-      ((weights data tests).hazardThree) (quittingSoloReward reward 3)
-      (data.targetValue tests) := by
-  funext who
-  obtain ⟨-, -, ht3, ht4⟩ := (weights data tests).tails_pos
-  have htail := (weights data tests).tail_identities
-  have hsurvival := (weights data tests).survival_eq_one_sub_hazard
-  simp only [afterTwoValue, targetValue, quittingSingletonArcPayoff]
-  rw [← hsurvival.2.2.2]
-  unfold Math.SignedFourCycleStrictData.hazardThree
-    Math.SignedFourCycleStrictData.survivalThree
-  have ht4eq : (weights data tests).tailFour = period data := by
-    simpa [weights, StrictTests.weights] using htail.2.2.2
-  rw [ht4eq]
-  field_simp [ne_of_gt ht3, ne_of_gt ht4,
-    ne_of_gt (data.one_sub_period_pos tests)]
-  ring
-
+/-- The branch-independent four-phase Bellman reconstruction. -/
 theorem coarse_bellman (phase : Fin 4) :
     data.coarseValue tests phase = quittingSingletonArcPayoff
       (data.phaseHazard tests phase) (quittingSoloReward reward phase)
-      (data.coarseValue tests (finRotate 4 phase)) := by
-  fin_cases phase
-  · simpa [coarseValue, phaseHazard, finRotate_apply] using
-      data.coarse_bellman_zero tests
-  · simpa [coarseValue, phaseHazard, finRotate_apply] using
-      data.coarse_bellman_one tests
-  · simpa [coarseValue, phaseHazard, finRotate_apply] using
-      data.coarse_bellman_two tests
-  · simpa [coarseValue, phaseHazard, finRotate_apply] using
-      data.coarse_bellman_three tests
+      (data.coarseValue tests (finRotate 4 phase)) :=
+  FourPhaseSingletonValues.coarse_bellman reward tests.weights.positiveMass phase
 
 end SignedFourCycleSingletonData
 end GameTheory

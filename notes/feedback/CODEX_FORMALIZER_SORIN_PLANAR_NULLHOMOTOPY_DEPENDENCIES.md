@@ -149,12 +149,33 @@ Complex Variable*, Sections 15–16, Theorem 16.6 and its proof, together with
 Appendix A.3 ([author's notes](https://legacy-www.math.harvard.edu/archive/118r_spring_05/docs/milnor.pdf)).
 It supplies continuous extension onto the closure under the local-connectivity
 conditions, without boundary injectivity. Its formalization still needs the
-spherical length/area, crosscut and Jordan separation, and radial uniqueness
-ingredients. Pommerenke's cited book proof remains inaccessible; this is an
+spherical length/area, crosscut and Jordan separation ingredients.
+`Math.ComplexAnalysis.eqOn_zero_of_bounded_radial_sequence_zero`
+(`MathUE/Complex/RadialSequenceUniqueness.lean`) supplies the Appendix A.3
+radial uniqueness step, with a computed Jensen lower bound, actual Fatou
+argument and almost-everywhere removal of circle zeros. It allows any radii
+sequence in a positive terminal annulus; convergence to the outer radius is
+unnecessary. Pommerenke's cited book proof remains inaccessible; this is an
 alternative known-proof source, not a checked boundary-extension theorem.
-The actual analytic bijection can be turned into a subtype homeomorphism using
-pinned open-mapping and continuous-open equivalence APIs. A holomorphic inverse
-and a nonzero-derivative bridge have not yet been supplied here.
+`Math.ComplexAnalysis.exists_normalized_disk_homeomorphism`
+(`MathUE/Complex/NormalizedDiskHomeomorphism.lean`) supplies the actual subtype
+homeomorphism. `Math.ComplexAnalysis.exists_normalized_disk_holomorphic_inverse`
+(`MathUE/Complex/NormalizedDiskHolomorphicInverse.lean`) supplies both
+holomorphic bijections, inverse identities, normalizations and nonzero
+derivatives. Its generic inverse theorem works on arbitrary open domains,
+without a connectedness or nonvanishing-derivative input. These are interior
+domain results, not closed-disk boundary extension.
+
+The next bounded Milnor Sections 15.1--15.4 producer is the rectangle
+slice-length estimate from measurable speed and finite square energy, using
+pinned Hölder, Fubini and Markov APIs. The conformal spherical-energy bound
+must then identify the actual complex Jacobian and spherical density in the
+weighted change-of-variables formula; finite sphere area is not a supplied
+energy oracle. Nested short crosscuts with distinct landing endpoints and
+Jordan separation remain separate known-proof library obligations. No scoped
+Jordan/Schoenflies or crosscut producer has been found. Section 16.6 requires
+continuous extension onto the boundary, not boundary injectivity, and the
+whole feasible carrier is not silently assumed locally connected.
 
 Fischer–Zastrow's Peano convention permits a singleton. Their Theorem 2
 application excludes constant loops via its non-null hypothesis, but an

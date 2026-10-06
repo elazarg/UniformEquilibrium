@@ -69,6 +69,25 @@ theorem eigen_second (hdisc : 0 ≤ c.discriminant) :
   ring_nf at h ⊢
   linarith
 
+/-- Either eigenvector reconstruction gives the same four recurrences. -/
+theorem balance_identities_of_eigenvector
+    (lambda zero one : ℝ) (hlambda : lambda ≠ 0)
+    (hfirst : c.upperLeft * zero + c.upperRight * one = lambda * zero)
+    (hsecond : c.lowerLeft * zero + c.lowerRight * one = lambda * one) :
+    let three := (c.aTwo * zero + c.dTwo * one) / lambda
+    let two := c.dOne * zero / lambda + c.aOne * three
+    one = c.aZero * two + c.dZero * three ∧
+      zero = c.aThree * one + c.dThree * two := by
+  dsimp only
+  constructor
+  · unfold lowerLeft lowerRight at hsecond
+    field_simp [hlambda]
+    linear_combination -hsecond
+  · unfold upperLeft upperRight lowerLeft lowerRight at hfirst
+    unfold lowerLeft lowerRight at hsecond
+    field_simp [hlambda]
+    linear_combination -hfirst + c.aThree * hsecond
+
 /-- The eigenvector reconstruction solves the four cyclic linear recurrences. -/
 theorem reconstructed_balance_identities
     (hdisc : 0 ≤ c.discriminant) (hlambda : 1 < c.smallerEigenvalue) :
@@ -78,20 +97,14 @@ theorem reconstructed_balance_identities
       c.rawWeightThree =
         c.periodSurvival * (c.aTwo * c.rawWeightZero + c.dTwo * c.rawWeightOne) := by
   have hlambda0 : c.smallerEigenvalue ≠ 0 := ne_of_gt (lt_trans (by norm_num) hlambda)
-  have hsecond := c.eigen_second hdisc
-  have hfirst := c.eigen_first
+  have hbalance := c.balance_identities_of_eigenvector
+    c.smallerEigenvalue c.rawWeightZero c.rawWeightOne hlambda0 c.eigen_first
+    (c.eigen_second hdisc)
   refine ⟨?_, ?_, rfl, rfl⟩
-  · unfold rawWeightZero rawWeightOne lowerLeft lowerRight at hsecond
-    unfold rawWeightTwo rawWeightThree periodSurvival rawWeightZero rawWeightOne
-    field_simp [hlambda0] at hsecond ⊢
-    ring_nf at hsecond ⊢
-    exact hsecond.symm
-  · unfold rawWeightZero rawWeightOne upperLeft upperRight lowerLeft lowerRight at hfirst
-    unfold rawWeightZero rawWeightOne upperLeft upperRight lowerLeft lowerRight at hsecond
-    unfold rawWeightTwo rawWeightThree periodSurvival rawWeightZero rawWeightOne
-      upperLeft upperRight lowerLeft lowerRight
-    field_simp [hlambda0] at hfirst hsecond ⊢
-    linear_combination hfirst + c.aThree * hsecond
+  · simpa only [rawWeightTwo, rawWeightThree, periodSurvival, one_div,
+      div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc, one_mul] using hbalance.1
+  · simpa only [rawWeightTwo, rawWeightThree, periodSurvival, one_div,
+      div_eq_mul_inv, mul_comm, mul_left_comm, mul_assoc, one_mul] using hbalance.2
 
 end SignedFourCycleCoefficients
 end Math

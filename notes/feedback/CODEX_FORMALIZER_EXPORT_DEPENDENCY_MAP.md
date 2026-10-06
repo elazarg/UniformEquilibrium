@@ -839,9 +839,14 @@ exposes the signed arbitrary-finite raw analytic producer, selecting the box
 before every potential with continuity on the same sublevel domain and ambient
 differentiability only on the singleton lower boundary. Its selected-root
 producer needs no comparison between the reward bound and return box; the
-analytic consumer retains the strict comparison. Unbounded annotation
-counterroots, every proper-child debt witness, no-floor/no-pure tests and
-matrix/response exclusions remain obligations. The boxed-charge packet is
+analytic consumer retains the strict comparison. The literal triple and full
+tables now exclude all pure terminal Nash profiles, including all-Never, and
+any nonnegative weighted singleton floor asserted for every product law must
+have zero weights, in
+`UniformEquilibrium/Quitting/Examples/BoxedNashChargeFloorAndPureExclusions.lean`.
+These tests need no supplied Nash root or weight normalization. Unbounded
+annotation counterroots, every proper-child debt witness and matrix/response
+exclusions remain obligations. The boxed-charge packet is
 not sealed by its main payoff result alone. The game-independent binary coalition encoder
 `Math.FiniteCoalition.binaryCode_injective` (`MathUE/Finset/CoalitionBinaryCode.lean`)
 is extracted from the existing reward-table owner; its private aliases retain
@@ -922,7 +927,8 @@ and odds-ratio source is in
 `UniformEquilibrium/Quitting/Root/TripleEndpointPartials.lean`. Generic
 own-coordinate and proper-support derivative proofs live once in the canonical
 full derivative owner; the old signed-pair weak consumer passes its regression.
-Mixed/triple raw classification, tie avoidance and UE composition remain separate.
+The actual joining-attractive triple source is recorded below; general
+mixed-sign raw classification and composition remain separate.
 `exists_fixedPoint_ne_of_negative_det_finite`
 (`MathUE/Topology/AmbientDegreeUniqueFixedPointIndex.lean`) now derives an actual
 second fixed point using nonlinear local index and excision in an expanded
@@ -938,8 +944,29 @@ theorem. The mixed-sign triple-core packet shares the needed finite-index census
 and actual full-clipped derivative infrastructure, rather than inheriting this
 unique-bad-root argument. The triple packet additionally requires
 its full three-player negative determinant, sure cascade and pair-tie/source
-restoration, with the pure-core alternative separated. Its weak localized
-passive perturbation is not the uniform all-passive increment consumer above.
+restoration, with the pure-core alternative separated. These are now supplied
+for the joining-attractive source by
+`exists_uniformEquilibriumPayoff_of_joiningAttractive_core`
+(`UniformEquilibrium/Quitting/Classification/Existence/JoiningAttractiveCoreUniformPayoff.lean`)
+and its actual weak consumer
+`exists_uniformEquilibriumPayoff_of_weakJoiningAttractive_core`
+(`UniformEquilibrium/Quitting/Classification/Existence/JoiningAttractiveCoreRewardClosure.lean`).
+Only nonnegative own singletons, computed core cardinality three and literal
+strict or weak insertion comparisons are inputs. Bad-root support, sure
+cascade, pair tie avoidance, full negative Jacobians and the internal census
+obstruction supply selected return; compact simplex projection restores it
+at every real source strictly below some own singleton, including boxed
+boundaries. Weak closure decreases only
+core-player passive entries on nonempty subsets of that player's erased core,
+preserving participants, own singletons, traps and core for every real shift.
+It gives one original-game target, not a weak analytic return theorem.
+This localized perturbation is not the uniform all-passive increment consumer.
+The packet's rational table and variants, actual bad triple counterroot,
+no-floor/no-pure, child/debt and matrix/response exclusions remain separate.
+Its singleton matrix shares the boxed/signed-pair Gamma, whose positive balance
+charge gives degree one, not the negative-charge cyclic degree-zero theorem.
+The literal nonlinear response identity depends on the full reward table and
+cannot be inferred from its singleton matrix alone.
 `quittingPairInactiveGapNumerator_update`
 (`UniformEquilibrium/Quitting/Root/PairInactiveGapNumerator.lean`) now derives
 the literal cleared four-atom inactive endpoint numerator and its own
@@ -956,6 +983,30 @@ small absorption for all nearby exact roots and vanishing absorption for
 arbitrary exact-root selections over convergent sources. Their hypothesis is
 zero absorption on the exact limiting fiber, not a unique all-Continue root.
 The diagnostic unique-all-Continue moat is a thin scope-preserving instance.
+
+## Larger-eigenvalue signed four-cycle source
+
+`largerTargetValue_isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/SignedFourCycleLargerCertificate.lean`)
+computes positive masses, exact singleton balances and one fixed behavioral
+equilibrium target from actual signed singleton rows and `LargerTests`.
+The positive singleton determinant supplies negative characteristic value at
+one internally; the transfer lower-right entry exceeds one and the opposite
+ratios alternate negative/positive/negative/positive. The eigenvalues straddle
+one, so this is distinct from the unchanged smaller-branch `StrictTests`.
+Own singletons and nonsingleton rewards remain arbitrary signed reals.
+`exists_uniformEquilibriumPayoff_of_reindexed_signedFourCycle_larger`
+(`UniformEquilibrium/Quitting/Classification/Existence/SignedFourCycleLargerUniformPayoff.lean`)
+returns a fixed target to the original relabeled game. The common positive-mass,
+Bellman and balanced-certificate proofs live once in the branch-independent
+owners; the old smaller finite-early-absorption consumer retains its scope.
+The reward-only open predicate and polynomial scalar tests, full rational
+fixture, stationary exclusions, fourteen child witnesses and class comparisons
+remain packet obligations. Fixture smaller-root exclusion must cover every
+labeling and positive row scaling; terminal affine transport is not silently
+assumed because Never remains zero. Zero/sure stationary boundaries and each
+child's complete behavioral cap, late singleton and Never choices must be
+included. The new fixture matrix is not the shared boxed/attractive Gamma.
 
 ## Pending pivot and solo-refinement source dependencies
 
