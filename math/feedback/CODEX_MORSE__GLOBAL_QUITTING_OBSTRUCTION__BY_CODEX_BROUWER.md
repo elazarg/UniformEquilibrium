@@ -404,7 +404,7 @@ qualifications for the one-date child witnesses are correct. No assembly
 repair is needed. This is a mathematical delta check, not a Lean check.
 
 The final packet is
-[`TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md`](../exports/TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md),
+[`TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md`](../formalized/TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md),
 SHA256 `a77ed8034289e563c0ee34493bfd4de936d2ac9a526495c9a93e3654866c2d9d`.
 Only the draft preface was removed from the checked assembly. The
 mathematical PASS applies to this final packet; no Lean check is asserted.
@@ -1268,7 +1268,7 @@ the source comparisons, or the main theorem.
 ## Final artifact check: signed same-sign pair cores
 
 Verdict: PASS for the complete 568-line
-[signed-pair standalone](../exports/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md),
+[signed-pair standalone](../formalized/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md),
 SHA256 `6eef4888ef06911bf6de766cf7a798328d94b3b31e95203eebab87c6e5466f6a`.
 This is a bounded assembly/delta check against my section18 proof
 review, not a third full mathematical audit. I read every assembled

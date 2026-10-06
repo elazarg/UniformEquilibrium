@@ -455,3 +455,29 @@ screens, not an exhaustive classification of all possible proof methods
 or repository producers. The mathematical argument and its actual-data
 adapter are ordinary mathematics here; source correspondences do not
 constitute a Lean implementation or a build claim for this new theorem.
+
+## Implementation coverage
+
+The conjecture-facing analytic and original-game existence statements are
+represented by the production declarations
+
+- `exactRootSuccessor_mem_singletonLowerBoundary_of_twoPlayerPremiumCore_strictLeave`
+  (`UniformEquilibrium/Quitting/Classification/TwoPlayerPremiumCoreExactRootBoundary.lean`);
+- `not_isQuittingFullExactRootPotential_of_twoPlayerPremiumCore_strictLeave`
+  (`UniformEquilibrium/Quitting/Classification/TwoPlayerPremiumCoreSmoothDrift.lean`); and
+- `exists_uniformEquilibriumPayoff_of_twoPlayerPremiumCore_strictLeave`
+  (`UniformEquilibrium/Quitting/Classification/Existence/TwoPlayerPremiumCoreUniformPayoff.lean`).
+
+The return theorem needs only the leaving player's annotation floor. The
+analytic exclusion needs differentiability on the lower boundary, rather
+than a neighborhood C¹ assumption. The strategic theorem has precisely
+the nonnegative-singleton Fin4 scope stated above and no supplied strategy.
+
+This is not a whole-packet kernel-verification claim. The complete fixture's
+comparisons against every matrix, response-partition and quiet-child source
+remain ordinary mathematical supporting evidence except where separately
+covered by declarations in
+`UniformEquilibrium/Quitting/Examples/TwoPlayerPremiumCoreStrictLeave.lean`
+and `UniformEquilibrium/Quitting/Examples/TwoPlayerPremiumCoreStrictLeaveMatrix.lean`.
+Those remaining comparisons do not define a further UE class or a stronger
+necessary condition on counterexamples beyond the implemented main theorem.

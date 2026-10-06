@@ -747,7 +747,7 @@ some coordinate at or below its singleton gives a contradiction. Zero
 join gaps are handled by perturbing passive rewards and applying UE reward
 closure; no weak-gap analytic exclusion is asserted.
 
-The [signed pair-core proof](exports/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md)
+The [signed pair-core proof](formalized/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md)
 permits negative participant premiums for every player. Its return is
 existential: the same table can have a bad exact root as well. Opposite
 strict join-gap signs admit a unique bad root of index +1 and are outside

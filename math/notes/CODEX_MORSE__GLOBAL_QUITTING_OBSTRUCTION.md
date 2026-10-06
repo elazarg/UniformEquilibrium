@@ -24,7 +24,7 @@ every smooth full-root potential. It imposes no outsider no-join condition.
 Its proposed Fin4 UE consequence uses the existing polynomial obstruction
 producer; source non-overlap has only been checked as specified there.
 The independently reviewed, frozen standalone packet is
-`../exports/TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md`; it contains a
+`../formalized/TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md`; it contains a
 stronger fully specified {0,3}-premium fixture, independently checked here
 and by both reviewers. This remains ordinary mathematics, not Lean code.
 Section 12 is a complete mutual-strict-join proof, using
@@ -77,7 +77,7 @@ pair root has negative index when the two pair-join gaps have the same
 strict sign. The full theorem, weak strategic boundary, and an exact
 signed mutual-join fixture are recorded. The self-contained assembly
 passed both final artifact checks and is frozen as
-`../exports/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md`, SHA256
+`../formalized/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md`, SHA256
 `6eef4888ef06911bf6de766cf7a798328d94b3b31e95203eebab87c6e5466f6a`.
 Section 19 preserves the exact opposite-sign obstruction to this local
 root-selection argument. Section 20's full-four-core boxed-charge proof

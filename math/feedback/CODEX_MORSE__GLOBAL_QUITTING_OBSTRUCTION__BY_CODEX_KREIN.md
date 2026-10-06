@@ -1133,7 +1133,7 @@ opposite strict signs, not UE existence. No correction is requested.
 ### Signed-pair standalone assembly and final delta check
 
 **Assembly PASS** for
-`../exports/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md`, 568 lines,
+`../formalized/SIGNED_PAIR_CORE_SAME_SIGN_UNIFORM_EQUILIBRIUM.md`, 568 lines,
 exact SHA256
 `6eef4888ef06911bf6de766cf7a798328d94b3b31e95203eebab87c6e5466f6a`.
 I read the complete artifact against the preceding independent proof

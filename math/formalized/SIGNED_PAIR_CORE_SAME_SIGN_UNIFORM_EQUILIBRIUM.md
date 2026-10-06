@@ -566,3 +566,31 @@ premium cores, arbitrary finite quitting games, and completeness of a
 bounded controller are not established here. This packet supplies
 ordinary mathematical evidence, not a claim that its new theorem has
 already been implemented or checked in Lean.
+
+## Implementation coverage
+
+The full weak original-game UE criterion, including the empty-core exit,
+is represented by
+`exists_uniformEquilibriumPayoff_of_empty_or_signed_pair_core_weakSameSign`
+(`UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClosure.lean`).
+Its strict producer is
+`exists_uniformEquilibriumPayoff_of_signed_pair_core_strictSameSign`
+(`UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreUniformPayoff.lean`).
+Both take raw rewards and the stated comparisons, not strategies or roots.
+
+The actual bad-root derivative and second-root producer are
+`signed_pair_core_badRoot_hasFDerivAt_and_negative_det`
+(`UniformEquilibrium/Quitting/Classification/SignedPairCoreBadRoot.lean`) and
+`exists_exactRoot_singletonSublevel_of_signed_pair_core`
+(`UniformEquilibrium/Quitting/Classification/SignedPairCoreSelectedReturn.lean`).
+The finite-player selected-return adapter in the latter file composes with
+`not_isQuittingFullExactRootPotential_of_selectedSingletonSublevelReturn`
+(`UniformEquilibrium/Quitting/Projective/SelectedSingletonSublevelReturnSmoothDrift.lean`).
+The pure-pair alternative is retained explicitly by the strict producer;
+it is not silently treated as a selected-return hypothesis.
+
+This coverage does not label every literal fixture, exclusion of another
+raw source, or boundary example above kernel-checked. Such comparisons
+remain ordinary supporting mathematics unless separately represented by
+a named declaration. They do not supply another counterexample-class
+restriction beyond the implemented main weak UE theorem.
