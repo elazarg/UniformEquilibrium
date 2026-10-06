@@ -5,6 +5,7 @@ import MathUE.RealSeries.GeometricAffineSchedule
 import MathUE.Topology.CompactIntervalGap
 import MathUE.Topology.FiniteOneDimensionalCoordinate
 import MathUE.Topology.SeparatelyAffineFiberConnectors
+import MathUE.Topology.CompactCarrierPathImageFill
 import GameTheory.Analysis.Payoff
 import GameTheory.Repeated.Trigger
 import MathUE.ProbabilityMassFunction.Simplex
@@ -12820,6 +12821,49 @@ theorem pair_returnConnector_homotopic (G : CompactContinuousGame) (base : G.Pro
       (field.returnConnector origin (a', b')) := by
   exact (G.pairPayoffField base first second hne).returnConnector_homotopic_of_same_value
     (base first, base second) a a' b b' hfiber
+
+/-- Restrict a real-parameter payoff path to the interval used in the paper. -/
+def intervalPayoffPath (G : CompactContinuousGame) (path : ℝ → Payoff G.Player)
+    (hcontinuous : Continuous path) : C(unitInterval, Payoff G.Player) :=
+  ⟨fun time => path time, hcontinuous.comp continuous_subtype_val⟩
+
+theorem range_intervalPayoffPath (G : CompactContinuousGame)
+    (path : ℝ → Payoff G.Player) (hcontinuous : Continuous path) :
+    Set.range (G.intervalPayoffPath path hcontinuous) = path '' Set.Icc (0 : ℝ) 1 := by
+  ext point
+  constructor
+  · rintro ⟨time, rfl⟩
+    exact ⟨time, time.property, rfl⟩
+  · rintro ⟨time, htime, rfl⟩
+    exact ⟨⟨time, htime⟩, rfl⟩
+
+/-- The actual filling adjoins precisely those complement components of the
+interval path image which are contained in the full feasible-payoff set. -/
+def feasiblePathImageFill (G : CompactContinuousGame) (path : ℝ → Payoff G.Player)
+    (hcontinuous : Continuous path) : Set (Payoff G.Player) :=
+  Math.Topology.carrierPathImageFill (G.intervalPayoffPath path hcontinuous)
+    G.feasiblePayoffs
+
+/-- A closed payoff path has a computed compact, path-connected and locally
+path-connected filling inside the original feasible image. Only the path's
+unit-interval image is included; no restriction on its values outside that
+interval is imposed. This is not yet a disk model or a nullhomotopy. -/
+theorem feasiblePathImageFill_spec (G : CompactContinuousGame)
+    (path : ℝ → Payoff G.Player) (hpath : ClosedPathIn G.feasiblePayoffs path) :
+    path '' Set.Icc (0 : ℝ) 1 ⊆ G.feasiblePathImageFill path hpath.1 ∧
+      G.feasiblePathImageFill path hpath.1 ⊆ G.feasiblePayoffs ∧
+      IsCompact (G.feasiblePathImageFill path hpath.1) ∧
+      IsPathConnected (G.feasiblePathImageFill path hpath.1) ∧
+      LocallyPathConnectedSpace (G.feasiblePathImageFill path hpath.1) := by
+  have hcontained : Set.range (G.intervalPayoffPath path hpath.1) ⊆
+      G.feasiblePayoffs := by
+    rintro _ ⟨time, rfl⟩
+    exact hpath.2.2 time time.property
+  have hfill := Math.Topology.carrierPathImageFill_spec
+    (G.intervalPayoffPath path hpath.1) (property_1 G).2.2 hcontained
+  refine ⟨?_, hfill.2.1, hfill.2.2.1, hfill.2.2.2.1, hfill.2.2.2.2⟩
+  rw [← G.range_intervalPayoffPath path hpath.1]
+  exact hfill.1
 
 end CompactContinuousGame
 

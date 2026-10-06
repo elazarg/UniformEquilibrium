@@ -153,11 +153,17 @@ def parse_imports(text: str) -> list[ParsedImport]:
     index = 0
     while index < len(lines):
         stripped = lines[index].lstrip()
+        if stripped.startswith("public ") or stripped.startswith("public\t"):
+            stripped = stripped[len("public") :].lstrip()
         if stripped == "import" or stripped.startswith("import ") or stripped.startswith(
             "import\t"
         ):
             rest = stripped[len("import") :].strip()
             import_line = index + 1
+            if rest == "all":
+                rest = ""
+            elif rest.startswith("all ") or rest.startswith("all\t"):
+                rest = rest[len("all") :].strip()
             if not rest:
                 next_index = index + 1
                 while next_index < len(lines) and not lines[next_index].strip():

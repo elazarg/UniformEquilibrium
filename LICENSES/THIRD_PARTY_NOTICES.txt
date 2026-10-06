@@ -1,0 +1,16 @@
+MathUE/Complex/UnitDiscShift.lean
+MathUE/Complex/NormalizedDiskEmbedding.lean
+MathUE/Complex/DiskEmbeddingDerivativeImprovement.lean
+
+These files adapt source by Yury Kudryashov from urkud/mathlib4,
+commit d43061d911b1aeae0788591da437a3b115098962:
+  Mathlib/Analysis/Complex/UnitDisc/Shift.lean
+  Mathlib/Analysis/Complex/RiemannMapping.lean
+
+Copyright (c) 2025-2026 Yury Kudryashov. All rights reserved.
+Licensed under the Apache License, Version 2.0.
+The complete license is reproduced in LICENSES/APACHE_2_0.txt.
+
+The adaptations replace draft dependencies with pinned or project-owned APIs,
+retain only the stated bounded mathematical units, and preserve attribution.
+The repository's MIT license does not replace this upstream license.

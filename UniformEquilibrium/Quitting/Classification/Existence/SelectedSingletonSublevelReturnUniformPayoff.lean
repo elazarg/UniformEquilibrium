@@ -11,10 +11,11 @@ noncomputable section
 
 namespace GameTheory
 
-theorem exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_on_subbox
+theorem exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (hsingleton : ∀ player, 0 ≤ reward (quittingSingletonTerminal player) player)
-    (bound : ℝ) (hbound : quittingRewardBound reward < bound)
+    (M bound : ℝ) (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hbound : M < bound)
     (hlarge : bound ≤ quittingRewardBound reward + 2)
     (hreturn : HasBoxedSelectedSingletonSublevelReturn reward bound) :
     ∃ payoff : Payoff (Fin 4),
@@ -23,11 +24,22 @@ theorem exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_on_su
     reward hsingleton
   intro potential hcontinuous hdiff hpotential
   apply not_isQuittingFullExactRootPotential_of_selectedSingletonSublevelReturn reward
-    (M := quittingRewardBound reward) (bound := bound)
-    (abs_reward_le_quittingRewardBound reward) hbound hreturn potential
+    (M := M) (bound := bound) hreward hbound hreturn potential
     hcontinuous.continuousOn _ (hpotential.mono_box hlarge)
   intro point hpoint
   exact hdiff point ⟨⟨hpoint.1.1, fun player => (hpoint.1.2 player).trans hlarge⟩, hpoint.2⟩
+
+theorem exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_on_subbox
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hsingleton : ∀ player, 0 ≤ reward (quittingSingletonTerminal player) player)
+    (bound : ℝ) (hbound : quittingRewardBound reward < bound)
+    (hlarge : bound ≤ quittingRewardBound reward + 2)
+    (hreturn : HasBoxedSelectedSingletonSublevelReturn reward bound) :
+    ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound
+    reward hsingleton (quittingRewardBound reward) bound
+    (abs_reward_le_quittingRewardBound reward) hbound hlarge hreturn
 
 theorem exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))

@@ -11,6 +11,31 @@ from scripts import check_import_graph
 
 
 class ImportParserTests(unittest.TestCase):
+    def test_parses_import_all_without_a_spurious_module(self) -> None:
+        source = "import all Mathlib.Private\nimport all\n  Mathlib.Other\n"
+        self.assertEqual(
+            check_import_graph.parse_imports(source),
+            [
+                check_import_graph.ParsedImport("Mathlib.Private", 1),
+                check_import_graph.ParsedImport("Mathlib.Other", 2),
+            ],
+        )
+
+    def test_parses_public_imports_and_public_import_all(self) -> None:
+        source = (
+            "public import MathUE.Public\n"
+            "public import all Mathlib.Private\n"
+            "public import\n  MathUE.Other\n"
+        )
+        self.assertEqual(
+            check_import_graph.parse_imports(source),
+            [
+                check_import_graph.ParsedImport("MathUE.Public", 1),
+                check_import_graph.ParsedImport("Mathlib.Private", 2),
+                check_import_graph.ParsedImport("MathUE.Other", 3),
+            ],
+        )
+
     def test_parses_multiline_imports_and_ignores_comments_and_literals(self) -> None:
         source = '''
 /- import Not.A.Module -/

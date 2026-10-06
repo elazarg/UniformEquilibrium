@@ -1,6 +1,7 @@
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Topology.Order.Compact
 import Mathlib.Topology.Instances.Real.Lemmas
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
@@ -24,6 +25,120 @@ variable {ι : Type*} [DecidableEq ι]
 
 def value (carrier : Finset ι) (coordinates : ι → ℝ) : ℝ :=
   ∑ who ∈ carrier, ∏ other ∈ carrier.erase who, coordinates other
+
+omit [DecidableEq ι] in
+theorem sum_prod_powersetCard_one (carrier : Finset ι) (coordinates : ι → ℝ) :
+    (∑ coalition ∈ carrier.powersetCard 1, ∏ who ∈ coalition, coordinates who) =
+      ∑ who ∈ carrier, coordinates who := by
+  rw [Finset.powersetCard_one, Finset.sum_map]
+  simp
+
+theorem filter_properSubsets_card_eq_powersetCard
+    (carrier : Finset ι) (degree : ℕ) (hpositive : 0 < degree)
+    (hless : degree < carrier.card) :
+    ((carrier.powerset.erase ∅).erase carrier).filter (fun coalition => coalition.card = degree) =
+      carrier.powersetCard degree := by
+  ext coalition
+  constructor
+  · intro hcoalition
+    have hfiltered := Finset.mem_filter.mp hcoalition
+    exact Finset.mem_powersetCard.mpr
+      ⟨Finset.mem_powerset.mp (Finset.mem_erase.mp
+        (Finset.mem_erase.mp hfiltered.1).2).2, hfiltered.2⟩
+  · intro hcoalition
+    have hmember := Finset.mem_powersetCard.mp hcoalition
+    apply Finset.mem_filter.mpr
+    refine ⟨Finset.mem_erase.mpr ⟨?_, Finset.mem_erase.mpr ⟨?_,
+      Finset.mem_powerset.mpr hmember.1⟩⟩, hmember.2⟩
+    · intro hequal
+      have hcard := congrArg Finset.card hequal
+      omega
+    · intro hequal
+      simp only [hequal, Finset.card_empty] at hmember
+      omega
+
+theorem sum_prod_powersetCard_pred (carrier : Finset ι) (coordinates : ι → ℝ)
+    (hne : carrier.Nonempty) :
+    (∑ coalition ∈ carrier.powersetCard (carrier.card - 1),
+      ∏ who ∈ coalition, coordinates who) = value carrier coordinates := by
+  unfold value
+  symm
+  apply Finset.sum_bij (fun who _ => carrier.erase who)
+  · intro who hwho
+    exact Finset.mem_powersetCard.mpr
+      ⟨Finset.erase_subset _ _, Finset.card_erase_of_mem hwho⟩
+  · intro first hfirst second hsecond hequal
+    by_contra hnequal
+    have hmember : first ∈ carrier.erase second := Finset.mem_erase.mpr ⟨hnequal, hfirst⟩
+    rw [← hequal] at hmember
+    exact Finset.notMem_erase first carrier hmember
+  · intro coalition hcoalition
+    obtain ⟨hsubset, hcard⟩ := Finset.mem_powersetCard.mp hcoalition
+    have hproper : coalition ⊂ carrier := by
+      apply Finset.ssubset_iff_subset_ne.mpr
+      refine ⟨hsubset, ?_⟩
+      intro hequal
+      have hpositive := Finset.card_pos.mpr hne
+      have hsame := congrArg Finset.card hequal
+      omega
+    obtain ⟨who, hwho, hnot⟩ := Finset.exists_of_ssubset hproper
+    refine ⟨who, hwho, ?_⟩
+    symm
+    apply Finset.eq_of_subset_of_card_le
+    · exact Finset.subset_erase.mpr ⟨hsubset, hnot⟩
+    · rw [Finset.card_erase_of_mem hwho, hcard]
+  · intro who _
+    rfl
+
+theorem sum_prod_coefficient_le_two_layers
+    (carrier : Finset ι) (hcard : 2 ≤ carrier.card) (coordinates : ι → ℝ)
+    (hnonnegative : ∀ player ∈ carrier, 0 ≤ coordinates player)
+    (coefficient : Finset ι → ℝ) (singletonCoefficient lastCoefficient : ℝ)
+    (hbound : ∀ coalition ∈ (carrier.powerset.erase ∅).erase carrier,
+      coefficient coalition ≤ (if coalition.card = 1 then singletonCoefficient else 0) +
+        (if coalition.card = carrier.card - 1 then lastCoefficient else 0)) :
+    (∑ coalition ∈ (carrier.powerset.erase ∅).erase carrier,
+      (∏ player ∈ coalition, coordinates player) * coefficient coalition) ≤
+      singletonCoefficient * (∑ player ∈ carrier, coordinates player) +
+        lastCoefficient * value carrier coordinates := by
+  let family := (carrier.powerset.erase ∅).erase carrier
+  have hsingleLayer : (∑ coalition ∈ family,
+      (∏ player ∈ coalition, coordinates player) *
+        (if coalition.card = 1 then singletonCoefficient else 0)) =
+      singletonCoefficient * (∑ player ∈ carrier, coordinates player) := by
+    simp_rw [mul_ite, mul_zero]
+    rw [← Finset.sum_filter]
+    change (∑ coalition ∈ ((carrier.powerset.erase ∅).erase carrier).filter
+        (fun coalition => coalition.card = 1),
+      (∏ player ∈ coalition, coordinates player) * singletonCoefficient) = _
+    rw [filter_properSubsets_card_eq_powersetCard carrier 1 (by omega) (by omega),
+      ← Finset.sum_mul, sum_prod_powersetCard_one, mul_comm]
+  have hlastLayer : (∑ coalition ∈ family,
+      (∏ player ∈ coalition, coordinates player) *
+        (if coalition.card = carrier.card - 1 then lastCoefficient else 0)) =
+      lastCoefficient * value carrier coordinates := by
+    simp_rw [mul_ite, mul_zero]
+    rw [← Finset.sum_filter]
+    change (∑ coalition ∈ ((carrier.powerset.erase ∅).erase carrier).filter
+        (fun coalition => coalition.card = carrier.card - 1),
+      (∏ player ∈ coalition, coordinates player) * lastCoefficient) = _
+    rw [filter_properSubsets_card_eq_powersetCard carrier (carrier.card - 1)
+      (by omega) (by omega), ← Finset.sum_mul,
+      sum_prod_powersetCard_pred carrier coordinates (Finset.card_pos.mp (by omega)), mul_comm]
+  calc
+    _ ≤ ∑ coalition ∈ family, (∏ player ∈ coalition, coordinates player) *
+        ((if coalition.card = 1 then singletonCoefficient else 0) +
+          (if coalition.card = carrier.card - 1 then lastCoefficient else 0)) := by
+      apply Finset.sum_le_sum
+      intro coalition hcoalition
+      apply mul_le_mul_of_nonneg_left (hbound coalition hcoalition)
+      apply Finset.prod_nonneg
+      intro player hplayer
+      exact hnonnegative player ((Finset.mem_powerset.mp (Finset.mem_erase.mp
+        (Finset.mem_erase.mp hcoalition).2).2) hplayer)
+    _ = _ := by
+      simp_rw [mul_add]
+      rw [Finset.sum_add_distrib, hsingleLayer, hlastLayer]
 
 theorem value_congr (carrier : Finset ι) {first second : ι → ℝ}
     (hequal : ∀ who ∈ carrier, first who = second who) :
@@ -297,5 +412,74 @@ theorem value_le_sum_pow_div_card_pow (coordinates : ι → ℝ)
     ring
   rw [← hnormalize]
   exact value_le_card_mul_mean_pow coordinates hcard hnonneg
+
+omit [Fintype ι] in
+theorem value_univ_subtype (carrier : Finset ι) (coordinates : ι → ℝ) :
+    value (Finset.univ : Finset carrier) (fun player => coordinates player.val) =
+      value carrier coordinates := by
+  calc
+    _ = ∑ player : carrier, ∏ other ∈ carrier.erase player.val, coordinates other := by
+      unfold value
+      apply Finset.sum_congr rfl
+      intro player _
+      apply Finset.prod_bij (fun other _ => other.val)
+      · intro other hother
+        apply Finset.mem_erase.mpr
+        refine ⟨?_, other.property⟩
+        intro hequal
+        exact (Finset.mem_erase.mp hother).1 (Subtype.ext hequal)
+      · intro first _ second _ hequal
+        exact Subtype.ext hequal
+      · intro other hother
+        refine ⟨⟨other, (Finset.mem_erase.mp hother).2⟩, ?_, rfl⟩
+        apply Finset.mem_erase.mpr
+        refine ⟨?_, Finset.mem_univ _⟩
+        intro hequal
+        exact (Finset.mem_erase.mp hother).1 (congrArg Subtype.val hequal)
+      · intro other _
+        rfl
+    _ = _ := by
+      unfold value
+      exact Finset.sum_coe_sort carrier (fun player =>
+        ∏ other ∈ carrier.erase player, coordinates other)
+
+omit [Fintype ι] in
+theorem value_finset_le_sum_pow_div_card_pow
+    (carrier : Finset ι) (coordinates : ι → ℝ) (hcard : 3 ≤ carrier.card)
+    (hnonnegative : ∀ player ∈ carrier, 0 ≤ coordinates player) :
+    value carrier coordinates ≤
+      (∑ player ∈ carrier, coordinates player) ^ (carrier.card - 1) /
+        (carrier.card : ℝ) ^ (carrier.card - 2) := by
+  have hbound := value_le_sum_pow_div_card_pow (fun player : carrier => coordinates player.val)
+    (by simpa using hcard) (fun player => hnonnegative player.val player.property)
+  simpa only [value_univ_subtype, Finset.sum_coe_sort, Fintype.card_coe] using hbound
+
+omit [Fintype ι] [DecidableEq ι] in
+theorem card_mul_ratio_rpow_lt_total_of_symmetric_bound
+    (count : ℕ) (hcount : 3 ≤ count) (total symmetric delta tau : ℝ)
+    (htotal : 0 < total) (hdelta : 0 < delta) (htau : 0 < tau)
+    (hsymmetric : symmetric ≤ total ^ (count - 1) / (count : ℝ) ^ (count - 2))
+    (hpremium : delta * total < tau * symmetric) :
+    (count : ℝ) * (delta / tau) ^ ((count - 2 : ℕ) : ℝ)⁻¹ < total := by
+  have hcountPositive : 0 < (count : ℝ) := by exact_mod_cast (by omega : 0 < count)
+  have hcountNonzero : (count : ℝ) ≠ 0 := ne_of_gt hcountPositive
+  have hdegreeNonzero : count - 2 ≠ 0 := by omega
+  have hdegreePositive : 0 < ((count - 2 : ℕ) : ℝ) :=
+    by exact_mod_cast (by omega : 0 < count - 2)
+  have hpower : count - 1 = (count - 2) + 1 := by omega
+  have hnormalize : total ^ (count - 1) / (count : ℝ) ^ (count - 2) =
+      (total / count) ^ (count - 2) * total := by
+    rw [hpower, pow_succ, div_pow]
+    field_simp
+  have hstrict := hpremium.trans_le (mul_le_mul_of_nonneg_left hsymmetric htau.le)
+  rw [hnormalize] at hstrict
+  have hcoefficient : delta < tau * (total / count) ^ (count - 2) := by
+    exact lt_of_mul_lt_mul_right (by simpa only [mul_assoc] using hstrict) htotal.le
+  have hratio : delta / tau < (total / count) ^ (count - 2) :=
+    (div_lt_iff₀ htau).mpr (by simpa only [mul_comm] using hcoefficient)
+  have hroot := Real.rpow_lt_rpow (div_pos hdelta htau).le hratio
+    (inv_pos.mpr hdegreePositive)
+  rw [Real.pow_rpow_inv_natCast (div_pos htotal hcountPositive).le hdegreeNonzero] at hroot
+  simpa only [mul_comm] using (lt_div_iff₀ hcountPositive).mp hroot
 
 end Math.NextToTopSymmetric

@@ -797,15 +797,31 @@ the valid-weight family and the canonical domain at any fixed box bound, not
 the computed reward-bound constant. No weak analytic exclusion is claimed.
 Packet-specific reductions and fixtures remain separate obligations.
 
-The boxed-Nash-charge packet shares the selected-return analytic consumer but
-still requires its actual boxed charge producer.
+The boxed-Nash-charge packet now has an actual raw Fin4 payoff producer.
+`exists_uniformEquilibriumPayoff_of_boxedQuittingNashCharges`
+(`UniformEquilibrium/Quitting/Classification/Existence/BoxedQuittingNashChargesUniformPayoff.lean`)
+passes its silent named check. It assumes nonnegative own-singleton rewards,
+an arbitrary coordinate reward bound, and literal coefficient tests with a
+strict charge margin for every premium trap. All-sure withdrawal and mixed-sure
+support are dispatched before division. Actual odds, cardinal-layer grouping,
+the generic mean bound and finitely many strict trap margins produce one common
+box before every annotation; exact Nash roots and absorption are supplied
+internally. Trap-free reward tables are included vacuously. No strategic or
+return certificate is a raw input.
 `Math.NextToTopSymmetric.value_le_sum_pow_div_card_pow`
 (`MathUE/FiniteNextToTopSymmetricMean.lean`) now proves its literal next-to-top
 elementary symmetric bound for every finite inventory of at least three
 coordinates, including boundary and zero vectors. The supplied compact-maximum
 averaging proof is formalized, not replaced by a Fin4-only estimate.
-Actual trap coefficient sums, sure-support cases, interior odds charge and
-finite-trap selection of a common reward-sized box remain source obligations.
+The analytic return theorem retains arbitrary finite players, signed rewards,
+continuity on the same boxed sublevel domain and differentiation only on the
+singleton lower boundary. The semantic payoff consumer is Fin4. Explicit C3/C4
+threshold formulas and packet fixtures remain separate obligations.
+`quittingRoot_activeHazards_lt_one_of_leave_sums`
+(`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashCharges.lean`)
+is a useful stronger reusable source lemma: actual support size at least two
+and the stated leave tests suffice, without premium, charge or source-floor
+hypotheses. This does not enlarge the raw charge class by itself.
 No equality-margin weak theorem is inferred from the packet's nonstrict
 coefficient bounds and strict charge margin. The global two-joint cyclic-child
 packet shares the child complementarity and actual outer-exit adapters with
@@ -817,10 +833,15 @@ source adapters; none follows merely from these protected-set consumers.
 now supplies the conditional Fin4 consumer for a chosen returning exact root
 at every strictly-below-singleton source in the same boxed sublevel domain.
 Its box bound may lie strictly above the reward bound and at most two above it.
+The generalized
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound`
+in the same file accepts any coordinate reward bound, with the box strictly
+above it and no larger than the canonical sum bound plus two. It restricts the
+same canonical polynomial rather than strengthening the packet's charge tests.
 Canonical compact-minimum localization and downward charge use existential
 return; their old universal wrappers retain their original scopes. Only the
 universal minimum wrapper concludes zero absorption for every exact root at
-the minimum. The raw signed-pair, boxed-charge and mixed-trap producers remain
+the minimum. The raw signed-pair and mixed-trap producers remain
 separate: a pure exact pair must be split off as a direct UE alternative,
 not silently asserted to satisfy chosen return.
 
@@ -839,9 +860,24 @@ It includes dimension zero and assumes neither coercivity nor a supplied
 isolating region. `quittingFullClippedEndpointMap_hazardOfRoot_eq_self_iff_isZeroNash`
 (`UniformEquilibrium/Quitting/Root/FullClippedEndpointMap.lean`) supplies the
 literal full-cube fixed-point bridge, including sure and inactive hazards.
-The polynomial endpoint gaps are smooth on all real hazards. These foundations
-do not supply the signed-pair or joining-attractive-triple source Jacobians,
-root census or degree obstruction. The triple packet additionally requires
+The polynomial endpoint gaps are smooth on all real hazards.
+`pairNash_hasFDerivAt_and_negative_det_fullClippedDisplacement`
+(`UniformEquilibrium/Quitting/Root/PairFullClippedJacobian.lean`) now supplies
+the actual full ambient pair derivative, including identity inactive rows.
+`signed_pair_core_badRoot_hasFDerivAt_and_negative_det`
+(`UniformEquilibrium/Quitting/Classification/SignedPairCoreBadRoot.lean`)
+internally supplies actual support, properness and every inactive strict gap;
+actual bad-root uniqueness is also checked. This is not yet the signed-pair
+selected-return or payoff producer. That source splits off a pure exact pair
+and uses local negative index for the remaining unique bad root; no annotation
+avoidance is needed for this branch. Mixed/triple cases still need finite
+census and tie avoidance.
+`exists_fixedPoint_ne_of_negative_det_finite`
+(`MathUE/Topology/AmbientDegreeUniqueFixedPointIndex.lean`) now derives an actual
+second fixed point using nonlinear local index and excision in an expanded
+ambient chart, including cube boundary coordinates. Raw signed-pair composition
+remains separate. Its weak boundary perturbs only the two specified passive
+singleton entries, not every passive reward. The triple packet additionally requires
 its full three-player negative determinant, sure cascade and pair-tie/source
 restoration, with the pure-core alternative separated. Its weak localized
 passive perturbation is not the uniform all-passive increment consumer above.
@@ -1808,6 +1844,28 @@ scale is allowed; existence already excludes zero. `exists_path_to_first_closedS
 whose range stays in the original range intersected with the union of the
 closed set and the starting complement path component. It needs no metric or separation
 assumption. Neither result is the planar image-nullhomotopy theorem.
+
+`CompactContinuousGame.feasiblePathImageFill_spec`
+(`Literature/Sorin1986.lean`) now computes a compact, path-connected, locally
+path-connected fill between the actual real path image of Icc 0 1 and the
+game's feasible payoff carrier. Its silent paper and separate permitted-axiom
+checks pass. The generic carrier is not assumed locally path connected.
+`continuous_of_null_closed_patches`
+(`MathUE/Topology/NullFamilyPasting.lean`) supplies actual continuity for
+parameterized null families in pseudometric spaces without local finiteness,
+disjointness or compactness. The general planar disk model remains unproduced.
+
+`exists_normalized_disk_embedding`
+(`MathUE/Complex/NormalizedDiskEmbedding.lean`) and
+`exists_disk_embedding_norm_deriv_gt`
+(`MathUE/Complex/DiskEmbeddingDerivativeImprovement.lean`) pass silent named
+checks: actual disk normalization and an omitted-point derivative improvement
+are supplied for open simply connected proper complex domains. The first
+reuses a pinned private source via supported import-all, not an external draft
+dependency. Apache attribution, license text and immutable provenance are
+retained. Maximizing embeddings, surjectivity and the non-injective continuous
+boundary extension needed for general component frontiers remain separate;
+no Jordan-boundary or whole-feasible-carrier LPC assumption is inserted.
 The source-backed remaining route is recorded in
 `notes/feedback/CODEX_FORMALIZER_SORIN_PLANAR_NULLHOMOTOPY_DEPENDENCIES.md`.
 `isPathConnected_selectedComponentFill` (`MathUE/Topology/SelectedComponentFill.lean`)
