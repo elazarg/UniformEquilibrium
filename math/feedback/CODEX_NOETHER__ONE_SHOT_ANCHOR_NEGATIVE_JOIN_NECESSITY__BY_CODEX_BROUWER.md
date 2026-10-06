@@ -268,3 +268,69 @@ strategic selection, continuation, off-path, correlation, or horizon input.
 The initial live-zero convention and the indispensable off-path Never laws
 are both explicit. I recommend mathematical acceptance and a later bounded
 standalone artifact check, not another repeat audit of the same theorem.
+
+## Final standalone: exact-byte assembly PASS
+
+Read all 447 lines of the
+[final standalone](../exports/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md),
+SHA256 `64cbf15fe912af117ee42d6d32a29806a8c72316cf88d28a7a8f85d06bdb6f02`.
+Verdict: **final-artifact PASS**, with no requested repair or unresolved
+objection. This is a bounded complete-artifact/delta check against the
+independent substantive review above, not another base audit. No counterpart
+review was read.
+
+The arbitrary finite-player raw criterion and negative-join necessary
+condition are preserved exactly. The producer still internally chooses the
+finite complementary Nash point, specifies literal off-path Never for its
+free players, retains the true empty-event cap, and proves exact terminal
+and every positive-horizon Nash with one fixed target. Signed rewards,
+zero singleton equality and unbounded behavioral deviations remain covered.
+The two-player equality/negative-target regression and one-player negative-
+own falsifier agree with my independent calculations above.
+
+The expanded singleton-base explanation is literal: the existing
+`QuittingPersistentBaseComplementLeaveSafe` predicate at base={a} is (A),
+including its empty completion. Its old strategic consumer has a genuine
+cardinality≥2 hypothesis; the new transient consumer fills that missing
+case without pretending to invent a different finite Nash theorem.
+
+The additional no-sure-stationary proof is sound and exhaustive. If some
+j≠0 is sure, player0's first-date gain from joining is exactly1 on every
+opponent outcome. Thus q₀ must also be1. With q₀=1 the other players
+must use the unique induced point(1/2,5/6,0), and that profile is refuted
+by the exact anchor Never value504/11>43. The same reasoning starts
+directly if0 is the designated sure player. No assertion about all-proper
+stationary equilibria has been added.
+
+I inspected the added actual one-date consumers
+`quittingOneDateThenNeverProfile_exactHorizonNash` and
+`quittingOneDateThenNeverProfile_sameProfile_uniformPayoffWitness` in
+`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean`.
+Their required exact terminal premise is produced in the packet. They do
+not produce the anchor inequalities or its finite-game root, so they are
+not overlapping raw existence theorems.
+
+The new local-source comparison is intrinsic and correct. In
+`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterNearbyHorizons.lean`,
+`AdaptiveChildCenter.exists_nearby_oneDate_sameProfile_horizon_equilibrium`
+requires and produces three probabilities strictly between1/4 and3/4.
+The literal definitions `nearbyProfile`, `nearbyRoot_anchor`, and
+`nearbyRoot_active_true` in
+`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterNearbyOneDate.lean`
+and `UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterNearbyInteriorRoot.lean`
+identify one sure anchor and those three proper first-date coordinates.
+For anchor0 the fixture forces free3=0; for any other anchor it forces
+free0=1. Thus it cannot possess the needed all-proper complementary Nash
+point under any relabeling. These are strict finite-game signs, preserved
+by positive affine utility transport. The comparison neither guesses a
+radius nor rules out arbitrary existential neighborhoods by fiat.
+
+The explicit outsider-axis face formula added in Section9 evaluates
+negatively for all four listed favorite premiums, including4. All other
+coverage arithmetic and the fourteen-child F/J contradiction are preserved.
+All twenty-two cited Lean paths are tracked. There is no dependency on
+math-folder content, untracked helpers, reviewer narrative or process
+history inside the packet. Its significance remains the actual necessary
+condition on every counterexample plus an uncovered arbitrary-completion
+raw class; it is not merely an interesting verifier. No new Lean seal or
+full-conjecture claim is made by this acceptance.

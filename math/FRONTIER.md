@@ -420,6 +420,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 
 | Reward condition | Conclusion and boundary |
 | --- | --- |
+| Any finite player set: one player has nonnegative own singleton and never loses by joining a nonempty opponent coalition | A raw-table finite-game selection produces one date-zero/Never profile that is exact terminal Nash and exact Nash at every positive horizon, with one fixed uniform payoff. All other reward coordinates are arbitrary signed reals. This is reviewed mathematics awaiting formalization. |
 | Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards, as a corollary of the implemented response-quotient criterion and elementary singleton branches. No nonsingleton inequalities beyond equivariance are required. |
 | Fin4: the cyclic-child joint/solo raw family specified below, for every real R | UE, with an explicit fixed-target finite-law producer on the interval not covered by the singleton criteria. Both participants of the prescribed pair receive a positive collision premium; a full four-player premium core is allowed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: the repeated-solo outsider-buffer family specified below, for every real R | UE allowing a positive outsider collision reward at the joint phase. A final solo exit supplies its continuation buffer. All rates and values are produced from rewards. This is a reviewed mathematical result awaiting formalization. |
@@ -450,6 +451,42 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | A proper child admits nonnegative domination weights satisfying the terminal, join, and Never inequalities | Its uniform payoff extends to the original game with complete outsider-deviation control. The weights satisfy an explicit finite raw-table linear test. |
 | A proper child passes either the future-withdrawal or deadline-withdrawal inequalities below | Its fixed UE payoff extends with outsiders Never. The raw criteria are incomparable; deadline withdrawal also controls every nonincreasing nonnegative evaluation. |
 | Uniform strict payoff deficit, nonconcentrated weighted payoff exclusion, or nonnegative-singleton weak subset exclusion | Actual finite profiles with arbitrarily small complete regret, hence a fixed UE payoff. |
+
+The **one-shot anchor criterion** requires some player a with
+
+    sₐ≥0,       rₐ(S∪{a})≥rₐ(S) for every nonempty S⊆I\{a}.
+
+Select a mixed Nash point of the finite binary game on I\{a} with
+utilities r(S∪{a}). At date zero the anchor quits surely and the others
+use that product point. All players Continue forever after date zero.
+Nonanchor deviations are screened by the sure anchor. If the anchor
+Continues, every nonempty opponent coalition has already absorbed; on the
+empty event its full later cap is max(sₐ,0)=sₐ. The raw joining inequalities
+therefore bound every complete anchor response. The same profile has zero
+regret at every positive horizon, and delivers its fixed terminal vector
+within M/N for M=max|r|. No strategic witness, contraction after deleting
+the anchor, or strict joining inequality is assumed.
+
+Consequently every possible no-UE table, at any finite cardinality, satisfies
+
+    for every a with sₐ≥0, some nonempty S⊆I\{a} has
+    rₐ(S∪{a})<rₐ(S).
+
+After the single-pivot normalization this negative-join requirement applies
+to all four players. This is a restriction on the resulting table, not an
+assertion that normalization preserves a previously selected source or law.
+The [complete anchor producer](exports/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md)
+includes a sixty-coordinate table outside the compared raw sources and with
+no sure-quitter stationary equilibrium. Its equilibrium is genuinely
+transient; repeating its first row fails. The finite Nash selector
+`quittingPersistentBaseNashSet_nonempty`
+(`UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean`) and the
+one-date/Never horizon consumers
+`quittingOneDateThenNeverProfile_exactHorizonNash` and
+`quittingOneDateThenNeverProfile_sameProfile_uniformPayoffWitness`
+(`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean`) are tracked;
+the raw singleton-base producer and necessary counterexample restriction
+are additional mathematics awaiting formalization.
 
 Klein-four equivariance means rᵢ₊ₖ(S+k)=rᵢ(S) after identifying the players
 with (ℤ/2ℤ)². In the branch with positive common own singleton,

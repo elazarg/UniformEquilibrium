@@ -200,3 +200,44 @@ source comparisons, they confirm genuinely new arbitrary-completion
 coverage and a global necessary condition on every possible counterexample.
 No full-conjecture claim, generic proper-stationary exclusion, or new Lean
 seal is warranted.
+
+## Final self-contained artifact
+
+Final-artifact verdict: **PASS**, with no unresolved objection, for all
+447 lines of
+`../exports/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md`,
+SHA256 `64cbf15fe912af117ee42d6d32a29806a8c72316cf88d28a7a8f85d06bdb6f02`.
+I read the complete assembly and checked its deltas against the substantive
+review above, independently of any counterpart review. The raw hypotheses
+and main producer have not changed.
+
+The new two-player weak-own test is correct: the free player is indifferent
+between both date-zero actions, the selected half hazard gives target
+(−5/2,−2), and the anchor's Continue cap is also −5/2 despite positive
+empty-event probability. The one-player negative-own countertest correctly
+separates necessity for this producer from a game-level nonexistence claim.
+These are complete literal tables, not supplied continuation values.
+
+The complete no-sure-stationary proof and the intrinsic exclusion of the
+all-proper complementary AdaptiveChildCenter output are incorporated with
+their precise nonclaims. The nearby-root definitions indeed identify one
+sure coordinate and three probabilities in (1/4,3/4). The explicit
+favorite-hazard 1/2 lower-face calculation is valid and fills the former
+implicit small-hazard step. The fourteen F/J cases and every fixed-table
+comparison remain unchanged mathematically.
+
+The assembly correctly identifies the new work as the missing singleton-
+base transient producer, not as a new finite Nash theorem or a replacement
+for an already applicable stationary theorem. It names the existing
+one-date/Never horizon consumers without assuming their terminal premise.
+The unrestricted terminal proof establishes that premise directly, and
+the horizon proof retains the initial zero date and fixes its target before
+accuracy. No missing conference-note or review dependency is introduced.
+
+The significance standard is met: the output is a whole arbitrary-
+completion raw class, with a complete fixture outside the compared actual
+sources, and by contraposition a necessary negative joining comparison
+at every nonnegative-own player of every possible UE counterexample.
+The final artifact does not merely rule out a proof architecture, improve
+a constant, or verify an externally supplied strategy. This is an ordinary
+mathematical PASS, not a new Lean certification or a full-conjecture claim.
