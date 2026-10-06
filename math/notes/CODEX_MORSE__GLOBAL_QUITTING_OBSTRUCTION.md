@@ -131,6 +131,10 @@ on an already solved constant-participant Fin4 table, every exact Nash
 law for every scalar completion between actual zero and the singleton
 vector retains a fixed positive unrestricted debt, on every finite
 calendar. It is an internal architecture falsifier, not new UE coverage.
+Section 27 records an actual-profile, all-prefix invariant showing why a
+minimum over one prefix orbit cannot replace the minimum over the complete
+semantic carrier. Its failure is repaired by an available same-law reset,
+so it does not challenge the source's stronger law-tight minimum theorem.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -4306,3 +4310,75 @@ The additional point in (121)–(123) is uniqueness under a constraint on
 only the low-premium outsider: no alternative stationary Nash selection
 within that family eliminates the debt. None of these calculations is a
 new proof of a positive terminal-exploitability gap for the game.
+
+## 27. An actual-origin prefix minimum need not be a global minimum
+
+This is an internal check on the global-minimum research route, not a new
+counterexample class or UE result. The relevant inspected source is
+`minimumTerminalSemantic_auxiliaryNash_budget` and
+`minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`.
+Their minimum is over the complete terminal-semantic carrier. It cannot
+be replaced by a minimum over all finite product prefixes of one actual
+profile, even if that prefix orbit is closed and convex and every point
+is itself attained by an actual profile.
+
+Take two players with zero Never reward and table
+
+    r({1})=(1,3),    r({2})=(3,1),    r({1,2})=(2,2).
+
+Let the actual tail profile have independent stationary hazards1/2.
+It has prescribed payoff u=(2,2). Each player's immediate-Quit value is
+3/2, its Never value is3, and its unrestricted behavioral cap is3.
+Thus its semantic pair is ((2,2),(3,3)). Define the entire segment
+
+    K={ (u,b): u₁+u₂=4, 1≤u₁,u₂≤3, b=(3,3) }.
+
+For an arbitrary product prefix with hazards q₁,q₂∈[0,1], the cap of
+player i is
+
+    max(1+q_j, (1−q_j)3+q_j3)=3.
+
+The total prescribed payoff remains4: every absorbing reward has sum4,
+and the joint-Continue continuation also has sum4. Each coordinate
+remains in [1,3] by convex averaging. Hence every literal product prefix
+maps K into K, and every point of K has total debt exactly2.
+
+Moreover K is exactly the one-prefix reachable set from the displayed
+actual tail. Prefixing only player1 with hazard x∈[0,1] yields
+u=(2−x,2+x); prefixing only player2 gives u=(2+x,2−x). These two
+families cover K. The same statement therefore holds for arbitrary
+finite product prefixes and their closure. In particular, no attainability
+or topological relaxation was used to create this positive-debt invariant.
+
+Nevertheless the pure strategy profile in which player1 quits immediately
+and player2 never quits is exact Nash. Its payoff is (1,3) and its full
+cap is (1,3): player1 receives either1 from immediate Quit or0 from Never,
+and player2 cannot exceed its passive payoff3. The symmetric solo profile
+is also exact Nash. With the initial-zero live-stage convention the
+N-stage prescribed payoff is (N−1)(1,3)/N; the same profile is exact
+Nash at every N and delivers the fixed target with error at most3/N.
+
+The endpoint ((1,3),(3,3)) of K illustrates the precise source loss.
+Its prescribed terminal law is already the pure singleton law δ_{1},
+but it retains the old stationary tail after the zero-probability joint
+Continue history. That history is reachable when player1 deviates, so
+the player's cap remains3. Replacing the tail by all Continue keeps the
+entire prescribed terminal law δ_{1} and reduces that cap to1. Therefore
+the endpoint is not a minimum on its same-law fibre.
+
+This is exactly why the stronger source also retains law-tight resets.
+`quittingLawTightCapNashSaturationHull` in
+`UniformEquilibrium/Diagnostics/Quitting/LawTightCapNashSaturationHull.lean`
+includes debt-nonincreasing replacement within a fixed terminal-law fibre;
+the example does not survive that operation. Nor does it contain the
+actual Never semantic pair ((0,0),(1,1)). There is consequently no
+conflict with a theorem requiring either the true global carrier minimum
+or a Never-containing convex all-prefix invariant.
+
+The reduction of global minimization to one fixed-tail prefix semigroup
+is retired. The substantive remaining question is whether the actual
+global minimum, after the already available same-law fibre minimization,
+can be contradicted by simultaneous variations of all four stopping laws
+with every tied cap witness retained. No common perturbation or curvature
+sign is supplied by this example or asserted here.
