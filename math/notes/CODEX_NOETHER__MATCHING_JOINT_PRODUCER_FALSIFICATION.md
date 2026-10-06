@@ -485,3 +485,117 @@ proper-three stationary exclusion. The derivation above records the earlier
 coarser upper bound; the final proof uses a stronger uniform lower bound on
 x and x<k/γ. Independent falsification of that complete result is the next
 required check.
+
+## Separate raw mechanism: a one-shot join-monotone anchor
+
+Status: proved ordinary raw producer; source-coverage comparison unfinished,
+not independently reviewed or exported. This line has no pair template.
+
+Choose any player a in a finite quitting game with s_a≥0 and require
+r_a(S∪{a})≥r_a(S) for every nonempty S excluding a. Choose a mixed Nash
+point of the complementary finite binary game paying r(T∪{a}). Let a
+Quit surely at date0, and each other player independently choose Quit0 or
+Never at that point. After date0 every surviving nonanchor always Continues,
+including on histories caused by an anchor deviation. This is not the
+stationary profile with the same first row.
+
+Every nonanchor's full behavioral cap reduces to its date0 binary choice,
+since the anchor forces immediate absorption. If p_T is the complement's
+date0 law, the anchor's immediate payoff is
+
+    V_a=p_∅s_a+∑_{T≠∅}p_T r_a(T∪{a}).
+
+After first-date Continue, nonempty T has already absorbed at r_a(T). On
+T=∅ all opponents Never quit, so the entire later cap is max(s_a,0)=s_a.
+Thus the cap after Continue is p_∅s_a+∑_{T≠∅}p_T r_a(T)≤V_a. This
+includes Never and every delayed behavioral replacement. At horizon N,
+nonempty outcomes have factor(N−1)/N; the empty event's delayed payoff is
+at most(N−1)s_a/N, since s_a≥0. The same argument proves exact Nash at
+every horizon. One fixed terminal target is delivered with error≤M/N.
+No opponent-contraction assumption, reward translation, or supplied root
+is needed. Every positive-gap table must consequently have, for each a
+with s_a≥0, some nonempty S excluding a with negative anchor joining gain.
+
+The source route selected through docs/FRONTIER.md was
+`UniformEquilibrium/Quitting/Stationary/SingleAnchorArbitraryCompletion.lean`.
+Its `QuittingSingleAnchorInducedDominance` instead requires immediate Quit
+to dominate every excluded terminal reward and zero; its raw
+`exists_exactTerminalNash_and_uniformPayoff_of_singleAnchorMembership`
+requires the literal membership indicator coordinate. The conditional
+`exists_exactTerminalNash_and_uniformPayoff_of_singleAnchor` consumes a
+selected complementary Nash point and that stronger screen. The ≥2-anchor
+variant is already covered by
+`exists_exactTerminalNash_and_uniformPayoff_of_complementLeaveSafe`, and
+is not a new claim. The alternate cardinal sign-balance route is already
+covered by `quittingGame_exists_uniformPayoff_of_cycleBalancedSignConsistentInfluence`
+in `UniformEquilibrium/Quitting/Stationary/SignedInfluenceCycleBalance.lean`.
+Threshold-monotone polarity would produce only a pure exit, already covered
+by the finite sure-set test in `UniformEquilibrium/Quitting/Paths/SureExitSet.lean`.
+Those duplicate routes were discarded for lack of surviving-table coverage.
+
+### Complete exact anchor stress table
+
+Take anchor0. All own levels are1 and the singleton matrix is favorable3
+and harmful−1, with favorite matching(01)(23).
+
+| S | r(S) |
+|---|---|
+| 0 | (1,4,0,0) |
+| 1 | (4,1,0,0) |
+| 2 | (0,0,1,4) |
+| 3 | (0,0,4,1) |
+| 01 | (5,−1,1,0) |
+| 02 | (1,0,1,0) |
+| 03 | (1,4,0,−1) |
+| 12 | (100,−100,−100,1000) |
+| 13 | (100,−100,1000,−100) |
+| 23 | (−100,1000,−100,−100) |
+| 012 | (101,1,0,100) |
+| 013 | (101,−1,1,−1) |
+| 023 | (−99,0,1,−1) |
+| 123 | (1000,−100,−100,1100) |
+| 0123 | (1001,100,100,99) |
+
+All anchor joining gains equal1. In the anchored complement, player3's
+joining gain is−1 everywhere. With3 absent, player1's joining gains are
+−5 if2 Continues and+1 if2 Quits; player2's are+1 if1 Continues and−1
+if1 Quits. The unique mixed point is(q_1,q_2,q_3)=(1/2,5/6,0), giving
+V=(43,2/3,1/2,125/3). The anchor's first-date Continue cap is505/12<43.
+Repeating that same free row forever instead makes its Never payoff504/11>43.
+The minimal false implication is that the one-shot row can be made stationary.
+
+No pure exit exists: every nonempty coalition excluding0 is joined by0;
+with0 and3 present3 leaves; with0 but not3 the matching-pennies pair has
+a profitable toggle. All Never loses to0. Every leave-safe base of size≥2
+fails: containing3 uses its−1 comparison when0 is present; containing01
+fails at01; containing02 fails at012; base12 fails at012; base123 fails
+by player1's−100<1000; the full base fails by player3's99<100.
+
+Every stationary single-anchor induced-dominance screen also fails. Anchor0
+has unique complementary Nash Quit value43<100=r_0(12). With any other
+anchor, free0 has strict join gain1 and must Quit surely at a complementary
+Nash point. Anchor1's immediate value is≤100<r_1(23)=1000; anchor2's is
+≤100<r_2(13)=1000; anchor3's is≤99<r_3(012)=100. This tests every
+actual complementary Nash point, not just a selected supplied root.
+
+### All fourteen actual nonnegative F/J children fail
+
+If child S excludes0, use T=S: omitted0 gains1, every child joining gain
+zero. If S contains0 and omits2, use T={0} for S={0} or01, T={0,3}
+for03 or013: omitted2 gains1, every child joining gain nonpositive.
+If S contains02 but omits1, use T=S: omitted1 gains1 at02 or100 at023,
+every child joining gain zero. These exhaust all but child012.
+
+For child012 and outsider3, its J row at T=12 forces λ_30≥100; its
+J row at T=01 forces λ_32≤1. Its F row at T=012 gives
+
+    −99≤−100λ_30+λ_32,
+
+contradicting those two bounds. Therefore no nonnegative F/J certificate
+works for any child. Some separately selected quiet-child profile is not
+ruled out by this raw failure.
+
+Next question: finish actual premium/core, guard, range and local-output
+comparisons before claiming significant new coverage. This theorem and its
+exact displayed tests are proved ordinary mathematics; the admission
+judgment remains pending.

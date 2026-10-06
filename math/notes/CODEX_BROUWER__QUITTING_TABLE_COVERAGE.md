@@ -4446,8 +4446,14 @@ These witnesses do not exclude every possible chosen child equilibrium.
 The only premium traps are03 andI. The four players all have some negative
 participant premium, so there is no protected player; row013 is strictly
 below the singleton vector in EVERY coordinate, excluding every nonzero
-nonnegative global floor weight. At the full trap, insertion from13 has
-charge (r₀(013)−1)+(r₂(123)−1)=88>0, so the boxed and mixed-trap
+nonnegative weighted floor on the actual reward vectors. For the implemented
+weighted FORCED-QUIT floor, the vector at background1 is
+(-1/2,0,-2,-1/2), so a nonnegative admissible weight must be supported
+only on player1. Background3 has player1 forced-Quit premium−1/2,
+eliminating that remaining weight. These two different floor tests must
+not be conflated. At the full trap, insertion from13 has
+P-charge (r₀(013)−1)+(r₂(123)−1)=88>0 and L-charge90>0,
+so the boxed and mixed-trap
 conditions fail. At q₀=q₃=1/2, q₁=q₂=0, the active forced-Quit
 values are3/2 and3, both above1, excluding product-low and its supportwise
 weighted subcondition. The singleton matrix already checked is R₀,
@@ -4464,9 +4470,133 @@ That map is neither a matching nor a four-cycle, so those exact singleton
 sign chambers do not apply. In particular it differs from the recent
 below-singleton matching neighborhood, not only from its selected rates.
 
+There is also an intrinsic exclusion of every proper two-pair profile with
+all phase coordinates below their own levels, independent of any local
+neighborhood radius. Word03/12 has positive active premiums for0,1,3,
+so their active values exceed1. On word01/23 player1 has
+c₁=r₁(01)−r₁(0)=1/2>0, forcing its passive value above1.
+On word02/13 player0 has c₀=r₀(02)−r₀(2)=1/2>0, with the same
+consequence. These are all three partitions. Thus the accepted below-floor
+two-phase output cannot supply this table under any relabeling or positive
+playerwise affine transport. The prospective opposite-sign matching raw
+family still requires a favorable matching, absent in this table.
+
 This is still an internal candidate, not a completed novelty/coverage gate.
 The exact scalar and root production is no longer the missing input. The
 remaining task is a bounded comparison with every applicable cyclic-child
 and stationary raw producer, retaining the distinction between a universal
 quiet lift and existence of a specially selected quiet lift. No new export
 or unrestricted stationary exclusion is claimed at this checkpoint.
+
+### Bounded actual-source comparison and remaining local-branch scope
+
+The following additional source checks are exact, not arguments from a failed
+search. The full inverse has a negative column; positive playerwise affine
+reward changes scale its columns positively and relabeling permutes them.
+Consequently it cannot meet any full nonnegative-inverse predicate, including
+the strict/weak crossed stationary matrix producers, or the new proposed
+quadratic-dominance class with Γ⁻¹>0. No payoff sign is reversed to invoke
+one of those results.
+
+For the matrix-free source I inspected `QuittingOneSidedWeakUnitGuards`,
+`QuittingOneSidedWeakUnitRawGuards`,
+`stationaryTerminalNash_or_instantNoJoin_of_oneSidedWeakUnitGuards`, and
+`exists_uniformPayoff_of_oneSidedWeakUnitGuards` in
+`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`.
+For each ordered owner/passive pair the next table supplies an actual pure
+hazard-face violation. A lower witness is an outsider coalition T with
+r_owner(T+owner)−r_owner(T)<0; an upper witness has owner∈T, passive∉T,
+and r_passive(T+passive)−r_passive(T)>0.
+
+| owner,passive | failed face | T | exact difference |
+|---|---|---|---|
+| 0,1 | lower | 23 | −10 |
+| 0,2 | lower | 1 | −7/2 |
+| 0,3 | lower | 1 | −7/2 |
+| 1,0 | lower | 23 | −10 |
+| 1,2 | upper | 01 | 100 |
+| 1,3 | lower | 02 | −10 |
+| 2,0 | lower | 1 | −1 |
+| 2,1 | lower | 0 | −D−4 |
+| 2,3 | lower | 0 | −D−4 |
+| 3,0 | upper | 3 | 2 |
+| 3,1 | lower | 02 | −10 |
+| 3,2 | lower | 01 | −10 |
+
+Thus even its polynomial guards fail for every ordered pair, not only the
+stronger finite ranking tests. This agrees with the independently derived
+complete sure-owner census above. Each singleton also has a strict join,
+excluding its no-join alternative directly.
+
+The conditional-face range criterion fails at recipient2 for every blocker.
+Its Continue upper bound must be at least4, from singleton0. Its Quit lower
+bound without the blocker is at most1, from the empty background. Its Quit
+lower bound with the blocker is at most−1: use pair02 or23 with reward−D,
+or pair12 with reward−1. No convex combination can exceed1. This is the
+literal `IsQuittingConditionalFaceGapRange` in
+`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`.
+The influence 1→0 has increment−9/2 at empty background and
+−1−K₀>0 at background2. Thus `SignConsistentQuittingInfluence`
+(`UniformEquilibrium/Quitting/Stationary/SignedInfluenceCycleBalance.lean`)
+and `IsAffineQuittingMembershipGain`
+(`UniformEquilibrium/Quitting/Stationary/ComponentwiseWeightedPotential.lean`)
+also fail by their actual definitions.
+
+For the canonical cyclic-child sources, only012 has the required directed
+three-cycle singleton signs; pivot3 is forced. The passive inverse-row
+exit fails by its two negative weights, and resonance/low-degree exits
+fail by the exact R₀ degree+1 calculation. I inspected `RawRows` and
+`exists_uniformPayoff_of_resonance` in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicChildSingletonAdapter.lean`,
+`outsideInverseWeight_eq` and `exists_uniformPayoff_of_passiveNumerators`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicChildPassiveInverseExit.lean`,
+and `CyclicChildJointPhase.RawTable` and its actual rate/certificate chain in
+`UniformEquilibrium/Quitting/Cycles/CyclicChildJointPhaseSource.lean`.
+The literal prescribed own levels already differ. More substantively,
+even after formal positive affine centering, the only pivot pair with both
+positive participant premiums is03; its child2 passive increment K₂ is
+strictly positive, contrary to the nonpositive joint-outsider input.
+Pairs13 and23 have negative pivot premiums. None of the pivot pairs has a
+zero participant premium, so the zero-premium/repeated-solo raw predicates
+do not apply. The two-high-passive versions require two pivot singleton
+comparisons ≥0, whereas pivot3 has only one. These are finite raw failures
+and retain all collision coordinates.
+
+The paired-cycle source requires only one below-own singleton partner per
+row, while here every row has two. A tournament singleton source fails on
+the mutually negative pair13. Literal nearby matching centers have a different
+strict favorable graph; the explicit small overlapping-period-three cylinder
+also preserves that matching sign pattern. The owner-risky literal source
+requires an off-diagonal singleton equality, absent here. The proper-core
+exports fail on the full trap I; the larger-trap, weighted-floor, protected
+leaver, quotient and product-low failures were proved above.
+
+There is an important nonclaim about unspecified neighborhoods. I inspected
+`PairedCubicStationaryExample.exists_local_stationary_branch` in
+`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`
+and its full-table local producer in
+`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistence.lean`.
+It supplies some neighborhood of a fixed different center, not a usable
+radius or a global criterion for every proper-three stationary equilibrium.
+The present table has no certified membership in that neighborhood. Conversely,
+I do not assert exclusion from every neighborhood that could satisfy its
+existential statement. An exploratory floating-point Newton calculation found
+two proper-three roots with omitted3, near
+
+    (q₀,q₁,q₂)=(0.81551052,0.99999809,0.06794832)
+    and          (0.16420512,0.99999818,0.06794832),
+
+with negative omitted-player displacement in both cases. These are numerical
+observations, not exact Nash certificates or a proof of root exhaustiveness.
+They forbid recycling a claim that ALL proper-three profiles are excluded.
+An existing supplied-root verifier is not an actual raw-table producer for
+this family; nevertheless the scope distinction must remain explicit in
+any independent significance audit. The same caution applies to other
+existential local-neighborhood theorems with no concrete membership bound.
+
+Current status: the finite signed-column criterion and its full strategy
+construction are an unreviewed serious draft; the complete fixture excludes
+the applicable finite raw tests inspected here. The next review question is
+whether some actual source producer, rather than an assumed neighborhood or
+supplied root, already consumes this class or its fixture. No export is
+requested on the basis of the numerical observations.
