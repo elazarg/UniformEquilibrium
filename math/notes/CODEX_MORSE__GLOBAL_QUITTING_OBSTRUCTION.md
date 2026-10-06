@@ -135,6 +135,11 @@ Section 27 records an actual-profile, all-prefix invariant showing why a
 minimum over one prefix orbit cannot replace the minimum over the complete
 semantic carrier. Its failure is repaired by an available same-law reset,
 so it does not challenge the source's stronger law-tight minimum theorem.
+Section 28 is an internal global-source reduction: under a positive
+minimum, every designated player can be made debt-free at a compact
+minimum of the remaining debts, strictly above its singleton floor.
+It uses true global weighted minima, not a prefix-orbit replacement.
+No consumer of the resulting zero-debt-owner source has been proved.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -4382,3 +4387,92 @@ global minimum, after the already available same-law fibre minimization,
 can be contradicted by simultaneous variations of all four stopping laws
 with every tied cap witness retained. No common perturbation or curvature
 sign is supplied by this example or asserted here.
+
+## 28. A global zero-debt-owner source, with its remaining gap explicit
+
+This is ordinary unreviewed mathematics supporting the global-minimum
+attempt, not an export candidate or an equilibrium producer. Let K be
+the actual compact terminal-semantic carrier, consisting of closure points
+p=(u,b) of literal prescribed payoff and unrestricted best-response cap.
+Write d_i(p)=b_i−u_i≥0. Assume the actual global positive-gap hypothesis
+
+    D_*:=min[p∈K] ∑[i]d_i(p)>0.
+
+Fix any player0. Then the face K₀={p∈K:d₀(p)=0} is nonempty and compact.
+Let L=min[p∈K₀]∑[j≠0]d_j(p). There exists a minimizer p∈K₀ such that
+
+    L≥D_*>0,
+    b_j−s_j≥L                 for every j≠0,
+    u_j≥s_j                   for every j,
+    u₀=b₀>s₀.                                      (124)
+
+In particular the final strict inequality is stronger than merely
+retaining one zero-debt coordinate. No participant-premium assumption is
+needed for this source statement. The initial motivation was a constant-
+participant owner, but that restriction does not occur in the proof.
+
+To prove K₀ nonempty, fix arbitrary opponents and choose responses of
+player0 approaching its full behavioral supremum. The resulting actual
+profiles have d₀→0, since that cap depends only on the opponents.
+Compactness of K gives a limit in K₀. This argument does not assume that
+the best response is attained or that K is convex.
+
+For η>0 minimize the true global objective
+
+    F_η(p)=d₀(p)+η∑[j≠0]d_j(p)
+
+on K, obtaining p_η and m_η=F_η(p_η). Comparing with a minimizer on K₀
+gives m_η≤ηL. Nonnegative debts yield d₀(p_η)≤ηL and
+∑[j≠0]d_j(p_η)≤L. Along a convergent subsequence η↓0, the limit p lies
+in K₀ and its remaining debt sum is exactly L. Moreover
+
+    ∑[j≠0]d_j(p_η) ≤ m_η/η ≤ L
+
+implies m_η/η→L. Every m_η is positive because
+F_η≥min(1,η)D_*. Apply the actual weighted singleton moat to the
+strictly positive costate θ₀=1, θ_j=η:
+
+    m_η≤b₀(p_η)−s₀,
+    m_η≤η(b_j(p_η)−s_j)       for j≠0.
+
+The limit gives b₀≥s₀ and b_j−s_j≥L. Since d₀=0 and each remaining
+debt is at most their sum L, all u_i≥s_i follows.
+
+Suppose b₀=s₀. Then u₀=s₀. Prefix p by a solo hazard t>0 of player0.
+Its own cap and prescribed value both remain s₀, so the prefixed pair
+still lies in K₀. For j≠0 the two cap endpoints are
+
+    Q_j=(1−t)s_j+t r_j({0,j}),
+    C_j=(1−t)b_j+t r_j({0}).
+
+At t=0 their gap is b_j−s_j≥L>0. Thus all sufficiently small common
+t>0 keep C_j>Q_j, retaining every actual pair reward in the comparison.
+The new payoff and cap are respectively
+
+    u'_j=(1−t)u_j+t r_j({0}),
+    b'_j=(1−t)b_j+t r_j({0}).
+
+Their debts sum to (1−t)L<L, contradicting the minimum on K₀.
+This proves b₀>s₀ and all of (124). The prefix is used only after a
+minimum over the full carrier has been obtained; no orbit minimality or
+convex average substitutes for that source.
+
+The exact source declarations inspected are
+`quittingTerminalSemanticCarrier_isCompact` and
+`quittingTerminalSemanticPrefix` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, and
+`minimumTerminalSemantic_weightedSingletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticWeightedAuxiliaryNashBudget.lean`.
+The weighted moat is already implemented mathematics; the limiting
+selection and strict zero-owner conclusion above are ordinary deductions,
+not claimed new Lean declarations.
+
+The missing consumer is substantive. Even when player0 has constant
+participant reward s₀, u₀=b₀>s₀ does not say that Never is its best
+response: its optimal stopping time can follow favorable passive
+outcomes but precede later unfavorable ones. Replacing it by Never may
+change the other players' caps, and selecting a child equilibrium does
+not preserve that owner's payoff. No such replacement is inferred.
+The next concrete question is whether the full tied-response information
+at this actual zero-owner minimum provides a source-preserving temporal
+replacement; scalar payoff/cap data alone have not supplied it.

@@ -3446,3 +3446,64 @@ whether full Never gains can be charged to those additional coordinates
 under EVERY product prefix, without replacing private independence by
 public mixing or assuming an exact finite-menu equilibrium selector.
 No such global invariant or approximate all-player producer is claimed.
+
+## Current cap-coupled attempt: public continuation and the maximum
+
+This is an unfinished global-mechanism investigation, not a new existence
+criterion. The completed convex-barrier and first-coalition sections above
+are unchanged. The next attempted bridge was to eliminate future public
+signals while retaining the COMPLETE cap, rather than just their prescribed
+payoff average.
+
+For a fixed product prefix q and finitely many continuation semantic pairs
+z_k=(u_k,b_k) with probabilities λ_k, put z̄=∑λ_k z_k. The prescribed
+payoff part of P_q is affine. Its cap discrepancy is exactly
+
+    ∑_k λ_k B_i(q,b_k)−B_i(q,b̄)
+      =∑_k λ_k max(Q_i,A_{−i}+c_{−i}b_{k,i})
+         −max(Q_i,A_{−i}+c_{−i}b̄_i).                 (J1)
+
+If c_{−i}=0 this is zero. Otherwise put
+θ_i=(Q_i−A_{−i})/c_{−i}; the same quantity is
+
+    c_{−i}[∑_k λ_k(b_{k,i}−θ_i)_+−(b̄_i−θ_i)_+]≥0. (J2)
+
+This is the exact change in that player's expected debt when the future
+signal is revealed before the prefix rather than afterward. It depends on
+the COMPLETE continuation cap, not only on the payoff. Fixing a future
+public signal path can expose its favorable stopping date earlier and
+therefore raises precisely the maximum in (J1). The formula is an identity,
+not a bound showing the effect is small.
+
+At an all-Continue prefix, θ_i=s_i. Thus if every branch already has
+b_{k,i}≥s_i, that coordinate has no Jensen loss there. This observation does
+not apply automatically to a nontrivial product prefix, whose θ_i can be
+different. No bound on the sum of (J2) along an actual positive-minimum
+source has been derived.
+
+The apparent one-coordinate simplification is not a fresh UE producer.
+For one fixed player, a finite public protocol's cap can be weakly lowered
+by choosing one signal branch recursively: its scalar cap recursion is
+monotone, and at each public draw one branch has cap at most its average.
+The uniform censoring argument above extends this to arbitrary protocols
+up to any positive tolerance. This controls only that one player's cap;
+it does not preserve payoffs or other players' caps. In the relevant
+above-singleton minimum region, even all Never lowers every cap while
+destroying the prescribed payoff, so cap reduction alone is insufficient.
+
+The inspected existing scalar consumers are
+`quittingPunishmentValue_eq_stationaryPunishmentValue` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`,
+`operator_iterate_limit_eq_quittingPunishmentValue` in
+`UniformEquilibrium/Quitting/Punishment/FiniteMenuPunishmentConvergence.lean`,
+and the literal Bellman operator in
+`UniformEquilibrium/Quitting/Punishment/FiniteMenuPunishmentOperator.lean`.
+The sure-quitter exit is already characterized by
+`quittingInstantPunishmentεEquilibriumExistence_iff_sureQuitterPunishmentVectorNashRoot`
+in
+`UniformEquilibrium/Quitting/Classification/InstantPunishmentSureQuitterCharacterization.lean`.
+These are source-overlap guardrails, not newly supplied joint strategic
+inputs. The remaining question is whether ACTUAL global-minimum provenance
+controls (J2) together with the lost payoff coordinates strongly enough to
+select all four independent laws. Neither a source-preserving selection nor
+an invariant positive barrier has been obtained.
