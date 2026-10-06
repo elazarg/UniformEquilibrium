@@ -386,3 +386,122 @@ one fixed target, while exact proper period-two production is confined to
 the strict construction branches. The boundary falsifier correctly prevents
 inflating that stronger profile claim. New content remains ordinary
 mathematics and earns no L/A/C assertion from this review.
+
+## Separate arbitrary-passive extension verdict
+
+**Accepted, with no unresolved mathematical objection.** The independently
+tested artifact is the entire 310-line file
+`notes/CODEX_BROUWER__MATCHING_JOINT_PHASE_ARBITRARY_PASSIVE_REWARDS.md`, SHA256
+
+    c97c1320ef98c0d68fb866ba532effbe1d2c666f99b328ba3d08b4a3fcb5c6c6
+
+The exact new claim removes every K_i sign restriction from the matching
+raw-table existence theorem, retaining strict singleton signs, Π_i>−b_i
+and the twelve outsider caps. Arbitrary own singletons and every unused
+terminal reward remain signed. Its strict Q branch produces four proper
+rates and exact period-two terminal Nash against unrestricted behavioral
+deviations, with one fixed uniform target. Its weak Γ-sign/Π-boundary
+closure asserts UE existence only. It does not settle arbitrary Fin4.
+
+I independently derived its load-bearing scaled-point bound before reading
+these frozen bytes, then read the entire artifact and checked the differences
+from the accepted K≤0 proof. Moving K_i⁺X_fX_o into the favorite coefficient
+of B(X), alongside the negative Π part in its harmful coefficient, exactly
+recovers the original passive equation. After the favorite permutation the
+new term is a positive diagonal increase. The original u>0 satisfies
+B(X)Pu≥1. Scaling by the actual variable diagonal, rather than the old
+diagonal, yields the required Neumann contraction and strictly positive
+inverse on every finite cube. No global-in-X inverse lower bound is asserted.
+
+For each positive scaled fixed point F(X)=ηX with0<η≤1, the two strict
+negative coefficients imply
+
+    c_i X_a(i)X_f(i)(1+X_o(i))
+      ≤N⁺_i(X)<η(h_i+K_i⁺X_o(i))X_f(i),
+    c_i X_a(i)<max(h_i,K_i⁺).
+
+Thus its raw-data radius R=1+∑max(h_i,K_i⁺)/c_i is selected BEFORE
+the cube inverse bounds and cone κ. The inverse compactness bounds, normalized
+simplex self-map and O(t²) compression are then valid. At an outer fixed
+direction, the radial clamp could fix R only if η≤1, contradicting the
+strict scaled-point bound. At the inner boundary compression gives the
+opposite strict radial movement. Every Brouwer fixed point is therefore
+interior and solves the genuine four equations. This specifically closes
+the potential circular radius/cone and spurious-boundary objections; uniform
+cubic expansion at infinity is neither used nor needed.
+
+The original action-endpoint, absorption and arbitrary-deviation proofs
+depend on c_i>0 and the caps, not on K sign, so remain unchanged. Full Never,
+history-dependent randomization and arbitrarily late stopping are controlled
+by the three-opponent geometric survival factor. The same phase-A value and
+profile give terminal-to-average error2MC/N and regret4MC/N at all large
+horizons. The exact declarations
+`isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff`
+(`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`) and
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables`
+(`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`)
+were rechecked at their source signatures. The first has no sign or strategic
+premise; the second gives ONE fixed original-table UE target even when nearby
+targets vary. The singleton perturbations preserve caps and arbitrary K.
+No boundary proper-profile compactness is assumed.
+
+I recomputed the mixed-K fixture exactly: its determinant is33583397/20480,
+inverse strictly positive, and all sixteen endpoints give the displayed
+values. Passive Quit is17/50 or31/72 with margins398/175 and2249/1152.
+Triple determinants are257/20 or53/4 and every inverse diagonal is negative.
+The affine quotient test remains valid because equality of scaled response
+row sums and all-sure responses would force equal ratios; the four ratios
+−440/169,−96/37,−104/37,−112/37 are distinct. The proper-three proof
+uses favorite terminal level289/40 or61/8 and Π+F_i>9, still giving
+the stated contradiction. No full-support stationary exclusion follows.
+
+This is a genuine additional raw class: the sole-positive matching fixes f,
+and only scheduled02/13 satisfies the participant comparison. Its K₀=1
+persists under small raw perturbations, so no relabeling places it in the
+previous all-K≤0 producer. Neither scheduled pair has both outside K≥0,
+so neither pure-pair arm supplies it. Unequal premiums prevent a common-
+premium reduction. Its pure and proper-child profitable-deviation witnesses,
+weighted-floor/upper-bound failures, principal-matrix signs, crossed weak-
+ranking and conditional-range obstructions remain exact. These are comparisons
+against the raw hypotheses already source-audited above, not against arbitrary
+supplied certificates or a claim that every conceivable stationary or selected
+quiet-child strategy fails.
+
+The final combined export must carry its full named-source comparisons and
+receive a separate assembly/hash check. The current proof itself is accepted
+ordinary mathematics and strictly supersedes the passive-sign restriction.
+I did not read any counterpart review, export, change Lean, build, stage,
+commit or push. The math-unicode skill affected only terminal-readable notation.
+
+## Final consolidated artifact verdict
+
+**Accepted for mathematical export, with no unresolved objection.** This
+verdict is independently bound to the complete 723-line frozen artifact
+`exports/CROSSED_MATCHING_UNIFORM_EQUILIBRIUM.md`, SHA256
+
+    4757f61a3e57ea6f328d1642136d52d4db2b012a160cda487e1ff167050e4a2c
+
+I read the full consolidated artifact and checked its assembly against the
+two separately accepted complete proofs above. The matching existence
+theorem retains arbitrary signed K, strict proper production in its Q branch,
+and weak-boundary UE closure with one fixed target. The separate general
+inverse-positive criterion still requires Π≥0 and K≤0 and uses a constant
+inverse with uniform cubic expansion. The radius-first scaled-eigenpoint
+proof is used only where proved; no arbitrary-K assertion was imported into
+the general-inverse branch. The pure-pair arm and proper-profile boundary
+falsifier also retain their correct scopes.
+
+The complete mixed-K table, moved-system values
+(167/200,193/160,7/8,193/160), all sixteen action endpoints, affine quotient
+ratios, proper-three exclusion and literal crossed/range guard obstructions
+are consistent with the exact checks above. All twenty cited Lean files
+are tracked. The named source statements' hypotheses and the raw-data
+comparisons are preserved, not replaced by generic supplied-certificate
+interfaces. Full behavioral deviations, Never, signed payoff realization,
+one fixed target and all-large-horizon quantifiers remain explicit.
+
+The result strictly narrows the surviving UE counterexample class, including
+an open mixed-passive region beyond the prior K≤0 and pure-pair arms. It
+does not assert full-support stationary nonexistence, arbitrary strategy-class
+completeness, a solution of unrestricted Fin4, or a new Lean seal. This is
+the final mathematical acceptance of these exact consolidated bytes.

@@ -437,6 +437,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The raw criterion, common-box selection, exact-root return, explicit C3/C4 thresholds, literal table consumers and raw neighborhood results have production Lean declarations. The proper-triple fixture has a full reward-coordinate UE neighborhood; the full-core fixture retains the own-singleton sign restriction. The packet's separation claims remain formalization obligations. |
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: the larger-eigenvalue cyclic singleton tests specified below | UE for arbitrary signed own singletons and arbitrary nonsingleton rewards. Four positive clocks, all phase floors and one fixed target are produced from raw rewards; all four phases are refined. This is reviewed mathematics awaiting formalization. |
+| Fin4: the weak crossed-matching singleton signs, participant comparisons, and twelve outsider caps specified below | UE for arbitrary signed own singletons and arbitrary passive pair rewards. The strict standard-Q branch produces four proper rates and an exact two-phase terminal Nash profile; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -1038,6 +1039,43 @@ producer is ordinary reviewed mathematics, not a checked Lean declaration;
 (`UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`)
 is the existing semantic consumer. No assertion at D=1 or det Γ=0,
 or of four-clock completeness, follows.
+
+The **crossed-matching criterion** selects f=(01)(23), a=(02)(13), and
+o=f∘a, after any player relabeling. For each i require
+
+    Γ_{i,f(i)}≥0,       Γ_{i,a(i)}≤0,       Γ_{i,o(i)}≤0,
+    rᵢ({i,a(i)})≥rᵢ({a(i)}),
+    rᵢ({i}∪T)≤sᵢ       for every nonempty T⊆{f(i),o(i)}.
+
+These are finite tests on the actual rewards. Own singletons may have either
+sign. The passive rewards rᵢ({f(i),o(i)}) and all unspecified nonsingleton
+entries, including the grand coalition, are unrestricted.
+
+In the strict sign and participant-comparison branch, bare no-UE supplies
+standard Q. The matching column permutation turns Γ into an irreducible
+Z-matrix whose inverse is strictly positive. A variable positive-diagonal
+addition retains signed participant increments and arbitrary passive rewards.
+An explicit bound on scaled eigenpoints chooses a finite outer radius before
+the inverse bounds and simplex cone. Brouwer then produces four positive
+odds, all phase values, and all sixteen unilateral endpoint comparisons.
+Alternating the two scheduled pairs gives exact terminal Nash: every player's
+opponents have a geometric survival clock, controlling arbitrary behavioral
+deviations and Never. The same profile delivers one fixed uniform payoff.
+Non-Q tables use the existing matrix exit; weak reward inequalities use
+reward closure, without asserting a proper periodic profile at the boundary.
+
+The [complete crossed-matching producer](exports/CROSSED_MATCHING_UNIFORM_EQUILIBRIUM.md)
+includes an open sixty-coordinate coverage fixture with mixed passive signs,
+full premium core, two pair traps, no pure equilibrium, and exact failures of
+the compared matrix, response-quotient, premium, child-weight, and periodic
+raw criteria. The packet also gives a separately scoped positive-inverse
+criterion with nonnegative participant increments and nonpositive passive
+increments. All rates and strategic witnesses are produced, not supplied.
+These are ordinary mathematical results awaiting formalization; they do not
+cover arbitrary singleton sign graphs or violations of the participant
+comparison or outsider caps. The semantic consumer is
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+(`UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`).
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are

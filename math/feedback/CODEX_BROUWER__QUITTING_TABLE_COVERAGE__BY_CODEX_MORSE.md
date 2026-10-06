@@ -1575,3 +1575,185 @@ periodic semantic consumer, and reward closure, with their relevant
 hypotheses stated. The handoff separates the raw predicates, produced
 strategic data, and UE-only boundary branches. It neither relies on an
 untracked reproduction input nor claims arbitrary Fin4 coverage.
+
+## Independent review of the arbitrary-passive-reward extension
+
+Reviewed complete 310-line candidate:
+`../notes/CODEX_BROUWER__MATCHING_JOINT_PHASE_ARBITRARY_PASSIVE_REWARDS.md`,
+SHA256 `c97c1320ef98c0d68fb866ba532effbe1d2c666f99b328ba3d08b4a3fcb5c6c6`.
+No counterpart review was read. **Mathematical PASS**, with no unresolved
+objection or requested repair. This is a substantive new raw-class
+producer, not a final consolidated-artifact seal or a Lean check.
+
+The changed claim removes every restriction on K_i while retaining the
+strict matching singleton signs, Π_i>−b_i, and twelve actual outsider
+caps. Its weak-sign/weak-participant statement is UE-only, by the same
+reward closure. I checked the changed argument directly; I did not infer
+it from the already reviewed K_i≤0 case.
+
+### Algebra and the closed-cube inverse
+
+In the original odds equation ΓX=N, the two potentially negative terms
+are −α_iX_a(i)²/(1+X_a(i)) and −K_i⁺X_f(i)X_o(i). Moving both to
+the left gives precisely the stated B(X): add α_iθ_i to the scheduled
+mate coefficient and K_i⁺X_o(i) to the favorite coefficient. Neither
+sign has been discarded or inserted twice.
+
+After the favorite column permutation, the latter addition is diagonal.
+The other changed coefficient stays strictly negative because α_i<b_i,
+and the second harmful coefficient stays negative. Thus B(X)P≥ΓP is
+a Z-matrix with positive diagonal and the same irreducible negative
+graph for every finite nonnegative X. Using the fixed positive u from
+(ΓP)u=1 gives B(X)Pu≥1. The diagonal-rescaled geometric inverse
+argument proves strict inverse positivity, including X on the boundary
+of any finite closed cube. Continuity then gives both finite upper and
+strictly positive lower inverse-entry bounds on the chosen cube. No
+uniform inverse lower bound on the entire unbounded orthant is claimed.
+
+### The scaled bound avoids the possible circularity
+
+The crucial estimate is valid for every X>0 with F(X)=ηX and
+0<η≤1, not merely for actual fixed points. The two harmful terms on
+the left are strictly negative, so
+
+    N⁺_i=η(B(X)X)_i
+      <η(h_i+K_i⁺X_o(i))X_f(i).
+
+The nonnegative right side of the defining equation also gives
+
+    N⁺_i≥c_iX_a(i)X_f(i)(1+X_o(i)).
+
+Division by the positive factors yields
+c_iX_a(i)<η(h_i+K_i⁺X_o(i))/(1+X_o(i))≤max(h_i,K_i⁺).
+Summing uses only that a is a permutation. Thus ΣX<L₀ is an explicit
+raw-data bound, before any cone or inverse-entry constants are chosen.
+
+Choosing R=1+L₀ first, then obtaining inverse bounds on [0,R]⁴, then
+choosing Δκ and the small radius r, is therefore legitimate. The
+normalized map is defined and invariant on the whole product domain.
+At an outer-boundary fixed point its direction equation forces
+F(Rx)=ηRx; the radial clamp can fix R only if η≤1. The just-proved
+bound would give R<L₀, a contradiction. At the inner boundary the
+uniform quadratic small-radius estimate excludes a fixed point. Every
+Brouwer fixed point is consequently interior and solves F(X)=X.
+No unsupported expansion-at-infinity or simultaneous radius/cone choice
+has entered the proof.
+
+### Strategic and weak-boundary scope
+
+The produced odds solve the original four Continue identities with the
+actual K_i of either sign. Active indifference and passive Quit≤s_i<W_i
+therefore verify all sixteen endpoints. All rates are proper, so all
+four opponent-deleted contraction products are less than one. The full
+behavioral/Never bound and the initial-zero finite-horizon estimates
+continue unchanged. The exact source still gives original-game UE in
+the non-Q branch, without asserting a proper cycle there.
+
+The twelve-entry singleton perturbation for weak signs leaves own levels,
+all collision entries, and all arbitrary K_i unchanged. It makes the
+participant comparison strict by increasing b_i, not by changing a
+scheduled pair reward. The exact reward-closure declaration previously
+inspected therefore gives a fixed original target, with no limiting
+periodic-strategy assertion. No extra strategic hypothesis remains.
+
+### Exact mixed-sign fixture and coverage delta
+
+I recomputed the changed table's singleton determinant33583397/20480,
+its strictly positive inverse, triple determinants53/4 and257/20, and
+the original odds equations at X=(1/4,1/5,1/4,1/5). All four residuals
+are zero. The change to row0 is exactly compensated: −(2/5)X_f(0)
++2X_f(0)X_o(0)=0 because X_o(0)=1/5. Hence the previously checked
+values and active endpoints are unchanged. The passive Quit polynomials
+depend only on the capped coordinates, also unchanged, so they remain
+17/50 and31/72. The mixed K=(1,−1,−1,−1) therefore gives a literal
+new admitted table with a proper original-game equilibrium.
+
+The participant rewards, traps, all-sure displacements, and fourteen
+child witnesses retain their asserted scope. Raising the passive payoff
+to player0 on13 removes its former profitable join there, but omitted
+player2 still gains1/2. No child or pure-coalition argument relies on
+that removed gain. In particular neither scheduled pair has both
+outsiders with nonnegative K. The sole alternative harmful matching
+fails its participant comparison, so relabeling does not bring the
+fixture into the all-K≤0 class or its pure-pair alternative.
+
+The weighted terminal upper-bound sum now has coefficient Π₀+1 on
+player0 and Π_i−1 elsewhere, all positive, as stated. The affine
+response-partition argument correctly replaces equal row sums by the
+distinct ratios
+
+    −440/169, −96/37, −104/37, −112/37.
+
+The first two are close but unequal: their difference is−56/6253.
+The new lower-face favorite witness for owner0 is−329/40, and every
+required favorite/harmful ratio remains above4. Thus the relevant
+named-source exclusions survive the asymmetric singleton modification.
+
+Finally, in a proper three-active support the player whose favorite is
+omitted still has zero Never payoff: the modified coordinate r₀(13)=2
+is not one of those player's passive outcomes in any of the four cases.
+The other active player's Never value uses F_i=289/40 or61/8 as
+appropriate. Both actual premiums satisfy Π+F_i>9, so the displayed
+proper-three contradiction remains valid for every deletion. It does
+not become a full-support stationary exclusion.
+
+This candidate is ready to replace the K-restricted matching claim in
+a single consolidated packet, subject to a final byte-bound assembly
+check. It does not consume the separately recorded below-singleton
+passive-value regime, which violates a remaining participant comparison
+or outsider cap under either harmful matching.
+
+### Consolidated strongest final-artifact check
+
+Reviewed complete standalone:
+`../exports/CROSSED_MATCHING_UNIFORM_EQUILIBRIUM.md`,
+723 lines, SHA256
+`4757f61a3e57ea6f328d1642136d52d4db2b012a160cda487e1ff167050e4a2c`.
+All lines were read. This is a bounded assembly/delta check against the
+independent strict, weak-boundary, and arbitrary-K reviews above. No
+counterpart artifact review was read.
+
+**Final artifact PASS**, with no unresolved mathematical objection or
+requested repair. The consolidated theorem has arbitrary passive K in
+the matching branch and retains the K_i≤0 premise in the separate
+general inverse-positive/nonnegative-participant branch. Its two outer
+radius arguments are correctly distinct: raw scaled-eigenpoint bounds
+before cone selection in the first branch, constant-inverse cubic
+expansion after cone selection in the second. The common compact map
+is valid for each branch for the stated reason. No unbounded uniform
+inverse estimate has slipped into the assembly.
+
+The signed weak raw predicate, twelve-entry perturbation, exact reward
+closure, non-Q original-game alternative, and unrestricted behavioral
+and initial-zero horizon consumers agree with the reviewed versions.
+The statement continues to distinguish original UE existence at weak
+boundaries from the produced exact proper cycle in the strict branch.
+The pure-pair special case is separate and correctly preserves its own
+weaker hypotheses.
+
+The added mixed-passive/signed-participant stress test is exact. With
+Π_i=−1/2, X_i=1, harmful gaps−1, the displayed favorite gaps and K
+give h_i+K_i=13/4 in every row. Thus the original passive Continue
+identity holds. Moving the signed terms gives
+BX=N⁺=(3/2,3/2,5/2,2) as stated. Every scheduled pair has one
+positive-K and one negative-K outsider, so this test genuinely avoids
+the pure-pair shortcut while retaining negative participant increments.
+
+The complete sixty-coordinate fixture is the independently checked
+mixed-K table, not the earlier K-restricted table. Its newly displayed
+moved-system value is exactly
+BX=N⁺=(167/200,193/160,7/8,193/160). All determinant, proper-child,
+triple-support, weighted, conditional-range, and affine-partition tests
+agree with the reviewed calculations. The particular designated player
+in the three-proper-support test never uses the new passive r₀(13)=2;
+the expanded explanation correctly identifies why its Never value remains
+zero. Full-support stationary nonexistence is not asserted.
+
+The packet is self-contained as an ordinary mathematical proof. All
+new raw definitions, matrix estimates, fixed-point production, strategy
+verification, boundary arguments, and complete tables appear inline.
+The relevant hypotheses of the named existing Lean source, reward
+closure, and semantic consumer are stated, and no conference-note,
+review, or earlier-packet dependency remains. Its handoff asks for the
+actual raw predicate and produced cyclic certificate, not an assumed
+strategic object. No new Lean or full-conjecture claim is made.
