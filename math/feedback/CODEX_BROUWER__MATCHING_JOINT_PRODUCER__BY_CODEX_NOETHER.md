@@ -24,9 +24,9 @@ mathematics was independently checked in
 
     e28b003be281fe62120e359ed0f2ae0173ea9646544e792cd3ac5147b3cae96f
 
-I read no other conference feedback or review. A later standalone packet
-requires its own byte-bound verdict; this manuscript verdict does not
-automatically approve different bytes or omitted proof details.
+I read no other conference feedback or review. The separate standalone
+verdict at the end binds the completed handoff, including its changed fixture
+and stronger weak-boundary statement, to a different exact hash.
 
 ## Exact claims checked
 
@@ -317,8 +317,72 @@ quitting games, or finite stochastic games. It carries no new L/A/C seal.
 The probability mode is expectation; all strategic deviations are unrestricted.
 No literature attribution or novelty assertion is needed for the new argument.
 
-The next required check is the standalone handoff's exact bytes: it must
-contain the complete definitions, variable-inverse proof, simplex/radius proof,
-all endpoint and deleted-opponent arguments, complete fixture, raw source
-comparisons, and any claimed weak-boundary extension. I did not export, stage,
-commit or push any file.
+I did not export, stage, commit or push any file.
+
+## Separate final standalone verdict
+
+**Accepted for mathematical export review, with no unresolved objection.**
+The separately tested artifact is the complete 647-line file
+`notes/CODEX_BROUWER__MATCHING_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md`, SHA256
+
+    c47039fd1d48eb76e05ee5105021f39485de6003b62dd46c4aef75ddb1f40653
+
+I read the entire standalone file and rechecked the differences from the
+accepted manuscript. It fully includes the variable-inverse matrix proof,
+the positive-odds Brouwer producer, all strategic and horizon arguments, the
+weak-sign/weak-participant closure proof, the independent general inverse
+criterion, and the pure-pair arm. There are no deferred conference lemmas or
+unproduced strategic witnesses. The named existing semantic and source
+dependencies are tracked Lean files, and I verified their hypotheses by
+bounded source inspection without compiling or changing Lean.
+
+This artifact uses a different full coverage fixture: Π_A=145/32 and
+Π_B=99/14, with equal premiums within each pair but unequal premiums between
+pairs. Independent exact arithmetic confirms all sixteen endpoints at
+q_A=1/5 and q_B=1/6. The active endpoints are 61/32 and61/28;
+passive Continue values are183/70 and305/128. Passive Quit is17/50
+or31/72, with positive margins398/175 and2249/1152. The singleton
+matrix, traps, grand-coalition tests, pure exits, rank/ratio obstructions and
+matrix signs used in the earlier audit are unchanged. Both new premiums
+exceed four, so the displayed larger-trap singleton charge inequality also
+fails exactly. The universal proper-child counterprofiles are actual exact
+terminal Nash profiles, with zero joint Never and an explicitly profitable
+omitted player; they exclude universal child-debt certificates without
+asserting that every possible selected child lift is unsafe.
+
+I separately checked the new proper-three stationary exclusion. For a support
+containing scheduled mates i,k and i's favorite j, player k's zero Never
+value gives
+
+    D(x)=(Π+9)x−Π,
+    a=(1−2x)/D(x),       (Π+1)/(Π+11)<x<1/2.
+
+Its two premiums satisfy 0<Π<9, proving D(x)>0 and the stated proper-rate
+range. Player i has Quit value D(x)(a−c), whereas Never pays
+(61/8)x(1−c)/(x+c−xc). Since a<1 and Π+61/8>9, the Quit value
+is strictly below D(x)(1−c)<(61/8)x(1−c), itself no greater than
+Never. This is an exact contradiction for all four proper-three supports.
+It therefore excludes every relabeling of the proper-three local stationary
+branch named in the packet, without claiming to exclude full-support
+stationary equilibria.
+
+The new affine-transport quotient exclusion is also valid. The all-sure
+displacement scales by the player's positive affine scale, while the zero
+derivative is the negatively scaled singleton row. Equal response rows in a
+block force equal scales there because each original row sum is H−2>0.
+Their distinct all-sure displacements then still differ. The visible affine
+period-three cylinder has visible own/favorable/harmful center levels1,4,0
+and radius1/50000000; its gap ratio is strictly below four, whereas the
+fixture's ratio is53/8. The positive affine scales and shifts cannot change
+that ratio. I checked the named cylinder source, its center table and its
+invisible-coordinate definition directly.
+
+The completed packet passes the substantive export boundary: it strictly
+eliminates the stated weak matching raw class from the surviving UE
+counterexamples and exhibits an open interior fixture outside the compared
+actual producers and accepted existence criteria. This is not another
+conditional interface. The weak and non-Q branches assert UE existence with
+one fixed target, while exact proper period-two production is confined to
+the strict construction branches. The boundary falsifier correctly prevents
+inflating that stronger profile claim. New content remains ordinary
+mathematics and earns no L/A/C assertion from this review.

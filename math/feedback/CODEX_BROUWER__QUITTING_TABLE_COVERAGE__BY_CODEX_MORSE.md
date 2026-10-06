@@ -1499,3 +1499,79 @@ No unrestricted stationary-completeness or arbitrary-table conclusion
 is added by this review. Subject only to correcting the partition-count
 wording in a final assembly, the complete strict manuscript is ready
 for its remaining independent gate and subsequent artifact check.
+
+### Final matching artifact and weak-boundary delta
+
+Reviewed standalone:
+`../notes/CODEX_BROUWER__MATCHING_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md`,
+647 lines, SHA256
+`c47039fd1d48eb76e05ee5105021f39485de6003b62dd46c4aef75ddb1f40653`.
+I read the complete artifact, without reading another artifact review.
+
+**Final artifact PASS.** The strict matrix, positive-odds, policy,
+behavioral, and finite-horizon proofs agree with the independently
+reviewed manuscript. The new weak-boundary UE corollary, pure-pair
+alternative, and exact source exclusions below also check. No repair
+or unresolved objection remains. This is ordinary mathematics plus
+static source inspection, not a new Lean-certification claim.
+
+The weak predicate has Γ_i,f(i)≥0, the other two comparisons≤0,
+Π_i≥Γ_i,a(i), K_i≤0, and the twelve collision caps. Increasing the
+favorite singleton coordinate by δ and decreasing each harmful
+singleton coordinate by δ changes exactly twelve independent entries,
+each by δ, and no own singleton or nonsingleton coordinate. In
+particular b_i increases to b_i+δ, so Π_i≥−b_i>−(b_i+δ), even when
+both b_i and Π_i are zero. All signs become strict and the K_i and
+caps remain unchanged. The strict theorem applies to every perturbed
+table. The inspected declaration
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`
+has exactly the required uniform entry-distance premise and selects a
+fixed original-table target even when nearby targets vary. Thus no
+limiting policy or unwarranted interchange of target and accuracy is
+used. The artifact correctly restricts the exact proper-periodic claim
+to the strict construction branches.
+
+For the pure-pair alternative, one remaining prescribed quitter absorbs
+the game even if a participant withdraws. Its withdrawal payoff is the
+mate's singleton, bounded by its pair payoff. Each outsider's join is
+capped by its singleton, bounded by the passive pair payoff when K_i≥0.
+There is no subsequent live decision under a unilateral deviation.
+Thus exact terminal and finite-horizon Nash are valid, and the explicit
+(N−1)r(P)/N delivery formula honors the initial-zero convention.
+
+All added boundary examples check. The favorable13/4, Π=−1/2, K=0,
+X=1 case has BX=N⁺=(3/2)1 and passive value s+1/2. The favorable17/4,
+K=−1 version has BX=N⁺=(5/2)1. Increasing one capped triple reward
+from1 to4 at hazard1/2 changes passive Quit from1 to7/4, exceeding
+3/2; this genuinely demonstrates the cap's role. At Π=−b=−1 and
+K=0, positive column sum H−2 makes ΣΓX>0, while ΣN<0, excluding
+every positive odds vector, not merely the equal-odds ansatz. Weak UE
+still follows by the separate branch, as the artifact explicitly says.
+
+The finite fixture, proper-three stationary calculation, and fourteen
+child witnesses have no mathematical delta. The partition count is now
+correct. The added positive-playerwise-affine quotient exclusion gives
+its whole singleton-row-sum and all-sure argument inline; it does not
+assert reward-translation invariance of zero-Never UE semantics.
+
+The additional weighted terminal-upper-bound test is exact: its two
+scheduled-coalition inequalities sum to Σ(Π_i−1)λ_i≤0, impossible
+for a nonzero nonnegative λ because every Π_i>1. This fails a premise
+of `exists_uniformEquilibriumPayoff_of_nonnegativeWeightChamber` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticNonnegativeWeightChamber.lean`.
+The conditional-range exclusion also checks against
+`IsQuittingConditionalFaceGapRange` in
+`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`:
+the empty background bounds QuitWithoutLower≤1, the maximal background
+bounds QuitWithLower by the negative grand reward, and the favorite
+passive singleton forces ContinueUpper≥61/8. At every admissible
+blocker lower hazard the required strict inequality is impossible.
+
+The artifact defines all data and supplies all new mathematical steps
+inline. It has no conference-note or frozen-packet proof dependency.
+Named existing declarations are used for the actual no-UE-to-Q source,
+periodic semantic consumer, and reward closure, with their relevant
+hypotheses stated. The handoff separates the raw predicates, produced
+strategic data, and UE-only boundary branches. It neither relies on an
+untracked reproduction input nor claims arbitrary Fin4 coverage.
