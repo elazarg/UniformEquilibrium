@@ -269,3 +269,48 @@ the significance verdict therefore does not require assuming that every
 additional split table has those same source exclusions. A final artifact
 should either retain that distinction or prove any extra split-table coverage
 claims explicitly.
+
+## Final strongest artifact: exact-byte PASS
+
+I read the complete 606-line
+[standalone manuscript](../exports/OPPOSITE_SIGN_MATCHING_PHASE_UNIFORM_EQUILIBRIUM.md),
+SHA256 `2b9f54370677ec176749a0a9c6c008bdb56d5733594d85f60a101374e148ac35`.
+This bounded assembly/delta check applies the independent base and average-cap
+reviews above to these exact bytes. No counterpart review was read.
+Verdict: **final-artifact PASS**, with no unresolved objection or requested
+repair.
+
+The full scalar threshold, unique positive high branch, finite endpoint
+selection, strict collision estimate, signed levels and Π_B∈(−1,0) arm
+are preserved. The final raw predicate correctly uses eight average/triple
+inequalities rather than silently restoring the twelve individual caps.
+All sixteen endpoints, original simultaneous rewards, actual terminal
+values, unrestricted behavioral/Never control and the fixed-target
+large-horizon bounds remain complete and self-contained. The exact semantic
+consumer hypotheses are produced literally. No source-Q reduction, root
+selection input, correlation, or phasewise singleton floor was inserted.
+
+The added signed stress test matches my independent exact calculation,
+including the quadratic108x_L²−2x_L−56, its value−30 at1/2, the
+threshold slack39/112, all phase values and all four passive gaps. The
+split-coordinate example preserves the relevant pair sum and all actual
+endpoints. Crucially, the final text claims the full source exclusions only
+for the unchanged complete fixture, not for every split table.
+
+All three scheduled matchings are covered by the inline below-floor
+architecture argument, including the positive four-term favorite-word
+Quit gap. The complete child profiles and explicit raw F/J inequalities
+retain their universal quantifiers. The proper-three exclusion, forced-Quit
+weight test, positive insertion charge, affine quotient and other finite
+source comparisons are unchanged and sound. The corrected triple inverse
+diagonal statement is exact: for each triple the favorite-pair coordinates
+are−1/6 and the unmatched coordinate is−3/2. The signed-column comparison
+states the relevant finite predicates intrinsically, with no dependency on
+an external conference notebook.
+
+All cited Lean paths are tracked. The artifact contains no math-folder
+dependency, untracked helper, review narrative or process-history reliance.
+Its implementation handoff accurately separates the new raw mathematics
+from existing strategic consumers. The full theorem and its actual new-class
+significance therefore retain my PASS on these bytes. This is not a Lean
+verification, self-export, or arbitrary-game completeness claim.

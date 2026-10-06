@@ -439,6 +439,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the larger-eigenvalue cyclic singleton tests specified below | UE for arbitrary signed own singletons and arbitrary nonsingleton rewards. Four positive clocks, all phase floors and one fixed target are produced from raw rewards; all four phases are refined. This is reviewed mathematics awaiting formalization. |
 | Fin4: the weak crossed-matching singleton signs, participant comparisons, and twelve outsider caps specified below | UE for arbitrary signed own singletons and arbitrary passive pair rewards. The strict standard-Q branch produces four proper rates and an exact two-phase terminal Nash profile; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
 | Fin4: the below-singleton joint-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile. A separate full sixty-coordinate reward neighborhood is also covered. The phase values may all lie below own singletons. This is reviewed mathematics awaiting formalization. |
+| Fin4: the opposite-sign matching-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile, with one pair's passive values below own singletons and the other pair's above. Eight averaged-pair/triple caps suffice; individual cross-pair caps are unnecessary. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -1106,6 +1107,55 @@ gaps produce the nearby strategies by contraction; nearby rewards need not
 satisfy the scalar family's equalities. This neighborhood is proved at that
 table, not at every member of the family. These are ordinary mathematical
 results awaiting formalization, using the same tracked periodic consumer.
+
+The **opposite-sign matching-phase criterion** uses f,a,o as above and
+A={0,2}, B={1,3}. Choose signed sᵢ, bᵢ>0 and common parameters
+
+    H>2,       Π_A<−1,       Π_B>−1,       k>0.
+
+Require the singleton comparisons Γ_{i,f(i)}=Hbᵢ and
+Γ_{i,a(i)}=Γ_{i,o(i)}=−bᵢ. The two scheduled rows are
+
+    rᵢ(A)=sᵢ+Π_A bᵢ, rᵢ(B)=sᵢ−kbᵢ   for i∈A,
+    rᵢ(B)=sᵢ+Π_B bᵢ, rᵢ(A)=sᵢ+K_B bᵢ for i∈B.
+
+Set h=H−1, β=−Π_A, γ=β−1, c_B=Π_B+1. Choose raw scalars
+y_L>max(h/k,β/(h+2k)) and define x_L as the unique positive root of
+
+    γ(1+y_L)²x²+[γ(1+y_L)²−β+hy_L−ky_L²]x+hy_L−ky_L²=0.
+
+The constant term is negative, so this root is given by the ordinary
+quadratic formula; it is not a supplied strategic witness. Require
+
+    K_B>[c_B y_L(1+x_L)²−h x_L−Π_B y_L/(1+y_L)]/x_L².
+
+Set m=y_L(ky_L−h)/[γ(1+y_L)²]>0, and choose
+
+    Y>max(y_L,[K_B+h/m+max(Π_B,0)/m²]/c_B),
+    δ=(1/2)min(k,[(2k+h)y_L−β]/[Y(Y+2)]),
+    Lᵢ=sᵢ−(k−δ)bᵢ for i∈A, and Lᵢ=sᵢ for i∈B.
+
+The remaining eight reward tests are
+
+    rᵢ({i,f(i)})+rᵢ({i,o(i)})≤2Lᵢ,
+    rᵢ({i,f(i),o(i)})≤Lᵢ                         for every i.
+
+All unspecified entries, including the grand coalition, are unrestricted.
+A continuous positive quadratic branch x(y) and an interval sign change
+produce x>0 and y∈(y_L,Y). Alternating pairs A and B with hazards
+x/(1+x) and y/(1+y) gives all sixteen exact action comparisons.
+Equal scheduled opponent hazards justify the pair-sum bounds. Deleted-
+opponent geometric survival controls every behavioral replacement,
+including Never, and gives exact terminal Nash and one fixed uniform
+payoff. No no-UE/Q assumption or strategic input is required.
+
+The [complete opposite-sign producer](exports/OPPOSITE_SIGN_MATCHING_PHASE_UNIFORM_EQUILIBRIUM.md)
+includes a rational table outside the compared raw criteria, including
+all three all-below-singleton pair schedules, and exact signed-level and
+negative-Π_B tests. It does not assert a full reward-space neighborhood,
+absence of every stationary equilibrium, or unrestricted Fin4 coverage.
+This is reviewed mathematics awaiting formalization, with the same tracked
+periodic semantic consumer.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are

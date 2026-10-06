@@ -203,3 +203,54 @@ equilibrium remain valid. This extension is not part of the frozen
 7c418080 claim or its PASS seal. It is a proved mathematical suggestion
 for the author to incorporate and submit as a clearly identified delta,
 if one strongest packet is desired.
+
+## Final strongest artifact and assembly verdict
+
+Final-artifact verdict: **PASS**, with no unresolved mathematical objection,
+for all 606 lines of
+`../exports/OPPOSITE_SIGN_MATCHING_PHASE_UNIFORM_EQUILIBRIUM.md`,
+SHA256 `2b9f54370677ec176749a0a9c6c008bdb56d5733594d85f60a101374e148ac35`.
+I read the complete artifact and checked its additions against the proof
+and source comparisons above without reading another review. This is a
+bounded assembly/delta check, not a new Lean verification.
+
+The artifact incorporates the averaged-cap strengthening exactly: four
+pair-sum inequalities and four triple inequalities replace the twelve
+individual caps. Equal opponent hazards, rather than any correlated
+averaging, justify that change. The actual forced-Quit formula retains
+both singleton events and their simultaneous collision. The split-coordinate
+example proves strictly greater raw scope; the artifact correctly does
+not reuse all source-exclusion calculations for that altered example.
+
+The new signed stress test chooses y_L=1 and Y=13, rather than the
+y_L=2, Y=10 test recorded in my original review. I checked it directly:
+m=14/27, δ=22/1053, C_A=4268/1053; the lower quadratic is
+108x_L²−2x_L−56=0 and is −30 at x_L=1/2. Its lower residual is
+strictly below −31/128, and the upper threshold slack is 39/112.
+The exact root x=2,y=3 produces the displayed signed U and W vectors.
+The two A passive margins are 2527/1404 and 2527/468, and the B
+margins are 3 and 6. Thus the equality-cap and negative-Π_B claims are
+tested by an admitted raw table, not only by a formal solution of the
+rate equations. The unused reward value 37 is harmless because a single
+deviation can access at most the scheduled pair plus itself.
+
+The complete fixture, all fourteen child tests, intrinsic all-three-
+schedule exclusion, proper-three proof and additional finite source
+screens agree with the reviewed arguments. The triple-inverse statement
+now correctly gives diagonal entries −1/6, −1/6, −3/2. The new signed-
+column comparison is also valid: this fixture's strictly positive inverse
+forces every column sign positive, while each schedule has a negative
+A participant premium.
+
+The self-contained behavioral proof includes Never and unbounded stopping,
+signed own levels, the initial live-zero convention, and a single target
+fixed before horizon accuracy. The finite-horizon bounds are upper error
+bounds, not an exact-delivery assertion. Its source citations point to
+the established certificate consumers and named raw predicates; no
+conference-file or review dependency supplies a missing proof. The Lean
+handoff clearly states the new raw producer still to formalize.
+
+Accordingly the final artifact, not merely the earlier individual-cap
+manuscript, has an independent mathematical PASS. Its meaningful scope is
+the new opposite-sign raw family and its exact separating table, not a
+claim of the full Fin4 conjecture or arbitrary stationary nonexistence.
