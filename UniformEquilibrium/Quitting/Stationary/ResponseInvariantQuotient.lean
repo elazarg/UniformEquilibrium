@@ -20,15 +20,15 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {k : ℕ}
 
 /-- Repeat each block coordinate at every original player in that block. -/
-def quittingBlockLift (block : ι → Fin k) (point : Fin k → ℝ) : ι → ℝ :=
+def quittingBlockLift {κ : Type*} (block : ι → κ) (point : κ → ℝ) : ι → ℝ :=
   fun who => point (block who)
 
 /-- The literal raw response-invariance condition on the block-constant
 closed unit cube. The residual uses every original reward coordinate. -/
-def QuittingResponseInvariantOnUnitCube
+def QuittingResponseInvariantOnUnitCube {κ : Type*}
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (block : ι → Fin k) : Prop :=
-  ∀ point : Fin k → ℝ,
+    (block : ι → κ) : Prop :=
+  ∀ point : κ → ℝ,
     (∀ coordinate, 0 ≤ point coordinate ∧ point coordinate ≤ 1) →
       ∀ first second : ι, block first = block second →
         quittingDiscountedDisplacement reward 0 (quittingBlockLift block point) first =
@@ -36,9 +36,9 @@ def QuittingResponseInvariantOnUnitCube
             (quittingBlockLift block point) second
 
 /-- The singleton matrix row sum over one literal block. -/
-def quittingSingletonBlockRowSum
+def quittingSingletonBlockRowSum {κ : Type*} [DecidableEq κ]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (block : ι → Fin k) (who : ι) (coordinate : Fin k) : ℝ :=
+    (block : ι → κ) (who : ι) (coordinate : κ) : ℝ :=
   ∑ player, if block player = coordinate then
     quittingSingletonMatrix reward who player else 0
 

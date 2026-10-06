@@ -1036,8 +1036,33 @@ exclude thirteen displayed partitions. The remaining named pivot partitions
 are excluded by the actual nonlinear axis responses in
 `full_pivotPartition_not_responseInvariant` and its triple counterpart
 (`UniformEquilibrium/Quitting/Examples/BoxedNashChargeAxisResponse.lean`).
-Normalization and coverage of arbitrary partition labels, behavioral children
-and debt/quiet-extension witnesses remain separate.
+`full_block_injective_of_responseInvariant` and its triple counterpart
+(`UniformEquilibrium/Quitting/Examples/BoxedNashChargeArbitraryPartitionExclusion.lean`)
+now exclude every nondiscrete response-invariant block map into any label type.
+The shared row-sum algebra forces injectivity or the pivot/child partition;
+actual full-table nonlinear responses exclude the latter. The canonical
+finite-label compression preserves every block equality, dispatches an empty
+player set internally and requires neither finite nor surjective original
+labels. The existing response lift, invariance and row-sum definitions now
+accept arbitrary labels; their finite-dimensional derivative proof is reused.
+Behavioral children and debt/quiet-extension witnesses remain separate, as do
+projective-Q criteria not implied by the standard-Q block screen.
+
+## Generic positive-inverse family dependencies
+
+`hasStrictlyPositiveInverse_of_zMatrix_positive_vector`
+(`MathUE/LinearProgramming/ZMatrixPositiveVector.lean`) derives an actual
+strictly positive inverse from nonpositive off-diagonal entries, a positive
+vector with strictly positive image and irreducibility of the displayed
+normalized matrix. Diagonal positivity, contraction and nonsingularity are
+derived internally using the canonical Neumann-series owner; the matrix index
+may be empty. Irreducibility remains an explicit mathematical hypothesis,
+not a literal matching-graph producer.
+`exists_uniform_positive_inverse_entry_bounds_on_compact`
+(`MathUE/LinearProgramming/CompactPositiveInverseBounds.lean`) derives uniform
+positive lower and finite upper entry bounds for a continuous-on-compact
+positive-inverse family, including empty parameter/index cases. Actual
+matching-family, Q/positive-vector, graph and strategy adapters remain separate.
 
 ## Mixed-sign triple source boundary
 

@@ -185,8 +185,17 @@ normalized inverse-chart derivative and bounds endpoint chordal distance by
 the integrated computed speed of a real-parameter curve. Its arbitrary real
 inner-product target needs a unit pole and an orthogonal complex-plane linear
 isometry, not completeness, a dimension premise or chart surjectivity.
-This does not yet produce landing points, spherical geodesic distance, an
-infinity-chart adapter or a boundary extension.
+`Math.ComplexAnalysis.exists_sphere_endpoint_limits_holomorphic_unitLine`
+(`MathUE/Complex/HolomorphicUnitLineSphereSpeed.lean`) now produces literal
+one-sided sphere limits from the finite integral of the actual computed
+speed along a unit-direction line in an open holomorphic domain. The generic
+`Math.FiniteIntegralCurve.exists_landing_of_edist_le_lintegral`
+(`MathUE/Analysis/FiniteIntegralCurveLanding.lean`) derives uniform continuity
+and complete-target extension from finite integral chord control, and the
+holomorphic consumer supplies that control internally. Limits may be the
+chart pole; a finite complex-coordinate limit is not assumed. This does not
+yet provide spherical geodesic distance, a global infinity-chart adapter,
+crosscuts or boundary extension of the disk map.
 Nested short crosscuts with distinct landing endpoints and
 Jordan separation remain separate known-proof library obligations. No scoped
 Jordan/Schoenflies or crosscut producer has been found. Section 16.6 requires
