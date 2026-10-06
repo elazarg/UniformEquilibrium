@@ -434,7 +434,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons and a protected common leaver in every premium trap, as specified below | UE with arbitrary signed participant premiums for the other players. The criterion permits cores of size three or four and requires no strategic witness. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. Both strict and weak tests have production Lean consumers. |
-| Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The raw criterion, common-box selection, exact-root return, explicit C3/C4 thresholds and literal triple/full-core table consumers have production Lean declarations. The packet's neighborhood and separation claims remain formalization obligations. |
+| Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The raw criterion, common-box selection, exact-root return, explicit C3/C4 thresholds, literal table consumers and raw neighborhood results have production Lean declarations. The proper-triple fixture has a full reward-coordinate UE neighborhood; the full-core fixture retains the own-singleton sign restriction. The packet's separation claims remain formalization obligations. |
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: the larger-eigenvalue cyclic singleton tests specified below | UE for arbitrary signed own singletons and arbitrary nonsingleton rewards. Four positive clocks, all phase floors and one fixed target are produced from raw rewards; all four phases are refined. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
@@ -947,9 +947,29 @@ give the explicit C₃/C₄ formulas. The complete triple and full-core
 tables have production payoff consumers in
 `UniformEquilibrium/Quitting/Examples/BoxedNashChargeTripleFixture.lean` and
 `UniformEquilibrium/Quitting/Examples/BoxedNashChargeFullCoreFixture.lean`.
-Their strict neighborhoods, outside-box counterroots, proper-child debt
-witnesses and matrix/response separation tests remain packet obligations;
-the export is not yet fully formalized.
+`eventually_triple_uniformPayoff`
+(`UniformEquilibrium/Quitting/Examples/BoxedNashChargeNeighborhoodFixtures.lean`)
+gives a full sixty-coordinate UE neighborhood of the proper-triple fixture.
+The same file's `eventually_full_uniformPayoff_on_nonnegative_singletons`
+gives a full-core neighborhood restricted to nonnegative own singletons.
+`eventually_positive_fullSingletonRaise_uniformPayoff_neighborhood` raises
+exactly the three zero own-singleton entries and supplies a full
+reward-coordinate UE neighborhood for every sufficiently small positive
+raise. The original full-core table also has a signed analytic neighborhood
+at fixed box five, but this does not remove the sign premise of its UE
+consumer.
+
+The generic signed analytic producer
+`exists_box_potential_exclusion_of_boxedQuittingNashCharges`
+(`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashChargeReturn.lean`)
+selects the box before every potential for any nonempty finite player type.
+It requires neither nonnegative own singletons nor a supplied return
+certificate. It excludes full exact-root potentials; it is not by itself
+an arbitrary-signed Fin4 UE consumer.
+
+Outside-box counterroots, proper-child debt witnesses and matrix/response
+separation tests remain packet obligations; the export is not yet fully
+formalized.
 
 The **mixed premium-trap criterion** allows pair traps and larger traps in
 the same table. Own singletons are nonnegative. For every pair trap {i,j},
