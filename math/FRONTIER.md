@@ -438,6 +438,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The raw criterion, common-box selection, exact-root return, explicit C3/C4 thresholds, literal table consumers and raw neighborhood results have production Lean declarations. The proper-triple fixture has a full reward-coordinate UE neighborhood; the full-core fixture retains the own-singleton sign restriction. The packet's separation claims remain formalization obligations. |
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: the larger-eigenvalue cyclic singleton tests specified below | UE for arbitrary signed own singletons and arbitrary nonsingleton rewards. Four positive clocks, all phase floors and one fixed target are produced from raw rewards; all four phases are refined. This is reviewed mathematics awaiting formalization. |
+| Fin4: some partition into pairs satisfies four weak mate-joining comparisons and twelve opposite-pair own-singleton caps | UE for arbitrary signed rewards, without singleton-matrix graph or inverse-sign restrictions. In the strict R0/nonzero-degree branch the proof produces an exact period-two terminal Nash profile, including inactive players; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
 | Fin4: the weak crossed-matching singleton signs, participant comparisons, and twelve outsider caps specified below | UE for arbitrary signed own singletons and arbitrary passive pair rewards. The strict standard-Q branch produces four proper rates and an exact two-phase terminal Nash profile; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
 | Fin4: the below-singleton joint-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile. A separate full sixty-coordinate reward neighborhood is also covered. The phase values may all lie below own singletons. This is reviewed mathematics awaiting formalization. |
 | Fin4: the opposite-sign matching-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile, with one pair's passive values below own singletons and the other pair's above. Eight averaged-pair/triple caps suffice; individual cross-pair caps are unnecessary. This is reviewed mathematics awaiting formalization. |
@@ -1079,6 +1080,50 @@ producer is ordinary reviewed mathematics, not a checked Lean declaration;
 (`UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`)
 is the existing semantic consumer. No assertion at D=1 or det Γ=0,
 or of four-clock completeness, follows.
+
+The **two-pair join-cap criterion** chooses any partition into pairs A,B.
+For each player i write a(i) for its mate and O(i) for the opposite pair.
+Require only
+
+    rᵢ({i,a(i)})≥rᵢ({a(i)}),
+    rᵢ({i}∪T)≤sᵢ          for every nonempty T⊆O(i).
+
+There are four mate comparisons and twelve outsider caps. All own rewards,
+passive pair rewards, singleton-matrix signs and unspecified coordinates are
+arbitrary signed reals. In particular the crossed-matching reward class below
+is contained in this class; no matrix graph or inverse-sign test remains.
+
+In the strict mate-comparison branch, original no-UE supplies R0 and degree
+one for Γ. For cᵢ=rᵢ({i,a(i)})−rᵢ({a(i)})>0, define
+
+    Πᵢ=rᵢ({i,a(i)})−sᵢ,       Kᵢ=rᵢ(O(i))−sᵢ,
+    Nᵢ(X)=cᵢX_{a(i)}(Xⱼ+Xₖ+XⱼXₖ)
+             +ΠᵢX_{a(i)}²/(1+X_{a(i)})−KᵢXⱼXₖ,
+
+where O(i)={j,k}. The full feasible set {X≥0:ΓX≥N(X)} is compact.
+A large positive-offset homotopy gives total complementarity degree zero;
+the origin retains Γ's nonzero local degree. Excision therefore produces a
+nonzero complementary root. R0 excludes singleton support, so every player
+has a geometric opponent clock. Alternating the scheduled pairs gives exact
+terminal Nash against unrestricted behavioral deviations. Inactive players'
+actual values include explicit nonnegative corrections rather than merely
+using the nominal phase templates. The same profile gives one fixed uniform
+target. Reward closure gives the weak raw theorem.
+
+Consequently every Fin4 counterexample must fail this test for each of its
+three pair partitions: some mate join is strictly negative, or some opposite-
+pair joining reward strictly exceeds that player's own singleton.
+The [complete raw producer](exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md)
+includes a strict sixty-coordinate coverage table and exact comparisons with
+the implemented raw sources and accepted matching-phase classes. Its proof
+is reviewed mathematics, not a new checked declaration. The original source is
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`);
+the tracked periodic semantic consumer is
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+(`UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`). No exact periodic
+profile at weak equality, all-proper rates, or arbitrary Fin4 conclusion is
+asserted.
 
 The **crossed-matching criterion** selects f=(01)(23), a=(02)(13), and
 o=f∘a, after any player relabeling. For each i require

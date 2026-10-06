@@ -147,3 +147,114 @@ changes only introductory/current-status text from the reviewed hash. I
 reread the final degree section at those bytes; it is unchanged, so the
 same scoped mathematical PASS applies. Later appended examples or coverage
 claims are not included automatically in this mechanism verdict.
+
+## Final standalone assembly, source calibration and coverage
+
+Final-artifact verdict: **PASS**, with no unresolved mathematical objection,
+on the complete 640-line artifact
+`../exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md`, SHA256
+`9260c76df59721bd09dc94b9a72cb4bff5c1205f3b4456f8eb07b71320c068e9`.
+I read all its sections and checked its substantive assembly additions
+without reading another review. This verdict now includes the complete
+fixture and the named raw-source comparisons; it is not inferred from
+the earlier root-mechanism-only verdict. No Lean build was performed.
+
+The statement preserves exactly four weak scheduled-pair joining
+comparisons and twelve opposite-pair own-singleton caps. It adds no
+singleton-sign, inverse, favorable-graph, chosen-root or strategic
+premise. Under strict comparisons the original no-UE source supplies
+R₀ and degree1, the nonlinear degree argument produces a nonzero root,
+and the support and inactive-value arguments produce actual strategies.
+The weak result is explicitly UE-only reward closure. Thus the final
+three-partition counterexample restriction is an unconditional original-
+table restriction, not a rephrased supplied-certificate interface.
+
+### One-chart degree calibration and strategic completion
+
+The new calibrated version uses one chart [−2R,2R]⁴ throughout.
+The central region and its closure lie strictly inside that chart, so
+the named ambient-map adapter identifies their cube solutions with
+zeros of H_λ, including boundary points of the central region. Compact
+E confines all λ-homotopy roots there. At the large offset the selected
+region has no solution and hence degree zero. The small-region
+θ-homotopy is isolating by the same uniform O(‖x‖²) estimate as before.
+For the homogeneous field, solution-set excision compares this small
+region to the central one; scalar-radius invariance then identifies
+its degree with the literal `r0Degree`. This requires neither an
+unimplemented arbitrary-chart comparison nor a whole-cube degree-one
+assertion on the selected region.
+
+I checked the actual statements in `MathUE/LinearProgramming/R0Degree.lean`,
+`MathUE/Topology/BoxComplementarityAmbientMapAdapter.lean` and
+`MathUE/Topology/BoxComplementaritySolutionExcision.lean`, including
+`localDegree_lcpMinBoxProblem_zero_eq_r0Degree`,
+`isSolution_ofAmbientMap_iff_of_coordinateInterior`, and
+`BoxComplementarityProblem.localDegree_eq_of_solutionsIn_eq`.
+The original no-UE source and arbitrary-close-reward consumer retain
+their already reviewed hypotheses. This is static source validation,
+not a new kernel-check claim.
+
+All actual inactive corrections are retained in the artifact. The
+signed stress target (−2,3,−5/6,25/6) is correct. The direct horizon
+argument is also complete: opponent survival is bounded by ρ^m per
+period, so every unilateral law has expected live duration at most
+C=2/(1−ρ). The pathwise error bound gives MC/N delivery and 2MC/N
+deviation gain relative to the one fixed ACTUAL phase-A target.
+The initial-zero convention and negative rewards are both respected.
+
+### Exact fixture and all five withdrawal operations
+
+I independently recomputed the modified table's c=(2,1,1,1) and all
+twelve strict caps. Hence its admitted raw set really contains a full
+coordinate neighborhood, not just a thin stratum. Its inverse, principal
+minors and complete offset−1 root census remain those of the displayed
+R₀/degree1 matrix. The signed-column criterion fails on every partition:
+its unique column signs require σ₂=−1, conflicting with c₂>0 on03/12
+and with K₂=−1 on each other schedule.
+
+All thirteen tabulated J witnesses were recalculated from the complete
+table. The fourteenth child's two elementary rows are inconsistent.
+In the withdrawal-strengthened test for child012, the literal F/J
+definitions give precisely
+
+    1≤λ₁/2−(D+4)λ₂,
+    1≤−3λ₀+λ₂,
+    −K₃≤−K₀λ₀−4λ₁.
+
+At12 the participant withdrawals are exactly 4−5=−1 and0−1=−1.
+The singleton withdrawal floors are at most1 for patient and both
+security variants and at most0 for deadline/cancellation. Consequently
+every dropped withdrawal term has the correct nonpositive sign; the
+future terms are absent precisely for the three specified kinds.
+The resulting negative upper bound contradicts −K₃>0 for arbitrary
+nonnegative advance and withdrawal weights. I checked the definitions
+and bounds in `WithdrawalFutureJoinRaw.lean`, `PatientWithdrawalRaw.lean`,
+`DeadlineWithdrawalRaw.lean` and `DeadlineWithdrawalSecurityLP.lean` under
+`UniformEquilibrium/Quitting/Classification/QuietExtension/`.
+
+The child12 both-quit witness has actual payoff(5,1), not the old
+modified singleton value; its two withdrawal comparisons are strict.
+The separately supplied stationary child123 law has exact zero child
+debt, zero Never, and omitted gain5210405575/136773399. The packet
+correctly does NOT assert a universal zero-debt-profile witness for012;
+it excludes that child's five raw certificates by the finite-row proof.
+This preserves the distinction between raw certificate failure and
+arbitrary safe-child selection.
+
+The premium traps are exactly03 andI. The forced-Quit weight test
+forces λ=0; the separate actual-row floor test also fails. The larger-
+trap intermediate sums are88 and90, and product-low fails at the
+displayed03 root. The response-partition, phase-floor, cyclic-child,
+guard, conditional-range and influence comparisons retain exact failure
+witnesses. I also checked the changed sure1 branch, the corrected ≤
+bound in sure0, and the full sure2/sure3 boundary enumeration. The
+reported sure0 gap recomputes to
+−724795040468913623231/692156460057385664250.
+
+No all-proper stationary exclusion is claimed or needed. The complete
+strict raw class, its neighborhood, and the finite weak counterexample
+restriction provide genuine additional counterexample-class narrowing
+beyond the named accepted raw tests, including the signed-column cone.
+All mathematical inputs needed by the packet are inline or named
+repository declarations; there is no dependency on another conference
+note, review, unaccepted CCE theorem, or unproduced strategic witness.
