@@ -284,3 +284,61 @@ branch; the positive orientation on the larger root recovers this one.
 I have not claimed that either test always succeeds, or that this exhausts
 all eigenvector degeneracies. The stated strict new branch is already
 complete and does not depend on this possible packaging extension.
+
+## Final standalone assembly seal
+
+**Final-artifact PASS** applies to the 653-line standalone
+[`LARGER_EIGENVALUE_SIGNED_FOUR_CYCLE_UNIFORM_PAYOFF.md`](../exports/LARGER_EIGENVALUE_SIGNED_FOUR_CYCLE_UNIFORM_PAYOFF.md),
+SHA256 `df0a17ebed5f9228e4e557304f2c82e5b73a56cbcee05312dbc178f707cdc1c6`.
+I read the complete preceding 649-line assembly at `ea517b918d5a856a7410216959de73c60d72a6bd684b2afe06a743207952c9e4`,
+then inspected the final self-containment delta and checked the new hash.
+No other review was read. This is an assembly/delta seal, not a third
+research audit and not a Lean-check claim.
+
+The standalone faithfully preserves the raw input, larger-root positivity,
+all four balances and all sixteen floors, exact target, all-player mesh,
+full behavioral/Never cap argument, and fixed-profile uniform-horizon
+quantifiers covered by the main PASS. Its explicit full fifteen-row table,
+four rotated transfer matrices, signed-singleton stress and child-witness
+tables agree with my independent calculations. The extra initial-date
+allowance in the horizon bound covers the live zero. The separate
+approximate-stationary strengthening above is correctly NOT imported as
+an unchecked claim of the packet.
+
+I independently checked the assembly's additional bounded source exclusions:
+
+- `RawRegion.eq_partner_of_singleton_lt` in
+  `UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean` implies the
+  stated unique-below-own-partner restriction. Rows0 and2 of the fixture
+  each have two below-own singleton entries. The cited raw source's
+  consumer `exists_exact_allSuffix_uniformPayoff_of_rawRegion` is in
+  `UniformEquilibrium/Quitting/Cycles/PairedCycleEquilibrium.lean`.
+- `exists_periodThreeClearedGapData_and_uniformPayoff_of_visible_affine_reward`
+  in
+  `UniformEquilibrium/Quitting/Examples/Cyclic/FourPlayerOverlappingPeriodThreePositiveAffineCylinder.lean`
+  has exactly the displayed visible-coordinate error and positive row
+  scales. I followed its actual central singleton rows through
+  `FourPlayerOverlappingPeriodThreeReward.lean`,
+  `FourPlayerOverlappingPeriodThreeRewardNeighborhood.lean`, and
+  `FourPlayerOverlappingPeriodThreeInvisibleCoordinates.lean` in that
+  directory. The singleton rows are all visible; every center receiver
+  has one off-diagonal4 and two off-diagonal0, against own1. The strict
+  sign count persists under the specified error and positive affine
+  transport. Rows1 and3 of the fixture violate it.
+- `normalizedSoloMatrix_eq_tournamentSkewMatrix_iff` in
+  `UniformEquilibrium/Quitting/Classification/LCP/FinFourIntegralTournamentBalancedSingleton.lean`
+  has the literal affine singleton-row meaning used in the packet.
+  The tournament branch requires opposite pair directions; the fixture's
+  bidirectionally negative02 pair defeats it under every relabeling.
+
+The last four-line expansion makes the two remaining comparisons intrinsic:
+one explicitly defined cyclic-child sign predicate fails at row1 after the
+forced pivot0 deletion, and the explicitly defined no-weak-leaver pair
+predicate fails on both of the fixture's only pair traps. Neither statement
+now relies on an unnamed conference neighborhood or another math packet.
+
+The proof is self-contained ordinary mathematics with named tracked source
+correspondences. There is no mathematical dependency on `math/` content,
+untracked helper, or review history inside the packet. No repair or strategic
+obligation remains for these exact final bytes. The main significance verdict
+above applies unchanged.

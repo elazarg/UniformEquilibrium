@@ -436,6 +436,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. Both strict and weak tests have production Lean consumers. |
 | Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The raw criterion, common-box selection, exact-root return, explicit C3/C4 thresholds and literal triple/full-core table consumers have production Lean declarations. The packet's neighborhood and separation claims remain formalization obligations. |
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
+| Fin4: the larger-eigenvalue cyclic singleton tests specified below | UE for arbitrary signed own singletons and arbitrary nonsingleton rewards. Four positive clocks, all phase floors and one fixed target are produced from raw rewards; all four phases are refined. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -977,6 +978,46 @@ an exact Nash witness in every proper child. Its reward criterion lies
 outside both the pair-core and pair-free boxed criteria. It does not cover
 opposite-strict-sign pair gaps or larger traps failing the charge tests,
 and it supplies no exhaustive classification of arbitrary tables.
+
+The **larger-eigenvalue four-clock criterion** depends only on the singleton
+comparisons Γᵢⱼ=rᵢ({j})−sᵢ for i≠j, with Γᵢᵢ=0. After a cyclic
+relabeling, require, with all indices modulo four,
+
+    Γ_{i,i+1}=−bᵢ<0,    Γ_{i,i+3}=hᵢ>0,
+    Γ_{i,i+2}=gᵢ,       g₀,g₂<0<g₁,g₃.
+
+Define
+
+    aᵢ=gᵢ/bᵢ,          dᵢ=hᵢ/bᵢ,
+    D₀=a₀a₁+d₀,       L=a₀d₁+D₀a₂,       D=D₀d₂,
+    U=a₃L+d₃(d₁+a₁a₂),     V=a₃D+d₃a₁d₂.
+
+The additional tests are D>1 and det Γ>0. There is no restriction on
+own singleton levels or nonsingleton rewards. These strict tests define
+an open class in the sixty reward coordinates. The transfer matrix
+[[U,V],[L,D]] has two real eigenvalues straddling one. Its larger
+eigenvalue λ>1 gives A=1/λ and positive weights
+
+    w₀=V,       w₁=λ−U,
+    w₃=A(a₂w₀+d₂w₁),       w₂=A d₁w₀+a₁w₃.
+
+Four proper solo hazards constructed from these weights satisfy every
+Bellman identity, owner indifference and all sixteen singleton floors.
+Refining all four phases makes pair-collision regret vanish. Every player
+has a geometric opponent clock, so this controls all behavioral deviations,
+including late stopping and Never, and the finite-horizon seam. The fixed
+target is u=∑[i] wᵢr({i})/∑[i]wᵢ.
+
+The [complete raw producer and full-table tests](exports/LARGER_EIGENVALUE_SIGNED_FOUR_CYCLE_UNIFORM_PAYOFF.md)
+give a full-core table outside the compared matrix, response-quotient,
+premium, quiet-child and periodic raw criteria. Its unrefined cycle is
+not Nash and it has no exact stationary Nash profile. Every admissible
+relabeling fails the implemented smaller-eigenvalue test. The new raw
+producer is ordinary reviewed mathematics, not a checked Lean declaration;
+`BalancedSingletonCycleCertificate.isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`)
+is the existing semantic consumer. No assertion at D=1 or det Γ=0,
+or of four-clock completeness, follows.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are
