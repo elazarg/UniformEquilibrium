@@ -111,15 +111,24 @@ exactly optimal. Deleting that hazard also destroys the other players'
 incentives. The example is already solved and remains internal; its role
 is to reject an unnormalized time-scale argument, not narrow the possible
 counterexample tables.
-Section 25 is a complete new raw-class candidate, not yet independently
-reviewed: a mixed-sign three-player premium core with two encouraging
+Section 25 is a complete new raw-class theorem independently reviewed by
+CODEX_BROUWER and CODEX_KREIN: a mixed-sign three-player premium core with two encouraging
 players and one discouraging player has UE. Two specified two-opponent
 joining differences vanish; the other signs may be weak in the strategic
 conclusion. The strict root producer, sure-hazard dispatch, ambient degree,
 original-game consumer, and signed rational coverage fixture are explicit.
 The fixture defeats all fourteen fixed weighted child-debt certificates.
-This claim remains internal pending independent mathematical and coverage
-review; no export or Lean implementation is asserted.
+Both mathematical/source reviews passed after the pure-exit finite-horizon
+delivery sentence was corrected to the repository's initial zero live date.
+The reviews are in `../feedback/CODEX_MORSE__MIXED_SIGN_TRIPLE_CORE__BY_CODEX_BROUWER.md`
+and `../feedback/CODEX_MORSE__MIXED_SIGN_TRIPLE_CORE__BY_CODEX_KREIN.md`.
+This theorem remains internal pending standalone assembly and its final
+artifact gate; no export or Lean implementation is asserted.
+Section 26 blocks the separate exact finite-Nash completion-homotopy route:
+on an already solved constant-participant Fin4 table, every exact Nash
+law for every scalar completion between actual zero and the singleton
+vector retains a fixed positive unrestricted debt, on every finite
+calendar. It is an internal architecture falsifier, not new UE coverage.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -4012,3 +4021,182 @@ Requested independent checks are the partly-sure classification, the
 mixed-sign ambient index and tie removal, the original-table weak UE
 bridge, and the complete source-overlap/fixture claims. No export is
 requested before those mathematical and coverage checks pass.
+
+## 26. The whole scalar-completion Nash homotopy can miss every useful law
+
+This exact internal obstruction concerns the proposed global construction
+by selecting exact finite-calendar equilibria while varying a terminal
+completion from zero to the singleton vector. It does not obstruct
+approximate independent-law construction, and supplies no counterexample
+table to UE. The table is the literal Fin4 constant-participant table
+in CODEX_BROUWER's
+[singleton-completion calculation](CODEX_BROUWER__QUITTING_TABLE_COVERAGE.md).
+The new assertion covers the ENTIRE completion interval, including its
+actual-zero endpoint, not only singleton completion.
+
+Let I={0,1,2,3}, s=(1,0,0,0), and set
+
+    G=[[0,1,1,−1],[-1,0,-1,2],
+       [-1,2,0,-1],[-1,-1,2,0]].
+
+For EVERY nonempty coalition S define all four rewards by
+
+    r_i(S)=s_i                       if i∈S,
+           s_i+∑_{j∈S}G_ij          if i∉S.          (116)
+
+This specifies all60 coordinates. In the original game Never pays zero.
+Fix any nonempty finite ordered COMMON calendar; each player may choose
+any of its dates or Never and randomizes independently. In the auxiliary
+finite game, replace only the joint-Never payoff by τs, where 0≤τ≤1.
+All finite absorption rewards are still (116). Normal-form Nash permits
+every unilateral replacement law on this common finite menu; it does not
+assume subgame-perfect behavior at unreachable dates.
+
+**Claim.** For 0≤τ<1 this finite game has exactly one mixed timing-law
+Nash equilibrium: every player waits until the last calendar date, then
+quits with the same probability t=t(τ), and otherwise chooses Never.
+Here t is the unique solution in (0,1) of
+
+    t=(1−τ)(1−t)³.                                    (117)
+
+For τ=1 the unique equilibrium is all Never, corresponding to t=0.
+The actual original-game full behavioral debt of these laws is
+
+    (t+τ(1−t)⁴,0,0,0)=((1−t)⁴+t²,0,0,0).            (118)
+
+If t₀ is the unique solution t₀=(1−t₀)³, then t₀>1/4 and
+every quantity in (118) is at least t₀. The empty calendar also fails,
+having only all Never and actual debt1. Thus neither enlarging the
+calendar nor varying τ anywhere in [0,1] gives a favorable selection
+of exact finite equilibria. A connected equilibrium graph does not
+repair this failure: the entire available branch has the debt floor.
+
+### The exact final-date root
+
+At continuation v=τs, forced Quit is always Q_i=s_i. Because the
+passive reward is additive on a coalition, the full gap functions are
+
+    g₀=(1−τ)(1−q₁)(1−q₂)(1−q₃)−q₁−q₂+q₃,
+    g₁=q₀+q₂−2q₃,
+    g₂=q₀+q₃−2q₁,
+    g₃=q₀+q₁−2q₂.                                    (119)
+
+The child cube Nash problem has the unique solution
+
+    q₁=q₂=q₃=q₀                                    (120)
+
+for every fixed q₀∈[0,1]. Here the cube Nash conditions are g_i≤0
+at q_i=0, g_i≥0 at q_i=1, and g_i=0 at proper positive hazards.
+For completeness, the boundary argument is as follows.
+
+If q₀>0 and q₁=0, then g₁≤0 forces q₃>0. Its active inequality
+g₃≥0 forces q₂≤q₀/2. If q₂>0, its gap g₂=q₀+q₃ is strictly
+positive, so q₂=1, contradicting q₂≤q₀/2≤1/2. But q₂=0 also
+contradicts its positive gap. The other zero-coordinate cases are
+cyclic permutations. Thus all child hazards are positive when q₀>0.
+When q₀=0, the same argument says that one zero coordinate forces
+all three to be zero.
+
+Suppose q₀<1 and q₁=1. If q₂<1, its positive hazard is proper,
+so g₂=0 would give q₀+q₃=2, impossible. Thus q₂=1; similarly
+q₃=1, but then each sure child has gap q₀−1<0. Hence no child
+hazard is sure for q₀<1. The proper equations in (119) now give
+(120), including q₀=0 by the preceding zero-coordinate argument.
+For q₀=1 the same equations and boundary inequalities force all
+children to be sure: a proper triple would solve (120) at its boundary,
+and any sure child forces the other two sure. This completes the cube
+classification, without dropping boundary equilibria.
+
+Substituting (120) into g₀ gives
+
+    g₀=(1−τ)(1−q₀)³−q₀.
+
+For τ<1 the endpoints q₀=0 and q₀=1 violate their Nash inequalities.
+The right side is strictly decreasing, positive at zero and negative
+at one, proving the unique proper root (117). All players mix, so the
+root's completed payoff is exactly Q=s. When τ=1, only q₀=0 is
+possible, proving that all Continue is the unique exact root at s.
+
+### Why every finite timing equilibrium uses only that final row
+
+First exclude a sure hazard at any positively reached date before the
+last date. Every player facing another sure quitter has a literal
+one-stage comparison, unaffected by a future continuation. A sole sure
+quitter can Continue once and quit at the next listed date. Constant
+participant rewards guarantee its singleton then, regardless of who
+joins it. Therefore its equilibrium condition implies exactly the
+Continue inequality evaluated at source s. If there is more than one
+sure quitter, all comparisons already ignore the continuation. In either
+case the current row would be a nonzero exact root at s, contradicting
+the τ=1 classification above.
+
+A sure hazard at the final date is also impossible: the conditional
+root is an exact root at τs, and the complete classification (119)–(120)
+has no sure hazard. These arguments apply at the first potentially sure
+date and do not assume optimality at any unreachable successor history.
+
+Thus every reached date has only hazards strictly below1. Induction
+over the finite calendar shows that every date has positive joint live
+reach and every player has positive Never probability. Replacing a
+conditional suffix while retaining all earlier masses is a permitted
+normal-form unilateral deviation. Positive reach therefore makes every
+conditional suffix genuinely Nash in the remaining finite timing game.
+
+The final row is consequently the unique root (117), with completed
+payoff s. At the preceding date the continuation value is s, whose
+unique root is all Continue. Backward induction makes every earlier
+row all Continue. Conversely these rows followed by (117) form an
+equilibrium: all suffix comparisons are exact, and backward induction
+over the finite action menu proves every player's full menu optimality.
+This proves uniqueness of the mixed stopping laws, not merely uniqueness
+among stationary or subgame-perfect candidates.
+
+### Literal original-game caps and the uniform debt floor
+
+Write c=(1−t)⁴. The completed payoff is s, so deleting the formal
+Never completion gives actual terminal payoff
+
+    u=(1−τc,0,0,0).
+
+For every nonpivot player, completed Never and actual Never coincide;
+quitting after the deadline adds its zero singleton. Thus its full
+behavioral cap is0. For player0, quitting before or at the last calendar
+date gives1. Continuing past that date and quitting afterward gives
+
+    C₀(s,q)=1+t,
+
+by (119) at τ=1. All opponents then choose Never if they did not quit
+on the last date, so still later deviations add no larger value. The
+unique live-history structure and independence reduce a behavioral
+deviation to a mixture of pure stopping dates; hence the full cap is
+exactly1+t. This proves (118). It retains the actual tail action, rather
+than equating finite-menu Nash with unrestricted behavioral Nash.
+
+The same identity follows from the tracked literal finite-word and cap
+equalities: `quittingContinuationFiniteTimingGame_mixedEU` in
+`UniformEquilibrium/Quitting/Terminal/ContinuationFiniteTimingGame.lean`,
+and `quittingContinuationBestResponseValue_finiteDeadlineTimingProfile_eq_max`
+in `UniformEquilibrium/Quitting/Terminal/FiniteDeadlineFullReplyCap.lean`.
+These declarations were inspected; no new Lean proof is claimed.
+
+Equation (117) gives 0≤t≤t₀. The function f(t)=(1−t)⁴+t² is strictly
+decreasing on this interval, since t≤(1−t)³ there and
+f′(t)=−4(1−t)³+2t<0. At t₀,
+
+    f(t₀)=t₀(1−t₀)+t₀²=t₀.
+
+Finally 1/4<(3/4)³, so the unique zero of t−(1−t)³ is greater
+than1/4. This establishes the calendar-independent and parameter-independent
+positive debt floor. Its significance is the quantifier over all τ,
+not an optimized numerical bound.
+
+The original table is already covered by
+`exists_uniformEquilibriumPayoff_of_productLowPremium` in
+`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`:
+all participant premiums vanish and s≥0. Accordingly this is not a
+positive-gap game, nor evidence against UE. It rules out one proposed
+exactification mechanism even at the actual-zero finite-game endpoint.
+Approximate finite laws may still have vanishing unrestricted debt.
+Any future use of completion homotopy must therefore use more than an
+exact finite Nash branch along the scalar segment [0,s]; the present
+route is retired in that form.
