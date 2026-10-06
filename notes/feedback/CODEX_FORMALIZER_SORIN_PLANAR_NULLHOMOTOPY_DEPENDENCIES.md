@@ -179,6 +179,14 @@ bound energy by the integrable spherical density in a complex-valued chart.
 for an actual open square in the holomorphic injective domain, with no global
 measurability assumption on the arbitrary outside values. This does not supply
 a chart containing infinity, spherical curve length, or a crosscut.
+`Math.NormalizedSphereChart.dist_chart_curve_le_integral_speed`
+(`MathUE/Analysis/NormalizedSphereChartSpeed.lean`) derives the actual
+normalized inverse-chart derivative and bounds endpoint chordal distance by
+the integrated computed speed of a real-parameter curve. Its arbitrary real
+inner-product target needs a unit pole and an orthogonal complex-plane linear
+isometry, not completeness, a dimension premise or chart surjectivity.
+This does not yet produce landing points, spherical geodesic distance, an
+infinity-chart adapter or a boundary extension.
 Nested short crosscuts with distinct landing endpoints and
 Jordan separation remain separate known-proof library obligations. No scoped
 Jordan/Schoenflies or crosscut producer has been found. Section 16.6 requires

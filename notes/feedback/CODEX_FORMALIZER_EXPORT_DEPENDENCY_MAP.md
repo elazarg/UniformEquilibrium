@@ -1019,8 +1019,25 @@ The shared positive-charge matrix is supplied once by
 (`MathUE/LinearProgramming/CyclicChildSharedFixture.lean`). Its literal regular
 offset has exactly the root `(0, 1, 1, 1)`, inactive residual two and active
 determinant seven. The child inverse and pivot inverse row are computed in the
-same owner; the latter has a negative entry. Reward-table identifications,
-partition-response calculations and child behavioral witnesses remain separate.
+same owner; the latter has a negative entry. Literal full-core and explicitly
+relabeled proper-triple reward-table bindings are supplied by
+`full_singletonMatrix_degree_eq_one` and
+`triple_relabel_singletonMatrix_degree_eq_one`
+(`UniformEquilibrium/Quitting/Examples/BoxedNashChargeSharedMatrix.lean`).
+`only_nonnegative_child_inverse`
+(`MathUE/LinearProgramming/CyclicChildSharedFixtureScreens.lean`) singles out
+deleted player zero, whose passive inverse row fails nonnegativity. The full
+inverse has a negative entry, there is no mutually positive singleton pair,
+and the principal zero-three block is not standard Q. These are matrix screens,
+not a conflation of standard Q with projective Q or behavioral child witnesses.
+`full_excludedPartition_not_responseInvariant` and its triple counterpart
+(`UniformEquilibrium/Quitting/Examples/BoxedNashChargePartitionScreens.lean`)
+exclude thirteen displayed partitions. The remaining named pivot partitions
+are excluded by the actual nonlinear axis responses in
+`full_pivotPartition_not_responseInvariant` and its triple counterpart
+(`UniformEquilibrium/Quitting/Examples/BoxedNashChargeAxisResponse.lean`).
+Normalization and coverage of arbitrary partition labels, behavioral children
+and debt/quiet-extension witnesses remain separate.
 
 ## Mixed-sign triple source boundary
 
@@ -1030,9 +1047,30 @@ derives the actual full ambient derivative from the literal seven strict tests
 and two equality constraints at a proper full-triple exact root, retaining
 strict gaps for every inactive player. The canonical full endpoint expansion
 also covers zero and sure hazards, and the sure classification derives the
-allowed pure-pair alternative. This is not yet the complete mixed-sign raw
-selected-return or equilibrium producer: all-support branch assembly, pair tie
-restoration and the strict/weak semantic consumers remain separate.
+allowed pure-pair alternative. The complete raw strict consumer is now
+`exists_uniformEquilibriumPayoff_of_mixedSignTriple_core`
+(`UniformEquilibrium/Quitting/Classification/Existence/MixedSignTripleCoreUniformPayoff.lean`):
+actual pair/full-core branch assembly, derived Jacobians, internal census and
+closed selected-return restoration discharge its source hypotheses. It splits
+the pure-pair alternative from all real strict-deficit sources in the no-pure
+branch; the final Fin4 consumer requires only nonnegative own singletons,
+computed core equality and the raw strict comparisons/equalities.
+`exists_uniformEquilibriumPayoff_of_weakMixedSignTriple_core`
+(`UniformEquilibrium/Quitting/Classification/Existence/MixedSignTripleCoreRewardClosure.lean`)
+supplies a fixed original-table target on the weak boundary. Exactly seven
+passive entries change, preserving both equalities and all participant coordinates,
+own-singleton payoffs, traps and core. Computed core cardinality three is retained in the
+weak theorem to derive distinct labels; weak signs alone do not do so.
+`not_isQuittingFullExactRootPotential_of_mixedSignTriple_core`
+(`UniformEquilibrium/Quitting/Projective/MixedSignTripleCoreSmoothDrift.lean`)
+supplies signed finite-table potential exclusion with continuity on the actual
+boxed sublevel domain and differentiability only on its singleton lower
+boundary. Its pure-set alternative uses
+`not_isQuittingFullExactRootPotential_of_pureSetNash`
+(`UniformEquilibrium/Quitting/Projective/PureSetExactRootPotentialExclusion.lean`),
+which needs only that coalition's actual reward in the box, not a bound on
+the whole table or analytic regularity. Packet fixtures and remaining
+separations remain explicit obligations; the main criterion does not seal them.
 The shared negative-bad-root obstruction and excluded-root dense restoration
 live in `exists_exactRoot_singletonSublevel_of_dense_sources_excluding_root`
 (`UniformEquilibrium/Quitting/Root/NegativeBadRootSelectedReturn.lean`); the

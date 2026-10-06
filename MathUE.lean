@@ -17,6 +17,9 @@ import MathUE.Analysis.RectangleLengthArea
 import MathUE.Complex.HolomorphicSphericalEnergy
 import MathUE.Complex.HolomorphicRectangleLengthArea
 import MathUE.LinearProgramming.CyclicChildSharedFixture
+import MathUE.LinearProgramming.CyclicChildSharedFixtureScreens
+import MathUE.LinearProgramming.CyclicChildSharedPartitionScreens
+import MathUE.Analysis.NormalizedSphereChartSpeed
 import MathUE.SignedFourCycleLargerOpenness
 import MathUE.Topology.AmbientDegreeNegativeFixedPointObstruction
 import MathUE.Finset.CoalitionBinaryCode
