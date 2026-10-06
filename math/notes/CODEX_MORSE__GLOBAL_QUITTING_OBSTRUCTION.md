@@ -4205,3 +4205,104 @@ Approximate finite laws may still have vanishing unrestricted debt.
 Any future use of completion homotopy must therefore use more than an
 exact finite Nash branch along the scalar segment [0,s]; the present
 route is retired in that form.
+
+### A unique connected forced-stationary branch is still insufficient
+
+The same table also falsifies a different proposed repair of Section 24:
+select a better connected branch of constrained stationary equilibria,
+rather than retain the one bad forced-hazard branch displayed there.
+Here there is no alternative branch to select. This is an internal
+architecture result on an already solved table, not additional UE coverage.
+
+Fix 0<λ<1. Let player0 choose a stationary hazard q₀∈[λ,1], and let
+the other three players choose q_i∈[0,1]. The payoff in this auxiliary
+normal-form game is the actual absorbing terminal payoff of the stationary
+profile. Absorption is certain because q₀≥λ. This is a one-player
+constraint, not a requirement that all players use positive hazards.
+
+For the additive-passive table of this section, write
+
+    L₀=q₁+q₂−q₃,
+    L₁=−q₀−q₂+2q₃,
+    L₂=−q₀+2q₁−q₃,
+    L₃=−q₀−q₁+2q₂.
+
+If a=1−∏[j](1−q_j), the actual stationary payoff is
+
+    u_i=s_i+(1−q_i)L_i/a.                              (121)
+
+Holding opponents fixed, the own-hazard payoff is decreasing, constant,
+or increasing according as L_i is positive, zero, or negative. This
+statement also holds when every opponent continues: then a=q_i and the
+formula is constant because L_i=0. For player0 the feasible hazard is
+positive, so there is no zero-absorption deviation in its constrained
+menu. Consequently the auxiliary game's Nash conditions are exactly the
+box complementarity conditions for −L.
+
+For every fixed q₀=r∈(0,1], the child complementarity problem has the
+unique solution q₁=q₂=q₃=r. Here is the complete boundary argument.
+If q₁=0, its Continue inequality gives q₃≥(r+q₂)/2>0. Player3's
+positive hazard then gives L₃≤0, hence q₂≤r/2. But L₂=−r−q₃<0
+forces q₂=1, contradicting q₂≤r/2≤1/2. Rotating the three labels
+gives the other zero exclusions.
+
+If r<1 and q₁=1, player2 has L₂=−r+2−q₃>0, so q₂=0, already
+excluded. Cyclic rotation excludes every sure child. Hence all three
+children are proper and L₁=L₂=L₃=0; the invertible linear system gives
+q₁=q₂=q₃=r. At r=1, the same argument shows that a sure child forces
+the cyclic neighbor to be sure; otherwise all children are proper and
+the linear equations would give all of them1. Thus all children are1.
+
+At this unique child response, L₀=r>0. Player0 therefore strictly
+prefers its smallest permitted hazard, giving the unique constrained
+stationary equilibrium
+
+    q=(λ,λ,λ,λ).                                      (122)
+
+Set t=1−λ. The exact actual payoff and unrestricted behavioral cap are
+
+    u=(1+t/(1+t+t²+t³),0,0,0),
+    b=(1+1/(1+t+t²),0,0,0).
+
+Indeed Q_i=s_i because participant rewards are constant. Every child's
+stationary Never value is0, while player0's stationary Never value is
+1+λ/[1−(1−λ)³]. Against stationary opponents every pure finite quitting
+time interpolates between Quit now and Never; random behavioral stopping
+times cannot exceed their maximum. Thus b is the full behavioral cap,
+not a stationary-deviation bound. The pivot debt is exactly
+
+    b₀−u₀ = 1/[(1+t+t²)(1+t+t²+t³)] > 1/12,            (123)
+
+and tends to1/12 as λ↓0. The forced player's absorption share tends
+to1/4. Its absolute rate vanishes, but its strategic cost does not.
+
+The full constrained equilibrium graph on λ∈(0,1) is the single
+continuous curve (122). Its closure meets λ=0 only at all Continue,
+whose actual payoff is0 and pivot cap1; neither is the limit of the
+displayed positive-rate semantic coordinates. Thus compact connected
+fixed-point continuation cannot repair this particular producer by a
+choice among components or branches. This does not rule out a genuinely
+temporal construction, a different constraint family, or a use of the
+additional no-UE global-minimum hypotheses.
+
+The forced-stationary connected-selection repair is therefore retired;
+there is no pending producer interface here. Further work on a positive
+global minimum must use its actual semantic minimality, which this solved
+table and these bad auxiliary profiles do not possess.
+
+The narrow source check inspected `exists_heterogeneousStationaryFaceNash`
+in `UniformEquilibrium/Quitting/Stationary/HeterogeneousConstrainedFaceNash.lean`,
+which already produces the relevant division-free constrained face roots.
+The exact stationary cap is the one in
+`quittingStationarySelectedCap` in
+`UniformEquilibrium/Quitting/Stationary/SnellCap.lean`, with the
+unrestricted behavioral bridge
+`quittingTerminalPayoff_update_stationary_le_cap` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`.
+The existing `lowerBoundMechanismReward_constant_cutoff_constrainedNash`
+in `UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/NormalTerminalGapFullSupportLiftRegression.lean`
+already exhibits a bad common-cutoff row in a solved two-player game.
+The additional point in (121)–(123) is uniqueness under a constraint on
+only the low-premium outsider: no alternative stationary Nash selection
+within that family eliminates the debt. None of these calculations is a
+new proof of a positive terminal-exploitability gap for the game.
