@@ -438,6 +438,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: the larger-eigenvalue cyclic singleton tests specified below | UE for arbitrary signed own singletons and arbitrary nonsingleton rewards. Four positive clocks, all phase floors and one fixed target are produced from raw rewards; all four phases are refined. This is reviewed mathematics awaiting formalization. |
 | Fin4: the weak crossed-matching singleton signs, participant comparisons, and twelve outsider caps specified below | UE for arbitrary signed own singletons and arbitrary passive pair rewards. The strict standard-Q branch produces four proper rates and an exact two-phase terminal Nash profile; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
+| Fin4: the below-singleton joint-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile. A separate full sixty-coordinate reward neighborhood is also covered. The phase values may all lie below own singletons. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -1076,6 +1077,35 @@ cover arbitrary singleton sign graphs or violations of the participant
 comparison or outsider caps. The semantic consumer is
 `isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
 (`UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`).
+
+The **below-singleton joint-phase criterion** uses the same matchings f,a,o.
+Choose b_i>0 and common parameters H,Π,K with
+
+    H>2,       Π<−1,       K<(7Π+10−2H)/2.
+
+Require, for every i,
+
+    Γ_{i,f(i)}=Hb_i,       Γ_{i,a(i)}=Γ_{i,o(i)}=−b_i,
+    rᵢ({i,a(i)})=sᵢ+Πb_i,       rᵢ({f(i),o(i)})=sᵢ+Kb_i,
+    rᵢ({i}∪T)≤sᵢ−4(−Π−1)b_i/3   for every nonempty T⊆{f(i),o(i)}.
+
+Own levels sᵢ are arbitrary signed reals; all other rewards are unrestricted.
+The cubic Πt³+(H−1−K)t²+Kt−(Π+1) has a root t∈(1/2,1).
+The producer selects it and alternates the two scheduled pairs with hazard
+1−t. Both phase values are below own singleton rewards; the stronger
+collision caps nevertheless give every passive player a strict Continue
+advantage. Deleted-opponent geometric survival proves exact terminal Nash
+and one fixed uniform payoff against all behavioral deviations, including
+Never. No no-UE/Q source or strategic certificate is assumed.
+
+The [complete below-singleton producer](exports/BELOW_SINGLETON_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md)
+also gives a full sixty-coordinate UE neighborhood of an explicit rational
+table outside the compared raw criteria, including the arbitrary-passive
+matching criterion. Its nonsingular four-odds Jacobian and strict passive
+gaps produce the nearby strategies by contraction; nearby rewards need not
+satisfy the scalar family's equalities. This neighborhood is proved at that
+table, not at every member of the family. These are ordinary mathematical
+results awaiting formalization, using the same tracked periodic consumer.
 
 For the child criterion, choose a nonempty proper S⊂I. For each outsider k,
 the conditions on weights λₖᵢ≥0, i∈S, are

@@ -179,3 +179,38 @@ L/A/C seal is justified. The math-unicode skill affects notation only.
 A future standalone packet must include the complete original-game proof
 and named-source coverage, and receive its own byte-bound assembly verdict.
 The current §29 mathematical candidate is accepted at the hash above.
+
+## Separate final standalone verdict
+
+**Accepted for mathematical export, with no unresolved objection.** The
+separately tested artifact is the complete 660-line file
+`exports/BELOW_SINGLETON_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md`, SHA256
+
+    6b75ada2ad8e675fd32216d0f1d98fbfdfee6ef5a47d0b7ca8aed05eb2d0e3ca
+
+I read the entire standalone and checked its assembly against the accepted
+§29 proof and independent coverage strengthenings above. It includes the
+raw-family scalar producer, all sixteen endpoints, actual signed terminal
+values, all behavioral/Never deviations, one fixed target and all-large-
+horizon bounds, and the separate full-coordinate contraction theorem. No
+root, continuity certificate or strategic object remains an unproduced input.
+The full mixed-strategy raw coverage evidence, direct quiet joining rows,
+influence/potential failures and robust proper-three exclusion are present.
+
+The simplified robustness argument is correct: for a≤9/10, the center
+Q₂* affine in x has both endpoints at least1/100, contradicting
+|Q₂*|≤2/1000. This directly supplies the same a>9/10 bound as the
+independent derivation. The proof still asserts neither full-support nor
+sure-boundary stationary nonexistence.
+
+I separately checked the new wrong-root boundary. Its cubic factorization
+is exact, the second proper root lies below1/20, its formal W<−9/10
+while actual passive Quit>13/15, so it fails Nash. The selected2/3 root
+instead has passive Quit25/27 and gap13/540. This valid falsifier prevents
+inflating the raw theorem to arbitrary cubic-root selection.
+
+The scalar equality-stratum family and the one full-coordinate neighborhood
+remain distinct conclusions. The packet gives real new UE coverage beyond
+the accepted arbitrary-K matching class, not a supplied-certificate interface.
+New content remains ordinary mathematics and carries no new L/A/C assertion.
+This is the independent final mathematical acceptance of these exact bytes.

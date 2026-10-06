@@ -1751,3 +1751,72 @@ implicit-function neighborhood. No unrestricted strategic input is hidden.
 The same-support scalar formula alone would not establish this comparison;
 the complete table and local producer do. No repair is requested, and no
 stronger global negative-premium or arbitrary-game claim is inferred.
+
+## Final below-singleton artifact: bounded assembly and delta PASS
+
+I read all 660 lines of
+[the standalone below-singleton packet](../exports/BELOW_SINGLETON_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md),
+with exact SHA256
+`6b75ada2ad8e675fd32216d0f1d98fbfdfee6ef5a47d0b7ca8aed05eb2d0e3ca`.
+This is a bounded final-artifact check against my independent Section 29
+review above, not a new inference from another review. No counterpart
+feedback was read. Verdict: **PASS on these exact bytes**, with no unresolved
+mathematical or strategic objection.
+
+The standalone preserves the strict raw parameter inequality, all twelve
+pair/triple caps, signed own-singleton scope, the selected interval
+t∈(1/2,1), and the full sixteen-endpoint calculation. It retains the
+opponent-deleted geometric tail for every behavioral deviation including
+Never, produces an actual terminal value, and proves the correct initial-zero
+finite-horizon bounds for one fixed uniform target. The actual inputs to
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate` and
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean` are all
+produced, not supplied as additional hypotheses. I rechecked these consumer
+declarations directly. The full-coordinate contraction proof retains its
+four original equations, nonsingular full Jacobian, positive closed ball,
+uniform contraction, actual passive inequalities, and convergence to the
+specified root. It does not infer an open neighborhood of every scalar
+family member.
+
+The added robust proper-three exclusion is valid uniformly over its whole
+claimed coordinate ball. Forced-Quit and absorbing-opponent Never values
+are both 1-Lipschitz in the reward sup norm at fixed hazards, even as the
+opponent absorption probability becomes small. Approximate player-2 mixing
+therefore forces a>9/10. Independently expanding the player-1 numerator gives
+F(9/10,c)=(64c²−512c+621)/200≥173/200 and the displayed derivative,
+whose endpoint values are a+3 and 91/60. Since 0<D≤1, the actual payoff
+gap exceeds 173/200, while a reward change δ changes it by at most 2δ.
+Thus δ≤1/1000 cannot repair mixing. The Klein relabelings use only rows
+of size at most three and cover all four deleted supports. The artifact
+correctly does not exclude full-support or sure-hazard stationary profiles.
+
+The new signed-influence and affine-membership exclusions follow from the
+two exact increments −9/2 and 1001/10 for the same ordered influence.
+I checked `SignConsistentQuittingInfluence` in
+`UniformEquilibrium/Quitting/Stationary/SignedInfluenceCycleBalance.lean`
+and `IsAffineQuittingMembershipGain` in
+`UniformEquilibrium/Quitting/Stationary/ComponentwiseWeightedPotential.lean`:
+the raw tests stated in the packet are necessary for those definitions.
+Both strict violations persist locally. The inline joining-row argument
+also has the right quantifiers: a child cutting an o-pair has a positive
+omitted join and nonpositive child joining/withdrawal terms at one singleton
+background; a child cutting neither is exactly an o-pair and has the same
+contradiction at its joint background. This supports failure of universal
+nonnegative debt/withdrawal lifts, not failure of every chosen child lift.
+
+The full table, source comparisons, positive-affine partition exclusion,
+and both arbitrary-passive matching alternatives are preserved. The second
+cubic-root regression is complete and correctly scoped: the smaller root
+has passive continuation below −9/10 and Quit above 13/15; the selected
+root on the modified table has positive gap 13/540. No unspecified-root
+selection is used by the theorem. The mathematical significance remains an
+original-table producer and a full-coordinate region beyond the compared
+accepted and implemented raw producers, rather than a new supplied witness.
+
+All cited Lean paths are tracked. The packet contains the required proofs
+and no dependency on conference notebooks, feedback, untracked helpers,
+or process history. Its Lean-handoff paragraph accurately distinguishes the
+new ordinary mathematics from the existing semantic consumers. No Lean
+build, Lean verification of the new producer, self-export, or broader
+arbitrary-game conclusion is claimed by this verdict.
