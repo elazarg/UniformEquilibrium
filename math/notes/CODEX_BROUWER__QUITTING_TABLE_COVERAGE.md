@@ -8,17 +8,19 @@ No exhaustive arbitrary-Fin4 producer has been obtained. A later exact
 source audit below shows that the Klein-four and one-involution EXISTENCE
 classes are already consumed by the implemented response-quotient machinery.
 
-The newest **An inverse-positive producer with two unequal joint rows**
-and **The whole strict matching chamber with signed participant increments**
-sections give one stronger ordinary-mathematics candidate awaiting independent
-review. They construct all four hazards by a positive-cone Brouwer argument,
-without common singleton ratios or common participant/passive rewards.
-The matching version needs no supplied inverse: the original no-UE source
-produces it, and a uniformly inverse-positive matrix family absorbs the
-negative participant terms. Its exact asymmetric table has a period-two
-terminal Nash profile and a fixed uniform target. The older cap-Jensen route
-is retired at its missing joint-selection implication; the current question
-is whether this raw class and its complement lead to broader coverage.
+The crossed-matching producer, strengthened to arbitrary passive pair rewards
+and weak singleton/participant boundaries, is exported after two independent
+mathematical and final-artifact checks as
+[`CROSSED_MATCHING_UNIFORM_EQUILIBRIUM.md`](../exports/CROSSED_MATCHING_UNIFORM_EQUILIBRIUM.md),
+SHA256 `4757f61a3e57ea6f328d1642136d52d4db2b012a160cda487e1ff167050e4a2c`.
+It is ordinary mathematics, not Lean-checked here. The strict source-Q branch
+produces all four hazards, full behavioral caps, and one fixed target; weak
+boundaries use reward closure. A finite scaled-eigenpoint bound removes all
+passive-sign restrictions without assuming a favorable root. The earlier
+inverse-positive and signed matching sections below retain their original,
+more restrictive proved statements. The older cap-Jensen route is retired.
+The current next question is the nonbijective favorable-graph raw family
+stated at EOF; the Q/degree source does not reduce it to a permutation graph.
 
 The latest **Singleton-completed finite timing games** section gives an
 exact all-calendar obstruction to a natural global selection route: even
@@ -4066,3 +4068,61 @@ actual active-pair premiums145/32 and99/14 are unequal. No relabeling
 restores the required common parameter. The strengthened theorem is
 therefore an actual raw-class enlargement, not only another root formula
 for the symmetric candidate.
+
+## A nonbijective favorable graph survives the complete matrix source
+
+This is a short internal failed-reduction test, not new UE coverage. After
+the crossed-matching theorem, one possible simplification would assert that
+standard Q and R₀ degree+1 force a zero-diagonal matrix with exactly one
+positive entry in each row to have those positive positions form a permutation.
+That assertion is false even in Fin4. No further optimization of this test
+is needed.
+
+Take the exact singleton-comparison matrix
+
+    Γ = [[ 0, 3,−1,−1],
+         [−1, 0, 3,−1],
+         [ 3,−1, 0,−1],
+         [ 3,−1,−1, 0]].
+
+Its favorable map is0↦1↦2↦0 and3↦0, not a bijection. Its determinant
+is13. The four triple determinants, in order012,013,023,123, are
+26,−10,6,2. Pair determinants are all nonzero, since every off-diagonal
+entry is3 or−1. A nonzero homogeneous LCP vector with support at least
+two would make the associated principal matrix singular. A singleton
+support also fails because each column has a negative off-diagonal entry.
+Thus Γ is R₀.
+
+At offset−1, the sole-positive-entry condition forces z₀,z₁,z₂>0.
+If z₃=0, the first three equations give z₀=z₁=z₂=1/2, but the
+fourth residual is−1/2, impossible. If z₃>0, all four equations force
+z=(1,1,1,1), which is a solution because every row sum is1. Thus there
+is exactly one LCP root at this offset, with full support and positive
+Jacobian determinant13. The finite regular-root degree formula gives
+R₀ degree+1, and nonzero degree makes Γ standard Q at EVERY offset.
+These ordinary calculations use the exact statements
+`exists_finset_r0Degree_eq_sum_sign_det` in
+`MathUE/LinearProgramming/R0DegreeSum.lean` and
+`isStandardQ_of_r0Degree_ne_zero` in
+`MathUE/LinearProgramming/R0Degree.lean`; no Lean check was run here.
+
+The cyclic child012 has positive inverse, but the outside factorization
+weight is
+
+    Γ_3,012 (Γ_012,012)⁻¹=(−1,−9,23)/26,
+
+so the nonnegative passive-row lift does not follow from that inverse.
+This is the literal weight of
+`PassiveRowInverseCriterion.inverseWeight` in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+The full inverse is not positive either; for example its(0,2) entry is−7/13.
+The zero-diagonal restriction and full Q source have both been retained.
+
+The concrete next raw-family question fixes s_i=1 and singleton rewards
+r_i({j})=s_i+Γ_ij for i≠j, with the displayed Γ, and leaves ALL forty-four
+nonsingleton reward coordinates free. Can a mechanism select all four
+independent stopping laws and control all caps on a new exhaustive portion
+of these completions, beyond the existing cyclic-child collision predicates?
+This is not a supplied-root question: the full actual-game strategic witnesses
+must be produced. The favorable graph cannot first be changed to a matching
+or four-cycle using only the already available matrix source.
