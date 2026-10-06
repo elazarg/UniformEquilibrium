@@ -23,6 +23,12 @@ The strongest consolidated 723-line artifact
 the complete assembly/delta check at SHA256
 `4757f61a3e57ea6f328d1642136d52d4db2b012a160cda487e1ff167050e4a2c`.
 The separate constant-inverse theorem correctly retains K≤0.
+MORSE's separate below-floor §29 candidate is also independently accepted at
+whole-file SHA256
+`84cf88f403ed0004abc2c7bf107f0d9b8e5b4b5312a9ef14da9ebdbafedc31d9`,
+from “A negative scheduled-premium arm of the matching two-phase producer”
+through EOF. Its substantive review is
+`feedback/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_NOETHER.md`.
 This notebook retains the independent boundary calculations and the proved
 extension of the raw existence class. The substantive review is in
 `feedback/CODEX_BROUWER__MATCHING_JOINT_PRODUCER__BY_CODEX_NOETHER.md`.
@@ -306,3 +312,96 @@ Concrete next question: what complete producer can remove a genuinely new
 remaining restriction: the matching geometry, participant comparison, or
 twelve outsider caps? Their removal is not justified by this proof. The
 final assembled artifact has passed its separate byte-bound acceptance.
+
+## Independent below-floor arm and neighborhood check
+
+The exact §29 claim uses favorite singleton gap H b_i, both harmful gaps
+−b_i, common participant increment Πb_i with Π<−1, and common passive
+increment Kb_i with K<(7Π+10−2H)/2. The stronger twelve collision caps
+are s_i−4(−Π−1)b_i/3. Its cubic has a root t∈(1/2,1), giving q=1−t,
+U_i=s_i+qΠb_i and W_i=s_i+q(Π+1)b_i/t<s_i. The cap comparison is
+positive because t(1+t)>3/4. This independently checks the below-singleton
+passive endpoint regime, not a variant of the positive c_i argument above.
+
+For the complete H=3, Π=−11/10, K=−179/60 table I recomputed all sixteen
+endpoints at q=1/3: active endpoints19/30, passive Continue19/20, passive
+Quit1/3, margin37/60. Its actual four-odds equations vanish at X=(1/2)1.
+The displayed Jacobian has eigenvalues79/72,−307/72,−41/72,269/72 and
+determinant267486337/26873856. The contraction X↦X−J⁻¹E(X,r) has zero
+derivative at the center, so the compact positive ball and nearby reward
+ball really produce all four odds from raw data. Every passive gap remains
+strict; no cap equality or normalized singleton equality is required nearby.
+The endpoint recursion and three-opponent contraction give a fixed target
+against arbitrary behavioral deviations, Never included, at every large
+horizon. The full neighborhood is a genuine UE region.
+
+The known arbitrary-K matching criterion fails under every relabeling.
+Favorite signs force f. Schedule02/13 violates participant comparison
+−1/10≥0; schedule03/12 has outsider triple rewards100>1. All pair
+participant premiums are negative, excluding the general Π≥0 inverse
+criterion. This separation has strict slack and persists in an open ball.
+
+### Additional actual quiet-lift raw exclusion
+
+Every nonempty proper child S fails the accepted nonnegative F/J condition
+already at J. Let o=(03)(12). If S cuts an o-pair, choose j∈S with
+k=o(j)∉S and use A={j}. The outsider joining gain is1/2. The child's
+joining gains are0 for j,−7/2 for f(j), and−1/10 for a(j), hence their
+nonnegative weighted sum is at most zero. If S cuts neither o-pair, the
+proper nonempty S is03 or12. At A=S any outsider gains100, whereas all
+child joining gains are identically zero. Thus no child and no nonnegative
+weight family satisfies J. These strict failures persist nearby.
+
+The exact five-kind withdrawal consumer
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`
+also charges every actual child profile. For each proper child the author's
+exact Nash witness has zero child debts and zero joint Never, but a positive
+outside deviation. It therefore excludes these universal certificate
+families as well; it does not exclude some separately selected safe child.
+
+### Proper-three exclusion persists on an open reward ball
+
+Suppose the full table is changed by at most δ≤1/1000 in every coordinate,
+and a proper stationary support012 has hazards(a,x,c). Player2's Never
+payoff changes from zero by at most δ, and its forced Quit changes by at
+most δ. Therefore its center-table endpoint
+
+    Q₂*=1−(11/10)a−x/2+(503/5)ax
+
+obeys |Q₂*|≤2δ. If x≥11/1006, its a coefficient is nonnegative and
+Q₂*≥1−x/2≥1/2, impossible. Thus x<11/1006. Rearrangement and the
+upper bound11/10 on its positive denominator give
+
+    a≥(1−x/2−2δ)/(11/10)
+      >(1−11/2012−2/1000)/(11/10)>9/10.
+
+For player1, write D=a+c−ac≤1 and F=D(N₁*−Q₁*). The author's
+derivative remains positive already for a≥9/10: it is concave in c and
+its endpoints are a+3 and91/60. Hence
+
+    F≥F(9/10,c)=(64c²−512c+621)/200≥173/200.
+
+Consequently the center Never-minus-Quit gap is at least173/200. Changing
+the table changes each endpoint by at most δ, leaving a positive gap at
+least173/200−2δ. This contradicts proper mixing. The four Klein-related
+supports are all excluded on this full reward ball, not merely at its center.
+Intersecting this ball with the proved root neighborhood retains new open
+UE coverage beyond the actual proper-three local branch.
+
+### Influence and potential screens
+
+Define D_i(T)=r_i(T∪{i})−r_i(T), with empty coalition reward zero.
+The influence1→0 equals−9/2 at background∅ and1001/10 at background{2}:
+D₀({1})=−7/2, D₀(∅)=1, D₀({1,2})=100, D₀({2})=−1/10.
+This falsifies `SignConsistentQuittingInfluence` in
+`UniformEquilibrium/Quitting/Stationary/SignedInfluenceCycleBalance.lean`
+and `IsAffineQuittingMembershipGain` in
+`UniformEquilibrium/Quitting/Stationary/ComponentwiseWeightedPotential.lean`.
+Both failures persist nearby. Together with the existing matrix, premium,
+guard, range, quotient and visible-cylinder checks, these are actual raw
+producer comparisons, not generic absence claims about strategy languages.
+
+Next check: bind any final standalone below-floor packet to its own bytes and
+verify it includes the original-game proof and real coverage evidence. The
+whole §29 candidate is accepted ordinary mathematics; no Lean seal is claimed.
