@@ -8,12 +8,29 @@ result is already proved in Lean.
 
 ## What qualifies
 
+Significant conjecture-facing progress is required, not merely a correct new
+theorem. A packet must demonstrably narrow the possible uniform-equilibrium
+counterexamples: prove existence on a previously surviving reward-table class,
+eliminate an actual residual mode under its already established hypotheses,
+or impose a genuinely stronger necessary condition on every counterexample.
+A complete unrestricted counterexample also qualifies. A theorem about a
+supplied object does not pass this test merely because that object has a
+conjecture-related name.
+
+For a new existence class, compare with both implemented results and previously
+accepted existence packets. Give exact raw-table evidence that the class is
+not already covered by the applicable criteria. For a residual reduction,
+identify the configurations excluded and show that the actual incoming source
+supplies every hypothesis. Proving another interface, sharpening a constant,
+counting roots more precisely, or refuting a proof architecture without
+narrowing the surviving counterexample class belongs in `notes/`.
+
 The increment is measured against the project's implemented mathematical
 capabilities, not against the published literature. An export is guidance for
 formalization, not a publication submission. A complete, faithful handoff for
 a relevant published theorem qualifies when its needed scope is not already
-implemented. Attribute the theorem and explain its relevance; no claim of
-publication novelty is required.
+implemented and its use meets the coverage requirement above. Attribute the
+theorem and explain that use; no claim of publication novelty is required.
 
 An export must be one of the following and identify a concrete, goal-relevant
 gap in the project's implemented mathematics or proof boundary that it fills:
@@ -54,7 +71,8 @@ required witnesses; otherwise classify the result as a supplied-object
 characterization and apply the conditional exception where needed.
 
 An exceptional conditional result requires a separate, explicit justification
-of its independently important mathematical contribution. State the exact
+of its independently important mathematical contribution and must still meet
+the counterexample-class narrowing requirement above. State the exact
 unproduced input, what the theorem settles without that input being available,
 and why this is more than another interface or restatement of the open
 consumer. Independent reviewers must assess that justification as well as
@@ -62,15 +80,11 @@ soundness. Do not count such a result as an eliminated branch, a new existence
 class, or progress along a completed source-to-UE chain. Absent that affirmative
 case, retain it in `notes/`.
 
-Placement in `questions/` is already the conference's importance decision. A
-complete result matching one of that question's stated acceptable answers does
-not need a second conjecture-relevance or exhaustiveness argument for export.
-Its remaining gate is quality: exact scope, complete proof, source and boundary
-audits, and independent review under the criteria below. This does not waive
-the conditional-result rule: answering a question about supplied witnesses
-still requires the separate affirmative justification above. Neither a
-question's existence nor the prospect of useful formalization is that
-justification.
+Placement in `questions/` does not waive the coverage requirement. A complete
+answer may still be an interesting internal theorem rather than a significant
+export. The prospect of useful formalization, an accepted answer format, and
+the soundness of a conditional implication are not substitutes for a concrete
+narrowing of the surviving counterexample class.
 
 ## Mandatory gate
 
@@ -84,6 +98,8 @@ Every packet has all of the following:
    power of one unilateral behavioral deviator.
 4. A named actual-data adapter and downstream semantic consumer, or a precise
    proof that the packet strictly closes or narrows a named live obligation.
+   Reviewers assess the concrete counterexample-class narrowing, including
+   overlap with implemented theorems and already accepted packets.
    Reviewers explicitly list any strategic inputs not produced by the packet
    or its cited theorems. If any remain, they must affirm the conditional
    exception and its independent mathematical value, not merely the validity
