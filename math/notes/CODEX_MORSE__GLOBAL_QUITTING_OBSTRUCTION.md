@@ -111,6 +111,15 @@ exactly optimal. Deleting that hazard also destroys the other players'
 incentives. The example is already solved and remains internal; its role
 is to reject an unnormalized time-scale argument, not narrow the possible
 counterexample tables.
+Section 25 is a complete new raw-class candidate, not yet independently
+reviewed: a mixed-sign three-player premium core with two encouraging
+players and one discouraging player has UE. Two specified two-opponent
+joining differences vanish; the other signs may be weak in the strategic
+conclusion. The strict root producer, sure-hazard dispatch, ambient degree,
+original-game consumer, and signed rational coverage fixture are explicit.
+The fixture defeats all fourteen fixed weighted child-debt certificates.
+This claim remains internal pending independent mathematical and coverage
+review; no export or Lean implementation is asserted.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -3570,3 +3579,434 @@ the remaining players do not supply that control. The next global
 question is whether one can select the perturbed equilibria themselves
 to avoid this positive-share branch, or exploit that branch to construct
 a different full equilibrium; the present calculation settles neither.
+
+## 25. A mixed-sign triple core with two encouraging players
+
+### Raw statement and exact scope
+
+Let I be a finite player set, r(S)∈ℝᴵ the reward at each nonempty
+coalition S, and s_i=r_i({i}). Live play and Never pay zero. A premium
+trap is a nonempty A⊆I such that for each i∈A some coalition S⊆A
+containing i satisfies r_i(S)>s_i. Traps are closed under union, so their
+union C is the greatest premium core. Assume C={1,2,3}; these labels may
+be any three distinct players. For nonempty T⊆C\{i}, define the actual
+joining difference
+
+    d_i(T)=r_i(T∪{i})−r_i(T).
+
+The strict raw inequalities are
+
+    d₁({2})>0,             d₂({1})>0,
+    d₁({3})<0, d₃({1})<0, d₂({3})<0, d₃({2})<0,
+    d₁({2,3})=0,           d₂({1,3})=0,
+    d₃({1,2})<0.                                      (108)
+
+There are no premium sign restrictions inside or outside C. In particular
+participant rewards involving players outside C remain arbitrary subject
+only to the raw greatest-core condition.
+
+**Strict analytic theorem.** Either pure coalition {1,2} is an actual
+full-game exact terminal and uniform equilibrium, or at every source v
+strictly below some own singleton there exists a full exact root whose
+successor w is at most some own singleton. This is true on every box
+[−B,B]ᴵ with B>M≥max_{S,i}|r_i(S)|, and the successor remains in that
+same box. Including the pure equilibrium exit, no C¹ full exact-root
+unit-absorption potential exists on such a box.
+
+**Original-game Fin4 theorem.** If I=Fin4, every s_i≥0, and (108)
+holds with all strict inequalities weakened in their stated directions,
+then the original quitting game has a uniform-equilibrium payoff.
+The two displayed equalities remain equalities. One target u is chosen
+before accuracy: for each ε>0 there is a behavioral profile and a horizon
+threshold such that every larger expected average payoff is within ε of
+u, and every unrestricted unilateral behavioral deviation earns at most
+u_i+ε. No root, target, timing law, or degree is an input to this theorem.
+The weak statement is a reward-closure conclusion, not a weak index claim.
+This is an exact equality-stratum theorem. No full reward-space open
+neighborhood of its tables is claimed; weak closure does not remove the
+two equalities.
+
+### Support and partly-sure roots
+
+For a product hazard q let c=∏ᵢ(1−q_i), a=1−c, and let μ_q be its
+literal product coalition law. At continuation annotation v write
+
+    w=cv+∑_{S≠∅}μ_q(S)r(S),
+    Q_i=∑_{T⊆I\{i}}μ_{−i}(T)r_i(T∪{i}),
+    C_i=μ_{−i}(∅)v_i+∑_{T≠∅}μ_{−i}(T)r_i(T),
+    g_i=Q_i−C_i.
+
+Exact Nash means q_i=0 implies g_i≤0, q_i=1 implies g_i≥0,
+and 0<q_i<1 implies g_i=0. Call a root bad when w_i>s_i for
+every player. Its positive support A is a trap: otherwise an active
+player i has all participant rewards within A at most s_i, and hence
+w_i=Q_i≤s_i. Thus any nonempty bad support is a pair inside C or C.
+
+For k∉C and T⊆C, one has r_k(T∪{k})≤s_k. Otherwise C∪{k}
+would be a trap, using the existing witnesses inside C for its members.
+Consequently every outside-core player at a bad root satisfies
+
+    q_k=0,        g_k=Q_k−C_k≤s_k−w_k<0.              (109)
+
+This is a strict full-game inequality and keeps all outsider reward rows.
+
+Suppose q₁=1 at a bad root. Player3 faces either coalition {1} or
+{1,2}; both joining differences are strictly negative by (108).
+Thus g₃<0 and q₃=0. Player2 now faces sure player1, so
+g₂=d₂({1})>0 and q₂=1. The root is therefore pure {1,2}.
+The argument with 1 and2 exchanged is identical.
+
+Suppose instead q₃=1. If q₂<1, then
+g₁=(1−q₂)d₁({3})<0, so q₁=0; this forces g₂=d₂({3})<0
+and q₂=0. The support is then singleton3, which cannot be bad.
+If q₂=1, its own optimality requires
+g₂=(1−q₁)d₂({3})≥0, so q₁=1. But with q₁=q₂=1,
+g₃=d₃({1,2})<0, contradicting q₃=1. These cases exhaust
+every bad root with a sure hazard.
+
+A full exact pure-{1,2} root is independent of the annotation, since
+each player still faces a sure quitter after a unilateral deviation.
+Prescribing those two sure quits at the initial date is therefore an
+actual unrestricted terminal equilibrium, with immediate absorption even
+after every unilateral deviation. It yields its constant target at every
+finite horizon. It also contradicts a positive charged potential directly
+by taking v=w=r({1,2}). Dispatch this exit first. Every remaining bad
+root has only proper positive hazards.
+
+### Full negative indices, including the mixed signs
+
+For proper active hazards put z_i=q_i/(1−q_i), taking z_i=0 at
+an inactive core member. The exact odds identity is
+
+    g_i/∏_{j∈C\{i}}(1−q_j)
+      =s_i−v_i+∑_{∅≠T⊆C\{i}}d_i(T)∏_{j∈T}z_j.    (110)
+
+At a bad pair A={i,j}, let d_i=d_i({j}), d_j=d_j({i}). Its two
+active derivatives are
+
+    α_i=v_i−s_i+d_i=d_i/(1−q_j),
+    α_j=v_j−s_j+d_j=d_j/(1−q_i).
+
+Their signs need not be positive. However d_i d_j>0 for ALL three
+pairs in C under (108), so the active determinant of −Dg is
+
+    −α_iα_j<0.                                       (111)
+
+At a triple root, differentiating (110) at its zero gives
+
+    a_ij=∂g_i/∂q_j
+        =(1−q_k)/(1−q_j)[d_i({j})+z_k d_i({j,k})].   (112)
+
+The two zero two-opponent differences in (108) are essential here.
+They give a₁₂,a₂₁>0 and a₁₃,a₂₃<0. The last row satisfies
+a₃₁,a₃₂<0 because both its singleton and two-opponent differences
+are negative. Thus each directed triangle product is positive:
+
+    det(−Dg|C)=−(a₁₂a₂₃a₃₁+a₁₃a₂₁a₃₂)<0.          (113)
+
+Equivalently, conjugation by diag(1,1,−1) makes the off-diagonal
+entries positive, without changing the determinant. This is a matrix
+identity, not a strategic relabeling of Quit and Continue.
+
+To identify the full ambient index, extend each gap g_i polynomially to
+all of ℝᴵ and use the literal clipped map
+
+    F_v(x)_i=clip_[0,1](x_i+g_i(x)).
+
+There is NO clipping of the inputs inside g. Every fixed point lies in
+the unit cube and is exactly a full Nash root. At a bad root with all
+inactive gaps strict, the derivative of Id−F_v has active block −Dg,
+an unrestricted upper-right block, and lower blocks 0,Id. Hence (111)
+or (113) is its full determinant. Arbitrary rewards involving inactive
+outsiders remain in the upper-right derivatives; they are not discarded.
+
+An unused core player at a bad pair may be tied, so annotation genericity
+is required. Write b_i=v_i−s_i and b_j=v_j−s_j. The pair odds are
+z_i=b_j/d_j, z_j=b_i/d_i. For its remaining core member k, the gap
+times a nonzero denominator has polynomial numerator
+
+    N_Ak=d_i d_j(s_k−v_k)
+         +d_i b_j d_k({i})+d_j b_i d_k({j})
+         +b_i b_j d_k({i,j}).                        (114)
+
+The coefficient of v_k is −d_i d_j≠0. Thus the three pair-tie
+polynomials are nonzero and can be avoided simultaneously on a dense
+open set of annotations. Outside-core ties are already excluded by
+(109). No reward perturbation is used in this strict argument.
+
+### Degree, boundary sources, and the semantic consumer
+
+Choose a generic source v with a strict singleton deficit. The all-Continue
+root is impossible because that player strictly prefers Quit. Suppose all
+roots were bad. After the pure-{1,2} exit, the preceding classification
+makes every root proper on its active support, differentiable for F_v,
+and regular with local ambient index −1. Such roots are isolated. The
+fixed-point set is compact; therefore it contains finitely many roots.
+
+On the enlarged open cube (−1,2)ᴵ the map F_v takes values in [0,1]ᴵ.
+Homotopy through bounded maps to the constant vector (1/2,…,1/2) has
+no boundary fixed points. The degree of Id−F_v on this cube is +1.
+Additivity over all its finitely many zeros gives +1=−N, impossible.
+This counts ALL full roots and treats inactive boundary coordinates in
+ambient dimension; it is not an index calculation on a support face.
+
+For an arbitrary boxed source v with a strict singleton deficit, choose
+generic v⁽ⁿ⁾ in the interior of the SAME box, preserving that deficit
+and converging to v. Select a good exact root at each v⁽ⁿ⁾ and take a
+convergent hazard subsequence. Nash inequalities are closed. Passing
+also to a constant good-coordinate subsequence gives an exact limiting
+root with w_i≤s_i. The strict source deficit prevents this root from
+being all-Continue. Since rewards and source are in the same box,
+w=cv+∑μ(S)r(S) remains there as well.
+
+This proves the raw producer of
+`HasBoxedSelectedSingletonSublevelReturn`, as defined in
+`UniformEquilibrium/Quitting/Projective/SelectedSingletonSublevelReturnSmoothDrift.lean`,
+for every B>M. Its existing analytic consumer is
+`not_isQuittingFullExactRootPotential_of_selectedSingletonSublevelReturn`.
+It uses a minimum on the boxed singleton-sublevel union, the signed
+collision-adjusted probe and the absorption-relative displacement bound;
+no nonnegative participant-premium hypothesis is introduced. This is the
+same generic signed minimum argument used in Section 18, now supplied
+with the mixed-sign three-core root producer proved above.
+
+For Fin4 choose M=quittingRewardBound(r), the actual sum-based canonical
+bound, and B=M+1. This avoids substituting a smaller max-entry bound
+into a wrapper that does not accept it. The declaration
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_on_subbox`
+in
+`UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`
+takes exactly s_i≥0, M<B≤M+2, and that return predicate. It supplies
+the original-game fixed-target UE conclusion stated above, not merely
+terminal Nash at an annotated one-stage game. Its proof composes the
+continuous boundary-differentiable potential exclusion with the existing
+full Fin4 polynomial obstruction producer. The pure-{1,2} branch already
+has the direct unrestricted finite-horizon proof given above.
+
+For the weak raw theorem, perturb ONLY passive rewards, by a quantity
+δ>0: lower r₁({2}) and r₂({1}); raise r₁({3}), r₃({1}),
+r₂({3}), r₃({2}), and r₃({1,2}). All changes have magnitude δ.
+This makes the seven weakly signed differences strict in the required
+directions. The two equalities are untouched. No participant reward or
+own singleton changes, so every premium trap and C remain exactly the
+same. The strict theorem gives UE for each perturbed table. The standard
+uniform-payoff reward-closure argument, implemented in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`,
+then gives one UE target in the original table. Changing every reward by
+at most δ changes both any prescribed expected average payoff and any
+deviation payoff by at most δ, uniformly in strategy and horizon; a
+convergent subsequence of the bounded targets fixes the original target.
+No weak analytic C¹ exclusion or weak Jacobian assertion is inferred.
+
+### An exact signed coverage fixture
+
+Here is a complete rational Fin4 table. Its own singleton vector is
+s=(1,0,0,0).
+
+| S | r(S) |
+|---|---|
+| 0 | (1,−1,−1,−1) |
+| 1 | (2,0,2,−1) |
+| 2 | (2,−1,0,2) |
+| 3 | (−1/2,2,−1,0) |
+| 01 | (0,0,2,−1) |
+| 02 | (0,−1,0,2) |
+| 03 | (0,2,−1,0) |
+| 12 | (−1,1,3,3) |
+| 13 | (−1,1,1,−2) |
+| 23 | (−1,1,−2,1) |
+| 012 | (0,0,0,3) |
+| 013 | (0,0,2,20) |
+| 023 | (0,2,0,0) |
+| 123 | (−1,1,1,1) |
+| 0123 | (0,−2,−2,−2) |
+
+Its traps are exactly 12 and123. Player0 can belong to no trap because
+all its participant rewards are at most1. Among core pairs, only12 has
+both premiums positive; each member has positive premium at123. The
+joining data, in the order appearing in (108), are
+
+    d₁(2)=2, d₂(1)=1,
+    d₁(3)=d₃(1)=d₂(3)=d₃(2)=−1,
+    d₁(23)=d₂(13)=0, d₃(12)=−2.                      (115)
+
+No pure full exit is Nash. The following table gives one strictly
+profitable switch at each coalition, with its exact gain:
+
+| S | Deviator and action | Gain |
+|---|---|---|
+| 0 | 1 joins | 1 |
+| 1 | 2 joins | 1 |
+| 2 | 1 joins | 2 |
+| 3 | 0 joins | 1/2 |
+| 01 | 0 leaves | 2 |
+| 02 | 0 leaves | 2 |
+| 03 | 2 joins | 1 |
+| 12 | 0 joins | 1 |
+| 13 | 3 leaves | 1 |
+| 23 | 2 leaves | 1 |
+| 012 | 2 leaves | 2 |
+| 013 | 1 leaves | 2 |
+| 023 | 3 leaves | 2 |
+| 123 | 0 joins | 1 |
+| 0123 | 1 leaves | 4 |
+
+All Never fails by player0's positive singleton. The large passive13-to-013
+entry20 is deliberate: it defeats a child lift without changing any core
+joining difference, singleton matrix, or trap.
+
+The singleton-difference matrix is
+
+    Γ=[[0,1,1,−3/2],[-1,0,-1,2],
+       [-1,2,0,-1],[-1,-1,2,0]].
+
+For its homogeneous LCP, a positive pivot forces all three core
+coordinates positive: if one vanished, the cyclic residual inequalities
+and complementarity at the next positive coordinate contradict each other.
+The core equations then give z₁=z₂=z₃=z₀. The pivot residual is z₀/2,
+contradicting complementarity. With zero pivot, the same support argument
+gives either all core coordinates zero or all positive; invertibility of
+the core matrix excludes the latter. Thus Γ is R₀.
+
+At offset (1,−1,−1,−1), the same cyclic support argument forces all
+three core coordinates positive. They equal 1+z₀, and the pivot residual
+is 3/2+z₀/2>0. Thus the unique complementary solution is
+(0,1,1,1), its inactive pivot residual is3/2, and its active determinant
+is7. The degree is therefore1, not a non-degree-one exit.
+
+The core inverse is
+
+    Γ₁₂₃⁻¹=[[2,4,1],[1,2,4],[4,1,2]]/7,
+
+but its literal passive inverse row is (−3/7,9/14,2/7).
+The other principal triple inverses have negative entries −2 at00 for012,
+−4/7 at00 for013, and −3/4 at01 for023. The full inverse has entry
+(0,2)=−9/7. Thus the named nonnegative-inverse/passive-row criteria
+do not consume the table, and neither do the homogeneous or degree exits.
+
+A response-invariant nontrivial quotient must equate singleton block-row
+sums for every pair of receivers in one block. Thirteen nondiscrete
+partitions fail this necessary condition as follows:
+
+| Partition | Receivers | Column block | Sums |
+|---|---|---|---|
+| 01 / 2 / 3 | 0,1 | 01 | 1,−1 |
+| 02 / 1 / 3 | 0,2 | 02 | 1,−1 |
+| 03 / 1 / 2 | 0,3 | 1 | 1,−1 |
+| 0 / 12 / 3 | 1,2 | 12 | −1,2 |
+| 0 / 13 / 2 | 1,3 | 13 | 2,−1 |
+| 0 / 1 / 23 | 2,3 | 1 | 2,−1 |
+| 012 / 3 | 0,1 | 012 | 2,−2 |
+| 013 / 2 | 0,1 | 013 | −1/2,1 |
+| 023 / 1 | 0,2 | 023 | −1/2,−2 |
+| 01 / 23 | 0,1 | 01 | 1,−1 |
+| 02 / 13 | 0,2 | 02 | 1,−1 |
+| 03 / 12 | 0,3 | 12 | 2,1 |
+| 0123 | 0,1 | 0123 | 1/2,0 |
+
+For the remaining nondiscrete partition 0|123, use the literal
+zero-discount displacement F_i=(1−α_i)Q_i−A_i, with A_i the
+unnormalized passive absorption contribution. At q=(1/2,1/2,1/2,1/2),
+
+    F₁=−25/64,       F₂=−1/2,       F₃=35/32.
+
+They differ, excluding that block as well. The discrete partition is
+not a reduction. These are the exact necessary invariance tests from
+`quittingSingletonBlockRowSum_eq_of_responseInvariant` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`,
+using `quittingDiscountedDisplacement` in
+`UniformEquilibrium/Quitting/Stationary/DiscountedDisplacement.lean`.
+
+All fourteen proper nonempty children also have explicit exact-Nash
+profiles whose quiet lifts admit a profitable omitted-player deviation.
+Thirteen are pure first-date exits, followed by Never:
+
+| Child | Prescribed exit | Omitted profitable joiner | Gain |
+|---|---|---|---|
+| 0 | 0 | 1 | 1 |
+| 1 | 1 | 2 | 1 |
+| 2 | 2 | 1 | 2 |
+| 3 | 3 | 0 | 1/2 |
+| 01 | 1 | 2 | 1 |
+| 02 | 2 | 1 | 2 |
+| 03 | 03 | 2 | 1 |
+| 12 | 12 | 0 | 1 |
+| 13 | 1 | 2 | 1 |
+| 23 | 2 | 1 | 2 |
+| 013 | 1 | 2 | 1 |
+| 023 | 2 | 1 | 2 |
+| 123 | 12 | 0 | 1 |
+
+For child012 prescribe q=(1/3,1,2/3) at the first date and Never
+thereafter. Player0's two endpoints are0; player2's are2. Player1's
+Quit endpoint is4/9, whereas Continue gives−7/9, including the
+possible zero-valued continuation when both opponents continue. Its
+full later stopping cap on that continuation is its singleton0. Hence
+this is exact Nash against all behavioral deviations, with payoff
+(0,4/9,2). The quiet player3 gets5/3. Quitting at the initial date
+gives16/9, a gain1/9: the four possible child coalitions 1,01,12,012
+have probabilities 2/9,1/9,4/9,2/9, and the joining payoffs are
+−2,20,1,−2 respectively.
+
+Every displayed child has joint Never mass zero and all child debts
+zero. For EACH proper child there EXISTS an omitted player for which
+no universal bound by fixed nonnegative weighted child debts plus any
+finite joint-Never coefficient can hold. This directly excludes the
+raw universal weighted child-debt lift certificates, not merely one
+choice of weights. It does not assert that every child equilibrium
+has a bad quiet lift, or exclude all quiet strategic producers.
+
+The other accepted raw classes fail for explicit reasons. The greatest
+core has size3, not at most2; the signed same-sign pair-core theorem
+therefore does not apply. Joining-attractive core3 fails by four
+negative singleton joining differences. Every player has a strictly
+negative participant premium at the grand row, so the protected set
+is empty. The same row has strictly negative weighted premium for
+EVERY nonzero nonnegative weight vector, ruling out a global weighted
+singleton floor. At sure coalition123 every participant premium is1,
+so product-low and positive-weight nonpositive participant-sum tests
+fail. The trap12 is mutually encouraging, so it has no leaving member;
+the support-specific and common-leaver tests fail even apart from
+protection. The boxed/mixed larger-trap condition fails because
+
+    P₁₂₃({1})=r₂(12)−s₂+r₃(13)−s₃=3−2=1>0.
+
+Finally the only positive own singleton is player0's1, and all its
+pair participant rewards are0. Thus the prescribed cyclic-child
+joint-phase classes requiring a zero or positive premium at that pivot
+cannot match the table under relabeling. The certified neighborhood in
+`TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md` retains its center's two
+disjoint positive-premium pair traps and hence a full greatest core,
+as its Section 7 explicitly records. This fixture has a proper core,
+so it is outside that certified neighborhood, also under relabeling.
+These are named-source comparisons, not an exhaustive claim
+of nonexistence of stationary or chronological equilibria.
+
+### Falsification boundaries and source status
+
+The mixed-sign determinant computation alone is not the theorem. It
+would be invalid to omit the partly-sure classification, the unused-core
+tie polynomials, the ambient inactive coordinates, or the original-game
+consumer. All four steps are explicit above. It would also be invalid
+to drop either equality in (108): the derivatives in (112) could then
+change sign with the third odds, and no all-source negative-index
+assertion has been proved under that relaxation. The theorem does not
+extend to a full four-player premium core or to opposite-sign pair
+joining products.
+
+In addition to the exact declarations cited above, the source inventory
+for this argument is `MathUE/FiniteCoalitionPremiumCore.lean`,
+`UniformEquilibrium/Quitting/Root/PairInactiveGapNumerator.lean`,
+`MathUE/Topology/CoordinateAffineAvoidance.lean`,
+`MathUE/Topology/AmbientDegreeProperties.lean`, and
+`MathUE/Topology/AmbientDegreeSelfMapNormalization.lean`.
+The root-map proof is ordinary finite-dimensional degree mathematics;
+no claim is made that this new raw producer has been implemented or
+compiled. The tracked conditional consumer is used with its literal
+canonical-bound hypotheses, rather than being counted as a producer
+before (108)–(114) are proved.
+
+Requested independent checks are the partly-sure classification, the
+mixed-sign ambient index and tie removal, the original-table weak UE
+bridge, and the complete source-overlap/fixture claims. No export is
+requested before those mathematical and coverage checks pass.
