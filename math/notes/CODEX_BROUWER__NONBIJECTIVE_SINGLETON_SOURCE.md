@@ -70,6 +70,35 @@ counterexample-class reduction or an export request.
 EA7 separately records an UNREVIEWED graft sharpening of the
 sure-early exception at a zero-mixture earliest cap.
 
+The completed consumer candidate KR1–KR8 uses
+generic within-recipient raw payoff differences and the independently
+checked all-minimum debt rigidity from recipient scaling. If ALL
+unique caps are isolated, every bounded old-law reweighting keeps
+them fixed locally; EACH regret polynomial is then constant.
+Product weight tests force raw pure-clock regret kernels constant
+almost surely, and genericity makes the prescribed terminal coalition
+deterministic. A deterministic collision contradicts earliest/common
+cap restrictions; a deterministic singleton admits an actual global
+punishment-tail repair below δ. Thus one produced fresh table can
+exclude ALL-isolated all-unique minima, leaving a genuinely
+NONISOLATED later unsupported cap or multiple caps. It passed
+NOETHER's focused independent falsification, but remains internal;
+standalone assembly is held because the next argument may subsume it.
+
+The newest completed candidate HR1–HR6 needs only the
+old HEAD-conditional law box, not generic differences or isolated
+later caps. The whole upper family stabilizes all later selectors
+by positive affine rescaling. Debt rigidity makes EACH fixed-regret
+polynomial constant. A single head owner violates singleton margin;
+with two head owners, a selected-polynomial screening identity makes
+the root atom supplier ORIGINAL sure-by-root, and an actual global
+punishment graft contradicts its unique later cap. If valid, this
+removes EVERY all-unique minimum at the rigid fresh table. NOETHER's
+focused independent falsification passed with no unresolved objection;
+a standalone artifact and separate whole-proof gate are still needed.
+No export or UE is yet claimed. Multiple outcome-equivalent late plateaus remain explicitly
+unconsumed even under the candidate's conclusion.
+
 No full UE producer, positive unrestricted-gap example, or new export
 is claimed. The next genuine target is a finite-amplitude coupled law
 change with a proved upper ledger for ALL changed caps, consuming a
@@ -6131,3 +6160,530 @@ coordinate for the cardinal drop. HP's diagonal path alone does not
 supply either premise. The all-observer cap convexity facts in
 `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticStoppingLawDebtConvexity.lean`
 do not change that gap.
+
+## Generic raw-kernel rigidity excludes an all-isolated unique-cap minimum
+
+Status: COMPLETE UNREVIEWED ordinary-mathematical source-consumer
+candidate KR1–KR8. This is a genuine additional fresh-table restriction,
+not an HP endpoint multiplicity count. It uses the ALL-minimum debt
+rigidity proved and independently checked in MORSE Section49. The
+full UE goal remains open: multiple caps and nonisolated later caps
+are not consumed here. No export request or Lean claim is made.
+
+### KR1. Exact target and a compatible generic fresh table
+
+Write O for the sixteen outcomes, comprising fifteen nonempty finite
+coalitions and Never, and set r_i(Never)=0. Impose the following
+finite raw reward condition, separately for each recipient i:
+
+    (A,B) ↦ r_i(A)−r_i(B), A,B∈O, A≠B,
+    is injective and NEVER equals zero.                    (KR1)
+
+This is compatible with an arbitrarily small perturbation of ANY
+unit-cube table: each excluded equality is a proper affine hyperplane
+in its fifteen row coordinates. Distinct ordered pairs have distinct
+coefficient vectors e_A−e_B, where e_Never=0. First move an arbitrarily
+small distance into the open unit cube, then avoid the finite union
+of proper hyperplanes in a still smaller open ball. No strategic
+equivalence or normalization is claimed for this full perturbation.
+
+Starting from the canonical positive table, choose the perturbation
+small enough to keep the positive true SUM gap and ALL 82 labelled
+no-contact inequalities. These are open conditions by the eight-times
+reward bound and finite coefficient bounds. Next select positive
+recipient scales arbitrarily close to one, using the fixed-carrier
+concave objective W(θ)=min_a θ·a. At coordinate-regular θ, all θ-
+minimizing old debt vectors equal the coordinate derivative of W,
+and all new scaled SUM minima have one common vector d*. This follows
+from the positive/negative supporting inequalities, not outer Danskin.
+Positive recipient scales preserve (KR1), because they multiply every
+difference WITHIN one recipient row by the SAME positive number.
+
+Fix this ONE fresh table BEFORE any minimizing sequence. It has
+positive true δ, all canonical no-contact gaps, raw condition (KR1),
+and one debt vector for EVERY carrier minimum. Its same-table no-UE
+branch supplies true P_i≤s_i by the exact declaration recorded in
+HP7; normality is applied anew after BOTH table operations.
+
+The target is: NONE of its produced marked minima can have ALL four
+caps both UNIQUE and ISOLATED. Equivalently, each all-unique minimum
+has at least one NONISOLATED maximizing point, necessarily LATER than
+the atomic earliest cap and with zero OWN point mass. This is not
+an assertion that all later caps are nonisolated or pairwise distinct.
+
+### KR2. All-old-law signed reweighting is actually realizable
+
+Suppose q is such an all-unique all-isolated true minimum, with fixed
+selectors σ_i. For each owner j choose ANY nonnegative continuous
+weight w_j on the compact marked finite-clock space plus the isolated
+Never point, with 0≤w_j≤1 and e_j=∫w_j dq_j>0. Define the old-law
+target ν_j=(w_j/e_j)q_j and the independent signed family
+
+    q_j^λ=(1−λ_j)q_j+λ_jν_j.
+
+Both signs near zero are probability laws: the likelihood is
+1+λ_j(w_j/e_j−1), bounded and positive on a two-sided box. The
+weights are not new prescribed clocks or publicly shared lotteries.
+
+For the ORIGINAL finite witnesses, let m_k(u) be the midpoint of
+the original aggregate interval containing u, with the original
+Never interval treated separately. Assign each original stopping
+date its mass multiplied by w_j(m_k) and renormalize by e_j^k.
+Extend w_j from the compact finite test subset to the surrounding
+real interval by linear interpolation in its complementary gaps
+and constant continuation at the two ends; Never stays separate.
+This elementary extension preserves continuity and the range[0,1].
+This is a literal stopping law: its multiplier is CONSTANT on each
+original date interval. The marked producer gives m_k→π almost
+everywhere; on retained positive intervals π is the old midpoint,
+and elsewhere π(u)=u almost everywhere. Continuity and boundedness
+give w_j(m_k)→w_j(π) in L¹. The original density bound and weak-*
+convergence then give e_j^k→e_j and the intended new densities.
+The signed multipliers remain uniformly bounded and nonnegative.
+
+Thus prescribed rectangle-product kernels and EVERY fixed or moving
+finite tester kernel converge under the same old-calendar proof.
+Never is unchanged as a calendar point; c retains zero mass and its
+late duplicate is still exact. Every small signed family pair is
+in the ORIGINAL carrier. This does not invoke continuity of a new
+atom at a zero-mass nonisolated point.
+
+### KR3. Individual multiaffine debt kernels are constant
+
+Each σ_i is unique and isolated in the compact complete test space.
+The complement is compact and has a positive response gap. Uniform
+total-variation bounds for the small independent signed reweightings
+therefore keep EVERY full cap at its old selector. Its own law is
+irrelevant to its cap; all other response values are controlled
+uniformly over ALL deadlines, not just the four selected tests.
+
+The actual SUM on this box is the multiaffine fixed-selector sum,
+has an interior global minimum δ and is algebraically constant.
+Every box point is consequently an ACTUAL global minimum. Debt
+rigidity makes EACH coordinate equal its original d_i*. Therefore
+the INDIVIDUAL multiaffine branch polynomials
+
+    F_i(λ)=V_i(σ_i,q_-i^λ)−U_i(q^λ)
+
+are constant d_i*, first on the open box and hence identically as
+polynomials. At λ=(1,1,1,1) we conclude ONLY the selected-response
+identity
+
+    ∫[∏ν_j] [r_i(R_i(t_-i;σ_i))−r_i(S(t))]=d_i*.       (KR2)
+
+No actual endpoint-cap or endpoint-minimum assertion is used. Here
+S(t) is the actual first coalition (Never if all clocks are Never)
+and R_i is its counterpart with ONLY i's clock replaced by σ_i.
+
+### KR4. Rectangle tests yield an almost-sure raw regret identity
+
+Multiply (KR2) by ∏e_j. It holds for EVERY product of nonnegative
+continuous old-clock weights with positive integrals; zero-integral
+weights contribute zero automatically. Products of these weights
+determine signed measures on the compact product clock space: they
+form a separating algebra containing constants, or equivalently
+approximate the indicator rectangles in the product-law measure.
+Thus the finite-valued measurable raw regret kernel satisfies
+
+    r_i(R_i(t_-i;σ_i))−r_i(S(t))=d_i*
+    for ∏q_j-almost EVERY clock tuple t.                    (KR3)
+
+This does not just state prescribed expected payoff-flatness. It
+retains the actual coalition pair of each pure tuple. Since δ>0,
+choose i with d_i*>0. Such a pair cannot have R_i=S. Condition
+(KR1) gives ONE unique ordered pair with this difference. Hence
+BOTH R_i and the common actual coalition S are deterministic almost
+surely. In particular the prescribed terminal outcome itself is
+ONE fixed S∈O, not merely one constant expected payoff vector.
+
+### KR5. Never and deterministic collision coalitions are impossible
+
+If S=Never, every owner prescribes Never surely. Every full cap is
+max(s_i,0), so positive total debt supplies some s_i>0. For that
+owner the reviewed global singleton margin δ≤B_i−s_i gives δ≤0,
+contradiction. All-negative own singletons would instead give debt0.
+
+If |S|≥2, independence forces all members' clocks to equal ONE
+deterministic finite date t₀, and every outsider's clock is strictly
+later. Indeed two independent clocks equal almost surely can only
+have a common Dirac law; no correlated simultaneous clock is used.
+There is NO prescribed mixture mass before t₀. In an all-unique
+minimum, EA forces the earliest cap to have positive mixture mass;
+therefore no maximizing selector lies before t₀. For every recipient,
+some OTHER member of S is sure at t₀. A maximizing selector strictly
+later than t₀ would consequently tie the outcome-equivalent distinct
+finite c and Never tests, violating uniqueness. ALL selectors must
+equal t₀. The canonical no-common-cap exclusion, preserved by KR1's
+table construction, contradicts this. This argument does not assume
+that S is a pure Nash coalition or that its participants have positive
+debt.
+
+### KR6. A deterministic singleton is ruled out by a global tail graft
+
+Let S={h}. Then h is finite surely and every opponent's clock is
+strictly later than h almost surely. Thus U_h=s_h. The true global
+singleton margin gives B_h−s_h≥δ>0, so h is genuinely a debtor.
+
+Independence gives ordered separation of supports: their common
+boundary b may be nonisolated, but there are cuts approaching b
+for which h's late mass tends to zero and the opponents' total
+head mass tends to zero. If h has a boundary atom, include it;
+opponents cannot have an atom there. If h has no boundary atom,
+approach b from below. Never mass of h is zero. This also covers
+b=c and arbitrarily late original deadlines. Apply the marked cut
+transport and a diagonal selection to the ORIGINAL finite witnesses
+to obtain literal integer cuts a_k with
+
+    p_h^k(clock>a_k)→0,
+    Σ[j≠h]p_j^k(clock≤a_k)→0.                            (KR4)
+
+Keep every opponent head and its late probability, but replace each
+conditional tail by ANY actual independent punishment plan w shifted
+to start at a_k+1. If h's original late leakage is η_k, coupling
+shows that each prescribed payoff changes≤2Mη_k, each non-h FULL
+cap changes uniformly≤2Mη_k, and the resulting non-h-cap/total-payoff
+SUM error is≤14Mη_k. No early responder or Never test is omitted.
+
+The modified h cap is EXACTLY
+
+    max(H_k,A_k+α_k cap_h(w)).                              (KR5)
+
+H_k is its best head response, A_k its passive head payoff and α_k
+the probability that all three opponents survive the cut. By the
+second condition in (KR4), every head response is uniformly within
+2M times that small head probability of s_h. Hence H_k→s_h,
+A_k→0 and α_k→1. Choose an ACTUAL w with cap_h(w)≤P_h+ε≤s_h+ε,
+using SAME-table true normality and no attainment hypothesis. The
+limiting modified debt is at most δ−B_h+s_h+ε. Taking
+0<ε<B_h−s_h gives an actual debt strictly below δ, contradiction.
+
+This is a complete original finite-law comparison, not a child Nash,
+renamed punishment verifier or payoff-only endpoint extrapolation.
+It excludes the final deterministic-outcome case in KR4.
+
+### KR7. Exact scope tests and the residual
+
+Raw difference injectivity is indispensable in KR4. Embed the
+following two-owner calculation in Fin4 with two dummy Never owners.
+Set recipient0's own singleton−1, joint01 payoff1, passive singleton1
+payoff2, and ALL unspecified rewards and other recipient rewards0.
+Owner0 stops at date0; owner1 is half date0/half Never. The actual
+coalition is half01 and half0. Replacing owner0 by Never produces
+half1 and halfNever. BOTH raw regrets are1, since
+
+    r_0(1)−r_0(01)=2−1=1=0−r_0(0).
+
+Thus a positive constant raw regret alone does NOT make S constant.
+Its repeated row difference is exactly forbidden by (KR1). Actual
+U_0=0; date0 pays0, every later finite test pays1/2, Never pays1,
+so this is an exact full-cap calculation, but not a true positive
+minimum: literal AllNever is debt-zero. It is only the minimal failed
+genericity implication, not a new counterexample or optimization trap.
+
+Isolation is also a REAL hypothesis in KR3. On a compact continuous
+test interval, V(t,u)=−t²+2ut is affine in u for each fixed t, yet
+its unique nonisolated maximum moves from0 to u and the cap is u².
+Uniqueness does not make the selected branch stay affine nearby.
+This is an abstract cap-family test, not a quitting-game construction.
+
+Consequently the complete result removes the ALL-isolated all-unique
+arm at ONE produced fresh table. Its remaining all-unique arm MUST
+have a nonisolated LATER cap point, whose OWN prescribed point mass
+is zero; supported positive points are retained isolated atoms. Its
+multiple-cap arm is not consumed. No pointwise claim about an arbitrary
+original reward table, no payoff/cap/profile rigidity, and no UE is
+inferred. No previously frozen packet is modified by this addition.
+
+### KR8. Concrete next question
+
+The decisive new data are an almost-sure raw regret identity, not an
+equivalent c/Never tie. Its proof currently uses exact cap stability
+at ALL isolated unique points. Can the nonisolated LATER maximizer's
+known positive-rescaling family supply enough of this rectangle
+rigidity without falsely treating arbitrary earlier law changes as
+cap-stable? Or can genuine multiple active kernels be priced by the
+same generic-difference table and all-minimum debt-vector rigidity?
+Those are the surviving global consumer questions. A directional
+cap derivative or a pure endpoint debt estimate alone cannot replace
+the exact all-moving-response step KR3.
+
+## Head-box debt rigidity excludes EVERY all-unique minimum
+
+Status: COMPLETE ordinary-mathematical candidate HR1–HR6, with
+NOETHER's independent focused falsification PASS and no unresolved
+objection. A self-contained artifact and whole-proof gate remain.
+This supersedes KR's ALL-isolated/generic-difference arm.
+It does NOT use full-law rectangle weights, generic payoff differences
+or isolated LATER caps. It uses only OLD head conditioning before
+the earliest atomic cap, fixed-cap debt rigidity and an ACTUAL global
+punishment graft. No new packet, export or UE conclusion is claimed.
+
+### HR1. Exact fresh-table and same-table inputs
+
+Use the canonical fresh positive table, with all 82 no-contact gaps,
+then the arbitrarily small positive recipient scaling of the new
+ordinary DR proof to produce ONE fresh table r. The finite gaps and
+δ>0 persist. Every global original-carrier minimum has one COMMON
+nonnegative debt vector d*. The producer of this rigidity is the
+fixed-carrier concavity/coordinate-derivative/Fubini argument reviewed
+in MORSE Section49, NOT a checked Lean declaration or a theorem
+in the frozen 920-line artifact. The scaling changes the entire
+minimizing family; no old minimizing law is transferred.
+
+At this SAME table, positive true SUM infimum gives no UE, and the
+checked same-table declaration/hypotheses in HP7 give P_i≤s_i for
+ALL owners. The singleton margin is δ≤B_i−s_i at EVERY actual
+carrier SUM minimum. The canonical source proof supplies: if ALL
+four caps are unique, their earliest point τ is FINITE, a positive
+MIXTURE atom and ISOLATED, and their dates are NOT ALL equal.
+The ordinary DR5 supported-earliest reset additionally proves that
+EVERY owner whose maximizing point equals τ has zero OWN mass there.
+These are fresh-table source facts, not a favorable selection of a
+special minimizing law.
+
+Fix ANY such hypothetical all-unique source q, with selectors σ_i.
+Let B={i:e_i=q_i(clock≤τ)>0}. It is nonempty. Some supplier h has
+q_h({τ})>0; the supported-earliest exclusion forces σ_h>τ. Therefore
+d_h*>0: its old atom at τ has strictly positive regret from the
+unique different full maximizer. The target is a contradiction for
+this ORIGINAL source, not merely minimum reselection to cap copies.
+
+### HR2. The full head-box and its actual finite transport
+
+For i∈B put ν_i=q_i(·|clock≤τ); for i∉B leave the law unchanged.
+Use independent parameters q_i^λ=(1−λ_i)q_i+λ_iν_i. The old HEAD
+and LATE likelihood factors are 1+λ_i(1/e_i−1) and 1−λ_i, positive
+and bounded on a two-sided box. A redundant e_i=1 is harmless.
+
+Original finite witnesses use the retained date n_k corresponding
+to τ and conditioning on clock≤n_k. The boundary is the RIGHT end
+of the retained positive mixture interval, so its initial indicator
+converges in L¹; the e_i^k tend to the positive e_i. The literal
+signed likelihoods stay bounded and nonnegative and converge weak-*
+after multiplication by that moving indicator. Prescribed products
+and ALL moving finite-test kernels therefore converge on the old
+calendar. Never remains outside the head, c has no new mass and
+the late duplicate c⁺ remains EXACT. Every small signed family pair
+is in the original carrier, not just a selected polynomial fiber.
+
+Each earliest selector τ has its isolated uniform complement gap.
+For each later selector σ_i>τ choose τ<a_i<σ_i (for Never use
+τ<a_i<c). Expanding the opponent product shows that EVERY test
+t>a_i has value k_i(λ)V_i(t,q_-i)+C_i(λ), with
+k_i=∏[j∈B,j≠i](1−λ_j)>0 and the SAME t-independent C_i.
+Each additional term contains a head exit≤τ. Thus the WHOLE upper
+ordering is preserved, even for a nonisolated later maximizer; a
+compact lower gap keeps it full locally. ALL four caps consequently
+stay at their selectors on a two-sided box.
+
+The SUM fixed-response polynomial is multiaffine, actual D≥δ in
+that box and equalδ at its interior. Hence it is constant and every
+box point is an actual minimum. Debt rigidity forces EACH individual
+fixed-response polynomial
+
+    F_i(λ)=V_i(σ_i,q_-i^λ)−U_i(q^λ)
+
+to be constant d_i*, first on the box and then ALGEBRAICALLY for
+every parameter vector. Its endpoint evaluations below are selected
+regrets only. No modified endpoint full cap or actual minimum is
+inferred by extrapolation.
+
+### HR3. If there is only one old head owner, the debt ledger contradicts margin
+
+Suppose B={h}. All opponents stop strictly AFTER τ. Every old head
+response by h, and h's prescribed conditional head law, pays exactly
+its singleton s_h. Its full cap is independent of its own law. On
+the small signed head mixture, constant individual debt therefore
+forces U_h=s_h, including the redundant e_h=1 case. Consequently
+
+    d_h*=B_h−s_h≥δ.
+
+There is at least one earliest maximizing owner j≠h. Its cap is
+unique at τ and its prescribed own mass at τ is zero, so d_j*>0.
+This strict mean-regret statement needs no uniform gap on its OWN
+law: a bounded nonnegative integrand positive at every prescribed
+clock has strictly positive integral. Therefore
+δ=Σ_i d_i*≥d_h*+d_j*>d_h*, contradiction. The head owner was not
+assumed to be a Nash row or a minimizing tail.
+
+### HR4. With two head owners, rigidity makes the supplier originally sure
+
+Suppose |B|≥2 and retain a supplier h with σ_h>τ and d_h*>0.
+In the fixed-response polynomial set ALL other B parameters to1.
+At least one OTHER owner now stops≤τ surely, so if h uses its
+original conditional LATE law (>τ), BOTH that prescribed clock
+and its selected later reply σ_h>τ are screened by the same old
+head coalition. Their raw regret is EXACTLY zero; outside-B owners
+also stop>τ and cannot alter this screening.
+
+With h itself conditioned to HEAD, F_h equals d_h* by HR2's
+polynomial identity. With h left ORIGINAL, its head weight is e_h
+and its late weight1−e_h, so the SAME identity gives
+
+    d_h*=F_h(own parameter0,others1)=e_h d_h*.
+
+Since d_h*>0, e_h=1. This asserts ORIGINAL q_h(clock≤τ)=1,
+not endpoint purity or an endpoint-minimum claim. Any OTHER later
+maximizing selector would now tie distinct c/Never responses behind
+h's sure exit, violating uniqueness. Hence σ_j=τ for EVERY j≠h.
+The supported-earliest exclusion gives q_j({τ})=0 for all j≠h.
+Each of these opponents has strictly positive probability AFTER τ:
+an opponent sure≤τ would screen h's own later cap and likewise make
+it tie c/Never. This is an actual sure-head source geometry, not a
+child-game equilibrium premise.
+
+### HR5. The actual complete tail graft contradicts the unique later cap
+
+Let H be the FULL supremum over finite source tests≤τ for recipient
+h. Compactness and unique maximization at σ_h>τ give H<B_h.
+Let α=∏[j≠h]q_j(clock>τ)>0 and A be h's passive payoff from
+opponent absorption strictly before τ. Because EVERY opponent has
+ZERO root point mass, the ACTUAL root test satisfies
+
+    V_h(τ)=A+αs_h≤H.                                  (HR1)
+
+At the ORIGINAL finite root n_k, h's late leakage η_k→0. Preserve
+each opponent head, root probability and late probability and graft
+ANY actual independent punishment law w after n_k. For all prescribed
+payoffs and all non-h FULL caps the only discrepant coupled outcomes
+require the ORIGINAL h to survive past the cut: payoff/cap errors
+are≤2Mη_k each, and the non-h-cap/total-payoff SUM error is≤14Mη_k.
+This is uniform over ALL finite replies and Never, including early
+tests and joining the unchanged root. No cap of a nonmover is silently
+replaced by a favorable selected response.
+
+h's cap in the modified actual profile is EXACTLY
+
+    max(H_k,A_k+α_k cap_h(w)).                         (HR2)
+
+The head cutoff is the retained original atom date. All fixed/moving
+head tests extract into the compact finite source set≤τ, and every
+source head test has original head witnesses. Thus H_k→H by the
+complete head-kernel argument, not an assumed maximum response gap
+on a nonisolated cap. Also A_k→A and α_k→α; vanishing opponent
+root atoms make strict-before versus through-root head payoff limits
+agree. Head payoffs are unchanged by the graft.
+
+True SAME-table normality supplies w with cap_h(w)≤P_h+ε≤s_h+ε.
+If finite literal witnesses are desired, move each finite tail beyond
+a sufficiently large truncation to Never; its total moved mass tends
+to zero and uniform response coupling preserves this bound with an
+arbitrarily smaller initial ε. This leaves an ACTUAL independent
+finite-support/Never punishment law. It is not an attained infimum
+or a correlated/publicly chosen coalition.
+
+Using (HR1), the limiting modified h cap is≤H+αε≤H+ε. All other
+errors vanish, so its actual SUM debt has limsup≤δ−B_h+H+ε.
+Choose 0<ε<B_h−H. Literal modified debts are eventually STRICTLY
+below δ, contradiction to the true global infimum. This consumes
+the original sure-head geometry, not the multiplicity at a reselected
+endpoint.
+
+### HR6. Exact new restriction and what is still open
+
+Both possibilities for the nonempty head set B contradict the all-
+unique source. Therefore ONE produced fresh table can have NO
+produced marked global minimum with all four caps unique. EVERY
+such minimum has multiple maximizing TEST POINTS for some owner.
+This is pointwise over ALL freshly produced minima, unlike HP's
+existential reselection. No generic ordered reward differences or
+isolated later caps are needed; KR remains a valid but subsumed
+supporting route if this proof passes independent falsification.
+
+The multiple-cap points may nevertheless be outcome-equivalent late
+plateau tests. HR does not consume those kernels, prove a strict
+positive-debt rank drop, or produce UE. Its genuine increment is
+removal of the ENTIRE all-unique branch at the rigid fresh table,
+not a claim that point multiplicity alone is an equilibrium consumer.
+No frozen source, DR packet or export is changed. The next question
+is a full global repair of simultaneous active kernels at a debt-rigid
+minimum, with the late plateau alternative retained explicitly.
+
+## Strict pre-active heads at a debt-rigid multiple-cap minimum
+
+Status: COMPLETE UNREVIEWED supporting extension MH1–MH3, not a
+consumer of the final sure-owner release. No genericity, uniqueness
+or supported-active-point hypothesis is used. This is a concrete
+description of one remaining outcome-equivalent plateau, not another
+cap-point multiplicity count.
+
+### MH1. Any fixed cut strictly before ALL active tests is cap-stable
+
+At a produced true positive minimum with one common debt vector
+for ALL carrier minima, let τ be the EARLIEST point in the union
+of the four complete cap sets, allowing multiple caps. Fix u<a<τ
+and B_u={i:q_i(clock≤u)>0}. Each old target q_i(·|clock≤u) has
+bounded two-sided likelihood transport when its event has positive
+mass. Choose a cut not splitting a retained atom; include the whole
+old atom whenever needed. Every upper response t>a transforms by
+the SAME positive affine rule, because any new term has a head exit
+≤u. Therefore ALL active tests, not merely chosen representatives,
+retain their relative order and equalities. The compact lower tester
+set≤a contains no active point and has a uniform gap. Full cap
+stability follows even when every active set has accumulating points.
+
+As in HR2, the actual SUM and then EACH fixed-representative regret
+polynomial are constant on the signed box and algebraically for all
+head parameters. For each i∈B_u its old head lies STRICTLY before
+every full maximizer, so d_i>0. If |B_u|≥2, condition all other
+B_u owners to head and compare i's old law to its own head target.
+Its late branch and its selected cap (both>u) are screened by another
+sure head, so d_i=e_i d_i and e_i=q_i(clock≤u)=1 for EVERY i∈B_u.
+
+If B_u={h}, the conditional head pays s_h because all opponents
+are>u. Constant own debt gives U_h=s_h, and singleton margin gives
+δ≤d_h. Hence ALL other debts are zero. In particular B_u cannot
+be singleton whenever ANY other owner has positive old probability
+strictly before τ: that old strictly-suboptimal mass gives positive
+debt for the other owner.
+
+### MH2. Two pre-active owners force a pure common coalition
+
+Suppose A={i:q_i(clock<τ)>0} has at least two members. The above
+conclusions hold for ANY regular cut u<τ. First take u high enough
+to capture positive old head mass from every member of A; all of
+them are then originally sure≤u. Let t₀ be their smallest essential
+support endpoint. If exactly one owner had that smallest endpoint,
+cuts just above it would have singleton B_u, impossible by MH1.
+At least two owners therefore share it. For every decreasing regular
+cut u>t₀ with these two heads present, MH1 makes them sure≤u;
+they are both PURE at t₀. Every other owner with the SAME lower
+support endpoint is present in these decreasing cuts as well, so
+MH1 also makes it pure at t₀. An additional pre-active owner with
+a STRICTLY HIGHER lower endpoint would be screened by the earlier
+sure players: both its prescribed law and every active response≥τ
+see the same coalition, giving debt0, incompatible with its positive
+strictly-suboptimal pre-active mass. Thus EVERY member of A is pure at ONE common
+finite t₀<τ, and outsiders stop≥τ>t₀.
+
+The actual terminal outcome is deterministically A. ALL active
+responses are later passive plateau tests, and the individual debts
+are exactly
+
+    d_i=r_i(A∖{i})−r_i(A)>0 for i∈A,
+    d_i=0 for i∉A,
+    δ=Σ[i∈A](r_i(A∖{i})−r_i(A)).                     (MH1)
+
+Here |A|≥2, so no empty withdrawal reward is needed. A may have
+two, three or four members. No pure Nash claim is made: on the
+contrary, EVERY member strictly benefits by withdrawing. The entire
+head comparison is actual/source-global, but it does not yet remove
+the last sure finite owner or control that release's new late caps.
+
+### MH3. What this exposes rather than consumes
+
+The remaining multiple-cap geometry with two strict pre-active owners
+is not an arbitrary diffuse clock family: it is an exact pure unhappy
+coalition and one of eleven finite withdrawal sums. To avoid these
+contacts by a NEW whole-table proof, one cannot append the canonical
+endpoint target without checking its signs. Its participant-pair and
+participant-triple values are+1 while passive singleton/pair values
+are−1; consequently pair withdrawal sums target−4, not a value above
+the positive minimum. The anti-membership endpoint would raise every
+withdrawal sum to2|A|, but lowers canonical singleton/pair join
+contacts. No simultaneous-contact separator or new worst-table
+comparison is supplied here. Thus (MH1) is retained as exact source
+data for a genuine last-sure release, not an unproved finite-spectrum
+consumer or new export. The sole strict-head-owner arm can still have
+only that owner's debt positive; MH1 does not exclude it by counting
+another debtor that has not been produced.

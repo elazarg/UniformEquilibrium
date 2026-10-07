@@ -438,3 +438,107 @@ exclusion applies, forcing its MIXTURE point mass positive. Since
 λ*<1 retains old laws and all targets are old restrictions, that
 atom is an original retained atom. This confirms SC9's ATOMIC
 earlier wall, without consuming the remaining simultaneous caps.
+
+## Focused independent SQ1–SQ6 full-cap and value check
+
+Reviewer: CODEX_BROUWER. Verdict: mathematical PASS for exclusion
+of the stated single-head/ACTUAL-empty-tester SC subgeometry. This
+is ordinary mathematics, not a full UE producer or Lean certification.
+No author note or frozen export was edited.
+
+One narrow source-reference correction is required: the exact tracked
+`minimumTerminalSemantic_singletonMargin` file is
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`,
+not the displayed path missing `Diagnostics`. The declaration's
+hypotheses are carrier membership, a GLOBAL SUM minimum and strictly
+positive SUM debt; no root Nash or sign assumption is needed. Those
+hypotheses are correctly retained throughout SQ.
+
+### Exact claim and what SC does not supply
+
+At the fresh SC table, an actual positive minimum with pure m at
+root t₀, positive a/b root masses, zero z root mass, displayed unique
+upper caps and old positive postroot masses cannot have at most ONE
+pre-root head owner when an ACTUAL empty test exists after its ENTIRE
+head and before the root. Lower caps may already be tied. SC has NOT
+produced the single-head or empty-test conditions exhaustively. The
+result is a strict excluded source subgeometry, not an unconditional
+raw-table class or another supplied domination field.
+
+### Independent checks of finite head spreading and every response class
+
+The preliminary finite-law repairs change only masses tending to
+zero; product coupling controls prescribed payoffs and ALL full caps
+uniformly. A retained root atom gives the needed original date and
+strong head/root cutoff convergence. In the repaired literal laws,
+the sole head owner j produces only singleton j before the root;
+otherwise m is sure at the root. Replacing j's ENTIRE head by an
+independent uniform law over M dates preserves EVERY prescribed
+terminal payoff exactly. Root and tail dates retain the same relative
+chronology and all Never masses. No shared head draw is introduced.
+
+For an upper responder other than j, the head event remains singleton
+j with the same total probability; on its complement the translated
+root/tail game is identical. For responder j, its prescribed head is
+deleted from both comparisons. Hence ALL upper/Never tests map exactly,
+and their supremum converges to the original full cap because one old
+displayed upper maximizer supplies a lower witness. No only-selected-
+test assumption replaces this upper supremum.
+
+For every new early finite response of i≠j, the exact three-term
+formula in SQ4 includes the head tie mass a. Its error from the
+segment between s_i and K_i is ≤2R h_k/M. The new empty date attains
+K_i exactly. For i=j, every early response is its own singleton.
+Those cases, all upper tests and Never exhaust the literal calendar.
+The actual original tester ξ independently proves K_i≤b_i; the global
+singleton margin proves s_i<b_i. Thus BOTH directions of cap convergence
+hold, and the head-spread limit has the original prescribed payoff and
+FULL cap vectors, genuinely in the original carrier at debt d.
+
+### Marked limit, normalization wall and final pair corner
+
+The new aggregate head interval has length h/4 and only j contributes
+density4; maximum head atom length tends to zero. The actual empty
+deadline supplies its zero-mass right endpoint. Retained root/tail
+intervals and complete upper test kernels are unchanged. Any earlier
+active point would therefore be zero-MIXTURE-mass, while EVERY owner
+has strictly positive old mass after it. The reviewed all-active EA
+consumer excludes the earliest such point even if several caps tie.
+This also excludes the boundary equality K_i=b_i; a strict empty-
+tester inequality was not smuggled into SQ1.
+
+Consequently all old upper maximizers are full, unique and isolated
+at the head-spread minimum. Conditional normalization to clock≥t₀
+has genuine two-sided old-cut likelihood transport: strict late
+mass is positive for every opponent and the head event is an old
+submeasure, not a new atom. Every upper response, including root and
+Never, follows one positive affine map along the WHOLE forward path.
+The selected multiaffine sum is constant algebraically and actual only
+until a lower wall. At any interior wall, the remaining head is still
+atomless and every owner still has positive mass after each lower
+test, so EA contradicts actual minimum membership. A first endpoint
+wall would pay the singleton and violate the true-minimum margin.
+
+With no wall, the normalized endpoint is an actual minimum with the
+SC root geometry; a/b's root rates remain strictly between zero and
+one and z still has zero root mass. The previously reviewed SC9
+bilinear selected-response identity therefore applies, with the same
+actual true punishment-tail graft rather than a child Nash. Its pair
+corner equals the forbidden floor-free pair label. No actual corner
+cap/minimum is asserted. These branches exhaust SQ's hypotheses and
+exclude the stated source geometry.
+
+### Exact no-tester countertest and value boundary
+
+I independently recomputed SQ6's complete sparse table. With player0
+sure at1 and player1 half0/halfNever, recipient2's prescribed payoff
+is1/4, deadline0 pays−1/2 and EVERY deadline≥1 or Never pays1/4.
+Its full cap is1/4, other caps/payoffs0, and debt SUM0. After uniform
+head spreading, the actual empty deadline M pays1/2; earlier head
+tests cannot exceed1/2 and all root/tail/Never tests still pay1/4.
+The new debt SUM is exactly1/4 despite unchanged prescribed outcomes.
+All sixty reward entries are specified. This is a genuine falsifier
+of deleting the ACTUAL tester assumption, not of SQ's positive-minimum
+claim or of UE. The derived full-cap upper control is the substantive
+increment; overlapping heads or accumulating no-gap heads remain open.
+No unresolved mathematical objection was found.

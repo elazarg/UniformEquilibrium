@@ -2,14 +2,15 @@
 
 ## Current best attempt
 
-The newest finite-amplitude consumer is SQ1–SQ6 at the end: in SC's
+The newest finite-amplitude consumer is SQ1–SQ6 at the end, accepted
+in CODEX_BROUWER's focused independent feedback: in SC's
 actual sure-triple cap wall, ONE owner may carry the entire earlier
 head, provided an ACTUAL empty tester lies after that entire head and
 before the sure deadline. Spreading that one head preserves every
 prescribed outcome and has a derived unrestricted-cap upper bound.
 It produces an atomless single-head actual minimum; EA and the priced
 SC pair corner then contradict it. This supplied SUBGEOMETRY exclusion
-is an ordinary proof draft awaiting independent review, not an assertion
+is ordinary mathematics with a focused PASS, not an assertion
 that SC produces the single-head/empty-test hypotheses exhaustively.
 SQ6 gives complete finite raw data falsifying the same upper-cap bound
 when the empty tester is absent. Overlapping heads remain open.
@@ -16376,8 +16377,9 @@ local active-gradient separation in AP1 is explicitly insufficient.
 
 ## A payoff-preserving single-head spread with actual full-cap control
 
-Status: COMPLETE ORDINARY PROOF DRAFT SQ1–SQ6, awaiting independent
-review. This consumes a genuine supplied subgeometry of SC's ACTUAL
+Status: COMPLETE ORDINARY PROOF SQ1–SQ6, independently accepted in
+CODEX_BROUWER's focused feedback for this notebook. This is not a whole-
+artifact/export gate. It consumes a genuine supplied subgeometry of SC's ACTUAL
 minimum wall. SC does NOT produce its single-head and empty-tester
 hypotheses exhaustively. The intervention is a finite-amplitude change
 of actual independent stopping laws with a DERIVED unrestricted upper
@@ -16392,7 +16394,7 @@ with the complete active-cap EA proof now frozen in Section7 of
 `../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`.
 The actual minimum singleton margin is
 `minimumTerminalSemantic_singletonMargin` in
-`UniformEquilibrium/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`.
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`.
 The scoped SC1–SC9 argument and its pair-corner exclusion are internal
 ordinary mathematics independently checked by CODEX_BROUWER. No new
 Lean declaration is asserted here.
@@ -16614,3 +16616,151 @@ a similarly DERIVED full-cap upper bound, preserving their collision
 payoffs rather than reordering them? Or can the fresh-table global
 comparison force an actual posthead/pre-root tester in SC's atomic
 wall? Neither fact is assumed or established here.
+
+## Zero-mixture multiple-cap heads under generic debt rigidity
+
+Status: COMPLETE NECESSARY-SOURCE PROOF DRAFT ZH1–ZH4, not independently
+reviewed or exported. It is an independent multiple-active-set use of
+the debt-rigid generic table from BROUWER's KR1. It does NOT assert
+that uniqueness holds, that distinct response points are distinct
+kernels, or that the remaining pure-triple/grand case is consumed.
+The full goal remains open. This is saved before the requested HR
+review rather than leaving its endpoint interpretation implicit.
+
+### ZH1. Exact question and signed full-family stability
+
+Fix ONE positive-gap table with ALL-minimum debt-vector rigidity and
+generic ordered within-row payoff differences as in KR1. The table
+is selected before its laws. Let q be any produced ACTUAL global
+minimum with earliest point τ in the union of ALL four full active
+cap sets, and suppose its MIXTURE mass at τ is zero. τ is finite by
+the reviewed universal earliest-cap theorem. Write d_i* for the one
+attainable minimizing debt vector and choose any active σ_i≥τ.
+
+The complete EA theorem supplies a nonempty set
+
+    H={h:q_h(clock<τ)=1}.
+
+For each j∉H the final strict-late probability q_j(clock>τ)>0.
+This definition does not infer final positivity from earlier-cut
+positivity: q_i({τ})=0 for EVERY owner, and H contains exactly the
+zero-final-late owners. At least one h belongs to H by EA.
+
+For a fixed real old cut u<τ, sufficiently close to τ, every head
+normalizer q_h(clock≤u), h∈H, is positive. Replace each H law by
+its OLD conditional law ≤u, and each non-H law by its OLD conditional
+law >u; take independent signed mixtures with both signs near zero.
+For any recipient and EVERY response t>u the product expansion has
+a positive original-term coefficient and all nonoriginal terms
+contain an EARLY submeasure ≤u. Thus its entire upper response
+function undergoes one positive affine transformation. ALL old active
+points and upper orderings survive, including nonisolated maxima.
+The compact lower set T∩[0,u] has no active point; its positive gap
+and bounded old likelihoods keep ALL full caps on their old upper
+families on a small signed box. A cut inside a calendar gap changes
+no old segment; retained-boundary cuts use whole old date intervals.
+The exact original signed/moving-response transport is the same as
+EA and KR, with Never separate and c⁺ duplicating c.
+
+Therefore the selected SUM polynomial is constantly δ, every small
+box point is an ACTUAL minimum, and debt rigidity makes EACH selected
+regret polynomial constant d_i*. Evaluations at distant conditional
+targets below are only polynomial identities, not claimed endpoint
+full caps.
+
+### ZH2. Nonhead owners have zero debt and no actual early mass
+
+At the all-target polynomial endpoint every H owner is sure ≤u and
+every other owner stops >u. A non-H owner j's prescribed payoff and
+its selected response σ_j≥τ both see precisely the first coalition
+inside H. Their raw difference is zero, hence their selected debt
+is zero. Individual polynomial constancy gives
+
+    d_j*=0 for EVERY j∉H.
+
+At the ORIGINAL source, zero debt implies its own stopping law is
+supported on the complete active response set: U_j is the integral
+of its pure-response payoff and all responses lie at most B_j.
+Since every active point is ≥τ and the atom at τ is zero, this gives
+
+    q_j(clock>τ)=1 for EVERY j∉H.                 (ZH1)
+
+Thus the original non-H early masses vanish; this is an original-law
+fact deduced from an individual polynomial identity, not an assertion
+that the conditional endpoint was a Nash profile. Every H owner has
+STRICTLY positive debt: its law is wholly before the earliest active
+point, so the positive raw cap gap is strictly positive almost surely.
+
+If |H|=1, (ZH1) already makes the ORIGINAL prescribed outcome the
+deterministic singleton H. The true same-table punishment graft in
+KR6 then strictly decreases actual SUM debt. Hence |H|≥2.
+
+### ZH3. Arbitrary bounded head weights force an original pure coalition
+
+Keep the non-H laws fixed; they are now known to be wholly after τ.
+For each h∈H replace its target by ANY continuous nonnegative weighted
+OLD law restricted to clocks≤u, with a positive normalizer. These
+targets are early submeasures, so ZH1's all-upper positive-affine
+stability, small signed box and individual constancy still apply.
+There is no arbitrary new atom insertion at a nonatomic point.
+
+Choose h∈H; its original d_h*>0. At the conditional target endpoint,
+its selector σ_h≥τ is screened by another sure head owner. Its raw
+regret depends only on the H clock tuple: it is the row difference
+between the first coalition of H∖{h} and the first coalition of H.
+As in KR4, all continuous product-weight identities make this raw
+difference equal d_h* almost surely on the rectangle where every H
+clock is ≤u. Row-difference injectivity gives ONE ordered coalition
+pair for this fixed positive value, independent of u. Let u↑τ.
+The union of these rectangles has full original H product measure.
+Thus the ORIGINAL prescribed coalition is deterministic, say S.
+
+Every h∈H has positive debt, so every h must belong to S: if h were
+absent, replacing its later clock by σ_h≥τ could not change the first
+coalition and its debt would be zero. No non-H owner belongs to S by
+(ZH1). Consequently S=H. Independence forces ALL H clocks to be the
+SAME deterministic finite t_H<τ. The original profile therefore has
+pure sure coalition H, with all other clocks strictly later than τ.
+
+Every outsider has strictly negative joining gap at t_H. A zero or
+positive join would make its root response a full cap at t_H<τ,
+contradicting earliestness and its zero debt. Likewise every member
+has strictly positive withdrawal gap, equal to its d_h*. ALL late
+tests are screened by another sure member and have identical passive
+coalition kernels; their multiplicity is an outcome-equivalent plateau,
+not a new payoff direction. The pure-pair actual consumer already
+proved in this notebook, using same-table punishment normality and
+strictly negative outsider joins, excludes |H|=2.
+
+Hence this generic debt-rigid zero-mixture-earliest branch can survive
+ONLY as a prescribed PURE TRIPLE or GRAND coalition, with positive
+debts for every member, zero outsider debts, and negative outside joins.
+This conclusion is a necessary SOURCE restriction, not a UE consumer.
+
+### ZH4. The surviving inequality and why the pair proof does not extend
+
+For a pure coalition H of size≥3, release only i∈H with probabilityρ
+while retaining every other H member sure at t_H. For sufficiently
+smallρ the root/withdrawal cap orderings and strict outsider gaps stay
+unchanged; every recipient still has another sure member screening
+ALL tails. The exact selected debt derivative is
+
+    −d_i* + Σ_(k∈H∖{i})
+      [r_k(H∖{i,k})−r_k(H∖{i})−d_k*].          (ZH2)
+
+Globality only makes (ZH2) nonnegative. Punishment normality does NOT
+bound the displayed pair/subcoalition withdrawals, because a retained
+sure owner still faces other sure root opponents. Its independent
+punishment tail is reached only after ALL such opponents continue.
+Releasing them together would require correlated root withdrawals;
+independent releases pay single-withdrawal terms at first order and
+reach the common punishment branch only at higher order. Thus the
+safe-pair proof cannot be copied with a supplied same-tail bound.
+
+No strict decrease for these pure-triple/grand sources has been derived.
+The actual multiple-cap line now splits sharply: atomic earliest walls
+with genuinely different kernels, and a zero-mixture earliest branch
+that generic debt rigidity collapses to this pure-coalition plateau.
+Concrete next question: consume the latter using a finite-amplitude
+independent release that prices ALL subcoalition caps, or show a global
+table selection rules it out without importing a selected-child UE.

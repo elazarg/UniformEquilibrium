@@ -555,3 +555,237 @@ except for an explicit sure-early boundary. It is stronger than a new
 conditional response ledger. Export-level value is plausible, subject
 to the usual separate complete-artifact and independent review gate;
 this feedback alone does not authorize packet placement.
+
+## Focused independent KR1–KR8 falsification: PASS
+
+Reviewer: CODEX_NOETHER. Checked the saved section “Generic raw-kernel
+rigidity excludes an all-isolated unique-cap minimum”, labels KR1–KR8,
+in `notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`. This is
+ordinary mathematics plus narrow read-only source verification, not a
+Lean build or whole-artifact/export gate. I did not read any counterpart
+KR review. No unresolved mathematical objection remains in this scope.
+
+The accepted statement is a FRESH-table producer, not a pointwise
+restriction on the old table: starting from the canonical positive-gap
+table, first select an arbitrarily close full-table row-difference-generic
+table preserving all82 no-contact inequalities and a positive gap; then
+select arbitrarily close positive recipient scales making EVERY compact
+SUM-minimizing debt vector identical. At THIS one table, no produced true
+marked minimum has all four complete caps unique and isolated. The
+remaining all-unique arm has a nonisolated LATER maximizing point with
+zero OWN point mass; the multiple-cap arm remains open.
+
+I checked the following load-bearing steps and attempted falsifiers.
+
+1. Raw genericity is genuinely available. With Never assigned row value0,
+   distinct ordered pairs A≠B have distinct coefficient vectors
+   e_A−e_B. Thus every forbidden equality or zero difference is a proper
+   affine hyperplane in the fifteen free row entries. An arbitrarily
+   small open-cube perturbation avoids their finite union. No old law or
+   minimizing debt is carried through this operation. Positive row
+   scaling preserves the condition exactly, and sufficiently small
+   perturbations/scales preserve the open no-contact and positive-gap
+   conditions. MORSE Section49's fixed-carrier W argument applies anew
+   after genericization; it gives debt-vector rigidity, not U/B rigidity.
+
+2. Continuous OLD-law weights suffice, and their transport is literal.
+   A continuous nonnegative weight on T extended over its gaps, with
+   Never treated separately, becomes a constant multiplier on each old
+   finite date interval through its midpoint. The midpoint projection
+   converges almost everywhere to the old retained-atom projection.
+   Bounded continuous weights therefore converge strongly in L¹;
+   the original bounded densities and weak-* convergence give both the
+   normalizers and new densities. Two-sided likelihoods are uniformly
+   positive on a small box. No new clock, public lottery, new atom at
+   c, or correlated opponent plan appears. Unchanged original product
+   and arbitrary moving-test kernels give FULL cap transport. The
+   extra late c⁺ response duplicates c EXACTLY; it need not have a
+   strict gap when c is the selected maximizer. This exact duplicate,
+   recorded in KR2, is enough and is not an additional moving branch.
+
+3. Unique ISOLATED selectors have a uniform gap on the compact old test
+   complement. Uniform total-variation bounds keep the full cap values
+   at those selectors under small signed weight changes. The actual
+   SUM polynomial is multiaffine and has an interior global minimum,
+   so it is constant; all nearby pairs are actual minima. All-family
+   debt rigidity then makes EACH individual regret polynomial constant.
+   Its evaluation at distant targets is ONLY a selected integral
+   identity, never an asserted actual endpoint cap/minimum.
+
+4. The continuous product-weight identities determine the finite-valued
+   measurable raw regret kernel. Nonnegative continuous products suffice
+   by signed linear combinations and the separating product algebra;
+   zero-integral weights are automatically null for the product law.
+   A positive debt coordinate yields a positive constant raw difference.
+   Ordered-pair injectivity fixes BOTH its response outcome and the
+   prescribed outcome almost surely. The repeated-difference two-player
+   test in KR7 is correct and shows why genericity cannot be removed.
+   It is not a positive-global-minimum counterexample.
+
+5. Deterministic nonsingleton absorption really forces a common Dirac
+   date for its members by independence. There is no mixture mass before
+   it. EA excludes an earlier unique cap; any later cap is screened by
+   another sure member and would tie finite c with Never. Thus all caps
+   are common and the preserved canonical exclusion applies. The
+   all-Never deterministic case instead contradicts the checked singleton
+   margin for any positive own singleton, or has debt zero if none exists.
+
+6. The singleton graft handles diffuse, atomic-boundary and final-c
+   support separation. Independent almost-sure strict ordering provides
+   original integer cuts with owner's late leakage and all opponent
+   head masses tending to zero. A boundary atom is included via its old
+   right cut; a null boundary is approached from below. Grafting the
+   SAME actual independent punishment beyond those cuts preserves all
+   nonowner full caps and all U up to the stated14Mη error. The owner's
+   EXACT full cap is max(H,A+α cap(w)); head caps tend uniformly to its
+   own singleton, A→0 and α→1. Choose ε<B_h−s_h and actual cap(w)
+   at most P_h+ε≤s_h+ε: the resulting actual debt is strictly below
+   the true global floor. No Nash tail or punishment attainment enters.
+   If literal finite-support witnesses are desired, truncate each fixed
+   punishment law's finite tail to Never. Its tail mass tends to zero,
+   and coupling bounds ALL response-cap errors uniformly, preserving
+   ε-optimality. The argument does not require an infinite-law loophole.
+
+The inspected exact declarations were
+`quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean`,
+`nonempty_finFourQuantitativeFullSupportHardResidual_of_no_uniformPayoff`
+and its `all_punishmentNormal` field in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportProjectiveQBarResidual.lean`,
+`IsQuittingNormalPlayer` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`,
+`quittingPunishmentValue` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`, and
+`minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`.
+Their literal hypotheses supply same-table true independent punishment
+normality and the actual global singleton margin; no normalization or
+supplied stationary punishment cap is substituted.
+
+The unique nonisolated quadratic-cap example correctly prevents extending
+KR3 by uniqueness alone. Multiple active points are also not handled by
+the rectangle argument: an arbitrary fixed selector need not remain a
+full cap under the signed weight box. Neither remaining case is silently
+absorbed by genericity. KR is a genuine strict SOURCE-class exclusion,
+not only a multiple-point reselection or conditional response interface.
+It has significant export-level value once embedded in a self-contained
+artifact that passes the independent complete-artifact gate; this focused
+PASS alone does not authorize placement.
+
+## Focused independent HR1–HR6 falsification: PASS
+
+Reviewer: CODEX_NOETHER. Checked the saved section “Head-box debt rigidity
+excludes EVERY all-unique minimum”, HR1–HR6, in
+`notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`. This is a focused
+ordinary-mathematical review, not a whole-artifact gate or Lean claim.
+I have not read a counterpart HR review. No unresolved mathematical
+objection remains in the stated scope.
+
+Accepted statement: ONE fresh canonical positive-gap table can be
+selected with its82 finite gaps preserved and ALL-family minimizing
+debt-vector rigidity. At THIS table EVERY produced marked global
+minimum has a multiple-point full cap. This excludes the entire
+all-unique arm, including nonisolated LATER maxima. It does not need
+generic raw payoff differences, does not consume the resulting multiple
+kernels, and does not imply UE. The fresh scaling is selected before
+new minimizing laws; no old minimizing family is identified with it.
+
+I checked the exact all-response and original-source chain.
+
+- DR5's supported-earliest exclusion is used correctly: the earliest
+  all-unique cap τ is a finite isolated positive MIXTURE atom, but
+  EVERY owner whose cap is τ has zero OWN atom there. A supplier h
+  has q_h({τ})>0 and a different later cap, so it has STRICTLY positive
+  original debt. Positive mixture mass is not silently equated with
+  positive own mass for a maximizing owner.
+
+- The signed HEAD likelihoods are bounded and positive for both signs
+  on a small box, including redundant e_i=1 coordinates. Conditioning
+  includes the entire retained date interval by its RIGHT endpoint;
+  no atom is bisected or inserted at a nonisolated point. Whole old
+  interval indicators converge in L¹, their positive normalizers
+  converge, and original bounded density/kernel arguments transport
+  every fixed and moving response. Never is separate; c has zero mass;
+  c⁺ duplicates c exactly even if c is selected.
+
+- Earliest isolated selectors have a uniform compact-complement gap.
+  For a later selector, every nonoriginal product term contains an
+  opponent stop≤τ; it is absorbed strictly before ANY t>a_i>τ.
+  Its payoff is therefore the SAME constant for all such t. Positive
+  original-term scaling preserves the WHOLE upper response ordering,
+  not merely the selected value. The compact lower set omits the later
+  unique maximum and has a gap. This handles nonisolated near-max tests
+  and a selected Never. In the Never case τ<c, since τ is a positive
+  retained atom and c has zero mass, so the stated separating real
+  a_i∈(τ,c) exists. No ordinary “uniqueness implies gap” inference is
+  being made at a nonisolated later point.
+
+- Actual cap identification on the small signed box is complete. SUM
+  multiaffinity gives actual minima throughout that box, and ALL-family
+  debt rigidity makes EACH regret polynomial constant. Its distant
+  algebraic identities are not called actual endpoint caps/minima.
+  Without individual constancy, constant SUM alone would not give
+  HR4's conclusion; the load-bearing rigidity hypothesis is visible.
+
+- In the one-head case all opponents are strictly after τ; the head
+  law pays exactly s_h. Individual constancy forces original U_h=s_h,
+  also when e_h=1 is redundant. The checked original singleton margin
+  gives d_h≥δ. Some different earliest owner has unique cap τ but
+  zero own mass there; its bounded raw regret is strictly positive
+  almost surely under its own law, hence d_j>0. This defeats δ≥d_h
+  without assuming a uniform positive gap on that own law.
+
+- With two or more head owners, conditioning every other head makes
+  at least one opponent sure≤τ. Original h's CONDITIONAL late law and
+  its selected later response are both absent from exactly the same
+  first coalition, so their raw regret is zero. The two polynomial
+  evaluations give d_h=e_h d_h, hence ORIGINAL e_h=1. This does not
+  derive purity of a polynomial endpoint. That original sure supplier
+  screens every other later cap into a c/Never duplicate, so all other
+  caps must be τ. DR5 then removes their root atoms, and uniqueness of
+  h's later cap makes each opponent's final strict-late mass positive.
+
+- The root test for h really is A+αs_h: ALL opponent root atoms have
+  been excluded, so through-root and strictly-before-root absorption
+  limits agree. The head cap H is the maximum on the compact finite
+  test set≤τ and is STRICTLY below h's unique later cap. It is not
+  replaced by a supplied punishment/continuation floor.
+
+- Literal finite grafts preserve the opponents' heads, root masses and
+  tail probabilities. All U and ALL non-h caps can differ only when
+  original h survives the cutoff; this gives uniform2Mη errors and the
+  stated14Mη aggregate. Early tests, joins at the root, and Never are
+  included. The h cap is EXACTLY max(H_k,A_k+α_k cap(w)). Moving
+  head tests have limiting point≤τ; every source point≤τ has original
+  head witnesses; hence H_k→H. Opponent root leakage vanishes, giving
+  A_k→A and α_k→α. True same-table P_h≤s_h and actual finite-support
+  ε-punishment witnesses yield limsup new cap≤H+ε<B_h. This strictly
+  lowers actual SUM and contradicts its global infimum. No tail Nash,
+  punishment attainment, or automatic h best reply is inserted.
+
+The narrow named-source verification is the same exact declaration set
+recorded in the immediately preceding KR review: positive literal
+infimum/no-UE equivalence, the full-support residual's same-table
+`all_punishmentNormal`, its true infimum-over-independent-plans definition,
+and the actual carrier singleton margin. HR correctly reapplies those
+facts to the newly scaled table.
+
+Attempted boundary failures were a selected Never, nonisolated later
+tests approaching their maximum, a head normalizer1, positive other head
+masses, vanishing finite root leakage, and a punishment with negative
+own reward. Each is covered by the argument above. Earliest Never is
+already excluded by the canonical earliest theorem; zero gap cannot
+support either strict contradiction. The counterexample V(t,u)=−t²+2ut
+does not falsify HR because this head-box produces an EXACT positive
+affine map on the entire later test family, not an arbitrary affine
+perturbation at each test. The unreviewed scalar nonisolated cap issue
+therefore is genuinely resolved for this source operation, not assumed
+away. If multiple caps are present at the initial source, the earliest
+support reset and fixed-selector debt box need not identify all full
+caps; HR makes no such extension.
+
+This is a significant strict whole-source reduction and supersedes KR's
+all-isolated/generic arm. Its remaining point multiplicity can still be
+an outcome-equivalent screened plateau. A self-contained assembled packet
+requires its own independent final-artifact gate; this focused PASS is
+not permission to export or a solution of the Fin4 conjecture.
