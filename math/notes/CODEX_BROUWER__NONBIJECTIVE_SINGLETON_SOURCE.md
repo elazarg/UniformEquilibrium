@@ -83,7 +83,7 @@ punishment-tail repair below δ. Thus one produced fresh table can
 exclude ALL-isolated all-unique minima, leaving a genuinely
 NONISOLATED later unsupported cap or multiple caps. It passed
 NOETHER's focused independent falsification, but remains internal;
-standalone assembly is held because the next argument may subsume it.
+its standalone assembly is superseded by the stronger HR argument.
 
 The newest completed candidate HR1–HR6 needs only the
 old HEAD-conditional law box, not generic differences or isolated
@@ -95,15 +95,19 @@ the root atom supplier ORIGINAL sure-by-root, and an actual global
 punishment graft contradicts its unique later cap. If valid, this
 removes EVERY all-unique minimum at the rigid fresh table. NOETHER's
 focused independent falsification passed with no unresolved objection;
-a standalone artifact and separate whole-proof gate are still needed.
-No export or UE is yet claimed. Multiple outcome-equivalent late plateaus remain explicitly
-unconsumed even under the candidate's conclusion.
+the complete self-contained internal artifact is
+[DEBT_RIGID_MULTIPLE_CAP_SOURCE_REDUCTION.md](CODEX_BROUWER__DEBT_RIGID_MULTIPLE_CAP_SOURCE_REDUCTION.md),
+ready for a separate whole-proof falsification. It includes all marked
+source/contact/recipient-scale proofs and the SAME-table original
+finite-law punishment graft. No export or UE is yet claimed. Multiple
+outcome-equivalent late plateaus remain explicitly unconsumed even
+under the candidate's conclusion.
 
 No full UE producer, positive unrestricted-gap example, or new export
 is claimed. The next genuine target is a finite-amplitude coupled law
 change with a proved upper ledger for ALL changed caps, consuming a
-multiple-cap minimum or an earliest zero-OWN-mass cap at a POSITIVE
-MIXTURE atom supplied by another owner. A local descent, a conditional
+multiple-cap minimum. HR removes the all-unique source arm only at
+its fresh rigid table if the whole-proof gate passes. A local descent, a conditional
 splice, and a favorable selector are not substitutes for that consumer.
 ES1–ES5 also retires convexified-payoff sharing as a black-box producer:
 an allowed sharing-rule equilibrium payoff need not belong even to
@@ -6411,7 +6415,9 @@ the exact all-moving-response step KR3.
 
 Status: COMPLETE ordinary-mathematical candidate HR1–HR6, with
 NOETHER's independent focused falsification PASS and no unresolved
-objection. A self-contained artifact and whole-proof gate remain.
+objection. The complete self-contained artifact is
+[DEBT_RIGID_MULTIPLE_CAP_SOURCE_REDUCTION.md](CODEX_BROUWER__DEBT_RIGID_MULTIPLE_CAP_SOURCE_REDUCTION.md);
+its separate whole-proof gate remains.
 This supersedes KR's ALL-isolated/generic-difference arm.
 It does NOT use full-law rectangle weights, generic payoff differences
 or isolated LATER caps. It uses only OLD head conditioning before
