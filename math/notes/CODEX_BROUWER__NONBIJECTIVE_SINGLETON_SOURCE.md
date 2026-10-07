@@ -63,6 +63,19 @@ make the row Nash or produce descent. The live question is whether a legal
 finite-amplitude variation can consume that binding cycle or the sure-rate
 branch. Earlier solo fragmentation and sufficiently small fresh heads are
 not candidate descents; the strict source margins oppose them.
+The newest exact test instead changes the OLD continuation and current
+rates together. Each separate block has a genuine local debt barrier,
+including arbitrary small tail-law releases and all late tests, while the
+coupled actual two-date profile strictly lowers debt. The table is solved
+by a pure singleton; this is a positive mechanism test, not new UE
+coverage or a claimed positive global minimum. Its cap-balanced derivative
+identifies the still-needed actual continuation direction at a true minimum.
+The following opposite-sign exact test is a strict local minimum against
+ALL simultaneous independent stopping-law perturbations, even after small
+earlier calendar refinements. It too has a distant pure Nash profile.
+Thus the universal infinitesimal mixed-cap-cycle descent is retired; the
+live question must use genuine GLOBAL minimality and finite-amplitude
+row/tail changes, not the local margins or a nonsingular Jacobian alone.
 
 The earlier question concerned a raw class with constant participant
 rewards on all joint exits.
@@ -3158,3 +3171,396 @@ variation alone only supplies F≥δ and the tight branches; treating that
 local inequality as a complete no-UE source would repeat the already
 refuted orbit-minimum shortcut. The sure-rate and pure-rate-tie branches
 remain literal alternatives, not conditions to be discarded.
+
+## A joint row–tail repair escapes two separate local barriers
+
+Status: exact ordinary-mathematical test and variation calculation, not
+Lean-checked or a new existence class. The game below already has a pure
+terminal Nash profile. The question being tested is narrower: can an
+actual coupled change of a responsive cap-tie row and its OLD tail lower
+complete debt when both separate blocks oppose local changes?
+
+The answer is yes. This retires alternating local row/tail minimization
+as a sufficient search rule, but not the genuinely joint variation.
+The final derivative calculation retains the extra requirement needed
+to use this mechanism at a TRUE global minimum.
+
+### Full table and all response values
+
+There are four players. For every nonempty coalition S, set
+
+    r_i(S)=10                         if i∉S;
+    r_i({i})=1;
+    r_i(S)=2,18,10                    if i∈S and |S|=2,3,4 respectively.
+
+These rules specify all sixty coordinates, with Never reward zero.
+Let each player put mass 1/2 at date 0 and 1/2 at Never. Its prescribed
+payoff and complete cap are
+
+    U_i=141/16,       B_i=71/8,       D=1/4.        (JT1)
+
+The date-0 response pays 71/8; EVERY positive finite date also pays
+71/8; Never pays 35/4. Thus the row is fully mixed with all four
+first-row Quit/Continue caps tied, and no late tester is omitted.
+
+The true global infimum on this table is zero: player 0 sure at date 0,
+all others Never is terminal Nash. Player 0 receives 1 rather than 0
+from Never; every other player receives passive 10 rather than pair
+reward 2 from joining. No positive-minimum conclusion is claimed from
+(JT1), even though its numerical own-floor margins are very large.
+
+### Every nonzero sufficiently small root-only change raises debt
+
+Keep the all-Never tail fixed and vary the first row x. Its tail cap is
+the own-singleton vector 1. Write Δ_i(x)=Q_i(x)−C_i(x). Exactly,
+
+    Δ_i(x)=8[P(exactly two opponents quit)
+                 −P(exactly one opponent quits)].
+
+At x₀=(1/2,1/2,1/2,1/2), Δ=0 and its Jacobian J has diagonal zero and
+every off-diagonal entry 4. For h→0 the exact full debt has expansion
+
+    D(x₀+h)−1/4
+       = (1/2)‖Jh‖₁−(1/2)Σ_i h_i+O(‖h‖₁²).    (JT2)
+
+Indeed stage regret is Σ(Δ_i⁺−x_iΔ_i) and the surviving all-Never debt
+is 4∏(1−x_i). These expressions give (JT2) directly, including all cap
+switches. Since J⁻¹=(−Id+(1/3)11ᵀ)/4 has induced ℓ¹ norm 5/12,
+‖Jh‖₁≥(12/5)‖h‖₁. The leading term is therefore at least
+(7/10)‖h‖₁. A genuine punctured neighborhood of this row has strictly
+larger debt. This is local, not a global root-minimum claim: the pure
+singleton root already supplies a distant zero-debt alternative.
+
+### Every small unrestricted tail-only release also raises debt
+
+Keep the first-row rates equal to 1/2. Replace the old all-Never
+continuation by ANY four independent stopping laws after that row,
+with conditional finite probabilities η_i and η=Ση_i. The laws may be
+infinitely supported and need not share a calendar or a response time.
+Let u_i and b_i be their actual prescribed payoffs and COMPLETE caps.
+
+Because every passive reward is 10, the limiting late-finite response
+gives the exact lower bound
+
+    b_i≥1+9[1−∏_{j≠i}(1−η_j)]≥1.
+
+The current Continue branch therefore weakly dominates its old tied
+Quit branch. Direct Bellman subtraction gives the exact identity
+
+    D_new−1/4=(1/8)Σ_i(b_i−1)−(1/16)Σ_i u_i.    (JT3)
+
+Bonferroni and independence give
+
+    Σ_i(b_i−1)≥27η−9η².
+
+The total reward of a singleton coalition is 31; the totals of pairs,
+triples and the grand coalition are 24,64,40. A joint first coalition
+requires at least two players to choose finite clocks. Consequently
+
+    Σ_i u_i≤31η+33Σ_{i<j}η_iη_j
+            ≤31η+(33/2)η².
+
+Inserting these two estimates into (JT3) proves
+
+    D_new−1/4≥23η/16−69η²/32>0   for 0<η<2/3.   (JT4)
+
+This tests ALL small tail-only changes, not merely another symmetric
+row. It uses the complete late-finite cap rather than Never, whose value
+is lower. The coefficient is only a convenient exact certificate; no
+sharpness claim or optimization is intended.
+
+In fact the fixed-row assertion is global, by the following stronger
+account communicated by CODEX_MORSE and checked directly here. Let a₁ be
+the probability that exactly one tail clock is finite, and a₂ the
+probability that at least two are finite. Summing the same late-test
+bound gives Σ(b_i−1)≥9(3a₁+4a₂): exactly one finite clock is visible to
+three deleted-player opponent tuples, whereas two or more are visible
+to all four. The first coalition has total reward 31 on the first event
+and at most 64 on the second. Hence Σu_i≤31a₁+64a₂ and
+
+    2Σ(b_i−1)−Σu_i≥23a₁+8a₂≥0.
+
+Together with (JT3), this proves that the all-Never continuation is a
+GLOBAL minimizer over every actual tail at this fixed root. The inequality
+extends to the actual semantic carrier by continuity. The coupled decrease
+below therefore escapes even global fixed-root tail optimization, not
+merely a locally optimized continuation. Global root optimization is a
+different premise and fails here because of the pure singleton exit.
+
+### A legal simultaneous two-date change strictly lowers debt
+
+For t∈(0,1/2), give each player's old continuation conditional mass t
+at date 1 and 1−t at Never, while replacing the original date-0 rate
+by x. These are independent laws
+
+    p_i(0)=x,   p_i(1)=(1−x)t,   p_i(Never)=(1−x)(1−t).
+
+The conditional continuation has complete cap and prescribed payoff
+
+    b(t)=10−9(1−t)³,
+    Δ(t)=24t(1−t)(2t−1)<0,
+    u(t)=b(t)+tΔ(t)−(1−t)⁴.
+
+Here the tail Quit test pays b(t)+Δ(t); its later finite test pays b(t);
+its Never test pays 10[1−(1−t)³]. These exhaust its pure-response menu.
+The full two-date profile has the four response types
+
+    Q₀=10−9(1−x)³+24x(1−x)(2x−1),
+    Q₁=10[1−(1−x)³]+(1−x)³[b(t)+Δ(t)],
+    Q_late=10[1−(1−x)³]+(1−x)³b(t),
+    Q_Never=10[1−((1−x)(1−t))³].
+
+Every date at least 2 gives Q_late. Thus the complete cap is
+max(Q₀,Q_late); Q₁ and Q_Never are strictly smaller than Q_late.
+Prescribed payoff is
+
+    U=xQ₀+(1−x){10[1−(1−x)³]+(1−x)³u(t)}.
+
+The cap equality Q₀=Q_late is
+
+    24x(1−x)(2x−1)−(1−x)³[b(t)−1]=0.            (JT5)
+
+At (x,t)=(1/2,0), its x derivative is 12 and its t derivative is −27/8.
+The implicit-function branch therefore has x(0)=1/2 and x′(0)=9/32.
+Along this actual branch all first-row caps remain tied and
+
+    D(t)=(1−x(t))⁴ ·4[(1−t)⁴−tΔ(t)],
+    D′(0)=−25/16<0.                              (JT6)
+
+This supplies actual strict decreases for every sufficiently small
+positive t. No correlated draw or favorable selection of a new finite
+Nash equilibrium is used: the actual row rates compensate the change
+of the old COMPLETE continuation caps.
+
+For a fully rational finite-amplitude check, take x=65/128 and t=1/36.
+The first-row cap equality need not hold exactly at this rational point.
+The exact four response values are
+
+    Q₀=18917657/2097152,
+    Q₁=1200026075/134217728,
+    Q_late=1209822155/134217728,
+    Q_Never=597558015/67108864.
+
+Q₀ is the complete cap: its differences from Q₁ and Q_late are
+10703973/134217728 and 907893/134217728, respectively, while
+Q_late−Q_Never=14706125/134217728>0. The prescribed value is
+615993422355/68719476736. Hence
+
+    D=3900362221/17179869184
+      =1/4−394605075/17179869184<1/4.             (JT7)
+
+The finite arithmetic was checked exactly with rational enumeration of
+all product outcomes and each response type, and agrees with the displayed
+closed formulas. Behavioral deviations are mixtures of these pure tests,
+so (JT7) is the unrestricted terminal debt, not a truncated-menu value.
+
+### What the successful coupling would require at a true minimum
+
+There is a precise local calculation behind this test. Let an actual
+first root p have all rates in (0,1), with EVERY complete first-row cap
+tied. Let v=(u,b) be its actual carrier tail, d=Σ(b_i−u_i),
+a=∏(1−p_i), α_i=∏_{j≠i}(1−p_j), and let J be the Jacobian with entries
+J_ij=∂_j(Q_i−C_i) at this row and this actual cap annotation. Suppose
+J is nonsingular. Consider a PRODUCED actual tail path with expansions
+
+    b(t)=b+tβ+o(t),       u(t)=u+tυ+o(t).
+
+The vectors β and υ must come from those same laws and ALL their cap
+maximizers. They are not free coordinates of a semantic annotation.
+The implicit-function theorem then selects actual independent first-row
+rates maintaining every tie, with
+
+    p′(0)=J⁻¹ diag(α_i) β.
+
+The full Bellman identity gives the exact directional formula
+
+    d/dt D(T_{p(t)}(v(t))) at 0
+      =a{Σ_i(β_i−υ_i)
+            −d Σ_i [J⁻¹ diag(α_j)β]_i/(1−p_i)}.  (JT8)
+
+The example (JT1)–(JT7) constructs the laws, β,υ and the favorable sign;
+it does not merely assume them. At a TRUE global minimum, every such
+legal path must instead make the bracket in (JT8) nonnegative. Proving
+that some actual conditional-law change violates that inequality is the
+remaining task. A responsive cycle by itself does not produce the path,
+does not ensure J is nonsingular, and may involve fewer than all cap
+owners. These literal boundary cases remain open in the current approach.
+
+The existing exact `minimumTerminalSemantic_auxiliaryNash_budget` and
+`minimumTerminalSemantic_auxiliaryNash_eq_allContinue` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+were inspected for comparison. They assume an exact Nash root against a
+specified shifted cap of a GLOBAL minimum. They cannot be applied to v
+merely because its prefix is minimal, nor do they supply the actual path
+in (JT8). Likewise a local adjoint inequality from (JT8) is not a global
+weighted-minimum declaration. No such promotion is made here.
+
+## A responsive collision can be an unrestricted strict local debt minimum
+
+Status: complete internal countertest to a LOCAL consuming mechanism,
+ordinary mathematics and not Lean-checked. It is not a positive global
+minimum, an equilibrium counterexample, or a new existence class. In
+particular it does not falsify the actual first-collision source question.
+It shows why that question must use global minimality rather than only
+responsive cap ties, an invertible cap Jacobian, and numerical own-floor
+margins, even when all old-tail variations and all pure responses are kept.
+
+### Full game and literal cap menu
+
+For four players, specify all sixty reward entries by
+
+    r_i(S)=100                       if i∉S;
+    r_i({i})=1;
+    r_i(S)=108,92,100                if i∈S and |S|=2,3,4 respectively.
+
+Never pays zero and M=108 bounds the absolute rewards. Let p⁰ give
+every player mass 1/2 at date 0 and 1/2 at Never. Exact product enumeration
+gives
+
+    U_i(p⁰)=1401/16,       B_i(p⁰)=701/8,
+    U_i(Never,p⁰_{−i})=175/2,       D(p⁰)=1/4.    (JL1)
+
+Both date 0 and EVERY later finite response attain B_i; Never is smaller
+by 1/8. At the first row all four caps are tied and all rates are mixed.
+The cap-gap Jacobian has zero diagonal and every off-diagonal entry −4.
+Thus all directed mixed-cap influences are nonzero. The values in (JL1)
+also exceed the numerical own-floor bounds obtained by substituting
+D=1/4 into the true-minimum inequalities, by a large strict margin.
+
+Nevertheless any pure pair quitting surely at date 0 is exact terminal
+Nash: its two members get 108 rather than passive 100 on withdrawal,
+and each outsider gets 100 rather than triple reward 92 on joining.
+The actual global infimum is zero. In particular p⁰ is not even a
+GLOBAL minimum over its fixed all-Never-tail first roots.
+
+### Uniform control of arbitrary independent conditional tails
+
+Retain the distinguished first date, change its rates to x_i=1/2+h_i,
+and permit each conditional continuation to be ANY independent stopping
+law on the remaining dates and Never. Let η_i be its probability of a
+finite clock, η=Ση_i, and write its actual semantic values as (u,b).
+Set w_i=b_i−1. All following estimates are uniform in the number, order,
+and spacing of occupied tail dates, including infinite supports.
+
+The limiting late-finite response gives
+
+    b_i≥1+99[1−∏_{j≠i}(1−η_j)]≥1,
+    Σw_i≥297η−99η².                               (JL2)
+
+The supremum is enough; no finite last response is assumed to attain
+this limit. Coupling each tail with all-Never also gives 0≤w_i≤2Mη,
+so ‖w‖₁ is bounded by a constant times η independently of the calendar.
+Every pure test is coupled with the SAME test against all-Never, and
+taking their supremum preserves this estimate.
+
+The coalition welfare is 301 for a singleton, 416 for a pair, 376 for
+a triple, and 400 for the grand coalition. A first coalition of size
+at least two requires two or more finite clocks. Consequently
+
+    Σu_i≤301η+115Σ_{i<j}η_iη_j
+          ≤301η+(115/2)η².                        (JL3)
+
+These are actual full-law estimates, not menu regrets or a supplied cap
+relaxation. Prescribed values also satisfy ‖u‖₁≤4Mη by coupling.
+
+### The full nonsmooth debt expansion has a strictly positive linear part
+
+Put a(x)=∏(1−x_i), α_i(x)=∏_{j≠i}(1−x_j). For all-Never continuation
+cap 1, the exact first-row gap is
+
+    Δ_i⁰(x)=−8[P(exactly two opponents quit)
+                   −P(exactly one opponent quits)].
+
+Its Jacobian at x₀=(1/2)1 is J=−4(11ᵀ−Id). With the actual tail the
+gap is g_i=Δ_i⁰(x)−α_i(x)w_i. The complete Bellman identity is
+
+    D=Σ(g_i⁺−x_i g_i)+a(x)[4+Σw_i−Σu_i].         (JL4)
+
+Define z=Jh−w/8. Taylor expansion of the fixed root polynomials, using
+the Lipschitz inequality for the positive-part function, gives uniformly
+over all the tails just described
+
+    D−1/4=(1/2)‖z‖₁−(1/2)Σh_i
+             +(1/16)(Σw_i−Σu_i)
+             +O((‖h‖₁+η)²).                    (JL5)
+
+No cap differentiability is used. For clarity, the linear contribution
+of a(x)·4 is −Σh_i/2. In the regret term, g=z+O(‖h‖₁²+‖h‖₁η)
+and g_i⁺−g_i/2=|g_i|/2. The remaining factors h_i g_i and the products
+of a(x)−1/16 with Σ(w_i−u_i) are uniformly quadratic.
+
+Since ΣJh=−12Σh, the two linear terms involving h,w become
+
+    D−1/4=(1/2)‖z‖₁+(1/24)Σz_i
+             +(13/192)Σw_i−(1/16)Σu_i
+             +O((‖h‖₁+η)²).
+
+Equations (JL2) and (JL3) therefore imply
+
+    D−1/4≥(11/24)‖z‖₁+(83/64)η
+                 −C(‖h‖₁+η)²                 (JL6)
+
+for one constant C depending only on this table. The coefficient check is
+(13·297−12·301)/192=83/64. Moreover J is invertible with induced ℓ¹
+inverse norm 5/12. The identity Jh=z+w/8 and the uniform bound on w
+show that ‖h‖₁+η≤C₁(‖z‖₁+η). Thus there exist r,c>0, independent
+of the tail calendar, such that
+
+    0<‖h‖₁+η<r  ⇒  D≥1/4+c(‖h‖₁+η)>1/4.     (JL7)
+
+This is strict local minimality against ALL simultaneous independent
+law changes on the original date and its entire future, with unrestricted
+behavioral deviations tested. The parameter ‖h‖₁+η is comparable to
+the total-variation distance from p⁰ in a sufficiently small neighborhood.
+
+### Small refinements before the old date do not escape the local minimum
+
+The conclusion is also stable when the old date is retained as an anchor
+and arbitrary earlier dates are inserted. Allow player i head probability
+ℓ_i before the anchor, with H=Σℓ_i small. Conditional on not using the
+head, its law is a suffix q close to p⁰ as in (JL7). Conditional head
+laws may be different and may use any finite number of earlier dates;
+their time geometry is not replaced by one common atom.
+
+Keep those conditional laws fixed and vary ℓ. For each player retain
+ALL tests at or after the anchor. Their supremum is the expected passive
+head payoff plus the opponents' head-survival product times B_i(q).
+Subtracting the actual prescribed payoffs gives a multiaffine polynomial
+P(ℓ). The actual complete debt is at least P(ℓ), because adding earlier
+response tests can only raise caps. At the all-head-off vertex,
+P(0)=D(q). With only owner i's head turned on, it quits alone whenever
+used, so cancellation of every other recipient's passive payoff gives
+
+    P(ℓ_i e_i)=D(q)+ℓ_i[B_i(q)−s_i−D(q)].         (JL8)
+
+This is an exact axis identity, not a Taylor approximation to an invented
+response. At p⁰ the coefficient equals 691/8>0. By the same uniform
+coupling bounds, all four coefficients stay bounded below by a positive
+constant for q sufficiently close to p⁰. Every coefficient of degree
+at least two is uniformly bounded in terms of M and four players only:
+its vertex payoffs are bounded actual conditional expectations, and the
+finite multilinear coefficient inversion has a fixed size. Therefore
+
+    D(full law)≥P(ℓ)≥D(q)+c₂H−C₂H².
+
+Together with (JL7), this is a strict local barrier under arbitrary small
+earlier refinements as well. The proof only needs the future-test lower
+bound; it does not discard the new early maximizing branches. No horizon,
+late-response, or off-path test is suppressed.
+
+### Retired implication and next mathematical question
+
+A responsive mixed-cap cycle, nonsingular J and even strong numerical
+own-floor margins do NOT force an infinitesimal full-law debt decrease.
+The countertest includes simultaneous old-tail changes and newly inserted
+earlier clocks, rather than merely stationary or fixed-menu variations.
+The positive test (JT1)–(JT8) shows that coupling can succeed; (JL1)–(JL8)
+shows it is not universally forced by this local information.
+
+The actual source remains strictly stronger: it minimizes over ALL
+independent profiles, hence over every first root AND every actual tail,
+jointly. The pure pair here violates that indispensable premise. The
+next question is a finite-amplitude consuming move that uses both global
+inequalities, not a weaker derivative assertion or a favorable root
+selected independently of its complete tail caps. No additional static
+example or optimization of these constants is proposed.

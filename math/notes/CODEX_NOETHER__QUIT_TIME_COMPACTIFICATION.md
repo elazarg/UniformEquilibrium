@@ -24,7 +24,10 @@ cap in the nonsure branch, preserving all conditional tails and Never
 masses. Sure hazards instead reduce to the exact finite punishment-floor
 objective (A11); two sure hazards give an actual finite-profile minimum.
 These new reductions are internal ordinary proofs, not independently
-reviewed or exported. Consuming the tied cap or sure-owner floor is open.
+reviewed or exported. A pure-pair minimum with punishment-normal members
+and strictly negative outsider joining gaps is now contradicted by an
+actual full-cap debt decrease; it must expose an outside paid join or
+inactive cap tie. General tied caps and sure-owner floors remain open.
 
 The current source-consumer candidate combines actual prefix erasure with
 Section73's punishment canonicalization. At an actual positive global
@@ -12677,6 +12680,213 @@ If every coalition of size at least two fails this ALL-player payoff
 test, the pure arm is impossible and the sure-source reductions must
 stop at a tied owner floor or tied free cap. No arbitrary finite Nash
 point is substituted anywhere in this finite-rank reduction.
+
+### A pure pair without an outside joining wall cannot be minimal
+
+Here the sure branch has an ACTUAL decrease, not merely a normal form.
+The following proof needs neither Fin4 nor strict quadratic margins.
+Let the literal one-date/Never profile have exactly the pair {a,b}
+quitting surely at date0 and all other players Never. Assume its full
+sum debt is the positive GLOBAL infimum δ. Suppose the true punishments
+of both pair members obey
+
+    P_a≤s_a,       P_b≤s_b.                         (A15)
+
+Nonnegative own singletons suffice by
+`quittingPunishmentValue_le_max_solo` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`; equality with a
+nominal tail value is NOT being assumed. Suppose also that EVERY outsider
+k has the strict root joining gap
+
+    J_k=r_k({a,b,k})−r_k({a,b})<0.                 (A16)
+
+Thus all outsider complete debts are zero. The pair member debts are
+
+    d_a=[r_a({b})−r_a({a,b})]⁺,
+    d_b=[r_b({a})−r_b({a,b})]⁺,
+    δ=d_a+d_b>0.
+
+Relabel so d_a>0. Keep b sure at date0, decrease a's root Quit rate to
+1−ρ, and keep every outsider's root rate zero. After a quiet root attach
+a finite ε-optimal opponent punishment for b, starting IMMEDIATELY at
+date1; all those tails were ghost in the original two-sure profile.
+This is a complete actual independent finite stopping-law profile. Its
+tail cap C_ε against b satisfies C_ε≤P_b+ε≤s_b+ε.
+
+For a, every unilateral response meets sure b at date0. Its cap stays
+r_a({b}), its target is (1−ρ)r_a({a,b})+ρ r_a({b}), and its debt is
+EXACTLY (1−ρ)d_a. The sure owner's target and Continue cap give debt
+
+    d_b(ρ)=[(1−ρ)(r_b({a})−r_b({a,b}))
+                              +ρ(C_ε−s_b)]⁺
+             ≤(1−ρ)d_b+ρε.                        (A17)
+
+Every outsider k still faces sure b, so ALL future responses and Never
+equal its first-row Continue endpoint. Its full joining excess is exactly
+
+    J_k(ρ)=(1−ρ)J_k
+                +ρ[r_k({b,k})−r_k({b})].           (A18)
+
+There are finitely many outsiders and every J_k is STRICTLY negative.
+Choose a fixed sufficiently small ρ>0 so all J_k(ρ)<0. Their prescribed
+root action is Continue, hence each complete debt remains zero. Choose
+ε<δ/2. Combining the actual debts gives
+
+    D_new≤(1−ρ)δ+ρε<δ.                            (A19)
+
+This contradicts the genuine numerical infimum. Every new response,
+including the owner's quiet punisher-tail choices and late/Never tests,
+was retained in (A17)–(A18). No off-minimum paid port or induced-Nash
+completion is substituted. The finite punishment exists at the indicated
+accuracy by the true infimum and uniform-cap censoring.
+
+Therefore, in a positive GLOBAL pure-pair minimum with punishment-normal
+members, SOME outsider has J_k≥0. A positive gap is a genuinely paid
+outside join; a zero gap is a binding INACTIVE joining cap that can absorb
+first-order debt. This is the literal distinction between the cases:
+replacing strict negativity by weak negativity would lose the argument,
+because (A18) may become positive immediately at J_k=0. Pair-member cap
+ties themselves do not obstruct (A17), which holds with either sign of
+their original withdrawal gaps.
+
+For an arbitrary finite player set with nonnegative pair owns this is a
+source-branch exclusion; in a no-UE canonical table all owns are nonnegative
+after the actual normalization and a NEW minimum is formed there. No old
+minimum is transported through normalization. Signed original pair owners
+without (A15), pure triples/grand coalitions, and outside joining walls
+remain unconsumed. This is not an arbitrary-table UE theorem or an export.
+
+The inspected declaration
+`finiteClockMinimum_exactCapPurification_or_pureTimeDescentPaidPort` in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/FiniteClockMinimumPaidPort.lean`
+routes an actual finite-clock positive minimum to an exact-cap chain and
+an off-minimum paid port. Its conclusion does not give debt below δ or
+contradict that minimum's existence. In contrast (A19) is a full-cap
+actual decrease under the stated pair/no-outside-wall hypotheses. It
+does not consume the paid-port alternatives outside this narrow branch.
+
+### Fresh genericity removes pure reward ties, not mixed cap walls
+
+Generic reward perturbation has one legitimate use here. If two raw tables
+differ by at most ζ in each absorbing reward entry and both keep Never
+payoff zero, every prescribed terminal payoff and every unilateral pure
+response differs by at most ζ. The same holds for its supremum over all
+responses. Consequently
+
+    |D_r(p)−D_r′(p)|≤2nζ for EVERY actual p,
+    |D_*^r−D_*^r′|≤2nζ.                            (B1)
+
+Thus an actual positive-gap table can be perturbed arbitrarily slightly
+while preserving a positive gap. If owns are nonnegative, keep all own
+singleton entries FIXED. The finitely many equations
+
+    r_j(T∪{j})=r_j(T),   ∅≠T⊆I−{j},               (B2)
+
+are proper hyperplanes even on that fixed-own affine slice; neither entry
+is an own singleton. Avoiding their finite union is dense. Select a NEW
+marked-calendar minimum for the perturbed table, whose δ′>0 is the NEW
+infimum. Its nonnegative-own punishment bounds remain valid. An earlier
+source, δ, payoff target or first-row support is not transported.
+
+Material consequence: if this new source reduces to a PURE pair, the
+necessary outside wall in (A16) cannot be a literal zero gap, so it is
+a PAID outside join. At any PURE coalition of cardinality at least two,
+all root Quit/Continue gaps are nonzero. The ordinary mixed first-row
+ties remain: they are equations at adjustable root probabilities, not
+the finite raw hyperplanes (B2). Genericity therefore does not remove
+the one-sure mixed floor/cap case or the nonsure tied row.
+
+For arbitrary signed no-UE Fin4 data, first use the EXISTING actual
+single-pivot normalization to obtain a NEW no-UE table with owns0/1,
+then perform the fixed-own perturbation and select another NEW minimum.
+This is a legitimate reduction for a contradiction proof, not a claim
+that any old pure-pair or cap-tied source persists. It adds no UE producer
+or exportable table class by itself.
+
+### Finite pure best replies expose a paid-debt feedback cycle
+
+Here is the complete finite-amplitude ledger for the larger pure sure
+cases and the paid outside joins. Let the pure coalition S, |S|≥2,
+be the first row of an ACTUAL global minimum, with all tails erased to
+Never. Define each signed gain from changing its prescribed root action
+by
+
+    x_j=r_j(S−{j})−r_j(S)       if j∈S;
+    x_j=r_j(S∪{j})−r_j(S)       if j∉S;
+    d_j=[x_j]⁺,       Σ_j d_j=δ.
+
+Choose any debtor i with x_i>0. Randomly switch ONLY that player's root
+action to its strict best root response, with probability λ∈[0,1].
+Let Sᶦ=S△{i}; every other player's pure root action stays unchanged.
+The mover's complete cap is unchanged because its opponents are fixed
+and at least one of them quits surely. Its debt is EXACTLY (1−λ)d_i.
+
+If |Sᶦ|≥2, some sure opponent remains for EVERY player. All cap/payoff
+values are literally binary root values, independent of every tail.
+For j≠i define z_{ji} by the same signed-gain formula at Sᶦ. Then
+
+    D_i(λ)=(1−λ)d_i
+               +Σ_{j≠i}[(1−λ)x_j+λ z_{ji}]⁺.      (B3)
+
+This is an exact actual finite-profile formula for the entire interval,
+not merely a derivative or a selected cap label. It applies to joining
+an outsider onto a pure pair, and to withdrawing from pure triples or
+the grand coalition. In particular every possible root cap switch on
+the interval remains in its positive-part term.
+
+If S={i,b} and i withdraws, Sᶦ={b}. Retain b sure and use immediate
+ε-optimal true punishment for b after a quiet root, exactly as in (A17).
+The same formula holds in its actual-carrier limit with
+
+    z_{bi}=P_b−s_b,
+    z_{ji}=r_j({b,j})−r_j({b}) for j∉S.
+
+The actual finite realizers differ from (B3) by at most λε. Thus GLOBAL
+minimality gives D_i(λ)≥δ at EVERY λ in the exact-floor limit as well.
+No unconditional Nash-root replacement has been made.
+
+The right derivative at zero is
+
+    D_i′(0⁺)=−d_i
+       +Σ_{j:x_j>0, j≠i}(z_{ji}−x_j)
+       +Σ_{j:x_j=0, j≠i}[z_{ji}]⁺.                (B4)
+
+If this quantity is negative, fix a sufficiently small positive λ and
+then an ε small enough to retain the strict loss; the displayed actual
+variation contradicts δ. This is an actual full-cap branch consumer,
+including inactive zero-debt walls through the LAST sum, not a selector.
+
+At a PURE source in the fixed-own generic table, no x_j is zero. The last
+sum disappears, so the actual minimum necessarily satisfies
+
+    Σ_{j:x_j>0, j≠i}(z_{ji}−x_j)≥d_i>0
+                              for EVERY paid i.    (B5)
+
+Put a directed edge i→j when BOTH are paid and z_{ji}−x_j>0. Every
+vertex has an outgoing edge by (B5); hence the paid-debtor graph contains
+a directed cycle of length at least two. In particular a pure minimum
+without root ties cannot have only one paid player. For a punishment-normal
+pure pair, the member-to-member coefficient is P_b−s_b−x_b<0 whenever b
+is paid. Its forced feedback must therefore involve a PAID OUTSIDER,
+not merely the two pair members. This recovers the generic paid-wall
+consequence through a complete finite-amplitude account.
+
+For pure triples/grand coalition the z_{ji} are literal raw reward
+differences, with no punishment or nominal continuation annotation.
+An acyclic paid-debtor graph would give a sink i, for which (B4)<0 and
+the actual variation consumes the minimum. The genuinely remaining
+pure branch has positive feedback between at least two PAID debts.
+This is different from the mixed tied-cap influence cycle: all its cap
+branches are locally strict, and debt is transferred between already
+positive regrets rather than created at an inactive cusp.
+
+This exact calculation rules out a universal one-player best-response
+repair for the remaining pure sources: a genuine minimum forces its
+loss to be offset by other paid debts. It does not claim that every
+cycle can be erased, that its descendants stay minimal, or that (B3)
+ever falls below δ when (B5) holds. A next mechanism must couple those
+paid debt transfers with a real continuation change; merely rerouting
+to an induced Nash point would omit the owner-floor/cap tradeoff.
 
 ### Exact source and current consuming question
 

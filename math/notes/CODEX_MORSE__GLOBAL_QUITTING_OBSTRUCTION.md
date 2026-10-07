@@ -7481,3 +7481,123 @@ the unconditional replacement lemma only. It neither refutes the
 first-collision theorem nor further narrows counterexamples. A successful
 consumer must use the GENUINE current global minimum and simultaneous
 full-law variations beyond (218), with every tied initial cap retained.
+
+### The whole-tail inequality and its exact outer obstacle
+
+There is a genuinely global tail premise at a first-row minimum: for
+EVERY w in the original semantic carrier K,
+
+    G_p(w):=D(T_p(w))≥δ=G_p(v).                    (220)
+
+This follows from literal prefix closure, not merely a derivative or a
+fixed-calendar minimum. All actual independent tail replacements are
+included. It is weaker than the complete joint inequality
+D(T_x(w))≥δ for every x and w, and cannot be used as a substitute for it.
+
+When all p_i<1, put c=∏_i(1−p_i)>0,
+λ_i=1/(1−p_i), and t_i=(Q_i−A_i)/α_i. Exact cancellation gives
+
+    G_p(u,B)/c
+      =Σ_i λ_i max(B_i,t_i)−Σ_i u_i
+         −Σ_i λ_i p_i t_i.                         (221)
+
+Thus (220) is an all-tail minimization with actual cap obstacles. It is
+NOT a positive weighted minimum of Σ_i λ_i(B_i−u_i): the prescribed-payoff
+coefficients in (221) remain one. In particular the weighted singleton
+margin from `minimumTerminalSemantic_weightedSingletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticWeightedAuxiliaryNashBudget.lean`
+does not apply to (221). The additional costate-switching terms explicitly
+retained in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostate.lean`
+likewise cannot be discarded by renaming this objective.
+
+For a concrete legal splice, inserting an empty date immediately after
+the root changes the tail cap B_i to max(B_i,s_i), not its payoff u_i.
+The exact increase of the COMPLETE current debt is
+
+    Σ_i [α_i(s_i−B_i)−g_i⁺]⁺.                     (222)
+
+At a tied current cap this is α_i(s_i−B_i)⁺; a strictly dominant current
+Quit branch can mask part or all of it. Neither the original current
+cap margin nor (220) proves the missing tail inequality B_i≥s_i.
+
+### Global tail optimization still does not substitute for a joint move
+
+The following complete-table test sharpens a local row–tail test. It is
+an exact boundary for the attempted use of (220), not a positive-global-
+minimum example or a further counterexample-class restriction.
+
+Take four players. For every nonempty coalition S set
+
+    r_i(S)=10                         if i∉S,
+    r_i(S)=1,2,18,10                  if i∈S and |S|=1,2,3,4,
+
+respectively. Fix the first row p_i=1/2 for all i. Its literal constants
+are α_i=1/8, c=1/16, A_i=35/4 and Q_i=71/8. Every actual tail has B_i≥1:
+arbitrarily late finite Quit has limiting value
+
+    10−9 P(all of i's opponents Never)≥1.          (223)
+
+The limit in (223) is a supremum of available finite responses; it does
+not invent a finite date after all random opponent clocks. All passive
+rewards are exactly10, own singleton is1, and the probability of an
+opponent quitting at the chosen late date tends to zero. Consequently
+the outer Continue cap is at least Q_i, and the exact objective is
+
+    G_p(u,B)=1/4+[2Σ_i(B_i−1)−Σ_i u_i]/16.        (224)
+
+Let N_f be the number of finite clocks in an arbitrary independent tail,
+a₁=P(N_f=1), and a₂=P(N_f≥2). Summing (223) gives
+
+    Σ_i(B_i−1)≥9(3a₁+4a₂).                       (225)
+
+Indeed exactly three players have a finite opponent when N_f=1, and all
+four do when N_f≥2. If N_f=1, the first coalition has total reward31.
+If N_f≥2, its total reward is at most64: the four possible coalition
+sizes have sums31,24,64,40. Infinite all-Continue pays zero. Therefore
+
+    Σ_i u_i≤31a₁+64a₂,
+    2Σ_i(B_i−1)−Σ_i u_i≥23a₁+8a₂,
+    G_p(u,B)≥1/4+(23a₁+8a₂)/16≥1/4.              (226)
+
+These inequalities hold for unrestricted actual tails, with arbitrary
+unbounded finite clocks and Never. Continuity of G_p extends the final
+lower bound to the ENTIRE original carrier K. The all-Never tail has
+(u,B)=(0,1) and attains G_p=1/4. Thus it is a genuine GLOBAL fixed-row
+tail optimizer, not merely a stationary, finite-calendar, or local one.
+
+Nevertheless a simultaneous change of the row and tail lowers the full
+debt. A two-date actual profile uses a common date-zero hazard
+x=65/128, conditional date-one hazard t=1/36, and Never otherwise.
+Its tail has
+
+    b(t)=10−9(1−t)^3=8965/5184.
+
+The complete tail cap is the late finite response; the other endpoints
+are date-one Quit and Never. Direct use
+of those three endpoints and both first-row branches gives
+
+    D=3900362221/17179869184<1/4.                  (227)
+
+For an exact formula that avoids any endpoint ambiguity, the one-row
+tail with hazard t has prescribed payoff
+
+    u(t)=31t−57t²+85t³−49t⁴
+
+per player and complete cap b(t)=10−9(1−t)^3 at t=1/36. The outer row
+has
+
+    Q(x)=(1−x)^3+6x(1−x)²+54x²(1−x)+10x³,
+    C(x)=10[1−(1−x)^3]+(1−x)^3 b(t),
+    U(x)=xQ(x)+(1−x)·10[1−(1−x)^3]+(1−x)^4 u(t).
+
+Substitution into 4[max(Q(x),C(x))−U(x)] proves (227). All laws and all
+responses in this calculation are on the original game. Immediate solo
+Quit by one player, all others Never, is exact terminal Nash with target
+(1,10,10,10) in the corresponding order, so the TRUE global debt infimum
+of this table is zero.
+
+The failed implication is therefore precise: even global minimization
+of G_p over all actual tails does not make a first row immune to a JOINT
+row–tail move. The genuine positive-global-minimum premise must remain
+in the joint direction calculation. No fixed-row tail selector or
+weighted-debt reinterpretation is being pursued as a consumer by itself.

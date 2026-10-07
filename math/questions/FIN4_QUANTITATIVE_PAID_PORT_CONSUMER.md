@@ -48,7 +48,7 @@ The complete first-row pair T_q(v)=(u′,b′) is
 
 These caps cover every behavioral response, not just changing the first
 action: Continuing permits the complete tail response valued at b_i.
-Every T_x(v), x∈[0,1]⁴, belongs to K. Require
+Every T_x(w), x∈[0,1]⁴ and w∈K, belongs to K. Require
 
     D(T_q(v))=δ,
     R(q)=∑[S⊆I,|S|≥2] ∏[i∈S]q_i · ∏[j∉S](1−q_j)>0.
@@ -79,6 +79,12 @@ Every summand is nonnegative. In particular,
 No equality D(v)=δ or root-Nash conclusion follows from this identity.
 The collision also gives α_i(q)≤1−R(q) for every i; contraction of this
 fixed prefix does not assert that iterating it preserves minimality.
+
+The global variational condition is stronger than D(v)≥δ: the supplied
+tail v minimizes G_q(w)=D(T_q(w)) over every w∈K, with value δ. Root
+changes and whole-tail changes must both respect the same global bound;
+neither optimization is restricted to one selected continuation or one
+selected best response.
 
 ## Question
 
