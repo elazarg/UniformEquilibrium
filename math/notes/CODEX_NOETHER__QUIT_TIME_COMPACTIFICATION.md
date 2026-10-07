@@ -7,8 +7,8 @@ Section73's punishment canonicalization. At an actual positive global
 minimum, a unique earliest zero-Never owner with nonnegative own reward
 cannot have a completely nonatomic finite prefix up to its endpoint.
 This includes binding Never and finite caps; other clocks may have atoms
-after that endpoint. The new proof is ordinary mathematics awaiting an
-independent check, not a UE theorem. Shared diffuse earliest owners,
+after that endpoint. The proof has an independent ordinary-mathematical
+PASS, not a Lean check or UE theorem. Shared diffuse earliest owners,
 earlier atoms, and signed-negative cutoff owners remain open here.
 Section73 also retains its distinct strict-Never-buffer social-max
 dispatch for shared earliest endpoints.
@@ -12229,7 +12229,9 @@ constant `-2` precision recorded above.
 
 ### Fixed-cut reachability and the unique diffuse earliest owner
 
-Status: complete ordinary mathematical proof candidate. This consumes an
+Status: independently reviewed ordinary mathematics, with PASS in
+feedback/CODEX_NOETHER__UNIQUE_DIFFUSE_EARLIEST_OWNER__BY_CODEX_BROUWER.md.
+This consumes an
 ACTUAL positive SUM-debt minimum, not a supplied positive-debt profile or
 a minimum along one selected sequence of updates. It uses the separately
 proved prefix-erasure mechanism and the punishment canonicalization in

@@ -388,6 +388,14 @@ restrictions are proved:
   Conditional head/tail reweighting preserves every post-cut comparison
   exactly; no charge-relative approximation error is assumed. The binding
   test need not have prescribed mass or be shared by other players.
+- A unique earliest zero-Never owner with nonnegative own singleton is
+  impossible if every finite marginal is atomless through its support
+  endpoint. Binding Never caps and later atoms are allowed. First erase
+  off-path opponent tails using the exact punishment account below. Then
+  every fixed surviving cut is reached by finitely many minimum-preserving
+  erasures. As those cuts approach the owner's endpoint, its opponents'
+  conditional laws tend to Never, contradicting its positive cap margin.
+  No uniform reach bound at the limiting endpoint is used.
 - Suppose at least two zero-Never owners share the earliest upper support
   endpoint, that endpoint is nonatomic, all Never responses are strictly
   below their caps, and the nonempty social maximum is unique. This branch
@@ -409,9 +417,11 @@ the earlier-cap result is in
 [the complete-cap variation proof](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md);
 the earliest-cutoff and punishment results are in
 [the cutoff proof](notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md).
-Atomic cuts, binding Never responses, and a unique earliest zero-Never
-owner remain unconsumed. These restrictions give neither ordinary-clock
-attainment, a renewable terminal consumer, nor UE.
+Positive atomic cuts and shared earliest zero-Never endpoints with binding
+Never responses remain unconsumed. The unique-earliest exclusion does not
+cover a negative own singleton or a preceding atomic clock. These
+restrictions give neither ordinary-clock attainment, a renewable terminal
+consumer, nor UE.
 
 ### Finite cap-threshold descent — tracked theorem
 

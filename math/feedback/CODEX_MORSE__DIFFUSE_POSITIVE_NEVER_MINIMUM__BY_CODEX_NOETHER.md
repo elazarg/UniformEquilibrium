@@ -177,3 +177,122 @@ available empty cut and atom mass can jump across κ. Nothing in this verdict
 licenses erasing them, deduces a positive atom floor, transports the compact
 calendar to ℕ, or settles the finite-quitting UE conjecture. The exact-byte
 PASS above is for this actual residual exclusion only.
+
+## Exact self-contained artifact and original-stage strengthening
+
+I subsequently read ALL739 lines of
+`notes/CODEX_MORSE__POSITIVE_NEVER_MINIMUM_STAGE_ATOM.md`, SHA256
+`c625f72f4471c024f545b6518042d987a8e3f8a647051927f896a17b8725c341`.
+The line count and whole-file hash were checked directly. This is a separate
+exact-byte verdict for the complete self-contained artifact, including the
+new original-sequence and uniform near-minimum assertions. No author edit,
+counterpart review, export mutation, or Lean command was performed.
+
+PASS for the entire artifact. The source construction, all-cap prefix
+erasure, and finite diffuse exclusion are faithfully included. The following
+additional conclusions survive independent falsification:
+
+- From ANY specified original finite-law minimizing sequence, a subsequence
+  with positive limiting Never masses has a fixed player i and ORIGINAL dates
+  t_k with liminf m_i(t_k;p^k)>0. The original profiles are not modified.
+- For a FIXED bounded reward table with positive global SUM-debt minimum δ
+  and EVERY η>0, there exist ε,γ>0 such that EVERY actual profile with
+  D≤δ+ε and every Never mass at least η has SOME original first-singleton
+  stage of mass at least γ. This includes infinite stopping laws and complete
+  behavioral strategies. Constants are non-effective and table/η-dependent.
+
+### Same unmodified sequence, not an atom in a replacement profile
+
+The construction is valid starting from any specified finite minimizing
+sequence. Every weak-* or Hausdorff extraction is a subsequence of it.
+Prefix erasures are used only to contradict the hypothesis that THIS
+represented limit is completely diffuse. They do not replace the sequence
+to which the final stage-trace statement applies. Once diffuse exclusion
+supplies an atom of the original limit, the retained endpoint component
+J=(a,b) has one corresponding original atom interval J_k at one original
+date t_k. Uniformly bounded likelihoods pay the moving endpoint error:
+
+    |∫_{J_k}r_i^k−∫_J r_i^k|≤n·Leb(J_k△J)→0.
+
+Weak-* convergence against the FIXED interval J then gives original
+p_i^k({t_k})→q_i({t})=w>0. The Never masses converge by the same fixed-
+interval argument and moving c_k error. This is not a weak-convergence
+claim that arbitrary collapsing nearby dates retain their distinct order;
+the marked positive interval identifies ONE actual original date.
+
+The first-singleton stage identity is exact. Requiring every opponent's
+clock to be strictly later than t_k already excludes every earlier and
+tied opponent Quit. Restricting that event further to all opponents at
+Never yields the lower bound w∏_{j≠i}α_j>0. A retained positive atom could
+otherwise be wholly off path because another player always stops earlier.
+Positive limiting Never masses exclude precisely that falsifier. They do
+not merely give positive total absorption or a conditional hazard floor.
+Dates t_k may diverge, which the statement explicitly allows.
+
+### Uniform quantifiers and infinite-law censoring
+
+Negating the uniform theorem permits profiles with D≤δ+1/k, every Never
+mass≥η, and EVERY original singleton stage<1/k. This sequence approaches
+the global minimum because actual D≥δ. Its represented Never masses stay
+at least η. The same-original-sequence theorem supplies an eventual positive
+stage floor, contradicting the bound for every i and every original date.
+Thus the claim concerns ALL sufficiently near-minimal profiles, not a chosen
+actualizer, a supplied support, or the existence of one favorable sequence.
+
+For infinite laws, moving ONLY finite mass after K_k to Never changes each
+payoff and EVERY unilateral test by the uniform bounded-reward coupling
+estimate. Taking suprema gives two-sided cap control and choosing K_k large
+gives D(p̃^k)≤δ+2/k. Never mass can only increase. At any t≤K_k the mover's
+atom and every opponent event {τ_j>t} are unchanged EXACTLY. At any t>K_k
+the censored mover atom is0. No finite stage is created at K_k or at a fresh
+late date. Consequently an apparent positive stage in the censored sequence
+must be that same original stage in the uncensored profile. This defeats
+the possible censoring-manufactures-the-conclusion loophole.
+
+Values η>1 or near-minimum sublevels with no such profile simply make the
+implication vacuous. This causes no quantifier error; ε and γ remain positive.
+No uniform date bound, computable constant, table-independent atom floor,
+positive joint-Never assumption without marginal control, or conclusion
+for an arbitrary positive-debt profile is inferred. The one-player stress
+has debt α>0 but TRUE global minimum0 and correctly fails the premise.
+
+### Self-containment and actual source overlap
+
+The complete marked source and conditional transport arguments are in the
+artifact itself, including all simultaneous coalitions, moving maximizers,
+separate finite/Never endpoints, and the retained c⁺ in atomic variations.
+No conference note is needed to prove its new ordinary mathematics. Its
+only established mathematical dependencies are the identified original-
+game/carrier declarations. The singleton moat has the exact global SUM
+minimum hypotheses, and the artifact does not replace it by a maximum-debt
+tie assertion. The original no-UE bridge retains unrestricted behavioral
+deviations and one fixed uniform payoff target; the result does not infer
+that target from the compact represented profile itself.
+
+I inspected the exact named comparison declarations in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticMinimumLawFiniteAtom.lean`:
+`exists_positive_finiteLawAtom_of_punishmentNormal_minimum_of_not_uniformPayoff`
+and `nonempty_minimumLawCausalSuffixAtom_of_punishmentNormal_of_not_uniformPayoff`.
+Their atom is a TERMINAL COALITION coordinate and their hypotheses include
+punishment normality. Neither is an original marginal time/stage atom
+in every near-minimizing whole profile.
+
+I also inspected `FinFourTerminalSingletonProducer`,
+`terminalVertexTargetProfile`, and
+`exists_singleton_with_stageMass_floor_and_postDateTail_eq` in
+`Research/Quitting/FinFourProducerAtlas/Leaves.lean`. The last theorem's
+singleton stage belongs literally to `producer.terminalVertexTargetProfile`;
+the equality concerns the post-date tail. It does not assert a singleton
+stage in the unmodified whole near-minimizing source. The artifact correctly
+distinguishes that supplied endpoint-orbit consumer from its uniform
+original-profile restriction. The earlier MINER source/target distinction
+recorded above remains relevant and does not subsume the new stage trace.
+
+This is genuine actual positive-gap branch narrowing: with a fixed positive
+Never lower bound, no minimizing sequence of original full profiles can
+spread every singleton stage to zero. It is stronger than merely producing
+an atom at one selected compact minimum or in a modified endpoint target.
+It does not exclude tables with zero-Never escape or consume the forced
+stage interaction. It is ordinary mathematical evidence, not an export,
+Lean seal, UE proof, or proof of unrestricted strategy-class completeness.
+No unresolved mathematical objection remains at the exact c625f72f… bytes.
