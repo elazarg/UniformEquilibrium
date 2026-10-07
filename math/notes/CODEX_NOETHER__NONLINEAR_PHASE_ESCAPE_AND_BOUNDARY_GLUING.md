@@ -46,6 +46,10 @@ The latest actual switch test excludes all six proper three-row words
 with two pivot0 joints at an explicit negative-corrected-determinant table.
 That table has an exact existing punishment-root consumer. This falsifies
 the adjacent-role-switch mechanism, not UE; no class increment is claimed.
+The final clock tests distinguish two issues: identical relative likelihoods
+do not retain tied coalition outcomes, even for actual entropy near-minimizers;
+and every one-atom insertion can raise debt while a legal ordered three-atom
+insertion lowers it. These are exact scope regressions, not new UE classes.
 
 ## Finite question
 
@@ -1524,3 +1528,134 @@ The next global route should address actual continuation selection beyond
 a fixed short-word inventory; the minimum-debt/ordered-clock representation
 is a candidate, with tied atoms, Never and uniform pure-response control
 kept explicit rather than treated as harmless compactness details.
+
+## Exact entropy near-minimizers still need collision marks
+
+This finite test uses a DIFFERENT game from the preceding table. Four
+players have the common reward
+
+    r_i(S)=1 if |S|=1, and r_i(S)=0 otherwise,
+    r_i(∅)=0.
+
+All terminal rewards lie in[0,1]. Here D denotes the SUM of the four
+complete behavioral terminal deviation gains. For stopping laws μ_i on
+finite dates together with Never, write μ̄=(μ₀+μ₁+μ₂+μ₃)/4 and
+
+    I=Σ_i KL(μ_i‖μ̄).
+
+The all-sure profile at date0 has target0 and D=0: any unilateral
+replacement still leaves three sure opponents, so the first quitting
+coalition has size at least3. Its four identical laws give I=0.
+
+Alternatively let the four laws be identical and uniform on{1,…,L},
+with no Never mass. The unique-minimum probability is exactly
+
+    4 L⁻⁴ Σ_{k=0}^{L−1} k³=(1−1/L)².
+
+Thus every target coordinate is(1−1/L)². Pure Quit at date0 earns1,
+and no deviation can earn more than1, so every complete cap is1 and
+
+    D=8/L−4/L²,       I=0.
+
+These are actual η-near minimizers of D+τI for every fixed τ≥0 once
+L is large; its global infimum is0. The relative likelihood densities
+dμ_i/d(Σ_j μ_j) are identically1/4 for both constructions. Therefore
+strong convergence of these densities alone cannot retain the target:
+the sure tied atom has target0, whereas the diffuse sequence tends to
+target1. This does not refute compactness retaining atom endpoints,
+collision marks and the complete tester set. It only refutes their
+replacement by relative-density convergence alone.
+
+## An ordered empty-slot variation defeats every one-atom direction
+
+This second test uses four player-indexed rewards
+
+    r_i({i})=1,
+    r_i(S)=2 if i∈S and |S|≥2,
+    r_i(S)=0 if i∉S,
+    r_i(∅)=0.                                           (M1)
+
+The all-Never profile has payoff0, complete cap1 in each coordinate,
+D=4 and I=0. It is not a global minimum: sure-all is an exact terminal
+Nash profile with target2. The question is instead whether legal
+variations inserting only one formerly empty simultaneous date can
+detect debt descent.
+
+### Every sufficiently small one-date insertion raises the objective
+
+Give player i probability q_i of Quit at one new common date and
+probability1−q_i of Never. Let O_i=Π_{j≠i}(1−q_j).
+Its immediate Quit value is2−O_i. Any earlier tester earns1; any later
+tester earns O_i, because a preceding opponent coalition pays player i
+zero. Never earns0. Hence the COMPLETE cap is2−O_i, and the actual
+payoff is q_i(2−O_i). Consequently
+
+    D=8−2Σ_i q_i−4Π_i(1−q_i).
+
+Set s=Σ_i q_i. The Bonferroni bound
+1−Π_i(1−q_i)≥s−Σ_{i<j}q_iq_j≥s−s²/2 gives
+
+    D−4≥2s(1−s)>0 whenever0<s<1.                       (M2)
+
+This includes all unequal private probabilities, not merely symmetric
+ones. Since I≥0, the same strict inequality holds for D+τI for every
+τ≥0. Thus the entire small one-atom insertion cone is blocked.
+
+### Three newly ordered dates give actual full-cap descent
+
+For 0<δ≤1, give EVERY player mass a=δ/3 at each of three ordered
+finite dates and mass1−δ at Never. All four laws remain identical,
+so I=0 exactly. For a pure tester at new date t∈{1,2,3}, its payoff is
+
+    Q_t=2[1−(t−1)a]³−[1−ta]³.                          (M3)
+
+An opponent quitting earlier pays zero. Conditional on no earlier
+opponent quit, a tie pays2 and no tie pays1; this proves(M3).
+Earlier testers earn1, testers strictly between dates have no tie and
+earn the corresponding opponent survival cube, late testers earn
+(1−δ)³, and Never earns0. The displayed Q_t decrease in t: writing
+x=1−(t−1)a≥a,
+
+    Q_t=x³+3ax²−3a²x+a³,
+    dQ_t/dx=3x²+6ax−3a²>0.
+
+Thus the exact full cap is Q₁=2−(1−a)³. The actual payoff is
+U=a(Q₁+Q₂+Q₃). Direct polynomial expansion gives
+
+    D−4=−4δ²(6δ²−13δ+9)/27<0.                          (M4)
+
+Indeed the quadratic is positive on the whole real line, since its
+leading coefficient is positive and its discriminant is−47.
+For instance δ=1/4 gives D−4=−49/864.
+All complete behavioral replacements are included: along the unique
+live all-Continue history, a replacement selects a distribution over
+pure stopping dates and Never. Its payoff is a convex average of the
+pure values just bounded. No bounded-controller restriction is used.
+
+This is a concrete consumed legal microcalendar variation, not just
+transport of a supplied signed measure. All new dates lie in an empty
+old calendar, so no hidden positive old atom or newly available old
+response has been declared free. The old earlier, intermediate, late
+and Never tests were checked explicitly. Several ordered private
+clocks can therefore lower D+τI even though all simultaneous single-
+atom directions raise it. The descent is second order inδ; the first-
+order one-atom variational inequalities do not encode it.
+
+### Scope and next question
+
+Neither test supplies a positive GLOBAL minimum or a new counterexample
+class. Both games already have exact sure equilibria. The first test
+rules out density-only payoff continuity at actual near-minimizers.
+The second rules out a local-descent/completeness inference from
+one-atom insertions, even when entropy does not change. It does not
+refute a marked-calendar compactness theorem or transport retaining
+all tester marks, and it does not prove that every nonminimum profile
+has an ordered-slot descent.
+
+The next concrete question is to insert an ordered microcalendar after
+the last finite atom of an ACTUAL positive-gap source, shifting only
+its Never masses. Track each owner's literal late-response cap and
+the full survival factor. Can the no-UE source conditions force
+descent there, or can an exact signed table block every such tail
+insertion? A nominal continuation value or a co-located signed-atom
+direction is not a substitute for that complete test.
