@@ -36,6 +36,12 @@ obligation. Its duplicate proof is replaced below by the canonical link;
 the distinct universal escape and no-source caveats remain here.
 This remains internal ordinary mathematics, with no Lean or export seal.
 The genuinely arbitrary all-A escape classification is still open.
+The new final planar-degree argument produces cyclic policies for a
+nonuniform raw negative-premium family under twelve actual endpoint caps.
+Its H≤0 branch has an actual child-only consumer. Class increment is
+unproved; its early test is already covered. A negative outside inverse
+weight selects the favorable active-origin determinant correction, but
+does not yet supply the remaining cap/deviation dispatch.
 
 ## Finite question
 
@@ -1096,3 +1102,209 @@ This is local in reward space. It is not an arbitrary no-good-child
 consumer and does not remove the distinct simultaneous-infinity branch
 proved above. The earlier scalar-escape and semantic-boundary caveats
 remain independent research obligations.
+
+## Planar degree for a nonuniform negative-premium cyclic child
+
+Status: the finite root and endpoint arguments below are ordinary
+mathematics, not Lean checked. No new class increment is asserted:
+the exact early test is already covered. The global question is whether
+actual hard-source data can supply or dispatch the passive cap conditions.
+
+### Raw data and actual equations
+
+Own singleton rewards s_i may be arbitrary signed. Relative singleton
+comparisons, not a transformation of Never, are
+
+    Γ=[[0,v₁,v₂,u],
+       [−h₁,0,−b₁,a₁],
+       [−h₂,a₂,0,−b₂],
+       [−h₃,−b₃,a₃,0]],
+
+where a_i,b_i,h_i>0, u<ξ<0, −h₃<η<0 and
+β=a₁a₂a₃−b₁b₂b₃>0. On03 prescribe participant premiums ξ,η
+and passive premiums a₁−h₁,−h₂−b₂. Other entries are arbitrary
+subject to the twelve caps below. No root is supplied.
+
+For joint03 rates p,y and solo1,solo2 rates z,w put
+
+    A=a₁y−h₁p, δ=h₃+η,
+    z=(h₂p+b₂y)/[a₂(1−p)(1−y)], w=A/(A+b₁),
+    R=y(ξ−u)/(1−y)−v₁z−(1−z)[v₂w+ξy(1−w)],
+    T=pδ/(1−p)+b₃z−(1−z)[a₃w+ηp(1−w)].           (D1)
+
+A proper zero of R,T gives the relative phase values
+
+    V_A=(ξy,A,0,ηp),
+    V_B=(y(ξ−u)/(1−y),0,a₂z,pδ/(1−p)),
+    V_C=(v₂w+ξy(1−w),0,0,a₃w+ηp(1−w)).             (D2)
+
+Adding s_i restores original annotations. Both joint owners are
+indifferent; the other two owners have their own singleton annotation.
+The A2 recursion is −h₂p−b₂y+a₂z(1−p)(1−y)=0, the C1
+recursion is −b₁w+(1−w)A=0, and the remaining B0/B3 recursions
+are R=T=0. Thus all policy equations, not nominal floors, are checked.
+
+### Boundary signs produce a root without a supplied branch
+
+Define
+
+    α=δ+b₃h₂/a₂+a₃h₁/b₁, τ=a₂b₁α/β,
+    L=−uτ−v₁(h₂+b₂τ)/a₂−v₂(a₁τ−h₁)/b₁,
+    y₀=β/[a₁(b₂b₃+a₃(a₂+b₂))],
+    z₀=b₂y₀/[a₂(1−y₀)], w₀=a₁y₀/(a₁y₀+b₁),
+    H=R(0,y₀).
+
+If L<0 and H>0, a proper zero exists. Consider the curvilinear triangle
+
+    p>0, A>0, C=a₂(1−p)(1−y)−h₂p−b₂y>0.
+
+Its y bounds are the increasing line h₁p/a₁ and the strictly decreasing
+function[a₂−(a₂+h₂)p]/[a₂+b₂−a₂p]. They meet exactly once.
+Its closure stays away from p=1,y=1, and(D1) extends continuously.
+
+On A=0, w=0 gives T=pδ/(1−p)+b₃z−(1−z)ηp>0 away from0.
+On C=0, z=1 gives T=pδ/(1−p)+b₃>0.
+On p=0, multiplication by positive denominators shows T has exactly
+two zeros,0 and y₀, with T<0 between them and T>0 above y₀.
+The product gap gives0<y₀<a₂/(a₂+b₂).
+
+Near0,
+
+    T=αp−[β/(a₂b₁)]y+O((p+y)²).
+
+Its local zero curve is y=τp+O(p²), strictly above A=0:
+α−βh₁/(a₁a₂b₁)
+=δ+b₃h₂/a₂+b₂b₃h₁/(a₁a₂)>0.
+Along that curve R=Lp+O(p²)<0.
+
+Remove a tiny corner p+y<t. On this new straight boundary T has
+exactly one zero, since its tangential derivative is
+α+β/(a₂b₁)>0 at0 and nearby; its R coordinate is negative.
+The only other boundary T-zero is(0,y₀), where R=H>0.
+Both crossings change sign; T is nonzero on the rest of the boundary.
+The loop(R,T) therefore has winding number±1: the two half-plane
+arcs join opposite horizontal rays, once above and once below the axis.
+Each half-plane contracts, so no additional winding is possible.
+If there were no interior zero, normalization would extend that loop
+to a disk in the circle, impossible. This proves a proper zero without
+uniqueness, nonsingularity or a selected quadratic branch.
+
+### Finite caps pay the complete passive bill
+
+For participant premiums J_i(S)=r_i(S)−s_i put
+
+    q_min=h₂b₂/[(a₂+h₂)(a₂+b₂)],
+    m₀=a₂q_min(ξ−u)/(h₂a₁/h₁+b₂)>0,
+    m₁=b₁b₂b₃/(a₂a₃), m₃=b₁b₂b₃/(a₁a₂),
+    m_C=v₂+ξa₂a₃/(b₂b₃).
+
+Assume
+
+    J₁(01)≤0,  J₁(13)≤m₁, J₁(013)≤0;
+    J₂(02)≤0,  J₂(23)≤0,  J₂(023)≤0;
+    J₀(01)≤m₀, J₃(13)≤0,  J₂(12)≤a₂;
+    J₀(02)≤m_C,J₃(23)≤m₃, J₁(12)≤0.              (D3)
+
+At a zero, T=0 implies
+
+    V_C,3=[pδ/(1−p)+b₃z]/(1−z)>b₃z/(1−z),
+    w>(b₃/a₃)z, z≥b₂y/a₂, A>m₁y.
+
+Hence A1 Quit≤m₁(1−p)y<A, A2 Quit≤0=Continue;
+B2 Quit≤a₂z=Continue, B3 Quit≤0<Continue;
+and C1 Quit≤0=Continue.
+Since w<A/b₁<a₁y/b₁, one has z/w>b₁b₂/(a₁a₂).
+This gives V_C,3/w>m₃, paying C3.
+
+Also y(1−w)/w=b₁y/A<a₂a₃/(b₂b₃). Multiplying by ξ<0
+gives V_C,0/w>m_C, paying C0 even when m_C<0.
+Finally p<a₂/(a₂+h₂), y<a₂/(a₂+b₂), p/y<a₁/h₁ give
+
+    y/z≥a₂q_min/(h₂a₁/h₁+b₂), V_B,0/z>m₀,
+
+paying B0. All eight passive endpoints, including013 and023, are covered.
+
+Actual value realization and unrestricted deviations follow by period
+contraction: every deleted player leaves proper opponent clocks.
+The opponent-only quiet probability is geometrically bounded uniformly
+over complete history-dependent replacements, Never and late stopping.
+Iterating the endpoint inequalities gives exact terminal Nash.
+The same tail under the project's zero selecting-date convention gives
+N-average Nash error≤2C/N, with C=3M max_i1/(1−ρ_i).
+One profile supplies one fixed actual target at all sufficiently large
+horizons. Arbitrary signs of s_i cause no problem, because opponents
+alone absorb almost surely even against any unilateral replacement.
+
+### The nonpositive H branch is a genuine child-only consumer
+
+The p=0 child rates y₀,z₀,w₀ are proper and form exact terminal Nash
+in123. The reverse-pair caps in(D3) pay its low passive comparisons;
+m₁<a₁ and m₃<a₃ follow from β>0 and pay the high ones.
+The B2 cap pays the remaining high comparison.
+
+The pivot's actual A gap in this quiet lift is
+(1−y₀)H/[1−(1−y₀)(1−z₀)(1−w₀)].
+When H≤0 its actual A value is at least ξy₀. Propagating actual
+Continue values then dominates the forced B/C annotations(D2).
+The B0/C0 cap bounds above still hold at p=0, using T=0 and the same
+domain bounds. Thus every pivot passive endpoint passes too, and the
+child-only profile is full-game terminal Nash.
+
+Accordingly L<0 and(D3) produce UE for the ENTIRE raw family:
+H≤0 gives the quiet child; H>0 gives the interior degree root.
+The genuine remaining restriction is the cap bill, not a missing branch.
+
+### Singleton determinant correction and source-facing selection
+
+Exact expansion gives
+
+    C₃=a₁a₂v₂+a₂b₁u+b₁b₂v₁,
+    −βL=detΓ+ηC₃.                                (D4)
+
+Positive detΓ alone does not suffice for a chosen partner.
+Take a_i=3,b_i=h₁=h₃=1,h₂=1/10,u=−1,v₁=v₂=1.
+Then detΓ=31/10,C₃=7, and η=−1/2 gives detΓ+ηC₃=−2/5.
+Every nonsingleton principal determinant is nonzero and every singleton
+column has a negative entry. The sole offset−1 complementary root is
+
+    (130/31,40/31,67/31,76/31),
+
+with determinant31/10. Thus Γ is R0 of degree1, but L<0 fails.
+No concrete-base or semantic-minimum assertion is made for this test.
+
+There is nevertheless a meaningful selected-partner implication.
+If D is the child singleton matrix and g=(v₁,v₂,u), block algebra gives
+
+    detD=β, detΓ=β gD⁻¹h=Σ_i h_i C_i,
+    C_i=β(gD⁻¹)_i.
+
+A negative outside inverse weight makes its corresponding C_i<0.
+Scheduling THAT partner with η_i<0 then makes detΓ+η_iC_i>0
+whenever detΓ>0. So an actual passive-inverse failure can furnish
+the correct active-origin sign, not for every partner but for a selected
+one. This does not provide its signed joint data or passive cap tests.
+
+Inspected source: JointPhaseData and exists_pivot in
+MathUE/CyclicChildJointPhasePivot.lean assume eta_nonneg and use a
+canceled endpoint interval; that hypothesis is not silently dropped here.
+outsideInverseWeight_eq in
+UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicChildPassiveInverseExit.lean
+is the relevant source adapter. The algebraic block identity is proved;
+the exact no-UE hypothesis match remains to be checked before global use.
+
+### Covered exact test and next question
+
+For a_i=3,b_i=h_i=1,u=−1,v₁=v₂=1,ξ=η=−1/100,
+
+    β=26, α=1297/300, τ=1297/2600,
+    L=−1293/2600, H=737/675,
+    y₀=z₀=w₀=2/3, m₀=297/6400.
+
+The canonical ε=1/100 table satisfies(D3). This is a covered
+consistency test, not increment evidence or a new export candidate.
+
+Next question: can a selected negative outside cofactor and actual
+all-base/global-minimum source data supply a complete passive-cap
+disjunction, or dispatch its failed cap to a different phase strategy?
+The source-facing sign selection is real; another cap refinement on the
+already-covered table would not answer this general dispatch obligation.
