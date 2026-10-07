@@ -41,4 +41,32 @@ def finFourCoalitionRowEquiv : (Fin 15) ≃
     · change 15 = Fintype.card {coalition : Finset (Fin 4) // coalition.Nonempty}
       decide
 
+/-- The first fourteen canonical rows exhaust all nonempty proper coalitions. -/
+theorem finFour_properNonemptyCoalition_row
+    (coalition : Finset (Fin 4)) (hnonempty : coalition.Nonempty)
+    (hproper : coalition ≠ Finset.univ) :
+    ∃ row : Fin 14, finFourCoalitionOfRow row.castSucc = coalition := by
+  obtain ⟨row, hrow⟩ := finFourCoalitionRowEquiv.surjective ⟨coalition, hnonempty⟩
+  have heq : finFourCoalitionOfRow row = coalition := congrArg Subtype.val hrow
+  have hlt : row.val < 14 := by
+    by_contra hnot
+    have hlast : row = 14 := Fin.ext (by omega)
+    subst row
+    apply hproper
+    rw [← heq]
+    decide
+  refine ⟨⟨row.val, hlt⟩, ?_⟩
+  exact heq
+
+theorem finFour_nonempty_proper_iff_row
+    (coalition : Finset (Fin 4)) :
+    coalition.Nonempty ∧ coalition ≠ Finset.univ ↔
+      ∃ row : Fin 14, finFourCoalitionOfRow row.castSucc = coalition := by
+  constructor
+  · rintro ⟨hnonempty, hproper⟩
+    exact finFour_properNonemptyCoalition_row coalition hnonempty hproper
+  · rintro ⟨row, rfl⟩
+    refine ⟨finFourCoalitionOfRow_nonempty _, ?_⟩
+    fin_cases row <;> decide
+
 end Math.Finset

@@ -5,7 +5,7 @@ public import MathUE.Complex.HolomorphicRectangleLengthArea
 public import Mathlib.MeasureTheory.Measure.Regular
 public import Mathlib.Order.Filter.Finite
 public import Mathlib.Analysis.Calculus.Deriv.Shift
-public import Mathlib.Analysis.Convex.PathConnected
+public import Mathlib.Topology.Path
 public import Mathlib.Topology.Order.ExtendFrom
 
 /-! # Local ingredients for short spherical image arcs
@@ -78,6 +78,33 @@ theorem exists_sphere_radial_frontier_limit_ae_avoiding
   obtain ⟨endpoint, hfrontier, hlimit⟩ := hθ
   exact ⟨endpoint, hfrontier, fun hmem => havoid endpoint hmem hlimit, hlimit⟩
 
+private theorem exists_short_slice_in_band_of_ae
+    {X Y : Type*} [MeasurableSpace X] [MeasurableSpace Y]
+    {μ : Measure X} {ν : Measure Y} [SFinite ν]
+    {speed : X × Y → ℝ≥0∞} (hspeed : Measurable speed)
+    (hfinite : (∫⁻ point, speed point ^ 2 ∂μ.prod ν) ≠ ∞)
+    {P : X → Prop} (hP : ∀ᵐ x ∂μ, P x) {band : Set X}
+    (hlarge : ν univ / 4 < μ band) :
+    ∃ x ∈ band, P x ∧
+      (∫⁻ y, speed (x, y) ∂ν) ≤ ENNReal.ofReal
+        (2 * Real.sqrt (∫⁻ point, speed point ^ 2 ∂μ.prod ν).toReal) := by
+  by_cases hzero : (∫⁻ point, speed point ^ 2 ∂μ.prod ν) = 0
+  · have hslices := RectangleLengthArea.slice_eq_zero_ae_of_energy_zero
+      (μ := μ) (ν := ν) hspeed hzero
+    have hpositive : μ band ≠ 0 := (lt_of_le_of_lt zero_le hlarge).ne'
+    obtain ⟨x, hx, hPx, hslice⟩ := Measure.exists_mem_of_measure_ne_zero_of_ae
+      hpositive (ae_restrict_of_ae (hP.and hslices))
+    exact ⟨x, hx, hPx, by rw [hslice]; exact zero_le⟩
+  · have hlong := RectangleLengthArea.measure_two_sqrt_energy_le_quarter
+      (μ := μ) (ν := ν) hspeed hzero hfinite
+    by_contra hnot
+    have hsubset : band ≤ᵐ[μ] {x | ENNReal.ofReal
+        (2 * Real.sqrt (∫⁻ point, speed point ^ 2 ∂μ.prod ν).toReal) ≤
+          ∫⁻ y, speed (x, y) ∂ν} := by
+      filter_upwards [hP] with x hx hmem
+      exact (lt_of_not_ge (fun hle => hnot ⟨x, hmem, hx, hle⟩)).le
+    exact hlarge.not_ge ((measure_mono_ae hsubset).trans hlong)
+
 /-- Short radial sides can be selected in any angular band occupying more
 than a quarter of the square. In particular the two opposite half-bands
 remain available after excluding finitely many spherical endpoint values.
@@ -120,22 +147,12 @@ theorem exists_short_logarithmic_slice_avoiding
   have hi : InjOn f (logarithmicStrip width) :=
     hinj.comp (logarithmicDiskMap_injOn hwidth angle)
       (fun _ hw => logarithmicDiskMap_mem_ball hw)
-  have hselected : ∃ x ∈ band, P x ∧ slice x ≤ threshold := by
-    by_cases hzero : energy = 0
-    · have hslices := RectangleLengthArea.slice_eq_zero_ae_of_energy_zero
-        (μ := μ) (ν := μ)
-        (measurable_chartRectangleSpeed (isOpen_logarithmicStrip width) hf) hzero
-      have hpositive : μ band ≠ 0 := (lt_of_le_of_lt zero_le hlarge).ne'
-      obtain ⟨x, hx, hPx, hslice⟩ := Measure.exists_mem_of_measure_ne_zero_of_ae
-        hpositive (ae_restrict_of_ae (hP.and hslices))
-      exact ⟨x, hx, hPx, by change slice x = 0 at hslice; rw [hslice]; exact zero_le⟩
-    · have hlong := chart_long_slices_le_quarter (isOpen_logarithmicStrip width) hf hi
-        (openComplexSquare_subset_logarithmicStrip width) hzero
-      by_contra hnot
-      have hsubset : band ≤ᵐ[μ] {x | threshold ≤ slice x} := by
-        filter_upwards [hP] with x hx hmem
-        exact (lt_of_not_ge (fun hle => hnot ⟨x, hmem, hx, hle⟩)).le
-      exact hlarge.not_ge ((measure_mono_ae hsubset).trans hlong)
+  have hselected : ∃ x ∈ band, P x ∧ slice x ≤ threshold :=
+    exists_short_slice_in_band_of_ae
+      (measurable_chartRectangleSpeed (isOpen_logarithmicStrip width) hf)
+      (chartSquareEnergy_lt_top (isOpen_logarithmicStrip width) hf hi
+        (openComplexSquare_subset_logarithmicStrip width)).ne hP
+      (by simpa only [Measure.restrict_apply_univ, Real.volume_Ioo, sub_zero] using hlarge)
   obtain ⟨x, hx, ⟨endpoint, hfrontier, havoid, hlimit⟩, hslice⟩ := hselected
   refine ⟨x, hx, endpoint, hfrontier, havoid, hlimit, ?_⟩
   change (∫⁻ t in Ioo 0 width,
@@ -163,38 +180,6 @@ theorem chartSquareEnergy_comp_add_const
     (Homeomorph.addRight shift).isClosedEmbedding.measurableEmbedding
     (fun z => ENNReal.ofReal (sphericalDerivativeSpeed f z ^ 2))
     (openComplexSquare width)
-
-private theorem injective_path_trans
-    {X : Type*} [TopologicalSpace X] {a b c : X}
-    (left : Path a b) (right : Path b c)
-    (hleft : Function.Injective left) (hright : Function.Injective right)
-    (hmeet : ∀ s t, left s = right t → s = 1 ∧ t = 0) :
-    Function.Injective (left.trans right) := by
-  intro s t heq
-  rw [Path.trans_apply, Path.trans_apply] at heq
-  split_ifs at heq with hs ht ht
-  · have h := congrArg Subtype.val (hleft heq)
-    apply Subtype.ext
-    dsimp only at h
-    linarith
-  · obtain ⟨hleftEnd, hrightEnd⟩ := hmeet _ _ heq
-    have hl := congrArg Subtype.val hleftEnd
-    have hr := congrArg Subtype.val hrightEnd
-    change (2 : ℝ) * (s : ℝ) = 1 at hl
-    change (2 : ℝ) * (t : ℝ) - 1 = 0 at hr
-    apply Subtype.ext
-    linarith
-  · obtain ⟨hleftEnd, hrightEnd⟩ := hmeet _ _ heq.symm
-    have hl := congrArg Subtype.val hleftEnd
-    have hr := congrArg Subtype.val hrightEnd
-    change (2 : ℝ) * (t : ℝ) = 1 at hl
-    change (2 : ℝ) * (s : ℝ) - 1 = 0 at hr
-    apply Subtype.ext
-    linarith
-  · have h := congrArg Subtype.val (hright heq)
-    apply Subtype.ext
-    dsimp only at h
-    linarith
 
 private def rectangleArc (left right height : ℝ) (t : ℝ) : ℂ :=
   if t ≤ 1 then (left : ℂ) + ((height * t : ℝ) : ℂ) * I
@@ -405,5 +390,532 @@ private theorem exists_injective_image_path
     · rw [hagrees s hs, hagrees t ht] at heq
       exact hsource (hinj (hinside s hs) (hinside t ht)
         (ComplexSphere.isEmbedding_chart.injective heq))
+
+private theorem exists_short_horizontal_chart_slice
+    {f : ℂ → ℂ} {U : Set ℂ} {width : ℝ} (hwidth : 0 < width)
+    (hU : IsOpen U) (hf : DifferentiableOn ℂ f U) (hinj : InjOn f U)
+    (hcontained : openComplexSquare width ⊆ U) :
+    ∃ height ∈ Ioo 0 width,
+      (∫⁻ x in Ioo 0 width, ENNReal.ofReal
+        (sphericalDerivativeSpeed f (complexUnitLine ((height : ℂ) * I) 1 x))) ≤
+      ENNReal.ofReal (2 * Real.sqrt (chartSquareEnergy f U width).toReal) := by
+  let μ := volume.restrict (Ioo (0 : ℝ) width)
+  let speed := chartRectangleSpeed f U
+  have hswap :
+      (∫⁻ point, speed point.swap ^ 2 ∂μ.prod μ) = chartSquareEnergy f U width :=
+    lintegral_prod_swap (μ := μ) (ν := μ) (fun point => speed point ^ 2)
+  have hfinite : (∫⁻ point, speed point.swap ^ 2 ∂μ.prod μ) ≠ ∞ := by
+    rw [hswap]
+    exact (chartSquareEnergy_lt_top hU hf hinj hcontained).ne
+  have hlarge : μ univ / 4 < μ univ := by
+    change volume.restrict (Ioo (0 : ℝ) width) univ / 4 <
+      volume.restrict (Ioo (0 : ℝ) width) univ
+    rw [Measure.restrict_apply_univ, Real.volume_Ioo, sub_zero]
+    rw [ENNReal.div_lt_iff (Or.inl (by norm_num)) (Or.inl (by norm_num))]
+    simpa only [one_mul, mul_one, mul_comm] using ENNReal.mul_lt_mul_left
+      (ENNReal.ofReal_pos.mpr hwidth).ne' ENNReal.ofReal_ne_top
+      (show (1 : ℝ≥0∞) < 4 by norm_num)
+  obtain ⟨height, _, hh, hshort⟩ := exists_short_slice_in_band_of_ae
+    ((measurable_chartRectangleSpeed hU hf).comp measurable_swap)
+    hfinite (ae_restrict_mem measurableSet_Ioo) hlarge
+  simp only [Function.comp_def] at hshort
+  change (∫⁻ x, speed (height, x).swap ∂μ) ≤
+    ENNReal.ofReal (2 * Real.sqrt
+      (∫⁻ point, speed point.swap ^ 2 ∂μ.prod μ).toReal) at hshort
+  rw [hswap] at hshort
+  refine ⟨height, hh, ?_⟩
+  have heq :
+      (∫⁻ x in Ioo 0 width, speed (x, height)) =
+      ∫⁻ x in Ioo 0 width, ENNReal.ofReal
+        (sphericalDerivativeSpeed f (complexUnitLine ((height : ℂ) * I) 1 x)) := by
+    apply setLIntegral_congr_fun measurableSet_Ioo
+    intro x hx
+    have hmem := hcontained ⟨(x, height), ⟨hx, hh⟩, rfl⟩
+    change U.indicator _ (Complex.measurableEquivRealProd.symm (x, height)) = _
+    rw [indicator_of_mem hmem]
+    congr 2
+    apply Complex.ext <;> simp [complexUnitLine, Complex.real_smul]
+  rw [← heq]
+  exact hshort
+
+private theorem exists_logarithmic_three_sides
+    {g : ℂ → ℂ} (hg : DifferentiableOn ℂ g (ball 0 1))
+    (hinj : InjOn g (ball 0 1)) {width : ℝ} (hwidth : 0 < width)
+    (hwidthPi : width < 2 * Real.pi) (angle : ℝ)
+    (forbidden : Finset ComplexSphere.Sphere) :
+    ∃ left ∈ Ioo 0 (width / 2), ∃ right ∈ Ioo (width / 2) width,
+      ∃ height ∈ Ioo 0 width, ∃ p q : ComplexSphere.Sphere,
+        p ∈ frontier (ComplexSphere.chart '' (g '' ball 0 1)) ∧
+        q ∈ frontier (ComplexSphere.chart '' (g '' ball 0 1)) ∧
+        p ∉ forbidden ∧ q ∉ forbidden ∧ p ≠ q ∧
+        Tendsto (fun r : ℝ => ComplexSphere.chart
+          (g ((r : ℂ) * Complex.exp (((angle + left : ℝ) : ℂ) * I))))
+          (𝓝[<] 1) (𝓝 p) ∧
+        Tendsto (fun r : ℝ => ComplexSphere.chart
+          (g ((r : ℂ) * Complex.exp (((angle + right : ℝ) : ℂ) * I))))
+          (𝓝[<] 1) (𝓝 q) ∧
+        (∫⁻ t in Ioo 0 width, ENNReal.ofReal
+          (sphericalDerivativeSpeed (fun w => g (logarithmicDiskMap angle w))
+            (complexUnitLine (left : ℂ) I t))) ≤
+          ENNReal.ofReal (2 * Real.sqrt
+            (chartSquareEnergy (fun w => g (logarithmicDiskMap angle w))
+              (logarithmicStrip width) width).toReal) ∧
+        (∫⁻ t in Ioo 0 width, ENNReal.ofReal
+          (sphericalDerivativeSpeed (fun w => g (logarithmicDiskMap angle w))
+            (complexUnitLine (right : ℂ) I t))) ≤
+          ENNReal.ofReal (2 * Real.sqrt
+            (chartSquareEnergy (fun w => g (logarithmicDiskMap angle w))
+              (logarithmicStrip width) width).toReal) ∧
+        (∫⁻ x in Ioo 0 width, ENNReal.ofReal
+          (sphericalDerivativeSpeed (fun w => g (logarithmicDiskMap angle w))
+            (complexUnitLine ((height : ℂ) * I) 1 x))) ≤
+          ENNReal.ofReal (2 * Real.sqrt
+            (chartSquareEnergy (fun w => g (logarithmicDiskMap angle w))
+              (logarithmicStrip width) width).toReal) := by
+  classical
+  have hleftBand : Ioo (0 : ℝ) (width / 2) ⊆ Ioo 0 width := by
+    intro x hx
+    exact ⟨hx.1, by linarith [hx.2]⟩
+  have hrightBand : Ioo (width / 2) width ⊆ Ioo 0 width := by
+    intro x hx
+    exact ⟨by linarith [hx.1], hx.2⟩
+  have hquarter : ENNReal.ofReal width / 4 < ENNReal.ofReal (width / 2) := by
+    have heq : ENNReal.ofReal width / 4 = ENNReal.ofReal (width / 4) := by
+      rw [ENNReal.ofReal_div_of_pos (by norm_num : (0 : ℝ) < 4)]
+      norm_num
+    rw [heq]
+    exact (ENNReal.ofReal_lt_ofReal_iff (by linarith : 0 < width / 2)).mpr
+      (by linarith)
+  have hleftLarge : ENNReal.ofReal width / 4 <
+      (volume.restrict (Ioo (0 : ℝ) width)) (Ioo 0 (width / 2)) := by
+    rw [Measure.restrict_apply measurableSet_Ioo, inter_eq_left.mpr hleftBand,
+      Real.volume_Ioo, sub_zero]
+    exact hquarter
+  have hrightLarge : ENNReal.ofReal width / 4 <
+      (volume.restrict (Ioo (0 : ℝ) width)) (Ioo (width / 2) width) := by
+    rw [Measure.restrict_apply measurableSet_Ioo, inter_eq_left.mpr hrightBand,
+      Real.volume_Ioo, show width - width / 2 = width / 2 by ring]
+    exact hquarter
+  obtain ⟨left, hleft, p, hp, hpavoid, hplimit, hleftShort⟩ :=
+    exists_short_logarithmic_slice_avoiding hg hinj hwidthPi angle forbidden
+      hleftBand hleftLarge
+  obtain ⟨right, hright, q, hq, hqavoid, hqlimit, hrightShort⟩ :=
+    exists_short_logarithmic_slice_avoiding hg hinj hwidthPi angle (insert p forbidden)
+      hrightBand hrightLarge
+  let f : ℂ → ℂ := fun w => g (logarithmicDiskMap angle w)
+  have hf : DifferentiableOn ℂ f (logarithmicStrip width) :=
+    hg.comp (differentiable_logarithmicDiskMap angle).differentiableOn
+      (fun _ hw => logarithmicDiskMap_mem_ball hw)
+  have hi : InjOn f (logarithmicStrip width) :=
+    hinj.comp (logarithmicDiskMap_injOn hwidthPi angle)
+      (fun _ hw => logarithmicDiskMap_mem_ball hw)
+  obtain ⟨height, hheight, hhorizontal⟩ := exists_short_horizontal_chart_slice
+    hwidth (isOpen_logarithmicStrip width) hf hi
+    (openComplexSquare_subset_logarithmicStrip width)
+  have hpq : p ≠ q := by
+    intro heq
+    apply hqavoid
+    rw [← heq]
+    exact Finset.mem_insert_self _ _
+  exact ⟨left, hleft, right, hright, height, hheight, p, q,
+    hp, hq, hpavoid, fun hmem => hqavoid (Finset.mem_insert_of_mem hmem),
+    hpq, hplimit, hqlimit, hleftShort, hrightShort, hhorizontal⟩
+
+private theorem exists_small_logarithmic_square
+    {g : ℂ → ℂ} (hg : DifferentiableOn ℂ g (ball 0 1))
+    (hinj : InjOn g (ball 0 1)) (angle : ℝ)
+    {ε : ℝ≥0∞} (hε : ε ≠ 0) {δ : ℝ} (hδ : 0 < δ) :
+    ∃ width ∈ Ioo (0 : ℝ) 1,
+      chartSquareEnergy (fun w => g (logarithmicDiskMap (angle - width / 2) w))
+        (logarithmicStrip width) width < ε ∧
+      ∀ z : ℂ, z.re ∈ Icc 0 width → z.im ∈ Icc 0 width →
+        dist (logarithmicDiskMap (angle - width / 2) z)
+          (Complex.exp ((angle : ℂ) * I)) < δ := by
+  let f : ℂ → ℂ := fun w => g (logarithmicDiskMap (angle - 1) w)
+  have htwo : (2 : ℝ) < 2 * Real.pi := by linarith [Real.pi_gt_three]
+  have hf : DifferentiableOn ℂ f (logarithmicStrip 2) :=
+    hg.comp (differentiable_logarithmicDiskMap (angle - 1)).differentiableOn
+      (fun _ hw => logarithmicDiskMap_mem_ball hw)
+  have hi : InjOn f (logarithmicStrip 2) :=
+    hinj.comp (logarithmicDiskMap_injOn htwo (angle - 1))
+      (fun _ hw => logarithmicDiskMap_mem_ball hw)
+  have hcenter : logarithmicDiskMap (angle - 1) (1 : ℂ) =
+      Complex.exp ((angle : ℂ) * I) := by
+    simpa [complexUnitLine] using logarithmicDiskMap_unitLine (angle - 1) 1 0
+  obtain ⟨η, hη, hclose⟩ := Metric.continuousAt_iff.mp
+    ((differentiable_logarithmicDiskMap (angle - 1)).continuous.continuousAt
+      (x := (1 : ℂ))) δ hδ
+  obtain ⟨r, hr, henergy⟩ := exists_ball_spherical_energy_lt
+    (isOpen_logarithmicStrip 2) hf hi (1 : ℂ) hε (lt_min hη zero_lt_one)
+  let width := r / 4
+  have hw : width ∈ Ioo (0 : ℝ) 1 := by
+    dsimp [width]
+    constructor <;> linarith [hr.1, hr.2, min_le_right η 1]
+  let shift : ℂ := ((1 - width / 2 : ℝ) : ℂ)
+  have htranslate (z : ℂ) : logarithmicDiskMap (angle - width / 2) z =
+      logarithmicDiskMap (angle - 1) (z + shift) := by
+    unfold logarithmicDiskMap
+    rw [← Complex.exp_add, ← Complex.exp_add]
+    congr 1
+    dsimp [shift]
+    push_cast
+    ring
+  have hnear (z : ℂ) (hx : z.re ∈ Icc 0 width) (hy : z.im ∈ Icc 0 width) :
+      z + shift ∈ ball (1 : ℂ) r := by
+    rw [mem_ball, dist_eq_norm]
+    have hxabs : |z.re - width / 2| ≤ width / 2 := abs_le.mpr (by
+      constructor <;> linarith [hx.1, hx.2])
+    have hyabs : |z.im| ≤ width := by
+      rw [abs_of_nonneg hy.1]
+      exact hy.2
+    have hnorm := Complex.norm_le_abs_re_add_abs_im (z + shift - 1)
+    have hre : (z + shift - 1).re = z.re - width / 2 := by
+      simp only [shift, Complex.sub_re, Complex.add_re, Complex.ofReal_re,
+        Complex.one_re]
+      ring
+    have him : (z + shift - 1).im = z.im := by simp [shift]
+    rw [hre, him] at hnorm
+    have hsum : ‖z + shift - 1‖ ≤ width / 2 + width :=
+      hnorm.trans (add_le_add hxabs hyabs)
+    dsimp [width] at hsum
+    linarith [hr.1]
+  refine ⟨width, hw, ?_, ?_⟩
+  · have hfun : (fun w => g (logarithmicDiskMap (angle - width / 2) w)) =
+        (fun w => f (w + shift)) := funext fun w => congrArg g (htranslate w)
+    rw [hfun, chartSquareEnergy_comp_add_const shift
+      (openComplexSquare_subset_logarithmicStrip width)]
+    apply lt_of_le_of_lt (lintegral_mono_set ?_) henergy
+    rintro _ ⟨z, ⟨⟨x, y⟩, ⟨hx, hy⟩, rfl⟩, rfl⟩
+    refine ⟨hnear _ ⟨hx.1.le, hx.2.le⟩ ⟨hy.1.le, hy.2.le⟩, ?_⟩
+    simp only [logarithmicStrip, Set.mem_ofPred_eq, shift,
+      Complex.measurableEquivRealProd_symm_apply, Complex.add_re, Complex.add_im,
+      Complex.ofReal_re, Complex.ofReal_im, add_zero]
+    exact ⟨by linarith [hw.2, hx.1], by linarith [hw.2, hx.2], hy.1⟩
+  · intro z hx hy
+    rw [htranslate, ← hcenter]
+    apply hclose
+    have hdistance : dist (z + shift) (1 : ℂ) < r := hnear z hx hy
+    exact hdistance.trans (hr.2.trans_le (min_le_left η 1))
+
+private theorem logarithmic_unitLine_tendsto_of_radial
+    {g : ℂ → ℂ} {angle x : ℝ} {endpoint : ComplexSphere.Sphere}
+    (hlimit : Tendsto (fun r : ℝ => ComplexSphere.chart
+      (g ((r : ℂ) * Complex.exp (((angle + x : ℝ) : ℂ) * I))))
+      (𝓝[<] 1) (𝓝 endpoint)) :
+    Tendsto (fun t : ℝ => ComplexSphere.chart
+      (g (logarithmicDiskMap angle (complexUnitLine (x : ℂ) I t))))
+      (𝓝[>] 0) (𝓝 endpoint) := by
+  have hradius : Tendsto (fun t : ℝ => Real.exp (-t)) (𝓝[>] 0) (𝓝[<] 1) := by
+    apply tendsto_nhdsWithin_iff.mpr
+    constructor
+    · have hc : Continuous (fun t : ℝ => Real.exp (-t)) := by fun_prop
+      have ht := hc.continuousAt (x := (0 : ℝ))
+      simpa only [neg_zero, Real.exp_zero] using
+        ht.tendsto.mono_left (show 𝓝[>] (0 : ℝ) ≤ 𝓝 0 from nhdsWithin_le_nhds)
+    · filter_upwards [self_mem_nhdsWithin] with t ht
+      exact Real.exp_lt_one_iff.mpr (neg_neg_of_pos ht)
+  simpa only [Function.comp_def, logarithmicDiskMap_unitLine] using hlimit.comp hradius
+
+private theorem rectangle_image_endpoint_limits
+    {g : ℂ → ℂ} {left right height angle : ℝ} (hh : 0 < height)
+    {a b : ℂ} (source : Path a b)
+    (hsource : ∀ t : unitInterval, source t = logarithmicDiskMap angle
+      (rectangleArc left right height (3 * (t : ℝ))))
+    {p q : ComplexSphere.Sphere}
+    (hp : Tendsto (fun r : ℝ => ComplexSphere.chart
+      (g ((r : ℂ) * Complex.exp (((angle + left : ℝ) : ℂ) * I))))
+      (𝓝[<] 1) (𝓝 p))
+    (hq : Tendsto (fun r : ℝ => ComplexSphere.chart
+      (g ((r : ℂ) * Complex.exp (((angle + right : ℝ) : ℂ) * I))))
+      (𝓝[<] 1) (𝓝 q)) :
+    Tendsto (fun t : ℝ => ComplexSphere.chart (g (source.extend t)))
+      (𝓝[>] 0) (𝓝 p) ∧
+    Tendsto (fun t : ℝ => ComplexSphere.chart (g (source.extend t)))
+      (𝓝[<] 1) (𝓝 q) := by
+  have hleftTime : Tendsto (fun t : ℝ => height * (3 * t))
+      (𝓝[>] 0) (𝓝[>] 0) := by
+    apply tendsto_nhdsWithin_iff.mpr
+    constructor
+    · have hc : Continuous (fun t : ℝ => height * (3 * t)) := by fun_prop
+      simpa only [mul_zero] using hc.continuousAt.tendsto.mono_left
+        (show 𝓝[>] (0 : ℝ) ≤ 𝓝 0 from nhdsWithin_le_nhds)
+    · filter_upwards [self_mem_nhdsWithin] with t ht
+      exact mul_pos hh (mul_pos (by norm_num) ht)
+  have hrightTime : Tendsto (fun t : ℝ => height * (3 - 3 * t))
+      (𝓝[<] 1) (𝓝[>] 0) := by
+    apply tendsto_nhdsWithin_iff.mpr
+    constructor
+    · have hc : Continuous (fun t : ℝ => height * (3 - 3 * t)) := by fun_prop
+      simpa only [mul_one, sub_self, mul_zero] using hc.continuousAt.tendsto.mono_left
+        (show 𝓝[<] (1 : ℝ) ≤ 𝓝 1 from nhdsWithin_le_nhds)
+    · filter_upwards [self_mem_nhdsWithin] with t ht
+      change t < 1 at ht
+      exact mul_pos hh (by linarith)
+  constructor
+  · apply ((logarithmic_unitLine_tendsto_of_radial hp).comp hleftTime).congr'
+    filter_upwards [self_mem_nhdsWithin,
+      (show ∀ᶠ t : ℝ in 𝓝[>] 0, t < 1 / 3 from
+        nhdsWithin_le_nhds (eventually_lt_nhds (by norm_num : (0 : ℝ) < 1 / 3)))]
+      with t ht hsmall
+    have htI : t ∈ Icc (0 : ℝ) 1 := ⟨ht.le, by linarith⟩
+    rw [Path.extend_extends' source ⟨t, htI⟩, hsource]
+    simp only [Function.comp_def, rectangleArc, ite_eq_left (show 3 * t ≤ 1 by linarith),
+      complexUnitLine, Complex.real_smul]
+  · apply ((logarithmic_unitLine_tendsto_of_radial hq).comp hrightTime).congr'
+    filter_upwards [self_mem_nhdsWithin,
+      (show ∀ᶠ t : ℝ in 𝓝[<] 1, 2 / 3 < t from
+        nhdsWithin_le_nhds (eventually_gt_nhds (by norm_num : (2 : ℝ) / 3 < 1)))]
+      with t ht hlarge
+    have htI : t ∈ Icc (0 : ℝ) 1 := ⟨by linarith, ht.le⟩
+    rw [Path.extend_extends' source ⟨t, htI⟩, hsource]
+    simp only [Function.comp_def, rectangleArc,
+      ite_eq_right (show ¬3 * t ≤ 1 by linarith),
+      ite_eq_right (show ¬3 * t ≤ 2 by linarith),
+      complexUnitLine, Complex.real_smul]
+
+private theorem ediam_image_Icc_le_of_open_chords
+    {X : Type*} [PseudoEMetricSpace X] {f : unitInterval → X}
+    (hf : Continuous f) {a b : unitInterval} (hab : a < b)
+    {bound : ℝ≥0∞}
+    (hbound : ∀ s ∈ Ioo a b, ∀ t ∈ Ioo a b, edist (f s) (f t) ≤ bound) :
+    Metric.ediam (f '' Icc a b) ≤ bound := by
+  calc
+    Metric.ediam (f '' Icc a b) =
+        Metric.ediam (f '' closure (Ioo a b)) := by rw [closure_Ioo hab.ne]
+    _ ≤ Metric.ediam (closure (f '' Ioo a b)) :=
+      Metric.ediam_mono (image_closure_subset_closure_image hf)
+    _ = Metric.ediam (f '' Ioo a b) := Metric.ediam_closure _
+    _ ≤ bound := by
+      apply Metric.ediam_le
+      rintro _ ⟨s, hs, rfl⟩ _ ⟨t, ht, rfl⟩
+      exact hbound s hs t ht
+
+private theorem rectangle_image_ediam_le
+    {f : ℂ → ℂ} {U : Set ℂ} (hU : IsOpen U) (hf : DifferentiableOn ℂ f U)
+    {left right height width : ℝ} (hleft : 0 < left) (hlr : left < right)
+    (hright : right < width) (hheight : 0 < height) (hheightWidth : height < width)
+    (hcontained : openComplexSquare width ⊆ U)
+    {p q : ComplexSphere.Sphere} (image : Path p q)
+    (hformula : ∀ t : unitInterval, (t : ℝ) ∈ Ioo 0 1 →
+      image t = ComplexSphere.chart (f (rectangleArc left right height (3 * (t : ℝ)))))
+    {bound : ℝ≥0∞} (hbound : bound ≠ ∞)
+    (hleftShort : (∫⁻ t in Ioo 0 width, ENNReal.ofReal
+      (sphericalDerivativeSpeed f (complexUnitLine (left : ℂ) I t))) ≤ bound)
+    (hrightShort : (∫⁻ t in Ioo 0 width, ENNReal.ofReal
+      (sphericalDerivativeSpeed f (complexUnitLine (right : ℂ) I t))) ≤ bound)
+    (hhorizontal : (∫⁻ x in Ioo 0 width, ENNReal.ofReal
+      (sphericalDerivativeSpeed f (complexUnitLine ((height : ℂ) * I) 1 x))) ≤ bound) :
+    Metric.ediam (range image) ≤ bound + bound + bound := by
+  have hvertical (x : ℝ) (hx : x ∈ Ioo 0 width) :
+      MapsTo (complexUnitLine (x : ℂ) I) (Ioo 0 width) U := by
+    intro t ht
+    have heq : complexUnitLine (x : ℂ) I t =
+        Complex.measurableEquivRealProd.symm (x, t) := by
+      apply Complex.ext <;> simp [complexUnitLine, Complex.real_smul]
+    rw [heq]
+    exact hcontained ⟨(x, t), ⟨hx, ht⟩, rfl⟩
+  have hhorizontalLine : MapsTo (complexUnitLine ((height : ℂ) * I) 1)
+      (Ioo 0 width) U := by
+    intro x hx
+    have heq : complexUnitLine ((height : ℂ) * I) 1 x =
+        Complex.measurableEquivRealProd.symm (x, height) := by
+      apply Complex.ext <;> simp [complexUnitLine, Complex.real_smul]
+    rw [heq]
+    exact hcontained ⟨(x, height), ⟨hx, hheight, hheightWidth⟩, rfl⟩
+  have hleftLine := hvertical left ⟨hleft, hlr.trans hright⟩
+  have hrightLine := hvertical right ⟨hleft.trans hlr, hright⟩
+  have hleftInt := integrableOn_sphericalDerivativeSpeed_unitLine_of_lintegral_ne_top
+    hU hf hleftLine (ne_top_of_le_ne_top hbound hleftShort)
+  have hrightInt := integrableOn_sphericalDerivativeSpeed_unitLine_of_lintegral_ne_top
+    hU hf hrightLine (ne_top_of_le_ne_top hbound hrightShort)
+  have hhorizontalInt := integrableOn_sphericalDerivativeSpeed_unitLine_of_lintegral_ne_top
+    hU hf hhorizontalLine (ne_top_of_le_ne_top hbound hhorizontal)
+  let cut₁ : unitInterval := ⟨1 / 3, by norm_num, by norm_num⟩
+  let cut₂ : unitInterval := ⟨2 / 3, by norm_num, by norm_num⟩
+  have hcut₁ : (0 : unitInterval) < cut₁ := by change (0 : ℝ) < 1 / 3; norm_num
+  have hcuts : cut₁ < cut₂ := by change (1 : ℝ) / 3 < 2 / 3; norm_num
+  have hcut₂ : cut₂ < (1 : unitInterval) := by change (2 : ℝ) / 3 < 1; norm_num
+  have hL : Metric.ediam (image '' Icc 0 cut₁) ≤ bound := by
+    apply ediam_image_Icc_le_of_open_chords image.continuous hcut₁
+    intro s hs t ht
+    change (0 : ℝ) < (s : ℝ) ∧ (s : ℝ) < 1 / 3 at hs
+    change (0 : ℝ) < (t : ℝ) ∧ (t : ℝ) < 1 / 3 at ht
+    have heq (u : unitInterval) (hu : (u : ℝ) ∈ Ioo 0 (1 / 3)) :
+        image u = ComplexSphere.chart
+          (f (complexUnitLine (left : ℂ) I (height * (3 * (u : ℝ))))) := by
+      rw [hformula u ⟨hu.1, by linarith [hu.2]⟩]
+      simp only [rectangleArc, ite_eq_left (show 3 * (u : ℝ) ≤ 1 by linarith [hu.2]),
+        complexUnitLine, Complex.real_smul]
+    have hs' : height * (3 * (s : ℝ)) ∈ Ioo 0 width := by
+      constructor <;> nlinarith [hs.1, hs.2]
+    have ht' : height * (3 * (t : ℝ)) ∈ Ioo 0 width := by
+      constructor <;> nlinarith [ht.1, ht.2]
+    rw [heq s hs, heq t ht]
+    exact (edist_sphere_holomorphic_unitLine_le_lintegral
+      ComplexSphere.pole ComplexSphere.plane ComplexSphere.norm_pole
+      ComplexSphere.pole_orthogonal_plane hU hf (by simp) hleftLine hleftInt
+      ⟨_, hs'⟩ ⟨_, ht'⟩).trans ((setLIntegral_le_lintegral _ _).trans hleftShort)
+  have hM : Metric.ediam (image '' Icc cut₁ cut₂) ≤ bound := by
+    apply ediam_image_Icc_le_of_open_chords image.continuous hcuts
+    intro s hs t ht
+    change (1 : ℝ) / 3 < (s : ℝ) ∧ (s : ℝ) < 2 / 3 at hs
+    change (1 : ℝ) / 3 < (t : ℝ) ∧ (t : ℝ) < 2 / 3 at ht
+    have heq (u : unitInterval) (hu : (u : ℝ) ∈ Ioo (1 / 3) (2 / 3)) :
+        image u = ComplexSphere.chart (f (complexUnitLine ((height : ℂ) * I) 1
+          (left + (right - left) * (3 * (u : ℝ) - 1)))) := by
+      rw [hformula u ⟨by linarith [hu.1], by linarith [hu.2]⟩]
+      simp only [rectangleArc, ite_eq_right (show ¬3 * (u : ℝ) ≤ 1 by linarith [hu.1]),
+        ite_eq_left (show 3 * (u : ℝ) ≤ 2 by linarith [hu.2]),
+        complexUnitLine, Complex.real_smul, mul_one, add_comm]
+    have hs' : left + (right - left) * (3 * (s : ℝ) - 1) ∈ Ioo 0 width := by
+      constructor <;> nlinarith [hs.1, hs.2]
+    have ht' : left + (right - left) * (3 * (t : ℝ) - 1) ∈ Ioo 0 width := by
+      constructor <;> nlinarith [ht.1, ht.2]
+    rw [heq s hs, heq t ht]
+    exact (edist_sphere_holomorphic_unitLine_le_lintegral
+      ComplexSphere.pole ComplexSphere.plane ComplexSphere.norm_pole
+      ComplexSphere.pole_orthogonal_plane hU hf (by simp) hhorizontalLine hhorizontalInt
+      ⟨_, hs'⟩ ⟨_, ht'⟩).trans ((setLIntegral_le_lintegral _ _).trans hhorizontal)
+  have hR : Metric.ediam (image '' Icc cut₂ 1) ≤ bound := by
+    apply ediam_image_Icc_le_of_open_chords image.continuous hcut₂
+    intro s hs t ht
+    change (2 : ℝ) / 3 < (s : ℝ) ∧ (s : ℝ) < 1 at hs
+    change (2 : ℝ) / 3 < (t : ℝ) ∧ (t : ℝ) < 1 at ht
+    have heq (u : unitInterval) (hu : (u : ℝ) ∈ Ioo (2 / 3) 1) :
+        image u = ComplexSphere.chart
+          (f (complexUnitLine (right : ℂ) I (height * (3 - 3 * (u : ℝ))))) := by
+      rw [hformula u ⟨by linarith [hu.1], hu.2⟩]
+      simp only [rectangleArc, ite_eq_right (show ¬3 * (u : ℝ) ≤ 1 by linarith [hu.1]),
+        ite_eq_right (show ¬3 * (u : ℝ) ≤ 2 by linarith [hu.1]),
+        complexUnitLine, Complex.real_smul]
+    have hs' : height * (3 - 3 * (s : ℝ)) ∈ Ioo 0 width := by
+      constructor <;> nlinarith [hs.1, hs.2]
+    have ht' : height * (3 - 3 * (t : ℝ)) ∈ Ioo 0 width := by
+      constructor <;> nlinarith [ht.1, ht.2]
+    rw [heq s hs, heq t ht]
+    exact (edist_sphere_holomorphic_unitLine_le_lintegral
+      ComplexSphere.pole ComplexSphere.plane ComplexSphere.norm_pole
+      ComplexSphere.pole_orthogonal_plane hU hf (by simp) hrightLine hrightInt
+      ⟨_, hs'⟩ ⟨_, ht'⟩).trans ((setLIntegral_le_lintegral _ _).trans hrightShort)
+  have hcover : range image =
+      (image '' Icc 0 cut₁ ∪ image '' Icc cut₁ cut₂) ∪ image '' Icc cut₂ 1 := by
+    apply Subset.antisymm
+    · rintro _ ⟨t, rfl⟩
+      by_cases ht : t ≤ cut₁
+      · exact Or.inl (Or.inl ⟨t, ⟨t.property.1, ht⟩, rfl⟩)
+      · by_cases ht' : t ≤ cut₂
+        · exact Or.inl (Or.inr ⟨t, ⟨(not_le.mp ht).le, ht'⟩, rfl⟩)
+        · exact Or.inr ⟨t, ⟨(not_le.mp ht').le, t.property.2⟩, rfl⟩
+    · rintro _ ((⟨t, _, rfl⟩ | ⟨t, _, rfl⟩) | ⟨t, _, rfl⟩) <;> exact mem_range_self t
+  have hmeet₁ : ((image '' Icc 0 cut₁) ∩ (image '' Icc cut₁ cut₂)).Nonempty :=
+    ⟨image cut₁, ⟨cut₁, ⟨hcut₁.le, le_rfl⟩, rfl⟩,
+      ⟨cut₁, ⟨le_rfl, hcuts.le⟩, rfl⟩⟩
+  have hmeet₂ : ((image '' Icc 0 cut₁ ∪ image '' Icc cut₁ cut₂) ∩
+      (image '' Icc cut₂ 1)).Nonempty :=
+    ⟨image cut₂, Or.inr ⟨cut₂, ⟨hcuts.le, le_rfl⟩, rfl⟩,
+      ⟨cut₂, ⟨le_rfl, hcut₂.le⟩, rfl⟩⟩
+  rw [hcover]
+  exact (Metric.ediam_union_le hmeet₂).trans
+    (add_le_add ((Metric.ediam_union_le hmeet₁).trans (add_le_add hL hM)) hR)
+
+/-- A local embedded three-side arc with actual small spherical image. The two
+boundary arguments lie in opposite bands around the prescribed argument.
+Neither boundary injectivity nor boundedness of the original map is assumed.
+This is a local arc, not a nested crosscut sequence or a separation theorem. -/
+theorem exists_short_embedded_spherical_image_arc
+    {g : ℂ → ℂ} (hg : DifferentiableOn ℂ g (ball 0 1))
+    (hinj : InjOn g (ball 0 1)) (angle : ℝ)
+    {sourceTolerance imageTolerance : ℝ}
+    (hsourceTolerance : 0 < sourceTolerance) (himageTolerance : 0 < imageTolerance)
+    (forbidden : Finset ComplexSphere.Sphere) :
+    ∃ width ∈ Ioo (0 : ℝ) 1,
+      ∃ left ∈ Ioo (angle - width / 2) angle,
+      ∃ right ∈ Ioo angle (angle + width / 2),
+      ∃ p q : ComplexSphere.Sphere,
+      ∃ source : Path (Complex.exp ((left : ℂ) * I))
+        (Complex.exp ((right : ℂ) * I)), ∃ image : Path p q,
+        Topology.IsClosedEmbedding source ∧ Topology.IsClosedEmbedding image ∧
+        p ∈ frontier (ComplexSphere.chart '' (g '' ball 0 1)) ∧
+        q ∈ frontier (ComplexSphere.chart '' (g '' ball 0 1)) ∧
+        p ∉ forbidden ∧ q ∉ forbidden ∧ p ≠ q ∧
+        (∀ t : unitInterval, (t : ℝ) ∈ Ioo 0 1 →
+          source t ∈ ball 0 1 ∧ image t = ComplexSphere.chart (g (source t))) ∧
+        (∀ t : unitInterval,
+          dist (source t) (Complex.exp ((angle : ℂ) * I)) < sourceTolerance) ∧
+        Metric.ediam (range source) < ENNReal.ofReal sourceTolerance ∧
+        Metric.ediam (range image) < ENNReal.ofReal imageTolerance := by
+  classical
+  have henergyPositive : ENNReal.ofReal ((imageTolerance / 12) ^ 2) ≠ 0 := by
+    positivity
+  obtain ⟨width, hw, henergy, hclose⟩ := exists_small_logarithmic_square
+    hg hinj angle henergyPositive (show 0 < sourceTolerance / 4 by positivity)
+  have hwidthPi : width < 2 * Real.pi := by linarith [hw.2, Real.pi_gt_three]
+  let offset := angle - width / 2
+  let f : ℂ → ℂ := fun w => g (logarithmicDiskMap offset w)
+  let energy := chartSquareEnergy f (logarithmicStrip width) width
+  let bound := ENNReal.ofReal (2 * Real.sqrt energy.toReal)
+  obtain ⟨left, hl, right, hr, height, hh, p, q, hp, hq, hpavoid, hqavoid,
+      hpq, hplimit, hqlimit, hleftShort, hrightShort, hhorizontal⟩ :=
+    exists_logarithmic_three_sides hg hinj hw.1 hwidthPi offset forbidden
+  have hlr : left < right := hl.2.trans hr.1
+  obtain ⟨source, hsourceInj, hinside, hsource⟩ :=
+    exists_rectangle_source_path hl.1 hlr hr.2 hh.1 hwidthPi offset
+  have hlimits := rectangle_image_endpoint_limits hh.1 source hsource hplimit hqlimit
+  obtain ⟨image, himageInj, hagrees⟩ := exists_injective_image_path
+    hg hinj source hsourceInj hinside hp hq hpq hlimits.1 hlimits.2
+  have hf : DifferentiableOn ℂ f (logarithmicStrip width) :=
+    hg.comp (differentiable_logarithmicDiskMap offset).differentiableOn
+      (fun _ hz => logarithmicDiskMap_mem_ball hz)
+  have hformula (t : unitInterval) (ht : (t : ℝ) ∈ Ioo 0 1) :
+      image t = ComplexSphere.chart (f (rectangleArc left right height (3 * (t : ℝ)))) := by
+    rw [hagrees t ht, hsource t]
+  have himageBound : Metric.ediam (range image) ≤ bound + bound + bound :=
+    rectangle_image_ediam_le (isOpen_logarithmicStrip width) hf hl.1 hlr hr.2 hh.1 hh.2
+      (openComplexSquare_subset_logarithmicStrip width) image hformula
+      ENNReal.ofReal_ne_top hleftShort hrightShort hhorizontal
+  have he : energy < ENNReal.ofReal ((imageTolerance / 12) ^ 2) := henergy
+  have hefinite : energy ≠ ∞ := ne_top_of_lt he
+  have hereal : energy.toReal < (imageTolerance / 12) ^ 2 := by
+    have h := (ENNReal.toReal_lt_toReal hefinite ENNReal.ofReal_ne_top).mpr he
+    simpa only [ENNReal.toReal_ofReal (sq_nonneg _)] using h
+  have hsqrt : Real.sqrt energy.toReal < imageTolerance / 12 :=
+    (Real.sqrt_lt ENNReal.toReal_nonneg (by positivity)).mpr hereal
+  have hboundSmall : bound + bound + bound < ENNReal.ofReal imageTolerance := by
+    have hn : 0 ≤ 2 * Real.sqrt energy.toReal := by positivity
+    change ENNReal.ofReal _ + ENNReal.ofReal _ + ENNReal.ofReal _ < _
+    rw [← ENNReal.ofReal_add hn hn, ← ENNReal.ofReal_add (add_nonneg hn hn) hn]
+    exact (ENNReal.ofReal_lt_ofReal_iff himageTolerance).mpr (by linarith)
+  have hsourceClose (t : unitInterval) :
+      dist (source t) (Complex.exp ((angle : ℂ) * I)) < sourceTolerance / 4 := by
+    have ht : 3 * (t : ℝ) ∈ Icc (0 : ℝ) 3 := by
+      constructor <;> linarith [t.property.1, t.property.2]
+    have hc := rectangleArc_coordinates hlr hh.1 ht
+    rw [hsource t]
+    exact hclose _ ⟨le_trans hl.1.le hc.1.1, hc.1.2.trans hr.2.le⟩
+      ⟨hc.2.1, hc.2.2.trans hh.2.le⟩
+  have hsourceBound : Metric.ediam (range source) ≤
+      ENNReal.ofReal (sourceTolerance / 2) := by
+    apply Metric.ediam_le
+    rintro _ ⟨s, rfl⟩ _ ⟨t, rfl⟩
+    rw [edist_dist]
+    apply ENNReal.ofReal_le_ofReal
+    have htri := dist_triangle_right (source s) (source t)
+      (Complex.exp ((angle : ℂ) * I))
+    linarith [hsourceClose s, hsourceClose t]
+  have hleftBand : offset + left ∈ Ioo (angle - width / 2) angle := by
+    dsimp [offset]
+    constructor <;> linarith [hl.1, hl.2]
+  have hrightBand : offset + right ∈ Ioo angle (angle + width / 2) := by
+    dsimp [offset]
+    constructor <;> linarith [hr.1, hr.2]
+  refine ⟨width, hw, offset + left, hleftBand, offset + right, hrightBand,
+    p, q, source, image, source.continuous.isClosedEmbedding hsourceInj,
+    image.continuous.isClosedEmbedding himageInj, hp, hq, hpavoid, hqavoid, hpq,
+    ?_, ?_, ?_, himageBound.trans_lt hboundSmall⟩
+  · exact fun t ht => ⟨hinside t ht, hagrees t ht⟩
+  · intro t
+    linarith [hsourceClose t]
+  · exact hsourceBound.trans_lt
+      ((ENNReal.ofReal_lt_ofReal_iff hsourceTolerance).mpr (by linarith))
 
 end Math.ComplexAnalysis

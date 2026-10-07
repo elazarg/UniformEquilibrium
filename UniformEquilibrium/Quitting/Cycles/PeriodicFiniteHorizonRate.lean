@@ -186,6 +186,56 @@ theorem finiteAveragePayoff_update_le_terminal_add_opponentLiveCesaro'
     (finiteAveragePayoff_update_le_terminal_add_opponentLiveCesaro
       reward profile player deviation horizon hhorizon bound hbound hreward)
 
+/-- A supplied bound on the actual opponent clock gives prescribed delivery.
+No Nash hypothesis or sign condition on the terminal reward is needed. -/
+theorem finiteAverage_delivery_le_of_opponentLiveCesaro_bound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (player : ι) (horizon : ℕ) (hhorizon : 0 < horizon)
+    (bound clock : ℝ) (hreward : ∀ terminal, |reward terminal player| ≤ bound)
+    (hclock : quittingOpponentLiveCesaro reward profile player horizon ≤
+      clock / (horizon : ℝ)) :
+    |(quittingGame reward).finiteAveragePayoff none horizon profile player -
+      quittingTerminalPayoff reward profile player| ≤ bound * clock / (horizon : ℝ) := by
+  have hbound : 0 ≤ bound :=
+    (abs_nonneg _).trans (hreward (quittingSingletonTerminal player))
+  have herror := abs_finiteAveragePayoff_sub_terminal_le_opponentLiveCesaro
+    reward profile player horizon hhorizon bound hbound hreward
+  exact herror.trans (by
+    simpa only [mul_div_assoc] using mul_le_mul_of_nonneg_left hclock hbound)
+
+/-- Exact terminal Nash and the SAME clock control every behavioral replacement.
+This only composes the canonical on-path and unilateral boundary estimates. -/
+theorem finiteAverage_deviation_gain_le_of_exact_terminalNash_and_opponentLiveCesaro_bound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (hnash : (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward) 0 profile)
+    (player : ι) (deviation : (quittingGame reward).BehaviorStrategy player)
+    (horizon : ℕ) (hhorizon : 0 < horizon)
+    (bound clock : ℝ) (hreward : ∀ terminal, |reward terminal player| ≤ bound)
+    (hclock : quittingOpponentLiveCesaro reward profile player horizon ≤
+      clock / (horizon : ℝ)) :
+    (quittingGame reward).finiteAveragePayoff none horizon
+        (Function.update profile player deviation) player -
+      (quittingGame reward).finiteAveragePayoff none horizon profile player ≤
+        2 * bound * clock / (horizon : ℝ) := by
+  have hbound : 0 ≤ bound :=
+    (abs_nonneg _).trans (hreward (quittingSingletonTerminal player))
+  have hdeviation := finiteAveragePayoff_update_le_terminal_add_opponentLiveCesaro'
+    reward profile player deviation horizon hhorizon bound hbound hreward
+  have hdelivery := (abs_le.mp
+    (finiteAverage_delivery_le_of_opponentLiveCesaro_bound reward profile player
+      horizon hhorizon bound clock hreward hclock)).1
+  have hterminal := hnash player deviation
+  have hbudget : bound * quittingOpponentLiveCesaro reward profile player horizon ≤
+      bound * clock / (horizon : ℝ) := by
+    simpa only [mul_div_assoc] using mul_le_mul_of_nonneg_left hclock hbound
+  have htwo : 2 * bound * clock / (horizon : ℝ) =
+      2 * (bound * clock / (horizon : ℝ)) := by ring
+  rw [htwo]
+  simp only [add_zero] at hterminal
+  linarith
+
 /-! ## Cyclic survival accounting -/
 
 /-- The total mass of any finite prefix of a contracting cyclic survival

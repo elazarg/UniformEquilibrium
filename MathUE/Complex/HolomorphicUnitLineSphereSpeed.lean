@@ -227,21 +227,15 @@ theorem ediam_sphere_landing_holomorphic_unitLine_le_lintegral
         pole plane hpole horthogonal hU hf hdirection hline hintegrable s t).trans
           (setLIntegral_le_lintegral _ _)
 
-/-- The finite ENNReal integral formulation derives its real integrability
-from local holomorphicity; no measurability of the arbitrary outside values is used. -/
-theorem exists_sphere_landing_holomorphic_unitLine_of_lintegral_ne_top [CompleteSpace E]
-    (pole : E) (plane : ℂ →ₗᵢ[ℝ] E) (hpole : ‖pole‖ = 1)
-    (horthogonal : ∀ z, ⟪pole, plane z⟫_ℝ = 0)
+theorem integrableOn_sphericalDerivativeSpeed_unitLine_of_lintegral_ne_top
     {f : ℂ → ℂ} {U : Set ℂ} (hU : IsOpen U) (hf : DifferentiableOn ℂ f U)
-    {origin direction : ℂ} (hdirection : ‖direction‖ = 1)
-    {a b : ℝ} (hab : a < b)
+    {origin direction : ℂ} {a b : ℝ}
     (hline : MapsTo (complexUnitLine origin direction) (Ioo a b) U)
     (hfinite : (∫⁻ t in Ioo a b,
       ENNReal.ofReal (sphericalDerivativeSpeed f (complexUnitLine origin direction t))) ≠ ∞) :
-    ∃ landing : Icc a b → sphere (0 : E) 1, UniformContinuous landing ∧
-      ∀ t : Ioo a b, landing ⟨t, t.property.1.le, t.property.2.le⟩ =
-        NormalizedSphereChart.chart pole plane hpole horthogonal
-          (f (complexUnitLine origin direction t)) := by
+    IntegrableOn
+      (fun t => sphericalDerivativeSpeed f (complexUnitLine origin direction t))
+      (Ioo a b) := by
   have hspeed : ContinuousOn (sphericalDerivativeSpeed f) U := by
     have hderiv := (hf.analyticOnNhd hU).deriv.continuousOn
     unfold sphericalDerivativeSpeed
@@ -257,9 +251,27 @@ theorem exists_sphere_landing_holomorphic_unitLine_of_lintegral_ne_top [Complete
     Filter.Eventually.of_forall fun t => by
       unfold sphericalDerivativeSpeed
       positivity
+  exact (lintegral_ofReal_ne_top_iff_integrable hmeas hnonnegative).mp hfinite
+
+
+/-- The finite ENNReal integral formulation derives its real integrability
+from local holomorphicity; no measurability of the arbitrary outside values is used. -/
+theorem exists_sphere_landing_holomorphic_unitLine_of_lintegral_ne_top [CompleteSpace E]
+    (pole : E) (plane : ℂ →ₗᵢ[ℝ] E) (hpole : ‖pole‖ = 1)
+    (horthogonal : ∀ z, ⟪pole, plane z⟫_ℝ = 0)
+    {f : ℂ → ℂ} {U : Set ℂ} (hU : IsOpen U) (hf : DifferentiableOn ℂ f U)
+    {origin direction : ℂ} (hdirection : ‖direction‖ = 1)
+    {a b : ℝ} (hab : a < b)
+    (hline : MapsTo (complexUnitLine origin direction) (Ioo a b) U)
+    (hfinite : (∫⁻ t in Ioo a b,
+      ENNReal.ofReal (sphericalDerivativeSpeed f (complexUnitLine origin direction t))) ≠ ∞) :
+    ∃ landing : Icc a b → sphere (0 : E) 1, UniformContinuous landing ∧
+      ∀ t : Ioo a b, landing ⟨t, t.property.1.le, t.property.2.le⟩ =
+        NormalizedSphereChart.chart pole plane hpole horthogonal
+          (f (complexUnitLine origin direction t)) := by
   exact exists_sphere_landing_holomorphic_unitLine pole plane hpole horthogonal hU hf
     hdirection hab hline
-    ((lintegral_ofReal_ne_top_iff_integrable hmeas hnonnegative).mp hfinite)
+    (integrableOn_sphericalDerivativeSpeed_unitLine_of_lintegral_ne_top hU hf hline hfinite)
 
 /-- Literal right and left landing limits in the sphere, with no finite-chart
 restriction on either produced endpoint. -/

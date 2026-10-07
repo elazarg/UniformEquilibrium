@@ -1109,8 +1109,14 @@ sources also have arbitrary-label transport. The pure scheduled-pair cap
 source uses the generic `oneDateThenNever_exactHorizon_of_sureExitSet`
 (`UniformEquilibrium/Quitting/Root/PureSureSetExactHorizons.lean`) and retains
 exact terminal Nash, every finite horizon and a fixed original-game target.
-Both matching packets' quantitative rates, full fixtures and child/source
-separation obligations remain separate.
+The quantitative cycle facades
+`exists_quantitative_cycle_of_standardQ` and
+`exists_quantitative_cycle_of_positive_inverse`
+(`UniformEquilibrium/Quitting/Cycles/CrossedMatchingFiniteHorizon.lean`)
+produce one hazard vector before all initial phases and positive horizons.
+Delivery is bounded by `M*C/N` and every behavioral gain by `2*M*C/N`,
+with printed factor-two weakenings. The weak reward-closure result does not
+assert a proper quantitative cycle. Full packet separation obligations remain separate.
 
 `GameTheory.CrossedMatchingFixture.exact_terminal_and_fixedProfile`
 (`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixture.lean`) supplies
@@ -1119,9 +1125,26 @@ both phase vectors and literal active/passive endpoints. It identifies the
 actual terminal payoff and retains exact terminal Nash and one profile for
 all accuracies at sufficiently long horizons, at either initial phase.
 The strict raw-source region is open in the full reward-table coordinates
-and contains this table, yielding actual nearby UE targets. Principal matrix
-census, all-fourteen-child debt failures and source/stationary separations
-are still separate; the fixture result alone is not packet completion.
+and contains this table, yielding actual nearby UE targets.
+`principal_det_eq`, `matrix_positive_inverse` and `matrix_r0Degree_eq_one`
+(`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixtureMatrix.lean`)
+bind the actual singleton matrix, all fifteen nonempty principal determinant
+rows, R0 and positive inverse to degree one; the full determinant is
+`33583397/20480`. This is not a no-UE obstruction.
+`exists_unsafe_witness_for_every_proper_child`
+(`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixtureChildren.lean`)
+supplies actual selected stationary Nash witnesses for all fourteen proper
+nonempty children, zero joint Never mass, literal profitable quiet-lift
+deviations and failure of every real weighted child-debt sum plus finite signed
+Never charge. The exact gains are `177/32`, `113/14` or `1/2`; no claim is made
+about every child equilibrium.
+`finiteAverage_delivery_le` and `finiteAverage_deviation_gain_le`
+(`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixtureFiniteHorizon.lean`)
+give the stronger fixture bounds `77/N` and `154/N` for every initial phase,
+positive horizon and full behavioral replacement, with printed `154/N` and
+`308/N` weakenings. One rational hazard vector supplies both phase-dependent
+profiles, each retained before all accuracy quantifiers. Source/stationary
+separations still remain; these fixture results are not packet completion.
 
 ## Below-singleton joint-phase raw producer
 
@@ -1178,8 +1201,29 @@ and an explicit positive outsider deviation exceeds every real weighted sum.
 The literal all-fourteen-child profiles and table gains are not supplied by
 this conditional helper.
 
+Those literal outputs are supplied separately by
+`exists_unsafe_witness_for_every_proper_child` and
+`childQuietLift_quitNow_gain_eq`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseChildren.lean`).
+Canonical proper-coalition coverage proves the result for every nonempty
+proper subset, not just four deletions. The two opposite-pair children have
+gain `100`, all other selected witnesses gain `1/2`, and actual child Nash
+and zero Never mass defeat every real weighted debt sum and finite signed
+Never charge. Literal joining/withdrawal rows also defeat all nonnegative
+weights, for arbitrary singleton fallbacks at most one on the child members;
+omitted coordinates are unrestricted. These are existential unsafe witnesses,
+not universal assertions about child equilibria.
+
+The shared `finiteAverage_delivery_le_of_opponentLiveCesaro_bound` and
+`finiteAverage_deviation_gain_le_of_exact_terminalNash_and_opponentLiveCesaro_bound`
+(`UniformEquilibrium/Quitting/Cycles/PeriodicFiniteHorizonRate.lean`)
+compose the actual clock budget with canonical delivery/deviation estimates.
+The delivery theorem requires no Nash premise; the regret theorem uses exact
+terminal Nash. This factor-two improvement over the printed constants applies
+to signed rewards and every initial phase at positive horizons.
+
 The packet remains incomplete: separately stated expected-exit-time bound,
-child/debt, raw-criterion, matrix, response and stationary separations, and
+other raw-criterion, matrix, response and stationary separations, and
 the invalid second-root selection remain separate. The matching packet's
 inverse and Brouwer route is distinct from this scalar IVT route; the
 source-free `TwoPairOddsValues` identities and actual two-pair compiler are shared.
@@ -1233,6 +1277,26 @@ monotonicity or uniqueness among all positive roots. Its closed-interval
 companion supplies continuity through zero endpoints under positive endpoint
 linear coefficients and continuous polynomial coefficients, including the
 zero-leading-coefficient case. This is a scalar producer, not a game pivot.
+
+The queued `OPPOSITE_SIGN_MATCHING_PHASE_UNIFORM_EQUILIBRIUM` branch can reuse
+`rationalizedQuadraticRoot_spec` with its positive leading coefficient,
+literal linear coefficient and negative constant, and the packet's cap.
+`continuousOn_rationalizedQuadraticRoot` in the same file permits pointwise
+nonzero denominator without requiring the linear coefficient positive.
+Bracket signs supply that denominator; no new quadratic-selection foundation
+or Q/inverse argument is needed. The actual raw source adapter is not supplied here.
+
+For the queued `NEGATIVE_PREMIUM_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM` packet,
+the same bracket theorem applies with leading coefficient `-alpha`, linear
+coefficient `beta`, constant `-gamma` and the printed pivot cap. On its
+parameter half-open interval, bracket signs give denominator nonvanishing;
+at the right endpoint the constant is zero and the linear coefficient is
+positive. Use `continuousOn_rationalizedQuadraticRoot` and
+`rationalizedQuadraticRoot_constant_zero`, not the closed-interval facade
+that asks both endpoint constants to vanish. A subsequent scalar IVT and
+actual K=3 game adapter remain to be implemented. The packet's large-parameter
+child-only branch does not require a proper pivot, and its cyclic child
+screen cannot be replaced by the pure-child obstruction above.
 
 `selectedBalanceRoot_spec` and `selectedBalanceRoot_continuous_endpoints`
 (`MathUE/CyclicChildJointPhaseAlgebra.lean`) produce the cyclic-child packet's

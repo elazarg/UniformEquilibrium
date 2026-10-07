@@ -84,19 +84,13 @@ theorem finiteAverage_delivery_le_timeConstant
         (profileAt reward t ht initial) player -
       twoPairPhaseValue reward fin4Schedule (fun _ => 1 - t) initial player| ≤
         bound * timeConstant t / (horizon : ℝ) := by
-  have hbound : 0 ≤ bound :=
-    (abs_nonneg _).trans (hreward (quittingSingletonTerminal player) player)
   have hterminal := (exact_terminal_and_nash hraw ht hroot initial).1
-  have herror := abs_finiteAveragePayoff_sub_terminal_le_opponentLiveCesaro reward
-    (profileAt reward t ht initial) player horizon hhorizon bound hbound
+  have herror := finiteAverage_delivery_le_of_opponentLiveCesaro_bound reward
+    (profileAt reward t ht initial) player horizon hhorizon bound (timeConstant t)
     (fun terminal => hreward terminal player)
+    (opponentLiveCesaro_le_timeConstant reward ht initial player horizon)
   rw [hterminal] at herror
-  have hclock := mul_le_mul_of_nonneg_left
-    (opponentLiveCesaro_le_timeConstant reward ht initial player horizon) hbound
-  have hrewrite : bound * (timeConstant t / (horizon : ℝ)) =
-      bound * timeConstant t / (horizon : ℝ) := by ring
-  rw [hrewrite] at hclock
-  exact herror.trans hclock
+  exact herror
 
 /-- The stronger regret bound for every history-dependent behavioral replacement. -/
 theorem finiteAverage_deviation_gain_le_timeConstant
@@ -113,26 +107,12 @@ theorem finiteAverage_deviation_gain_le_timeConstant
       (quittingGame reward).finiteAveragePayoff none horizon
         (profileAt reward t ht initial) player ≤
       2 * bound * timeConstant t / (horizon : ℝ) := by
-  have hbound : 0 ≤ bound :=
-    (abs_nonneg _).trans (hreward (quittingSingletonTerminal player) player)
-  obtain ⟨hterminal, hnash⟩ := exact_terminal_and_nash hraw ht hroot initial
-  have hdeviation := finiteAveragePayoff_update_le_terminal_add_opponentLiveCesaro' reward
-    (profileAt reward t ht initial) player deviation horizon hhorizon bound hbound
+  exact finiteAverage_deviation_gain_le_of_exact_terminalNash_and_opponentLiveCesaro_bound
+    reward (profileAt reward t ht initial)
+    (exact_terminal_and_nash hraw ht hroot initial).2
+    player deviation horizon hhorizon bound (timeConstant t)
     (fun terminal => hreward terminal player)
-  have hterminalBound := hnash player deviation
-  rw [hterminal] at hterminalBound
-  have hclock := mul_le_mul_of_nonneg_left
-    (opponentLiveCesaro_le_timeConstant reward ht initial player horizon) hbound
-  have hdelivery := (abs_le.mp
-    (finiteAverage_delivery_le_timeConstant hraw ht hroot hreward
-      initial player horizon hhorizon)).1
-  have hrewrite : bound * (timeConstant t / (horizon : ℝ)) =
-      bound * timeConstant t / (horizon : ℝ) := by ring
-  rw [hrewrite] at hclock
-  have htwo : 2 * bound * timeConstant t / (horizon : ℝ) =
-      2 * (bound * timeConstant t / (horizon : ℝ)) := by ring
-  rw [htwo]
-  linarith
+    (opponentLiveCesaro_le_timeConstant reward ht initial player horizon)
 
 /-- The packet's conservative delivery constant, obtained by weakening the stronger bound. -/
 theorem finiteAverage_delivery_le

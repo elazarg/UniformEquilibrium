@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Classification.PlayerDeletionLift
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-! # Profitable quiet lifts of exact absorbing children
 
@@ -15,6 +16,56 @@ namespace GameTheory
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+omit [DecidableEq ι] in
+/-- A stationary child has the literal stationary Never extension of its root. -/
+theorem quittingLiftDeletedProfile_stationary
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deleted : ι → Prop) [DecidablePred deleted]
+    (root : QuittingChildPlayer deleted → PMF Bool) :
+    quittingLiftDeletedProfile reward deleted
+        (quittingStationaryProfile (quittingDeleteReward reward deleted) root) =
+      quittingStationaryProfile reward (quittingExtendDeletedRoot deleted root) := by
+  funext player time history
+  rfl
+
+/-- The quiet lift of a pure child exit is the same pure exit in the parent. -/
+theorem quittingLiftDeletedProfile_stationary_pureSetRoot
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deleted : ι → Prop) [DecidablePred deleted]
+    (active : Finset (QuittingChildPlayer deleted)) :
+    quittingLiftDeletedProfile reward deleted
+        (quittingStationaryProfile (quittingDeleteReward reward deleted)
+          (QuittingSureSetOwnerRepair.quittingPureSetRoot active)) =
+      quittingStationaryProfile reward
+        (QuittingSureSetOwnerRepair.quittingPureSetRoot
+          (active.map (Function.Embedding.subtype (p := fun who : ι => ¬ deleted who)))) := by
+  rw [quittingLiftDeletedProfile_stationary]
+  congr 1
+  funext player
+  by_cases hdeleted : deleted player
+  · have hnot : player ∉ active.map
+        (Function.Embedding.subtype (p := fun who : ι => ¬ deleted who)) := by
+      rintro hmem
+      obtain ⟨child, _, heq⟩ := Finset.mem_map.mp hmem
+      change child.1 = player at heq
+      exact child.2 (by simpa only [heq] using hdeleted)
+    simp [quittingExtendDeletedRoot, hdeleted,
+      QuittingSureSetOwnerRepair.quittingPureSetRoot,
+      QuittingSureSetOwnerRepair.quittingSetAction, hnot]
+  · have hmem : player ∈ active.map
+        (Function.Embedding.subtype (p := fun who : ι => ¬ deleted who)) ↔
+          (⟨player, hdeleted⟩ : QuittingChildPlayer deleted) ∈ active := by
+      constructor
+      · intro hplayer
+        obtain ⟨child, hchild, heq⟩ := Finset.mem_map.mp hplayer
+        have heq' : child = ⟨player, hdeleted⟩ := Subtype.ext heq
+        exact heq' ▸ hchild
+      · intro hchild
+        exact Finset.mem_map_of_mem _ hchild
+    simp [quittingExtendDeletedRoot, hdeleted,
+      QuittingSureSetOwnerRepair.quittingPureSetRoot,
+      QuittingSureSetOwnerRepair.quittingSetAction, hmem]
 
 /-- Exact terminal Nash makes each complete behavioral deviation debt zero. -/
 theorem quittingBehaviorDeviationDebt_eq_zero_of_exact_terminalNash

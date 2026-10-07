@@ -148,8 +148,9 @@ An accessible source for that remaining step is Milnor's *Dynamics in One
 Complex Variable*, Sections 15–16, Theorem 16.6 and its proof, together with
 Appendix A.3 ([author's notes](https://legacy-www.math.harvard.edu/archive/118r_spring_05/docs/milnor.pdf)).
 It supplies continuous extension onto the closure under the local-connectivity
-conditions, without boundary injectivity. Its formalization still needs the
-spherical length/area, crosscut and Jordan separation ingredients.
+conditions, without boundary injectivity. Its formalization uses the
+spherical energy/speed and embedded-arc ingredients below; complementary
+neighborhoods and Jordan separation remain to be supplied.
 `Math.ComplexAnalysis.eqOn_zero_of_bounded_radial_sequence_zero`
 (`MathUE/Complex/RadialSequenceUniqueness.lean`) supplies the Appendix A.3
 radial uniqueness step, with a computed Jensen lower bound, actual Fatou
@@ -201,7 +202,10 @@ the actual restricted-interval chord bound without completeness, and
 `ediam_sphere_landing_holomorphic_unitLine_le_lintegral` bounds the diameter
 of an actual continuous agreeing extension by its computed speed integral.
 This diameter result consumes that extension; it does not assume boundary
-injectivity or construct crosscuts.
+injectivity. `integrableOn_sphericalDerivativeSpeed_unitLine_of_lintegral_ne_top`
+in the same file derives actual line-speed integrability from local
+holomorphicity, line inclusion and finite integral, without unit-direction,
+completeness or pole inputs.
 
 `Math.ComplexAnalysis.exists_sphere_radial_limit_ae_real`
 (`MathUE/Complex/HolomorphicRadialLimits.lean`) now derives actual radial
@@ -236,12 +240,24 @@ uniqueness excludes positive-measure fibers without assuming convergence of F.
 in prescribed bands wider than one quarter of the square's width, with
 frontier landing outside any finite forbidden set. The same file supplies
 local small spherical energy, translated-square energy and injective path
-gluing. It does not yet assemble the embedded three-side arc or nested
-crosscuts. Those constructions and the subsequent Jordan step remain separate.
+gluing. `Math.ComplexAnalysis.exists_short_embedded_spherical_image_arc`
+in the same file constructs actual source and spherical-image closed
+embeddings, opposite angular bands, frontier endpoints outside the finite
+forbidden set, source localization and strict diameters of both ranges.
+Nested complementary neighborhoods and the subsequent Jordan step remain separate.
 
-Nested short crosscuts with distinct landing endpoints and
-Jordan separation remain separate known-proof library obligations. No scoped
-Jordan/Schoenflies or crosscut producer has been found. Section 16.6 requires
+`Math.ComplexAnalysis.exists_disjoint_shrinking_spherical_image_arcs`
+(`MathUE/Complex/HolomorphicDisjointArcSequence.lean`) recursively retains
+actual source/image paths with pairwise disjoint full closed ranges, finite
+endpoint avoidance, positive localization radii tending to zero and both
+diameters tending to zero. Compact finite source avoidance, disk injectivity
+and frontier endpoint separation supply the recursion, not a global
+boundary-injectivity hypothesis. This does not assert nested complementary
+neighborhoods or rectifiable-length bounds.
+
+Nested complementary neighborhoods and Jordan separation remain separate
+known-proof library obligations. No scoped Jordan/Schoenflies or
+complementary-component separation producer has been found. Section 16.6 requires
 continuous extension onto the boundary, not boundary injectivity, and the
 whole feasible carrier is not silently assumed locally connected.
 
