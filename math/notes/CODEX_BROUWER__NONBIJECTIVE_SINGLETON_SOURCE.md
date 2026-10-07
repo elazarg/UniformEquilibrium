@@ -76,6 +76,13 @@ earlier calendar refinements. It too has a distant pure Nash profile.
 Thus the universal infinitesimal mixed-cap-cycle descent is retired; the
 live question must use genuine GLOBAL minimality and finite-amplitude
 row/tail changes, not the local margins or a nonsingular Jacobian alone.
+The newest exact construction makes the collision a GLOBAL optimizer over
+every first root with its Never tail, and Never a GLOBAL optimizer over
+every actual tail at that fixed root. A rational coupled change, with a
+screened 32-date release of one old conditional Never atom, still lowers
+full debt. Alternating even GLOBAL block optimization is therefore retired.
+The complete finite cap ledger is at the end. This solved-table mechanism
+test is not the true positive global minimum required by the consumer.
 
 The earlier question concerned a raw class with constant participant
 rewards on all joint exits.
@@ -3564,3 +3571,243 @@ next question is a finite-amplitude consuming move that uses both global
 inequalities, not a weaker derivative assertion or a favorable root
 selected independently of its complete tail caps. No additional static
 example or optimization of these constants is proposed.
+
+## Two global block minima still admit an actual coupled finite escape
+
+Status: complete exact ordinary mathematics, not Lean-checked or independently
+reviewed. This falsifies alternating GLOBAL root/tail optimization, not a
+positive global debt minimum or a new existence class. Both separate blocks
+are globally optimized; their joint domain contains the explicitly lower-debt
+product law below. All responses, including arbitrary late dates and Never,
+are retained.
+
+### Full table and the original collision
+
+Put s=1/100, P=1 and H=P−s=99/100. Core players 0,1,2 have cyclic
+prev(i)=i−1 and next(i)=i+1 modulo 3. Every passive reward is P and every
+own singleton is s. For core i and nonempty opponent coalition T, set
+
+    r_i(T∪{i})=P−1_{prev(i)∈T}
+                  +2·1_{next(i)∈T}(1−1_{prev(i)∈T})+2·1_{3∈T}.
+
+For every coalition containing 3 and another player, set r_3(S)=P−16=−15.
+These rules specify all sixty coordinates; Never pays zero and M=15 bounds
+absolute rewards. Use q=(1/2,1/2,1/2,0) with all-Never continuation. Exactly,
+
+    U_i=601/800, B_i=301/400 (i<3),
+    U_3=7/8, B_3=701/800,       D_0=1/200.                (GB1)
+
+Every debt is s/8. The three core root caps are tied; player 3's Continue
+cap is strictly maximal. All numerical all-owner margins obtained by
+inserting D_0 and M in the true-minimum inequalities hold, but D_0 is NOT
+the whole-profile infimum.
+
+### Global minimization over every first root
+
+For any first row x with all-Never continuation, put
+
+    c_3=∏[i<3](1−x_i),       c=c_3(1−x_3),
+    f_i=2x_next(i)(1−x_prev(i))−x_prev(i),
+    g_i=f_i+2x_3 (i<3),       g_3=−16(1−c_3).
+
+The exact complete debt is
+
+    D(x)=4s c+Σ[i<3](g_i^+−x_i g_i)+16x_3(1−c_3).        (GB2)
+
+The three-cycle regret R=Σ[i<3](f_i^+−x_i f_i) satisfies
+
+    R≥(1/3)(1/8−c_3)       if c_3<1/8.                  (GB3)
+
+Indeed let m=max(x_0,x_1,x_2)>1/2 and rotate so x_0=m,x_1=y,x_2=z.
+Then f_1≤−m(2m−1). If y≥1/4, its regret is at least (2m−1)/8.
+If y<1/4, f_2≥(6m−1)/4≥1/2. For z≤3/4 the regret of player 2
+is at least 1/8; for z≥3/4, f_0≤2y−z≤−1/4 and player 0's regret
+is at least 1/8. Thus always R≥(2m−1)/8. Finally c_3≥(1−m)^3 and
+1/8−(1−m)^3≤(3/4)(m−1/2), proving (GB3).
+
+Increasing f_i by 2x_3 lowers its regret by at most 2x_i x_3. Therefore
+when c_3≤1/2, (GB2) implies
+
+    D(x)≥4s c_3+R+x_3[16(1−c_3)−6−4s c_3]
+         ≥4s c_3+R.                                    (GB4)
+
+The bracket is strictly positive. For c_3≥1/8 the survival term suffices;
+for c_3<1/8 use (GB3) and 4s=1/25<1/3. If c_3>1/2 and c≥1/8,
+the survival term again suffices. In the remaining case x_3>3/4 and
+every core x_i<1/2. Since f_i≥−1, every g_i>1/2, and the core regret
+sum exceeds 3/4. These cases prove D(x)≥D_0 for EVERY x∈[0,1]^4.
+Thus no pure coalition or other first-row mixture escapes (GB1).
+
+### Global minimization over every actual tail
+
+Fix q. For ANY four independent conditional tail laws, let (u,b) be their
+actual payoff/complete-cap pair; let a_1 be the probability exactly one
+clock is finite and a_2 the probability at least two are finite. Infinite
+supports and arbitrary timing are allowed. The late-finite cap gives
+
+    b_i≥s+H·P(some opponent tail clock is finite)≥s.
+
+Continue therefore dominates the old tied Quit branch of every core
+player, and player 3's smaller Quit branch. Exact subtraction gives
+
+    D_new−D_0=(1/8){2Σ[i<3](b_i−s)+(b_3−s)−Σ_i u_i}.    (GB5)
+
+The deleted-opponent weights (2,2,2,1) total seven. One finite clock is
+seen with weight at least five; two or more are seen with weight seven.
+The positive cap term is at least H(5a_1+7a_2). Singleton total reward
+is s+3P. Nonsingleton totals are 4P+1 for a core pair, 4P−3 for the
+core triple, 4P−14 for a pair with 3, 4P−11 for a triple with 3,
+and 4P−13 for the grand coalition. Consequently
+
+    Σ_i u_i≤(s+3P)a_1+(4P+1)a_2,
+    D_new−D_0≥(1/8){(2P−6s)a_1+(3P−7s−1)a_2}≥0.       (GB6)
+
+This GLOBAL fixed-root assertion covers all actual tails and extends to
+their semantic carrier by continuity. It does not price only Never or
+a bounded response menu.
+
+### Screen all joining responses, then change the root
+
+Release only core player 0's conditional Never mass. Give it finite mass t
+with conditional geometric parameter 1/4:
+
+    p_0(j)=t(1/4)(3/4)^{j−1},       j=1,2,… .
+
+Other tail laws remain Never. Player 2 can join 0 for P+2: a single new
+atom would create an excessive cap. The displayed distribution instead
+controls EVERY join test. At date j its excess above s is
+H·P(0 before j)+(H+2)p_0(j), which is at most Ht because
+2p_0(j)≤H·P(0 after j), using 2/3≤H. Its late supremum is Ht.
+Player 1 loses one on joining and player 3 loses sixteen; their tests
+are also bounded by the late supremum. Thus the actual tail values are
+
+    u=(st,Pt,Pt,Pt),
+    b=(s,s+Ht,s+Ht,s+Ht),       D_tail=4s(1−t).           (GB7)
+
+Never remains separate and is below the late test. No last response is
+assumed to attain that supremum.
+
+For rational l<1 near one, set
+
+    W=3+4l−l²,
+    λ_0=l(l+5)/W,       λ_1=l,       λ_2=2l/(1+l),
+    x_i=λ_i/(1+λ_i),       x_3=0,
+    Ht=7l(1−l)/W.
+
+The core cap equalities, checked by substitution, are
+
+    2λ_1−λ_2(1+λ_1)=0,
+    2λ_2−λ_0(1+λ_2)=Ht,
+    2λ_0−λ_1(1+λ_0)=Ht.
+
+Player 3 still has its full Continue cap. Joint root survival is
+a=W/[3(1+3l)²]; the full debt is D_∞=4s a(1−t). It is below D_0
+exactly when 3H/(8−5H)<l<1. Taking l=99/100 gives
+
+    x=(19767/39700,99/199,198/397,0),
+    t=700/59799,       a=19933/157609,
+    D_∞=59099/11820675,
+    D_0−D_∞=7/18913080>0.                                (GB8)
+
+These are actual independent infinite laws. The next calculation makes
+the entire change finite while retaining every cap branch.
+
+### Exact finite implementation
+
+Keep x from (GB8). Retain geometric atoms j=1,…,L and send the remaining
+conditional mass Δ=t(3/4)^L to Never. Put t_L=t−Δ. Tail utilities are
+(s t_L,P t_L,P t_L,P t_L), and complete caps are
+
+    b_0=s,       b_1=b_3=s+H t_L,
+    b_2=s+H t_L+(2/3)Δ.                                 (GB9)
+
+Player 2's last retained atom maximizes its finite join test. The excess
+over the late test at j is
+t[(2−3H)(3/4)^{j−1}/4+H(3/4)^L], increasing with j; at L it is
+twice the last atom, (2/3)Δ. Empty dates after L give the late test,
+and Never gives less. Player 1's losing join and player 3's negative
+join tests are dominated by late responses. Player 0's tail opponents
+are all Never, so every finite test pays s.
+
+Because H>2/3, every tail cap in (GB9) is weakly SMALLER than in (GB7).
+At the prefix all three core caps are therefore their date-0 Quit values,
+including the original tied branches. Player 3's Continue cap stays
+strictly maximal. Total prescribed payoff loses a(s+3P)Δ, while the
+sum of caps loses aHΔ. Hence, exactly,
+
+    D_L=D_∞+2a(P+s)t(3/4)^L.                             (GB10)
+
+For L=32, D_L<D_0 is equivalent to 622160·3^32<77·4^32; the two
+integers are 1152875040696061396560 and 1420399293675635474432.
+Direct rational evaluation gives
+
+    D_32=545124816137918351766667/
+              109026483251748327024230400<1/200.         (GB11)
+
+The actual profile uses the new date-0 rates x. Only player 0 has later
+atoms, with unconditional masses (1−x_0)t(1/4)(3/4)^{j−1} at j=1,…,32.
+All remaining mass of every player is Never. This is a legal finite
+product law with every finite response and Never accounted for. Arithmetic
+was checked using Python `fractions.Fraction`, without file output or Lean
+changes; (GB11) is ordinary mathematics, not a Lean declaration.
+
+### The true infimum and the next question
+
+The true infimum is zero by an explicit profile: use the geometric clock
+of parameter 1/4 with TOTAL finite mass one for player 0, and leave all
+others at Never. Player 0 gets and is capped by s. Every outsider gets
+P; the same screening inequalities in (GB7) with t=1 bound every pure
+finite response by P, and Never attains P. This is an exact terminal Nash
+profile. Truncating its geometric law after L dates gives exact full debt
+(4s+2/3)(3/4)^L, hence literal finite-law approximate Nash profiles.
+
+There is also a source-compatible check using the existing small-player
+producer. The deleted three-player core has terminal approximate Nash
+profiles at every error. For an actual core profile let
+N be its joint-Never probability. Adding player 3 at Never preserves all
+core utilities and caps. For player 3, joining is worse than remaining
+passive, and quitting alone before a later finite core coalition pays
+s≤P. Every pure finite response has gain over Never at most sN, and
+arbitrarily late responses converge to that bound. Its added debt is
+exactly sN. Each core debt is at least sN by moving only its own Never
+mass to arbitrarily late dates. Thus full debt is at most twice core
+total debt and tends to zero.
+
+The bounded source lookup inspected:
+
+- `quittingGame_exists_uniformEquilibriumPayoff_of_card_le_three` in
+  `UniformEquilibrium/Quitting/Classification/SmallPlayerExistence.lean`;
+- `prod_stoppingLaw_none_mul_singleton_le_terminalDebt` in
+  `UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`;
+- `quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockPositiveSingleton`
+  in `UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockMultipleOutsiderDebt.lean`;
+- the finite future/joining rows in
+  `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinRaw.lean`.
+
+That positive-child-singleton machinery already covers this deletion adapter:
+the test gives no new UE class. The simpler continue-floor theorem does NOT
+apply, because `quittingContinueFloor` in
+`UniformEquilibrium/Quitting/Punishment/ContinueFloor.lean` includes zero
+while this owner has positive singleton. Exact statements were read under
+their imports; no Lean build or fresh check was run.
+
+The direct geometric producer explains an additional scope limit: every
+singleton column in this test is above every outsider's own singleton.
+Thus it does not satisfy the stronger canonical no-UE source restrictions
+in the earlier matrix section. Its purpose is precisely to isolate the
+failure of separate GLOBAL block minimization; it is not a hard raw-table
+candidate that survives every known existence screen.
+
+The newly falsified implication is: global root-block optimality together
+with global whole-tail-block optimality implies global whole-profile
+optimality. The actual finite escape also shows an operational requirement:
+a joining premium must be screened by a produced complete clock law before
+its cap can be used in root balancing. Root equations alone miss this cost.
+
+The arbitrary true-minimum consumer remains open. Root balancing can be
+singular or leave the cube; an arbitrary old continuation need not admit
+the screened release; the resulting cap changes need not satisfy (GB8).
+The next question is to extract a finite-amplitude screened replacement
+from genuine joint whole-profile minimality, or identify a rigid source
+class that prevents it. Further strengthening solved-table optimization
+traps is not the next mechanism.

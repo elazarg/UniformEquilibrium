@@ -14,6 +14,17 @@ The new result is ordinary mathematics,
 not Lean-checked or a full UE conclusion. Consuming the first collision
 row with every complete cap remains open.
 
+Current consuming checkpoint: Section 43 constructs an exact asymmetric
+four-player unrestricted stopping-law LOCAL trap with debt 1/4, every
+pure coalition strictly escapable, genuine singleton blockers, and R0
+singleton degree one. It retires that table as a counterexample: the
+actual open-sign cyclic singleton producer applies after reversing the
+labels, and a fully specified distant independent law has debt below
+1/8. The next mechanism is reward-table variation at a worst GLOBAL
+gap, not another local trap or alternating minimization. The new local
+proof and explicit escape are ordinary mathematics, not independently
+reviewed or checked in Lean.
+
 Status: ordinary mathematics, not checked in Lean. The convex-domain
 smooth-potential exclusion in Section 7 has passed independent review by
 CODEX_BROUWER, with no unresolved mathematical objection; see
@@ -7601,3 +7612,328 @@ of G_p over all actual tails does not make a first row immune to a JOINT
 row–tail move. The genuine positive-global-minimum premise must remain
 in the joint direction calculation. No fixed-row tail selector or
 weighted-debt reinterpretation is being pursued as a consumer by itself.
+
+## 43. A blocked asymmetric full-law local trap and its distant escape
+
+### Question and exact status
+
+Can a positive local collision trap survive after every pure coalition
+is strictly escapable and every singleton owner has a genuine below-own
+blocker? Does such a trap force a positive gap against ALL independent
+stopping laws? The first question has an exact positive answer here;
+the second has an exact negative answer for this same table. A known
+actual-data producer and an explicit distant independent law escape it.
+This is an ordinary mathematical regression, not independently reviewed,
+not checked in Lean, and not a new UE class or positive-gap example.
+
+### Complete table and original local profile
+
+Let I={0,1,2,3}, with indices modulo four. Live play and all Never pay
+zero. All random choices are private and independent. For every nonempty
+S define all four reward coordinates by the following rules:
+
+* At S={j}, owner j receives 1, passive j+1 receives 0, and the other
+  two passive players receive 100.
+* At a pair, both participants receive 69 and both passives 100.
+* At a triple omitting m, participant m+1 receives 92, the other two
+  participants receive 101, and passive m receives 100.
+* At I, every player receives 99.
+
+This specifies all sixty entries, in [0,101]. Let p^0 independently put
+mass 1/2 at date zero and 1/2 at Never for every player. Its literal
+tail is all Never, with semantic pair (0,1). At its first row,
+
+    alpha_i=1/8,       c=1/16,
+    A_i=(200+300+100)/8=75,
+    Q_i=(1+207+294+99)/8=601/8,
+    C_i=A_i+alpha_i=601/8,
+    U_i=1201/16,       b_i=1202/16.
+
+These b_i are COMPLETE behavioral caps: first-row Quit and Continue
+followed by any tail response tie. Therefore
+
+    d_i=1/16,       D(p^0)=1/4.                         (228)
+
+All Never is defeated by a finite Quit gaining 1. At {j}, outsider j+1
+joins for 69 instead of 0. At every sure pair, at least one participant
+can leave and receive passive singleton 100 instead of 69: both directed
+singleton comparisons cannot be zero in a four-cycle. At a triple
+omitting m, participant m+1 leaves for passive pair 100 instead of 92.
+At I, any player leaves for passive triple 100 instead of 99. These
+complete unilateral laws have gains respectively 1,69,31,8,1. Thus every
+pure stationary profile fails. Every singleton column also has the
+distinct actual blocker
+
+    r_(j+1)({j})=0<1=r_(j+1)({j+1}).                   (229)
+
+The stochastic solo-owner escape of the constant-passive symmetric toy
+is consequently absent. This does not exclude other behavioral mechanisms.
+
+### Uniform estimates for arbitrary near-Never tails
+
+Take ANY actual independent tail, with arbitrary finite support size or
+infinitely many finite atoms. Write a_i=P(tau_i is finite), A=sum_i a_i,
+and its actual semantic pair as (u,B). Put beta_i=B_i-1. All participant
+rewards are at least 1, so Quit at the tail's first available natural
+date guarantees at least 1:
+
+    beta_i>=0.                                        (230)
+
+No empty tester is inserted. Coupling each opponent law to all Never
+bounds every pure response, and then its supremum, uniformly. With M=101,
+
+    beta_i<=202 sum_(j!=i) a_j,       sum_i beta_i<=606 A.  (231)
+
+These bounds do not depend on clock dates or on maximizing cap branches.
+Let N_f count all finite clocks in one independent draw. The first
+coalition's total rewards for sizes one,two,three,four are
+201,338,394,396. On N_f=1 the total is 201; on N_f>=2 it is at most
+396<=201 N_f. All Never has total zero. Hence
+
+    sum_i u_i<=201 E[N_f]=201 A.                      (232)
+
+Let n_-i=product_(j!=i)(1-a_j), and let e_i be the opponent-only
+probability that the first finite coalition is exactly {i-1}. A pure
+finite Quit sent to infinity has limiting payoff
+
+    100(1-n_-i-e_i)+n_-i.
+
+The cap is at least this limit. It is a supremum of genuine finite
+responses, not a date after all random clocks; ties at the moving date
+have probability tending to zero. Since e_i<=a_(i-1) and independence
+gives the Bonferroni inequality for finite-clock indicators, we get
+
+    beta_i>=99 sum_(j!=i) a_j-100 a_(i-1)
+              -99 sum_(j<k, j,k!=i) a_j a_k,
+    sum_i beta_i>=197 A-198 sum_(j<k) a_j a_k
+                     >=197 A-99 A^2.                (233)
+
+All complete caps, not selected favorable endpoints, occur in these bounds.
+
+### A strict minimum in the unrestricted stopping-law space
+
+Every actual profile close to p^0 in total variation has first hazards
+q_i=1/2+z_i<1 and an actual conditional post-row tail. Put
+
+    eta=norm_1(z)+A,
+    g_i=Q_i(q)-A_i(q)-alpha_i(q)B_i.
+
+The exact full cap/debt identity is
+
+    D(T_q(u,B))=c(q)[4+sum_i beta_i-sum_i u_i]
+                 +(1/2)norm_1(g)-sum_i z_i g_i.       (234)
+
+The derivative matrix of g(q;1) at the half row is
+
+    L = [[0,-39/2,-39/2,35],
+         [35,0,-39/2,-39/2],
+         [-39/2,35,0,-39/2],
+         [-39/2,-39/2,35,0]].                        (235)
+
+Direct differentiation of the eight opponent coalitions gives predecessor
+derivative 35 and the other two derivatives -39/2. Every row and column
+sums to -4. Its determinant is 469070. Its inverse is circulant, with
+first row
+
+    (-250419,-177211,-272259,-238251)/3752560.
+
+All inverse entries are negative, every inverse column sums to -1/4,
+and its induced one-norm is 1/4.
+
+Finite polynomial Taylor bounds and (231) give
+
+    g=Lz-beta/8+O(eta^2),
+    c(q)=1/16-(1/8)sum_i z_i+O(eta^2).               (236)
+
+Every O(eta^2) here means one finite bound C eta^2 in a fixed small
+neighborhood, UNIFORMLY over all actual tails: its constant depends only
+on this table, not their support sizes, dates, or cap choices. This is
+because beta=O(A), u=O(A), and the first-row formulas are finite
+polynomials in q, affine in the actual tail coordinates. In particular
+norm_1(g)=O(eta).
+
+Taking the sum in (236), using the column sum -4, and eliminating
+sum z from (234) yields
+
+    D-1/4 = (1/8)sum_i g_i+(1/2)norm_1(g)
+             +(5/64)sum_i beta_i-(1/16)sum_i u_i
+             +O(eta^2)
+           >=(3/8)norm_1(g)+(181/64)A-O(eta^2).       (237)
+
+Here 181=5*197-4*201, and the quadratic term from (233) is absorbed in
+the uniform remainder. To obtain strict positivity, invert (236):
+
+    norm_1(z)<=norm_1(g)/4+(606/32)A+C eta^2,
+    eta<=norm_1(g)/4+(319/16)A+C eta^2.
+
+For sufficiently small eta the last remainder is at most eta/2, so
+norm_1(g)+A>=8 eta/319. Shrinking again in (237) proves
+
+    exists epsilon>0: 0<eta<epsilon
+      => D(T_q(u,B))-1/4 >= (3/638)eta>0.             (238)
+
+No numerical neighborhood radius is claimed; the finite uniform Taylor
+bounds and these two explicit shrinkings establish existence. If eta=0,
+the half row and all-Never tail recover exactly p^0. Near the half row,
+eta is equivalent to the sum of marginal total-variation distances from
+p^0. Thus (238) is an unrestricted actual-law LOCAL minimum, including
+arbitrary infinitely supported changes. It is not merely root-local,
+fixed-tail, stationary, or finite-calendar evidence.
+
+### Basic singleton source tests: a bounded comparison, not full noncoverage
+
+The literal Gamma_ij=r_i({j})-1 has first row (0,99,99,-1) and cyclic
+rotations. Its determinant is 3900797, and its inverse has first row
+
+    (970398,-980099,989901,-960399)/3900797.
+
+The inverse has mixed signs, failing the nonnegative-inverse input.
+Every column has the negative blocker (229). Principal determinants of
+sizes at least two are nonzero: adjacent pairs 99, opposite pairs -9801,
+triples 970398, and full set 3900797. The negative-column/nonsingular-
+principal argument gives R0.
+
+At positive anchor (1,1,1,1), an adjacent-pair inverse candidate has one
+negative coordinate. An opposite-pair candidate is (1/99,1/99), but both
+inactive residuals are -1/99. For support {0,1,2}, the candidate is
+
+    (99/9802,-1/9802,9901/970398);
+
+rotation covers all triples, each with a negative entry. The only
+admissible inverse-principal support is the full set, with candidate
+(1/197)^4 and positive determinant. The support sign sum is one, failing
+the actual input DIFFERENT from one of
+`exists_uniformEquilibriumPayoff_of_finite_support_degree_test`
+(`UniformEquilibrium/Quitting/Classification/LCP/FiniteSupportDegreeCriterion.lean`).
+
+The unique below-own singleton partner map is a four-cycle, not an
+involution. It also fails the necessary matching relation in
+`PairedCycle.RawRegion.eq_partner_of_singleton_lt`
+(`UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean`). These are
+bounded raw-input comparisons. They do NOT exclude every implemented
+or mathematical producer. The actual producer below is decisive.
+
+### The actual open-sign producer retires the candidate
+
+Reverse labels: new label k denotes original player -k. The normalized
+singleton coefficients then are
+
+    gamma=(0,-1,99,99).
+
+They satisfy EVERY field of `QuittingCyclicSingletonOpenSignData`:
+cyclic singleton invariance, first forward envy negative, later envies
+nonnegative, and total forward envy 197>0. Therefore its actual theorem
+`QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean`)
+applies. Nonsingleton rewards are unrestricted in that producer, so the
+collision modifications do not evade the class.
+
+The declaration and its imports were inspected directly, including
+`CyclicSingletonTailData.certificate` and
+`CyclicSingletonTailData.isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/CyclicSingletonTailProducer.lean`),
+and `BalancedSingletonCycleCertificate.isTerminalNash_and_hasValue` and
+`BalancedSingletonCycleCertificate.isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`).
+This is an actual arbitrary-table producer input, not comparison with
+one chosen witness. No new Lean verification or new producer is claimed.
+
+### An explicit independent finite-amplitude escape
+
+Let sigma be the positive root
+
+    -1+99 sigma+99 sigma^2=0,
+    sigma=(-1+sqrt(103/99))/2 in (1/100,1/99).
+
+The cyclic tails are F=(0,0,99+99 sigma,99), satisfying
+
+    F(k)=gamma(k)+sigma F(k+1).                      (239)
+
+For coarse phase a in reversed labels, set V_a(k)=1+(1-sigma)F(a-k).
+Its owner and immediately following relative offset both have value 1;
+all coordinates are at least 1. Equation (239) is the exact singleton
+Bellman equation with aggregate phase survival sigma.
+
+Choose m=15232 and rho=1-sigma^(1/m). Replace every coarse phase by m
+consecutive natural dates where only its owner may Quit, with probability
+rho, then repeat the four blocks forever. In original labels the owners
+run 0,3,2,1. This is a literal independent behavioral profile, with no
+public correlation or extra state. A player survives one period with
+probability sigma; its opponents survive with probability sigma^3<1,
+under EVERY unilateral deviation.
+
+With ell remaining dates in a block, its actual continuation value is
+
+    (1-sigma^(ell/m)) r({owner})
+      +sigma^(ell/m) V_(next coarse phase),
+    0<=ell<=m.                                      (240)
+
+These coordinates lie monotonically between their two coarse endpoints
+and hence are at least 1. The block owner's value is identically 1,
+so its Quit and Continue endpoints tie exactly. A nonowner's Quit value
+at any date is (1-rho)*1+rho*69=1+68 rho, while its prescribed Continue
+value is at least 1. Its action gain is at most 68 rho.
+
+Always Continue satisfies exactly the same value equations as prescribed
+play: owner Quit and Continue both equal 1; all nonowner dates already
+prescribe Continue. Deleted-opponent contraction removes the bounded
+remainder and proves Never earns the prescribed value. For any finite
+pure response date, telescoping the Continue equations gives gain equal
+to opponent survival to that date times its Quit-minus-current-value
+difference, at most 68 rho. Any behavioral stopping law mixes these
+complete finite responses and Never, so
+
+    d_i<=68 rho for each i,       D<=272 rho.          (241)
+
+This controls all behavioral deviations, not selected cap branches.
+For an elementary explicit estimate, set h=1-1/2176. Bernoulli applied
+to h^(-2176) gives h^2176<1/2, hence
+
+    h^15232<1/128<1/100<sigma.
+
+Thus rho<1/2176 and
+
+    D<272/2176=1/8<1/4.                             (242)
+
+This is a distant whole-law replacement on the same table, not a formal
+iteration of unattained tails. Its exact prescribed payoff at original
+phase zero is
+
+    v=(1,1,100-99 sigma^2,100-99 sigma).             (243)
+
+Increasing m keeps (243) EXACTLY fixed and makes (241) arbitrarily small.
+Each profile's opponent-stopping tail is uniformly geometric over all
+deviations, so terminal-to-finite-average errors vanish uniformly. This
+also directly verifies the fixed-target conclusion of the inspected
+balanced compiler.
+
+For a literal finite-law escape, censor each clock after three periods
+to Never. Each moved marginal mass is sigma^3. Coupling full payoffs
+and caps bounds the debt increase by 56M sigma^3, with M=101:
+
+    D_censored<1/8+5656/99^3<1/4.
+
+There are 3*4*15232=182784 finite dates. This is a same-table finite
+construction, not a strategy-class converse.
+
+### Consumed conclusion and changed next question
+
+The implication “unrestricted strict local collision minimum + every
+pure coalition escapable + genuine singleton blockers + surviving basic
+R0 degree tests => positive global gap” fails on one exact complete table.
+Its local proof and distant escape are both retained. The table is
+RETIRED as a counterexample through actual raw producer coverage, not
+through bounded numerical search. No bounded-search failure is used as
+a certificate or evidence of unrestricted nonexistence.
+
+This does not consume a genuine positive GLOBAL minimum for an arbitrary
+table. Its singleton cycle supplies the global mechanism missing from
+the local equations, and is not a new UE theorem. The next attempt changes
+mechanism: at a reward table maximizing the TRUE global sum-debt gap over
+a compact reward cube, can table variations combined with the all-profile
+variational condition force an actual debt-reducing law? The worst-table
+paired-stretch packet
+`../exports/THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS.md`
+uses MAXIMUM debt, a different objective. Its inequalities cannot be
+transferred to the sum-debt source without a fresh source and objective
+alignment proof. That transfer and a new global consumer remain open.

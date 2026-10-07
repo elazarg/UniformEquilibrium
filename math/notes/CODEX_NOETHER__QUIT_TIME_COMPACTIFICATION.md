@@ -12953,14 +12953,14 @@ root actions account for ALL future and Never responses. Hence the
 whole actual debt is at least16 times
 
     H_z(x,y,w)=[2x−1+h]⁺
-       +(1−x)[1−2y]⁺+x[2y−1]⁺+y+w.              (B6)
+       +(1−x)[1−2y]⁺+x[2y−1]⁺+y+w.              (SF6)
 
 All-Never conditional tails attain equality because C_tail=s_z.
-Thus (B6), including w and every floor/cap tie, is the exact
+Thus (SF6), including w and every floor/cap tie, is the exact
 unrestricted minimization over the whole sure-z family, not merely
 one selected tail. Since the positive-part function is1-Lipschitz,
 
-    H_z(x,y,w)≥H_z(x,y,0):                         (B7)
+    H_z(x,y,w)≥H_z(x,y,0):                         (SF7)
 
 turning w on decreases its first term by at most
 w(1−x)(1−y)≤w and adds the exact dummy debt w.
@@ -12969,12 +12969,12 @@ At w=0 write f=x−y+xy. If 0≤y≤1/2 and f≤0, then
 x≤y/(1+y) and
 
     H_z=1−y−x(1−2y)
-       ≥(1−y+y²)/(1+y)≥1/2.                      (B8)
+       ≥(1−y+y²)/(1+y)≥1/2.                      (SF8)
 
 If 0≤y≤1/2 and f≥0, then x≥y/(1+y) and
 
     H_z=1−2y+3xy
-       ≥(1−y+y²)/(1+y)≥1/2.                      (B9)
+       ≥(1−y+y²)/(1+y)≥1/2.                      (SF9)
 
 The final inequality is exact because
 2(1−y+y²)−(1+y)=(1−y)(1−2y)≥0.
@@ -12990,13 +12990,13 @@ at least16 times
 
     H_3(q)=1−h
        +Σ_{i=0}^2[(1−q_i)[1−2q_{i^+}]⁺
-                          +q_i[2q_{i^+}−1]⁺].    (B10)
+                          +q_i[2q_{i^+}−1]⁺].    (SF10)
 
 Again all-Never tails attain equality. If h≤1/2, the owner term gives
 H_3≥1/2. If h>1/2, EACH q_i<1/2. Set a=Σq_i,
 b=q_0q_1+q_1q_2+q_2q_0, c=q_0q_1q_2. Then
 
-    H_3=3−2a+b+c≥7/8.                            (B11)
+    H_3=3−2a+b+c≥7/8.                            (SF11)
 
 Indeed its derivative in any one coordinate on [0,1/2]^3 is
 −2+q_j+q_k+q_jq_k≤−3/4, so the multiaffine expression is minimized
@@ -13004,11 +13004,11 @@ at (1/2,1/2,1/2), where it equals7/8. This bound does not select
 cap labels outside that subcube; there the nonnegative owner term
 already proves the claimed floor.
 
-Equations (B6)–(B11) cover EVERY possible sure owner, including
+Equations (SF6)–(SF11) cover EVERY possible sure owner, including
 profiles with multiple sure owners, arbitrary conditional future laws,
 and all first-row changes. Therefore
 
-    min{D(p): SOME p_i({0})=1}=8.                 (B12)
+    min{D(p): SOME p_i({0})=1}=8.                 (SF12)
 
 **An exact minimizer with every numerical strict margin.** Use the
 literal root rates
@@ -13018,7 +13018,7 @@ literal root rates
 and Never conditional tails. Complete independent enumeration gives
 
     U=(11,16,24,32),     B=(11,16,32,32),
-    d=(0,0,8,0),       D=8.                       (B13)
+    d=(0,0,8,0),       D=8.                       (SF13)
 
 Owner0's root Quit and complete Continue are tied at11. Free player1's
 two root actions are tied at16. These are actual caps, not retained
@@ -13029,10 +13029,10 @@ Insert δ_sure=8 and M=32 into the numerical formulas, so
 γ_sure=δ_sure²/(8M)=1/4. For every i one has
 
     B_i−s_i≥δ_sure+γ_sure,
-    U_i−s_i≥δ_sure−d_i+γ_sure.                    (B14)
+    U_i−s_i≥δ_sure−d_i+γ_sure.                    (SF14)
 
 For owner0 the left sides both equal10>33/4; the other checks are
-immediate from (B13). Thus the table satisfies punishment normality,
+immediate from (SF13). Thus the table satisfies punishment normality,
 the finite floor objective's GLOBAL minimization, two actual mixed
 ties, a macroscopic first collision, and all those strict numerical
 margin inequalities. No finite-amplitude move that retains SOME sure
@@ -13040,8 +13040,8 @@ date-zero quitter can give debt below8, even if it reselects the
 owner and the entire conditional tail from scratch.
 
 Nevertheless the actual all-Never profile has U=0 and B=(1,0,0,0),
-so D=1<8. This proves that (B13) is NOT a global debt minimum and
-that (B14) alone cannot make it one. No complete uniform-equilibrium
+so D=1<8. This proves that (SF13) is NOT a global debt minimum and
+that (SF14) alone cannot make it one. No complete uniform-equilibrium
 construction or positive unrestricted gap is inferred from this test.
 
 **What this retires.** A proposed argument that uses only global
@@ -13065,12 +13065,96 @@ in `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/FiniteClockMinimumPaidPo
 likewise produces a paid port, not the missing strict decrease. No
 Lean edits, compilation, or claim that a nominal floor equals P_i
 in arbitrary data is made. Here P_i=s_i was proved from the table.
+For literature scope I also inspected `assumptions` and `theorem1_2`
+in `Literature/SolanAndVieille2001.lean`, after its lane README. Its
+unit-own/capped-participant hypothesis does not apply to this canonical
+table: the three zero owns and the nonsingleton participant reward16
+are outside those hypotheses. No paper theorem is used in this proof.
 
 The concrete next question is whether full globality forces a
 last-sure-owner release with an actual continuation that beats the
 minimum, possibly jointly with an induced mixed-row change. Do not
 repair this falsified all-sure mechanism by tuning its constants or
 dropping one of its mixed ties.
+
+### A last-sure release can need a deliberately nonoptimal prescribed tail
+
+The same complete table gives a finite-amplitude choice between two
+ACTUAL last-sure releases. This is another mechanism falsifier and
+positive countertest, not a global source or a new table class. Its
+point is that the prescribed continuation of the old sure owner was
+ghost in F_z, but is NOT ghost to other caps after that owner is
+released. Prescribing its tail best reply can defeat the intended
+full-debt decrease.
+
+Start at (SF13). For 0≤ρ≤1 replace the root rates by
+
+    q(ρ)=(1−ρ,1/3,1/2,0).
+
+First give EVERY conditional tail the literal Never law. All pure
+responses are root Quit, a later finite Quit, and Never. For owner0
+the two later endpoints are32/3+1/3=11 and32/3, so its complete cap
+stays11. The exact debts of the four players are
+
+    d_0=ρ/3,
+    d_1=8ρ/3,
+    d_2=|8−32ρ/3|,
+    d_3=0.                                      (SF15)
+
+For example player1's root endpoints are16−8ρ and16, while player2's
+are16−32ρ/3 and32(1−ρ). Both are prescribed at the original free rates.
+Player3 Continues with target32(1−ρ/3), which is its complete cap.
+Consequently
+
+    D_Never(ρ)=8−23ρ/3                  if 0≤ρ≤3/4;
+    D_Never(ρ)=41ρ/3−8                  if 3/4≤ρ≤1. (SF16)
+
+Every ρ>0 gives D_Never(ρ)<8. In particular the literal finite
+profile at ρ=3/4 has debt9/4. The only new unrestricted owner0
+gain is its one-unit late singleton on the all-quiet opponent event;
+it has not been suppressed or merged with Never.
+
+Now keep EXACTLY the same root rates and exactly the same opponent
+conditional tails, but prescribe owner0 to Quit surely at date1 if
+its root Continues. This is owner0's actual best tail reply against
+the all-Never opponent punishment, achieving P_0=s_0=1. All other
+tails still Never. It improves owner0's prescribed whole payoff and
+makes its own debt zero. It also creates a new late joining cap for
+player1. Direct complete response enumeration gives
+
+    U_0=B_0=11,
+    U_1=16−8ρ/3,       B_1=16+8ρ,
+    U_2=24−32ρ/3,      B_2=32−32ρ/3,
+    U_3=B_3=32.
+
+Thus throughout the ENTIRE finite-amplitude interval
+
+    D_ownerBestReply(ρ)=8+32ρ/3.                 (SF17)
+
+Player1's new Continue cap is its passive root value16 plus
+ρ·(1/2)·16 from joining owner0 at date1 if the root was quiet.
+Player2 prefers waiting for owner0's singleton, which leaves its
+debt EIGHT unchanged. Root, date1, every date after1 and Never all
+enter these caps; random behavioral responses are bounded by them.
+
+The two changes therefore have opposite signs at EVERY ρ>0, despite
+sharing the same root and the SAME true owner punishment plan.
+Repairing the owner's own tail prescription is not a harmless final
+step of a last-sure consumer. A real construction must choose that
+prescription together with the other players' complete caps. The
+improving profile here uses positive prescribed owner tail regret
+to prevent a larger observer-cap increase. This is consistent with
+the exact replacement identity in the current question; it gives a
+literal two-date finite-amplitude instance of its tradeoff.
+
+The table and all displayed one-date and two-date identities were
+checked by direct rational product enumeration: 8,788 one-date cube
+points with every possible sure owner, 49 rational amplitudes for
+each two-date release, and the displayed exact endpoint calculations
+for (SF15)–(SF17). The cube checks are bounded experiment
+evidence only; the continuous and arbitrary-tail claims use the
+proofs above, not grid coverage. No tracked experiment producer is
+being claimed for this inline verification.
 
 ### Exact source and current consuming question
 
