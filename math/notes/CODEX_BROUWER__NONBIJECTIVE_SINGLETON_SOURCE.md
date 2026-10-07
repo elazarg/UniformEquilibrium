@@ -4736,3 +4736,190 @@ game. It is not a positive-global-gap example and cannot be inserted
 inside the genuine first-collision source as a contradiction. The
 next route must actively retain and change collision atoms; neither
 bounded-density tuning nor an atomless continuum replacement is used.
+
+## One exceptional latest cap: conditional old-mass transport and a sure-clock reduction
+
+Status: a COMPLETE ordinary-mathematical source-restriction candidate,
+not independently reviewed or exported, not a whole Fin4 consumer.
+It uses the TRUE global sum minimum and preserves every full response.
+No root Nash, minimizing old tail, nonnegative reward, or atomless
+approximation is assumed. Its source is precisely the produced marked
+calendar and laws of UA1–UA15; Never is isolated and ordered after every
+finite clock. The extra late test c⁺ is retained as an outcome-equivalent
+copy of c for these old-chart changes, not discarded.
+
+### LC1. Self-contained claim
+
+Let bounded signed Fin4 rewards satisfy |r_i(S)|≤M. Let q be a
+produced marked global minimum with full sum debt δ>0, on compact
+finite-clock set T and isolated Never, with q_i(c)=0 at c=max T.
+The prescribed laws have bounded old quantile-chart densities, every
+positive finite mixture atom is an isolated retained midpoint, and
+old-chart finite realizing sequences preserve prescribed payoffs and
+ALL pure-response caps as in UA1–UA15. Suppose every owner's complete
+cap has a unique POINT maximizer τ_i on X=T⊔Never. For one owner m,
+
+    q_m({τ_m})=0,
+    q_j({τ_j})>0 for every j≠m,
+    τ_j<τ_m for every j≠m.                             (LC1)
+
+Put t₀=min_(j≠m)τ_j; all three nonexceptional τ_j are finite, since
+Never is the last point. Then necessarily
+
+    q_m({t:t>t₀}∪{Never})=0,
+    τ_j=t₀ for all j≠m,
+    q_m({t₀})>0,
+    δ=r_m(I∖{m})−r_m(I)>0.                            (LC2)
+
+The first line strictly excludes every source geometry in (LC1) with
+positive own mass later than the earliest other maximizing clock.
+The remaining geometry is a sure-by-t₀ exceptional owner and three
+common supported cap atoms. The numerical final identity is a selected-
+response polynomial evaluation, NOT an assertion that the pure-grand
+endpoint has actual full debt δ or belongs to the minimum fibre.
+
+### LC2. Ordered unique-cap stability without isolated exceptional clock
+
+Let h=max_(j≠m)τ_j. Reweight each nonexceptional law only toward its
+EXISTING supported cap atom:
+
+    q_j^λ=(1−λ_j)q_j+λ_jδ_(τ_j),       j≠m.
+
+These are probabilities for a two-sided open box around zero, because
+their own point masses are positive. The mixture factors 1−λ_j are
+strictly positive there. For a finite exceptional maximizer τ_m>h,
+choose a strictly between h and τ_m. For EVERY response clock t>a,
+including Never, expand the opponent product:
+
+    V_m(t,q_{−m}^λ)
+       = [∏_(j≠m)(1−λ_j)]·V_m(t,q_{−m})+C(λ),       (LC3)
+
+where C(λ) is independent of t. Each nonempty replacement subset
+has at least one sure finite opponent clock τ_j≤h<a; that opponent
+has absorbed before t, even if other opponents stop still earlier.
+The prescribed first-coalition payoff in that summand is independent
+of the response time. This reasoning also covers signed expansion
+coefficients: only the coefficient of the original term needs to
+be positive to preserve its maximizing order.
+
+The compact lower-clock set T∩[0,a] does not contain τ_m. Original
+response continuity and unique maximization give a strict uniform gap
+on that set. The standard 2M∑|λ_j| response-change bound preserves
+this gap for a smaller two-sided box. Formula (LC3) preserves the
+unique maximizer on all clocks above a. Thus τ_m remains the complete
+cap maximizer, even when it is a NONISOLATED zero-mass point. If τ_m
+is Never, its isolation gives the ordinary uniform-gap argument
+directly. Every other τ_j is isolated and has its original uniform
+gap, so all their maximizers remain fixed under sufficiently small
+simultaneous changes of the other laws as well.
+
+This is not the false generic implication “unique nonisolated max
+gives a uniform gap”. The order of the OPPONENT replacement atoms
+below the exceptional response yields the exact affine rescaling
+(LC3) near that maximum.
+
+### LC3. Signed conditional transport of existing mass after t₀
+
+Assume e=q_m({t:t>t₀}∪{Never})>0, and define the conditional OLD law
+ν=q_m(· | t>t₀), including Never in the event. Vary the exceptional law
+by
+
+    q_m^λ=(1−λ_m)q_m+λ_mν.                            (LC4)
+
+On the event's complement its likelihood multiplier is 1−λ_m; on
+the event it is 1+λ_m(1/e−1). Hence |λ_m|<min(1/4,e/8) is a legal
+two-sided box. If e=1 this simply leaves q_m unchanged and still
+causes no difficulty. Together with LC2, ALL caps are fixed on the
+product box. The own-law change (LC4) does not affect m's response
+values; it affects other owners continuously in total variation,
+whose supported unique cap points are isolated.
+
+The actual finite witnesses are not supplied as a new interface.
+In the original realizing sequence, t₀ is the retained positive
+mixture atom. Let its original date be t₀^k and its old quantile
+interval have right endpoint b_k→b. These intervals have positive
+limiting length because one nonexceptional owner has positive mass
+at t₀. The event “strictly after t₀^k, including original Never”
+is exactly the old-chart region u>b_k. Write e_k for its m-marginal
+mass. The bounded old densities and convergence of the retained
+interval give e_k→e>0. For large k, e_k≥e/2. The literal law
+
+    p_m^{k,λ}=(1−λ_m)p_m^k+
+                λ_m·p_m^k(· | original clock>t₀^k)               (LC5)
+
+is an actual probability even for negative λ_m in the chosen box:
+its two multipliers are positive. Its old-chart density is
+
+    r_m^{k,λ}(u)=r_m^k(u)·[(1−λ_m)+
+                              (λ_m/e_k)1_{u>b_k}].               (LC6)
+
+The indicators converge in L¹ to 1_{u>b}; the bracket multipliers
+are uniformly bounded. Testing (LC6) against any L¹ function proves
+weak-* convergence to its displayed limiting density: the moving
+indicator error vanishes by absolute continuity of its test integral,
+and the fixed multiplier uses original weak-* convergence. The
+nonexceptional signed atom reweightings use the direct UA old-chart
+formula. No new atom, calendar refinement, or clock consolidation
+is introduced. All modified densities stay nonnegative and uniformly
+bounded, so the original product-rectangle and moving-response-kernel
+arguments give complete payoff and cap convergence.
+
+Original q_i(c)=0 remains true for every changed law: all targets are
+existing finite atoms or conditional old mass. Thus the late c⁺ test
+has exactly the c response value, including the original Never
+event. ALL actual finite tests are accounted for. The true global
+floor therefore applies to these signed changes on a TWO-SIDED box.
+
+### LC4. First polynomial endpoint and exclusion of later own mass
+
+With all displayed responses fixed there,
+
+    D(q^λ)=F(λ)=∑_i[V_i(τ_i,q_{−i}^λ)−U_i(q^λ)].                (LC7)
+
+F is multiaffine in the four law-mixture parameters. True global
+minimality gives F(λ)≥F(0)=δ on an open box. The multiaffine interior-
+minimum argument from UA forces F to be algebraically constant:
+the first nonzero homogeneous squarefree term would have zero sign-
+cube mean and a negative direction. This remains valid if one
+parameter is redundant (e=1).
+
+Algebraically set every parameter to one. Nonexceptional players
+now prescribe δ_(τ_j), so their displayed response payoff equals
+their prescribed payoff. Owner m prescribes ν, wholly STRICTLY
+after t₀. The earliest opponents stop surely at t₀, and m's displayed
+response τ_m also lies after t₀. Both therefore receive the same
+passive payoff. Every summand of (LC7) is zero. Thus F(1,1,1,1)=0,
+contradicting constant δ>0. This is the actual signed global-minimum
+contradiction for e>0. As in UA, the endpoint evaluation does NOT
+identify actual endpoint caps; only a sufficiently small negative
+polynomial direction has to be transported to actual finite witnesses.
+
+### LC5. The surviving sure-clock geometry and exact grand withdrawal
+
+Hence q_m stops no later than t₀ almost surely. If some τ_j>t₀,
+opponent m has surely stopped before j's response; responding at
+τ_j or Never gives identical payoff. This contradicts UNIQUE point
+maximization. Therefore all three τ_j=t₀. If q_m({t₀})=0, m stops
+strictly before t₀ almost surely and the same equality contradicts
+unique maximization at t₀ for each other player. Thus q_m({t₀})>0.
+
+Now ALL owners have positive prescribed mass at t₀. Reweight every
+old law, including m's, toward δ_(t₀) with both signs. Nonexceptional
+caps stay fixed by isolation; the exceptional later cap stays fixed
+by the exact rescaling LC3, since all opponent targets are t₀<τ_m.
+Actual signed transport is exactly the retained-atom UA transport.
+The new selected-response polynomial is again constant δ.
+
+At its all-one endpoint, all four prescribed clocks are t₀. For
+every j≠m the displayed response t₀ is the prescribed action, giving
+zero selected-response debt. The exceptional response is later,
+so its payoff is r_m(I∖{m}), while prescribed payoff is r_m(I).
+The constant polynomial identity gives the final equality in (LC2).
+
+This is a universal SOURCE restriction, not a favorable-minimizer
+selection or root-level Nash conclusion. The remaining last-sure
+geometry can have a genuine local/operation-only barrier, so no
+infinitesimal descent or actual pure-grand minimum is inferred. The
+next question is whether finite-amplitude changes of that sure owner's
+OLD finite mass and the three common-cap laws consume this remaining
+case; its pure-grand polynomial endpoint alone cannot do so.

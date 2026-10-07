@@ -393,3 +393,53 @@ reviewed artifact. Its export-level contribution is the exact
 all-owners-unique-positive-own-atom exclusion at EVERY produced marked
 true minimum. It supplies no producer for the surviving alternatives
 and makes no full-conjecture or arbitrary-calendar coverage claim.
+
+## Focused LC1–LC5 cross-check, 2026-10-08
+
+PASS for the source restriction in the section “One exceptional latest
+cap: conditional old-mass transport and a sure-clock reduction” of
+`notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`. This is a focused
+ordinary-mathematical check requested by the coordinator, not a final
+artifact or export gate. I read LC1–LC5 and the old-chart UA construction
+on which its actual transport depends.
+
+The exceptional unique maximizing point need not be isolated. The
+argument does not infer a uniform gap from this uniqueness. Above a
+cut strictly between all replacement opponent atoms and that point,
+every nonempty replacement term has already absorbed, so its payoff
+is independent of the later response. The unchanged term is multiplied
+by ∏(1−λ_j)>0. Below the cut compactness and continuity give the needed
+uniform gap. Together these facts stabilize the exceptional response;
+the three supported maximizing points are isolated and have ordinary
+uniform gaps. The exceptional owner's own-law change cannot change its
+cap. Never and a possible last finite maximizing cut are covered.
+
+The conditional old-tail transport is legal with both signs. The
+retained mixture atom at t₀ has a positive-length quantile interval,
+even if the exceptional owner itself puts no mass there. Its right
+endpoints converge, so the indicators of the old region strictly after
+that interval converge in L¹. Their uniformly bounded multipliers,
+combined with the original bounded densities, give nonnegative bounded
+modified densities and weak-* convergence. This supplies actual finite
+witnesses; it is not an application of the nonnegative-mixture theorem
+to an unauthorized negative coefficient. Original product and moving
+response kernels are unchanged and retain every tester. No law gains
+mass at c, so c⁺ duplicates c throughout these changes.
+
+At the first polynomial endpoint the conditional exceptional law and
+its later displayed response both follow a sure earlier opponent exit.
+Thus every selected-response debt vanishes, contradicting the constant
+positive polynomial. The subsequent sure-by-t₀, common-cap and positive
+exceptional-atom conclusions follow from exact outcome equivalence with
+Never, not from response-gap stability at an endpoint. The second
+endpoint gives only δ=r_m(I∖{m})−r_m(I). It does not identify actual
+endpoint caps, declare a pure-grand minimum, or supply a Nash root.
+
+As an independent endpoint check, leaving only m at its original law
+gives δ=a_mδ+(1−a_m)[r_m(I∖{m})−s_m], since its support is no later than
+t₀. Therefore any earlier exceptional mass forces r_m(I)=s_m. I obtained
+this identity before learning that the author had also derived it.
+It does not itself contradict the strict singleton margins of the
+original minimum: earlier opponents can give m larger passive payoffs.
+The complete source restriction is accepted; its surviving common-date
+geometry still needs a full-cap consumer.

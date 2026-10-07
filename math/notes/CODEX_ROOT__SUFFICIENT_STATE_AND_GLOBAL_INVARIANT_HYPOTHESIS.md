@@ -565,6 +565,40 @@ Continuity of the restricted problem cannot replace that completeness
 check. This is evidence of a representation failure, not evidence that
 uniform equilibrium is false.
 
+### Necessary conditions can overlap without consuming their common residual
+
+There is an exact test for whether a singleton-reward pressure inequality
+adds information to one supported-cap configuration. Suppose a marked
+independent-law source has one owner m stopping surely by t₀. The other
+three selected cap tests are t₀; m's selected test is strictly later.
+Define
+
+    μ_i=P(first coalition={i}),
+    θ_i=P(all opponents of i stop strictly after its selected finite test),
+
+and put θ_i=0 for a Never test. Then θ_j=0 for j≠m because opponent m
+has stopped or ties at t₀. For m, every opponent surviving its later
+test also survives its prescribed stop, so θ_m≤μ_m. Consequently
+
+    ∑[i] w_i θ_i≤∑[i] w_i μ_i       for every w_i≥0.
+
+Any necessary singleton-pressure bound of this form is automatic on
+this configuration, even when the displayed source is assumed to be a
+positive global minimum. Combining it with the supported-cap restriction
+therefore does not exclude the remaining case. The configuration is the
+surviving arm of LC1–LC5 in
+`CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`; the focused independent
+check of that restriction is in the corresponding NOETHER feedback. This is not a proof
+that a positive-minimum table realizing the configuration exists.
+
+The useful test is stronger than asking whether two claims are valid.
+Before counting their combination as progress, evaluate the proposed
+new inequality on the exact surviving branch. If it holds automatically,
+retuning nonnegative weights cannot supply a consumer. One must change
+the comparison or construct a legal operation whose full-cap account is
+not already forced by that branch. This failure is not explained by an
+omitted state field: the event laws already make the nonclosure explicit.
+
 ## Competing explanations
 
 ### H1: insufficient compositional state
