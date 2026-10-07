@@ -44,6 +44,12 @@ mass. A separate signed extension below replaces s_i by max(s_i,0) only in
 the endpoint cap, without changing the underlying utilities or Never payoff.
 The current question is to consume a finite binding atom/response while
 retaining genuine whole-profile minimality and every other player's cap.
+The newest completed internal move uniformly spreads every original date
+over private subdates, with complete cap leakage bounded by original
+collision mass plus the ACTUAL cost of inserting empty response dates.
+Combined with the original-stage theorem, near-minima with Never bounded
+below must have a definite collision-or-clock-stretch cost. Neither arm
+is dispatched; no root or favorable best-response selection is assumed.
 This is internal research, not an existence theorem or export candidate.
 
 The earlier question concerned a raw class with constant participant
@@ -2735,3 +2741,291 @@ This contradicts D_*=S₊. The signed extension is proved. It changes neither
 the requirement α_i>0 for every player nor the remaining earlier-binding
 cap branch. If S₊=0, the all-Never equilibrium disposes of the original
 game instead of supplying this contradiction argument.
+
+## Spreading original clocks: collision or a genuinely missing response cut
+
+Status: complete ordinary mathematical finite-law estimate and source
+consequence, not independently reviewed or Lean-checked. This is internal
+research, not another proposed export. The move changes actual independent
+laws and measures ALL cap leakage; it does not assume an auxiliary Nash
+selector or preservation of caps under arbitrary clock refinement.
+
+### Exact finite-data question
+
+Fix any nonempty finite player set I of size n, bounded real rewards
+|r_i(S)|≤M with M>0, original Never payoff0, and an arbitrary independent
+finite stopping-law profile p. Let χ(p) be the probability that its FIRST
+quitting coalition has size at least2. For each i, let χ_{−i}(p) be the
+probability that the first coalition among its opponents has size at least2;
+if every opponent chooses Never this event is false. Set χ_{−i}=0 for a
+one-player game. These are different probabilities.
+
+Stretch the original calendar by placing every old date k at date2k+1.
+Date2k is now an empty available test immediately before that old date.
+Write p̂ for this ACTUAL stretched profile and
+
+    Λ(p)=Σ_i[b_i(p̂)−b_i(p)]≥0.                    (SD1)
+
+All old tests and Never remain, with their old values, and the prescribed
+coalition law is unchanged. Thus Λ is exactly D(p̂)−D(p), not a supplied
+cap bound. It prices the otherwise missing before/after cuts. It need not
+vanish, even when χ=0.
+
+For any integer L≥1, construct p^{[L]} as follows. If player i's original
+independent clock equals a finite k, it independently selects a uniform
+subdate ℓ∈{1,…,L} and quits at
+
+    (L+1)k+ℓ.
+
+Original Never remains Never. All players' added random choices are private
+and independent. Original order between DIFFERENT dates is preserved;
+simultaneous old draws may now be separated. Every gap and subdate is a
+literal natural-number test. No compact-clock realization is required.
+
+The claim is the complete estimate
+
+    D(p^{[L]})
+      ≤D(p)+Λ(p)+2Mnχ(p)+2MΣ_iχ_{−i}(p),          (SD2)
+
+while every singleton stage of p^{[L]} is at most1/L and all Never masses
+are unchanged. The bound is independent of L and of the original deadline.
+
+### Prescribed payoffs and every pure response
+
+Couple the old and new laws by the original clocks and their independent
+subdate draws. If the old first coalition is a singleton, its unique owner
+still precedes every other old block and remains the first quitter. The
+all-Never outcome is also unchanged. Only an old nonsingleton FIRST
+coalition can change its reward. Therefore
+
+    |U_i(p^{[L]})−U_i(p)|≤2Mχ(p) for every i.     (SD3)
+
+Fix a responder i and a new pure time in block k, at subdate ℓ. Compare
+with the three ACTUAL stretched-calendar tests immediately before old k,
+at old k, and immediately after old k. Their payoffs are denoted
+Q_i^−(k), Q_i^0(k), Q_i^+(k), all bounded by b_i(p̂).
+
+On the event that the original opponents' first finite coalition is a
+singleton, the conditional new test payoff, averaged over the private
+subdates, agrees with the convex combination
+
+    [(L−ℓ)/L] Q_i^−(k)
+      +(1/L) Q_i^0(k)+[(ℓ−1)/L] Q_i^+(k).        (SD4)
+
+Here equality means equality of the expected kernels RESTRICTED to that
+event, with the same coefficients. If the unique opponent first quits
+before k or after k, all three comparison outcomes agree with the new
+outcome. If it first quits at k, its uniform subdate is later than ℓ,
+equal to ℓ, or earlier than ℓ with exactly the displayed probabilities.
+Those probabilities do not depend on which opponent is the sole quitter.
+All-opponent-Never gives the same own singleton in all four tests.
+
+On the exceptional event of an original opponent collision, the difference
+between the new payoff and this convex combination has absolute value at
+most2M. Thus the full pure payoff is at most
+
+    b_i(p̂)+2Mχ_{−i}(p).
+
+An empty new gap corresponds to an old stretched cut and has the same
+bound. Never uses the passive first-opponent coalition: it is unchanged
+off the same exceptional collision event, so obeys the bound too. This
+exhausts EVERY pure natural date and Never. Taking the supremum, or any
+behavioral mixture of those tests, proves
+
+    b_i(p^{[L]})≤b_i(p̂)+2Mχ_{−i}(p).            (SD5)
+
+Combining (SD3) and (SD5) yields (SD2). Also the new marginal probability
+at a single date is p_i({k})/L≤1/L. Multiplying by opponent survival can
+only decrease it, so every new singleton stage probability is at most1/L.
+
+### A consumed restriction at the actual positive infimum
+
+Assume δ=inf D>0 for this fixed ORIGINAL table, and fix η>0. For a profile
+with all α_i=p_i(Never)≥η, the independence identity gives
+
+    χ(p)≥α_iχ_{−i}(p),
+
+because on the event that i Never stops, an opponent collision is also
+the original first collision. Consequently (SD2) implies
+
+    D(p^{[L]})≤D(p)+Λ(p)+2Mn(1+1/η)χ(p).        (SD6)
+
+Apply the established original-stage restriction in
+[POSITIVE_NEVER_NEAR_MINIMA_FORCE_SINGLETON_STAGE_ATOMS.md](../exports/POSITIVE_NEVER_NEAR_MINIMA_FORCE_SINGLETON_STAGE_ATOMS.md).
+It gives ε_A,γ_A>0 for this table and η, such that every actual law with
+D≤δ+ε_A and these Never bounds has some singleton stage≥γ_A. Choose L
+with 1/L<γ_A. Equation (SD6) therefore forces
+
+    D(p)−δ+Λ(p)+2Mn(1+1/η)χ(p)>ε_A.            (SD7)
+
+In particular all finite profiles with D(p)≤δ+ε_A/2 and α_i≥η satisfy
+
+    Λ(p)+2Mn(1+1/η)χ(p)>ε_A/2.                 (SD8)
+
+This is an actual complete-law source restriction. A near-minimum sequence
+with a fixed positive Never lower bound cannot have BOTH vanishing first-
+collision probability and vanishing complete-cap cost of clock stretching.
+It is stronger than merely knowing that a marginal or singleton stage atom
+exists. The displayed argument uses no root normality, reward normalization,
+entropy, bounded response menu, or assumed favorable reselection.
+
+For an arbitrary infinite original law the same conclusion follows from
+finite censoring if needed. Both its original and stretched complete caps
+are approximated uniformly by censoring sufficiently late finite mass;
+the collision probabilities converge by coupling, and Never masses can
+only increase. The actual infinite stretched law is the independent image
+k↦2k+1, with Never unchanged. Thus (SD8), with a weak inequality if taking
+a boundary limit, also gives a positive uniform collision-or-stretch floor
+for sufficiently near-minimal arbitrary laws.
+
+### Exact boundary and the unresolved consuming move
+
+The missing-cut term cannot be discarded. Take two players with own
+singleton1, passive singleton0 and joint reward−10 for both. Player0
+quits at date0 with probability1/2 and otherwise Never. Player1 quits at
+date1 with probability1/2 and otherwise Never. There are NO on-path
+collisions. Direct calculation gives
+
+    U=(1/2,1/4),   b=(1,1/2),   D=3/4.
+
+Stretching exposes the empty first date, where player1 can quit alone.
+Its cap becomes1; player0's cap stays1. Hence Λ=1/2. In the L-spread
+profile, player1's test at the first subdate of block0 earns
+
+    1−11/(2L),
+
+approaching1. Targets are unchanged. Thus collision-free spreading can
+raise debt by a fixed amount if the newly exposed test is ignored. This
+is a solved-table method boundary, not a positive-global-minimum example:
+player0 quitting surely with player1 Never is already an exact equilibrium.
+
+The bounded source lookup used the existing nonsingleton anti-diffusion
+and literal endpoint descriptions in `docs/TOOLKIT.md`, together with
+`QuittingStageAtomConcentratedPacketAdapter` in
+`Research/Quitting/PositiveStageAtomConcentratedPacket.lean` and
+`FinFourStrongConcentratedPacketConsumerResult` in
+`Research/Quitting/FinFourProducerAtlas/StrongConcentratedPacketConsumer.lean`.
+Those adapters alter a selected action and do not bound all other caps
+or retain whole-profile minimality. The current estimate instead produces
+a complete actual refinement and charges its entire cap effect. No blanket
+absence-of-overlap claim is made.
+
+The remaining question is NOT whether an original singleton stage can be
+found; that is settled by the cited restriction. It is whether true global
+minimality can consume the collision arm of (SD8), or the positive price of
+an unavailable response cut, by a coupled alteration of old stopping mass.
+Neither arm is excluded by (SD8). In particular it would be circular to
+assume Λ small just because inserting empty dates is strategically useful
+to a deviator. This checkpoint changes the candidate move and quantifies
+its exact failure modes; it does not establish another raw UE class.
+
+The missing-cut arm has a concrete continuation meaning. At an old date k
+write A_i(k) for the passive contribution from opponents who quit before k,
+R_i(k) for their probability of all surviving to k, and B_i(k) for their
+complete conditional cap on the old calendar beginning AT k. If R_i(k)>0,
+the old full cap is at least A_i(k)+R_i(k)B_i(k), whereas a newly inserted
+empty date immediately before k pays A_i(k)+R_i(k)s_i. Thus a profitable
+new cut necessarily has
+
+    B_i(k)<s_i.                                  (SD9)
+
+If R_i(k)=0 no such gain is possible. This is a genuine conditional cap,
+not a prescribed-payoff annotation. Global minimality of the WHOLE law
+does not say that this conditional suffix is itself a minimum.
+
+A tempting canonical shortcut is invalid: the exact declaration
+`singlePivotSingletonTable_punishment_le_solo` in
+`UniformEquilibrium/Quitting/Terminal/SinglePivotCanonicalConsequences.lean`
+supplies only P_i≤s_i, not P_i=s_i or P_i≥s_i. The explicit punishment
+transport in `FinFourSinglePivotNormalization` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean`
+does not change that direction. Hence the fact B_i(k)≥P_i does NOT rule
+out(SD9), even for a zero-singleton nonpivot row. The remaining move must
+alter the old head as well as the deficient suffix, or genuinely consume
+the collision arm. No free cap-preserving clock stretching is inferred.
+
+## First-root consumption: a genuine minimum cannot start with a solo root
+
+Status: complete ordinary algebraic consequence of an ACTUAL prefix minimum
+and the inspected strict minimum cap margin. Not independently reviewed or
+Lean-checked. It is not a new raw-table UE class. Unlike a best-endpoint
+adapter, the calculation retains the full Bellman maximum for every cap.
+
+Let (u⁺,b⁺) be a point in the original terminal semantic carrier, and let
+q∈[0,1]^I be a literal independent first root. Let (u,b) be its semantic
+prefix, assumed to be a GLOBAL sum-debt minimum with value δ>0. Set
+
+    a=∏_i(1−q_i),    d⁺=Σ_i(b_i⁺−u_i⁺).
+
+The exact prefix formulas are those in `quittingTerminalSemanticPrefix`
+in `UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`. In the
+finite Boolean stage game whose all-Continue annotation is b⁺, let Q_i
+be the pure-Quit endpoint, C_i the pure-Continue endpoint, and
+
+    g_i=q_iQ_i+(1−q_i)C_i,
+    e_i=max(Q_i,C_i)−g_i≥0.
+
+These are actual cap-annotated STAGE regrets; no stage Nash assumption is
+made. The full prefix cap is b_i=max(Q_i,C_i). The prescribed prefix payoff
+uses u⁺ instead of b⁺ ONLY on the all-Continue event, so
+
+    u_i=g_i−a(b_i⁺−u_i⁺),
+    δ=Σ_i e_i+a d⁺.                               (FR1)
+
+Every tail carrier point has d⁺≥δ by global minimality. Consequently
+
+    Σ_i e_i≤δ(1−a).                               (FR2)
+
+The tracked strict margins supply ξ>0 with b_i−s_i≥δ+ξ for EVERY i.
+For arbitrary signed Fin4 tables this is the exact declaration
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+For arbitrary finite players with nonnegative own singletons it is
+`positive_minimum_nonnegativeOwner_quadraticMargins` in the same file.
+One may take ξ=δ²/(8M) for a common M>0 reward bound. The source is the
+prefix pair (u,b), not the conditional tail; no tail-minimum assumption
+is hidden in this use.
+
+For each coordinate, regardless of which Bellman branch is maximal,
+
+    e_i≥q_i(b_i−Q_i).
+
+Combining this with(FR2) proves the forced participant-premium charge
+
+    Σ_i q_i(Q_i−s_i)
+      ≥δ[Σ_iq_i−(1−a)]+ξΣ_iq_i.                 (FR3)
+
+The bracket is nonnegative by the union bound. If q has precisely one
+positive coordinate j, then Q_j=s_j and every other summand on the left
+vanishes, whereas the right side is ξq_j>0. This is impossible. Thus every
+NONTRIVIAL first product root of such an actual minimum has at least TWO
+positive quitter coordinates and a positive first-stage collision mass.
+
+Equivalently, if S is the root's random quitting coalition, the left side
+of(FR3) is
+
+    E[Σ_{i∈S}(r_i(S)−s_i)],
+
+and the bracket is E[(|S|−1)^+]. Singletons contribute zero to the left.
+This states which actual simultaneous-quitting payoff mass must finance
+the stage regrets; it does not infer that the root itself is Nash.
+
+The applicability to a represented FIRST occupied atom needs the actual
+first-root decomposition. If that source has already been produced,
+its original pre-atom mass tends to zero; the first root rates converge,
+and a subsequence of the actual post-date semantic pairs gives the tail
+carrier point. Earlier empty tests pay s_i and are strictly below the
+source cap, so dropping those empty tests changes no limiting cap. The
+continuous prefix formulas then give(FR1). This paragraph does not supply
+the missing first-atom producer by itself. It does NOT apply unchanged to
+an arbitrary later atom, whose earlier cap tests must remain in a larger
+maximum and whose prescribed payoff has a nontrivial old-head term.
+
+For overlap, `HasProductLowQuittingPremium` in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`
+requires at least one low-premium ACTIVE coordinate at every absorbing
+product root. It is not the weighted-sum statement(FR3). No new whole-table
+coverage follows merely from this comparison. The next substantive task
+is to consume the forced first COLLISION root with its actual tail and
+complete cap equations, rather than replacing it by a favorable auxiliary
+Nash root or assuming its tail is another minimum.

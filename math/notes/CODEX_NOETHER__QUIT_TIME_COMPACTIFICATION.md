@@ -2,6 +2,16 @@
 
 ## Current best attempt
 
+The strongest new complete candidate is now the original-coalition-stage
+restriction below: at a positive global debt gap in Fin4, sufficiently
+near-minimal ACTUAL profiles must have a macroscopic first-coalition
+STAGE atom, with NO lower bound on their Never masses. The same holds
+at any finite cardinality when all own rewards are nonnegative.
+The exact one-coordinate polynomial test consumes EVERY fully diffuse
+minimum, including shared three/four zero-Never endpoints. This is
+ordinary mathematics awaiting independent review, not a UE producer.
+Earlier frozen reductions and their independent evidence remain below.
+
 The current source-consumer candidate combines actual prefix erasure with
 Section73's punishment canonicalization. At an actual positive global
 minimum, a unique earliest zero-Never owner with nonnegative own reward
@@ -12,6 +22,14 @@ PASS, not a Lean check or UE theorem. Shared diffuse earliest owners,
 earlier atoms, and signed-negative cutoff owners remain open here.
 Section73 also retains its distinct strict-Never-buffer social-max
 dispatch for shared earliest endpoints.
+
+A separate complete candidate now treats TWO shared earliest owners:
+at a nonnegative-own actual positive minimum with an atomless initial
+calendar, their two mutual singleton advantages must be EXACTLY equal
+to the global sum-debt minimum. This gives a finite raw hyperplane
+guardrail and a generic reduction to at least three shared earliest
+owners. It is ordinary mathematics awaiting independent review, not
+another equilibrium interface or a claim that the atomic case is solved.
 
 **Exact reviewable claim.**  In the canonical exact Nash--Bellman tail,
 Propositions 64--67 identify moving-source radial drift, compress zero rows,
@@ -12226,6 +12244,442 @@ label conclusion, again with no objection.  Gauss Round 52 checked Proposition
 94's donated/global cap distinction, direct defect, generated secant, seam
 ledger, and every clock field.  It found the example valid and supplied the
 constant `-2` precision recorded above.
+
+### Strict margins force an original coalition stage without a Never floor
+
+Status: complete ordinary mathematical proof candidate. No Lean check or
+export is claimed. This is a stronger actual-source restriction than
+the preceding positive-Never-only stage theorem: Never may vanish for
+any number of owners, and the forced original stage may be a collision.
+The former two-owner equality proof is retained unchanged below; the
+strict tracked margin now consumes that branch outright, not merely
+its generic unequal-advantage case.
+
+#### Raw statement and probability mode
+
+Fix a finite nonempty player set I with bounded arbitrary signed
+rewards r(S), independent private stopping laws on ℕ∪{Never}, and
+Never payoff0. The game absorbs at the earliest nonempty Quit coalition.
+Let U_i(p) be prescribed terminal payoff, b_i(p) its cap over ALL pure
+dates and Never, equivalently all behavioral deviations, and put
+
+    D(p)=Σ_i[b_i(p)−U_i(p)],   δ=inf_p D(p)>0.
+
+The infimum ranges over all actual profiles; finite-support laws give
+the same value by uniform-cap tail censoring. Assume either
+
+    |I|=4, with arbitrary own singleton signs; OR
+    |I| is arbitrary finite and s_i=r_i({i})≥0 for every i.    (S1)
+
+Then there exist ε>0 and γ>0, depending only on the fixed reward table,
+such that EVERY actual profile p satisfies
+
+    D(p)≤δ+ε
+      ⇒ ∃nonempty S⊆I ∃t∈ℕ:
+           m_S(t;p)≥γ,                                (S2)
+
+where its ORIGINAL first-coalition stage probability is
+
+    m_S(t;p)=∏_{i∈S}p_i({t})
+                ·∏_{j∉S}p_j({t+1,t+2,…,Never}).
+
+The laws may have infinitely many finite dates. There is NO Never
+lower bound, supplied root, favorable support, or selected continuation.
+The stage may be a singleton or a simultaneous collision; a universal
+singleton conclusion is NOT asserted when Never masses vanish.
+The dates may diverge along a minimizing sequence. Constants are
+non-effective and no table-independent stage floor is claimed.
+
+The sequence version is stronger geometrically: from ANY specified
+finite-law minimizing sequence, some subsequence has a fixed nonempty
+coalition S and ORIGINAL dates t_k with liminf m_S(t_k;p^k)>0, with
+none of those original profiles modified.
+
+#### The actual strict-margin declaration
+
+Choose M>0 bounding every absolute reward. The exact declarations
+inspected in
+UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean
+are positive_minimum_nonnegativeOwner_quadraticMargins and
+positive_minimum_fourPlayer_allOwner_quadraticMargins. Their hypotheses
+are membership in the actual semantic carrier, a GLOBAL minimum of
+total debt, positivity δ, the reward bound, and respectively nonnegative
+own reward or cardinality4. No preemptor is supplied to these declarations.
+Under(S1), EVERY owner at EVERY genuine minimum therefore satisfies
+
+    b_i−s_i≥δ+c₀,       c₀=δ²/(8M)>0.              (S3)
+
+The exact source truth is this strict bound, not an inferred margin
+from the name of the file. The Fin4 version allows signed own levels
+and internally obtains its blocker certificate from the no-UE consequence
+of the positive global minimum. Thus this route needs no normalization
+of an already chosen minimum, or even raw-table normalization first.
+
+The produced marked minimum and actual small-prefix erasure used next
+are the complete ordinary mathematics independently reviewed in
+exports/POSITIVE_NEVER_NEAR_MINIMA_FORCE_SINGLETON_STAGE_ATOMS.md.
+Its erasure proof has arbitrary signed finite-player scope and does
+NOT require positive Never. Only its diffuse iteration and singleton
+stage trace require that latter hypothesis. The following consumption
+uses its erasure and polynomial constancy, not its positive-Never-only
+conclusion.
+
+#### Exact one-coordinate test consumes every nonzero small prefix
+
+Take a marked representation q,T of ANY original finite minimizing
+sequence. Its complete prescribed/cap pair is a global minimum δ.
+Let a∈T be an available NONATOMIC cut. Write x_i=q_i(t<a), and
+suppose
+
+    0<H:=Σ_i x_i≤κ:=δ/(4M).                         (S4)
+
+All suffix masses are positive, because x_i≤κ≤1/2. The actual
+prefix-erasure theorem makes the independent conditional suffix
+q^+ another genuine global minimum, with every finite/Never test
+retained and first empty test a. It also supplies a multi-affine
+future-branch debt polynomial P(z), with a head/tail mixture coordinate
+for each i with x_i>0, satisfying
+
+    P(z)≡δ on the ENTIRE coordinate face.           (S5)
+
+This is polynomial constancy, not a claim that the full-cap objective
+has that branch everywhere. Local interior minimality and the true
+singleton moat supplied constancy; the separate full-cap continuation
+supplied actual minimality at the all-tail point z=0.
+
+Choose i with x_i>0 and set EVERY other head coordinate to0, while
+varying z_i. All other players now use tails at or after a. If i
+selects its head it quits ALONE strictly before every opponent.
+Thus the prescribed payoff on that event is s_i for i and r_j({i})
+for each j≠i. For any future j-tester, including Never, the same
+passive term r_j({i}) occurs. In notation V_j=U_j(q^+), B_j=b_j(q^+),
+the exact future polynomial contributions on this axis are
+
+    L_i=B_i,       U_i=(1−z_i)V_i+z_i s_i,
+    L_j=(1−z_i)B_j+z_i r_j({i}),
+    U_j=(1−z_i)V_j+z_i r_j({i})       for j≠i.
+
+Consequently
+
+    P(z_i e_i)=δ+z_i[(B_i−s_i)−δ].                 (S6)
+
+All passive terms cancel EXACTLY. There is no O(H²) bound, no
+linearization in the reward data, and no division by a vanishing
+survival probability. Equation(S5) forces B_i−s_i=δ. But q^+ is a
+true minimum, so(S3) says B_i−s_i≥δ+c₀. Contradiction.
+
+We have proved: at this actual minimum, every available nonatomic
+cut a has either zero cumulative head mass or head mass greater
+than κ. No NONZERO cap-inactive small prefix exists. The head laws
+themselves may have atoms; only the cut must be nonatomic. In
+particular the proof does not weaken the cap test at a positive
+atom or invent an empty response beside it.
+
+The finite transport is exactly that in small-prefix erasure: select
+one FIXED cut before the realizing-sequence limit; original head/suffix
+indicators converge off its zero-mass boundary; reweight normalized
+finite laws with denominators bounded away from0; use bounded weak-*
+product likelihoods and moving semantic kernels for ALL cap tests.
+The all-tail minimum is established there by the singleton-moat
+clopen continuation. Only then is the STRICT margin(S3) applied.
+This does not presume an arbitrary conditional minimum or apply a
+Lean inequality to a merely annotated continuation payoff.
+
+#### A reachable finite atom exists in the ORIGINAL marked source
+
+If every Never mass is positive, every finite marginal atom carries
+positive first-singleton stage probability by the event that all
+opponents Never. If no finite atom existed and some finite mass
+remained, continuity of the cumulative mass would supply an available
+nonatomic cut with positive head at most κ, contradicting(S4)–(S6).
+An intermediate-value cut inside a gap may be moved to its endpoint
+in T without changing head mass. If no finite mass remained, q is
+all Never. That actual profile cannot minimize positive δ under(S3):
+δ=Σ_i max(s_i,0)>0 supplies an owner with s_i>0, whose cap-minus-solo
+is0. Hence this case also contradicts(S3).
+
+Now suppose Z={i:q_i(Never)=0} is nonempty. For i∈Z let d_i be the
+maximum of its finite support, and d=min_{i∈Z}d_i. Every marginal
+has positive strict survival past any t<d. Therefore ANY positive
+marginal atom at t<d has a positive first-SINGLETON stage: choose its
+owner, and let every opponent survive strictly beyond t.
+
+Suppose there is no finite atom at or before d. A zero-Never owner
+ending at d has all of its finite probability below d. Thus the total
+cumulative head grows continuously from0 to a value at least1 there.
+An available nonatomic cut a<d has total head in(0,κ], by the same
+intermediate-value/gap-endpoint argument. Its tail normalizers remain
+positive. This contradicts(S4)–(S6). Hence some finite atom exists
+at or before d.
+
+It remains to price a possible atom exactly at d, without assuming
+positive Never. In the marked source, EVERY positive finite atom is
+a retained component midpoint and is ISOLATED in T by its positive
+quantile interval. Let B={i∈Z:d_i=d}. Since each of these supports
+contains its maximum d and d is isolated, q_i({d})>0 for every i∈B.
+Every j∉B has positive STRICT survival beyond d, either from Never
+or from finite support ending later. Therefore
+
+    m_B(d;q)=∏_{i∈B}q_i({d})
+                  ·∏_{j∉B}q_j((d,c]∪{Never})>0.       (S7)
+
+This is a real first-coalition stage, possibly a collision, not an
+off-path marginal atom. An alleged atom at d while another zero-Never
+owner approaches d diffusely is ruled out by the retained atom's
+isolation: that diffuse endpoint cannot be the maximum of a support
+contained in T. No ordinary discrete-clock realization of q is used.
+
+Thus every represented minimum under(S1) has a REACHABLE positive
+finite stage atom. In particular ALL fully diffuse minima are excluded,
+including the shared-three/four zero-Never endpoint branch. This is
+not merely a property of one favorably selected minimum source.
+
+#### Trace the original stage and obtain the uniform whole-profile bound
+
+Take the retained atom at t, its quantile component J=(a,b), and its
+unique original atom intervals J_k=(a_k,b_k) at ORIGINAL dates t_k
+in the UNMODIFIED minimizing sequence. Bounded likelihoods and fixed-
+interval weak-* convergence give
+
+    p_i^k({t_k})=∫_{J_k}r_i^k→q_i({t}),
+    p_j^k({t_k+1,t_k+2,…,Never})
+                  =∫_{b_k}^1 r_j^k
+                   →q_j((t,c]∪{Never}).                (S8)
+
+The moving endpoints cost at most |I| times their displacement.
+Choose S as the reachable singleton above or the coalition B in(S7).
+Multiplying(S8) yields m_S(t_k;p^k)→m_S(t;q)>0. No original profile,
+calendar or prefix is changed in this conclusion. Conditional
+erasures are used only in proving that the ORIGINAL represented
+source has such an atom; the trace returns to that source's original
+marked intervals, not to an erasure target.
+
+If(S2) failed, choose actual profiles p^k with D≤δ+1/k and EVERY
+coalition stage below1/k. For finite laws, the same-source marked
+representation and trace contradict that bound. For infinite laws,
+censor finite mass after sufficiently late K_k to Never. The sum
+debt changes by at most1/k under uniform cap coupling. EVERY stage
+at t≤K_k is EXACTLY unchanged, since each mover atom and each
+opponent event {τ_j>t} is unchanged. Every later finite stage is0.
+Thus the finite censored sequence still has all stages below1/k
+and approaches δ, giving the same contradiction. No stage is
+manufactured at the cutoff. This proves(S2) for unrestricted actual
+laws and hence their behavioral profiles. ∎
+
+#### Scope and the concrete surviving problem
+
+This excludes the entire diffuse actual-minimum branch and all
+vanishing-FIRST-STAGE minimizing sequences under(S1). It does NOT
+force a singleton stage without a Never floor, does not bound the
+time of the stage, and does not produce a uniform equilibrium.
+Under a positive lower Never bound η, (S2) does imply an original
+singleton stage: m_S≥γ gives p_i(t)≥γ for any i∈S, and then
+m_i(t)≥γ η^(|I|−1). Without η a simultaneous collision may be the
+only forced stage. The already exported arbitrary-signed finite-
+cardinality positive-Never theorem retains scope beyond(S1).
+
+The new raw producer is a NECESSARY restriction on every positive
+global gap, not a supplied-atom verifier. The surviving actual
+task is to consume a macroscopic ORIGINAL absorbed coalition stage
+with the whole near-minimizing profile and every off-path cap still
+retained. Existing terminal-coalition mass certificates and modified
+endpoint singleton targets do not provide this whole-profile input.
+No export admission is inferred without independent mathematical
+and actual-source overlap review.
+
+### A two-owner diffuse endpoint forces an exact singleton equality
+
+Status: complete ordinary mathematical proof candidate, not independently
+reviewed or Lean-checked. This is a new actual-minimum necessary condition,
+not a proposed UE theorem or export. It uses the independently reviewed
+fixed-cut reachability mechanism immediately below, the reviewed Section73
+ghost erasure, and an exact tracked strict-singleton declaration.
+
+#### Precise statement
+
+Fix ANY finite nonempty player set I, bounded arbitrary signed rewards,
+Never payoff0, independent private clocks, and NONNEGATIVE own singleton
+levels s_i=r_i({i}). Let δ=D_*>0 be the numerical global infimum of SUM
+complete terminal debts over actual finite stopping laws. Take its produced
+marked-calendar minimum q on T with the full original-game cap transport.
+
+Let Z={i:q_i(Never)=0}, assume Z≠∅, put d_i=max supp(q_i) for i∈Z,
+and d=min_{i∈Z}d_i. Suppose exactly TWO zero-Never owners u,v have
+d_i=d, and all marginal clocks have no finite atom at or before d.
+Arbitrary atoms and laws strictly after d remain allowed. Define
+
+    a=r_u({v})−s_u,     b=r_v({u})−s_v.
+
+Then necessarily
+
+    a=b=δ>0.                                          (E1)
+
+Thus any fixed table with a≠b cannot have this genuine diffuse two-owner
+earliest-endpoint minimum branch. No Never buffer, cap uniqueness,
+joining-reward sign, favorable singleton graph, or social-max assumption
+is supplied. Rewards of every coalition of size≥2 are unrestricted.
+
+The proof additionally supplies a global minimum semantic pair (V,B)
+and θ∈(0,1) with
+
+    V=θ r({u})+(1−θ)r({v}),
+    B_u=s_u+δ,     B_v=s_v+δ,
+    debt_u=θδ,     debt_v=(1−θ)δ,
+    debt_i=0 for i∉{u,v}.                             (E2)
+
+This is a point in the original attainable semantic carrier, not an
+asserted executable strategy or a new equilibrium on a two-player calendar.
+
+#### Exact strict-payoff source
+
+The inspected declaration
+minimumTerminalSemantic_strictSingleton_of_punishmentNormal in
+UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticMinimumLawFiniteAtom.lean
+says that EVERY positive global semantic SUM-debt minimum has
+
+    V_i>s_i for every i,
+
+provided the TRUE original-game punishment satisfies P_i≤s_i for every i.
+Here nonnegative own levels supply precisely that condition by
+quittingPunishmentValue_le_max_solo in
+UniformEquilibrium/Quitting/Stationary/MinMax.lean:
+P_i≤max(s_i,0)=s_i. This is not a replacement of punishment by a nominal
+phase value. The strict assertion applies also to a limit point of a
+sequence of genuine conditional global minima, once actual carrier
+membership and minimality have been established.
+
+#### Canonicalize ghosts, then take genuine minimum suffixes
+
+Choose cutoff owner u, whose clock ends at d almost surely. Section73
+sets every opponent clock strictly after d to Never while preserving
+the ENTIRE semantic pair at the minimum, since s_u≥0 and the true
+punishment upper bound gives b_u=E_u. Owner v already ends at d.
+The resulting minimum q̄ has exactly two zero-Never owners u,v;
+every other player has positive Never mass. All its finite clocks
+lie at or before d and are nonatomic. Original finite approximants
+are the source-preserving forced-owner/ghost-erasure construction,
+not an auxiliary correlated law.
+
+For each fixed available cut t<d all marginal survivals are positive:
+u and v have support supremum d, and every other player retains Never.
+Fixed-cut reachability therefore makes q̄^t, the independent conditional
+suffix at t, another ACTUAL global minimum of value δ. Choose available
+t_m↑d. The number of erasures may diverge with m; each t_m is reached
+by a finite legal sequence before its own original-source limit.
+
+For every outsider i∉{u,v}, conditional finite mass tends to0, because
+its original finite mass after t_m tends to the zero atom at d while
+its Never mass remains a positive lower bound. Put
+
+    e_m=Σ_{i∉{u,v}}q̄_i^{t_m}(finite) →0.
+
+For u and v the conditional laws remain finite almost surely and
+nonatomic. Their independent clocks therefore never tie. Let θ_m
+be the conditional probability that u precedes v; 0≤θ_m≤1.
+Against an outsider-all-Never replacement, the two prescribed targets are
+
+    U_u=s_u+(1−θ_m)a,
+    U_v=s_v+θ_m b.
+
+Uniform reward coupling bounds the error of these identities in
+the genuine q̄^{t_m} profile by 2M e_m, where M bounds all rewards.
+It also gives, for every payoff observer i,
+
+    U_i(q̄^{t_m})
+      =θ_m r_i({u})+(1−θ_m)r_i({v})+O(M e_m).          (E3)
+
+Only prescribed singleton outcomes of two independent nonatomic clocks
+are used here; no finite collision reward has been discarded in an
+actual approximating profile. Its effect tends to0 under the proved
+semantic convergence.
+
+#### The two active complete caps are exact endpoint bounds
+
+With every outsider at Never, a pure u tester earns a convex combination
+of s_u and r_u({v}), according to whether the finite nonatomic v clock
+has already stopped. The first available empty suffix cut pays s_u;
+a finite test at d or later, and Never, pay r_u({v}). Therefore the
+COMPLETE cap equals max(s_u,r_u({v})). The v cap is analogous.
+Uniform coupling in the vanished outsider finite mass yields
+
+    b_u(q̄^{t_m}) → s_u+max(a,0),
+    b_v(q̄^{t_m}) → s_v+max(b,0).                    (E4)
+
+This cap computation includes EVERY finite tester and Never. It does
+not require dense time: the available empty first cut and final cut
+give both extrema, and every intermediate test lies between them.
+The actual singleton moat b_i−s_i≥δ now gives
+
+    a≥δ>0,     b≥δ>0.                              (E5)
+
+#### Neither winning weight can vanish at the carrier limit
+
+Take a subsequence with θ_m→θ∈[0,1]. Prescribed payoffs then converge
+by(E3). Caps are bounded; pass to a common cap subsequence. Every
+q̄^{t_m} pair belongs to the original attainable semantic carrier
+and has debt δ. Closedness of that carrier and continuity of total
+debt make its limiting pair (V,B) another GLOBAL minimum of value δ.
+There is no asserted convergence of the actual clock laws or their
+chronological realization.
+
+Apply the exact strict-singleton source to this true limit pair.
+If θ=0 then V_v=s_v, a contradiction. If θ=1 then V_u=s_u, again
+a contradiction. Thus
+
+    0<θ<1.                                          (E6)
+
+This is where actual punishment normality is used. The mere positivity
+of each finite-cut winning probability would not prevent it tending
+to0; silently using that weaker assertion would be a false proof.
+
+By(E3)–(E5) the limiting u and v debts are θa and (1−θ)b. All other
+debts are nonnegative at any actual carrier point. Consequently
+
+    δ≥θa+(1−θ)b≥θδ+(1−θ)δ=δ.
+
+Strictly positive weights force a=b=δ. Their two debts already sum
+to δ, so every outsider debt vanishes. This proves(E1) and(E2). ∎
+
+#### Generic source reduction, with no normalization ancestry
+
+The equality a=b is a nontrivial raw hyperplane for each unordered
+player pair. There are finitely many pairs. Small independent changes
+of off-diagonal singleton rewards can avoid all these hyperplanes
+while keeping every own level unchanged and nonnegative.
+
+The positive gap survives sufficiently small reward changes. If the
+supremum norm of a reward-table perturbation is at most ζ, every
+prescribed payoff and every complete behavioral cap changes by at
+most ζ, uniformly over actual profiles. Thus
+
+    |D_*'−D_*|≤2|I|ζ.
+
+Choose ζ<δ/(2|I|). The perturbed table still has a positive actual
+global minimum. Form its OWN minimizing sequence and marked source;
+do not claim that the old clock law minimizes the new objective.
+
+For the generic perturbed table, a source with no finite atoms through
+its earliest zero-Never endpoint cannot have exactly two earliest
+owners. The separately reviewed unique-earliest exclusion also rules
+out exactly one. The positive-Never diffuse exclusion rules out a
+completely diffuse source with no zero-Never owners. Hence a fully
+diffuse minimum of such a table must have AT LEAST THREE zero-Never
+owners sharing its earliest support endpoint.
+
+In Fin4 an original no-UE table may first be replaced by the actual
+single-pivot-normalized table with nonnegative own levels, then by this
+arbitrarily small generic perturbation. Positive global debt persists.
+One selects a NEW minimum only after those raw-table changes. This
+is an actual counterexample-source reduction, not a positive-gap
+example or an equilibrium certificate for the old table.
+
+The conclusion does not consume earlier finite atoms or three/four
+shared diffuse owners, and does not claim whole raw-table UE coverage.
+At the equal-advantage boundary a=b the proof supplies(E2), not a
+contradiction. The next difficult question is whether the existing
+actual all-base gap consumer can turn that two-debtor singleton fiber,
+or its three-owner analogue, into a legal descent with every outsider
+cap retained. Another supplied two-player equilibrium would not suffice.
 
 ### Fixed-cut reachability and the unique diffuse earliest owner
 

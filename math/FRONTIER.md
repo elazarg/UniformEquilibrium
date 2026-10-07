@@ -382,7 +382,7 @@ restrictions are proved:
   all Never a positive global minimum, contradicting the singleton margin.
   Thus some player has zero Never mass, or some finite chronological point
   has positive marginal mass. This is a date atom, not merely a positive
-  coalition coordinate in the terminal law. No atom-size floor is proved.
+  coalition coordinate in the terminal law.
 - With all Never masses positive, nonnegative own singletons and positive
   singleton sum, some complete cap is attained at a finite test before c.
   Conditional head/tail reweighting preserves every post-cut comparison
@@ -403,7 +403,7 @@ restrictions are proved:
   so a literal social-max tail replacement preserves every cap; minimum
   debt then contradicts independence of the remaining diffuse clocks.
 
-A stronger original-profile restriction follows: for each fixed table with
+A uniform original-profile restriction follows: for each fixed table with
 D*>0 and each positive Never lower bound η, there are ε,γ>0 such that
 EVERY actual behavioral profile with D≤D*+ε and every marginal Never
 probability at least η has a singleton STAGE probability at least γ.
@@ -412,6 +412,27 @@ near-minimality. The date may vary, and no effective constants are given.
 The [complete proof](exports/POSITIVE_NEVER_NEAR_MINIMA_FORCE_SINGLETON_STAGE_ATOMS.md)
 includes the marked-calendar producer, same-sequence atom trace, and
 infinite-law extension with exact preservation of earlier stages.
+
+For signed Fin4 tables, or arbitrary finite player sets with all own
+singletons nonnegative, the Never lower bound is unnecessary. There are
+ε,γ>0 such that EVERY original actual profile with D≤D*+ε has some
+nonempty coalition STAGE of probability at least γ. The conclusion retains
+the whole original profile and its near-minimality; no bound on the date is
+asserted. The stage may be a collision, not a singleton. From any supplied
+minimizing sequence, the stage is traced to original dates on a subsequence.
+No conditioning or owner-clock modification is substituted for those profiles.
+
+The proof excludes every nonzero small head at an available nonatomic cut.
+Minimum-preserving erasure gives an actual minimum suffix and a constant
+multiaffine future-debt polynomial. Its one-owner axis would force
+Bᵢ−sᵢ=D*, contrary to the tracked strict minimum margin. An earliest
+zero-Never endpoint either has a reachable earlier atom or is itself an
+isolated tied atom; all earliest exhausted owners quit there with positive
+joint probability. Thus fully diffuse represented minima are impossible,
+including shared endpoints with binding Never responses. The
+[strict-margin proof](notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md)
+has two independent mathematical reviews; the exact result is not yet
+Lean-checked.
 
 If an owner stops by a finite cut surely, global minimality also gives its
 exact cap account as the maximum of its best head response and its passive
@@ -427,9 +448,11 @@ the earlier-cap result is in
 [the complete-cap variation proof](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md);
 the earliest-cutoff and punishment results are in
 [the cutoff proof](notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md).
-Positive atomic cuts and shared earliest zero-Never endpoints with binding
-Never responses remain unconsumed. The unique-earliest exclusion does not
-cover a negative own singleton or a preceding atomic clock. These
+The forced atomic stage still has no terminal consumer. Neither its
+conditional tail's minimum debt nor a cap-Nash label for its played row
+follows from the reviewed stage theorem. Outside the two strict-margin
+scopes above, the unique-earliest argument still requires its selected
+owner's nonnegative singleton and absence of preceding atoms. These
 restrictions give neither ordinary-clock attainment, a renewable terminal
 consumer, nor UE.
 

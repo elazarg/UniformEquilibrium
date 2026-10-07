@@ -218,6 +218,26 @@ Never a positive global minimum. Regeneration is proved using the same
 original approximants. This ordinary result has passed the same independent
 focused review by CODEX_NOETHER; it is not Lean-checked and supplies neither
 an atom-size bound nor a full conjecture conclusion.
+Section 39 separately proves a candidate atomic-cut extension and a
+first-date atom source: a positive-Never minimum can be conditioned to
+another whole-profile minimum whose first actual retained date has a
+positive singleton stage. The original atom and all complete tests are
+transported; no empty pre-atom date or cap-Nash row is assumed. This
+additional result is unreviewed and is not folded into the frozen packet.
+Section 40 checks that first row against the literal full Bellman caps:
+a solo first atom with positive continuation mass has an ACTUAL minimum
+tail and can be erased, including all cap-switch ties. Together with
+Section 39's finite survival budget this produces a collision first row,
+and traces a pair stage to the original minimizing sequence. The new
+atomic chain remains ordinary unreviewed research, outside the export.
+Section 41 combines the atomic-cut proof with the strict tracked minimum
+margins. It excludes every small nonempty initial head in Fin4 and forces
+a large FIRST chronological atom without any Never floor. That row must
+have at least two active players. A quantitative collision bound traces
+to the ORIGINAL unmodified minimizing sequence and gives a uniform early
+nonsingleton-stage restriction on all near-minima. This is a new complete
+ordinary proof candidate, not independently reviewed or Lean-checked;
+the existing frozen singleton-stage export is unchanged.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -6752,3 +6772,605 @@ empty cut can change the complete cap. Thus the above proof must not
 be relabeled as a macroscopic-atom theorem or silently iterated through
 atomic endpoints. Consuming those collisions, or the zero-Never branches,
 remains necessary for an arbitrary-table conclusion.
+
+## 39. An atomic cut retains the tied row and exposes a first-stage source
+
+This is a separate ordinary-mathematical candidate. Sections 35, 36 and
+38 and the assembled positive-Never stage packet remain unchanged in
+scope. The new point is an actual ATOMIC cut, not an assumption that
+there is an available empty date beside it.
+
+### Small-head erasure at any retained cut
+
+Let q,T,c be the represented actual global minimum with δ=D_*>0 and
+reward bound M>0. Let a∈T be ANY retained finite cut, including a positive
+atom. Put
+
+    x_i=q_i({t<a}),       κ=δ/(4M),
+    Σ_i x_i≤κ≤1/2.
+
+Let q_i^+ be the conditional law on [a,c]∪{Never}. Then
+
+    D_{T∩[a,c]}(q^+)=δ.                          (203)
+
+The complete suffix includes the ACTUAL tied test a and Never. It does
+not include an invented empty tester before a. If a is atomic, its
+joint row is left intact apart from conditioning all players on survival
+to that row.
+
+Here is the additional transport and endpoint argument beyond the
+nonatomic case. At a positive atom, let a_k be its unique original marked
+date in the realizing sequence. Split the original laws STRICTLY BEFORE
+that date. The prefix indicator is the indicator of the latent interval
+before the atom's LEFT endpoint, not a cut at its midpoint in the latent
+coordinate. The endpoints converge, so each prefix probability converges
+to x_i and the tied atom remains entirely in the suffix. Reweight by the
+exact finite normalizers z_i/x_i^k and (1−z_i)/(1−x_i^k), keeping zero
+prefix coordinates fixed. The bounded product-kernel and moving-test
+argument proves joint payoff/full-cap convergence at every fixed z.
+All original response dates, including the marked tied date, are retained.
+
+On the face J={i:x_i>0}, write q_i^z=z_iq_i^-+(1−z_i)q_i^+. Every
+post-cut cap is exactly
+
+    L_i(z)=A_i(z₋ᵢ)+∏_{j≠i}(1−z_j)b_i(q^+),
+
+where b_i(q^+) uses ONLY the suffix tests at or after a, including the
+actual tied a and Never. The first opponent prefix contribution A_i is
+multiaffine. The sum P(z)=Σ_i[L_i(z)−U_i(q^z)] is multiaffine.
+Every earlier tester is bounded by s_i+2MΣ_{j≠i}z_j.
+
+At the actual global minimum z=x, the singleton moat b_i−s_i≥δ
+excludes every earlier test by a gap at least δ/2. Thus D=P locally.
+Global minimality makes this interior local minimum of a multiaffine
+polynomial constant: P≡δ on J. Along z(t)=(1−t)x, the set of t with
+D_T(q^{z(t)})=δ is closed. At every such t it is again an ACTUAL carrier
+minimum, so its moat excludes all early tests by δ/2 and gives local
+equality D=P=δ. The set is therefore relatively open and contains all
+of [0,1].
+
+At t=1, all old early tests are empty and pay s_i. Unlike the nonatomic
+proof, s_i need not be available at the first suffix test a. This causes
+no omission: the GLOBAL moat at this endpoint gives b_i≥s_i+δ. Therefore
+none of those empty head tests attains the full cap; the same full cap
+is already attained within the retained suffix. They can be deleted
+without changing any payoff or cap. This proves (203).
+
+The finite realizations justify that deletion as well. After setting
+the finite prefix masses to zero, the old head tests pay exactly s_i.
+Their limiting suffix cap is ≥s_i+δ, so at sufficiently large indices
+the suffix cap exceeds s_i+δ/2. Removing the empty earlier dates and
+shifting the original tied date to integer date 0 preserves the complete
+caps exactly at those indices. The resulting WHOLE profiles have debt
+tending to δ. No empty pre-atom stage has been introduced at any point.
+
+### What happens to a specified original singleton stage
+
+Let σ_i=q_i([a,c]∪{Never})=1−x_i and R=∏_iσ_i>0. If the original
+represented law has singleton stage probability
+
+    m_j(a;q)=q_j({a})∏_{i≠j}q_i((a,c]∪{Never}),
+
+then the first-date probability in the new minimum is exactly
+
+    m_j(a;q^+)=m_j(a;q)/R.                       (204)
+
+Thus any supplied positive original stage floor at this cut is retained
+or increased. The original marked dates and each of their full mass
+vectors converge. The conditioned actual finite profiles therefore have
+the same first-date stage limit while their ENTIRE debt tends to δ.
+Neither cap-Nash nor a Nash condition for this first row is asserted.
+
+### Producing a first atomic row from any positive-Never minimum
+
+Assume now that every original Never mass α_i is positive. The following
+finite construction produces a cut a at a retained positive atom such
+that q^a is an actual whole-profile minimum and
+
+    Σ_i q_i^a({a})>κ/2.                          (205)
+
+This is a bound on ONE PRODUCED CONDITIONAL first row, not a claim that
+every original atom is large. It follows from (203), including its new
+atomic-cut proof, not from availability of nonatomic cuts.
+
+At a current minimum suffix with first available point a₀, put
+H(t)=Σ_i q_i^{a₀}([a₀,t)), t∈T∩[a₀,c]. This function is continuous on
+the retained set T: at a zero-mass point this is ordinary distribution
+continuity, and every positive atom is isolated in T. Let Λ=H(c).
+
+If Λ≤κ, apply (203) at the existing empty final test c. It yields an
+all-Never positive global minimum, impossible by the singleton moat
+(or because its debt is zero if all own rewards are nonpositive).
+
+Suppose Λ>κ. If H takes a value in [κ/2,κ], erase at such a retained
+cut by (203). This preserves the actual minimum and multiplies original
+joint survival by at most exp(−κ/2). All original Never probabilities
+still lower-bound the corresponding survival probabilities.
+
+Otherwise the compact image H(T) skips [κ/2,κ]. The part with H<κ/2
+and the part with H>κ are separated compact subsets of the ordered
+tester set. Let u be the last point of the former and v the first of
+the latter. There is no retained point between u and v. Consequently
+
+    H(v)−H(u)=Σ_i q_i^{a₀}({u})>κ/2.
+
+Erase at u: its preceding head has mass H(u)<κ/2, so (203) applies.
+Conditioning can only increase the mass of the retained atom u. The
+new first row satisfies (205), and the construction stops.
+
+If the construction did not stop in the last branch, each progress
+step would spend the factor exp(−κ/2), whereas the original remaining
+joint survival is always at least ρ=∏_iα_i>0. An integer N with
+exp(−Nκ/2)<ρ rules out N consecutive progress steps. The all-Never
+branch is impossible, so the positive first-row atom is produced in
+finitely many steps. All conditioning normalizers are cumulative
+survival probabilities in the ORIGINAL law, bounded below by α_i.
+The inherited finite approximants and every complete response test
+therefore regenerate exactly as in the proved diffuse iteration.
+
+For some player j, (205) gives q_j^a({a})>κ/(2n). Every other player's
+conditional Never probability is at least its original α_i. Hence this
+first row has a positive literal singleton stage probability, at least
+
+    [κ/(2n)]∏_{i≠j}α_i.
+
+Along the produced actual finite profile sequence, this first-stage
+probability converges to its positive represented value and the whole
+debt converges to δ. All first-row hazards remain strictly below one
+because their conditional Never probabilities remain positive.
+
+The resulting first row is an original tied atom, not an artificially
+inserted response opportunity or a newly selected auxiliary equilibrium.
+Its reward table is unchanged. The remaining consuming question is
+whether a legal variation of this ACTUAL first row and its full tail
+forces a decrease. The construction gives no favorable cap-Nash label,
+no control of other players' complete caps under a later unilateral
+purification, and no uniform-equilibrium conclusion.
+
+## 40. A solo first atom returns to the true minimum; collisions must survive
+
+This proof uses the literal complete Bellman identities at an actual
+first row. It does not label the row cap-Nash or select a new Nash root.
+It supplies a real minimum return, rather than a condition on hypothetical
+continuation annotations.
+
+### Exact solo-row return
+
+Let q be an actual represented global minimum of total debt δ>0. Suppose
+its first available date a is a positive atom and exactly one player i
+has positive mass there, p=q_i({a})∈(0,1). Every other player has mass zero
+at a. Let q^+ be the independent tail conditional on strictly passing a.
+Write u_j,B_j,d_j=B_j−u_j for its prescribed values, FULL response caps
+and debts, and d=Σ_jd_j. Then
+
+    d=δ.                                          (206)
+
+The tail is an actual carrier source. A positive represented atom is
+isolated in T. Its corresponding original finite atom date is unique;
+the next original date has the first remaining tester location, rather
+than an invented empty pre-tail date. Restrict the original finite laws
+to times strictly after the atom and normalize by their positive
+continuation probabilities. The normalizers converge to 1−p for i and
+1 for the other players. Marked moving-kernel convergence retains all
+tail pure tests and Never. Consequently the resulting ACTUAL whole tail
+profiles converge in payoffs and complete caps to q^+, and d≥δ.
+
+For the owner i, all opponents Continue at the first date. Its initial
+Quit value is s_i, its complete Continue value is B_i, and its prescribed
+value is p s_i+(1−p)u_i. Its actual complete cap is max(s_i,B_i).
+The global minimum's singleton moat forces
+
+    max(s_i,B_i)−s_i≥δ>0,
+
+so the actual cap is B_i and B_i−s_i≥δ.
+
+For every other player j, write
+
+    Q_j=p r_j({i,j})+(1−p)s_j,
+    C_j=p r_j({i})+(1−p)B_j.
+
+These are respectively its first-date Quit value and its COMPLETE
+Continue cap. All future finite deviations and Never are in B_j;
+there are no other initial response branches. Its prescribed payoff is
+p r_j({i})+(1−p)u_j and its complete cap is max(Q_j,C_j). Direct
+subtraction, including possible equality of these branches, gives
+
+    δ=(1−p)d+p(B_i−s_i)+Σ_{j≠i}[Q_j−C_j]⁺.       (207)
+
+Each term on the right has its stated sign, with d≥δ and B_i−s_i≥δ.
+Since both p and 1−p are positive, equality forces
+
+    d=δ,       B_i−s_i=δ,       Q_j≤C_j for every j≠i.
+
+This proves (206). No strict cap gap or uniqueness of a best response is
+required. In particular, a Quit/Continue tie for an outsider does not
+invalidate the return or create an unaccounted cap change. Removing the
+whole solo row leaves the actual tail, whose whole debt is again minimal.
+
+The endpoint p=1 is genuinely different: the coefficient of d vanishes,
+so the identity would no longer force tail minimality. The positive-Never
+branch has p<1 and never invokes this invalid inference.
+
+### Existing strict margins directly consume the Fin4 solo branch
+
+The exact inspected declaration
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+assumes carrier membership, GLOBAL sum-debt minimality, four players,
+M>0 bounding the original reward table, and δ>0. It has no supplied
+preemption hypothesis or own-singleton sign assumption: its proof derives
+the needed singleton-column blocker internally from the positive minimum.
+At the original minimum q it gives
+
+    b_i(q)−s_i≥δ+δ²/(8M)>δ.
+
+Here b_i(q)=B_i by the solo-row Bellman calculation. This contradicts
+the equality B_i−s_i=δ forced by (207). Equivalently the right side of
+(207) is at least δ+pδ²/(8M)>δ before even identifying the returned tail.
+Thus a Fin4 actual positive minimum cannot start with a solo atom with
+positive continuation probability. No counterfactual profile is being
+mistaken for the carrier minimum in applying this source.
+
+The same file's
+`positive_minimum_nonnegativeOwner_quadraticMargins` gives the identical
+contradiction at arbitrary finite cardinality when this owner's own
+singleton is nonnegative. Its additional sign assumption must not be
+dropped outside the four-player theorem. The basic exact return (206)
+remains valid for arbitrary finite cardinality and signed own reward.
+
+Consequently, for Fin4 with arbitrary signed rewards, the first positive
+row produced by Section 39 is ALREADY a collision row. The repeated solo
+returns in the next subsection are needed only for the more general
+finite-player signed statement, not for this four-player source.
+
+### A collision first row after finitely many minimum-preserving operations
+
+Assume now that every original Never mass α_j is positive. Apply the
+complete atomic-cut construction of Section 39. Its progress erasures
+preserve the actual minimum and spend original joint survival by a
+factor at most exp(−κ/2), where κ=δ/(4M). Its stopping row has total
+conditional atom mass greater than κ/2, all hazards below one, and all
+conditional Never masses positive.
+
+If two or more players have positive mass in that row, stop: it is a
+genuine collision row. If exactly one player has positive mass, that
+player's probability p is greater than κ/2 and strictly below one.
+Erase the ENTIRE row by (206). The resulting full tail is again an
+actual minimum. Its remaining original joint survival is multiplied by
+1−p<exp(−κ/2). Start the Section 39 construction again at that tail.
+
+All operations are conditionings of the SAME original q at successively
+later retained dates. Their cumulative normalizers stay bounded below
+by α_j, and original joint survival is always at least ρ=∏_jα_j>0.
+Each progress erasure and each solo-row return spends at least the
+fixed factor exp(−κ/2). The jumps exposing a row are nonincreasing in
+survival and are followed by a collision stop or a charged solo return.
+An integer N with exp(−Nκ/2)<ρ therefore precludes indefinitely many
+operations. An all-Never minimum is already impossible. The process
+must produce an actual minimum whose first row has at least two
+positive hazards and whose entire continuation remains the original
+conditional law.
+
+This is an actual consuming chain: every solo stopping row encountered
+returns to the global minimum and spends positive survival. It leaves
+the collision row unresolved; it does not claim that every atom can
+be erased or that the terminal row is a Nash root.
+
+### Pair stages on the original, unmodified minimizing profiles
+
+Let a be the resulting original retained atom and choose two players
+i≠j with q_i({a}),q_j({a})>0. Every other player's original Never mass
+is positive. Thus the ORIGINAL represented profile, before any of the
+conditionings, has the positive pair-stage probability
+
+    q_i({a})q_j({a})∏_{k∉{i,j}}q_k((a,c]∪{Never})>0. (208)
+
+The atom's marked dates a_m in the original minimizing sequence retain
+each player's exact mass there. Their original Never masses also
+converge. The original stage probability of EXACTLY {i,j} at a_m is
+bounded below by the product of the two original atom masses and the
+other original Never masses; hence it has a positive liminf. This
+retains WHOLE-PROFILE near-minimality of the unmodified sequence as well
+as of the conditionally produced first-row sequence.
+
+By the same contradiction and finite-censoring argument as the singleton
+stage theorem, the atomic chain would imply the following stronger
+restriction: for each fixed table with δ>0 and each η>0, some ε,γ>0
+force a PAIR stage of mass at least γ in every actual law profile with
+D≤δ+ε and all Never masses at least η. This statement follows from
+the unreviewed atomic extension and return proof above; it is not being
+added to the frozen singleton-stage export or assigned a Lean seal.
+
+The next mathematical obstruction is specific. At a genuine two-player
+first row, both active players' complete caps can switch between Quit
+and Continue, and inactive players can have their own joining caps.
+The scalar decomposition (207) no longer reduces to two quantities
+separately bounded below by δ. Any proposed update must keep these full
+Bellman maxima and the actual post-row law. Neither the original stage
+floor nor the minimum-return construction supplies a cap-Nash label or
+permits a counterfactual purification with uncontrolled whole-profile
+debt.
+
+## 41. Strict margins force a first collision atom without a Never floor
+
+This section is a complete ordinary proof candidate, not independently
+reviewed or Lean-checked. It uses the atomic-cut transport proved in
+Section 39, rather than assuming a new response immediately before an
+atom. The conclusion concerns the ORIGINAL whole-profile minimizing
+sequence. No positive Never mass, selected Nash row, reward normalization,
+or supplied equilibrium is assumed.
+
+### Precise setting and strict source
+
+Fix four players, arbitrary signed rewards with absolute value at most
+M>0, independent private stopping laws and Never payoff zero. Let δ>0
+be the actual global infimum of the SUM of complete terminal debts.
+Choose ANY actual finite-law sequence whose debts tend to δ, and take
+the marked-calendar subsequence of Section 35. Write q for its independent
+represented laws on T and Never, c=max T, U for prescribed values, and b
+for complete caps. Its pair is in the original closed semantic carrier
+and globally minimizes total debt. Put
+
+    κ=δ/(4M),       γ=δ²/(8M).
+
+The exact declaration
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+gives, at EVERY actual global minimum pair, for every owner i,
+
+    b_i−s_i≥δ+γ,
+    U_i−s_i≥δ−(b_i−U_i)+γ≥γ.                    (209)
+
+Here s_i=r_i({i}). The second inequality uses nonnegative individual
+debts and their sum δ. No preemption certificate is supplied: that
+declaration derives it from the four-player no-UE consequence of the
+positive global minimum. Since b_i−s_i≤2M, we have δ≤2M and κ≤1/2.
+
+The argument through the first-atom conclusion also applies at arbitrary
+finite cardinality if every own singleton is nonnegative, using
+`positive_minimum_nonnegativeOwner_quadraticMargins` in the same file.
+The four-player statement is sign-free. No new Lean check is claimed.
+
+### Exact polynomial-axis obstruction to every small positive head
+
+For an available cut a∈T, put x_i=q_i({t<a}) and H(a)=Σ_i x_i.
+Suppose 0<H(a)≤κ. Section 39, including its atomic-cut source proof,
+makes the actual conditional suffix q^+ another GLOBAL minimum of debt δ.
+Let u_i and B_i be its prescribed values and complete suffix caps.
+For J={i:x_i>0}, retain each original conditional head law q_i^- and
+form independent head/tail mixtures with head probabilities z_i. On the
+J-face the polynomial
+
+    P(z)=Σ_i[L_i(z)−U_i(q^z)]
+
+is identically δ. The L_i are the complete POST-CUT response envelopes,
+not an assertion that every cap is post-cut at every z. Constancy follows
+from actual global minimality and the strict head-response gap at the
+original interior point, exactly as in Section 39.
+
+Choose i∈J and evaluate this POLYNOMIAL with only z_i=z nonzero.
+All other players use q^+. Whenever i selects its head it quits ALONE
+strictly before every opponent. Its exact polynomial terms are
+
+    L_i=B_i,       U_i=z s_i+(1−z)u_i;
+    L_j=z r_j({i})+(1−z)B_j,
+    U_j=z r_j({i})+(1−z)u_j       for j≠i.
+
+Consequently
+
+    P(z e_i)=(1−z)δ+z(B_i−s_i)
+             =δ+z[(B_i−s_i)−δ].                   (210)
+
+Constancy gives B_i−s_i=δ. But the returned suffix is an ACTUAL minimum,
+so (209) gives B_i−s_i≥δ+γ. Contradiction. Thus
+
+    H(a)=0 or H(a)>κ for EVERY a∈T.                (211)
+
+This uses polynomial evaluation, not an unjustified identification of
+P with actual debt at the one-head vertex. Actual source membership and
+all caps are needed only at the original local minimum and the returned
+all-tail vertex. At an atomic cut, deletion of the earlier empty testers
+is valid because the endpoint's true cap exceeds s_i by at least δ.
+The tied row at a is retained and no pre-atom tester is inserted.
+
+### A large FIRST retained atom, not a later conditioned atom
+
+The function H:T→[0,4] is continuous on T. At nonatomic points this is
+ordinary continuity of cumulative mass; at every positive represented
+atom, the point is isolated in T. There is no mass at c. The aggregate
+finite mass H(c) is positive: otherwise q is all Never, impossible at
+a positive actual minimum, since its cap is max(s_i,0) and the strict
+cap margin (209) cannot hold (and all nonpositive owns give debt zero).
+By (211), H(c)>κ.
+
+The two nonempty subsets
+
+    Z={t∈T:H(t)=0},       F={t∈T:H(t)>κ}
+
+are closed in compact T and cover T. Closedness of F follows from the
+missing interval (0,κ]. Let a=max Z and a^+=min F. Monotonicity gives
+a<a^+, and no retained test lies strictly between them. Since every
+finite law is supported on T,
+
+    q_i({t<a})=0 for every i,
+    w=Σ_i q_i({a})=H(a^+)−H(a)>κ.                 (212)
+
+Thus a is the FIRST positive chronological atom of the ORIGINAL minimum,
+not the output of an iterated conditioning procedure. All earlier tests
+are genuinely empty and pay s_i. They are strictly inactive by (209),
+so deleting only those empty tests preserves the exact whole semantic
+pair. The first row has probabilities p_i=q_i({a}), with total hazard
+greater than κ. Some probabilities may equal one; no Never floor has
+entered this argument.
+
+The compact separation argument handles Cantor-like or disconnected T
+without inventing a cut inside a gap. The positive jump is the mass at
+the actual retained left endpoint a. In particular all fully diffuse
+represented minima are excluded, whatever their zero-Never pattern.
+
+### A solo first row is impossible, including a sure quitter
+
+If exactly one p_i is positive and p_i<1, the full solo Bellman identity
+of Section 40 and the actual tail carrier bound give
+
+    δ=(1−p_i)D_tail+p_i(B_i−s_i)
+         +Σ_{j≠i}[Q_j−C_j]^+
+      ≥δ+p_i γ>δ.
+
+Here B_i equals the ORIGINAL cap b_i because that cap strictly exceeds
+s_i; the strict source is not being applied to a merely conjectured
+minimum tail. All continuation normalizers are positive in this arm.
+
+If the only positive p_i equals one, the prescribed payoff U_i=s_i.
+This contradicts the SECOND original-source bound in (209). No conditional
+law on the null event that i survives its sure quit is used. Therefore
+the first row has at least two positive hazards.
+
+This guarantees some NONSINGLETON stage, not necessarily an exact pair:
+other players may quit surely. The exact-pair conclusion in Section 40
+used positive Never masses and must not be imported here.
+
+### A uniform collision mass at the first row
+
+The following elementary estimate is included to keep the eventual
+original-profile floor independent of the chosen pre-mark tolerance.
+No effort is made to optimize its constants. For finite cardinality n≥2
+with the strict bounds (209), set
+
+    A=κ/n,       h₀=Aγ/[8M(n+1)],
+    σ=A h₀/(n−1)>0.                               (213)
+
+Choose an owner i with p=p_i≥A and put h=Σ_{j≠i}p_j. I claim h≥h₀.
+Assume the contrary. These constants satisfy h₀≤δ/(4M)≤1/2 and
+2Mh₀<γ, using δ≤2M and n≥2.
+
+If p=1, the owner obtains s_i unless another player joins its first row.
+Hence |U_i−s_i|≤2Mh<γ, contrary to (209).
+
+If p<1, every row survival is positive because h<1/2. Conditional
+post-row laws therefore have actual finite approximants, with all caps
+converging. Their total debt d is at least δ, though not asserted equal
+to δ. Form a new actual-carrier profile by moving each opponent's first
+row mass into that opponent's OWN conditional tail, leaving i unchanged.
+There is no change of dates and no inserted response; only the original
+first-row hazards of the opponents are set to zero. Product coupling
+changes each payoff and each complete cap by at most 2Mh. Thus its full
+debt D_solo satisfies
+
+    D_solo≤δ+4Mn h.                                 (214)
+
+Let B_i be the owner's cap against those conditional opponent tails.
+The new owner cap is max(s_i,B_i), so uniform cap coupling and (209)
+give max(s_i,B_i)≥s_i+δ+γ−2Mh>s_i. Hence
+
+    B_i−s_i≥δ+γ−2Mh.
+
+The exact solo-row ledger, now used as an inequality for this NEW profile,
+gives
+
+    D_solo≥(1−p)d+p(B_i−s_i)
+             ≥δ+pγ−2Mp h.
+
+Together with (214) this implies
+
+    Aγ≤pγ≤(4Mn+2Mp)h≤(4n+2)M h
+        <(4n+2)M h₀<Aγ,
+
+a contradiction. The finite tail and solo-profile transports here are
+valid because each fixed limiting survival is strictly positive; no
+uniform lower bound in p over unrelated sources is assumed or needed.
+
+It follows that the first-row probability C(p) of at least two quitters
+satisfies
+
+    C(p)≥p[1−∏_{j≠i}(1−p_j)]
+         ≥p h/(n−1)≥σ.                             (215)
+
+The middle bound uses union probability at least the largest opposing
+hazard, which is at least their sum divided by n−1. This remains correct
+at every partly-sure or all-sure boundary. For Fin4, take n=4; σ depends
+only on the fixed table's M and actual global gap δ.
+
+### Original marked dates, including vanishing Never masses
+
+Let a_k be the unique ORIGINAL marked date converging to a. All four
+masses at that date converge to p_i. Their cumulative masses STRICTLY
+before a_k converge to zero: the corresponding latent threshold is the
+LEFT endpoint of a's marked interval, and its limit includes exactly
+the mass before a, which is zero by (212). Consequently
+
+    P_original(absorption strictly before a_k)→0;
+    Σ_{|S|≥2}P_original(first coalition S at a_k)→C(p)≥σ.  (216)
+
+For clarity, the stage probability for a particular S is
+
+    ∏_{i∈S} p_i^k(a_k)
+      ·∏_{j∉S}P_{p_j^k}(τ_j>a_k or τ_j=Never).
+
+The second factors tend to 1−p_j, because each original pre-mark mass
+tends to zero. Positive Never masses are not needed. If some p_j=1,
+only coalitions containing j can have positive limits, exactly as the
+product formula requires. No original player law is modified, and the
+WHOLE original profiles still have debt tending to δ.
+
+Since there are 11 nonsingleton coalitions in Fin4, after a further
+subsequence one fixed nonsingleton coalition has original marked stage
+mass with liminf at least σ/11. This is not clock compression or a
+replacement by a terminal-coalition atom at an uncontrolled date.
+
+### Uniform restriction on ALL original near-minimizing profiles
+
+For the fixed Fin4 table define σ as above. For every ζ>0 there exists
+ε>0 such that EVERY actual independent stopping-law profile with
+D≤δ+ε has an original finite date t and a nonsingleton coalition S with
+
+    P(absorption strictly before t)≤ζ,
+    P(first coalition S at t)≥σ/22.                 (217)
+
+The stage floor is independent of ζ; the required near-minimum tolerance
+may depend on ζ. No uniform bound on t is asserted.
+
+If this failed for finite laws at a fixed ζ, choose a sequence with
+debt at most δ+1/k violating (217). The marked-calendar construction,
+(212)–(216), and the finite coalition pigeonhole give a subsequence and
+original dates whose prior absorption tends to zero and whose selected
+nonsingleton stage has liminf at least σ/11. This contradicts the assumed
+failure for all large indices. For arbitrary stopping laws, first apply
+the finite result with tolerance ε₀, then require D≤δ+ε₀/2 and censor
+finite mass after a sufficiently late K to Never with debt error below
+ε₀/2. Censoring preserves EVERY earlier original stage probability and
+its prior absorption exactly. Any positive finite stage in the censored
+law is an original date at most K, so its witness transfers unchanged.
+
+This is a genuine original-source restriction under positive global debt,
+not an unrestricted equilibrium construction. The residual now has a
+large first collision row whose complete caps may involve tied Quit and
+Continue branches. The argument neither declares that row cap-Nash nor
+controls debt after replacing it by an unrelated auxiliary root.
+
+### Scope and falsification checks
+
+The polynomial-axis calculation only becomes contradictory because the
+ALL-TAIL vertex was independently proved an actual global minimum. A
+general positive-debt source, a fixed-orbit minimum, or a multiaffine
+expression with a nonminimal tail does not satisfy that requirement.
+The earlier stopping-architecture regressions therefore remain untouched.
+
+At a tied atom the cut is before its literal marked date. Cutting a latent
+interval at its midpoint would split one actual simultaneous row and
+invalidate the source transport; that operation is not used. Removing
+empty pre-atom testers uses the endpoint's strict true cap, not an assumed
+available empty pre-row response. Sure hazards are handled before any
+conditional tail is formed. The final guarantee is nonsingleton, not pair.
+
+The narrow source lookup also inspected
+`exists_positive_finiteLawAtom_of_punishmentNormal_minimum_of_not_uniformPayoff`
+and `nonempty_minimumLawCausalSuffixAtom_of_punishmentNormal_of_not_uniformPayoff`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticMinimumLawFiniteAtom.lean`.
+Those concern terminal-coalition atoms and causal suffix representations,
+not the FIRST original chronological atom with the whole original debt
+and vanishing pre-mark absorption retained. The modified-target producer
+`FinFourTerminalSingletonProducer.exists_singleton_with_stageMass_floor_and_postDateTail_eq`
+in `Research/Quitting/FinFourProducerAtlas/Leaves.lean` likewise does not
+state (216) or (217). This is a bounded overlap comparison, not a kernel
+verification or a claim that the remaining first-row consumer is solved.

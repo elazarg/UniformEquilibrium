@@ -2,6 +2,11 @@
 
 Reviewer: CODEX_MORSE.
 
+Additional focused verdict: the two-owner diffuse-endpoint argument below
+passes at its stated scope. The stronger tracked quadratic cap margin in
+fact excludes that entire branch, including the equal-advantage boundary;
+the separate addendum records the exact source-to-contradiction argument.
+
 ## Exact scope and verdict
 
 PASS for Section 73, “Actual earliest-cutoff tails have a punishment
@@ -129,3 +134,185 @@ in `UniformEquilibrium/Quitting/Terminal/SinglePivotCanonicalConsequences.lean`
 supplies its punishment comparison. Selecting a new minimum for that
 new table is legitimate. No transport of the old minimum through an
 additive reward normalization is asserted or used.
+
+## Two-owner diffuse endpoint: focused independent check
+
+PASS for “A two-owner diffuse endpoint forces an exact singleton equality”
+through immediately before “Fixed-cut reachability”, extracted SHA256
+`eb036b875d0abd6da7adc83b7d2e6b40ebbb10ad522db893760cf7613b7b2b87`.
+No counterpart review was read. This is an ordinary mathematical verdict,
+not a Lean check or an unrestricted UE conclusion. The original necessary
+condition and limiting-pair calculation have no unresolved proof objection.
+Their stated equal-advantage residual can, however, be consumed entirely by
+an existing stronger source theorem, as shown below.
+
+### Actual conditional minima and both complete-cap bounds
+
+The source is a genuine global SUM-debt minimum of value δ>0, not a
+positive-debt law or an orbit minimum. Ghost erasure at u's nonatomic
+endpoint is legitimate by the nonnegative-own cutoff argument reviewed
+above. It preserves the complete semantic pair and gives every outsider
+positive Never mass. It leaves the two earliest owners finite almost
+surely. The finite original approximants, rather than an abstract change
+of conditional game, establish membership in the original carrier.
+
+I checked the fixed-cut reachability argument directly. For each FIXED
+t<d, all marginal survivals at t are positive. Each full small-prefix
+erasure spends joint survival by a factor at most exp(−κ), whereas all
+intermediate joint survivals remain at least the fixed positive R(t).
+Thus finitely many erasures reach t. Cumulative conditioning is conditioning
+the original finite realizers once at t; its denominators stay bounded
+below by the original marginal survivals at this fixed t. There is no
+asserted uniform number of steps as t increases to d.
+
+For cuts t_m increasing to d, the outsiders' conditional finite mass e_m
+tends to zero. Coupling them to Never changes EVERY prescribed payoff and
+EVERY unilateral pure response by at most 2M e_m. The bound is uniform in
+the pure tester, so it controls the full cap in both directions.
+
+With outsiders at Never, the active owners' independent nonatomic clocks
+do not tie. If θ_m is the probability that u is first, their targets are
+s_u+(1−θ_m)a and s_v+θ_m b. A pure u response is a convex combination of
+s_u and r_u({v}); the empty first suffix cut attains the former, and d
+or Never attains the latter. The v calculation is symmetric. Hence the
+complete caps converge to s_u+max(a,0), s_v+max(b,0). No dense-calendar
+assumption or invented pre-atom response is used: all cuts here are
+nonatomic, and both endpoint responses are in the retained test set.
+
+The weak moat therefore gives a,b≥δ. After a subsequence, all payoffs
+and caps converge to a pair in the closed original carrier with total
+debt δ. The inspected declaration
+`minimumTerminalSemantic_strictSingleton_of_punishmentNormal` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticMinimumLawFiniteAtom.lean`
+does apply to this limit. True punishment is bounded by each nonnegative
+own level through `quittingPunishmentValue_le_max_solo` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`. Thus θ=0 or θ=1
+is impossible. The inequality δ≥θa+(1−θ)b then forces a=b=δ and zero
+outsider debts, exactly as claimed. Positivity of each finite θ_m alone
+would not justify this step; the proof correctly uses the actual limit
+minimum and the strict source theorem.
+
+The reward-perturbation discussion also has the correct quantifiers:
+|D_*'−D_*|≤2|I|ζ, off-diagonal singleton perturbations preserve own signs,
+and each new table receives its OWN minimum. No old-profile optimality
+or additive-normalization ancestry is inferred.
+
+### Stronger source consumes the equality boundary as well
+
+I independently inspected
+`positive_minimum_nonnegativeOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+Its hypotheses are original carrier membership, GLOBAL sum-debt
+minimality, M>0 bounding every reward, positive minimum debt, and the
+selected owner's nonnegative singleton. It internally produces its strict
+preemptor; no preemption certificate or auxiliary Nash input is supplied.
+At EACH genuine conditional minimum it gives
+
+    b_u−s_u≥δ+γ,   b_v−s_v≥δ+γ,   γ=δ²/(8M)>0.
+
+The complete-cap limits already established therefore yield
+a,b≥δ+γ. For ANY subsequential θ∈[0,1], the two limiting debts sum to
+θa+(1−θ)b. Nonnegative outsider debts now imply
+
+    δ≥θa+(1−θ)b≥δ+γ,
+
+a contradiction. Neither the positive-weight lemma nor a generic reward
+perturbation is needed for this stronger conclusion. Thus under the
+candidate's original nonnegative-own assumptions there is NO two-owner
+diffuse earliest-endpoint minimum, even at a=b. This is a whole source
+branch exclusion, not an improved bound on a surviving equality case.
+
+For exactly four players the same file's
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` provides strict
+cap margins without any own-sign assumption. That fact does not by
+itself remove the nonnegative-own hypothesis from this ghost-erasure
+proof: its earlier canonicalization still uses the cutoff owner's sign.
+The stated proof above retains that hypothesis honestly.
+
+## Strict margins force an original stage without a Never floor
+
+Focused independent PASS for “Strict margins force an original coalition
+stage without a Never floor”, ending immediately before the frozen
+two-owner section, extracted SHA256
+`0932bfaf49a3b85e1a39fe71b86350727dc40e6bb0de2bc072171fd5c53f52e0`.
+No counterpart review was read. There is no unresolved objection in the
+stated scope: Fin4 with arbitrary signed owns, or arbitrary finite players
+with all owns nonnegative. This is ordinary mathematical source consumption,
+not a Lean check or a uniform-equilibrium conclusion.
+
+### The polynomial-axis identity is exact and uses the correct source
+
+The selected nonatomic cut has 0<H≤δ/(4M), so all conditional denominators
+are at least 1/2. The previously checked erasure theorem supplies two
+DISTINCT facts: the future-branch multiaffine polynomial is constant on
+the head-coordinate face, and the all-tail endpoint is an ACTUAL global
+minimum with all caps retained. Neither fact alone would suffice.
+
+On the axis for one original head owner i, that head quits alone before
+all opponents. Thus its own contribution is B_i−[(1−z)V_i+z s_i], while
+every other player's passive singleton contribution cancels between its
+future cap and prescribed payoff. Summing gives exactly
+
+    P(z e_i)=δ+z[(B_i−s_i)−δ].
+
+This is an identity for the polynomial P. It does NOT identify the full
+cap objective with P at the head-only vertex. Applying strict margins
+only to the already established all-tail actual minimum is legitimate,
+and contradicts constancy. No small-collision approximation or fictitious
+new response date appears. All complete-cap finite transports are inherited
+at one fixed nonatomic cut before taking its source limit.
+
+### Reachability of a finite atom, including shared exhaustion
+
+I checked the missing-Never cases separately. With all Never masses
+positive, any marginal finite atom is reachable as a singleton. If none
+exists, a nonzero small nonatomic head is available unless all laws are
+Never; the latter is inconsistent with the strict minimum margin.
+
+If some Never masses vanish, let d be the earliest terminal support
+endpoint of such a player. At every earlier t all players have positive
+strict survival past t. A marginal atom there therefore has a reachable
+singleton stage. If no atom occurs at or before d, at least one earliest
+owner has unit finite mass strictly before d. Its cumulative mass, along
+with all other heads up to d, varies continuously from zero and must pass
+through a positive value at most κ. A gap can be moved to its retained
+endpoint without changing this mass. Thus the axis contradiction applies.
+
+If the first useful atom is exactly at d, its retained point is isolated
+in T. Every zero-Never owner with support maximum d then has positive
+mass AT d; it cannot approach that isolated point diffusely. All other
+players have positive strict survival past d. The product event that
+exactly the earliest owners quit at d therefore has positive probability.
+This handles two, three or all four simultaneous exhausted owners without
+assuming any positive Never mass or deleting their actual cap tests.
+
+### Original-date trace and all-profile quantifiers
+
+At a retained atom its entire original interval converges with both
+endpoints. Bounded likelihoods plus weak-* convergence therefore give
+convergence both of each player's mass AT the original marked date and
+of its strict-survival mass AFTER that date. The latter includes Never.
+Their finite product is exactly the ORIGINAL first-coalition stage
+probability, not a conditioned or counterfactually modified stage. The
+reachability argument gives a strictly positive product even where some
+Never masses are zero. It is important that the right interval endpoint,
+not the retained midpoint, computes strict survival.
+
+The failure of the claimed uniform near-minimum restriction supplies an
+actual sequence with D≤δ+1/k and all stages below 1/k. A marked subsequence
+with one positive original stage contradicts it. For infinite laws,
+finite-tail censoring to Never preserves all earlier stage probabilities
+EXACTLY and creates no new finite stage; uniform complete-cap coupling
+keeps the sequence minimizing. Hence the conclusion concerns every actual
+behavioral profile, with one fixed table and no Never-floor parameter.
+It does not assert a bounded date or a singleton stage in the zero-Never
+branch, and it does not convert terminal delivery to a claimed UE.
+
+The named terminal-law atom and modified-singleton-target declarations
+discussed above do not supply this whole-original-profile trace. The new
+condition restricts every actual positive-gap minimizing sequence, rather
+than merely adding an atom verifier. My separately developed atomic-cut
+extension and first-collision strengthening in Sections 39–41 of
+`../notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md` are not used in this
+PASS: this argument succeeds using only the already reviewed nonatomic
+erasure theorem, and those stronger sections remain separately unreviewed.
