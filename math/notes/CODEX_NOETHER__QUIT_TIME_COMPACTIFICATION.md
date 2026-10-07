@@ -29,6 +29,18 @@ and strictly negative outsider joining gaps is now contradicted by an
 actual full-cap debt decrease; it must expose an outside paid join or
 inactive cap tie. General tied caps and sure-owner floors remain open.
 
+The finite-amplitude test below now gives an exact warning at the remaining
+one-sure branch. A canonical punishment-normal Fin4 table has minimum sum
+debt EIGHT over EVERY actual profile whose first row contains a sure quitter,
+with arbitrary later tails and arbitrary reselection of the sure owner. One
+of these restricted minimizers satisfies all numerical quadratic singleton
+margins with that value, but its true global debt infimum is at most ONE.
+Thus the finite objective's global minimization and those numerical margins
+alone cannot supply a consumer that stays inside the sure-root family.
+The full arbitrary-profile lower bound is essential. This is an exact
+finite-amplitude falsifier of a consuming mechanism, not a positive-gap
+counterexample or an export.
+
 The current source-consumer candidate combines actual prefix erasure with
 Section73's punishment canonicalization. At an actual positive global
 minimum, a unique earliest zero-Never owner with nonnegative own reward
@@ -12887,6 +12899,178 @@ cycle can be erased, that its descendants stay minimal, or that (B3)
 ever falls below δ when (B5) holds. A next mechanism must couple those
 paid debt transfers with a real continuation change; merely rerouting
 to an induced Nash point would omit the owner-floor/cap tradeoff.
+
+### A whole sure-root family can have a positive minimum and the strict numerical margins
+
+Status: exact finite-amplitude falsifier of ONE consuming mechanism,
+ordinary mathematics and not Lean-checked. The table below is canonical
+and punishment-normal. It has no positive global gap certified here:
+an explicit actual profile has debt ONE while the entire sure-root
+family has minimum EIGHT. In particular this does NOT falsify the
+genuine global first-collision question. It rules out replacing that
+global premise by simultaneous finite minimization of every F_z and
+the numerical singleton-margin inequalities.
+
+**Question tested.** Can every positive minimum of the whole family of
+actual profiles with SOME sure date-zero quitter be lowered by another
+profile in that same family, provided its payoff/cap pair satisfies
+the strict numerical margins for its minimum value? The answer is NO,
+even when all first-row probabilities, the identity of the sure quitter,
+and every independent conditional tail can be changed at finite amplitude.
+This is stronger than an infinitesimal or fixed-tail test.
+
+**Complete table.** There are four players, core {0,1,2}, with successor
+i^+=i+1 modulo three, and player3. For every nonempty S put
+
+    r_i(S)=16                         if i∈S and |S|≥2;
+    r_0({0})=1,  r_i({i})=0           for i=1,2,3;
+    r_i(S)=32·1[i^+∈S]                if i∈{0,1,2} and i∉S;
+    r_3(S)=32                         if 3∉S.
+
+These clauses specify all sixty absorbing coordinates. Never pays zero,
+and M=32 bounds every reward. Random stopping laws are independent;
+every complete behavioral deviation, including every late finite date
+and Never, is included. The table has the canonical one-pivot owns
+(1,0,0,0), not a nominal normalization of some retained old source.
+
+The true punishment is EXACTLY P_i=s_i for every player. Immediate
+Quit pays at least s_i against every opponent plan: its singleton
+pays s_i and any simultaneous nonempty opponent coalition pays16.
+Opponents who Never attain cap s_i, since s_i≥0. This checks both
+legs directly, with no punishment-attainment assumption beyond this
+literal all-Never plan.
+
+**All profiles with a sure core owner.** Keep core owner z sure at
+date0. Let x be its successor's root Quit rate, y its predecessor's,
+and w player3's; arbitrary independent tails may follow. Put
+
+    h=(1−x)(1−y)(1−w).
+
+The sure owner's target is 16(1−h)+h s_z. Its quiet root payoff is
+32x+h C_tail, where C_tail≥P_z=s_z is the TRUE complete tail cap.
+Every other player's complete cap is screened by sure z, so its two
+root actions account for ALL future and Never responses. Hence the
+whole actual debt is at least16 times
+
+    H_z(x,y,w)=[2x−1+h]⁺
+       +(1−x)[1−2y]⁺+x[2y−1]⁺+y+w.              (B6)
+
+All-Never conditional tails attain equality because C_tail=s_z.
+Thus (B6), including w and every floor/cap tie, is the exact
+unrestricted minimization over the whole sure-z family, not merely
+one selected tail. Since the positive-part function is1-Lipschitz,
+
+    H_z(x,y,w)≥H_z(x,y,0):                         (B7)
+
+turning w on decreases its first term by at most
+w(1−x)(1−y)≤w and adds the exact dummy debt w.
+
+At w=0 write f=x−y+xy. If 0≤y≤1/2 and f≤0, then
+x≤y/(1+y) and
+
+    H_z=1−y−x(1−2y)
+       ≥(1−y+y²)/(1+y)≥1/2.                      (B8)
+
+If 0≤y≤1/2 and f≥0, then x≥y/(1+y) and
+
+    H_z=1−2y+3xy
+       ≥(1−y+y²)/(1+y)≥1/2.                      (B9)
+
+The final inequality is exact because
+2(1−y+y²)−(1+y)=(1−y)(1−2y)≥0.
+For y≥1/2 the terms y and x[2y−1]⁺ alone give H_z≥1/2.
+These cases exhaust the entire cube. Equality holds at
+y=1/2, w=0 and EVERY 0≤x≤1/3.
+
+**All profiles with sure player3.** Let the three core root rates be
+q_0,q_1,q_2 and h=∏(1−q_i). Player3's target is16(1−h), and its
+quiet cap is at least32(1−h). The free core players have literal
+endpoint gaps16(1−2q_{i^+}). Consequently the whole actual debt is
+at least16 times
+
+    H_3(q)=1−h
+       +Σ_{i=0}^2[(1−q_i)[1−2q_{i^+}]⁺
+                          +q_i[2q_{i^+}−1]⁺].    (B10)
+
+Again all-Never tails attain equality. If h≤1/2, the owner term gives
+H_3≥1/2. If h>1/2, EACH q_i<1/2. Set a=Σq_i,
+b=q_0q_1+q_1q_2+q_2q_0, c=q_0q_1q_2. Then
+
+    H_3=3−2a+b+c≥7/8.                            (B11)
+
+Indeed its derivative in any one coordinate on [0,1/2]^3 is
+−2+q_j+q_k+q_jq_k≤−3/4, so the multiaffine expression is minimized
+at (1/2,1/2,1/2), where it equals7/8. This bound does not select
+cap labels outside that subcube; there the nonnegative owner term
+already proves the claimed floor.
+
+Equations (B6)–(B11) cover EVERY possible sure owner, including
+profiles with multiple sure owners, arbitrary conditional future laws,
+and all first-row changes. Therefore
+
+    min{D(p): SOME p_i({0})=1}=8.                 (B12)
+
+**An exact minimizer with every numerical strict margin.** Use the
+literal root rates
+
+    q=(1,1/3,1/2,0),
+
+and Never conditional tails. Complete independent enumeration gives
+
+    U=(11,16,24,32),     B=(11,16,32,32),
+    d=(0,0,8,0),       D=8.                       (B13)
+
+Owner0's root Quit and complete Continue are tied at11. Free player1's
+two root actions are tied at16. These are actual caps, not retained
+favorable branches; player2's Continue cap is32 and player3's is32.
+The prescribed collision probability is2/3, including a triple event1/6.
+
+Insert δ_sure=8 and M=32 into the numerical formulas, so
+γ_sure=δ_sure²/(8M)=1/4. For every i one has
+
+    B_i−s_i≥δ_sure+γ_sure,
+    U_i−s_i≥δ_sure−d_i+γ_sure.                    (B14)
+
+For owner0 the left sides both equal10>33/4; the other checks are
+immediate from (B13). Thus the table satisfies punishment normality,
+the finite floor objective's GLOBAL minimization, two actual mixed
+ties, a macroscopic first collision, and all those strict numerical
+margin inequalities. No finite-amplitude move that retains SOME sure
+date-zero quitter can give debt below8, even if it reselects the
+owner and the entire conditional tail from scratch.
+
+Nevertheless the actual all-Never profile has U=0 and B=(1,0,0,0),
+so D=1<8. This proves that (B13) is NOT a global debt minimum and
+that (B14) alone cannot make it one. No complete uniform-equilibrium
+construction or positive unrestricted gap is inferred from this test.
+
+**What this retires.** A proposed argument that uses only global
+minimization of F_z (even for EVERY z), punishment normality and the
+displayed numerical margins cannot always lower debt through a new
+sure row. Any successful consumer of the true source must additionally
+use the actual arbitrary-profile bound δ≤D(p), and may have to leave
+the sure family by releasing the LAST sure owner with a real tail.
+That last step is precisely absent from the screened formulas.
+
+**Bounded source check.** The definitions `quittingPunishmentValue`,
+`quittingBestReplyValue`, and `quittingPunishmentValue_le_max_solo`
+in `UniformEquilibrium/Quitting/Stationary/MinMax.lean` were inspected.
+The true-floor excess and the induced-Nash-only consumer
+`quittingSingletonBaseOwnerFloorExcess` and
+`exists_uniformPayoff_or_singletonBase_pos_gap` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`
+were inspected too. The latter is not an F_z-minimizer consumer.
+`finiteClockMinimum_exactCapPurification_or_pureTimeDescentPaidPort`
+in `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/FiniteClockMinimumPaidPort.lean`
+likewise produces a paid port, not the missing strict decrease. No
+Lean edits, compilation, or claim that a nominal floor equals P_i
+in arbitrary data is made. Here P_i=s_i was proved from the table.
+
+The concrete next question is whether full globality forces a
+last-sure-owner release with an actual continuation that beats the
+minimum, possibly jointly with an induced mixed-row change. Do not
+repair this falsified all-sure mechanism by tuning its constants or
+dropping one of its mixed ties.
 
 ### Exact source and current consuming question
 
