@@ -634,6 +634,32 @@ directions, not merely exhibit another paid deviation. This distinguishes a
 genuinely new global mechanism from another local account with an unpaid
 observer cap.
 
+### Several cap dates need not be several strategic branches
+
+A cap is a supremum over stopping dates, but two distinct maximizing dates
+need not describe different interventions. If one opponent stops surely by a
+finite cut, every pure deadline strictly after that cut has exactly the same
+terminal coalition law as Never: the tested player continues until the game
+has already ended. An entire plateau of maximizing deadlines can therefore
+represent one outcome kernel.
+
+This distinction matters when a minimum-preserving path reaches its first
+cap tie. An interior tie can retain enough of the original product law for
+the competing interventions to change absorbing outcomes. At a sure-owner
+endpoint the tie can instead be only the dead-tail plateau described above.
+The finite-amplitude head-concentration construction records these two
+possibilities separately in
+[the nonbijective-source notebook](CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md).
+Its existential reselection alone is not a terminal consumer or a strict
+reduction of the surviving strategic class.
+
+The concrete progress test is to compare the complete deviation kernels of
+the tied responses, not merely their dates or equal payoff values. If they
+are outcome-equivalent, a new consumer must use additional supplied data;
+counting the tie as a new active face does not provide a renewable rank.
+This failure can occur even with all original opponent laws retained. It is
+therefore not automatically repaired by enlarging the stored state.
+
 ## Competing explanations
 
 ### H1: insufficient compositional state

@@ -2,7 +2,8 @@
 
 ## Current best attempt
 
-The newest UNREVIEWED whole-source attempt is SC1–SC9 at the end.
+The newest whole-source attempt is SC1–SC9 at the end, independently
+accepted in CODEX_BROUWER's focused feedback (not an artifact gate).
 A fresh hierarchical table comparison forces the all-unique/all-isolated/
 some-supported branch into one pure sure-triple geometry with exactly
 two supported caps. Removing old heads before the common cap either
@@ -15842,8 +15843,9 @@ observer cap or the multi-unsupported/multiple-cap branches globally.
 
 ## Joint support cuts and the isolated two-unsupported sure-triple boundary
 
-Status: COMPLETE ordinary-mathematical proof DRAFT of the source reduction
-SC1–SC6 below, not independently reviewed, Lean checked or exported. This
+Status: COMPLETE ordinary-mathematical source reduction SC1–SC9,
+independently accepted by CODEX_BROUWER in the existing feedback.
+This is a focused proof review, not a Lean check or export gate. This
 is a fresh-table counterexample-class exclusion, not a supplied cap-price
 interface. SC8–SC9 adds a genuine minimum-preserving lower-cap wall:
 the normalized FIRST-LAW sure-triple branch is impossible, so an actual
@@ -16109,7 +16111,7 @@ Do not choose a child Nash tail and assume it also punishes m.
 
 ### SC8. Removing invisible earlier heads: an actual minimum or a real tie
 
-This is an additional ordinary proof DRAFT, not reviewed. It helps with
+This additional ordinary proof passed the same focused check. It helps with
 the chronology in the remaining (SC7), without assigning endpoint caps.
 Its source still has q_m PURE t₀, the other three unique caps t₀,
 and m's unique later cap. Some other old laws may stop before t₀.
@@ -16224,3 +16226,132 @@ work with these genuine simultaneous lower/upper active branches; it
 cannot choose a child Nash tail and assume it also attains P_m. No solved-
 table trap, supplied domination field, or endpoint Nash claim replaces
 that missing global argument.
+
+## All-active pricing and a globally closed constant-cap barrier test
+
+Status: FAILED global-price route AP1; COMPLETE negative-mechanism
+retirement AP2–AP3, ordinary mathematics not independently reviewed or
+exported. The coordinator identified immediate CHECKED overlap of the
+no-UE exclusion: a profile-independent cap is max(0,s_i) on all-Never;
+if some s_i>0 the actual minimum singleton margin contradicts a positive
+gap, and if all s_i≤0 all-Never has debt zero. Thus there is NO new
+counterexample-class narrowing here. The row classification is retained
+as a standalone exact calculation only. This is not new arbitrary Fin4
+UE coverage. The point of the attempted route was to
+reject a genuinely universally closed positive-barrier architecture,
+rather than strengthen another solved-table local trap.
+
+### AP1. What the true minimum supplies, and the missing finite upper price
+
+At SC's actual atomic cap wall, consider finitely many SIGNED OLD-law
+directions, with bounded positive old likelihoods. They create no new
+atoms or testers. For each recipient i and active t∈A_i, the directional
+response derivative is a continuous linear functional L_(i,t) on the
+finite parameter space. Complete cap differentiation takes the maximum
+over ALL A_i, not over a chosen old root response. Actual D's directional
+derivative is consequently
+
+    Σ_i max_(t∈A_i)L_(i,t)(h) − L_U(h).
+
+At an interior true minimum this is nonnegative for every signed h.
+Finite-dimensional separation therefore supplies probability weights on
+the complete active response gradients whose sum equals L_U. Equivalently
+one weighted selected polynomial has value δ and zero first derivative
+on these old directions. This accounts for every active branch locally.
+
+The desired implication DOES NOT follow: the weighted selected polynomial
+is a LOWER bound on complete debt, not a global upper bound after several
+laws change. Stationarity supplies no inequality paying for newly superior
+caps or for changes of the active face at finite amplitude. Nor may an
+unsupported nonatomic response be inserted and its derivative calculated
+without retaining its left/at/right moving-test germs. Signed OLD-law
+transport avoids that difficulty but does not solve it for arbitrary
+own cap insertions.
+
+I therefore do not promote this first-order separation to a new conditional
+consumer. The nearby exact source lookup was
+`TerminalSemanticLawSparseSourceImprovement.lean` and
+`TerminalSemanticNonnegativeWeightChamber.lean`: their named positive-
+minimum conclusions concern prescribed outcome moments/player weights,
+and the sparse outcome law explicitly need not preserve behavioral
+realization or deviation caps. Neither declaration supplies the missing
+all-response finite upper price at the SC wall.
+
+### AP2. Exact classification of a constant row-maximum cap
+
+For each row i put M_i=max(0,max_(S≠∅)r_i(S)). Consider the proposed
+negative barrier architecture
+
+    b_i(q_−i)=M_i for EVERY independent opponent profile.     (AP1)
+
+Even the SINGLE test profile in which each opponent independently quits
+at date0 with probability1/2 and otherwise chooses Never is enough to
+force a protected row. All2^(n−1) subsets of opponents occur with positive
+probability. A date0 response samples EVERY coalition containing i.
+Every finite response after date0 samples EVERY nonempty coalition not
+containing i, plus own singleton on the all-Never event. Never samples
+the same passive coalitions plus zero on all-Never. These are the COMPLETE
+three response categories; finite dates after0 have identical payoffs.
+
+All rewards and zero are at most M_i. If SOME participant coalition pays
+strictly below M_i, the date0 expected payoff is strictly below M_i.
+If SOME passive coalition pays strictly below M_i, the SAME positive
+event lowers EVERY later finite response and Never strictly below M_i.
+Thus if both sorts of bad coalition exist the unrestricted cap is
+strictly below M_i. Consequently (AP1) implies, row by row,
+
+    ALL participant coalitions pay M_i, OR
+    ALL passive coalitions pay M_i.                         (AP2)
+
+This necessity uses one ACTUAL product profile, not a correlated law,
+jointly selected response or a limit that ignores finite deadlines.
+It is valid also for M_i=0 and negative own singleton rewards. If
+M_i>0, (AP1) against all-Never additionally forces s_i=M_i.
+Conversely either row type with s_i=M_i when M_i>0 gives the constant
+cap: a participant-safe row guarantees M_i at date0; a passive-safe
+row uses Never when M_i=0, and finite deadlines increasing to infinity
+when M_i>0. On the latter response sequence finite opposing first stops
+receive M_i and the all-Never event receives s_i=M_i, uniformly up to
+the vanishing opposing late mass. The cap is a supremum, so original
+deadline attainment is not assumed.
+
+### AP3. The entire constant-cap architecture has a pure actual UE
+
+Let A be the set of participant-safe rows in (AP2), using ANY admissible
+choice for rows safe in both ways. If A is nonempty, have exactly A
+quit at date0 and everyone else choose Never. Every A member receives
+M_i by participant safety; every outsider receives M_i by passive safety.
+Since each complete cap is at most M_i, this actual profile has zero
+terminal debt. It is not necessary to select responses adaptively.
+
+If A is empty, every row is passive-safe. If some M_j>0, let that j
+alone quit at date0. Its own singleton equals M_j; all outsiders get
+their passive M_i. Again every coordinate receives its row maximum.
+If all M_i=0 instead, all-Never is exact Nash since all own singletons
+are nonpositive.
+
+These are actual UNIFORM equilibria, not merely terminal payoff claims.
+For the absorbing profiles the live coalition-selecting date pays0 and
+the reward M_i begins on subsequent dates. Every deviation's stage
+payoff is at most M_i≥0, so it cannot exceed the canonical profile's
+finite-horizon average ((N−1)/N)M_i; its delivery error is M_i/N.
+The all-Never case is exact at every horizon. The named checked
+`oneDateThenNever_terminalNash_of_sureExitSet` and its exact-horizon
+and same-profile declarations in `Quitting/Root/PureSureSetExactHorizons.lean`
+cover nonsingleton outputs; the singleton and all-Never arguments here
+are explicit ordinary calculations, not additional claimed Lean facts.
+
+Therefore NO arbitrary-table positive gap can be proved by closing a
+barrier with EVERY cap fixed at its row maximum and a smaller total
+prescribed payoff. The whole such class already has a pure maximum-
+payoff equilibrium. This no-gap conclusion is ALREADY immediate from
+the checked singleton margin and literal all-Never as recorded above;
+the classification does not earn additional coverage credit. It is not
+a positive-gap example or new export. Any credible negative barrier must
+retain genuinely profile-dependent caps; the SC wall cannot be replaced
+by four constant benchmarks.
+
+Concrete next question: derive a finite-amplitude ALL-active cap upper
+comparison from the actual SC law/punishment coupling, or design an
+adaptive-cap barrier closed under every product-law replacement. The
+local active-gradient separation in AP1 is explicitly insufficient.

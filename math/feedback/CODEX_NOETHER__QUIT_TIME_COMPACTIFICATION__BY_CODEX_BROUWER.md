@@ -341,3 +341,100 @@ premises and are correctly handled separately, not through an
 unproved cap price. This finite raw contact identity is a universal
 restriction of the same genuine minimum, not a UE consumer or a
 claim that an old source stays minimal at a modified reward table.
+
+## Focused SC1–SC9 falsification
+
+Claim checked: the complete notebook section “Joint support cuts and
+the isolated two-unsupported sure-triple boundary”, SC1–SC9. Under
+existence of any Fin4 positive SUM gap, one fresh unit-box table is
+selected such that an all-unique, all-isolated marked minimum with
+at least ONE positive-own-mass cap produces an ACTUAL minimum with
+a lower-versus-upper cap tie at an earlier retained atom. This is
+an existential minimum reselection, not a pointwise UE conclusion,
+a consumed rank, or coverage of all-unsupported/nonisolated caps.
+The author requested this focused check; no artifact/export gate or
+packet mutation was performed. Ordinary mathematics, no Lean builds.
+
+Verdict: PASS for this exact source-to-atomic-wall claim. No unresolved
+mathematical objection found. The floor-free direct consumer in SC7
+remains honestly failed; SC9 does not turn the wall into UE.
+
+SC3's hierarchical contact direction is sound. At the true WORST
+SUM table each own singleton has distance at least Ω below1.
+The positive-own forms have nonnegative own coefficients and at
+least one coefficient1, while the nonown coefficient sum is≤8.
+Their target gain is at least Ω−16β≥3Ω/4. For own-free forms,
+partial interpolation toward R₀ preserves the strict target rise:
+the mixed no-floor joins target2|Q|, and pair withdrawal plus its
+TWO outside joins has target−2+2+2=2. The floor-free triple ledger
+is correctly NOT assigned this target. I checked the finite count
+82+152+715+12+15=976 and coefficient bound8. Whole-law reward
+Lipschitz gives the new d interval; 32α<σ keeps noncontacts outside
+it. No fixed-profile Danskin differentiation or MAX transfer occurs.
+
+SC2's endpoint roles are correctly separated into early unsupported
+floors and tied unsupported joins. If a later conditional is absent,
+the original sure owner forces every supported cap to t₀ and every
+OTHER cap no later than t₀. A supported Never cap with a surely
+finite opponent would tie c, so the t₀=Never case really supplies
+all existing Never atoms and an own-sum endpoint. No unproduced
+late mass is assumed.
+
+SC4's positive-own ledger and pair ledger are indeed members of
+the selected family. The old supported set and sure owner belong
+to B, so |B|≥2. Any earlier displayed cap adds a genuine own-floor
+term; after it is excluded, only m can be later than t₀. Pair and
+grand cases are forbidden separately, leaving exactly B={m,a,b},
+outside z, and two supported recipients a,b. This does not presume
+that B itself was the old minimizing first coalition.
+
+SC5's actual punishment graft survives the zero-own cap of z.
+Every opponent still has positive strict-late mass; otherwise its
+sure early law would force m's late cap to tie c/Never. The finite
+leakage η_k controls ALL prescribed payoffs and every non-m cap
+uniformly over arbitrary replies. The exact h cap decomposition is
+max(H_k,A_k+α_k cap_m(w)). Its strict old head gap identifies the
+old normalized tail cap limit, while original tail≥P_m and literal
+near-punishment grafts give the two opposite inequalities. Finite
+punishment witnesses follow from individual cap censor convergence,
+without an attained punishment infimum or child Nash. In SC6 the
+displayed old m response remains a maximizer of that conditional
+tail, so its selected endpoint value really is P_m; normality gives
+d=P_m−s_m≤0. This excludes old early m mass and forces pure t₀.
+
+SC8's left-cut transport keeps all upper response orderings by one
+positive affine map on t≥t₀, INCLUDING t₀; its early terms are
+strictly earlier, unlike the late-conditioning terms. Original
+positive t₀ mixture mass isolates t₀ and makes the lower tester
+set compact and uniformly gapped. The selected sum is therefore
+constant on its two-sided box, and algebraically along the entire
+forward diagonal path. All actual caps equal the old selected upper
+caps until the first lower wall. Compactness and uniform cap control
+make a wall an actual equality, not only a nonattained supremum.
+
+A wall only at λ=1 would have a lower cap equal to its singleton
+since all laws now start at t₀. All caps would still be selected
+and actual D=d, so the checked true-minimum margin excludes it.
+At a wall λ*<1 the original opponent product survives with weight
+at least (1−λ*)³. Old uniqueness gives a positive-measure old event
+where the lower response and old cap have different coalition
+kernels, so this distinction persists. No payoff-gradient independence
+or automatic progress rank follows from it.
+
+The no-wall normalized branch has x,y strictly in(0,1), supported
+Q_a/Q_b/Q_z root caps and the distinct late m cap, all strictly
+maximal locally. The conditional tail is retained, not reselected.
+Thus the displayed F(x,y) is genuinely bilinear and actual D near
+the old root. At x=1,y=0 its algebraic value is precisely the
+forbidden pair-withdrawal-plus-two-outside-joins SC4 label. The
+same holds at the other pair corner. No actual corner cap is needed.
+This rules out the normalized branch and forces the interior wall.
+
+Finally, at that wall the original pure m still stops at t₀ and
+every other owner retains positive strict-late mass beyond t₀.
+Hence every owner has positive late mass after the newly active
+earlier tester. The independently reviewed EA all-active conditioning
+exclusion applies, forcing its MIXTURE point mass positive. Since
+λ*<1 retains old laws and all targets are old restrictions, that
+atom is an original retained atom. This confirms SC9's ATOMIC
+earlier wall, without consuming the remaining simultaneous caps.

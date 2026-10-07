@@ -35,7 +35,7 @@ path to a multiple-cap minimum when a sole unsupported EARLIEST owner
 has old mass before the supported opponent caps; it does not require
 that owner's maximizing point to be isolated.
 
-The newest complete consumer candidate, EA1–EA5 with boundary EA6,
+The completed source restriction EA1–EA5 with boundary EA6
 passed NOETHER's focused independent falsification. Joint signed
 old-tail conditioning preserves ALL active upper
 response branches together. At a zero-MIXTURE-mass earliest active
@@ -45,8 +45,30 @@ full cap equals its own singleton: contradiction. Thus such a
 zero-mixture earliest cap forces a sure-strictly-earlier prescribed
 owner and multiple late caps for all three other recipients. This
 excludes EVERY all-unique nonisolated earliest-cap minimum, not only
-a common cap date. A new combined standalone source-reduction draft
-is awaiting its separate whole-artifact review; it is not exported.
+a common cap date. The combined source/table proof passed two whole
+independent falsifications and is frozen in the canonical
+[WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md](../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md).
+Its fresh-table all-unique residual has at least two zero-own-mass
+owners, not-all-equal cap dates and an atomic earliest cap; the
+multiple-cap branch remains open. This export is ordinary mathematics,
+not a new Lean-checked result.
+
+The new COMPLETE UNREVIEWED finite-amplitude candidate HP1–HP6
+concentrates each owner's EXISTING mass at or before the earliest
+active atom. Unique earliest caps have an isolated gap; every later
+cap's whole upper family has one positive affine rescaling. A first
+cap wall is an actual multiple-cap minimum. If the path reaches its
+endpoint, a sure early opponent either supplies multiple late caps
+directly, or a literal punishment-tail graft gives debt below δ.
+Under same-table punishment normality, this reselects a multiple-cap
+minimum from any all-unique non-common minimum. It is EXISTENTIAL,
+not a pointwise exclusion or a consumer of the resulting wall. An
+interior wall has distinct outcome kernels, but an endpoint wall can
+supply only equivalent late plateau points. Without a consumer of
+that alternative, HP is supporting mathematics, not a strict
+counterexample-class reduction or an export request.
+EA7 separately records an UNREVIEWED graft sharpening of the
+sure-early exception at a zero-mixture earliest cap.
 
 No full UE producer, positive unrestricted-gap example, or new export
 is claimed. The next genuine target is a finite-amplitude coupled law
@@ -5862,3 +5884,250 @@ recipients with an entire maximizing late plateau. The unique-cap
 join/withdrawal spectrum does not consume these MULTIPLE branches.
 The next genuine question is an all-response coupled release of
 that early owner, not another punishment-optimal child-Nash splice.
+
+## Head concentration globally reselects a multiple-cap minimum
+
+Status: COMPLETE UNREVIEWED ordinary-mathematical candidate HP1–HP6,
+separate from the frozen strengthened source-reduction packet. This
+is a finite-amplitude actual MINIMUM RESELECTION, not a pointwise
+exclusion of all-unique minima, an automatically consumed rank or
+UE. Its endpoint alternatives have a full cap ledger; no endpoint
+is declared minimizing from a selected polynomial alone.
+
+### HP1. Exact target and supplied source facts
+
+Let q be ANY produced true positive SUM minimum of a bounded signed
+Fin4 reward table with same-table true punishment normality P_i≤s_i.
+Assume all four caps have UNIQUE maximizing points τ_i and they
+are NOT ALL equal. By reviewed EA, their earliest point τ=min_iτ_i
+is finite and has positive mixture mass, hence is ISOLATED in T.
+The exact target is an ACTUAL profile pair in the same original
+carrier with debt δ and some cap having at least two maximizing
+TEST POINTS. No proper-game child equilibrium is supplied.
+
+This applies in particular to every all-unique source of the ONE
+fresh table produced in the frozen strengthened packet. Its ordinary
+proof of non-common unique caps and reviewed EA supply the two
+source facts; no old minimizing law is transported across table
+variation. True normality holds for that SAME fresh table by the
+checked no-UE source used in LC10 and EA7.
+
+### HP2. Concentrate existing HEAD mass, not cap atoms
+
+Put B={i:e_i=q_i(clock≤τ)>0}. This set is nonempty because τ has
+positive mixture mass. For i∈B let ν_i=q_i(·|clock≤τ); for i∉B
+let ν_i=q_i, a redundant direction. Independently vary
+
+    q_i^λ=(1−λ_i)q_i+λ_iν_i.
+
+For i∈B the head and late likelihood factors are respectively
+1+λ_i(1/e_i−1) and 1−λ_i; both are positive on a two-sided box.
+Its density is a positive multiple (1−λ_i) of the old law plus
+an early signed term (λ_i/e_i)q_i|_(clock≤τ). An e_i=1 direction
+is redundant and causes no difficulty. Directions for i∉B are
+IDENTICALLY unchanged, not conditioning on a vanishing old event.
+
+Every earliest selector τ is isolated and unique, so it has a
+uniform compact-complement gap and stays fixed locally. For any
+later selector σ_i=τ_i>τ choose a real a_i with τ<a_i<σ_i; when
+σ_i=Never use τ<a_i<c, possible since a positive finite atom lies
+strictly before c. For EVERY test t>a_i, expanding its opponent
+product gives
+
+    V_i(t,q_-i^λ)=k_i(λ)V_i(t,q_-i)+C_i(λ),
+    k_i(λ)=∏[j∈B,j≠i](1−λ_j)>0.                (HP1)
+
+Every nonoriginal term contains a finite head exit≤τ, so C_i is
+independent of t, including Never. The lower compact set t≤a_i
+excludes the unique σ_i and has a uniform gap. Thus ALL later
+caps stay fixed locally, even at nonisolated points. This is a
+whole-upper-family identity, not uniqueness-as-uniform-gap.
+
+The selected sum F(λ)=Σ_i[V_i(τ_i,q_-i^λ)−U_i(q^λ)] is multiaffine
+and equals actual D≥δ on the signed box, with F(0)=δ. Therefore
+F is algebraically constant δ. No supported OWN cap mass is needed:
+the target is each owner's OLD head conditional, not its cap point.
+
+### HP3. Complete actual finite transport and continuous path
+
+Including τ in the conditioning event uses the RIGHT endpoint of
+its positive old retained interval as the HEAD boundary. For each
+i∈B, original head masses e_i^k tend to e_i>0 and the literal law
+conditional on original clock≤τ^k has old density
+
+    f_i^k[(1−λ_i)+(λ_i/e_i^k)1_(u<right endpoint)].
+
+The interval endpoint converges, its indicator converges in L¹,
+the signed likelihoods remain nonnegative and bounded, and the fixed
+multiplier weak-* test gives the desired limiting density. Unchanged
+independent rectangle products and prescribed/ALL-moving-response
+kernels give BOTH U and full B convergence, exactly as EA3. Never
+is in the complement; no new calendar point is inserted; zero c
+mass is retained and c⁺ duplicates c. The global floor is therefore
+the true actual floor for this signed family.
+
+Follow the legal forward diagonal path q_i^x=(1−x)q_i+xν_i,
+0≤x≤1. Every point has bounded old density and actual carrier
+realization. Uniform total-variation estimates make all caps and
+payoffs continuous in x. The selected sum stays δ ALGEBRAICALLY
+as the same polynomial, but it is actual D only when the old
+selectors remain full caps.
+
+### HP4. A first cap wall is an actual multiple-cap minimum
+
+Let Z be the closed set where ALL old τ_i remain full maximizing
+responses. It contains an initial interval. Let x* end its maximal
+initial interval. On that interval and at x*, actual D=δ.
+
+If x*<1 and all caps were still unique there, every τ selector
+would have its isolated complement gap. For each later σ_i, the
+coefficient k_i(x*) in (HP1) is positive. Its original upper ordering
+is preserved along the whole path near x*, and the compact lower
+set has a gap from uniqueness at x*. Thus every old selector would
+remain full in a neighborhood beyond x*, contradiction. Hence some
+cap has multiple maximizing POINTS at q^{x*}. This argument prices
+nonisolated later caps without suppressing their nearby replies.
+
+It remains to check x*=1; actual endpoint membership in Z is now
+justified by closedness, not polynomial extrapolation.
+
+### HP5. All but one endpoint configuration directly have multiple caps
+
+At x=1 every owner in B stops no later than τ surely; each owner
+outside B continues strictly after τ. There is at least one later
+cap owner i because the original cap dates were not all equal.
+If there is ANY h∈B\{i}, that sure opponent makes every response
+strictly after τ and Never outcome-equivalent for recipient i.
+Since its old selector τ_i>τ is a full cap at this endpoint,
+the distinct finite c and Never are full maximizing points.
+
+In particular |B|≥2 always yields multiple caps. If |B|=1 and
+some later cap owner differs from its sole member, the same applies.
+The only remaining configuration is
+
+    B={h},       τ_h>τ,
+    τ_j=τ and q_j(clock≤τ)=0 for ALL j≠h.         (HP2)
+
+The endpoint changes ONLY h's OWN law. Thus its entire full-response
+function and old cap B_h are unchanged. All three opponents originally
+and finally stop strictly after τ, so V_h(τ)=s_h. Uniqueness of the
+different maximizing point τ_h gives B_h>s_h.
+
+### HP6. The exceptional endpoint has a genuine global debt decrease
+
+At (HP2)'s endpoint, h stops≤τ surely and ALL opponents stop>τ.
+Prescribed play is the singleton h, regardless of which head date
+h selects. Arbitrary changes of the three opponents' conditional
+tails after τ do not change any prescribed payoff or ANY non-h
+full cap. A non-h test before τ sees only unchanged h or its own
+early exit; one at τ sees h's unchanged atom there; a later test
+or Never is screened by h's sure exit≤τ. This is the complete
+deviation ledger, not child Nash or a favorable cap selector.
+
+Literal witnesses make the comparison rigorous even at a marked
+endpoint. HP3 makes h's old finite law conditional on clock≤τ^k,
+so its late leakage is EXACTLY zero. The other old finite head
+masses tend to zero. Preserve those heads and their late probabilities
+and graft ANY actual opponent punishment law w starting at τ^k+1.
+All prescribed payoffs and non-h full caps are EXACTLY unchanged
+by the sure-by-cut h law. For h the new full cap is exactly
+
+    max(H_k,A_k+α_k cap_h(w)),
+
+with H_k→s_h, A_k→0 and α_k→1. The head cap convergence is
+uniform: while all opponents have total head mass tending to zero,
+every finite head response is within 2M times that mass of s_h.
+The response at τ^k supplies the matching lower bound. No original
+finite cap attainment, uniform nonisolated gap or attained punishment
+minimum is assumed.
+
+Choose actual w with cap_h(w)≤P_h+ε≤s_h+ε. The limiting modified
+debt is at most δ−B_h+s_h+ε. Choose 0<ε<B_h−s_h. It is STRICTLY
+below δ, contradicting the true global floor. Thus x*=1 cannot
+remain in the exceptional configuration; the path must already
+produce an actual multiple-cap minimum as in HP4 or HP5.
+
+We have derived an ACTUAL finite-amplitude existing-head law producer:
+ANY all-unique positive minimum with non-common cap dates can be
+reselected, at the SAME table, to a multiple-cap true minimum under
+same-table Fin4 punishment normality. Applied after the reviewed
+worst-SUM source reduction, it means the counterexample search may
+select a multiple-cap minimum without retaining an all-unique
+multi-unsupported fallback. This is EXISTENTIAL and does not assert
+that every produced minimum was already multiple, exclude all-unique
+sources pointwise, or consume the resulting simultaneous-cap wall.
+
+No step is added to the frozen 920-line artifact. A complete full
+consumer must now operate on the actual multiple-cap minimum, not
+reuse the fixed-selector polynomial beyond its cap-stable path.
+
+### HP7. Exact same-table strategic input and the remaining value gap
+
+The tracked input is
+`nonempty_finFourQuantitativeFullSupportHardResidual_of_no_uniformPayoff`
+in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportProjectiveQBarResidual.lean`.
+Its hypotheses are a literal reward table on NONEMPTY coalitions of
+Fin4, a supplied real coordinate bound with |r(S)_i|≤bound for EVERY
+coalition and recipient, and NO uniform-equilibrium payoff for THAT
+SAME reward table at initial state none. Its produced field
+`FinFourQuantitativeFullSupportHardResidual.all_punishmentNormal`
+is ∀i, `IsQuittingNormalPlayer reward i`.
+`IsQuittingNormalPlayer` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`
+means `quittingPunishmentValue reward i ≤ quittingSoloSelfPayoff reward i`.
+The punishment definition in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean` is the infimum
+over actual independent behavioral opponent plans of the supremum
+over ALL behavioral responses. Thus its sole use in HP6 is the
+existence, for EVERY ε>0, of an ACTUAL opponent law w with cap≤s_i+ε;
+no infimum attainment or stationary child Nash is supplied. The
+same-table no-UE hypothesis follows from that table's positive true
+terminal-debt infimum by
+`quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean`;
+its player type is finite and inhabited, as Fin4 is. For
+the fresh table, apply the declaration afresh. Nothing transports
+normality from the old reward table or singleton normalization.
+
+There is a genuine kernel distinction when HP4 ends at x*<1. The
+new equal-valued test and old unique test were NOT outcome-equivalent
+at x=0, or the old cap would not have been unique. For two ordered
+reply clocks t<s, under a COMMON opponent sample, player i's
+membership in the absorbing coalition can only decrease when its
+reply is delayed, while each opponent's membership can only increase.
+The same holds for s=Never, with the empty Never outcome assigned
+the empty membership vector. Hence different coalition kernels
+force a strictly different membership marginal for some recipient:
+if all those monotone marginal changes vanished, the two coalition
+sets would be equal almost surely. At x*<1, the opponent product
+law retains at least (1−x*)³ times its original product law. The
+strict monotone marginal change therefore remains positive. Thus an
+INTERIOR wall has at least two full maximizing tests with genuinely
+different absorbing-outcome kernels, not merely c/Never copies behind
+a sure owner.
+
+However HP5 at x*=1 can supply ONLY outcome-equivalent c/Never
+plateau points behind a sure head owner. The proof does not eliminate
+this alternative. It supplies an explicit original-law head endpoint
+and some zero-debt recipients when their prescribed laws stay strictly
+late, but it does NOT prove that a previously positive debt is killed,
+lower cardinal-minimal debt support, or price release of the final
+sure owner. There is currently no complete consumer of that endpoint
+which receives strictly stronger sufficient data than the already-open
+multiple-cap branch. Therefore HP is retained as a global-path
+mechanism in this notebook, NOT an export request or a claimed strict
+counterexample-class reduction. The next line must distinguish or
+consume the endpoint plateau instead of counting duplicate TEST POINTS
+as strategic progress.
+
+Nearby tracked geometry inspected for this question:
+`quittingTerminalSemanticDebt_responseChord_eq_of_minimum_sameDebtSum`
+and `response_support_nonempty_and_card_le_three_finFour` in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticMinimumResponseChord.lean`.
+Those exact results need TWO same-minimum endpoints differing in ONE
+complete stopping law, and an actually killed source-positive debt
+coordinate for the cardinal drop. HP's diagonal path alone does not
+supply either premise. The all-observer cap convexity facts in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticStoppingLawDebtConvexity.lean`
+do not change that gap.

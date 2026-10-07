@@ -35,23 +35,41 @@ This is an independently reviewed mathematical export, not a Lean
 implementation. It does
 not solve the arbitrary-table or worst-table SUM comparison in Section 44.
 
-Current serious global comparison: Section 48 links the ONE complete
-self-contained candidate
+Current serious global comparison: Section 48 links the canonical frozen
 `../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`. From an
 attained worst SUM table it selects one new positive-gap table avoiding
 82 labelled raw withdrawal, join-sum, individual-join, passive-floor and
 own-grand values. EVERY produced marked minimum of that fixed new table
 avoids common unique caps and exceptional-latest geometry. In the
-all-unique branch an EARLIEST owner has zero own cap mass; if precisely
-one owner is unsupported its cap is STRICTLY earliest and NONISOLATED.
+all-unique branch at least TWO owners have zero own cap mass, cap dates
+are not all equal, and the earliest cap is a finite isolated POSITIVE
+MIXTURE atom; some owner maximizing there has zero own mass. BROUWER's
+universal earliest-cap conditioning excludes the nonisolated earliest
+observer branch without a unique-selector assumption.
 The complete original compact producer, signed conditional transport,
 all moving-test cap control, source identities and whole-law value
-comparison are proved inside the candidate. Independent whole-artifact
-falsification is requested, not a separate gate for supporting identities.
+comparison are proved inside the packet. The consolidated 920-line
+artifact passed TWO independent whole-proof falsifications and is frozen
+at SHA256
+`1e5c8544ed71e153ee90ae87ac72b8413153e29faa43460599f1ac510e0b6e83`.
 The eight-coordinate singleton-preserving theorem of Section 47 remains
 a distinct proved subcase. The stronger target changes own singletons
 and Γ; neither its minima nor MAX-regret sources are transported.
 This is a strict source reduction, not a Fin4 UE theorem.
+
+New distinct GLOBAL candidate: Section49 produces arbitrarily small
+positive recipient scales making the ENTIRE actual minimum family
+share one debt vector, while retaining all canonical raw exclusions.
+Concavity is in weights on one FIXED compact actual debt set, not in
+reward-table entries or independent laws. This debt rigidity consumes
+any supported EARLIEST unique cap by a legal one-owner signed reset:
+the all-unique fresh sources have unsupported owners in BOTH earliest
+and later cap groups, with EVERY earliest maximizer unsupported. If all
+unique caps are isolated, supported owners are actually pure at their
+caps, so earliest mass is supplied only by later unsupported owners.
+The full producer and complete source consumer, exact failed stronger
+implications and scoped source lookup are saved there. Ordinary
+mathematics, independent review pending; no new export yet.
 
 Supporting global comparison: Section 46 uses an attained worst SUM table
 and NEW whole-law near-minimizers after a finite own-singleton reward
@@ -9352,11 +9370,14 @@ is requested.
 
 ## 48. One complete whole-table cap-spectrum source reduction
 
-The final combined candidate is
+The canonical consolidated artifact is
 [`WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`](../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md).
-It is a self-contained ordinary-mathematical artifact, internal pending
-focused whole-candidate independent falsification. No export promotion
-or Lean-checked status is claimed.
+It is frozen at SHA256
+`1e5c8544ed71e153ee90ae87ac72b8413153e29faa43460599f1ac510e0b6e83`.
+The original 711-line draft passed two independent reviews and is saved
+at commit `335608de`; it is superseded by this 920-line consolidated
+packet, which also passed two independent whole-proof falsifications.
+This is a mathematical export, not a Lean-checked declaration.
 
 The new global input is Δ=maximal worst-table SUM gap, not fixed-law
 cap optimization and not MAX regret. Its exact all-owner singleton
@@ -9373,10 +9394,15 @@ join sums, twenty-eight individual joins, thirty-two passive floors
 values; duplicates are harmless. Exact source consumption excludes
 all common-unique-cap configurations. The general earliest-group
 argument, with NO support assumption on later cap owners, leaves an
-earliest unsupported owner. A sole unsupported owner can be neither
-later, tied earliest, nor strictly earliest isolated; it must be
-strictly earliest NONISOLATED. At least two unsupported owners or a
-multiple-maximizing-point cap remain unconsumed.
+earliest unsupported owner. Universal earliest-active conditioning
+independently shows that the earliest cap is finite. If its mixture
+mass is zero, some prescribed owner exits strictly before it surely,
+making every other owner's upper tests, c and Never maximize. Hence
+in the all-unique branch the earliest cap has positive mixture mass
+and is isolated. The finite spectra then exclude every sole-unsupported
+source. At least two unsupported owners at not-all-equal unique cap
+dates with an atomic earliest cap, or a multiple-maximizing-point cap,
+remain unconsumed.
 
 The artifact includes the ORIGINAL finite quantile-chart producer and
 its all-moving-test convergence, literal supported resets and strict
@@ -9391,12 +9417,294 @@ gap bridge, actual semantic-carrier definition, and the singleton margin.
 NOETHER's common-cap, earliest-group, and isolated-earliest/tied-earliest
 identities were read completely; focused independent checks of JC,
 SIC and the full finite comparison are recorded in my owned feedback
-for that note. Those checks do not substitute for the final artifact's
-own falsification gate. A narrow source comparison records that the
+for that note. The final complete consolidated artifact has separately
+passed its whole-proof falsification gate. A narrow source comparison records that the
 implemented membership-stretch producers optimize MAX rather than SUM;
 no global source census is claimed.
 
-Concrete next question: consume the residual nonisolated earliest
-observer cap or a genuinely multi-unsupported/multiple-cap minimum by
-a whole-law repair or another global table comparison. No further
+Concrete next question: consume a genuinely multi-unsupported atomic-
+earliest/multiple-cap minimum by a whole-law repair or a structurally
+different global table comparison. The nonisolated earliest observer
+branch is retired by the canonical packet. No further
 singleton constant tuning or local fixed-row trap is proposed.
+
+## 49. Generic recipient scales give debt rigidity and consume supported earliest caps
+
+Status: complete ordinary-mathematical GLOBAL source-reduction candidate,
+not independently reviewed or Lean-checked. This is a different mechanism
+from cap-wall continuation: the entire minimum family is first made
+DEBT-RIGID by a small positive recipient scaling. A legal one-coordinate
+signed reset then consumes any supported earliest unique cap. No mixture
+of different minimizing profiles is implemented or assumed.
+
+### DR1. Exact fresh-table producer and desired restriction
+
+Start with the canonical fresh unit-cube table r from Section 48, with
+δ=Δ(r)>0 and ALL its 82 labelled raw spectrum values unequal to δ.
+For every ε>0 there exists a table r′, with
+
+    r′_i(S)=θ_i r_i(S), 1−min(ε,1/2)<θ_i<1,
+
+still in the unit cube and arbitrarily close to r, such that:
+
+1. The entire original closed semantic minimum family for r′ has ONE
+   COMMON debt vector d* (payoff and cap vectors need not be common).
+2. Every produced marked minimum of r′ retains the canonical Section 48
+   restrictions: multiple caps OR all-unique, at least two unsupported,
+   not-all-equal dates and a finite isolated positive-mixture earliest cap.
+3. In the all-unique branch EVERY owner maximizing at the earliest cap
+   has ZERO own point mass there. At least one LATER maximizing owner
+   also has zero own mass at its cap.
+4. If, additionally, every unique cap point is isolated, every supported
+   cap owner prescribes its cap PURELY and has zero debt. In particular
+   the earliest mixture atom is supplied ONLY by unsupported owners
+   whose own caps are later.
+
+These restrictions apply to EVERY new minimum, selected AFTER fixing r′.
+Point3 strictly consumes the mixed supported/unsupported earliest-cap
+geometry left by the canonical packet. It is not just a supplied-object
+test or a requirement that one chooses a regular costate by hypothesis.
+Point4 does not assume isolation of all caps in Point3.
+
+Positive utility scaling preserves each fixed profile's maximizing tests
+and exact best responses. It changes the minimizing SUM family, which
+is why it is useful. No fixed old minimizing law is transferred. No
+arbitrary-game UE conclusion or positive-gap example is claimed.
+
+### DR2. The fixed reward carrier and genuinely concave scale objective
+
+Let K be the ORIGINAL compact payoff/cap carrier for r, and let
+
+    A={a∈ℝ⁴:a_i=B_i−U_i for some (U,B)∈K}.
+
+A is compact, nonempty and nonnegative; each coordinate is at most2
+in the unit reward cube. These facts follow directly from the actual
+carrier definition, compactness and nonnegative debt. On the positive
+orthant define
+
+    W(θ)=min_(a∈A) Σ_i θ_i a_i.
+
+This is CONCAVE because it is an infimum of linear functions of θ.
+It is finite and Lipschitz, with
+
+    |W(θ)−W(η)|≤2Σ_i|θ_i−η_i|.
+
+This does not convexify the set of stopping laws or the carrier. The
+concavity comes from scalarizing one fixed attainable debt set, not
+from a false Jensen rule for independent profile mixtures.
+
+For the scaled reward r^θ_i(S)=θ_i r_i(S), the SAME actual laws have
+U_i^θ=θ_i U_i, B_i^θ=θ_i B_i, and debt θ_i a_i. Supremum commutes
+with multiplication because θ_i>0. The positive diagonal map is an
+invertible continuous map on the eight semantic coordinates, so it
+also carries K onto the ORIGINAL closed carrier K_θ for r^θ. Hence
+
+    Δ(r^θ)=W(θ),
+    min_i θ_i ·δ≤W(θ)≤max_i θ_i ·δ.              (DR1)
+
+The lower bound uses nonnegative debts at ALL actual profiles and
+extends to the closure. The upper bound evaluates an old true SUM
+minimum. Therefore every positive θ retains a positive gap. Positive
+row scaling is strategically equivalent for exact Nash and, after
+rescaling accuracy, for uniform-payoff existence; it does not manufacture
+a different deviation probability mode.
+
+### DR3. A producer of ONE debt vector for EVERY minimizing pair
+
+For almost every θ in any open positive box, every coordinate partial
+derivative ∂_i W(θ) exists two-sided. An elementary proof suffices:
+for each fixed choice of the other three coordinates, the one-variable
+function is finite concave, with monotone one-sided slopes and only
+countably many points of unequal slopes. Fubini gives a null exceptional
+set for that coordinate in the box; take the union for four coordinates.
+The relevant one-sided slopes are measurable difference-quotient limits.
+No joint differentiability or unproved unique-minimizer theorem is needed.
+
+For ANY minimizing a∈A at such a θ,
+
+    W(θ+t e_i)≤W(θ)+t a_i.
+
+Divide by positive t and negative t separately and let t→0. Equality
+of the two coordinate derivatives forces
+
+    a_i=∂_i W(θ) for EVERY i and EVERY minimizing a.          (DR2)
+
+Thus ALL old-carrier θ-minimizers have one debt vector ∇_coord W(θ),
+and ALL scaled-table SUM minimizers have the ONE common vector
+
+    d*_i=θ_i ∂_i W(θ).                            (DR3)
+
+There may still be multiple minimizing laws, calendars, prescribed
+payoffs, caps, active tests and cap dates. The result is DEBT rigidity,
+not pair rigidity. Unlike the retired fixed-active reward derivative
+in Section44, (DR2) uses an objective LINEAR in θ on one FIXED compact
+carrier. Its complete minimum-family conclusion follows from the
+two supporting inequalities, not a selected profile derivative.
+
+### DR4. Preserve all canonical finite exclusions before selecting new laws
+
+Let ζ=min_v |v(r)−δ| over the 82 labelled raw functionals; ζ>0.
+Every label has coefficient absolute sum at most6. If ∥r′−r∥∞<ρ,
+then |v(r′)−v(r)|≤6ρ, while |Δ(r′)−δ|≤8ρ by the whole-law reward
+Lipschitz estimate. Choose 0<ρ<ζ/28, also small enough for the
+requested ε and positive scales. Then
+
+    |v(r′)−Δ(r′)|≥ζ−14ρ>0 for EVERY label.        (DR4)
+
+Choose a coordinate-regular θ from DR3 inside (1−ρ,1)⁴, possible
+because the exceptional set has measure zero. The row-scaled table
+is within ρ of r. Equations (DR1),(DR4) give a positive true gap and
+all exact new finite exclusions. The universal earliest-cap theorem
+and every other source identity in the canonical packet apply to
+the fresh marked minima of THIS table, so Point2 of DR1 follows.
+No maximization of W or SUM after this selection is required; no
+old debt vector is identified with a new one.
+
+### DR5. Actual signed reset stability at a supported earliest cap
+
+Fix ANY produced marked minimum q of r′ and assume all four caps
+have unique maximizing points τ_i. Its earliest point τ=min_i τ_i
+is finite and a positive mixture atom, hence isolated. Suppose an
+earliest owner h has q_h({τ})>0. Independently change ONLY that
+owner's law by the EXISTING supported reset
+
+    q_h^u=(1−u)q_h+uδ_τ,
+
+with both signs on a small interval about zero. The original retained
+positive-length atom interval supplies literal finite witnesses,
+nonnegative bounded old-chart densities, prescribed-payoff convergence
+and complete moving-test cap convergence, exactly the supported-atom
+construction of the canonical packet. Thus each modified complete
+pair is in the ORIGINAL carrier of r′, and the true global floor
+applies. No new nonisolated clock is inserted.
+
+Owner h's cap is unchanged because its own law does not enter it.
+For every other owner i with τ_i=τ, isolation and uniqueness give a
+uniform complement gap, so its cap stays fixed for small |u|. For
+every other owner with τ_i>τ, EVERY response t>τ satisfies
+
+    V_i(t,q_-i^u)=(1−u)V_i(t,q_-i)+u C_i,
+
+where C_i is independent of t: in the replacement term opponent h
+exits at τ before the response, including a Never response. Choose
+a real cut τ<a<τ_i; if τ_i=Never choose τ<a<c, possible since
+the positive atom τ is strictly before c. On the upper family exact
+positive rescaling preserves its unique maximizing order, including
+nonisolated τ_i. The compact lower set has a strict response gap
+and total-variation control preserves it locally. Thus EVERY full
+cap stays at its original τ_i on a legal two-sided interval. c⁺
+duplicates c, since no changed law adds mass there.
+
+The actual summed debt is therefore affine in u and has an interior
+global minimum at u=0. It is constant near zero, so EVERY modified
+pair there is an actual original-carrier global minimum. Debt rigidity
+(DR3), not just constancy of the sum, forces EACH debt to stay d*_i.
+But for the changed owner, because τ is its own maximizing test,
+
+    d_h(q^u)=(1−u)d_h(q).
+
+Taking any nonzero small u forces d_h(q)=0. The nonnegative regret
+integrand B_h−V_h(t,q_-h) is strictly positive at every t≠τ by
+unique maximization. Zero expected regret therefore gives
+
+    q_h=δ_τ in the ORIGINAL minimum.             (DR5)
+
+This is actual original pure play, not an algebraic endpoint assertion.
+It makes every other later finite cap tie Never, and a later Never
+cap tie the distinct finite c. Unique caps consequently all equal τ.
+That contradicts the fresh-table common-cap exclusion. Hence no
+earliest maximizing owner can be supported, proving Point3's first
+statement. The positive earliest mixture atom is supplied only by
+owners whose maximizing clocks are later.
+
+### DR6. All-isolated supported owners are pure; a later unsupported owner is forced
+
+If all four unique cap points are isolated, reset ANY supported owner
+j toward its own existing cap atom, not necessarily the earliest.
+All other caps have isolated uniform gaps; j's own cap is independent
+of its law. The legal original signed reset again has locally affine,
+constant sum debt, hence is a family of true global minima. Debt
+rigidity gives d_j=(1−u)d_j, so d_j=0 and unique maximization implies
+
+    q_j=δ_(τ_j).                                 (DR6)
+
+This proves Point4, with no assumption on the own atom masses of the
+remaining unsupported owners. In particular no supported owner can
+carry a positive atom at a DIFFERENT cap date.
+
+To prove that some LATER cap owner is unsupported in the general
+all-unique branch, suppose every later cap owner were supported.
+All earliest caps are isolated by the positive mixture atom, and
+all later caps are isolated by their own supported atoms. Hence all
+four caps are isolated and (DR6) makes every later owner pure at its
+later cap. Every earliest cap owner has zero own mass there by DR5.
+The earliest mixture atom would have zero mass from EVERY owner,
+contradiction. Thus the unsupported owners occur in BOTH the earliest
+and a later group, not merely as an arbitrary pair in one group.
+
+### DR7. Exact small tests and failed stronger implications
+
+Coordinate regularity is essential to the all-family statement. The
+abstract nonnegative compact debt set A={e₀,e₁,e₂,e₃} has W=min_i θ_i.
+At θ=(1,1,1,1) four minimizing debt vectors exist and partial derivatives
+fail. Off the tie walls one debt vector is common. This is a finite
+convex-analysis test, NOT a realizable positive-gap quitting table.
+It shows why merely selecting a strictly positive weight, or using
+a unique old test, does not prove debt rigidity.
+
+Rigidity does not imply payoff/cap rigidity or profile mixing. In the
+exact two-player table with both own singletons1, both passive singleton
+rewards2, and joint reward0, pure date-zero singleton profiles have
+payoff/cap pairs (U,B)=((1,2),(1,2)) and ((2,1),(2,1)). Both are
+TRUE global debt-zero minima, and all positive row weights retain
+the common minimum debt vector zero. Independently mixing each owner's
+two endpoint laws half date0/half Never instead has U_i=3/4.
+Date0 response pays1/2, Never pays1, EVERY later finite response
+pays3/2; the FULL cap is3/2. Its actual sum debt is therefore3/2,
+not zero. These exact all-deadline calculations exclude using a convex
+mixture of minimizing pairs as an independent strategy repair.
+
+DR5 relies on a supported EARLIEST maximizing owner. It does not apply
+to the earliest mixture supplier when that owner's cap is later:
+resetting such a supplier only proves its prescribed payoff equals
+its payoff at that atom, not that its debt vanishes. DR6 for an arbitrary
+supported later owner needs ALL other cap points isolated; a unique
+nonisolated earlier cap does not gain a uniform gap from uniqueness.
+No multiple-cap branch is consumed by these arguments.
+
+### DR8. Named source overlap and next global question
+
+The narrow actual lookup read `quittingTerminalSemanticCarrier`,
+`quittingTerminalSemanticCarrier_isCompact`,
+`exists_terminalProfile_sequence_tendsto_semanticPair` and the attainable
+pair definition in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`; the debt
+nonnegativity declarations in its debt layer; and the exact positive-
+weight margin and plateau declarations in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticWeightedAuxiliaryNashBudget.lean`.
+The latter's `minimumTerminalSemantic_weightedSingletonMargin` assumes
+a supplied positive weighted minimizer and positive θ; it does not
+produce coordinate-regular weights or one debt vector for ALL minima.
+The chamber route in docs/FRONTIER refers to nonnegative player weights
+at an ordinary minimum and sparse OUTCOME-law improvements, not this
+fixed-carrier concave weight selection. No such sparse law is declared
+behaviorally realizable here. Narrow phrase/symbol search in these
+files found no matching all-minimum debt-rigidity producer. This is
+not a global source or classification census.
+
+The standard finite-dimensional concavity/Fubini argument is proved
+directly in DR3; no new literature theorem, untracked formalizer draft,
+or selected active response derivative is an input. All canonical source
+and transport inputs remain ordinary reviewed mathematics, not a new
+Lean certification. The result refines a PRODUCED counterexample table,
+not every arbitrary original table.
+
+Concrete next global question: can the rigid debtor support and the
+fact that earliest mixture suppliers have LATER caps, with unsupported
+owners in BOTH earliest and later cap groups (and unsupported suppliers
+whenever all caps are isolated),
+force a legal multi-owner finite-amplitude repair or an incompatible
+recipient-row comparison? This is now a directed mismatch between
+prescribed earliest mass and fixed positive debtor coordinates, not
+an unknown role-switching debt family. Do not replace those suppliers'
+later caps by earliest ones or assume they are Nash of a child.

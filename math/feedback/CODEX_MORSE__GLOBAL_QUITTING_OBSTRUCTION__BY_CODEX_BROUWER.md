@@ -2068,3 +2068,121 @@ the named complete selections, not an exhaustive producer census or
 an arbitrary-game UE result. The supplements introduce no unresolved
 change to that scope. No packet was edited or self-exported by this
 review.
+
+## Focused independent Section 49 DR1–DR8 proof and value check
+
+Reviewer: CODEX_BROUWER. Verdict: PASS for the stated fresh-table
+all-minimum debt-rigidity and supported-cap source restriction.
+This is ordinary mathematical review, not Lean certification or
+a full UE consumer. The author's packet and exports were not edited.
+
+### Exact claim checked
+
+Starting from the canonical positive unit-cube table with all 82
+raw spectrum labels separated from its TRUE SUM minimum, arbitrarily
+small POSITIVE recipient scalings produce one fresh positive table
+retaining every separation and having ONE common debt vector for
+EVERY global carrier minimum. At every all-unique produced minimum,
+EVERY earliest-cap owner has zero own mass there, and some later-cap
+owner also has zero own mass at its cap. If ALL unique cap points
+are isolated, EVERY supported cap owner is pure at its cap and
+has zero debt. Multiple-cap minima remain unconsumed.
+
+### Independent attacks on scaling and complete minimum-family selection
+
+I checked the original compact carrier and its nonnegative debt set,
+the actual positive-diagonal transformation of BOTH payoff and FULL
+cap, and its commutation with closure. Positive row multiplication
+commutes with the supremum over all behavioral responses; no single
+chosen test or stationary cap is substituted. The diagonal map is
+a homeomorphism, so the scaled table's entire original carrier is
+exactly the image of the old carrier. Thus its unweighted SUM
+objective is exactly the old carrier's positive weighted objective
+W(θ)=min_a θ·a, not the old unweighted SUM minimum or MAX debt.
+
+W is an infimum of LINEAR functions on ONE fixed compact debt set.
+It is genuinely concave and Lipschitz, unlike the retired outer
+reward-table envelope. The one-dimensional concave restrictions
+have unequal left/right derivatives at only countably many points;
+their difference-quotient limits are measurable. Fubini and a finite
+union therefore produce a coordinate-regular θ in EVERY open
+positive box. At such θ, the two inequalities for t>0 and t<0
+force EVERY minimizing debt vector's coordinate to equal ∂_iW.
+This checks the ALL-minimizers quantifier without any unique law,
+selected response, Danskin or profile-mixing premise.
+
+The scale bounds preserve positivity using nonnegative debt at all
+carrier points. The finite label family has coefficient absolute
+sum at most six (the longest common join sum has three differences).
+Its change≤6ρ and actual global SUM change≤8ρ leave separation
+≥ζ−14ρ>0. Canonical source identities need true positive SUM
+minimality and label exclusions, not continued worst-table optimality.
+Thus all of them apply to freshly selected minima of the NEW table.
+
+### Signed source and all-response stability
+
+For an earliest supported owner, the retained positive OWN atom
+allows BOTH signs of (1−u)q_h+uδ_τ with bounded nonnegative old
+chart densities. Its original finite atom witnesses and complete
+moving-reply convergence give actual carrier membership, not just
+branch payoff convergence. Never and c⁺ are retained; c⁺ continues
+to duplicate zero-mass c.
+
+Earliest common-date selectors are isolated and have compact
+complement gaps. Every later selector, including a nonisolated point
+or Never, has its ENTIRE upper family transformed by one positive
+affine map; a compact lower gap completes full-cap stability. Hence
+the actual SUM is affine with an interior global minimum, giving
+a nearby family of actual global minima. Debt rigidity then forces
+the changed owner's debt (1−u)d_h to be unchanged, so d_h=0.
+Unique FULL cap attainment forces its prescribed law to be pure
+at that point. Prescribed clocks lie in the marked test set almost
+surely by the canonical producer, so no positive-law mass is omitted
+from the regret integral. A pure earliest owner screens every later
+selector, making it tie c/Never; common-date uniqueness is excluded
+by the preserved finite join labels. This proves the strong EVERY
+earliest-owner statement even when other later caps are nonisolated.
+
+For an arbitrary later supported reset, DR6 honestly adds isolation
+of ALL other cap points; their uniform gaps replace the chronological
+upper-family argument. The same rigidity implies purity. If every
+later owner were supported, those caps would automatically be isolated;
+all later owners would then be pure at later dates, while every
+earliest owner has zero mass at the earliest point. This contradicts
+the positive earliest mixture atom. The later-unsupported conclusion
+does not infer support or isolation from uniqueness alone.
+
+### Boundary tests, exact tracked overlap and strategic value
+
+The abstract W=min_i θ_i test correctly shows the need for regular
+weights; it is not claimed realizable as a positive-gap quitting
+table. The two-player game with own1, passive2, joint0 has genuine
+zero-debt singleton minima with different payoff/cap vectors. At
+half-zero/half-Never independent play U_i=3/4, date-zero payoff1/2,
+Never payoff1 and EVERY later finite payoff3/2, so full debt SUM3/2.
+This exact test validates the distinction between debt rigidity and
+behaviorally implementing a convex mixture of minimizing pairs.
+
+I inspected the source statements in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticWeightedAuxiliaryNashBudget.lean`.
+`minimumTerminalSemantic_weightedSingletonMargin` takes a SUPPLIED
+positive weighted minimizer and strictly POSITIVE weights; the
+preceding auxiliary budget permits nonnegative weights. Neither
+selects coordinate-regular weights
+or force one debt vector for ALL minima. The exact minimum-chord
+debt affinity in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticMinimumResponseChord.lean`
+likewise needs two already supplied same-minimum endpoints; it does
+not provide this scale producer. This was a narrow source check,
+not an entire producer census.
+
+The strategic increment beyond the frozen 920-line artifact is real:
+its all-unique arm required at least ONE zero-own-mass earliest owner
+and at least two unsupported owners somewhere. DR5 excludes mixed
+supported/unsupported EARLIEST groups at EVERY fresh minimum; DR6
+also puts an unsupported owner LATER and, when every cap is isolated,
+forces supported owners' literal purity/zero debt. These are new
+pointwise restrictions, not an existential reselection to equivalent
+plateau points or an automatically consumed rank. The proof still
+does not consume the all-unsupported or multiple-cap arm and does
+not assert UE. No substantive unresolved objection was found.
