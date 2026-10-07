@@ -6004,3 +6004,45 @@ auxiliary response game has a fixed positive Nash gap. The two conclusions
 are compatible. The unresolved part is selecting an equally effective
 common direction at the genuine Fin4 minimum, not repairing the auxiliary
 game or weakening its missing selection premise.
+
+### A finite-amplitude tail test and its unresolved scale
+
+There is a separate exact test which does not select any response tuple.
+Suppose the own singleton rewards s_i are nonnegative, p is supported on
+{0,…,K,Never}, and α_i=p_i(Never)>0 for every player. Put
+ρ=∏_i α_i, β_i=∏_{j≠i}α_j, and
+W_i=U_i(Never,p₋ᵢ). After an empty separating date, replace each player's
+Never draw by an independent copy of an arbitrary full tail law q_i.
+This is an actual private-law substitution, denoted p⋆q. Direct conditioning
+gives
+
+    U_i(p⋆q)=U_i(p)+ρ U_i(q),
+    b_i(p⋆q)=max{b_i(p), W_i+β_i b_i(q)}.       (180)
+
+Every old finite response remains available before the tail. A response
+after that cut has its old passive contribution W_i plus β_i times a full
+response payoff against q₋ᵢ; this includes Never and arbitrarily late replies.
+The old cap is attained at a finite date because the response immediately
+after K earns W_i+β_i s_i≥W_i. This explains both the separating date and
+the nonnegative-singleton assumption in (180); a negative singleton does
+not justify retaining an old Never cap after arbitrary tail replacement.
+
+Define c_i=(b_i(p)−W_i)/β_i≥s_i. Equation (180) gives the exact identity
+
+    [D(p⋆q)−D(p)]/ρ
+       =Σ_i α_i⁻¹ [b_i(q)−c_i]⁺−Σ_i U_i(q).  (181)
+
+Thus an actual η-near-GLOBAL-minimizer satisfies, for EVERY independent
+tail q,
+
+    Σ_i U_i(q)≤Σ_i α_i⁻¹[b_i(q)−c_i]⁺+η/ρ.   (182)
+
+This uses the global infimum at the complete substituted law, not a
+prefix-orbit minimum. It is finite-amplitude and has no Taylor remainder.
+It is not a new table criterion: neither a tail violating (182), nor a
+positive lower bound for ρ along the actual near-minimum sequence, has
+been produced. In particular η→0 does not alone make η/ρ→0. The common
+support furnished by a regularized finite-law minimum likewise does not
+give that quantitative lower bound. This tail test is retained as an exact
+checkpoint; it is not being promoted to an unproved tail selector or a
+replacement for the missing consumer of (178).
