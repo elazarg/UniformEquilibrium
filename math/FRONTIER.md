@@ -471,8 +471,8 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the larger-eigenvalue cyclic singleton tests specified below | UE for arbitrary signed own singletons and arbitrary nonsingleton rewards. Four positive clocks, all phase floors and one fixed target are produced from raw rewards; all four phases are refined. This is reviewed mathematics awaiting formalization. |
 | Fin4: some partition into pairs satisfies four weak mate-joining comparisons and twelve opposite-pair own-singleton caps | UE for arbitrary signed rewards, without singleton-matrix graph or inverse-sign restrictions. In the strict R0/nonzero-degree branch the proof produces an exact period-two terminal Nash profile, including inactive players; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
 | Fin4: a triple has six strict pair joins, at least two good triple rows, and the passive-cap alternatives and seven collision-box tests specified below | UE for arbitrary signed rewards. The remaining triple row may have a negative joining gap; positive anchor triple and grand premiums are allowed. All odds, corrected values and a fixed uniform target are produced. This is reviewed mathematics awaiting formalization. |
-| Fin4: the weak crossed-matching singleton signs, participant comparisons, and twelve outsider caps specified below | UE for arbitrary signed own singletons and arbitrary passive pair rewards. The strict standard-Q branch produces four proper rates and an exact two-phase terminal Nash profile; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
-| Fin4: the below-singleton joint-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile. A separate full sixty-coordinate reward neighborhood is also covered. The phase values may all lie below own singletons. This is reviewed mathematics awaiting formalization. |
+| Fin4: the weak crossed-matching singleton signs, participant comparisons, and twelve outsider caps specified below | UE for arbitrary signed own singletons and arbitrary passive pair rewards. The strict standard-Q branch produces four proper rates and an exact two-phase terminal Nash profile; weak boundaries use reward closure. Both raw-table producers have production Lean declarations. The packet's additional fixtures and separation claims remain separate. |
+| Fin4: the below-singleton joint-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile. A separate full sixty-coordinate reward neighborhood is also covered. The phase values may all lie below own singletons. Both the family and the neighborhood have production Lean declarations; packet separation claims remain separate. |
 | Fin4: the opposite-sign matching-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile, with one pair's passive values below own singletons and the other pair's above. Eight averaged-pair/triple caps suffice; individual cross-pair caps are unnecessary. This is reviewed mathematics awaiting formalization. |
 | Fin4: the signed inverse-column, pair-coefficient and twelve outsider-cap tests specified below | UE from a directly produced proper two-phase terminal Nash profile. The inverse may have negative columns, scheduled singleton comparisons may be favorable, and own rewards are signed. No utility ordering is reversed. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
@@ -1234,9 +1234,20 @@ the compared matrix, response-quotient, premium, child-weight, and periodic
 raw criteria. The packet also gives a separately scoped positive-inverse
 criterion with nonnegative participant increments and nonpositive passive
 increments. All rates and strategic witnesses are produced, not supplied.
-These are ordinary mathematical results awaiting formalization; they do not
-cover arbitrary singleton sign graphs or violations of the participant
-comparison or outsider caps. The semantic consumer is
+Neither criterion covers arbitrary singleton sign graphs or violations of
+the participant comparison or outsider caps. The raw crossed-matching criterion is
+represented by `GameTheory.PairedCycle.CrossedMatching.exists_uniformEquilibriumPayoff`
+and `GameTheory.PairedCycle.CrossedMatching.exists_uniformEquilibriumPayoff_of_weak`
+(`UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`). Its
+positive-odds source is
+`Math.CrossedMatching.exists_positive_odds_of_matching_standardQ`
+(`MathUE/LinearProgramming/CrossedMatchingPositiveOdds.lean`); it produces
+the original signed passive equations, not just a supplied eigenpoint.
+`Math.CrossedMatching.exists_positive_odds_of_positive_inverse`
+(`MathUE/LinearProgramming/PositiveInverseTwoPairOdds.lean`) supplies the
+alternate's algebraic odds; its actual-game adapter remains separate.
+The additional fixture and source-separation claims in the packet remain
+ordinary mathematics. The semantic consumer is
 `isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
 (`UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`).
 
@@ -1264,10 +1275,19 @@ The [complete below-singleton producer](exports/BELOW_SINGLETON_JOINT_PHASE_UNIF
 also gives a full sixty-coordinate UE neighborhood of an explicit rational
 table outside the compared raw criteria, including the arbitrary-passive
 matching criterion. Its nonsingular four-odds Jacobian and strict passive
-gaps produce the nearby strategies by contraction; nearby rewards need not
+gaps produce the nearby strategies by the implicit-function theorem; nearby rewards need not
 satisfy the scalar family's equalities. This neighborhood is proved at that
-table, not at every member of the family. These are ordinary mathematical
-results awaiting formalization, using the same tracked periodic consumer.
+table, not at every member of the family. The raw-family producer is
+`GameTheory.PairedCycle.BelowSingleton.exists_exact_terminal_and_fixedProfile_of_rawFamily`
+(`UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseSource.lean`).
+The literal fixture and full-coordinate neighborhood are represented by
+`GameTheory.BelowSingletonJointPhaseFixture.exact_terminal_and_fixedProfile`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseFixture.lean`)
+and `GameTheory.BelowSingletonJointPhaseFixture.exists_reward_supnorm_radius`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseLocalPersistence.lean`).
+Their targets, exact terminal Nash properties and same-profile horizon
+bounds are actual-game conclusions. The packet's separation claims remain
+ordinary mathematics, not consequences of those declarations.
 
 The **opposite-sign matching-phase criterion** uses f,a,o as above and
 A={0,2}, B={1,3}. Choose signed sᵢ, bᵢ>0 and common parameters

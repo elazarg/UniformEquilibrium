@@ -17,11 +17,14 @@ new root-production step here.
 
 Current independent question: select approximate complete response laws
 for a raw class with constant participant rewards on all joint exits.
-The final section gives an exact four-player table in this class defeating
+The constant-participant section gives an exact four-player table defeating
 all fifteen concrete persistent-base screens and all fourteen universal
 child-debt lifts. This is an internal test of a whole-class shortcut,
 NOT a new UE theorem or claimed uncovered table. In particular there is
-no all-proper stationary root exclusion.
+no all-proper stationary root exclusion for that four-player table. The
+later literature check distinguishes joint-only constants from constants
+including singleton exits. A separate three-player exact test rules out
+a universal stationary shortcut, without refuting time-dependent selection.
 
 ## Question and status
 
@@ -1184,3 +1187,139 @@ or a statement about formal verification.
 
 The research question remains the complete-cap selection/descent question
 above. No new conditional architecture or export is proposed from this skim.
+
+## Constant joint rewards: source scope and the complete cap
+
+The current class has r_i(S)=P_i whenever i∈S and |S|≥2, but allows
+r_i({i})=s_i<P_i. It must not be confused with a constant participant
+reward INCLUDING singleton exits.
+
+### Narrow primary-literature and production check
+
+[Solan–Vieille, Quitting Games, Theorem1.2](https://www.math.tau.ac.il/~eilons/quitting19.pdf)
+uses simultaneous independent quitting and terminal Never0, as here. Its
+normalized assumptions are s_i=1 and r_i(S)≤1 for every participant.
+[Solan, book, Section12.3, Theorem12.11 and Comment12.12](https://www.math.tau.ac.il/~eilons/book.pdf)
+gives the same no-positive-participant-premium condition and discusses
+nonnegative own levels. Thus P_i=s_i≥0 is covered, while P_i>s_i has the
+opposite premium sign. “Constant payoff processes” in these sources means
+time-independent tables, not coalition-independent participant payoffs.
+This bounded lookup located no general theorem for the joint-only constant
+positive-premium class; it is not an exhaustive absence claim.
+
+The precise inspected production predicates are `QuittingCappedJointExit`
+and `QuittingWeakSoloExitPreference` in
+`UniformEquilibrium/Quitting/Classification/SoloExitPreference.lean`.
+The faithful statement is `theorem1_2` in
+`Literature/SolanAndVieille2001.lean`. The broader actual producer
+`exists_uniformEquilibriumPayoff_of_productLowPremium` is in
+`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`;
+`hasProductLowQuittingPremium_of_noLargerOwnPremium` in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumMonotonicity.lean`
+moves participant premiums DOWN, not up. At an interior product root in
+the strict P_i>s_i class, every Quit premium is
+(P_i−s_i)(1−∏[j≠i](1−q_j))>0, so this raw product-low test fails.
+
+The inspected declaration
+`exists_uniformEquilibriumPayoff_of_twoPlayerPremiumCore_strictLeave` in
+`UniformEquilibrium/Quitting/Classification/Existence/TwoPlayerPremiumCoreUniformPayoff.lean`
+requires every player outside a designated pair to receive exactly its
+singleton reward in every coalition it joins. It does not cover a full
+four-player positive-premium core. Finally, `IsEscapeGame` in
+`Literature/Simon2007.lean` requires a separate `EscapeWitness`, including
+closure under the full relation and boundary escape. Reward constancy
+does not supply those hypotheses; no such composition was obtained.
+
+### An exact stationary shortcut failure inside the class
+
+Consider three players with singleton vectors
+
+    r(0)=(1,0,3), r(1)=(3,1,0), r(2)=(0,3,1).
+
+Every joint quitter receives2. A nonquitter facing the other pair receives4,
+and r(012)=(2,2,2). Thus s_i=1 and P_i=2 for every player. This is a
+simultaneous quitting table, not a turn-based approximation.
+
+It has NO exact stationary terminal Nash profile. Write f(i)=i+1 modulo3
+for the favorite singleton, and h(i)=i−1 for the harmful singleton. Against
+stationary opponents with x=q_f and y=q_h, let a=x+y−xy. For a>0, quitting
+now pays Q=1+a, while Never pays C=(3x+xy)/a. Hence the sign of C−Q is
+the sign of
+
+    H(x,y)=3x+xy−a−a².
+
+On the square, ∂H/∂x=3+y−(1+2a)(1−y)≥4y≥0. For y>0,
+
+    H(y,y)=y[(1−y)²+y²(3−y)]>0,
+
+and H(x,0)=x(2−x)>0 for x>0. Therefore x≥y and a>0 implies C>Q.
+An active stationary quitter must instead have C≤Q: its prescribed value
+is a strictly positive mixture of Q and C, and it may replace itself by
+Never. Consequently, with all three hazards positive each active row
+requires q_f<q_h, an impossible cyclic chain.
+
+With exactly two positive hazards, one active player's favorite is the
+other active player, so that row has H(x,0)>0 and also cannot be active.
+With just i active, player f(i) receives0 by continuing but has a strictly
+positive immediate Quit payoff 1+q_i. With no active player, any player
+can quit alone for1. These cases exhaust all cube boundaries, including
+sure quitters. This is only an exact stationary exclusion. The known
+three-player UE result is entirely compatible with it; no unrestricted
+positive gap or new existence coverage is claimed.
+
+### Whole response-function identity and a finite tied-cap test
+
+Fix any independent opponent stopping laws, including Never. Let S_i(t)
+be the probability all opponents stop at or after t, with Never after every
+finite date. Let A_i(t) be the expected passive reward from opponent first
+coalitions strictly before t. Writing d_i=P_i−s_i, the payoff from stopping
+at exactly t is
+
+    f_i(t)=A_i(t)+P_i S_i(t)−d_i S_i(t+1).
+
+Indeed, on survival to t, simultaneous opponent quitting pays P_i and
+strict opponent survival past t pays s_i. Therefore, if m_i(t,T) denotes
+the probability that the opponents' first exit is T at t,
+
+    f_i(t+1)−f_i(t)
+      =∑[∅≠T⊆I\{i}] m_i(t,T)(r_i(T)−P_i)
+         +d_i(S_i(t+1)−S_i(t+2)).
+
+The true behavioral cap is max(sup_t f_i(t), A_i(∞)), where A_i(∞) is
+the Never payoff. This follows from the same pure-time extremality as
+`sSup_range_quittingTerminalPayoff_update_eq_pureTime` in
+`UniformEquilibrium/Quitting/Cycles/BehaviorPureTimeExtremality.lean`;
+the value definition and Bellman identity are in
+`UniformEquilibrium/Quitting/Cycles/InfinitePureTimeExtremality.lean`.
+The displayed specialization is ordinary mathematics, not Lean-checked.
+
+Even with s_i=1,P_i=2, there need not be a distinguished finite cap time.
+Take two opponents, good and bad, paying player i passive4 and0 respectively;
+the fourth player, if present, always continues. For n periods the good
+opponent alone has hazard3/5 at the first date, and the bad opponent alone
+has hazard1/2 at the second date; both use Never after period n. Their
+private stopping laws are independent. Survival of a complete period is1/5.
+The passive contribution before period k, indexed from0, is
+3(1−5^(−k)). Stopping at that period's bad date gives exactly3:
+
+    3(1−5^(−k))+5^(−k)[(3/5)4+(2/5)(3/2)]=3.
+
+Stopping at its good date gives 3−(7/5)5^(−k)<3. Never gives
+3(1−5^(−n)), and stopping after the final period gives
+3−2·5^(−n)<3. Thus all n bad dates are complete-cap maximizers, all
+above P_i, while Never is strictly worse. No growing calendar creates
+an extra unlisted profitable date. This is a fixed-opponent stress test,
+not a four-player equilibrium or a genuine global-minimum source.
+
+The class therefore does not make “cap above P_i” mean “Never is optimal,”
+and coefficient constancy does not justify retaining only one cap time.
+The attempted reduction to a single latest-response direction stops here.
+The remaining question is to use the entire response-function identity at
+an actual positive global debt minimum to select SIMULTANEOUS law changes
+with all four caps controlled. The genuine source is not an arbitrary
+fixed-opponent example: `finFour_noUniformPayoff_exists_lawTightGlobalMinimumMoatTwoChamber`
+in `UniformEquilibrium/Diagnostics/Quitting/FinFourLawTightCapNashStrictMinimum.lean`
+retains the complete semantic carrier, global debt minimum and singleton
+cap margins, but explicitly does not realize that minimum by one profile.
+No descent, realization or all-player approximate-law producer has yet
+been established from the identity.
