@@ -1308,3 +1308,38 @@ all-base/global-minimum source data supply a complete passive-cap
 disjunction, or dispatch its failed cap to a different phase strategy?
 The source-facing sign selection is real; another cap refinement on the
 already-covered table would not answer this general dispatch obligation.
+
+### Early actual failed-cap dispatch and a selected-partner obstruction
+
+At the canonical cyclic table, change only r₁(013) to1+c.
+For every c≥2 the literal sure base013, with player2 Continue, is
+exact terminal Nash. The three owner joining gaps are respectively
+0,c−2,2−ε, all nonnegative; outsider2 has joining1−2=−1.
+Absorption at date0 persists against every single replacement because
+two sure opponents remain. This is an actual persistent-large-base
+consumer, not a supplied phase root. Thus sufficiently large failure
+of that simultaneous A1 cap is already dispatched by an existing source.
+The interval0<c<2 is not settled by this screen, nor asserted to violate
+the actual passive endpoint of the produced interior policy.
+
+More importantly, the negative-cofactor selection alone does NOT select
+an admissible single-joint word. For the canonical singleton data,
+C₁=−5,C₂=11,C₃=7. The favorable determinant correction selects
+partner1, but its pivot comparison is u=Γ₀₁=1 and its pivot
+participant premium is ξ=ε<1. Any proper joint01/solo2/solo3
+policy with owner0 active indifference would consequently have
+
+    V_B,0=s₀+y(ε−1)/(1−y)<s₀.
+
+At B, pivot0's forced Quit payoff is EXACTLY s₀, since both its
+singleton and its joining reward on02 equal s₀. Therefore its actual
+passive endpoint fails, for EVERY proper hazard vector in this word.
+No degree or cap estimate can repair that policy. This is an exact
+source-facing failure, not a missing numerical root.
+
+The actual successful word joint03/solo1/solo2 instead uses C₃>0;
+its negative η correction is adverse, but detΓ+ηC₃ remains positive
+for the stated small-negative-premium family. The negative outside weight
+is still real algebraic information. Turning it into a phase producer
+requires extra role release or repeated owner activity, not simply
+choosing its partner and claiming that all caps follow from no UE.
