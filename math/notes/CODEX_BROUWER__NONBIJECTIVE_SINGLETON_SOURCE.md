@@ -1874,3 +1874,131 @@ minimizer. A proposed descent must either be transported to actual finite
 profiles with all resulting tests, or prove a finite-reconstruction theorem
 for the changed marked calendar. This is the next consumer question,
 rather than a claimed closure of the positive-global-debt problem.
+
+### Finite atomic replacements with the mandatory late test retained
+
+Here is a smallest finite-amplitude variational domain for the represented
+minimum. It is ordinary mathematics, and still not a descent theorem.
+
+Take the selected represented profile q on T∪{Never} above, with
+c=max T. Its prescribed mass at c is zero: c is an endpoint of the
+finite quantile interval, never a midpoint of a positive-length finite
+atom. Adjoin ONE new empty finite response c⁺>c, distinct from Never.
+This does not change q's prescribed values or caps, since both c and c⁺
+are after all prescribed finite stopping mass.
+
+For each player choose an arbitrary λ_i∈[0,1] and a finitely supported
+probability law ν_i on T∪{Never}. All choices may be made simultaneously.
+Set
+
+    q_i'= (1−λ_i)q_i+λ_iν_i.                     (RC11)
+
+The claim is that there are independent finite laws p_i^{n,prime} on the
+ORIGINAL natural-number calendar such that their prescribed coalition
+laws, EVERY player's unrestricted behavioral cap and their total entropy
+converge to those of q' on the enlarged tester calendar
+T⁺=T∪{c⁺}, with Never separate. In particular
+
+    D_{T⁺}(q')+τI(q') ≥ m_τ
+                         =D_T(q)+τI(q).          (RC12)
+
+Every pure time in T⁺ and Never is in the limiting cap; no selected
+response is omitted. The extra c⁺ is ESSENTIAL when ν_i assigns mass to
+c. In the original game a player can always quit strictly after the new
+last finite atom. A compact calendar that simply makes c its last action
+would miss exactly that response and could give a false inequality.
+The claim permits ν_i(Never)>0 and arbitrary signed rewards.
+
+**Finite transport proof.** Let Z be the union of the finite supports of
+the four ν_i after removing Never. For a point z∈Z already carrying
+positive prescribed mixture mass, z is the midpoint of a retained tied
+interval and is isolated in T. Use its corresponding original atomic
+date. Its probability vector converges, so adding the four chosen masses
+there preserves simultaneous quitting literally.
+
+For a z with zero prescribed mixture mass, choose a shrinking interval
+around z, disjoint from the neighborhoods for other points of Z and
+eventually disjoint from EACH fixed positive atom not at z. Small atoms
+may accumulate at z; they are not excluded individually at a fixed stage.
+The neighborhood's original prescribed
+mass can be made to tend to zero. This follows from weak convergence of
+the original quantile-location mixture to π_*dx and the fact that the
+limit has no atom at z. Choose the intervals to shrink slowly enough
+that their widths dominate the Hausdorff errors of T_n→T; pass to a
+diagonal subsequence if necessary. Inside each such interval consolidate
+ALL its original response dates to one date, by a common monotone
+coarsening. The union is a consecutive original-calendar block because
+the quantile locations are ordered. Choose that date as the image of z.
+
+At z=c take the block through the original last finite support and the
+first empty date beyond it; later empty dates are not removed. They
+become the single extra response c⁺ in the limiting description.
+At every other zero-mass point the consolidation removes spurious
+multiple empty dates which had the same limiting quantile location.
+For a positive atom no such removal is needed. The consolidations
+change only a vanishing amount of prescribed probability; all other
+date order and nonvanishing simultaneous atoms remain unchanged.
+
+Now on this actual coarsened calendar mix each player's coarsened law
+with the finite law placing its ν_i masses at the chosen common dates,
+using the weight λ_i. Keep its ν_i(Never) mass literally at Never.
+The four randomizations are independent private randomizations. This
+constructs p^{n,prime}, not merely a candidate limiting payoff vector.
+
+Prescribed coalition-law convergence follows by coupling the base laws
+as in the representation proof and the finitely many inserted atoms
+exactly. A positive base atom and an inserted atom intended to coincide
+use the same date. At a formerly zero-mass point, the probability of any
+base draw in its shrinking consolidated block tends to zero. Thus only
+the deliberately inserted masses can create a new nonvanishing tie.
+
+For the caps, classify ANY sequence of pure response dates in the
+modified finite profiles, passing to a subsequence. Away from Z its
+limit is an old available time in T, and the previous moving-tester
+argument applies. At z∈Z there are exactly three possible limits of its
+position relative to the inserted atom: before, coincident, or after.
+Coincident is the pure-z test itself. A before limit can survive the
+consolidation only if T has available times approaching z from below;
+otherwise Hausdorff convergence puts all nearby original tests inside
+the consolidated block. When that approach exists, its limiting payoff
+is bounded by the supremum of the actual pure tests of q' at those
+times. The same argument applies to an after limit at an interior point.
+At c an after response always exists and is exactly the additional c⁺
+test. Never is unchanged and treated separately. This gives the upper
+cap bound for EVERY possible maximizing sequence, including responses
+which cease to attain a maximum in the limiting calendar.
+
+For the lower bound, every fixed time of T∖Z is approximated by original
+dates outside the shrinking blocks, each time of Z has its exact chosen
+date, and c⁺ is realized by a date after the new last occupied one.
+Never is literal. Taking the supremum supplies the opposite cap inequality.
+Thus the transport controls the complete caps in both directions; a new
+atom's before/tie/after tests have not been collapsed to its tie test.
+
+Entropy convergence also survives the insertion. On the unchanged base
+part the four densities are (1−λ_i)r_iⁿ and converge in L¹. Their
+common-marginal entropy integrand is the continuous bounded function
+
+    H(y)=Σ_i y_i log[y_i/(Σ_j y_j/4)],
+    H(0,0,0,0)=0,
+
+on[0,4]⁴. At a retained positive atom the total four masses after
+insertion converge and their entropy contribution is continuous in
+that finite vector. At a zero-mass insertion, the vanishing base mass
+contributes no limiting entropy: 0≤H(y)≤(Σ_i y_i)log4, so its total
+contribution is bounded by that mass times log4. The remaining inserted
+mass vector contributes its exact finite-atom entropy. Never is handled
+by the same finite-vector argument. Hence I(p^{n,prime})→I(q').
+
+Each transported p^{n,prime} is in the original domain defining m_τ.
+Taking the limit of Φ_τ(p^{n,prime})≥m_τ proves(RC12). ∎
+
+This gives the represented minimum a concrete simultaneous finite-law
+variational domain, rather than assuming all compact-calendar changes
+are legal. It does not claim a negative direction. In particular choosing
+one player's current best response can raise the other three COMPLETE
+caps, and mixing all four best responses can create new tied outcomes.
+The remaining research problem is to use(RC12), with its full tester
+completion, to produce a quantitative debt decrease when the original
+unregularized global infimum is positive. No gain/leakage estimate that
+does so has yet been established.

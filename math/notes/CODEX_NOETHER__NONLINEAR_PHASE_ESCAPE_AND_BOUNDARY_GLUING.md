@@ -42,6 +42,10 @@ Its H≤0 branch has an actual child-only consumer. Class increment is
 unproved; its early test is already covered. A negative outside inverse
 weight selects the favorable active-origin determinant correction, but
 does not yet supply the remaining cap/deviation dispatch.
+The latest actual switch test excludes all six proper three-row words
+with two pivot0 joints at an explicit negative-corrected-determinant table.
+That table has an exact existing punishment-root consumer. This falsifies
+the adjacent-role-switch mechanism, not UE; no class increment is claimed.
 
 ## Finite question
 
@@ -1343,3 +1347,180 @@ for the stated small-negative-premium family. The negative outside weight
 is still real algebraic information. Turning it into a phase producer
 requires extra role release or repeated owner activity, not simply
 choosing its partner and claiming that all caps follow from no UE.
+
+## A failed-cap-driven two-joint switch in the corrected-determinant regime
+
+This is an exact falsification of a proposed schedule-switch mechanism,
+not a UE counterexample. The complete table below is ALREADY consumed by
+the concrete punishment-root source. No additional coverage is claimed.
+
+Use original own singleton levels1 and the full table
+
+| S | r(S) |
+|---|---|
+| 0 | (1,0,9/10,0) |
+| 1 | (2,1,4,0) |
+| 2 | (2,0,1,4) |
+| 3 | (0,4,0,1) |
+| 01 | (11/10,1/2,39/10,−1) |
+| 02 | (1,−1,1/2,3) |
+| 03 | (1/2,3,−1/10,1/2) |
+| 12 | (3,1,11/10,3) |
+| 13 | (1,11/10,3,1) |
+| 23 | (1,3,1/2,11/10) |
+| 012 | (11/10,1/2,3/5,2) |
+| 013 | (3/5,3/5,29/10,1/2) |
+| 023 | (1/2,2,1/2,3/5) |
+| 123 | (2,11/10,11/10,11/10) |
+| I | (1,1,1,1) |
+
+Its singleton matrix is the earlier h₂=1/10 regression: R0 of degree1,
+determinant31/10 and only offset−1 root
+(130/31,40/31,67/31,76/31). The harmful joint03 has η=−1/2,
+so its active-origin corrected determinant is−2/5, not positive.
+These are exact finite calculations, not assumed no-UE source data.
+
+### Every proper three-row, two-joint pivot0 switch fails
+
+Consider the class in which pivot0 appears with two distinct children
+in two joint rows, and the remaining child has a solo row. All five
+scheduled hazards are proper; every other hazard is0. Cyclic rotation
+does not change the following classification. There are six ordered
+choices. Values below are original actual values minus own1.
+
+First note the necessary pivot indifference at any joint0j with child
+hazard t:
+
+    V_next,0=t(ξ_j−Γ₀ⱼ)/(1−t),
+
+while the pivot's current forced-Quit value is ξ_j t.
+Here(ξ₁,ξ₂,ξ₃)=(1/10,0,−1/2), while
+(Γ₀₁,Γ₀₂,Γ₀₃)=(1,1,−1).
+
+Both joint01→joint02 and joint02→joint01 fail immediately:
+the earlier favorite joint requires a negative next pivot value,
+while the next favorite joint's active pivot value is nonnegative.
+Joint03→joint02 also fails immediately: the former requires a strictly
+positive next pivot value, but the latter's active value is0.
+
+For joint03→joint01→solo2, active pivot indifference at joint01
+forces V_C,0=−9t/[10(1−t)]<0. But at solo2 the pivot's forced
+Quit value is0 because r₀(02)=r₀(0)=1. Its ACTUAL passive test fails.
+
+For joint01→joint03→solo2, let p,t be the first row's pivot/child1
+hazards and q the next row's pivot hazard. Child3's active value in
+the next row is−q/2. At the first row its actual Continue value is
+
+    V_A,3=−p−t−q(1−p)(1−t)/2,
+
+whereas its forced Quit value is−p/2, because both03 and013 pay it1/2
+and13 pays its own1. Its Quit-minus-Continue gap is
+
+    p/2+t+q(1−p)(1−t)/2>0.
+
+Thus adding the pivot to the failed-cap row merely creates an earlier
+profitable Quit for a DIFFERENT child, for every proper vector.
+
+The remaining word joint02→joint03→solo1 cannot even satisfy all five
+active equations. Write p,x for its first-row pivot/child2 hazards,
+q,y for its second-row pivot/child3 hazards and z for its solo1 hazard.
+The pivot equations give
+
+    V_A,0=0, V_B,0=−y/2, V_C,0=z,
+    x=y/(2+y), z=y/[2(1−y)], 0<y<2/3.               (W1)
+
+Child1 is active only in the solo row, hence V_C,1=V_A,1=0.
+Its B value is3y−q, so its A recursion forces
+
+    q=3y−(p+x)/[(1−p)(1−x)].                       (W2)
+
+Child3's active B value is−q/2. Its A recursion and(W2) give
+
+    V_A,3=−p+3x−q(1−p)(1−x)/2
+         =[y/2+p(5y/2−1)]/(2+y),
+    V_C,3=−z+(1−z)V_A,3.                           (W3)
+
+If y<2/5, then V_A,3<y/[2(2+y)] and(W1) implies V_C,3<0.
+If y≥2/5, discard the negative terms in the first expression of(W3):
+V_A,3<3x, and
+
+    V_C,3<−z+3x(1−z)
+          =y(4−10y)/[2(1−y)(2+y)]≤0.
+
+But active child3 indifference at B requires
+V_C,3=q/[2(1−q)]>0, a contradiction.
+
+This exhausts all six ordered partner choices in this strategy class.
+It does not exclude sure boundaries, additional phases, different
+repeated owners, nonpivot joint rows or approximate rather than exact
+periodic policies. It is not a general finite-calendar impossibility.
+
+### The actual old source already consumes this test table
+
+Every participant reward is at least1/2. Each player's complete
+punishment value equals1/2: immediate Quit guarantees it; sure3 caps
+players0,2, and sure0 caps players1,3 at1/2, with passive reward0.
+These are actual all-behavior opponent strategies, not stationary-Never
+surrogates.
+
+At continuation(1/2,1/2,1/2,1/2) the exact product root
+
+    (q₀,q₁,q₂,q₃)=(1,0,5/29,2/5)
+
+has owner gaps
+
+    (8/29, −23/50, 0, 0).
+
+The quiet-coordinate sign is correct for player1; players2,3 are proper
+and indifferent; player0 is sure and its gap is positive.
+For direct calculation, player2's gap is−2/5+q₃;
+player3's is1/2−(29/10)q₂. At their displayed values player1's
+gap is−23/50 and the pivot's punishment-tail gap is8/29.
+
+The induced base0 source therefore accepts this table. The exact
+inspected general consumer is
+quittingPunishmentSureRootTarget_isUniformEquilibriumPayoff_and_floor in
+UniformEquilibrium/Quitting/Classification/InstantPunishmentSureQuitterPayoff.lean.
+It consumes the actual punishment root with a sure quitter and fixes its
+literal initial target before every error request. This is distinct
+from a strategy-class absence theorem.
+
+Here even the strategy can be supplied directly: use the displayed root
+at date0; after the off-path all-Continue event, prescribe sure3 next
+date and all other players Continue. Every deviation except player0's
+absorbs at date0. Player0's later responses are capped by1/2 because
+sure3 then absorbs. Its date0 Continue payoff is at most76/145,
+strictly below its actual target4/5. All complete behavioral replacements,
+Never and delayed stopping are thereby covered.
+
+The original target is
+
+    (4/5,149/145,1/2,15/29).
+
+Absorption occurs by date1 against every unilateral replacement, so
+original horizon payoffs differ from terminal payoffs by at most2M/N.
+The same profile and this target work at all sufficiently large horizons.
+The test is thus solved by an existing raw source, not a surviving table.
+
+### Source fences and direction change
+
+The narrow existing no-go inspected is
+not_isZeroNash_selfMembershipReward_of_pureContinue in
+UniformEquilibrium/Diagnostics/Quitting/CyclicKofNFeasibilityObstruction.lean:
+a prescribed pure-Continue role with strict opponent absorption can be
+intrinsically infeasible even in an already solved game. It does not
+supply this table's six-word exclusion or exclude arbitrary schedules.
+
+The inspected phase-switch consumer
+quittingTerminalPayoff_update_quittingPhaseSwitchProfile_le in
+UniformEquilibrium/Quitting/Cycles/PhaseSwitchDeviationCap.lean requires
+an ACTUAL truncated-plan cap and an ACTUAL punishment-response cap.
+It does not turn a profitable passive action into such a source.
+
+The attempted adjacent-role switch is now falsified rather than repaired
+with another assumed cap bill. The negative corrected determinant test
+also hits an existing sure-root consumer, so it supplies no new class.
+The next global route should address actual continuation selection beyond
+a fixed short-word inventory; the minimum-debt/ordered-clock representation
+is a candidate, with tied atoms, Never and uniform pure-response control
+kept explicit rather than treated as harmless compactness details.
