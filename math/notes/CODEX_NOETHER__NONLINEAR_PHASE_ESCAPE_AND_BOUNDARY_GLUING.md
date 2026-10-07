@@ -29,11 +29,11 @@ table realizes it while satisfying R0/degree1, punishment normality and
 all concrete-base positive gaps. Those finite screens cannot provide the
 missing common isolation; no conclusion about the global semantic minimum
 or no-UE is inferred from the artificial branch.
-The final section separately proves a full sixty-coordinate open UE
-neighborhood at a low-ε interior table, by an exact nonsingular four-active-
-equation Jacobian and strict passive tests. It is internal and unreviewed;
-the existing export is not revised. This removes fixed-row equalities
-locally, not the general no-good-child obligation.
+The full sixty-coordinate producer is canonical in
+`exports/FULL_DIMENSIONAL_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md`.
+It removes fixed-row equalities locally, not the general no-good-child
+obligation. Its duplicate proof is replaced below by the canonical link;
+the distinct universal escape and no-source caveats remain here.
 This remains internal ordinary mathematics, with no Lean or export seal.
 The genuinely arbitrary all-A escape classification is still open.
 
@@ -1074,185 +1074,25 @@ route, not an additional counterexample-class restriction or UE theorem.
 The next concrete target is an actual producer for the positive-leading
 escape geometry, rather than a claim that the artificial branch is absent.
 
-## A genuine full sixty-coordinate neighborhood at the low-ε interior
+## Canonical full sixty-coordinate producer
 
-### Raw center and exact root, not a supplied policy
+The complete theorem and proof are now in
+`exports/FULL_DIMENSIONAL_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md`.
+For every η>0 its fully displayed rational center has an unconditional
+full sixty-coordinate UE neighborhood. The four ACTUAL active-gap
+Jacobian is nonsingular and all eight passive comparisons are strict.
+The same original-game profile supplies one target at every sufficiently
+large horizon against unrestricted behavioral replacements.
 
-This is a separate ordinary-mathematics strengthening, internal pending
-independent review. The frozen canonical export is not modified.
-Let r* be its complete rational table at ε=100/729. For η>0 change only
+At the explicit source-comparison center η=50/729, punishment remains
+629/729 and the unique punishment-priced root is
+(593/5525,1/10,1/10,1/10). The canonical proof excludes all65
+base/free carriers, all14 universal child quiet-lift families and the
+stated finite phase/core sources, including arbitrary positive-row-scale
+quotients. A further singleton-coordinate perturbation gives a full open
+subball outside the fixed-row criterion too.
 
-    r₁(12)=r₂(23)=r₃(13)=1−η,                       (O1)
-
-retaining every other coordinate literally. Call the resulting complete
-table r^η. The three changed coordinates are passive collision rewards;
-none appears in a prescribed on-path outcome. Thus the already produced
-joint03/solo1/solo2 profile and all its values remain unchanged.
-
-For EVERY fixed η>0, there is a full sixty-coordinate open neighborhood
-of r^η on which every raw table has an exact terminal Nash profile of
-that same architecture, with four proper hazards, one actual target and
-the same profile at every sufficiently large horizon accuracy. The
-hazards and target may vary with the raw table. No favorable root is
-supplied as an input, and no singleton/joint-row equality is imposed on
-the nearby tables. The neighborhood radius is produced by the ordinary
-implicit function theorem; no optimal radius is claimed.
-
-Here is an exact isolation and Jacobian check for the base root. Write
-e=100/729 and use the rational polynomials
-
-    F=−(16+e−12y)p²
-       +[(9e−36)y²+(32−10e)y+13]p−13y(2−3y),
-    G=(6y−3−3ey)p²+(12ey²+2ey−18y²+2)p
-                                      +(18−13e)y²−7y.
-
-On the rectangle 19/100≤p≤21/100, 47/100≤y≤12/25,
-termwise rational interval bounds give
-
-    F_p>14,      F_y>9,      G_p<−1,      G_y>5.     (O2)
-
-For explicit checks, the corresponding enclosing derivative intervals are
-
-    F_p ∈[13441769/911250, 7430767/455625],
-    F_y ∈[18049781/1822500,7406657/607500],
-    G_p ∈[−3464381/1822500,−605173/405000],
-    G_y ∈[18956381/3645000,7230857/1215000].
-
-These follow by expanding each derivative as a polynomial and taking
-the monomial minimum/maximum at the rectangle's positive endpoints,
-with endpoints reversed for negative coefficients. There is no
-floating-point inference. Moreover
-
-    F(19/100,12/25)=−23257/182250<0,
-    F(21/100,47/100)=220067/3037500>0.
-
-Together with(O2) these give one continuous p(y) in the rectangle
-solving F=0. It agrees with the canonical selected crossing since the
-rectangle lies strictly before the z=1 cap. At the left endpoint
-
-    F(41/200,47/100)=−352051/81000000<0,
-    G(41/200,47/100)=−4464901/162000000<0,
-
-so p(47/100)>41/200 and G at that selected p is strictly negative.
-At the right endpoint
-
-    F(199/1000,12/25)=60523229/4556250000>0,
-    G(199/1000,12/25)=231741911/6075000000>0,
-
-so p(12/25)<199/1000 and G there is strictly positive.
-The intermediate value theorem gives a root in the rectangle's interior.
-It is unique there because
-
-    D=F_p G_y−F_y G_p>79,
-    dG(p(y),y)/dy=D/F_p>0.                         (O3)
-
-This determines an exact algebraic root, not a numerical or assumed
-equilibrium point. Its proper z,w are given by the canonical formulas.
-
-### Four actual active equations and nonsingular Jacobian
-
-For arbitrary nearby proper (p,y,z,w), let actual phase values be the
-unique Bellman-policy solution. They are smooth in all hazards and all
-sixty rewards: the full-period survival ρ=(1−p)(1−y)(1−z)(1−w)
-is strictly below1, so each player's three linear policy equations have
-an invertible coefficient matrix. Let K_i be that player's actual
-forced Quit minus Continue at its scheduled active row.
-
-At the canonical reward rows, introduce
-
-    H₁=3(1−p)(1−y)z−p−y,
-    H₂=(1+3y−p)w−3y+p,
-    f=p(1−e)/(1−p)+z−(1−z)[3w−ep(1−w)],
-    k=(1−ey)/(1−y)−2z
-                         −(1−z)[2w+(1−w)(1−ey)].
-
-There is an EXACT identity, not merely an equivalence of zero sets,
-
-    (K₀,K₁,K₂,K₃)
-        =((1−y)k, H₂, −H₁, (1−p)f)/(1−ρ).        (O4)
-
-To derive it, annotate each player's own active-phase value by its
-forced-Quit endpoint, then propagate the other two policy rows once.
-The active Quit-minus-Continue discrepancy of this annotation is,
-respectively, (1−y)k,H₂,−H₁,(1−p)f. Correcting the annotation to
-the actual policy value divides the discrepancy by1−ρ. This follows
-directly from the scalar cycle equation V=A+ρV, and holds for every
-proper hazard vector, not just at the root.
-
-The z derivative of H₁ is u=3(1−p)(1−y)>0 and the w derivative
-of H₂ is d=1+3y−p>0. After eliminating H₁,H₂, the remaining
-f,k equations are F/N,G/N with N=ud. At their root the reduced
-Jacobian determinant is D/N². Block elimination gives
-det ∂(H₁,H₂,f,k)/∂(p,y,z,w)=D/N. Thus(O4) gives
-
-    det ∂K/∂(p,y,z,w)
-       =−(1−p)(1−y)D/[N(1−ρ)⁴]≠0.               (O5)
-
-Changes(O1) do not affect this Jacobian or any policy equation: their
-coordinates enter only the passive Quit tests, not active K or policy
-values. The implicit function theorem therefore produces a smooth
-proper hazard vector solving the four ACTUAL active equations for
-every table in an unconditional full-dimensional reward neighborhood.
-
-### Passive endpoints, behavioral replies and fixed target
-
-All eight passive comparisons in the low-ε proof are strictly satisfied
-at r^η. The potentially binding C1 comparison gains margin ηw>0.
-The changed A2 and B3 collision rewards can only improve their already
-strict low-ε margins. Every other margin in the canonical proof is
-strict since p,y,z,w are proper, e<1 and H=(3−e)y−p>0.
-Consequently all passive comparisons persist on a sufficiently small
-full-dimensional neighborhood. Together with K=0 and the exact policy
-solution, they give all24 action tests for the original nearby table.
-
-Opponent-only contraction persists because all four hazards stay proper.
-The finite-cycle telescoping proof includes every complete behavioral
-reply, Never and late stopping; the actual target is the realized
-initial phase vector. For each nearby finite table, with its own reward
-bound M and four survival factors ρ_i, the same direct estimates
-C/N and2C/N hold with C=3M max_i1/(1−ρ_i). The target and profile
-are fixed before accuracy and horizon are chosen. This proves the raw
-open-neighborhood theorem without correlated play, original-game row
-equalities or an accuracy-dependent root.
-
-### Significant scope versus the fixed-row locus
-
-At r* every full or partial persistent-base selection set has a
-strictly positive attained minimum. There are only finitely many
-base/free carrier choices. Induced finite Nash sets have a closed graph
-in the compact product cube, and their component excesses are continuous
-in reward data; actual punishment values are also continuous, since
-changing all rewards by at most ν changes every complete-response payoff
-and hence the minmax value by at most ν. A compact-subsequence argument
-therefore keeps every such minimum strictly positive in a neighborhood
-of r*. For all sufficiently small η>0 this excludes the complete
-persistent-base producer, not just a chosen law, near r^η.
-
-The fourteen quiet-lift counter-witnesses persist there too. All the pure
-child witnesses have strict joining tests and positive owner rewards.
-For child123, the three active solo-clock numerators have Jacobian
-[[0,3,−1],[−1,0,3],[3,−1,0]], determinant26. Changes(O1) make its
-three previously binding low-value passive tests strict; the high-value
-tests already have strict margins. Its exact contracting child Nash
-therefore persists by the same implicit-function argument, while the
-outside pivot's positive gain persists by continuity. All child debts
-and joint Never probabilities remain zero. Hence every universal
-withdrawal/capped-clock carrier remains intrinsically excluded nearby.
-
-All other canonical finite raw-source failures have strict signs or
-nonzero finite identity defects and are likewise stable, with R0/degree1
-preserved under the small singleton perturbations. In particular, after
-choosing such a small η, perturb only r₀(1) from2 to2+ζ, with small
-ζ≠0. The open producer still applies, but no positive playerwise affine
-transport or relabeling satisfies the frozen fixed-row family: its unique
-row with two positive singleton comparisons must be row0, and that
-family requires those two positive comparisons equal. Here they are
-1+ζ and1. This gives genuine full-coordinate scope beyond that locus,
-not a different constant inside it. The canonical whole-source
-comparisons remain applicable in a sufficiently small neighborhood.
-
-No unspecified neighborhood of another implicit-function producer is
-blanket-excluded. The assertion concerns the explicit finite raw criteria
-and their actual carrier selection sets compared in the canonical theorem.
-This stronger neighborhood result has not been independently reviewed
-and is not added to the immutable export.
+This is local in reward space. It is not an arbitrary no-good-child
+consumer and does not remove the distinct simultaneous-infinity branch
+proved above. The earlier scalar-escape and semantic-boundary caveats
+remain independent research obligations.
