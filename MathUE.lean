@@ -200,6 +200,7 @@ import MathUE.CoordinatewisePuiseuxCurve
 import MathUE.Coupling
 import MathUE.CubicAnchorRoot
 import MathUE.RationalizedQuadraticBracketRoot
+import MathUE.CyclicChildNegativePremiumRates
 import MathUE.CyclicChildJointPhaseAlgebra
 import MathUE.CyclicChildComplementarity
 import MathUE.CyclicChildExteriorDegree

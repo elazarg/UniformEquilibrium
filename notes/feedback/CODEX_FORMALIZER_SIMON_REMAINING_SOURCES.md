@@ -21,6 +21,14 @@ as an explicit hypothesis.
 (`Literature/Simon2007.lean`) proves the harm clause without a sign restriction
 on the normal quitter's singleton payoff. It reuses the production
 stationary-prefix-and-punishment construction, not an open paper theorem.
+The independent 2012 consumer
+`lemma2_1_normalSoloQuitterHarmsNormal` (`Literature/Simon2012.lean`) needs
+only failure of the generated branch and delegates directly to that helper.
+Its silent named module check and separate transitive axiom check pass with
+only `propext`, `Classical.choice`, and `Quot.sound`. The normal-harm conjunct
+of `lemma2_1_part1` uses this independent consumer; its positive-normal
+conjunct still uses `lemma5_corrected_2012` and its axiom check retains
+`sorryAx`. Neither `lemma2_1_part1` nor the full `lemma2_1` is thereby sealed.
 
 `exists_compactMotionParameter_of_not_branches` in the same file proves
 uniform motion and survival bounds on any fixed compact continuation set,
@@ -38,6 +46,9 @@ equilibrium is not by definition a stationary-prefix-and-punishment witness.
 No general conversion between those two notions is proved by this work.
 This records a remaining source obligation, not a counterexample to the
 corrected lemma.
+`quittingStationarilyGeneratedApproximateEquilibria_of_positiveAbsorptionStationary`
+(`UniformEquilibrium/Quitting/Classification/Existence/PositiveAbsorptionStationarySplice.lean`)
+does not cover actual all-Continue, whose root has zero absorption.
 
 The primary source makes this a specific proof-source question, rather than
 merely a missing Lean interface. Simon (2012), Section 2.3, printed page 184,
@@ -866,7 +877,7 @@ nearest checked dependencies and unresolved inputs:
 | `theorem1` | `EpsilonViable.mono` and the paper's `CumulativeAdvantage`/`AdvantageCrossingEvent` are available. | The behavioral-profile patching and payoff estimate from self-perfection, viability, and the crossing-event bound to the stated equilibrium constant. |
 | `lemma2` | `MarkovSemantics.finiteExpectedVariation_eq_production` and `MarkovSemantics.expectedMarkovVariation_le_of_finiteProductionBound` give the cylinder-law adapter and exact finite-horizon reduction. | The global state-count finite-horizon variation inequality; the proposed single-state renewal bound is false, as noted above. |
 | `lemma5` | `everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated` and `exists_correctedUniformMotionAt_of_not_branches` apply under the *corrected* stronger branch exclusion and restricted carrier. | The printed 2007 branch hypotheses and combined global motion/survival conclusion are not supplied by those results. Global normalized motion is available under the corrected branch exclusions, but does not supply global survival. |
-| `lemma5_corrected_2012` | `everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated` and `exists_correctedUniformMotionAt_of_not_branches` prove its harm and motion/survival clauses. `Literature.Simon2012.lemma2_1_part1`, `lemma2_1_part2`, and `lemma2_1` reuse this declaration. | The positive-normal-player clause under failure of the instant and stationarily generated branches, exactly the source obligation in “Corrected Lemma 5” above. The 2012 theorems cannot be imported back to discharge it. |
+| `lemma5_corrected_2012` | `everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated` and `exists_correctedUniformMotionAt_of_not_branches` prove its harm and motion/survival clauses. `Literature.Simon2012.lemma2_1_normalSoloQuitterHarmsNormal` and `lemma2_1_part2` use those independent helpers. Only the positive-normal conjunct of `lemma2_1_part1` still invokes this open declaration. | The positive-normal-player clause under failure of the instant and stationarily generated branches, exactly the source obligation in “Corrected Lemma 5” above. The 2012 theorems cannot be imported back to discharge it. |
 | `theorem3` | `CyclicOrbitCondition.hasQuitApproximateEquilibria`, `FiniteNearOrbitCondition.toCyclicOrbitCondition`, and `CyclicOrbitCondition.toInfiniteOrbitCondition_of_uniformRho` assemble the other edges. | Its local `HasQuitApproximateEquilibria → CyclicOrbitCondition` hole, as well as the open printed `lemma5` it invokes. The checked `hasQuitApproximateEquilibria_imp_cyclicOrbitCondition_of_firstCrossingExtraction` requires a separate extraction premise and corrected motion. |
 | `theorem3_corrected_2012` | `CyclicOrbitCondition.toInfiniteOrbitCondition_of_corrected_motion` and the same orbit compilers cover the non-forward edges; `Literature.Simon2012.theorem2_1` only transports this very declaration to Euclidean norm. | `lemma5_corrected_2012` plus `HasCorrectedFirstCrossingPathExtraction` (or an equivalent equilibrium-to-cyclic proof). The conditional checked first-crossing compiler does not construct its extraction premise. |
 | `KohlbergMertensStatement` | `MatrixEquilibriumGraph` and `MatrixNorm` express the matrix-game target. | The external Kohlberg–Mertens homotopy theorem in the stated straight/proper form; no checked homotopy construction is present. |

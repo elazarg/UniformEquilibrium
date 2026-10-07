@@ -461,8 +461,21 @@ theorem abs_apply_le_euclideanNorm {N : Type} [Fintype N]
   simpa only [Real.norm_eq_abs] using
     PiLp.norm_apply_le (WithLp.toLp 2 value) who
 
+/-- The normal-harm clause of Lemma 2.1(1) follows directly from failure of
+the stationarily generated branch; no instant-branch exclusion is needed.
+This clause does not depend on the unresolved positive-normal clause of the
+corrected 2007 Lemma 5. -/
+theorem lemma2_1_normalSoloQuitterHarmsNormal (G : QuittingGame)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G) :
+    ∀ j, IsNormalPlayer G j → ∃ k, k ≠ j ∧ IsNormalPlayer G k ∧
+      G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k := by
+  exact Literature.Simon2007.everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated
+    G hgenerated
+
 /--
 Lemma 2.1(1), the sign-pattern clause of the corrected 2007 Lemma 5.
+The positive-normal conjunct still depends on the unresolved corrected
+Lemma 5; the normal-harm conjunct uses the independent theorem above.
 -/
 theorem lemma2_1_part1 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
@@ -474,7 +487,7 @@ theorem lemma2_1_part1 (G : QuittingGame)
     fun hold => hinstant ((instantApproximateEquilibria_iff_simon2007 G).mpr hold)
   have hcorrected :=
     Literature.Simon2007.lemma5_corrected_2012 G hgenerated hinstant2007
-  exact ⟨hcorrected.1, hcorrected.2.1⟩
+  exact ⟨hcorrected.1, lemma2_1_normalSoloQuitterHarmsNormal G hgenerated⟩
 
 /--
 Lemma 2.1(2), with the two corrections printed on page 185.  Simon 2007's
