@@ -197,6 +197,11 @@ by CODEX_NOETHER; see
 This is internal supporting mathematics, not Lean-checked, an ℕ realization,
 a produced descent, or a uniform-equilibrium conclusion. The remaining task
 is to consume that actual minimum with its full tester completion.
+Section 36 records a first ordered variation at that source: erasing a
+sufficiently small prefix through a non-atomic available cut preserves
+the actual sum-debt minimum. Its proof and conditional-law transport are
+ordinary mathematics, not independently reviewed. It supplies a minimum
+suffix, not a strict decrease or an unrestricted renewal argument.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -6329,3 +6334,118 @@ mass, disjoint player supports, diffuse ordered time, or new cap switches.
 None of these branches has been consumed here. The theorem is a produced
 minimum source with a proved finite variation domain, not a new UE class,
 an invariant barrier, or an export request.
+
+## 36. Erasing a small cap-inactive prefix at the actual minimum
+
+This is a complete ordinary-mathematical deduction from Section 35 and the
+existing sum-minimum singleton moat. It is not a new raw-table UE class.
+It consumes global minimality to produce another chronological minimum;
+it does not assume that arbitrary conditional tails are minima.
+
+Let q,T,c be the represented source of Section 35 and let δ=D_*>0.
+Its prescribed-payoff/cap pair is in the original terminal-semantic carrier,
+because one actual sequence converges to both coordinates. It minimizes
+sum debt there by continuity. The inspected declaration
+`minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+therefore gives, for every i,
+
+    b_i(q)−s_i≥δ,       s_i=r_i({i}).             (189)
+
+This is a SUM-debt statement. No all-player debt tie from a maximum-debt
+minimum is imported. In particular δ≤2M.
+
+Choose an available finite cut a∈T with q_i({a})=0 for all i. Put
+x_i=q_i({t∈T:t<a}) and suppose
+
+    Σ_i x_i≤δ/(4M).                              (190)
+
+Each x_i<1. Let q_i^+ be q_i conditioned on t≥a, including Never.
+The claim is
+
+    D_{T∩[a,c]}(q^+)=δ.                          (191)
+
+The cap includes a and Never; since a is non-atomic, its forced-Quit payoff
+is s_i. Thus removing the now-empty earlier dates does not remove a cap test.
+This specific point is why (191) is not asserted for a cut at a positive atom
+with no preceding available empty response.
+
+For x_i>0 let q_i^- be the conditional prefix law. Hold these two laws fixed
+and let z_i be their mixture mass, forming
+
+    q_i^z=z_i q_i^-+(1−z_i)q_i^+.
+
+Coordinates with x_i=0 stay fixed at z_i=0. These are actual admissible
+represented-law variations, although they are not merely an application
+of the finite-atomic formula (184). Here is their separate transport.
+Use the finite realizing sequence from Section 35 and split each original
+law at the set of original locations strictly below a. Because q has no
+atom at a, the corresponding prefix probabilities x_i^k converge to x_i.
+For x_i>0, reweight each finite prefix and suffix by z_i/x_i^k and
+(1−z_i)/(1−x_i^k), respectively. These are exactly normalized probability
+laws. Zero-prefix coordinates are left unchanged. The factors converge
+to z_i/x_i and (1−z_i)/(1−x_i) and are bounded for fixed z, while the
+prefix indicator converges almost everywhere
+in the common quantile chart. The product weak-* and moving-kernel proof
+(185)–(188) therefore applies to these reweighted laws. No dates are inserted
+or deleted: all old tests remain available, even where their new prescribed
+mass is zero. Complete caps and prescribed payoffs converge. Hence
+
+    D_T(q^z)≥δ                                   (192)
+
+for every such z∈[0,1]^J, where J={i:x_i>0}. In particular this is not an
+orbit-minimum hypothesis or a conditional-law selection assumed without proof.
+
+For a response strictly before a, no opponent stops before or together with
+the responder except on an event of probability at most Σ_{j≠i}z_j. Therefore
+its payoff is at most
+
+    s_i+2MΣ_{j≠i}z_j.                            (193)
+
+The cap over responses at or after a, including Never, has the exact form
+
+    L_i(z)=A_i(z₋ᵢ)+[∏_{j≠i}(1−z_j)] b_i(q^+).
+
+Here A_i is the expected passive payoff from the first opponent prefix
+coalition; it is multiaffine in z₋ᵢ. The prescribed U_i(q^z) is multiaffine
+in all coordinates. Consequently
+
+    P(z)=Σ_i[L_i(z)−U_i(q^z)]
+
+is a multiaffine polynomial. At z=x, (189), (190) and (193) give a strict
+gap of at least δ/2 between every early response and its full cap. The same
+gap remains positive in a neighborhood of x. Thus D_T(q^z)=P(z) there.
+By (192), x is a local minimum of P, interior in all coordinates J.
+
+A multiaffine polynomial with an interior local minimum is constant.
+For completeness take a small axis-aligned cube about that minimum.
+The center value is the average of its corner values. Every corner is
+at least the local minimum, so all corner values equal it. Multiaffine
+interpolation makes the polynomial constant on that cube, and polynomial
+identity then makes it constant everywhere. Thus P(z)≡δ on the face J.
+
+Now follow z(t)=(1−t)x, 0≤t≤1. Let C be the set of t for which
+D_T(q^{z(t)})=δ. It is nonempty and closed, since every cap along this
+finite-dimensional mixture family is uniformly Lipschitz in z. At a point
+of C the represented pair again belongs to the original carrier and is
+a global sum-debt minimum. Therefore (189) applies to that point too.
+Meanwhile (193) and Σz(t)≤Σx bound every early response by s_i+δ/2.
+No early response can attain its cap. This is a uniform strict gap, so
+nearby t still has D=P=δ. Hence C is also relatively open. Connectedness
+gives C=[0,1]. At t=1 there is no prefix mass and all old prefix tests
+equal the own singleton payoff, already attained by the empty test a.
+This proves (191).
+
+The preservation uses all cap tests, not a chosen cap witness. It also
+uses global minimality twice: first to make the multiaffine branch locally
+minimal, then to prevent a new early cap from binding during continuation
+to z=0. A mere inequality for the derivative at one point would not justify
+the continuation step.
+
+The result does not erase a large atomic prefix, does not choose an available
+non-atomic cut when none exists, and does not establish arbitrary repeated
+suffix renewal through a zero-reach limit. Those are genuine remaining
+boundaries. Its role in the current attempt is to remove an initial
+cap-inactive segment at the actual positive minimum while keeping the
+entire remaining chronological law, rather than replacing it by a selected
+prefix-orbit minimum or an unrelated finite auxiliary equilibrium.

@@ -30,6 +30,10 @@ section consumes one actual branch: positive joint-Never mass, a
 positive-social singleton and strict late-cap buffers yield a literal
 finite-law decrease with exactly measured cap leakage. At a genuine
 minimum this is a necessary late-binding condition, not a UE producer.
+The following exact binding-late trap shows that even ALL simultaneous
+Never-tail comparisons, together with canonical singleton Q/R₀/degree-one
+data, cannot replace genuine global minimality. The live task is a coupled
+variation that also changes old finite stopping mass.
 This is internal research, not an existence theorem or export candidate.
 
 The earlier question concerned a raw class with constant participant
@@ -2185,3 +2189,238 @@ standard-Q positive simplex does not by itself overcome those binding
 cap charges. A useful next step must produce a simultaneous ordered tail
 with gain exceeding that COMPLETE leakage, or a different legal variation
 when ρ=0; repeating the strict-buffer argument does not settle either.
+
+### Bounded source comparison for the late-release account
+
+The inspected all-player escape declarations concern a different operation.
+`QuittingTerminalSemanticEscapeAccount` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAllPlayerEscapeAccount.lean`
+records finite-coalition mass lost when converging marginal laws are
+reconstructed. Its exact identity
+`debtSum_sub_target_eq_escapeSocialReward_sub_capDropSum` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAllPlayerEscapeDebtJump.lean`
+balances that reconstruction's debt jump against escaped social reward
+and cap drops. The consequence
+`capDropSum_nonneg_and_le_escapeSocialReward_of_minimum` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAllPlayerEscapeMinimumConsequences.lean`
+applies at a supplied carrier minimum. The sign-chamber theorem
+`reconstructedDebtJump_nonpos_of_singleton_nonneg_socialReward_nonpos` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAllPlayerEscapeSocialSignAttainment.lean`
+uses nonpositive aggregate reward at EVERY coalition. None is a formula
+for deliberately releasing one conditional Never atom and enumerating
+the new collision and late responses as in (LR4). This distinction is
+about the mathematical operation; no novelty claim is made for the
+general principle that social surplus must pay for cap changes.
+
+## A complete binding-late trap for the Never-tail-only mechanism
+
+The next stronger attempt was: perhaps standard-Q, positive Never mass
+and positivity of current debt guarantee some simultaneous independent
+Never-tail replacement with lower debt. The following exact example
+refutes that implication even for R₀ degree one. It is NOT a global
+minimum and NOT a counterexample to UE. Its purpose is to identify
+exactly why retaining genuine global minimality matters after (LR6).
+
+Pair the players by f=(01)(23), set s=(1,0,0,0), and specify the entire
+original reward table, with Never0, by
+
+    r_i({i})=s_i;
+    r_i({j})=s_i+4 if j=f(i), and s_i−1 otherwise, for j≠i;
+    r_i(S)=s_i+1 if |S|≥2 and i∈S;
+    r_i(S)=s_i+9 if |S|≥2 and i∉S.               (BT1)
+
+Thus this test already has the single-pivot own-singleton vector; no
+claim about transporting a selected minimizing law under affine reward
+normalization is needed.
+
+The singleton matrix and inverse are
+
+    Γ = [[0,4,−1,−1], [4,0,−1,−1],
+         [−1,−1,0,4], [−1,−1,4,0]],
+    Γ⁻¹=(1/24)[[1,7,2,2], [7,1,2,2],
+                [2,2,1,7], [2,2,7,1]],
+    det Γ=192.                                  (BT2)
+
+It is R₀. Indeed Γx≥0 with x≥0 forces positivity in the other pair
+as soon as either pair has positive total; it then forces positivity
+of all four coordinates. Complementarity would force Γx=0, hence x=0.
+At offset −1, Γx≥1 forces all coordinates strictly positive, and the
+unique complementary root is x=(1/2,1/2,1/2,1/2), with positive full
+index. Thus the R₀ degree is one and Γ is standard Q. The source
+declarations inspected for this exact inference are
+`r0Degree_eq_sign_det_of_nonnegative_inverse` in
+`MathUE/LinearProgramming/NonnegativeInverseDegree.lean` and
+`isStandardQ_of_r0Degree_ne_zero` in
+`MathUE/LinearProgramming/R0Degree.lean`. This is an ordinary exact
+matrix calculation, not a Lean instance checked here.
+
+### A global inequality for EVERY independent tail
+
+Let v be ANY independent natural-number-or-Never stopping profile for
+(BT1), including unrestricted behavioral profiles through their stopping
+laws. Put a=P(at least one clock is finite). Write U_i(v), b_i(v) for
+its actual payoffs and complete caps. Then
+
+    b_i(v)≥s_i for every i,
+    Σ_i[b_i(v)−s_i] ≥ a,
+    Σ_i U_i(v) ≤21a.                            (BT3)
+
+The first inequality is supplied by pure Quit at date0: it pays s_i when
+no opponent quits there and s_i+1 otherwise. For the second, define
+S_{−i} as the first coalition among i's opponents, empty if they all
+choose Never. The limiting pure late-Quit value is
+
+    s_i+E[(r_i(S_{−i})−s_i) 1_{S_{−i} nonempty}].
+
+This late limit is bounded by the actual cap, even for unbounded stopping
+laws. Sum these four inequalities and condition on the first coalition S
+of the complete clock tuple. When S is empty the summed integrand is0.
+When S={j}, the three outside recipients contribute 4−1−1=2, while
+recipient j's later-opponent contribution is at least−1; the total is
+at least1. When |S|=2, the two outsiders each contribute9 and the two
+participants each at least−1, giving at least16. When |S| is3 or4,
+all four contributions are9. Thus the integrand is always at least
+1_{S nonempty}, proving the second inequality. The largest social reward
+of a coalition is21, achieved by any pair; singleton, triple and grand
+social rewards are3,13,5 respectively. This proves the third inequality.
+The actual late-limit declaration used here is
+`quittingTerminalPayoff_update_finiteTime_tendsto_never_add_opponentNever_mul_singleton`
+in `UniformEquilibrium/Quitting/Terminal/CompactStoppingLawCapUpperBound.lean`.
+
+### A positive-debt profile that every nontrivial tail makes worse
+
+Set α=1/32. Independently give each player mass1−α at date0 and massα
+at Never. Its pure date0, Never, and late values are respectively
+
+    Q_i=s_i+1−α³,
+    W_i=s_i+9−25α²+(16−s_i)α³,
+    b_i=W_i+α³s_i=s_i+9−25α²+16α³.              (BT4)
+
+There are no other distinct cap values. Since b_i>Q_i, every player's
+complete cap is its late value; the LR1 LATE buffers d_i vanish for all
+four players, not their terminal deviation debts. The common
+formula for the prescribed payoff is U_i=(1−α)Q_i+αW_i, and
+
+    b_i−U_i=(1−α)(b_i−Q_i)+α⁴s_i>0.
+
+Now replace ALL four Never atoms by any independent tail v, after an
+empty separating date. The new tail may use any number of dates,
+unbounded private stopping times and Never. Its pure responses include
+every before/tie/after time; none is restricted to prescribed support.
+Old tests remain available before the tail. Direct conditioning gives
+
+    U_i'=U_i+α⁴U_i(v),
+    b_i'=b_i+α³[b_i(v)−s_i],
+    D'−D=α⁴(32Σ_i[b_i(v)−s_i]−Σ_iU_i(v))
+         ≥11α⁴a.                                (BT5)
+
+Thus every nontrivial tail strictly INCREASES debt, and the all-Never
+tail leaves it unchanged. This rules out an arbitrary-amplitude,
+arbitrary-calendar tail rescue, not merely a one-atom or first-order
+candidate. All identities use original Never payoff0.
+
+Yet (BT1) has the exact pure equilibrium {0,2}: each participant i receives
+s_i+1 and would receive s_i−1 by leaving, while each outsider i receives
+s_i+9 and at most s_i+1 by joining. Hence D_*=0; the source (BT4) is NOT a global
+minimum. The counterexample does not falsify the actual-minimum route.
+It falsifies replacing that source by its Q/R₀ data, positive debt and
+the COMPLETE family of nonnegative Never-tail variations. A proof for
+the binding-late branch must additionally consume global comparisons
+that alter the old finite part; the tail inequality alone cannot do it.
+No export or constant-optimization task is proposed for this example.
+
+## Changing old finite mass: a strict-cap-region descent
+
+The following move changes the OLD laws, not only their Never continuations.
+It consumes a finite-profile branch, but its extension to an accumulating
+ordered calendar has a genuine scale obstruction stated below.
+
+Fix a finite profile p with α_i>0, nonnegative own singletons, and
+S₀=Σ_i s_i>0. Keep each player's current finite support fixed and retain
+Never as an available action. On this finite product of simplex faces let
+
+    L_i(x)=W_i(x)+β_i(x)s_i,
+    F(x)=Σ_i L_i(x)−Σ_i U_i(x).                  (OF1)
+
+L_i is the actual payoff of quitting after every opponent support point.
+It is affine in EACH opponent's law separately. U_i is affine in each
+player's law separately. Thus F is a multi-affine polynomial in the
+players' finite action masses, with their Never mass the residual.
+At the all-Never vertex, F=S₀.
+
+Assume that at p every complete cap is L_i(p), and that every pure
+response whose payoff FUNCTION on this product face is not identically
+L_i is strictly smaller at p. Only finitely many response functions occur:
+the displayed dates, their empty intervening intervals, a late date and
+Never. The Never function is identical to L_i when s_i=0, and strictly
+below it when s_i>0 because β_i>0. Thus the stated condition is a literal
+finite, strict complete-cap test, not a discarded Never constraint.
+
+By continuity and the finite strict gaps, in some relative neighborhood
+of p ALL complete caps remain the same late functions. Therefore D=F
+throughout that neighborhood. Since p has positive probability on every
+action of its selected support face, it is a relative interior point.
+
+**Claim.** If D(p)≠S₀, arbitrarily small simultaneous reweightings of
+these existing finite/Never actions strictly decrease D.
+
+**Proof.** F is nonconstant because F(p)≠F(all-Never). Expand F(p+h)−F(p)
+and select its lowest nonzero homogeneous part H_k. Each monomial has at
+most one variable from each player's block, hence no variable is squared.
+On independent symmetric ±1 choices of all the free mass coordinates,
+the average of H_k is zero. Distinct such square-free monomials are
+linearly independent on this sign cube; since H_k is nonzero, at least
+one sign vector h has H_k(h)<0. For sufficiently small ε>0,
+
+    F(p+εh)−F(p)=ε^k H_k(h)+O(ε^(k+1))<0.
+
+Choose ε also small enough to preserve all positive action probabilities
+and the strict cap region. The resulting four laws are independent
+original finite laws, with their complete caps still L_i. Hence D drops.
+No new clock, favorable Nash reselection, or cap estimate is assumed. ∎
+
+This is a genuine old-law move on the binding-late test (BT4). More
+explicitly, varying its common Never probability α gives, while the late
+caps remain strict against the other response functions,
+
+    D(α)=32−32α−100α²+168α³−67α⁴.
+
+Its derivative at α=1/32 is negative. Increasing that α slightly deletes
+some OLD date0 mass and strictly lowers debt, even though every addition
+of a nontrivial Never tail increases it by (BT5). This illustrates the
+missing operation without strengthening the table's coverage claims.
+
+### Actual global-minimum consequence and the compact-calendar limit
+
+The general strict inequality D_*<S₀ is already supplied by existing
+prefix descent. Start with the literal all-Never profile, whose terminal
+payoff is0 and whose debts are s_i, and choose j with s_j>0. The exact
+declaration
+`exists_exactRoot_terminalExploitability_le_and_debtSum_descent` in
+`UniformEquilibrium/Quitting/Terminal/TerminalDebtPrefixDescent.lean`
+produces a one-date Nash prefix with strictly smaller total debt. Its
+continuation is still all Never, so it is a finite law. Both terms in
+the declaration's minimum gain are strictly positive in this application.
+No new existence lemma is claimed for this already implemented step.
+
+Consequently a FINITE global D-minimizer with positive Never probabilities
+cannot satisfy the strict late-only cap test above. Some cap must either
+strictly exceed its late value, or have an additional maximizing response
+whose payoff function differs from the late function. This consequence
+uses global minimality and an actual decreasing finite-law variation,
+unlike merely imposing all Never-tail inequalities.
+
+It does NOT yet dispatch the represented minimum from the earlier
+compactness theorem. On an accumulating calendar, nonmaximizing responses
+can approach the late value with no uniform gap. After truncation, a
+small reweighting can then activate one of those omitted near-best
+responses. The sign-cube polynomial decrease is of order ε^k, whereas
+the uncontrolled cap increment may be only o(ε), which can dominate it
+for k≥2. The finite proof may not be passed to the limit by saying that
+the cap maximizer is unique or that the deleted tail mass tends to zero.
+
+The concrete next question is therefore whether genuine global minimality
+controls this near-late cap leakage relative to an old-law ε^k decrease,
+or whether an actual finite-amplitude reweighting avoids that scale
+comparison. All late/near-late pure tests and Never must remain present.
+Neither outcome is established here.

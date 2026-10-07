@@ -55,6 +55,11 @@ including arbitrary calendars, at actual entropy near-minimizers. A finite
 conditional change after a rare continuation still gives full-cap descent.
 Thus global-minimum variations must retain finite conditional amplitude;
 first-order tail tests alone do not suffice.
+The last actual-minimum argument targets zero joint-Never instead: if at
+least two zero-Never laws have a common diffuse terminal endpoint, all
+Never-response caps are strictly buffered, and the social reward maximum
+is unique, a literal late coalition replacement contradicts minimality.
+The binding-Never and earlier-certain-absorption branches remain open.
 
 ## Finite question
 
@@ -1818,3 +1823,185 @@ vanishes. Neither the matching cofactor nor the preceding finite
 screens supply it. The toy data(R1) furnish one exact consumed move;
 they do not justify adding these cap hypotheses as a purported
 general solution.
+
+## Actual-minimum dispatch at a common diffuse zero-Never endpoint
+
+This argument uses the ACTUAL numerical global minimum, not a profile
+whose debt merely happens to be positive. The represented minimum and
+its actual finite approximants are supplied by section35 of
+notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md. My independent focused
+check is in
+feedback/CODEX_MORSE__UNREGULARIZED_MARKED_CALENDAR_MINIMUM__BY_CODEX_NOETHER.md.
+The theorem's finite-mixture domain is not enlarged by assertion: the
+specific late replacement below is constructed directly on its actual
+finite approximants.
+
+Let q_i be the independent represented laws on compact T and Never,
+c=max T, with q_i({c})=0. Let v_i,b_i be their literal target and
+complete cap, δ_i=b_i−v_i, and D=Σ_iδ_i=D_*>0.
+Let a_i be player i's literal Never-response payoff. The actual semantic
+passport inspected in
+UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean
+is minimumTerminalSemantic_singletonMargin:
+
+    b_i−s_i≥D,     v_i≥s_i+D−δ_i,     s_i=r_i({i}).     (Z1)
+
+The represented payoff/cap pair is in the closure of actual semantic
+pairs, so it is a true global-minimum pair to which this passport applies.
+No equivalent inequality is imposed on a solved-table local minimum.
+The closure definition quittingTerminalSemanticCarrier and the literal
+pair definition quittingTerminalSemanticPair were inspected in
+UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean, following
+the import from TerminalSemanticDebt.lean.
+
+### Concrete branch and claim
+
+Assume all of the following actual-source conditions:
+
+- at least two players have q_i(Never)=0;
+- the joint live probability S(t)=Π_i q_i((t,c]∪{Never}) is positive
+  for every real0≤t<c;
+- every Never response is strictly below its complete cap: a_i<b_i;
+- among NONEMPTY coalitions, the sum F(S)=Σ_i r_i(S) has a unique
+  maximizing coalition S*.
+
+These conditions are incompatible with global minimality. Thus, for a
+table with unique nonempty social maximum, an actual positive-minimum
+source with at least two zero-Never players must have either a binding
+Never response a_i=b_i or a finite earlier cutoff of the joint live
+clock. This is a proved internal source-branch dispatch, not a raw-table
+UE theorem or a claim that the remaining alternatives are impossible.
+
+### Full-cap price of a late replacement
+
+For t<c, put S_i(t)=q_i((t,c]∪{Never}) and
+S_{−i}(t)=Π_{j≠i}S_j(t). Two zero-Never players and q_i({c})=0 imply
+
+    S_{−i}(t)→0 as t↑c for EVERY i.                    (Z2)
+
+Choose a cut t∈T sufficiently near c that
+
+    2M S_{−i}(t)<b_i−a_i for every i,                  (Z3)
+
+where M bounds absolute rewards. Keep all marginal atoms at dates≤t.
+Such cuts exist: a zero-Never marginal with positive survival up to c
+and no atom at c has support points in T arbitrarily near c.
+For original outcomes after t, prescribe a fresh later date at which
+every player in S* Quits surely and everyone outside S* Continues
+forever. This is a conditional replacement of all old tail mass,
+independently in each player's law, not a shared random flag.
+
+Every pure tester at or before t has EXACTLY its old payoff: its own
+finite stop ends the game before any altered future event. For every
+later pure tester, including Never, the early opponent contribution
+is unchanged. Only the event that all opponents survive past t can
+change its continuation reward. Both the old Never payoff and every
+new response on that event lie in[−M,M]. Hence EVERY new later response
+has payoff at most
+
+    a_i+2M S_{−i}(t)<b_i.                             (Z4)
+
+The same bound applies to the old later testers. Since b_i is attained
+and a_i<b_i, at least one old finite maximizer lies at or before t.
+That maximizer is preserved. Therefore the replacement leaves EACH
+complete cap exactly b_i. This includes the new fresh date, its tied
+Quit outcomes, later responses and Never; none is declared free.
+
+### Why this is a legal numerical-global-minimum comparison
+
+Use the actual finite minimizing sequence underlying the representation.
+A cut at a retained positive atom is transported by its exact marked
+date; its full probability vector converges. At a non-atomic point,
+choose approximating cut locations from T_k, so the head masses converge.
+These are the only cases, since every positive represented atom is an
+isolated retained midpoint. Truncate each finite approximant after the
+chosen cut and add the one new coalition date immediately afterwards.
+
+The joint and player-deleted survival probabilities converge. The actual
+Never-response payoffs and old complete caps converge. The strict
+inequalities(Z3) therefore persist for sufficiently large indices.
+Every new late tester satisfies the finite version of(Z4); some old
+maximizer before the cut is retained. Each modified approximant has its
+EXACT old caps and is an actual independent finite-law profile. Its
+payoff change converges to the conditional-coalition calculation below.
+Thus a fixed positive improvement would contradict D(p^k)→D_*. No
+unproved general conditional-calendar transport theorem is needed.
+The order of choices is important: t is fixed FIRST, using the limiting
+strict cap buffers. If its limiting social improvement is Δ>0, keep
+that same t and its Δ while taking k→∞. For large k, the modified
+finite law has caps b_i^k and payoff-sum improvement at leastΔ/2;
+then choose k also with D(p^k)<D_*+Δ/4. Its debt is less than D_*,
+contradicting the numerical infimum. No shrinking-cut gain is divided
+by an uncontrolled minimizing error.
+
+### Minimality forces a maximal social tail
+
+Let W(t) be the conditional expected sum reward of the original first
+coalition given all players survive past t. The zero joint-Never
+probability implies this eventual coalition is nonempty almost surely.
+Thus W(t)≤F(S*). The literal original payoff-sum change under the new
+tail is
+
+    S(t)[F(S*)−W(t)].                                (Z5)
+
+All caps are unchanged. Global minimality and S(t)>0 force
+W(t)=F(S*) for every sufficiently late cut satisfying(Z3). Uniqueness
+of the maximum forces the old conditional first coalition to equal
+S* almost surely, not merely have the same expected social score.
+
+### A constant winning coalition cannot persist in this endpoint branch
+
+If |S*|≥2, the independent conditional clocks of two members of S*
+are equal and finite almost surely. Independent variables that are
+equal almost surely are both constant: for every measurable set A,
+the common probability p obeys p(1−p)=0. Conditional independence holds
+because conditioning all players to survive t is a product event of
+positive probability. Consequently these players
+Quit surely at one common u<c. The original joint live probability
+is then zero after u, contradicting its stipulated positive tail.
+
+If S*={j}, player j must be a finite strict winner almost surely.
+It cannot have positive Never mass, since a zero-Never opponent is
+finite almost surely. Choose another zero-Never player k. Its
+conditional clock has some positive mass at or below a point u<c.
+Its conditional Never probability would be positive if its original
+Never mass were positive, so j itself has zero Never mass. The
+positive joint live probability gives player j positive mass
+strictly above u. Independence gives a positive event on which k
+Quits before j, again a contradiction. This also covers countably
+atomic tails: only q_i({c})=0 and live support approaching c were used.
+
+### Scope, overlaps and remaining consumer
+
+The proof uses actual minimality, the actual full caps, and player-
+deleted reach probabilities. The passport(Z1) ensures this is the
+positive no-UE source, but is not used to replace any of the buffers
+in(Z3). Those buffers are a legitimate BRANCH split on a_i<b_i,
+not a new arbitrary cap bill imposed on raw game data.
+
+This does not cover a single zero-Never player, a binding Never cap,
+or an earlier cutoff S(t)=0. Nor does it eliminate tables with tied
+social maxima. Unique social maximum is a generic raw property:
+its failure lies on finitely many equal-sum hyperplanes. A putative
+positive terminal gap is stable under sufficiently small reward
+perturbations, so generic-table reduction is legitimate if the other
+source branches can be consumed. No such consumption is proved here.
+
+The current precise next question is the BINDING-Never alternative
+when at least two zero-Never players have common terminal support.
+Can an actual best Never response be coupled to a finite-amplitude
+deletion/continuation move with strict total-debt decrease, using(Z1)?
+Strict late buffers cannot be inferred from positive debt or from
+standard-Q alone, and no such inference is being made.
+
+The narrow nearby-source search inspected
+causalCollision_tailEscape_or_quantitativeBestEndpoint in
+UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticLawCarrierCausalNashDispatch.lean
+and exists_strictCarrierDebtDescent_of_opponentAbsorptionFloor in
+UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourSoloWallDispatch.lean.
+The former dispatches an actual collision row through its shifted-tail
+debt or a Nash-defect endpoint; the latter assumes a unique positive-debt
+coordinate and a uniform positive opponent-absorption floor across ALL
+Nash roots at the source, then selects an actual such root. Neither
+inspected statement supplies the present common-
+terminal social-max replacement or the missing binding-Never consumer.
