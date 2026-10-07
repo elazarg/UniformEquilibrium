@@ -19,7 +19,12 @@ conjecture-related name.
 
 For a new existence class, compare with both implemented results and previously
 accepted existence packets. Give exact raw-table evidence that the class is
-not already covered by the applicable criteria. For a residual reduction,
+not already covered by the applicable criteria. Check existential producers
+over their complete selection sets, not only pointwise reward screens or one
+selected witness. In particular, failure of stationary repetition does not
+exclude an implemented punishment-tail consumer of the same induced Nash
+row. A stronger exact-profile conclusion on an already covered UE class is
+not an additional counterexample exclusion. For a residual reduction,
 identify the configurations excluded and show that the actual incoming source
 supplies every hypothesis. Proving another interface, sharpening a constant,
 counting roots more precisely, or refuting a proof architecture without

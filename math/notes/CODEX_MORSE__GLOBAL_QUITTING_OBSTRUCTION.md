@@ -26,7 +26,11 @@ producer; source non-overlap has only been checked as specified there.
 The independently reviewed, frozen standalone packet is
 `../formalized/TWO_PLAYER_PREMIUM_CORE_STRICT_LEAVE.md`; it contains a
 stronger fully specified {0,3}-premium fixture, independently checked here
-and by both reviewers. This remains ordinary mathematics, not Lean code.
+and by both reviewers. Its main exact-root return, smooth-potential exclusion
+and nonnegative-singleton Fin4 UE scope are represented by the production
+declarations in that packet's implementation-coverage appendix. The remaining
+fixture/source comparisons are ordinary supporting mathematics unless
+separately covered there; this is not a whole-packet kernel-verification claim.
 Section 12 is a complete mutual-strict-join proof, using
 the explicitly computed negative index of the only possible core-only
 mixed root. Together with the separate reward-closure argument in
@@ -161,6 +165,14 @@ passive rewards. The complete boundary census also excludes every
 root-then-Never exact terminal equilibrium of that table. This is an
 internal strategy-architecture regression, not a positive-gap table or
 new counterexample-class exclusion.
+Section 32 retires a finite-law selection repair that uses the ACTUAL
+punishment vector and strict normality. A complete rational Fin4 table has
+all four punishment values strictly below their singleton rewards and has
+an R₀/degree-one singleton matrix. Nevertheless every exact finite-calendar
+Nash law at punishment completion waits until the final date, has the same
+positive Never mass, and has unrestricted original-game debt 6661/10000 in
+every coordinate. This is an internal exact selector obstruction, not a
+positive-gap table or an exclusion of approximate-law production.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -5343,3 +5355,246 @@ finite-horizon conclusions cannot repair the failed producer above.
 This sure-anchor selection is retired. The next global attempt must
 retain temporal law/cap information, rather than infer a first-date
 anchor from positive joining against singletons.
+
+## 32. Strict punishment normality does not repair finite exact selection
+
+This is ordinary exact mathematics, not checked in Lean and not an export
+candidate. The question is whether pricing a finite timing game's joint
+Never event at the ACTUAL punishment vector, strictly below every singleton,
+forces some exact finite Nash selections to absorb early as the common
+calendar grows. The answer is no, even with the full singleton R₀ and
+degree-one restrictions. This differs from Section 26: no player is at its
+singleton punishment ceiling here.
+
+### Complete rational table and exact punishment values
+
+Let I={0,1,2,3}, t=1/10, ε=100/729=t/(1−t)³, and P=1−ε=629/729.
+Every own singleton is 1. Set
+
+    Γ=((0,1,1,−1), (−1,0,−1,3),
+       (−1,3,0,−1), (−1,−1,3,0)).                   (161)
+
+Define favorite and adverse labels by
+
+    f=(1,3,1,2),    a=(3,0,0,0).
+
+For every nonempty S and every i define the complete reward table by
+
+    r_i(S)=1+ε(1_{f(i)∈S}−1_{a(i)∈S})       if i∈S,
+    r_i(S)=1+Σ_{j∈S}Γ_ij                     if i∉S.   (162)
+
+The labels f(i),a(i) are distinct and different from i. Hence every
+participant payoff is at least P, and each own singleton is exactly 1.
+Quitting immediately guarantees P against every opponent policy, so the
+actual unrestricted punishment value is at least P. Conversely have the
+single opponent a(i) quit surely at the first date. Its passive payoff to i
+is 1+Γ_i,a(i)=0, and joining yields exactly P. The full response cap is
+max(P,0)=P. Thus
+
+    quittingPunishmentValue_i = P < 1 = s_i            (163)
+
+for ALL four players, with strict normality margin ε. This calculation uses
+the original game, whose Never payoff remains zero.
+
+Fix any nonempty finite ordered COMMON calendar. Each player independently
+chooses one listed quitting date or Never. Only the auxiliary game's joint
+Never reward is replaced by (P,P,P,P); absorption rewards remain (162).
+Nash means ordinary mixed Nash over the complete finite timing menus, with
+no sequential-perfection hypothesis. The following statement quantifies over
+every such calendar and EVERY mixed timing Nash point.
+
+**Claim.** All earlier dates are surely Continue, and at the final listed
+date every player independently Quits with probability t=1/10. This is the
+unique mixed timing Nash profile. Its completed payoff is (1,1,1,1), but
+its actual original-game payoff and full behavioral cap are
+
+    u_i=4339/10000,  b_i=11/10,
+    d_i=b_i−u_i=6661/10000                 for every i. (164)
+
+Its joint Never mass is 6561/10000, independently of the calendar length.
+
+### The only root at the singleton vector is all Continue
+
+Write A=1−ε and B=3−ε; then B>2, A>ε>0 and B=A+2. At a continuation
+annotation equal to the singleton vector 1, the literal Quit-minus-Continue
+gaps are linear. If the hazards are (h,x,y,z), they are
+
+    g₀=−(1−ε)x−y+(1−ε)z,
+    g₁=Ah+y−Bz,
+    g₂=Ah+z−Bx,
+    g₃=Ah+x−By.                                      (165)
+
+Here the cube Nash signs are g≤0 at a zero own hazard, g≥0 at a sure
+own hazard and g=0 at a proper hazard. Fix h first. If x=0 and h>0,
+g₁≤0 forces z>0. Then g₃≥0 forces y≤Ah/B<1, but
+g₂=Ah+z>0 forces y=1, a contradiction. Cyclically, no child hazard
+can vanish. If h=0, one vanishing child instead forces all three zero
+by the same argument.
+
+If x=1 and y<1, then g₂=Ah+z−B≤A+1−B=−1<0,
+contradicting y>0. Hence y=1, and cyclically z=1, but all three sure
+gaps are Ah+1−B<0. Thus no sure child is possible in the positive branch.
+The three proper equations give uniquely
+
+    x=y=z=Ah/(B−1).
+
+This also includes the all-zero solution at h=0; if h=0 and all children
+were positive the proper linear equations would force them zero. At any
+h>0, substitution in g₀ gives g₀=−x<0, which is incompatible with
+that positive own hazard. Thus the only cube Nash root at annotation 1
+is all Continue, including every sure, quiet and proper boundary pattern.
+
+### The unique root at the actual punishment vector
+
+At annotation (P,P,P,P), add ε times opponent survival to each expression
+in (165). For example
+
+    g₁=ε(1−h)(1−y)(1−z)+Ah+y−Bz,                   (166)
+
+and the other two child equations are its cyclic rotations. For fixed h,
+no child hazard is zero. Indeed, if x=0, g₁≤0 forces z>0:
+at z=0 its left side is ε(1−h)(1−y)+Ah+y>0.
+Since z>0, g₃≥0 gives
+
+    By≤ε(1−h)(1−y)+Ah≤max(ε,A)<1.
+
+But g₂=ε(1−h)(1−z)+Ah+z>0, so y would have to be 1.
+The cyclic versions handle the other zero hazards. A sure child is also
+impossible: x=1 makes g₂=Ah+z−B≤−1, contradicting y>0.
+All three children are therefore proper for every h∈[0,1].
+
+Put C=ε(1−h). Solving the equation for z in terms of y gives
+
+    z=φ_h(y)=[C(1−y)+Ah+y]/[B+C(1−y)].
+
+The map φ_h is strictly increasing: implicit differentiation of (166)
+gives
+
+    φ'_h(y)=[1−C(1−φ_h(y))]/[B+C(1−y)]>0.
+
+The three equations are z=φ_h(y), x=φ_h(z), y=φ_h(x).
+A strictly increasing real map has no nonconstant three-cycle: if x>y,
+these relations successively give y>z and z>x. Therefore x=y=z=r(h),
+where r(h) is the unique root in (0,1) of
+
+    ε(1−h)(1−r)²+Ah−(B−1)r=0.                       (167)
+
+Existence follows from the opposite endpoint signs, and uniqueness from
+strict decrease in r. Implicit differentiation shows r(h) is strictly
+increasing, because the h derivative of the left side is
+A−ε(1−r)²≥1−2ε>0. The choice ε=t/(1−t)³ gives r(t)=t.
+
+At these child responses the remaining owner gap is
+
+    g₀=ε(1−r(h))³−r(h).                             (168)
+
+This is strictly decreasing in h and vanishes precisely at h=t. In
+particular h=0 has a strictly positive gap and h=1 a strictly negative gap,
+so neither endpoint can be Nash. The unique full cube root is
+
+    (h,x,y,z)=(t,t,t,t).
+
+At that row every favorite and adverse hazard is equal. Forced Quit
+therefore has expected reward 1 for every player. All players mix, so the
+completed root payoff is exactly 1 in all four coordinates.
+
+### Uniqueness for every finite calendar, including off-path behavior
+
+First rule out a sure hazard at any positively reached calendar date of a
+finite timing Nash law. With two or more sure quitters, all pure endpoint
+comparisons ignore the continuation. With just one sure quitter i, that
+player can replace Quit now by Continue now and Quit at the next listed
+date. Conditional on no opponent quitting now, this guarantees at least
+P by (162). At the final listed date, choosing Never instead receives the
+auxiliary completion P on that same empty event. Hence the sure owner's
+actual Nash inequality implies the Continue comparison priced at P.
+Every other player faces a sure opponent, so its comparison is already
+independent of the tail. In either case the current row would be a cube
+Nash root at P having a sure coordinate, contradicting (166)–(168).
+
+This argument uses actual unilateral changes of the conditional remaining
+law at a positively reached date; it assumes nothing about equilibrium at
+an unreachable history. No date can be the first reached sure date.
+Consequently all hazards are below 1 and every listed date has positive
+joint live reach. Ordinary finite timing Nash then makes every conditional
+suffix a Nash law in its remaining finite game: altering just that suffix
+retains earlier own masses and multiplies any strict gain by positive reach.
+
+At the final date its exact row is therefore the unique root at P, with
+completed suffix value 1. The preceding row is a Nash root at 1 and hence
+all Continue by (165). Backward induction makes every earlier row all
+Continue. Conversely these rows followed by the proper final root satisfy
+all conditional endpoint inequalities; finite backward induction proves
+optimality of every mixed timing action, so the displayed law is Nash.
+This proves uniqueness in ordinary finite normal form, not merely among
+stationary or selected sequential equilibria.
+
+### Full original-game cap and matrix-source checks
+
+Let c=(1−t)⁴=6561/10000. Removing only the formal Never completion
+from the completed payoff 1 gives
+
+    u_i=1−cP=1−5661/10000=4339/10000.
+
+Before the last listed date, a full deviation that quits faces all opponents
+Continue and receives 1. Quitting on that last date also has expectation 1.
+If the player continues past it and then quits, its payoff is
+
+    C_i(1,q)=C_i(P,q)+(1−t)³(1−P)
+            =1+(1−t)³ ε=1+t=11/10.
+
+Thereafter all opponents are quiet, so further delay yields the same solo
+payoff on the surviving event; Never gives a smaller value. Every complete
+behavioral replacement is a mixture of these pure stopping choices along
+the unique live history. Thus b_i=11/10 exactly and (164) follows. Gaps
+between calendar dates, or insertion of any additional earlier dates, do
+not add another pure response value.
+
+The singleton matrix in (161) retains R₀ and degree one. Its six two-player
+principal determinants, in order 01,02,03,12,13,23, are
+
+    1,1,−1,3,3,3;
+
+the four triple determinants in order 012,013,023,123 are
+
+    −2,−4,4,26;
+
+and det Γ=13. Thus every principal of size at least two is nonsingular.
+Every singleton column has a strictly negative off-diagonal entry. A
+nonzero homogeneous LCP root could have neither singleton support nor
+larger support, proving R₀.
+
+At offset −1, singleton or empty supports are impossible. No pair has
+both reciprocal entries positive, so every pair's active solution has a
+negative coordinate. The triple active solutions are, respectively,
+
+    (−5/2,−1/2,3/2), (−7/4,3/4,−1/4),
+    (−1/4,1/4,−3/4), (1/2,1/2,1/2).
+
+The last has omitted residual −1/2; the first three have a negative active
+coordinate. The sole LCP solution is the fully supported vector 1, with
+positive principal determinant 13. The usual exact local determinant
+formula therefore gives R₀ degree +1. The named source inspected for that
+formula is `exists_finset_r0Degree_eq_sum_sign_det` in
+`MathUE/LinearProgramming/R0DegreeSum.lean`. This finite calculation is
+ordinary mathematics, not a compiled fixture or a full hard-residual audit.
+
+The other relevant source declarations inspected are
+`quittingPunishmentValue_le_stationaryUnilateralCap` and
+`quittingPunishmentValue_le_max_solo` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`, together with the
+finite menu/full cap correspondences already named in Section 26.
+`exists_finiteMenu_samePrefix_completion` in
+`UniformEquilibrium/Quitting/Punishment/FiniteMenuCompletion.lean` is a
+genuine downstream consumer when an EARLY-ABSORPTION menu source exists.
+The present exact completed laws do not supply that source: their first
+absorption remains at the last listed date and their final Never mass is
+fixed away from zero.
+
+The failed implication is now retired even under strict own-versus-actual-
+punishment inequalities and full R₀/degree-one singleton data. This is not
+a positive lower bound over all original-game profiles and not evidence
+against UE of (162). Approximate timing laws, original-zero menu equilibria,
+and a use of true positive-global-minimum information remain distinct.
+The next consumer attempt must use that global information essentially;
+strict punishment normality alone cannot replace it.

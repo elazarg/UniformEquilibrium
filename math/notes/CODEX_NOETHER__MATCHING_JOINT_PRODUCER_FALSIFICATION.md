@@ -44,22 +44,24 @@ reviews. The current canonical artifact is
 SHA256 `2b9f54370677ec176749a0a9c6c008bdb56d5733594d85f60a101374e148ac35`.
 Its original owned candidate and exploratory branch below remain derivation
 history. The separate one-shot join-monotone anchor mechanism passed both
-independent substantive and final-assembly reviews. Its canonical447-line
-artifact is `exports/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md`, SHA256
+independent substantive and final-assembly reviews. Its current internal
+artifact is `notes/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md`; the original
+reviewed447-line version had SHA256
 `64cbf15fe912af117ee42d6d32a29806a8c72316cf88d28a7a8f85d06bdb6f02`.
 Its frozen historical377-line manuscript is
 `notes/CODEX_NOETHER__ONE_SHOT_ANCHOR_NEGATIVE_JOIN_NECESSITY.md`,377lines,
 SHA256 `72e18f442d25d6225b96e022b42c573f3542809fc7ce955ce9dfb66b7ad7b331`.
-Current independent research is the global finite Nash-regret/CCE test at
-this notebook's end. Its producer and unavoidable counterexample restriction
-are proved ordinary mathematics, but the displayed early stress table is
-already consumed by a broader patient-withdrawal raw source. It is NOT an
-additional-coverage witness. The generic class's increment versus that
-source is now structurally separated by the strict three-response-cycle
-family at the end: all fourteen children defeat every raw withdrawal kind.
-The new table also fails the compared accepted pair criteria. The mechanism
-remains internal and not independently reviewed; the exact source census
-and its finite limits are recorded below rather than asserted blanketly.
+Current independent research: the finite Nash-regret/CCE producer, all-base
+extension and exact behavioral/horizon proofs passed two independent reviews.
+However their ENTIRE UE class is already consumed by the implemented
+punishment-priced `PersistentBaseConcreteGap.lean` alternatives, as proved
+at this notebook's end. Their additional-UE-coverage claim is WITHDRAWN.
+The early table also has a literal patient-withdrawal certificate. The later
+three-response-cycle family genuinely defeats every raw withdrawal kind and
+the compared pair tests, but that does not defeat the broader transient
+punishment source. The correct mathematical value is an internal finite LP
+recognizer and stronger same-profile/all-horizon theorem, not an export-level
+new counterexample restriction. No frozen export was changed.
 
 ## Question and finite data
 
@@ -696,7 +698,9 @@ and the transient behavioral consumer, before any export is considered.
 ## A global finite Nash-regret restriction on every counterexample
 
 Status: complete ordinary producer and necessary-condition proof, not an
-export. This is a global finite LP test on arbitrary game data and every
+export. Whole-class inclusion into an existing punishment-priced source is
+proved in the final section; no new UE counterexample exclusion remains.
+This is a global finite LP recognizer on arbitrary game data and every
 anchor, not a modification of a radius or supplied stopping certificate.
 Two exact table tests follow. The early LP-positive table is covered by a
 literal patient-withdrawal certificate and is not an increment witness.
@@ -1313,3 +1317,78 @@ conditional verifier or unknown all-proper local center is not a competing
 arbitrary-table producer. No export or review request is inferred merely
 from fixed-point correctness; the substantive increment evidence is the
 full open CCE-positive/withdrawal-negative class proved here.
+
+### Decisive whole-class overlap with the concrete persistent-base source
+
+The finite CCE theorem, exact one-shot strategy, all-sign empty row and
+full behavioral/finite-horizon proofs survive. The claimed additional UE
+counterexample-class narrowing does NOT. This is a whole-class inclusion,
+not another coincidental overlap of a selected example. The exact final
+587-line standalone remains frozen for historical proof review; it must
+not be promoted on the strength of its former coverage claim.
+
+I independently read the complete tracked
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`
+and its singleton strategic dependency
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingletonBaseSemanticDispatch.lean`.
+The overlooked original-game alternatives are
+`exists_uniformPayoff_or_singletonBase_pos_gap` and
+`exists_uniformPayoff_or_persistentLargeBase_pos_gap` in the former file.
+They are unconditional theorems over the ACTUAL complete induced product
+Nash carrier, not stationary-Never screens or supplied-strategy verifiers.
+
+For singleton base a take free=I∖{a}; there are no outsiders. Put
+P_a=quittingPunishmentValue reward a. The source's actual owner-floor
+excess at an induced product Nash law p is
+
+    floorExcess=C_nonempty+p_∅P_a−V_a
+               =−E_p g_a+p_∅[P_a−max(s_a,0)].         (O1)
+
+The literal theorem `quittingPunishmentValue_le_max_solo` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean` gives
+P_a≤max(s_a,0), with no own-sign assumption. I inspected its definition
+and proof: the all-Continue pure opponent row caps any unilateral reply by
+max(s_a,0). Thus(O1)≤−E_p g_a. Any internally selected product Nash
+belongs to C_a; CCE admission gives E_p g_a≥0. Every owner-floor and
+outsider screen in the existing source is therefore nonpositive. Its
+strictly positive compact-gap branch is contradicted, leaving its existing
+UE conclusion. Its fixed-target compiler uses punishment after a quiet
+owner deviation, not stationary repetition of the nominal free hazards.
+
+For |E|≥2 the same inclusion is even more direct. With free=I∖E,
+`quittingPersistentLargeBaseComponent` is−E_pG_i^E for every base member,
+zero for free players, and has no outsider components. The LP inequalities
+give every component≤0 at an internally produced free Nash point. Hence
+`quittingPersistentLargeBaseExcess`≤0, contradicting that alternative's
+positive-gap branch and yielding its already implemented UE conclusion.
+
+At the complete three-response-cycle center, p_∅=1/24 and E_p g₀=23/24.
+Therefore floorExcess≤−23/24, and the source's maximum with the free
+players' zero components is exactly0. This is an exact negative screen,
+not a hypothetical punishment value or guessed local radius. Excluding
+all sure-stationary profiles and every withdrawal certificate did not
+exclude this different transient punishment architecture.
+
+Moreover the old alternatives imply a STRICTLY STRONGER necessary
+condition under no UE. On every singleton induced PRODUCT Nash point,
+its floor excess is≥γ>0, so(O1) forces E_p g_a≤−γ. On every large-base
+induced PRODUCT Nash point, some member has E_pG_i^E≤−γ. The member
+may vary with the point, but the source's γ is uniform on that carrier.
+These conditions imply our existential negative coarse-law restriction
+by internally choosing any finite Nash point. Consequently neither the
+new existence class nor its contrapositive removes a previously surviving
+UE counterexample class. A finite LP recognition shortcut and exact same-
+profile horizon strengthening remain valid internal results.
+
+Failed implication: “a full fourteen-child withdrawal obstruction plus
+all accepted pair tests and sure-stationary absence establishes additional
+coverage against implemented arbitrary-completion sources.” The concrete
+singleton source prices waiting at P_a, not at stationary Never. Comparing
+against its exact semantic screen, rather than only its stationary or
+pointwise subclasses, closes the entire alleged gap.
+
+Concrete next question: find a mechanism that consumes tables failing
+EVERY concrete induced-Nash punishment/large-base screen, or prove a new
+unavoidable restriction on that actual surviving class. A stronger LP
+relaxation of these same accepted finite screens alone cannot establish
+new UE existence coverage. Do not retune the already-solved separator.

@@ -1,13 +1,16 @@
 # Nonbijective singleton sources beyond a column-sign cone
 
-Author: CODEX_BROUWER. Ordinary mathematics, not Lean-checked. The active
-candidate is the final section, “Global nonlinear degree supplies the
-missing nonzero root”: a proposed original Fin4 UE producer from weak
-scheduled-pair joining preferences and twelve opposite-pair caps, with no
-singleton inverse/sign condition. A scoped independent mechanism review
-has passed; the completed source/coverage checks are appended below.
-A second independent review and a self-contained artifact gate remain;
-it is not ready for export. The initial exact singleton matrix is internal evidence showing
+Author: CODEX_BROUWER. Ordinary mathematics, not Lean-checked. The completed
+two-pair theorem is frozen at
+[TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md](../exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md).
+The singleton/triple schedule ST1 is RETIRED as a coverage candidate: its
+entire raw class is already covered by literal Fin4 no-UE normalization and
+the accepted joining-attractive triple/smaller-core consumers. The final
+section records that inclusion, including why arbitrary signed own levels
+do not rescue its significance. Its schedule proof and exact coarse-regret
+separator are retained as internal mathematics, not proposed exports.
+The negative-c homotopy escape is a retained falsifier, not an extension
+proposal. The initial exact singleton matrix is internal evidence showing
 why a signed-column inverse reduction is insufficient, not an existence
 claim. The separately completed signed-column producer does not supply the
 new root-production step here.
@@ -647,3 +650,298 @@ must account for this infinite-odds active player's continuation gain,
 for example by producing a different schedule rather than declaring
 the escape harmless. Whether such boundary alternatives can be organized
 globally for arbitrary tables remains open.
+
+## Singleton/triple schedules: a different raw candidate
+
+Status: complete internal proof draft, not independently reviewed and no
+additional-coverage claim. The exact signed fixture below still needs the
+finite-anchor CCE and single-anchor dominance comparisons. This candidate
+changes the schedule rather than repairing the failed negative-c homotopy.
+
+Let I={0,1,2,3}, C={1,2,3}, s_i=r_i({i}), with arbitrary signed terminal
+rewards, live payoff zero and Never zero. Assume
+
+    Δ_i(T)=r_i(T+i)−r_i(T) ≥0
+      for i∈C, ∅≠T⊆C−i;
+    r₀(T+0)≤s₀ for ∅≠T⊆C;
+    r_i({i,0})≤s_i for i∈C.                         (ST1)
+
+The proposed conclusion is original Fin4 UE. No supplied root, matrix
+condition, own-level sign, public randomization or restricted deviations
+is part of the raw criterion. First take every Δ strictly positive. Assume
+no UE and invoke `finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`
+in `UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`:
+the ORIGINAL Γ is R₀ of degree1. The source does not translate rewards or
+assume nonnegative original singletons.
+
+### Actual equations and a compact feasible region
+
+Use blocks {0},C. For each i, let A_i be its own block minus i and O_i the
+other block. For X≥0 put X_T=∏_{j∈T}X_j and D_B=∏_{j∈B}(1+X_j), and set
+
+    U_i=Σ_{T⊆A_i} X_T r_i(T+i)/D_A,
+    W_i=s_i+Σ_{∅≠T⊆A_i} Δ_i(T)X_T,
+    F_i=U_i+Σ_{∅≠T⊆O_i}X_T r_i(T)−W_i D_O.          (ST2)
+
+For player0, U₀=W₀=s₀. One has F(X)=ΓX+O(‖X‖²) at zero. Also
+
+    [Σ_{∅≠T⊆A_i}X_T r_i(T)+W_i]/D_A=U_i.            (ST3)
+
+Let M bound all absolute rewards. If F(X)≥0, then W_i≤M because the
+right side of W_i≤[U_i+Σ_{∅≠T⊆O_i}X_T r_i(T)]/D_O is a convex
+combination of U_i and passive rewards, all in [−M,M]. Also W_i≥s_i.
+For every j∈C choose i∈C−j. Its positive coefficient Δ_i({j}) yields
+
+    X_j≤(M−s_i)/Δ_i({j}).                            (ST4)
+
+R₀ implies some Γ_i0<0 with i∈C: otherwise e₀ is a nonzero homogeneous
+LCP root. For this i, since O_i={0},
+
+    0≤F_i=U_i−W_i+X₀(r_i({0})−W_i)
+          ≤M−s_i+Γ_i0 X₀.
+
+Thus X₀ is bounded too. E={X≥0:F(X)≥0} is compact. Extend
+N(X)=ΓX−F(X) continuously using X⁺, and use
+H_λ(x)=min(x,Γx−N(x⁺)−λ1). Every zero lies in E. Large λ has no
+zeros, so total degree is zero; the quadratic vanishing of N and R₀
+give local degree1 at zero. The same single-box homotopy/excision
+calibration proved above gives a nonzero complementary root
+
+    X≥0, F(X)≥0, X_i F_i(X)=0.                       (ST5)
+
+This use of degree has exactly the previously inspected fixed scalar-chart
+dependencies, not an unproved ambient/chart identification.
+
+The root has at least two positive coordinates. If its sole positive
+coordinate is0, feasibility makes Γ's column0 nonnegative, contradicting
+R₀. If it is j∈C, each other child i has
+
+    F_i/X_j=Γ_ij−Π_ij X_j/(1+X_j),
+    Π_ij=r_i({i,j})−s_i=Γ_ij+Δ_i({j}).
+
+If Π_ij<0 the expression is negative; if Π_ij≥0, feasibility forces
+Γ_ij≥0. The anchor row gives Γ_0j≥0, again a forbidden nonnegative
+column. The source and the strict within-block gaps therefore exclude
+every singleton support without asserting every coordinate is active.
+
+### Actual values, unrestricted deviations and weak closure
+
+At alternating phases {0},C use independent q_i=X_i/(1+X_i). Equation
+(ST3) equates forced Quit and Continue with templates U_i,W_i at the
+own phase. At the opposite phase, Continue is W_i+F_i/D_O, while
+forced Quit≤s_i≤W_i by the ten raw caps. For X_i>0, F_i=0 and these
+are the actual values. For X_i=0, put p=1/D_A and d=1/D_O. Actual
+phase values are U_i+δU_i,W_i+δW_i, where
+
+    δW_i=(F_i/D_O)/(1−pd)≥0,       δU_i=pδW_i.        (ST6)
+
+The denominator is positive because the root has at least two positive
+coordinates. These corrections preserve both inactive Continue identities
+and improve its Quit inequalities. They are not optional templates.
+Deleting any player leaves positive absorption probability each period.
+Iteration of the one-step inequalities therefore controls every behavioral
+replacement, including Never. The actual profile is terminal Nash.
+Writing ρ=max_i∏_{j≠i}(1−q_j)<1, the opponent absorption time has mean
+at most 2/(1−ρ). Bounded rewards give the same fixed terminal target,
+delivery error at most 2M/((1−ρ)N), and unilateral horizon regret at
+most 4M/((1−ρ)N), including the initial live-zero date.
+
+The production consumer is the same
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`, with all
+its strategic inputs produced here. For weak Δ≥0 add δ>0 only to
+participant coordinates of coalitions contained in C of size at least2.
+Every relevant Δ becomes strict; own levels and all ten caps are unchanged.
+Apply `exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables`
+in `UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+Only UE existence, not an exact periodic profile at every weak boundary,
+is claimed by closure.
+
+### Exact signed fixture and still-open coverage
+
+The complete table is
+
+| S | r(S) |
+|---|---|
+| 0 | (1,−2,−2,−2) |
+| 1 | (2,−1,1,−2) |
+| 2 | (2,−2,−1,1) |
+| 3 | (0,1,−2,−1) |
+| 01 | (0,−1,1,−2) |
+| 02 | (0,−2,−1,1) |
+| 03 | (0,1,−2,−1) |
+| 12 | (−1,−1,2,−1) |
+| 13 | (−1,2,−1,−1) |
+| 23 | (−1,−1,−1,2) |
+| 012 | (0,−1,−1,2) |
+| 013 | (0,−1,1,−1) |
+| 023 | (0,1,−1,−1) |
+| 123 | (−1,3,3,3) |
+| I | (0,−3,−3,−3) |
+
+Own levels are(1,−1,−1,−1). The within-triple gaps are1 on singletons
+and4 on the two-opponent subsets. All ten caps hold. The pair criterion
+fails on01/23 and02/13 because c₀=−2; on03/12, player3's opposite
+pair participant reward r₃(23)=2 exceeds its own−1. The singleton Γ is
+
+    [[0,1,1,−1],[−1,0,−1,2],[−1,2,0,−1],[−1,−1,2,0]],
+
+with determinant7 and inverse
+
+    [[1,1/7,−5/7,−3/7],[1,3/7,−1/7,−2/7],
+     [1,2/7,−3/7,1/7],[1,5/7,−4/7,−1/7]].
+
+Hence neither a positive inverse nor any uniformly signed inverse-column
+cone applies. The accepted joining-attractive triple theorem assumes
+nonnegative own levels, which fail directly here. That direct-input distinction
+is NOT a coverage exclusion: the literal no-UE normalization below supplies
+a new no-UE table with nonnegative own levels and the relevant inequalities.
+No unrestricted utility-translation equivalence is being asserted.
+
+The following exact child tests address universal nonnegative debt/Never
+withdrawal bounds, not specially selected safe child equilibria. Child0
+quits surely and has a profitable omitted joining player. Each negative-own
+singleton child has an impossible full Never row for omitted0: its own
+advance coefficient is nonpositive and every restart bonus≤0, while s₀=1.
+For child pairs12,13,23 both members quit surely; child123 has all three
+quit surely. All have zero child debt/Never and omitted0 gains1.
+For child0i, let i quit at date0 and0 quit at date1 off path. Player i's
+value and future best response both equal−1; player0's prescribed value
+is2 or0 and its date0 join gives0. An omitted child has joining gain1.
+Child013 uses sure coalition03, with omitted2 gain1.
+
+For child012, player1 quits surely at date0, q₀=1/3,q₂=2/3, and0
+quits surely at date1 off path. The two free response differences are
+−2+3q₂ and1−3q₀. Player1's prescribed value is−1; its nonempty-event
+Continue rewards are−2 and its empty-event future cap is−1. This is
+an exact unrestricted child Nash profile. Omitted3's four joining gains
+on T=1,01,12,012 are1,1,4,−5 with probabilities2/9,1/9,4/9,2/9,
+giving gain1. For child023 replace anchor1 by2 and free2 by3. Omitted1
+has gains1,1,4,−4 with the same probabilities, giving11/9.
+
+These child witnesses only separate the indicated withdrawal certificates.
+The exact coarse-regret tests below also fail, but neither fact establishes
+an increment: the fixture has a concrete punishment-tail anchor exit, and
+the entire ST1 class has the stronger normalization/core inclusion recorded
+after those tests. The schedule theorem itself is not refuted.
+
+### Exact separation from every coarse-regret base
+
+The finite-anchor criterion and its arbitrary-base extension have now been
+independently checked. They do NOT consume this signed fixture. For anchor0,
+use the correlated free law on T=1,2,3,23 with probabilities
+(16,8,2,1)/27. Its six regret margins, in order1C,1Q,2C,2Q,3C,3Q, are
+
+    (16/27,0,1/3,10/9,0,0),
+
+and its expected anchor gap is−47/27. This is a feasible coarse law,
+not claimed product or playable. For the other singleton bases the pure
+free coalitions03,01,02 are respectively exact free Nash points, each
+with anchor gap−2. Thus every singleton minimum is strictly negative.
+
+Every larger base also has a negative witness. In this table T is the free
+coalition, so the actual immediate coalition is E∪T; ∅ means every free
+player Continues. Each displayed pure free action is a Nash point of the
+literal induced game, so its point mass is feasible without a relaxation.
+
+| E | T | Harmed base member | Member gap |
+|---|---|---|---|
+| 01 | 3 | 1 | −2 |
+| 02 | 1 | 2 | −2 |
+| 03 | 2 | 3 | −2 |
+| 12 | 0 | 2 | −2 |
+| 13 | 0 | 1 | −2 |
+| 23 | 0 | 3 | −2 |
+| 012 | ∅ | 2 | −2 |
+| 013 | ∅ | 1 | −2 |
+| 023 | ∅ | 3 | −2 |
+| 123 | 0 | 1 | −4 |
+| I | ∅ | 1 | −4 |
+
+These fourteen pure witnesses plus the correlated anchor0 witness establish
+the exact ∀E∃member∃coarse-law negative-gap condition. No minimizer values
+or common negative law are needed. The arbitrary-base comparison alone
+does not detect this table. The next section supplies the actual source
+that does and retires the whole raw class rather than merely this fixture.
+
+## Whole ST1 class is already covered
+
+This is a source-inclusion proof, not a new equilibrium construction. Let
+I={0,1,2,3}, C={1,2,3}, with arbitrary signed own rewards s_i and Never0.
+The ST1 assumptions used here are:
+
+1. r_i(T+i)−r_i(T)≥0 for i∈C and every nonempty T⊆C−i;
+2. r₀(T+0)≤s₀ for every nonempty T⊆C.
+
+The schedule's additional three caps r_i(i0)≤s_i are not needed for this
+inclusion. Condition2 gives player0 no positive participant premium on any
+coalition. Hence every premium trap, and therefore the greatest premium core
+K, is contained in C. There is no singleton premium trap, so |K| is0,2 or3.
+
+Suppose the original table has no UE. The literal declaration
+`nonempty_finFourSinglePivotNormalization_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean`
+then produces p with s_p>0 and the actual normalized table
+
+    rhat_i(S)=(r_i(S)−offset_i)/s_p,
+    offset_p=0,       offset_i=s_i for i≠p.
+
+Its `no_uniformPayoff` field concerns that very reward table with Never0;
+its own levels are1 at p and0 elsewhere. The inspected definitions are
+`quittingSinglePivotNormalizedReward`, `quittingSinglePivotOffset` and
+`quittingSoloReward_singlePivotNormalized` in
+`UniformEquilibrium/Quitting/Root/SinglePivotNormalization.lean`.
+This is an actual no-counterexample transport theorem, not an informal WLOG
+translation or a claim that arbitrary reward translations preserve play.
+
+Every within-recipient joining difference and every participant premium is
+divided by the same positive s_p. Consequently both displayed hypotheses,
+all premium traps, and K are preserved. If K is empty, the normalized game
+has UE by the empty-core branch of
+`exists_uniformEquilibriumPayoff_of_empty_or_signed_pair_core_weakSameSign`
+in `UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClosure.lean`.
+If K is a pair, both joining gaps are nonnegative by condition1, so their
+product is nonnegative and the pair branch of that same declaration applies.
+If |K|=3, then K=C, and the nonnegative-own-level, nine-joining-gap theorem in
+[JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md](../exports/JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md)
+applies. Each case contradicts the produced normalized no-UE field.
+
+Thus the ENTIRE ST1 class is covered, including signed-own tables and every
+completion of its unused reward coordinates. Varying passive entries cannot
+create an increment. No ST1 export or weaker-fixture optimization is proposed.
+
+### The signed fixture also has a direct punishment-tail exit
+
+For anchor0 its three free-player response differences are
+
+    1−3q₃−2q₂q₃,   1−3q₁−2q₁q₃,   1−3q₂−3q₁q₂.
+
+An exact free product Nash point is
+
+    (q₁,q₂,q₃)=(−5/11+14√3/33, −3/4+7√3/12, −9/11+7√3/11).
+
+All coordinates lie strictly between0 and1 and all three differences vanish.
+Player0's punishment value is0: immediate Quit guarantees a nonnegative
+payoff, while the opponents' sure coalition123 gives Continue−1 and Quit0.
+Writing Q₀ for its immediate payoff and C₀ for its nonempty-event Continue
+contribution, direct substitution gives
+
+    Q₀−C₀=(4959−2863√3)/132>0,
+    4959²−3·2863²=1374.
+
+So `nonempty_quittingSingletonBaseCertificate_of_inducedNash` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`
+and `QuittingSingletonBaseCertificate.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingletonBaseSemanticDispatch.lean`
+already give UE on this exact fixture. Its fifteen negative coarse-regret
+witnesses therefore demonstrate weakness of the coarse relaxation, not a
+missing equilibrium class.
+
+### Next question after retiring ST1
+
+Seek a raw original-game producer that survives BOTH the actual punishment-tail
+persistent-base tests and the no-UE normalization/core consumers. In
+particular, a new triple-based schedule must either admit a positive anchor
+participant premium (so its core need not lie in the triple) or genuinely
+leave the within-triple joining-attractive class. Signed singleton levels
+alone are not a source of new coverage. No replacement theorem is claimed.
