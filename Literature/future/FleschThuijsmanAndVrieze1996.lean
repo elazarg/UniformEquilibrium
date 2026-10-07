@@ -1,5 +1,6 @@
 import Literature.FleschThuijsmanAndVrieze1997
 import MathUE.Probability.RatioProperPair
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.ProperPairLimit
 
 /-!
 # Recursive repeated games with absorbing states
@@ -10,7 +11,10 @@ Primary source: <https://dke.maastrichtuniversity.nl/f.thuijsman/recursive%20rep
 
 This is a partial paper audit. Definition 2.3 and Theorem 2.4 use the paper's
 finite probability simplexes and absorption-weighted reward tables, delegating
-the proper-pair construction to the generic ratio-ranking theorem. Example 3
+the proper-pair construction to the generic ratio-ranking theorem. Lemma 2.2
+and Theorem 3.1 additionally delegate to actual expected-pathwise-liminf results
+for the canonical model with arbitrary finite live-state actions and literal
+action-independent absorbing rewards. Example 3
 is the same three-player game analyzed in the 1997 paper, so its table and
 stationary conclusions delegate to that existing formalization. The printed
 exclusion for every positive error is refuted; the corrected exclusion below
@@ -27,16 +31,20 @@ approximate-equilibrium existence for two-player recursive repeated games with
 absorbing states; Lemma 3.2 supplies its best-reply mass-ratio estimate.
 
 Definition 2.3 and Theorem 2.4 are formalized below in their numerical-table
-presentation. The other general definitions and results, Examples 1, 2 and 4,
-and the three final remarks are not formalized in this file. In particular,
-Lemma 2.2's expected-pathwise-liminf payoff identity and the all-behavioral
-best-reply semantics used by Lemma 3.2 and Theorem 3.1 remain unformalized here.
-The two-player quitting existence theorem is not asserted to cover arbitrary
-action sets or probabilistic absorption, and this file does not claim complete
-paper coverage or a fixed-target uniform-equilibrium payoff from Theorem 3.1.
+presentation. The canonical Lemma 2.2 identifies the actual stationary payoff,
+including zero absorption. The canonical Theorem 3.1 selects one stationary
+pair before every initial state and every unilateral behavioral deviation.
+It is not a proof of the paper's reduction of general absorbing stage games
+with state-dependent action sets to action-independent absorbing rewards.
+The remaining general definitions, the standalone arbitrary-sequence statement
+of Lemma 3.2, Examples 1, 2 and 4, and the three final remarks are not formalized
+here. This file does not claim complete paper coverage or a fixed-target
+uniform-equilibrium payoff from Theorem 3.1.
 -/
 
 noncomputable section
+
+open _root_.Math.ProbabilityMassFunction
 
 namespace Literature.FleschThuijsmanAndVrieze1996
 
@@ -46,13 +54,14 @@ The table records the absorption probability and both absorbing rewards for
 each live-state action pair. The live-state stage reward is zero. Rewards at
 zero-probability entries are immaterial: multiplication by the absorption
 probability implements the paper's convention that those entries have value
-zero. These are numerical source data, not a separately constructed stochastic
-game or a new identification of expected-pathwise-liminf payoffs.
+zero. The canonical game below consumes precisely these data; its absorbers
+have literal action-independent rewards. No reduction from general absorbing
+stage games is asserted.
 
 Stationary strategies are literally finite real probability vectors. Pure
 stationary values below are the ratios in Lemma 2.2, with value zero when the
-denominator vanishes. Their agreement with the actual stochastic-game payoff
-is not proved here. Definition 2.3 uses these numerical ratios; its proper-pair
+denominator vanishes. Their agreement with the canonical game's actual payoff
+is identified below. Definition 2.3 uses these numerical ratios; its proper-pair
 limit is along a discrete sequence, as specified by the paper's basic assumptions.
 -/
 
@@ -81,7 +90,45 @@ def payoffNumerator1 (G : AbsorbingGameData I J) : I → J → ℝ :=
 def payoffNumerator2 (G : AbsorbingGameData I J) : I → J → ℝ :=
   fun i j => G.absorptionCoefficients i j * G.reward2 i j
 
+/-- Literal canonical absorption data, with the two source reward coordinates. -/
+def canonicalData {A B : Type} (G : AbsorbingGameData A B) :
+    GameTheory.RecursiveAbsorption.Data A B where
+  absorption := G.absorptionProbability
+  reward := fun i j who => Bool.rec (G.reward1 i j) (G.reward2 i j) who
+
 end AbsorbingGameData
+
+/-- The actual finite action law represented by a paper simplex strategy. -/
+def stationaryLaw {A : Type*} [Fintype A] (x : StationaryStrategy A) : PMF A :=
+  ofVector x.1 x.2
+
+/-- One live state and literal action-independent absorbers for the source table. -/
+abbrev canonicalGame {A B : Type} (G : AbsorbingGameData A B) :=
+  GameTheory.RecursiveAbsorption.game G.canonicalData
+
+/-- The paper strategies played as an actual stationary behavioral profile. -/
+def canonicalStationaryProfile {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (x : StationaryStrategy A) (y : StationaryStrategy B) :
+    (canonicalGame G).BehaviorProfile :=
+  GameTheory.RecursiveAbsorption.stationaryProfile G.canonicalData
+    (stationaryLaw x) (stationaryLaw y)
+
+/-- Literal expected pathwise liminf under the canonical game's infinite-play law. -/
+abbrev canonicalPayoff {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (initial : (canonicalGame G).State) :=
+  GameTheory.RecursiveAbsorption.liminfPayoff G.canonicalData initial
+
+/-- Lemma 2.2 for the canonical game, with zero-denominator value zero included. -/
+theorem lemma2_2_canonical {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (x : StationaryStrategy A) (y : StationaryStrategy B)
+    (who : Bool) :
+    canonicalPayoff G none (canonicalStationaryProfile G x y) who =
+      GameTheory.RecursiveAbsorption.absorbingContribution G.canonicalData
+        (stationaryLaw x) (stationaryLaw y) who /
+      GameTheory.RecursiveAbsorption.absorptionMass G.canonicalData
+        (stationaryLaw x) (stationaryLaw y) :=
+  GameTheory.RecursiveAbsorption.liminfPayoff_stationary_none
+    G.canonicalData (stationaryLaw x) (stationaryLaw y) who
 
 variable {I J : Type*} [Fintype I] [Fintype J]
 
@@ -96,6 +143,46 @@ def pureStationaryPayoff2 (G : AbsorbingGameData I J)
     (x : StationaryStrategy I) (j : J) : ℝ :=
   Math.Probability.RatioProperPair.columnRatio
     G.absorptionCoefficients G.payoffNumerator2 x.1 j
+
+/-- The numerical pure row value is the canonical game's actual stationary value. -/
+theorem pureStationaryPayoff1_eq_canonical {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (y : StationaryStrategy B) (i : A) :
+    pureStationaryPayoff1 G y i =
+      canonicalPayoff G none
+        (GameTheory.RecursiveAbsorption.stationaryProfile G.canonicalData
+          (PMF.pure i) (stationaryLaw y)) false := by
+  calc
+    _ = GameTheory.RecursiveAbsorption.stationaryPayoff G.canonicalData
+        (PMF.pure i) (stationaryLaw y) false := by
+      have hratio := GameTheory.RecursiveAbsorption.rowRatio_eq_stationaryPayoff
+        G.canonicalData (stationaryLaw y) false i
+      change Math.Probability.RatioProperPair.rowRatio G.absorptionCoefficients
+        G.payoffNumerator1 (toVector (stationaryLaw y)) i =
+          GameTheory.RecursiveAbsorption.stationaryPayoff G.canonicalData
+            (PMF.pure i) (stationaryLaw y) false at hratio
+      simpa only [pureStationaryPayoff1, stationaryLaw, toVector_ofVector] using hratio
+    _ = _ := (GameTheory.RecursiveAbsorption.liminfPayoff_stationary_none
+      G.canonicalData (PMF.pure i) (stationaryLaw y) false).symm
+
+/-- The corresponding numerical pure column value has the same actual semantics. -/
+theorem pureStationaryPayoff2_eq_canonical {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (x : StationaryStrategy A) (j : B) :
+    pureStationaryPayoff2 G x j =
+      canonicalPayoff G none
+        (GameTheory.RecursiveAbsorption.stationaryProfile G.canonicalData
+          (stationaryLaw x) (PMF.pure j)) true := by
+  calc
+    _ = GameTheory.RecursiveAbsorption.stationaryPayoff G.canonicalData
+        (stationaryLaw x) (PMF.pure j) true := by
+      have hratio := GameTheory.RecursiveAbsorption.columnRatio_eq_stationaryPayoff
+        G.canonicalData (stationaryLaw x) true j
+      change Math.Probability.RatioProperPair.columnRatio G.absorptionCoefficients
+        G.payoffNumerator2 (toVector (stationaryLaw x)) j =
+          GameTheory.RecursiveAbsorption.stationaryPayoff G.canonicalData
+            (stationaryLaw x) (PMF.pure j) true at hratio
+      simpa only [pureStationaryPayoff2, stationaryLaw, toVector_ofVector] using hratio
+    _ = _ := (GameTheory.RecursiveAbsorption.liminfPayoff_stationary_none
+      G.canonicalData (stationaryLaw x) (PMF.pure j) true).symm
 
 /-- Definition 2.3: full mixing and both strict-payoff ranking inequalities. -/
 def IsDeltaProperPair (G : AbsorbingGameData I J) (δ : ℝ)
@@ -116,6 +203,27 @@ theorem theorem2_4 [Nonempty I] [Nonempty J] (G : AbsorbingGameData I J) :
     G.absorptionCoefficients G.payoffNumerator1 G.payoffNumerator2
     (fun i j => (G.absorptionProbability i j).2.1)
   exact ⟨⟨x, hxy.1⟩, ⟨y, hxy.2.1⟩, hxy⟩
+
+/-! ## Section 3: canonical stationary approximate equilibria
+
+This statement concerns the actual game defined above. The production proof
+constructs proper pairs internally, derives the absorbing and recurrent limit
+cases, and caps all behavioral deviations. The original absorbing-stage-game
+reduction and the standalone statement of Lemma 3.2 remain separate obligations.
+-/
+
+/-- Theorem 3.1 for the canonical model, simultaneously at every initial state. -/
+theorem theorem3_1_canonical {A B : Type} [Fintype A] [Fintype B]
+    [Nonempty A] [Nonempty B] (G : AbsorbingGameData A B) {ε : ℝ} (hε : 0 < ε) :
+    ∃ (x : StationaryStrategy A) (y : StationaryStrategy B), ∀ initial,
+      (canonicalGame G).IsεAsymptoticNash (canonicalPayoff G initial) ε
+        (canonicalStationaryProfile G x y) := by
+  obtain ⟨x, y, hxy⟩ :=
+    GameTheory.RecursiveAbsorption.exists_stationary_liminfApproximateEquilibrium
+      G.canonicalData hε
+  refine ⟨⟨toVector x, toVector_mem_stdSimplex x⟩,
+    ⟨toVector y, toVector_mem_stdSimplex y⟩, ?_⟩
+  simpa only [canonicalStationaryProfile, stationaryLaw, ofVector_toVector] using hxy
 
 /-! ## Section 4: Example 3
 

@@ -1,5 +1,6 @@
 import Research.MarkedCalendar.FiniteLawChart
 import MathUE.MeasureTheory.FiniteProductDominatedWeakCompactness
+import MathUE.Topology.NonemptyCompactLimits
 
 /-! # Compactification of the actual finite-law charts
 
@@ -37,32 +38,6 @@ theorem legalMenuCompacts_subset (laws : ι → FinDist (Option ℕ)) :
   obtain ⟨time, _, rfl⟩ := (mem_legalFiniteMenu_iff laws t).mp ht
   exact ⟨mark_nonneg laws time, (mark_le_cutoff laws time).trans (cutoff laws).property.2⟩
 
-omit [Fintype ι] [Nonempty ι] in
-private theorem mem_limit_compact {sets : ℕ → NonemptyCompacts ℝ}
-    {limit : NonemptyCompacts ℝ} {points : ℕ → ℝ} {point : ℝ}
-    (hsets : Tendsto sets atTop (𝓝 limit)) (hpoints : Tendsto points atTop (𝓝 point))
-    (hmem : ∀ k, points k ∈ sets k) : point ∈ limit := by
-  apply (limit.isCompact.isClosed.mem_iff_infDist_zero limit.nonempty).mpr
-  have hdist := NonemptyCompacts.lipschitz_infDist.continuous.tendsto
-    (point, limit) |>.comp (hpoints.prodMk_nhds hsets)
-  have hzero : Tendsto (fun k => Metric.infDist (points k) (sets k : Set ℝ))
-      atTop (𝓝 0) := by
-    apply tendsto_const_nhds.congr'
-    exact Eventually.of_forall fun k => (Metric.infDist_zero_of_mem (hmem k)).symm
-  exact tendsto_nhds_unique hdist hzero
-
-omit [Fintype ι] [Nonempty ι] in
-private theorem exists_mem_tendsto_of_compacts_tendsto
-    {sets : ℕ → NonemptyCompacts ℝ} {limit : NonemptyCompacts ℝ}
-    (hsets : Tendsto sets atTop (𝓝 limit)) {point : ℝ} (hpoint : point ∈ limit) :
-    ∃ points : ℕ → ℝ, (∀ k, points k ∈ sets k) ∧ Tendsto points atTop (𝓝 point) := by
-  choose points hmem hdist using
-    fun k => (sets k).isCompact.exists_infDist_eq_dist (sets k).nonempty point
-  refine ⟨points, hmem, tendsto_iff_dist_tendsto_zero.mpr ?_⟩
-  have h := (NonemptyCompacts.lipschitz_infDist_const point).continuous.tendsto limit
-    |>.comp hsets
-  simpa only [Function.comp_def, hdist, Metric.infDist_zero_of_mem hpoint, dist_comm] using h
-
 /-- Every limiting legal mark is realized along genuine finite entries of the original menus. -/
 theorem exists_legal_reply_dates_tendsto
     (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
@@ -73,7 +48,8 @@ theorem exists_legal_reply_dates_tendsto
       (∀ k, some (dates k) ∈ quittingFiniteOpponentAtomGapReplyMenu
         (quittingFiniteStoppingCalendar (source (subsequence k)))) ∧
       Tendsto (fun k => mark (source (subsequence k)) (dates k)) atTop (𝓝 t) := by
-  obtain ⟨points, hmem, hpoints⟩ := exists_mem_tendsto_of_compacts_tendsto hmenu ht
+  obtain ⟨points, hmem, hpoints⟩ :=
+    Math.Topology.exists_mem_tendsto_of_nonemptyCompacts_tendsto hmenu ht
   have hdates (k : ℕ) :=
     (mem_legalFiniteMenu_iff (source (subsequence k)) (points k)).mp (hmem k)
   choose dates hlegal hmark using hdates
@@ -165,12 +141,12 @@ theorem exists_chart_compactification (source : ℕ → ι → FinDist (Option �
     { endpoints := point.1
       cutoff := point.2.2.1
       endpoints_subset := hpoint.1
-      zero_mem := mem_limit_compact hE tendsto_const_nhds
-        (fun k => (calendar (source (subsequence k))).zero_mem)
-      one_mem := mem_limit_compact hE tendsto_const_nhds
-        (fun k => (calendar (source (subsequence k))).one_mem)
-      cutoff_mem := mem_limit_compact hE hcReal
-        (fun k => (calendar (source (subsequence k))).cutoff_mem) }
+      zero_mem := Math.Topology.mem_limit_of_nonemptyCompacts_tendsto hE tendsto_const_nhds
+        (Eventually.of_forall fun k => (calendar (source (subsequence k))).zero_mem)
+      one_mem := Math.Topology.mem_limit_of_nonemptyCompacts_tendsto hE tendsto_const_nhds
+        (Eventually.of_forall fun k => (calendar (source (subsequence k))).one_mem)
+      cutoff_mem := Math.Topology.mem_limit_of_nonemptyCompacts_tendsto hE hcReal
+        (Eventually.of_forall fun k => (calendar (source (subsequence k))).cutoff_mem) }
   refine ⟨subsequence, limit, point.2.1, point.2.2.2, hmono, hE, hc, hT, hμ, ?_,
     sum_limit_chartLaws source subsequence hμ, ?_, ?_, ?_⟩
   · intro i
@@ -182,8 +158,8 @@ theorem exists_chart_compactification (source : ℕ → ι → FinDist (Option �
       (Eventually.of_forall fun k => mark_nonneg (source (subsequence k)) (dates k)), ?_⟩
     exact le_of_tendsto_of_tendsto hdates hcReal
       (Eventually.of_forall fun k => mark_le_cutoff (source (subsequence k)) (dates k))
-  · exact mem_limit_compact hT hcReal
-      (fun k => cutoff_mem_legalFiniteMenu (source (subsequence k)))
+  · exact Math.Topology.mem_limit_of_nonemptyCompacts_tendsto hT hcReal
+      (Eventually.of_forall fun k => cutoff_mem_legalFiniteMenu (source (subsequence k)))
   · intro t ht
     exact exists_legal_reply_dates_tendsto source subsequence hT ht
 

@@ -796,6 +796,7 @@ import MathUE.Topology.KuhnSimplexGeometry
 import MathUE.Topology.KuhnSimplexIncidence
 import MathUE.Topology.KuhnSimplexOrientation
 import MathUE.Topology.NestedOuterApproximation
+import MathUE.Topology.NonemptyCompactLimits
 import MathUE.Topology.NonnegativeSubsequenceDichotomy
 import MathUE.Topology.NormalizedRadialFixedPoint
 import MathUE.Topology.NullFamilyPasting
@@ -1635,6 +1636,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPert
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.UniformPayoffExistenceClosure
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.AbsorptionWeightedPayoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.BestReplyMassEstimate
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.BestResponse
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.Game
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.Payoff
@@ -2844,6 +2846,7 @@ import UniformEquilibrium.Quitting.Examples.HostClearingCapLedgerBoundary
 import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixtureChildren
 import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixtureMatrix
 import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixturePassiveAndJointScreens
+import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixturePunishmentRoots
 import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixtureRangeAndInfluence
 import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixtureSourceScreens
 import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixtures

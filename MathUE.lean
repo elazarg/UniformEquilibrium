@@ -801,6 +801,7 @@ import MathUE.Topology.BoxComplementaritySpernerSubdivisionPrism
 import MathUE.Topology.BoxComplementarityStabilizedLocalDegree
 import MathUE.Topology.KuhnExternalCubePrism
 import MathUE.Topology.KuhnPrismBoundaryCollar
+import MathUE.Topology.NonemptyCompactLimits
 import MathUE.LinearProgramming.LocalDegree
 import MathUE.LinearProgramming.CommonChartLocalDegree
 import MathUE.LinearProgramming.R0Degree

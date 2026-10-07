@@ -4,6 +4,7 @@ import Research.Counterexamples.Pairwise.TailPacketCyclicFourWitness
 import Research.MarkedCalendar.Order
 import Research.MarkedCalendar.FiniteLawChart
 import Research.MarkedCalendar.FiniteLawCompactification
+import Research.MarkedCalendar.FiniteLawGeometry
 import Research.General.AnytimeDetectionConditional
 import Research.General.BinaryKLQuadratic
 import Research.General.BufferedOneSeamReturnOrExit
