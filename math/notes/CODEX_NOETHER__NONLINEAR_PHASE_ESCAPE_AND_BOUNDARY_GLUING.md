@@ -7,6 +7,9 @@ It falsifies a tempting global compactness implication, not UE existence.
 The displayed escape table is itself covered by a pure-pair equilibrium.
 Two nonnegative triple-join rows already give a complete bounded producer
 under the additional raw sign and passive-cap conditions at the end.
+The actual singleton punishment source also consumes the one-coordinate
+escape mode under the explicitly stated cylinder cap; multi-coordinate
+escapes remain open.
 The live question is whether actual no-UE concrete-base gaps exclude or
 consume EVERY escape mode, instead of assuming one more reward sign.
 No export or conjecture-facing increment is claimed here.
@@ -328,3 +331,140 @@ The extension shows precisely where the symmetric escape uses more than
 one bad row. It does not prove that actual all-base gaps supply a suitable
 G, and it does not settle escapes with fewer than two good rows or with
 only bad rows having negative Γ_ib. Those are still the global question.
+
+## A real singleton-source consumer for one-coordinate escape
+
+The following semantic boundary lemma is proved in ordinary mathematics.
+It is internal, not independently reviewed. Unlike the two-good-row bound,
+it uses the actual concrete-base screen to consume an unbounded shifted
+root branch. It does not consume arbitrary multicoordinate escapes.
+
+Relabel the good owner as0. Assume all six c_ij>0, c₀A≥0 and Γ₀b<0.
+Put M=M₀, R₁=M/c₀₁ and R₂=M/c₀₂. A shifted zero has
+
+    X₁≤R₁,       X₂≤R₂,       X_b≤M/(−Γ₀b),       0≤λ≤M.  (B1)
+
+Indeed e₀≥λ≥0 and L₀≥0 give all three coordinate bounds as before;
+also e₀=Γ₀bX_b−(1+X_b)L₀+P₀/D₀≤M. No condition on c₁A or c₂A
+is used. Thus the only potentially unbounded coordinate is X₀.
+
+Write d_j=r_b(bj)−s_b and d_jk=r_b(bjk)−s_b, and split the anchor's
+passive Quit polynomial into its constant and X₀ parts:
+
+    C_b(X)=C⁰(X₁,X₂)+X₀ C¹(X₁,X₂),
+    C⁰=d₁X₁+d₂X₂+d₁₂X₁X₂,
+    C¹=d₀+d₀₁X₁+d₀₂X₂+aX₁X₂.
+
+Assume the three nonempty vertex values of C⁰ on[0,R₁]×[0,R₂] are≤0,
+and all four vertex values of C¹ are≤0. Bilinear interpolation gives
+
+    C_b(X)≤0 whenever X₀≥0, X₁∈[0,R₁], X₂∈[0,R₂].   (B2)
+
+These are seven finite raw tests on a cylinder, not an unspecified bound
+at infinity. Coincident zero-radius vertices cause no difficulty.
+
+Boundary lemma: if Pun₀=quittingPunishmentValue reward0≤s₀ and an unbounded
+sequence of zeros of H_λ exists, then the actual singleton0 concrete
+persistent-base screen has a nonpositive point. Consequently the existing
+original-game compiler already gives a uniform equilibrium payoff.
+
+Proof: take a sequence Xⁿ,λ_n with H_{λ_n}(Xⁿ)=0 and X₀ⁿ→∞. By(B1),
+pass to a subsequence on which X₁ⁿ,X₂ⁿ,X_bⁿ,λ_n converge to finite
+limits x₁,x₂,x_b,λ. Set q_j=x_j/(1+x_j) for j=1,2. Consider the
+literal induced free game at base{0}, with free probabilities(q₁,q₂,0)
+for players1,2,b.
+
+For i∈{1,2}, let k be the other element. Because P_i/D_i is uniformly
+bounded and the other odds are bounded, division of the residual by X₀ⁿ
+gives
+
+    e_i(Xⁿ)/X₀ⁿ→−(1+x_b)(c_i0+c_iA x_k).
+
+Since e_i≥λ_n≥0, c_i0+c_iA x_k≤0. If x_i>0, then X_iⁿ>0 eventually;
+complementarity makes e_i=λ_n, bounded by M, and this coefficient is zero.
+The free joining gap at the proposed base0 law is exactly
+
+    (c_i0+c_iA x_k)/(1+x_k).
+
+It is≤0 when q_i=0 and equals0 when q_i>0. Neither q_i can equal1 by
+finite(B1), so this is precisely free-player Nash for players1 and2.
+This argument uses the leading coefficient, not a false limit of an
+unbounded nominal continuation value.
+
+For b, its A-date Continue endpoint with nominal tail s_b is
+s_b+e_b(Xⁿ)/D_A(Xⁿ)≥s_b. Its Quit endpoint is
+s_b+C_b(Xⁿ)/D_A(Xⁿ)≤s_b by(B2). As X₀ⁿ→∞, the empty-A probability
+vanishes and the two endpoints converge to the literal Continue/Quit
+payoffs in the same finite free game with player0 sure. Therefore playerb
+weakly prefers Continue at that game point. The probabilities(q₁,q₂,0)
+are an actual independent induced finite Nash law for ALL three free
+players, not only for the two leading residual coordinates.
+
+For owner0, both U₀ and W₀ depend only on x₁,x₂ and remain finite.
+The forced-Quit value is U₀. The algebraic active Continue endpoint with
+tail W₀ equals U₀, irrespective of the shifted owner residual. Because
+W₀=s₀+L₀≥s₀≥Pun₀, substituting the real punishment tail Pun₀ can only
+decrease that endpoint. This is exactly
+
+    quittingSingletonBaseOwnerFloorExcess reward0 root≤0.
+
+There are no outsiders: free=I−{0}. Its full singleton maximum is therefore
+nonpositive by `quittingSingletonBaseExcess_nonpos_iff`, and the actual
+induced-Nash source theorem
+`exists_uniformPayoff_or_singletonBase_pos_gap` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`
+must take its UE arm. This proves the boundary lemma, including Never
+through the existing punishment-tail semantic consumer. The shifted λ
+equations are NOT asserted to be Bellman equations of a strategy.
+
+Under actual no UE and Pun₀≤s₀, the source thus excludes every unbounded
+zero sequence. By(B1) all λ are already bounded, so the full zero family
+is bounded. Its λ>M slice is empty. Local degree one and global degree
+zero now produce a nonzero H₀ root without requiring c₁A,c₂A≥0.
+The same six strict pair joins exclude singleton support. This is a
+genuine source-to-analytic-root adapter; its proof requires only the
+actual singleton0 gap, not a conjectural implication from a renamed
+positive minimum. It does not make the root into full Nash unless the
+remaining passive endpoint caps are supplied.
+
+For raw signed no-UE data, Pun₀≤s₀ need not hold on the original table.
+There is an exact implemented adapter rather than a silent sign repair:
+`nonempty_finFourSinglePivotNormalization_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean`
+produces the literal normalized table r̂_i(S)=(r_i(S)−offset_i)/s_p with
+s_p>0, original no UE for r̂, and its `normal` field actual punishment≤ŝ_i
+for EVERY i.
+The definitions `quittingSinglePivotOffset` and
+`quittingSinglePivotNormalizedReward` in
+`UniformEquilibrium/Quitting/Root/SinglePivotNormalization.lean` show that
+Γ,Π,c and all C coefficients scale by the same positive1/s_p, while
+the radii stay unchanged. Thus(B1)–(B2) and every raw joining comparison
+survive this actual source normalization. No arbitrary affine invariance
+of the zero-Never game is assumed. These exact declarations and fields
+were inspected for this adapter.
+
+Adding the checked passive-cap alternatives gives a complete raw UE
+corollary: owner0 may use r₀(0b)≤s₀ or its nonnegative-premium alternative;
+the two other A players must have Π_ij,Π_ik,Π_iA≥0 and r_i(ib)≤r_i(b).
+On the normalized actual source the boundary lemma eliminates escape,
+and the root plus actual-value cap proof supplies the remaining terminal
+consumer. Alternatively an escaped branch is consumed directly by the
+existing singleton punishment source. This yields UE existence, not a
+promise that the boundary arm has one fixed exact period-two strategy or
+an accuracy-independent punishment plan.
+
+The structural limit is still clear: this dispatch concerns one divergent
+odds coordinate with a good row controlling every other coordinate. If
+two or three A coordinates diverge, the nominal owner tail itself can
+diverge, the other odds need not have finite limits, and this
+argument does not apply. The exact symmetric escape family above remains
+the unresolved multicoordinate guardrail. Nor is any new counterexample-
+class increment claimed for this internal corollary without a full actual
+source-overlap comparison.
+
+Concrete next question: can a multicoordinate escape be split into an
+actual finite-Nash face with admissible member gaps, or does a second
+regularization select a lower-scale owner whose nominal tail remains
+bounded? The available compact global positive minimum supplies an actual
+semantic restriction, but no link from it to these shifted polynomial
+roots has yet been proved. A rate limit alone cannot fill that link.

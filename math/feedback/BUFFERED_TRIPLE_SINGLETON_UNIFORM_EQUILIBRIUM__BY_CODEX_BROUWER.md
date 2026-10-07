@@ -350,7 +350,7 @@ No self-export, Lean seal, or conclusion for arbitrary Fin4 tables is made.
 ## Final strongest artifact: exact-byte assembly and delta PASS
 
 I read the complete690-line standalone
-[TRIPLE_SINGLETON_COLLISION_BOX_UNIFORM_EQUILIBRIUM](../notes/CODEX_NOETHER__TRIPLE_SINGLETON_COLLISION_BOX_UNIFORM_EQUILIBRIUM.md),
+[TRIPLE_SINGLETON_COLLISION_BOX_UNIFORM_EQUILIBRIUM](../exports/TRIPLE_SINGLETON_COLLISION_BOX_UNIFORM_EQUILIBRIUM.md),
 SHA256
 `fe00a5c0ddb505f462c794823e9a3ba20eba8e2f57c5344852faabcb6b0cb3c7`.
 This is a bounded assembly/delta check against the preceding independent
@@ -464,3 +464,30 @@ No objection or repair remains for this bounded extension. Any stronger
 standalone incorporating it must retain the good-row minimum, the extra
 negative Γ condition when G≠A, and the mandatory second cap arm for
 bad rows. Its final changed bytes remain a separate assembly check.
+
+## Final716-line strongest artifact: PASS
+
+The final standalone at the same linked path above has716 lines and SHA256
+`8b2ed12c6be0daacbeeabc9d8c892664e080eda356cae2687f8d7fd25c5cc0c5`.
+I compared its complete changed surface against the approved690-line
+version saved in commit`c37d4941`, and checked the final removal of an
+undefined internal label. No counterpart review was read.
+
+**Final exact-byte soundness and significance PASS; no unresolved
+objection or repair.** The changes faithfully incorporate the preceding
+two-good-row theorem: G-dependent nonempty minima, the negative good-row
+Γ condition when G is proper, good-row-only coercive bounds, and mandatory
+second passive-cap arm for bad rows appear in the statement, proof,
+conclusion and handoff. The four-coordinate stress is exactly the one
+independently checked above. No bad-row singleton floor is used.
+
+The whole-class normalization/core inclusion paragraph is now expressly
+restricted to G=A; it makes no false joining-attractive claim for a
+negative third triple join. The original complete coverage fixture and
+all15 concrete-source calculations are unchanged. The seven-vertex
+caps, signed inactive corrections, support≥2, unrestricted replies,
+fixed target and initial-zero horizon bounds remain intact. The artifact
+has no mathematical dependency on a conference note or review and makes
+no Lean or all-table strategy-completeness claim. This final seal replaces
+the690-line assembly seal only for the stronger assembled artifact;
+it does not alter either earlier scoped mathematical verdict.

@@ -470,6 +470,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: the larger-eigenvalue cyclic singleton tests specified below | UE for arbitrary signed own singletons and arbitrary nonsingleton rewards. Four positive clocks, all phase floors and one fixed target are produced from raw rewards; all four phases are refined. This is reviewed mathematics awaiting formalization. |
 | Fin4: some partition into pairs satisfies four weak mate-joining comparisons and twelve opposite-pair own-singleton caps | UE for arbitrary signed rewards, without singleton-matrix graph or inverse-sign restrictions. In the strict R0/nonzero-degree branch the proof produces an exact period-two terminal Nash profile, including inactive players; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
+| Fin4: a triple has six strict pair joins, at least two good triple rows, and the passive-cap alternatives and seven collision-box tests specified below | UE for arbitrary signed rewards. The remaining triple row may have a negative joining gap; positive anchor triple and grand premiums are allowed. All odds, corrected values and a fixed uniform target are produced. This is reviewed mathematics awaiting formalization. |
 | Fin4: the weak crossed-matching singleton signs, participant comparisons, and twelve outsider caps specified below | UE for arbitrary signed own singletons and arbitrary passive pair rewards. The strict standard-Q branch produces four proper rates and an exact two-phase terminal Nash profile; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
 | Fin4: the below-singleton joint-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile. A separate full sixty-coordinate reward neighborhood is also covered. The phase values may all lie below own singletons. This is reviewed mathematics awaiting formalization. |
 | Fin4: the opposite-sign matching-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile, with one pair's passive values below own singletons and the other pair's above. Eight averaged-pair/triple caps suffice; individual cross-pair caps are unnecessary. This is reviewed mathematics awaiting formalization. |
@@ -1158,6 +1159,49 @@ the tracked periodic semantic consumer is
 (`UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`). No exact periodic
 profile at weak equality, all-proper rates, or arbitrary Fin4 conclusion is
 asserted.
+
+The **triple–singleton collision-box criterion** chooses an anchor b,
+A=I∖{b}, and G⊆A with |G|≥2. For distinct i,j∈A put
+
+    Πᵢⱼ=rᵢ({i,j})−sᵢ,        cᵢⱼ=rᵢ({i,j})−rᵢ({j}).
+
+For A∖{i}={j,k} put ΠᵢA=rᵢ(A)−sᵢ and
+cᵢA=rᵢ(A)−rᵢ({j,k}). Require all six cᵢⱼ>0, cᵢA≥0 on G,
+and either G=A or Γᵢb<0 for some i∈G. Define
+
+    Mᵢ=max(0,Πᵢⱼ,Πᵢₖ,ΠᵢA),    Bᵢ=max(0,Γᵢb,Mᵢ),
+    Rⱼ=min[i∈G∖{j}] Bᵢ/cᵢⱼ.
+
+Every good i∈G must satisfy at least one of
+
+    rᵢ({i,b})≤sᵢ;
+    Πᵢⱼ,Πᵢₖ,ΠᵢA≥0 and rᵢ({i,b})≤rᵢ({b}).
+
+Every i∈A∖G must satisfy the second alternative; its cᵢA may be negative.
+For the anchor define
+
+    C_b(x)=∑[j∈A](r_b({b,j})−s_b)xⱼ
+           +∑[{j,k}⊆A](r_b({b,j,k})−s_b)xⱼxₖ
+           +(r_b(I)−s_b)∏[j∈A]xⱼ.
+
+Require C_b(v)≤0 at the seven nonzero-choice vertices vⱼ∈{0,Rⱼ}.
+Coincident vertices when a radius is zero are harmless.
+
+These finite reward tests imply UE without a matrix or strategic hypothesis.
+Under Γ R0 of degree one, the good rows bound the entire nonlinear feasible
+odds set. A bounded degree homotopy and the nonzero local origin degree
+produce a complementary root with at least two positive hazards. Alternating
+the joint A row and solo b row, with actual inactive-value corrections,
+gives exact terminal Nash against every behavioral replacement. Geometric
+opponent absorption gives the same fixed target and an O(1/N) horizon bound.
+The other matrix cases use the tracked original-game degree exit.
+
+Every Fin4 counterexample must fail this criterion for every choice of b
+and G. The [complete raw producer](exports/TRIPLE_SINGLETON_COLLISION_BOX_UNIFORM_EQUILIBRIUM.md)
+includes an open sixty-coordinate family escaping all fifteen concrete-base
+screens and the other compared raw criteria. This is ordinary mathematics,
+not a new checked Lean declaration. No coverage of arbitrary remaining
+tables or all-proper rates is asserted.
 
 The **crossed-matching criterion** selects f=(01)(23), a=(02)(13), and
 o=f∘a, after any player relabeling. For each i require

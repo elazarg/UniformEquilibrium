@@ -425,7 +425,7 @@ deltas should be checked and bound to its own exact bytes.
 ## 8. Final strongest artifact: bounded assembly and changed-surface check
 
 The complete 690-line artifact
-`../notes/CODEX_NOETHER__TRIPLE_SINGLETON_COLLISION_BOX_UNIFORM_EQUILIBRIUM.md`
+`../exports/TRIPLE_SINGLETON_COLLISION_BOX_UNIFORM_EQUILIBRIUM.md`
 has SHA256
 `fe00a5c0ddb505f462c794823e9a3ba20eba8e2f57c5344852faabcb6b0cb3c7`.
 I read the entire artifact, checked that exact identity, and compared it
@@ -477,3 +477,90 @@ feedback. Its elementary arguments, finite data and coverage calculations
 are included inline. The Lean handoff accurately separates the new raw
 predicate, produced complementary root, behavioral profile, and original-
 game UE consumer; it does not portray them as already implemented.
+
+## 9. Changed-surface review: two good triple rows suffice
+
+I independently checked only the final section “Two good triple rows
+suffice: a structural producer extension” in
+`../notes/CODEX_NOETHER__NONLINEAR_PHASE_ESCAPE_AND_BOUNDARY_GLUING.md`.
+The 330-line full note has SHA256
+`44bf7c6452cd0bb653ac5d5828ddec1c57195d7420a1be089634f8bf08693bc2`;
+the reviewed final section has SHA256
+`43ab62272f8f9db0c6732d0b3dea9c221b1c173fef0786567f0535a0982f2e08`.
+Verdict: PASS. This is a further genuine weakening of a structural raw
+input, not an improvement of a numerical bound. It does not imply that
+all remaining tables have the required good rows. No counterpart review
+was read, and the preceding 690-line artifact verdict remains separately
+bound to its original bytes.
+
+Precisely, choose G⊆A with |G|≥2. All six c_ij stay strictly positive.
+Require c_iA≥0 only on G, and either G=A or some i∈G has Γ_ib<0.
+Each good row may use either reviewed passive-cap arm; every bad row
+must use Π_ij,Π_ik,Π_iA≥0 and r_i(ib)≤r_i(b). Define R_j using
+only i∈G−{j}, a nonempty set, and retain the seven actual box caps.
+
+For every feasible e(X)≥0, each good row has L_i≥0 and P_i/D_i≤M_i,
+so L_i≤B_i. These rows bound every A coordinate by the new R_j. A
+good negative Γ_ib then bounds X_b. If G=A, R₀ supplies such a row;
+otherwise its existence is an explicit raw hypothesis. Thus all shifted
+homotopy zeros remain in one compact set. No estimate from a bad row is
+needed. Local quadratic isolation uses no triple coefficient sign, and
+the singleton-support argument uses only c_ij>0: the offending triple
+monomial vanishes on a singleton support. Hence nonzero produced support
+still has at least two positive finite odds.
+
+For a bad row, nominal W_i may indeed be below s_i. The proof does not
+reuse that false floor. Instead Π_i coefficients nonnegative give
+U_i≥s_i, and the residual correction gives U_i*≥U_i. The unchanged
+actual policy identity W_i*=(U_i*+X_b r_i(b))/(1+X_b) proves the
+passive Quit cap directly. The active Quit endpoint equals nominal U_i
+and is therefore at most U_i*, with equality for active i. The positive
+inactive corrections depend on e_i≥0, not on L_i≥0. All corrected
+equations, including inactive b, remain valid; period contraction identifies
+their values with actual bounded payoffs. The full behavioral and uniform-
+horizon proof follows with the same opponent survival argument.
+
+The exact strict-inclusion test also checks. From the original complete
+table, change only r₂(01)=3, r₂(02)=r₂(12)=1, and r₂(23)=2.
+With G={0,1}, both good triple joins are1 and both Γ_ib are−1.
+The bad triple join is c₂A=−1, while its three Π values are0,0,1
+and 2≤r₂(3)=4. Pair joins c₂₀,c₂₁ become1; all others retain
+their positive values. Good-row B values are4,4, so R=(4,4,8) and
+the unchanged anchor polynomial has exactly the old strict vertex caps.
+Thus the new predicate admits this full table and the earlier all-three-
+good predicate does not. No source-separation census is transferred to
+this stress modification; the original strict center still witnesses
+the already established coverage distinction.
+
+## 10. Final two-good-row artifact fidelity
+
+The strongest final artifact is the same standalone path as Section8,
+now 716 lines with SHA256
+`8d60675e258ef8166f77e64e9c0e353d9ab5430bdc6d9ed0d5f52e09ea0401b6`.
+I checked the changed statement, good-row compactness proof, passive
+endpoints, exact four-coordinate stress, and handoff against the approved
+690-line artifact and the independently checked Section9 extension.
+Final bounded artifact verdict: PASS. No counterpart review was read,
+no new strategic premise is present, and no repair remains.
+
+In particular R_j minimizes only over nonempty G−{j}; a good negative
+Γ_ib is either produced from R₀ when G=A or required explicitly when G
+is proper. Only good rows may use the singleton-floor passive cap.
+The bad row must use the nonnegative-Π/actual-r_i(b) alternative, and
+both occurrences of the endpoint proof retain that distinction. The new
+example's negative c₂A and its good-only radii are correct. The old
+normalization/peeling inclusion is now explicitly restricted to G=A;
+it is not asserted for the negative-third-row family. The unchanged
+original center retains the previously verified complete source census.
+
+This seal supersedes the final-artifact bytes in Section8, not its valid
+narrower theorem. The resulting class is the strongest reviewed raw
+statement; this addendum adds no further mathematical refinement and
+asserts no Lean verification.
+
+Final label-only acknowledgment: the 716-line artifact subsequently removed
+only the unexplained label “ST1” from “No such ST1 inclusion”; the full
+mathematical scope sentence remains. Its final SHA256 is
+`8b2ed12c6be0daacbeeabc9d8c892664e080eda356cae2687f8d7fd25c5cc0c5`.
+The exact changed sentence and hash were checked. PASS binds these final
+bytes; no hypothesis, proof, example, or coverage conclusion changed.

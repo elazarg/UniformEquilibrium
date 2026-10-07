@@ -18,26 +18,33 @@ behavioral strategy. All claims concern expected payoff. Put s_i=r_i({i}),
 Γ_ii=0 and Γ_ij=r_i({j})−s_i for i≠j.
 
 For distinct i,j∈A define Π_ij=r_i({i,j})−s_i and
-c_ij=r_i({i,j})−r_i({j}). For i∈A, writing A−i={j,k}, put
+c_ij=r_i({i,j})−r_i({j}). Choose a raw subset G⊆A with |G|≥2.
+For i∈A, writing A−i={j,k}, put
 
     Π_iA=r_i(A)−s_i,                 c_iA=r_i(A)−r_i({j,k}),
     M_i=max(0,Π_ij,Π_ik,Π_iA),      B_i=max(0,Γ_ib,M_i),
-    R_j=min[i∈A−j] B_i/c_ij.                         (T1)
+    R_j=min[i∈G−{j}] B_i/c_ij.                       (T1)
+
+The minimizing sets are nonempty because |G|≥2. The choice of G is a
+finite reward-data selection, not a strategic witness.
 
 Assume the following finite raw inequalities:
 
     c_ij>0 for all six ordered i≠j in A,
-    c_iA≥0 for every i∈A.                            (T2a)
+    c_iA≥0 for every i∈G,
+    either G=A or Γ_ib<0 for at least one i∈G.        (T2a)
 
-For each i∈A separately assume at least one of the two raw alternatives:
+For each good i∈G separately assume at least one of the two raw alternatives:
 
     r_i({i,b})≤s_i;                                   (T2b)
     Π_ij≥0, Π_ik≥0, Π_iA≥0 and r_i({i,b})≤r_i({b}).   (T2c)
 
-Different players may use different alternatives. Under(T2b) their within-A
-participant premiums remain arbitrary signed data. Under(T2c) those three
-premiums are nonnegative, but own levels and all other rewards may still
-have either sign.
+Every bad i∈A−G must satisfy(T2c). In particular its triple joining gap
+c_iA may be negative. Different good players may use different alternatives.
+Under(T2b) their within-A participant premiums remain arbitrary signed data.
+Under(T2c) those three premiums are nonnegative, but own levels and all
+other rewards may still have either sign. Taking G=A recovers the
+all-three-nonnegative-triple family.
 
 For the singleton player b put a=r_b(I)−s_b and define the multiaffine
 polynomial
@@ -136,16 +143,18 @@ continuous field on all of ℝ⁴ with the same quadratic bound at zero.
 
 ### All feasible nonnegative odds are bounded
 
-Consider the larger set E={X≥0:e(X)≥0}, not merely roots. For i∈A,
+Consider the larger set E={X≥0:e(X)≥0}, not merely roots. For i∈G,
 P_i/D_i is a convex combination of 0,Π_ij,Π_ik,Π_iA, hence is≤M_i.
 Since L_i≥0, (T5) gives
 
     (1+X_b)L_i≤Γ_ib X_b+M_i,
     L_i≤(Γ_ib X_b+M_i)/(1+X_b)≤B_i.                (T8)
 
-Therefore X_j≤B_i/c_ij for every i∈A−j, and X_j≤R_j.
-R0 implies some i∈A has Γ_ib<0: otherwise column b is nonnegative
-and X=e_b is a nonzero homogeneous complementary solution. For that i,
+Therefore X_j≤B_i/c_ij for every i∈G−{j}, and X_j≤R_j for every j∈A.
+If G=A, R0 implies some i∈G has Γ_ib<0: otherwise column b is
+nonnegative and X=e_b is a nonzero homogeneous complementary solution.
+If G is proper, the last raw clause of(T2a) supplies such a good row.
+For that i,
 (T8), together with L_i≥0, gives X_b≤M_i/(−Γ_ib). Thus E is
 closed and bounded. These bounds do not use the signs of any passive A
 reward, and do not use the grand joining cap that is being proved later.
@@ -184,7 +193,8 @@ All q_i are strictly below one because every X_i is finite.
 
 For i∈A, the forced Quit endpoint on the passive b date is
 (s_i+X_b r_i({i,b}))/(1+X_b). Under(T2b) it is≤s_i≤W_i.
-Under(T2c) the cap follows from the corrected policy equation below.
+Here(T2b) is allowed only for good rows, where L_i≥0. Under(T2c) the
+cap follows from the corrected policy equation below even when L_i<0.
 For b, the A-date forced Quit minus s_b is exactly
 
     C_b(X)/D_A.                                      (T10)
@@ -205,8 +215,8 @@ The vertex condition is strictly broader; a positive triple coefficient
 can instead be offset by the linear terms. A complete raw-scope witness
 is given below.
 
-The subclass with all seven nonempty anchor participant rewards bounded
-by s_b has no additional UE coverage. Under
+For the all-three-good subclass G=A, imposing all seven nonempty anchor
+participant rewards≤s_b has no additional UE coverage. Under
 bare original no UE, `nonempty_finFourSinglePivotNormalization_of_no_uniformPayoff`
 in `UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean`
 positively rescales every own premium and joining comparison. Those seven
@@ -216,7 +226,8 @@ in `UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClo
 and its joining-attractive triple case by the corresponding triple-core
 theorem. A positive anchor grand premium leaves that particular
 whole-class inclusion; the separating table below also defeats the exact
-concrete punishment-tail consumers.
+concrete punishment-tail consumers. No such inclusion is asserted for
+the two-good-row family with a negative third triple joining gap.
 
 ### Inactive coordinates, actual payoff and arbitrary behavioral replies
 
@@ -240,7 +251,8 @@ For every i∈A the corrected passive-date policy equation is exactly
 
     W_i*=(U_i*+X_b r_i({b}))/(1+X_b).
 
-Under(T2b) its Quit endpoint is≤s_i≤W_i≤W_i*. Under(T2c), P_i/D_i≥0
+Under(T2b), valid only for good rows, its Quit endpoint is≤s_i≤W_i≤W_i*.
+Under(T2c), P_i/D_i≥0
 and the correction is nonnegative, hence U_i*≥U_i≥s_i. Therefore
 
     (s_i+X_b r_i({i,b}))/(1+X_b)
@@ -287,7 +299,7 @@ precede ε and work for all large N. No accuracy-varying target is selected.
 Finally, under hypothetical original no UE the cited source forces R0
 and degree one. The complete construction just given supplies a fixed
 uniform target, contradiction. This proves raw UE existence under(T2a),
-the per-player(T2b)/(T2c) disjunctions, and(T3).
+the good-row(T2b)/(T2c) disjunctions, mandatory(T2c) on bad rows, and(T3).
 
 ### A fresh complete strict table
 
@@ -345,6 +357,19 @@ but violates(T2b). The other two players retain(T2b). The new radii are
 anchor polynomial remains nonpositive there by the already verified vertex
 test. All pair joins remain positive and the three triple joins remain1.
 This is a complete raw-scope stress, not a second source-separation claim.
+
+The two-good-row scope genuinely permits a negative triple joining gap.
+From the original table change only
+
+    r₂(01)=3,       r₂(02)=r₂(12)=1,       r₂(23)=2.
+
+Take G={0,1}. The good triple joins remain1 and Γ₀b=Γ₁b=−1. The bad
+triple join is c₂A=2−3=−1, but player2 satisfies(T2c): its participant
+premiums are(0,0,1) and r₂(23)=2≤r₂(3)=4. All six pair joins remain
+positive. The good-only radii are exactly(4,4,8), so all seven anchor
+vertex values are unchanged. This complete raw table is admitted despite
+its negative c₂A. Again, the original fixture's concrete-source census is
+not asserted for the modification.
 
 Its Γ is the favorable matching H=3 matrix, with off-diagonal favorable
 entries3 at01/10/23/32 and all others−1. Every principal matrix with
@@ -661,9 +686,10 @@ only in the independent implemented-source coverage comparison.
 
 A narrow formalization can separate the following declarations:
 
-- A raw `TripleSingletonCollisionBox` predicate containing(T1), the six
-  strict pair joins, three weak triple joins, the per-player passive-cap
-  alternatives and the seven vertex inequalities. It should contain no
+- A raw `TripleSingletonCollisionBox` predicate containing the choice of G,
+  (T1), the six strict pair joins, weak triple joins on G, the good-row
+  negative singleton comparison when G is proper, the allowed per-player
+  passive-cap alternatives and the seven vertex inequalities. It should contain no
   root, strategy, payoff or equilibrium field.
 - A nonlinear complementarity producer under `IsR0Matrix Γ` and
   `r0Degree Γ hR0=1`, returning finite X≥0 with e≥0, X_i e_i=0, the
