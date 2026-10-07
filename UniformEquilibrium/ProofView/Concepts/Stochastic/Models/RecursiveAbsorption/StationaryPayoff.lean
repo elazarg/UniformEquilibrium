@@ -1,4 +1,4 @@
-import Research.RecursiveAbsorption.Payoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.Payoff
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring

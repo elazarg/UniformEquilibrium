@@ -1,4 +1,4 @@
-import Research.RecursiveAbsorption.Model
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.Game
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic.LiminfAverageBridge
 import Mathlib.Analysis.Asymptotics.SpecificAsymptotics
 

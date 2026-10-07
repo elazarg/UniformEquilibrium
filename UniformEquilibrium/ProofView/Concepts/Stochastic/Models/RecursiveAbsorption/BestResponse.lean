@@ -1,4 +1,4 @@
-import Research.RecursiveAbsorption.StationaryPayoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.StationaryPayoff
 import MathUE.PMFProduct.Bool
 import MathUE.GeometricMinimumRecurrence
 import UniformEquilibrium.Certificates.Adaptive.Certificate

@@ -1,5 +1,6 @@
 import Research.MarkedCalendar.Order
 import UniformEquilibrium.Quitting.Terminal.FiniteOpponentAtomGapReplyMenu
+import UniformEquilibrium.Quitting.Paths.CommonStoppingCalendarRetiming
 import Mathlib.MeasureTheory.Constructions.UnitInterval
 import Mathlib.MeasureTheory.Measure.WithDensity
 import GameTheory.Math.Probability.Measure
@@ -13,8 +14,11 @@ The base is canonical unit-interval volume, not a supplied density law.
 The actual densities give normalized chart laws, pointwise domination, and the
 exact common-mixture identity. The interval decoder recovers the same original
 laws and their independent product, with fallback confined to a derived-null
-complement. Calendar/menu transport, limiting complete caps, and original
-variation witnesses remain separate obligations beyond this slice.
+complement. The actual endpoint calendar collapses each cell to its midpoint
+or literal Never. The full finite reply-menu image preserves comparisons with
+supported clocks and the original pure first outcome. Product outcome-law
+transport, limiting complete caps, and original variation witnesses remain
+separate obligations beyond this slice.
 -/
 
 noncomputable section
@@ -522,5 +526,621 @@ theorem chartProduct_map_decodeClock (laws : ι → FinDist (Option ℕ)) :
   apply congrArg FinDist.pi
   funext i
   exact cellLaw_map_val laws i
+
+/-- Cumulative mass strictly below an original clock, computed from the actual mixture cells. -/
+def cumulativeMass (laws : ι → FinDist (Option ℕ)) (clock : WithTop ℕ) : ℝ :=
+  ∑ a : Cell laws, if (a : WithTop ℕ) < clock then weight laws a else 0
+
+theorem cumulativeMass_nonneg (laws : ι → FinDist (Option ℕ)) (clock : WithTop ℕ) :
+    0 ≤ cumulativeMass laws clock := by
+  apply Finset.sum_nonneg
+  intro a _
+  split_ifs
+  · exact (weight_pos laws a).le
+  · exact le_rfl
+
+theorem cumulativeMass_le_one (laws : ι → FinDist (Option ℕ)) (clock : WithTop ℕ) :
+    cumulativeMass laws clock ≤ 1 := by
+  rw [← sum_weight laws]
+  apply Finset.sum_le_sum
+  intro a _
+  split_ifs
+  · exact le_rfl
+  · exact (weight_pos laws a).le
+
+theorem cumulativeMass_mono (laws : ι → FinDist (Option ℕ)) :
+    Monotone (cumulativeMass laws) := by
+  intro first second hle
+  apply Finset.sum_le_sum
+  intro a _
+  by_cases ha : (a : WithTop ℕ) < first
+  · simp only [ha, ha.trans_le hle, ite_true, le_refl]
+  · simp only [ha, ite_false]
+    split_ifs
+    · exact (weight_pos laws a).le
+    · exact le_rfl
+
+theorem cumulativeMass_cell (laws : ι → FinDist (Option ℕ)) (a : Cell laws) :
+    cumulativeMass laws a = left laws a := rfl
+
+/-- The finite cutoff is the actual mixture mass of finite original clocks. -/
+def cutoff (laws : ι → FinDist (Option ℕ)) : unitInterval :=
+  ⟨cumulativeMass laws ⊤, cumulativeMass_nonneg laws ⊤, cumulativeMass_le_one laws ⊤⟩
+
+theorem cutoff_eq_left_of_top (laws : ι → FinDist (Option ℕ)) (a : Cell laws)
+    (ha : (a : WithTop ℕ) = ⊤) : (cutoff laws : ℝ) = left laws a := by
+  change cumulativeMass laws ⊤ = left laws a
+  rw [← ha, cumulativeMass_cell]
+
+theorem cutoff_eq_one_sub_never (laws : ι → FinDist (Option ℕ)) :
+    (cutoff laws : ℝ) = 1 - (averageClockLaw laws).prob ⊤ := by
+  classical
+  by_cases htop : ⊤ ∈ (averageClockLaw laws).supportFinset
+  · let a : Cell laws := ⟨⊤, htop⟩
+    have hright : right laws a = 1 := by
+      rw [right_eq_sum_le]
+      have hall (b : Cell laws) : b ≤ a := show (b : WithTop ℕ) ≤ ⊤ from le_top
+      simp only [hall, ite_true, sum_weight]
+    have hcut := cutoff_eq_left_of_top laws a rfl
+    change left laws a + (averageClockLaw laws).prob ⊤ = 1 at hright
+    linarith
+  · have hzero : (averageClockLaw laws).prob ⊤ = 0 :=
+      FinDist.prob_eq_zero_iff.mpr fun h => htop (FinDist.mem_supportFinset.mpr h)
+    have hall (a : Cell laws) : (a : WithTop ℕ) < ⊤ :=
+      lt_top_iff_ne_top.mpr fun h => htop (h ▸ a.property)
+    simp only [cutoff, cumulativeMass, hall, ite_true, sum_weight, hzero, sub_zero]
+
+theorem right_le_cumulativeMass (laws : ι → FinDist (Option ℕ)) (a : Cell laws)
+    {clock : WithTop ℕ} (ha : (a : WithTop ℕ) < clock) :
+    right laws a ≤ cumulativeMass laws clock := by
+  rw [right_eq_sum_le, cumulativeMass]
+  apply Finset.sum_le_sum
+  intro b _
+  by_cases hba : b ≤ a
+  · have hb : (b : WithTop ℕ) < clock :=
+      (show (b : WithTop ℕ) ≤ a from hba).trans_lt ha
+    simp only [hba, hb, ite_true, le_refl]
+  · simp only [hba, ite_false]
+    split_ifs
+    · exact (weight_pos laws b).le
+    · exact le_rfl
+
+theorem right_le_cutoff (laws : ι → FinDist (Option ℕ)) (a : Cell laws)
+    (ha : (a : WithTop ℕ) ≠ ⊤) : right laws a ≤ (cutoff laws : ℝ) :=
+  right_le_cumulativeMass laws a (lt_top_iff_ne_top.mpr ha)
+
+/-- Endpoints of the actual positive cells, together with the boundary and finite cutoff. -/
+def endpointSet (laws : ι → FinDist (Option ℕ)) : Set ℝ :=
+  insert 0 (insert 1 (insert (cutoff laws : ℝ) (range (left laws) ∪ range (right laws))))
+
+theorem finite_endpointSet (laws : ι → FinDist (Option ℕ)) : (endpointSet laws).Finite :=
+  (((finite_range (left laws)).union (finite_range (right laws))).insert _).insert _ |>.insert _
+
+theorem endpointSet_subset (laws : ι → FinDist (Option ℕ)) :
+    endpointSet laws ⊆ Icc (0 : ℝ) 1 := by
+  intro y hy
+  simp only [endpointSet, mem_insert_iff, mem_union, mem_range] at hy
+  rcases hy with rfl | rfl | rfl | ⟨a, rfl⟩ | ⟨a, rfl⟩
+  · exact ⟨le_rfl, zero_le_one⟩
+  · exact ⟨zero_le_one, le_rfl⟩
+  · exact (cutoff laws).property
+  · exact ⟨left_nonneg laws a, (left_lt_right laws a).le.trans (right_le_one laws a)⟩
+  · exact ⟨(left_nonneg laws a).trans (left_lt_right laws a).le, right_le_one laws a⟩
+
+/-- The actual finite-law calendar, without supplied geometric or endpoint restrictions. -/
+def calendar (laws : ι → FinDist (Option ℕ)) : MathUE.MarkedCalendar.Calendar where
+  endpoints := ⟨⟨endpointSet laws, (finite_endpointSet laws).isCompact⟩,
+    ⟨0, mem_insert _ _⟩⟩
+  cutoff := cutoff laws
+  endpoints_subset := endpointSet_subset laws
+  zero_mem := mem_insert _ _
+  one_mem := mem_insert_of_mem _ (mem_insert _ _)
+  cutoff_mem := mem_insert_of_mem _ (mem_insert_of_mem _ (mem_insert _ _))
+
+theorem isGap_interval (laws : ι → FinDist (Option ℕ)) (a : Cell laws) :
+    Math.Topology.IsGap (calendar laws).endpoints (left laws a) (right laws a) := by
+  have hleft : left laws a ∈ endpointSet laws := by
+    simp only [endpointSet, mem_insert_iff, mem_union, mem_range]
+    exact Or.inr (Or.inr (Or.inr (Or.inl ⟨a, rfl⟩)))
+  have hright : right laws a ∈ endpointSet laws := by
+    simp only [endpointSet, mem_insert_iff, mem_union, mem_range]
+    exact Or.inr (Or.inr (Or.inr (Or.inr ⟨a, rfl⟩)))
+  refine ⟨hleft, hright, left_lt_right laws a, ?_⟩
+  intro y hy
+  change y ∈ endpointSet laws at hy
+  simp only [endpointSet, mem_insert_iff, mem_union, mem_range] at hy
+  rcases hy with rfl | rfl | rfl | ⟨b, rfl⟩ | ⟨b, rfl⟩
+  · exact Or.inl (left_nonneg laws a)
+  · exact Or.inr (right_le_one laws a)
+  · by_cases ha : (a : WithTop ℕ) = ⊤
+    · exact Or.inl (cutoff_eq_left_of_top laws a ha).le
+    · exact Or.inr (right_le_cutoff laws a ha)
+  · rcases lt_trichotomy b a with h | rfl | h
+    · exact Or.inl ((left_lt_right laws b).le.trans (right_le_left_of_lt laws h))
+    · exact Or.inl le_rfl
+    · exact Or.inr (right_le_left_of_lt laws h)
+  · rcases lt_trichotomy b a with h | rfl | h
+    · exact Or.inl (right_le_left_of_lt laws h)
+    · exact Or.inr le_rfl
+    · exact Or.inr ((right_le_left_of_lt laws h).trans (left_lt_right laws b).le)
+
+/-- The finite atom midpoint, or literal Never, attached to an actual source cell. -/
+def cellMark (laws : ι → FinDist (Option ℕ)) (a : Cell laws) : WithTop ℝ :=
+  if (a : WithTop ℕ) = ⊤ then ⊤ else ((left laws a + right laws a) / 2 : ℝ)
+
+theorem collapseClock_of_mem_cellInterior (laws : ι → FinDist (Option ℕ))
+    (a : Cell laws) {x : unitInterval} (hleft : left laws a < (x : ℝ))
+    (hright : (x : ℝ) < right laws a) :
+    (calendar laws).collapseClock x = cellMark laws a := by
+  by_cases ha : (a : WithTop ℕ) = ⊤
+  · have hcut : (calendar laws).cutoff ≤ x := by
+      change (cutoff laws : ℝ) ≤ (x : ℝ)
+      rw [cutoff_eq_left_of_top laws a ha]
+      exact hleft.le
+    simp only [MathUE.MarkedCalendar.Calendar.collapseClock, hcut, ite_true,
+      cellMark, ha]
+  · have hcut : ¬(calendar laws).cutoff ≤ x := by
+      change ¬(cutoff laws : ℝ) ≤ (x : ℝ)
+      exact not_le_of_gt (hright.trans_le (right_le_cutoff laws a ha))
+    simp only [MathUE.MarkedCalendar.Calendar.collapseClock, hcut, ite_false,
+      cellMark, ha, (calendar laws).midpointClock_of_gap (isGap_interval laws a) hleft hright]
+
+/-- Agreement follows from actual cell gaps; only cell endpoints and the null fallback
+are removed. -/
+theorem ae_collapseClock_eq_cellMark_decodeCell (laws : ι → FinDist (Option ℕ)) :
+    (calendar laws).collapseClock =ᵐ[(volume : Measure unitInterval)]
+      fun x => cellMark laws (decodeCell laws x) := by
+  have hne : ∀ᵐ x : unitInterval ∂volume, ∀ a : Cell laws, x ≠ leftPoint laws a :=
+    ae_all_iff.mpr fun a => volume.ae_ne (leftPoint laws a)
+  filter_upwards [ae_mem_interval laws, hne] with x hx hne
+  obtain ⟨a, ha⟩ := hx
+  rw [decodeCell_of_mem_interval laws ha]
+  have hleft : left laws a ≠ (x : ℝ) := fun h => hne a (Subtype.ext h.symm)
+  exact collapseClock_of_mem_cellInterior laws a
+    (lt_of_le_of_ne ha.1 hleft) ha.2
+
+theorem chartMeasure_map_collapseClock_cellLaw (laws : ι → FinDist (Option ℕ)) (i : ι) :
+    (chartMeasure laws i).map (calendar laws).collapseClock =
+      ((cellLaw laws i).map (cellMark laws)).toMeasure := by
+  have hae : (calendar laws).collapseClock =ᵐ[chartMeasure laws i]
+      fun x => cellMark laws (decodeCell laws x) :=
+    (withDensity_absolutelyContinuous volume
+      (fun x => ENNReal.ofReal (density laws i x))).ae_le
+        (ae_collapseClock_eq_cellMark_decodeCell laws)
+  rw [Measure.map_congr hae]
+  change (chartMeasure laws i).map (cellMark laws ∘ decodeCell laws) = _
+  rw [← Measure.map_map (measurable_of_countable (cellMark laws))
+    (measurable_decodeCell laws), chartMeasure_map_decodeCell,
+    FinDist.toMeasure_map _ _ (measurable_of_countable (cellMark laws))]
+
+/-- The actual finite reply mark: mass strictly earlier, plus half the mass tied at that date. -/
+def mark (laws : ι → FinDist (Option ℕ)) (time : ℕ) : ℝ :=
+  cumulativeMass laws time + (averageClockLaw laws).prob time / 2
+
+theorem mark_nonneg (laws : ι → FinDist (Option ℕ)) (time : ℕ) : 0 ≤ mark laws time :=
+  add_nonneg (cumulativeMass_nonneg laws time)
+    (div_nonneg ((averageClockLaw laws).prob_nonneg time) (by norm_num))
+
+theorem mark_eq_midpoint (laws : ι → FinDist (Option ℕ)) (a : Cell laws)
+    {time : ℕ} (ha : (a : WithTop ℕ) = time) :
+    mark laws time = (left laws a + right laws a) / 2 := by
+  rw [mark, ← ha, cumulativeMass_cell]
+  change left laws a + weight laws a / 2 = (left laws a + right laws a) / 2
+  rw [right]
+  ring
+
+theorem cumulativeMass_eq_left_of_least (laws : ι → FinDist (Option ℕ))
+    (clock : WithTop ℕ) (a : Cell laws) (ha : clock ≤ a)
+    (hleast : ∀ b : Cell laws, clock ≤ b → a ≤ b) :
+    cumulativeMass laws clock = left laws a := by
+  apply Finset.sum_congr rfl
+  intro b _
+  have hiff : (b : WithTop ℕ) < clock ↔ b < a := by
+    constructor
+    · intro hb
+      exact hb.trans_le ha
+    · intro hb
+      by_contra hnot
+      exact (not_le_of_gt hb) (hleast b (le_of_not_gt hnot))
+  simp only [hiff]
+
+/-- Unsupported replies lie at an actual endpoint, including the finite terminal cutoff. -/
+theorem mark_eq_left_or_cutoff_of_not_supported (laws : ι → FinDist (Option ℕ))
+    (time : ℕ) (htime : (time : WithTop ℕ) ∉ (averageClockLaw laws).supportFinset) :
+    (∃ a : Cell laws, (time : WithTop ℕ) < a ∧
+      (∀ b : Cell laws, (time : WithTop ℕ) ≤ b → a ≤ b) ∧
+      mark laws time = left laws a) ∨ mark laws time = (cutoff laws : ℝ) := by
+  classical
+  have hzero : (averageClockLaw laws).prob time = 0 :=
+    FinDist.prob_eq_zero_iff.mpr fun h => htime (FinDist.mem_supportFinset.mpr h)
+  have hmark : mark laws time = cumulativeMass laws time := by
+    rw [mark, hzero, zero_div, add_zero]
+  let later : Finset (Cell laws) := Finset.univ.filter
+    fun a : Cell laws => (time : WithTop ℕ) ≤ (a : WithTop ℕ)
+  by_cases hlater : later.Nonempty
+  · let a : Cell laws := later.min' hlater
+    have ha : (time : WithTop ℕ) ≤ a := (Finset.mem_filter.mp (later.min'_mem hlater)).2
+    have hleast (b : Cell laws) (hb : (time : WithTop ℕ) ≤ b) : a ≤ b :=
+      later.min'_le b (Finset.mem_filter.mpr ⟨Finset.mem_univ b, hb⟩)
+    have hlt : (time : WithTop ℕ) < a := lt_of_le_of_ne ha fun h =>
+      htime (h.symm ▸ a.property)
+    exact Or.inl ⟨a, hlt, hleast,
+      hmark.trans (cumulativeMass_eq_left_of_least laws time a ha hleast)⟩
+  · have hall (a : Cell laws) : (a : WithTop ℕ) < time := by
+      by_contra ha
+      exact hlater ⟨a, Finset.mem_filter.mpr ⟨Finset.mem_univ a, le_of_not_gt ha⟩⟩
+    have halltop (a : Cell laws) : (a : WithTop ℕ) < ⊤ := (hall a).trans_le le_top
+    right
+    rw [hmark]
+    simp only [cutoff, cumulativeMass, hall, halltop, ite_true]
+
+theorem mark_le_cutoff (laws : ι → FinDist (Option ℕ)) (time : ℕ) :
+    mark laws time ≤ (cutoff laws : ℝ) := by
+  classical
+  by_cases htime : (time : WithTop ℕ) ∈ (averageClockLaw laws).supportFinset
+  · let a : Cell laws := ⟨time, htime⟩
+    rw [mark_eq_midpoint laws a rfl]
+    have hright := right_le_cutoff laws a (WithTop.coe_ne_top)
+    have hleft := left_lt_right laws a
+    linarith
+  · rcases mark_eq_left_or_cutoff_of_not_supported laws time htime with
+      ⟨a, _, _, heq⟩ | heq
+    · rw [heq]
+      by_cases ha : (a : WithTop ℕ) = ⊤
+      · exact (cutoff_eq_left_of_top laws a ha).ge
+      · exact (left_lt_right laws a).le.trans (right_le_cutoff laws a ha)
+    · exact heq.le
+
+theorem atomCompatible_mark (laws : ι → FinDist (Option ℕ)) (time : ℕ) :
+    (calendar laws).AtomCompatible (mark laws time) := by
+  classical
+  refine ⟨⟨mark_nonneg laws time, mark_le_cutoff laws time⟩, ?_⟩
+  intro first last hgap hfirst hlast
+  by_cases htime : (time : WithTop ℕ) ∈ (averageClockLaw laws).supportFinset
+  · let a : Cell laws := ⟨time, htime⟩
+    let x : unitInterval := ⟨mark laws time, mark_nonneg laws time,
+      (mark_le_cutoff laws time).trans (cutoff laws).property.2⟩
+    have hmark := mark_eq_midpoint laws a rfl
+    have hwidth := left_lt_right laws a
+    have hleft : left laws a < (x : ℝ) := by change left laws a < mark laws time; linarith
+    have hright : (x : ℝ) < right laws a := by change mark laws time < right laws a; linarith
+    have hcell := (calendar laws).midpointClock_of_gap (isGap_interval laws a) hleft hright
+    have hother := (calendar laws).midpointClock_of_gap hgap
+      (x := x) hfirst hlast
+    exact hmark.trans (hcell.symm.trans hother)
+  · have hmem : mark laws time ∈ (calendar laws).endpoints := by
+      change mark laws time ∈ endpointSet laws
+      rcases mark_eq_left_or_cutoff_of_not_supported laws time htime with
+          ⟨a, _, _, heq⟩ | heq
+      · rw [heq]
+        simp only [endpointSet, mem_insert_iff, mem_union, mem_range]
+        exact Or.inr (Or.inr (Or.inr (Or.inl ⟨a, rfl⟩)))
+      · rw [heq]
+        exact (calendar laws).cutoff_mem
+    rcases hgap.2.2.2 _ hmem with h | h
+    · exact (not_le_of_gt hfirst h).elim
+    · exact (not_le_of_gt hlast h).elim
+
+/-- Mark finite original dates and preserve literal Never, independently of legal-menu selection. -/
+def markedClock (laws : ι → FinDist (Option ℕ)) : WithTop ℕ → WithTop ℝ :=
+  WithTop.map (mark laws)
+
+theorem markedClock_cell (laws : ι → FinDist (Option ℕ)) (a : Cell laws) :
+    markedClock laws a = cellMark laws a := by
+  by_cases ha : (a : WithTop ℕ) = ⊤
+  · simp only [markedClock, ha, WithTop.map_top, cellMark, ite_true]
+  · rw [cellMark, ite_eq_right ha]
+    obtain ⟨time, htime⟩ := WithTop.ne_top_iff_exists.mp ha
+    change WithTop.map (mark laws) (a : WithTop ℕ) = _
+    rw [← htime, WithTop.map_coe, mark_eq_midpoint laws a htime.symm]
+
+theorem ae_collapseClock_eq_marked_decodeClock (laws : ι → FinDist (Option ℕ)) :
+    (calendar laws).collapseClock =ᵐ[(volume : Measure unitInterval)]
+      fun x => markedClock laws (decodeClock laws x) := by
+  filter_upwards [ae_collapseClock_eq_cellMark_decodeCell laws] with x hx
+  exact hx.trans (markedClock_cell laws (decodeCell laws x)).symm
+
+/-- Exact scalar marked-law pushforward from the same original finite stopping law. -/
+theorem chartMeasure_map_collapseClock (laws : ι → FinDist (Option ℕ)) (i : ι) :
+    (chartMeasure laws i).map (calendar laws).collapseClock =
+      ((sourceClockLaw laws i).map (markedClock laws)).toMeasure := by
+  have hae : (calendar laws).collapseClock =ᵐ[chartMeasure laws i]
+      fun x => markedClock laws (decodeClock laws x) :=
+    (withDensity_absolutelyContinuous volume
+      (fun x => ENNReal.ofReal (density laws i x))).ae_le
+        (ae_collapseClock_eq_marked_decodeClock laws)
+  rw [Measure.map_congr hae]
+  change (chartMeasure laws i).map (markedClock laws ∘ decodeClock laws) = _
+  rw [← Measure.map_map (measurable_of_countable (markedClock laws))
+    (measurable_decodeClock laws), chartMeasure_map_decodeClock,
+    FinDist.toMeasure_map _ _ (measurable_of_countable (markedClock laws))]
+
+/-- Exact independent marked-law pushforward, retaining the specified original marginals. -/
+theorem chartProduct_map_collapseClock (laws : ι → FinDist (Option ℕ)) :
+    (Measure.pi (chartMeasure laws)).map (fun x i => (calendar laws).collapseClock (x i)) =
+      (FinDist.pi fun i => (sourceClockLaw laws i).map (markedClock laws)).toMeasure := by
+  have hscalar (i : ι) : (calendar laws).collapseClock =ᵐ[chartMeasure laws i]
+      fun x => markedClock laws (decodeClock laws x) :=
+    (withDensity_absolutelyContinuous volume
+      (fun x => ENNReal.ofReal (density laws i x))).ae_le
+        (ae_collapseClock_eq_marked_decodeClock laws)
+  have hae : (fun x : ι → unitInterval => fun i => (calendar laws).collapseClock (x i))
+      =ᵐ[Measure.pi (chartMeasure laws)]
+      fun x i => markedClock laws (decodeClock laws (x i)) := by
+    have heach (i : ι) :=
+      (measurePreserving_eval (chartMeasure laws) i).quasiMeasurePreserving.ae (hscalar i)
+    filter_upwards [ae_all_iff.mpr heach] with x hx
+    exact funext hx
+  have hdecode : Measurable (fun x : ι → unitInterval => fun i => decodeClock laws (x i)) :=
+    Measurable.of_eval fun i => (measurable_decodeClock laws).comp (measurable_pi_apply i)
+  have hmark : Measurable (fun x : ι → WithTop ℕ => fun i => markedClock laws (x i)) :=
+    Measurable.of_eval fun i =>
+      (measurable_of_countable (markedClock laws)).comp (measurable_pi_apply i)
+  rw [Measure.map_congr hae]
+  change (Measure.pi (chartMeasure laws)).map
+    ((fun x : ι → WithTop ℕ => fun i => markedClock laws (x i)) ∘
+      (fun x : ι → unitInterval => fun i => decodeClock laws (x i))) = _
+  rw [← Measure.map_map hmark hdecode, chartProduct_map_decodeClock,
+    FinDist.toMeasure_map _ _ hmark, ← FinDist.pi_map]
+
+theorem mem_calendar_of_mem_average_support (laws : ι → FinDist (Option ℕ))
+    (time : ℕ) (htime : (time : WithTop ℕ) ∈ (averageClockLaw laws).support) :
+    time ∈ quittingFiniteStoppingCalendar laws := by
+  rw [averageClockLaw, FinDist.support_bind] at htime
+  obtain ⟨i, hi⟩ := mem_iUnion.mp htime
+  obtain ⟨_, hsource⟩ := mem_iUnion.mp hi
+  rw [sourceClockLaw, FinDist.support_map] at hsource
+  obtain ⟨choice, hchoice, hvalue⟩ := hsource
+  cases choice with
+  | none => exact (WithTop.top_ne_coe hvalue).elim
+  | some date =>
+      have hdate : date = time := WithTop.coe_injective hvalue
+      subst date
+      exact mem_quittingFiniteStoppingCalendar_of_mem_support laws i time hchoice
+
+/-- The representative preserves the actual mark even when it is an unsupported successor. -/
+theorem mark_atomGapRepresentative (laws : ι → FinDist (Option ℕ)) (time : ℕ) :
+    mark laws (quittingAtomGapRepresentative (quittingFiniteStoppingCalendar laws) time) =
+      mark laws time := by
+  classical
+  let dates := quittingFiniteStoppingCalendar laws
+  let representative := quittingAtomGapRepresentative dates time
+  by_cases htime : time ∈ dates
+  · change mark laws (quittingAtomGapRepresentative dates time) = mark laws time
+    rw [quittingAtomGapRepresentative, ite_eq_left htime]
+  · have hrep : representative ∉ dates := by
+      intro h
+      have hle := (quittingAtom_le_atomGapRepresentative_iff dates h).mp le_rfl
+      have hge := (quittingAtomGapRepresentative_le_atom_iff dates h).mp le_rfl
+      exact htime (le_antisymm hle hge ▸ h)
+    have hzero (date : ℕ) (hd : date ∉ dates) :
+        (averageClockLaw laws).prob date = 0 :=
+      FinDist.prob_eq_zero_iff.mpr fun h => hd (mem_calendar_of_mem_average_support laws date h)
+    change mark laws representative = mark laws time
+    rw [mark, mark, hzero representative hrep, hzero time htime,
+      zero_div, add_zero, add_zero]
+    apply Finset.sum_congr rfl
+    intro a _
+    by_cases ha : (a : WithTop ℕ) = ⊤
+    · simp only [ha, not_top_lt, ite_false]
+    · obtain ⟨atom, hatom⟩ := WithTop.ne_top_iff_exists.mp ha
+      have hsupported : (atom : WithTop ℕ) ∈ (averageClockLaw laws).support := by
+        exact (congrArg (fun clock : WithTop ℕ => clock ∈ (averageClockLaw laws).support)
+          hatom).mpr (FinDist.mem_supportFinset.mp a.property)
+      have hmem : atom ∈ dates := mem_calendar_of_mem_average_support laws atom hsupported
+      have hlt : atom < representative ↔ atom < time := by
+        rw [lt_iff_not_ge, lt_iff_not_ge,
+          quittingAtomGapRepresentative_le_atom_iff dates hmem]
+      have hcompare : (a : WithTop ℕ) < representative ↔ (a : WithTop ℕ) < time := by
+        rw [← hatom]
+        exact WithTop.coe_lt_coe.trans (hlt.trans WithTop.coe_lt_coe.symm)
+      simp only [hcompare]
+
+/-- Only images of actual finite entries of the source reply menu are legal finite marks. -/
+def legalFiniteMenu (laws : ι → FinDist (Option ℕ)) : Finset ℝ := by
+  classical
+  exact (quittingFiniteOpponentAtomGapReplyMenu (quittingFiniteStoppingCalendar laws)).biUnion
+    fun choice => choice.elim ∅ (fun time => {mark laws time})
+
+theorem mem_legalFiniteMenu_iff (laws : ι → FinDist (Option ℕ)) (r : ℝ) :
+    r ∈ legalFiniteMenu laws ↔ ∃ time : ℕ,
+      some time ∈ quittingFiniteOpponentAtomGapReplyMenu (quittingFiniteStoppingCalendar laws) ∧
+      r = mark laws time := by
+  classical
+  constructor
+  · intro hr
+    obtain ⟨choice, hchoice, hr⟩ := Finset.mem_biUnion.mp hr
+    cases choice with
+    | none => exact (Finset.notMem_empty _ hr).elim
+    | some time => exact ⟨time, hchoice, Finset.mem_singleton.mp hr⟩
+  · rintro ⟨time, htime, rfl⟩
+    exact Finset.mem_biUnion.mpr ⟨some time, htime, Finset.mem_singleton_self _⟩
+
+/-- Every original finite response is represented, without adding other compatible endpoints. -/
+theorem range_mark_eq_legalFiniteMenu (laws : ι → FinDist (Option ℕ)) :
+    range (mark laws) = (legalFiniteMenu laws : Set ℝ) := by
+  ext r
+  constructor
+  · rintro ⟨time, rfl⟩
+    apply (mem_legalFiniteMenu_iff laws _).mpr
+    exact ⟨quittingAtomGapRepresentative (quittingFiniteStoppingCalendar laws) time,
+      quittingAtomGapRepresentative_mem_replyMenu _ _,
+      (mark_atomGapRepresentative laws time).symm⟩
+  · intro hr
+    obtain ⟨time, _, heq⟩ := (mem_legalFiniteMenu_iff laws r).mp hr
+    exact ⟨time, heq.symm⟩
+
+theorem atomCompatible_of_mem_legalFiniteMenu (laws : ι → FinDist (Option ℕ))
+    {r : ℝ} (hr : r ∈ legalFiniteMenu laws) : (calendar laws).AtomCompatible r := by
+  obtain ⟨time, _, rfl⟩ := (mem_legalFiniteMenu_iff laws r).mp hr
+  exact atomCompatible_mark laws time
+
+theorem mark_after_calendar_eq_cutoff (laws : ι → FinDist (Option ℕ)) (time : ℕ)
+    (hafter : ∀ atom ∈ quittingFiniteStoppingCalendar laws, atom < time) :
+    mark laws time = (cutoff laws : ℝ) := by
+  have hzero : (averageClockLaw laws).prob time = 0 :=
+    FinDist.prob_eq_zero_iff.mpr fun h => (lt_irrefl time)
+      (hafter time (mem_calendar_of_mem_average_support laws time h))
+  rw [mark, hzero, zero_div, add_zero]
+  change cumulativeMass laws time = cumulativeMass laws ⊤
+  apply Finset.sum_congr rfl
+  intro a _
+  by_cases ha : (a : WithTop ℕ) = ⊤
+  · simp only [ha, not_top_lt, lt_self_iff_false, ite_false]
+  · obtain ⟨atom, hatom⟩ := WithTop.ne_top_iff_exists.mp ha
+    have hsupported : (atom : WithTop ℕ) ∈ (averageClockLaw laws).support := by
+      exact (congrArg (fun clock : WithTop ℕ => clock ∈ (averageClockLaw laws).support)
+        hatom).mpr (FinDist.mem_supportFinset.mp a.property)
+    have hmem := mem_calendar_of_mem_average_support laws atom hsupported
+    have hlt : (a : WithTop ℕ) < time := by
+      rw [← hatom]
+      exact WithTop.coe_lt_coe.mpr (hafter atom hmem)
+    simp only [hlt, lt_top_iff_ne_top.mpr ha, ite_true]
+
+/-- The finite cutoff is a genuine finite reply, even when every source law is Never. -/
+theorem cutoff_mem_legalFiniteMenu (laws : ι → FinDist (Option ℕ)) :
+    (cutoff laws : ℝ) ∈ legalFiniteMenu laws := by
+  change (cutoff laws : ℝ) ∈ (legalFiniteMenu laws : Set ℝ)
+  rw [← range_mark_eq_legalFiniteMenu]
+  refine ⟨(quittingFiniteStoppingCalendar laws).sup id + 1, ?_⟩
+  apply mark_after_calendar_eq_cutoff
+  intro atom hatom
+  exact Nat.lt_succ_of_le (Finset.le_sup (f := id) hatom)
+
+theorem mark_le_cumulativeMass_of_lt (laws : ι → FinDist (Option ℕ))
+    {time : ℕ} {clock : WithTop ℕ} (hlt : (time : WithTop ℕ) < clock) :
+    mark laws time ≤ cumulativeMass laws clock := by
+  classical
+  by_cases htime : (time : WithTop ℕ) ∈ (averageClockLaw laws).supportFinset
+  · let a : Cell laws := ⟨time, htime⟩
+    rw [mark_eq_midpoint laws a rfl]
+    have hright := right_le_cumulativeMass laws a hlt
+    have hwidth := left_lt_right laws a
+    linarith
+  · have hzero : (averageClockLaw laws).prob time = 0 :=
+      FinDist.prob_eq_zero_iff.mpr fun h => htime (FinDist.mem_supportFinset.mpr h)
+    rw [mark, hzero, zero_div, add_zero]
+    exact cumulativeMass_mono laws hlt.le
+
+theorem mark_lt_mark_of_supported_left (laws : ι → FinDist (Option ℕ))
+    (a : Cell laws) {first last : ℕ} (ha : (a : WithTop ℕ) = first) (hlt : first < last) :
+    mark laws first < mark laws last := by
+  have hright := right_le_cumulativeMass laws a
+    (show (a : WithTop ℕ) < last by rw [ha]; exact WithTop.coe_lt_coe.mpr hlt)
+  have hwidth := left_lt_right laws a
+  have hmark := mark_eq_midpoint laws a ha
+  have hnonneg := (averageClockLaw laws).prob_nonneg last
+  unfold mark at *
+  linarith
+
+theorem mark_lt_mark_of_supported_right (laws : ι → FinDist (Option ℕ))
+    (a : Cell laws) {first last : ℕ} (ha : (a : WithTop ℕ) = last) (hlt : first < last) :
+    mark laws first < mark laws last := by
+  have hleft := mark_le_cumulativeMass_of_lt laws
+    (time := first) (clock := last) (WithTop.coe_lt_coe.mpr hlt)
+  have hcum : cumulativeMass laws last = left laws a := by rw [← ha, cumulativeMass_cell]
+  rw [hcum] at hleft
+  have hwidth := left_lt_right laws a
+  have hmark := mark_eq_midpoint laws a ha
+  linarith
+
+/-- Order reflection holds against an actual supported clock, not between arbitrary gap dates. -/
+theorem cellMark_le_mark_iff (laws : ι → FinDist (Option ℕ)) (a : Cell laws) (time : ℕ) :
+    cellMark laws a ≤ (mark laws time : WithTop ℝ) ↔ (a : WithTop ℕ) ≤ time := by
+  by_cases ha : (a : WithTop ℕ) = ⊤
+  · rw [cellMark, ite_eq_left ha, ha]
+    constructor <;> intro h
+    · exact (WithTop.coe_ne_top (WithTop.top_le_iff.mp h)).elim
+    · exact (WithTop.coe_ne_top (WithTop.top_le_iff.mp h)).elim
+  · obtain ⟨atom, hatom⟩ := WithTop.ne_top_iff_exists.mp ha
+    rw [← markedClock_cell, markedClock, ← hatom, WithTop.map_coe, WithTop.coe_le_coe]
+    refine Iff.trans ?_ WithTop.coe_le_coe.symm
+    constructor
+    · intro h
+      by_contra hnot
+      exact (not_le_of_gt (mark_lt_mark_of_supported_right laws a hatom.symm
+        (Nat.lt_of_not_ge hnot))) h
+    · intro h
+      rcases h.eq_or_lt with rfl | hlt
+      · exact le_rfl
+      · exact (mark_lt_mark_of_supported_left laws a hatom.symm hlt).le
+
+theorem mark_le_cellMark_iff (laws : ι → FinDist (Option ℕ)) (a : Cell laws) (time : ℕ) :
+    (mark laws time : WithTop ℝ) ≤ cellMark laws a ↔ (time : WithTop ℕ) ≤ a := by
+  by_cases ha : (a : WithTop ℕ) = ⊤
+  · simp only [cellMark, ha, ite_true, le_top]
+  · obtain ⟨atom, hatom⟩ := WithTop.ne_top_iff_exists.mp ha
+    rw [← markedClock_cell, markedClock, ← hatom, WithTop.map_coe, WithTop.coe_le_coe]
+    refine Iff.trans ?_ WithTop.coe_le_coe.symm
+    constructor
+    · intro h
+      by_contra hnot
+      exact (not_le_of_gt (mark_lt_mark_of_supported_left laws a hatom.symm
+        (Nat.lt_of_not_ge hnot))) h
+    · intro h
+      rcases h.eq_or_lt with rfl | hlt
+      · exact le_rfl
+      · exact (mark_lt_mark_of_supported_right laws a hatom.symm hlt).le
+
+theorem cellMark_le_cellMark_iff (laws : ι → FinDist (Option ℕ)) (a b : Cell laws) :
+    cellMark laws a ≤ cellMark laws b ↔ (a : WithTop ℕ) ≤ b := by
+  by_cases hb : (b : WithTop ℕ) = ⊤
+  · simp only [cellMark, hb, ite_true, le_top]
+  · obtain ⟨atom, hatom⟩ := WithTop.ne_top_iff_exists.mp hb
+    have hmark : cellMark laws b = (mark laws atom : WithTop ℝ) := by
+      rw [← markedClock_cell, markedClock, ← hatom, WithTop.map_coe]
+    rw [hmark, cellMark_le_mark_iff]
+    exact Iff.of_eq (congrArg (fun clock : WithTop ℕ => (a : WithTop ℕ) ≤ clock) hatom)
+
+/-- All supported pairwise comparisons and literal Never status identify the original outcome. -/
+theorem minimumLabels_markedClock_eq_originalOutcome
+    (laws : ι → FinDist (Option ℕ)) (times : ι → Option ℕ)
+    (hsupport : ∀ i, quittingStoppingTimeValue (times i) ∈
+      (averageClockLaw laws).supportFinset) :
+    MathUE.MarkedCalendar.minimumLabels
+        (fun i => markedClock laws (quittingStoppingTimeValue (times i))) =
+      (quittingFirstStoppingOutcome times).elim ∅ Subtype.val := by
+  have horder (i j : ι) :
+      markedClock laws (quittingStoppingTimeValue (times i)) ≤
+          markedClock laws (quittingStoppingTimeValue (times j)) ↔
+        quittingStoppingTimeValue (times i) ≤ quittingStoppingTimeValue (times j) := by
+    change markedClock laws (⟨_, hsupport i⟩ : Cell laws) ≤
+      markedClock laws (⟨_, hsupport j⟩ : Cell laws) ↔ _
+    rw [markedClock_cell, markedClock_cell]
+    exact cellMark_le_cellMark_iff laws ⟨_, hsupport i⟩ ⟨_, hsupport j⟩
+  have htop (i : ι) : markedClock laws (quittingStoppingTimeValue (times i)) = ⊤ ↔
+      quittingStoppingTimeValue (times i) = ⊤ := WithTop.map_eq_top_iff
+  by_cases hnever : quittingEarliestStoppingValue times = ⊤
+  · rw [quittingFirstStoppingOutcome, ite_eq_left hnever, Option.elim_none]
+    apply Finset.eq_empty_of_forall_notMem
+    intro i hi
+    have hiNever := (quittingEarliestStoppingValue_eq_top_iff times).mp hnever i
+    have hiTop : markedClock laws (quittingStoppingTimeValue (times i)) = ⊤ :=
+      (htop i).mpr (by rw [hiNever]; rfl)
+    exact (Finset.mem_filter.mp hi).2.1 hiTop
+  · rw [quittingFirstStoppingOutcome, ite_eq_right hnever, Option.elim_some]
+    ext i
+    simp only [MathUE.MarkedCalendar.minimumLabels, Finset.mem_filter,
+      Finset.mem_univ, true_and, mem_quittingEarliestStoppingCoalition_iff]
+    constructor
+    · intro hi j
+      exact (horder i j).mp (hi.2 j)
+    · intro hleast
+      have hcoalition := (mem_quittingEarliestStoppingCoalition_iff times i).mpr hleast
+      have hiEq : quittingStoppingTimeValue (times i) = quittingEarliestStoppingValue times :=
+        (Finset.mem_filter.mp hcoalition).2
+      refine ⟨fun hiTop => hnever (hiEq.symm.trans ((htop i).mp hiTop)), ?_⟩
+      intro j
+      exact (horder i j).mpr (hleast j)
+
+omit [Fintype ι] [Nonempty ι] in
+/-- Empty labels are exactly literal Never; finite terminal coalitions cannot be empty. -/
+theorem originalOutcome_labels_eq_empty_iff (outcome : QuittingTerminalOutcome ι) :
+    outcome.elim ∅ Subtype.val = ∅ ↔ outcome = none := by
+  cases outcome with
+  | none => simp only [Option.elim_none]
+  | some coalition =>
+      simp only [Option.elim_some, Option.some_ne_none, iff_false]
+      exact coalition.property.ne_empty
 
 end GameTheory.MarkedCalendarChart

@@ -514,6 +514,7 @@ import MathUE.Probability.FiniteIndependentMixture
 import MathUE.Probability.FiniteKernelPeriodicMixing
 import MathUE.Probability.FiniteKernelRegeneration
 import MathUE.Probability.FiniteLawRepair
+import MathUE.Probability.FiniteLawRepairExpectation
 import MathUE.Probability.FiniteOverlapSparseCompression
 import MathUE.Probability.FiniteOverlapSparseMaximizer
 import MathUE.Probability.FinitePMF
@@ -1633,6 +1634,11 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootCont
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.UniformPayoffExistenceClosure
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.AbsorptionWeightedPayoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.BestResponse
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.Game
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.Payoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.StationaryPayoff
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Controller.MemoryController
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Potential.Adaptive
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.BehaviorTransfer
@@ -2834,6 +2840,7 @@ import UniformEquilibrium.Quitting.Examples.GuardedCrossedResponseWeakHalfNeighb
 import UniformEquilibrium.Quitting.Examples.HostClearingBoundary
 import UniformEquilibrium.Quitting.Examples.HostClearingCapLedgerBoundary
 import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixtureMatrix
+import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixtureRangeAndInfluence
 import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixtureSourceScreens
 import UniformEquilibrium.Quitting.Examples.NegativePremiumCyclicChildFixtures
 import UniformEquilibrium.Quitting.Examples.NegativeSingletonQuietBoundary

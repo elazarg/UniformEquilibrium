@@ -563,6 +563,7 @@ import MathUE.Probability.FiniteIndependentMixture
 import MathUE.Probability.FiniteKernelRegeneration
 import MathUE.Probability.FiniteKernelPeriodicMixing
 import MathUE.Probability.FiniteLawRepair
+import MathUE.Probability.FiniteLawRepairExpectation
 import MathUE.Probability.FinitePathLawAdapter
 import MathUE.Probability.FinDistIntegral
 import MathUE.Probability.FinitePMF
