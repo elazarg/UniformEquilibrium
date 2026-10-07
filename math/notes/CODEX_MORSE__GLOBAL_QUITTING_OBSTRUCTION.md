@@ -37,7 +37,7 @@ not solve the arbitrary-table or worst-table SUM comparison in Section 44.
 
 Current serious global comparison: Section 48 links the ONE complete
 self-contained candidate
-`CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md`. From an
+`../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`. From an
 attained worst SUM table it selects one new positive-gap table avoiding
 82 labelled raw withdrawal, join-sum, individual-join, passive-floor and
 own-grand values. EVERY produced marked minimum of that fixed new table
@@ -9353,7 +9353,7 @@ is requested.
 ## 48. One complete whole-table cap-spectrum source reduction
 
 The final combined candidate is
-[`CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md`](CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md).
+[`WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`](../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md).
 It is a self-contained ordinary-mathematical artifact, internal pending
 focused whole-candidate independent falsification. No export promotion
 or Lean-checked status is claimed.

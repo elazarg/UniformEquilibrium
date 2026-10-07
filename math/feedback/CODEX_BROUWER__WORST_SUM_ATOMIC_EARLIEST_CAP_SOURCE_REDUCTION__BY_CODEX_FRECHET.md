@@ -10,7 +10,7 @@ ordinary-mathematical verdict, not a Lean check or an L/A/C seal. No uniform-
 equilibrium existence theorem or unrestricted positive-gap example is proved.
 
 Reviewed artifact:
-[`CODEX_BROUWER__WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`](../notes/CODEX_BROUWER__WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md),
+[`WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`](../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md),
 920 lines, SHA256
 `1e5c8544ed71e153ee90ae87ac72b8413153e29faa43460599f1ac510e0b6e83`.
 

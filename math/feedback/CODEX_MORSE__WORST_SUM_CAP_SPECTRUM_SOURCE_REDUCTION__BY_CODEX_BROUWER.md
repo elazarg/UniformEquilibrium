@@ -6,7 +6,7 @@ inspection; no Lean builds and no claim of kernel certification.
 ## Exact artifact and verdict
 
 Reviewed the COMPLETE 711-line artifact
-[CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md](../notes/CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md),
+[CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md at its preserved Git revision](https://github.com/elazarg/UniformEquilibrium/blob/335608de3d6abe8ddc463a1f3bd07e3c44c3df98/math/notes/CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md),
 SHA256 `4c6cc98812936445f78f20151f23e5b20a2d4def783bc2e8bfbe5894a0a4e8d1`.
 The hash was checked before and after the independent inspection. The
 author's packet was not edited.

@@ -434,13 +434,42 @@ reweighting. These are source restrictions, not an actual zero-debt endpoint
 or a UE consumer. Multiple cap maxima, earliest unsupported maxima, and the
 sure-owner/common-date configuration remain unconsumed.
 
-The four unique maximizing points also cannot all coincide at a point with
-zero mixture mass. Conditioning all clocks strictly after that point gives
-an actual carrier limit; an exact comparison of its complete response
-functions proves every cap equals its own singleton reward. Its sum debt is
-still D*, contradicting the global-minimum singleton margin. This reviewed
-exclusion does not cover distinct unsupported cap points or a common point
-with positive opponent mass.
+For any produced positive Fin4 minimum, even with multiple maximizing
+points, the earliest point in the union of all active cap sets is finite.
+If it has zero mixture point mass, some prescribed owner stops strictly
+before it almost surely. Each of the other three caps is then attained at
+that point, the final finite test c, and Never. If every owner instead has
+positive probability of stopping strictly later, joint signed old-tail
+conditioning preserves all active upper response branches. The actual
+conditioned endpoint remains a minimum but its earliest owner's cap equals
+its own singleton, contradicting the positive minimum margin. Positive
+survival at every approaching cut is not a substitute for positive final
+survival. In particular, when all four caps are unique, the earliest cap
+point is an isolated finite atom of the mixture law.
+
+There is also a whole-table reduction. If any signed Fin4 counterexample
+exists, one can select ONE new table in the sixty-coordinate unit cube,
+with positive sum-debt infimum d, before selecting any minimizing sequence.
+At EVERY marked minimum produced from ANY finite-law minimizing sequence
+of that table, either:
+
+- some cap has multiple maximizing compact test points; or
+- all four caps are unique, their dates are not all equal, at least two
+  owners have zero own point mass at their caps, and the earliest cap is
+  an isolated finite positive-mixture atom. Some owner maximizing at this
+  earliest point has zero own mass there.
+
+The [complete reduction](exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md)
+constructs its original-profile compact source and signed variations. It
+uses a maximum of the TRUE sum-debt infimum over bounded reward tables,
+then one reward direction and finite separation to keep every raw
+withdrawal/join/floor contact away from the new infimum. Every new minimum
+is produced afresh; no old law is transported through the reward change.
+This is an existential counterexample-table reduction, not a restriction
+on every original table. Its expanded direction changes own singleton
+rewards and need not preserve single-pivot data or MAX-regret selections.
+Distinct maximizing tests may be behaviorally outcome-equivalent; neither
+remaining alternative supplies a UE consumer or a renewable rank.
 
 A uniform original-profile restriction follows: for each fixed table with
 D*>0 and each positive Never lower bound η, there are ε,γ>0 such that
