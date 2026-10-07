@@ -1,4 +1,5 @@
 import Research.RecursiveAbsorption.Payoff
+import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
@@ -11,6 +12,9 @@ absorption mass forces a zero contribution; this is derived rather than assumed.
 Absorbed initial states have their literal constant payoff against every
 behavioral profile. The stationary live-state stage payoff satisfies the actual
 one-step affine recurrence used in Flesch, Thuijsman and Vrieze (1996), Lemma 2.2.
+Its geometric solution and the actual expected-pathwise-liminf bridge identify
+the stationary live-state payoff with the absorption-weighted reward ratio.
+Zero absorption mass is included without a separate public positivity premise.
 -/
 
 noncomputable section
@@ -173,5 +177,62 @@ theorem expectedStagePayoff_stationary_succ (D : Data I J) (x : PMF I) (y : PMF 
   simp_rw [hpoint, expect_add, expect_sub, expect_const, expect_const_mul]
   change value - value * absorptionMass D x y + absorbingContribution D x y who = _
   ring
+
+/-- The stationary ratio reconstructs its actual numerator, including zero mass. -/
+theorem stationaryPayoff_mul_absorptionMass (D : Data I J) (x : PMF I) (y : PMF J)
+    (who : Bool) : stationaryPayoff D x y who * absorptionMass D x y =
+      absorbingContribution D x y who := by
+  by_cases hzero : absorptionMass D x y = 0
+  · rw [hzero, mul_zero, absorbingContribution_eq_zero_of_mass_eq_zero D x y who hzero]
+  · exact div_mul_cancel₀ _ hzero
+
+/-- The actual stage recurrence has the paper's geometric stationary solution. -/
+theorem expectedStagePayoff_stationary_eq (D : Data I J) (x : PMF I) (y : PMF J)
+    (n : ℕ) (who : Bool) :
+    (game D).expectedStagePayoff (stationaryProfile D x y) none n who =
+      stationaryPayoff D x y who * (1 - (1 - absorptionMass D x y) ^ n) := by
+  induction n with
+  | zero => simp only [expectedStagePayoff_stationary_zero, pow_zero, sub_self, mul_zero]
+  | succ n ih =>
+      rw [expectedStagePayoff_stationary_succ, ih, pow_succ,
+        ← stationaryPayoff_mul_absorptionMass D x y who]
+      ring
+
+/-- Actual stationary stage payoffs converge to the ratio, even at zero absorption mass. -/
+theorem tendsto_expectedStagePayoff_stationary (D : Data I J) (x : PMF I) (y : PMF J)
+    (who : Bool) :
+    Tendsto (fun n => (game D).expectedStagePayoff (stationaryProfile D x y) none n who)
+      atTop (𝓝 (stationaryPayoff D x y who)) := by
+  by_cases hzero : absorptionMass D x y = 0
+  · have hratio : stationaryPayoff D x y who = 0 := by
+      simp only [stationaryPayoff, hzero, div_zero]
+    simp only [expectedStagePayoff_stationary_eq, hratio, zero_mul]
+    exact tendsto_const_nhds
+  · have hpositive : 0 < absorptionMass D x y :=
+      lt_of_le_of_ne (absorptionMass_nonneg D x y) (Ne.symm hzero)
+    have hsurvival : 0 ≤ 1 - absorptionMass D x y :=
+      sub_nonneg.mpr (absorptionMass_le_one D x y)
+    have hsurvival_lt : 1 - absorptionMass D x y < 1 := by linarith
+    have hpow := tendsto_pow_atTop_nhds_zero_of_lt_one hsurvival hsurvival_lt
+    have hlimit : Tendsto
+        (fun n : ℕ => stationaryPayoff D x y who * (1 - (1 - absorptionMass D x y) ^ n))
+        atTop (𝓝 (stationaryPayoff D x y who * (1 - 0))) :=
+      tendsto_const_nhds.mul (tendsto_const_nhds.sub hpow)
+    simpa only [expectedStagePayoff_stationary_eq, sub_zero, mul_one] using hlimit
+
+/-- Lemma 2.2's ratio is the literal expected-pathwise-liminf stationary payoff. -/
+theorem liminfPayoff_stationary_none (D : Data I J) (x : PMF I) (y : PMF J)
+    (who : Bool) : liminfPayoff D none (stationaryProfile D x y) who =
+      stationaryPayoff D x y who := by
+  have haverage : Tendsto
+      (fun n => (game D).finiteAveragePayoff none n (stationaryProfile D x y) who)
+      atTop (𝓝 (stationaryPayoff D x y who)) :=
+    (tendsto_expectedStagePayoff_stationary D x y who).cesaro.congr'
+      (Eventually.of_forall fun n =>
+        ((game D).finiteAveragePayoff_eq_sum_expectedStagePayoff
+          (stationaryProfile D x y) none who n).symm)
+  exact tendsto_nhds_unique
+    (tendsto_finiteAveragePayoff_liminfPayoff D (stationaryProfile D x y) none who)
+    haverage
 
 end GameTheory.RecursiveAbsorption
