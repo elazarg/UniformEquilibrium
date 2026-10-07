@@ -460,6 +460,21 @@ table and displayed inverse give degree one. Every distinct nonfavorite pair
 restriction is R0 but not standard Q; every triple inverse has a diagonal
 entry `-1/6`. Four nonzero eigenvector identities realize `1,5,-3,-3`;
 no separate eigenbasis or spectrum-completeness theorem is claimed.
+`not_exact_stationaryNash_of_three_proper_support_of_coordinate_error`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseStationary.lean`)
+excludes actual stationary terminal Nash for every table in the closed
+`1/1000` ball in all sixty reward coordinates, when the positive-hazard
+support has cardinality three and every active hazard is strictly below one.
+All four deleted supports are included; actual mixing balance and the
+coordinate-error bounds are derived internally. The center theorem is a
+specialization. This radius is not asserted to be the UE neighborhood radius;
+full-support profiles, sure active hazards and other boundary supports remain
+outside this exclusion.
+`stationary_proper_mixing_balance`
+(`UniformEquilibrium/Quitting/Stationary/ProperMixingBalance.lean`)
+extracts the Quit/Continue absorption balance from actual exact terminal Nash
+at any proper own hazard, for arbitrary finite player sets and reward tables.
+No supplied continuation value or opponent contraction is assumed.
 
 `GameTheory.PairedCycle.TwoPairOdds.passiveEquation_eq_scaled_post_sub_continue`
 (`UniformEquilibrium/Quitting/Cycles/TwoPairOddsValues.lean`) identifies the
@@ -514,11 +529,24 @@ and contains the fixture; nearby tables internally produce UE targets.
 (`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixtureMatrix.lean`)
 uses the actual singleton matrix, all fifteen principal determinant rows,
 R0 and its strictly positive inverse; the full determinant is `33583397/20480`.
+`projectiveMatrix_harmful_pair_isR0` and
+`projectiveMatrix_harmful_pair_not_standardQ` identify every distinct
+nonfavorite principal pair as R0 but not standard Q, with actual offset
+`[-1,-1]` infeasible. `projectiveMatrix_triple_inverse_diagonal_neg` gives
+a strictly negative diagonal at every coordinate of every principal triple
+inverse. These are restrictions of the actual reward-table singleton matrix.
 `exists_unsafe_witness_for_every_proper_child`
 (`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixtureChildren.lean`)
 supplies chosen exact Nash/zero-Never witnesses for all fourteen children,
 with explicit quiet-lift gains and failure of every real weighted debt/Never
 charge. It does not say every child equilibrium has an unsafe lift.
+`premium_trap_iff`, `premium_core_card` and `not_pure_coalition_terminalNash`
+(`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixtureCoreAndPureExits.lean`)
+give the actual trap census: precisely the two scheduled pairs and the full
+set, with greatest core of cardinality four. Explicit profitable membership
+toggles exclude terminal behavioral Nash for all sixteen pure stationary
+coalitions, including AllNever. This excludes neither stationary mixed
+equilibria nor a uniform-equilibrium payoff.
 `affine_responseInvariant_injective_of_nonzero_scale`
 (`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixtureResponseQuotients.lean`)
 excludes every nondiscrete response-invariant map into `Fin k`, including
@@ -3440,6 +3468,7 @@ generic quitting-game existence theorems.
 | Analytic zero factorization, circle multiplicities and limits | `MathUE/Analysis/AnalyticCompactZeroFactorization.lean`, `MathUE/Complex/CircleArgumentPrinciple.lean`, `MathUE/Complex/HurwitzLimit.lean` | `Math.Analysis.exists_finset_eq_prod_smul_nonzero` derives a finite zero set and actual-order product factorization on a compact preconnected set for a nonzero analytic function, including vector-valued functions. `circleIntegral_logDeriv_eq_finsum_analyticOrderNatAt` counts the actual zero orders inside a circle from analyticity near the closed disk and a nonzero boundary. The Hurwitz companions prove zero-or-zero-free and constant-or-injective locally uniform limits on open preconnected complex domains, for a nontrivial countably generated filter. No finite-zero oracle, normal-family compactness, maximizing embedding, full Riemann mapping theorem or Sorin Proposition 11 closure is supplied. Apache attribution is retained. |
 | Actual covering endpoints and affine image loop families | `MathUE/Topology/CoveringLoopFamilyEndpoint.lean`, `MathUE/Topology/QuotientFiberCollision.lean`, `MathUE/Topology/CoveringImageIncidence.lean`, `MathUE/Topology/SeparatelyAffineImageLoopFamily.lean`, `MathUE/Topology/SeparatelyAffineCoveringEndpoint.lean`, `MathUE/Topology/SeparatelyAffineComplexLoopLift.lean` | Actual continuous prefix-plus-return image loops and their same-fiber homotopies compose with the compact-incidence covering endpoint law. `exists_closed_logarithmic_lift` supplies a continuous logarithmic lift with equal endpoints for every image loop translated away from an omitted complex point. No family or integer-index oracle is assumed. This is not a nullhomotopy in the original image; the planar bridge for Sorin Proposition 11 remains separate. |
 | Sorin's actual payoff-image fiber connectors | `MathUE/Topology/SeparatelyAffineFiberConnectors.lean`, `Literature/Sorin1986.lean` | `returnConnector_homotopic_of_same_value` proves the supplied six-edge cancellation in the payoff-image subtype. `CompactContinuousGame.pair_returnConnector_homotopic` instantiates it in actual compact game strategies; `exists_pairPayoffField_range_eq` identifies the whole image when there are exactly two players. Named checks and separate standard-axiom queries pass. The original Proposition 11 remains unproved; no planar winding or whole-image simple-connectivity theorem is asserted. |
+| Binary exposed-edge integer counting | `Literature/Sorin1986.lean` | `binaryGame_finitePayoff_on_exposed_diagonal_edge` proves that an actual positive finite-horizon behavioral profile maximizing a supplied linear score, whose only maximizing action profiles are the two diagonals, has a pure diagonal expected-stage schedule and an integer-count mixture of its diagonal rewards. Point-mass histories are derived from independence and the score bound. The helper's separate axiom query uses only the three permitted standard axioms. It does not produce an exposed edge for every nonconvex binary payoff image; `two_by_two_feasible_dichotomy` remains a Literature placeholder. |
 | Compact exact-fiber vanishing statistic | `UniformEquilibrium/Quitting/Root/CompactExactNashFiberMoat.lean` | `exists_eventually_totalNashDefect_moat_of_measure_zero_on_exact_fiber` gives a uniform nearby positive defect moat above any positive threshold of a continuous statistic vanishing on the limiting exact Nash fiber. Its absorption companions control every nearby exact root and arbitrary selected roots over convergent sources, without selector convergence or uniqueness. |
 | Separately affine based image loops | `MathUE/Topology/SeparatelyAffineFiberLoops.lean` | `SeparatelyAffinePair.sixVertexLoop_nullhomotopic` contracts the literal six-edge strategy loop inside the payoff image subtype. The fiber bridge is a segment and its reverse by separate affinity. These are supplied-loop homotopies, not a proof that the whole image is simply connected or a closure of Sorin's Proposition 11. |
 | Mixed-cycle solo refinement at one fixed target | `UniformEquilibrium/Quitting/Cycles/MixedCycleUniformPayoff.lean` | `MixedCycleSoloMesh.isUniformEquilibriumPayoff` constructs refined independent profiles from a literal coarse `SourceCertificate`: policy and exact Continue, singleton floors, retained Quit caps and playerwise opponent contraction. Arbitrary finite phase inventories, repeated solo owners, nonzero singleton rewards and empty solo phases are allowed; retained product rows may contain sure hazards. The selected coarse initial target stays exact while accuracy changes only the solo subdivision. Full behavioral terminal error is not multiplied by period length. Quiet padding makes the actual period the coarse phase count times the subdivision scale. This conditional compiler does not supply packet-specific coarse sources. |

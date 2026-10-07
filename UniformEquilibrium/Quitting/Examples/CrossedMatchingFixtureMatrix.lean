@@ -1,6 +1,7 @@
 import UniformEquilibrium.Quitting.Examples.CrossedMatchingFixture
 import MathUE.LinearProgramming.SupportTest
 import MathUE.LinearProgramming.NonnegativeInverseDegree
+import MathUE.LinearProgramming.CyclicChildSharedFixtureScreens
 
 /-! # Actual singleton matrix and degree of the crossed-matching fixture
 
@@ -97,5 +98,89 @@ theorem matrix_r0Degree_eq_one : r0Degree matrix matrix_isR0 = 1 := by
     matrix_positive_inverse.1 (fun row column => (matrix_positive_inverse.2 row column).le),
     matrix_det]
   norm_num
+
+/-- Every distinct nonfavorite pair has the same literal harmful principal matrix. -/
+theorem harmful_pair_matrix_eq (player partner : Fin 4)
+    (hdistinct : partner ≠ player) (hfavorite : partner ≠ favorite player) :
+    matrix.submatrix (![player, partner] : Fin 2 → Fin 4)
+      (![player, partner] : Fin 2 → Fin 4) = !![0, -1; -1, 0] := by
+  ext row column
+  fin_cases player <;> fin_cases partner
+  all_goals norm_num at hdistinct
+  all_goals norm_num [favorite] at hfavorite
+  all_goals fin_cases row <;> fin_cases column <;> norm_num [matrix, Matrix.submatrix]
+
+theorem harmful_pair_isR0 (player partner : Fin 4)
+    (hdistinct : partner ≠ player) (hfavorite : partner ≠ favorite player) :
+    IsR0Matrix (matrix.submatrix (![player, partner] : Fin 2 → Fin 4)
+      (![player, partner] : Fin 2 → Fin 4)) := by
+  rw [harmful_pair_matrix_eq player partner hdistinct hfavorite,
+    ← Math.CyclicChildJointPhase.SharedFixture.pairZeroThree_eq]
+  exact Math.CyclicChildJointPhase.SharedFixture.pairZeroThree_isR0
+
+theorem harmful_pair_negativeOffset_infeasible (player partner : Fin 4)
+    (hdistinct : partner ≠ player) (hfavorite : partner ≠ favorite player) :
+    ¬StandardLCPSolvable (matrix.submatrix (![player, partner] : Fin 2 → Fin 4)
+      (![player, partner] : Fin 2 → Fin 4)) ![-1, -1] := by
+  rw [harmful_pair_matrix_eq player partner hdistinct hfavorite,
+    ← Math.CyclicChildJointPhase.SharedFixture.pairZeroThree_eq]
+  exact Math.CyclicChildJointPhase.SharedFixture.pairZeroThree_negativeOffset_infeasible
+
+theorem harmful_pair_not_standardQ (player partner : Fin 4)
+    (hdistinct : partner ≠ player) (hfavorite : partner ≠ favorite player) :
+    ¬IsStandardQ (matrix.submatrix (![player, partner] : Fin 2 → Fin 4)
+      (![player, partner] : Fin 2 → Fin 4)) := by
+  rw [harmful_pair_matrix_eq player partner hdistinct hfavorite,
+    ← Math.CyclicChildJointPhase.SharedFixture.pairZeroThree_eq]
+  exact Math.CyclicChildJointPhase.SharedFixture.pairZeroThree_not_standardQ
+
+/-- Increasing-order indexing of the actual principal triple. -/
+def tripleMatrix (omitted : Fin 4) : Matrix (Fin 3) (Fin 3) ℝ :=
+  matrix.submatrix omitted.succAbove omitted.succAbove
+
+theorem triple_inverse_diagonal_neg (omitted : Fin 4) (player : Fin 3) :
+    (tripleMatrix omitted)⁻¹ player player < 0 := by
+  rw [Matrix.inv_def]
+  fin_cases omitted <;> fin_cases player <;>
+    norm_num [tripleMatrix, matrix, Matrix.det_fin_three, Matrix.adjugate_fin_three,
+      Matrix.submatrix, Fin.succAbove, Ring.inverse_eq_inv]
+
+theorem triple_inverse_not_nonnegative (omitted : Fin 4) :
+    ¬∀ row column, 0 ≤ (tripleMatrix omitted)⁻¹ row column := by
+  intro hnonnegative
+  exact (not_le_of_gt (triple_inverse_diagonal_neg omitted 0)) (hnonnegative 0 0)
+
+theorem projectiveMatrix_harmful_pair_isR0 (player partner : Fin 4)
+    (hdistinct : partner ≠ player) (hfavorite : partner ≠ favorite player) :
+    IsR0Matrix (Matrix.submatrix (quittingProjectiveLCPMatrix reward)
+      (![player, partner] : Fin 2 → Fin 4) (![player, partner] : Fin 2 → Fin 4)) := by
+  rw [projectiveMatrix_eq]
+  exact harmful_pair_isR0 player partner hdistinct hfavorite
+
+theorem projectiveMatrix_harmful_pair_negativeOffset_infeasible (player partner : Fin 4)
+    (hdistinct : partner ≠ player) (hfavorite : partner ≠ favorite player) :
+    ¬StandardLCPSolvable (Matrix.submatrix (quittingProjectiveLCPMatrix reward)
+      (![player, partner] : Fin 2 → Fin 4) (![player, partner] : Fin 2 → Fin 4)) ![-1, -1] := by
+  rw [projectiveMatrix_eq]
+  exact harmful_pair_negativeOffset_infeasible player partner hdistinct hfavorite
+
+theorem projectiveMatrix_harmful_pair_not_standardQ (player partner : Fin 4)
+    (hdistinct : partner ≠ player) (hfavorite : partner ≠ favorite player) :
+    ¬IsStandardQ (Matrix.submatrix (quittingProjectiveLCPMatrix reward)
+      (![player, partner] : Fin 2 → Fin 4) (![player, partner] : Fin 2 → Fin 4)) := by
+  rw [projectiveMatrix_eq]
+  exact harmful_pair_not_standardQ player partner hdistinct hfavorite
+
+theorem projectiveMatrix_triple_inverse_diagonal_neg (omitted : Fin 4) (player : Fin 3) :
+    (Matrix.submatrix (quittingProjectiveLCPMatrix reward)
+      omitted.succAbove omitted.succAbove)⁻¹ player player < 0 := by
+  rw [projectiveMatrix_eq]
+  exact triple_inverse_diagonal_neg omitted player
+
+theorem projectiveMatrix_triple_inverse_not_nonnegative (omitted : Fin 4) :
+    ¬∀ row column, 0 ≤ (Matrix.submatrix (quittingProjectiveLCPMatrix reward)
+      omitted.succAbove omitted.succAbove)⁻¹ row column := by
+  rw [projectiveMatrix_eq]
+  exact triple_inverse_not_nonnegative omitted
 
 end GameTheory.CrossedMatchingFixture

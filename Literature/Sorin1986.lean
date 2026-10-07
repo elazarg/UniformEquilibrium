@@ -10975,6 +10975,250 @@ theorem example6_D1_not_convex_D2_eq_C :
       example6.finiteFeasiblePayoffs 2 = example6.correlatedFeasiblePayoffs := by
   exact ⟨example6_D1_not_convex, example6_D2_eq_C⟩
 
+/-- The independent binary payoff in vector form. -/
+private theorem binaryGame_mixedPayoff_vector
+    (A B C D : Payoff Bool) (profile : Bool → PMF Bool) :
+    (binaryGame A B C D).mixedPayoff profile =
+      (profile false true).toReal •
+        ((profile true true).toReal • D + (1 - (profile true true).toReal) • C) +
+      (1 - (profile false true).toReal) •
+        ((profile true true).toReal • B + (1 - (profile true true).toReal) • A) := by
+  funext who
+  simpa only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] using
+    binaryGame_mixedPayoff_apply A B C D profile who
+
+/-- A supporting score maximized only on the two opposite action profiles
+forces any independently mixed maximizing stage to be pure and diagonal. -/
+private theorem binaryGame_supportingScore_le_and_pure_diagonal
+    (A B C D : Payoff Bool) (score : Payoff Bool →ₗ[ℝ] ℝ) (cap : ℝ)
+    (hA : score A = cap) (hD : score D = cap)
+    (hB : score B < cap) (hC : score C < cap)
+    (profile : Bool → PMF Bool) :
+    score ((binaryGame A B C D).mixedPayoff profile) ≤ cap ∧
+      (score ((binaryGame A B C D).mixedPayoff profile) = cap →
+        ∃ diagonal : Bool, profile false = PMF.pure diagonal ∧
+          profile true = PMF.pure diagonal) := by
+  let p := (profile false true).toReal
+  let q := (profile true true).toReal
+  have hp0 : 0 ≤ p := ENNReal.toReal_nonneg
+  have hq0 : 0 ≤ q := ENNReal.toReal_nonneg
+  have hp1 : p ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  have hq1 : q ≤ 1 :=
+    ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
+  have hleft : 0 ≤ (1 - p) * q := mul_nonneg (by linarith) hq0
+  have hright : 0 ≤ p * (1 - q) := mul_nonneg hp0 (by linarith)
+  have hgap :
+      cap - score ((binaryGame A B C D).mixedPayoff profile) =
+        (1 - p) * q * (cap - score B) + p * (1 - q) * (cap - score C) := by
+    rw [binaryGame_mixedPayoff_vector]
+    simp only [map_add, map_smul, smul_eq_mul, hA, hD]
+    dsimp only [p, q]
+    ring
+  have hleftLoss : 0 ≤ (1 - p) * q * (cap - score B) :=
+    mul_nonneg hleft (by linarith)
+  have hrightLoss : 0 ≤ p * (1 - q) * (cap - score C) :=
+    mul_nonneg hright (by linarith)
+  refine ⟨by linarith, ?_⟩
+  intro heq
+  have hleftZero : (1 - p) * q = 0 := by nlinarith
+  have hrightZero : p * (1 - q) = 0 := by nlinarith
+  by_cases hp : p = 0
+  · have hq : q = 0 := by nlinarith
+    exact ⟨false,
+      Math.PMFProduct.eq_pure_false_of_true_toReal_eq_zero _ hp,
+      Math.PMFProduct.eq_pure_false_of_true_toReal_eq_zero _ hq⟩
+  · have hq : q = 1 := by
+      have := (mul_eq_zero.mp hrightZero).resolve_left hp
+      linarith
+    have hp' : p = 1 := by nlinarith
+    exact ⟨true,
+      Math.PMFProduct.eq_pure_true_of_true_toReal_eq_one _ hp',
+      Math.PMFProduct.eq_pure_true_of_true_toReal_eq_one _ hq⟩
+
+
+private theorem binaryGame_expectedStage_supportingScore_le
+    (A B C D : Payoff Bool) (score : Payoff Bool →ₗ[ℝ] ℝ) (cap : ℝ)
+    (hA : score A = cap) (hD : score D = cap)
+    (hB : score B < cap) (hC : score C < cap)
+    (profile : (binaryGame A B C D).BehaviorProfile) (time : ℕ) :
+    score (fun who => (binaryGame A B C D).repeatedGame.expectedStagePayoff
+      profile PUnit.unit time who) ≤ cap := by
+  let G := binaryGame A B C D
+  let : Fintype (G.repeatedGame.Hist time) := Fintype.ofFinite _
+  change score (fun who => Math.Probability.expect
+    (G.repeatedGame.histDist profile PUnit.unit time)
+    (fun history => G.repeatedGame.stageEUAt profile history who)) ≤ cap
+  rw [Math.ProbabilityMassFunction.coordinateExpectation_map_linear]
+  rw [← Math.Probability.expect_const
+    (G.repeatedGame.histDist profile PUnit.unit time) cap]
+  apply Math.Probability.expect_mono
+  intro history
+  have hstage : (fun who => G.repeatedGame.stageEUAt profile history who) =
+      G.mixedPayoff (fun who => profile who time history) := by
+    funext who
+    exact G.stageEUAt_eq_mixedEU profile history who
+  exact (congrArg score hstage).trans_le
+    (binaryGame_supportingScore_le_and_pure_diagonal
+      A B C D score cap hA hD hB hC _).1
+
+/-- Equality at all preceding stages forces the actual monitored history
+law to remain a point mass; no deterministic-profile premise is required. -/
+private theorem binaryGame_histDist_eq_pure_of_supportingScores_eq
+    (A B C D : Payoff Bool) (score : Payoff Bool →ₗ[ℝ] ℝ) (cap : ℝ)
+    (hA : score A = cap) (hD : score D = cap)
+    (hB : score B < cap) (hC : score C < cap)
+    (profile : (binaryGame A B C D).BehaviorProfile) (horizon : ℕ)
+    (hstage : ∀ time, time < horizon →
+      score (fun who => (binaryGame A B C D).repeatedGame.expectedStagePayoff
+        profile PUnit.unit time who) = cap) :
+    ∀ time, time ≤ horizon → ∃ history,
+      (binaryGame A B C D).repeatedGame.histDist profile PUnit.unit time =
+        PMF.pure history := by
+  let G := binaryGame A B C D
+  intro time htime
+  induction time with
+  | zero => exact ⟨G.repeatedGame.emptyHist PUnit.unit, rfl⟩
+  | succ time ih =>
+    obtain ⟨history, hhistory⟩ := ih (by omega)
+    have htotal := hstage time (by omega)
+    unfold StochasticGame.expectedStagePayoff at htotal
+    rw [hhistory] at htotal
+    simp only [Math.Probability.expect_pure] at htotal
+    have heq : (fun who => G.repeatedGame.stageEUAt profile history who) =
+        G.mixedPayoff (fun who => profile who time history) := by
+      funext who
+      exact G.stageEUAt_eq_mixedEU profile history who
+    rw [heq] at htotal
+    obtain ⟨diagonal, hfalse, htrue⟩ :=
+      (binaryGame_supportingScore_le_and_pure_diagonal
+        A B C D score cap hA hD hB hC _).2 htotal
+    let action : G.repeatedGame.JointAct := fun _ => diagonal
+    let nextHistory : G.repeatedGame.Hist (time + 1) :=
+      (Fin.snoc history.1 (PUnit.unit, action), PUnit.unit)
+    refine ⟨nextHistory, ?_⟩
+    rw [G.repeatedGame.histDist_succ, hhistory, PMF.pure_bind]
+    have hactions : G.repeatedGame.stageActionDist profile history = PMF.pure action := by
+      unfold StochasticGame.stageActionDist
+      have hprofile : (fun who => profile who time history) =
+          fun who => PMF.pure (action who) := by
+        funext who
+        cases who
+        · exact hfalse
+        · exact htrue
+      rw [hprofile]
+      exact Math.PMFProduct.pmfPi_pure action
+    rw [hactions, PMF.pure_bind]
+    simp only [FiniteStageGame.repeatedGame,
+      KernelGame.realizedActionStochasticGame, PMF.pure_bind]
+    rfl
+
+
+/-- On an exposed diagonal edge of a binary game, an actual finite-horizon
+profile realizes an integer-count mixture of the two diagonal rewards.
+The expected stage vectors themselves follow a pure diagonal schedule.
+This does not assert that every nonconvex binary image has such an edge. -/
+theorem binaryGame_finitePayoff_on_exposed_diagonal_edge
+    (A B C D : Payoff Bool) (score : Payoff Bool →ₗ[ℝ] ℝ) (cap : ℝ)
+    (hA : score A = cap) (hD : score D = cap)
+    (hB : score B < cap) (hC : score C < cap)
+    (profile : (binaryGame A B C D).BehaviorProfile)
+    (n : ℕ) (hn : 0 < n)
+    (hpayoff : score ((binaryGame A B C D).finitePayoff n profile) = cap) :
+    ∃ schedule : ℕ → Bool, ∃ count : ℕ, count ≤ n ∧
+      (∀ time, time < n →
+        (fun who => (binaryGame A B C D).repeatedGame.expectedStagePayoff
+          profile PUnit.unit time who) = if schedule time then D else A) ∧
+      (binaryGame A B C D).finitePayoff n profile =
+        ((count : ℝ) / (n : ℝ)) • D + (1 - (count : ℝ) / (n : ℝ)) • A := by
+  classical
+  let G := binaryGame A B C D
+  let stage : ℕ → Payoff Bool := fun time who =>
+    G.repeatedGame.expectedStagePayoff profile PUnit.unit time who
+  have hstageLe (time : ℕ) : score (stage time) ≤ cap :=
+    binaryGame_expectedStage_supportingScore_le
+      A B C D score cap hA hD hB hC profile time
+  have hsum : ∑ time ∈ Finset.range n, score (stage time) = (n : ℝ) * cap := by
+    have h := congrArg score (cast_smul_finitePayoff_eq_sum G n profile)
+    have hlinear : (n : ℝ) * score (G.finitePayoff n profile) =
+        ∑ time ∈ Finset.range n, score (stage time) := by
+      simpa only [map_smul, smul_eq_mul, map_sum] using h
+    have hscore : score (G.finitePayoff n profile) = cap := hpayoff
+    rw [hscore] at hlinear
+    exact hlinear.symm
+  have hstageEq : ∀ time, time < n → score (stage time) = cap := by
+    intro time htime
+    have hnonneg : ∀ t ∈ Finset.range n, 0 ≤ cap - score (stage t) := by
+      intro t _
+      exact sub_nonneg.mpr (hstageLe t)
+    have hzero : ∑ t ∈ Finset.range n, (cap - score (stage t)) = 0 := by
+      rw [Finset.sum_sub_distrib, hsum]
+      simp
+    exact (sub_eq_zero.mp
+      ((Finset.sum_eq_zero_iff_of_nonneg hnonneg).mp hzero
+        time (Finset.mem_range.mpr htime))).symm
+  have hpure : ∀ time, time < n → ∃ diagonal : Bool,
+      stage time = if diagonal then D else A := by
+    intro time htime
+    obtain ⟨history, hhistory⟩ :=
+      binaryGame_histDist_eq_pure_of_supportingScores_eq
+        A B C D score cap hA hD hB hC profile n hstageEq time htime.le
+    have hscore := hstageEq time htime
+    have hstage : stage time = G.mixedPayoff (fun who => profile who time history) := by
+      funext who
+      dsimp only [stage]
+      unfold StochasticGame.expectedStagePayoff
+      rw [hhistory, Math.Probability.expect_pure]
+      exact G.stageEUAt_eq_mixedEU profile history who
+    rw [hstage] at hscore
+    obtain ⟨diagonal, hfalse, htrue⟩ :=
+      (binaryGame_supportingScore_le_and_pure_diagonal
+        A B C D score cap hA hD hB hC _).2 hscore
+    refine ⟨diagonal, ?_⟩
+    rw [hstage]
+    funext who
+    rw [binaryGame_mixedPayoff_apply, hfalse, htrue]
+    cases diagonal <;> simp
+  let schedule : ℕ → Bool := fun time =>
+    if ht : time < n then Classical.choose (hpure time ht) else false
+  have hschedule : ∀ time, time < n →
+      stage time = if schedule time then D else A := by
+    intro time htime
+    simpa only [schedule, dite_eq_left htime] using
+      Classical.choose_spec (hpure time htime)
+  let count := ((Finset.range n).filter fun time => schedule time = true).card
+  have hcount : count ≤ n := by
+    exact (Finset.card_filter_le _ _).trans_eq (Finset.card_range n)
+  refine ⟨schedule, count, hcount, hschedule, ?_⟩
+  have hcountSum : (∑ time ∈ Finset.range n,
+      if schedule time = true then (1 : ℝ) else 0) = (count : ℝ) := by
+    rw [Finset.sum_boole]
+  have hnReal : (n : ℝ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hn)
+  funext who
+  have hsumVector := congrFun (cast_smul_finitePayoff_eq_sum G n profile) who
+  simp only [Pi.smul_apply, smul_eq_mul, Finset.sum_apply] at hsumVector
+  have hsumStage : (∑ time ∈ Finset.range n, stage time who) =
+      (n : ℝ) * A who + (count : ℝ) * (D who - A who) := by
+    calc
+      _ = ∑ time ∈ Finset.range n,
+          (A who + (if schedule time = true then (1 : ℝ) else 0) *
+            (D who - A who)) := by
+        apply Finset.sum_congr rfl
+        intro time htime
+        rw [hschedule time (Finset.mem_range.mp htime)]
+        cases schedule time <;> simp
+      _ = _ := by
+        rw [Finset.sum_add_distrib, ← Finset.sum_mul, hcountSum]
+        simp
+  change (n : ℝ) * G.finitePayoff n profile who =
+    ∑ time ∈ Finset.range n, stage time who at hsumVector
+  rw [hsumStage] at hsumVector
+  change G.finitePayoff n profile who =
+    (count : ℝ) / (n : ℝ) * D who + (1 - (count : ℝ) / (n : ℝ)) * A who
+  apply (mul_left_cancel₀ hnReal)
+  field_simp
+  nlinarith [hsumVector]
+
 /-! The two-by-two dichotomy is stated in the remark on page 152, after
 Example 6. Proposition 5 alone does not give its binary-game converse. -/
 theorem two_by_two_feasible_dichotomy
