@@ -1735,3 +1735,139 @@ finite-clock reconstruction, to force the unregularized global infimum
 to zero? A common-support assertion or a supplied tail inequality would
 not answer it. In particular an η error still cannot be divided by a
 vanishing joint Never mass without an additional argument.
+
+### Retaining tied atoms and the entire tester set
+
+The following completes a REPRESENTATION of the fixed-τ selected limit.
+It is not a realization on the original natural-number calendar. Its
+point is to keep the complete cap coordinates, not only prescribed
+payoffs, in the relative-clock limit.
+
+**Proposition.** After a subsequence of the profiles in(RC7), there are a
+compact ordered set T⊆[0,1], a distinguished extra Never point, and four
+independent probability laws q_i on T∪{Never} such that:
+
+1. the law of the first quitting coalition, including Never, is the limit
+   of the original prescribed coalition laws;
+2. each original unrestricted cap b_i(pⁿ) converges to the supremum over
+   EVERY pure time in T and Never against q₋ᵢ;
+3. I(q)=lim I(pⁿ), so D_T(q)+τI(q)=m_τ.
+
+Here D_T uses all the just-specified cap tests on T. This is exact
+attainment of the numerical regularized infimum by independent laws on
+a compact ORDERED calendar. It does not assert that this calendar embeds
+in ℕ, that the q_i are original behavioral strategies, or that arbitrary
+changes of the calendar are automatically admissible minimum-preserving
+variations. Those are separate strategic questions.
+
+**Proof.** Let c_n=1−μⁿ(Never). Let E_n be the endpoints of all the
+positive-μⁿ atom intervals, including0,c_n,1. For every original finite
+pure response time t use its quantile location
+
+    x_n(t)=μⁿ({a:a<t})+μⁿ(t)/2.
+
+Thus a supported date is the midpoint of its tied atom interval, whereas
+an unoccupied date is its preceding cumulative mass. All dates after the
+last supported finite date have the SAME location c_n and the same
+payoff against the source opponents. Let T_n be the finite set of these
+locations. It includes c_n. Never remains an extra isolated response;
+it is not identified with the last finite test, for either sign of the
+singleton reward.
+
+The E_n and T_n are nonempty compact subsets of[0,1]. Compactness of the
+Hausdorff hyperspace, together with c_n→c, permits a common subsequence
+with E_n→E and T_n→T. The already obtained strong density convergence is
+retained. We have0,c,1∈E and T⊆[0,c], with c∈T. The open interval(c,1)
+is the limiting Never interval.
+
+Each component J=(a,b) of[0,c]∖E is the limit of ONE actual atom interval
+J_n=(a_n,b_n), with a_n→a,b_n→b. To see this, any compact subinterval
+of J eventually contains no endpoint from E_n; it is therefore contained
+in a single original atom. Hausdorff convergence forces that atom's two
+endpoints toward the endpoints of J. The limiting r_i* is constant
+almost everywhere on J, because the approximating density is constant
+on J_n and converges strongly. Moreover
+
+    T∩J={(a+b)/2}.                               (RC9)
+
+Indeed the only original pure-time location in the interior of J_n is
+its atom midpoint. This proves both inclusion directions in(RC9).
+
+Define an order-preserving collapse π on[0,1], ignoring null endpoints:
+collapse each J to its midpoint, leave x∈E∩[0,c] unchanged, and send
+(c,1) to Never. This map has values in T∪{Never} almost everywhere.
+The only point requiring justification is E∖T: it is null. On any open
+interval disjoint from T, the set E has at most one point. Otherwise two
+nearby original endpoints inside that interval would enclose an original
+atom midpoint there, contradicting Hausdorff convergence of T_n. There
+are countably many components of the complement of T, so E∖T is at most
+countable. Endpoint conventions have zero Lebesgue measure.
+
+Let q_i be the push-forward under π of r_i*(x)dx. Use INDEPENDENT draws
+for the four players; the common chart is deterministic. The reference
+mixture of the q_i is π_*dx. Because each r_i* is constant on every
+collapsed positive-length interval, including Never, this push-forward
+loses no player-identity entropy. Consequently
+
+    I(q)=Σ_i∫r_i*log r_i*=lim I(pⁿ).              (RC10)
+
+For payoff convergence, represent the original profile in the same way
+using π_n, which collapses each original atom to its midpoint and its
+Never interval to Never. Its product density on[0,1]⁴ converges in L¹ to
+the limiting product density: telescoping gives an upper bound by the
+sum of the four marginal L¹ distances. With that density difference
+removed, compare outcomes at a fixed tuple of quantile draws.
+
+Outside a Lebesgue-null set, no draw equals c or an endpoint of any
+component of[0,c]∖E, and no two distinct draws are equal. Whether two
+finite draws are in the same actual atom then stabilizes: if they lie
+in one component J, both eventually lie in J_n; otherwise some limiting
+endpoint strictly between them eventually separates their original
+atoms. An exception in the latter assertion would put a draw at a
+component endpoint, already excluded. The Never membership of each draw
+also stabilizes. Thus the first quitting coalition stabilizes almost
+everywhere. Bounded convergence proves convergence of every coalition
+probability and every prescribed payoff.
+
+Now retain a moving pure response x_n∈T_n with x_n→x∈T. Its payoff
+against the other three laws converges to the actual pure-x payoff
+against q₋ᵢ. If x is the midpoint of a component J, (RC9) forces x_n to
+be the corresponding atom midpoint eventually; the same-atom coalition
+is retained exactly. Otherwise x∈E, and no opponent draw equals x with
+positive Lebesgue probability. A large atom cannot cross this cut except
+by having x as an endpoint; available response locations then approach
+that atom only from the correct side, since its midpoint stays a positive
+distance away. All remaining order and tie tests stabilize as in the
+prescribed-payoff argument. The Never response is handled separately by
+the same opponent first-coalition convergence. This proves convergence
+for EVERY convergent sequence of available test locations, not just a
+preselected maximizing response.
+
+The limiting pure-time payoff is continuous on T: a retained atom
+midpoint is isolated from all other available locations by its half-length,
+and elsewhere the preceding cut argument applies. Never is isolated as
+a tester label. Hence the limiting maximum is attained. For the upper
+cap bound choose a maximizer in each finite T_n∪{Never} and extract a
+convergent subsequence; the preceding paragraph bounds its limit by the
+limiting cap. For the lower cap bound approximate a limiting maximizer
+using Hausdorff convergence (or use Never unchanged). This proves both
+cap inequalities and therefore the claimed full cap convergence.
+Combining it with(RC10) and Φ_τ(pⁿ)→m_τ proves the proposition. ∎
+
+This proof permits diffuse limiting time and tied atomic time together.
+It does not turn a common quantile draw into public randomness. It also
+does not assume that a Hausdorff limit of dates has every empty cut
+available: T is the limit of the ACTUAL test locations. In particular a
+cut between two adjacent nonvanishing tied atoms need not belong to T.
+
+There is still a real variational boundary. A response location with zero
+prescribed marginal mass can represent several collapsing empty dates;
+the current semantic pair does not record their multiplicity. Giving
+positive new mass to such a location can expose distinct before/tie/after
+tests. Likewise a compact continuum T need not have the order type of
+a subset of ℕ. Consequently numerical attainment at the represented q
+does NOT justify arbitrary calendar changes or an original-game exact
+minimizer. A proposed descent must either be transported to actual finite
+profiles with all resulting tests, or prove a finite-reconstruction theorem
+for the changed marked calendar. This is the next consumer question,
+rather than a claimed closure of the positive-global-debt problem.
