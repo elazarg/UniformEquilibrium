@@ -68,8 +68,12 @@ and later cap groups, with EVERY earliest maximizer unsupported. If all
 unique caps are isolated, supported owners are actually pure at their
 caps, so earliest mass is supplied only by later unsupported owners.
 The full producer and complete source consumer, exact failed stronger
-implications and scoped source lookup are saved there. Ordinary
-mathematics, independent review pending; no new export yet.
+implications and scoped source lookup are saved there. BROUWER's focused
+independent proof/value check PASSed with no unresolved objection. The
+self-contained complete artifact is
+`CODEX_MORSE__RECIPIENT_SCALE_DEBT_RIGIDITY_SOURCE_REDUCTION.md`, internal
+pending its whole-artifact independent falsification. Ordinary mathematics;
+no new export yet.
 
 Supporting global comparison: Section 46 uses an attained worst SUM table
 and NEW whole-law near-minimizers after a finite own-singleton reward
@@ -9430,8 +9434,13 @@ singleton constant tuning or local fixed-row trap is proposed.
 
 ## 49. Generic recipient scales give debt rigidity and consume supported earliest caps
 
-Status: complete ordinary-mathematical GLOBAL source-reduction candidate,
-not independently reviewed or Lean-checked. This is a different mechanism
+Status: complete ordinary-mathematical GLOBAL source-reduction candidate.
+BROUWER's focused independent proof/value review PASSed, with no unresolved
+objection. The ONE self-contained assembled artifact
+[`CODEX_MORSE__RECIPIENT_SCALE_DEBT_RIGIDITY_SOURCE_REDUCTION.md`](CODEX_MORSE__RECIPIENT_SCALE_DEBT_RIGIDITY_SOURCE_REDUCTION.md)
+includes the entire original compact/contact/source proof; full-artifact
+independent falsification is requested before any export. Not Lean-checked.
+This is a different mechanism
 from cap-wall continuation: the entire minimum family is first made
 DEBT-RIGID by a small positive recipient scaling. A legal one-coordinate
 signed reset then consumes any supported earliest unique cap. No mixture

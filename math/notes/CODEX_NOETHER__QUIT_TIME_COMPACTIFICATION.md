@@ -2,6 +2,18 @@
 
 ## Current best attempt
 
+The newest finite-amplitude consumer is SQ1–SQ6 at the end: in SC's
+actual sure-triple cap wall, ONE owner may carry the entire earlier
+head, provided an ACTUAL empty tester lies after that entire head and
+before the sure deadline. Spreading that one head preserves every
+prescribed outcome and has a derived unrestricted-cap upper bound.
+It produces an atomless single-head actual minimum; EA and the priced
+SC pair corner then contradict it. This supplied SUBGEOMETRY exclusion
+is an ordinary proof draft awaiting independent review, not an assertion
+that SC produces the single-head/empty-test hypotheses exhaustively.
+SQ6 gives complete finite raw data falsifying the same upper-cap bound
+when the empty tester is absent. Overlapping heads remain open.
+
 The newest whole-source attempt is SC1–SC9 at the end, independently
 accepted in CODEX_BROUWER's focused feedback (not an artifact gate).
 A fresh hierarchical table comparison forces the all-unique/all-isolated/
@@ -14,7 +26,7 @@ coalition kernels, not an outcome-equivalent c/Never endpoint tie.
 The simultaneous multiple-cap source is not yet consumed. This draft
 is separate from the frozen independently reviewed source packet.
 
-A new full-cap SOURCE restriction is recorded at the end as SLC1–SLC12.
+The full-cap SOURCE restriction SLC1–SLC12 is retained below.
 At a produced marked positive global minimum with four unique cap
 maximizers, either an EARLIEST maximizing owner has zero own point mass,
 or three supported caps share one finite date and the sole later-cap
@@ -26,9 +38,11 @@ the actual original finite tests. The earlier separated-zero-own-mass
 group theorem is now a corollary of this stronger classification.
 CODEX_BROUWER independently falsified and accepted SLC1–SLC12; I have
 consolidated the duplicate proof without changing its accepted scope.
-This is ordinary mathematics, not a Lean check, export, endpoint Nash
-claim or full Fin4 consumer. Earliest zero-own-mass caps, all four
-unsupported caps, and multiple maximizers remain open.
+This is ordinary mathematics, not a Lean check, endpoint Nash claim or
+full Fin4 consumer. Its subsequent fresh-table combination with EA is
+now frozen in `../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`;
+the older claim by itself does not consume earliest zero-own-mass caps,
+all four unsupported caps, or multiple maximizers.
 
 A new actual SOURCE CONSUMER at the end, CC1–CC8, excludes one part
 of that earliest-zero branch: all four caps cannot have the SAME
@@ -47,19 +61,23 @@ identity: δ=Σ_(z∉A)[r_z(A∪{z})−r_z(A)], where A is the nonempty
 proper set of owners with positive own mass at that common cap.
 Its joint signed conditional transport is complete; its distant
 endpoint is explicitly only a selected-response evaluation. A single
-fresh worst-table perturbation can avoid this finite join spectrum
-and LC's withdrawal spectrum together. MORSE is supplying the separate
-worst-table/gap comparison; no old source is carried through it.
+fresh worst-table perturbation avoids this finite join spectrum and
+LC's withdrawal spectrum together. The whole-source/table comparison
+is now in the frozen packet just cited; no old source is carried through
+the fresh-table selection.
 JC1–JC4 has passed independent checks by CODEX_BROUWER and CODEX_MORSE.
 SIC1–SIC6 and FP1–FP5 have passed MORSE's independent focused check.
-The latter gives one explicit FRESH-table producer whose all-unique
-three-supported sources can survive only with a strictly EARLIEST,
-NONISOLATED unsupported cap. It uses Ω≤4/5<1 to push every critical
-withdrawal/join/floor/own-grand spectrum value above the worst SUM
-gap, then selects new actual minimizing sequences. MORSE is assembling
-one self-contained whole-source reduction with these independently
-checked ingredients; no separate auxiliary export is made. Multiple
-caps and two, three or four unsupported cap owners remain open.
+FP's original strictly-earliest NONISOLATED three-supported arm has
+since been eliminated by the independently checked EA argument. The
+frozen whole-source reduction includes that strengthening: its produced
+minimum has multiple complete maximizing POINTS, or all maxima are
+unique and its earliest maximizing point is an isolated positive-mixture
+atom with a zero-own-mass maximizing owner and at least TWO unsupported
+owners overall. It uses Ω≤4/5<1 and selects fresh actual minimizing
+sequences. Distinct maximizing points need not be distinct behavioral
+effects; the unrestricted multiple-cap and multiple-unsupported branches
+remain open. The stronger SC comparison is a separate internally reviewed
+attempt, not part of that frozen packet; no auxiliary export is made.
 
 The broad original-stage restriction has a canonical stronger proof in
 `../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`: a positive
@@ -16355,3 +16373,244 @@ Concrete next question: derive a finite-amplitude ALL-active cap upper
 comparison from the actual SC law/punishment coupling, or design an
 adaptive-cap barrier closed under every product-law replacement. The
 local active-gradient separation in AP1 is explicitly insufficient.
+
+## A payoff-preserving single-head spread with actual full-cap control
+
+Status: COMPLETE ORDINARY PROOF DRAFT SQ1–SQ6, awaiting independent
+review. This consumes a genuine supplied subgeometry of SC's ACTUAL
+minimum wall. SC does NOT produce its single-head and empty-tester
+hypotheses exhaustively. The intervention is a finite-amplitude change
+of actual independent stopping laws with a DERIVED unrestricted upper
+cap bound; it is not a selected-response ledger, conditional child Nash
+choice, or claim that arbitrary overlapping heads can be reordered.
+No Lean edits, export, or full Fin4 conclusion is claimed.
+
+The source lookup for this attempt is the already inspected original
+marked construction and signed-old-cut transport in
+`../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`, together
+with the complete active-cap EA proof now frozen in Section7 of
+`../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`.
+The actual minimum singleton margin is
+`minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`.
+The scoped SC1–SC9 argument and its pair-corner exclusion are internal
+ordinary mathematics independently checked by CODEX_BROUWER. No new
+Lean declaration is asserted here.
+
+### SQ1. Exact source and the excluded subgeometry
+
+Fix SC3's FRESH table r̂, its true global SUM gap d>0, and the forbidden
+floor-free pair labels (SC4). Work at one ACTUAL marked global minimum
+q, transported from actual finite minimizing profiles as in SC8–SC9.
+Let I={m,a,b,z} and let t₀ be a finite positive-mixture atom. Assume:
+
+1. q_m=δ_t₀; q_a({t₀}),q_b({t₀})>0; q_z({t₀})=0.
+2. Each of a,b,z has a full maximizing test t₀, UNIQUE among ALL tests
+   at or above t₀. Player m has a full maximizing test τ_m>t₀,
+   likewise unique among upper tests. This upper maximizer is an old
+   isolated test point; Never is allowed. Full caps may ALSO have lower
+   maximizing points: this is a genuine SC wall, not an all-unique
+   premise disguised as a tie.
+3. All three opponents of m have strictly positive OLD probability
+   after t₀. All displayed upper test kernels and their uniqueness are
+   those of the same actual source, not a newly selected child game.
+4. At most ONE j∈{a,b,z} has positive prescribed mass before t₀.
+   If this mass h is positive, there is an ACTUAL complete test
+   ξ<t₀ with q_j(clock<ξ)=h and q_j({ξ})=0. Thus ξ is after the
+   ENTIRE head, and no player has any prescribed stop between ξ and
+   t₀. The source needs this tester, not merely an order interval in
+   a larger invented calendar.
+
+Conclusion: this subgeometry CANNOT be an actual positive global
+minimum of the fresh table. When h=0 the normalized SC pair-corner
+contradiction already proves this. The following proof handles h>0.
+It does not exclude two or three head owners, or a single head whose
+support accumulates at the root without the stated actual empty test.
+
+Write s_i=r̂_i({i}), b_i for the full source caps, and R for a bound
+on all absolute rewards. The checked singleton margin gives
+b_i−s_i≥d>0 for EVERY i at this actual minimum.
+
+### SQ2. The actual empty tester prices every recipient's head exposure
+
+For i≠j, opponents can stop before ξ only through j's entire head.
+If it occurs, coalition {j} has already absorbed; otherwise nobody
+stops before or at ξ and i's test creates singleton {i}. Therefore
+
+    V_i(ξ,q_−i)=K_i=h r̂_i({j})+(1−h)s_i≤b_i.       (SQ1)
+
+For owner j itself this test pays s_j. Crucially (SQ1) is a derived
+complete-cap bound from an ACTUAL test at the SAME source. It is not
+an assumed domination field, punishment value, or universal row bound.
+The source's remaining upper cap values can be strictly smaller than
+K_i when ξ is not an actual test; SQ6 gives the complete countertest.
+
+### SQ3. Explicit finite independent-law head spreading
+
+Use an actual finite minimizing sequence pᵏ producing q, with root
+date n_k retained from t₀. Since the root is an isolated mixture atom,
+the following error probabilities converge to zero: m not stopping
+at n_k; every player other than j stopping before n_k; and z stopping
+at n_k. Modify these vanishing masses: make m pure n_k, move the
+other players' early masses to Never, and move z's root leakage to
+Never. Keep j's whole early probability h_k and all other root masses
+and post-root stopping distributions. The product laws remain
+independent. Coupling bounds each prescribed payoff and complete cap
+change by O(R times the total error probability), uniformly over ALL
+deadlines. Let p̃ᵏ denote the resulting finite laws.
+
+For each integer M≥1, construct an ACTUAL finite profile pᵏ,M:
+
+- the sole head owner j spreads probability h_k uniformly over
+  dates0,…,M−1, replacing its ENTIRE old conditional early law;
+- date M is empty for everyone;
+- the old root n_k becomes date M+1;
+- each old date n_k+u, u>0, becomes date M+1+u, with the SAME
+  original root/tail probabilities and the SAME Never masses.
+
+There is no shared randomization or public clock draw. Each player
+chooses its own independent complete stopping law. Only j can stop
+at a head date. On the head event the first coalition is {j}; on
+its complement m's sure root stops the game with exactly the original
+root coalition. Thus EVERY prescribed terminal payoff is unchanged
+EXACTLY between p̃ᵏ and pᵏ,M. Unreachable tails are retained to control
+deviations, not chosen as Nash continuations.
+
+Every response at or above the new root, including Never, has EXACTLY
+the payoff of its corresponding old at-or-above-root response against
+p̃ᵏ. On a j-head event it observes the same prior singleton; otherwise
+the old root and tail chronology is unchanged. For response owner j,
+its prescribed head law is deleted from both comparisons. Put
+b_iᵏ,up=sup_(t≥n_k or Never)V_i(t,p̃ᵏ_−i). Transport of the displayed
+old upper maximizers and the uniform old full-cap bound gives
+
+    b_iᵏ,up→b_i.                                      (SQ2)
+
+This includes moving at/right root tests and the old late maximizer;
+it does not identify upper caps merely by a chosen finite response.
+
+### SQ4. Derived upper bounds for ALL newly created early tests
+
+For i=j, every response before the new root pays exactly s_j: all
+opponents start at the root or later. For i≠j and any early response
+date t≤M put F=P(j stops before t), a=P(j stops exactly at t).
+Here 0≤F≤h_k and 0≤a≤h_k/M. The COMPLETE payoff is
+
+    V_i(t)=(1−F−a)s_i+F r̂_i({j})+a r̂_i({i,j}).
+
+The expression without the a term lies on the line segment between
+s_i and K_iᵏ=h_k r̂_i({j})+(1−h_k)s_i. Since all rewards have
+absolute value at most R,
+
+    V_i(t)≤max(s_i,K_iᵏ)+2R h_k/M.                  (SQ3)
+
+In particular the new empty date M attains K_iᵏ EXACTLY. There are
+no additional response categories between M and the root, since these
+are consecutive integer dates. ALL root/tail/Never tests were already
+accounted for in (SQ2). Hence
+
+    b_i(pᵏ,M)≤max(b_iᵏ,up,s_i,K_iᵏ)+2R h_k/M       (i≠j),
+    b_j(pᵏ,M)=max(b_jᵏ,up,s_j).
+
+By the ACTUAL tester bound (SQ1), s_i<b_i, and (SQ2), any diagonal
+k→∞, M→∞ has EVERY full cap converging to b_i. The upper responses
+give the matching lower bound. The prescribed payoffs converge to
+the old U_i exactly up to the vanishing preliminary coupling error.
+Thus these ACTUAL profiles have D→d. This is the sought full-cap
+upper control, not just a preserved selected polynomial.
+
+### SQ5. The atomless-head actual minimum is impossible
+
+Take the marked limit of these new finite laws. Before the root the
+mixture chart has length h/4, only j has mass, and j has constant
+density4 on this interval. Its finite head atoms and all head atom
+intervals disappear as M→∞. The head tests fill the closed interval,
+and the empty date M retains its right endpoint as a zero-mixture
+test. There are NO positive mixture atoms before the root.
+
+At and after the root, the mixture chart, relative tail ordering,
+retained atom intervals, and old upper response kernels are unchanged:
+the total preceding mixture mass is still h/4 and all root and tail
+probabilities were retained. Never stays a separate test label and
+the finite endpoint c is treated by the same full moving-test transport.
+Consequently the marked profile q′ has precisely the old upper cap
+values and the old unique upper maximizers. By SQ4 its full payoff/cap
+vector is the old one, so it is an ACTUAL global minimum with D=d.
+
+Any full active point τ<t₀ would be a zero-mixture point, and every
+owner has strictly positive final mass after τ: m stops at t₀, and
+the other three retain their positive strictly-after-root masses.
+The complete active-cap EA exclusion therefore rules out EVERY such
+lower active point, even at the head endpoint. Thus all four caps of
+q′ are unique and isolated at their displayed old upper maximizers.
+In particular an equality K_i=b_i would itself produce a forbidden
+zero-mixture earlier active point; it was not necessary to assume a
+strict empty-test bound at SQ1.
+
+Now apply SC8's actual normalization to q′: condition each old law
+on clock≥t₀, retain all original upper test kernels, and follow the
+joint nonnegative conditioning path. Near zero, signed OLD left-cut
+transport and isolated upper maxima identify all full caps. The
+selected multiaffine debt is consequently the constant d. For the
+ENTIRE path, every upper response retains its exact positive-affine
+relation to the old upper response family. A loss of actual full-cap
+identification can occur ONLY when an earlier test reaches its upper
+cap, not through an unpriced upper response switch.
+
+Any first earlier wall before parameter1 has only the scaled atomless
+j-head before t₀. All owners still have positive mass after EVERY
+lower test. EA rules out this ACTUAL minimum wall. A first wall only
+at1 is impossible by the checked minimum singleton margin, as in
+SC8: all lower tests then pay s_i. If there is no wall, the endpoint
+is an actual all-unique first-law minimum. SC9's old-root signed x,y
+variation and true punishment graft give the bilinear constant (SC9);
+its pair corner (SC11) equals a forbidden fresh-table pair label.
+That is also impossible. All branches contradict d>0.
+
+Therefore SQ1's single-head/actual-empty-test SC subgeometry is
+excluded. The proof leaves all post-root conditional laws coupled
+to the SAME source. It never supplies a child Nash tail or replaces
+the true opponent punishment by an owner's best reply. Neither the
+old polynomial endpoint nor the pair corner is called an actual
+minimum; actual minimum identification occurs only at the derived
+full-cap head-spread limit and at the first conditioning wall.
+
+### SQ6. Exact full raw countertest when the empty tester is absent
+
+The empty-tester hypothesis cannot be deleted from the head-spread
+upper bound. Here are ALL sixty payoff entries of a Fin4 table:
+every entry is zero EXCEPT the following four entries of recipient2,
+
+    r₂({1})=1,          r₂({1,2})=−1,
+    r₂({0})=−1/2,       r₂({0,2})=−1/2.
+
+Thus all four own singletons are zero; unspecified recipient/coalition
+entries are literally zero. Use the independent actual profile
+
+    p₀=δ₁,  p₁=(1/2)δ₀+(1/2)δ_Never,
+    p₂=p₃=δ_Never.
+
+The prescribed payoffs are (0,0,1/4,0). For recipient2 EVERY actual
+response is accounted for: deadline0 pays−1/2; deadline1, every later
+finite deadline, and Never pay1/4. Hence its complete cap is1/4.
+All other caps are0, so this source even has D=0. There is NO integer
+test between the head date0 and sure-root date1. Its formal posthead
+singleton blend is K₂=(1/2)·1+(1/2)·0=1/2, strictly ABOVE the actual
+complete cap1/4.
+
+Spread player1's head probability1/2 uniformly over0,…,M−1, move
+player0's sure root to M+1, and leave both passive players at Never.
+EVERY prescribed payoff is unchanged. But recipient2's ACTUAL empty
+deadline M now pays1/2; SQ3 shows no early response exceeds1/2 and
+all upper responses still pay1/4. The new full debt is exactly1/4.
+Thus unrestricted cap control FAILS despite unchanged prescribed
+outcomes and a single independent head owner. This is not a positive-
+minimum counterexample, nor an SC-table counterexample. It falsifies
+only the tempting stronger implication needed to erase SQ1's actual
+tester assumption.
+
+Concrete next question: can overlapping pre-root heads be changed with
+a similarly DERIVED full-cap upper bound, preserving their collision
+payoffs rather than reordering them? Or can the fresh-table global
+comparison force an actual posthead/pre-root tester in SC's atomic
+wall? Neither fact is assumed or established here.

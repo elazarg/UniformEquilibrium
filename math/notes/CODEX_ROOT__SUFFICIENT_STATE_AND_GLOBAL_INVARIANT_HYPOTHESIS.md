@@ -634,6 +634,33 @@ directions, not merely exhibit another paid deviation. This distinguishes a
 genuinely new global mechanism from another local account with an unpaid
 observer cap.
 
+### Scalarizing one fixed attainable debt set is different from moving its sources
+
+Let A be the compact set of complete debt vectors of one fixed game, and
+minimize a positive weighted sum over A. As a function of the weights this
+value is concave: it is the infimum of linear functions on one unchanged
+attainable set. At weights admitting all two-sided coordinate derivatives,
+the supporting inequalities force every minimizing vector to have the same
+coordinates. Positive recipient reward scaling implements those weights in
+the original game semantics, including the complete behavioral caps.
+
+This argument does not convexify independent strategies and does not follow
+one selected old profile through a changed game. It can make the entire new
+minimum family debt-rigid while leaving its laws, payoffs, caps and response
+times different. The complete source application and independent focused
+check are recorded in
+[the global-obstruction notebook](CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
+and its BROUWER feedback. Its standalone artifact is subject to the full
+export gate.
+
+The useful completion test is whether a legal operation is proved to remain
+inside that minimum family. If it is, debt rigidity controls every coordinate
+at once, rather than merely their sum. If its full caps are uncontrolled or
+its target is off-minimum, rigidity gives no missing return edge. Generic
+weights alone therefore do not repair chronological splicing or solve UE;
+the actual supported-earliest-cap exclusion separately proves the required
+full-cap stability and local minimum preservation.
+
 ### Several cap dates need not be several strategic branches
 
 A cap is a supremum over stopping dates, but two distinct maximizing dates
