@@ -253,4 +253,19 @@ theorem exists_hazards_of_rawRegion
     (jointReward reward schedule) (quietRows reward schedule) hregion.own
     (quietRows_passive reward schedule hregion) (quietRows_nonempty reward schedule hperiod)
 
+
+/-- Ordered pairs `{0,2}`, `{1,3}`. -/
+def fin4Schedule : Schedule (Fin 4) 2 where
+  label := Equiv.ofBijective
+    (fun point : Fin 2 × Bool =>
+      (⟨point.1.val + if point.2 then 2 else 0, by split <;> omega⟩ : Fin 4))
+    (by decide)
+
+@[simp] theorem fin4Schedule_first_zero : fin4Schedule.first 0 = 0 := rfl
+@[simp] theorem fin4Schedule_second_zero : fin4Schedule.second 0 = 2 := rfl
+@[simp] theorem fin4Schedule_first_one : fin4Schedule.first 1 = 1 := rfl
+@[simp] theorem fin4Schedule_second_one : fin4Schedule.second 1 = 3 := rfl
+@[simp] theorem fin4Schedule_phase_zero : fin4Schedule.phase 0 = 0 := by
+  exact fin4Schedule.phase_first 0
+
 end GameTheory.PairedCycle

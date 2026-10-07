@@ -81,6 +81,8 @@ import UniformEquilibrium.Quitting.Paths.FiniteWordWeakExclusionSelection
 import UniformEquilibrium.Quitting.Cycles.PairedCycleSchedule
 import UniformEquilibrium.Quitting.Cycles.PairedCycleValues
 import UniformEquilibrium.Quitting.Cycles.PairedCycleEquilibrium
+import UniformEquilibrium.Quitting.Cycles.TwoPairExactCertificate
+import UniformEquilibrium.Quitting.Cycles.BelowSingletonJointPhaseSource
 import UniformEquilibrium.Quitting.Cycles.CyclicFiniteWord
 import UniformEquilibrium.Quitting.Cycles.CyclicFiniteMenu
 import UniformEquilibrium.Quitting.Cycles.PairedCycleFiniteTruncation

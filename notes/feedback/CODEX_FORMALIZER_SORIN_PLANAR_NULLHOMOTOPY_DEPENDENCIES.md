@@ -196,6 +196,32 @@ holomorphic consumer supplies that control internally. Limits may be the
 chart pole; a finite complex-coordinate limit is not assumed. This does not
 yet provide spherical geodesic distance, a global infinity-chart adapter,
 crosscuts or boundary extension of the disk map.
+
+`Math.ComplexAnalysis.exists_sphere_radial_limit_ae_real`
+(`MathUE/Complex/HolomorphicRadialLimits.lean`) now derives actual radial
+sphere limits for almost every real angle, using logarithmic-strip energy
+and a countable translated-window cover. The concrete complete sphere and
+orthogonal complex-plane frame are supplied by
+`MathUE/Complex/CanonicalComplexSphere.lean`.
+`Math.ComplexAnalysis.exists_sphere_radial_frontier_limit_ae`
+(`MathUE/Complex/HolomorphicRadialFrontier.lean`) places these limits on the
+frontier of the actual spherical image: the chart embedding and the actual
+holomorphic inverse exclude interior image limits. The pole remains allowed;
+no finite complex-coordinate limit or supplied landing data is assumed.
+This supplies neither null fixed landing fibers nor continuous extension at
+every boundary point. The pole as a sphere point is not a global infinity
+chart or a spherical geodesic-length adapter.
+
+`Math.ComplexAnalysis.exists_algebraic_boundedization_of_holomorphic_injOn`
+(`MathUE/Complex/UnivalentDiskBoundedization.lean`) constructs a holomorphic
+injective, nonzero, disk-bounded map F and constants a, b, c with c positive,
+retaining the literal identity g = a + (b + c/F)² on the disk. The original
+image omits a complex value, by its actual holomorphic inverse and Liouville's theorem;
+the square-root branch and omitted ball are constructed internally. This
+supplies the algebra needed for bounded analytic landing-fiber transport,
+not the null-fiber result itself. That result and the subsequent crosscut and
+Jordan steps remain separate.
+
 Nested short crosscuts with distinct landing endpoints and
 Jordan separation remain separate known-proof library obligations. No scoped
 Jordan/Schoenflies or crosscut producer has been found. Section 16.6 requires

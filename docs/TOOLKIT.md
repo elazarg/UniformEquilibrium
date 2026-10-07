@@ -366,6 +366,26 @@ into at least two pairs. The actual cyclic profile is exact terminal Nash
 against unrestricted deviations at every literal suffix, and its actual
 value at each initial phase is a uniform-equilibrium payoff. The proof
 retains the strict inactive-player advantage and opponent-cycle absorption.
+`GameTheory.PairedCycle.twoPair_exact_terminal_and_fixedProfile`
+(`UniformEquilibrium/Quitting/Cycles/TwoPairExactCertificate.lean`) instead
+computes active and post-phase values from arbitrary signed rewards and four
+proper hazards on a labeled two-pair schedule. Only the four actual passive
+Continue identities and passive Quit bounds are conditional inputs. Active
+indifference, policy recursion, root Nash and opponent contraction are derived.
+The output identifies the actual terminal target, proves exact terminal Nash,
+and retains the same cyclic profile for horizon Nash and payoff delivery at
+every positive accuracy. The canonical fixed-profile terminal wrapper is
+`quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact`
+(`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`).
+`GameTheory.PairedCycle.BelowSingleton.exists_exact_terminal_and_fixedProfile_of_rawFamily`
+(`UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseSource.lean`)
+discharges those inputs from literal singleton and scheduled-pair equalities,
+positive row scales, three common scalar inequalities and twelve joining caps.
+The selected root in `(1/2,1)` is produced by the canonical cubic-root theorem;
+both phase values lie strictly below every own singleton. Own-singleton signs
+and all unmentioned collisions remain unrestricted. This is the raw scalar
+family, not its full-coordinate neighborhood, quantitative horizon rates or
+complete rational-fixture separation claims.
 `GameTheory.PairedCycle.exists_one_hazards_all_finiteTruncations_of_rawRegion`
 (`UniformEquilibrium/Quitting/Cycles/PairedCycleFiniteSource.lean`) retains
 that one hazard vector for all initial phases and all positive cycle counts.
@@ -3195,6 +3215,10 @@ generic quitting-game existence theorems.
 
 | Tool | Module | Use |
 | --- | --- | --- |
+| Algebraic boundedization of univalent disk maps | `MathUE/Complex/UnivalentDiskBoundedization.lean` | `Math.ComplexAnalysis.exists_algebraic_boundedization_of_holomorphic_injOn` produces a holomorphic injective nonzero disk-bounded map F and constants a, b, c with c positive and the literal identity g = a + (b + c/F)² on the disk. The omitted value is derived from the actual holomorphic inverse and Liouville, and the square-root branch and omitted ball are constructed internally. This preserves algebra needed for later landing-fiber transport; null landing fibers and boundary extension are not yet supplied. |
+| Literal matching inverse family and odds bounds | `MathUE/LinearProgramming/CrossedMatchingPositiveInverse.lean`, `MathUE/LinearProgramming/CrossedMatchingOdds.lean` | `Math.CrossedMatching.hasStrictlyPositiveInverse_variableMatrix_of_standardQ` derives the actual variable-family positive inverse from strict singleton matching signs and standard Q, retaining arbitrary signed passive rewards and premiums above their harmful singleton comparisons. The literal matching graph and positive vector are derived internally; compact nonnegative odds cubes have uniform inverse-entry bounds. `scaled_eigenpoint_sum_lt_bound` bounds scaled eigenpoints with strictly positive odds of the actual raw-data odds map, conditional on their displayed equality, rather than producing an odds root or a matching-game equilibrium. |
+| Normalized direction/radius Brouwer step | `MathUE/Topology/NormalizedRadialFixedPoint.lean` | `Math.exists_fixedPoint_of_normalized_radial_map` produces an actual interior fixed point under explicit compact-convex direction, shell continuity, positive mass, normalized-cone, inner-radius and outer scaled-eigenpoint hypotheses. The literal matching source still needs to discharge these hypotheses and derive its passive endpoint conditions. |
+| Actual global spherical radial frontier limits | `MathUE/Complex/CanonicalComplexSphere.lean`, `MathUE/Complex/HolomorphicRadialLimits.lean`, `MathUE/Complex/HolomorphicRadialFrontier.lean` | `Math.ComplexAnalysis.exists_sphere_radial_frontier_limit_ae` produces a radial sphere limit on the frontier of the actual spherical image for almost every real angle of a holomorphic injective disk map. The canonical sphere and chart, strip-energy argument, endpoint landing and inverse-based exclusion of interior image limits are supplied internally. The pole is allowed. Null landing fibers, crosscuts, Jordan separation, continuous disk-map boundary extension and Sorin Proposition 11 remain separate. |
 | Discrete hazard stopping | `MathUE/Probability/DiscreteHazardStopping.lean` | Survival products, first-hit weights, total stopping mass, and bounded stopped-payoff accounting independent of quitting games. |
 | Independent first-stopping coalition square-root laws | `MathUE/Probability/OverlappingFirstStopping.lean` and `MathUE/Probability/IndependentFirstStoppingPair.lean` | `twoOverlappingFirstStoppingMasses_sqrt_sum_le_one` proves the sharp square-root bound for two overlapping tie-before-third events of three arbitrary complete stopping laws, including positive Never mass. `sqrt_exactFiniteFirstStoppingCoalitionMass_add_sqrt_le_one_of_incomparable` gives the corresponding exact-coalition theorem for any two incomparable intersecting coalitions. Combining it with the disjoint-pair clock yields `sqrt_exactFiniteFirstStoppingPairMass_add_sqrt_le_one`: over any finite player type, every two distinct two-player exact first-stopping coalitions have square-root masses summing to at most one, and hence all fifteen pair projections for four players are covered without a Fin4 case split. Independence is encoded by products of the separately supplied marginal laws. The complete overlapping-event equality classification is in `MathUE/Probability/OverlappingFirstStoppingChronologicalEquality.lean`. Actual-profile adapters and conditional pair-mass consumers are described above. An affine mass-bound producer for an arbitrary reward table is not supplied. |
 | Survival products | `MathUE/SurvivalProduct.lean` | Generic finite-product and cumulative-hazard estimates shared by stopping arguments. |

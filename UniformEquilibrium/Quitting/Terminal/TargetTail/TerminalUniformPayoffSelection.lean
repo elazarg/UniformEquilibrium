@@ -169,6 +169,25 @@ theorem quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family
       _ ≤ ε := by
         linarith [htarget who]
 
+/-- One exact terminal Nash profile is the same uniform witness at every positive accuracy. -/
+theorem quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (hnash : (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) 0 profile) :
+    ∀ ε : ℝ, 0 < ε → ∃ threshold : ℕ,
+      ∀ horizon, threshold ≤ horizon →
+        (quittingGame reward).IsεHorizonNash none horizon ε profile ∧
+          ∀ who, |(quittingGame reward).finiteAveragePayoff none horizon profile who -
+            quittingTerminalPayoff reward profile who| ≤ ε := by
+  intro ε hε
+  obtain ⟨_, threshold, hthreshold⟩ :=
+    quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family
+      reward (quittingTerminalPayoff reward profile) (fun _ : Unit => profile)
+      (fun error herror =>
+        ⟨(), hnash.mono herror.le, fun who => by simpa using herror.le⟩) ε hε
+  exact ⟨threshold, hthreshold⟩
+
 /-- Terminal approximate Nash profiles approaching a fixed target produce a
 uniform-equilibrium payoff by projecting the retained family witnesses. -/
 theorem quittingGame_isUniformEquilibriumPayoff_of_terminalTargetAcceptance

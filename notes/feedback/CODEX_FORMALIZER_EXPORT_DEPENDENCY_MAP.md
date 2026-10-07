@@ -1061,8 +1061,58 @@ not a literal matching-graph producer.
 `exists_uniform_positive_inverse_entry_bounds_on_compact`
 (`MathUE/LinearProgramming/CompactPositiveInverseBounds.lean`) derives uniform
 positive lower and finite upper entry bounds for a continuous-on-compact
-positive-inverse family, including empty parameter/index cases. Actual
-matching-family, Q/positive-vector, graph and strategy adapters remain separate.
+positive-inverse family, including empty parameter/index cases.
+`Math.CrossedMatching.hasStrictlyPositiveInverse_variableMatrix_of_standardQ`
+(`MathUE/LinearProgramming/CrossedMatchingPositiveInverse.lean`) now supplies
+the literal crossed-matching matrix family: strict singleton matching signs
+and standard Q produce the positive vector, graph and actual inverse
+internally. The scheduled-pair premium need only exceed its harmful singleton
+comparison; passive rewards are arbitrary signed reals and odds are arbitrary
+finite nonnegative coordinates. Continuous-on-cube inverse families have
+uniform positive lower and finite upper entry bounds. This is an actual matrix
+source adapter, not the final odds root or matching-game payoff producer.
+
+`Math.CrossedMatching.scaled_eigenpoint_sum_lt_bound`
+(`MathUE/LinearProgramming/CrossedMatchingOdds.lean`) bounds every strictly
+positive scaled eigenpoint of the literal raw-data odds map for a scale in `(0,1]`; the
+displayed eigenpoint equality remains its hypothesis. It does not produce
+that point. `Math.exists_fixedPoint_of_normalized_radial_map`
+(`MathUE/Topology/NormalizedRadialFixedPoint.lean`) supplies the generic
+normalized direction/radius Brouwer step under explicit compact-convex
+direction, shell continuity, positive mass, normalized-cone, inner and outer hypotheses.
+The raw matching source must still discharge those hypotheses and derive
+the actual positive odds and passive endpoint conditions before invoking
+the shared exact two-pair compiler. Neither dependency is a matching-game
+uniform-payoff theorem.
+
+## Below-singleton joint-phase raw producer
+
+`GameTheory.PairedCycle.BelowSingleton.exists_exact_terminal_and_fixedProfile_of_rawFamily`
+(`UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseSource.lean`)
+implements the raw rate producer, endpoint calculations and qualitative
+equilibrium conclusions of `BELOW_SINGLETON_JOINT_PHASE_UNIFORM_EQUILIBRIUM`:
+literal signed singleton and scheduled-pair identities, positive row scales,
+the three common scalar inequalities and all twelve joining caps produce a
+root in `(1/2,1)` internally. The canonical prescribed-interval cubic theorem
+is reused by `Math.PairedBelowSingleton.exists_selected_root`
+(`MathUE/PairedBelowSingletonScalar.lean`); no supplied root or Nash selection
+is an input. Actual passive endpoint calculations feed
+`GameTheory.PairedCycle.twoPair_exact_terminal_and_fixedProfile`
+(`UniformEquilibrium/Quitting/Cycles/TwoPairExactCertificate.lean`). The result
+identifies the original game's terminal vector, proves exact behavioral
+terminal Nash and retains the same cyclic profile for every accuracy's
+eventual horizon Nash and target delivery. Both phase values are strictly
+below own singletons; their signs and all unmentioned rewards are unrestricted.
+
+The packet remains incomplete: the actual 60-coordinate contraction/implicit
+function neighborhood, explicit geometric finite-horizon rates, the complete
+rational fixture and its child/debt, raw-criterion, matrix, response and
+stationary separations, and the invalid second-root selection remain separate.
+The existing `QuittingRewardTableVariable` coordinate encoding and generic
+implicit-function API can support the neighborhood, but its actual four-odds
+Jacobian must be produced; the existing three-active stationary example is
+not that adapter. The matching packet's inverse and Brouwer route is distinct
+from this scalar IVT route; only the actual two-pair compiler is shared.
 
 ## Mixed-sign triple source boundary
 
