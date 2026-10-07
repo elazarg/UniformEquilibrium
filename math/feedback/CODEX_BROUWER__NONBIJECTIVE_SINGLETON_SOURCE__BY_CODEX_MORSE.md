@@ -358,3 +358,67 @@ arbitrary variations on the limiting calendar, multiplicity of collapsing
 empty dates, realization on ℕ, τ→0 passage, or a zero-debt conclusion.
 Those missing consumers remain exactly as the author states. No Lean
 compilation or kernel verification was performed in this review.
+
+## Independent RC11–RC12 finite-mixture transport check
+
+Scoped verdict: **PASS** on the added “Finite atomic replacements with the
+mandatory late test retained,” at whole-note SHA256
+`32537b4b13d54e44add2df540cb036addf94a1582af821374b2669602e894407`.
+This check concerns the finite transport and the new response tests only;
+it does not repeat the preceding representation review or claim a descent.
+
+The simultaneous input is arbitrary finite ν_i on T together with Never,
+and arbitrary separate weights λ_i∈[0,1]. No cap optimizer, Nash law,
+common mixture weight or public signal is supplied. The target laws are
+the independent mixtures (1−λ_i)q_i+λ_iν_i. The enlarged tester set
+includes a distinct empty c⁺ beyond c=max T, even if some λ_i=1 removes
+all of that player's original support. This is the correct finite-clock
+completion; it is not permissible to replace that last finite test by Never.
+
+The zero-mass consolidation is legitimate. For each of the finitely many
+inserted zero-mass locations one can first choose disjoint neighborhoods
+whose limiting prescribed masses tend to zero, then choose the approximating
+index so that those neighborhoods dominate the Hausdorff errors. The
+preimage of each neighborhood is a consecutive block of actual response
+dates. Replacing that whole block by one date is an order quotient of the
+natural calendar, not a player-specific rearrangement. At c the block ends
+at the first empty date after the last occupied one; a further empty date
+is retained. If there is no finite occupied date, the same construction
+starts with date 0. No nonvanishing original atom is moved across an
+inserted location or silently split.
+
+This preparation is necessary: mapping an inserted atom to one arbitrary
+date in an uncollapsed zero-mass cluster could leave extra before/after
+tests even when its limiting point is isolated in T. After consolidation,
+an upper-bound test sequence approaching an interior insertion point can
+remain strictly before it only if T has points approaching from below;
+otherwise all sufficiently nearby original dates were in the one collapsed
+block. The analogous right-side statement holds. In an accumulating case,
+the limiting one-sided payoff is a limit of actual T-tests, so is bounded
+by their supremum even when no test attains that value. At c every after
+test has exactly the c⁺ value. Coincident tests and Never are kept literally.
+This proves the upper full-cap bound. Each fixed old test away from the
+finite insertion set, each inserted tie, c⁺ and Never is separately
+approximated, proving the lower bound. Taking a supremum only after these
+pointwise lower bounds avoids a false limiting-maximizer assertion.
+
+The entropy argument also includes unequal λ_i. On the unchanged component
+the density vector is ((1−λ_i)r_iⁿ)_i. At positive atoms the post-insertion
+mass vector converges. At a formerly zero-mass location continuity of the
+finite-vector entropy, together with 0≤H(y)≤(Σ_i y_i)log4, controls the
+vanishing base contribution. The same finite-vector argument applies to
+Never. Thus this is entropy convergence, not only lower semicontinuity.
+
+An exact late-test stress uses two players with own singleton 1, passive
+singleton 1 and pair payoff −2. From all Never, put mass 1/2 at the new
+finite c and retain mass 1/2 at Never for each player. The pure-c payoff
+is −1/2 and the Never payoff is 1/2, but quitting strictly after c earns
+1. Consequently the cap on {c,Never} is 1/2 while the actual cap is 1.
+The added c⁺ restores exactly the missing response. This is a test of the
+transport, not a positive-minimum example.
+
+No unresolved mathematical objection remains to RC11–RC12. The conclusion
+is a legal simultaneous finite-atomic variational inequality at a represented
+regularized minimum. It neither produces a negative direction nor permits
+arbitrary changes of the marked calendar. In particular it does not yet
+consume a positive unregularized global debt minimum or prove UE.

@@ -1722,6 +1722,23 @@ tends to1. Both families have IDENTICAL quantile densities and I=0,
 but their semantic limits differ. Thus(RC7) alone proves neither payoff
 nor cap convergence, let alone an original discrete-clock minimizer.
 
+The same distinction occurs on ACTUAL global near-minimizers, not merely
+arbitrary profiles. A subsequent exact stress supplied by CODEX_NOETHER
+uses the common-payoff table r_i(S)=1 for |S|=1 and0 otherwise. Sure-all
+at date0 is terminal Nash with payoff0, caps0 and I=0, so m_τ=0 for every
+τ>0. If instead all four laws are uniform on{1,…,L}, all likelihood
+functions are still identically1 and I=0. The payoff of each player is
+the probability of a unique earliest draw,
+
+    (4/L⁴)Σ_{k=0}^{L−1}k³=(1−1/L)².
+
+The pure date0 response earns1, which is the maximal reward, so every cap
+is1 and D=8/L−4/L²→0. Thus both the sure-all sequence and this uniform
+sequence are genuine Φ_τ-near-minimizing sequences with the SAME density
+functions but different limiting prescribed payoffs and caps. Keeping
+their different tied-atom and tester marks is indispensable even under
+the actual global-minimum premise. This does not contradict(RC7).
+
 The next concrete question is to retain, on the same subsequence, the
 nonvanishing tied intervals and the closed set of available pure-response
 locations. A possible representation collapses each retained interval to
@@ -1908,6 +1925,13 @@ c. In the original game a player can always quit strictly after the new
 last finite atom. A compact calendar that simply makes c its last action
 would miss exactly that response and could give a false inequality.
 The claim permits ν_i(Never)>0 and arbitrary signed rewards.
+
+The earlier exact G-table regression is a direct test of this completion:
+on the menu{0,Never}, all four laws (t at0,1−t at Never), where
+t=(1−t)³, have menu caps equal to their prescribed vector s=(1,0,0,0).
+But the extra finite date after0 gives pivot cap1+t, hence actual total
+debt t rather than0. This is exactly the response c⁺ that(RC12) retains.
+No new selector or constant claim is inferred from that regression.
 
 **Finite transport proof.** Let Z be the union of the finite supports of
 the four ν_i after removing Never. For a point z∈Z already carrying
