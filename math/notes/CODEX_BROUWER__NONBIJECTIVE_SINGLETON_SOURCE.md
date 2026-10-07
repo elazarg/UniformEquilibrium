@@ -4688,3 +4688,51 @@ law/response construction that keeps all clocks as actual deviations.
 The owned entropy-minimum compactness result remains valid, but it is
 not upgraded to Nash existence by DR1–DR4. No new theorem premise,
 state field, export or uniform-equilibrium claim is added here.
+
+### DR6. Whole atomless-clock class excluded, not just the symmetric selector
+
+The coordinator's scope question has a complete affirmative answer.
+For the same participant-indicator table, let EACH independent law
+have an arbitrary atomless finite-clock part on an ordered real
+calendar bounded below, and arbitrary Never mass n_i. No symmetry,
+density bound, common support or regularization is assumed. Independent
+finite ties have probability zero: for i≠j, integrate p_j({t})=0
+against p_i. The first finite coalition is therefore a singleton
+almost surely. Since only its members are paid one,
+
+    ∑_i U_i = P(some finite stop)=1−∏_i n_i≤1.
+
+Every complete finite-clock cap is 1. If the calendar has an earliest
+point, quitting there is a pure payoff-one response; no opponent has
+an atom there and none is earlier. If only a finite lower infimum is
+available, tests approaching it have payoff tending to one, which
+still gives cap1 without claiming attainment. All table rewards are
+at most one. Consequently
+
+    D=4−∑_i U_i =3+∏_i n_i≥3.                         (DR6)
+
+Thus EVERY purely atomless independent-clock profile misses terminal
+epsilon-Nash for epsilon below 3/4 in maximum individual gain (and
+has sum debt at least3). There is no favorable existential restricted
+density-Nash selector hiding behind DR1: the WHOLE atomless strategy
+class is incapable of approaching the original game's debt-zero
+target, despite the actual pure grand coalition being exact Nash.
+
+For original nonnegative integer clocks in this table, pure date zero
+always gives payoff1, EVEN with opponent atoms. More generally,
+
+    D=4−E|S_first|,
+
+where S_first=∅ on perpetual continuation. If D≤ε then
+P(S_first=I)≥1−ε, because 4−|S_first|≥1 whenever the first coalition is
+not grand. So approximate equilibrium for this table REQUIRES almost
+sure simultaneous grand absorption, not an atomless order limit.
+Any actual finite approximation claiming prescribed-payoff AND full-cap
+convergence to an atomless law retains the lower bound in (DR6); adding
+large tied mass instead is a material payoff change, not that realization.
+
+This is an exclusion of an approximation CLASS on a solved boundary
+game. It is not a positive-global-gap example and cannot be inserted
+inside the genuine first-collision source as a contradiction. The
+next route must actively retain and change collision atoms; neither
+bounded-density tuning nor an atomless continuum replacement is used.

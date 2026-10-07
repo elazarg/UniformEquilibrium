@@ -522,6 +522,49 @@ for a global game-existence theorem. A proposed topological consumer
 must verify its entire payoff-graph closure and independent unilateral
 agency, not only continuity at a selected minimizing profile.
 
+### Atomless approximation can discard an indispensable equilibrium mechanism
+
+For the participant-indicator table, r_i(S)=1 if i∈S and zero otherwise,
+the pure grand coalition is an exact equilibrium. Nevertheless every
+independent profile whose finite-clock parts are atomless on a calendar
+bounded below has
+
+    ∑[i] U_i=1−∏[i] p_i(Never)≤1,
+    B_i=1 for every i,
+    D=3+∏[i] p_i(Never)≥3.
+
+Independent finite ties have probability zero, so finite absorption pays
+only one player. A pure test at the earliest calendar point gives payoff
+one; if there is only a lower infimum, tests approaching it give the same
+cap as a supremum. No density bound, common support or symmetry is used.
+On the original integer calendar, instead,
+
+    D=4−E|S_first|,
+    D≤ε ⇒ P(S_first=I)≥1−ε,
+
+with S_first empty on Never. Approaching equilibrium in this table thus
+requires retaining simultaneous grand absorption, not replacing it by an
+atomless ordering of the private clocks. The complete calculation and the
+restricted-density and entropy comparisons are in DR1–DR6 of
+`CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`. They are ordinary
+mathematics, not new checked declarations.
+
+This separates two tests of a proposed producer. A bad supplied restricted
+Nash equilibrium does not exclude choosing a better one. The whole-class
+bound above does exclude every atomless selector on this table. It does
+not exclude a method that retains collision atoms, nor a contradiction
+argument restricted to genuine positive global minima: this table has
+minimum zero.
+
+The methodological inference is limited but useful. A smooth clock space
+may remove the very coalitions needed for equilibrium while making the
+remaining optimization more regular. Before pursuing density or entropy
+regularization as an existence route, test unrestricted regret across
+the whole approximation class on collision-dependent solved tables.
+Continuity of the restricted problem cannot replace that completeness
+check. This is evidence of a representation failure, not evidence that
+uniform equilibrium is false.
+
 ## Competing explanations
 
 ### H1: insufficient compositional state
