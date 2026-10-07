@@ -13,6 +13,14 @@ or counterexample restriction is not silently counted as either one.
 
 ## Dependency shape
 
+`MeasureTheory.ProbabilityMeasure.le_of_tendsto_of_le_measure` and
+`MeasureTheory.ProbabilityMeasure.exists_dominated_subsequence`
+(`MathUE/MeasureTheory/BoundedDensityWeakCompactness.lean`) preserve measure
+domination under an actual weak probability limit and produce a dominated
+subsequential probability limit on a compact metrizable Borel space. These
+game-independent results do not supply a Radon–Nikodym density, convergence
+against moving discontinuous tests, marked calendars or response caps.
+
 ```text
 game or analytic data
         |
@@ -410,6 +418,11 @@ initial phase and positive horizon, where `C = 1 + 2/(1-t^3)`. The printed
 `2*M*C/N` and `4*M*C/N` bounds follow by weakening; the selected root precedes
 the reward bound and all horizon quantifiers. The formal clock estimate uses
 actual live Cesaro mass, not a separately stated expected-exit-time bound.
+`expectedOpponentLiveTime_le` and `expectedOpponentLiveTime_le_timeConstant`
+(`UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseFiniteHorizon.lean`)
+also bound the actual opponent-survival sum by `2/(1-t^3)` and `C`, respectively,
+at every initial phase, without reward or Nash assumptions. A separate
+stopping-date expectation representation is not asserted.
 The source-free `finiteAverage_delivery_le_of_opponentLiveCesaro_bound` and
 `finiteAverage_deviation_gain_le_of_exact_terminalNash_and_opponentLiveCesaro_bound`
 (`UniformEquilibrium/Quitting/Cycles/PeriodicFiniteHorizonRate.lean`)
@@ -439,6 +452,14 @@ injective, under arbitrary shifts and nonzero playerwise scales. The proof
 uses actual singleton row sums and all-sure displacement, not a partition
 census. Signed scales are used only for response invariance, not Nash, UE,
 R0 or degree transport. Remaining source/stationary separations are separate.
+`projectiveMatrix_isR0`, `projectiveMatrix_standardQ` and
+`projectiveMatrix_positive_inverse`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseMatrix.lean`)
+apply to the actual fixture's singleton matrix. The full principal determinant
+table and displayed inverse give degree one. Every distinct nonfavorite pair
+restriction is R0 but not standard Q; every triple inverse has a diagonal
+entry `-1/6`. Four nonzero eigenvector identities realize `1,5,-3,-3`;
+no separate eigenbasis or spectrum-completeness theorem is claimed.
 
 `GameTheory.PairedCycle.TwoPairOdds.passiveEquation_eq_scaled_post_sub_continue`
 (`UniformEquilibrium/Quitting/Cycles/TwoPairOddsValues.lean`) identifies the
@@ -459,7 +480,29 @@ cap producer and arbitrary-label reindex wrappers. The pure-pair producer
 has exact Nash at every finite horizon, using
 `oneDateThenNever_exactHorizon_of_sureExitSet`
 (`UniformEquilibrium/Quitting/Root/PureSureSetExactHorizons.lean`).
+The source-free `finiteAveragePayoff_eq_terminal_of_quietAfter_one` and
+`abs_finiteAveragePayoff_sub_terminal_of_quietAfter_one`
+(`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean`) give exact
+delivery `((N-1)/N)*terminal` and absolute error `|terminal|/N` for any actual
+quiet-after-one behavioral profile at `N > 0`. The nonempty pure-coalition
+specializations, including singletons, are
+`oneDateThenNever_finiteAveragePayoff_eq_of_nonempty`,
+`oneDateThenNever_abs_finiteAveragePayoff_error_eq_of_nonempty` and
+`oneDateThenNever_abs_finiteAveragePayoff_error_le_of_nonempty`
+(`UniformEquilibrium/Quitting/Root/PureSureSetExactHorizons.lean`). The `M/N`
+bound requires only the coordinate reward bound, not Nash or two quitters.
 Complete packet rates, neighborhoods, fixtures and separation claims are not inferred.
+`balanced_exactFamily`, the three signed example consumers, and
+`capViolation_not_terminalNash`
+(`UniformEquilibrium/Quitting/Examples/CrossedMatchingBoundaryExamples.lean`)
+formalize the literal signed boundary tests. The balanced half-hazard family
+requires only increment at least `-1` and its exact balance, not strict matching
+signs or Q. The changed cap gives actual date-zero gain `1/4`, not a no-UE
+claim. `weak_no_positive_odds` and `weak_pure_pair_exact_profile` distinguish
+failure of positive original odds from a weak-boundary pure-pair equilibrium.
+`mixed_positive_inverse` verifies the mixed-sign example's actual singleton
+inverse separately from its balanced phase construction.
+Unused entries and signed own-singletons remain unrestricted.
 `GameTheory.CrossedMatchingFixture.exact_terminal_and_fixedProfile`
 (`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixture.lean`) supplies
 the complete literal fifteen-row table, rational positive odds, actual phase

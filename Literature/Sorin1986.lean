@@ -10975,7 +10975,8 @@ theorem example6_D1_not_convex_D2_eq_C :
       example6.finiteFeasiblePayoffs 2 = example6.correlatedFeasiblePayoffs := by
   exact ⟨example6_D1_not_convex, example6_D2_eq_C⟩
 
-/-! The paper's two-by-two dichotomy follows from Proposition 5. -/
+/-! The two-by-two dichotomy is stated in the remark on page 152, after
+Example 6. Proposition 5 alone does not give its binary-game converse. -/
 theorem two_by_two_feasible_dichotomy
     (topLeft topRight bottomLeft bottomRight : Payoff Bool) :
     let G := binaryGame topLeft topRight bottomLeft bottomRight

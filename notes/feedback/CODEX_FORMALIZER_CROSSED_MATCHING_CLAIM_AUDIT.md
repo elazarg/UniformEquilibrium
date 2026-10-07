@@ -12,9 +12,10 @@ The established producer, matrix, children, and rate results below have checked
 owners in the shared build record. Both the response-quotient and proper-three
 stationary results are integrated and passed their targeted checks, the full
 silent build and exhaustive production axiom audit. These checks are
-build-owner evidence, not compilation performed in this audit. The approved Section 8
-boundary-example module is implementation
-work, not evidence that the obligations below are already discharged.
+build-owner evidence, not compilation performed in this audit. Section 8's
+boundary examples and source-free one-date delivery identities are integrated
+and have passed their named target checks, the full silent build and exhaustive
+production axiom audit. This does not complete the remaining Section 9 comparisons.
 
 ## Main producer and semantic coverage
 
@@ -60,12 +61,13 @@ uniqueness or continuous selection of odds.
 the printed delivery and arbitrary behavioral-deviation bounds. The underlying
 bounds are stronger than the packet's conservative constants.
 
-### Remaining pure-pair rate output
+### Source-free pure-pair delivery
 
-The exact finite-horizon Nash assertion and a generic M/N delivery bound are
-already present; do not reprove them. The remaining public specialized output
-is, for the actual one-date pure-pair profile, every player, and every integer
-N > 0:
+`oneDateThenNever_finiteAveragePayoff_eq_of_nonempty`,
+`oneDateThenNever_abs_finiteAveragePayoff_error_eq_of_nonempty` and
+`oneDateThenNever_abs_finiteAveragePayoff_error_le_of_nonempty`
+(`UniformEquilibrium/Quitting/Root/PureSureSetExactHorizons.lean`) give, for any
+actual nonempty one-date pure coalition, every player and every integer N > 0:
 
     finiteAveragePayoff(N) = ((N - 1) / N) * r(P),
     |finiteAveragePayoff(N) - r(P)| = |r(P)| / N ≤ M / N.
@@ -75,52 +77,50 @@ bounds the relevant absolute reward. The date-zero absorption reward is zero.
 Keep the positive-horizon guard: the formula is not an assertion about division
 by zero at horizon zero.
 
-The rate follows immediately from
-`abs_finiteAveragePayoff_sub_terminal_quietAfterDeadline_le`
-(`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineHorizonError.lean`) with
-deadline 1, `quittingOneDateThenNeverProfile_quietAfter_one`
-(`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean`), and
-`oneDateThenNever_payoff_of_nonempty`
-(`UniformEquilibrium/Quitting/Root/PureSureSetExactHorizons.lean`). The existing
-same-profile consumer already uses this generic bound internally.
-
-The literal identity needs only a finite-sum adapter to
-`finiteAveragePayoff_eq_sum_expectedStagePayoff`, using
-`expectedStagePayoff_eq_terminal_of_quietAfter_one`
-(`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean`) for positive
-dates and the existing zero absorbed mass at date zero. This is a public
-specialization/finite-sum normalization obligation, not missing mathematical
-input or a new finite-horizon estimate. Delivery needs only a nonempty pure
+The generic actual-profile identities are
+`finiteAveragePayoff_eq_terminal_of_quietAfter_one` and
+`abs_finiteAveragePayoff_sub_terminal_of_quietAfter_one`
+(`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean`). Their finite-sum
+proof uses the existing positive-date stage identity and zero absorbed mass
+at date zero; the bound delegates the canonical deadline-one estimate.
+Delivery needs only a nonempty pure
 coalition, not Nash or two participants; those stronger assumptions belong to
 the exact-Nash consumer.
 
-## Section 8: priority literal regressions
+## Section 8: literal boundary regressions
 
-No corresponding literal declarations were located in the existing crossed
-fixture owners. These are important boundary tests even though the general
-producer is already available:
+`UniformEquilibrium/Quitting/Examples/CrossedMatchingBoundaryExamples.lean`
+supplies the following targeted-checked tests, without restricting unused
+entries or signed own singletons. The packet's broader Section 9 comparisons
+remain separate.
 
 1. Favorable gap 13/4, harmful gaps -1, premium -1/2, K = 0, arbitrary signed
-   singleton vector, cap equalities, and arbitrary unused rewards. Produce
+   singleton vector, cap equalities, and arbitrary unused rewards:
    X = 1, q = 1/2, U = s - 1/4, W = s + 1/2, actual endpoint identities,
    B(X)X = N-positive(X) = 3/2, and the actual exact-profile consumer.
-2. Favorable gap 17/4 and K = -1 with the same negative premium. Produce the
-   printed values and moved-system value 5/2. Then alter one outsider triple
-   reward from 1 to 4 and prove its actual passive Quit endpoint is 7/4 > 3/2,
-   so the unchanged profile fails Nash. An endpoint calculation alone should not
-   be advertised as an actual strategic counterexample without the consumer.
+2. Favorable gap 17/4 and K = -1 with the same negative premium give the
+   printed values and moved-system value 5/2. Altering one outsider triple
+   reward from 1 to 4 makes its actual passive Quit endpoint 7/4 > 3/2 and
+   gives actual date-zero gain 1/4 and `capViolation_not_terminalNash` against
+   the unchanged opponents. `capViolation_not_rawSource` identifies the failed cap.
 3. Mixed K = (1, 1/2, -1, -1/2), favorable gaps
    (9/4, 11/4, 17/4, 15/4), premium -1/2, signed singletons and cap equalities:
-   exact odds, values, moved-system vector, and failure of both pure scheduled-pair
-   alternatives. Preserve the signed source rather than substituting Section 9.
+   exact odds, values, moved-system vector, strictly positive singleton inverse
+   via `mixed_positive_inverse`, and failure of both pure scheduled-pair
+   alternatives, via `mixed_pair_passive_test_fails`.
 4. H > 2, harmful gaps -1, premium -1, K = 0: positive singleton inverse but
-   no positive solution of the original odds equations. Also apply weak UE and
-   the pure-pair alternative when the caps hold. This refutes extension of the
+   no positive solution of the original odds equations, together with weak UE
+   and the pure-pair alternative when the caps hold. This refutes extension of the
    proper producer to the weak boundary, not weak UE existence.
 
-Reuse `passiveEquation` (`MathUE/LinearProgramming/CrossedMatchingOdds.lean`),
-the existing `TwoPairOdds` endpoint/value identities, and the actual phase
-compiler. No second general odds or behavioral proof is needed.
+The source-free `balanced_exactFamily` needs only increments at least -1 and
+the exact balance, not strict matching signs or Q. Printed strict raw membership
+is a separate theorem. `weak_rawSource` requires only H ≥ 0; positive inverse
+and no positive original odds use H > 2. `family_unused` retains every
+unmentioned coordinate. The proof reuses `passiveEquation`
+(`MathUE/LinearProgramming/CrossedMatchingOdds.lean`), `TwoPairOdds` endpoint
+identities and the existing actual phase/pure-pair compilers. No second odds
+existence or behavioral-deviation proof is supplied or needed.
 
 ## Section 9: present coverage
 

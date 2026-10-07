@@ -1204,6 +1204,12 @@ give the stronger all-initial delivery `M*C/N` and complete behavioral regret
 producer selects its root before every reward-bound and horizon quantifier;
 signed own rewards are allowed. Its clock source is actual live Cesaro mass;
 the separately stated expected deleted-opponent exit-time bound remains separate.
+The actual survival-sum corollaries `expectedOpponentLiveTime_le` and
+`expectedOpponentLiveTime_le_timeConstant`
+(`UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseFiniteHorizon.lean`)
+give `2/(1-t^3)` and `1+2/(1-t^3)` without Nash or reward assumptions.
+They use the canonical opponent-live-time tsum; no separate stopping-date
+expectation representation is supplied.
 
 `quietLift_gain_gt_weighted_childDebt_add_never_of_exact_child`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/PureAbsorbingChildDebtObstruction.lean`)
@@ -1258,10 +1264,46 @@ by `quittingDiscountedDisplacement_one_eq_grand_sub_withdrawal`
 the own singleton. The two fixture facades reuse the same generic criterion.
 
 The packet remains incomplete: separately stated expected-exit-time bound,
-other raw-criterion, matrix and stationary separations remain
-separate. The matching packet's
+other raw-criterion and stationary separations remain separate.
+`projectiveMatrix_isR0`, `projectiveMatrix_standardQ`,
+`projectiveMatrix_positive_inverse`, `projectiveMatrix_harmful_pair_isR0`,
+`projectiveMatrix_harmful_pair_not_standardQ` and
+`projectiveMatrix_triple_inverse_diagonal_eq`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseMatrix.lean`)
+prove the actual singleton-matrix screens: all fifteen principal determinants,
+explicit positive inverse, degree one and standard Q; all distinct nonfavorite
+pair restrictions are R0 but not Q; every triple inverse has a `-1/6` diagonal.
+Four nonzero eigenvector identities realize the printed eigenvalues, without
+a separate eigenbasis or spectrum-completeness statement. The matching packet's
 inverse and Brouwer route is distinct from this scalar IVT route; the
 source-free `TwoPairOddsValues` identities and actual two-pair compiler are shared.
+
+## Source-free one-date delivery and bounded probability compactness
+
+`finiteAveragePayoff_eq_terminal_of_quietAfter_one` and
+`abs_finiteAveragePayoff_sub_terminal_of_quietAfter_one`
+(`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean`) give exact
+`((N-1)/N)*terminal` delivery and `|terminal|/N` error for any actual behavioral
+quiet-after-one profile, at every positive horizon. Nonempty pure-coalition
+facades in `UniformEquilibrium/Quitting/Root/PureSureSetExactHorizons.lean`
+include singleton sets and require no Nash or card-two premise for delivery.
+The coordinate reward-bound facade is `M/N`. Thus pure-pair delivery uses
+canonical actual semantics, not another deviation proof.
+
+`MeasureTheory.ProbabilityMeasure.le_of_tendsto_of_le_measure` and
+`MeasureTheory.ProbabilityMeasure.exists_dominated_subsequence`
+(`MathUE/MeasureTheory/BoundedDensityWeakCompactness.lean`) give actual weak-limit
+domination and compact-metrizable dominated probability subsequences. This is
+only the game-independent measure-valued foundation for the two stage-atom
+packets. Radon–Nikodym densities, all-L1 tests, marked calendars, moving tester
+sets, all response caps and original-sequence chronology remain to be supplied.
+
+The remark on page 152 of Sorin1986 states the two-by-two finite-feasibility
+dichotomy; Proposition 5 alone does not prove its binary converse. The source
+comment in `Literature/Sorin1986.lean` records this precisely; the dichotomy is
+still unproved there. A supporting-edge deterministic-history/counting helper
+and a binary convex-hull classification are distinct dependencies, not a
+completed consequence of the existing proposition.
 
 ## Mixed-sign triple source boundary
 

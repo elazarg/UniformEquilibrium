@@ -38,6 +38,78 @@ theorem expectedStagePayoff_eq_terminal_of_quietAfter_one
     sub_self, mul_zero] at htail
   exact (sub_eq_zero.mp (abs_eq_zero.mp (le_antisymm htail (abs_nonneg _)))).symm
 
+omit [DecidableEq ι] in
+/-- Date zero has zero reward; every later stage has the actual terminal payoff. -/
+theorem finiteAveragePayoff_eq_terminal_of_quietAfter_one
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (hquiet : ∀ later, 1 ≤ later →
+      quittingProfileLiveRoot reward profile later = quittingAllContinueRoot)
+    (who : ι) {horizon : ℕ} (hhorizon : 0 < horizon) :
+    (quittingGame reward).finiteAveragePayoff none horizon profile who =
+      ((horizon : ℝ) - 1) / horizon * quittingTerminalPayoff reward profile who := by
+  let : Finite (quittingGame reward).State :=
+    inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+    fun _ => inferInstanceAs (Finite Bool)
+  let initial : (quittingGame reward).State := none
+  change (quittingGame reward).finiteAveragePayoff initial horizon profile who = _
+  obtain ⟨count, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hhorizon.ne'
+  rw [(quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff
+      profile initial who count.succ,
+    Finset.sum_range_succ']
+  dsimp only [initial]
+  have hzero : (quittingGame reward).expectedStagePayoff profile none 0 who = 0 := by
+    rw [expectedStagePayoff_quittingGame_eq_sum_mass]
+    simp only [quittingAbsorbedMass_zero, zero_mul, Finset.sum_const_zero]
+  have htail (time : ℕ) :
+      (quittingGame reward).expectedStagePayoff profile none (time + 1) who =
+        quittingTerminalPayoff reward profile who :=
+    expectedStagePayoff_eq_terminal_of_quietAfter_one reward profile hquiet (by omega) who
+  simp_rw [htail]
+  rw [hzero]
+  simp only [Finset.sum_const, Finset.card_range, nsmul_eq_mul, add_zero]
+  push_cast
+  ring
+
+omit [DecidableEq ι] in
+/-- The exact one-date error, without Nash or a reward-sign assumption. -/
+theorem abs_finiteAveragePayoff_sub_terminal_of_quietAfter_one
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (hquiet : ∀ later, 1 ≤ later →
+      quittingProfileLiveRoot reward profile later = quittingAllContinueRoot)
+    (who : ι) {horizon : ℕ} (hhorizon : 0 < horizon) :
+    |(quittingGame reward).finiteAveragePayoff none horizon profile who -
+        quittingTerminalPayoff reward profile who| =
+      |quittingTerminalPayoff reward profile who| / horizon := by
+  have hpositive : (0 : ℝ) < horizon := by exact_mod_cast hhorizon
+  have hweight : ((horizon : ℝ) - 1) / horizon - 1 = -(horizon : ℝ)⁻¹ := by
+    field_simp [ne_of_gt hpositive]
+    ring
+  have herror : ((horizon : ℝ) - 1) / horizon * quittingTerminalPayoff reward profile who -
+      quittingTerminalPayoff reward profile who =
+        (((horizon : ℝ) - 1) / horizon - 1) *
+          quittingTerminalPayoff reward profile who := by ring
+  rw [finiteAveragePayoff_eq_terminal_of_quietAfter_one reward profile hquiet who hhorizon,
+    herror, hweight, neg_mul, abs_neg, abs_mul, abs_inv, abs_of_pos hpositive]
+  rw [div_eq_mul_inv, mul_comm]
+
+omit [DecidableEq ι] in
+/-- The canonical deadline-one bound applies to every actual quiet-after-one profile. -/
+theorem abs_finiteAveragePayoff_sub_terminal_of_quietAfter_one_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (hquiet : ∀ later, 1 ≤ later →
+      quittingProfileLiveRoot reward profile later = quittingAllContinueRoot)
+    (who : ι) {bound : ℝ} (hreward : ∀ terminal, |reward terminal who| ≤ bound)
+    {horizon : ℕ} (hhorizon : 0 < horizon) :
+    |(quittingGame reward).finiteAveragePayoff none horizon profile who -
+        quittingTerminalPayoff reward profile who| ≤ bound / horizon := by
+  simpa only [Nat.cast_one, mul_one] using
+    abs_finiteAveragePayoff_sub_terminal_quietAfterDeadline_le
+      reward 1 horizon profile hquiet who hreward hhorizon
+
 /-- No finite-support or singleton-sign hypothesis is used on a deviation. -/
 theorem isHorizonNash_exact_of_terminalNash_quietAfter_one
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

@@ -7,6 +7,8 @@ Two sure quitters screen every continuation even under a unilateral deviation.
 The canonical semantic-pair formula gives exact terminal Nash for one date
 followed by Never, and the existing cutoff consumer supplies every horizon.
 Singleton sure sets are deliberately excluded from this tail-independent result.
+The delivery identities and rates below require only a nonempty set, not Nash
+or two sure quitters, and therefore also cover singleton sets.
 -/
 
 noncomputable section
@@ -25,6 +27,47 @@ theorem oneDateThenNever_payoff_of_nonempty
   funext who
   exact quittingTerminalPayoff_pureSetRootThenContinuation_eq_setReward
     active hnonempty (quittingAlwaysContinueProfile reward) who
+
+theorem oneDateThenNever_finiteAveragePayoff_eq_of_nonempty
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (active : Finset ι) (hnonempty : active.Nonempty) (who : ι)
+    {horizon : ℕ} (hhorizon : 0 < horizon) :
+    (quittingGame reward).finiteAveragePayoff none horizon
+        (quittingOneDateThenNeverProfile reward (quittingPureSetRoot active)) who =
+      ((horizon : ℝ) - 1) / horizon * quittingSetReward reward active who := by
+  rw [finiteAveragePayoff_eq_terminal_of_quietAfter_one reward _
+      (quittingOneDateThenNeverProfile_quietAfter_one reward _) who hhorizon,
+    oneDateThenNever_payoff_of_nonempty reward active hnonempty]
+
+theorem oneDateThenNever_abs_finiteAveragePayoff_error_eq_of_nonempty
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (active : Finset ι) (hnonempty : active.Nonempty) (who : ι)
+    {horizon : ℕ} (hhorizon : 0 < horizon) :
+    |(quittingGame reward).finiteAveragePayoff none horizon
+          (quittingOneDateThenNeverProfile reward (quittingPureSetRoot active)) who -
+        quittingSetReward reward active who| = |quittingSetReward reward active who| / horizon := by
+  simpa only [oneDateThenNever_payoff_of_nonempty reward active hnonempty] using
+    abs_finiteAveragePayoff_sub_terminal_of_quietAfter_one reward
+      (quittingOneDateThenNeverProfile reward (quittingPureSetRoot active))
+      (quittingOneDateThenNeverProfile_quietAfter_one reward (quittingPureSetRoot active))
+      who hhorizon
+
+theorem oneDateThenNever_abs_finiteAveragePayoff_error_le_of_nonempty
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (active : Finset ι) (hnonempty : active.Nonempty) (who : ι)
+    {bound : ℝ} (hreward : ∀ terminal, |reward terminal who| ≤ bound)
+    {horizon : ℕ} (hhorizon : 0 < horizon) :
+    |(quittingGame reward).finiteAveragePayoff none horizon
+          (quittingOneDateThenNeverProfile reward (quittingPureSetRoot active)) who -
+        quittingSetReward reward active who| ≤ bound / horizon := by
+  simpa only [oneDateThenNever_payoff_of_nonempty reward active hnonempty] using
+    abs_finiteAveragePayoff_sub_terminal_of_quietAfter_one_le reward
+      (quittingOneDateThenNeverProfile reward (quittingPureSetRoot active))
+      (quittingOneDateThenNeverProfile_quietAfter_one reward (quittingPureSetRoot active))
+      who hreward hhorizon
 
 theorem oneDateThenNever_terminalNash_of_sureExitSet
     {ι : Type} [Fintype ι] [DecidableEq ι]

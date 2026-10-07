@@ -363,6 +363,7 @@ import MathUE.Logic.SignFormulaMap
 import MathUE.MaxAffineStoppingValue
 import MathUE.MeanErgodic
 import MathUE.MeasurableSelection
+import MathUE.MeasureTheory.BoundedDensityWeakCompactness
 import MathUE.MeshContraction
 import MathUE.Minimax.DiscountedShapleySystem
 import MathUE.Minimax.Loomis
@@ -2691,6 +2692,7 @@ import UniformEquilibrium.Quitting.Examples.BelowSingletonJointPhaseChildren
 import UniformEquilibrium.Quitting.Examples.BelowSingletonJointPhaseFixture
 import UniformEquilibrium.Quitting.Examples.BelowSingletonJointPhaseJacobian
 import UniformEquilibrium.Quitting.Examples.BelowSingletonJointPhaseLocalPersistence
+import UniformEquilibrium.Quitting.Examples.BelowSingletonJointPhaseMatrix
 import UniformEquilibrium.Quitting.Examples.BelowSingletonJointPhaseResponseQuotients
 import UniformEquilibrium.Quitting.Examples.BelowSingletonJointPhaseSecondRoot
 import UniformEquilibrium.Quitting.Examples.BlockPair.All
@@ -2748,6 +2750,7 @@ import UniformEquilibrium.Quitting.Examples.CommonLeaverSignedPremiumFixture
 import UniformEquilibrium.Quitting.Examples.ConstantSignedNormalTable
 import UniformEquilibrium.Quitting.Examples.CrossMassDeterminantFixture
 import UniformEquilibrium.Quitting.Examples.CrossMassPayoffThresholdRegression
+import UniformEquilibrium.Quitting.Examples.CrossedMatchingBoundaryExamples
 import UniformEquilibrium.Quitting.Examples.CrossedMatchingFixture
 import UniformEquilibrium.Quitting.Examples.CrossedMatchingFixtureChildren
 import UniformEquilibrium.Quitting.Examples.CrossedMatchingFixtureFiniteHorizon

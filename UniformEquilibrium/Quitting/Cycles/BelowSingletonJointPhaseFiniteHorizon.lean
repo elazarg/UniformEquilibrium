@@ -1,5 +1,6 @@
 import UniformEquilibrium.Quitting.Cycles.BelowSingletonJointPhaseSource
 import UniformEquilibrium.Quitting.Cycles.PairedCycleFiniteHorizon
+import UniformEquilibrium.Quitting.Cycles.BlockSurvival
 
 /-! # Quantitative horizons for the selected below-singleton cycles
 
@@ -38,6 +39,38 @@ theorem opponentCycleSurvival_eq {t : ℝ} (ht : t ∈ Set.Ioo (1 / 2 : ℝ) 1)
       player) = t ^ 3 := by
   rw [prod_cycle_opponentsContinue]
   simp [opponentCycleSurvival]
+
+/-- The actual opponent-survival sum, independently of rewards or Nash conditions. -/
+theorem expectedOpponentLiveTime_le {t : ℝ} (ht : t ∈ Set.Ioo (1 / 2 : ℝ) 1)
+    (initial : Fin 2) (player : Fin 4) :
+    quittingExpectedOpponentLiveTime
+      (quittingCyclicRootSequence
+        (cycle fin4Schedule (fun _ => 1 - t)
+          (properUnitBounds _ (fun _ => ⟨by linarith [ht.2], by linarith [ht.1]⟩)))
+        initial) player 0 ≤ 2 / (1 - t ^ 3) := by
+  let roots := quittingCyclicRootSequence
+    (cycle fin4Schedule (fun _ => 1 - t)
+      (properUnitBounds _ (fun _ => ⟨by linarith [ht.2], by linarith [ht.1]⟩))) initial
+  have hblock : IsQuittingOpponentBlockContraction roots 2 (t ^ 3) := by
+    intro block who
+    rw [quittingOpponentSurvivalWeight_cyclicRootSequence,
+      quittingCyclicPrefixWeight_card, opponentCycleSurvival_eq ht who]
+  have hbound := quittingExpectedOpponentLiveTime_aligned_le roots (by decide) hblock
+    (pow_nonneg (by linarith [ht.1]) 3) (survival_lt_one ht) 0 player
+  simpa only [zero_mul, Nat.cast_ofNat] using hbound
+
+/-- The printed time constant includes the extra initial live-state date. -/
+theorem expectedOpponentLiveTime_le_timeConstant
+    {t : ℝ} (ht : t ∈ Set.Ioo (1 / 2 : ℝ) 1)
+    (initial : Fin 2) (player : Fin 4) :
+    quittingExpectedOpponentLiveTime
+      (quittingCyclicRootSequence
+        (cycle fin4Schedule (fun _ => 1 - t)
+          (properUnitBounds _ (fun _ => ⟨by linarith [ht.2], by linarith [ht.1]⟩)))
+        initial) player 0 ≤ timeConstant t := by
+  have hbound := expectedOpponentLiveTime_le ht initial player
+  unfold timeConstant
+  linarith
 
 theorem opponentLiveCesaro_le_timeConstant
     (reward : Reward) {t : ℝ} (ht : t ∈ Set.Ioo (1 / 2 : ℝ) 1)
