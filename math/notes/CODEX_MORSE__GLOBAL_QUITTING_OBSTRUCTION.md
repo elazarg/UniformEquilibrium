@@ -7937,3 +7937,217 @@ paired-stretch packet
 uses MAXIMUM debt, a different objective. Its inequalities cannot be
 transferred to the sum-debt source without a fresh source and objective
 alignment proof. That transfer and a new global consumer remain open.
+
+## 44. Beginning a genuinely global SUM table-space variation
+
+Status: source alignment and a precise next consuming question, not a
+new conjecture-facing theorem or export. The objective throughout this
+section is the SUM of unrestricted debts, not their maximum. No APS
+literature resurvey or MAX all-player-tie transfer is used.
+
+### The actual extremal source exists
+
+For a four-player unit-bounded reward table put
+
+    Delta(r)=inf_(all actual independent p) sum_i d_i(r,p).
+
+Two tables at sup distance e change each prescribed and deviated payoff
+by at most e. Suprema over all deviations change each cap by at most e.
+Thus the SAME actual laws satisfy |D_r(p)-D_r'(p)|<=8e, and taking
+infima in both directions gives
+
+    |Delta(r)-Delta(r')|<=8e.                         (244)
+
+This argument does not require cap attainment, bounded clocks, or a
+common optimizing law. A worst table r* on the compact sixty-coordinate
+cube therefore exists. If any Fin4 positive-gap table exists, scaling
+it into this cube shows
+
+    Omega=Delta(r*)=max_(unit cube) Delta(r)>0.
+
+For every actual law p, D_(r*)(p)>=Omega; the infimum over all laws is
+attained on the compact original semantic carrier. This is the full
+global variational premise to retain, not just a bad law selected after
+some table perturbation.
+
+The strict source margin from
+`positive_minimum_fourPlayer_allOwner_quadraticMargins`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)
+was re-read under its actual imports and hypotheses. With M=1, a
+positive minimum Delta=d gives, for every owner,
+
+    B_i-s_i>=d+d^2/8.
+
+Since B_i<=1, every s_i<=h=1-d-d^2/8. If h<=0, all Never has debt
+zero, impossible. Otherwise all Never has debt at most 4h. In fact
+its debt is STRICTLY above d: equality would make all Never a minimum,
+but a positive singleton owner there has B_i=s_i, contrary to the same
+margin. At least one such owner exists, since its Never debt is positive.
+Consequently
+
+    0<d<4(1-d-d^2/8),
+    0<d<sqrt(33)-5<3/4.                              (245)
+
+This is only extremal-source bookkeeping. An improved upper bound alone
+does not close any positive-gap branch.
+
+### SUM-compatible paired stretch, without an imported tie argument
+
+The literal paired non-own-singleton stretch of the reviewed MAX packet
+can also be formed at r*. It changes a positive directed membership gap
+c into (1-alpha)c+2alpha, leaves zero gaps zero, and preserves negative
+signs. Choose 0<alpha<Omega/32. Its reward displacement is at most
+2alpha, so (244) gives Delta(r*_alpha)>Omega/2.
+
+For an actual pure nonsingleton S, write its SUM of complete regrets as
+e_S=sum_i[r_i(S symmetric-difference {i})-r_i(S)]_+.
+These use no own-singleton coordinate. At r*, e_S>=Omega. If k_S is
+the number of its positive directed gaps, then k_S>=1 and exactly
+
+    e_S(r*_alpha)=(1-alpha)e_S(r*)+2alpha k_S
+                   >=Omega+alpha(2-Omega)>Omega.      (246)
+
+Freeze the 56 stretched coordinates and maximize Delta over the four
+own-singleton coordinates. A final table r exists, with
+
+    Omega/2<m=Delta(r)<=Omega,
+    every pure nonsingleton profile has SUM debt >Omega.  (247)
+
+Changing the own singletons does not change (246). Therefore ANY actual
+minimum profile of r cannot be a one-date pure profile: pure singletons
+also fail the strict prescribed-owner margin, and all Never fails (245).
+It must be genuinely randomized or use a nontrivial calendar. This
+provides an honest SUM extremal family on which a finite-
+amplitude consumer can be tested; it does not itself produce such a
+consumer. The original source r*, fixed stretch, final fiber maximizer r,
+and their infimum order remain fixed before selecting a comparison law.
+
+The unresolved move is to use an arbitrary globally minimizing first
+collision law of r to construct an actual whole law at r* with SUM
+debt below m. Undoing the stretch at the SAME profile does not automatically
+do this when complete response preferences reverse across opponent draws.
+There is also no assertion that a sum minimum has equal individual debts:
+the MAX proof of all-player ties uses a different objective and cannot
+be substituted. The next check should target the old-table all-law
+comparison, retaining every response maximum, rather than derive another
+row-local necessary condition.
+
+### A static active-tester shortcut fails at first order
+
+An attempted next step was to differentiate Delta at the worst table
+using only its currently minimizing laws and their active cap testers.
+Compact attainment does NOT justify that step. The exact generic
+counterexample is
+
+    D(x,k)=|x-k|,       -1<=k<=1,
+    Delta(x)=min_k D(x,k)=0 for -1<x<1.
+
+At x=0 its unique minimizing k is zero, whose fixed-k directional
+derivative is |h|. But Delta's derivative is zero: the minimizing
+parameter moves to k=x. Thus
+
+    Delta'(r;h)=min_(k in Argmin_r) D'_r(r,k;h)
+
+is FALSE even for a jointly continuous compact family of nonnegative
+functions convex in the outer variable, with a unique current minimizer.
+This is an exact optimization falsifier, not a quitting-game counterexample.
+It identifies the first-order selection failure: moving inner minimizers
+can cancel an active-response kink at the same order as the perturbation.
+
+A reward-independent compact carrier makes the quitting issue precise.
+For every actual independent profile let mu be its first-coalition law,
+including all Never as an extra outcome. For each i let C_i be the closed
+convex hull of its outcome laws under ALL pure finite deadlines and Never.
+Behavioral mixtures make mu belong to C_i, and the complete cap at ANY
+reward table r is the support function h_Ci(r_i). The finite outcome
+simplex is compact, and its nonempty compact convex subsets form a compact
+Hausdorff space. Taking the closure of actual tuples (mu,C_0,...,C_3)
+therefore gives one reward-independent compact K_occ. Its objective is
+
+    D_r(k)=sum_i[h_Ci(r_i)-r_i dot mu].
+
+It is jointly continuous in r and k; Delta(r)=min_(k in K_occ) D_r(k).
+Each C_i is legitimately convex because it describes ONE player's full
+response mixtures against fixed opponents. K_occ is NOT asserted convex:
+mixing two profile tuples need not produce an independent behavioral law.
+No public correlation is introduced by this descriptive compactification.
+
+At one fixed k, increasing an own singleton has a right cap derivative
+equal to the MAXIMUM singleton-outcome probability among its active
+response occupation vectors; the left derivative uses the MINIMUM. The
+prescribed derivative is mu({i}). Hence tied testers may not be assigned
+favorable slopes independently of the variation. More seriously, applying
+these fixed-k derivatives directly to Delta would repeat the falsified
+minimum-envelope step above.
+
+The static active-tester shortcut is RETIRED without replacing it by
+an unproduced response-uniqueness premise. A consuming table-space argument must
+instead track an actual minimizing-law reselection under a FINITE table
+variation, or prove the joint first-order limit including motion of the
+law and every tied response body. No strategy repair or globally
+maximizing-obstruction exclusion follows yet from this section.
+
+### The finite optional-hazard comparison also does not transfer from MAX
+
+The first finite operation to test was the reviewed three-sure packet's
+optional-rate reselection, now with the SUM objective. It fails as a
+general operation, even with the extremal source's numerical smallness
+and strict pure-endpoint separation. Here is an exact complete-table test.
+Let every reward coordinate be zero except
+
+    r_0({1,2})=-1/2000,       r_0({0,1,2})=1/2000,
+    r_0({1,2,3})=1/20,       r_0(I)=-1/20,
+    r_3({0,1,2})=-1/20,      r_3(I)=1/20.
+
+These six overrides together with the zero default specify all sixty
+entries. All own singletons are zero, so its TRUE unrestricted global
+gap is zero by all Never. The test is not a counterexample to the
+positive worst-table premise in (247).
+
+In the full actual date-zero family with players 0,1,2 Sure, player 3
+Continue with probability p, and Never after that date, all unrestricted
+debts reduce exactly to
+
+    d_0=[a p+b(1-p)]_+,       d_1=d_2=0,       d_3=c p,
+    a=-1/1000,       b=c=1/10.
+
+A sure opponent remains after each deviation, so no omitted late
+deadline or Never response can improve beyond these Quit/Continue
+endpoints. Thus its WHOLE old-family minimum is
+
+    F_old(p)=[a p+b(1-p)]_++c p,
+    p_old=b/(b-a)=100/101,
+    m_old=c b/(b-a)=10/101.                           (248)
+
+Perform the literal paired membership stretch with alpha=1/10000.
+The same actual family then has
+
+    a'=-11999/10000000,       b'=c'=10019/100000,
+    p_new=b'/(b'-a')=1001900/1013899,
+    m_new=(b')^2/(b'-a')=100380361/1013899000.        (249)
+
+Both formulas are exact global minima over EVERY optional p in [0,1],
+not grid outputs. On the positive-core side F decreases to its single
+kink; on the zero-core side it increases, because 0<c<b-a and
+0<c'<b'-a'. Direct subtraction gives
+
+    m_old-m_new=573539/102403799000>0,
+    alpha<m_new/32,
+    F_new(0)=F_new(1)=10019/100000>m_old.             (250)
+
+There is just ONE reversing sure owner, and there are no opposed core
+reversals. No choice of old optional hazard attains debt <=m_new.
+Therefore the scalar finite-comparison lemma needed by a direct SUM
+translation of the MAX opposed-reversal proof is false. The MAX proof's
+all-player tie is load-bearing: at the SUM kink here only the optional
+player has positive debt.
+
+The exact failed implication is a FAMILY comparison, not a full
+counterexample to a globally maximizing SUM table: the original all-Never
+law still has debt zero. Consequently a valid consumer of (247) must
+exploit the true all-profile lower bound and construct a new whole law,
+possibly outside this three-sure family. Neither optional reselection
+nor the static active-tester derivative is being pursued as a universal
+replacement. The next concrete question remains a finite table change
+with its moving minimum laws followed by an actual old-table whole-law
+repair, preserving the two globally ordered infima.

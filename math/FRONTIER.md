@@ -403,6 +403,21 @@ restrictions are proved:
   so a literal social-max tail replacement preserves every cap; minimum
   debt then contradicts independence of the remaining diffuse clocks.
 
+For arbitrary signed rewards and any finite player set, every represented
+positive global minimum also has an owner with at least two distinct complete
+cap-maximizing test points, or a unique cap-maximizing point carrying zero
+prescribed own POINT MASS. Zero point mass does not mean absence from
+topological support; outcome-equivalent distinct tests still count separately.
+If every owner instead had a unique positive-own-mass maximizer, isolation
+would give a uniform complete-response gap. Legal two-sided old-atom
+reweightings retain all caps and have original finite realizing profiles.
+Their sum-debt branch is multiaffine with an interior minimum, hence constant;
+its algebraic all-displayed-responses endpoint is zero, a contradiction.
+This [cap-atom exclusion](exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md)
+applies to every original marked minimum, not only an existentially reselected
+one. It supplies no consumer for multiple caps or unique zero-mass caps, and
+does not assert zero actual debt at the distant polynomial endpoint.
+
 A uniform original-profile restriction follows: for each fixed table with
 D*>0 and each positive Never lower bound η, there are ε,γ>0 such that
 EVERY actual behavioral profile with D≤D*+ε and every marginal Never

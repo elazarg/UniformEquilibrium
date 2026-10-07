@@ -417,6 +417,67 @@ is correlated: the examples were investigated inside the same program.
 The decisive test remains a repair or exclusion derived from joint
 whole-profile minimality, rather than another solved-table local trap.
 
+### Payoff feasibility does not solve cap minimization
+
+There is an exact source-level filter for payoff-only approaches. For any
+Fin4 table put s_i=r_i({i}) and Γ_ij=r_i({j})−s_i. The tracked theorem
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+produces, from bare no UE, a nonnegative simplex vector λ with
+
+    (Γλ)_i>0 for every i.
+
+The matrix orientation is fixed by `quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`: receivers are
+rows, singleton owners are columns. No reward-sign, punishment, or selected
+strategy premise is needed by the source theorem.
+
+This already implies actual prescribed-payoff feasibility above all own
+singletons. Give player j stationary Quit hazard hλ_j, with 0<h<1.
+One-row absorption is h+O(h²), singleton-j absorption is hλ_j+O(h²),
+and collision absorption is O(h²). Repeating the row therefore gives
+terminal payoff converging, as h tends to zero, to
+
+    U_i→∑[j] λ_j r_i({j})=s_i+(Γλ)_i>s_i.
+
+For sufficiently small fixed h, all four actual prescribed payoffs exceed
+their singleton rewards. Zero coordinates of λ are allowed; at least one
+positive hazard ensures eventual absorption. This is an ordinary elementary
+consequence of the checked simplex source, not a new checked declaration.
+Nothing in the argument controls unrestricted caps or regret.
+
+Consequently a universal actual-payoff exclusion cannot apply to the
+surviving no-UE source. For example, the sharp independent-clock inequality
+t_a t_b≤e²/4 for two different triple outcomes is useful joint-law geometry,
+but a raw class with every singleton social value at most −390 and
+∑[i]s_i≥1 is already excluded without that inequality: every Γ column sum
+is at most −391, so Γλ cannot be positive in all rows. The full product-law
+proof does not provide new UE coverage for that class. The exact inequality,
+its ordered-copy proof, and the overlap check are retained in
+`CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md` and its independent feedback.
+
+This strengthens the diagnosis beyond the claim that linear social tests
+are weak. Even nonlinear payoff-only infeasibility must first survive the
+singleton source above. A successful new use of independent-law constraints
+must constrain the same family's caps, counterfactual responses, or genuine
+global-minimum membership, rather than merely exclude all prescribed
+payoffs above s.
+
+Concrete tests before investing in another raw class are therefore:
+
+1. Check whether Γ admits a simplex vector with all-positive image. If not,
+   the existing singleton source already excludes that class.
+2. If it does, exhibit which complete response or global-minimum condition
+   defeats the actual high-payoff stationary family; payoff feasibility
+   alone is insufficient.
+3. For a law inequality, identify the legal common-source intervention and
+   compute every changed cap. A probability coupling used to prove an
+   inequality is not itself shared randomization available in the game.
+
+These tests do not establish that chronology is the only viable route, or
+that a counterexample exists. They separate a genuinely cap-aware global
+mechanism from a well-proved theorem on an already excluded reward class.
+
 ## Competing explanations
 
 ### H1: insufficient compositional state

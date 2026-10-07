@@ -246,3 +246,150 @@ not merely another supplied-odds verifier. The nonclaims concerning all
 proper stationary equilibria, unspecified local neighborhoods and arbitrary
 selected quiet-child equilibria remain explicit. No repair or unresolved
 mathematical objection is requested for these exact bytes.
+
+## Independent review: unique on-support complete caps at a true minimum
+
+Reviewed claim: UA1–UA15 in the author's section “Existing-atom reweighting
+excludes unique on-support complete caps”. Fix any finite player set,
+arbitrary bounded signed coalition rewards, independent complete stopping
+laws, and the PRODUCED marked-calendar representation of a strictly
+positive GLOBAL infimum of SUM terminal debt. It is impossible that every
+player has a unique POINT maximizing its unrestricted cap and gives that
+point positive mass in its prescribed own law. This is a necessary source
+restriction, not a UE theorem, an off-support exclusion, or a statement
+about an arbitrary compact-calendar annotated payoff/cap pair.
+
+Verdict: PASS in ordinary mathematics under that exact scope. This review
+is independent of other reviewers. No Lean verification or export placement
+is asserted. I read the complete appended argument and the exact chart,
+continuity, and transport proof in §2 of the frozen
+`POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`.
+
+The principal attempted falsifier was unique attainment with arbitrarily
+late near-maximizing responses. That invalidates a generic compact-space
+claim when the maximizing point is not isolated, but not UA3. Positive
+finite OWN mass makes the point a retained interval midpoint, and formula
+(4) of the frozen source isolates it in the ACTUAL test set T. Never has
+its separate isolated label. The response payoff is continuous on compact
+T disjoint union Never; removing the isolated maximizer leaves a compact
+set, so UA4 has a strictly positive uniform gap. Infinite near-maximizing
+finite deadlines are already represented by their finite limit cut in T;
+they would produce a distinct cap maximizer and violate unique POINT
+attainment. Outcome-equivalent distinct maximizing points likewise do not
+satisfy UA3.
+
+I separately tested the new late c⁺ response. The source has zero
+prescribed mass at c, and every selected positive-own-mass τ_i differs
+from c. The entire signed family retains zero mass there and inserts
+nothing later. A response at c or c⁺ therefore quits alone exactly on
+the all-opponent-Never event and is passive otherwise. UA6a is exact for
+signed rewards, including a selected Never response. It duplicates two
+FINITE tests and never identifies either with Never. Both stay below the
+unique selected maximizer.
+
+The initial genuine transport issue was that frozen formula (2) permits
+only nonnegative mixture coefficients, whereas the polynomial needs a
+two-sided neighborhood. UA7–UA10 explicitly resolve it rather than
+silently applying that formula. The original retained atom masses converge
+to m_i>0, so replacing an old finite law by
+(1−λ_i)p_i^k+λ_i δ_{τ_i^k} is legal for every fixed sufficiently small
+negative λ_i. The displayed lower mass m_i/4 is valid. Retained interval
+lengths stay bounded away from zero, giving uniformly bounded nonnegative
+old-chart densities. Their weak-* convergence and the unchanged original
+fixed/moving tester kernels give coalition, payoff, and COMPLETE-cap
+convergence. Product-density convergence uses the rectangle argument, not
+a product of uncontrolled weak limits. Never's interval has positive
+length when it carries positive prescribed mass, so the same argument
+applies there. Different owners may select different original atoms;
+their independent modifications use the same unchanged ordered chart.
+
+UA12 is multiaffine in all independent λ coordinates once the complete
+caps are stabilized. The sign-cube proof of UA13 is valid, including zero
+coordinate directions and vanishing first derivatives: nonconstant
+square-free monomials are linearly independent on that cube and have
+mean zero. Thus an interior minimum would force polynomial constancy.
+At λ=(1,…,1), each prescribed law equals its DISPLAYED response, so
+the globally defined selected-response polynomial vanishes. This is an
+algebraic evaluation only; no distant endpoint cap stability or zero
+actual endpoint debt is needed or claimed. A small signed descent stays
+inside the gap-stable box and UA10 transports it to a literal finite
+actual profile below the global infimum. This closes the contradiction.
+
+The restriction has export-level mathematical value as a new actual
+source exclusion, subject to the coordinator's independent novelty/value
+check and the normal export gate. It forbids a complete positive-minimum
+configuration using only its produced chart and global minimality, and
+supplies the actual finite descent responsible for exclusion. It is not
+merely a supplied-object verifier or an improved constant. The exact
+surviving alternative must be retained: SOME owner has multiple distinct
+maximizers, or its unique maximizing point has zero prescribed own mass.
+It does not prove that arbitrary minima can be selected to avoid those
+alternatives, and it does not consume responsive multi-cap cycles.
+
+## Final artifact review: standalone cap-atom exclusion
+
+PASS for the complete511-line
+`exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md` reviewed
+on2026-10-07, SHA256
+`29e55dee03a1cb70f9a470f5a3a9f646a1f3029c1108a5d5c384fe6c16471300`.
+This is ordinary-mathematical acceptance for the exact
+necessary restriction stated there, not a Lean seal or export placement.
+I read every section of the standalone artifact, including its inlined
+marked producer, actual source correspondence, boundary tests, and
+handoff. The earlier UA review remains applicable; the artifact has no
+mathematical dependence on a conference note or the frozen source packet.
+
+The inlined producer is complete for its claimed mode. Finite censoring
+preserves EVERY pure response uniformly, so finite-law and arbitrary-law
+infima agree. The old common charts retain endpoint and test-location
+Hausdorff limits separately, collapse only retained atom intervals, and
+keep Never separate. Bounded product densities and a.e./L¹ first-coalition
+kernel convergence correctly retain all simultaneous coalitions and
+joint-Never. The complete cap upper bound tests ANY maximizing sequence
+on the OLD test set; its lower bound approximates each limiting test.
+At a retained midpoint the unique original atom preserves its tie;
+at a zero-atom cut the opponent kernels converge. Thus continuity and
+cap attainment do not discard arbitrary late responses or confuse the
+last finite cut with Never.
+
+I rechecked signed witness legality, density bounds and complete tester
+transport in the standalone text, not just the earlier notes. The
+neighborhood's uniform gap includes c⁺ by the exact zero-c-mass identity.
+The selected-response multiaffine argument remains valid, and its
+distant endpoint zero is explicitly NOT asserted to be actual endpoint
+zero debt. The negative local branch is realized by literal original
+finite profiles, contradicting the true infimum.
+
+The declarations in the source-correspondence section were located and
+their actual statements read under the displayed imports:
+`abs_expectedPayoff_censorLateFiniteStoppingLaws_sub_le`,
+`abs_replacementCap_censorLateFiniteStoppingLaws_sub_le`;
+the two stopping-law/behavior payoff equalities and two full-cap
+equalities in `StoppingLawOperationalDistance.lean`;
+`quittingTerminalOutcomeMass_stoppingLawMixture_eq`,
+`quittingTerminalPayoff_stoppingLawMixture_eq` in the Diagnostic
+stopping-law affinity module; and
+`exists_finiteDeadlineTimingProfile_approximation`,
+`isUniformEquilibriumPayoff_iff_finiteMenu_fullCap_target_approximation`.
+Their hypotheses match the signed finite reward semantics here. The
+affinity theorems only permit coefficients in[0,1], and the manuscript
+does not misuse them for negative coefficients. The fixed-target
+finite-menu criterion indeed requires payoff and unrestricted
+exploitability bounds on the SAME actual profile and permits arbitrary
+lower displayed deadlines. No build was run and no fresh checked fact
+is attributed to the new ordinary argument.
+
+All three boundary tests are exact. Grand-coalition sure play has zero
+gap and unique supported caps; the half-Quit/half-Never profile has
+positive debt2 but true gap0 and the displayed simultaneous decrease;
+the uniform-calendar boundary has cap value1 uniquely at point0, zero
+own POINT MASS there, and no uniform complement gap despite membership
+in topological support. The final theorem correctly says zero point
+mass, not absence from topological support. Multiple outcome-equivalent
+TEST POINTS remain genuinely multiple under the stated premise.
+
+No mathematical correction or unresolved objection remains for the
+reviewed artifact. Its export-level contribution is the exact
+all-owners-unique-positive-own-atom exclusion at EVERY produced marked
+true minimum. It supplies no producer for the surviving alternatives
+and makes no full-conjecture or arbitrary-calendar coverage claim.

@@ -316,3 +316,147 @@ extension and first-collision strengthening in Sections 39–41 of
 `../notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md` are not used in this
 PASS: this argument succeeds using only the already reviewed nonatomic
 erasure theorem, and those stronger sections remain separately unreviewed.
+
+## Independent review: quadratic triple incompatibility and TC6 coverage
+
+Scoped artifact: the section “Quadratic triple incompatibility and a raw
+strict-payoff consumer,” labels TC1–TC12, in the whole-note snapshot SHA256
+`6b42b8b494d4b35ade3e231e7e14d9e050a928004ae8e87ddeaa59b13d8e35fc`.
+This review checks the whole-clock product injection, the advertised
+strict payoff deficit and uniform-payoff consumer, and actual implemented
+producer overlap. No Lean build or kernel verification was performed.
+
+Verdict: TC2–TC3 and TC7 are valid ordinary mathematics. The uniform-payoff
+conclusion for TC6 is valid, but the ENTIRE raw class is already covered
+by a stronger existing SINGLETON-ONLY producer. Pair/triple/grand rewards
+and the new product inequality are unnecessary for its UE conclusion.
+This is stronger overlap than the section's acknowledged exact raw-P
+classifier. The sharp product inequality should be retained; TC6 must
+not be presented as additional UE coverage.
+
+### Ordered-copy injection and its probability coefficient
+
+Write S={b,c,d}, T={a,c,d}, and take two independent ORDERED copies of
+the same four-player independent clock profile. On the original event,
+X_b=X_c=X_d=u<X_a and Y_a=Y_c=Y_d=v<Y_b, with u,v finite.
+If u<v, exchanging just c gives pair {b,d} in X and singleton {c} in
+Y, both at u. If u>v, it gives singleton {c} in X and pair {a,d} in
+Y, both at v. If u=v, exchanging b gives pair {c,d} in X and grand
+I in Y. A missing original clock may be Never; none of these comparisons
+or first-outcome identities changes.
+
+The three ORDERED image categories are disjoint. The same fixed swap
+recovers every input within its indicated category, so the piecewise map
+is globally injective. Each fixed coordinate swap preserves the product
+measure because both copies use the SAME own marginal. One does not
+need equal player marginals, finite support, or public randomization.
+The event is countable and every branch measurable. The resulting bound
+is precisely
+
+    t_a t_b <= sigma_c (beta_bd+beta_ad)+chi beta_cd
+              <= (sigma_c+chi)(beta_bd+beta_ad+beta_cd)
+              <= e^2/4.
+
+The two factors in the middle inequality enumerate disjoint finite
+nontriple outcome sets. Their sum is at most e, without charging Never.
+There is no missing factor of two: the domain has ordered probability
+t_a t_b, not the union of its reversed outcome-pair event. The supplied
+half-hazard a,b / sure c,d example attains equality. An independent
+finite structural check on clocks {0,1,2,Never} gave 36 original ordered
+pairs with 36 distinct images: 11 strict-before, 11 strict-after, and
+14 equal-time inputs. This check is not the proof.
+
+### Raw deficit and its consuming quantifiers
+
+Assuming every U_i>=s_i-1/100 gives sum U>=24/25. The triple total
+ceiling 8 and nontriple total ceiling -390 imply
+e<=88/4875<1/50. The separate coordinate bound U_0<=4t+5e then yields
+t>89/400 and m=max t_a>89/1600. For the three other triples, TC2 gives
+sum t_b<12/2225. The omitted dominant-triple player's payoff satisfies
+
+    U_a < -89/400+48/2225+1/10
+         = -3593/35600 < -1/100 <= s_a-1/100.
+
+All inequalities retain arbitrary additional negative entries and actual
+Never probability. The contradiction proves the full actual-clock TC7,
+not a bounded-menu statement. Fixing the selected owner on a convergent
+subsequence gives a semantic limit coordinate <=s_i-1/100. The inspected
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+instead makes every prescribed coordinate strictly above its singleton
+at a positive GLOBAL SUM minimum, since every own debt is at most the
+sum. Thus the stated zero-minimum/uniform-payoff argument is valid.
+
+The actual alternative source definitions and consumers were also read:
+`HasQuittingActualStrictSingletonDeficit`,
+`hasQuittingFiniteCalendarRawStrictSingletonDeficit_iff_actual`, and
+`hasQuittingFiniteCalendarRawStrictExclusion_iff_exists_positive_actual`
+in `UniformEquilibrium/Quitting/Paths/FiniteCalendarRawPredicates.lean`;
+`exists_uniformEquilibriumPayoff_of_finFour_rawPayoffExclusion` and
+`exists_finFour_finiteWord_exactLaws_of_rawPayoffExclusion` in
+`UniformEquilibrium/Quitting/Paths/FinFourRawPayoffExclusionFiniteLaws.lean`;
+and the exact strict-decision correctness declaration in
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawStrictDecision.lean`.
+They confirm the author's explicit raw-P overlap. The 1/400 reward
+neighborhood costs at most 1/200 in payoff-minus-singleton and is valid,
+including perturbations of zero singleton signs: its Fin4 consumer is
+all-sign, not a silently translated old profile.
+
+### Stronger whole-class overlap: only the singleton totals are needed
+
+Here is the source-level retirement, valid for EVERY TC6 table, not only
+TC12. Define the literal receiver-row matrix
+
+    Gamma_ij=r_i({j})-s_i.
+
+TC6 gives, in every column j,
+
+    sum_i Gamma_ij = sum_i r_i({j})-sum_i s_i
+                   <= -390-1 = -391 < 0.
+
+For ANY nonnegative simplex lambda, therefore,
+
+    sum_i (Gamma lambda)_i
+       =sum_j lambda_j sum_i Gamma_ij <= -391 < 0.
+
+In particular Gamma lambda cannot be strictly positive in every row.
+But the exact already implemented declaration
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+produces precisely such a simplex from arbitrary Fin4 no-UE data, with
+NO extra sign, punishment-normality, strategy, or reward-bound premise.
+Its sibling
+`isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff`
+is the ambient standard-Q source. The file's imports are
+`MathUE.LinearProgramming.StandardQSimplexImage`,
+`UniformEquilibrium.Quitting.Classification.LCP.CopositiveQBridge`,
+`UniformEquilibrium.Quitting.Classification.LCP.FullNormalCoreHomogeneousTransfer`,
+and
+`UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.AmbientCarrierElimination`.
+I read the actual declarations under these imports, not a conference
+paraphrase. The matrix orientation was separately checked against
+`quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`; it is exactly
+Gamma above, not its transpose or its negative.
+
+Consequently TC6's UE conclusion holds with ALL nonsingleton rewards
+arbitrary. Even nonnegative singleton signs are unnecessary for this
+specific singleton-only contradiction if the displayed column sum bound
+is retained directly. TC12 has exact Gamma column sums
+(-590,-591,-591,-591). It fails the existing all-outcome weighted floor
+as claimed, but it satisfies this different singleton-only exclusion.
+Failure of one linear screen cannot establish source noncoverage.
+
+The complete TC12 table and every deterministic escape check are correct.
+The boxed-charge failures are also literal: I and each triple are premium
+traps; P_I({0,1})=8>0 and L_{012}({0})=195>0 violate their indicated
+finite hypotheses in
+`exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`. Those comparisons do
+not remove the whole-class singleton-source overlap proved above.
+
+No mathematical objection remains to the sharp whole-law inequality or
+the strict-deficit implication. A genuinely new UE class from this
+mechanism must survive the ambient positive-simplex singleton condition
+before imposing pair/triple/grand penalties. The two-copy map itself is
+a probability proof, not an actual legal profile repair or correlation
+device; that boundary is correctly stated by the author.

@@ -29,6 +29,24 @@ and strictly negative outsider joining gaps is now contradicted by an
 actual full-cap debt decrease; it must expose an outside paid join or
 inactive cap tie. General tied caps and sure-owner floors remain open.
 
+A new independent global mechanism is recorded at the end under “Quadratic
+triple incompatibility and a raw strict-payoff consumer”. Coordinate
+exchange between two independent complete clock profiles proves the SHARP
+bound t_a t_b≤e²/4 for distinct proper triples, where e is the total
+finite nontriple first-coalition probability. This yields a complete finite
+coefficient certificate for an implemented raw UE class, including an
+explicit cyclic table with no deterministic terminal Nash profile and no
+nonnegative weighted outcome-floor certificate. The proof produces a
+uniform actual singleton-payoff deficit and invokes an existing unrestricted
+consumer; it does not assume a minimizing conditional tail or stay in the
+sure-root family. CODEX_BROUWER and CODEX_MORSE independently accepted the
+inequality and deficit calculation. MORSE identified decisive existing
+source overlap: TC6's singleton columns ALONE already imply UE by the
+ambient-Q positive-simplex theorem. The raw UE certificate is therefore
+RETIRED as new coverage. The sharp whole-clock constraint is retained,
+but it must interact with complete caps to reach the genuine hard source.
+No export or arbitrary Fin4 conclusion is claimed.
+
 The finite-amplitude test below now gives an exact warning at the remaining
 one-sure branch. A canonical punishment-normal Fin4 table has minimum sum
 debt EIGHT over EVERY actual profile whose first row contains a sure quitter,
@@ -13156,6 +13174,196 @@ evidence only; the continuous and arbitrary-tail claims use the
 proofs above, not grid coverage. No tracked experiment producer is
 being claimed for this inline verification.
 
+### Genuine last-sure release: the finite-amplitude obstacle that remains
+
+Status: substantial consuming attempt, NOT a new source exclusion or
+conditional producer. The full global minimum is retained throughout.
+No strict sign has been proved, and the exact unconsumed inequality is
+recorded rather than weakened to a supplied-object interface.
+
+Let δ>0 be the true unrestricted sum-debt infimum, z the unique sure
+owner in an actual-carrier first row, and p the other root rates. Thus
+all p_j<1, although zeros are allowed. Write h=∏_{j≠z}(1−p_j)>0 and
+let V_z, A_z and f_z=A_z+hP_z−V_z have their actual meanings from
+(A11). The original rates minimize F_z at value δ. No induced-Nash
+condition on these rates or minimum-debt condition on the tail is
+assumed. Every source payoff and cap satisfies the global singleton
+margins already stated above.
+
+Define the ACTUAL compact punishment face
+
+    K_z={w=(u,b)∈K: b_z=P_z}.
+
+It is nonempty: select a sequence of genuine independent opponent
+punishments with complete z-caps tending to P_z, prescribe ANY complete
+z-law, and take a semantic-carrier subsequence. Conversely all the
+payoff/cap coordinates of w∈K_z must come from one common actual
+approximating sequence. They cannot be selected coordinate by
+coordinate. Changing the prescribed z-law can change the other caps
+and payoffs even though b_z is unchanged.
+
+Keep a candidate free root p′ and release z to root probability1−ρ,
+where 0≤ρ≤1. After quiet play attach w∈K_z, understood through its
+actual approximants. For each free j let g_j^1(p′) be its literal
+Quit-minus-Continue gap when z is sure. Let
+
+    a_j(p′)=∏_{k≠z,j}(1−p′_k),
+    g_j^0(p′,b_j)=Q_j^0(p′)−A_j^0(p′)−a_j(p′)b_j,
+    R_t(g)=g⁺−t g.
+
+The superscript0 means z Continues at the root; the conditional tail
+still contains its chosen complete z-law. Thus the owner's quiet
+cap remains A_z+hP_z, whereas EVERY observer gap is the actual affine
+interpolation of the two root configurations. The exact full debt is
+
+    L(ρ,p′,w)=ρh(p′) D(w)
+         +[f_z(p′)]⁺−ρ f_z(p′)
+         +Σ_{j≠z} R_{p′_j}((1−ρ)g_j^1(p′)
+                                +ρg_j^0(p′,b_j)). (LR1)
+
+This retains all owner and observer maxima, every late finite test and
+Never, and prescribed tail regret. At ρ=0 it is EXACTLY F_z(p′),
+independently of the tail's prescribed z-law. At ρ>0 that prescription
+matters through the COMMON pair w. Prefix closure proves membership
+in K for every displayed modification, so true globality gives
+
+    L(ρ,p′,w)≥δ  for EVERY ρ,p′,w∈K_z.            (LR2)
+
+The desired consuming inequality is the strict reverse of (LR2) for
+one simultaneous choice. No assumption D(w)=δ is used: in fact the
+global singleton cap margin gives an OPPOSITE separation. Since
+P_z≤s_z in the punishment-normal source, the compact face K_z is
+disjoint from the true minimum set; hence
+
+    min_{w∈K_z}D(w)>δ.                           (LR3)
+
+This strict but nonquantitative tail cost is an obstruction to
+simply discarding ρhD(w), not a descent or a counterexample. It uses
+the full global margin on every minimum point and continuity on K.
+
+The attempted finite-amplitude proof was to make the loss of paid
+root regret dominate the continuation term and every observer
+cap switch in (LR1), by changing p′ and selecting the punishment
+and prescribed z-law together. The scalar identity b_z=P_z supplies
+NO upper bound on D(w), b_j−u_j, or the relevant opponent caps b_j.
+Ordinary tail-debt minimization therefore does not provide this sign.
+The previous explicit countertest shows why setting u_z=P_z by a
+best response is also insufficient: it can change the other b_j.
+
+For clarity the unproved comparison is
+
+    inf_{0<ρ≤1, p′, w∈K_z}
+       {ρh(p′)D(w)+[f_z(p′)]⁺−ρf_z(p′)
+          +Σ_j R_{p′_j}((1−ρ)g_j^1+ρg_j^0)}<δ.   (LR4)
+
+It has not been proved or refuted under the TRUE global source.
+Replacing K_z by independently chosen cap coordinates, assuming
+the tail is itself minimal, or deleting observer switches would
+change this question. Those repairs are not being made.
+
+One can see the mismatch even without infinitesimal approximations.
+For ρ>0, h(p′)>0 and free p′_j<1, put
+
+    t_j(ρ,p′)=[Q_j^0−A_j^0]/a_j
+                     +(1−ρ)g_j^1/(ρa_j),
+    λ_j=1/(1−p′_j).
+
+Up to a root-only additive constant, L/(ρh) minimizes on K_z the
+literal obstacle objective
+
+    P_z−u_z+Σ_{j≠z}[λ_j max(b_j,t_j)−u_j].        (LR5)
+
+The payoff coefficients are ALL one, whereas the cap coefficients
+are λ_j≥1 and are clipped by different actual root obstacles.
+It is not a weighted minimum of Σ_i weight_i(b_i−u_i).
+At a strict Quit cap, its obstacle tends to+∞ asρ↓0 and the
+observer's cap penalty disappears; at a strict Continue cap it
+remains λ_j b_j; at a tied cap the finite obstacle remains. This
+explains the very different effects of prescribed owner tails in
+the last-sure test. No weighted minimum theorem is invoked here.
+
+The next mechanism must solve the actual finite-amplitude joint
+comparison (LR4), or allow b_z>P_z while simultaneously exploiting
+the owner's root cap slack and changing p′. In the latter route the
+exact root prefix formula must be recomputed with that same b_z;
+an owner's floor buffer is not permission to choose the other
+coordinates freely. If this constrained-release mechanism stalls,
+the surviving alternative is a different genuine global argument,
+not another solved-table barrier or a conditional tail adapter.
+
+### Allowing a larger true tail cap does not by itself close the release
+
+This follow-up tests the actual owner's cap slack, with all observer
+coordinates still supplied by ONE actual carrier tail. It is a
+failure record, not an additional conditional certificate.
+
+Suppose the sure owner's current cap is its Quit payoff V_z, so
+f_z(P_z)≤0. At the current free root let
+
+    t_z=(V_z−A_z)/h≥P_z,
+    K_z^{≤t_z}={w=(u,b)∈K: b_z≤t_z}.
+
+EVERY tail in this compact sublevel regenerates the SAME current
+minimum pair at the unchanged sure root: the owner's prescribed
+payoff is V_z and its cap is max(V_z,A_z+h b_z)=V_z, while all
+free targets and caps are screened by sure z. This is genuine
+same-table membership and minimum inheritance; other coordinates
+are not chosen independently.
+
+For the released owner the exact formula is (LR1) with
+
+    f_z(p′,b_z)=A_z(p′)+h(p′)b_z−V_z(p′)
+
+in place of f_z(p′,P_z). The same b_z also belongs to D(w).
+Thus an enlarged tail set does NOT mean that the old owner-floor
+term remains fixed while the other tail values improve. If the
+free rates change, eligibility must be recomputed at their NEW
+threshold; the old floor buffer cannot be reused at arbitrary p′.
+
+The tempting joint comparison was to take the original minimum
+w₀ itself as the tail, thereby obtaining D(w₀)=δ rather than
+(LR3)'s strictly higher punishment-face cost. For the current
+owner-Quiet branch this is legal EXACTLY when
+
+    b_z(w₀)=V_z≤t_z
+       ⇔ A_z≤(1−h)V_z.                          (LR6)
+
+This is a genuine stationary owner-floor condition, stronger than
+the screen A_z+hP_z≤V_z. It is NOT supplied automatically by the
+true punishment value or by the global singleton margins.
+
+Even in (LR6)'s arm, the desired release does not follow. The
+unchanged prefix satisfies T_q(w₀)=w₀ but its free players still
+carry the positive regret δ. It is not an auxiliary cap-Nash root.
+For a released root with the same free rates and same actual tail,
+the owner's new debt alone is
+
+    ρ[(1−h)V_z−A_z]≥0,
+
+and the full tail contribution isρhδ; all observer branch changes
+in (LR1) remain. Substituting an auxiliary cap-Nash root against
+w₀ cannot discharge this: the inspected positive-minimum budget
+forces its only exact cap-Nash root to be all Continue. Consequently
+the self-referential tail yields no renewable absorbing Nash block.
+This reproduces the known auxiliary-minimum obstruction, not a
+new reason to assume a supplied good tail.
+
+There is a literal finite-clock reduction in the larger-cap test,
+but it also has no current consuming sign. With nonnegative owns,
+if A_z+h s_z≤V_z, all-Never conditional tails have b_z=s_z and
+preserve the same minimum. The source then has an actual one-date/
+Never realization. In particular (LR6), V_z>s_z≥0 implies this
+screen. The inspected finite-clock-minimum theorem then routes it
+to a paid port, not to debt belowδ. No new closure is inferred.
+
+The enlarged-tail mechanism is therefore stopped at its precise
+missing inequality: find a simultaneous free-rate change and one
+actual carrier tail such that the generalized (LR1) is strictly
+belowδ. Neither the fixed-point identity T_q(w₀)=w₀ nor the
+availability of an exact minimum tail supplies that inequality.
+The next attempt must use different global information, rather
+than append this larger-cap screen as a new hypothesis.
+
 ### Exact source and current consuming question
 
 The strict margin in (A1) is supplied by
@@ -14050,3 +14258,358 @@ proves nonnegative own levels and true punishment normality there.
 Thus an original counterexample may be replaced by that table before
 selecting a NEW represented minimum. The theorem supplies no ancestry
 relation between its minimum and the original one; none is assumed here.
+
+## Quadratic triple incompatibility and a raw strict-payoff consumer
+
+Status: the ordinary proof is independently accepted by CODEX_BROUWER
+and CODEX_MORSE, but the raw UE class is RETIRED as new coverage. MORSE
+found that its singleton columns alone are excluded by an existing
+bare-no-UE source theorem; TC2 is unnecessary for that class. The sharp
+whole-clock geometric inequality TC2–TC3 remains valid and potentially
+useful for cap-aware interventions, not exported. The simple certificate
+also lies within the ALREADY implemented quantified strict-payoff
+predicate. None of this settles arbitrary Fin4 UE. The exact stronger
+retirement and mechanism change are proved below without discarding
+the complete calculation, table, or independent reviews.
+
+### Self-contained data, agency, and inspected sources
+
+Let I={0,1,2,3}. A reward vector r(S) is fixed for every nonempty S⊆I;
+all-Never pays zero. Each player independently chooses a complete law on
+ℕ∪{Never}. The first finite clock realizes its literal tied quitting
+coalition. Unilateral deviations replace the COMPLETE own law. There is
+no public correlation or bounded-controller assumption. For a profile p,
+let p_S be the probability of first coalition S, n its joint-Never
+probability, and U_i(p)=Σ_S p_S r_i(S). Define
+
+    t_a=p_{I\{a}},   t=Σ_a t_a,
+    e=Σ_{|S|∈{1,2,4}} p_S,   n+t+e=1.                  (TC1)
+
+All probabilities refer to ACTUAL independent complete laws, not a
+supplied correlated outcome vector. No finite support is required.
+
+The bounded source lookup inspected the complete relevant statements in
+`MathUE/PMFProduct/SingletonRatioPairConcentration.lean` and
+`UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonBehavioralLawProductBase.lean`.
+The former supplies
+`exists_pair_subsequence_mul_tendsto_one_of_singletonMass_ratio_tendsto_zero`
+for Bernoulli roots; the latter supplies
+`exists_twoSureProductRoot_realizing_law_of_mem_terminalSemanticLawCarrier`
+when BOTH Never and all singleton coordinates vanish. Neither gives the
+finite quadratic TC2 below for arbitrary whole clock laws with possibly
+positive Never, singleton, pair, and grand mass.
+
+The actual-minimum consumer inspected is
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`:
+at a positive true carrier SUM minimum δ, every U_i exceeds its own
+singleton by at least δ²/(8M), since its individual debt is≤δ. This is
+all-sign Fin4 and concerns the full unrestricted caps. The alternative
+already implemented strict-deficit producer was also read:
+`exists_uniformEquilibriumPayoff_of_finFour_rawPayoffExclusion` and
+`exists_finFour_finiteWord_exactLaws_of_rawPayoffExclusion` in
+`UniformEquilibrium/Quitting/Paths/FinFourRawPayoffExclusionFiniteLaws.lean`,
+with the literal definitions and actual-profile bridge in
+`Paths/FiniteCalendarRawPredicates.lean`. A supplied verifier is not the
+candidate contribution: the finite raw inequalities TC6 below PRODUCE
+its accepted strict-deficit hypothesis. Its general classifier can already
+accept every table in this family; that overlap is explicit.
+
+### A sharp whole-law coordinate-exchange inequality
+
+For every actual independent profile and distinct a,b∈I,
+
+    t_a t_b ≤ e²/4.                                     (TC2)
+
+Here is the complete unrestricted-clock proof. Write
+I={a,b,c,d}; S=I\{a} and T=I\{b}. Sample two ORDERED independent
+copies X,Y of the ENTIRE product profile. On the event that X first
+realizes S at date u and Y first realizes T at date v, split into u<v,
+u>v, u=v. Swapping the X and Y clocks of one fixed player is a
+measure-preserving involution on this doubled product space: its two
+clocks are independent draws from the SAME marginal law. This applies
+to arbitrary countable supports, including Never. All domain branches
+and maps are measurable on the countable eight-clock product space.
+
+If u<v, swap player c's clocks. The new X first coalition is {b,d} at
+u, and the new Y first coalition is {c} at u. If u>v, the SAME swap
+gives new X coalition {c} at v and new Y coalition {a,d} at v. If u=v,
+instead swap player b's clocks: new X coalition is {c,d} at u and new
+Y coalition is I at u. The original absent clocks satisfy X_a>u,
+Y_b>v, with Never ordered after all finite dates, so these statements
+have no missing equality or late-clock case.
+
+The piecewise map is GLOBALLY injective on the original ordered-copy
+event. Each restriction is an injective coordinate involution, and its
+three image categories are respectively (pair,singleton),
+(singleton,pair), and (pair,grand), which are pairwise disjoint. No
+reordering or identification of X and Y is performed. One can recover
+the branch from the ordered image category and apply its fixed inverse
+swap. Thus measure preservation on each restriction and disjointness
+also make the whole restricted map measure preserving. An untracked
+unordered-pair symmetry or multiplicity is not hidden in the coefficient.
+
+Let σ_c=p_{ {c} }, β_A=p_A for pairs A, and χ=p_I. The three images
+lie within their indicated ordered outcome-pair events, whose product
+probabilities bound the original branch measures. Consequently
+
+    t_a t_b
+      ≤ σ_c(β_{ {b,d} }+β_{ {a,d} })+χ β_{ {c,d} }
+      ≤ (σ_c+χ)(β_{ {b,d} }+β_{ {a,d} }+β_{ {c,d} })
+      ≤ e²/4.                                           (TC3)
+
+The last two factors count DISJOINT subsets of the finite nontriple
+outcomes, so their sum is≤e; their product is≤one quarter of that
+sum squared. Never is not charged as an off-triple event.
+
+TC2 is sharp. Give c,d certain date-0 clocks, and a,b independent
+date-0 probabilities one half, otherwise Never. Then the two triples
+each have mass1/4, while the common pair and grand coalition each have
+mass1/4. Thus t_a t_b=1/16=e²/4.
+
+The inequality survives joint terminal-law closure by continuity of its
+finite coordinates. It does not characterize all realizable laws, assert
+that a correlated triple mixture is realizable, or constrain unilateral
+caps by itself. A uniform mixture of the four distinct triples has e=0
+and all t_a=1/4, and is explicitly NOT realizable.
+
+### Finite raw hypotheses and the actual uniform payoff deficit
+
+Write s_i=r_i({i}). Consider EVERY finite raw table satisfying
+
+    s_i≥0 for all i, and s_0≥1;
+    |S|=3: r_i(S)≤4 for i∈S, and r_j(S)≤−4 for j∉S;
+    |S|∈{1,2,4}: Σ_i r_i(S)≤−390 and r_i(S)≤5 for all i. (TC6)
+
+Labels TC4 and TC5 are intentionally unused. The displayed conditions
+are finite literal reward inequalities; the table can have arbitrary
+additional negative entries. Relabeling the distinguished owner is
+harmless. The desired conclusion is an ORIGINAL-game uniform-equilibrium
+payoff against ALL behavioral deviations, with one target fixed before
+accuracy, not merely a finite-horizon or terminal-equilibrium statement.
+
+The complete producer of its consuming hypothesis is
+
+    for EVERY actual profile p,
+       ∃i: U_i(p)<s_i−1/100.                            (TC7)
+
+Suppose instead all U_i≥s_i−1/100. Then U_0≥99/100 and
+Σ_i U_i≥24/25. Triple reward sums are≤8, so
+
+    24/25 ≤Σ_i U_i≤8t−390e≤8−390e,
+    e≤88/4875<1/50.                                    (TC8)
+
+Every triple coordinate is≤4 and every other finite coordinate is≤5.
+Consequently U_0≤4t+5e. Let m=max_a t_a and choose a with t_a=m.
+Then
+
+    t≥(99/100−5e)/4>89/400,
+    m≥t/4>89/1600>0.                                   (TC9)
+
+For each b≠a, TC2 gives t_b≤e²/(4m). Thus
+
+    Σ_{b≠a} t_b≤3e²/(4m)<12/2225.                       (TC10)
+
+Owner a receives≤−4 on the dominant triple and≤4 on every other
+triple. Even giving it its coordinate ceiling5 on EVERY off-triple
+finite event,
+
+    U_a≤−4m+4Σ_{b≠a}t_b+5e
+       <−89/400+48/2225+1/10
+       =−3593/35600<−1/100≤s_a−1/100.                   (TC11)
+
+This contradicts the assumed inequalities and proves TC7. Nothing here
+chooses a best reply, minimizes a conditional tail, or changes the root.
+All private complete clocks are quantified. Positive and negative entries
+are retained in the single literal reward table.
+
+TC7 also yields a strict exclusion on the complete payoff/cap carrier:
+along any actual convergent semantic sequence, pass to a subsequence
+with the same selected owner i. The limit satisfies U_i≤s_i−1/100,
+still strictly below s_i. A positive carrier SUM minimum instead has
+ALL U_i>s_i by the inspected all-owner quadratic-margin theorem. Hence
+its minimum is zero. The terminal all-errors/uniform-payoff equivalence
+supplies one fixed original uniform-equilibrium payoff. This gives a
+genuine raw-coefficient producer and strict counterexample-class
+exclusion, not a statement that every reward table satisfies TC6.
+
+Alternatively TC7 directly supplies the existing accepted strict raw
+payoff predicate and its literal finite-law producer: for every ε>0 it
+selects one finite root word with SAME independent natural-date/Never
+laws and FULL debt<ε. Its complete-cap realization is not being inferred
+from an independently compressed favorable payoff witness. This use does
+not compute the uniform target or a bound on the selected word length.
+
+The payoff deficit also gives an unrestricted reward neighborhood. If
+max_{S,i}|r'_i(S)−r_i(S)|≤1/400, compare the SAME profile's prescribed
+payoff and singleton coordinates under the two tables. Each changes by
+at most1/400. TC7 then implies some U'_i<s'_i−1/200 for every actual
+profile, so the perturbed table also has UE by the same Fin4 consumer.
+This neighborhood need not keep the zero singleton signs or TC6 exactly.
+It selects a NEW table and its OWN true minimum; no old minimum is carried
+through a perturbation. This is a payoff comparison, not a cap annotation.
+
+### A complete nontrivial table and scope checks
+
+The following formula specifies ALL sixty nonempty-coalition entries.
+Set s=(1,0,0,0), with cyclic successor j⁺=j+1 mod4:
+
+    |S|=3: r_i(S)=4 if i∈S, otherwise −4;
+    |S|=2: r_i(S)=−200 if i∈S, otherwise5;
+    S=I:   r_i(S)=−200 for every i;
+    S={j}: r_j(S)=s_j;
+           r_{j⁺}(S)=−600;
+           r_i(S)=5 for the other two outsiders.        (TC12)
+
+Here is the complete literal table, with coordinates in order0,1,2,3:
+
+| S | r(S) |
+| --- | --- |
+| {0} | (1,−600,5,5) |
+| {1} | (5,0,−600,5) |
+| {2} | (5,5,0,−600) |
+| {3} | (−600,5,5,0) |
+| {0,1} | (−200,−200,5,5) |
+| {0,2} | (−200,5,−200,5) |
+| {0,3} | (−200,5,5,−200) |
+| {1,2} | (5,−200,−200,5) |
+| {1,3} | (5,−200,5,−200) |
+| {2,3} | (5,5,−200,−200) |
+| {0,1,2} | (4,4,4,−4) |
+| {0,1,3} | (4,4,−4,4) |
+| {0,2,3} | (4,−4,4,4) |
+| {1,2,3} | (−4,4,4,4) |
+| I | (−200,−200,−200,−200) |
+
+Never pays zero; M=600 bounds every absolute reward. Triple totals are8,
+pair totals−390, singleton totals s_j−590≤−589, and the grand total
+is−800. The nontriple coordinate ceiling is5, so TC6 holds literally.
+
+This table has NO deterministic terminal Nash profile, not just no
+particular prescribed root. For any first pure singleton {j}, outsider
+j⁺ can join at that date to get−200 instead of−600. For a first pair,
+at least one member can withdraw to the remaining singleton and receive
+passive5 instead of−200: a cyclic4 successor relation cannot point in
+both directions between two players. For a first triple, every member
+can withdraw to the remaining pair and receive5 instead of4. For the
+grand coalition, any member can withdraw and receive−4 instead of−200.
+The corresponding first-date deviations are available regardless of all
+later prescribed pure clocks. At all-Never, player0 obtains1 by quitting.
+Thus the UE conclusion genuinely requires a mixed/dynamic producer.
+
+It is not a nonnegative weighted outcome-floor consequence. A formal
+correlated mixture assigning1/4 to each triple has payoff(2,2,2,2),
+strictly above s in every coordinate. For every nonzero nonnegative
+weight w,
+
+    (1/4)Σ_{|S|=3}Σ_i w_i r_i(S)=2Σ_i w_i>Σ_i w_i s_i.
+
+Hence at least one literal triple defeats that weight's proposed raw
+outcome upper bound. That formal mixture is ruled out by TC2; it is not
+an actual product profile or a Nash witness. This is where independence
+does real work beyond the existing linear chamber screen.
+
+The reviewed boxed Nash-charge raw conditions also fail, independently
+of their numerical constants. I is a premium trap, but for T={0,1}
+its inserted premium sum over owners2,3 is8>0, whereas the full-core
+intermediate-coalition condition requires≤0. The proper triple trap
+A={0,1,2} has singleton T={0} leave sum
+
+    [r_1({0,1})−r_1({0})]+[r_2({0,2})−r_2({0})]
+       =(−200+600)+(−200−5)=195>0,
+
+where that condition requires a strictly negative sum. These are direct
+failures of the finite tests in
+`exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`, not an assertion
+that all other implemented/pending raw UE classes fail. The usual
+own-singleton participant ceiling also fails: e.g. player1 receives4
+as a triple participant while its own singleton is0. No wholesale
+classification census or comparison with every literature theorem has
+been attempted.
+
+An inline exact-integer calculation checked TC2 on all50,625 independent
+two-date/Never profiles whose marginal masses have denominator4. The
+maximum observed ratio4t_a t_b/e² was EXACTLY1, attaining the displayed
+sharpness fixture. This is an arithmetic experiment, not the proof.
+Separate exact reward evaluation checked every one-date pure coalition:
+the four singleton debts are400; cyclic-adjacent pair debts205 and the
+other two pair debts410; each triple debt3; grand debt784; all-Never
+debt1. These finite evaluations agree with, but do not replace, the
+complete-clock deviation argument above. No file output or Lean build
+was used by those calculations.
+
+### What this changes, and the next genuine global question
+
+TC6 supplies a complete finite-coefficient certificate for a raw UE
+class, and TC2–TC3 supply a sharp independence obstruction that persists
+under actual joint-law limits. Neither is an arbitrary positive-minimum
+consumer. In particular, a genuine global source can place large mass
+on profitable singleton/pair outcomes, and general rewards need not
+charge its off-triple mass. A four-triple correlated social surplus alone
+does NOT refute UE. Relative to the implemented exact quantified strict
+raw predicate, TC6 is a simple sufficient certificate, not new coverage.
+
+The next global question is whether the coordinate-exchange construction
+can retain the observer response caps in a paired actual reweighting,
+so that a minimum with incompatible profitable triple branches is
+consumed without the raw off-triple penalty hypothesis. The displayed
+outcome-law inequality is not itself such an intervention: its two-copy
+swap is a measure calculation and gives no authorized public-correlation
+device or unilateral clock change. This distinction is the live boundary.
+
+### Independent reviews and decisive source retirement
+
+CODEX_BROUWER's review in
+`../feedback/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION__BY_CODEX_BROUWER.md`
+accepts TC1–TC12, including the globally injective ordered-copy map and
+the exact deficit/consumer arithmetic. Its independent denominator3
+experiment used three finite dates plus Never:160,000 profiles and
+960,000 distinct-triple pair tests, with no violation and300 positive
+sharp equalities. CODEX_MORSE's review in the corresponding
+`__BY_CODEX_MORSE.md` independently accepts TC2–TC3 and TC7, but proves
+the entire UE class already has a stronger SINGLETON-ONLY consumer.
+
+I read the actual declaration
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+and its literal matrix definition `quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean` under their
+imports. For ANY Fin4 reward table with no uniform-equilibrium payoff,
+the former produces λ_i≥0, Σ_iλ_i=1, and
+
+    (Γλ)_i>0 for EVERY i,
+    Γ_{ij}=r_i({j})−s_i.                               (TC13)
+
+It has no normality, reward-bound, own-sign, or supplied-strategy
+hypothesis. TC6 instead makes EVERY column satisfy
+
+    Σ_i Γ_{ij}=Σ_i r_i({j})−Σ_i s_i≤−390−1=−391.
+
+Hence Σ_i(Γλ)_i≤−391 for every simplex λ, contradicting TC13.
+The pairs, triples, grand coalition, and TC2 are completely unnecessary
+for this existing exclusion. On the literal TC12 table the four column
+sums are(−590,−591,−591,−591). This is stronger overlap than merely
+feeding the general strict raw-P predicate. No new hard-class coverage
+or export value is attributed to TC6.
+
+The obstruction is broader than this table. Given ANY simplex λ with
+Γλ>0, use literal stationary independent root rates q_i=ε λ_i. If
+a_ε=1−∏_i(1−ελ_i), the first singleton probabilities are
+
+    P(first coalition {i})
+       = ελ_i∏_{j≠i}(1−ελ_j)/a_ε→λ_i.
+
+Here a_ε/ε→1, all nonsingleton probabilities are O(ε), and absorption
+is almost sure for every ε>0. Consequently prescribed payoffs tend to
+Σ_iλ_i r({i})=s+Γλ, STRICTLY above own singletons in every coordinate.
+These are actual independent complete geometric clocks; no public
+correlation or favorable semantic annotation is involved. For sufficiently
+small ε all their actual U_i>s_i. Thus ANY universal payoff-only
+singleton-deficit mechanism is incompatible with the genuine no-UE
+source TC13, not merely this particular nontriple penalty certificate.
+Changing constants or weakening its singleton penalty cannot repair
+the mechanism while preserving its desired universal payoff exclusion.
+
+The geometric inequality is retained; the payoff-only attempt is closed.
+The next attempt must compare common-source counterfactual/deleted
+laws AND their unrestricted caps, or use a different global mechanism.

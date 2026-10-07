@@ -90,7 +90,18 @@ tail decomposition, even when the old tail varies simultaneously. Thus
 connectedness does not supply that minimizing homotopy. This is a proved
 failure of the proposed mechanism, not a new existence reduction. The
 current next question must compare a distant replacement of old finite
-stopping mass and calculate all complete cap switches.
+stopping mass and calculate all complete cap switches. The newest candidate
+below excludes one genuine source geometry: every complete cap uniquely
+maximized at a clock carrying positive mass in its owner's old law. Unlike
+generic unique attainment, this clock is isolated in the PRODUCED marked
+calendar. Signed reweightings of those existing atoms transport on the
+original finite realizing sequence and yield a multiaffine local branch.
+Its selected-clock endpoint polynomial is zero, so positive global debt is
+impossible in this geometry. This ordinary-mathematics candidate passed
+an independent check, but is not a full consumer: multiple active cap
+clocks and unique maximizing clocks with zero OWN POINT MASS remain live.
+Zero point mass does not mean outside the topological support. A standalone
+draft is being assembled at the coordinator's request.
 
 The earlier question concerned a raw class with constant participant
 rewards on all joint exits.
@@ -3880,3 +3891,427 @@ For a true minimum, such a distant comparison must be produced from its
 whole old conditional laws. The unresolved next question is a finite
 replacement of old finite stopping mass, with its complete response
 switches calculated, that crosses the barrier and lowers total debt.
+
+## Existing-atom reweighting excludes unique on-support complete caps
+
+**Status.** Candidate proved below in ordinary mathematics under the exact
+marked-source hypotheses. An independent check passed; this
+is not Lean-checked, not exported, and does not settle the multi-cap or
+zero-own-point-mass branches. It changes existing finite stopping mass, rather
+than adding a fresh root or merely releasing Never. The source-specific
+isolation and signed finite transport are essential, not optional
+regularity assumptions inferred from generic unique attainment.
+
+### Self-contained question and inspected dependencies
+
+Let I be a nonempty finite player set, with |I|=n (in the live application
+n=4). Let r_i(S) be arbitrary signed rewards for each nonempty coalition
+S⊆I, bounded in absolute value by M. The all-Never outcome pays zero.
+Each player samples its stopping time independently. A deviator may
+replace its complete stopping law; hence its cap is the supremum over
+ALL pure finite dates and Never, including arbitrary late dates.
+
+Let δ be the infimum of the sum of unrestricted terminal debts over
+actual independent finite stopping-law profiles on ℕ∪{Never}. Suppose
+δ>0, and take the produced marked minimum (T,q) from Section 2 of
+`POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`: T⊆[0,c] is compact,
+c=max T, Never is a separate isolated label, and
+
+    D_T(q)=Σ_i[b_i^T(q)−U_i(q)]=δ.               (UA1)
+
+The source has a fixed ORIGINAL finite minimizing sequence p^k, old
+quantile interval maps π_k, bounded densities r_i^k⇀*r_i, and complete
+finite test sets T_k→T. Each positive finite atom of q is the midpoint
+τ of one retained open interval J=(a,b); its corresponding original
+interval J_k=(a_k,b_k) has a_k→a and b_k→b, and
+
+    T∩J={τ},  τ=(a+b)/2.                        (UA2)
+
+The original outcome and moving-response kernels converge almost
+everywhere and in L¹ on these old charts. The complete pure-response
+payoffs V_i(t,q_-i) are continuous on the compact disjoint union
+X=T⊔{Never}. These are the actual hypotheses produced by that reviewed
+source, not properties of an arbitrary payoff/cap annotation in K.
+
+The narrow nearby lookup was
+`TerminalSemanticStoppingLawDebtConvexity.lean` in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/`: the one-law outcome/payoff
+affinity and other-player cap convexity are compatible with, but do not
+prove, this simultaneous old-law exclusion. The previous strict-late
+multiaffine failure and fixed-cut repair in this notebook were also
+checked. `CODEX_DESCENDANT__MULTICOORDINATE_CAP_JENSEN_ACTIVE_FACE.md`
+records why the product Jensen identity alone does not consume global
+minimality. No outer-infimum envelope differentiation is used here.
+
+**Candidate exclusion.** It is impossible that, for EVERY i∈I, there is
+a UNIQUE complete maximizing clock τ_i∈X and
+
+    V_i(τ_i,q_-i)=b_i^T(q),  q_i({τ_i})=m_i>0.  (UA3)
+
+Uniqueness means a unique POINT of X, not uniqueness after identifying
+distinct response clocks that happen to have the same outcome function.
+If distinct clocks attain the cap, (UA3) fails even if their payoffs are
+outcome-equivalent at q. Never is permitted as τ_i only when its original
+own mass is positive. No Nash root, minimizing continuation, common
+Never floor, reward sign, or cap selector is additionally assumed.
+
+### The source-specific cap-stability lemma
+
+Positive OWN mass at a finite τ_i implies positive mixture mass there,
+so (UA2) applies. The open interval
+
+    (τ_i−(b−a)/2, τ_i+(b−a)/2)∩T={τ_i}
+
+isolates this test. Never is isolated by the stated disjoint-union
+topology. Thus X\{τ_i} is compact. By continuity and UNIQUE point
+attainment,
+
+    g_i:=b_i^T(q)−max_{t∈X\{τ_i}}V_i(t,q_-i)>0. (UA4)
+
+Own mass is not being used to control opponent payoffs. It is being
+used solely to isolate the maximizing point in the ACTUAL marked test
+space. In an ordinary compact calendar, uniqueness at an accumulation
+point does not imply (UA4). On ℕ alone, a unique finite maximizer can
+also have arbitrarily late near-maximizers. Neither invalid generic
+implication is used.
+
+For a vector λ near zero, independently set
+
+    q_i^λ=(1−λ_i)q_i+λ_iδ_{τ_i}.                (UA5)
+
+Both signs are legal: if −m_i/4<λ_i<1, the mass at τ_i is
+m_i+λ_i(1−m_i)>0 and all other masses are multiplied by the positive
+factor 1−λ_i. When m_i=1 the coordinate direction is simply zero.
+Total variation between q_i^λ and q_i is at most |λ_i|. The bounded
+payoff coupling estimate gives, uniformly over ALL t∈X,
+
+    |V_i(t,q_-i^λ)−V_i(t,q_-i)|
+       ≤2MΣ_{j≠i}|λ_j|.                        (UA6)
+
+Choose an open box about zero so small that
+4MΣ_j|λ_j|<min_i g_i and all signed laws are legal. Equations
+(UA4)–(UA6) then show that EVERY complete cap stays uniquely at its
+displayed τ_i throughout that box. This covers ALL marked finite tests,
+the last finite test c, and Never. No late-response branch is dropped.
+
+To compare with the source's extended test space T⁺=T∪{c⁺}, observe
+that τ_i≠c for every i, since q_i({c})=0 whereas m_i>0. Equation
+(UA5) therefore gives q_i^λ({c})=0 throughout the signed box (and
+indeed throughout every legal λ). No prescribed finite mass lies
+strictly above c, and no mass is inserted at c⁺. Thus a deviator at c
+and one at c⁺ face exactly the same outcomes: any finite opponent
+exit occurs strictly earlier, and on the remaining all-opponent-Never
+event the deviator is the sole quitter. Consequently, for arbitrary
+signed rewards and even when some chosen τ_j is Never,
+
+    V_i(c⁺,q_-i^λ)=V_i(c,q_-i^λ).              (UA6a)
+
+The extra DISTINCT test c⁺ cannot be maximizing: the unique supported
+τ_i is not c and (UA4) places c strictly below it. Hence the cap and
+the uniform cap gap are unchanged on the COMPLETE extended compact
+test space X⁺=T⊔{c⁺,Never}. This argument proves, rather than assumes,
+that the last finite response is harmless; it never identifies either
+finite test with Never.
+
+### Signed transport on the original actual finite witnesses
+
+The source's finite-atomic variation theorem states λ_i∈[0,1]; it is
+NOT sufficient by itself to authorize the negative λ_i in (UA5).
+Here is a separate transport using the existing retained own atoms.
+
+If τ_i is finite, let τ_i^k be the unique original date whose old
+interval is J_{i,k}→J_i of positive length. If τ_i=Never, let
+J_{i,k}=(c_k,1) and J_i=(c,1). Positive m_i at Never ensures 1−c>0.
+Weak-* convergence and the constant retained-atom densities give
+
+    p_i^k({τ_i^k})=m_i^k→m_i>0.                (UA7)
+
+Here τ_i^k is Never in its own case, not a late finite substitute. For
+all sufficiently large k, m_i^k≥m_i/2. For any fixed λ in the above
+box with λ_i≥−m_i/4, the literal old-calendar laws
+
+    p_i^{k,λ}=(1−λ_i)p_i^k+λ_iδ_{τ_i^k}        (UA8)
+
+are probabilities: away from τ_i^k they remain nonnegative, and at
+that date their mass is at least m_i/2−m_i/4=m_i/4. They have finite
+support, remain independent, add no clock, delete no tester, and retain
+original Never. This is an actual finite-law move of old stopping mass.
+
+On the OLD common quantile domain their densities are
+
+    r_i^{k,λ}=(1−λ_i)r_i^k
+                  +λ_i 1_{J_{i,k}}/|J_{i,k}|.  (UA9)
+
+The normalized interval indicators converge strongly in L¹ because
+their endpoints converge and their limiting lengths are positive.
+Consequently these nonnegative densities have a uniform L∞ bound
+(for example |1−λ_i|n+2|λ_i|/|J_i| for all sufficiently large k),
+and converge weak-*
+to the corresponding density of q_i^λ. Their product and every opponent
+product converge weak-* by the same rectangle-test argument as the
+source. The ORIGINAL maps π_k and their kernels are unchanged, so their
+a.e./L¹ outcome and moving-response convergence is still valid. The
+split into fixed-kernel weak-* convergence plus moving-kernel L¹ error
+therefore proves
+
+    U_i(p^{k,λ})→U_i(q^λ),
+    b_i(p^{k,λ})→b_i^T(q^λ).                    (UA10)
+
+For the cap upper bound take any original maximizing test sequence and
+extract a convergent OLD location in T, or the separate Never label;
+the unchanged moving-kernel proof applies. For the lower bound retain
+the source's approximations to each fixed T-test and Never. In fact,
+within the cap-stable box, every maximizing sequence eventually uses
+the displayed τ_i^k: any other limiting location contradicts (UA4),
+and convergence to a retained midpoint forces the unique original
+midpoint by (UA2). None of these modifications puts mass at the
+non-atomic last finite test c, so no extra c⁺ response is needed.
+Equivalently their limiting complete caps also equal those on X⁺,
+by the explicitly proved duplication (UA6a).
+
+For EVERY fixed λ in that open box, (UA8) is actual and hence has
+D(p^{k,λ})≥δ. Taking the limits in (UA10) yields
+
+    D_T(q^λ)≥δ.                                (UA11)
+
+This explicitly uses the original finite witnessing sequence. It does
+not claim arbitrary signed changes of an annotated carrier pair are
+realizable, or that one finite profile realizes all counterfactual laws.
+
+### A multiaffine branch cannot carry positive global debt
+
+Because all complete caps stay at τ_i in the open box,
+
+    D_T(q^λ)=F(λ)
+      :=Σ_i[V_i(τ_i,q_-i^λ)−U_i(q^λ)].          (UA12)
+
+F is a multiaffine polynomial in λ_1,…,λ_n. Each fixed-response
+payoff is affine separately in every opponent law; each prescribed
+payoff is affine separately in every law. Thus each λ variable occurs
+with degree at most one in every monomial, and total degree is at most n.
+Equations (UA1),(UA11),(UA12) make zero an INTERIOR local minimum of F,
+with F(0)=δ.
+
+An interior local minimum of a multiaffine polynomial is constant.
+Indeed, if F−F(0) is not zero, let H_k be its lowest nonzero homogeneous
+Taylor part, 1≤k≤n. Its nonconstant square-free monomials have average
+zero over the independent sign cube {−1,+1}^n and are linearly
+independent there. Hence H_k has a strictly negative value at some
+sign vector h. For sufficiently small ε>0,
+
+    F(εh)−F(0)=ε^k H_k(h)+O(ε^(k+1))<0,       (UA13)
+
+contradicting the local minimum. This argument permits identically
+zero coordinate directions and does not require a nonzero first
+derivative or a nonsingular cap Jacobian.
+
+But the polynomial F has the exact algebraic endpoint
+
+    F(1,…,1)=0.                                (UA14)
+
+At that endpoint every displayed prescribed law is the pure clock
+δ_{τ_i}; each displayed response τ_i is identical to its prescribed
+own law, so V_i(τ_i,q_-i^1)=U_i(q^1). This identity includes ties,
+Never, and the all-Never payoff zero.
+
+IMPORTANT: (UA14) does NOT assert D_T(q^1)=0, nor that the τ_i remain
+complete caps at this distant endpoint. Only the globally defined
+POLYNOMIAL selected in (UA12) is evaluated there. It would be constant
+if it had an interior local minimum; its endpoint zero would then
+contradict F(0)=δ>0. Thus a nonconstant leading part exists and (UA13)
+actually applies inside the cap-stable neighborhood.
+
+Choose ε and let η=δ−D_T(q^{εh})>0. By (UA10), for large enough k the
+literal finite profile (UA8) satisfies
+
+    D(p^{k,εh})<δ−η/2.                         (UA15)
+
+This contradicts the TRUE actual global infimum. It is an actual
+finite-amplitude coupled change of existing finite/Never mass, not a
+formal directional inequality with unmeasured cap leakage. Therefore
+(UA3) is excluded. ∎
+
+### Surviving source geometry and precise next question
+
+At every positive represented global minimum, SOME player's cap is
+either attained at more than one distinct clock, or has no unique
+maximizing clock carrying positive mass in its owner's prescribed law.
+The latter includes a unique zero-mass accumulation cut and a unique
+finite/Never response outside the point-atom support. A zero-mass cut
+may still belong to the TOPOLOGICAL support of the owner's law.
+The exclusion does not say every
+owner's debt is zero, and does not eliminate responsive multi-cap cycles.
+
+The minimal failed generalization is replacing (UA3) by mere unique
+attainment: without isolation, (UA4) need not hold and an o(ε) cap
+switch can dominate an ε^k polynomial decrease. Another invalid
+generalization identifies equivalent responses at q without showing
+their payoff FUNCTIONS coincide throughout the signed neighborhood.
+
+The next substantive question is whether the genuine all-law minimum
+forces a joint reweighting inside a multi-cap active face, or forces one
+active response onto a non-isolated/off-support boundary that a separate
+actual calendar operation consumes. A first-root responsive cycle alone
+does not supply either implication. The requested independent check is
+the isolation/complete-cap lemma (UA2)–(UA6), signed actual transport
+(UA7)–(UA11), and the distinction between polynomial endpoint (UA14)
+and actual cap debt at that endpoint.
+
+Independent initial stress-test: CODEX_NOETHER checked the actual
+marked-clock isolation, complete c/c⁺ comparison, retained-atom signed
+density transport, and the algebraic endpoint distinction. The review
+agreed with those steps under the unique-POINT/on-support hypothesis.
+This is an internal candidate checkpoint, not authorization to export
+or a claim of full source consumption.
+
+## Response-faithful triple exchange: one law may change, not two
+
+**Status.** Exact ordinary-mathematics whole-law constraint, not a debt
+consumer or export candidate. It was derived while trying to turn
+NOETHER's sharp same-profile triple inequality into a comparison involving
+actual complete cap responses. The coefficient CHANGES under a unilateral
+law replacement; applying the old quarter coefficient to response copies
+is false. This is a new obstruction to that proposed paid-cap inference,
+not another optimization trap or claimed equilibrium class.
+
+The narrow source search in `MathUE/PMFProduct/`, together with
+`Quitting/Paths/StoppingLawOperationalDistance.lean` and
+`Quitting/Paths/FiniteCalendarRawPredicates.lean`, found no declaration
+for cross-profile triple coordinate exchange. The actual full-cap and
+one-law payoff semantics already inspected above remain the input. No
+outer infimum differentiation is used.
+
+### The one-coordinate cross-profile inequality
+
+Let P,Q be independent complete stopping-law profiles on ℕ∪{Never},
+differing ONLY in player m's law. Finite mass need not have finite
+support. Put t_a(P)=P(first coalition I\{a}) and
+
+    e(P)=P(finite first coalition of size 1, 2, or 4).
+
+Define the same coordinates for Q. For ANY distinct a,b∈I,
+
+    t_a(P)t_b(Q)≤e(P)e(Q).                       (RC1)
+
+In particular Q may replace the entire law of m by a pure finite cap
+clock or Never. This is about the SAME unchanged opponent laws, not
+two independently selected payoff or response witnesses.
+
+Write I={a,b,c,d}, choosing c in the two shared participants so that
+c≠m. Sample ordered independent copies X∼P, Y∼Q. On the domain that
+X first triple I\{a} occurs at u and Y first triple I\{b} at v,
+the finite dates and inequalities are
+
+    X_b=X_c=X_d=u<X_a,
+    Y_a=Y_c=Y_d=v<Y_b.
+
+For u<v, swap c's two clocks: the output first coalitions are
+({b,d},{c}). For u>v, the SAME swap gives ({c},{a,d}). Since P_c=Q_c,
+this is a measure-preserving involution of P×Q, not merely a
+coordinate permutation of two different laws.
+
+For u=v, if b≠m swap b, giving ({c,d},I); if b=m, swap a instead,
+giving (I,{c,d}). The chosen unshared player is not m, so its
+marginals also agree and this swap preserves P×Q. The three branch
+images have respectively (pair,singleton), (singleton,pair), and
+either (pair,grand) or (grand,pair). They are disjoint ORDERED outcome
+categories. Each branch map is injective, with fixed involutive inverse
+once its category is read. Consequently the entire domain, of measure
+t_a(P)t_b(Q), injects measure-preservingly into the event that BOTH
+outputs are exceptional finite nontriples. Its measure is e(P)e(Q),
+proving (RC1). Never may be any absent clock, but u,v are finite; the
+strict inequalities and all equal-date cases above remain literal.
+
+The same proof works on a compact marked calendar with an isolated
+Never label: all clock comparisons and swaps are measurable, and a
+triple has one actual earliest finite date. Alternatively, actual
+same-opponent-law finite witness pairs transport the finite outcome
+coordinates and (RC1) passes to their limit. This observation does
+not authorize arbitrary unrelated annotated carrier pairs.
+
+### Coefficient one is sharp, even for a pure unilateral response
+
+Fix c,d surely at date zero and b half at zero, half at Never. Let
+P_a=Never and Q_a=date zero surely, leaving every opponent unchanged.
+Then P has first triple I\{a} with probability1/2 and pair {c,d}
+with probability1/2. Q has first triple I\{b} with probability1/2
+and grand coalition with probability1/2. Thus
+
+    t_a(P)t_b(Q)=1/4=e(P)e(Q).                   (RC2)
+
+There is no universal smaller coefficient in (RC1). In particular,
+the same-profile e²/4 inequality must NOT be applied across this
+prescribed/cap-response pair. If a payoff realization is desired,
+give a payoff1 when a belongs to the quitting coalition and0
+otherwise; pure date zero is a complete cap response to these
+opponents. This is an exact response-mode falsifier, not a positive
+global-gap example.
+
+For two response copies changing DIFFERENT players, even coefficient
+one with only their exceptional masses can fail. Start all four clocks
+surely at zero. Let Q withdraw a to Never and R withdraw b to Never.
+They realize distinct pure triples, so t_a(Q)t_b(R)=1 although
+e(Q)=e(R)=0. The coupled two-owner withdrawal profile realizes the
+pair {c,d}; the base realizes the grand coalition. The missing equal-
+date swap transfers its product measure to these TWO HYBRID profiles,
+not to Q×R. NOETHER independently owns the resulting common-source
+two-coordinate cap-family identity; it is not duplicated here.
+
+### Genuine global use and the remaining unpaid step
+
+At the actual produced marked global minimum q with D(q)=δ>0,
+let τ be any complete cap response of m and let q^{m,τ} replace only
+that player's full law. The source finite-atomic transport produces
+actual witnesses with ALL T⁺ finite tests and Never retained. Its
+own cap is unchanged because its opponents are unchanged; its own
+prescribed payoff equals the displayed response payoff. Thus
+
+    d_m(q^{m,τ})=0,
+    Σ_{j≠m}d_j(q^{m,τ})=D(q^{m,τ})≥δ.          (RC3)
+
+The last inequality is TRUE whole-profile global minimality, not a
+fixed-root floor. Alongside (RC3), (RC1) constrains prescribed q
+versus THAT same-opponents response profile. For example, if
+t_a(q)>0 and e(q)>0, then every b≠a satisfies
+
+    t_b(q^{m,τ})≤e(q)e(q^{m,τ})/t_a(q).        (RC4)
+
+A response that tries to put substantial mass on an incompatible
+triple must pay exceptional finite outcome mass. That is a genuine
+response-law constraint, but exceptional OUTCOME mass is not by
+itself a summed-DEBT payment. Arbitrary signed rewards allow that
+mass to be profitable or cap-raising. I have not obtained a universal
+inequality converting (RC4) into a lower actual cap bill than the
+original δ, and no response arrow has been temporalized into a
+private-law correlation mechanism.
+
+The finite active-clock Nash bootstrap also fails at this exact
+boundary. If all current cap maximizers are supported isolated atoms,
+their set is finite (otherwise its accumulation point would be a
+zero-own-point-mass maximizer). A finite game using those pure clocks
+and the old complete law as actions has a Nash profile. But it only
+annuls regret against that finite action set; a previously nonmaximizing
+empty or late T-test can become maximizing at the distant endpoint.
+The local uniform gap from (UA4) does not control that endpoint.
+Adding every current test to the action set is not a cure: if its
+last empty c becomes prescribed, c⁺ no longer duplicates c.
+
+This is the already tracked finite-menu/full-cap boundary, not a new
+producer. I inspected
+`quittingContinuationBestResponseValue_finiteDeadlineTimingProfile_eq_max`
+and
+`quittingFiniteDeadlineTimingProfile_pureTime_eq_never_add_of_le`
+in `UniformEquilibrium/Quitting/Terminal/FiniteDeadlineFullReplyCap.lean`.
+They express the exact missing late candidate as Never payoff plus
+opponent-Never product times the own singleton. The nearby
+`FiniteDeadlineBoundaryResponseCollision.lean` preserves a
+counterfactual collision cylinder, not a profitable prescribed repair.
+Therefore I am not claiming that Nash on the present active clocks
+consumes the surviving source.
+
+The next concrete question is to couple (RC1)–(RC4) with an ACTUAL
+joint old-law change and its complete cap ledger, rather than with
+the same-profile quarter coefficient or finite restricted regret.
+Any such repair must control the newly exceptional response outcomes
+and the hybrid two-owner profile; neither is furnished by the law
+inequality alone.

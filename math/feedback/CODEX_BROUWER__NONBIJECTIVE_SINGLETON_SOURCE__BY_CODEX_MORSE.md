@@ -422,3 +422,219 @@ is a legal simultaneous finite-atomic variational inequality at a represented
 regularized minimum. It neither produces a negative direction nor permits
 arbitrary changes of the marked calendar. In particular it does not yet
 consume a positive unregularized global debt minimum or prove UE.
+
+## Narrow overlap/value check of the supported-unique-cap exclusion
+
+This is an overlap check, NOT another independent proof review or export
+verdict. The claim checked is the final unregularized section: a supplied
+marked positive GLOBAL minimum cannot have, for every owner, a unique
+complete maximizing clock carrying positive prescribed own mass. Finite
+retained clocks and the separately labelled Never are both allowed.
+
+The earlier finite same-tail selector in this notebook already obtains an
+EXISTENTIALLY reselected first-row minimum maximizing the sum of squared
+rates. If any mixed rate survives, a responsive cap tie obstructs it;
+otherwise that reselected row is a pure collision. It does not exclude
+the original represented minimum. It also does not test arbitrary later
+supported response clocks by signed whole-law changes. Thus the new
+exclusion is a genuinely stronger POINTWISE restriction on every supplied
+marked minimum, although the tied-cap conclusion adds little in the
+already reselected fully mixed first-row branch.
+
+The nearest inspected generic declaration is
+`Math.IsCoordinateAffine.exists_vertex_minimum` in
+`MathUE/Analysis/CoordinateAffineBoxMinimum.lean`, under its actual import
+`MathUE.Analysis.LowerBoxBoundarySmoothDrift`. It moves a global box
+minimum of a coordinate-affine function to a vertex. The single-coordinate
+interpolation and endpoint-decrease lemmas in the same file are the
+elementary algebra used by the earlier selector. This existing generic
+tool does not establish a complete-cap stable neighborhood, transport
+signed mixtures on the old realizing calendars, or supply the endpoint
+identity for the fixed-response polynomial. Those are the substantive
+quitting adapters here; the multiaffine polynomial fact is not itself
+new research.
+
+A narrow search of `Diagnostics/Quitting/StoppingLaw`, nearby diagnostic
+minimum/regret files, and `MathUE/Optimization` found the minimum-response
+chord and fixed-witness/supremum-switch layers, but no existing declaration
+with this supported-unique-complete-cap adapter. In particular the
+one-law minimum chord is not a simultaneous open box, and the coordinate
+box theorem does not make a distant selected-response endpoint actual
+Nash. The proposed proof correctly uses that endpoint only algebraically.
+No Lean build or unrestricted whole-conjecture review was performed.
+
+## Second independent falsification review of the final cap-atom artifact
+
+Verdict: **PASS**, with no unresolved mathematical objection to
+`exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md`, SHA256
+`29e55dee03a1cb70f9a470f5a3a9f646a1f3029c1108a5d5c384fe6c16471300`.
+I read all 511 lines of that complete artifact, independently checked its
+unrestricted-clock producer and final exclusion, and attempted to break
+the isolated-cap gap, signed original-chart transport, last finite
+tester, and distant polynomial endpoint. This is ordinary mathematical
+review, not a Lean compilation or kernel seal. The preceding overlap
+check was not a proof review; this entry is the full second review.
+
+### Exact claim reviewed
+
+For arbitrary bounded signed rewards on any NONEMPTY finite player
+set, let delta be the infimum of SUM debt over all independent complete
+natural-date/Never stopping laws, with full unrestricted behavioral caps.
+Assume delta>0. From ANY specified finite-law minimizing sequence, the
+artifact extracts its own original-witness marked calendar and attains
+the same debt numerically there. EVERY marked minimum produced by that
+construction has some owner with either at least two distinct complete
+maximizing test points, or a unique maximizing point carrying ZERO own
+point mass. The alternative also holds after retaining the separate
+empty finite test c-plus. It does not claim arbitrary marked laws are
+attainable, a positive gap exists, or the surviving branch is consumed.
+
+### Falsifying the marked producer
+
+The finite-law infimum reduction uniformly couples all unilateral
+responses while censoring only small late FINITE mass to Never. Thus
+it neither relies on opponent tightness nor drops late tests. The old
+mixture-quantile densities are bounded by n and keep independent raw
+coordinates; the chart is not a common random signal. Their weak-star
+limits retain the marginal mass, nonnegativity and upper bound.
+
+The endpoint and finite-test Hausdorff limits serve different purposes
+and are both needed. A component (a,b) of the endpoint complement is
+the limit of one entire OLD atom interval. Only its midpoint can be
+an interior finite test. The limiting densities are constant there,
+so every positive prescribed finite atom is exactly such a midpoint.
+Endpoint points not in the test set form at most a countable set:
+two endpoint points strictly inside one test-complement component
+would force an old atom midpoint between them. They are therefore
+Lebesgue-null. The final cut c is not an interval midpoint and has
+zero own mass. Never remains a separate isolated label, even if c=1.
+
+I tried the two unstable-kernel cases explicitly. Distinct raw
+coordinates either share one retained atom interval, where the old
+tie is eventually exact, or have a limiting endpoint strictly between
+them, where the old order is eventually exact. Equal raw coordinates
+and retained endpoints are null. If a moving response approaches a
+retained midpoint, no EMPTY old response cut can enter that retained
+open interval: the old response is eventually precisely its original
+atom date. At every other limiting finite test the collapsed law has
+no point atom, so the moving-order exceptional set is null. These
+facts establish the stated L1 kernel convergence, including the last
+finite cut c. Product weak-star convergence is valid here because
+rectangle tests factor and the product densities have one uniform
+bound; it is not asserted for arbitrary correlated weak limits.
+
+The fixed-kernel/moving-kernel split consequently proves payoffs and
+ALL caps converge. Taking an actual old maximizing sequence gives
+the cap upper bound; approximating each fixed limiting test gives
+the lower bound. Taking maxima before these two arguments would be
+invalid, but the artifact does not do that. No earlier empty finite
+test is invented before a first original date-zero atom.
+
+### The two uses of positive own mass
+
+Positive finite own mass implies positive mixture mass and hence a
+retained midpoint isolated in T. Never is isolated by construction.
+Thus deletion of the unique maximizing point leaves a COMPACT
+complement on which the continuous response value has strictly smaller
+maximum. The uniform FULL-response gap is valid. A unique zero-mass
+accumulation maximizer would not have that gap; the theorem excludes
+that attempted generalization explicitly. The complement is nonempty:
+the separate last finite point c and Never already give two test labels.
+
+Positive mass also makes signed reweighting legal. For fixed lambda
+near zero, the target mass at an OLD atom is
+
+    m_i^k + lambda_i(1-m_i^k).
+
+Since m_i^k>=m_i/2 eventually and lambda_i>-m_i/4, this is at least
+m_i/4 for negative lambda_i. All remaining masses have positive factor
+1-lambda_i. Coordinates already pure at their selected atom simply
+do not move. The original Never atom is used as Never, not replaced
+by a late finite date. No negative probability or shared mixing flag
+appears. Taking a small TWO-SIDED box, rather than only [0,1]^n,
+is essential to the interior-minimum argument.
+
+### Original-chart transport and every response
+
+The selected finite atom interval has positive limiting length, and
+the original date's own mass converges to m_i>0. The same is true for
+the Never interval when selected. The normalized interval indicators
+converge strongly in L1; after a fixed signed reset the OLD-chart
+densities remain nonnegative and uniformly bounded, although their
+old sum need no longer be exactly n. The convergence argument needs
+only that bound, not a freshly recomputed mixture chart.
+
+All collapse maps, actual response-date sets, and response kernels
+are UNCHANGED. In fact all old positive masses remain positive in
+the chosen open box. Consequently the moving-test convergence from
+the producer applies to the new bounded densities, with both the
+limsup maximizing-test and liminf fixed-test arguments intact.
+The extra c-plus is harmless for a proved reason: q_i(c)=0 and no
+selected reset targets c, so q_i^lambda(c)=0 throughout the box.
+At c and c-plus each finite opponent exit is already strictly earlier;
+on all-opponent-Never the deviator alone quits. Their response functions
+coincide throughout this variation. Neither is equated with Never.
+This remains valid for arbitrary signed singleton rewards and selected
+positive Never atoms.
+
+For EACH fixed lambda in the box there is a sequence of genuine
+independent finite original-calendar laws with convergent FULL caps
+and payoffs. Its debt is >=delta at every index. Passing to the limit
+gives the required global lower bound for the represented signed
+variation. No realization of an arbitrary annotation or simultaneous
+finite profile for all counterfactual lambdas is needed.
+
+### Multiaffine branch and the endpoint overclaim test
+
+Uniform response coupling costs at most 2M times the sum of opponent
+TV changes. The chosen box makes twice that error smaller than every
+old complement gap, so all complete caps remain at their displayed
+unique points there. The actual SUM debt equals ONE fixed-response
+polynomial F in that box. Every lambda appears with degree at most
+one, including in prescribed payoff, because the laws vary separately
+and independently.
+
+The lowest nonzero Taylor part of a nonconstant multiaffine F is a
+nonzero combination of distinct nonconstant sign-cube characters.
+It has mean zero and cannot vanish on every sign vector, so it has
+a strictly negative sign value. A sufficiently small signed step
+stays in the legal cap-stable box and makes F strictly smaller.
+This argument covers higher-order flatness and zero coordinate
+directions; vanishing first derivatives alone are not being used.
+
+At (1,...,1) the displayed law of every owner is precisely its
+displayed response clock. Hence EACH summand of the globally defined
+fixed-response polynomial vanishes algebraically, including coincident
+clocks, Never, and the all-Never tuple. This proves F is nonconstant
+when F(0)=delta>0. It does NOT prove that the selected response stays
+optimal at that distant point, that actual debt there is zero, or
+that the tuple is Nash. The artifact makes exactly this distinction.
+The actual contradiction is at the small signed step, transported
+to one sufficiently large original finite witness below delta.
+
+The three boundary tests are exact: the participant-one/passive-zero
+grand profile has zero debt and unique supported caps; the half-date-zero/
+half-Never profile has positive PROFILE debt with a legal local descent;
+and the independent uniform compact-clock profile has a unique
+zero-point-mass maximizer in its topological support with no uniform
+gap. They invalidate the three tempting hypothesis weakenings, not
+the reviewed universal theorem.
+
+### Source truth and scope
+
+The named censoring, complete-law/behavioral cap correspondence,
+one-law payoff/outcome affinity, and finite-menu uniform target
+criterion were re-read under the actual imports in
+`Paths/LateFiniteStoppingLawCensor.lean`,
+`Paths/StoppingLawOperationalDistance.lean`,
+`Diagnostics/Quitting/StoppingLaw/TerminalSemanticStoppingLawDebtConvexity.lean`,
+and `Terminal/FiniteMenuFullProfileApproximation.lean`. The existing
+mixture declarations really require coefficients in [0,1]; the new
+two-sided transport is proved directly and does not cite them as
+authorization for negative coefficients.
+
+No counterexample, silent tester identification, lost late response,
+illegal negative reset, public correlation, or endpoint cap overclaim
+was found. The precise surviving alternative remains multiple complete
+test-point maximizers OR a unique zero-own-point-mass maximizer for
+at least one owner. Its downstream global consumer remains open.
