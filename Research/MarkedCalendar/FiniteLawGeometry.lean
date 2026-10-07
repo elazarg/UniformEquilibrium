@@ -427,4 +427,130 @@ theorem ae_mem_limit_menu_of_mem_endpoints
   by_contra hxT
   exact hx (mem_exceptionalEndpoints_of_notMem_limit_menu source subsequence hE hc hT hxE hxc hxT)
 
+private theorem integral_indicator_chartLaw (laws : ι → FinDist (Option ℕ)) (i : ι)
+    (s : Set unitInterval) (hs : MeasurableSet s) :
+    ∫ x, s.indicator (fun _ => (1 : ℝ)) x ∂(chartLaw laws i : Measure unitInterval) =
+      ∫ x in s, density laws i x ∂volume := by
+  change ∫ x, s.indicator (fun _ => (1 : ℝ)) x
+    ∂volume.withDensity (fun x => ENNReal.ofReal (density laws i x)) = _
+  rw [integral_withDensity_eq_integral_toReal_smul
+    (measurable_density laws i).ennreal_ofReal
+    (Eventually.of_forall fun _ => ENNReal.ofReal_lt_top)]
+  rw [← integral_indicator hs]
+  apply integral_congr_ae
+  apply Eventually.of_forall
+  intro x
+  change (ENNReal.ofReal (density laws i x)).toReal • s.indicator (fun _ => (1 : ℝ)) x =
+    s.indicator (density laws i) x
+  rw [ENNReal.toReal_ofReal (density_nonneg laws i x), smul_eq_mul]
+  by_cases hx : x ∈ s
+  · simp only [Set.indicator_of_mem hx, mul_one]
+  · simp only [Set.indicator_of_notMem hx, mul_zero]
+
+private theorem eventually_density_eq_on_inner_interval
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints)) {a b q r : ℝ}
+    (hgap : Math.Topology.IsGap limit.endpoints a b) {x : unitInterval}
+    (haq : a < q) (hqx : q < (x : ℝ)) (hxr : (x : ℝ) < r) (hrb : r < b) :
+    ∀ᶠ k in atTop, ∀ (i : ι) (y : unitInterval), q < (y : ℝ) → (y : ℝ) < r →
+      density (source (subsequence k)) i y = density (source (subsequence k)) i x := by
+  have hax := haq.trans hqx
+  have hxb := hxr.trans hrb
+  have hxE : (x : ℝ) ∉ limit.endpoints := by
+    intro hx
+    rcases hgap.2.2.2 _ hx with h | h
+    · exact (not_le_of_gt hax) h
+    · exact (not_le_of_gt hxb) h
+  have hxregular := notMem_exceptionalEndpoints_of_notMem limit hxE
+  obtain ⟨hlower, hupper⟩ := limit.endpoints_of_gap hgap hax hxb
+  have hlowerq : limit.lowerEndpoint x < q := by rwa [hlower]
+  have hrupper : r < limit.upperEndpoint x := by rwa [hupper]
+  filter_upwards [eventually_notMem_sourceEndpoints source subsequence hE hxE,
+    (MathUE.MarkedCalendar.Calendar.tendsto_lowerEndpoint hE hxregular).eventually
+      (gt_mem_nhds hlowerq),
+    (MathUE.MarkedCalendar.Calendar.tendsto_upperEndpoint hE hxregular).eventually
+      (lt_mem_nhds hrupper)] with k hk hlow hupp
+  obtain ⟨hsourcegap, hsourceleft, hsourceright⟩ :=
+    (calendar (source (subsequence k))).gap_of_not_mem hk
+  obtain ⟨values, _, hvalues⟩ :=
+    density_constant_on_calendar_gap (source (subsequence k)) hsourcegap
+  intro i y hqy hyr
+  exact (hvalues i y (hlow.trans hqy) (hyr.trans hupp)).trans
+    (hvalues i x hsourceleft hsourceright).symm
+
+/-- Fixed inner-interval tests determine the source densities on the same whole subsequence.
+The gap may be finite or the actual Never interval; no new extraction is made. -/
+theorem exists_tendsto_density_on_limit_gap
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints)) (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    {a b : ℝ} (hgap : Math.Topology.IsGap limit.endpoints a b) :
+    ∃ value : ℝ, (0 ≤ value ∧ value ≤ (Fintype.card ι : ℝ)) ∧
+      ∀ x : unitInterval, a < (x : ℝ) → (x : ℝ) < b →
+        Tendsto (fun k => density (source (subsequence k)) i x) atTop (𝓝 value) := by
+  have hab := hgap.2.2.1
+  let x : unitInterval := ⟨(a + b) / 2, by
+    have ha := (limit.endpoints_subset hgap.1).1
+    have hb := (limit.endpoints_subset hgap.2.1).2
+    constructor <;> linarith⟩
+  have hax : a < (x : ℝ) := by change a < (a + b) / 2; linarith
+  have hxb : (x : ℝ) < b := by change (a + b) / 2 < b; linarith
+  obtain ⟨q, haq, hqx⟩ := exists_between hax
+  obtain ⟨r, hxr, hrb⟩ := exists_between hxb
+  let first : unitInterval := ⟨q, (limit.endpoints_subset hgap.1).1.trans haq.le,
+    hqx.le.trans x.property.2⟩
+  let last : unitInterval := ⟨r, x.property.1.trans hxr.le,
+    hrb.le.trans (limit.endpoints_subset hgap.2.1).2⟩
+  let inner : Set unitInterval := Ioo first last
+  have hinner : MeasurableSet inner := measurableSet_Ioo
+  have hvolume : 0 < (volume : Measure unitInterval).real inner := by
+    change 0 < ((volume : Measure unitInterval) (Ioo first last)).toReal
+    rw [unitInterval.volume_Ioo, ENNReal.toReal_ofReal]
+    · change 0 < r - q
+      linarith
+    · change 0 ≤ r - q
+      linarith
+  have hconstant := eventually_density_eq_on_inner_interval source subsequence hE
+    hgap haq hqx hxr hrb
+  have hformula : ∀ᶠ k in atTop,
+      ∫ y, inner.indicator (fun _ => (1 : ℝ)) y
+        ∂(chartLaw (source (subsequence k)) i : Measure unitInterval) =
+      (volume : Measure unitInterval).real inner * density (source (subsequence k)) i x := by
+    filter_upwards [hconstant] with k hk
+    rw [integral_indicator_chartLaw _ _ inner hinner]
+    calc
+      _ = ∫ _ in inner, density (source (subsequence k)) i x ∂volume := by
+        apply integral_congr_ae
+        filter_upwards [ae_restrict_mem hinner] with y hy
+        exact hk i y hy.1 hy.2
+      _ = _ := by rw [setIntegral_const, smul_eq_mul]
+  have hweak := ProbabilityMeasure.tendsto_integral_of_tendsto_of_le_smul base
+    (Fintype.card ι : NNReal) hlaw
+    (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
+    (inner.indicator (fun _ => (1 : ℝ))) ((integrable_const _).indicator hinner)
+  let value := (∫ y, inner.indicator (fun _ => (1 : ℝ)) y ∂(law : Measure unitInterval)) /
+    (volume : Measure unitInterval).real inner
+  have hvalue : Tendsto (fun k => density (source (subsequence k)) i x) atTop (𝓝 value) := by
+    apply (hweak.div_const ((volume : Measure unitInterval).real inner)).congr'
+    filter_upwards [hformula] with k hk
+    rw [hk, mul_div_cancel_left₀ _ hvolume.ne']
+  refine ⟨value, ⟨?_, ?_⟩, ?_⟩
+  · exact le_of_tendsto_of_tendsto tendsto_const_nhds hvalue
+      (Eventually.of_forall fun k => density_nonneg (source (subsequence k)) i x)
+  · exact le_of_tendsto_of_tendsto hvalue tendsto_const_nhds
+      (Eventually.of_forall fun k => density_le_card (source (subsequence k)) i x)
+  · intro y hay hyb
+    obtain ⟨q', haq', hq'⟩ := exists_between (lt_min hax hay)
+    obtain ⟨r', hr', hr'b⟩ := exists_between (max_lt hxb hyb)
+    have heq := eventually_density_eq_on_inner_interval source subsequence hE hgap
+      haq' (hq'.trans_le (min_le_left _ _)) ((le_max_left _ _).trans_lt hr') hr'b
+    apply hvalue.congr'
+    filter_upwards [heq] with k hk
+    exact (hk i y (hq'.trans_le (min_le_right _ _))
+      ((le_max_right _ _).trans_lt hr')).symm
+
 end GameTheory.MarkedCalendarChart
