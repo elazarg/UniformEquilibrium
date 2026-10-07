@@ -443,3 +443,115 @@ It does not itself contradict the strict singleton margins of the
 original minimum: earlier opponents can give m larger passive payoffs.
 The complete source restriction is accepted; its surviving common-date
 geometry still needs a full-cap consumer.
+
+## Focused EA1–EA5 review, with EA6 boundary, 2026-10-08
+
+PASS for the ordinary-mathematical source exclusion in “Earliest active
+zero-mixture cap: simultaneous conditioning exclusion” of
+`notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`. I read EA1–EA6,
+reopened the exact marked construction and full response transport in
+`exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`, and rechecked
+`minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+under its imports. This is the requested focused falsification, not a
+standalone artifact/export gate or Lean check. No unresolved mathematical
+objection remains in this scope.
+
+The accepted statement is precise: τ is the least point of the UNION of
+ALL four complete active response sets, it is finite, its MIXTURE atom
+is zero, and EVERY owner's final strict-late probability e_i is positive.
+At a produced true SUM minimum with δ>0 those hypotheses contradict one
+actual final cap equalling that owner's singleton reward. No uniqueness
+or own cap mass is needed. If an e_h vanishes, only the stated sure-early
+and multiple-maximizer output survives; that branch is not consumed.
+
+The key change from the common-zero consumer is valid. At each fixed
+earlier cut u_n, every nonoriginal product term contains a finite early
+clock and therefore pays the SAME constant for ALL responses t>u_n.
+The unchanged term has a strictly positive multiplier. Thus the full
+upper response functions, not merely one selected branch, undergo a
+common positive affine transformation. This preserves arbitrarily many
+active upper responses and all their ordering against nonactive upper
+responses. There is no need to infer a uniform gap from uniqueness or
+to bound nonisolated near-cap tests individually.
+
+The separate compact lower set T∩[0,a_n], with u_n<a_n<τ, has no
+active point for ANY owner by the definition of τ. Its positive gap
+can shrink with n; the proof uses a different small signed box for each
+n and never needs a uniform-in-n gap. This covers tests moving upward
+through the cuts, left-isolated τ, gaps of T, and even an empty lower
+set. Choosing real cuts in a gap does not insert a new clock: the initial
+old segment is unchanged there. Its raw boundary is an old limiting
+endpoint, or the right endpoint of a retained interval. The final zero-
+mixture boundary τ is raw-null. These are exactly the boundaries for
+which whole old finite date intervals approximate the cut in L¹.
+
+Both signs are legal: the conditional-event likelihood is 1−λ off the
+event and 1+λ(1/e−1) on it. Positive normalizers and a fixed sufficiently
+small box make both bounded and nonnegative. Original endpoint cuts
+converge; their indicators converge strongly in L¹. Multiplying the
+bounded weak-* densities by these likelihoods preserves the original
+weak-* limit against each L¹ test. Original product and arbitrary moving
+response kernels remain unchanged, so the actual FULL-cap transport,
+including Never, follows rather than being supplied as an interface.
+All changed laws still have zero c mass; c⁺ duplicates c. No nonatomic
+point receives a new atom in this bounded transport.
+
+The distant selected endpoint (EA3) is correctly NOT yet claimed to be
+an actual minimum. The later passage is what makes the theorem a consumer.
+Because the final e_i are bounded away from zero and q_i(τ)=0,
+ν_i^n→ν_i in total variation. This gives the selected identity at ν
+and the direct final actual-carrier realization. The exact expansion
+against early submeasures strictly before τ then works on the CLOSED
+upper test set, including τ itself and Never. The original selected
+τ_i remain maximizers on that whole upper set. At τ and every earlier
+finite test the new payoff is s_i. Since the upper selected payoff is
+at least its value at τ, these earlier tests cannot exceed it. Thus
+ALL final full caps are derived, even when later caps exceed their
+own singleton rewards. For one earliest owner m, the selected τ_m=τ
+has cap exactly s_m. Only now do selected debt and actual debt coincide
+at δ, allowing the checked singleton-margin contradiction. No Nash tail
+or conditional debt-minimum assumption enters this identification.
+
+I attempted the following boundary falsifiers. A first finite tester
+with zero mixture mass already gives the earliest owner's cap s_m and
+contradicts the original minimum margin; the proof handles it separately.
+A final τ=c makes ν all-Never but still retains Never as a different
+response: the upper comparison controls it, so there is no omitted last
+finite test. A τ left-isolated in T causes the conditioning laws to
+stabilize before the real cuts reach τ, not a failure of convergence.
+Partial active sets and distinct later active points do not break the
+positive-affine ordering argument. Atomless participant-indicator laws
+have positive debt but are not global minima and therefore do not falsify
+the result. Zero rewards have δ=0 and do not permit its final contradiction.
+
+EA6 is an exact and important falsifier of a STRONGER statement. Its
+uniform 0-law then uniform 1-law has U=(0,1,1,1), B=(1,1,1,1),
+D=1, earliest active τ=1/4, and e_0=0. All three other owners have
+every upper finite test and Never maximizing, as EA5 predicts. Earlier
+cut masses e_0^n are positive but tend to zero; their conditional density
+bound diverges and their laws would create a new atom at a nonisolated
+point. This is NOT bounded old-chart transport. I checked the full
+finite payoff chronology: player0 needs a response at least2N (or
+Never) for cap1, while each other player needs at leastN (or Never).
+All-Never has true debt0. Thus EA6 neither supplies a positive-minimum
+counterexample nor permits removing the FINAL strict-late hypothesis.
+
+The all-unique corollary is also accepted. If e_h=0, the other three
+owners have distinct c and Never maximizers, contradicting uniqueness.
+Thus an all-unique earliest cap cannot have zero mixture mass. For
+completeness, an earliest cap equal to Never with POSITIVE mixture mass
+cannot occur either: all four cap sets would be {Never}; a zero own
+Never mass would make another owner's Never response tie c, while all
+four positive own Never masses are excluded by the already accepted
+cap-atom theorem. Hence the earliest cap is finite, has positive mixture
+mass, and is isolated. This does not make every later cap isolated or
+turn its positive mixture atom into positive OWN mass for every owner.
+
+This is a significant necessary SOURCE restriction: it eliminates the
+reviewed fresh-table reduction's three-supported nonisolated-earliest
+alternative, and consumes the multiple-active-set zero-mixture branch
+except for an explicit sure-early boundary. It is stronger than a new
+conditional response ledger. Export-level value is plausible, subject
+to the usual separate complete-artifact and independent review gate;
+this feedback alone does not authorize packet placement.

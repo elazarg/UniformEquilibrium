@@ -35,16 +35,18 @@ path to a multiple-cap minimum when a sole unsupported EARLIEST owner
 has old mass before the supported opponent caps; it does not require
 that owner's maximizing point to be isolated.
 
-The newest complete UNREVIEWED consumer candidate is EA1–EA5 at the
-end. Joint signed old-tail conditioning preserves ALL active upper
+The newest complete consumer candidate, EA1–EA5 with boundary EA6,
+passed NOETHER's focused independent falsification. Joint signed
+old-tail conditioning preserves ALL active upper
 response branches together. At a zero-MIXTURE-mass earliest active
 point with positive old late mass for every owner, its final actual
 conditioned profile stays a true minimum, but one earliest owner's
 full cap equals its own singleton: contradiction. Thus such a
 zero-mixture earliest cap forces a sure-strictly-earlier prescribed
-owner and multiple late caps for all three other recipients. If
-independently valid, this excludes EVERY all-unique nonisolated
-earliest-cap minimum, not only a common cap date.
+owner and multiple late caps for all three other recipients. This
+excludes EVERY all-unique nonisolated earliest-cap minimum, not only
+a common cap date. A new combined standalone source-reduction draft
+is awaiting its separate whole-artifact review; it is not exported.
 
 No full UE producer, positive unrestricted-gap example, or new export
 is claimed. The next genuine target is a finite-amplitude coupled law
@@ -5510,7 +5512,9 @@ atomless density controls may supply that missing global step.
 
 ## Earliest active zero-mixture cap: simultaneous conditioning exclusion
 
-Status: COMPLETE UNREVIEWED ordinary-mathematical candidate. It is a
+Status: COMPLETE ordinary-mathematical candidate, independently passed
+by NOETHER for EA1–EA5 and exact boundary EA6 in the existing feedback.
+It is a
 genuine positive-global-minimum restriction, not a supplied local
 interface. It handles ALL simultaneously active cap responses rather
 than assuming four unique caps. It strengthens the common-zero-cap
@@ -5687,6 +5691,14 @@ mass, every law is finite surely and the distinct finite c would
 tie each Never cap. That contradicts earliestness directly. Thus
 the zero-mixture case never hides an omitted terminal boundary.
 
+More generally, an earliest active Never would force ALL four active
+sets to be the singleton {Never}. If some own Never mass were zero,
+the other recipients would again have the distinct finite c tied
+with Never. If all own Never masses were positive, the reviewed
+all-supported unique-cap exclusion UA would apply. Hence the
+earliest active point is finite at ANY produced positive minimum,
+not only under zero mixture mass.
+
 For four UNIQUE caps, an e_h=0 sure-early owner is impossible since
 each of the other three caps would have distinct c and Never
 maximizers. Therefore ALL-UNIQUE produced positive minima have a
@@ -5757,3 +5769,96 @@ Nash since every own singleton is zero. The source values D=1 here
 therefore cannot be substituted for δ. This boundary tests both the
 several-active-branch cap ledger and the zero-normalizer seam without
 claiming a positive-minimum counterexample.
+
+### EA7. Global late-tail graft sharpens the sure-early exception
+
+Status: COMPLETE UNREVIEWED ordinary derivation, separate from the
+frozen combined source-reduction artifact and not a dependency of it.
+The source assumptions are the same actual produced true minimum,
+τ the earliest member of the UNION of all cap-maximizer sets, zero
+mixture mass at τ, and the actual Fin4 no-UE punishment normality
+P_i≤s_i. EA5 supplies an owner h with q_h(clock<τ)=1.
+
+Claim: τ is a maximizing response for ALL FOUR owners. The three
+non-h recipients were already covered by EA5; the new global graft
+shows τ also maximizes h's own cap. This is a common ACTIVE point,
+not unique caps, not the common-unique finite spectrum, and not UE.
+
+If there are two sure-strictly-early owners, each recipient has one
+as an opponent. Every response≥τ then gives that recipient the same
+payoff, so the claim is immediate. Assume h is the only such owner.
+Thus l_j=q_j(clock>τ)>0 for all j≠h and α=∏[j≠h]l_j>0.
+Let A be h's passive payoff ledger on the event some opponent exits
+before τ, and let H=max_(t∈T,t≤τ)V_h(t,q_-h). This is attained
+on a compact set of finite tests and
+
+    H≥V_h(τ)=A+αs_h.
+
+An arbitrary replacement of ONLY each opponent's old conditional
+tail after τ is invisible to EVERY prescribed payoff and EVERY
+non-h full-response payoff. Under prescribed h play its sure exit
+is before τ. If a non-h pure response is earlier, all changed draws
+remain later than that response; if it is≥τ or Never, h has already
+exited. Thus no changed tail can affect the first coalition in
+either case. This prices unrestricted caps, not merely the displayed
+late maximizers.
+
+Literal finite seam: choose original finite reply dates a_k tending
+to the zero-mixture τ boundary. Their own and opponent atom masses
+there tend to zero. Then η_k=p_h^k(clock>a_k)→0, l_j^k→l_j,
+α_k→α, A_k→A, and H_k→H, where H_k is the largest original h
+response payoff at finite dates≤a_k. For H_k's upper bound extract
+arbitrary moving head-maximizing replies; their limits are≤τ.
+For its lower bound approximate every strict earlier tester, and
+use reply a_k itself for τ. Null mixture mass prices its vanished
+tie and yields V_h(a_k)→V_h(τ). Hence the truncated-head cap limit
+does not require isolated τ or a uniform gap below τ.
+
+For ANY actual independent opponent-tail laws w, preserve every old
+opponent head and its late probability, replacing its conditional
+tail by w shifted to start at a_k+1. Keep h's entire old law.
+On the event h≤a_k all prescribed first coalitions and every non-h
+deviation outcome remain unchanged by the preceding argument. Thus
+all four prescribed payoff errors are≤2Mη_k and every non-h full
+cap error is≤2Mη_k, UNIFORMLY over all finite/Never responses.
+The total debt error outside h's new cap is≤14Mη_k.
+
+For h, every test≤a_k is unchanged; every later test or Never has
+exact payoff A_k+α_k times the corresponding w response. Therefore
+its ACTUAL new full cap is exactly
+
+    max(H_k,A_k+α_k cap_h(w)).
+
+Since the literal modified law has D≥δ, taking k→∞ gives
+
+    B_h(q)≤max(H,A+α cap_h(w)) for EVERY actual w.      (EA7)
+
+The true punishment value is the infimum of cap_h(w) over actual
+independent opponent laws, without attainment. Normality P_h≤s_h
+permits w with cap_h(w)≤s_h+ε. Hence (EA7) gives
+
+    B_h(q)≤max(H,A+α(s_h+ε))≤H+αε.
+
+Let ε↓0. Since B_h≥H, equality follows. The compact H maximum
+cannot occur strictly before τ by earliestness of the UNION of
+active sets. It therefore occurs at τ, proving τ∈A_h. No old
+conditional tail is assumed punishment-optimal, and no child Nash
+is inserted. If P_h is unattained or negative, the same finite
+ε argument applies; H already includes the solo payoff at τ.
+
+The source of true normality at the SAME reward table is
+`nonempty_finFourQuantitativeFullSupportHardResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportProjectiveQBarResidual.lean`,
+whose returned `all_punishmentNormal` field has no reward change.
+The literal punishment infimum and the stationary equality are in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`; exact attainment
+is NOT inferred. These declarations and the already inspected
+stopping-law correspondences were checked narrowly, with no build.
+
+Thus the zero-mixture earliest branch in a hypothetical Fin4
+counterexample has a common ACTIVE cap point with no own mass there,
+at least one sure-strictly-earlier prescribed owner, and three
+recipients with an entire maximizing late plateau. The unique-cap
+join/withdrawal spectrum does not consume these MULTIPLE branches.
+The next genuine question is an all-response coupled release of
+that early owner, not another punishment-optimal child-Nash splice.

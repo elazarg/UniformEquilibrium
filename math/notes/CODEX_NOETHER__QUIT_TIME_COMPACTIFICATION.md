@@ -2,6 +2,17 @@
 
 ## Current best attempt
 
+The newest UNREVIEWED whole-source attempt is SC1–SC9 at the end.
+A fresh hierarchical table comparison forces the all-unique/all-isolated/
+some-supported branch into one pure sure-triple geometry with exactly
+two supported caps. Removing old heads before the common cap either
+produces an ACTUAL lower-cap wall or a normalized first-law minimum;
+the latter is contradicted by the already priced pair corner. Thus this
+branch yields an actual earlier ATOMIC lower/upper cap tie, with distinct
+coalition kernels, not an outcome-equivalent c/Never endpoint tie.
+The simultaneous multiple-cap source is not yet consumed. This draft
+is separate from the frozen independently reviewed source packet.
+
 A new full-cap SOURCE restriction is recorded at the end as SLC1–SLC12.
 At a produced marked positive global minimum with four unique cap
 maximizers, either an EARLIEST maximizing owner has zero own point mass,
@@ -15834,8 +15845,11 @@ observer cap or the multi-unsupported/multiple-cap branches globally.
 Status: COMPLETE ordinary-mathematical proof DRAFT of the source reduction
 SC1–SC6 below, not independently reviewed, Lean checked or exported. This
 is a fresh-table counterexample-class exclusion, not a supplied cap-price
-interface. It does NOT settle the surviving sure-triple case. SC7 records
-the precise failure of the attempted complete consumer. The previously
+interface. SC8–SC9 adds a genuine minimum-preserving lower-cap wall:
+the normalized FIRST-LAW sure-triple branch is impossible, so an actual
+minimum with distinct lower/upper coalition kernels is produced instead.
+It does NOT settle the resulting multiple-cap case. SC7 records
+the precise failure of the direct complete consumer. The previously
 reviewed FP comparison is unchanged; none of this is silently added to
 MORSE's frozen packet.
 
@@ -16092,3 +16106,121 @@ joint release of m and insertion of z, retaining the punishment-tail
 coupling, or derive a whole-table direction that prices the floor-free
 withdrawal-plus-join and participant-premium contacts simultaneously.
 Do not choose a child Nash tail and assume it also punishes m.
+
+### SC8. Removing invisible earlier heads: an actual minimum or a real tie
+
+This is an additional ordinary proof DRAFT, not reviewed. It helps with
+the chronology in the remaining (SC7), without assigning endpoint caps.
+Its source still has q_m PURE t₀, the other three unique caps t₀,
+and m's unique later cap. Some other old laws may stop before t₀.
+Each e_i=q_i(clock≥t₀)>0: m's probability is1; for opponents the
+strict-late probabilities in SC5 are already positive. Put
+
+    ν_i=q_i(·|clock≥t₀),
+    q_i^λ=(1−λ_i)q_i+λ_iν_i.
+
+The OLD strictly-early submeasure E_i=q_i|_(clock<t₀) gives
+q_i^λ=c_iq_i−(λ_i/e_i)E_i, c_i=1+λ_i(1/e_i−1)>0.
+For EVERY response t≥t₀, including t₀ itself, all nonoriginal
+product terms have absorbed STRICTLY before the response. Thus the
+entire upper response family is positively rescaled, even at distant
+nonnegative parameters. The old unique upper maximizers do not switch.
+Near zero the compact lower test set T∩[0,t₀) has a positive gap:
+the positive mixture atom t₀ is isolated and is the earliest cap.
+Signed LEFT-endpoint cut transport supplies actual finite profiles,
+and therefore the selected multiaffine polynomial is constantly d.
+
+Follow the diagonal λ_i=λ from0 to1. The selected debt stays d
+throughout. The only possible loss of full-cap identification is a
+lower test attaining the selected upper cap. If such a first wall
+occurs at λ*<1, all old opponent laws are retained with positive
+weight. The new lower response is NOT pathwise outcome-equivalent
+to the old unique cap: an old positive-probability event distinguishing
+their coalition kernels remains positive after retaining the original
+opponent product component. The wall is an ACTUAL true minimum with
+these two maximizing points. This does not claim linear independence
+of their payoff directions, or any automatic rank drop.
+
+A first wall cannot occur only at λ*=1. At that endpoint every law
+is at or after t₀, so every lower test pays exactly s_i. Equality
+with a selected upper cap, with all other caps still selected, would
+give ACTUAL D=d and one cap=s_i, contradicting the checked singleton
+margin. If there is no lower wall, the endpoint is itself an ACTUAL
+minimum with all four caps unique: every upper ordering is preserved
+by positive scaling, all lower tests remain strictly below, and the
+full cap/payoff pair is realized by the direct old left-cut transport.
+All prescribed laws then start at or after t₀. Thus, without changing
+the reward table, either a genuine lower-vs-upper cap tie is produced,
+or the sure-triple source is reduced to a literal first supported date.
+
+In the latter branch q_z is STRICTLY later than t₀ and
+x=q_a(t₀), y=q_b(t₀) lie strictly between0 and1. The upper bounds
+follow from m's unique late cap: an opponent sure at t₀ would screen
+it into a Never/c tie. Write Q_a(y),C_a(y) for a's root Quit/Continue
+payoffs with m sure, z continuing, and b quitting with probability y;
+define Q_b(x),C_b(x) likewise. Let Q_z(x,y),C_z(x,y) be z's root
+Quit and Continue values. Define
+
+    A_m(x,y)=xy r_m({a,b})
+       +x(1−y)r_m({a})+(1−x)y r_m({b}),
+    U_m(x,y)=E[r_m({m}∪S)],
+
+where S is the independent root set selected by a,b. The ACTUAL late
+m cap at the original root is A_m+(1−x)(1−y)P_m, by SC5. On its
+locally stable cap branch the exact selected objective is
+
+    F(x,y)=(1−x)[Q_a(y)−C_a(y)]
+       +(1−y)[Q_b(x)−C_b(x)]
+       +Q_z(x,y)−C_z(x,y)
+       +A_m(x,y)+(1−x)(1−y)P_m−U_m(x,y).       (SC9)
+
+Root caps for a,b,z and the late cap for m are strict, so all four
+bracketed debts use precisely these branches locally. Existing root
+and strict-late mass lets x,y vary with both signs, retaining the SAME
+true punishment conditional tail. The polynomial (SC9) is bilinear,
+has an interior global minimum, and is therefore constant on its
+whole algebraic square. Its corners give, in addition to (SC7),
+
+    d=P_m−s_m
+       +Σ_(j≠m)[r_j({m,j})−r_j({m})]            (SC10)
+
+at x=y=0, and the analogous pair withdrawal plus two outside joins
+at x=1,y=0 or x=0,y=1. These distant corners are STILL selected
+evaluations; normality P_m≤s_m does not make the join sum nonpositive.
+
+### SC9. The pair corners exclude the normalized branch outright
+
+The pair corners just mentioned are ALREADY among SC3's forbidden
+floor-free pair labels; this is stronger than merely recording a ledger.
+At x=1,y=0 the exact constant selected evaluation is
+
+    d=r_m({a})−r_m({m,a})
+       +r_b({m,a,b})−r_b({m,a})
+       +r_z({m,a,z})−r_z({m,a}).                (SC11)
+
+This is (SC4) with B={m,a}. Its equality contradicts the NEW table's
+spectral separation, independent of all actual caps at that corner.
+The x=0,y=1 corner yields the same contradiction with B={m,b}.
+Thus SC8's all-unique first-law endpoint CANNOT occur. The path MUST
+meet a lower-vs-upper cap wall strictly before λ=1.
+
+The actual conclusion is therefore not a strict decrease from every
+original sure-triple law. It is an existential reselection, on the SAME
+fresh table, of an ACTUAL global minimum with a lower test tied to a
+displayed t₀-or-later cap. The tests have distinct coalition kernels on
+a positive-probability old event, retained because λ*<1. At that wall
+all original laws retain positive weight and all three opponents retain
+positive strict-late mass beyond t₀. Therefore the just-reviewed EA
+exclusion implies the EARLIEST newly active lower test has positive
+mixture mass: it is a retained atom, not an unsupported nonisolated
+tester or a c/Never outcome-equivalent endpoint tie. No linear-independence
+or automatic rank-drop claim follows from this fact alone.
+
+This is the substantive checkpoint of the current complete attempt.
+The sole remaining isolated supported branch produces an actual EARLIER
+ATOMIC cap tie, rather than only its floor-free ledger. The unrestricted
+multiple-cap source is not yet consumed. A possible next mechanism must
+work with these genuine simultaneous lower/upper active branches; it
+cannot choose a child Nash tail and assume it also attains P_m. No solved-
+table trap, supplied domination field, or endpoint Nash claim replaces
+that missing global argument.
