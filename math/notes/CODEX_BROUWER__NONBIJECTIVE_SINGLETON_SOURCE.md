@@ -20,8 +20,12 @@ while retaining the actual unrestricted-debt minimum. The final entropy
 section produces finite regularized games but records an exact bad Nash
 branch at every calendar size; common support alone is not a selector.
 The live variation now puts the bounded entropy penalty on the full-debt
-objective itself. Its common-support and clock-refinement facts are proved;
-a debt-lowering direction at a positive global minimum is NOT proved.
+objective itself. Its common-support and clock-refinement facts are proved.
+The newest section combines actual complete-cap quantile coarsening with
+entropy loss to prove strong relative-clock compactness at fixed temperature,
+for arbitrary bounded signed rewards. Tied atoms, response-time availability
+and Never must still be retained separately. A debt-lowering direction at a
+positive global minimum is NOT proved.
 This is internal research, not an existence theorem or export candidate.
 
 The earlier question concerned a raw class with constant participant
@@ -1540,3 +1544,194 @@ strictly lowers the FULL D by more than its entropy change and η. Common
 support, likelihood comparability and entropy-neutral refinement alone
 do not prove this. No supplied inequality, one-player repair, or assumed
 monotone reselection is being counted as an existence result.
+
+## Fixed-temperature relative-clock compactness from the actual minimum
+
+This section is ordinary mathematics, not Lean-checked and not a new UE
+class or proposed export. Unlike the earlier finite-menu normalization,
+the statement here applies to ANY finite real Fin4 reward table, with
+original Never reward0. Fix M>0 bounding every absolute terminal reward.
+For an independent finite stopping-law profile p, let U_i(p) be its actual
+terminal payoff and b_i(p) its supremum over ALL complete behavioral
+responses. Equivalently the cap tests are every finite pure time and Never.
+For a finite support these include the response strictly after the last
+occupied date, not just the occupied menu. Put
+
+    D(p)=Σ_i[b_i(p)−U_i(p)],
+    μ=(p₀+p₁+p₂+p₃)/4,
+    I(p)=Σ_i KL(p_i‖μ),
+    Φ_τ(p)=D(p)+τI(p),        τ>0,
+    m_τ=inf{Φ_τ(p): p is any independent finite-law profile}.
+
+This infimum ranges over every finite calendar; a global near-minimizer
+below is not only a minimizer on one fixed calendar. Since D≥0 and
+0≤I≤4log4, the infimum is finite and actual η-near-minimizers exist for
+every η>0. No no-UE hypothesis or positivity of m_τ is used in the
+compactness proof. The previously inspected single-pivot existence
+consumer is the justification for δ>0 only in that normalized setting;
+it is not silently substituted for a general-table theorem here.
+
+### Actual coarsening, not assumed cap continuity
+
+The needed general source is already implemented. I inspected
+`quittingQuantileClockCompressedLaws`,
+`hasEscapeAwareQuantileClockCompressionAtRewardBound`,
+`quantileClockSupport`, and `quantileClockScaledRadius` in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`.
+Its mathematical content for Fin4 and level j≥1 is a COMMON deterministic
+ordered quotient f_j of the stopping calendar, preserving Never as a
+separate point, such that q_i=(f_j)_*p_i has at most8j+1 finite dates and
+
+    |U_i(q)−U_i(p)|≤12M/j,
+    |b_i(q)−b_i(p)|≤12M/j.                         (RC1)
+
+The second bound is for unrestricted behavioral caps, proved by two-sided
+transport of every pure response, including Never and the late finite
+response. It is not a supplied stationary or selected-cap estimate. Thus
+
+    |D(q)−D(p)|≤96M/j.                            (RC2)
+
+The map's exact fibers are the singleton marked dates and the consecutive
+unmarked intervals. `finiteClockActiveCompressedLaw` is the push-forward
+through `finiteClockActiveQuotient` in
+`MathUE/Probability/QuantileClock.lean`. Active-cell indexing deletes
+unattained clock gaps; it does NOT insert a new response date between
+consecutive original marks. This matters for complete-cap transport.
+The quantitative finite-clock theorem is existing source material, not
+being claimed as new work.
+
+For a quotient fiber C write P_i(C)=p_i(C), μ(C)=Σ_iP_i(C)/4. On the
+ORIGINAL calendar define the common-conditional reconstruction
+
+    p̂_i(a)=μ(a) P_i(C)/μ(C),       a∈C, μ(C)>0,
+
+and assign0 on zero-μ fibers. This is a probability law. Its quotient is
+q_i, and (Σ_i p̂_i)/4=μ. Direct cancellation in the finite entropy sums
+gives the exact chain rule
+
+    I(p)−I(q)=Σ_i KL(p_i‖p̂_i)≥0.                 (RC3)
+
+For example the summand difference on C is
+Σ_{a∈C}p_i(a)log[p_i(a)/μ(a)]
+−P_i(C)log[P_i(C)/μ(C)], exactly KL(p_i‖p̂_i) on C.
+Zero probabilities are interpreted by continuity; a positive p_i(a)
+always has positive reconstructed mass. Never is a singleton fiber, so
+its contribution to this loss is zero and its four masses are retained.
+
+Suppose Φ_τ(p)≤m_τ+η. The compressed q is an ACTUAL finite independent
+profile in the same global optimization domain. Hence
+
+    τ[I(p)−I(q)]≤D(q)−D(p)+η≤96M/j+η.             (RC4)
+
+This is where genuine global near-minimality enters. The estimate would
+not follow for an arbitrary common-support profile, an auxiliary Nash
+point, or an optimizer restricted to a shorter calendar than q uses.
+Pinsker's inequality, with natural logarithms, and Cauchy–Schwarz yield
+
+    Σ_i ‖p_i−p̂_i‖₁²≤2(96M/j+η)/τ,
+    Σ_i ‖p_i−p̂_i‖₁≤√[8(96M/j+η)/τ].             (RC5)
+
+No comparison between τ and a Never product was used. The estimate says
+that a genuine regularized near-minimizer cannot hide much player-specific
+timing information inside quantile cells whose strategic effect is small.
+It is stronger than merely bounding each player's total entropy.
+
+### One fixed quantile domain and genuine strong compactness
+
+Order the finite dates and then Never. On the fixed interval[0,1], give
+each date a a half-open interval J_a of length μ(a), in that order; an
+empty interval can be discarded. Define
+
+    r_i(x)=p_i(a)/μ(a)                 on J_a.
+
+Thus 0≤r_i≤4, Σ_i r_i=4 almost everywhere and ∫r_i=1. The last interval
+has length μ(Never) and records Never separately. A common quotient fiber
+C is a consecutive union of these intervals, so the density of p̂_i is
+the CONSTANT P_i(C)/μ(C) on that union. In particular the four reconstructed
+densities are step functions on the SAME[0,1], with a common partition
+of at most8j+2 intervals, including Never. Moreover
+
+    ∫|r_i−r̂_i|=‖p_i−p̂_i‖₁.                    (RC6)
+
+This identification does not relabel each player independently and does
+not introduce a common random draw. Each player's quantile draw remains
+independent; the interval representation merely uses the common marginal
+as a deterministic coordinate chart.
+
+For fixed K, the family of four bounded step functions with at most K
+common intervals is compact in the joint L¹ norm. Indeed parameterize it
+by ordered endpoints0=t₀≤⋯≤t_K=1 and heights in[0,4]^{4K}.
+This parameter domain is compact, and moving endpoints by small amounts
+changes the functions only on intervals of small total length. Moving
+heights is continuous in L¹ as well. Zero-length intervals cause no
+problem. Consequently the parameter-to-function map is L¹-continuous.
+
+Now fix τ>0 and any sequence of actual finite profiles pⁿ with
+Φ_τ(pⁿ)≤m_τ+η_n, η_n→0. Given an L¹ tolerance, first choose one finite
+j so that the limiting right side of(RC5) is below that tolerance, then
+discard finitely many n to control η_n. The remaining quantile density
+tuples lie within that tolerance of one compact K-step family. This proves
+total boundedness, hence a subsequence converges STRONGLY in(L¹[0,1])⁴:
+
+    r_iⁿ→r_i*,       0≤r_i*≤4,
+    Σ_i r_i*=4 a.e.,       ∫r_i*=1.               (RC7)
+
+This is not a weak-compactness assertion dressed as strong convergence.
+Its substantive input is the near-minimum entropy-loss bound(RC4).
+Since xlog x extends continuously and boundedly to[0,4], strong L¹
+convergence gives
+
+    I(pⁿ)=Σ_i∫r_iⁿ log r_iⁿ → Σ_i∫r_i*log r_i*.  (RC8)
+
+If the sequence is chosen from exact minimizers on its increasing finite
+calendars, the earlier transfer estimate additionally gives
+r_iⁿ≥exp(−14M/τ) almost everywhere. The same lower bound passes to r_i*.
+This extra bound is not needed for(RC7), and it does not remain uniformly
+positive as τ→0.
+
+### Never, collisions and the still-open realization step
+
+Passing to a further subsequence, let a_n=μⁿ(Never)→a∈[0,1]. The four
+Never masses also converge. If a>0, each limiting density is constant
+almost everywhere on the terminal interval(1−a,1), with integral equal
+to that player's limiting Never mass. This follows from the constant
+Never density on each moving terminal interval and strong L¹ convergence.
+Under the likelihood lower bound, a>0 makes all four limiting Never
+masses positive; a=0 makes all of them zero. Neither alternative has
+been excluded by the minimum argument.
+
+The relative densities are NOT a complete strategic state. A finite
+atom J_a represents simultaneous quitting whenever two independent draws
+fall in that SAME interval, not two successive real times inside it.
+The marked atom intervals must therefore be retained along with r_i.
+Likewise an unoccupied date between two consecutive supported dates is
+an extra pure response; a nonexistent gap must not be silently inserted.
+The active-cell source in(RC1) already respects this distinction.
+
+For a simple exact illustration, take all four laws equal. Then r_i≡1
+for every player, regardless of their atom partition. Let each participant
+receive1 when it is the sole quitter and−1 in every coalition of size≥2,
+and let every nonparticipant receive0. If all laws put mass1 at date0,
+each prescribed payoff is−1 and each cap is0 (Never). If all laws instead
+are uniform on0,…,N−1, collision probability tends to0; symmetry gives
+prescribed payoff tending to1/4 for each player, while the date0 cap
+tends to1. Both families have IDENTICAL quantile densities and I=0,
+but their semantic limits differ. Thus(RC7) alone proves neither payoff
+nor cap convergence, let alone an original discrete-clock minimizer.
+
+The next concrete question is to retain, on the same subsequence, the
+nonvanishing tied intervals and the closed set of available pure-response
+locations. A possible representation collapses each retained interval to
+one simultaneous date and leaves the remaining quantile mass diffuse;
+Never remains separate. Even if that produces independent laws and all
+caps on a compact ORDERED calendar, that calendar need not embed in ℕ.
+Such an attained relaxed minimum must be distinguished from an actual
+discrete-calendar minimum. No such realization theorem, no τ→0 compactness,
+and no tail-descent conclusion is asserted by(RC1)–(RC8).
+
+The useful surviving target is now precise: can the atom-and-tester limit
+be consumed by a legal full-cap variation, or by a uniformly controlled
+finite-clock reconstruction, to force the unregularized global infimum
+to zero? A common-support assertion or a supplied tail inequality would
+not answer it. In particular an η error still cannot be divided by a
+vanishing joint Never mass without an additional argument.
