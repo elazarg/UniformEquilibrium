@@ -459,6 +459,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: all tables in an open sixty-coordinate neighborhood of the explicit two-joint-phase rational table specified below | UE with rates and a fixed target produced from the table. Every singleton and collision reward may vary; only two solo phases require refinement. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: the global two-joint cyclic-child family specified below, for every real R | UE with simultaneous quitting at both retained joint phases. The rates and target are produced from rewards, including the outsider halfspace boundaries. This is reviewed mathematics awaiting formalization. |
 | Fin4: the zero-premium joint-phase family specified below, for every real R and σ≥0 | UE with both joint participants at their singleton rewards and a possibly positive outsider collision payoff. Rates and a fixed target are produced; an opposite-sign pair core is allowed. This is reviewed mathematics awaiting formalization. |
+| Fin4: the negative-premium cyclic-child completion family specified below | UE for arbitrary signed own rewards, with an exact terminal Nash profile and one fixed target produced from raw entries. Both scheduled joint participants have negative premiums. Twenty-eight normalized coordinates are unrestricted. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. Both strict and weak comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons, greatest premium core of size three, and all within-core joining differences nonnegative | UE with arbitrary signed participant premiums, including negative premiums inside the core and overlapping pair traps. A full triple-root index argument selects a suitable successor; weak comparisons use reward closure. This is reviewed mathematics awaiting formalization. |
@@ -1202,6 +1203,41 @@ includes an open sixty-coordinate family escaping all fifteen concrete-base
 screens and the other compared raw criteria. This is ordinary mathematics,
 not a new checked Lean declaration. No coverage of arbitrary remaining
 tables or all-proper rates is asserted.
+
+The **negative-premium cyclic-child criterion** permits any player
+relabeling, arbitrary own levels sᵢ, and positive row scales kᵢ. Put
+uᵢ(S)=1+(rᵢ(S)−sᵢ)/kᵢ. For some 0<ε≤1 require
+
+    u(0)=(1,0,0,0),   u(1)=(2,1,4,0),
+    u(2)=(2,0,1,4),   u(3)=(0,4,0,1),
+    u(03)=(1−ε,3,−1,1−ε),
+
+and the twelve upper bounds
+
+    u₁(01)≤1−ε,   u₁(13)≤1+ε,   u₁(013)≤1,
+    u₂(02)≤1−ε,   u₂(23)≤1,     u₂(023)≤1−ε,
+    u₀(01)≤1+ε,   u₃(13)≤1,     u₂(12)≤1+ε,
+    u₀(02)≤1,     u₃(23)≤1+ε,   u₁(12)≤1.
+
+All twenty-eight other coordinates, including the grand-coalition rewards,
+are unrestricted. For ε<15/26 a scalar crossing produces four proper
+hazards for the three-row cycle joint03, solo1, solo2. For ε≥15/26,
+player0 always Continues and the child cycle solo3, solo1, solo2 has
+hazards2/3. Both branches give exact terminal Nash against every behavioral
+replacement and one fixed uniform target witnessed by the same profile.
+The original Never payoff remains zero. Signed-row transport is justified
+for the produced profile by almost-sure opponent absorption under every
+unilateral replacement, not by general affine invariance.
+
+The [complete raw producer](exports/NEGATIVE_PREMIUM_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md)
+contains a rational center with greatest premium core of size four,
+negative child triple-joining coefficients, and no accepted concrete
+base/free or universal quiet-child source among the compared producers.
+The comparisons cover all sixty-five nonempty-base/disjoint-free choices
+and all fourteen proper child carriers. This is additional completion-family
+coverage, not a universal consumer for negative-premium or no-good-row
+configurations. The scalar producer and raw adapter are ordinary mathematics;
+the downstream periodic consumers are existing Lean declarations.
 
 The **crossed-matching criterion** selects f=(01)(23), a=(02)(13), and
 o=f∘a, after any player relabeling. For each i require
