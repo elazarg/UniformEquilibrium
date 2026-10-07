@@ -599,6 +599,41 @@ the comparison or construct a legal operation whose full-cap account is
 not already forced by that branch. This failure is not explained by an
 omitted state field: the event laws already make the nonclosure explicit.
 
+### Finite reward contacts and moving minimizing sources
+
+A global reward comparison has a different logical burden from a strategic
+splice. Let Δ(r) be the infimum of SUM debt over all independent behavioral
+profiles, and let Ω>0 be its maximum over the bounded reward cube. Suppose a
+source configuration forces Δ(r)=ℓ(r), where ℓ belongs to a finite family of
+affine reward expressions. If one legal target table raises every expression
+currently equal to Ω strictly above Ω, a sufficiently small interpolation
+separates every expression from the new value of Δ. Finite separation treats
+the noncontacts; uniform reward Lipschitz continuity bounds the new value
+below, while worst-table maximality bounds it above by Ω.
+
+This comparison does not transport an old minimizing profile, response
+selector, or law through the changed game. Every new minimizer is constructed
+afresh, and the forbidden equality applies to all of them. Thus changing
+owners or supports is not a loophole when all their finitely many contact
+values are separated simultaneously. The exact source identities and finite
+comparison are developed in
+[the global-obstruction notebook](CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
+and [the compact-clock notebook](CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md).
+
+This is not a general cure for cap leakage. A source with several maximizing
+responses may have no fixed selected-response polynomial on a signed open
+box. A unique nonisolated maximum can move under a perturbation without any
+uniform complement gap. In those cases an identity with one of the finite
+reward expressions has not been established. The finite number of contact
+labels therefore does not make the entire behavioral source space finite.
+
+The concrete test is whether the remaining active-cap configurations also
+force a finite contact family with a compatible reward direction. Failure
+must identify the moving complete-response term or conflicting contact
+directions, not merely exhibit another paid deviation. This distinguishes a
+genuinely new global mechanism from another local account with an unpaid
+observer cap.
+
 ## Competing explanations
 
 ### H1: insufficient compositional state

@@ -460,3 +460,102 @@ mechanism must survive the ambient positive-simplex singleton condition
 before imposing pair/triple/grand penalties. The two-copy map itself is
 a probability proof, not an actual legal profile repair or correlation
 device; that boundary is correctly stated by the author.
+
+## Focused JC/SIC and worst-SUM threshold check, 2026-10-08
+
+Scope: the complete JC1–JC4 common-positive-atom identity and SIC1–SIC4
+strictly-earliest isolated unsupported-cap identity, read in the author's
+current notebook; the proposed simultaneous endpoint table is not yet a
+byte-bound final-artifact review. I also read SLC1–SLC12 to check the
+actual earliest-group classification used by the combination, without
+rerunning its already completed independent gate.
+
+Verdict: PASS for these ordinary-mathematical source identities under
+their explicit original marked-source transport hypotheses. No unresolved
+mathematical objection was found.
+
+For JC, common positive mixture mass makes the common clock isolated
+for EVERY recipient, even an owner with zero own point mass there. A
+zero-own-mass owner must have positive mass strictly later: otherwise
+it stops surely before the common clock and makes every other displayed
+cap tie Never. Thus the old conditional targets exist. The signed
+family has legal bounded likelihood multipliers, full-cap stability
+follows from all four isolated unique gaps, and the endpoint identity
+is exactly the sum of join differences C_A. This is an algebraic
+selected-response evaluation, not an assertion that the distant
+endpoint is a minimum or that its displayed responses are actual caps.
+
+For SIC, the strict-before t₀ conditional uses the LEFT endpoint of
+the existing retained supported interval. The early endpoint has zero
+selected debt because BOTH the exceptional displayed cap and every
+prescribed conditional clock precede all three opponent targets. This
+forces no original mass before t₀. The resulting selected endpoint
+has the correct separate participant and passive contributions. If
+there is any later mass, a second signed conditional yields the
+passive floor identity by itself. If there is no later mass, the
+ORIGINAL exceptional law is pure t₀, and any supported cap later
+than t₀ ties Never; hence all three supported caps are t₀ and the
+only remaining participant identity is own singleton minus GRAND.
+The proof does not need arbitrary participant-pair/triple spectrum
+terms. Never as first supported cap correctly yields the empty-floor
+value s_m, although further singleton-margin reasoning can exclude
+that boundary separately.
+
+The exceptional cap's ISOLATION in SIC is indispensable to the proof
+as written. Unique attainment at a nonisolated point does not give a
+uniform complement gap; later-atom resets do not have the early
+submeasure scaling used by SLC. Partial earliest ties and two or more
+unsupported owners are also outside SIC. None is silently consumed.
+
+The threshold Ω≤4/5 is independently checked against the actual
+tracked declaration `minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`,
+under its imports. Its hypotheses are membership in the ORIGINAL
+closed payoff/cap carrier, a TRUE global SUM minimum there, positivity,
+and an owner. It assumes neither Nash of a conditional tail nor
+nonnegative singleton rewards. For a unit-bounded positive minimum d,
+the declaration gives d≤B_i−s_i≤1−s_i. If d≥1, all s_i≤0, whereas
+AllNever has D=Σ_i[s_i]⁺=0, contradiction. Thus d<1, and
+
+    d≤D(AllNever)=Σ_i[s_i]⁺≤4(1−d),
+    so d≤4/5<1.
+
+This holds in particular at a hypothetical attained worst-SUM table.
+It justifies endpoint contact targets at least one. The own-singleton
+target +1 in the expanded comparison CHANGES singleton normalization
+and Γ data; it is not the singleton-preserving signed-eight theorem,
+nor does it authorize transferring MAX-regret sources or old minimizing
+laws. A complete combined theorem must preserve the all-moving-laws
+value interval and include its original source realization, which this
+focused identity review does not certify on the author's behalf.
+
+### SIC5–SIC6 and FP1–FP5 extension
+
+I then read the complete new SIC5–SIC6 and FP1–FP5. PASS for the
+additional tied-earliest single-unsupported identity and the finite
+table comparison, still not a byte-bound self-contained final-packet
+verdict. The positive atom of H isolates the exceptional common test;
+its positive old late mass follows from the exact Sure-before/Never
+tie contradiction. Signed resetting of supported owners and old late
+conditioning of the exceptional owner have legal bounded transport.
+Only the exceptional selected debt survives at the endpoint, so the
+identity is the INDIVIDUAL J_(m,H), not C_H. The latter distinction
+correctly avoids a false sum over later supported owners.
+
+The labelled family count 4+14+28+32+4=82 is correct, with duplicates
+harmless. Every critical positive contact has target at least one,
+whereas Ω≤4/5. The maximum endpoint difference of any functional is
+twelve (three two-entry differences), and α=min(1,Ω,σ)/64 makes
+28α<σ and 16α≤Ω/4. These inequalities control both sides of the
+ENTIRE possible new value interval. Old upper noncontacts may fall
+and old lower noncontacts may rise; the proof correctly permits both
+and uses their finite separation. It requires no active tester
+derivative, common minimizing law, or old-to-new role preservation.
+
+The stronger rank conclusion is consequently valid under the stated
+marked-source producer: every all-unique fresh minimum has an earliest
+unsupported owner; with exactly one unsupported owner that cap is
+strictly earliest and nonisolated. Common unique caps are excluded,
+but two-or-more unsupported or multiple-cap sources remain. This
+conclusion consumes original complete-source identities, not fixed-row
+optimization or a bounded strategy grid.

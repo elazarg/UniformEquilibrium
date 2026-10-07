@@ -35,18 +35,23 @@ This is an independently reviewed mathematical export, not a Lean
 implementation. It does
 not solve the arbitrary-table or worst-table SUM comparison in Section 44.
 
-Current serious global comparison: Section 47 gives an eight-coordinate
-finite perturbation of an attained worst SUM table. It produces another
-unit-bounded positive-gap table whose true global SUM minimum differs
-from BOTH orientations of every grand withdrawal gap. Consequently NO
-produced marked minimum of that new table, for ANY exceptional owner,
-has the all-unique, exactly-one-zero-own-cap, exceptional-latest geometry.
-The full finite comparison and its marked-source consumer are written
-there; independent review is pending. The new table need not be the
-original counterexample or another worst table. This is a strict source
-reduction, not a Fin4 UE theorem. All own singletons and fifty-two reward
-coordinates are preserved by the perturbation; optional subsequent
-SUM-own-fiber maximization is explicitly separate from MAX-regret data.
+Current serious global comparison: Section 48 links the ONE complete
+self-contained candidate
+`CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md`. From an
+attained worst SUM table it selects one new positive-gap table avoiding
+82 labelled raw withdrawal, join-sum, individual-join, passive-floor and
+own-grand values. EVERY produced marked minimum of that fixed new table
+avoids common unique caps and exceptional-latest geometry. In the
+all-unique branch an EARLIEST owner has zero own cap mass; if precisely
+one owner is unsupported its cap is STRICTLY earliest and NONISOLATED.
+The complete original compact producer, signed conditional transport,
+all moving-test cap control, source identities and whole-law value
+comparison are proved inside the candidate. Independent whole-artifact
+falsification is requested, not a separate gate for supporting identities.
+The eight-coordinate singleton-preserving theorem of Section 47 remains
+a distinct proved subcase. The stronger target changes own singletons
+and Γ; neither its minima nor MAX-regret sources are transported.
+This is a strict source reduction, not a Fin4 UE theorem.
 
 Supporting global comparison: Section 46 uses an attained worst SUM table
 and NEW whole-law near-minimizers after a finite own-singleton reward
@@ -9340,6 +9345,58 @@ Concrete next question: can one finite endpoint table simultaneously
 avoid the raw join-sum contacts supplied by common unique-cap positive
 atoms, without undoing N3? The disjoint participant-pair/triple and
 passive-singleton/pair coordinates look compatible with N8; that
-additional source identity is being checked independently and is NOT
-claimed here. Independent review of N1--N13 is now requested before any
-standalone packet or export promotion.
+additional source identity was then independently checked and assembled
+in the combined candidate linked below. N1--N13 remains the separate
+singleton-preserving subcase; no independent gate for this subcase alone
+is requested.
+
+## 48. One complete whole-table cap-spectrum source reduction
+
+The final combined candidate is
+[`CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md`](CODEX_MORSE__WORST_SUM_CAP_SPECTRUM_SOURCE_REDUCTION.md).
+It is a self-contained ordinary-mathematical artifact, internal pending
+focused whole-candidate independent falsification. No export promotion
+or Lean-checked status is claimed.
+
+The new global input is Δ=maximal worst-table SUM gap, not fixed-law
+cap optimization and not MAX regret. Its exact all-owner singleton
+margin implies Ω≤4/5<1 using literal AllNever. One explicit unit-cube
+target makes every critical positive raw contact strictly exceed Ω;
+finite separation and the all-law Lipschitz bound keep all remaining
+raw values outside the entire new minimum-value interval. The target
+and table are chosen before ANY new minimizing sequence, so owner,
+support and cap-role switching are covered, not frozen by hypothesis.
+
+The 82 labelled values are four grand withdrawals, fourteen common
+join sums, twenty-eight individual joins, thirty-two passive floors
+(including empty-coalition own values), and four own-minus-grand
+values; duplicates are harmless. Exact source consumption excludes
+all common-unique-cap configurations. The general earliest-group
+argument, with NO support assumption on later cap owners, leaves an
+earliest unsupported owner. A sole unsupported owner can be neither
+later, tied earliest, nor strictly earliest isolated; it must be
+strictly earliest NONISOLATED. At least two unsupported owners or a
+multiple-maximizing-point cap remain unconsumed.
+
+The artifact includes the ORIGINAL finite quantile-chart producer and
+its all-moving-test convergence, literal supported resets and strict
+left/right cut likelihoods, nonisolated late-cap positive rescaling,
+constant multiaffine selected-response identities, and the derived
+ACTUAL cap bound needed in the common-zero-atom branch. There is no
+unproduced compact strategic input hidden in the word source and no
+appeal to another mathematical packet for its realization. Its only
+named checked inputs are original game/law agency, the terminal no-UE
+gap bridge, actual semantic-carrier definition, and the singleton margin.
+
+NOETHER's common-cap, earliest-group, and isolated-earliest/tied-earliest
+identities were read completely; focused independent checks of JC,
+SIC and the full finite comparison are recorded in my owned feedback
+for that note. Those checks do not substitute for the final artifact's
+own falsification gate. A narrow source comparison records that the
+implemented membership-stretch producers optimize MAX rather than SUM;
+no global source census is claimed.
+
+Concrete next question: consume the residual nonisolated earliest
+observer cap or a genuinely multi-unsupported/multiple-cap minimum by
+a whole-law repair or another global table comparison. No further
+singleton constant tuning or local fixed-row trap is proposed.
