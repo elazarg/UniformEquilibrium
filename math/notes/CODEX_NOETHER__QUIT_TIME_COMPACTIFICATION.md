@@ -15507,3 +15507,124 @@ owner with at least one DIFFERENT maximizing clock, or multiple
 maximizing points. Neither the finite spectrum nor CC presently
 consumes that case, and no newly born cap test is identified with
 an old selected response.
+
+## One isolated earliest unsupported cap: a literal singleton-floor spectrum
+
+Status: complete ordinary-mathematical source-restriction candidate,
+not independently reviewed. This treats a DISTINCT earliest-cap geometry
+from LC: the exceptional cap is EARLIER, but its owner prescribes only
+late clocks. The isolation hypothesis is explicit. It is NOT supplied
+as a cap-price bound, and the nonisolated version is not asserted.
+
+### SIC1. Exact marked-source claim
+
+At the same true global δ>0 marked Fin4 minimum, suppose all four
+complete caps have unique maximizing points. Exactly one owner m has
+zero own mass at its cap τ_m, the three other owners have positive
+own cap masses, and
+
+    τ_m< t₀:=min_(j≠m)τ_j.
+
+Assume τ_m is an ISOLATED point of X. Positive opponent mixture mass
+there is sufficient but is not necessary for the stated topological
+assumption. The three supported cap points are already isolated, so
+ALL four complete cap functions have uniform complement gaps.
+
+Claim: m prescribes no clock strictly before t₀. If t₀ is finite,
+let H={j≠m:τ_j=t₀}, a=q_m(t₀), and define
+
+    f_(m,K)=s_m−r_m(K) for nonempty K⊆I∖{m},
+    f_(m,∅)=s_m.
+
+Then
+
+    q_m(clock<t₀)=0,
+    δ=a[s_m−r_m(H∪{m})]+(1−a)f_(m,H).           (SIC1)
+
+If 1−a>0, necessarily δ=f_(m,H). If a>0, necessarily
+δ=s_m−r_m(H∪{m}). The latter value uses a PARTICIPANT coalition,
+not a passive floor and not a grand-withdrawal.
+If t₀=Never, necessarily q_m=δ_Never and δ=s_m=f_(m,∅).
+In the remaining case a=1, m is actually sure at t₀, so uniqueness
+forces ALL THREE supported caps to equal t₀. Thus H=I∖{m} and
+the participant gap is specifically δ=s_m−r_m(I), not an arbitrary
+participant pair or triple gap.
+
+### SIC2. Actual early conditional contradiction
+
+If e=q_m(clock<t₀)>0, reweight m with both signs toward this OLD
+conditional early law. Independently reweight each of the other three
+owners toward its existing supported cap atom, also with both signs.
+For finite t₀ the strict-before old-chart indicator lies before the
+convergent LEFT endpoint of its retained positive mixture interval.
+For t₀=Never it is the old finite region before c_k→c. Positive
+conditional mass, bounded densities and these moving-cut indicators
+give the same literal probability legality, weak-* product convergence
+and ALL moving-test transport as SLC5, with the strict-before cut
+instead of strict-after. No new clock is inserted and c⁺ remains
+c's duplicate.
+
+All four unique caps are isolated, so their uniform complement gaps
+make every complete cap stay fixed on a legal two-sided box. The
+selected-response multiaffine polynomial is therefore constant δ.
+At its all-one endpoint the other three prescribe their displayed
+cap clocks, giving zero selected debts. Owner m prescribes a finite
+clock strictly before t₀, and its displayed cap τ_m is also strictly
+before t₀; both are sole-quitter payoffs s_m against those opponents.
+Thus the polynomial endpoint is zero, contradicting δ>0. This proves
+q_m(clock<t₀)=0 without declaring that endpoint minimal.
+
+### SIC3. Exact remaining endpoint and conditional refinements
+
+Keeping m at its original law, reweight only the other three owners
+toward their supported caps. The same isolated-gap signed transport
+makes the three-variable selected-response polynomial constant δ.
+At all-one parameters, if t₀ is finite, the first sure opponent
+coalition is H. Owner m's earlier displayed cap yields s_m. Its
+prescribed clock either joins H at t₀, with probability a, or follows
+H, with probability 1−a. This proves (SIC1).
+
+If a>0, add the signed reweighting of m toward its EXISTING atom t₀;
+its selected polynomial endpoint gives δ=s_m−r_m(H∪{m}). If 1−a>0,
+instead reweight m toward its OLD conditional law strictly after t₀;
+its endpoint gives δ=f_(m,H). These are actual old-chart signed
+constructions and fixed isolated caps, NOT arbitrary new insertions.
+
+If t₀=Never, absence of prescribed clocks before it forces m to
+prescribe Never surely. The other three endpoint clocks are also
+Never, whereas the displayed τ_m is finite. Its selected debt is
+exactly s_m, proving the stated empty-coalition floor identity.
+
+If a=1 at finite t₀, m's ACTUAL original law is pure t₀. Any supported
+owner with cap strictly later than t₀ would then respond after m's
+sure exit and have the same cap payoff as Never, contrary to uniqueness.
+All three supported caps equal t₀, so the first coalition in their
+endpoint is I and the participant gap is s_m−r_m(I). This uses actual
+sure play only when it has been proved, not at a polynomial endpoint.
+
+### SIC4. Precise sign and coverage limits
+
+If m has positive mass exactly at t₀ and NO later mass, only the
+PARTICIPANT GRAND gap s_m−r_m(I) is forced. It must not be silently
+replaced by a passive floor value. If m has positive later mass,
+the passive gap f_(m,H) is genuinely forced; if both atom and later
+mass are positive, both gaps equal δ. This split is essential for
+any whole-table spectrum-avoidance comparison.
+
+The proof fails for a nonisolated exceptional cap: reweighting the
+other owners toward their LATER cap atoms need not positively rescale
+the earlier response function. Unique attainment then does not give
+a uniform complement gap, so no fixed multiaffine debt branch is
+established. This is an exact remaining cap-motion issue, not a claim
+that the same proof applies after choosing a favorable test.
+
+Consequently every isolated-earliest source in this class has δ in
+the finite literal spectrum
+
+    {s_m−r_m(K):K⊆I∖{m}, r_m(∅)=0}
+       ∪{s_m−r_m(I)}.
+
+The next genuine question is whether one whole-table comparison can
+avoid these floor/grand values TOGETHER with LC and JC, despite their
+rowwise sign conflicts. No whole-table comparison or arbitrary UE
+producer is claimed here yet.

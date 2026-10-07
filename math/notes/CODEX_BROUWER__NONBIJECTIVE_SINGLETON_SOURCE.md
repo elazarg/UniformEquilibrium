@@ -30,7 +30,10 @@ strictly before the common clock with positive probability. The checked
 Fin4 no-UE punishment-normality source excludes this, leaving m PURE at
 that clock. LC11 gives an actual finite-amplitude minimum-preserving path
 to a multiple-cap minimum; it is an existential reselection, not a
-pointwise statement about every minimum.
+pointwise statement about every minimum. LC12 gives a distinct own-law
+path to a multiple-cap minimum when a sole unsupported EARLIEST owner
+has old mass before the supported opponent caps; it does not require
+that owner's maximizing point to be isolated.
 
 No full UE producer, positive unrestricted-gap example, or new export
 is claimed. The next genuine target is a finite-amplitude coupled law
@@ -5257,3 +5260,82 @@ new proof must consume that multiple-cap geometry, not suppress it
 through a favorable selector or treat the selected-grand identity as
 an actual equilibrium. The zero-own-mass EARLIEST-cap alternative
 from NOETHER's SLC10–SLC12 remains a different unresolved branch.
+
+### LC12. Own-law path bypasses a nonisolated earliest-cap obstruction
+
+Status: complete ordinary-mathematical EXISTENTIAL minimum reselection,
+unreviewed. It is not a pointwise unsupported-cap exclusion or a full
+UE consumer. The unsupported earliest cap itself need NOT be isolated.
+This is different from stabilizing it under changes of its opponents:
+only its OWN law changes, so its entire full-cap function is unchanged.
+
+Let q be the same produced global minimum δ>0, with all four caps
+unique. Suppose one owner m has zero own mass at its EARLIEST cap
+τ_m, and the other three have supported cap clocks τ_j>τ_m. Put
+t₀=min_{j≠m}τ_j and suppose
+
+    e=q_m(clock<t₀)>0.
+
+Condition only m's old law on this event, calling it ν, and follow
+the literal old-law path
+
+    q_m^x=(1−x)q_m+xν,       0≤x≤1,
+    q_j^x=q_j,              j≠m.                 (LC18)
+
+The same change is legal on a two-sided open interval near x=0:
+its likelihood multipliers are 1−x and 1+x(1/e−1). All three
+non-m caps are unique supported points, hence isolated and uniformly
+gapped. They remain fixed locally by total-variation control. The
+whole m cap function and its unique maximizer remain EXACTLY fixed
+for every x, including a nonisolated τ_m, because its opponents
+never change. Thus the selected sum
+
+    F(x)=b_m(q)+Σ_{j≠m}V_j(τ_j,q_{−j}^x)−Σ_iU_i(q^x)
+
+is affine, equals the actual full debt near zero, and has an interior
+minimum there. It follows that F(x)≡δ algebraically on the entire
+path. Actual full debt is not asserted equal to F outside that
+initial stable region.
+
+Literal finite realization: if t₀ is finite, it is a positive retained
+mixture atom because some j owns mass at its supported cap there.
+Condition p_mᵏ on clock BEFORE the corresponding original date; its
+old-chart indicator lies before the converging LEFT endpoint. If
+t₀=Never, condition on the original finite-clock region before c_k;
+its endpoint tends to c and its m mass tends to e. The same L¹
+indicator/weak-* bounded-density argument as LC10 applies. Negative
+x near zero is justified by direct likelihood positivity. Forward
+0≤x≤1 needs no extrapolated probability. All modified laws retain
+zero c mass; every actual moving response and original Never remains
+priced. The complete payoffs/caps along (LC18) belong to the actual
+carrier and vary continuously in x by uniform total-variation bounds.
+
+Let x* end the maximal initial interval where the three displayed
+non-m responses are still complete maximizers. Throughout that
+interval D(q^x)=δ. If x*<1, uniqueness of ALL three supported cap
+points at x* would give complement gaps and an extension beyond x*.
+Hence some non-m cap has at least two maximizing POINTS at the
+actual global minimum q^{x*}. No gap for τ_m is used in this step.
+
+If x*=1, m now stops STRICTLY before every other displayed cap surely.
+For any finite τ_j, that response and Never give the same payoff;
+if τ_j=Never, its payoff equals that at finite c because m stops
+strictly below c surely. The relevant selected responses really are
+full maximizers at x=1 by closedness. Thus again another cap has
+multiple maximizing POINTS at a genuine global minimum.
+
+Therefore an earliest unsupported owner with any old mass before
+the first supported opponent cap can be moved to a multiple-cap
+minimum even when its own unique maximizer is NONISOLATED. This is
+not NOETHER's stronger isolated-cap pointwise contradiction: here
+we select another actual minimum, and the old unique-cap source may
+still exist. If e=0, the earlier-law direction does not exist and
+the argument says nothing. Nor does it cover several unsupported
+opponent caps, whose own maximizers may move without a uniform gap.
+
+The immediate full-goal target is now the multiple-cap minimum reached
+by LC11 or LC12. A proof must handle simultaneous ACTIVE responses
+and upper-bound their cap changes; choosing one branch and reusing
+the interior multiaffine argument would discard the very boundary
+price that these finite-amplitude paths expose. No further density,
+entropy, or fixed-child Nash approximation is being proposed.

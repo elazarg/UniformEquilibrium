@@ -35,7 +35,20 @@ This is an independently reviewed mathematical export, not a Lean
 implementation. It does
 not solve the arbitrary-table or worst-table SUM comparison in Section 44.
 
-Current global comparison: Section 46 uses an attained worst SUM table
+Current serious global comparison: Section 47 gives an eight-coordinate
+finite perturbation of an attained worst SUM table. It produces another
+unit-bounded positive-gap table whose true global SUM minimum differs
+from BOTH orientations of every grand withdrawal gap. Consequently NO
+produced marked minimum of that new table, for ANY exceptional owner,
+has the all-unique, exactly-one-zero-own-cap, exceptional-latest geometry.
+The full finite comparison and its marked-source consumer are written
+there; independent review is pending. The new table need not be the
+original counterexample or another worst table. This is a strict source
+reduction, not a Fin4 UE theorem. All own singletons and fifty-two reward
+coordinates are preserved by the perturbation; optional subsequent
+SUM-own-fiber maximization is explicitly separate from MAX-regret data.
+
+Supporting global comparison: Section 46 uses an attained worst SUM table
 and NEW whole-law near-minimizers after a finite own-singleton reward
 increase. It produces an old-table global collision minimum with a
 response-occupation inequality. Consequently the SELECTED source has
@@ -8909,3 +8922,424 @@ especially the sure/common-cap family, or use the selected later-cap
 loss in G11 to construct a complete old-table law of debt below Ω.
 The present own-singleton direction is retired as a sure-boundary
 consumer; the genuinely global reward-table comparison remains active.
+
+## 47. Finite contact avoidance excludes every exceptional-latest owner at a new positive-gap table
+
+Status: a COMPLETE ordinary-mathematical source-reduction candidate,
+not checked in Lean, independently reviewed or exported. Unlike the
+singleton pressure in Section 46, this comparison consumes the WHOLE
+exceptional-latest geometric component, including sure clocks and all
+four possible exceptional owners. It uses one finite reward table and
+the true infimum over EVERY actual independent behavioral profile.
+It never transfers a selected minimizing profile between reward tables.
+
+### N1. Self-contained theorem and exact logical scope
+
+Let I={0,1,2,3}. For each nonempty S⊆I, let r_i(S) be an arbitrary
+real terminal reward. Before absorption, the only observed live history
+is all Continue. Each unrestricted behavioral strategy therefore has a
+complete stopping law on ℕ∪{Never}; the four private laws are independent.
+At the first finite quitting date the nonempty first coalition determines
+the terminal reward, and all Never pays zero. A unilateral deviator may
+replace its ENTIRE law. This is the original terminal objective used by
+the fixed-target uniform-payoff equivalence, not a restricted-menu Nash
+condition or a finite-horizon error.
+
+Define the nonnegative unrestricted debt and its full SUM infimum by
+
+    d_i(r,p)=B_i(r,p)−U_i(r,p),
+    D_r(p)=∑[i∈I]d_i(r,p),
+    Δ(r)=inf[all actual independent laws p]D_r(p).             (N1)
+
+Here B_i is the supremum over ALL pure finite dates and the distinct
+Never response, equivalently over all behavioral deviations. Define
+the four raw grand withdrawal gaps
+
+    a_i(r)=r_i(I∖{i})−r_i(I).                     (N2)
+
+**Raw table conclusion.** If some Fin4 reward table has Δ>0, there is
+another unit-bounded Fin4 reward table r̂ with true Δ(r̂)>0 satisfying
+
+    Δ(r̂)≠a_i(r̂) and Δ(r̂)≠−a_i(r̂)
+                         for EVERY i∈I.          (N3)
+
+The construction changes only the EIGHT omitted-triple recipient and
+grand recipient coordinates of a worst unit-cube table. Its other
+fifty-two coordinates, including every own-singleton entry, stay fixed.
+The theorem is existential: it does NOT assert that every original
+positive-gap table already obeys (N3), or that r̂ is itself a worst
+table. It does not supply a positive-gap table without the hypothetical
+counterexample premise.
+
+**Consumed marked-source conclusion.** For this SAME r̂, consider ANY
+marked compact minimum produced from ANY specified finite-law minimizing
+sequence by the original quantile-chart representation. Let q_i be its
+independent prescribed laws on X=T⊔{Never}; finite order and ties are
+literal, Never is isolated and distinct, every pure-response payoff is
+continuous, and every cap is attained. The construction retains the
+original finite witnesses and complete unrestricted caps, with
+q_i({c})=0 at c=max T. There is NO owner m for which all of the following
+simultaneously hold:
+
+1. EVERY player's complete cap has a unique maximizing TEST POINT τ_i;
+2. q_m({τ_m})=0, while q_j({τ_j})>0 for EVERY j≠m;
+3. τ_j<τ_m for EVERY j≠m.                         (N4)
+
+Thus the entire exactly-one-zero-own-cap, exceptional-latest class is
+excluded on ALL produced minima of r̂, for ALL four owner choices. This
+is a restriction on a newly produced counterexample table, not a
+pointwise theorem about an arbitrary old minimizing law. Conditions
+in (N4) count test points, not just distinct response payoff values;
+Never is not consolidated with the last finite test.
+
+Combining this conclusion with the frozen cap-atom exclusion, every
+produced minimum of r̂ must have at least one of:
+
+- a multiple-maximizing-point complete cap;
+- at least TWO owners whose unique maximizing cap points have zero
+  own prescribed mass;
+- exactly one such zero-mass owner m whose cap is NOT strictly later
+  than all the other unique cap points, so some τ_j≥τ_m.
+
+These alternatives remain open. There is no equilibrium construction
+or unrestricted positive-gap example, and no full Fin4 closure claim.
+
+### N2. Exact original-game counterexample input
+
+The tracked theorem
+`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean` states
+the actual no-UE equivalence with one fixed positive gain against EVERY
+behavioral profile. Its target is one payoff vector fixed before the
+accuracy, with accuracy-dependent profiles valid at all sufficiently
+long horizons. The deviation replaces the complete behavioral strategy.
+
+If such a gain g>0 exists, D_r(p)≥g for every p, so Δ(r)>0. Conversely,
+if Δ(r)=d>0, every profile has some debt at least d/4. Approximate that
+owner's supremum by an actual response within d/8; it improves payoff
+by at least d/8. Thus Δ>0 implies an actual terminal exploitability
+gap, without assuming cap attainment on the natural-number calendar.
+The named semantic theorem then excludes an original uniform-payoff
+target. This checks the input and output against the same unrestricted
+original-game quantifiers.
+
+Choose M>0 bounding all finitely many reward entries and divide the
+entire finite reward table by M; Never remains zero. Positive scaling
+multiplies every payoff, cap, debt and infimum by the same factor.
+Therefore an arbitrary signed Fin4 no-UE table supplies a positive-Δ
+table in the closed unit reward cube. No punishment normality,
+nonnegative own-singleton premise, single-pivot normalization, or
+selected local Nash object is needed for N1--N3.
+
+### N3. The attained worst SUM source and the strict bound Ω<2
+
+For two reward tables at sup distance e, the SAME independent laws give
+prescribed payoff and every pure response payoff changes at most e.
+Taking all-response suprema changes each cap at most e. Therefore
+
+    |D_r(p)−D_(r′)(p)|≤8e,
+    |Δ(r)−Δ(r′)|≤8e.                            (N5)
+
+The second estimate follows by taking infima in BOTH directions over
+the same complete actual law space, not by selecting a fixed minimizer.
+The closed unit cube has sixty coordinates and is compact. Continuity
+in (N5) supplies a table r* with
+
+    Ω=Δ(r*)=max[all unit-bounded Fin4 tables]Δ(r)>0.             (N6)
+
+An actual finite-law minimizing sequence supplies a marked global
+minimum, whose payoff/cap pair belongs to the original closed semantic
+carrier. At this TRUE SUM minimum the exact tracked theorem
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+gives, with M=1,
+
+    B_i−s_i≥Ω+Ω²/8.
+
+The original unit bounds give B_i≤1 and s_i≥−1. Hence
+
+    Ω+Ω²/8≤2, and consequently 0<Ω<2.            (N7)
+
+Only the strict comparison with the endpoint value two is needed here.
+This is not a numerical-bound improvement. The bound is for the SUM
+minimum under the named actual carrier hypotheses, not the MAX-regret
+infimum used by the existing membership-stretch source.
+
+### N4. One eight-coordinate perturbation avoids ALL signed contacts
+
+Write a_i=a_i(r*)∈[−2,2]. Define the rowwise orientation
+
+    χ_i=1 if a_i≥0, and χ_i=−1 if a_i<0.
+
+For 0<α<1, change exactly the following entries:
+
+    r̂_i(I∖{i})=(1−α)r*_i(I∖{i})+αχ_i,
+    r̂_i(I)=(1−α)r*_i(I)−αχ_i.                   (N8)
+
+Every other entry of r̂ equals its entry in r*. These are distinct
+coordinates for all four recipients. Each changed coordinate is a
+convex combination of its old unit-bounded value with +1 or −1, so
+r̂ stays in the closed unit cube. Also
+
+    ‖r̂−r*‖∞≤2α,
+    a_i(r̂)=χ_i[(1−α)|a_i|+2α],
+    |a_i(r̂)|=(1−α)|a_i|+2α.                     (N9)
+
+The last identity includes a_i=0, with χ_i=1. No original sign is
+reversed. This is a simultaneous four-pair perturbation with one
+common α, not a separate reward table chosen after an owner request.
+
+Let L={i:|a_i|<Ω}. If L is nonempty, put
+
+    η=min[i∈L](Ω−|a_i|)>0;
+
+if L is empty, put η=1. Make the explicit common choice
+
+    α=min(1,Ω,η)/64.                             (N10)
+
+Then 0<α≤1/64. Put d=Δ(r̂). The worst-table ordering and the full-law
+Lipschitz estimate give the SINGLE global value interval
+
+    Ω−16α≤d≤Ω, and d≥3Ω/4>0.                    (N11)
+
+For every owner the raw contact lies strictly OUTSIDE this interval:
+
+1. If |a_i|=Ω, then by (N7)--(N9)
+
+       |a_i(r̂)|=Ω+α(2−Ω)>Ω.
+
+2. If |a_i|>Ω, the bound |a_i|≤2 and (N9) give
+
+       |a_i(r̂)|≥|a_i|>Ω.
+
+3. If |a_i|<Ω, then
+
+       |a_i(r̂)|≤|a_i|+2α≤Ω−η+2α<Ω−16α,
+
+   since α≤η/64 implies 18α<η.
+
+These cases are exhaustive. Thus d differs from EVERY |a_i(r̂)|,
+which, since d>0, proves both signed inequalities in (N3). Crucially
+the comparison is against the ENTIRE interval in (N11), so no selected
+minimizing law or branch need remain fixed when the table changes.
+All new minimizing laws, including completely different role assignments,
+have the SAME true value d and encounter the same eight strict contacts.
+
+### N5. Which further selections are preserved, and which are not
+
+The literal table r̂ in (N8) preserves all four own-singleton entries,
+every passive singleton, every pair reward, and all triple PARTICIPANT
+entries. Only the four triple OMITTED-player entries and all four grand
+entries change. Its sixty-coordinate unit bound is preserved. No
+singleton matrix Γ entry changes, since Γ uses only singleton rewards.
+Thus any equality defining a particular original singleton normalization
+is preserved as a raw equality IF the worst table actually has it;
+the argument does not assert that arbitrary worst tables are canonical
+single-pivot tables.
+
+One may optionally reselect ONLY the four own-singleton entries on their
+closed unit cube to maximize the SUM infimum Δ, while keeping the other
+fifty-six coordinates of r̂ fixed. Continuity from (N5) guarantees such
+a SUM-own-fiber maximum r̂ᶠ. Its value satisfies
+
+    Δ(r̂)≤Δ(r̂ᶠ)≤Ω.
+
+The upper bound still comes from the original full-cube SUM maximum r*.
+All four a_i(r̂ᶠ)=a_i(r̂) remain unchanged, so the same no-contact proof
+applies to r̂ᶠ. This optional reselection may change own singleton levels
+and Γ; it does not preserve a singleton normalization unless that
+normalization is separately imposed and shown compatible. No profile,
+clock ancestry, response selection or minimizing continuation is
+transferred through this optional fiber selection.
+
+In particular this is NOT the existing MAX-exploitability singleton-fiber
+source. The two numerical objectives and their minimizing families stay
+separate. No simultaneous maximum of SUM and MAX, or a common maximizer
+between those two fibers, is asserted. N4 itself needs no fiber selection.
+
+### N6. Complete marked-source consumer: the exceptional-latest identity
+
+For clarity, the exact source identity used to consume (N3) is proved
+here in ordinary mathematics. It is the LC1--LC5 result in BROUWER's
+owned `CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`; LC8's punishment
+graft and the later earlier-mass refinement are NOT needed.
+
+Let an arbitrary bounded table have true positive SUM infimum δ. Let
+q be ANY produced marked global minimum satisfying (N4). Write
+
+    t₀=min[j≠m]τ_j,       h=max[j≠m]τ_j.
+
+The three nonexceptional maximizing tests are finite, because Never is
+last and each is strictly earlier than τ_m. They are positive prescribed
+own point atoms, so they are isolated retained mixture-atom midpoints.
+Every supported atom admits two-sided legal reweighting
+
+    q_j^λ=(1−λ_j)q_j+λ_j δ_(τ_j),   j≠m,
+
+on a sufficiently small open box around zero. Negative coefficients
+are legal because the old own mass at τ_j is positive. Original finite
+witnesses use the SAME atom's original date and retain all prescribed
+payoffs and full caps. These signed supported-atom realizations are
+proved in `../exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md`.
+
+The exceptional unique cap stays fixed despite possible nonisolation of
+τ_m. If τ_m is finite, choose a cut h<a<τ_m. For EVERY response t>a,
+including Never, expansion of the opponent product gives
+
+    V_m(t,q_-m^λ)
+       =[∏[j≠m](1−λ_j)]V_m(t,q_-m)+C(λ),         (N12)
+
+where C is independent of t. Indeed each nonempty replacement subset
+contains an opponent stopped at its earlier finite τ_j≤h<a; the
+earliest opponent coalition in that summand occurs before t, regardless
+of the other old opponent clocks. The multiplier in (N12) is positive
+near zero, so it preserves the response ordering above a. The compact
+set of response points at or before a has a uniform original strict
+gap below the unique τ_m cap; the total-variation change bound preserves
+that gap on a smaller box. If τ_m is Never, its isolation directly
+gives a uniform full-response gap. Each other unique cap is an isolated
+positive atom and has the ordinary uniform full-response gap as well.
+Thus EVERY complete cap is fixed simultaneously on the indicated box.
+
+Suppose m has positive prescribed mass e strictly after t₀, including
+Never. Let ν=q_m(·|clock>t₀), and also vary its law by
+
+    q_m^λ=(1−λ_m)q_m+λ_mν.
+
+This is legal for both signs near zero: its likelihood multiplier is
+1−λ_m on the complement and 1+λ_m(1/e−1) on the conditional event.
+Its own cap is independent of its own law, while other owners' isolated
+unique caps stay fixed by their uniform gaps. The original-sequence
+realization is literal: if a_k is the original date of the retained
+positive atom t₀ and e_k=p_m^k(clock>a_k), then e_k→e>0. Replace the
+old law by
+
+    (1−λ_m)p_m^k+λ_m p_m^k(·|clock>a_k).
+
+In its old quantile chart the only new multiplier is the bounded
+two-valued factor with cutoff at the old atom interval's right endpoint.
+Those endpoints converge, and the cutoff indicators converge in L¹.
+Testing against L¹ functions proves weak-* convergence of the modified
+old densities. The already retained product-rectangle and moving-test
+kernels therefore transport all coalition probabilities, prescribed
+payoffs and EVERY complete response cap. No new calendar or correlation
+is introduced. The positive global floor applies on this two-sided box.
+
+With every complete cap fixed at its displayed τ_i, SUM debt is a
+multiaffine polynomial in the four parameters. An interior minimum of
+a multiaffine polynomial on an open box makes it algebraically constant.
+For completeness, the lowest nonzero squarefree homogeneous part would
+have zero average over a sign cube, hence a strictly negative sign
+direction; small scaling would contradict the local minimum. The
+argument remains valid if a parameter is redundant.
+
+Set all four parameters to one ALGEBRAICALLY. The three nonexceptional
+players prescribe their displayed τ_j and have zero displayed-response
+debt. Owner m prescribes ν strictly after t₀; its displayed τ_m is
+later than all τ_j. Both receive the same passive payoff from the
+earliest opponent coalition at t₀. The displayed polynomial is therefore
+zero at this endpoint, contradicting its positive constant δ. This
+proves that m stops no later than t₀ almost surely.
+
+If some τ_j>t₀, opponent m stops strictly before that displayed response
+surely. Responding at τ_j or Never gives identical payoff, contradicting
+the unique cap. Hence ALL τ_j=t₀ for j≠m. If q_m({t₀})=0, m stops
+strictly before t₀ surely; the same equality of t₀ and Never responses
+contradicts every other unique cap. Thus q_m({t₀})>0.
+
+Now every owner has a positive OLD atom at t₀. Reweight every law,
+including m's, toward its old δ_(t₀) with both signs. Nonexceptional
+caps t₀ stay fixed by isolation; m's later cap stays fixed by (N12),
+since all opponent replacement targets are t₀<τ_m. The same original
+finite witnesses realize these signed changes and the multiaffine
+SUM polynomial is again constant δ.
+
+At its all-one ALGEBRAIC endpoint all four prescribed clocks are t₀.
+The three nonexceptional displayed responses are prescribed actions and
+contribute zero. The exceptional displayed response occurs later, so
+it receives r_m(I∖{m}) while prescribed payoff is r_m(I). Consequently
+
+    δ=r_m(I∖{m})−r_m(I)=a_m(r).                  (N13)
+
+This polynomial evaluation does NOT assert actual endpoint caps, pure
+grand Nash, actual pure-grand minimum debt δ, or a minimizing old tail.
+Only the caps on a sufficiently small two-sided box are held fixed;
+the endpoint is used algebraically. The original whole-law global floor
+and full moving-test transport are what justify the constant polynomial.
+
+Apply (N13) to ANY hypothetical (N4) source at r̂. Its debt is the SAME
+true d=Δ(r̂), contradicting (N3) for its owner m. Since the no-contact
+inequalities hold simultaneously for all four owners and for the entire
+value interval (N11), this consumes owner switching as well as the sure
+boundary. No new minimizing profile is identified with an old one.
+
+### N7. Exact tests, overlap, and nonclaims
+
+The finite raw cases in N4 include old contact values on either sign,
+zero gaps, saturated gaps ±2, noncontact gaps on both sides of Ω,
+and ties across any number of owners. A zero gap moves to 2α and stays
+below the allowed d interval; an old contact ±Ω moves in its OWN sign
+to magnitude Ω+α(2−Ω)>Ω. Saturated ±2 gaps stay saturated and remain
+above d. The separation η is chosen from a finite four-element set,
+so no uniform separation over an infinite active-response family is
+being assumed.
+
+Worst-table maximality is necessary for this construction. Without the
+upper bound d≤Ω, moving a contact above Ω would not exclude an increase
+of the true global value to that same moved contact. The finite lower
+bound is also necessary: without the Lipschitz control, d could drop
+onto a formerly lower contact. Both bounds are derived for ALL actual
+laws, not a root class or a grid.
+
+Bounded actual-source lookup inspected:
+
+- `quittingTerminalExploitability_eq_max_debt` in
+  `UniformEquilibrium/Quitting/Terminal/TerminalExploitability.lean`,
+  and the definition `quittingTerminalExploitabilityInf` in
+  `UniformEquilibrium/Quitting/Terminal/TerminalDebtPrefixDescent.lean`;
+- `exists_maximum_quittingTerminalExploitabilityInf_unitReward` and
+  `exists_membershipStretch_singletonFiber_source_of_positiveInf` in
+  `UniformEquilibrium/Diagnostics/Quitting/MembershipStretchWorstTableSource.lean`;
+- `exists_membershipStretch_source_opposedReversals_of_no_uniformPayoff_finFour`
+  in `UniformEquilibrium/Diagnostics/Quitting/MembershipStretchOpposedSource.lean`;
+- `quittingMembershipStretchedReward` and its own-singleton and displacement
+  declarations in `UniformEquilibrium/Diagnostics/Quitting/MembershipStretch.lean`;
+- the exact no-UE semantic equivalence and all-owner SUM moat named in
+  N2--N3, under their imports.
+
+The existing worst-table declarations optimize MAX debt, not SUM. They
+use a full sign-sensitive membership stretch across paired coalition
+entries and may then reselect a MAX-own-fiber optimum. Their sure-root
+consumers concern actual three-sure roots and opposed membership
+reversals. They do not state (N3) for a true SUM infimum, or exclude
+(N4) for every produced compact minimum at one fixed new table. The
+new eight-coordinate construction is aligned to the SUM source from
+start to finish and requires none of their all-player-tie conclusions.
+A narrow search for finite contact avoidance or grand withdrawal
+no-contact in these files and the nearby terminal-semantic subtree
+found no matching implemented SUM result. This is not a global source
+or UE-producer census.
+
+The N6 identity is ordinary mathematics from the produced global
+marked source, not a Lean-checked declaration. It has been expanded
+here so that review can independently falsify its signed conditional
+transport, complete-cap stability, and polynomial endpoint as well as
+the new N4 finite comparison. Neither LC8's punishment-tail identity,
+LC10's later refinement, nor a common-unique-cap theorem is an input.
+
+The main proof changes a hypothetical counterexample into another
+counterexample with a strictly smaller surviving marked-source class.
+It does not build an equilibrium in either table, exclude arbitrary
+unproduced compact laws, or eliminate all multi-cap/early-zero-cap
+geometries. It also does not claim that every original counterexample
+can be perturbed by this recipe without first taking the global worst
+SUM source. Further reward normalization, single-pivot conversion,
+strategy ancestry, and MAX-minimizer transfer require their own proofs.
+
+Concrete next question: can one finite endpoint table simultaneously
+avoid the raw join-sum contacts supplied by common unique-cap positive
+atoms, without undoing N3? The disjoint participant-pair/triple and
+passive-singleton/pair coordinates look compatible with N8; that
+additional source identity is being checked independently and is NOT
+claimed here. Independent review of N1--N13 is now requested before any
+standalone packet or export promotion.

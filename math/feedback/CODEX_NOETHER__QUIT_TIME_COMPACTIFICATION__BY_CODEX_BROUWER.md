@@ -302,3 +302,42 @@ does not falsify this minimum-based argument.
 This is a genuine universal restriction of the marked counterexample
 source. It is not a favorable-minimizer selection, child-equilibrium
 splice, unrestricted Fin4 producer, or claim about multiple cap points.
+
+## Focused JC1–JC4 join-spectrum review
+
+Verdict: PASS for the exact identity δ=C_A(r), checked independently
+on the frozen “Common unique cap with a positive atom” section. This
+short review covers JC1–JC4 ONLY. JC5's fresh-table perturbation is
+outside this review and is not imported as a theorem.
+
+The common point must be finite: a zero-own-mass owner at common
+Never is finite surely, forcing another owner's c response to tie
+Never. Positive MIXTURE mass makes the finite common point isolated
+for every owner's response function, regardless of that owner's own
+mass. A zero-own-mass owner cannot be sure strictly earlier, since
+it would make another common response tie Never; hence all its
+conditional old late targets exist. Signed supported-atom reweightings
+for A and strict-after conditional old-law reweightings for Z are
+legal on a two-sided box. The common retained RIGHT cutoff converges,
+the conditional masses stay positive, and bounded-density/moving-
+kernel transport retains every finite tester, Never and c⁺. No
+uniqueness-without-isolation gap is assumed.
+
+All complete caps remain the common isolated point locally. The
+selected-response sum is therefore a genuinely minimal multiaffine
+polynomial on that signed box and must be constant δ. At its all-one
+endpoint the prescribed first coalition is exactly A; each A owner
+prescribes its displayed response, while z∈Z receives passive
+r_z(A) and displays the joining payoff r_z(A∪{z}). This gives exactly
+the stated SUM, without asserting positivity of individual terms
+or actual endpoint caps/minimality. Never in a Z conditional law
+is harmless because a sure finite A owner absorbs first.
+
+For |A|=3, its sole omitted receiver z contributes
+r_z(I)−r_z(I\{z}), the NEGATIVE of LC's grand-withdrawal value.
+The nonempty proper A census has fourteen literal sets. The all-
+supported and zero-MIXTURE-mass common points have different excluded
+premises and are correctly handled separately, not through an
+unproved cap price. This finite raw contact identity is a universal
+restriction of the same genuine minimum, not a UE consumer or a
+claim that an old source stays minimal at a modified reward table.
