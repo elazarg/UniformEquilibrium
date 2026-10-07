@@ -1575,9 +1575,12 @@ it is not silently substituted for a general-table theorem here.
 
 The needed general source is already implemented. I inspected
 `quittingQuantileClockCompressedLaws`,
-`hasEscapeAwareQuantileClockCompressionAtRewardBound`,
+`hasEscapeAwareQuantileClockCompressionAtBound`,
 `quantileClockSupport`, and `quantileClockScaledRadius` in
 `UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`.
+The related `hasEscapeAwareQuantileClockCompressionAtRewardBound` is its
+canonical game-specific reward-bound specialization; the arbitrary M used
+here is supplied to the `AtBound` theorem.
 Its mathematical content for Fin4 and level j≥1 is a COMMON deterministic
 ordered quotient f_j of the stopping calendar, preserving Never as a
 separate point, such that q_i=(f_j)_*p_i has at most8j+1 finite dates and

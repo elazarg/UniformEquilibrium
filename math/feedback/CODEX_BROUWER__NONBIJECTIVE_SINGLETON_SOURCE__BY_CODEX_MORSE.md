@@ -258,3 +258,103 @@ beyond the named accepted raw tests, including the signed-column cone.
 All mathematical inputs needed by the packet are inline or named
 repository declarations; there is no dependency on another conference
 note, review, unaccepted CCE theorem, or unproduced strategic witness.
+
+## Independent fixed-temperature representation check
+
+Scoped verdict: **PASS** on RC1–RC10 and the proposition in “Retaining
+tied atoms and the entire tester set,” in the author notebook at whole-file
+SHA256 `810da591fdc5387491fb7133ebfa4301b8c7dff333fbb9db45fc1f510e013982`
+(1873 lines). This is a separate ordinary-mathematical review of a supporting
+global-minimum representation, not an export gate, an original-clock
+attainment theorem, or a UE result. No counterpart review was read.
+
+### Coarsening and strong convergence
+
+The source bound uses the actual common active-cell push-forward, retaining
+Never and transporting every response in both directions. I inspected
+`quantileClockSupport`, `quantileClockScaledRadius`,
+`hasEscapeAwareQuantileClockCompressionAtBound` and
+`hasEscapeAwareQuantileClockCompressionAtRewardBound` in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`, and
+`finiteClockActiveQuotient`, `finiteClockActiveCompressedLaw` and
+`exists_finiteClockActiveCellIndex_eq` in
+`MathUE/Probability/QuantileClock.lean`. For an arbitrary supplied absolute
+reward bound M, the precise applicable wrapper is the `AtBound` theorem;
+the `AtRewardBound` specialization uses the canonical game-specific bound.
+Both give the stated 12M/j coordinate error for Fin4 with the appropriate M.
+The 96M/j sum-debt bound and at most 8j+2 quantile cells follow.
+
+The entropy chain rule is exact, including zero masses. Its reconstructed
+law has the same common marginal and the same quotient masses. Thus global
+near-minimality, not finite-calendar Nash or common support alone, yields
+τΣ_i KL(p_i‖p̂_i)≤96M/j+η. Pinsker and Cauchy–Schwarz give RC5 with
+the stated constants. The common-quantile coordinates identify this norm
+with L¹ exactly. Bounded K-step functions form a compact L¹ family even
+when endpoints coincide. Choosing j first and then the sequence tail
+proves total boundedness of the actual likelihoods. Uniform continuity
+of x log x on [0,4] proves entropy convergence. No positive lower bound
+on the Never mass or likelihood ratios is needed for RC1–RC8.
+
+### Tied intervals and both complete-cap inequalities
+
+I checked the potentially delicate endpoint cases directly. An open
+component (a,b) of the limiting endpoint complement is approached by one
+whole original atom, not by several atoms of unrecorded relative order.
+Otherwise an intermediate endpoint would persist inside (a,b), contradicting
+Hausdorff convergence. Its limiting density is constant, and the only
+available test in its interior is its midpoint. The midpoint itself is
+retained because the corresponding original date is a legal response.
+
+The assertion that E outside T has zero Lebesgue measure is also valid.
+Inside a component of the complement of T, two distinct limiting endpoints
+would force an original atom midpoint between nearby approximating
+endpoints. That midpoint would contradict the positive distance from T.
+Thus there is at most one endpoint in each such component. This justifies
+the collapse map almost everywhere without adding any unavailable cut.
+
+For prescribed outcomes, away from the countable component endpoints,
+Never boundary and pairwise equal draws, the first-coalition partition
+stabilizes. Two draws lie either in one persistent atom or have a limiting
+endpoint strictly between them. Strong convergence of the product densities
+then permits bounded convergence for each coalition indicator.
+
+For a moving pure response x_n→x, there are two genuinely different cases.
+At a persistent atom midpoint, x_n is eventually that exact atom's midpoint,
+so the tie is retained. At x∈E, the limiting prescribed law has no mass at
+x itself; a nonvanishing adjacent atom stays on its correct side because
+its midpoint remains separated from x. All other atom masses crossing the
+cut tend to zero. This proves convergence for every moving available
+response, including the last finite response c_n→c. Never remains a
+different isolated response, so signed singleton rewards cause no problem.
+
+Consequently a subsequence of finite maximizers gives limsup b_i(pⁿ)≤b_i(q).
+Conversely each limiting test is approximated by actual tests via Hausdorff
+convergence, giving b_i(q)≤liminf b_i(pⁿ). The same argument proves
+continuity of the limiting pure-response payoff on T; a positive atom's
+midpoint is isolated, while non-atomic cuts have continuous payoff.
+Thus the stated limiting maximum is attained, and neither cap inequality
+assumes an unrecorded response location.
+
+### Exact stress tests and scope
+
+The tester-set bookkeeping is essential. In a two-player table with own
+singleton payoff 1, passive singleton payoff 0 and pair payoff −10, let
+both laws assign mass 1/2 to each of adjacent dates 0 and 1. The available
+quantile tests are {1/4,3/4,1} and Never, and the complete cap is 0.
+An artificially inserted cut at 1/2 would instead earn 1/2. Inserting an
+empty initial date would also add the test 0 and raise the cap to 1.
+These are different calendars with identical likelihood densities and
+atom lengths. The proposed T distinguishes all three correctly.
+
+At the opposite boundary, if all laws are Never, T={0} records a genuine
+finite response while Never remains separate. With own singleton −1, the
+two values are −1 and 0; collapsing those tests would be false. The proof
+does not collapse them. Vanishing atom lengths likewise contribute no
+unrecorded positive tie probability because all likelihoods are bounded by 4.
+
+There is no unresolved mathematical objection to the stated representation
+and attainment of the numerical value m_τ. This verdict does not justify
+arbitrary variations on the limiting calendar, multiplicity of collapsing
+empty dates, realization on ℕ, τ→0 passage, or a zero-debt conclusion.
+Those missing consumers remain exactly as the author states. No Lean
+compilation or kernel verification was performed in this review.
