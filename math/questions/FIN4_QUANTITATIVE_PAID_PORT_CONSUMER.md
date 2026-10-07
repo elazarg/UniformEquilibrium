@@ -1,150 +1,131 @@
-# Turn an actual quantitative paid row into debt below the global infimum
+# Consume a first collision at a positive global terminal-debt minimum
 
-## Game and full terminal debts
+## Game and unrestricted response values
 
-There are four players I = {0,1,2,3}. At each date in ℕ, each player
+There are four players I={0,1,2,3}. At each date in ℕ each player
 independently chooses Continue or Quit. The first nonempty quitting
-coalition S pays r(S) ∈ ℝ⁴; infinite all-Continue pays zero. Fix M > 0 with
-|r_i(S)| ≤ M for every reward coordinate.
+coalition S pays r(S)∈ℝ⁴; infinite all-Continue pays zero. Fix M>0 with
+|r_i(S)|≤M for every reward coordinate, and write s_i=r_i({i}).
 
-A behavioral profile is equivalently an independent product law p on
-(ℕ ∪ {Never})⁴. A unilateral deviation replaces one complete stopping law,
-including arbitrary late finite dates and Never. Define
+A behavioral profile p is equivalently four independent stopping laws on
+ℕ∪{Never}. A deviator may replace its complete law, including arbitrarily
+late finite dates and Never. No common random seed is available. Define
 
-    U_i(p) = the prescribed expected terminal reward;
-    B_i(p) = sup over all replacement laws μ_i of U_i(μ_i,p_{−i});
-    d_i(p) = B_i(p)−U_i(p);
-    D(p) = ∑[i ∈ I] d_i(p);
-    D_* = inf over all actual product laws p of D(p);
-    P_i = inf over all independent opponent laws p_{−i} of B_i(p).
+    U_i(p)=the prescribed expected terminal payoff,
+    B_i(p)=sup over all replacement laws μ_i of U_i(μ_i,p_{−i}),
+    d_i(p)=B_i(p)−U_i(p),
+    D(p)=∑[i∈I] d_i(p).
 
-Punishment P_i is an infimum of unrestricted behavioral best-reply values;
-the opponents do not receive a common random seed. Assume
+Let K be the Euclidean closure of all actual pairs (U(p),B(p)). It is
+compact. For w=(u,b)∈K put D(w)=∑[i∈I](b_i−u_i), and let
 
-    D_* > 0,       P_i ≤ r_i({i}) for every i.
+    δ=min[w∈K] D(w)=inf[actual p] D(p).
 
-The inequality D(p) ≥ D_* holds against every actual behavioral product law,
-not only stationary, finite-clock, or bounded-memory profiles.
+Assume δ>0. This is a lower bound against every actual behavioral profile,
+not only finite-clock, stationary, or bounded-memory profiles.
+Membership in K does not assert that the pair is realized by one profile.
 
-## A minimum and its actual realizing profiles
+## Supplied first-row decomposition
 
-Let ℓ_p be the probability vector of the terminal outcome: its coordinates
-are the fifteen nonempty quitting coalitions and Never, where Never means
-all players choose Never. Put
+Fix an actual carrier continuation v=(u,b)∈K and an independent product
+root q∈[0,1]⁴. Player i Quits at the first date with probability q_i;
+on all-Continue the continuation is v. This means the continuous semantic
+limit of literal one-row prefixes over actual realizing tails, not play
+followed by an unattained strategy at an infinite date.
 
-    Φ(p) = (U(p),B(p),ℓ_p).
+For T⊆I\{i} put
 
-Let C be the closure, in finite-dimensional Euclidean space, of
-{Φ(p) : p is an actual behavioral product law}. It is compact because
-U and B lie in [−M,M]⁴ and ℓ_p lies in a finite probability simplex.
-The continuous function (u,b,ℓ) ↦ ∑[i] (b_i−u_i) attains its minimum D_*
-on C. This does not assert that a minimizing point equals Φ(p) for an
-actual profile.
+    p_{−i}(T;q)=∏[j∈T] q_j · ∏[j∉T,j≠i](1−q_j),
+    α_i(q)=∏[j≠i](1−q_j),
+    A_i(q)=∑[∅≠T⊆I\{i}] p_{−i}(T;q) r_i(T),
+    Q_i(q)=∑[T⊆I\{i}] p_{−i}(T;q) r_i(T∪{i}),
+    C_i(q)=A_i(q)+α_i(q)b_i.
 
-Fix one minimum z_* = (u_*,b_*,ℓ_*) in C and one sequence of actual laws
-p^n with Φ(p^n) → z_*. Also retain a nonempty coalition S_* with
-ℓ_*(S_*) > 0. This is a positive terminal coalition atom, not a stopping-date
-atom and not a statement about independent marginal limits.
+The complete first-row pair T_q(v)=(u′,b′) is
 
-## An actual paid row with quantitative reach
+    u_i′=q_i Q_i(q)+(1−q_i)[A_i(q)+α_i(q)u_i],
+    b_i′=max(Q_i(q),C_i(q)).
 
-The supplied data include an index n₀ and a finite chain of actual product
-laws
+These caps cover every behavioral response, not just changing the first
+action: Continuing permits the complete tail response valued at b_i.
+Every T_x(v), x∈[0,1]⁴, belongs to K. Require
 
-    σ^0 = p^(n₀), σ^1, …, σ^m = p.
+    D(T_q(v))=δ,
+    R(q)=∑[S⊆I,|S|≥2] ∏[i∈S]q_i · ∏[j∉S](1−q_j)>0.
 
-Each step replaces one player's complete law and leaves the other three
-unchanged. These replacements are recorded as actual equalities of laws;
-their order is not an order of temporal play, and no payoff monotonicity is
-assumed merely from this ancestry.
+Thus a nonsingleton event occurs at the first root of a genuine global
+minimum. The row need not be Nash against u or b. The tail need not
+minimize debt; its only automatic lower bound is D(v)≥δ. Rates zero and
+one are allowed. No positive Never probabilities are assumed, and no
+conditioning on a zero-survival event is permitted.
 
-The endpoint satisfies D(p) > D_*. It has a distinguished player i with
-d_i(p) ≥ D_*/4 and two distinct pure stopping times s,t in ℕ ∪ {Never}.
-The time s has positive mass in p_i. The ordered comparison is a profitable
-switch from s to t against the same opponents p_{−i}.
-Write U_i(u,p_{−i}) for the payoff when i uses the pure time u.
+## Quantitative minimum constraints
 
-Order Never after every finite time and put a = min(s,t), which is finite.
-Let
+The following all-owner inequalities are available at every minimizing
+pair w=(a,c)∈K, with γ=δ²/(8M):
 
-    A = Pr_{p_i}(T_i ≥ a);
-    L = ∏[j ≠ i] Pr_{p_j}(T_j ≥ a);
-    R = A L.
+    c_i−s_i≥δ+γ,
+    a_i−s_i≥δ−(c_i−a_i)+γ≥γ.
 
-Thus A is own survival, L is opponent survival, and R is actual joint
-survival to the start of date a. Require the quantitative floors
+For the supplied decomposition put c(q)=∏[i](1−q_i) and
+g_i(q)=Q_i(q)−C_i(q). Its exact total-debt identity is
 
-    A ≥ D_*/(16M),
-    L ≥ D_*/(32M),
-    R ≥ D_*²/(512M²).
+    δ=c(q)D(v)+∑[i∈I][max(g_i(q),0)−q_i g_i(q)].
 
-All these probabilities refer to the actual endpoint p. Because R > 0,
-conditioning each marginal on survival to a and subtracting a from its
-finite times gives one well-defined actual continuation product law.
+Every summand is nonnegative. In particular,
 
-For a pure time u ≥ a, let V_i^a(u) be i's expected terminal payoff against
-the opponents conditioned to survive to a, when i waits until u and quits,
-or chooses Never if u = Never. Dates are shifted by a in this continuation.
-Define the reached comparison
+    0≤∑[i∈I][max(g_i(q),0)−q_i g_i(q)]≤(1−c(q))δ.
 
-    g = V_i^a(t)−V_i^a(s).
-
-Require
-
-    Lg = U_i(t,p_{−i})−U_i(s,p_{−i}) ≥ D_*/16.
-
-The equality holds because both pure plans Continue before their first
-disagreement at a. The quantity Lg is an opponent-survival-weighted
-pure-witness gain. It is not silently identified with the payoff improvement
-from replacing the original mixed law p_i by t. The conditional continuation,
-the ordered pair s,t, and the actual law p are all retained.
+No equality D(v)=δ or root-Nash conclusion follows from this identity.
+The collision also gives α_i(q)≤1−R(q) for every i; contraction of this
+fixed prefix does not assert that iterating it preserves minimality.
 
 ## Question
 
-For every reward table and every collection of actual data satisfying the
-conditions above, construct an actual behavioral product law π on the same
+For every reward table and every collection of data satisfying these
+conditions, construct an actual behavioral product law π on the same
 table such that
 
-    D(π) < D_*.
+    D(π)<δ,
 
-This would contradict the defining global lower bound. Equivalently, a
-complete positive solution may prove that no such collection of data exists.
-The task is to convert the paid comparison and its actual continuation into
-this strict terminal-debt conclusion, not to select another profitable row.
+or prove directly that the supplied conditions are inconsistent.
 
-Every four-player game without a uniform-equilibrium payoff admits the
-displayed punishment-normal positive-infimum setting and such minimum,
-realizing, and quantitative paid-row data. Consequently a solution rules
-out that case. A sequence of actual profiles with maximum debt tending to
-zero would be a stronger sufficient output; compact payoff selection then
-gives one fixed uniform-equilibrium payoff target.
+The first-collision configuration can be extracted from any sequence of
+actual profiles tending to a positive four-player global debt infimum.
+Consequently an affirmative answer rules out positive terminal gaps and
+gives uniform-equilibrium payoff existence. In that conclusion one fixed
+payoff target must work at every accuracy: the profile and horizon
+threshold may depend on the accuracy, but for that profile the payoff
+and all unilateral gains must satisfy the error bound at every larger
+finite-average horizon.
 
-A complete negative answer is an explicit four-player table with one Γ > 0
-such that, against every behavioral product law, some unilateral behavioral
-deviation improves terminal payoff by at least Γ. Failure restricted to one
-strategy class is not such a certificate.
+A complete negative answer is an explicit four-player table and Γ>0
+such that, against every behavioral profile, some unilateral behavioral
+deviation improves terminal payoff by at least Γ. A lower bound for a
+restricted strategy class is not such an answer.
 
-## Constraints on proposed constructions
+## Requirements on a consuming argument
 
-New profiles may be introduced, but their complete terminal payoffs and
-unrestricted caps must be proved on the same table. If a comparison uses the
-fixed minimum z_* or a particular retained continuation, it must use those
-actual data or prove the required replacement identity. The minimum is not
-silently replaced by an attained profile.
+All modifications must be actual independent laws on the same reward
+table, or limits whose membership in K is proved. If simultaneous tail
+changes or counterfactual timing comparisons are used, select actual
+realizing profiles and calculate their complete response values. The
+finite pair v alone is not a compositional description of those changes.
 
-The recorded finite replacement chain does not concatenate into play.
-Likewise infinitely many all-Continue prefixes do not define a profile that
-reaches the old continuation after an infinite date. A construction using
-temporal blocks must prove its actual Bellman matching and control the
-accumulated error.
+For a one-player replacement p→ρ by player i, its own cap is unchanged,
+so exactly
 
-No rank construction is required. If one is proposed, it must define its
-state set, an initial state determined by the given data, a well-founded
-order, and a total rule which at every nonterminal state produces a strictly
-smaller state. Every terminal state must produce
-an actual π with D(π) < the original D_*. A rank decreasing only on an
-optional or empty transition relation does not suffice.
+    D(ρ)−D(p)=−[U_i(ρ)−U_i(p)]
+                +∑[j≠i][d_j(ρ)−d_j(p)].
 
-These conditions audit a construction using the supplied data; they do not
-assert that every possible proof of uniform equilibrium must preserve this
-replacement ancestry or follow a chronological argument.
+The other caps are unrestricted and may switch their maximizing stopping
+times. A positive mover gain alone is therefore not a descent. Every
+tied maximum must remain in the calculation; choosing favorable response
+branches independently for different variations is insufficient.
+
+A finite cycle of same-date profiles is not a temporal chronology.
+A temporal argument must prove its actual continuation matching and
+accumulated error control. A rank argument must give a total renewable
+transition with a strict well-founded decrease, and consume every
+terminal state. Neither construction is required: any rigorous
+same-table proof reaching the strict-debt conclusion is acceptable.

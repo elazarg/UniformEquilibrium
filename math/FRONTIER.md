@@ -1776,7 +1776,7 @@ one accepted instance or an equivalent unrestricted proof.
 | --- | --- |
 | Finite laws | Select the three independent nonpivot laws with inner repair value tending to zero. |
 | Maximum-regret sources | Consume either the generic singleton-bearing source or the single-pivot source with strict pressure and a singleton-removing delay, controlling the changed nonmover caps. |
-| Total-debt source | Consume full-debt, reset-rigid, and off-minimum paid configurations, including all exits of any proposed rank. |
+| Total-debt source | Consume an early original collision of a near-minimizer, or its global-minimum first-root limit with an actual carrier continuation; control simultaneous cap switches rather than assuming a Nash row or a minimizing tail. |
 | Forward play | Produce the bounded absorption-relative packets or the punishment-vector sure root from the remaining table. |
 | Global obstruction | Exclude every full robust polynomial/positive invariant barrier, or construct one for an explicit table. |
 | Matrix classification | Consume tables surviving full and quotient degree tests, guarded crossed-response tests, and the matrix-free oriented-pair test, using actual all-behavior realization. |
