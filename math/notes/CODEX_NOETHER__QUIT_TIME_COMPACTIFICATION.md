@@ -38,7 +38,16 @@ endpoint is explicitly only a selected-response evaluation. A single
 fresh worst-table perturbation can avoid this finite join spectrum
 and LC's withdrawal spectrum together. MORSE is supplying the separate
 worst-table/gap comparison; no old source is carried through it.
-The JC identity is awaiting independent review and is not exported.
+JC1–JC4 has passed independent checks by CODEX_BROUWER and CODEX_MORSE.
+SIC1–SIC6 and FP1–FP5 have passed MORSE's independent focused check.
+The latter gives one explicit FRESH-table producer whose all-unique
+three-supported sources can survive only with a strictly EARLIEST,
+NONISOLATED unsupported cap. It uses Ω≤4/5<1 to push every critical
+withdrawal/join/floor/own-grand spectrum value above the worst SUM
+gap, then selects new actual minimizing sequences. MORSE is assembling
+one self-contained whole-source reduction with these independently
+checked ingredients; no separate auxiliary export is made. Multiple
+caps and two, three or four unsupported cap owners remain open.
 
 The broad original-stage restriction has a canonical stronger proof in
 `../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`: a positive
@@ -15378,8 +15387,10 @@ not append it as a supplied price condition.
 
 ## Common unique cap with a positive atom: an exact finite join spectrum
 
-Status: complete ordinary-mathematical source-restriction candidate,
-awaiting independent falsification. This consumes no endpoint profile;
+Status: complete ordinary-mathematical source restriction, independently
+accepted for JC1–JC4 by CODEX_BROUWER and CODEX_MORSE in their existing
+feedback. JC5 is coordination toward the distinct fresh-table producer,
+not part of either focused source-identity review. This consumes no endpoint profile;
 it identifies the TRUE minimum value with one of fourteen explicit
 raw-table join sums. CC consumes the all-zero-mass common point, and
 the frozen cap-atom exclusion consumes the all-supported common point.
@@ -15510,8 +15521,8 @@ an old selected response.
 
 ## One isolated earliest unsupported cap: a literal singleton-floor spectrum
 
-Status: complete ordinary-mathematical source-restriction candidate,
-not independently reviewed. This treats a DISTINCT earliest-cap geometry
+Status: complete ordinary-mathematical source restriction, independently
+accepted for SIC1–SIC6 by CODEX_MORSE in existing feedback. This treats a DISTINCT earliest-cap geometry
 from LC: the exceptional cap is EARLIER, but its owner prescribes only
 late clocks. The isolation hypothesis is explicit. It is NOT supplied
 as a cap-price bound, and the nonisolated version is not asserted.
@@ -15628,3 +15639,456 @@ The next genuine question is whether one whole-table comparison can
 avoid these floor/grand values TOGETHER with LC and JC, despite their
 rowwise sign conflicts. No whole-table comparison or arbitrary UE
 producer is claimed here yet.
+
+### SIC5. A sole unsupported cap tied with some earliest supported caps
+
+There is one further single-unsupported geometry, distinct from SIC1:
+τ_m=t₀=min_(j≠m)τ_j. Let H={j≠m:τ_j=t₀}, a nonempty subset of
+the three supported owners. The positive H atom isolates τ_m, so
+ALL four unique caps have uniform complement gaps. Because q_m(t₀)=0,
+absence of old mass strictly after t₀ would make m stop strictly
+before t₀ surely and make each H cap equal Never. Thus e_m>0.
+
+Reweight the three supported owners toward their existing cap atoms,
+and m toward its OLD conditional law strictly after t₀, all with
+both signs. The retained right-cut transport, bounded densities and
+uniform cap gaps prove a constant selected-response polynomial.
+At its endpoint H quits surely at t₀, any other supported owner
+prescribes its later displayed cap and contributes zero, while m's
+prescribed law is late but its displayed response joins H at t₀.
+Consequently
+
+    δ=J_(m,H),
+    J_(m,H)=r_m(H∪{m})−r_m(H).                   (SIC2)
+
+For |H|=3 this is NEGATIVE grand-withdrawal. For |H|=1 or2 it is
+an individual join value, not the sum over all outsiders C_H.
+The latter distinction is necessary because supported owners with
+later caps are passive at this endpoint and give zero selected debt.
+
+### SIC6. Exact single-unsupported finite spectrum
+
+For all-unique caps with exactly one unsupported owner m, the
+unsupported cap falls into the following exhaustive order cases:
+
+    later than the first supported cap: LC by SLC10–SLC12;
+    tied with the first supported cap: SIC5 individual join;
+    strictly earlier and isolated: SIC1–SIC4 floor or own-grand;
+    strictly earlier and nonisolated: not consumed here.
+
+All finite-spectrum conclusions use ACTUAL original global minimality
+and complete signed transport. They are not values assigned to a
+Nash root or to a minimizing continuation. In particular the last
+case is not silently placed in the isolated proof.
+
+## A fresh-table finite spectrum producer for the surviving cap rank
+
+Status: complete ordinary-mathematical comparison, independently accepted
+for FP1–FP5 and SIC1–SIC6 by CODEX_MORSE in existing feedback. This
+remains INTERNAL, not a Lean check or export. CC and JC and the bound
+below have separate independent checks. This comparison is deliberately distinct
+from MORSE's completed signed-eight comparison; it neither modifies
+that theorem nor imports a same-minimum transfer. All new minima are
+selected AFTER the new sixty-coordinate reward table is fixed.
+
+### FP1. A true worst SUM table exists and has gap at most four fifths
+
+For r in the closed sixty-coordinate unit cube, let Δ(r) be the
+infimum of the SUM of the four complete terminal debts over ALL
+actual independent stopping-law profiles. Allowing arbitrary laws
+or finite laws gives the same infimum by the checked censoring result.
+For η=∥r−r′∥∞, every prescribed payoff changes by at most η and
+every complete cap changes by at most η. Therefore every profile's
+sum debt changes by at most8η, uniformly over profiles, and
+
+    |Δ(r)−Δ(r′)|≤8∥r−r′∥∞.                      (FP1)
+
+Thus Ω=max_cube Δ exists. Suppose Ω>0 and choose a worst table r.
+Its marked global minimum has δ=Ω. The complete cap bound b_i≤1
+and the CHECKED minimum singleton margin give
+
+    s_i≤1−Ω for EVERY i.                         (FP2)
+
+Literal all-Never play has prescribed payoff zero and complete cap
+max(s_i,0). Consequently Ω≤Σ_i[s_i]^+. If Ω≥1, (FP2) would make
+all owns nonpositive and this bound would give Ω=0. Hence Ω<1,
+and using (FP2) in the same bound gives
+
+    Ω≤4(1−Ω),       Ω≤4/5<1.                    (FP3)
+
+MORSE independently checked this exact argument against
+`minimumTerminalSemantic_singletonMargin` under its actual imports.
+The strict threshold1 is used below to resolve a sign conflict in
+the source producer; it is not an isolated constants claim.
+
+### FP2. One explicit target and one finite raw spectrum
+
+Put a_i=r_i(I∖{i})−r_i(I). Choose a target table R in the same cube:
+
+    every own singleton: +1;
+    every passive singleton or passive pair: −1;
+    every participant pair or participant triple: +1;
+    omitted triple/grand in row i:
+       (0,−1) if a_i≥0, and (−1,0) if a_i<0.
+
+These cases specify ALL sixty reward entries without overlap.
+No reward is deleted. Use sign choice a_i≥0 for the zero case.
+For every nonempty proper A⊂I, every i and nonempty K⊆I∖{i}, define
+
+    C_A=Σ_(z∉A)[r_z(A∪{z})−r_z(A)],
+    J_(i,K)=r_i(K∪{i})−r_i(K),
+    F_(i,K)=s_i−r_i(K),       F_(i,∅)=s_i,
+    G_i=s_i−r_i(I).
+
+Let V(r) be the FINITE labelled family of all a_i,C_A,J_(i,K),
+F_(i,K) including empty K, and G_i. It has at most82 distinct entries;
+some labels agree, for example C_(I∖{i})=J_(i,I∖{i})=−a_i.
+Every entry is a linear reward functional with the all-Never value
+held at zero, not another game parameter.
+
+### FP3. Every critical upper contact moves strictly above Ω
+
+For EACH labelled v∈V with v(r)=Ω, its target value v(R) is at
+least1>Ω:
+
+- a_i=Ω>0 selects (omitted,grand)=(0,−1), giving target1;
+- C_A has target6 or4 for |A|=1 or2; for |A|=3 it is −a_i,
+  and its positive critical contact selects (−1,0), giving target1;
+- J_(i,K) has target2 for |K|=1 or2; for |K|=3 the same −a_i
+  argument gives target1;
+- F_(i,K) has target2 for |K|=1 or2, target1 or2 for |K|=3,
+  and target1 for empty K;
+- G_i has target1 or2.
+
+The rowwise zero target in the omitted/grand pair is essential:
+uniform passive+1/participant−1 would push joins downward, whereas
+uniform participant+1/passive−1 would push withdrawals downward.
+Threshold Ω<1 allows the explicit intermediate choices to push all
+CURRENT positive contacts upward at once. No individual join or floor
+term is assumed positive when a SUM contact is considered.
+
+### FP4. Literal new table, positive new gap, and spectral separation
+
+Let σ be the minimum positive |v(r)−Ω| over the finite labelled
+family, using σ=1 if every label is a contact. Choose
+
+    α=min(1,Ω,σ)/64>0,       r^α=(1−α)r+αR.
+
+The whole new table is still in the unit cube and
+∥r^α−r∥∞≤2α. By (FP1) and worst-table maximality, its ACTUAL new
+gap d=Δ(r^α) satisfies
+
+    0<3Ω/4≤Ω−16α≤d≤Ω.                          (FP4)
+
+All v∈V change by at most12α: a join sum has at most three terms,
+each a difference of two entries, while other functionals are shorter.
+For a contact, linearity and FP3 give
+v(r^α)=Ω+α[v(R)−Ω]>Ω≥d. For v(r)>Ω,
+v(r^α)≥Ω+σ−12α>Ω≥d. For v(r)<Ω,
+
+    v(r^α)≤Ω−σ+12α<Ω−16α≤d,
+
+because 28α<σ. Hence
+
+    d≠v(r^α) for EVERY labelled v∈V.             (FP5)
+
+This proof allows noncritical upper values to decrease and noncritical
+lower values to increase; it does not rely on an unstated monotonicity.
+Every old-table source is now discarded. The marked producer is applied
+AFRESH to actual minimizing sequences of the fixed new table r^α.
+
+### FP5. Exact global cap-rank conclusion and remaining class
+
+Every produced marked true minimum of r^α has debt d>0 and avoids
+the entire NEW raw spectrum (FP5). Therefore:
+
+1. LC geometry is impossible by its grand-withdrawal identity a_m.
+2. All four caps cannot share ONE UNIQUE point: if all own masses
+   there are positive, the frozen cap-atom exclusion applies; if
+   none is positive, CC applies; otherwise JC gives the forbidden C_A.
+3. In the all-unique branch with exactly THREE supported cap owners,
+   the sole unsupported owner must have a STRICTLY EARLIEST,
+   NONISOLATED maximizing point. A later unsupported cap is LC by SLC;
+   an earliest tie is SIC5 with J_(m,H); a strictly earlier isolated
+   cap is SIC1–SIC4 with F_(m,H) or G_m.
+4. In EVERY all-unique branch, some earliest maximizing owner has
+   zero own point mass, by SLC and LC exclusion.
+
+A nonisolated earliest cap in conclusion3 has zero MIXTURE atom,
+since every positive produced finite mixture atom is isolated; Never
+is isolated too. No claim excludes this earliest nonatomic observer
+cap or the cases with two, three or four unsupported cap owners.
+Multiple maximizing POINTS remain open, including outcome-equivalent
+points that need not supply different payoff directions.
+
+This is a producer of a genuinely smaller surviving counterexample
+class, conditional only on the EXISTENCE of any positive Fin4 gap.
+It is not a supplied-object verifier or an arbitrary UE producer.
+Its hypotheses select a FRESH table and FRESH actual source; no
+pressure inequality from a different minimizing family is carried over.
+The next mechanism must consume the remaining nonisolated earliest
+observer cap or the multi-unsupported/multiple-cap branches globally.
+
+## Joint support cuts and the isolated two-unsupported sure-triple boundary
+
+Status: COMPLETE ordinary-mathematical proof DRAFT of the source reduction
+SC1–SC6 below, not independently reviewed, Lean checked or exported. This
+is a fresh-table counterexample-class exclusion, not a supplied cap-price
+interface. It does NOT settle the surviving sure-triple case. SC7 records
+the precise failure of the attempted complete consumer. The previously
+reviewed FP comparison is unchanged; none of this is silently added to
+MORSE's frozen packet.
+
+### SC1. Question, sources and signed domain
+
+Assume some Fin4 quitting table has a positive unrestricted terminal SUM
+gap. Can a FRESH table be selected for which an all-unique, all-isolated
+marked minimum with at least one positive-own-mass cap has a forced
+actual sure geometry, even when TWO or THREE cap owners are unsupported?
+
+All laws and opponent replacements are independent; all finite tests and
+Never are retained; no tail is assumed Nash or debt-minimizing. We use
+the same actual original finite minimizing sequence and bounded old
+charts as SLC/CC/JC. An isolated unique cap has a uniform gap on the
+compact full test space. Signed replacement toward any OLD atom or
+positive OLD conditional event is legal on a two-sided box. Its old-chart
+likelihoods stay bounded and positive. Retained finite cuts use their
+literal left/right interval endpoints; Never uses its separate old
+interval. The unchanged kernels and moving-response transport then
+realize every signed family by ACTUAL finite profiles, including c⁺.
+This is the signed proof, not an application of a nonnegative-mixture
+statement to negative parameters.
+
+Consequently, whenever all displayed caps are isolated, the selected
+SUM F is multiaffine and equals full D on that small signed box.
+Actual global minimality makes F constant δ, hence constant at its
+algebraic endpoints. Endpoint full caps are NOT thereby identified.
+
+Additional exact sources inspected for this attempt:
+
+- `positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`:
+  the actual same-table positive minimum gives b_i−s_i≥δ+δ²/(8M).
+  Its strictness does not repair the floor-free sign failure in SC7.
+- `nonempty_finFourQuantitativeFullSupportHardResidual_of_no_uniformPayoff`
+  in `UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportProjectiveQBarResidual.lean`:
+  under a coordinate bound and same-table no UE, its
+  `all_punishmentNormal` field gives the TRUE independent P_i≤s_i.
+- BROUWER's LC8/LC10 in his owned NONBIJECTIVE_SINGLETON_SOURCE notebook:
+  the actual finite graft changes other caps by at most the vanishing
+  late leakage of a sure-by-t₀ owner. The extension used in SC6 is
+  reproved below; it does not assume three supported opponent caps.
+
+### SC2. Joint late conditioning forces a sure owner, or a finite sum
+
+Let J be the nonempty set of supported cap owners and L its complement.
+If L is empty the frozen cap-atom exclusion already contradicts δ>0.
+First suppose t₀=min_(j∈J)τ_j is finite, and put
+H={j∈J:τ_j=t₀}. Suppose EVERY ℓ∈L has old late mass
+e_ℓ=q_ℓ(clock>t₀)>0. Reweight each j∈J toward its old cap atom,
+and each ℓ∈L toward its OLD conditional law strictly after t₀.
+SC1 gives the constant selected polynomial. At its endpoint H quits
+surely at t₀, later supported owners have zero selected debt, and
+
+    δ=Σ_(ℓ∈P)[s_ℓ−r_ℓ(H)]
+        +Σ_(ℓ∈Q)[r_ℓ(H∪{ℓ})−r_ℓ(H)],          (SC1)
+
+where P={ℓ∈L:τ_ℓ<t₀} and Q={ℓ∈L:τ_ℓ=t₀}.
+The remaining unsupported owners have zero selected debt. Since δ>0,
+P∪Q is nonempty. For |H|≤2 this is a finite mixed floor/join sum;
+for |H|=3 it is one of FP's individual floors or joins.
+
+If instead some m∈L has NO old mass after t₀, uniqueness screens
+the source exactly as in SLC: q_m(t₀)>0, ALL supported caps equal
+t₀, and every OTHER owner's cap is at or before t₀. Indeed m surely
+strictly before t₀ would equate a supported t₀ response with Never.
+Any other cap later than t₀ would likewise equate Never and a distinct
+finite late test. Thus at most m's own cap can be later. These are
+statements about the ORIGINAL source law, not the endpoint in (SC1).
+
+If t₀=Never, all supported caps are Never. Every owner must have
+positive old Never mass: a surely finite opponent would make a
+supported Never cap tie finite c. Signed reweight ALL owners to their
+existing Never atoms. Its selected endpoint gives
+
+    δ=Σ_(i:τ_i finite)s_i.                       (SC2)
+
+The set in (SC2) is nonempty, since all four supported Never caps are
+already excluded. This case has a positive own coefficient, rather than
+an invented finite first coalition.
+
+### SC3. A hierarchical direction prices every positive-own endpoint
+
+Start AFRESH at a true worst unit-cube table r with gap Ω>0. FP1 gives
+Ω≤4/5 and EVERY s_i≤1−Ω. Let R₀ be FP's complete sixty-coordinate
+target. Fix β=min(1,Ω)/64 and define a NEW target R by
+
+    R_i({i})=1;
+    R_i(S)=(1−β)r_i(S)+β(R₀)_i(S),  S≠{i}.
+
+This is still a full unit-cube table. Own coordinates increase by at
+least Ω, while every nonown coordinate changes by at most2β.
+
+Use the following finite labelled family V⁺, specified from raw rewards:
+
+1. FP's82 labels.
+2. For every H of size1 or2 and disjoint P,Q⊆I∖H with
+   P∪Q nonempty, the mixed sum in (SC1): at most152 labels.
+3. For every B of size at least2, disjoint E,W⊆B and disjoint
+   P,Q⊆I∖B, with E∪P nonempty, the endpoint ledger
+
+       Σ_(i∈E∪P)[s_i−r_i(B)]
+       +Σ_(i∈W)[r_i(B∖{i})−r_i(B)]
+       +Σ_(i∈Q)[r_i(B∪{i})−r_i(B)].            (SC3)
+
+   There are at most 11·(3⁴−2⁴)=715 labels. Each player contributes
+   at most one term; the roles correspond respectively to a displayed
+   response before the first coalition, after it for a participant,
+   or tied with it for an outsider.
+4. For each pair B and m∈B, the floor-free ledger
+
+       r_m(B∖{m})−r_m(B)
+       +Σ_(z∉B)[r_z(B∪{z})−r_z(B)]:            (SC4)
+
+   at most12 labels.
+5. For each nonempty E⊆I, the own sum Σ_(i∈E)s_i:15 labels.
+
+Thus this is an explicitly finite family of at most976 labels, not a
+new strategic hypothesis. Every label has coefficient absolute sum
+at most8, so changes by at most16α along an α interpolation.
+
+For EVERY v(r)=Ω its target value satisfies v(R)>Ω. To check ALL
+labels, distinguish positive-own forms from own-free ones. Each
+positive-own form has nonnegative own coefficients, at least one
+coefficient1, and nonown coefficient absolute sum at most8. Hence
+
+    v(R)−v(r)≥Ω−16β≥3Ω/4>0.                  (SC5)
+
+This covers every (SC3), (SC2), base floor/grand floor, and (SC1)
+with P nonempty, even when some individual terms are negative.
+For own-free critical base forms FP gave v(R₀)≥1>Ω; partial
+interpolation gives a strict increase. For (SC1) with P empty and
+|H|≤2, the R₀ target is 2|Q|≥2. For (SC4), the R₀ target is
+−2+2+2=2. Thus ALL own-free contacts also move strictly upward.
+
+Let σ be the finite positive noncontact distance from Ω, default1,
+and choose α=min(1,Ω,σ)/64. Set r⋆=(1−α)r+αR. Its fresh true
+gap d lies in [Ω−16α,Ω] and is positive. A lower noncontact has
+v(r⋆)≤Ω−σ+16α<Ω−16α≤d because32α<σ; upper noncontacts
+stay above Ω, and contacts moved above Ω. Consequently d avoids
+EVERY NEW v(r⋆). Produce new marked minima from actual minimizing
+sequences of r⋆, discarding all old-table minima and identities.
+
+### SC4. The actual isolated supported branch becomes one triple
+
+Consider ANY newly produced true minimum whose four caps are unique
+and isolated, with J nonempty. SC2 and the forbidden (SC1)/(SC2)
+spectra force an unsupported owner m sure by finite t₀, all supported
+caps at t₀, and every other cap at or before t₀.
+
+Let B={i:q_i(t₀)>0} and C=I∖B. It includes J and m, so |B|≥2.
+Every i∈C has positive old mass strictly after t₀; otherwise i
+would stop strictly before t₀ surely and destroy a supported cap's
+uniqueness. Jointly reweight B to its old t₀ atoms and C to its old
+conditional laws strictly after t₀. The constant polynomial's endpoint
+has first coalition B. If ANY displayed cap is earlier than t₀,
+its selected ledger contains a positive own term, and is exactly a
+forbidden form (SC3). Therefore NONE is earlier than t₀.
+
+If m's cap were t₀, it would have positive own cap mass and not belong
+to L. Thus its cap is later, and ALL three other caps are t₀. Only
+m contributes a participant withdrawal term. The exact selected identity
+is
+
+    d=r_m(B∖{m})−r_m(B)
+        +Σ_(z∈C)[r_z(B∪{z})−r_z(B)].          (SC6)
+
+If |B|=2 this is forbidden (SC4); if |B|=4 it is the forbidden
+grand withdrawal a_m. Thus |B|=3. Writing B={m,a,b}, C={z},
+there are EXACTLY two supported caps a,b at t₀; z's unique cap is
+also t₀ but q_z(t₀)=0; m's unique cap is later and q_m is sure by
+t₀ with q_m(t₀)>0. No endpoint actual D or root Nash claim was used.
+
+### SC5. Actual finite graft still prices the late cap by true punishment
+
+In this triple source put l_j=q_j(clock>t₀), α₀=∏_(j≠m)l_j.
+All l_j>0: otherwise a sure-by-t₀ opponent makes m's later test
+tie Never or finite c. Write H_m=max_(t≤t₀)V_m(t,q_−m),
+A_m for opponent absorption at or before t₀, and b_m for the full
+m cap. Uniqueness gives H_m<b_m. The conditional opponent tail has
+scalar cap z_m=(b_m−A_m)/α₀.
+
+The LC8 ACTUAL graft proof applies without requiring positive own mass
+at z's cap. In the ORIGINAL minimizing sequence retain the positive
+t₀ atom and every opponent head and late probability. Replace each
+opponent's post-t₀ conditional law by ANY actual finite punishment
+plan w; keep m's entire original law. If η_k is m's old late leakage,
+η_k→0. Every prescribed payoff and every other full cap changes by
+at most2Mη_k, uniformly in its response. The exact m cap is
+
+    max(H_m^k,A_m^k+α₀^k cap_m(w)).
+
+Old conditional tails have cap at least P_m; ε-near-punishment finite
+witnesses give the reverse inequality by the global d floor. Thus
+z_m=P_m. This concerns TRUE independent punishment, not child Nash.
+The same-table no-UE theorem quoted in SC1 supplies P_m≤s_m.
+
+### SC6. The retained sure owner must actually be pure at t₀
+
+Suppose m had positive old mass BEFORE t₀. Reweight it toward that
+old early conditional law, and all three opponents toward their old
+strictly-late conditional laws. All four caps are isolated and unique,
+so SC1 supplies the signed constant polynomial and literal left/right
+cut transport. At its endpoint m is a surely early singleton and
+all three opponents prescribe later than t₀. Their displayed t₀
+responses follow m and each give zero selected debt. Owner m's
+displayed later response gives P_m against the old joint conditional
+tail, by SC5. Hence d=P_m−s_m≤0, contradiction. Since m was sure
+by t₀, it follows that the ORIGINAL q_m is PURE t₀.
+
+This completes the drafted whole-source class exclusion: if a positive
+gap exists, one fresh table can be chosen such that every all-unique,
+all-isolated minimum having a supported cap must lie in the following
+very specific remaining geometry:
+
+    q_m=δ_(t₀),       τ_m>t₀;
+    τ_a=τ_b=τ_z=t₀;
+    q_a(t₀)>0, q_b(t₀)>0, q_z(t₀)=0;
+    d=r_m({a,b})−r_m({m,a,b})
+       +r_z(I)−r_z({m,a,b}).                   (SC7)
+
+All three opponents retain positive strict-late mass. All four caps
+remain unrestricted, and the conditional opponent tail minimizes ONLY
+m's scalar punishment value. All unsupported or nonisolated-cap branches
+are not covered by this theorem's premise. This is not a full UE result.
+
+### SC7. Why the attempted final consumer still fails
+
+The remaining (SC7) is FLOOR-FREE. Under FP's R₀ target its first
+term has value−2, while its second is−a_z with target+1 or−1.
+Their sum has target−1 or−3, not a number above Ω. Raising owns
+does not change either term. Thus neither the direct FP direction nor
+SC3's hierarchical own direction consumes this source. Substituting a
+supplied positive withdrawal bound would merely rename the missing step.
+
+There is another exact source identity if q_z has positive mass BEFORE
+t₀. Reweight z toward that old early law and a,b toward their old
+late laws, keeping actual pure m at t₀. The selected endpoint is z's
+early singleton. All displayed responses other than z follow that
+singleton and give zero selected debt; z's displayed t₀ response joins
+the sure m there. Hence
+
+    d=r_z({z,m})−s_z.                            (SC8)
+
+This is a PARTICIPANT PREMIUM, the negative of an own-floor form.
+It is not in the positive-own family, and the R₀ target is zero. The
+checked strict quadratic singleton margin does not change this sign:
+it bounds full caps above s_z, not this joint endpoint premium below it.
+The two identities (SC7)/(SC8) are retained rather than falsely pricing
+both by the same own-increase direction.
+
+Concrete next question: consume this pure sure-triple source by an ACTUAL
+joint release of m and insertion of z, retaining the punishment-tail
+coupling, or derive a whole-table direction that prices the floor-free
+withdrawal-plus-join and participant-premium contacts simultaneously.
+Do not choose a child Nash tail and assume it also punishes m.

@@ -35,12 +35,26 @@ path to a multiple-cap minimum when a sole unsupported EARLIEST owner
 has old mass before the supported opponent caps; it does not require
 that owner's maximizing point to be isolated.
 
+The newest complete UNREVIEWED consumer candidate is EA1–EA5 at the
+end. Joint signed old-tail conditioning preserves ALL active upper
+response branches together. At a zero-MIXTURE-mass earliest active
+point with positive old late mass for every owner, its final actual
+conditioned profile stays a true minimum, but one earliest owner's
+full cap equals its own singleton: contradiction. Thus such a
+zero-mixture earliest cap forces a sure-strictly-earlier prescribed
+owner and multiple late caps for all three other recipients. If
+independently valid, this excludes EVERY all-unique nonisolated
+earliest-cap minimum, not only a common cap date.
+
 No full UE producer, positive unrestricted-gap example, or new export
 is claimed. The next genuine target is a finite-amplitude coupled law
-change with a proved upper ledger for ALL changed caps, consuming the
-pure common-clock LC survivor, a multiple-cap minimum, or an EARLIEST
-unique cap with zero own point mass. A local descent, a conditional
+change with a proved upper ledger for ALL changed caps, consuming a
+multiple-cap minimum or an earliest zero-OWN-mass cap at a POSITIVE
+MIXTURE atom supplied by another owner. A local descent, a conditional
 splice, and a favorable selector are not substitutes for that consumer.
+ES1–ES5 also retires convexified-payoff sharing as a black-box producer:
+an allowed sharing-rule equilibrium payoff need not belong even to
+the actual independent payoff closure.
 
 The earlier completed raw two-pair theorem is frozen at
 [TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md](../exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md).
@@ -5114,7 +5128,7 @@ l_j=q_j(clock>t₀)>0 because α>0 in LC8. Let
 
 ALL four variations are legal on a TWO-SIDED open parameter box.
 For a conditional event of probability e>0, their two likelihood
-multiplers are 1−λ outside it and 1+λ(1/e−1) inside it; the same
+multipliers are 1−λ outside it and 1+λ(1/e−1) inside it; the same
 small signed bounds as LC3 keep both positive. Own m's earlier
 conditional law is finite surely, never containing Never or t₀.
 The other conditional laws include their original Never probabilities.
@@ -5339,3 +5353,407 @@ and upper-bound their cap changes; choosing one branch and reusing
 the interior multiaffine argument would discard the very boundary
 price that these finite-amplitude paths expose. No further density,
 entropy, or fixed-child Nash approximation is being proposed.
+
+## Endogenous sharing loses the independent payoff carrier
+
+Status: exact mechanism falsifier, ordinary mathematics. This changes
+the attempted general discontinuous-game existence route; it is NOT a
+counterexample to UE or a source exclusion inside δ>0. The example is
+solved by actual all-Never. It falsifies even PAYOFF realization of an
+allowed endogenous-sharing equilibrium, before unrestricted cap
+transport is attempted. No further sharing-rule interface is proposed.
+
+### ES1. The literature theorem actually inspected
+
+The original Simon–Zame working paper is available as the scanned
+Berkeley paper [Discontinuous Games and Endogenous Sharing Rules](https://escholarship.org/content/qt8n46v2wv/qt8n46v2wv.pdf)
+(1987; published in Econometrica, 1990). Its scan was not successfully
+extracted here, so no exact assertion is attributed to an unread
+theorem in it. The independently authored primary source actually read
+is Erik Balder, [An equilibrium closure result for discontinuous games](https://webspace.science.uu.nl/~balde101/baet11.pdf),
+Economic Theory 48 (2011), Theorems 1 and 2 and Section 4.1.
+
+Balder's Theorem 2 assumes compact metric action spaces and an upper
+semicontinuous nonempty compact convex-valued payoff correspondence.
+It produces a bounded measurable selection of that correspondence
+and an independent mixed Nash equilibrium for the SELECTED payoff
+function. Section 4.1 permits the correspondence obtained by taking
+the convex hull of each fiber of the closed original payoff graph.
+Theorem 1 retains a sequence's equilibrium payoffs and relates the
+selected payoff graph to limiting graphs, but it does not identify
+the selected payoff with the original literal collision payoff.
+
+Narrow Lean lookup found no Simon–Zame declaration in the toolkit or
+paper filenames. Two nearby actual-law facts were inspected instead:
+`quittingTerminalSemanticDebt_stoppingLawMixture_eq_of_minimum_sameDebtSum`
+in `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticStoppingLawMinimumFiberAffine.lean`
+requires a ONE-coordinate endpoint that is ALREADY another true
+minimum; it gives coordinate debt affinity, not an endogenous-sharing
+producer. `QuittingCapBandFiniteCut` and
+`QuittingCapBandFiniteCut.target_terminalSemanticDebt_le`
+in `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/CapBandRedistribution.lean`
+move a supplied actual law's bad mass to an actual near-cap receiver.
+They do not synthesize jointly independent laws from a convexified
+coalition lottery. No Lean result is asserted for ES2–ES5.
+
+### ES2. Complete Fin4 table and legal compact strategy topology
+
+Let I={0,1,2,3} and specify ALL sixty reward coordinates by
+
+    r_i(S)=1 if |S|=3 and i∈S; otherwise r_i(S)=0.
+
+Never pays zero. In the literal terminal game each player chooses
+an independent complete stopping law on X=ℕ⊔{Never}. Endow X with
+the one-point compactification topology: each finite clock is
+isolated, and finite clocks tending to infinity converge to Never.
+This is a compact metric pure-strategy space. The pure payoff map
+u:X⁴→[0,1]⁴ is continuous everywhere except possibly the all-Never
+point n. Indeed, if a profile has a finite first clock, then in a
+neighborhood all coordinates at or before that clock are fixed and
+every other coordinate remains strictly later, so its first coalition
+is unchanged.
+
+For every a∈I, let three clocks in I\{a} equal k and let a's clock
+equal k+1. These pure profiles converge to n and their payoff vector
+is v^a, which has coordinate a zero and each other coordinate one.
+Thus the closed payoff graph at n contains 0 and all four v^a. Its
+convex hull contains
+
+    v=(v^0+v^1+v^2+v^3)/4=(3/4,3/4,3/4,3/4).
+
+Define the bounded measurable selection u* to equal literal u at
+every profile except n, and set u*(n)=v. It belongs pointwise to
+the convexified closed payoff graph. The pure all-Never profile is
+an exact Nash equilibrium for u*: changing one's own clock to ANY
+finite date yields a singleton, hence own payoff zero, while Never
+yields 3/4. All unilateral mixed deviations are averages of these
+pure payoffs. This is precisely the independent-mixed equilibrium
+notion allowed by the inspected theorem; no public correlation is
+needed to make it an equilibrium of the MODIFIED payoff function.
+
+### ES3. Its equilibrium payoff is outside every actual product-law closure
+
+For an arbitrary actual independent profile, finite or infinite
+support, let t_a be the probability of first coalition I\{a}, let
+T=Σ_a t_a, and let e=1−T count ALL other outcomes, including Never.
+The displayed table gives the exact identity
+
+    U_i=T−t_i,       Σ_i U_i=3T.
+
+Consequently any sequence with U→v would have T→1, e→0 and every
+t_a→1/4. This is impossible for independent clocks. The following
+simple ordered-two-copy proof suffices; the stronger sharp inequality
+retained in NOETHER's TC2–TC3 also implies it.
+
+Fix distinct a,b and write I={a,b,c,d}. Sample two independent
+copies X,Y of the entire product profile. On the event that X first
+realizes I\{a} at u and Y first realizes I\{b} at w, split into the
+three cases u<w, u>w, u=w. Swapping the two copies' c coordinates
+is a measure-preserving involution because they have the same
+marginal law. In the first case it changes the ordered first outcomes
+to ({b,d},{c}); in the second to ({c},{a,d}). Each event therefore has
+probability at most e, since its indicated singleton has probability
+at most e in the appropriate copy. In the equal-time case, swap the
+b coordinates instead. The ordered outcomes become ({c,d},I), so
+this event too has probability at most e. No bounded date, finite
+support, or no-Never hypothesis is used: the omitted coordinate is
+strictly later than a finite first clock, with Never allowed there.
+Adding the three disjoint DOMAIN cases gives
+
+    t_a t_b≤3e.
+
+The argument does not demand injectivity BETWEEN its three images,
+because each case is bounded separately and only their domain
+probabilities are added. The exact inequality passes to payoff/law
+closure. In the alleged limit it would give 1/16≤0. Therefore v is
+not even in the closure of the literal prescribed payoff vectors,
+and a fortiori not in the closure of actual payoff/FULL-cap pairs.
+
+### ES4. What is falsified, and what survives
+
+The false implication is: an independent mixed equilibrium of a
+measurable selection of the convexified closed payoff graph has an
+actual independent stopping-law approximation preserving its payoff,
+and hence can supply terminal approximate Nash of the original game.
+The selection above has an exact equilibrium payoff not approximable
+by ANY actual profile, regardless of its debts. This is stronger
+than merely noticing that a particular pure collision reward changed.
+
+The convexified all-Never fiber silently admits a correlated lottery
+on the four triple omissions. Actual quitting laws have independent
+private clock randomization and a deterministic all-Continue public
+history before absorption. The omitted-player correlation is not an
+available public device. Matching its four payoff coordinates in
+this table forces that forbidden outcome lottery, so it cannot be
+hidden by a different independent payoff realization.
+
+This does NOT refute existence of a FAVORABLE endogenous-sharing
+equilibrium selection with an actual adapter. For this table the
+literal all-Never payoff zero itself is an actual exact equilibrium.
+Nor does it refute the literature theorem, whose payoff indeterminacy
+is explicit. It retires the general theorem as a black-box producer
+from the closed payoff graph: an additional independent-law and
+all-response realization theorem would be genuinely load-bearing,
+not a continuity detail. No such theorem has been supplied.
+
+### ES5. Direction after the falsifier
+
+The multiple-cap boundary must be analyzed inside the actual complete
+product-law carrier, not its convexified payoff graph. The surviving
+useful facts are literal coordinate convexity of total debt and
+debt-vector affinity on ONE-coordinate chords whose two endpoints
+are already minima. The next question is whether a true minimum's
+simultaneously active response branches force an actual
+minimum-preserving law extension or a lower-debt product profile.
+Neither endogenous payoff choices nor the previously retired
+atomless density controls may supply that missing global step.
+
+## Earliest active zero-mixture cap: simultaneous conditioning exclusion
+
+Status: COMPLETE UNREVIEWED ordinary-mathematical candidate. It is a
+genuine positive-global-minimum restriction, not a supplied local
+interface. It handles ALL simultaneously active cap responses rather
+than assuming four unique caps. It strengthens the common-zero-cap
+consumer by retaining distinct later cap maximizers. No UE theorem
+or export is claimed.
+
+### EA1. Exact statement on the produced source
+
+Use the actual marked source X=T⊔{Never}, original finite sequence
+and bounded signed reward table from UA, LC and ES above. Let
+
+    A_i={t∈X: V_i(t,q_-i)=B_i(q)},
+    τ=min(⋃_i A_i),       μ=Σ_i q_i/4.
+
+Each A_i is nonempty compact because the COMPLETE response function
+is continuous on compact X. The minimum is in the ordered compact
+finite calendar, unless it is Never. Suppose τ is FINITE and
+
+    μ({τ})=0,       e_i=q_i(clock>τ)>0 for ALL i.       (EA1)
+
+Claim: these hypotheses are IMPOSSIBLE at δ=Δ(r)>0. No uniqueness,
+own cap support, punishment normality, root Nash, minimal conditional
+tail or response attainment among original ℕ deadlines is assumed.
+The displayed compact cap attainment is produced, not posited for
+the original countable clocks.
+
+Consequently, at any positive produced minimum with a finite earliest
+active zero-mixture point, SOME owner stops STRICTLY before τ surely.
+For all three OTHER owners, τ, finite c and Never are full maximizing
+points; if τ=c there are two distinct points, otherwise three. In
+particular a source with ALL FOUR caps unique CANNOT have a
+zero-mixture earliest cap, including the nonisolated residual of the
+reviewed worst-SUM source reduction.
+
+### EA2. Why the signed variation preserves every active branch
+
+If τ is the first finite tester, q_i({τ})=0 and the supports of all
+opponents are after τ, so every V_i(τ)=s_i. For an owner m with
+τ∈A_m, the checked global minimum margin δ≤B_m−s_m immediately
+contradicts δ>0. Thus assume there is a finite tester below τ.
+
+Take real ordered cuts u_n<τ increasing to τ and set
+
+    e_i^n=q_i(clock>u_n)≥e_i>0,
+    ν_i^n=q_i(·|clock>u_n).
+
+For fixed n independently change each EXISTING complete law by
+q_i^λ=(1−λ_i)q_i+λ_iν_i^n. This is legal on an open two-sided
+box about zero. Its old likelihood factors are 1−λ_i on clock≤u_n
+and c_i=1+λ_i(1/e_i^n−1)>0 on clock>u_n. Equivalently,
+
+    q_i^λ=c_i q_i−(λ_i/e_i^n)E_i^n,
+    E_i^n=q_i|_(clock≤u_n).
+
+EVERY nonoriginal term in an opponent product contains an early
+finite submeasure E_j^n. For ANY response t>u_n that term has
+absorbed before t, so its payoff is independent of t. Therefore,
+simultaneously for EVERY recipient and EVERY upper test,
+
+    V_i(t,q_-i^λ)=k_i(λ)V_i(t,q_-i)+C_i(λ),
+    k_i(λ)=∏[j≠i]c_j>0,       t>u_n.                (EA2)
+
+Choose a real a_n with u_n<a_n<τ. The compact lower test set
+T∩[0,a_n] contains NO maximizing point for ANY owner, because τ
+is the earliest point of the UNION of all four active sets. Each
+owner has a positive uniform gap on that set. Uniform total-variation
+payoff bounds preserve those lower gaps on a smaller signed box.
+All A_i lie strictly above a_n, and positive rescaling (EA2) keeps
+EVERY original member of A_i tied at the upper cap. Hence ALL full
+caps equal k_i B_i+C_i there. Arbitrarily many active points, active
+Never, and nonisolated active points cause no branch switch: their
+entire upper response family is transformed by the SAME positive
+affine map. This is not the false assertion that an arbitrary
+selected branch of a changing maximum controls the cap.
+
+Choose once any τ_i∈A_i, with τ_m=τ for one earliest owner m.
+All τ_i≥τ. The multiaffine selected sum
+
+    F_n(λ)=Σ_i[V_i(τ_i,q_-i^λ)−U_i(q^λ)]
+
+equals ACTUAL debt on this signed box. Literal old-cut transport
+below gives F_n≥δ there and F_n(0)=δ, so the sign-cube polynomial
+argument gives F_n≡δ. Its distant all-one value is INITIALLY only
+
+    Σ_i[V_i(τ_i,ν_-i^n)−U_i(ν^n)]=δ.               (EA3)
+
+No actual endpoint cap assertion has yet been made.
+
+### EA3. Direct old finite realization, including all moving responses
+
+The needed cut transport is the same proved mechanism as UA's signed
+old-law density transport and NOETHER's CC4, not a theorem about
+negative convex coefficients. For any fixed cut, the monotone old
+chart maps its initial segment to an interval. If a retained atom is
+removed, its RIGHT endpoint is the late-conditioning boundary; if
+the boundary has zero mixture mass, its raw preimage is null and
+old endpoint cuts converge to it. Cuts outside T merely specify the
+same initial segment as the corresponding endpoint of the retained
+interval or tester gap. These are chronological unions of WHOLE old
+atom intervals, not a newly inserted nonisolated clock.
+
+For the corresponding old finite cuts and positive masses e_i^{k,n}
+the literal modified probability laws have old-chart densities
+
+    f_i^k[(1−λ_i)+(λ_i/e_i^{k,n})1_(old clock>cut)].
+
+The cut indicators converge in L¹, the normalizers converge to
+e_i^n>0, and a small fixed signed box keeps all likelihood factors
+nonnegative and bounded. Against any L¹ test the moving-indicator
+error is bounded by the integral of its absolute value over a set
+of vanishing measure; the remaining fixed multiplier is a weak-*
+test. Thus the modified densities converge weak-* on the UNCHANGED
+old chart. Independent product tests and the original prescribed
+and arbitrary-moving-response kernels give payoff and FULL-cap
+convergence. Never is retained and zero c mass remains zero; c⁺
+therefore continues to duplicate c. This supplies the actual global
+floor for the signed box used in EA2.
+
+Also μ({τ})=0, so all q_i({τ})=0 and ν_i^n→ν_i=q_i(·|clock>τ)
+in TOTAL VARIATION. Normalizers remain bounded away from zero.
+The final ν has the SAME direct old-cut realization, now using the
+null raw boundary at τ; the modified density bound is at most the
+old bound divided by min_i e_i. Its complete (U,B) pair belongs to
+the ORIGINAL actual carrier. Uniform total-variation response
+estimates pass (EA3) to
+
+    Σ_i[V_i(τ_i,ν_-i)−U_i(ν)]=δ.                   (EA4)
+
+This passage does not identify the selected cap with the full cap.
+The required identification is proved next.
+
+### EA4. The final conditioned profile has actual full caps
+
+Put E_j=q_j|_(clock<τ). Zero mass at τ ensures
+ν_j=(q_j−E_j)/e_j. For EVERY response t≥τ, INCLUDING τ itself,
+each nonoriginal term in the opponent expansion has a finite exit
+STRICTLY before t. Consequently the SAME constant works on the
+entire closed upper response set:
+
+    V_i(t,ν_-i)=k_i V_i(t,q_-i)+C_i,
+    k_i=∏[j≠i]e_j⁻¹>0,       t≥τ.                 (EA5)
+
+Since each original τ_i is an actual global maximizer and τ_i≥τ,
+positive scaling gives V_i(t,ν_-i)≤V_i(τ_i,ν_-i) for EVERY upper
+test. At τ, all conditioned opponents stop strictly later, so
+V_i(τ,ν_-i)=s_i; therefore V_i(τ_i,ν_-i)≥s_i. Every finite test
+t<τ also has payoff exactly s_i. Never is in the upper set, and
+c⁺ duplicates c. Thus the ALL-response upper bound is proved:
+
+    B_i(ν)=V_i(τ_i,ν_-i) for EVERY i,
+    B_m(ν)=V_m(τ,ν_-m)=s_m.                         (EA6)
+
+Equations (EA4),(EA6) give ACTUAL D(ν)=δ. Its pair lies in the
+original carrier by EA3, so it is another true global minimum.
+The checked `minimumTerminalSemantic_singletonMargin` applied to
+owner m at this actual pair yields δ≤B_m(ν)−s_m=0, contradiction.
+This is the missing global consumer: distinct later caps can be
+larger than their singleton levels; only the EARLIEST owner must
+have equality. It is unnecessary to assert B_i(ν)=s_i for all i.
+
+### EA5. The sure-early obstruction is an exact output
+
+If (EA1) fails through e_h=0, then q_h(clock≤τ)=1 and zero mixture
+mass gives q_h(clock<τ)=1. For any recipient i≠h and EVERY response
+t≥τ, that sure early opponent makes the prescribed first coalition
+independent of t. Some τ_i∈A_i is ≥τ by the definition of earliest
+active point; hence ALL these upper responses are full maximizers.
+In particular τ,c,Never are maximizing POINTS for all i≠h. This
+does not declare their prescribed laws Nash or permit replacement
+of h's complete early law by a pure clock.
+
+If an alleged earliest active point were Never with zero mixture
+mass, every law is finite surely and the distinct finite c would
+tie each Never cap. That contradicts earliestness directly. Thus
+the zero-mixture case never hides an omitted terminal boundary.
+
+For four UNIQUE caps, an e_h=0 sure-early owner is impossible since
+each of the other three caps would have distinct c and Never
+maximizers. Therefore ALL-UNIQUE produced positive minima have a
+POSITIVE MIXTURE ATOM at their earliest cap; it is finite and
+isolated by the source producer. In particular the sole unsupported
+strictly earliest NONISOLATED alternative in the reviewed fresh-table
+reduction is excluded if EA1–EA5 survives independent falsification.
+This does not exclude a zero-OWN-mass earliest cap at an atom supplied
+by some OTHER player's prescribed law, nor multiple-cap sure-early
+sources. Those are the genuine remaining branches.
+
+The source lookup for this new implication was narrow: the exact
+`minimumTerminalSemantic_singletonMargin` declaration and imports in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`,
+the original carrier definition in `Quitting/Root/TerminalSemanticPair.lean`,
+and the stopping-law minimum-fiber declarations identified in ES1.
+NOETHER's common-zero proof CC3–CC5 supplies the nearby comparison:
+the new point is replacing common cap τ by the EARLIEST member of
+the union of ALL active sets, then bounding later caps by (EA5) and
+using the singleton equality for only ONE owner. No Lean build ran.
+
+Boundary checks: positivity is indispensable. With all reward entries
+zero, actual all-Never has zero debt, zero mixture mass at first finite
+tester c=0, all caps are tied there and at Never, and all late masses
+are positive. No positive-margin contradiction follows. With the
+participant-indicator table and purely atomless finite laws, the
+earliest finite cap also has zero mass and singleton equality, but
+their large positive debt is NOT the true all-law infimum: all-pure
+date-zero play has debt zero. This is the exact existing DR6 guardrail
+against replacing global δ by a restricted profile debt.
+
+### EA6. Exact no-strict-late boundary and its collapsing normalizer
+
+This validates the EXCEPTION in EA5; it does not weaken the positive-
+global-floor hypothesis or claim another solved-table optimization trap.
+Set all own singletons zero. Give recipient i≠0 payoff1 on singleton
+{0}, give recipient0 payoff1 on singleton{1}, and set EVERY other
+reward coordinate zero. For N≥1 choose player0's uniform law on
+{0,…,N−1}, player1's uniform law on {N,…,2N−1}, and players2,3
+pure Never. The first outcome is {0} surely, so
+
+    U=(0,1,1,1),       B=(1,1,1,1),       D=1.
+
+For each i≠0 EVERY finite response ≥N and Never gives cap1; before
+N the response payoff is the chance that0 has already stopped, and
+at its last possible clock the join payoff remains0. Player0's cap1
+is achieved by every finite response ≥2N and Never. These exact full
+caps include every finite clock, not only the prescribed menu.
+
+The common quantile charts have c=1/2 and limiting finite calendar
+T=[0,1/2]. Player0 is uniform on [0,1/4], player1 uniform on
+[1/4,1/2], and players2,3 are Never. The earliest active point is
+τ=1/4, which is NONISOLATED with zero mixture mass. Player0 stops
+STRICTLY before τ surely, so e_0=0. The other three caps have every
+point in [τ,c] and Never as maximizers, exactly the EA5 output.
+
+For cuts u_n↑τ, e_0^n remains positive but tends to ZERO. Conditioning
+player0 after u_n concentrates its law into the collapsing interval
+(u_n,τ), and the likelihood bound1/e_0^n diverges. Its limit would
+insert a positive atom at the old NONISOLATED point τ, which is NOT
+covered by bounded old-chart transport. Thus the positivity of each
+FINAL e_i in EA1 cannot be replaced by positivity at every preceding
+cut. The obstruction has exact finite witnesses and is not repaired
+by treating a moving cut as an automatically permissible new atom.
+
+The true all-law gap of this table is zero: actual all-Never is exact
+Nash since every own singleton is zero. The source values D=1 here
+therefore cannot be substituted for δ. This boundary tests both the
+several-active-branch cap ledger and the zero-normalizer seam without
+claiming a positive-minimum counterexample.
