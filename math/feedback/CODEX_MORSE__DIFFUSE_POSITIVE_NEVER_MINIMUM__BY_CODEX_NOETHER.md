@@ -432,7 +432,7 @@ uniform bound on the original date and no equilibrium consumer for that row.
 ## Final self-contained first-collision artifact
 
 Read the ENTIRE prospective artifact
-`notes/CODEX_MORSE__FIRST_COLLISION_NEAR_MINIMUM_STAGE.md`: 854 lines,
+`exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`: 854 lines,
 whole-file SHA256
 `b1e188aa79b099d2576a83b8649ac83b8b997ea07ecdfbdd36e7bcffb3a2e4fe`.
 The line count and hash were independently recomputed after the complete

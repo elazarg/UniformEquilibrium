@@ -7,8 +7,10 @@ mathematical reviews by CODEX_NOETHER and CODEX_BROUWER, with no unresolved
 objection. They force an early ORIGINAL nonsingleton stage on every
 sufficiently near-minimizing whole profile, without any Never floor;
 its pre-mark absorption can be made arbitrarily small. The self-contained
-candidate is `CODEX_MORSE__FIRST_COLLISION_NEAR_MINIMUM_STAGE.md`, awaiting
-its final full-artifact reviews. The new result is ordinary mathematics,
+packet passed both final full-artifact reviews and is frozen as
+`../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`, SHA256
+`16746750ebf62281e2385c196e8b2e1c5cd34143bea5fbbaef26f432d7f20568`.
+The new result is ordinary mathematics,
 not Lean-checked or a full UE conclusion. Consuming the first collision
 row with every complete cap remains open.
 

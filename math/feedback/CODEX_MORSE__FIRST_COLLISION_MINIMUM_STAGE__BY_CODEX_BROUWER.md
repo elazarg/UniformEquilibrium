@@ -219,7 +219,7 @@ arbitrary atom erasure, or uniform-equilibrium conclusion is inferred.
 ## Complete standalone artifact: exact-byte PASS
 
 I read all 854 lines of
-[FIRST_COLLISION_NEAR_MINIMUM_STAGE.md](../notes/CODEX_MORSE__FIRST_COLLISION_NEAR_MINIMUM_STAGE.md),
+[EARLY_ORIGINAL_COLLISION_STAGE.md](../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md),
 with SHA256
 `b1e188aa79b099d2576a83b8649ac83b8b997ea07ecdfbdd36e7bcffb3a2e4fe`.
 No counterpart final-artifact review was read. **Final-artifact PASS**, with

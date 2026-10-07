@@ -435,7 +435,7 @@ excludes one nonsure active owner; the strict prescribed margin excludes a
 sure solo owner. A uniform coupling estimate bounds collision mass away from
 zero. Tracing the original atom interval gives the displayed unchanged-profile
 restriction, including vanishing Never masses. The
-[first-collision proof](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
+[first-collision proof](exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md)
 has two independent mathematical reviews; the exact source theorem is not
 yet Lean-checked. Fully diffuse and solo-first represented minima are excluded.
 
