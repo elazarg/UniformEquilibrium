@@ -50,7 +50,7 @@ theorem quittingAtomGapRepresentative_mem_replyMenu
       (Finset.mem_filter.mp (Finset.max'_mem _ hbefore)).1, rfl⟩
   · simp
 
-private theorem atom_le_atomGapRepresentative_iff
+theorem quittingAtom_le_atomGapRepresentative_iff
     (calendar : Finset ℕ) {atom time : ℕ} (hatom : atom ∈ calendar) :
     atom ≤ quittingAtomGapRepresentative calendar time ↔ atom ≤ time := by
   unfold quittingAtomGapRepresentative
@@ -72,7 +72,7 @@ private theorem atom_le_atomGapRepresentative_iff
       have : atom < time := lt_of_le_of_ne hle fun heq => htime (heq ▸ hatom)
       exact (hbefore ⟨atom, Finset.mem_filter.mpr ⟨hatom, this⟩⟩).elim
 
-private theorem atomGapRepresentative_le_atom_iff
+theorem quittingAtomGapRepresentative_le_atom_iff
     (calendar : Finset ℕ) {atom time : ℕ} (hatom : atom ∈ calendar) :
     quittingAtomGapRepresentative calendar time ≤ atom ↔ time ≤ atom := by
   unfold quittingAtomGapRepresentative
@@ -119,7 +119,7 @@ private theorem quittingFirstStoppingOutcome_update_atomGapRepresentative
         | some atom =>
             simp only [quittingStoppingTimeValue]
             exact WithTop.coe_le_coe.trans
-              ((atomGapRepresentative_le_atom_iff calendar
+              ((quittingAtomGapRepresentative_le_atom_iff calendar
                 (hcalendar second hsecond atom hchoice)).symm.trans
                   WithTop.coe_le_coe.symm)
     · by_cases hsecond : second = who
@@ -130,7 +130,7 @@ private theorem quittingFirstStoppingOutcome_update_atomGapRepresentative
         | some atom =>
             simp only [quittingStoppingTimeValue]
             exact WithTop.coe_le_coe.trans
-              ((atom_le_atomGapRepresentative_iff calendar
+              ((quittingAtom_le_atomGapRepresentative_iff calendar
                 (hcalendar first hfirst atom hchoice)).symm.trans
                   WithTop.coe_le_coe.symm)
       · simp [Function.update_of_ne hfirst, Function.update_of_ne hsecond]

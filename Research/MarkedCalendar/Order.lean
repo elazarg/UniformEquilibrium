@@ -14,9 +14,13 @@ Compact endpoint sets define clocks by collapsing each complementary interval
 to its midpoint. A separate cutoff sends the remaining latent coordinates to
 Never, represented by `⊤`. Finite replies at the cutoff remain finite.
 
-This module defines the geometric clocks and their minimum-label kernels.
-It does not construct quantile charts from original stopping laws, transport
-complete response caps, or approximate arbitrary original profiles.
+Endpoint and cutoff convergence give actual almost-everywhere stabilization
+and L¹ convergence of first-label kernels under an atomless independent base.
+Compatible moving finite replies preserve positive-mass interval ties; Never
+is handled separately. Compatibility does not assert legal-menu membership.
+
+This module does not construct quantile charts from original stopping laws,
+transport complete response caps, or approximate arbitrary original profiles.
 -/
 
 noncomputable section
@@ -738,6 +742,185 @@ theorem tendsto_integral_norm_coalitionKernel_sub (base : ProbabilityMeasure uni
       ∂(ProbabilityMeasure.pi (fun _ : ι => base) : Measure (ι → unitInterval)))
       atTop (𝓝 0) :=
   tendsto_integral_norm_payoffKernel_sub base hE hc
+    (fun outcome => if outcome = coalition then 1 else 0)
+
+/-- The only additional response exception is equality with the raw latent
+coordinate. Positive-mass equality of collapsed clocks is retained. -/
+theorem ae_eventually_responseLabels_eq (base : ProbabilityMeasure unitInterval)
+    [NullSingletonClass (base : Measure unitInterval)]
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    {tester : ℕ → ℝ} {t : ℝ} (ht : Tendsto tester atTop (𝓝 t))
+    (hcompatible : ∀ k, (calendars k).AtomCompatible (tester k)) (who : ι) :
+    ∀ᵐ sample : {j : ι // j ≠ who} → unitInterval
+        ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+          Measure ({j : ι // j ≠ who} → unitInterval)),
+      ∀ᶠ k in atTop, responseLabels (calendars k) who (tester k : WithTop ℝ) sample =
+        responseLabels limit who (t : WithTop ℝ) sample := by
+  have hne : ∀ᵐ x : unitInterval ∂(base : Measure unitInterval), (x : ℝ) ≠ t := by
+    simpa only [mem_preimage, mem_singleton_iff] using
+      ((countable_singleton t).preimage (f := fun x : unitInterval => (x : ℝ))
+        Subtype.val_injective).ae_notMem (base : Measure unitInterval)
+  have hgood : ∀ᵐ x : unitInterval ∂(base : Measure unitInterval),
+      (x : ℝ) ∉ limit.exceptionalEndpoints ∧ x ≠ limit.cutoff ∧ (x : ℝ) ≠ t :=
+    (limit.ae_notMem_exceptionalEndpoints (base : Measure unitInterval)).and
+      (((base : Measure unitInterval).ae_ne limit.cutoff).and hne)
+  have hcoords (j : {j : ι // j ≠ who}) :
+      ∀ᵐ sample : {j : ι // j ≠ who} → unitInterval
+          ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+            Measure ({j : ι // j ≠ who} → unitInterval)),
+        (sample j : ℝ) ∉ limit.exceptionalEndpoints ∧ sample j ≠ limit.cutoff ∧
+          (sample j : ℝ) ≠ t := by
+    have hEval := measurePreserving_eval
+      (fun _ : {j : ι // j ≠ who} => (base : Measure unitInterval)) j
+    exact hEval.quasiMeasurePreserving.ae hgood
+  filter_upwards [eventually_all.mpr hcoords] with sample hs
+  exact eventually_responseLabels_eq hE hc ht hcompatible who sample
+    (fun j => (hs j).1) (fun j => (hs j).2.1) (fun j => (hs j).2.2)
+
+theorem ae_eventually_never_responseLabels_eq (base : ProbabilityMeasure unitInterval)
+    [NullSingletonClass (base : Measure unitInterval)]
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff)) (who : ι) :
+    ∀ᵐ sample : {j : ι // j ≠ who} → unitInterval
+        ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+          Measure ({j : ι // j ≠ who} → unitInterval)),
+      ∀ᶠ k in atTop, responseLabels (calendars k) who ⊤ sample =
+        responseLabels limit who ⊤ sample := by
+  have hgood : ∀ᵐ x : unitInterval ∂(base : Measure unitInterval),
+      (x : ℝ) ∉ limit.exceptionalEndpoints ∧ x ≠ limit.cutoff :=
+    (limit.ae_notMem_exceptionalEndpoints (base : Measure unitInterval)).and
+      ((base : Measure unitInterval).ae_ne limit.cutoff)
+  have hcoords (j : {j : ι // j ≠ who}) :
+      ∀ᵐ sample : {j : ι // j ≠ who} → unitInterval
+          ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+            Measure ({j : ι // j ≠ who} → unitInterval)),
+        (sample j : ℝ) ∉ limit.exceptionalEndpoints ∧ sample j ≠ limit.cutoff := by
+    have hEval := measurePreserving_eval
+      (fun _ : {j : ι // j ≠ who} => (base : Measure unitInterval)) j
+    exact hEval.quasiMeasurePreserving.ae hgood
+  filter_upwards [eventually_all.mpr hcoords] with sample hs
+  exact eventually_never_responseLabels_eq hE hc who sample
+    (fun j => (hs j).1) (fun j => (hs j).2)
+
+theorem norm_responsePayoffKernel_le (C : Calendar) (who : ι) (reply : WithTop ℝ)
+    (reward : Finset ι → ℝ) (sample : {j : ι // j ≠ who} → unitInterval) :
+    ‖responsePayoffKernel C who reply reward sample‖ ≤
+      ∑ coalition : Finset ι, ‖reward coalition‖ := by
+  exact Finset.single_le_sum (fun coalition _ => norm_nonneg (reward coalition))
+    (Finset.mem_univ (responseLabels C who reply sample))
+
+theorem integrable_responsePayoffKernel (C : Calendar) (who : ι) (reply : WithTop ℝ)
+    (reward : Finset ι → ℝ) (μ : Measure ({j : ι // j ≠ who} → unitInterval))
+    [IsFiniteMeasure μ] : Integrable (responsePayoffKernel C who reply reward) μ :=
+  Integrable.of_bound (measurable_responsePayoffKernel C who reply reward).aestronglyMeasurable
+    (∑ coalition : Finset ι, ‖reward coalition‖)
+    (Eventually.of_forall (norm_responsePayoffKernel_le C who reply reward))
+
+theorem integrable_responseCoalitionKernel (C : Calendar) (who : ι) (reply : WithTop ℝ)
+    (coalition : Finset ι) (μ : Measure ({j : ι // j ≠ who} → unitInterval))
+    [IsFiniteMeasure μ] : Integrable (responseCoalitionKernel C who reply coalition) μ :=
+  integrable_responsePayoffKernel C who reply
+    (fun outcome => if outcome = coalition then 1 else 0) μ
+
+private theorem responsePayoffKernel_L1_of_ae_labels
+    (base : ProbabilityMeasure unitInterval) (calendars : ℕ → Calendar) (limit : Calendar)
+    (who : ι) (reply : ℕ → WithTop ℝ) (limitReply : WithTop ℝ)
+    (hlabels : ∀ᵐ sample : {j : ι // j ≠ who} → unitInterval
+        ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+          Measure ({j : ι // j ≠ who} → unitInterval)),
+      ∀ᶠ k in atTop, responseLabels (calendars k) who (reply k) sample =
+        responseLabels limit who limitReply sample) (reward : Finset ι → ℝ) :
+    Tendsto (fun k => ∫ sample,
+      ‖responsePayoffKernel (calendars k) who (reply k) reward sample -
+        responsePayoffKernel limit who limitReply reward sample‖
+      ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+        Measure ({j : ι // j ≠ who} → unitInterval))) atTop (𝓝 0) := by
+  have hdom := tendsto_integral_of_dominated_convergence
+    (μ := (ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+      Measure ({j : ι // j ≠ who} → unitInterval)))
+    (F := fun k sample =>
+      ‖responsePayoffKernel (calendars k) who (reply k) reward sample -
+        responsePayoffKernel limit who limitReply reward sample‖) (f := fun _ => (0 : ℝ))
+    (fun _ => 2 * ∑ coalition : Finset ι, ‖reward coalition‖)
+    (fun k => ((measurable_responsePayoffKernel (calendars k) who (reply k) reward).sub
+      (measurable_responsePayoffKernel limit who limitReply reward)).norm.aestronglyMeasurable)
+    (integrable_const _) ?_ ?_
+  · simpa only [integral_zero] using hdom
+  · intro k
+    apply Eventually.of_forall
+    intro sample
+    rw [norm_norm]
+    have hfirst := norm_responsePayoffKernel_le (calendars k) who (reply k) reward sample
+    have hlast := norm_responsePayoffKernel_le limit who limitReply reward sample
+    exact (norm_sub_le _ _).trans (by linarith)
+  · filter_upwards [hlabels] with sample hs
+    apply tendsto_const_nhds.congr'
+    filter_upwards [hs] with k hk
+    simp only [responsePayoffKernel, hk, sub_self, norm_zero]
+
+/-- Actual moving finite-response kernels converge in L¹ under the geometric inputs. -/
+theorem tendsto_integral_norm_responsePayoffKernel_sub
+    (base : ProbabilityMeasure unitInterval) [NullSingletonClass (base : Measure unitInterval)]
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    {tester : ℕ → ℝ} {t : ℝ} (ht : Tendsto tester atTop (𝓝 t))
+    (hcompatible : ∀ k, (calendars k).AtomCompatible (tester k)) (who : ι)
+    (reward : Finset ι → ℝ) :
+    Tendsto (fun k => ∫ sample,
+      ‖responsePayoffKernel (calendars k) who (tester k : WithTop ℝ) reward sample -
+        responsePayoffKernel limit who (t : WithTop ℝ) reward sample‖
+      ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+        Measure ({j : ι // j ≠ who} → unitInterval))) atTop (𝓝 0) :=
+  responsePayoffKernel_L1_of_ae_labels base calendars limit who
+    (fun k => (tester k : WithTop ℝ)) (t : WithTop ℝ)
+    (ae_eventually_responseLabels_eq base hE hc ht hcompatible who) reward
+
+theorem tendsto_integral_norm_never_responsePayoffKernel_sub
+    (base : ProbabilityMeasure unitInterval) [NullSingletonClass (base : Measure unitInterval)]
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff)) (who : ι)
+    (reward : Finset ι → ℝ) :
+    Tendsto (fun k => ∫ sample,
+      ‖responsePayoffKernel (calendars k) who ⊤ reward sample -
+        responsePayoffKernel limit who ⊤ reward sample‖
+      ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+        Measure ({j : ι // j ≠ who} → unitInterval))) atTop (𝓝 0) :=
+  responsePayoffKernel_L1_of_ae_labels base calendars limit who (fun _ => ⊤) ⊤
+    (ae_eventually_never_responseLabels_eq base hE hc who) reward
+
+theorem tendsto_integral_norm_responseCoalitionKernel_sub
+    (base : ProbabilityMeasure unitInterval) [NullSingletonClass (base : Measure unitInterval)]
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    {tester : ℕ → ℝ} {t : ℝ} (ht : Tendsto tester atTop (𝓝 t))
+    (hcompatible : ∀ k, (calendars k).AtomCompatible (tester k)) (who : ι)
+    (coalition : Finset ι) :
+    Tendsto (fun k => ∫ sample,
+      ‖responseCoalitionKernel (calendars k) who (tester k : WithTop ℝ) coalition sample -
+        responseCoalitionKernel limit who (t : WithTop ℝ) coalition sample‖
+      ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+        Measure ({j : ι // j ≠ who} → unitInterval))) atTop (𝓝 0) :=
+  tendsto_integral_norm_responsePayoffKernel_sub base hE hc ht hcompatible who
+    (fun outcome => if outcome = coalition then 1 else 0)
+
+theorem tendsto_integral_norm_never_responseCoalitionKernel_sub
+    (base : ProbabilityMeasure unitInterval) [NullSingletonClass (base : Measure unitInterval)]
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff)) (who : ι)
+    (coalition : Finset ι) :
+    Tendsto (fun k => ∫ sample,
+      ‖responseCoalitionKernel (calendars k) who ⊤ coalition sample -
+        responseCoalitionKernel limit who ⊤ coalition sample‖
+      ∂(ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base) :
+        Measure ({j : ι // j ≠ who} → unitInterval))) atTop (𝓝 0) :=
+  tendsto_integral_norm_never_responsePayoffKernel_sub base hE hc who
     (fun outcome => if outcome = coalition then 1 else 0)
 
 end MathUE.MarkedCalendar
