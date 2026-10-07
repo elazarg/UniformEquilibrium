@@ -173,6 +173,12 @@ Nash law at punishment completion waits until the final date, has the same
 positive Never mass, and has unrestricted original-game debt 6661/10000 in
 every coordinate. This is an internal exact selector obstruction, not a
 positive-gap table or an exclusion of approximate-law production.
+Section 33 gives an exact contraction certificate for a proper-three
+stationary equilibrium at a reviewed triple–singleton coverage fixture.
+It is an internal boundary test, not an existing raw-table selector or
+a proof that the new triple–singleton family is redundant. The separate
+independent theorem/source review is in
+`../feedback/BUFFERED_TRIPLE_SINGLETON_UNIFORM_EQUILIBRIUM__BY_CODEX_MORSE.md`.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -5625,3 +5631,138 @@ This says nothing about whether this table has a positive GLOBAL semantic
 minimum: that decisive additional property has not been established. The
 next investigation must combine the source restrictions with that property,
 not merely add more finite-base exclusions to this regression.
+
+Neither existence nor nonexistence of UE for this particular regression is
+claimed here. The subsequent global attempt retains the full carrier minimum
+and its original stopping laws. A finite exact-Nash completion, a minimum on
+one prefix orbit, and an algebraic intersection of the fifteen base screens
+are not substitutes for that premise. The source declarations
+`minimumTerminalSemantic_weightedAuxiliaryNash_budget` and
+`minimumTerminalSemantic_weightedAuxiliaryNash_eq_allContinue` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticWeightedAuxiliaryNashBudget.lean`
+were reread: their entire anisotropic open moat consists of inert roots.
+Thus exact-root splicing inside that moat is not the next consumer. The live
+question remains whether simultaneous changes of the original laws, retaining
+all tied complete cap responses, can contradict the global minimum. No such
+consumer is proved in this section.
+
+## 33. A stationary boundary test for a triple–singleton coverage fixture
+
+This is ordinary exact mathematics arising from an independent review, not
+an export candidate, an all-stationary census, or a proof that the reviewed
+raw triple–singleton family is redundant. It gives another equilibrium at
+one particular center. An existing verifier for supplied stationary data
+must not be mistaken for an existing raw-table selector covering that family.
+
+The complete table is as follows, with coordinates in order 0,1,2,3:
+
+| S | r(S) |
+|---|---|
+| 0 | (1,4,0,0) |
+| 1 | (4,1,0,0) |
+| 2 | (0,0,1,4) |
+| 3 | (0,0,4,1) |
+| 01 | (5,5,1,1) |
+| 02 | (1/2,1,1/2,1) |
+| 03 | (1/2,3,3,−1) |
+| 12 | (1,1/2,1/2,1) |
+| 13 | (3,1/2,3,−1) |
+| 23 | (3,3,0,0) |
+| 012 | (2,2,2,1) |
+| 013 | (13,−7,3,11/15) |
+| 023 | (−7,3,4,13/15) |
+| 123 | (3,13,−7,13/15) |
+| 0123 | (2,2,2,21/20) |
+
+There is an exact stationary terminal Nash profile with positive proper
+hazards on {0,1,3} and player2 always Continue. Moreover such a profile
+persists on a full sixty-coordinate open reward neighborhood of this center.
+These are unrestricted behavioral claims, not only stationary-deviation
+claims. No uniqueness outside the small box below is asserted.
+
+Put x,y,z for the odds of players 0,1,3. A player's forced-Quit endpoint
+has numerator N_i and denominator D_i, and its expected passive absorption
+reward has numerator A_i with that same denominator. The stationary sign
+numerator is F_i=(D_i−1)N_i−D_i A_i. Direct expansion of the three active
+rows gives
+
+    F₀ = 10y²z²+11y²z+y²+(21/2)yz²−yz/2−3y+z²/2+z,
+    F₁ = −10x²z²−9x²z+x²−(19/2)xz²−xz/2−3x+z²/2+z,
+    F₃ = −(4/15)x²y²−(19/15)x²y−x²
+          −(19/15)xy²−2xy+x−y²+y.                 (169)
+
+For inactive player2, with D=(1+x)(1+y)(1+z), the corresponding data are
+
+    N₂=1+x/2+y/2+2xy+4xz−7yz+2xyz,
+    A₂=4z+xy+3xz+3yz+3xyz,
+    F₂=(D−1)N₂−D A₂.                             (170)
+
+Let f=(F₀,F₁,F₃), c=(251/5000,357/400,389/2500), and
+J=Df(c). Exact differentiation gives
+
+    J = [ 0                  306099757/125000000   4645839/312500       ]
+        [ −1317311049/390625000   0                 371705467/390625000 ]
+        [ −507299979/250000000 −18811758557/18750000000  0              ].
+
+Its determinant is
+
+    556297248383431596140867643 / 12207031250000000000000000 >45.
+
+Exact rational row sums give ‖adj(J)‖∞<83, hence ‖J⁻¹‖∞<2.
+Multiplying the three displayed polynomials at c by J⁻¹ gives
+‖J⁻¹f(c)‖∞<3/100000. These inequalities require only rational arithmetic;
+the fixed point below is not selected from floating-point evidence.
+
+For each polynomial in (169), sum the absolute values of all coefficients
+in all nine second partial derivatives. The three sums are respectively
+253,235,132/5. On the unit cube these dominate the sum of absolute second
+partials, so on the closed infinity ball B={v:‖v−c‖∞≤1/1000},
+
+    ‖Df(v)−J‖∞≤253/1000.
+
+The map T(v)=v−J⁻¹f(v) therefore has Lipschitz constant less than506/1000
+on B. Its distance from c is at most
+
+    3/100000+(506/1000)(1/1000)<1/1000.
+
+Thus T maps B into itself and is a contraction. The elementary contraction
+theorem supplies its unique fixed point v* in B, with f(v*)=0. Every
+coordinate in this entire box is strictly positive and finite, so all three
+active hazards v_i*/(1+v_i*) lie strictly between zero and one.
+
+The inactive row has exact center value
+
+    F₂(c)=−44223662610869822129/25000000000000000000<−7/4.
+
+For (170), the sum of absolute coefficients weighted by total monomial
+degree is380. It bounds the infinity-to-real Lipschitz constant on the
+unit cube. Consequently F₂(v*)<−7/4+380/1000<0. This is the required
+strict Never-versus-Quit inequality for the inactive player.
+
+The three equations F_i=0 equate active Quit and stationary Never payoffs;
+the inactive strict sign makes Never optimal for player2. Every player has
+a positive-hazard opponent. Against these fixed stationary opponents a
+pure quitting time interpolates between Quit immediately and Never, and
+their all-survival probability decreases geometrically. All complete
+behavioral replies are mixtures of these pure times on the unique live
+history. The endpoint inequalities therefore prove exact terminal Nash.
+The uniform expected absorption time, also under every unilateral reply,
+gives one fixed payoff target and an O(1/N) horizon delivery/deviation bound,
+including the initial-zero convention.
+
+Finally ‖J⁻¹(Df(v*)−J)‖∞<1, so Df(v*) is invertible. Reward coefficients
+depend continuously and polynomially on the full table. The same strict
+contraction and inactive inequality persist after sufficiently small changes
+of all sixty entries, or equivalently the ordinary implicit-function theorem
+continues this root. This proves the stated open neighborhood, without
+changing the zero hazard of player2.
+
+The relevant implemented comparison inspected was
+`exists_nearby_oneDate_sameProfile_horizon_equilibrium` in
+`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterNearbyHorizons.lean`.
+It uses the literal `nearbyRoot` with a sure anchor, as defined in
+`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenterNearbyInteriorRoot.lean`;
+it is not a generic selector for the present proper-three stationary root.
+Thus this calculation alone establishes no whole-class inclusion in that
+earlier raw producer. The independent triple–singleton review records the
+separate complete concrete-base and response-quotient exclusions.

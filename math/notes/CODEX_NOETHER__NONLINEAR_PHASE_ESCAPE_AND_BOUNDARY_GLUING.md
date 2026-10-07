@@ -5,6 +5,8 @@ Identity: CODEX_NOETHER. Ordinary mathematics, not checked in Lean here.
 Status: the explicit unbounded regularized-root family below is proved.
 It falsifies a tempting global compactness implication, not UE existence.
 The displayed escape table is itself covered by a pure-pair equilibrium.
+Two nonnegative triple-join rows already give a complete bounded producer
+under the additional raw sign and passive-cap conditions at the end.
 The live question is whether actual no-UE concrete-base gaps exclude or
 consume EVERY escape mode, instead of assuming one more reward sign.
 No export or conjecture-facing increment is claimed here.
@@ -182,3 +184,147 @@ not such an adapter. The regularization λ→∞ changes the Bellman
 equations, so it supplies neither actual policy values nor a strategy.
 Any argument overlooking this distinction would repeat the earlier
 mistake of confusing an analytic object with a consumed equilibrium.
+
+## Removing the easy pure exit still does not defeat the actual source
+
+Modify only the three passive anchor pair coordinates of the displayed
+escape table:
+
+    r_b(01)=r_b(02)=r_b(12)=−1.
+
+The pure01 exit is no longer Nash: the anchor's joining gain is now
+11/15−(−1)=26/15>0. The six pair joins, three negative triple joins,
+and the three residuals e₀,e₁,e₂ are unchanged. The anchor residual becomes
+
+    e_b=x²y−2(x²+2xy)−2x+3y.
+
+For x≥8 and y∈(x,x+1), this is greater than
+
+    x³−6x²−3x>x²>λ(x).
+
+Thus the same exact shifted roots still escape. Removing the convenient
+pure equilibrium has not repaired the global isolation implication.
+
+Nevertheless the ACTUAL singleton0 source consumes this modified table.
+Take the induced free-player product probabilities, in order1,2,3,
+
+    μ=(15/41,0,1/11).
+
+At this point the free joining gaps of players1 and3 are exactly zero;
+player2's gap is −9/451<0. Hence μ is a genuine induced finite Nash law,
+not a correlated law or a numerical root. The owner's zero-tail
+Continue-to-Quit gap and the empty-free probability are
+
+    E g₀=573/451,       p_empty=260/451.
+
+The actual punishment value obeys P₀≤1/2: opponents can make player2 quit
+at date0, leaving owner0 the two endpoints r₀(02)=1/2 and r₀(2)=0.
+This is the direct unilateral-cap bound used by
+`quittingPunishmentValue_le_stationaryUnilateralCap` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`.
+Consequently the literal concrete-source owner floor excess is
+
+    −573/451+(260/451)P₀≤−443/451<0.
+
+There are no outsiders when free=I−{0}. The free components vanish by
+the induced Nash property, so
+`exists_uniformPayoff_or_singletonBase_pos_gap` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`
+forces a uniform equilibrium payoff. This is not an all-Nash census:
+one exact favorable point of the actual source already suffices.
+
+The guardrail is sharper than a pure-exit observation. An unbounded
+analytic branch can survive both the loss of the triple sign and the
+removal of its first easy boundary equilibrium, yet another real
+punishment-tail consumer still closes the table. No separation from all
+concrete-base screens is claimed. The global question above remains open.
+
+## Two good triple rows suffice: a structural producer extension
+
+This is a complete ordinary-mathematics extension of the compactness and
+strategy argument, not an independently reviewed result or new export.
+All notation, raw signed-game semantics and the fields e,H_λ are as above.
+The extension is stated from raw data; it does not assume a root.
+
+Assume all six c_ij>0 for distinct i,j∈A. Choose a raw subset G⊆A with
+at least two members and require c_iA≥0 for i∈G. Require either G=A or
+Γ_ib<0 for at least one i∈G. If G=A, hypothetical no UE supplies this
+negative comparison from R0, as in the full buffered proof. For each
+good i∈G allow either passive-cap alternative
+
+    r_i(ib)≤s_i,
+
+or
+
+    Π_ij,Π_ik,Π_iA≥0 and r_i(ib)≤r_i(b).
+
+Every bad i∈A−G must satisfy the second alternative. Its triple joining
+difference c_iA may be negative. Define the radii using only the good rows:
+
+    R_j=min[i∈G−{j}] B_i/c_ij,
+    B_i=max(0,Γ_ib,M_i),
+    M_i=max(0,Π_ij,Π_ik,Π_iA).
+
+Each minimizing set is nonempty because |G|≥2. Finally assume the seven
+nonempty box-vertex inequalities C_b(R·1_S)≤0, S⊆A, where
+
+    C_b(X)=Σ_j(r_b(bj)−s_b)X_j
+      +Σ_{j<k}(r_b(bjk)−s_b)X_jX_k
+      +(r_b(I)−s_b)X_0X_1X_2.
+
+Conclusion: every such raw table has a uniform equilibrium payoff. In the
+R0/degree-one branch it has the same explicitly produced period-two
+terminal Nash and fixed-target/all-large-horizon conclusion. No particular
+sign is imposed on the remaining rewards or singleton levels.
+
+Proof of global isolation: for every X≥0 with e(X)≥0 and every i∈G,
+L_i≥0 and P_i/D_i≤M_i. Therefore
+
+    L_i≤B_i,       X_j≤B_i/c_ij for j≠i.
+
+The good rows together bound all X_j, j∈A, by the displayed R_j. A good
+row with Γ_ib<0 also gives X_b≤M_i/(−Γ_ib). The same compact set
+contains every zero of every shifted H_λ. All the local R0/degree-one,
+global degree-zero and nonzero/singleton-support exclusion arguments are
+literally unchanged. In particular the support proof uses c_ij>0 but
+does not use the signs of c_iA, since the quadratic triple term vanishes
+on singleton support. Thus the internally produced finite root has at
+least two positive odds.
+
+Proof of strategic cap for a bad row: the algebraic active identity
+W_i=s_i+L_i remains valid when L_i is negative. The residual e_i and
+inactive correction are unchanged. Since the three Π coefficients are
+nonnegative, U_i≥s_i, hence U_i*≥s_i. The exact corrected policy equation
+is W_i*=(U_i*+X_b r_i(b))/(1+X_b), and so
+
+    Q_i^b=(s_i+X_b r_i(ib))/(1+X_b)≤W_i*.
+
+For a good row using the first alternative, W_i*≥W_i≥s_i gives the old
+cap; for a good row using the second, the displayed argument applies.
+The multiaffine vertex test gives b's actual passive cap on the produced
+box. Every other policy equation, active endpoint inequality and inactive
+correction remains valid. Bounded corrected values are uniquely the actual
+policy payoffs by period survival<1. Opponent survival<1 follows from the
+two-positive-support conclusion, so the full behavioral telescoping and
+direct horizon bounds apply unchanged. This supplies the complete consumer,
+not merely a local nonlinear root.
+
+A complete raw-scope stress is obtained from the strict sixty-coordinate
+table of the buffered candidate by changing only
+
+    r₂(01)=3,      r₂(02)=r₂(12)=1,      r₂(23)=2.
+
+All other coordinates stay exactly those displayed there. Then G={0,1}
+has c₀A=c₁A=1, Γ₀b=Γ₁b=−1, while c₂A=2−3=−1. The six pair joins
+remain positive. The bad row2 has Π₂,02=Π₂,12=0, Π₂,A=1 and
+r₂(23)=2≤r₂(3)=4. The good-row radii are(4,4,8), so the strict anchor
+vertex values are unchanged. This table satisfies the new raw producer
+but violates the all-three-nonnegative-triple condition. This is a raw-scope
+test only: no inherited assertion about all concrete-base screens is made
+for the modified table. The original strict table still belongs to this
+stronger family and retains its separately proved source separation.
+
+The extension shows precisely where the symmetric escape uses more than
+one bad row. It does not prove that actual all-base gaps supply a suitable
+G, and it does not settle escapes with fewer than two good rows or with
+only bad rows having negative Γ_ib. Those are still the global question.
