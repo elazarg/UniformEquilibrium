@@ -1,6 +1,7 @@
 import Literature.FleschThuijsmanAndVrieze1997
 import MathUE.Probability.RatioProperPair
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.ProperPairLimit
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.BestReplyMassEstimate
 
 /-!
 # Recursive repeated games with absorbing states
@@ -14,7 +15,9 @@ finite probability simplexes and absorption-weighted reward tables, delegating
 the proper-pair construction to the generic ratio-ranking theorem. Lemma 2.2
 and Theorem 3.1 additionally delegate to actual expected-pathwise-liminf results
 for the canonical model with arbitrary finite live-state actions and literal
-action-independent absorbing rewards. Example 3
+action-independent absorbing rewards. Definition 2.1's canonical action sets
+and Lemma 3.2's arbitrary-sequence estimates use actual behavioral best replies.
+Example 3
 is the same three-player game analyzed in the 1997 paper, so its table and
 stationary conclusions delegate to that existing formalization. The printed
 exclusion for every positive error is refuted; the corrected exclusion below
@@ -36,15 +39,17 @@ including zero absorption. The canonical Theorem 3.1 selects one stationary
 pair before every initial state and every unilateral behavioral deviation.
 It is not a proof of the paper's reduction of general absorbing stage games
 with state-dependent action sets to action-independent absorbing rewards.
-The remaining general definitions, the standalone arbitrary-sequence statement
-of Lemma 3.2, Examples 1, 2 and 4, and the three final remarks are not formalized
-here. This file does not claim complete paper coverage or a fixed-target
+Examples 1, 2 and 4 and the three final remarks are not formalized here.
+The canonical statements do not settle the original model reduction. This file
+does not claim complete paper coverage or a fixed-target
 uniform-equilibrium payoff from Theorem 3.1.
 -/
 
 noncomputable section
 
 open _root_.Math.ProbabilityMassFunction
+open Filter
+open scoped Topology
 
 namespace Literature.FleschThuijsmanAndVrieze1996
 
@@ -117,6 +122,38 @@ def canonicalStationaryProfile {A B : Type} [Fintype A] [Fintype B]
 abbrev canonicalPayoff {A B : Type} [Fintype A] [Fintype B]
     (G : AbsorbingGameData A B) (initial : (canonicalGame G).State) :=
   GameTheory.RecursiveAbsorption.liminfPayoff G.canonicalData initial
+
+/-- Definition 2.1: the carrier is the set of positive own strategy coordinates. -/
+def stationaryCarrier {A : Type*} [Fintype A] (x : StationaryStrategy A) : Set A :=
+  {i | 0 < x.1 i}
+
+/-- Definition 2.1: the actual one-stage probability of leaving the live state. -/
+def canonicalAbsorptionProbability {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (x : StationaryStrategy A) (y : StationaryStrategy B) : ℝ :=
+  GameTheory.RecursiveAbsorption.absorptionMass G.canonicalData
+    (stationaryLaw x) (stationaryLaw y)
+
+/-- Definition 2.1: rows with positive absorption against the opponent's strategy. -/
+def absorbingPureRows {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (y : StationaryStrategy B) : Set A :=
+  {i | 0 < GameTheory.RecursiveAbsorption.absorptionMass G.canonicalData
+    (PMF.pure i) (stationaryLaw y)}
+
+/-- Definition 2.1's analogous positive-absorption column set. -/
+def absorbingPureColumns {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (x : StationaryStrategy A) : Set B :=
+  {j | 0 < GameTheory.RecursiveAbsorption.absorptionMass G.canonicalData
+    (stationaryLaw x) (PMF.pure j)}
+
+/-- Definition 2.1: pure rows that cap every actual behavioral reply. -/
+def pureBestReplies1 {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (y : StationaryStrategy B) : Set A :=
+  {i | GameTheory.RecursiveAbsorption.IsRowBestReply G.canonicalData (stationaryLaw y) i}
+
+/-- Definition 2.1: pure column best replies against all behavioral strategies. -/
+def pureBestReplies2 {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (x : StationaryStrategy A) : Set B :=
+  {j | GameTheory.RecursiveAbsorption.IsColumnBestReply G.canonicalData (stationaryLaw x) j}
 
 /-- Lemma 2.2 for the canonical game, with zero-denominator value zero included. -/
 theorem lemma2_2_canonical {A B : Type} [Fintype A] [Fintype B]
@@ -209,7 +246,7 @@ theorem theorem2_4 [Nonempty I] [Nonempty J] (G : AbsorbingGameData I J) :
 This statement concerns the actual game defined above. The production proof
 constructs proper pairs internally, derives the absorbing and recurrent limit
 cases, and caps all behavioral deviations. The original absorbing-stage-game
-reduction and the standalone statement of Lemma 3.2 remain separate obligations.
+reduction remains a separate obligation.
 -/
 
 /-- Theorem 3.1 for the canonical model, simultaneously at every initial state. -/
@@ -224,6 +261,80 @@ theorem theorem3_1_canonical {A B : Type} [Fintype A] [Fintype B]
   refine ⟨⟨toVector x, toVector_mem_stdSimplex x⟩,
     ⟨toVector y, toVector_mem_stdSimplex y⟩, ?_⟩
   simpa only [canonicalStationaryProfile, stationaryLaw, ofVector_toVector] using hxy
+
+/-! Lemma 3.2 uses arbitrary stationary sequences. Its absorbing non-best-reply
+set varies along the sequence; the conditional ratio is zero off that set.
+Only the opponent's strategy is required to converge. These statements concern
+the canonical model, not a presumed reduction of the original absorbing stages.
+-/
+
+/-- The raw row ratio on precisely the current absorbing non-best-reply set. -/
+abbrev badReplyProbabilityRatio1 {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (x : StationaryStrategy A) (y : StationaryStrategy B)
+    (anchor i : A) :=
+  GameTheory.RecursiveAbsorption.rowBadReplyProbabilityRatio G.canonicalData
+    (stationaryLaw x) (stationaryLaw y) anchor i
+
+/-- The corresponding conditional column ratio. -/
+abbrev badReplyProbabilityRatio2 {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (x : StationaryStrategy A) (y : StationaryStrategy B)
+    (anchor j : B) :=
+  GameTheory.RecursiveAbsorption.columnBadReplyProbabilityRatio G.canonicalData
+    (stationaryLaw x) (stationaryLaw y) anchor j
+
+/-- Lemma 3.2: the actual canonical row payoff is eventually near its best reply. -/
+theorem lemma3_2_canonical {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (xs : ℕ → StationaryStrategy A)
+    (ys : ℕ → StationaryStrategy B) (y : StationaryStrategy B) (anchor : A)
+    (hy : Tendsto (fun n => (ys n).1) atTop (𝓝 y.1))
+    (hsupported : ∀ n, anchor ∈ stationaryCarrier (xs n))
+    (hbest : ∀ n, anchor ∈ pureBestReplies1 G (ys n))
+    (hhazard : anchor ∈ absorbingPureRows G y)
+    (hbad : ∀ i, Tendsto
+      (fun n => badReplyProbabilityRatio1 G (xs n) (ys n) anchor i) atTop (𝓝 0))
+    {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ n in atTop, canonicalPayoff G none (canonicalStationaryProfile G (xs n) (ys n))
+      false ≥ pureStationaryPayoff1 G (ys n) anchor - ε := by
+  have hy' : Tendsto (fun n => toVector (stationaryLaw (ys n))) atTop
+      (𝓝 (toVector (stationaryLaw y))) := by
+    simpa only [stationaryLaw, toVector_ofVector] using hy
+  have hs : ∀ n, 0 < ((stationaryLaw (xs n)) anchor).toReal := by
+    intro n
+    simpa only [stationaryLaw, ofVector_toReal, stationaryCarrier, Set.mem_ofPred_eq] using
+      hsupported n
+  have hfloor :=
+    GameTheory.RecursiveAbsorption.eventually_rowPayoff_ge_bestReply_of_bad_ratio_tendsto
+      G.canonicalData (fun n => stationaryLaw (xs n)) (fun n => stationaryLaw (ys n))
+      (stationaryLaw y) anchor hy' hs hbest hhazard hbad hε
+  simpa only [canonicalPayoff, canonicalStationaryProfile,
+    pureStationaryPayoff1_eq_canonical] using hfloor
+
+/-- The same canonical Lemma 3.2 estimate for the column player. -/
+theorem lemma3_2_canonical_column {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (xs : ℕ → StationaryStrategy A)
+    (ys : ℕ → StationaryStrategy B) (x : StationaryStrategy A) (anchor : B)
+    (hx : Tendsto (fun n => (xs n).1) atTop (𝓝 x.1))
+    (hsupported : ∀ n, anchor ∈ stationaryCarrier (ys n))
+    (hbest : ∀ n, anchor ∈ pureBestReplies2 G (xs n))
+    (hhazard : anchor ∈ absorbingPureColumns G x)
+    (hbad : ∀ j, Tendsto
+      (fun n => badReplyProbabilityRatio2 G (xs n) (ys n) anchor j) atTop (𝓝 0))
+    {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ n in atTop, canonicalPayoff G none (canonicalStationaryProfile G (xs n) (ys n))
+      true ≥ pureStationaryPayoff2 G (xs n) anchor - ε := by
+  have hx' : Tendsto (fun n => toVector (stationaryLaw (xs n))) atTop
+      (𝓝 (toVector (stationaryLaw x))) := by
+    simpa only [stationaryLaw, toVector_ofVector] using hx
+  have hs : ∀ n, 0 < ((stationaryLaw (ys n)) anchor).toReal := by
+    intro n
+    simpa only [stationaryLaw, ofVector_toReal, stationaryCarrier, Set.mem_ofPred_eq] using
+      hsupported n
+  have hfloor :=
+    GameTheory.RecursiveAbsorption.eventually_columnPayoff_ge_bestReply_of_bad_ratio_tendsto
+      G.canonicalData (fun n => stationaryLaw (xs n)) (fun n => stationaryLaw (ys n))
+      (stationaryLaw x) anchor hx' hs hbest hhazard hbad hε
+  simpa only [canonicalPayoff, canonicalStationaryProfile,
+    pureStationaryPayoff2_eq_canonical] using hfloor
 
 /-! ## Section 4: Example 3
 

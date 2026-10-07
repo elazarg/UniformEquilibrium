@@ -156,4 +156,64 @@ theorem eventually_rowPayoff_ge_bestReply_of_bad_ratio_tendsto (D : Data I J)
   rw [liminfPayoff_stationary_none, liminfPayoff_stationary_none]
   linarith
 
+/-- The column companion of Lemma 3.2 for arbitrary stationary sequences. -/
+theorem eventually_columnPayoff_ge_bestReply_of_bad_ratio_tendsto (D : Data I J)
+    (xs : ℕ → PMF I) (ys : ℕ → PMF J) (x : PMF I) (anchor : J)
+    (hx : Tendsto (fun n => toVector (xs n)) atTop (𝓝 (toVector x)))
+    (hsupported : ∀ n, 0 < (ys n anchor).toReal)
+    (hbest : ∀ n, IsColumnBestReply D (xs n) anchor)
+    (hhazard : 0 < absorptionMass D x (PMF.pure anchor))
+    (hbad : ∀ j, Tendsto
+      (fun n => columnBadReplyProbabilityRatio D (xs n) (ys n) anchor j) atTop (𝓝 0))
+    {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ n in atTop,
+      liminfPayoff D none (stationaryProfile D (xs n) (ys n)) true ≥
+        liminfPayoff D none (stationaryProfile D (xs n) (PMF.pure anchor)) true - ε := by
+  classical
+  let δ : ℕ → ℝ := fun n => ∑ j, columnBadReplyProbabilityRatio D (xs n) (ys n) anchor j
+  have hratio_nonneg : ∀ n j,
+      0 ≤ columnBadReplyProbabilityRatio D (xs n) (ys n) anchor j := by
+    intro n j
+    unfold columnBadReplyProbabilityRatio
+    split_ifs
+    · exact div_nonneg ENNReal.toReal_nonneg (hsupported n).le
+    · exact le_rfl
+  have hδnonneg : ∀ n, 0 ≤ δ n := fun n => Finset.sum_nonneg fun j _ => hratio_nonneg n j
+  have hδ : Tendsto δ atTop (𝓝 0) := by
+    simpa only [Finset.sum_const_zero] using tendsto_finsetSum Finset.univ (fun j _ => hbad j)
+  have hmass := tendsto_pureColumn_absorptionMass D xs x hx anchor
+  obtain ⟨bound, hbound⟩ := exists_abs_bound_of_finite
+    (fun pair : I × J => D.reward pair.1 pair.2 true)
+  have hrate : Tendsto (fun n => (2 * bound) * (Fintype.card J : ℝ) *
+      (δ n / absorptionMass D (xs n) (PMF.pure anchor))) atTop (𝓝 0) := by
+    simpa only [Pi.div_apply, zero_div, mul_zero] using
+      (hδ.div hmass hhazard.ne').const_mul ((2 * bound) * (Fintype.card J : ℝ))
+  filter_upwards [hmass.eventually_const_lt hhazard, hrate.eventually_lt_const hε]
+    with n hnhazard hnrate
+  have hpositive : 0 < absorptionMass D (xs n) (ys n) := by
+    have hweight : 0 < columnAbsorptionWeight D (xs n) (ys n) anchor :=
+      mul_pos (hsupported n) hnhazard
+    exact hweight.trans_le ((Finset.single_le_sum
+      (fun j _ => columnAbsorptionWeight_nonneg D (xs n) (ys n) j)
+      (Finset.mem_univ anchor)).trans_eq (sum_columnAbsorptionWeight D (xs n) (ys n)))
+  have hprob : ∀ j, 0 < absorptionMass D (xs n) (PMF.pure j) →
+      stationaryPayoff D (xs n) (PMF.pure j) true ≠
+        stationaryPayoff D (xs n) (PMF.pure anchor) true →
+      (ys n j).toReal ≤ δ n * (ys n anchor).toReal := by
+    intro j hjhazard hne
+    have hjnot : ¬ IsColumnBestReply D (xs n) j := by
+      intro hj
+      exact hne (le_antisymm
+        ((isColumnBestReply_iff_pure_max D (xs n) anchor).mp (hbest n) j)
+        ((isColumnBestReply_iff_pure_max D (xs n) j).mp hj anchor))
+    have hsingle : columnBadReplyProbabilityRatio D (xs n) (ys n) anchor j ≤ δ n :=
+      Finset.single_le_sum (fun j _ => hratio_nonneg n j) (Finset.mem_univ j)
+    rw [columnBadReplyProbabilityRatio, ite_eq_left ⟨hjhazard, hjnot⟩] at hsingle
+    exact (div_le_iff₀ (hsupported n)).mp hsingle
+  have hgap := abs_columnPayoff_gap_le_of_bad_probabilities D (xs n) (ys n) (δ n) anchor
+    bound (hδnonneg n) hpositive hnhazard hprob (fun i j => hbound (i, j))
+  have hlower := (abs_le.mp hgap).1
+  rw [liminfPayoff_stationary_none, liminfPayoff_stationary_none]
+  linarith
+
 end GameTheory.RecursiveAbsorption

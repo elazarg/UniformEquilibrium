@@ -87,4 +87,63 @@ theorem punishmentValue_eq_lower (who : Player) :
       (le_quittingBestReplyValue survivorReward profile who
         (quittingPureTimeBehaviorStrategy survivorReward who (some 0)))
 
+def childEndpointGap (h next previous : ℝ) : ℝ :=
+  loss * (1 - h) * (1 - next) * (1 - previous) + (1 - loss) * h + next -
+    (3 - loss) * previous
+
+def pivotEndpointGap (first second third : ℝ) : ℝ :=
+  -(1 - loss) * first - second + (1 - loss) * third +
+    loss * (1 - first) * (1 - second) * (1 - third)
+
+/-- The packet's four endpoint polynomials are the actual annotated-root gaps. -/
+theorem rootEndpointGap_eq (root : Player → PMF Bool) :
+    quittingRootEndpointDifference survivorReward (fun _ => lower) root =
+      ![pivotEndpointGap (hazardOfRoot root 1) (hazardOfRoot root 2) (hazardOfRoot root 3),
+        childEndpointGap (hazardOfRoot root 0) (hazardOfRoot root 2) (hazardOfRoot root 3),
+        childEndpointGap (hazardOfRoot root 0) (hazardOfRoot root 3) (hazardOfRoot root 1),
+        childEndpointGap (hazardOfRoot root 0) (hazardOfRoot root 1) (hazardOfRoot root 2)] := by
+  funext who
+  rw [quittingRootEndpointDifference_eq_gainValue]
+  fin_cases who
+  · change gainValue (weightOfReward survivorReward) (hazardOfRoot root) (0 : Player) lower =
+      pivotEndpointGap (hazardOfRoot root 1) (hazardOfRoot root 2) (hazardOfRoot root 3)
+    unfold gainValue sigmaValue gammaValue excludedValue continueMassExcl
+    rw [show Finset.univ.erase (0 : Player) = {1, 2, 3} by decide]
+    rw [show ({1, 2, 3} : Finset Player).powerset =
+      {∅, {1}, {2}, {3}, {1, 2}, {1, 3}, {2, 3}, {1, 2, 3}} by decide]
+    simp +decide [weightOfReward, survivorReward, pivotEndpointGap, Finset.sdiff_insert,
+      Finset.sdiff_singleton_eq_erase, Finset.erase_insert_of_ne,
+      lower, upper, loss, Finset.ext_iff, Fin.forall_fin_succ]
+    ring
+  · change gainValue (weightOfReward survivorReward) (hazardOfRoot root) (1 : Player) lower =
+      childEndpointGap (hazardOfRoot root 0) (hazardOfRoot root 2) (hazardOfRoot root 3)
+    unfold gainValue sigmaValue gammaValue excludedValue continueMassExcl
+    rw [show Finset.univ.erase (1 : Player) = {0, 2, 3} by decide]
+    rw [show ({0, 2, 3} : Finset Player).powerset =
+      {∅, {0}, {2}, {3}, {0, 2}, {0, 3}, {2, 3}, {0, 2, 3}} by decide]
+    simp +decide [weightOfReward, survivorReward, childEndpointGap, Finset.sdiff_insert,
+      Finset.sdiff_singleton_eq_erase, Finset.erase_insert_of_ne,
+      lower, upper, loss, Finset.ext_iff, Fin.forall_fin_succ]
+    ring
+  · change gainValue (weightOfReward survivorReward) (hazardOfRoot root) (2 : Player) lower =
+      childEndpointGap (hazardOfRoot root 0) (hazardOfRoot root 3) (hazardOfRoot root 1)
+    unfold gainValue sigmaValue gammaValue excludedValue continueMassExcl
+    rw [show Finset.univ.erase (2 : Player) = {0, 1, 3} by decide]
+    rw [show ({0, 1, 3} : Finset Player).powerset =
+      {∅, {0}, {1}, {3}, {0, 1}, {0, 3}, {1, 3}, {0, 1, 3}} by decide]
+    simp +decide [weightOfReward, survivorReward, childEndpointGap, Finset.sdiff_insert,
+      Finset.sdiff_singleton_eq_erase, Finset.erase_insert_of_ne,
+      lower, upper, loss, Finset.ext_iff, Fin.forall_fin_succ]
+    ring
+  · change gainValue (weightOfReward survivorReward) (hazardOfRoot root) (3 : Player) lower =
+      childEndpointGap (hazardOfRoot root 0) (hazardOfRoot root 1) (hazardOfRoot root 2)
+    unfold gainValue sigmaValue gammaValue excludedValue continueMassExcl
+    rw [show Finset.univ.erase (3 : Player) = {0, 1, 2} by decide]
+    rw [show ({0, 1, 2} : Finset Player).powerset =
+      {∅, {0}, {1}, {2}, {0, 1}, {0, 2}, {1, 2}, {0, 1, 2}} by decide]
+    simp +decide [weightOfReward, survivorReward, childEndpointGap, Finset.sdiff_insert,
+      Finset.sdiff_singleton_eq_erase, Finset.erase_insert_of_ne,
+      lower, upper, loss, Finset.ext_iff, Fin.forall_fin_succ]
+    ring
+
 end GameTheory.NegativePremiumCyclicChild.Fixtures
