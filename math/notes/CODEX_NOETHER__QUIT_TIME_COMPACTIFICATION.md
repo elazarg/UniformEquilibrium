@@ -12,6 +12,14 @@ minimum, including shared three/four zero-Never endpoints. This is
 ordinary mathematics awaiting independent review, not a UE producer.
 Earlier frozen reductions and their independent evidence remain below.
 
+The new atomic-row attempt below gives two exact restrictions, not an
+equilibrium producer. At a nonsure first row, some initial Quit response
+must attain a complete cap. Moving any positive portion of one player's
+first atom to a fresh earlier SOLO date costs at least that portion times
+the strict quadratic margin, even at finite amplitude. Thus unilateral
+earlier fragmentation cannot consume the genuine minimum; a successful
+move must retain a collision or change opponents simultaneously.
+
 The current source-consumer candidate combines actual prefix erasure with
 Section73's punishment canonicalization. At an actual positive global
 minimum, a unique earliest zero-Never owner with nonnegative own reward
@@ -12244,6 +12252,268 @@ label conclusion, again with no objection.  Gauss Round 52 checked Proposition
 94's donated/global cap distinction, direct defect, generated secant, seam
 ledger, and every clock field.  It found the example valid and supplied the
 constant `-2` precision recorded above.
+
+### Actual first-row caps and the cost of unilateral earlier fragmentation
+
+This is ordinary mathematics at the actual GLOBAL positive sum-debt
+minimum, not a local positive-debt example or a raw UE producer. It uses
+the strict margins already named below. The current first-atom source is
+being independently checked separately; the assertions here may equally
+be read with a supplied FIRST atom in an actual minimum. A supplied atom
+is not being advertised as an arbitrary-table producer.
+
+Fix a finite player set, independent private stopping laws and bounded
+signed rewards |r_i(S)|≤M, with all-Never payoff zero. Put δ=D_*>0 and
+γ=δ²/(8M). Assume either Fin4 with arbitrary own signs, or arbitrary finite
+cardinality with all owns nonnegative, so that every genuine minimum has
+
+    b_i−s_i≥δ+γ,       s_i=r_i({i}).                 (A1)
+
+Let q be an ORIGINAL represented global minimum with first positive
+atomic date a, no prescribed mass strictly before a, and first-row masses
+p_i=q_i({a}). Earlier retained tests, if any, are empty and strictly
+inactive by (A1). For each i, let Q_i be the response payoff from Quit at
+a and C_i the supremum of ALL responses strictly after a, including
+Never. These values depend only on the opponents, not on i's own law.
+Every pure response is accounted for, and
+
+    b_i=max(Q_i,C_i).                               (A2)
+
+### No nonsure first row can have every cap strictly in Continue
+
+Assume every p_i<1 and C_i>Q_i for EVERY player, including players whose
+prescribed first-row mass is zero. Independently condition the original
+laws strictly after a; all normalizers 1−p_i are positive. Denote their
+actual tail values and complete caps by V_i,B_i. This tail pair has
+actual finite approximants and its debt d=Σ_i(B_i−V_i) is at least δ.
+No claim that it is minimal has yet been made.
+
+Hold those tails fixed and vary the positive first-row coordinates. At
+the original point these coordinates are interior and all full caps
+strictly select Continue. Therefore the actual debt agrees locally with
+the multiaffine polynomial P obtained by selecting each C_i branch.
+All nearby profiles have actual finite approximants retaining the tied
+date and every future test. Global minimality makes P constant on the
+entire face of positive first-row coordinates, with value δ.
+
+At the all-zero row vertex this polynomial has value
+
+    P(0)=Σ_i(B_i−V_i)=d.
+
+The ACTUAL tail, without inventing an empty pre-tail test, is an actual
+carrier point and has debt d. Hence d=δ: the tail is truly minimal.
+Applying (A1) to it gives B_i−s_i≥δ+γ for all i.
+
+Choose any i with p_i>0. At the polynomial vertex with only coordinate
+i equal to z, its selected Continue branches give exactly
+
+    P(z e_i)=(1−z)δ+z(B_i−s_i).
+
+Constancy instead forces B_i−s_i=δ. Contradiction. Consequently every
+nonsure first atom in a genuine positive minimum has
+
+    Q_j≥C_j for SOME player j.                     (A3)
+
+The cap-attaining player may be inactive in the prescribed row. A tied
+Quit/Continue cap is sufficient for (A3). Sure hazards are not included
+in this argument: their root coordinates are not interior and their
+conditional tail normalizers may vanish. There is no inference that the
+first row is Nash, that some active player chooses a best response, or
+that its tail is minimal when (A3) holds.
+
+This is more specific than merely locating some finite cap maximizer:
+it forces one at the FIRST tied row, with no Never lower bound. It is
+an internal source restriction, not a claim of additional raw-table UE
+coverage or a Lean theorem. The next cap-switch consumer must allow
+inactive joining responders and exact ties.
+
+### A legal relocation and its exact complete-cap account
+
+Fix any i with p_i>0. Move an unconditional mass ρ from i's atom a to
+one NEW date immediately before a, where no other player has prescribed
+mass. Take 0<ρ≤p_i, first with ρ<1. Keep every other law and all old
+response dates unchanged; on a natural calendar insert the date and
+shift the later dates by one. No shared randomization is introduced.
+
+This variation is concretely actualizable from the ORIGINAL sequence.
+Its marked atom masses converge to p_i, so at sufficiently large
+indices the chosen amount ρ can be moved from that literal date (use
+ρ_k↑ρ if ρ=p_i). The vanishing original pre-mark masses remain in place.
+Their payoffs and cap kernels converge to empty-head values. The added
+date supplies its exact tester; all old tied/future/Never testers remain.
+Thus the actual finite profiles converge in prescribed values and full
+caps to the declared variation. Fixed conditional tails after the new
+date have normalizer 1−ρ>0 and are actual carrier points too.
+
+For j≠i, average over the other players' old first-row Bernoulli outcomes
+S⊆I−{i,j}, and put
+
+    Q_{j|i}=E[r_j(S∪{i,j})],
+    C_{j|i}=E[r_j(S∪{i})],
+    c_{j|i}=Q_{j|i}−C_{j|i}.
+
+If i occupied its old atom, the event has already absorbed, so the second
+conditional value is identical for EVERY future response of j, including
+Never. Therefore the modified old tied and future response envelopes are
+
+    Q_j(ρ)=Q_j+ρ[r_j({i})−Q_{j|i}],
+    C_j(ρ)=C_j+ρ[r_j({i})−C_{j|i}].               (A4)
+
+The newly inserted pure response of j pays
+(1−ρ)s_j+ρ r_j({i,j}). The owner's new test pays s_i; its old cap b_i
+is unchanged because its opponents are unchanged and b_i>s_i. All old
+empty head tests remain inactive. For sufficiently small ρ, the added
+tester of j is also inactive: it is at most s_j+2Mρ, whereas the old
+envelopes remain at least b_j−2Mρ≥s_j+δ+γ−2Mρ.
+Hence for small ρ the complete cap is exactly the maximum of the two
+branches in (A4), even when the branches were originally tied.
+
+The prescribed targets change by
+
+    U_i(ρ)−U_i=ρ(s_i−Q_i),
+    U_j(ρ)−U_j=ρ[r_j({i})−p_j Q_{j|i}
+                                 −(1−p_j)C_{j|i}].
+
+Until the first strict old-branch switch, the complete debt is EXACTLY
+
+    D(ρ)=δ+ρ α_i,
+    α_i=Q_i−s_i+Σ_{j≠i} E_{ji},                   (A5)
+
+where
+
+    E_{ji}=−(1−p_j)c_{j|i}       if Q_j>C_j;
+    E_{ji}=p_j c_{j|i}          if C_j>Q_j;
+    E_{ji}=max(−(1−p_j)c_{j|i},p_j c_{j|i})
+                                           if Q_j=C_j.
+
+This includes arbitrary signs, inactive or sure root players, simultaneous
+old outcomes, every later stopping date and Never. The tie arm cannot be
+replaced by an arbitrarily chosen cap selector.
+
+### The actual minimum makes EVERY unilateral earlier relocation costly
+
+The new first row is solo, of probability ρ. Its whole conditional tail
+has actual debt d_ρ≥δ. The mover's opponents are unchanged, so its full
+post-new-date cap is the ORIGINAL b_i. Apply the exact solo Bellman ledger
+to this new profile, keeping every outsider Quit/Continue excess:
+
+    D(ρ)=(1−ρ)d_ρ+ρ(b_i−s_i)
+                 +Σ_{j≠i}[Q_j^new−C_j^new]⁺
+          ≥δ+ργ.                                  (A6)
+
+This holds for EVERY 0<ρ≤p_i with ρ<1, even beyond branch switches and
+even when the new first tester of an outsider becomes binding. At ρ=1
+the owner's prescribed target is s_i and its cap is b_i, so its own
+debt alone is at least δ+γ; (A6) holds there too without forming a tail
+on a null event. No modified source is assumed minimal in this argument.
+The tail lower bound is precisely the global numerical infimum, and
+the strict cap margin is used only at the ORIGINAL actual minimum.
+
+In particular the explicit local account (A5) must satisfy
+
+    α_i≥γ>0 for EVERY positive first-row owner.    (A7)
+
+Thus this route is not just missing a favorable derivative: the true
+positive minimum uniformly forbids a unilateral earlier fragmentation
+at ALL amplitudes. Any successful first-row surgery must change opponents
+simultaneously, retain a genuine collision, or alter the complete tail.
+Independent one-owner phase preemptions cannot be an actual descent.
+At nontied old cap branches, multi-owner infinitesimal early changes have
+the sum of these strictly positive first derivatives; tied branches can
+couple their slopes, so no analogous simultaneous claim is made here.
+
+### Even an ordered small multi-owner prefix has a strict cost
+
+The same actual-minimum account closes the loophole of coordinating several
+small early private clocks. Move masses x_i≤p_i from the first atom into
+ANY fixed finite ordered calendar strictly before it. Each moved part may
+have its own independent finite head law; retain every new head tester and
+every old tied/future/Never tester. Put H=Σ_i x_i>0. These are private mass
+relocations, not correlated flags or a single shared head time.
+
+The conditional law after the entire new head is
+
+    q_i^+=(q_i−x_i δ_a)/(1−x_i).
+
+For H≤1/2 its total-variation distance from q_i is at most 2x_i. All its
+conditional normalizers are positive and its full tail pair is an actual
+carrier point, with debt d≥δ. Its caps B_i over the original tied and
+future tests obey
+
+    B_i−s_i≥δ+γ−4MH.                              (A8)
+
+This uses uniform opponent coupling and the ORIGINAL margin (A1), not a
+claim that the new tail is minimal. Old empty pre-atom tests were inactive
+at the original point, so the original cap is supplied by these retained
+tests. The finite realizers insert the chosen head calendar immediately
+before the unique marked atom date and remove exactly the indicated atom
+masses. Vanishing old pre-mark masses have o(1) effect on every cap.
+There is no assumption that a newly created head tester is free.
+
+Let K be the set of players selecting their new head components. It is
+an independent Bernoulli set. Its probabilities of no selector, exactly
+one selector, and at least two selectors are R,W₁,W₂, respectively, with
+
+    R=∏_i(1−x_i),
+    W₁=Σ_i x_i∏_{j≠i}(1−x_j)≥H(1−H),
+    W₂=1−R−W₁≤H²/2.
+
+Price each cap only at responses AFTER the whole head; this is a LOWER
+bound on the complete cap. Conditional on K=∅, the resulting sum-debt
+polynomial contributes the true tail debt d. Conditional on K={i}, i
+quits alone before every opponent and the contribution is B_i−s_i;
+every other target equals its passive head response and cancels exactly.
+Conditional on |K|≥2, each nonselector again cancels. A selector's
+post-head response payoff and prescribed head payoff lie in [−M,M],
+so the total contribution is at least −2Mn. This accounts for EVERY
+relative order and every tie among the finite head laws. Consequently
+
+    D_new≥R d+Σ_i x_i∏_{j≠i}(1−x_j)(B_i−s_i)−2Mn W₂
+          ≥δ+W₁(γ−4MH)−(δ+2Mn)W₂.                (A9)
+
+All additional head response opportunities can only INCREASE the left
+side; (A9) has not dropped a profitable ghost tester from the actual cap.
+Using δ≤2M, a single nonoptimized sufficient bound is
+
+    0<H≤γ/[8M(n+1)]
+       ⇒ D_new≥δ+γH/8>δ.                          (A10)
+
+Indeed γ−4MH≥γ/2, W₁≥H/2, and
+(δ+2Mn)W₂≤M(n+1)H²≤γH/8. The head law and its number/order of dates do
+not enter this estimate. Thus even arbitrarily many fixed finite ordered
+microdates cannot yield a sufficiently small early-only descent from a
+GENUINE positive global minimum. Earlier solved-table examples of a
+quadratic improvement after three tiny dates lacked (A1) and do not
+falsify this actual-source bound.
+
+This is a mechanism guardrail, not an extra UE class or a constants result.
+An attack by early fragmentation alone must cross a finite total-mass
+threshold, not merely cancel individual first derivatives at cap ties.
+The present next direction is to change the CURRENT collision row or its
+actual continuation, instead of adding a vanishing new head before it.
+
+### Exact source and current consuming question
+
+The strict margin in (A1) is supplied by
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` and
+`positive_minimum_nonnegativeOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`,
+with their literal carrier/global-minimum, reward-bound, positive-gap and
+cardinality/own-sign hypotheses. The exact source scopes were inspected.
+The inspected `minimumTerminalSemantic_is_allContinuePlateau` and
+`minimumTerminalSemantic_exactNash_criticalFace` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+refer to auxiliary roots PREFIXED to a semantic pair. They do not assert
+that the first actual root here is cap-Nash. No finite auxiliary Nash point
+is being substituted for the original continuation.
+
+The earlier solo-root account and elementary uniform-cap coupling justify
+(A6); no new general transport architecture is claimed. This is internal
+ordinary mathematics, not an export, formalization or completed raw class.
+The concrete next question is whether a simultaneous collision-preserving
+change can exploit the required FIRST-row Quit cap in (A3), while keeping
+all tied maxima in (A4). A mechanism based only on one owner's earlier
+clock must be abandoned by (A6), not repaired with more passive caps.
 
 ### Strict margins force an original coalition stage without a Never floor
 

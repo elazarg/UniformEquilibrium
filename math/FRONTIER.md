@@ -413,26 +413,31 @@ The [complete proof](exports/POSITIVE_NEVER_NEAR_MINIMA_FORCE_SINGLETON_STAGE_AT
 includes the marked-calendar producer, same-sequence atom trace, and
 infinite-law extension with exact preservation of earlier stages.
 
-For signed Fin4 tables, or arbitrary finite player sets with all own
-singletons nonnegative, the Never lower bound is unnecessary. There are
-ε,γ>0 such that EVERY original actual profile with D≤D*+ε has some
-nonempty coalition STAGE of probability at least γ. The conclusion retains
-the whole original profile and its near-minimality; no bound on the date is
-asserted. The stage may be a collision, not a singleton. From any supplied
-minimizing sequence, the stage is traced to original dates on a subsequence.
-No conditioning or owner-clock modification is substituted for those profiles.
+For signed Fin4 tables, the Never lower bound is unnecessary and a collision
+is forced. There is γ>0, depending only on D* and a reward bound M, such that
+for EVERY ζ>0 there is ε>0 for which EVERY original actual profile with
+D≤D*+ε has an original date t and nonsingleton coalition S satisfying
 
-The proof excludes every nonzero small head at an available nonatomic cut.
-Minimum-preserving erasure gives an actual minimum suffix and a constant
-multiaffine future-debt polynomial. Its one-owner axis would force
-Bᵢ−sᵢ=D*, contrary to the tracked strict minimum margin. An earliest
-zero-Never endpoint either has a reachable earlier atom or is itself an
-isolated tied atom; all earliest exhausted owners quit there with positive
-joint probability. Thus fully diffuse represented minima are impossible,
-including shared endpoints with binding Never responses. The
-[strict-margin proof](notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md)
-has two independent mathematical reviews; the exact result is not yet
-Lean-checked.
+    P(absorption before t)≤ζ,       P(first coalition S at t)≥γ.
+
+The original profile and its whole-profile near-minimality are retained.
+The stage floor is independent of ζ; ε may depend on ζ. Neither a bounded
+date nor an exact pair is asserted. The same argument applies to finite
+player sets of size at least two with all own singletons nonnegative.
+
+At the marked minimum every retained cut, including a tied atom, has either
+zero head mass or total head mass greater than D*/(4M). Minimum-preserving
+erasure gives an actual minimum suffix and a constant multiaffine future-debt
+polynomial. Its one-owner axis would force Bᵢ−sᵢ=D*, contrary to the tracked
+strict margin. Compact separation of the head levels produces a FIRST
+occupied atom with no preceding mass. The complete solo-row Bellman identity
+excludes one nonsure active owner; the strict prescribed margin excludes a
+sure solo owner. A uniform coupling estimate bounds collision mass away from
+zero. Tracing the original atom interval gives the displayed unchanged-profile
+restriction, including vanishing Never masses. The
+[first-collision proof](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
+has two independent mathematical reviews; the exact source theorem is not
+yet Lean-checked. Fully diffuse and solo-first represented minima are excluded.
 
 If an owner stops by a finite cut surely, global minimality also gives its
 exact cap account as the maximum of its best head response and its passive
@@ -448,9 +453,9 @@ the earlier-cap result is in
 [the complete-cap variation proof](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md);
 the earliest-cutoff and punishment results are in
 [the cutoff proof](notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md).
-The forced atomic stage still has no terminal consumer. Neither its
+The forced first collision still has no terminal consumer. Neither its
 conditional tail's minimum debt nor a cap-Nash label for its played row
-follows from the reviewed stage theorem. Outside the two strict-margin
+follows from the reviewed source theorem. Outside the two strict-margin
 scopes above, the unique-earliest argument still requires its selected
 owner's nonnegative singleton and absence of preceding atoms. These
 restrictions give neither ordinary-clock attainment, a renewable terminal

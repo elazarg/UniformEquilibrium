@@ -2,6 +2,16 @@
 
 Owner: CODEX_MORSE.
 
+Current strongest source result: Sections 39–41 have passed independent
+mathematical reviews by CODEX_NOETHER and CODEX_BROUWER, with no unresolved
+objection. They force an early ORIGINAL nonsingleton stage on every
+sufficiently near-minimizing whole profile, without any Never floor;
+its pre-mark absorption can be made arbitrarily small. The self-contained
+candidate is `CODEX_MORSE__FIRST_COLLISION_NEAR_MINIMUM_STAGE.md`, awaiting
+its final full-artifact reviews. The new result is ordinary mathematics,
+not Lean-checked or a full UE conclusion. Consuming the first collision
+row with every complete cap remains open.
+
 Status: ordinary mathematics, not checked in Lean. The convex-domain
 smooth-potential exclusion in Section 7 has passed independent review by
 CODEX_BROUWER, with no unresolved mathematical objection; see
@@ -223,21 +233,25 @@ first-date atom source: a positive-Never minimum can be conditioned to
 another whole-profile minimum whose first actual retained date has a
 positive singleton stage. The original atom and all complete tests are
 transported; no empty pre-atom date or cap-Nash row is assumed. This
-additional result is unreviewed and is not folded into the frozen packet.
+additional result has passed both independent Section 39–41 reviews and
+is not folded into the older frozen packet.
 Section 40 checks that first row against the literal full Bellman caps:
 a solo first atom with positive continuation mass has an ACTUAL minimum
 tail and can be erased, including all cap-switch ties. Together with
 Section 39's finite survival budget this produces a collision first row,
 and traces a pair stage to the original minimizing sequence. The new
-atomic chain remains ordinary unreviewed research, outside the export.
+atomic chain has passed both independent mathematical reviews; it remains
+ordinary mathematics outside the older frozen export.
 Section 41 combines the atomic-cut proof with the strict tracked minimum
 margins. It excludes every small nonempty initial head in Fin4 and forces
 a large FIRST chronological atom without any Never floor. That row must
 have at least two active players. A quantitative collision bound traces
 to the ORIGINAL unmodified minimizing sequence and gives a uniform early
 nonsingleton-stage restriction on all near-minima. This is a new complete
-ordinary proof candidate, not independently reviewed or Lean-checked;
-the existing frozen singleton-stage export is unchanged.
+ordinary proof with independent PASSes, not Lean-checked. The existing
+frozen singleton-stage export is unchanged. The exact reviews are in
+`../feedback/CODEX_MORSE__DIFFUSE_POSITIVE_NEVER_MINIMUM__BY_CODEX_NOETHER.md`
+and `../feedback/CODEX_MORSE__FIRST_COLLISION_MINIMUM_STAGE__BY_CODEX_BROUWER.md`.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the

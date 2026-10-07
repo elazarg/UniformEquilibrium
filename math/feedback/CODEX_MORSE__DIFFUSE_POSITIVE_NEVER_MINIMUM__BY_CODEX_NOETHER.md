@@ -1,4 +1,4 @@
-# Independent check of diffuse positive-Never minimum exclusion
+# Independent checks of diffuse and atomic positive-minimum sources
 
 Reviewer: CODEX_NOETHER. Ordinary mathematics, not a Lean check, UE proof,
 or export seal. No counterpart review was read.
@@ -296,3 +296,228 @@ It does not exclude tables with zero-Never escape or consume the forced
 stage interaction. It is ordinary mathematical evidence, not an export,
 Lean seal, UE proof, or proof of unrestricted strategy-class completeness.
 No unresolved mathematical objection remains at the exact c625f72f… bytes.
+
+## Independent atomic-cut and first-collision check
+
+Reviewed Sections39–41 of
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, starting at
+“An atomic cut retains the tied row and exposes a first-stage source” and
+ending at the current EOF: 601 lines, extracted SHA256
+`0a74339c95779b4316f40f27ebf2e5a3d6020ba9efd3108afcc10803dc0a8b24`.
+The individual section hashes supplied for this freeze are
+`db617e8480b8da7bf02e9c0341d1eb532194aeddd1ce371e179084bd3eb71eb0`,
+`07d030e0c8f5c360e6a598a5658c434581f6063d1ad558d00d68c1b31b154512`,
+and `54625e0333485fb5351ae53f4edac0564c5329367398b6c19960ff5670867bcb`.
+The combined hash was independently recomputed. I read these mathematical
+bodies, revisited Section35's marked endpoints/tester construction and the
+exact strict-margin declarations, and read no counterpart review.
+
+### Claim and verdict
+
+Fix a bounded signed Fin4 quitting table, with independent private stopping
+laws, all-Never payoff zero, and positive GLOBAL sum-debt infimum δ. For any
+original finite minimizing sequence, its marked-calendar subsequence has
+a FIRST positive atom, zero prescribed mass at every earlier time, and
+total hazard greater than κ=δ/(4M). That first atom has collision probability
+at least the explicit positive σ in (213). The ORIGINAL profiles have
+vanishing absorption before their corresponding original dates and a fixed
+nonsingleton coalition stage with positive liminf. Consequently, for EVERY
+ζ>0, sufficiently near-minimizing actual profiles have an original date with
+prior absorption at most ζ and some nonsingleton stage at least σ/22.
+No Never lower bound, normalization, favorable auxiliary root, or modified
+target profile is assumed. The first-atom argument also holds for arbitrary
+finite cardinality when every own singleton is nonnegative.
+
+PASS for the combined exact-byte surface. I found no unresolved mathematical
+objection or required repair. This is a genuine additional necessary
+condition on original positive-gap sources, not a UE proof, a Lean check,
+or an assertion that the first row is cap-Nash. The forced collision remains
+to be consumed with its actual continuation and complete cap maxima.
+
+### Atomic cut: tied transport and every discarded tester
+
+The cut is STRICTLY BEFORE the literal original atom date, equivalently
+before the atom interval's LEFT endpoint. Hence its entire simultaneous
+mass vector remains in the suffix. Cutting at the midpoint would be wrong;
+the proof does not do this. Moving endpoints and bounded conditional
+likelihoods give the same payoff/product-kernel and moving-response convergence
+as Section35. The normalizers are bounded because each erased marginal mass
+is at most κ≤1/2. Zero head coordinates can be set to zero in the approximants
+at vanishing total-variation cost; they are not varied as interior coordinates.
+
+For every post-cut test, INCLUDING the tied test and Never, the prefix-passive
+contribution plus opponent-survival product times the full suffix response
+is exact. The latter factor is nonnegative, so taking the complete suffix
+supremum preserves the formula. Earlier responses are uniformly bounded by
+s_i+2M times the opposing head mass. The actual-minimum moat therefore makes
+all those responses inactive in a neighborhood of the original head vector.
+The resulting local debt expression is genuinely multiaffine, even when
+suffix best responses tie. A local minimum at the positive head coordinates
+forces that polynomial constant on their entire face.
+
+The closed-and-open minimum argument is essential: polynomial constancy alone
+would not show that the all-tail point has actual debt δ. At every point in
+the closed minimum set, fixed original-sequence reweighting gives actual
+carrier membership; the moat again excludes every earlier response uniformly.
+Thus the connected path to zero stays minimal. At its endpoint the discarded
+head tests pay exactly s_i, while the true full cap is at least s_i+δ. The
+cap must therefore already be supplied by retained suffix tests. This repairs
+precisely the atomic difference from Section36, where a singleton-paying empty
+test was itself available at the cut. No empty pre-atom tester is invented.
+In the finite approximants, the suffix cap exceeds s_i+δ/2 eventually, so
+cropping empty head dates preserves complete caps literally, before taking
+the limit. This also establishes same-original-sequence regeneration.
+
+### First atom, solo endpoints, and uniform collision
+
+The aggregate strict-head function H is continuous ON the retained compact
+tester set: a positive atom is an isolated midpoint; all other points have
+zero mass. After the polynomial-axis contradiction, H takes no value in
+(0,κ]. Its zero and positive parts are separated closed sets. Their adjacent
+retained endpoints have no prescribed mass between them, so the jump is
+exactly the mass of the left endpoint. This produces the ORIGINAL first
+positive row directly. It neither chooses a new cut inside a gap nor relies
+on a positive Never survival budget.
+
+For a nonsure solo first row, the exact ledger (207) uses an actual post-row
+tail with positive normalizers. Its debt is at least δ, and the ORIGINAL
+owner cap is B_i because it exceeds s_i. The strict margin at that original
+minimum makes (207) impossible. For a sure solo owner, no conditional tail
+is formed: its prescribed payoff equals s_i and directly contradicts the
+strict prescribed-payoff margin. Thus the second arm cannot be silently
+discarded when Never masses vanish.
+
+The quantitative estimate also survives partly-sure boundaries. If the largest
+hazard is sure and opposing hazard sum h is small, its payoff differs from
+s_i by at most 2Mh. Otherwise all row continuations are positive under the
+assumed small-h hypothesis. Moving opponents' atom mass to their OWN actual
+conditional tails changes every payoff/cap by at most 2Mh, hence total debt
+by at most 4Mnh. The cap of the untouched owner stays strictly above s_i.
+Applying the exact solo ledger to this NEW profile uses only a tail debt
+lower bound δ; it does not incorrectly call that profile minimal. The stated
+constants make (214) incompatible with the strict owner margin. The union
+bound C(p)≥p h/(n−1) is valid even with sure hazards and produces σ>0.
+
+### Original dates, all profiles, and source significance
+
+The left endpoint mark traces cumulative mass strictly before the original
+atom, while the right endpoint traces strict survival after it. At the first
+atom the former limit is zero, so each nonsingleton stage has the literal
+product limit in (216), including coordinates with zero Never or sure first
+hazards. Fin4 has 11 nonsingleton coalitions; pigeonholing loses only that
+factor. Censoring late finite mass to Never preserves every earlier original
+stage and prior-absorption probability exactly. All positive finite stages
+of the censored law occur before its cutoff, so the uniform statement for
+arbitrary stopping laws does not inherit a manufactured witness.
+
+The relevant checked original source is
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+Its hypotheses are literal carrier membership, GLOBAL sum-debt minimality,
+cardinality four, positive δ and a reward bound M>0. It derives the preemptor
+internally and has no own-sign assumption. The same file's
+`positive_minimum_nonnegativeOwner_quadraticMargins` supplies the generic
+finite-player arm with its explicit own-sign hypothesis. Neither source
+alone supplies chronological atoms or their original-date trace.
+
+The terminal-coalition atom declarations and modified-target singleton
+producer identified above do not subsume this all-original early collision
+restriction. The 739-line positive-Never stage theorem retains a distinct
+arbitrary-signed finite-cardinality scope, but in Fin4 the new result removes
+its Never lower bound and forces an early NONSINGLETON rather than merely
+some singleton stage. This is actual residual-class narrowing, not merely
+a different representation of its earlier criterion. It still gives no
+uniform bound on the original date and no equilibrium consumer for that row.
+
+## Final self-contained first-collision artifact
+
+Read the ENTIRE prospective artifact
+`notes/CODEX_MORSE__FIRST_COLLISION_NEAR_MINIMUM_STAGE.md`: 854 lines,
+whole-file SHA256
+`b1e188aa79b099d2576a83b8649ac83b8b997ea07ecdfbdd36e7bcffb3a2e4fe`.
+The line count and hash were independently recomputed after the complete
+read. No counterpart final review was read and no author/export file edited.
+
+PASS at these exact bytes, with no unresolved mathematical objection or
+required repair. The complete statement is (A): for every pre-absorption
+tolerance ζ>0, every sufficiently near-minimizing ORIGINAL independent
+stopping-law profile has an ORIGINAL finite date with prior absorption at
+most ζ and some nonsingleton stage at least σ/(2N). Here N=2^n−n−1 and
+σ is the displayed fixed positive table/gap-dependent constant. There is
+no Never floor; the scope is arbitrary signed Fin4, or arbitrary finite
+n≥2 with all own singletons nonnegative. The full stopping laws and all
+behavioral response caps enter the objective. Neither the limiting ordered
+law nor a selected row is declared an original equilibrium.
+
+The final assembly includes the whole marked-calendar source and finite
+variation proof inline, rather than depending on the reviewed notebook or
+another mathematical packet. The product convergence is justified by dense
+rectangle tests and uniform L∞ bounds, followed by the separate L¹ convergence
+of moving coalition and response kernels. No product of weak limits, entropy
+attainment, or strong-density conclusion is used. The actual tester sets
+retain finite late response and Never as distinct labels, and no response
+inside an atom interval is manufactured.
+
+The newly explicit zero-limit head cleanup is correct. Positive-limit head
+coordinates are set literally to zero at the endpoint. A zero-limit head
+coordinate may still have vanishing finite head mass; removing that mass
+and normalizing its suffix costs o(1) uniformly in targets and ALL tests.
+Only after this cleanup are head testers exactly singleton-paying and
+deleted, because the suffix cap is eventually above s_i+δ/2. This does
+not omit a tied first response or a negative-own Never alternative.
+The returned suffix is a genuine global carrier minimum before any strict
+quadratic margin is applied. The polynomial-axis evaluation is distinct
+from actual debt at its one-head vertex, exactly as required.
+
+The generic-cardinality assembly preserves the correct quantifiers and
+sign hypotheses. The first aggregate jump exceeds κ=δ/(4M); the solo
+nonsure arm uses actual conditional tails, and the sure arm instead uses
+U_i−s_i≥γ without a null-event division. The quantitative collision argument
+uses a NEW solo profile only through uniform cap/payoff coupling and the
+lower bound δ on its actual post-row tail. It never falsely labels that
+profile minimal. The bound C(p)≥p h/(n−1) survives all partly-sure boundaries.
+The number of eligible coalitions is correctly N, equal to 11 for Fin4.
+
+The original left endpoint traces zero cumulative mass before the selected
+mark; the right endpoint traces strict survival after it. Consequently the
+whole original sequence, not just conditional realizers, supplies the stage
+limit. Infinite-law censoring moves only dates beyond a cutoff to Never and
+preserves every earlier stage and prior-absorption probability EXACTLY.
+Every positive finite stage of the censored profile is before the cutoff.
+Thus the uniform statement has no supplied-minimum-only or finite-support
+loophole. Its stage floor is independent of ζ, while its debt tolerance
+may depend on ζ; it promises no uniform stopping-date bound.
+
+I revisited the exact declarations named in Section3 under their actual
+source files, including the sign-free Fin4 and own-nonnegative generic strict
+margin declarations. The no-UE/positive-gap bridge uses the GLOBAL sum-debt
+objective and full behavioral class; δ=0's fixed uniform payoff belongs to
+the existing terminal-selection theorem, not to the new stage conclusion.
+All eight cited Lean paths are tracked. The packet has no math-directory,
+review-history or author-identity dependency and assigns itself no Lean seal.
+
+The source comparison remains substantive. The existing minimum-law atom
+theorems concern TERMINAL COALITION coordinates, with punishment-normality
+hypotheses, and the singleton endpoint producer changes its target profile.
+Neither preserves a uniformly large early collision at an original date
+of EVERY whole near-minimizer. The new result also consumes zero-Never
+source branches outside the 739-line positive-Never singleton-stage theorem,
+while retaining that older theorem's distinct arbitrary-signed-cardinality
+scope. It is therefore genuine temporal/source-class narrowing under δ>0,
+not merely an auxiliary calendar interface. It does not contradict δ>0,
+exclude all surviving first collision rows, settle Fin4 UE, or furnish an
+equilibrium at any horizon. The actual first collision and its full tail
+remain the open consuming object.
+
+### Exact-calendar boundary clarification
+
+Final prospective bytes: 854 lines, SHA256
+`16746750ebf62281e2385c196e8b2e1c5cd34143bea5fbbaef26f432d7f20568`.
+Verified only the requested example delta: the adjacent tied dates are now
+explicitly 0 and 1; the late-response example now has mass at date0/Never,
+with date0 payoff −1/2, Never payoff 1/2 and date1 payoff 1. These literal
+payoffs recompute exactly. Reversing those four text substitutions in a
+READ-ONLY stream recovers the prior whole-file hash b1e188aa… exactly;
+there are no other byte changes. The entire preceding mathematical and
+significance PASS therefore transports to these final bytes with no
+objection or further audit. No artifact or export was edited by me.
