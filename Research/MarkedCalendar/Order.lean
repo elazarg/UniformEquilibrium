@@ -297,6 +297,172 @@ theorem midpointClock_eq_of_avoid_closed {x y : unitInterval} (hxy : x ≤ y)
       exact ⟨hzE, (show (x : ℝ) ≤ y from hxy).trans hyz⟩
   simp only [midpointClock, lowerEndpoint, upperEndpoint, hlower, hupper]
 
+private theorem avoid_closed_of_no_open_hit {x y : unitInterval} (hxy : x < y)
+    (hx : (x : ℝ) ∉ C.exceptionalEndpoints) (hy : (y : ℝ) ∉ C.exceptionalEndpoints)
+    (havoid : ∀ z ∈ C.endpoints, z ∉ Ioo (x : ℝ) (y : ℝ)) :
+    ∀ z ∈ C.endpoints, z ∉ Icc (x : ℝ) (y : ℝ) := by
+  intro z hzE hz
+  by_cases hzx : z = (x : ℝ)
+  · have hxE : (x : ℝ) ∈ C.endpoints := hzx ▸ hzE
+    obtain ⟨w, hwy, hwE, hxw⟩ := mem_closure_iff.mp
+      (C.mem_closure_right hx hxE) (Iio (y : ℝ)) isOpen_Iio hxy
+    exact havoid w hwE ⟨hxw, hwy⟩
+  · by_cases hzy : z = (y : ℝ)
+    · have hyE : (y : ℝ) ∈ C.endpoints := hzy ▸ hzE
+      obtain ⟨w, hxw, hwE, hwy⟩ := mem_closure_iff.mp
+        (C.mem_closure_left hy hyE) (Ioi (x : ℝ)) isOpen_Ioi hxy
+      exact havoid w hwE ⟨hxw, hwy⟩
+    · exact havoid z hzE ⟨lt_of_le_of_ne hz.1 (Ne.symm hzx), lt_of_le_of_ne hz.2 hzy⟩
+
+private theorem eventually_midpointClock_eq_of_eq_of_lt
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    {x y : unitInterval} (hxy : x < y)
+    (hx : (x : ℝ) ∉ limit.exceptionalEndpoints)
+    (hy : (y : ℝ) ∉ limit.exceptionalEndpoints)
+    (heq : limit.midpointClock x = limit.midpointClock y) :
+    ∀ᶠ k in atTop, (calendars k).midpointClock x = (calendars k).midpointClock y := by
+  have havoid : ∀ z ∈ limit.endpoints, z ∉ Ioo (x : ℝ) (y : ℝ) := by
+    intro z hzE hz
+    exact (ne_of_lt (limit.midpointClock_lt_of_endpoint_between hzE hz.1 hz.2)) heq
+  filter_upwards [eventually_avoid_closed hE isClosed_Icc
+    (limit.avoid_closed_of_no_open_hit hxy hx hy havoid)] with k hk
+  exact (calendars k).midpointClock_eq_of_avoid_closed hxy.le hk
+
+/-- Positive-mass collapsed ties persist exactly, not merely in the limit. -/
+theorem eventually_midpointClock_eq_of_eq {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    {x y : unitInterval} (hx : (x : ℝ) ∉ limit.exceptionalEndpoints)
+    (hy : (y : ℝ) ∉ limit.exceptionalEndpoints)
+    (heq : limit.midpointClock x = limit.midpointClock y) :
+    ∀ᶠ k in atTop, (calendars k).midpointClock x = (calendars k).midpointClock y := by
+  rcases lt_trichotomy x y with hxy | hxy | hyx
+  · exact eventually_midpointClock_eq_of_eq_of_lt hE hxy hx hy heq
+  · subst y
+    exact Eventually.of_forall fun _ => rfl
+  · exact (eventually_midpointClock_eq_of_eq_of_lt hE hyx hy hx heq.symm).mono
+      fun _ hk => hk.symm
+
+theorem eventually_midpointClock_le_iff {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    {x y : unitInterval} (hx : (x : ℝ) ∉ limit.exceptionalEndpoints)
+    (hy : (y : ℝ) ∉ limit.exceptionalEndpoints) :
+    ∀ᶠ k in atTop, (calendars k).midpointClock x ≤ (calendars k).midpointClock y ↔
+      limit.midpointClock x ≤ limit.midpointClock y := by
+  rcases lt_trichotomy (limit.midpointClock x) (limit.midpointClock y) with h | h | h
+  · filter_upwards [(tendsto_midpointClock hE hx).eventually_lt
+      (tendsto_midpointClock hE hy) h] with k hk
+    exact iff_of_true hk.le h.le
+  · filter_upwards [eventually_midpointClock_eq_of_eq hE hx hy h] with k hk
+    exact iff_of_true hk.le h.le
+  · filter_upwards [(tendsto_midpointClock hE hy).eventually_lt
+      (tendsto_midpointClock hE hx) h] with k hk
+    exact iff_of_false (not_le_of_gt hk) (not_le_of_gt h)
+
+theorem eventually_cutoff_le_iff {calendars : ℕ → Calendar} {limit : Calendar}
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    {x : unitInterval} (hx : x ≠ limit.cutoff) :
+    ∀ᶠ k in atTop, (calendars k).cutoff ≤ x ↔ limit.cutoff ≤ x := by
+  rcases hx.lt_or_gt with h | h
+  · filter_upwards [tendsto_const_nhds.eventually_lt hc h] with k hk
+    exact iff_of_false (not_le_of_gt hk) (not_le_of_gt h)
+  · filter_upwards [hc.eventually_lt tendsto_const_nhds h] with k hk
+    exact iff_of_true hk.le h.le
+
+theorem eventually_collapseClock_le_iff {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    {x y : unitInterval} (hx : (x : ℝ) ∉ limit.exceptionalEndpoints)
+    (hy : (y : ℝ) ∉ limit.exceptionalEndpoints)
+    (hxc : x ≠ limit.cutoff) (hyc : y ≠ limit.cutoff) :
+    ∀ᶠ k in atTop, (calendars k).collapseClock x ≤ (calendars k).collapseClock y ↔
+      limit.collapseClock x ≤ limit.collapseClock y := by
+  filter_upwards [eventually_cutoff_le_iff hc hxc, eventually_cutoff_le_iff hc hyc,
+    eventually_midpointClock_le_iff hE hx hy] with k hxk hyk horder
+  simp only [collapseClock]
+  by_cases hxcut : limit.cutoff ≤ x <;> by_cases hycut : limit.cutoff ≤ y <;>
+    simp_all only [ite_true, ite_false, le_top, WithTop.top_le_iff,
+      WithTop.coe_ne_top, WithTop.coe_le_coe]
+
+theorem midpointClock_eq_of_mem {x : unitInterval} (hx : (x : ℝ) ∈ C.endpoints) :
+    C.midpointClock x = (x : ℝ) := by
+  rw [midpointClock, C.lowerEndpoint_eq_of_mem hx, C.upperEndpoint_eq_of_mem hx]
+  ring
+
+theorem gap_of_not_mem {x : unitInterval} (hx : (x : ℝ) ∉ C.endpoints) :
+    Math.Topology.IsGap C.endpoints (C.lowerEndpoint x) (C.upperEndpoint x) ∧
+      C.lowerEndpoint x < (x : ℝ) ∧ (x : ℝ) < C.upperEndpoint x := by
+  obtain ⟨a, b, hgap, hax, hxb⟩ := Math.Topology.exists_gap_of_mem_interval_not_mem
+    (C.endpoints : Set ℝ) C.endpoints.isCompact C.zero_mem C.one_mem x.property hx
+  obtain ⟨hlower, hupper⟩ := C.endpoints_of_gap hgap hax hxb
+  simpa only [hlower, hupper] using And.intro hgap (And.intro hax hxb)
+
+/-- A compatible moving mark preserves an actual interval tie exactly. Only
+the latent equality `x = t`, not equality of collapsed clocks, is excluded. -/
+theorem eventually_tester_eq_midpointClock {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    {tester : ℕ → ℝ} {t : ℝ} (ht : Tendsto tester atTop (𝓝 t))
+    (hcompatible : ∀ k, (calendars k).AtomCompatible (tester k))
+    {x : unitInterval} (hx : (x : ℝ) ∉ limit.exceptionalEndpoints)
+    (hxt : (x : ℝ) ≠ t) (heq : t = limit.midpointClock x) :
+    ∀ᶠ k in atTop, tester k = (calendars k).midpointClock x := by
+  have hxE : (x : ℝ) ∉ limit.endpoints := by
+    intro hmem
+    exact hxt (heq.trans (limit.midpointClock_eq_of_mem hmem)).symm
+  obtain ⟨_, hleft, hright⟩ := limit.gap_of_not_mem hxE
+  have hlt : limit.lowerEndpoint x < t := by
+    rw [heq, midpointClock]
+    linarith
+  have htu : t < limit.upperEndpoint x := by
+    rw [heq, midpointClock]
+    linarith
+  have hnotMem : ∀ᶠ k in atTop, (x : ℝ) ∉ (calendars k).endpoints := by
+    filter_upwards [eventually_avoid_closed hE isClosed_singleton
+      (show ∀ z ∈ limit.endpoints, z ∉ ({(x : ℝ)} : Set ℝ) from
+        fun z hzE hzx => hxE (mem_singleton_iff.mp hzx ▸ hzE))] with k hk
+    exact fun hxk => hk _ hxk (mem_singleton (x : ℝ))
+  filter_upwards [hnotMem, (tendsto_lowerEndpoint hE hx).eventually_lt ht hlt,
+    ht.eventually_lt (tendsto_upperEndpoint hE hx) htu] with k hxk hlk huk
+  exact (hcompatible k).2 _ _ ((calendars k).gap_of_not_mem hxk).1 hlk huk
+
+theorem eventually_tester_midpointClock_order
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    {tester : ℕ → ℝ} {t : ℝ} (ht : Tendsto tester atTop (𝓝 t))
+    (hcompatible : ∀ k, (calendars k).AtomCompatible (tester k))
+    {x : unitInterval} (hx : (x : ℝ) ∉ limit.exceptionalEndpoints)
+    (hxt : (x : ℝ) ≠ t) :
+    ∀ᶠ k in atTop,
+      (tester k ≤ (calendars k).midpointClock x ↔ t ≤ limit.midpointClock x) ∧
+      ((calendars k).midpointClock x ≤ tester k ↔ limit.midpointClock x ≤ t) := by
+  rcases lt_trichotomy t (limit.midpointClock x) with h | h | h
+  · filter_upwards [ht.eventually_lt (tendsto_midpointClock hE hx) h] with k hk
+    exact ⟨iff_of_true hk.le h.le, iff_of_false (not_le_of_gt hk) (not_le_of_gt h)⟩
+  · filter_upwards [eventually_tester_eq_midpointClock hE ht hcompatible hx hxt h] with k hk
+    exact ⟨iff_of_true hk.le h.le, iff_of_true hk.symm.le h.symm.le⟩
+  · filter_upwards [(tendsto_midpointClock hE hx).eventually_lt ht h] with k hk
+    exact ⟨iff_of_false (not_le_of_gt hk) (not_le_of_gt h), iff_of_true hk.le h.le⟩
+
+theorem eventually_tester_collapseClock_order
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    {tester : ℕ → ℝ} {t : ℝ} (ht : Tendsto tester atTop (𝓝 t))
+    (hcompatible : ∀ k, (calendars k).AtomCompatible (tester k))
+    {x : unitInterval} (hx : (x : ℝ) ∉ limit.exceptionalEndpoints)
+    (hxc : x ≠ limit.cutoff) (hxt : (x : ℝ) ≠ t) :
+    ∀ᶠ k in atTop,
+      ((tester k : WithTop ℝ) ≤ (calendars k).collapseClock x ↔
+        (t : WithTop ℝ) ≤ limit.collapseClock x) ∧
+      ((calendars k).collapseClock x ≤ (tester k : WithTop ℝ) ↔
+        limit.collapseClock x ≤ (t : WithTop ℝ)) := by
+  filter_upwards [eventually_cutoff_le_iff hc hxc,
+    eventually_tester_midpointClock_order hE ht hcompatible hx hxt] with k hk horder
+  simp only [collapseClock]
+  by_cases hcut : limit.cutoff ≤ x <;>
+    simp_all only [ite_true, ite_false, le_top, WithTop.top_le_iff,
+      WithTop.coe_ne_top, WithTop.coe_le_coe, and_self]
+
 end Calendar
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -304,6 +470,15 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 /-- Labels at the earliest finite clock. The empty set means all Never. -/
 def minimumLabels (clock : ι → WithTop ℝ) : Finset ι :=
   Finset.univ.filter fun i => clock i ≠ ⊤ ∧ ∀ j, clock i ≤ clock j
+
+omit [DecidableEq ι] in
+theorem minimumLabels_eq_of_order_and_top {first second : ι → WithTop ℝ}
+    (htop : ∀ i, first i = ⊤ ↔ second i = ⊤)
+    (horder : ∀ i j, first i ≤ first j ↔ second i ≤ second j) :
+    minimumLabels first = minimumLabels second := by
+  ext i
+  simp only [minimumLabels, Finset.mem_filter, Finset.mem_univ, true_and]
+  exact and_congr (not_congr (htop i)) (forall_congr' (horder i))
 
 /-- First finite labels in the actual collapsed latent sample. -/
 def firstLabels (C : Calendar) (sample : ι → unitInterval) : Finset ι :=
@@ -317,6 +492,24 @@ def coalitionKernel (C : Calendar) (coalition : Finset ι)
 /-- A finite outcome observable applied to the actual first-label event. -/
 def payoffKernel (C : Calendar) (reward : Finset ι → ℝ)
     (sample : ι → unitInterval) : ℝ := reward (firstLabels C sample)
+
+/-- Insert one literal response clock into the actual opponent clocks. -/
+def responseClock (C : Calendar) (who : ι) (reply : WithTop ℝ)
+    (sample : {j : ι // j ≠ who} → unitInterval) (j : ι) : WithTop ℝ :=
+  if h : j = who then reply else C.collapseClock (sample ⟨j, h⟩)
+
+/-- Response outcomes keep finite marks, including the cutoff, distinct from Never. -/
+def responseLabels (C : Calendar) (who : ι) (reply : WithTop ℝ)
+    (sample : {j : ι // j ≠ who} → unitInterval) : Finset ι :=
+  minimumLabels (responseClock C who reply sample)
+
+def responsePayoffKernel (C : Calendar) (who : ι) (reply : WithTop ℝ)
+    (reward : Finset ι → ℝ) (sample : {j : ι // j ≠ who} → unitInterval) : ℝ :=
+  reward (responseLabels C who reply sample)
+
+def responseCoalitionKernel (C : Calendar) (who : ι) (reply : WithTop ℝ)
+    (coalition : Finset ι) (sample : {j : ι // j ≠ who} → unitInterval) : ℝ :=
+  responsePayoffKernel C who reply (fun outcome => if outcome = coalition then 1 else 0) sample
 
 omit [DecidableEq ι] in
 theorem measurable_firstLabels (C : Calendar) : Measurable (firstLabels C (ι := ι)) := by
@@ -338,6 +531,101 @@ theorem measurable_payoffKernel (C : Calendar) (reward : Finset ι → ℝ) :
     Measurable (payoffKernel C reward) :=
   (measurable_of_countable reward).comp (measurable_firstLabels C)
 
+theorem measurable_responseLabels (C : Calendar) (who : ι) (reply : WithTop ℝ) :
+    Measurable (responseLabels C who reply) := by
+  apply measurable_finset_iff.mpr
+  intro i
+  simp only [responseLabels, minimumLabels, Finset.mem_filter, Finset.mem_univ, true_and]
+  have hclock (j : ι) : Measurable fun sample : {j : ι // j ≠ who} → unitInterval =>
+      responseClock C who reply sample j := by
+    by_cases hj : j = who
+    · simpa only [responseClock, dite_eq_left hj] using
+        (measurable_const : Measurable fun _ : {j : ι // j ≠ who} → unitInterval => reply)
+    · simpa only [responseClock, dite_eq_right hj, Function.comp_def] using
+        C.measurable_collapseClock.comp
+          (measurable_pi_apply (⟨j, hj⟩ : {j : ι // j ≠ who}))
+  exact ((hclock i).eq_const ⊤).not.and
+    (Measurable.forall fun j => (hclock i).le' (hclock j))
+
+theorem measurable_responsePayoffKernel (C : Calendar) (who : ι) (reply : WithTop ℝ)
+    (reward : Finset ι → ℝ) : Measurable (responsePayoffKernel C who reply reward) :=
+  (measurable_of_countable reward).comp (measurable_responseLabels C who reply)
+
+private theorem eventually_responseLabels_eq_of_comparisons
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    (who : ι) (reply : ℕ → WithTop ℝ) (limitReply : WithTop ℝ)
+    (sample : {j : ι // j ≠ who} → unitInterval)
+    (hregular : ∀ j, (sample j : ℝ) ∉ limit.exceptionalEndpoints)
+    (hcutoff : ∀ j, sample j ≠ limit.cutoff)
+    (hreplyTop : ∀ᶠ k in atTop, reply k = ⊤ ↔ limitReply = ⊤)
+    (hcross : ∀ j, ∀ᶠ k in atTop,
+      (reply k ≤ (calendars k).collapseClock (sample j) ↔
+        limitReply ≤ limit.collapseClock (sample j)) ∧
+      ((calendars k).collapseClock (sample j) ≤ reply k ↔
+        limit.collapseClock (sample j) ≤ limitReply)) :
+    ∀ᶠ k in atTop, responseLabels (calendars k) who (reply k) sample =
+      responseLabels limit who limitReply sample := by
+  have htop (i : ι) : ∀ᶠ k in atTop,
+      responseClock (calendars k) who (reply k) sample i = ⊤ ↔
+        responseClock limit who limitReply sample i = ⊤ := by
+    by_cases hi : i = who
+    · simpa only [responseClock, dite_eq_left hi] using hreplyTop
+    · simpa only [responseClock, dite_eq_right hi, Calendar.collapseClock_eq_top_iff] using
+        Calendar.eventually_cutoff_le_iff hc (hcutoff ⟨i, hi⟩)
+  have horder (i j : ι) : ∀ᶠ k in atTop,
+      responseClock (calendars k) who (reply k) sample i ≤
+          responseClock (calendars k) who (reply k) sample j ↔
+        responseClock limit who limitReply sample i ≤
+          responseClock limit who limitReply sample j := by
+    by_cases hi : i = who <;> by_cases hj : j = who
+    · exact Eventually.of_forall fun _ => by simp [responseClock, hi, hj]
+    · simpa only [responseClock, dite_eq_left hi, dite_eq_right hj] using
+        (hcross ⟨j, hj⟩).mono (fun _ hk => hk.1)
+    · simpa only [responseClock, dite_eq_right hi, dite_eq_left hj] using
+        (hcross ⟨i, hi⟩).mono (fun _ hk => hk.2)
+    · simpa only [responseClock, dite_eq_right hi, dite_eq_right hj] using
+        Calendar.eventually_collapseClock_le_iff hE hc (hregular ⟨i, hi⟩)
+          (hregular ⟨j, hj⟩) (hcutoff ⟨i, hi⟩) (hcutoff ⟨j, hj⟩)
+  filter_upwards [eventually_all.mpr htop,
+    eventually_all.mpr fun i => eventually_all.mpr (horder i)] with k hkTop hkOrder
+  exact minimumLabels_eq_of_order_and_top hkTop hkOrder
+
+/-- Compatibility is used only to preserve actual atom ties, not to assert
+that the moving marks belong to an original response menu. -/
+theorem eventually_responseLabels_eq {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    {tester : ℕ → ℝ} {t : ℝ} (ht : Tendsto tester atTop (𝓝 t))
+    (hcompatible : ∀ k, (calendars k).AtomCompatible (tester k))
+    (who : ι) (sample : {j : ι // j ≠ who} → unitInterval)
+    (hregular : ∀ j, (sample j : ℝ) ∉ limit.exceptionalEndpoints)
+    (hcutoff : ∀ j, sample j ≠ limit.cutoff) (htester : ∀ j, (sample j : ℝ) ≠ t) :
+    ∀ᶠ k in atTop, responseLabels (calendars k) who (tester k : WithTop ℝ) sample =
+      responseLabels limit who (t : WithTop ℝ) sample := by
+  apply eventually_responseLabels_eq_of_comparisons hE hc who
+    (fun k => (tester k : WithTop ℝ)) (t : WithTop ℝ) sample hregular hcutoff
+  · exact Eventually.of_forall fun _ => by simp only [WithTop.coe_ne_top]
+  · intro j
+    exact Calendar.eventually_tester_collapseClock_order hE hc ht hcompatible
+      (hregular j) (hcutoff j) (htester j)
+
+theorem eventually_never_responseLabels_eq {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    (who : ι) (sample : {j : ι // j ≠ who} → unitInterval)
+    (hregular : ∀ j, (sample j : ℝ) ∉ limit.exceptionalEndpoints)
+    (hcutoff : ∀ j, sample j ≠ limit.cutoff) :
+    ∀ᶠ k in atTop, responseLabels (calendars k) who ⊤ sample =
+      responseLabels limit who ⊤ sample := by
+  apply eventually_responseLabels_eq_of_comparisons hE hc who (fun _ => ⊤) ⊤
+    sample hregular hcutoff (Eventually.of_forall fun _ => Iff.rfl)
+  intro j
+  filter_upwards [Calendar.eventually_cutoff_le_iff hc (hcutoff j)] with k hk
+  simpa only [WithTop.top_le_iff, Calendar.collapseClock_eq_top_iff, le_top, iff_self,
+    and_true] using hk
+
 theorem coalitionKernel_nonneg (C : Calendar) (coalition : Finset ι)
     (sample : ι → unitInterval) : 0 ≤ coalitionKernel C coalition sample := by
   unfold coalitionKernel
@@ -347,5 +635,109 @@ theorem coalitionKernel_le_one (C : Calendar) (coalition : Finset ι)
     (sample : ι → unitInterval) : coalitionKernel C coalition sample ≤ 1 := by
   unfold coalitionKernel
   split_ifs <;> norm_num
+
+omit [DecidableEq ι] in
+/-- Endpoint and cutoff convergence determine the actual eventual finite outcome. -/
+theorem eventually_firstLabels_eq {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    (sample : ι → unitInterval)
+    (hregular : ∀ i, (sample i : ℝ) ∉ limit.exceptionalEndpoints)
+    (hcutoff : ∀ i, sample i ≠ limit.cutoff) :
+    ∀ᶠ k in atTop, firstLabels (calendars k) sample = firstLabels limit sample := by
+  have htop (i : ι) := Calendar.eventually_cutoff_le_iff hc (hcutoff i)
+  have horder (i j : ι) := Calendar.eventually_collapseClock_le_iff hE hc
+    (hregular i) (hregular j) (hcutoff i) (hcutoff j)
+  filter_upwards [eventually_all.mpr htop,
+    eventually_all.mpr fun i => eventually_all.mpr (horder i)] with k hkTop hkOrder
+  apply minimumLabels_eq_of_order_and_top
+  · intro i
+    simpa only [Calendar.collapseClock_eq_top_iff] using hkTop i
+  · exact hkOrder
+
+omit [DecidableEq ι] in
+/-- The exceptional coordinates are proved null under the actual independent base law. -/
+theorem ae_eventually_firstLabels_eq (base : ProbabilityMeasure unitInterval)
+    [NullSingletonClass (base : Measure unitInterval)]
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff)) :
+    ∀ᵐ sample : ι → unitInterval
+        ∂(ProbabilityMeasure.pi (fun _ : ι => base) : Measure (ι → unitInterval)),
+      ∀ᶠ k in atTop, firstLabels (calendars k) sample = firstLabels limit sample := by
+  have hgood : ∀ᵐ x : unitInterval ∂(base : Measure unitInterval),
+      (x : ℝ) ∉ limit.exceptionalEndpoints ∧ x ≠ limit.cutoff :=
+    (limit.ae_notMem_exceptionalEndpoints (base : Measure unitInterval)).and
+      ((base : Measure unitInterval).ae_ne limit.cutoff)
+  have hcoords (i : ι) : ∀ᵐ sample : ι → unitInterval
+      ∂(ProbabilityMeasure.pi (fun _ : ι => base) : Measure (ι → unitInterval)),
+      (sample i : ℝ) ∉ limit.exceptionalEndpoints ∧ sample i ≠ limit.cutoff := by
+    have hEval := measurePreserving_eval (fun _ : ι => (base : Measure unitInterval)) i
+    exact hEval.quasiMeasurePreserving.ae hgood
+  filter_upwards [eventually_all.mpr hcoords] with sample hsample
+  exact eventually_firstLabels_eq hE hc sample (fun i => (hsample i).1)
+    (fun i => (hsample i).2)
+
+omit [DecidableEq ι] in
+theorem norm_payoffKernel_le (C : Calendar) (reward : Finset ι → ℝ)
+    (sample : ι → unitInterval) :
+    ‖payoffKernel C reward sample‖ ≤ ∑ coalition : Finset ι, ‖reward coalition‖ := by
+  exact Finset.single_le_sum (fun coalition _ => norm_nonneg (reward coalition))
+    (Finset.mem_univ (firstLabels C sample))
+
+omit [DecidableEq ι] in
+theorem integrable_payoffKernel (C : Calendar) (reward : Finset ι → ℝ)
+    (μ : Measure (ι → unitInterval)) [IsFiniteMeasure μ] :
+    Integrable (payoffKernel C reward) μ :=
+  Integrable.of_bound (measurable_payoffKernel C reward).aestronglyMeasurable
+    (∑ coalition : Finset ι, ‖reward coalition‖)
+    (Eventually.of_forall (norm_payoffKernel_le C reward))
+
+omit [DecidableEq ι] in
+/-- Actual payoff kernels converge in L¹; no kernel-convergence premise is supplied. -/
+theorem tendsto_integral_norm_payoffKernel_sub (base : ProbabilityMeasure unitInterval)
+    [NullSingletonClass (base : Measure unitInterval)]
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    (reward : Finset ι → ℝ) :
+    Tendsto (fun k => ∫ sample, ‖payoffKernel (calendars k) reward sample -
+      payoffKernel limit reward sample‖
+      ∂(ProbabilityMeasure.pi (fun _ : ι => base) : Measure (ι → unitInterval)))
+      atTop (𝓝 0) := by
+  have hdom := tendsto_integral_of_dominated_convergence
+    (μ := (ProbabilityMeasure.pi (fun _ : ι => base) : Measure (ι → unitInterval)))
+    (F := fun k sample => ‖payoffKernel (calendars k) reward sample -
+      payoffKernel limit reward sample‖) (f := fun _ => (0 : ℝ))
+    (fun _ => 2 * ∑ coalition : Finset ι, ‖reward coalition‖)
+    (fun k => ((measurable_payoffKernel (calendars k) reward).sub
+      (measurable_payoffKernel limit reward)).norm.aestronglyMeasurable)
+    (integrable_const _) ?_ ?_
+  · simpa only [integral_zero] using hdom
+  · intro k
+    apply Eventually.of_forall
+    intro sample
+    rw [norm_norm]
+    have hfirst := norm_payoffKernel_le (calendars k) reward sample
+    have hlast := norm_payoffKernel_le limit reward sample
+    exact (norm_sub_le _ _).trans (by linarith)
+  · filter_upwards [ae_eventually_firstLabels_eq (ι := ι) base hE hc] with sample hs
+    apply tendsto_const_nhds.congr'
+    filter_upwards [hs] with k hk
+    simp only [payoffKernel, hk, sub_self, norm_zero]
+
+/-- The coalition-event version includes the empty, all-Never outcome. -/
+theorem tendsto_integral_norm_coalitionKernel_sub (base : ProbabilityMeasure unitInterval)
+    [NullSingletonClass (base : Measure unitInterval)]
+    {calendars : ℕ → Calendar} {limit : Calendar}
+    (hE : Tendsto (fun k => (calendars k).endpoints) atTop (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => (calendars k).cutoff) atTop (𝓝 limit.cutoff))
+    (coalition : Finset ι) :
+    Tendsto (fun k => ∫ sample, ‖coalitionKernel (calendars k) coalition sample -
+      coalitionKernel limit coalition sample‖
+      ∂(ProbabilityMeasure.pi (fun _ : ι => base) : Measure (ι → unitInterval)))
+      atTop (𝓝 0) :=
+  tendsto_integral_norm_payoffKernel_sub base hE hc
+    (fun outcome => if outcome = coalition then 1 else 0)
 
 end MathUE.MarkedCalendar
