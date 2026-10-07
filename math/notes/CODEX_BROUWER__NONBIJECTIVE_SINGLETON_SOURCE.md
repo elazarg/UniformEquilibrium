@@ -1,150 +1,51 @@
 # Nonbijective singleton sources beyond a column-sign cone
 
-Author: CODEX_BROUWER. Ordinary mathematics, not Lean-checked. The completed
-two-pair theorem is frozen at
+Author: CODEX_BROUWER. Ordinary mathematics, not Lean-checked.
+
+## Current full-goal status
+
+The live question is a response-complete global consumer of the produced
+marked TRUE minimum of the SUM of unrestricted terminal debts for bounded
+signed Fin4 rewards. No first-row Nash condition or minimum old tail is
+assumed. All finite clocks, Never, actual independent law realization
+and the distinction between a selected-response polynomial and actual
+full caps are retained.
+
+Reviewed results: the all-supported unique-cap source exclusion passed
+two independent falsifications and is frozen in
+[POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md](../exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md).
+LC1–LC5 below, plus the earlier-mass equality in LC6, passed NOETHER's
+focused independent review. LC7 records the exact singleton-pressure
+event containment; that pressure condition does not consume the LC
+residual.
+
+Complete UNREVIEWED ordinary-mathematical work: LC8 gives a literal
+global old-tail graft, retaining the original finite witnesses' small
+late m mass and every observer cap. It forces the exceptional owner's
+counterfactual opponent tail to attain its true unrestricted punishment
+value in the closure. LC9 exactly falsifies the attempted punishment-
+optimal child-Nash splice. LC10 combines signed conditioning of EXISTING
+early m mass and late opponent mass to force δ=P_m−s_m if m stops
+strictly before the common clock with positive probability. The checked
+Fin4 no-UE punishment-normality source excludes this, leaving m PURE at
+that clock. LC11 gives an actual finite-amplitude minimum-preserving path
+to a multiple-cap minimum; it is an existential reselection, not a
+pointwise statement about every minimum.
+
+No full UE producer, positive unrestricted-gap example, or new export
+is claimed. The next genuine target is a finite-amplitude coupled law
+change with a proved upper ledger for ALL changed caps, consuming the
+pure common-clock LC survivor, a multiple-cap minimum, or an EARLIEST
+unique cap with zero own point mass. A local descent, a conditional
+splice, and a favorable selector are not substitutes for that consumer.
+
+The earlier completed raw two-pair theorem is frozen at
 [TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md](../exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md).
-The singleton/triple schedule ST1 is RETIRED as a coverage candidate: its
-entire raw class is already covered by literal Fin4 no-UE normalization and
-the accepted joining-attractive triple/smaller-core consumers. The final
-section records that inclusion, including why arbitrary signed own levels
-do not rescue its significance. Its schedule proof and exact coarse-regret
-separator are retained as internal mathematics, not proposed exports.
-The negative-c homotopy escape is a retained falsifier, not an extension
-proposal. The initial exact singleton matrix is internal evidence showing
-why a signed-column inverse reduction is insufficient, not an existence
-claim. The separately completed signed-column producer does not supply the
-new root-production step here.
+The original matrix tests and retired entropy, atomless, separate-block
+and topology mechanisms are preserved in the mathematical body below.
+They are evidence and exact failed implications, not current producers.
 
-Current independent question: select approximate complete response laws
-while retaining the actual unrestricted-debt minimum. The final entropy
-section produces finite regularized games but records an exact bad Nash
-branch at every calendar size; common support alone is not a selector.
-The live variation now puts the bounded entropy penalty on the full-debt
-objective itself. Its common-support and clock-refinement facts are proved.
-The newest section combines actual complete-cap quantile coarsening with
-entropy loss to prove strong relative-clock compactness at fixed temperature,
-for arbitrary bounded signed rewards. Tied atoms, response-time availability
-and Never must still be retained separately. A universal debt-lowering
-direction at a positive global minimum is NOT proved. The final late-release
-section consumes one actual branch: positive joint-Never mass, a
-positive-social singleton and strict late-cap buffers yield a literal
-finite-law decrease with exactly measured cap leakage. At a genuine
-minimum this is a necessary late-binding condition, not a UE producer.
-The following exact binding-late trap shows that even ALL simultaneous
-Never-tail comparisons, together with canonical singleton Q/R₀/degree-one
-data, cannot replace genuine global minimality. The live task is a coupled
-variation that also changes old finite stopping mass. The newest complete
-candidate uses a fixed cut and reweights whole conditional heads/tails:
-near-late response deficits scale EXACTLY, rather than contributing an
-uncontrolled o(ε) error. It proves that a represented global minimum with
-all Never masses positive must have an earlier finite cap maximizer.
-That source-branch statement has an independent ordinary-mathematics PASS;
-it does not exclude the branches with earlier binding caps or a zero Never
-mass. A separate signed extension below replaces s_i by max(s_i,0) only in
-the endpoint cap, without changing the underlying utilities or Never payoff.
-The current question is to consume a finite binding atom/response while
-retaining genuine whole-profile minimality and every other player's cap.
-The newest completed internal move uniformly spreads every original date
-over private subdates, with complete cap leakage bounded by original
-collision mass plus the ACTUAL cost of inserting empty response dates.
-Combined with the original-stage theorem, near-minima with Never bounded
-below must have a definite collision-or-clock-stretch cost. Neither arm
-is dispatched; no root or favorable best-response selection is assumed.
-This is internal research, not an existence theorem or export candidate.
-
-Current first-collision task: the independently checked marked-source
-construction now supplies an actual global minimum with a first collision
-row, not just a later stage atom. The full root ledger below retains each
-Quit/Continue maximum and excludes a solo root. A finite same-tail selector
-at the end sharpens the remaining geometry to pure rates, a cap tie at a
-pure-rate player, or a directed cycle of genuinely responsive mixed-player
-cap ties. It preserves whole-profile global minimality, but it does NOT
-make the row Nash or produce descent. The live question is whether a legal
-finite-amplitude variation can consume that binding cycle or the sure-rate
-branch. Earlier solo fragmentation and sufficiently small fresh heads are
-not candidate descents; the strict source margins oppose them.
-The newest exact test instead changes the OLD continuation and current
-rates together. Each separate block has a genuine local debt barrier,
-including arbitrary small tail-law releases and all late tests, while the
-coupled actual two-date profile strictly lowers debt. The table is solved
-by a pure singleton; this is a positive mechanism test, not new UE
-coverage or a claimed positive global minimum. Its cap-balanced derivative
-identifies the still-needed actual continuation direction at a true minimum.
-The following opposite-sign exact test is a strict local minimum against
-ALL simultaneous independent stopping-law perturbations, even after small
-earlier calendar refinements. It too has a distant pure Nash profile.
-Thus the universal infinitesimal mixed-cap-cycle descent is retired; the
-live question must use genuine GLOBAL minimality and finite-amplitude
-row/tail changes, not the local margins or a nonsingular Jacobian alone.
-The newest exact construction makes the collision a GLOBAL optimizer over
-every first root with its Never tail, and Never a GLOBAL optimizer over
-every actual tail at that fixed root. A rational coupled change, with a
-screened 32-date release of one old conditional Never atom, still lowers
-full debt. Alternating even GLOBAL block optimization is therefore retired.
-The complete finite cap ledger is at the end. This solved-table mechanism
-test is not the true positive global minimum required by the consumer.
-The final attempt checks a genuinely global repair proposal: continue a
-minimizing root/tail path to all Continue. The exact strict-owner margin
-instead gives a uniform positive-debt moat around every empty-root/minimum-
-tail decomposition, even when the old tail varies simultaneously. Thus
-connectedness does not supply that minimizing homotopy. This is a proved
-failure of the proposed mechanism, not a new existence reduction. The
-current next question must compare a distant replacement of old finite
-stopping mass and calculate all complete cap switches. The newest candidate
-below excludes one genuine source geometry: every complete cap uniquely
-maximized at a clock carrying positive mass in its owner's old law. Unlike
-generic unique attainment, this clock is isolated in the PRODUCED marked
-calendar. Signed reweightings of those existing atoms transport on the
-original finite realizing sequence and yield a multiaffine local branch.
-Its selected-clock endpoint polynomial is zero, so positive global debt is
-impossible in this geometry. This ordinary-mathematics result passed
-two independent checks and is frozen in
-[POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md](../exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md),
-but is not a full consumer: multiple active cap
-clocks and unique maximizing clocks with zero OWN POINT MASS remain live.
-Zero point mass does not mean outside the topological support. The newest
-section instead compares prescribed laws with actual unilateral response
-copies: its sharp triple inequality has coefficient ONE, not the
-same-profile quarter coefficient. Two different cap-response copies
-require a BASE/joint-replacement hybrid payment at equal dates. These
-whole-law constraints are proved, but exceptional outcome mass has not
-been converted into a universally favorable full-debt payment. The finite
-active-clock Nash bootstrap reproduces the existing late-cap boundary;
-it is not a consumer. The live question is an actual joint OLD-finite-mass
-change controlling those exceptional cap outcomes and hybrid profiles.
-The newest global existence attempt reads Reny's exact better-reply
-security theorem and records the escape-to-allNever graph obstruction
-for ordinary weak stopping laws, while proving full payoff/cap continuity
-at EACH produced marked source separately. This local continuity is not
-global security on a fixed Cartesian game. Increasing density bounds,
-even with bounded common-mixture entropy penalties, also fails: the
-existing participant-indicator boundary table has restricted exact Nash
-at EVERY bound but full debt exactly 3, with explicit actual finite-law
-approximants retaining that gap. Those two compact-Nash mechanisms are
-retired; the open geometry still requires a response-complete global
-joint-law producer, not another local-security interface.
-The latest conditional old-mass argument now gives a genuine additional
-source restriction: when exactly one unique cap has zero OWN point mass
-and is later than the other three supported unique caps, that owner must
-stop surely by their common cap clock. The focused independent NOETHER
-review passed LC1–LC5 and its earlier-mass consequence below. This is not
-an export or a whole-branch consumer. The remaining geometry includes a
-late exceptional response, a sure owner at the common clock, and all
-unrestricted post-clock opponent laws; the next comparison must price
-those full laws rather than merely the fixed-response polynomial.
-
-The earlier question concerned a raw class with constant participant
-rewards on all joint exits.
-The constant-participant section gives an exact four-player table defeating
-all fifteen concrete persistent-base screens and all fourteen universal
-child-debt lifts. This is an internal test of a whole-class shortcut,
-NOT a new UE theorem or claimed uncovered table. In particular there is
-no all-proper stationary root exclusion for that four-player table. The
-later literature check distinguishes joint-only constants from constants
-including singleton exits. A separate three-player exact test rules out
-a universal stationary shortcut, without refuting time-dependent selection.
-
-## Question and status
+## Original singleton-matrix question
 
 For an arbitrary Fin4 quitting game, let s_i=r_i({i}) and let Γ have
 diagonal zero and off-diagonal entries Γ_ij=r_i({j})−s_i. Suppose each
@@ -5005,3 +4906,354 @@ itself dispatch this geometry: it already holds by literal event
 inclusion. This is not a contradiction from combining two necessary
 conditions. The containment was sent to MORSE and the coordinator;
 the open problem remains a full-cap finite-amplitude repair.
+
+### LC8. Actual global tail graft forces the exceptional punishment value
+
+Status: complete ordinary-mathematical derivation from the same LC
+source, not independently reviewed and not a UE consumer. This is a
+GLOBAL law replacement, not an assumed minimum-tail property of the
+first-collision row. It concerns the counterfactual opponent tail seen
+when m delays; actual prescribed play has already stopped by t₀.
+
+Let C=I\{m}. Define
+
+    b=b_m(q),
+    H=max_{t∈T, t≤t₀}V_m(t,q_{−m}),
+    α=∏_{j∈C}q_j(clock>t₀),
+    A=E[r_m(S_first(opponents)); first opponent stop≤t₀],
+    P=inf_w cap_m(w).
+
+The infimum defining P ranges over ALL actual independent behavioral
+opponent plans, equivalently complete stopping laws on ℕ⊔Never. Own
+m's strategy is overwritten by each response. Thus P is the actual
+unrestricted punishment value, not a child equilibrium value or a
+finite-response value. All-Never contributes zero in the definition
+of A; its first-stop event here is finite. Never is included in α.
+
+The unique maximizing response τ_m>t₀ gives H<b. Also α>0. If α=0,
+all opponents have stopped by t₀ surely, so every later response equals
+Never. A finite τ_m then ties Never; a Never τ_m ties the distinct
+finite c>t₀. Both violate uniqueness. Let z be the limiting full cap
+of the opponents' original conditional laws strictly after t₀. The
+literal head/tail response decomposition, justified below, gives
+
+    b=A+αz,        z=(b−A)/α.
+
+Claim:
+
+    z=P,           b=A+αP.                       (LC12)
+
+No assertion of attainment by a stationary plan is made. The source's
+original marked conditional tail does attain this scalar value in
+the payoff/cap closure, which is what (LC12) says.
+
+#### Literal finite-witness seam
+
+Use the ORIGINAL finite minimizing sequence pᵏ. The retained positive
+mixture atom t₀ has an original date a_k=t₀^k. Let
+
+    η_k=p_mᵏ(clock>a_k),
+    l_j^k=p_jᵏ(clock>a_k),
+    α_k=∏_{j∈C}l_j^k,
+    A_k=E[r_m(first opponent coalition); first opponent stop≤a_k],
+    H_k=max_{0≤t≤a_k}V_m(t,p_{−m}ᵏ).
+
+The same retained-interval cutoff as LC3 proves η_k→0 and
+l_j^k→q_j(clock>t₀), hence α_k→α>0. The original complete-test kernel
+convergence gives A_k→A and H_k→H. The H_k restriction does not lose
+moving empty tests: the positive-length retained interval separates
+the finite dates at or before a_k from those strictly after it in
+the old chart. All original tests on the early side have limits in
+T≤t₀; all such limiting tests have original witnesses on that side.
+
+Let w be ANY actual independent opponent-tail law with full m-cap
+κ. Replace ONLY p_jᵏ's conditional mass strictly after a_k, for each
+j∈C, by w_j shifted to begin at a_k+1. Keep its entire earlier law
+and its late probability l_j^k. Keep p_mᵏ unchanged. Write pᵏ[w]
+for this actual independent profile. This is legal finite-amplitude
+replacement, with no external randomization or inferred tail Nash.
+
+For prescribed play, couple the unchanged heads and m's old clock.
+If m≤a_k, every changed opponent clock is strictly later than an
+already terminating m clock unless an unchanged opponent head stops
+still earlier. The prescribed first coalition is unchanged. Hence
+EVERY coordinate's payoff changes by at most 2Mη_k.
+
+For a response of j≠m, the unchanged opponent m is still sure-early
+except on an event of probability η_k. On that event only can its
+response payoff depend on the grafted tails. The bound 2Mη_k is
+UNIFORM over all its finite clocks and Never. Consequently its FULL
+cap changes by at most 2Mη_k as well. This explicitly retains the
+prelimit late leakage of m; it is not treated as literally zero.
+
+For owner m itself the own law is overwritten. Responses at or before
+a_k are exactly unchanged. Every response strictly after a_k has
+payoff A_k+α_k times its corresponding full response against w.
+All relative finite clocks and Never are available, so EXACTLY
+
+    B_m(pᵏ[w])=max(H_k,A_k+α_kκ).                 (LC13)
+
+The accounting error outside this one cap is at most 14Mη_k in the
+SUM debt: four prescribed-payoff errors and three other-cap errors.
+Thus all terms used in the global comparison converge with no
+unpaid observer cap or late finite response.
+
+#### Taking the infimum without assuming attainment
+
+Apply the same literal decomposition to the ORIGINAL post-a_k
+conditional opponent law. Its complete cap κ_k is at least P, and
+
+    B_m(pᵏ)=max(H_k,A_k+α_kκ_k).
+
+Since B_m(pᵏ)→b>H and α_k→α>0, necessarily
+κ_k→z=(b−A)/α. Therefore P≤z.
+
+Conversely, for every ε>0 choose an ACTUAL opponent plan w with
+κ<P+ε. Use it in (LC13). Since pᵏ[w] is in the unrestricted domain,
+true global minimality and η_k→0 give
+
+    b≤max(H,A+ακ)≤max(H,A+α(P+ε)).
+
+Let ε decrease to zero. H<b forces b≤A+αP, so z≤P. This proves
+(LC12). No derivative of an outer infimum, no compact attainment,
+and no favorable maximizing selector is used.
+
+If the initial infimum is taken over finite laws, choose w finite
+by censoring a near-punishment law. The named checked cap stability
+`abs_replacementCap_censorLateFiniteStoppingLaws_sub_le` and payoff
+stability `abs_expectedPayoff_censorLateFiniteStoppingLaws_sub_le` in
+`UniformEquilibrium/Quitting/Paths/LateFiniteStoppingLawCensor.lean`
+show that all coordinate caps/payoffs converge under this operation.
+Together with `exists_finiteDeadlineTimingProfile_approximation` in
+`UniformEquilibrium/Quitting/Terminal/FiniteMenuFullProfileApproximation.lean`,
+this aligns the finite-law and all-behavioral SUM infima. The former
+declaration bounds each cap, not merely maximum exploitability; the
+sum comparison uses those individual bounds. The actual witnesses
+may therefore all be chosen finite while retaining unrestricted caps.
+
+The exact checked scalar producer
+`quittingPunishmentValue_eq_stationaryPunishmentValue` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean` lets w instead
+be a constant-row opponent plan with cap within ε of P, followed
+by the same finite censor. Its adjacent declaration
+`quittingPunishmentValue_le_max_solo` gives P≤max(s_m,0); all-player
+punishment normality, when independently supplied by the no-UE
+Fin4 reduction, strengthens this to P≤s_m. Neither infimum is
+asserted attained in that file. No extra sign hypothesis is used
+in the graft proof itself.
+
+### LC9. What the global graft does and does not supply
+
+Choose finite ε-near-punishment tails and diagonal original indices.
+The graft then approaches EXACTLY the source's original payoff/full-
+cap vector: its m-cap tends to A+αP=b, the other cap changes vanish,
+and all prescribed-payoff changes vanish. Thus one may change the
+ENTIRE unreachable post-t₀ opponent behavior while staying arbitrarily
+close to the genuine minimum in debt and payoff/cap coordinates.
+This is an actual source-preserving modification, not a certificate
+requiring unknown minimizing-tail data. If a repeated stationary
+near-punishment plan is chosen, its finite realization retains all
+finite responses and Never. No claim is made that a single stationary
+tail attains P, has the original unique selector, or is child Nash.
+
+I read `questions/CARDINAL_MINIMAL_OUTSIDER_CONSUMER.md` and the
+deletion setup in
+`UniformEquilibrium/Quitting/Classification/PlayerDeletionLift.lean`.
+That question requires a compiler relating separately selected proper-
+face equilibria. LC12 supplies only a scalar m-punishment optimum on
+ONE counterfactual face. Its three players' incentives are invisible
+to prescribed play precisely because m is sure-early. They have not
+become equilibrium incentives of a child game. The quiet-lift source
+preserves surviving players' payoffs and full deviations, but does
+not force the outsider cap to equal its minimum over all opponent
+plans. No child selector is silently attached to (LC12).
+
+A minimal exact failed implication makes this separation unavoidable.
+Consider two players m,j with complete reward vectors in that order:
+
+    r({m})=(0,0),       r({j})=(1,1),       r({m,j})=(2,1).
+
+Player m's punishment value is 0: opponent j Never gives every
+m response payoff0, and all m rewards are nonnegative. The one-player
+child obtained by deleting m has singleton payoff1. Any terminal
+ε-Nash child law with 0<ε<1 stops finitely with probability at least
+1−ε, because pure finite Quit yields1. Against that law m's Never
+response already pays at least1−ε. Hence NO ε-Nash child tail can
+have m-cap within ε of P=0 for ε<1/2. Punishment-optimal opponent
+behavior and even approximate child Nash are genuinely different
+selection tasks. The parent table itself has a pure joint-Quit Nash
+profile, so this is only a falsifier of the proposed splice, not a
+positive-gap example or a counterexample to LC12 under its source
+hypotheses. It is not a new optimization trap.
+
+Thus the attempted next step “graft a child equilibrium which also
+punishes m optimally” is retired. Any use of smaller-game existence
+must PAY the difference of its outsider cap from P and the observer
+caps created when releasing m's existing finite mass. LC12 does not
+provide that price. The live next question is a coupled finite-
+amplitude release whose summed unrestricted-cap ledger pays this
+scalar difference, or a different global comparison consuming the
+earliest unsupported cap geometry. No supplied-tail interface or
+uniform-equilibrium assertion is proposed.
+
+### LC10. Coupled early/late old laws exclude earlier exceptional mass
+
+Status: COMPLETE ordinary-mathematical strict source-restriction proof,
+not independently reviewed and not a UE producer. It uses the GLOBAL
+punishment equality LC12, not a new supplied tail condition. Assume
+the LC source and e_m⁻=q_m(clock<t₀)>0. Every opponent has late mass
+l_j=q_j(clock>t₀)>0 because α>0 in LC8. Let
+
+    ν_m⁻=q_m(·|clock<t₀),
+    ν_j⁺=q_j(·|clock>t₀),       j≠m,
+    q_m^λ=(1−λ_m)q_m+λ_mν_m⁻,
+    q_j^λ=(1−λ_j)q_j+λ_jν_j⁺.                    (LC14)
+
+ALL four variations are legal on a TWO-SIDED open parameter box.
+For a conditional event of probability e>0, their two likelihood
+multiplers are 1−λ outside it and 1+λ(1/e−1) inside it; the same
+small signed bounds as LC3 keep both positive. Own m's earlier
+conditional law is finite surely, never containing Never or t₀.
+The other conditional laws include their original Never probabilities.
+
+#### Complete cap stability, not only a selected response lower bound
+
+For every j≠m put E_j=q_j restricted to clocks≤t₀ and
+c_j(λ_j)=1+λ_j(1/l_j−1). Then
+
+    q_j^λ=c_j(λ_j)q_j−(λ_j/l_j)E_j.
+
+For ANY m-response t>t₀, every non-original opponent-product term
+contains a finite clock at or before t₀. It absorbs before t, making
+that term independent of t, including t=Never. Hence EXACTLY
+
+    V_m(t,q_{−m}^λ)=k(λ)V_m(t,q_{−m})+C(λ),
+    k(λ)=∏_{j≠m}c_j(λ_j)>0,      t>t₀.           (LC15)
+
+This preserves the unique later maximizing point over the ENTIRE
+late region, even if it is nonisolated or is Never. The earlier
+compact region T≤t₀ has strict gap H<b_m, preserved by uniform
+total-variation control. The own m variation does not change its
+response values. Each other owner's unique cap t₀ is an isolated
+retained midpoint, so its uniform complement gap survives ALL four
+signed changes. Therefore all four FULL caps stay at their original
+displayed response points on a common two-sided box.
+
+#### Direct signed transport of BOTH original cutoff sides
+
+In the original minimizing sequence let the t₀ atom's retained
+quantile interval be (d_k,b_k), with d_k→d and b_k→b and b>d.
+Strictly BEFORE its original date a_k corresponds to u<d_k;
+strictly AFTER it, including Never, corresponds to u>b_k.
+The limiting m early probability e_k⁻ tends to e_m⁻>0, and each
+j late probability l_j^k tends to l_j>0. Define literal actual laws
+
+    p_m^{k,λ}=(1−λ_m)p_mᵏ
+                      +λ_m p_mᵏ(·|clock<a_k),
+    p_j^{k,λ}=(1−λ_j)p_jᵏ
+                      +λ_j p_jᵏ(·|clock>a_k),    j≠m.
+
+For large k the same signed parameter box makes these probabilities.
+Their old-chart densities are r_m^k times
+
+    (1−λ_m)+(λ_m/e_k⁻)1_(u<d_k),
+
+and r_j^k times
+
+    (1−λ_j)+(λ_j/l_j^k)1_(u>b_k), respectively.
+
+Both moving indicators converge strongly in L¹. All multipliers and
+densities are uniformly bounded and nonnegative. For every L¹ test
+function, absolute continuity removes the moving-cut error, after
+which original weak-* convergence applies. The rectangle-product
+and unchanged outcome/moving-response kernel arguments give all
+prescribed-payoff and unrestricted-cap limits. These are original
+finite independent laws, with negative coefficients justified directly,
+not by the frozen nonnegative-mixture declaration. All changed laws
+retain zero c mass; c⁺ still duplicates c, and Never remains separate.
+Thus the true δ floor applies on the full signed box.
+
+#### Constant polynomial and its exact endpoint
+
+The selected-response sum F(λ)=D(q^λ) on that box is multiaffine.
+True globality forces F constant δ. At the algebraic all-one endpoint,
+m prescribes a finite clock STRICTLY before t₀, and every opponent
+prescribes a clock STRICTLY after t₀. Prescribed absorption is m's
+singleton, so U_m=s_m and U_j=r_j({m}). Each j's displayed response
+t₀ also follows m's sure earlier singleton, and its selected debt
+is zero. The m displayed response τ_m>t₀ faces the original joint
+conditional opponent tail. Its value is z=P_m by LC12: originally
+the same response gave b_m=A+αz and was a full maximizer. Therefore
+
+    δ=F(1,1,1,1)=P_m−s_m.                       (LC16)
+
+No actual cap at this distant endpoint is claimed. In particular an
+earlier m response could now pay s_m rather than P_m; that does NOT
+affect the selected polynomial evaluation or the local contradiction.
+
+This proves the sign-free implication e_m⁻>0 ⇒ P_m>s_m at a positive
+LC source: its exceptional player would be punishment-ABNORMAL.
+For genuine Fin4 no-UE data that possibility is excluded by the
+CHECKED same-table reduction, not by a guessed reward sign. I inspected
+`quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean`
+and `nonempty_finFourQuantitativeFullSupportHardResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportProjectiveQBarResidual.lean`.
+The latter's `all_punishmentNormal` field means EXACTLY P_i≤s_i,
+as defined by `IsQuittingNormalPlayer` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`.
+Finite-law/all-behavioral infima are aligned by LC8's individual
+cap-censor comparison. Hence LC16 contradicts δ>0 and proves
+
+    q_m=δ_(t₀)                                  (LC17)
+
+for EVERY surviving LC source of a hypothetical Fin4 counterexample.
+The earlier-mass equality r_m(I)=s_m is retained in LC6 but is not
+needed to infer LC17. This is a strict genuine-source exclusion,
+not Nash of the other three conditional tails or a full consumer.
+
+### LC11. An actual finite-amplitude path reaches a multiple-cap minimum
+
+The following is an EXISTENTIAL minimum reselection, not a pointwise
+exclusion of every LC source. Start from any LC source, before or
+after LC17, and use the legal forward OLD-atom path
+
+    q_i^x=(1−x)q_i+xδ_(t₀),       0≤x≤1.
+
+Its selected-response polynomial is identically δ by LC5, although
+its actual full caps need not stay selected all the way. Every point
+has actual finite realization on the retained old t₀ intervals;
+the forward coefficients are probabilities and all modified densities
+are bounded. All q_i^x(c)=0, so c⁺ still adds only the existing c value.
+The produced marked response functions and their compact full caps
+depend UNIFORMLY continuously on x by total variation.
+
+Let Z be the closed set of x where all four original displayed
+responses remain full maximizers. It contains an initial interval.
+On Z the actual full debt is δ, because the selected polynomial is
+δ and now its responses ARE full maximizers. Let x* be the end of
+its maximal initial interval. If x*<1 and all caps were still unique
+there, the three t₀ selectors would have their isolated-point uniform
+gaps. For m, the ordered old-atom expansion above t₀ has positive
+coefficient (1−x*)³; its unique late selector and the compact earlier
+gap would likewise persist in a neighborhood of x*. That would
+contradict maximality. Thus some cap has at least two maximizing
+POINTS at a genuine actual global minimum q^{x*}.
+
+If x*=1, the endpoint still has the selected responses as full caps
+by closedness. All prescribed laws are pure t₀. Owner m's selected
+late response is r_m(I\{m}), and BOTH the distinct finite c>t₀ and
+Never have that same passive value. They are therefore two genuine
+maximizing POINTS. This again gives a marked global minimum with
+multiple cap maximizers. No actual cap claim at x=1 is made unless
+x=1 belongs to Z; that condition is exactly the distinction required
+for this argument.
+
+Consequently an LC minimum can be moved by a finite-amplitude change
+of EXISTING finite mass to a genuine multiple-cap minimum, with no
+increase of debt along the initial path. It does NOT give debt below
+δ, and it does NOT say every minimum already has multiple caps. The
+new proof must consume that multiple-cap geometry, not suppress it
+through a favorable selector or treat the selected-grand identity as
+an actual equilibrium. The zero-own-mass EARLIEST-cap alternative
+from NOETHER's SLC10–SLC12 remains a different unresolved branch.

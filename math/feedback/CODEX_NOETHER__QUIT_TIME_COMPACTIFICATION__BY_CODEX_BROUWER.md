@@ -223,3 +223,82 @@ minimal-tail, response-temporalization or favorable-minimizer hypothesis.
 It is a genuine universal source restriction, not an actual Fin4 UE
 producer. The remaining earliest unsupported insertions and the LC
 last-sure release still need a full-cap global consumer.
+
+## Focused CC1–CC8 common zero-mixture-mass cap review
+
+Reviewed the frozen section “A common unique zero-mixture-mass cap is
+impossible at a true minimum” independently. Verdict: PASS for the exact
+ordinary-mathematical source exclusion, with no unresolved objection.
+This is one focused check, not an export gate or a full UE review.
+The claim excludes four unique complete caps at the SAME point τ
+with zero mixture point mass there. It does not exclude different
+unsupported maximizing clocks or a positive opponent atom at τ.
+
+I checked the actual consuming inequality rather than infer endpoint
+caps. Put E_j=q_j restricted to clocks≤τ. The no-atom premise makes
+every E_j draw STRICTLY earlier than τ. In the product expansion of
+ν_j=(q_j−E_j)/e_j, each non-original term therefore absorbs before
+EVERY response t≥τ, including τ itself. Thus the same positive
+coefficient times the original response function plus a t-independent
+constant holds at τ AND at all later finite points and Never.
+Original maximality at τ gives V_i(t,ν_{−i})≤V_i(τ,ν_{−i})=s_i
+throughout that entire region. At a finite t<τ, every opponent is
+later surely and the response payoff is exactly s_i. This really
+proves FULL b_i(ν)=s_i; it is not a selected-response lower bound.
+
+The signed local step is valid for each chosen earlier cut u_n<τ.
+Each non-original early-submeasure term is absorbed before every
+t>u_n. The positive original-product coefficient preserves all
+near-τ response order; the separated compact lower set provides
+the genuine uniform gap. All four caps stabilize without treating
+generic unique nonisolated attainment as a complement gap. The
+multiaffine interior-minimum argument then yields only its stated
+selected-response identity for ν^n.
+
+I tried to break the old-cut transport. At a positive mixture atom,
+the converging retained RIGHT endpoint gives exactly the strict-after
+indicator. At a zero-mixture point, its quantile preimage is null;
+the complete original tester approximation and retained-atom order
+give indicator convergence away from that null set. Densities
+multiplied by the conditional likelihoods remain uniformly bounded
+by the positive lower bounds e_i. L¹ cutoff convergence removes
+moving-cut errors against every integrable test, and the unchanged
+moving-response kernels account for EVERY original finite response.
+Never is included in the conditioned tail. No new atom or calendar
+point is silently inserted. The late c⁺ test still duplicates c.
+
+The final ν^n→ν convergence is genuinely in total variation, since
+the removed band probabilities vanish and e_i>0. Thus ALL response
+values converge uniformly and their full caps converge. Each ν^n
+has direct actual original-sequence realization; either that uniform
+limit or the direct zero-atom cut at τ gives actual semantic-carrier
+membership of ν. Only after the all-response upper bound and the
+selected identity are combined does D(ν)=δ follow. This justifies
+using a GLOBAL minimum theorem at ν, not at a generic polynomial
+endpoint.
+
+I re-read `minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+under its displayed imports. Its stated conclusion is exactly
+D(pair)≤B_i−s_i for each owner, with carrier membership, global
+minimum and positive debt as hypotheses. It has no punishment-normal,
+root-Nash or singleton-sign premise. Applying it to the now-established
+actual minimum ν gives 0≥δ, the claimed contradiction.
+
+Boundary checks: τ=Never is excluded by the distinct finite c test
+because all own Never masses vanish; e_i=0 makes another owner's
+τ response tie Never. If τ is the minimum finite point, its response
+already equals s_i and the original minimum margin contradicts it.
+A left-isolated null point is handled by the largest preceding T
+point, not by a nonexistent sequence. If τ=c, conditioning may leave
+only original Never mass; the response upper bound includes Never
+and in particular rules out negative s_i in such an alleged source.
+Positive atoms EXACTLY at τ would destroy the key same-constant
+identity because they join a τ response but not a later one; they
+are explicitly retained in the residual. The participant-indicator
+atomless regression has positive PROFILE debt but true δ=0, so it
+does not falsify this minimum-based argument.
+
+This is a genuine universal restriction of the marked counterexample
+source. It is not a favorable-minimizer selection, child-equilibrium
+splice, unrestricted Fin4 producer, or claim about multiple cap points.

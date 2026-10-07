@@ -417,6 +417,31 @@ applies to every original marked minimum, not only an existentially reselected
 one. It supplies no consumer for multiple caps or unique zero-mass caps, and
 does not assert zero actual debt at the distant polynomial endpoint.
 
+In four players, a stronger reviewed order restriction holds on the same
+produced positive minimum when all four caps have unique maximizing points.
+Either an owner at the earliest maximizing point has zero own point mass,
+or three owners have positive own mass at one common finite maximizing point
+t₀. In the latter case the remaining owner m stops surely by t₀, has positive
+mass at t₀, and has its unique maximizing point strictly later. Moreover,
+
+    D*=r_m(I\{m})−r_m(I)>0.
+
+If m has positive prescribed mass strictly before t₀, then r_m(I)=s_m.
+The restriction permits arbitrary ordering of supported and unsupported later
+cap points; it is not confined to a separated group of unsupported caps.
+Its proof retains all original moving tests under signed conditional-tail
+reweighting. These are source restrictions, not an actual zero-debt endpoint
+or a UE consumer. Multiple cap maxima, earliest unsupported maxima, and the
+sure-owner/common-date configuration remain unconsumed.
+
+The four unique maximizing points also cannot all coincide at a point with
+zero mixture mass. Conditioning all clocks strictly after that point gives
+an actual carrier limit; an exact comparison of its complete response
+functions proves every cap equals its own singleton reward. Its sum debt is
+still D*, contradicting the global-minimum singleton margin. This reviewed
+exclusion does not cover distinct unsupported cap points or a common point
+with positive opponent mass.
+
 A uniform original-profile restriction follows: for each fixed table with
 D*>0 and each positive Never lower bound η, there are ε,γ>0 such that
 EVERY actual behavioral profile with D≤D*+ε and every marginal Never
