@@ -945,3 +945,35 @@ particular, a new triple-based schedule must either admit a positive anchor
 participant premium (so its core need not lie in the triple) or genuinely
 leave the within-triple joining-attractive class. Signed singleton levels
 alone are not a source of new coverage. No replacement theorem is claimed.
+
+## Independent selection checkpoint
+
+The next search is for an approximate all-player producer, not an exact
+finite-menu Nash selector. A possible uniform quantile/sampling compression
+shortcut was checked against the actual source and is already implemented:
+`hasEscapeAwareQuantileClockCompressionAtBound` in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`
+preserves prescribed payoffs and both directions of unrestricted pure-time
+caps, including Never. `escapeAwareQuantileClock_normalized_quantitative_bracket`
+in `UniformEquilibrium/Quitting/Paths/CommonQuantileClockApproximation.lean`
+already gives the finite lower/upper bracket. The actual independent-law
+producer `exists_fin4_calendarUniformStoppingLaws_exploitability_le` in
+`UniformEquilibrium/Quitting/Paths/QuantitativeFiniteClockSource.lean`
+selects laws with error at most the unrestricted infimum plus24/level.
+Consequently compression, sparse support, or a finite optimizer alone is not
+a new selection mechanism: the missing step is still forcing that infimum
+to vanish. This direction is not being repackaged as a theorem.
+
+A separate concrete raw-family question remains exploratory. Suppose that,
+for every player i, its reward on EVERY coalition containing it and at least
+one other player is one fixed P_i≥s_i, while passive rewards are arbitrary.
+Can the uniform positive joint-quit increment be used to repair a singleton
+clock profile by coalition enlargements, with no supplied child equilibrium
+or cap bound? This includes signed s_i and fixed independent behavioral
+play; the desired output is one fixed uniform payoff. A profitable join
+does not alone prove progress: at a later coalition an old participant may
+prefer to leave for a passive payoff above P_i. No rank, stationary-completeness
+claim, actual uncovered fixture, or existence theorem has been established.
+Before pursuing it, the whole class must be tested against the current
+concrete-base and premium-core consumers. This is a different question from
+the retired ST1 schedule and does not modify any frozen result.

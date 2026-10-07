@@ -5598,3 +5598,30 @@ against UE of (162). Approximate timing laws, original-zero menu equilibria,
 and a use of true positive-global-minimum information remain distinct.
 The next consumer attempt must use that global information essentially;
 strict punishment normality alone cannot replace it.
+
+There is a direct relevance check for the simultaneous induced-Nash source
+constraints. The same table satisfies ALL fifteen persistent-base positive
+gap alternatives together. Indeed fix any nonempty E and internally choose
+any Nash point of the full complementary free game. If |E|≥2 and every
+member had nonnegative expected joining gap, the extended row would be an
+exact root at P with a sure coordinate, since the remaining base players
+make the continuation irrelevant to every deviation. This contradicts the
+unique fully proper root (166)–(168). Thus some member has strictly negative
+expected joining gap at every such Nash point. If E={i}, nonpositive
+punishment-floor excess at an induced point would likewise make its sure-
+owner extension a root at P, again impossible. The singleton floor excess
+is consequently strictly positive at EVERY induced Nash point.
+
+The induced Nash sets are nonempty and compact and the literal excess
+functions continuous, so each base has its own uniformly positive minimum
+excess, exactly as in `exists_uniformPayoff_or_singletonBase_pos_gap` and
+`exists_uniformPayoff_or_persistentLargeBase_pos_gap` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`.
+The minimum of the fifteen positive numbers is positive too. Hence these
+simultaneous whole-carrier restrictions, strict punishment normality and
+full singleton R₀/degree one are jointly inhabited by an explicit table.
+No purely algebraic contradiction between those restrictions is possible.
+This says nothing about whether this table has a positive GLOBAL semantic
+minimum: that decisive additional property has not been established. The
+next investigation must combine the source restrictions with that property,
+not merely add more finite-base exclusions to this regression.
