@@ -4,6 +4,7 @@ import UniformEquilibrium.Quitting.Paths.CommonStoppingCalendarRetiming
 import Mathlib.MeasureTheory.Constructions.UnitInterval
 import Mathlib.MeasureTheory.Measure.WithDensity
 import GameTheory.Math.Probability.Measure
+import Mathlib.Logic.Equiv.Option
 
 /-! # Actual finite-law interval charts
 
@@ -16,9 +17,11 @@ exact common-mixture identity. The interval decoder recovers the same original
 laws and their independent product, with fallback confined to a derived-null
 complement. The actual endpoint calendar collapses each cell to its midpoint
 or literal Never. The full finite reply-menu image preserves comparisons with
-supported clocks and the original pure first outcome. Product outcome-law
-transport, limiting complete caps, and original variation witnesses remain
-separate obligations beyond this slice.
+supported clocks and the original pure first outcome. The chart's independent
+product has exactly the original terminal-outcome law, including literal Never.
+Every original pure reply has the exact updated source-outcome law against the
+unchanged opponents' chart, even when the opponent set is empty. Limiting
+complete caps and original variation witnesses remain separate obligations.
 -/
 
 noncomputable section
@@ -1092,30 +1095,19 @@ theorem cellMark_le_cellMark_iff (laws : ι → FinDist (Option ℕ)) (a b : Cel
     rw [hmark, cellMark_le_mark_iff]
     exact Iff.of_eq (congrArg (fun clock : WithTop ℕ => (a : WithTop ℕ) ≤ clock) hatom)
 
-/-- All supported pairwise comparisons and literal Never status identify the original outcome. -/
-theorem minimumLabels_markedClock_eq_originalOutcome
-    (laws : ι → FinDist (Option ℕ)) (times : ι → Option ℕ)
-    (hsupport : ∀ i, quittingStoppingTimeValue (times i) ∈
-      (averageClockLaw laws).supportFinset) :
-    MathUE.MarkedCalendar.minimumLabels
-        (fun i => markedClock laws (quittingStoppingTimeValue (times i))) =
+private theorem minimumLabels_eq_originalOutcome_of_order_and_top
+    (times : ι → Option ℕ) (clock : ι → WithTop ℝ)
+    (htop : ∀ i, clock i = ⊤ ↔ quittingStoppingTimeValue (times i) = ⊤)
+    (horder : ∀ i j, clock i ≤ clock j ↔
+      quittingStoppingTimeValue (times i) ≤ quittingStoppingTimeValue (times j)) :
+    MathUE.MarkedCalendar.minimumLabels clock =
       (quittingFirstStoppingOutcome times).elim ∅ Subtype.val := by
-  have horder (i j : ι) :
-      markedClock laws (quittingStoppingTimeValue (times i)) ≤
-          markedClock laws (quittingStoppingTimeValue (times j)) ↔
-        quittingStoppingTimeValue (times i) ≤ quittingStoppingTimeValue (times j) := by
-    change markedClock laws (⟨_, hsupport i⟩ : Cell laws) ≤
-      markedClock laws (⟨_, hsupport j⟩ : Cell laws) ↔ _
-    rw [markedClock_cell, markedClock_cell]
-    exact cellMark_le_cellMark_iff laws ⟨_, hsupport i⟩ ⟨_, hsupport j⟩
-  have htop (i : ι) : markedClock laws (quittingStoppingTimeValue (times i)) = ⊤ ↔
-      quittingStoppingTimeValue (times i) = ⊤ := WithTop.map_eq_top_iff
   by_cases hnever : quittingEarliestStoppingValue times = ⊤
   · rw [quittingFirstStoppingOutcome, ite_eq_left hnever, Option.elim_none]
     apply Finset.eq_empty_of_forall_notMem
     intro i hi
     have hiNever := (quittingEarliestStoppingValue_eq_top_iff times).mp hnever i
-    have hiTop : markedClock laws (quittingStoppingTimeValue (times i)) = ⊤ :=
+    have hiTop : clock i = ⊤ :=
       (htop i).mpr (by rw [hiNever]; rfl)
     exact (Finset.mem_filter.mp hi).2.1 hiTop
   · rw [quittingFirstStoppingOutcome, ite_eq_right hnever, Option.elim_some]
@@ -1133,6 +1125,23 @@ theorem minimumLabels_markedClock_eq_originalOutcome
       intro j
       exact (horder i j).mpr (hleast j)
 
+/-- All supported pairwise comparisons and literal Never status identify the original outcome. -/
+theorem minimumLabels_markedClock_eq_originalOutcome
+    (laws : ι → FinDist (Option ℕ)) (times : ι → Option ℕ)
+    (hsupport : ∀ i, quittingStoppingTimeValue (times i) ∈
+      (averageClockLaw laws).supportFinset) :
+    MathUE.MarkedCalendar.minimumLabels
+        (fun i => markedClock laws (quittingStoppingTimeValue (times i))) =
+      (quittingFirstStoppingOutcome times).elim ∅ Subtype.val := by
+  apply minimumLabels_eq_originalOutcome_of_order_and_top
+  · intro i
+    exact WithTop.map_eq_top_iff
+  · intro i j
+    change markedClock laws (⟨_, hsupport i⟩ : Cell laws) ≤
+      markedClock laws (⟨_, hsupport j⟩ : Cell laws) ↔ _
+    rw [markedClock_cell, markedClock_cell]
+    exact cellMark_le_cellMark_iff laws ⟨_, hsupport i⟩ ⟨_, hsupport j⟩
+
 omit [Fintype ι] [Nonempty ι] in
 /-- Empty labels are exactly literal Never; finite terminal coalitions cannot be empty. -/
 theorem originalOutcome_labels_eq_empty_iff (outcome : QuittingTerminalOutcome ι) :
@@ -1142,5 +1151,327 @@ theorem originalOutcome_labels_eq_empty_iff (outcome : QuittingTerminalOutcome �
   | some coalition =>
       simp only [Option.elim_some, Option.some_ne_none, iff_false]
       exact coalition.property.ne_empty
+
+omit [Fintype ι] [Nonempty ι] in
+/-- The standard option/nonempty-subtype equivalence encodes literal Never as the empty labels. -/
+def outcomeLabelsEquiv : QuittingTerminalOutcome ι ≃ Finset ι := by
+  classical
+  exact (Equiv.optionCongr (Equiv.subtypeEquivProp
+    (funext fun _ : Finset ι => propext Finset.nonempty_iff_ne_empty))).trans
+      (Equiv.optionSubtypeNe ∅)
+
+omit [Fintype ι] [Nonempty ι] in
+theorem outcomeLabelsEquiv_apply (outcome : QuittingTerminalOutcome ι) :
+    outcomeLabelsEquiv outcome = outcome.elim ∅ Subtype.val := by
+  cases outcome <;> rfl
+
+omit [Fintype ι] [Nonempty ι] in
+/-- The explicit discrete measurable space for the existing terminal-outcome carrier. -/
+@[instance_reducible]
+def outcomeMeasurableSpace : MeasurableSpace (QuittingTerminalOutcome ι) := ⊤
+
+attribute [local instance] outcomeMeasurableSpace
+
+omit [Fintype ι] [Nonempty ι] in
+local instance outcomeMeasurableSingletonClass :
+    MeasurableSingletonClass (QuittingTerminalOutcome ι) where
+  measurableSet_singleton _ := trivial
+
+/-- Encode the actual chart labels in the existing literal terminal-outcome type. -/
+def chartOutcome (laws : ι → FinDist (Option ℕ))
+    (sample : ι → unitInterval) : QuittingTerminalOutcome ι :=
+  outcomeLabelsEquiv.symm (MathUE.MarkedCalendar.firstLabels (calendar laws) sample)
+
+theorem measurable_chartOutcome (laws : ι → FinDist (Option ℕ)) :
+    Measurable (chartOutcome laws) :=
+  (measurable_of_countable outcomeLabelsEquiv.symm).comp
+    (MathUE.MarkedCalendar.measurable_firstLabels (calendar laws))
+
+theorem chartOutcome_eq_none_iff (laws : ι → FinDist (Option ℕ))
+    (sample : ι → unitInterval) :
+    chartOutcome laws sample = none ↔
+      MathUE.MarkedCalendar.firstLabels (calendar laws) sample = ∅ := by
+  rw [chartOutcome, Equiv.symm_apply_eq, outcomeLabelsEquiv_apply, Option.elim_none]
+
+/-- The original stopping choice underlying an ordered clock; top returns literal none. -/
+def originalChoice : WithTop ℕ → Option ℕ := WithTop.recTopCoe none some
+
+theorem stoppingTimeValue_originalChoice (clock : WithTop ℕ) :
+    quittingStoppingTimeValue (originalChoice clock) = clock := by
+  induction clock using WithTop.recTopCoe <;> rfl
+
+theorem originalChoice_stoppingTimeValue (choice : Option ℕ) :
+    originalChoice (quittingStoppingTimeValue choice) = choice := by
+  cases choice <;> rfl
+
+theorem cellLaw_map_originalChoice (laws : ι → FinDist (Option ℕ)) (i : ι) :
+    (cellLaw laws i).map (fun a : Cell laws => originalChoice a) = laws i := by
+  change (cellLaw laws i).map (originalChoice ∘ Subtype.val) = _
+  rw [← FinDist.map_comp, cellLaw_map_val, sourceClockLaw, FinDist.map_comp]
+  have hinverse : originalChoice ∘ quittingStoppingTimeValue = id :=
+    funext originalChoice_stoppingTimeValue
+  rw [hinverse, FinDist.map_id]
+
+theorem cellProduct_map_originalChoice (laws : ι → FinDist (Option ℕ)) :
+    (FinDist.pi (cellLaw laws)).map (fun sample i => originalChoice (sample i)) =
+      FinDist.pi laws := by
+  calc
+    _ = FinDist.pi (fun i => (cellLaw laws i).map
+        (fun a : Cell laws => originalChoice a)) :=
+      (FinDist.pi_map (fun (_ : ι) (a : Cell laws) => originalChoice a) (cellLaw laws)).symm
+    _ = _ := congrArg FinDist.pi (funext fun i => cellLaw_map_originalChoice laws i)
+
+theorem minimumLabels_cellMark_eq_originalOutcome (laws : ι → FinDist (Option ℕ))
+    (sample : ι → Cell laws) :
+    MathUE.MarkedCalendar.minimumLabels (fun i => cellMark laws (sample i)) =
+      outcomeLabelsEquiv
+        (quittingFirstStoppingOutcome (fun i => originalChoice (sample i))) := by
+  have hsupport (i : ι) : quittingStoppingTimeValue (originalChoice (sample i)) ∈
+      (averageClockLaw laws).supportFinset := by
+    rw [stoppingTimeValue_originalChoice]
+    exact (sample i).property
+  have h := minimumLabels_markedClock_eq_originalOutcome laws
+    (fun i => originalChoice (sample i)) hsupport
+  simpa only [stoppingTimeValue_originalChoice, markedClock_cell,
+    outcomeLabelsEquiv_apply] using h
+
+theorem ae_chartOutcome_eq_originalOutcome (laws : ι → FinDist (Option ℕ)) :
+    chartOutcome laws =ᵐ[Measure.pi (chartMeasure laws)]
+      fun sample => quittingFirstStoppingOutcome
+        (fun i => originalChoice (decodeCell laws (sample i))) := by
+  have hscalar (i : ι) : (calendar laws).collapseClock =ᵐ[chartMeasure laws i]
+      fun x => cellMark laws (decodeCell laws x) :=
+    (withDensity_absolutelyContinuous volume
+      (fun x => ENNReal.ofReal (density laws i x))).ae_le
+        (ae_collapseClock_eq_cellMark_decodeCell laws)
+  have heach (i : ι) :=
+    (measurePreserving_eval (chartMeasure laws) i).quasiMeasurePreserving.ae (hscalar i)
+  filter_upwards [ae_all_iff.mpr heach] with sample hsample
+  have hclock : (fun i => (calendar laws).collapseClock (sample i)) =
+      fun i => cellMark laws (decodeCell laws (sample i)) := funext hsample
+  unfold chartOutcome MathUE.MarkedCalendar.firstLabels
+  rw [hclock, minimumLabels_cellMark_eq_originalOutcome, Equiv.symm_apply_apply]
+
+/-- Exact first-outcome law from the specified original independent source family.
+The equality includes literal none, not just finite coalition probabilities. -/
+theorem chartProduct_map_outcome (laws : ι → FinDist (Option ℕ)) :
+    (Measure.pi (chartMeasure laws)).map (chartOutcome laws) =
+      ((FinDist.pi laws).map quittingFirstStoppingOutcome).toMeasure := by
+  let decode := fun sample : ι → unitInterval => fun i => decodeCell laws (sample i)
+  let read := fun sample : ι → Cell laws =>
+    quittingFirstStoppingOutcome (fun i => originalChoice (sample i))
+  have hdecode : Measurable decode :=
+    Measurable.of_eval fun i => (measurable_decodeCell laws).comp (measurable_pi_apply i)
+  have hae : chartOutcome laws =ᵐ[Measure.pi (chartMeasure laws)] read ∘ decode :=
+    ae_chartOutcome_eq_originalOutcome laws
+  rw [Measure.map_congr hae,
+    ← Measure.map_map (measurable_of_countable read) hdecode,
+    chartProduct_map_decodeCell, FinDist.toMeasure_map _ _ (measurable_of_countable read)]
+  change ((FinDist.pi (cellLaw laws)).map
+    (quittingFirstStoppingOutcome ∘ (fun sample i => originalChoice (sample i)))).toMeasure = _
+  rw [← FinDist.map_comp, cellProduct_map_originalChoice]
+
+/-- The chart's literal all-Never event has exactly its original source-outcome mass. -/
+theorem chartProduct_real_none (laws : ι → FinDist (Option ℕ)) :
+    (Measure.pi (chartMeasure laws)).real {sample | chartOutcome laws sample = none} =
+      ((FinDist.pi laws).map quittingFirstStoppingOutcome).prob none := by
+  change (Measure.pi (chartMeasure laws)).real (chartOutcome laws ⁻¹' {none}) = _
+  rw [← map_measureReal_apply (measurable_chartOutcome laws)
+    (measurableSet_singleton (none : QuittingTerminalOutcome ι)),
+    chartProduct_map_outcome, FinDist.toMeasure_real_singleton]
+
+/-- An arbitrary original response is compared only against actual supported cells. -/
+theorem cellMark_le_replyMark_iff (laws : ι → FinDist (Option ℕ))
+    (a : Cell laws) (choice : Option ℕ) :
+    cellMark laws a ≤ markedClock laws (quittingStoppingTimeValue choice) ↔
+      (a : WithTop ℕ) ≤ quittingStoppingTimeValue choice := by
+  cases choice with
+  | none => simp only [quittingStoppingTimeValue, markedClock, WithTop.map_top, le_top]
+  | some time => exact cellMark_le_mark_iff laws a time
+
+theorem replyMark_le_cellMark_iff (laws : ι → FinDist (Option ℕ))
+    (a : Cell laws) (choice : Option ℕ) :
+    markedClock laws (quittingStoppingTimeValue choice) ≤ cellMark laws a ↔
+      quittingStoppingTimeValue choice ≤ (a : WithTop ℕ) := by
+  cases choice with
+  | none =>
+      rw [← markedClock_cell]
+      change ⊤ ≤ WithTop.map (mark laws) (a : WithTop ℕ) ↔ ⊤ ≤ (a : WithTop ℕ)
+      simp only [top_le_iff, WithTop.map_eq_top_iff]
+  | some time => exact mark_le_cellMark_iff laws a time
+
+section Replies
+
+variable [DecidableEq ι]
+
+/-- Insert any original response, including unsupported finite dates and literal Never. -/
+theorem minimumLabels_responseCellClock_eq_originalOutcome
+    (laws : ι → FinDist (Option ℕ)) (who : ι) (choice : Option ℕ)
+    (sample : {j : ι // j ≠ who} → Cell laws) :
+    MathUE.MarkedCalendar.minimumLabels
+        ((Equiv.funSplitAt who (WithTop ℝ)).symm
+          (markedClock laws (quittingStoppingTimeValue choice),
+            fun j => cellMark laws (sample j))) =
+      outcomeLabelsEquiv (quittingFirstStoppingOutcome
+        ((Equiv.funSplitAt who (Option ℕ)).symm
+          (choice, fun j => originalChoice (sample j)))) := by
+  rw [outcomeLabelsEquiv_apply]
+  apply minimumLabels_eq_originalOutcome_of_order_and_top
+  · intro i
+    by_cases hi : i = who
+    · simp only [Equiv.funSplitAt_symm_apply, dite_eq_left hi]
+      exact WithTop.map_eq_top_iff
+    · simp only [Equiv.funSplitAt_symm_apply, dite_eq_right hi,
+        stoppingTimeValue_originalChoice, ← markedClock_cell]
+      exact WithTop.map_eq_top_iff
+  · intro i j
+    by_cases hi : i = who <;> by_cases hj : j = who
+    · simp only [Equiv.funSplitAt_symm_apply, dite_eq_left hi, dite_eq_left hj, le_refl]
+    · simp only [Equiv.funSplitAt_symm_apply, dite_eq_left hi, dite_eq_right hj,
+        stoppingTimeValue_originalChoice]
+      exact replyMark_le_cellMark_iff laws (sample ⟨j, hj⟩) choice
+    · simp only [Equiv.funSplitAt_symm_apply, dite_eq_right hi, dite_eq_left hj,
+        stoppingTimeValue_originalChoice]
+      exact cellMark_le_replyMark_iff laws (sample ⟨i, hi⟩) choice
+    · simp only [Equiv.funSplitAt_symm_apply, dite_eq_right hi, dite_eq_right hj,
+        stoppingTimeValue_originalChoice]
+      exact cellMark_le_cellMark_iff laws (sample ⟨i, hi⟩) (sample ⟨j, hj⟩)
+
+/-- The response uses the unchanged full-source calendar and only the opponents' samples. -/
+def chartResponseOutcome (laws : ι → FinDist (Option ℕ)) (who : ι) (choice : Option ℕ)
+    (sample : {j : ι // j ≠ who} → unitInterval) : QuittingTerminalOutcome ι :=
+  outcomeLabelsEquiv.symm (MathUE.MarkedCalendar.responseLabels (calendar laws) who
+    (markedClock laws (quittingStoppingTimeValue choice)) sample)
+
+theorem measurable_chartResponseOutcome (laws : ι → FinDist (Option ℕ))
+    (who : ι) (choice : Option ℕ) : Measurable (chartResponseOutcome laws who choice) :=
+  (measurable_of_countable outcomeLabelsEquiv.symm).comp
+    (MathUE.MarkedCalendar.measurable_responseLabels (calendar laws) who
+      (markedClock laws (quittingStoppingTimeValue choice)))
+
+theorem chartResponseOutcome_eq_none_iff (laws : ι → FinDist (Option ℕ))
+    (who : ι) (choice : Option ℕ) (sample : {j : ι // j ≠ who} → unitInterval) :
+    chartResponseOutcome laws who choice sample = none ↔
+      MathUE.MarkedCalendar.responseLabels (calendar laws) who
+        (markedClock laws (quittingStoppingTimeValue choice)) sample = ∅ := by
+  rw [chartResponseOutcome, Equiv.symm_apply_eq, outcomeLabelsEquiv_apply, Option.elim_none]
+
+/-- Removing one coordinate does not change the actual interval decoder or its laws. -/
+theorem chartOpponentProduct_map_decodeCell (laws : ι → FinDist (Option ℕ)) (who : ι) :
+    (Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)).map
+        (fun sample j => decodeCell laws (sample j)) =
+      (FinDist.pi (fun j : {j : ι // j ≠ who} => cellLaw laws j.val)).toMeasure := by
+  rw [Measure.pi_map_pi (fun _ => (measurable_decodeCell laws).aemeasurable)]
+  simp only [chartMeasure_map_decodeCell, FinDist.toMeasure_pi]
+
+theorem opponentCellProduct_map_originalChoice (laws : ι → FinDist (Option ℕ)) (who : ι) :
+    (FinDist.pi (fun j : {j : ι // j ≠ who} => cellLaw laws j.val)).map
+        (fun sample j => originalChoice (sample j)) =
+      FinDist.pi (fun j : {j : ι // j ≠ who} => laws j.val) := by
+  calc
+    _ = FinDist.pi (fun j : {j : ι // j ≠ who} => (cellLaw laws j.val).map
+        (fun a : Cell laws => originalChoice a)) :=
+      (FinDist.pi_map (fun (_ : {j : ι // j ≠ who}) (a : Cell laws) => originalChoice a)
+        (fun j => cellLaw laws j.val)).symm
+    _ = _ := congrArg FinDist.pi (funext fun j => cellLaw_map_originalChoice laws j.val)
+
+theorem ae_chartResponseOutcome_eq_originalOutcome (laws : ι → FinDist (Option ℕ))
+    (who : ι) (choice : Option ℕ) :
+    chartResponseOutcome laws who choice
+      =ᵐ[Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)]
+      fun sample => quittingFirstStoppingOutcome
+        ((Equiv.funSplitAt who (Option ℕ)).symm
+          (choice, fun j => originalChoice (decodeCell laws (sample j)))) := by
+  have hscalar (i : ι) : (calendar laws).collapseClock =ᵐ[chartMeasure laws i]
+      fun x => cellMark laws (decodeCell laws x) :=
+    (withDensity_absolutelyContinuous volume
+      (fun x => ENNReal.ofReal (density laws i x))).ae_le
+        (ae_collapseClock_eq_cellMark_decodeCell laws)
+  have heach (j : {j : ι // j ≠ who}) :=
+    (measurePreserving_eval
+      (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val) j).quasiMeasurePreserving.ae
+        (hscalar j.val)
+  filter_upwards [ae_all_iff.mpr heach] with sample hsample
+  have hclock : MathUE.MarkedCalendar.responseClock (calendar laws) who
+      (markedClock laws (quittingStoppingTimeValue choice)) sample =
+      (Equiv.funSplitAt who (WithTop ℝ)).symm
+        (markedClock laws (quittingStoppingTimeValue choice),
+          fun j => cellMark laws (decodeCell laws (sample j))) := by
+    funext j
+    by_cases hj : j = who
+    · simp only [MathUE.MarkedCalendar.responseClock, Equiv.funSplitAt_symm_apply,
+        dite_eq_left hj]
+    · simpa only [MathUE.MarkedCalendar.responseClock, Equiv.funSplitAt_symm_apply,
+        dite_eq_right hj] using hsample ⟨j, hj⟩
+  unfold chartResponseOutcome MathUE.MarkedCalendar.responseLabels
+  rw [hclock, minimumLabels_responseCellClock_eq_originalOutcome, Equiv.symm_apply_apply]
+
+/-- Exact response law with the original independent opponents, including an empty opponent set. -/
+theorem chartOpponentProduct_map_responseOutcome (laws : ι → FinDist (Option ℕ))
+    (who : ι) (choice : Option ℕ) :
+    (Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)).map
+        (chartResponseOutcome laws who choice) =
+      ((FinDist.pi (fun j : {j : ι // j ≠ who} => laws j.val)).map
+        (fun times => quittingFirstStoppingOutcome
+          ((Equiv.funSplitAt who (Option ℕ)).symm (choice, times)))).toMeasure := by
+  let decode := fun sample : {j : ι // j ≠ who} → unitInterval =>
+    fun j => decodeCell laws (sample j)
+  let read := fun sample : {j : ι // j ≠ who} → Cell laws =>
+    quittingFirstStoppingOutcome ((Equiv.funSplitAt who (Option ℕ)).symm
+      (choice, fun j => originalChoice (sample j)))
+  have hdecode : Measurable decode :=
+    Measurable.of_eval fun j => (measurable_decodeCell laws).comp (measurable_pi_apply j)
+  have hae : chartResponseOutcome laws who choice
+      =ᵐ[Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)]
+      read ∘ decode := ae_chartResponseOutcome_eq_originalOutcome laws who choice
+  rw [Measure.map_congr hae,
+    ← Measure.map_map (measurable_of_countable read) hdecode,
+    chartOpponentProduct_map_decodeCell,
+    FinDist.toMeasure_map _ _ (measurable_of_countable read)]
+  change ((FinDist.pi (fun j : {j : ι // j ≠ who} => cellLaw laws j.val)).map
+    ((fun times => quittingFirstStoppingOutcome
+      ((Equiv.funSplitAt who (Option ℕ)).symm (choice, times))) ∘
+        (fun sample j => originalChoice (sample j)))).toMeasure = _
+  rw [← FinDist.map_comp, opponentCellProduct_map_originalChoice]
+
+omit [Nonempty ι] in
+/-- The canonical split of a pure-response update, without any opponent nonemptiness premise. -/
+theorem pi_update_pure_eq_map_opponents (laws : ι → FinDist (Option ℕ))
+    (who : ι) (choice : Option ℕ) :
+    FinDist.pi (Function.update laws who (FinDist.pure choice)) =
+      (FinDist.pi (fun j : {j : ι // j ≠ who} => laws j.val)).map
+        (fun times => (Equiv.funSplitAt who (Option ℕ)).symm (choice, times)) := by
+  rw [FinDist.pi_eq_map_product who, Function.update_self]
+  have hother : (fun j : {j : ι // j ≠ who} =>
+      Function.update laws who (FinDist.pure choice) j.val) = fun j => laws j.val :=
+    funext fun j => Function.update_of_ne j.property _ _
+  rw [hother, FinDist.product, FinDist.pure_bind, FinDist.map_comp]
+  rfl
+
+/-- Every original pure reply has exactly its original terminal law in the unchanged chart. -/
+theorem chartOpponentProduct_map_responseOutcome_update (laws : ι → FinDist (Option ℕ))
+    (who : ι) (choice : Option ℕ) :
+    (Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)).map
+        (chartResponseOutcome laws who choice) =
+      ((FinDist.pi (Function.update laws who (FinDist.pure choice))).map
+        quittingFirstStoppingOutcome).toMeasure := by
+  rw [chartOpponentProduct_map_responseOutcome, pi_update_pure_eq_map_opponents,
+    FinDist.map_comp]
+  rfl
+
+/-- Literal Never is retained separately in the exact response-law identity. -/
+theorem chartOpponentProduct_real_response_none (laws : ι → FinDist (Option ℕ))
+    (who : ι) (choice : Option ℕ) :
+    (Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)).real
+        {sample | chartResponseOutcome laws who choice sample = none} =
+      ((FinDist.pi (Function.update laws who (FinDist.pure choice))).map
+        quittingFirstStoppingOutcome).prob none := by
+  change (Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)).real
+    (chartResponseOutcome laws who choice ⁻¹' {none}) = _
+  rw [← map_measureReal_apply (measurable_chartResponseOutcome laws who choice)
+    (measurableSet_singleton (none : QuittingTerminalOutcome ι)),
+    chartOpponentProduct_map_responseOutcome_update, FinDist.toMeasure_real_singleton]
+
+end Replies
 
 end GameTheory.MarkedCalendarChart
