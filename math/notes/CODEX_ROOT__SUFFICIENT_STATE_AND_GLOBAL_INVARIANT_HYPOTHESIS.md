@@ -361,6 +361,62 @@ progress there must use its source support, quantitative atom floors, or
 additional toggle/cap structure to produce an operation unavailable from
 \(U\ge s\) alone.
 
+### Globality cannot be replaced by local or separate-block optimality
+
+There is an exact distinction between three optimization statements. Let K
+be the full terminal semantic carrier, let T_q be actual product-root
+prefixing, and put f(q,z)=D(T_q z). A genuine minimum decomposition must
+satisfy
+
+    f(q,z) ≤ f(q′,z′) for every product root q′ and every z′∈K.
+
+Neither local optimality in the complete stopping-law space nor the two
+separate global inequalities
+
+    f(q,z) ≤ f(q′,z) for every q′,
+    f(q,z) ≤ f(q,z′) for every z′∈K
+
+implies this joint inequality. This is not merely an abstract optimization
+warning. The exact quitting-game tests distinguish all three notions:
+
+- The coupled finite-law example in
+  `CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md` minimizes globally in
+  each separate root/tail block at debt 1/200. A specified legal 32-date
+  product law has strictly smaller unrestricted debt. Every complete cap,
+  including Never and post-calendar stopping, is computed. Thus alternating
+  even globally solved blocks can stop at a nonminimum of the full game.
+- The asymmetric table in Section 43 of
+  `CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md` has a strict local minimum
+  against arbitrary independent stopping-law perturbations, not only a
+  finite or stationary menu. It also has actual below-singleton blockers,
+  strict escapes from every pure coalition, and an R₀ singleton matrix of
+  degree one. Nevertheless an existing cyclic equilibrium producer applies,
+  and an explicit distant actual product law lowers the debt. These tests
+  do not establish insufficiency of every stronger source theorem; they
+  establish insufficiency of these precisely listed local screens.
+- The all-sure-family calculation in
+  `CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md` optimizes over every
+  date-zero sure-owner profile and every actual conditional tail. Its
+  positive class minimum is not the global minimum over all profiles.
+  Releasing its last sure owner lowers debt when the prescribed tail is
+  Never, but raises debt when that owner is prescribed a conditional best
+  reply. The difference is an exact observer-cap effect. Optimizing the
+  released player's own payoff is therefore not an objective-aligned
+  choice of the new joint tail.
+
+These are ordinary mathematical tests, with no new Lean claim. The tables
+are solved games, not positive-gap examples. Their value is diagnostic:
+using every local cap does not substitute for using the true global
+minimum, and individually optimizing both legal operations does not make
+their composition globally optimizing.
+
+This favors testing a missing global comparison before adding another
+passport field. It does not show that information never matters, that UE
+is true, or that every global mechanism must be chronological. The evidence
+is correlated: the examples were investigated inside the same program.
+The decisive test remains a repair or exclusion derived from joint
+whole-profile minimality, rather than another solved-table local trap.
+
 ## Competing explanations
 
 ### H1: insufficient compositional state
