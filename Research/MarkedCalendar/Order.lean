@@ -126,9 +126,37 @@ theorem collapseClock_of_lt {x : unitInterval} (hx : x < C.cutoff) :
     C.collapseClock x = (C.midpointClock x : WithTop ℝ) := by
   exact ite_eq_right (not_le.mpr hx)
 
+/-- The finite cutoff has no latent preimage, even before any measure is chosen. -/
+theorem collapseClock_ne_cutoff (x : unitInterval) :
+    C.collapseClock x ≠ ((C.cutoff : ℝ) : WithTop ℝ) := by
+  by_cases hx : C.cutoff ≤ x
+  · rw [collapseClock, ite_eq_left hx]
+    exact WithTop.top_ne_coe
+  · have hxc : x < C.cutoff := lt_of_not_ge hx
+    have hupper : C.upperEndpoint x ≤ (C.cutoff : ℝ) :=
+      (C.monotone_upperEndpoint hxc.le).trans_eq (C.upperEndpoint_eq_of_mem C.cutoff_mem)
+    have hlower := C.lowerEndpoint_le x
+    have hreal : (x : ℝ) < (C.cutoff : ℝ) := hxc
+    have hmid : C.midpointClock x < (C.cutoff : ℝ) := by
+      unfold midpointClock
+      linarith
+    rw [C.collapseClock_of_lt hxc]
+    exact fun heq => hmid.ne (WithTop.coe_injective heq)
+
+theorem preimage_collapseClock_cutoff :
+    C.collapseClock ⁻¹' {((C.cutoff : ℝ) : WithTop ℝ)} = ∅ := by
+  ext x
+  exact iff_of_false (C.collapseClock_ne_cutoff x) (Set.notMem_empty x)
+
 theorem measurable_collapseClock : Measurable C.collapseClock := by
   exact Measurable.ite (measurableSet_le measurable_const measurable_id)
     measurable_const C.measurable_midpointClock.withTop_coe
+
+/-- Any latent measure, including an atomic one, gives the finite cutoff zero collapsed mass. -/
+theorem map_collapseClock_cutoff (μ : Measure unitInterval) :
+    μ.map C.collapseClock {((C.cutoff : ℝ) : WithTop ℝ)} = 0 := by
+  rw [Measure.map_apply C.measurable_collapseClock (measurableSet_singleton _),
+    C.preimage_collapseClock_cutoff, measure_empty]
 
 theorem endpoints_of_gap {a b : ℝ} (hgap : Math.Topology.IsGap C.endpoints a b)
     {x : unitInterval} (hax : a < (x : ℝ)) (hxb : (x : ℝ) < b) :
