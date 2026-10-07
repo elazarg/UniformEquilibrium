@@ -78,6 +78,73 @@ theorem twoPair_active_endpoints
   · rw [cycle_continue_active, twoPairPhaseValue_post]
     exact continue_eq_active _ _ _ _ (ne_of_lt (hproper (schedule.partner player)).2)
 
+/-- Passive Continue identities realize the computed two-pair policy.
+Passive Quit upper bounds are not required. -/
+theorem twoPair_policy
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (schedule : Schedule ι 2) (q : ι → ℝ)
+    (hproper : ∀ player, q player ∈ Set.Ioo (0 : ℝ) 1)
+    (hcontinue : ∀ player,
+      quittingRootContinuePayoff reward
+        (twoPairPhaseValue reward schedule q (schedule.phase player))
+        (cycle schedule q (properUnitBounds q hproper)
+          (finRotate 2 (schedule.phase player))) player =
+        twoPairPostValue reward schedule q player) :
+    ∀ phase, twoPairPhaseValue reward schedule q phase =
+      quittingRootSuccessorPayoff reward (twoPairPhaseValue reward schedule q (finRotate 2 phase))
+        (cycle schedule q (properUnitBounds q hproper) phase) := by
+  intro phase
+  funext player
+  rw [quittingRootSuccessorPayoff_eq_endpointMix]
+  by_cases hphase : phase = schedule.phase player
+  · subst phase
+    obtain ⟨hactiveQuit, hactiveContinue⟩ :=
+      twoPair_active_endpoints reward schedule q hproper player
+    rw [hactiveQuit, hactiveContinue, twoPairPhaseValue_active]
+    have hsum := quittingRoot_continueProbability_add_quitProbability
+      (cycle schedule q (properUnitBounds q hproper) (schedule.phase player)) player
+    calc
+      twoPairActiveValue reward schedule q player =
+          ((cycle schedule q (properUnitBounds q hproper) (schedule.phase player) player
+            false).toReal +
+          (cycle schedule q (properUnitBounds q hproper) (schedule.phase player) player
+            true).toReal) * twoPairActiveValue reward schedule q player := by rw [hsum, one_mul]
+      _ = _ := by ring
+  · rw [cycle_outside schedule q (properUnitBounds q hproper) hphase]
+    simp only [PMF.pure_apply, Bool.true_eq_false, ↓reduceIte, ENNReal.toReal_zero,
+      zero_mul, ENNReal.toReal_one, one_mul, zero_add]
+    have hpassive : phase = finRotate 2 (schedule.phase player) :=
+      (rotate_two_eq_of_ne (Ne.symm hphase)).symm
+    have hnext := rotate_two_eq_of_ne hphase
+    rw [hnext, hpassive, twoPairPhaseValue_post]
+    exact (hcontinue player).symm
+
+
+/-- Actual terminal realization uses policy and absorption, not Nash or Quit caps. -/
+theorem twoPair_terminalPayoff_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (schedule : Schedule ι 2) (q : ι → ℝ)
+    (hproper : ∀ player, q player ∈ Set.Ioo (0 : ℝ) 1)
+    (hcontinue : ∀ player,
+      quittingRootContinuePayoff reward
+        (twoPairPhaseValue reward schedule q (schedule.phase player))
+        (cycle schedule q (properUnitBounds q hproper)
+          (finRotate 2 (schedule.phase player))) player = twoPairPostValue reward schedule q player)
+    (initial : Fin 2) :
+    quittingTerminalPayoff reward
+        (quittingCyclicBehaviorProfile reward
+          (cycle schedule q (properUnitBounds q hproper)) initial) =
+      twoPairPhaseValue reward schedule q initial := by
+  have hpolicy := twoPair_policy reward schedule q hproper hcontinue
+  have hcontracts := cycle_opponents_contract schedule q (properUnitBounds q hproper)
+    (fun player => (hproper player).1)
+  have hvalue := eq_quittingCyclicTerminalValue_of_rootSuccessorPayoff reward
+    (cycle schedule q (properUnitBounds q hproper)) (twoPairPhaseValue reward schedule q)
+    hpolicy hcontracts
+  exact (quittingTerminalPayoff_cyclicBehaviorProfile reward _ initial).trans
+    (congrFun hvalue initial).symm
+
+
 /-- Passive tests supply the exact policy and Nash points at both phases.
 No root Nash or policy-evaluation certificate is an input. -/
 theorem twoPair_policy_and_nash
@@ -116,29 +183,7 @@ theorem twoPair_policy_and_nash
       have hnext := rotate_two_eq_of_ne hphase
       rw [hnext, hpassive, twoPairPhaseValue_post]
       exact ⟨hquit player, hcontinue player⟩
-  have hpolicy (phase : Fin 2) : twoPairPhaseValue reward schedule q phase =
-      quittingRootSuccessorPayoff reward (twoPairPhaseValue reward schedule q (finRotate 2 phase))
-        (cycle schedule q (properUnitBounds q hproper) phase) := by
-    funext player
-    rw [quittingRootSuccessorPayoff_eq_endpointMix]
-    by_cases hphase : phase = schedule.phase player
-    · subst phase
-      obtain ⟨hactiveQuit, hactiveContinue⟩ :=
-        twoPair_active_endpoints reward schedule q hproper player
-      rw [hactiveQuit, hactiveContinue, twoPairPhaseValue_active]
-      have hsum := quittingRoot_continueProbability_add_quitProbability
-        (cycle schedule q (properUnitBounds q hproper) (schedule.phase player)) player
-      calc
-        twoPairActiveValue reward schedule q player =
-            ((cycle schedule q (properUnitBounds q hproper) (schedule.phase player) player
-              false).toReal +
-            (cycle schedule q (properUnitBounds q hproper) (schedule.phase player) player
-              true).toReal) * twoPairActiveValue reward schedule q player := by rw [hsum, one_mul]
-        _ = _ := by ring
-    · rw [cycle_outside schedule q (properUnitBounds q hproper) hphase]
-      simp only [PMF.pure_apply, Bool.true_eq_false, ↓reduceIte, ENNReal.toReal_zero,
-        zero_mul, ENNReal.toReal_one, one_mul, zero_add]
-      exact (hendpoints phase player).2.symm
+  have hpolicy := twoPair_policy reward schedule q hproper hcontinue
   refine ⟨hpolicy, ?_⟩
   intro phase
   rw [← isεQuittingRootEndpointNash_iff_isεQuittingRootNash,

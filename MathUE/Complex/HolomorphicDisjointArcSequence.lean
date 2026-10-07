@@ -1,6 +1,6 @@
 module
 
-public import MathUE.Complex.HolomorphicShortArc
+public import MathUE.Complex.LogarithmicRectangleNeighborhood
 public import Mathlib.Data.Fintype.Basic
 public import Mathlib.Data.Finset.Lattice.Fold
 public import Mathlib.Analysis.SpecificLimits.Basic
@@ -15,9 +15,10 @@ and finite endpoint exclusions. No global boundary injectivity is used.
 Source: Milnor, *Dynamics in One Complex Variable*, §15.4,
 https://legacy-www.math.harvard.edu/archive/118r_spring_05/docs/milnor.pdf
 
-The results supply disjoint shrinking closed arcs, not nested complementary
-neighborhoods, rectifiable-length bounds, Jordan separation, or a continuous
-extension on the whole circle.
+The results supply disjoint shrinking closed arcs and nested relatively open
+source neighborhoods with their exact frontiers. They do not identify target
+complementary components, rectifiable-length bounds, Jordan separation, or a
+continuous extension on the whole circle.
 -/
 
 public section
@@ -155,58 +156,230 @@ theorem disjoint_image_of_disjoint_source
 
 end EmbeddedSphericalImageArc
 
-private theorem exists_arc_avoiding_finite_sources
+/-- The actual rectangle retained by the local analytic construction. -/
+structure RectangleSphericalImageArc (g : ℂ → ℂ) (angle : ℝ)
+    extends EmbeddedSphericalImageArc g angle where
+  height : ℝ
+  height_mem : height ∈ Ioo (0 : ℝ) width
+  source_formula : ∀ t : unitInterval, source t =
+    logarithmicDiskMap (angle - width / 2)
+      (rectangleArc (left - (angle - width / 2))
+        (right - (angle - width / 2)) height (3 * (t : ℝ)))
+
+namespace RectangleSphericalImageArc
+
+variable {g : ℂ → ℂ} {angle : ℝ}
+
+@[expose] def neighborhood (arc : RectangleSphericalImageArc g angle) :
+    Set (closedBall (0 : ℂ) 1) :=
+  logarithmicRectangleNeighborhood (angle - arc.width / 2)
+    (arc.left - (angle - arc.width / 2))
+    (arc.right - (angle - arc.width / 2)) arc.height
+
+theorem isOpen_neighborhood (arc : RectangleSphericalImageArc g angle) :
+    IsOpen arc.neighborhood := isOpen_logarithmicRectangleNeighborhood _ _ _ _
+
+theorem closure_neighborhood (arc : RectangleSphericalImageArc g angle) :
+    Subtype.val '' closure arc.neighborhood =
+      logarithmicDiskMap (angle - arc.width / 2) ''
+        closedLogarithmicRectangle (arc.left - (angle - arc.width / 2))
+          (arc.right - (angle - arc.width / 2)) arc.height := by
+  apply closure_logarithmicRectangleNeighborhood
+  · linarith [arc.left_mem.2, arc.right_mem.1]
+  · exact arc.height_mem.1
+
+theorem frontier_neighborhood (arc : RectangleSphericalImageArc g angle) :
+    Subtype.val '' frontier arc.neighborhood = range arc.source := by
+  have h := frontier_logarithmicRectangleNeighborhood
+    (show 0 < arc.left - (angle - arc.width / 2) by linarith [arc.left_mem.1])
+    (show arc.left - (angle - arc.width / 2) <
+      arc.right - (angle - arc.width / 2) by linarith [arc.left_mem.2, arc.right_mem.1])
+    (show arc.right - (angle - arc.width / 2) < arc.width by
+      linarith [arc.right_mem.2]) arc.height_mem.1
+    (show arc.width < 2 * Real.pi by linarith [arc.width_mem.2, Real.pi_gt_three])
+    (angle - arc.width / 2)
+  rw [show (fun t : unitInterval => logarithmicDiskMap (angle - arc.width / 2)
+    (rectangleArc (arc.left - (angle - arc.width / 2))
+      (arc.right - (angle - arc.width / 2)) arc.height (3 * (t : ℝ)))) =
+      arc.source from funext fun t => (arc.source_formula t).symm] at h
+  exact h
+
+theorem boundaryPoint_mem_neighborhood (arc : RectangleSphericalImageArc g angle) :
+    (⟨Complex.exp ((angle : ℂ) * I), by
+      simp [mem_closedBall, Complex.norm_exp]⟩ : closedBall (0 : ℂ) 1) ∈
+      arc.neighborhood := by
+  have h := boundaryPoint_mem_logarithmicRectangleNeighborhood (angle - arc.width / 2)
+    (show arc.width / 2 ∈ Ioo (arc.left - (angle - arc.width / 2))
+      (arc.right - (angle - arc.width / 2)) by
+        constructor <;> linarith [arc.left_mem.2, arc.right_mem.1]) arc.height_mem.1
+  have hangle : angle - arc.width / 2 + arc.width / 2 = angle := by ring
+  have hpoint :
+      (⟨Complex.exp (((angle - arc.width / 2 + arc.width / 2 : ℝ) : ℂ) * I), by
+        simp [mem_closedBall, Complex.norm_exp]⟩ : closedBall (0 : ℂ) 1) =
+      ⟨Complex.exp ((angle : ℂ) * I), by
+        simp [mem_closedBall, Complex.norm_exp]⟩ := by
+    apply Subtype.ext
+    change Complex.exp (((angle - arc.width / 2 + arc.width / 2 : ℝ) : ℂ) * I) = _
+    rw [hangle]
+  exact hpoint ▸ h
+
+end RectangleSphericalImageArc
+
+private theorem exists_rectangle_arc_inside_finite_neighborhoods
     {g : ℂ → ℂ} (hg : DifferentiableOn ℂ g (ball 0 1))
     (hinj : InjOn g (ball 0 1)) (angle : ℝ)
-    (previous : Finset (EmbeddedSphericalImageArc g angle))
+    (forbidden : Finset ComplexSphere.Sphere)
+    (previous : Finset (RectangleSphericalImageArc g angle))
     {ε : ℝ} (hε : 0 < ε) :
-    ∃ arc : EmbeddedSphericalImageArc g angle,
+    ∃ arc : RectangleSphericalImageArc g angle,
+      (arc.first ∉ forbidden ∧ arc.last ∉ forbidden) ∧
+      (∀ z ∈ closure arc.neighborhood,
+        dist (z : ℂ) (Complex.exp ((angle : ℂ) * I)) < ε) ∧
       (∀ t : unitInterval,
         dist (arc.source t) (Complex.exp ((angle : ℂ) * I)) < ε) ∧
       Metric.ediam (range arc.source) < ENNReal.ofReal ε ∧
       Metric.ediam (range arc.image) < ENNReal.ofReal ε ∧
-      ∀ old ∈ previous, Disjoint (range old.source) (range arc.source) ∧
+      ∀ old ∈ previous, closure arc.neighborhood ⊆ old.neighborhood ∧
+        Disjoint (range old.source) (range arc.source) ∧
         Disjoint (range old.image) (range arc.image) := by
   classical
-  let K : Set ℂ := ⋃ old ∈ previous, range old.source
-  have hK : IsClosed K := isClosed_biUnion_finset fun old _ =>
-    old.source_embedding.isClosed_range
-  have hnotK : Complex.exp ((angle : ℂ) * I) ∉ K := by
-    simp only [K, mem_iUnion, not_exists]
-    exact fun old _ => old.boundaryPoint_not_mem_source
-  obtain ⟨δ, hδ, hball⟩ := Metric.isOpen_iff.mp hK.isOpen_compl _ hnotK
-  let forbidden := previous.biUnion fun old => {old.first, old.last}
+  let anchor : closedBall (0 : ℂ) 1 :=
+    ⟨Complex.exp ((angle : ℂ) * I), by simp [mem_closedBall, Complex.norm_exp]⟩
+  let U : Set (closedBall (0 : ℂ) 1) := ⋂ old ∈ previous, old.neighborhood
+  have hopen : IsOpen U := isOpen_biInter_finset fun old _ => old.isOpen_neighborhood
+  have hanchor : anchor ∈ U := by
+    simp only [U, mem_iInter]
+    exact fun old _ => old.boundaryPoint_mem_neighborhood
+  obtain ⟨δ, hδ, hball⟩ := Metric.isOpen_iff.mp hopen anchor hanchor
+  let excluded := forbidden ∪ previous.biUnion (fun old => {old.first, old.last})
   obtain ⟨width, hw, left, hl, right, hr, p, q, source, image, hs, hi,
-      hp, hq, hpavoid, hqavoid, hpq, hagrees, hclose, hdiamS, hdiamI⟩ :=
-    exists_short_embedded_spherical_image_arc hg hinj angle (lt_min hδ hε) hε forbidden
-  let arc : EmbeddedSphericalImageArc g angle :=
-    ⟨width, hw, left, hl, right, hr, p, q, source, image, hs, hi, hp, hq, hpq, hagrees⟩
-  refine ⟨arc, fun t => (hclose t).trans_le (min_le_right δ ε),
-    hdiamS.trans_le (ENNReal.ofReal_le_ofReal (min_le_right δ ε)), hdiamI, ?_⟩
+    hp, hq, hpa, hqa, hpq, hagrees, hclose, hds, hdi, height, hh, hformula, hfilled⟩ :=
+    exists_short_embedded_spherical_image_rectangle_arc hg hinj angle
+      (lt_min hδ hε) hε excluded
+  let arc : RectangleSphericalImageArc g angle :=
+    { toEmbeddedSphericalImageArc :=
+        ⟨width, hw, left, hl, right, hr, p, q, source, image,
+          hs, hi, hp, hq, hpq, hagrees⟩
+      height := height
+      height_mem := hh
+      source_formula := hformula }
+  have hclosure (z : closedBall (0 : ℂ) 1) (hz : z ∈ closure arc.neighborhood) :
+      dist (z : ℂ) (Complex.exp ((angle : ℂ) * I)) < min δ ε := by
+    have hmem : (z : ℂ) ∈ Subtype.val '' closure arc.neighborhood := ⟨z, hz, rfl⟩
+    rw [arc.closure_neighborhood] at hmem
+    rcases hmem with ⟨w, hw, heq⟩
+    rw [← heq]
+    exact hfilled w hw.1 hw.2
+  have hnested (old : RectangleSphericalImageArc g angle) (hold : old ∈ previous) :
+      closure arc.neighborhood ⊆ old.neighborhood := by
+    intro z hz
+    have hzball : z ∈ ball anchor δ := (hclosure z hz).trans_le (min_le_left δ ε)
+    have hzU := hball hzball
+    exact mem_iInter.mp (mem_iInter.mp hzU old) hold
+  refine ⟨arc, ⟨fun h => hpa (Finset.mem_union_left _ h),
+      fun h => hqa (Finset.mem_union_left _ h)⟩,
+    fun z hz => (hclosure z hz).trans_le (min_le_right δ ε),
+    fun t => (hclose t).trans_le (min_le_right δ ε),
+    hds.trans_le (ENNReal.ofReal_le_ofReal (min_le_right δ ε)), hdi, ?_⟩
   intro old hold
   have hsource : Disjoint (range old.source) (range arc.source) := by
     apply Set.disjoint_left.mpr
-    rintro z hz ⟨t, rfl⟩
-    have hn := hball ((hclose t).trans_le (min_le_left δ ε))
-    exact hn (mem_iUnion.mpr ⟨old, mem_iUnion.mpr ⟨hold, hz⟩⟩)
+    intro z hzold hznew
+    rw [← old.frontier_neighborhood] at hzold
+    rw [← arc.frontier_neighborhood] at hznew
+    rcases hzold with ⟨u, hu, rfl⟩
+    rcases hznew with ⟨v, hv, heq⟩
+    have huv : v = u := Subtype.ext heq
+    subst v
+    exact Set.disjoint_left.mp
+      (disjoint_frontier_iff_isOpen.mpr old.isOpen_neighborhood)
+      hu (hnested old hold (frontier_subset_closure hv))
   have hend : Disjoint ({old.first, old.last} : Set ComplexSphere.Sphere)
       {arc.first, arc.last} := by
     apply Set.disjoint_left.mpr
     intro z hz hz'
-    have hmem : z ∈ forbidden := by
-      apply Finset.mem_biUnion.mpr
-      exact ⟨old, hold, by simpa using hz⟩
+    have hmem : z ∈ excluded := Finset.mem_union_right _
+      (Finset.mem_biUnion.mpr ⟨old, hold, by simpa using hz⟩)
     rcases hz' with rfl | hz'
-    · exact hpavoid hmem
+    · exact hpa hmem
     · rw [mem_singleton_iff] at hz'
       change z = q at hz'
       rw [hz'] at hmem
-      exact hqavoid hmem
-  exact ⟨hsource, EmbeddedSphericalImageArc.disjoint_image_of_disjoint_source
-    hg hinj old arc hsource hend⟩
+      exact hqa hmem
+  exact ⟨hnested old hold, hsource,
+    EmbeddedSphericalImageArc.disjoint_image_of_disjoint_source hg hinj
+      old.toEmbeddedSphericalImageArc arc.toEmbeddedSphericalImageArc hsource hend⟩
 
-/-- Actual shrinking source and spherical-image arcs with pairwise disjoint
-closed ranges. No complementary-neighborhood or separation assertion is made. -/
+/-- One selection recursion gives nested relatively open source neighborhoods
+with their exact source-arc frontiers and pairwise disjoint full image ranges.
+Finite forbidden endpoint values are retained throughout the sequence. -/
+theorem exists_nested_shrinking_spherical_image_arcs
+    {g : ℂ → ℂ} (hg : DifferentiableOn ℂ g (ball 0 1))
+    (hinj : InjOn g (ball 0 1)) (angle : ℝ)
+    (forbidden : Finset ComplexSphere.Sphere) :
+    ∃ arcs : ℕ → RectangleSphericalImageArc g angle,
+      ∃ ε : ℕ → ℝ, (∀ n, 0 < ε n) ∧ Tendsto ε atTop (𝓝 0) ∧
+      (∀ n, ((arcs n).first ∉ forbidden ∧ (arcs n).last ∉ forbidden) ∧
+        (∀ z ∈ closure (arcs n).neighborhood,
+          dist (z : ℂ) (Complex.exp ((angle : ℂ) * I)) < ε n) ∧
+        (∀ t : unitInterval,
+          dist ((arcs n).source t) (Complex.exp ((angle : ℂ) * I)) < ε n) ∧
+        Metric.ediam (range (arcs n).source) < ENNReal.ofReal (ε n) ∧
+        Metric.ediam (range (arcs n).image) < ENNReal.ofReal (ε n)) ∧
+      (∀ m n, m < n → closure (arcs n).neighborhood ⊆ (arcs m).neighborhood) ∧
+      Pairwise (fun m n => Disjoint (range (arcs m).source) (range (arcs n).source)) ∧
+      Pairwise (fun m n => Disjoint (range (arcs m).image) (range (arcs n).image)) ∧
+      Tendsto (fun n => Metric.ediam (range (arcs n).source)) atTop (𝓝 0) ∧
+      Tendsto (fun n => Metric.ediam (range (arcs n).image)) atTop (𝓝 0) := by
+  classical
+  let A := ℕ × RectangleSphericalImageArc g angle
+  let P (a : A) : Prop :=
+    (a.2.first ∉ forbidden ∧ a.2.last ∉ forbidden) ∧
+    (∀ z ∈ closure a.2.neighborhood,
+      dist (z : ℂ) (Complex.exp ((angle : ℂ) * I)) < 1 / ((a.1 : ℝ) + 1)) ∧
+    (∀ t : unitInterval, dist (a.2.source t) (Complex.exp ((angle : ℂ) * I)) <
+      1 / ((a.1 : ℝ) + 1)) ∧
+    Metric.ediam (range a.2.source) < ENNReal.ofReal (1 / ((a.1 : ℝ) + 1)) ∧
+    Metric.ediam (range a.2.image) < ENNReal.ofReal (1 / ((a.1 : ℝ) + 1))
+  let R (a b : A) : Prop := a.1 < b.1 ∧
+    closure b.2.neighborhood ⊆ a.2.neighborhood ∧
+    Disjoint (range a.2.source) (range b.2.source) ∧
+    Disjoint (range a.2.image) (range b.2.image)
+  obtain ⟨seq, hseq, hrel⟩ := exists_seq_of_forall_finset_exists P R (by
+    intro previous _
+    let k := previous.sup Prod.fst + 1
+    obtain ⟨arc, havoid, hclosure, hclose, hs, hi, hnested⟩ :=
+      exists_rectangle_arc_inside_finite_neighborhoods hg hinj angle forbidden
+        (previous.image Prod.snd) (show 0 < 1 / ((k : ℝ) + 1) by positivity)
+    refine ⟨(k, arc), ⟨havoid, hclosure, hclose, hs, hi⟩, ?_⟩
+    intro old hold
+    exact ⟨Nat.lt_succ_of_le (Finset.le_sup hold),
+      hnested old.2 (Finset.mem_image.mpr ⟨old, hold, rfl⟩)⟩)
+  have hmono : StrictMono (fun n => (seq n).1) := fun m n hmn => (hrel m n hmn).1
+  let ε : ℕ → ℝ := fun n => 1 / (((seq n).1 : ℝ) + 1)
+  have hε : Tendsto ε atTop (𝓝 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat.comp hmono.tendsto_atTop
+  have hε' : Tendsto (fun n => ENNReal.ofReal (ε n)) atTop (𝓝 0) := by
+    have h := ENNReal.continuous_ofReal.continuousAt.tendsto.comp hε
+    simp only [Function.comp_def, ENNReal.ofReal_zero] at h
+    convert! h using 1
+  refine ⟨fun n => (seq n).2, ε, fun n => by dsimp [ε]; positivity,
+    hε, hseq, fun m n hmn => (hrel m n hmn).2.1, ?_, ?_, ?_, ?_⟩
+  · intro m n hmn
+    rcases lt_or_gt_of_ne hmn with h | h
+    · exact (hrel m n h).2.2.1
+    · exact (hrel n m h).2.2.1.symm
+  · intro m n hmn
+    rcases lt_or_gt_of_ne hmn with h | h
+    · exact (hrel m n h).2.2.2
+    · exact (hrel n m h).2.2.2.symm
+  · exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hε'
+      (fun _ => zero_le) (fun n => (hseq n).2.2.2.1.le)
+  · exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hε'
+      (fun _ => zero_le) (fun n => (hseq n).2.2.2.2.le)
+
+/-- Forgetting the rectangle neighborhoods recovers the disjoint shrinking arc
+statement without a second recursion. -/
 theorem exists_disjoint_shrinking_spherical_image_arcs
     {g : ℂ → ℂ} (hg : DifferentiableOn ℂ g (ball 0 1))
     (hinj : InjOn g (ball 0 1)) (angle : ℝ) :
@@ -220,47 +393,9 @@ theorem exists_disjoint_shrinking_spherical_image_arcs
       Pairwise (fun m n => Disjoint (range (arcs m).image) (range (arcs n).image)) ∧
       Tendsto (fun n => Metric.ediam (range (arcs n).source)) atTop (𝓝 0) ∧
       Tendsto (fun n => Metric.ediam (range (arcs n).image)) atTop (𝓝 0) := by
-  classical
-  let A := ℕ × EmbeddedSphericalImageArc g angle
-  let P (a : A) : Prop :=
-    (∀ t : unitInterval, dist (a.2.source t) (Complex.exp ((angle : ℂ) * I)) <
-      1 / ((a.1 : ℝ) + 1)) ∧
-    Metric.ediam (range a.2.source) < ENNReal.ofReal (1 / ((a.1 : ℝ) + 1)) ∧
-    Metric.ediam (range a.2.image) < ENNReal.ofReal (1 / ((a.1 : ℝ) + 1))
-  let R (a b : A) : Prop := a.1 < b.1 ∧
-    Disjoint (range a.2.source) (range b.2.source) ∧
-    Disjoint (range a.2.image) (range b.2.image)
-  obtain ⟨seq, hseq, hrel⟩ := exists_seq_of_forall_finset_exists P R (by
-    intro previous _
-    let k := previous.sup Prod.fst + 1
-    obtain ⟨arc, hclose, hs, hi, havoid⟩ := exists_arc_avoiding_finite_sources
-      hg hinj angle (previous.image Prod.snd)
-      (show 0 < 1 / ((k : ℝ) + 1) by positivity)
-    refine ⟨(k, arc), ⟨hclose, hs, hi⟩, ?_⟩
-    intro old hold
-    exact ⟨Nat.lt_succ_of_le (Finset.le_sup hold),
-      havoid old.2 (Finset.mem_image.mpr ⟨old, hold, rfl⟩)⟩)
-  have hmono : StrictMono (fun n => (seq n).1) := fun m n hmn => (hrel m n hmn).1
-  let ε : ℕ → ℝ := fun n => 1 / (((seq n).1 : ℝ) + 1)
-  have hε : Tendsto ε atTop (𝓝 0) :=
-    tendsto_one_div_add_atTop_nhds_zero_nat.comp hmono.tendsto_atTop
-  have hε' : Tendsto (fun n => ENNReal.ofReal (ε n)) atTop (𝓝 0) := by
-    have h := ENNReal.continuous_ofReal.continuousAt.tendsto.comp hε
-    simp only [Function.comp_def, ENNReal.ofReal_zero] at h
-    convert! h using 1
-  refine ⟨fun n => (seq n).2, ε, fun n => by dsimp [ε]; positivity,
-    hε, hseq, ?_, ?_, ?_, ?_⟩
-  · intro m n hmn
-    rcases lt_or_gt_of_ne hmn with h | h
-    · exact (hrel m n h).2.1
-    · exact (hrel n m h).2.1.symm
-  · intro m n hmn
-    rcases lt_or_gt_of_ne hmn with h | h
-    · exact (hrel m n h).2.2
-    · exact (hrel n m h).2.2.symm
-  · exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hε'
-      (fun _ => zero_le) (fun n => (hseq n).2.1.le)
-  · exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hε'
-      (fun _ => zero_le) (fun n => (hseq n).2.2.le)
+  obtain ⟨arcs, ε, hpos, hlim, hdata, _, hs, hi, hds, hdi⟩ :=
+    exists_nested_shrinking_spherical_image_arcs hg hinj angle ∅
+  exact ⟨fun n => (arcs n).toEmbeddedSphericalImageArc, ε, hpos, hlim,
+    fun n => (hdata n).2.2, hs, hi, hds, hdi⟩
 
 end Math.ComplexAnalysis

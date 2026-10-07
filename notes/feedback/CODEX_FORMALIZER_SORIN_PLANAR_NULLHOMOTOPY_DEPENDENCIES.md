@@ -244,18 +244,27 @@ gluing. `Math.ComplexAnalysis.exists_short_embedded_spherical_image_arc`
 in the same file constructs actual source and spherical-image closed
 embeddings, opposite angular bands, frontier endpoints outside the finite
 forbidden set, source localization and strict diameters of both ranges.
-Nested complementary neighborhoods and the subsequent Jordan step remain separate.
+`exists_short_embedded_spherical_image_rectangle_arc` in the same file also
+retains the actual rectangle height, source parametrization and localization
+of the whole filled rectangle.
 
-`Math.ComplexAnalysis.exists_disjoint_shrinking_spherical_image_arcs`
-(`MathUE/Complex/HolomorphicDisjointArcSequence.lean`) recursively retains
-actual source/image paths with pairwise disjoint full closed ranges, finite
-endpoint avoidance, positive localization radii tending to zero and both
-diameters tending to zero. Compact finite source avoidance, disk injectivity
-and frontier endpoint separation supply the recursion, not a global
-boundary-injectivity hypothesis. This does not assert nested complementary
-neighborhoods or rectifiable-length bounds.
+`isOpen_logarithmicRectangleNeighborhood`,
+`closure_logarithmicRectangleNeighborhood` and
+`frontier_logarithmicRectangleNeighborhood`
+(`MathUE/Complex/LogarithmicRectangleNeighborhood.lean`) compute actual
+relative source neighborhoods in the closed disk. Their frontier is the
+literal three-edge arc; the open bottom edge is not part of that frontier.
+`Math.ComplexAnalysis.exists_nested_shrinking_spherical_image_arcs`
+(`MathUE/Complex/HolomorphicDisjointArcSequence.lean`) uses one recursion to
+retain these neighborhoods, with every later closure inside every earlier
+open neighborhood. It retains actual source/image paths with pairwise
+disjoint full closed ranges, arbitrary finite frontier-endpoint avoidance,
+anchor exclusion, positive localization radii tending to zero and both
+diameters tending to zero. The old disjoint-sequence theorem is its
+forgetful corollary. Disk injectivity and endpoint separation are used,
+not boundary injectivity. No rectifiable-length statement is supplied.
 
-Nested complementary neighborhoods and Jordan separation remain separate
+Image complementary-component selection and Jordan separation remain separate
 known-proof library obligations. No scoped Jordan/Schoenflies or
 complementary-component separation producer has been found. Section 16.6 requires
 continuous extension onto the boundary, not boundary injectivity, and the

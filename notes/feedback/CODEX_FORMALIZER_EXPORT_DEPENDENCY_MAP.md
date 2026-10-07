@@ -1143,8 +1143,20 @@ about every child equilibrium.
 give the stronger fixture bounds `77/N` and `154/N` for every initial phase,
 positive horizon and full behavioral replacement, with printed `154/N` and
 `308/N` weakenings. One rational hazard vector supplies both phase-dependent
-profiles, each retained before all accuracy quantifiers. Source/stationary
-separations still remain; these fixture results are not packet completion.
+profiles, each retained before all accuracy quantifiers.
+`affine_responseInvariant_injective_of_nonzero_scale`
+(`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixtureResponseQuotients.lean`)
+excludes all nondiscrete maps into `Fin k` under arbitrary shifts and nonzero
+signed scales, solely for actual response invariance. The canonical
+pair-valued row-sum/displacement criterion and its normalized-ratio corollary
+are in `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`.
+`not_exact_stationaryNash_of_three_proper_support` and
+`not_exact_stationaryNash_reindex_of_three_proper_support`
+(`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixtureStationary.lean`)
+exclude actual stationary terminal Nash on proper three-player supports,
+including relabelings. The payoff is actual, not a supplied continuation;
+full-support stationary profiles are not excluded. Other source comparisons
+still remain; these are not packet completion.
 
 ## Below-singleton joint-phase raw producer
 
@@ -1222,9 +1234,32 @@ The delivery theorem requires no Nash premise; the regret theorem uses exact
 terminal Nash. This factor-two improvement over the printed constants applies
 to signed rewards and every initial phase at positive horizons.
 
+`twoPair_policy` and `twoPair_terminalPayoff_eq`
+(`UniformEquilibrium/Quitting/Cycles/TwoPairExactCertificate.lean`) separate
+policy and actual terminal realization from Nash: only passive Continue
+identities are needed for these two consumers; passive Quit caps enter Nash.
+This supplies the source-faithful invalid-root comparison rather than merely
+rejecting an endpoint certificate. `not_terminalNash` and
+`selected_exact_terminal_and_fixedProfile`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseSecondRoot.lean`)
+use the modified table with all twelve caps `13/15`. The internally selected
+small root in `(0,1/20)` realizes `W`, while actual date-zero Quit delivers
+`Q > 13/15 > W` against the same opponents. Both initial profiles fail
+terminal Nash. The modified game's valid `2/3` root still supplies exact
+terminal and fixed-profile horizon equilibrium; its passive gap is `13/540`.
+No target non-UE conclusion is inferred from the bad profile.
+`affine_responseInvariant_injective_of_nonzero_scale`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseResponseQuotients.lean`)
+covers every label type through canonical finite compression. Nonzero signed
+scales and arbitrary shifts preserve this response-only exclusion. Actual
+all-sure displacement is grand reward minus recipient-withdrawal reward,
+by `quittingDiscountedDisplacement_one_eq_grand_sub_withdrawal`
+(`UniformEquilibrium/Quitting/Root/FinFourEndpointRowSum.lean`), not minus
+the own singleton. The two fixture facades reuse the same generic criterion.
+
 The packet remains incomplete: separately stated expected-exit-time bound,
-other raw-criterion, matrix, response and stationary separations, and
-the invalid second-root selection remain separate. The matching packet's
+other raw-criterion, matrix and stationary separations remain
+separate. The matching packet's
 inverse and Brouwer route is distinct from this scalar IVT route; the
 source-free `TwoPairOddsValues` identities and actual two-pair compiler are shared.
 

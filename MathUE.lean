@@ -34,6 +34,7 @@ import MathUE.Complex.HolomorphicRadialLimits
 import MathUE.Complex.HolomorphicRadialFrontier
 import MathUE.Complex.HolomorphicRadialLandingFibers
 import MathUE.Complex.HolomorphicShortArc
+import MathUE.Complex.LogarithmicRectangleNeighborhood
 import MathUE.Complex.HolomorphicDisjointArcSequence
 import MathUE.Complex.UnivalentDiskBoundedization
 import MathUE.SignedFourCycleLargerOpenness

@@ -181,13 +181,14 @@ theorem chartSquareEnergy_comp_add_const
     (fun z => ENNReal.ofReal (sphericalDerivativeSpeed f z ^ 2))
     (openComplexSquare width)
 
-private def rectangleArc (left right height : ℝ) (t : ℝ) : ℂ :=
+/-- The two vertical sides and top of a rectangle, parametrized on `[0,3]`. -/
+@[expose] def rectangleArc (left right height : ℝ) (t : ℝ) : ℂ :=
   if t ≤ 1 then (left : ℂ) + ((height * t : ℝ) : ℂ) * I
   else if t ≤ 2 then
     ((left + (right - left) * (t - 1) : ℝ) : ℂ) + (height : ℂ) * I
   else (right : ℂ) + ((height * (3 - t) : ℝ) : ℂ) * I
 
-private theorem continuous_rectangleArc (left right height : ℝ) :
+theorem continuous_rectangleArc (left right height : ℝ) :
     Continuous (rectangleArc left right height) := by
   unfold rectangleArc
   apply Continuous.if_le (by fun_prop) ?_ continuous_id continuous_const
@@ -207,7 +208,7 @@ private theorem rectangleArc_endpoints (left right height : ℝ) :
       rectangleArc left right height 3 = (right : ℂ) := by
   norm_num [rectangleArc]
 
-private theorem rectangleArc_coordinates
+theorem rectangleArc_coordinates
     {left right height : ℝ} (hlr : left < right) (hh : 0 < height)
     {t : ℝ} (ht : t ∈ Icc (0 : ℝ) 3) :
     (rectangleArc left right height t).re ∈ Icc left right ∧
@@ -252,7 +253,7 @@ private theorem rectangleArc_injOn
       sub_zero, add_zero, zero_add] at hre him <;>
     nlinarith
 
-private theorem logarithmicDiskMap_injOn_closed_upper_strip
+theorem logarithmicDiskMap_injOn_closed_upper_strip
     {width : ℝ} (hwidth : width < 2 * Real.pi) (angle : ℝ) :
     InjOn (logarithmicDiskMap angle)
       {z : ℂ | 0 < z.re ∧ z.re < width ∧ 0 ≤ z.im} := by
@@ -822,7 +823,7 @@ private theorem rectangle_image_ediam_le
 boundary arguments lie in opposite bands around the prescribed argument.
 Neither boundary injectivity nor boundedness of the original map is assumed.
 This is a local arc, not a nested crosscut sequence or a separation theorem. -/
-theorem exists_short_embedded_spherical_image_arc
+theorem exists_short_embedded_spherical_image_rectangle_arc
     {g : ℂ → ℂ} (hg : DifferentiableOn ℂ g (ball 0 1))
     (hinj : InjOn g (ball 0 1)) (angle : ℝ)
     {sourceTolerance imageTolerance : ℝ}
@@ -843,7 +844,16 @@ theorem exists_short_embedded_spherical_image_arc
         (∀ t : unitInterval,
           dist (source t) (Complex.exp ((angle : ℂ) * I)) < sourceTolerance) ∧
         Metric.ediam (range source) < ENNReal.ofReal sourceTolerance ∧
-        Metric.ediam (range image) < ENNReal.ofReal imageTolerance := by
+        Metric.ediam (range image) < ENNReal.ofReal imageTolerance ∧
+        ∃ height ∈ Ioo (0 : ℝ) width,
+          (∀ t : unitInterval, source t =
+            logarithmicDiskMap (angle - width / 2)
+              (rectangleArc (left - (angle - width / 2))
+                (right - (angle - width / 2)) height (3 * (t : ℝ)))) ∧
+          (∀ z : ℂ, z.re ∈ Icc (left - (angle - width / 2))
+              (right - (angle - width / 2)) → z.im ∈ Icc 0 height →
+            dist (logarithmicDiskMap (angle - width / 2) z)
+              (Complex.exp ((angle : ℂ) * I)) < sourceTolerance) := by
   classical
   have henergyPositive : ENNReal.ofReal ((imageTolerance / 12) ^ 2) ≠ 0 := by
     positivity
@@ -911,11 +921,60 @@ theorem exists_short_embedded_spherical_image_arc
   refine ⟨width, hw, offset + left, hleftBand, offset + right, hrightBand,
     p, q, source, image, source.continuous.isClosedEmbedding hsourceInj,
     image.continuous.isClosedEmbedding himageInj, hp, hq, hpavoid, hqavoid, hpq,
-    ?_, ?_, ?_, himageBound.trans_lt hboundSmall⟩
+    ?_, ?_, ?_, himageBound.trans_lt hboundSmall, height, hh, ?_, ?_⟩
   · exact fun t ht => ⟨hinside t ht, hagrees t ht⟩
   · intro t
     linarith [hsourceClose t]
   · exact hsourceBound.trans_lt
       ((ENNReal.ofReal_lt_ofReal_iff hsourceTolerance).mpr (by linarith))
+  · have hlcancel : offset + left - (angle - width / 2) = left := by
+      dsimp [offset]
+      ring
+    have hrcancel : offset + right - (angle - width / 2) = right := by
+      dsimp [offset]
+      ring
+    rw [hlcancel, hrcancel]
+    exact hsource
+  · intro z hzre hzim
+    have hlcancel : offset + left - (angle - width / 2) = left := by
+      dsimp [offset]
+      ring
+    have hrcancel : offset + right - (angle - width / 2) = right := by
+      dsimp [offset]
+      ring
+    rw [hlcancel, hrcancel] at hzre
+    have hz := hclose z ⟨hl.1.le.trans hzre.1, hzre.2.trans hr.2.le⟩
+      ⟨hzim.1, hzim.2.trans hh.2.le⟩
+    linarith
+
+/-- The local embedded arc conclusion, forgetting its filled rectangle data. -/
+theorem exists_short_embedded_spherical_image_arc
+    {g : ℂ → ℂ} (hg : DifferentiableOn ℂ g (ball 0 1))
+    (hinj : InjOn g (ball 0 1)) (angle : ℝ)
+    {sourceTolerance imageTolerance : ℝ}
+    (hsourceTolerance : 0 < sourceTolerance) (himageTolerance : 0 < imageTolerance)
+    (forbidden : Finset ComplexSphere.Sphere) :
+    ∃ width ∈ Ioo (0 : ℝ) 1,
+      ∃ left ∈ Ioo (angle - width / 2) angle,
+      ∃ right ∈ Ioo angle (angle + width / 2),
+      ∃ p q : ComplexSphere.Sphere,
+      ∃ source : Path (Complex.exp ((left : ℂ) * I))
+        (Complex.exp ((right : ℂ) * I)), ∃ image : Path p q,
+        Topology.IsClosedEmbedding source ∧ Topology.IsClosedEmbedding image ∧
+        p ∈ frontier (ComplexSphere.chart '' (g '' ball 0 1)) ∧
+        q ∈ frontier (ComplexSphere.chart '' (g '' ball 0 1)) ∧
+        p ∉ forbidden ∧ q ∉ forbidden ∧ p ≠ q ∧
+        (∀ t : unitInterval, (t : ℝ) ∈ Ioo 0 1 →
+          source t ∈ ball 0 1 ∧ image t = ComplexSphere.chart (g (source t))) ∧
+        (∀ t : unitInterval,
+          dist (source t) (Complex.exp ((angle : ℂ) * I)) < sourceTolerance) ∧
+        Metric.ediam (range source) < ENNReal.ofReal sourceTolerance ∧
+        Metric.ediam (range image) < ENNReal.ofReal imageTolerance := by
+  obtain ⟨width, hw, left, hl, right, hr, p, q, source, image,
+    hs, hi, hp, hq, hpa, hqa, hpq, hagree, hclose, hds, hdi, _⟩ :=
+    exists_short_embedded_spherical_image_rectangle_arc
+      hg hinj angle hsourceTolerance himageTolerance forbidden
+  exact ⟨width, hw, left, hl, right, hr, p, q, source, image,
+    hs, hi, hp, hq, hpa, hqa, hpq, hagree, hclose, hds, hdi⟩
 
 end Math.ComplexAnalysis

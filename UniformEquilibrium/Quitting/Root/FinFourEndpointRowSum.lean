@@ -1,6 +1,8 @@
 import MathUE.Finset.FinFourNonemptyCoalitions
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
+import UniformEquilibrium.Quitting.Stationary.DiscountedDisplacement
 import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.NormNum
 
 /-! # Finite row expansions of four-player pure endpoint payoffs -/
 
@@ -309,5 +311,27 @@ theorem excludedValue_eq_excludedEndpointRowSum
   · exact excludedValue_one_eq_excludedEndpointRowSum reward hazard
   · exact excludedValue_two_eq_excludedEndpointRowSum reward hazard
   · exact excludedValue_three_eq_excludedEndpointRowSum reward hazard
+
+/-- At all-sure hazards, the actual zero-discount response is grand reward
+minus the reward obtained when only the recipient withdraws. The reward table
+remains arbitrary; no singleton comparison replaces this withdrawal reward. -/
+theorem quittingDiscountedDisplacement_one_eq_grand_sub_withdrawal
+    (reward : {coalition : Finset (Fin 4) // coalition.Nonempty} → Payoff (Fin 4))
+    (who : Fin 4) :
+    quittingDiscountedDisplacement reward 0 (fun _ => 1) who =
+      reward ⟨Finset.univ, by simp⟩ who -
+        reward ⟨Finset.univ.erase who, by fin_cases who <;> decide⟩ who := by
+  have huniv : (Finset.univ : Finset (Fin 4)) = {0, 1, 2, 3} := by decide
+  unfold quittingDiscountedDisplacement
+  rw [sigmaValue_eq_pureQuitEndpointRowSum, excludedValue_eq_excludedEndpointRowSum]
+  fin_cases who <;>
+    norm_num +decide [continueMassExcl, pureQuitEndpointRowSum, excludedEndpointRowSum,
+      opponentCoalitionMass, weightOfReward, finFourCoalitionOfRow,
+      Fin.sum_univ_succ, Fin.prod_univ_succ, huniv]
+  all_goals
+    refine congrArg (fun terminal => reward terminal _) ?_
+  all_goals apply Subtype.ext
+  all_goals dsimp only
+  all_goals decide
 
 end GameTheory.QuittingFinFourEndpointRows

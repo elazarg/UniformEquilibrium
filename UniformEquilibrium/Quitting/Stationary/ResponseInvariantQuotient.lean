@@ -322,4 +322,54 @@ theorem quittingQuotientResponse_derivative_apply
   intro column _
   rfl
 
+omit [DecidableEq ι] in
+/-- Summing over all source labels recovers the full singleton row, including
+when the block map has unused labels. -/
+theorem sum_quittingSingletonBlockRowSum_eq_totalRowSum
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (block : ι → Fin k) (who : ι) :
+    (∑ label, quittingSingletonBlockRowSum reward block who label) =
+      ∑ player, quittingSingletonMatrix reward who player := by
+  unfold quittingSingletonBlockRowSum
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro player _
+  simp
+
+/-- Two actual response statistics distinguish recipients and therefore forbid
+merging them in a response-invariant block. No source label need be occupied. -/
+theorem injective_block_of_responseInvariant_of_injective_rowSum_displacement
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (block : ι → Fin k)
+    (hresponse : QuittingResponseInvariantOnUnitCube reward block)
+    (hstatistics : Function.Injective (fun who =>
+      ((∑ player, quittingSingletonMatrix reward who player),
+        quittingDiscountedDisplacement reward 0 (fun _ => 1) who))) :
+    Function.Injective block := by
+  intro first second hblock
+  apply hstatistics
+  apply Prod.ext
+  · have hrows := congrArg (fun row : Fin k → ℝ => ∑ label, row label)
+      (funext fun label => quittingSingletonBlockRowSum_eq_of_responseInvariant
+        reward block hresponse first second hblock label)
+    simpa only [sum_quittingSingletonBlockRowSum_eq_totalRowSum] using hrows
+  · exact hresponse (fun _ => 1) (by intro label; exact ⟨by norm_num, le_rfl⟩)
+      first second hblock
+
+/-- Normalized response statistics suffice as a short corollary. Division by
+zero is allowed; no unused nonzero-row hypothesis is imposed. -/
+theorem injective_block_of_responseInvariant_of_injective_normalized_displacement
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (block : ι → Fin k)
+    (hresponse : QuittingResponseInvariantOnUnitCube reward block)
+    (hratio : Function.Injective (fun who =>
+      quittingDiscountedDisplacement reward 0 (fun _ => 1) who /
+        (∑ player, quittingSingletonMatrix reward who player))) :
+    Function.Injective block := by
+  apply injective_block_of_responseInvariant_of_injective_rowSum_displacement
+    reward block hresponse
+  intro first second heq
+  apply hratio
+  exact congrArg (fun statistics : ℝ × ℝ => statistics.2 / statistics.1) heq
+
 end GameTheory
