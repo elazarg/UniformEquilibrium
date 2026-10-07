@@ -16,7 +16,16 @@ claim. The separately completed signed-column producer does not supply the
 new root-production step here.
 
 Current independent question: select approximate complete response laws
-for a raw class with constant participant rewards on all joint exits.
+while retaining the actual unrestricted-debt minimum. The final entropy
+section produces finite regularized games but records an exact bad Nash
+branch at every calendar size; common support alone is not a selector.
+The live variation now puts the bounded entropy penalty on the full-debt
+objective itself. Its common-support and clock-refinement facts are proved;
+a debt-lowering direction at a positive global minimum is NOT proved.
+This is internal research, not an existence theorem or export candidate.
+
+The earlier question concerned a raw class with constant participant
+rewards on all joint exits.
 The constant-participant section gives an exact four-player table defeating
 all fifteen concrete persistent-base screens and all fourteen universal
 child-debt lifts. This is an internal test of a whole-class shortcut,
@@ -1323,3 +1332,211 @@ retains the complete semantic carrier, global debt minimum and singleton
 cap margins, but explicitly does not realize that minimum by one profile.
 No descent, realization or all-player approximate-law producer has yet
 been established from the identity.
+
+## Approximate finite laws with a calendar-independent regularizer
+
+The cyclic local-logit attempt does not close the gap. The actual source
+`nonempty_interiorApproximateNashCyclicBlock` in
+`UniformEquilibrium/Quitting/Cycles/EndogenousInteriorCyclicBlock.lean`
+produces interior local-error blocks, while
+`InteriorApproximateNashCyclicBlock.outsiderTerminalDeviationDebt_le` in
+`UniformEquilibrium/Quitting/Cycles/InteriorCyclicAbsorptionAlternatives.lean`
+requires an opponent absorption denominator. Constant positive collision
+premiums do not provide a lower bound on that denominator. In particular,
+balanced hazards can all vanish; deleting a one-fast-owner branch would
+not delete this branch. No new selection consequence is claimed from this
+local-logit construction.
+
+Here is a distinct, explicitly approximate finite-law question. Use the
+single-pivot normalized table s=(1,0,0,0), arbitrary remaining rewards,
+and F_N={0,…,N−1,Never}. For a product law p put
+
+    μ=(p₀+p₁+p₂+p₃)/4,
+    J_i(p)=∑[a∈F_N] p_i(a) log(p_i(a)/μ(a)),
+    V_i^τ(p)=U_i(p)−τ J_i(p),               τ>0.
+
+A zero coordinate contributes0. This is a game on the four mixed-law
+simplices, not a change to the actual quitting reward table. Each player
+chooses its entire private law, and changing that law also changes μ.
+There is no public random clock. The precise smaller question is whether,
+for arbitrarily small τ, SOME finite N and SOME Nash point of this
+regularized game satisfy the missing full pivot bound
+
+    W₀(p)+p₁(Never)p₂(Never)p₃(Never)−U₀(p)→0.
+
+The finite-menu half is already produced, not assumed. Relative entropy
+is jointly convex in its two arguments; μ is affine in p_i. Thus J_i is
+convex in p_i, whereas U_i is affine. Also J_i is continuous even where
+μ(a)=0, since 0≤p_i(a)≤4μ(a), and
+
+    0≤J_i(p)≤log4.
+
+The ordinary compact-concave finite-player Nash existence argument applies:
+best-reply sets are nonempty compact convex and their graph is closed.
+At such a Nash point, for EVERY unilateral alternative law y_i,
+
+    U_i(y_i,p_{−i})−U_i(p)
+      ≤τ[J_i(y_i,p_{−i})−J_i(p)]≤τ log4.
+
+Consequently all four finite-menu regrets are at most τ log4, independent
+of N. These assertions are ordinary mathematics, not a Lean claim. A
+narrow source search in MathUE and the stopping-law/terminal subtrees
+found no existing common-marginal relative-entropy selector declaration.
+
+This regularization has a useful exact support property. At any Nash
+point, if one player's law assigns positive mass to a date, every player's
+law does. Otherwise adding a small mass at that date has entropy derivative
+−∞, overcoming the bounded linear payoff derivative. Therefore all four
+laws have the SAME support, including agreement on whether Never is used.
+If Never is absent, the produced finite law is already an unrestricted
+τ log4 terminal approximate equilibrium: an opponent surely stops within
+the calendar, so later deviations add no cap. The unresolved arm has
+positive Never mass at every player, not a supplied favorable support.
+
+The first-order identities retain the complete date dependence. Put
+r_i(a)=p_i(a)/μ(a), and h(r)=log r+1−r/4. On the common support,
+
+    f_i(a)−τ h(r_i(a))=c_i,
+
+where f_i(a) is the actual pure-time payoff. This includes Never. The
+derivative uses μ's dependence on p_i; dropping the −r/4 term would be
+incorrect. On (0,4], h is strictly increasing and h(4)=log4. The shares
+satisfy ∑_i r_i(a)=4 at every occupied date.
+
+There remains a literal boundary condition when the calendar is extended.
+Write α_i=p_i(Never)>0, D_i=∏[j≠i]α_j. Moving pivot mass from Never
+to one NEW date after all occupied finite dates has right derivative
+
+    D₀−τ[log4−h(r₀(Never))]
+
+in V₀^τ. At the new date the mover is the only marginal with mass, so the
+entropy contribution is exactly its moved mass times log4. A positive
+derivative shows that the old law cannot remain regularized Nash after
+that extension. It does NOT show that a newly selected Nash point has a
+smaller Never mass or a better pivot cap: the other three laws may change.
+That selection/escape issue is the remaining smaller assertion. No
+calendar-independent late-cap estimate, limiting Nash point, or uniform
+payoff follows from the finite regularizer alone. This is the live attempt;
+the exact finite-Nash and single-cap-time selectors remain retired.
+
+### Exact bad branch and a change to the actual minimum
+
+The quantifier SOME regularized Nash is essential. The regularizer does
+not itself remove the old exact-Nash branch. Define a complete canonical
+Fin4 table by s=(1,0,0,0),
+
+    G=((0,1,1,−1),(−1,0,−1,2),
+       (−1,2,0,−1),(−1,−1,2,0)),
+    r_i(S)=s_i                     if i∈S,
+           s_i+∑[j∈S]G_ij          if i∉S.
+
+Let t be the unique root of t=(1−t)³ in(0,1). It exceeds1/4.
+On ANY nonempty finite calendar let all four laws put mass t at the
+last date and 1−t at Never. The finite pure-time payoff of every player
+is its own s_i at EVERY allowed response, including Never. At the last
+row the child differences vanish, and the pivot difference is
+(1−t)³−t=0; an earlier Quit gives s_i. Hence this is exact finite-menu
+Nash. The four laws coincide, so J_i=0. Since all unilateral J_i are
+nonnegative, this same profile is regularized Nash for EVERY τ>0.
+But the pivot's unrestricted late payoff is1+t, whereas its prescribed
+payoff is1. Its full debt remains t. This table is already covered by
+product-low UE. The calculation refutes an all-regularized-Nash claim,
+not the still-open existential favorable-selector question.
+
+Rather than assuming favorable reselection after a profitable insertion,
+the next attempt regularizes the actual full-debt objective. For p on
+F_N define the literal full caps
+
+    b₀(p)=max(B₀ᴺ(p), W₀(p)+D₀(p)),
+    b_i(p)=B_iᴺ(p) for i≠0,
+    D(p)=∑_i(b_i(p)−U_i(p)),
+    I(p)=∑_i J_i(p),       Φ_τ(p)=D(p)+τI(p).
+
+All cap tests are retained, including the pivot's late test and Never.
+Each player chooses an independent law; no public mixture is introduced.
+The exact supplied-profile identity inspected is
+`singlePivot_fullExploitability_eq_max_menuExploitability_scalar` in
+`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`;
+the existence consumer is
+`exists_uniformEquilibriumPayoff_of_singlePivot_finiteMenu_scalar_source`
+in `UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuCompletion.lean`.
+Their finite-law source still has to be produced. The present objective
+does not replace it by exact finite Nash.
+
+For each N and τ>0, compactness and continuity produce a global minimizer
+of Φ_τ. This is joint optimization of the true sum of unrestricted debts,
+not Nash equilibrium of an auxiliary game. One has 0≤I≤4log4. If δ_N
+is the minimum of D on F_N, its selected minimizer therefore satisfies
+
+    δ_N≤D(p)≤δ_N+4τlog4.
+
+Embedding a law into a larger calendar by zero new masses changes neither
+D nor I. Thus δ_N decreases to the infimum δ over all finite independent
+laws, and the infima of Φ_τ similarly decrease to some δ_τ with
+δ≤δ_τ≤δ+4τlog4. If the normalized original game has no uniform payoff,
+the inspected finite-law consumer implies δ>0: otherwise vanishing sums
+of full debts would supply both scalar-source inequalities. This is the
+genuine global no-UE premise, not an arbitrary selected orbit minimum.
+
+The following extra information holds at each finite global minimizer.
+
+1. All four laws have common support. At a date occupied by another
+   player but not by i, inserting i's mass has entropy derivative−∞,
+   whereas D has a finite directional Lipschitz bound. Removing that
+   mass from a positive coordinate supplies a feasible strict decrease.
+
+2. On the occupied support the derivative of TOTAL I with respect to
+   p_i(a) is log(p_i(a)/μ(a)), without the earlier h correction.
+   Indeed I=∑_{i,a}p_i(a)log p_i(a)−4∑_a μ(a)log μ(a).
+   The h correction belongs to a player's OWN J_i in the auxiliary
+   regularized Nash game, not to this joint objective.
+
+3. If |r_i(S)|≤M, changing only p_i changes D by at most
+   7M‖Δp_i‖₁. Its own cap is independent of its law; its own payoff
+   has Lipschitz constant M. Each of the other three cap-minus-payoff
+   terms has constant at most2M. Every cap is a maximum of actual
+   affine response payoffs, so this bound includes all tied cap tests.
+   Transferring mass between two occupied dates consequently gives
+
+       |log(r_i(a)/r_i(b))|≤14M/τ,
+       exp(−14M/τ)≤r_i(a)≤4.
+
+   The second bound uses ∑_a μ(a)r_i(a)=1, hence some r_i(b)≥1.
+   It is calendar-independent and covers Never if Never is occupied.
+   In particular the selected finite laws, and all their survival tails,
+   are mutually comparable by a τ-dependent positive factor.
+
+These are complete ordinary-mathematical facts, not yet a UE producer.
+The factor can be exponentially small in1/τ. A full-debt error of orderτ
+cannot silently be treated as negligible relative to a variation of that
+size. This is an explicit scale obstruction to applying an ordinary
+near-minimum Taylor lemma using only these bounds.
+
+There is one exact way around that error for a limited class of variations.
+Split any occupied atom a, for ALL players, into consecutively ordered
+subdates with the same fractions θ₁,…,θ_m. Replace p_i(a) by
+θ_k p_i(a) at subdate k. Each ratio p_i/μ is unchanged on the split
+pieces, so EVERY J_i, and hence I, is preserved exactly. The same identity
+holds when a Never atom is split into a new last finite date and remaining
+Never, in common proportions. The strategic payoffs and caps generally
+change, and must be recomputed from the independent product law; entropy
+invariance is not payoff invariance or public randomization.
+
+For a fixed τ, choose N and a finite global minimizer whose Φ_τ value
+is within an arbitrarily specified η>0 of δ_τ. Any such refinement,
+possibly on a larger calendar, then satisfies
+
+    D(refined p)≥D(p)−η.
+
+This follows from the global infimum of Φ_τ and exact entropy invariance,
+not from monotonicity of a reselected Nash point. The error η can be chosen
+independently of τ. It supplies a concrete full-cap variational restriction
+at selected actual near-minimizers.
+
+The current smaller question is whether δ>0 is incompatible with these
+regularized global-minimum restrictions: produce a legal simultaneous
+clock refinement, or another explicitly controlled law variation, that
+strictly lowers the FULL D by more than its entropy change and η. Common
+support, likelihood comparability and entropy-neutral refinement alone
+do not prove this. No supplied inequality, one-player repair, or assumed
+monotone reselection is being counted as an existence result.

@@ -179,6 +179,12 @@ It is an internal boundary test, not an existing raw-table selector or
 a proof that the new triple–singleton family is redundant. The separate
 independent theorem/source review is in
 `../feedback/BUFFERED_TRIPLE_SINGLETON_UNIFORM_EQUILIBRIUM__BY_CODEX_MORSE.md`.
+Section 34 retains an exact simultaneous full-cap directional formula for
+actual laws. It also shows why a proposed auxiliary Nash game on all tied
+responses cannot simply be declared finite: its best-response timing face
+can have a positive product-regret gap. That test has global minimum zero,
+so the positive-global-minimum consumer remains open; no new coverage or
+counterexample conclusion is drawn from it.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -5632,8 +5638,15 @@ minimum: that decisive additional property has not been established. The
 next investigation must combine the source restrictions with that property,
 not merely add more finite-base exclusions to this regression.
 
-Neither existence nor nonexistence of UE for this particular regression is
-claimed here. The subsequent global attempt retains the full carrier minimum
+The regression itself is not a no-UE claim. A subsequent complete raw
+producer now proves UE for this particular table: the negative-premium
+joint03/solo1/solo2 construction in
+`../exports/NEGATIVE_PREMIUM_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md`,
+whose independent review is
+`../feedback/NEGATIVE_PREMIUM_THREE_PHASE_UNIFORM_EQUILIBRIUM__BY_CODEX_MORSE.md`.
+The present finite-completion and all-base calculations remain valid; they
+are architecture/source-screen obstructions inside a solved game, not a
+positive global minimum. The global attempt retains the full carrier minimum
 and its original stopping laws. A finite exact-Nash completion, a minimum on
 one prefix orbit, and an algebraic intersection of the fifteen base screens
 are not substitutes for that premise. The source declarations
@@ -5766,3 +5779,228 @@ it is not a generic selector for the present proper-three stationary root.
 Thus this calculation alone establishes no whole-class inclusion in that
 earlier raw producer. The independent triple–singleton review records the
 separate complete concrete-base and response-quotient exclusions.
+
+## 34. A simultaneous cap-response game and its noncompact timing tail
+
+This is an internal attempt at the positive-global-minimum consumer, not a
+new UE class or an independent review. The minimum is over the COMPLETE
+terminal-semantic carrier. No prefix-orbit or finite-calendar minimum is
+substituted for it. The calculation retains every tied complete response.
+It does not yet consume positive global minimality: a proposed finite-Nash
+selection has an unbounded-time obstruction that cannot be hidden by
+truncating its action sets.
+
+Let p be a finite-calendar independent stopping-law profile. Write U_j(p)
+for its original terminal payoff, b_j(p) for its unrestricted cap, d_j=b_j−U_j,
+and D=Σ_j d_j. Let ν_i be finite-supported laws on dates and Never, each
+supported on best responses to p₋ᵢ, and put p_i(t)=(1−t)p_i+tν_i.
+These are independent PRIVATE law mixtures, not common randomization.
+For this fixed collection ν, a finite test set B_j computes the COMPLETE cap
+of p(t) for every t: include all finite support dates, representatives of
+their gaps, a date after every support, and Never. Let T_j⊆B_j be all tests
+attaining b_j(p). Define
+
+    A_j(a;ν₋ⱼ)=Σ_{i≠j}[U_j(a,ν_i,p₋{i,j})−U_j(a,p₋ⱼ)],
+    H_j(ν)=Σ_i[U_j(ν_i,p₋ᵢ)−U_j(p)].             (171)
+
+In the first line j's entire law is the pure response a. Multilinearity and
+the directional derivative of a finite maximum give the exact right derivative
+
+    d/dt|₀₊ Σ_j d_j(p(t))
+       =Σ_j max_{a∈T_j} A_j(a;ν₋ⱼ)−Σ_j H_j(ν). (172)
+
+An ACTUALLY ATTAINED global minimum makes (172) nonnegative for every common
+direction of this kind. This does not identify a compact-carrier minimizer
+with an actual profile. A near-minimum version needs both an error estimate
+and a chosen perturbation scale before passing to a nonattained source.
+
+A tempting way to select the maxima simultaneously is an auxiliary game on
+the complete original best-response sets, giving j utility A_j. This is a
+polymatrix game. IF it has a product Nash profile ν of the required finite
+support, ν_j attains the corresponding maximum in (172). With
+
+    E_ij=U_j(ν_j,ν_i,p₋{i,j})−U_j(ν_i,p₋ᵢ)−d_j,
+
+equation (172) then becomes
+
+    d/dt|₀₊ Σ_j d_j(p(t))=Σ_{i≠j}E_ij−D.        (173)
+
+Indeed U_j(ν_j,p₋ⱼ)=b_j and the own-coordinate term of H_j is d_j.
+Thus an attained positive global minimum TOGETHER WITH THAT SELECTION
+would force Σ_{i≠j}E_ij≥D, hence some unordered pair in Fin4 would carry
+E_ij+E_ji≥D/6. Equation (172), not this conditional simplification, is the
+controlling full-cap formula. Neither expression produces a descent or UE.
+
+The finite-Nash shortcut for producing ν is invalid in general. Finite
+support of p does not make its best-response sets finite for this auxiliary
+game: all sufficiently late finite dates can be equivalent against p but
+inequivalent against a simultaneously changed opponent law. Adding one
+last response date simply creates another later response. Never may have a
+different original payoff and be excluded from the best-response face.
+
+For an exact test, take two players with
+
+    r({1})=(1,2),   r({2})=(2,1),   r({1,2})=(0,0),
+
+and zero Never reward. At p=(Never,Never), b₁=b₂=1. Each complete
+best-response set consists of ALL finite dates, excluding Never. The
+auxiliary utility is the original two-clock payoff minus1. For any product
+laws supported on finite dates, original payoffs sum to at most3: the sum
+is3 at unequal dates and0 at a tie. Each player's supremum within the
+best-response face is2, since a deterministic date tending to infinity
+lies after the opponent with probability tending to1. Thus total auxiliary
+regret is at least1, and maximum regret at least1/2, for EVERY such pair of
+laws. There is neither a product Nash point nor arbitrarily accurate
+product Nash play on this full face. Constant shifts by1 change no regret.
+
+The original game is solved: player1 Quit at zero and player2 Never is exact
+terminal Nash, with payoff(1,2). Hence its true global minimum is zero.
+This test does NOT refute a use of positive global minimality to control the
+auxiliary timing tail. It refutes only automatic finite-game selection.
+That shortcut is retired, rather than replaced by an arbitrary last date
+or a supplied selected response. No counterexample-class narrowing follows.
+
+The surviving question is whether positive global minimality controls the
+late response face in (172) strongly enough to obtain a common law
+direction without auxiliary Nash selection. This must be proved at actual
+near-minimizers retaining all cap tests and then passed to the compact
+source. Section28's zero-owner restriction may help; neither attainment
+nor uniformly bounded response times is proved there.
+
+The targeted source overlap was
+`quittingTerminalSemanticDebt_stoppingLawMixture_chordGap_le_nearMinimum`
+and `quittingTerminalSemanticDebt_stoppingLawMixture_eq_of_minimum_sameDebtSum`
+in `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticStoppingLawMinimumFiberAffine.lean`.
+These control ONE law chord, not a simultaneous auxiliary Nash producer.
+The actual minimum consumer is
+`not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt`
+in `UniformEquilibrium/Quitting/Terminal/PositiveMinimumSemanticDebt.lean`.
+The finite-calendar all-tied-gradient and second-order formulation in
+`CODEX_LARCH_JOINT__MULTILATERAL_REPAIR_THEORY.md` likewise requires one
+common feasible direction. No covariance average or independently chosen
+response direction is substituted for it here.
+
+### A uniform near-minimum consequence without auxiliary Nash selection
+
+The exact global premise does give the following unconditional restriction
+on actual near-minimizers. It avoids both the preceding finite-Nash shortcut
+and an assumption that the compact minimum is attained by an actual law.
+It is internal supporting mathematics, not a completed UE consumer.
+
+Suppose there are n≥2 players and |r_j(S)|≤M with M>0. Let D_* be the
+infimum of total complete debt over ALL independent behavioral profiles.
+Let p have finite support and D(p)≤D_*+η, where η>0. Choose ANY tuple ν
+of finite-supported exact best responses to p, independently across players.
+For 0<t≤1/(n−1), there exist pure complete responses a_j such that
+
+    0≤b_j(p)−U_j(a_j,p₋ⱼ)≤4M(n−1)t,              (174)
+
+and, with the actual two-player replacement interaction
+
+    E_ij(a_j,ν_i;p)
+       =U_j(a_j,ν_i,p₋{i,j})−U_j(ν_i,p₋ᵢ)−d_j(p),
+
+one has
+
+    Σ_j Σ_{i≠j} E_ij(a_j,ν_i;p)
+       ≥ D(p)−η/t−4Mn(n−1)²t.                   (175)
+
+All payoffs in (174)–(175) are evaluated on actual product profiles of
+the SAME original game. The a_j are witnesses for its complete caps;
+they are not prescribed correlated actions or supplied auxiliary roots.
+The quantifier is FOR EVERY common tuple ν of original best responses,
+THERE EXISTS one complete response a_j per player satisfying both claims.
+Neither ν nor a is asserted to solve an auxiliary game.
+
+Here is the proof, including the uniformity in the calendar. For any
+bounded terminal-payoff function depending on m independently mixed
+coordinates, every ordered second partial along the mixture direction has
+absolute value≤4M: two signed law differences each have total variation
+norm≤2 and all unchanged factors are probability laws. Hence its value
+differs from its first-order expansion by at most2Mm(m−1)t². For U_j use
+m=n; for a forced response of j use m=n−1. These bounds hold uniformly
+over every pure response date and Never.
+
+Write h_j(a)=b_j(p)−U_j(a,p₋ⱼ)≥0. On the finite complete test set for
+the union of p's and ν's supports, choose a_j maximizing
+
+    A_j(a;ν₋ⱼ)−h_j(a)/t.                         (176)
+
+This finite scan is legitimate: ν has ALREADY been chosen, so every
+candidate in (176) is tested against a fixed finite union of opponent
+calendars. This is not the invalid simultaneous closure of the auxiliary
+game's action sets. It includes dates after every new support and Never.
+
+For any original exact best response, h_j=0 and A_j≥−2M(n−1).
+The selected test also has A_j≤2M(n−1), so (176) implies
+h_j(a_j)/t≤4M(n−1), proving (174). The uniform Taylor bounds give
+
+    D(p(t)) ≤ D(p)
+       +t Σ_j[A_j(a_j;ν₋ⱼ)−h_j(a_j)/t−H_j(ν)]
+       +4Mn(n−1)²t².                             (177)
+
+Since p(t) is an ACTUAL simultaneous independent-law mixture,
+D(p(t))≥D_*≥D(p)−η. Furthermore, using that ν_j is an original
+best response, exact algebra gives
+
+    A_j(a_j;ν₋ⱼ)−H_j(ν)−h_j(a_j)/t
+       =Σ_{i≠j}E_ij(a_j,ν_i;p)−d_j(p)
+           −[1/t−(n−1)]h_j(a_j).
+
+The final term is nonpositive at the stated t. Combining this with
+(177) proves (175). Global minimality is used precisely in the lower
+bound for the actual mixed law, not in an unsupported limit of derivatives.
+
+For Fin4 take η≤4M and t=√(η/(144M)). Then
+
+    h_j(a_j)≤√(Mη),
+    Σ_{i≠j}E_ij(a_j,ν_i;p)≥D(p)−24√(Mη).        (178)
+
+If D_*>0 and η is sufficiently small, the right side is at least D_*/2.
+Some unordered pair therefore has
+
+    E_ij(a_j,ν_i;p)+E_ji(a_i,ν_j;p)≥D_*/12.      (179)
+
+This pair can depend on the common response tuple. Along a selected
+sequence a fixed pair can be retained by finiteness; no time-order,
+chronological implementation or renewable mark follows from that selection.
+In particular (179) cannot be used as a paid temporal edge without an
+additional argument.
+
+Finite near-minimizers required here exist without a fixed-calendar
+compression claim. Start with an actual profile whose debt is near D_*;
+move each marginal's finite-date tail beyond K to Never. The moved masses
+tend to zero. Coupling bounds both prescribed payoffs and every unilateral
+payoff test uniformly by2M times the sum of changed opponent masses, so
+all complete caps and their debt sum converge. The resulting profile has
+finite support. Exact pure best replies to it exist by the finite atom-gap
+reply menu. This also explains why the calendar may grow with η.
+The inspected production declarations are
+`exists_finiteDeadlineTimingProfile_approximation` in
+`UniformEquilibrium/Quitting/Terminal/FiniteMenuFullProfileApproximation.lean`
+and `exists_mem_quittingFiniteOpponentAtomGapReplyMenu_actual_payoff_eq_cap`
+in `UniformEquilibrium/Quitting/Terminal/FiniteOpponentAtomGapReplyMenu.lean`.
+The inline uniform-cap coupling argument supplies the sum-debt version
+used here; the former declaration itself is stated with maximum debt.
+
+The surviving proof task is now explicit: use the quitting-clock structure
+to choose one common original best-response tuple ν for which the left
+side of (178) is too small for ALL sufficiently near-best cap witnesses.
+No such choice has been produced. Raw singleton, induced-base, or
+payoff-only inequalities do not give that bound. The noncompact auxiliary
+game example above is a warning against manufacturing the choice by a
+finite Nash assertion, not a falsifier of (174)–(179).
+
+There is a useful exact check that the direct formula is stronger than
+that failed selection device. In the two-player timing example above,
+at the all-Never source and for EVERY finite-supported tuple ν of
+original best responses, H₁=H₂=3: one's own replacement earns1 and the
+other player's replacement earns the passive reward2. Each complete
+maximum of A_j is1, attained by waiting after the other law's last finite
+atom. Equation (172) therefore gives total-debt derivative−4, independently
+of the selected ν. Thus this source is immediately rejected as a positive
+global minimum by a simultaneous actual-law descent, even though its
+auxiliary response game has a fixed positive Nash gap. The two conclusions
+are compatible. The unresolved part is selecting an equally effective
+common direction at the genuine Fin4 minimum, not repairing the auxiliary
+game or weakening its missing selection premise.
