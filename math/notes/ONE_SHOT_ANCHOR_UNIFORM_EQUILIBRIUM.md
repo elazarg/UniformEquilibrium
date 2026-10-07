@@ -1,5 +1,12 @@
 # Every quitting counterexample needs a negative join at each nonnegative-own player
 
+Status: proved ordinary mathematics. The exact same-profile terminal and
+positive-horizon Nash construction is valid. Its entire UE existence class,
+including the complete rational example, is already covered by the tracked
+singleton-base punishment-tail consumer. The source inclusion below makes
+this distinction explicit; this note asserts no additional counterexample
+exclusion.
+
 ## 1. Exact necessary condition and whole raw family
 
 Let I be any nonempty finite player set. At each live date the players
@@ -248,10 +255,12 @@ are `QuittingPersistentBaseComplementLeaveSafe` and
 `UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseArbitraryCompletionEscape.lean`.
 For the singleton base={a}, that raw predicate is exactly (A): its empty
 completion uses the literal empty reward zero, requiring s_a≥0, and its
-other completions are the nonempty joining comparisons. The existing
+other completions are the nonempty joining comparisons. That particular
 strategic consumer assumes base cardinality≥2 and constructs stationary
-repetition. The new transient theorem supplies the missing singleton-base
-consumer; it does not rename a new raw predicate or a new finite Nash theorem.
+repetition. The transient construction here extends its exact same-profile
+conclusion to singleton bases. A different implemented singleton-base
+punishment-tail consumer already covers the UE existence claim, as shown
+below.
 Its robust-predecessor subclass also fails. Moreover the positive singleton
 join0→2, with gain1, reverses to−1 on background1, violating
 `QuittingNoStrictBackgroundReversal` in
@@ -425,10 +434,37 @@ and `UniformEquilibrium/Quitting/Examples/Cyclic/FourPlayerOverlappingPeriodThre
 No absence of arbitrary proper-three or full-support stationary profiles
 is asserted. No unspecified local neighborhood is blanket-excluded or
 claimed to contain this table. An arbitrary supplied-root verifier is not
-a producer for the raw completion family. The significance claim is the
-new necessary condition (N), proved by a global arbitrary-completion
-producer and a complete table outside the compared actual raw sources,
-not a new strategy-language interface or an isolated root calculation.
+a producer for the raw completion family. These separations exclude the
+displayed stationary, withdrawal and matrix criteria, not every implemented
+UE producer. In particular, the singleton-base punishment-tail source
+already admits this table and the entire family (A).
+
+### Whole-class inclusion in the implemented singleton-base source
+
+Choose the internally available induced product Nash point on I∖{a}.
+Let p_T be its coalition law, V_a its anchored prescribed payoff, and
+P_a the punishment value. The source's owner floor excess is exactly
+
+    floorExcess = ∑[T≠∅]p_T r_a(T) + p_∅P_a − V_a
+                = −∑[T≠∅]p_T[r_a(T∪{a})−r_a(T)]
+                  + p_∅(P_a−s_a).
+
+The tracked theorem `quittingPunishmentValue_le_max_solo` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean` gives
+P_a≤max(s_a,0)=s_a. Condition (A) therefore gives floorExcess≤0.
+With free=I∖{a}, there are no omitted outsider conditions. Thus the
+positive-gap arm of `exists_uniformPayoff_or_singletonBase_pos_gap`
+cannot hold. Its certificate is consumed by
+`QuittingSingletonBaseCertificate.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingletonBaseSemanticDispatch.lean`.
+The floor definition, induced-Nash certificate constructor, and alternative
+are in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`.
+
+Consequently both UE for (A) and the necessary condition (N) follow from
+existing production sources. The additional result proved here is an exact
+terminal and every-positive-horizon equilibrium using one fixed transient
+profile, rather than error-dependent punishment continuations.
 
 ## 10. Formalization shape and semantic boundary
 

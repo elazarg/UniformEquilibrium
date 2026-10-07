@@ -272,7 +272,7 @@ standalone artifact check, not another repeat audit of the same theorem.
 ## Final standalone: exact-byte assembly PASS
 
 Read all 447 lines of the
-[final standalone](../exports/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md),
+[standalone theorem](../notes/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md),
 SHA256 `64cbf15fe912af117ee42d6d32a29806a8c72316cf88d28a7a8f85d06bdb6f02`.
 Verdict: **final-artifact PASS**, with no requested repair or unresolved
 objection. This is a bounded complete-artifact/delta check against the

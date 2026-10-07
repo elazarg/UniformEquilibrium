@@ -414,13 +414,44 @@ The LCP at b asks for x≥0 with Γx+b≥0 and xᵢ(Γx+b)ᵢ=0 for all i.
 Standard Q means solvability for every b; R0 means x=0 is the only solution
 at b=0.
 
+### Persistent-base punishment-tail selection — tracked theorem
+
+For every nonempty base E, select product mixed Nash points of the finite
+binary game on I∖E with free-player utilities rⱼ(E∪T). This Nash set is
+nonempty and compact. Put p_T for the selected opponent coalition law.
+There are no omitted players in this full-complement choice.
+
+For |E|≥2, one such Nash point with
+
+    ∑[T⊆I∖E]p_T[rᵢ(E∪T)−rᵢ((E∖{i})∪T)]≥0   for every i∈E
+
+gives UE. If no UE exists, at every induced Nash point some base member
+has expected joining gap at most −γ_E, for one γ_E>0 uniform on that Nash
+set. The failing member need not be fixed across points.
+
+For E={a}, write Pₐ for the punishment value and Vₐ for the anchored
+root payoff. The exact acceptance condition is
+
+    floorExcessₐ = ∑[T≠∅]p_T rₐ(T) + p_∅Pₐ − Vₐ ≤ 0.
+
+It produces one fixed uniform payoff through error-dependent punishment
+tails, with unrestricted deviations. If no UE exists, floorExcessₐ≥γₐ>0
+at every induced Nash point. This is not a comparison with stationary Never.
+
+Since Pₐ≤max(sₐ,0), a sufficient finite test is nonnegative expected gap
+gₐ(T), where gₐ(∅)=min(sₐ,0) and
+gₐ(T)=rₐ(T∪{a})−rₐ(T) for T≠∅. Testing this gap on every coarse Nash
+law is a finite linear-program sufficient recognizer of an already covered
+UE class, not an additional counterexample exclusion. The same applies to
+coarse-law tests of the larger-base member gaps.
+
 In addition to tracked low-cardinality, non-Q/homogeneous, punishment,
 stationary, cyclic, and explicit-chamber consumers, the following complete
 mathematical results supply sufficient criteria or quantitative constructions:
 
 | Reward condition | Conclusion and boundary |
 | --- | --- |
-| Any finite player set: one player has nonnegative own singleton and never loses by joining a nonempty opponent coalition | A raw-table finite-game selection produces one date-zero/Never profile that is exact terminal Nash and exact Nash at every positive horizon, with one fixed uniform payoff. All other reward coordinates are arbitrary signed reals. This is reviewed mathematics awaiting formalization. |
+| Any finite player set: one player has nonnegative own singleton and never loses by joining a nonempty opponent coalition | UE is covered by the tracked persistent-base punishment-tail selection above. An additional ordinary mathematical construction produces one date-zero/Never profile that is exact terminal Nash and exact Nash at every positive horizon. All other reward coordinates are arbitrary signed reals. |
 | Fin4: the whole reward table is equivariant under the regular Klein-four action | UE for arbitrary signed rewards, as a corollary of the implemented response-quotient criterion and elementary singleton branches. No nonsingleton inequalities beyond equivariance are required. |
 | Fin4: the cyclic-child joint/solo raw family specified below, for every real R | UE, with an explicit fixed-target finite-law producer on the interval not covered by the singleton criteria. Both participants of the prescribed pair receive a positive collision premium; a full four-player premium core is allowed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: the repeated-solo outsider-buffer family specified below, for every real R | UE allowing a positive outsider collision reward at the joint phase. A final solo exit supplies its continuation buffer. All rates and values are produced from rewards. This is a reviewed mathematical result awaiting formalization. |
@@ -476,10 +507,12 @@ Consequently every possible no-UE table, at any finite cardinality, satisfies
 After the single-pivot normalization this negative-join requirement applies
 to all four players. This is a restriction on the resulting table, not an
 assertion that normalization preserves a previously selected source or law.
-The [complete anchor producer](exports/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md)
-includes a sixty-coordinate table outside the compared raw sources and with
-no sure-quitter stationary equilibrium. Its equilibrium is genuinely
-transient; repeating its first row fails. The finite Nash selector
+The [exact transient anchor construction](notes/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md)
+includes a sixty-coordinate table failing the displayed stationary and
+withdrawal criteria, with no sure-quitter stationary equilibrium. The table
+and the entire anchor class nevertheless pass the implemented punishment-tail
+source above. Its exact equilibrium is genuinely transient; repeating its
+first row fails. The finite Nash selector
 `quittingPersistentBaseNashSet_nonempty`
 (`UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean`) and the
 one-date/Never horizon consumers
@@ -487,7 +520,8 @@ one-date/Never horizon consumers
 `quittingOneDateThenNeverProfile_sameProfile_uniformPayoffWitness`
 (`UniformEquilibrium/Quitting/Root/OneDateNeverHorizonNash.lean`) are tracked;
 the raw singleton-base producer and necessary counterexample restriction
-are additional mathematics awaiting formalization.
+already follow by composition of tracked punishment-tail declarations. The
+stronger exact-profile raw construction remains ordinary mathematics.
 
 Klein-four equivariance means rᵢ₊ₖ(S+k)=rᵢ(S) after identifying the players
 with (ℤ/2ℤ)². In the branch with positive common own singleton,
@@ -1563,6 +1597,14 @@ games are not a proved normal form for all finite stochastic games.
   (`UniformEquilibrium/Diagnostics/Quitting/FinFourUnboundedExactBlockHazardCapacity.lean`);
   `all_marginalQuitHazards_summable_of_no_uniformPayoff`
   (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportHardNashBellmanSpine.lean`).
+- Persistent-base selection:
+  `exists_uniformPayoff_or_singletonBase_pos_gap` and
+  `exists_uniformPayoff_or_persistentLargeBase_pos_gap`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`);
+  `QuittingSingletonBaseCertificate.isUniformEquilibriumPayoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingletonBaseSemanticDispatch.lean`);
+  `quittingPunishmentValue_le_max_solo`
+  (`UniformEquilibrium/Quitting/Stationary/MinMax.lean`).
 - Finite cap-threshold descent and minimum isolation:
   `exists_literal_capThreshold_block_debtSum_le_quadraticDrop`
   (`UniformEquilibrium/Quitting/Paths/FiniteSoloCapThresholdDescent.lean`);

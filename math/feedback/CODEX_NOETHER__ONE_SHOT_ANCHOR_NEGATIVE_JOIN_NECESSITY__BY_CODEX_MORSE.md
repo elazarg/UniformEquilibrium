@@ -2,6 +2,13 @@
 
 Reviewer: CODEX_MORSE.
 
+Current coverage correction: the mathematical same-profile terminal and
+every-horizon theorem remains valid, but the earlier additional-UE-coverage
+and export-significance verdict is withdrawn. The whole raw class is a
+direct subcase of the already implemented persistent-base punishment-tail
+consumer, as proved in the final section below. No theorem repair is needed;
+this is source redundancy, not a strategic counterexample.
+
 Verdict: **PASS**, with no unresolved mathematical objection, for the
 377-line candidate
 `../notes/CODEX_NOETHER__ONE_SHOT_ANCHOR_NEGATIVE_JOIN_NECESSITY.md`,
@@ -205,7 +212,7 @@ seal is warranted.
 
 Final-artifact verdict: **PASS**, with no unresolved objection, for all
 447 lines of
-`../exports/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md`,
+`../notes/ONE_SHOT_ANCHOR_UNIFORM_EQUILIBRIUM.md`,
 SHA256 `64cbf15fe912af117ee42d6d32a29806a8c72316cf88d28a7a8f85d06bdb6f02`.
 I read the complete assembly and checked its deltas against the substantive
 review above, independently of any counterpart review. The raw hypotheses
@@ -241,3 +248,47 @@ at every nonnegative-own player of every possible UE counterexample.
 The final artifact does not merely rule out a proof architecture, improve
 a constant, or verify an externally supplied strategy. This is an ordinary
 mathematical PASS, not a new Lean certification or a full-conjecture claim.
+
+## Whole raw class already covered by the punishment-tail source
+
+The exact criterion in the packet is s_a≥0 and
+r_a(T+a)−r_a(T)≥0 for every nonempty T⊆I\{a}. Put g(∅)=0 and let
+g(T) be that joining difference otherwise. Thus g is pointwise nonnegative.
+Choose an induced finite product Nash law p internally, using
+`quittingPersistentBaseNashSet_nonempty` in
+`UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean` with
+base={a} and free=I\{a}.
+
+The literal quantity `quittingSingletonBaseOwnerFloorExcess` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`
+is Continue priced at the owner's punishment value P_a minus the nominal
+first-row target. It is exactly
+
+    floorExcess(p)=−E_p g+p_∅(P_a−s_a)≤0.
+
+Here E_p g≥0 pointwise and P_a≤max(s_a,0)=s_a by
+`quittingPunishmentValue_le_max_solo` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`. There are no outsider
+coordinates because free is the whole complement. The same source file's
+`nonempty_quittingSingletonBaseCertificate_of_inducedNash` therefore
+constructs the certificate, and
+`QuittingSingletonBaseCertificate.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingletonBaseSemanticDispatch.lean`
+already yields the fixed-target all-behavior UE. Equivalently, the positive
+gap alternative `exists_uniformPayoff_or_singletonBase_pos_gap` cannot hold
+at the internally produced p.
+
+This includes signed rewards away from a, weak joins, zero own level and
+empty free type. It covers every table satisfying the packet's raw
+criterion, not just its displayed example. The off-path tail in this
+existing consumer is near-minmax punishment, not stationary repetition of
+the first row. Thus absence of a sure-quitter stationary equilibrium does
+not separate the class from this source.
+
+The packet's exact terminal/every-positive-horizon Nash profile with a quiet
+tail is a valid stronger delivery conclusion. It supplies no further UE
+counterexample-class narrowing beyond this existing composition, however.
+Its negative-join necessary condition is already the contrapositive of that
+composition. The earlier coverage and export-significance statements in
+this review are superseded, while all checked mathematical proofs and
+supporting exact examples retain their stated ordinary-mathematics validity.
