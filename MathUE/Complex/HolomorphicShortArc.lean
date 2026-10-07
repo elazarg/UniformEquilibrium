@@ -196,4 +196,214 @@ private theorem injective_path_trans
     dsimp only at h
     linarith
 
+private def rectangleArc (left right height : ℝ) (t : ℝ) : ℂ :=
+  if t ≤ 1 then (left : ℂ) + ((height * t : ℝ) : ℂ) * I
+  else if t ≤ 2 then
+    ((left + (right - left) * (t - 1) : ℝ) : ℂ) + (height : ℂ) * I
+  else (right : ℂ) + ((height * (3 - t) : ℝ) : ℂ) * I
+
+private theorem continuous_rectangleArc (left right height : ℝ) :
+    Continuous (rectangleArc left right height) := by
+  unfold rectangleArc
+  apply Continuous.if_le (by fun_prop) ?_ continuous_id continuous_const
+  · intro t ht
+    change t = 1 at ht
+    subst t
+    norm_num
+  · apply Continuous.if_le (by fun_prop) (by fun_prop) continuous_id continuous_const
+    intro t ht
+    change t = 2 at ht
+    subst t
+    push_cast
+    ring
+
+private theorem rectangleArc_endpoints (left right height : ℝ) :
+    rectangleArc left right height 0 = (left : ℂ) ∧
+      rectangleArc left right height 3 = (right : ℂ) := by
+  norm_num [rectangleArc]
+
+private theorem rectangleArc_coordinates
+    {left right height : ℝ} (hlr : left < right) (hh : 0 < height)
+    {t : ℝ} (ht : t ∈ Icc (0 : ℝ) 3) :
+    (rectangleArc left right height t).re ∈ Icc left right ∧
+      (rectangleArc left right height t).im ∈ Icc 0 height := by
+  unfold rectangleArc
+  split_ifs with hfirst hsecond <;>
+    simp only [Complex.add_re, Complex.add_im, Complex.mul_re, Complex.mul_im,
+      Complex.ofReal_re, Complex.ofReal_im, I_re, I_im, mul_one, mul_zero,
+      sub_zero, add_zero, zero_add]
+  · constructor
+    · exact ⟨le_rfl, hlr.le⟩
+    · constructor <;> nlinarith [ht.1]
+  · constructor
+    · constructor <;> nlinarith
+    · exact ⟨hh.le, le_rfl⟩
+  · constructor
+    · exact ⟨hlr.le, le_rfl⟩
+    · constructor <;> nlinarith [ht.2]
+
+private theorem rectangleArc_im_pos
+    {left right height : ℝ} (hh : 0 < height)
+    {t : ℝ} (ht : t ∈ Ioo (0 : ℝ) 3) :
+    0 < (rectangleArc left right height t).im := by
+  unfold rectangleArc
+  split_ifs <;>
+    simp only [Complex.add_im, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, I_re, I_im, mul_one, mul_zero, add_zero, zero_add]
+  · exact mul_pos hh ht.1
+  · exact hh
+  · exact mul_pos hh (sub_pos.mpr ht.2)
+
+private theorem rectangleArc_injOn
+    {left right height : ℝ} (hlr : left < right) (hh : 0 < height) :
+    InjOn (rectangleArc left right height) (Icc (0 : ℝ) 3) := by
+  intro s hs t ht heq
+  have hre := congrArg Complex.re heq
+  have him := congrArg Complex.im heq
+  dsimp only [rectangleArc] at hre him
+  split_ifs at hre him <;>
+    simp only [Complex.add_re, Complex.add_im, Complex.mul_re, Complex.mul_im,
+      Complex.ofReal_re, Complex.ofReal_im, I_re, I_im, mul_one, mul_zero,
+      sub_zero, add_zero, zero_add] at hre him <;>
+    nlinarith
+
+private theorem logarithmicDiskMap_injOn_closed_upper_strip
+    {width : ℝ} (hwidth : width < 2 * Real.pi) (angle : ℝ) :
+    InjOn (logarithmicDiskMap angle)
+      {z : ℂ | 0 < z.re ∧ z.re < width ∧ 0 ≤ z.im} := by
+  intro z hz w hw heq
+  have hz' : z + I ∈ logarithmicStrip width := by
+    simpa only [logarithmicStrip, mem_ofPred_eq, Complex.add_re, Complex.add_im,
+      I_re, I_im, add_zero] using
+      (show 0 < z.re ∧ z.re < width ∧ 0 < z.im + 1 from
+        ⟨hz.1, hz.2.1, by linarith [hz.2.2]⟩)
+  have hw' : w + I ∈ logarithmicStrip width := by
+    simpa only [logarithmicStrip, mem_ofPred_eq, Complex.add_re, Complex.add_im,
+      I_re, I_im, add_zero] using
+      (show 0 < w.re ∧ w.re < width ∧ 0 < w.im + 1 from
+        ⟨hw.1, hw.2.1, by linarith [hw.2.2]⟩)
+  have hshift : logarithmicDiskMap angle (z + I) =
+      logarithmicDiskMap angle (w + I) := by
+    simpa only [logarithmicDiskMap, add_mul, Complex.exp_add, mul_assoc] using
+      congrArg (fun value => value * Complex.exp (I * I)) heq
+  exact add_right_cancel (logarithmicDiskMap_injOn hwidth angle hz' hw' hshift)
+
+private theorem exists_rectangle_source_path
+    {left right height width : ℝ} (hleft : 0 < left) (hlr : left < right)
+    (hright : right < width) (hheight : 0 < height)
+    (hwidth : width < 2 * Real.pi) (angle : ℝ) :
+    ∃ source : Path (Complex.exp (((angle + left : ℝ) : ℂ) * I))
+        (Complex.exp (((angle + right : ℝ) : ℂ) * I)),
+      Function.Injective source ∧
+      (∀ t : unitInterval, (t : ℝ) ∈ Ioo 0 1 → source t ∈ ball 0 1) ∧
+      ∀ t : unitInterval, source t = logarithmicDiskMap angle
+        (rectangleArc left right height (3 * (t : ℝ))) := by
+  let curve : ℝ → ℂ := fun t => logarithmicDiskMap angle
+    (rectangleArc left right height (3 * t))
+  have hc : Continuous curve :=
+    (differentiable_logarithmicDiskMap angle).continuous.comp
+      ((continuous_rectangleArc left right height).comp (by fun_prop))
+  have hzero : curve 0 = Complex.exp (((angle + left : ℝ) : ℂ) * I) := by
+    simp only [curve, mul_zero, (rectangleArc_endpoints left right height).1]
+    simpa [complexUnitLine] using logarithmicDiskMap_unitLine angle left 0
+  have hone : curve 1 = Complex.exp (((angle + right : ℝ) : ℂ) * I) := by
+    simp only [curve, mul_one, (rectangleArc_endpoints left right height).2]
+    simpa [complexUnitLine] using logarithmicDiskMap_unitLine angle right 0
+  let source := Path.ofLine hc.continuousOn hzero hone
+  have htime (t : unitInterval) : 3 * (t : ℝ) ∈ Icc (0 : ℝ) 3 := by
+    constructor <;> linarith [t.property.1, t.property.2]
+  have hstrip (t : unitInterval) :
+      0 < (rectangleArc left right height (3 * (t : ℝ))).re ∧
+      (rectangleArc left right height (3 * (t : ℝ))).re < width ∧
+      0 ≤ (rectangleArc left right height (3 * (t : ℝ))).im := by
+    have hc := rectangleArc_coordinates hlr hheight (htime t)
+    exact ⟨hleft.trans_le hc.1.1, hc.1.2.trans_lt hright, hc.2.1⟩
+  refine ⟨source, ?_, ?_, fun _ => rfl⟩
+  · intro s t heq
+    have hrect := logarithmicDiskMap_injOn_closed_upper_strip hwidth angle
+      (hstrip s) (hstrip t) heq
+    have htimeEq := rectangleArc_injOn hlr hheight (htime s) (htime t) hrect
+    apply Subtype.ext
+    linarith
+  · intro t ht
+    apply logarithmicDiskMap_mem_ball (width := width)
+    refine ⟨(hstrip t).1, (hstrip t).2.1, ?_⟩
+    apply rectangleArc_im_pos hheight
+    constructor <;> linarith [ht.1, ht.2]
+
+private theorem exists_injective_image_path
+    {g : ℂ → ℂ} (hg : DifferentiableOn ℂ g (ball 0 1))
+    (hinj : InjOn g (ball 0 1)) {a b : ℂ} (source : Path a b)
+    (hsource : Function.Injective source)
+    (hinside : ∀ t : unitInterval, (t : ℝ) ∈ Ioo 0 1 → source t ∈ ball 0 1)
+    {p q : ComplexSphere.Sphere}
+    (hp : p ∈ frontier (ComplexSphere.chart '' (g '' ball 0 1)))
+    (hq : q ∈ frontier (ComplexSphere.chart '' (g '' ball 0 1)))
+    (hpq : p ≠ q)
+    (hleft : Tendsto (fun t : ℝ => ComplexSphere.chart (g (source.extend t)))
+      (𝓝[>] 0) (𝓝 p))
+    (hright : Tendsto (fun t : ℝ => ComplexSphere.chart (g (source.extend t)))
+      (𝓝[<] 1) (𝓝 q)) :
+    ∃ image : Path p q, Function.Injective image ∧
+      ∀ t : unitInterval, (t : ℝ) ∈ Ioo 0 1 →
+        image t = ComplexSphere.chart (g (source t)) := by
+  let φ : ℝ → ComplexSphere.Sphere := fun t =>
+    ComplexSphere.chart (g (source.extend t))
+  have hmap : MapsTo source.extend (Ioo (0 : ℝ) 1) (ball 0 1) := by
+    intro t ht
+    rw [Path.extend_extends' source ⟨t, ht.1.le, ht.2.le⟩]
+    exact hinside ⟨t, ht.1.le, ht.2.le⟩ ht
+  have hcontinuous : ContinuousOn φ (Ioo (0 : ℝ) 1) :=
+    ComplexSphere.isEmbedding_chart.continuous.comp_continuousOn
+      (hg.continuousOn.comp source.extend.continuous.continuousOn hmap)
+  let image : Path p q := Path.ofLine
+    (continuousOn_Icc_extendFrom_Ioo hcontinuous hleft hright)
+    (eq_lim_at_left_extendFrom_Ioo zero_lt_one hleft)
+    (eq_lim_at_right_extendFrom_Ioo zero_lt_one hright)
+  have hagrees (t : unitInterval) (ht : (t : ℝ) ∈ Ioo 0 1) :
+      image t = ComplexSphere.chart (g (source t)) := by
+    change extendFrom (Ioo (0 : ℝ) 1) φ (t : ℝ) = _
+    rw [extendFrom_extends hcontinuous _ ht]
+    exact congrArg (fun z => ComplexSphere.chart (g z))
+      (Path.extend_extends' source t)
+  have hopenComplex : IsOpen (g '' ball 0 1) := by
+    simpa only [range_domRestrict] using
+      (isOpenMap_domRestrict_of_holomorphic_injOn isOpen_ball hg hinj).isOpen_range
+  have hopenChart : IsOpen (range ComplexSphere.chart) := by
+    rw [ComplexSphere.range_chart]
+    exact isClosed_singleton.isOpen_compl
+  have hopen : IsOpen (ComplexSphere.chart '' (g '' ball 0 1)) :=
+    ComplexSphere.isEmbedding_chart.isInducing.isOpenMap hopenChart _ hopenComplex
+  have hpnot : p ∉ ComplexSphere.chart '' (g '' ball 0 1) := by
+    simpa only [hopen.interior_eq] using hp.2
+  have hqnot : q ∉ ComplexSphere.chart '' (g '' ball 0 1) := by
+    simpa only [hopen.interior_eq] using hq.2
+  have hmem (t : unitInterval) (ht : (t : ℝ) ∈ Ioo 0 1) :
+      image t ∈ ComplexSphere.chart '' (g '' ball 0 1) := by
+    rw [hagrees t ht]
+    exact ⟨_, ⟨_, hinside t ht, rfl⟩, rfl⟩
+  have hcases (t : unitInterval) :
+      t = 0 ∨ t = 1 ∨ (t : ℝ) ∈ Ioo 0 1 := by
+    rcases eq_endpoints_or_mem_Ioo_of_mem_Icc t.property with h | h | h
+    · exact Or.inl (Subtype.ext h)
+    · exact Or.inr (Or.inl (Subtype.ext h))
+    · exact Or.inr (Or.inr h)
+  refine ⟨image, ?_, hagrees⟩
+  intro s t heq
+  rcases hcases s with rfl | rfl | hs
+  · rcases hcases t with rfl | rfl | ht
+    · rfl
+    · exact False.elim (hpq (by simpa using heq))
+    · exact False.elim (hpnot (by simpa only [← heq, Path.source] using hmem t ht))
+  · rcases hcases t with rfl | rfl | ht
+    · exact False.elim (hpq (by simpa using heq.symm))
+    · rfl
+    · exact False.elim (hqnot (by simpa only [← heq, Path.target] using hmem t ht))
+  · rcases hcases t with rfl | rfl | ht
+    · exact False.elim (hpnot (by simpa only [heq, Path.source] using hmem s hs))
+    · exact False.elim (hqnot (by simpa only [heq, Path.target] using hmem s hs))
+    · rw [hagrees s hs, hagrees t ht] at heq
+      exact hsource (hinj (hinside s hs) (hinside t ht)
+        (ComplexSphere.isEmbedding_chart.injective heq))
+
 end Math.ComplexAnalysis

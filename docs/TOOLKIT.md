@@ -398,8 +398,16 @@ branch retains both-phase below-singleton values and passive Quit gaps,
 without requiring nearby family equalities or joining caps. The same selected
 odds give actual terminal targets, exact terminal Nash and same-profile
 horizon witnesses at both initial phases; thresholds need not be uniform
-over nearby tables. Quantitative rates, second-root selection and the
-fixture's child/debt and source-separation claims remain separate.
+over nearby tables. `finiteAverage_delivery_le_timeConstant` and
+`finiteAverage_deviation_gain_le_timeConstant`
+(`UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseFiniteHorizon.lean`)
+bound delivery by `M*C/N` and every behavioral gain by `2*M*C/N` at every
+initial phase and positive horizon, where `C = 1 + 2/(1-t^3)`. The printed
+`2*M*C/N` and `4*M*C/N` bounds follow by weakening; the selected root precedes
+the reward bound and all horizon quantifiers. The formal clock estimate uses
+actual live Cesaro mass, not a separately stated expected-exit-time bound.
+Second-root selection and the fixture's child/debt and source-separation
+claims remain separate.
 
 `GameTheory.PairedCycle.TwoPairOdds.passiveEquation_eq_scaled_post_sub_continue`
 (`UniformEquilibrium/Quitting/Cycles/TwoPairOddsValues.lean`) identifies the
@@ -411,8 +419,24 @@ Q, singleton-floor or joining-cap conditions.
 the raw strict crossed-matching payoff producer; its Q branch produces the
 positive odds and exact fixed profile internally, while its non-Q branch
 uses the existing original-game result. The weak source uses reward closure.
-Signed own-singletons and unmentioned rewards remain unrestricted. Complete
-packet rates, neighborhoods, fixtures and separation claims are not inferred.
+Signed own-singletons and unmentioned rewards remain unrestricted.
+`exists_exact_cycle_of_positive_inverse_all_initial`
+(`UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`) supplies
+the distinct positive-inverse source without Q or favorite sign assumptions.
+The same file supplies all-initial strict-Q witnesses, a pure scheduled-pair
+cap producer and arbitrary-label reindex wrappers. The pure-pair producer
+has exact Nash at every finite horizon, using
+`oneDateThenNever_exactHorizon_of_sureExitSet`
+(`UniformEquilibrium/Quitting/Root/PureSureSetExactHorizons.lean`).
+Complete packet rates, neighborhoods, fixtures and separation claims are not inferred.
+`GameTheory.CrossedMatchingFixture.exact_terminal_and_fixedProfile`
+(`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixture.lean`) supplies
+the complete literal fifteen-row table, rational positive odds, actual phase
+values and active/passive endpoints, one hazard vector and exact Nash profiles
+for both initial phases, each fixed before all accuracy quantifiers. Its strict
+raw-source region is open in every reward entry
+and contains the fixture; nearby tables internally produce UE targets.
+Matrix/degree, all-child/debt and source/stationary screens remain separate.
 `GameTheory.PairedCycle.exists_one_hazards_all_finiteTruncations_of_rawRegion`
 (`UniformEquilibrium/Quitting/Cycles/PairedCycleFiniteSource.lean`) retains
 that one hazard vector for all initial phases and all positive cycle counts.

@@ -196,6 +196,12 @@ holomorphic consumer supplies that control internally. Limits may be the
 chart pole; a finite complex-coordinate limit is not assumed. This does not
 yet provide spherical geodesic distance, a global infinity-chart adapter,
 crosscuts or boundary extension of the disk map.
+The same file's `edist_sphere_holomorphic_unitLine_le_lintegral` now exposes
+the actual restricted-interval chord bound without completeness, and
+`ediam_sphere_landing_holomorphic_unitLine_le_lintegral` bounds the diameter
+of an actual continuous agreeing extension by its computed speed integral.
+This diameter result consumes that extension; it does not assume boundary
+injectivity or construct crosscuts.
 
 `Math.ComplexAnalysis.exists_sphere_radial_limit_ae_real`
 (`MathUE/Complex/HolomorphicRadialLimits.lean`) now derives actual radial

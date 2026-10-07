@@ -1101,9 +1101,27 @@ assertion that a single limiting profile satisfies the strict construction.
 (`MathUE/LinearProgramming/PositiveInverseTwoPairOdds.lean`) supplies a distinct
 odds producer from a zero-diagonal positive-inverse matrix, negative scheduled
 entries, nonnegative premiums and nonpositive passive increments. No favorite
-matching signs or Q hypothesis is inferred. Its actual-game source adapter,
-and both matching packets' quantitative rates, neighborhoods, rational
-fixtures and child/source-separation obligations, remain separate.
+matching signs or Q hypothesis is inferred. The actual-game adapter is now
+`exists_exact_cycle_of_positive_inverse_all_initial`
+(`UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`), with
+one produced odds vector before all initial phases. Strict, weak and inverse
+sources also have arbitrary-label transport. The pure scheduled-pair cap
+source uses the generic `oneDateThenNever_exactHorizon_of_sureExitSet`
+(`UniformEquilibrium/Quitting/Root/PureSureSetExactHorizons.lean`) and retains
+exact terminal Nash, every finite horizon and a fixed original-game target.
+Both matching packets' quantitative rates, full fixtures and child/source
+separation obligations remain separate.
+
+`GameTheory.CrossedMatchingFixture.exact_terminal_and_fixedProfile`
+(`UniformEquilibrium/Quitting/Examples/CrossedMatchingFixture.lean`) supplies
+the complete rational table, explicit positive odds and passive equations,
+both phase vectors and literal active/passive endpoints. It identifies the
+actual terminal payoff and retains exact terminal Nash and one profile for
+all accuracies at sufficiently long horizons, at either initial phase.
+The strict raw-source region is open in the full reward-table coordinates
+and contains this table, yielding actual nearby UE targets. Principal matrix
+census, all-fourteen-child debt failures and source/stationary separations
+are still separate; the fixture result alone is not packet completion.
 
 ## Below-singleton joint-phase raw producer
 
@@ -1142,7 +1160,25 @@ give actual terminal values, exact terminal Nash, same-profile horizon
 witnesses and UE for both initial phases, with no common horizon threshold
 claimed across nearby tables.
 
-The packet remains incomplete: explicit geometric finite-horizon rates,
+`finiteAverage_delivery_le_timeConstant` and
+`finiteAverage_deviation_gain_le_timeConstant`
+(`UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseFiniteHorizon.lean`)
+give the stronger all-initial delivery `M*C/N` and complete behavioral regret
+`2*M*C/N`, where `C = 1 + 2/(1-t^3)` and `N > 0`. The packet's printed
+`2*M*C/N` and `4*M*C/N` are thin weakenings, not optimality claims. The raw
+producer selects its root before every reward-bound and horizon quantifier;
+signed own rewards are allowed. Its clock source is actual live Cesaro mass;
+the separately stated expected deleted-opponent exit-time bound remains separate.
+
+`quietLift_gain_gt_weighted_childDebt_add_never_of_exact_child`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PureAbsorbingChildDebtObstruction.lean`)
+packages the shared semantic obstruction: actual exact child Nash gives zero
+complete debts, actual joint Never zero kills any finite signed Never charge,
+and an explicit positive outsider deviation exceeds every real weighted sum.
+The literal all-fourteen-child profiles and table gains are not supplied by
+this conditional helper.
+
+The packet remains incomplete: separately stated expected-exit-time bound,
 child/debt, raw-criterion, matrix, response and stationary separations, and
 the invalid second-root selection remain separate. The matching packet's
 inverse and Brouwer route is distinct from this scalar IVT route; the

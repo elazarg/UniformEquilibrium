@@ -4,6 +4,7 @@ public import MathUE.Analysis.NormalizedSphereChartSpeed
 public import MathUE.Analysis.FiniteIntegralCurveLanding
 public import MathUE.Complex.HolomorphicSphericalEnergy
 public import Mathlib.Analysis.Calculus.Deriv.Mul
+public import Mathlib.Topology.EMetricSpace.Diam
 
 /-! # Actual holomorphic unit-line speed in the normalized sphere chart
 
@@ -97,6 +98,57 @@ theorem dist_sphere_holomorphic_unitLine_le_integral
   rw [intervalIntegral.integral_congr_ae_restrict hae] at hbound
   exact hbound
 
+/-- The actual ENNReal chord bound on an open interval. Completeness is not
+needed until an endpoint extension is constructed. -/
+theorem edist_sphere_holomorphic_unitLine_le_lintegral
+    (pole : E) (plane : ℂ →ₗᵢ[ℝ] E) (hpole : ‖pole‖ = 1)
+    (horthogonal : ∀ z, ⟪pole, plane z⟫_ℝ = 0)
+    {f : ℂ → ℂ} {U : Set ℂ} (hU : IsOpen U) (hf : DifferentiableOn ℂ f U)
+    {origin direction : ℂ} (hdirection : ‖direction‖ = 1)
+    {a b : ℝ}
+    (hline : MapsTo (complexUnitLine origin direction) (Ioo a b) U)
+    (hintegrable : IntegrableOn
+      (fun t => sphericalDerivativeSpeed f (complexUnitLine origin direction t))
+      (Ioo a b)) (s t : Ioo a b) :
+    edist (NormalizedSphereChart.chart pole plane hpole horthogonal
+        (f (complexUnitLine origin direction s)))
+      (NormalizedSphereChart.chart pole plane hpole horthogonal
+        (f (complexUnitLine origin direction t))) ≤
+      ∫⁻ r in uIoc (s : ℝ) (t : ℝ),
+        ENNReal.ofReal (sphericalDerivativeSpeed f (complexUnitLine origin direction r))
+          ∂volume.restrict (Ioo a b) := by
+  let speed : ℝ → ℝ := fun t =>
+    sphericalDerivativeSpeed f (complexUnitLine origin direction t)
+  let curve : Ioo a b → sphere (0 : E) 1 := fun t =>
+    NormalizedSphereChart.chart pole plane hpole horthogonal
+      (f (complexUnitLine origin direction t))
+  have hnonnegative (t : ℝ) : 0 ≤ speed t := by
+    dsimp [speed, sphericalDerivativeSpeed]
+    positivity
+  have hordered (s t : Ioo a b) (hst : (s : ℝ) ≤ t) :
+      edist (curve s) (curve t) ≤
+        ∫⁻ r in uIoc (s : ℝ) (t : ℝ), ENNReal.ofReal (speed r)
+          ∂volume.restrict (Ioo a b) := by
+    have hsub : Icc (s : ℝ) (t : ℝ) ⊆ Ioo a b := fun r hr =>
+      ⟨s.property.1.trans_le hr.1, hr.2.trans_lt t.property.2⟩
+    have hsuboc : Ioc (s : ℝ) (t : ℝ) ⊆ Ioo a b :=
+      fun r hr => hsub ⟨hr.1.le, hr.2⟩
+    have hint : IntervalIntegrable speed volume (s : ℝ) (t : ℝ) :=
+      (intervalIntegrable_iff_integrableOn_Ioc_of_le hst).mpr
+        (hintegrable.mono_set hsuboc)
+    have hbound := dist_sphere_holomorphic_unitLine_le_integral
+      pole plane hpole horthogonal hU hf hdirection hst
+      (fun r hr => hline (hsub hr)) hint
+    rw [uIoc_of_le hst, Measure.restrict_restrict_of_subset hsuboc]
+    rw [← ofReal_integral_eq_lintegral_ofReal
+      (hintegrable.mono_set hsuboc) (Filter.Eventually.of_forall hnonnegative)]
+    rw [edist_dist]
+    apply ENNReal.ofReal_le_ofReal
+    simpa only [curve, dist_comm, intervalIntegral.integral_of_le hst] using hbound
+  rcases le_total (s : ℝ) (t : ℝ) with hst | hts
+  · exact hordered s t hst
+  · simpa only [edist_comm, uIoc_comm] using hordered t s hts
+
 /-- Finite actual spherical speed produces both landing values, possibly at
 the chart pole. Nothing is asserted about a finite complex endpoint. -/
 theorem exists_sphere_landing_holomorphic_unitLine [CompleteSpace E]
@@ -125,35 +177,55 @@ theorem exists_sphere_landing_holomorphic_unitLine [CompleteSpace E]
     rw [← ofReal_integral_eq_lintegral_ofReal hintegrable
       (Filter.Eventually.of_forall hnonnegative)]
     exact ENNReal.ofReal_ne_top
-  have hordered (s t : Ioo a b) (hst : (s : ℝ) ≤ t) :
-      edist (curve s) (curve t) ≤
-        ∫⁻ r in uIoc (s : ℝ) (t : ℝ), ENNReal.ofReal (speed r)
-          ∂volume.restrict (Ioo a b) := by
-    have hsub : Icc (s : ℝ) (t : ℝ) ⊆ Ioo a b := fun r hr =>
-      ⟨s.property.1.trans_le hr.1, hr.2.trans_lt t.property.2⟩
-    have hsuboc : Ioc (s : ℝ) (t : ℝ) ⊆ Ioo a b :=
-      fun r hr => hsub ⟨hr.1.le, hr.2⟩
-    have hint : IntervalIntegrable speed volume (s : ℝ) (t : ℝ) :=
-      (intervalIntegrable_iff_integrableOn_Ioc_of_le hst).mpr
-        (hintegrable.mono_set hsuboc)
-    have hbound := dist_sphere_holomorphic_unitLine_le_integral
-      pole plane hpole horthogonal hU hf hdirection hst
-      (fun r hr => hline (hsub hr)) hint
-    rw [uIoc_of_le hst, Measure.restrict_restrict_of_subset hsuboc]
-    rw [← ofReal_integral_eq_lintegral_ofReal
-      (hintegrable.mono_set hsuboc) (Filter.Eventually.of_forall hnonnegative)]
-    rw [edist_dist]
-    apply ENNReal.ofReal_le_ofReal
-    simpa only [curve, dist_comm, intervalIntegral.integral_of_le hst] using hbound
   have hchord (s t : Ioo a b) : edist (curve s) (curve t) ≤
       ∫⁻ r in uIoc (s : ℝ) (t : ℝ), ENNReal.ofReal (speed r)
-        ∂volume.restrict (Ioo a b) := by
-    rcases le_total (s : ℝ) (t : ℝ) with hst | hts
-    · exact hordered s t hst
-    · simpa only [edist_comm, uIoc_comm] using hordered t s hts
+        ∂volume.restrict (Ioo a b) :=
+    edist_sphere_holomorphic_unitLine_le_lintegral pole plane hpole horthogonal
+      hU hf hdirection hline hintegrable s t
   let : CompleteSpace (sphere (0 : E) 1) := isClosed_sphere.isComplete.completeSpace_coe
   exact FiniteIntegralCurve.exists_landing_of_edist_le_lintegral hab
     Measure.restrict_le_self hfinite hchord
+
+theorem ediam_sphere_landing_holomorphic_unitLine_le_lintegral
+    (pole : E) (plane : ℂ →ₗᵢ[ℝ] E) (hpole : ‖pole‖ = 1)
+    (horthogonal : ∀ z, ⟪pole, plane z⟫_ℝ = 0)
+    {f : ℂ → ℂ} {U : Set ℂ} (hU : IsOpen U) (hf : DifferentiableOn ℂ f U)
+    {origin direction : ℂ} (hdirection : ‖direction‖ = 1)
+    {a b : ℝ} (hab : a < b)
+    (hline : MapsTo (complexUnitLine origin direction) (Ioo a b) U)
+    (hintegrable : IntegrableOn
+      (fun t => sphericalDerivativeSpeed f (complexUnitLine origin direction t))
+      (Ioo a b))
+    (landing : Icc a b → sphere (0 : E) 1) (hcontinuous : Continuous landing)
+    (hagrees : ∀ t : Ioo a b, landing ⟨t, t.property.1.le, t.property.2.le⟩ =
+      NormalizedSphereChart.chart pole plane hpole horthogonal
+        (f (complexUnitLine origin direction t))) :
+    Metric.ediam (range landing) ≤
+      ∫⁻ t in Ioo a b,
+        ENNReal.ofReal (sphericalDerivativeSpeed f (complexUnitLine origin direction t)) := by
+  let inclusion : Ioo a b → Icc a b := Set.inclusion Ioo_subset_Icc_self
+  let curve : Ioo a b → sphere (0 : E) 1 := fun t =>
+    NormalizedSphereChart.chart pole plane hpole horthogonal
+      (f (complexUnitLine origin direction t))
+  have hdense : DenseRange inclusion := by
+    apply (denseRange_inclusion_iff Ioo_subset_Icc_self).mpr
+    rw [closure_Ioo hab.ne]
+  have heq : landing '' range inclusion = range curve := by
+    rw [← Set.range_comp]
+    congr 1
+    funext t
+    exact hagrees t
+  calc
+    Metric.ediam (range landing) ≤
+        Metric.ediam (closure (landing '' range inclusion)) :=
+      Metric.ediam_mono (hcontinuous.range_subset_closure_image_dense hdense)
+    _ = Metric.ediam (range curve) := by rw [Metric.ediam_closure, heq]
+    _ ≤ _ := by
+      apply Metric.ediam_le
+      rintro _ ⟨s, rfl⟩ _ ⟨t, rfl⟩
+      exact (edist_sphere_holomorphic_unitLine_le_lintegral
+        pole plane hpole horthogonal hU hf hdirection hline hintegrable s t).trans
+          (setLIntegral_le_lintegral _ _)
 
 /-- The finite ENNReal integral formulation derives its real integrability
 from local holomorphicity; no measurability of the arbitrary outside values is used. -/
