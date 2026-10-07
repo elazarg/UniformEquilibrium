@@ -15,6 +15,7 @@ domination extends to every fixed integrable real test of the base measure.
 
 This is the measure-valued compactness foundation for bounded likelihoods on a
 compact interval. It does not assert convergence of discontinuous moving tests,
+unless their actual base-measure L¹ error tends to zero. It does not produce
 marked calendars, ties, or stopping-game response caps.
 -/
 
@@ -168,6 +169,41 @@ theorem tendsto_integral_of_tendsto_of_le_smul
     (∫ x, approximation x ∂(limit : Measure X))
     (∫ x, test x ∂(limit : Measure X))
   rw [dist_comm (∫ x, approximation x ∂(limit : Measure X))] at htriangle'
+  linarith
+
+/-- Moving integrable tests may be combined with weakly converging dominated
+laws when their actual L¹ error under the base probability tends to zero.
+Weak convergence of the laws alone does not supply this test-error premise. -/
+theorem tendsto_integral_moving_test_of_tendsto_of_le_smul
+    [TopologicalSpace.MetrizableSpace X] [CompactSpace X] [BorelSpace X]
+    {J : Type*} {filter : Filter J} [filter.NeBot]
+    (base : ProbabilityMeasure X) (constant : NNReal)
+    {laws : J → ProbabilityMeasure X} {limit : ProbabilityMeasure X}
+    (hlimit : Tendsto laws filter (𝓝 limit))
+    (hbound : ∀ᶠ j in filter, (laws j : Measure X) ≤ constant • (base : Measure X))
+    (test : X → ℝ) (htest : Integrable test (base : Measure X))
+    (movingTest : J → X → ℝ)
+    (hmoving : ∀ᶠ j in filter, Integrable (movingTest j) (base : Measure X))
+    (herror : Tendsto
+      (fun j => ∫ x, ‖movingTest j x - test x‖ ∂(base : Measure X)) filter (𝓝 0)) :
+    Tendsto (fun j => ∫ x, movingTest j x ∂(laws j : Measure X)) filter
+      (𝓝 (∫ x, test x ∂(limit : Measure X))) := by
+  have hfixed := tendsto_integral_of_tendsto_of_le_smul
+    base constant hlimit hbound test htest
+  have hscaled : Tendsto
+      (fun j => (constant : ℝ) * ∫ x, ‖movingTest j x - test x‖ ∂(base : Measure X))
+      filter (𝓝 0) := by
+    simpa only [mul_zero] using tendsto_const_nhds.mul herror
+  apply Metric.tendsto_nhds.mpr
+  intro ε hε
+  have hsmall := hscaled.eventually (gt_mem_nhds (show (0 : ℝ) < ε / 2 by positivity))
+  have hclose := (Metric.tendsto_nhds.mp hfixed) (ε / 2) (by positivity)
+  filter_upwards [hbound, hmoving, hsmall, hclose] with j hj hmovingj hsmallj hclosej
+  have herr := dist_integral_le_of_le_smul base (laws j) constant hj hmovingj htest
+  have htriangle := dist_triangle
+    (∫ x, movingTest j x ∂(laws j : Measure X))
+    (∫ x, test x ∂(laws j : Measure X))
+    (∫ x, test x ∂(limit : Measure X))
   linarith
 
 /-- One dominated probability subsequence works for all fixed integrable real

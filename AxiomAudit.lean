@@ -365,6 +365,7 @@ import MathUE.MaxAffineStoppingValue
 import MathUE.MeanErgodic
 import MathUE.MeasurableSelection
 import MathUE.MeasureTheory.BoundedDensityWeakCompactness
+import MathUE.MeasureTheory.FiniteProductDominatedWeakCompactness
 import MathUE.MeshContraction
 import MathUE.Minimax.DiscountedShapleySystem
 import MathUE.Minimax.Loomis
@@ -572,6 +573,7 @@ import MathUE.Probability.PrefixFreeSubstochasticMass
 import MathUE.Probability.QuantileClock
 import MathUE.Probability.QuantileClockCollision
 import MathUE.Probability.QuotientShadowLift
+import MathUE.Probability.RatioProperPair
 import MathUE.Probability.ReachableClosedClass
 import MathUE.Probability.RealizedAccountDeflation
 import MathUE.Probability.ResetActivation
@@ -2492,6 +2494,8 @@ import UniformEquilibrium.Quitting.Cycles.MixedCycleSoloMesh
 import UniformEquilibrium.Quitting.Cycles.MixedCycleSoloMeshCertificate
 import UniformEquilibrium.Quitting.Cycles.MixedCycleSourceCertificate
 import UniformEquilibrium.Quitting.Cycles.MixedCycleUniformPayoff
+import UniformEquilibrium.Quitting.Cycles.NegativePremiumCyclicChildEndpoints
+import UniformEquilibrium.Quitting.Cycles.NegativePremiumCyclicChildSource
 import UniformEquilibrium.Quitting.Cycles.OwnShiftCycleExactification
 import UniformEquilibrium.Quitting.Cycles.OwnerSingletonCyclicConcentration
 import UniformEquilibrium.Quitting.Cycles.PairedCycleAffineEquilibrium

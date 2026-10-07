@@ -109,6 +109,7 @@ import MathUE.ExponentialExcessScale
 import MathUE.FinFourSubsetIncidenceCounts
 import MathUE.FiniteSupportInwardScaling
 import MathUE.Probability.DiscreteHazardQuitZeroInstallation
+import MathUE.Probability.RatioProperPair
 import MathUE.Probability.StoppingLawQuantile
 import MathUE.Probability.StoppingLawFirstCrossing
 import MathUE.Probability.StoppingLawConditioning
@@ -826,3 +827,4 @@ import MathUE.Viability.LipschitzCompactness
 import MathUE.WeierstrassCurve
 import MathUE.WeightedBlackwellFerguson
 import MathUE.MeasureTheory.BoundedDensityWeakCompactness
+import MathUE.MeasureTheory.FiniteProductDominatedWeakCompactness
