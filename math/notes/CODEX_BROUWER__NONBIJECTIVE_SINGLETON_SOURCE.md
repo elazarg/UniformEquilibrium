@@ -123,6 +123,15 @@ at EVERY bound but full debt exactly 3, with explicit actual finite-law
 approximants retaining that gap. Those two compact-Nash mechanisms are
 retired; the open geometry still requires a response-complete global
 joint-law producer, not another local-security interface.
+The latest conditional old-mass argument now gives a genuine additional
+source restriction: when exactly one unique cap has zero OWN point mass
+and is later than the other three supported unique caps, that owner must
+stop surely by their common cap clock. The focused independent NOETHER
+review passed LC1–LC5 and its earlier-mass consequence below. This is not
+an export or a whole-branch consumer. The remaining geometry includes a
+late exceptional response, a sure owner at the common clock, and all
+unrestricted post-clock opponent laws; the next comparison must price
+those full laws rather than merely the fixed-response polynomial.
 
 The earlier question concerned a raw class with constant participant
 rewards on all joint exits.
@@ -4739,8 +4748,13 @@ bounded-density tuning nor an atomless continuum replacement is used.
 
 ## One exceptional latest cap: conditional old-mass transport and a sure-clock reduction
 
-Status: a COMPLETE ordinary-mathematical source-restriction candidate,
-not independently reviewed or exported, not a whole Fin4 consumer.
+Status: a COMPLETE ordinary-mathematical source restriction, with a
+focused independent NOETHER PASS of LC1–LC5 and the earlier-own-mass
+consequence in LC6. No full export gate or export is requested; this is
+not a whole Fin4 consumer. The review checked the exact positive
+rescaling of the exceptional cap, the moving retained-atom cutoff,
+the two-sided signed original-law transport, and the distinction
+between the algebraic endpoint and its actual unrestricted debt.
 It uses the TRUE global sum minimum and preserves every full response.
 No root Nash, minimizing old tail, nonnegative reward, or atomless
 approximation is assumed. Its source is precisely the produced marked
@@ -4923,3 +4937,71 @@ infinitesimal descent or actual pure-grand minimum is inferred. The
 next question is whether finite-amplitude changes of that sure owner's
 OLD finite mass and the three common-cap laws consume this remaining
 case; its pure-grand polynomial endpoint alone cannot do so.
+
+### LC6. Further selected-response identities, including earlier own mass
+
+The constant polynomial from LC5 can be evaluated with any subset of
+the four reweighting parameters equal to one. This is an algebraic
+identity of the displayed responses, NOT a claim that these endpoints
+still have those actual caps or minimize actual debt. Let
+
+    a_m=q_m({t₀})>0,       e_m⁻=q_m({t<t₀})=1−a_m.
+
+Set the three nonexceptional parameters to one and leave m's parameter
+zero. If m stops at t₀, the selected-response debt is the withdrawal
+gap δ. If m stops earlier, its prescribed payoff is s_m and its late
+response gets r_m(I\{m}); every other owner prescribes its displayed
+response t₀ and contributes zero. Therefore
+
+    δ=a_mδ+e_m⁻[r_m(I\{m})−s_m].                   (LC8)
+
+Combined with δ=r_m(I\{m})−r_m(I), this proves the exact implication
+
+    e_m⁻>0  ⇒  r_m(I)=s_m.                         (LC9)
+
+This is the additional consequence independently checked by NOETHER.
+It does not hold merely from a local debt minimum or the source's
+coordinate margin. It uses the constant two-sided selected-response
+polynomial. If e_m⁻=0, no equality to s_m is inferred.
+
+For completeness, fix a nonexceptional owner i and let
+e_i⁻,a_i,e_i⁺ be its probabilities of stopping before, at, or after
+t₀, with Never included in the last event. Set every OTHER law,
+including m's, to the pure clock t₀ and leave i's original law.
+Writing J=I\{m,i}, the same polynomial gives
+
+    δ=a_iδ+e_i⁻[r_i(I)−s_i]
+       +e_i⁺[r_m(J)−r_m(I\{i})
+                         +r_i(I)−r_i(I\{i})].     (LC10)
+
+The early case makes i prescribe its singleton but display a grand
+response. The late case makes m display the passive payoff from J,
+while m and i's prescribed values come from I\{i}; i's displayed
+response joins the grand coalition. This explicitly retains both
+changed owners in the endpoint ledger.
+
+### LC7. Singleton-pressure containment is automatic on this residual
+
+Let μ({i}) be the prescribed probability that i is the first SOLO
+quitter. For the chosen unique cap response τ_i, let θ_i be its
+probability of quitting SOLO against the three unchanged opponent
+laws; Never has θ_i=0. The LC residual satisfies, pointwise,
+
+    θ_j=0 for every j≠m,
+    θ_m≤μ({m})≤∑_i μ({i}).                        (LC11)
+
+For j≠m the displayed response is t₀. Its opponent m stops no later
+than t₀ surely, so j can never quit alone at that response. If τ_m
+is finite, its solo-response event requires all three opponents to
+stop strictly after τ_m>t₀. On that SAME opponent event the prescribed
+m clock is at most t₀ surely, hence m is the actual first solo
+quitter. Independence permits the event containment without any
+new profile, response coupling, or temporalization assumption. If
+τ_m=Never, its θ_m is already zero.
+
+Consequently the extra selected-family singleton-pressure inequality
+∑_i θ_i≤∑_i μ({i}), obtained on MORSE's worst-table line, does not by
+itself dispatch this geometry: it already holds by literal event
+inclusion. This is not a contradiction from combining two necessary
+conditions. The containment was sent to MORSE and the coordinator;
+the open problem remains a full-cap finite-amplitude repair.

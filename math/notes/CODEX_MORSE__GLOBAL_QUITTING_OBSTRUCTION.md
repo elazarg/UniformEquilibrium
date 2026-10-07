@@ -31,9 +31,19 @@ all-v no-sure and complete matrix supplements are in
 the complete artifact and supplements passed both final byte-bound reviews
 and are now frozen at SHA256
 `1f342e9ee028c79f37d8b95868fa659aa628e0a65670316a7295716775fbc2f3`.
-This is ordinary
-mathematics, not a Lean implementation or export. It does
+This is an independently reviewed mathematical export, not a Lean
+implementation. It does
 not solve the arbitrary-table or worst-table SUM comparison in Section 44.
+
+Current global comparison: Section 46 uses an attained worst SUM table
+and NEW whole-law near-minimizers after a finite own-singleton reward
+increase. It produces an old-table global collision minimum with a
+response-occupation inequality. Consequently the SELECTED source has
+a sure root owner or a genuinely later maximizing cap test: a nonsure
+root with only root maximizers is excluded by a strict finite value
+comparison. This is not a pointwise assertion about every old minimizer,
+nor a sure-boundary consumer. The sure/common-cap residual satisfies the
+occupation inequality automatically. No new export is proposed.
 
 Earlier consuming checkpoint: Section 43 constructs an exact asymmetric
 four-player unrestricted stopping-law LOCAL trap with debt 1/4, every
@@ -8646,3 +8656,256 @@ question is again the genuinely global comparison in Section 44: use ALL
 moving minimizing laws at a worst SUM table to construct a finite-amplitude
 old-table law, not a fixed active-tester derivative or another solved-table
 refinement.
+
+## 46. A finite worst-table comparison consumes the nonsure root-only cap component
+
+Status: complete ordinary-mathematical source restriction, not checked
+in Lean or independently reviewed, and not an export proposal. The
+comparison retains NEW whole-law minimizers of the perturbed table. It
+does not differentiate a fixed old minimizer, fix a response branch
+through a moving minimizer, or claim that every old-table minimum obeys
+the selected occupation inequality. Its consumed component is precisely
+the nonsure original root with NO later cap maximizer. The sure boundary
+is not consumed.
+
+### G1. Exact question and reward direction
+
+Let I={0,1,2,3}. Every actual behavioral profile is represented by four
+independent probability laws p_i on ℕ∪{Never}; a deviator replaces its
+complete law. First finite quitting coalition S receives terminal
+reward r_i(S), and all Never receives zero. Let μ_p(S) be the actual
+first-coalition probability, U_i(r,p) the prescribed terminal payoff,
+B_i(r,p) the supremum over ALL pure finite dates and Never, and
+
+    D_r(p)=∑[i∈I](B_i(r,p)−U_i(r,p)),
+    Δ(r)=inf[all actual independent p] D_r(p).
+
+No selected response, public correlation, finite-horizon objective or
+bounded-controller restriction enters these quantities. Section 44
+proved |Δ(r)−Δ(r′)|≤8‖r−r′‖∞. Assume that the attained worst table on
+the closed sixty-coordinate unit cube satisfies
+
+    Ω=Δ(r*)=max[|r_i(S)|≤1] Δ(r)>0.                 (G1)
+
+The all-owner strict moat gives
+
+    s_i=r*_i({i})≤1−Ω−Ω²/8<1.                    (G2)
+
+Thus there is a common ε₀>0 such that increasing ALL FOUR own-singleton
+entries by any ε∈(0,ε₀) remains in the same reward cube. Write r^ε for
+this table. All other fifty-six coordinates and the Never reward are
+unchanged. This is a literal finite table perturbation, not a payoff
+translation or an optional-row stretch.
+
+For each ε choose an ACTUAL FINITE stopping-law profile p^ε satisfying
+
+    D_(r^ε)(p^ε)≤Δ(r^ε)+ε²≤Ω+ε².                 (G3)
+
+The finite-law infimum equals the unrestricted infimum by the existing
+late-finite censoring estimate. The choice in (G3) may change completely
+with ε. In particular it is not an old minimizing profile held fixed.
+
+### G2. Exact finite comparison against ALL old maximizing tests
+
+For a pure own test t, define its singleton occupation against p_-i by
+
+    θ_i(t,p_-i)=P(the first coalition is {i}
+                         when i prescribes t).
+
+For finite t this is ∏[j≠i]p_j({u:u>t}∪{Never}); for Never it is zero.
+Increasing the own-singleton entry gives EXACTLY
+
+    V_i(r^ε,t,p_-i)=V_i(r*,t,p_-i)+εθ_i(t,p_-i),
+    U_i(r^ε,p)=U_i(r*,p)+εμ_p({i}).               (G4)
+
+Because p^ε has finite stopping support, its old cap is attained among
+finitely many date-equivalence classes together with Never. For ANY
+choice of OLD maximizing tests
+
+    t_i^ε∈argmax[all finite t and Never] V_i(r*,t,p_-i^ε),
+
+the new cap is at least the payoff of that same test. Consequently
+
+    D_(r^ε)(p^ε)−D_(r*)(p^ε)
+       ≥ε∑[i∈I](θ_i(t_i^ε,p_-i^ε)−μ_(p^ε)({i})).             (G5)
+
+The OLD whole-law global floor D_(r*)(p^ε)≥Ω and (G3) imply
+
+    ∑[i∈I] θ_i(t_i^ε,p_-i^ε)
+       ≤∑[i∈I] μ_(p^ε)({i})+ε.                 (G6)
+
+This holds for EVERY independent choice from the four OLD maximizing
+sets of the NEW near-minimizer p^ε. In particular one may select the
+old maximizing test of largest singleton occupation for each owner.
+It does NOT compare branches that become old maximizers only after
+taking a limit. That distinction is essential: the minimizer and its
+active response family both move.
+
+Each cap increment in (G4) lies in [0,ε], as does each prescribed payoff
+increment. Hence |D_(r^ε)(p)−D_(r*)(p)|≤4ε, and (G3) also gives
+
+    Ω≤D_(r*)(p^ε)≤Ω+4ε+ε².                       (G7)
+
+Thus the SAME new profiles form a genuine old-table minimizing sequence
+as ε decreases to zero. The eventual collision source comes from these
+profiles; it is not imported from an unrelated old minimizing sequence.
+
+### G3. Original collision extraction with response occupations retained
+
+Take any sequence ε_k↓0. Apply the original-stage producer in
+`../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md` to the
+old minimizing sequence in (G7), keeping its finite witnesses. After a
+subsequence there are original dates a_k with pre-mark absorption →0
+and one fixed nonsingleton coalition whose original stage probability
+has a positive uniform lower bound. The marked ordered compactification
+retains the full prescribed coalition law, every complete cap, a first
+positive atom a, and all moving old maximizing tests t_i^(ε_k).
+
+The response-occupation transport used here is not an extra strategic
+assumption. In the original quantile charts every coalition indicator
+is one of the bounded ordered-rectangle kernels already used to
+transport payoffs for arbitrary rewards. Test against the indicator
+reward which is one on {i} and zero on every other outcome, including
+Never. The same moving-test rectangle convergence transports θ_i and
+μ({i}). A finite test escaping past the finite support retains its
+finite label; it is never replaced by Never. The empty last finite
+test c⁺ and c have the same singleton occupation because all produced
+prescribed laws have zero mass at c. Never retains occupation zero.
+
+Write x for the literal marked whole-law limit. It satisfies
+
+    D_(r*)(x)=Ω,
+
+with the TRUE global minimum over every actual law and the produced
+variation domain. Let τ_i be the selected limiting maximizing test of
+owner i, and ν_i its unilateral first-coalition law against x_-i. Limit
+of (G6) gives
+
+    ∑[i∈I] ν_i({i})≤∑[i∈I] μ_x({i}).             (G8)
+
+The quantifier is selected: each τ_i is a limit of OLD maximizing
+tests of the NEW near-minimizers. No assertion is made about every
+maximizer at x. A response branch born only at this limiting x cannot
+silently be substituted into (G8).
+
+No maximizing τ_i lies strictly before a. There is no prescribed
+absorption before a, so every such pure test pays exactly s_i. The
+complete old cap exceeds s_i by Ω+Ω²/8, by (G2)'s source theorem.
+Thus τ_i=a or τ_i is strictly later (including the separate Never
+test). The positive original atom makes a isolated in the finite-test
+calendar, so no approaching before-date test is identified with a.
+
+### G4. The literal row/tail ledger and a consumed source component
+
+Let q_i be prescribed stopping mass at a and put
+
+    α_i=∏[j≠i](1−q_j),   c=∏[i∈I](1−q_i).
+
+Let v be the independent conditional tail strictly after a. When q_i=1
+the unused i-tail may be filled arbitrarily; no minimizing-tail or
+tail Nash property is assumed. If μ_v({i}) is the tail first-singleton
+probability, literal prescribed coalition decomposition gives
+
+    μ_x({i})=q_iα_i+cμ_v({i}).                     (G9)
+
+For τ_i=a, put β_i=1. For a later finite τ_i, let β_i be its own-singleton
+occupation against the conditional tail opponents; for Never put β_i=0.
+Always 0≤β_i≤1 and
+
+    ν_i({i})=α_iβ_i.                              (G10)
+
+Substituting (G9)--(G10) into (G8), and using
+∑[i∈I](1−q_i)α_i=4c, gives
+
+    ∑[i∈I] α_i(1−β_i)
+       ≥c(4−∑[i∈I]μ_v({i}))≥3c.                 (G11)
+
+The last inequality uses only that the disjoint tail singleton outcomes
+have total probability at most one. It has no cap-Nash replacement,
+positive Never floor, or minimizing-tail premise.
+
+If c>0, (G11) forces at least one selected complete maximizing response
+strictly after the original collision row, with β_i<1. Therefore the
+SELECTED worst-table collision minimum has at least one of:
+
+1. c=0: some owner stops surely at the original collision row;
+2. a selected later complete cap test loses positive own-singleton
+   opportunity relative to root quitting, with total loss at least 3c.
+
+In particular it cannot have c>0 and every complete cap attained ONLY
+at a. This is an actual source component exclusion, not just an
+occupation verifier awaiting a supplied profile. A positive worst-table
+obstruction whose ENTIRE generated minimizing family were nonsure and
+root-only would contradict this construction. It does NOT exclude an
+isolated old root-only minimum when another old minimizing family can
+be selected after the perturbation.
+
+Here is the corresponding finite strict value comparison. If a selected
+limit had c>0 and ONLY root maximizers, isolation of a and continuity of
+the full response functions give a uniform gap outside a. Moving old
+maximizers therefore use the original date a_k for all sufficiently
+large k. Let A_k be the probability of reaching a_k, η_k=1−A_k the
+pre-mark absorption, and c_k the conditional all-Continue row probability.
+Then A_k→1, η_k→0, c_k→c. The literal original occupations satisfy
+
+    ∑[i∈I](θ_i(a_k,p_-i^(ε_k))−μ_(p^(ε_k))({i}))
+       ≥3A_kc_k−η_k →3c>0.                       (G12)
+
+To verify the bound, let a_(i,k) be player i's survival to a_k, so
+A_k=∏_i a_(i,k). The response-singleton probability at a_k is
+A_kα_(i,k)/a_(i,k)≥A_kα_(i,k). The prescribed singleton probability
+is its pre-mark singleton probability plus
+A_k[q_(i,k)α_(i,k)+c_kμ_(v^k)({i})]. Summing, the pre-mark singleton
+probabilities total at most η_k, and the row identity gives 4c_k;
+the tail singleton sum is at most one. This proves (G12).
+
+Combining (G5) and (G12), the new near-minimizers would have debt at
+least Ω+ε_k(3c/2) for all large k. But (G3) bounds it by Ω+ε_k².
+This is a STRICT finite value contradiction for ε_k<3c/2. No derivative
+interchange, uniform selection theorem or cap formula at an off-minimum
+endpoint is used. Pre-mark absorption need only tend to zero; it need
+not be o(ε_k), since (G5) is exact before taking the limit.
+
+### G5. Sure-boundary falsification and exact overlap scope
+
+For one sure root owner m, α_j=0 for j≠m and c=0. Its prescribed
+singleton probability is α_m. Any selected response singleton event
+is contained in that prescribed singleton event, so (G8) is automatic.
+With at least two sure root owners all α_i vanish, and every quantity
+in (G8) is zero. This comparison cannot release a sure root owner.
+
+The stronger sure/common-cap geometry in BROUWER's LC1--LC5 also makes
+the occupation test automatic coordinate by coordinate. There m stops
+surely by t₀; the other three selected cap tests are t₀, so each has
+singleton occupation zero. The later exceptional cap τ_m>t₀ can have
+singleton outcome only if every other player stops after τ_m. That
+event is contained in the prescribed singleton event of m. Retuning
+nonnegative own-singleton perturbation weights cannot change this
+containment. Thus no splice with that sure-boundary result is claimed.
+
+The cap-atom exclusion in
+`../exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md` already rules out
+ALL owners having a unique maximizing root at positive own root mass.
+It can leave quiet root owners whose unique maximizing root has zero
+own point mass. G4 excludes a nonsure root-only SELECTED source even
+in that quiet-owner case. Conversely its quantifier is not the
+cap-atom theorem's universal pointwise quantifier. All-root caps tied
+with genuinely later tests survive and may satisfy (G11).
+
+Bounded source lookup re-read
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+under its imports; the precise all-owner hypotheses and SUM objective
+are used in G2 and G3. The original-stage and cap-atom packets supply
+their explicit ordinary-mathematical marked transport, not Lean checks
+of G1--G12. A narrow search for root-only maximizers and response
+singleton occupations in the stopping-law, collision and root subtrees
+found no matching implemented all-moving-minimum SUM comparison. This
+is not a global producer census or an additional UE raw-class theorem.
+
+Next question: find a different allowed finite reward direction whose
+occupation comparison is STRICT on an actual surviving component,
+especially the sure/common-cap family, or use the selected later-cap
+loss in G11 to construct a complete old-table law of debt below Ω.
+The present own-singleton direction is retired as a sure-boundary
+consumer; the genuinely global reward-table comparison remains active.

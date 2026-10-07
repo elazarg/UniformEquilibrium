@@ -2,6 +2,29 @@
 
 ## Current best attempt
 
+A new full-cap SOURCE restriction is recorded at the end as SLC1–SLC12.
+At a produced marked positive global minimum, suppose all four caps
+have unique maximizing TEST POINTS. If every zero-own-mass maximizing
+point lies strictly after every positive-own-mass maximizing point,
+there cannot be two or three zero-own-mass owners. Joint signed
+conditional-old-tail reweighting gives an exact positive rescaling of
+ALL later cap functions, not just one owner's function. If every late
+owner retains late prescribed mass, a constant selected-response
+polynomial gives an actual global-minimum contradiction. Otherwise an
+early-sure late-cap owner makes each other late cap outcome-equivalent
+to Never, contradicting uniqueness. The sole surviving separated case
+is exactly BROUWER's one exceptional owner/common-cap geometry. This
+The extension SLC10–SLC12 removes the initial global order-separation
+premise: if EVERY owner whose unique cap is at the EARLIEST maximizing
+clock has positive own mass there, the source MUST be that same LC
+geometry. Thus every all-unique-cap source either has a zero-own-mass
+EARLIEST maximizing owner or has the sole later exception/common-date
+geometry. Later supported and zero-own-mass caps may be interleaved;
+they are handled by the same conditional-old-tail scaling. This
+is ordinary mathematics awaiting independent review, not an export,
+an endpoint Nash claim, or a full Fin4 consumer. Interleaved/equal cap
+orders, all-zero-own-mass caps, and multiple maximizers remain open.
+
 The broad original-stage restriction has a canonical stronger proof in
 `../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`: a positive
 global debt gap in Fin4 forces a macroscopic early ORIGINAL nonsingleton
@@ -14771,3 +14794,355 @@ whose debt bypasses it. Neither follows from a numerical law inequality
 or the lower bounds D(q^J)≥δ alone. The common-source hybrid square is
 retained as the useful evidence; another payoff-only raw penalty is not
 the next step.
+
+## Separated late zero-own-mass cap groups cannot have two owners
+
+Status: a complete ordinary-mathematical SOURCE restriction, awaiting
+independent falsification. It extends BROUWER's LC1–LC5 by stabilizing
+several nonisolated later cap points simultaneously. It does not
+assume a Nash first row or a minimizing conditional tail. It uses a
+TRUE global minimum and ALL unrestricted complete responses. No Lean
+implementation, export, or arbitrary Fin4 UE conclusion is claimed.
+
+### SLC1. Exact question, source and conclusion
+
+Let I=Fin4. For every nonempty S⊆I let r_i(S) be a real reward with
+|r_i(S)|≤M; all-Never pays zero. Players independently sample complete
+stopping laws. A pure response is ANY finite calendar point or Never;
+complete caps take the supremum over all such responses. Let δ>0 be
+the infimum of the SUM of the four unrestricted terminal debts over
+actual independent finite stopping laws on ℕ∪{Never}.
+
+Use the produced marked true minimum from
+`../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`, as
+inlined in `../exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md`:
+T⊆[0,c] is compact, c=max T, X=T⊔{Never} has Never as a separate
+isolated final label, and independent laws q satisfy q_i({c})=0 and
+
+    D(q)=Σ_i[b_i(q)−U_i(q)]=δ.
+
+Response payoff V_i(t,q₋ᵢ) is continuous on X. Every positive finite
+mixture atom is an isolated retained midpoint with a positive-length
+old quantile interval. There is an ORIGINAL finite minimizing
+sequence pᵏ, old interval maps, uniformly bounded densities converging
+weak-*, and outcome/moving-response kernels converging a.e. and in L¹.
+Every original finite tester and Never is retained. The possible late
+test c⁺ duplicates c whenever all modified laws retain zero mass at c.
+
+Suppose each i has a UNIQUE maximizing POINT τ_i∈X. Put
+
+    J={i:q_i({τ_i})>0},       L=I∖J.
+
+Assume J and L are nonempty and have STRICTLY separated cap times:
+
+    h=max_(j∈J)τ_j < min_(ℓ∈L)τ_ℓ.                 (SLC1)
+
+In particular all J clocks are finite. Put t₀=min_(j∈J)τ_j.
+
+Claim: |L|=1. If L={m}, then |J|=3 and necessarily
+
+    q_m(clock>t₀)=0,
+    τ_j=t₀ for every j∈J,
+    q_m({t₀})>0,
+    δ=r_m(I∖{m})−r_m(I)>0.                       (SLC2)
+
+Here clock>t₀ includes Never. Therefore two or three unique
+zero-own-point-mass caps ALL lying strictly after the supported cap
+group are excluded from a true positive global minimum. “Zero own
+point mass” does not mean absence from topological support. The
+conclusion concerns the original produced source, not a reselected
+minimum after perturbing the reward table.
+
+### SLC2. Narrow lookup and independent ingredient
+
+I inspected BROUWER's UA1–UA15 and LC1–LC5 in
+`CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md` and recorded a focused
+LC check in my existing feedback for that note. The corresponding
+frozen cap-atom packet proves signed transport only toward EXISTING
+positive own atoms; it does not authorize arbitrary new insertions.
+The conditional changes below have their own literal old-chart proof.
+
+The nearby Lean lookup was
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/CapBandRedistribution.lean`:
+`quittingCapBandClockValue`, `quittingCapBandSourceLaw`, and
+`QuittingCapBandFiniteCut`. Its source-law cap-band cut and unilateral
+redistribution do not contain this simultaneous order-stability
+argument or assert a global debt decrease. The ordinary stopping-law
+mixture affinity theorem, inspected in the earlier UA review, permits
+only coefficients in [0,1]; it is NOT used to justify negative
+coefficients here.
+
+The new ingredient is that conditional LATE-law reweighting can be
+expanded using an EARLY submeasure. Every nonempty such submeasure
+term has absorbed before ALL late cap tests, even though the target
+conditional law itself need not be early, finite, or atomic.
+
+### SLC3. Joint signed family and its legal multipliers
+
+Suppose for contradiction that
+
+    e_ℓ=q_ℓ(clock>t₀)>0 for every ℓ∈L.             (SLC3)
+
+Let ν_ℓ be q_ℓ conditioned on clock>t₀. Independently vary all four
+laws by
+
+    q_j^λ=(1−λ_j)q_j+λ_jδ_(τ_j),       j∈J,
+    q_ℓ^λ=(1−λ_ℓ)q_ℓ+λ_ℓν_ℓ,         ℓ∈L.       (SLC4)
+
+Each supported point has positive own mass, giving an open legal
+two-sided interval for its λ_j. For ℓ∈L, the likelihood multiplier
+on clock≤t₀ is 1−λ_ℓ, and on clock>t₀ it is
+
+    c_ℓ(λ_ℓ)=1+λ_ℓ(1/e_ℓ−1).
+
+For example |λ_ℓ|<min(1/4,e_ℓ/8) makes both positive. This also
+covers e_ℓ=1, when that coordinate direction is identically zero.
+All total variations are O(Σ_i|λ_i|), uniformly over all responses.
+
+### SLC4. ALL nonisolated late caps stay at their old points
+
+Let a be a finite cut with h<a<min_(ℓ∈L)τ_ℓ. If every τ_ℓ is
+Never, choose h<a<c instead; h<c because a supported atom cannot
+equal the zero-mass last cut c. Write E_ℓ=q_ℓ restricted to clock≤t₀,
+an UNNORMALIZED finite submeasure, and rewrite (SLC4) as
+
+    q_ℓ^λ=c_ℓ(λ_ℓ)q_ℓ−(λ_ℓ/e_ℓ)E_ℓ.             (SLC5)
+
+For an exceptional owner i∈L and ANY response t>a, expand the
+opponent product using (SLC5) and the supported-point formula in
+(SLC4). The term with no early replacement is the original opponent
+product times
+
+    k_i(λ)=∏_(j∈J)(1−λ_j) · ∏_(ℓ∈L∖{i})c_ℓ(λ_ℓ)>0.
+
+Every other term contains either one δ_(τ_j) with τ_j≤h<a, or one
+E_ℓ supported on clock≤t₀<a. Such a term has a finite opponent
+exit before t. Its integral payoff is therefore independent of t,
+including when t=Never. A zero submeasure term simply vanishes.
+Signed coefficients do not affect this outcome identity. Consequently
+
+    V_i(t,q₋ᵢ^λ)=k_i(λ)V_i(t,q₋ᵢ)+C_i(λ)
+    for EVERY t>a,                              (SLC6)
+
+where C_i is independent of t. The common cut is strictly below
+every late cap point. Thus the exact positive scaling preserves its
+unique maximizing order over ALL points above a, without falsely
+postulating a uniform gap at a nonisolated maximum.
+
+The compact lower-clock set T∩[0,a] excludes τ_i and has a strict
+uniform response gap. Uniform total-variation control preserves it
+for a sufficiently small open parameter box. Each j∈J has an
+isolated unique cap point and hence a uniform complement gap; these
+gaps also survive all the changes. All four caps are therefore fixed
+at their displayed points throughout a legal TWO-SIDED box.
+
+The c⁺ test is not discarded. All targets in J are old finite atoms
+different from c, and conditional targets in L retain q_ℓ(c)=0.
+Thus c⁺ continues to duplicate c. If a late unique maximizing point
+on X is c, c⁺ is a second equivalent maximizer on the extended space,
+but it has exactly the SAME value throughout the family and creates
+no different cap branch. No uniqueness on X⁺ is claimed or needed.
+
+### SLC5. Literal finite transport, including every moving cut
+
+The common t₀ is a retained positive mixture atom, even if some ℓ
+puts zero own mass there. Its original old-chart interval has a
+right endpoint b_k→b and a positive limiting length. For every ℓ∈L
+the original mass e_ℓ^k strictly after the corresponding original
+date t₀^k, including original Never, tends to e_ℓ>0. Define literal
+original finite laws
+
+    p_ℓ^{k,λ}=(1−λ_ℓ)p_ℓ^k
+              +λ_ℓ p_ℓ^k(·|clock>t₀^k).
+
+For large k their two likelihood multipliers are positive on the
+same sufficiently small signed box. If r_ℓ^k is the old bounded
+density, its new density is
+
+    r_ℓ^{k,λ}(u)=r_ℓ^k(u)
+        [(1−λ_ℓ)+(λ_ℓ/e_ℓ^k)1_(u>b_k)].          (SLC7)
+
+The moving indicators converge strongly in L¹; bounded densities
+and absolute continuity of each L¹ test integral remove the moving
+cut error. The remaining fixed multiplier uses old weak-* convergence.
+All modified densities remain nonnegative and uniformly bounded.
+For j∈J use the existing positive-own-atom signed transport, whose
+normalized retained interval indicators converge in L¹.
+
+The old maps, original product kernels and ALL moving-response kernels
+are unchanged. The rectangle-test product argument and L¹ kernel
+error bound therefore give simultaneous prescribed-payoff and full-cap
+convergence. Any original maximizing test sequence has an old-chart
+subsequence, with Never separate, so the cap upper bound includes
+every finite date. Fixed limiting tests give the cap lower bound.
+The c⁺ duplication above handles the late extended tester. These are
+actual independent finite profiles, not just annotations in a carrier.
+Hence the true global floor applies to each fixed signed parameter.
+
+### SLC6. A constant polynomial contradicts simultaneous late mass
+
+On the signed stable box define
+
+    F(λ)=Σ_i[V_i(τ_i,q₋ᵢ^λ)−U_i(q^λ)]=D(q^λ).
+
+Every law depends affinely on its own parameter, so F is multiaffine.
+Actual finite transport gives F(λ)≥F(0)=δ on an open box. A multiaffine
+polynomial with an interior minimum is constant: its first nonzero
+homogeneous squarefree part has mean zero over every sufficiently
+small sign cube, so has a negative direction. Thus F≡δ algebraically.
+
+Set every parameter to one ONLY in this polynomial. Supported owners
+now prescribe their own displayed cap actions and therefore contribute
+zero selected-response debt. Their earliest date is t₀, attained by
+at least one sure owner. Every exceptional owner prescribes ν_ℓ,
+strictly after t₀, and its displayed cap response is also strictly
+after t₀. Both get the same passive payoff from the sure earlier
+exit. Thus F(1,1,1,1)=0, contradicting δ>0.
+
+This is an actual local global-minimum contradiction via signed finite
+witnesses. It does NOT assert that the distant endpoint has its old
+cap selectors, is Nash, has actual debt zero, or lies in the minimum
+fibre. Therefore (SLC3) fails: some m∈L has e_m=0.
+
+### SLC7. Two late zero-mass owners are now impossible
+
+Owner m stops no later than t₀ surely. If any supported owner j has
+τ_j>t₀, then its displayed response is after this sure opponent exit
+and gives exactly its Never payoff, contradicting unique POINT
+maximization. Thus every supported cap equals t₀. If q_m(t₀)=0,
+m stops strictly before t₀ surely, giving the same contradiction
+for each supported cap. Therefore q_m(t₀)>0.
+
+If another ℓ∈L existed, its cap would be strictly later than t₀.
+For a finite τ_ℓ it would tie Never because opponent m has surely
+stopped first. If τ_ℓ=Never, the distinct finite test c>t₀ would
+give the same payoff. The latter inequality follows from the positive
+supported atom at t₀ and q_j(c)=0. Both cases contradict its unique
+maximizing POINT. Hence L={m} and J has three owners.
+
+### SLC8. The remaining selected-response identity
+
+All four owners now have positive own mass at the common t₀. Reweight
+all toward δ_(t₀) with both signs on the original retained interval.
+Supported caps remain fixed by their isolated-point gaps; m's later
+cap remains fixed by the exact early-replacement scaling. Its selected
+response polynomial is constant δ. At the all-one algebraic endpoint,
+the three supported selected debts are zero and m's is exactly
+r_m(I∖{m})−r_m(I), proving (SLC2).
+
+Leaving m at its old law and replacing the other three gives, with
+a_m=q_m(t₀)>0,
+
+    δ=a_mδ+(1−a_m)[r_m(I∖{m})−s_m].
+
+Thus any prescribed mass before t₀ forces r_m(I)=s_m. This matches
+BROUWER's independent LC endpoint extraction; neither calculation
+identifies that endpoint with the actual global minimum. The original
+minimum's strict singleton margins do not by themselves contradict
+it: earlier opponent exits can give m larger passive payoffs.
+
+### SLC9. Surviving cases and the next genuine question
+
+The new exclusion concerns |L|=2 or 3 under strict temporal separation.
+It is stronger than the all-supported exclusion and the single-late
+owner LC restriction, while retaining the SAME original true source.
+It does not cover all-zero-own-mass caps, interleaved supported and
+zero-own-mass cap clocks, equality at a supported cap date, or multiple
+maximizing points. Exact equality cannot be folded into (SLC6): a
+response at an opponent replacement atom can join that coalition,
+whereas a strictly later response cannot.
+
+The next question is whether an analogous exact affine response
+decomposition can consume an INTERLEAVED unique-cap order, rather
+than assume a supplied full-cap domination bound. The one exceptional
+common-date survivor still needs an actual finite-amplitude release
+or another global mechanism. This note does not promote its endpoint
+identity into that missing consumer.
+
+### SLC10. Interleaved orders: classify by the earliest cap group
+
+The same mechanism admits a stronger source restriction without
+(SLC1). Retain the marked true minimum and unique cap hypotheses from
+SLC1. Let
+
+    t₀=min_i τ_i,       A={i:τ_i=t₀},       B=I∖A.
+
+Assume EVERY earliest-cap owner has positive own point mass:
+
+    q_i({t₀})>0 for every i∈A.                    (SLC8)
+
+Claim: B={m} consists of one owner, A has three owners, and all of
+(SLC2) holds. In particular m has zero own mass at its later cap.
+The later-cap owners are NOT assumed unsupported, and their supported
+and unsupported cap clocks are not assumed ordered. This genuinely
+extends SLC1–SLC9 rather than weakening a cap-stability premise.
+
+If B is empty, all four owners have unique supported caps and the
+existing signed own-atom polynomial argument gives δ=0. Thus B is
+nonempty. The earliest point t₀ is finite: if it were Never, B would
+be empty. It is an isolated retained positive mixture atom and t₀<c.
+
+### SLC11. Simultaneous tail rescaling excludes positive late mass
+
+Suppose e_i=q_i(clock>t₀)>0 for every i∈B. Reweight every i∈A
+toward δ_(t₀), and every i∈B toward its conditional old law ν_i
+strictly after t₀, with the same legal two-sided formulas as SLC3.
+
+Choose a finite cut t₀<a<min_(i∈B)τ_i, or t₀<a<c if all later
+caps are Never. For EVERY owner in B, every opponent-law factor is
+an original factor with positive coefficient plus a signed submeasure
+supported no later than t₀. This is true for the A pure-atom factors
+and for the B conditional-tail factors by (SLC5). Consequently (SLC6)
+holds for its entire response function above a. The compact lower
+set has a strict uniform gap, so its unique cap remains fixed, whether
+or not it has positive own mass or is isolated. The A caps are at
+the isolated t₀ and remain fixed by their uniform complement gaps.
+
+Signed original-calendar transport is EXACTLY SLC5: the common cutoff
+is a positive retained mixture atom, all B conditional densities use
+its moving right endpoint, and every A target is an existing positive
+own atom. This includes all original moving tests, Never and c⁺.
+Thus the selected-response polynomial is constant δ on a two-sided
+box and hence algebraically everywhere.
+
+At the all-one endpoint A prescribes its own displayed cap action
+at t₀. Every B owner prescribes a clock strictly after t₀ and its
+displayed cap is also strictly after t₀. A sure A opponent has
+absorbed first, so all B selected-response debts vanish. All A debts
+vanish because their displayed response is their prescribed action.
+The polynomial therefore gives 0=δ, a contradiction. Thus some
+m∈B has e_m=0: it stops surely no later than t₀.
+
+### SLC12. Only one later cap can survive; exact remaining alternative
+
+For any other i∈B, opponent m surely stops no later than t₀. Its
+later cap response therefore equals its Never payoff. If its cap
+itself is Never, the distinct finite test c>t₀ gives the same payoff.
+Both contradict unique POINT maximization. Hence B={m}; A has three
+owners. If q_m(t₀)=0, its strict earlier sure exit would also make
+each A cap equal Never, so q_m(t₀)>0. Since τ_m>t₀ but m stops by
+t₀, its own mass at τ_m is zero. The common-atom signed transport
+and endpoint calculation from SLC8 give the stated δ withdrawal
+identity, and earlier m mass still implies r_m(I)=s_m.
+
+We have proved the following exact alternative at EVERY produced
+marked positive global minimum whose four complete caps are unique:
+
+    either some EARLIEST maximizing owner has zero own point mass,
+    or there are three supported caps at one common finite t₀,
+       and a sole later zero-own-mass cap owner m, sure by t₀,
+       with positive mass at t₀ and δ its grand-withdrawal gap.
+
+The first branch expressly includes four unsupported cap owners.
+It also includes a tie of supported and unsupported maximizing owners
+at the earliest cap date. The second branch is LC, NOT a pure-grand
+minimum or an equilibrium. Multiple maximizing points fall outside
+the all-unique premise. No claim about newly born maximizing clocks
+or generic selection after reward perturbation is made.
+
+The next genuine question is the first branch with a positive mixture
+atom at that earliest date but at least one zero-own-mass cap owner:
+its test is isolated, yet its one-sided insertion can create joined
+coalition payoffs. A new consumer must derive a GLOBAL cap price for
+that insertion or bypass it; the order scaling above does not assign
+that missing sign as an extra hypothesis.

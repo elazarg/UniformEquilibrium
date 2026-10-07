@@ -139,3 +139,87 @@ independence constraint TC2 is the independently useful new mathematical
 tool: it may constrain a surviving true source without the very strong
 off-triple reward penalty. It currently does not control unilateral caps
 or implement the two-copy swap as a legal independent-law intervention.
+
+## Focused SLC1–SLC12 genuine-source review
+
+Reviewed the complete frozen section “Separated late zero-own-mass cap
+groups cannot have two owners”, including the strengthened interleaved
+earliest-group extension SLC10–SLC12. This is an independent focused
+falsification, not an export gate or a whole-conjecture review. Verdict:
+PASS for the precise source restriction, with no unresolved mathematical
+objection. The source is the produced marked TRUE global sum minimum,
+not a positive-debt profile or a constrained local minimum.
+
+The strongest checked claim is: if all four compact complete caps have
+unique maximizing POINTS, and every owner in the earliest cap group A
+has positive OWN point mass there, then there are exactly three such
+earliest owners at one finite point t₀. The remaining owner m stops
+surely by t₀, has positive mass at t₀ and zero own mass at its later
+maximizing point, and δ=r_m(I\{m})−r_m(I). Earlier prescribed m mass
+forces r_m(I)=s_m. Otherwise at least one earliest maximizing owner
+has zero own point mass. Multiple maximizing points remain outside
+the premise. The separated SLC1–SLC9 exclusion is correctly subsumed.
+
+I checked the critical signed expansion directly. With e_i>0 and
+E_i=q_i restricted to clocks≤t₀, the conditional-law variation is
+
+    q_i^λ=[1+λ_i(1/e_i−1)]q_i−(λ_i/e_i)E_i.
+
+Both original likelihood multipliers are positive on the stated
+two-sided box. In a late owner's opponent-product expansion, every
+non-original term contains a FINITE opponent submeasure supported
+by t₀; a supported earliest replacement atom has the same property.
+That opponent absorbs before every t>a>t₀. The entire term is therefore
+t-independent, including t=Never. The coefficient of the sole original
+term is positive, so its whole late response function is rescaled by
+a positive number plus a constant. This is a valid response-order
+identity even with signed coefficients, not a fictitious uniform gap
+at a nonisolated maximum. The lower compact set has a genuine uniform
+gap. Earliest supported points are isolated in the produced calendar
+and have their own complement gaps.
+
+The literal signed transport is also sufficient. The earliest supported
+mixture atom has a positive-length retained interval, whose moving
+right cutoff converges. The after-cut indicators converge in L¹ and
+the changed densities stay nonnegative and uniformly bounded. Testing
+against L¹ functions removes the moving-cut error; the old weak-*
+limit handles the fixed multiplier. Rectangle-product convergence and
+the unchanged moving-response kernels apply simultaneously to all four
+modified factors. No new atom is silently inserted, and every original
+finite test and Never remains priced. The nonnegative-mixture theorem
+`quittingTerminalPayoff_update_stoppingLawMixture_eq` in
+`UniformEquilibrium/Quitting/Paths/StoppingLawMixture.lean` is not falsely
+used for negative coefficients. The direct signed-density calculation
+is the needed ordinary-mathematical extension.
+
+Boundary attempts did not break the proof. If e_i=1, its variation is
+redundant but the polynomial argument and its endpoint remain valid.
+If all later caps are Never, t₀<c gives the required finite comparison
+clock. If a late cap is c, the extra c⁺ retains the SAME response value
+throughout this family; no uniqueness on an enlarged duplicate-labelled
+space is claimed. Never mass is included in the after-cut event. The
+proof does not exclude equality at an unsupported earliest cap, where
+joining instead of passing the replacement atom really changes the
+payoff. All four unsupported cap owners are retained in the residual.
+
+At the all-one polynomial endpoint, earliest owners prescribe their
+displayed response, while every later owner both prescribes and displays
+a time after a sure earliest opponent exit. Every SELECTED summand is
+zero. This does not say the endpoint has actual zero full debt. True
+globality is needed only on the small legal signed box; a multiaffine
+interior minimum makes that polynomial constant. Thus some later owner
+has no after-t₀ mass. Its sure early exit forces every other later cap
+to tie Never (or the distinct finite c test), proving it is the sole
+later owner. Positive m mass at t₀ then follows from the supported
+earliest caps' uniqueness. The grand-withdrawal endpoint and the earlier-
+mass equality are exactly the LC calculations, with the same actual-
+versus-selected-polynomial distinction.
+
+The participant-indicator boundary game at pure-grand date zero has
+unique supported caps and true δ=0, so the positive-minimum premise is
+essential. Its atomless laws have all earliest caps unsupported and do
+not falsify the surviving alternative. The section adds no Nash-row,
+minimal-tail, response-temporalization or favorable-minimizer hypothesis.
+It is a genuine universal source restriction, not an actual Fin4 UE
+producer. The remaining earliest unsupported insertions and the LC
+last-sure release still need a full-cap global consumer.
