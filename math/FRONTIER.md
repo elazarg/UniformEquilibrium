@@ -460,6 +460,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the global two-joint cyclic-child family specified below, for every real R | UE with simultaneous quitting at both retained joint phases. The rates and target are produced from rewards, including the outsider halfspace boundaries. This is reviewed mathematics awaiting formalization. |
 | Fin4: the zero-premium joint-phase family specified below, for every real R and σ≥0 | UE with both joint participants at their singleton rewards and a possibly positive outsider collision payoff. Rates and a fixed target are produced; an opposite-sign pair core is allowed. This is reviewed mathematics awaiting formalization. |
 | Fin4: the negative-premium cyclic-child completion family specified below | UE for arbitrary signed own rewards, with an exact terminal Nash profile and one fixed target produced from raw entries. Both scheduled joint participants have negative premiums. Twenty-eight normalized coordinates are unrestricted. This is reviewed mathematics awaiting formalization. |
+| Fin4: all tables in a full sixty-coordinate neighborhood of the rational negative-premium center specified below | UE with four proper periodic hazards and one fixed target produced from the raw table. No perturbed reward equality is imposed. A nonempty open subregion escapes the compared raw producers and every affine/relabeling copy of the fixed-row completion family. The radius is qualitative. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. Both strict and weak comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons, greatest premium core of size three, and all within-core joining differences nonnegative | UE with arbitrary signed participant premiums, including negative premiums inside the core and overlapping pair traps. A full triple-root index argument selects a suitable successor; weak comparisons use reward closure. This is reviewed mathematics awaiting formalization. |
@@ -1238,6 +1239,44 @@ and all fourteen proper child carriers. This is additional completion-family
 coverage, not a universal consumer for negative-premium or no-good-row
 configurations. The scalar producer and raw adapter are ordinary mathematics;
 the downstream periodic consumers are existing Lean declarations.
+
+The **full-dimensional cyclic-child criterion** uses e=100/729,
+P=1−e and E=1+e. Define the following complete table R^η, in player
+order0,1,2,3:
+
+    R^η(0)=(1,0,0,0),       R^η(1)=(2,1,4,0),
+    R^η(2)=(2,0,1,4),       R^η(3)=(0,4,0,1),
+    R^η(01)=(E,P,3,−1),     R^η(02)=(1,−1,P,3),
+    R^η(03)=(P,3,−1,P),     R^η(12)=(3,1−η,E,3),
+    R^η(13)=(1,E,3,1−η),    R^η(23)=(1,3,1−η,E),
+    R^η(012)=(E,P,1,2),     R^η(013)=(1,1,2,P),
+    R^η(023)=(P,2,P,1),     R^η(123)=(2,E,E,E),
+    R^η(0123)=(1,1,1,1).
+
+For every η>0 there is d_η>0 such that every table r with
+‖r−R^η‖∞<d_η has an exact terminal Nash profile repeating joint03,
+solo1, solo2 with four proper hazards. The raw-table-to-hazard map is
+smooth on a smaller ball. Its actual initial payoff is one fixed uniform
+target for that game, witnessed by the same profile at every accuracy.
+All sixty reward coordinates may vary independently; neither a strategic
+root nor a singleton equality is supplied. The original Never reward
+remains zero. The radius is existential, not a numerical certificate.
+
+For every 0<η<e a smaller ball preserves the exclusion of all sixty-five
+base/free selections and all fourteen universal quiet-child carriers,
+together with the other explicitly compared finite raw criteria.
+At η=e/2=50/729 the center is rational and completely specified.
+A sufficiently small nonzero change of r₀(1) from2 to2+ζ leaves an
+open UE subball outside every positive playerwise affine/relabeling copy
+of the fixed-row criterion: the unique row with two positive singleton
+comparisons now has unequal comparisons. No unspecified neighborhood
+of another producer is asserted disjoint.
+
+The [complete raw open-region producer](exports/FULL_DIMENSIONAL_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md)
+derives nonsingularity of the four actual active Bellman gaps, strict
+passive endpoints and opponent-only contraction. The result is ordinary
+mathematics awaiting formalization. It does not consume the general
+negative-premium, full-debt or reset-rigid chamber.
 
 The **crossed-matching criterion** selects f=(01)(23), a=(02)(13), and
 o=f∘a, after any player relabeling. For each i require
