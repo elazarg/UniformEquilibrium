@@ -6,7 +6,7 @@ ordinary mathematical review; no Lean build or implementation claim.
 ## Exact artifact and verdict
 
 I read all739 lines of
-[CODEX_MORSE__POSITIVE_NEVER_MINIMUM_STAGE_ATOM.md](../notes/CODEX_MORSE__POSITIVE_NEVER_MINIMUM_STAGE_ATOM.md).
+[POSITIVE_NEVER_NEAR_MINIMA_FORCE_SINGLETON_STAGE_ATOMS.md](../exports/POSITIVE_NEVER_NEAR_MINIMA_FORCE_SINGLETON_STAGE_ATOMS.md).
 The reviewed SHA256 is
 `c625f72f4471c024f545b6518042d987a8e3f8a647051927f896a17b8725c341`.
 

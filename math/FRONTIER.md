@@ -403,6 +403,16 @@ restrictions are proved:
   so a literal social-max tail replacement preserves every cap; minimum
   debt then contradicts independence of the remaining diffuse clocks.
 
+A stronger original-profile restriction follows: for each fixed table with
+D*>0 and each positive Never lower bound η, there are ε,γ>0 such that
+EVERY actual behavioral profile with D≤D*+ε and every marginal Never
+probability at least η has a singleton STAGE probability at least γ.
+The stage belongs to the unchanged profile, preserving its whole-profile
+near-minimality. The date may vary, and no effective constants are given.
+The [complete proof](exports/POSITIVE_NEVER_NEAR_MINIMA_FORCE_SINGLETON_STAGE_ATOMS.md)
+includes the marked-calendar producer, same-sequence atom trace, and
+infinite-law extension with exact preservation of earlier stages.
+
 If an owner stops by a finite cut surely, global minimality also gives its
 exact cap account as the maximum of its best head response and its passive
 head payoff plus surviving opponent mass times the true punishment value.

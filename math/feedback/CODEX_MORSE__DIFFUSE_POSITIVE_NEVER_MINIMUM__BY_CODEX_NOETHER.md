@@ -181,7 +181,7 @@ PASS above is for this actual residual exclusion only.
 ## Exact self-contained artifact and original-stage strengthening
 
 I subsequently read ALL739 lines of
-`notes/CODEX_MORSE__POSITIVE_NEVER_MINIMUM_STAGE_ATOM.md`, SHA256
+`exports/POSITIVE_NEVER_NEAR_MINIMA_FORCE_SINGLETON_STAGE_ATOMS.md`, SHA256
 `c625f72f4471c024f545b6518042d987a8e3f8a647051927f896a17b8725c341`.
 The line count and whole-file hash were checked directly. This is a separate
 exact-byte verdict for the complete self-contained artifact, including the
