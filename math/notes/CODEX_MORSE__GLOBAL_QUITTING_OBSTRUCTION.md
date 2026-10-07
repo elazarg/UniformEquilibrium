@@ -185,6 +185,18 @@ responses cannot simply be declared finite: its best-response timing face
 can have a positive product-regret gap. That test has global minimum zero,
 so the positive-global-minimum consumer remains open; no new coverage or
 counterexample conclusion is drawn from it.
+Section 35 gives a complete ordinary-mathematical source construction:
+the genuine unregularized global debt infimum is attained numerically by
+independent laws on a compact ordered calendar with Never. It retains all
+original complete cap tests and a precisely transported simultaneous
+finite-atomic variation domain. Bounded weak-* likelihood convergence is
+enough for semantics; no entropy or positive likelihood bound is asserted.
+The complete statement and proof have passed an independent focused check
+by CODEX_NOETHER; see
+`../feedback/CODEX_MORSE__UNREGULARIZED_MARKED_CALENDAR_MINIMUM__BY_CODEX_NOETHER.md`.
+This is internal supporting mathematics, not Lean-checked, an ℕ realization,
+a produced descent, or a uniform-equilibrium conclusion. The remaining task
+is to consume that actual minimum with its full tester completion.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -6046,3 +6058,274 @@ support furnished by a regularized finite-law minimum likewise does not
 give that quantitative lower bound. This tail test is retained as an exact
 checkpoint; it is not being promoted to an unproved tail selector or a
 replacement for the missing consumer of (178).
+
+## 35. The unregularized global minimum on a marked ordered calendar
+
+### Statement and exact scope
+
+Fix a finite nonempty player set I of cardinality n and an arbitrary real
+reward vector r(S) for each nonempty S⊆I. Fix M>0 bounding every absolute
+reward. All players' stopping laws are independent; all Never pays zero.
+For an actual finite stopping-law profile p on ℕ∪{Never}, write U_i(p)
+for prescribed terminal payoff and b_i(p) for the supremum over EVERY
+pure finite stopping date and Never. This is the unrestricted behavioral
+cap, since before absorption the only live public history is all Continue
+and each behavioral strategy has one independent stopping law. Define
+
+    D(p)=Σ_i[b_i(p)−U_i(p)],
+    D_*=inf{D(p): p is an actual independent finite-law profile}.
+
+The same infimum results from allowing arbitrary stopping laws. Indeed,
+move each law's finite mass after K to Never. Those moved masses tend to
+zero, and coupling bounds each prescribed payoff and every unilateral
+payoff test uniformly by 2M times the relevant changed masses. Taking
+suprema proves convergence of every complete cap and of D.
+
+**Unregularized representation theorem.** There exist a nonempty compact
+ordered set T⊆[0,1], c=max T, a separate Never point after T, and independent
+probability laws q_i on T∪{Never}, with q_i({c})=0 for all i, such that
+
+    D_T(q)=D_* .                                  (183)
+
+Here quitting at t∈T has its literal earliest-coalition meaning, including
+ties, and b_i^T(q) is the supremum over ALL t∈T and Never. Each such cap
+is attained. More strongly, one actual finite minimizing sequence has
+all its first-coalition probabilities, prescribed payoffs and complete caps
+converging to those of q, including the joint-Never probability.
+
+The represented minimum has the following produced variational domain.
+Adjoin one empty finite test c⁺>c, distinct from Never, and put T⁺=T∪{c⁺}.
+For ANY finitely supported probability laws ν_i on T∪{Never} and ANY
+λ_i∈[0,1], define independently
+
+    q_i'=(1−λ_i)q_i+λ_iν_i.
+
+There are actual independent finite profiles whose coalition laws,
+payoffs and unrestricted caps converge to those of q' with ALL tests
+in T⁺ and Never. Consequently
+
+    D_{T⁺}(q')≥D_*=D_T(q).                        (184)
+
+The choices of ν_i and λ_i can be simultaneous and need not agree across
+players. There is no supplied equilibrium, cap selector or payoff witness.
+The conclusion does not assert that q is a law on ℕ, that every compact-
+calendar variation is legal, or that one family of approximating profiles
+simultaneously realizes every counterfactual replacement. The finite
+approximation in (184) may depend on the complete chosen variation.
+
+### Weak-* likelihoods and the marked calendar
+
+Choose actual finite profiles p^k with D(p^k)→D_*. Put
+μ^k=Σ_i p_i^k/n. Give each date, followed by Never, an interval in [0,1]
+of length μ^k at that date. Intervals with zero length are omitted. On
+the interval of a date a define
+
+    r_i^k(x)=p_i^k(a)/μ^k(a).
+
+These deterministic coordinate charts do not introduce a shared random
+draw: the players still sample their coordinates independently. They give
+
+    0≤r_i^k≤n,   Σ_i r_i^k=n almost everywhere,   ∫r_i^k=1.
+
+Since L¹[0,1] is separable, the bounded ball of L∞ is weak-* sequentially
+compact. Passing to a common subsequence for finitely many players gives
+
+    r_i^k ⇀* r_i,   0≤r_i≤n,   Σ_i r_i=n a.e.,   ∫r_i=1.             (185)
+
+Let c_k=1−μ^k(Never) and pass to a subsequence with c_k→c. Let E_k contain
+the endpoints of all the atom intervals, together with 0,c_k,1. For every
+actual finite response date t define its location
+
+    x_k(t)=μ^k({a:a<t})+μ^k(t)/2,
+
+and let T_k be the finite set of these locations. A supported finite date
+is represented by its atom midpoint; an empty date by the cumulative mass
+strictly before it. Every date after the last finite support has location
+c_k. Never is NOT such a date: it remains a separate tester label.
+
+Hausdorff compactness of the nonempty compact subsets of [0,1] gives a
+further common subsequence E_k→E and T_k→T. Thus 0,c,1∈E, T⊆[0,c]
+and c∈T. No endpoint lies in the interior of the limiting Never interval
+(c,1). For each component J=(a,b) of [0,c] outside E there is exactly
+one original atom interval J_k=(a_k,b_k) approaching J. An interior compact
+subinterval of J eventually contains no endpoint and hence lies in one
+atom; Hausdorff convergence forces that atom's endpoints to a and b.
+Moreover
+
+    T∩J={(a+b)/2}.                               (186)
+
+Only the atom midpoint is an actual test in its interior, and that midpoint
+is always available. The weak-* limit r_i is constant almost everywhere
+on J. To see this without strong convergence, take any two compact
+subintervals inside J: r_i^k is the same constant on both for large k.
+Weak-* convergence of their integrals identifies the same limiting
+constant. Exhaust J by compact subintervals. The identical argument shows
+constancy on (c,1) when this interval is nonempty.
+
+The part of E outside T is null. In fact, each component of the complement
+of T has at most one point of E, apart from the harmless endpoints outside
+[0,c]. Two distinct such endpoints would force an original atom midpoint
+between nearby approximating endpoints, contradicting the positive distance
+from T. There are only countably many complement components.
+
+Define π almost everywhere on [0,1]: collapse each J to its midpoint,
+leave the remaining points of E∩[0,c] in place, and send (c,1) to Never.
+Its values belong to T∪{Never} outside a null set. Define q_i=π_*(r_i dx),
+using independent draws. Since c is an endpoint, not an atom midpoint,
+q_i({c})=0. Its mixture is π_*dx, so the only positive finite atoms are
+the retained component midpoints. All other finite points are non-atomic.
+
+### Why weak convergence is sufficient for all semantic coordinates
+
+The required product statement is stronger than convergence against
+continuous functions but follows directly from (185). The product
+densities R^k(x)=∏_i r_i^k(x_i) converge weak-* in L∞([0,1]^n) to
+R(x)=∏_i r_i(x_i). For a rectangle test ∏_i 1_{A_i}(x_i) this is the
+product of the marginal weak-* identities. Finite linear combinations
+of rectangle indicators are dense in L¹ of the product cube, while
+0≤R^k,R≤n^n. Approximation proves the claim for EVERY fixed L¹ test.
+The same argument applies to each opponent product with n−1 factors.
+
+Let π_k be the original interval-collapse map, with Never separate.
+For each coalition S, including the all-Never outcome, let K_S^k be
+the corresponding first-coalition indicator on the product cube. Then
+
+    K_S^k→K_S almost everywhere and in L¹.        (187)
+
+Exclude the countably many endpoints of components of [0,c] outside E,
+the point c, and equality of any two independent Lebesgue coordinates.
+Two remaining finite draws either lie in one component J, hence eventually
+in the same original atom J_k, or have a limiting endpoint strictly between
+them, which eventually separates their original atoms. Their order cannot
+reverse. Never membership stabilizes as well. This proves (187), including
+all simultaneous quitting coalitions, not just singleton outcomes.
+
+Now split the integral difference into
+
+    ∫K_S^k R^k−∫K_S R
+       =∫(K_S^k−K_S)R^k+∫K_S(R^k−R).           (188)
+
+The first term is bounded by n^n‖K_S^k−K_S‖₁ and tends to zero; the second
+uses the FIXED-kernel weak-* limit. Thus no unjustified product of two
+weak limits is present. This proves coalition-law and payoff convergence.
+
+For complete caps, take ANY sequence x_k∈T_k with x_k→x∈T. If x is a
+retained midpoint, (186) forces x_k eventually to be the corresponding
+midpoint and retains its exact tie. Otherwise x∈E and the limiting
+prescribed law has no mass at x. A retained atom adjacent to x stays on
+its correct side: its midpoint is separated from the endpoint x. All
+remaining order comparisons stabilize off a null set. Consequently the
+opponent payoff kernels for this moving response converge almost everywhere
+and in L¹. The opponent version of (188) proves convergence of the actual
+pure-response payoff. Never is treated separately by its first-coalition
+kernel. This argument applies also to x_k=c_k, so the last finite response
+is never confused with Never, even for negative own singleton rewards.
+
+The limiting pure-response payoff is continuous on T. A retained midpoint
+is isolated by its half-atom length. At all other points, the same cut
+argument with the fixed limit laws proves continuity. Never is an isolated
+label. Hence the limiting cap is attained. Choose finite maximizers and
+extract convergent locations to obtain limsup b_i(p^k)≤b_i^T(q). Approximate
+a limiting maximizer by T_k using Hausdorff convergence to obtain the
+reverse liminf inequality. Therefore all full caps converge. Equation
+(183) follows from D(p^k)→D_*.
+
+### Transport of simultaneous finite-atomic variations
+
+Here is the complete response-location issue in (184). Let Z be the union
+of the finite supports of the ν_i, excluding Never. If z∈Z is a retained
+positive atom, put the inserted masses at its corresponding original
+date. That atom's full probability vector converges by weak-* convergence
+on its interior and bounded density near the moving endpoints.
+
+If z has zero prescribed mixture mass, choose disjoint shrinking
+neighborhoods of these finitely many z. Shrink them slowly enough to
+dominate the Hausdorff errors and to make their original mixture masses
+tend to zero. This is possible because the original mixture at quantile
+locations converges weakly to π_*dx and the latter has no atom at z.
+Consolidate the consecutive original-calendar block in each neighborhood
+to one date by a COMMON monotone quotient, before adding any mass.
+This removes the otherwise spurious multiplicity of collapsing empty dates.
+At c include the last finite support and the first empty date after it
+in the block, but retain a later empty date for c⁺. If the original finite
+support is empty, use date 0 and its following date. Rename the resulting
+finite ordered calendar consecutively; this is a literal natural calendar.
+
+On this common calendar use the independently mixed laws prescribed in
+(184), with Never unchanged as a label. The mixture flags are independent
+across players. Conditional on each choice of flags and inserted atoms,
+the remaining base factors satisfy (185)–(188). The probability that any
+base draw belongs to one of the shrinking consolidated blocks tends to
+zero. This proves every prescribed coalition-law limit; inserted ties
+at one chosen common date are preserved exactly.
+
+For the upper cap bound take any sequence of modified finite pure tests.
+Away from Z the preceding moving-test argument applies. At z∈Z distinguish
+before, coincident and after. Coincident is the pure-z test. A strictly
+before limit can survive consolidation only if T has points approaching
+z from below; otherwise Hausdorff convergence puts all nearby original
+tests inside the one block. When such approach exists, its limiting payoff
+is bounded by the supremum over those ACTUAL T-tests. The right-hand case
+is identical at interior z. At c the after value is exactly the extra c⁺
+test. Never is separate. This exhausts all maximizing sequences and gives
+the upper cap inequality, without assuming a limiting maximum for q'.
+
+For the lower bound approximate each fixed point of T outside Z by
+original dates outside the shrinking blocks. Each point of Z has its
+chosen date, c⁺ has its later empty date, and Never is unchanged. Their
+payoffs converge by the same finite-flag argument. Taking the supremum
+gives the opposite cap inequality. Every approximating profile is actual
+and finite, so has D≥D_*; taking the limit proves (184).
+
+This proof transports one COMPLETE simultaneous variation at a time.
+It does not supply joint realization of an arbitrary counterfactual table
+at a single finite index, or identify the represented calendar with ℕ.
+
+### Boundary tests, source overlap and the remaining consumer
+
+Weak-* convergence does not preserve the entropy from Section 34's
+regularized discussion. Partition [0,1] into increasingly fine groups of
+n equal cells, and in each group put r_i^k=n on player i's cell and zero
+on the others. Then r_i^k⇀*1, but Σ_i∫r_i^k log r_i^k=n log n while
+the limiting entropy is zero. The corresponding atom mesh tends to zero;
+its semantic convergence follows from (188) despite this entropy loss.
+Thus the present theorem claims neither strong density convergence nor
+positive likelihoods, and does not replace an entropy-attainment theorem.
+
+The extra c⁺ is necessary. For two players with singleton vectors (1,1)
+and (1,1), and pair vector (−2,−2), assign each player probability 1/2
+to c and 1/2 to Never. The cap on {c,Never} is 1/2, whereas a finite
+response strictly after c earns 1. Equation (184) uses the latter cap.
+Likewise, retaining E alone is insufficient: for two equal laws on adjacent
+dates with own singleton 1, passive singleton 0 and pair −10, the actual
+cap is 0; inserting a nonexistent middle cut raises it to 1/2. The full
+sets T_k, not just the tied intervals, prevent this false extra test.
+
+The compact ordered representation and finite-variation construction use
+the marked-calendar mechanism independently checked in
+`../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md`.
+The removal of strong convergence is the argument (185)–(188) above,
+and all semantic details needed for the present theorem are included here.
+No KKT or entropy theorem is required by its proof.
+
+The inspected original-game declarations are
+`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`,
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`,
+and `exists_finiteDeadlineTimingProfile_approximation` in
+`UniformEquilibrium/Quitting/Terminal/FiniteMenuFullProfileApproximation.lean`.
+For a finite player set, maximum debt≤D≤n times maximum debt. These sources,
+together with the elementary uniform-cap truncation above, show that no UE
+implies D_*>0 and that proving D_*=0 would yield one fixed original-game
+uniform-equilibrium payoff. They do not turn the represented q into an
+original behavioral strategy or prove its debt zero.
+
+The concrete remaining task is therefore to contradict (184) at its
+ACTUAL positive global minimum using a legal simultaneous variation with
+every newly exposed test retained. There is no τ term and no near-minimum
+error to divide by a vanishing probability. There may still be zero Never
+mass, disjoint player supports, diffuse ordered time, or new cap switches.
+None of these branches has been consumed here. The theorem is a produced
+minimum source with a proved finite variation domain, not a new UE class,
+an invariant barrier, or an export request.

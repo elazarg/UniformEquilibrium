@@ -24,8 +24,12 @@ objective itself. Its common-support and clock-refinement facts are proved.
 The newest section combines actual complete-cap quantile coarsening with
 entropy loss to prove strong relative-clock compactness at fixed temperature,
 for arbitrary bounded signed rewards. Tied atoms, response-time availability
-and Never must still be retained separately. A debt-lowering direction at a
-positive global minimum is NOT proved.
+and Never must still be retained separately. A universal debt-lowering
+direction at a positive global minimum is NOT proved. The final late-release
+section consumes one actual branch: positive joint-Never mass, a
+positive-social singleton and strict late-cap buffers yield a literal
+finite-law decrease with exactly measured cap leakage. At a genuine
+minimum this is a necessary late-binding condition, not a UE producer.
 This is internal research, not an existence theorem or export candidate.
 
 The earlier question concerned a raw class with constant participant
@@ -2024,5 +2028,160 @@ one player's current best response can raise the other three COMPLETE
 caps, and mixing all four best responses can create new tied outcomes.
 The remaining research problem is to use(RC12), with its full tester
 completion, to produce a quantitative debt decrease when the original
-unregularized global infimum is positive. No gain/leakage estimate that
-does so has yet been established.
+unregularized global infimum is positive. No universal gain/leakage estimate
+that does so has yet been established.
+
+## An actual late release and its complete cap account
+
+This section leaves the fixed-temperature objective behind. Its source is
+an actual sequence of independent finite laws with D tending to its global
+infimum over ALL such laws. It does not assume positive likelihood ratios,
+entropy convergence, or that a compact ordered calendar is an ℕ calendar.
+The conclusion excludes one branch of a putative minimum, not every
+positive minimum and not a new raw existence class.
+
+Let I be finite, r any bounded real quitting table, and assume only that
+the own singleton rewards s_i=r_i({i}) are nonnegative. For an independent
+finite law profile p write U_i for its prescribed terminal payoff, b_i for
+the cap over every pure natural-number time AND Never, and
+
+    D(p)=Σ_i(b_i−U_i),   α_i=p_i(Never),
+    β_i=∏[k≠i]α_k,      ρ=∏_i α_i.
+
+Suppose α_i>0 for every i. Let W_i be player i's payoff from literal Never
+against p_{−i}. At any date after all finite opponent support, pure Quit
+has value W_i+β_i s_i. Thus define the nonnegative late buffer
+
+    d_i=b_i−W_i−β_i s_i ≥0.                       (LR1)
+
+For distinct i,j put
+
+    C_ij=max(0, r_i({j})−s_i, r_i({i,j})−s_i),
+    A_j=Σ_i r_i({j}).                             (LR2)
+
+These are actual reward entries, not continuation annotations.
+
+### Exact finite construction and all response tests
+
+Choose j and 0≤θ≤1. Keep every original finite draw unchanged. Of player
+j's original Never mass, privately send the fraction θ to a new date t
+strictly AFTER an empty separating date beyond the entire old finite
+support. Leave its remaining Never mass at Never. Do not alter any other
+player's law. This is one legal independent finite profile p^{j,θ}; no
+common/public random variable is used. There are still natural-number
+dates strictly after t.
+
+Only the original all-Never event changes its prescribed outcome: it now
+has singleton {j} with conditional probability θ. Consequently
+
+    U_i(p^{j,θ})−U_i(p)=ρθ r_i({j})               (LR3)
+
+for EVERY recipient i. The mover's cap b_j is unchanged, because it is
+a function only of its opponents' unchanged laws.
+
+Fix i≠j. Every old finite response up through the empty separator is
+unchanged. Such responses already attain b_i: the finite support gives
+only finitely many different finite response values, and the old Never
+value W_i is no larger than the old late response W_i+β_i s_i. The three
+possibly new response values are exactly
+
+    tie at t: W_i+β_i[(1−θ)s_i+θr_i({i,j})],
+    after t:  W_i+β_i[(1−θ)s_i+θr_i({j})],
+    Never:    W_i+β_i θr_i({j}).                  (LR4)
+
+The Never value is bounded by the after-t value because s_i≥0. Dates
+before t but after the separator give the old late value. Equations
+(LR4), together with every retained old test, exhaust ALL pure responses.
+Complete behavioral deviations have the same cap, since their private
+stopping law averages these pure-time/Never values. Therefore
+
+    b_i(p^{j,θ})−b_i(p)=[β_i θ C_ij−d_i]⁺,
+
+    [D(p^{j,θ})−D(p)]/(ρθ)
+      =−A_j+Σ[i≠j] α_i⁻¹[C_ij−d_i/(β_iθ)]⁺    (LR5)
+
+when θ>0. This equality measures the entire cap leakage; it does not
+discard late tests or replace a cap by one selected best reply.
+
+In particular, if A_j>0 and d_i>0 for every i≠j with C_ij>0, choose
+θ>0 small enough that β_i θ C_ij≤d_i for all such i. All caps then stay
+EXACTLY fixed, and D decreases by ρθ A_j>0. The profile produced here
+is finite and literal, not merely an element of a relaxed carrier.
+
+### Consequence at a genuine finite-law infimum
+
+Let pⁿ be a sequence of independent finite profiles with D(pⁿ)→D_*,
+where D_* is the infimum over all independent finite profiles on ℕ.
+Suppose, after taking a subsequence, that
+
+    α_iⁿ→α_i>0,  b_iⁿ→b_i,  W_iⁿ→W_i.
+
+Set β_i=∏[k≠i]α_k and d_i=b_i−W_i−β_i s_i. These limits are supplied
+by the marked-calendar representation when its joint-Never atom has
+positive mass; no fixed-τ density lower bound is being imported.
+
+For any fixed j and θ>0 the construction above is legal at EVERY n.
+Since D(p^{n,j,θ})≥D_*, taking limits in the unscaled form of (LR5)
+and then letting θ decrease to zero gives
+
+    A_j ≤ Σ[i≠j, d_i=0] C_ij/α_i.                (LR6)
+
+Here ρⁿ→ρ>0, so the original near-minimum error vanishes before division
+by ρθ. No assertion of a rate uniform as ρ→0 is made. More directly,
+if the strict-buffer condition above holds at the limit, a single fixed
+small θ works for all sufficiently large n and produces a decrease
+bounded below by (ρ/2)θA_j, contradicting D(pⁿ)→D_*.
+
+Thus every positive-social singleton j must be blocked by at least one
+DIFFERENT player i whose late response binds, with C_ij>0. The stronger
+weighted inequality (LR6) retains the amount of blocking required. In
+particular, a positive-Never minimum cannot have all late buffers strict
+if even one singleton has positive social sum.
+
+### The positive-social singleton is supplied by the Fin4 no-UE source
+
+For Fin4 define Γ_ij=r_i({j})−s_i, including Γ_ii=0. The declaration
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+produces, from bare original-game no uniform payoff, simplex weights w
+with Γw strictly positive in every row. The exact matrix definition is
+`quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`.
+The same source file also proves
+`isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff`;
+no supplied normality or homogeneous root is required.
+
+Since Σ_i s_i≥0 here,
+
+    Σ_j w_j A_j=Σ_i s_i+Σ_i(Γw)_i >0.
+
+Some A_j is therefore strictly positive. Consequently the all-strict
+late-buffer branch is impossible for a positive-Never global minimizing
+sequence of a nonnegative-own-singleton Fin4 counterexample. This does
+NOT assume that arbitrary signed rewards can be shifted without changing
+Never; it states its own-sign hypothesis explicitly.
+
+The related existing declaration
+`prod_stoppingLaw_none_mul_singleton_le_terminalDebt`, and its literal
+late-time limit and one-law movement precursors, were inspected in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`.
+They charge ρs_i against individual debt. Equations (LR4)–(LR6) instead
+keep the other players' complete cap changes when that movement is made.
+No new Lean check was run.
+
+### Exact check and remaining branch
+
+Take r_i({i})=1, r_i(S)=2 when i∈S and |S|≥2, and r_i(S)=0 when
+i∉S. Give all four players probability 1/2 of date0 and 1/2 of Never.
+Then α_i=1/2, β_i=1/8, ρ=1/16, W_i=0, b_i=15/8, U_i=15/16,
+and d_i=7/4. Here A_j=1 and C_ij=1 for i≠j. Releasing θ=1/2 of
+one player's Never mass at a new late date leaves all caps 15/8 and
+decreases D by exactly 1/32. This is a check of a literal variation,
+not an uncovered game: the table already has a pure all-quit equilibrium.
+
+The live obstruction is now explicit. Either a represented minimum has
+zero joint-Never mass, or its binding late tests satisfy (LR6). The
+standard-Q positive simplex does not by itself overcome those binding
+cap charges. A useful next step must produce a simultaneous ordered tail
+with gain exceeding that COMPLETE leakage, or a different legal variation
+when ρ=0; repeating the strict-buffer argument does not settle either.

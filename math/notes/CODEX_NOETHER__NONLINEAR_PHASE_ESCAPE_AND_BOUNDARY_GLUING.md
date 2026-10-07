@@ -50,6 +50,11 @@ The final clock tests distinguish two issues: identical relative likelihoods
 do not retain tied coalition outcomes, even for actual entropy near-minimizers;
 and every one-atom insertion can raise debt while a legal ordered three-atom
 insertion lowers it. These are exact scope regressions, not new UE classes.
+The final stronger tail test blocks EVERY small conditional tail insertion,
+including arbitrary calendars, at actual entropy near-minimizers. A finite
+conditional change after a rare continuation still gives full-cap descent.
+Thus global-minimum variations must retain finite conditional amplitude;
+first-order tail tests alone do not suffice.
 
 ## Finite question
 
@@ -1659,3 +1664,157 @@ the full survival factor. Can the no-UE source conditions force
 descent there, or can an exact signed table block every such tail
 insertion? A nominal continuation value or a co-located signed-atom
 direction is not a substitute for that complete test.
+
+## Rare continuation can block every small tail change but admit a finite one
+
+This is a third game, again with four players. Pair the favorite relation
+f=(01)(23). Define the complete table by
+
+    r_i({i})=1,
+    r_i({f(i)})=4,
+    r_i({j})=0 for j∉{i,f(i)},
+    r_i(S)=0 whenever |S|≥2.                           (R1)
+
+All60 coordinates are specified. The singleton Γ has favorable entries3
+and its other off-diagonal entries−1; it is the previously inspected
+R0/degree1 matching matrix. No class increment is inferred: sure-all
+already has target0 and complete debt0.
+
+### Actual entropy near-minimizers
+
+Fix0<ε<1/5. In σ_ε every player Quits at date0 with probability1−ε
+and chooses Never with probabilityε. Put q=1−ε. Against player i,
+a finite response after date0 earns
+
+    B_i=c+ε³,       c=4qε².
+
+Its immediate Quit payoff isε³; Never earns c. Therefore B_i is the
+exact complete cap. The actual target is U_i=5qε³, since only singleton
+coalitions pay anything. Consequently
+
+    D(σ_ε)=4ε²(4−8ε+5ε²),       I(σ_ε)=0.              (R2)
+
+Thus σ_ε are actual near-minimizers of D+τI for ANY fixed τ≥0 as
+ε→0. The global infimum is0, attained by sure-all. Their positive
+debt is not asserted to be a positive GLOBAL minimum.
+
+### Every small conditional tail insertion is blocked
+
+Keep every date0 atom fixed. Conditional on its old Never choice,
+player i now independently selects an arbitrary law ν_i supported
+on dates≥2 and Never. It need not have bounded support or a common
+finite calendar. Let
+
+    x_i=ν_i(finite),        s=Σ_i x_i,
+    C_i=the COMPLETE cap against the tail opponents ν_{−i},
+    V_i=the actual tail payoff under ν.
+
+A fresh tester at date1 guarantees the tail singleton1, so C_i≥1.
+The old date0 tester is unchanged. Every later pure response has the
+literal early contribution c plus ε³ times its tail response. Hence
+the modified profile obeys EXACTLY
+
+    B'_i=c+ε³ C_i,
+    U'_i=U_i+ε⁴ V_i,
+    D'−D=ε³[Σ_i(C_i−1)−εΣ_i V_i].                    (R3)
+
+No nominal phase continuation appears here. The full-reach factor is
+ε⁴ for original payoff and the player-deleted factor isε³ for cap.
+This distinction is decisive.
+
+The limiting late pure tester has payoff
+
+    L_i=4x_{f(i)} Π_{j∉{i,f(i)}}(1−x_j)
+          +Π_{j≠i}(1−x_j).                            (R4)
+
+For unbounded tail clocks, take the limit of finite response dates;
+bounded rewards and finite players give(R4) by dominated convergence.
+It counts the sole favorite finite quitter and all-opponents-Never.
+Thus C_i≥max(1,L_i), regardless of ordering and tie structure.
+
+The product bound Π(1−x_j)≥1−Σ x_j gives
+
+    Σ_i Π_{j≠i}(1−x_j)≥4−3s,
+    4Σ_i x_{f(i)} Π_{j∉{i,f(i)}}(1−x_j)≥4s−4s²,
+    Σ_i(C_i−1)≥s−4s².                               (R5)
+
+Also Σ_i V_i is exactly5 times the probability of a finite UNIQUE
+minimum, because every singleton reward column sums to5 and all
+non-singleton columns are zero. In particular Σ_i V_i≤5s.
+Substitute these bounds into(R3):
+
+    D'−D≥ε³ s(1−5ε−4s)>0
+      whenever0<s<(1−5ε)/4.                           (R6)
+
+This blocks ALL sufficiently small conditional tail insertions, not
+just finitely many directions or all simultaneous ones. Mixed clocks,
+new ordered microdates, ties, arbitrarily late stopping and Never
+have all been included. Any entropy increase reinforces(R6), because
+the original entropy is0. It is a local restriction on this tail
+operation, not a full-profile local minimum or a finite-amplitude
+obstruction.
+
+### A finite conditional tail change is nevertheless consumed
+
+Give every player, conditional on old Never, probability1/2 of Quit
+at date2 and probability1/2 of Never. The fresh date1 tester earns1;
+the date2 tester earns1/8; every finite tester after date2 earns5/8;
+Never earns1/2. Therefore C_i=1 exactly, while V_i=5/16.
+Equation(R3) now gives
+
+    D'−D=−5ε⁴/4<0.                                   (R7)
+
+The complete laws remain identical, so I'=I=0. Hence(R7) is a legal
+strict descent for every D+τI. Forε=1/10 the exact debts are13/100
+and1039/8000, a decrease1/8000; the small-tail barrier in(R6) is s<1/8.
+The unconditional total-variation change of each law isε/2, tending
+to0 along the near-minimum sequence, although its conditional tail
+amplitude is1/2 rather than infinitesimal.
+
+This exhibits a genuine nonuniformity in first-order clock tests at
+actual entropy near-minimizers: a shrinking unconditional perturbation
+can require a finite conditional excursion through an initially rare
+continuation. It does not invalidate global minimality arguments that
+permit all finite conditional replacements. It says precisely why
+their legal move must be retained, rather than inferred from an
+infinitesimal insertion cone or from its first-order inequalities.
+
+### Actual-source formula and remaining global question
+
+The inspected exact Lean bridge is
+quittingTerminalPayoff_stoppingLawProfile_late_pure_eq_never_add in
+UniformEquilibrium/Quitting/Terminal/FiniteOpponentLateResponse.lean:
+against finite opponent clocks, the signed late finite payoff equals
+the actual Never payoff plus the player-deleted Never probability
+times the singleton reward. In that file,
+quittingTerminalPayoff_stoppingLawProfile_update_eq_expect gives
+affinity under every complete marginal replacement. The signed
+pivot analogue quittingTerminalPayoff_pivot_late_response_eq in
+UniformEquilibrium/Quitting/Terminal/FiniteOpponentPivotResponseFormula.lean
+also retains the actual early contribution; it does not replace it
+by a supplied tail annotation. Those files and the relevant imports
+were inspected narrowly. Equations(R3)–(R7) are ordinary mathematics
+here, not claims that these exact formulas are already Lean declarations.
+
+For a general actual finite source, let n_i be its Never masses,
+c_i its actual Never-response payoffs, and E_i the best old finite
+tester before its deadline. A tail ν placed after a fresh empty date
+has the same exact decomposition
+
+    B'_i=max(E_i, c_i+n_{−i} C_i(ν)),
+    U'_i=U_i+(Π_j n_j)V_i(ν).                          (R8)
+
+The fresh tester is included in C_i; omitting it can falsely lower
+the old cap. In particular, a tail with C_i≤max(s_i,0) for every i
+and Σ_i V_i>0 produces strict total-debt descent whenever Π_i n_i>0.
+The old late finite/Never alternatives already ensure
+B_i≥c_i+n_{−i}max(s_i,0). This implication is a supporting consumer,
+NOT a producer of such a tail from arbitrary no-UE tables.
+
+The genuinely global remaining question is whether actual no-UE
+source data produce a finite conditional tail satisfying the complete
+cap inequalities in(R8), or another move when the joint Never mass
+vanishes. Neither the matching cofactor nor the preceding finite
+screens supply it. The toy data(R1) furnish one exact consumed move;
+they do not justify adding these cap hypotheses as a purported
+general solution.
