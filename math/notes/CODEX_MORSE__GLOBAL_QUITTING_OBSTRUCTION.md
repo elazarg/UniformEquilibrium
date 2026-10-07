@@ -14,7 +14,28 @@ The new result is ordinary mathematics,
 not Lean-checked or a full UE conclusion. Consuming the first collision
 row with every complete cap remains open.
 
-Current consuming checkpoint: Section 43 constructs an exact asymmetric
+Current complete candidate: Section 45 proves a raw Fin4 CLASS theorem:
+each premium-trap support may independently use a nonpositive weighted
+forced-Quit upper-average certificate OR boxed Nash charges. The per-support
+choice gives universal exact-root singleton-sublevel return on one common
+box, and the actual selected-return consumer gives a uniform-equilibrium
+payoff. A complete full-core deadlock table passes the combined criterion
+while failing the entire ProductLow, boxed-charge, participant-balance,
+protected/support-specific leaver, and weighted-floor producer selection
+sets audited there. Relevant deadlock-family producer overlap is also
+checked over all labelings. Section 45/H1--H12 has passed independent
+falsification reviews by CODEX_NOETHER and CODEX_BROUWER, with no unresolved
+objection. The self-contained final draft and its open-neighborhood,
+all-v no-sure and complete matrix supplements are in
+`../exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md`;
+the complete artifact and supplements passed both final byte-bound reviews
+and are now frozen at SHA256
+`1f342e9ee028c79f37d8b95868fa659aa628e0a65670316a7295716775fbc2f3`.
+This is ordinary
+mathematics, not a Lean implementation or export. It does
+not solve the arbitrary-table or worst-table SUM comparison in Section 44.
+
+Earlier consuming checkpoint: Section 43 constructs an exact asymmetric
 four-player unrestricted stopping-law LOCAL trap with debt 1/4, every
 pure coalition strictly escapable, genuine singleton blockers, and R0
 singleton degree one. It retires that table as a counterexample: the
@@ -8151,3 +8172,477 @@ nor the static active-tester derivative is being pursued as a universal
 replacement. The next concrete question remains a finite table change
 with its moving minimum laws followed by an actual old-table whole-law
 repair, preserving the two globally ordered infima.
+
+## 45. Mixed per-support upper averages and boxed charges: a complete raw class
+
+Status: complete ordinary-mathematical proof, not checked in Lean.
+Frozen H1--H12 passed independent falsification reviews
+by CODEX_NOETHER and CODEX_BROUWER with no unresolved objection. See their
+owned feedback files for the exact scope; this does not give a verdict on
+intervening notebook sections. The final standalone draft is
+`../exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md` and
+includes the full-coordinate neighborhood and complete no-sure/matrix
+supplements. Both full final-artifact reviews passed, with the literal
+original-game chronology corrected: the live coalition-selecting date
+pays zero and absorption rewards start subsequently. The packet is frozen
+at the SHA recorded in the top status; no new Lean verification is claimed.
+The theorem below is a raw
+finite-reward CLASS producer, rather than a supplied strategic verifier.
+Its mechanism is universal full exact-root return, so it does not confuse
+a local minimum or one fixed row with the all-profile SUM minimum.
+The full arbitrary-game conclusion and the table-space repair in Section
+44 remain open. Labels H1--H12 delimit the complete candidate for review.
+
+### H1. Game, conclusion, and the two raw support certificates
+
+There are four players I={0,1,2,3}. At every live date they independently
+choose Continue or Quit. The first nonempty quitting coalition S absorbs
+at the fixed vector r(S), received thereafter; live play and perpetual
+continuation pay zero. Each of the sixty entries is an arbitrary bounded
+real number. Strategies and deviations are unrestricted behavioral
+strategies with independent private randomization and public histories.
+There is no public correlation or restricted clock/controller class.
+Put s_i=r_i({i}) and M=max_(S nonempty,i)|r_i(S)|. Assume s_i>=0 for all i.
+
+A nonempty A is a premium trap if for every i in A there is a nonempty
+S contained in A, containing i, with r_i(S)>s_i. For each trap A require
+AT LEAST ONE of the following two finite certificates. Different traps
+may choose different types, weights, and coefficients.
+
+UPPER(A): there are weights w_i>=0 for i in A, with sum_A w_i>0, such that
+
+    H_(A,w)(S)=sum_(i in A) w_i*[r_i(S union {i})-s_i]<=0
+                      for EVERY S contained in A, including empty. (H1)
+
+The weight may vanish at some active players. No condition is imposed
+outside A, and no same weight must work for different supports. In
+particular this is an UPPER bound, not the existing nonnegative global
+forced-Quit FLOOR.
+
+CHARGE(A): m=|A|>=3 and there are d,tau,g,l>0 such that, for every nonempty
+proper T contained in A, writing
+
+    P_A(T)=sum_(i in A minus T)[r_i(T union {i})-s_i],
+    L_A(T)=sum_(i in A minus T)[r_i(T union {i})-r_i(T)],
+
+the following hold:
+
+    |T|=1:             P_A(T)<=-d,    L_A(T)<=-g;
+    2<=|T|<=m-2:       P_A(T)<=0,     L_A(T)<=0;
+    |T|=m-1:           P_A(T)<=tau,   L_A(T)<=-l.     (H2)
+
+An empty middle range imposes nothing. Require
+
+    C_A=m*(d/tau)^(1/(m-2))*(g+l*d/tau)>sum_A s_i+m*M. (H3)
+
+For Fin4 the two possible charge thresholds are
+C_3=3*(d/tau)*(g+l*d/tau) and
+C_4=4*sqrt(d/tau)*(g+l*d/tau).
+
+THEOREM. Under these raw conditions the original game has a uniform-
+equilibrium payoff: there is one u, fixed before accuracy, such that for
+every epsilon>0 a behavioral profile and a horizon threshold work for
+every larger finite horizon, with expected average payoff within epsilon
+of u and every complete unilateral deviation paying at most u_i+epsilon.
+
+### H2. Exact-root data and supported-action identities
+
+For any q in [0,1]^I let mu_q be its product coalition law and c=mu_q(empty).
+At an arbitrary continuation annotation v define
+
+    W(v,q)=c*v+sum_(S nonempty) mu_q(S)*r(S),
+    Q_i(q)=sum_(T contained in I minus {i}) mu_(-i)(T)*r_i(T union {i}),
+    C_i(v,q)=mu_(-i)(empty)*v_i
+                +sum_(T nonempty, i not in T) mu_(-i)(T)*r_i(T).
+
+An exact root is a Nash equilibrium of this finite action game with
+all-Continue continuation v. Thus W_i=q_i*Q_i+(1-q_i)*C_i, with W_i>=Q_i
+and W_i>=C_i. In particular, for the active support A={i:q_i>0},
+
+    W_i=Q_i>=C_i for i in A;
+    Q_i=C_i for i in A when q_i<1.                  (H4)
+
+These are statements about the actual full finite Nash relation, not a
+chosen subrelation. Nash existence holds at EVERY v. No actual-tail
+realization of v or player-response cap selection is being assumed.
+
+### H3. The upper-average alternative, with quiet and sure hazards
+
+Give a UPPER(A) weight value zero outside A. The full-product identity is
+
+    sum_(i in A) w_i*(Q_i(q)-s_i)
+           =sum_(S contained in A) mu_q(S)*H_(A,w)(S). (H5)
+
+Indeed, the summand r_i(S union {i}) is independent of whether i is in
+S; summing mu_q(S) over that coordinate leaves the opponent coalition
+law defining Q_i. Coalitions containing any quiet player have zero mass.
+No division by q_i or 1-q_i occurs, so (H5) includes partly-sure and
+all-sure roots and every quiet coordinate exactly.
+
+The right side is nonpositive by (H1). If Q_i>s_i for every i in A,
+the left side is strictly positive because the weights are nonnegative
+and at least one is positive. Therefore some active i satisfies Q_i<=s_i.
+By (H4), every exact root with support A then has W_i<=s_i. This argument
+uses only the support and forced-Quit endpoints, and is independent of v.
+
+### H4. A nontrap support always returns
+
+If the nonempty active support A is not a premium trap, some i in A
+satisfies r_i(S)<=s_i for EVERY contained coalition S containing i.
+The forced-Quit average Q_i only uses such coalitions, because all
+players outside A are quiet. Hence Q_i<=s_i and W_i=Q_i<=s_i. This also
+handles every singleton support, including a sure singleton. Absorption
+zero is precisely A empty and is not part of the absorbing-root return.
+
+### H5. Charge supports: complete exclusion of sure hazards
+
+The exact aggregate gap identity on A is
+
+    sum_(i in A) (1-q_i)*(Q_i-C_i)
+       =c*sum_(i in A)(s_i-v_i)
+             +sum_(empty != T proper-subset A) mu_q(T)*L_A(T). (H6)
+
+Multiplying the opponent coalition probabilities by 1-q_i gives full
+coalition probabilities; the empty term gives s_i-v_i. Thus (H6) is
+valid throughout the entire cube, before any odds substitution.
+
+For CHARGE(A), every proper nonempty L_A(T)<=0, and every erased support
+L_A(A minus {i})<=-l<0. If some but not all active hazards are sure,
+c=0. Choose a nonsure active i. The coalition A minus {i} has strictly
+positive product mass, since every other active q_j>0 and 1-q_i>0.
+Its strict negative L term makes the right side of (H6) negative,
+whereas (H4) makes its left side nonnegative. This is impossible.
+
+If ALL active hazards are sure, the last leave coefficient is just
+r_i(A)-r_i(A minus {i})<=-l for each i. Continuing unilaterally gives
+r_i(A minus {i})>r_i(A), a profitable withdrawal. This separate boundary
+case does not use (H6), whose two sides vanish at the all-sure point.
+Consequently every exact root with a CHARGE support has 0<q_i<1 on A.
+
+### H6. Charge supports: interior source charge
+
+Suppose, seeking a contradiction, that Q_i>s_i for all i in this A.
+Define z_i=q_i/(1-q_i)>0, U=sum_A z_i, and
+E=sum_(i in A) product_(j in A minus {i}) z_j. Dividing each positive
+Quit premium by its positive opponent-Continue probability gives
+
+    0<sum_(empty != T proper-subset A) P_A(T)*product_(j in T) z_j
+                                                  <=-d*U+tau*E. (H7)
+
+The elementary symmetric bound E<=U^(m-1)/m^(m-2) gives
+
+    E>(d/tau)*U,    U>m*(d/tau)^(1/(m-2)).          (H8)
+
+For completeness, at fixed nonnegative sum U a maximum of E has at
+least m-1 positive coordinates. Holding the sum of any two coordinates
+fixed, its dependence is ab*e_(m-3)(rest)+(a+b)*e_(m-2)(rest).
+The first coefficient is positive at an unequal maximizing pair, so
+equalizing increases E; the maximum is at all entries U/m. This proves
+the bound for m=3,4, including boundary vectors.
+
+All active players are indifferent by (H4), so the left side of (H6)
+vanishes. Divide by c>0 and use (H2), (H7), and (H8):
+
+    sum_A(s_i-v_i)
+      =sum_(empty != T proper-subset A)[-L_A(T)]*product_(j in T)z_j
+      >=g*U+l*E
+      >(g+l*d/tau)*U
+      >C_A.                                        (H9)
+
+In particular no boxed annotation with sum_A s_i+m*B<C_A can support
+such a bad exact root, because |v_i|<=B gives sum_A(s_i-v_i)<=sum_A s_i+mB.
+Nothing about quiet-player Nash inequalities was dropped: we only used
+necessary supported inequalities, so the exclusion applies to every
+full exact root, not just a Nash equilibrium of the active subgame.
+
+### H7. One common box and the actual UE consumer
+
+There are finitely many trap supports. Choose one admissible alternative
+for each. Strict margins (H3) select ONE B with M<B<M+2 such that
+sum_A s_i+|A|B<C_A for every selected CHARGE support. If there are no
+charge supports any such B works. The UPPER and nontrap arguments are
+independent of B. Therefore H3--H6 prove
+
+    FOR EVERY v with |v_i|<=B, EVERY absorbing full exact root q at v
+             has SOME player i with W_i(v,q)<=s_i.  (H10)
+
+This is stronger than a selected-return witness. At any boxed v with
+some v_i<s_i, finite Nash existence supplies a root, and that root
+cannot be all Continue: that player would gain by quitting alone.
+It therefore absorbs and (H10) supplies the required return. No positive
+uniform lower bound on absorption or continuous root selector is needed.
+
+The named source-level semantic consumer is
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound`
+in `UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`.
+Its exact inputs are nonnegative own singletons; a coordinate reward
+bound M; M<B; B<=quittingRewardBound reward+2; and
+`HasBoxedSelectedSingletonSublevelReturn reward B`. Our M is the maximum
+absolute entry, so M<=quittingRewardBound reward and B<M+2 supplies the
+last size condition. (H10) and the preceding Nash argument supply the
+actual selected-return predicate. The theorem concludes the original
+`IsUniformEquilibriumPayoff none`, not merely a terminal-payoff verifier.
+
+The consumer imports
+`UniformEquilibrium/Quitting/Projective/SelectedSingletonSublevelReturnSmoothDrift.lean`
+and `UniformEquilibrium/Quitting/Classification/Existence/BoundaryDifferentiablePotentialUniformPayoff.lean`.
+The raw coefficient adapter here has NOT been implemented in Lean.
+
+### H8. A complete asymmetric full-core table
+
+The following fifteen payoff rows specify ALL sixty entries; order is
+(r_0,r_1,r_2,r_3). Perpetual continuation is zero.
+
+| S | r(S) |
+| --- | --- |
+| {0} | (1,3,3,0) |
+| {1} | (4,1,-1,-1) |
+| {2} | (0,2,1,2) |
+| {3} | (4,-2,0,1) |
+| {0,1} | (-200,-200,5,5) |
+| {0,2} | (1,5,-200,5) |
+| {0,3} | (-200,5,5,1) |
+| {1,2} | (5,-200,0,5) |
+| {1,3} | (5,-1,5,-200) |
+| {2,3} | (5,5,-200,-200) |
+| {0,1,2} | (4,4,4,-4) |
+| {0,1,3} | (4,4,-4,4) |
+| {0,2,3} | (4,-4,4,4) |
+| {1,2,3} | (-4,4,4,4) |
+| I | (-200,-200,-200,-200) |
+
+Here s=(1,1,1,1), M=200. Pairs are not traps because every participant
+payoff is <=1. Every triple is a trap because all three participant
+payoffs are 4>1. The full support is also a trap. Thus these five sets
+are the COMPLETE trap selection set, not an example list.
+
+Every pure coalition strictly escapes. At each singleton the respectively
+selected outsiders 3,2,0,1 can join with gains 1,1,1,1. Every pair has a
+participant at -200, who leaves for a singleton passive payoff at least
+-2. Every triple participant leaves for the passive pair payoff 5>4.
+Every grand participant leaves for -4>-200. All Never loses to any
+owner's solo 1. This pure audit is supporting evidence only, not the UE
+proof or an assertion of noncoverage by all mixed producers.
+
+### H9. Exact certificate audit of all five traps
+
+For the full support choose w_i=1. H_(I,w)(empty)=0, and the nonempty
+coefficients in singleton/pair/triple/grand order are
+
+    singletons: (-402,-403,-402,-404),
+    pairs 01,02,03,12,13,23: (-396,-195,-195,-196,-197,-396),
+    triples: (-192,-192,-192,-192),
+    grand: -804.                                    (H11)
+
+All are strictly negative, so UPPER(I) holds. In fact every absorbing
+full-support product root has sum_i(Q_i-1)<0, without using Nash.
+
+For every triple choose (d,tau,g,l)=(201,3,198,1). The complete singleton
+coefficient pairs (P_A({j}),L_A({j})) are as follows, with j listed in
+increasing order inside each row:
+
+    A=012: (-402,-406), (-202,-203), (-201,-201);
+    A=013: (-201,-202), (-402,-403), (-203,-203);
+    A=023: (-201,-202), (-201,-201), (-402,-404);
+    A=123: (-202,-198), (-402,-404), (-203,-199).
+
+For EVERY pair T contained in a triple A, its unique omitted player
+has P_A(T)=4-1=3 and L_A(T)=4-5=-1. There is no middle range. Therefore
+every triple has threshold
+
+    C_3=3*67*(198+67)=53265>3+3*200=603.             (H12)
+
+One may use the explicit common box B=201, since 53265>606. The actual
+UE consumer applies with M=200 and B=201. No optimization of these
+large margins is needed or intended.
+
+### H10. Complete selection-set comparisons with the relevant raw producers
+
+These are source-level comparisons, not a claim that every possible
+implemented UE producer has been exhausted. The comparison concerns
+the COMPLETE selection sets of the following relevant actual producers;
+it is stronger than failure of one favored witness. All failures are
+preserved under relabeling, except the explicit deadlock equality audit
+which is addressed separately in H11.
+
+1. `HasProductLowQuittingPremium`, defined in
+   `UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`,
+   fails: take any triple sure and the fourth quiet. Its active Q_i=4>1
+   for all three owners. This is an actual absorbing product root;
+   continuation annotations are irrelevant to Q. This is a product action
+   profile, NOT an exact Nash root: the triple owners can withdraw for5.
+   It defeats the universal
+   predicate and hence its entire exact decision producer, not one weight.
+   `exists_uniformEquilibriumPayoff_of_productLowPremium` in
+   `Classification/Existence/ProductLowPremiumUniformPayoff.lean` therefore
+   does not consume this table through its stated raw hypothesis.
+
+2. `HasBoxedQuittingNashCharges` in
+   `Classification/BoxedQuittingNashChargeReturn.lean` fails for the full
+   trap: EVERY pair T has P_I(T)=6>0, whereas the required middle-range
+   bound in `QuittingTrapChargeCoefficients` is P_I(T)<=0. No alternate
+   positive coefficients can repair that sign, for any reward bound or
+   box. All triple coefficients pass, but that is insufficient for the
+   old global boxed predicate. H1 instead chooses its upper alternative
+   at exactly this failed support.
+
+3. `IsSupportwiseBalancedQuittingPremiumTable` in
+   `Classification/SupportwiseQuittingPremium.lean` fails over ALL
+   normalized nonnegative participant weights. For A=I, every contained
+   triple has participant premium 3 at each of its members. Given ANY
+   nonzero nonnegative weight, choose a triple containing a positive
+   coordinate: its weighted participant premium is strictly positive.
+   This violates `IsSupportwiseQuittingPremiumWeightCertificate` in
+   `Classification/SupportwiseQuittingPremiumBalanceAt.lean`. This is a
+   different identity from (H5): it weights q_i*Q_i premiums and only
+   participant coefficients, not inserted coefficients. The distinction
+   is necessary, not notation.
+
+4. ALL protected/common/support-specific leaver selections fail. In
+   `Classification/SupportSpecificQuittingPremiumLeavers.lean`,
+   `HasProtectedParticipantPremiums` requires each protected player's
+   participant rewards >= its own singleton on EVERY containing
+   coalition. Since every grand reward is -200<1, the maximal protected
+   set is empty. Any admissible protected set is a subset of this empty
+   set, but the four triple traps and full trap require a selected
+   protected leaver. Thus neither strict nor weak support-specific
+   producers apply for ANY choice of protected set or support-wise
+   witness. The passive-perturbation closure theorem
+   `exists_uniformEquilibriumPayoff_of_supportSpecific_weakLeave` in
+   `Classification/Existence/SupportSpecificQuittingPremiumLeaversRewardClosure.lean`
+   retains participant data and the same empty protected set, so it does
+   not alter this conclusion. `IsCommonQuittingPremiumLeaver` in
+   `Classification/CommonQuittingPremiumLeaver.lean` likewise fails for
+   EVERY player. Also the four triple traps have empty intersection,
+   independently of the participant-floor failure.
+
+5. ALL weighted trap-leaver selections fail, including their weak version.
+   `HasWeightedQuittingTrapLeavers` in
+   `Classification/WeightedQuittingTrapLeavers.lean` requires positive
+   weights on a trap, zero outside, and a GLOBAL NONNEGATIVE inserted
+   premium for every coalition. At S=I that quantity is
+   -201*sum_A w_i<0 for EVERY allowed weight. Neither its leave witnesses
+   nor a different support weighting can rescue this violated global
+   lower floor. In contrast our (H1) is support-local and nonpositive.
+
+6. The premium core is all four players, as every owner has triple premium
+   3. Thus the entire at-most-two-core and exactly-three-core producers
+   are excluded by their core-cardinality hypotheses, not by checking
+   one ordered pair/triple. In particular the mixed-sign triple source
+   `hasBoxedSelectedSingletonSublevelReturn_of_mixedSignTriple_core` in
+   `Classification/MixedSignTripleCoreSelectedReturn.lean` requires the
+   premium core to equal one three-set, which no relabeling can supply.
+
+7. This table does NOT satisfy an actual-payoff-only strict-deficit raw
+   condition. Its singleton comparison matrix is
+
+       Gamma = [ [ 0,  3, -1,  3],
+                 [ 2,  0,  1, -3],
+                 [ 2, -2,  0, -1],
+                 [-1, -2,  1,  0] ].
+
+   With lambda=(2,1,5,1)/9, Gamma*lambda=(1,6,1,1)/9>0 coordinatewise.
+   This is an exact feasible simplex point, so the ambient simplex
+   exclusion used to retire TC6 cannot retire this table. More strongly,
+   actual stationary hazards q_i=epsilon*lambda_i, repeated forever,
+   give every player's prescribed payoff strictly above 1 when
+   epsilon=1/10000. To verify without a numerical limit claim, their
+   unnormalized terminal premium numerator has singleton contribution
+   at least epsilon/9-3*epsilon^2, because |Gamma_ij|<=3 and the missing
+   singleton product factors cost at most the sum of opponent hazards.
+   Nonsingleton mass is at most sum_(j<k)q_j*q_k<=epsilon^2/2, and every
+   premium is >=-201. Thus every numerator is at least
+   epsilon/9-(207/2)*epsilon^2>0. Absorption per row is positive, and
+   division by it gives the infinite stationary terminal payoff.
+   Hence any predicate demanding an own-singleton prescribed deficit
+   at EVERY actual independent profile fails. This does not claim that
+   the displayed stationary law is Nash; the all-response root-return
+   proof is doing genuinely additional work.
+
+### H11. Relevant singleton/Γ-family producer audit over all labelings
+
+The matrix Gamma is literally `FullCoreDeadlock.deadlockMatrix` in
+`Classification/LCP/FullCore/DeadlockChargedReturn.lean`. Its theorem
+`deadlockMatrix_normalCore_eq_univ` shows the full normal core, so no
+smaller normal-core route is silently being invoked. The arbitrary-
+nonsingleton completion results in that file and in
+`DeadlockGlobalContraction.lean` and `DeadlockSharperBound.lean` give
+positive numerical debt upper bounds, not a zero-gap UE producer for
+all such completions. The current frontier explicitly separates these
+bounds from the named equilibrium completions.
+
+The actual deadlock producers checked are:
+
+- `FullCoreDeadlock.reward_isUniformEquilibriumPayoff_jointBlock` in
+  `Classification/LCP/FullCore/DeadlockJointBlockEquilibrium.lean`:
+  the named zero-multiquitter table, not arbitrary completion data.
+- `integerTableTarget_isUniformEquilibriumPayoff` in
+  `Classification/LCP/FullCore/DeadlockIntegerTablePeriodThree.lean`:
+  the named integer table and its stored algebraic parameters, not an
+  arbitrary reward producer.
+- `isUniformEquilibriumPayoff_of_isDeadlockRationalJointBlockCompletion`
+  in `Classification/LCP/FullCore/DeadlockRationalPolyhedralBlock.lean`:
+  arbitrary baselines and nonsingleton coordinates subject to its FULL
+  raw structure `IsDeadlockRationalJointBlockCompletion`.
+
+For the rational structure, the singleton diagonal fixes the baseline
+as s=(1,1,1,1). It requires the ENTIRE pair {1,3} vector to equal s;
+our pair {1,3} is (5,-1,5,-200), so it fails. This failure is checked
+over ALL allowed simultaneous player labelings, not only the identity:
+the only permutation pi with Gamma_(pi(i),pi(j))=Gamma_(i,j) is identity.
+Indeed its four offdiagonal row multisets are respectively
+{-1,3,3}, {-3,1,2}, {-2,-1,2}, {-2,-1,1}, all distinct, so any such
+permutation fixes every row. An exact enumeration of all 24 permutations
+independently gave only (0,1,2,3). Consequently no alternative labeling
+can move a favorable pair into its required {1,3} slot while satisfying
+the singleton hypotheses. The named zero-multiquitter and integer
+completions are also not this table under any such labeling.
+
+The circulant/open-sign cyclic producer cannot supply another labeling:
+simultaneous row/column relabeling preserves the distinct row-multiset
+list, whereas a circulant singleton matrix has equal offdiagonal row
+multisets. The defining equality, not just a chosen balance root, fails
+for every labeling. This audits the producer used to retire Section 43.
+No claim is made that arbitrary supplied block certificates, arbitrary
+exact-root return predicates, or every other implementation must fail:
+our theorem intentionally supplies the general selected-return predicate.
+
+### H12. Source alignment, exact tests, and the remaining question
+
+The existing theorem `quittingWeightedQuitPremium_eq_fullCoalitionAverage`
+in `Classification/WeightedQuittingTrapLeavers.lean` is exactly the
+identity behind H5; it accepts arbitrary signed weights and has no
+Nash, floor, or normalization premise. The existing charge-source
+theorem `QuittingTrapChargeCoefficients.threshold_lt_singletonSourceCharge`
+in `Classification/BoxedQuittingNashChargeOdds.lean` applies to ONE
+supplied active support. Nothing in that declaration requires that
+every other trap possess charge coefficients. The new raw assembly
+uses this support-local fact, rather than treating the globally failed
+boxed predicate as if it were available. This is a direct source-level
+composition with the actual consumer described in H7.
+
+Additional bounded source inspection covered the definitions and
+theorems named in H10--H11, `SupportwiseQuittingPremiumProductLow.lean`,
+and `ProductLowPremiumUniformPayoff.lean`. A narrow symbol/phrase search
+in the chosen classification files found no implemented per-trap
+UPPER-or-CHARGE raw assembly. This is not a global codebase survey or
+a claim of full known-class noncoverage.
+
+Exact rational/integer tests recomputed every row in H8, all fifteen
+nonempty H coefficients in H11, all twelve triple singleton coefficient
+pairs, all twelve triple penultimate coefficients, the simplex witness,
+and all 24 deadlock labelings. These computations check finite data;
+the universal root proof H2--H7 is algebraic and does not use a grid.
+
+The ENTIRE per-support class, all root boundaries, common-box semantic
+consumer and compared complete producer selection sets have passed the
+two independent H1--H12 reviews. The complete final artifact, including
+the full-coordinate neighborhood and scoped no-sure/quiet/matrix
+supplements, also passed both byte-bound reviews and is frozen at the
+export path above. A no-UE table with nonnegative own singletons must have
+a trap support failing BOTH alternatives. That is a concrete strict
+counterexample-class restriction, not an arbitrary-game UE proof. The next
+question is again the genuinely global comparison in Section 44: use ALL
+moving minimizing laws at a worst SUM table to construct a finite-amplitude
+old-table law, not a fixed active-tester derivative or another solved-table
+refinement.

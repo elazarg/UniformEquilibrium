@@ -1820,3 +1820,251 @@ or process history. Its Lean-handoff paragraph accurately distinguishes the
 new ordinary mathematics from the existing semantic consumers. No Lean
 build, Lean verification of the new producer, self-export, or broader
 arbitrary-game conclusion is claimed by this verdict.
+
+## Section 45 H1–H12: independent complete-class falsification PASS
+
+I independently read the entire H1–H12 candidate in the author's frozen
+notebook, SHA256
+`6a32c34b7c6d4da99abc197598d06dc386755f9e5420e6ee963d966122020220`.
+No counterpart verdict was read. I tried to break the algebra at quiet,
+partly-sure, all-sure and interior roots; the common box and actual
+uniform-payoff consumer; and the value claim over complete selections.
+Verdict: **PASS for the stated raw Fin4 class**, as ordinary mathematics
+composed with the named checked semantic consumer. There is no unresolved
+objection. The raw UPPER-or-CHARGE adapter itself is not yet Lean-checked.
+
+### Universal root argument, not just the fixture
+
+For a full exact root, positive own Quit mass implies W_i=Q_i and
+Q_i≥C_i. Positive Continue mass additionally implies Q_i=C_i. These
+supported identities follow from both endpoint inequalities and
+W_i=q_i Q_i+(1−q_i)C_i. Quiet-player inequalities are not asserted to
+follow from supported ones: the proof only uses necessary conditions of
+every full Nash root, which is sufficient for its universal exclusion.
+
+UPPER averages the inserted premium over the FULL product coalition
+law. It is correct that summing over coordinate i leaves the opponent
+law, even if q_i is zero or one. Extending the weights by zero outside
+the support discards no positive-mass coalition, since quiet players
+never belong to one. Vanishing weights on some active players cause
+no problem: if ALL supported Q_i>s_i, the nonnegative weighted sum is
+strictly positive because its total weight is positive. The owner
+returned need not be the same for different roots. No odds, source
+floors, actual tail, or cap attainment enters this branch.
+
+For a nontrap nonempty support, the negated trap quantifiers give one
+active owner whose EVERY containing subcoalition reward is at most its
+own singleton. Its forced-Quit average is therefore low, including
+singleton and sure-singleton supports. Empty support is correctly
+excluded from the absorbing-root assertion.
+
+For CHARGE, I rederived the full-cube identity (H6) before division.
+With at least one sure hazard and at least one nonsure active owner i,
+the full all-Continue mass is zero while A∖{i} has positive mass and
+strictly negative leave coefficient. Every other proper leave term is
+nonpositive. This contradicts the nonnegative supported left side.
+At the all-sure point both sides of (H6) vanish, so the separate
+withdrawal comparison is essential and valid: r_i(A∖{i})>r_i(A) for
+each i. Since |A|≥3, that opponent coalition is nonempty. Thus the
+interior odds passage loses no boundary root.
+
+For each supported owner, division by its own positive opponent-Continue
+mass converts Q_i−s_i into a coalition odds polynomial. Summing gives
+exactly P_A(T), not an incorrectly shared denominator. Therefore all
+positive supported premiums force E>(d/τ)U. The symmetric bound
+E≤U^(m−1)/m^(m−2) is correct for m=3,4. Its extremal proof includes
+boundary vectors: a positive maximum must have at least m−1 positive
+coordinates, so unequal positive/zero coordinates have a strictly
+positive e_(m−3) coefficient and can be equalized. Interior Nash makes
+the left side of (H6) zero. The resulting source charge is strictly
+above C_A, whereas |v_i|≤B bounds it by ∑_A s_i+|A|B. This is the
+claimed contradiction; no omitted quiet inequality is used as a
+surrogate for a full Nash condition.
+
+The finitely many strict selected charge margins admit ONE B>M, B<M+2.
+Zero charge supports and M=0 cause no exceptional case. Every boxed
+source strictly below some own singleton has a finite exact root by
+`exists_isZeroQuittingRootNash` in
+`UniformEquilibrium/Quitting/Root/NashExistence.lean`. Such a root is
+not all Continue, since quitting alone strictly improves for that owner.
+The universal absorbing-root conclusion then supplies the selected
+singleton-sublevel return. It does not need a continuous root selector,
+a uniform positive absorption estimate, or a realized continuation law.
+
+### Literal semantic consumer
+
+I directly inspected
+`HasBoxedSelectedSingletonSublevelReturn` in
+`UniformEquilibrium/Quitting/Projective/SelectedSingletonSublevelReturnSmoothDrift.lean`
+and
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound`
+in
+`UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`.
+The actual inputs match H7: nonnegative own singletons, every coordinate
+bounded by M, M<B, B≤quittingRewardBound+2, and selected return for every
+boxed source strictly below one own singleton. The return predicate
+requires successor ≤own singleton, not an unproved strict return or
+an extra cap annotation. The output is the original game's fixed
+`IsUniformEquilibriumPayoff none`, not merely terminal Nash verification.
+The canonical sum bound in `UniformEquilibrium/Quitting/RewardBound.lean`
+is at least the maximum absolute coordinate, so the box-size premise
+follows exactly. The proof's abstract continuation annotations are
+legitimate inputs to this consumer; no actual-tail realization is
+needed to prove its raw return hypothesis.
+
+I also inspected the exact support-local
+`QuittingTrapChargeCoefficients.threshold_lt_singletonSourceCharge` in
+`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashChargeOdds.lean`,
+the full structure in `Classification/BoxedQuittingNashCharges.lean`,
+and `quittingWeightedQuitPremium_eq_fullCoalitionAverage` in
+`Classification/WeightedQuittingTrapLeavers.lean`. These match the two
+identities used by the adapter. A charge theorem for one supplied
+support does not require charge certificates for every other support.
+
+### Complete fixture and selection audit
+
+An independent exact rational computation from the sixty entries found
+exactly the five traps {012,013,023,123,0123}. It recomputed all sixteen
+inserted full-support coefficients, every singleton and pair charge
+coefficient on all four triples, the positive Gamma simplex witness,
+all 24 simultaneous labelings, and strict escape from all fifteen pure
+coalitions. All reported values agree. At the literal stationary hazards
+ε(2,1,5,1)/9 with ε=1/10000, the FOUR terminal premium numerators are
+strictly positive exact fractions. Thus the actual-payoff strict-deficit
+predicate fails, not just an ambient necessary screen.
+
+The relevant entire raw selection sets, not just chosen weights, fail
+as stated. A sure triple defeats ProductLow. The positive middle-layer
+full-support P_I(T)=6 defeats EVERY boxed charge coefficient choice.
+The participant-only supportwise balance fails at a triple containing
+any positive weighted owner. All protected sets are empty because every
+grand participant reward is −200<1; so every support-specific protected
+leaver selection fails. Every positive trap weight has negative GLOBAL
+inserted premium at the grand coalition, defeating the weighted lower
+floor even in its weak leave version. The premium core is four, ruling
+out the compared core-cardinality-three/two consumers.
+
+The deadlock rational completion's baseline is fixed by singleton
+diagonals; its required entire pair {1,3} equals that baseline and the
+fixture fails it. All four off-diagonal row multisets of Gamma are
+distinct, so any simultaneous automorphism is identity; enumeration
+agrees. Hence no allowed relabeling repairs that completion equality.
+Distinct row multisets also prevent a circulant singleton matrix at
+every labeling, ruling out the compared cyclic open-sign producer.
+The arbitrary-completion deadlock results inspected are positive gap
+bounds, not uniform-equilibrium producers for this fixture.
+
+These comparisons are correctly LIMITED to the named relevant raw
+producers; no total census of every possible supplied periodic/root
+certificate is claimed. The mixed class intentionally produces the
+already checked general selected-return predicate, but not through the
+globally failed charge raw predicate. This is a real reward-class
+adapter with a fixture beyond the compared completed selections, not
+a new supplied strategic interface or full arbitrary-game theorem.
+
+## Final mixed-support packet: byte-bound supplement and assembly PASS
+
+I read the complete standalone
+[MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md](../exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md),
+at SHA256
+`1f342e9ee028c79f37d8b95868fa659aa628e0a65670316a7295716775fbc2f3`.
+This includes the final literal live-stage-zero wording, not the earlier
+opening semantics. I independently checked the substantive supplements,
+without reading another review. Verdict: **PASS on these exact bytes**,
+with no unresolved mathematical, agency or semantic objection. This is
+ordinary mathematics plus the named existing semantic consumer, not
+Lean verification of the raw adapter or fixture.
+
+The standalone retains the complete general support argument reviewed
+above. Every trap has its selected certificate, both root boundaries
+are retained, and ONE box is selected before continuation annotations.
+The actual source chain through
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound`
+still supplies one original fixed target against all behavioral
+deviations. All required definitions and proofs are inline or exact
+tracked declaration references. There is no conference-file dependency,
+missing realized-tail premise, speculative seal, or unused correlation.
+
+### Full sixty-coordinate neighborhood
+
+The radius 1/100 argument is valid for independently changing ALL
+sixty entries, including singleton baselines. A pair remains nontrap
+because at least one member retains its −200 reward strictly below its
+own near-one baseline; the other participant's equality may break
+without creating a pair trap. Every triple retains positive premium,
+so the five-trap census persists. Full inserted coefficients change
+by at most 8η, with original largest nonempty value −192. Empty H is
+identically zero. Triple singleton P,L move by at most 4η and
+penultimate P,L by at most 2η. The slack parameters
+(200,4,197,1/2) meet every coefficient range and give C₃=33300.
+The single box B=201 satisfies M<B and B<M+2 for every table in the
+ball, as well as all triple charge inequalities. This is a genuine
+full-coordinate open UE chamber, not a singleton equality stratum.
+
+### True punishment and every sure-coordinate root
+
+At r*, Never guarantees ≥−4 under all opponent laws; opponents all
+quitting in I∖{i} at zero restrict i's payoff to −4 by Continue or
+−200 by joining. Hence the actual punishment value is exactly −4.
+It is not a nominal floor. All-v no-sure exclusion is also correct:
+with at least three sure players, one sure owner's gap is
+−1−195p<0; with two sure players, one pair member has four strictly
+negative convex coefficients; with exactly one sure z, its two
+nonfavorite opponents have uniformly negative gaps and must be quiet,
+while its favorite's positive gap forces it sure and reaches the
+already excluded case. These comparisons do not depend on v. Every
+strict sign persists under the stated 2η coefficient error, proving
+the neighborhood no-sure statement as well.
+
+I inspected
+`nonempty_quittingPersistentBaseCertificate_of_inducedNash` and
+`exists_uniformPayoff_of_persistentBase_inducedNash_signs` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseNashSemanticAdapter.lean`,
+and the singleton adapter/floor equivalence in
+`PersistentBaseConcreteGap.lean`. For base size at least two, accepted
+induced Nash PLUS base-leave PLUS outsider-join supplies a full exact
+sure-coordinate root. For singleton base, the owner-floor condition
+gives the owner's Continue comparison at true punishment; all other
+players' endpoint comparisons are annotation independent since that
+owner is sure. Thus the accepted data are excluded. The induced Nash
+set alone is correctly NOT claimed empty. The explicit punishment-
+vector root predicate in
+`Classification/InstantPunishmentSureQuitterCharacterization.lean`
+is also excluded by the stronger all-v statement.
+
+### Complete degree census and universal child scope
+
+Independent exact symbolic inversion recomputed all eleven principal
+determinants and the full inverse-support table at a=(1,2,3,5).
+Only support 023 is admissible, with z=(3,8,3), outside slack3 and
+determinant5. One-point homogeneous support fails a negative entry in
+its column, and every larger support is nonsingular. I read the exact
+inputs and determinant-sign output of
+`r0Degree_eq_sum_admissible_inverse_supports` in
+`MathUE/LinearProgramming/FiniteSupportDegree.lean`, and the actual
+`isStandardQ_of_r0Degree_ne_zero` in `R0Degree.lean`. The supplied
+zero diagonal, positive anchor, negative columns, every nonsingular
+large principal and strict inactive slack suffice. Degree1 and
+StandardQ follow with the stated sign convention. No matrix fixture
+Lean-checking or grid argument is inferred.
+
+The quiet-child countertest is exact for every proper child: the
+favorite map is a four-cycle, so a proper nonempty child cuts an edge
+z→k. Sole sure z is terminal child Nash because every other child
+player's join is unfavorable, withdrawal gives zero, and later
+responses cannot change date-zero absorption. All child debts and
+joint Never mass are zero; the cut outsider has actual join gain1.
+I checked the universal bound produced by
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess` in
+`Classification/QuietExtension/WithdrawalFutureJoinDebt.lean` from the
+raw `WithdrawalFutureJoinRewardCertificate`. Restriction to S∪{k}
+and relabeling k as none preserve this exact countertest. Thus every
+universal certificate for that cut transport fails. Another selected
+safe child might still exist: the packet's existential caveat is
+essential, present, and not contradicted by its final scope paragraph.
+
+The value claim remains a new raw assembly and open chamber beyond
+the named complete selections, not an exhaustive producer census or
+an arbitrary-game UE result. The supplements introduce no unresolved
+change to that scope. No packet was edited or self-exported by this
+review.

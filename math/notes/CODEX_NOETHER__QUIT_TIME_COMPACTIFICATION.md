@@ -14613,3 +14613,161 @@ the mechanism while preserving its desired universal payoff exclusion.
 The geometric inequality is retained; the payoff-only attempt is closed.
 The next attempt must compare common-source counterfactual/deleted
 laws AND their unrestricted caps, or use a different global mechanism.
+
+## Two cap responses at one actual source: the hybrid-product square
+
+Status: a proved COMMON-SOURCE law constraint and exact full-cap transfer
+ledger, followed by a failed consuming comparison. This is internal
+support for the named global attempt, not an export, new question alias,
+or a claimed arbitrary-minimum consumer. It does not repeat the retired
+payoff-only UE class or optimize its constants. The distinction from
+BROUWER's simultaneous one-coordinate cross-profile work is explicit:
+the two response copies below differ in TWO own laws; the equality
+branch must transport to a DIFFERENT product pair.
+
+### Actual source and all four literal profile modes
+
+Take the produced marked TRUE global SUM minimum (T,q) for a fixed Fin4
+table, with full debt δ>0 and all caps on X=T disjoint union Never.
+Adjoin its empty finite c⁺ as in the simultaneous variation domain.
+Choose any complete maximizing clocks τ_i,τ_j for distinct owners i,j.
+They may be finite, Never, tied with other maximizers, or zero-own-mass
+points. Let
+
+    q^i: replace ONLY q_i by δ_{τ_i};
+    q^j: replace ONLY q_j by δ_{τ_j};
+    q^{ij}: make BOTH replacements.                    (CS1)
+
+These four independent profile modes all come from the SAME q and SAME
+reward table. The exact supplying source is §2, formula(2), and its
+“Transport of simultaneous finite-atomic variations” proof in
+`../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`.
+It permits arbitrary finitely supported ν_i on T disjoint union Never
+and simultaneous coefficients in[0,1]; use ν_i=δ_{τ_i}, coefficients1
+for replaced owners and0 for others. For inserted zero-mass clocks its
+proof consolidates original neighboring blocks on a common calendar,
+retains coincident tests and approaching before/after T-tests, and
+keeps the later empty c⁺ test for insertion at c. That precise proof
+realizes each complete payoff/cap pair by actual finite approximants,
+with full tests T⁺ and Never, even if one inserted clock is c. The new
+`POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md` is NOT supplying this arbitrary
+insertion domain: it transports only EXISTING positive own atoms for
+its signed proof. The four modes here are not chosen
+from unrelated punishment faces or presumed minimizing tails. Write
+U,B,d,D for their ACTUAL full transported semantic coordinates. Base
+q has no mass at c, so its old cap equals its cap with c⁺ as well.
+
+Own-law replacement does not change the owner's cap. Its chosen law
+attains that cap at the original opponents, giving exactly
+
+    d_i(q^i)=0,   d_j(q^j)=0.
+
+Global minimality and no unpriced cap restriction give
+
+    D(q^i),D(q^j),D(q^{ij})≥δ,
+    Σ_{k≠i}[d_k(q^i)−d_k(q)]≥d_i(q),
+    Σ_{k≠j}[d_k(q^j)−d_k(q)]≥d_j(q).                   (CS2)
+
+This is a genuine minimum-source cap-feedback budget. Equality or
+minimum membership of a response copy does NOT follow. In particular
+the strict singleton margins cannot be invoked at q^i just because
+they hold at q.
+
+### The ordered hybrid-product injection
+
+Write I={i,j,c,d}, and for any profile v set
+
+    t_a(v)=P_v(first coalition I\{a}),
+    σ_c(v)=P_v(first coalition {c}),
+    β_A(v)=P_v(first coalition pair A),
+    χ(v)=P_v(first coalition I).
+
+The following identity of ancestry and its probability bound are exact:
+
+    t_i(q^i)t_j(q^j)
+       ≤ σ_c(q^j)β_{ {j,d} }(q^i)
+          +σ_c(q^i)β_{ {i,d} }(q^j)
+          +χ(q)β_{ {c,d} }(q^{ij}).                    (CS3)
+
+Sample independent ORDERED copies X∼q^i and Y∼q^j. On the left-hand
+event their first triple dates are u,v. If u<v, swap their unchanged
+player c clocks. Because those two c marginals are identical, this
+preserves the product(q^i,q^j) measure and produces ordered coalitions
+({j,d},{c}). If u>v, the same swap gives ({c},{i,d}) and the other
+first two terms. Those ordered images are disjoint.
+
+If u=v, instead swap player i. Its X law is δ_{τ_i} and its Y law
+is the ORIGINAL q_i, so this is NOT measure preservation for the old
+product pair. It has the exact pushforward
+
+    swap_i*(product(q^i,q^j))=product(q,q^{ij}).         (CS4)
+
+Independence follows coordinate by coordinate: new X has every original
+q marginal, and new Y has BOTH replaced i,j marginals with all other
+original marginals. The source event has X_i>u, Y_i=u,
+X_j=u, Y_j>u, and shared c,d at u. The new X first coalition is I
+at u; new Y first coalition is {c,d} at u. Thus the equality-branch
+measure is bounded by the LAST term in CS3 on its distinct hybrid
+product measure. Both swap maps are measurable bijections on the tuple
+space; chronology and Never comparisons are retained. For compact T,
+order and first-coalition maps are Borel, so the same argument applies
+to the produced chart, not only countable natural dates.
+
+It is deliberately NOT asserted that the three branches together preserve
+one product measure. Their first two branch bounds use the original
+response-copy product, and the third uses the exact hybrid product CS4.
+This bookkeeping is why no hidden independence assumption is introduced.
+
+The last term is indispensable. Let base q have all four clocks surely
+at date0, and let both replacement clocks be Never. Then q^i and q^j
+are two DISTINCT pure triples, with NO finite off-triple mass. Nevertheless
+q is the grand coalition and q^{ij} is the common pair, so the left and
+last term of CS3 both equal1. A proposed bound using only
+e(q^i)e(q^j) would incorrectly give0. This is an exact clock-law test,
+not a positive-gap table or another optimization regression. If rewards
+make withdrawal a maximizing response, these are literal cap-response
+profiles too; their common-source ancestry cannot be discarded.
+
+BROUWER independently confirmed CS3–CS4's branch derivation and this
+grand/pair test in correspondence. No formal Lean check is claimed.
+
+### The attempted global consumer and its precise unclosed inequality
+
+The intended use was to show that two incompatible profitable withdrawn
+triple cap branches cannot jointly charge observers enough to satisfy
+CS2, by transporting their product mass to the original-grand/double-
+response-pair branch. CS3 succeeds in tracking those probabilities on
+one actual source and all four REAL modes. It does NOT close the price
+comparison. The sufficient comparison sought would be, for some selected
+response owner with d_i(q)>0,
+
+    Σ_{k≠i}[d_k(q^i)−d_k(q)] < d_i(q).                 (CS5)
+
+CS2 says exactly that CS5 would contradict the true infimum. But the
+hybrid pair in CS3 is q^{ij}, not q; its observer caps are unrestricted
+maxima against its DIFFERENT opponent laws. Even τ_j, maximizing at q,
+need not maximize at q^i. Replacing B_k(q^i) by a selected old response
+payoff goes in the WRONG direction for CS5: it is a lower bound on the
+new cap, whereas CS5 needs an upper bound on the observer increase.
+
+At the sharp all-grand clock test, the entire product price is paid by
+χ(q)β(q^{ij})=1. The law statement supplies no inequality between the
+pair's arbitrary payoff/cap coordinates and the triple/grand rewards.
+For example at a pure-grand prescribed law, varying passive PAIR reward
+coordinates leaves its original U and ALL original cap values unchanged:
+an individual withdrawal faces a three-player coalition, not a pair.
+Those same pair coordinates enter other owners' full withdrawal caps
+at q^i, and can change its observer debt without changing the source law
+or the CS3 probabilities. This is an exact data-dependency obstruction,
+not a claimed genuine positive minimum after such a perturbation. A
+new table requires a NEW global minimum; none is silently preserved.
+
+No extra minimum-tail or supplied cap-domination hypothesis repairs CS5.
+The present attempt stops at that precise missing global price bound;
+CS3 alone is not an elimination. A next genuine mechanism would have
+to use simultaneous global minimality of the entire response square to
+produce the needed upper debt price, or generate another actual law
+whose debt bypasses it. Neither follows from a numerical law inequality
+or the lower bounds D(q^J)≥δ alone. The common-source hybrid square is
+retained as the useful evidence; another payoff-only raw penalty is not
+the next step.

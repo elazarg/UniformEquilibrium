@@ -2,6 +2,10 @@
 
 Identity: CODEX_NOETHER. Ordinary mathematics; no new Lean claim.
 
+Latest additional review: the independent Section45/H1–H12 verdict and
+complete sure-base/universal-quiet-transport checks are recorded at the end.
+The earlier Section29 and standalone verdicts below are unchanged.
+
 Status: **accepted, with no unresolved mathematical objection.** The tested
 surface is §29, from “A negative scheduled-premium arm of the matching
 two-phase producer” through EOF, in
@@ -214,3 +218,373 @@ remain distinct conclusions. The packet gives real new UE coverage beyond
 the accepted arbitrary-K matching class, not a supplied-certificate interface.
 New content remains ordinary mathematics and carries no new L/A/C assertion.
 This is the independent final mathematical acceptance of these exact bytes.
+
+## Independent Section45 hybrid-class review
+
+**Accepted as ordinary mathematics, with no unresolved proof objection.**
+The exact surface checked is Section45, H1–H12, of
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, whole-file SHA256
+
+    6a32c34b7c6d4da99abc197598d06dc386755f9e5420e6ee963d966122020220
+
+This is a new review of that frozen surface, not an extension of the
+earlier Section29 verdict to intervening sections. I read all H1–H12,
+recomputed all sixty original reward entries and the finite certificate
+data, and attempted to falsify the arbitrary-table theorem at quiet,
+partly-sure, all-sure and interior roots. No Lean build or edit, export,
+staging, commit or push was performed. The reviewed raw adapter is not
+asserted to be implemented in Lean.
+
+### Claim and exact consumer
+
+Four players use independent private behavioral randomization at live
+dates; complete unilateral behavioral replacements are allowed. The first
+nonempty quitting coalition absorbs at its original reward vector; live
+play and Never pay zero. Own singleton rewards are nonnegative. For EACH
+premium trap A, there is either a nonzero nonnegative support-local weight
+whose inserted-premium average is nonpositive at EVERY S⊆A, or the stated
+three-cardinality-layer boxed charge coefficients with strict threshold
+above ∑[i∈A]s_i+|A|M. Weights and certificate types may differ with A.
+The conclusion is one original-game uniform-equilibrium payoff, selected
+before accuracy, against unrestricted deviations and all sufficiently
+large horizons. It is not completeness of a stationary or periodic class.
+
+I checked the exact declarations
+`HasBoxedSelectedSingletonSublevelReturn` in
+`UniformEquilibrium/Quitting/Projective/SelectedSingletonSublevelReturnSmoothDrift.lean`
+and
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound` in
+`UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`.
+The predicate asks for ONE exact full root at every boxed annotation
+strictly below some own singleton, returning below some own singleton.
+It does not demand every root return or a continuous selector. The theorem
+requires own nonnegativity, a coordinate reward bound M, M<B and
+B≤quittingRewardBound+2. The proposed common box has exactly these inputs.
+Its conclusion is the original fixed-target uniform-payoff contract, not
+merely terminal Nash or finite-horizon equilibrium with varying targets.
+
+### Universal root proof and attempted falsifiers
+
+H5 is correct with arbitrary zero weights, quiet coordinates and sure
+coordinates. Summing the complete product law over the player's own
+coordinate gives the forced-Quit opponent law. Thus the inserted average
+weights Q_i−s_i, not q_i(Q_i−s_i). It needs no division or Nash assumption.
+The existing `quittingWeightedQuitPremium_eq_fullCoalitionAverage` in
+`Classification/WeightedQuittingTrapLeavers.lean` has this precise algebraic
+scope. A nonzero nonnegative weight makes an all-strictly-positive active
+Quit-premium vector impossible. A nontrap support likewise supplies one
+owner whose entire forced-Quit coalition inventory is at most its singleton.
+
+H6 is also valid on the whole cube. The empty outcome contributes
+c∑(s_i−v_i), and each nonempty proper coalition contributes its actual
+leave sum. At a partly-sure CHARGE root c=0; a nonsure active i gives
+strictly positive mass to A\{i}, making the right side negative while
+Nash makes the left side nonnegative. At the all-sure point both sides of
+H6 vanish, but the separate individual erased-support inequality supplies
+a strictly profitable withdrawal. No sure case survives into the odds
+calculation. The singleton-support case is handled by the nontrap arm;
+no charge threshold is illicitly used at cardinality one or two.
+
+For an interior charge support, division by positive Continue probabilities
+gives H7 exactly: each missing player's own-zero term disappears, and the
+inserted premiums collect by proper nonempty coalition. The next-to-top
+elementary symmetric bound E≤U^(m−1)/m^(m−2) is correct for m=3,4.
+The averaging proof also covers a boundary maximizer: at least m−1 positive
+coordinates are necessary for E>0, so the pair-equalization coefficient
+is positive whenever it is needed. There is no unproved strict convexity
+or maximum-at-equal-points assertion hiding a zero coefficient.
+
+H9 uses the full exact Nash identities only on active proper hazards, where
+they are indifferent. Its charge bound is strict because E>(d/τ)U and
+g,ℓ>0. Quiet-player inequalities are not replaced by subgame Nash: only
+necessary supported inequalities were used to exclude a bad FULL root.
+The same calculation is the support-local theorem
+`QuittingTrapChargeCoefficients.threshold_lt_singletonSourceCharge` in
+`Classification/BoxedQuittingNashChargeOdds.lean`; it does not require that
+other traps carry charge coefficients.
+
+There are finitely many traps, so the strict threshold margins allow ONE
+M<B<M+2 for all selected charge supports. At every boxed v with some
+v_i<s_i, finite-game Nash existence supplies a root; all Continue is not
+Nash because i's solo Quit gains s_i−v_i>0. Thus an absorbing full root
+exists, and the proved universal return supplies the selected predicate.
+No realized actual tail, positive uniform absorption bound, maximum-debt
+source, differentiable Nash selection or punishment-value assumption is
+silently introduced. These were the principal attempted falsifiers, and
+none invalidated the theorem.
+
+### Exact fixture and original H10–H11 comparisons
+
+All fifteen H8 payoff rows were independently entered and checked. The
+complete trap list is 012,013,023,123,I; no pair is a trap. All fifteen
+nonempty full-support H coefficients, all twelve triple singleton (P,L)
+pairs, all twelve triple penultimate (P,L) pairs and C₃=53265 agree exactly.
+M=200,B=201 satisfy the actual consumer; there is no floating-point premise.
+The pure-escape inventory also agrees. In H10(1), the witness should be
+read as an absorbing **product action profile**, not an exact Nash root:
+the sure triple is deliberately not Nash. This is harmless for the actual
+definition `HasProductLowQuittingPremium`, which quantifies over all product
+profiles, but the wording distinction prevents a misleading source reading.
+
+The ProductLow, whole-core boxed-charge, participant-weight balance,
+protected/common/support-specific leaver and weighted global lower-floor
+failures are valid over their complete stated selection sets. In particular
+P_I(T)=6 for EVERY pair T defeats any full-core charge coefficient choice,
+and grand premiums −201 defeat every nonzero nonnegative global lower-floor
+weight. Positive triple participant premiums defeat every participant-only
+support weighting. The upper inserted identity is genuinely different.
+
+The exact Γλ witness is (1,6,1,1)/9 for λ=(2,1,5,1)/9. The stated stationary
+small-hazard numerator estimate is sound, so this is not an all-profile
+prescribed-payoff-deficit class. It also excludes every nonnegative weighted
+terminal upper chamber: the singleton tests would imply wᵀΓ≤0, incompatible
+with Γλ>0 for nonzero w≥0. I inspected the exact raw theorem
+`exists_uniformEquilibriumPayoff_of_nonnegativeWeightChamber` in
+`Diagnostics/Quitting/TerminalSemanticNonnegativeWeightChamber.lean`.
+
+The full-core deadlock equality and all24-labeling audit are valid. The four
+distinct offdiagonal row multisets force the only Γ automorphism to be
+identity. The actual raw structure `IsDeadlockRationalJointBlockCompletion` in
+`Classification/LCP/FullCore/DeadlockRationalPolyhedralBlock.lean` requires
+the WHOLE pair13 vector equal the own baseline. The fixture's (5,−1,5,−200)
+fails that field. Arbitrary completion debt bounds are not mistaken for UE.
+
+### Complete sure-base and true-punishment exclusion
+
+The true unrestricted independent-opponent punishment value is P_i=−4
+for EVERY i. Never earns at least −4 against any opponents: each passive
+singleton, passive pair, omitted triple and Never reward is at least −4.
+Opponents all surely Quit at date0 in I\{i}; i can then only receive −4 by
+Continue/Never or −200 by joining the grand coalition. This is an actual
+punishment, without public correlation or a nominal floor.
+
+Stronger: at ANY continuation annotation v, no FULL exact finite root has
+ANY sure coordinate. Here is an independent direct proof, covering all
+supports and all free-rate choices.
+
+If at least three players are sure, choose three of them. For a member,
+the Quit-minus-Continue gap is −1−195p<0, where p is the fourth hazard;
+three sure gives triple4 versus passive pair5, and four sure gives grand
+−200 versus omitted triple−4. Such a sure player is not best responding.
+
+If exactly two a,b are sure, let x,y be the other hazards. Each sure
+member's gap is the convex combination of its directed pair joining gap,
+two copies of −1, and −196, with weights
+(1−x)(1−y),x(1−y),(1−x)y,xy. The two directed pair gaps, in pair order,
+are
+
+    01:(−204,−203), 02:(1,−203), 03:(−204,1),
+    12:(−202,1),   13:(1,−199), 23:(−200,−202).
+
+EVERY pair has a member whose four coefficients are strictly negative.
+Thus no exact root has two sure coordinates, even with arbitrary other
+rates or arbitrary v.
+
+If exactly z is sure, each free player's action gap is a convex combination
+of its directed joining gap against {z}, two copies of −1 and −196.
+Exactly one free player f(z) has positive first coefficient, equal1:
+
+    f(0)=3, f(3)=1, f(1)=2, f(2)=0.
+
+The other two free players have a uniformly strictly negative gap and hence
+must Continue. With both quiet, f(z)'s gap is1, forcing f(z) surely Quit.
+This contradicts the already excluded two-sure case. The annotation drops
+out because every free player's opponents include a sure quitter, and the
+final owner comparison has the newly forced sure opponent. No own-floor
+condition on v was used.
+
+This covers the COMPLETE selections in the named persistent-base producers,
+not only a chosen base/free carrier. I read `quittingPersistentBaseNashSet`
+in `UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean`,
+`nonempty_quittingPersistentBaseCertificate_of_inducedNash` and
+`exists_uniformPayoff_of_persistentBase_inducedNash_signs` in
+`Diagnostics/Quitting/Collision/Toggles/PersistentBaseNashSemanticAdapter.lean`,
+and `quittingSingletonBaseOwnerFloorExcess_nonpos_iff` and
+`exists_uniformPayoff_or_singletonBase_pos_gap` in
+`Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`.
+For base size≥2, the induced Nash, base-leave and outsider-join fields yield
+a full exact root, with continuation irrelevant. For a singleton base, the
+owner-floor field is exactly its Continue inequality at its TRUE P_z;
+free and outsider inequalities are screened by the sure owner. Thus every
+accepted carrier would give a prohibited full root at a suitable v.
+The exact predicate `HasQuittingPunishmentVectorNashRootWithSureQuitter`
+in `UniformEquilibrium/Quitting/Classification/InstantPunishmentSureQuitterCharacterization.lean`
+likewise fails over all owner/root choices. This does NOT exclude proper
+stationary roots, proper quiet roots or arbitrary selected continuations.
+
+### All proper children fail universal quiet-transport certificates
+
+The same f is one directed four-cycle. Every nonempty proper child S cuts
+an edge z→k=f(z), with z∈S and k∉S: a nonempty subset closed under f would
+contain all four players. Within that child, prescribe z surely at date0
+and every other child player Never. This is an EXACT unrestricted terminal
+child Nash profile. Owner z earns1, while any late/ Never withdrawal earns0;
+each other child player has a strictly negative date0 joining gain because
+its only positive joining partner is the omitted k. Later moves do not
+change date0 absorption. Mixtures of deadlines give no additional gain.
+All child debts are zero and child joint Never is zero, but quiet parent
+outsider k gains1 by joining at date0.
+
+Consequently, for EVERY proper child selection, there are no fixed finite
+nonnegative debt weights and Never residual making a bound
+
+    d_k(quiet(p)) ≤ ∑[i∈S]c_i d_i(p)+ρ Q_child(p)
+
+hold for EVERY actual child profile p. This directly falsifies every
+advancing F/J certificate and every one of the five withdrawal kinds,
+over all weights and all child choices, using the exact universal theorem
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess` in
+`Classification/QuietExtension/WithdrawalFutureJoinDebt.lean` and the literal
+raw structure `WithdrawalFutureJoinRewardCertificate` in
+`Classification/QuietExtension/WithdrawalFutureJoinRaw.lean`. It likewise
+blocks the corresponding universal capped-clock domination transports.
+All14 child countertests were independently enumerated exactly.
+
+This is NOT noncoverage by an EXISTENTIAL selected-child equilibrium
+producer. Another child root or continuation could still be safe; the
+proof neither estimates those choices nor claims every quiet lift has a
+gap. A separately supplied stationary/child/periodic certificate remains
+a verifier, not a universally excluded strategy class. The no-sure theorem
+above is also not a substitute for a census of all proper quiet roots.
+
+### Other applicable raw screens and Γ source alignment
+
+Every pair has a strictly negative directed joining gap. Thus every pair
+partition fails the scheduled-member inequality of
+`exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md`; every partition also has
+an opposite-pair participant triple4>own1, violating its cross caps.
+Rows0 and1 of Γ each have TWO positive offdiagonal entries, so no relabeling
+meets strict or weak exclusive crossed matching. The symmetric/below-floor
+and opposite-sign matching families require that same singleton matching
+pattern and therefore fail before parameter selection. The signed-inverse
+column family fails because Γ⁻¹ column1 has a zero, while columns2 and3
+have mixed signs. In fact
+
+    Γ⁻¹=(1/25)[[8,5,9,3],[3,5,−6,−2],
+               [14,15,−3,24],[10,0,5,10]], detΓ=25.
+
+It also fails the nonnegative-inverse/negative-determinant raw criterion
+`exists_uniformEquilibriumPayoff_of_nonnegative_singletonInverse` in
+`Classification/LCP/NonnegativeInverseCriterion.lean`. No positive Γ cycle
+of length four exists: row2's only positive predecessor is0, row3's is2;
+a four-cycle would require row1's predecessor3, whose gap is−3. This
+excludes all orderings of both signed-four-cycle eigenvalue branches.
+The literal conditional range adapter fails for every blocker: its
+ContinueUpper is at least passive pair5, whereas QuitWithoutLower≤own1
+and QuitWithLower≤grand−200. Their nonnegative lower-hazard mixture is≤1.
+I checked `IsQuittingConditionalFaceGapRange` in
+`Classification/Existence/ConditionalFaceGapRange.lean`.
+
+As a further attempted singleton-only retirement, all principal determinants
+of order≥2 are nonzero: pair list (−6,2,3,2,−6,1), triple list (10,−3,5,8),
+full25. Each Γ column has a negative coordinate, so no homogeneous LCP
+solution can have singleton support; nonzero principal determinants exclude
+larger homogeneous supports. For positive anchor a=(1,2,3,5), exact principal
+inverse candidate enumeration at offset−a gives the sole admissible support
+023, candidate z=(3,0,8,3), with inactive row1 slack3 and determinant5.
+Thus the R₀ degree is1 by
+`r0Degree_eq_sum_admissible_inverse_supports` in
+`MathUE/LinearProgramming/FiniteSupportDegree.lean`, and Γ is StandardQ by
+`isStandardQ_of_r0Degree_ne_zero` in `MathUE/LinearProgramming/R0Degree.lean`.
+I inspected those exact declarations and recomputed all support candidates;
+this is ordinary exact mathematics, not a new Lean-checked fixture instance.
+Hence generic homogeneous, non-Q and degree-not-one UE exits do not retire
+the fixture. The full normal core named in H11 excludes a hidden proper-core
+inverse route. This remains a bounded relevant-producer audit, not a survey
+or a claim that all possible actual equilibrium verifiers have been excluded.
+
+### Value verdict and next assembly boundary
+
+The theorem gives a real raw arbitrary-table class and a concrete fixed-target
+consumer, not another supplied-object interface. The fixture proves that
+supportwise assembly can succeed where ProductLow and whole-core boxed
+charges each fail, and the relevant complete-selection checks above found
+no existing raw producer that retires it. This is export-level mathematical
+value as a strict counterexample-class restriction and new class UE coverage,
+not a solution of arbitrary Fin4 and not a full known-class noncoverage seal.
+Wider existential quiet/controller noncoverage remains UNPROVED and is not
+needed for the theorem. No new L/A/C seal is justified.
+
+The reported 1/100 open-chamber supplement was not in the frozen H1–H12
+surface and receives no separate byte-bound verdict here. It may be added
+with its explicit finite slack proof before standalone assembly review.
+Any standalone export artifact must carry the complete arbitrary-table
+proof, original semantics, named consumer and scoped coverage record, and
+receive its own final-artifact review. The math-unicode skill changes only
+notation in this review, not mathematics or its acceptance criteria.
+
+## Final standalone hybrid-class verdict
+
+**Accepted for mathematical export, with no unresolved mathematical or
+semantic objection.** The exact final artifact is
+`exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md`,
+624 lines, SHA256
+
+    1f342e9ee028c79f37d8b95868fa659aa628e0a65670316a7295716775fbc2f3
+
+I read the complete standalone, Sections1–13, before giving this verdict.
+The preceding whole-class review checked the exact arbitrary-table
+root-return theorem and source consumer; this assembly keeps their inputs
+and conclusions intact. The new finite supplements below were checked
+independently, not accepted merely because the notebook passed earlier.
+
+One semantic correction was required: the first reviewed assembly said the
+quitting reward was paid at the live coalition-selecting date. The actual
+`quittingGame` definition in
+`UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/Game.lean`
+pays zero at that live date and r(S) only at subsequent absorbed dates.
+The author corrected this sentence. Restoring just that sentence in a
+read-only stream recovers the initially reviewed SHA256
+fd713f854fb9277b2b6cc889f10e1e261f22028b1335af38fa28f752799d19a6,
+so all remaining assembly bytes are unchanged. The final statement now
+uses the exact original semantics. The root-game continuation identities
+are terminal-value identities and require no change.
+
+The full sixty-coordinate open chamber of radius1/100 passes. A pair always
+retains a participant near−200, even when its other participant was exactly
+at its singleton in the center; therefore no new pair trap can appear.
+Every triple retains positive participant premiums, yielding precisely the
+same five traps. Nonempty full-support H changes by at most8η; singleton
+triple P,L by at most4η; penultimate P,L by at most2η. The fixed slack
+coefficients (200,4,197,1/2) satisfy every strict charge inequality and
+give C₃=33300. With fixed B=201, M<B<M+2 and every boxed threshold input
+hold. Thus this is a genuinely open arbitrary-sixty-coordinate UE class,
+not an equality-preserving perturbation or a carried old minimum.
+
+The true punishment P=−4 and the all-annotation no-sure-root proof pass
+exactly as in the independent derivation above. The robustness argument
+for the no-sure theorem also passes: favorite pair gaps remain positive,
+all other pair gaps stay negative, and all triple-versus-passive-pair and
+grand-versus-omitted-triple coefficients stay negative. This is uniform
+in the annotation because each relevant comparison is screened by a sure
+opponent. The fixed true-P value is asserted only for the center table;
+the packet does not falsely keep P=−4 throughout the perturbation ball.
+
+The complete inverse-principal table, determinants and inactive residuals
+were recomputed. At offset−(1,2,3,5), only support023 is admissible, its
+candidate is (3,0,8,3), inactive slack is3 and determinant is5. Empty and
+singleton supports are impossible; every other displayed support fails
+positivity or residual feasibility. All homogeneous supports are excluded
+by negative columns and nonsingular principal matrices. Consequently the
+named finite-support degree theorem gives degree1, and the named nonzero-
+degree theorem gives StandardQ. The source-level theorem hypotheses are
+all explicitly supplied, but the fixture instance has not been newly
+checked in Lean.
+
+Selection scope is accurate. The induced Nash sets are not called empty:
+only their accepted Nash-plus-base-leave/outsider-join or singleton TRUE-
+floor combinations are excluded by the full no-sure-root theorem.
+Section12 excludes universal child-debt/Never transports for every proper
+child, with an explicit restriction to S∪{k} for the cut outsider. It does
+not infer failure of an existential safe-child producer, all quiet profiles,
+or all proper stationary/periodic equilibria. The pure-triple ProductLow
+witness is now correctly named a product action profile, not a Nash root.
+The boxed/weighted/deadlock comparisons retain their complete raw selections
+without turning a supplied-object verifier into a producer.
+
+The final artifact is self-contained ordinary mathematics and has real
+raw-class UE/strict counterexample-restriction value. It settles neither
+arbitrary Fin4 nor the general stochastic-game conjecture, and it carries
+no additional L/A/C evidence claim. I did not edit the packet, export it,
+edit or build Lean, stage, commit or push. This is the final byte-bound
+independent acceptance of the hash above.

@@ -97,11 +97,32 @@ generic unique attainment, this clock is isolated in the PRODUCED marked
 calendar. Signed reweightings of those existing atoms transport on the
 original finite realizing sequence and yield a multiaffine local branch.
 Its selected-clock endpoint polynomial is zero, so positive global debt is
-impossible in this geometry. This ordinary-mathematics candidate passed
-an independent check, but is not a full consumer: multiple active cap
+impossible in this geometry. This ordinary-mathematics result passed
+two independent checks and is frozen in
+[POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md](../exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md),
+but is not a full consumer: multiple active cap
 clocks and unique maximizing clocks with zero OWN POINT MASS remain live.
-Zero point mass does not mean outside the topological support. A standalone
-draft is being assembled at the coordinator's request.
+Zero point mass does not mean outside the topological support. The newest
+section instead compares prescribed laws with actual unilateral response
+copies: its sharp triple inequality has coefficient ONE, not the
+same-profile quarter coefficient. Two different cap-response copies
+require a BASE/joint-replacement hybrid payment at equal dates. These
+whole-law constraints are proved, but exceptional outcome mass has not
+been converted into a universally favorable full-debt payment. The finite
+active-clock Nash bootstrap reproduces the existing late-cap boundary;
+it is not a consumer. The live question is an actual joint OLD-finite-mass
+change controlling those exceptional cap outcomes and hybrid profiles.
+The newest global existence attempt reads Reny's exact better-reply
+security theorem and records the escape-to-allNever graph obstruction
+for ordinary weak stopping laws, while proving full payoff/cap continuity
+at EACH produced marked source separately. This local continuity is not
+global security on a fixed Cartesian game. Increasing density bounds,
+even with bounded common-mixture entropy penalties, also fails: the
+existing participant-indicator boundary table has restricted exact Nash
+at EVERY bound but full debt exactly 3, with explicit actual finite-law
+approximants retaining that gap. Those two compact-Nash mechanisms are
+retired; the open geometry still requires a response-complete global
+joint-law producer, not another local-security interface.
 
 The earlier question concerned a raw class with constant participant
 rewards on all joint exits.
@@ -4315,3 +4336,355 @@ the same-profile quarter coefficient or finite restricted regret.
 Any such repair must control the newly exceptional response outcomes
 and the hybrid two-owner profile; neither is furnished by the law
 inequality alone.
+
+## Better-reply security: a global obstruction, not cap-degeneracy consumption
+
+**Status.** A substantive failed existence route, with an exact minimal
+test and a true-minimum obstruction. The marked source is locally a
+FULL weak-continuity point, even in its surviving multiple-cap and
+zero-own-point-mass branches. That local fact does not supply the global
+payoff-graph security hypothesis of a discontinuous-game existence
+theorem. On the project's ordinary compact stopping-law space, a positive
+true minimum with nonnegative own singletons actually supplies a
+better-reply-security FAILURE. This is a direction change, not a new
+conditional existence interface or a claim that the UE conjecture is false.
+
+### The exact theorem inspected
+
+The literature lane has no Reny transcription. I read the original
+Philip J. Reny, “On the Existence of Pure and Mixed Strategy Nash
+Equilibria in Discontinuous Games”, Econometrica 67(5), 1999,
+1029–1056, Sections 2–3, especially Theorem 3.1. Original-paper locator:
+<https://kylewoodward.com/blog-data/pdfs/references/reny-econometrica-1999A.pdf>.
+The author's publication list identifies this paper and the 2022
+corrigendum; I also checked the latter at
+<https://ewerhart.net/files/2022%20Ewerhart%20Reny%20Etrica.pdf>.
+It leaves Theorem 3.1 unchanged; no symmetric-equilibrium corollary is
+being used here.
+
+The needed theorem is: a compact convex strategy game with bounded
+payoffs, quasiconcave in each own strategy, has an equilibrium if it is
+better-reply secure. That condition quantifies the ENTIRE closure of
+the vector-payoff graph. At a nonequilibrium profile x and any associated
+graph-limit payoff u, one owner must have a FIXED allowed strategy
+whose payoff remains strictly above u_i on some opponent neighborhood
+of x_-i. This is not merely ordinary better-response existence at x,
+and not security on the actual minimum set alone.
+
+The strategy sets contemplated here are complete probability laws with
+their weak topology; own terminal payoff is affine, hence quasiconcave.
+The missing condition is global graph security, not convexity.
+
+Narrow Lean lookup read
+`MathUE/ProbabilityMassFunction/CompactStoppingLaw.lean`, especially
+`CompactStoppingTime`, `CompactStoppingLaw`,
+`compactStoppingLawEquivPMF`,
+`compactStoppingTime_finiteSingleton_isClopen`, and
+`CompactStoppingLaw.tendsto_realMass_of_isClopen`.
+`UniformEquilibrium/Quitting/Terminal/CompactStoppingLawProfile.lean`
+supplies `quittingCompactStoppingLawProfile` and its exact own-law
+identity. `CompactStoppingLawCapUpperBound.lean` supplies
+`quittingTerminalPayoff_update_finiteTime_tendsto_never_add_opponentNever_mul_singleton`:
+late finite is Never payoff PLUS the surviving-opponents singleton
+term, not Never itself. The nearby
+`minimumRealizingSequence_purify_or_offMinimum` in
+`Diagnostics/Quitting/StoppingLaw/ArbitraryClockMinimumPurification.lean`
+explicitly retains an off-minimum alternative; it is not the needed
+global security theorem. No Reny existence theorem is silently imported
+from those declarations.
+
+### Ordinary compact laws: the all-Never graph fiber is too large
+
+Let C=ℕ∪{Never} with the one-point compact topology: each finite date
+is isolated, and finite dates tending to infinity approach Never.
+Let L=Prob(C) with weak convergence, and take the product L^4.
+This is the actual strategy space represented by CompactStoppingLaw;
+its probability data are exactly all ordinary complete stopping laws.
+
+Given ANY finite-support profile p, shift all its finite dates by k,
+retaining its original Never masses. Call this p[k]. First-coalition
+probabilities and prescribed terminal payoffs are EXACTLY unchanged,
+while every marginal p_i[k] converges weakly to δ_Never. Thus
+
+    (allNever,U(p)) belongs to the payoff-graph closure. (BS1)
+
+For an actual finite sequence p^k with U(p^k)→u, shift its kth profile
+by k as well. All finite mass is then at dates at least k, so the same
+weak convergence proves (BS1) with the limiting u. This argument uses
+actual finite laws; it is not an annotation or correlated law.
+
+Shifting may ADD profitable early empty responses, so caps need not
+be unchanged. That is immaterial to (BS1), which concerns prescribed
+PAYOFF graph closure. It would be false to call the delayed profiles
+full-debt near-minima without a separate cap calculation.
+
+For a FIXED own stopping law z_i, against literal all-Never opponents,
+
+    U_i(z_i,allNever_-i)
+        =(1−z_i({Never}))s_i≤max(s_i,0).         (BS2)
+
+Every neighborhood of all-Never opponents contains that opponent
+profile itself. Consequently NO own strategy can secure a payoff
+strictly above max(s_i,0) there, regardless of its randomization or
+unbounded finite support. This is a point evaluation, not an estimate
+that loses arbitrarily late responses.
+
+Now suppose δ>0 is the TRUE Fin4 summed-debt minimum and s_i≥0 for
+every owner. The inspected declaration
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+gives for its actual payoff/cap carrier minimum
+
+    u_i≥s_i+δ−d_i+δ²/(8M)>s_i,                 (BS3)
+
+since all d_i≥0 and Σ_i d_i=δ. Its actual realizing profiles may be
+finitely censored while preserving payoffs and full caps, as already
+proved/cited above. Delaying that finite realizing sequence produces
+the graph point (allNever,u) in (BS1).
+
+Positive δ also forces some s_j>0 in this nonnegative-singleton branch:
+if every s_i=0, literal all Never has payoff0 and caps0, hence δ=0.
+Therefore all Never is NOT a Nash profile. But (BS2),(BS3) show that
+NO player secures anything strictly above its graph-limit u_i there.
+Thus
+
+    δ>0 and all s_i≥0 ⇒ the ordinary compact-law
+    game is NOT better-reply secure.             (BS4)
+
+This is the reverse of the proposed use of Reny's theorem. The actual
+true-minimum margin does not verify its security hypothesis; together
+with the compactification it supplies an exact failure point. In the
+signed-own case the same argument excludes security whenever the
+realizing payoff has u_i>max(s_i,0) for EVERY owner. The signed margin
+u_i>s_i alone does not justify that stronger inequality.
+
+Minimal exact test, reusing the earlier four-player boundary table:
+r_i(S)=1 when i∈S and0 otherwise. Shift the pure grand-coalition
+profile to dates k. Its payoff is always (1,1,1,1), and its weak limit
+is all Never. All Never is nonequilibrium (any owner can quit for1),
+but no payoff can exceed1. Better-reply security fails at this graph
+point although the table has exact terminal Nash at every pure grand
+date and true δ=0. Thus the issue is not an unknown positive-gap table
+or a stronger solved optimization trap.
+
+### The marked minimum itself is a full weak-continuity point
+
+Now keep the actual produced compact marked X=T⊔{Never}, where Never
+is isolated and every positive finite MIXTURE atom is isolated in T.
+Consider ALL independent laws on X, not merely laws dominated by the
+original mixture or densities bounded by a fixed constant.
+
+**Lemma.** If p^k→q marginally weakly on this FIXED X, then
+
+    U_i(p^k)→U_i(q),  b_i^T(p^k)→b_i^T(q).     (BS5)
+
+Moreover, for every moving complete pure-test sequence t_k→t∈X,
+
+    V_i(t_k,p_-i^k)→V_i(t,q_-i).               (BS6)
+
+Here q is the original marked minimum, not an arbitrary law on X.
+
+Proof. The bounded first-coalition kernel on X^4 is continuous at any
+clock tuple whose finite ties occur only at isolated points. For an
+isolated common clock, sufficiently close finite coordinates equal it
+exactly, so its tie is retained. With distinct finite clocks the
+ordering is stable. Never is an isolated label and is not approached
+by finite clocks. The remaining possible discontinuities have at
+least two independent coordinates equal at a NON-isolated finite
+point. That event has q-product probability zero: a tie has positive
+mass only when both laws have an atom there, which would make it a
+positive mixture atom, hence isolated. Weak convergence of the product
+measures and the bounded almost-everywhere-continuous integration
+criterion give prescribed outcome and payoff convergence.
+
+For (BS6), the analogous response kernel has its possible bad set at
+an opponent coordinate equal to the fixed finite t if t is non-isolated.
+Every q_j has zero atom there. If t is isolated, t_k=t eventually,
+so any actual tie remains exact. A tuple with earliest opponents
+ties away from t again has only the null non-isolated tie set just
+described. A coupling/Skorokhod realization of the weakly convergent
+laws on the compact metric X, followed by bounded convergence, proves
+the moving-test identity. Equivalently use the same product/kernel
+argument with the deterministic response coordinate δ_{t_k}.
+
+Each p^k cap is a supremum, not assumed attained. Choose tests within
+1/k of it and extract a convergent subsequence by compactness of X.
+(BS6) proves the limsup bound. Retain one actual maximizing test at q
+for the liminf bound. This proves full cap convergence (BS5), including
+all late marked finite tests and Never. ∎
+
+For the extra finite c⁺, q_i({c})=0 makes its original value duplicate
+c, and (BS6) handles that fixed extra test as well. The conclusion
+does not say a nearby profile with newly inserted c mass has those
+two response functions identical.
+
+In particular, every displayed complete cap response of q is locally
+secure against unrestricted weak opponent-law perturbations. Some
+owner has d_i≥δ/4>0, and its maximizing pure test secures a payoff
+strictly above U_i(q) in a weak neighborhood. This holds when the cap
+has MULTIPLE maximizing clocks and when its unique maximizing clock
+has ZERO own point mass. Forced cap degeneracy is not a discontinuity
+of the payoff or full-cap map at the original marked minimum.
+
+### Why this does not yield an equilibrium producer
+
+Reny's graph-closure condition is global. (BS5)–(BS6) prove it only
+at the source q and profiles with the same isolated-atom property;
+arbitrary other laws on X can put new atoms at non-isolated original
+zero-mass cuts. The complete payoff game can then have discontinuities.
+The same-profile cap gap cannot control every graph point of that game.
+
+Keeping a fixed dominated-density strategy set makes all integral
+payoffs continuous and its weak-* law cube compact. A Nash equilibrium
+there need not control excluded clocks: at an atomless point, an
+arbitrarily narrow approximation to a pure test may require density
+far ABOVE the imposed bound, particularly when opponents' own densities
+concentrate at that bound. Increasing the bound does not provide a
+uniform full-cap error, and new limiting atoms again appear at those
+cuts. An equilibrium of that restricted cube is therefore not an
+actual epsilon-Nash producer. No excluded response is discarded here.
+
+Re-marking EACH new limiting atom would restore the local continuity
+property (BS5), but the common quantile calendar depends on ALL players'
+laws. It is not a product of four fixed convex strategy spaces with
+independent unilateral agency. Hence compactness of the marked source
+carrier cannot be substituted for the Cartesian compactness premise
+of the existence theorem. This is an actual topology/agency mismatch,
+not a missing continuity convention.
+
+The next mechanism must therefore use a GLOBAL joint law comparison
+and its summed-cap ledger, or a genuinely response-complete approximation
+whose compactness survives the new atoms. Neither the ordinary compact
+law security theorem nor a dominated-density Nash gives that consumer.
+The forced multiple-cap/zero-own-point-mass alternative remains open.
+
+## Independent MORSE45 gate, then return to full-law existence
+
+I independently falsified MORSE's complete H1–H12 support-local
+UPPER-or-CHARGE raw-class candidate at frozen whole-notebook SHA256
+`6a32c34b7c6d4da99abc197598d06dc386755f9e5420e6ee963d966122020220`.
+The complete review is retained in my existing
+`feedback/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_BROUWER.md`.
+No counterpart review was read. Verdict: PASS, including quiet, partly
+sure and all-sure roots, ONE common reward box, the actual fixed-target
+uniform-payoff consumer, and complete selections of the compared raw
+producers. Exact rational recomputation confirms the sixty-entry fixture,
+all five traps, all charge coefficients and the actual stationary
+profile with every own payoff above its singleton. This is a genuine
+raw reward-class adapter, not a universal Fin4 consumer.
+
+The newly inspected declarations and files are recorded in that review;
+in particular the selected-return consumer really accepts arbitrary
+boxed continuation annotations, so it does not require actual law
+realization of each finite Nash root. That source-level mode differs
+from our genuine debt minimum, whose cap geometry remains unresolved.
+The next owned question is a response-complete full-law approximation
+that avoids both the allNever graph defect (BS1–BS4) and the fixed-density
+exclusion (BS6), or a joint-law comparison using the marked source.
+
+## Increasing density bounds and bounded entropic Nash: exact failed producer
+
+Status: ordinary-mathematical falsifier of a specific approximation
+mechanism, not a new game counterexample or a supplied-interface export.
+This uses ONLY the existing participant-indicator boundary table,
+r_i(S)=1 if i∈S and 0 otherwise, whose true infimum is zero. It does
+not introduce another local-optimization trap. The target mechanism
+was Nash existence on an increasing bounded-density cube, followed
+by full-cap realization, possibly after a bounded common-mixture
+relative-entropy penalty. The excluded-clock error is exactly visible.
+
+### DR1. Restricted density Nash at every scale
+
+Fix L≥1. Every controller chooses a finite-clock density f_i on [0,1]
+with 0≤f_i≤L and integral at most one; the remainder is Never. Pure
+unrestricted tests retain every t∈[0,1] and Never. Against three copies
+of g_L=L·1_[0,1/L], the pure test payoff is
+
+    V_i(t)= (1−Lt)^3     for 0≤t≤1/L,
+            0           for 1/L≤t≤1,
+    V_i(Never)=0.
+
+Opponent finite ties have probability zero. The first display is
+strictly decreasing on its positive interval. Among EVERY density
+bounded by L, moving all allowed mass to that earliest interval
+therefore maximizes expected payoff. Formally,
+∫(g_L−f)V=∫_[0,1/L](L−f)V≥0; omitted outside mass and Never contribute
+zero. Thus (g_L,g_L,g_L,g_L) is an EXACT Nash equilibrium of this
+restricted compact game. Each U_i=∫_0^1 (1−x)^3 dx=1/4.
+
+But the unrestricted pure clock 0 has payoff 1. Its FOUR complete
+debts sum to 3, at EVERY L. Increasing the density bound does not
+give a full-response error tending to zero, even when the chosen
+restricted equilibria converge weakly to a perfectly good pure Nash
+profile at zero. Their payoff graph does not converge to that profile's
+actual simultaneous-coalition payoff.
+
+### DR2. The actual finite-law discrepancy is retained
+
+To realize the same atomless order law, let every player independently
+choose uniformly from m consecutive finite dates. Never mass is zero.
+Under this table, player i is paid one exactly when its date is one
+of the minimum-date quitters. Therefore
+
+    U_i= m^(−4)·∑_(k=1)^m k^3 = (m+1)^2/(4m²),
+    B_i=1,
+    D=3−2/m−1/m² →3.
+
+The first available date is itself a full-cap test, so this calculation
+does not need an illegally inserted earlier date. All actual finite
+witnesses retain the discrepancy. Clock compression or weak collapse
+to a tied atom instead changes the prescribed payoff; it is not a
+payoff/full-cap approximation of the restricted density equilibrium.
+
+### DR3. A bounded relative-entropy penalty leaves the failed producer intact
+
+For a complete law profile put μ=(p_0+p_1+p_2+p_3)/4 and
+I_i=KL(p_i∥μ). This is well-defined in every probability mode because
+p_i≤4μ, and 0≤I_i≤log4. Replacing the finite or continuous payoff by
+U_i−τ I_i, τ≥0, keeps the full-law regularization cost bounded.
+
+At the density profile of DR1 all four laws agree, so I_i=0. Against
+the other three copies, EVERY legal bounded-density replacement f_i
+has U_i(f_i)≤1/4 and I_i(f_i)≥0. Consequently the same profile is
+an exact Nash equilibrium of the ENTROPIC restricted game at every
+L and every τ≥0, still with original full debt 3. A common-mixture
+penalty encourages likelihood overlap, not chronological dispersion
+or response completeness. It cannot repair this approximation gate.
+
+This does not assert that the FULL regularized game has no equilibrium.
+Indeed any full Nash profile for this bounded-cost game would give
+original unilateral gains at most τ log4, directly from its Nash
+inequality and I_i≥0. Producing such profiles is the substantive
+unrestricted existence problem; the increasing restricted-density
+equilibria above do not produce them.
+
+### DR4. Bounded nonnegative penalties also preserve the escape-to-Never defect
+
+In the positive-global-gap branch with s_i≥0, write γ>0 for the
+checked true-minimum slack from BS3, so the source payoff u_i>s_i+γ.
+Consider ANY nonnegative law-dependent penalty bounded by η, with
+η<γ, and a sequence of actual minimizing payoffs tending to u.
+Delay every finite date of the kth profile beyond k. Payoffs still
+tend to u, and the penalized payoff sequence has a subsequential
+limit at least u_i−η>s_i in every coordinate. All laws tend weakly
+to Never. At literal allNever opponents, every fixed own strategy's
+original payoff is ≤s_i; subtracting a nonnegative penalty cannot
+raise that bound. Hence no strategy secures above the displayed
+graph-limit payoffs. If additionally η<max_i s_i, the allNever profile
+remains nonequilibrium (the positive owner may quit alone). This
+extends the BS graph defect to bounded penalties, including the
+common-mixture entropy with τ log4<min(γ,max_i s_i).
+
+Thus bounded entropic perturbation does NOT furnish the missing global
+better-reply security. An unbounded absolute-time cost might furnish
+ordinary compactness but no longer gives a uniformly small bound for
+all original clock deviations, so it is outside this proposed producer.
+
+### DR5. Mechanism retired; actual frontier remains the response seam
+
+The restricted-density Nash mechanism, with or without bounded identity
+entropy, is retired. The independent full-goal question is now a joint
+law/response construction that keeps all clocks as actual deviations.
+The owned entropy-minimum compactness result remains valid, but it is
+not upgraded to Nash existence by DR1–DR4. No new theorem premise,
+state field, export or uniform-equilibrium claim is added here.

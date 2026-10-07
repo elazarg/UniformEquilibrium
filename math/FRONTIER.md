@@ -290,20 +290,19 @@ curvature inequalities are not sufficient for the full robust inequality.
 
 ### Selected exact-root return — tracked conditional consumer
 
-Assume sᵢ≥0. Let R=∑[S≠∅,i]|rᵢ(S)| and choose R<B≤R+2.
+Assume sᵢ≥0. Let |rᵢ(S)|≤M, put R=∑[S≠∅,i]|rᵢ(S)|,
+and choose M<B≤R+2.
 If every v∈[−B,B]⁴ with some vᵢ<sᵢ admits an exact Nash root q
 against v with some Fⱼ(v,q)≤sⱼ, then the game has UE. The selected
 root need not be unique or vary continuously, and other roots may have
 every successor coordinate above its singleton.
 
-This is `exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_on_subbox`
+This is `exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound`
 (`UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`).
-Its boxed-return hypothesis is not produced by the consumer. The displayed
-implemented wrapper uses the summed bound R; the generic analytic exclusion
-accepts a supplied coordinate reward bound strictly below B. Raw
-criteria using smaller boxes can use that analytic theorem with the
-polynomial obstruction directly, rather than identifying R with the maximum
-absolute reward entry. No universal selected-return theorem is asserted.
+Its boxed-return hypothesis is not produced by the consumer. The supplied
+coordinate bound M need not equal the summed canonical bound R; in particular
+it may be the maximum absolute reward entry. The wrapper with R<B is a
+special case. No universal selected-return producer is asserted.
 
 ## 5. Minimum geometry and the paid-response route
 
@@ -586,6 +585,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: nonnegative own singletons and a protected leaver for each premium trap, allowing different leavers for different traps | UE with signed premiums outside the protected set. The criterion is a finite test on rewards, not supplied strategic data. Both strict and weak leave comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons and the weighted-floor/aggregate-leave tests specified below | UE even when every player has negative participant premiums somewhere. The weights are finite raw-table certificates; no root or strategy is assumed. Both strict and weak tests have production Lean consumers. |
 | Fin4: nonnegative own singletons, premium traps of size three or four, and the boxed Nash-charge inequalities specified below | UE without a nonnegative weighted forced-Quit floor. The raw criterion, common-box selection, exact-root return, explicit C3/C4 thresholds, literal table consumers and raw neighborhood results have production Lean declarations. The proper-triple fixture has a full reward-coordinate UE neighborhood; the full-core fixture retains the own-singleton sign restriction. The packet's separation claims remain formalization obligations. |
+| Fin4: nonnegative own singletons and, independently at each premium trap, a support-local forced-Quit upper average or the boxed Nash-charge inequalities | UE with one common box and no supplied strategic witness. An explicit full-core standard-Q fixture and its full sixty-coordinate 1/100 neighborhood satisfy the mixed criterion while neither the universal product-low nor global boxed-charge criterion applies. This is reviewed mathematics awaiting formalization. |
 | Fin4: nonnegative own singletons, same-sign pair-trap joining gaps, and the boxed Nash-charge tests on every larger trap | UE for mixed pair and larger-trap configurations, including zero pair products by reward closure. The hypotheses force pair traps to be disjoint. This is reviewed mathematics awaiting formalization. |
 | Fin4: the larger-eigenvalue cyclic singleton tests specified below | UE for arbitrary signed own singletons and arbitrary nonsingleton rewards. Four positive clocks, all phase floors and one fixed target are produced from raw rewards; all four phases are refined. This is reviewed mathematics awaiting formalization. |
 | Fin4: some partition into pairs satisfies four weak mate-joining comparisons and twelve opposite-pair own-singleton caps | UE for arbitrary signed rewards, without singleton-matrix graph or inverse-sign restrictions. In the strict R0/nonzero-degree branch the proof produces an exact period-two terminal Nash profile, including inactive players; weak boundaries use reward closure. This is reviewed mathematics awaiting formalization. |
@@ -1166,6 +1166,38 @@ an arbitrary-signed Fin4 UE consumer.
 Outside-box counterroots, proper-child debt witnesses and matrix/response
 separation tests remain packet obligations; the export is not yet fully
 formalized.
+
+The **supportwise upper-or-charge criterion** assumes nonnegative own
+singletons and allows each premium trap A to choose either the preceding
+boxed-charge inequalities or nonnegative weights wᵢ on A with positive
+sum such that
+
+    ∑[i∈A]wᵢ(rᵢ(S∪{i})−sᵢ)≤0    for every S⊆A, including empty S.
+
+The weights and certificate type may differ between supports. This is a
+support-local upper bound, not the global nonnegative forced-Quit floor.
+The full product identity gives ∑[i∈A]wᵢ(Qᵢ−sᵢ)≤0, so some active
+Quit endpoint is at most its singleton, including sure-hazard boundaries.
+Charge supports return by the preceding odds argument in one common box;
+nontrap supports already have a low active endpoint. Every absorbing full
+exact root in that box therefore has a low successor. Finite Nash existence
+produces the selected return at every below-singleton source, and the
+tracked coordinate-bound consumer in Section 4 gives UE.
+
+The [complete raw class theorem](exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md)
+includes a full-core standard-Q fixture with charge certificates at all
+four triples and an upper certificate only at full support. All sixty
+coordinates may vary by less than 1/100 independently and UE persists.
+The fixture has no sure-coordinate exact root at any annotation, so the
+accepted sure-base and punishment-floor selection sets do not cover it.
+The complete raw product-low, global charge, protected/weighted-leaver
+and compared deadlock criteria fail; existential safe-child choices are
+not universally excluded. No new Lean check of this adapter is claimed.
+
+Consequently every no-UE table with nonnegative own singletons has a premium
+trap admitting NEITHER support-local upper weights NOR boxed-charge
+coefficients with the displayed strict threshold. The mixed criterion is
+not an exhaustive classification of all remaining reward tables.
 
 The **mixed premium-trap criterion** allows pair traps and larger traps in
 the same table. Own singletons are nonnegative. For every pair trap {i,j},

@@ -478,6 +478,50 @@ These tests do not establish that chronology is the only viable route, or
 that a counterexample exists. They separate a genuinely cap-aware global
 mechanism from a well-proved theorem on an already excluded reward class.
 
+### Calendar compactness is not a Cartesian existence space
+
+A complete stopping law is a strategy, but a compact topology on complete
+laws need not preserve the payoff graph needed by an existence theorem.
+On the one-point compactification of finite dates by Never, delay every
+finite date of an independent finite-law profile by k. The prescribed
+terminal law and payoff are unchanged, while all four laws converge weakly
+to all Never. Thus every such payoff occurs above all Never in the closure
+of the payoff graph. The shifted caps need not be unchanged.
+
+Against literal all-Never opponents a fixed own law pays at most
+max(s_i,0). Consequently a graph-limit payoff u with
+u_i>max(s_i,0) for every owner cannot be secured there by any fixed
+unilateral response. If some s_j>0, all Never is not Nash, so this is
+an actual failure of better-reply security, rather than an equilibrium
+point at which the security condition is irrelevant. Even the solved
+table r_i(S)=1 when i belongs to S and zero otherwise has this failure:
+delayed sure grand coalitions retain payoff (1,1,1,1).
+
+The tracked theorem
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+gives u_i>s_i at every positive summed-debt minimum. With nonnegative
+own singletons, such a minimum therefore supplies a failure of security
+in this compact strategy space, not the premise of a security-based
+existence theorem. This is ordinary mathematics about the topology;
+no new Lean declaration or positive-gap table is claimed.
+
+Marking every positive limiting atom as an isolated calendar point repairs
+payoff and full-cap continuity at the resulting minimum source. It does
+not repair continuity at every other profile on that calendar: other laws
+can insert positive mass at an old nonisolated cut. Re-marking each such
+law changes the common calendar as a function of all four strategies.
+It is not a fixed Cartesian product on which an owner independently
+changes one strategy. The exact local-continuity argument and its scope
+are in `CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`.
+
+This distinguishes two hypotheses that should not be confused. Full
+response information at the source can be sufficient for its local cap
+calculation, yet the same source compactification can be insufficient
+for a global game-existence theorem. A proposed topological consumer
+must verify its entire payoff-graph closure and independent unilateral
+agency, not only continuity at a selected minimizing profile.
+
 ## Competing explanations
 
 ### H1: insufficient compositional state
