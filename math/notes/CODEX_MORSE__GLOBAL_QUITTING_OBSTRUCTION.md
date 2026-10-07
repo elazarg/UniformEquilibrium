@@ -7390,3 +7390,94 @@ and vanishing pre-mark absorption retained. The modified-target producer
 in `Research/Quitting/FinFourProducerAtlas/Leaves.lean` likewise does not
 state (216) or (217). This is a bounded overlap comparison, not a kernel
 verification or a claim that the remaining first-row consumer is solved.
+
+## 42. An actual first-row tail is not an auxiliary Nash selector
+
+This is an internal consuming attempt, not another export result. The
+reviewed first-collision source remains unchanged. It produces an actual
+prefix factorization, but does not label that prefix as a Nash root.
+
+### Actual tail factorization and the full cap ledger
+
+At the marked dates a_k of Section 41, all original pre-mark marginal
+masses tend to zero. Condition on marginal survival to a_k; the change
+in each whole law tends to zero in total variation. Its old earlier
+tests are now empty and pay s_i, while the limiting cap exceeds s_i by
+δ+γ. They can eventually be removed without changing any cap. Shift the
+retained first original date to zero. The resulting actual profiles
+still converge to the SAME complete minimum pair, and their first product
+rows converge to p with collision probability at least σ.
+
+Take their literal behavioral continuations after that row. A player
+whose first hazard is one may have any prescribed continuation on its
+null branch: under another player's deviation it still surely quits
+first, and its own complete cap ignores its own prescribed continuation.
+Thus all first-row semantics remain exact. Compactness of the original
+semantic carrier gives one common subsequential tail limit (u,B), with
+d=Σ_i(B_i−u_i)≥δ. This avoids conditioning on any limiting zero survival.
+
+Define α_i=∏_{j≠i}(1−p_j), c=∏_j(1−p_j), and let A_i be the expected
+passive reward from a nonempty first-row opponent coalition. Let Q_i
+be the payoff when i Quits at that row, including its own singleton
+when all opponents Continue. Put C_i=A_i+α_iB_i and g_i=Q_i−C_i.
+The continuous literal prefix formulas give
+
+    U_i'=p_iQ_i+(1−p_i)(A_i+α_i u_i),
+    b_i'=max(Q_i,C_i),
+    δ=c d+Σ_i[g_i⁺−p_i g_i].                     (218)
+
+Each term g_i⁺−p_i g_i is nonnegative, including ties and sure hazards.
+Consequently
+
+    c d≤δ,   d≥δ,
+    0≤Σ_i[g_i⁺−p_i g_i]≤(1−c)δ.                 (219)
+
+Neither d=δ nor the Nash condition on mixed coordinates follows.
+When c=0 the ledger gives no upper bound on d. The first-row collision
+probability gives α_i≤1−σ for EVERY i, since on a collision event each
+player has a quitting opponent, and also c≤1−σ. Thus this fixed prefix
+map contracts payoff and cap coordinates in sup norm by at most 1−σ.
+Iteration need not preserve the global minimum; contraction alone is
+not a return or equilibrium argument.
+
+The exact definitions inspected are `quittingTerminalSemanticPrefix`
+and `quittingTerminalSemanticPair` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+The inspected `FinFourLowTailRow.lowTail` in
+`Research/Quitting/FinFourProducerAtlas/Source.lean` requires a specified
+weighted tail-excess inequality and retains exact cap-Nash prefix data.
+The produced first collision and (219) do not supply those further inputs.
+
+### A one-step Nash replacement lemma fails with an actual tail
+
+The possible claim was: for ANY actual tail, a root with low prefixed
+sum debt can be replaced by an auxiliary cap-Nash root with no higher
+debt. It is false already for two players with nonnegative own rewards.
+Take the complete table
+
+    r({1})=(1,2),   r({2})=(2,1),
+    r({1,2})=(19/10,19/10).
+
+In the actual tail let player 1 quit at date zero and player 2 at
+date one. Then u=(1,2), B=(2,2), and d=1: player 1 can wait for
+player 2's singleton, while player 2 can wait for player 1. The first
+joint Quit payoff is only 19/10, so these are complete caps.
+
+At continuation B, either player's auxiliary Quit-minus-Continue gap
+against opposing hazard y is
+
+    g_i(y)=−1+(9/10)y<0  for all y∈[0,1].
+
+The ONLY auxiliary Nash root is all Continue, whose prefixed debt is
+1. But the literal both-sure root has target (19/10,19/10), complete
+caps (2,2), and total debt 1/5. Hence no cap-Nash root matches even
+this displayed prefix debt. Actual tail realizability does not repair
+the proposed one-step selection lemma.
+
+This is NOT a positive-global-minimum example. Immediate solo Quit by
+player 1 with player 2 Never is an exact terminal Nash profile, with
+payoff (1,2), so the true global minimum is zero. The example retires
+the unconditional replacement lemma only. It neither refutes the
+first-collision theorem nor further narrows counterexamples. A successful
+consumer must use the GENUINE current global minimum and simultaneous
+full-law variations beyond (218), with every tied initial cap retained.

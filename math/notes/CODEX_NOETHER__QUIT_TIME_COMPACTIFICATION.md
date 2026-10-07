@@ -2,15 +2,14 @@
 
 ## Current best attempt
 
-The strongest new complete candidate is now the original-coalition-stage
-restriction below: at a positive global debt gap in Fin4, sufficiently
-near-minimal ACTUAL profiles must have a macroscopic first-coalition
-STAGE atom, with NO lower bound on their Never masses. The same holds
-at any finite cardinality when all own rewards are nonnegative.
-The exact one-coordinate polynomial test consumes EVERY fully diffuse
-minimum, including shared three/four zero-Never endpoints. This is
-ordinary mathematics awaiting independent review, not a UE producer.
-Earlier frozen reductions and their independent evidence remain below.
+The broad original-stage restriction has a canonical stronger proof in
+`../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`: a positive
+global debt gap in Fin4 forces a macroscopic early ORIGINAL nonsingleton
+stage in every sufficiently near-minimal actual profile, without a Never
+floor. The same scope extends to finite cardinality with nonnegative owns.
+It is independently reviewed ordinary mathematics, not a UE producer.
+The frozen earlier stage proof and distinct cutoff/punishment reductions
+remain below without modification.
 
 The new atomic-row attempt below gives two exact restrictions, not an
 equilibrium producer. At a nonsure first row, some initial Quit response
@@ -19,6 +18,13 @@ first atom to a fresh earlier SOLO date costs at least that portion times
 the strict quadratic margin, even at finite amplitude. Thus unilateral
 earlier fragmentation cannot consume the genuine minimum; a successful
 move must retain a collision or change opponents simultaneously.
+The ordered small-head estimate closes the simultaneous perturbative
+version too. A finite hazard-decrease reduction reaches a tied first-row
+cap in the nonsure branch, preserving all conditional tails and Never
+masses. Sure hazards instead reduce to the exact finite punishment-floor
+objective (A11); two sure hazards give an actual finite-profile minimum.
+These new reductions are internal ordinary proofs, not independently
+reviewed or exported. Consuming the tied cap or sure-owner floor is open.
 
 The current source-consumer candidate combines actual prefix erasure with
 Section73's punishment canonicalization. At an actual positive global
@@ -12492,6 +12498,186 @@ threshold, not merely cancel individual first derivatives at cap ties.
 The present next direction is to change the CURRENT collision row or its
 actual continuation, instead of adding a vanishing new head before it.
 
+### A finite current-row reduction reaches a tied complete cap
+
+There is a source-preserving finite-rank move even though earlier clocks
+are costly. Suppose ALL first-row hazards satisfy p_i<1. Then there is
+another actual global minimum, obtained by only DECREASING those hazards
+and retaining their exact original conditional tails, for which SOME
+player's first-row Quit and full Continue caps tie. The first row still
+has at least two positive hazards. Every Never mass is at least its
+original value. This does not say the ORIGINAL row already has a tie,
+that the tied player is active, or that the resulting row is Nash.
+
+Condition every original law strictly after the atom, with fixed positive
+normalizers 1−p_i. The tail pair is in the actual semantic carrier. For
+any new root vector p′∈[0,1]^I, prefix this same tail by one ordinary
+joint Quit/Continue row. Its exact semantic pair is in the carrier by
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+The initially prefixed pair equals the original minimum pair after
+deleting strictly inactive earlier empty tests. No conditional Nash
+or minimum premise for the tail is needed.
+
+If some Q_j=C_j already, stop. Otherwise choose a positive proper root
+coordinate p_i. Hold all other root coordinates fixed. Each Q_j and C_j
+is affine in this one coordinate, and each prescribed U_j is affine too.
+The caps are their literal maxima. At the original coordinate all labels
+are strict, so D is affine in a neighborhood. Actual global minimality
+and p_i∈(0,1) make its slope zero. Thus D stays EXACTLY δ throughout the
+connected strict-label interval containing that coordinate.
+
+Decrease the coordinate to that interval's left endpoint. Either an
+initial Quit/Continue tie occurs, or the coordinate reaches zero with
+all labels still strict. The limiting pair is in the carrier and its
+debt is δ by continuity. In the zero arm remove that root coordinate
+and repeat. Every completed zero move reduces the number of positive
+hazards by one. No sure hazard is created. A zero move leaving a solo
+first row is impossible by the exact ledger and strict-margin exclusion;
+the all-zero row cannot be reached through this procedure either.
+Starting from m≥2 positive hazards, after at most m−1 coordinate segments
+the procedure therefore stops at a tie. There is no infinite orbit,
+new response opportunity, or selected auxiliary equilibrium in this move.
+
+Since p_i′≤p_i and the conditional tail law is unchanged,
+
+    q_i′(Never)=(1−p_i′)q_i(Never)/(1−p_i)
+                  ≥q_i(Never).
+
+Thus a positive-Never source stays positive-Never, and any original Never
+lower bounds are retained. Terminal targets, individual debts and caps
+may change; only the full GLOBAL minimum value and actual source membership
+are preserved. After the tie is reached no claim of further purification
+is made: the cusp can stop a coordinate move. At every intermediate
+minimum the strict singleton margin guarantees that any old empty pre-row
+tester would still be inactive, so omitting those dates from the root-prefix
+calendar has not secretly changed the source's complete cap.
+
+Together with the first-collision production, this reduces the consuming
+question to a first row with a SURE hazard, or to a nonsure first collision
+row with a genuine Quit/Continue cap tie. The tie may belong to an inactive
+joining responder. The reduction is internal supporting mathematics, not
+a newly solved reward class, and it gives no original-unmodified-stage
+claim beyond the separate stage theorem. The next task is a real descent
+or equilibrium consumer at that tied row, not another early-clock insertion.
+
+### Sure hazards reduce to an exact finite punishment-floor objective
+
+The sure branch has a direct reduction, but not an automatic Nash consumer.
+If TWO or more players quit surely in the first row, every unilateral
+deviator still faces some other sure quitter at that row. Hence ALL later
+prescribed clocks are ghost for every target and every complete cap. Move
+all their masses to Never and delete earlier empty dates: the same minimum
+pair is realized by the LITERAL one-date/Never profile. This is an ACTUAL
+finite-law global minimum, not merely a compact-limit pair. Repeating that
+row stationarily is neither necessary nor being inferred safe. This
+reduction alone gives no Nash condition for any sure owner or free player.
+
+With just ONE sure owner z, free-player tails remain ghost for their
+targets and their own complete caps, but not for z's quiet deviation.
+Use the TRUE punishment value P_z, starting immediately at the next date
+if everyone Continues; do not replace it by the nominal phase value or
+by max(s_z,0). For independent free first-row rates p on I−{z}, define
+the finite root quantities
+
+    V_z(p)=E[r_z({z}∪S)],
+    A_z(p)=Σ_{S≠∅}P_p(S) r_z(S),
+    h(p)=P_p(S=∅),
+    f_z(p)=A_z(p)+h(p)P_z−V_z(p).
+
+For each free j let v_j(p) be its finite induced-game prescribed payoff
+at this sure-owner row, and let a_j^Q(p),a_j^C(p) be its two root endpoint
+payoffs. ALL future responses and Never coincide with the Continue
+endpoint because z absorbs at that date. Put
+
+    F_z(p)=[f_z(p)]⁺
+              +Σ_{j≠z}[max(a_j^Q(p),a_j^C(p))−v_j(p)].   (A11)
+
+For EVERY p, attach an ε-optimal independent opponent punishment profile
+for z after the row, with owner z prescribed Sure Quit. The free players'
+full debts are EXACTLY their displayed finite-game regrets. The owner's
+full cap is max(V_z,A_z+h C_ε), where P_z≤C_ε≤P_z+ε.
+Thus the resulting actual profiles have total debt in
+[F_z(p), F_z(p)+ε]. Finite-censor the punishment laws if necessary, with
+uniform full-cap error below any specified extra tolerance. Consequently
+
+    F_z(p)≥δ for EVERY p;                          (A12)
+
+its corresponding payoff/cap pair with exact P_z is in the actual carrier.
+No punishment attainment is assumed. The finite root cube is compact,
+so F_z has an attained numerical minimum, although its exact tail need
+not have a single discrete-clock realization.
+
+If an actual minimum has this sure owner, Section73's atomic-cut
+canonicalization gives its owner cap max(V_z,A_z+hP_z). Any old empty
+head test is inactive by the strict cap margin. Every other complete cap
+already depends only on the sure-owner root. Therefore the ORIGINAL
+root rates satisfy
+
+    F_z(p)=δ=min F_z.                              (A13)
+
+This is a finite-dimensional same-source reduction of the sure-owner
+branch, with true punishment in the scalar coefficient. It is not a
+claim that the root rates are finite induced Nash. If there is another
+sure free player, h=0 and no tail coefficient matters, recovering the
+literal finite-profile reduction above.
+
+The exact existing consumer
+`exists_uniformPayoff_or_singletonBase_pos_gap` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`
+uses an induced PRODUCT Nash point and the owner-floor screen. With
+free=I−{z} there are no outsiders, its floor is exactly f_z(p), via
+`quittingSingletonBaseOwnerFloorExcess`. A Nash point with f_z≤0 is
+already a UE producer. Under δ>0, the alternative forces a uniform
+positive floor on EVERY induced Nash point. Minimizing F_z does not
+establish that its free-game regret terms vanish, and substituting an
+unrelated Nash point can increase the owner term. Thus this inspected
+source does NOT directly consume (A13); it identifies the real remaining
+tradeoff between free regrets and the TRUE owner-floor excess.
+
+If a first-row tied cap belongs to the sure owner, its owner debt is
+zero and δ sits in free-player regrets.
+If it belongs to a free player, that player's own regret is zero at
+the tie, even when it is inactive. Neither observation makes the other
+regrets vanish or preserves the owner floor under their repair. Active
+vs inactive ties therefore must remain distinct in a proposed descent.
+The next sure-hazard consumer must exploit the actual minimization
+(A13), not assume an induced-Nash root or appeal to stationary Never.
+
+There is a finite-rank reduction inside (A13) as well. Each displayed
+endpoint and target, and f_z, is affine in any one free coordinate.
+If the owner's floor is not tied at zero and no free endpoint cap is
+tied, F_z is locally affine in every proper free coordinate. At its
+GLOBAL minimum the slope is zero. Decrease a proper coordinate until
+an owner-floor tie, a free-cap tie, or its zero boundary is reached;
+the value stays exactly δ. The exact-floor pair at every endpoint is
+in the actual carrier by the punishment approximants, so the strict
+margin remains available. Every zero move lowers the proper-coordinate
+count. The process stops after finitely many segments, either at a
+tie or at a pure free completion. The pure completion cannot have
+all free players Continue: its sure owner's target would be s_z,
+contradicting the strict prescribed-payoff margin at the returned actual
+minimum. It therefore has another sure quitter, and its minimum pair
+has the literal finite-profile realization described above.
+
+If that finite profile still has proper free rates, apply the same
+coordinate-flatness argument to its ordinary two-endpoint caps while
+keeping two sure quitters fixed. It stops at a tied root cap or a PURE
+first-row coalition S of cardinality at least two. In the latter arm
+ALL laws may be literally Sure-at-date0 or Never, and the complete debt
+is the exact finite expression
+
+    δ=Σ_{i∈S}[r_i(S−{i})−r_i(S)]⁺
+         +Σ_{j∉S}[r_j(S∪{j})−r_j(S)]⁺.           (A14)
+
+For every player, the same true minimum has target r_i(S), so
+r_i(S)−s_i≥γ. This gives a concrete raw table test for that pure residual,
+not an equilibrium assertion: one or more terms of (A14) remain positive.
+If every coalition of size at least two fails this ALL-player payoff
+test, the pure arm is impossible and the sure-source reductions must
+stop at a tied owner floor or tied free cap. No arbitrary finite Nash
+point is substituted anywhere in this finite-rank reduction.
+
 ### Exact source and current consuming question
 
 The strict margin in (A1) is supplied by
@@ -12511,9 +12697,11 @@ The earlier solo-root account and elementary uniform-cap coupling justify
 (A6); no new general transport architecture is claimed. This is internal
 ordinary mathematics, not an export, formalization or completed raw class.
 The concrete next question is whether a simultaneous collision-preserving
-change can exploit the required FIRST-row Quit cap in (A3), while keeping
-all tied maxima in (A4). A mechanism based only on one owner's earlier
-clock must be abandoned by (A6), not repaired with more passive caps.
+change can consume the forced FIRST-row tied cap or a sure hazard, while
+keeping all tied maxima in (A4). A mechanism based only on new small earlier
+clocks must be abandoned by (A6) and (A10), not repaired with more passive
+caps. The finite hazard-decrease reduction supplies that exact residual
+without changing the reward table or assuming a cap-Nash row.
 
 ### Strict margins force an original coalition stage without a Never floor
 

@@ -52,6 +52,18 @@ below must have a definite collision-or-clock-stretch cost. Neither arm
 is dispatched; no root or favorable best-response selection is assumed.
 This is internal research, not an existence theorem or export candidate.
 
+Current first-collision task: the independently checked marked-source
+construction now supplies an actual global minimum with a first collision
+row, not just a later stage atom. The full root ledger below retains each
+Quit/Continue maximum and excludes a solo root. A finite same-tail selector
+at the end sharpens the remaining geometry to pure rates, a cap tie at a
+pure-rate player, or a directed cycle of genuinely responsive mixed-player
+cap ties. It preserves whole-profile global minimality, but it does NOT
+make the row Nash or produce descent. The live question is whether a legal
+finite-amplitude variation can consume that binding cycle or the sure-rate
+branch. Earlier solo fragmentation and sufficiently small fresh heads are
+not candidate descents; the strict source margins oppose them.
+
 The earlier question concerned a raw class with constant participant
 rewards on all joint exits.
 The constant-participant section gives an exact four-player table defeating
@@ -3029,3 +3041,120 @@ coverage follows merely from this comparison. The next substantive task
 is to consume the forced first COLLISION root with its actual tail and
 complete cap equations, rather than replacing it by a favorable auxiliary
 Nash root or assuming its tail is another minimum.
+
+## A finite same-tail selector exposes a responsive cap cycle
+
+Status: complete internal finite-dimensional reduction, ordinary mathematics
+not independently reviewed or Lean-checked. It is not a new UE class or
+an export candidate. Its intended use is to focus an actual consuming
+variation on complete-cap switches; no such variation is proved here.
+
+### Actual data and question
+
+Let a bounded quitting table have actual global sum-debt infimum δ>0.
+Let v=(u⁺,b⁺) belong to its original closed terminal semantic carrier.
+Suppose some nonzero product row p has T_p(v) an actual GLOBAL minimum
+of value δ. Here T is the literal semantic prefix, with all unilateral
+behavioral caps, defined by `quittingTerminalSemanticPrefix` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`. Assume the
+strict all-owner source margin, available for arbitrary signed Fin4 or
+nonnegative own singletons at arbitrary finite cardinality, from
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` or
+`positive_minimum_nonnegativeOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+
+Can one reselect only the FIRST row, retaining this actual continuation
+source, so that every genuinely mixed coordinate is obstructed by an
+actual switch in ANOTHER player's full cap?
+
+The answer is yes. For x∈[0,1]^I let Q_j(x₋ⱼ) be first-row Quit value,
+C_j(x₋ⱼ) its Continue value priced at the actual tail cap b_j⁺, and put
+
+    F(x)=Σ_j max(Q_j(x₋ⱼ),C_j(x₋ⱼ))−Σ_j U_j(T_x(v)),
+    Δ_j(x)=Q_j(x₋ⱼ)−C_j(x₋ⱼ).
+
+Both Q_j and C_j are multiaffine and independent of x_j. The second
+statement is important: the owner's complete cap never depends on its
+own first-row mixing rate. The full payoff vector is multiaffine in x.
+Every T_x(v) remains in the original carrier, by the actual-prefix
+closure statement `quittingTerminalSemanticPrefix_mem_carrier` in the
+same source file. Thus F(x)≥δ for EVERY x, with equality at p.
+
+### Compact selector and exact conclusion
+
+Let K={x∈[0,1]^I:F(x)=δ}. This is a nonempty compact set. Choose x*∈K
+maximizing Σ_i x_i². Its norm is at least that of the supplied nonzero p,
+so x* is nonzero. The full-prefix minimum and strict source rule out a
+solo support, as in(FR1)–(FR3). Thus x* still has a collision row. Neither
+the tail's debt nor its individual continuation levels are asserted to be
+minimal.
+
+For every mixed coordinate i with 0<x_i*<1, there is some j≠i such that
+
+    Δ_j(x*)=0,          ∂_i Δ_j(x*)≠0.             (CG1)
+
+To prove this, hold all other coordinates fixed. Each Δ_j is affine in
+x_i. If no j satisfies(CG1), every strict cap branch retains its sign
+in a neighborhood, and each cap tied at x* is either independent of x_i
+or has zero slope, hence remains exactly tied on that whole line. The
+owner's cap is independent of x_i as well. Therefore F is locally affine
+in x_i. Since x_i* is interior and F has a global minimum there, this
+affine function is constant locally. Moving x_i slightly in one of the
+two directions strictly increases Σ_j x_j² while remaining in K. This
+contradicts the selection of x*. The argument includes all current cap
+ties; it does not choose favorable branches separately for different
+variations.
+
+Draw i→j whenever(CG1) holds. Every mixed vertex has an outgoing edge,
+and no edge is a self-loop. Consequently at this selected actual minimum
+one of the following holds:
+
+- every first-row rate is pure, so the row is a pure collision coalition;
+- a player with rate zero or one has a tied Quit/Continue cap;
+- there is a directed cycle of at least two genuinely mixed players,
+  every member having a tied complete cap and responding nontrivially
+  to its preceding mover's first-row rate.
+
+Indeed, if there is a mixed vertex, follow its edges. Either the path
+reaches a pure-rate vertex, which is a tied cap owner by construction,
+or it repeats a mixed vertex and yields such a cycle. In particular a
+fully mixed selected row has at least TWO distinct tied cap owners, not
+merely one arbitrary cap equality.
+
+### Source and scope boundaries
+
+The input is a literal first-row prefix decomposition of a true minimum.
+For a produced marked first atom, such a tail carrier can be obtained
+from the same original finite profiles: remove their vanishing pre-mark
+mass, take their actual post-row behavior profiles and pass to a compact
+semantic-pair subsequence. If a finite row coordinate quits surely,
+choose an arbitrary continuation for that owner's null event; do not
+call it a conditional law. The prefix identities remain exact, since
+its arbitrary own continuation is multiplied by zero in every affected
+prescribed or opponent-cap term. Other owners' positive-survival tails
+are their ordinary conditional laws. If two or more owners quit surely,
+all continuation terms in current caps vanish. Continuity of T gives
+the represented first-row decomposition. This construction never assigns
+a conditional probability to a zero-probability event.
+
+Reselecting x* is a new ACTUAL carrier minimum with the same actual tail;
+it is not the unmodified original law. Thus the statement does not retain
+the exact original marked stage probability promised by the stage-source
+theorem. The current mathematical goal only needs an actual minimum for
+a legal consuming variation, so this distinction is explicit rather than
+silently hidden.
+
+The responsive cap graph is not a best-response or quitting-influence
+graph for the whole table. Its edges depend on this selected row and the
+actual continuation cap vector. It is not enough that Δ_j=0: a zero-slope
+tie cannot obstruct coordinate motion and is excluded in(CG1). No sign
+for these slopes, auxiliary Nash property, collision erasure, or strict
+debt decrease follows from the compact selector.
+
+The concrete next question is whether the finite-amplitude geometry of
+these responsive cap cycles, together with actual global minimality
+under changes of the OLD conditional tail laws, forces a descent. Root
+variation alone only supplies F≥δ and the tight branches; treating that
+local inequality as a complete no-UE source would repeat the already
+refuted orbit-minimum shortcut. The sure-rate and pure-rate-tie branches
+remain literal alternatives, not conditions to be discarded.
