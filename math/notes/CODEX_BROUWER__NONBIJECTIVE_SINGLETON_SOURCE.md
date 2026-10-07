@@ -83,6 +83,14 @@ screened 32-date release of one old conditional Never atom, still lowers
 full debt. Alternating even GLOBAL block optimization is therefore retired.
 The complete finite cap ledger is at the end. This solved-table mechanism
 test is not the true positive global minimum required by the consumer.
+The final attempt checks a genuinely global repair proposal: continue a
+minimizing root/tail path to all Continue. The exact strict-owner margin
+instead gives a uniform positive-debt moat around every empty-root/minimum-
+tail decomposition, even when the old tail varies simultaneously. Thus
+connectedness does not supply that minimizing homotopy. This is a proved
+failure of the proposed mechanism, not a new existence reduction. The
+current next question must compare a distant replacement of old finite
+stopping mass and calculate all complete cap switches.
 
 The earlier question concerned a raw class with constant participant
 rewards on all joint exits.
@@ -3750,6 +3758,12 @@ All remaining mass of every player is Never. This is a legal finite
 product law with every finite response and Never accounted for. Arithmetic
 was checked using Python `fractions.Fraction`, without file output or Lean
 changes; (GB11) is ordinary mathematics, not a Lean declaration.
+An independent calculation within this session enumerated the full raw
+table on all actual product outcomes, then every pure response 0,…,33
+and Never. It reproduced (GB11) exactly. Player 0's maximizers are every
+finite date; players 1 and 2 maximize only at date 0; player 3 maximizes
+at the late date 33. Every date after 33 has that same late response
+value. This is a separate arithmetic check, not an independent author review.
 
 ### The true infimum and the next question
 
@@ -3811,3 +3825,58 @@ The next question is to extract a finite-amplitude screened replacement
 from genuine joint whole-profile minimality, or identify a rigid source
 class that prevents it. Further strengthening solved-table optimization
 traps is not the next mechanism.
+
+## Why a minimum-preserving root homotopy does not follow from globality
+
+Status: a substantive failed mechanism, with its exact obstruction proved
+below. This is a direct consequence of the existing all-owner margin and
+prefix ledger, not a new conjecture-facing reduction or claimed result.
+
+After (GB1)–(GB11), the attempted global mechanism was to transport the
+collision root along cap-balanced continuations until it reached an empty
+root or a sure boundary, while projecting every intermediate profile back
+onto the TRUE minimum δ. The first alternative fails for a precise reason:
+the minimum set itself has a neighborhood excluding every nonempty prefix
+over tails close to any actual semantic minimum. Connectedness of the
+whole carrier does not give connectedness of this minimum fiber.
+
+Let w=(u,b) be a true global minimum, D(w)=δ>0, and use the supplied
+strict margin b_i−s_i≥δ+γ. By continuity there is a carrier neighborhood
+V of w such that every z=(a,c)∈V satisfies
+
+    c_i−s_i≥D(z)+γ/2 for every i.
+
+Uniform continuity of the finitely many root polynomials supplies a
+neighborhood X of the all-Continue root such that for every x∈X and
+z∈V the Continue branch is strictly maximal and
+
+    C_i(x;z)−Q_i(x)≥D(z)+γ/4.
+
+The exact ledger, with A(x)=∏(1−x_i), then gives
+
+    D(T_x(z))=A(x)D(z)+Σ_i x_i[C_i(x;z)−Q_i(x)]
+              ≥D(z)+(γ/4)Σ_i x_i
+              ≥δ+(γ/4)Σ_i x_i.                           (HM1)
+
+The first inequality uses 1−A(x)≤Σ_i x_i and D(z)≥0. It retains all
+Quit/Continue branches, since the strict inequalities prove rather than
+assume the common Continue branch on this neighborhood. Tail membership
+in V is semantic closeness of actual carrier points; no unrealizable
+conditional law is introduced. Thus even simultaneously changing the OLD
+tail cannot preserve minimum debt when the tail approaches w and a fresh
+nonzero root approaches all Continue.
+
+Consequently a continuous path (x(t),z(t)) of minimizing decompositions
+with endpoint (0,w) must have x(t)=0 near that endpoint. There is no
+automatic minimum-preserving continuation from the supplied nonzero
+collision decomposition to that endpoint. A proposed cap-equation
+homotopy must either leave the minimum set, end at a different boundary,
+or supply an independent global comparison that crosses the barrier.
+Following a locally invertible cap Jacobian is not that comparison.
+
+This is consistent with the exact finite escape above: its path crosses
+the separate block barriers and compares a distant actual product law.
+For a true minimum, such a distant comparison must be produced from its
+whole old conditional laws. The unresolved next question is a finite
+replacement of old finite stopping mass, with its complete response
+switches calculated, that crosses the barrier and lowers total debt.
