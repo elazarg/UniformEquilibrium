@@ -2,6 +2,17 @@
 
 ## Current best attempt
 
+The current source-consumer candidate combines actual prefix erasure with
+Section73's punishment canonicalization. At an actual positive global
+minimum, a unique earliest zero-Never owner with nonnegative own reward
+cannot have a completely nonatomic finite prefix up to its endpoint.
+This includes binding Never and finite caps; other clocks may have atoms
+after that endpoint. The new proof is ordinary mathematics awaiting an
+independent check, not a UE theorem. Shared diffuse earliest owners,
+earlier atoms, and signed-negative cutoff owners remain open here.
+Section73 also retains its distinct strict-Never-buffer social-max
+dispatch for shared earliest endpoints.
+
 **Exact reviewable claim.**  In the canonical exact Nash--Bellman tail,
 Propositions 64--67 identify moving-source radial drift, compress zero rows,
 and remove punishment-tight clock expansion.  Independently reviewed
@@ -12215,3 +12226,435 @@ label conclusion, again with no objection.  Gauss Round 52 checked Proposition
 94's donated/global cap distinction, direct defect, generated secant, seam
 ledger, and every clock field.  It found the example valid and supplied the
 constant `-2` precision recorded above.
+
+### Fixed-cut reachability and the unique diffuse earliest owner
+
+Status: complete ordinary mathematical proof candidate. This consumes an
+ACTUAL positive SUM-debt minimum, not a supplied positive-debt profile or
+a minimum along one selected sequence of updates. It uses the separately
+proved prefix-erasure mechanism and the punishment canonicalization in
+Section73 below. It is not Lean-checked and does not settle Fin4 UE.
+
+#### Precise finite-player statement
+
+Let I be any finite nonempty player set, with bounded arbitrary real
+quitting rewards r(S), independent private clocks, and Never payoff0.
+Fix M>0 bounding all rewards. Let δ=D_*>0 be the global infimum of
+SUM unrestricted terminal behavioral debts over ACTUAL finite laws.
+Take its produced marked-calendar representation q on compact T,
+with empty final finite tester c and attained complete caps. The pair
+of prescribed payoffs and caps is a global minimum of the original
+attainable semantic carrier. All quantities below refer to that source.
+
+Put Z={i:q_i(Never)=0}, assume Z≠∅, and for i∈Z let d_i be the maximum
+of its finite support. Let d=min_{i∈Z}d_i. Suppose
+
+    there is a UNIQUE z∈Z with d_z=d;
+    s_z=r_z({z})≥0;
+    q_i({t})=0 for all i and all finite t∈T with t≤d.       (U1)
+
+These assumptions cannot coexist at the actual positive minimum.
+Atoms and arbitrary laws after d are allowed. No strict Never buffer,
+solo-clipped buffer, unique social maximum, or reward-sign condition
+on other rows is assumed. For nonnegative-own Fin4 normal forms this
+excludes the unique-earliest branch whenever its whole initial calendar
+through d is nonatomic.
+
+The needed prefix-erasure theorem is Section36, “Erasing a small
+cap-inactive prefix at the actual minimum”, of
+notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md. Its independent
+finite transport and complete-cap continuation were checked in
+feedback/CODEX_MORSE__DIFFUSE_POSITIVE_NEVER_MINIMUM__BY_CODEX_NOETHER.md.
+Its literal conclusion is: at ANY actually represented global minimum,
+an available nonatomic cut removing marginal masses with total at most
+κ=δ/(4M) yields another actual global-minimum conditional suffix.
+All previously earlier tests pay s_i, already represented by the empty
+first suffix test. Every finite and Never cap is retained. The singleton
+moat b_i−s_i≥δ applies to the new source. This is a proved consumer,
+not a premise that an arbitrary conditional tail minimizes debt.
+
+#### Reach ANY fixed surviving cut by finitely many erasures
+
+First consider an arbitrary represented minimum whose finite calendar
+is nonatomic through a fixed available b∈T, and for which
+
+    S_i(b)=q_i([b,c]∪{Never})>0 for every i.               (U2)
+
+Then q conditioned independently at b is again an actual global minimum.
+Here is the full finite argument; it does not use a positive joint-Never
+probability or an infinite renewal limit.
+
+Start at a=min T, with no erased mass. At a current minimum suffix
+q^a, compute its total conditional mass before b:
+
+    H_a(b)=Σ_i q_i^a([a,b)).
+
+If H_a(b)≤κ, apply the small-prefix erasure once at b and finish.
+Otherwise continuity of the atomless cumulative masses yields an
+available a'<b with Σ_i q_i^a([a,a'))=κ. A real intermediate-value
+cut inside a gap can be moved to a gap endpoint in T without changing
+that mass. The intermediate value is strictly positive and strictly
+less than H_a(b), so the chosen endpoint lies strictly between a and b.
+No empty response is invented. Apply small-prefix erasure at a'.
+
+Write R(a)=∏_i S_i(a). Each full-charge step satisfies
+
+    R(a')=R(a)∏_i(1−x_i)≤R(a)e^(−κ),
+    x_i=q_i^a([a,a')),  Σ_i x_i=κ.
+
+All intermediate cuts are at most b, hence R(a')≥R(b)>0 by(U2).
+Choose finite N with e^(−Nκ)<R(b). It is impossible to take N full-charge
+steps. Therefore after finitely many steps the remaining prefix to b
+has total mass at most κ and can be erased. Every suffix is a genuine
+global minimum, so δ and κ are unchanged throughout.
+
+The finite realizers are always obtained from the ORIGINAL realizing
+sequence by conditioning at the current cut. Repeated conditioning
+is exactly conditioning once at that cut; its cumulative normalizer
+is 1/S_i(a), bounded by 1/S_i(b) for this fixed b. Original first-test
+locations tend to the chosen nonatomic cut. At that location all
+prescribed masses tend to0, including if an approximating first date
+has a small atom. After shifting that first original test to date0,
+its payoff tends to s_i. Opponent kernels and all old suffix tests
+give complete-cap convergence exactly as in small-prefix transport.
+The number of steps may depend on b and diverge as b approaches an
+endpoint. Neither an infinite common realizer nor a uniform survival
+bound over ALL b is asserted or needed.
+
+#### First erase off-path ghost clocks at the unique endpoint
+
+Apply Section73's exact punishment canonicalization to z at d. Its
+source interpretation is important. The original z law stops by d
+almost surely; after any OTHER player's unilateral replacement, z
+still ensures absorption by d. Modifying opponent clocks strictly
+after d therefore leaves every target and every other player's cap
+unchanged. Only z's off-path cap needs calculation.
+
+Let E_z be z's cap over finite tests at or before d, A_z its passive
+opponent-head payoff contribution, and h_z the product of opponents'
+survival masses beyond d. The actual punishment surgery gives
+
+    b_z=max(E_z,A_z+h_z P_z),
+
+where P_z is the TRUE original-game punishment value. The available
+nonatomic d test pays A_z+h_z s_z, so E_z≥A_z+h_z s_z. The exact bound
+P_z≤max(s_z,0)=s_z gives b_z=E_z.
+
+Now send every opponent clock after d to Never. All targets and other
+caps remain unchanged, while the new z cap is
+
+    max(E_z,A_z+h_z s_z,A_z)=E_z,
+
+the final term being its Never response. Thus the resulting profile
+q̄ has EXACTLY the same complete semantic pair and is another actual
+global minimum. This does not put punishment on path, change q_z,
+or replace the true cap by a nominal continuation value.
+
+The actual approximants first force the old owner to quit at original
+tests tending to d; its changed mass tends to0. Opponent ghosts are
+then changed after that cutoff, when they are off path under every
+nonowner deviation. Before d all response kernels are unchanged;
+after d only the literal late finite and Never tests remain relevant,
+both included by the displayed maximum. Fixed strict-improvement
+comparison gives the punishment identity before taking the limit.
+The all-Never attachment consequently has the exact limiting caps.
+This is the actual source transport proved in Section73, not an
+arbitrary compact-law identification.
+
+All finite mass of q̄ lies≤d and is nonatomic by(U1). Every opponent
+j≠z has ᾱ_j=q̄_j(Never)>0: an originally positive Never mass stays
+positive, while any other zero-Never owner has d_j>d and hence
+positive original finite mass after d, now sent to Never. Owner z
+remains zero-Never. Empty later testers may be retained; they are
+not deleted from the cap calculation.
+
+#### Condition toward d, then use the actual owner moat
+
+Every marginal of q̄ has positive survival at every b<d: z's support
+has supremum d, and every opponent retains its positive Never mass.
+Choose available cuts b_m<d increasing to d. Such cuts exist because
+z has mass arbitrarily close to d and no atom there. The fixed-cut
+reachability argument applies to EACH b_m, yielding a genuine
+minimum q̄^{b_m}. In particular
+
+    b_z(q̄^{b_m})−s_z≥δ.                              (U3)
+
+For each opponent j≠z, its conditional finite mass is
+
+    q̄_j([b_m,d])/[q̄_j([b_m,d])+ᾱ_j] →0.
+
+The numerator tends to q̄_j({d})=0 and the denominator is bounded
+below by ᾱ_j>0. Thus ALL opponents tend in total variation to Never.
+For any own pure date or Never, uniformly over the changing suffix
+calendar, bounded-reward coupling gives
+
+    response_z ≤ max(s_z,0)
+                   +2MΣ_{j≠z} q̄_j^{b_m}(finite).
+
+The complete cap obeys the same upper bound. Since s_z≥0, its right
+side tends to s_z, contradicting the FIXED positive moat(U3).
+There is no claimed convergence of z's conditional clock or complete
+on-path profile, and no comparison of an unproved limiting debt.
+Only the actual cap against nearly all-Never opponents is used. ∎
+
+#### Scope, exact sources, and the next residual
+
+The carrier and moat declarations inspected are
+minimumTerminalSemantic_singletonMargin in
+UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean,
+and quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum in
+UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean.
+The true punishment upper bound is quittingPunishmentValue_le_max_solo
+in UniformEquilibrium/Quitting/Stationary/MinMax.lean. The exact cutoff
+transport and no-UE normalization distinction are retained in Section73.
+
+This advances the zero-Never branch without assuming a strict Never
+buffer: under nonnegative own levels, an entirely diffuse actual
+minimum cannot have a unique earliest zero-Never owner. Combined with
+the separately proved positive-Never diffuse exclusion, a completely
+diffuse nonnegative-own positive minimum would have at least TWO
+zero-Never owners sharing its earliest support endpoint. Their own
+conditional tails do not approach Never. The moat contradiction above
+therefore does NOT consume them. Earlier positive atoms and signed
+negative cutoff owners also remain outside this proof. No general UE,
+macroscopic atom floor, or raw-table export is asserted here.
+
+The concrete next question is the genuinely shared earliest diffuse
+branch, including binding Never caps: can its actual conditional
+minimum be consumed without discarding the other zero-Never tails?
+
+### 73. Actual earliest-cutoff tails have a punishment canonical form
+
+This section is a new ordinary-mathematical source reduction, not an
+export or Lean seal. Its source is the unregularized marked-calendar
+representation in section35 of
+notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md, independently checked
+in feedback/CODEX_MORSE__UNREGULARIZED_MARKED_CALENDAR_MINIMUM__BY_CODEX_NOETHER.md.
+The earlier fixed-cut dispatch is in the final reviewed mathematical
+section of notes/CODEX_NOETHER__NONLINEAR_PHASE_ESCAPE_AND_BOUNDARY_GLUING.md.
+No new counterexample class is claimed merely from a legal tail adapter.
+
+#### Finite source: only the cutoff owner's cap sees the ghost tail
+
+Consider an ACTUAL independent finite-law profile p for an arbitrary
+finite player set and signed bounded rewards, |r_i(S)|≤M. Suppose player
+z Quits by date d almost surely. The first coalition therefore occurs
+by d under the prescribed profile and under EVERY unilateral deviation
+of a player other than z.
+
+For z define these literal quantities:
+
+    E_z = max payoff of pure z-testers at dates≤d,
+    A_z = expected z reward from opponents' first coalition at dates≤d,
+          with contribution0 if all opponents survive past d,
+    h_z = Π_{j≠z} P_p(τ_j>d or τ_j=Never).
+
+When h_z>0, conditional opponent laws after d remain independent.
+Let C_z be their complete conditional response cap, with dates shifted
+so the first date after d is time0 of the conditional game. The exact
+old complete cap is
+
+    b_z=max(E_z, A_z+h_z C_z).                       (G1)
+
+Never is INCLUDED in C_z. When h_z=0, every late tester equals A_z,
+so(G1) becomes b_z=max(E_z,A_z), without conditioning a null event.
+
+Now replace every opponent's old clock after d by an ε-optimal ACTUAL
+punishment plan for z, starting IMMEDIATELY at date d+1. Let P_z be
+the true original-game minmax value. Its complete conditional cap is
+at most P_z+ε. This plan can be chosen with finite opponent laws:
+first choose a near-infimum behavioral plan, then move a sufficiently
+small finite late mass to Never; bounded-reward coupling controls z's
+entire cap uniformly. This does not require punishment attainment.
+
+Every original target and every other player's complete cap stays
+EXACTLY unchanged. Their unilateral profiles still absorb by d, with
+z's law fixed. Only z's cap can change, and it becomes at most
+
+    max(E_z, A_z+h_z(P_z+ε)).                         (G2)
+
+The attached punishment starts at the next integer date. There is NO
+invented empty date before its first action. A fresh earlier tester
+would expose singleton s_z and could change the minimum punishment;
+none is silently added here. All future pure dates and Never are
+already included in the actual punishment cap.
+
+#### Global minimality forces exact punishment canonicalization
+
+If p is an actual global minimizer of total complete debt, the preceding
+modification cannot decrease b_z: targets and all other caps are fixed.
+Let ε→0 in(G2). Conversely P_z≤C_z by the definition of true minmax.
+Thus global minimality gives the EXACT equality
+
+    b_z=max(E_z, A_z+h_z P_z).                        (G3)
+
+If a minimizing sequence rather than one finite minimizer is available,
+the same conclusion follows by passing through the strict-improvement
+test before taking the limit. A positive gap between b_z and the right
+side of(G3) would permit one fixed ε>0 and produce a fixed positive
+cap decrease at all sufficiently large minimizing indices.
+
+#### Passage to the represented actual minimum
+
+Let q be the represented numerical global minimum on compact T and
+Never, with complete caps b_i and targets v_i. Assume q_z is supported
+on finite points≤d. The point d belongs to T; it is either a retained
+isolated atom or a non-atomic point. Define E_z as the supremum over
+the actual T-tests≤d, and A_z,h_z by the same head/tail events as above.
+The former supremum is attained by the represented continuity theorem.
+
+Use its actual finite minimizing sequence. At a positive retained atom
+d, use the literal marked date; its whole probability vector converges.
+At a non-atomic d, use approximating tester/cut locations. Head masses
+converge in either case. Player z's total probability of finite dates
+after that cut OR Never tends to0. Move this residual mass onto the cut
+date. Every payoff and cap changes by o(1), uniformly over ALL unilateral
+testers, by the bounded-reward marginal coupling estimate. The resulting
+actual finite profile has z Quitting by its cut surely and still tends
+to the same actual minimum pair.
+
+Perform the finite off-path replacement(G2) on that profile. The old
+head maximum E_z, the passive contribution A_z and h_z all converge:
+the positive-atom cut is isolated, while a non-atomic cut is a continuity
+point for the same moving-tester kernels used in the representation.
+For a non-atomic cut, head maximizing sequences converging to d have
+the literal d-test limit; no extra side test is postulated.
+
+Choose ε first whenever a fixed strict improvement in(G3) is alleged,
+then choose the minimizing index large enough to pay both the o(1)
+forcing cost and the minimizing error. This yields a finite profile
+below D_*, impossible. The reverse inequality follows by applying the
+minmax lower bound to the old actual conditional tails before passing
+to the limit. Therefore(G3) is valid for the represented global minimum,
+not only for a finite attained minimum.
+
+The actual no-UE passport is also available at this pair:
+
+    b_i−s_i≥D_*>0,
+    v_i≥s_i+D_*−(b_i−v_i).                           (G4)
+
+It does not replace P_z by a nominal phase value. If the late arm of(G3)
+is binding, it identifies the exact exceptional-coordinate account that
+must be consumed; it does not prove that this arm is strict or impossible.
+
+#### Sources inspected and remaining seam
+
+The definitions quittingBestReplyValue and quittingPunishmentValue,
+bddBelow_range_quittingBestReplyValue, quittingPunishmentValue_le and
+quittingPunishmentValue_le_max_solo were inspected in
+UniformEquilibrium/Quitting/Stationary/MinMax.lean. The last declaration
+supplies only P_z≤max(s_z,0); it is not an equality and was not substituted
+for P_z in(G1)–(G3). Finite-tail coupling and the full independent-law
+semantics were inspected through
+UniformEquilibrium/Quitting/Terminal/FiniteMenuFullProfileApproximation.lean
+and UniformEquilibrium/Quitting/Terminal/FiniteOpponentLateResponse.lean.
+The actual margin(G4) is minimumTerminalSemantic_singletonMargin in
+UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean.
+
+This is not a sure-root producer: the original cutoff owner may mix at
+many dates, and the true punishment is only off-path against that owner.
+Making it on-path by deletion may create new deviations for the opponents.
+The proof deliberately avoids that false equilibrium transfer.
+
+#### Shared earliest diffuse endpoints already fit the social-max dispatch
+
+This conclusion holds for ANY finite player set, not just Fin4: at an
+actual represented numerical global minimum, a shared non-atomic earliest
+zero-Never endpoint, strict Never buffers for every player, and a unique
+nonempty social maximum cannot coexist. Only |B|≥2 and finite products
+are used. No minimum source is asserted at other cardinalities beyond
+the independently proved finite-player representation theorem itself.
+
+Let Z={i:q_i(Never)=0}, with |Z|≥2. For i∈Z let d_i be the maximum
+of the finite support of q_i, and put d=min_{i∈Z}d_i. Set
+B={i∈Z:d_i=d}. For all real0≤t<d every marginal has positive survival,
+so the joint live probability S(t)>0. Suppose |B|≥2 and the mixture
+has NO atom at d. Then, for each i, some j∈B−{i} satisfies
+S_j(t)→0 as t↑d. Hence EVERY player-deleted survival tends to0.
+
+Assume all actual Never responses a_i are strictly below b_i and
+the nonempty social maximum F(S)=Σ_i r_i(S) is unique at S*.
+Choose a FIXED t∈T near d with2M S_{−i}(t)<b_i−a_i. The exact
+head-preserving, sure-S* tail replacement from the reviewed dispatch
+has all complete caps fixed and social gain S(t)[F(S*)−W(t)].
+Its legal finite approximants therefore force W(t)=F(S*).
+
+Conditional independence rules out the resulting constant coalition:
+if |S*|≥2, its clocks must be a common finite constant u. A member
+of B is finite strictly below d almost surely. Thus u≥d cannot be
+the first coalition; u<d makes S(u)=0, also impossible. If S*={j},
+j must be finite almost surely. Choose k∈B−{j}; its conditional
+clock has positive mass≤u for some u<d. Positive joint survival
+at u gives j positive mass>u. Independence then permits k before j.
+
+Consequently the strict-Never-buffer/unique-social-max branch is
+excluded even when OTHER clocks continue after d and the displayed
+calendar maximum c is larger. Their ghost tails are not declared
+irrelevant: their full-cap price is bounded by the actual deleted
+survival in the legal variation. This removes a genuine shared-
+diffuse EARLIER-cutoff case from the remaining source alternatives.
+
+The literal remaining zero-Never cases are: a binding Never cap;
+exactly one earliest zero-Never owner; or a positive terminal atom
+at the earliest endpoint. Tied social maxima are an additional raw
+degeneracy. No branch is asserted consumed merely by(G3).
+
+#### Nonnegative-own diffuse cutoff: erase the ghost clocks exactly
+
+There is a further genuine source reduction, not a new reward cap.
+Suppose d is a NON-ATOMIC terminal endpoint for owner z and s_z≥0.
+Because positive represented atoms are isolated, all players have
+zero mass at this d. The literal d-tester earns
+
+    A_z+h_z s_z,
+
+so E_z≥A_z+h_z s_z. The true bound P_z≤s_z and(G3) imply
+
+    b_z=E_z.                                         (G5)
+
+Replace every opponent clock after d by Never, while leaving z and
+all head clocks unchanged. Original targets and other players' caps
+remain exact because z still Quits by d. The new z cap is
+max(E_z,A_z+h_z s_z)=E_z, since s_z≥0 also bounds the new Never
+payoff A_z. Thus EVERY target and complete cap is preserved exactly.
+The compact version uses the same forced-owner finite approximants
+as above, with all-Never attachment rather than a near-optimal punishment;
+the resulting pair is the same numerical actual-minimum pair.
+
+If z is the UNIQUE earliest zero-Never owner, every other zero-Never
+law originally had positive finite mass after d. That mass is now
+Never, so the reduced minimum has EXACTLY one zero-Never owner.
+All finite clocks lie≤d, with no atom at d; the old full response
+range after d collapses to its literal final finite tester and Never.
+It is not necessary to discard either endpoint: for z they differ by
+h_z s_z; for other players their difference is0 because their deleted
+survival includes z.
+
+If s_z>0 and h_z>0, the new owner's Never response A_z is strictly
+below b_z. This does NOT imply the strict solo-clipped late buffer:
+
+    b_z−A_z−h_z s_z≥0                                (G6)
+
+can be exactly0. The distinction is the exceptional-owner seam.
+The other players can still have binding Never caps. No late-tail
+descent is inferred from(G5) alone.
+
+This specialization is all-sign honest: if s_z<0, the true minmax
+upper bound is max(s_z,0)=0, and the new Never response A_z may
+exceed E_z. The all-Never ghost erasure is NOT justified then.
+One may first use an actual no-UE normalization producer to obtain
+a new table with nonnegative own levels and then form its OWN numerical
+minimum; additive normalization must not be applied silently to this
+old profile or to its old debt objective.
+
+The actual Fin4 producer inspected is
+nonempty_finFourSinglePivotNormalization_of_no_uniformPayoff in
+UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean.
+Its output is a literal normalized table with no uniform payoff, an
+actual positive terminal gap and canonical own levels. The accompanying
+singlePivotSingletonTable_punishment_le_solo in
+UniformEquilibrium/Quitting/Terminal/SinglePivotCanonicalConsequences.lean
+proves nonnegative own levels and true punishment normality there.
+Thus an original counterexample may be replaced by that table before
+selecting a NEW represented minimum. The theorem supplies no ancestry
+relation between its minimum and the original one; none is assumed here.

@@ -33,7 +33,17 @@ minimum this is a necessary late-binding condition, not a UE producer.
 The following exact binding-late trap shows that even ALL simultaneous
 Never-tail comparisons, together with canonical singleton Q/R₀/degree-one
 data, cannot replace genuine global minimality. The live task is a coupled
-variation that also changes old finite stopping mass.
+variation that also changes old finite stopping mass. The newest complete
+candidate uses a fixed cut and reweights whole conditional heads/tails:
+near-late response deficits scale EXACTLY, rather than contributing an
+uncontrolled o(ε) error. It proves that a represented global minimum with
+all Never masses positive must have an earlier finite cap maximizer.
+That source-branch statement has an independent ordinary-mathematics PASS;
+it does not exclude the branches with earlier binding caps or a zero Never
+mass. A separate signed extension below replaces s_i by max(s_i,0) only in
+the endpoint cap, without changing the underlying utilities or Never payoff.
+The current question is to consume a finite binding atom/response while
+retaining genuine whole-profile minimality and every other player's cap.
 This is internal research, not an existence theorem or export candidate.
 
 The earlier question concerned a raw class with constant participant
@@ -2424,3 +2434,304 @@ controls this near-late cap leakage relative to an old-law ε^k decrease,
 or whether an actual finite-amplitude reweighting avoids that scale
 comparison. All late/near-late pure tests and Never must remain present.
 Neither outcome is established here.
+
+## Positive-Never global minima have an earlier finite cap maximizer
+
+Status: complete ordinary mathematical source-consumer candidate, not
+Lean-checked, not a UE theorem or export proposal. The fixed-cut proof
+below resolves the preceding near-late scale problem for the stated
+late-only branch. It does not assert arbitrary compact-calendar minimality.
+
+### Statement and the actual source being consumed
+
+Let I be any finite nonempty player set. Fix a bounded real reward vector
+r(S) for every nonempty coalition, with original Never payoff0. Suppose
+
+    s_i=r_i({i})≥0 for all i,   S₀=Σ_i s_i>0.
+
+For independent actual finite stopping laws p on ℕ∪{Never}, let U_i(p)
+be their terminal payoffs and b_i(p) their caps over ALL pure dates and
+Never, equivalently all behavioral deviations. Put
+
+    D(p)=Σ_i[b_i(p)−U_i(p)],   D_*=inf_p D(p).
+
+Take the marked ordered-calendar representation of an actual minimizing
+sequence. Thus T⊆[0,1] is nonempty compact, c=max T, Never is a separate
+point after T, and independent laws q_i satisfy q_i({c})=0. The literal
+payoffs and complete caps on T∪{Never} are limits of the original finite
+profiles and have D_T(q)=D_*. Every cap is attained; the pure-date payoff
+function is continuous on T. These are the actual marked-representation
+conclusions, not premises about an arbitrary supplied auxiliary game.
+Assume
+
+    α_i=q_i(Never)>0 for EVERY player.             (HT1)
+
+Then some player has an earlier finite cap maximizer:
+
+    ∃i∈I, ∃t∈T, t<c: U_i(t,q_{−i})=b_i(q).       (HT2)
+
+This is cardinal-independent. The implication from an original no-UE
+table to D_*>0 is not needed for the proof. In the Fin4 application the
+counterexample normal form may be chosen FIRST with s=(1,0,0,0), before
+selecting the minimizing sequence; no already selected minimum or law
+is transported through a reward normalization.
+
+The unregularized source used here is proved in Section35 of
+`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`. Its weak-* density and
+marked-tester construction is the same semantic representation as
+(RC9)–(RC10), without requiring entropy convergence. The finite transport
+needed here is proved explicitly below and is not inferred from the
+finite-atomic-mixture domain (RC11).
+
+### Reduction to the late-only branch
+
+For any profile x on this ordered calendar write
+
+    W_i(x)=U_i(Never,x_{−i}),
+    L_i(x)=W_i(x)+s_i∏[j≠i]x_j(Never).
+
+Because q and every reweighting below have no prescribed atom at c,
+L_i is exactly the finite pure-c payoff. Since s_i≥0, it is no smaller
+than the Never payoff.
+
+Suppose (HT2) fails. By attained caps, every cap must then equal its
+late value, and every earlier finite response is strictly smaller:
+
+    b_i(q)=L_i(q),
+    U_i(t,q_{−i})<L_i(q) for every t∈T, t<c.       (HT3)
+
+If c=0, all prescribed laws are Never, since they give c zero mass.
+Then D_T(q)=S₀, contradicting the known strict inequality D_*<S₀ proved
+below. Hence assume c>0.
+
+### One fixed cut: exact scaling of every future tester
+
+Choose any real K<c with K≥0 that carries no atom of the common prescribed
+mixture. Define the head/tail masses and conditional laws
+
+    H_i=q_i([0,K]),   S_i=1−H_i≥α_i>0,
+    h_i=q_i( · | [0,K]) when H_i>0,
+    v_i=q_i( · | (K,c]∪{Never}).
+
+For a player with H_i>0 vary x_i∈[0,1] and set
+
+    q_i^x=(1−x_i)h_i+x_i v_i.                    (HT4)
+
+For H_i=0 leave q_i unchanged and fix x_i=1. The original point is
+x_i=S_i; it is an INTERIOR point of the cube of all variable coordinates,
+because α_i>0 and H_i>0 there. No independence is lost: each player
+independently chooses its mixture component and its conditional clock.
+
+For a player i and any tester t∈T with t>K, including separately Never,
+condition on whether one of its opponents selects the head. If so, the
+first opponent coalition lies at or before K and its reward is independent
+of t. Therefore the exact response identity is
+
+    U_i(t,q^x_{−i})
+      =A_i(x_{−i})+X_{−i} U_i(t,v_{−i}),
+    X_{−i}=∏[j≠i]x_j,                            (HT5)
+
+where A_i is the early-opponent reward contribution. It is a multi-affine
+polynomial in the opponent head/tail probabilities. In particular
+
+    L_i(q^x)=A_i(x_{−i})+X_{−i} L_i(v).
+
+At x=S the factor X_{−i} is strictly positive. Thus (HT3) implies
+U_i(t,v_{−i})≤L_i(v) for every future finite test and Never. Equation
+(HT5) shows that ALL those inequalities survive for EVERY x in the cube.
+More precisely, each future tester's deficit below the late test is
+multiplied by X_{−i}. This includes testers arbitrarily close to c;
+there is no o(ε) cap leakage to compare with a higher-order decrease.
+
+Head tests t∈T∩[0,K] have a uniform strict gap at x=S: this is a compact
+set and its payoff function is continuous and strictly below L_i(q).
+If the set is empty there is no head condition. Each pure payoff and
+L_i change uniformly continuously under these finite mixing parameters,
+by the bounded-reward coupling estimate. Hence in a relative neighborhood
+of x=S every head test also remains below the late cap. We have proved
+the exact local identity
+
+    D_T(q^x)=F_K(x):=Σ_i L_i(q^x)−Σ_i U_i(q^x).  (HT6)
+
+The function F_K is multi-affine in the variable players' probabilities.
+No assertion that (HT6) holds on the WHOLE cube is needed.
+
+### Actual finite transport of this conditional reweighting
+
+Here is why genuine global minimality applies to the neighborhood in
+(HT6). Use the fixed finite minimizing sequence that produced q. On its
+common quantile domain [0,1], write its bounded player densities r_iⁿ and
+interval-collapse maps π_n, with Never separate. The source construction
+gives r_iⁿ⇀*r_i in L∞, a uniform bound |I|, retained atom marks, and the
+complete finite-response sets T_n→T. It gives a.e. convergence of the
+prescribed and moving-response coalition kernels in these coordinates.
+
+Select as the nth head exactly the original dates whose OLD quantile
+response locations are at most K. Never is always in the tail. Since K
+has zero mixture mass, the head indicators
+
+    1_{π_n(u)≤K} → 1_{π(u)≤K}
+
+converge almost everywhere and in L¹. Here a retained atomic interval is
+included as a whole or excluded as a whole according to its midpoint;
+it is never split by treating K as a raw density-domain coordinate.
+Weak-* convergence and the bounded densities give H_iⁿ→H_i and
+S_iⁿ→S_i. For H_i>0, independently reweight that player's ACTUAL finite
+conditional head and conditional tail to probabilities 1−x_i and x_i.
+For H_i=0 leave its nth law unchanged. For all large n the denominators
+H_iⁿ and S_iⁿ needed by the varying players are bounded away from zero.
+This gives a literal independent finite profile p^{n,x}; it adds no new
+dates, removes no tester and leaves original Never as Never.
+
+On the old quantile domain its new density, for a varying player, is
+
+    r_iⁿ(u)[(1−x_i)1_{head}/H_iⁿ+x_i1_{tail}/S_iⁿ].
+
+The bracketed factors are uniformly bounded and converge a.e. The new
+densities therefore converge weak-* to the corresponding reweighted
+limit densities. Products converge weak-* by rectangle tests and L¹
+density, with a uniform bound. Against the unchanged marked semantic
+kernels, split each integral into a moving-kernel L¹ error plus a fixed-
+kernel weak-* error. Thus all prescribed coalition probabilities and
+payoffs converge to those of q^x.
+
+Exactly the same argument applies to EVERY sequence of pure tester
+locations in the old T_n. Retained atoms keep their literal ties; other
+limit points are mass-zero cuts; c and Never remain different tests.
+Taking convergent maximizing subsequences gives the upper cap bound,
+and approximating each fixed T-test and Never gives the lower bound.
+Thus every unrestricted cap of p^{n,x} converges to that of q^x on T.
+The old calendar is unchanged, so there is no new c-atom or missing c⁺
+issue here: c remains empty and its late test remains available.
+
+For EACH fixed x, D(p^{n,x})≥D_* and taking n→∞ proves
+
+    D_T(q^x)≥D_*.                                (HT7)
+
+No common finite approximation is claimed for all x simultaneously.
+The chosen cut is fixed before taking the minimizing-sequence limit;
+there is no division of its error by a shrinking tail probability.
+
+### Algebraic constancy and the Never limit
+
+Equations (HT6)–(HT7) make x=S a local minimum of F_K at a relative
+interior point. A multi-affine polynomial with an interior local minimum
+is constant: its lowest nonzero homogeneous Taylor part would have mean
+zero and both signs on a symmetric sign cube, and would supply a small
+decreasing direction. This also covers several coordinates per block,
+although (HT4) uses only one. Therefore
+
+    F_K(x)=D_* on the entire parameter cube.      (HT8)
+
+At its all-tail vertex, (HT8) says ONLY that
+
+    Σ_i L_i(v)−Σ_i U_i(v)=D_*.                   (HT9)
+
+It does NOT assert that the actual debt of v equals D_*: early tests may
+overtake the late branch away from the local neighborhood. This is why
+the polynomial is kept separate from the complete-cap objective.
+
+Choose K approaching c through mixture-continuity points. There are at
+most countably many excluded atom locations, so such cuts exist. Since
+q_i({c})=0 and α_i>0, S_i(K)→α_i and the conditional tail law v_i has
+finite mass (S_i(K)−α_i)/S_i(K)→0. Hence v_i tends in total variation to
+Never. Uniform bounded-payoff coupling gives U_i(v)→0 and W_i(v)→0,
+while the product of conditional opponent Never masses tends to1.
+Thus L_i(v)→s_i. Taking limits in (HT9) yields D_*=S₀.
+
+But the literal all-Never profile has payoff0 and debts s_i. Choose j
+with s_j>0. The existing theorem
+`exists_exactRoot_terminalExploitability_le_and_debtSum_descent` in
+`UniformEquilibrium/Quitting/Terminal/TerminalDebtPrefixDescent.lean`
+prepends an internally produced finite-game Nash row and lowers its total
+debt strictly: both terms of its minimum decrease are positive. The
+resulting profile is still a finite law. Hence D_*<S₀, a contradiction.
+This proves (HT2). ∎
+
+### Exact scope and next surviving branch
+
+The proof uses the attained complete-cap function, actual finite transport
+and positive Never masses. It does not assume common-support likelihood
+bounds or entropy convergence. If some α_i=0, its conditional tail need
+not approach Never and the last step fails. If S₀=0, the all-Never profile
+already has zero debt and the strict prefix comparison is unavailable.
+Both hypotheses are used, not presented as removable technicalities.
+
+The new move differs from changing only a Never atom: it independently
+reweights every old conditional head against its ENTIRE tail. Preserving
+each conditional tail is precisely what makes all near-late cap deficits
+scale exactly. Merely moving selected head mass to Never would not have
+that property.
+
+Together with (LR6) and the positive singleton social sum supplied by the
+Fin4 no-UE Q source, this says that a positive-Never minimizing source
+cannot hide all its strategic constraints at the empty final cut. An
+earlier finite cap attains the maximum. It may be an empty response cut
+or a prescribed atomic date; it need not be shared by players, and it
+need not be the earliest support point. Nothing here removes that binding
+response, proves its owner has zero debt, or produces a uniform equilibrium.
+The next question is how an earlier binding cap and the late-binding
+constraints can be consumed together without deleting either response.
+
+## Signed extension of the earlier-cap source consumer
+
+Status: ordinary mathematical extension, not independently reviewed or
+Lean-checked. The preceding reviewed section is unchanged. This statement
+does not require reward normalization or transport of a selected minimum.
+
+Retain its arbitrary finite player set, bounded original reward table,
+actual finite-law infimum D_*, marked ordered-calendar global minimizer q,
+empty final cut c, complete attained caps, and positive Never masses α_i.
+The own singleton rewards s_i may now have arbitrary signs. If
+
+    S₊=Σ_i max(s_i,0)>0,
+
+then some finite test t<c attains some player's complete cap. In particular
+this applies to every no-UE table: if all s_i≤0, all-Never itself is an exact
+terminal equilibrium, since its unilateral pure finite-date payoffs are
+s_i and its Never payoff is0.
+
+The correct endpoint branch is
+
+    E_i(x)=W_i(x)+max(s_i,0)∏[j≠i]x_j(Never).
+
+It is the maximum of the pure-c and Never payoffs whenever no prescribed
+law has an atom at c. No reward coordinate has been altered. If every
+finite t<c is strictly suboptimal, attained caps give b_i(q)=E_i(q).
+
+For the same fixed continuity cut K and the same independently reweighted
+conditional head/tail laws q^x in (HT4), conditioning on an opponent head
+gives EXACTLY
+
+    E_i(q^x)=A_i(x_{−i})+X_{−i}E_i(v),
+    U_i(t,q^x_{−i})=A_i(x_{−i})+X_{−i}U_i(t,v_{−i})
+
+for every future test, including Never. Thus all future deficits relative
+to E_i retain their signs on the entire parameter cube. The compact head
+has a strict uniform cap gap at the original point. The actual finite
+transport in (HT7) is unchanged and uses no reward sign. Consequently
+the local complete debt equals the multi-affine polynomial
+
+    F_K^+(x)=Σ_i E_i(q^x)−Σ_i U_i(q^x).
+
+Its interior local minimum forces this polynomial to be constant. Evaluating
+the polynomial at the all-tail vertex and then letting K↑c gives
+
+    D_*=lim_K [Σ_i E_i(v)−Σ_i U_i(v)]=S₊.
+
+As before, this extrapolated polynomial value is NOT asserted to equal the
+complete debt of each all-tail profile. Total-variation convergence of each
+conditional tail to Never is enough for the displayed limit.
+
+Finally all-Never has exactly total debt S₊. Choose j with s_j>0 and apply
+`exists_exactRoot_terminalExploitability_le_and_debtSum_descent` in
+`UniformEquilibrium/Quitting/Terminal/TerminalDebtPrefixDescent.lean` with
+continuation all-Never, gap=s_j, and a finite reward bound M>0. Its j-debt
+is s_j, so the produced finite root prefix decreases total debt by at least
+
+    min(s_j²/(8M),s_j/2)>0.
+
+This contradicts D_*=S₊. The signed extension is proved. It changes neither
+the requirement α_i>0 for every player nor the remaining earlier-binding
+cap branch. If S₊=0, the all-Never equilibrium disposes of the original
+game instead of supplying this contradiction argument.

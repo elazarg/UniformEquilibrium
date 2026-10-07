@@ -199,9 +199,25 @@ a produced descent, or a uniform-equilibrium conclusion. The remaining task
 is to consume that actual minimum with its full tester completion.
 Section 36 records a first ordered variation at that source: erasing a
 sufficiently small prefix through a non-atomic available cut preserves
-the actual sum-debt minimum. Its proof and conditional-law transport are
-ordinary mathematics, not independently reviewed. It supplies a minimum
-suffix, not a strict decrease or an unrestricted renewal argument.
+the actual sum-debt minimum. Its proof and conditional-law transport have
+passed an independent focused review by CODEX_NOETHER, recorded in
+`../feedback/CODEX_MORSE__DIFFUSE_POSITIVE_NEVER_MINIMUM__BY_CODEX_NOETHER.md`.
+It remains ordinary mathematics, not Lean-checked, and supplies a minimum
+suffix rather than a strict decrease or an unrestricted renewal argument.
+Section 37 excludes an actual positive-minimum branch: with all Never
+masses positive and every cap equal to its late value, some preterminal
+finite response must also attain a cap. Fixed-cut head/suffix reweighting
+preserves all post-cut comparisons exactly, avoiding a near-late error
+estimate. This is ordinary, unreviewed source consumption, not a raw-table
+UE theorem or an export claim.
+Section 38 consumes the completely diffuse positive-Never branch: at a
+positive actual global minimum, all Never masses cannot be positive
+while every finite marginal is atomless. Repeated small prefix erasure
+has a finite survival budget; its terminal alternative would make all
+Never a positive global minimum. Regeneration is proved using the same
+original approximants. This ordinary result has passed the same independent
+focused review by CODEX_NOETHER; it is not Lean-checked and supplies neither
+an atom-size bound nor a full conjecture conclusion.
 Section 9 shows that the local corner obstruction persists with compact,
 contractible local fibers and uniform metric drift. This ends the proposed
 local repair by fiber contractibility; it is not a counterexample to the
@@ -6449,3 +6465,290 @@ boundaries. Its role in the current attempt is to remove an initial
 cap-inactive segment at the actual positive minimum while keeping the
 entire remaining chronological law, rather than replacing it by a selected
 prefix-orbit minimum or an unrelated finite auxiliary equilibrium.
+
+## 37. An actual minimum cannot have only strictly late cap maximizers
+
+Let q,T,c be the represented actual global minimum from Section 35, with
+δ=D_*>0, c=max T, and q_i({c})=0. Write α_i=q_i(Never), U_i for its
+prescribed payoff, B_i for its complete cap, and W_i for its literal
+Never-response payoff. Assume
+
+    α_i>0 for every i.
+
+The payoff of the available empty finite test c is exactly
+
+    L_i=W_i+β_i s_i,       β_i=∏_{j≠i}α_j,
+    s_i=r_i({i}).                                  (194)
+
+The conclusion is the following actual-source disjunction:
+
+    either some B_i>L_i,
+    or some i and t∈T with t<c have pure payoff B_i. (195)
+
+In particular, it is impossible that all B_i=L_i while every finite
+preterminal response is strictly below its player's cap. Never remains
+a complete response throughout: it can tie L_i when s_i=0. The theorem
+does not assume all own singletons nonnegative; that follows in the
+branch B_i=L_i because W_i≤B_i and β_i>0.
+
+This is ordinary mathematical consumption of one genuine global-minimum
+branch, not a uniform-equilibrium theorem. It does not eliminate the
+preterminal-tie alternative, positive excess over the late value, or a
+zero-Never player.
+
+### Fixed-cut variations retain the entire late comparison
+
+Suppose, for contradiction, that B_i=L_i for all i and that every t<c
+is strictly below its cap. Choose any real a<c such that no q_i has an
+atom at a. It need NOT be a retained response location: no tester is
+inserted there. Put
+
+    x_i=q_i(T∩[0,a]),
+    q_i^−=q_i conditioned on [0,a] when x_i>0,
+    q_i^+=q_i conditioned on (a,c]∪{Never}.
+
+Since α_i>0, x_i<1. On J={i:x_i>0}, vary independent mixture masses
+
+    q_i^z=z_i q_i^−+(1−z_i)q_i^+,       0≤z_i≤1,
+
+and hold q_i fixed for i∉J. The original parameter x is interior on J.
+The complete tester set remains the original T∪{Never}, including its
+empty terminal test c. There is no new terminal insertion or missing
+post-insertion test.
+
+These variations are actual numerical-global-minimum comparisons.
+To see this, use the original finite realizing sequence and split each
+marginal at its original test locations ≤a. With x_i^k the corresponding
+prefix probability, replace its two conditional weights by z_i and
+1−z_i, using the exactly normalizing factors z_i/x_i^k and
+(1−z_i)/(1−x_i^k). For i∉J leave the finite marginal unchanged.
+The factors converge and remain bounded for each fixed z. The absence
+of boundary mass at a makes the head indicator converge almost
+everywhere in the common quantile chart. The weak-* product/moving-kernel
+proof of Section 35 therefore transports the prescribed payoff and
+EVERY complete cap. The old tester sets are unchanged. Consequently
+
+    D_T(q^z)≥δ for every z∈[0,1]^J.              (196)
+
+For each i, let A_i(z₋ᵢ) be its expected passive payoff on the event
+that some opponent stops in the head. This is a multiaffine polynomial.
+Every post-cut response t>a, and Never, has EXACT payoff
+
+    A_i(z₋ᵢ)+[∏_{j≠i}(1−z_j)] V_i(t;q₋ᵢ^+).    (197)
+
+Here coordinates outside J are zero and the tail response has its
+literal original reward rule. In particular the late value is
+
+    L_i(z)=A_i(z₋ᵢ)+[∏_{j≠i}(1−z_j)]L_i(q^+).
+
+At z=x all post-cut responses are ≤L_i(x), and the survival factor is
+strictly positive. Thus V_i(t;q₋ᵢ^+)≤L_i(q^+) for EVERY post-cut t,
+including Never. Equation (197) preserves these comparisons for every
+z. Arbitrarily close near-late ties cannot create an error term: their
+differences from L_i are multiplied by the same nonnegative factor.
+
+The old head tester set T∩[0,a] is compact. At the unmodified represented
+profile its pure-response payoff is continuous on T: positive atoms are
+isolated retained points, and the remaining test cuts carry no mass.
+Strict suboptimality therefore gives a uniform positive head gap for
+each i, unless that set is empty. Pure payoffs depend uniformly
+Lipschitz-continuously on z by product coupling. In a relative neighborhood
+of x every head test stays below L_i(z), while every post-cut test stays
+below it by (197). The available test c attains it. Hence
+
+    D_T(q^z)=F(z):=Σ_i[L_i(z)−U_i(q^z)]          (198)
+
+in that neighborhood. All displayed functions are multiaffine in the
+independent player blocks. By (196), x is an interior local minimum of
+F on the face J. The sign-cube averaging argument, or the small-cube
+corner argument in Section 36, makes F identically δ on that whole face.
+
+Evaluating the POLYNOMIAL identity at z=0 gives
+
+    Σ_i[L_i(q^+)−U_i(q^+)]=δ.                    (199)
+
+No claim that the complete caps of q^+ equal L_i(q^+) is needed here.
+Earlier now-empty tests could become better. Equation (199) evaluates
+the same globally constant polynomial, not an unproved conditional-tail
+minimality assertion. This is the key distinction from a continuation
+argument requiring all early cap switches to remain inactive.
+
+### The all-Never limit contradicts the true singleton moat
+
+Take non-atomic real cuts a↑c; only countably many cut locations are
+forbidden. Since q_i({c})=0 and α_i>0,
+
+    q_i^+(Never)=α_i/(1−x_i)→1.
+
+Thus these conditional tails converge in total variation to all Never.
+Their bounded prescribed payoffs tend to zero. Formula (194), applied
+to the conditional laws, gives L_i(q^+)→s_i. Passing to the limit in
+(199) yields
+
+    δ=Σ_i s_i.                                   (200)
+
+As observed above, each s_i≥0 in this branch. Therefore the ACTUAL
+all-Never profile has total debt Σ_i s_i=δ: its prescribed payoff is
+zero and its complete cap is max(s_i,0)=s_i. It is itself a global
+sum-debt minimum in the original semantic carrier. But the inspected
+`minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+then requires δ≤s_i−s_i=0 for every i, contrary to δ>0. This proves
+(195). If all s_i vanish, (200) already supplies the contradiction.
+
+### Relation to finite strict-cap descent and exact scope
+
+The finite strict-cap-region argument in
+`../notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md` correctly warns
+that a generic truncated sign-cube decrease of size ε^k need not beat
+an uncontrolled o(ε) cap increment. This proof does not assert such a
+bound. It freezes a cut FIRST, retains the complete conditional tail,
+and varies head/suffix probabilities so that (197) preserves every
+late comparison EXACTLY. Only the compact head needs a uniform gap.
+There is no minimizing error, truncation error, or limiting perturbation
+size to divide by the head or tail probability.
+
+The theorem assumes strictness of every preterminal finite test, not
+merely absence of a different maximizing response function on a chosen
+finite support face. It does not identify an additional preterminal
+maximizer with a useful stopping date of the prescribed laws. Such a
+maximizer may have zero prescribed mass, and replacing its owner's law
+can affect all other complete caps. The remaining task is to consume
+that actual tied finite response or the alternative B_i>L_i, rather
+than to reuse a late-tail inequality at an arbitrary positive-debt law.
+
+## 38. Completely diffuse positive-Never minima are impossible
+
+The represented genuine minimum of Section 35 cannot satisfy both
+
+    α_i=q_i(Never)>0 for every i,
+    q_i({t})=0 for every i and every finite t∈T.    (201)
+
+This theorem uses the numerical GLOBAL minimum δ=D_*>0, not a profile
+with positive debt, or a minimum along one selected orbit. Rewards may
+have either sign. It consumes a source branch; it does not prove UE for
+arbitrary data or say that every positive minimum must have zero Never.
+
+Choose M>0 bounding all rewards. The true singleton moat gives δ≤2M.
+Set
+
+    κ=δ/(4M)∈(0,1/2],       ρ=∏_i α_i>0.
+
+For an available cut a∈T, let
+
+    S_i(a)=q_i([a,c]∪{Never}),
+    R(a)=∏_i S_i(a),
+    q_i^a=q_i conditioned on [a,c]∪{Never}.
+
+All these conditionings are defined because S_i(a)≥α_i>0. In particular
+R(a)≥ρ. Under (201), every retained cut is nonatomic. The initial cut
+a₀=min T has q^{a₀}=q; the degenerate all-Never case is already impossible
+at a positive global minimum by the argument below.
+
+### The actual source regenerates under each finite conditioning
+
+Whenever a finite sequence of Section 36 erasures has reached a,
+q^a is a genuine global-minimum suffix on T∩[a,c]. Every formerly earlier
+empty response pays s_i, already represented by the available empty
+test a. Thus none of its complete tests has been dropped.
+
+The next use of Section 36 does not assume a new representation with
+the same atomlessness. It reuses the ORIGINAL finite realizing sequence.
+Take original test locations a_k→a and restrict every original marginal
+to times at or after that test, including Never, then normalize. The
+boundary mass is zero, so the normalizers converge to S_i(a)≥α_i.
+The normalized densities on the original common quantile chart remain
+bounded by, for example, 2n/min_i α_i at sufficiently large indices.
+Their weak-* limits are the corresponding conditional densities, and
+the same moving response kernels retain all tests at or after a.
+Shift the retained first test to original date 0; this is an order
+preserving change of integer labels, not an inserted empty stage.
+It yields actual finite profiles with the full payoff/cap limit q^a.
+
+Conditioning again at b>a is exactly conditioning the original law at b.
+For any fixed finite number of iterations the cumulative normalizer is
+1/S_i(b), still bounded by 1/α_i, rather than an uncontrolled product
+of approximation errors. At each new step the singleton moat applies
+to this actual carrier minimum. The finite head/suffix reweighting in
+Section 36 therefore remains valid with this inherited realizing
+sequence. No simultaneous realization of infinitely many counterfactual
+updates, nor an ordinary-ℕ realization of q, is required.
+
+### A fixed amount of erased head spends a finite survival budget
+
+At a current minimum suffix define its total conditional finite mass
+
+    Λ(a)=Σ_i[1−α_i/S_i(a)].
+
+If Λ(a)>κ, atomlessness makes
+
+    H_a(b)=Σ_i q_i^a([a,b))
+
+a continuous nondecreasing function of real b, from 0 at a to Λ(a)
+at c. There is a b∈T with a<b<c and H_a(b)=κ. Indeed the intermediate
+value theorem supplies such a real cut; if it lies in a gap of T, move
+it to a gap endpoint without changing H_a. Equivalently choose a
+boundary point of the level set, which lies in the union of the finite
+marginal supports. All these points are still nonatomic by (201).
+
+Section 36 applies to this complete conditional prefix: its removed
+masses x_i=q_i^a([a,b)) have sum κ. Consequently q^b is again a genuine
+global minimum, and
+
+    R(b)=R(a)∏_i(1−x_i)≤R(a)exp(−κ).           (202)
+
+If the branch Λ>κ lasted N steps, then R≤exp(−Nκ), whereas always
+R≥ρ. Choose a finite integer N with exp(−Nκ)<ρ. It follows that the
+iteration reaches some minimum suffix a with Λ(a)≤κ in fewer than
+N steps. This is a finite argument: no source limit is inferred from
+an unending renewal construction.
+
+### The remaining small suffix would make all Never minimal
+
+At that final a, every later available cut b<c removes total conditional
+mass at most Λ(a)≤κ. A further application of Section 36 thus shows
+that q^b is a global minimum for EVERY such b. Under (201), take
+available b increasing to the upper endpoint of the finite support;
+using c is equivalent if there is an empty final gap. If no finite
+mass remains, the suffix is already all Never. Otherwise cuts in the
+finite support exist approaching that endpoint and their residual finite
+mass tends to zero, since there is no terminal atom. For each i,
+
+    q_i^b(Never)=α_i/S_i(b)→1.
+
+Hence q^b tends to all Never in total variation. The original reward
+bound controls every pure deviation uniformly by the probability that
+some opponent's clock changes. Thus the complete caps tend to
+max(s_i,0), and prescribed payoffs tend to zero, even though the retained
+suffix calendar changes. Its first available cut always provides the
+finite singleton test; Never remains separate. Consequently
+
+    δ=Σ_i max(s_i,0).
+
+The right side is the debt of the ACTUAL all-Never profile. It would
+therefore be a positive global minimum. If all s_i≤0 that debt is zero,
+an immediate contradiction. Otherwise choose j with s_j>0. The global
+singleton moat at all Never gives
+
+    δ≤max(s_j,0)−s_j=0,
+
+again impossible. This proves the exclusion (201).
+
+### What was, and was not, consumed
+
+This is stronger than merely locating a finite cap maximizer in Section
+37: it excludes EVERY completely diffuse represented minimum with all
+Never masses positive, regardless of which finite or Never responses
+attain the complete caps. The positive original joint-Never probability
+is used as a lower bound on the total remaining survival, not as a
+denominator for an uncontrolled near-minimum error.
+
+The conclusion is that every represented positive minimum has either
+a zero-Never player or a positive finite atom. It does not give a lower
+bound on that atom. With atoms, a cumulative-mass cut may jump across
+the admissible κ budget; in addition, adjacent retained atomic times
+need not have an available empty response between them. An invented
+empty cut can change the complete cap. Thus the above proof must not
+be relabeled as a macroscopic-atom theorem or silently iterated through
+atomic endpoints. Consuming those collisions, or the zero-Never branches,
+remains necessary for an arbitrary-table conclusion.

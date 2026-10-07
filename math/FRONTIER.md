@@ -359,6 +359,60 @@ the original D*, a consumed charged return, or a genuinely renewable rank
 whose every terminal case is consumed. Merely generating another paid row,
 a new minimum, or a real-valued decrease does not supply those conclusions.
 
+### Ordered-clock minimum — reviewed mathematics, not Lean-checked
+
+For any finite nonempty player set and bounded signed rewards, a finite-law
+sequence approaching the original behavioral sum-debt infimum has a compact
+ordered-calendar representation. It consists of independent stopping laws
+on a compact set T, a separate Never point, and an available final finite
+test c=max T with no prescribed mass. Prescribed payoffs, terminal coalition
+probabilities, and every unrestricted deviation cap are limits of the same
+actual finite profiles. All cap tests are retained and every cap is attained.
+This is numerical attainment of the original minimum, not an executable
+strategy on ordinary integer dates.
+
+At a represented positive global minimum D*>0, the following source
+restrictions are proved:
+
+- All players cannot have positive Never mass while every finite marginal
+  clock is atomless. Small prefixes through available nonatomic cuts can be
+  erased while retaining the minimum and every cap. Repeated conditioning
+  uses the same original realizing sequence. The positive joint-Never mass
+  supplies a finite survival budget; a final small suffix would make actual
+  all Never a positive global minimum, contradicting the singleton margin.
+  Thus some player has zero Never mass, or some finite chronological point
+  has positive marginal mass. This is a date atom, not merely a positive
+  coalition coordinate in the terminal law. No atom-size floor is proved.
+- With all Never masses positive, nonnegative own singletons and positive
+  singleton sum, some complete cap is attained at a finite test before c.
+  Conditional head/tail reweighting preserves every post-cut comparison
+  exactly; no charge-relative approximation error is assumed. The binding
+  test need not have prescribed mass or be shared by other players.
+- Suppose at least two zero-Never owners share the earliest upper support
+  endpoint, that endpoint is nonatomic, all Never responses are strictly
+  below their caps, and the nonempty social maximum is unique. This branch
+  is impossible. Player-deleted survival tends to zero at that endpoint,
+  so a literal social-max tail replacement preserves every cap; minimum
+  debt then contradicts independence of the remaining diffuse clocks.
+
+If an owner stops by a finite cut surely, global minimality also gives its
+exact cap account as the maximum of its best head response and its passive
+head payoff plus surviving opponent mass times the true punishment value.
+Only this owner's cap sees the off-path opponent tails. At a nonatomic
+cut with nonnegative own singleton, those tails can instead be erased to
+Never while preserving all payoffs and caps. This is not player deletion
+or an on-path punishment equilibrium.
+
+The source construction and diffuse exclusion are in
+[the ordered-minimum proof](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md);
+the earlier-cap result is in
+[the complete-cap variation proof](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md);
+the earliest-cutoff and punishment results are in
+[the cutoff proof](notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md).
+Atomic cuts, binding Never responses, and a unique earliest zero-Never
+owner remain unconsumed. These restrictions give neither ordinary-clock
+attainment, a renewable terminal consumer, nor UE.
+
 ### Finite cap-threshold descent — tracked theorem
 
 Call i preempted if some j≠i has sⱼ>rⱼ({i}). For an arbitrary actual source p
