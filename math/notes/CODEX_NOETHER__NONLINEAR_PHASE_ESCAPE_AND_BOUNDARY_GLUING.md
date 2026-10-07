@@ -10,6 +10,10 @@ under the additional raw sign and passive-cap conditions at the end.
 The actual singleton punishment source also consumes the one-coordinate
 escape mode under the explicitly stated cylinder cap; multi-coordinate
 escapes remain open.
+The delayed-anchor proof below is valid, but its present passive caps
+already admit the immediate singletonb source; that arm is not new UE
+coverage. The actual singleton screen also supplies the negative good-row
+comparison needed by the useful escape adapter.
 The live question is whether actual no-UE concrete-base gaps exclude or
 consume EVERY escape mode, instead of assuming one more reward sign.
 No export or conjecture-facing increment is claimed here.
@@ -453,6 +457,70 @@ existing singleton punishment source. This yields UE existence, not a
 promise that the boundary arm has one fixed exact period-two strategy or
 an accuracy-independent punishment plan.
 
+An exact positive test of the adapter changes only three passive entries
+of the strict sixty-coordinate buffered table:
+
+    r₁(02)=12,       r₂(01)=7,       r_b(012)=102.
+
+The singleton Γ and all six strict pair joins are unchanged. The triple
+joins are(1,−10,−5). The good owner0 has Γ₀b=−1 and cylinder radii(4,8).
+Its C⁰ vertices are0,−8,−8,−304/15. Its C¹ vertices are
+−2,−46/15,−46/15,−38/15. Thus the cylinder cap is strict.
+
+There really is an unbounded shifted-root family here, not merely a
+formal boundary point. Set X₀=1/z, X_b=0 and define, for i=1,2,
+
+    F_i(z,x₁,x₂)=z[e_i(1/z,x₁,x₂,0)−e₀(x₁,x₂,0)].
+
+Each F_i extends smoothly through z=0: the only 1/z term of e_i is
+−(c_i0+c_iA x_k)/z, and its rational P_i/D_i term has denominator
+(1+z)(1+x_k) after cancellation. The extensions at zero are
+
+    F₁(0,x₁,x₂)=−1+10x₂,
+    F₂(0,x₁,x₂)=−1/2+5x₁.
+
+Their common zero is(1/10,1/10), with x-Jacobian
+[[0,10],[5,0]], determinant−50. The ordinary implicit function theorem
+therefore gives x₁(z),x₂(z)>0 for all sufficiently small positive z,
+converging to that point and solving F₁=F₂=0 exactly. Put
+λ(z)=e₀(x₁(z),x₂(z),0); its limit is416/3025>0.
+The anchor residual divided by X₀ tends to
+
+    Γ_b0+(r_b(01)−s_b)/10+(r_b(02)−s_b)/10
+      +(r_b(A)−s_b)/100=−1+101/100=1/100>0.
+
+Hence e_b>λ eventually. These are actual zeros of H_λ with three
+positive A odds, b odds zero, bounded λ and X₀→∞. In contrast to the
+earlier symmetric escape, the shift stays bounded.
+
+The consumed induced law is exactly(q₁,q₂,q_b)=(1/11,1/11,0) at base0.
+The two free A joining gaps are zero. Anchorb's Continue and Quit payoffs
+are respectively122/121 and−1659/2420, so its joining gap is
+−4099/2420<0. Owner0 has U₀=157/121, W₀=29/25 and quiet-free
+probability100/121. A literal punishment makes player2 quit surely on
+the next date if owner0 deviated to Continue and both free players were
+quiet. Its owner cap is max(r₀(02),r₀(2))=1/2, so actual Pun₀≤1/2.
+The source owner floor is therefore≤
+
+    (100/121)(1/2−29/25)=−66/121<0.
+
+This exact independent product law plus the specified date-one punishment
+is itself terminal Nash against every complete behavioral replacement:
+all nonowner deviations still absorb against owner0 at date0 and reduce
+to their already checked finite endpoints; an owner deviation either
+absorbs at date0 or meets the fixed date-one sure quitter. No private
+memory, late stopping or Never can improve that cap. It realizes fixed
+target(157,572,77,122)/121. Under the initial-zero convention it is even
+exact Nash at every positive horizon: the nonowner endpoint payoffs share
+the common factor(N−1)/N; the owner's quiet punishment return is at most
+(N−2)_+/N times1/2, which is≤(N−1)/N times1/2. The same strict owner
+floor still controls its entire reply. Target delivery error is O(1/N).
+
+Thus the semantic consumer is nonvacuous and retains a true signed-game
+punishment cap rather than a nominal phase tail. This table is already
+covered by the actual singleton source; it is a mechanism test, not an
+additional UE class or a request for another export.
+
 The structural limit is still clear: this dispatch concerns one divergent
 odds coordinate with a good row controlling every other coordinate. If
 two or three A coordinates diverge, the nominal owner tail itself can
@@ -468,3 +536,237 @@ regularization select a lower-scale owner whose nominal tail remains
 bounded? The available compact global positive minimum supplies an actual
 semantic restriction, but no link from it to these shifted polynomial
 roots has yet been proved. A rate limit alone cannot fill that link.
+
+## Owner–anchor escape: compactness modulo two real UE consumers
+
+The negative comparison Γ₀b<0 is not needed for the semantic dispatch once
+both possible unbounded coordinates are treated. The following complete
+ordinary-mathematics mechanism stays internal: no actual-source increment
+or independent review is claimed. It does not consume escape with no good
+triple row.
+
+Assume all six c_ij>0 and c₀A≥0. Put
+
+    B=max(0,Γ₀b,M₀),       R₁=B/c₀₁,       R₂=B/c₀₂.
+
+Require the same seven cylinder vertex tests, now at these radii. Owner0
+may use either passive-cap alternative; players1,2 must use the second:
+Π_ij,Π_ik,Π_iA≥0 and r_i(ib)≤r_i(b). These are finite raw conditions
+only. There is no sign assumption on Γ₀b,c₁A,c₂A or any own singleton.
+The conclusion is raw UE existence, not necessarily one exact period-two
+profile. The boundary consumer below uses accuracy-dependent punishments.
+
+For a shifted zero, the good row still gives X₁≤R₁,X₂≤R₂ and
+
+    0≤λ≤M₀+max(Γ₀b,0)X_b.                         (B3)
+
+Thus only X₀ and X_b may escape. Work on the actual normalized no-UE
+source: it supplies every Pun_i≤s_i and own levels in{0,1}, together with
+literal Γ R0/degree one. All raw comparisons and cylinder tests survive
+its positive common scaling, as proved above.
+
+If X₀→∞, even with X_b→∞, divide the other A residuals by
+X₀(1+X_b). Bound(B3) makes λ/[X₀(1+X_b)]→0. The terms Γ_ibX_b and
+P_i/D_i also vanish after this division, leaving
+
+    −(c_i0+c_iA x_k).
+
+The same Nash complementarity and owner floor argument gives a genuine
+singleton0 induced Nash law and admissible actual punishment floor.
+The b endpoint comparison needs no bound on X_b because its A-date
+endpoints depend only on A odds and satisfy C_b≤0≤e_b. This dispatch
+consumes the simultaneous owner–anchor escape, not just X_b bounded.
+
+It remains to treat X_b→∞ with X₀ bounded. Pass to a subsequence on
+which all A odds converge to finite x_i. Since X_b>0 eventually,
+complementarity gives λ=e_b(X_A), hence λ is bounded on this branch.
+Dividing(T5) by1+X_b yields
+
+    Γ_ib−L_i(x_A)≥0,
+    Γ_ib=L_i(x_A) whenever x_i>0.                  (B4)
+
+The anchor residual itself satisfies e_b(x_A)≥0. Let q_i=x_i/(1+x_i).
+The two-date profile is: at date0 the A players use q and b Continues;
+after quiet survival, at date1 b quits surely and all A players Continue.
+If b unexpectedly Continues at date1, the other players switch from
+date2 to a stationary near-punishment of b. On its prescribed path the
+profile absorbs by date1, regardless of the punishment choice.
+
+Before date1 the A player's Continue value is exactly r_i(b)=s_i+Γ_ib.
+At date0 its Quit endpoint is U_i=s_i+P_i/D_i. The algebraic Continue
+identity with nominal tail s_i+L_i shows that the actual Continue endpoint
+with tail r_i(b) is
+
+    U_i+[Γ_ib−L_i]/D_i.
+
+By(B4), an active q_i has equality and an inactive player weakly prefers
+Continue. These are the full date0 Nash endpoint inequalities. At date1,
+the passive Quit payoff r_i(ib) is≤r_i(b) for both bad players by their
+raw cap. For the good owner, the second cap works directly; under its
+first cap, Γ₀b≥L₀≥0 from(B4), so
+r₀(0b)≤s₀≤r₀(b). All nonowner complete deviations therefore reduce to
+these two-date endpoints: b still quits surely at date1 and absorbs them.
+
+The actual on-path A payoff is
+
+    V_i=U_i+(1−q_i)[Γ_ib−L_i]/D_i.
+
+This retains the inactive correction explicitly; an inactive nominal U_i
+is not silently identified with its policy payoff. The anchor's actual
+date0 Continue value is
+
+    V_b=s_b+e_b(x_A)/D_A≥s_b.
+
+Its forced Quit endpoint is s_b+C_b(x_A)/D_A≤s_b by the cylinder cap.
+At date1 it receives s_b by Quit. To make Continue unprofitable up toη,
+choose stationary opponents with complete terminal best-reply cap≤Pun_b+η
+≤s_b+η. Their existence follows from the literal real infimum and
+`quittingPunishmentValue_eq_stationaryPunishmentValue` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`; the infimum is not
+assumed attained. The first-date endpoint inequality and this actual
+tail cap bound EVERY complete behavioral reply by V_b+η. Late stopping,
+private memories and Never are included in the stationary stopping cap,
+not guessed from one nominal continuation number.
+
+The finite-horizon consumer is also explicit. If any stationary punishment
+opponent has positive hazard, opponent survival is geometric and the
+terminal-to-horizon error is≤C_η/H for every complete reply over H
+remaining stages. If all punishment opponents Never, their horizon reply
+cap is≤max(s_b,0)=s_b because the normalized own level is nonnegative.
+The two live prefix dates contribute zero and shifting the remaining
+horizon into the original N average costs O(1/N). The on-path payoff
+vector V is independent ofη, absorbs by date1 and differs from its
+N-average realization by at most2M/N. All A deviations share that bounded
+absorption clock; the anchor deviations have gain at mostη+C_η/N.
+Chooseη before N, then choose N large for every prescribed accuracy.
+Thus this is one FIXED uniform target, with no claim that its punishment
+profile is independent of accuracy or that it is exact terminal Nash.
+
+Consequently actual no UE excludes every unbounded shifted-root sequence:
+one of the two just proved consumers would give UE for the same actual
+normalized table. On a bounded zero family, λ is bounded by(B3), so a
+larger shift has no zero; local degree one/global degree zero produces
+a finite nonzero H₀ root. Its six pair joins exclude singleton support.
+The good-row floor and bad-row nonnegative-premium alternatives give
+every passive endpoint inequality, and the usual inactive corrections and
+deleted-clock argument supply a full exact terminal profile and uniform
+target. That is the final alternative, also contradicting normalized no UE.
+This proves the stated raw existence corollary without substituting a
+convenient global isolation assumption for the semantic source.
+
+The original-game conclusion is only obtained through the actual
+normalization's retained no-UE field. A row translation does not in general
+pull this delayed-anchor/punishment strategy back: an all-Never punishment
+tail can retain positive Never mass, and the original anchor's own reward
+can be negative. No false affine-invariance or fixed-profile claim for
+arbitrary original signed tables is being made.
+
+### Exact nonvacuous delayed-anchor escape test
+
+From the strict sixty-coordinate buffered table change only
+
+    r₀(02)=r₁(12)=1,       r₀(03)=r₁(13)=0,
+    r₀(12)=r₁(02)=5,       r₂(01)=0.
+
+All other coordinates remain literally those of that table. Take the
+good owner as2 rather than0. The six pair joins are(1,1,1,1,1/2,1/2)
+in ordered01,02,10,12,20,21. The triple joins are(−3,−3,2). The bad
+players0,1 have within-A premiums(4,0,1) and passive cap0≤r_i(b)=0.
+Good player2 uses its original cap r₂(23)=0≤own1, with Γ₂b=3.
+Its B=3 and cylinder radii are(6,6) on coordinates0,1.
+The constant anchor-polynomial vertices are0,−12,−12,−168/5;
+the coefficient vertices are−1,−9/5,−9/5,−4/5. All tests pass.
+
+There is an actual shifted-root branch with X_b→∞ and X_A→(1,1,1).
+Put X_b=1/w and define F_i(w,X_A)=w(e_i−e_b) for i∈A. It extends
+smoothly at w=0 with F_i(0,X_A)=Γ_ib−L_i. At X_A=1 these three
+values vanish. The X_A-Jacobian there is
+
+    [[0,2,2],[2,0,2],[−5/2,−5/2,0]],
+
+with determinant−20. The ordinary implicit function theorem gives an
+exact positive X_A(w)→1 for all sufficiently small w>0. Here
+λ(w)=e_b(X_A(w))→1>0, so H_λ=0 with all four coordinates positive.
+This is a bounded-shift, anchor-only unbounded branch. Its limiting
+periodic policy is NOT stationary terminal Nash: at the anchor's solo
+row its nominal Continue advantage is still positive.
+
+The correct consumer uses A hazards(1/2,1/2,1/2) once, then b sure,
+then all opponents Never if b refused its sure exit. The A first-date
+endpoints both equal(9/4,9/4,1), and their passive date-one Quit caps
+are(0,0,0)≤r_A(b)=(0,0,4). The anchor's date0 Continue and Quit values
+are9/8 and151/480 respectively. Its solo Quit value is1, whereas after
+refusing it the literal all-Never punishment cap is max(own1,0)=1.
+Thus the profile is exact TERMINAL Nash against all complete behavioral
+deviations, with fixed target(9/4,9/4,1,9/8).
+
+It is also one fixed uniform profile. Every A deviation absorbs by date1.
+An anchor deviation reaching the punishment tail earns at most1 at every
+remaining horizon, including late Quit and Never. For N≥2 its exact
+N-average payoff vector is
+
+    (9(N−1)/(4N), 9(N−1)/(4N), (2N−3)/(2N), (9N−10)/(8N)).
+
+The delivery sup-norm error is9/(4N). Players0,1 have equal initial
+endpoints. Player2's Continue endpoint loses1/N relative to its Quit
+endpoint, and its prescribed half mixture therefore has exact best-reply
+gain1/(2N). The anchor's Continue payoff exceeds its initial Quit payoff
+by(389N−449)/(480N)>0, and at date1 any delayed own1 return loses
+weakly to its prescribed earliest exit. Thus the exact horizon Nash
+error is1/(2N); N=1 has zero payoff and zero error. Exact finite-horizon
+Nash is NOT claimed. The accuracy tends to zero at the same fixed target.
+
+This stress proves that the delayed-anchor arm repairs a genuinely
+non-Bellman escape limit by an actual observed-deviation punishment.
+No full concrete-source census or new UE-class increment is claimed for
+the test table. It is not being added to the frozen export.
+
+### Exact source inclusion of the delayed-anchor arm
+
+The current passive-cap hypotheses make the anchor-only escape arm an
+existing-source branch, not an additional existence class. At that limit
+every bad A row already has r_i(ib)≤r_i(b). A good row using the second
+alternative does too. A good row using the first has Γ_ib≥L_i≥0 from
+(B4), and hence r_i(ib)≤s_i≤r_i(b). Therefore ALL three players have
+nonpositive joining gaps into singletonb.
+
+At base{b}, choose the complete free law with all A hazards zero. It is
+induced finite Nash precisely because these three joining gaps are≤0.
+There are no outsiders. The owner's actual singleton floor is simply
+Pun_b−s_b≤0. Thus
+`exists_uniformPayoff_or_singletonBase_pos_gap` already closes the table.
+The delayed two-date proof remains a correct stronger fixed-policy test,
+but is not a counterexample-class increment. In particular its seven-
+coordinate stress is consumed by this literal certificate, without a
+full carrier census or an invented same-profile punishment infimum.
+
+This observation also PRODUCES the negative good-row comparison on actual
+source-screen survivors. With one good row0 and the other two using the
+second cap, singletonb all-Never cannot be induced Nash with an admissible
+owner floor. Since Pun_b≤s_b on the actual normalized no-UE source,
+player0 must have
+
+    r₀(0b)−r₀(b)>0.
+
+Its second cap is consequently impossible; it uses the first cap and
+r₀(0b)≤s₀ then forces Γ₀b=r₀(b)−s₀<0. This is not an extra
+reward assumption or a nominal phase comparison: the actual full free
+carrier and actual punishment floor give it. The one-coordinate escape
+adapter above can therefore use the source-selected negative row.
+
+More generally, if |G|≥2 and every bad row uses the second cap, absence
+of the same immediate singletonb certificate forces some GOOD row to
+have positive joining into b and therefore negative Γ_ib. This supplies
+the good negative comparison used in the two-good-row bounded proof.
+The additional raw comparison clause in the frozen theorem is sufficient
+but not necessary once this actual normalization/source dispatch is used.
+No revision of the frozen export is proposed here.
+
+Next global obligation: remove the last good-row assumption or classify
+escaping faces when every c_iA<0. In that case all A odds may diverge,
+λ need not stay below the scale of the leading joining coefficients, and
+neither finite-face adapter above is yet valid. MORSE's source-screen
+survivor emphasizes that mere R0/degree, punishment normality and all
+fifteen positive concrete gaps are jointly consistent. The required next
+step is another actual phase/boundary consumer, not an algebraic claim
+that those source fields contradict each other.

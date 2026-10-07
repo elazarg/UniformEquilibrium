@@ -15,6 +15,14 @@ why a signed-column inverse reduction is insufficient, not an existence
 claim. The separately completed signed-column producer does not supply the
 new root-production step here.
 
+Current independent question: select approximate complete response laws
+for a raw class with constant participant rewards on all joint exits.
+The final section gives an exact four-player table in this class defeating
+all fifteen concrete persistent-base screens and all fourteen universal
+child-debt lifts. This is an internal test of a whole-class shortcut,
+NOT a new UE theorem or claimed uncovered table. In particular there is
+no all-proper stationary root exclusion.
+
 ## Question and status
 
 For an arbitrary Fin4 quitting game, let s_i=r_i({i}) and let Γ have
@@ -977,3 +985,202 @@ claim, actual uncovered fixture, or existence theorem has been established.
 Before pursuing it, the whole class must be tested against the current
 concrete-base and premium-core consumers. This is a different question from
 the retired ST1 schedule and does not modify any frozen result.
+
+## Constant joint-participant rewards: an exact early source test
+
+The raw question is this: for four players with arbitrary singleton levels
+s_i, suppose constants P_i≥s_i satisfy r_i(S)=P_i whenever i∈S and
+|S|≥2, while passive coordinates are arbitrary. Never and live rewards
+are zero; randomization is private and independent; complete behavioral
+deviations are allowed. Can one produce approximate complete response laws
+and one fixed uniform target without a supplied root or cap hypothesis?
+
+The first shortcut, whole-class inclusion in actual concrete persistent-base
+sources, fails even with own levels1, joint-participant levels2 and all
+rewards nonnegative. The complete table below is only a source test.
+
+| S | r(S) |
+|---|---|
+| 0 | (1,4,0,0) |
+| 1 | (4,1,0,0) |
+| 2 | (0,0,1,4) |
+| 3 | (0,0,4,1) |
+| 01 | (2,2,4,0) |
+| 02 | (2,4,2,0) |
+| 03 | (2,0,4,2) |
+| 12 | (0,2,2,4) |
+| 13 | (4,2,0,2) |
+| 23 | (4,0,2,2) |
+| 012 | (2,2,2,4) |
+| 013 | (2,2,4,2) |
+| 023 | (2,4,2,2) |
+| 123 | (4,2,2,2) |
+| I | (2,2,2,2) |
+
+Its Γ is the favorable matching H=3 matrix: favorable entries3 at
+01/10/23/32 and every other off-diagonal entry−1. Pair determinants are
+−9 or−1, triple determinants6 and full determinant45; every column has
+a negative entry. Thus it is R₀. At residual ΓX−1, favorite-pair roots
+have negative inactive residuals, harmful-pair and triple solutions have
+negative coordinates, and the unique root is X=1 with positive determinant.
+It has degree1 and standard Q by the degree declarations already cited
+above. The original no-UE matrix necessities do not dispose of the table.
+
+### All fifteen actual persistent-base screens fail
+
+For each large base E with free set I−E, the COMPLETE free Nash carrier
+is the one pure point below. Gap vectors are base players' Quit-minus-
+Continue differences in increasing base order.
+
+| E | Free quitters | Base gaps |
+|---|---|---|
+| 01 | 3 | (−2,2) |
+| 02 | 3 | (−2,−2) |
+| 03 | 1 | (−2,2) |
+| 12 | 0 | (−2,−2) |
+| 13 | 2 | (2,−2) |
+| 23 | 1 | (2,−2) |
+| 012 | ∅ | (2,−2,−2) |
+| 013 | ∅ | (−2,2,2) |
+| 023 | ∅ | (−2,−2,2) |
+| 123 | ∅ | (2,2,−2) |
+| I | ∅ | (−2,−2,−2,−2) |
+
+For a pair base one free player receives4 from Continue regardless of
+the other action, versus2 from Quit, and therefore strictly Continues.
+The second then has Continue0 versus Quit2, so strictly Quits. For a
+triple base the sole free player strictly Continues because4>2. This
+proves completeness, not only a list of unfavorable selected Nash points.
+
+For singleton anchors use increasing free-player order and hazards x,y,z.
+The exact induced response differences are
+
+    anchor0: (−2+4z(1−y), 2−4(x+z−xz), 2−4xy),
+    anchor1: (−2+4y(1−z), 2−4x, 2−4y),
+    anchor2: (2−4z, 2−4x, −2+4x(1−y)),
+    anchor3: (2−4(y+z−yz), 2−4xz, −2+4y(1−x)).
+
+Their unique Nash points and anchor gaps with empty tail0 are
+
+| Anchor | Free Nash point | Quit-minus-nonempty-Continue | Empty probability |
+|---|---|---|---|
+| 0 | (1,0,1) | −2 | 0 |
+| 1 | (1/2,1/2,0) | −1/4 | 1/4 |
+| 2 | (1/2,0,1/2) | −1/4 | 1/4 |
+| 3 | (0,1,1) | −2 | 0 |
+
+Completeness follows directly. At anchor0, y>0 implies x,z≤1/2; then
+the first difference is strictly negative, so x=0 and the third forces
+z=1, contradiction. Thus y=0,z=x=1. At anchor3, x>0 implies y,z≤1/2;
+the third forces z=0 and the second y=1, contradiction. Thus x=0,y=z=1.
+At anchor1, y<1/2 forces z=1,x=0,y=1, while y>1/2 forces z=0,x=1,y=0.
+Hence y=1/2. Positive z would force x=0 and then y=1, so z=0,x=1/2.
+At anchor2, x<1/2 and x>1/2 similarly contradict the last two response
+conditions. Thus x=1/2; positive y would force z=0,x=1, so y=0,z=1/2.
+
+All passive rewards are nonnegative, so Never guarantees0 and each actual
+punishment value PUN_i≥0. The literal owner-floor excesses are therefore
+2, 1/4+PUN₁/4, 1/4+PUN₂/4 and2, all positive. Smaller free sets cannot
+evade the census: their screened outsiders would extend by Continue to
+a full-free Nash point already listed.
+
+The exact inspected comparisons are
+`quittingPersistentLargeBaseExcess_nonpos_iff`,
+`quittingSingletonBaseOwnerFloorExcess_nonpos_iff`,
+`exists_uniformPayoff_or_persistentLargeBase_pos_gap` and
+`exists_uniformPayoff_or_singletonBase_pos_gap` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`.
+The unrestricted consumers are in the adjacent
+`PersistentBaseNashSemanticAdapter.lean` and
+`SingletonBaseSemanticDispatch.lean`. This example falsifies an inclusion
+into these actual sources, not their soundness.
+
+### Fourteen exact child-debt tests
+
+For each proper nonempty child S, the following pure child equilibrium T
+has zero child debt and Never mass. The omitted k gains2 by joining.
+
+| S | T | k |
+|---|---|---|
+| 0 | 0 | 2 |
+| 1 | 1 | 2 |
+| 2 | 2 | 0 |
+| 3 | 3 | 0 |
+| 01 | 0 | 2 |
+| 02 | 02 | 3 |
+| 03 | 03 | 1 |
+| 12 | 12 | 0 |
+| 13 | 13 | 2 |
+| 23 | 2 | 0 |
+| 012 | 02 | 3 |
+| 013 | 13 | 2 |
+| 023 | 03 | 1 |
+| 123 | 12 | 0 |
+
+For singleton T its member earns1 rather than0 by quitting, and any
+child nonmember receives4 rather than2 by continuing. For nonsingleton T
+each member's relevant passive singleton is0 versus its joining reward2;
+the possible child nonmember receives4 rather than2. These are exact
+terminal equilibria against arbitrary complete child deviations.
+Every fixed nonnegative omitted-regret bound by child debt plus Never
+fails for at least one omitted player for each child. The pointwise J
+row has nonpositive advance/withdrawal terms, including the five restart
+floors bounded by own1, so the five raw withdrawal certificates fail too.
+The inspected definitions are in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinRaw.lean`.
+No assertion excludes every specially selected child continuation.
+
+### Scope and the remaining mechanism question
+
+All pair partitions fail the two-pair cap theorem because joining the
+opposite pair pays2>own1. Every triple contains a favorable pair with
+joining gaps2−4=−2, so it fails the six-positive-pair premise of the
+triple–singleton collision-box theorem under every relabeling. Every
+set of size≥2 is a premium trap; harmful pairs have positive leave gaps,
+excluding support-specific and weighted leaver tests there. Mixed-trap
+charges fail on the positive singleton premium sums of every triple.
+These are bounded comparisons, NOT a complete all-producer exclusion.
+
+No absence of all-proper stationary equilibria is claimed. Such a root
+may solve this particular table without settling the raw completion class.
+The checkpoint only rejects the shortcut from constant joint-participant
+rewards to the exhausted persistent-base or universal child-debt sources.
+There is no new existence theorem, export candidate or positive-gap table.
+
+The next question is whether the upper bound P_i on ALL forced-Quit
+payoffs can be used at a genuine positive global debt minimum to construct
+one complete response-law perturbation lowering total debt. Pure Never
+need not be optimal when the cap exceeds P_i: a finite quit time can
+preserve earlier high passive outcomes while avoiding later low ones.
+The useful input must therefore be the whole stopping-time cap function,
+not just the participant bound or a payoff-only projection. No descent
+lemma or exactification shortcut is asserted.
+
+## Bounded external mechanism lookup
+
+A catalogue skim of [openai/math](https://github.com/openai/math), followed
+by exactly three main-statement/introductory reads, found no direct transfer
+to the current UE selector. This is relevance assessment, not a proof audit
+or a statement about formal verification.
+
+- Family149, [Uniform Permanence, Theorem1.1](https://github.com/openai/math/blob/main/preprints/Uniform-Permanence-in-Weakly-Reversible-Mass-Action-Systems-October-5-2026/permanence.pdf),
+  concerns fixed-positive-rate weakly reversible mass-action systems.
+  Its finite concave affine/log-scale trapping device is the useful
+  brainstorm. A signed strategic flow would first need a genuine inward
+  certificate; neither response cycles nor complementarity roots are
+  automatically reaction networks. Fixed-rate bounds also do not supply
+  uniform bounds over a regularization parameter.
+- Family328, [Nonexpansive Fixed Points, Theorem1.1](https://github.com/openai/math/blob/main/preprints/Fixed-Points-of-Nonexpansive-Maps-in-Reflexive-Banach-Spaces-September-24-2026/paper.pdf),
+  requires a nonexpansive selfmap on a closed bounded convex domain in
+  a reflexive space. No complete-cap-preserving strategy selector with
+  those properties is produced here. Infinite stopping laws naturally
+  use nonreflexive ℓ¹; moving them to ℓ² loses closedness, since uniform
+  laws on the first m dates converge there to the zero vector.
+- Family104, [Stochastic Mean-Payoff, Theorem1.1](https://github.com/openai/math/blob/main/preprints/Turn-Based-Stochastic-Mean-Payoff-Games-in-Deterministic-Quasipolynomial-Time-October-5-2026/stochastic-mean-payoff-games.pdf),
+  is a turn-based two-player zero-sum algorithm. Its reusable comparison
+  argument needs monotonicity and discounted scalar-translation symmetry;
+  these are not known for a simultaneous four-law Nash selector. A
+  fixed-opponent cap computation does not select all opponents.
+
+The research question remains the complete-cap selection/descent question
+above. No new conditional architecture or export is proposed from this skim.
