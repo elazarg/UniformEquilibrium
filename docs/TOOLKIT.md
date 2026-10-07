@@ -383,9 +383,36 @@ discharges those inputs from literal singleton and scheduled-pair equalities,
 positive row scales, three common scalar inequalities and twelve joining caps.
 The selected root in `(1/2,1)` is produced by the canonical cubic-root theorem;
 both phase values lie strictly below every own singleton. Own-singleton signs
-and all unmentioned collisions remain unrestricted. This is the raw scalar
-family, not its full-coordinate neighborhood, quantitative horizon rates or
-complete rational-fixture separation claims.
+and all unmentioned collisions remain unrestricted.
+`GameTheory.BelowSingletonJointPhaseFixture.exact_terminal_and_fixedProfile`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseFixture.lean`)
+supplies the literal fifteen-row table and survival `2/3`, phase vectors,
+active endpoints `19/30`, passive Continue `19/20`, passive Quit `1/3` and
+strict gap `37/60`. Its actual unrestricted four-odds derivative and
+determinant `267486337/26873856` are proved in
+`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseJacobian.lean`.
+`GameTheory.BelowSingletonJointPhaseFixture.exists_reward_supnorm_radius`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseLocalPersistence.lean`)
+gives a positive uniform radius in all sixty raw entries. An actual IFT
+branch retains both-phase below-singleton values and passive Quit gaps,
+without requiring nearby family equalities or joining caps. The same selected
+odds give actual terminal targets, exact terminal Nash and same-profile
+horizon witnesses at both initial phases; thresholds need not be uniform
+over nearby tables. Quantitative rates, second-root selection and the
+fixture's child/debt and source-separation claims remain separate.
+
+`GameTheory.PairedCycle.TwoPairOdds.passiveEquation_eq_scaled_post_sub_continue`
+(`UniformEquilibrium/Quitting/Cycles/TwoPairOddsValues.lean`) identifies the
+literal odds residual with the scaled actual passive Continue deficit for
+arbitrary raw tables and independent positive odds. It imposes no matching,
+Q, singleton-floor or joining-cap conditions.
+`GameTheory.PairedCycle.CrossedMatching.exists_uniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`) supplies
+the raw strict crossed-matching payoff producer; its Q branch produces the
+positive odds and exact fixed profile internally, while its non-Q branch
+uses the existing original-game result. The weak source uses reward closure.
+Signed own-singletons and unmentioned rewards remain unrestricted. Complete
+packet rates, neighborhoods, fixtures and separation claims are not inferred.
 `GameTheory.PairedCycle.exists_one_hazards_all_finiteTruncations_of_rawRegion`
 (`UniformEquilibrium/Quitting/Cycles/PairedCycleFiniteSource.lean`) retains
 that one hazard vector for all initial phases and all positive cycle counts.
@@ -3215,10 +3242,12 @@ generic quitting-game existence theorems.
 
 | Tool | Module | Use |
 | --- | --- | --- |
-| Algebraic boundedization of univalent disk maps | `MathUE/Complex/UnivalentDiskBoundedization.lean` | `Math.ComplexAnalysis.exists_algebraic_boundedization_of_holomorphic_injOn` produces a holomorphic injective nonzero disk-bounded map F and constants a, b, c with c positive and the literal identity g = a + (b + c/F)² on the disk. The omitted value is derived from the actual holomorphic inverse and Liouville, and the square-root branch and omitted ball are constructed internally. This preserves algebra needed for later landing-fiber transport; null landing fibers and boundary extension are not yet supplied. |
+| Algebraic boundedization of univalent disk maps | `MathUE/Complex/UnivalentDiskBoundedization.lean` | `Math.ComplexAnalysis.exists_algebraic_boundedization_of_holomorphic_injOn` produces a holomorphic injective nonzero disk-bounded map F and constants a, b, c with c positive and the literal identity g = a + (b + c/F)² on the disk. The omitted value is derived from the actual holomorphic inverse and Liouville, and the square-root branch and omitted ball are constructed internally. It retains the algebra used by the null-fiber theorem; boundary extension remains separate. |
 | Literal matching inverse family and odds bounds | `MathUE/LinearProgramming/CrossedMatchingPositiveInverse.lean`, `MathUE/LinearProgramming/CrossedMatchingOdds.lean` | `Math.CrossedMatching.hasStrictlyPositiveInverse_variableMatrix_of_standardQ` derives the actual variable-family positive inverse from strict singleton matching signs and standard Q, retaining arbitrary signed passive rewards and premiums above their harmful singleton comparisons. The literal matching graph and positive vector are derived internally; compact nonnegative odds cubes have uniform inverse-entry bounds. `scaled_eigenpoint_sum_lt_bound` bounds scaled eigenpoints with strictly positive odds of the actual raw-data odds map, conditional on their displayed equality, rather than producing an odds root or a matching-game equilibrium. |
-| Normalized direction/radius Brouwer step | `MathUE/Topology/NormalizedRadialFixedPoint.lean` | `Math.exists_fixedPoint_of_normalized_radial_map` produces an actual interior fixed point under explicit compact-convex direction, shell continuity, positive mass, normalized-cone, inner-radius and outer scaled-eigenpoint hypotheses. The literal matching source still needs to discharge these hypotheses and derive its passive endpoint conditions. |
-| Actual global spherical radial frontier limits | `MathUE/Complex/CanonicalComplexSphere.lean`, `MathUE/Complex/HolomorphicRadialLimits.lean`, `MathUE/Complex/HolomorphicRadialFrontier.lean` | `Math.ComplexAnalysis.exists_sphere_radial_frontier_limit_ae` produces a radial sphere limit on the frontier of the actual spherical image for almost every real angle of a holomorphic injective disk map. The canonical sphere and chart, strip-energy argument, endpoint landing and inverse-based exclusion of interior image limits are supplied internally. The pole is allowed. Null landing fibers, crosscuts, Jordan separation, continuous disk-map boundary extension and Sorin Proposition 11 remain separate. |
+| Normalized direction/radius Brouwer step | `MathUE/Topology/NormalizedRadialFixedPoint.lean`, `MathUE/Topology/PositiveCoordinateRadialFixedPoint.lean` | `Math.exists_fixedPoint_of_normalized_radial_map` produces an actual interior fixed point under explicit compact-convex direction, shell continuity, positive mass, normalized-cone, inner-radius and outer scaled-eigenpoint hypotheses. `exists_positive_fixedPoint_of_coordinate_radial_bounds` assembles the finite positive-coordinate cone and inner radius from entrywise field/weight estimates; these remain explicit mathematical inputs to the generic helper. |
+| Actual positive two-pair odds | `MathUE/LinearProgramming/CrossedMatchingPositiveOdds.lean`, `MathUE/LinearProgramming/PositiveInverseTwoPairOdds.lean` | `Math.CrossedMatching.exists_positive_odds_of_matching_standardQ` discharges the radial conditions from literal matching signs, standard Q and scheduled premiums above their singleton comparisons, retaining signed passive increments. `exists_positive_odds_of_positive_inverse` instead uses a zero-diagonal positive-inverse matrix, negative scheduled entries, nonnegative premiums and nonpositive passive increments, without Q or favorite matching signs. Both produce actual positive odds and the original passive equations. The alternate's actual-game adapter remains separate. |
+| Actual global spherical radial frontier limits | `MathUE/Complex/CanonicalComplexSphere.lean`, `MathUE/Complex/HolomorphicRadialLimits.lean`, `MathUE/Complex/HolomorphicRadialFrontier.lean` | `Math.ComplexAnalysis.exists_sphere_radial_frontier_limit_ae` produces a radial sphere limit on the frontier of the actual spherical image for almost every real angle of a holomorphic injective disk map. The canonical sphere and chart, strip-energy argument, endpoint landing and inverse-based exclusion of interior image limits are supplied internally. The pole is allowed. Crosscuts, Jordan separation, continuous disk-map boundary extension and Sorin Proposition 11 remain separate. |
+| Null spherical landing fibers and short-side selection | `MathUE/Complex/HolomorphicRadialLandingFibers.lean`, `MathUE/Complex/HolomorphicShortArc.lean` | `Math.ComplexAnalysis.spherical_radial_fiber_measure_zero` proves null fibers for every fixed sphere target, including the pole, over all real angles and without a fiber-measurability premise. Actual boundedization and radial uniqueness supply the proof. Local small spherical energy, finite-forbidden frontier landing and short radial sides in prescribed bands are derived from the actual map; translated-square energy and injective path gluing are also available. An embedded three-side arc, crosscuts, Jordan separation and boundary extension are not yet produced. |
 | Discrete hazard stopping | `MathUE/Probability/DiscreteHazardStopping.lean` | Survival products, first-hit weights, total stopping mass, and bounded stopped-payoff accounting independent of quitting games. |
 | Independent first-stopping coalition square-root laws | `MathUE/Probability/OverlappingFirstStopping.lean` and `MathUE/Probability/IndependentFirstStoppingPair.lean` | `twoOverlappingFirstStoppingMasses_sqrt_sum_le_one` proves the sharp square-root bound for two overlapping tie-before-third events of three arbitrary complete stopping laws, including positive Never mass. `sqrt_exactFiniteFirstStoppingCoalitionMass_add_sqrt_le_one_of_incomparable` gives the corresponding exact-coalition theorem for any two incomparable intersecting coalitions. Combining it with the disjoint-pair clock yields `sqrt_exactFiniteFirstStoppingPairMass_add_sqrt_le_one`: over any finite player type, every two distinct two-player exact first-stopping coalitions have square-root masses summing to at most one, and hence all fifteen pair projections for four players are covered without a Fin4 case split. Independence is encoded by products of the separately supplied marginal laws. The complete overlapping-event equality classification is in `MathUE/Probability/OverlappingFirstStoppingChronologicalEquality.lean`. Actual-profile adapters and conditional pair-mass consumers are described above. An affine mass-bound producer for an arbitrary reward table is not supplied. |
 | Survival products | `MathUE/SurvivalProduct.lean` | Generic finite-product and cumulative-hazard estimates shared by stopping arguments. |

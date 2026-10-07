@@ -50,22 +50,9 @@ structure RawFamily (reward : Reward) (scale : Fin 4 → ℝ)
     reward ⟨{player, favorite player, other player}, by simp⟩ player ≤
       singleton reward player - (4 * (-premium - 1) / 3) * scale player
 
-private theorem phase_one : fin4Schedule.phase 1 = 1 := by
-  exact fin4Schedule.phase_first 1
-
-private theorem phase_two : fin4Schedule.phase 2 = 0 := by
-  exact fin4Schedule.phase_second 0
-
-private theorem phase_three : fin4Schedule.phase 3 = 1 := by
-  exact fin4Schedule.phase_second 1
-
 private theorem partner_eq_scheduled (player : Fin 4) :
     fin4Schedule.partner player = scheduled player := by
-  fin_cases player
-  · exact fin4Schedule.partner_first 0
-  · exact fin4Schedule.partner_first 1
-  · exact fin4Schedule.partner_second 0
-  · exact fin4Schedule.partner_second 1
+  exact fin4Schedule_partner_eq_scheduled player
 
 private theorem passive_root (q : ℝ) (hq : q ∈ Set.Icc (0 : ℝ) 1)
     (player : Fin 4) :
@@ -73,23 +60,7 @@ private theorem passive_root (q : ℝ) (hq : q ∈ Set.Icc (0 : ℝ) 1)
         (finRotate 2 (fin4Schedule.phase player)) =
       root (favorite player) (other player)
         (quittingHazardCoin q hq.1 hq.2) (quittingHazardCoin q hq.1 hq.2) := by
-  fin_cases player
-  · change cycle fin4Schedule (fun _ => q) (fun _ => hq)
-        (finRotate 2 (fin4Schedule.phase (0 : Fin 4))) = root (1 : Fin 4) 3 _ _
-    rw [fin4Schedule_phase_zero]
-    rfl
-  · change cycle fin4Schedule (fun _ => q) (fun _ => hq)
-        (finRotate 2 (fin4Schedule.phase (1 : Fin 4))) = root (0 : Fin 4) 2 _ _
-    rw [phase_one]
-    rfl
-  · change cycle fin4Schedule (fun _ => q) (fun _ => hq)
-        (finRotate 2 (fin4Schedule.phase (2 : Fin 4))) = root (3 : Fin 4) 1 _ _
-    rw [phase_two]
-    exact root_swap (by decide : (1 : Fin 4) ≠ 3) _ _
-  · change cycle fin4Schedule (fun _ => q) (fun _ => hq)
-        (finRotate 2 (fin4Schedule.phase (3 : Fin 4))) = root (2 : Fin 4) 0 _ _
-    rw [phase_three]
-    exact root_swap (by decide : (0 : Fin 4) ≠ 2) _ _
+  exact fin4Schedule_passive_root (fun _ => q) (fun _ => hq) player
 
 private theorem jointReward_eq {reward : Reward} {scale : Fin 4 → ℝ}
     {favorable premium passive : ℝ} (hraw : RawFamily reward scale favorable premium passive)

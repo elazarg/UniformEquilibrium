@@ -1,4 +1,5 @@
 import MathUE.PairedAffineClearedField
+import MathUE.LinearProgramming.CrossedMatchingMaps
 import UniformEquilibrium.Quitting.Root.PairedProductRoot
 import UniformEquilibrium.Quitting.Cycles.PeriodicCompiler
 
@@ -252,8 +253,6 @@ theorem exists_hazards_of_rawRegion
     schedule.partner_partner (singleton reward) (partnerReward reward schedule)
     (jointReward reward schedule) (quietRows reward schedule) hregion.own
     (quietRows_passive reward schedule hregion) (quietRows_nonempty reward schedule hperiod)
-
-
 /-- Ordered pairs `{0,2}`, `{1,3}`. -/
 def fin4Schedule : Schedule (Fin 4) 2 where
   label := Equiv.ofBijective
@@ -267,5 +266,43 @@ def fin4Schedule : Schedule (Fin 4) 2 where
 @[simp] theorem fin4Schedule_second_one : fin4Schedule.second 1 = 3 := rfl
 @[simp] theorem fin4Schedule_phase_zero : fin4Schedule.phase 0 = 0 := by
   exact fin4Schedule.phase_first 0
+
+theorem fin4Schedule_partner_eq_scheduled (player : Fin 4) :
+    fin4Schedule.partner player = Math.CrossedMatching.scheduled player := by
+  fin_cases player
+  · exact fin4Schedule.partner_first 0
+  · exact fin4Schedule.partner_first 1
+  · exact fin4Schedule.partner_second 0
+  · exact fin4Schedule.partner_second 1
+
+/-- The actual passive root for arbitrary independent hazards on the two pairs. -/
+theorem fin4Schedule_passive_root (q : Fin 4 → ℝ)
+    (hq : ∀ player, q player ∈ Set.Icc (0 : ℝ) 1) (player : Fin 4) :
+    cycle fin4Schedule q hq (finRotate 2 (fin4Schedule.phase player)) =
+      root (Math.CrossedMatching.favorite player) (Math.CrossedMatching.other player)
+        (quittingHazardCoin (q (Math.CrossedMatching.favorite player))
+          (hq _).1 (hq _).2)
+        (quittingHazardCoin (q (Math.CrossedMatching.other player))
+          (hq _).1 (hq _).2) := by
+  fin_cases player
+  · change cycle fin4Schedule q hq (finRotate 2 (fin4Schedule.phase (0 : Fin 4))) =
+      root (1 : Fin 4) 3 _ _
+    rw [fin4Schedule_phase_zero]
+    rfl
+  · change cycle fin4Schedule q hq (finRotate 2 (fin4Schedule.phase (1 : Fin 4))) =
+      root (0 : Fin 4) 2 _ _
+    have hphase : fin4Schedule.phase 1 = 1 := fin4Schedule.phase_first 1
+    rw [hphase]
+    rfl
+  · change cycle fin4Schedule q hq (finRotate 2 (fin4Schedule.phase (2 : Fin 4))) =
+      root (3 : Fin 4) 1 _ _
+    have hphase : fin4Schedule.phase 2 = 0 := fin4Schedule.phase_second 0
+    rw [hphase]
+    exact root_swap (by decide : (1 : Fin 4) ≠ 3) _ _
+  · change cycle fin4Schedule q hq (finRotate 2 (fin4Schedule.phase (3 : Fin 4))) =
+      root (2 : Fin 4) 0 _ _
+    have hphase : fin4Schedule.phase 3 = 1 := fin4Schedule.phase_second 1
+    rw [hphase]
+    exact root_swap (by decide : (0 : Fin 4) ≠ 2) _ _
 
 end GameTheory.PairedCycle

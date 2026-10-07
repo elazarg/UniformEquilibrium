@@ -208,9 +208,8 @@ orthogonal complex-plane frame are supplied by
 frontier of the actual spherical image: the chart embedding and the actual
 holomorphic inverse exclude interior image limits. The pole remains allowed;
 no finite complex-coordinate limit or supplied landing data is assumed.
-This supplies neither null fixed landing fibers nor continuous extension at
-every boundary point. The pole as a sphere point is not a global infinity
-chart or a spherical geodesic-length adapter.
+Continuous extension at every boundary point remains separate. The pole as
+a sphere point is not a global infinity chart or a spherical geodesic-length adapter.
 
 `Math.ComplexAnalysis.exists_algebraic_boundedization_of_holomorphic_injOn`
 (`MathUE/Complex/UnivalentDiskBoundedization.lean`) constructs a holomorphic
@@ -218,9 +217,21 @@ injective, nonzero, disk-bounded map F and constants a, b, c with c positive,
 retaining the literal identity g = a + (b + c/F)² on the disk. The original
 image omits a complex value, by its actual holomorphic inverse and Liouville's theorem;
 the square-root branch and omitted ball are constructed internally. This
-supplies the algebra needed for bounded analytic landing-fiber transport,
-not the null-fiber result itself. That result and the subsequent crosscut and
-Jordan steps remain separate.
+supplies the algebra needed for bounded analytic landing-fiber transport.
+`Math.ComplexAnalysis.spherical_radial_fiber_measure_zero`
+(`MathUE/Complex/HolomorphicRadialLandingFibers.lean`) now proves that every
+fixed spherical landing fiber has zero measure over all real angles, including
+the pole and without assuming the fiber measurable. The retained algebraic
+identity packages finite fibers into a bounded analytic polynomial; radial
+uniqueness excludes positive-measure fibers without assuming convergence of F.
+
+`Math.ComplexAnalysis.exists_short_logarithmic_slice_avoiding`
+(`MathUE/Complex/HolomorphicShortArc.lean`) derives actual short radial sides
+in prescribed bands wider than one quarter of the square's width, with
+frontier landing outside any finite forbidden set. The same file supplies
+local small spherical energy, translated-square energy and injective path
+gluing. It does not yet assemble the embedded three-side arc or nested
+crosscuts. Those constructions and the subsequent Jordan step remain separate.
 
 Nested short crosscuts with distinct landing endpoints and
 Jordan separation remain separate known-proof library obligations. No scoped

@@ -17,7 +17,7 @@ The omitted value is derived from the actual inverse and Liouville's theorem;
 the square root and an omitted ball are produced, not supplied.
 Source: https://legacy-www.math.harvard.edu/archive/118r_spring_05/docs/milnor.pdf
 
-This owner does not yet assert null landing fibers or boundary extension.
+Null landing fibers and boundary extension are separate results.
 -/
 
 public section

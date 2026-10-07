@@ -13,6 +13,15 @@ namespace Math.CrossedMatching
 open LinearProgramming
 open scoped Matrix
 
+def passiveEquation (matrix : Matrix (Fin 4) (Fin 4) ℝ)
+    (premium passive point : Fin 4 → ℝ) (i : Fin 4) : ℝ :=
+  (premium i - matrix i (scheduled i)) * point (scheduled i) *
+      (1 + point (favorite i)) * (1 + point (other i)) -
+    matrix i (favorite i) * point (favorite i) -
+    matrix i (other i) * point (other i) -
+    passive i * point (favorite i) * point (other i) -
+    premium i * point (scheduled i) / (1 + point (scheduled i))
+
 def positiveNumerator (matrix : Matrix (Fin 4) (Fin 4) ℝ)
     (premium passive point : Fin 4 → ℝ) : Fin 4 → ℝ := fun i =>
   (premium i - matrix i (scheduled i)) * point (scheduled i) *

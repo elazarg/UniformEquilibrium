@@ -134,10 +134,11 @@ An existing stationary solution is not a replacement for these conclusions.
 The indexed-family theorem
 `quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family`
 (`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`)
-retains the selected actual profile. Its constant-family specialization can
-expose same-profile horizon witnesses for arbitrary exact terminal Nash,
-without stationarity or absorption assumptions. Several local consumers
-already perform this specialization; a shared facade remains to be extracted.
+retains the selected actual profile. Its checked constant-family facade
+`quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact`
+in the same file exposes same-profile horizon witnesses for arbitrary exact
+terminal Nash, without stationarity or absorption assumptions. The shared
+two-pair compiler and the below-singleton source use this interface.
 
 The complete-law bounds
 `quittingTerminalOutcomeOperationalDistance_le_sum`,
@@ -1080,10 +1081,29 @@ that point. `Math.exists_fixedPoint_of_normalized_radial_map`
 (`MathUE/Topology/NormalizedRadialFixedPoint.lean`) supplies the generic
 normalized direction/radius Brouwer step under explicit compact-convex
 direction, shell continuity, positive mass, normalized-cone, inner and outer hypotheses.
-The raw matching source must still discharge those hypotheses and derive
-the actual positive odds and passive endpoint conditions before invoking
-the shared exact two-pair compiler. Neither dependency is a matching-game
-uniform-payoff theorem.
+`Math.exists_positive_fixedPoint_of_coordinate_radial_bounds`
+(`MathUE/Topology/PositiveCoordinateRadialFixedPoint.lean`) assembles the finite
+positive-coordinate cone and inner radius from explicit entrywise field and
+weight estimates. `Math.CrossedMatching.exists_positive_odds_of_matching_standardQ`
+(`MathUE/LinearProgramming/CrossedMatchingPositiveOdds.lean`) discharges these
+conditions from the actual matching data and returns positive odds satisfying
+the original passive equations. The game source
+`GameTheory.PairedCycle.CrossedMatching.exists_uniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`) uses the
+original-game non-Q alternative or this root to obtain a fixed payoff target.
+Its standard-Q branch also retains exact terminal Nash and the same selected
+profile for every accuracy's horizon witnesses. Literal twelve joining caps
+provide the passive Quit bounds; signed own-singletons and unmentioned
+collisions remain unrestricted. The weak source uses reward closure, not an
+assertion that a single limiting profile satisfies the strict construction.
+
+`Math.CrossedMatching.exists_positive_odds_of_positive_inverse`
+(`MathUE/LinearProgramming/PositiveInverseTwoPairOdds.lean`) supplies a distinct
+odds producer from a zero-diagonal positive-inverse matrix, negative scheduled
+entries, nonnegative premiums and nonpositive passive increments. No favorite
+matching signs or Q hypothesis is inferred. Its actual-game source adapter,
+and both matching packets' quantitative rates, neighborhoods, rational
+fixtures and child/source-separation obligations, remain separate.
 
 ## Below-singleton joint-phase raw producer
 
@@ -1104,15 +1124,29 @@ terminal Nash and retains the same cyclic profile for every accuracy's
 eventual horizon Nash and target delivery. Both phase values are strictly
 below own singletons; their signs and all unmentioned rewards are unrestricted.
 
-The packet remains incomplete: the actual 60-coordinate contraction/implicit
-function neighborhood, explicit geometric finite-horizon rates, the complete
-rational fixture and its child/debt, raw-criterion, matrix, response and
-stationary separations, and the invalid second-root selection remain separate.
-The existing `QuittingRewardTableVariable` coordinate encoding and generic
-implicit-function API can support the neighborhood, but its actual four-odds
-Jacobian must be produced; the existing three-active stationary example is
-not that adapter. The matching packet's inverse and Brouwer route is distinct
-from this scalar IVT route; only the actual two-pair compiler is shared.
+The literal fifteen-row table, selected survival `2/3`, phase vectors, active
+endpoints `19/30`, passive Continue `19/20`, passive Quit `1/3` and gap `37/60`
+are supplied by `active_endpoints`, `passive_continue_eq`, `passive_quit_eq`,
+`passive_gap_eq` and `exact_terminal_and_fixedProfile`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseFixture.lean`).
+`oddsResponse_hasFDerivAt` and `oddsJacobian_det`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseJacobian.lean`)
+derive the actual four independent odds derivative and determinant
+`267486337/26873856`, not an equal-odds or three-active proxy.
+`exists_reward_supnorm_radius`
+(`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseLocalPersistence.lean`)
+produces a positive uniform radius in all sixty raw entries. The actual IFT
+branch retains the strict passive Quit and both-phase singleton gaps; nearby
+tables need no family equalities or supplied joining caps. The selected odds
+give actual terminal values, exact terminal Nash, same-profile horizon
+witnesses and UE for both initial phases, with no common horizon threshold
+claimed across nearby tables.
+
+The packet remains incomplete: explicit geometric finite-horizon rates,
+child/debt, raw-criterion, matrix, response and stationary separations, and
+the invalid second-root selection remain separate. The matching packet's
+inverse and Brouwer route is distinct from this scalar IVT route; the
+source-free `TwoPairOddsValues` identities and actual two-pair compiler are shared.
 
 ## Mixed-sign triple source boundary
 
