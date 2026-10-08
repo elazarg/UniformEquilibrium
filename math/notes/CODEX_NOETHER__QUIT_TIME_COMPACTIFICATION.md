@@ -1,341 +1,72 @@
 # Quit-Time Compactification and Its Singular Boundary
 
-## Current best attempt
+## Current status and exact open consumer
 
-The current common-source frontier is the independently checked
-MORSE Section50/SA1–SA11 plus BROUWER BG1–BG6, not a new export.
-At ONE compatibly selected row-generic debt-rigid positive table,
-EVERY produced minimum has random prescribed outcome, no preactive
-mass, and a finite atomic FIRST active collision. Some owner maximizes
-BOTH there and later, with genuinely distinct PAYOFF kernels on a
-positive opponent-root event; that owner may have zero debt. My
-focused complete checks are saved in the authors' existing feedback.
-The broader all-active head collapse needs NO row-difference genericity.
-Genericity is selected before DR, preserving all93 strict gaps/signs,
-only to turn BG's coalition-kernel distinction into payoff distinction.
+The canonical common-source reduction is
+[`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
+At ONE compatibly selected row-generic debt-rigid positive table, EVERY
+produced minimum has random prescribed outcome, no strictly preactive
+mass, and a finite atomic first active collision. Some owner maximizes
+both there and later, with genuinely different PAYOFF kernels on a
+positive original opponent-root event. The bridging owner may have
+ZERO debt. This is independently reviewed ordinary mathematics, not
+an equilibrium producer or an assertion that distinct clock labels
+always distinguish payoff effects.
 
-PD1–PD4 below is my complete deterministic-outcome contribution,
-now incorporated with attribution in MORSE's independently restated
-and focused-reviewed Section50. The final sign target already makes
-the required W/J gaps nonzero, so PD's extra genericity is unnecessary
-for that consumer. The global root-mass attempt RM1–RM5 at the end
-retains a precise nonlinear-wall obstruction, not a completed consumer.
-No new artifact or export is prepared.
+The live attempt is RM1–RM16 at the end of this notebook. RM1–RM5
+select a genuine compact GLOBAL minimum with maximal root mass and
+identify the nonlinear-wall failure of naïve purification. A sole
+bridger is at its own root rate0 or1. RM6–RM9 prove that if it is the
+ONLY sure root owner, its unreachable tail cap must equal its TRUE
+independent punishment value: a cheaper actual punishment would
+preserve the entire minimum pair while removing the required bridge.
+No prescribed-tail minimization or automatic owner best reply is used.
 
-The older SOURCE/TABLE consumer draft ZH1–ZH4 plus
-TP1–TP5 at the end is retained, unreviewed and superseded in strength
-by Section50's direct non-generic all-active head collapse.
-At one fresh GENERIC debt-rigid
-positive table, ZH reduces a zero-mixture earliest active point
-with MULTIPLE caps to an ORIGINAL pure triple/grand coalition.
-TP's full sign-adapted target preserves all82 contact directions
-and avoids at most five additional typed leave-sum labels; sign
-preservation ensures no new unpriced pure coalition is born.
-It therefore claims to remove EA's entire sure-early exception
-at this newly selected table. Atomic simultaneous-cap walls remain
-open. No old source is retained through the table changes, and no
-frozen export is modified. One combined independent falsification
-of the actual all-active head box and full finite target is requested.
+RM10–RM13 refine that genuine saturated source. Every mixed free root
+coordinate has a nonzero owner-floor derivative, with one COMMON
+strict shadow price between0 and1. This follows from actual global
+minimality and ALL-minimum debt rigidity, not a supplied max-polynomial
+model. A literal one-row membership perturbation then raises the FULL
+debt of every nearby sure-owner law by a derived positive amount, even
+after arbitrary joint changes of its free root rates and tail. The
+comparison is local to the actual sole-bridge sure geometry; the final
+canonical table is not silently promoted to an absolute worst table,
+and new minima are not silently carried through the perturbation.
 
-I independently accepted BROUWER's HR1–HR6 all-unique source exclusion
-and completed the separate 1636-line WHOLE-artifact mathematical gate
-in standalone owned feedback: ordinary PASS, with a tracked-reference
-hold for the redundant external TerminalDebtSumInf citation. That
-result uses head-only exact positive affine cap transport and all-family
-debt rigidity, not generic row differences. The stronger SA+BG common
-source has a genuine root/later kernel wall, not only two test labels.
+RM14–RM15 treat the distinct unsupported sole bridge at root rate0.
+At maximal root mass its mixed-coordinate floor price is also strictly
+between0 and1: the checked UNIVERSAL finite-prefix bridge theorem
+excludes the apparent zero-price, zero-debt flat side.
+Installing that owner's genuine root best reply has strictly positive
+aggregate external debt cost, even at zero own debt. These are new
+complete ordinary proof drafts awaiting focused falsification.
 
-The newest finite-amplitude consumer is SQ1–SQ6 at the end, accepted
-in CODEX_BROUWER's focused independent feedback: in SC's
-actual sure-triple cap wall, ONE owner may carry the entire earlier
-head, provided an ACTUAL empty tester lies after that entire head and
-before the sure deadline. Spreading that one head preserves every
-prescribed outcome and has a derived unrestricted-cap upper bound.
-It produces an atomless single-head actual minimum; EA and the priced
-SC pair corner then contradict it. This supplied SUBGEOMETRY exclusion
-is ordinary mathematics with a focused PASS, not an assertion
-that SC produces the single-head/empty-test hypotheses exhaustively.
-SQ6 gives complete finite raw data falsifying the same upper-cap bound
-when the empty tester is absent. Overlapping heads remain open.
+RM16 now covers the unsupported bridge when ANOTHER owner is sure:
+true-punishment canonicalization of that screening owner supplies an
+ALL-tail price as well. Consequently every c=0 sole-bridge geometry
+has a derived positive local one-row table price. The complementary
+c>0 whole-tail problem remains unpriced; multiple bridges and global
+owner/source switching still prevent a full consumer.
 
-The newest whole-source attempt is SC1–SC9 at the end, independently
-accepted in CODEX_BROUWER's focused feedback (not an artifact gate).
-A fresh hierarchical table comparison forces the all-unique/all-isolated/
-some-supported branch into one pure sure-triple geometry with exactly
-two supported caps. Removing old heads before the common cap either
-produces an ACTUAL lower-cap wall or a normalized first-law minimum;
-the latter is contradicted by the already priced pair corner. Thus this
-branch yields an actual earlier ATOMIC lower/upper cap tie, with distinct
-coalition kernels, not an outcome-equivalent c/Never endpoint tie.
-The simultaneous multiple-cap source is not yet consumed. This draft
-is separate from the frozen independently reviewed source packet.
+Status of RM10–RM16: COMPLETE ORDINARY PROOF DRAFTS, not independently
+reviewed, not Lean-checked, and not exported. Their necessary conditions
+and local table prices do not assert that the GLOBAL infimum rises.
 
-The full-cap SOURCE restriction SLC1–SLC12 is retained below.
-At a produced marked positive global minimum with four unique cap
-maximizers, either an EARLIEST maximizing owner has zero own point mass,
-or three supported caps share one finite date and the sole later-cap
-owner is sure by that date: exactly BROUWER's LC geometry. Later
-supported and zero-own-mass caps can be interleaved in the premise.
-Joint signed conditional-old-tail reweighting positively rescales ALL
-later response functions, even at nonisolated maximizers, and preserves
-the actual original finite tests. The earlier separated-zero-own-mass
-group theorem is now a corollary of this stronger classification.
-CODEX_BROUWER independently falsified and accepted SLC1–SLC12; I have
-consolidated the duplicate proof without changing its accepted scope.
-This is ordinary mathematics, not a Lean check, endpoint Nash claim or
-full Fin4 consumer. Its subsequent fresh-table combination with EA is
-now frozen in `../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`;
-the older claim by itself does not consume earliest zero-own-mass caps,
-all four unsupported caps, or multiple maximizers.
+The remaining consumer must EXIT or jointly control that saturated
+sure family, account for a zero-root-mass bridging owner or several
+sure roots, and retain ALL unrestricted observer caps. A worst-table
+comparison would need to handle EVERY selected minimum, including
+owner switching, unsupported bridges, and newly active response branches.
+No full Fin4 contradiction or new export is claimed.
 
-A new actual SOURCE CONSUMER at the end, CC1–CC8, excludes one part
-of that earliest-zero branch: all four caps cannot have the SAME
-unique maximizing point with ZERO MIXTURE MASS there. Unlike an
-endpoint-only identity, its conditional-old-tail limit has a derived
-GLOBAL upper cap: every cap is exactly its singleton reward. The
-constant selected debt is consequently actual debt at that limit,
-contradicting the checked positive-minimum singleton margin. This
-argument is ordinary mathematics independently accepted by CODEX_BROUWER
-in the existing feedback for this notebook, not a Lean check or export.
-Four distinct unsupported caps and supported/unsupported common-date
-joins are not covered.
+The body retains the independently reviewed compact/source reductions,
+the PD deterministic-outcome contribution incorporated with attribution
+in the canonical packet, the honest SQ supplied-subgeometry exclusion,
+and exact failed implications. Older route proofs and counterexamples
+are retained as mathematics, not as a competing current frontier.
 
-JC1–JC5 now gives the exact complementary common-cap positive-atom
-identity: δ=Σ_(z∉A)[r_z(A∪{z})−r_z(A)], where A is the nonempty
-proper set of owners with positive own mass at that common cap.
-Its joint signed conditional transport is complete; its distant
-endpoint is explicitly only a selected-response evaluation. A single
-fresh worst-table perturbation avoids this finite join spectrum and
-LC's withdrawal spectrum together. The whole-source/table comparison
-is now in the frozen packet just cited; no old source is carried through
-the fresh-table selection.
-JC1–JC4 has passed independent checks by CODEX_BROUWER and CODEX_MORSE.
-SIC1–SIC6 and FP1–FP5 have passed MORSE's independent focused check.
-FP's original strictly-earliest NONISOLATED three-supported arm has
-since been eliminated by the independently checked EA argument. The
-frozen whole-source reduction includes that strengthening: its produced
-minimum has multiple complete maximizing POINTS, or all maxima are
-unique and its earliest maximizing point is an isolated positive-mixture
-atom with a zero-own-mass maximizing owner and at least TWO unsupported
-owners overall. It uses Ω≤4/5<1 and selects fresh actual minimizing
-sequences. Distinct maximizing points need not be distinct behavioral
-effects; the unrestricted multiple-cap and multiple-unsupported branches
-remain open. The stronger SC comparison is a separate internally reviewed
-attempt, not part of that frozen packet; no auxiliary export is made.
-
-The broad original-stage restriction has a canonical stronger proof in
-`../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`: a positive
-global debt gap in Fin4 forces a macroscopic early ORIGINAL nonsingleton
-stage in every sufficiently near-minimal actual profile, without a Never
-floor. The same scope extends to finite cardinality with nonnegative owns.
-It is independently reviewed ordinary mathematics, not a UE producer.
-The frozen earlier stage proof and distinct cutoff/punishment reductions
-remain below without modification.
-
-The new atomic-row attempt below gives two exact restrictions, not an
-equilibrium producer. At a nonsure first row, some initial Quit response
-must attain a complete cap. Moving any positive portion of one player's
-first atom to a fresh earlier SOLO date costs at least that portion times
-the strict quadratic margin, even at finite amplitude. Thus unilateral
-earlier fragmentation cannot consume the genuine minimum; a successful
-move must retain a collision or change opponents simultaneously.
-The ordered small-head estimate closes the simultaneous perturbative
-version too. A finite hazard-decrease reduction reaches a tied first-row
-cap in the nonsure branch, preserving all conditional tails and Never
-masses. Sure hazards instead reduce to the exact finite punishment-floor
-objective (A11); two sure hazards give an actual finite-profile minimum.
-These new reductions are internal ordinary proofs, not independently
-reviewed or exported. A pure-pair minimum with punishment-normal members
-and strictly negative outsider joining gaps is now contradicted by an
-actual full-cap debt decrease; it must expose an outside paid join or
-inactive cap tie. General tied caps and sure-owner floors remain open.
-
-A new independent global mechanism is recorded at the end under “Quadratic
-triple incompatibility and a raw strict-payoff consumer”. Coordinate
-exchange between two independent complete clock profiles proves the SHARP
-bound t_a t_b≤e²/4 for distinct proper triples, where e is the total
-finite nontriple first-coalition probability. This yields a complete finite
-coefficient certificate for an implemented raw UE class, including an
-explicit cyclic table with no deterministic terminal Nash profile and no
-nonnegative weighted outcome-floor certificate. The proof produces a
-uniform actual singleton-payoff deficit and invokes an existing unrestricted
-consumer; it does not assume a minimizing conditional tail or stay in the
-sure-root family. CODEX_BROUWER and CODEX_MORSE independently accepted the
-inequality and deficit calculation. MORSE identified decisive existing
-source overlap: TC6's singleton columns ALONE already imply UE by the
-ambient-Q positive-simplex theorem. The raw UE certificate is therefore
-RETIRED as new coverage. The sharp whole-clock constraint is retained,
-but it must interact with complete caps to reach the genuine hard source.
-No export or arbitrary Fin4 conclusion is claimed.
-
-The finite-amplitude test below now gives an exact warning at the remaining
-one-sure branch. A canonical punishment-normal Fin4 table has minimum sum
-debt EIGHT over EVERY actual profile whose first row contains a sure quitter,
-with arbitrary later tails and arbitrary reselection of the sure owner. One
-of these restricted minimizers satisfies all numerical quadratic singleton
-margins with that value, but its true global debt infimum is at most ONE.
-Thus the finite objective's global minimization and those numerical margins
-alone cannot supply a consumer that stays inside the sure-root family.
-The full arbitrary-profile lower bound is essential. This is an exact
-finite-amplitude falsifier of a consuming mechanism, not a positive-gap
-counterexample or an export.
-
-The current source-consumer candidate combines actual prefix erasure with
-Section73's punishment canonicalization. At an actual positive global
-minimum, a unique earliest zero-Never owner with nonnegative own reward
-cannot have a completely nonatomic finite prefix up to its endpoint.
-This includes binding Never and finite caps; other clocks may have atoms
-after that endpoint. The proof has an independent ordinary-mathematical
-PASS, not a Lean check or UE theorem. Shared diffuse earliest owners,
-earlier atoms, and signed-negative cutoff owners remain open here.
-Section73 also retains its distinct strict-Never-buffer social-max
-dispatch for shared earliest endpoints.
-
-A separate complete candidate now treats TWO shared earliest owners:
-at a nonnegative-own actual positive minimum with an atomless initial
-calendar, their two mutual singleton advantages must be EXACTLY equal
-to the global sum-debt minimum. This gives a finite raw hyperplane
-guardrail and a generic reduction to at least three shared earliest
-owners. It is ordinary mathematics awaiting independent review, not
-another equilibrium interface or a claim that the atomic case is solved.
-
-**Exact reviewable claim.**  In the canonical exact Nash--Bellman tail,
-Propositions 64--67 identify moving-source radial drift, compress zero rows,
-and remove punishment-tight clock expansion.  Independently reviewed
-Proposition 68 (Section 58.13) proves that a collapsing next-record clock is
-either negligible-tail or carries a literal source-matched diffuse block.
-Proposition 69 sharpens this to an extended future-charge ratio: zero gives
-the old-support identity, a finite positive limit gives a finite normalized
-diffuse segment, and infinity gives nested exact diffuse prefixes of every
-prescribed normalized charge horizon.  Proposition 70 compactifies the
-infinite arm to an exact differential-complementarity trajectory on a
-production-normal principal face.  Proposition 71 uses the full centered
-payoff motion to show that finite normalized variation would produce a full
-homogeneous LCP witness; residual-hard counterexample data therefore force
-unbounded normalized full-payoff variation.  Propositions 72--73 strengthen
-this to uniform ballistic escape.  Proposition 74 compactifies first exits
-into a unit arc whose endpoint either strictly descends the active face or
-escapes entirely through inactive ambient coordinates.  Proposition 75 gives
-exact floor-admissible examples with both signs of that cross-face drift.
-Proposition 76 replaces the false coordinatewise sign by one fixed strict
-linear Lyapunov coordinate for the entire old-face radial motion.
-Proposition 77 turns that separator into a quantitative cross-face mass
-requirement for every diffuse near-return.  Proposition 78 gives the exact
-pure-time and Never prices of the positive-survival phantom boundary.  Its
-reviewed semantic continuation shows that the unrestricted exploitability of
-late suffixes converges exactly to the positive part of the own-solo vector.
-On the distinct global recurrence route, Proposition 79 proves that bounded
-transient charge always has an exact state-local bounded bias, and gives a
-compact predecessor-serial example where no continuous exact bias exists.
-Proposition 80 shows that unbounded sublinear maximal prefix charge need not
-belong to any one divergent path, even under the same compactness and
-seriality hypotheses.  Proposition 81 strengthens this obstruction to a
-finite-dimensional compact semialgebraic relation with polynomial charge.
-Proposition 82 further makes every charged edge move by at least its charge,
-showing that normalized one-edge coercivity alone does not close the branch.
-The decisive game-semantic correction is Proposition 83: the checked finite-
-prefix compiler already turns **any** unbounded family of actual floor-prefix
-charges into a uniform payoff, so a counterexample has one global finite
-charge bound on every such prefix.  Proposition 84 then gives the exact
-bounded-capacity/debt dichotomy: the debt-minus-capacity mismatch is monotone,
-so its limiting sign either makes the capacity account dominate exact debt at
-every finite date or selects a positive-own-solo coordinate.  It also proves
-that constant initial reanchoring cannot supply the missing terminal boundary
-comparison unless the mismatch has no growth at all.
-Proposition 85 removes the separate magnitude gate from the resulting
-incoming-edge search: any physical zero-target frozen-root lift whose active
-support contains all positive-solo players automatically has enough literal
-absorption charge to fund the full terminal singleton debt at the existing
-`card * rewardBound` scale.
-Proposition 86 shows that this support condition is not a universal producer:
-on the exact residual-hard Solan--Vieille boundary table every player has
-positive solo reward, but no floor-admissible zero-target root can mix all
-four players.  The obstruction is exactly the punishment floor, not the raw
-product equations; after dropping that floor there is an explicit symmetric
-full-support root.  The already checked period-two equilibrium therefore
-identifies the indispensable replacement as moving-payoff recurrence.
-Proposition 87 isolates the exact general combinatorics behind that failure:
-with nonnegative floor and opponent-only rewards, an active positive-solo
-owner needs a negative joined coalition whose entire opponent-only down-set
-is zero.  This clean-negative hyperedge condition is sharp, and its failure
-proves that several frozen zero-target roots cannot replace target motion.
-Proposition 88 gives the exact replacement ledger: on any returned exact
-Nash--Bellman block, opponent-only deficits and excesses relative to the
-moving current target balance after division by deleted-player survival.
-On the Solan--Vieille block the odd phase's deficit is repaid exactly by the
-even phase's high-partner excess while every reached value remains above the
-floor.
-Independently reviewed Proposition 89 connects this ledger route to the checked payoff-near-return
-consumer.  The residual-hard singleton-face separator remains strictly
-monotone on every local collision-light admissible path.  Hence any fixed-
-charge payoff near-return must make a nonlocal payoff excursion, activate an
-owner outside the tight face, or carry a fixed conditional collision fraction
-at some row.  The checked global prefix-capacity bound upgrades the last arm
-to one exact row with fixed absolute absorption and collision mass.
-Proposition 90 then shows that any such row with actual terminal-semantic
-root--tail provenance must make a fixed excursion above the positive minimum
-semantic-debt fiber.  Thus the collision escape cannot be supplied by a local
-minimum-fiber reset: it must move the semantic tail or abandon literal source
-provenance.
-Proposition 91 (Section 71) strengthens this from one row to a whole exact
-path.  One carrier lift at the relation source propagates canonically through
-every displayed Bellman root, and the total collision mass of the path is
-paid by the resulting decrease of total semantic debt.  Combining this
-telescope with Proposition 89 forces a fixed semantic-debt excursion already
-at the source of every local-face payoff near-return.
-Independently reviewed Proposition 92 (Section 72) attacks the distinct one-sided artificial-seam
-route.  A bounded candidate cap can repeatedly drop favorably at block seams
-only if exact Bellman motion inside the blocks replenishes it.  The total
-replenishment is bounded by opponent absorption.  Hence divergent favorable
-cap drops with summable reverse violations force a divergent marginal hazard
-for one fixed opponent.  If the cap owner is already a persistent mover, the
-two-label clock requirement follows automatically.  This is a conditional
-producer reduction; actual atom/reset data have not yet been
-oriented to supply the divergent favorable drops.  Corollary 93 gives the
-exact alignment repair when the existing stream is a distinct mover: the cap
-pump must diverge even after subtracting the mover's own hazard budget, which
-then forces a genuinely new third-coordinate label.
-
-**Honest status and gap.**  Propositions 69--91 are independently reviewed
-ordinary mathematics.
-Proposition 92 and Corollary 93 are independently reviewed ordinary
-mathematics.
-Proposition 94 is also independently reviewed ordinary mathematics; it is an
-exact boundary example showing that the known-mover subtraction in Corollary
-93 is necessary.
-Proposition 83 is an ordinary adapter between named checked declarations,
-not a new Lean theorem or a novel producer.  All radial motion is
-divided by a vanishing record charge.  Local Nash/floor data do not sign the
-remaining cross-face endpoint, which still has no finite-scale return or
-common Simon carrier.  On the forced positive-survival tail, the remaining
-error is not asymptotically small: outside the checked zero-solo branch, it is
-a fixed positive own-solo deviation that an attachment must pay.  On the
-ergodic route, the exact surviving question is whether quitting-game geometry
-turns the checked bounded predecessor capacity into a terminal semantic
-contradiction or an executable returned path; no unbounded-charge case remains.
-On the collision route, Proposition 91 shows that source semantic provenance
-is enough for the entire exact path, but no current producer couples the paid
-high-debt source to a local-face payoff return.
-On the one-sided seam route, Propositions 92--94 isolate the exact remaining
-clock alignment issue.  Favorable cap replenishment yields an opponent stream,
-but an observer's stream may be entirely the already persistent mover.  The
-actual atom/reset source must therefore produce either a pump in the mover's
-own cap coordinate, the unbounded excess `(N273)` after subtracting mover
-hazard, or a second label directly from a non-singleton atom/finite observer
-response.  A positive observer-cap drop without this alignment is now
-rigorously insufficient.
-
-**Named sections to check.**  Sections 69--72 contain the current collision
-escape, one-row semantic-lift obstruction, and aggregate semantic path
-telescope, followed by the one-sided cap-drop/two-label adapter.  Section
-58.13 and Sections 59--61 contain the diffuse boundary from which the strict
-separator is obtained.
-
-**Sections to check.**  Sections 58.9--70, especially Propositions 64--90;
-the frozen projective-Q-bar decoder is in Sections 56--57.
-
-Author: `CODEX_NOETHER`
-Status: `PROOF_DRAFT`
+Author: CODEX_NOETHER.
+Status: ordinary research; full finite-quitting conjecture OPEN.
 
 ## Conjecture-closing thesis and kill criterion
 
@@ -17104,8 +16835,9 @@ without assuming cap stability at all its simultaneous active kernels.
 
 ## Global maximal root-mass selection: a real max-wall blocks naïve purification
 
-Status: COMPLETE ORDINARY ATTEMPT RM1–RM5, not a new UE/source-class
-consumer. The compact selection is genuinely GLOBAL and keeps every
+Status: COMPLETE ORDINARY ATTEMPT RM1–RM9, followed by a new complete
+ordinary proof drafts RM10–RM16 awaiting focused falsification. No new
+UE/source-class consumer is claimed. The compact selection is genuinely GLOBAL and keeps every
 full cap. Its proposed purification fails at a nonlinear active wall;
 the precise failed inference and strongest local consequence are saved.
 This is not a new prescribed-tail minimization assumption. It begins
@@ -17280,3 +17012,526 @@ wall. Neither a fixed-response endpoint nor ambient multiaffinity
 supplies that upper price. The actual source still has the checked
 SA random first collision and BG distinct-kernel bridge; neither is
 weakened to a supplied tail minimum to make the wall easier.
+
+### RM6. A sole SURE root bridger has a genuinely saturated true punishment
+
+This is a proved ordinary refinement using BG's ALL-minimum conclusion,
+not just the polynomial model. At the selected compatible table, let
+ANY minimum root-prefix representation have exactly one bridging owner
+i, with p_i=1 and h_i=∏_(j≠i)(1−p_j)>0. Thus i is the ONLY sure root
+owner. Write its tie as
+
+    Q_i=A_i+h_i b_i=B_i=U_i,       d_i=0.
+
+The actual tail carrier coordinate obeys b_i≥P_i, where P_i is the
+TRUE unrestricted independent punishment infimum at THIS table. If
+b_i>P_i, choose an actual independent punishment w_-i with cap_i(w)
+strictly below b_i. Keep every player's root probability unchanged;
+behind the root prescribe w_-i, and choose any owner-i continuation.
+The i continuation is irrelevant since it is sure at the root.
+
+EVERY prescribed payoff is unchanged because at least i absorbs at
+the root. Every non-i cap is unchanged because i is a sure opponent:
+its root response has the same join value, and ALL later replies and
+Never have the same passive root-absorption value. These are exact
+equalities, not vanishing-leak estimates. The new i cap is
+
+    max(Q_i,A_i+h_i cap_i(w))=Q_i,
+
+but its ENTIRE later envelope is now STRICTLY below Q_i. Thus the
+whole new semantic pair is exactly the old minimum pair. This is an
+ACTUAL executable root/punishment profile even if the old tail pair
+was only in the closure. The prescribed root outcome is unchanged
+and random by SA. No owner now bridges root to later: i's tie was
+removed, and every other numerical root/later strict gap was unchanged.
+Applying BG to this actual new minimum contradicts that randomness.
+
+Consequently the surviving ONLY-sure, sole-bridge geometry satisfies
+the exact actual floor
+
+    b_i=P_i=(Q_i−A_i)/h_i≤s_i.                       (RM6)
+
+The proof controls ALL cap branches on the same actual law and uses
+normality freshly at the final table. It does NOT claim an attained
+punishment law, debt decrease, or a selected child Nash. Only when the
+old b_i is strictly greater than P_i does a strictly cheaper actual
+punishment exist. At equality ε-punishments need not put the later
+envelope strictly below Q_i.
+
+The two other boundaries remain separate. If another root owner is
+sure, h_i=0 and no punishment graft changes the continuation branch.
+If the only bridger has p_i=0, it is NOT a screening opponent, so
+opponent-tail grafts can change prescribed payoffs and other full caps.
+Neither case is covered by this argument.
+
+### RM7. The abstract AM–GM toy cannot have its naïve actual sure-root realization
+
+The RM4 polynomial alone remains a valid algebraic countertest, but
+its most direct quitting interpretation is incompatible with true
+same-table normality. Suppose it were realized on a sure-owner face
+i, with each other player's literal full root regret exactly
+
+    d_j(p)=κ_j p_j, κ_j>0,
+
+for EVERY tuple of the other three independent root rates. If this
+comes from a CONSTANT positive leaving cost against every coalition
+containing i, then in particular
+
+    r_j({i,j})−r_j({i})=−κ_j<0, j≠i.             (RM7)
+
+Equivalently, comparing the multiaffine regret identity at all other
+optional rates zero gives this singleton-root comparison. It cannot
+be discarded when assigning the proposed finite table.
+
+At a same-table normal owner i, ANY reward table satisfying all the
+weak outsider inequalities r_j({i,j})≤r_j({i}) already has Δ=0.
+For ε>0 choose an actual independent opponent punishment w_-i with
+cap_i(w)≤P_i+ε≤s_i+ε. Let i quit surely at integer date0; every
+other owner continues at0 and uses w_j after that date. Its actual
+prescribed outcome is the singleton {i}.
+
+For each j≠i, EVERY finite reply after0 and Never sees i's sure
+singleton and pays r_j({i}); the only other pure test, date0, pays
+r_j({i,j})≤r_j({i}). Hence B_j=U_j=r_j({i}) exactly. For i,
+the complete cap is max(s_i,cap_i(w)), while U_i=s_i, so its debt
+is at most ε. Thus the WHOLE actual debt is at most ε. Taking
+ε→0 proves Δ=0 and hence UE through the tracked terminal bridge.
+
+This literal singleton/punishment construction is already the familiar
+true-floor singleton consumer, not claimed new raw UE coverage.
+Its use here is to falsify the FULL raw realization of the RM4 constant
+free-debt fields, not merely a selected polynomial coefficient. The
+toy must retain its algebraic status: a genuine surviving floor wall
+requires context-dependent joining comparisons, with at least one
+positive outsider join at the owner's singleton. Imposing constant
+positive leaving costs on ALL contexts would solve the game instead.
+
+### RM8. Updated boundary after the global punishment test
+
+At the globally maximal root-mass minimum, a sole bridging owner is
+at root rate0 or1. For rate1 with no second sure owner, its original
+conditional scalar cap is forced to its TRUE punishment infimum by
+the exact payoff-preserving graft and BG, not supplied as a field.
+The elementary constant-free-cost realization of the nonlinear wall
+is impossible by the literal singleton punishment equilibrium.
+
+The honest unresolved cases are: a zero-root-rate bridger; a bridger
+sharing a sure root with someone else; or the single-sure saturated
+true-punishment wall whose optional joining incentives DEPEND on the
+other root draws. The last case is a joint strategic floor/free-regret
+tradeoff, not the abstract AM–GM field itself. An actual consumer must
+leave that sure-root family or globally control the same tail's free
+caps. No automatic owner best reply or child Nash punishment is inserted.
+
+### RM9. Exact stationary punishment characterization, not an optimal old row
+
+Narrow source lookup after RM6 inspected the definitions and declaration
+`quittingPunishmentValue_eq_stationaryPunishmentValue` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`, under its imports,
+and the exact `quittingStationaryUnilateralCap_eq_max_div` in that file.
+They supply, for arbitrary finite signed tables,
+
+    P_i=inf_(independent constant opponent hazards y)
+          max(Q_i(y), A_i(y)/(1−h_i(y))).           (RM9)
+
+At the all-Continue row the division convention produces0 and the
+cap is max(s_i,0). Against every constant row this is its ACTUAL
+unrestricted response cap, not a nominal continuation row value.
+The lower leg of the named theorem excludes arbitrary nonstationary
+plans punishing below the infimum. No attainment is claimed. Thus
+actual ε-stationary punishments can be used behind the sure root,
+and finite/Never truncation still supplies finite witnesses.
+
+This characterization DOES NOT make the ORIGINAL root row optimal
+punishment. In the surviving RM6 geometry let h=h_i>0. SA supplies
+another positive root supplier, so h<1. Its own prescribed payoff
+Q_i=B_i exceeds s_i by the checked prescribed margin, and P_i≤s_i.
+Since Q_i=A_i+hP_i, the passive absorption average of its ORIGINAL
+opponent root row satisfies
+
+    A_i/(1−h)=P_i+(Q_i−P_i)/(1−h)>Q_i>s_i≥P_i.    (RM10)
+
+Both the stationary Quit branch Q_i and the stationary Continue
+branch of that original row are therefore strictly above P_i.
+Repeating that row is not an optimal punishment and is not a
+cap-preserving continuation. This is an actual comparison using
+the same original rates, not a scalar analogy or an old-table floor.
+
+The independent opponent row attaining or approximating (RM9) must
+instead be selected jointly with the released owner's prescribed law
+if the root is relaxed. Optimality for i alone does not bound the
+three opponents' new FULL caps. While i remains sure their future
+plans are screened, but that exact screening disappears on its
+Continue branch. The missing finite-amplitude global comparison is
+therefore explicit: the owner has a true stationary min-max floor,
+its original opponent row lies strictly above it, and no observer
+tail-debt bound follows from either statement.
+
+### RM10. The true sure-family objective is globally bounded, not a tail minimum
+
+Fix the SAME compatible table and an actual carrier minimum represented
+by a literal first-root prefix. Suppose i is SURE at the root and its
+ONLY numerical root/later bridger. Other sure owners are permitted.
+Write p for the three other root rates. Their independent root coalition
+is S. Define
+
+    Q(p)=E[r_i(S∪{i})], A(p)=E[1_(S≠∅)r_i(S)],
+    h(p)=Pr(S=∅)=∏_(j≠i)(1−p_j),
+    g(p)=A(p)+h(p)P_i−Q(p).
+
+For j≠i, let Q_j^+(p) and A_j^+(p) be its root Quit and Continue
+payoffs against the sure opponent i and the other two optional root
+draws. Then Δ_j(p)=Q_j^+(p)−A_j^+(p) does not depend on p_j, and
+
+    R_j(p)=max(Δ_j(p),0)−p_jΔ_j(p), R(p)=Σ_(j≠i)R_j(p),
+    F(p)=R(p)+max(g(p),0).                            (RM11)
+
+These are FULL free-player debts: i screens EVERY later response and
+Never into A_j^+. The owner continuation is irrelevant to prescribed
+payoffs. Every actual tail has cap_i≥P_i, so the infimum of FULL debt
+over all tails behind these root rates is exactly F(p). The reverse
+inequality uses actual ε-punishments and an arbitrary owner continuation;
+their debt tends to F(p). Consequently F(p)≥δ for EVERY p∈[0,1]³.
+The resulting payoff/cap pair is in the ORIGINAL carrier by closure,
+even if P_i is not attained by an actual punishment.
+
+At the source p⁰, g(p⁰)=0 and F(p⁰)=δ: if i is the only sure owner,
+RM6 gives b_i=P_i; if there is another sure owner, h(p⁰)=0 and the
+root/later tie is simply Q=A, independent of all tails. At ANY other rate
+with F(p)=δ the same actual-punishment limit produces a true GLOBAL
+minimum, not an optimum of a supplied tail. ALL-minimum debt rigidity
+therefore fixes its individual coordinates:
+
+    max(g(p),0)=d_i*=0, R_j(p)=d_j*.                 (RM12)
+
+Because i is the sole bridger, every Δ_j(p⁰) is NONZERO. In a small
+rate neighborhood these signs remain strict, so R_j and R are genuine
+multiaffine polynomials selected from the ACTUAL full caps. All later
+test aliases remain represented by A_j^+; no unique-point premise is
+imposed on those passive test families.
+
+Randomness guarantees at least one mixed free rate p_j⁰∈(0,1).
+Otherwise all rates are bits and a nonempty sure root coalition is
+the forbidden deterministic prescribed outcome.
+
+### RM11. A derived strict common price at every mixed free coordinate
+
+For ANY mixed free j define at p⁰
+
+    a_j=∂R/∂p_j, b_j=∂g/∂p_j.
+
+Then b_j≠0, and there is ONE number κ∈(0,1), common to ALL mixed
+free coordinates, such that
+
+    a_j=−κ b_j.                                    (RM13)
+
+Proof of b_j≠0: vary ONLY p_j on its legal two-sided interval, retaining
+the strict free cap branches. Both R and g are affine in that variable.
+If b_j=0 then g stays0; interior global minimality makes R constant.
+Every point of the interval is thus a true minimum. But its j debt has
+the nonzero slope −Δ_j(p⁰), contradicting (RM12).
+
+For b_j≠0, the exact one-variable objective is the maximum of two
+affine functions, R and R+g. Its minimum at the crossing gives
+κ_j=−a_j/b_j∈[0,1]. The endpoint κ_j=0 makes the g<0 side a flat
+minimum interval; R_j varies there with slope −Δ_j≠0, again violating
+rigidity. The endpoint κ_j=1 makes the g>0 side a flat minimum interval,
+whose owner debt g is positive, contrary to d_i*=0. Hence 0<κ_j<1.
+
+For several mixed coordinates, let a and b be their gradient vectors.
+Every tangent direction v with b·v=0 is legal both ways. The directional
+minimum condition for R+max(g,0) forces a·v=0. Thus a is proportional
+to b; the one-coordinate signs identify the SAME κ for every mixed j.
+This uses only first-order tangent tests to establish the common price;
+it does NOT treat the nonlinear zero set g=0 as a product neighborhood.
+No relation is claimed for a free coordinate at the boundary p_j=0.
+
+This is a strict necessary condition at a genuine GLOBAL minimum with
+common debt rigidity. It excludes zero floor gradients and either flat
+side in ANY mixed coordinate of a SURE sole-bridge geometry.
+The price is derived, not supplied as a new certificate field. It does
+not itself make a same-table release decrease the three observer debts.
+
+### RM12. Finite one-row price controlling ALL nearby sure-family laws
+
+Normalize the current table to |r|≤1 by a common positive scale if
+necessary; all hypotheses and exact carrier identities scale. Modify
+ONLY recipient row i toward the complete membership table H_i:
+
+    H_i(T)=−1 if i∈T, and H_i(T)=1 if i∉T,
+    r_i^α(T)=(1−α)r_i(T)+αH_i(T), 0<α<1.
+
+All other recipient rows are unchanged. Never still pays0. Let P_i^α
+be the TRUE unrestricted independent punishment value of the NEW table.
+For every fixed opponent plan and every owner response, its new payoff
+is at least its old payoff times(1−α), minusα. Supremum then infimum
+give the genuine bound
+
+    P_i^α≥(1−α)P_i−α.                              (RM14)
+
+This bound uses ALL actual opponent plans and ALL behavioral replies;
+it does not transport a nominal punishment or assume that an old
+punishment remains optimal. The free regrets R are exactly unchanged
+on the sure-i face. The owner's new root coefficients satisfy
+
+    Q^α=(1−α)Q−α, A^α=(1−α)A+α(1−h),
+    g^α=A^α+hP_i^α−Q^α≥(1−α)g+2α(1−h).            (RM15)
+
+Choose any mixed free coordinate j from RM11. On a sufficiently small
+compact neighborhood N₀ of p⁰, contained in a slightly larger open
+neighborhood N₁, all free branch signs remain strict, p_j stays interior,
+b_j stays bounded away from0, and κ_j(p_-j)=−a_j(p_-j)/b_j(p_-j)≥κ/2.
+These coefficients depend only on p_-j because the two polynomials
+are affine in p_j. Also choose η>0 with
+
+    1−h(p)≥2η, |g(p)|≤η on N₁.
+
+This is possible since some other root rate is positive. From (RM15),
+g^α≥g+αη on N₀. Put β=αη. For α sufficiently small, the single
+legal rate adjustment
+
+    p'=p+(β/b_j(p_-j))e_j
+
+lies in N₁ for EVERY p∈N₀. Its sign can be either positive or negative;
+it is a legal interior change, not an independent clock insertion.
+Exact affinity gives
+
+    g(p')=g(p)+β, R(p')=R(p)−κ_j(p_-j)β.
+
+Applying the ORIGINAL global lower bound F(p')≥δ proves
+
+    R(p)+max(g(p)+β,0)≥δ+κ_j(p_-j)β.
+
+For EVERY NEW-table actual law with i sure at its first date and free
+root rates p∈N₀, regardless of its arbitrary tail and all its full caps,
+
+    D_new≥R(p)+max(g^α(p),0)
+          ≥δ+(κ/2)αη.                              (RM16)
+
+The same lower bound holds for closure pairs having such a prefix
+representation. This is an ALL-cap, finite-amplitude comparison after
+arbitrary joint reoptimization of the free rates and the actual tail.
+There is no supplied observer-cap upper bound. The old source root is
+not silently declared minimal for the new table.
+
+This comparison is a true local EXIT of the sure family under a table
+change: if the NEW global gap is at most δ, none of its minima can
+have a sure-i root with free rates in N₀. The new law must leave this
+sure geometry; simply replacing the invisible punishment cannot repair
+it inside the neighborhood. In particular this implication is available
+at an absolute worst unit-cube table IF it also has the stated rigidity
+and sole-bridge geometry. No such combined worst/rigid input is asserted
+by the canonical packet.
+
+### RM13. Exact remaining global obstruction after the finite price
+
+RM16 proves an actual uniform local price, not a full-table completeness
+theorem. The canonical selected table is fresh and debt-rigid but is
+NOT asserted to attain the absolute worst gap Ω. Its new Δ may rise,
+or its new minimum may switch to a different root owner, release i,
+or acquire another root/later active branch. Applying small genericity
+and recipient-rigidity selection to the NEW table would require a fresh
+source; none of the old minimum facts are transported by provenance.
+
+The same-table release remains a genuinely different operation. At
+b_i=P_i the owner can use an actual near-best reply behind a near-optimal
+punishment to keep its own new debt small, but the other three caps
+are no longer screened on its Continue branch. Neither P_i≤s_i nor
+the exact scalar floor controls those observer increases. RM16 prices
+this tradeoff only on the sure face, by changing the table; it does not
+pretend to supply the missing simultaneous law intervention.
+
+The concrete next question is whether a GLOBAL table/source selection
+can make the strict prices for ALL possible zero-debt sure bridges
+compatible at once, or whether an actual law release can exploit the
+now-derived κ without paying the observer continuation debts. A zero-root
+mass bridge and several sure owners remain separate boundaries. No new
+export or conditional domination API is proposed.
+
+### RM14. The unsupported root arm: universality removes the zero-price residual
+
+Return to RM1's genuine GLOBAL maximal-root-mass selection (p,u,b),
+with fixed actual carrier tail(u,b), and suppose i is its ONLY numerical
+root/later bridger but p_i=0. Do NOT replace b_i by a punishment value:
+it is this SAME actual tail's complete cap. On the slice p_i=0 put
+
+    G(p_-i)=Q_i−A_i−h_i b_i,
+    R_i(p_-i)=c(b_i−u_i), c=∏_(j≠i)(1−p_j).
+
+Select the strict numerical cap branch of every j≠i and call its
+cap-minus-payoff polynomial R_j. In a neighborhood of the source,
+the actual FULL debt is exactly
+
+    D=R+max(G,0), R=Σ_j R_j, G(p⁰)=0.             (RM17)
+
+This retains the WHOLE later envelope b_j, even if many later tests
+attain it; it does not assume distinct test points are distinct effects.
+All polynomials here use the fixed actual tail, not its minimization.
+
+For EVERY mixed other root coordinate j, B_j=∂G/∂p_j is nonzero.
+Otherwise G stays0 on its exact one-coordinate line, and interior
+global minimality makes the affine total R constant. Increasing p_j
+then gives an actual carrier minimum with higher root mass, contradicting
+RM1's compact selection. This argument needs maximal root mass; it does
+not assume that the mixed owner's own debt slope is nonzero.
+
+The same first-order tangent argument as RM11 gives ONE κ∈[0,1]
+with ∂R/∂p_j=−κ B_j for ALL mixed other coordinates. Its exact
+permitted endpoints from rigidity and maximality ALONE would be
+
+    d_i*>0 ⇒ 0<κ<1;
+    d_i*=0 ⇒ 0≤κ<1, and κ=0 requires EVERY B_j>0. (RM18)
+
+To check this, the owner base slope is
+∂R_i/∂p_j=−d_i*/(1−p_j). If κ=0, the G<0 side is a flat
+minimum interval. A positive d_i* makes its owner debt change, violating
+rigidity. At d_i*=0 it can be flat only on the decreasing-p_j side:
+if B_j<0 the flat G<0 side increases root mass, contradicting maximality.
+Thus any surviving κ=0 has all B_j positive.
+
+If κ=1, the G>0 side is flat. At zero owner debt its nonzero owner
+slope B_j contradicts rigidity. At positive debt, constancy of the
+owner coordinate requires B_j=d_i*/(1−p_j)>0; that flat side then
+increases p_j and violates maximal root mass. Hence κ=1 never survives.
+The common-price statement concerns only the genuinely mixed variables;
+no two-sided condition is imposed at a zero or sure boundary variable.
+
+This argument works with another sure root as well: then c=0 and
+d_i*=0. The positive-debt arm necessarily has c>0. However the actual
+canonical table supplies a further UNIVERSAL constraint, independently
+checked in NF8/formula(NF9) of BROUWER's owned source notebook: EVERY
+nonzero-root carrier prefix attaining δ has SOME numerical root/later
+bridge at that exact root. It is not only the original one-witness tie.
+
+If κ=0 in the zero-debt residual, choose ANY mixed j and decrease its
+rate a little. Every B_j>0, so G becomes strictly negative. Total R
+stays exactly constant by one-coordinate affinity and ∂R/∂p_j=0.
+Thus this NEW prefix, with the SAME actual carrier tail, is still a
+GLOBAL minimum. Its root remains nonzero, and every other cap gap
+remains strict. The old sole bridge is now strictly late-maximizing,
+so NO owner has Q_k=C_k at the new root. This contradicts the checked
+UNIVERSAL finite-prefix bridge statement.
+
+Consequently the actual canonical source satisfies the stronger
+
+    0<κ<1 for EVERY sole unsupported root bridge.    (RM18a)
+
+This consumes a genuine remaining flat-side class at a NEW same-table
+actual minimum. It does not equate distinct clock labels with distinct
+effects and does not need a Nash tail. It is the UNIVERSAL source
+quantifier—not mere debt rigidity—that eliminates the κ=0 loophole.
+
+### RM15. Installing the unsupported best response has strict external cost
+
+Keep ALL other root rates and the SAME actual tail fixed, and increase
+the sole bridging owner's rate from0 toρ>0. Its complete cap is
+independent of its own rate, and its tied root/later value is Q_i.
+Its individual debt is exactly
+
+    D_i(ρ)=(1−ρ)d_i*.                            (RM19)
+
+Every other numerical cap branch was strict atρ=0, so all remain the
+actual FULL branches for sufficiently smallρ. The whole debt is
+therefore affine inρ on this legal one-sided interval. Write its slope Γ.
+Global minimality gives Γ≥0. Equality would give actual carrier minima
+with larger root mass, forbidden by RM1's maximization. Consequently
+
+    Γ>0,
+    Σ_(j≠i) ∂D_j/∂ρ > d_i*.                    (RM20)
+
+Even when d_i*=0, installing this genuine root best response strictly
+increases total debt: the observer cost is positive. When d_i*>0,
+the observer increase strictly exceeds the owner's actual debt saving.
+The claim involves ALL unrestricted caps on the actual fixed tail,
+not a selected payoff-only ledger or a local toy. It is a necessary
+externality at this global selection, not an impossibility of changing
+the tail simultaneously. The next consumer must alter that tail or
+several active branches together; automatic best response insertion
+is now rigorously insufficient at the chosen source.
+
+### RM16. An unsupported bridge with ANOTHER sure owner is also fully priced
+
+The unscreened tail problem in RM14 is specific to c>0. Suppose its
+unsupported sole bridge i has p_i=0 but some OTHER owner z is sure.
+Then d_i*=0: its Continue and root cap are both A_i because h_i=0.
+Choose z as the screening owner and minimize its TRUE punishment tail
+at any nearby tuple of its three free root rates p. The exact global
+sure-z objective is
+
+    F_z(p)=Σ_(j≠z)[max(Δ_j(p),0)−p_jΔ_j(p)]
+            +max(A_z+h_z P_z−Q_z,0).               (RM21)
+
+It is ≥δ for ALL p and attains δ at the original source. At that
+source the z floor branch is STRICT: z is not a bridger. If its
+current root cap wins, the true floor is even smaller; if its later
+cap wins and h_z>0, globality forces its old tail cap to equal P_z,
+else a cheaper actual punishment would strictly reduce debt without
+affecting anyone else. If h_z=0, both old and true floors equal A_z,
+and no equality of the irrelevant tail cap with P_z is asserted.
+Thus the same strict branch remains valid in a neighborhood.
+
+The only remaining kink is the free owner's gap
+
+    g(p)=Δ_i(p)=Q_i^+(p)−A_i^+(p), g(p⁰)=0.
+
+At fixed p_i=0, (RM21) equals R(p)+max(g(p),0), where R contains
+all other strict branches and the term −p_i g. It agrees locally with
+RM14's fixed-tail polynomial when z's selected root branch is independent
+of its tail or its selected later branch has h_z>0 and uses P_z.
+If h_z=0 instead, their values and mixed-k derivatives at the SOURCE
+still agree: the product h_z and its mixed-k derivative both vanish
+because a different owner is sure. Whole-neighborhood equality of those
+two polynomials is not needed or asserted in that case.
+There is a mixed free coordinate k≠i,z, by the universal random-root
+property. Its b_k=∂g/∂p_k is nonzero and κ_k=−(∂R/∂p_k)/b_k∈(0,1)
+by RM14 and the universal flat-side exclusion(RM18a).
+
+Modify ONLY recipient row i toward H_i^+=(participant1, passive−1).
+Since z is sure, root Quit always includes i and EVERY Continue test
+always excludes it. Therefore the new free gap is EXACTLY
+
+    g^α=(1−α)g+2α=g+α(2−g).                    (RM22)
+
+EVERY other reward row, including z's TRUE punishment value P_z, is
+unchanged. The full NEW sure-z objective consequently satisfies
+
+    F_z^α=R+max(g^α,0)−p_i(g^α−g).                (RM23)
+
+This identity is for the infimum over ALL actual tails. Any particular
+tail gives debt at least F_z^α; z screens every free complete cap.
+
+Shrink to nested neighborhoods N₀⊂N₁ on which |g|≤1/2,
+κ_k(p_-k)≥κ/2, b_k is bounded away from0, and 0≤p_i≤κ/20.
+For small α, shift ONLY the mixed p_k by α/b_k, keeping p_i fixed.
+The SAME exact affine/global argument as RM12 gives
+
+    R(p)+max(g(p)+α,0)≥δ+(κ/2)α.
+
+Since g^α≥g+α and |g^α−g|≤(5/2)α, every NEW actual sure-z
+law with p∈N₀, after arbitrary rate AND actual-tail reoptimization,
+has FULL debt
+
+    D_new≥F_z^α≥δ+(3κ/8)α.                       (RM24)
+
+Thus ALL c=0 sole-bridge geometries are locally fully priced by an
+actual one-row table change: if the sole bridging owner itself is sure,
+use RM12 (which also permits several sure owners); if it has root rate0
+and another owner is sure, use RM24. This is not merely a fixed-tail
+price. It permits the formerly invisible tails to vary arbitrarily and
+retains ALL unilateral finite/Never caps through the true punishment
+canonicalization of the screening owner.
+
+The genuinely unpriced sole-bridge arm is now c>0 with its bridging
+owner at rate0, the ALL-tail capped objective in BROUWER NF7. A complete
+global table comparison still has to handle source/owner switching and
+multiple bridges; the canonical table is not an absolute worst table.
+RM24 does not consume that boundary by assuming the new Δ is≤δ.
+
+The proof inputs for these RM necessary conditions and local prices
+are already retained in the current universal finite consumer question:
+the TRUE actual carrier/global gap, prefix closure, ALL-minimum debt
+rigidity, a nonzero minimum prefix, and a bridge at EVERY such prefix.
+No extra93 spectrum, raw sign certificate, row genericity or punishment
+normality is needed for the PRICE calculations. Those stronger canonical
+facts produce the inputs from arbitrary no-UE data elsewhere; they are
+not silently used to select a convenient new minimizing law here.

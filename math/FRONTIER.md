@@ -466,6 +466,18 @@ such that:
   expectations equal the same unrestricted cap. The original finite moving
   tests witness this distinction asymptotically.
 
+The same selected table also satisfies a finite-prefix constraint over its
+ENTIRE original carrier K. For every nonzero product root x and tail pair
+w∈K such that prefixing w by x gives total debt d, at least two Quit
+rates are positive, at least one is strictly mixed, and some player has
+equal Quit-now and complete Continue-response values. The two response
+payoff kernels differ on a positive nonempty opponent event. This follows
+by applying the marked theorem to actual realizing tails prefixed by the
+SAME fixed x; their first quantile cell cannot disappear in the extraction.
+It is reusable after a proved same-table minimum-preserving reconstruction,
+not a consequence of having one supplied tied row. The tail need not itself
+minimize debt, and the tied player may have zero debt or zero Quit rate.
+
 The [complete ordinary-mathematical reduction](exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md)
 constructs the original-profile compact source, every moving finite/Never
 cap test, and signed old-law variations. A sign-adaptive worst-SUM reward

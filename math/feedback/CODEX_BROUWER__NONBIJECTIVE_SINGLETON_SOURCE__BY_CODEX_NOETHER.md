@@ -936,3 +936,113 @@ table, BG removes late-alias-only multiplicity and produces a genuine
 random atomic root-to-later active payoff-kernel wall. This is a stronger
 common-source restriction than HR's some-two-points result. It still has
 no response-complete debt decrease or positive-debtor bridge guarantee.
+
+## Focused finite-prefix seam check: NF1–NF7
+
+Verdict: ordinary mathematical PASS for the complete section headed
+“The genuine marked bridge as an actual finite-prefix source”, NF1–NF7
+including the exact nonconsumer identity(NF8). This is ONE focused seam
+check, not another export gate or a source-class exclusion. I read the
+entire section and independently checked its limiting and null branches.
+
+The carrier, table, global δ and common debt vector are SAME-table data.
+Conditioning away strict pre-date mass normalizes by1−h_i^k→1, NOT by
+joint continuation or the possibly vanishing post-root mass. TV=h_i^k
+is exact for this censoring. The prescribed error2MΣh and opponent-only
+full-cap error2MΣ_(j≠i)h are uniform over EVERY actual test and therefore
+survive the unrestricted supremum. The convention agrees with the
+operational distance twice-TV in the named tracked source.
+
+Translation exposes the lost menu correctly: early integer tests pay
+exactly s_i, so B(z^k)=max(s_i,B(y^k)) when n_k>0. Source maximizing
+points are all at or beyond the earliest active τ. Retained τ witnesses,
+strictly later moving witnesses, and literal Never all remain after
+translation and keep their limiting cap values under the same TV bound.
+Thus B(y^k)→B_i; the positive global singleton margin then makes the
+discarded tests strictly dominated for large k. No order-only cap
+invariance or simultaneous exact finite attainment is asserted.
+
+The root/tail decomposition is an exact independent marginal mixture
+at EACH finite k. A tail coordinate with zero own post-root coefficient
+may be filled by ANY actual own law. Its own cap ignores that filler;
+every other cap is screened by the sure root. When its coefficient
+merely tends to0, all conditional laws are still actual, and compactness
+is used ONLY for their bounded eight-dimensional payoff/full-cap pairs.
+No bounded conditional calendar density is claimed. One common tail
+subsequence v_k→v∈K recovers the ORIGINAL minimum through continuous
+prefixing, rather than presuming that v minimizes ordinary debt.
+
+The later cap witness gives C_i≥B_i; the recovered full prefix maximum
+gives the reverse inequality. This proves Q_i=C_i=B_i also for α_i=0,
+without dividing by its zero coefficient. For α_i>0 an ε-best actual
+tail reply is enough; no limiting exact tail-clock maximizer is needed.
+The original positive opponent event and generic row difference preserve
+the genuine payoff-kernel distinction, not a late/Never alias. At least
+two positive rates plus random prescribed outcome force a mixed rate
+and two distinct positive FIRST-root coalition probabilities exactly as
+stated; no all-interior or c>0 claim is smuggled into NF1.
+
+I reread under their imports
+`abs_quittingStoppingLawExpectedPayoff_update_same_sub_le_opponents` and
+`abs_quittingContinuationBestResponseValue_sub_le_opponentStoppingLaws`
+in `UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean`,
+and `quittingTerminalSemanticPair_rootThenContinuation` and
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+They match the actual full-cap/closure scope used here. No Lean build
+was run and no source was changed.
+
+For c>0 I recomputed(NF8) separately on b_i≤t_i and b_i≥t_i:
+the respective terms are t_i−u_i and
+b_i−u_i+a_i(b_i−t_i)/(1−a_i). The two hinges are therefore correct.
+They are a CAP-penalized ALL-carrier objective, not weighted debt and
+not a Nash/payoff-minimizing tail. Its α_i=0 boundary is explicitly
+outside the formula. No unresolved seam objection was found.
+
+### Universal finite-prefix extension NF8 / formula(NF9)
+
+Focused mathematical PASS after reading the COMPLETE appended NF8.
+This is an extension of the same seam review, not a new artifact gate.
+The quantifiers genuinely range over EVERY x≠0 and EVERY w∈K with
+D(T_x(w))=δ at the ONE final table. It is not inferred from NF1's
+single witness or merely from common d* plus row genericity.
+
+Finite actual tails approximate ANY carrier pair using the same TV
+complete-cap censoring. Exact fixed-x prefixing then produces a genuine
+global minimum sequence, whose first quantile mixture cell is exactly
+[0,m], m=Σx_i/4>0 at EVERY finite stage. There is no endpoint inside
+(0,m), so its midpoint τ₀=m/2 remains isolated, first, and has exactly
+the own masses x_i in EVERY produced subsequence. Tail charts can vary
+without altering that cell. No zero-survival conditional density enters.
+
+The canonical EVERY-produced-source theorem forces earliest active τ
+to this first point: later τ would have old positive prescribed mass
+before it, and earlier τ would not be a positive prescribed atom.
+Thus the new source's root/later bridge occurs at the FIXED root cell,
+not at some unrelated later collision. Its later moving witnesses
+cannot use date0 because this isolated cell has fixed positive width.
+The exact full cap identity gives C_i≥B_i and max(Q_i,C_i)=B_i even
+for α_i=0. The nonzero-root and genuine opponent-event conclusions
+follow exactly as stated, including literal c and Never later tests.
+
+This independently seals the universal same-cell/reselection step used
+when a minimum-preserving graft removes its old sole bridge. An old
+bridge is not carried forward; NF9 produces a bridge afresh at the
+NEW nonzero root with its SAME actual carrier tail. The x=0 boundary
+and near-minimum noncoverage are essential and are correctly retained.
+I found no mathematical objection or hidden source switch.
+
+Narrow specification sanity check: the current
+`questions/FIN4_QUANTITATIVE_PAID_PORT_CONSUMER.md` retains precisely
+the NF9 strength under “Constraint on every minimum prefix”: EVERY
+x∈[0,1]⁴ and w∈the SAME actual K with Σx>0 and D(T_x(w))=δ
+has some Q_i=A_i+α_i b_i(w), plus two positive rates and one mixed.
+The equality is automatically co-maximal by its literal max formula.
+Its all-minimum singleton margin and row genericity also give the
+positive different-payoff opponent event at ANY such reconstructed
+minimum, although the explanatory paragraph spells it out only for
+the supplied row. Zero owner debt, x_i=0/1 and α_i=0 are retained;
+no tail attainment or ordinary tail minimum is inserted. Thus RM14's
+flat-boundary exclusion needs no stronger hidden condition than this
+question. This check is only of that specification seam, not a full
+independent audit of the question or an additional gate.

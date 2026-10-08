@@ -4,135 +4,40 @@ Author: CODEX_BROUWER. Ordinary mathematics, not Lean-checked.
 
 ## Current full-goal status
 
-The live question is a response-complete global consumer of the produced
-marked TRUE minimum of the SUM of unrestricted terminal debts for bounded
-signed Fin4 rewards. No first-row Nash condition or minimum old tail is
-assumed. All finite clocks, Never, actual independent law realization
-and the distinction between a selected-response polynomial and actual
-full caps are retained.
+The canonical ordinary-mathematical source theorem is frozen in
+[RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md)
+after two independent whole-artifact falsifications. From any Fin4
+counterexample it selects ONE fresh bounded row-generic table with
+positive unrestricted SUM-debt minimum and ONE common debt vector at
+ALL carrier minima. EVERY produced marked minimum has a random terminal
+law, no prescribed mass before its earliest active point, and a finite
+isolated first collision with at least two root suppliers. Some owner
+has genuinely different maximizing root and later PAYOFF kernels on
+a positive-probability original opponent event. That owner can have
+ZERO debt. This is a source restriction, not a UE theorem.
 
-Reviewed results: the all-supported unique-cap source exclusion passed
-two independent falsifications and is frozen in
-[POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md](../exports/POSITIVE_MINIMUM_CAP_ATOM_EXCLUSION.md).
-LC1–LC5 below, plus the earlier-mass equality in LC6, passed NOETHER's
-focused independent review. LC7 records the exact singleton-pressure
-event containment; that pressure condition does not consume the LC
-residual.
+The exact open task is to consume that source by an actual independent
+finite-amplitude root/tail change with an upper ledger for EVERY changed
+response cap, or another genuinely global contradiction. Neither the
+first row nor the old tail is assumed Nash or debt-minimizing. All finite
+deadlines, Never, zero/sure root rates and actual carrier realization
+remain in scope. Different cap kernels alone are not a paid charge.
 
-Complete UNREVIEWED ordinary-mathematical work: LC8 gives a literal
-global old-tail graft, retaining the original finite witnesses' small
-late m mass and every observer cap. It forces the exceptional owner's
-counterfactual opponent tail to attain its true unrestricted punishment
-value in the closure. LC9 exactly falsifies the attempted punishment-
-optimal child-Nash splice. LC10 combines signed conditioning of EXISTING
-early m mass and late opponent mass to force δ=P_m−s_m if m stops
-strictly before the common clock with positive probability. The checked
-Fin4 no-UE punishment-normality source excludes this, leaving m PURE at
-that clock. LC11 gives an actual finite-amplitude minimum-preserving path
-to a multiple-cap minimum; it is an existential reselection, not a
-pointwise statement about every minimum. LC12 gives a distinct own-law
-path to a multiple-cap minimum when a sole unsupported EARLIEST owner
-has old mass before the supported opponent caps; it does not require
-that owner's maximizing point to be isolated.
+NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
+source: delete vanishing original pre-date mass, normalize the first
+date to0, extract an ACTUAL carrier tail even at sure-owner boundaries,
+and obtain an exact Q_i=A_i+α_i b_i bridge. Randomness forces a strictly
+mixed root rate. NF8 makes this UNIVERSAL at EVERY nonzero finite-prefix
+minimum of the SAME canonical table, including new grafted minima.
+This is supporting consumer simplification, not a new export or an
+additional counterexample-class reduction.
 
-The completed source restriction EA1–EA5 with boundary EA6
-passed NOETHER's focused independent falsification. Joint signed
-old-tail conditioning preserves ALL active upper
-response branches together. At a zero-MIXTURE-mass earliest active
-point with positive old late mass for every owner, its final actual
-conditioned profile stays a true minimum, but one earliest owner's
-full cap equals its own singleton: contradiction. Thus such a
-zero-mixture earliest cap forces a sure-strictly-earlier prescribed
-owner and multiple late caps for all three other recipients. This
-excludes EVERY all-unique nonisolated earliest-cap minimum, not only
-a common cap date. The combined source/table proof passed two whole
-independent falsifications and is frozen in the canonical
-[WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md](../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md).
-Its fresh-table all-unique residual has at least two zero-own-mass
-owners, not-all-equal cap dates and an atomic earliest cap; the
-multiple-cap branch remains open. This export is ordinary mathematics,
-not a new Lean-checked result.
-
-The new COMPLETE UNREVIEWED finite-amplitude candidate HP1–HP6
-concentrates each owner's EXISTING mass at or before the earliest
-active atom. Unique earliest caps have an isolated gap; every later
-cap's whole upper family has one positive affine rescaling. A first
-cap wall is an actual multiple-cap minimum. If the path reaches its
-endpoint, a sure early opponent either supplies multiple late caps
-directly, or a literal punishment-tail graft gives debt below δ.
-Under same-table punishment normality, this reselects a multiple-cap
-minimum from any all-unique non-common minimum. It is EXISTENTIAL,
-not a pointwise exclusion or a consumer of the resulting wall. An
-interior wall has distinct outcome kernels, but an endpoint wall can
-supply only equivalent late plateau points. Without a consumer of
-that alternative, HP is supporting mathematics, not a strict
-counterexample-class reduction or an export request.
-EA7 separately records an UNREVIEWED graft sharpening of the
-sure-early exception at a zero-mixture earliest cap.
-
-The completed consumer candidate KR1–KR8 uses
-generic within-recipient raw payoff differences and the independently
-checked all-minimum debt rigidity from recipient scaling. If ALL
-unique caps are isolated, every bounded old-law reweighting keeps
-them fixed locally; EACH regret polynomial is then constant.
-Product weight tests force raw pure-clock regret kernels constant
-almost surely, and genericity makes the prescribed terminal coalition
-deterministic. A deterministic collision contradicts earliest/common
-cap restrictions; a deterministic singleton admits an actual global
-punishment-tail repair below δ. Thus one produced fresh table can
-exclude ALL-isolated all-unique minima, leaving a genuinely
-NONISOLATED later unsupported cap or multiple caps. It passed
-NOETHER's focused independent falsification, but remains internal;
-its standalone assembly is superseded by the stronger HR argument.
-
-The newest completed candidate HR1–HR6 needs only the
-old HEAD-conditional law box, not generic differences or isolated
-later caps. The whole upper family stabilizes all later selectors
-by positive affine rescaling. Debt rigidity makes EACH fixed-regret
-polynomial constant. A single head owner violates singleton margin;
-with two head owners, a selected-polynomial screening identity makes
-the root atom supplier ORIGINAL sure-by-root, and an actual global
-punishment graft contradicts its unique later cap. If valid, this
-removes EVERY all-unique minimum at the rigid fresh table. NOETHER's
-focused independent falsification passed with no unresolved objection;
-the complete self-contained internal artifact is
-[DEBT_RIGID_MULTIPLE_CAP_SOURCE_REDUCTION.md](CODEX_BROUWER__DEBT_RIGID_MULTIPLE_CAP_SOURCE_REDUCTION.md),
-ready for a separate whole-proof falsification. It includes all marked
-source/contact/recipient-scale proofs and the SAME-table original
-finite-law punishment graft. No export or UE is yet claimed. Multiple
-outcome-equivalent late plateaus remain explicitly unconsumed even
-under the candidate's conclusion.
-
-The new COMPLETE UNREVIEWED source restriction BG1–BG6 attacks
-genuinely random atomic earliest outcomes rather than counting late
-aliases. At one compatible row-generic debt-rigid positive table,
-EVERY produced minimum either has deterministic terminal outcome or
-has a genuine active root-to-later PAYOFF-kernel bridge. Randomness
-first removes all strict pre-active heads. If no owner maximizes
-both at the earliest atom and later, the full signed root box keeps
-ALL complete active sets stable; individual rigidity forces every
-root participant originally pure, making the outcome deterministic.
-The bridge differs on a positive-probability original root event,
-with literal moving-test finite witnesses. Its owner may have ZERO
-debt. No deterministic-outcome exclusion or resulting bridge consumer
-is assumed. MH2's focused-review calendar-cut clarification and the
-stronger all-owner payoff margin are retained.
-
-No full UE producer, positive unrestricted-gap example, or new export
-is claimed. The next genuine target is a finite-amplitude coupled law
-change with a proved upper ledger for ALL changed caps, consuming a
-multiple-cap minimum. HR removes the all-unique source arm only at
-its fresh rigid table if the whole-proof gate passes. A local descent, a conditional
-splice, and a favorable selector are not substitutes for that consumer.
-ES1–ES5 also retires convexified-payoff sharing as a black-box producer:
-an allowed sharing-rule equilibrium payoff need not belong even to
-the actual independent payoff closure.
-
-The earlier completed raw two-pair theorem is frozen at
-[TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md](../exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md).
-The original matrix tests and retired entropy, atomless, separate-block
-and topology mechanisms are preserved in the mathematical body below.
-They are evidence and exact failed implications, not current producers.
+All earlier unique mathematical proofs, failed implications and exact
+tests remain below. In particular local descent, separate-block repair,
+atomless regularization, weak-clock security and convexified-payoff
+sharing have been retired as universal producers. HP/EA7 remain
+unreviewed supporting reselections; a late plateau is not a genuine
+kernel charge. The full finite-quitting UE conjecture remains open.
 
 ## Original singleton-matrix question
 
@@ -6731,8 +6636,9 @@ were narrowly inspected. No change to the frozen HR artifact follows.
 
 ## A random minimum forces a root-to-later active payoff-kernel bridge
 
-Status: COMPLETE ordinary-mathematical candidate BG1–BG6, not yet
-independently falsified. It is a source restriction at one compatible
+Status: COMPLETE ordinary-mathematical candidate BG1–BG6 with two
+independent focused mathematical PASSes. The combined standalone
+integration gate is separate. It is a source restriction at one compatible
 generic debt-rigid positive table, not an equilibrium consumer. It
 strictly distinguishes root-to-later active kernels from late/Never
 plateau aliases. No conclusion that the bridging owner has positive
@@ -7016,3 +6922,385 @@ ZERO-debt owner, while permitting changes to the independent old
 tails and controlling every moving finite response and Never.
 A late-plateau-only multiplicity argument or a locally linear
 selector cannot settle that remaining branch.
+
+## The genuine marked bridge as an actual finite-prefix source
+
+Status: complete ordinary-mathematical adapter of the already accepted
+canonical source theorem, not an additional class exclusion or export.
+It does not require an attained minimizing tail, a tail deadline
+attaining its limiting cap, or a Nash first row. The strategic inputs
+are precisely the same fixed-table marked source and ALL-minimum debt
+rigidity used in BG. The purpose is to let a consumer work with the
+existing finite-prefix interface without naming a whole calendar.
+
+### NF1. Exact finite statement delivered by the canonical source
+
+Write r for the ONE final selected table, K for its original closed
+payoff/full-cap carrier, δ=min_K D>0, s_i=r_i({i}), and d* for its
+common nonnegative debt vector at ALL unweighted SUM minima. Its
+row-genericity means r_i(S)≠r_i(T) for distinct nonempty coalitions.
+There exist a∈[0,1]⁴ and v=(u,b)∈K with the following properties.
+
+For S⊆I\{i}, set
+
+    p_-i(S)=∏[j∈S]a_j ∏[j∉S,j≠i](1−a_j),
+    α_i=∏[j≠i](1−a_j), c=∏[j∈I](1−a_j),
+    A_i=∑[∅≠S⊆I\{i}]p_-i(S)r_i(S),
+    Q_i=∑[S⊆I\{i}]p_-i(S)r_i(S∪{i}),
+    C_i=A_i+α_i b_i.
+
+The literal prefix map is
+
+    T_a(v)_U,i=a_i Q_i+(1−a_i)A_i+c u_i,
+    T_a(v)_B,i=max(Q_i,C_i).
+
+It satisfies D(T_a(v))=δ and T_a(v)_B−T_a(v)_U=d*.
+At least two a_j are positive and at least one a_j is STRICTLY
+between0 and1. The nonempty root-coalition law has at least two
+distinct coalitions of positive probability; its collision mass
+is positive. For at least one owner i,
+
+    Q_i=C_i=T_a(v)_B,i.                         (NF1)
+
+There is a nonempty S⊆I\{i} with p_-i(S)>0 and
+
+    r_i(S∪{i})≠r_i(S).                         (NF2)
+
+Root Quit and Continue followed by ANY tail response have precisely
+these two different payoffs on that root event. Its owner may have
+d*_i=0; neither sign of (NF2) is asserted. Zero and sure rates are
+permitted, including α_i=0. No division by α_i is made in the statement.
+
+Every T_x(w), x∈[0,1]⁴,w∈K, lies in K. Consequently
+
+    D(T_x(w))≥δ,
+    D(T_x(w))=δ ⇒ T_x(w)_B−T_x(w)_U=d*.         (NF3)
+
+In particular v minimizes G_a(w)=D(T_a(w)) over ALL of K; only
+D(v)≥δ, not D(v)=δ, is automatic. These are actual-carrier facts,
+not a prescription to execute an unattained pair at an infinite date.
+
+### NF2. Delete only vanishing ORIGINAL strict pre-date mass
+
+Take ANY one of the canonical theorem's produced marked minima q,
+with its first active retained atom τ and original retained finite
+dates n_k. Its actual finite independent laws p_i^k satisfy
+
+    p_i^k({n_k})→a_i=q_i({τ}),
+    h_i^k=p_i^k({t<n_k})→q_i({t<τ})=0.
+
+The second convergence is an old-chart interval-endpoint test: the
+left endpoints of the retained intervals converge and their density
+likelihoods are uniformly bounded. It is NOT a raw cut inserted
+inside the retained atom. The accepted source supplies its zero limit.
+
+For large k, condition p_i^k on {clock≥n_k}, retaining Never, and
+call the law z_i^k. This conditions on positive mass1−h_i^k→1,
+not on the eventual probability of joint continuation through τ.
+It removes the earlier mass and rescales the entire remainder by
+1/(1−h_i^k). In total variation TV(p_i^k,z_i^k)=h_i^k.
+Independent coupling therefore gives, for every recipient i,
+
+    |U_i(p^k)−U_i(z^k)|≤2M∑_j h_j^k,
+    |B_i(p^k)−B_i(z^k)|≤2M∑_(j≠i)h_j^k.       (NF4)
+
+The cap estimate is uniform over EVERY actual finite deadline and
+Never, hence remains valid after taking the unrestricted supremum.
+It also applies to each particular MOVING original response. Thus
+z^k has the SAME limiting prescribed payoff, full cap and terminal
+outcome law as p^k. Its normalized root rate is
+
+    a_i^k=z_i^k({n_k})
+         =p_i^k({n_k})/(1−h_i^k)→a_i.
+
+The operational estimates agree with
+`abs_quittingStoppingLawExpectedPayoff_update_same_sub_le_opponents`
+and `abs_quittingContinuationBestResponseValue_sub_le_opponentStoppingLaws`
+in `UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean`.
+Their operational distance is twice TV; (NF4) uses TV. The corresponding
+prescribed-law/outcome bound and stopping-law/full behavioral cap
+identities in that same file were inspected under their imports.
+
+### NF3. Renumbering does not silently discard a profitable early test
+
+Shift every finite z_i^k date t≥n_k to t−n_k, keeping Never literal.
+Call the resulting actual finite profile y^k. Terminal coalitions
+and prescribed payoffs are unchanged. An original finite test t≥n_k
+corresponds exactly to translated test t−n_k, and Never to Never.
+
+When n_k>0, the extra tests t<n_k against z_-i^k give EXACTLY s_i:
+all opponents are at or after n_k. Thus
+
+    B_i(z^k)=max(s_i,B_i(y^k))                  (NF5)
+
+when n_k>0, and equals B_i(y^k) if n_k=0. This equality exposes the
+one possible cap difference caused by translating to an initial date.
+It is not legal to declare complete-cap invariance from order alone.
+
+The canonical root is maximizing for the bridge owner, but not for
+EVERY owner. For a non-root-maximizing owner its later selected cap
+has actual moving witnesses strictly beyond n_k; for a root-maximizing
+owner root response itself has payoff converging to its cap. More
+uniformly, choose an original compact maximizing point of EACH owner.
+All are at or later than τ by definition of the earliest active point.
+If the selected point is τ its retained witness is n_k. If it is later,
+its original moving witness is eventually strictly later than n_k
+(or literal Never). By (NF4), their z^k payoffs still tend to the
+original B_i, and they are all retained in the translated y^k menu.
+Consequently liminf B_i(y^k)≥B_i. Together with (NF5) and (NF4),
+
+    B_i(y^k)→B_i, U_i(y^k)→U_i.                (NF6)
+
+The strict singleton margin B_i−s_i≥δ>0 additionally shows that,
+eventually, B_i(y^k)>s_i and (NF5) discards ONLY strictly dominated
+early singleton tests. This proof works for a moving retained date
+with n_k→∞ and for n_k=0. Arbitrarily late and Never witnesses have
+not been cut off. No claim of simultaneous exact finite attainment
+of all limiting maximizing points is made.
+
+### NF4. Actual old tails even if some owners stop surely at the root
+
+The profile y^k has root a^k at date0. If e_i^k=1−a_i^k>0,
+take its independent own conditional law on {clock>0}, including
+Never, and shift each finite t>0 to t−1. If e_i^k=0, choose ANY
+actual own tail law, for example pure Never. Let w^k be the resulting
+four actual independent tail laws, and v_k=(u^k,b^k) their FULL pair.
+
+There is an exact literal identity, for EVERY k,
+
+    pair(y^k)=T_(a^k)(v_k).                    (NF7)
+
+Indeed each marginal equals a_i^k δ₀ plus1−a_i^k times its shifted
+tail; a zero tail coefficient makes the chosen filler irrelevant.
+The full cap is max(Q_i(a^k),A_i(a^k)+α_i(a^k)b_i^k): choosing
+Continue at0 permits an unrestricted complete tail response, including
+all finite dates and Never, not just the prescribed tail clock.
+
+All v_k are ACTUAL pairs at this SAME table and belong to the compact
+original carrier K. Extract one common further subsequence v_k→v∈K.
+No uniform density bound on a conditional law whose own normalization
+tends to0 is needed: this extraction is in the already bounded
+eight-dimensional actual pair carrier, not weak-* convergence of those
+conditional law densities. By the explicit finite sums and max,
+T_(a^k)(v_k)→T_a(v). Equation (NF6) identifies this with the SAME
+original minimum pair, not just another small-debt point.
+
+If a_i=1, the original prescribed tail of i is never executed. If it
+is the ONLY sure owner, its complete Continue response still depends
+on its opponents' genuine conditional tails and is represented by
+b_i. Its own conditional tail filler does not determine its own cap.
+If another owner is sure then α_i=0 and C_i=A_i, independently of b_i.
+With two sure owners ALL α_i=0; one may still extract v, but no
+continuation coordinate enters any root cap. All these cases use
+actual v_k rather than conditioning a limiting zero-survival event.
+
+The named exact splicing identity
+`quittingTerminalSemanticPair_rootThenContinuation`, the definition
+`quittingTerminalSemanticPrefix`, and
+`continuous_quittingTerminalSemanticPrefix` were inspected in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+`quittingTerminalSemanticPrefix_mem_carrier` in that file supplies
+prefix closure for ALL w∈K. Joint a,v continuity used here also follows
+directly from the displayed polynomial/max formula; the cited fixed-root
+continuity theorem alone is not mislabeled as a joint theorem.
+
+### NF5. A later marked maximum is exactly the complete Continue cap
+
+Take the canonical bridging owner i with maximizing τ and σ>τ.
+Root response in y^k has payoff Q_i(a^k)→B_i. Its later original
+moving witness at σ has, after (NF4) and translation, payoff
+tending to B_i and a date strictly after0, or literal Never.
+Write its shifted tail payoff as V_i(t_k,w_-i^k). The exact prefix
+response value is
+
+    A_i(a^k)+α_i(a^k)V_i(t_k,w_-i^k)
+       ≤A_i(a^k)+α_i(a^k)b_i^k.
+
+The right side tends to C_i; hence C_i≥B_i. But (NF7) and
+(NF6) give max(Q_i,C_i)=B_i, and Q_i=B_i. Therefore C_i=B_i
+and (NF1) follows without division by α_i, even if α_i=0.
+
+Conversely one may use actual ε_k-best tail replies to w_-i^k,
+ε_k→0. Their literal post-root values converge to C_i=B_i;
+root values converge to Q_i=B_i as well. Finite-law tails have a
+finite reply menu plus Never and in fact admit maximizing pure
+replies, but approximate selection already suffices. No SINGLE
+tail deadline must attain b_i at the limiting unattained pair v.
+No late cap born only in a new limit is selected and silently
+identified with an original finite clock.
+
+The singleton margin Q_i=B_i>s_i implies a nonempty opponent
+root event with positive probability: with no opponent root mass
+Q_i would equal s_i. Choose one such S. On that event root Quit
+creates S∪{i}; every Continue-then-tail response, finite or Never,
+sees S already absorbing. Row genericity proves (NF2). On the
+original finite witnesses the same event probabilities tend to
+p_-i(S)>0, and the same fixed nonzero table difference appears.
+This retains the genuine PAYOFF-kernel distinction, not only a
+numerical expectation equality or an abstract deadline alias.
+
+### NF6. Randomness forces a strictly mixed FIRST root rate
+
+At least two a_j>0 are already supplied by the canonical collision
+source. If every a_j belonged to {0,1}, the nonempty set
+R={j:a_j=1} would quit surely at τ, all other owners would be
+strictly later, and the ORIGINAL prescribed terminal outcome would
+be the point mass on R. This contradicts the canonical random law.
+Thus some j has0<a_j<1; this conclusion does not depend on whether
+the selected tail v retains a particular terminal law.
+
+In fact there are TWO positive nonempty root-coalition probabilities.
+Let H={j:a_j=1} and F={j:0<a_j<1}. If H≠∅, choose any j∈F:
+H and H∪{j} both have positive probability when all other mixed
+owners continue. If H=∅, there are at least two mixed suppliers
+j,k, and {j} and {j,k} both have positive probability when the
+remaining mixed owners continue. Hence the actual FIRST root law,
+not only the entire root/tail outcome law, is random.
+
+No claim that ALL rates are strictly mixed, that c>0, that every
+owner is a root supplier, or that the bridging owner itself has
+positive root mass follows. The bridge event uses opponents,
+so it remains meaningful when a_i=0 or1 and d*_i=0.
+
+### NF7. Exact open finite consumer and a useful nonconsumer identity
+
+The existing finite consumer can now be attacked with a genuine
+root bridge (NF1), a strictly mixed rate, the nonzero payoff-kernel
+event (NF2), and common d* at EVERY true carrier minimum. To finish
+one must construct an actual same-table profile with D<δ or derive
+inconsistency. Since every root/tail splice is in K, any strict
+inequality D(T_x(w))<δ already gives a literal actual finite/profile
+repair after approximating w by realizing laws. The required strict
+gap must dominate the approximation error. A changed full pair w
+is not automatically the result of a specified playerwise graft of v.
+
+When c>0 (ALL a_i<1), put t_i=(Q_i−A_i)/α_i and
+κ_i=a_i/(1−a_i). The global fixed-root objective is exactly
+
+    G_a(w)/c=D(w)+∑_i[(t_i−b_i(w))⁺
+                         +κ_i(b_i(w)−t_i)⁺].  (NF8)
+
+It is a CAP-penalized global debt minimum over K, not a weighted
+ordinary-debt minimum. At a bridge b_i=t_i. No positive weighted
+Nash/quad singleton margin may be applied to v merely by treating
+the two hinge slopes as recipient weights: K is not convex, and
+the upper-cap coefficient differs from the prescribed-payoff
+coefficient away from the hinge. This is an exact objective
+re-expression, not a consumer or a new supporting-field request.
+
+The unreviewed next attempt is to exploit this ALL-tail constrained
+minimum together with actual response laws. It must avoid replacing
+K by its convex hull, promising only cap-control for one recipient,
+or transporting normality from an earlier table. The α_i=0 sure-root
+arm remains distinct from this c>0 expression.
+
+### NF8. UNIVERSAL finite-prefix bridge at the SAME selected table
+
+The compact NF1 data alone describe ONE supplied minimum. Common d*
+and within-row distinct rewards do NOT logically recreate the canonical
+theorem's random-law/bridge conclusion at another minimum. For example
+a punishment-graft argument that preserves the pair and removes its
+sole bridge needs that conclusion again at the NEW source. The following
+universal statement is what the ENTIRE canonical table theorem supplies;
+it is not inferred merely from the one NF1 witness.
+
+Fix the ONE canonical final table r, its K, δ and d*. Then
+
+    FOR EVERY x∈[0,1]⁴ and w∈K:
+      Σ_i x_i>0 and D(T_x(w))=δ
+      ⇒ |{j:x_j>0}|≥2, some0<x_j<1,
+         and some i satisfies
+           Q_i(x)=A_i(x)+α_i(x)b_i(w)=B_i(T_x(w)).  (NF9)
+
+The nonempty root-coalition law is random, and for that i some
+nonempty S⊆I\{i} has p_-i(S;x)>0 with different fixed rewards
+r_i(S∪{i}) and r_i(S). Root Quit and ANY Continue-then-tail reply
+therefore have genuinely different PAYOFF kernels. As before i
+may have zero debt, x_i may be0 or1, and α_i may vanish. ALL
+minimum pairs—not only the pairs in (NF9)—have debt d*.
+
+**Proof.** Fix x,w AFTER selecting the canonical table. Because w∈K,
+choose actual finite-support tail profiles h^k with pairs w_k→w.
+Such finite approximants exist for ANY carrier pair: first approximate
+by an actual profile, then TV-truncate its finite clock tails to Never,
+using the uniform complete-cap estimates in NF2. No old marked source
+law must be reconstructed. Prefix the EXACT same fixed x to h^k at
+date0, shifting each finite h^k date one step forward. The resulting
+actual finite profiles y^k have pairs exactly T_x(w_k), hence
+D(y^k)→D(T_x(w))=δ. Thus they are genuine globally minimizing
+sequences at the SAME final table, not merely constrained minima.
+
+Their FIRST mixture atom is date0 with fixed positive length
+
+    m=Σ_i x_i/4>0.
+
+In the quantile producer its whole raw interval is [0,m], its
+retained midpoint is τ₀=m/2, and its own limiting masses are x_i.
+It is the first retained prescribed point in EVERY subsequence with
+the producer's convergences. The finite-tail chart may otherwise
+vary arbitrarily; none of that affects this fixed positive interval.
+It follows in particular that no likelihood normalization tending
+to zero or moving retention convention can dissolve the root atom.
+
+Apply the canonical EVERY-produced-minimum theorem to any such
+produced marked source q. Its earliest active point τ is its
+FIRST prescribed stage with no prescribed mass before it. The
+fixed τ₀ atom gives prescribed mass>0 there; there is no prescribed
+point before τ₀. Therefore τ=τ₀. An alleged τ>τ₀ would contradict
+the no-preactive-mass conclusion, and τ<τ₀ would contradict the
+theorem's requirement that τ itself be a prescribed positive atom.
+This step uses the canonical UNIVERSAL source property, not the
+earlier one-witness finite statement.
+
+The theorem supplies at least two own positive atoms at τ₀, hence
+at least two positive x_j, and a random ORIGINAL terminal law.
+If all x_j were bits, a nonempty sure root coalition would be the
+deterministic prescribed terminal outcome, impossible. The two
+positive root-law labels follow by the same H/F case split as NF6.
+
+BG supplies some recipient i and an original compact later cap
+point σ>τ₀. Its root response gives Q_i(x)=B_i(T_x(w)). Original
+finite moving witnesses for σ are eventually strictly after date0
+or literal Never: the retained [0,m] atom is uniformly isolated,
+so a different later compact point cannot be represented by date0.
+Their full prefix values tend to that SAME cap. Every such response
+has the exact value
+
+    A_i(x)+α_i(x)V_i(t_k,h_-i^k)
+       ≤A_i(x)+α_i(x)b_i(w_k),
+
+including the literal Never response. Therefore C_i(x;w)≥B_i′.
+Exact splicing and w_k→w give B_i′=max(Q_i(x),C_i(x;w)); hence
+C_i=Q_i=B_i′. The proof does not divide by α_i or suppose that
+the limiting b_i is attained by one tail deadline.
+
+Since the true minimum cap satisfies B_i′−s_i≥δ>0, Q_i(x)>s_i.
+Some nonempty opponent root coalition has positive probability;
+otherwise Q_i(x)=s_i. Its two response kernels give S∪{i} and S,
+and row genericity supplies the nonzero fixed payoff difference.
+The same positive event has the SAME probability p_-i(S;x) on
+EVERY finite prefixed witness, because x is fixed exactly. Finally,
+ALL-minimum debt rigidity supplies d* directly at T_x(w). ∎
+
+**Boundary and consumption scope.** The nonzero-root condition is
+essential. For x=0 and ANY true minimum w=(u,b), singleton margin
+gives b_i>s_i, so T_0(w)=w but Q_i(0)=s_i<C_i(0;w)=b_i for
+every i. There is no root bridge in this all-Continue presentation.
+This does not contradict NF9 or the first prescribed-stage theorem.
+
+NF9 can be invoked at EVERY NEW minimum-preserving actual graft
+whose first root remains nonzero, without storing its whole calendar.
+An actual tail graft supplies a pair w′∈K, or a proven actual sequence
+supplies its closure pair; then D(T_x(w′))=δ triggers NF9. A new
+tail offered only as unattained numerical values, without carrier
+membership, cannot be used. If the root is also changed, use its new
+nonzero x′, not the old root's bridge. Mere near-minimality does not
+give the exact equality in NF9.
+
+The canonical table's typed93 no-contact/sign facts are NOT recovered
+from NF9, row genericity and debt rigidity. They remain separate
+inputs if a later argument changes reward tables. A finite consumer
+for arbitrary tables satisfying these displayed UNIVERSAL minimum
+constraints would be sufficient for UE, since the canonical selection
+produces them from any no-UE table. No pointwise preservation of an
+arbitrary earlier game's minimizing laws or normality is asserted.

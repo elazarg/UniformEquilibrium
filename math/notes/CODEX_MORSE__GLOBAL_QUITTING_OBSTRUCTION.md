@@ -2,102 +2,44 @@
 
 Owner: CODEX_MORSE.
 
-Current strongest source result: Sections 39–41 have passed independent
-mathematical reviews by CODEX_NOETHER and CODEX_BROUWER, with no unresolved
-objection. They force an early ORIGINAL nonsingleton stage on every
-sufficiently near-minimizing whole profile, without any Never floor;
-its pre-mark absorption can be made arbitrarily small. The self-contained
-packet passed both final full-artifact reviews and is frozen as
-`../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md`, SHA256
-`16746750ebf62281e2385c196e8b2e1c5cd34143bea5fbbaef26f432d7f20568`.
-The new result is ordinary mathematics,
-not Lean-checked or a full UE conclusion. Consuming the first collision
-row with every complete cap remains open.
+Current canonical source: the fully self-contained, independently reviewed
+1244-line packet is frozen as
+`../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`, SHA256
+`f6f865e04ce0d46c5a0214981aa63078dbb76e8f636d84d8ef96849158978f89`.
+It combines the original compact source, sign-adaptive contact comparison,
+recipient-scale debt rigidity, Sections49–50 and BROUWER's direct bridge.
+At ONE freshly selected positive-gap table, ALL original-carrier minima
+share one debt vector. EVERY produced marked minimum has RANDOM terminal
+outcome, no prescribed pre-active mass, and a finite isolated FIRST active
+collision with at least two positive own atoms. Some owner maximizes there
+AND later with genuinely different PAYOFF kernels on a positive original
+opponent event. Both complete expected response values tie. The table is
+selected before every minimum sequence; all finite responses and Never
+remain covered. No old law or MAX source is carried between tables.
 
-Current complete candidate: Section 45 proves a raw Fin4 CLASS theorem:
-each premium-trap support may independently use a nonpositive weighted
-forced-Quit upper-average certificate OR boxed Nash charges. The per-support
-choice gives universal exact-root singleton-sublevel return on one common
-box, and the actual selected-return consumer gives a uniform-equilibrium
-payoff. A complete full-core deadlock table passes the combined criterion
-while failing the entire ProductLow, boxed-charge, participant-balance,
-protected/support-specific leaver, and weighted-floor producer selection
-sets audited there. Relevant deadlock-family producer overlap is also
-checked over all labelings. Section 45/H1--H12 has passed independent
-falsification reviews by CODEX_NOETHER and CODEX_BROUWER, with no unresolved
-objection. The self-contained final draft and its open-neighborhood,
-all-v no-sure and complete matrix supplements are in
-`../exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md`;
-the complete artifact and supplements passed both final byte-bound reviews
-and are now frozen at SHA256
-`1f342e9ee028c79f37d8b95868fa659aa628e0a65670316a7295716775fbc2f3`.
-This is an independently reviewed mathematical export, not a Lean
-implementation. It does
-not solve the arbitrary-table or worst-table SUM comparison in Section 44.
+Current research question: consume that genuine random first-collision tie
+by a GLOBAL whole-law/table mechanism. The bridge owner may have ZERO
+debt; sure owners and other outcome-equivalent cap plateaus remain possible.
+Conditional tails are not Nash or minimizing. Positive-debtor complete
+replies have a uniform off-minimum excursion under the common-debt source,
+so minimum-return support rotation is unavailable. The forward exact test
+below additionally supplies a distant literal mixed equilibrium after all
+pure coalitions are made escapable; it is NOT a positive-gap source.
 
-Current serious global comparison: Section 48 links the canonical frozen
-`../exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md`. From an
-attained worst SUM table it selects one new positive-gap table avoiding
-82 labelled raw withdrawal, join-sum, individual-join, passive-floor and
-own-grand values. EVERY produced marked minimum of that fixed new table
-avoids common unique caps and exceptional-latest geometry. In the
-all-unique branch at least TWO owners have zero own cap mass, cap dates
-are not all equal, and the earliest cap is a finite isolated POSITIVE
-MIXTURE atom; some owner maximizing there has zero own mass. BROUWER's
-universal earliest-cap conditioning excludes the nonisolated earliest
-observer branch without a unique-selector assumption.
-The complete original compact producer, signed conditional transport,
-all moving-test cap control, source identities and whole-law value
-comparison are proved inside the packet. The consolidated 920-line
-artifact passed TWO independent whole-proof falsifications and is frozen
-at SHA256
-`1e5c8544ed71e153ee90ae87ac72b8413153e29faa43460599f1ac510e0b6e83`.
-The eight-coordinate singleton-preserving theorem of Section 47 remains
-a distinct proved subcase. The stronger target changes own singletons
-and Γ; neither its minima nor MAX-regret sources are transported.
-This is a strict source reduction, not a Fin4 UE theorem.
+The canonical packet passed both complete final-artifact falsification
+reviews. These are ordinary mathematical results, not Lean implementations
+or a Fin4 UE conclusion. Earlier status lines in the body describe their
+then-current checkpoints; the assembled source is no longer an unreviewed
+or held draft. The old 920-line reduction in Section48 and the Section49
+recipient-scale proof are subsumed, not independent current queue items.
 
-New distinct GLOBAL candidate: Section49 produces arbitrarily small
-positive recipient scales making the ENTIRE actual minimum family
-share one debt vector, while retaining all canonical raw exclusions.
-Concavity is in weights on one FIXED compact actual debt set, not in
-reward-table entries or independent laws. This debt rigidity consumes
-any supported EARLIEST unique cap by a legal one-owner signed reset:
-the all-unique fresh sources have unsupported owners in BOTH earliest
-and later cap groups, with EVERY earliest maximizer unsupported. If all
-unique caps are isolated, supported owners are actually pure at their
-caps, so earliest mass is supplied only by later unsupported owners.
-The full producer and complete source consumer, exact failed stronger
-implications and scoped source lookup are saved there. BROUWER's focused
-independent proof/value check PASSed with no unresolved objection. The
-self-contained complete artifact is
-`CODEX_MORSE__RECIPIENT_SCALE_DEBT_RIGIDITY_SOURCE_REDUCTION.md`, internal
-at SHA256 `530f428f5a8f05d1b2063f872a22706fc4207c19317bb20fc9cb05a768d95e3c`.
-TWO blind complete-artifact reviews passed with no unresolved objection.
-It remains frozen while the stronger head/punishment consumer is assembled;
-ordinary mathematics, no new export here.
-
-New complete GLOBAL candidate: Section50 combines a sign-adaptive worst-
-table comparison with NOETHER's deterministic-outcome debt pricing and a
-full ALL-active strict-head comparison. At ONE fresh positive, debt-rigid
-table, EVERY marked minimum has random prescribed terminal outcome and NO
-prescribed stopping mass strictly before its earliest active response.
-That response is therefore a finite isolated positive-mixture atom and
-the FIRST prescribed stage, with at least two positive quitters. The same
-table meets HR's all-unique exclusion inputs; no earlier minimizing law is
-carried between tables. Multiple cap points with identical outcome kernels
-and random collision outcomes remain allowed. Section50 is a complete
-ordinary proof draft, UNREVIEWED; no frozen packet is changed or exported.
-
-Supporting global comparison: Section 46 uses an attained worst SUM table
-and NEW whole-law near-minimizers after a finite own-singleton reward
-increase. It produces an old-table global collision minimum with a
-response-occupation inequality. Consequently the SELECTED source has
-a sure root owner or a genuinely later maximizing cap test: a nonsure
-root with only root maximizers is excluded by a strict finite value
-comparison. This is not a pointwise assertion about every old minimizer,
-nor a sure-boundary consumer. The sure/common-cap residual satisfies the
-occupation inequality automatically. No new export is proposed.
+Separate reviewed class coverage remains in
+`../exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md` (Section45),
+and the every-near-minimizer ORIGINAL-stage theorem remains in
+`../exports/POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md` (Sections39–41).
+Section47's own-singleton-preserving eight-coordinate comparison retains
+its distinct normalization scope. All unique proofs, caveats, exact tests
+and named-source comparisons are retained in the body.
 
 Earlier consuming checkpoint: Section 43 constructs an exact asymmetric
 four-player unrestricted stopping-law LOCAL trap with debt 1/4, every
@@ -9731,6 +9673,140 @@ recipient-row comparison? This is now a directed mismatch between
 prescribed earliest mass and fixed positive debtor coordinates, not
 an unknown role-switching debt family. Do not replace those suppliers'
 later caps by earliest ones or assume they are Nash of a child.
+
+## Forward exact test: mixed root debt is not priced by its pure endpoints
+
+Status: EXACT FALSIFIER of a proposed random-root extension, not a
+positive-gap candidate, gate, or new strategy-class exclusion. Section50
+below remains byte-for-byte frozen. The source counterexample is solved
+by the already checked prescribed-payoff envelope; its value is exposing
+the missing GLOBAL premise in endpoint-only pricing.
+
+Let F={0,1,2}, g=3. Specify all sixty unit coordinates of a base table R:
+every own singleton1; every passive singleton/pair−1; every participant
+pair/triple1; for rows0,1,2 omitted triple/grand are(0,−1), while for
+row3 they are(−1,0). At date0 let the three F owners quit surely, and
+let g quit with probabilityq and play Never with probability1−q.
+
+For each i∈F the actual root payoff is1−2q, and EVERY later finite
+deadline or Never pays−1+q. For g the root response pays0 and EVERY
+later response or Never pays−1, while its prescribed payoff is−1+q.
+Thus the COMPLETE all-deadline debts on this whole family are
+
+    d_i=[3q−2]⁺ for i∈F,
+    d_g=1−q,
+    D(q)=1−q+3[3q−2]⁺.
+
+The exact family minimum is1/3 atq=2/3, although the two pure
+endpoint debts areD(0)=1 andD(1)=3. At its minimum every F owner
+has debt0 and BOTH root and later/Never cap points; the ONLY
+debtor g has ROOT-ONLY cap. On the event g continues, probability1/3,
+the F owner's root-versus-wait payoff difference is1−(−1)=2;
+on the event g quits, probability2/3, it is−1−0=−1. These actual
+payoff kernels differ pointwise but their expected difference is0.
+This is a genuine bridge wall carried entirely by ZERO-debt owners.
+
+The base table has a literal far escape: pure date-zero coalition
+{0,1,3}, all other owners Never, has payoff/cap(1,1,0,1) and debt0.
+This confirms that the restricted family minimum is not an unrestricted
+gap and that even a stationary finite-amplitude change of the sure
+cohort can escape it. It does not prove that such a repair exists for
+every arbitrary bridge.
+
+To prevent that example from relying only on a pure terminal Nash,
+make the following FOUR disjoint lower-join coordinate pairs negative:
+
+    (i,K)=(0,{1,3}),(0,{2,3}),(1,{2,3}),(2,{3}):
+    set (R_i(K),R_i(K∪{i}))=(0,−1/2).
+
+Keep ALL other coordinates of the base table. These are eight changes;
+the complete formula still specifies exactly60 entries. They do NOT
+alter any response or prescribed payoff of the displayed F/g family:
+against each F respondent the other two sure F opponents screen these
+new columns, and against g all F opponents remain sure. Hence its
+whole-family debt remains the exact formula above, with minimum1/3,
+only paid g, and three genuine zero-debt bridge owners.
+
+Every pure coalition in the modified table has a strict terminal
+escape. The literal date-zero pure-profile full debts, in coalition
+order, are:
+
+    {0},{1},{2},{3}:                 6,6,6,4;
+    {0,1},{0,2},{0,3},{1,2},{1,3},{2,3}:
+                                     4,4,4,4,2,1/2;
+    {0,1,2},{0,1,3},{0,2,3},{1,2,3}:  1,1/2,1/2,1/2;
+    I:                               3.
+
+For a pure coalition of size≥2 these numbers sum its positive member
+withdrawals and positive outsider joins; for singletons only outsider
+joins matter. ALL later deadlines equal the passive reward because
+another sure owner remains; for a singleton owner's later finite
+solo response1 is available but creates no debt beyond its own1.
+The table and every number were checked with exact rational arithmetic,
+not a bounded grid.
+
+The modified table has a DISTANT LITERAL MIXED equilibrium too, despite
+having no pure terminal Nash point. Let g=3 quit surely at date0, and
+let the three other owners independently quit at0 with respective rates
+
+    x₀=3/19,   x₁=2/31,   x₂=38/49,
+
+playing Never otherwise. Against sure g, every core owner's complete
+response menu consists of its root payoff and one common later/Never
+passive payoff. Exact enumeration of the other two root decisions gives
+the root-minus-wait differences
+
+    G₀=2−(5/2)x₁−(5/2)x₂+2x₁x₂,
+    G₁=2−(5/2)x₂−(1/2)x₀x₂,
+    G₂=−1/2+(5/2)x₀+(5/2)x₁−(11/2)x₀x₁.
+
+The displayed rational rates make ALL three gaps exactly zero. Solving
+G₁=G₀=0 first gives x₂=4/(5+x₀) and x₁=4x₀/(9+5x₀);
+then G₂=0 gives 19x₀²−60x₀+9=0, whose only unit-interval root
+is3/19 (the other is3). No bounded grid supplies these values.
+
+For g, put c=(1−x₀)(1−x₁)(1−x₂)=5104/28861. Its response at0
+pays 1−x₀x₁x₂=1507/1519. EVERY finite deadline after0 pays
+−1+2c=−18653/28861: an opponent root exits passively with reward−1,
+while all-opponent-Never gives g its own singleton1. Literal Never
+pays−1+c=−23757/28861. Its root is strictly best. Therefore the
+ACTUAL complete payoff/cap pair of this independent profile is
+
+    U=B=(−319/1519, −11/49, −119/589, 1507/1519),
+    D=0.
+
+This is an unrestricted terminal Nash profile, not only a one-row Nash:
+the sure g screens EVERY later response of each core owner, and the
+listed two late options exhaust g's complete menu. The profile absorbs
+surely at date0. The fixed displayed vector is consequently a uniform-
+equilibrium payoff as well; the zero live decision-date convention gives
+the bounded one-date averaging discrepancy. The repair changes the sure
+cohort and all three other rates, rather than pricing the two endpoints
+of the old three-sure family. It proves only this exact table's escape,
+not a universal repair of arbitrary genuine bridges.
+
+There is also an independent existing-source retirement. All own
+singletons are1 and all rewards are≤1. If the true minimum δ were
+positive, `positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+would give U_i−1>0 at a true carrier minimum, impossible since U_i≤1.
+Compactness and debt nonnegativity give Δ=0; the actual no-UE/gain
+bridge gives a uniform-equilibrium payoff. This is not new class coverage.
+The payoff-envelope declaration
+`exists_minimumTerminalSemanticDebt_le_sqrt_of_fourPlayer` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPayoffEnvelope.lean`
+was narrowly located as the same existing consumer with envelope0.
+All-pure escape is emphatically not known-producer noncoverage.
+
+Consequently neither “the two pure endpoint labels exceedΩ” nor
+“the earliest bridge has different payoff kernels” yields a paid
+random-root consumer. Even removing every pure terminal Nash point
+does not fix those implications. A new GLOBAL attempt must use the
+actual prescribed-margin constraints and all moving minimizing laws;
+the toy violates U_i>s_i at every owner and is not substituted for
+such a minimum. The prospective two-outcome finite-contact extension
+is retired in this form. Section50's deterministic pricing and the
+separately reviewed bridge source theorem are not contradicted.
 
 ## 50. One fresh table has random outcomes and no prescribed pre-active head
 

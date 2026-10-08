@@ -1,4 +1,4 @@
-# Consume a first collision at a positive global terminal-debt minimum
+# Consume a mixed first collision at a debt-rigid terminal-debt minimum
 
 ## Game and unrestricted response values
 
@@ -24,6 +24,15 @@ compact. For w=(u,b)∈K put D(w)=∑[i∈I](b_i−u_i), and let
 Assume δ>0. This is a lower bound against every actual behavioral profile,
 not only finite-clock, stationary, or bounded-memory profiles.
 Membership in K does not assert that the pair is realized by one profile.
+
+Assume recipient-row genericity: for each i, the numbers r_i(S) are
+pairwise distinct as S ranges over nonempty coalitions. Assume also that
+there is one nonnegative vector a, with ∑[i∈I]a_i=δ, such that
+
+    D(w)=δ ⇒ d_i(w)=a_i for every i and every w∈K.
+
+Only the debt vector is common. Minimizing payoffs, caps, laws and
+calendars need not coincide. Some a_i may be zero.
 
 ## Supplied first-row decomposition
 
@@ -58,6 +67,35 @@ minimum. The row need not be Nash against u or b. The tail need not
 minimize debt; its only automatic lower bound is D(v)≥δ. Rates zero and
 one are allowed. No positive Never probabilities are assumed, and no
 conditioning on a zero-survival event is permitted.
+
+## Constraint on every minimum prefix
+
+Require the following on the ENTIRE same carrier, not just the supplied
+row. For every x∈[0,1]⁴ and w∈K with
+
+    ∑[i∈I]x_i>0,      D(T_x(w))=δ,
+
+at least two rates x_i are positive, at least one lies strictly between
+zero and one, and some player i satisfies
+
+    Q_i(x)=A_i(x)+α_i(x)b_i(w).
+
+Thus every nonzero minimum prefix has a random first-root coalition law
+and an exact tie between Quit and the complete Continue response value.
+The player realizing the tie may have zero debt and zero prescribed
+root Quit probability. Sure quitters and α_i(x)=0 remain allowed.
+
+For every such row, a tied player's positive singleton margin implies
+that some nonempty opponent coalition S has p_{−i}(S;x)>0. On that
+event, Quit pays r_i(S∪{i}) and Continue pays r_i(S), which are different
+by row genericity. This is a genuine payoff-kernel distinction, although
+the complete expected response values tie. It is not a positive gain.
+No tail stopping date is assumed to attain b_i(w).
+
+This global condition applies again after any proved same-table
+minimum-preserving graft or reconstruction. A tie at one supplied row
+alone would not license that reuse. A reward-table change requires
+re-establishing the conditions for the changed table and carrier.
 
 ## Quantitative minimum constraints
 
@@ -96,14 +134,21 @@ table such that
 
 or prove directly that the supplied conditions are inconsistent.
 
-The first-collision configuration can be extracted from any sequence of
-actual profiles tending to a positive four-player global debt infimum.
+A positive four-player terminal-gap table, if one exists, permits
+reselection to a bounded table with the common-debt and universal
+minimum-prefix properties above and at least one nonzero minimum
+prefix. No old minimizing law is asserted to survive that table change.
 Consequently an affirmative answer rules out positive terminal gaps and
 gives uniform-equilibrium payoff existence. In that conclusion one fixed
 payoff target must work at every accuracy: the profile and horizon
 threshold may depend on the accuracy, but for that profile the payoff
 and all unilateral gains must satisfy the error bound at every larger
 finite-average horizon.
+
+It is also acceptable to produce a more restrictive class from arbitrary
+positive-gap game data and prove inconsistency there. Any additional
+strategic or reward-table condition must be produced by that reduction,
+not assumed for one convenient selected profile.
 
 A complete negative answer is an explicit four-player table and Γ>0
 such that, against every behavioral profile, some unilateral behavioral
