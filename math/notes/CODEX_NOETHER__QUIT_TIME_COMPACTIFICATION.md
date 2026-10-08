@@ -15,8 +15,14 @@ RM46 now selects least literal joint-Never mass among full minima at
 the SAME NP table, excluding that subgeometry and giving the exhaustive
 alternative: at least two genuine bridging owners, or a sole zero-root-
 mass bridger together with a different later-only cap owner. RM46 is an
-ordinary unreviewed strengthening. Neither branch has a general below-δ
-competitor yet; this disjunction does not complete the Fin4 consumer.
+ordinary strengthening with its own focused independent CODEX_MORSE
+PASS. Neither branch has a general below-δ competitor yet; this
+disjunction does not complete the Fin4 consumer. The author-owned
+self-contained candidate
+[`CODEX_NOETHER__LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`](CODEX_NOETHER__LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md)
+now includes the full original source and every needed end-wall/word
+input. Its assembled whole-artifact review is pending; it is not in
+exports or supplied as a checked Lean theorem.
 
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
