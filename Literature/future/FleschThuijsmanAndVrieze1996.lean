@@ -1,5 +1,6 @@
 import Literature.FleschThuijsmanAndVrieze1997
 import Mathlib.Order.Filter.AtTopBot.CountablyGenerated
+import Mathlib.Geometry.Convex.ConvexSpace.Barycenter
 import MathUE.Probability.RatioProperPair
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.ProperPairLimit
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.BestReplyMassEstimate
@@ -56,8 +57,12 @@ also apply to every positive delta sequence tending to zero.
 Remark 2's payoff-convention equality is formalized for the canonical model,
 even for arbitrary behavioral profiles. Canonical Remark 3 selects one
 stationary pair with limiting Nash bounds and a common finite-horizon cutoff.
-Example 4 and Remark 1 are not formalized here. The original-model versions of
-Remarks 2 and 3 still require the absorbing-stage reduction.
+Remark 1's literal subset-constrained domain, compact convex geometry and
+sufficiently-small-delta feasibility are formalized below. Its unrestricted
+printed delta range is refuted by the empty two-action domain at delta 3/4.
+Restricted-game equilibrium existence and its limiting ranking properties are
+separate obligations. Example 4 is not formalized here. The original-model
+versions of Remarks 2 and 3 still require the absorbing-stage reduction.
 The canonical statements do not settle the original model reduction. This file
 does not claim complete paper coverage or a fixed-target
 uniform-equilibrium payoff from Theorem 3.1.
@@ -1524,6 +1529,147 @@ theorem example3_pathwise_corrected :
   rintro ⟨profile, hprofile⟩
   exact hexclusion ε hε hsmall
     ⟨profile, (example3_pathwiseEquilibrium_iff_terminal ε profile).mp hprofile⟩
+
+/-! ## Section 4: Remark 1
+
+The source's restricted simplex imposes a lower bound on the total probability
+of every nonempty proper subset of actions, not just a coordinate floor.
+Its printed range `0 < delta < 1` can make that domain empty: with two actions,
+both singleton masses must be at least delta. The exact feasibility threshold
+is delta at most 1/2. The general uniform witness below establishes feasibility
+for sufficiently small delta; it does not establish a restricted-game Nash
+equilibrium or the remark's limiting ranking properties.
+-/
+
+/-- The literal Remark 1 domain, with every nonempty proper-subset mass constraint. -/
+def remark1RestrictedStrategies (I : Type*) [Fintype I] (δ : ℝ) : Set (I → ℝ) :=
+  {x | x ∈ GameTheory.Math.Probability.simplexWeights I ∧
+    ∀ U : Finset I, U.Nonempty → U ⊂ Finset.univ →
+      δ ^ (Fintype.card I - U.card) ≤ ∑ i ∈ U, x i}
+
+/-- The source subset domain is closed, even when its constraints are infeasible. -/
+theorem remark1_isClosed_restrictedStrategies (I : Type*) [Fintype I] (δ : ℝ) :
+    IsClosed (remark1RestrictedStrategies I δ) := by
+  classical
+  have heq : remark1RestrictedStrategies I δ =
+      GameTheory.Math.Probability.simplexWeights I ∩
+        ⋂ U : Finset I, ⋂ _ : U.Nonempty, ⋂ _ : U ⊂ Finset.univ,
+          {x : I → ℝ | δ ^ (Fintype.card I - U.card) ≤ ∑ i ∈ U, x i} := by
+    ext x
+    simp [remark1RestrictedStrategies]
+  rw [heq]
+  exact (GameTheory.Math.Probability.isClosed_simplexWeights I).inter
+    (isClosed_iInter fun U => isClosed_iInter fun _ => isClosed_iInter fun _ =>
+      isClosed_le continuous_const (continuous_finsetSum U fun i _ => continuous_apply i))
+
+/-- Compactness is inherited from the existing finite simplex. -/
+theorem remark1_isCompact_restrictedStrategies (I : Type*) [Fintype I] (δ : ℝ) :
+    IsCompact (remark1RestrictedStrategies I δ) :=
+  (GameTheory.Math.Probability.isCompact_simplexWeights I).of_isClosed_subset
+    (remark1_isClosed_restrictedStrategies I δ) (fun _ hx => hx.1)
+
+/-- Every literal subset constraint is preserved by convex combinations. -/
+theorem remark1_convex_restrictedStrategies (I : Type*) [Fintype I] (δ : ℝ) :
+    Convex ℝ (remark1RestrictedStrategies I δ) := by
+  intro x hx y hy s t hs ht hst
+  refine ⟨GameTheory.Math.Probability.convex_simplexWeights I hx.1 hy.1 hs ht hst, ?_⟩
+  intro U hU hproper
+  change δ ^ (Fintype.card I - U.card) ≤ ∑ i ∈ U, (s * x i + t * y i)
+  rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum]
+  calc
+    δ ^ (Fintype.card I - U.card) =
+        s * δ ^ (Fintype.card I - U.card) + t * δ ^ (Fintype.card I - U.card) := by
+      rw [← add_mul, hst, one_mul]
+    _ ≤ s * (∑ i ∈ U, x i) + t * (∑ i ∈ U, y i) :=
+      add_le_add (mul_le_mul_of_nonneg_left (hx.2 U hU hproper) hs)
+        (mul_le_mul_of_nonneg_left (hy.2 U hU hproper) ht)
+
+/-- Canonical uniform weights satisfy every source constraint for sufficiently small delta. -/
+theorem remark1_uniform_mem_restrictedStrategies {I : Type*} [Fintype I] {δ : ℝ}
+    (hδ : 0 < δ) (hsmall : δ ≤ (Fintype.card I : ℝ)⁻¹) :
+    (fun _ : I => (Fintype.card I : ℝ)⁻¹) ∈ remark1RestrictedStrategies I δ := by
+  classical
+  have hcard : 0 < Fintype.card I := by
+    by_contra hnot
+    have hzero : Fintype.card I = 0 := Nat.eq_zero_of_not_pos hnot
+    have hnonpos : δ ≤ 0 := by simpa only [hzero, Nat.cast_zero, inv_zero] using hsmall
+    exact (not_le_of_gt hδ) hnonpos
+  let : Nonempty I := Fintype.card_pos_iff.mp hcard
+  have hcardReal : 0 < (Fintype.card I : ℝ) := by exact_mod_cast hcard
+  have hcardOne : (1 : ℝ) ≤ Fintype.card I := by exact_mod_cast hcard
+  have hδOne : δ ≤ 1 := hsmall.trans ((inv_le_one₀ hcardReal).mpr hcardOne)
+  refine ⟨?_, ?_⟩
+  · have hweights :
+        ((Convexity.StdSimplex.barycenter (K := ℝ) (M := I)).weights : I → ℝ) =
+          fun _ : I => (Fintype.card I : ℝ)⁻¹ := by
+      funext i
+      exact Convexity.StdSimplex.weights_barycenter_apply i
+    rw [← hweights]
+    exact weights_mem_simplexWeights (Convexity.StdSimplex.barycenter (K := ℝ) (M := I))
+  · intro U hU hproper
+    have hless : U.card < Fintype.card I := by
+      simpa only [Finset.card_univ] using Finset.card_lt_card hproper
+    have hexponent : 1 ≤ Fintype.card I - U.card := Nat.sub_pos_of_lt hless
+    have hUOne : (1 : ℝ) ≤ U.card := by exact_mod_cast Finset.card_pos.mpr hU
+    calc
+      δ ^ (Fintype.card I - U.card) ≤ δ := by
+        simpa only [pow_one] using pow_le_pow_of_le_one hδ.le hδOne hexponent
+      _ ≤ (Fintype.card I : ℝ)⁻¹ := hsmall
+      _ ≤ (U.card : ℝ) * (Fintype.card I : ℝ)⁻¹ := by
+        simpa only [one_mul] using
+          mul_le_mul_of_nonneg_right hUOne (inv_nonneg.mpr hcardReal.le)
+      _ = ∑ i ∈ U, (Fintype.card I : ℝ)⁻¹ := by
+        simp only [Finset.sum_const, nsmul_eq_mul]
+
+/-- The literal restricted simplex is nonempty throughout a sufficient small-delta range. -/
+theorem remark1_restrictedStrategies_nonempty_of_smallDelta
+    {I : Type*} [Fintype I] {δ : ℝ}
+    (hδ : 0 < δ) (hsmall : δ ≤ (Fintype.card I : ℝ)⁻¹) :
+    (remark1RestrictedStrategies I δ).Nonempty :=
+  ⟨_, remark1_uniform_mem_restrictedStrategies hδ hsmall⟩
+
+/-- On two actions, the printed subset domain is feasible exactly up to delta 1/2. -/
+theorem remark1_finTwo_nonempty_iff {δ : ℝ} :
+    (remark1RestrictedStrategies (Fin 2) δ).Nonempty ↔ δ ≤ 1 / 2 := by
+  classical
+  constructor
+  · rintro ⟨x, hx⟩
+    have hzero := hx.2 {0} (by simp) (by decide)
+    have hone := hx.2 {1} (by simp) (by decide)
+    norm_num at hzero hone
+    have hsum : x 0 + x 1 = 1 := by
+      simpa only [Fin.sum_univ_two] using
+        (GameTheory.Math.Probability.mem_simplexWeights.mp hx.1).2
+    linarith
+  · intro hhalf
+    have huniform := remark1_uniform_mem_restrictedStrategies
+      (I := Fin 2) (δ := 1 / 2) (by norm_num) (by norm_num)
+    refine ⟨_, huniform.1, ?_⟩
+    intro U hU hproper
+    have hUpos : 0 < U.card := Finset.card_pos.mpr hU
+    have hUless : U.card < 2 := by
+      simpa only [Finset.card_univ, Fintype.card_fin] using Finset.card_lt_card hproper
+    have hUcard : U.card = 1 := by omega
+    simpa [hUcard] using hhalf
+
+/-- Delta 3/4 lies in the printed range but its two-action source domain is empty. -/
+theorem remark1_finTwo_threeQuarter_empty :
+    remark1RestrictedStrategies (Fin 2) (3 / 4) = ∅ := by
+  apply Set.eq_empty_iff_forall_notMem.mpr
+  intro x hx
+  have hhalf := (remark1_finTwo_nonempty_iff (δ := 3 / 4)).mp ⟨x, hx⟩
+  norm_num at hhalf
+
+/-- A necessary domain-feasibility consequence of the printed full delta range. -/
+def Remark1FinTwoAllDeltaFeasibilityClaim : Prop :=
+  ∀ δ : ℝ, 0 < δ → δ < 1 → (remark1RestrictedStrategies (Fin 2) δ).Nonempty
+
+/-- The printed unrestricted delta range already fails for a two-action strategy set. -/
+theorem remark1_printedDeltaRange_refuted : ¬ Remark1FinTwoAllDeltaFeasibilityClaim := by
+  intro hclaim
+  obtain ⟨x, hx⟩ := hclaim (3 / 4) (by norm_num) (by norm_num)
+  rw [remark1_finTwo_threeQuarter_empty] at hx
+  exact hx
 
 /-! ## Section 4: Remark 2
 

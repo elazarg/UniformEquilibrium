@@ -486,6 +486,7 @@ import MathUE.Probability.AnalyticRestrictedSourceCalendarAccount
 import MathUE.Probability.AnalyticRestrictedSourceChargeAlternative
 import MathUE.Probability.AnalyticStationaryClass
 import MathUE.Probability.AnalyticStationaryPoisson
+import MathUE.Probability.BooleanEndpointExpectation
 import MathUE.Probability.BoundedRealizedAccountAlternative
 import MathUE.Probability.CausalQuitConvexHull
 import MathUE.Probability.ChargedCirculationChattering

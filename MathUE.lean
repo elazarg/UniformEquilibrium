@@ -563,6 +563,7 @@ import MathUE.Probability.FiniteControlledStoppingEnvelope
 import MathUE.Probability.FiniteControlledStoppingOptimalPolicy
 import MathUE.Probability.FiniteDiscountedFlow
 import MathUE.Probability.FiniteIndependentMixture
+import MathUE.Probability.BooleanEndpointExpectation
 import MathUE.Probability.FiniteKernelRegeneration
 import MathUE.Probability.FiniteKernelPeriodicMixing
 import MathUE.Probability.FiniteLawRepair

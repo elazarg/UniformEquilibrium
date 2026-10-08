@@ -9,6 +9,7 @@ import Research.MarkedCalendar.FiniteLawGeometry
 import Research.MarkedCalendar.SupportedAtomVariation
 import Research.MarkedCalendar.SupportedAtomSemanticVariation
 import Research.MarkedCalendar.SupportedAtomConditioning
+import Research.MarkedCalendar.ChronologicalCellConditioning
 import Research.MarkedCalendar.FiniteLawCaps
 import Research.MarkedCalendar.FiniteLawSemanticMinimum
 import Research.General.AnytimeDetectionConditional
