@@ -195,6 +195,14 @@ rational table has, for EVERY last menu date, ONE restricted-menu equilibrium
 and its unrestricted full debt is always7/8. This table is already solved by
 the tracked positive-inverse three-child producer. Approximate FULL-cap
 finite words and genuinely selected nonlocal returns are not refuted.
+The live global variation is RM39: FIXED positive owns and zero Never, with
+independent passive-row taxes. Both extreme faces have actual full-game
+equilibria, so an assumed positive SUM gap has a genuine interior worst tax.
+The attempt now concerns its SWITCHING minimizing sources. A selected
+limiting complete-response ledger is priced in each tax direction; pricing
+ALL active tests at one supplied minimum is false. The old NP minimizers,
+debt rigidity and separated absorbing floor are not transported to this
+new global maximum. No interior consumer or new export is claimed.
 
 The body retains the independently reviewed compact/source reductions,
 the PD deterministic-outcome contribution incorporated with attribution
@@ -21726,3 +21734,241 @@ table does not refute approximate full-cap finite-word selection,
 charged periodic/nonlocal circuits, or their possible all-table source.
 The next attempt must change the selection mechanism rather than add
 extra late tests to this already complete restricted correspondence.
+
+## RM39: a whole-table passive-tax maximum and its genuine source-switching seam
+
+Status: a complete ordinary boundary/source calculation and a failed
+ALL-active derivative implication. This is an actual FULL-game variational
+attempt, not a positive-gap example, an independently reviewed export,
+or a supplied Nash-word selector. The interior consumption step is open.
+
+PT1: exact question and one fixed family. Start with a finite four-player
+reward table r with all own singletons s_i=r_i({i})>0 and assume its true
+SUM-debt infimum is positive:
+
+    D_r(p)=Σ_i[B_i(r,p)−U_i(r,p)],
+    Δ(r)=inf[ALL independent behavioral profiles p]D_r(p)>0. (PT.1)
+
+Here U is expected eventual terminal reward, B is the supremum over each
+owner's COMPLETE unilateral behavioral replacements, and allNever pays0.
+The canonical fully-paid nonsure source provides such a starting table
+from a hypothetical counterexample. Only its positive-own/positive-full-gap
+facts are used in this block; none of its previously selected minima is
+carried through the variation.
+
+For λ∈ℝ⁴ define the literal PASSIVE tax
+
+    r_i^λ(S)=r_i(S)−λ_i·1_{i∉S},   ∅≠S⊆I,
+    allNever payoff=0.                                      (PT.2)
+
+Every participant entry, particularly EVERY own s_i, is fixed. Positive
+λ lowers all seven passive entries of that recipient; negative λ raises
+them. This is equivalent to participation rewards plus a terminal row
+translation, NOT a translation of the Never reward. Never remains0.
+The objective throughout this block is SUM debt, not maximum exploitability.
+Their zero-infimum equivalence is used only at the semantic UE endpoint.
+
+For any law profile or unilateral replacement write P_i for the probability
+of a nonempty terminal coalition not containing i. Its payoff changes by
+exactly−λ_iP_i. Thus each fixed-profile debt is a supremum of affine
+functions of λ_i whose slopes lie in[−1,1]. Taking the sum and then the
+infimum gives the global bound
+
+    |Δ(r^λ)−Δ(r^η)|≤Σ_i|λ_i−η_i|.                         (PT.3)
+
+Also0≤Δ(r^λ)≤Σ_i s_i, because allNever's full cap is exactly s_i.
+All statements cover finite/Never tests and all behavioral mixtures.
+
+PT2: the actual high-tax boundary is an EXACT full equilibrium. Define
+
+    u_i=1+max(0,max[∅≠T⊆I\{i}](r_i(T)−r_i(T∪{i}))).    (PT.4)
+
+For λ_i≥u_i EVERY nonempty joining difference for i is strictly positive.
+Hold i sure at date0. The remaining three owners play their finite binary
+normal-form game at that date: Quit joins i's coalition, Continue leaves
+them out. A mixed Nash equilibrium of this finite static game exists.
+After an all-Continue date0 use the literal allNever tail. This branch is
+not prescribed-reached because i was sure; it is retained for i's complete
+deviations.
+
+For every other owner j, the sure i screens ALL later and Never tests.
+The full original deviation problem is exactly its static Quit/Continue
+choice; its binary Nash inequality is therefore its complete cap inequality.
+For i let μ(T) be the opponent-product probability of date0 coalition T
+and let h=μ(∅). Its forced-Quit value Q and best value C after continuing
+date0 satisfy
+
+    Q=Σ_T μ(T)r_i(T∪{i}),
+    C=Σ_{T≠∅}μ(T)(r_i(T)−λ_i)+h s_i,
+    Q−C=Σ_{T≠∅}μ(T)[r_i(T∪{i})−r_i(T)+λ_i]≥0.           (PT.5)
+
+The empty event cancels because s_i>0 makes a later singleton better than
+Never0 against the allNever tail. Earlier than date0 is unavailable; ALL
+later finite tests give exactly C, and Never gives no more. Hence i is
+also unrestricted Nash. The prescribed profile absorbs at date0 and has
+zero FULL debt, for EVERY choice of the other three taxes. Consequently
+
+    λ_i≥u_i for SOME i  ⇒  Δ(r^λ)=0.                       (PT.6)
+
+No conditional punishment, Nash child, or owner best-reply repair is missing
+from this boundary proof; the actual tail is literally allNever.
+
+PT3: the actual low-tax boundary uses a REAL three-player producer.
+Set
+
+    A_i=max[i∈S]r_i(S)≥s_i>0,
+    m_i=min[∅≠T⊆I\{i}]r_i(T),
+    l_i=m_i−A_i−1.                                        (PT.7)
+
+When λ_i≤l_i EVERY passive reward r_i(T)−λ_i is at least A_i+1,
+strictly above EVERY participant reward of i, including its singleton.
+Remove i, retaining the actual restricted table r^λ on the other three
+owners. Their own singletons remain strictly positive. The actual theorem
+`QuittingThreePlayerStrategyClass.of_card_le_three` in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardAllSigns.lean`
+provides, for EVERY ε>0, a profile with complete behavioral terminal
+debt≤ε in EACH child coordinate, for arbitrary signed other rewards.
+I read its complete statement/proof under its imports and the definition
+`StationaryOrSmallHazardTerminalEquilibrium` in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`.
+The stationary/small-hazard label is not used; its actual approximate
+profiles and unrestricted terminal inequalities are. No unproved
+Literature statement is an input.
+
+The following elementary full-response bound controls the child's joint
+Never probability ν_child. In ANY independent quitting profile with
+positive own singleton s_j, let n_j be j's Never mass and let h_j be
+the opponent Never product. If R_j is its prescribed Never payoff, pure
+finite deadlines tending to∞ have payoffs tending R_j+h_js_j; hence
+B_j≥R_j+h_js_j. All its finite conditional actions have payoff≤B_j,
+so
+
+    U_j≤(1−n_j)B_j+n_jR_j,
+    d_j=B_j−U_j≥n_j(B_j−R_j)≥ν_child s_j.                 (PT.8)
+
+This needs no attained late response, stationary law or finite support.
+Bounded convergence supplies the late-clock limit. With
+s_min=min[j≠i]s_j>0, the supplied child profile therefore has
+ν_child≤ε/s_min.
+
+Lift it by prescribing i Never. Compare a COMPLETE replacement of i
+sample-by-sample using the same opponent clocks. If some child stops
+finitely, i's prescribed reward is its passive reward, which exceeds
+EVERY reward its deviation could obtain by quitting earlier or joining
+the first coalition. If that deviation quits after the opponents, the
+terminal outcome is unchanged. Only the child-allNever event can yield
+a positive improvement: its size is ν_child and i can obtain at most
+its singleton s_i instead of0. Consequently
+
+    d_i(parent)≤s_iν_child≤(s_i/s_min)ε,
+    D_parent≤(3+s_i/s_min)ε.                               (PT.9)
+
+The child owners' complete response problems are exactly the restricted
+game because i never participates. Thus ε→0 proves Δ(r^λ)=0, and the
+actual terminal all-errors consumer gives an original-game fixed UE target.
+No particular child target, a.s.-finite child law, or favorable selected
+child equilibrium was assumed. This is an EXISTENTIAL actual approximate
+family, not an inference from one bad/good child witness. Therefore
+
+    λ_i≤l_i for SOME i  ⇒  Δ(r^λ)=0.                       (PT.10)
+
+The relevant semantic endpoints were reread in
+`UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean` and
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+This argument is ordinary mathematics using their actual all-deviations
+contract. No new Lean proof or build is claimed.
+
+PT4: the worst tax is interior BEFORE source selection. Equations
+(PT.3),(PT.6),(PT.10) give a continuous, nonnegative function
+λ↦Δ(r^λ), zero whenever ANY coordinate leaves its finite interval
+[l_i,u_i]. Since Δ(r)>0, its maximum over the explicit box
+∏_i[l_i−1,u_i+1] is attained at some λ* strictly inside
+∏_i(l_i,u_i), with
+
+    Ω=Δ(r^{λ*})≥Δ(r)>0.                                  (PT.11)
+
+Its full reward table is finite, owns are still the original positive s,
+and EVERY profile still has D≥Ω. The SAME table r*=r^{λ*} admits
+arbitrarily close actual minimizing profiles and ordinary compact
+terminal-semantic minimum points. These are FRESH sources selected AFTER
+the tax maximum. They are not the old NP sources. In particular this proof
+does NOT preserve the old separated absorbing floor, common positive debt
+vector, common Never mass, full-row genericity or frozen finite-contact
+conditions. If one of those is later used here it needs its own compatible
+selection; it is not inherited from the starting table.
+
+PT5: what source switching DOES rigorously price. Fix ANY direction
+a∈ℝ⁴. Take ε_k>0 tending0 and actual ε_k²-minimizers p_k for
+r^{λ*+ε_k a}. Since λ* is a GLOBAL family maximum,
+
+    D_new(p_k)≤Ω+ε_k²,    D_old(p_k)≥Ω.                    (PT.12)
+
+Choose for each i an OLD-table complete pure-clock response τ_{i,k}
+whose payoff is within ε_k² of its full cap at p_k. Finite or Never
+labels are allowed. Pure-clock extremality supplies these tests; exact
+attainment is not assumed. Define the actual probability ledger
+
+    L_{i,k}=P_i(p_k)−P_i(p_k with i replaced by τ_{i,k}).   (PT.13)
+
+The new cap is at least the payoff of that SAME actual response. The
+old own payoff and the selected old response payoff change by their
+literal passive probabilities, so
+
+    D_new(p_k)≥D_old(p_k)+ε_k Σ_i a_iL_{i,k}−4ε_k²,
+    Σ_i a_iL_{i,k}≤5ε_k.                                 (PT.14)
+
+By(PT.3) these p_k are also OLD-table near-minimizers, with old debt
+tendingΩ. Extract their finite-dimensional prescribed terminal
+probability vectors and all four selected response terminal vectors.
+They lie in compact simplices on the15 coalitions plus Never. The
+selected response payoff gaps tend0, so the limit retains an ACTUAL
+old-table global minimum realizing sequence and maximizing complete
+responses in the corresponding augmented semantic closure. No raw
+clock tightness, newly born maximizer, or calendar transport is required
+for this probability/payoff ledger extraction. Its limiting vector L
+satisfies a·L≤0.
+
+Let ℒ be the compact set of ALL limiting ledgers of old near-minimizers
+and old cap-approximating pure responses. Equivalently use the intersection
+of closures of ledgers with debt≤Ω+1/k and response errors≤1/k;
+these nested compact sets are nonempty and define exactly this limiting
+set. The preceding proof gives
+
+    EVERY a∈ℝ⁴ has SOME L∈ℒ with a·L≤0,
+    hence0∈conv ℒ.                                       (PT.15)
+
+Strict finite-dimensional separation proves the second implication:
+otherwise some a is uniformly positive on the compact convex hull,
+contradicting the first. Carathéodory gives at most FIVE actual limiting
+minimum/response ledgers whose convex average is0. All belong to ONE
+worst tax table. They need not have the SAME prescribed law or payoff
+port, the SAME cap labels, or a behavioral realization of their average.
+This finite averaging is mathematical bookkeeping, NOT legal public
+correlation or an independent-law equilibrium construction.
+
+PT6: the exact failed ALL-active inference. One cannot replace the
+selected old tests in(PT.13) by ALL limiting active cap tests, or put
+all directions on one prescribed minimum. Even a UNIQUE minimizing
+law can move fast enough to change which tied OLD test supplies the
+comparison. The elementary model
+
+    f(x,λ)=κ+max(x+λ,−x−λ)=κ+|x+λ|,
+    inf[x∈ℝ]f(x,λ)=κ                                   (PT.16)
+
+has κ>0, unique minimizer x=−λ and two active tests at x=λ=0.
+Both have λ slopes+1 and−1. The value derivative is0, NOT their
+maximum+1. For λ=ε>0 the new minimizer x=−ε has OLD debtκ+ε
+and OLD maximizing test−x; its slope is−1. The opposite direction
+selects the other test. Thus(PT.14) correctly prices a selected limiting
+old test, while the proposed bound for EVERY active limiting test fails.
+This is an abstract envelope falsifier, NOT an actual positive-gap
+quitting table or an attempted replacement for the global boundary proof.
+
+The open global step is to consume the same-table switching alternatives
+in(PT.15), using ACTUAL independent laws and all cap branches. Neither
+convexly mixing whole minimum profiles nor serially installing their
+ports is authorized by the ledger. Such mixing can create new collision
+payoffs and cap maxima; serial blocks can create a cap-mixing price.
+The complete boundary proof makes the global variation legitimate, but
+it does not itself eliminate a surviving positive-gap class. This block
+remains supporting mathematics until that interior step is proved.
