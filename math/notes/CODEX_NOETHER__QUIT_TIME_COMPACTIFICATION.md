@@ -165,9 +165,16 @@ and the uniform full60-coordinate raw extension. His SC1–SC6 further
 produces closure by a reward-derived scalar IVT and leaves fourteen
 recipient-coalition entries arbitrary under ALL unilateral replies;
 my focused delta review passes. Both verdicts are in the existing MORSE
-feedback, with exact section hashes. They do not certify an as-yet-unread
-standalone or assert arbitrary-table coverage. RM35 itself remains a
-supporting actual-word consumer, not a self-exported class theorem.
+feedback, with exact section hashes. The final standalone text, after its
+explicit Γ-definition repair, is now the independently reviewed canonical
+[`SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md`](../exports/SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md),
+SHA256ae88bf68…b176. It asserts a reward-only special class, NOT
+arbitrary-table coverage. RM35 itself remains a supporting actual-word
+consumer, not a self-exported class theorem. RM36 below records an elementary
+same-family extension in the ten deviation-only directions: lowering those
+entries controls EVERY full cap with prescribed payoffs unchanged. This is
+internal supporting mathematics, not a claimed new counterexample reduction
+or a change to the frozen exported class.
 
 The current whole-goal question is NONLOCAL compatible charged-word
 production with freely selected common ports, including below-own quiet
@@ -21157,3 +21164,118 @@ ordinary independently UNREVIEWED supporting mathematics. The next
 whole-goal task is to produce a compatible charged return from arbitrary
 game data, or refute that specific mechanism with an actual full-graph
 obstruction; no closed circuit is supplied by this section.
+
+## RM36: one-sided reward changes along an actual circuit family
+
+Status: COMPLETE ORDINARY SUPPORTING PROOF, INDEPENDENTLY UNREVIEWED.
+This extends a particular already produced profile FAMILY, not the arbitrary
+four-player producer. It is not included in the frozen scalar-circuit export
+and does not establish noncoverage by every other known UE producer.
+
+Question and finite data. Fix I={0,1,2,3}, independent private behavioral
+randomization, terminal nonabsorption0, and the usual fixed-target uniform
+contract against unrestricted unilateral behavioral deviations. Let r⁺
+be a reference table satisfying the reward-only coefficient criterion of
+`exports/SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md`, Sections2–5.
+Its finite periodic acceptance family has, at EVERY live date, prescribed
+rate support in
+
+    A={{0},{3},{1},{1,2,3},{0,2}}.
+
+No extra continuation choice, root or equilibrium family is an input to
+that coefficient criterion. The reference family is its proved output.
+Let r be another finite real table with the following coordinate conditions.
+
+Retain ALL36 recipient coordinates on the prescribed coalition rows
+
+    P={{0},{1},{2},{3},{0,2},{1,2},{1,3},{2,3},{1,2,3}}.
+
+Weakly LOWER the following ten recipient-coalition coordinates, relative
+to r⁺, by arbitrary finite amounts:
+
+    r₀(01), r₀(03), r₀(012), r₀(013), r₀(023), r₀(I),
+    r₁(01), r₁(012), r₃(03), r₃(023).                 (MO1)
+
+The other fourteen recipient coordinates are arbitrary and independent:
+
+    01: recipients2,3;       03: recipients1,2;
+    012: recipients2,3;      013: recipients1,2,3;
+    023: recipients1,2;      I: recipients1,2,3.      (MO2)
+
+Claim. The EXACT SAME acceptance family from r⁺ has the SAME terminal and
+finite-horizon prescribed payoffs at r. For every family member σ, every
+owner i and every COMPLETE unilateral behavioral replacement η_i,
+
+    U_i^r(σ)=U_i^{r⁺}(σ),
+    U_i^r(η_i,σ_{−i})≤U_i^{r⁺}(η_i,σ_{−i}),
+    B_i^r(σ)≤B_i^{r⁺}(σ).                           (MO3)
+
+The same payoff comparison holds at every finite horizon. Hence the
+reference fixed-target uniform-equilibrium family is also valid at r,
+with no additional approximation error and the SAME fixed target.
+
+Proof of ALL-response coverage. At a date with support A∈A, an owner's
+unchanged opponents can quit only in a subset T⊆A∖{i}. Under that owner's
+full deviation the first absorbing coalition is T if i continues, or
+T∪{i} if i quits. Recipients other than i are irrelevant to i's cap.
+Enumeration over the five supports and four owners yields exactly the
+36 coordinates on P plus the ten in(MO1). The14 in(MO2) cannot be paid
+to their listed recipient under that recipient's own unilateral
+replacement. I independently repeated this finite mask enumeration;
+it gives46 used coordinates, of which36 are prescribed and10 are not.
+
+Couple the same prescribed coins and the same deviator strategy at both
+tables. Reward values do not affect state transitions or observations.
+The absorption time and coalition are thus identical pathwise. Under
+prescribed play that coalition lies in P, so the whole reward vector
+is unchanged. Under i's deviation its recipient entry is either
+unchanged or weakly lowered by(MO1), while(MO2) is impossible for i.
+Both tables pay0 on nonabsorption and on the live selecting date.
+The entire reward process is therefore unchanged on prescribed play
+and weakly lowered pointwise for the deviator. Expectation proves the
+terminal and EVERY finite-horizon inequalities. Taking the supremum
+over all complete strategies proves the cap inequality in(MO3).
+This argument covers private memory, mixed stopping clocks, Never,
+arbitrarily late dates and histories after absorption. It does not
+compare only forced-Quit endpoints at the old ports.
+
+Concrete reward-only producer, without a supplied reference profile.
+Fix once the ten upper bounds in(MO1), in its listed order, to
+
+    β=(−2,−2,4,4,4,−5,−2,4,3/2,4).
+
+Given the actual36 prescribed coordinates x, form the VIRTUAL table
+r⁺(x,β) with those36 entries, these ten β entries and, say, zeros in
+the14 unused positions. Apply the export's finite coefficient test to
+THIS virtual table. If it passes and the actual ten entries are≤β,
+(MO3) gives actual uniform equilibrium at the output target. Thus the
+criterion is a36-coordinate reward test times ten downward half-lines
+times unrestricted ℝ¹⁴. The test contains the literal reference core,
+because its virtual replacement of the unused14 entries does not
+change any scalar/quiet criterion. No closeness of the lowered entries
+to the reference bounds is needed.
+
+Important scope. The actual lowered table need NOT satisfy the export's
+original46-coordinate criterion. For example lowering r₃(03) below s₃
+breaks its favorite3 positive-premium formula at the actual table.
+One must NOT recompute the old rates as if that formula remained true.
+The reference family's original rates and ports are retained; owner3's
+formerly tied QUIET response at the solo0 dates is only made less
+profitable. Its prescribed active payoffs are unchanged. This is a
+same-law payoff/cap comparison, not transport of a true minimum or an
+equilibrium annotation through a table perturbation.
+
+Overlap and strategic limitation. I read
+`quittingTerminalPayoff_le_of_reward_le` and
+`IsεAsymptoticNash.of_nonnegative_reward_perturbation` in
+`UniformEquilibrium/Quitting/Terminal/TerminalPayoffRewardOrder.lean`.
+The general one-sided comparison principle is already production.
+Here prescribed rewards are EXACTLY unchanged on the actual family's
+mask, so there is no reward-distance error; unused recipient entries
+need not be globally ordered. Only the concrete ten-direction extension
+is additional to the sealed14-invisible-coordinate scope. Some lowered
+tables may acquire a simpler sure-root producer. I have NOT excluded
+all existing selection sets or claimed a new hard counterexample class.
+This supporting extension does not force any compatible circuit for
+arbitrary data. The remaining full-goal question is still physical
+common-port return through genuinely positive-premium collision jumps.
