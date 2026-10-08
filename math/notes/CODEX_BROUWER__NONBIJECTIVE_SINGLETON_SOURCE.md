@@ -126,6 +126,17 @@ step remains to produce an actual equilibrium or a satisfying positive-gap
 certificate; an additional compression or verification interface cannot
 supply either. No independent QC gate is requested.
 
+RS below is the current independent GLOBAL attempt. Its objective is the
+native ZERO-OWN ABSORPTIVE SUM infimum, not the unrestricted native gap
+(AllNever already has zero native debt). From a hypothetical counterexample
+it selects a positive Euclidean-ball maximum and derives a convex combination
+of at most57 SAME-table limiting minimum/response probability ledgers equal
+to the radial reward vector. The proof follows NEW-table minimizing laws and
+OLD finite full-cap approximants. It supplies no one-source proportionality,
+playable profile mixture, or equilibrium. The live question is whether its
+ALL-law minimum floor forces a legal absorbing competitor. A complete exact
+early test rejects a raw pure-coalition shortcut, not that global consumer.
+
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
 date to0, extract an ACTUAL carrier tail even at sure-owner boundaries,
@@ -10676,6 +10687,251 @@ elementary proof, but is no strategic coverage increment. NOETHER
 independently verified this exact source overlap before a QC audit.
 No redundant full gate or export is requested; retain the exact proof,
 infinite-final-block seam and signed boundary tests as supporting notes.
+
+## A native absorbing spherical maximum and full response-distribution duality
+
+### RS1. Exact global question, domain and counterexample adapter
+
+Status: COMPLETE ORDINARY, UNREVIEWED source-switching-safe dual proof;
+the global consumer is OPEN. This is notes-only supporting mathematics.
+The independently selected passive-tax maximum in NOETHER's RM40 is not
+identified with the spherical table below. No old NP minimum, genericity,
+common debt vector or common Never mass is transported through this maximum.
+
+Let I={0,1,2,3}. A native table z assigns a real reward z_i(S) to every
+nonempty S⊆I and recipient i, with z_i({i})=0 and AllNever payoff0.
+Each prescribed player independently samples T_i∈ℕ∪{Never}. For a profile
+p, let U_i(z,p) be its expected terminal reward and B_i(z,p) the supremum
+over COMPLETE unilateral behavioral replacements. Pure-clock extremality
+identifies B_i with the supremum over all finite deadlines and Never.
+Write D_z(p)=Σ_i(B_i−U_i), and FIX the actual absorbing domain
+
+    P_abs={p:∏_i p_i(Never)=0},
+    A(z)=inf[p∈P_abs]D_z(p).                         (RS.1)
+
+The responses in B are NOT restricted to remain absorbing. The prescribed
+domain is fixed before reward changes; it has an actual finite-a.s. owner,
+not a common prescribed absorption date. Full native infimum is always0
+because AllNever is terminal Nash. Nothing below asserts that full gap
+is positive.
+
+The no-UE→A>0 adapter is literal. The accepted paid-source initialization
+produces a bounded counterexample r with all own s_i>0 and full SUM gap
+δ>0. Define z_i(S)=r_i(S)−s_i for every nonempty coalition. Against fixed
+opponents, late finite tests converge to the Never payoff plus h_i s_i,
+where h_i is the opponents' Never product. Thus both r and z have their
+full caps equal to the finite-response supremum; every finite response
+absorbs and its payoff translation is exactly s_i. Consequently, at
+EVERY actual profile,
+
+    B_i(r,p)=B_i(z,p)+s_i,
+    U_i(r,p)=U_i(z,p)+s_i(1−ν),
+    d_i(r,p)=d_i(z,p)+s_iν,   ν=∏_j p_j(Never).       (RS.2)
+
+In particular D_r=D_z on P_abs, so A(z)≥δ>0. This does not turn native z
+into a full counterexample. Equivalently the accepted single-pivot source
+subtracts its lone positive own from that recipient row and preserves its
+absorbing gap by the same identity. No native theorem is being inferred
+from a stationary affine-invariance claim.
+
+### RS2. A genuinely global spherical maximum
+
+Let E be the56-dimensional Euclidean space of all native tables; its
+coordinates are (i,S) with S≠{i}. For two tables at sup distance e, EVERY
+prescribed payoff and EVERY finite/Never response payoff at the SAME laws
+changes by at most e. Thus each full cap changes by at most e and
+
+    |A(z)−A(z′)|≤8‖z−z′‖_∞,
+    A(tz)=tA(z) for t≥0.                              (RS.3)
+
+Both facts use the SAME domain P_abs. No minimum attainment, clock
+tightness, response attainment or fixed optimizing profile is needed.
+Nonnegativity follows from complete best-response domination of prescribed
+play. The compact Euclidean unit ball therefore has a maximizing table r.
+If some A(z)>0, the maximum a=A(r)>0 and ‖r‖₂=1, since otherwise positive
+rescaling increases A. For EVERY u∈E and ε>0,
+
+    A(r+εu)≤a‖r+εu‖₂.                                (RS.4)
+
+The maximizer is not assumed differentiable. In particular no generic
+recipient scaling or reward perturbation is performed after choosing it.
+
+### RS3. Compact limiting ledgers of actual old-table minima
+
+For an absorbing p let μ(p) be its distribution on the15 nonempty terminal
+coalitions, so Σ_S μ(S)=1. For owner i choose an ACTUAL finite response
+τ_i; let μ_i(p,τ_i) be the distribution after its replacement. That profile
+also absorbs because τ_i is finite, even if replacing the unique anchor
+by Never would not absorb. Put
+
+    g_i(S)=μ_i(p,τ_i)(S)−μ(p)(S) for S≠{i},
+    g_i({i})=0.                                      (RS.5)
+
+The coordinate-zero operation is only the orthogonal projection to E;
+it does not alter any native payoff identity. Each full raw row is a
+difference of probability distributions and has Euclidean norm≤√2, so
+‖g‖₂≤√8.
+
+Finite old-cap approximants ALWAYS exist at native owns0, including when
+Never maximizes. Indeed bounded convergence along actual deadlines gives
+V_i(t)→V_i(Never)+h_i·0=V_i(Never). Complete behavioral replacements
+average pure-clock values. Hence the finite supremum is the full cap.
+
+Let Z be the compact set of ALL cluster ledgers of actual p_k∈P_abs with
+D_r(p_k)→a, and chosen finite tests whose old full-cap gaps tend0. This
+can be defined without raw clock limits: take the nested closures of
+the bounded (μ,μ_i,U,B,g) ledgers having D_r≤a+1/k and each test gap≤1/k,
+then project their compact intersection. It is nonempty because actual
+infimum approximants and finite cap approximants exist. Every element
+retains one actual SAME-table absorbing minimizing sequence, its complete
+cap limit and its selected response distributions. It does not assert a
+limiting finite raw deadline or a named maximizing response atom.
+
+For EVERY g∈Z the native linear payoff identity gives
+
+    ⟨r,g⟩=a.                                       (RS.6)
+
+More precisely if the response gaps are at most e per owner then
+D_r(p)−4e≤⟨r,g⟩≤D_r(p). This also explains why the construction is
+about FULL cap ledgers rather than arbitrarily picked responses.
+
+### RS4. Follow new minimizing laws before separating old ledgers
+
+Fix ANY u∈E. For ε↓0 choose ACTUAL absorbing ε²-minimizers p_ε at the
+NEW table r+εu. At these same laws choose OLD-table finite tests within
+ε² of each OLD full cap, and let g_ε be(RS.5). No response is required
+to be maximizing at the new table. The new cap is at least its value
+on each selected old test. Thus
+
+    D_new(p_ε)≥D_old(p_ε)+ε⟨u,g_ε⟩−4ε²,
+    D_old(p_ε)≥a,
+    D_new(p_ε)≤a‖r+εu‖₂+ε².                          (RS.7)
+
+The old and new payoff/cap moduli in(RS.3) also show D_old(p_ε)→a.
+Extract only the finite-dimensional probability/semantic ledgers. Their
+limit g belongs to Z, and(RS.7) gives
+
+    ⟨u,g⟩≤a⟨u,r⟩.                                  (RS.8)
+
+This is SOME old limiting ledger for this direction. Neither EVERY active
+test nor ONE prescribed source works for every direction. For example,
+the abstract fixed-profile envelope κ+|x+λ| has unique old minimizing
+law x=0 but its new minimizer x=−λ changes the selected old maximizing
+branch. Compact attainment does not remove that compensation.
+
+If ar were outside conv Z, strict finite-dimensional separation would
+give u with ⟨u,g⟩>⟨u,ar⟩ for ALL g∈Z, contradicting(RS.8). Therefore
+
+    ar∈conv Z.
+    ar=Σ[a=1..k]α_a g^a,   k≤57, α_a≥0, Σ_aα_a=1.    (RS.9)
+
+Every g^a comes from ONE actual minimizing sequence at this SAME r.
+The chosen table precedes all these sequences. Carathéodory is only
+finite-dimensional bookkeeping: the α-average is NOT an independent
+stopping-law profile, public randomization, or legal common calendar.
+
+For each component let d_i^a be its limiting actual full debt. Since
+native own coordinates are zero, (RS.9) also gives the exact row identity
+
+    Σ_aα_a d_i^a=a‖r_i‖₂².                            (RS.10)
+
+This is an AVERAGE identity, not all-minimum debt rigidity or equality
+of the individual source debt vectors.
+
+### RS5. An exact response-difference table rejects a pure-coalition shortcut
+
+The unproduced consumer cannot simply say that a self-consistent
+response-minus-prescribed table with positive deliveries has a pure
+absorbing Nash coalition. Here is an exact FULL-response test, not a
+positive-gap example or an application of(RS.9).
+
+Use independent laws on dates0,1,2 (no Never):
+
+    p₀=(3/11,4/11,4/11), p₁=(5/9,0,4/9),
+    p₂=(3/7,0,4/7),     p₃=(4/7,3/7,0),
+    chosen tests τ=(1,2,1,0).                          (RS.11)
+
+Let μ be their actual first-coalition law, let μ_i be its law after
+replacing i by τ_i, and DEFINE ALL60 reward entries by
+
+    z_i({i})=0,  z_i(S)=μ_i(S)−μ(S) for S≠{i}.          (RS.12)
+
+Thus this is a complete signed native table specified by rational finite
+data, not an incomplete singleton matrix. For arbitrary finite deadline
+t≥3 and Never, all opponents have already stopped and the payoff is the
+same passive value. Therefore tests0,1,2,3 exhaust EVERY full cap here.
+Exact selected maxima and prescribed deliveries are
+
+    U=(114557/7844067,248035/23532201,
+       29635/2614689,43081/7844067)>0,
+    B=(21529/713097,289565/2614689,
+       18883/373527,55369/1120581),
+    D=4681256/23532201>0.                              (RS.13)
+
+For each i, its selected τ_i REALLY attains this full cap under z.
+In particular d_i=‖z_i‖₂², as predicted by the single-ledger identity.
+Nevertheless ALL15 pure date-zero coalitions are strictly escapable.
+For a mask S, toggle owner i; its deviation gain is z_i(S△{i})−z_i(S).
+Here is one strict witness per mask, writing coalitions in binary masks:
+
+    S: 1    2     3    4    5    6    7    8    9     10
+    i: 3    3     0    3    0    1    0    0    2      1
+    g:32/1617,320/1617,40/539,64/539,24/539,80/539,
+      30/539,16/539,80/1617,1520/4851;
+    S:11    12    13    14     15
+    i: 0     2     0     1      0
+    g:160/1617,80/1617,32/539,320/1617,40/539.           (RS.14)
+
+This is NOT an absorbing-gap barrier. Its singleton column3 is
+
+    (z₀({3}),z₁({3}),z₂({3}),z₃({3}))
+       =(0,80/441,64/1617,0)≥0.                        (RS.15)
+
+Let only owner3 use a geometric finite clock with hazard θ and let the
+others Never. It absorbs a.s. and delivers EXACTLY this column. With
+M=max|z_i(S)|, every other owner's pure finite reply differs from its
+passive singleton value by at most Mθ from a same-date joining spike;
+the remaining preemption term is nonpositive because(RS.15) is
+nonnegative. Its full cap is at most that passive value plus Mθ; owner3
+has payoff and cap0. Hence D≤3Mθ→0 and A(z)=0. The tested p in(RS.11)
+is NOT globally minimizing. This explicitly prevents using positive
+profile debt in place of the true all-law floor in the dual consumer.
+
+### RS6. Current global seam and narrow source record
+
+The stable output is(RS.9), not a UE proof or counterexample-class
+exclusion. The next mathematical question is: does the ALL-law minimum
+floor at r consume this finite mixture by an actual independent absorbing
+profile? Neither mixing entire source profiles nor selecting one ledger
+from their convex combination is justified. A one-source radial identity
+would require an additional proof; it is not recovered by genericity or
+by differentiability of nearby, rather than maximizing, tables.
+
+Sources inspected in this attempt, with their scope kept separate:
+
+- `not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+  in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean` gives
+  the original behavioral gap endpoint, not the native ABS objective.
+- `abs_quittingTerminalDebtSum_sub_le_of_reward_close`,
+  `abs_quittingTerminalDebtSumInf_sub_le_of_reward_close`, and
+  `quittingTerminalDebtSumInf_scaleQuittingReward` in
+  `UniformEquilibrium/Quitting/Terminal/TerminalDebtSumRewardGeometry.lean`
+  establish the FULL-domain geometry. (RS.3) proves its fixed ABS-domain
+  version directly from the same actual response comparisons.
+- `exists_positive_maximum_sum_source_of_not_uniformPayoff` in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticWorstSumRewardSource.lean`
+  selects a FULL unit-cube maximum. It does not state(RS.2),(RS.9) or
+  authorize treating that maximum as our native spherical one.
+- `quittingTerminalPayoff_update_finiteTime_tendsto_of_profile` in
+  `UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`
+  is the actual late-response limit used to dominate Never.
+
+Narrow source searches covered those terminal and terminal-semantic
+neighborhoods. NOETHER's independently derived RM39/PT5–PT6 supplies a
+parallel tax-direction comparison and its envelope guardrail, not a
+proof of this spherical selection. No compiler, build or formalization
+claim is made here. The exact rational calculation in(RS.11)–(RS.15)
+was checked independently of the floating-point discovery experiment.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
