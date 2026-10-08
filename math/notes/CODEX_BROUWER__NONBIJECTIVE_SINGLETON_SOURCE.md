@@ -101,6 +101,17 @@ extension below allows arbitrary unused coordinates, including a
 four-player positive-premium trap. FE's complete-set source preflight
 is separate from its exact profile proof; no full-goal closure follows.
 
+FE1–FE4 and the unconditional GF1–GF6 raw theorem now have TWO
+independent mathematical PASSes, from CODEX_MORSE and CODEX_NOETHER.
+Both reviews leave additional existential coverage UNRESOLVED and give
+NO export approval. Their feedback files are
+[Morse FE/GF](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__FE_GF__BY_CODEX_MORSE.md)
+and [Noether FE/GF](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__FE_GF__BY_CODEX_NOETHER.md).
+The frozen FE/GF proof sections have not been rewritten. GS below is
+one separate actual GF witness, with a complete finite-carrier census
+and retained-output exclusions; it does not claim full old-producer
+separation or settle the original conjecture.
+
 
 ## Original singleton-matrix question
 
@@ -13870,3 +13881,912 @@ joining bounds, or whether the real least-Never whole-law source
 supplies an analogous legal coupled repair with all born caps priced.
 The completed global family is being retained as actual-data research,
 not used to stop at a supporting interface.
+
+## GS: one global-family witness and bounded complete-class comparison
+
+Status: COMPLETE ORDINARY mathematics for GS1–GS5 and GS7, not Lean checked,
+and independently UNREVIEWED. The full previous-producer comparison
+in GS6 is separately bounded and does not infer novelty from a few
+failed raw tests. This is ONE completed table, not permission for an
+open-ended sequence of coordinate changes to evade individual tests.
+The already reviewed FE/GF sections above are unchanged.
+
+### GS1. Complete original data and actual produced profile
+
+All strategies have independent private coins and public live history;
+first nonempty quitting coalition absorbs, live and Never rewards are
+zero. Deviations are complete unrestricted behavioral replacements.
+Every own singleton is1. The original table in owner order0,1,2,3 is:
+
+| S | r(S) |
+|---|---|
+| 0 | (1,2,5/2,0) |
+| 1 | (2,1,0,5/2) |
+| 2 | (−1,0,1,1/2) |
+| 3 | (0,−1,1/2,1) |
+| 01 | (3/2,3/2,1,1) |
+| 02 | (−5/2,1,1/2,1) |
+| 03 | (−1/2,1,1,1/2) |
+| 12 | (1,−1/2,1/2,1) |
+| 13 | (1,−5/2,1,1/2) |
+| 23 | (1,1,1,1) |
+| 012 | (1,0,0,3) |
+| 013 | (0,1,3,0) |
+| 023 | (3,3,0,−19) |
+| 123 | (3,3,−19,0) |
+| I | (2,2,2,2) |
+
+Write z_i(S)=r_i(S)−1. This table satisfies the COMPLETE raw GF
+conditions with
+
+    (A,B,C,D,H,α,β,E,F)=(1,2,3/2,1/2,1,1/2,1/2,0,0),
+    s_i=λ_i=1,     C>H,     Δ=1>0.
+
+In particular the favorable bad joining premiums at01 are+1/2≤A;
+the harmful bad joining premiums at02,13 are−7/2=−B−H−α;
+the bad triple premiums at012,013 are0=E. All six good passive
+joining cells are≤0, including the deliberately zero pair23 cells.
+F=0<β+2√(Dβ)=3/2. The prescribed singleton rows and COMPLETE
+scheduled rows03,12 equal the centered MP data. Therefore the same
+MP polynomial root a∈(1/3,3/8) and
+
+    b=(a−a²−a³)/(1−a³)∈(3/16,1/5)
+
+give the ACTUAL exact period-two profile: owners0,3 mix at the even
+phase with rates a,b, and owners1,2 mix at the odd phase with rates
+a,b. The initial original target is
+
+    u=(1−3b/2, 1−b/[2(1−b)],
+                     1+a/[2(1−a)], 1−a/2).
+
+This is an internally selected fixed target with all behavioral caps,
+not only four indifferences. GS changes only passive capped cells or
+unused cells relative to the already reviewed profile field. The
+reviewed FOUR-variable MP Jacobian remains literally the same; the
+GF bad cap subtraction is strictly negative and the good cap is≤0
+below its positive post value. Thus GS is also the center of a
+full sixty-coordinate open existence neighborhood with fresh four
+hazards. Applying IFT to the thirty-six used coordinates gives an
+open projected neighborhood times all twenty-four finite free
+coordinates, exactly as in FE, but now centered at the GS used data.
+The radius and raw-sign separation from other producers are not
+asserted uniform over every GF parameter or every downward cap.
+
+Every deleted-opponent product over two dates is strictly below1.
+The reviewed Bellman iteration therefore controls every behavioral
+replacement and Never. For this fixed table, rates and target, the
+finite-horizon delivery bound is MK/N and regret is2MK/N, where
+K=2/(1−max_i∏_{j≠i}(1−q_j)) and M is the actual finite reward bound.
+Own-row translation is used only after this actual absorption proof.
+There is no claim that a signed translated Never payoff was changed.
+
+### GS2. Every proper quiet-child carrier has an actual unsafe Nash witness
+
+The singleton host-to-positive-joiner map is
+
+    h(0)=3, h(1)=2, h(2)=3, h(3)=2.
+
+Each positive joining gap is exactly1/2; every other singleton join
+gap is≤0. Its nonempty proper closed sets are exactly23,023,123.
+On EVERY other nonempty proper child S, choose j∈S with h(j)∉S.
+Sure Quit by j at date0 and Never by the other child members is exact
+child terminal Nash: own Quit pays1 rather than Never0, and all other
+child joiners have a nonpositive gap. The quiet parent lift gives
+outsider h(j) a legal Quit-now gain1/2. These eleven child witnesses
+have zero child debts and zero joint Never.
+
+On child23, both members Quit at date0. Each receives1 and withdrawal
+pays1/2, so this too is exact child Nash with zero Never. Either core
+outsider joins for3 instead of its passive pair payoff1, gaining2.
+
+On child023 use the independent STATIONARY child hazards
+
+    q_0=1/41,       q_2=1,       q_3=3/7.
+
+The four actual coalition probabilities, in order2,02,23,023, are
+
+    (160,4,120,3)/287.
+
+The native child-owner2 value is−5/287. Owners0 and3 mix because their
+actual Quit-minus-Continue gaps are respectively
+
+    −3/2+(7/2)q_3=0,       1/2−(41/2)q_0=0.
+
+Owner2's actual Continue endpoint, INCLUDING the surviving empty
+opponent event and its true tail value, is−16298/82369. Hence its
+Quit-minus-Continue gap is14863/82369>0. All deleted child-opponent
+survival products are<1. These exact Bellman signs and contraction
+prove unrestricted child terminal Nash; no stationary-deviation
+restriction is being substituted for that conclusion.
+
+Outsider1, when prescribed Never, has native value−154/287. A legal
+Quit-now replacement gives−1/287. Its gain is153/287>0. Original
+values add1 since owner2 surely absorbs against all these strategies.
+Child123 is the image under the full-table symmetry
+σ=(0 1)(2 3), with q_1=1/41,q_3=1,q_2=3/7 and the same outsider0
+gain153/287. Thus ALL fourteen nonempty proper carriers have an
+actual exact child Nash witness with zero Never and positive outside
+quiet-lift debt.
+
+Consequently no universal finite nonnegative-coefficient bound
+
+    d_k(quiet(p))≤Σ_{i∈S}c_ki d_i(p)+ρ_k·jointNever(p)
+
+can hold for that chosen outsider on ANY proper child. This excludes
+all five universal withdrawal F/J certificate kinds and the capped
+advancing-clock subcases through the already inspected behavioral
+debt consumers named in FE3. It does NOT exclude a selected safe
+child equilibrium, every quiet profile, or all stationary equilibria
+of the full game.
+
+### GS3. Complete persistent-base census with actual floor directions
+
+The screen uses the ACTUAL original punishment value p_i. Its owner
+empty-event Quit-minus-Continue gap is1−p_i, not an arbitrarily chosen
+native annotation. On nonempty opponent events the original row
+offset cancels. The free-owner gaps are exactly the finite nonbase
+game's usual joining differences. All hazards below range over[0,1].
+
+Base0: write u=q_1,x=q_2,y=q_3. The three free gaps are
+
+    g_1=−(1−x)(1−y)/2−x,
+    g_2=−2+u+y−uy,
+    g_3=1/2−3u/2−41x/2+(41/2)ux.
+
+Here g_2≤−1 forces x=0. Then g_1=−(1−y)/2, so u>0 requires y=1.
+With u=0, g_3=1/2 also forces y=1. Thus the ENTIRE free Nash set is
+
+    (q_1,q_2,q_3)=(u,0,1),       0≤u≤1/3.
+
+Since opponent3 is sure, the base owner's empty branch has probability
+zero. Its floor-priced gap is exactly−1/2−u/2<0. Base1 is the image
+under σ and has the same complete negative-owner census.
+
+Base2: write w=q_0,u=q_1,x=q_3. The free gaps are
+
+    g_0=−3/2+3u/2+7x/2−9ux/2,
+    g_1=−1/2−w/2+5x/2−5wx/2,
+    g_3=1/2−3u/2−41w(1−u)/2.
+
+If x=0, g_1<0 gives u=0, then g_0<0 gives w=0, but g_3>0 is a
+contradiction. Thus x>0 and its Nash sign gives g_3≥0. Necessarily
+
+    u≤1/3,   w≤(1−3u)/[41(1−u)]≤1/41.
+
+If w>0 it is proper, so g_0=0 and
+
+    x=3(1−u)/(7−9u)∈[3/7,1/2].
+
+These bounds imply
+
+    g_1≥−1/2−1/82+(5/2)(3/7)(40/41)=153/287>0,
+
+forcing u=1, a contradiction. Hence w=0. Now x=1 would give
+g_0=2−3u≥1>0, contradicting w=0. Therefore x is proper, g_3=0
+gives u=1/3, and its proper gap g_1=0 gives x=1/5. The ENTIRE
+free Nash set is the single point
+
+    (q_0,q_1,q_3)=(0,1/3,1/5).
+
+The original strategy AlwaysNever secures owner2 at least0 against
+EVERY opponent profile: all its passive nonempty-coalition rewards
+are nonnegative, and Never itself pays0. Thus p_2≥0 and its owner
+empty-event gap is at most1. At this free point the opponent-event
+probabilities for empty,1,3,13 are(8,4,2,1)/15; the three nonempty
+joining gaps are1/2,1/2,−20. Consequently
+
+    g_2(floor)≤8/15+2/15+1/15−20/15=−3/5<0.
+
+Base3 follows by σ, with the same complete census and floor bound.
+
+This handles ALL partial free carriers too: acceptance supplies the
+omitted owners' joining inequalities, so it extends to a Nash point
+of the FULL three-owner induced game already classified. If the base
+has at least two members, each has a sure opponent and its floor
+coefficient is zero. An accepted large-base point is a full one-stage
+Nash point with at least two sure coordinates; selecting one as a
+singleton base contradicts the complete census. This is exactly the
+component semantics in `quittingPersistentLargeBaseComponent` and
+`exists_uniformPayoff_or_singletonBase_pos_gap`, in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`.
+
+The same argument excludes ALL exact contracting stationary terminal
+Nash profiles WITH A SURE OWNER. Such a Nash target u_i satisfies
+p_i≤u_i because punishment is an infimum of opponent best-response
+values. Replacing the owner's actual empty-event continuation u_i
+by the lower floor p_i only increases its Quit-minus-Continue gap;
+all other owners face sure absorption and are in the induced Nash
+set. This would be an accepted singleton base. There is NO claim of
+stationary NONEXISTENCE without a sure owner.
+
+### GS4. Two complete retained-output exclusions, not center-sign tests
+
+First output grammar: two nonempty scheduled pairs partition I;
+each owner uses one proper fixed hazard when its pair is scheduled,
+the schedule alternates; both phase values are STRICTLY below that
+owner's own singleton value; and the profile is exact terminal Nash.
+This is the complete retained output of
+`BelowSingletonJointPhaseFixture.HasBelowSingletonExactProfile` and
+`BelowSingletonJointPhaseFixture.exists_reward_supnorm_radius`, in
+`UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseLocalPersistence.lean`.
+I inspected that definition and the original four-equation branch,
+not only the radius center. The following excludes this ENTIRE output
+grammar at GS, under every relabeling and positive recipient-row
+affine change compatible with absorption.
+
+There are exactly three unordered pair partitions. For01/23, the
+active core premium is+1/2 and the active leaf premium is0, so the
+strict below-own requirement fails. For03/12, each leaf's post value
+minus own is +(1/2) times its core mate's positive odds, so the
+requirement fails there too.
+
+For02/13, write core rates a_0,a_1 and leaf rates b_2,b_3, all proper.
+The core active values minus own are−7b_i/2, and indifference at that
+active phase gives its post value minus own−3b_i/[2(1−b_i)].
+At core0's passive phase its actual Continue endpoint is
+
+    C_0=a_1−b_3−(7/2)b_2(1−a_1)(1−b_3).
+
+The policy requires C_0=−3b_2/[2(1−b_2)]. Its passive Quit endpoint
+minus Continue therefore reduces EXACTLY to
+
+    gain_0=a_1/2−3b_3/2+3b_2/[2(1−b_2)].
+
+The swapped identity is
+
+    gain_1=a_0/2−3b_2/2+3b_3/[2(1−b_3)].
+
+If b_2≥b_3, gain_0>a_1/2>0; if b_3≥b_2, gain_1>a_0/2>0.
+Thus this partition has NO proper exact two-pair Nash profile at all,
+without any symmetry assumption on its four rates. The three cases
+exhaust the retained grammar, rather than testing only the symmetric
+candidate or a supplied IFT root.
+
+Second output grammar: a proper joint pair A={p,k}, a proper solo j,
+a proper solo l, and a second proper joint A, in that cyclic order;
+all four aggregate phase values are weakly ABOVE their own singleton
+levels; supported actions are indifferent. The two joint rows may
+use different rates. Solo phases may subsequently be refined as in
+the source, but the coarse aggregate values and their singleton
+floors are retained. This is the complete retained output of
+[TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md](../exports/TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md),
+Sections3–6, not a generic terminal-profile verifier. This argument
+allows every relabeling, proper rate choice and positive row unit.
+
+An active joint participant's phase value is own plus its partner's
+hazard times its participant premium. Thus ANY of02,03,12,13 violates
+an active singleton floor: both participant premiums are negative.
+For joint01 the participant premiums are+1/2, but its mate singleton
+gap is+1. Active indifference then forces the NEXT aggregate phase
+value minus own to be−(1/2) times the mate's positive odds, violating
+its singleton floor.
+
+Only joint23 remains. Its two solo players are0,1 in one order or
+the other. If j is the first solo player and l the second, j's
+proper solo indifference forces V_C,j=s_j. But at the second solo
+phase j Continues, hence
+
+    V_C,j=q_l r_j({l})+(1−q_l)V_D,j>s_j,
+
+because q_l>0, r_j({l})−s_j=1, and V_D,j≥s_j. Contradiction.
+This excludes the entire above-floor four-phase output grammar,
+not only the literal source center or its fixed raw rows. It does
+NOT exclude arbitrary three-phase cyclic-child calendars whose
+joint values may be below singleton, or a generic two-joint calendar
+without the stated floors.
+
+### GS5. Complete finite raw-source and guard comparisons, with limits
+
+The complete premium trap family is{01,I}; its premium core is I.
+No owner is protected, and AllNever is not Nash since immediate
+solo Quit pays1. At grand Quit each owner can withdraw for3 instead
+of2. The grand trap fails every nonzero nonnegative support-upper
+weight at its own grand reward. At T=23 its forced-Quit coefficient
+P_I(T) is4, and its leave coefficient L_I(T) is4; every strictly
+positive weighted leave sum there is2λ_0+2λ_1>0. Thus the larger-trap
+charge and weighted floor-return inputs fail over their COMPLETE
+weight sets. The pair01 has the SAME-sign joining gaps(−1/2,−1/2),
+so its pair test PASSES; it is the GRAND test that rules out the
+whole mixed-trap packet. Pair-core and triple-core criteria fail the
+core cardinality. These are raw-source exclusions, not an assertion
+that no equilibrium can exploit pair01.
+
+The singleton matrix Γ is exactly MP's Γ. Its favorite graph
+0↔1,2↦0,3↦1 is nonbijective, with no positive three-cycle. Thus
+all literal matching, positive four-cycle and strict cyclic-child
+singleton sources fail under every positive row affine relabeling.
+The full inverse has mixed columns, every proper triple inverse
+fails nonnegativity, and Γ is R0 with degree+1 as previously proved.
+The scalar-circuit packet needs positive participant premiums on
+FOUR distinct specified pair rows; GS has only ONE pair with any
+positive participant premium, namely01. Hence all its relabelings
+fail. Every triple-collision box needs six positive within-triple
+joining gaps, while each GS triple has a negative one. None of these
+statements treats a mate-joining gap as a participant premium.
+
+The table has the exact symmetry σ=(0 1)(2 3); do NOT claim its
+response-invariant paired quotient is broken. At all hazards1 each
+owner's actual forced-Quit-minus-Continue displacement is−1.
+Positive affine row units compatible within a quotient block are
+therefore equal in that block. Singleton row sums then force core
+owners and leaves into separate blocks; one-pair merges fail the
+individual outside-column comparisons. The only possible nondiscrete
+partition is{01,23}, whose actual singleton block-sum matrix is
+
+    [[1,−3],[1/2,−1/2]].
+
+It has determinant1, degree+1 and a mixed-sign inverse. The discrete
+quotient is Γ itself. Thus the NAMED nonnegative-inverse and
+degree-not-one quotient producers have no applicable partition.
+This does not turn response invariance into a smaller strategic game.
+
+For the matrix-free raw weak-unit guards, a recipient's unique
+positive singleton outsider forces its passive partner to be that
+favorite. At the remaining partner the lower ranking fails in these
+native comparisons:
+
+| recipient | forced partner | outsider event | joining event | false comparison |
+|---|---|---|---|---|
+| 0 | 1 | 23 | 02 | 0≤−7/2 |
+| 1 | 0 | 23 | 13 | 0≤−7/2 |
+| 2 | 0 | 13 | 123 | 0≤−20 |
+| 3 | 1 | 02 | 023 | 0≤−20 |
+
+This excludes EVERY ordered pair of raw guards, not only an inverse
+test. It also excludes the broader one-sided POLYNOMIAL guard
+producer's complete selection set: the actual construction in
+`stationaryTerminalNash_or_instantNoJoin_of_oneSidedWeakUnitGuards`,
+`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`,
+uses `exists_quittingSureOwnerJoiningRoot`, retains hazard owner=1,
+and either produces an exact contracting stationary Nash with that
+sure owner, or produces a sure-solo no-join row. GS3 excludes the
+former; h excludes the latter for every owner. The theorem statement
+does not expose its sure-owner property, so this last implication
+uses the literal source construction, not an invented extra field.
+Its raw consumer is
+`exists_uniformPayoff_of_oneSidedWeakUnitRawGuards`; two-sided weak
+lower-ranking variants fail the same finite raw comparisons.
+
+`IsQuittingBlockerSwitch` fails every baseline since each recipient
+has unequal passive singleton rewards. The COMPLETE coarse range
+adapter `IsQuittingConditionalFaceGapRange`, in
+`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`,
+fails at owner0 for EVERY valid blocker/hazard weight and every bound
+selection: its passive123 reward is3, while every participating
+reward is≤3. Both group lower bounds are consequently≤3 and their
+convex mixture is≤3, contradicting the required strict lower mixture
+above the passive upper bound≥3. The validity restriction puts the
+blocker's lower hazard in[0,1]; the raw predicate with invalid weights
+is NOT claimed impossible. Arbitrary direct face-box stationary
+certificates are not ruled out.
+
+### GS6. Remaining coverage boundary and next full-goal question
+
+GS4 genuinely excludes two COMPLETE neighborhood-output classes,
+not just their center equalities. GS2–GS3 exhaust the relevant finite
+carrier and Nash choices. All previous MP empty-core coverage remains
+valid on the empty-core subset of GF, but does not apply to GS.
+
+GS7 separately excludes the accepted full-dimensional cyclic-child
+neighborhood's COMPLETE three-phase output grammar, allowing below-own
+joint values. Its proof does NOT transfer GS4's above-floor argument.
+The remaining comparison includes the implemented three-active stationary
+neighborhood `PairedCubicStationaryExample.exists_local_stationary_branch`,
+in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`,
+and any other actual producer not explicitly screened above. Its output
+has three proper stationary hazards and one quiet owner. The base census
+does not exclude that grammar. A bounded numerical exploration in fact
+finds plausible such GS roots (for example quiet3, approximate hazards
+(.07027245,.11823937,.08364507,0), with a strictly negative quiet face).
+This is an EXPERIMENT, not a certified root or an input-domain overlap
+proof. Even an exact stationary root would not establish raw producer
+coverage throughout GF. Conversely different center signs or an unspecified
+radius do not exclude the whole old neighborhood's actual selection set.
+This remaining comparison is UNRESOLVED, hence there is no GS or GF
+export-significance claim and no stationary nonexistence claim.
+
+No further table surgery is being proposed. The global conjecture
+still needs a producer on arbitrary surviving actual data or a legal
+whole-law consumer of the least-Never positive full minimum. The next
+global question is whether profile-adapted simultaneous actual cap
+substitutions can yield one independent absorbing competitor while
+upper-pricing ALL newborn deadlines and Never; a fixed averaged
+lower ledger has already been falsified in WD7.
+
+### GS7. Complete exclusion of the proper three-phase joint/solo/solo grammar
+
+The output grammar is a fixed proper joint pair{p,k}, then a proper
+solo j, then a proper solo l, cyclically, with all four owners distinct.
+Coins are independent; there are four proper rates, one for each owner.
+Values are actual terminal values and all supported actions are
+indifferent. Passive Quit endpoints must be below the prescribed
+Continue values. Singleton floors are NOT assumed. This is the entire
+output grammar of
+[FULL_DIMENSIONAL_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md](../exports/FULL_DIMENSIONAL_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md)
+and its affine/relabelled proper three-row neighborhood outputs. It also
+contains the proper three-row direct outputs of the literal positive and
+negative cyclic-child sources; their other existence exits remain
+separate sources, already tested by GS5's singleton comparisons.
+
+Write the joint hazards a for p and b for k, and the solo hazards q_j,q_l.
+Work with the native z=r−1, legitimately translating actual values
+because deleting any owner still leaves a positive periodic opponent
+hazard. Let c=(1−a)(1−b), and let E_i be i's weighted nonempty reward
+in the joint row. Active solo indifference and the actual policy imply
+
+    V_B,j=V_C,j=0,       V_A,l=V_C,l=0,
+    V_A,j=E_j=−[q_l/(1−q_l)]Γ_jl,
+    0=E_l+c q_j Γ_lj.
+
+All off-diagonal Γ entries here are nonzero. Therefore ANY proper
+candidate must use the internally determined rates
+
+    q_l=E_j/(E_j−Γ_jl),       q_j=−E_l/(c Γ_lj).       (GS.1)
+
+The denominator of q_l is nonzero under the first displayed identity:
+it equals−Γ_jl/(1−q_l). Both joint owners must additionally satisfy
+
+    (Π_i−Γ_im) q_m/(1−q_m)
+      =q_j Γ_ij+(1−q_j)[q_l Γ_il+(1−q_l)Π_i q_m],   (GS.2)
+
+where m is the joint mate and Π_i=z_i({p,k}). These are the actual
+post indifferences, not arbitrary continuation annotations.
+
+Six of the twelve labelled joint-pair/solo-order cases are immediately
+excluded. At the SECOND solo row the FIRST solo owner's value is0,
+but its Quit endpoint is q_l Π_j({j,l}); thus Π_j>0 is impossible.
+At the FIRST solo row the SECOND solo owner's value is q_j Γ_lj,
+whereas its Quit endpoint is q_j Π_l({j,l}); thus a positive later
+joining gap Π_l−Γ_lj is impossible. Joint23 has solo pair01, whose
+first participant premium is+1/2, and joint01 has solo pair23, whose
+later joining gap is+1/2. Both orders fail. Joint03 with solo1 then2,
+and its σ image joint12 with solo0 then3, fail the later joining
+gap+1/2. No passive tail is omitted in these two tests: the future
+values used above follow exactly from the proper solo indifferences.
+
+The table symmetry σ reduces the other SIX cases to THREE. After
+substituting(GS.1), clearing the genuinely nonzero denominators in
+(GS.2) gives polynomials f(a,b)=g(a,b)=0 below. The coefficient of
+b² is listed first by construction, but the displayed expressions
+are ordinary two-variable polynomials. The verifier checks these
+from the ORIGINAL raw table, not only the elimination results.
+
+Case A: joint02, solo1 then3.
+
+    f=−27a²b+14a²−57ab²+45ab+2a+37b²−14b;
+    g=−24a²b+23a²+12ab²−15ab+7a−2b²−b.
+
+Both actual residuals in(GS.2) are f/D,g/D with
+D=6(a−1)(b−1)(a−b+2). Their exact b-resultant is
+
+    6a(a−1)(6a²+3a−5)(13395a³+10608a²+1285a−208).
+
+If the quadratic factor vanishes, the common-root equations force
+b=a+2>1. If the cubic factor vanishes they force
+
+    b=(13395a²+5003a+368)/3190>a.
+
+But here(GS.1) gives q_3=(a−b)/(a−b+2)<0 since 0<a,b<1.
+Thus there is NO proper candidate in Case A.
+
+Case B: joint02, solo3 then1.
+
+    f=−6a²b²−20a²b+16a²+62ab²−37ab−2a−27b²+14b;
+    g=−36a²b²+69a²b−35a²+21ab²−10ab−7a−3b²+b.
+
+Here D=4(a−1)(b−1)(3ab−2a−b−3), and the b-resultant is
+
+    6a(a−1)(5a²−13a+5)
+                ·(5322a⁴−2083a³−5866a²−1189a−48).
+
+The quartic is strictly negative for0<a<1: replace5322a⁴ by its
+strict upper bound5322a² to obtain an entirely negative expression.
+The quadratic common root forces b=12−5a>7. Thus Case B has no
+proper candidate either.
+
+Case C: joint03, solo2 then1.
+
+    f=−10a²b²−a²b+24a²+17ab²−39ab+2a+17b²−10b;
+    g=−16a²b+20a²+10ab²−15ab−3a+5b²−b.
+
+Here D=2(a−1)(b−1)(2ab−3a+b−2), and the b-resultant is
+
+    −2a(a−1)(4a²−3a−3)h(a),
+    h(a)=2280a⁴−2306a³+561a²−657a+176.
+
+The quadratic is strictly negative for0<a<1, since4a²<4a gives
+4a²−3a−3<a−3<0. At a quartic common root,
+
+    b=B(a)=(60420a³−57119a²+19438a+304)/19395.       (GS.3)
+
+The exact Sturm census says h has TWO and only two roots in(0,1),
+one in(279/1000,7/25) and one in(489/500,979/1000). At the latter,
+rational interval bounds in(GS.3) give b>1, excluding properness.
+At the former they give13/100<b<7/50. Its last solo owner's odds
+are E_2=(3a−b−2ab)/2, and the ACTUAL core0 passive Quit gain at
+that last solo1 row is
+
+    gain_0=(7b−3a+2ab)/[4(1+E_2)]>0.
+
+The numerator is at least
+7(13/100)−3(7/25)+2(279/1000)(13/100)>0; the denominator is
+positive from(GS.1), or directly from these same intervals. Therefore
+even this only possible proper active root cannot be exact Nash.
+
+The linear recovery claims used here do not discard exceptional roots.
+Let L be leading_b(g)·f−leading_b(f)·g, cancelling b². In each
+listed resultant factor h₀, its coefficient L_b is coprime to h₀,
+and L_0+L_b B is divisible by h₀, with B the printed recovery.
+Hence L_b cannot vanish at such a root and b=B follows. All of these
+divisibilities and gcds, the Sylvester determinants, the field-to-
+polynomial identities and the Sturm counts are checked EXACTLY in
+GS8's standard-library verifier. Nonzero denominators were resolved
+before clearing them; a=0,1 is excluded by properness. Cases A–C and
+their σ images exhaust every remaining label/order choice.
+
+Thus GS admits NO exact Nash profile of this ENTIRE proper three-row
+joint/solo/solo grammar. This is not a claim about arbitrary periods,
+different grammar, stationary profiles, other cyclic-child existence
+exits, or the complete Fin4 conjecture. Together with GS4 it removes
+the retained-output ambiguity for the two named phase-neighborhood
+producers, without inferring their radius from their centers.
+
+### GS8. Runnable exact table, endpoint, elimination and Sturm verifier
+
+Only the Python standard library is used. This checks the original
+sixty-entry data, all fourteen actual child witnesses, the base gap
+polynomials, the two-pair passive endpoint simplification, every
+three-phase field-to-polynomial identity, all three Sylvester
+determinants, every coprime linear recovery, and the exact Sturm census
+and cap intervals. It does not replace the proofs of carrier exhaustion,
+behavioral iteration, or the stated producer-semantic comparisons.
+
+Run the sole code block of this subsection:
+
+    awk '/^### GS8\./{found=1;next} found && /^\x60\x60\x60python/{code=1;next} code && /^\x60\x60\x60/{exit} code{print}' notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md | python3
+
+```python
+from fractions import Fraction as R
+from itertools import product, permutations
+from math import prod
+
+I=range(4)
+Z={
+1:(0,1,R(3,2),-1),2:(1,0,-1,R(3,2)),
+4:(-2,-1,0,R(-1,2)),8:(-1,-2,R(-1,2),0),
+3:(R(1,2),R(1,2),0,0),5:(R(-7,2),0,R(-1,2),0),
+9:(R(-3,2),0,0,R(-1,2)),6:(0,R(-3,2),R(-1,2),0),
+10:(0,R(-7,2),0,R(-1,2)),12:(0,0,0,0),
+7:(0,-1,-1,2),11:(-1,0,2,-1),
+13:(2,2,-1,-20),14:(2,2,-20,-1),15:(1,1,1,1)}
+Z={S:tuple(map(R,row)) for S,row in Z.items()}
+assert len(Z)==15 and sum(map(len,Z.values()))==60
+sigma=(1,0,3,2)
+sm=lambda S:sum(1<<sigma[j] for j in I if S>>j&1)
+assert all(Z[sm(S)][sigma[i]]==Z[S][i] for S in Z for i in I)
+traps=[S for S in Z if all(Z[S][i]>0 for i in I if S>>i&1)]
+assert traps==[3,15]
+assert sum(Z[12|1<<i][i] for i in (0,1))==4
+assert sum(Z[15][i]-Z[12][i] for i in (0,1))==2
+# The literal leave coefficient uses r_i(T+i)-r_i(T), not the grand reward.
+assert sum(Z[12|1<<i][i]-Z[12][i] for i in (0,1))==4
+H=(3,2,3,2)
+for j in I:
+    for i in I:
+        if i!=j:
+            gap=Z[(1<<j)|(1<<i)][i]-Z[1<<j][i]
+            assert gap==R(1,2) if i==H[j] else gap<=0
+
+def mass(S,q,J=I):
+    return prod(q[j] if S>>j&1 else 1-q[j] for j in J)
+def stage_gap(q,i):
+    return sum(mass(S,q,[j for j in I if j!=i])*
+        (Z[S|1<<i][i]-Z[S][i]) for S in Z if not S>>i&1)
+def original_value(q,i):
+    c=mass(0,q)
+    assert c<1
+    return sum(mass(S,q)*(Z[S][i]+1) for S in Z)/(1-c)
+def endpoints(q,i,V):
+    J=[j for j in I if j!=i]
+    Q=sum(mass(S,q,J)*(Z[S|1<<i][i]+1)
+          for S in range(16) if not S>>i&1)
+    C=sum(mass(S,q,J)*(Z[S][i]+1)
+          for S in Z if not S>>i&1)+mass(0,q,J)*V
+    return Q,C
+
+closed=[S for S in range(1,15)
+        if all(S>>H[j]&1 for j in I if S>>j&1)]
+assert closed==[12,13,14]
+checked=[]
+for S in range(1,15):
+    members=[i for i in I if S>>i&1]
+    q=[R(0)]*4
+    if S not in closed:
+        host=next(j for j in members if not S>>H[j]&1)
+        q[host]=1;outsider=H[host];wanted=R(1,2)
+    elif S==12:
+        q[2]=q[3]=1;outsider=0;wanted=R(2)
+    elif S==13:
+        q[0]=R(1,41);q[2]=1;q[3]=R(3,7)
+        outsider=1;wanted=R(153,287)
+    else:
+        q[1]=R(1,41);q[3]=1;q[2]=R(3,7)
+        outsider=0;wanted=R(153,287)
+    assert mass(0,q)==0
+    values=[original_value(q,i) for i in I]
+    for i in members:
+        Q,C=endpoints(q,i,values[i])
+        if q[i]==0:assert Q<=C
+        elif q[i]==1:assert Q>=C
+        else:assert Q==C
+        # Never is already priced by the Bellman proof; the one-owner
+        # deleted-nonabsorbing special case has nonnegative own value.
+        if mass(0,q,[j for j in I if j!=i])==1:assert values[i]>=0
+    Q,_=endpoints(q,outsider,values[outsider])
+    assert Q-values[outsider]==wanted
+    checked.append(S)
+    if S==13:
+        assert values[2]-1==R(-5,287)
+        Q,C=endpoints(q,2,values[2])
+        assert C-1==R(-16298,82369)
+        assert Q-C==R(14863,82369)
+        assert values[1]-1==R(-154,287) and Q>=C
+assert len(checked)==14
+
+# Every free gap is multiaffine; its eight corner values identify it exactly.
+for u,x,y in product((R(0),R(1)),repeat=3):
+    q=(R(1),u,x,y)
+    assert stage_gap(q,1)==-(1-x)*(1-y)/2-x
+    assert stage_gap(q,2)==-2+u+y-u*y
+    assert stage_gap(q,3)==R(1,2)-R(3,2)*u-R(41,2)*x+R(41,2)*u*x
+for w,u,x in product((R(0),R(1)),repeat=3):
+    q=(w,u,R(1),x)
+    assert stage_gap(q,0)==R(-3,2)+R(3,2)*u+R(7,2)*x-R(9,2)*u*x
+    assert stage_gap(q,1)==R(-1,2)-w/2+R(5,2)*x-R(5,2)*w*x
+    assert stage_gap(q,3)==R(1,2)-R(3,2)*u-R(41,2)*w*(1-u)
+assert R(-1,2)-R(1,82)+R(5,2)*R(3,7)*R(40,41)==R(153,287)
+assert all(Z[S][2]+1>=0 for S in Z if not S>>2&1)
+assert R(8,15)+R(4,15)/2+R(2,15)/2-R(20,15)==R(-3,5)
+for a1,b3 in product((R(0),R(1)),repeat=2):
+    Q=(R(1,2)*a1*(1-b3)-R(3,2)*b3*(1-a1)-a1*b3)
+    assert Q==a1/2-R(3,2)*b3
+print('GS original table, 14 exact child endpoints, base polynomials and two-pair caps PASS')
+
+# Sparse two-variable polynomials and unreduced rational functions.
+class P:
+    def __init__(self,v=0):
+        if isinstance(v,P):self.d=v.d.copy()
+        elif isinstance(v,dict):self.d={e:R(c) for e,c in v.items() if c}
+        else:self.d={(0,0):R(v)} if v else {}
+    def __add__(self,other):
+        out=self.d.copy()
+        for e,c in P(other).d.items():out[e]=out.get(e,R(0))+c
+        return P(out)
+    __radd__=__add__
+    def __neg__(self):return P({e:-c for e,c in self.d.items()})
+    def __sub__(self,other):return self+-P(other)
+    def __rsub__(self,other):return P(other)+-self
+    def __mul__(self,other):
+        out={}
+        for e,c in self.d.items():
+            for f,d in P(other).d.items():
+                k=(e[0]+f[0],e[1]+f[1])
+                out[k]=out.get(k,R(0))+c*d
+        return P(out)
+    __rmul__=__mul__
+    def __pow__(self,n):
+        out=P(1)
+        for _ in range(n):out=out*self
+        return out
+    def __eq__(self,other):return self.d==P(other).d
+class F:
+    def __init__(self,n=0,d=1):self.n,self.d=P(n),P(d)
+    @staticmethod
+    def cast(x):return x if isinstance(x,F) else F(x)
+    def __add__(self,x):
+        x=F.cast(x);return F(self.n*x.d+x.n*self.d,self.d*x.d)
+    __radd__=__add__
+    def __neg__(self):return F(-self.n,self.d)
+    def __sub__(self,x):return self+-F.cast(x)
+    def __rsub__(self,x):return F.cast(x)+-self
+    def __mul__(self,x):
+        x=F.cast(x);return F(self.n*x.n,self.d*x.d)
+    __rmul__=__mul__
+    def __truediv__(self,x):
+        x=F.cast(x);return F(self.n*x.d,self.d*x.n)
+    def __eq__(self,x):
+        x=F.cast(x);return self.n*x.d==x.n*self.d
+a=P({(1,0):1});b=P({(0,1):1})
+cases=[
+((0,2,1,3),
+ -27*a*a*b+14*a*a-57*a*b*b+45*a*b+2*a+37*b*b-14*b,
+ -24*a*a*b+23*a*a+12*a*b*b-15*a*b+7*a-2*b*b-b,
+ 6*(a-1)*(b-1)*(a-b+2),
+ (6*a*a+3*a-5,13395*a**3+10608*a*a+1285*a-208),
+ ([2,1],[R(368,3190),R(5003,3190),R(13395,3190)]),6),
+((0,2,3,1),
+ -6*a*a*b*b-20*a*a*b+16*a*a+62*a*b*b-37*a*b-2*a-27*b*b+14*b,
+ -36*a*a*b*b+69*a*a*b-35*a*a+21*a*b*b-10*a*b-7*a-3*b*b+b,
+ 4*(a-1)*(b-1)*(3*a*b-2*a-b-3),
+ (5*a*a-13*a+5,5322*a**4-2083*a**3-5866*a*a-1189*a-48),
+ ([12,-5],[R(2026736,2366070),R(14373827,2366070),
+                R(8445665,2366070),R(-14140554,2366070)]),6),
+((0,3,2,1),
+ -10*a*a*b*b-a*a*b+24*a*a+17*a*b*b-39*a*b+2*a+17*b*b-10*b,
+ -16*a*a*b+20*a*a+10*a*b*b-15*a*b-3*a+5*b*b-b,
+ 2*(a-1)*(b-1)*(2*a*b-3*a+b-2),
+ (4*a*a-3*a-3,2280*a**4-2306*a**3+561*a*a-657*a+176),
+ ([-1,2],[R(304,19395),R(19438,19395),
+                   R(-57119,19395),R(60420,19395)]),-2)]
+
+# Univariate polynomial arithmetic, ascending coefficient order.
+def trim(p):
+    p=list(map(R,p))
+    while p and p[-1]==0:p.pop()
+    return p
+def uadd(p,q):
+    out=[R(0)]*max(len(p),len(q))
+    for i,c in enumerate(p):out[i]+=c
+    for i,c in enumerate(q):out[i]+=c
+    return trim(out)
+def uneg(p):return [-c for c in p]
+def umul(p,q):
+    out=[R(0)]*max(0,len(p)+len(q)-1)
+    for i,c in enumerate(p):
+        for j,d in enumerate(q):out[i+j]+=c*d
+    return trim(out)
+def udiv(p,q):
+    p,q=trim(p),trim(q);assert q
+    out=[R(0)]*max(0,len(p)-len(q)+1)
+    while p and len(p)>=len(q):
+        k=len(p)-len(q);c=p[-1]/q[-1];out[k]+=c
+        p=uadd(p,uneg([R(0)]*k+[c*d for d in q]))
+    return trim(out),p
+def ugcd(p,q):
+    while q:p,q=q,udiv(p,q)[1]
+    return [c/p[-1] for c in p]
+def coeff(p,k):
+    out=[]
+    for (i,j),c in p.d.items():
+        if j==k:
+            while len(out)<=i:out.append(R(0))
+            out[i]+=c
+    return trim(out)
+def asu(p):
+    assert all(j==0 for _,j in p.d)
+    return coeff(p,0)
+def determinant(M):
+    out=[]
+    for pi in permutations(range(len(M))):
+        parity=sum(pi[i]>pi[j] for i in range(len(pi)) for j in range(i+1,len(pi)))
+        term=[R(-1 if parity%2 else 1)]
+        for i,j in enumerate(pi):term=umul(term,M[i][j])
+        out=uadd(out,term)
+    return out
+for (p,k,j,l),f,g,D,factors,recoveries,scale in cases:
+    pair=(1<<p)|(1<<k);c=(1-a)*(1-b)
+    E=lambda i:a*(1-b)*Z[1<<p][i]+b*(1-a)*Z[1<<k][i]+a*b*Z[pair][i]
+    ql=F(E(j),E(j)-Z[1<<l][j]);qj=F(-E(l),c*Z[1<<j][l])
+    for i,m,rate,expected in [(p,k,b,f),(k,p,a,g)]:
+        Pi=Z[pair][i]
+        C=qj*Z[1<<j][i]+(1-qj)*(ql*Z[1<<l][i]+(1-ql)*(Pi*rate))
+        W=F((Pi-Z[1<<m][i])*rate,1-rate)
+        assert C-W==F(expected,D)
+    A=[coeff(f,t) for t in (2,1,0)]
+    Bc=[coeff(g,t) for t in (2,1,0)]
+    matrix=[A+[[]],[[]]+A,Bc+[[]],[[]]+Bc]
+    expected=asu(scale*a*(a-1)*factors[0]*factors[1])
+    assert determinant(matrix)==expected
+    leadf=P({(i,0):v for i,v in enumerate(A[0])})
+    leadg=P({(i,0):v for i,v in enumerate(Bc[0])})
+    L=leadg*f-leadf*g
+    assert coeff(L,2)==[]
+    L0,Lb=coeff(L,0),coeff(L,1)
+    for factor,recovery in zip(factors,recoveries):
+        h=asu(factor)
+        assert ugcd(Lb,h)==[R(1)]
+        assert udiv(uadd(L0,umul(Lb,trim(recovery))),h)[1]==[]
+print('GS all three actual fields, Sylvester resultants and coprime recoveries PASS')
+
+def evaluate(p,x):
+    out=R(0)
+    for c in p[::-1]:out=out*x+c
+    return out
+def sturm(p):
+    seq=[trim(p),trim([i*p[i] for i in range(1,len(p))])]
+    while seq[-1]:
+        r=uneg(udiv(seq[-2],seq[-1])[1])
+        if not r:break
+        seq.append(r)
+    return seq
+def variations(seq,x):
+    signs=[1 if v>0 else -1 for p in seq if (v:=evaluate(p,x))!=0]
+    return sum(signs[i]!=signs[i+1] for i in range(len(signs)-1))
+h=asu(cases[2][4][1]);S=sturm(h)
+count=lambda lo,hi:variations(S,lo)-variations(S,hi)
+intervals=[(R(279,1000),R(7,25)),(R(489,500),R(979,1000))]
+assert count(R(0),R(1))==2
+assert all(count(lo,hi)==1 for lo,hi in intervals)
+def interval(p,lo,hi):
+    lower=sum(c*(lo**i if c>=0 else hi**i) for i,c in enumerate(p))
+    upper=sum(c*(hi**i if c>=0 else lo**i) for i,c in enumerate(p))
+    return lower,upper
+B=trim(cases[2][5][1])
+bl,bh=interval(B,*intervals[0])
+assert R(13,100)<bl and bh<R(7,50)
+assert interval(B,*intervals[1])[0]>1
+assert 7*R(13,100)-3*R(7,25)+2*R(279,1000)*R(13,100)>0
+assert (3*R(279,1000)-R(7,50)-2*R(7,25)*R(7,50))/2>0
+print('GS exact two-root Sturm census, excluded high b and positive low-root cap PASS')
+```
+
+### GS9. Exact producer scope, including boundary outputs and unresolved inputs
+
+The finite census and retained-output exclusions are logically different.
+GS7 excludes only the named proper four-hazard three-phase grammar.
+It does NOT by itself exclude a raw source that can select a Never
+pivot, a sure hazard, a child-only calendar, or a matrix-source exit.
+The complete raw hypothesis comparisons below handle the listed such
+sources directly, without pretending their boundary outputs are proper.
+
+The singleton matrix has NO directed positive three-cycle under any
+relabeling or positive row scaling. Therefore the ACTUAL singleton
+row prerequisites fail for the entire raw source classes, including
+every parameter exit, of
+[CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md](../exports/CYCLIC_CHILD_WITH_ONE_JOINT_PHASE.md),
+[ZERO_PREMIUM_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md](../exports/ZERO_PREMIUM_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md),
+[NEGATIVE_PREMIUM_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md](../exports/NEGATIVE_PREMIUM_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md),
+and [GLOBAL_TWO_JOINT_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md](../exports/GLOBAL_TWO_JOINT_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md).
+For example, the negative-premium packet's ε≥15/26 branch really
+has a Never pivot and three solo children; it is excluded here by
+its literal singleton data, NOT by the proper joint resultants.
+The implemented corresponding `SignedRawTable` and singleton-exit
+consumers retain those raw row hypotheses.
+
+The ENTIRE raw class of
+[TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md](../exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md)
+requires every mate-joining gap nonnegative for some pair partition.
+The complete mate-gap vectors at GS, in owner order0,1,2,3, are
+
+    01/23: (−1/2,−1/2,1/2,1/2);
+    02/13: (−3/2,−3/2,−2,−2);
+    03/12: (−1/2,−1/2,1/2,1/2).
+
+Each partition fails that RAW condition independently of selected rates.
+This excludes its weak-boundary reward-closure and inactive-owner
+branches as well as its proper direct branch. It is not derived from
+the failure of a single supplied two-pair profile.
+
+GS5's scalar and triple-box comparisons refer to the exact raw packets
+[SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md](../exports/SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md)
+and [TRIPLE_SINGLETON_COLLISION_BOX_UNIFORM_EQUILIBRIUM.md](../exports/TRIPLE_SINGLETON_COLLISION_BOX_UNIFORM_EQUILIBRIUM.md).
+The favorite-graph, inverse and degree tests refer to the actual raw
+matched/four-clock and passive-inverse classes already named and
+inspected in MP6/FE3, not arbitrary periodic strategies. The grand
+trap comparisons refer to the FULL family of raw support/weight
+conditions in
+[WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md](../exports/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md),
+[MIXED_PREMIUM_TRAPS_UNIFORM_EQUILIBRIUM.md](../exports/MIXED_PREMIUM_TRAPS_UNIFORM_EQUILIBRIUM.md),
+[MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md](../exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md),
+and the protected-leaver packets. GS3 excludes every accepted
+persistent-base point, including sure and quiet boundaries, and
+therefore the full constructed selection set of the one-sided
+polynomial guards as explained in GS5.
+
+In contrast, the proper neighborhood outputs of the three precisely
+named producers in GS4/GS7 retain their proper rates as PART OF THEIR
+CONCLUSIONS. Impossibility of that entire output is a valid input-domain
+exclusion even though their radius or local equations do not impose
+literal center equalities. No boundary branch of those neighborhood
+statements has been invented.
+
+The three-active stationary neighborhood remains genuinely UNRESOLVED,
+as explicitly recorded in GS6. Supplied-profile verifiers and generic
+unrestricted terminal-Nash consumers are NOT raw existence producers,
+but the actual input/selection set of
+`PairedCubicStationaryExample.exists_local_stationary_branch` IS.
+Its unresolved status prevents claiming separation from the complete
+old union or requesting a GS/GF export. Any unlisted raw input class
+also remains outside the bounded comparison rather than being silently
+declared false. This is the final bounded coverage disposition for
+this ONE witness; no additional coordinate surgery is planned.
