@@ -79,6 +79,15 @@ mathematics, not new counterexample-class narrowing. The missing consumer is top
 exclude that smooth potential on the ACTUAL quitting correspondence,
 not an arbitrary supplied graph. This is an ordinary producer candidate,
 not a full conjecture proof or an independently reviewed export.
+RM28 completes the two-projection regularization check and excludes such
+a smooth rank when the topological domain is CONVEX. An exact four-slab
+corner calculation blocks the projection/convexification extension at
+the ACTUAL nonconvex Simon domain. There is also a DISTINCT UPSTREAM
+seam: Section4J includes artificial lowerGlueFiber/upper-glue edges;
+a rank on F_b is not thereby a rank on ALL J edges. The missing steps
+are that actual rank-extension adapter AND a literal nonconvex boundary
+index (or a different quitting-specific consumer). Neither is supplied
+by contractibility, and the convex conclusion is not transferred.
 No full Fin4 contradiction or new export is claimed.
 
 The body retains the independently reviewed compact/source reductions,
@@ -19204,3 +19213,176 @@ quitting graph contradict its essential Nash homotopy plus the literal
 coordinate-piece escape fibres? A proof must retain the two-projection
 homotopy and deal with genuinely large jumps; smoothing alone does not
 turn that graph into the flow of −∇G.
+
+### RM28. Two-projection regularization works; convexification does not
+
+Status: COMPLETE ORDINARY CONVEX-DOMAIN CONSUMER AND EXACT FAILURE OF ITS
+NAIVE EXTENSION. This is a full proof of the stated topological subcase,
+not a proof of Simon Question1, a full seven-hypothesis counterexample,
+or a new Fin4 reward class. The actual coordinate-slab domain is
+nonconvex. A continuous response selector or convex fibre is NOT added.
+
+TG1: literal question. Let C⊂ℝᵈ be compact, nonempty and have nonempty
+interior; let C=⋃[j=1..k]C_j with each C_j a full-dimensional compact
+convex polytope. Let a,b:C→ℝᵈ be continuous, with a(x)=b(x)=x for
+x∈∂C. Suppose a(x)=b(x) implies their COMMON VALUE lies in ∂C;
+the PARAMETER x is not required to lie in ∂C. Let J contain every
+(a(x),b(x)). For every boundary point x and every piece C_j containing
+x, suppose J also contains a full segment of edges
+
+    (x,x+t(y−x)), 0≤t≤1,
+
+for some y∈C_j with y≠x. These are exactly the boundary consequences
+of QuestionOneHypotheses(7): distance(x,C_j)=0 and the target's distance
+to C_j is≤0, so y∈C_j; its length is at least the supplied positive
+scale. No target in another fibre is used. Finally suppose φ is C¹
+on an ambient neighborhood of all these compact data and, for some
+γ>0, obeys
+
+    φ(u)−φ(v)≥γ‖u−v‖₂ for EVERY (u,v)∈J.        (TG1)
+
+The complete claim proved below is: these data are impossible IF C is
+convex. For general C the proof gives a nonvanishing extension of its
+boundary gradient and stops before a justified contradiction.
+
+TG2: the segment inequality supplies a literal directional test.
+Apply TG1 at (x,x+t(y−x)), divide by t>0, and let t↓0:
+
+    ⟨∇φ(x),y−x⟩≤−γ‖y−x‖₂<0.                   (TG2)
+
+In particular ∇φ(x)≠0 at EVERY boundary point. Only the source's
+own fibre is differentiated. A minimum of φ over C is therefore not
+a boundary point, but its interior minimum does NOT alone contradict
+the endpoint pairs: a(parameter) need not equal parameter and the
+actual endpoint can be a genuinely large jump.
+
+TG3: all diagonal VALUES, including those at interior PARAMETERS, are
+handled by a uniform regularization. Put d(x)=a(x)−b(x). Compactness
+of their images and uniform continuity of ∇φ give an η>0 such that,
+whenever 0<‖d(x)‖₂<η, the line-integral Taylor estimate is
+
+    |φ(a(x))−φ(b(x))−⟨∇φ(a(x)),d(x)⟩|
+       ≤(γ/2)‖d(x)‖₂.
+
+Hence
+
+    ⟨∇φ(a(x)),d(x)⟩≥(γ/2)‖d(x)‖₂>0.          (TG3)
+
+The segment between a(x) and b(x) need not be a graph segment; it
+is used only for the ordinary ambient Taylor estimate. Let
+M=max[x∈C]‖∇φ(a(x))‖₂. Here M>0 because a is the identity on
+∂C and TG2 holds. Choose 0<t<η/(2M), and define
+
+    v_t(x)=d(x)+t∇φ(a(x)).                       (TG4)
+
+This continuous field has NO zero on C. If ‖d‖≥η, its added term
+has norm<η/2. If 0<‖d‖<η, its inner product with ∇φ(a) is strictly
+positive by TG3. If d=0, its common value lies in ∂C and TG2 makes
+the added gradient nonzero. At the PARAMETER boundary it satisfies
+
+    v_t(x)=t∇φ(x), x∈∂C.                        (TG5)
+
+Thus the diagonal-value/parameter distinction is genuinely repaired;
+it is not an unmentioned strengthening of Simon's homotopy. The
+straight-line homotopy's intermediate pairs are never asserted to
+belong to J.
+
+TG4: complete convex consumer. Assume now that C is convex. Its metric
+projection Π_C is continuous. The continuous self-map
+
+    T(x)=Π_C(x−v_t(x))
+
+has a fixed point by Brouwer. The metric-projection variational
+inequality at a fixed point says
+
+    ⟨v_t(x),y−x⟩≥0 for EVERY y∈C.               (TG6)
+
+If x is interior, testing all sufficiently small signed displacements
+forces v_t(x)=0, contrary to TG4. If x is a boundary point, choose
+one piece containing x and its literal target y from TG2. This target
+lies in C, and TG5 changes TG6 into
+
+    t⟨∇φ(x),y−x⟩≥0,
+
+contrary to TG2. This proves the complete claimed impossibility. It
+does not require contractibility of J's fibres, convexification of
+their responses, or source-preserving H. A genuinely large endpoint
+jump is controlled in TG3 by the separate large-d case rather than
+incorrectly differentiated.
+
+TG5: exact actual-shaped corner obstruction. In dimension4 take
+
+    C=[−2,2]⁴∩{x:min_i x_i≤0},
+    C_j=[−2,2]⁴∩{x:x_j≤0},
+    x=0, g=(−1,−1,−1,−1).
+
+For EACH j choose any k≠j and y=e_k. Then y∈C_j, ‖y‖₂=1 and
+⟨g,y⟩=−1. Every segment[0,y] stays in C_j, and the affine local
+function φ(u)=−Σ_i u_i pays its exact Euclidean length on that
+segment. Thus the individual-piece boundary tests at this corner
+permit precisely this gradient. But −g=(1,1,1,1) points into the
+excluded upper orthant, not into C. Moreover no nonzero direction
+in the COMMON tangent intersection {v:ALL v_i≤0} decreases this
+affine φ: ⟨g,v⟩=−Σv_i≥0 there. Individual-piece descent does NOT
+produce a common-piece descent direction.
+
+Projecting to the convex hull does not repair TG4. For 0<ρ≤1 set
+y^j_j=0 and y^j_k=4ρ/3 for k≠j. Each y^j belongs to C_j, and
+
+    (1/4)Σ_j y^j=ρ(1,1,1,1).
+
+Consequently ρ(1,1,1,1) lies in conv(C) but NOT in C. At x=0,
+the projection Π_conv(C)(x−ρg) is exactly this illegal point. Thus
+the proposed convexified T is not a self-map of C. This is an exact
+falsifier of the projection/averaging implication, not a counterexample
+to the FULL seven hypotheses or a globally strict rank on this C.
+The displayed affine φ has boundary minima elsewhere and is NOT
+presented as a full graph rank. This noncoverage is load-bearing.
+
+TG6: actual source and current decision. The bounded lookup read
+`QuestionOneHypotheses` in `MathUE/Topology/SimonViabilityQuestion.lean`,
+including its diagonal IMAGE condition and the full segment in (7).
+The ordinary convex argument uses Brouwer/metric projection, not a
+new Lean theorem or a theorem inferred from the unproved paper question.
+For the actual quitting construction I read `TruncatedPiece`,
+`TruncatedW`, `truncatedW_eq_iUnion`, `convex_truncatedPiece`, and
+`starConvex_truncatedW` under the imports of `Literature/Simon2012.lean`.
+Here W_j={x:x_j≤s_j} and W=⋃_j W_j, truncated by the coordinate
+cube. The pieces have a common lower corner and C is star-convex;
+it is NOT convex. The exact TG5 geometry is its equal-threshold model.
+The literature lane is not imported production theorem evidence.
+`not_isQuittingFullExactRootPotential_of_convexReturnDomain` in
+`UniformEquilibrium/Quitting/Projective/ConvexReturnDomainSmoothDrift.lean`
+was also read under its imports: it has actual all-root return and
+singleton-sublevel-return hypotheses, not a theorem replacing this
+nonconvex two-projection domain by its convex hull. No overlap claim
+is inferred merely from the word "convex".
+
+The regularized field offers a precise global test: can the LITERAL
+coordinate-piece escape data forbid a nonvanishing extension of its
+boundary gradient, despite the corner behavior TG5? A relative boundary
+index argument could do so, but none has been proved here. Contractibility
+alone is not a demonstrated replacement for TG4's metric-projection
+step, and graph-fibre contractibility is not convexity. The route must
+now address this global nonconvex index or use additional actual quitting
+structure; no supplied selector/sign field is appended to turn the gap
+into a theorem. No new counterexample-class exclusion is counted.
+
+There is a DISTINCT UPSTREAM ADAPTER, before that index can even be
+applied to RM27. Further concrete lookup read `Section4X`, `Section4Y`,
+`Section4H`, `LowerBoundary`, `LowerGlueFiber`, `UpperGlueFiber` and
+`Section4J` in `Literature/Simon2012.lean`. The full J is the terminal
+two-projection homotopy image PLUS a glued graph. Its lower fibre is
+convexJoin({source},P), not a behavioural Nash root correspondence.
+Its upper fibre permits a supplied small-probability root box, not by
+definition the original E_b inequalities. The exact declarations
+`section4Y_mem_lowerGlueFiber` and
+`section4J_target_mem_lowerGlueFiber` prove feasible-join containment,
+NOT F_b-rank drift. `section4J_mem_fRow_of_mem_halfPayoffBox_targetBox`
+has actual rational half-box hypotheses; its consequence for a
+localized orbit is not a claim that every J edge has them. Thus GL2
+cannot simply be inserted as TG1 on J. No reviewed export used here
+asserts that implication, and the canonical NP/minimum packets do not
+enter this route. The potential-extension and nonconvex-index gaps are
+kept separate; the artificial fibre segments are not silently treated
+as behavioural Nash edges.

@@ -1109,7 +1109,7 @@ has adequate state. A candidate must beat the same-domain full-debt
 floor after pricing its manufactured source and all new cap branches;
 positive delivery or a large auxiliary penalty is not that comparison.
 
-## Three tests separating complete information from successful selection
+## Four tests separating complete information from successful selection
 
 The supporting arguments below are ordinary, unreviewed mathematics in
 the authors' notebooks. They are not new counterexample exclusions. Their
@@ -1178,6 +1178,47 @@ whose debt tends to zero. It therefore refutes arbitrary selection, not
 the existence of a good selection from the whole correspondence. The next
 useful test is existential and global: produce a good selected family, or
 show that a true minimum supplies a strict same-domain improvement.
+
+### Minimizing over all anchored equilibria does not restore table continuity
+
+For a fixed hazard floor θ∈(0,1), let E_h,θ(r) contain ALL actual
+profiles where the host h has conditional Quit probability at least θ
+at each live date, the other three players are unrestricted terminal
+Nash, and the host is optimal over that constrained law class. The
+selection objective is the host's FULL debt, not its constrained regret.
+The ordinary argument in
+`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, HN1–HN5, proves its
+minimum is attained. The unrestricted host cap is only lower
+semicontinuous; the other caps are screened by the host's geometric
+survival bound. This argument remains independently unreviewed.
+
+The same record proposes an exact all-selection calculation for the
+following complete Fin4 table, with parameter γ∈[0,1] and Never0:
+
+    r₀(S)=1 if 1∈S and 0∉S, otherwise0;
+    r₁(S)=1 if {0,1}⊆S;
+          γ if 0∈S and 1∉S;
+          0 otherwise;
+    rᵢ(S)=−1 if i∈S and |S|≥2, otherwise0, i=2,3.
+
+All own singletons are0. Over the ENTIRE anchored correspondence,
+the proposed exact minimum full host debt is
+
+    f₀(θ,γ)=θ if γ<θ, and0 if γ≥θ.
+
+Thus no fixed-floor reward-table Lipschitz modulus survives this
+optimization, even though the full original debt infimum has such a
+modulus over its fixed law domain. The admissible equilibrium set changes
+with the table, and a favorable branch appears at γ=θ. Compactness and
+actual objective attainment do not remove that distinction.
+
+This table family has absorbing debt infimum0. For every FIXED γ its
+displayed selection value also tends to0 as θ→0. The calculation therefore
+does not refute an existential good-selection theorem or narrow the
+positive-gap class. Its concrete test is the fixed-table asymptotic
+selection problem, without importing continuity from a different
+optimization domain. If correct, it rules out another operation on a
+fully specified state rather than exposing missing response information.
 
 Taken together, these tests weakly favor a missing global selection theorem
 or an unsuitable operation over missing information for these particular
