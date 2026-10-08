@@ -781,6 +781,32 @@ A unilateral response transition and an exact predecessor transition are
 different objects. A route using both must prove their matching; none of
 the other conjecture-equivalent formulations requires that particular route.
 
+### Interior cyclic families — reviewed consequence of tracked results
+
+At one fixed Fin4 table with no UE, consider ANY family of interior
+approximate Nash cyclic blocks with periods L_n≥1 and nonnegative
+one-row regret bounds ε_n such that L_nε_n→0. Then
+
+    H_n=∑[t<L_n,i]q_{n,t,i} → 0.
+
+Periods need not be bounded. The tracked fixed-debtor refinement gives
+singleton-owner concentration or vanishing total hazard. Its concentration
+branch already supplies the literal root, vanishing outsider errors and
+true punishment bound required by the tracked solo-payoff consumer.
+Applying this dispatch to every subsequence on which H_n is bounded below
+proves the whole-family limit. This composition has independent mathematical
+review; the displayed whole-family conclusion is not a new checked declaration.
+
+Interior approximate cyclic blocks exist for every positive-error and period
+schedule. Their existence does not select a family with
+
+    L_nε_n / min[i]Pr(an opponent of i quits during the period) → 0.
+
+That relative-error condition would control every unrestricted terminal
+debt and give UE. Its denominator may vanish as fast as the numerator or
+faster. The fully vanishing-hazard regime remains open, and these cyclic
+families are not identified with the separated-gap minimum sources.
+
 ## 7. Solved reward classes and finite recognition
 
 Let Γᵢⱼ=rᵢ({j})−sᵢ, with recipients indexing rows and quitters columns.
@@ -2112,6 +2138,7 @@ one accepted instance or an equivalent unrestricted proof.
 | Finite laws | Select the three independent nonpivot laws with inner repair value tending to zero. |
 | Maximum-regret sources | Consume either the generic singleton-bearing source or the single-pivot source with strict pressure and a singleton-removing delay, controlling the changed nonmover caps. |
 | Total-debt source | Consume the least-literal-Never separated-gap minimum: either two owners bridge between the first root and later responses, or one owner bridges and another has only later maximizers. Every debt is positive and the first collision has no sure quitter. Retain the arbitrary-carrier tail constraint and account for the positive born cap under periodic replay. The source supplies neither a Nash row, minimizing tail, nor temporal return. |
+| Interior cyclic families | Select vanishing error relative to every player-deleted period absorption, or consume the fully vanishing-hazard regime by another whole-game argument. Absolute period-error convergence already excludes singleton concentration but does not control full terminal debts. |
 | Forward play | Produce the bounded absorption-relative packets or the punishment-vector sure root from the remaining table. |
 | Global obstruction | Exclude every full robust polynomial/positive invariant barrier, or construct one for an explicit table. |
 | Matrix classification | Consume tables surviving full and quotient degree tests, guarded crossed-response tests, and the matrix-free oriented-pair test, using actual all-behavior realization. |
@@ -2173,6 +2200,15 @@ games are not a proved normal form for all finite stochastic games.
   (`UniformEquilibrium/Diagnostics/Quitting/FinFourUnboundedExactBlockHazardCapacity.lean`);
   `all_marginalQuitHazards_summable_of_no_uniformPayoff`
   (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportHardNashBellmanSpine.lean`).
+- Interior cyclic selection and singleton completion:
+  `nonempty_interiorApproximateNashCyclicBlockFamily`,
+  `exists_interiorCyclicFixedDebtor_and_ownerEscape_of_terminalGap`, and
+  `nonempty_interiorCyclicUniformPayoffSubsequence_of_maximumRatio_tendsto_zero`
+  (`UniformEquilibrium/Quitting/Cycles/InteriorCyclicTerminalDebtRatio.lean`);
+  `isUniformEquilibriumPayoff_soloReward_of_deletedQuitLimits`
+  (`UniformEquilibrium/Quitting/Cycles/ConditionedDeletedClockSoloCompletion.lean`);
+  `isUniformEquilibriumPayoff_soloReward_of_approximate_caps`
+  (`UniformEquilibrium/Quitting/Punishment/ApproximateCompletedCycle.lean`).
 - Persistent-base selection:
   `exists_uniformPayoff_or_singletonBase_pos_gap` and
   `exists_uniformPayoff_or_persistentLargeBase_pos_gap`
