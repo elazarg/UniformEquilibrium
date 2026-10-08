@@ -8819,6 +8819,96 @@ plus the exact singleton and actual absorbing-completion facts used by
 the canonical NP proof. The algebra above uses their ordinary one-law
 affinity/convexity principle; it is not a new checked declaration.
 
+## A whole ν-changing diagonal architecture already fails on the old cyclic test
+
+### UD1. Exact scope and complete response ledger
+
+This is an ORDINARY, COMPLETE architecture falsifier, not a genuine
+positive-gap example or a new class theorem. It reuses MORSE's already
+solved cyclic table rather than strengthening the local test. Its role
+is to rule out a uniform acceleration of EVERY existing finite clock
+as the missing ν-changing move. Asymmetric calendar changes remain open.
+
+Indices are modulo four. For every nonempty coalition S, the complete
+sixty entries are: own singleton 1; at singleton {j}, passive j+1 gets0
+and the other two passives100; pairs pay participants69 and passives100;
+at a triple omitting m, participant m+1 gets92, the other two participants101,
+and passive m100; grand pays99 to all. Never pays0. This is exactly the
+previous cyclic regression, not new data.
+
+Let every independent law put probability p at the SAME actual date T
+and 1−p at Never, for ANY p∈[0,1] and T∈ℕ. All players have the same
+complete quantities
+
+    Q=(1−p)³+207p(1−p)²+294p²(1−p)+99p³,
+    A=200p(1−p)²+300p²(1−p)+100p³,
+    C=A+(1−p)³,       U=pQ+(1−p)A.
+
+Every pure response strictly before T gives1; the date T gives Q;
+EVERY finite response strictly after T gives C; Never gives A. Q≥1
+because ALL participant entries are at least1. C≥A. Thus the full
+unrestricted cap is EXACTLY max(Q,C), even when T>0, p=0, or p=1.
+No response menu has been substituted for the full cap. Put
+
+    G=Q−C=p(2p−1)(6p−7).
+
+Then the exact unrestricted sum debt is
+
+    D(p)=4[(1−p)⁴+G⁺−pG].                     (UD1)
+
+In particular D(1/2)=1/4 and ν(p)=(1−p)⁴ ranges over ALL of[0,1].
+This family is not constrained to the old joint Never mass.
+
+### UD2. Global minimum over the entire architecture
+
+Since 6p−7<0, G≥0 on[0,1/2] and G≤0 on[1/2,1]. Expansion gives
+
+    D(p)−1/4=(1−2p)(15+78p−180p²+88p³)/4    if p≤1/2,
+    D(p)−1/4=(2p−1)(−88p³+84p²+34p−15)/4   if p≥1/2.
+
+Both cubic factors are STRICTLY positive on their respective intervals.
+For a transparent exact certificate: after x=2p in the first factor,
+the degree-three Bernstein coefficients on x∈[0,1] are
+
+    (15,28,26,20).
+
+After x=2p−1 in the second factor, they are
+
+    (12,62/3,76/3,15).
+
+Here the Bernstein basis is ((1−x)³,3x(1−x)²,3x²(1−x),x³), all
+nonnegative and summing to1. Therefore
+
+    D(p)≥1/4 for EVERY p,T, with equality exactly at p=1/2.   (UD2)
+
+This excludes ALL uniform common-cohort hazard rescalings, not just
+small perturbations. Independently taking the earliest of k replicas
+of each old half-finite law gives p=1−2⁻ᵏ; taking the latest gives
+p=2⁻ᵏ. Both change ν, both modify existing finite mass, and both are
+covered by(UD2), as are arbitrary intermediate common rates. Nothing
+here excludes asymmetric rates, calendar refinement, or whole-law repair.
+
+### UD3. Why the next mechanism must be asynchronous
+
+The true unrestricted gap of this table is ZERO. After the finite
+relabeling i↦−i its singleton matrix has cyclic coefficients
+(0,−1,99,99). These meet the hypotheses of
+`QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean`:
+first forward entry negative, the other two nonnegative, and coefficient
+sum197>0. The inspected producer permits arbitrary collision rewards.
+MORSE's explicit same-table four-block refinement additionally bounds
+ALL finite/Never gains by68ρ, and sum debt by272ρ→0. Its original
+literal finite-law censoring test also beats1/4. Hence(UD2) is a
+whole-architecture obstruction at a SOLVED table, not a no-UE example.
+
+The decision is to drop UNIFORM finite-clock acceleration as a consumer.
+This is stronger than NR10's fixed-ν warning but does not answer the
+remaining problem: find a genuinely asymmetric ν-changing comparison
+whose born caps are paid at a TRUE global minimum. No constants or new
+local trapping table are being sought. The old cyclic table's actual
+escape already demonstrates the needed change of calendar mechanism.
+
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
 ### NF9. Every minimum prefix at the SAME separated table has a paid nonsure bridge
