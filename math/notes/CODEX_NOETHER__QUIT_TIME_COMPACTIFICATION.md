@@ -183,6 +183,13 @@ obligatory by local activation or bare index. Nor may its limiting ports
 be installed at finite dates. The actual raw class is meaningful positive
 progress; it still does not consume the canonical fully-paid nonsure
 counterexample source or force such a circuit for every finite table.
+The current selected-domain test is now sharply falsified in RM37:
+even a feasible continuation STRICTLY below own levels can have a UNIQUE
+full Nash root whose successor is above EVERY own level, while the table
+has exact true punishment floors, no sure roots anywhere above them,
+and hard R₀/StandardQ singleton data. This is not a positive-gap example.
+It rejects the whole threshold-slab viability premise, not the existing
+selected-return consumer or a suitably selected smaller viable subset.
 
 The body retains the independently reviewed compact/source reductions,
 the PD deterministic-outcome contribution incorporated with attribution
@@ -21279,3 +21286,251 @@ all existing selection sets or claimed a new hard counterexample class.
 This supporting extension does not force any compatible circuit for
 arbitrary data. The remaining full-goal question is still physical
 common-port return through genuinely positive-premium collision jumps.
+
+## RM37: a strict-below feasible port with no singleton-sublevel successor
+
+Status: COMPLETE EXACT ORDINARY FALSIFIER, INDEPENDENTLY UNREVIEWED.
+All data and all binary-root boundaries are covered below. No uniform-payoff
+nonexistence, positive full debt gap, positive absorbing gap or complete
+known-producer census is asserted for this table.
+
+TR1: the proposed global mechanism and its actual missing premise.
+For a table r let s_i=r_i({i}), let P_i be the infimum of the full
+unrestricted best-response value over INDEPENDENT opponent stopping laws,
+and let H=conv{r(S):S≠∅}. A tempting domain for charged predecessor paths is
+
+    K=H∩{v:ALL v_i≥P_i}∩{v:SOME v_i≤s_i}.
+
+The attempted raw claim was that every v∈K has a nonzero full root q with
+F(v,q)∈K; after the all-own boundary test below, the actual next test
+was restricted to v with SOME v_i<s_i. Here is the EXACT quantified
+weaker output assertion falsified, with no implicit viable-subset choice.
+For a finite table r and B>max_{S,i}|r_i(S)|, define
+
+    Adm_r,B(v) ⇔ v∈H AND ALL v_i≥P_i AND ALL |v_i|≤B
+                       AND SOME v_i<s_i.
+
+The proposed raw implication was: for EVERY positive-own table r with
+no sure full root at ANY w≥P and with the R₀/standardQ/positive-simplex
+singleton screens in(TR.7–8), and EVERY such bound B,
+
+    ∀v, Adm_r,B(v) ⇒ ∃q∈[0,1]⁴,
+          FullRootNash(r,v,q) AND ∃i,F_i(v,q)≤s_i.   (TR.0)
+
+The input inequality is STRICT; the required successor inequality is
+WEAK≤own, not strict<own. Requiring F(v,q)∈K would only strengthen
+the already falsified output. A nonzero root is automatic at a strict
+input, since AllContinue cannot be Nash there. The witness below takes
+B=13 and fails EVEN this weak successor test. This is an ALL-admissible-
+ports assertion. It is NOT an assertion that no chosen nonempty viable
+subset exists, or that a port supplied by an actual positive-global-debt
+minimum must fail. Such a minimum/source is not produced by this table.
+
+The exact existing `HasBoxedSelectedSingletonSublevelReturn` in
+`UniformEquilibrium/Quitting/Projective/SelectedSingletonSublevelReturnSmoothDrift.lean`
+quantifies over ALL boxed sources strictly below some own singleton,
+and asks for ONE exact root with SOME successor coordinate≤own. Its
+proved consumer
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound`
+in
+`UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`
+has explicit nonnegative-own, reward-bound and selected-return premises.
+I read both files under their imports. The selected-return hypothesis is
+a SOURCE obligation, not a conclusion of their potential-exclusion proof.
+The new table below disproves producing it from even the stated stronger
+elementary screens. Its port lies in the true-floor feasible set too.
+
+TR2: complete60-entry countertest. Owns are1 and Never pays0. Columns
+list recipients0,1,2,3. All rewards are literal rational numbers.
+
+| S | r(S) |
+| --- | --- |
+| 0 | (1,3,3,0) |
+| 1 | (4,1,−2/5,−1) |
+| 2 | (0,2,1,2) |
+| 3 | (4,−1/2,0,1) |
+| 01 | (3,4,−1/2,10) |
+| 02 | (1,−5/2,2,10) |
+| 03 | (5,10,10,1) |
+| 12 | (10,1,−7/5,10) |
+| 13 | (10,−3/2,−5/2,0) |
+| 23 | (10,−1/2,1,1) |
+| 012 | (9,−3/2,−3/2,−10) |
+| 013 | (9,11,10,11) |
+| 023 | (11,10,11,9) |
+| 123 | (−10,−3/2,−3/2,9) |
+| I | (−11,11,11,−11) |
+
+Write e=(1,−1,−1,1), b=(−2,2,2,−2) and π=(1,0,3,2).
+Directly from ALL table entries, for EVERY owner i and every nonempty
+T⊆I∖{i},
+
+    r_i(T∪{i})−r_i(T)=e_i+b_i·1_{π(i)∈T}.          (TR.1)
+
+At the reference continuation v=(0,2,2,0) one also has s_i−v_i=e_i.
+Consequently the ENTIRE binary game, not merely its interior equations,
+has
+
+    g₀(v,q)=1−2q₁,       g₁(v,q)=−1+2q₀,
+    g₂(v,q)=−1+2q₃,      g₃(v,q)=1−2q₂.           (TR.2)
+
+For an arbitrary annotation w the exact extension is
+
+    g_i(w,q)=e_i+b_iq_{π(i)}+h_i(q)(v_i−w_i).    (TR.3)
+
+These identities retain every coalition term, including grand and every
+omitted-player triple. They follow by opponent-product averaging of
+(TR.1); the only different term is the empty opponent event h_i.
+
+TR3: ALL roots and the strict exit. The first two equations in(TR.2)
+are a matching-pennies pair. A pure boundary for either coordinate
+forces its opponent's opposite strict best response, which reverses
+the first response. Thus both coordinates are mixed and tie, giving
+q₀=q₁=1/2. The second pair analogously gives q₂=q₃=1/2.
+There is exactly ONE full Nash root, including all0/1 boundary faces:
+
+    q*=(1/2,1/2,1/2,1/2),
+    F(v,q*)=(7/2,47/16,27/10,21/8).              (TR.4)
+
+To verify the head, each nonempty coalition has mass1/16, the empty
+coalition contributes v/16, and averaging the15 rows above gives
+(TR.4). All owners mix, so their forced-Quit endpoints equal this
+head too. Every coordinate is STRICTLY above1. Hence no exact root
+from this strictly-below source has ANY singleton-sublevel successor.
+This is a complete correspondence falsifier, not one bad selected root.
+
+TR4: exact true punishments and feasible input. All passive rewards
+for owners0,3 are≥−10; Never therefore guarantees≥−10 against ANY
+independent opponent profile. Opponents all quitting at the first
+date give only passive−10 or grand−11, so their unrestricted cap is
+exactly−10. Hence P₀=P₃=−10.
+
+Every participant reward for owners1,2 is≥−3/2. Quitting at the first
+date guarantees≥−3/2 against ANY independent opponents. For owner1,
+opponents0,2 sure at that date and3 Never give Continue−5/2 and
+Quit−3/2. For owner2 use opponents1,3 sure and0 Never. Thus
+
+    P=(−10,−3/2,−3/2,−10).                     (TR.5)
+
+No correlated/public punishment or optimal-tail assumption is used.
+The input v is≥P and strictly below own in coordinates0,3. It is
+also literally in the feasible terminal hull:
+
+    v=[3268r(0)+503r(012)+675r(123)+95r(I)]/4541. (TR.6)
+
+All four weights are positive and sum to4541; direct row arithmetic
+gives (0,2,2,0). Feasibility is only convex feasibility, not a claim
+that this precise mixture is realizable by independent clock laws.
+
+TR5: no sure root at ANY annotation above true punishment. Suppose
+w≥P and a full root has q₀=1. Equation(TR.3) for owner1 then has
+h₁=0 and g₁=1, forcing q₁=1. But owner0 then has h₀=0 and g₀=−1,
+contradicting q₀=1. Similarly q₃=1 forces q₂=1 and contradicts
+g₃=−1. These arguments allow every other boundary rate.
+
+If q₁=1, owner0 has g₀=−1, hence q₀=0. Owners2,3 have h₂=h₃=0
+and form their fixed matching-pennies pair, so q₂=q₃=1/2. Therefore
+
+    g₁=−1+(2−w₁)/4≤−1+7/8=−1/8<0,
+
+using w₁≥−3/2. This also contradicts q₁=1. The case q₂=1 forces
+q₃=0, q₀=q₁=1/2 and the same strict bound on g₂. Thus EVERY sure
+coordinate is excluded for EVERY w≥P. This is stronger than failure
+of selected sure roots at v alone, but does not assert absence below P.
+
+TR6: full singleton matrix screens. With the ACTUAL projective sign
+Γ_ij=r_i({j})−s_i one obtains
+
+    Γ=[0,3,−1,3;
+       2,0,1,−3/2;
+       2,−7/5,0,−1;
+       −1,−2,1,0].                              (TR.7)
+
+Every column has a negative entry. The six principal pair determinants,
+in order01,02,03,12,13,23, are
+
+    −6, 2, 3, 7/5, −3, 1.
+
+The four principal triple determinants in order012,013,023,123 are
+44/5,−15/2,5,41/10, and the full determinant is41/2. Hence no
+nonnegative homogeneous complementarity root can have support≥2;
+a singleton support is excluded by its negative column entry.
+Thus Γ is R₀, with no nonzero homogeneous simplex LCP solution.
+Also the positive simplex λ=(5,1,9,5)/20 gives
+
+    Γλ=(9/20,23/40,9/50,1/10)>0.                (TR.8)
+
+For completeness, standard Q is an EXACT finite census, not grid
+evidence. At positive anchor a=(1,2,3,5), solve Γ_SS z=a_S.
+The principal candidates and off-support slacks Γz−a are as follows.
+An entry with a negative active coordinate or slack is inadmissible.
+
+| S | active z | off-support slack |
+| --- | --- | --- |
+| 01 | (1,1/3) | (−22/15,−20/3) |
+| 02 | (3/2,−1) | (0,−15/2) |
+| 03 | (−5,1/3) | (−25/2,−40/3) |
+| 12 | (−15/7,2) | (−66/7,9/7) |
+| 13 | (−5/2,−4/3) | (−25/2,11/6) |
+| 23 | (5,−3) | (−15,15/2) |
+| 012 | (3/2,0,−1) | (−15/2) |
+| 013 | (5,−5,16/3) | (26/3) |
+| 023 | (3,8,3) | (15/2) |
+| 123 | (−75/41,55/41,−18/41) | (−375/41) |
+| I | (75/41,−75/41,130/41,132/41) | empty |
+
+At the negative offset−a, the empty support is inadmissible, and each
+singleton has zero diagonal and a positive active anchor, so cannot
+solve its active equation. The ONLY admissible candidate is023 with
+positive active entries, strict outside slack15/2 and determinant5.
+The proper R₀ complementarity map therefore has degree+1, and nonzero
+degree makes it onto for every offset: Γ is standard Q.
+
+I checked the exact sign definition `quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`, and reread
+`r0Degree_eq_sum_admissible_inverse_supports` under its imports in
+`MathUE/LinearProgramming/FiniteSupportDegree.lean` and
+`isStandardQ_of_r0Degree_ne_zero` in
+`MathUE/LinearProgramming/R0Degree.lean`. Their conditions match the
+complete finite census just given. The new table has not been implemented
+or checked in Lean; this is ordinary exact arithmetic using those
+established degree principles.
+
+TR7: the earlier ALL-own boundary comparator and the precise pivot.
+MORSE supplied a separate full-root witness on the already constructed
+DN table, whose literal15 rows are Section6 of the canonical scalar
+export. At v=s=(1,1,1,1), every full root is q=0. Here is the complete
+ordinary check, with the incoming favorite orientation explicit.
+Positive singleton joins have the cycle f:0→3→1→2→0. For a proper
+active support A of size≥2 choose a receiver i∈A with f⁻¹(i)∉A.
+Every NONEMPTY opponent event within A has a strictly negative join
+gap for that receiver, while its empty gap is0. Hence g_i<0, impossible
+for an active nonsure owner. Sure cases are excluded by that table's
+whole-annotation proof. A singleton host's quiet favorite f(host)
+has a strictly positive join and cannot stay quiet. With full mixed
+support,
+
+    Σ_i(1−q_i)g_i=Σ_{∅≠S⊊I}μ_q(S)C_S<0,
+
+where C_S is the sum of outsider joins. Its singleton values in order
+0,1,2,3 are−17/2,−9/2,−13/2,−9/2, every pair value is−2 and every
+triple value−1. This contradicts ALL mixed indifferences. The price is
+feasible too: weight3/14 on each of the four triples and1/7 on grand
+gives (1,1,1,1); it is above that table's true punishment−4.
+This comparator alone does NOT violate the STRICT-below predicate.
+The new(TR.2–6) example does, retaining feasible price and true floors.
+
+Neither test is a counterexample to UE or to the checked selected-return
+consumer. In particular none of the screens in(TR.5–8) supplies positive
+GLOBAL full debt, a separated absorbing floor, source ancestry, or
+exclusion of every stationary/other known producer. The exact rejected
+implication is only
+
+    positive owns + true-floor feasibility + no sure root above trueP
+    + R₀/standardQ/hard positive-simplex singleton data
+    ⇒ selected singleton-sublevel return.           FALSE.
+
+A sufficiently chosen smaller viable set is not excluded. The whole
+quitting construction may need genuine above-own excursion and a nonlocal
+return, or extra global no-UE structure; it cannot keep EVERY feasible
+strict-below input in the threshold slab by this elementary argument.
