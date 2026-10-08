@@ -13,7 +13,7 @@ ZERO debt. This is independently reviewed ordinary mathematics, not
 an equilibrium producer or an assertion that distinct clock labels
 always distinguish payoff effects.
 
-The live attempt is RM1–RM18 at the end of this notebook. RM1–RM5
+The live attempt is RM1–RM19 at the end of this notebook. RM1–RM5
 select a genuine compact GLOBAL minimum with maximal root mass and
 identify the nonlinear-wall failure of naïve purification. A sole
 bridger is at its own root rate0 or1. RM6–RM9 prove that if it is the
@@ -65,7 +65,27 @@ ceiling is a genuine boundary, not silently genericized away.
 This is an unreviewed supporting source simplification, not a UE
 consumer or an export; two clocks alone are not proved consuming.
 
-Status of RM10–RM18: COMPLETE ORDINARY PROOF DRAFTS, not independently
+MORSE's FC1–FC6 has now passed my independent full-section review in
+the existing feedback: at a compatibly selected ALL-positive-own table,
+a common zero debt makes EVERY original minimum pair realizable in the
+closure of ALL-FOUR-finite-a.s. clocks, at the SAME gap and with the full
+arbitrary-tail floor. Actual normal-core ROW witnesses supply completion.
+Thus RM18's two-clock simplification is superseded in that produced branch;
+its strict stationary-attainment assertion and boundary calculations remain
+distinct. FC is not an actual finite-clock minimum-attainment theorem.
+
+RM19 checks the remaining positive-own equality P_i=s_i. All-Continue
+opponents actually attain it, so ANY sure-root minimum in that equality
+case has an ACTUAL one-date/Never realization with exactly its original
+semantic pair. Equality can nevertheless hold throughout an open row-generic
+reward region satisfying the normal-core ROW condition. In its strict
+participant-premium subcase NO absorbing opponent law attains P_i; a saturated
+sure bridge cannot be clock-completed by an EXACT absorbing suffix graft.
+FC's closure remains valid and is not silently upgraded to attainment.
+Genericity alone therefore cannot remove this wall. No actual positive-gap
+counterexample in that region or full Fin4 consumer has been constructed.
+
+Status of RM10–RM19: COMPLETE ORDINARY PROOF DRAFTS, not independently
 reviewed, not Lean-checked, and not exported. Their necessary conditions
 and local table prices do not assert that the GLOBAL infimum rises.
 
@@ -17766,3 +17786,115 @@ observer cap after releasing that root? If not, can full globality
 rule out the remaining clipped equality P_i=max(s_i,0) in the positive
 sure-source case? Two finite-a.s. clocks alone, even at the FULL
 minimum, have not been proved to yield a renewal or a debt descent.
+
+### RM19. Positive-own equality is attained, but not necessarily by an absorbing punishment
+
+Status: COMPLETE ORDINARY PROOF DRAFT; no export or positive-gap example.
+This is the equality-boundary check after MORSE's FC1–FC6. FC supersedes
+RM18's two-clock closure at its produced table. The question is whether
+positive own payoffs, normal-core ROW witnesses and within-recipient reward
+genericity force P_i<s_i, or make an absorbing opponent punishment actually
+attain P_i. They do neither by themselves. Actual-minimum consequences are
+separated from the raw-table falsifier below; no minimum is transported
+through a reward perturbation.
+
+Take s_i>0 and P_i=s_i. All opponents Never give complete cap max(s_i,0)=s_i.
+Thus the punishment infimum is ACTUALLY attained by stationary hazards0. The
+negative-own nonattainment regression in RM18 is irrelevant to this positive
+source. If i is sure at a true FULL minimizing root T_q(v), RM18's global
+canonicalization sets its cap to max(Q_i,A_i+h_i s_i) without changing ANY
+payoff or ANY other cap. Choose the all-Never tail exactly, not an approximating
+sequence. This one-date/Never profile is an ACTUAL realization of the SAME
+full minimizing pair. Another sure root owner already makes all tails
+irrelevant. Multiple bridges are allowed. This does not say all four clocks
+are finite in that actual realization.
+
+There is a robust equality region, not a finite difference hyperplane. For
+one owner i impose
+
+    s_i>0,
+    r_i(S)>s_i for every S containing i with |S|≥2.       (RM28)
+
+Against ANY independent opponent laws the deadline0 reply gives at least s_i:
+its terminal coalition contains i. All opponents Never give cap s_i. Hence
+TRUE unrestricted P_i=s_i throughout this OPEN reward region. Passive rewards
+can vary freely, including a strict ROW witness r_i({j})<s_i. Coalitional
+distinctness and ordered payoff-difference injectivity can be chosen densely
+there; they do not imply strict optimized punishment inequality.
+
+One complete finite-data specification retains the normal-core and ambient
+necessary screens. Set I=Fin4 and choose independently:
+
+* every own singleton in(1/10,11/100);
+* each passive singleton r_m({m+1 mod4}) in(−1/2,−2/5);
+* each of the other TWO passive singletons in(7/10,4/5);
+* owner0's SEVEN nonsingleton participant entries in(2/5,3/5);
+* every remaining nonsingleton entry in(−4/5,4/5).
+
+These intervals specify ALL60 entries, with no omitted defaults. Every row
+has a strict cyclic blocker, so normal core is full. Each Γ-row sum exceeds
+
+    2(7/10−11/100)+(−1/2−11/100)=57/100>0.
+
+Thus Γ times the uniform simplex vector is strictly positive in EVERY row.
+Owner0 satisfies(RM28), hence P_0=s_0. This open60-coordinate family permits
+avoidance of every finite collection of proper row-genericity hyperplanes.
+It does NOT claim avoidance of contacts involving an unknown positive GLOBAL
+gap, a standard-Q census, an actual canonical minimum, or no-UE. It falsifies
+only the implication from generic rows, positive owns, full normal core and
+the necessary ambient Γ-simplex condition to strict P_i<s_i. No solved-table
+test is counted as a positive counterexample.
+
+Under(RM28), all-Never is the ONLY actual opponent law attaining s_i. If
+opponents have ANY finite exit with positive probability, take the least
+finite date n with positive exit probability. There are no earlier exits.
+Quitting at n pays s_i if no opponent stops there and STRICTLY more if some
+opponent stops there. That latter event has positive probability. Therefore
+the complete cap exceeds s_i. This includes arbitrary infinite supports and
+Never probabilities, not just stationary hazards. No absorbing opponent law
+attains P_i, although delayed diffuse laws approach it under a ROW blocker
+as in FC3.
+
+This is an EXACT obstruction to a same-head consumer. Suppose a TRUE full
+minimum has i as its sole sure root owner, h_i>0, and saturated tie
+
+    B_i=U_i=Q_i=A_i+h_iP_i=A_i+h_i s_i.                  (RM29)
+
+Keeping that root and grafting ANY actual absorbing opponent suffix gives
+scalar cap strictly larger than s_i. The new owner cap exceeds Q_i, while
+ALL prescribed payoffs and ALL other caps are screened by i's sure root and
+unchanged. FULL debt is strictly larger than δ. This is not a universally
+closed positive barrier: different roots, other minimum families and other
+suffixes remain available, and no δ>0 table with(RM28) is supplied. It
+precisely refutes automatic EXACT absorbing-suffix attainment from FC's
+carrier closure.
+
+Equality also has actual necessary root signs. For a sole-sure bridge in
+(RM29), put L_i(S)=r_i(S)−r_i(S∪{i}), for ∅≠S⊆I∖{i}. The original
+independent opponent root-coalition law gives
+
+    0=A_i+h_i s_i−Q_i
+     =Σ_(S≠∅) Prob(root opponent coalition=S)L_i(S).    (RM30)
+
+Within-recipient distinctness makes every L_i(S) nonzero. The first collision
+has at least one other positive root rate, hence a nonempty positive-weight
+term. Some positive-probability L_i(S) must be positive and another negative.
+In particular ONLY ONE positive opponent root rate is impossible: it supplies
+just one nonempty coalition and cannot satisfy(RM30). A deterministic
+nonempty opponent coalition is equally impossible. Thus a saturated equality
+bridge needs at least THREE positive root suppliers and opposed membership
+effects. This narrow actual-source exclusion is not a UE or switch-price claim.
+
+Direct pure punishments give another raw necessary equality screen. Making
+precisely nonempty S⊆I∖{i} sure at date0, everyone else Never, gives owner
+complete cap max(r_i(S),r_i(S∪{i})). If P_i=s_i, this maximum is≥s_i,
+and genericity makes it>s_i. In particular every strict ROW blocker j with
+r_i({j})<s_i must have r_i({i,j})>s_i. These screens allow, not forbid,(RM28).
+
+Current conclusion: FC repairs a missing-clock realization mode but not
+punishment saturation. Positive-own equality gives an ACTUAL one-date/Never
+full minimum, permitting a same-table attempt there without importing a tail
+minimum. Releasing the sure owner to a later guaranteed finite clock still
+exposes NEW observer joining caps. Neither(RM30) nor debt rigidity bounds those
+caps above. An automatic owner's best reply or another local row price does
+not repair that missing global comparison.
