@@ -107,6 +107,14 @@ first date prevents the presumed early solo test. The exact interior
 empty-date insertion costs5/192 debt. This seam must remain priced
 in any nonexact geometric-cohort change.
 
+BB below changes mechanism to the full finite-word control problem.
+Its continuous soft-cap barrier has an explicit error for EVERY root,
+not just exact Nash roots. The Nash-edge consequence overlaps existing
+production, and no reachable return or favorable word is produced.
+The attempted exact-discount variant weighted by original Never mass
+is falsified by the source's actual absorbing payoff direction. Thus
+neither version is a new counterexample-class reduction or UE consumer.
+
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
 date to0, extract an ACTUAL carrier tail even at sure-owner boundaries,
@@ -10182,6 +10190,152 @@ geometric equations, but must retain occupied atomic dates and price
 ALL empty-date births. Neither conditional native Nash nor a column
 blocker supplies an unobserved pre-collision opportunity. No export,
 full conjecture result or new positive-gap class reduction is claimed.
+
+## Whole-word Bellman barriers and the failure of Never-weighted exact discounting
+
+### BB1. Actual full-cap control problem and status
+
+Question. Can the complete finite-word control problem consume the strict
+global source, instead of assuming a local gain or free geometric tail?
+Fix any bounded finite quitting table |r|≤M, M>0, and its ORIGINAL closed
+attainable payoff/full-cap carrier K. Assume its unrestricted SUM minimum
+δ=min_K Σ_i(b_i−u_i)>0. Here all original independent stopping laws,
+all finite deadlines and Never are included. No tail Nash or minimum-tail
+assumption is added. The following barrier calculation is COMPLETE
+ORDINARY, UNREVIEWED supporting mathematics, not a conjecture consumer.
+
+For a product root q write c=∏_i(1−q_i), α_i=∏_(j≠i)(1−q_j),
+and use the literal root payoff terms A_i,Q_i from NF. Set
+
+    F_q(B)_i=max(Q_i,A_i+α_i B_i),
+    H_i(q)=q_iQ_i+(1−q_i)A_i,
+    T_q(u,b)=(H(q)+cu,F_q(b)).                         (BB.1)
+
+Every root and every carrier pair are allowed. Prefix closure follows
+by putting q at date0 and shifting actual approximating laws one date;
+the same formulas give cap convergence for EVERY finite reply and Never.
+Finite-support stopping laws approximate every actual law by moving its
+finite tail to Never. Coupling changes U and all responder payoffs by
+at most2M times the sum of moved masses, uniformly before taking caps.
+Every such finite-support profile is a finite root word ending in the
+all-Never pair (0,max(s,0)). Thus the closed carrier is the closure of
+the complete finite-word orbit; bounded-word or menu Nash is not used.
+
+Let
+
+    E={B∈[−M,M]^I: some (u,b)∈K has b≤B}.
+
+E is compact and upward closed within the box. Monotonicity of F_q and
+prefix closure give F_q(E)⊆E. For any root define the FULL root regret
+
+    R(q,B)=Σ_i F_q(B)_i−Σ_iH_i(q)−cΣ_iB_i
+          =Σ_i[(1−q_i)(Q_i−C_i)⁺+q_i(C_i−Q_i)⁺]≥0,
+    C_i=A_i+α_iB_i.                                  (BB.2)
+
+R=0 is exactly full root Nash at annotation B, including quiet/sure
+owners. For all other roots the quantity remains explicit; it is not
+silently discarded as a perturbation error.
+
+### BB2. A continuous barrier with an ALL-root error
+
+Choose L>1 and define on the WHOLE reward box
+
+    V_L(B)=max_(u,b)∈K [Σ_i u_i−LΣ_i(b_i−B_i)⁺],
+    W_L(B)=Σ_iB_i−V_L(B),       P_L(B)=W_L(B)−δ.
+
+Compactness gives the maximum; V_L is monotone and L-Lipschitz in ℓ¹.
+For every candidate pair,
+
+    Σ_iB_i−[Σ_i u_i−LΣ_i(b_i−B_i)⁺]
+      =D(u,b)+Σ_i(B_i−b_i)⁺+(L−1)Σ_i(b_i−B_i)⁺.
+
+Hence W_L≥δ everywhere, P_L≥0 everywhere, and at the cap vector of
+ANY true minimum pair W_L=δ. If (u,b) attains V_L(B) and
+e_i=(b_i−B_i)⁺, then
+
+    Σ_i e_i≤P_L(B)/(L−1).                           (BB.3)
+
+For B∈E a feasible pair gives V_L(B)≥−|I|M, so W_L(B)≤2|I|M.
+These bounds are uniform in L. They do not assume every cap exceeds
+its own singleton; GC is a counterexample to that assumption.
+
+For every root, (F_q(b)_i−F_q(B)_i)⁺≤α_i e_i. Insert T_q(u,b)
+as a candidate in V_L(F_q(B)). Since α_i−c=q_iα_i, this gives
+
+    W_L(F_q(B))≤cW_L(B)+R(q,B)+LΣ_iq_iα_i e_i.
+
+The probability q_iα_i of the singleton outcome {i} is at most1−c.
+Using BB.3 and subtracting δ therefore yields
+
+    P_L(F_q(B))≤P_L(B)+R(q,B)
+                   −[δ−P_L(B)/(L−1)](1−c).          (BB.4)
+
+On E, take L−1≥4|I|M/δ. Then P_L(B)/(L−1)≤δ/2, and
+
+    P_L(F_q(B))≤P_L(B)+R(q,B)−(δ/2)(1−c)             (BB.5)
+
+for EVERY root and every B∈E. No cap branches are selected; the max in
+BB.1 is the complete response cap throughout. At a true minimum cap
+vector P_L=0, BB.5 forces R(q,B)≥(δ/2)(1−c) for every root. This
+fixed-cap consequence is already the known minimum/cap-Nash obstruction,
+not a favorable whole-law move. Along a word a useful negative comparison
+would require the aggregate R error to be less than its absorption charge.
+The source has not supplied such a word or a return inside E.
+
+### BB3. Exact discounting by Never mass loses the debt barrier
+
+An apparently cleaner version uses the augmented closed carrier carrying
+the original marginal Never probabilities n_i. Define
+
+    V_L^N(B)=max_(u,b,n) [Σ_i u_i−LΣ_i n_i(b_i−B_i)⁺].
+
+The prefix has n′_i=(1−q_i)n_i, so n′_iα_i=cn_i. The same cap
+comparison now gives the EXACT supersolution inequality
+
+    V_L^N(F_q(B))≥Σ_iH_i(q)+cV_L^N(B).
+
+This does not give a positive debt barrier. If every n_i=0, ALL cap
+penalties vanish. On the actual NP source the produced positive singleton
+direction Γλ>0 gives an absorbing profile with EVERY u_i>s_i: first
+make λ strictly positive by a sufficiently small perturbation, then use
+small stationary independent hazards ρλ_i. Every clock is finite a.s.;
+collision probability is O(ρ), and the terminal payoff tends to
+s_i+(Γλ)_i>s_i. This is the actual payoff producer already recorded in
+PS, not a new strategy completeness assertion. Consequently
+
+    V_L^N(s)≥Σ_i u_i>Σ_i s_i
+
+for EVERY L. The putative barrier ΣB−V_L^N(B) is negative at s.
+Strict positive full/absorbing gap cannot repair a potential that has
+deleted all absorbing cap penalties.
+
+The failure is structural for diagonal exact-discount weights. For fixed
+owner i, the identity w_i((1−q_i)n)α_i=cw_i(n), required for every
+n,q_i and any positive opponent survival, says w_i(an)=a w_i(n).
+Thus w_i(n)=n w_i(1), including w_i(0)=0. Every such weight discards
+precisely the absorbing profiles whose full caps must remain controlled.
+The unweighted BB2 retains those caps but pays the explicit root error.
+
+### BB4. Bounded source overlap and the remaining global question
+
+Inspected `exists_quittingRobustChargedRelation_rationalPotential_of_finiteBudget`
+in `UniformEquilibrium/Quitting/Projective/RobustChargedRelationPolynomialSeparator.lean`
+and `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`.
+The latter, under its exact normality/positive-singleton hypotheses, already
+produces a rational polynomial on a FULL fixed box for every robust relative
+approximate root-Nash edge. Its domain is stronger than E. BB2 is an
+ordinary all-root error ledger from the actual carrier; it is not a claim
+of a stronger Nash-edge potential theorem or a new exportable source.
+
+The hard constrained value max_{K,b≤B}Σu need not be continuous merely
+because AllNever is strictly cap-feasible: product-law profiles cannot be
+convexified by an unproduced common signal. Softening avoids that false
+step, but does not solve reachability. The next useful question is whether
+the STRICT absorbing gap forces an actual finite word with aggregate
+root regret below its physical charge, or forces a closed charged root
+return at reachable cap states. A supplied return, fixed annotations or
+the existence of an absorbing payoff above s is not such a producer.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
