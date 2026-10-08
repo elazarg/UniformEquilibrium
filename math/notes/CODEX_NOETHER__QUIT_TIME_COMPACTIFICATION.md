@@ -81,6 +81,15 @@ while every supported finite atom stays uniformly suboptimal, contrary
 to the marked minimum's active first atom. This does not transport an old
 profile to the single-pivot table or exclude coupled subsequent repairs.
 
+NC9 makes one additional FRESH-table global selection, not a change to the
+frozen canonical export. Five-parameter scalarization of the actual augmented
+debt/Never carrier makes EVERY full minimum share both its debt vector and
+one positive literal joint-Never mass. Consequently no nonzero finite prefix
+WORD over a full minimum can return to a full minimum of that same table.
+Both endpoints must be minima; the original excess-debt suffix is not one.
+This strengthens NC6's one-row substitution obstruction, but supplies no
+whole-law descent, no arbitrary-tail exclusion, and no export claim.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -24599,7 +24608,7 @@ published 2026-04-02, is distinct from their tracked 2024 absorption-path
 paper. The publisher's Introduction, §2.1 and Theorem4.10 were inspected:
 the theorem concerns singleton-flow SFAP payoffs under additional
 circuit-face avoidance, not arbitrary collision paths. Its model uses
-own singleton0 and negative AllContinue payoff, unlike our Never0 table;
+ own singleton0 and negative AllContinue payoff, unlike our Never0 table;
 no unchanged-profile normalization is inferred. No new proof audit was
 performed. Through the existing `EssentialAPS/All.lean` import facade, the
 actual declaration in
@@ -24608,3 +24617,168 @@ actual declaration in
 was checked narrowly through TOOLKIT: it also requires a supplied component
 and does not produce one from this source. The whole-suffix consumer remains
 open; the bibliographical check is not a mathematical contraction.
+
+### NC9. Joint debt/Never rigidity forbids every finite-word minimum return
+
+PROVED ORDINARY FRESH-TABLE GLOBAL SELECTION; INTERNAL, NOT A CONSUMER.
+This does not revise the frozen least-Never export. Its point is to test
+whether the one-row exclusion in NC6 genuinely requires one row. It does
+at the old table, but one additional attainable scalarization parameter
+removes that restriction at ONE newly selected counterexample table.
+
+Start with the reviewed source table, scale it by1/2, and call the result
+r⁰. Its rewards have absolute value at most M₀=1/2, all own singletons
+s⁰_i are positive, each row has distinct nonempty entries, and its true
+full and absorbing floors are δ₀>0 and δ₀+g₀ with g₀>0. The scale uses
+the same actual laws and scales all prescribed payoffs, ENTIRE caps and
+debts positively; no minimum law is transported through the next selection.
+
+Let H₀ be the closure of ALL ACTUAL triples (U,B,ν), with the same profile
+providing its complete cap/payoff pair and its literal independent product
+ν=∏_i p_i(Never). This is a nonempty compact subset of ℝ⁹. Project it to
+
+    A₀={(d,ν):d_i=B_i−U_i, (U,B,ν)∈H₀}.
+
+A₀ is compact, 0≤d_i≤2M₀ and 0≤ν≤1. It is not a convexification of
+independent laws. On an open five-parameter box, define
+
+    W(θ,T)=min_(A₀) [Σ_i θ_i d_i+Tν],
+    r^(θ,T)_i(S)=θ_i r⁰_i(S)+T/4  for EVERY nonempty S,
+    r^(θ,T)_i(Never)=0.
+
+All θ_i are positive. T may have either sign. Choose the box
+|θ_i−1|<ε, |T|<ε, with ε>0 strictly smaller than
+
+    min(1/2,
+        s₀/[2(s₀+1/4)],
+        δ₀/[16(M₀+1/4)],
+        g₀/[32(M₀+1/4)]),   s₀=min_i s⁰_i>0.
+
+Every new own singleton is then greater than s₀/2: both old and new
+singleton signs are positive, INCLUDING when T<0. The new reward table
+stays inside [−1,1]⁶⁰. The same-row common translation and positive scale
+preserve every within-row distinction. Its sup distance from r⁰ is less
+than e=ε(M₀+1/4). The all-profile table coupling estimate changes either
+minimum value by at most8e. Therefore EVERY table in this box has
+
+    Δ_all>δ₀/2>0,
+    Δ_abs−Δ_all>g₀/2>0.                         (NC.18)
+
+The actual augmented-carrier transport is essential. Because own singletons
+are nonnegative before AND after translation, the full response cap equals
+the supremum over ALL FINITE replies before and after. At the SAME actual
+laws, positive scale followed by signed finite-row translation gives
+
+    U_i^(θ,T)=θ_i U_i+(T/4)(1−ν),
+    B_i^(θ,T)=θ_i B_i+T/4,
+    ν^(θ,T)=ν,
+    d_i^(θ,T)=θ_i d_i+(T/4)ν.                   (NC.19)
+
+This follows from P3–P4 in the reviewed source: a late finite reply converges
+to the Never reply plus the opponent-Never product times the own singleton.
+Finite replies all absorb and receive the full row constant, whereas prescribed
+play receives it only on probability1−ν. It is NOT a signed-own affine
+invariance assertion, and it does NOT infer B_i≥s_i at an arbitrary suffix.
+The displayed map Φ_(θ,T):(U,B,ν)↦(U^(θ,T),B^(θ,T),ν) is a continuous
+invertible affine map on ℝ⁹. Thus it maps the ENTIRE actual augmented
+carrier H₀ ONTO the new actual augmented carrier H_(θ,T). In particular
+
+    Δ_all(r^(θ,T))=W(θ,T).                     (NC.20)
+
+An old full minimum need not minimize this new scalarization. No chronology,
+law, cap selector or marked minimum is asserted to survive the re-selection.
+
+W is finite concave, as the infimum of affine functions over the one FIXED
+compact A₀, and satisfies
+
+    |W(θ,T)−W(η,S)|≤2M₀Σ_i|θ_i−η_i|+|T−S|.
+
+For each fixed choice of four coordinates, the remaining one-variable
+restriction is finite concave. Its left/right slopes disagree at only
+countably many points. The slopes are measurable difference-quotient limits,
+so Fubini and the union of five null sets give a parameter (θ*,T*) inside
+the box where ALL FIVE two-sided coordinate partial derivatives exist.
+This uses coordinate regularity, not an unproved unique-law theorem.
+
+For ANY minimizing (d,ν)∈A₀ and a signed increment h in one coordinate,
+evaluate the SAME minimizing point at the perturbed parameter. This gives
+
+    W(θ*+h e_i,T*)≤W(θ*,T*)+h d_i,
+    W(θ*,T*+h)≤W(θ*,T*)+hν.
+
+Divide separately by positive and negative h and pass to zero. Hence every
+minimizer has the SAME old-coordinate values
+
+    d_i=∂_(θ_i)W(θ*,T*),   ν=∂_T W(θ*,T*).
+
+By the ONTO map (NC.19), every augmented full minimum at the ONE fresh
+table r*=r^(θ*,T*) has both a common new debt vector and a common ν*.
+The latter is positive. Indeed, if a minimum had ν=0, its actual realizing
+profiles with ν→0 could be completed to absorbing profiles with ENTIRE-pair
+error tending to zero by the source's 14Mν^(1/4) completion estimate. This
+would give Δ_abs≤Δ_all, contradicting (NC.18). The actual bound
+d_i≥νs_i passes to the augmented closure, so every common debt coordinate
+is strictly positive as well. Write δ*=Δ_all(r*) and d* for that vector.
+
+The source's marked compiler may now be applied AFRESH after the parameters
+are fixed. Its positive-own, generic-row, separated-floor and common-debt
+hypotheses all hold. Every full minimum is also a least-literal-Never
+minimum, because they all have ν*. Thus its reviewed two-owner/later-only
+disjunction applies to every produced marked full minimum of THIS table.
+Individual Never masses need not be common. The prior selected table and
+its old marked profiles are not being strengthened without re-selection.
+
+Now take ANY fixed finite prefix word w, of ANY finite length, with independent
+per-row hazards a_i^t∈[0,1]. Let
+
+    c_w=∏_t ∏_i(1−a_i^t).
+
+Prefixing actual laws multiplies each marginal Never mass by its literal
+prefix survival, and hence multiplies joint Never by c_w. The same identity
+holds for a supplied augmented carrier tail and its prefixed carrier output,
+by prefixing ONE actual realizing sequence and taking its semantic limit.
+Suppose BOTH that tail and that output are full minima at r*. Then
+
+    ν*=ν_output=c_w ν_tail=c_w ν*,
+
+so c_w=1, since ν*>0. Every factor is in [0,1], and consequently EVERY
+hazard a_i^t is zero. Therefore
+
+    No nonzero finite prefix word over a full minimum
+    returns to a full minimum of r*.             (NC.21)
+
+This includes words whose intermediate suffixes are OFF the minimum fibre;
+it does not iterate a one-row minimum-tail hypothesis through them. A sure
+hazard gives c_w=0 and is excluded by the same positive-Never equation.
+All-Continue padding, with c_w=1, is correctly retained as an exact return.
+
+Falsification checks and surviving scope: at the original table, common debts
+alone did not give common ν, and NC6 could not exclude an entire multirow
+return. Adding T to the objective WITHOUT the ν coordinate in the carrier
+would fail (NC.19). Allowing a translated own singleton to become negative
+would also invalidate the finite-supremum cap identity used there. Both
+failures are excluded explicitly above. Finally, replacing either endpoint
+in (NC.21) by an arbitrary excess-debt suffix destroys the common-ν equality.
+For the actual supplied root with c<1, its honest suffix has ν_tail=ν*/c>ν*,
+not ν*. It therefore remains a perfectly legal OFF-minimum continuation.
+No near-return estimate, arbitrary suffix exclusion, below-δ* law, or UE
+producer is inferred from (NC.21).
+
+Effect on the whole-law seam: every finite-word substitution of one true
+minimum for another is now unavailable, even when intermediate rows go off
+the fibre. But the all-four-bridge clipped-welfare formula already recorded
+in NC7 still evaluates genuinely excess-debt suffixes, including the original
+ν_tail>ν* suffix. Common minimum ν supplies no sign for that global comparison.
+The next operation remains an actual LATER original-law/full-cap change,
+not a further finite-prefix return search. This bounded strengthening is
+kept internal; no gate or reopening of the frozen exports is requested.
+
+Exact source inputs inspected: P3–P7, the fixed-carrier coordinate-regularity
+argument, and the actual augmented carrier in
+`exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`;
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash` in
+`UniformEquilibrium/Quitting/Root/CapNashRootStack.lean` remains the separate
+all-four-bridge charged edge. A narrow common-Never/scalarization search in
+the selected Diagnostics/Quitting subtree, TOOLKIT and this note found no
+existing declaration supplying the five-parameter rigidity used here.
+All of NC9 is ordinary mathematics, not a Lean-checked theorem.
