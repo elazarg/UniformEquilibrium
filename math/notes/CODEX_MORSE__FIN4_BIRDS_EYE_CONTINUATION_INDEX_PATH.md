@@ -1,564 +1,570 @@
-# Fin4 bird's-eye path: close continuation prices before choosing clocks
+# Fin4 bird’s-eye path: robust strategic relays, then actual clocks
 
 Owner: CODEX_MORSE.
 
-Status: an INTUITION-LEVEL PROOF PROGRAM, not a proof, producer theorem,
-counterexample-class reduction, or export candidate. The requested result
-is UE for EVERY four-player reward table, against EVERY behavioral
-deviation. The argument below identifies one main global mechanism and
-three substantial unproved bridges. It does not count those bridges as
-supplied inputs or already available theorems.
+Status: EXPLORATORY SYNTHESIS, not a proof, a new counterexample-class
+reduction, or an export candidate. The conjecture remains open.
+The requested endpoint is UE for EVERY signed four-player quitting table,
+against EVERY unilateral behavioral deviation, with ONE payoff target
+fixed before the requested accuracy.
 
-Worked follow-through, still ordinary and independently UNREVIEWED:
-CI1–CI8 in the owned global notebook construct a literal four-player
-closed Nash-price circuit, positive-charge return family and exact
-periodic absorbing equilibrium on a nontrivial already-solved table.
-Its arbitrarily small one-entry perturbation eliminates EVERY nearby
-four-stage Nash circuit, including activation of the old tied observers.
-Thus local repair is not the proposed mechanism: B2 must allow genuine
-global itinerary reselection or approximate charged words. NOETHER's
-separate BD1–BD5 additionally rule out obtaining the needed index from
-plain boundary-glue directions and matrix classification alone. Neither
-test establishes, nor refutes, the FULL witnessed/charged global bridge.
+This refresh replaces the earlier suggestion that a useful exact
+continuation index should simply persist. Exact Nash paths can have
+bounded charge on the ENTIRE payoff box even in a solved game.
+The stronger surviving idea is a globally selected, absorption-relative
+robust relay. Its strategic selection theorem is UNPROVED and is the
+main mathematical gap, not an index fact already available.
 
-## 1. The central picture
+## 1. The decisive picture
 
-My best current intuition is this:
+My strongest current intuition is:
 
-> The equilibrium is a self-financing circuit of continuation prices,
-> not necessarily an improving sequence of existing strategy profiles.
-> Construct the whole circuit first. Only then implement its clocks.
+> A useful equilibrium circuit need not exist as a finite exact Nash
+> circuit. It can exist as a circuit of strategically compatible
+> LIMITING ports whose finite approximations recharge at a corner.
+> The error at that corner must be bought with actual absorption.
 
-One player's profitable timing change can create another player's
-profitable timing change. The difficulty is not absence of a response;
-it is that the unpaid obligation moves. A source-minimum repair tries
-to make that moving obligation disappear immediately. I now think the
-more persuasive global attempt is to let obligations pass through a
-whole Nash-continuation diagram until they close consistently. On a
-closed diagram, everyone compares Quit with the SAME future that the
-construction will actually supply. There is no spectator cap left
-outside the accounting.
+Think of continuation payoffs as prices for the future the construction
+will really supply. A root is a transaction at those prices: independent
+Quit/Continue coins buy terminal rewards now or the stated continuation.
+A profitable early deviation and a profitable late deviation are two
+different invoices. The construction succeeds only when the whole
+itinerary prices both; naming a higher cap does not pay the invoice.
 
-There are two genuine kinds of motion in this diagram:
+There are three physical moves:
 
-- slow one-owner hazard blocks, which implement continuous singleton
-  payoff arcs and can be refined without changing their target;
-- actual independent product-root jumps, which keep macroscopic
-  simultaneous quitting rather than replacing it by an average.
+1. a finite exact root, possibly a macroscopic simultaneous collision;
+2. a finite stretch of small exact or approximate roots approaching
+   a limiting continuation port;
+3. a small charged connector that changes the active owner set at a
+   nearly matched port, with both incentive and payoff errors bounded
+   by tolerance × its own absorption.
 
-Both are needed. The first can turn a pure response cycle into a proper
-growing-clock equilibrium. The second can cross a collision trap that
-no singleton-only motion handles. Their endpoints must be the SAME
-continuation ports. A mixture of two different future payoff targets
-is not itself a future strategy in this game.
+The third move is the important addition. It is not an arbitrary jump
+between nearby prices. A passive player may be unwilling to activate,
+and an incumbent may become profitable after the jump. ALL four root
+inequalities still have to be checked.
 
-The proposed existence principle is topological, but not the generic
-claim that every face has an escape. It is a game-specific **index
-conservation law for the entire decorated Nash-continuation graph**.
-An essential equilibrium branch should either finish at a correctly
-punishment-priced absorbing root or continue through the collision
-and singleton strata. If no finishing branch exists, the branch must
-support arbitrarily much physical absorption inside a bounded payoff
-box. Existing compilers then give approximate equilibria.
+In the successful EC test, a ladder ends with error E, while a new
+supplier can be activated with hazard r=√E. Its active regret is rE,
+other root inequalities remain safe, and the port mismatch is O(E).
+Consequently both errors divided by the new absorption r go to zero.
+This gives a literal finite word at every tolerance, not a concatenation
+of infinitely many clocks followed by a root “after infinity.”
 
-This is the place where I would put the main proof effort. It is NOT
-proved that an essential branch survives, carries positive charge, or
-has the required global index. Those are the hard bridges below.
+The global intuition is that payoff obligations can relay between
+owners rather than disappear after one response. Four-player product
+roots should supply the missing coordination moves when a singleton
+relay becomes blocked. Proper-child equilibrium constructions offer
+other routes around a blocked port, but their outsiders must remain
+priced in the ambient game. The mechanism selects a WHOLE compatible
+relay, not a good next root at every possible port.
 
-## 2. What the existing mathematics does and does not settle
+The unproved part is exactly why an arbitrary surviving table must
+contain at least one such relay, or a correctly punishment-priced
+absorbing exit. Neither “there are only four owners” nor ordinary
+Nash degree establishes it. The rest of this note makes that obligation
+concrete and separates it from the actual-clock endpoint.
 
-The original problem has sixty signed finite-coalition rewards, four
-independent private clocks on ℕ∪{Never}, and zero live/Never rewards.
-The selecting live date pays zero; the absorbing reward starts later.
-Before absorption there is only one public history. A deviator may
-replace its entire clock, including every late finite date and Never.
+## 2. The endpoint and the honest state of knowledge
 
-For a profile p let U be prescribed payoffs, B the complete caps,
-d_i=B_i−U_i≥0, D=Σ_i d_i, and E=max_i d_i. Terminal approximate Nash
-profiles at every error are exactly enough for one FIXED uniform
-equilibrium payoff target. It is unnecessary to prescribe that target
-before searching for the profiles; compact payoff selection does that
-afterwards. It is necessary to retain the target before the accuracy
-in the final UE conclusion.
+The reward data are sixty real numbers r_i(S), for four recipients and
+fifteen nonempty terminal coalitions. Never and live payoffs are zero.
+The live date selecting a coalition pays zero; absorbing rewards begin
+afterwards. Before absorption there is one public history. A player’s
+entire behavioral deviation is an arbitrary stopping law on ℕ∪{Never}.
 
-The existing positive results cover three broad ways an equilibrium
-can already be found: a suitable absorbing anchor/base with a true
-punishment tail; a stationary or small-hazard matrix/index source; or
-a coherent multi-phase singleton/collision construction. Raw leaver,
-weighted-floor, boxed-charge, matching, triple, cyclic, inverse and
-quotient criteria cover many signed tables. They do not exhaust the
-sixty-dimensional table space. In particular, a remaining standard-Q,
-degree1 full-core table need not fail UE, and absence of a pure terminal
-Nash coalition says little about long clocks.
+For an actual profile let U_i be prescribed payoff and B_i its complete
+best-response cap. Write d_i=B_i−U_i≥0 and D=∑[i]d_i. A pure response
+may stop at ANY finite date or Never. Bounds on a finite response menu
+alone do not bound B.
 
-The strongest reviewed counterexample source is much more precise.
-If any Fin4 counterexample exists, one can select ONE fresh table with
-positive own singleton rewards and
+It is enough to produce, for EVERY η>0, an actual profile with
+B_i−U_i≤η for all four players. Compact payoff selection then produces
+ONE fixed UE payoff; the strategy can depend on accuracy, the payoff
+target cannot. The tracked terminal selection theorem supplies this
+last passage, including sufficiently long finite horizons and all
+behavioral deviations. Merely producing small stage regrets is not
+that endpoint.
+
+Existing arbitrary signed three-player existence is important, but
+does not automatically lift to four players: the fourth player may
+join profitably. Existing four-player inverse, matching, cyclic,
+stationary, boxed-charge, weighted-floor, persistent-base and other
+raw producers cover genuine classes, not all table space.
+
+The reviewed scalar singular-circuit class adds a concrete producer:
+a reward-only interval criterion yields common ports, exact ladder
+inequalities and a closed circuit; finite reverse-order periodic
+execution controls all full caps. It has a full sixty-coordinate open
+chamber and a recipient-specific fourteen-coordinate free cylinder.
+Its role here is EVIDENCE for the mechanism, not arbitrary-game coverage.
+
+The strongest reviewed counterexample source is more restrictive.
+If any counterexample exists, ONE fresh table can be selected with
+positive own rewards and
 
     0<δ=Δ_all<Δ_abs=δ+g,       g>0.
 
-Every full-carrier minimum has one common debt vector, all four of
-whose coordinates are positive. All four Never masses are positive.
-The first prescribed stage is a random nonsure collision. A paid
-owner ties a first and a later FINITE cap, with different payoff
-kernels on a positive opponent event. Repeating the source block
-honestly raises a conditional-Never cap. This is reviewed ordinary
-mathematics, not the missing UE consumer.
-
-The full NP statement is not being called Lean-checked. Recipient
-scaling and the fresh contact/common-debt producer now have production
-declarations, but they select a new table before ALL its new minima;
-they do not transport old minimizing profiles to that table.
-
-Why not simply prefix this minimum by an equilibrium root? A root
-that is Nash against its FULL old cap vector would scale all debts
-by joint survival c. If c<1, that would contradict positive global
-minimality. Hence the minimum only admits the neutral such prefix.
-The prospective equilibrium has to be built elsewhere. Its continuation
-prices are not silently identified with the minimum's U or B.
-
-## 3. The concrete object to build
-
-Fix ONE table r, own rewards s_i=r_i({i}), reward bound M, and a
-fixed payoff box K=[−M−2,M+2]⁴. For an independent root q∈[0,1]⁴
-write c(q)=∏_i(1−q_i), a(q)=1−c(q), and
-
-    F_i(v,q)=Σ[S≠∅]Pr_q(S)r_i(S)+c(q)v_i.
-
-Here v is the all-Continue continuation PRICE. The two endpoint
-values for owner i are
-
-    Q_i(q)=Σ[A⊆I\{i}]Pr_{q_-i}(A)r_i(A∪{i}),
-    C_i(v,q)=Σ[A≠∅]Pr_{q_-i}(A)r_i(A)+χ_i(q)v_i,
-    χ_i(q)=∏[j≠i](1−q_j).
-
-An exact root is Nash if its Bernoulli coin assigns mass only to
-maximizing endpoints. Equivalently, the stage regret
-
-    e_i(v,q)=max(Q_i(q),C_i(v,q))−F_i(v,q)
-
-is zero for every i. The full decorated root graph keeps (v,q,F(v,q)),
-not just its projected successor-payoff set. No convex hull of possible
-successor payoffs is taken.
-
-The sought global output is a finite root word with annotations
-v₀,…,v_H∈K, having for each construction step t
-
-    |v_(t+1),i−F_i(v_t,q_t)|≤ε a(q_t),
-    e_i(v_t,q_t)≤ε a(q_t),
-    Σ[t<H]a(q_t)≥Q.
-
-K is fixed before BOTH ε and the requested charge Q. Construction
-order runs outward by prefixing, so actual play reverses the word.
-That reversal is explicit; horizontal response updates are not inserted
-as chronological edges. At this stage the annotations are not asserted
-to be payoffs of actual tails.
-
-For normal Fin4 games, the checked fixed-box characterization says:
-these words at every ε,Q, OR a sure Nash root at the true punishment
-vector, suffice for UE. This is the endpoint I intend to produce,
-not a new grammar. The full problem is to force the words or the exit.
-
-The geometric proposal uses a trace-level graph rather than a single
-root selector. Several Nash roots can coexist, merge, split, or live
-in disconnected payoff components. Their witness tags and exact ports
-remain in the object. Small roots approaching AllContinue are recorded
-with their first-order directions relative to a(q); roots with a(q)
-bounded positively remain literal collision cells. A direction chart
-is a limit used to design FINITE words, not an asserted raw-time profile.
-
-## 4. Why closing prices really addresses full cap leakage
-
-The exact semantic prefix map for a tail pair (u,b) is
-
-    u'_i=q_iQ_i+(1−q_i)[A_i+χ_i u_i],
-    b'_i=max(Q_i,A_i+χ_i b_i),
-
-where A_i is the passive-opponent contribution. If the tail is diagonal
-(v,v) and q is Nash at v, this maps to the diagonal (F(v,q),F(v,q)).
-There is then no unpriced nonmover response branch. The max operation
-has already priced every response after Continue, not just the next row.
-
-Of course an arbitrary annotation v does not supply a diagonal tail.
-The global charged-word compiler is the noncircular part: long compatible
-bounded words, with errors proportional to absorption, permit charged
-closing and actual punishment completion. It is not enough to invoke
-the separately checked finite jump–flow closure of an ALREADY supplied
-UE tail; that would assume the equilibrium we want to produce.
-
-The intuitive cap ledger is as follows. At each cut a finite pure
-deadline compares Quit-now with the actual declared continuation.
-All comparisons are simultaneously bounded by the root inequalities.
-When the tail is replaced by its actual compiler output, the residual
-is weighted by the appropriate player-DELETED survival, not merely
-joint survival. A two-sure root screens every deleted continuation.
-A sole-sure root must use that owner's true punishment value; its
-off-path continuation cannot be replaced by zero just because prescribed
-joint survival is zero. If only one owner remains persistent, the
-normality/punishment machinery handles its exceptional deleted tail.
-
-A slow singleton arc is refined only when its owner remains indifferent
-and outsiders have the required continuation floor along that arc.
-The finite-mesh theorem then controls every outsider deadline, with
-collision error proportional to the mesh hazard. A jump is executed
-with its actual product coin and actual continuation port. We do not
-serially split a macroscopic collision and pretend its rewards survive.
-Signed below-singleton payoffs are allowed at other graph points;
-the whole diagram is not confined to a positive singleton-flow region.
-
-At the reviewed NP table, naive repetition fails because R_i/(1−h_i)
-can exceed the old B_i. A closed continuation-price circuit would instead
-solve for ALL relevant phase prices together, including that Never
-branch. If the required price rises, the root/phase choices must change
-before repetition. The source word is not held fixed. Some rate or
-phase can become macroscopic, an observer can activate, or a flow can
-switch to a joint jump. A genuine construction must output D≤4ε<δ
-on this SAME table; raising another cap and naming it a new price does
-not count as success.
-
-This is why the proposal is global. It tries to find one mutually
-compatible diagram, not prove that every local debtor reset is good.
-The common-debt excursion barrier is allowed: the construction can
-leave the old minimum family completely.
-
-## 5. The three unproved mathematical bridges
-
-### B1. An essential index for witnessed continuation diagrams
-
-Proposed bridge: build an absorption-sensitive relative index of the
-FULL decorated Nash graph and its small-root direction charts, with
-the actual punishment/sure-root exits attached. For four normal players
-with nonnegative own rewards and at least one positive own reward,
-this essential index is nonzero.
-
-Why this might be true: finite-game Nash degree counts a whole equilibrium
-correspondence even when no continuous root selector exists. Known pair
-and triple producers already use this distinction to select a good root
-despite bad roots elsewhere. Product-root jumps are the actual extra
-cells that singleton-only pictures discard. A complete graph retains
-those cells and their continuation parameters, rather than requiring a
-convex equilibrium-payoff set.
-
-What is NOT proved: the ordinary +1 Nash degree is not automatically
-an absorption-sensitive index after zero-charge AllContinue branches
-are removed. The relative boundary and its exit labels have to be
-constructed, and the normalization shown for the literal game graph.
-This cannot be obtained by declaring a correspondence contractible,
-by taking its convex hull, or by treating all branches as useful.
-
-### B2. Strategic completion of reentrant boundary contributions
-
-Proposed bridge: an index-carrying boundary component either has a
-genuine ambient punishment-priced absorbing exit, or its index is
-transported through actual joint-root/continuation cells rather than
-being lost at a quiet-child or reentrant corner. The transport retains
-the endpoints needed for compatible finite words.
-
-The important mechanism is observer completion. A proper-child
-equilibrium is not automatically a full equilibrium. If the fourth
-player can profitably join, that joining inequality becomes an active
-constraint in the next ambient root cell. If the child members then
-want to leave, those leave constraints change the subsequent continuation
-prices. One does not discard the outsider or require an immediate
-total-debt decrease. The new cell simultaneously prices all four.
-
-Why this might be true specifically in Fin4: every proper active
-coalition has at most three members, whose intrinsic equilibrium
-problem is solved. The remaining strategic obstruction is at most one
-external observer for a triple, or two observers for a pair; they stay
-in the ambient graph until safe. The familiar cyclic and two-joint-phase
-constructions look like explicit local instances of this closure.
-At four active owners there is no unrecorded fifth observer: all debt
-leakage has to be represented inside the same four-label continuation
-diagram. This is a motivation, NOT a pigeonhole proof or a rank on
-support size. Owners can leave and re-enter indefinitely.
-
-The exact topological warning is crucial. In the slab union
-{x:min_i x_i≤0}, a three-active reentrant corner can have local relative
-Euler contribution +1 even though every individual slab has a strict
-descent direction. A four-active corner has a different contribution.
-The generic assertion 'no boundary minimum, hence no boundary index'
-is false. B2 must compute/cancel/transport these ACTUAL contributions
-using the Nash and joining equations. It must not set them to zero.
-
-This is the central unproved bridge, and the most likely place for the
-path to fail. At present I do not know whether actual arbitrary signed
-four-player root graphs enforce the proposed observer completion.
-Neither pure-coalition escape nor a local +1 degree suffices.
-
-### B3. Essential index cannot be parked at zero physical charge
-
-Proposed bridge: if no genuine sure-root exit occurs, the continued
-essential component supplies finite compatible words with arbitrarily
-large absorption charge, at every requested absorption-relative error.
-It cannot terminate as an all-Continue self-loop, an unpriced late
-test, or an index label at a Zeno endpoint with no actual continuation.
-
-Why this might be true: a normalized small-root direction that carries
-the index should integrate to a proper coarse arc; a nonsmall root
-already carries absorption. A continuing component then has either
-recurrent positive-charge pieces or a new boundary piece to which its
-index passes. A source-matched repeated piece closes, whereas a new
-piece is handled by B2. A true punishment exit handles a unique sure
-supplier instead of losing its deleted survival.
-
-The necessary quantitative content is substantial. Errors must be
-small compared with CHARGE, not just tend to zero absolutely. Local
-progress may shrink; a finite owner set does not bound ordinal clock
-depth or rule out nested accumulation. Therefore I would prove B3
-by contradiction from a bounded-capacity rank, not by pretending that
-one arbitrary selected infinite path is proper. Its output is a FINITE
-word for each ε,Q; no universal period, exact finite-menu Nash, or
-attained integer-clock minimum is needed.
-
-The existing counterexample-to-UE polynomial theorem supplies that
-contradiction target precisely. If no UE exists, there is a positive
-rational tolerance and a bounded rational polynomial P such that
-
-    P(F(v,q))+a(q)≤P(v)
-
-on every exact boxed root, and the corresponding strict charge drift
-on every allowed robust edge. Along any compatible construction word
-P drops by at least its total charge. Large charge is impossible in
-a compact box. B1–B3 are meant to show that a FULL GAME graph cannot
-have all its essential index absorbed by such a bounded acyclic rank.
-This does not require excluding only additive, quadratic, multi-affine,
-or convex P; those exclusions are already known and do not close the
-problem. A surviving P can have genuinely nonlinear mixed curvature.
-
-## 6. The complete proposed route from arbitrary rewards to UE
-
-1. Start with any signed four-player table. Use exact existing positive
-   branches when available, but do not assume their union is exhaustive.
-   For the contradiction route assume this table has no UE. Checked
-   low-cardinality/normal-core results then give its all-player normality
-   and true punishment bounds. Apply the actual single-pivot semantic
-   normalization, not an informal inverse row-affine invariance. The
-   resulting table has own rewards (1,0,0,0), all other rows signed.
-   Scale positively to a bounded table if desired.
-2. Fix this ONE resulting table. Build its full decorated continuation
-   graph. If it has a sure root at the TRUE punishment vector, the
-   checked consumer gives UE and the actual normalization adapter
-   transports that conclusion back to the original table.
-3. Otherwise apply B1 and B2 to continue the essential index through
-   every intrinsic child, unsafe outsider, macroscopic collision,
-   singleton flow and reentrant stratum. No selected child is silently
-   certified safe. No minimum payoff or cap is used as a supplied
-   Nash continuation.
-4. Apply B3. For every ε>0 and charge request Q≥0 obtain the finite
-   absorption-weighted Bellman/Nash word from Section3, in one fixed
-   box. Equivalently, the bounded strict polynomial rank forced by
-   no UE is contradicted by those actual graph words.
-5. Use the existing weighted-packet repair, charged closing and actual
-   profile compiler. For every desired terminal Nash accuracy this
-   produces one literal independent behavioral profile controlling
-   ALL finite deadlines and Never. It is not enough to report small
-   stage regrets or a finitely additive Nash boundary packet.
-6. Select a convergent subsequence of prescribed payoffs as terminal
-   error tends to zero, so the same subsequence has (U,B)→(v,v).
-   The checked diagonal-carrier/terminal selection endpoint gives one
-   FIXED UE payoff. Transport through the actual normalization adapter.
-   This contradicts the initial no-UE hypothesis and proves UE for
-   every four-player table, IF B1–B3 are established.
-
-This is an all-branch route. The current paid nonsure source is its
-hard adversarial instance, not an additional branch assumed solved.
-Applying the same proposed graph principle directly at that fresh
-normal positive-own table would yield D<δ there and contradict its
-global floor. None of the single-pivot table's minima, MAX witnesses,
-absorbing minima, or diagram tags are carried into the NP table.
-
-## 7. Four decisive tests, and what would kill the path
-
-### Test1: disconnected correct targets versus a false symmetric limit
-
-Use the COMPLETE solved table r_i({i})=C≥1, r_i(S)=C−1 for nonsingleton
-participants, and r_i(S)=C+1 for passive recipients. Its ordinary
-UE-payoff set is exactly four singleton vectors, while exhaustive
-full-support finite-menu equilibria can have a refined finitely additive
-limit with false payoff C·1. The omitted moving deadline retains debt
-4C/(C+1). This was proved exactly in FA1–FA7 of the owned notebook.
-
-The proposed diagram must retain four distinct absorbing exits; it
-must NOT convexify them or follow only the symmetric finite-menu
-branch. Here an exact singleton root is Nash against a continuation
-whose owner coordinate is at most C; passive outsiders are already
-protected. This is a simple positive check for index-carried SELECTION
-rather than preservation of all equilibrium branches.
-
-### Test2: inert finite-menu roots, but a successful growing clock
-
-Use the complete cyclic RZ table in the owned notebook. Its zero-own
-singleton matrix is R₀/StandardQ/degree1 with a positive simplex image;
-every pure absorbing coalition has a strict escape. Yet every exact
-finite-calendar Nash profile is AllNever. Proper repeated four-owner
-blocks have fixed target and full debts at most98ρ per owner, with
-ρ→0 under refinement and deleted-opponent contraction σ³ per period.
-
-The diagram has to keep the normalized singleton-flow branch and
-approximate finite execution. It must not demand an exact finite-menu
-Nash endpoint, a bounded exact period, or a root at continuation0.
-Failure to recover this existing execution kills B3's proposed treatment
-of neutral/late boundary points before any general theorem is attempted.
-
-### Test3: a bad positive-index root and a genuinely reentrant corner
-
-Use BOTH an opposite-join-sign two-owner root module and NOETHER's
-three-active reentrant local pair. The complete module is
-
-| coalition | owner i payoff | owner j payoff |
-| --- | ---: | ---: |
-| {i} | 1 | 3 |
-| {j} | 1 | 1 |
-| {i,j} | 2 | 2 |
-
-At continuation v=(2,0), the two gaps are −1+2q_j and1−2q_i.
-The UNIQUE Nash root is q_i=q_j=1/2. Both endpoint values and both
-successor payoffs are3/2, above the two own singletons1, although the
-source's j-coordinate lies below its singleton. No pure root is Nash.
-The nondegenerate mixed equilibrium has local index +1; the product
-of the two cross-gap slopes is negative. This is a local two-owner
-module, not a claim of unique Nash over an unlisted four-player table.
-The module itself has an exact full singleton Nash with payoffs(1,3).
-Thus its bad root tests selection, not existence.
-
-For the reentrant test, use D₃×ℝ near0 with
-ψ(x,t)=−x₀−x₁−x₂+t² and D₃={x:min_k x_k≤0}. Every active slab
-has a descending segment in some other active coordinate, but the
-local descending link is S¹ and the sublevel pair contributes +1.
-There is no constrained boundary minimum there. These exact tests
-forbid claiming that all bad roots have negative index or that all
-boundary contributions disappear.
-
-The first substantive calculation I would request is the local
-continuation INDEX ACCOUNT near a three-active own-threshold stratum,
-with the fourth owner's ALL joining/withdrawal payoffs retained.
-Show an actual ambient Nash branch transporting the positive index,
-or a safe punishment-priced terminal exit. A realizable four-player
-counterexample to that local strategic account would kill B2 as
-stated and change the mechanism. A generic star-shaped topological
-counterexample alone does not answer the game-specific question.
-
-The completed actual-game follow-through is CI1–CI8 in
-`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`. On the FULL sixty-entry
-mixed-support fixture, the root set at(1,1,1,2) is exactly one charged
-singleton segment plus AllContinue. That segment enters an invariant
-two-price return section. A four-edge circuit closes its continuation
-ports algebraically, has positive absorption charge, and has an actual
-periodic reverse-order realization screening EVERY behavioral cap.
-The circuit uses a below-own intermediate coordinate, not only the
-singleton viable-flow region. This is actual evidence that the global
-picture can work; it is not new coverage of the conjecture.
-
-But one small entry change r₀(02):1→1+η kills ALL nearby versions of
-that same four-stage circuit. Strictly inactive players remain inactive;
-even allowing the two tied spectators to activate gives a common port
-forced≤1 at one stage and>1 at the previous stage. The perturbed game
-is still inside a reviewed open UE chamber. Therefore 'a joining
-observer can simply activate and continue the old good circuit nearby'
-is FALSE. This falsifies a tempting local version of B2, not B2's
-unproved claim about an essential GLOBAL component: the displayed
-circuit has not been proved to carry that hypothetical essential index.
-
-Cross-reading NOETHER RM31/BD1–BD5 on this SAME table gives the other
-half of the warning. A nonvanishing canonical field prices ALL literal
-boundary glue cones, so their ordinary boundary degree is0. There is
-no contradiction with the physical circuit: the field omits terminal
-Nash witnesses, matched ports and charge. The next account must use
-that missing data and must survive NONLOCAL reselection; neither local
-spectator repair nor boundary-gradient degree normalization suffices.
-
-### Test4: the reviewed nonsure fully-paid source, with its full renewal cap
-
-At ONE NP table retain δ,g,d*, the positive Never masses, and the
-whole active cap family. The diagram must allow asynchronous rates,
-different phase lengths, and literal macroscopic joint roots. It must
-price R_i/(1−h_i), not merely B_i, when closing a proposed period.
-
-Demand an actual word/profiles with D<δ. A best reply whose nonmover
-debts rise, a new minimum at a DIFFERENT table, a repetition of the
-old word, or a condition 'assume the seam is admissible' fails this
-test. The proposed global index theorem is valuable only if it forces
-a NEW compatible circuit on that fixed table despite those obstructions.
-
-## 8. Known no-gos this path is designed to avoid
-
-The choice of a witnessed global graph is deliberate:
-
-- A root Nash at prescribed continuation U need not control full cap B.
-  Closing annotated words and actual tails is indispensable.
-- Positive-debtor replies cannot remain at the common-debt minimum;
-  no minimum-return support rank is invoked.
-- Fixed-row tail optimization and alternating row/tail optimization can
-  be globally trapped in their chosen blocks. The whole word is selected.
-- Stationarity, diagonal hazard acceleration, and uniform common-date
-  replicas are not complete. Rates and phases can be asymmetric.
-- Quiet-child NE alone is not an ambient UE; every outsider remains
-  in the graph until its full joining clock is safe.
-- Joint survival does not control deleted survival. A unique sure owner
-  still exposes a punishment continuation under its own deviation.
-- Finite-menu NE, fixed-test convergence and finitely additive refinement
-  do not control moving complete responses. The full packet compiler is
-  the semantic endpoint, not a weak clock limit.
-- The actual UE-payoff set and jump images can be nonconvex. No convexified
-  payoff selection or public lottery between components is used.
-- Horizontal replacements, table changes and compact-source regeneration
-  are not chronological edges. Only matched root words are executed.
-- Absolute endpoint errors do not imply error/charge control. The required
-  Bellman and Nash tolerances are explicitly absorption-relative.
-- A compact carrier minimum is not necessarily an attained raw profile,
-  and an absorbing minimum is not an original full minimum. Neither
-  inference appears in the proposed graph construction.
-- Four owner labels do not bound clock depth or guarantee that a selected
-  Zeno path is executable. The goal is finite ε,Q words, not that shortcut.
-
-## 9. Evidence map and the honest next step
-
-The bounded reading for this bird's-eye assignment used `FRONTIER.md`,
-`GOAL.md`, the architecture notes on sufficient state, controller/tester,
-semantic barriers, chronological occupation, recurrence obstruction and
-neutral chronology, and the reviewed fully-paid nonsure source. Existing
-raw classes were read as sufficient classes, not a global census. The
-global-route/one-jump APS notes and the owned FA/JF/RZ/HN/HF tests supplied
-the exact failure boundaries above. NOETHER's TG7 local-index calculation
-was read as a falsifier, not as an index consumer.
-
-The concrete tracked interfaces inspected in their source files were:
-
-- `quittingGame_exists_uniformEquilibriumPayoff_iff_fixedBoxPackets_or_sureRoot`
-  (`UniformEquilibrium/Quitting/Projective/FixedBoxForwardCharacterization.lean`);
-- `HasAbsorptionWeightedFiniteForwardPackets` and
-  `quittingGame_exists_uniformEquilibriumPayoff_of_absorptionWeightedPackets`
-  (`UniformEquilibrium/Quitting/Projective/AbsorptionWeightedForwardPacketProducer.lean`);
-- `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
-  (`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`);
-- `IsQuittingFullExactRootPotential` and
-  `isQuittingFullExactRootPotential_of_robustPotential`
-  (`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`);
-- `CompatibleFiniteJumpFlowWord.execute_error_and_debt_le`
-  (`UniformEquilibrium/Quitting/EssentialAPS/FiniteJumpFlowCompiler.lean`),
-  with its SUPPLIED compatible word and tail hypotheses kept explicit;
-- `isUniformEquilibriumPayoff_singletonArc_before_rootSuccessor`
-  (`UniformEquilibrium/Quitting/EssentialAPS/JumpFlowClosure.lean`),
-  which requires an already supplied uniform-payoff tail;
-- `isUniformEquilibriumPayoff_iff_diagonal_mem_terminalSemanticCarrier`
-  (`UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean`);
-- `exists_recipientScale_all_minimum_debts_eq`
-  (`UniformEquilibrium/Quitting/Terminal/RecipientScaledTerminalSemantics.lean`)
-  and `exists_recipientRigid_signAdaptiveContact_source_of_not_uniformPayoff`
-  (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticRecipientRigidContactSource.lean`).
-
-No Lean implementation, build, Git action, or export is part of this
-intuition-level investigation. The recent raw-Simon rank composition
-may offer another precise version of the same acyclic obstruction; it
-is not needed as an unreviewed source premise here. Its nonconvex index
-gap remains a genuine gap, not a missing name for an existing theorem.
-
-My current belief is that a proof is more likely to need this global
-selection/closing mechanism than a universal one-response gain lemma.
-But the confidence is conditional on the strategic reentrant-index
-account, not on generic topology. The next decisive task is Test3's
-actual four-player local account, INCLUDING its ambient continuation
-ports and positive-charge orientation. If that account fails, this
-proof picture should be changed, not repaired by assuming away the
-unsafe observer or convexifying the continuation family.
+Every original full-carrier minimum has the SAME debt vector d*,
+strictly positive in EVERY coordinate. All four Never masses are
+positive. A first random nonsure collision has a paid owner tying an
+early and a later FINITE full-cap test, with different payoff kernels
+on a positive opponent event.
+
+This is the reviewed fully-paid nonsure finite-bridge source.
+It has not been consumed. Its compact minima need not be attained
+by raw integer-clock profiles, and its conditional tails need not
+be Nash or minimizing. Its source does not silently retain the older
+contact spectra or zero-debt four-finite-clock conclusions.
+
+The current problem is therefore not a missing compactness theorem
+or a missing finite strategy syntax. We have strong sources and
+compilers. What is missing is a GLOBAL choice that yields a usable
+whole word, rather than an exact but strategically sterile component.
+
+## 3. Brief comparison with genuinely different global paths
+
+Three alternatives deserve to remain independent.
+
+**Whole-table perturbation.** Passive taxes keep own singletons fixed:
+subtract a parameter from recipient i only when i is absent from the
+terminal coalition, leaving Never zero. NOETHER’s live attempt has
+zero-gap boundary constructions when any one parameter is sufficiently
+large positive or negative. A positive worst tax would therefore be
+interior. This may force a joint variational contradiction involving
+ALL moving minimizing profiles and tied responses. That interior
+consumer is open. A fixed-active-profile derivative is false, and an
+interior maximum alone does not identify an equilibrium. This is a
+genuinely different promising route, not a lemma of the relay picture.
+
+**Native absorbing existence.** A reduction passes through all-own-zero
+rewards with a positive absorbing gap; ordinary AllNever equilibrium
+there is irrelevant. Proving absorbing approximate Nash for EVERY
+own-zero table would close the original problem. True absorbing minima
+have useful strict margins, but the positive-Never full minima and the
+absorbing minima are different objects. Small or large row shifts do
+not identify them or supply an executable continuation. This route
+might avoid the continuation graph entirely; it currently lacks an
+all-law absorbing producer.
+
+**Whole-law repair or a negative certificate.** An actual finite-amplitude
+change could directly lower the positive global SUM minimum.
+Alternatively, a rational robust polynomial certificate on the WHOLE
+fixed payoff box plus the correct no-sure-root hypothesis could certify
+an actual counterexample. Both are conjecture-facing routes. Stationary
+failure, exact-root monotonicity, bounded exact capacity, or a supplied
+barrier are not sufficient negative certificates.
+
+My choice here is the robust-relay route because the EC and reviewed
+scalar-class constructions show a concrete way around exact-path
+failure. It is not chosen because the other routes are disproved.
+Its distinctive claim is about strategically completing singular
+ports with finite absorption-relative errors, followed by global
+component selection. Ordinary continuation index is only a possible
+accounting device for that selection, not the proposed engine itself.
+
+## 4. The relation that must actually be used
+
+Fix ONE table, |r_i(S)|≤M, and a fixed box K=[−M−2,M+2]⁴.
+Own singleton rewards are s_i=r_i({i}). For independent root rates
+q∈[0,1]⁴ let
+
+    c(q)=∏[i](1−q_i),       a(q)=1−c(q),
+    h_i(q)=∏[j≠i](1−q_j).
+
+Against continuation price v define
+
+    Q_i(q)=∑[A⊆I\{i}]Pr_{q_-i}(A)r_i(A∪{i}),
+    C_i(v,q)=∑[A≠∅]Pr_{q_-i}(A)r_i(A)+h_i(q)v_i,
+    F_i(v,q)=q_i Q_i(q)+(1−q_i)C_i(v,q),
+    e_i(v,q)=max(Q_i(q),C_i(v,q))−F_i(v,q).
+
+Q and C are actual Quit and Continue endpoints. Exact root Nash is
+e_i=0 for every i, including quiet and sure coordinates.
+
+At positive tolerance τ the permitted robust edge (v,q,y) satisfies
+
+    ‖y−F(v,q)‖_∞≤τ a(q),
+    e_i(v,q)≤τ a(q) for EVERY i,
+    v,y∈K.
+
+The label q and its PHYSICAL charge a(q) are retained. Convex mixtures
+of distinct successor prices are not declared edges. This is the
+floor-free robust relation in the actual polynomial characterization;
+a different floor-constrained relation must not replace it silently.
+
+The desired global output is, for EVERY τ>0 and charge request L,
+a finite compatible word of these edges with total charge at least L,
+OR an exact sure Nash root at the true punishment vector. K is fixed
+before τ and L. This is the already checked fixed-box UE endpoint
+under normality and a positive singleton, not a new supplied-object API.
+
+Construction order prefixes roots outward; chronological play reverses
+the finite word. No response update, tax change, or table reselection
+is inserted as a chronological move.
+
+A useful mental compactification records limits of finite exact paths
+whose total charge is finite. It can retain the limiting port and the
+charge already accumulated. It DOES NOT declare a transition from
+that port executable. An executable continuation exists only after
+a finite approximation and a verified robust connector are supplied.
+
+## 5. The proposed global mechanism, with its missing bridges exposed
+
+### 5.1 First resolve intrinsic children, but keep their observers
+
+Suppose a candidate relay is confined to a proper player subset.
+Its intrinsic problem has at most three players, for which existence
+is already known. Use its actual approximate clocks or root words,
+not just a child payoff vector.
+
+Now inspect the omitted players’ COMPLETE caps. If all are safe, that
+child construction is an ambient equilibrium and the search ends.
+If not, the unpaid outsider response is a concrete inequality for a
+larger ambient root or a different itinerary. It is not a proof that
+simply turning on the outsider repairs the old circuit.
+
+Plausible bridge, UNPROVED: the actual intrinsic construction and its
+violated observer inequalities produce either a new compatible ambient
+relay segment or a globally alternative component, without permanently
+losing the charge budget.
+
+Why it might hold: child solutions supply real continuation ports and
+full-clock inequalities; independent product roots supply the coalition
+events that a singleton-only account discards. Pair and triple joining
+conditions already yield several positive raw producers. But mixed
+joining signs, spectator activation and nonlocal port compatibility
+can obstruct a PARTICULAR component. The bridge must select globally
+rather than promise a successor for every child or feasible price.
+
+### 5.2 Resolve finite-charge sinks by strategic recharge
+
+A selected exact path may have all owners active, positive relative
+rates and finite total charge, then converge to an own-threshold port.
+Discarding it as a failed infinite path throws away useful limiting
+information. Its limit might lie on another charged branch.
+
+The EC calculation supplies the constructive template:
+truncate the old ladder close enough; take a new owner’s small root;
+ensure quiet inequalities; choose its hazard much larger than the
+truncation error but still small. Then match to the new branch with
+error at most τ times the new physical charge. The old finite exact
+capacity can jump at this corner, although the robust connector closes
+the finite circuit.
+
+Plausible bridge, UNPROVED: globally chosen limiting ports admit
+such recharge, or a literal joint-root alternative, or a correctly
+punishment-priced exit. The bridge must also handle competitive
+binding owners where small simultaneous activation is unfavorable.
+
+The restriction “globally chosen” is substantial. GS shows that
+a unique fair exact path can converge with finite charge and a
+positive terminal debt floor. RM37 shows that a feasible strict-below
+port may have only a root whose successor leaves the desired region.
+An arbitrary path, a fixed threshold domain and a local spectator
+repair do not satisfy this bridge.
+
+At a competitive corner the intended operation is NONLOCAL:
+search other roots and other continuation ports, possibly make a
+macroscopic product-root move, and return through a different child
+or collision cell. The exact fixed-box relation permits above-own
+excursions. It does not require staying in a singleton sublevel set.
+Whether such a compatible itinerary is forced is open.
+
+### 5.3 Select a relay globally, rather than following any next root
+
+This is the weakest bridge and the decisive mathematical problem.
+
+Proposed claim: in an arbitrary normal four-player table with a
+positive singleton, absence of a true punishment-priced sure exit
+forces a robustly usable component of the COMPLETE continuation
+relation, not merely an ordinary index-carrying quiet component.
+
+One possible proof would give a relative continuation index to
+FULL Nash witnesses, physical charge and compatible ports, with
+singular ports completed only by actual robust connectors.
+It would show that all essential mass cannot be trapped on the
+strict all-Continue sheet or competitive finite-charge sinks.
+No such invariant or conservation theorem is proved here.
+
+Why this might be true: an unsafe proper core supplies a concrete
+joining constraint, not an arbitrary topological boundary label.
+Four-player product-root equations tie every observer constraint
+to the same finite reward table. A genuine full graph may force
+a closed obligation relay even when its coarse matrix or boundary
+field does not. The reviewed singular class exhibits a mixed
+triple/pair relay; EC exhibits sequential corner recharge.
+
+Why that intuition is not yet convincing as a theorem: coalition
+labels can recur with different ports and incompatible future prices.
+There is no monotone support rank. Four owners do not rule out nested
+accumulation or acyclic global flow. A useful proof must derive a
+table-specific obstruction to COMPLETE trapping; “no fifth observer”
+is not that derivation.
+
+The negative-certificate formulation makes the challenge falsifiable.
+Under no UE the actual characterization supplies a positive rational
+τ and rational polynomial P, bounded on K, strictly falling by
+physical charge on EVERY permitted robust edge:
+
+    P(y)+a(q)≤P(v).
+
+Global selection must produce an actual finite word exceeding
+the oscillation of THIS P, or otherwise contradict this all-edge
+inequality using the SAME table’s strategic equations.
+An exact-root path or abstract degree calculation cannot do it.
+
+This is not an exportable conditional theorem: “assume the useful
+component exists” would simply assume the missing producer.
+The candidate contribution is the recharge mechanism and the
+specific global selection question, not a solved existence bridge.
+
+## 6. Full route, if those strategic bridges can be proved
+
+Start from an arbitrary signed four-player table. Existing positive
+branches may finish it, but their union is not assumed exhaustive.
+For contradiction assume no UE. Actual abnormal-player and normal-core
+adapters give a normal residual; single-pivot normalization gives a
+normal table with one positive own singleton and the others zero.
+This is an actual semantic adapter, not inverse affine invariance
+with Never fixed. Alternatively select the reviewed NP table.
+Use ONE of these tables for the entire graph argument.
+
+At that fixed table:
+
+1. If the true-punishment exact sure-root exit exists, consume it by
+   the checked original-game payoff theorem.
+2. Otherwise keep the full robust continuation relation. Begin with
+   actual child constructions, full roots and their exact port data.
+   Use global selection, not a demand that every feasible port works.
+3. Retain finite-charge limiting arcs, but complete them by verified
+   finite charged connectors. Include literal macroscopic collision
+   roots and unsafe observer inequalities. Permit above-own excursions,
+   component changes and nonlocal itinerary reselection.
+4. Force finite absorption-relative words at every τ and requested
+   charge. Equivalently, exclude the bounded robust polynomial rank
+   forced by no UE. This is the substantive UNPROVED global step.
+5. Apply the checked fixed-box packet/actual-profile endpoint.
+   Produce actual independent stopping laws with all finite/Never caps
+   controlled at every prescribed terminal accuracy. A supplied UE-tail
+   jump–flow closure is not a substitute for this unconditional compiler.
+6. Select a subsequence of terminal approximate Nash payoffs. Compact
+   payoff selection gives ONE fixed uniform target and all sufficiently
+   long finite-horizon behavioral-deviation bounds. Transport through
+   the actual normalization adapter if that route was used.
+
+All surviving branches are assigned a place, but NONE is declared
+solved just by that assignment. A quiet exact fibre, a competitive
+ghost endpoint, a random paid collision and a sole-sure deleted tail
+are genuine strategic obligations of Steps2–4.
+
+## 7. Why the positive-Never source and leakage are not omitted
+
+At the NP table every minimum is fully paid, all Never masses are
+positive, and Δ_abs exceeds Δ_all by g. A positive-debtor best reply
+leaves the common-debt minimum family by a macroscopic amount.
+The global construction is allowed to leave that family completely;
+minimum-return resets are not assumed.
+
+Repeating an old block has exact caps
+
+    max(B_i, R_i/(1−h_i)),
+
+where R_i is refusal/Never payoff in the block and h_i its deleted
+survival. The born-cap debt is genuinely positive at the source.
+Thus old-block repetition is NOT the proposed recharge operation.
+
+A relay instead changes the continuation ports, rates and possibly
+the order and supports before closing the word. It must price
+every Quit-now and Continue-to-later response against the SAME
+future. A paid first/later tie is a warning that those phase choices
+are coupled, not an admissible free bridge to be pasted twice.
+
+For a real tail pair (u,b), the full prefix semantics are
+
+    u'_i=q_i Q_i+(1−q_i)(A_i+h_i u_i),
+    b'_i=max(Q_i,A_i+h_i b_i),
+
+with A_i the passive-opponent contribution. If u=b=v and the root is
+Nash at v, both coordinates become F_i(v,q). An arbitrary price v is
+not an actual diagonal tail; only the eventual actual compiler
+justifies replacing annotations by realizable continuations.
+
+For a periodic finite circuit with two fixed distinct suppliers,
+EVERY deleted period has survival κ_i<1. Root-level errors accumulate
+through the max-affine cap map, with geometric denominator 1−κ_i.
+Never is included by sending the number of periods to infinity.
+A sole sure supplier does NOT screen its own deleted tail; use the
+true punishment value. For general charged packets the integrated
+compiler handles the persistent-owner alternatives rather than
+assuming joint absorption controls every player-deleted process.
+
+Success at this SAME NP table would yield D<δ, a contradiction.
+Relative gap closeness at another table, a cap increase at the old
+minimum or a companion absorbing minimum is not success.
+
+## 8. Decisive tests the proposed mechanism must survive
+
+### A. EVERY exact menu selector can be bad
+
+NOETHER RM38 gives a complete rational four-player table for which
+the ENTIRE exact equilibrium correspondence on dates0,…,N,Never
+consists of one delayed final root. Every N leaves FULL debt7/8:
+a pure date beyond N is missed. The table is already covered by a
+tracked raw triple inverse producer.
+
+Therefore no selection among exact menu equilibria, however global,
+can prove the general endpoint by those equilibria alone.
+Approximate FULL-cap finite laws are not excluded. The relay picture
+allows such laws rather than claiming exact menu equilibrium is dense
+in the useful endpoint correspondence.
+
+### B. Feasible strict-sublevel ports need not have a sublevel successor
+
+NOETHER RM37 has own values1, true punishment
+(−10,−3/2,−3/2,−10), and no sure root at ANY annotation above them.
+At a feasible port v=(0,2,2,0), the FULL root is uniquely
+q=(1/2)⁴ and its head is
+
+    (7/2,47/16,27/10,21/8)> (1,1,1,1).
+
+Its normal-core, R₀, degree1 and positive-simplex screens hold.
+The exact admissible singleton-sublevel successor assertion fails.
+It is not a no-UE source. Global selection may avoid that port or
+use its above-own excursion; it may NOT infer a viable whole
+threshold region from these raw premises.
+
+### C. Unique fair all-active paths can stall
+
+GS gives an actual full-table eigencone with UNIQUE full roots,
+all four suppliers uniformly positive in projective proportion,
+and feasible prices between true punishment and own singletons.
+Every selected exact path has finite total charge and converges
+to a quiet own port. Its finite forced-prefix family has an explicit
+positive late-deviation debt floor.
+
+Fairness, uniqueness, feasible prices and repeated use of all four
+owners do not establish proper execution or good global selection.
+The relay must genuinely reselect or recharge; it cannot attach a
+free next root to that limit.
+
+### D. Whole-box bounded EXACT capacity can coexist with UE
+
+EC gives no sure root at ANY annotation and bounds the charge of
+EVERY finite exact Nash path in the entire fixed box by1+log5.
+Nevertheless four exact Zeno ladders have compatible limiting ports.
+Verified finite corner connectors at EVERY positive relative tolerance
+close a charged circuit, and literal periodic reverse-order profiles
+have vanishing ALL-cap debt and one fixed payoff limit.
+
+Thus “all exact finite paths have bounded charge” is not a negative
+certificate. The exact cost-to-go has an upward discontinuity at
+a recharge port. A continuous robust polynomial separator cannot
+ignore it. This is the clearest positive test of the revised picture.
+
+### E. Ordinary index and coarse boundary cones miss physical charge
+
+NOETHER’s NG has ordinary full Nash index+1 concentrated on a unique
+strict quiet fibre at a genuine positive-minimum cap. BD supplies a
+nonvanishing extension pricing ALL literal boundary cones in a solved
+table, with coarse degree0 despite a real charged circuit elsewhere.
+R₀/StandardQ/full core and cone geometry alone do not select a useful
+branch. A new relative invariant must carry actual Nash/port/charge
+data, or it is measuring the wrong object.
+
+### F. A nearby good circuit may disappear completely
+
+CI’s one-entry perturbation kills EVERY nearby version of an old
+four-stage circuit, including activation of the tied spectators,
+while remaining inside a reviewed UE chamber. Robustness of UE
+does not imply nearby continuation of that chosen itinerary.
+The global route permits extra phases and NONLOCAL reselection.
+
+### G. The adversarial no-UE source, not just solved fixtures
+
+Finally apply the claimed selection rule to ONE fully-paid nonsure
+NP table with δ,g,d* and its full early/later cap family.
+It must output an actual packet/profile with D<δ, not only pass
+TestsA–F on solved tables. Failure here would expose a missing
+global selection premise rather than justify a new local assumption.
+
+## 9. One concrete research target, and the weakest point
+
+The next target is not another generic local root lemma. It is the
+following specific attempt to make global recharge selection testable:
+
+> Starting from the WHOLE robust relation of a surviving normal table,
+> can finite-charge trapping be localized to a finite family of actual
+> limiting ports, and can the COMPLETE joining/withdrawal equations
+> rule out all its exits being simultaneously non-rechargeable?
+
+A successful localization must retain the permitted relative tolerance,
+literal root witnesses and port incidence. It may use semialgebraicity
+at fixed positive τ; it may not replace approximate paths by exact
+ones or convexify the root image. A finite family of obstruction labels
+would permit an exhaustive actual-table algebraic test. An accumulation
+of incompatible ghost ports would falsify that finite localization
+and require a different global mechanism.
+
+The first bounded test is whether the apparent coordination escape
+at a port with two binding owners and reciprocal positive pair joins
+actually discharges any of these simultaneous exit equations.
+Existing strict-ray binding-pair and box-complementarity producers
+must be checked first. Even a nonzero root would only solve the
+LOCAL root obligation; it would not supply a return or a usable
+component. If its hypotheses cannot be produced by the global trap,
+do not turn the generic lemma into the next research deliverable.
+
+The weakest bridge remains global strategic selection, especially
+competitive trapping and nested singular ports. I do not presently
+have a convincing rigorous argument that all signed tables force a
+relay. The plausible intuition is an obligation cycle with physically
+paid transfers; the actual proof must exclude simultaneous dead ends
+using game-specific equations. That is stronger than the older
+“essential index must continue” slogan and still genuinely open.
+
+## 10. Exact evidence and source scope
+
+This synthesis used the current conference FRONTIER and GOAL,
+architecture notes on executable compact state, semantic barrier
+duality and neutral chronology, and bounded exact-source navigation
+through docs/FRONTIER.md and docs/TOOLKIT.md. No broad Lean census
+or new literature survey is claimed.
+
+Tracked declarations read under their imports:
+
+- quittingGame_exists_uniformEquilibriumPayoff_iff_fixedBoxPackets_or_sureRoot,
+  in UniformEquilibrium/Quitting/Projective/FixedBoxForwardCharacterization.lean;
+- quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential,
+  in UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean;
+- the literal robust edge definitions, in
+  UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean;
+- IsQuittingFullExactRootPotential and its robust-potential restriction,
+  in UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean;
+- IsQuittingFullExactRootPotential.minimum_above_singleton and the
+  arbitrary-minimum variants, in
+  UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMinimum.lean;
+- quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors,
+  in UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean.
+
+CyclicSingletonTailData.certificate and its payoff consumer, in
+UniformEquilibrium/Quitting/Cycles/CyclicSingletonTailProducer.lean,
+already cover the EC table. EC is therefore a mechanism falsifier,
+not new existence coverage. The current scalar singular-circuit export
+is an independently reviewed ordinary raw-class theorem, not an
+unconditional Lean theorem for all Fin4.
+
+The fully-paid nonsure source is the reviewed ordinary packet
+[ FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE ](../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md).
+The independent scalar raw producer is
+[ SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM ](../exports/SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md).
+The exact GS, EC, CI and older menu/nonconvex tests remain in the
+owned [global notebook](CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md).
+RM37–RM38 and BD/NG are in
+[NOETHER’s notebook](CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md),
+with their ordinary-versus-reviewed status retained there.
+
+No Lean implementation, build, export placement or Git action
+belongs to this exploratory synthesis. None of its unproved
+strategic bridges is a theorem.
