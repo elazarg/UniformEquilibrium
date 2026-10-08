@@ -136,6 +136,20 @@ supporting obstruction calculations, not another positive-gap restriction
 or an export. The live question is a global, physically charged return
 through the threshold/collision graph, not a supplied relative-index axiom.
 
+RM33 tests a DIFFERENT global producer, periodic discounted Bellman
+equilibria, rather than renormalizing index again. At a positive-own R₀
+counterexample table, EVERY fixed-period discounted equilibrium collapses
+to hazards of order the discount loss. Its limiting aggregate hazards
+solve a standard LCP, but its ACTUAL terminal continuation is strictly
+above the discounted port and an active owner's unrestricted Never cap
+is strictly higher still. Arbitrary fixed-period discount selection thus
+cannot supply the missing physical return. A nonlocal/variable-length
+word producer remains possible and unproved. As a bounded positive test,
+the literal RZ cyclic construction is already EXACT Nash at its coarse
+four macroscopic phases; refinement is not needed for that particular
+table. Both statements are ordinary unreviewed supporting mathematics,
+not new UE coverage, a new counterexample, or an export.
+
 The body retains the independently reviewed compact/source reductions,
 the PD deterministic-outcome contribution incorporated with attribution
 in the canonical packet, the honest SQ supplied-subgeometry exclusion,
@@ -20491,3 +20505,298 @@ explain the global strategic continuation through those threshold and
 collision strata; it cannot assume positive index after deleting the
 quiet sheet. This block is complete ordinary supporting mathematics,
 independently UNREVIEWED, with no export or new class-narrowing claim.
+
+## RM33: periodic discounted ports versus actual physical absorption
+
+Question. Could one select periodic discounted Nash equilibria, let the
+discount tend to1, and obtain the missing common-port charged words?
+This is a WHOLE-GAME strategy producer attempt, not a local variation
+of the NP minimum and not another ordinary-index normalization. Exact
+discounted existence does not by itself supply the needed comparison
+between discount loss and physical opponent absorption. The calculation
+below identifies that comparison, then proves that EVERY fixed-period
+discounted selection fails it at a positive-own R₀ counterexample table.
+Variable-length approximate words are NOT excluded. Neither UE nor
+universal exact periodic Nash existence is claimed.
+
+DP1: literal periodic discounted game and an actual producer. Fix ANY
+four-player table r, |r_i(S)|≤M, and a positive integer k. A period is
+q=(q_t)_{t∈ℤ/kℤ}, with each q_t an independent four-coin root.
+The period is replayed forever on the actual public calendar; no public
+randomization or selection between tails is added. Put θ=1−h, 0<h<1.
+The normalized discounted payoff of absorption at live date T is
+θ^(T+1)r(S); the coalition-selecting date itself pays0, and absorbing
+rewards start at the next date. Perpetual continuation pays0.
+
+A discounted Bellman equilibrium consists of q and ports v_t with
+|v_{t,i}|≤M such that, at EVERY phase and for EVERY owner,
+
+    v_{t,i}=θ F_i(v_{t+1},q_t),
+    q_t is exact root Nash against v_{t+1}.                  (DP.1)
+
+The factor θ multiplies both endpoints, so the raw root Nash inequalities
+are unchanged. Such an object exists for every h,k. One ordinary proof
+uses the standard finite discounted Bellman fixed-point construction on
+the finite cyclic live states plus absorbing coalition states. The exact
+source `exists_isDiscountedStationaryBellmanEq_bounded` in
+`GameTheory/GameTheory/Analysis/Stochastic/Fink.lean` was read under its
+imports. It proves stationary auxiliary Nash and Bellman equations, NOT
+on its own an equilibrium against all history-dependent deviations.
+
+That latter step is elementary here and is made explicit. The root
+inequalities bound both Quit and Continue by v_t/θ, and prescribed play
+attains v_t. Iterating the discounted Bellman inequality against ANY
+complete clock leaves a remainder bounded by Mθ^n→0. This gives the
+discounted cap≤v_t; prescribed play gives equality. Equivalently one
+may prove it first for every pure finite deadline and Never, then use
+the actual clock-mixture representation. Thus DP.1 really produces a
+discounted equilibrium against unrestricted original behavioral clocks,
+not merely a supplied finite-root verifier.
+
+DP2: physical comparison prices EVERY deviation, not only joint survival.
+For owner i let
+
+    κ_i(q)=∏[t=0..k−1]∏_{j≠i}(1−q_{t,j}),
+    b_i(q)=1−κ_i(q).
+
+If b_i>0, the unchanged opponents' first stopping time T_-i satisfies
+
+    E[T_-i+1]≤k/(1−κ_i)=k/b_i.
+
+Indeed the survival to the start of period m is κ_i^m; summing the
+at-most-k dates of each period gives this geometric bound. Under ANY
+deviation of i, the joint absorbing time is at most T_-i. Hence
+
+    |terminal payoff−discounted payoff|
+      ≤M E[1−θ^(T+1)]≤Mh E[T_-i+1]≤Mhk/b_i.                (DP.2)
+
+The bound is uniform over ALL finite deadlines, Never, and their mixtures;
+it does not use the deviator's own stopping probability. Applying it to
+both the prescribed payoff and the supremum of complete responses gives
+
+    d_i(q)≤2Mhk/b_i(q)                                    (DP.3)
+
+for an exact discounted equilibrium. Therefore a selected family with
+hk/min_i b_i(q)→0 would supply terminal approximate Nash profiles and
+the existing fixed-payoff selection endpoint would give UE. Joint period
+absorption alone is NOT the quantity in DP.2. If one owner carries all
+absorption, that owner's deleted-opponent denominator is0, and this
+argument says nothing about its Never response.
+
+The tracked analogue for actual cyclic Nash defects is
+`quittingTerminalDeviationDebt_cyclicBehaviorProfile_le_card_mul_error_div_opponentAbsorption`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicApproximateNashDeviationCap.lean`.
+Its exact statement and proof were read: the denominator is the literal
+deleted-opponent absorption, and its root error is computed at ACTUAL
+next-phase terminal values. It does not silently identify the discounted
+v_t in DP.1 with those actual values.
+
+DP3: a genuine no-UE table cannot have macroscopic fixed-period limits.
+Now assume all own rewards s_i>0 and the table has NO uniform-equilibrium
+payoff. Fix k ONCE. For EVERY sequence h_n→0 and EVERY selection of
+discounted Bellman equilibria q^n,v^n, ALL rates tend to0.
+
+Proof. Compactness gives a subsequential root limit q* and port limit v*.
+If q* has positive quit rate for at least two distinct owners somewhere
+in its period, then b_i(q*)>0 for EVERY i. DP.2 is uniform near q*, so
+discounted and terminal payoffs/caps differ by o(1). The limiting exact
+root/Bellman equations and geometric deleted-opponent contraction make
+q* an actual exact terminal Nash profile, a contradiction to no UE.
+
+If q* has precisely one active owner z, its joint period survival is<1.
+Every nonempty absorbing coalition is {z}, so the undiscounted period
+Bellman equations have the UNIQUE solution v*_{t,i}=r_i({z}) for ALL
+phases. Continuity of the root inequalities retains full root Nash at
+those ports. Every outsider's unchanged opponent z is proper, so every
+finite/Never deviation is capped by its prescribed singleton payoff.
+For z, EVERY finite deadline pays s_z; Never pays0≤s_z. Thus the
+one-owner periodic profile q* is itself exact terminal Nash. This treats
+the deleted-opponent boundary b_z=0 directly rather than applying DP.2
+at a zero denominator. Again no UE is contradicted. Therefore no nonzero
+root limit exists; the assertion holds for EVERY selection.
+
+DP4: R₀ makes the collapse quantitatively of discount order. Define
+
+    Γ_ij=r_i({j})−s_i,       Γ_ii=0,
+    H(q)=Σ[t=0..k−1]Σ_i q_{t,i}.
+
+Assume additionally Γ is R₀: the only λ≥0 with Γλ≥0 and
+λ_i(Γλ)_i=0 for every i is λ=0. Then there exist constants
+C_k,c_k,h_k>0 such that EVERY discounted Bellman equilibrium at
+0<h<h_k satisfies
+
+    c_k h≤H(q)≤C_k h.                                     (DP.4)
+
+The constants depend on r and the FIXED k. No bound uniform in k is
+asserted; that missing uniformity is strategically important.
+
+Here is a complete asymptotic proof, with all root terms retained.
+Write m_i=Σ_t q_{t,i}, H=Σ_i m_i, and Z=H+kh. Bounded rewards give
+
+    |v_{t,i}−v_{t+1,i}|≤Mh+2MΣ_j q_{t,j},
+    max_{t,i}|v_{t,i}−v_{0,i}|≤Mkh+2MH.                    (DP.5)
+
+Expanding each independent coalition law into its empty and singleton
+terms has total remainder O_M((Σ_j q_{t,j})²). Summing the k Bellman
+equations telescopes the phase differences. Substitution of DP.5 then
+gives, uniformly over the whole period and every owner,
+
+    (H+kh)v_0=Σ_j m_j r({j})+O_{M,k}(Z²).                 (DP.6)
+
+This follows equally by expanding the exact periodic affine return;
+no pair/triple/grand term is discarded without the displayed remainder.
+Root Nash also gives v_{t,i}≥θ Q_i(q_t), hence every limiting common
+port is≥s_i. If q_{t,i}>0, supported root optimality gives
+v_{t,i}=θ Q_i(q_t)=s_i+O_M(H+h).
+
+Suppose the upper bound in DP.4 failed. Since H≤4k, choose h_n→0
+with H_n/h_n→∞. DP3 gives H_n→0. Normalize λ^n_i=m^n_i/H_n
+and take λ^n→λ in the simplex. DP.6 divided by H_n gives the common
+limiting port
+
+    v=Σ_j λ_j r({j})=s+Γλ.
+
+For every λ_i>0 some phase has q^n_{t,i}>0 along a subsequence, so
+supported optimality gives v_i=s_i. For all other owners v_i≥s_i.
+Thus Γλ≥0 and λ_i(Γλ)_i=0, with Σλ=1, contradicting R₀. This proves
+the upper bound for ALL equilibria, not only one selected branch.
+
+If the lower bound failed, choose H_n/h_n→0. DP.6 divided by kh_n
+would give v^n_0→0, whereas root Nash gives liminf v^n_{t,i}≥s_i>0.
+This contradiction proves the lower bound. The sequential arguments
+imply uniform constants: a failed uniform inequality supplies exactly
+the violating sequence just excluded.
+
+DP5: the actual discounted limit is a standard LCP, NOT an equilibrium
+tail. Take ANY convergent scaled subsequence
+
+    λ_i=lim m_i/h,          Λ=Σ_i λ_i>0.
+
+DP.4 makes it bounded and nonzero. DP.6 gives
+
+    v=[Σ_j λ_j r({j})]/(Λ+k),
+    Γλ≥k s,       λ_i[(Γλ)_i−k s_i]=0.                    (DP.7)
+
+The second line follows from v_i≥s_i and active equality v_i=s_i,
+proved exactly as in DP4. Thus λ/k solves the STANDARD LCP at offset
+−s. This only supplies that PARTICULAR offset, not StandardQ at every
+offset. Since s_i>0 and Γ_ii=0, λ cannot have singleton support:
+at least two owners have positive limiting total rates.
+
+For the actual undiscounted repeated period, singleton absorption laws
+converge to weights λ_j/Λ. Deleted-opponent absorption laws for i converge
+to λ_j/(Λ−λ_i), j≠i. Their first-pass numerators are singleton sums
+plus O_M(H²); their per-period denominators are H+O(H²) and
+H−m_i+O(H²), respectively. Thus the SAME actual period has
+
+    U_i→s_i+(Γλ)_i/Λ,
+    Never payoff for i→s_i+(Γλ)_i/(Λ−λ_i).                 (DP.8)
+
+Every denominator is positive, because at least two λ coordinates are
+positive. ALL rows of Γλ are≥k s>0. The limiting Never value is
+therefore strictly above s_i for EVERY owner, while the immediate Quit
+endpoint at every phase tends to s_i. The same statement holds uniformly
+over the finitely many phase rotations. For large n, AlwaysContinue's
+periodic Bellman value consequently dominates the Quit endpoint at EVERY
+phase. Its deleted-opponent remainder vanishes. Hence Never is an actual
+full best response: ALL pure finite deadlines and their mixtures are
+bounded by it, not merely the one-date test.
+
+The limiting full debts are consequently
+
+    d_i→(Γλ)_i λ_i/[Λ(Λ−λ_i)].                            (DP.9)
+
+This is positive for every λ_i>0. By DP.7 it equals
+k s_i λ_i/[Λ(Λ−λ_i)] on that active support. The ACTUAL terminal
+payoff is strictly above own for ALL four players, the discounted common
+port equals own for its active owners, and the unrestricted Never cap
+is higher still. Those are three DIFFERENT vectors. They cannot be
+identified by reading a discounted Bellman equality as a terminal one.
+
+Also b_i(q)≤H(q)=O_k(h), so the desired fast-absorption condition in
+DP2 fails for EVERY fixed-period discounted selection at this source.
+This is an exact architecture restriction, not a proof of no UE or a
+new counterexample table. It says the direct fixed-period discount
+producer cannot close a counterexample. It does not rule out periods
+growing with h, a nonperturbative branch at some table with UE, or
+general absorption-relative approximate words with independently matched
+ports. No stronger exact-periodic existence conclusion is substituted.
+
+DP6: same-table source scope and overlap. R₀ is an ordinary producible
+generic hard-table property, not an unmentioned assumption transported
+from an old source. Begin at the positive-own counterexample table,
+make the sufficiently small own-preserving nonsingular perturbation
+described in RS6, and REGENERATE its no-UE data. The no-stationarily-
+generated alternative gives a negative entry in every Γ column, via
+`everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated` in
+`Literature/Simon2007.lean` and full normal core. Nonsingular principal
+submatrices of size≥2 plus those column witnesses give R₀ by
+`isR0Matrix_of_negative_columns_of_nonsingular_principals` in
+`MathUE/LinearProgramming/SupportTest.lean`. Its full proof and the
+definition `IsR0Matrix` in `MathUE/LinearProgramming/CopositiveQ.lean`
+were read. No old minimum, payoff rank, or calendar is transported.
+
+The main theorem DP3–5 itself is self-contained at ONE table with
+s>0, Γ R₀ and no UE; it does not need NP minima or debt rigidity.
+The derived standard-LCP branch is supporting mathematics and overlaps
+existing matrix source information. This block is NOT counted as a new
+positive-gap-class exclusion. Its strategic conclusion is the precise
+failure of a newly attempted global producer, rather than another local
+screen on a solved positive-debt profile. The next candidate must permit
+genuinely growing or nonlocal compatible words and retain the actual
+terminal/discounted/cap distinctions throughout.
+
+DP7: bounded exact positive test, not another coverage claim. The RZ
+table and construction in MORSE's owned global notebook have a stronger
+property than the stated estimate d_i≤98ρ. In reversed labels modulo4,
+the COMPLETE table is: own singletons0, passive singleton
+z_i({j})=γ′(j−i), γ′=(0,−1,99,99); pair participant
+z_i({i,j})=γ′(j−i)+K′_ij, where K′_ij=1 if i=j−1 and−1 otherwise;
+pair passive0; triple participant−1 and passive0; grand−1. These rules
+specify all sixty coordinates without leaving any coalition unassigned.
+
+Let σ=(−1+√(103/99))/2, so −1+99σ+99σ²=0 and0<σ<1.
+Set F=(0,0,99+99σ,99), and V_a(i)=(1−σ)F(a−i).
+The exact common-port recurrence is
+
+    V_a=(1−σ)z({a})+σ V_{a+1}.
+
+At every actual phase a only owner a quits, with probability1−σ;
+actual chronology is a=0,1,2,3 repeatedly (original labels0,3,2,1).
+This is already a MACROSCOPIC four-root common-port loop. To include
+the stated refinements, put ρ=1−σ^(1/m) and use m dates per phase.
+With ℓ dates remaining, t=(1−ρ)^ℓ∈[σ,1−ρ]. Direct actual values are:
+
+| player | current prescribed value | immediate Quit endpoint |
+| --- | --- | --- |
+| a | 0 | 0 |
+| a−1 | t/σ−1≥0 | 0 |
+| a+1 | 99(1−t)≥99ρ | 98ρ |
+| a−2 | 99(1−σt)≥99(1−σ)≥99ρ | 98ρ |
+
+For a−1 the identity σ[100−99σ²]=1 follows from the quadratic,
+so its displayed value is EXACT, not an approximation. All current
+values dominate Quit, including the two small-value boundary owners;
+the active owner's Continue value is also0. Thus EVERY root is exact
+Nash at its actual next port. Every unchanged triple of opponents
+survives one whole period with probability σ³<1. The forced-Continue
+Bellman equations and that contraction show Never earns the prescribed
+value, while every finite deadline earns no more. Therefore the profile
+is EXACT terminal Nash for EVERY m, including m=1.
+
+This does not contradict RZ's exact finite-support-calendar no-go:
+these profiles repeat forever and all four clocks are proper. It also
+does not contradict DP4: RZ has own0, whereas DP4 assumes s>0, and the
+table already has UE rather than being a counterexample. Its existence
+coverage was already supplied by the checked cyclic producer; no new
+class is claimed. The improvement matters only as an actual global-word
+test: one need not rely on a small-debt microcontroller or a merely
+formal singleton arc for this literal table. The next general producer
+must not be strengthened to exact periodic existence on that evidence.
+
+Status. DP1–7 (equations DP.1–9) and the bounded RZ test are ordinary independently
+UNREVIEWED mathematics. The no-UE conclusion remains open. The live
+consumer question is whether a GLOBAL selection of growing compatible
+words can achieve physical opponent absorption dominating approximation
+loss, or yield a punishment-priced exit, without choosing false discounted
+ports or presuming local itinerary continuation. No export is proposed.
