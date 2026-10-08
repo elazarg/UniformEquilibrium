@@ -12,6 +12,18 @@ not a new theorem, source reduction, or export. The central aim is to
 close all continuation prices before executing clocks, rather than
 preserve a positive minimum through local responses.
 
+Actual follow-through: the separate continuation-index test below gives
+a COMPLETE ORDINARY UNREVIEWED four-player Nash circuit, with matched
+ports, positive charge, an exact periodic behavioral equilibrium and
+all deleted-owner caps controlled. An invariant face-hit section also
+connects the three-threshold corner to arbitrarily long exact words.
+However, an arbitrarily small single-entry perturbation destroys EVERY
+nearby continuation of this four-stage circuit. Thus the remaining
+index account must genuinely allow nonlocal branch/itinerary changes;
+nearby observer activation is not an adequate general completion rule.
+The fixture is already covered by an existing reviewed UE class. Neither
+the circuit nor its perturbation test is new conjecture-facing coverage.
+
 Current canonical source: the fully self-contained, independently reviewed
 1244-line packet is frozen as
 `../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`, SHA256
@@ -9918,6 +9930,379 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Actual continuation-index test: a closed positive-charge circuit and its nonlocal breaking wall
+
+Status: COMPLETE ORDINARY UNREVIEWED worked mechanism test, not new UE
+coverage, a counterexample-class reduction, or an export candidate.
+This follows Test3 of the owned bird's-eye proof program. Its purpose is
+to replace an analogy about Nash-graph index by an actual four-player
+continuation diagram, and then test whether its strategic completion
+can be local. The closed circuit exists. Local continuation of that
+circuit fails under a one-coordinate perturbation inside a known UE
+chamber. The general global index/selection bridge remains unproved.
+
+### CI1. Complete game and the literal continuation relation
+
+Players are 0,1,2,3, with independent private stopping clocks and all
+behavioral deviations allowed. Own singleton rewards are all1; Never
+and live rewards are0. Absorbing rewards start after the selecting live
+date. The entire sixty-coordinate table is:
+
+| Quitters | r₀ | r₁ | r₂ | r₃ |
+|---|---:|---:|---:|---:|
+| 0 | 1 | 3 | 3 | 0 |
+| 1 | 4 | 1 | −1 | −1 |
+| 2 | 0 | 2 | 1 | 2 |
+| 3 | 4 | −2 | 0 | 1 |
+| 01 | −200 | −200 | 5 | 5 |
+| 02 | 1 | 5 | −200 | 5 |
+| 03 | −200 | 5 | 5 | 1 |
+| 12 | 5 | −200 | 0 | 5 |
+| 13 | 5 | −1 | 5 | −200 |
+| 23 | 5 | 5 | −200 | −200 |
+| 012 | 4 | 4 | 4 | −4 |
+| 013 | 4 | 4 | −4 | 4 |
+| 023 | 4 | −4 | 4 | 4 |
+| 123 | −4 | 4 | 4 | 4 |
+| 0123 | −200 | −200 | −200 | −200 |
+
+For continuation v and product Quit probabilities q, write Qᵢ for i's
+forced-Quit payoff, Cᵢ for its forced-Continue payoff and
+gᵢ=Qᵢ−Cᵢ. The prescribed source is Fᵢ=qᵢQᵢ+(1−qᵢ)Cᵢ.
+A root is Nash iff gᵢ=0 for mixed i, gᵢ≤0 for quiet i and gᵢ≥0
+for sure i. This is the actual finite root game, not a prescribed cap
+surrogate or a Nash game against a different future.
+
+When only j has positive rate x<1,
+
+    F(v,x eⱼ)=(1−x)v+x r({j}),
+    Qⱼ=1,                 Cⱼ=vⱼ,
+    Qᵢ=1+x(rᵢ({i,j})−1), Cᵢ=Fᵢ  for i≠j.
+
+Hence a mixed one-owner root needs vⱼ=1, but a quiet observer's source
+payoff need NOT be≥1. The observer compares that source with its actual
+joint-joining reward. This distinction will be used, not suppressed.
+
+The positive singleton joining map is the four-cycle
+
+    0→3→1→2→0.
+
+All other singleton joining gaps are strictly negative. Every joining
+gap against an opponent pair is−1, and against an opponent triple is
+−196. These claims follow directly from the displayed table.
+
+### CI2. All ambient sure-root exits are absent, but the table is solved
+
+At ANY continuation v there is no Nash root with a sure coordinate.
+With at least three sure owners, a sure owner's withdrawing gap is
+−1−195x when the fourth owner has rate x; with four sure owners it is
+−196. With exactly two sure owners, the two directed pair gaps are:
+
+    01:(−204,−203), 02:(1,−203), 03:(−204,1),
+    12:(−202,1),   13:(1,−199), 23:(−200,−202).
+
+Each pair has a strictly negative withdrawing member. Additional free
+quitters only mix that member's gap with−1 or−196. With exactly one sure
+z, each of its two nonfavorite free observers has an everywhere negative
+joining gap: all opponent-root outcomes give its singleton negative
+gap,−1 or−196. Those observers must be quiet. The remaining favorite
+then has gap1 and must be sure, contradicting the two-sure exclusion.
+The argument does not assume any continuation is Nash or minimizing.
+
+True punishment is−4 for every owner: Never guarantees at least−4,
+and all three opponents quitting at date0 give best cap−4. In
+particular, there is no hidden punishment-priced sure-root exit.
+
+Nevertheless the full raw mixed-support upper-average/boxed-charge
+criterion already covers this exact table and every sixty-coordinate
+perturbation of sup norm<1/100. That result is recorded in
+`../exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md`.
+The following explicit equilibrium is therefore a worked construction
+within known coverage, not a new positive theorem for arbitrary tables.
+
+### CI3. The actual three-threshold corner has only ONE charged branch
+
+At v=(1,1,1,2), the entire Nash-root set is
+
+    q=(x,0,0,0),                0≤x≤1/2.
+
+Here is a complete support exclusion, rather than a bounded-grid test.
+There are no sure rates by CI2. For any proper support S with≥2 owners,
+the four-cycle joining map has an i∈S whose unique favorable predecessor
+lies outside S. Its empty-opponent gap is1−vᵢ≤0, every singleton
+opponent in S gives a negative gap, and larger opponent sets give−1
+or−196. Some nonempty opponent event has positive probability, so
+gᵢ<0, contradicting its prescribed positive mixed rate.
+
+Full support is excluded by a multi-affine certificate: at the sixteen
+pure vertices q=1_A, the values of Σgᵢ, in mask order0,…,15, are
+
+    −1,−405,−402,−409,−403,−204,−203,−199,
+    −404,−205,−200,−199,−404,−199,−199,−784.
+
+The sum is strictly negative throughout the cube, so four mixed owners
+cannot all have gap0. For singleton support, owner3 is not indifferent
+because v₃=2. Singletons1 and2 are blocked by their quiet favorites at
+price1. Singleton0 is Nash exactly when its observer3 gap−1+2x≤0.
+AllContinue is included at x=0.
+
+The three singleton gradient directions used in the geometric corner
+model are consequently NOT three actual Nash branches at this v.
+The literal singleton matrix on owners012 does satisfy
+wᵀΓ₀₁₂=(6,1,1) for w=(1,2,1), as suggested by NOETHER. That geometric
+fact does not change this full raw-root census. The charged branch
+which really exists raises prices1,2 and lowers price3 to its threshold.
+
+### CI4. An exact four-stage closed circuit
+
+Let p be the positive root of
+
+    132p²+55p−25=0,
+
+and set
+
+    t=(455−132p)/1830,
+    u=(66p−15)/35,
+    w=(635−924p)/810,       c=1/(1−p).
+
+All four rates lie strictly between0 and1, with u<1/2. For example,
+27/100<p<28/100 follows by evaluating the quadratic at those endpoints;
+the displayed linear formulas then prove the required inequalities.
+Their approximate values, used only to visualize the exact formulas,
+are p=.274157,t=.228859,u=.088410,w=.471209.
+
+Define the SAME four continuation ports throughout:
+
+    v⁰=(1,1+w,1,c),
+    v¹=(1,(1−p)(1+w)+3p,1+2p,1),
+    v²=(1+3t,1,(1+u)/(1−u),1),
+    v³=(1/(1−w),1,1,1−2u).
+
+The actual edges, in CONSTRUCTION order, are
+
+    v⁰ --p e₀--> v¹ --t e₃--> v² --u e₁--> v³ --w e₂--> v⁰,
+
+where an arrow means SOURCE=F(TAIL,root). This is not chronological
+play order. Exact substitution gives these four identities using
+
+    (1−t)((1−p)(1+w)+3p)−2t=1,
+    (1−u)(1−t)(1+2p)−u=1,
+    (1−w)(1+3t+3u−3tu)=1,
+    (1−p)((1−w)(1−2u)+2w)=1.
+
+Substituting the four linear formulas reduces every identity to the
+single polynomial132p²+55p−25. No numerical root is used in the proof.
+
+All active owners are indifferent because their corresponding tail
+coordinate is1. The forced-Quit vectors at the four edges are:
+
+    0-edge: (1,1−201p,1−201p,1),
+    3-edge: (1−201t,1−2t,1−201t,1),
+    1-edge: (1−201u,1,1−u,1−201u),
+    2-edge: (1,1−201w,1,1−201w).
+
+For each quiet owner its Continue vector is the corresponding source
+port. Comparison with v¹,v²,v³,v⁰ respectively gives ALL Nash
+inequalities. In particular:
+
+    g₃ at the0-edge=0;
+    g₁ at the3-edge=−2t;
+    g₂ at the1-edge=−u,     g₃ at the1-edge=−199u;
+    g₀ at the2-edge=0,     g₁ at the2-edge=−202w.
+
+All unlisted quiet gaps are strictly negative by the port expressions.
+The value v³₃=1−2u<1 is legal and crucial: its lower immediate Quit
+payoff1−201u keeps that observer quiet at the1-edge. Replacing the
+whole continuation diagram by the above-own singleton-flow region
+would discard this exact compatible circuit.
+
+### CI5. Actual infinite chronology and EVERY behavioral cap
+
+Actual play repeats the four dates in the REVERSED order
+
+    2,1,3,0,2,1,3,0,…,
+
+with each date's named owner using hazard w,u,t,p respectively and all
+other owners continuing. The independent per-date randomizations
+define ordinary clocks, not finitely additive laws or correlated modes.
+The phase payoffs are v⁰,v³,v²,v¹ in that actual order. Every named
+continuation is the NEXT actual phase payoff, including the wraparound.
+
+Per-period prescribed survival is
+
+    ρ=(1−p)(1−t)(1−u)(1−w)<1.
+
+Thus the profile absorbs almost surely; its bounded phase payoffs are
+the unique periodic Bellman solution, exactly the displayed ports.
+For any deviator i, opponent-only survival per period is
+
+    ρ₋ᵢ=∏_{j≠i}(1−hazardⱼ)<1.
+
+At every phase, the root inequalities say both available actions have
+conditional payoff at most that phase's prescribed value. Iterate
+these inequalities up to ANY finite deadline. The remaining bounded
+term is controlled by opponent-only survival, and tends to0. Passing
+to the limit also bounds literal Never. Disintegrating any behavioral
+clock over finite deadlines and Never bounds EVERY unrestricted
+behavioral response by the same prescribed value. Consequently B=U
+at every phase; there is no forgotten later-cycle or Never cap.
+
+These same deleted-owner geometric screens uniformly bound expected
+absorption time under every deviation. The zero selecting live date
+changes the expected n-stage average from its terminal value by at
+most M times the corresponding expected absorption time divided by n.
+The bound is uniform over deviations. Hence the fixed displayed phase
+payoff is an original-game UE payoff as well. This is a complete exact
+solved-fixture construction, not merely one-cycle root error control.
+
+Repeating the construction circuit k times also yields a finite exact
+forward word with charge k(p+t+u+w). This tends to infinity, its root
+errors and composition errors are0, and all ports stay in one reward-
+bounded box. Thus it realizes exactly the weighted-forward-word object
+required by the checked fixed-box compiler, without assuming a UE tail.
+
+### CI6. The original corner enters a positive-charge return family
+
+This is not just an unrelated isolated loop. Starting at (1,1,1,2),
+four exact single-owner roots in construction order0,3,1,2, with rates
+
+    1/2,1/4,1/5,6/11,
+
+give the successive ports
+
+    (1,2,2,1),
+    (7/4,1,3/2,1),
+    (11/5,1,1,3/5),
+    (1,17/11,1,15/11).
+
+The root checks are the same direct forced-Quit comparisons as CI4.
+In particular, the last root's quiet0 comparison is equality, and
+its quiet3 comparison is strictly favorable despite the below-own
+tail3=3/5. The initial nontrivial corner branch really enters this
+matched diagram; it is not identified with a hypothetical joint root.
+
+More generally consider a section port v=(1,1+a,1,c) in the rectangle
+
+    2/5≤a≤3/5,             4/3≤c≤7/5.
+
+The four successive face-hit roots have rates
+
+    p=1−1/c,
+    t=(a+2c−2)/(a+5c−2),
+    u=(4c−4−a)/(a+14c−8),
+    w=3(a+8c−8)/(2(2a+19c−16)).
+
+They give the return section
+
+    a'=3(a+8c−8)/(2(2a+19c−16)),
+    c'=3(3a+18c−16)/(2(2a+19c−16)).
+
+All rates are in(0,1), u<1/2, and all quiet inequalities from CI4
+remain valid. For the only comparison requiring an extra check,
+
+    F₃ at the2-edge−Q₃=203w−2u(1−w)>0,
+
+because w/(1−w)=3(t+u−tu)≥3u. All denominators are positive.
+Both coordinates of the return map are increasing in a and c on
+this rectangle. Differentiation gives, for the first coordinate,
+positive numerators9c and9(8−a), and for the second coordinate,
+positive numerators3(21c−16) and3(16−21a), with the common positive
+denominator2(2a+19c−16)². Its corner bounds are
+
+    69/152≤a'≤57/118,       207/152≤c'≤165/118.
+
+They lie strictly inside the original rectangle. The first returned
+port (a,c)=(6/11,15/11) belongs to it. Iteration therefore gives actual
+finite exact Nash words of arbitrary length, with p≥1/4 at every lap.
+Their accumulated physical charge is unbounded while every port stays
+bounded. NO infinite nonperiodic word has been chronologically reversed:
+these are finite construction words. The exact fixed point from CI4
+separately supplies the legitimate infinite periodic profile.
+
+This is a small worked game-specific Poincaré section with charge.
+It proves that this test's all-Continue corner does not trap the useful
+diagram. It does NOT prove that an arbitrary game has such a section.
+
+### CI7. One arbitrarily small entry change kills ALL nearby four-stage circuits
+
+Change only r₀({0,2}) from1 to1+η, where0<η<1/100. This stays within
+the independently reviewed open UE chamber in CI2. Nevertheless there
+is NO exact Nash continuation circuit near the CI4 circuit with the
+same four stages, even if the two previously indifferent observers
+are allowed to activate and all four continuation ports are re-solved.
+
+The proof is a strict-inactive-set obstruction, not just failure of
+the old four chosen rates. By continuity, all observers whose gaps
+were strictly negative in CI4 remain strictly negative throughout
+some neighborhood of that whole matched circuit. Therefore any nearby
+Nash circuit has supports contained in
+
+    A:{0,3},        B:{3},        C:{1},        D:{0,2},
+
+with original owners0,3,1,2 respectively still strictly mixed.
+Let h be3's possibly positive rate at A, and let y>0 be2's rate at D.
+At A, owner0's indifference, with only opponent3 possibly active,
+forces its tail port coordinate to be
+
+    v₀=1−204h/(1−h)≤1.
+
+At D its forced-Quit payoff is exactly
+
+    Q₀=1+ηy>1.
+
+If0 is quiet there, Nash requires its source coordinate C₀≥Q₀.
+If0 is mixed there, its source is exactly Q₀. In either case that
+source coordinate is>1. But D's source IS A's tail: the ports belong
+to the SAME closed circuit. This contradicts the previous≤1 bound.
+No closeness estimate or root selector can repair that contradiction.
+
+Thus even this successful, fully priced, positive-charge circuit is
+not locally persistent as an actual Nash circuit. Adding a small
+joining rate to the tied observer is NOT sufficient. A successful
+construction at the nearby table must change the itinerary/supports
+nonlocally, use extra phases or use genuine approximation rather than
+continue this particular exact component. The table remains solved;
+no UE or arbitrary good-selection theorem is contradicted.
+
+### CI8. Strategic conclusion, source reuse and the next global test
+
+The positive side is concrete: closing continuation prices first can
+really create an exact four-player absorbing equilibrium with positive
+charge, even with no ambient sure root anywhere and with below-own
+intermediate prices. The graph retains all observers, and its actual
+periodic chronology controls every cap. This is stronger evidence for
+the bird's-eye mechanism than a nonconvex one-step picture or an
+abstract supplied circuit interface.
+
+The negative side changes the proposed proof strategy. A proof cannot
+propagate an arbitrary useful charged circuit through table space by
+nearby spectator activation, nor identify the first successful circuit
+with a stable essential-index component. The B1–B2 bridge, if true,
+must select a GLOBAL component or work directly with arbitrarily long
+approximate words. This exact example does not refute those bridges;
+it refutes their tempting local-continuation shortcut.
+
+Checked-source reuse remains the bounded lookup recorded in the
+bird's-eye note:
+`quittingGame_exists_uniformEquilibriumPayoff_iff_fixedBoxPackets_or_sureRoot`
+in `UniformEquilibrium/Quitting/Projective/FixedBoxForwardCharacterization.lean`,
+`HasAbsorptionWeightedFiniteForwardPackets` and its semantic producer
+in `AbsorptionWeightedForwardPacketProducer.lean`, and the full exact-
+root potential restriction in `ExactRootPotentialRestriction.lean`.
+These compile an ACTUAL compatible word or rule out its existence by
+a bounded decreasing potential under no UE. They do not produce the
+arbitrary-game return section used here. No new Lean theorem is claimed.
+
+Concrete next question: at the perturbed table, can one trace a
+genuinely nonlocal collision/phase detour returning to this price
+section with positive charge, rather than insist on the broken four-
+stage branch? Such a detour would test the remaining global observer-
+completion idea. More generally, the desired mechanism is a whole-
+graph charged return argument, not local implicit-function persistence
+of this solved-fixture circuit. NOETHER continues the distinct literal
+Section4 graph/index account; this calculation does not presume that
+raw homotopy paths are Nash edges or supply his missing index theorem.
 
 ## Global producer triage: a finitely approximable undominated equilibrium misses every ordinary payoff target
 

@@ -110,6 +110,17 @@ tangential minimum contributes+1 despite ALL individual-piece descent
 tests and a contractible local fibre. Thus the shortcut "no boundary
 minimum ⇒no boundary-index terms ⇒degree χ(C)" is retired. This is a
 local falsifier, NOT a complete seven-hypothesis counterexample or UE.
+RM31 now computes a WHOLE-boundary obstruction on a complete solved
+four-player table: its literal upper/lower glue cones, full normal core,
+R₀ and StandardQ are compatible with boundary-field degreeZERO.
+An exact strictly convex simplex minimization gives a nonvanishing
+extension on the entire truncated domain; the complete projective
+support census places its only zero above ALL own thresholds.
+Thus adding those actual singleton-matrix facts does not repair the
+plain-gradient index normalization. The next consumer must retain
+FULL terminal Nash/continuation ports and physical charge, not merely
+strengthen the boundary cone. This is ordinary unreviewed supporting
+mathematics, not a no-UE table, UE proof or new class exclusion.
 No full Fin4 contradiction or new export is claimed.
 
 The body retains the independently reviewed compact/source reductions,
@@ -20073,3 +20084,221 @@ calendar, debt vector or orbit is transported. This closes the supplied
 Section4-data scope at the level of ordinary proof composition; it is
 not another independently reviewed source theorem or a new Lean build.
 The remaining consumer is still the actual nonconvex boundary/index.
+
+## RM31: the entire literal boundary cone can have degree zero
+
+Question. After RS6 has sourced a FULL-J C¹ rank at a fresh no-UE
+table, can the actual singleton upper-glue directions, outer feasible
+glue, full normal core, R₀ and StandardQ by themselves normalize its
+boundary gradient to nonzero degree? This attempt gives an exact
+NEGATIVE answer to that normalization route. It is a whole-boundary
+calculation, not only TG7's local link, and not a no-UE game. No
+actual full-J rank is supplied on the solved fixture below. The result
+does not refute Simon's seven-hypothesis question or MORSE's proposed
+decorated continuation index; those retain additional terminal-graph
+and physical-charge information.
+
+BD1: literal data and boundary constraints. Use the following complete
+reward table, already proved to have UE in the reviewed
+`exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md`.
+Players are 0,1,2,3; Never/live pay zero; all stopping coins are independent.
+
+| coalition | payoff vector |
+| --- | --- |
+| 0 | (1,3,3,0) |
+| 1 | (4,1,−1,−1) |
+| 2 | (0,2,1,2) |
+| 3 | (4,−2,0,1) |
+| 01 | (−200,−200,5,5) |
+| 02 | (1,5,−200,5) |
+| 03 | (−200,5,5,1) |
+| 12 | (5,−200,0,5) |
+| 13 | (5,−1,5,−200) |
+| 23 | (5,5,−200,−200) |
+| 012 | (4,4,4,−4) |
+| 013 | (4,4,−4,4) |
+| 023 | (4,−4,4,4) |
+| 123 | (−4,4,4,4) |
+| 0123 | (−200,−200,−200,−200) |
+
+Here s=(1,1,1,1), true P=(−4,−4,−4,−4), and
+
+    Γ = [ [ 0,  3, −1,  3],
+          [ 2,  0,  1, −3],
+          [ 2, −2,  0, −1],
+          [−1, −2,  1,  0] ].
+
+The cited packet's exact determinant/standard-LCP census proves full
+normal core, R₀, no homogeneous simplex solution, and StandardQ with
+degree1; the full determinant is25. None is inferred from a numerical
+grid or from the present boundary field.
+
+Fix R≥501 and the LITERAL Simon domain
+C={x: |xᵢ|≤R+1 for all i, minᵢ xᵢ≤1}. Write t=x−s and
+dⱼ(x)=r({j})−x=Γeⱼ−t. On the inner frontier t≥0, with active
+A={j:tⱼ=0}, UpperGlueFiber contains x+h dⱼ(x) for each j∈A
+and every sufficiently small h>0, unless the lower-glue case has
+priority. Consequently any C¹ full-J rank Ψ with
+Ψ(x)−Ψ(y)≥γ‖x−y‖ forces
+
+    ∇Ψ(x)⋅dⱼ(x)≤−γ‖dⱼ(x)‖<0.                  (BD.1)
+
+Each dⱼ is nonzero there: its column has a negative entry, whereas
+t≥0. At lower-glue frontier points the analogous necessary constraint
+is ∇Ψ(x)⋅(z−x)<0 for EVERY z∈P=conv(0,{r(S)}). These are genuine
+infinitesimal consequences of the literal glue, not artificial
+behavioral Nash edges or a claim that the homotopy interior lies in J.
+
+BD2: one continuous canonical field satisfying both boundary cones.
+For EVERY t∈ℝ⁴, let λ(t) be the unique minimizer over the standard
+simplex of
+
+    Lₜ(λ)=½‖Γλ−t‖²+t⋅λ,
+    g(x)=t−Γλ(t),                 t=x−s.           (BD.2)
+
+Invertibility of Γ makes Lₜ strictly convex; compactness of the
+simplex gives existence. Uniqueness and a subsequence comparison of
+Lₜ show λ(t) is continuous. Thus g is an ordinary continuous field.
+It is NOT asserted to be a gradient or a Nash correspondence selector.
+At its minimizer, the derivative towards each simplex vertex gives
+
+    0≤−g⋅Γ(eⱼ−λ)+tⱼ−t⋅λ,
+    g⋅dⱼ(x)≤tⱼ−t⋅λ−‖g‖².                       (BD.3)
+
+On the inner frontier and for active j, the right side is
+−t⋅λ−‖g‖²≤−‖g‖², since t≥0. This prices ALL active singleton
+directions simultaneously, including three- and four-active corners.
+There is no choice of a favorable boundary piece.
+
+For the outer/lower collar, every z∈P satisfies ‖z−s‖≤402, while
+‖Γλ‖≤6. With r=‖t‖,
+
+    g⋅(z−x)≤−r²+408r+2412<0       whenever r≥500.  (BD.4)
+
+Every point of the outer frontier has r≥R. If 0<ε≤1, every
+frontier point in LowerNeighborhood has r≥R−ε/3≥500: choose a
+nearest lower-boundary point, which has a cube coordinate of absolute
+value R+1. Hence (BD.4) respects the LITERAL lower-before-upper
+priority of GluedFiber and ALL feasible target choices, not a selected z.
+
+BD3: exact complete zero census. The equation g(x)=0 means
+t=Γλ(t). The KKT conditions then reduce to
+
+    λ≥0, Σλ=1, Γλ≥μ1,
+    λᵢ>0 ⇒ (Γλ)ᵢ=μ,       μ=λ⋅Γλ.                (BD.5)
+
+Conversely (BD.5) makes λ the minimizer in (BD.2), since the squared
+term is zero and its first derivative vanishes, while t⋅λ is minimized
+on that support. Thus this is an equivalence, not only a necessary
+selected-response equation.
+
+Singleton supports have μ=0 and fail their negative outside column
+entry. For every principal support of size≥2, solve
+Γ_A λ_A=μ1 and Σ_A λ_A=1. The COMPLETE candidates are below;
+the displayed λ is in full player order. A candidate must have all
+listed support coordinates STRICTLY positive and outside Γλ≥μ.
+
+| support | μ | λ | failed test or acceptance |
+| --- | ---: | --- | --- |
+| 01 | 6/5 | (3/5,2/5,0,0) | row2=2/5<μ; row3=−7/5<μ |
+| 02 | −2 | (−1,0,2,0) | negative coordinate |
+| 03 | −3/2 | (3/2,0,0,−1/2) | negative coordinate |
+| 12 | 2 | (0,−1,2,0) | negative coordinate |
+| 13 | −6/5 | (0,3/5,0,2/5) | row2=−8/5<μ |
+| 23 | — | — | 1ᵀΓ_A⁻¹1=0; normalization impossible |
+| 012 | 2 | (7/5,2/5,−4/5,0) | negative coordinate |
+| 013 | 3/22 | (21/22,−6/11,0,13/22) | negative coordinate |
+| 023 | 1/4 | (1/4,0,1/2,1/4) | ACCEPTED; row1=μ too |
+| 123 | −8/3 | (0,1,−2/3,2/3) | negative coordinate |
+| 0123 | 1/4 | (1/4,0,1/2,1/4) | zero coordinate; same 023 point |
+
+All inverses exist, by the cited principal determinant list. The zero
+denominator for23 cannot hide a μ=0 solution: Γ_A is invertible,
+so Γ_A λ_A=0 would force λ_A=0. The sole zero of g on ALL ambient
+space is therefore
+
+    x*=s+Γ(1/4,0,1/2,1/4)=(5/4,5/4,5/4,5/4).    (BD.6)
+
+It lies STRICTLY OUTSIDE C. In particular g never vanishes on C,
+not merely on its frontier. The inactive equality in023 is retained;
+there is no generic strict-outside-slack assumption in this census.
+The rational table was checked by an exact SymPy inverse calculation,
+then by the support/KKT proof above; this is ordinary mathematics,
+not a Lean instance.
+
+BD4: literal small mixed upper coins do not repair the index. Compactness
+gives a positive minimum η of ‖g‖ on C. For inner-frontier points
+eligible for UpperGlueFiber, every allowed owner has 0≤tⱼ≤ε/3.
+Equation (BD.3) gives g⋅dⱼ≤ε/3−η². Take ε small enough that
+this is≤−η²/2. For a full product root supported on those allowed
+owners, put Q=Σqⱼ. Bernoulli expansion gives
+
+    F(x,q)−x=Σqⱼ dⱼ(x)+O_R(Q²),
+
+uniformly on C; ALL nonsingleton rewards in BD1 are included in the
+remainder. Since qⱼ≤δ=ε/(8M), Q≤4δ→0. Boundedness of g and
+the displayed strict first-order margin therefore imply, for all
+sufficiently small ε and EVERY such product coin,
+
+    g(x)⋅[F(x,q)−x]≤−(η²/4)Q<0       if Q>0.      (BD.7)
+
+This is only a boundary FIELD inequality. It is NOT a finite-word
+rank, full-cap Nash verification, or a behavioral implementation of λ(t).
+Near the outer boundary lower glue has priority and BD.4 prices its
+entire fibre instead. Thus all literal boundary cases, not only a
+single root direction, are represented by this nonzero field.
+
+BD5: whole boundary degree, and the exact failed consumer. C is a
+topological closed4-ball: about center0, its radial gauge on a unit
+direction u is
+
+    k(u)=max(‖u‖∞/(R+1), max(0,minᵢ uᵢ))>0,
+
+and the radius is1/k(u). This is continuous, and radial rescaling
+identifies the frontier with S³. Since g/‖g‖ extends to ALL C,
+its boundary degree is0.
+
+Suppose a continuous boundary field h satisfies the strict necessary
+rank constraints (BD.1) and their lower-glue counterparts. The
+straight interpolation (1−a)h+a g is never zero on the frontier:
+at each point one available nonzero glue direction has STRICTLY
+negative dot product with BOTH fields. It therefore gives a homotopy
+of their normalized boundary maps. Consequently
+
+    degree(h/‖h‖ on ∂C)=0.                         (BD.8)
+
+In particular a hypothetical FULL-J rank gradient satisfying those
+boundary constraints would have degree0, not χ(C)=1. The implication
+"literal glue plus normal/R₀/StandardQ data ⇒nonzero boundary-gradient
+degree" is false on this COMPLETE actual game. The game is solved;
+there is no claim it supplies the no-UE rank or all seven homotopy
+hypotheses together with such a rank. The missing consumer cannot
+be repaired by changing a local corner sign or by inserting the
+full-normal-core/StandardQ hypothesis into TG's degree normalization.
+It must retain additional FULL terminal-root/continuation information,
+or use an absorption-sensitive relative index rather than the plain
+boundary gradient degree. MORSE's Test3 actual Nash circuit is distinct
+and may explain such additional transport; BD.2–8 are not that circuit.
+
+The zero price in BD.6 is the singleton lottery
+¼r({0})+½r({2})+¼r({3})∈P, above ALL own singletons. It is
+not silently declared a diagonal actual continuation. This is precisely
+the distinction a physical-charge index would have to keep: a quiet
+feasible price can absorb ordinary boundary degree without supplying
+an unrestricted equilibrium tail.
+
+Source inspection for this block: literal `TruncatedW`,
+`UpperNeighborhoodFor`, `UpperGlueFiber`, `LowerGlueFiber`,
+`GluedFiber`, `Section4Delta` and `Section4H` in
+`Literature/Simon2012.lean`; exact fixture/source semantics and the
+independently reviewed full matrix census in the cited export;
+`r0Degree_eq_sum_admissible_inverse_supports` in
+`MathUE/LinearProgramming/FiniteSupportDegree.lean` and
+`isStandardQ_of_r0Degree_ne_zero` in
+`MathUE/LinearProgramming/R0Degree.lean` were read only to confirm
+the earlier matrix-regime scope, not used as a boundary-degree adapter.
+No new paper theorem, Lean declaration or independently reviewed result
+is claimed here. Current next question: retain the actual terminal
+homotopy/payoff-port data while replacing this zero plain-boundary
+normalization by a physically charged relative account, or change the
+global consumer mechanism. No supplied convexity/index axiom is added.

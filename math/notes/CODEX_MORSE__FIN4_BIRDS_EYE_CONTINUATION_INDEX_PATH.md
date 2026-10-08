@@ -9,6 +9,18 @@ deviation. The argument below identifies one main global mechanism and
 three substantial unproved bridges. It does not count those bridges as
 supplied inputs or already available theorems.
 
+Worked follow-through, still ordinary and independently UNREVIEWED:
+CI1–CI8 in the owned global notebook construct a literal four-player
+closed Nash-price circuit, positive-charge return family and exact
+periodic absorbing equilibrium on a nontrivial already-solved table.
+Its arbitrarily small one-entry perturbation eliminates EVERY nearby
+four-stage Nash circuit, including activation of the old tied observers.
+Thus local repair is not the proposed mechanism: B2 must allow genuine
+global itinerary reselection or approximate charged words. NOETHER's
+separate BD1–BD5 additionally rule out obtaining the needed index from
+plain boundary-glue directions and matrix classification alone. Neither
+test establishes, nor refutes, the FULL witnessed/charged global bridge.
+
 ## 1. The central picture
 
 My best current intuition is this:
@@ -426,6 +438,35 @@ or a safe punishment-priced terminal exit. A realizable four-player
 counterexample to that local strategic account would kill B2 as
 stated and change the mechanism. A generic star-shaped topological
 counterexample alone does not answer the game-specific question.
+
+The completed actual-game follow-through is CI1–CI8 in
+`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`. On the FULL sixty-entry
+mixed-support fixture, the root set at(1,1,1,2) is exactly one charged
+singleton segment plus AllContinue. That segment enters an invariant
+two-price return section. A four-edge circuit closes its continuation
+ports algebraically, has positive absorption charge, and has an actual
+periodic reverse-order realization screening EVERY behavioral cap.
+The circuit uses a below-own intermediate coordinate, not only the
+singleton viable-flow region. This is actual evidence that the global
+picture can work; it is not new coverage of the conjecture.
+
+But one small entry change r₀(02):1→1+η kills ALL nearby versions of
+that same four-stage circuit. Strictly inactive players remain inactive;
+even allowing the two tied spectators to activate gives a common port
+forced≤1 at one stage and>1 at the previous stage. The perturbed game
+is still inside a reviewed open UE chamber. Therefore 'a joining
+observer can simply activate and continue the old good circuit nearby'
+is FALSE. This falsifies a tempting local version of B2, not B2's
+unproved claim about an essential GLOBAL component: the displayed
+circuit has not been proved to carry that hypothetical essential index.
+
+Cross-reading NOETHER RM31/BD1–BD5 on this SAME table gives the other
+half of the warning. A nonvanishing canonical field prices ALL literal
+boundary glue cones, so their ordinary boundary degree is0. There is
+no contradiction with the physical circuit: the field omits terminal
+Nash witnesses, matched ports and charge. The next account must use
+that missing data and must survive NONLOCAL reselection; neither local
+spectator repair nor boundary-gradient degree normalization suffices.
 
 ### Test4: the reviewed nonsure fully-paid source, with its full renewal cap
 
