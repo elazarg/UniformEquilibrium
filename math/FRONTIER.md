@@ -863,6 +863,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the zero-premium joint-phase family specified below, for every real R and σ≥0 | UE with both joint participants at their singleton rewards and a possibly positive outsider collision payoff. Rates and a fixed target are produced; an opposite-sign pair core is allowed. This is reviewed mathematics awaiting formalization. |
 | Fin4: the negative-premium cyclic-child completion family specified below | UE for arbitrary signed own rewards, with an exact terminal Nash profile and one fixed target produced from raw entries. Both scheduled joint participants have negative premiums. Twenty-eight normalized coordinates are unrestricted. This is reviewed mathematics awaiting formalization. |
 | Fin4: all tables in a full sixty-coordinate neighborhood of the rational negative-premium center specified below | UE with four proper periodic hazards and one fixed target produced from the raw table. No perturbed reward equality is imposed. A nonempty open subregion escapes the compared raw producers and every affine/relabeling copy of the fixed-row completion family. The radius is qualitative. This is reviewed mathematics awaiting formalization. |
+| Fin4: the premium core is empty, with arbitrary signed own singletons | UE follows by composing the tracked no-UE single-pivot normalization with the tracked empty-core producer. Normalization preserves every participant-minus-own sign and hence the whole trap family. No selected root or strategy is supplied. |
 | Fin4: nonnegative own singletons and participant premiums, with greatest premium core of size at most two | UE through full exact-root potential exclusion and reward closure. Players outside the core remain in the game and may have positive premiums. No strategic witnesses are assumed. This is an ordinary mathematical result awaiting formalization. |
 | Fin4: nonnegative own singletons, greatest premium core {i,j}, and nonnegative product of the two pair join gaps | UE with arbitrary signed participant premiums. A degree argument selects a suitable exact root; it does not require every root to return. Both strict and weak comparisons have production Lean consumers. |
 | Fin4: nonnegative own singletons, greatest premium core of size three, and all within-core joining differences nonnegative | UE with arbitrary signed participant premiums, including negative premiums inside the core and overlapping pair traps. A full triple-root index argument selects a suitable successor; weak comparisons use reward closure. This is reviewed mathematics awaiting formalization. |
@@ -1202,6 +1203,23 @@ selected return. The weak consumer perturbs only the two passive singleton
 entries, preserving participant rewards, own singletons, traps and core,
 then obtains one original target by reward closure. No strategic witness
 is an input.
+
+The empty-core conclusion also holds for arbitrary SIGNED own singletons.
+This is a composite consequence of the tracked producers, not a separate
+checked declaration. If an empty-core table had no UE, then
+`nonempty_finFourSinglePivotNormalization_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean`)
+would produce another no-UE table with nonnegative own singletons. Its
+literal reward formula in
+`UniformEquilibrium/Quitting/Root/SinglePivotNormalization.lean` subtracts
+one constant per recipient row and divides every reward by the same positive
+pivot singleton. Every difference r_i(S)−r_i({i}) therefore has its original
+sign. The entire trap family and empty core are preserved. The tracked
+`exists_uniformEquilibriumPayoff_of_empty_quittingPremiumCore`
+(`UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreUniformPayoff.lean`)
+then supplies UE for that normalized table, contradicting its retained
+no-UE property. This argument uses the no-UE normalization source; it does
+not assume general row-translation invariance with Never fixed at zero.
 
 The **joining-attractive triple-core criterion** assumes nonnegative own
 singletons, greatest premium core C of size three, and the nine comparisons
