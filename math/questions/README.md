@@ -49,11 +49,12 @@ Two questions address the general finite-player conjecture:
 7. Establish or refute the implication from absorbing row-perfect witnesses
    to terminal approximate equilibria.
 
-One finite-state source question tests a bound used in a quitting-game
-structure argument:
+Two source questions test bounds used in quitting-game structure arguments:
 
 8. Prove or refute the uniform expected-variation bound for bounded
    backward-harmonic values along a homogeneous Markov chain.
+9. Determine whether uniform exclusion of sure quitters forces all-Continue
+   uniqueness at sufficiently large continuation payoffs.
 
 ## Inclusion rule
 

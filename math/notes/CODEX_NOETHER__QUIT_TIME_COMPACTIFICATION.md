@@ -49,6 +49,12 @@ auxiliary budget is globally nonnegative. This is a falsifier of a proposed
 universal tail-exit implication, NOT an actual positive-global-minimum or
 no-UE example. The next mechanism must use additional genuine minimum-source
 ancestry or attack the zero-own ABSORBING gap directly, not supply a cap sign.
+RM23 carries out the latter finite-penalty/limit attempt: it produces a
+native absorbing minimum with weak cap/payoff margins and proves the native
+worst absorbing gap is<1. The strict full payoff margin does NOT survive
+the limit; a sole-debtor/sole-head boundary remains. This alternative source
+loses NP's fully-paid/all-tail strength and is internal, not a substitute
+consumer or an additional export.
 No full Fin4 contradiction or new export is claimed.
 
 The body retains the independently reviewed compact/source reductions,
@@ -18272,3 +18278,206 @@ that genuinely uses those hypotheses. In particular the absorbing tail
 force such a tail from actual source structure, or rule out a positive
 zero-own absorbing gap; it must not repackageWN2 as a supplied upper-cap
 condition. The full Fin4 goal remains OPEN.
+
+### RM23. Native zero-own absorbing minima: a genuine limit and the missing strict margin
+
+Status: SUBSTANTIAL ORDINARY GLOBAL ATTEMPT, NOT A FIN4 CONSUMER OR EXPORT.
+This changes domain deliberately and states the lost strength. No old full
+minimum, paid bridge or full-carrier margin is transported to a restricted
+minimum. The purpose is to test whether the zero-own absorbing game can
+close NP by a genuinely different mechanism, rather than another change of
+its existing finite masses.
+
+Question. NP's normalization produces a finite signed table z with all own
+singletons0 and A=Δ_abs(z)>0. Does that absorbing positive gap lead to an
+actual contradiction? The responding player still has EVERY finite clock
+and Never. The independent competitors are now ALL absorbing profiles;
+they are not required to have four finite clocks, though such realizations
+will be available by whole-carrier completion. AllNever is a full Nash
+profile with D0 but is NOT a competitor in the absorbing domain. Thus this
+is not the original full-carrier minimum problem.
+
+Write M_0>0 for a fixed bound on z. For any C>0, add C to EVERY finite
+coordinate in EVERY recipient row, obtaining z^C. Both old and new owns
+are nonnegative. At every actual profile,
+
+    d_i^C=d_i^z+Cν,
+    D_C=D_z+4Cν,
+    Δ_abs(z^C)=A.                              (ZA1)
+
+The same smallest-Never completion argument as NP proves
+δ_C=Δ_all(z^C)>0 for EVERY fixed finite C, with δ_C≤A.
+This is a true full-gap table, so the tracked all-owner quadratic margin
+applies to its CURRENT full minima. No contradiction with AllNever at z
+is claimed. Constants leave Γ_i,j=z_i({j}) unchanged.
+
+For each C→∞ choose an actual finite-law realizing profile p^C within
+o(1/C²) of one TRUE full-minimum pair of z^C, including its entire U/B.
+The approximate minimum bound gives
+
+    4Cν(p^C)≤A+o(1),
+    D_z(p^C)≤A+o(1).
+
+Apply smallest-Never absorbing completion to the SAME profile at table z,
+with its FIXED M_0, not the growing reward bound of z^C:
+
+    A≤D_z(p^C)+14M_0 ν(p^C)^(1/4).
+
+Therefore
+
+    ν(p^C)→0, D_z(p^C)→A,
+    δ_C→A, Cν(p^C)→0.                          (ZA2)
+
+The last conclusion uses4Cν=D_C−D_z; it is stronger than merely
+ν=O(1/C). Completing the smallest Never atom changes the ENTIRE z pair
+by o(1). Compactness hence gives an ACTUAL-CARRIER limit pair in K_abs(z)
+at debtA. A full-minimum pair at each z^C was selected first, and actual
+approximants were then chosen sufficiently close. This prevents applying
+the quadratic theorem directly to an arbitrary near-minimizer.
+
+The fixed-carrier concave scalarization can be performed BEFORE this limit
+on the ABSORBING debt carrier of z. Choose positive row scales regular for
+ALL absorbing minima, retaining A>0 and zero owns. A small own-preserving
+genericization beforehand also retains A>0. Every final absorbing minimum
+then has one common debt vector a*, Σa*=A. Row scaling exactly maps K_abs,
+just as in DR; no convexity of law mixtures is used. All z^C tables and the
+limiting selection use THIS fixed zero-own table, not its predecessor.
+
+For that fixed table, the full-minimum margin at z^C, with bound M_0+C,
+is
+
+    B_i^C−C≥δ_C+δ_C²/[8(M_0+C)],
+    U_i^C−C≥δ_C−d_i^C+δ_C²/[8(M_0+C)].
+
+The exact row identities are
+B_i^C−C=B_i^z and U_i^C−C=U_i^z−Cν.
+Taking the produced limit and usingZA2 gives
+
+    B_i≥A,
+    U_i≥A−a*_i≥0.                             (ZA3)
+
+This is a producer of ONE absorbing minimum with weak margins. It does
+NOT proveZA3 at EVERY absorbing minimum. In particular the payoff/cap
+selection may change with C, even though the limiting absorbing debt
+vector is common. The quadratic strict term tends to0 and cannot be
+retained in the limit.
+
+The genuine counterexample source also supplies the necessary matrix and
+closure facts, rather than assuming them. For any fixed C>0, z^C has
+positive full gap, hence actual no-UE. Its unchanged Γ has full normal
+core, a positive simplex λ with Γλ>0, and no nonzero homogeneous LCP
+solution, by the corresponding tracked no-UE producers. Normal-core ROW
+witnesses z_i({j})≤0, j≠i, and nonnegative owns permit the ordinary
+WHOLE-pair completion proof in
+`exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md`, Section15. Thus
+K_fin(z)=K_abs(z). The selected pair inZA3 admits realizing sequences
+with ALL four clocks finite a.s., and then finite-support approximants
+having literal Never mass0 at each index. This is closure realization,
+not an actual raw minimum or four-clock punishment attainment. Its marked
+Never masses are0; the finite endpoint c and literal Never have EQUAL
+response value for every owner, not two distinct payoff directions.
+
+### A native worst-ABS bound useful for a whole-table comparison
+
+Normalize a zero-own table to the unit cube. If A=Δ_abs(z)>0, the previous
+fixed finite-C argument makes z^C an actual no-UE table. The unchanged Γ
+therefore has a positive simplex witness and full normal-core ROW witnesses.
+Perturb its simplex witness slightly into the strictly positive simplex,
+preserving Γλ>0. In particular 0<λ_i<1 for every i. Actual stationary
+small hazards ελ_i are absorbing and have
+
+    U_i→Γλ_i,
+    B_i→C_i:=Γλ_i/(1−λ_i)>0.
+
+These limits use the exact stationary finite-vs-Never cap: the Quit branch
+tends to own0, while the passive conditional value tends toC_i. Every
+row has some nonown singleton≤0 and all singleton entries≤1. Since ALL
+λ_j>0,
+
+    0<C_i<1,
+    D→Σ_i(C_i−Γλ_i)=Σ_i λ_i C_i<1.
+
+Consequently EVERY unit-bounded positive-ABS-gap zero-own table has
+
+    A<1.                                      (ZA4)
+
+This is not a new constant export. Its possible role is a native whole-table
+target: on the compact56-coordinate own-zero cube, Δ_abs is8-Lipschitz and
+attains its maximum Ω_abs. If any NP counterexample exists then Ω_abs>0;
+applyingZA4 at the maximizing table gives Ω_abs<1. The class maximized over
+is fixed and includes all signed remaining coordinates. This is not a
+MAX-exploitability or full-SUM worst table.
+
+For example the following sign-adaptive own-preserving target moves every
+weak-unhappy coalition leave SUM strictly above this native maximum. For
+K of size1 or2, write J_i,K=z_i(K+i)−z_i(K), i∉K. If OLD J>0, target the
+participant/passive entries(+1,−1); if OLD J≤0, target(−1/2,0). For K of
+size3 use participant target+1 for OLD J>0 and−1 otherwise, and omitted
+triple target0. Own singletons remain0. These coordinates do not conflict:
+each recipient/participant coalition and its matching passive coalition
+belongs to exactly one such join. All targets stay in the unit cube.
+
+For a coalition H with ALL member withdrawals weakly nonnegative, define
+
+    W_H=Σ_(i∈H)[z_i(H−i)−z_i(H)], |H|≥2.
+
+Its target is1 for a pair,3/2 for a triple,4 for grand. All exceed Ω_abs.
+OLD positive joins stay positive under any positive convex step and OLD
+nonpositive joins become negative, so NEW weak-unhappy coalitions belong
+to precisely the appropriate OLD cohort. Finite contact separation then
+works as usual: at contacts W_H=Ω_abs the value moves aboveΩ_abs; all
+noncontacts retain a fixed distance for a sufficiently small step. The
+new true absorbing gap lies in[Ω_abs−16α,Ω_abs]. Subsequent sufficiently
+small generic/debt-regular choices preserve the actual separated values.
+No old minimum is transported. This target only addresses W_H identities;
+it does NOT exclude a deterministic minimum whose debt also includes
+outside joining or zero-debt member branches. It is not a completed source
+consumer, and no93-spectrum from the full source is inherited.
+
+### Exact obstruction to importing the full earliest-head proof
+
+At the produced absorbing minimum, all four marked clocks can be finite
+a.s. and the cap floor B_i≥A is strict above own0. Legal old-law signed
+head boxes remain in K_abs when their conditionals are absorbing. Their
+complete active-family transport is the same early-submeasure identity,
+with the same compact lower-gap protection. Common ABS debt pins each
+selected-regret polynomial on a small cap-stable box.
+
+But the literal NP proof does NOT close here. In its sole strict-head case
+the original owner's payoff is forced to own0. ZA3 yields only
+
+    U_h=0 ⇒a*_h=A, a*_j=0 for every j≠h,         (ZA5)
+
+not a contradiction. The strict full margin U_h>0 has vanished. The three
+zero-debt owners may carry later maximizing laws, while the entire positive
+absorbing debt sits on h. Their Never masses are0, so the NP quantitative
+joint-Never/fully-paid argument is unavailable at this native minimum.
+This is an exact lost implication, not a claim that an actual positive-gap
+example realizingZA5 has been built.
+
+Likewise a minimum root with one mixed supplierh has the same full suffix
+ledger, but only B_h≥A rather than B_h>A. The positive continue branch is
+absorbing and satisfies D_tail≥A. Equality permits B_h=A,D_tail=A. Common
+absorbing debt then forces its tail payoffU_h'=0, concentrating all debt
+onh, rather than producing a contradiction. Arbitrary tails not absorbing
+are NOT legal competitors, and the old NP full-carrier floor must not be
+reinserted at tablez. Also, ZA3 was produced at ONE penalty-limit pair and
+is not licensed after arbitrary minimum reselection.
+
+The next native attempt would have to consume that concentrated-debt
+boundary, prove a strict absorbing-minimum margin at the SAME selected
+table, or derive an exhaustive first-active source using the whole-table
+target. Merely assigning the full QM theorem to K_abs is invalid. Thus
+this route currently loses more strategic strength than NP and is kept
+internal; the paid nonsure FULL source remains the main target.
+
+Bounded source dependencies inspected: the original full-gap bridge;
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`;
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`;
+normal-core ROW/normality declarations recorded earlier; and the exact
+stationary cap definitions underlying the already used stationary-punishment
+bridge. All new finite-C, limit and native target arguments above are
+ordinary mathematics, not fresh Lean declarations. No full Fin4 conclusion
+or new export is claimed.

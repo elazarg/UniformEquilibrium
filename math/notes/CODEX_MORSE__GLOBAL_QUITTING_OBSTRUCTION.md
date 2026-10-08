@@ -44,6 +44,15 @@ table alone still permits zero-debt bridges and sure owners. The forward
 exact test below additionally supplies a distant literal mixed equilibrium
 after all pure coalitions are escapable; it is NOT a positive-gap source.
 
+Current native extension ZV1–ZV7 is a complete ORDINARY UNREVIEWED
+attempt at the all-own-zero absorbing gap. The joint-ν carrier proves
+the small-constant limit remains nonabsorptive. At a least-Never
+zero-debt point, exact cap-Nash prefixing forces genuine root uniqueness;
+finite root constructions consume one/two zero-payoff coordinates,
+and a whole second-copy graft consumes all-zero payoff whenever μ<1.
+Remaining native alternatives and a complete three-zero cap-vector
+regression are stated explicitly. No new export or UE claim is made.
+
 Current independent work: BA1–BA10 passed two independent soundness
 reviews but is NOTES ONLY: its companion absorbing minimum is not an
 original minimum, and relative gap proximity does not restore the
@@ -9963,14 +9972,206 @@ against the minimum's prescribed payoff is new leverage: the
 complete critical-face statement is already checked, and four
 positive debt coordinates exclude its sole-debtor branch directly.
 
+### ZV5. Least-Never zero-debt points have genuine cap-root uniqueness
+
+The augmented H is closed under EACH fixed product root prefix.
+For rates x_i∈[0,1] let c=∏(1−x_i), α_i=∏_(j≠i)(1−x_j),
+Q_i be the root pure-Quit payoff, and A_i the expected passive
+payoff on nonempty opponent-root coalitions. The literal prefix
+of ANY actual old law has the exact triple map
+
+    U_i′=x_i Q_i+(1−x_i)(A_i+α_i U_i),
+    B_i′=max(Q_i,A_i+α_i B_i),
+    ν′=cν.                                      (ZV3)
+
+Every later deadline and Never carries the same old suffix cap;
+there are no omitted unilateral response branches. Shift the old
+clock laws one integer date and put these fixed hazards at date0.
+The map is continuous, so actual triple approximants prove that
+it carries ENTIRE H into H, including boundary/sure rates.
+
+Take h∈Z with ν(h)=μ. Its prescribed and cap vectors coincide;
+write w=U=B. For ANY exact root Nash x against continuation w,
+the checked identity
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash`
+in `UniformEquilibrium/Quitting/Root/CapNashRootStack.lean`
+gives every prefixed debt0. Thus(ZV3) belongs to Z, and minimality
+of μ>0 forces c=1. Every coordinate x_i is therefore0.
+
+Exact finite root Nash existence is the tracked
+`exists_isZeroQuittingRootNash` in
+`UniformEquilibrium/Quitting/Root/NashExistence.lean`, under its
+imports. Hence the root game against THIS w has exactly ONE
+Nash root: AllContinue. In particular w_i≥0 for every i,
+since otherwise pure Quit at that all-Continue root pays own0
+and beats w_i<0. This is true at EVERY least-Never zero-debt
+point, although none need be an attained raw profile.
+
+This is a native zero-FULL-debt conclusion. The earlier positive
+minimum critical-face lemma does not supply it: here D=0 and
+the strict descent parameter is μ, not positive total debt.
+
+### ZV6. A complete finite-amplitude consumer excludes one or two zero payoffs
+
+Let Z_w={i:w_i=0} for such a least-Never point. Root uniqueness
+implies that either Z_w is empty or |Z_w|≥3. The cases1 and2
+are consumed by actual root prefixes, not supplied cap fields.
+
+If Z_w={i}, give only i a small positive quit rate a. Its
+own Quit and Continue pay0, so it is indifferent. Every other
+owner j has w_j>0 and root gap
+
+    a[r_j({i,j})−r_j({i})]−(1−a)w_j<0
+
+for one common sufficiently small a>0. All others stay quiet;
+this is a nonzero exact Nash root, contradicting ZV5. Its
+prefix has exact debt0 and ν′=(1−a)μ<μ.
+
+Suppose Z_w={i,j}. Set
+k_i=r_i({i,j})−r_i({j}) and
+k_j=r_j({i,j})−r_j({i}). If k_i≤0, use only j at a small
+positive rate: i's gap is a k_i≤0 and both outside owners
+have strictly negative gaps by w>0. The active j is indifferent.
+The same construction works if k_j≤0, with roles reversed.
+
+It remains that both k_i,k_j>0. Replace ONLY these two zero
+continuation entries by−ε, keeping the outside entries positive.
+For each ε>0 choose an exact finite root Nash x^ε. Let ε↓0
+and take a compact root subsequence; every limit is Nash against
+w, by continuity of the finite best-response inequalities.
+This subsequence CANNOT converge to AllContinue. Near that root
+the outside players' gaps remain uniformly negative, so both
+outside rates must be0. For either zero-payoff owner the exact
+gap against the remaining owner is then
+
+    ε(1−x_other)+k_owner x_other>0.
+
+Thus both rates must be1, incompatible with convergence to0.
+There is a nonzero limiting Nash root against w. Prefixing h
+by that root contradicts μ minimality exactly as in ZV5.
+No approximate root is substituted for an exact limiting root,
+and the outside players are screened by their strictly positive
+continuation values, not by a universal child-debt transport.
+
+This does not rule out THREE or FOUR zero entries, or an entirely
+positive w. Three-player cyclic root gains can have only the
+quiet Nash root at zero continuation; cardinality alone cannot
+replace the missing whole-law consumer.
+
+Complete sharpness regression. Let core C={0,1,2}, use successors
+modulo3, and for every nonempty S write T=S∩C. Every core
+recipient gets0 if T is empty or a singleton. On
+T={j,j+1}, participant j gets−1, participant j+1 gets+1,
+and the omitted core recipient gets0. On T=C each core
+participant gets−1. These core coordinates ignore dummy
+membership. Recipient3 gets0 whenever3∈S, and gets1 whenever
+3∉S. This specifies all sixty finite coordinates; owns are0.
+
+At continuation w=(0,0,0,1), dummy Quit pays0 and dummy
+Continue pays1, so it is strictly quiet. Each core gap is
+
+    g_i=x_favored−x_other−x_favored x_other.
+
+One active core owner gives a positive gap to a quiet successor.
+With two active owners, one has a strictly negative gap. With
+all three active, Σ_core g_i=−Σ_core pair x_i x_j<0, so some
+active owner's gap is negative. Therefore the ONLY exact full
+root Nash is AllContinue, with exactly THREE zero entries of w.
+
+This w is not an invented supplied continuation: use independent
+geometric q clocks for the three core owners and dummy Never.
+The actual absorbing profiles have
+
+    U_i=−q³/[1−(1−q)³], B_i=0 for i∈C,
+    U_3=B_3=1, ν=0.
+
+Core finite replies at t pay−q²(1−q)^(2t), while Never pays0;
+dummy joining pays0 and Never pays1. Hence the complete debts
+tend to0 and the augmented absorbing-carrier limit is exactly
+(w,w,0). Here A=μ=0. This is NOT a positive-A example, but
+it proves that uniqueness of the quiet root at a genuine
+zero-debt cap vector alone does not obstruct absorbing
+approximate equilibria or consume the native residual.
+
+### ZV7. A pure end-Never graft has a precise native barrier
+
+At a marked realization of such a zero-debt point, all n_i>0.
+Debt is the expectation of nonnegative response regret, so its
+positive own Never atom forces R_i=V_i(Never)=B_i=U_i.
+Append any actual independent tail (u,b) ONLY on the old Never
+branches, strictly after an original finite block plus an empty
+finite date. The same literal full-cap argument checked in
+BROUWER's SG1–SG5 gives
+
+    U_i′=U_i+νu_i,
+    B_i′=max(B_i,R_i+h_i b_i)=B_i+h_i b_i⁺,
+    d_i′=h_i[b_i⁺−n_i u_i],
+    ν′=νν_tail.                                  (ZV4)
+
+All terms are nonnegative because b_i≥u_i and 0<n_i≤1.
+The graft has debt0 iff, for EVERY owner,
+
+    n_i<1  ⇒  u_i=b_i=0;
+    n_i=1  ⇒  u_i=b_i≥0.                         (ZV5)
+
+For the first clause, u_i<0 makes −n_i u_i>0; u_i>0
+makes b_i⁺−n_i u_i≥(1−n_i)u_i>0; and u_i=0
+requires b_i=0. The second clause is the same direct equality
+test with n_i=1. This covers ALL finite and Never tail replies.
+Original finite witnesses and a diagonal retain ν′ as well as
+the semantic coordinates, so this is an operation on H, not an
+assumed attained profile or an arbitrary new compact clock.
+
+Hence an appended positive-delivery Γ tail is NOT a lossless
+ν-reduction whenever any original owner has finite prescribed
+mass. It creates positive debt at that owner. A successful
+native end graft would need a zero-debt tail with exactly the
+payoff restrictions(ZV5), already a substantial part of the
+absorbing-equilibrium problem. The stronger μ source does not
+turn arbitrary renewal into a free construction.
+
+There IS a complete nonlocal consumer when the positive-payoff
+owners are all pure Never. Graft a SECOND COPY of the same
+zero-debt point on the old Never branches. Use actual triple
+approximants for both blocks and a diagonal, retaining original
+marginal Never limits n_i as well as joint ν. The pair need
+not be attained. Its tail u=b=w≥0 gives
+
+    d_i′=h_i(1−n_i)w_i,
+    ν′=μ².                                     (ZV6)
+
+If μ<1 and every positive-w owner has n_i=1, all these debts
+are0 while ν′<μ: an actual-carrier contradiction. Thus at
+EVERY marked least-Never zero-debt realization with μ<1,
+SOME positive-payoff owner has positive finite prescribed mass.
+
+Combining the two complete consumers gives the following native
+counterexample alternatives, without raw-profile attainment:
+
+1. μ=1. Then every marginal Never mass is1 and independent
+   coupling to AllNever forces w=0. The least-Never zero-debt
+   stratum is entirely the semantic AllNever point.
+2. 0<μ<1. Every least-Never cap vector is either entirely
+   positive, or has EXACTLY THREE zero entries. In the latter
+   case the single positive-payoff owner MUST have positive
+   finite mass in every marked realization. A fully zero
+   vector is excluded by the second-copy graft(ZV6).
+
+These are actual consequences of the positive-A hypothesis and
+the least-ν producer. The graft is a whole finite-amplitude
+law construction and its NEW complete caps are retained. No
+positive-gap cap stability or vanishing-error inequality is
+borrowed from the changing-t family to justify it.
+
 Concrete next question. At a least-Never zero-debt point of H,
-can a finite-amplitude chronological construction reduce ν while
-keeping complete debt0, or produce absorbing laws of debt→0?
-Such a construction would contradict μ>0 and close the native
-residual. Affine row shifts of fixed total do not help: their
-ENTIRE all-profile SUM objective is unchanged by signed translation.
-The required step must alter whole independent laws or use a
-non-affine reward-table comparison, not just send t to0.
+can a finite-amplitude construction MODIFY THE OLD FINITE MASS
+and reduce ν while keeping complete debt0, or produce absorbing
+laws of debt→0? Such a construction would contradict μ>0 and
+close the native residual. Fixed-total affine row shifts have
+unchanged ENTIRE SUM objective, small-t passage stays at positive
+Never mass, and a pure appended tail is restricted by(ZV5).
+The surviving native alternatives are the precise two cases
+above; neither remaining case is consumed.
 
 ## Forward global source: strict absorbing-gap separation forces a fully paid finite bridge
 

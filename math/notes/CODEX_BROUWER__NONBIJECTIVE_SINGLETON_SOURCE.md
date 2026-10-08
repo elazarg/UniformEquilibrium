@@ -26,8 +26,9 @@ remain in scope. Different cap kernels alone are not a paid charge.
 The accepted [four-finite source theorem](../exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md)
 adds a new four-finite realizing sequence for EVERY original minimum in
 the common-zero-debt arm. PF below rules out reviving exact finite-menu
-Nash selection from that fact. The separately reviewed NP fresh-table
-candidate takes another branch: strict full/absorbing separation forces
+Nash selection from that fact. The canonical stronger fresh-table source
+[FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md](../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md)
+takes another branch: strict full/absorbing separation forces
 all debts and all Never masses positive, with paid finite bridges. It
 is not a property borrowed at the old table. SG1–SG5 below is a COMPLETE
 actual end-graft proof, with MORSE's independent focused mathematical
@@ -41,6 +42,13 @@ universal minimum-prefix strengthening without adding source hypotheses.
 EG reuses an old exact table to exclude ALL end-Never-only repairs
 without the true global floor; the live consumer must change existing
 finite stopping mass or use that full-law floor in a genuinely new way.
+
+NR1–NR8 below is a COMPLETE ORDINARY, UNREVIEWED augmented
+scalarization. At ONE further fresh table, every minimum has the SAME
+joint Never mass as well as the same debt vector. Every nonzero minimum
+prefix then has a STRICTLY nonminimal old tail, and changing one root
+rate over that tail strictly raises full debt at EVERY finite amplitude.
+This is a global necessary restriction, not a repair or UE consumer.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -8267,6 +8275,291 @@ The next mechanism must use that full-law/global input and retain
 the paid finite bridge; I will not strengthen this solved table
 or optimize its constants. This is supporting failure evidence,
 not an export or a new equilibrium-class claim.
+
+## Augmented rigidity and globally strict finite-root fibers
+
+### NR1. Self-contained question and exact status
+
+COMPLETE ORDINARY PROOF, UNREVIEWED. Fix a bounded Fin4 table r,
+every own singleton s_i>0, and its ORIGINAL full-response infimum
+δ=inf_p D_r(p)>0. Suppose δ_abs>δ, where absorbing profiles retain
+ALL behavioral response caps. Let ν(p)=∏[i]p_i(Never).
+
+Can a FRESH nearby row-affine table be selected with common joint Never
+mass at ALL original minima, compatibly with the complete NP source?
+Yes. At ONE final table r* there are a_i*>0 and ν*>0 such that EVERY
+actual sequence with D_{r*}(p^k)→δ* satisfies
+
+    d_i^{r*}(p^k)→a_i*,       ν(p^k)→ν*.
+
+The selection precedes ALL sequences and marked sources. No individual
+Never mass, payoff, cap, law or calendar is claimed unique. There is no
+actual minimum-attainment assumption. At the SAME table this implies
+globally strict one-coordinate finite-root fibers and strictly nonminimal
+conditional tails. It does not produce a debt descent or UE.
+
+### NR2. Exact signed directions on a fixed augmented carrier
+
+Define the nonempty compact set
+
+    A=closure{(d_0(p),d_1(p),d_2(p),d_3(p),ν(p)):actual p}⊆ℝ⁵.
+
+Debts lie in[0,2M] and ν in[0,1]. The additional coordinate is ACTUAL
+joint Never probability; it cannot be inferred from one old (U,B) pair
+and must be retained BEFORE closure. For θ_i>0 and τ close to0 define
+
+    r_i^{θ,τ}(S)=θ_i r_i(S)+τ/4  for nonempty S; Never pays0.
+
+Choose the neighborhood so all new own rewards stay positive. Positive
+row scaling scales payoff and EVERY response cap. Whole-row addition C
+has B_i^{new}=B_i+C and U_i^{new}=U_i+C(1−ν), provided BOTH old and
+new own singletons are nonnegative. Every finite pure response absorbs
+surely, hence gains C. Its supremum is the FULL cap: delayed finite
+values tend to Never payoff+h_i s_i≥Never payoff, before AND after
+translation. This proves the signed identity for all finite/Never replies.
+Therefore, EXACTLY at every actual profile,
+
+    d_i^{θ,τ}(p)=θ_i d_i(p)+(τ/4)ν(p),
+    D_{θ,τ}(p)=∑[i]θ_i d_i(p)+τν(p).                (NR2)
+
+The FINAL UNWEIGHTED infimum is the fixed-carrier concave value
+
+    W(θ,τ)=min[(a,v)∈A](∑[i]θ_i a_i+τv).
+
+There is no convexification of independent laws or selected-law envelope
+derivative. The old coefficients remain fixed while the table changes.
+
+### NR3. Select ONE regular coefficient vector before ALL minima
+
+Compact bounded A makes W finite, concave and Lipschitz on ℝ⁵. In every
+nonempty open box there is a point with all five two-sided coordinate
+partials. On every one-coordinate slice the one-sided slopes of a finite
+concave function are monotone, with at most countably many disagreements;
+Fubini gives a null exceptional set for each coordinate and their union.
+
+Choose (θ*,τ*) there, arbitrarily near(1,0). For EVERY minimizing (a,v),
+
+    W(θ*+t e_i,τ*)≤W(θ*,τ*)+t a_i,
+    W(θ*,τ*+t)≤W(θ*,τ*)+t v.
+
+Dividing separately by positive and negative t forces ALL minimizing
+coefficients to be the SAME a_i=∂_{θ_i}W and v=∂_τW. Set
+
+    a_i*=θ_i* a_i+(τ*/4)v,       ν*=v.
+
+For ANY actual final-table minimizing sequence, its old five coefficients
+are bounded. Every subsequential cluster belongs to A and minimizes W
+by(NR2), hence equals this same (a,v). Thus the ENTIRE coefficient
+sequence converges. Applying(NR2) gives exactly NR1, not a favorable
+subsequence or uniqueness of underlying pairs.
+
+This is a genuine fifth-coordinate extension of ordinary DR. The current
+WORKTREE declaration `Math.CompactLinearMinimum.exists_mem_open_all_minimizers_eq`
+in `MathUE/Analysis/CompactLinearMinimumRigidity.lean` has one fixed compact
+coefficient set and a regular weight in every open region; its Rademacher
+proof was statically inspected, not checked here. That file is untracked
+external-formalizer work, NOT a tracked/integrated input. The ordinary
+coordinate/Fubini argument above is the mathematical proof used here.
+The ACTUAL extra ν coefficient and semantic signed table transport are
+also ordinary mathematics, not claimed implemented.
+
+### NR4. Compatibility and uniform all-law rigidity
+
+The table change is arbitrarily small. Full and absorbing infima are
+8-Lipschitz in reward sup distance, since all payoffs and ALL complete
+caps are1-Lipschitz at fixed laws. Thus δ*>0, δ_abs*>δ* and s_i*>0
+remain. Within-row distinctness is preserved EXACTLY by positive scaling
+and a common row addition.
+
+From ANY actual counterexample, use NP's ordinary interior row-generic
+positive-own separated table BEFORE its four-weight regular step, and
+replace that step by NR2–NR3. Its marked no-head/root-box proof needs
+only the common final debt vector, now a*, and remains applicable to
+EVERY original minimum at this SAME final table. No old source or old
+table's normality is transported. Reapply actual no-UE inputs to r*.
+
+The actual absorbing completion bound
+δ_abs*≤D_{r*}(p)+14M*ν(p)^(1/4) forces ν*>0. The exact joint-Never
+singleton bound νs_i*≤d_i gives a_i*≥s_i*ν*>0. For every ε>0 there
+is ζ(ε)>0 such that, for EVERY actual profile,
+
+    |ν(p)−ν*|≥ε ⇒ D_{r*}(p)≥δ*+ζ(ε).               (NR4)
+
+Otherwise a sequence would contradict NR3. Equivalently, the compact
+coefficient set outside that ν-neighborhood has a strict objective gap.
+No constants optimization or actual minimum attainment is used.
+
+### NR5. All nonzero minimum prefixes have strictly nonminimal tails
+
+Fix ANY w in the ORIGINAL final-table carrier K and realize it by actual
+finite tails p^k. Prefix EXACT rates x at date0 over those SAME tails.
+ALL finite/Never caps converge to T_x(w), and the literal joint Never is
+
+    ν(prefix_x p^k)=c(x)ν(p^k),       c(x)=∏[i](1−x_i).
+
+If q≠0 and D(T_q(w))=δ*, positive ν* excludes any sure rate, so
+0<c(q)<1. Applying NR3 to these genuine minimum sequences forces
+
+    ν(p^k)→ν*/c(q)>ν*.                              (NR5)
+
+This holds for EVERY realizing sequence of w, not a chosen attained tail.
+If D(w)=δ*, NR3 would instead force ν(p^k)→ν*, a contradiction.
+Therefore D(w)>δ*. In the exact prefix identity
+
+    δ*=c(q)D(w)+∑[i](max(g_i(q),0)−q_i g_i(q)),
+
+the nonnegative root term is STRICTLY below(1−c(q))δ*. The tail is
+strictly HIGHER in ordinary total debt, not a decreasing rank or Nash.
+
+If x and q are TWO minimum roots over the same w, the same realizing
+tails give c(x)ν*/c(q)=ν*, hence c(x)=c(q). This also excludes x=0
+when q≠0. The result applies anew after every same-table reconstruction.
+
+### NR6. Every one-coordinate finite-root change is globally strict
+
+Fix the same nonzero minimum prefix and an owner j. Change ONLY x_j to
+ANY t∈[0,1] different from q_j. Its full pair lies in original K and
+has debt≥δ*. Equality would force c(x)=c(q) by NR5. Every other factor
+1−q_i is positive, so this would force t=q_j. Thus
+
+    D(T_x(w))>δ* for EVERY t≠q_j.                   (NR6)
+
+This is a finite-amplitude ALL-response exclusion, not merely failure of
+small descent. Any different minimum root over this fixed tail must
+change at least TWO rates and preserve the EXACT all-Continue product.
+
+The univariate objective is convex piecewise affine: for i≠j its Q_i,
+C_i and U_i are affine in x_j; B_i=max(Q_i,C_i). The cap of j is
+independent of its own rate and its payoff is affine. Unique minimization
+therefore gives a strictly negative left slope and strictly positive
+right slope at every mixed q_j>0; at q_j=0 the right slope is strictly
+positive. A zero slope would yield a nonempty constant adjacent interval
+because there are only finitely many affine root branches.
+
+In particular EVERY positive supplier j has SOME OTHER owner i with
+
+    Q_i(q)=C_i(q),       ∂_{x_j}(Q_i−C_i)(q)≠0.
+
+Without such a nonzero slope switch the objective would be locally affine
+and could not have a strict interior minimum. This assigns a coupled-cap
+wall to EACH supplier, but supplies no paid temporal edge or return.
+
+### NR7. Exact boundary tests and failed stronger implications
+
+For the complete table r_i(S)=−1 at all nonempty S, AllNever is exact
+full Nash with ν=1. The infimum is identically0 on an open neighborhood
+with all own rewards negative. Whole-row cap translation fails there:
+Never stays cap0. Differentiability without the OLD AND NEW own-sign
+hypotheses cannot imply joint Never rigidity by the NR2 coefficient law.
+
+At the earlier EG table (owns1, passive100, pair participants108,
+triple participants92, grand100), half-root/half-Never has D=1/4 and
+ν=1/16, while an exact pure-pair full Nash has D=0 and ν=0. Its member
+Quit-vs-Continue margin and outsider root-join disadvantage are both8,
+so that pair stays exact Nash on a small open reward ball. The true
+infimum there is0. NR3 constrains TRUE minimizing sequences, not the
+positive-debt half-root profile. This reuses the old solved regression;
+it is not a new positive-gap example or a stronger optimization trap.
+
+Common ν is not unique laws, payoffs or kernels. Set r_i(S)=1 for
+EVERY recipient and nonempty S except S={2,3}, where EVERY recipient
+gets2. This specifies all60 coordinates and all own singletons are1.
+Pure date-zero grand Quit is full Nash with U=B=(1,1,1,1): leaving
+pays1 at the other-three coalition. Pure date-zero pair{2,3}, outsiders
+Never, is also full Nash with U=B=(2,2,2,2): a member leaving pays1,
+and an outsider joining pays1 rather than its passive2. Later/Never
+outsider responses pay2, and later member responses pay1. Both have
+ν=0, but their outcomes, payoff pairs and complete laws differ.
+
+### NR8. Exact increment, narrow dependencies and remaining consumer
+
+The new output is one common ACTUAL joint-Never limit across EVERY
+original full-minimum realizing sequence at ONE compatible fresh table.
+It is not a supplied state field or a property borrowed at an old table.
+Common debt alone did not imply strict old-tail debt or strict root fibers.
+No export or UE claim is made.
+
+The bounded source lookup inspected the fixed compact-set declaration
+named in NR3, the canonical NP signed translations/full-cap bounds and
+source proof, and
+`quittingContinuationBestResponseValue_source_sub_stoppingLawMixture_le`
+in `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticStoppingLawMinimumTangent.lean`,
+plus `quittingSimultaneousStoppingLawMixture_minimumFloor_slopeOrFlat_withUnilateralPassport`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSimultaneousResetMinimumDichotomy.lean`.
+Those give unilateral affine debt and minimum-forced transfer, NOT the
+extra ν rigidity or joint descent. The nearby
+`CommonWitnessPassportRegression.envelope_is_modular_on_vertices` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCommonWitnessPassportRegression.lean`
+also rules out assuming a shared active selector from modular cap values.
+
+This does not consume the source. A nontrivial end-Never graft decreases
+ν, so cannot even REMAIN exactly minimal here: SG's global budget is
+strict when the appended tail has positive absorption probability, by
+NR4 and its literal joint-Never product. A successful equal-debt return
+would need compensating changes of EXISTING finite mass. Preserving ν
+is necessary for such a return, not sufficient. The next question is a
+coupled old-law comparison on this fixed-ν minimum level, not further
+tail-only release or counting the incoming walls of NR6. NR9 below
+tests and rejects a proposed lossless mixing step on that level.
+
+### NR9. Exact full-law fixed-Never optimization still has a collision barrier
+
+This is a COMPLETE EXACT TEST, not a positive unrestricted gap or a
+new source theorem. Reuse the participant-indicator table
+
+    r_i(S)=1 if i∈S, and0 otherwise.
+
+It specifies all60 rewards. EVERY actual profile has full B_i=1,
+because date-zero Quit surely makes i a participant, and all rewards
+are≤1. Let n_i=p_i(Never) and fix ANY joint mass v∈(0,1). For ALL
+independent actual laws with ∏[i]n_i=v,
+
+    U_i=P(i belongs to the first finite coalition)≤1−n_i,
+    D≥∑[i]n_i≥4v^(1/4).                            (NR9)
+
+The last inequality is AM–GM. Put n=v^(1/4). Equality is attained
+by the actual laws p_i=nδ_Never+(1−n)δ_T for ANY common finite date T.
+Thus this is the TRUE infimum over the ENTIRE fixed-joint-Never law
+class, with all unrestricted deviations, not a bounded-menu optimum.
+
+Its equality cases are exact. AM–GM forces every n_i=n. The other
+inequality forces every owner who draws a finite clock to belong to
+the first coalition surely. For every pair i,j, on their independent
+joint-finite event both conditional finite times must therefore agree
+almost surely. Independent probability laws whose product is supported
+on the diagonal are Dirac masses at the same date. Since1−n>0, all four
+conditional finite laws are the SAME δ_T. These are all actual minimizers.
+
+Take T=0 and T=1. Mix EACH owner's existing finite date independently
+half-and-half between the two dates, keeping its Never mass n EXACT.
+The joint Never mass remains v. Let p=(1−n)/2 and s=(1+n)/2.
+An owner is a participant if it draws date0 (probability p), or draws
+date1 and all other owners avoid date0 (probability p s³). Hence
+
+    U_i=p(1+s³),
+    D−4n=2(1−n)(1−s³)>0.
+
+ALL response caps remain1; this loss is entirely the destroyed finite
+coalition membership. At n=1/2 the old fixed-class minimum is D=2,
+the mixed debt is165/64, and the increase is37/64. These are exact
+full-law values, not a derivative or a cap-selection artifact.
+
+Indeed no nonconstant continuous PRODUCT-law path in total variation
+connects these two endpoints while remaining in the minimizing level:
+every minimizer's conditional finite law is a COMMON Dirac δ_T, and
+different Dirac dates have positive fixed total-variation separation.
+A shared coin choosing one common T would preserve the mixture of
+cohorts, but is not the independent private mixture used above.
+
+This does NOT refute NR: the unrestricted table has δ=0, attained at
+all date-zero Quit, and its positive-v constrained minima are not full
+minima. It also lacks NP's generic paid bridge. The precise failed
+implication is that common joint Never restores convexity or supplies
+a lossless simultaneous finite-mass chord. NR's concrete role is to
+force compensating product survival in an EQUAL-debt reconstruction;
+it does not supply the reconstruction. The next mechanism must change
+coalition probabilities using the actual table/global-floor information,
+not interpolate calendar aliases or share a forbidden cohort coin.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
