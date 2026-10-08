@@ -25,7 +25,12 @@ claimed. The next full-goal question is whether arbitrary raw data force
 a compatible finite-charge closed itinerary, or whether a genuine
 all-behavior negative certificate can obstruct every such itinerary.
 
-Latest supporting result: GS1–6 gives a complete ORDINARY UNREVIEWED
+Latest supporting results: EC1–7 supplies a whole-box dual falsifier.
+Every finite exact-Nash path has charge at most1+log5, while explicit
+corner connectors close positive finite robust cycles at EVERY positive
+absorption-relative tolerance. No continuous exact charged potential
+exists. The table already has the tracked cyclic-tail UE producer;
+this is not new UE coverage or a no-UE source. GS1–6 gives an ORDINARY UNREVIEWED
 actual-root-graph falsifier on the solved scalar-circuit table. A cone of
 feasible ports strictly below ALL own values has unique full Nash roots
 with all four suppliers uniformly represented, yet its forced forward
@@ -9963,6 +9968,390 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Global dual sequel: finite exact capacity is not a sufficient negative certificate
+
+Status: COMPLETE ORDINARY UNREVIEWED mechanism falsifier. This is not a
+new UE class or a no-UE table. The example is covered by the existing
+cyclic-singleton-tail producer. Its purpose is stronger than a bad
+forward selector: EVERY literal finite exact-Nash path in the WHOLE
+fixed payoff box has uniformly bounded charge, yet EVERY positive
+absorption-relative tolerance admits a closed finite robust path with
+positive charge. It has no continuous exact-root charged potential.
+Thus exact capacity cannot replace robust capacity in the sufficient
+negative certificate, even with normality and no sure root at ANY
+annotation. The proof supplies the actual corner connectors, not an
+assumed index or horizontal jump.
+
+### EC1. Complete rational table and unrestricted endpoint
+
+Let I={0,1,2,3}, arithmetic modulo4, own singletons1 and Never0.
+The following is the entire60-coordinate reward table:
+
+| S | r(S) |
+| --- | --- |
+| 0 | (1,0,3,3) |
+| 1 | (3,1,0,3) |
+| 2 | (3,3,1,0) |
+| 3 | (0,3,3,1) |
+| 01 | (2,2,3,3) |
+| 02 | (2,3,2,3) |
+| 03 | (2,3,3,2) |
+| 12 | (3,2,2,3) |
+| 13 | (3,2,3,2) |
+| 23 | (3,3,2,2) |
+| 012 | (2,2,2,3) |
+| 013 | (2,2,3,2) |
+| 023 | (2,3,2,2) |
+| 123 | (3,2,2,2) |
+| I | (2,2,2,2) |
+
+Equivalently, a singleton host j gives1 to itself,0 to f(j)=j+1
+and3 to the other two players. A nonsingleton gives2 to members
+and3 to nonmembers. The bound M=3 is literal.
+
+Each true unrestricted punishment equals1. Immediate Quit guarantees
+at least1 against EVERY independent opponent stopping law. Opponents
+all Never make the best complete response worth exactly1. Thus
+P=s=(1)^4, all owners are normal, and the positive-own hypothesis holds.
+
+A finite product root q and annotation v have the usual exact values
+
+    F(v,q)=c(q)v+Σ_{S≠∅}μ_q(S)r(S),
+    g_i=Q_i−C_i,   C_i=R_i+h_i v_i,
+    c=Π_i(1−q_i),  h_i=Π_{j≠i}(1−q_j),  a=1−c.
+
+Ordinary full binary Nash means: active nonsure owners have g_i=0,
+quiet owners have g_i≤0, and sure owners have g_i≥0.
+The coordinate regret is max((1−q_i)g_i,−q_i g_i).
+All such inequalities here retain every coalition term. Annotation
+ports need no independent-law realization.
+
+There is no sure Nash root at ANY real annotation. Any pair of
+sure owners has a member i for whom the other sure host is not its
+incoming predecessor f⁻¹(i). Its joining gap is−1 whether that host
+is alone or any additional opponent joins. Hence i must withdraw.
+If there is only one sure host j, its two nonfavorite observers
+have gap−1 uniformly over all other rates, and must be quiet.
+Its favorite f(j) then has gap2 and must be sure, again impossible.
+This also covers every three/four-sure boundary.
+
+### EC2. All Nash heads and the full upper-orthant root census
+
+Every participant reward equals2 except its own singleton1.
+Consequently, for EVERY product root,
+
+    Q_i(q)=2−h_i(q)≥1.
+
+At an exact full Nash root, F_i≥Q_i for every i: a mixing owner has
+F_i=Q_i, a quiet owner has F_i=C_i≥Q_i, and a sure owner has
+F_i=Q_i. Therefore EVERY nonzero exact Nash edge, from ANY boxed
+annotation, has its head in the upper orthant v≥s. With at least
+two suppliers all h_i<1, so its head is strictly above s in ALL
+coordinates. With one supplier i its head has coordinate i exactly1,
+and EVERY other coordinate is at least1+q_i>1.
+
+Now suppose the INPUT v≥s. No proper support A with |A|≥2 can be
+Nash. Choose a receiver i∈A with f⁻¹(i)∉A. Every nonempty
+opponent event inside A then gives joining gap−1. Its empty gap
+is1−v_i≤0. Some opponent has positive rate, so g_i<0.
+
+Full support is impossible too. Sure faces were excluded above,
+so all four owners would mix. The exact identity
+
+    Σ_i(1−q_i)g_i
+      =cΣ_i(1−v_i)+Σ_{∅≠S⊊I}μ_q(S)C_S,
+    C_S=Σ_{i∉S}[r_i(S+i)−r_i(S)]
+
+has C_singleton=0, C_pair=−2 and C_triple=−1. Full mixing makes
+the pair/triple terms strictly negative, while all four gaps are0.
+Contradiction.
+
+Thus on v≥s the ONLY possible nonzero exact Nash roots are
+singletons. A singleton host i must have v_i=1, and its favorite
+j=f(i) must satisfy
+
+    v_j≥1+2q_i/(1−q_i).
+
+This is the complete quiet-player condition for the favorite;
+the two nonfavorites have gap
+(1−q_i)(1−v_k)−q_i≤0 automatically. AllContinue is also Nash
+on this orthant.
+
+### EC3. A uniform bound for EVERY finite exact path in the whole box
+
+Take the fixed certificate box [−5,5]^4=M+2. A finite exact path
+has literal targets F(v,q) and may choose ANY exact full root on
+every fibre. Its starting port may be ANY vector in the box.
+Ignore initial zero roots, which leave the port unchanged.
+
+If the first nonzero root has two or more suppliers, its head
+is strictly above all owns, so EC2 makes all later roots zero.
+Its total charge is at most1.
+
+Otherwise the first supplier is a single i. The head has own
+coordinate i equal1, all other coordinates strictly above1.
+Every later nonzero root must therefore use the SAME host i.
+This is a whole-correspondence assertion, not a selected route.
+On every such later edge the favorite coordinate obeys
+
+    v'_f(i)=(1−q_i)v_f(i).
+
+Every input and head in this suffix stays at least1, while its
+initial favorite coordinate is at most5. Hence for the entire
+suffix the product of 1−q_i is at least1/5. Using
+q≤−log(1−q) gives
+
+    Σ_suffix a=Σ_suffix q_i≤log5.
+
+The first edge contributes at most1. Therefore ALL finite exact
+paths in the entire box satisfy
+
+    Σ_edges a≤1+log5.
+
+More generally the same argument gives1+log B for any box
+[−B,B]^4 with B≥3. No calendar restriction, stationary assumption,
+supplier selection, punishment-floor annotation or path-length
+bound was used.
+
+This is finite EXACT capacity, not robust capacity and not an
+unrestricted terminal debt gap. Normality and absence of every
+sure annotation do not upgrade it to either of those conclusions.
+
+### EC4. The corner jump which defeats a continuous separator
+
+Put
+
+    A=1+√3,   B=4−√3=3−2/A,
+    v=(1,A,B,1),    σ=1/A.
+
+Let R rotate coordinates one step forward, so
+Rv=(1,1,A,B). All these ports lie in [1,3]^4.
+
+At a port on the solo0 curve, write its favorite coordinate t>1.
+The full vector is
+
+    z(t)=(1,t,3+(B−3)t/A,3−2t/A).
+
+Start at t=A. Choose the single-owner rate
+
+    q(t)=(t−1)/(2(t+1)).
+
+The active owner's gap is0. Its favorite's gap is exactly
+−(t−1)/2<0. The two nonfavorites have values at least1 and gaps
+(1−q)(1−z_k)−q<0. Thus EVERY row is full exact Nash.
+
+The next favorite value t'=(1−q)t satisfies
+
+    t'−1=(t−1)(t+2)/(2(t+1)),
+    0<t'−1≤(3/4)(t−1).
+
+Hence t decreases to1, all hazards are positive with finite sum,
+and their product survival is t/A→σ. The port converges to Rv
+because the identities
+
+    3+(B−3)/A=A,    3−2/A=B
+
+hold exactly. Rotating this construction gives four genuine Nash
+Zeno ladders with ports
+
+    v → Rv → R²v → R³v → v.
+
+Each ladder has strictly positive total charge. These are limits
+of ordinary legal finite root words, NOT an execution of ω+ω
+phases or a root inserted after an infinite time.
+
+No CONTINUOUS function can have unit absorption drift on all
+exact roots in the box. Such a function ψ would satisfy along
+each finite part of a ladder
+
+    ψ(start)−ψ(last)≥Σ q_n.
+
+Continuity lets the last port tend to its next corner. Sum the
+four resulting inequalities; the left side is0 and the right
+side strictly positive. Contradiction. In particular no smooth
+or polynomial exact-root potential exists despite EC3.
+
+The discontinuity of literal finite-path capacity is explicit.
+At z(t) with 1<t<A, only host0 can be active, so its remaining
+exact capacity is at most log t→0. At the endpoint Rv the new
+owner1 has an exact root with positive rate, for example
+(A−1)/(2(A+1)). Thus the finite-path capacity jumps upward at
+that corner. There is no valid exact-capacity smoothing step.
+
+### EC5. A literal closed ROBUST cycle at EVERY positive tolerance
+
+The corner seam can be crossed with absorption-relative, not merely
+absolute, errors. Fix τ>0. Choose ε>0 with
+
+    ε≤1/64,    √ε≤min(τ,1/8),    ε≤τ,
+
+and set r=√ε. At each corner R^i v, take the exact single-owner
+root of rate r using owner i. Its favorite value becomes A(1−r)>2.
+It is full exact Nash: r≤1/8 is below the favorite admissible rate.
+
+From that post-root port execute finitely many of the exact ladder
+rows in EC4, until the endpoint differs from R^(i+1)v by at most ε
+in sup norm. This is possible because its favorite excess e>0
+decreases geometrically. In fact the endpoint is z(1+e), rotated,
+and its sup-norm error from the corner is exactly e≤ε; all other
+coordinates remain at least1 and its upcoming favorite stays above2.
+
+At this actual endpoint take the NEXT owner's single rate r,
+and choose the edge target to be the post-root port obtained
+by applying that SAME rate r at the exact next corner. This
+target is the start of the next finite ladder.
+
+The connector has active gap−e, so its active regret is r e≤r ε.
+Its old host has gap−r. Its upcoming favorite, with value w>2,
+has gap
+
+    (1−r)(1−w)+2r<0
+
+for r≤1/8. Its remaining observer has value at least1 and
+nonfavorite gap≤−r. Thus ALL quiet-player regrets are0, and
+the ENTIRE full-root regret is at most r ε≤τ r.
+
+The source and corner differ by at most ε, and with fixed
+singleton root the head dependence on the source is multiplication
+by1−r. Therefore the Bellman residual to the chosen target is
+at most ε≤τ r. The connector's physical absorption is EXACTLY r.
+Both endpoints stay in [1,3]^4. It is a literal permitted robust
+edge in the same fixed box; no uncharged horizontal edge is inserted.
+
+Four such finite ladder portions and four connectors close EXACTLY
+at the first post-root reference port. All interior rows have
+zero residual and regret. Every connector obeys BOTH actual
+robust inequalities
+
+    |target_i−F_i(source,q)|≤τ a(q),
+    coordinateRegret_i≤τ a(q).
+
+Each ladder starts with favorite at least2, so its first half-rate
+is at least1/6; take at least one ladder row. The whole word has
+positive charge at least2/3, independently of the tolerance.
+Repeating this finite closed relation word produces arbitrarily
+large total charge at EVERY positive τ.
+
+This is the whole robust-edge condition used by the polynomial
+certificate, including every quiet player. It is not only an
+inequality on exact roots. No claimed positive-gap table survives:
+the sufficient negative certificate is refuted on this test.
+
+### EC6. Actual behavioral clocks, all caps and a fixed payoff
+
+The finite robust cycle also has an explicit original-game consumer.
+Reverse its ENTIRE finite root word and repeat it periodically.
+At every date only one player is active; rates and dates are
+deterministic public-clock data, with independent private Bernoulli
+decisions. There are no additional Continue actions or public lottery.
+
+Let S be the sum of root absorptions in one word, C its joint
+survival, and κ_i its player-deleted survival. Every player's
+ladder has a root with hazard at least1/6. Consequently
+
+    C≤(5/6)^4<1,     κ_i≤(5/6)^3<1.
+
+Each ladder's total charge is at most log A; the four connectors
+add4r≤1/2. Thus S≤4log A+1/2 uniformly as ε→0. These bounds do
+not depend on the growing number of rows.
+
+Track the closed reference ports in reverse chronological order.
+At an edge the prescribed affine error is at most τ a. Its
+weights telescope because a=1−c, so the one-period payoff error
+is at most τ(1−C). The true periodic fixed payoff U therefore
+lies within τ of its reference entry port.
+
+For a player's full cap the exact one-root map is
+
+    b ↦ max(Q_i,R_i+h_i b).
+
+Since both Q_i−F_i=(1−q_i)g_i and
+C_i−F_i=−q_i g_i are at most the ordinary coordinate regret,
+a robust row with reference head y and tail v satisfies
+
+    max(Q_i,R_i+h_i v_i)≤y_i+2τ a.
+
+Over a full word this yields cap error at most2τ S plus κ_i
+times the old cap error. Thus
+
+    B_i≤reference_i+2τ S/(1−κ_i),
+    B_i−U_i≤τ+2τ S/(1−κ_i) →0 as τ→0.
+
+This really bounds EVERY finite deadline and Never. After m
+whole periods, the player-deleted residual is at most a uniform
+bounded constant times κ_i^m→0. Finite backward cap recursions
+therefore bound the supremum over arbitrarily late tests, and
+the same deleted-opponent absorption controls the Never response.
+An arbitrary complete behavioral response is a mixture of its
+pure stopping deadlines and Never on the unique live history.
+No bounded-controller deviation class is substituted.
+
+The reference entry port is F(v,r), after the first small solo0
+root, and tends to the ONE fixed vector v=(1,A,B,1). The actual
+periodic payoff is within τ of that port, so U→v as τ→0.
+The family gives terminal approximate Nash at every accuracy
+and then the existing fixed-target uniform-payoff consumer.
+This establishes no new coverage: the table already has the
+cyclic-singleton-tail certificate described next.
+
+### EC7. Exact tracked overlap and the changed negative search
+
+After reversing player order, the singleton comparison offsets
+are (0,−1,2,2). The data
+
+    survival=1/A,     tail=(0,0,A,2)
+
+satisfy EVERY literal cyclic-tail recurrence
+
+    tail(k)=Γ(k)+survival·tail(k+1).
+
+For k=0 and3 this is immediate; for k=1 it is−1+A/A=0;
+for k=2 it is A=2+2/A, equivalent to A²−2A−2=0.
+Tail values are nonnegative, tail0=0 and survival∈(0,1).
+Thus `CyclicSingletonTailData.certificate` and
+`CyclicSingletonTailData.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonTailProducer.lean`
+already cover this actual table after player relabeling.
+The unrestricted compiler is
+`BalancedSingletonCycleCertificate.isUniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`.
+There is no new-class claim or whole known-producer census.
+
+Also reread under imports:
+
+- `IsQuittingFloorFreeRobustEdge` and
+  `quittingFloorFreeRobustChargedRelation` in
+  `UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean`;
+- `IsQuittingFullExactRootPotential` and
+  `isQuittingFullExactRootPotential_of_robustPotential` in
+  `UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`;
+- `exists_quittingRobustChargedRelation_rationalPotential_of_finiteBudget`
+  in
+  `UniformEquilibrium/Quitting/Projective/RobustChargedRelationPolynomialSeparator.lean`;
+- `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+  in
+  `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`.
+
+The separator's finite-budget premise is on the ENTIRE positive-
+tolerance outer robust relation, not on exact roots. EC3 supplies
+none of that premise. EC4 disproves an attempted replacement by
+continuous exact separation. EC5 explicitly supplies the robust
+recharge missing from the literal finite graph.
+
+The direction change is not another local fairness condition:
+global charged selection must account for APPROACHING corners and
+absorption-relative reselection, not just cycles or unbounded paths
+in the literal finite exact graph. A future negative trial must
+obstruct those corners uniformly, or provide the actual rational
+polynomial on all permitted robust edges. An exact-path barrier
+alone is now decisively retired on a complete whole-box example.
+
+Next full-goal question: can a genuine no-UE/source obstruction
+rule out every such robust corner recharge in an arbitrary game,
+or does normality plus the global source force at least one?
+The present positive construction does not establish either
+arbitrary-game alternative and transports no minimum ancestry.
 
 ## Graph-wide sequel: an all-active Nash sink with a positive terminal debt floor
 
