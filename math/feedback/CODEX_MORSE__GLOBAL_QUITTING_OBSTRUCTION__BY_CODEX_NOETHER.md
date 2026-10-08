@@ -1631,3 +1631,151 @@ The theorem remains a necessary source restriction. It does not prove
 admissible return, cap-compatible descent, raw minimum attainment, a no-UE
 example or uniform equilibrium. SG/NF9 is absent and is not imported into
 this verdict. Those exact open boundaries are part of the accepted scope.
+
+## Independent CL1–CL10 circuit-input and raw-chamber review
+
+Verdict: PASS, with no unresolved mathematical objection. This checks the
+complete section headed “Dual follow-through: a closed singular full-Nash
+circuit retires the rational shell”, through BEFORE “Negative dual attempt:”,
+in `notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`. Section SHA256:
+
+    0a7b002181838a65118b65adb6c8fe51c5cfb7de024f7707f62cafc2e6858ae2
+
+The base CL1–CL8 subrange through BEFORE CL9 has SHA256:
+
+    191fc80086228218ba9f41905be6f4e22e695ca3bfa6b160bcbdf9c1aafc647a
+
+I read the entire section and independently reconstructed its actual
+table/root calculations. This is not a verdict on the whole notebook or a
+future standalone artifact. No other CL review was read. I authored the
+separately saved ZU compiler which CL8 explicitly reconstructs; that
+contribution is disclosed rather than described as blind certification.
+The new actual circuit inputs, closure certificate and raw-table extension
+were independently tested here. No Lean edit/build, export, staging, commit
+or push was performed.
+
+### Actual ports, complete roots and exact closure
+
+The full fifteen-row table is retained. The forward predecessor order is
+solo0 ladder, solo3 ladder, literal solo1, literal triple123, pair02 ladder.
+Both solo favorite recurrences, telescoping survival products and ALL
+spectator inequalities check. Solo3's quiet2 test uses both endpoint
+annotations, not an above-own passive target. The solo1 rate is exactly
+2N/T; its head and quiet3's negative joining gap check.
+
+I formed forced-Quit/Continue expectations directly from all sixty table
+entries with independent opponent subset probabilities. The active triple
+differences are exactly f₁,f₂/T,f₃/T. Quiet0's numerator is exactly G₀.
+The printed W is consequently justified by ACTUAL indifference. No fourth
+owner, grand payoff or response branch is omitted.
+
+Independent rational symbolic arithmetic confirms both pair active
+differences vanish identically and both quiet normalized differences equal
+CL4, including97/60 and13/15. The displayed bounds follow for B,D≥1,a≤1
+although W₁,W₃<1. Requiring all quiet annotations≥own would incorrectly
+reject this circuit. The pair survival product telescopes through
+(1+t′/C₀)/(1+t/C₀)=1−q₂ and
+(1+a′/C₂)/(1+a/C₂)=1−q₀. I checked the general terminal weights against
+both active endpoint equations and total-mass normalization. CL16 is thus
+a return to the SAME b,d, not independently selected favorable ports.
+
+I executed the entire CL6 verifier in exact SymPy rational arithmetic;
+every assertion passed. Its polynomials were first checked against the
+independently reconstructed actual gaps. Rational J⁻¹ exists. The monomial
+magnitude bounds dominate every Hessian value throughout the box, so the
+center displacement, derivative variation and self-map bounds prove a
+contraction, not acceptance of a rounded root. Box-wide inequalities retain
+interior rates, positive t,a∈(0,1), strict quiet0 gap and every solo endpoint
+condition. The closed circuit is an actual algebraic conclusion.
+
+### Chronology, ALL caps and the fixed target
+
+Reverse the ENTIRE finite predecessor list, not just each ladder. Every
+finite block then has the correct continuation/head incidence. No infinite
+endpoint is installed at a finite date. Full-root Nash identifies each
+scalar companion value at the reference annotation. Its Lipschitz constant
+is DELETED-opponent survival, whereas prescribed payoff uses joint survival.
+The resulting seam bound is the SUM of endpoint errors, with no length
+factor. Fixed positive first solo0/solo3 rates supply two DISTINCT owners,
+so every deleted-opponent period contraction is uniformly below1.
+
+Censoring after m periods changes rewards only when all opponents survive
+to that cut. For EVERY response, including Never and later deadlines, the
+change is≤5κᵢᵐ. Hence the scalar period-map fixed point is the ACTUAL
+unrestricted cap, not a selected fixed point or merely a finite-test bound.
+Joint contraction alone would not suffice. The printed debt bound follows
+and every approximant approaches the ONE fixed port V. For each chosen
+finite period, geometric opponent absorption gives finite mean stopping
+time uniformly against deviations; this bounds finite-average/terminal
+differences and supplies the terminal-to-uniform step. Choose accuracy and
+the truncated period first, then a horizon threshold, never a new target.
+
+I inspected `quittingRootCompanionMap_eq_max_endpoints` in
+`UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean`,
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`,
+and the literal definition in
+`UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean` under
+their imports. Exact roots have residual/regret0 on that floor-free relation;
+all ports lie in rewardBound+2. Normality follows from
+`isQuittingNormalPlayer_of_singleton_nonneg` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`, without
+any premium-sign assumption. Therefore summing finite ladder inequalities,
+taking limits by continuity, and canceling ALL common ports contradicts
+EVERY continuous charged potential as CL7 claims. This independently gives
+UE through the named characterization, apart from the ordinary compiler.
+These are static declaration checks, not new Lean-check/integration seals.
+
+### Full raw-coordinate neighborhood and finite criterion
+
+CL21–25 adapt all rates/ports to the NEW raw table. Favorite inequalities
+give geometric contraction; nonfavorite start/endpoint tests cover the
+entire solo interval. The structural initial quiet threshold equality is
+retained by construction, not falsely called a strict inequality. All
+remaining needed comparisons have uniform strict slack on the closure box.
+
+For generic raw pair entries the exact normalized quiet gap is
+sᵢ−vᵢ+(a/E₂)δᵢ,₀+(t/D₀)δᵢ,₂+
+(ta/(D₀E₂))δᵢ,₀₂. Substitution of the endpoint expression for vᵢ gives
+CL26. CL27 suffices uniformly for ALL t≥0,0≤a≤1 because
+L_t+aL_ta≤L_t+max(L_ta,0), with L₀,L_a<0. The stated dependence on Bᵢ
+is monotone. Base b≥3/2,d≥13/10 supplies strictly negative margins for
+infinitely many rows approaching a binding active endpoint. Pointwise
+strictness/continuity was NOT used to infer this uniform conclusion.
+
+The denominator-cleared polynomial map is the actual-gap/return-residual
+map multiplied by nonzero positive scalars at its zero. Its nonsingular
+Jacobian therefore yields the same implicit-function continuation. Compact
+box margins and the factored quiet inequalities persist under independent
+perturbations of ALL60 entries. A qualitative open UE chamber is proved;
+no numerical reward radius is asserted. At rational input tables the
+reusable box conditions are finite rational tests that PRODUCE the exact
+closure by contraction, not an externally supplied exact-cycle field.
+
+### Bounded overlap and mathematical value
+
+The named paired RawRegion, BelowSingleton RawFamily, strict/weak crossed
+RawSource and InverseRawSource definitions were inspected in their printed
+files. Their COMPLETE matching/relabeling choices fail for the table reasons
+stated. The cyclic-child pivot fails for every pivot. The criterion in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`
+requires both child inverse and literal outside weights nonnegative;
+independent arithmetic finds only child023 has nonnegative inverse, with
+outside weights(−3/5,6/5,2/5). Negative pair13 fails projective Q-bar.
+These failures persist on a smaller raw subchamber. They do not exclude
+arbitrary supplied cycles or separately selected quiet-child equilibria.
+
+Independent ALL16 support enumeration at offset(−1,−2,−3,−4) gives only
+z=(14/5,0,34/5,13/5), outside slack13/5, active determinant5. Principal
+determinants and negative columns give R₀; the degree count is1. The printed
+positive simplex image also checks. Elementary no-UE necessary matrix
+screens remain compatible but are not mistaken for sufficient no-UE data.
+
+This is genuine constructive progress: actual finite periodic approximate
+Nash laws consume a previously unresolved rational trial, and a raw-table
+return-map mechanism produces an open full-coordinate UE class beyond the
+compared sources. ZU alone was only a supplied supporting compiler; CL
+supplies its missing actual charged closure. Neither this review nor CL
+claims arbitrary Fin4 UE, universally obligatory circuits, a positive-gap
+example or noncoverage by ALL existing producers. An export needs its own
+self-contained final artifact/gate; this review does not place a packet.
