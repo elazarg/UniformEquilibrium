@@ -84,10 +84,14 @@ a smooth rank when the topological domain is CONVEX. An exact four-slab
 corner calculation blocks the projection/convexification extension at
 the ACTUAL nonconvex Simon domain. There is also a DISTINCT UPSTREAM
 seam: Section4J includes artificial lowerGlueFiber/upper-glue edges;
-a rank on F_b is not thereby a rank on ALL J edges. The missing steps
-are that actual rank-extension adapter AND a literal nonconvex boundary
-index (or a different quitting-specific consumer). Neither is supplied
-by contractibility, and the convex conclusion is not transferred.
+a rank on F_b is not thereby a rank on ALL J edges. RM29 now supplies
+that actual F→J adapter by an explicit C¹ penalty construction on the
+FULL Section4J domain, rather than identifying artificial edges as Nash.
+The literal nonconvex boundary index (or a different quitting-specific
+consumer) remains missing; it is not supplied by contractibility, and
+the convex conclusion is not transferred. RM27's original bounded-F
+source/necessity caveat also remains explicit. RM29 is ordinary,
+unreviewed supporting mathematics, not an export or new UE exclusion.
 TG7 now computes the exact local descending link: an m-slab corner
 has link S^(m−2) and local Euler contribution (−1)^(m−1). The full
 four-face corner contributes−1; a three-active Fin4 stratum with a
@@ -19494,3 +19498,259 @@ I will not repair its proof by declaring the slab union convex, using
 only its homotopy type, or averaging actual targets out of C. A credible
 continuation must control these reentrant terms from additional actual
 quitting data or construct a complete globally compatible example.
+
+### RM29. Actual F→J rank extension by smooth floor and feasibility penalties
+
+Status: COMPLETE ORDINARY ADAPTER CANDIDATE, NOT INDEPENDENTLY REVIEWED.
+This repairs the DISTINCT upstream seam identified in TG6. It constructs
+a C¹ strict rank on EVERY edge of the literal Section4J from the smooth
+rank on the smaller-tolerance ACTUAL quitting correspondence. No artificial
+glue edge is declared behavioral Nash. The nonconvex index problem TG5–7
+is not consumed. This is supporting mathematics, not a new counterexample
+class exclusion, a full Fin4 theorem or an export candidate. The source
+of the bounded-F input remains exactly as scoped in RM27; in particular
+the supplied production necessity adapter is not silently discharged.
+
+JR1: self-contained finite data and literal domain. Fix a finite player
+set I, |I|=n≥3, any quitting reward table r, and its true independent-
+opponent behavioral punishment values p_i. All roots in F_b are independent
+Boolean product roots, with the RAW positive-support inequalities stated
+in RM27, not probability-weighted replacements. Let
+
+    P=conv({0}∪{r(S):S nonempty}),
+    K_b={x: ALL x_i≥p_i−b, dist₂(x,P)≤b}.
+
+Fix b>0 and the PRODUCED RM27 function G, globally C∞, such that every
+actual F_b edge whose two endpoints lie in K_b has
+
+    G(x)−G(y)≥½‖x−y‖₂.                         (JR1)
+
+The argument also applies to any already established G with this exact
+whole-edge property. It adds no selected cap, law, child equilibrium,
+minimum-tail or response-pricing hypothesis. It is a payoff-correspondence
+adapter, not a manipulation of terminal complete-law caps at NP's minimum.
+
+Choose a Simon payoff scale M≥1 with ALL terminal coordinates in
+[−M/3,M/3], hence P contained in that same cube. Select the actual
+Section3/4 parameters with
+
+    0<ρ≤min(1,b),  0<ε<min(b,ρ/3),
+    κ=ρ²/(1000M),  ℓ_i=p_i−ρ/3,
+    δ=Section4Delta(M,ε).
+
+Let J be the FULL actual Section4J: both the terminal image of its
+two-projection homotopy and the complete lower/upper glued graph. Its
+inverse, cutoff and Section3 constants have precisely their original
+normal-game/no-stationarily-generated/no-instant hypotheses. No smaller
+graph is substituted. Lowering an already available structure motion
+parameter to min(ρ,b) preserves its clauses: support tolerance and the
+rational source set shrink, the motion coefficient decreases, and the
+sure-root exclusion is inherited. The inverse/cutoff/constants are THEN
+selected at these final parameters; no old J is carried through a change
+of table or parameters.
+
+Three literal properties of this construction, with their actual source
+proved in the declarations listed in JR6, are the entire input from J:
+
+1. EVERY J edge x→y has y=(1−a)x+a z for some a∈[0,1], z∈P.
+   The number a here need NOT be a root's absorption mass.
+2. If ALL |x_i|≤M/2, then EACH coordinate obeys
+
+       x_i≥ℓ_i ⇒ y_i≥ℓ_i,
+       x_i<ℓ_i ⇒ y_i≥x_i+κ.                   (JR2)
+
+3. If ALL |x_i|≤M/2 and x_i≥p_i−ρ/2, then x→y is an
+   ACTUAL raw-support F_ε edge. Positive cutoff is excluded by its
+   terminal drift; membership is not inferred from small edge length.
+
+J is compact in the product ambient space. Choose a separate R_box≥M
+so a convex cube B=[−R_box,R_box]^I contains BOTH projections of J
+and P, and put D=2R_box√n>0. This does NOT change the already fixed
+Section3 radius R or J. Thus ‖x−z‖₂≤D whenever x is a J source and z∈P;
+the literal representation in (1) gives
+
+    d=‖x−y‖₂=a‖x−z‖₂≤aD.                      (JR3)
+
+Take L=max[u∈B]‖∇G(u)‖₂. The entire segment from x to y lies
+in B, so G(x)−G(y)≥−Ld on EVERY J edge, whether or not it is Nash.
+All choices are finite and depend only on the original table/construction
+and the produced G. They are not supplied signs at an active response.
+
+JR2: smooth deficit that is NEVER recharged inside the half-box. Put
+w=ρ/24. Choose a smooth function θ:ℝ→[0,1] equal0 for t≤0 and
+equal1 for t≥w, and define
+
+    ψ(t)=∫[0..t]θ(u)du,
+    S(x)=Σ_i ψ(ℓ_i−w−x_i).                     (JR4)
+
+For t<0 this integral is0 because θ vanishes there. Thus ψ is smooth,
+nonnegative, nondecreasing and1-Lipschitz; ψ′=θ. In particular S
+is globally smooth with Lipschitz constant at most√n.
+
+For EVERY J edge with source in the half-box, S(y)≤S(x). Indeed,
+if x_i≥ℓ_i, JR2 puts both x_i and y_i≥ℓ_i, so both summands
+are0. If x_i<ℓ_i, JR2 has y_i≥x_i+κ>x_i, so the summand
+cannot increase. This uses the full floor/drift dichotomy, NOT just
+invariance of a selected low-coordinate set.
+
+There is a quantitative strict drop on EVERY inside-half-box edge
+whose source fails the rational half-rho floor. Choose j with
+x_j<p_j−ρ/2. Then x_j<ℓ_j and
+
+    ℓ_j−w−x_j>ρ/8,
+    κ≤ρ/1000<ρ/24.
+
+During the first κ of the coordinate increase, the ψ argument remains
+greater thanρ/12>w, where ψ′=1. Even if y_j overshoots the floor,
+this first interval is present. Hence
+
+    S(x)−S(y)≥κ≥(κ/D)d.                        (JR5)
+
+All other summands have nonnegative drops. The small smooth transition
+is strictly BELOW the invariant floor; using a mollified positive part
+centered exactly at ℓ would not justify this non-recharge assertion.
+
+JR3: squared feasibility distance pays all outer and far edges. Define
+H(x)=dist₂(x,P)². For the exact convex join in JR1(1), projecting x
+onto P and joining that projection with z proves
+
+    dist₂(y,P)≤(1−a)dist₂(x,P).
+
+Consequently
+
+    H(x)−H(y)≥(2a−a²)H(x)≥aH(x)
+             ≥[H(x)/D]d.                       (JR6)
+
+This is valid on ALL J, including arbitrary lowerGlueFiber targets.
+H never increases. If the source is OUTSIDE the half-box, some
+|x_i|>M/2, whereas every point of P has |z_i|≤M/3. Hence
+
+    H(x)≥M²/36.                                (JR7)
+
+If instead dist₂(x,P)>b/2, then H(x)>b²/4. No source feasibility,
+punishment rationality or behavioral interpretation is assumed for
+these artificial steps. They are paid by a genuine geometric decrease.
+
+For completeness, H is globally C¹, not merely locally Lipschitz.
+The nearest point π(x) in the nonempty compact convex P is unique.
+Its variational inequality is
+⟨x−π(x),z−π(x)⟩≤0 for every z∈P. Applying this at x,x+h
+and adding proves ‖π(x+h)−π(x)‖₂≤‖h‖₂. Comparing the
+two minimizing squared distances then gives
+
+    |H(x+h)−H(x)−2⟨x−π(x),h⟩|≤‖h‖₂².
+
+For the upper bound use π(x) as competitor at x+h. For the lower
+bound use π(x+h) as competitor at x; the extra projection difference
+is bounded by2‖h‖₂². The displayed estimate follows after adding
+the +‖h‖₂² term. Thus ∇H(x)=2[x−π(x)] is continuous. No
+smoothness of the POLYTOPE'S boundary is required, and C∞ is not
+claimed for H.
+
+JR4: explicit FULL-J rank. Set
+
+    A=D(L+1)/κ,
+    K=max(36D(L+A√n+1)/M², 4D(L+1)/b²),
+    Φ(x)=G(x)+A S(x)+K H(x).                    (JR8)
+
+This is globally C¹. It is bounded on the compact projections of J;
+no boundedness on all ambient space is needed for the finite-orbit or
+Taylor consumer. For EVERY edge (x,y)∈J,
+
+    Φ(x)−Φ(y)≥½‖x−y‖₂.                        (JR9)
+
+Proof, exhausting the literal full domain. A self-edge has d=0 and
+the conclusion is equality. Otherwise choose its actual convex-join
+representation and use the following cases.
+
+* x outside the half-box: G's drop is≥−Ld, S's drop is≥−√n d,
+  and H's drop is≥(M²/(36D))d by JR6–7. The first term in K
+  therefore makes the total drop≥d. This covers ALL outer lower
+  glue and any terminal/upper glue source outside the half-box;
+  no Nash support condition is asserted there.
+* x inside the half-box but below SOME p_j−ρ/2: S drops by
+  at least(κ/D)d, H does not increase and G drops by≥−Ld.
+  The choice of A makes the total drop≥d. This covers every
+  positive-cutoff or other artificial step at such a source.
+* x inside the half-box, ALL x_i≥p_i−ρ/2, but dist₂(x,P)>b/2:
+  S does not increase and H drops by at least(b²/(4D))d.
+  The second term in K again pays G's possible increase and
+  leaves total drop≥d.
+* x inside the half-box, ALL x_i≥p_i−ρ/2 and dist₂(x,P)≤b/2:
+  JR1(3) gives a genuine F_ε root, hence a genuine F_b root since
+  ε<b. The target is in the half-box because it is a convex join
+  with P. For each coordinate, JR2 either retains ℓ_i or raises
+  x_i, so y_i≥p_i−ρ/2≥p_i−b. Both x and y have distance≤b/2
+  from P, by JR6. Thus BOTH endpoints are in the ORIGINAL K_b,
+  and JR1 gives G's drop≥d/2. S and H do not increase, proving
+  JR9 in this last case.
+
+The case partition includes every source and both artificial glue
+branches. Nothing is inferred from an endpoint's hypothetical minimum,
+a selected root response, or a positive cap atom. In particular no
+conditional continuation is called Nash solely because it is feasible.
+
+JR5: common-value boundary and use in TG. For the literal two-projection
+terminal image, JR9 applies to its ACTUAL endpoint pair (a(u),b(u)).
+If an interior PARAMETER u maps to a common boundary VALUE a(u)=b(u)=v,
+then this diagonal edge has zero cost. However the actual boundary escape
+segments at the VALUE v are separate edges of J and ALSO satisfy JR9.
+Differentiating those segments forces ∇Φ(v)≠0 as in TG2. Therefore
+the common-value/parameter distinction is not lost by the extension,
+and TG3's C¹ Taylor argument may now use Φ on the FULL J.
+
+The intermediate straight homotopy pairs are NOT asserted to be graph
+edges; JR9 prices only its terminal image and the literal glued graph.
+The resulting nonvanishing field has the same still-open nonconvex
+boundary-index problem as TG4–7. In particular the explicit Φ does
+NOT establish that its boundary gradient has degreeχ(C), and TG7's
+three-active +1 local contribution is not erased by this construction.
+Nor does JR9 alone give an actual lower-debt terminal profile.
+
+JR6: exact source lookup and nonclaim. I read the declarations and proofs
+of `section4J_target_mem_lowerGlueFiber`,
+`section4J_coordinate_floor_or_drift_of_mem_halfPayoffBox`, and
+`section4J_mem_fRow_of_mem_halfPayoffBox_targetBox` under the imports
+of `Literature/Simon2012.lean`. The latter has ALL unrestricted J edges,
+not only the earlier small-step statement. Their hypotheses include the
+actual normality, excluded stationarily-generated and instant branches,
+Section3 constants, structure motion parameter, inverse/cutoff data,
+positive ε<ρ/3 and the exact Section4Delta. `IsSimonPayoffScale`,
+`StructureTargetBox`, `IsStructureMotionParameter`, and
+`isCompact_section4J` were read for the scale, floor, monotone parameter
+selection and full-domain compactness. These are source evidence in
+the Literature lane, not claims of production integration or a new build.
+
+The floor/drift proof's quantitative input is
+`lemma6_quantitative_of_positiveBound` in `Literature/Simon2007.lean`,
+whose exact statement and proof were read: it uses only a positive
+payoff-difference bound, normal players, and a raw F step. It does
+NOT borrow a positive full-debt minimum or NP's source margins.
+The same file's `minMaxQuit_eq_quittingPunishmentValue` identifies its
+literal inf-profile/sup-complete-quit-law floor with the production
+behavioral punishment value; its exact declaration was checked, rather
+than identifying a nominal or stationary punishment with p_i.
+The remaining positive-cutoff cases are supplied by the actual
+Section4 drift theorem, not by this Lemma6 applied to a non-Nash edge.
+
+For the independent production boundary I reread
+`QuittingSimonFEdgeAt` and the supplied necessity documentation in
+`UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/SuppliedCorrespondence.lean`,
+and the relevant normalized-motion source in
+`UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/NormalizedMotionStationaryPrefixProducer.lean`.
+The existing robust polynomial producer in
+`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`
+has absorption-normalized probability-weighted defect/residual edges.
+A raw E_ε edge is NOT silently placed in that normalized relation:
+at arbitrarily small absorption, an ε support gap need not be ε
+times absorption. Accordingly JR1 uses the precise RM27 raw F_b
+rank and retains that route's original source caveat. No alternative
+proof of the full no-UE→raw-capacity producer is inferred merely
+from the word "stronger" in the overlap comparison.
+
+Next substantive question. Can the actual UPPER glue/Nash inverse
+structure rule out the positive three-active boundary contribution
+identified in TG7, or force it to be balanced with a genuine orbit
+return? JR9 removes the artificial-edge pricing gap, but neither a
+generic boundary minimum argument nor a convexified projection is
+now a legal substitute for that remaining game-specific consumer.
