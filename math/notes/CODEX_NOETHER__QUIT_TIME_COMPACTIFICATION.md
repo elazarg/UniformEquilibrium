@@ -12,6 +12,13 @@ a finite cap-approximating response genuinely different from Never at
 ONE newly produced positive absorbing minimum. No old NP minimum,
 debt rigidity, paid owner or lower-debt competitor is inferred. The
 live question is how to consume this actual finite branch globally.
+The next joint shape/tax attempt is recorded in RM41: two independent
+row constants do NOT yet provide a compact maximizing domain. A single
+owner's nonown-participant level can tend to−∞ while its passive level
+stays bounded. An early solo0 reply defeats the proposed automatic
+Never/three-player lift. The valid all-player capped-premium boundary
+does not close that single-row face. No three-class conserving source
+or native absorbing equilibrium is inferred from this attempt.
 
 The canonical common-source reduction is
 [`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
@@ -22381,3 +22388,165 @@ uses neither their paid-port output nor its off-minimum target as a
 debt reduction. The native first collision and its active head branches
 still need global production/consumption; AT9 is not counted as a new
 raw-table UE class or export.
+
+## RM41: the joint participation-tax attempt meets an unbounded avoidance face
+
+Status: COMPLETE FAILED-IMPLICATION RECORD AND EXACT SURVIVING DOMAIN
+BOUNDS; THE RANDOM-FLOW CONSUMER IS OPEN. This is ordinary mathematics,
+not independently reviewed or an export. It corrects the preliminary
+eight-parameter compactification idea rather than supplying its missing
+boundary as a hypothesis. No old tax, spherical or NP source is reused.
+
+### JT1. The intended fresh global question
+
+Fix four players, native own singletons0 and Never0. For each recipient
+i let the nonempty-coalition rewards have the form
+
+    r_i(S)=θ_i(S)+c_i       if i∉S,
+    r_i(S)=θ_i(S)+k_i       if i∈S and |S|≥2,
+    r_i({i})=0,
+
+with all |θ_i(S)|≤1. The θ entries are fixed in the following domain
+calculation; later choosing their shape is a DIFFERENT fresh selection.
+Write A(c,k) for the infimum of FULL SUM debt over all independent
+absorbing stopping-clock profiles. All unilateral responses, including
+Never and responses making the replacement profile nonabsorbing, remain
+in every cap. The proposed mechanism was to maximize A over all eight
+constants, then combine the tax stationarity with a bounded shape
+maximum. If a positive maximum were attained at an interior point, the
+source-switching-safe ledger comparison could conserve both passive and
+nonown-participant mass separately in each row. That conclusion needs
+the actual compactification first. It is NOT currently produced.
+
+The native positive-gap facts available here are exactly RM24's strict
+U_i>0 at every absorbing minimum and AT7's negative passive-singleton
+witness in EACH recipient row. They apply at the actual table being
+tested, not at a fixed starting table carried through parameter changes.
+
+### JT2. What positive gap really bounds
+
+Suppose A(c,k)>0. The row witness gives some j≠i with
+θ_i({j})+c_i<0, hence c_i<1. If k_i−c_i>2, every nonempty
+joining gap for i is strictly positive. Put i sure at date0 and take
+an exact Nash equilibrium of the finite binary game of the other three
+players against that sure action. No continuation is reached. The
+other players' two root actions are their entire terminal response
+menu, because i screens every later date/Never. Player i prefers Quit
+on every nonempty opponent coalition; on the empty event both its
+Quit and Never pay0. This is an actual absorbing full Nash profile,
+contradicting A>0. Therefore k_i≤c_i+2<3.
+
+At an actual absorbing minimum, U_i>0 while every reward in row i is
+at most max(0,c_i+1,k_i+1). If both c_i and k_i were≤−1,
+ALL nonown outcomes in that row would be nonpositive, and its own
+singleton is0; then U_i≤0. Consequently max(c_i,k_i)>−1.
+Combining this with k_i≤c_i+2 gives c_i>−3. Thus the proved bounds are
+
+    −3<c_i<1,       k_i≤c_i+2<3.                       (JT.1)
+
+They do NOT bound k_i below. The remaining face is
+
+    k_i→−∞,       c_i bounded and possibly mixed in sign. (JT.2)
+
+The failed step was to infer that k_i−c_i<−2 makes i's Never
+strategy optimal and therefore permits a three-player absorbing lift.
+It only makes joining an already nonempty coalition unattractive.
+Preempting alone still pays own0 and can avoid a negative passive
+outcome. The actual AT4 low-passive-tax lift needs passive rewards
+above EVERY participant reward INCLUDING own0; a relative joining
+comparison alone does not supply that premise.
+
+### JT3. Minimal literal failure of that Never inference
+
+For ANY K>1 define a complete four-player table by the following rule,
+which specifies all60 entries: recipient0 receives0 at {0}, receives
+−1 at every coalition not containing0, and receives−K at every
+coalition containing0 with size≥2. Every other recipient receives0
+at every coalition. Never0 is unchanged.
+
+Let player1 stop surely at date1, and players2,3 Never. For recipient0
+every nonempty joining gap is1−K<0. Nevertheless its Never response
+pays−1, its solo Quit at date0 pays0, and joining at date1 pays−K.
+The full cap is0. This falsifies the asserted pathwise Never dominance
+for arbitrarily negative participation levels.
+
+This is NOT a positive-gap or no-UE example: player0 sure at date0
+with the other three Never is exact absorbing Nash, all rewards/caps0.
+The example is retained only for the literal failed implication. It
+does not refute a selected child whose omitted-player cap is actually
+priced, and it does not exclude every good child selection.
+
+### JT4. What an actual minimizing sequence on the face would avoid
+
+There is a precise unrestricted statement, but it does not price the
+other three caps or construct a child equilibrium. Let z be ANY native
+table with |z_i(S)|≤M, M>0, and penalize ONE recipient h by
+
+    r^L_h(S)=z_h(S)−L·1_{h∈S, |S|≥2},
+    r^L_j(S)=z_j(S) for j≠h,      L>0.
+
+Own singletons and Never remain0. For an actual absorbing profile p,
+let β_h(p) be its original joint-participation probability. For any
+pure finite response τ, let χ_h(τ,p) be the probability that τ ties
+the earliest ORIGINAL opponent clock. This is precisely the response's
+joint-participation event; it is0 for the Never response. Then
+
+    U_h^L(p)=U_h^0(p)−Lβ_h(p),
+    V_h^L(τ,p)=V_h^0(τ,p)−Lχ_h(τ,p).                  (JT.3)
+
+Literal Never has value≥−M, so B_h^L≥−M. Since U_h^0≤M,
+
+    d_h^L(p)≥Lβ_h(p)−2M.                              (JT.4)
+
+Player h sure at date0 with all others Never has h debt0. The other
+three caps are exact two-value maxima, so its total debt is≤6M,
+independently of L. Hence A(r^L)≤6M. Every actual η-near-minimizer
+therefore satisfies
+
+    β_h(p)≤(8M+η)/L.                                  (JT.5)
+
+Every finite η-cap-approximating test also satisfies
+
+    χ_h(τ,p)≤(2M+η)/L,                                (JT.6)
+
+because its penalized value is≥B_h^L−η≥−M−η while its unpenalized
+value is≤M. These bounds concern ALL-response caps, not a prescribed
+row menu, and need no attained maximizing deadline.
+
+Thus this face suppresses h's original AND cap-tested collisions.
+It does not suppress h's solo stopping or its time-dependent ability
+to preempt a bad child outcome. Nor may one drop the penalty from a
+limit: Lβ_h can have a nonzero limit although β_h→0. The native
+reward bound now grows with L, so RM24's quantitative strict margins
+cannot silently be made uniform along this unbounded face. No limiting
+unpenalized child is identified with an actual minimum of r^L.
+
+### JT5. The all-player capped subcase is already consumed
+
+For contrast, if a native table z has z_i(S)≤0 for EVERY participant
+i∈S, its absorbing gap is0. This follows from already inspected
+sources rather than a new boundary theorem. If its gap were A>0,
+AT7 would give a C>0 for which r=z+C has a true FULL positive gap.
+The table r/C has unit own singletons and participant rewards≤1.
+The actual declaration
+`exists_uniformEquilibriumPayoff_of_soloExitPreference` in
+`UniformEquilibrium/Quitting/Classification/Existence/PerfectSequenceExtraction.lean`
+then contradicts that full positive gap (positive scaling multiplies
+every actual U/B/debt by the same factor).
+
+The same file's declaration
+`exists_cyclic_subgamePerfectTerminalNash_of_soloExitPreference` retains
+periodicity and COMPLETE terminal deviations at every tail. Its exact
+raw hypotheses are `QuittingUnitSoloExit` and
+`QuittingCappedJointExit` in
+`UniformEquilibrium/Quitting/Classification/SoloExitPreference.lean`:
+ALL participants, not one distinguished row, must satisfy the cap.
+The single-row face(JT.2) supplies neither that condition for the other
+players nor a quiet lift pricing the omitted player's full cap.
+
+Concrete next question: can the true absorbing floor consume the
+joining-avoidance owner on(JT.2) while retaining its solo preemption
+tests and all three observer caps? An arbitrary three-player child,
+an averaged ledger, or deleting h's small collision mass is not such
+a competitor. The original native passive-tax interior consumer also
+remains open; JT1's unsupported eight-direction passport is withdrawn.
