@@ -12,19 +12,25 @@ a finite cap-approximating response genuinely different from Never at
 ONE newly produced positive absorbing minimum. No old NP minimum,
 debt rigidity, paid owner or lower-debt competitor is inferred. The
 live question is how to consume this actual finite branch globally.
-The next joint shape/tax attempt is recorded in RM41: two independent
-row constants do NOT yet provide a compact maximizing domain. A single
-owner's nonown-participant level can tend to−∞ while its passive level
-stays bounded. An early solo0 reply defeats the proposed automatic
-Never/three-player lift. The valid all-player capped-premium boundary
-does not close that single-row face. No three-class conserving source
-or native absorbing equilibrium is inferred from this attempt.
+RM41's automatic relative-join/quiet lift is false: early solo0 replies
+survive when a single participant level tends to−∞. MORSE's separate
+TB1–TB6 occupied periodic-core proof now repairs that actual unbounded
+face, including ALL omitted caps and the empty core. My focused check
+is saved in the matching feedback. It legitimately makes positive-gap
+shape/eight-tax superlevels compact, but supplies no interior equilibrium.
+No common minimum or debt rigidity is imported after remaximizing taxes.
 RM42 now retires counts-only consumption even after aligning the source:
 an exact four-finite-clock profile has class-preserving FULL-cap response
 mixtures and positive numerical native margins, but D=5/3. A literal
 pure-pair competitor has D=0, so the profile is NOT a genuine minimum.
 The remaining consumer must use the true global floor or full
 coalition-valued balance to control the changed caps, not class counts.
+RM43 tests the genuine global floor by a DIFFERENT fresh-table comparison:
+one sign-adaptive perturbation excludes deterministic outcomes at EVERY
+native absorbing minimum, with a uniform qualitative near-minimum random
+mass floor. This is an ordinary unreviewed source restriction, not a
+below-gap competitor, an independently reviewed export, or the random-law
+consumer. The fresh table is not a passive-tax or radial maximum.
 
 The canonical common-source reduction is
 [`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
@@ -22721,3 +22727,216 @@ or the full coalition-valued radial identity; those are precisely the
 remaining data that this test lacks. The next global attempt must
 use them to select/control an actual absorbing competitor rather
 than promote a class-count ledger to a playable equilibrium.
+
+## RM43: a true native worst-gap comparison excludes every deterministic minimum
+
+Question. If SOME bounded own-zero four-player table has a positive
+absorbing SUM gap, can one choose a NEW such table at which EVERY
+absorbing minimum has genuinely random terminal outcome? This is not
+the radial statement that one component of a selected mixture is random.
+It uses the actual all-law infimum to exclude an entire minimum class.
+The result below is a COMPLETE ORDINARY PROOF DRAFT, not independently
+reviewed or Lean-checked. It does not lower the remaining random gap.
+
+### GD1. Domain, ordinary inputs, and selection order
+
+There are four players, independent private stopping clocks on
+ℕ∪{Never}, signed terminal rewards rᵢ(S) on every nonempty coalition,
+own singletons rᵢ({i})=0 and Never/live reward0. The prescribed class
+P_abs consists of ALL independent profiles with joint Never mass0.
+EVERY complete unilateral behavioral replacement is allowed, whether
+or not it preserves absorption. Write
+
+    Uᵢ(r,p)=E[rᵢ(S)],
+    Bᵢ(r,p)=sup over every finite clock and literal Never,
+    D(r,p)=∑ᵢ[Bᵢ(r,p)−Uᵢ(r,p)],
+    A(r)=inf[p∈P_abs] D(r,p).
+
+Append the actual terminal law μ(p) to the payoff/cap pair, and take
+its closure K_abs⁺(r). It is compact in [-M,M]⁸ times the simplex
+of nonempty coalitions. Its minimum D is A(r), and every point of
+the carrier is realized by absorbing actual profiles. No raw clock
+tightness, attained clock optimizer, or legal averaged profile is used.
+
+The direct prefix-closed-domain proof NA1 in RM24 supplies, at EVERY
+positive absorbing minimum with |rᵢ(S)|≤M,
+
+    Bᵢ≥A+A²/(8M),
+    Uᵢ≥A−dᵢ+A²/(8M)>0.                         (GD.1)
+
+Its concrete preemptors and actual absorbing prefix competitors were
+recorded there. This is NOT the full-carrier minimum theorem with a
+changed premise. In particular no punishment≥0 is assumed; own0 does
+not give that inequality for a general signed table.
+
+Uniform supnorm reward closeness ε changes EACH prescribed payoff and
+full cap by at most ε, including literal Never. Therefore
+
+    |A(r)−A(r′)|≤8ε.                             (GD.2)
+
+Assume some native table has A>0. Positive scaling puts one in the
+closed56-coordinate cube of own-zero tables with |rᵢ(S)|≤1.
+Maximize A over that cube BEFORE selecting any minimizing laws. Let
+Ω>0 be its attained maximum and r⁰ one maximizing table. By GD.1
+with M=1 and Bᵢ≤1,
+
+    Ω+Ω²/8≤1, hence Ω<1.                        (GD.3)
+
+The positive-own counterexample source can yield this native premise
+by row translation on the absorbing domain, as in AT2/AT7: subtract
+each nonnegative own singleton from its whole nonempty row, using the
+late-finite-test cap identity. This is a distinct native selection,
+not transport of NP's minimizing laws or of a radial representation.
+
+### GD2. A deterministic limiting law has exact toggle caps
+
+Let (U,B,μ) be ANY native positive absorbing minimum and suppose
+μ=δ_H. A singleton H is impossible: its owner's U is its own0,
+contrary to GD.1. Thus |H|≥2 and EVERY rᵢ(H)=Uᵢ>0.
+
+Take an absorbing realizing sequence pⁿ with μⁿ(H)→1. For any two
+members h,k of H, their independent clocks satisfy
+
+    P[T_hⁿ=T_kⁿ<∞]→1.
+
+Consequently some finite date tₙ has p_hⁿ(tₙ)→1: the probability
+of equal finite clocks is a weighted average of p_hⁿ(t). Every other
+H member then also has mass→1 at that SAME tₙ, since
+P[T_hⁿ=T_kⁿ<∞]≤p_kⁿ(tₙ)+P[T_hⁿ≠tₙ]. Independence moreover gives
+P[T_zⁿ≤tₙ]→0 for every outsider z, or the first coalition could not
+be H with probability→1.
+
+Fix a tester i and delete its prescribed clock. With probability→1,
+all remaining H members stop at tₙ and all remaining outsiders stop
+strictly later. The remaining H is nonempty, even for a member tester.
+On this common opponent event EVERY complete pure clock has one of
+three outcomes: before tₙ gives the tester's own singleton0; at tₙ
+joins the sure H opponents; after tₙ or Never sees their passive
+coalition. The bounded bad-event error is UNIFORM over all clocks.
+Testing tₙ and Never supplies the two main values from below. An
+earlier test may be absent when tₙ=0, but its value0 is strictly below
+the positive rᵢ(H) and cannot affect the limiting maximum. Hence
+
+    Bᵢ=max(rᵢ(H),rᵢ(H△{i})),
+    dᵢ=(rᵢ(H△{i})−rᵢ(H))⁺.                    (GD.4)
+
+Here H△{i} is nonempty. Moving tₙ, including tₙ→∞, is harmless:
+the comparison uses the literal moving finite date and Never at EACH
+index, not an assertion about a fixed maximizing compact point.
+
+Define the eleven raw contact values, for |H|≥2,
+
+    L_H(r)=∑ᵢ(rᵢ(H△{i})−rᵢ(H))⁺.              (GD.5)
+
+Thus a deterministic positive minimum MUST have A(r)=L_H(r).
+The implication needs genuine minimum positivity GD.1; arbitrary
+deterministic profiles need not have these caps when preemption0 is
+better than their prescribed reward.
+
+### GD3. One legal sign-adaptive target moves all upper contacts upward
+
+For each player i and each NONEMPTY K⊆I\{i}, pair its two reward
+coordinates rᵢ(K) and rᵢ(K∪{i}), and put
+
+    wᵢ,K=rᵢ(K)−rᵢ(K∪{i}).
+
+These28 pairs partition ALL56 nonown coordinates. There is no
+conflict between a target chosen for two different K or recipients.
+Keep owns0. At the old table r⁰ choose target entries
+
+    (target passive, target participant)=(+1,−1) if w⁰ᵢ,K≥0,
+                                         (−1,+1) if w⁰ᵢ,K<0.
+
+For 0<α<1 let rᵅ=(1−α)r⁰+α target. It remains in the SAME
+native unit cube, so A(rᵅ)≤Ω. Also |rᵅ−r⁰|∞≤2α gives
+
+    Ω−16α≤A(rᵅ)≤Ω.                             (GD.6)
+
+Every strictly nonzero w preserves its sign, and
+
+    wᵅ=(1−α)w⁰+2α sign₊(w⁰),
+
+where sign₊(0)=+1. For a member i∈H the toggle gain is wᵢ,H\{i};
+for an outsider it is −wᵢ,H. Thus at every H the positive old gains
+remain positive, each is pushed toward2, and zero gains enter ONLY
+when i is a member. If N_H counts the old positive gains plus those
+zero member gains, then EXACTLY
+
+    L_H(rᵅ)=(1−α)L_H(r⁰)+2α N_H.                (GD.7)
+
+In particular N_H≥1 when L_H(r⁰)>0, N_H≤4, and
+L_H(r⁰)≤2N_H. Hence L_H never decreases; every old upper contact
+L_H(r⁰)≥Ω is STRICTLY above Ω after perturbation (at equality,
+the increase is at least α(2−Ω)>0).
+
+For the finitely many lower contacts define
+
+    η=min{Ω−L_H(r⁰): |H|≥2, L_H(r⁰)<Ω},
+
+using η=1 if there are none. Choose
+
+    α=min(1,Ω,η)/64.
+
+For every old lower contact, GD.7 gives
+
+    L_H(rᵅ)≤L_H(r⁰)+8α
+             ≤Ω−η+8α<Ω−16α≤A(rᵅ),
+
+because24α<η. For every upper contact L_H(rᵅ)>Ω≥A(rᵅ).
+Also A(rᵅ)≥3Ω/4>0. Thus at ONE freshly selected native table
+
+    A(rᵅ)≠L_H(rᵅ) for EVERY |H|≥2.              (GD.8)
+
+No old minimum, contact equality, active response or original calendar
+is carried through this table perturbation. Only the maximum Ω and
+the finite OLD raw contact list select α; all new minima are treated
+anew using GD.1–GD.4 at rᵅ.
+
+### GD4. Actual source exclusion and honest remaining mechanism
+
+GD.4 and GD.8 imply that EVERY minimum of K_abs⁺(rᵅ) has random
+terminal law. This also gives a qualitative UNIFORM floor: compactness
+and disjointness from the finitely many point laws imply some γ>0
+such that at every minimum
+
+    1−max_H μ(H)≥γ.
+
+A further compactness comparison gives ε>0 so that EVERY actual
+absorbing profile with D(rᵅ,p)≤A(rᵅ)+ε satisfies the weaker bound
+1−max_H μ_p(H)≥γ/2. These are genuine all-near-minimizer statements,
+not an averaged mixture being mistaken for independent play.
+
+Overlap/value boundary. The frozen full-domain random-source packet
+already excludes deterministic minima at a DIFFERENT positive-own,
+debt-rigid table. BROUWER's native spherical RS7 excludes deterministic
+ONLY radial representations, not every minimum; neither is imported
+here. The toggle comparison is an adaptation of the earlier full-table
+contact method, not a new general perturbation API. Its new scope is
+the native ABSORBING infimum and ALL its minimum/near-minimum laws,
+without genericity, debt rigidity, true-punishment sign, or a selected
+response correspondence. This remains supporting/source mathematics,
+not another standalone export proposal.
+
+The tax maximum and the spherical radial maximum are NOT this fresh
+table. Remaximizing either can destroy GD.8, and recipient scaling
+does not automatically preserve a later remaximized tax source. Thus
+one cannot append their conservation/radial passports to this result.
+
+No legal competitor with D<A(rᵅ) has been constructed in the random
+arm. The completed whole-floor comparison removes the deterministic
+minimum shortcut, but does not close Fin4. The concrete next question
+is a legal modification of a RANDOM source retaining the full
+coalition-valued response kernel and controlling every observer cap;
+mere class conservation and the numerical margins remain insufficient
+by RM42. No source-wrapper milestone or consumer seal is inferred.
+
+Bounded sources inspected for this attempt: the direct ordinary NA1
+proof in RM24; `quittingTerminalSemanticDebt_prefix_le_auxiliaryNashDefect`
+in `UniformEquilibrium/Quitting/Terminal/AuxiliaryNashDebt.lean`;
+`minimumTerminalSemantic_exactNash_criticalFace` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`;
+and `minimumTerminalSemantic_literalNash_support_budget` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticLiteralNashDebtSupport.lean`.
+The last two retain their FULL-carrier hypotheses: the local native
+prefix argument uses only their explicit algebra with the separately
+proved absorbing-domain floor, not a rewritten Lean declaration.
