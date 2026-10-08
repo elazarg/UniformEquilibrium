@@ -53,6 +53,19 @@ and a whole second-copy graft consumes all-zero payoff whenever μ<1.
 Remaining native alternatives and a complete three-zero cap-vector
 regression are stated explicitly. No new export or UE claim is made.
 
+New native triage RZ1–RZ6 is complete ORDINARY UNREVIEWED mathematics:
+one explicit all-own-zero table satisfies R₀/StandardQ/degree1 and
+all-pure escape, yet its ENTIRE exact finite-calendar Nash selector
+is AllNever at every calendar size. Bounded proper approximate
+equilibria are constructed with full caps controlled. This refutes
+root-only and exact finite-Nash selection shortcuts, NOT a positive
+absorbing gap. Current consuming target is instead a strict same-domain
+competitor at a true K_abs minimum, using the direct strict margins
+restored in NOETHER's RM24. Those margins belong to K_abs at A>0,
+not to ZV's zero-full-debt stratum. The alternative greatest jump–flow
+route has been narrowly reread; executable nonemptiness is not supplied,
+and convexifying its product-root jump images is not authorized.
+
 Current independent work: BA1–BA10 passed two independent soundness
 reviews but is NOTES ONLY: its companion absorbing minimum is not an
 original minimum, and relative gap proximity does not restore the
