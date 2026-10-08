@@ -49,6 +49,7 @@ import MathUE.Topology.CompactDiscreteFiber
 import MathUE.Topology.FiniteOneDimensionalCoordinate
 import MathUE.Analysis.LowerBoxBoundaryReflection
 import MathUE.Analysis.CoordinateAffineBoxMinimum
+import MathUE.Analysis.BooleanEndpointInterpolation
 import MathUE.Polynomial.MvPolynomialCoordinateAffine
 import MathUE.Polynomial.MvPolynomialQuadraticReflection
 import MathUE.Analysis.MidpointThirdDerivative

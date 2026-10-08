@@ -3,6 +3,7 @@ import Mathlib.Order.Filter.AtTopBot.CountablyGenerated
 import MathUE.Probability.RatioProperPair
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.ProperPairLimit
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.BestReplyMassEstimate
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.PathwisePayoff
 
 /-!
 # Recursive repeated games with absorbing states
@@ -22,7 +23,9 @@ Example 3
 is the same three-player game analyzed in the 1997 paper, so its table and
 stationary conclusions delegate to that existing formalization. The printed
 exclusion for every positive error is refuted; the corrected exclusion below
-one positive threshold is retained.
+one positive threshold is retained. The actual all-profile quitting payoff
+identity also transports these conclusions to the paper's expected-pathwise-
+liminf convention at every initial state.
 
 ## Sections 1–3: source inventory
 
@@ -63,7 +66,7 @@ uniform-equilibrium payoff from Theorem 3.1.
 noncomputable section
 
 open _root_.Math.ProbabilityMassFunction
-open Filter
+open Filter MeasureTheory
 open scoped BigOperators Topology
 
 namespace Literature.FleschThuijsmanAndVrieze1996
@@ -1362,11 +1365,13 @@ The three coordinates choose Top/Bottom, Left/Right and Near/Far respectively.
 The Boolean `false` denotes the first action. The all-first-action row is live
 with zero stage payoff; every other row absorbs with probability one.
 
-The definitions below use the checked terminal-payoff presentation from the
-1997 formalization. They do not introduce a separate expected-pathwise-liminf
-semantics or prove a new equivalence with that semantics. Unilateral deviations
-in the equilibrium predicate are all behavioral strategies, not just stationary
-ones. The error and stationary-profile quantifiers are preserved exactly.
+The terminal-payoff presentation from the 1997 formalization is preserved.
+The actual all-profile quitting payoff identity also identifies the paper's
+expected-pathwise-liminf equilibrium predicate at every initial state.
+Unilateral deviations in both predicates are all behavioral strategies, not
+just stationary ones. The error and stationary-profile quantifiers are
+preserved exactly. This literal Example 3 adapter does not establish the
+original two-player paper's general absorbing-stage or legal-history reduction.
 -/
 
 abbrev Example3Player := Literature.FleschThuijsmanAndVrieze1997.Player
@@ -1390,6 +1395,54 @@ abbrev example3StationaryBehaviorProfile (profile : Example3StationaryProfile) :
 abbrev Example3EpsilonEquilibrium (ε : ℝ) (profile : Example3StationaryProfile) : Prop :=
   example3Game.IsεAsymptoticNash (GameTheory.quittingTerminalPayoff example3Reward) ε
     (example3StationaryBehaviorProfile profile)
+
+local instance : Finite example3Game.State :=
+  inferInstanceAs (Finite (Option {S : Finset Example3Player // S.Nonempty}))
+
+local instance (who : Example3Player) : Finite (example3Game.Act who) :=
+  inferInstanceAs (Finite Bool)
+
+/-- The literal expected pathwise liminf of the actual Example 3 play law. -/
+def example3PathwisePayoff (initial : example3Game.State)
+    (profile : example3Game.BehaviorProfile) (who : Example3Player) : ℝ :=
+  ∫ play, liminf (fun n => example3Game.pathwiseAveragePayoff who n play) atTop
+    ∂example3Game.infinitePlayMeasure profile initial
+
+/-- The paper's stationary epsilon-equilibrium notion, at every initial state. -/
+def Example3PathwiseEpsilonEquilibrium (ε : ℝ) (profile : Example3StationaryProfile) : Prop :=
+  ∀ initial, example3Game.IsεAsymptoticNash (example3PathwisePayoff initial) ε
+    (example3StationaryBehaviorProfile profile)
+
+/-- Every behavioral profile's literal live-state payoff equals its terminal payoff. -/
+theorem example3PathwisePayoff_none (profile : example3Game.BehaviorProfile)
+    (who : Example3Player) :
+    example3PathwisePayoff none profile who =
+      GameTheory.quittingTerminalPayoff example3Reward profile who :=
+  GameTheory.integral_liminf_pathwiseAveragePayoff_quittingGame_none example3Reward profile who
+
+/-- Every behavioral profile has the same literal payoff at an absorbed initial state. -/
+theorem example3PathwisePayoff_some (profile : example3Game.BehaviorProfile)
+    (S : {S : Finset Example3Player // S.Nonempty}) (who : Example3Player) :
+    example3PathwisePayoff (some S) profile who = example3Reward S who :=
+  GameTheory.integral_liminf_pathwiseAveragePayoff_quittingGame_some example3Reward profile S who
+
+/-- Actual all-initial-state equilibrium is exactly terminal equilibrium, for every error. -/
+theorem example3_pathwiseEquilibrium_iff_terminal (ε : ℝ)
+    (profile : Example3StationaryProfile) :
+    Example3PathwiseEpsilonEquilibrium ε profile ↔ Example3EpsilonEquilibrium ε profile := by
+  constructor
+  · intro hNash who deviation
+    have hnone := hNash none who deviation
+    simpa only [example3PathwisePayoff_none] using hnone
+  · intro hNash initial who deviation
+    cases initial with
+    | none => simpa only [example3PathwisePayoff_none] using hNash who deviation
+    | some S =>
+        simp only [example3PathwisePayoff_some]
+        have hself := hNash who ((example3StationaryBehaviorProfile profile) who)
+        rw [Function.update_eq_self] at hself
+        have hε : 0 ≤ ε := by linarith
+        exact le_add_of_nonneg_right hε
 
 @[simp] theorem example3TerminalReward_TLN :
     example3TerminalReward ![false, false, false] = ![0, 0, 0] :=
@@ -1440,6 +1493,37 @@ theorem example3_corrected :
       ∀ ε : ℝ, 0 < ε → ε < threshold →
         ¬ ∃ profile : Example3StationaryProfile, Example3EpsilonEquilibrium ε profile :=
   Literature.FleschThuijsmanAndVrieze1997.theorem3_2_corrected
+
+/-- Example 3 has no exact stationary equilibrium for literal expected pathwise liminf. -/
+theorem example3_no_stationary_pathwise_equilibrium :
+    ¬ ∃ profile : Example3StationaryProfile, Example3PathwiseEpsilonEquilibrium 0 profile := by
+  rintro ⟨profile, hprofile⟩
+  exact example3_no_stationary_equilibrium
+    ⟨profile, (example3_pathwiseEquilibrium_iff_terminal 0 profile).mp hprofile⟩
+
+/-- The all-positive-error exclusion is false also for the paper's literal payoff convention. -/
+theorem example3_printed_pathwise_refuted :
+    ¬ (∀ ε : ℝ, 0 < ε →
+      ¬ ∃ profile : Example3StationaryProfile, Example3PathwiseEpsilonEquilibrium ε profile) := by
+  intro hexclusion
+  apply example3_printed_refuted
+  intro ε hε
+  rintro ⟨profile, hprofile⟩
+  exact hexclusion ε hε
+    ⟨profile, (example3_pathwiseEquilibrium_iff_terminal ε profile).mpr hprofile⟩
+
+/-- The corrected small-error exclusion uses actual payoffs at every initial state. -/
+theorem example3_pathwise_corrected :
+    ∃ threshold : ℝ, 0 < threshold ∧
+      ∀ ε : ℝ, 0 < ε → ε < threshold →
+        ¬ ∃ profile : Example3StationaryProfile,
+          Example3PathwiseEpsilonEquilibrium ε profile := by
+  obtain ⟨threshold, hthreshold, hexclusion⟩ := example3_corrected
+  refine ⟨threshold, hthreshold, ?_⟩
+  intro ε hε hsmall
+  rintro ⟨profile, hprofile⟩
+  exact hexclusion ε hε hsmall
+    ⟨profile, (example3_pathwiseEquilibrium_iff_terminal ε profile).mp hprofile⟩
 
 /-! ## Section 4: Remark 2
 

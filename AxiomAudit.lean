@@ -15,6 +15,7 @@ import MathUE.AffineRecurrenceInfiniteUnroll
 import MathUE.AlgebraicSelection
 import MathUE.Analysis.AnalyticCompactZeroFactorization
 import MathUE.Analysis.AnalyticQuadraticRemainder
+import MathUE.Analysis.BooleanEndpointInterpolation
 import MathUE.Analysis.BoxedAdditiveCalculus
 import MathUE.Analysis.CollisionAdjustedDrift
 import MathUE.Analysis.CompactGapStability
