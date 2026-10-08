@@ -25,7 +25,17 @@ claimed. The next full-goal question is whether arbitrary raw data force
 a compatible finite-charge closed itinerary, or whether a genuine
 all-behavior negative certificate can obstruct every such itinerary.
 
-Latest supporting results: EC1–7 supplies a whole-box dual falsifier.
+Latest supporting result: PS1–PS7 gives a complete ALL-PATH, absorption-
+relative seeded construction falsifier. On a solved rational table the
+true punishment is0, there is no sure root at ANY annotation, and EVERY
+sufficiently accurate robust word starting at0 has charge at most1.
+Its first root enters a strict quiet moat; actual AllNever-seeded
+prefixes also retain a positive FULL-cap debt floor. This is not a
+counterexample to UE: unrooted cyclic words already solve the table.
+Thus the remaining relay program must genuinely select its whole
+word, not initialize it at true punishment or literal AllNever.
+
+Earlier supporting results: EC1–7 supplies a whole-box dual falsifier.
 Every finite exact-Nash path has charge at most1+log5, while explicit
 corner connectors close positive finite robust cycles at EVERY positive
 absorption-relative tolerance. No continuous exact charged potential
@@ -9969,6 +9979,332 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Global relay sequel: true punishment can seed an all-path robust trap
+
+Status: COMPLETE ORDINARY UNREVIEWED falsifier of a global construction
+rule. The table is ALREADY SOLVED by the tracked cyclic-singleton-tail
+producer. No positive-gap table, new UE class or export is claimed.
+The decisive assertion covers EVERY finite sufficiently accurate
+absorption-relative robust word rooted at its true punishment, with
+arbitrary roots and arbitrary word length. It is stronger than a bad
+exact selector or one above-own first head. The successful unrooted
+cyclic words remain available elsewhere in the SAME game.
+
+### PS1. The proposed global debt contraction and its hidden seed
+
+Fix an actual terminal semantic pair (U,B), with full unrestricted
+caps B and d_i=B_i−U_i≥0. For a product root q put
+
+    h_i=Π_{j≠i}(1−q_j),   c=Π_i(1−q_i),   a=1−c,
+    Q_i=the date-zero Quit value,
+    C_i=R_i+h_i U_i,      g_i=Q_i−C_i,
+    e_i=max((1−q_i)g_i,−q_i g_i).
+
+If q is exact full binary Nash against U, its actual prefix satisfies
+
+    d'_i=(h_i d_i−[g_i]⁺)⁺≤h_i d_i.
+
+This is already checked as
+`quittingTerminalSemanticDebt_prefix_eq_blockAct` and
+`quittingTerminalSemanticDebt_prefix_le` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+For arbitrary q the exact formula also gives
+
+    d'_i=max((1−q_i)g_i,−q_i g_i+h_i d_i)
+          ≤e_i+h_i d_i.
+
+This suggests choosing a sequence of full roots and using opponent
+absorption to contract every debt. It does NOT produce that absorption.
+A particularly natural seed is true punishment P, or the prescribed
+payoff0 of literal AllNever. The following game defeats EVERY such
+rooted selection, even with absorption-relative approximate roots.
+At AllNever its FULL cap is1, not its prescribed payoff0.
+
+### PS2. Complete table, true punishment and every sure-root boundary
+
+Let I={0,1,2,3}, with arithmetic modulo4. Own singletons are1,
+Never is0, and a singleton host j has favorite receiver f(j)=j+1.
+The entire rational60-coordinate reward table is:
+
+| S | r(S) |
+| --- | --- |
+| 0 | (1,0,3,3) |
+| 1 | (3,1,0,3) |
+| 2 | (3,3,1,0) |
+| 3 | (0,3,3,1) |
+| 01 | (2,2,3,3) |
+| 02 | (2,3,2,3) |
+| 03 | (2,3,3,2) |
+| 12 | (3,2,2,3) |
+| 13 | (3,2,3,2) |
+| 23 | (3,3,2,2) |
+| 012 | (2,2,2,0) |
+| 013 | (2,2,0,2) |
+| 023 | (2,0,2,2) |
+| 123 | (0,2,2,2) |
+| I | (−1,−1,−1,−1) |
+
+Thus pairs/triples pay2 to members; passive pairs pay3, omitted
+triples pay0, and grand pays−1. The literal reward bound is M=3.
+All passive rewards are nonnegative. Hence the Never response is
+nonnegative against EVERY independent opponent clock law, so P_i≥0.
+If all three opponents quit surely at date0, immediate Quit pays−1,
+while every strictly later deadline and Never pays0. The FULL cap
+is0. Consequently the TRUE unrestricted punishment is P=(0)^4.
+
+There is no sure exact Nash root at ANY real annotation v. This
+does not rely on v≥P or on a stationary response restriction.
+With two sure owners choose one whose other sure host is not its
+favorite predecessor. Every conditional opponent event containing
+that host has joining gap−1: pair minus passive singleton, triple
+minus passive pair, or grand minus omitted triple. This owner
+cannot be sure. With three or four sure owners the same gap−1
+holds directly, also with a fourth owner mixing. If exactly one
+owner z is sure, both nonfavorite observers have gap−1 regardless
+of the other free rates, so must be quiet. Favorite z+1 then has
+gap2 and must be sure, reducing to the impossible two-sure case.
+
+The singleton matrix Γ_ij=r_i({j})−1, with diagonal0, is
+
+    Γ = ( 0   2   2  −1 )
+        (−1   0   2   2 )
+        ( 2  −1   0   2 )
+        ( 2   2  −1   0 ).
+
+It has positive simplex image Γ(1/4)^4=(3/4)^4. Adjacent principal
+pair determinants are2, opposite pair determinants−4, every
+principal triple determinant10, and det Γ=39. These give R₀:
+on support of size≥2, Γ_AAλ_A=0 has only λ_A=0; a singleton
+support violates its favorite receiver's nonnegative residual.
+The offset−1 complementarity census has one solution, λ=(1/3)^4.
+Singleton supports cannot solve the active equation. Adjacent pairs
+require a negative coordinate. Opposite pairs give both coordinates
+1/2 but outside residual−1/2. For support012, the first two active
+equations give λ₁+λ₂=1/2 and λ₀=2λ₂−1<0; rotations cover all
+triples. The full active solution is positive with determinant39.
+These exact screens are not a no-UE claim or a whole producer census.
+
+### PS3. EVERY exact root at the seed, and its common first head
+
+At v=P=0 the four complete binary gaps factor exactly as
+
+    g_i(0,q)=(2+q_{i−1})(1−q_{i+1})(1−q_{i+2})−1.
+
+The predecessor i−1 is the favorite host. Empty opponents give
+gap1; that host alone gives2; every other nonempty event gives−1.
+This proves the factorization with all coalition terms retained.
+
+There are no boundary roots. Sure faces were excluded in PS2.
+A singleton active owner has gap1. For an adjacent pair its
+favorite receiver has gap1+q_predecessor>0. Opposite active owners
+would have rates1/2, but each quiet observer has gap1/4>0.
+For support012, g₀=0 forces q₂<1/2, whereas g₁=0 forces
+
+    q₂=(1+q₀)/(2+q₀)>1/2.
+
+Rotations cover all proper triples. AllContinue has gap1 and is
+not Nash at0. Therefore every root must be fully interior.
+
+Write x_i=1−q_i and X=Π_i x_i>0. The full active equations are
+
+    x_i x_{i−1}=X(3−x_{i−1}),
+    x_i=f_X(x_{i−1}),  f_X(x)=X(3/x−1).
+
+The map f_X is strictly decreasing, so f_X² is strictly increasing.
+A four-cycle therefore has x₀=x₂ and x₁=x₃: otherwise applying
+the increasing f_X² to the two unequal opposite values contradicts
+their exchanged order. The two adjacent equations then force
+x₀=x₁. Hence there is EXACTLY ONE full Nash root at the seed,
+
+    q*=(u)^4,   u³−3u+1=0,   1/3<u<7/20.
+
+The cubic is strictly decreasing on (0,1), and the displayed
+rational endpoints have opposite signs. The exact common head is
+
+    F_i(0,q*)=Q_i(q*)=W,
+    W=1+3u−3u²−2u³=3−3u−3u²>633/400>1.
+
+Thus the unique first head is strictly above EVERY own reward.
+This is an actual product-root value, not an externally declared
+continuation or a selected exact tester.
+
+### PS4. Complete strict-upper fibre census and a relative moat
+
+For EVERY annotation v with v_i>1 for all i, the ONLY exact full
+Nash root is AllContinue. For a proper nonempty active support A,
+choose receiver i∈A whose favorite PREDECESSOR is outside A.
+Its empty-event gap is1−v_i<0 and every nonempty opponent event
+inside A has gap−1. Thus g_i<0, impossible for an active owner.
+
+For full support all rates are strictly between0 and1 by PS2.
+The exact identity is
+
+    Σ_i(1−q_i)g_i
+      =cΣ_i(1−v_i)−2Pr(|S|=2)−Pr(|S|=3)<0.
+
+Here the sum of outside joining gaps is0 on a singleton,−2
+on a pair and−1 on a triple. Full mixing would require all
+g_i=0. AllContinue itself is strict Nash since1−v_i<0.
+This accounts for ALL four constraints and all root supports.
+
+Choose a compact box C around (W)^4, wholly inside (1,5)^4,
+with v_i≥1+η for a fixed η>0. There is a number m>0 such that
+
+    max_i e_i(v,q)≥m a(q)
+
+for EVERY v∈C and EVERY q≠0. To see the crucial small-charge
+part, uniform continuity of the polynomial gaps gives a root
+neighborhood of0 on which every g_i≤−η/2, uniformly over C.
+Then e_i=q_i(−g_i)≥ηq_i/2. Since a≤Σ_iq_i,
+
+    max_i e_i≥(η/8)a.
+
+On the remaining compact set of roots outside that neighborhood,
+a>0 and no exact Nash root exists by the whole-fibre census.
+The continuous ratio max e_i/a has a positive minimum there.
+Combining the two gives m. Fixed-positive-absorption compact
+moats alone would NOT establish this bound as q→0; the strict
+own margin supplies its linear absorption-relative part.
+
+### PS5. EVERY sufficiently accurate rooted robust word has charge≤1
+
+Use the literal fixed box [−5,5]^4 and the complete relation
+`IsQuittingFloorFreeRobustEdge` from
+`UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean`:
+
+    |y_i−F_i(v,q)|≤τa(q),     e_i(v,q)≤τa(q),
+
+for every owner i. Neither punishment-floor restriction nor
+support restriction is imposed. Let a finite word start at v₀=P=0.
+Every root q satisfying the second inequality there converges
+uniformly to q* as τ→0: otherwise compactness gives a different
+exact root at0, contrary to PS3. AllContinue cannot be an edge
+there, since it has a=0 but e_i=1. Continuity of F and the first
+robust inequality therefore put EVERY first target in the interior
+of C, once τ is sufficiently small.
+
+Fix τ₀>0 smaller than this entry tolerance and the moat constant m.
+For EVERY 0≤τ≤τ₀ and EVERY finite robust word starting at0,
+the first edge is the only possible positive-charge edge.
+Indeed its target is in C, where the second inequality forces
+q=0. Its absorption is0 and the first inequality then forces
+y=v exactly. Inductively every subsequent edge is the same
+zero-charge identity. Therefore
+
+    Σ_edges a≤1,
+
+uniformly over arbitrary word length, every permissible root
+selection and every approximate annotation selection. No fixed
+calendar, same-rate, exact-root or stationary completeness is
+used. This is an ALL-PATH relative robust trap at the actual true
+punishment seed, not merely a particular trajectory. It says
+NOTHING about words starting elsewhere in the box.
+
+### PS6. Actual AllNever prefixes retain a FULL behavioral debt floor
+
+For literal AllNever, U_i=0 and B_i=1. Prefixing its law by q*
+gives the actual unrestricted semantic pair
+
+    U'_i=W,   B'_i=max(Q_i,R_i+h_i)=W+h_i,
+    h_i=(1−u)³>0,   d'_i=h_i,
+    ν'=(1−u)⁴>0.
+
+The born later-deadline response is R_i+h_i·1. It is larger
+than the first-date Quit value W. This maximum covers ALL
+finite deadlines and Never, not merely the two stage actions.
+At the all-Continue tail, every finite deadline pays the own
+singleton1, while Never pays0; this proves the tail cap exactly.
+
+For every sufficiently accurate first root q against the actual
+U=0, continuity of the actual prefix polynomials and the complete
+maximum gives U'∈C and d'_i≥(1−u)³/2. Every later root chosen
+against this actual prescribed U', with the same relative Nash
+bound, must be AllContinue by PS4. Such a prefix preserves U'
+and B', because its cap is max(1,B'_i)=B'_i. Consequently the
+ENTIRE actual AllNever-seeded root-prefix family has
+
+    D≥2(1−u)³>0.
+
+In forward annotation order the mixed root comes first and the
+quiet roots come later. Actual play reverses this whole prefix
+word: the quiet dates occur BEFORE the mixed date followed by
+AllNever. There is no root inserted after an infinite chronology.
+For abstract robust words with targets y≠actual prescribed payoff,
+PS5 asserts only the charge bound; it does not identify those
+annotations with an actual tail or claim PS6's debt bound for them.
+
+### PS7. Exact overlap, solved boundary and changed global obligation
+
+The game differs from EC1 only in omitted-triple and grand rows.
+Its singleton and pair data are IDENTICAL. All EC corner ladders
+and their robust connectors have at most one active prescribed
+owner per date. Under EVERY unilateral full-clock replacement,
+at most that owner and the deviator can quit at the first terminal
+date, so the terminal coalition still has size≤2. Thus each
+owner's prescribed payoff and FULL cap in that actual cyclic
+construction are unchanged. The EC5–EC6 robust cyclic words
+and their actual full-cap consumer work on this same game.
+
+The tracked overlap is even more direct: after reversing labels,
+the unchanged singleton offsets (0,−1,2,2) admit
+
+    A=1+√3,    survival=1/A,    tail=(0,0,A,2),
+    tail(k)=Γ(k)+survival·tail(k+1).
+
+The only nontrivial identity is A²−2A−2=0. The data have
+tail0=0 and nonnegative tails. Hence
+`CyclicSingletonTailData.certificate` and
+`CyclicSingletonTailData.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonTailProducer.lean`,
+with the full compiler
+`BalancedSingletonCycleCertificate.isUniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`,
+already solve the table. Arbitrary nonsingleton data are permitted
+by that producer; this is not an attempted new existence class.
+
+Narrow comparison with prior no-gos:
+
+- RB1–RB6 discharges local charged-root availability at binding
+  corners. It does not allow reaching a good corner from P.
+- EC1–EC7 bounds exact capacity on the ENTIRE box but permits
+  arbitrarily charged ROBUST unrooted words. PS instead excludes
+  ALL sufficiently accurate robust words from ONE genuine seed.
+- NOETHER RM37 forces an above-own head from a feasible sublevel
+  annotation. PS uses TRUE punishment/literal AllNever and adds
+  a uniform ALL-PATH absorption-relative moat and actual cap floor.
+- `root_eq_allContinue_of_terminal_mem_uniqueBasin` and
+  `exists_uniform_terminal_separation_of_positiveAbsorption` in
+  `UniformEquilibrium/Quitting/Bellman/Finite/AllContinueBasinRestartMoat.lean`
+  already control supplied EXACT blocks at quiet basins.
+- `exists_eventually_absorptionNashDefect_moat_of_unique_allContinue`
+  in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauNashMoat.lean`
+  gives compact fibre moats at a FIXED positive absorption
+  threshold. PS4's strict-own argument additionally controls the
+  ratio e/a down to zero charge, which is necessary for PS5.
+- `no_isQuittingBlockCertificate_solanPassivePaddedReward_one`
+  in
+  `UniformEquilibrium/Quitting/Boundary/Analytic/SolanPassivePaddingBlockNoGo.lean`
+  already excludes every EXACT finite block certificate on a
+  different solved rational padding. It supplies no approximate
+  relative-edge moat or rooted robust capacity bound. PS does not
+  claim that exact nonexistence is new or that it excludes UE.
+
+The real fixed-box forward characterization is UNROOTED:
+`UniformEquilibrium/Quitting/Projective/FixedBoxForwardCharacterization.lean`
+does not require its arbitrarily charged words to start at P or
+at any one designated port. None of its premises or conclusions
+is falsified here. Nor can this solved table inherit the positive-
+gap source ancestry in the canonical nonsure paid bridge packet.
+
+Direction change: the charged-component/forward-selection program
+cannot hide an initialization at punishment or at literal AllNever,
+even after allowing relative robust reselection and unlimited
+word length. It must produce/select an UNROOTED whole compatible
+word, or use genuinely different global data. The next attempt
+is that unrooted forcing problem, not extending this fixture or
+strengthening its constants.
 
 ## Robust relay sequel: binding corners always admit local charged root approximations
 
