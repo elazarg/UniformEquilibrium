@@ -456,26 +456,36 @@ such that:
   common debt vector. Their payoff vectors, cap vectors and laws need not
   coincide.
 - At EVERY marked minimum produced from ANY finite-law minimizing sequence,
-  some player has at least TWO maximizing compact stopping-test points.
-  The entire all-unique-cap alternative is excluded.
+  the prescribed terminal outcome is random. No prescribed stopping mass
+  precedes the earliest active cap point. That point is a finite isolated
+  positive mixture atom and the first prescribed collision, with positive
+  own atoms for at least two players.
+- Some player maximizes both at that first collision and at a strictly
+  later compact stopping test, possibly Never. The response PAYOFF kernels
+  differ on a positive event under the original opponent laws, while their
+  expectations equal the same unrestricted cap. The original finite moving
+  tests witness this distinction asymptotically.
 
-The [complete ordinary-mathematical reduction](notes/CODEX_BROUWER__DEBT_RIGID_MULTIPLE_CAP_SOURCE_REDUCTION.md)
+The [complete ordinary-mathematical reduction](exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md)
 constructs the original-profile compact source, every moving finite/Never
-cap test, and signed old-law variations. A worst-SUM reward comparison
-avoids finitely many withdrawal/join/floor contacts. Positive recipient
-row scaling then differentiates a concave minimum over ONE FIXED attainable
-debt set, forcing the common debt vector at every new minimum. Head-box
-rigidity and a literal same-table punishment graft exclude all unique caps.
-This argument has independent mathematical review; the full reduction is
-not yet a Lean-checked theorem.
+cap test, and signed old-law variations. A sign-adaptive worst-SUM reward
+comparison avoids at most 93 fixed contacts. Tiny recipient-row generic
+perturbations precede positive recipient scaling, which differentiates a
+concave minimum over ONE FIXED attainable debt set. The resulting common
+debt vector, actual deterministic-outcome exclusion, and full-active-family
+head/root boxes force the genuine collision-to-later bridge. This argument
+has independent mathematical review; the full reduction is not yet a
+Lean-checked theorem.
 
 Every final minimum is produced afresh; no old law is transported through
 the reward change. This is an existential counterexample-table reduction,
 not a restriction on every original table. The expanded direction changes
 own singleton rewards, and the positive row scales need not be rational.
 Single-pivot data and MAX-regret selections are not preserved. Distinct
-maximizing tests may be behaviorally outcome-equivalent; multiplicity
-alone supplies no UE consumer, paid move, or renewable rank.
+tests other than the displayed bridge may still be outcome-equivalent.
+The bridge owner may have ZERO debt; the collision may have sure quitters,
+and its conditional tail need not minimize debt or be Nash. No paid move,
+temporal return, renewable rank, or UE consumer follows from the tie alone.
 
 A uniform original-profile restriction follows: for each fixed table with
 D*>0 and each positive Never lower bound η, there are ε,γ>0 such that
