@@ -90,6 +90,14 @@ Both endpoints must be minima; the original excess-debt suffix is not one.
 This strengthens NC6's one-row substitution obstruction, but supplies no
 whole-law descent, no arbitrary-tail exclusion, and no export claim.
 
+NC10 tests an actual nonlocal repair at the honest excess-debt suffix:
+move an owner's WHOLE conditional law toward a genuinely maximizing finite
+reply, keeping its complete own cap fixed. Every nonzero such repair loses
+STRICTLY in the global clipped-welfare comparison. The other owners' ENTIRE
+new cap clipping must exceed the total prescribed-payoff surplus. This is
+an actual whole-law mechanism obstruction, not a local source-like fixture;
+the next repair must move at least two tail laws and hedge their new caps.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -24782,3 +24790,96 @@ all-four-bridge charged edge. A narrow common-Never/scalarization search in
 the selected Diagnostics/Quitting subtree, TOOLKIT and this note found no
 existing declaration supplying the five-parameter rigidity used here.
 All of NC9 is ordinary mathematics, not a Lean-checked theorem.
+
+### NC10. A cap-neutral whole-own-law best reply loses the global clipping test
+
+PROVED EXACT MECHANISM OBSTRUCTION; INTERNAL, NOT A CONSUMER. This returns
+to the original canonical table and its honest excess-debt suffix. It needs
+common MINIMUM DEBTS, but not NC9's further fresh selection or common ν.
+The attempted repair acts on ORIGINAL finite tail mass as well as Never:
+turn a tail owner toward its own full best reply without raising its own cap.
+The earlier tail-graft/root-only falsifiers do not provide this calculation.
+
+Assume the source's still-permitted all-four-bridge submode, with original
+root rates a_i<1, c=∏_i(1−a_i)>0 and H_i=c/(1−a_i). Keep its ACTUAL
+honest tail v=(u,b), not an arbitrary minimum or a free cap vector. Then
+
+    Q_i=C_i=B_i  for every i,
+    c(b_i−u_i)=d*_i>0.
+
+For a WHOLE replacement tail w, the previously derived exact identity is
+
+    D(T_a(w))−δ=c K(w),
+    K(w)=Σ_j (b_j^w−b_j)⁺/(1−a_j)−Σ_j(u_j^w−u_j).   (NC.22)
+
+The candidate: choose owner i, choose a genuine FULL maximizing finite
+reply for its tail opponents, and replace its conditional tail law by
+the independent mixture (1−t)p_i+tδ_reply, for any 0<t≤1. All other tail
+laws and the ORIGINAL root remain unchanged. Its own cap is deleted from
+its own law, so b_i^w=b_i exactly, while its own delivery improves by
+
+    u_i^w−u_i=t(b_i−u_i)>0.                     (NC.23)
+
+Raw cap attainment is unnecessary. Implement this FIRST on the original
+honest actual tail realizing sequence v^k=(u^k,b^k). Choose an actual finite
+reply σ_k with value at least b_i^k−1/k; finite replies suffice because
+s_i>0. Mix the entire owner-i stopping law with δ_(σ_k). Such a mixture
+is one private complete stopping law, not a public mixture of profiles.
+At each index its own entire cap stays b_i^k, its own delivery tends to
+the value in (NC.23), and every other cap is the ACTUAL supremum over all
+finite and Never replies after this change. Extract a convergent semantic
+subsequence. It gives an actual carrier tail w satisfying (NC.23).
+
+No old-chart domination by an unsupported new atom, closed-seam identity,
+or fixed selected opponent response is assumed. The maximizing witness
+σ_k may collide with original tail dates. Those collisions and newly
+dominant opponent replies remain inside the actual b_j^w coordinates.
+The extraction may depend on the fixed t; a common affine-cap selection
+over all t is NOT needed or claimed. Prefix the same actual sequences by
+the original fixed a, so that T_a(w) also belongs to the full carrier.
+
+The output own cap is fixed, since its root and tail opponent laws stayed
+put. Its own prescribed output delivery improves by c times (NC.23).
+Consequently the exact OUTPUT debt coordinate is
+
+    d_i(T_a(w))=(1−t)d*_i.                       (NC.24)
+
+At the true global floor every minimum has debt coordinate d*_i. Thus
+T_a(w) cannot be a minimum for ANY t>0, and actual global minimality gives
+
+    D(T_a(w))>δ,   K(w)>0.                       (NC.25)
+
+This is a strict inequality for every possible extracted full-cap limit,
+not merely one favorable selection of moving tests. Compactness makes its
+nonlocal cost explicit without inventing a constant. The nonempty set of
+carrier pairs whose i debt is at most (1−t)d*_i is disjoint from all minima,
+so
+
+    χ_i(t)=min{D(z)−δ:z∈K_all,
+                         d_i(z)≤(1−t)d*_i}>0.
+
+Every limit constructed above satisfies K(w)≥χ_i(t)/c. At t=1 the altered
+owner's actual tail law is surely finite at EACH realizing index; hence
+the entire prefixed profile is absorbing and the stronger bound is
+
+    K(w)≥g/c.                                    (NC.26)
+
+The source's excess tail debt was not replaced by zero or dropped from
+the comparison. All full new caps remain in (NC.22). Since b_i^w=b_i,
+the strict obstruction reads particularly plainly:
+
+    Σ_(j≠i) (b_j^w−b_j)⁺/(1−a_j)
+        > Σ_j(u_j^w−u_j).
+
+Thus the own cap-neutral payoff gain does not constitute a total-surplus
+gain after clipping; other owners' unrestricted new response envelopes
+necessarily charge more. This universal actual-law obstruction is stronger
+than a selected-reply calculation, but it does NOT exhibit a no-UE table,
+exclude arbitrary simultaneous tail changes, or consume source branchI.
+
+Mechanism change: stop attempting a direct best-reply repair of a single
+honest tail law. A viable nonlocal descent must also move opponent tail laws,
+so that the own cap can fall and/or the other newly born caps are hedged.
+The next concrete candidate is an independent paired whole-law replacement,
+with ALL hybrid outcome and response terms retained. No gate/export is
+requested for this obstruction, and the full conjecture remains open.

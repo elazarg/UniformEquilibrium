@@ -2,6 +2,18 @@
 
 Owner: CODEX_MORSE.
 
+Current full-game direction (NI1–NI6 at the end): an unrestricted
+negative-certificate search, not another clock-repair recipe. The exact
+root correspondence can be held fixed while sixteen actual reward
+coordinates control every successor. The fresh rational table in NI3
+is normal and has no sure Nash root at ANY annotation. No polynomial
+barrier has been found, no unrestricted positive gap is claimed, and
+numerical stationary/cycle searches are not nonexistence proofs. The
+full Fin4 question remains OPEN. This route must deliver an actual
+full-domain absorption-relative certificate or be falsified by an
+actual charged return; a further supplied-object interface is not its
+endpoint.
+
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
 whose outsider FULL debts vanish. All born finite deadlines and Never
@@ -19837,3 +19849,279 @@ outcome kernels, its root may have sure players, and its debtor
 support is rigid. None of those residuals may be discarded merely
 because a selected pointwise response or deterministic endpoint is
 easier to analyze. Full Fin4 UE remains OPEN.
+
+## NI. Nonstrategic inverse design of an unrestricted negative certificate
+
+Status: ORDINARY UNREVIEWED exact parametrization and experiment.
+Neither a counterexample nor a new UE class is claimed. This changes
+the current mechanism from three-law selection to a full-domain dual
+search. The old DN/SC table is NOT reused: its reviewed singular
+circuit already prevents every successful negative certificate.
+
+### NI1. The full endpoint, before any numerical restriction
+
+Let I={0,1,2,3}, and let the 60 rewards r_i(S), S nonempty, be real.
+Never pays zero, private randomization is independent, and all public
+information before absorption is survival. The desired negative result
+would exclude a uniform-equilibrium payoff against EVERY unilateral
+behavioral deviation, with no restriction on support, calendar,
+periodicity, or memory. It is NOT a gap for one architecture.
+
+The exact tracked declaration
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`
+was reread under its imports. For a bound M, normality of every player
+and at least one positive own singleton, it identifies failure of UE
+with BOTH the absence of a sure-quitter Nash root at the true punishment
+vector AND a rational polynomial potential on the full floor-free
+robust relation, at some positive rational tolerance at most1/4, on
+the fixed box[-M-2,M+2]^4.
+
+Write c=product_i(1-q_i), a=1-c and
+F_r(v,q)=cv+sum_{S nonempty} mu_q(S)r(S). For EVERY v,y in that box
+and EVERY independent product root q, the certificate must imply
+
+    P(v)-P(y) >= a
+
+whenever, for EACH i,
+
+    |y_i-F_i(v,q)| <= tau*a,
+    max((1-q_i)g_i,-q_i*g_i) <= tau*a.                 (NI.1)
+
+The literal definitions in `Projective/RobustChargedRelation.lean`
+and the all-root restriction in `Projective/ExactRootPotentialRestriction.lean`
+were inspected. State v is an arbitrary boxed continuation annotation;
+no behavioral realization or favorable minimizing suffix may be assumed.
+DN5 supplies an ORDINARY buffered sufficient repair: a C² exact-root
+potential on box[-M-3,M+3]^4, with unit charge drift on ALL exact roots
+and strong no-sure on that buffered box, gives 2P satisfying (NI.1)
+at some positive rational tau. Its absorption-relative cancellation,
+not absolute root proximity, is indispensable. This lemma is not
+silently being promoted to a checked Lean declaration.
+
+This is a convincing complete NEGATIVE route if its concrete inequality
+can actually be supplied: reward table -> verified gates -> all-root
+buffered barrier -> relative robust barrier -> unrestricted noUE.
+The indispensable unproved mathematics is the existence of such a
+barrier for at least one table. No local trap, failed stationary search,
+bounded exact path, or selected bad branch supplies it.
+
+### NI2. Separate the root geometry from its actual payoff transport
+
+For each i, write s_i=r_i({i}). For every nonempty opponent coalition
+T subset I\{i}, put
+
+    b_i(T)=r_i(T),       d_i(T)=r_i(T union {i})-r_i(T).
+
+These 4+28+28 real numbers are a bijective parametrization of all60
+reward entries. Let mu_{-i}(T) be the independent opponent product
+mass and h_i=mu_{-i}(empty). Then EXACTLY
+
+    g_i(v,q)=h_i(s_i-v_i)+sum_{T nonempty} mu_{-i}(T)d_i(T),
+    F_i(v,q)=h_i[(1-q_i)v_i+q_i s_i]
+             +sum_{T nonempty} mu_{-i}(T)[b_i(T)+q_i d_i(T)].   (NI.2)
+
+Thus the entire root Nash correspondence, and even every coordinate
+regret at every annotation/root, depends only on s and d. Changing b
+while fixing s,d does not change that correspondence. Its actual
+successor changes by
+
+    Delta F_i = sum_{T nonempty} mu_{-i}(T) Delta b_i(T).        (NI.3)
+
+This is an exact WHOLE-RELATION statement, not a comparison of selected
+local Nash branches. It also retains arbitrary quiet annotations and
+all sure faces. A fixed reward box must still contain the changed
+rewards and both edge endpoints.
+
+Important nonclaim: this is NOT strategic equivalence of the quitting
+games. Changing b changes actual prescribed payoffs, all unilateral
+clock caps, punishment values and potentially UE existence. No old
+minimum or old source may be transported across it. Its purpose is
+inverse design: hold the finite Nash constraints fixed while testing
+different actual successor transports for a full-domain barrier.
+
+When no sure root exists anywhere, all nonzero exact roots have a
+nonempty support A and 0<q_i<1 for i in A, with q_i=0 outside A.
+For these roots h_i>0 and the COMPLETE cell description is
+
+    t_i(q)=s_i+h_i^(-1)sum_{T nonempty}mu_{-i}(T)d_i(T),
+    v_i=t_i(q) for i in A,       v_i>=t_i(q) for i outside A.  (NI.4)
+
+There are fifteen support cells. Zero absorption is the separate
+AllContinue cell v_i>=s_i, whose edge is the identity. A numerical or
+symbolic barrier test must include every boxed portion of (NI.4),
+including quiet coordinates BELOW s_i when the threshold allows them.
+Restricting the search to v>=s or to realized payoff ports is invalid.
+
+### NI3. A fresh exact table and the independently transparent gates
+
+This table differs from DN/SC, despite retaining its singleton matrix.
+All pair participants now receive LESS than their own reward. In
+particular the positive pair premiums essential to the saved singular
+ladder calculation have been removed; that saved proof is not imported.
+Rows below are ordered by literal coalition, with recipient order0,1,2,3.
+
+| S | r(S) |
+|---|---|
+| {0} | (1,3,3,0) |
+| {1} | (4,1,-1,-1) |
+| {2} | (0,2,1,2) |
+| {3} | (4,-2,0,1) |
+| {0,1} | (-2,-2,5,5) |
+| {0,2} | (1/2,5,-2,5) |
+| {0,3} | (-2,5,5,1/2) |
+| {1,2} | (5,-2,-1/2,5) |
+| {1,3} | (5,-3/2,5,-2) |
+| {2,3} | (5,5,-2,-2) |
+| {0,1,2} | (4,4,4,-4) |
+| {0,1,3} | (4,4,-4,4) |
+| {0,2,3} | (4,-4,4,4) |
+| {1,2,3} | (-4,4,4,4) |
+| I | (-5,-5,-5,-5) |
+
+All owns are1 and M=5. Against the three opponents quitting surely at
+date0, i receives -5 by also quitting and -4 by continuing; every later
+clock and Never gives -4. Hence its TRUE full punishment satisfies
+P_i<=-4<1. This proves normality from an actual opponent law, not a
+guessed floor. The table is not asserted to be a noUE source.
+
+Strong no-sure, at EVERY real annotation. Define the four-cycle favorite
+map f(0)=3, f(3)=1, f(1)=2, f(2)=0. On an opponent singleton {z},
+favorite f(z)'s join gap is exactly+1/2; every nonfavorite join gap is
+strictly negative (at most-1). On ANY opponent pair or triple the join
+gap is exactly-1. Every pair has a strictly negative withdrawing gap
+for one of its members because f has no two-cycle.
+
+If at least three owners are sure, a sure member has gap-1 on every
+remaining opponent outcome. If exactly two are sure, choose the
+withdrawing member of their pair; its gap is strictly negative when
+no additional opponent quits, and is-1 otherwise. If z alone is sure,
+each nonfavorite free owner has strictly negative gap under every
+opponent outcome and must be quiet. Its sole favorite then has gap
++1/2 and must be sure, contradicting the two-sure case. These cases
+exhaust EVERY sure face and do not refer to v. In particular the true
+punishment vector has no sure Nash root.
+
+All s,d can now be frozen. Holding the twelve b_i({j}) fixed preserves
+the displayed singleton matrix too. The remaining twelve b_i(T) for
+opponent pairs and four b_i(T) for opponent triples are independent
+actual transport controls. Their corresponding participant triple
+and grand entries are b_i(T)-1. Strong no-sure holds for ALL values of
+these sixteen controls, not just the center. If each triple-opponent
+b_i(T)<=1, the same literal date-zero punishment argument proves
+normality. Bounds and positive owns must still be checked for the
+particular chosen table. No new UE or noUE region follows from these
+facts alone.
+
+A convenient complete control box is b_i(T) in[-4,5] for opponent
+pairs and in[-4,1] for opponent triples. Every reward then stays in
+[-5,5], all owns remain1, normality holds, and strong no-sure holds
+throughout. This is a verified search domain, NOT a solved family or
+a family known to exclude the complete existing UE producers.
+
+### NI4. What the numerical test actually did, and what it did not
+
+Experiments used ordinary floating point, not a proof assistant or an
+interval certificate. A trial polynomial of total degree4 was represented
+in the69 nonconstant monomials of v/8. Initial constraints comprised
+sampled points from ALL fifteen exact cells (NI.4), plus the valid
+singleton-face differential constraints
+
+    DP(v)[v-r({i})]>=1,    v_i=1, other v_j in[1,8].
+
+The named source for the latter is
+`IsQuittingFullExactRootPotential.singletonFace_drift` in
+`Projective/FullExactRootPotentialFaceDrift.lean`; collision-adjusted
+probes make these valid even at multiple-binding corners. The
+normalization sum|coefficient|<=1 is a numerical scaling convention,
+not a mathematical restriction on a positive certificate.
+
+At each iteration a finite linear program maximized the sampled
+normalized charge margin, and a separate global numerical optimizer
+looked for violations in every root cell and every singleton face.
+Initial positive sampled margin was about1.85e-4. Twelve iterations
+added181 violated constraints, with the sampled margin falling to
+about4.92e-7; the last separation still found an actual root-cell loss
+about-8.84e-3. Thus NONE of these polynomials is a certificate or even
+a surviving numerical lead. These numbers are experiment output, not
+exact degree-four exclusion or evidence of a positive game gap.
+
+Several large violations used quiet annotations below own; others
+used mixed pair roots with an active annotation close to a box face.
+These observations explain why replacing the full domain by a quiet
+upper rectangle or by sampled feasible payoff ports would be a
+dangerous false-positive search restriction.
+
+Separate floating-point searches found no stationary exact-Nash root
+and no closed full-root word among the tested finite support words.
+They are NOT complete censuses and establish NO nonexistence statement.
+The previously solved RZ examples and DN/SC show exactly why failure
+of such searches cannot be treated as a counterexample.
+
+A second experiment alternated quartic fits with small ACTUAL changes
+of the sixteen controls in the box just specified. Each transport
+step used (NI.3), and a line search recomputed the actual polynomial
+loss rather than trusting its linearized prediction. The entire
+root domain stayed frozen; no old payoff/cap minimum was transported.
+After twelve iterations, the sampled margin was about6.04e-7 while
+the numerical separator still found loss about-5.51e-4. No proposed
+polynomial survived. This is again only a failed numerical search,
+not a quartic no-go or exclusion of the whole control box.
+
+### NI5. The concrete next mathematical test
+
+The sixteen transport controls in NI3 give a sharper inverse-design
+problem than selecting another clock grammar: the full Nash-cell
+domain remains identical while successors vary by the exact linear
+formula (NI.3). Test actual transport values together with a genuinely
+nonconvex barrier, retaining the entire buffered box and every support
+cell. Any serious positive lead needs rational coefficients and a
+symbolic/interval proof of unit exact charge drift, followed by DN5's
+quantitative relative repair, or a direct proof of (NI.1).
+
+Conversely an exact charged return for the proposed table invalidates
+EVERY degree of potential and retires that table, not merely one
+polynomial ansatz. The next useful checkpoint is such a barrier or
+return, not another constrained Nash existence theorem, a finite
+sample's positive margin, or a newly named unsupported-clock adapter.
+Both least-Never response configurations and the ordinary full Fin4
+UE conjecture remain unconsumed.
+
+### NI6. Exact rejection of an additive quiet-well barrier
+
+Supporting ordinary theorem, not new UE coverage. Fix any finite game
+with |r_i(S)|<=M and any B>M. No C¹ full exact-root potential on
+[-B,B]^I can have the form
+
+    H(v)=h(v_i)+G(v_{-i})                              (NI.5)
+
+for even ONE isolated player i. In particular an arbitrary sum of
+one-coordinate wells cannot work, whatever its degree or nonconvexity.
+The function may be defined on a neighborhood of the box. No
+convexity, positive-own or interior-minimum assumption is imposed.
+
+Proof. Choose a global box minimum x. The inspected declaration
+`IsQuittingFullExactRootPotential.minimum_above_singleton` implies
+x_j>s_j for every j. Set z_i=s_i and z_j=x_j for j!=i. This is on
+the singleton lower face inside the same box. For j!=i, additivity
+gives partial_j H(z)=partial_j H(x). If x_j<B, both signs of the
+coordinate variation at x are legal, so this derivative is zero.
+If x_j=B, the left-sided minimum condition gives partial_j H(x)<=0,
+and x_j-r_j({i})>0 because B>M. The i-coordinate of z-r({i}) is
+zero. Consequently
+
+    DH(z)[z-r({i})]
+       =sum_{j!=i}partial_j H(z)[x_j-r_j({i})] <=0.
+
+But `singletonFace_drift` requires this SAME quantity to be at least1.
+Contradiction. This proof handles upper-face global minima explicitly.
+It does not exclude a polynomial merely because its interaction graph
+has several nontrivial blocks, nor does it require a four-way monomial.
+
+Thus the tempting control intuition “send every charged step toward
+independent above-own quiet wells” is false in the complete relation.
+Any serious inverse-designed barrier must couple EVERY player to
+another player. The quartic fits above already allowed such coupling;
+their numerical failure is NOT upgraded by this supporting theorem.
+The next research test remains an actual all-domain coupled barrier
+or an exact charged return for the selected reward data.

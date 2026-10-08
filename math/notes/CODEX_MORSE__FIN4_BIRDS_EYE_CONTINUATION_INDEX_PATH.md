@@ -8,6 +8,26 @@ The requested endpoint is UE for EVERY signed four-player quitting table,
 against EVERY unilateral behavioral deviation, with ONE payoff target
 fixed before the requested accuracy.
 
+Current independent pivot: NI1–NI6 in the owned global notebook tests
+an unrestricted negative certificate on a DIFFERENT rational table,
+not another repair of the solved RZ clocks. Exact root geometry depends
+only on own values and the28 opponent-coalition join gaps; sixteen
+actual transport coordinates can vary while that ENTIRE geometry
+stays fixed. The selected table is normal and has no sure Nash root
+at ANY annotation. A buffered polynomial barrier would give an
+absorption-relative full-relation certificate and hence unrestricted
+noUE by the named tracked characterization. No barrier has been
+found: sampled quartic candidates fail further root-cell tests, and
+failed stationary/finite-cycle numerical searches prove nothing.
+An exact supporting argument also rejects every barrier with even
+one additively isolated player, including arbitrary-degree sums of
+independent quiet wells. Coupled quartic fits, including actual
+transport changes, still supply no positive lead. The next test is
+actual nonconvex inverse design on the full box,
+with either a certified barrier or an exact charged return as its
+meaningful endpoint. This is neither a new counterexample class nor
+an export, and does not consume either least-Never configuration.
+
 This refresh replaces the earlier suggestion that a useful exact
 continuation index should simply persist. Exact Nash paths can have
 bounded charge on the ENTIRE payoff box even in a solved game.
