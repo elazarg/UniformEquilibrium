@@ -35,6 +35,14 @@ finite-support, all-four-finite realizing laws at each index. RS is
 COMPLETE ORDINARY, UNREVIEWED supporting mathematics, not a UE theorem
 or an independently reviewed counterexample-class elimination.
 
+RS11 now uses the genuine native absorbing floor: an occupied-prefix
+comparison forces positive ORIGINAL terminal collision probability in
+EVERY selected all-four-finite realizing sequence, at that SAME table.
+Its full arbitrary-root, negative-cap and sure-row argument is COMPLETE
+ORDINARY, UNREVIEWED. It supplies no paid owner, atom floor or legal
+debt improvement. The next step is to change that actual collision mass
+while upper-pricing all born caps, not to refine its lower bound.
+
 These ledgers are not one playable profile or a public signal. RS10
 retires pure-coalition and single-owner-geometric consumption of balance
 plus positive deliveries alone; its exact test is solved and violates
@@ -11117,6 +11125,182 @@ by these simple competitor families; it does NOT defeat a comparator
 using the true ALL-law floor and that margin. The next construction must
 use those hypotheses, rather than infer a favorable pure/solo member
 from the radial identity alone.
+
+### RS11. A true occupied-prefix floor forces ORIGINAL collision mass
+
+Status: COMPLETE ORDINARY, UNREVIEWED comparison. This is a SAME-table
+native restriction using the actual ALL-law floor, unlike RS10. It does
+not produce a lower-debt competitor or identify a paid collision owner.
+The already exported full-carrier early-collision theorem is stronger
+in its original domain; no new full-carrier theorem is claimed here.
+
+Fix ANY four-player native table r_i({i})=0, Never0, |r_i(S)|≤M with
+M>0. Let A=inf_{p∈P_abs}D_r(p)>0, with unrestricted caps throughout.
+For an actual ALL-four-finite law profile p define
+
+    η(p)=P_p(|first terminal coalition|≥2).
+
+For ANY γ>0, the following implication holds:
+
+    B_i(p)≥A+γ for every i
+      ⇒ D_r(p)≥A+γ²/(16M)−12Mη(p).                   (RS.26)
+
+Only the true absorbing floor and the displayed FULL cap margin are
+used. In particular no native true punishment≥0, conditional-cap
+nonnegativity, minimizing suffix, Nash row, isolated response or common
+debt vector is assumed. Necessarily γ≤M when the premise is satisfied.
+
+First prove (RS.26) for finite-support laws, all with Never mass0.
+Let s be the first natural date at which some owner's conditional Quit
+rate is1. For t≤s every original marginal survival P(T_i≥t) is positive;
+condition each marginal independently on that event and translate its
+calendar by t. Denote its actual full semantic pair by (u(t),b(t)) and
+its debt by D(t). Its laws are still ALL-four-finite, so D(t)≥A.
+Write q_i(t)=P(T_i=t|T_i≥t) and
+
+    c_t=∏_i(1−q_i(t)),  a_t=1−c_t,
+    w_t=∏_{v<t}c_v,     χ_t=P_{q(t)}(≥2 Quit).
+
+The first sure row exists and c_s=0. At s+1 a marginal with zero
+survival is filled by ANY finite law. The others use their actual
+positive-survival conditional laws. This constructs an actual
+ALL-four-finite tail, without conditioning on a null event. It supplies
+D(s+1)≥A, though that term will be multiplied by0 if the stopping
+prefix reaches this seam.
+
+The literal semantic identity at the sure seam needs checking for ALL
+responses, not just prescribed play. If h is the sole sure owner, h's
+tail cap depends only on the OTHER owners' actual conditionals and is
+independent of its filler. For i≠h the Continue tail multiplier α_i
+contains 1−q_h=0, so its full root cap is independent of all tail
+fillers. If at least two owners are sure, every α_i is0. Prescribed
+play also has c_s=0. Thus the same exact root semantic identity holds
+at s as at each earlier row, including every finite deadline and Never.
+
+Put Q_i=the literal root Quit payoff and C_i=its Continue payoff against
+b(t+1). The full root cap is b_i(t)=max(Q_i,C_i). The arbitrary-root
+identity, not an exact-Nash identity, is
+
+    D(t)=c_tD(t+1)+R_t,
+    R_t=Σ_i[(1−q_i)(Q_i−C_i)⁺+q_i(C_i−Q_i)⁺].       (RS.27)
+
+This includes EVERY max(Q,C) branch. The literal ordinary prefix has
+no free inserted date or omitted late test.
+
+Two elementary estimates provide the comparison. Write
+α_i=∏_{j≠i}(1−q_j) and a_i=1−α_i≤a_t. Native own0 gives Q_i=0
+when no opponent quits, whence |Q_i|≤Ma_i. Also
+
+    C_i=α_i b_i(t+1)+Π_i,       |Π_i|≤Ma_i.
+
+Although b_i(t+1) may be NEGATIVE, |b_i(t+1)|≤M. Therefore
+|C_i−b_i(t+1)|≤2Ma_i. Comparing max(0,Q_i,C_i) with
+max(0,0,b_i(t+1)) proves the positive-cap speed estimate
+
+    |b_i(t)⁺−b_i(t+1)⁺|≤2Ma_t.                      (RS.28)
+
+The positive part is indispensable; no false nonnegative conditional
+punishment floor enters this step. Empty old rows also obey (RS.28):
+they may clip a negative cap to0, but do not move its positive part.
+
+For a literal boundary check, put r_i({i})=0 and every other entry in
+row i equal to−1, with all opponents sure at date0. Its tail cap is−1;
+prefixing an empty date makes its cap0 by the new solo test. Thus an
+absolute-cap speed claim would FAIL at zero root absorption, whereas
+(RS.28) correctly compares positive parts0 and0.
+
+For any i, its summand in R_t is at least
+q_i(max(Q_i,C_i)−Q_i)=q_i(b_i(t)−Q_i). If every b_i(t)≥L>0,
+then independence and the union bound give
+
+    R_t≥LΣ_iq_i−Σ_iq_iQ_i
+       ≥La_t−MΣ_{i≠j}q_iq_j
+       ≥La_t−12Mχ_t.                                (RS.29)
+
+Indeed Σ_{i≠j}q_iq_j is the expected number K(K−1) of ordered
+quitter pairs, and K(K−1)≤12·1_{K≥2}. Signed rewards only make
+the upper bound on Σ_iq_iQ_i easier; no branch sign is suppressed.
+
+Stop at the first k∈{1,…,s+1} for which some b_i(k)⁺≤A+γ/2,
+or use k=s+1 if no such threshold is reached. For every t<k,
+all ORIGINAL conditional head caps are at least L=A+γ/2.
+If an actual threshold is reached, (RS.28) and the initial cap premise
+give Σ_{t<k}a_t≥γ/(4M). The product bound
+
+    ∏_{t<k}(1−a_t)≤1/(1+Σ_{t<k}a_t)
+
+then gives 1−w_k≥γ/(8M), using γ≤M. If no threshold is reached,
+the prefix includes the first sure row and w_k=0, so the same weaker
+bound holds. This is PHYSICAL absorption, not a count of root stages.
+
+Now unfold the actual occupied prefix:
+
+    D(0)=w_kD(k)+Σ_{t<k}w_tR_t
+        ≥w_kA+(A+γ/2)(1−w_k)−12MΣ_{t<k}w_tχ_t
+        ≥A+γ²/(16M)−12Mη(p).
+
+Here Σ_{t<k}w_ta_t=1−w_k, and the weighted collision terms are
+actual ORIGINAL first-coalition probabilities. No counterfactual
+response collision or publicly mixed ledger substitutes for η(p).
+This proves (RS.26) for finite support, including arbitrary sure-rate
+and zero-rate rows.
+
+For general ALL-four-finite p, truncate each finite-a.s. clock in total
+variation by moving only its finite tail mass to one finite date. Never
+mass stays EXACTLY0. Literal coupling makes prescribed outcomes, every
+response payoff and therefore all full caps converge uniformly; η also
+converges. Apply the finite-support argument with γ'<γ and then let
+γ'↑γ. This proves (RS.26) for ALL four-finite laws, without raw-clock
+tightness, an attained cap, or a bounded deadline restriction.
+
+Application to RS. At the SAME native spherical table, the ordinary
+RM24/BA6 strict minimum margin is
+
+    B_i≥A+γ₀,       γ₀=A²/(8M)>0
+
+at EVERY absorbing minimum semantic pair. RS9 supplies finite-support,
+ALL-four-finite realizing sequences for each selected RS ledger.
+For any fixed γ∈(0,γ₀), every sufficiently late source profile obeys
+the premise of (RS.26). Since D→A,
+
+    liminf η(p^k)≥γ²/(192M²)>0.                      (RS.30)
+
+Thus EVERY selected component in the finite-realizer radial mixture
+has a nonsingleton ORIGINAL terminal event; consequently its averaged
+prescribed law m does too. This strengthens the sphere-compatible
+randomness in RS7–RS8 without changing the table or the chosen radial
+identity. It is not a statement that every cap is paid, that one atom
+has a prescribed lower bound, or that the full unmodified native game
+has a positive unrestricted minimum.
+
+Sources and overlap. The exact autonomous recursion is already tracked
+as `quittingTerminalSemanticDebtSum_prefix_eq_continueMass_mul_add_capDefect`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CapDebtBellmanReduction.lean`;
+the root defect is defined in `UniformEquilibrium/Quitting/Root/NashDefect.lean`.
+Those declarations and the literal cap prefix were inspected. Neither
+states the native absorbing floor comparison (RS.26); they are reused,
+not rediscovered. `minimumTerminalSemantic_exactNash_criticalFace` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+concerns an EXACT Nash root against a FULL global minimum, not our
+arbitrary occupied roots or restricted native minimum. The independently
+reviewed `POSITIVE_MINIMUM_EARLY_ORIGINAL_COLLISION_STAGE.md` proves a
+stronger first-stage source theorem for the ORIGINAL unrestricted gap.
+Our direct proof uses the different native absorbing floor and remains
+compatible with its spherical selection; no new canonical full-source
+packet or Lean implementation is claimed.
+
+As an arithmetic diagnostic, (RS.28)–(RS.29) and the individual defect
+bound were also checked with exact rational arithmetic on all625 roots
+q_i∈{0,1/5,1/2,4/5,1}, signed integer reward rows bounded by3, and
+signed half-integer tail caps in[−3,3]. The check included all zero/sure
+boundaries and172 strictly positive-head cases. It is a test of the
+elementary root estimates, not a finite enumeration proof of the global
+floor premise or a Lean build.
+
+The next actual consumer must change these original collision masses
+independently and bound all born caps. This proof does not convert a
+collision into a charged bridge or collapse its coalition identity to
+participant counts; those would require additional arguments.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
