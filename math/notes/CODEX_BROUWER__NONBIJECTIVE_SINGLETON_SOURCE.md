@@ -136,6 +136,11 @@ OLD finite full-cap approximants. It supplies no one-source proportionality,
 playable profile mixture, or equilibrium. The live question is whether its
 ALL-law minimum floor forces a legal absorbing competitor. A complete exact
 early test rejects a raw pure-coalition shortcut, not that global consumer.
+RS7 now consumes a genuine part of that floor: with the native strict payoff
+margin, the radial mixture CANNOT consist entirely of deterministic terminal
+minimum ledgers. At least one selected native minimum is random. This is an
+ordinary, unreviewed compatible restriction at the spherical table, not the
+canonical EVERY-minimum random theorem or a full consumer.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -10932,6 +10937,100 @@ parallel tax-direction comparison and its envelope guardrail, not a
 proof of this spherical selection. No compiler, build or formalization
 claim is made here. The exact rational calculation in(RS.11)–(RS.15)
 was checked independently of the floating-point discovery experiment.
+
+### RS7. The global minimum floor rules out a deterministic-only radial mixture
+
+Status: COMPLETE ORDINARY, UNREVIEWED. This is a genuine application of
+the SAME-table minimum floor in(RS.9), unlike the nonglobal test in RS5.
+It asserts EXISTENCE of a random minimum among the radial ledgers, not
+that EVERY minimum at this table is random, and not a UE conclusion.
+
+The needed native minimum margin is the ordinary prefix-invariant result
+recorded as NOETHER RM24: if all owns are0, |r_i(S)|≤M and the true
+absorbing minimum is a>0, then EVERY K_abs minimum obeys
+
+    U_i≥a−d_i+a²/(8M)>0,  for every i.              (RS.16)
+
+It follows by the reviewed cap-crossing proof on the absorbing carrier;
+its finite prefixes remain absorbing and its strict singleton-column
+preemptors follow from the actual small solo-hazard competitor. This is
+NOT an application of the tracked FULL-minimum margin with its domain
+hypothesis silently removed. Only strict positivity U_i>0 is used here;
+no common debt vector, scale, genericity or punishment is assumed.
+
+Suppose, for contradiction, every positive-weight component in(RS.9)
+has a deterministic prescribed terminal law δ_H. Singleton H is impossible:
+its named participant's native prescribed payoff would be its own0,
+contradicting(RS.16). Thus every such H has |H|≥2 and r_i(H)>0 for ALL i.
+Group the weights of components with the same H as β_H>0.
+
+First establish the actual all-response rule for such a component.
+For its realizing sequence p_k, the original terminal coalition equals
+H with probability tending1. Coupling a selected response with the same
+original opponent clocks shows, on that event, its coalition can only be
+
+    H, H△{i}, or {i}.                              (RS.17)
+
+When i leaves a nonsingleton first coalition, its other members remain;
+when it joins, only i is added; earlier preemption produces its singleton.
+This bound is uniform over EVERY finite deadline and Never. The discarded
+original event contributes at most2M times its probability to any payoff
+comparison. No raw stopping-law tightness is assumed.
+
+Both H and H△{i} are actually obtainable in the limit. Staying with the
+old law yields r_i(H). If i∈H, literal Never withdraws it and yields
+r_i(H−i). If i∉H, choose a common actual finite date a_k on which the
+members of H concentrate and join them there. Such dates are produced,
+not assumed: two independent members j,l satisfy
+P[T_j=T_l<∞]→1, so max_t p_j(t)→1. A maximizing atom a_k therefore
+has p_j(a_k)→1, and the equality event forces p_l(a_k)→1. The original
+H event forces every other member of H to concentrate at the SAME a_k
+and every outsider to lie strictly after it with probability tending1.
+Hence this actual finite test joins H with probability tending1.
+
+Native singleton0 is strictly below r_i(H)>0, so(RS.17) and these lower
+witnesses identify its ENTIRE limiting full cap and debt:
+
+    B_i(H)=max(r_i(H),r_i(H△{i})),
+    d_i(H)=[r_i(H△{i})−r_i(H)]⁺.                    (RS.18)
+
+This holds for every realizing sequence with that prescribed point mass,
+including sequences whose common dates tend arbitrarily late. Consequently
+all components grouped at H have the SAME debt here, without invoking
+general all-minimum debt rigidity.
+
+Their debt sum is a>0. Choose H and a debtor i, and put J=H△{i}.
+Then r_i(J)>r_i(H)>0. By(RS.18) EVERY full-cap-approximating selected
+response in an H component converges in outcome to δ_J: its only other
+possible payoffs are strictly below r_i(J), uniformly outside a vanishing
+exceptional original event. In particular it puts zero limiting mass at H.
+
+No other deterministic minimum component can supply response mass at H.
+If its original coalition is K, (RS.17) requires K=H or K=J, since H
+is nonsingleton. K=H has just been treated. If J is a singleton there is
+NO J minimum by(RS.16). If |J|≥2, its full cap for i is
+max(r_i(J),r_i(H))=r_i(J), and EVERY selected cap response must stay at
+J rather than yield the strictly smaller r_i(H) or singleton0. Thus it
+also supplies no response mass at H.
+
+The i,H coordinate of the actual averaged ledger in(RS.9) is therefore
+
+    a r_i(H)=Σ_aα_a[μ_i^a(H)−μ^a(H)]
+            =0−β_H<0,                              (RS.19)
+
+contradicting r_i(H)>0. Therefore EVERY radial representation(RS.9)
+contains at least ONE component with a genuinely RANDOM prescribed
+terminal coalition law.
+
+This proves a compatible native-source restriction while retaining the
+spherical maximum, its all-law floor and its finite response-ledger dual.
+It does not replace the canonical stronger full-source random theorem,
+nor prove all native minima random. For a random component the reply can
+alter singleton-first paths and expose later opponent coalitions; the
+pure rule(RS.18) no longer holds. Even with no singleton on a particular
+sample, an owner cannot choose a response contingent on an unobserved
+coalition. Extending the flow contradiction to those actual random laws,
+with ALL birth caps retained, is the open global step.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
