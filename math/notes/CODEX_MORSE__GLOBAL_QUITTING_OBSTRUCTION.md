@@ -90,8 +90,9 @@ regression are stated explicitly. No new export or UE claim is made.
 New native triage RZ1–RZ6 is complete ORDINARY UNREVIEWED mathematics:
 one explicit all-own-zero table satisfies R₀/StandardQ/degree1 and
 all-pure escape, yet its ENTIRE exact finite-calendar Nash selector
-is AllNever at every calendar size. Bounded proper approximate
-equilibria are constructed with full caps controlled. This refutes
+is AllNever at every calendar size. Explicit absorbing periodic
+equilibria have EXACT zero full debt for every block subdivision;
+NOETHER's sharper spectator ledger is checked below. This refutes
 root-only and exact finite-Nash selection shortcuts, NOT a positive
 absorbing gap. Current consuming target is instead a strict same-domain
 competitor at a true K_abs minimum, using the direct strict margins
@@ -12092,7 +12093,7 @@ so the nonnegative-inverse input fails. The degree-different-from-one
 consumer does not apply because the actual degree is1. These are
 exact raw tests, not a claim to exclude all known UE producers.
 
-### RZ4. Actual nonlocal absorbing escape, with every reply controlled
+### RZ4. Actual nonlocal EXACT absorbing escape, with every reply controlled
 
 Reverse labels: new k denotes original −k. The singleton coefficients
 become γ′=(0,−1,99,99). Let
@@ -12126,9 +12127,23 @@ With ℓ microdates remaining in a block the actual value is
 Each coordinate is between its two nonnegative coarse endpoints.
 The block owner's value is identically0, so its Quit and Continue
 actions tie exactly. At any date a nonowner's pure Quit endpoint is
-ρzᵢ({i,owner}), since its singleton reward is0. Every pair
-participant reward is either0 or98, so this endpoint is at most
-98ρ. Its prescribed Continue value is nonnegative.
+ρzᵢ({i,owner}), since its singleton reward is0. NOETHER noticed that
+the exact spectator values dominate these endpoints, not merely zero;
+the following label check confirms this stronger conclusion.
+
+Put t=(1−ρ)^ℓ∈[σ,1−ρ], with ℓ∈{1,…,m}. The three nonowners in
+REVERSED labels have the following exact values and Quit endpoints:
+
+    i=a−1:   Uᵢ=t/σ−1≥0,                      Qᵢ=0;
+    i=a+1:   Uᵢ=99(1−t)≥99ρ,                  Qᵢ=98ρ;
+    i=a−2:   Uᵢ=99(1−σt)≥99(1−σ)≥99ρ,         Qᵢ=98ρ.
+
+The first value uses 99σ(1+σ)=1. The last comparison uses
+σ≤σ^(1/m)=1−ρ. In original labels i=a−1 is the successor of the
+current owner −a, so its pair participant reward really is0; the
+other two pair participant rewards really are98. Thus EVERY root
+is EXACT Nash, at every microdate, including m=1. This was previously
+understated as only an O(ρ) regret bound; no approximation is needed.
 
 Always Continue obeys the same Bellman equations as prescribed play:
 on one's active dates both actions pay0, and all other dates already
@@ -12136,17 +12151,20 @@ prescribe Continue. The bounded terminal remainder vanishes by the
 σ³ deleted-opponent contraction; therefore Never earns precisely
 the prescribed value. For EVERY finite pure deadline, telescoping
 the Continue equations gives deviation gain equal to opponent survival
-to that date times its Quit-minus-current-value difference, at most
-98ρ. Taking arbitrary mixtures of finite deadlines and Never proves
+to that date times its Quit-minus-current-value difference, which is
+nonpositive by the displayed exact ledger. Taking arbitrary mixtures
+of finite deadlines and Never proves
 
-    0≤dᵢ≤98ρ for every i,    D≤392ρ→0.
+    dᵢ=0 for every i,    D=0,    for EVERY positive integer m.
 
 The prescribed payoff at original phase0 is EXACTLY
 
     v=(0,0,99−99σ²,99−99σ),
 
-independent of m. Thus these are genuinely absorbing approximate
-terminal Nash profiles, not just root errors or selected cap estimates.
+independent of m. Thus these are genuinely absorbing EXACT terminal
+Nash profiles, not just root errors or selected cap estimates. They
+have infinite clock support; RZ5's entire finite-support obstruction
+therefore remains consistent.
 
 There is independent tracked producer overlap. γ′ satisfies every
 field of `QuittingCyclicSingletonOpenSignData`, including negative
