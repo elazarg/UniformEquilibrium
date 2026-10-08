@@ -36,6 +36,25 @@ has moved to finite-amplitude comparison using the SAME source's
 global floor and honest excess-debt suffix; no local constant or
 response-menu strengthening is proposed.
 
+FG now specifies one actual six-parameter family, built on the ORIGINAL
+finite honest-tail approximants with all born caps recomputed. Its two
+surely-finite owner mixtures are not a complete strategy class. The ORIGINAL
+least-Never selection already forces c_x(1−t)(1−s)≥c_a for any minimum
+return; nontrivial mixtures therefore require LESS root absorption. The
+product-Jensen cap dividend must exceed the entire actual corner excess,
+not just the movers' old debts. No such inequality or consumer has yet
+been obtained. Individual marginal Never masses remain free to redistribute;
+neither fixing the root nor freezing each marginal is justified by the
+joint-probability passport.
+
+The requested independent UR1–UR5 review of Morse's sixteen-control family
+is complete: mathematical PASS, with precise bounded prior-criterion
+separations but the full existential-producer union still UNRESOLVED.
+Its feedback is appended to
+[Morse review](../feedback/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_BROUWER.md).
+This reuses a tracked whole-game selected-return consumer; it does not
+consume this notebook's arbitrary least-Never source or close Fin4.
+
 The retained independent global source is RS: the native ZERO-OWN
 ABSORPTIVE infimum, not the native unrestricted gap (AllNever already
 has zero debt). At a positive Euclidean-ball maximum, source-switching
@@ -15424,3 +15443,155 @@ global floor/common debts/least Never to select the change while
 retaining every max branch. An unrelated zero-debt or minimizing
 tail is not supplied by this example. No further local constants,
 fixtures, menu refinements or export gate are proposed.
+
+## FG: the active finite-amplitude full-envelope comparison
+
+Status: OPEN consumer attempt. The elementary accounting below is
+not a new producer or class elimination; it specifies the operation
+now being tested after CA. It reuses the earlier CV dividend and
+the multicoordinate product-Jensen issue, rather than opening another
+certificate/no-go program.
+
+Use the SAME selected table/minimum and its HONEST suffix w after
+root a, with a_i=0 for the sole bridger i and a nonempty later-only
+set J. Choose j whose full maximizing set contains the FIRST α
+from SB, and use its moving finite suffix best response for β_j.
+For β_i choose a supplied later finite suffix best response. Do
+NOT infer that its response clock σ_i is≥α: SB excludes original
+PRESCRIBED i-mass beforeα, not unsupported i-response maxima.
+If σ_i<α this is a distinct early-response subcase, still legal
+and fully priced by the same construction. To restrict the move
+itself to at/afterα, one may choose a finite target there instead,
+but its best-response property then requires proof and is not
+assumed. All accounting and the least-Never filter need only the
+targets to be surely finite. Do not substitute unrelated minimizing
+tails. Independently replace the
+two complete conditional laws by
+
+    w_i^t=(1−t)w_i+tβ_i,
+    w_j^s=(1−s)w_j+sβ_j,     0≤t,s≤1.
+
+All other honest laws stay unchanged. Also allow the ENTIRE original
+root-rate vector to change to x∈[0,1]⁴. The independent product
+T_x(w^{t,s}) is the proposed finite-amplitude competitor; neither
+the two suffix mixtures nor x are a shared profile lottery. The
+operation is defined FIRST on the original actual finite suffix
+approximants, using the moving FINITE best-response dates there.
+Every changed law is legal on that unchanged integer calendar.
+Compute its full cap over ALL integer dates and Never, including
+the before/tie/after tests born at a formerly empty date. Do not
+reuse the old marked test space after such an insertion.
+
+The notation w^{t,s} denotes limits of those ACTUAL pairs, not a
+free annotation or a claimed integer-clock minimizer. Marginal-TV
+coupling gives payoff and cap functions uniformly Lipschitz in
+t,s, with constants depending only on the reward bound. Extract
+on a countable dense parameter grid and extend by this common
+modulus. Thus one subsequence supplies the full parameter family
+and its four corners, each in the same carrier. Their cap limits
+retain the entire original integer response envelopes, including
+every born branch. The root prefix formulas then transport these
+pairs continuously. This literal construction avoids assuming an
+unproved unchanged-calendar compiler for new unsupported atoms.
+
+With h_k(x)=∏_{l≠k}(1−x_l), c_x=∏_l(1−x_l), let A_k(x) be
+the passive expected reward when some opponent quits at the root
+and Q_k(x) the pure root-Quit value. The exact prefix formulas are
+
+    U_k=x_k Q_k+(1−x_k)[A_k+h_k u_k(w^{t,s})],
+    B_k=max(Q_k,A_k+h_k b_k(w^{t,s})).
+
+These retain the root-only buffers, sole-bridge clipping and possible
+DECREASE of a later-only full cap. No all-four-tie simplification
+is used. At x=a,t=s=0 they give the supplied minimum δ. Its suffix
+has the actual excess debt, not debtδ. The desired concrete output
+is x,t,s with their COMPLETE D<δ, or an exact obstruction redirecting
+this finite-amplitude family.
+
+**Original least-Never filter, not a fresh-table equality.** Let
+ν_v be the literal joint Never of this HONEST suffix. Section18
+of the accepted source gives ν_min=c_aν_v. At every original
+finite approximant the surely finite β_i,β_j give the EXACT
+literal identity, which survives the same augmented subsequence,
+
+    ν(T_x(w^{t,s}))=c_x(1−t)(1−s)ν_v.           (FG.0)
+
+Every member of the parameter family belongs to the original
+augmented carrier H: its semantic coordinates are not paired with
+an independently chosen ν. Hence ANY UPDATED FULL MINIMUM must
+satisfy
+
+    c_x(1−t)(1−s)≥c_a.
+
+For t+s>0 this requires c_x>c_a, i.e. LESS total root absorption,
+not coordinatewise reduction of every x_k. A fixed or more-absorptive
+root cannot make a nontrivial minimum return. In particular a
+return requires (1−t)(1−s)≥c_a, because c_x≤1. At a surely
+absorbing root c_x=0 the stronger absorbing gap applies directly.
+No equality is imported from NC9's differently selected table.
+
+This is also a quantitative separation filter. For any fixed
+ε∈(0,c_a), the compact subset of H with
+ν≤ν_min−εν_v contains NO full minimum. If nonempty, its least
+debt exceedsδ by some positive ζ_ε. Thus the entire parameter
+region c_x(1−t)(1−s)≤c_a−ε has D≥δ+ζ_ε, with ALL caps
+already included. The same compactness gives an approximate
+return filter; it does not assign a numerical modulus to ζ_ε.
+
+The consumer may therefore aim either at D<δ, or at a proven
+nonincrease D≤δ with strict violation of (FG.0)'s minimum-return
+budget. The latter would itself contradict globality plus least
+Never. Merely having an infinitesimal displacement, a small
+restricted regret, or the hypothetical ability to lower suffix
+debt supplies neither output.
+
+There is a useful guard against a misleading global upper bound.
+At fixed x, write P_ab=T_x(w^{a,b}) for the four ACTUAL corners
+(a,b)∈{0,1}² and let π_ab(t,s) be their product weights. Prescribed
+payoffs obey exact product affinity. Every response value also
+obeys that affinity, so the FULL cap defect is
+
+    C_k=Σ_ab π_ab B_k(P_ab)−B_k(T_x(w^{t,s}))≥0,
+    D(T_x(w^{t,s}))=Σ_ab π_ab D(P_ab)−Σ_k C_k.   (FG.1)
+
+This is not an identity for correlated play: the middle profile is
+the actual product of the two owner mixtures. Corner averaging is
+only algebra for its payoff and separate response values. A response
+family need not have a common maximizing clock at all four corners.
+The three corners other than00 have a surely finite suffix owner,
+so they absorb and have D≥δ+g at this SAME table. The remaining
+corner has D≥δ. Therefore any attempted strict comparison must
+obtain the actual cap-defect dividend large enough to overcome
+
+    Σ_ab π_ab[D(P_ab)−δ]≥g(t+s−ts).             (FG.2)
+
+Merely upper-pricing the mixed cap by the weighted corner caps
+cannot prove a descent: its resulting debt upper bound is the
+weighted corner debt, which is already at leastδ. This is why
+the next calculation concerns the entire joint cap-switch geometry,
+not only the mover debts eliminated at the absorbing corners. It
+does NOT claim that positive defect alone suffices, that (FG.2) is
+violated, or that this two-law family is universally complete.
+
+The narrow source search also found the earlier CV1–CV4 one-law
+global purification dividend and
+CODEX_NOETHER_SUPPORT__GLOBAL_KKT_TWO_LAW_COMPETITOR_CHECKPOINT.md:
+its exact response square controls selected gains but does not
+price every unmarked tester. The inspected prefix declarations are
+quittingTerminalSemanticPrefix and
+quittingTerminalSemanticPrefix_mem_carrier in
+UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean. These
+are the semantic inputs, not a proof of the missing dividend.
+
+An external literature preflight checked Ashkenazi-Golan, Krasikov,
+Rainer and Solan, "The APS approach for undiscounted quitting games"
+(2026), Introduction and Sections2.1–2.4, at the
+[official open-access article](https://link.springer.com/article/10.1007/s00182-026-00982-6).
+Its characterized class uses continuous-time single-owner absorption
+paths and can be empty; it supplies no arbitrary atomic/multiowner
+existence theorem for this remaining source. The paper normalizes
+own solo rewards to0 and AllNever strictly negative. A constant
+recipient shift of ALL outcomes, including AllNever, reconciles
+that convention with positive owns; shifting only nonempty rows
+would not. No paper claim is promoted to a tracked Lean result,
+and no new source transcription or implementation was made.
