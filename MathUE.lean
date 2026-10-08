@@ -76,6 +76,7 @@ import MathUE.Analysis.FaceDriftAdditiveExclusion
 import MathUE.Analysis.FaceDriftScalarCompositionExclusion
 import MathUE.Analysis.CompactMinimumEnvelope
 import MathUE.Analysis.CompactLinearMinimumRigidity
+import MathUE.Analysis.CompactGapStability
 import MathUE.Analysis.FiniteLogSumExp
 import MathUE.Analysis.CoordinateResetFTC
 import MathUE.Analysis.Examples.CoupledCubicShape
@@ -834,3 +835,4 @@ import MathUE.WeightedBlackwellFerguson
 import MathUE.MeasureTheory.BoundedDensityWeakCompactness
 import MathUE.MeasureTheory.FiniteProductDominatedWeakCompactness
 import MathUE.MeasureTheory.SignedConditioning
+import MathUE.MeasureTheory.IndicatorConvergence

@@ -17,6 +17,7 @@ import MathUE.Analysis.AnalyticCompactZeroFactorization
 import MathUE.Analysis.AnalyticQuadraticRemainder
 import MathUE.Analysis.BoxedAdditiveCalculus
 import MathUE.Analysis.CollisionAdjustedDrift
+import MathUE.Analysis.CompactGapStability
 import MathUE.Analysis.CompactLinearMinimumRigidity
 import MathUE.Analysis.CompactMinimumEnvelope
 import MathUE.Analysis.CompactSubtypeZeroExtension
@@ -367,6 +368,7 @@ import MathUE.MeanErgodic
 import MathUE.MeasurableSelection
 import MathUE.MeasureTheory.BoundedDensityWeakCompactness
 import MathUE.MeasureTheory.FiniteProductDominatedWeakCompactness
+import MathUE.MeasureTheory.IndicatorConvergence
 import MathUE.MeasureTheory.SignedConditioning
 import MathUE.MeshContraction
 import MathUE.Minimax.DiscountedShapleySystem
@@ -1621,6 +1623,7 @@ import UniformEquilibrium.ProofView.Concepts.Repeated.Uniform
 import UniformEquilibrium.ProofView.Concepts.Stochastic
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.AbsorbingPathwisePayoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.ActionIndependentAbsorptionPayoff
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.TransitionIndependent
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Basic
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayLawTransfer
@@ -1641,6 +1644,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.Expe
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Uniform.PayoffExistenceClosure
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Asymptotic
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Game
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.PathwisePayoff
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.PunishmentLevel
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootContinuation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation

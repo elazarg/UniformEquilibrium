@@ -165,6 +165,9 @@ of each other under `A ↦ -A`.
   realized pathwise along an infinite play
 * `StochasticGame.integral_pathwiseAveragePayoff` — its expectation against
   `infinitePlayMeasure` is exactly `finiteAveragePayoff`
+* `StochasticGame.tendsto_finiteAveragePayoff_integral_liminf_of_ae_tendsto` —
+  finite-game expected averages converge to expected pathwise liminf when the
+  actual pathwise averages converge almost surely
 * `StochasticGame.deviation_liminf_le_of_isUniformEquilibriumPayoff` — the
   deviation direction instantiated against `IsUniformEquilibriumPayoff`,
   unconditionally (given a bound on stage payoffs)
@@ -468,6 +471,35 @@ theorem integral_pathwiseAveragePayoff (σ : G.BehaviorProfile) (s₀ : G.State)
   rw [G.integral_histOfPlay_infinitePlayMeasure σ s₀ n
     (fun h => (n : ℝ)⁻¹ * G.totalPayoff who h), Math.Probability.expect_const_mul]
   rfl
+
+omit [DecidableEq ι] [Fintype G.State] [DecidableEq G.State]
+  [∀ i, Fintype (G.Act i)] [∀ i, DecidableEq (G.Act i)] in
+/-- Actual almost-sure average convergence identifies the finite-game expected liminf limit.
+The domination bound is derived from the finite stage outcomes, not supplied as a payoff floor. -/
+theorem tendsto_finiteAveragePayoff_integral_liminf_of_ae_tendsto
+    [Finite G.State] [∀ i, Finite (G.Act i)]
+    (σ : G.BehaviorProfile) (s₀ : G.State) (who : ι)
+    (hconv : ∀ᵐ play ∂G.infinitePlayMeasure σ s₀,
+      Tendsto (fun n => G.pathwiseAveragePayoff who n play) atTop
+        (𝓝 (liminf (fun n => G.pathwiseAveragePayoff who n play) atTop))) :
+    Tendsto (fun n => G.finiteAveragePayoff s₀ n σ who) atTop
+      (𝓝 (∫ play, liminf (fun n => G.pathwiseAveragePayoff who n play) atTop
+        ∂G.infinitePlayMeasure σ s₀)) := by
+  classical
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
+  obtain ⟨C, hC⟩ := Math.Probability.exists_abs_bound_of_finite
+    (fun outcome : G.StageOutcome => G.stagePayoff outcome.1 outcome.2 who)
+  have hstage : ∀ state action, |G.stagePayoff state action who| ≤ max C 0 :=
+    fun state action => (hC (state, action)).trans (le_max_left C 0)
+  have hbounded := G.abs_pathwiseAveragePayoff_le who (le_max_right C 0) hstage
+  have hlimit := tendsto_integral_of_dominated_convergence
+    (μ := G.infinitePlayMeasure σ s₀) (fun _ => max C 0)
+    (fun n => (G.measurable_pathwiseAveragePayoff who n).aestronglyMeasurable)
+    (integrable_const (max C 0))
+    (fun n => ae_of_all _ fun play => by simpa using hbounded n play)
+    hconv
+  simpa only [integral_pathwiseAveragePayoff] using hlimit
 
 omit [DecidableEq G.State] [∀ i, DecidableEq (G.Act i)] in
 /-- The deviation direction of the finite-horizon/liminf-average bridge,

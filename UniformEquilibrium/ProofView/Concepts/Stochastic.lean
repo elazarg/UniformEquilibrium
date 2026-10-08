@@ -1,5 +1,6 @@
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.AbsorbingPathwisePayoff
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.ActionIndependentAbsorptionPayoff
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.BehaviorTransfer
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.DependentActionPadding
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Disintegration
@@ -24,6 +25,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Asymptot
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Game
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.PunishmentLevel
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootContinuation
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.PathwisePayoff
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.SimpleBranches
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.UniformPayoffExistenceClosure

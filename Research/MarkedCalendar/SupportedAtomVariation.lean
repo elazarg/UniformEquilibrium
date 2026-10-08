@@ -1,5 +1,6 @@
 import Research.MarkedCalendar.FiniteLawGeometry
 import MathUE.Probability.FiniteSignedConditioning
+import MathUE.MeasureTheory.IndicatorConvergence
 
 /-! # Supported-atom variations on the unchanged reference cells
 
@@ -18,8 +19,9 @@ measurable signed conditional law. No limiting replacement law is supplied.
 Positive finite atoms of the actual collapsed marginal determine a retained gap,
 its exact raw mass, and one selector before every legal signed parameter. Positive
 Never mass similarly supplies the actual nonempty terminal gap and one selector.
-Mapped reset identities, chronological facades, and semantic carrier consumers
-remain separate subsequent steps. Parameter one is not identified with the signed
+The signed limiting laws satisfy exact mapped real-mass reset identities for both
+finite gaps and Never. Chronological facades and semantic carrier consumers remain
+separate subsequent steps. Parameter one is not identified with the signed
 constructor's fallback.
 -/
 
@@ -305,36 +307,12 @@ theorem tendsto_integral_norm_selectedCell_indicator_sub
       (decodeCell (source (subsequence k)) x)).indicator test y -
         ({z : unitInterval | a < (z : ℝ) ∧ (z : ℝ) < b}).indicator test y‖ ∂volume)
       atTop (𝓝 0) := by
-  let gap : Set unitInterval := {y | a < (y : ℝ) ∧ (y : ℝ) < b}
-  have hgapMeasurable : MeasurableSet gap := measurableSet_Ioo.preimage measurable_subtype_coe
-  have h := tendsto_integral_of_dominated_convergence
-    (μ := (volume : Measure unitInterval))
-    (F := fun k y => ‖(interval (source (subsequence k))
-      (decodeCell (source (subsequence k)) x)).indicator test y - gap.indicator test y‖)
-    (f := fun _ => (0 : ℝ)) (fun y => 2 * ‖test y‖)
-    (fun k => (((htest.indicator (measurableSet_interval _ _)).sub
-      (htest.indicator hgapMeasurable)).norm).aestronglyMeasurable)
-    (htest.norm.const_mul 2) (fun k => Eventually.of_forall fun y => by
-      rw [norm_norm]
-      calc
-        _ ≤ ‖(interval (source (subsequence k))
-            (decodeCell (source (subsequence k)) x)).indicator test y‖ +
-              ‖gap.indicator test y‖ := norm_sub_le _ _
-        _ ≤ ‖test y‖ + ‖test y‖ :=
-          add_le_add (norm_indicator_le_norm_self _ _) (norm_indicator_le_norm_self _ _)
-        _ = _ := by ring) (by
-      filter_upwards [ae_eventually_mem_selectedCell_interval_iff source subsequence hE
-        hgap hax hxb] with y hy
-      apply tendsto_const_nhds.congr'
-      filter_upwards [hy] with k hk
-      have heq : (interval (source (subsequence k))
-          (decodeCell (source (subsequence k)) x)).indicator test y = gap.indicator test y := by
-        classical
-        by_cases hmem : y ∈ gap
-        · rw [Set.indicator_of_mem (hk.mpr hmem), Set.indicator_of_mem hmem]
-        · rw [Set.indicator_of_notMem (fun h => hmem (hk.mp h)), Set.indicator_of_notMem hmem]
-      simp only [heq, sub_self, norm_zero])
-  simpa only [integral_zero] using h
+  exact MeasureTheory.tendsto_integral_norm_indicator_sub_of_ae_eventually_mem_iff
+    (volume : Measure unitInterval)
+    (fun k => interval (source (subsequence k)) (decodeCell (source (subsequence k)) x))
+    {y : unitInterval | a < (y : ℝ) ∧ (y : ℝ) < b}
+    (fun k => measurableSet_interval _ _) test htest
+    (ae_eventually_mem_selectedCell_interval_iff source subsequence hE hgap hax hxb)
 
 /-- Moving old-cell masks have their actual limiting integral under the original marginal laws. -/
 theorem tendsto_integral_selectedCell_chartLaw
@@ -670,5 +648,65 @@ theorem exists_signedSelectedCellLaw_limit_of_positive_never_atom
   have hright : (x : ℝ) < 1 := by dsimp only [x]; linarith
   exact tendsto_referenceLaw_signedSelectedCellLaw source subsequence hE i hlaw
     hgap hleft hright hmass parameter hparameter
+
+omit [Fintype ι] [Nonempty ι] in
+open Classical in
+/-- A signed variation on a finite gap resets its mapped real masses toward the actual midpoint.
+This is an identity of real masses, not a signed ENNReal mixture. -/
+theorem map_signedCond_gap_real
+    (limit : MathUE.MarkedCalendar.Calendar) (law : ProbabilityMeasure unitInterval)
+    {a b : ℝ} (hgap : Math.Topology.IsGap limit.endpoints a b)
+    (hb : b ≤ (limit.cutoff : ℝ))
+    (hmass : 0 < (law : Measure unitInterval).real
+      {x | a < (x : ℝ) ∧ (x : ℝ) < b})
+    (parameter : ℝ)
+    (hparameter : |parameter| ≤ law.signedCondRadius
+      {x | a < (x : ℝ) ∧ (x : ℝ) < b})
+    (target : Set (WithTop ℝ)) (htarget : MeasurableSet target) :
+    ((law.signedCond {x | a < (x : ℝ) ∧ (x : ℝ) < b}
+      (by
+        change MeasurableSet ((Subtype.val : unitInterval → ℝ) ⁻¹' Ioo a b)
+        exact measurableSet_Ioo.preimage measurable_subtype_coe)
+      hmass parameter hparameter : Measure unitInterval).map limit.collapseClock).real target =
+      (1 - parameter) * ((law : Measure unitInterval).map limit.collapseClock).real target +
+        parameter * (if (((a + b) / 2 : ℝ) : WithTop ℝ) ∈ target then (1 : ℝ) else 0) := by
+  apply ProbabilityMeasure.map_signedCond_real_of_ae_eq_const
+    law _ _ hmass parameter hparameter limit.collapseClock limit.measurable_collapseClock
+    (((a + b) / 2 : ℝ) : WithTop ℝ) ?_ target htarget
+  have hevent : MeasurableSet {x : unitInterval | a < (x : ℝ) ∧ (x : ℝ) < b} :=
+    measurableSet_Ioo.preimage measurable_subtype_coe
+  filter_upwards [self_mem_ae_restrict (μ := (law : Measure unitInterval)) hevent] with x hx
+  change x ∈ {y : unitInterval | a < (y : ℝ) ∧ (y : ℝ) < b} at hx
+  rw [← collapseClock_fiber_midpoint limit hgap hb] at hx
+  exact hx
+
+omit [Fintype ι] [Nonempty ι] in
+open Classical in
+/-- A signed variation on the open terminal interval resets mapped real masses toward literal
+Never. No endpoint or atomlessness premise is needed for constancy on this event. -/
+theorem map_signedCond_neverGap_real
+    (limit : MathUE.MarkedCalendar.Calendar) (law : ProbabilityMeasure unitInterval)
+    (hmass : 0 < (law : Measure unitInterval).real
+      {x | (limit.cutoff : ℝ) < (x : ℝ) ∧ (x : ℝ) < 1})
+    (parameter : ℝ)
+    (hparameter : |parameter| ≤ law.signedCondRadius
+      {x | (limit.cutoff : ℝ) < (x : ℝ) ∧ (x : ℝ) < 1})
+    (target : Set (WithTop ℝ)) (htarget : MeasurableSet target) :
+    ((law.signedCond {x | (limit.cutoff : ℝ) < (x : ℝ) ∧ (x : ℝ) < 1}
+      (by
+        change MeasurableSet
+          ((Subtype.val : unitInterval → ℝ) ⁻¹' Ioo (limit.cutoff : ℝ) 1)
+        exact measurableSet_Ioo.preimage measurable_subtype_coe)
+      hmass parameter hparameter : Measure unitInterval).map limit.collapseClock).real target =
+      (1 - parameter) * ((law : Measure unitInterval).map limit.collapseClock).real target +
+        parameter * (if ⊤ ∈ target then (1 : ℝ) else 0) := by
+  apply ProbabilityMeasure.map_signedCond_real_of_ae_eq_const
+    law _ _ hmass parameter hparameter limit.collapseClock limit.measurable_collapseClock
+    ⊤ ?_ target htarget
+  have hevent : MeasurableSet
+      {x : unitInterval | (limit.cutoff : ℝ) < (x : ℝ) ∧ (x : ℝ) < 1} :=
+    measurableSet_Ioo.preimage measurable_subtype_coe
+  filter_upwards [self_mem_ae_restrict (μ := (law : Measure unitInterval)) hevent] with x hx
+  exact (limit.collapseClock_eq_top_iff x).mpr hx.1.le
 
 end GameTheory.MarkedCalendarChart
