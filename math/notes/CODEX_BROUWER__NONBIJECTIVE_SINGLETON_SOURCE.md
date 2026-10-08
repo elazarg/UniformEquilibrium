@@ -24,7 +24,7 @@ and exact architecture falsifiers below have not supplied one. SG's
 actual end-Never graft has an independent focused PASS; the other live
 supporting derivations retain their explicit ordinary/unreviewed status.
 
-The current independent global attempt is RS: the native ZERO-OWN
+The retained independent global source is RS: the native ZERO-OWN
 ABSORPTIVE infimum, not the native unrestricted gap (AllNever already
 has zero debt). At a positive Euclidean-ball maximum, source-switching
 comparison yields a radial convex combination of at most57 complete
@@ -43,6 +43,16 @@ ORDINARY, UNREVIEWED. It supplies no paid owner, atom floor or legal
 debt improvement. The next step is to change that actual collision mass
 while upper-pricing all born caps, not to refine its lower bound.
 
+The subsequent boundary-penalty producer test BP is COMPLETE ORDINARY,
+UNREVIEWED. It falsifies EVERY exact finite-calendar Nash selector with
+arbitrary strictly negative terminal payments tending to zero, followed
+by private independent repetition, on the already-solved RZ table.
+All repeated finite/Never caps are evaluated exactly. Thus absolute
+disappearance of the terminal perturbation is not sufficient; the next
+construction must control its deleted-player, absorption-relative seam.
+This is an architecture falsifier, not an original positive-gap example
+or an additional reduction of the RS source.
+
 These ledgers are not one playable profile or a public signal. RS10
 retires pure-coalition and single-owner-geometric consumption of balance
 plus positive deliveries alone; its exact test is solved and violates
@@ -50,7 +60,10 @@ the genuine minimum cap margin. The live next question is whether the
 ALL-law floor and that strict margin force a legal independent
 whole-law substitution with all born caps priced. No radial identity,
 count balance or selected response lower ledger is used as a cap upper
-bound. All older unique proofs, tests and objections are retained below.
+bound. The live boundary question now permits nonvanishing terminal
+payments but must actually produce negligible deleted-player seam
+charges, not assume a favorable Nash selector. All older unique proofs,
+tests and objections are retained below.
 
 
 ## Original singleton-matrix question
@@ -11301,6 +11314,277 @@ The next actual consumer must change these original collision masses
 independently and bound all born caps. This proof does not convert a
 collision into a charged bridge or collapse its coalition identity to
 participant counts; those would require additional arguments.
+
+## Boundary-penalty Nash selection: an entire vanishing-price family fails
+
+COMPLETE ORDINARY, UNREVIEWED architecture falsifier. This changes the
+construction after RS11; it does not strengthen the collision lower bound.
+The table is already solved by the cyclic singleton producer. No positive
+native absorbing gap, spherical radial identity or genuine-minimum margin
+is claimed for it.
+
+### BP1. Actual construction and exact all-response seam
+
+For a native table z with own singletons and original Never payoff zero,
+fix the finite clock menu {0,…,N,Never}. Change ONLY the payoff when ALL
+players choose Never to the vector −c, where every c_i>0. Take an exact
+mixed Nash equilibrium in this finite normal-form game. The probabilities
+are private and independent. The proposed producer repeats that finite
+clock block independently after every block in which everyone continues.
+It must be tested against EVERY original finite deadline and Never, not
+just against the penalized finite menu.
+
+For any finite block let n_i be its own Never probability, ν=∏n_i,
+h_i=∏_{j≠i}n_j, G_i its original prescribed reward numerator, K_i its
+original reward when i refuses through the whole block, and F_i its
+maximum original pure-deadline value INSIDE the block. If ν<1 the literal
+independent repeated profile absorbs and delivers
+
+    U_i*=G_i/(1−ν).
+
+If h_i<1, every response in block k is
+
+    (1−h_i^k)·K_i/(1−h_i)+h_i^k·f_i(t),
+
+where t is its phase and f_i(t) the first-pass value. Literal Never has
+value K_i/(1−h_i). Thus the COMPLETE behavioral cap is
+
+    B_i*=max(F_i,K_i/(1−h_i)).                         (BP.1)
+
+This includes arbitrarily late deadlines and all empty phases already
+present in the block. No empty phase is inserted or declared free. If
+h_i=1, all opponents continue surely throughout every block, so in the
+native convention K_i=0, every finite stop pays own singleton zero, and
+literal Never also pays zero. Hence B_i*=0 directly; no division by zero
+or phantom continuation value occurs.
+
+These repetition facts are existing production, not the new producer.
+The exact declarations inspected are
+`sSup_range_quittingTerminalPayoff_update_eq_periodicWindow`,
+`quittingPeriodicPureTimeTerminalValue_add_period_eq_interpolation`, and
+`quittingRootSequenceTerminalValue_eq_windowRestartDelivery_of_periodic`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicWindowEvaluation.lean`.
+The first two do not require opponent contraction. Also inspected were
+`quittingPeriodicWindowBestResponseValue_le_restartDelivery_of_drift`
+in that file and `quittingBestReplyValue_periodizedPrefix_le_max` in
+`UniformEquilibrium/Quitting/Cycles/PeriodicFiniteReplyPrefix.lean`.
+They do NOT produce favorable boundary Nash profiles.
+
+### BP2. Complete table and the root facts used below
+
+Use I={0,1,2,3}, indices modulo4. The original Never payoff and own
+singleton rewards are zero. The full native table is:
+
+| S | z₀(S) | z₁(S) | z₂(S) | z₃(S) |
+| --- | ---: | ---: | ---: | ---: |
+| {0} | 0 | −1 | 99 | 99 |
+| {1} | 99 | 0 | −1 | 99 |
+| {2} | 99 | 99 | 0 | −1 |
+| {3} | −1 | 99 | 99 | 0 |
+| {0,1} | 98 | 0 | 0 | 0 |
+| {0,2} | 98 | 0 | 98 | 0 |
+| {0,3} | 0 | 0 | 0 | 98 |
+| {1,2} | 0 | 98 | 0 | 0 |
+| {1,3} | 0 | 98 | 0 | 98 |
+| {2,3} | 0 | 0 | 98 | 0 |
+| {0,1,2} | −1 | −1 | −1 | 0 |
+| {0,1,3} | −1 | −1 | 0 | −1 |
+| {0,2,3} | −1 | 0 | −1 | −1 |
+| {1,2,3} | 0 | −1 | −1 | −1 |
+| I | −1 | −1 | −1 | −1 |
+
+This is the RZ table in MORSE's notebook, whose original source is
+acknowledged rather than claimed as a new fixture. The new claim here is
+about ALL negative-boundary Nash selectors and their repetitions.
+
+Write Γ_ij=z_i({j}), diagonal zero. Thus Γ_i,i−1=−1 and its other two
+off-diagonal entries are99. In an adjacent pair, the two membership
+gaps are +1 and −1; in an opposite pair both are−1. Triple and grand
+membership gaps are−1.
+
+No exact Nash ROOT can have a sure owner, at ANY continuation vector.
+If z is sure, each nonfavorite i≠z,z+1 has gap−1 whether z is alone or
+another opponent also quits, so both are quiet. Favorite z+1 then has
+gap+1 and is forced sure. The original sure owner z now has gap−1
+against that adjacent sure favorite, contradiction. All later tails are
+screened in each asserted comparison.
+
+At continuation v the weighted gap identity is
+
+    Σ_i q_i g_i(q;v)
+      =−2[P_q({0,2})+P_q({1,3})]
+       −3Σ_{|S|=3}P_q(S)−4P_q(I)
+       −Σ_i q_i α_i(q)v_i.                            (BP.2)
+
+At v=0 the ONLY Nash root is q=0. Three or more positive suppliers
+give a strictly negative coalition term. Two opposite suppliers give
+negative active gaps, and two adjacent suppliers have one negative
+active gap. A sole supplier has a quiet favorite with positive gap.
+At any strictly positive v the only Nash root is again q=0: sure roots
+were excluded, so a nonzero root makes the last sum strictly negative.
+
+### BP3. ALL small negative-boundary roots have positive payoffs
+
+Let q be ANY Nash root at continuation −c with every c_i>0. It is not
+zero, and every q_i<1 by BP2. As max_i c_i→0, ALL these roots tend
+uniformly to zero. Otherwise compactness and closedness of the finite
+Nash inequalities would give a nonzero root at continuation zero,
+contrary to BP2. This uses the entire root family, not a preferred
+branch or an unproved equilibrium-selection theorem.
+
+Put x_i=q_i/(1−q_i), α_i=∏_{j≠i}(1−q_j). For owner i let
+F=x_{i−1} be its favorite opponent's odds and let A,B be the other two
+opponent odds. Direct evaluation of all table entries gives
+
+    Q_i(q)=[98(A+B)−H_i]·α_i,
+    K_i(q)=[99(A+B)−F]·α_i,
+    g_i(q;−c)/α_i=c_i+F−A−B−H_i,
+    H_i=F(A+B)+AB+FAB.                                (BP.3)
+
+At a nonsure Nash root every g_i≤0. Therefore A+B>0 for EVERY owner:
+otherwise H_i=0 and g_i/α_i=c_i+F>0. If all odds are at mostρ≤1/10,
+
+    H_i≤(ρ+ρ/2+ρ²/2)(A+B)<A+B.
+
+Consequently Q_i>0 for every owner. The equilibrium root payoff v'_i
+equals Q_i at a mixed owner and is at least Q_i at a quiet owner.
+Thus v' is STRICTLY POSITIVE coordinatewise at EVERY root for all
+sufficiently small positive price vectors c. No lower bound on the
+relative ratios c_i/c_j is assumed.
+
+### BP4. ALL finite-menu Nash profiles occupy ONLY the last date
+
+For sufficiently small c as above, every exact Nash profile in
+{0,…,N,Never} has all n_i>0. If a clock were finite surely, choose the
+earliest date at which some cumulative finite mass reaches one. All
+owners survive TO that date with positive probability. Conditioning
+the actual independent clocks on survival gives a suffix Nash profile:
+every surviving prescribed support test remains maximizing after
+subtracting the common earlier payoff and dividing by positive opponent
+survival. Its root has a sure owner, excluded by BP2. This argument is
+valid with the penalized ALL-Never payoff as well.
+
+AllNever itself is not Nash since a finite solo deadline pays0>−c_i.
+Hence there is a latest occupied finite date t. At that date the
+conditional continuation is exactly −c. BP3 gives a strictly positive
+continuation vector immediately BEFORE t. Every earlier root must then
+be AllContinue by BP2. Induction shows that t is the ONLY occupied date.
+
+It must in fact be t=N. Otherwise Never, used with positive probability
+by every owner, pays K_i−c_i h_i, whereas the allowed finite deadline
+t+1 pays K_i in the native own-singleton convention. Since c_i h_i>0,
+this contradicts its support optimality. Conversely every Nash root at
+−c placed at N is a finite-menu Nash profile: its root/terminal tests
+are optimal, and every earlier finite deadline pays0, below the strictly
+positive equilibrium payoff. Thus the assertion describes the ENTIRE
+finite-menu Nash family for every N, not one bad selector.
+
+Any such root has at least two suppliers: a sole supplier j has a quiet
+favorite i=j+1 with gap q_j+c_i(1−q_j)>0. Hence in its repeated profile
+EVERY h_i<1 and (BP.1) applies. The original one-block FULL cap is K_i:
+all tests after N, including Never, have value K_i, and root Nash plus
+c_i>0 gives K_i>Q_i; earlier tests are0. If u_i is its penalized Nash
+payoff, its original prescribed payoff is u_i+c_iν. Therefore
+
+    D_original(block)=Σ_i c_i(h_i−ν)≤Σ_i c_i→0.         (BP.4)
+
+This does NOT make it an absorbing near-equilibrium: ν→1. Repetition
+must be priced separately.
+
+### BP5. Every repeated selector retains a positive full debt floor
+
+Consider ANY sequence of positive price vectors c→0, ANY calendar
+lengths N, and ANY exact Nash selectors. BP4 reduces every chosen block
+to one root q at its last date. Let S=Σx_i and pass to a subsequence on
+which λ_i=x_i/S converges. Then λ belongs to the probability simplex.
+Divide the inequalities g_i≤0 in (BP.3) by S. Because all odds vanish,
+H_i/S→0 and c_i/S≥0, so
+
+    2λ_{i−1}+λ_i≤1 for EVERY i.                       (BP.5)
+
+In particular λ_i≤1/2 and every deleted denominator 1−λ_i is positive.
+Since
+
+    (Γλ)_i=99(1−λ_i)−100λ_{i−1},
+
+(BP.5) implies (Γλ)_i≥49(1−λ_i)>0 for all owners. The exact signed
+block statistics, with ν=∏(1−q_i), now give
+
+    K_i/(1−h_i)→(Γλ)_i/(1−λ_i),
+    U_i*=G_i/(1−ν)→(Γλ)_i,
+    F_i=max(0,Q_i)→0.                                (BP.6)
+
+If N=0 there is no early empty test, but F_i=Q_i>0 and the same limit
+holds. The passive singletons provide the displayed first-order terms;
+every participant pair contribution to G_i and every higher coalition
+term is of order S². Formula (BP.1), with its literal Never branch,
+therefore yields the COMPLETE debt limit
+
+    D_repeated→Σ_i λ_i(Γλ)_i/(1−λ_i)≥49Σ_iλ_i=49.      (BP.7)
+
+Every subsequence has a further simplex limit with this bound. Hence
+liminf D_repeated≥49 for the ENTIRE selector family, regardless of how
+calendar size, unequal prices and equilibria are chosen. This is not
+merely a lower ledger for old maximizing tests: (BP.1) controls ALL new
+finite tests and Never and shows Never is eventually the full cap.
+
+An exact common-price check is useful. For x=1/200 take
+c_i=ε=x+3x²+x³=40601/8000000 and q_i=x/(1+x)=1/201. Then
+
+    Q=2613133/2706867,
+    K=7880000/8120601,
+    Q=K−ε(1−q)³,
+    D_original=162404/1632240801,
+    B_repeated=7880000/120601,
+    U_repeated=1583839399/32240801,
+    D_repeated=252179586084804/3888272841401>60.
+
+The general proof does not need uniqueness of the common-price root.
+All figures above follow from the full displayed table and elementary
+rational operations, with no lost experiment artifact. The existing
+cyclic construction in RZ4, covered by
+`QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean`,
+gives native absorbing gap zero. BP is consequently NOT an unrestricted
+positive-gap table or a contradiction to the actual spherical source.
+
+Unequal prices do not secretly force all four rates positive. For
+0<ε<1 take c₀=c₂=ε, c₁=c₃=ε²/2 and odds x₀=x₂=ε,
+x₁=x₃=0. The two active root gaps are zero and each quiet scaled
+gap is −ε²/2. All root payoffs are positive. This is an exact
+two-supplier opposite-pair Nash root at the same last calendar date;
+its repeated debt tends99. It is included in BP5, whose argument
+never assumed all suppliers active or a uniform price-ratio bound.
+
+### BP6. Mechanism decision and next genuine producer question
+
+RETIRED: choose exact finite-calendar Nash profiles after ANY strictly
+negative terminal perturbation tending to zero, then repeat them and
+infer absorbing approximate Nash from the perturbation's absolute
+size. The ENTIRE family fails on BP's already-solved table. A small
+one-block FULL debt and strict positivity of its delivered payoffs do
+not fix the failure.
+
+The next test allows a terminal payment which does NOT tend to zero,
+and must PRODUCE control of every deleted-player seam, not merely of
+joint survival. For a negative payment −c the original FULL cap birth
+is bounded by c_i h_i, while original prescribed transport costs c_iν.
+Thus c_iν→0 alone is not the relevant bound. An actual finite-Nash
+producer with Σ_i c_i h_i→0 and max_i c_i bounded below by a positive
+constant would control every original finite/Never test and force
+ν→0. A literal small-Never fill could then force absorption. Such
+a producer has NOT been proved, and arbitrary favorable Nash selection
+or periodization is not supplied as an assumption.
+
+The literature branch checked during this pivot was Ashkenazi-Golan,
+Krasikov, Rainer and Solan, “The APS approach for undiscounted quitting
+games” (2026), §§2.4 and4.1–4.3, Theorems2.11 and4.10,
+<https://doi.org/10.1007/s00182-026-00982-6>. Its Flesch absorption paths
+use singleton quitting flows; their payoff set can be empty, and the
+essential operator does not produce arbitrary joint-quitting roots.
+The integrated essential-APS and finite jump–flow compiler in the
+toolkit already cover that conditional architecture. No new producer
+or UE hypothesis is borrowed from the paper here.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
