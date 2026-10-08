@@ -8561,6 +8561,34 @@ it does not supply the reconstruction. The next mechanism must change
 coalition probabilities using the actual table/global-floor information,
 not interpolate calendar aliases or share a forbidden cohort coin.
 
+### NR10. Do not impose fixed ν on a LOWER-debt competitor
+
+A sharper whole-law check applies to the earlier EG table, with no new
+example or constants tuning. Its half-root/half-Never profile satisfies
+d_i=1/16 for every i and ν=1/16. The actual singleton bound gives,
+for EVERY independent profile on this table with that SAME joint Never,
+
+    D(p)≥ν∑[i]s_i=4/16=1/4.
+
+Therefore the old profile is already a TRUE GLOBAL minimum over the
+ENTIRE fixed-ν strategy class, including all conditional finite laws,
+all coupled root/tail changes and all unrestricted response caps.
+Unlike NR9 it has actual random atomic coalitions, positive debts,
+and distinct maximizing root and late payoff kernels. Its unrestricted
+full infimum is nevertheless0 at the distant pure-pair Nash profile,
+whose ν=0. This distinguishes the two global optimization problems.
+
+Thus a repair architecture forced to preserve ν is globally falsified
+even when it may change ALL existing finite stopping mass. NR's common
+ν* constrains an EQUAL-debt return or two minima, not a hypothetical
+strictly LOWER-debt competitor: such a competitor need not preserve
+ν*. At the genuine source the full-law floor would forbid it by
+contradiction, but it cannot be excluded from the search in advance.
+This rejects the proposed fixed-ν repair mechanism, not NR's producer.
+The next comparison must permit changed ν while controlling the born
+caps through the actual unrestricted floor; no more fixed-level mixing
+or scalarization is being pursued as a consumer.
+
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
 ### NF9. Every minimum prefix at the SAME separated table has a paid nonsure bridge

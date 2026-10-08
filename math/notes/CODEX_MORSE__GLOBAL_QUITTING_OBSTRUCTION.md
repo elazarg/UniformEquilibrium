@@ -9861,6 +9861,226 @@ such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
 
+## Native root-only falsifier: quiet uniqueness survives the strongest basic Γ screens
+
+Question. In an all-own-zero Fin4 game, does a singleton matrix which
+is R₀, StandardQ, degree1, has a strictly positive simplex image and a
+negative blocker in every column force a NONquiet auxiliary Nash root
+at continuation0? Such a root would immediately consume the μ=1
+least-Never branch in ZV5. The answer is NO for the ENTIRE root cube,
+even when every pure absorbing coalition has a strict escape. An
+explicit infinite absorbing construction nevertheless solves the
+table. This is an exact mechanism falsifier, not a positive absorbing
+gap, a counterexample to UE, or new producer coverage.
+
+### RZ1. Complete table and probability model
+
+Use I={0,1,2,3}, indices modulo4. Each player has an independent
+private stopping clock with values in ℕ∪{Never}. The first finite
+minimum date selects its tied coalition S; terminal reward is z(S).
+Joint Never pays0. Deviations are unrestricted behavioral stopping
+laws, equivalently mixtures of ALL pure finite deadlines and Never.
+
+Set γ=(0,99,99,−1) and Γᵢⱼ=γ(j−i). For i≠j put
+Kᵢⱼ=1 if i=j+1, and Kᵢⱼ=−1 otherwise. The complete table is:
+
+| S | z₀(S) | z₁(S) | z₂(S) | z₃(S) |
+| --- | ---: | ---: | ---: | ---: |
+| {0} | 0 | −1 | 99 | 99 |
+| {1} | 99 | 0 | −1 | 99 |
+| {2} | 99 | 99 | 0 | −1 |
+| {3} | −1 | 99 | 99 | 0 |
+| {0,1} | 98 | 0 | 0 | 0 |
+| {0,2} | 98 | 0 | 98 | 0 |
+| {0,3} | 0 | 0 | 0 | 98 |
+| {1,2} | 0 | 98 | 0 | 0 |
+| {1,3} | 0 | 98 | 0 | 98 |
+| {2,3} | 0 | 0 | 98 | 0 |
+| {0,1,2} | −1 | −1 | −1 | 0 |
+| {0,1,3} | −1 | −1 | 0 | −1 |
+| {0,2,3} | −1 | 0 | −1 | −1 |
+| {1,2,3} | 0 | −1 | −1 | −1 |
+| I | −1 | −1 | −1 | −1 |
+
+Equivalently, own singletons are0, passive singletons are Γᵢⱼ,
+pair participants are Γᵢⱼ+Kᵢⱼ, all nonsingleton passive entries
+are0, and all triple/grand participant entries are−1. M=99 is
+a reward bound. This specifies all60 finite coordinates literally.
+
+### RZ2. Exact uniqueness over EVERY auxiliary root rate
+
+At continuation0 let x∈[0,1]⁴ and let gᵢ(x) be player i's
+root Quit payoff minus its root Continue payoff. Write pₓ(S) for
+the product probability of coalition S, and use zᵢ(∅)=0 solely
+for the empty-root continuation in this auxiliary finite game.
+Direct grouping by full root coalition gives the polynomial identity
+
+    Σᵢ xᵢ gᵢ(x)
+      =Σ_{S≠∅} pₓ(S) Σ_{i∈S}[zᵢ(S)−zᵢ(S\{i})]
+      =−2[pₓ({0,2})+pₓ({1,3})]
+       −3Σ_{|S|=3}pₓ(S)−4pₓ(I).
+
+Singleton coefficients vanish. Adjacent pair coefficients are
+Kᵢⱼ+Kⱼᵢ=0; opposite pairs have coefficient−2. Every triple
+coefficient is−3 and the grand coefficient is−4.
+
+At any exact auxiliary Nash root, xᵢ>0 implies gᵢ(x)≥0,
+including xᵢ=1; hence the displayed sum must be nonnegative.
+If at least three rates are positive, either a triple or the grand
+coalition has positive product probability, contradiction. If exactly
+two positive rates are opposite, both active gaps are negative. If
+they are adjacent, one active gap is −xⱼ<0; thus this case also
+fails, with no assumption that either rate is mixed. If exactly one
+rate xⱼ>0, its quiet favorite i=j+1 has gap xⱼ>0 and wants
+to join. Thus it is not Nash either. These cases exhaust all faces
+and partly-sure boundaries of the root cube.
+
+AllContinue IS Nash because own singletons and continuation are0.
+It is therefore the UNIQUE auxiliary Nash root at continuation0.
+The claim is not a bounded-grid conclusion or infinitesimal result.
+
+Every pure terminal coalition has a strict escape. From singleton j,
+i=j+1 joins, changing −1 to0. In an adjacent pair, its member with
+reward98 withdraws to passive singleton reward99. In an opposite
+pair either member makes the same change. In a triple or the grand
+coalition any member withdraws from−1 to a passive nonsingleton0.
+Every displayed escape gains exactly1.
+
+### RZ3. The strong basic singleton tests really hold
+
+The literal singleton matrix is Γ, with first row (0,99,99,−1).
+Each column has a negative blocker. Its principal determinants are
+99 on adjacent pairs, −9801 on opposite pairs, 970398 on triples,
+and 3900797 on I. They are nonzero whenever the support has at
+least two members. A homogeneous LCP solution with a singleton
+support is blocked by the negative column; with larger support it
+is zero by nonsingularity. Thus Γ is R₀.
+
+At positive anchor (1,1,1,1), the adjacent-pair inverse candidate
+has entries −1,1/99 in the appropriate order. An opposite-pair
+candidate is (1/99,1/99), but both inactive slacks are−1/99.
+On support {0,1,2}, the candidate is
+
+    (99/9802, −1/9802, 9901/970398);
+
+rotations cover all triples, with a negative coordinate. Empty and
+singleton supports are not admissible at this positive anchor.
+The only admissible support is I with candidate (1/197)⁴; its
+determinant is positive, and the inactive strictness test is vacuous.
+Hence the exact inverse-principal degree formula gives degree1.
+
+The following tracked declarations were inspected under their imports:
+
+- `isR0Matrix_of_negative_columns_of_nonsingular_principals` and
+  `r0Degree_eq_sum_admissible_inverse_supports` in
+  `MathUE/LinearProgramming/FiniteSupportDegree.lean`;
+- `isStandardQ_of_r0Degree_ne_zero` in
+  `MathUE/LinearProgramming/R0Degree.lean`;
+- `exists_uniformEquilibriumPayoff_of_finite_support_degree_test` in
+  `UniformEquilibrium/Quitting/Classification/LCP/FiniteSupportDegreeCriterion.lean`.
+
+Consequently Γ is StandardQ as well. Its uniform simplex image is
+(197/4)⁴>0. The inverse first row is
+
+    (970398,−980099,989901,−960399)/3900797,
+
+so the nonnegative-inverse input fails. The degree-different-from-one
+consumer does not apply because the actual degree is1. These are
+exact raw tests, not a claim to exclude all known UE producers.
+
+### RZ4. Actual nonlocal absorbing escape, with every reply controlled
+
+Reverse labels: new k denotes original −k. The singleton coefficients
+become γ′=(0,−1,99,99). Let
+
+    σ=(−1+√(103/99))/2∈(1/100,1/99),
+    −1+99σ+99σ²=0,
+    F=(0,0,99+99σ,99).
+
+Then F(k)=γ′(k)+σF(k+1), indices modulo4. Define coarse phase
+values Vₐ(k)=(1−σ)F(a−k) in reversed labels. They are all
+nonnegative, and the active owner a has value0 both at phase a
+and at the next phase. The recurrence is exactly
+
+    Vₐ=(1−σ)z({original owner −a})+σVₐ₊₁.
+
+For any positive integer m put ρ=1−σ^(1/m). Replace each coarse
+phase by m natural dates at which only that owner may quit, with
+independent hazard ρ. Repeat the four m-date blocks FOREVER; the
+original owner order is 0,3,2,1. It is essential to repeat them,
+not to end one four-block word with a Never tail. This specifies a
+literal behavioral profile without public randomness or correlation.
+Each individual clock survives one full period with probability σ;
+hence all four clocks are finite almost surely. Under any unilateral
+deviation, the three unchanged opponents survive a full period with
+probability σ³<1, so deleted-opponent absorption is uniform.
+
+With ℓ microdates remaining in a block the actual value is
+
+    (1−σ^(ℓ/m))z({owner})+σ^(ℓ/m)V_next.
+
+Each coordinate is between its two nonnegative coarse endpoints.
+The block owner's value is identically0, so its Quit and Continue
+actions tie exactly. At any date a nonowner's pure Quit endpoint is
+ρzᵢ({i,owner}), since its singleton reward is0. Every pair
+participant reward is either0 or98, so this endpoint is at most
+98ρ. Its prescribed Continue value is nonnegative.
+
+Always Continue obeys the same Bellman equations as prescribed play:
+on one's active dates both actions pay0, and all other dates already
+prescribe Continue. The bounded terminal remainder vanishes by the
+σ³ deleted-opponent contraction; therefore Never earns precisely
+the prescribed value. For EVERY finite pure deadline, telescoping
+the Continue equations gives deviation gain equal to opponent survival
+to that date times its Quit-minus-current-value difference, at most
+98ρ. Taking arbitrary mixtures of finite deadlines and Never proves
+
+    0≤dᵢ≤98ρ for every i,    D≤392ρ→0.
+
+The prescribed payoff at original phase0 is EXACTLY
+
+    v=(0,0,99−99σ²,99−99σ),
+
+independent of m. Thus these are genuinely absorbing approximate
+terminal Nash profiles, not just root errors or selected cap estimates.
+
+There is independent tracked producer overlap. γ′ satisfies every
+field of `QuittingCyclicSingletonOpenSignData`, including negative
+first envy, nonnegative later envies, and positive total197. The
+arbitrary nonsingleton part of this table is permitted. Its theorem
+`QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean`
+applies. The actual `CyclicSingletonTailData.certificate` and
+`CyclicSingletonTailData.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonTailProducer.lean`,
+and `BalancedSingletonCycleCertificate.isTerminalNash_and_hasValue`
+in `UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`
+were also inspected. The explicit calculation above separately checks
+absorption and all complete replies; it is not new existence coverage.
+
+### RZ5. Consumed implication and the honest remaining target
+
+Exact rational/symbolic experiments regenerated the full60 table,
+all15 pure-coalition escapes, all inverse-principal candidates and
+slacks, and the entire weighted-root polynomial. No search failure
+or floating-point inference is part of the proof. The recurrence
+was checked modulo the exact balance polynomial.
+
+RETIRED: the claim that the surviving Γ degree/StandardQ/blocker
+screens alone force a nonzero exact root at continuation0. It fails
+over the WHOLE auxiliary root family, even with all pure coalitions
+strictly escapable. The distant absorbing construction demonstrates
+why a genuine whole-law mechanism can succeed when that root-only
+consumer has no output.
+
+NOT RETIRED: the μ=1 branch under the FULL native premise A>0.
+Here A=0 and μ=0, because the explicit absorbing zero-debt limit
+exists. Thus this is not substituted for a least-Never source with
+a positive absorbing gap, and it cannot falsify an argument genuinely
+using that gap. The next global attempt must use the whole absorbing
+value or an actual chronological infinite construction, rather than
+trying to force a nonquiet root from Γ at the AllNever payoff alone.
+
 ## Native all-own-zero attempt: the exact small-constant limit is NONabsorbing
 
 Question. Let z be a fixed finite signed Fin4 table with ALL own
