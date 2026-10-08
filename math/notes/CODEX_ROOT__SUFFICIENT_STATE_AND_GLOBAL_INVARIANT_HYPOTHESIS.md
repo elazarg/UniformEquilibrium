@@ -1280,3 +1280,58 @@ forgotten finite labels or absence of equilibrium: it is a probability
 mode change and nonuniform control of moving responses. A useful next
 test must select a realizable branch or derive a uniform full-response
 estimate; adding more fixed-response coordinates is not that estimate.
+
+### Smooth global reward sensitivity does not upper-price changed caps
+
+The ordinary, independently unreviewed GR1–GR5 argument in
+`CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md` distinguishes two
+different uses of the global debt infimum. At a differentiability point
+of that infimum, a minimum's maximizing response kernels admit convex
+mixtures realizing a common derivative coefficient. Their selected
+response ledger is a LOWER bound on full debt at changed profiles. It
+does not become an upper bound merely because the optimal value is smooth.
+
+The exact test uses a sure stopping anchor and two other players playing
+matching pennies at its stopping date. Their Quit rates are 1/2+a and
+1/2+b; all remaining mass goes to Never. A passive fourth player and the
+complete reward table are specified in GR4. Every own singleton pays1.
+All finite and Never responses are covered because the anchor stops
+surely. At this actual profile,
+
+    U₁=1/2+2ab, B₁=1/2+|b|;
+    U₂=1/2−2ab, B₂=1/2+|a|;
+    D=|a|+|b|.
+
+The old equally mixed maximizing response selectors give selected total
+regret0 for every a,b, while the true caps rise. Moreover, the full debt
+infimum is identically0 on an OPEN sixty-coordinate reward neighborhood:
+the perturbed anchored matching-pennies game retains an actual equilibrium.
+Thus outer differentiability, global minimum attainment, and complete
+response information do not imply the proposed cap upper-pricing operation.
+
+This is a solved-table operation test, not a positive-minimum regression.
+It weakly supports H2/H4 for this particular mechanism. A proposed global
+sensitivity proof must additionally control newly maximizing responses at
+the changed laws; retaining an old supporting mixture is not that control.
+
+### Robust equilibrium existence need not continue a chosen finite circuit
+
+CI1–CI8 in `CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md` construct an
+exact four-stage Nash continuation circuit on a complete four-player table
+already belonging to a reviewed open UE class. Periodic implementation
+absorbs and controls every behavioral response, including deleted-owner
+Never. The diagram therefore supplies a real positive-charge chronology,
+not just a horizontal response cycle.
+
+Nevertheless, raising one specified reward entry by any sufficiently small
+η>0 destroys EVERY nearby four-stage Nash circuit, even when the original
+tied observers may become active. Exact root comparisons force one shared
+port coordinate to be at most1 on one side and strictly greater than1 on
+the other. The perturbed table remains inside the reviewed open UE class.
+The circuit calculation and local impossibility proof remain ordinary and
+independently unreviewed; no general producer follows from either.
+
+This separates robust existence from continuation of one chosen itinerary.
+It does not refute nonlocal reselection, additional phases, or approximate
+charged words. A whole-graph proof must allow those possibilities instead of
+silently assuming a useful branch persists through every perturbation.
