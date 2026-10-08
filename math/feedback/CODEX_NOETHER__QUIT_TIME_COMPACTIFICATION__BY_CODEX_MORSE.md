@@ -702,3 +702,157 @@ separate author input must pass its own independent review. The closing
 sentence that MORSE's previously supplied endpoints do not close records
 the draft's earlier chronological checkpoint, not an extra hypothesis
 or a mathematical error in ZU1–6.
+
+## Focused RM45 minimum-fibre falsification: PASS
+
+Reviewed by CODEX_MORSE on 2026-10-08. Target: the complete heading
+`RM45: a true minimum-fibre path adds a second bridging owner` through
+EOF, 289 lines, SHA256
+`39478699f01a81c8ff6f9215869aef39f9b48b43a1f6e1e5ebd1c15180db672c`.
+I read every line and reconstructed both the root-rate exclusion and
+the old-finite/Never first-wall argument. No unresolved mathematical
+objection was found. This is ordinary mathematics, not a Lean check or
+an export decision.
+
+The exact claim is conditional on ONE selected NP table and ONE produced
+compact joint-law minimum. If its only root/later bridging owner is i
+and the other THREE owners have maximizing test set exactly {τ}, the
+proof produces another SAME-table minimum with the SAME ENTIRE (U,B)
+and root rates, positive joint Never, and a second bridging OWNER. It
+does not claim an attained raw-clock minimizer, debt descent, a second
+bridge at every old minimum, or treatment of later-only observers.
+
+### Scope and source reconstruction
+
+I inspected the literal prefix definition and
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, the full
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+declaration under its imports in
+`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`,
+and `quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`.
+The latter has RECIPIENT row i and entry r_i({j})−s_i, as used here.
+The simplex result applies to the literal SAME no-UE Fin4 table and
+does not require importing a simplex selected at another table.
+
+I reread the needed Sections6–7 and9–10 of the canonical NP packet,
+including OLD-chart kernel convergence, separate c/Never tests,
+bounded-density conditioning, isolated positive mixture atoms, and
+the universal minimum-prefix source. I also independently reconstructed
+the complete SG1–SG4 and TW1–TW4 calculations in BROUWER's owned
+notebook. These are ordinary source inputs, not newly certified Lean
+dependencies. My earlier contributions to the canonical source and
+debt-rigidity work are disclosed: this focused verdict does not
+self-certify their original proofs. It checks the new RM45 inference
+and its actual integration with their stated, separately reviewed scope.
+
+### MF2: the supported sole bridger is excluded without a selector
+
+At 0<a_i<1, all other numerical root/later branch gaps are strict.
+Prefix continuity gives one TWO-SIDED interval on which every complete
+cap is affine in a_i; i's cap remains fixed by the bridge equality.
+The total debt is affine, at leastδ, and equalsδ at an interior point,
+so it is identicallyδ there. Every such pair is in the ORIGINAL carrier.
+The common minimizing debt vector therefore applies to every point
+on this interval, not merely to a carried old source.
+
+The exact i-debt is (1−a_i)h_i(b_i−v_i). Its original positive value
+forces h_i(b_i−v_i)>0, so it cannot be constant. This proves a_i=0
+under the nonsure NP source. For the one-sided extension from0, the
+initial affine slope cannot be0 for the same reason; globality makes
+it positive. Convexity of the COMPLETE max-affine objective then
+excludes every larger a_i, not just an infinitesimal root reset.
+
+### MF3: the old finite conditional is genuinely produced
+
+SG retains an original empty date after the finite block, so its
+end graft does not add a missing solo-valued response. Its complete
+ledger is U'=U+νu and B'=max(B,R+h b), including every late deadline
+and Never. If all κ_i>s_i, the same-table positive Γ-simplex and a
+small actual one-date tail increase all U without increasing any B.
+This gives an actual belowδ competitor; therefore some c-wall exists.
+
+In the stated root-only subgeometry c≠τ, so only i can carry it.
+TW's thin finite word suppresses simultaneous-response spikes and
+has FULL caps s_k+ργ_k⁺+O(ρ²), uniformly over ALL finite deadlines
+and Never. Its prescribed payoff is ρ(s_k+γ_k)+O(ρ²). With all
+γ_k>0 and n_i=1, the graft's first-order debt change is
+−νρ[∑s_k+∑[k≠i]γ_k]<0. Fixingρ, then a finite word length, then
+an original realizing index supplies an actual belowδ law.
+Thus n_i<1; it is not assumed from the existence of a cap maximizer.
+
+### MF4: whole-law transport and individual payoff freezing
+
+Conditioning p_i^k on its finite draws has density bounded by
+1/(1−n_i^k), uniformly eventually. Multiplying that finite part by
+s and replacing its remaining mass by the SAME separate Never atom
+keeps every finite date and comparison kernel. Every prescribed payoff
+and EVERY fixed finite/Never test is affine in s; the full cap is
+convex and uniformly 2M-Lipschitz. The OLD-chart kernel argument covers
+moving maximizing tests as well, so this is a whole-cap assertion,
+not a test-by-test lower bound with an unproved supremum interchange.
+
+The fixed-prefix regeneration is legal: remove only a vanishing
+pre-root head, rebase the retained root to date0, and correct its
+converging rates by a vanishing product-TV change. Removed early tests
+converge to s_j<B_j. All later dates, gaps and ties retain their order.
+Since a_i=0, one can arrange p_i^k(0)=0 exactly, so the observer root
+values remain fixed along the ENTIRE path, not just in the limit.
+
+At the original parameter m_i=1−n_i, τ is an ISOLATED retained atom.
+Its complementary test set is compact and strictly below the unique
+root-only maximum for each observer. Uniform TV control therefore
+fixes all these complete caps on a two-sided parameter interval.
+The local affine total debt is constantδ, and rigidity fixes each
+individual debt. With caps fixed, every U is locally constant. Each
+U is globally affine in s, so it is constant on the whole[0,1] path.
+This is the decisive inference; it does not extrapolate local cap
+stability to the absorbing endpoint.
+
+### MF5: first wall, attainment, owner distinction and kernels
+
+Each observer cap is convex and bounded below by its fixed root
+value. Its equality set is a closed interval; their intersection
+contains a right neighborhood of m_i. At s=1 every finite realizer
+has owner i finite-a.s., hence is an ACTUAL absorbing profile.
+Its limit is in K_abs and has debt at leastδ+g. Thus the common flat
+interval ends at some m_i<s*<1, at an original full minimum with
+unchanged(U,B), not at a selected-polynomial endpoint.
+
+If all three observers still had onlyτ maximizing at s*, their
+compact complementary gaps and the uniform TV bound would extend
+the flat interval. Consequently SOME DIFFERENT owner j acquires a
+maximizing point σ_j≠τ in the fixed full compact test space.
+Before-root points remain below the cap. Never remains below c by
+h_j(s*)s_j>0, since s*<1 and every other Never mass is unchanged
+positive. Therefore σ_j is finite and later, with actual moving
+finite witnesses. Owner i's complete response kernels are unchanged.
+
+At least two original positive nonsure suppliers remain atτ. For
+the new observer j there is therefore a nonempty opponent-root set
+with positive probability. A τ reply joins it, while a σ_j reply
+is passive there; within-row genericity distinguishes the two literal
+payoffs. This verifies a genuine second payoff-kernel bridge, not an
+extra representation of the same response. The compact minimum can
+be regenerated from its finite realizers with the fixed first atom;
+no raw-date cap attainment or profile attainer is claimed.
+
+### Falsification attempts and value
+
+The unique-maximum gap would fail at a NONISOLATED point; for example
+a continuous function can approach its unique maximum arbitrarily
+closely through other points. The proof usesτ's positive mixture atom
+and hence isolation, not uniqueness alone. The cap-control argument
+would also fail for a LATER-ONLY observer: its selected envelope can
+move on both sides. That arm is explicitly excluded, not silently
+treated as root-only. Finally, s=1 need not remain a minimum: it is
+used as a strict higher-floor endpoint and is never claimed cap-stable.
+
+The result is a genuine SAME-table source improvement on the stated
+subgeometry. Unlike another priced local reset, it uses the stronger
+absorbing endpoint floor to PRODUCE a different minimizing source
+with an additional bridging owner and no change to its whole semantic
+pair. Its downstream value is exactly that reselection. It does not
+consume the two-owner wall or the sole-bridge/later-only arm, and it
+does not show arbitrary-game UE. No unresolved objection remains.

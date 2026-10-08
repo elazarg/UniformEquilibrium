@@ -2,14 +2,25 @@
 
 ## Current status and exact open consumer
 
-The live consumer question is a legal independent whole-law modification
-below the TRUE native own-zero ABSORBING minimum, with EVERY finite and
-Never cap controlled. RM43 supplies a fresh table with only random minima;
+The live line has returned to ONE table supplied by the reviewed
+`FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`: true unrestricted minimum
+δ>0, strictly larger absorbing floor, positive owns, common strictly
+positive minimum debts, and positive joint Never. RM45 tests an actual
+old-law finite/Never conditioning path. In its precisely stated sole-
+bridger/root-only-observer subgeometry, all prescribed payoffs stay fixed
+and the absorbing floor forces a second bridging OWNER before Never
+vanishes. This is an ordinary unreviewed subgeometry construction, not
+a full Fin4 consumer or an assumed rank theorem. The residual with a
+later-only observer and the arbitrary multiple-bridge geometry remain
+open; a general below-δ competitor is still missing.
+
+The separate earlier native own-zero ABSORBING consumer is also open.
+RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
 the attempted extension of its pure-contact sign push to a random sure-root
 family: a moving cap wall lowers the family minimum. The actual table in
 that test has gap0, so this is a mechanism falsifier, not a no-UE source.
-The random whole-law consumer is still open. RM39 maximizes the TRUE full
+The native random whole-law consumer is still open. RM39 maximizes the TRUE full
 SUM gap over passive taxes with
 owns/Never fixed, producing at most five limiting minimum/response
 ledgers; consuming their source switching remains open. RM40 separately
@@ -18,7 +29,7 @@ absorbing boundary adapter and selected negative-tax comparison force
 a finite cap-approximating response genuinely different from Never at
 ONE newly produced positive absorbing minimum. No old NP minimum,
 debt rigidity, paid owner or lower-debt competitor is inferred. The
-live question is how to consume this actual finite branch globally.
+question there is how to consume that actual finite branch globally.
 RM41's automatic relative-join/quiet lift is false: early solo0 replies
 survive when a single participant level tends to−∞. MORSE's separate
 TB1–TB6 occupied periodic-core proof now repairs that actual unbounded
@@ -23086,3 +23097,293 @@ The source algebra is the literal max-prefix cap definition already
 used in RM43 and in `quittingTerminalSemanticPrefix` in
 `UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
 No general theorem about fresh minima is imported into SW.1–SW.4.
+
+## RM45: a true minimum-fibre path adds a second bridging owner
+
+### MF1. Exact source, target, dependencies, and nonclaim
+
+COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED. This block returns to ONE
+positive-own table r selected by the reviewed canonical packet
+`exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`, SHA256
+21e596e53595811ad4f83b657d97b3942d53e313d69bb2e9e243c2ee2af11953.
+It does NOT use RM43's fresh native table or a subsequent tax maximum.
+Write
+
+    δ=Δ_all(r)>0,   Δ_abs(r)=δ+g,   g>0.
+
+Every actual full-carrier minimum has the same debt vector d*, with
+EVERY d*_i>0. Positive joint Never and positive owns s_i persist at
+every such minimum. Use a produced joint marked law q with its FULL
+finite-clock/Never test space X, finite isolated first active stage τ,
+no prescribed mass before τ, and nonsure root rates a_i=q_i({τ}).
+There are at least two positive a_i. All within-row nonempty rewards
+are pairwise distinct. This is the exact NP source, not a tail minimum
+or a Nash row.
+
+The input q is generally only a COMPACT JOINT-LAW/semantic cluster,
+NOT an attained independent integer-clock profile. It comes with
+finite actual realizing profiles and full moving-test witnesses.
+All operations below are defined on those actual profiles first;
+bounded old-chart transport identifies their limiting laws and caps.
+Only the constructed finite-index below-δ competitor in MF3 is
+asserted to be an actual single profile. The first-wall output in MF5
+is another attained compact minimum, with finite realizing profiles,
+not an asserted exact integer-clock equilibrium or actual min-attainer.
+
+Let E_root be the owners having BOTH τ and some later finite point
+in their full maximizing test set. A ROOT-ONLY owner has maximizing
+set EXACTLY {τ}; a LATER-ONLY owner does not maximize at τ. Never is
+strictly below the cap because every n_i=q_i(Never)>0 and s_i>0.
+
+The actual subgeometry treated here is
+
+    E_root={i}, and every j≠i is ROOT-ONLY.                (MF.1)
+
+The conclusion is an actual same-table minimum-fibre construction:
+there is another produced minimum with the SAME ENTIRE semantic pair
+(U,B), the same root rates, positive joint Never, and at least TWO
+different bridging owners. The later bridge is a finite response with
+a genuinely different payoff kernel on a positive original opponent-
+root event. This is stronger than merely obtaining two clock labels.
+
+MF2 also excludes a supported sole root bridger without the extra
+root-only hypothesis. It strengthens the quantifier of RM2: no
+maximal-root-mass reselection is needed at this NP table. It is not
+credited as a new theorem about arbitrary nonrigid tables.
+
+Dependencies inspected narrowly:
+
+- `quittingTerminalSemanticPrefix_mem_carrier` and the literal
+  `quittingTerminalSemanticPrefix` definition in
+  `UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`;
+- `exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+  under its imports in
+  `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`;
+- `quittingProjectiveLCPMatrix` in
+  `UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`, with the
+  RECIPIENT-row orientation Γ_ij=r_i({j})−s_i;
+- the canonical NP marked/finite transport and its all-minimum debt
+  rigidity, not any old source passport;
+- BROUWER's ordinary internal SG1–SG4 and TW1–TW4 in
+  `notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`.
+  I read their complete finite/Never ledgers and thin-word response
+  calculation. MF3 uses only their stated same-table end-wall conclusion;
+  these internal inputs are not silently given an independent export seal.
+
+The older clipped-tail budget is not proposed as a consumer. It is used
+only to exclude a PURE-Never carrier of the sole end wall, after which
+the new operation changes ORIGINAL finite law mass on the minimum fibre.
+
+### MF2. A sole bridging owner must have zero original root mass
+
+Use the actual finite-prefix representation T_a(w), w=(v,b)∈K_all,
+of the produced minimum. Its full-cap formula is
+
+    U_k=a_k Q_k+(1−a_k)(A_k+h_k v_k),
+    B_k=max(Q_k,A_k+h_k b_k),
+
+where h_k=∏_(ℓ≠k)(1−a_ℓ). The tail need NOT minimize debt. If i is
+the only bridger, its equality Q_i=A_i+h_i b_i=B_i does not depend
+on a_i. All other owners have strict numerical root/later branch gaps.
+
+Suppose 0<a_i<1. Vary only a_i in a two-sided interval with w and
+all other root rates fixed. Those strict gaps remain strict. Every
+FULL cap is affine in this one coordinate there, including the entire
+later envelope b_k. Thus total debt is affine. Every pair belongs to
+the actual carrier, so its minimum at the interior a_i makes that
+affine function identically δ locally.
+
+But the i debt is exactly
+
+    d_i(a_i)=(1−a_i)h_i(b_i−v_i),
+
+and its original value is d*_i>0. It changes strictly under the
+variation, contrary to the common debt vector of EVERY true minimum.
+No signed perturbation at an unsupported clock is invoked: this is
+the literal numeric root-prefix formula realized by actual tail sequences.
+
+The NP source has no sure root, hence a sole bridger has a_i=0.
+This also shows why the old root-rate repair cannot consume that
+remaining owner by itself. Along increasing a_i, every other full cap
+is a max of affine functions, while its own cap is fixed. Total debt
+is convex. Its local affine slope at a_i=0 must be STRICTLY positive:
+a zero slope would produce another minimum with changed d_i. Convexity
+therefore gives D(T_(a_i=t,a_-i)(w))>δ for EVERY t∈(0,1]. This is
+an actual all-amplitude one-coordinate obstruction, not a positive-
+gap example constructed from arbitrary max polynomials.
+
+### MF3. In (MF.1), the sole bridger has old finite mass to condition
+
+Write R_k=V_k(Never), h_k=∏_(ℓ≠k)n_ℓ, ν=∏_k n_k, and
+κ_k=(B_k−R_k)/h_k≥s_k. The final EMPTY finite point c is different
+from τ and has value R_k+h_k s_k. SG's literal end graft and the
+positive singleton-simplex tail force c to maximize for SOME owner.
+Since the other three maximizing sets are {τ}, that owner can only
+be i. Consequently E_c={k:κ_k=s_k}={i}.
+
+TW's produced thin finite word gives, for every simplex λ,
+
+    Σ_(k∈E_c) (Γλ)_k⁺/n_k ≥ Σ_k[s_k+(Γλ)_k].      (MF.2)
+
+The named ambient Q theorem supplies λ with γ_k=(Γλ)_k>0 for ALL k.
+If n_i=1, (MF.2) would read
+
+    γ_i ≥ Σ_k s_k+Σ_k γ_k > γ_i,
+
+a contradiction. Thus 0<n_i<1. The finite conditional law F_i exists,
+and by MF2 it has NO mass at τ or before τ.
+
+For clarity about the actual-domain content of this exclusion: the thin
+word's finite/Never cap is s_k+ργ_k⁺+O(ρ²), not the common-date cap
+with pair-joining spikes. If E_c={i} and n_i=1, its literal end graft
+has full debt change
+
+    −νρ[Σ_k s_k+Σ_(k≠i)γ_k]+O(ρ²)<0.
+
+First fix a sufficiently small positive ρ, then a sufficiently long
+finite word, then an original minimizing index. The complete cap
+limits supply an ACTUAL independent law below δ. This excludes the
+pure-Never subcase using the genuine all-law floor; it is not a
+statement about a fictitious positive-debt profile on a solved table.
+
+### MF4. One legal old-law path and ALL-response control
+
+Let m_i=1−n_i∈(0,1), and replace ONLY owner i's original law by
+
+    q_i^s=s F_i+(1−s)δ_Never,       0≤s≤1.          (MF.3)
+
+Every other owner's law stays fixed. Independence is literal; no
+shared random choice between whole profiles is used. For an actual
+finite realizing profile p^k use F_i^k=p_i^k conditioned on its finite
+draws and the SAME formula. Since m_i^k→m_i>0, the conditioning is
+well-defined eventually and has uniformly bounded density. All old
+finite atoms and occupied/empty dates keep their order. There is no
+new finite response clock, stretch, or endpoint after-insertion alias.
+
+The realizers may be chosen with the retained first root at literal
+date0 and EXACT fixed root rates a. Censor the vanishing prescribed
+head before the retained stage and replace its convergent rates by a;
+the bounded product-TV error vanishes. The removed early tests paid
+s_k in the limit, strictly below B_k. Keep every original subsequent
+date and gap. This is the fixed-prefix/minimum regeneration seam in
+NP, applied to the ORIGINAL joint-law realizers, not an arbitrary
+semantic tail sequence that discards the original cap-test geometry.
+In particular p_i^k(0)=0 exactly, and conditioning its finite draws
+does not alter ANY other owner's literal date0 response value.
+
+The NP old-calendar transport handles this finite submeasure and
+the separate Never atom. Equivalently, at each finite k every pure
+response payoff is affine in s; the uniform product-TV bound
+
+    |V_j(t,q^s)−V_j(t,q^u)|≤2M|s−u|
+
+holds for ALL finite tests and Never. The old bounded-density marked
+transport supplies every moving finite witness and the compact c
+test. Thus B_j(s)=max_(t∈X)V_j(t,q^s) is convex and continuous on
+[0,1], and every resulting semantic pair belongs to K_all.
+At s=1 the literal owner-i finite conditional laws have Never mass0,
+so their independent products absorb and the limiting pair is in
+K_abs. This is actual absorption, not compact raw-clock attainment.
+
+For the required direction s≥m_i, NO original positive finite-mixture
+atom disappears: owner i's old finite density increases and every
+other finite law is unchanged. The same retained finite clock chart
+therefore represents ALL responses, including raw cuts inside old
+atom intervals and just-after cuts. The final c has zero mixture mass
+throughout; a fresh after-c test has the same value as c and supplies
+no missing cap. Only the separate Never mass can vanish, at s=1.
+For the small two-sided neighborhood of m_i, both its finite and
+Never densities remain strictly positive as well. The convexity/
+affinity formulas outside that neighborhood can alternatively be
+read directly at each unchanged finite calendar and passed to the
+limit; they do not require a new canonical chart with presumed tight
+raw clocks.
+
+Owner i's FULL cap B_i is independent of its own law, so is fixed
+for the whole path. For each j≠i, its root test also stays EXACTLY
+fixed: owner i has no root/before-root mass under either F_i or Never.
+Hence
+
+    B_j(s)≥Q_j=B_j(original)    for ALL s∈[0,1].   (MF.4)
+
+At s=m_i the root is j's UNIQUE isolated maximizing POINT. Its
+complement X\{τ} is compact and has a strict uniform gap. The TV
+bound therefore keeps its FULL cap at Q_j for a two-sided interval
+around m_i, even if some lower near-cap tests move through raw cuts.
+Never, final c, all upper finite tests and root left/right boundaries
+are part of this same comparison. No uniqueness⇒gap claim at a
+nonisolated maximizer is needed: τ is an isolated retained atom.
+
+On that interval every cap is fixed and every U_k(s) is affine in s.
+Therefore total debt is affine and ≥δ, with its minimum at the
+interior m_i. It is identically δ on the interval. Debt rigidity now
+implies U_k(s)=B_k−d*_k=U_k(original) for EVERY k there. Since each
+prescribed payoff is affine on the ENTIRE one-coordinate path,
+
+    U_k(s)≡U_k(original)   for EVERY s∈[0,1].      (MF.5)
+
+This is a conclusion, not a supplied payoff-preservation field. It
+does not claim whole caps stay fixed outside the established interval.
+
+### MF5. The absorbing floor supplies a genuine first cap wall
+
+By (MF.4)–(MF.5), D(s) is δ plus the nonnegative observer cap rises.
+The set
+
+    I_flat={s∈[m_i,1]: B_j(s)=B_j(original) for ALL j≠i}
+
+is a closed interval: each B_j is convex and bounded below by its
+constant root value. It contains an interval to the right of m_i.
+At s=1, the actual absorbing floor gives D(1)≥δ+g, so 1∉I_flat.
+Let s* be its right endpoint. Then
+
+    m_i<s*<1,    (U(s*),B(s*))=(U(original),B(original)).
+
+This is a TRUE actual-carrier minimum endpoint, not evaluation of
+a selected-response polynomial. Its joint Never is
+(1−s*)∏_(j≠i)n_j>0, and it retains the same positive debt vector.
+
+At least one j≠i has an additional maximizing point outside {τ}
+at s*. Otherwise the compact complementary gaps for all three
+observers would extend I_flat farther, a contradiction. No test
+before τ can maximize: no prescribed mass has appeared there, its
+payoff is s_j<B_j by the unchanged minimum singleton margin. Literal
+Never cannot maximize either: s*<1 and every n_k(s*)>0, so
+V_j(c)−V_j(Never)=h_j(s*)s_j>0. The new maximizing point is therefore
+a FINITE compact point σ_j>τ, with actual moving finite witnesses.
+
+The i root and late maximizing tests are unchanged, since its cap
+kernel depends only on the unchanged opponent laws. The new owner j
+also maximizes at τ, whose payoff stayed exactly Q_j, and at σ_j.
+All original root rates are unchanged and at least two are positive.
+For every j there is a positive nonempty opponent-root event S;
+τ and σ_j have payoff kernels r_j(S∪{j}) and r_j(S), respectively.
+Within-row distinctness makes them genuinely different. Thus the
+new minimum has at least TWO DIFFERENT bridging owners with literal
+payoff-kernel effects, not an outcome-equivalent clock duplication.
+
+The finite realization can be fed back into the canonical marked
+producer using the fixed first root atom, as in NP's universal
+minimum-prefix property. The whole semantic pair and the root rates
+were established before regeneration; they are not borrowed from a
+different table or independently selected source.
+
+### MF6. Scope of the consumed arm and the next actual obstruction
+
+The argument consumes (MF.1) by an actual independent whole-law
+minimum-fibre change. It does NOT lower δ there; it produces a second
+bridging OWNER. Its global step is the SAME absorbing floor at s=1,
+not a Nash tail, a correlation between sources, or a local cap ledger
+given a favorable sign. The pure-Never alternative has a direct
+below-δ thin-word competitor, while the finite-mass alternative has
+a fully priced first wall.
+
+This is not exhaustive for the NP source. If the sole root bridger
+has another owner whose cap is LATER-ONLY, that observer's cap can
+change on both sides of m_i; (MF.4) and local all-cap fixation no
+longer follow. At the constructed two-owner wall, continuing the same
+path can immediately raise the new observer's cap; iteration is NOT
+automatic. Neither situation is repaired by asserting an upper-price
+or minimum-tail hypothesis. The concrete next question is an actual
+coupled old-law change at the two-owner wall, or a different whole-law
+operation for the sole-bridge/later-only-observer arm.
