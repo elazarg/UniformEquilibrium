@@ -44,6 +44,20 @@ Good existential selection of a faithful resolution remains possible,
 but no game-specific proof of that selection is available here. These
 are ordinary unreviewed mechanism tests, not new UE coverage.
 
+Current actual-source pivot: the QCUT-O composition in the global note
+already consumes every singleton-concentrating interior cyclic family
+at a hypothetical no-UE Fin4 table. Hence ALL families with vanishing
+period times local error have vanishing total displayed hazard there;
+this composition is reviewed, but creates no new equilibrium class.
+The RT test then shows that scaling temperature by deleted absorption
+and adding a vanishing floor can still keep an exponentially collapsing
+symmetric branch on a SOLVED full-core table, with exact full debt
+tending197/12 per owner. Its explicit equilibrium instead rotates four
+owners. This does not exclude good asymmetric selection. It retires
+automatic efficiency from that local temperature adjustment and makes
+actual global-minimum response kernels the next selection input; no
+forcing principle for a whole compatible word has yet been proved.
+
 ## 1. The decisive picture
 
 My strongest current intuition is:

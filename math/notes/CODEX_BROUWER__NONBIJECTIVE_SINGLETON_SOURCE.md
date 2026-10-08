@@ -71,9 +71,16 @@ operator, or a direct full-behavioral negative certificate. WD below
 records one completed obstruction to the latter: the fixed four-response
 copy/preempt/delay kernel cannot have a positive pointwise symmetrized
 lower bound for ANY native table. Its exact thirteen-pattern cancellation
-is not a playable correlated profile. The next certificate attempt must
-use genuine product-law constraints, or the word comparison must produce
-a below-floor word; selected-response lower ledgers alone do neither.
+is not a playable correlated profile. WD7 now strengthens this to the
+ENTIRE fixed equal-weight four-response EXPECTED ledger: eleven ACTUAL
+independent absorbing product laws, together with their cyclic rotations,
+have an exact positive-weight cancellation of all 56 native reward
+coordinates. Hence every native table has one actual absorbing witness
+where that ledger is nonpositive. The weighted family is used only to
+select a witness, never as one playable lottery. This is COMPLETE
+ORDINARY, UNREVIEWED architecture falsification, not a no-UE class
+exclusion. The next mechanism must retain profile-adapted response
+selection or produce a below-floor word with every new cap priced.
 All older unique proofs, tests and objections are retained below.
 
 
@@ -11303,6 +11310,173 @@ debt; (WD.1) must control its entire defects at its ACTUAL intermediate
 cap states. Neither missing step is assumed here. This certificate
 grammar is retired in its tested pointwise form; it is not exported or
 enlarged by tuning its constants.
+
+
+### WD7. Actual independent absorbing witnesses retire the entire fixed expected ledger
+
+Status: COMPLETE ORDINARY, UNREVIEWED, internal architecture falsifier.
+The new statement is strictly stronger than WD4: it uses only ACTUAL
+independent product laws, so a product-law refinement cannot rescue THIS
+fixed equal-weight ledger. No conclusion about the full cap, a positive
+absorbing infimum, or UE follows.
+
+Keep the exact four responses of WD2, with independent fresh draws:
+Quit0, Never, own finite clock delayed by one, and next player's finite
+clock preempted by one and clipped at zero. All clock maps preserve
+Never. For any table with own singleton and AllNever rewards zero define
+
+    L_r(p) = Σ_i [¼ Σ_(four responses β) U_i(β_i,p_-i) − U_i(p)].
+
+The complete unrestricted debt dominates L_r(p). The proposed negative
+certificate would require one c>0 such that L_r(p)≥c for EVERY actual
+independent absorbing p. The following exact theorem refutes that
+requirement for EVERY native table, without assuming cyclic symmetry:
+
+    For every native Fin4 table r, one of the 44 explicitly specified
+    independent absorbing profiles below has L_r(p)≤0.
+
+Represent a player's law by its probability NUMERATORS on
+{0,1,Never}, with common denominator2. Use
+
+    N=(0,0,2), Z=(2,0,0), T=(0,2,0),
+    A=(0,1,1), B=(1,0,1), C=(1,1,0).
+
+Each row below is one actual profile: the four owners draw their listed
+laws independently. Its entire nonempty support is finite apart from
+the displayed literal Never atoms. In particular T, Z, and C have
+Never probability zero, and EVERY row has at least one such owner.
+Every listed profile therefore absorbs almost surely.
+
+| owner laws (0,1,2,3) | positive integer weight |
+|---|---:|
+| (N,N,T,Z) | 2 |
+| (A,Z,T,T) | 24 |
+| (T,T,T,T) | 12 |
+| (T,T,Z,Z) | 3 |
+| (T,B,T,C) | 64 |
+| (T,B,B,C) | 32 |
+| (T,C,B,Z) | 16 |
+| (T,C,C,C) | 44 |
+| (T,C,Z,B) | 32 |
+| (T,C,Z,C) | 166 |
+| (T,Z,C,Z) | 70 |
+
+The weights sum to465. Also include each row's four cyclic player
+rotations with the SAME weight; the 44 occurrences have total weight
+1860. Repeated profiles may be retained as separate occurrences.
+
+Every payoff and response expectation is linear in the 56 free reward
+coordinates (i,S) with nonempty S≠{i}. For one profile p, every
+expectation has denominator16: it uses four independent clock draws,
+each with denominator2. A forced response has numerator2, while a
+copied response replaces only the deviator's marginal by the fresh
+copied law. Thus 64L_r(p) has INTEGER coefficients. The following
+standard-library verifier constructs all 56 coefficients directly for
+EVERY rotated ACTUAL profile and checks their exact cancellation:
+
+```python
+from itertools import product
+from math import prod
+
+N=(0,0,2); Z=(2,0,0); T=(0,2,0)
+A=(0,1,1); B=(1,0,1); C=(1,1,0)
+data=[
+ ((N,N,T,Z),2), ((A,Z,T,T),24), ((T,T,T,T),12),
+ ((T,T,Z,Z),3), ((T,B,T,C),64), ((T,B,B,C),32),
+ ((T,C,B,Z),16), ((T,C,C,C),44), ((T,C,Z,B),32),
+ ((T,C,Z,C),166), ((T,Z,C,Z),70),
+]
+coords=[(i,S) for i in range(4) for S in range(1,16)
+        if S != 1 << i]
+index={c:j for j,c in enumerate(coords)}
+
+def payoff_coeff(laws,i):
+    out=[0]*56
+    for choices in product(*laws):
+        clocks=[c[0] for c in choices]
+        weight=prod(c[1] for c in choices)
+        first=min((t for t in clocks if t is not None),default=None)
+        if first is None:
+            continue
+        coalition=sum(1 << j for j,t in enumerate(clocks) if t==first)
+        if coalition != 1 << i:
+            out[index[i,coalition]] += weight
+    return out
+
+def ledger(profile):
+    laws=[[(t,w) for t,w in zip((0,1,None),p) if w]
+          for p in profile]
+    out=[0]*56
+    for i in range(4):
+        base=payoff_coeff(laws,i)
+        nxt=profile[(i+1)%4]
+        tests=[
+            [(0,2)],
+            [(None,2)],
+            [(None if t is None else t+1,w) for t,w in laws[i]],
+            [(0,nxt[0]+nxt[1]),(None,nxt[2])],
+        ]
+        for test in tests:
+            changed=laws.copy()
+            changed[i]=[(t,w) for t,w in test if w]
+            response=payoff_coeff(changed,i)
+            out=[x+y-b for x,y,b in zip(out,response,base)]
+    return out
+
+assert sum(w for _,w in data)==465
+total=[0]*56
+for profile,weight in data:
+    assert all(sum(p)==2 and min(p)>=0 for p in profile)
+    assert any(p[2]==0 for p in profile)
+    for shift in range(4):
+        rotated=tuple(profile[(i-shift)%4] for i in range(4))
+        row=ledger(rotated)
+        total=[a+weight*b for a,b in zip(total,row)]
+assert total==[0]*56
+print('44 independent absorbing product witnesses; total weight 1860; '
+      'all 56 coefficients exactly zero')
+```
+
+The displayed verifier was run and printed the stated exact result.
+An exploratory floating-point LP suggested the profile support; an
+exact rational nullspace produced the displayed integer weights. No
+LP output, solver tolerance or external package is needed to reproduce
+or prove the identity now.
+
+Consequently the positive-weight sum of the 44 numbers L_r(p) is ZERO
+for every native reward table. At least one of those actual products
+has L_r(p)≤0. All 44 remain absorbing and legal irrespective of r.
+This proves the theorem; there is no conditioning on a finite anchor
+event and no correlated profile supplied to the game.
+
+The weighted family is a separation witness ONLY. Selecting one row
+after evaluating the table produces a legal witness against this ledger;
+playing a common lottery over rows is neither needed nor asserted. The
+same distinction prevents a false conclusion D_r(p)≤0: the complete
+debt is bounded BELOW by L_r, and may be positive at every listed row.
+
+Exact scope retired: fixed equal weights on these four response maps,
+summed over all owners, even when evaluated on genuine independent
+absorbing laws. The statement does not cover unequal or table/profile
+dependent weights, selecting the best of these responses, changing the
+maps, or the complete finite/Never response envelope.
+
+The actual-law and complete-cap semantics used here were inspected
+in `quittingStoppingLawCap_eq_continuationBestResponseValue_stoppingLawProfile`,
+`quittingStoppingLawExpectedPayoff_behaviorStoppingLaws_eq_terminalPayoff`,
+and `abs_quittingStoppingLawReplacementPayoffCap_sub_le_opponents`
+in `UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean`.
+The arbitrary-deviation negative endpoint is
+`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`.
+These sources were read, not built or changed. The theorem above is
+ordinary mathematics, not a named checked Lean declaration.
+
+Mechanism pivot. Independence alone cannot rescue the retired fixed
+ledger. The next comparison will choose responses using the ACTUAL
+profile or retain their full maximum, and must either output a genuine
+below-floor product competitor or prove a negative bound on every such
+product. Another selected fixed-response lower sum is not that output.
 
 
 ## A native absorbing spherical maximum and full response-distribution duality

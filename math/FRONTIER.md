@@ -791,8 +791,10 @@ one-row regret bounds ε_n such that L_nε_n→0. Then
 
 Periods need not be bounded. The tracked fixed-debtor refinement gives
 singleton-owner concentration or vanishing total hazard. Its concentration
-branch already supplies the literal root, vanishing outsider errors and
-true punishment bound required by the tracked solo-payoff consumer.
+branch supplies singleton terminal-law concentration and vanishing outsider
+full debts. The same-table no-UE normal-core chain supplies the true punishment
+bound, and the first-positive-atom adapter supplies actual solo roots for the
+tracked solo-payoff consumer.
 Applying this dispatch to every subsequence on which H_n is bounded below
 proves the whole-family limit. This composition has independent mathematical
 review; the displayed whole-family conclusion is not a new checked declaration.

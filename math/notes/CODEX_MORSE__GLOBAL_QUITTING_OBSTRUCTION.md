@@ -14,10 +14,24 @@ for every interior cyclic family with period times error tending0.
 The closer tracked approximate solo-cap/punishment consumer ALREADY
 covers even QCUT4 via a first-supported-clock-atom adapter, recorded in
 QCUT-O below. Its proposed new export coverage is therefore RETIRED;
-the frozen cutoff proof remains supporting ordinary mathematics while
-the independent checks finish. The varying-period/all-family corollary
+the frozen cutoff proof remains supporting ordinary mathematics and
+both independent mathematical checks have passed. The varying-period/all-family corollary
 is a newly recorded composition, not a new equilibrium class. It does
 not consume the fully diffuse arm or prove arbitrary-game UE.
+
+Latest diffuse-source test: RT1–RT6 below rejects automatic efficient
+selection by an absorption-scaled logistic temperature plus a vanishing
+positive floor. One actual symmetric stationary branch on the saved RZ
+table, with all finite rows translated by1, has exponentially collapsing
+hazards and full debt tending197/12 at EACH owner. Its exact local-regret
+over deleted-absorption quotient has that same positive limit. The table
+has positive own rewards, punishment at most own, no solo-host completion,
+R₀/StandardQ/degree1 singleton data, and an explicit rotating exact
+equilibrium. Thus these necessary screens do not remove this branch.
+This is ordinary unreviewed mechanism triage, not a no-UE source or a
+failure of every asymmetric selector. The current direction is nonlocal
+whole-word selection from actual global source data, not another local
+temperature adjustment.
 
 Current completed class result: CL1–10 and SC1–6 have each passed two
 independent mathematical checks. The negative DN trial is retired by a
@@ -10449,6 +10463,248 @@ scale separation produce a nonvanishing obligation that the quantile
 repair or an efficient full-cap cycle actually consumes? At present no
 game-equation reason rules out the former. This section is honest
 branch progress, not a persuasive completed proof of the conjecture.
+
+## Absorption-scaled temperature has an actual exponentially collapsing branch
+
+Status: ordinary exact mechanism falsifier RT1–RT6, unreviewed. This
+tests a new proposed regularization of the fully diffuse cyclic source.
+It does not show that all asymmetric fixed points are bad, that no
+different regularization works, or that this solved table has a positive
+unrestricted gap. No export or review cycle is requested for this helper.
+
+### RT1. Complete data and the actual selection question
+
+There are four owners I={0,1,2,3}, with indices modulo4. Clocks and
+complete unilateral deviations have exactly the independent original
+integer-calendar semantics of QCUT1. Let γ=(0,99,99,−1). Define the
+sixty-coordinate zero-own table z by
+
+* z_i({j})=γ(j−i), including z_i({i})=0;
+* z_i({i,j})=γ(j−i)+K_ij for i≠j, where K_ij=1 when i=j+1
+  and K_ij=−1 otherwise;
+* z_i(S)=0 on pairs not containing i;
+* z_i(S)=−1 for i∈S and |S|≥3, and z_i(S)=0 for i∉S and |S|≥3.
+
+Use the FIXED table r_i(S)=z_i(S)+1. Never still pays0. Thus all own
+singletons are1. This is the whole-row translate of RZ1, not a new
+choice of the table along the temperature sequence.
+
+For a symmetric stationary product root every owner quits with the
+same q∈(0,1). Write ρ(q)=1−(1−q)^3 for one owner's deleted absorption,
+and let V(q) be the ORIGINAL z terminal payoff. Put a(q)=C(q)−Q(q),
+where Q and C are the Quit and Continue endpoints evaluated at that
+actual stationary terminal value. In r every finite endpoint and
+terminal payoff is translated by1; hence a(q) is unchanged.
+
+The attempted relative-temperature rule is
+
+    τ(q)=ε ρ(q)+ξ,
+    q=1/(1+exp(a(q)/τ(q))),                    (RT.1)
+
+where 0<ε≤1/4 and ξ>0. At an arbitrary root the proposed general map
+would use each player's own deleted absorption in its temperature.
+Symmetry makes these four temperatures identical. The hope was that
+sending ξ→0 would eliminate inefficient error/deleted-absorption ratios.
+We test that hope on ACTUAL Bellman-return profiles, not arbitrary
+continuation annotations or approximate values.
+
+### RT2. Exact Bellman values and a strictly positive endpoint advantage
+
+Set t=1−q. Exact enumeration of the three opponents gives, in z,
+
+    Q(q)=196q(1−q)^2−3q²(1−q)−q³
+        =−198t³+199t²−1,
+    A(q)=197q(1−q)^2,
+    C(q)=A(q)+t³V(q).
+
+The actual stationary Bellman equation is V=qQ+tC. Consequently
+
+    V(q)=(−t³+199t²−1)/[(1+t)(1+t²)],
+    a(q)=N(t)/[(1+t)(1+t²)],
+    N(t)=198t⁵−t⁴−t³−t²+t+1.                 (RT.2)
+
+The rational formulas extend continuously to q=0 and q=1. The degree5
+Bernstein coefficients of N on [0,1] are exactly
+
+    (1,6/5,13/10,6/5,3/5,197).
+
+The Bernstein weights are nonnegative and sum to1, so N≥3/5 and
+a(q)≥3/20 on the ENTIRE interval. In particular every solution of
+(RT.1) has q<1/2. For that smaller interval t≥1/2 and
+
+    a(q)−1=t²[198t³−t²−2t−2]/[(1+t)(1+t²)]>0,
+
+because the bracket is at least198/8−1−2−2=79/4. Therefore
+
+    a(q)≥1 at every relative-temperature fixed point.       (RT.3)
+
+All formulas were regenerated by exact SymPy polynomial arithmetic;
+the displayed identities and Bernstein expansion are finite algebra,
+not conclusions from sampled roots or floating-point evidence.
+
+### RT3. Actual symmetric fixed points exist and their hazards collapse
+
+For any ε,ξ as in RT1 define F(q)=1/(1+exp(a(q)/(ε ρ(q)+ξ))).
+The continuous extension of a from(RT.2) makes F continuous on[0,1/2].
+One has F(0)>0 and F(1/2)<1/2. The intermediate value theorem supplies
+q∈(0,1/2) with F(q)=q. With actual payoff V(q)+1 this is a strictly
+interior one-period Bellman-return block at the SINGLE positive
+temperature τ(q). Repeating the same root through any finite period
+is also an actual cyclic block; no supplied-tail realizability is used.
+
+For EVERY such symmetric solution write ℓ(q)=log((1−q)/q)>0. Equation
+(RT.1) and(RT.3) give
+
+    1≤a(q)=ε ρ(q)ℓ(q)+ξℓ(q).
+
+Since ρ(q)≤3q and qℓ(q)≤q log(1/q)≤1/e<1/2, ε≤1/4 implies
+
+    ξℓ(q)>5/8,
+    q≤exp(−5/(8ξ)).                           (RT.4)
+
+The last step uses q=1/(1+exp(ℓ(q)))≤exp(−ℓ(q)). Thus ξ→0 forces
+q→0 and q/ξ→0, uniformly over ALL symmetric solutions. This does not
+classify the asymmetric solutions of the four-owner fixed-point map.
+
+Even at ξ=0 the same calculation would imply 1<3ε/2, so no positive
+symmetric solution exists when ε≤1/4. Removing the positive floor
+therefore exposes a zero-hazard boundary rather than continuing this
+branch to an efficient positive root.
+
+### RT4. The full behavioral cap and the exact local-error ratio
+
+Against the other three stationary geometric clocks, let W(q) be the
+z payoff of literal Never. Deleted opponents absorb almost surely, and
+
+    W(q)=A(q)/ρ(q)=197(1−q)^2/[q²−3q+3].
+
+A pure response at finite date k has value
+
+    W(q)+(1−q)^(3k)[Q(q)−W(q)].
+
+This follows by splitting the opponent absorption before k from its
+deleted-survival event through k. Thus the COMPLETE original cap is
+max(Q,W), including all finite dates and Never, and pure-time extremality
+extends the same cap to unrestricted behavioral replacements.
+
+From V=qQ+(1−q)C and C−Q=a>0 one obtains
+
+    V−Q=(1−q)a,
+    W−V=q a/ρ(q)>0.                           (RT.5)
+
+Hence B_z=W. Every deleted opponent group is proper, so the whole-row
+translate r increases EACH pure response, including Never, by1 and
+increases prescribed payoff by1. Therefore B_r=W+1, U_r=V+1 and
+
+    d_i(q)=q a(q)/ρ(q) for EVERY i.
+
+At the same actual continuation the exact local Nash defect is q a(q):
+Continue is better, and only the prescribed Quit probability incurs loss.
+Consequently the original one-period local-regret/deleted-absorption
+bound is an EQUALITY on this branch, not merely a coarse temperature
+upper bound. As ξ→0,
+
+    U_i→201/4,
+    B_i→200/3,
+    d_i→197/12,
+    D→197/3.                                  (RT.6)
+
+Replacing the temperature upper bound by the EXACT local defects does
+not repair this branch. Nor does absorbing almost surely: all four
+prescribed clocks and every deleted opponent group are already proper.
+
+### RT5. Arbitrary periods retain low period-error and the inefficient ratio
+
+Choose ANY finite period schedule L_n≥1, ANY ε_n∈(0,1/4], and set
+ξ_n=1/(n²L_n), for n≥1. Select ANY symmetric solution q_n of(RT.1).
+Repeat its root L_n times in the displayed block and then repeat that
+word forever. This is the SAME stationary profile, now displayed with
+period L_n and local temperature τ_n=ε_nρ(q_n)+ξ_n.
+
+Equation(RT.4) implies L_n q_n→0, since with x_n=n²L_n one has
+L_nq_n≤x_n exp(−5x_n/8)/n² and x_n≥n². Therefore
+
+    L_n τ_n≤3ε_nL_nq_n+1/n²→0,
+    H_n=4L_nq_n→0.
+
+But its actual period-deleted absorption is
+
+    ρ_n=1−(1−q_n)^(3L_n)≤3L_nq_n.
+
+The proposed temperature ratio satisfies
+
+    L_nτ_n/ρ_n≥ξ_n/(3q_n)→∞.
+
+Using the true local defect gives the sharper failed limit
+
+    L_nq_na(q_n)/ρ_n→197/12>0,
+
+because L_nq_n→0 implies ρ_n/(L_nq_n)→3. This last limit follows,
+for example, by sandwiching the geometric sum between3L_n and
+3L_n(1−q_n)^(3L_n−1). Full debt is independently known from(RT.5).
+Thus making the period depend arbitrarily on accuracy does not change
+this actual symmetric branch or manufacture an efficient ratio.
+
+### RT6. Solved-game witness, source screens, and the direction change
+
+RZ2–RZ3 already gives exact checks for THIS underlying table: its
+singleton matrix is R₀ and StandardQ with degree1, every column has
+a negative blocker, and every pure terminal coalition has an escape
+of gain1. Whole-row translation leaves all those differences unchanged.
+Own rewards are now1. The all-Continue opponent law gives actual cap1
+to any owner, proving true punishment≤own without claiming minmax
+attainment or a joint punishment profile.
+
+No solo-host completion is hidden in this example. If only h ever
+quits, its favorite j=h+1 earns r_j({h})=0, whereas j's date0 Quit
+pays1 whether h also quits at0 or is later. Thus that singleton payoff
+is not terminal approximate Nash with arbitrarily small error.
+
+An explicit SOLVED-game witness is RZ4's rotating exact profile. Put
+σ=(−1+√(103/99))/2. In the original owner order0,3,2,1, let each
+owner alone quit with probability1−σ on its date and repeat the four
+dates forever. The exact RZ4 ledger proves every finite response and
+Never is capped by its prescribed z payoff, with deleted contraction
+σ³<1. Every clock is proper. Hence the SAME profile in r has zero full
+debt and target
+
+    (1,1,100−99σ²,100−99σ).
+
+This is an ordinary explicit exact terminal Nash witness, also covered
+by `QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean`.
+It is not new UE coverage. The algebra above demonstrates that a
+local regularization can retain a bad branch even when a different
+literal chronology supplies an exact solution on the SAME table.
+
+Selected exact sources inspected for this attempt were
+`nonempty_interiorApproximateNashCyclicBlock`,
+`InteriorApproximateNashCyclicBlock.quitProbability_odds_eq_exp`, and
+`binaryEndpointDefect_interiorBinaryApproximateResponse_le` in
+`UniformEquilibrium/Quitting/Cycles/EndogenousInteriorCyclicBlock.lean`;
+`InteriorApproximateNashCyclicBlock.value_eq_cyclicTerminalValue` and
+`InteriorApproximateNashCyclicBlock.terminalDeviationDebt_le` in
+`UniformEquilibrium/Quitting/Cycles/InteriorApproximateNashCyclicProfile.lean`;
+the actual fixed-debtor/escape fields in
+`UniformEquilibrium/Quitting/Cycles/InteriorCyclicDebtEscape.lean` and
+`exists_interiorCyclicFixedDebtor_and_ownerEscape_of_terminalGap` in
+`UniformEquilibrium/Quitting/Cycles/InteriorCyclicTerminalDebtRatio.lean`;
+and `exists_positive_commonMinimum_and_totalEndpointRegretDensity_tendsto`
+in `UniformEquilibrium/Quitting/Cycles/PeriodOneVanishingHazardLimitLaw.lean`.
+A narrow logistic/relative-error search in those cyclic and nearby root
+sources found the existing positive regret-density conclusion, which
+is NOT relabelled as new. RT supplies only this specific actual-table
+regularization falsifier. No new Lean check was run or claimed.
+
+The attempted implication RETIRED is: absorption-scaled temperatures
+plus a vanishing floor automatically turn all available fixed points
+into efficient full-cap cyclic sources. It fails even with the displayed
+necessary singleton/punishment screens and no solo-host completion.
+Good existential asymmetric selection remains open. The next concrete
+question is whether the positive actual GLOBAL minimum and its original
+response kernels can select a whole nonlocal word that avoids this
+collapsed branch; local temperature rescaling alone does not use those
+data. This attempt changes the mechanism, not the conjecture frontier.
 
 ## Actual cap-domain control does not automatically select a charged path
 
