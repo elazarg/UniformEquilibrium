@@ -32,6 +32,18 @@ an attempted nonnegative-floor argument for correlated rounding;
 native own0 need not imply true punishment0. No convincing all-game
 forcing principle has emerged from these two supporting tests.
 
+Fresh pass outside relay/radial/tax methods: the DG/FD calculation in the
+owned global notebook tests general discontinuous-game existence. It
+rejects direct Reny better-reply security and arbitrary Simon–Zame
+sharing-rule realization on one already solved positive-own game.
+Its faithful vanishing-debt fiber at raw AllNever has FOUR disconnected
+pure-host payoff/cap pairs; convex completion instead admits an
+unrealizable symmetric equilibrium payoff. Thus switching to a general
+compact-game theorem has not supplied the missing strategic forcing.
+Good existential selection of a faithful resolution remains possible,
+but no game-specific proof of that selection is available here. These
+are ordinary unreviewed mechanism tests, not new UE coverage.
+
 ## 1. The decisive picture
 
 My strongest current intuition is:
@@ -142,7 +154,7 @@ whole word, rather than an exact but strategically sterile component.
 
 ## 3. Brief comparison with genuinely different global paths
 
-Three alternatives deserve to remain independent.
+Four alternatives deserve to remain independent.
 
 **Whole-table perturbation.** Passive taxes keep own singletons fixed:
 subtract a parameter from recipient i only when i is absent from the
@@ -202,7 +214,25 @@ an actual counterexample. Both are conjecture-facing routes. Stationary
 failure, exact-root monotonicity, bounded exact capacity, or a supplied
 barrier are not sufficient negative certificates.
 
-My choice here is the robust-relay route because the EC and reviewed
+**General equilibrium for a discontinuous complete-law game.** Weakly
+compact independent stopping-law spaces and own linearity look promising,
+but the decisive continuity/selection condition is not automatic. In
+the DG game (own1, joint-participant0, passive2), escaping clocks have
+payoff(7/4)^4 and complete caps(2)^4. At the raw AllNever limit a fixed
+law can secure at most1, so Reny's security condition fails. Convex
+completion may assign AllNever payoff(7/4)^4; for that selected rule,
+Never dominates all deadlines and gives its UNIQUE Nash equilibrium.
+Every original profile near that payoff nevertheless has a positive
+whole-class debt floor. Actual near-equilibrium limits are exactly
+the four pure-host payoffs, whose faithful infinity fiber is disconnected.
+Thus neither arbitrary sharing selection nor assumed convex/acyclic
+values of those actual equilibrium fibers is a valid general adapter.
+A more informative game-specific completion is not ruled out, but
+proving its existence is a genuine NEW obligation, not supplied by the
+general theorem. This route currently has no convincing end-to-end path.
+
+The most concrete positive mechanism remains the robust-relay route:
+the EC and reviewed
 scalar-class constructions show a concrete way around exact-path
 failure. It is not chosen because the other routes are disproved.
 Its distinctive claim is about strategically completing singular
@@ -560,6 +590,20 @@ annotation v=(−109/729)⁴ above true punishment, with head
 This is a premise failure, not a correlated-rounding impossibility
 theorem. It explains why a proof cannot replace legal negative
 continuation faces by the native all-Continue value0.
+
+### J. An equilibrium of a payoff completion need not be realizable at all
+
+DG/FD examines an entire selected-sharing equilibrium, not only one bad
+clock approximation. For its explicit solved positive-own table,
+u*=(7/4)^4 is the UNIQUE equilibrium payoff of one valid convex-completion
+rule, yet every original profile within η of u* has
+D≥3/4−3η−6(4η/7)^(1/4). Thus no original approximate-equilibrium sequence
+can have that payoff. The faithful zero-debt raw AllNever fiber contains
+four disconnected pure-host branches rather than their convex hull.
+This test does not refute a good EXISTENTIAL rule selection or a different
+strategic compactification. It requires any claimed adapter to select
+original response-compatible branches, not merely match prescribed
+payoffs or import a convex sharing rule's Nash inequalities.
 
 ## 9. One concrete research target, and the weakest point
 

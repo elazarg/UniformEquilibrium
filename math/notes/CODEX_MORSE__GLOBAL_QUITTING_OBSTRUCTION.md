@@ -52,6 +52,13 @@ an all-game producer. Good existential sharing-rule selection is NOT
 refuted. This is ordinary unreviewed mechanism triage, not a positive-gap
 example, new UE class or counterexample-source reduction.
 
+The FD1–FD4 sequel exactly classifies the ORIGINAL game's full Nash
+payoffs and all vanishing-debt payoff limits: four pure-host vertices.
+At weak AllNever, its faithful zero-debt payoff/cap fiber is therefore
+disconnected. This retires convex OR acyclic-fiber selection of those
+actual equilibrium outcomes as an automatic fixed-point premise; it
+does not rule out some other strategically faithful completion theorem.
+
 Earlier direction test: CR1–CR6 is a RETIRED payoff-rounding attempt,
 not an independent-play impossibility theorem. Its exact absorbing
 correlated equilibrium pays197/4 to all four owners, but the proposed
@@ -10017,6 +10024,117 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## A faithful infinity fiber is disconnected even in the solved security test
+
+### FD1. The full finite-deadline cap adds a decisive original-game constraint
+
+Use precisely DG2's reward table, with no change of coordinates or Never
+convention. For an arbitrary independent complete profile p write
+n_i=P(T_i=∞), ν=∏n_i and ν_{−i}=∏[j≠i]n_j. A literal Never response
+pays2(1−ν_{−i}). A finite response sent to later and later dates instead
+has payoff tending to
+
+  2(1−ν_{−i})+ν_{−i}=2−ν_{−i}.
+
+Indeed it becomes passive with payoff2 whenever any opponent is finite,
+and wins its own singleton with payoff1 if all opponents are Never.
+This is exactly the extra singleton term retained by the tracked signed
+limit declaration cited in DG1. The FULL cap therefore satisfies
+
+  B_i≥2−ν_{−i},
+
+even when that limit is not attained by a finite deadline. Using only
+the literal Never cap would miss this stronger inequality. No restricted
+Nash-game or sharing-rule cap appears in it.
+
+### FD2. One actual all-law inequality classifies every exact equilibrium
+
+Let E be the random set of owners whose prescribed clocks are finite,
+whether or not those clocks are reached before absorption. Independence
+gives
+
+  ∑ν_{−i}=P(|E|=1)+4ν.
+
+DG5's original welfare bound ∑U_i≤7(1−ν) now implies
+
+  D(p)=∑(B_i−U_i)
+      ≥8−∑ν_{−i}−7(1−ν)
+      =P(|E|≥2)+4P(E=∅).                         (FD2)
+
+This holds for EVERY behavioral profile via its complete stopping laws.
+For D(p)=0, E has size1 almost surely. Independence of the four finite
+flags forces a deterministic owner m with n_m=0 and all n_j=1 for
+j≠m: at least one finite probability is positive; two such probabilities
+would give positive P(|E|≥2); the remaining sole probability must be1.
+
+Conversely every such profile is exact Nash. The host's finite-a.s. law
+may be arbitrary; its payoff and full cap are1. Every outsider earns2
+and has full cap2. Thus the entire ORIGINAL exact Nash payoff set is
+
+  { h⁰,h¹,h²,h³ },
+  where hᵐ_m=1 and hᵐ_j=2 for j≠m.
+
+There are no additional mixed, nonstationary or infinite-support Nash
+payoffs. The statement does not assert that the host uses a deterministic
+date; its complete finite-a.s. law need not have bounded support.
+
+### FD3. Approximate equilibria do not connect the four vertices
+
+Let p_k be any original profiles with D(p_k)→0. Select a subsequence
+along which each finite flag probability 1−n_i(k) converges. Equation
+(FD2) forces the limiting independent flag law to have exactly one
+finite owner almost surely, so its flag vector is one of the four
+vertices just classified. Write that owner as m.
+
+The event E={m} has probability tending1. On it the first coalition is
+{m}, whatever the host's actual finite time; all payoffs are hᵐ. On the
+complement all coordinates remain in[0,2]. Hence
+
+  U(p_k)→hᵐ
+
+along this subsequence. Equivalently the distance of U(p_k) from those
+four vertices tends0 for every vanishing-debt sequence. Since
+B=U+d and 0≤d_i≤D, the full cap vectors converge to the same vertex.
+
+The actual fixed-target reverse/positive terminal endpoint declarations
+in DG1 therefore identify the ORIGINAL uniform-equilibrium payoff set
+with exactly the same four vertices. Each vertex is realized already by
+an exact pure-date host equilibrium; no fixed-target extraction is being
+assumed beyond the named semantic endpoint.
+
+### FD4. What this means for the next general existence mechanism
+
+Translate a deterministic date0 host equilibrium to date k and keep the
+other owners Never. The strategies converge weakly to AllNever, while
+the payoff/cap pair stays(hᵐ,hᵐ). FD3 shows the complete fiber of
+vanishing-debt strategy/payoff/cap limits ABOVE THAT RAW AllNever point
+is precisely these four pairs. It is disconnected and hence not acyclic.
+Its convex hull contains DG4's unliftable symmetric pair(u*,u*).
+
+Therefore an automatic fixed-point argument cannot use the faithful
+zero-debt infinity fiber as a nonempty convex, or merely acyclic, value
+without proving a DIFFERENT correspondence or disaggregating the raw
+boundary. This rejects one concrete attempted refinement of endogenous
+sharing; it does not say all strategically faithful completions must
+have disconnected best-reply values, or that no general existence
+theorem could apply after a more informative change of space.
+
+The example gives a precise global distinction: good selection exists,
+but its branches are distinct ORIGINAL strategic outcomes. Averaging them
+creates an invalid branch even when its payoff is attainable by ordinary
+independent clocks with NONvanishing debt. A common-clock boundary can
+collapse these branches; compactness alone cannot identify their Nash
+conditions. The same issue occurs before invoking Fin4-specific source
+decoration or a positive gap.
+
+An exact Fraction test on625 flag vectors with n_i∈{0,1/4,1/2,3/4,1}
+verified the identity and its zero vertices. The proof above, not this
+grid, supplies unrestricted coverage. This is supporting ordinary
+unreviewed mathematics on an already solved game, not new UE coverage.
+The fresh global proof question remains: what game-specific mechanism
+selects a genuine strategic branch, without assuming a charged return,
+averaging its cap tests, or postulating an acyclic zero-debt fiber?
 
 ## Discontinuous-game existence meets an unliftable infinity equilibrium
 
