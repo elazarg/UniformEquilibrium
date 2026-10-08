@@ -100,6 +100,12 @@ minimum, such prefixes are in fact already forbidden by the tracked
 minimum cap--Nash invariant. The exact whole-root test is solved and is
 not a positive-gap counterexample. The consumer must change existing
 laws nonexactly, or change more than a fixed equilibrium cap state.
+GC below falsifies a later proposed two-finite-owner exclusion: even
+at an actual native equilibrium with positive full payoffs and singleton
+column blockers, a conditional tail cap can be NEGATIVE. Its occupied
+first date prevents the presumed early solo test. The exact interior
+empty-date insertion costs5/192 debt. This seam must remain priced
+in any nonexact geometric-cohort change.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -9990,6 +9996,192 @@ existing finite mass, with full root/intermediate/tail maxima kept
 in the same ledger. A fixed-state exact-Nash extension is no longer
 a live producer. No new export, UE theorem, native absorption
 producer or additional positive-gap class exclusion is asserted.
+
+## Negative conditional caps block an unpriced two-owner geometric exclusion
+
+### GC1. The proposed implication and its precise failure
+
+This is a COMPLETE EXACT architecture falsifier, not a new UE result
+or positive-gap example. The proposed argument considered ZE's native
+boundary with exactly two owners having positive finite mass. Their
+supported-clock equations suggest geometric finite tails. If the two
+decay rates differ, the slower owner eventually dominates remaining
+finite mass. A negative singleton observer was supposed to preempt
+that tail and contradict native Nash.
+
+The missing implication was
+
+    native conditional terminal Nash with own0 ⇒ tail cap≥0.
+
+It is FALSE on an occupied first date. A date-zero reply joins
+whatever opponents quit there; an empty solo reply BEFORE that
+date is not an available clock. Even positivity of every original
+equilibrium payoff, positive original Never masses, a random first
+collision, and singleton column blockers do not repair the implication.
+The full exact test below also gives an explicit cap price for
+inserting the missing early test.
+
+### GC2. Complete independent geometric equilibrium
+
+Never pays0. The following fifteen rows specify ALL60 native rewards,
+in recipient order0,1,2,3:
+
+    coalition        reward vector
+    {0}              (0,4,−1,1/2)
+    {1}              (4,0,1/2,−1)
+    {2}              (−1,−1,0,4)
+    {3}              (−1,−1,4,0)
+    {0,1}            (8,12,14,31/2)
+    {0,2}            (0,4,−6,1/2)
+    {0,3}            (0,4,−1,−6)
+    {1,2}            (4,0,−6,−1)
+    {1,3}            (4,0,1/2,−6)
+    {2,3}            (−1,−1,−6,−6)
+    {0,1,2}          (8,12,−6,31/2)
+    {0,1,3}          (8,12,14,−6)
+    {0,2,3}          (0,4,−6,−6)
+    {1,2,3}          (4,0,−6,−6)
+    {0,1,2,3}        (8,12,−6,−6).
+
+Let m_0,m_1∈(0,1]. Independently use literal stopping laws
+
+    P(T_0=t)=m_0(1/3)(2/3)^t,    P(T_0=Never)=1−m_0,
+    P(T_1=t)=m_1(1/2)(1/2)^t,    P(T_1=Never)=1−m_1,
+    T_2=T_3=Never,              t=0,1,2,....
+
+There are NO empty finite dates. Every date has a positive atom
+of BOTH finite owners. For any finite reply t of owner0,
+
+    V_0(t)=4m_1[1−(1/2)^t]+8m_1(1/2)(1/2)^t=4m_1.
+
+Every finite reply of owner1 analogously pays4m_0. Their Never
+responses have the same values. Thus the two finite laws are
+unrestricted exact best replies, for ALL finite probabilities m_0,m_1.
+
+Conditional on BOTH owners drawing finite clocks, the first terminal
+coalition is {0}, {1}, or {0,1} with probabilities respectively
+1/4, 1/2, 1/4. This follows by summing the geometric series with
+common factor(2/3)(1/2)=1/3: the one-date masses are1/6,1/3,1/6.
+Consequently the passive Never payoffs are exactly
+
+    R_2(x,y)=−x+(1/2)y+4xy,
+    R_3(x,y)=(1/2)x−y+4xy,                         (GC)
+
+where x,y are the conditional finite probabilities of owners0,1
+at the current surviving tail. Their immediate Quit probabilities
+are x/3 and y/2. Either observer's immediate pure Quit payoff is
+
+    Q(x,y)=−6[x/3+y/2−xy/6]=−2x−3y+xy.
+
+For EVERY x,y∈[0,1],
+
+    R_2−Q=x+(7/2)y+3xy≥0,
+    R_3−Q=(5/2)x+2y+3xy≥0.
+
+To check an arbitrary original finite deadline t, split its opponent
+law at the earlier dates. The passive payoff already paid on those
+earlier exits is identical for this reply and Never. On the positive
+opponent-survival event, the displayed inequality compares the
+current Quit response to the complete conditional Never value.
+Thus EVERY finite response is bounded by original Never; literal
+Never attains that value. These calculations control ALL finite
+deadlines, arbitrarily late ones and arbitrary behavioral mixtures.
+The complete independent profile is therefore terminal Nash for
+EVERY m_0,m_1∈(0,1], even when an observer's payoff is negative.
+
+At m_0=m_1=1/2, the joint Never mass is1/4 and the complete
+payoff/cap vector is
+
+    U=B=(2,2,3/4,3/4).
+
+All four ORIGINAL payoffs are strictly positive. The unchanged
+singleton matrix has a strictly negative entry in EVERY column:
+
+    Γ=[[0,4,−1,−1], [4,0,−1,−1],
+       [−1,1/2,0,4], [1/2,−1,4,0]].
+
+For an additional ordinary matrix check, ALL principal minors of
+size≥2 are nonzero: the pair determinants are−16,−1,1/2,1/2,−1,−16;
+all four triple determinants are2; the full determinant is240.
+Together with the negative-column entries this proves R₀ directly:
+a nonzero homogeneous complementarity solution cannot have singleton
+support, and any larger support would have a singular principal.
+The uniform simplex vector has strictly positive image. These
+finite matrix facts do not make this solved table a no-UE source.
+
+### GC3. An actual native Nash tail whose cap is strictly negative
+
+Condition both finite owners on surviving all dates0,1,2, shift
+the remaining dates down by3, and leave Never intact. At the
+above half-finite profile the resulting finite probabilities are
+
+    x=(2/3)^3/[1+(2/3)^3]=8/35,
+    y=(1/2)^3/[1+(1/2)^3]=1/9.
+
+The geometric conditional shapes are unchanged. GC2 therefore
+gives a literal independent terminal Nash tail with
+
+    U_2=B_2=R_2(8/35,1/9)=−1/14,
+    Q_2=−241/315<−1/14,
+    U_3=B_3=R_3(8/35,1/9)=11/105.
+
+Its observer2 cap is NEGATIVE although its own singleton is0.
+At later tails the slower owner0 increasingly dominates the finite
+mass, with negative passive singleton reward to observer2. Nevertheless
+the observer cannot preempt that mass for free: every finite reply
+joins a positive current atom and pays the specified joining penalty.
+Never remains optimal.
+
+More generally, conditioning an actual terminal Nash profile with
+positive marginal Never masses on a common old chronological survival
+cut preserves exact tail Nash when Never is a maximizing response.
+Indeed write the old Never value as H_i+α_i R_i^tail, where H_i
+is the passive payoff on earlier opponent exits and α_i>0 their
+survival product. Every after-cut reply has the same decomposition.
+Old cap optimality gives b_i^tail≤R_i^tail, and tail Never gives
+the reverse inequality. Every remaining finite own support clock
+was old-cap maximizing, as was Never, so the conditional prescribed
+payoff also equals R_i^tail. This argument DOES NOT give its sign.
+The actual occupied first date remains part of the tail game.
+
+### GC4. The omitted empty test has an exact positive cap birth
+
+Insert one empty date between old dates2 and3: keep old clocks0,1,2,
+and send every old finite clock t≥3 to t+1. Both original laws and
+Never masses otherwise stay unchanged. This is an actual calendar
+change, not an allowed reply in the old profile. Prescribed terminal
+coalitions and EVERY payoff U remain unchanged. Every old finite
+reply still has its identical counterpart; Never is unchanged.
+
+The ONLY new response type is the empty date3. For observer2 its
+opponent-survival product through old date2 is
+
+    α=(35/54)(9/16)=35/96.
+
+That new reply replaces the conditional Never payoff−1/14 by the
+own-singleton payoff0. Its full original value is therefore
+
+    3/4−α(−1/14)=3/4+5/192=149/192.
+
+The other three conditional Never values are positive: they are
+4y=4/9 for owner0, 4x=32/35 for owner1, and11/105 for observer3.
+Their new empty response is below their old maximizing Never value.
+Thus the COMPLETE new total debt is EXACTLY5/192, whereas the
+original profile has debt0. A payoff-preserving simultaneous stretch
+can create a genuine full-cap loss even at a true zero-gap minimum.
+
+This does not falsify the canonical NP theorem. Taking m_0=m_1=1
+in GC2 gives an actual absorbing terminal Nash profile, and already
+pure{0,1} at date0 is absorbing Nash. Hence Δ_abs=0 here, not NP's
+positive separated floor. No positive-debt profile or conditional
+tail is declared a true NP minimum.
+
+The two-owner dominance argument is retired at the exact missing
+early-test implication. A future comparison can use the displayed
+geometric equations, but must retain occupied atomic dates and price
+ALL empty-date births. Neither conditional native Nash nor a column
+blocker supplies an unobserved pre-collision opportunity. No export,
+full conjecture result or new positive-gap class reduction is claimed.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
