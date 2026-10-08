@@ -2,6 +2,35 @@
 
 ## Current best attempt
 
+PD1–PD4 is the newest complete UNREVIEWED consumer draft at the end.
+At one fresh generic debt-rigid table it excludes ALL deterministic
+prescribed terminal outcomes, including pure coalitions whose earliest
+cap is a paid outsider join. Its mixed-debt labels use the preserved
+signs; an unpriced single indebted member is consumed by an ACTUAL
+one-law strict decrease with all other zero debts preserved. This is
+distinct from MORSE's broader MH/weak-unhappy source comparison, which
+is being assembled. No new artifact or export is prepared.
+
+The newest complete SOURCE/TABLE consumer draft is ZH1–ZH4 plus
+TP1–TP5 at the end, unreviewed. At one fresh GENERIC debt-rigid
+positive table, ZH reduces a zero-mixture earliest active point
+with MULTIPLE caps to an ORIGINAL pure triple/grand coalition.
+TP's full sign-adapted target preserves all82 contact directions
+and avoids at most five additional typed leave-sum labels; sign
+preservation ensures no new unpriced pure coalition is born.
+It therefore claims to remove EA's entire sure-early exception
+at this newly selected table. Atomic simultaneous-cap walls remain
+open. No old source is retained through the table changes, and no
+frozen export is modified. One combined independent falsification
+of the actual all-active head box and full finite target is requested.
+
+I independently accepted BROUWER's HR1–HR6 all-unique source exclusion
+in owned feedback. That result uses head-only exact positive affine
+cap transport and all-family debt rigidity, not generic row differences;
+it is separate from the frozen worst-SUM packet and still needs its
+assembled-artifact gate. ZH/TP concern genuinely MULTIPLE active sets,
+not another all-unique reselection.
+
 The newest finite-amplitude consumer is SQ1–SQ6 at the end, accepted
 in CODEX_BROUWER's focused independent feedback: in SC's
 actual sure-triple cap wall, ONE owner may carry the entire earlier
@@ -16764,3 +16793,297 @@ that generic debt rigidity collapses to this pure-coalition plateau.
 Concrete next question: consume the latter using a finite-amplitude
 independent release that prices ALL subcoalition caps, or show a global
 table selection rules it out without importing a selected-child UE.
+
+## Sign-adapted triple pricing consumes the zero-mixture earliest branch
+
+Status: COMPLETE ORDINARY PROOF DRAFT TP1–TP5, unreviewed. Combined with
+ZH, this is a genuine FRESH-table source consumer: at one generic,
+debt-rigid positive table, the earliest point across ALL active cap
+sets has positive MIXTURE mass even if some caps are multiple. It
+does not consume atomic simultaneous-cap walls or settle Fin4 UE.
+There is no export request or change to a frozen packet.
+
+### TP1. Exact global input and why the old target was insufficient
+
+Assume arbitrary Fin4 no-UE data exist. Let Ω>0 be the maximum of
+the true ALL-profile SUM infimum on the closed sixty-coordinate unit
+reward cube, attained at r. The exact carrier singleton margin and
+all-Never comparison give Ω≤4/5<1, as proved in FP and the frozen
+source packet. No particular minimizing law is selected yet.
+
+ZH's zero-mixture multiple-active branch at a generic debt-rigid
+table leaves only an ORIGINAL pure coalition H with |H|=3 or4,
+every member strictly indebted and every outsider unindebted. Its
+actual debt is therefore
+
+    L_H=Σ_(i∈H)[r_i(H∖{i})−r_i(H)]>0.          (TP1)
+
+For triples the old target's individual pair-to-triple joins were
+ALL+2, so L_H had target−6. It could not be driven above Ω. The
+following target distinguishes the signs of those OLD individual
+joins. It preserves every required positive-contact direction and
+drives the pure-triple contacts above Ω as well.
+
+### TP2. Complete target on all sixty entries
+
+For each recipient i and passive pair A⊆I∖{i}, |A|=2, write
+
+    J_i,A=r_i(A∪{i})−r_i(A).
+
+Assign one target table R from the OLD WORST table r as follows:
+
+- Own singleton R_i({i})=1.
+- Passive singleton R_i({j})=−1, j≠i.
+- Participant pair R_i({i,j})=1, j≠i.
+- For each passive pair A and its participant triple A∪{i}, if
+  OLD J_i,A≥0 set (R_i(A),R_i(A∪{i}))=(−1,1), giving target join2.
+  If OLD J_i,A<0 set this pair to (0,−1), giving target join−1.
+- For a_i=r_i(I∖{i})−r_i(I), if OLD a_i≥0 set
+  (R_i(I∖{i}),R_i(I))=(0,−1); otherwise set it to (−1,0).
+
+These assignments cover exactly4 own entries,12 passive singleton
+entries,12 participant pair entries,12 passive pair entries,12
+participant triple entries,4 omitted-triple entries and4 grand
+entries: ALL60 coordinates, without overlap. Every target is in the
+unit cube. A row's passive pairs and participant triples are paired
+bijectively, so their sign choices do not conflict.
+
+Under r^α=(1−α)r+αR with 0<α<1, ALL twelve J_i,A preserve their
+OLD strict sign, and an OLD zero becomes strictly positive. All four
+a_i likewise preserve their OLD strict sign and a zero becomes
+strictly positive. Thus a NEW negative J_i,A can ONLY come from an
+OLD negative one, and a NEW positive a_i can ONLY come from an OLD
+nonnegative one. These are source-classification facts about the
+FRESH coefficients, not assumptions about an old minimum.
+
+### TP3. At most87 labels and every relevant upper contact
+
+Keep ALL82 labelled functionals from FP. In addition include L_H
+for each OLD triple H for which ALL three J_i,H∖{i}<0, i∈H.
+Include L_I=Σ_i a_i only if all four OLD a_i≥0. There are at most
+five additional labels, hence at most87 overall; multiplicities are
+harmless. Every label has coefficient absolute sum≤8.
+
+Every label v with OLD v(r)=Ω has v(R)≥1>Ω. The full check, not
+just the new labels, is:
+
+- An a_i contact is positive, so its target is1.
+- A singleton-set join sum C_A has target6.
+- A pair-set join sum C_A is the sum of TWO J_i,A. A positive OLD
+  sum requires at least one strictly positive old join. That target
+  is2; the other target is either2 or−1. Hence the sum target is
+  at least1. Two old negative joins cannot give a positive contact.
+- A triple-set join sum is −a_i. A positive old contact has a_i<0,
+  so its target is1. The sign is NEGATIVE grand withdrawal.
+- A positive individual join contact has target2 for singleton or
+  pair A, and target1 for triple A. A negative J_i,A is not such
+  a positive contact; its target−1 is therefore permissible.
+- Every passive own-floor contact has target at least1: own1 minus
+  passive singleton−1, passive pair0 or−1, omitted triple0 or−1,
+  or Never0. Every own-minus-grand contact has target1 or2.
+- Each added triple label has target3, since all three old joins
+  are negative and have target−1. The added grand label has target4.
+
+Thus the modification fixes the formerly problematic pair-set sum:
+opposite-sign joins give target2−1=1, still STRICTLY greater than
+Ω. Choosing both join magnitudes2 would instead give target0 and
+would not preserve this contact argument. This is not a constants
+improvement; it is the sign distinction needed for both mechanisms.
+
+### TP4. Genuine fresh minima avoid all relevant values
+
+Let σ be the minimum positive |v(r)−Ω| over noncontact labels, using1
+if there are none. Set α=min(1,Ω,σ)/64 and d=Δ(r^α). Actual payoff
+and cap reward Lipschitz bounds, together with worst-table maximality,
+give
+
+    Ω−16α≤d≤Ω,       d>0.
+
+For an old contact, affine evaluation and TP3 give
+v(r^α)=(1−α)Ω+αv(R)>Ω≥d. For a noncontact, changing a reward
+coordinate by at most2α changes its label by at most16α. Hence
+
+    |v(r^α)−d|≥σ−32α>0.
+
+The last inequality follows from α≤σ/64. Thus EVERY selected NEW
+label is separated from the NEW actual gap. No old minimizing law
+or response is carried through this perturbation.
+
+All relevant sign inequalities are strict at r^α. Choose an
+arbitrarily small full-table genericization preserving d>0, all
+these at most87 no-contact inequalities, and all twelve join and
+four withdrawal signs. Then select positive recipient scales
+arbitrarily close to1, obtaining the ALL-family debt-rigid table
+of DR. The finite gaps and the signs persist; ordered within-row
+payoff-difference genericity persists under positive row scaling.
+Call the final table r̃ and its true gap δ. Its same-table no-UE
+branch gives true punishment normality. Apply every marked-source
+theorem to NEW minimizing laws of r̃, not old laws of r or r^α.
+
+### TP5. Actual consumption of the sure-early zero-mixture boundary
+
+Suppose ANY freshly produced true minimum for r̃ has zero-mixture
+earliest active point. ZH's all-active old-head transport and generic
+raw regret argument force ORIGINAL pure H with |H|=3 or4 and every
+member indebted. Its ACTUAL full debt is the raw value (TP1).
+
+If |H|=3, every NEW J_i,H∖{i} is strictly negative. Sign preservation
+forces every OLD one negative, so this H WAS one of TP3's added
+labels. Equality δ=L_H(r̃) contradicts its preserved no-contact gap.
+If H=I, all four NEW a_i are positive. Sign preservation forces
+all four OLD a_i nonnegative, so the grand label was included.
+Equality δ=L_I(r̃) gives the same contradiction. Singleton and pair
+heads were already consumed in ZH by the true singleton graft and
+the actual safe-pair decrease respectively.
+
+Consequently at ONE produced generic debt-rigid positive table the
+earliest point across ALL four active cap sets is finite and has
+positive MIXTURE mass. It is therefore isolated in the original
+marked calendar. This removes the complete sure-early exception
+to EA at this FRESH table, not only its all-unique nonisolated arm.
+The full simultaneous-cap branch remains: some earliest owners may
+have zero OWN mass, there may be several active responses for each
+owner, and different points may have identical outcome kernels.
+No rank drop, endpoint Nash, or UE is inferred from the new atomic
+earliest conclusion.
+
+Review question: independently falsify ZH1–ZH4 AND TP1–TP5 as ONE
+source/table consumer, particularly all-active nonisolated upper
+stability, ORIGINAL zero-debt support inference, raw head rectangle
+genericity, every82 old contact under the sign-adapted full target,
+and the typed-label sign preservation after fresh selection/scaling.
+
+## Atomic pure-outcome branch: mixed debt pricing rather than weak unhappiness
+
+Status: COMPLETE PROOF DRAFT PD1–PD4, UNREVIEWED. This is saved before
+the requested whole HR artifact review. It strengthens the sign-adaptive
+mechanism from pure unhappy coalitions to ALL deterministic prescribed
+coalitions at ONE fresh table, including an atomic earliest cap caused
+by a paid outsider join. It is not a new artifact, export, or full UE
+producer. MORSE's broader MH/weak-unhappy comparison is independently
+being completed; this different mixed-debt conclusion is not attributed
+to it.
+
+### PD1. A generic single-debtor pure coalition has an actual decrease
+
+At ANY bounded generic table whose distinct row outcomes have distinct
+payoffs, suppose an ACTUAL positive global minimum prescribes one
+deterministic nonempty coalition A. Its literal independent source
+forces every A member pure at one finite date t_A and outsiders strictly
+later (when |A|≥2). The singleton case, even with a diffuse sole owner's
+clock, is impossible by the checked all-owner quadratic prescribed
+margin: its U_h=s_h but U_h−s_h>0 at a positive global minimum.
+
+For |A|≥2 put W_i,A=r_i(A∖{i})−r_i(A) for members and
+J_z,A=r_z(A∪{z})−r_z(A) for outsiders. The checked cap singleton
+margin excludes any before-root own-solo cap. Therefore the ACTUAL
+debt is the sum of positive W_i,A and positive J_z,A. Row genericity
+excludes zero values of both differences.
+
+This marked pure source can be replaced by the literal actual profile
+in which exactly A quits at integer date0 and all outsiders choose
+Never: at least two sure members screen all old tails for EVERY
+unilateral responder, and the only removed before-root test paid s_i,
+strictly below its full cap by the global margin. Its entire U/B pair
+is therefore identical. The following positive release is performed
+on this ACTUAL finite profile, not by inserting an untransported new
+atom into a compact marked law.
+
+If just ONE member i is indebted and no outsider is indebted, every
+retained member has strict W_j,A<0 and every outsider strict J_z,A<0.
+Release i to Never with probabilityρ while keeping ALL others' original
+laws unchanged. Its cap is unchanged and its own U improves byρW_i,A,
+so its debt is exactly(1−ρ)δ. Retained members' root-versus-late/own
+gaps were strict; their caps are uniformly continuous in this ONE old
+opponent-law mixture, and prescribed root payoffs vary continuously,
+so they retain zero debt for smallρ. For a retained member in a pair,
+the now-accessible tail has only probabilityρ and uniformly bounded
+cap, so this strict-gap argument includes ALL late and Never tests;
+no punishment hypothesis is needed. For an outsider, a retained sure
+member still screens every late test into its prescribed passive payoff.
+Root joining and early-own gaps remain strict for smallρ, so it also
+retains zero debt. Consequently full D=(1−ρ)δ<δ. This is an ACTUAL
+independent-law comparison, not a selected endpoint or diagonal mixture.
+
+Thus a deterministic coalition positive minimum must have either at
+least TWO indebted members, or at least ONE indebted outsider.
+
+### PD2. Complete sign target and the mixed debt label for each coalition
+
+Use the same OLD worst table r and Ω≤4/5 as TP. For BOTH singleton
+and pair lower joins J_i,K, |K|=1 or2, use this sign target:
+
+    OLD J_i,K>0: (R_i(K),R_i(K∪{i}))=(−1,1), target J=2;
+    OLD J_i,K≤0: (R_i(K),R_i(K∪{i}))=(0,−1/2), target J=−1/2.
+
+Each passive singleton pairs bijectively with one participant pair,
+and each passive pair with one participant triple; no coordinate
+conflicts occur. Own singletons are1. Grand/omitted-triple entries
+are as in TP: OLD a_i≥0 gives(0,−1), otherwise(−1,0). This specifies
+ALL60 entries. Every lower join is nonzero after a positive convex
+step and its new sign is positive EXACTLY for OLD J>0. Every a_i's
+new sign is positive EXACTLY for OLD a_i≥0.
+
+For each A of size2,3,4 define its OLD-labelled sets of future positive
+debts:
+
+    E_A={i∈A: OLD W_i,A≥0},
+    Z_A={z∉A: OLD J_z,A>0},
+    V_A=Σ_(i∈E_A)W_i,A+Σ_(z∈Z_A)J_z,A.
+
+For grand A use E_I={i:OLD a_i≥0}; Z_I is empty. For triple outside
+join J_z,A=−a_z, its positive cohort is OLD a_z<0. These choices
+include OLD zero member withdrawals because they become positive,
+but not zero outsider joins because they become negative. Thus they
+give EXACTLY the positive debt branches after the convex step, and
+remain exact after small genericization and positive row scaling.
+
+Include V_A only when |E_A|≥2 or |Z_A|≥1. There are at most11 such
+labels, in addition to the original82. Their target values are
+
+    |A|=2: |E_A|/2+2|Z_A|,
+    |A|=3: |E_A|/2+|Z_A|,
+    |A|=4: |E_A|.
+
+Every INCLUDED label has target at least1>Ω. Labels not included
+have either no positive branch (debt0) or exactly one positive member
+branch and no positive outsider branch, consumed by PD1.
+
+### PD3. All canonical contacts survive, and ONE final table is selected
+
+The original82 contact check remains complete. Positive singleton-set
+join sums have target at least2−1/2−1/2=1; positive pair-set join sums
+at least2−1/2=3/2. Individual positive lower joins target2. Passive
+own floors target1 or2, since all target passive singleton/pair values
+are0 or−1. Grand-withdrawal, triple-set join, and own-minus-grand
+contacts have the same targets≥1 as TP. Thus EVERY old Ω contact
+among the original82 and included mixed labels is driven above Ω.
+
+All at most93 labels have coefficient absolute sum≤8. Choosing
+α=min(1,Ω,σ)/64 with σ the finite noncontact distance gives the SAME
+actual new gap interval[Ω−16α,Ω], positive, and noncontact distance
+at leastσ−32α>0. Every new labelled value differs from the NEW gap.
+The sign patterns are strict after the convex step. Genericize within
+the unit cube by an arbitrarily small amount preserving these gaps
+and all signs; then choose debt-rigid positive recipient scales close
+to1, preserving gaps/signs/genericity. ALL future laws are selected
+from this ONE final table. No old minimum passes through the changes.
+
+### PD4. All deterministic prescribed outcomes are excluded
+
+At a final-table true global minimum with prescribed deterministic A,
+the singleton/Never cases contradict the quadratic prescribed margin
+or literal debt0. For |A|≥2, its actual positive debt branches are
+EXACTLY E_A and Z_A by the preserved signs. If |E_A|≥2 or |Z_A|≥1,
+actual δ=V_A contradicts its preserved finite gap. If both are empty,
+actual debt0 contradicts δ>0. The only other possibility is exactly
+one indebted member and no indebted outsider, contradicted by PD1's
+actual one-law strict decrease.
+
+Hence ONE fresh generic debt-rigid positive table has NO produced
+minimum with deterministic prescribed terminal outcome. This includes
+atomic earliest paid-join sources, not only the zero-mixture unhappy
+plateau described by MH/ZH. It does NOT exclude a random absorbing
+coalition or consume an arbitrary atomic multiple-cap root. The next
+question is whether the minimum can be forced to a deterministic law
+without assuming cap stability at all its simultaneous active kernels.

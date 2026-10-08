@@ -72,8 +72,22 @@ implications and scoped source lookup are saved there. BROUWER's focused
 independent proof/value check PASSed with no unresolved objection. The
 self-contained complete artifact is
 `CODEX_MORSE__RECIPIENT_SCALE_DEBT_RIGIDITY_SOURCE_REDUCTION.md`, internal
-pending its whole-artifact independent falsification. Ordinary mathematics;
-no new export yet.
+at SHA256 `530f428f5a8f05d1b2063f872a22706fc4207c19317bb20fc9cb05a768d95e3c`.
+TWO blind complete-artifact reviews passed with no unresolved objection.
+It remains frozen while the stronger head/punishment consumer is assembled;
+ordinary mathematics, no new export here.
+
+New complete GLOBAL candidate: Section50 combines a sign-adaptive worst-
+table comparison with NOETHER's deterministic-outcome debt pricing and a
+full ALL-active strict-head comparison. At ONE fresh positive, debt-rigid
+table, EVERY marked minimum has random prescribed terminal outcome and NO
+prescribed stopping mass strictly before its earliest active response.
+That response is therefore a finite isolated positive-mixture atom and
+the FIRST prescribed stage, with at least two positive quitters. The same
+table meets HR's all-unique exclusion inputs; no earlier minimizing law is
+carried between tables. Multiple cap points with identical outcome kernels
+and random collision outcomes remain allowed. Section50 is a complete
+ordinary proof draft, UNREVIEWED; no frozen packet is changed or exported.
 
 Supporting global comparison: Section 46 uses an attained worst SUM table
 and NEW whole-law near-minimizers after a finite own-singleton reward
@@ -9717,3 +9731,573 @@ recipient-row comparison? This is now a directed mismatch between
 prescribed earliest mass and fixed positive debtor coordinates, not
 an unknown role-switching debt family. Do not replace those suppliers'
 later caps by earliest ones or assume they are Nash of a child.
+
+## 50. One fresh table has random outcomes and no prescribed pre-active head
+
+Status: COMPLETE ORDINARY PROOF DRAFT SA1–SA11, UNREVIEWED. This is ONE
+combined source theorem, not a new standalone artifact. It includes the
+stronger deterministic-outcome pricing in CODEX_NOETHER's PD1–PD4 and
+independently restates its proof, including a literal finite-root repair.
+The ALL-active head-box argument is developed from CODEX_BROUWER's
+MH1–MH3, with the sole-head arm consumed by the actually checked
+four-player prescribed quadratic margin. These contributions are not
+silently attributed to the previous frozen exports. The present WHOLE
+combination still needs independent falsification.
+
+### SA1. Exact claim, original-law objective and ordinary source inputs
+
+Let I={0,1,2,3}. A signed reward table has sixty coordinates r_i(S),
+i∈I and ∅≠S⊆I. The quitting game has independent unrestricted
+behavioral strategies on the original integer calendar, zero reward
+before absorption and on Never, and the coalition reward after the
+absorbing decision date. U_i is expected terminal reward and B_i is
+the supremum over ALL pure quit deadlines and Never against the other
+independent stopping laws. Mixed deviations cannot improve that cap.
+
+Let K_r be the closure of the attainable ORIGINAL (U,B) pairs and put
+
+    Δ(r)=min[(U,B)∈K_r] Σ_i(B_i−U_i).
+
+All individual debts are nonnegative. The ordinary source/bridge inputs
+are: K_r is compact; zero minimum debt is equivalent to existence of a
+uniform-equilibrium payoff; finite-law pairs approximate every minimum;
+and their marked old-calendar compactification realizes U and the
+COMPLETE response caps at a minimum. These are the actual compact-source
+inputs established in Sections48–49 and the frozen source packets, not
+supplied auxiliary Nash or abstract independent-law assumptions. The
+specific signed conditional transport needed below is restated in SA8.
+This notebook proof does not claim a new Lean implementation of those
+ordinary marked-source facts.
+
+Assuming some signed Fin4 game has no uniform-equilibrium payoff, there
+exists ONE table r̃∈[−1,1]⁶⁰ with δ=Δ(r̃)>0 such that:
+
+1. ALL original semantic minimum pairs have ONE common debt vector d*.
+2. EVERY marked representative of EVERY such pair has a non-deterministic
+   prescribed outcome on the sixteen labels {∅}∪{nonempty coalitions};
+   ∅ denotes Never, not zero reward conditional on absorption.
+3. Let A_i be its FULL compact set of maximizing responses and let
+   τ=min(⋃_i A_i). Every owner has q_i(clock<τ)=0. The point τ is
+   finite, has positive mixture mass, is isolated in the retained
+   chart, and is the FIRST prescribed stage. At least two owners have
+   positive own atoms there.
+4. The final table also meets ALL ordinary inputs of HR1–HR6. Thus that
+   same-table head/punishment theorem excludes the all-unique branch at
+   r̃: at least one A_i has more than one point. This last combination
+   uses HR's separately reviewed theorem, not a new independent proof
+   of its punishment graft in this section.
+
+The new restrictions in Points2–3 apply even with multiple or accumulating
+cap sets. Point4 does not imply distinct active OUTCOME KERNELS: different
+points may have exactly the same response law. No random-collision
+consumer, UE payoff, exclusion at every original counterexample table,
+or rational recipient scale is claimed.
+
+Choose an attained worst UNIT-cube table r with Ω=Δ(r)>0. Attainment
+follows from |Δ(r)−Δ(r′)|≤8‖r−r′‖∞ and compactness of the sixty-cube.
+The singleton margin at a genuine positive minimum gives
+B_i−s_i≥Ω, B_i≤1, where s_i=r_i({i}). Hence s_i≤1−Ω. AllNever
+has actual debt Σ_i[s_i]⁺, so Ω≤Σ_i[s_i]⁺. This forces Ω<1;
+then Ω≤4(1−Ω), and therefore
+
+    0<Ω≤4/5<1.                                      (SA1)
+
+No reward shift, singleton sign, Nash tail or punishment premise is
+used in this bound. The stronger tracked theorem used later is
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+Under its stated imports, its hypotheses are the actual carrier,
+TRUE global SUM minimum, card4, M>0, |r_i(S)|≤M and δ>0. It concludes
+
+    B_i−s_i≥δ+δ²/(8M),
+    U_i−s_i≥δ−d_i+δ²/(8M)>0,                         (SA2)
+
+where the strict conclusion uses 0≤d_i≤δ. This is not a theorem for
+restricted stationary minima, weighted minima at the old table, or
+supplied tail Nash data. We use M=1 at the FINAL unweighted table.
+
+### SA2. Complete sign-adaptive endpoint and typed mixed-debt labels
+
+For K⊆I∖{i}, |K|=1 or2, write
+
+    J_(i,K)=r_i(K∪{i})−r_i(K),
+    a_i=r_i(I∖{i})−r_i(I).
+
+Construct ONE endpoint R from the OLD worst table r:
+
+- R_i({i})=1 for all four own singletons.
+- For EACH lower pair of coordinates (r_i(K),r_i(K∪{i})), with
+  |K|=1 or2, if OLD J_(i,K)>0 assign (−1,1); otherwise assign
+  (0,−1/2). Thus the endpoint join is2 or−1/2 respectively.
+- For each omitted-triple/grand pair, if OLD a_i≥0 assign
+  (R_i(I∖{i}),R_i(I))=(0,−1); otherwise assign (−1,0).
+
+This specifies all sixty coordinates without overlap: 4 own singletons,
+12 passive singleton/participant pair pairs, 12 passive pair/participant
+triple pairs and 4 omitted-triple/grand pairs. All targets lie in the
+unit cube. OLD ZERO lower joins belong to the negative target branch;
+OLD ZERO grand withdrawals belong to the positive branch. Those
+choices are essential for the following EXACT fresh sign census.
+
+For a coalition A of size2,3 or4 put
+
+    W_(i,A)=r_i(A∖{i})−r_i(A), i∈A,
+    J_(z,A)=r_z(A∪{z})−r_z(A), z∉A.
+
+Define from OLD r the future-positive cohorts
+
+    E_A={i∈A: W_(i,A)(r)≥0},
+    Z_A={z∉A: J_(z,A)(r)>0},
+    V_A=Σ_(i∈E_A)W_(i,A)+Σ_(z∈Z_A)J_(z,A).          (SA3)
+
+For a triple's omitted owner, J_(z,A)=−a_z; hence its membership
+in Z_A is OLD a_z<0. For the grand coalition E_I={i:a_i≥0}
+and Z_I=∅. Include V_A in the labelled family ONLY if
+
+    |E_A|≥2 OR |Z_A|≥1.                              (SA4)
+
+There are at most eleven added labels. Keep the entire original82:
+four a_i; fourteen C_H=Σ_(i∉H)J_(i,H), ∅≠H⊊I;
+twenty-eight individual J_(i,H), ∅≠H⊆I∖{i};
+thirty-two F_(i,K)=s_i−r_i(K), K⊆I∖{i}, with r_i(∅)=0;
+and four G_i=s_i−r_i(I). Labels may coincide numerically or be
+negative; they are not replaced by a selected positive witness.
+The combined family ℱ has at most93 labels and coefficient absolute
+sum at most8. This is the needed finite classification, not a claim
+of additional coverage merely from the contact count.
+
+For ANY positive convex step r^α=(1−α)r+αR, 0<α<1,
+all twenty-four lower joins and all four a_i are nonzero, with
+
+    J_(i,K)(r^α)>0 ⇔ J_(i,K)(r)>0,
+    a_i(r^α)>0 ⇔ a_i(r)≥0.                          (SA5)
+
+Consequently the positive member withdrawals and outsider joins for
+EVERY A are EXACTLY E_A and Z_A. The weak old inequalities in E_A
+allow NEW positive branches born from OLD zeros. This statement is
+about table signs, not limiting maximizing tests or an old law.
+Positive recipient scaling preserves all these signs exactly.
+
+### SA3. Every old positive contact is pushed above Ω
+
+For every labelled v∈ℱ with v(r)=Ω, one has v(R)≥1>Ω.
+Here is the complete check over the full label set:
+
+- a_i=Ω>0 selects the endpoint a_i=1.
+- A singleton-set C_H is a sum of THREE lower joins. A positive
+  old sum has at least one old positive term. Its endpoint is at
+  least2−1/2−1/2=1, even with two negative or zero old terms.
+- A pair-set C_H is a sum of TWO lower joins. Its endpoint is at
+  least2−1/2=3/2 for a positive old sum.
+- A triple-set C_H=−a_i. Positive old contact requires a_i<0,
+  whose negative endpoint is1.
+- A positive individual lower join has endpoint2; a positive
+  triple individual join is−a_i and has endpoint1.
+- Each F has endpoint1 or2: own singleton1 minus passive
+  singleton/pair0 or−1, omitted triple0 or−1, or Never0.
+- Each G has endpoint1 or2 since the grand endpoint is0 or−1.
+- For the included mixed labels, literal endpoint values are
+
+      |A|=2:  |E_A|/2+2|Z_A|,
+      |A|=3:  |E_A|/2+|Z_A|,
+      |A|=4:  |E_A|.
+
+  Under (SA4) each is at least1. In particular TWO indebted
+  triple members already target1; no assumption that EVERY
+  member withdraws or that an outsider blocks is imposed.
+
+This is why the negative joins are not simply given target−2.
+Such a target would destroy the positive C_H direction. Conversely,
+assigning every participant payoff1 and passive payoff−1 would drive
+pure pair/triple withdrawal sums NEGATIVE and could not price them.
+The negative magnitude−1/2 accommodates BOTH the join and mixed-debt
+contacts. No claim is made that arbitrary independent-law debt is one
+of these finite values; SA6 proves precisely the class for which it is.
+
+### SA4. Global finite comparison with ALL moving minimizers
+
+Let σ be the minimum positive |v(r)−Ω| over labels not equal to Ω,
+using σ=1 if that set is empty. Put
+
+    α=min(1,Ω,σ)/64,       r^α=(1−α)r+αR,
+    d=Δ(r^α).
+
+Both reward tables lie in the unit cube and their distance is at most
+2α. Worst-table maximality and the actual debt-infimum modulus give
+
+    Ω−16α≤d≤Ω,       d≥3Ω/4>0.                     (SA6)
+
+An old contact v(r)=Ω has v(r^α)=(1−α)Ω+αv(R)>Ω≥d.
+An old upper noncontact is at least Ω+σ−16α>Ω≥d.
+An old lower noncontact is at most Ω−σ+16α<Ω−16α≤d,
+because 32α<σ. Thus EVERY v∈ℱ differs from the actual NEW gap.
+All statements allow every new minimizing profile and every moving
+response tester. We have not transported any old minimizing law.
+
+Let γ=min_(v∈ℱ)|v(r^α)−d|>0. Choose ε>0 smaller than
+min(1/2,d/16,γ/32). On the fixed original compact carrier for r^α,
+the concave scalarization
+
+    W(θ)=min[(U,B)∈K_(r^α)] Σ_i θ_i(B_i−U_i)
+
+has all two-sided coordinate derivatives at almost every θ in the
+open box (1−ε,1)⁴. Choose such a θ and set
+
+    r̃_i(S)=θ_i r_i^α(S).                            (SA7)
+
+The exact positive diagonal image of the old carrier is K_(r̃).
+For ANY minimizing old debt vector a, the inequalities
+W(θ+t e_i)≤W(θ)+t a_i with both signs t force a_i=∂_iW.
+Hence ALL new original minimum pairs have debt vector
+d*_i=θ_i∂_iW. The finite-coordinate concavity/Fubini proof and
+positive row/carrier scaling are established in DR3, not an invalid
+fixed-active-test derivative in reward-table space.
+
+The final reward distance from r^α is at most ε. Each label changes
+by at most8ε and Δ by at most8ε, so its no-contact gap survives.
+The final δ=Δ(r̃) is positive. Every sign in (SA5) survives exactly
+under the positive row scaling. No further generic payoff-difference
+assumption is needed: the target itself made every relevant W and J
+nonzero. Scales may be REAL, not necessarily rational. Payoff/cap
+vectors, minimum profiles and maximizing-test families are not rigid.
+
+### SA5. Same final table, and what previous source results may be applied
+
+Fix r̃ ONCE, before selecting any minimum. It has positive unweighted
+SUM infimum, all82 canonical exclusions, every included mixed V_A
+exclusion, exact signs (SA5), all-minimum debt rigidity and same-table
+no UE. Its original finite-law/marked producer is applied afresh to
+EVERY new minimum. The old weighted carrier was used only to choose
+the recipient scales and prove the unweighted final rigidity.
+
+Thus the canonical 920 source results, DR supported-earliest reset,
+and HR head/punishment exclusion have their required hypotheses at
+THIS SAME table. HR uses the raw82 gaps, rigidity, actual original
+source and same-table punishment normality; it does not require the
+specific old endpoint's values or full generic payoff differences.
+No strategic profile, ancestry, punishment value or MAX-regret
+minimizer is carried from an earlier table. The new target changes
+own singletons and Γ; this is not the own-preserving signed-eight
+fiber selection or an adapter for a simultaneous MAX source.
+
+SA6–SA9 below prove the new restrictions without invoking HR.
+If HR is used for the combined multiple-cap conclusion, its proof
+status is stated separately in SA1 and SA11. No draft declaration
+or untracked marked-calendar formalization is a checked dependency.
+
+### SA6. Deterministic outcomes give exact raw debts and a literal repair
+
+Work at ANY actual positive global minimum with (SA2). Suppose the
+prescribed outcome is deterministic. If it is Never, every law is
+Never, U_i=0, and (SA2) forces every s_i<0; all caps are0, contradicting
+δ>0. If it is a singleton {h}, absorption there gives U_h=s_h,
+also contradicting (SA2), even with a diffuse sole-owner clock.
+
+Let the deterministic coalition A have |A|≥2. Independence implies
+all its members are PURE at ONE common finite time t_A. Indeed any
+two member clocks are independent and equal almost surely; their
+bounded chart coordinates then have covariance0 and equal variance,
+so variance0. Every outsider is strictly later than t_A almost surely.
+Therefore U_i=r_i(A) for every player. For a member i, responding at
+t_A yields r_i(A), and responding later or Never yields r_i(A∖{i}).
+For an outsider z, joining at t_A yields r_z(A∪{z}), while every
+later or Never response yields r_z(A). Earlier finite responses,
+when available, yield s_i. The cap-minus-singleton margin in (SA2)
+excludes this earlier value as a maximizer. Thus the ACTUAL debts are
+
+    d_i=[W_(i,A)]⁺, i∈A,
+    d_z=[J_(z,A)]⁺, z∉A.                            (SA8)
+
+This is also exactly the semantic pair of the LITERAL date-zero
+pure-A profile with all outsiders Never. Its only response values
+are the displayed root and wait rewards; dropping the old earlier
+solo tests changes no cap because they were strictly below B_i.
+This is a legitimate nonlocal SAME-table profile replacement, not
+a convex mixture of minimizing pairs or an unsupported old-chart
+atom reset. In particular the date-zero pure-A profile is itself
+an actual global minimum if the hypothetical marked one was.
+
+Assume all W_(j,A), j∈A, and J_(z,A), z∉A, are nonzero and that
+EXACTLY ONE member i has positive debt, with no indebted outsider.
+Then W_(i,A)=δ>0, every other member has W_(j,A)<0, and every
+outsider has J_(z,A)<0. Use the literal date-zero profile and change
+ONLY member i to quit at0 with probability1−ρ and Never with
+probabilityρ. Every other A member remains sure at0; outsiders
+remain Never. This is an actual independent behavioral law.
+
+Owner i's cap is independent of its own law and equals r_i(A∖{i}).
+Its prescribed payoff improves by ρδ, so its debt is (1−ρ)δ.
+For another member j the root payoff is
+
+    P_j(ρ)=(1−ρ)r_j(A)+ρr_j(A∖{i}).
+
+Every later/ Never response at ρ=0 pays r_j(A∖{j}), strictly less
+than r_j(A). Changing i's law perturbs EVERY response uniformly by
+at most2ρM and its root payoff by at most2ρM. This includes the
+pair case: on i's Never branch the other member can choose any
+finite deadline or Never, but that branch has probabilityρ and
+bounded reward, so no new large cap is hidden there. Taking
+4ρM<min_(j∈A∖{i})(−W_(j,A)) keeps root j's full cap at its
+prescribed P_j(ρ); its debt stays0. An empty minimum is ignored.
+
+Every outsider still faces at least one retained sure member at0.
+ALL later and Never tests equal its prescribed passive payoff
+(1−ρ)r_z(A)+ρr_z(A∖{i}). Its root join was strictly lower atρ=0,
+and remains so when 4ρM<min_(z∉A)(−J_(z,A)). Thus its full debt
+stays0 as well. There are no earlier-than-zero finite tests.
+
+Choose ρ>0 satisfying these finitely many strict bounds. The exact
+WHOLE-law debt is
+
+    D=(1−ρ)δ<δ,                                    (SA9)
+
+contradicting global minimality. No punishment tail or selected child
+Nash is used. This repair works even though the changed Never atom
+was unsupported in the old source; it is performed in a literal
+original-calendar profile whose complete pair was already equal
+to the source pair. It is not authorized as a negative density reset.
+
+### SA7. Consumption of ALL deterministic prescribed outcomes
+
+At the final table, signs (SA5) make EVERY W and J in (SA8) nonzero.
+The positive branches are EXACTLY E_A and Z_A selected at OLD r.
+If |E_A|≥2 or |Z_A|≥1 then actual δ=V_A(r̃), contradicting
+SA4's preserved no-contact gap for that included label.
+If both cohorts are empty, actual debt0 contradicts δ>0.
+The only remaining possibility is |E_A|=1 and Z_A=∅, which SA6's
+actual one-law release strictly improves. Singleton and Never
+were separately excluded there. Therefore EVERY final-table
+minimum has a random prescribed outcome. With finitely many
+outcome labels, at least TWO labels have positive probability.
+
+This includes atomic earliest paid outsider joins: it is not merely
+the pure unhappy coalition whose all members strictly withdraw.
+It does not exclude an outcome law supported on {A,Never}, a random
+pair/triple distribution, or any source solely because its cap set
+has several points. There is no linear outcome-mixture repair.
+
+### SA8. ALL-active signed head box, including accumulating cap sets
+
+Let q be ANY freshly produced final-table marked minimum, with full
+compact response sets A_i and τ=min(⋃_i A_i), allowing Never.
+Choose finite regular cuts u<a<τ; neither cut splits a retained atom,
+and q_j(clock=u)=0 for all j. Put B={i:e_i=q_i(clock≤u)>0}.
+If B is nonempty, for each i∈B use the OLD conditional head
+ν_i=q_i(·|clock≤u) and independent signed parameters
+
+    q_i^λ=(1−λ_i)q_i+λ_iν_i.
+
+The head/late density factors are 1+λ_i(1/e_i−1) and 1−λ_i.
+They are positive and bounded on a common small two-sided box.
+An e_i=1 direction is redundant; no new clock is introduced.
+
+This is realized on the ORIGINAL finite minimizing sequence using
+chronological conditionals at whole old atom intervals. Their cut
+boundaries converge to the old-chart regular cut; their indicators
+converge in L¹, and their positive masses tend to e_i. The literal
+old density is multiplied by
+
+    (1−λ_i)+(λ_i/e_i^k)1_(clock≤u_k).
+
+Its common bound and the strong indicator convergence give the
+required weak-* density convergence. All old retained collapse
+maps and moving finite-test kernels stay unchanged. The marked
+product/kernel convergence proves prescribed payoff AND full cap
+convergence for every fixed parameter vector: every original
+maximizing deadline has an old-chart subsequential tester, and each
+fixed limit tester has original approximants. Never stays separate
+from finite c, and c⁺ remains an exact duplicate because the
+targets add no mass at c. Hence EVERY small signed family pair
+belongs to the ORIGINAL closed carrier and has actual D≥δ.
+
+For EVERY response t>a and every player i, expand the opponents'
+independent product. A term containing any head replacement exits
+by u<t, so its payoff is independent of t, including t=Never.
+Consequently
+
+    V_i(t,q_-i^λ)=k_i(λ)V_i(t,q_-i)+C_i(λ),
+    k_i(λ)=Π_(j∈B∖{i})(1−λ_j)>0, t>a.              (SA10)
+
+The constant C_i is the SAME for ALL upper testers, not a selected
+branch derivative. The compact lower tester set≤a contains NO old
+maximizer and has a strict uniform gap. Product coupling bounds
+all response changes by2M times the sum of opponent total-variation
+changes. On a small signed box the lower gap stays strict, and
+(SA10) preserves EXACTLY all upper orderings and all active ties.
+Thus the ENTIRE old A_i remains the full maximizing set, even
+when it has accumulating or outcome-equivalent points.
+
+Choose any representative σ_i∈A_i and form
+
+    F_i(λ)=V_i(σ_i,q_-i^λ)−U_i(q^λ).
+
+The sum F is multiaffine, equals actual D on the signed box, and
+has an interior GLOBAL minimum δ at0. Averaging over a small
+centered cube, or inspecting the first nonzero squarefree part,
+forces F≡δ algebraically. Every point on the small box is a TRUE
+original minimum; final-table debt rigidity therefore gives
+F_i=d*_i there. Each individual multiaffine polynomial is consequently
+IDENTICALLY d*_i, also at its algebraic all-head endpoint. No claim
+that the distant endpoint retains old full caps follows from this
+polynomial identity; only the small signed box is cap-stable.
+
+### SA9. Strict pre-active mass collapses to a deterministic coalition
+
+Let P={i:q_i(clock<τ)>0}. Any such owner has d*_i>0: its
+nonnegative regret integrand B_i−V_i(t) is strictly positive at
+every pre-active clock and is integrated on a positive-mass set.
+
+For a regular cut with B={h}, the own response cap B_h is unchanged
+by the sole-law modification. Constancy of F_h says the prescribed
+payoff is unchanged as h is conditioned to its old head. All
+opponents are later than u, so that conditional payoff is s_h.
+Thus the ORIGINAL U_h=s_h, contradicting the tracked strict
+prescribed margin (SA2). This consumes the sole-head case without
+assuming that another debtor, sure-owner punishment, or child Nash
+has been produced.
+
+For |B|≥2, fix i∈B and set every other B owner algebraically to
+its head. Both i's own late conditional branch and its chosen
+response σ_i≥τ>u are screened by another sure head≤u, so they
+have identical passive payoff. Decomposing i's original law gives
+
+    F_i(own old law, others heads)
+      =e_i F_i(all heads).
+
+Both polynomials equal d*_i; its positivity gives e_i=1 in the
+ORIGINAL q_i. This conclusion holds for every i∈B. For j∉B,
+its own law and σ_j are later than u, screened by sure heads at
+the all-head endpoint. Its selected polynomial is0 there, so
+d*_j=0. Thus no j∉B can have positive pre-active mass: B=P.
+
+If P is nonempty, choose the smallest essential support endpoint
+t₀ of its mixture. There are decreasing regular cuts u_n↓t₀,
+all below τ, with some positive head present. Singleton B is
+impossible; for EACH n the preceding paragraph gives B=P,
+|P|≥2 and q_i(clock≤u_n)=1 for every i∈P. It follows that
+EVERY P owner is PURE at ONE finite t₀<τ in the ORIGINAL source.
+Every outsider stops≥τ>t₀. Its prescribed terminal outcome is
+therefore deterministically P, contradicting SA7.
+
+Hence for EVERY minimum and EVERY marked representation,
+
+    q_i(clock<τ)=0 for ALL i.                        (SA11)
+
+This proof allows randomly absorbing coalitions initially and makes
+no within-row distinct-payoff, unique active test or isolated active
+set assumption. The deterministic conclusion is derived ONLY in
+the hypothetical pre-active branch by actual signed transport and
+all-minimum debt rigidity, then consumed by SA7.
+
+### SA10. The first prescribed stage is finite, active and a collision
+
+If τ=Never, (SA11) makes every law Never and its full debt0 once
+Never is earliest active: all finite own-singleton rewards are≤0.
+This contradicts δ>0. Thus τ is finite. If its mixture atom had
+mass0, all opponents would stop strictly later than τ, and an
+owner maximizing at τ would have B_i=V_i(τ)=s_i. This contradicts
+the cap margin (SA2). Therefore τ has positive mixture mass and
+is isolated by the retained positive-atom chart construction.
+Equation (SA11) says it is exactly the FIRST prescribed stage.
+
+Suppose just one owner h has positive root atom q=q_h({τ}).
+If q=1 then U_h=s_h, contradicting (SA2). If 0<q<1, take the
+literal ORIGINAL finite suffix after the retained τ cut, conditioned
+on continuation by each owner, and reindex its unchanged integer
+calendar. The h continuation mass tends to1−q>0; the other masses
+tend to1. Compactness supplies an actual suffix carrier pair (u,b)
+with D_tail=Σ_i(b_i−u_i)≥δ. Vanishing pre-root absorption and
+vanishing other root rates give the exact limiting ledger
+
+    U_h=q s_h+(1−q)u_h,    B_h=max(s_h,b_h),
+    U_j=q r_j({h})+(1−q)u_j,
+    B_j≥q r_j({h})+(1−q)b_j, j≠h.
+
+This uses ALL suffix deadlines/Never and the original conditional
+sequence; it does NOT assert that the suffix minimizes debt or
+is Nash. The h margin implies b_h=B_h>s_h. Therefore
+
+    δ≥(1−q)D_tail+q(B_h−s_h)
+      ≥(1−q)δ+q(δ+δ²/8)>δ,
+
+contradiction. At least TWO owners thus have positive atoms atτ.
+The first root has genuine nonsingleton probability, not a new
+Never floor or a purely continuous collision-free strategy class.
+It may have sure owners and may still have several random coalition
+outcomes or cap kernels. These residuals are not consumed here.
+
+Apply HR only AFTER fixing this same final table and obtaining all
+its source conditions. That theorem excludes every all-unique
+minimum. Combining it with (SA11) and SA7 leaves a multiple-cap,
+random-outcome minimum whose first prescribed stage is already
+active and a collision, rather than a later passive plateau behind
+a deterministic unhappy head. It does not force distinct response
+kernels, a positive debt-rank drop, a root Nash or a uniform payoff.
+
+### SA11. Exact tests, source overlap and concrete next question
+
+An exact sixty-entry coefficient test detects the target conflict
+early. Set all own singletons0, all passive singleton/pair rewards0,
+all participant pair rewards−1/4 except r_1({0,1})=1, all participant
+triple rewards−1/6, and all omitted-triple/grand rewards0. These
+instructions specify ALL60 entries in the unit cube. Its actual
+global gap is ZERO because AllNever has debt0. The number1/2
+below is ONLY a coefficient-test level, not a positive minimum.
+
+Its C_{ {0} }=1−1/4−1/4=1/2. Five pairs other than {0,1}
+have two positive member withdrawals summing1/2. Every triple has
+three positive member withdrawals summing1/2 and its outsider
+join0. Under the PRESENT target their values become respectively
+1,1 and3/2. The pair {0,1} has exactly one positive member
+withdrawal and no positive outsider join, so its mixed label is
+deliberately omitted and assigned to the actual release consumer.
+The grand label is old0 and targets4. All60 endpoint coordinates
+are assigned and remain in the unit cube. These assertions were
+checked by an exact `fractions.Fraction` calculation, not a grid
+search. Assigning negative target−2 would instead give C_{ {0} }
+target−2; assigning all positive joins would lower the eligible
+pair/triple withdrawal labels. This keeps both failed implications
+visible rather than silently changing their contact quantifiers.
+
+The two-player debt-zero profile-mixing falsifier in DR7 continues
+to apply: this proof never independently mixes different minimizing
+profiles, inferred convex outcome laws, or minimizing payoff/cap
+pairs. The only local polynomial family is an OLD-law signed box
+with complete moving-test transport. The deterministic repair is
+a literal original finite-root profile with explicitly equal caps,
+followed by one one-sided independent release. Outcome-equivalent
+multiple cap points are preserved, not counted as distinct strategic
+directions.
+
+Narrow named source lookup for this section reread the declaration
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+and the compact carrier/weighted margin dependencies listed in DR8.
+The existing declaration supplies (SA2), not debt-rigid weights,
+typed mixed contacts, or all-minimum random-outcome/pre-active
+exclusion. The 920 packet's universal earliest theorem allows an
+original sure BEFORE-earliest supplier in its zero-mixture branch;
+the present comparison removes that whole branch and also removes
+the ATOMIC pre-active head and deterministic paid-join branches.
+DR alone only consumed selected unique-cap support. HR independently
+removes all-unique caps; its full artifact is under the separate
+coordinator gate, and no frozen file is changed by this notebook.
+These are exact nearby overlap distinctions, not a global producer
+census or additional raw-table UE coverage claim.
+
+Requested focused falsification: check the complete93-label target
+against EVERY old82 contact, zero-born sign cohorts, true moving-law
+gap interval, literal date-zero equality of deterministic semantic
+pairs, all-deadline sole-member release including pair/Never, and
+ALL-active signed cut box with original lower support collapse.
+Then check that the HR combination genuinely applies at ONE final
+table rather than importing a minimum from a different selection.
+
+Concrete next global question: at this one produced table, can the
+FIRST active collision with random prescribed outcome and multiple
+complete caps be consumed by a whole-table comparison or a legal
+finite-amplitude independent repair? Its active points may share
+outcome kernels, its root may have sure players, and its debtor
+support is rigid. None of those residuals may be discarded merely
+because a selected pointwise response or deterministic endpoint is
+easier to analyze. Full Fin4 UE remains OPEN.

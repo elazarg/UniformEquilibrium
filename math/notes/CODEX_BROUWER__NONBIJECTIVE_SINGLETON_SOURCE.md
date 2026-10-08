@@ -6607,8 +6607,10 @@ minimum, with the late plateau alternative retained explicitly.
 
 ## Strict pre-active heads at a debt-rigid multiple-cap minimum
 
-Status: COMPLETE UNREVIEWED supporting extension MH1–MH3, not a
-consumer of the final sure-owner release. No genericity, uniqueness
+Status: COMPLETE supporting extension MH1–MH3; NOETHER's focused
+independent proof check found no mathematical issue, with the cut
+clarification incorporated in MH2. It is not a consumer of the final
+sure-owner release or a whole-artifact gate. No genericity, uniqueness
 or supported-active-point hypothesis is used. This is a concrete
 description of one remaining outcome-equivalent plateau, not another
 cap-point multiplicity count.
@@ -6651,9 +6653,15 @@ to capture positive old head mass from every member of A; all of
 them are then originally sure≤u. Let t₀ be their smallest essential
 support endpoint. If exactly one owner had that smallest endpoint,
 cuts just above it would have singleton B_u, impossible by MH1.
-At least two owners therefore share it. For every decreasing regular
-cut u>t₀ with these two heads present, MH1 makes them sure≤u;
-they are both PURE at t₀. Every other owner with the SAME lower
+At least two owners therefore share it. Use CALENDAR events clock≤u,
+not raw-chart cuts through a retained interval. At an isolated t₀,
+one whole-date event at the RIGHT end of its retained interval
+already gives clock≤t₀; cuts within its following calendar gap are
+the same event. At a nonisolated t₀, choose decreasing regular
+calendar cuts u>t₀ with whole retained atoms included; their raw
+pullbacks use retained right endpoints or null boundaries. Whenever
+these two heads are present, MH1 makes them sure≤u, and taking the
+decreasing calendar events makes them both PURE at t₀. Every other owner with the SAME lower
 support endpoint is present in these decreasing cuts as well, so
 MH1 also makes it pure at t₀. An additional pre-active owner with
 a STRICTLY HIGHER lower endpoint would be screened by the earlier
@@ -6690,6 +6698,18 @@ withdrawal sum to2|A|, but lowers canonical singleton/pair join
 contacts. No simultaneous-contact separator or new worst-table
 comparison is supplied here. Thus (MH1) is retained as exact source
 data for a genuine last-sure release, not an unproved finite-spectrum
-consumer or new export. The sole strict-head-owner arm can still have
-only that owner's debt positive; MH1 does not exclude it by counting
-another debtor that has not been produced.
+consumer or new export. The sole strict-head-owner arm is excluded
+by the stronger SAME-table checked input
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+Its hypotheses are original-carrier membership and global SUM
+minimality, exactly four players, a positive reward bound M covering
+all entries, and positive total debt δ. It gives
+
+    U_i−s_i≥δ−d_i+δ²/(8M)>0 for EVERY i.
+
+The strict final inequality uses nonnegative debts and d_i≤δ.
+Hence MH1's U_h=s_h is impossible; no second debtor is needed.
+This theorem and `exists_minimumTerminalSemanticDebt_le_sqrt_of_fourPlayer`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPayoffEnvelope.lean`
+were narrowly inspected. No change to the frozen HR artifact follows.
