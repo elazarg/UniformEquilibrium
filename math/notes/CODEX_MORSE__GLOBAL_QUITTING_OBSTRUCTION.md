@@ -2,7 +2,19 @@
 
 Owner: CODEX_MORSE.
 
-Current bird's-eye assignment: the separate owned note
+Current independent negative/dual attempt: seek an ACTUAL rational table
+and a sufficient polynomial certificate on EVERY absorption-relative
+robust root edge in the whole fixed payoff box. The new dual section
+below gives a complete ORDINARY UNREVIEWED buffered exact-to-robust repair
+under the stronger, explicitly verified no-sure-root-at-any-annotation
+hypothesis of one provisional table. It does NOT produce a potential,
+a positive gap, or a new counterexample-class exclusion. Small stationary
+and periodic searches and low-degree fitting failures are experiments
+only; no bounded-search failure is used as a certificate. The remaining
+task is an actual nonseparable high-degree barrier or a charged full-root
+construction that retires the table. No export is proposed.
+
+Preserved bird's-eye program: the separate owned note
 `CODEX_MORSE__FIN4_BIRDS_EYE_CONTINUATION_INDEX_PATH.md` develops ONE
 intuition-level all-table path: a nonconvex, witnessed Nash-continuation
 index should force compatible absorption-weighted words or a true
@@ -9930,6 +9942,447 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Negative dual attempt: a rational no-sure table and absorption-relative buffered root repair
+
+Status: COMPLETE ORDINARY UNREVIEWED supporting mathematics and
+explicitly UNRESOLVED counterexample search. No sufficient potential has
+been found. The table is a provisional inverse-design shell, NOT an
+asserted counterexample, and its complete existing-producer census is
+not claimed. The exact-to-robust lemma below genuinely controls every
+robust edge under its stated strong no-sure hypothesis; it must not be
+confused with having supplied its exact potential premise.
+
+### DN1. Exact sufficient endpoint and the data actually inspected
+
+For a rational reward table r on the 15 nonempty subsets of I={0,1,2,3},
+let |rᵢ(S)|≤M and B=M+2. A root q∈[0,1]⁴ is an independent product
+action law. Write
+
+    c(q)=∏[i∈I](1−qᵢ),                 a(q)=1−c(q),
+    F(v,q)=c(q)v+∑[S≠∅]μ_q(S)r(S),
+    Qᵢ(q)=∑[T⊆I\{i}]μ_{−i}(T)rᵢ(T∪{i}),
+    Cᵢ(v,q)=hᵢ(q)vᵢ+Rᵢ(q),            gᵢ=Qᵢ−Cᵢ,
+    hᵢ(q)=∏[j≠i](1−qⱼ),
+    Rᵢ(q)=∑[∅≠T⊆I\{i}]μ_{−i}(T)rᵢ(T).
+
+The coordinate regret is max((1−qᵢ)gᵢ,−qᵢgᵢ). A robust edge v→y of
+charge a has BOTH endpoints in [−B,B]⁴ and, for every i,
+
+    |yᵢ−Fᵢ(v,q)|≤τa,
+    (1−qᵢ)gᵢ≤τa,                    −qᵢgᵢ≤τa.       (DN.1)
+
+A sufficient negative certificate consists of rational τ>0 and rational
+polynomial P with
+
+    P(v)−P(y)≥a                         for EVERY such edge,       (DN.2)
+
+together with the absence of a Nash root having a sure quitter at the
+TRUE unrestricted punishment vector. Normality and one positive own
+singleton are also inputs to the tracked consumer. This covers the
+original behavioral uniform-payoff endpoint, not just periodic,
+stationary, bounded-calendar, or finite-action deviations. No source
+minimum, tail Nash hypothesis, or cap selector is used in (DN.1).
+
+Read declarations and definitions in this attempt:
+
+- `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+  in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`;
+- `quittingGame_not_exists_uniformEquilibriumPayoff_of_noSureRoot_of_rationalPotential`
+  in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateConsumer.lean`;
+- `IsQuittingFloorFreeRobustEdge` and
+  `quittingFloorFreeRobustChargedRelation` in
+  `UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean`;
+- `IsQuittingFullExactRootPotential` and the robust-to-exact restriction
+  declarations in
+  `UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`;
+- `IsQuittingFullExactRootPotential.radialReversal` in
+  `UniformEquilibrium/Quitting/Projective/FullExactRootPotentialReflection.lean`,
+  and `IsQuittingFullExactRootPotential.directionalThirdDerivative` in
+  `UniformEquilibrium/Quitting/Projective/FullExactRootPotentialThirdDerivative.lean`;
+- `quittingRobustPotential_singletonFace_l1_drift` in
+  `UniformEquilibrium/Quitting/Projective/RobustPotentialSingletonFaceDrift.lean`;
+- `HasQuittingPunishmentVectorNashRootWithSureQuitter` in
+  `UniformEquilibrium/Quitting/Classification/InstantPunishmentSureQuitterCharacterization.lean`;
+- `isQuittingNormalPlayer_of_singleton_nonneg` in
+  `UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`.
+
+These are declaration-level source reads, not a new build/axiom audit.
+The existing low-degree exclusions rule out quadratic, multiaffine and
+quasiconvex full potentials and the stated monotone-composition variants.
+The present attempt does not try to evade those exclusions by renaming
+their templates.
+
+### DN2. A new literal rational shell, with all 60 coordinates
+
+The following is NOT the old solved mixed-support fixture: its pair and
+grand entries are materially different. Coordinates are always ordered
+0,1,2,3; Never pays (0,0,0,0).
+
+| S | r(S) |
+| --- | --- |
+| {0} | (1,3,3,0) |
+| {1} | (4,1,−1,−1) |
+| {2} | (0,2,1,2) |
+| {3} | (4,−2,0,1) |
+| {0,1} | (−2,−2,5,5) |
+| {0,2} | (3/2,5,−2,5) |
+| {0,3} | (−2,5,5,3/2) |
+| {1,2} | (5,−2,3/2,5) |
+| {1,3} | (5,3/2,5,−2) |
+| {2,3} | (5,5,−2,−2) |
+| {0,1,2} | (4,4,4,−4) |
+| {0,1,3} | (4,4,−4,4) |
+| {0,2,3} | (4,−4,4,4) |
+| {1,2,3} | (−4,4,4,4) |
+| I | (−5,−5,−5,−5) |
+
+Here M=5 and every own singleton is 1. Alternatively the literal
+rational table r/5 has M=1, own singles 1/5, the characterization's
+fixed box [−3,3]⁴, and the buffered box [−4,4]⁴ used below. Positive
+scaling preserves the uniform-equilibrium question, but the original
+M+2 box and this scaled table's M+2 box are NOT identified: scaled
+box 3 pulls back to original box 15, not original box 7.
+
+TRUE punishment is Pᵢ=−4 in the unscaled table. Playing Never guarantees
+at least −4, because every passive terminal reward is at least −4.
+Opponents all quitting at date zero give pure Continue −4 and pure Quit
+−5, so the unrestricted best-response value is −4. This supplies both
+bounds. Nonnegative own singles independently supply normality by the
+tracked declaration above.
+
+Every pure terminal coalition has a strict escape. A singleton z has
+the joining favorite
+
+    f(0)=3, f(1)=2, f(2)=0, f(3)=1.
+
+Its join gains are 3/2,5/2,3/2,7/2 respectively. Every pair has a
+withdrawing member with reward −2 strictly below its passive reward
+at the other singleton. A triple member gains by leaving 4 for passive
+pair reward 5. A grand member gains by leaving −5 for −4. These pure
+tests alone are NOT a barrier against independent behavioral profiles.
+
+### DN3. Strong whole-annotation no-sure theorem for this shell
+
+Claim. At EVERY real continuation annotation v, the full four-player
+binary action game has no exact Nash root with ANY sure quitter.
+
+Proof. If at least three players are sure, a sure member's Quit-minus-
+Continue gap is −1: with the fourth continuing it is 4−5, and with
+the fourth quitting it is −5−(−4). Its profitable withdrawal contradicts
+Nash. If exactly two are sure, choose a withdrawing member of their
+pair whose pair-minus-passive-singleton gap is strictly negative.
+Conditioning on the two free players, its gap is that negative number
+when neither joins, and is −1 when one or both joins. The whole gap is
+strictly negative.
+
+If z is the only sure owner, every free i≠f(z) has a strictly negative
+gap independently of v and the other free rates. When no additional
+opponent joins, its pair participant reward −2 is strictly below its
+passive reward at {z}; when one or two additional opponents join the
+gap is −1. Thus these two nonfavorites must be quiet. Favorite f(z)
+then has the strictly positive join gain listed above and must be
+sure, contradicting the already excluded two-sure case. All possible
+sure-coordinate faces are covered. ∎
+
+This is stronger than no sure Nash root at the true punishment vector;
+it is proved for this particular shell, not inferred for all no-UE
+tables. It supplies the compact rate collar used in DN5.
+
+### DN4. Bounded source overlap, and exactly what remains unaudited
+
+The following COMPLETE selection predicates fail; this is not a census
+of all existing UE producers.
+
+1. ProductLow fails at a pure triple: every active player's forced-Quit
+   value is 4>1. The supportwise premium balance predicate also fails
+   on that triple, since its normalized weighted premium is 3>0.
+2. No player can be protected by the global participant-floor premise
+   of the protected support-specific leaver producer: grand reward
+   −5<1 violates that premise for every player. The table has premium
+   traps, for example every triple, so choosing no protected players
+   cannot supply its trap leavers.
+3. The mixed-per-support upper-average OR boxed-charge class fails
+   already at A={0,1,2}. The upper-average test at S=A gives 3 for
+   every normalized nonnegative weight vector. For its charge branch
+   the singletons give d≤5/2 and g≤5/2, while penultimate subsets give
+   τ≥3 and ℓ≤1. Hence the largest possible threshold is
+
+       3(d/τ)(g+ℓd/τ)≤25/3<3+3M=18.
+
+   This rules out ALL coefficient choices on that support, rather
+   than failure of one guessed weight or coefficient tuple.
+4. Participant-only rewards do not apply: passive singleton/pair
+   entries are not zero. The strong all-annotation no-sure proof also
+   excludes any supplied sure-root producer.
+5. An unrestricted strict actual-payoff deficit below the own-singleton
+   vector is false: the literal one-date product rates
+   q=(2/3,0,1/2,1/2), followed by Never, have expected payoff
+   (3/2,23/12,19/12,11/6), strictly above 1 in every coordinate.
+   This is not Nash and does not exclude more targeted payoff criteria.
+
+Exact definitions inspected: `HasProductLowQuittingPremium` in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`;
+`IsSupportwiseQuittingPremiumWeightCertificate` in
+`UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremiumBalanceAt.lean`;
+`HasProtectedParticipantPremiums` and `HasSupportSpecificQuittingLeavers`
+in `UniformEquilibrium/Quitting/Classification/SupportSpecificQuittingPremiumLeavers.lean`;
+`HasBoxedQuittingNashCharges` in
+`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashChargeReturn.lean`;
+and `QuittingTrapChargeCoefficients` in
+`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashCharges.lean`.
+The upper-average OR charge statement and its complete finite tests are
+the previously independently reviewed class; no new seal is asserted.
+Relevant cycle, matching, inverse-column and selected-child producers
+have NOT all been audited on the new shell. It is therefore not yet a
+certified surviving counterexample candidate.
+
+### DN5. Buffered exact-root potentials ARE sufficient under strong no-sure
+
+Lemma (ordinary proof). Let |r|≤M, B=M+2, B′=B+1. Suppose EVERY exact
+full root at EVERY annotation in [−B′,B′]⁴ has all rates strictly below
+1. Let P be C² on a neighborhood of this buffered box and suppose
+
+    P(v)−P(F(v,q))≥a(q)
+
+for ALL exact full Nash roots q at ALL buffered v. Then some τ>0 makes
+2P a potential on ALL robust edges (DN.1) in the original box [−B,B]⁴.
+If P has rational coefficients, τ can be chosen rational and 2P retains
+those coefficients and the same degree.
+
+This is an actual absorption-relative repair, not an absolute root-
+closeness estimate and not a claimed converse without the buffer or
+strong no-sure hypothesis.
+
+Proof. Compactness of the inner annotation/rate cube and continuity of
+the four regret functions supply η>0 and ε₀>0 such that regret≤ε₀ in
+every coordinate implies qᵢ≤1−η for all i. Otherwise a sequence of
+near-Nash roots with a coordinate tending to 1 would have a limit
+exact root with a sure coordinate, contrary to the hypothesis.
+
+Take τ sufficiently small, set ε=√τ, and first assume a>0. Delete each
+rate qᵢ<εa, obtaining q′≤q coordinatewise. Its total deleted rate d
+satisfies
+
+    d≤4εa,       (1−4ε)a≤a′=a(q′)≤a.                 (DN.3)
+
+The lower bound follows from coupling the two product action laws, or
+the coordinatewise 1-Lipschitz bound for absorption. If ε<1/4 then q′
+is nonzero. From τa≤τ≤ε₀ every old rate is ≤1−η; thus every deleted-
+opponent survival hᵢ(q′) is at least η³.
+
+Put K=M+B′. Each gap gᵢ is Lipschitz in the other rates with constant
+L=2K for their ℓ¹ distance: a conditional Quit reward changes by at
+most 2M, and a conditional Continue reward by at most M+B′. Their
+sum 3M+B′ is at most 2K because B′≥M. For a retained active i,
+qᵢ≥εa and the two regret inequalities give
+
+    gᵢ≥−τa/qᵢ≥−ε,
+    gᵢ≤τa/(1−qᵢ)≤τ/η≤ε                         if ε≤η.
+
+Consequently |gᵢ(v,q′)|≤(1+8K)ε. At a quiet or deleted coordinate,
+only its positive gap matters and satisfies the stronger bound
+
+    [gᵢ(v,q′)]⁺≤(1+8K)εa.                           (DN.4)
+
+Define v′ independently coordinatewise. For q′ᵢ>0 set
+v′ᵢ=vᵢ+gᵢ(v,q′)/hᵢ(q′); for q′ᵢ=0 set v′ᵢ to the maximum of vᵢ
+and that same indifferent threshold. Then the retained active gaps
+are exactly zero and all quiet gaps are nonpositive. Thus (v′,q′) is
+an EXACT FULL Nash root, not merely a Nash root of its active subgame.
+With C₀=(1+8K)/η³,
+
+    ‖v′−v‖∞≤C₀ε.
+
+Taking C₀ε<1 puts v′ in the buffered box. This is the point at which
+the buffer is genuinely used.
+
+Let G bound ‖∇P‖₁ on the buffered box, and H bound the Hessian as an
+operator from the coordinate ∞-norm to the 1-norm. For fixed q′ put
+
+    L_P(v,q′)=P(v)−P(F(v,q′)).
+
+Since ∂F/∂v=c(q′)Id and ‖F(v,q′)−v‖∞≤a′K,
+
+    ‖∂L_P/∂v‖₁
+      =‖∇P(v)−c(q′)∇P(F(v,q′))‖₁
+      ≤a′(G+HK).                                     (DN.5)
+
+All segments used here lie in the buffered box, because it contains
+the rewards and both annotations. The exact-root inequality at v′
+and integration of (DN.5) therefore imply
+
+    L_P(v,q′)≥a′−a′(G+HK)C₀ε.
+
+Changing the deleted rates costs at most GKd, since F is K-Lipschitz
+in the rate ℓ¹ distance. Combining with (DN.3) yields
+
+    P(v)−P(F(v,q))≥a(1−C_*ε),
+    C_*=4+C₀(G+HK)+4GK.                              (DN.6)
+
+Finally the robust target perturbation costs at most Gτa. Thus
+
+    2(P(v)−P(y))≥2a(1−C_*√τ−Gτ)≥a
+
+once τ is small enough that C_*√τ+Gτ≤1/2. All constraints are strict
+upper bounds on τ, so a positive rational choice exists. If a=0 then
+q=0 and (DN.1) gives y=v; the desired inequality is automatic. ∎
+
+The crucial cancellation is (DN.5). Bounding P(v)−P(v′) and
+P(F(v,q′))−P(F(v′,q′)) separately would give an error O(√τ), NOT
+O(a√τ), and would not prove the lemma. Tiny rates are deleted at
+εa rather than a fixed absolute cutoff for the same reason.
+
+On the literal shell DN3 supplies the no-sure input without any
+unproved producer. Hence searching an exact C² polynomial barrier on
+the unit-scaled buffered box [−4,4]⁴ is a sufficient negative attack:
+if such a barrier is actually supplied, DN5 and the tracked consumer
+would refute UE for that table. No polynomial has yet been supplied.
+The narrow source search found the already implemented robust-to-exact
+restriction, but no converse with these buffered/no-sure hypotheses;
+this is not a claim of an exhaustive codebase novelty audit.
+
+### DN6. Exact algebraic search domain, with its singular stratum retained
+
+A direct robust search can instead remove division by tiny absorption.
+For nonzero q write q=αz, where α=∑qᵢ∈(0,4] and z is in the unit
+simplex, with αzᵢ≤1. Then
+
+    a=αA(α,z),
+    A=1−αe₂(z)+α²e₃(z)−α³e₄(z),
+    F(v,αz)=v+αH(v,α,z),
+    H=−Av+∑[S≠∅]α^(|S|−1)∏[i∈S]zᵢ
+                         ∏[i∉S](1−αzᵢ)r(S).
+
+For e∈[−1,1]⁴ take y=v+α(H+τAe). Both endpoints must still be boxed.
+The gap constraints become the exact polynomial inequalities
+
+    (1−αzᵢ)gᵢ(v,αz)≤ταA,
+    −zᵢgᵢ(v,αz)≤τA.                                (DN.7)
+
+For polynomial P the expression
+
+    W=[P(v)−P(v+α(H+τAe))]/α−A
+
+is a polynomial, because the numerator is divisible by α. Proving
+W≥0 on this ENTIRE semialgebraic domain, including all α>0, is a
+sufficient certificate. Requiring it also on the algebraic α=0
+stratum is a safe strengthening. Necessity there may only be asserted
+on actual limits of positive-α feasible points; the unfiltered algebraic
+stratum is not silently identified with those limits. At α=0,
+
+    H=−v+∑zᵢr({i}),
+    W=∇P(v)⋅(v−∑zᵢr({i}))−τ∇P(v)⋅e−1.
+
+Thus a face-only polynomial fit omits real finite-α obligations, while
+an exact-root-only fit omits the robust thickening unless DN5's
+additional hypotheses and buffer are used. A grid is not an all-domain
+proof. Rational Bernstein/SOS identities or exact elimination would
+need to be actually supplied and checked, not assumed to exist.
+
+For the exact alternative, with no sure roots the active support S is
+parameterized by 0<qᵢ<1 on S and qᵢ=0 outside it. The full annotation
+conditions are simply
+
+    vᵢ=(Qᵢ−Rᵢ)/hᵢ     for i∈S,
+    vᵢ≥(Qᵢ−Rᵢ)/hᵢ     for i∉S,
+
+together with the buffered box. These are FULL roots, including all
+quiet-player inequalities. The denominator is positive. This reduces
+a potential verification to finitely many support-wise polynomial
+inequalities after multiplication by positive denominators, but does
+not prove those inequalities.
+
+### DN7. Exact rejection of invalid solver evidence
+
+No positive conclusion is drawn from the attempted symbolic linear
+programs. Exact substitution caught an invalid returned vector for
+108 sampled singleton-face inequalities. In shifted original
+coordinates u=v−(1,1,1,1), the returned polynomial was
+
+    P(u)=5u₀/3−125u₀³/28224−125u₀²u₁/3136+5u₃.
+
+At u=0 and owner 2 its face drift is −2/3, whereas the requested
+inequality was ≥1. Twenty-four sampled rows were violated. Hence it
+was NOT even a grid-feasible candidate; it is not evidence that a
+grid-passing potential fails off-grid. A separate unconstrained-variable
+test of the same symbolic LP wrapper returned infeasibility for
+the feasible constraint x≤−1 with x free. Signed-variable expansion
+did not cure the first invalid witness. These outputs are discarded.
+
+The subsequent numerical tensor-Bernstein face fits at degrees 3–6
+also found no positive margin; they supplied neither a feasible
+polynomial nor an exact nonnegative Farkas identity. Their failure
+does NOT exclude any polynomial degree or table.
+
+One exact elementary observation survives separately: if a degree≤3
+full-root potential had an INTERIOR global minimum x, the tracked
+radial reversal would give a boxed reflected segment with negative
+slope at time 1. Its restriction has the form
+
+    P(x+td)−P(x)=At²+Bt³,
+
+because ∇P(x)=0. Minimality gives A≥0 and 4A+8B≥0; therefore its
+slope at 1 is 2A+3B≥A/2≥0, a contradiction. This excludes only
+INTERIOR-minimum cubic templates. Boundary minima may have a linear
+term, for example t(2−t)², whose slope at 1 is negative while it is
+nonnegative on [0,2]. No universal cubic exclusion is claimed.
+
+### DN8. Full-period numerical tests, not a gap certificate
+
+The stationary and exact active-root searches did not supply a Nash
+profile. The same is true of the small specified periodic root families:
+two complementary pairs, and four-pair favorite-cycle words. Newton
+failure is not a census of their solutions and is not an all-law bound.
+
+A broader finite-period experiment evaluated the WHOLE cap, not merely
+the current action gaps. For a length-m periodic rate word, let
+A_t=∑[S≠∅]μ_{q_t}(S)r(S), c_t=μ_{q_t}(∅). Its prescribed payoff at
+the initial phase is
+
+    U=[∑[t=0..m−1](∏[k<t]c_k)A_t]/(1−∏c_t).
+
+For observer i, set h_{i,t}=∏[j≠i](1−q_{t,j}), let R_{i,t} be its
+passive contribution, and let Q_{i,t} be its pure-Quit endpoint. The
+first-block deadline values and the Never value are
+
+    V_{i,t}=∑[k<t](∏[ℓ<k]h_{i,ℓ})R_{i,k}
+                       +(∏[k<t]h_{i,k})Q_{i,t},
+    Nᵢ=[∑[t=0..m−1](∏[k<t]h_{i,k})R_{i,t}]/(1−∏h_{i,t}).
+
+Every later-block deadline is an interpolation between its first-block
+value and Nᵢ. Consequently the complete cap is max(Nᵢ,max_t V_{i,t})
+when deleted-opponent period survival is <1. This is the tracked
+periodic calculation, not a new completeness assertion for arbitrary
+laws. The tested rates stayed strictly between 0 and 1, so no missing
+zero-denominator boundary was used.
+
+With 24 random starts, finite-difference projected descent and 4,000
+iterations, observed minimum debts for periods 3,4,6 were about
+0.0537,0.0428,0.0245 respectively. These are found UPPER bounds on
+restricted infima, NOT certified minima or LOWER bounds. The decrease
+with period length is a warning against interpreting the trial as a
+positive-gap table. No asymptotic equilibrium conclusion follows
+either. Near-zero numerical rates were not identified with literal
+zero in a proof. The prototype remains unretired and unvalidated.
+
+### DN9. Concrete next question and the changed mechanism
+
+The initial low-degree face ansatz is retired as a proof strategy:
+existing exclusions already force genuine nonlinear geometry, and
+invalid symbolic outputs were caught before any certificate claim.
+The new question is now precise: does this particular rational no-sure
+table admit a nonseparable polynomial with unit charged decrease at
+EVERY exact root in the buffered unit-scaled box [−4,4]⁴? If yes, DN5
+turns it into the sufficient ALL-robust-edge certificate; if not,
+one should extract a real compatible charged word or an exact broader
+contradiction, not infer infeasibility from a finite fit. A separate
+complete producer-coverage audit is still required before calling
+the table a surviving negative candidate.
+
+No new source narrowing, Fin4 UE theorem, counterexample, or export is
+claimed by DN1–DN9. DN5 is a proved supporting reverse bridge with
+honest additional hypotheses, applied here only to the search problem.
 
 ## Actual continuation-index test: a closed positive-charge circuit and its nonlocal breaking wall
 
