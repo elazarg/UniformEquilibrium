@@ -627,7 +627,8 @@ Blind replay therefore creates a quantitatively positive new response cap;
 it is not a return consumer. A whole-law modification must control this
 renewal leakage or produce another complete contradiction to δ>0.
 
-The [separated-source proof](exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md)
+The separated-source proof in Part I of the
+[complete source packet](exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md)
 has two independent mathematical reviews. These restrictions are ordinary
 mathematics, not Lean-checked declarations. No UE consumer, actual minimum
 attainment, Nash continuation or preservation of an earlier selected chronology
@@ -2110,7 +2111,7 @@ one accepted instance or an equivalent unrestricted proof.
 | --- | --- |
 | Finite laws | Select the three independent nonpivot laws with inner repair value tending to zero. |
 | Maximum-regret sources | Consume either the generic singleton-bearing source or the single-pivot source with strict pressure and a singleton-removing delay, controlling the changed nonmover caps. |
-| Total-debt source | Consume the selected separated-gap minimum: every debt is positive, its first collision has no sure quitter, and a paid bridge connects two finite responses. Retain the arbitrary-carrier tail constraint and account for the positive born cap under periodic replay. The source supplies neither a Nash row, minimizing tail, nor temporal return. |
+| Total-debt source | Consume the least-literal-Never separated-gap minimum: either two owners bridge between the first root and later responses, or one owner bridges and another has only later maximizers. Every debt is positive and the first collision has no sure quitter. Retain the arbitrary-carrier tail constraint and account for the positive born cap under periodic replay. The source supplies neither a Nash row, minimizing tail, nor temporal return. |
 | Forward play | Produce the bounded absorption-relative packets or the punishment-vector sure root from the remaining table. |
 | Global obstruction | Exclude every full robust polynomial/positive invariant barrier, or construct one for an explicit table. |
 | Matrix classification | Consume tables surviving full and quotient degree tests, guarded crossed-response tests, and the matrix-free oriented-pair test, using actual all-behavior realization. |

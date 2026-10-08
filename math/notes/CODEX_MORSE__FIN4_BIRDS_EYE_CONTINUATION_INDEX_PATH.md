@@ -709,7 +709,7 @@ is an independently reviewed ordinary raw-class theorem, not an
 unconditional Lean theorem for all Fin4.
 
 The fully-paid nonsure source is the reviewed ordinary packet
-[ FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE ](../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md).
+[ LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE ](../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md).
 The independent scalar raw producer is
 [ SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM ](../exports/SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md).
 The exact GS, EC, CI and older menu/nonconvex tests remain in the

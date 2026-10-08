@@ -3,7 +3,7 @@
 ## Current status and exact open consumer
 
 The live line has returned to ONE table supplied by the reviewed
-`FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`: true unrestricted minimum
+`LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`: true unrestricted minimum
 δ>0, strictly larger absorbing floor, positive owns, common strictly
 positive minimum debts, and positive joint Never. RM45 tests an actual
 old-law finite/Never conditioning path. In its precisely stated sole-
@@ -92,9 +92,10 @@ From ANY counterexample it selects a FRESH generic debt-rigid table with
 mass and ALL positive debts at EVERY sufficiently near-minimal actual law.
 Every marked full minimum has a nonsure paid finite-to-finite first-root
 bridge. Its whole-block renewal competitor proves that a conditional-Never
-upper cap MUST grow. The complete independently reviewed canonical source is
-[`FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`](../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md),
-SHA25621e596e5…11953. No
+upper cap MUST grow. The complete independently reviewed canonical source is now Part I of
+[`LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`](../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md).
+The original `FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md` component had
+SHA25621e596e5…11953 and is included there unchanged except heading depth. No
 canonical93 contact exclusion or old minimum is transported. It makes
 RM18–RM21's sure-owner normalization unnecessary for this stronger source,
 while their proofs and exact equality-boundary regressions remain useful.

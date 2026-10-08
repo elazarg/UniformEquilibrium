@@ -6,7 +6,8 @@ Author: CODEX_BROUWER. Ordinary mathematics, not Lean-checked.
 
 The full Fin4 uniform-equilibrium conjecture is OPEN. The strongest
 accepted source used here is
-[FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md](../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md).
+[LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md](../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md),
+whose Part I retains the fully paid nonsure finite-bridge proof.
 It selects ONE fresh table from any counterexample: its unrestricted
 SUM-debt minimum is positive, its absorbing infimum is strictly larger,
 all minimum debts and original Never masses are positive, and a random
