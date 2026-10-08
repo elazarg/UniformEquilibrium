@@ -1299,3 +1299,182 @@ hash promotion remain mechanical coordinator checks. Affirmative export value
 does NOT imply a consumer of the residual: chronological paid renewal,
 off-minimum cap leakage control, actual minimizing-law attainment and uniform
 equilibrium remain open exactly as Section18 states.
+
+## Independent NP1–NP9 full-section review: strict absorbing-gap separation
+
+Verdict: ORDINARY MATHEMATICS PASS; AFFIRMATIVE SIGNIFICANT SOURCE-REDUCTION
+VALUE. This is not a Lean certification or a full-conjecture proof.
+
+Reviewed surface: the entire section headed “Forward global source: strict
+absorbing-gap separation forces a fully paid finite bridge” in
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, excluding the following
+heading and section. Its exact SHA256 is
+
+    a2cf862fb5006c6b8acc513a5bfa5bd897e61522bd426498727ebf239600b5ed
+
+I read the complete section, independently reconstructed the global source
+and all-response comparisons, and attempted the falsifiers below. I did not
+read another NP review or verdict, edit the author, export, edit/build Lean,
+or run Git. My earlier RM20 contains the zero-sum instance of the signed-row
+identity; my RM18–RM21 investigate sure-owner punishment. Those are disclosed
+related contributions, not certification of the author's new global
+full/absorbing separation or completion argument.
+
+### Exact accepted quantifiers and global selection
+
+From ANY Fin4 no-uniform-payoff game, the section produces ONE FRESH
+unit-bounded, within-row-generic table with positive own singletons, a true
+ORIGINAL full-carrier minimum δ>0, a strictly larger absorbing-carrier gap
+δ+g, and one common debt vector at ALL full minima. No old table, minimum,
+normalization, chronology or canonical93 contact exclusion is carried to
+this final table. Every sufficiently near-minimal actual profile, not just
+one selected realizing sequence, has a uniform positive joint Never mass
+and uniformly positive debt in EVERY coordinate. Every marked full-minimum
+producer has the stated nonsure paid finite-to-finite bridge. Literal Never
+is retained among complete tests and proved strictly suboptimal, not removed
+by a response restriction.
+
+NP2's negative row translation is valid exactly because BOTH old and new
+own singletons are nonnegative. Delayed finite replies converge to
+V(Never)+h·s, so the complete cap equals the finite-response supremum on
+BOTH tables. Every finite response then translates by C even when C<0;
+the prescribed shift is C(1−ν), and debt shifts by Cν. The absorbing
+ENTIRE-pair map and absorbing-gap invariance follow. This does not assert
+arbitrary negative-own affine invariance.
+
+For NP3 I reread
+`isUniformEquilibriumPayoff_original_of_singlePivotNormalized` under its
+imports in `UniformEquilibrium/Quitting/Punishment/SinglePivotUniformPayoff.lean`
+and `all_punishmentNormal_of_normalCore_eq_univ` in
+`UniformEquilibrium/Quitting/Classification/LCP/NormalCorePunishmentNormal.lean`.
+The reverse transport genuinely requires original normality and a positive
+pivot. The no-UE normal-core source supplies those before this operation.
+The normalized own vector is e_m; subtracting its one pivot row gives a
+zero-own table with positive ABSORBING gap A, not a positive full gap.
+AllNever correctly has full debt0 there.
+
+Adding t to all four rows leaves absorbing debt unchanged and makes every
+full-profile debt D_z+4tν. The smallest-Never-atom coupling uses only a
+bounded reward and changes all payoffs/caps, hence D, by at most
+14Mν^(1/4). Together with tν≤d_i≤D it proves a UNIFORM positive full gap,
+not merely positive debt at AllNever. The bound
+min(A/2,t(A/(28M))⁴) is valid. Choosing t<A/8 simultaneously puts that gap
+strictly BELOW A. The proof therefore retains a genuine counterexample
+with the full original all-tail floor.
+
+Both gap functions are 8-Lipschitz on their FIXED respective actual law
+classes. Consequently inward scaling, generic perturbation, then a positive
+coordinate-regular recipient scaling sufficiently close to1 preserve the
+strict separation and own positivity. The full debt carrier scales exactly;
+the DR supporting inequalities apply to ALL its weighted minimizers and
+give one common unweighted debt vector at the final table. Genericity is
+selected before scaling, survives row scaling, and no subsequent selection
+silently drops separation. The absorbing minimum need not itself be rigid.
+
+### Actual near-minima, marked completion and all-active branches
+
+The uniform inequalities in NP6 apply to every actual near-minimizer.
+Taking limits along ANY actual realizing sequence gives the stronger minimum
+floor (g/(14M))⁴. The marked Never interval records those limiting marginal
+masses, so the floor survives without raw clock tightness. The complete
+finite endpoint has value R_i+h_i s_i>R_i; all n_i and s_i are positive.
+Thus Never is strictly below every cap, but a moving finite deadline may
+still be needed to realize a compact finite maximizer. No actual raw cap
+attainment is asserted.
+
+The NP7–NP8 signed-box arguments control ENTIRE active response families.
+For a strict chronological head, all upper responses undergo the SAME
+positive affine map; all lower responses occupy a compact strict-gap set.
+For an isolated supported root atom, root-only caps have complement gaps
+and later families again share the affine map. Old whole-atom right-prefix
+transport handles both signs and every moving response, including the last
+finite tester and Never. Full minimum plus multiaffine constancy first fixes
+the SUM; common debt then fixes each row polynomial. Far algebraic endpoint
+evaluations are not claimed to retain actual caps.
+
+Every positive head mass e_i is<1 because that owner's Never mass is positive.
+For two or more head owners the selected-polynomial endpoint identity
+d*_i=e_i d*_i therefore contradicts d*_i>0 directly: no deterministic-outcome
+exclusion, contact spectrum or extra genericity is needed. A sole head
+instead forces original U_h=s_h and violates the strict quadratic full-minimum
+prescribed margin. The null-earliest alternative similarly violates the
+cap-minus-own margin. Thus the earliest active clock is a retained isolated
+atom and there is no earlier prescribed mass.
+
+At the literal first collision all rates are<1. One supplier is excluded
+by its exact original suffix ledger and D_tail≥δ, not by declaring the
+tail minimizing or Nash. At least two suppliers are strictly mixed. Under
+the hypothetical absence of a root/later bridge, root-only and wholly later
+cap families are stable under the full signed root box. A root-only supplier
+would change its positive debt by the factor1−λ; a wholly later supplier
+would satisfy d*=a_h d* with a_h<1. Both contradict rigidity. The resulting
+bridge owner is paid, and its later compact test is FINITE because Never
+is strictly suboptimal for every owner.
+
+The kernel distinction uses a positive ORIGINAL nonempty opponent-root
+event. Root Quit pays r_i(S+i), while a later response pays r_i(S). Distinct
+within-row entries give a genuine payoff difference. Co-maximality is at
+the limiting marked source; retained/moving finite original witnesses only
+approach both cap values. The positive paid root gain survives eventually.
+
+### Whole-block renewal and independent falsifiers
+
+NP9's profile is an honest independent periodic hazard profile. The block
+ends after every original finite atom and includes an empty finite tester;
+one-block finite tests therefore attain the original complete finite cap.
+Waiting k blocks gives R_i∑_(r<k)h_i^r+h_i^k V_i(t), and periodic Never gives
+R_i/(1−h_i). Their full supremum is exactly
+max(B_i,R_i/(1−h_i)). All unrestricted behavioral replies are mixtures of
+these pure tests. At least two original suppliers imply h_i<1 for EVERY
+owner, including a nonsupplier, so the denominators remain positive along
+the finite approximants. Prescribed renewal payoff is U_i/(1−ν).
+
+These actual competitors are absorbing, hence their debt is≥δ+g. Subtracting
+the source debt δ yields exactly NP12, including the positive payoff term;
+U_i>s_i>0 comes from the same true full minimum. Consequently at least one
+new upper renewal cap must grow. The section does not mistake payoff
+conditioning for complete-cap preservation or claim replay descends.
+
+I inspected the ordinary overlap against the exact declarations
+`tendsto_quittingTerminalPayoff_periodizedTailWindow_conditionedValue` in
+`UniformEquilibrium/Quitting/Cycles/ConditionedPeriodicRenewal.lean` and
+`quittingTerminalPayoff_capNashRootStack_eq_conditionedSplit` plus
+`debtDrop_div_terminalDebt_le_capNashStackAbsorptionSum` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashRenewalObstruction.lean`.
+Those conditioned-delivery and tradeoff results do not already supply the
+strict full/absorbing gap or this all-near-minimizer floor. The existing
+`lawTightStrictSaturation_fullDebt_or_resetRigid_or_singletonNeverCycle`
+in `UniformEquilibrium/Diagnostics/Quitting/LawTightCapNashStrictMinimum.lean`
+has surviving alternative arms and is not an unconditional all-paid producer.
+
+Attempted falsifiers: negative-old-own translation; a zero absorbing gap
+with positive shifted AllNever debt; a finite endpoint co-maximizing with
+Never; an owner with no root atom; just one root supplier; all-algebraic
+endpoints mistaken for actual minima; and renewal deadlines just after a
+block boundary. The explicit own−1 translation test correctly fails outside
+NP2. The padded cyclic zero-own geometric example has the stated debt
+3q³/[1−(1−q)⁴]→0, so it correctly refutes production without A>0, not NP4.
+For a future standalone packet, that regression's complete table should be
+spelled out instead of the abbreviated “three-cycle pair±1/grand−1” name;
+the main NP theorem does not depend on it. I found no unresolved mathematical
+objection to the frozen section.
+
+### Separate strict value decision and precise remaining consumer
+
+AFFIRMATIVE: this is a substantial counterexample-class restriction, not
+BA's approximately close absorbing companion or FC's alternative zero-debt
+realization. It produces a fresh true FULL positive-gap table where ALL
+near-minimizers retain Never and ALL full-minimum debts are positive. In
+particular no sure first root, zero-debt bridge or literalNever maximizing
+branch survives at THAT produced table. The paid finite-to-finite bridge and
+quantitative forced renewal leakage are genuine same-table outputs, not
+supplied verifier fields. It does not retroactively exclude those branches
+at the old canonical table or preserve its93 contact spectrum.
+
+The new restriction makes a whole-law conditional-Never/renewal consumer
+strategically credible: every old minimum has an unscreened positive survival
+branch, yet any absorbing completion must pay the born-cap leakage. NP12
+identifies the specific complete-cap obstruction to naive replay. Constructing
+a different absorbing law below δ, or proving the zero-own absorbing gap A
+cannot be positive, remains OPEN. No uniform equilibrium, positive-gap
+example, finite raw cap attainment or export placement is certified here.

@@ -23,6 +23,16 @@ first row nor the old tail is assumed Nash or debt-minimizing. All finite
 deadlines, Never, zero/sure root rates and actual carrier realization
 remain in scope. Different cap kernels alone are not a paid charge.
 
+The accepted [four-finite source theorem](../exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md)
+adds a new four-finite realizing sequence for EVERY original minimum in
+the common-zero-debt arm. PF below rules out reviving exact finite-menu
+Nash selection from that fact. The separately reviewed NP fresh-table
+candidate takes another branch: strict full/absorbing separation forces
+all debts and all Never masses positive, with paid finite bridges. It
+is not a property borrowed at the old table. PC1–PC5 below is a COMPLETE
+UNREVIEWED restriction on that explicit geometry: no finite prescribed
+mass lies after the latest full maximizing clock. It is not a UE consumer.
+
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
 date to0, extract an ACTUAL carrier tail even at sure-owner boundaries,
@@ -8028,3 +8038,148 @@ selection response-complete. Four-finite approximation itself is
 NOT falsified: PF2 supplies approximate full Nash finite clocks.
 The next route must change the COMPLETE laws using the unrestricted
 debt objective, rather than optimize an exact restricted Nash menu.
+
+## A paid Never source has no finite prescribed tail after its last cap
+
+### PC1. Exact restriction and status
+
+COMPLETE ORDINARY PROOF, UNREVIEWED. Fix a bounded signed Fin4 table
+with s_i>0, ORIGINAL full payoff/cap carrier K, and true positive
+unweighted SUM-debt minimum δ. Suppose ALL K minima share ONE debt
+vector d*. Let q be ANY old-quantile marked minimum produced from
+actual finite-law approximants. Its full compact response space is
+X=T⊔{Never}, with last finite point c and q_i({c})=0. Assume
+
+    n_i=q_i(Never)>0 for EVERY i.
+
+No root Nash, minimum tail, raw-date tightness or new nonisolated
+insertion is assumed. The exact final finite response has value
+V_i(c)=V_i(Never)+s_i∏_(j≠i)n_j, so Never is strictly suboptimal.
+Put A_i=argmax_X V_i and L=max(⋃_i A_i), a FINITE compact test.
+
+Claim: q_i({finite clocks>L})=0 for every i. Moreover either L=c,
+or L is an isolated positive-mixture atom, the LAST retained finite
+atom, and its retained interval ends at c. This is a pointwise source
+restriction, not a raw-calendar last-date assertion or a UE consumer.
+The NP separated-gap producer supplies all these hypotheses at ONE
+table. Row genericity and93 contact exclusions are not used here.
+
+### PC2. Literal two-sided finite-tail-to-Never transport
+
+Fix a regular ordered cut a>L, respecting whole retained dates;
+a nonisolated boundary has zero mixture mass. Put
+
+    e_i=q_i({finite clocks>a}), J={i:e_i>0}.
+
+Independently for i∈J use the OLD-law variation
+
+    q_i^λ=q_i+λ_i[e_i δ_Never−q_i restricted to finite clocks>a].
+
+Early mass stays fixed, late finite mass has factor1−λ_i, and
+Never mass is n_i+λ_i e_i. A small common two-sided box is legal
+because n_i,e_i>0. Owners outside J stay fixed.
+
+On the ORIGINAL finite sequence, take whole-date finite tail events
+A_i^k with convergent raw cut boundaries and e_i^k→e_i. Their
+indicators converge in L¹, including the finite boundary c_k→c.
+The retained Never interval has positive limiting length, and
+n_i^k→n_i>0. The literal actual laws are
+
+    p_i^{k,λ}=p_i^k+λ_i[e_i^k δ_Never−p_i^k restricted to A_i^k].
+
+Their signed OLD-chart density is
+
+    f_i^k−λ_i f_i^k 1_(A_i^k)
+        +λ_i e_i^k 1_(Never interval)/|Never interval|.
+
+It is nonnegative and uniformly bounded on the same small box.
+Strong interval/cut indicators plus marginal weak-* convergence give
+the stated limit. All old prescribed and moving-response kernels
+remain unchanged, so the rectangle/L¹ product argument gives BOTH
+prescribed and FULL-cap convergence for every fixed parameter vector.
+Never is separate; c⁺ duplicates c because no new mass is put at c.
+Every small-box pair lies in original K and has actual debt≥δ.
+
+### PC3. Entire caps stay fixed, and individual payoff polynomials are constant
+
+For EVERY test t≤a the changed opponent clocks were finite>a
+and become Never, or conversely; both are later than the responding
+owner. Its first-coalition response kernel is EXACTLY unchanged.
+Every old active point lies≤L<a and retains its old cap value.
+
+The compact upper tester set {t∈X:t≥a} has NO maximizer and has a
+strict uniform gap from the old cap. Product coupling bounds every
+response change uniformly by2M times changed opponent marginal
+masses. Shrink the signed box to preserve this gap. Thus EVERY
+full cap B_i stays exactly its old value, with no unique-response
+or favorable-selector assumption.
+
+Each U_i(λ) is multiaffine. The summed regret equals actual debt
+on the box and has a true interior minimum, hence is constant.
+Every box pair is a global minimum. All-minimum rigidity yields
+U_i(λ)=B_i−d*_i individually. Therefore EACH payoff polynomial is
+IDENTICALLY constant, also at algebraic distant endpoints. No
+far-endpoint full-cap constancy or minimality follows from this.
+
+### PC4. A singleton cylinder contradicts any positive finite tail
+
+Suppose J is nonempty and choose i∈J. Set every other λ_j=1.
+All finite opponent draws now lie≤a; each opponent's former late
+finite mass was moved to its OLD positive Never atom. Changing
+λ_i from0 to1 moves e_i of its own finite clocks>a to Never,
+leaving early mass unchanged.
+
+Any finite opponent exits before a and screens both own choices,
+so gives the SAME passive reward. On the all-opponent-Never
+cylinder the finite own draw instead pays s_i and Never pays0.
+Independence gives the exact prescribed-payoff difference
+
+    U_i(λ_i=0,λ_-i=1)−U_i(all λ=1)
+        =e_i s_i∏_(j≠i)(n_j+e_j)>0,
+
+with e_j=0 outside J. This contradicts individual polynomial
+constancy. The endpoints are legal laws, but only their prescribed
+payoff identity is used; born endpoint caps are not omitted.
+
+Thus every e_i=0 for every regular a>L. Cuts approach L from above
+(or one cut suffices in an isolated gap), yielding no prescribed
+finite mass strictly after L. If L=c this is vacuous but exact.
+
+If L<c and all own masses at L were0, every finite opponent would
+be strictly earlier than L. An owner active at L would have
+V_i(L)=V_i(c)=V_i(Never)+s_i∏_(j≠i)n_j, making c active, a
+contradiction. Hence L has positive mixture mass and is isolated
+by the retained-atom construction. With no finite mass after L,
+its retained interval ends at c: any positive raw length between
+its right endpoint and c would collapse to a later finite clock.
+It is the LAST retained finite atom, not necessarily the last
+support date at each original approximating index. Vanishing
+later original finite mass is allowed.
+
+### PC5. Boundary, increment and open consumer
+
+True global minimum cannot be replaced by positive profile debt.
+In the participant-indicator table r_i(S)=1 if i∈S and0 otherwise,
+let every owner have probability1/2 at date0,1/4 at date2,1/4 Never.
+Every cap is1 at date0 only, but finite prescribed mass lies after
+the latest active point. Moving small Never mass to the OLD date2
+keeps all caps1 and raises that owner's payoff by at least the mass
+times(1/4)³; other payoffs cannot decrease. This legally lowers debt.
+The true global gap is0, so it is not a counterexample to PC1.
+
+Together with NP's no-pre-active-head theorem, this brackets all
+prescribed finite clocks between the first and last full active
+times. It excludes a post-active prescribed tail, not an alias of
+two response labels. It does NOT imply every prescribed clock is
+its owner's maximizer, L<c, a paid temporal charge or a renewal law.
+The zero-mixture final finite test c remains a live residual.
+
+Source correspondence used: the original carrier, complete moving
+kernels and signed old-law bounds in the canonical source proof;
+the actual joint-Never debt bound in
+UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean;
+and NP's ordinary common-debt/positive-Never producer. No new Lean
+declaration, independent gate or export is asserted. The next
+question is whether the L=c residual, or the final retained
+collision when L<c, supplies an ACTUAL whole-law change controlling
+all born caps rather than another clock-count refinement.
