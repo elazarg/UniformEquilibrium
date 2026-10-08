@@ -95,6 +95,12 @@ finite-orbit→cycle→terminal-equilibrium direction and its contrapositive;
 the open equilibrium→orbit necessity is not used. The complete chain
 therefore prices full J at any actual same-table Section4 construction,
 but still does not consume its quitting-specific nonconvex boundary.
+The construction inputs are obtainable too: first select a sufficiently
+close NORMAL nonsingular counterexample table, then regenerate ALL raw-rank
+and Section4 data there. Normality and solved-branch exclusion follow from
+that table's no-UE hypothesis; the inverse chart is produced by `lemma3_2`,
+not an additional conjectural selector. Nothing transports an old minimum
+or rank through the perturbation. RS6 records the precise source scope.
 RM29–30 are ordinary, unreviewed supporting mathematics, not exports
 or new UE/counterexample-class exclusions.
 TG7 now computes the exact local descending link: an m-slab corner
@@ -20019,3 +20025,51 @@ remains OPEN. The next proof must now consume this ACTUALLY produced
 full-J C¹ rank using additional quitting-specific upper-face data,
 or produce a complete compatible obstruction; convexification and
 the generic no-boundary-minimum shortcut remain falsified by TG5–7.
+
+RS6: remaining Section4 inputs and fresh-table scope. This bounded source
+check does not assert that an arbitrary FIXED no-UE table is nonsingular.
+For Fin4, the SAME no-UE table is punishment-normal by
+`normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean`
+and `all_punishmentNormal_of_normalCore_eq_univ` in
+`UniformEquilibrium/Quitting/Classification/LCP/NormalCorePunishmentNormal.lean`.
+The paper normality is identified by
+`minMaxQuit_eq_quittingPunishmentValue` in `Literature/Simon2007.lean`.
+The complete instant and stationarily-generated consumers used in RS1–4
+exclude both branches at that same table.
+
+In `Literature/Simon2012.lean`, `lemma3_2` produces `PhiInverseData`
+for EVERY game with `IsSimonPayoffScale G M` and 0<d≤1, with no normality,
+nonsingularity or no-UE input. I read its actual `phi_surjective` proof:
+a capped quitting cube, Brouwer's clipped excess-map fixed point,
+strict exclusion of upper faces, and a complementary continuation
+adjustment give surjectivity. `lemma3_1` gives injectivity; the proved
+hazard Lipschitz estimate and exact continuation recovery give continuity
+of the inverse. Thus the stale comment describing a missing Jacobian
+proof is not a new hypothesis of the displayed declaration. No paper
+Kohlberg–Mertens statement is invoked as a substitute.
+
+`exists_structureMotionParameter_of_not_branches` produces the common
+bounded-region motion parameter from the two excluded branches;
+`exists_section3Constants` produces ξ,R by compact exact-row survival
+slack. Both are private proved declarations in that file. The proved
+`exists_section4Cutoff` supplies the cutoff. `lemma4_5` uses compactness
+of the inverse image of the truncated domain to choose its common
+small-step scale; it does NOT use the separate sorry-backed numerical
+`lemma4_4` zero-quitter bound.
+
+The nonsingularity input used by `corollary4_1` is produced only after
+a fresh table choice: `exists_nonsingularPerturbation` decreases the
+off-diagonal singleton entries by an arbitrarily small common positive
+amount, preserves own singleton entries and punishment normality, and
+makes EVERY principal singleton-difference matrix of size≥2 invertible.
+Choose that perturbation within the original positive exploitability-gap
+collar, using
+`abs_quittingTerminalExploitabilityInf_sub_le_of_reward_close` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+The NEW table still has no UE. Apply RS1–5, the inverse/motion/constants
+producers and JR9 anew at that table. No previously chosen rank, minimum,
+calendar, debt vector or orbit is transported. This closes the supplied
+Section4-data scope at the level of ordinary proof composition; it is
+not another independently reviewed source theorem or a new Lean build.
+The remaining consumer is still the actual nonconvex boundary/index.
