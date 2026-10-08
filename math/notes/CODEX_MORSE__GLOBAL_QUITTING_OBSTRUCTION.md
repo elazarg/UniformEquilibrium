@@ -25,7 +25,7 @@ claimed. The next full-goal question is whether arbitrary raw data force
 a compatible finite-charge closed itinerary, or whether a genuine
 all-behavior negative certificate can obstruct every such itinerary.
 
-Latest complete candidate: TB1–TB6 gives an ORDINARY UNREVIEWED actual
+Latest global move: TB1–TB6 gives an ordinary actual
 competitor for the independent negative-participant-tax boundary.
 Bounded-price surviving owners form a core of at most three players;
 existing positive-own stationary/cyclic producers and exact native row
@@ -38,6 +38,19 @@ face. No counts-only consumer, fixed-price zero-gap theorem, old-source
 transport or Fin4 closure is claimed. WF1–WF4 separately retires the
 static weighted-welfare/punishment certificate by existing floor
 invariance; this is not new equilibrium coverage.
+TB has a focused independent mathematical PASS in the corresponding
+CODEX_NOETHER feedback; it has not entered the export gate.
+
+Latest direction test: CR1–CR6 is a RETIRED payoff-rounding attempt,
+not an independent-play impossibility theorem. Its exact absorbing
+correlated equilibrium pays197/4 to all four owners, but the proposed
+independent payoff restriction incorrectly required a nonnegative
+true punishment floor. Native own0 does NOT supply that premise:
+an explicit opponent law has complete cap−1/2. The valid whole-prefix
+estimate is retained with its extra floor hypothesis explicit; it
+does not apply to this table or consume the genuine native source.
+DK1–DK4 retains the exact full-coalition deadline-flow identity before
+averaging. All this is ordinary unreviewed supporting mathematics.
 
 Earlier supporting result: PS1–PS7 gives a complete ALL-PATH, absorption-
 relative seeded construction falsifier. On a solved rational table the
@@ -9993,6 +10006,307 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Correlated relaxation meets a negative true-punishment face
+
+Status: RETIRED attempt, with an exact missing-premise test.
+The table is the already solved native RZ table, not a new negative
+candidate. The proposed independent-payoff obstruction DOES NOT
+follow. The correlated equilibrium and finite-root calculations
+below are exact; the whole-law estimate needs an additional
+nonnegative punishment floor absent from this table.
+
+### CR1. The precise failed implication and model
+
+Tempting global route: first find an absorbing correlated equilibrium
+of complete clocks, then round it to independent clocks without
+changing its payoff and without losing unrestricted incentive control.
+This is stronger than selecting some good correlated payoff. The
+attempt below does NOT prove or refute it. In particular, a proof
+cannot replace the actual punishment vector by own singleton0.
+
+Use the full table in RZ1: own singletons0; for singleton host j,
+receiver j+1 gets−1 and the other two outsiders get99; pair members
+get0 when the other member is their predecessor and98 otherwise;
+pair outsiders get0; triple/grand participants get−1 and triple
+outsiders get0. Never pays0. M=99.
+
+Independent profiles below may have ANY finite or infinite support,
+and ANY Never masses. Their complete caps Bᵢ include every deadline
+and Never. Put dᵢ=Bᵢ−Uᵢ and D=Σᵢdᵢ. No absorption restriction
+is imposed in the independent-law obstruction.
+
+The correlated comparison object has an additional private
+recommendation device, which is NOT an allowed strategy ingredient
+of the ordinary quitting game. The distinction is deliberate.
+
+### CR2. An exact absorbing correlated full equilibrium
+
+Choose a host J uniformly from I. Recommend clock0 to J and Never
+to everyone else. The coalition is always {J}, so absorption is
+sure at date0. A player observes only its own clock recommendation.
+Its expected payoff is
+
+    Uᵢ=(−1+99+99)/4=197/4.
+
+If i is told0, it knows the other three clocks are Never. Every
+own finite deadline pays own singleton0 and Never pays0. Thus no
+complete deviation gains.
+
+If i is toldNever, the host is uniform among the other three owners.
+The pure date0 joining payoff is
+
+    (0+98+98)/3=196/3,
+
+whereas every deadline at least1, and literal Never, pays
+
+    (−1+99+99)/3=197/3.
+
+Those are ALL pure response modes. Every unrestricted conditional
+behavioral law is their mixture and cannot improve. At a live
+history after date0 in the host branch, all other clocks remain
+Never and all own finite/Never choices still pay0. There is no
+unpriced delayed response. This is an exact absorbing correlated
+terminal equilibrium with strictly positive payoff in all four
+coordinates.
+
+The device creates perfectly anticorrelated host recommendations.
+Calling this device an independent law would change the game.
+
+### CR3. Two exact finite-root facts on this same table
+
+Write q for a product root, v for its continuation payoff, Qᵢ for
+Quit, Cᵢ for Continue, and gᵢ=Qᵢ−Cᵢ. Let
+
+    c(q)=Πᵢ(1−qᵢ),  αᵢ(q)=Π_{j≠i}(1−qⱼ),
+    Hᵢ(q)=Σ_{S≠∅}p_q(S)rᵢ(S),
+    wᵢ=Hᵢ(q)+c(q)vᵢ.
+
+First, there is NO exact Nash root with a sure owner at ANY real
+annotation v. Against sure z, each nonfavorite free owner has gap
+exactly−1, so both are quiet. The favorite z+1 then has gap1 and
+must be sure. But z has gap−1 against that adjacent sure partner.
+Additional sure partners are already excluded by the same negative
+withdrawal calculation. No tail or punishment hypothesis enters.
+
+Second, if v≥0 and q is a nonzero exact Nash root, SOME current
+payoff wᵢ is0. Here is the full face proof, not an extrapolation
+from continuation0. Define the membership-withdrawal coefficient
+
+    L(S)=Σ_{i∈S}[rᵢ(S)−rᵢ(S\{i})],
+
+using rᵢ(∅)=0 solely in this auxiliary root identity. L is0 on
+singletons and adjacent pairs, −2 on opposite pairs, −3 on triples
+and−4 on I. Direct grouping gives
+
+    Σᵢqᵢgᵢ=Σ_{S≠∅}p_q(S)L(S)−Σᵢqᵢαᵢ(q)vᵢ.
+
+The left side is nonnegative at Nash, whereas every term on the
+right is nonpositive. The no-sure fact gives c(q)>0. Every active
+owner therefore has vᵢ=0. Three or more active rates would give a
+strict negative coalition coefficient. Two opposite active rates
+are excluded similarly; two adjacent active rates give one active
+owner gap−q_partner<0. Thus q has exactly one positive rate, say
+q_z. Its continuation v_z=0, and its current payoff w_z=0.
+
+Consequently, on v≥0 and w≥m·1 for ANY m>0, the only exact
+Nash root is q=0. This is a statement about FULL binary Nash
+inequalities, not ordinary Nash index or one selected reply.
+
+### CR4. Compact robust consequence, with no charge-relative shortcut
+
+Let
+
+    R(q,v)=Σᵢ[max(Qᵢ,Cᵢ)−wᵢ]
+
+be the ordinary one-stage SUM regret. All its terms are continuous.
+Keep v in the fixed actual-payoff cube [−M,M]⁴.
+
+The no-sure fact and compactness give numbers e_sure>0 and
+c_bar>0 such that
+
+    R(q,v)≤e_sure  ⇒  c(q)≥c_bar.
+
+Indeed an approximate sequence violating this would converge to
+an exact Nash root with a sure owner.
+
+Fix 0<u≤M. A second compactness argument gives e_small>0 and
+eta_small>0 such that
+
+    R(q,v)≤e_small,  v≥−eta_small·1,
+    w≥(3u/4)·1  ⇒  Σᵢqᵢ≤u/(8M).
+
+Otherwise a convergent sequence with regret and negative floor
+tending0 has a nonzero exact root, nonnegative v and strictly
+positive w, contradicting CR3. The constants may depend on u and
+on this table; no universal quantitative modulus is claimed.
+
+When those conditions hold,
+
+    Qᵢ≤MΣ_{j≠i}qⱼ≤u/8,
+    Cᵢ=(wᵢ−qᵢQᵢ)/(1−qᵢ)≥5u/8,
+    Cᵢ−Qᵢ≥u/2.
+
+Thus EVERY owner strictly prefers suppressing its root quit at
+such a phase. Ordinary small root regret alone would not bound
+an arbitrarily long chronology. The next step accumulates the
+actual full deviation, rather than multiplying a phase error by
+an uncontrolled word length.
+
+### CR5. The missing floor, and the conditional whole-prefix estimate
+
+The attempted conclusion was: for each u>0 there is
+epsilon_star(u)>0 such that EVERY actual independent profile with
+minᵢUᵢ≥u has D≥epsilon_star(u). It is NOT established on RZ.
+
+The exact failure is already visible in a two-opponent law. To
+punish i, put its favorite predecessor j=i−1 sure at0, another
+opponent k half at0 and halfNever, and the remaining opponent
+Never. Quit0 by i pays pair0 or triple−1, each with probability
+1/2. Every deadline at least1, or Never, pays passive singleton−1
+or passive pair0, each with probability1/2. Thus
+
+    Bᵢ=max(−1/2,−1/2)=−1/2,
+    truePᵢ≤−1/2<0.
+
+All pure response modes have been covered. The global table lower
+bound−1 gives truePᵢ≥−1, but the exact infimum is not needed or
+claimed. Native own0 and the AllNever equilibrium do NOT imply
+Bᵢ≥0 against arbitrary opponent laws.
+
+The lost face changes the root conclusion materially. With
+
+    qᵢ=1/10 for all i,   vᵢ=−109/729 for all i,
+
+direct symmetric evaluation gives
+
+    Qᵢ=196p(1−p)²−3p²(1−p)−p³=1981/125,
+    Cᵢ=197p(1−p)²+(1−p)³vᵢ=1981/125.
+
+This is a full mixed Nash root, and EVERY current payoff is
+strictly positive. Its annotation is above the ACTUAL punishment
+vector since vᵢ>−1/2≥truePᵢ. It is also convex-feasible: mix
+the uniform singleton lottery of payoff197/4 with the grand
+payoff−1, giving the former total weight2480/146529.
+No actual Nash continuation with this payoff is supplied or
+claimed. The exact example nevertheless rules out replacing
+CR3's nonnegative-annotation premise by annotation≥trueP.
+It is not just an unquantified possible seam error.
+
+The following analytic estimate remains valid for a native table
+with the TWO root properties proved in CR3 AND the extra premise
+trueP≥0. It is a conditional supporting lemma, not a source from
+arbitrary data and not an application to RZ. It explains exactly
+where the failed floor entered the proposed full-cap argument.
+
+For an arbitrary actual profile define
+
+    S(t)=Pr(all four clocks≥t),
+    hᵢ(t)=Pr(all opponents' clocks≥t).
+
+At S(t)>0 its independent conditional suffix has payoff w(t)
+and full debts d(t). Keeping the original prefix and changing
+only i's conditional future gives the exact gain multiplier S(t).
+Therefore
+
+    Σᵢdᵢ(t)≤D/S(t),   wᵢ(t)≥truePᵢ−D/S(t).
+
+Only the additional trueP≥0 premise strengthens the second
+inequality to wᵢ(t)≥−D/S(t). That strengthening is invalid on RZ.
+The suffix's current root also has R(q(t),w(t+1))≤D/S(t),
+because changing only that root action and keeping the actual
+future is an allowed complete deviation. If a survival factor
+vanishes, choose bounded actual filler tails for this root test;
+the first compact consequence will exclude that case when D
+is sufficiently small.
+
+Put a=u/(4M)≤1/4. At any date with S(t)≥1−a, the original
+payoff decomposition and |prior absorbing reward|≤M(1−S(t))
+give
+
+    wᵢ(t)≥(u−Ma)/S(t)≥3u/4.
+
+For D small enough the root regret is≤e_sure, so c(q(t))≥c_bar
+and S(t+1)≥(1−a)c_bar. Thus its actual next tail exists and
+
+    wᵢ(t+1)≥−2D/c_bar.
+
+Choose D small enough that this is≥−eta_small, and that the
+root regret is≤e_small. CR4 then implies Cᵢ(t)−Qᵢ(t)≥u/2
+for every owner at every such date. All constants were chosen
+BEFORE the number of phases; there is no finite-menu argument.
+
+There is a finite first T with S(T)<1−a. Indeed min U≥u and
+the reward bound imply Pr(absorption)≥u/M=4a, even if Never
+has positive probability. Every t<T has S(t)≥1−a.
+
+Now let owner i use the ACTUAL unilateral law that suppresses
+ALL its quits before T, then uses its old behavioral hazard
+sequence from T onward. Only i's clock law changes. Telescoping
+its deleted-survival Bellman recursion gives its exact gain
+
+    Gᵢ=Σ_{t<T}hᵢ(t)qᵢ(t)[Cᵢ(t)−Qᵢ(t)].
+
+This is not an average of changing tests or a correlated mixture.
+Since hᵢ(t)≥S(t), every term is nonnegative, and
+
+    ΣᵢGᵢ≥(u/2)Σ_{t<T}S(t)Σᵢqᵢ(t)
+           ≥(u/2)Σ_{t<T}S(t)[1−c(q(t))]
+           =(u/2)[1−S(T)]>u²/(8M).
+
+But each Gᵢ≤dᵢ, by the original FULL cap. Choose
+epsilon_star smaller than u²/(16M),
+(1−a)min(e_sure,e_small), and c_bar·eta_small/2.
+The displayed inequalities contradict D<epsilon_star.
+
+Under the extra floor premise, D(p_n)→0 and U(p_n)→U would
+give U≥0 and minᵢUᵢ=0, even for nonabsorbing prescribed profiles
+and arbitrary infinite calendars. This is NOT an independent-payoff
+claim about the correlated RZ comparison. On the actual RZ table
+the next continuation is controlled only down to trueP, not0.
+
+### CR6. What changed, what survives, and exact checks
+
+The exact correlated equilibrium is incentive compatible against
+all full conditional replies. But no separation from independent
+approximate equilibrium payoffs was proved: the proposed proof
+lost the negative punishment face. Claiming that its anticorrelation
+alone blocks equilibrium rounding would be unsupported.
+
+Both payoff-preserving rounding and good existential correlated
+selection remain OPEN in this test. The table already has
+independent absorbing equilibria on a zero-payoff face. Nor does
+the conditional estimate consume
+a native A>0 minimum: its strict margin can be much smaller
+than its positive debt, and nothing here compares that debt
+to epsilon_star of the margin. Turning those two scales into
+the same one would be a new unproved step.
+
+Narrow source checks for this attempted change of mechanism:
+`docs/TOOLKIT.md` already distinguishes normalized correlated
+coalition laws from independent product laws in
+`Examples/ProductLowPremiumBoundaryIdentities.lean`; its Sorin
+feasible-set correspondence concerns discounted repeated-game
+schedules, not this quitting-clock rounding. The full declaration
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `Projective/PolynomialForwardCertificateCharacterization.lean`
+uses absorption-relative ROBUST edges and does not assert such
+a correlated realization. CR5 is ordinary mathematics, not a
+corollary advertised as implemented by any of these files.
+
+An exact Fraction calculation regenerated all15 L(S) coefficients,
+the conditional passive mean197/3, the conditional joining mean
+196/3, the full payoff197/4, and this admissible negative-annotation
+full root. The whole-law argument is
+analytic and uses no grid or floating-point equilibrium test.
+
+Next question: at ONE genuine native worst-gap source, can the
+strict cap margin be coupled to an accumulated full deviation
+while retaining the ACTUAL possibly negative punishment vector
+and all newly born caps? CR5 used both D→0 and trueP≥0;
+the surviving source supplies neither replacement automatically.
+The correlated relaxation has not yet given a credible independent
+producer, so it is not the next main proof language.
 
 ## Full coalition deadline flow: the exact orientation before, and not after, averaging
 
