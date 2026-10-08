@@ -26,6 +26,17 @@ so minimum-return support rotation is unavailable. The forward exact test
 below additionally supplies a distant literal mixed equilibrium after all
 pure coalitions are made escapable; it is NOT a positive-gap source.
 
+Current independent attempt: BA1–BA10 below compares the COMPLETE
+almost-surely absorbing strategy class with all profiles. A positive
+singleton recipient-row translation gives the exact full-debt penalty
+C·P(AllNever), with ALL responses reoptimized. The candidate source
+selection carries BOTH carriers at ONE final table, with arbitrarily
+small RELATIVE gap/debt-vector discrepancy and an absorbing-carrier
+finite-a.s. clock anchor. These are DIFFERENT minimizing families;
+no finite penalty makes their minima equal or anchors an original
+all-profile minimum. This is a new ordinary proof draft, not reviewed
+or a consumer of the remaining random collision.
+
 The canonical packet passed both complete final-artifact falsification
 reviews. These are ordinary mathematical results, not Lean implementations
 or a Fin4 UE conclusion. Earlier status lines in the body describe their
@@ -9807,6 +9818,490 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Forward global attempt: an absorbing carrier and a terminal-row penalty
+
+Status: BA1–BA10 are a COMPLETE ORDINARY PROOF DRAFT, not independently
+reviewed or checked in Lean. The proposed output is an actual
+counterexample-source producer on a complete strategy class, compatible
+with the canonical all-profile source at ONE final table. It is not a
+Fin4 UE proof. In particular, the anchored minimum is a minimum over
+the absorbing carrier, not necessarily over the original full carrier.
+The passage between these objectives below is a comparison of ALL
+moving minimizing laws, not a derivative at selected old testers.
+
+### BA1. Finite data, two actual domains and the intended source conclusion
+
+Let I={0,1,2,3}, with arbitrary finite real rewards r_i(S) for every
+nonempty S⊆I. AllNever pays0. The complete independent stopping laws
+p_i are probability measures on ℕ∪{Never}; their induced behavioral
+plans and all unilateral behavioral deviations are unrestricted.
+Write U_i(p) for terminal payoff, B_i(p) for the supremum of ALL pure
+finite deadline and Never responses, d_i=B_i−U_i≥0, and D=Σ_i d_i.
+All response mixtures are covered by this pure-response supremum.
+
+Put
+
+    c(p)=∏_i p_i(Never),
+    P_abs={p:c(p)=0},
+    K_abs(r)=closure{(U_r(p),B_r(p)):p∈P_abs},
+    Δ_abs(r)=min_{K_abs(r)} D,
+    Δ_all(r)=min_{K_all(r)} D.
+
+Thus P_abs consists of the independent profiles absorbing a.s.;
+it is the UNION of the four entire classes p_j(Never)=0, not a
+fixed date, bounded controller, fixed root family or fixed owner.
+Every p∈P_abs has at least one finite-a.s. clock, since the product
+of its four Never probabilities is0. Both carriers retain the FULL
+unrestricted response caps. They are nonempty compact subsets of
+the bounded actual payoff/cap cube, and Δ_all≤Δ_abs.
+
+Proposed producer. If a Fin4 counterexample exists, then for every
+ε>0 one can select ONE finite reward table r† with some s_m>0 and
+two positive gaps δ_all≤δ_abs such that:
+
+1. Every original-carrier SUM minimum has one common debt vector a;
+   every absorbing-carrier SUM minimum has one common debt vector b.
+2. 0≤δ_abs−δ_all<ε·δ_abs and max_i|a_i−b_i|<ε·δ_abs.
+3. The canonical finite contact exclusions, rowwise coalitional
+   distinctness, random terminal outcome, no prescribed pre-active
+   mass and genuine first-collision PAYOFF-kernel bridge hold for
+   EVERY produced marked minimum in EACH carrier separately.
+4. EVERY absorbing-carrier marked minimum has some owner j with
+   q_j(Never)=0. Its first active collision is finite and isolated,
+   has at least two positive prescribed root atoms and at least
+   one strictly mixed root supplier, and has a root/later full-cap
+   bridge with different kernels on a positive opponent-root event.
+
+The j in(4) need not be m, paid, sure at the first root, a pure clock,
+or common to all minimizing families. Statements1–4 select the table
+BEFORE any minimizing sequence, calendar chart, anchor or bridge.
+The gaps and vectors need not coincide EXACTLY. The full carrier's
+minima need not have a finite-a.s. anchor. A common global rescaling
+may put r† in the unit cube without changing any RELATIVE estimate.
+
+The construction below supplies this statement. Its strategy-class
+completeness at gap0 overlaps known early-absorption completeness;
+the additional proposed source is the anchored minimum and the SAME
+table/two-objective compatibility. No minimum-tail or child Nash is
+an input or conclusion.
+
+### BA2. Exact positive-row translation, with the full cap recomputed
+
+Suppose s_m=r_m({m})≥0. For C≥0 define a table r^C by adding C to
+EVERY nonempty-coalition reward in recipient row m, leaving other
+rows and AllNever0 unchanged. For every actual complete profile p,
+
+    U_m^{C}(p)=U_m(p)+C(1−c(p)),
+    B_m^{C}(p)=B_m(p)+C,
+    d_m^{C}(p)=d_m(p)+C c(p),
+    d_i^{C}(p)=d_i(p)  (i≠m),
+    D_{r^C}(p)=D_r(p)+C c(p).                    (BA2)
+
+Proof. Every finite pure deadline causes terminal absorption surely,
+so its expected reward in row m increases by C. Let F_m be the
+supremum over all finite deadlines. Delayed finite replies tend to
+the Never payoff plus c_{−m}s_m, where
+c_{−m}=∏_{i≠m}p_i(Never). Hence F_m≥V_m(Never) when s_m≥0,
+and the FULL old cap is F_m. The new finite cap is F_m+C; its new
+Never response is V_m(Never)+C(1−c_{−m})≤F_m+C. Thus the displayed
+new full cap really equals B_m+C, including suprema not attained
+at any deadline. The prescribed shift is C times actual absorption
+probability1−c. Other recipient rows do not change. This proves
+the identities with all responses, not one fixed cap selector.
+
+The joint-Never singleton bound is
+
+    d_m(p)≥s_m c(p).                              (BA3)
+
+One exact proof moves only m's Never atom to a deadline T and lets
+T→∞. Its gain tends to p_m(Never)c_{−m}s_m=c(p)s_m. The full cap
+dominates every such response and hence their limiting gain.
+For s_m>0, (BA2) and(BA3) give, for every profile,
+
+    D_r≤D_{r^C}≤(1+C/s_m)D_r.                    (BA4)
+
+Therefore Δ_all(r)=0 iff Δ_all(r^C)=0; a positive global gap is
+preserved. The NUMERICAL gap need not be preserved. On P_abs both
+U_m and B_m translate by the same C, so the whole absorbing carrier
+transports affinely and its debt set, debt minimum and ALL minimizing
+debt vectors remain unchanged. This transport uses no attainment
+of best responses and no Nash or minimum-tail premise.
+
+### BA3. The absorbing class is complete at zero gap, not at positive gap
+
+Assume |r_i(S)|≤M and s_m>0. Given a profile of debt D=d, (BA3)
+gives c≤d/s_m. Some owner j has
+
+    p_j(Never)≤c^(1/4).
+
+Move that owner's entire Never atom to ONE finite date, keeping all
+other laws unchanged. The resulting p′ is in P_abs. Couple old and
+new clocks; their only disagreement has probability
+η=p_j(Never). Every prescribed payoff changes by at most2Mη.
+Owner j's response cap is unchanged, since its opponents are fixed.
+Each other owner's ENTIRE response menu changes by at most2Mη
+uniformly in all finite/Never tests, so its supremum changes by at
+most2Mη too. Consequently
+
+    D_r(p′)≤d+14M(d/s_m)^(1/4),
+    Δ_all≤Δ_abs≤Δ_all+14M(Δ_all/s_m)^(1/4).       (BA5)
+
+The last line follows by applying the first to a sequence approaching
+Δ_all. In particular, Δ_abs=0 iff Δ_all=0. The usual terminal-gap
+equivalence with existence of one uniform-equilibrium payoff then
+applies. A counterexample necessarily has some s_m>0: otherwise
+AllNever itself is a terminal equilibrium and uniform payoff0.
+
+There is NO equality claim Δ_abs=Δ_all at a positive gap, and no
+claim that moving a fixed preselected player's Never atom is small.
+The small-Never owner is chosen from the whole current profile.
+
+### BA4. The infinite penalty consumes all moving minimizers
+
+Fix r with s_m>0, and put d=Δ_abs(r). The exact whole-profile formula
+(BA2) gives
+
+    f(C)=Δ_all(r^C)=inf_p [D_r(p)+C c(p)]≤d.
+
+The function f is nondecreasing and concave. The upper bound uses
+ALL almost-surely absorbing profiles as competitors, not one old
+law. For any C_n→∞ choose arbitrary actual o(1)-minimizers p_n
+of the NEW objective. Then
+
+    D_r(p_n)+C_n c(p_n)≤d+o(1),
+    c(p_n)→0.
+
+Use BA3's coupling with the OLD finite reward bound M to get an
+absorbing p′_n whose payoff/cap pair differs from the old pair of
+p_n by o(1), and D_r(p′_n)≤D_r(p_n)+o(1). It follows that
+
+    d≤D_r(p_n)+o(1)≤f(C_n)+o(1)≤d+o(1),
+    f(C)↑d,
+    C_n c(p_n)→0.                                (BA6)
+
+Every old payoff/cap cluster of such moving laws belongs to K_abs(r)
+and minimizes its debt. These statements are UNIFORM over all new
+near-minimizer choices: a violating selection would be a sequence
+to which exactly the same argument applies.
+
+Carrier minima need not be actual laws. For a fixed finite C, lift
+a minimizing pair through an actual approximating sequence and
+include the extra scalar c∈[0,1]. Compactness of the old bounded
+payoff/cap cube and c supplies a lift with
+d^C=d_old+C c e_m. Equivalently choose the actual approximation
+error o(1) along C_n. Thus (BA6) and its uniform conclusion apply
+to EVERY minimizing pair of every moving new full carrier too.
+No reward-dependent tester differentiation occurs.
+
+If ALL minima of K_abs(r) have debt vector b, the old debts of these
+moving full minima converge uniformly to b by compactness, and
+their new debts do too because Cc→0. Payoff/cap pairs can vary;
+only the debt vector is asserted rigid.
+
+Finite penalty does NOT give c=0 at every minimum. Even the abstract
+compact graph D(c)=1−√c for0≤c≤1/4 satisfies D≥c, has absorbing
+endpoint debt1, and minimizes D+Cc at c=1/(4C²)>0 for EVERY C≥1.
+Its value is1−1/(4C). This is an abstract optimization falsifier,
+not a realized quitting-game positive-gap table. It disproves
+finite-penalty attainment from the comparison facts alone.
+
+### BA5. Compactification and admissible operations in K_abs
+
+The class P_abs is reward-independent. Full payoff/cap pairs change
+by at mostη in each coordinate under a uniform reward changeη,
+and their sums by at most8η. Hence Δ_abs is8-Lipschitz, just like
+Δ_all. Positive recipient scales multiply U_i,B_i,d_i by that
+recipient's scale over the IDENTICAL law class. Thus the fixed
+absorbing debt set gives the concave scalarization
+
+    W_abs(θ)=min_{x∈K_abs(r)} Σ_i θ_i d_i(x).
+
+At a positive coordinate-regular θ, varying coordinate i from both
+sides shows that every minimizing debt vector equals
+(∂_i W_abs)_i. Coordinate regularity exists a.e. by finite-dimensional
+concavity and Fubini. This is DR's fixed-carrier proof, not a new
+convex mixing assertion about independent strategy laws.
+
+Finite-approximation and marked sources retain an anchor. In an
+approximating sequence in P_abs pass to a subsequence with a fixed
+j satisfying p_j(Never)=0. Truncate late finite masses in other laws
+to Never if desired, but truncate late finite mass of j to a NEW
+finite deadline, not Never. The total-variation error tends to0
+and all full caps converge uniformly. The retained chart carries
+the exact old Never probabilities as separate masses. Consequently
+its limiting j-law still has q_j(Never)=0; no escaped finite mass
+is silently reclassified as Never. The usual zero-mass finite
+calendar endpoint is distinct from the Never test.
+
+K_abs is invariant under every finite independent stopping prefix:
+prefixing an absorbing actual tail keeps its anchor's Never mass0;
+semantic continuity extends this to all carrier points. It is also
+closed under the original-sequence supported-atom and bounded
+head/late conditional signed variations used in SA/BG. Those
+variations only redistribute an owner's old law and cannot introduce
+Never mass into an old zero-Never anchor. Every actual approximant
+therefore remains in P_abs. Thus its genuine global floor applies
+to ALL these variations, including all moving responses.
+
+If a sole first-root supplier has a limiting rate a∈(0,1), the
+actual conditional tails remain absorbing: an anchor has positive
+continuation probability and its conditional Never mass is still0.
+Their carrier limits lie in K_abs, giving D_tail≥Δ_abs. This is
+a FLOOR, not a minimizing-tail assertion. The root-sure boundary
+is also legal: once a prefix absorbs surely, EVERY actual tail
+from K_all may be grafted while staying in P_abs.
+
+The important lost hypothesis is equally explicit. For a non-sure
+root x, T_x(w) is in K_abs for w∈K_abs, but need NOT be in K_abs
+for an arbitrary w∈K_all. Therefore an unrestricted all-tail
+floor at a fixed non-sure root is NOT imported from the original
+all-profile source. The anchored source is not a renaming of that
+stronger hypothesis.
+
+### BA6. Singleton margins survive on this prefix-invariant carrier
+
+The following argument is ordinary mathematics, not an invocation
+of a tracked theorem with a silently weakened minimum hypothesis.
+For any compact C⊆K_all invariant under all finite prefixes, let
+(U,B) minimize D on C at δ>0. The auxiliary Nash-prefix debt bound
+is algebraic and does not use where the source was minimized.
+Take an exact root Nash against B−h with 0≤h_i<δ. Its prefix
+belongs to C. The bound and the minimum floor force zero absorption
+(all Continue); its Nash inequalities give s_i≤B_i−h_i. Let
+h_i↑δ to obtain B_i−s_i≥δ for every i.
+
+In a Fin4 no-UE table every singleton column has a strict preemptor:
+for each owner i some k≠i satisfies
+r_k({k})>r_k({i}). Starting at (U,B), repeatedly prefix a small
+solo hazard of owner i. Every finite iterate stays in C. The
+first-solo-threshold construction gives a reached pair with some
+cap surplus in(2Mθ,4Mθ] and total debt at most L=B_i−s_i.
+Let θ↓0, select the finite crossing label and a compact limit y∈C.
+At y that label's cap equals its singleton, while
+
+    δ≤D(y)≤L.
+
+Take an exact root Nash at y.B−δ/2. Its absorption mass is at least
+δ/(4M+δ), by the below-singleton root bound. This prefix also
+belongs to C. The ordinary auxiliary Nash budget gives
+
+    δ≤D(y)−[δ/(4M+δ)]·(D(y)−δ/2).
+
+Since D(y)≥δ, rearrangement yields
+
+    D(y)≥δ+δ²/(8M).
+
+Thus, for all owners,
+
+    B_i−s_i≥δ+δ²/(8M),
+    U_i−s_i≥δ−d_i+δ²/(8M)>0.                   (BA7)
+
+Every use of minimality here was a finite prefix of C or a compact
+limit in C. The solo-threshold lemma is a response calculation,
+not an optimization outside C. Therefore this proof applies to
+C=K_abs whenever Δ_abs>0 and some singleton is positive: BA3
+then supplies no UE, hence the actual four-player column blockers.
+It also gives the usual margins on K_all.
+
+### BA7. Producing a generic, contact-separated absorbing source
+
+Begin with any hypothetical counterexample. Positive common scaling
+puts its rewards in the unit cube and preserves some s_m=a>0.
+Maximize Δ_abs over the COMPACT table fiber r_m({m})≥a in that cube.
+BA5 gives an attained value Ω_abs>0. Every positive-gap table in
+this fiber is still a counterexample by BA3. BA6's weak margin at
+such a minimum gives
+
+    Ω_abs≤1−a<1.                                (BA8)
+
+AllNever is NOT an admissible absorbing competitor and is not used
+to get this bound. The earlier worst-all boundΩ≤4/5 is not imported.
+
+Apply SA's sign-adaptive finite contact comparison to this ACTUAL
+fiber maximizer. The target owns are all1, so the line to the target
+stays inside the positive-singleton fiber. All ≤93 labels are
+the same member withdrawals, outsider joins, passive floors,
+own-minus-grand and typed pure-outcome debt sums specified in SA.
+At every OLD positive contactΩ_abs their target values are≥1,
+strictly aboveΩ_abs by(BA8). All noncontact values have positive
+finite separationσ. The same convex perturbation and8-Lipschitz
+comparison therefore separate EVERY label from the NEW gap; no
+old minimizing law or role is retained between tables.
+
+After this comparison contract slightly inward and choose the row
+coordinates generically, preserving the finite separations and
+s_m>0; then choose a positive coordinate-regular recipient scale
+arbitrarily close to1. The absorbing fixed debt carrier now has
+one common minimizing vector b and all93 gaps avoid its minimum.
+All rowwise coalitional inequalities are strict and sign cohorts
+are unchanged. Call this table A and put d=Δ_abs(A)>0. BA3 gives
+Δ_all(A)>0 but does not equate the two gaps.
+
+The SA/BG source arguments now run on K_abs(A):
+
+* Pure deterministic coalitions and the one-paid-member literal
+  release have an absorbing supplier throughout, so their complete
+  repair profiles are in P_abs. A deterministic singleton is
+  contradicted by(BA7).
+* Every head or supported-root signed box stays in P_abs by BA5;
+  cap stability still treats the ENTIRE compact response family,
+  including finite accumulations and Never. Debt rigidity and the
+  multiaffine polynomial argument are unchanged.
+* A non-sure sole-supplier suffix is in K_abs as checked in BA5.
+  The complete exact ledger and(BA7) exclude it without a tail Nash
+  or tail-minimum assumption.
+* The no-bridge signed root box retains the anchor. Its rigidity
+  endpoint would force deterministic prescribed absorption, which
+  the first item excludes. The resulting bridge is a real root/
+  later payoff-kernel witness, not two aliases.
+
+These are EXACTLY the operations used by the direct SA/BG producer;
+no arbitrary non-sure root graft from K_all is needed there. Hence
+ALL produced absorbing marked minima have the canonical random
+collision/bridge geometry and some finite-a.s. anchor, uniformly
+over every minimizing sequence, not just a selected witness.
+
+### BA8. ONE final table can carry both source families and close debts
+
+Keep the table A from BA7. Translate recipient m by C→∞. The
+absorbing gap d and its entire minimizing debt family remain fixed,
+while the full gap approaches d by BA4. All coalitional difference
+labels are invariant under this row translation. The only changed
+canonical label is the empty passive-floor label F_{m,∅}=s_m,
+which becomes s_m+C; all other own-singleton labels stay fixed.
+Thus for sufficiently large finite C every label avoids BOTH
+Δ_abs(A^C)=d and Δ_all(A^C), since the unchanged labels have a
+positive finite distance from d and the changing label diverges.
+Rowwise distinctness and typed join/withdrawal signs are unchanged.
+
+Choose C_n→∞ and positive recipient weights θ_n→1 regular for
+BOTH concave scalarizations W_abs and W_all,C_n. The union of
+their coordinate-exceptional sets is null, so such θ_n exist in
+ANY sufficiently small positive box. Make those boxes small enough
+to preserve the two sets of finite contact separations and generic
+rows. Let r_n=θ_n A^{C_n} recipient by recipient. Every full
+minimum and every absorbing minimum now has a common vector,
+respectively a_n and b_n.
+
+To verify the convergence with moving weighted minimizers rather
+than assume old profile continuity, lift any actual o(1)-minimizer
+of the full weighted objective. It minimizes
+
+    Σ_i θ_{n,i} d_i^A(p)+θ_{n,m} C_n c(p).
+
+Absorbing old competitors bound this by d+o(1). Since θ_n→1,
+the old sum and penalty are bounded; c→0. BA3's OLD-reward coupling
+again yields d≤D_A(p)+o(1). Hence D_A(p)→d and C_n c(p)→0.
+Every old cluster is an absorbing minimum of A, with debt b.
+Multiplying by θ_n and adding the vanishing penalty proves
+a_n→b. The fixed absorbing compact debt carrier similarly gives
+b_n→b. The same actual approximation/lifting argument applies
+to all carrier minima. Therefore
+
+    δ_all(r_n)→d,
+    δ_abs(r_n)→d,
+    a_n→b,
+    b_n→b,
+    δ_all(r_n)≤δ_abs(r_n).
+
+For any requested ε>0 choose ONE sufficiently large FINITE n;
+the two relative estimates in BA1 hold because d>0. This FINAL
+table has the contact/generic/debt-rigid inputs of both source
+families SIMULTANEOUSLY. Apply the original all-carrier direct
+source to its full minima, and the BA5–BA7 absorbing source to
+its absorbing minima. Their ordinary margin arguments are separate
+and use the correct respective gap. Common global normalization
+preserves positivity, genericity, all equalities/inequalities and
+the relative estimates. This proves the proposed producer in BA1.
+
+It is false to infer a_n=b_n, equal numerical gaps, a common law,
+or minimum-return of any positive debtor from these limits. The
+finite-a.s. anchor is asserted only for the absorbing source.
+Nor does relative closeness make the two compact minimum sets
+lower-hemicontinuous or preserve selected payoff/cap values.
+
+### BA9. Exact tests, necessary signs and no finite-penalty overclaim
+
+Use the complete modified forward fixture immediately above, with
+q_i=1/2 at date0 and otherwise Never. Its FULL old debts are
+
+    (7/16,19/32,19/32,7/8).
+
+Adding7 to recipient3's whole finite row gives full debts
+
+    (7/16,19/32,19/32,21/16).
+
+The total increase7/16 is EXACTLY7c, since c=1/16. The old
+row3 response menu (root, later finite, Never) is
+(7/8,−3/4,−7/8), and the new menu is
+(63/8,25/4,21/4). Thus even Never is explicitly recomputed.
+The distant equilibrium in that fixture has p_3(Never)=0;
+the same shift leaves all four debts exactly0, as BA2 predicts.
+All these fractions were enumerated exactly over the independent
+root subsets, with later finite and Never exhausting all replies.
+
+The positive-singleton condition cannot be dropped. Set all60
+coordinates r_i(S)=−1 for i∈S and0 for i∉S. All own singletons
+are−1 and AllNever has debt0. For ANY absorbing independent law,
+Never response pays0 to every owner, so B_i≥0, while
+U_i=−P(i belongs to the first coalition). Therefore
+
+    D≥E|first coalition|≥1.
+
+Pure singleton absorption attains1; thus Δ_abs=1 whereas Δ_all=0.
+This is an exact whole-class barrier in a SOLVED table, not a
+positive unrestricted gap. For the pure singleton{0}, c=0 and
+old debt vector(1,0,0,0). Adding2 to recipient0's finite row
+makes that SAME law have debt vector0, falsifying BA2 without
+the old s_0≥0 condition. The old cap is the Never cap0, not the
+finite cap−1. The abstract square-root graph in BA4 separately
+retains the finite-penalty attainment failure; it is not claimed
+to be an actual payoff table.
+
+### BA10. Actual source overlap and the concrete next consumer
+
+Narrow actual-source inspection read:
+
+* `quittingTerminalPayoff_playerwiseAffine`,
+  `quittingTerminalPayoff_finiteTime_playerwiseAffine` and
+  `quittingFinitePureReplyValue_playerwiseAffine` in
+  `UniformEquilibrium/Quitting/Terminal/TerminalAffineReward.lean`;
+* `quittingContinuationBestResponseValue_eq_finitePureReplyValue_of_solo_nonneg`
+  in `UniformEquilibrium/Quitting/Punishment/FinitePureReplyValue.lean`;
+* `quittingTerminalPayoff_update_finiteTime_tendsto_of_profile`,
+  `neverMass_mul_opponentNeverProduct_mul_singleton_le_terminalDebt`
+  and `prod_stoppingLaw_none_mul_singleton_le_terminalDebt` in
+  `UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`;
+* `exists_uniformEquilibriumPayoff_iff_finiteMenuEarlyAbsorption_of_singleton_pos`
+  in `UniformEquilibrium/Quitting/Terminal/FiniteMenuEarlyAbsorptionNecessity.lean`;
+* the ordinary prefix budget underlying
+  `minimumTerminalSemantic_singletonMargin` in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`,
+  and the full proof of `positive_minimum_preemptedOwner_quadraticMargins`
+  in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`;
+* `exists_singletonColumnBlockerCertificate_of_fourPlayer_noUniform`
+  in `UniformEquilibrium/Quitting/Classification/LCP/FourPlayerSingletonColumnBlockers.lean`.
+
+Those affine declarations certify the prescribed/FINITE-cap identities
+under their imports, not BA's whole new carrier producer. The existing
+early-absorption equivalence already supplies unrestricted UE-class
+completeness and is not counted as new coverage. The preempted-owner
+declaration requires an ORIGINAL full-carrier minimum; BA6 separately
+reconstructs its proof on a prefix-invariant compact carrier and does
+not advertise that generalization as checked Lean. No actual-source
+declaration for the two-objective same-table producer was found in
+the selected terminal/semantic subtrees. This is a narrow overlap
+check, not a global producer census.
+
+Concrete next question: can a random first-collision minimum with a
+finite-a.s. anchor in the COMPLETE absorbing class be consumed using
+its full upper calendar and all allowed absorbing-law deviations,
+or does the loss of the arbitrary non-sure-root all-tail floor block
+the proposed advantage? At a sure root every actual tail is still
+legal. The source gives NO chronological renewal, supported best
+reply, positive-debt anchor or tail Nash. Those missing properties
+must be proved or falsified, not renamed as a consumer.
 
 ## 50. One fresh table has random outcomes and no prescribed pre-active head
 
