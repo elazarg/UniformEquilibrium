@@ -7864,3 +7864,167 @@ an actual product-law restriction on the ENTIRE simultaneous
 root/later active face, beyond one selected bridge and the
 fixed-source row price retired in CP2. A single favorable selected
 cap price cannot stand in for that face.
+
+## Proper finite-menu Nash is not an all-four-finite approximation producer
+
+### PF1. Question and exact scope
+
+The four-finite source theorem permits a new original minimum realizing
+sequence in which every prescribed clock is finite almost surely, and even
+has finite support at each index. Does selecting an EXACT Nash equilibrium
+of a common finite deadline game, with Never EXCLUDED, approximate the
+unrestricted full debt infimum in that class?
+
+No. The following exact Fin4 example satisfies positive own singletons
+and every completion row witness, has all-four-finite full-debt infimum0,
+but EVERY exact Nash selection in EVERY nonempty common finite deadline
+menu has unrestricted debt8. This is a supporting architecture failure,
+not a new counterexample-class reduction or UE claim. The earlier FN
+failure already retired the corresponding finite-menu architecture with
+Never included; this test prevents reintroducing exact Nash selection
+merely because the new source has four proper clocks. It is not an
+obstruction to approximate Nash selections or direct whole-law minimization.
+
+### PF2. Complete sixty-entry table and proper approximation
+
+Core owners are 0,1,2 modulo3, with love(i)=i−1. For i in the core set
+
+    r_i(S)=1 if i∈S;
+           3 if i∉S and love(i)∈S;
+           0 otherwise.
+
+For the fourth recipient set
+
+    r_3(S)=1 if 3∈S;
+           0 if S={0};
+           3 otherwise.
+
+These rules specify every nonempty coalition and all sixty rewards.
+All own singletons are1. Each core row has a distinct passive singleton
+with reward0, and row3 has witness r_3({0})=0. Thus every recipient
+has the actual row condition r_m({j})≤s_m. All rewards are nonnegative.
+
+There is an explicit unrestricted exact terminal Nash profile: schedule
+core owners 0,1,2 repeatedly, with ONLY the scheduled owner quitting
+with hazard1/2 at each date; owner3 uses Never. The core calculation
+is the FN cyclic calculation: phase payoffs to a core recipient are
+2 when its loved owner is scheduled and1 at its other phases. Each
+scheduled owner is indifferent between quitting and continuing; every
+other core owner weakly prefers continuing. The vanishing geometric
+opponent survival bounds every unrestricted response, including Never.
+
+The first core singleton probabilities, starting at phase0, are
+(4/7,2/7,1/7). Row3's Never values in phases0,1,2 are respectively
+
+    (9/7,18/7,15/7).
+
+They satisfy the literal one-step Continue recurrences: at phase0,
+V=V(next)/2; at the other phases, V=3/2+V(next)/2. Any Quit reply
+pays1, below all these phase values. The same geometric survival
+argument bounds EVERY finite and Never reply by its initial Never
+value. Thus this is a full four-player terminal Nash profile with
+payoff (1,2,1,9/7) and debt0.
+
+It has THREE unchanged proper core anchors. Move owner3's Never law
+to a sufficiently late finite date. Every prescribed payoff and each
+full cap is screened by an unchanged proper opponent; the error tends
+to0 uniformly over all replies. Hence the entire pair is approached
+by four-proper profiles and the four-finite debt infimum is0. Truncate
+the core finite tails to late FINITE dates for finite-support versions.
+This is a solved table, not a genuine positive-gap source.
+
+### PF3. No absorbing root Nash exists for any nonnegative continuation
+
+Write core root rates q_i and dummy rate y. All member rewards are1,
+so each core Quit payoff is1. If a core owner k quits surely, its
+successor has Continue payoff3 and must have rate0. Its predecessor
+then has Continue payoff0, because its loved successor is absent and
+k screens all later outcomes, so that predecessor must quit surely.
+But k then has Continue payoff3 and cannot quit surely. Thus no core
+coordinate can be sure at a root Nash, independently of continuation.
+
+If owner3 is sure, a zero core rate forces its successor to quit
+surely: with no loved quitter and a sure dummy, its Continue payoff
+is0 while Quit pays1. Hence all core rates must be strictly between0
+and1. Their indifference equations become 1=3q_love, forcing all
+three rates1/3. On this core law, dummy Continue pays3 on every
+nonempty core coalition except singleton{0}, which pays0. The former
+event has probability15/27. Its Continue payoff is therefore at least
+5/3 for ANY nonnegative continuation, above its Quit payoff1. This
+contradicts sure dummy. No root coordinate is sure at any root Nash
+with nonnegative continuation.
+
+This observation permits backward conditional-Nash reasoning for a
+finite-menu equilibrium: the joint continuation probability at each
+nonterminal menu date is positive. The induced conditional suffix
+must itself be a Nash profile. No subgame-perfection hypothesis has
+been assumed.
+
+### PF4. At continuation vector1 the only root Nash is allContinue
+
+For core i, put a=q_love(i), b=the other opponent core rate. Its
+Quit-minus-Continue incentive is
+
+    G_i=1−3a−(1−a)(1−b)(1−y).
+
+If y=0, the identity
+
+    Σ_(core i) q_i G_i
+      =−Σ_(core pairs{i,j})q_iq_j−3q_0q_1q_2
+
+and the Nash signs force at most one positive core rate. A sole
+positive rate is impossible: its predecessor has no loved quitter
+and strictly prefers Quit. Thus all core rates are0.
+
+Suppose y>0. By PF3 all rates are less than1. A zero core rate
+would give its successor G≥y>0 and force a sure rate, so all core
+rates are positive and mixed. Indifference gives, cyclically,
+
+    b=f_y(a)=((2+y)a−y)/((1−y)(1−a)).
+
+The map f_y is strictly increasing wherever these rates lie, with
+derivative 2/((1−y)(1−a)²). An increasing real map cannot have a
+nonconstant finite cycle: choose its least cycle member and iterate
+the strict inequality if its successor differs. Hence all core
+rates equal some t>0. Dummy Continue, at continuation1, then pays
+
+    3−(1−t)²(2+t)=1+3t−t³>1.
+
+It strictly prefers Continue, contradicting y>0 at Nash. Therefore
+y=0 and all core rates are0. Conversely allContinue is a root Nash
+at vector1 since every singleton pays1. It is the unique root Nash.
+
+### PF5. Every common finite-menu exact equilibrium has full debt8
+
+Fix ANY nonempty finite F⊆ℕ and let each strategy law be supported
+on F only. At its final menu date T=max F the continuation game has
+only Quit available, so all four owners quit and all four payoffs
+are1. At each preceding menu date, PF3 rules out any sure root;
+its positive continuation probability makes the conditional suffix
+Nash. Induct backwards. PF4 at suffix vector1 forces allContinue
+at EVERY preceding date. Thus the UNIQUE exact finite-game Nash
+profile has all four owners pure at T.
+
+Its prescribed payoff is1 in every row. Responding strictly after T
+or Never is passive at the other-three coalition and pays3 in every
+row. Earlier finite replies and root joins pay1. The full cap vector
+is therefore(3,3,3,3), the debt vector is(2,2,2,2), and D=8 for
+EVERY F. This includes singleton menus and arbitrarily sparse or
+late finite menus. There is no favorable exact finite-game selector.
+
+### PF6. Source check and mechanism decision
+
+The narrow lookup of QuittingCyclicSingletonOpenSignData and its
+isUniformEquilibriumPayoff theorem in
+UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean
+confirms that cyclic singleton producers already consume the core
+open-sign pattern, with arbitrary collision rewards. This record
+makes no new existence-class or literature-priority claim. The
+proper completion and cap checks above are direct literal-law tests.
+
+The conclusion is only that complete finite clocks and their
+finite-support approximations do not make exact restricted Nash
+selection response-complete. Four-finite approximation itself is
+NOT falsified: PF2 supplies approximate full Nash finite clocks.
+The next route must change the COMPLETE laws using the unrestricted
+debt objective, rather than optimize an exact restricted Nash menu.
