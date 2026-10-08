@@ -2982,3 +2982,180 @@ minimizing profile, raw tightness, a Nash tail, or a paid bridge in
 the zero-coordinate arm. Those nonclaims are stated correctly. No
 SUM/MAX transfer, normalization of old minima, source input left
 unproduced, or actual far-endpoint cap overclaim was found.
+
+## Independent NP1–NP9 falsification: separated full gap and fully paid finite bridge
+
+Reviewer: CODEX_BROUWER. Scope is the ENTIRE section beginning
+“Forward global source: strict absorbing-gap separation forces a fully paid
+finite bridge” and ending immediately before “Forward exact residual: all
+own singletons zero, absorption required”, in
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`. Frozen section SHA256:
+`a2cf862fb5006c6b8acc513a5bfa5bd897e61522bd426498727ebf239600b5ed`.
+The extraction hash was verified, all393 lines read, and the section was
+not edited. I did not consult the other NP review. Earlier BG source
+contributions are disclosed; the new signed translation, separated-gap
+producer, all-minimum Never floor, contact-free source application and
+whole-block periodic comparison were independently reconstructed here.
+
+Ordinary mathematical verdict: PASS, with no unresolved objection.
+Separate significant-source-increment verdict: PASS. This is not a
+Lean seal, a UE theorem or authorization for export placement.
+
+### Exact producer versus a conditional interface
+
+The claim is ANY actual Fin4 no-UE game ⇒ ONE unit-bounded, positive-own,
+row-generic table with 0<δ_all<δ_abs, all full minima sharing one strictly
+positive debt vector, and a paid earliest-root/later-FINITE different-payoff
+bridge at EVERY produced minimum. Near-minimizing ACTUAL profiles have a
+uniform positive joint Never floor. This is a fresh-table conclusion;
+old canonical minima and93 contact labels are not preserved or used.
+
+NP3 genuinely produces its positive absorbing gap from the actual
+counterexample: the tracked full-core/punishment producer and reverse
+single-pivot transport give a still-no-UE table with owns e_m, whose
+absorbing infimum is at least its positive full infimum. Subtracting1
+from the pivot row is legitimate because both old and new own rewards
+are nonnegative. At ALL absorbing profiles this translates the entire
+row pair by a constant and preserves debt EXACTLY. Thus the zero-own
+table has A=Δ_abs>0. A is not an assumed punishing profile, selected
+tail value or unproduced original absorbing strategy.
+
+The tracked declarations used here were checked in the preceding whole
+FC audit under their actual hypotheses: the original no-UE/gap equivalence
+in Terminal/ExploitabilityGap.lean; the full-core theorem in
+Classification/LCP/ThreeCore/AmbientCarrierElimination.lean; the actual
+all-player punishment-normality theorem in
+Classification/LCP/NormalCorePunishmentNormal.lean; and
+isUniformEquilibriumPayoff_original_of_singlePivotNormalized in
+Punishment/SinglePivotUniformPayoff.lean. No inverse same-profile
+affine claim or old normality after an unproved normalization is used.
+
+### Exact tests of the signed translation and separation
+
+NP2 is valid for negative C precisely when BOTH own rewards stay
+nonnegative. Before and after translation the full cap is the finite
+response supremum; all finite responses shift by C. The full prescribed
+payoff shifts by C(1−ν), giving the exact d shift Cν. Literal Never
+does not independently shift by C, but its finite-limit domination
+prevents it from invalidating the full cap identity.
+
+As a small exact test, take the participant-indicator Fin4 table
+r_i(S)=1 if i∈S, otherwise0. At AllNever, translating every row by
+−λ, 0≤λ≤1, gives U=0, B_i=1−λ and D=4(1−λ). At an absorbing
+allQuit profile both U_i and B_i become1−λ and debt stays0. Thus
+positive AllNever debt alone does NOT provide a separated gap: this
+table has A=0. At the all-nonempty−1 table, a shift+1 instead changes
+AllNever's full cap0 to0, not to1; crossing from negative own reward
+breaks NP2 exactly outside its hypotheses. These tests check both the
+joint-Never term and the indispensable cap-sign boundary.
+
+For the actual produced A>0 table, adding t in all rows gives
+D_new=D_z+4tν and keeps Δ_abs=A. AllNever bounds Δ_all≤4t<A/2.
+Positivity of Δ_all is proved for EVERY law by the small-marginal
+Never replacement and the exact joint-Never debt bound, not by assumed
+attainment: A≤D+14M(D/t)^(1/4). Its stated positive lower bound is
+correct. It follows that the new table is a genuine original no-UE
+game and its full minimum is strictly below EVERY absorbing competitor.
+
+### Final-table compatibility and every-minimum quantifiers
+
+Both value functions are8-Lipschitz on the same fixed profile classes.
+Small contraction/perturbation preserves BOTH positive full gap and
+strict full/absorbing separation. Row genericity is selected before
+coordinate-regular recipient scales; the regular scalarization uses one
+FIXED original full debt carrier. Positive scales then give common debt
+at ALL NEW unweighted full minima while continuity retains separation.
+No maximization at a new table, transfer of an old debt vector, or
+SUM/MAX identification is hidden in this step.
+
+At any actual profile the absorbing replacement gives
+δ+g≤D+14Mν^(1/4). Hence ALL sufficiently near-minimizers, not one
+selected sequence, have the uniform positive ν floor stated in NP7.
+The stronger limiting floor at a true minimum follows by taking limits.
+Each marginal Never mass is at least the product, and the retained
+Never interval/weak-* density argument keeps these literal masses in
+EVERY marked source. The exact tracked declaration
+prod_stoppingLaw_none_mul_singleton_le_terminalDebt in
+Terminal/SingletonJointNeverDebt.lean gives positive debt in every row.
+The late finite test has payoff R_i+h_i s_i>R_i, so literal Never is
+strictly suboptimal even if the old raw finite supremum is unattained.
+
+### Contact-free signed source argument
+
+The earlier complete quantile and signed old-law transport apply at the
+true original full minimum without93 contact exclusions. Positive own
+Never mass forces EVERY finite head probability e_i<1. On a signed head
+box the whole upper response family is positively affinely transformed,
+not merely one response. The lower compact gap is strict. Multiaffine
+constancy plus common debt then gives the individual polynomial identity.
+The singleton-head case contradicts U_h>s_h; a multi-head case gives
+d_i=e_i d_i with d_i>0 and e_i<1. This directly removes all heads
+without the older deterministic-coalition spectrum argument.
+
+The earliest active point is finite because Never cannot maximize;
+it has positive mixture mass because a zero-mass point would pay the
+own singleton. Retained positive atoms are isolated. All root rates
+are strictly below1 because every own Never mass is positive. The
+one-supplier contradiction uses the ACTUAL conditioned suffix in K_all
+and the full global floor, not a Nash or minimum tail. Thus there are
+at least two strictly mixed suppliers and the stated three positive
+root coalition labels really occur.
+
+If no owner bridged, the complete signed root box would be stable.
+A root-only supplier would force its positive common debt to0; a
+later-only supplier would force d_i=a_i d_i with a_i<1. Both are
+contradictions. All later active tests are FINITE since Never is
+strictly below the cap. Row genericity makes the positive opponent-root
+event distinguish the two PAYOFF kernels. Retained root dates and moving
+finite later responses witness this on the original sequence, with
+response gains eventually at least half the positive common debt.
+No actual far-polynomial-endpoint cap or pointwise raw attainment is
+claimed. This source is paid for ALL owners, not just the observer.
+
+### Whole-block renewal, including its born cap
+
+I independently computed NP11. A finite original block repeated on the
+unique live history delivers U_i/(1−ν). Against periodic opponents, a
+pure responder that waits k whole blocks then tests at t gets
+R_i Σ_(j<k)h_i^j+h_i^k V_i(t). There is an empty finite final
+date in each block, and nonnegative own reward makes the old finite
+supremum its ENTIRE cap. Every original finite deadline lies in one
+such block, while literal Never gives R_i/(1−h_i). Taking the
+supremum therefore gives EXACTLY max(B_i,R_i/(1−h_i)), even for
+signed R_i. This is the maximum of the two endpoint values of the
+geometric interpolation, not a selected within-block response estimate.
+
+At least two limiting root suppliers keep EVERY denominator1−h_i
+and1−ν strictly positive along sufficiently late original approximants.
+The repeated actual profiles absorb almost surely and have full debt
+at least δ_abs. Their complete pair limits give NP12 with the correct
+sign: born cap leakage must exceed g plus the strictly positive delivery
+gain νΣU/(1−ν). Thus some conditional passive Never payoff is positive
+and raises an upper renewal cap above the old B_i. The proof honestly
+prices why blind replay fails; it does not claim replay is an equilibrium.
+
+### Separate significant narrowing assessment
+
+This improves the incoming counterexample geometry rather than renaming
+its multiple-cap branch. ANY original counterexample produces ONE new
+table at which EVERY original minimizing sequence has positive joint
+Never probability, every debt is uniformly paid, no root owner is sure,
+and a genuine bridge connects two FINITE responses. Zero-debt observers,
+literal-Never bridges and sure-root sources all disappear at the selected
+table. The near-minimizer floor is quantitative and universal, not an
+automatic property of a restricted-domain minimizer. The earlier FC
+four-finite arm applies at a different selected table and is not falsely
+combined with the strict separation here.
+
+No tracked earlier source named in the supplied packet yields this
+strict separation or universal positive near-minimizer Never floor.
+The bounded source comparison is with the already audited canonical
+source, the FC whole-carrier theorem, the exact joint-Never bound and
+the cited renewal interfaces; no global novelty census is claimed.
+
+Concrete new leverage is that a consumer may now use paid response gains,
+positive continuation at EVERY owner, finite later witnesses, legal
+supported Never variations and a known positive price for complete
+block replay. The construction controlling that price is still open;
+compatible charge, return, tail Nash and UE are not consequences. The
+claimed structural increment itself is complete and genuinely produced.
