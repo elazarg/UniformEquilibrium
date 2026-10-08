@@ -83,6 +83,11 @@ the fixed-table good-selection question as the hazard floor vanishes.
 That question is the current attempt; no new positive-gap class is
 excluded. HB's nonlinear hazard-box construction is separately retired
 as new coverage by its complete source comparison with existing producers.
+The fixed-table negative trial HF1–HF5 also fails: its whole optimized
+host debt lies between θ/2 and3θ. An actual asymmetric geometric branch
+has exact observer caps, with one rate tending1/2 and a different rate
+of order θ. This solved-table mechanism test is ordinary unreviewed
+supporting mathematics, not an arbitrary-table producer or new coverage.
 
 Current independent work: BA1–BA10 passed two independent soundness
 reviews but is NOTES ONLY: its companion absorbing minimum is not an
@@ -9891,6 +9896,188 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Fixed-table selection trial: a false persistent-gap candidate has an asymmetric actual escape
+
+Status: COMPLETE ORDINARY UNREVIEWED mechanism test, not new UE coverage.
+After HN's reward-space obstruction, this tries the FIXED-table question.
+The candidate has every deterministic coalition strictly escapable and
+no exact full equilibrium with the host in a positive hazard-floor class.
+Nevertheless its ENTIRE optimized anchored debt tends to zero. The
+actual escape uses a macroscopic owner hazard and a different observer's
+hazard of order θ, rather than a uniformly accelerated cohort. The
+attempted persistent deleted-host barrier is retired. No export proposed.
+
+### HF1. Complete table and the unrestricted fixed-table selection value
+
+Use host0 and three observers1,2,3, with cyclic successor
+f(1)=2, f(2)=3, f(3)=1. Never pays0. EVERY coordinate on every
+nonempty S is specified as follows:
+
+    z_0(S)=1 if 0∉S, and0 otherwise.
+    If0∈S: z_i(S)=0 if i∈S, and−1 otherwise, i=1,2,3.
+    If0∉S and |S|=1: the member receives0; other observers receive1.
+    If0∉S and |S|=2, say S={j,f(j)}:
+        j receives−2, f(j) receives2, the remaining observer receives3.
+    If S={1,2,3}: all observers receive0.
+
+This is all60 entries, own singletons0, |z|≤3. At any pure observer
+singleton, its successor gains by joining; at any observer pair, its
+negative member gains by withdrawing; at the observer triple, any
+member gains3 by withdrawing. At host singleton, an observer gains by
+joining, from−1 to0. In every coalition containing host AND observers,
+host gains1 by withdrawing. Thus all fifteen pure terminal coalitions
+have a strict escape. This says nothing about the complete known UE
+producer selection sets.
+
+Let E_0,θ and f_0(θ,z) be the actual whole correspondence and least FULL
+host debt in HN1, with every observer unrestricted Nash and host optimal
+over ALL H_θ. For this FIXED table, for 0<θ≤1/100,
+
+    θ/2 ≤ f_0(θ,z) ≤ 3θ.                         (HF1)
+
+Both inequalities include EVERY finite test and Never. In particular
+there is no exact full Nash member of E at any positive θ, but good
+selection does hold as θ↓0. This is not a positive absorbing-gap example.
+
+### HF2. Whole-correspondence lower bound, not one bad selection
+
+For ANY actual p∈E, put ρ=P(some observer clock is finite). The host
+is proper. Its Never response receives exactly ρ, and no response can
+receive more. Thus B_0=ρ. Its hazard at date0 is at least θ. On the
+independent event that it stops at0 AND some observer is finite, the
+host receives0, whereas its Never response receives1. On every other
+event prescribed host payoff is at most the Never payoff. Hence
+
+    d_0 ≥ θρ.                                    (HF2)
+
+Write a_i=P(T_i=0), i=0,1,2,3. Observer i's date0 Quit payoff is
+
+    Q_i=2(1−a_0)(a_{f⁻¹(i)}−a_{f(i)}).
+
+The observer triple has participant reward0, so the two cross terms
+cancel exactly; host-containing coalitions also pay that responder0.
+Consequently ∑[i=1..3]Q_i=0. Full observer Nash gives U_i=B_i≥Q_i,
+so the prescribed observer sum is nonnegative. On the event all observers
+Never, that sum is exactly−3 because the proper host eventually absorbs.
+On its complement the sum is at most3: observer-only coalitions have
+sum2,3,0; host-containing coalitions have sum at most0. Therefore
+
+    0≤∑[i=1..3]U_i≤3ρ−3(1−ρ),    so ρ≥1/2.
+
+Combining with(HF2) proves the lower bound uniformly over the ENTIRE
+correspondence. It does not fix the opponent law, require deadline
+attainment, or replace full debt by constrained debt.
+
+### HF3. Actual asymmetric absorbing profile
+
+Put q=1−θ and define positive real algebraic numbers
+
+    y=(√(1+12θ+4θ²)−1−2θ)/4,
+    z=(1−2θ+√(1−12θ+4θ²))/4,
+    x=y/q,       p=z/q.
+
+For 0<θ≤1/100 the radicals are real, 0<y<θ,
+0<x<θ/q, and 0<p<1. Indeed y is the positive root of
+
+    2y²+(1+2θ)y−θ=0;
+
+the polynomial is negative at0 and positive at θ. The larger positive
+root z solves
+
+    2z²+(2θ−1)z+θ=0.
+
+Since (1−12θ+4θ²)≥(9/10)² and 1−2θ≥49/50,
+z≥47/100>1/3. Also z<q/2, so p<1/2. Thus all displayed probabilities
+are legal and p>x. Let host use geometric hazard θ, observer1 geometric
+hazard p, observer2 geometric hazard x, and observer3 literal Never.
+The laws are independent. This is an actual almost-surely absorbing
+infinite profile, not a finite word followed by Never or a limit law.
+
+### HF4. Complete caps, constrained host optimality, and the upper bound
+
+Against stationary independent opponents with opponent Continue mass
+k<1, every pure date-t value is
+
+    V_i(t)=R_i+(Q_i−R_i)k^t,   V_i(Never)=R_i,
+
+where Q_i is immediate Quit and R_i is the unrestricted Never value.
+Every behavioral stopping response averages these literal tests. This
+supplies the complete cap max(Q_i,R_i), not just one-stage Nash.
+
+For observer1 in HF3 the endpoints are
+
+    Q_1=−2y,         R_1=(−θ+y)/(θ+y).
+
+The defining equation of y makes Q_1=R_1 EXACTLY. For observer2,
+
+    Q_2=2z,          R_2=(−θ+z)/(θ+z),
+
+and the defining equation of z makes these endpoints exactly equal.
+Their prescribed geometric laws therefore attain their COMPLETE caps.
+For observer3,
+
+    Q_3=2q(x−p)<0,
+    R_3=[−θ+q(p+x+px)]/[θ+q(p+x−px)]>0.
+
+The last inequality follows already from qp=z>1/3>θ. Thus its Never
+law attains its complete cap as well. All three observer debts are0.
+
+For any retained observer laws, host payoff here is
+P(min observer clock < host clock). Every H_θ law obeys
+S_0(t+1)≤q^(t+1); the geometric host attains all these bounds. Summing
+against the retained minimum-observer clock proves that the displayed
+host maximizes over the ENTIRE H_θ, not merely over stationary hazards.
+So HF3 really belongs to E_0,θ.
+
+Both positive-rate observers are proper, hence B_0=1. Its actual payoff
+and full debt are
+
+    U_0=q(p+x−px)/[θ+q(p+x−px)],
+    d_0=θ/[θ+q(p+x−px)] ≤ θ/(qp)=θ/z <3θ.
+
+This proves the upper bound in(HF1) with all deadlines/Never accounted
+for. As θ↓0, p→1/2, x/θ→1, d_0/θ→2. Observer1's exact payoff is
+negative of order θ; the rare successor's payoff tends1. Neglecting that
+small negative payoff or declaring the rare player's mass zero would
+destroy the exact observer-Nash equations.
+
+### HF5. Failed inference, source overlap, and next genuine question
+
+The persistent-gap candidate is false. All-pure escape and the absence
+of an exact positive-floor full equilibrium do not prevent a vanishing
+minimum full host debt. This positive branch needs coupled observer
+responses at DIFFERENT hazard scales. Neither an arbitrary anchored
+equilibrium selection nor a uniform rescaling of its rates is used.
+The lower bound is over all E; the upper bound is one actual selection,
+which is the correct quantifier for a producer.
+
+The original table is solved independently of anchoring. Let host and
+observers2,3 Never, and let observer1 use any geometric hazard ε≤1/2.
+Observer1's every finite test pays0, and its Never test pays0. Host's
+Never payoff1 dominates joining0. Observer2's date-t payoff is
+1+(2ε−1)(1−ε)^t≤1, and observer3's joining payoff is smaller than
+its Never payoff1. This is an exact absorbing terminal Nash profile.
+Thus no existing-coverage nonclaim is hidden in the all-pure census.
+HF is a test of GLOBAL good selection, not a new raw UE class.
+
+The narrow stationary-source lookup read
+`quittingContinuationBestResponseValue_stationary_eq_max_quitNow_never`
+in `UniformEquilibrium/Quitting/Stationary/CompleteBehavioralCap.lean`
+under its import, and the nearby exact endpoint selection declarations
+in `UniformEquilibrium/Quitting/Stationary/StrictEndpointSelection.lean`.
+The generic complete stationary-cap consumer is already implemented;
+the new toy branch and all-E bound are ordinary calculations, not newly
+Lean-checked coverage. Exact algebraic-root computations checked both
+endpoint equalities and the strict third-observer cap; decimal evaluations
+at θ=1/1000,1/100,1/15 were discovery checks, not their proof.
+
+The open step remains the actual fixed-table producer for arbitrary z.
+HF gives no universal asymptotic selection theorem and cannot identify
+E-minimizers with a native K_abs minimum. Next: seek a whole-family
+continuation or selection argument retaining the rare observers' exact
+caps, rather than a persistent-gap barrier based only on pure escape or
+the failure of exact equilibrium at each positive floor.
 
 ## Global anchored selection: an attained objective with an exact ALL-selection discontinuity
 
