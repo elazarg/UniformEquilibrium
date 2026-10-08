@@ -89,9 +89,14 @@ that actual F→J adapter by an explicit C¹ penalty construction on the
 FULL Section4J domain, rather than identifying artificial edges as Nash.
 The literal nonconvex boundary index (or a different quitting-specific
 consumer) remains missing; it is not supplied by contractibility, and
-the convex conclusion is not transferred. RM27's original bounded-F
-source/necessity caveat also remains explicit. RM29 is ordinary,
-unreviewed supporting mathematics, not an export or new UE exclusion.
+the convex conclusion is not transferred. RM30 now obtains the precise
+raw-rank input from ACTUAL no-UE data by the proved POSITIVE
+finite-orbit→cycle→terminal-equilibrium direction and its contrapositive;
+the open equilibrium→orbit necessity is not used. The complete chain
+therefore prices full J at any actual same-table Section4 construction,
+but still does not consume its quitting-specific nonconvex boundary.
+RM29–30 are ordinary, unreviewed supporting mathematics, not exports
+or new UE/counterexample-class exclusions.
 TG7 now computes the exact local descending link: an m-slab corner
 has link S^(m−2) and local Euler contribution (−1)^(m−1). The full
 four-face corner contributes−1; a three-active Fin4 stratum with a
@@ -19754,3 +19759,263 @@ identified in TG7, or force it to be balanced with a genuine orbit
 return? JR9 removes the artificial-edge pricing gap, but neither a
 generic boundary minimum argument nor a convexified projection is
 now a legal substitute for that remaining game-specific consumer.
+
+### RM30. Actual no-UE data supplies the precise raw-support rank input
+
+Status: COMPLETE ORDINARY SOURCE COMPOSITION, NOT A NEW STRATEGY CLASS.
+This resolves the source direction deliberately left open in RM27/29.
+The required implication is the CONTRAPOSITIVE of the positive
+finite-orbit→cycle→approximate-equilibrium consumer. It is NOT the open
+approximate-equilibrium→finite-orbit extraction/necessity direction.
+The relevant positive declarations were independently read in full or
+through the exact dependencies stated below. No Lean build, axiom audit,
+external formalization or export claim is made here. The ordinary theorem
+is principally a correct composition of existing proved positive steps,
+not a newly excluded reward-table class.
+
+RS1: one table and the exact source quantifiers. Fix a nonempty finite
+player set I and a quitting table r. Its prescribed and unilateral laws
+are independent behavioral laws of the original quitting game, terminal
+nonabsorption pays0, and a UE payoff is one target fixed BEFORE accuracy.
+Assume no such UE payoff exists. For the later actual Section4 application
+also retain its normal-player/no-branch/generic inverse hypotheses; these
+are not obtained by changing the already chosen table during this proof.
+
+Use the RAW support correspondence and Euclidean K_a from RM27:
+
+    K_a={x: ALL x_i≥p_i−a, dist₂(x,P)≤a},
+    x→f_q(x) iff q∈E_a(x) and BOTH endpoints lie in K_a.
+
+Then there are a>0 and a finite B such that EVERY finite such F_a
+orbit has Euclidean total variation≤B. In particular no orbit, root,
+Nash tail or selected cap is an extra input to this source assertion.
+For the normalized motion rate, no-UE excludes both actual instant and
+stationarily-generated approximate equilibrium branches by their existing
+complete behavioral consumers. The production normalized-motion theorem
+then supplies GL1 at some positive rate. RM27 produces b>0 and its
+globally smooth G with the precise raw F_b drop JR1.
+
+Consequently, at ANY literal same-table Section4 construction selected
+after reducing its motion scale toρ≤b, RM29's EXPLICIT Φ is C¹ and
+
+    Φ(x)−Φ(y)≥½‖x−y‖₂ for EVERY (x,y)∈Section4J. (RS1)
+
+This includes all its artificial lower/upper glue and terminal endpoint
+image, not merely a behavioral subgraph. No claim that arbitrary game
+data automatically supplies an inverse chart is hidden in this universal
+construction statement: the exact Section4 hypotheses remain the ones
+displayed in JR1. In an actual source with that construction, G itself
+is now produced from no-UE, not supplied. The abstract/generic
+nonconvex index problem remains a genuine consumer gap.
+
+RS2: prove the source by its positive contrapositive. Suppose instead
+that for EVERY a>0 these actual finite F_a paths have arbitrarily
+large variation. For the moment read norms as ‖·‖∞, as in the
+2007 source. Every Euclidean K_a path is also an a-rational,
+‖·‖∞-near-feasible path, since coordinate absolute value and the max
+norm are bounded by the Euclidean norm. If its Euclidean variation
+is≥√|I|·T, its max-norm variation is≥T. Thus the assumed Euclidean
+condition implies precisely
+
+    ∀a>0 ∀T>1 ∃finite raw F_a orbit,
+       ALL states a-rational and max-norm a-near P,
+       max-norm total variation≥T.              (RS2)
+
+This is the exact `FiniteNearOrbitCondition` of Simon2007, not a
+probability-weighted or absorption-normalized relation. It has ONE
+tolerance for all states and roots in the supplied word and arbitrarily
+large variation at EACH positive tolerance. No moving carrier/accuracy
+is exchanged with the requested variation target.
+
+If the instant approximate branch exists, its own punishment consumer
+already gives terminal approximate equilibria at all errors and a UE.
+Otherwise choose its positive scale σ at which no σ-rational
+raw-support σ-root has a sure coordinate. Such a scale is supplied by
+the actual no-instant theorem, which uses a literal one-stage punishment
+construction; no stationarily-generated exclusion is needed for this
+positive closing step.
+
+Fix a target cyclic support/rationality error ζ>0 and take
+
+    η=min(ζ/5,σ)>0.
+
+All η-near-feasible states lie in a single compact max-norm ball
+K of radius C=M₀+η, where M₀≥1 bounds every terminal coordinate.
+Take a finite η-orbit with sufficiently large variation. On its
+finite edges assign the CHARGE
+
+    h_k=‖x_(k+1)−x_k‖∞/(2C), 0≤h_k≤1.
+
+Its actual root absorption a_k=1−∏_i(1−q_(k,i)) satisfies
+h_k≤a_k, because x_(k+1)−x_k=a_k[z_k−x_k] with z_k∈P
+and both vectors in the C-ball. The generic COMPACT RETURNED-BLOCK
+lemma, applied to these actual states and charges, yields k<l with
+
+    ‖x_k−x_l‖∞<η,  Σ[k≤j<l]h_j≥1.             (RS3)
+
+This is one returned portion of the ORIGINAL word, not a second
+independently selected return path. Therefore its actual absorption
+charges sum to at least1. The elementary product inequality gives
+
+    c_block=∏[k≤j<l](1−a_j)
+            ≤1/(1+Σ[k≤j<l]a_j)≤1/2.
+
+Every row is nonsure by the η-rational/no-instant scale, so c_block>0.
+Thus its period absorption 1−c_block lies in[1/2,1).
+
+Reverse and periodically repeat THIS actual root block. This reversal
+is required because F's arrows prepend a stage to its continuation.
+The resulting actual periodic terminal tails are the unique fixed
+point of the block affine recursion. Comparing that fixed point with
+the ORIGINAL returned states telescopes their exact Bellman equalities
+and bounds every tail correction by
+
+    η/(1−c_block)≤2η.                           (RS4)
+
+Each Continue-minus-Quit gap changes by at most the coordinate tail
+correction. Hence the repeated cycle is raw-support3η-optimal and
+3η-rational at ALL of its ACTUAL tails, so certainly ζ-optimal and
+ζ-rational. The block has a positive-absorption row; otherwise RS3
+could not have positive charge. This proves the exact positive cyclic
+orbit condition at EVERY ζ>0. Neither a hypothetical optimizing tail
+nor a source's minimum is identified with the polynomial fixed point.
+
+RS3: the complete-deviation consumer is essential, not finite-menu Nash.
+The positive cyclic condition supplies, at arbitrarily small δ,
+a periodic actual root profile p with unbounded quit mass, all tails
+ε-rational and all RAW support gaps at mostδ. The checked positive
+consumer chooses 0<ε≤1 and
+
+    0<δ<ε⁴/(2M³),
+
+where M≥1 is a strict payoff-difference bound including the zero
+nonabsorption payoff. It follows p only until the FIRST trigger T:
+some player's own finite survival has fallen to≤ε/M, or some
+Continue ledger reaches ε. Here the Continue ledger of player i is
+
+    L_i(T)=Σ[t<T](C_i(actual next tail,p_t)
+                    −U_i(actual tail at t)).
+
+All ledgers were below ε before T and their last increments are≤δ.
+The complete prefix cap with the original actual terminal reference
+tail is therefore at most its prescribed value plus ε+δ. This is
+proved for EVERY full unilateral sequence, not one selected deadline.
+
+The ledger-trigger case is not screened simply by large total
+absorption. A δ-balanced finite quitting decision process has expected
+total variation≤2M. Its exact raw absolute-crossing bound gives
+probability≤ε²/M² of a ledger crossing ε under the numerical
+δ condition above. The all-Continue live cylinder embeds into that
+crossing event. Consequently the prescribed survival at a crossing
+is≤ε²/M². Since EVERY player's own survival is>ε/M when no
+small-own-survival trigger exists, deleting any one nonpunished
+player still leaves survival≤ε/M. In the small-own-survival case,
+that chosen owner directly screens all other deviators' tail access
+by its own survival≤ε/M. The prescribed tail access is≤ε/M in
+both cases. This is the part that would fail if one screened only
+prescribed joint survival and automatically inferred observer caps.
+
+For the chosen player j attach an ACTUAL calibrated punishment law:
+its complete best-response value is≤p_j+κ₀ and its prescribed
+j payoff is≥p_j−κ₀, with κ₀=(ε−δ)/4>0. Such a law comes
+from an ε-optimal independent-opponent punishment and an approximate
+owner response. It is an actual product continuation, not correlated
+punishment or a child Nash selector. The original reference tail
+has j-coordinate≥p_j−ε.
+
+For j the worst tail/base comparison is therefore≤2ε−δ; for
+EVERY other player the two tail corrections are controlled by their
+screened probabilities≤ε/M and the same terminal payoff range,
+also giving≤2ε−δ. Adding the prefix estimate ε+δ proves
+
+    EVERY full unilateral sequence payoff
+       ≤the new prescribed payoff+3ε.          (RS5)
+
+Taking ε small relative to an arbitrary requested terminal error
+gives paper-profile approximate Nash at ALL errors. The exact
+paper→production root-sequence encoding preserves both prescribed
+and full unilateral payoffs. An arbitrary behavioral deviation has
+the same live hazard sequence because only the all-Continue history
+remains live. The production root-Nash→behavior-terminal-Nash
+consumer therefore gives actual unrestricted terminal approximate
+equilibria at every error. Finally the canonical terminal all-errors
+selection theorem fixes ONE uniform-equilibrium PAYOFF target.
+It does not merely select a different payoff target at each accuracy.
+
+This contradicts the original actual no-UE assumption. Thus RS2
+fails: there are a>0 and T>1 such that EVERY max-norm rational/
+near-feasible finite F_a orbit has variation<T. Every Euclidean
+K_a orbit is one of these, with Euclidean variation<√|I|·T.
+Taking B=√|I|·T proves the exact raw-capacity input RS1.
+
+RS4: independent bounded dependency check. I read the entire proof of
+`FiniteNearOrbitCondition.toCyclicOrbitCondition` in
+`Literature/Simon2007.lean`, including its actual returned block,
+support-preserving reversal, period absorption lower bound and exact
+fixed-point error. I read `lemma4`,
+`CyclicOrbitCondition.hasQuitApproximateEquilibria`, and the entire
+`proposition3` proof in the same file. Its punishment calibration,
+first-trigger/crossing split and finite quitting decision-process
+variation bound were inspected in their concrete proof dependencies.
+The returned-block threshold is the fully read
+`exists_charge_threshold_for_close_pair_of_compact`
+(`MathUE/CompactFiniteChargedReturn.lean`): a finite η/3 cover and
+finite labeled-charge return give ONE close ordered pair carrying at
+least1 raw charge. It requires no limiting infinite orbit or source
+reselection.
+
+The generic raw absolute-crossing inequality used there is proved by
+finite-prefix square/maximum estimates and monotone union, not by the
+unproved general-stochastic-game `theorem1`. The finite quitting
+DDP expected-variation≤2M proof directly sums disjoint own-Quit events;
+it does not invoke the sorry-backed Markov-chain `lemma2`.
+The paper's actual `MinMaxQuit` inf-sup and its equality to the
+production punishment value were checked in JR6. Calibrating the
+owner by an approximate response changes neither the opponents nor
+their complete punishment cap.
+
+The following exact source conversions were also read under their
+imports:
+
+* `isεQuittingRootSequenceNash_of_isQuitEpsilonEquilibrium`
+  (`Literature/Simon2007.lean`), with arbitrary PMF hazards read back
+  into real Quit probabilities and then round-tripped exactly;
+* `quittingApproximateEquilibriumExistence_iff_behavior` and
+  `quittingGame_exists_uniformEquilibriumPayoff_of_approximateEquilibriumExistence`
+  (`UniformEquilibrium/Quitting/Classification/Existence/StationarilyGeneratedBranch.lean`);
+* `quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+  (`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`);
+* `exists_normalizedMotionLowerBound_of_not_branches`
+  (`UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/NormalizedMotionStationaryPrefixProducer.lean`).
+
+The positive chain above does NOT use the sorry-backed 2007
+`lemma5`, `lemma5_corrected_2012`, `lemma2`, the open necessity
+arm inside `theorem3`, the open `theorem3_corrected_2012`, or the
+unproved Simon2012 extended-orbit escape argument. Its no-instant
+scale is the separate proved true-punishment consumer. Its normalized
+motion scale comes from the production theorem, not the unproved
+full sign-pattern statement. The source files contain unproved
+OTHER claims; importing the whole Literature file is not offered
+as an axiom audit of everything in that file. This is a bounded static
+dependency check and ordinary proof composition, not a new Lean build
+or an independently obtained whole-transitive `#print axioms` report.
+
+RS5: strategic value and the remaining consumer. No-UE→raw F_b rank
+is now a genuine actual-table SOURCE theorem, and JR9 extends that
+rank to the FULL actual J without supplied edge signs. This supersedes
+the specific bounded-F source caveat in RM27/29; it does NOT settle
+the opposite equilibrium→orbit extraction, which remains open in its
+production interface and is unnecessary for this direction.
+
+The combination does not yet exclude a new configuration of a
+counterexample: no boundary-degree normalization or quitting-specific
+control of the TG7 reentrant +1 strata follows from it. The canonical
+robust polynomial obstruction already supplies another actual no-UE
+certificate, although its normalized weighted edges are different.
+The present contribution is a literal raw-support/full-J source bridge
+for the Simon consumer, not a renamed positive-gap game or an extra
+rank field assumed at a supplied source. The full Fin4 conjecture
+remains OPEN. The next proof must now consume this ACTUALLY produced
+full-J C¹ rank using additional quitting-specific upper-face data,
+or produce a complete compatible obstruction; convexification and
+the generic no-boundary-minimum shortcut remain falsified by TG5–7.

@@ -89,6 +89,18 @@ has exact observer caps, with one rate tending1/2 and a different rate
 of order θ. This solved-table mechanism test is ordinary unreviewed
 supporting mathematics, not an arbitrary-table producer or new coverage.
 
+Current distinct global-producer triage FA1–FA7 is complete ORDINARY
+UNREVIEWED supporting mathematics. An exact exhaustive sequence of
+full-support finite-menu Nash laws has an iteratively-undominated,
+finitely additive equilibrium limit whose payoff lies outside the
+ENTIRE ordinary uniform-equilibrium payoff set of the same solved table.
+Its missing deadline moves with the menu. A large-row-shift version
+makes both literal joint Never and its shift penalty tend to zero,
+yet the full debt of one FIXED original zero-own game tends to4.
+This retires automatic utility-preserving finitely-additive and
+row-shift completion adapters; it does not refute good selections,
+the primary paper, or Fin4 UE. No export or new source narrowing.
+
 Current independent work: BA1–BA10 passed two independent soundness
 reviews but is NOTES ONLY: its companion absorbing minimum is not an
 original minimum, and relative gap proximity does not restore the
@@ -9896,6 +9908,329 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Global producer triage: a finitely approximable undominated equilibrium misses every ordinary payoff target
+
+Status: COMPLETE ORDINARY UNREVIEWED exact mechanism falsifier, not a
+positive-gap table or new UE coverage. The question is whether the
+finitely additive existence route, even with exhaustive finite
+approximation and iterative finite weak-dominance refinement, can be
+converted utility-preservingly to an ordinary behavioral uniform
+equilibrium. The answer to that UNIVERSAL adapter is NO. A separate
+large-row-shift calculation also retires an apparently promising
+absorption-completion adapter. A good global selection remains open.
+
+### FA1. Primary-source scope and exact finite game data
+
+The bounded primary-source lookup is Khan–Pedersen–Stinchcombe,
+[All Games Have Equilibria, arXiv2607.15452v2](https://arxiv.org/html/2607.15452v2),
+Definitions3.6–3.9, TheoremC, and TheoremE. Their equilibrium uses total
+finitely additive probabilities with rectangle independence and immunity
+to fixed pure deviations. Their refinement uses finitely supported
+dominating mixtures. TheoremE additionally requires its countably
+additive continuous equivalent to avoid the payoff discontinuities.
+These are paper statements, not imported project theorems. No local
+transcription of this paper was found in the narrow Literature lookup.
+
+Fix I={0,1,2,3}, C≥1, and literal Never reward0. The following formula
+specifies ALL60 nonempty-coalition payoff coordinates:
+
+    rᶜ_i({i})=C;
+    rᶜ_i(S)=C−1 if i∈S and |S|≥2;
+    rᶜ_i(S)=C+1 if i∉S.
+
+All randomizations below are independent private stopping clocks on
+ℕ∪{Never}; the first finite minimum determines the quitting coalition.
+As in the original game, the selecting live date pays zero and the
+absorbing reward starts subsequently. Terminal payoffs are the expected
+absorbing reward, with zero on AllNever. There is no correlation device,
+observation of another player's private clock, or restricted deviation
+class in an ordinary cap statement.
+
+The table is SOLVED before this experiment: player j quits at date0,
+all others Never. Player j obtains C, and each outsider obtains C+1;
+the owner's withdrawal gives0 and an outsider's tie gives C−1.
+Thus this is an exact unrestricted terminal Nash profile. Its payoff
+vʲ has vʲ_j=C and vʲ_i=C+1 for i≠j. It supplies an ordinary uniform
+equilibrium payoff by the semantic endpoint recalled in FA7. This
+fixture is not proposed as a counterexample candidate.
+
+### FA2. Exact full-support finite-menu Nash laws on an exhaustive sequence
+
+For N≥1 give EACH player the finite menu
+
+    F_N={0,…,N−1,Never}.
+
+Define u₀=0 and, for k≥1,
+
+    aₖ³=2/(C+2−u_(k−1)),       uₖ=C−1+aₖ³.
+
+At date t=0,…,N−1, each player independently Continues with probability
+a_(N−t); after the final menu date everyone Never. Every aₖ lies
+strictly between0 and1, as follows also from the closed formulas below.
+Hence the resulting clock law assigns POSITIVE mass to every action in
+F_N, including Never. This is a finitely supported actual stopping law,
+not a finite-horizon reinterpretation of its terminal rewards.
+
+Suppose the next suffix has symmetric prescribed payoff u_(k−1).
+Against the three current independent opponent coins, own Quit pays
+
+    Qₖ=C aₖ³+(C−1)(1−aₖ³)=C−1+aₖ³=uₖ.
+
+Own Continue, followed by ANY suffix menu response, pays
+
+    Rₖ=(C+1)(1−aₖ³)+aₖ³u_(k−1)=uₖ.
+
+For k=0 only Never is available and gives0. Backward induction therefore
+shows that EVERY pure response in F_N gives u_N. The prescribed mixture
+also gives u_N, so the displayed four independent clock laws form an
+EXACT Nash equilibrium of the finite timing game. No condition on only
+one-stage deviations is substituted for this backward induction.
+
+Let b_N=∏[k=1..N]aₖ be each owner's literal Never mass. Direct induction
+gives the exact closed forms
+
+    u_N=C−C/[2ᴺ(C+1)−C],
+    b_N³=2ᴺ/[2ᴺ(C+1)−C],
+    u_N=(C+1)(1−b_N³).
+
+Thus u_N→C and b_N→b_C=(C+1)^(−1/3)>0. At EACH FIXED raw finite
+date t, the prescribed atom tends to zero: a_(N−t)→1 and its Quit
+probability tends to zero. A mass1−b_C escapes through finite dates,
+while the distinct literal Never atom tends to b_C.
+
+### FA3. The exact unrestricted behavioral cap is NOT the finite-menu cap
+
+Every test in F_N gives u_N. A pure clock t≥N waits past every opponent
+finite atom and receives
+
+    L_N=u_N+C b_N³=C+1−b_N³.
+
+The additional reward is the singleton reward C on the opponent-AllNever
+event, of probability b_N³. All such late deadlines give the same value;
+there are no other raw pure clocks. A complete behavioral response is
+an average of pure finite clocks and literal Never, so its cap is
+EXACTLY L_N. In particular, the actual unrestricted regret sum is
+
+    Dᶜ(p_N)=4C b_N³ → 4C/(C+1)>0.
+
+The maximizing omitted response can be taken to be date N itself.
+For each FIXED finite clock t, eventually t∈F_N and its regret is0;
+literal Never also has regret0 for every N. Hence the limit of each
+fixed-test regret is0, although the supremum over ALL tests remains
+bounded positively. This is an exact moving-response failure, not a
+floating-point indication or a lack of payoff convergence.
+
+The generic omitted late row is already implemented; FA7 records the
+exact source declarations. Only this explicit global method test and
+the exhaustive payoff comparison below are asserted here as ordinary
+mathematics.
+
+### FA4. A finitely approximable, iteratively-undominated finitely additive limit
+
+Choose a nonprincipal ultrafilter 𝒰 on N. For EVERY subset A of the
+four-clock action space define
+
+    P(A)=lim[N→𝒰] P_N(A),
+
+where P_N is the actual independent product law from FA2. Finite
+additivity and total mass1 follow by taking limits in the finite
+additivity identities. For every rectangle ∏ᵢAᵢ,
+
+    P(∏ᵢAᵢ)=∏ᵢlim[N→𝒰]p_N,i(Aᵢ).
+
+Thus P is a total independent extension of its four finitely additive
+marginals. Integration of any bounded function commutes with this
+limit: first check finite-valued simple functions, then use their
+uniform approximation and the unit norm of probability integration.
+
+The prescribed utilities converge to C for every player. For every
+FIXED finite deviation t, the utilities equal u_N for all N>t;
+the literal Never deviation equals u_N for ALL N. Every fixed pure
+deviation therefore gives exactly C under P. This verifies the paper's
+finitely additive Nash definition directly, with payoff C·1.
+
+The menus exhaust all ordinary clocks, and P is a cluster of their
+exact finite-game equilibria. A cofinal convergent subnet yields the
+same conclusion in net language. Hence this example is finitely
+approximable, not an equilibrium supported only by an arbitrary
+independent-extension choice.
+
+It also survives the paper's iterative weak-dominance refinement of
+the finite games. At each N, EVERY player's equilibrium law has full
+support on ALL menu actions, and so does the product law of its
+opponents. If one menu action were weakly dominated by a mixture, with
+strict inequality at some pure opponent tuple, the strict inequality
+would persist in expectation against this full-support opponent law.
+That would contradict Nash optimality of the supported action. Thus
+no action is deleted at the first round, and none at any later round.
+The same P belongs to the paper's finitely approximable refined family.
+
+For additional precision, no original raw action is weakly dominated
+by a FINITELY SUPPORTED mixture either. For a finite clock t, a mixture
+with positive Never mass loses against all-opponent Never. Otherwise,
+if its largest finite support point L exceeds t, set all opponents to
+L: own t gets C but the candidate's positive L atom ties and gets C−1.
+If all support lies at/before t and some earliest point L<t has positive
+mass, set all opponents to L: own t gets C+1 but the candidate's L atom
+gets C−1. The only remaining mixture is pure t. A candidate for
+dominating Never with some finite mass loses against all opponents at
+its largest finite support point. Therefore the finite-support
+dominance restriction is substantial. No conclusion here asserts
+absence of dominance by diffuse proper countably additive mixtures.
+
+### FA5. The ENTIRE ordinary uniform-equilibrium payoff set is four points
+
+Consider ANY actual independent behavioral stopping profile p for rᶜ.
+Write nᵢ=pᵢ(Never), ν=∏ᵢnᵢ, and dᵢ=Bᵢ−Uᵢ≥0 for its COMPLETE cap.
+Literal Never always earns C+1 if some opponent quits and0 otherwise:
+
+    Rᵢ=(C+1)(1−∏[j≠i]nⱼ).
+
+The payoff of a pure deadline t tends, as t→∞, to
+
+    Lᵢ=Rᵢ+C∏[j≠i]nⱼ=C+1−∏[j≠i]nⱼ ≥ C.
+
+Thus Bᵢ≥Lᵢ. Averaging the nonnegative pure-test residuals of the
+prescribed clock, including its Never atom, yields
+
+    dᵢ≥nᵢ(Bᵢ−Rᵢ)≥Cν,       Dᶜ(p)≥4Cν.
+
+This holds for EVERY behavioral profile, with unbounded finite support
+allowed; it does not require finite-menu Nash, stationarity, identical
+clocks, or membership in a special source family.
+
+Suppose a sequence of actual profiles has (U,B)→(v,v). Its debt tends
+to0, so ν→0. Take a subsequence of its four marginal Never masses
+converging in the cube. At least one limiting n_j is0. For each i≠j,
+the literal Never payoff tends to C+1, hence vᵢ≥C+1. Since every reward
+is at most C+1, vᵢ=C+1. The late-test bound gives v_j≥C.
+
+The total prescribed terminal reward of any nonempty coalition is
+4C+3 for a singleton, 4C for a pair, 4C−2 for a triple, and4C−4 for
+the grand coalition. Never gives0. Thus for C≥1 every actual profile
+satisfies ∑ᵢUᵢ≤4C+3. The three coordinates already equal to C+1 force
+v_j≤C. Consequently v=vʲ from FA1.
+
+Conversely, each vʲ is delivered by FA1's exact full Nash profile.
+The diagonal-carrier semantic endpoint therefore identifies the
+ENTIRE ordinary uniform-equilibrium payoff set as
+
+    {v⁰,v¹,v²,v³}.
+
+The finitely additive payoff C·1 has supnorm distance1 from EVERY
+point in this set. This rules out a utility-preserving adapter for
+the whole refined finitely additive equilibrium family, not merely
+the literal weak limit of one unfortunate strategy sequence.
+
+The primary paper's continuity adapter is not contradicted. On the
+one-point compact clock space, the original payoff is continuous at
+every tuple containing some finite clock: isolate its earliest finite
+date and force all later clocks to remain later. Its only discontinuity
+is AllNever. Each fixed finite deviation has a continuous payoff map;
+the fixed Never deviation has value0 at opponent-AllNever and C+1
+elsewhere, so is lower semicontinuous. However the countably additive
+continuous equivalent of P is δ_AllNever. Indeed the mass of every
+fixed finite prefix tends to0 in FA2, so P_N converges weakly to that
+point mass. It gives mass1, not0, to the payoff discontinuity. Precisely
+that hypothesis of the paper's TheoremE fails.
+
+### FA6. Even vanishing Never AND vanishing row-shift penalty do not complete absorption
+
+Fix ONE ORIGINAL table z, with ALL60 entries given by
+
+    zᵢ({i})=0;
+    zᵢ(S)=−1 if i∈S and |S|≥2;
+    zᵢ(S)=1 if i∉S;
+    zᵢ(Never)=0.
+
+For every C≥1, rᶜ is obtained by adding C to EVERY nonempty entry of
+each row of this SAME z. Let the FA4 equilibrium for rᶜ be Pᶜ and
+retain b_C=(C+1)^(−1/3). Its literal joint Never mass is ν_C=b_C⁴.
+Then ν_C→0 AND Cν_C→0 as C→∞. Nevertheless its payoff in z is
+
+    Uᶻ_i(Pᶜ)=C−C(1−ν_C)=Cν_C → 0,
+
+whereas the fixed literal Never deviation in z gives
+
+    Rᶻ_i(Pᶜ)=1−b_C³=C/(C+1) → 1.
+
+The gain C b_C³(1−b_C) tends to1. These are not equilibria for z;
+positive nonempty-row translation is not an inverse equilibrium
+invariance when a deviator may choose literal Never.
+
+The same failure is visible entirely on ACTUAL approximating profiles,
+without using finitely additive integration. Because z has own
+singleton0, a finite pure response's absorption is1−0·∏n_-i=1.
+The exact complete-cap translation and prescribed-payoff translation
+give, on FA2's actual profile,
+
+    Dᶜ(p_N)=Dᶻ(p_N)+4Cν_N,
+    Dᶻ(p_N)=4C(b_N³−b_N⁴).
+
+Thus lim[C→∞]lim[N→∞]Dᶻ(p_N)=4, while both ν_N and Cν_N tend to0
+in the same iterated limit. A sufficiently slow diagonal N(C) gives
+the same limits for a single sequence of actual profiles. The deleted
+Never product b_C³ and the joint product b_C⁴ have different scales:
+C b_C³→1 while C b_C⁴→0. A bound on the joint prescribed penalty
+does not bound all unilateral deleted-player errors.
+
+There is no positive-gap claim for z either. A pure singleton j gives
+the absorbing exact Nash payoff with coordinate j equal0 and the other
+three equal1. AllNever is also a full nonabsorbing Nash profile.
+In the a.s.-absorbing class, the same FA5 argument gives EXACTLY the
+four singleton payoff targets: ν=0 implies some n_j=0; all other
+coordinates tend to1 by literal Never caps; the late cap for j is
+nonnegative; and every coalition has total reward at most3. The zero
+payoff limit above is outside this absorbing approximate-Nash target
+set. No claim restricts the FULL ordinary payoff set of z to four
+points, since AllNever itself disproves that.
+
+### FA7. Source reuse, exact tests, strategic retirement, and next question
+
+Inspected in place, under their own imports:
+
+- `quittingFiniteDeadlineTimingProfile_pureTime_eq_never_add_of_le`
+  and `quittingContinuationBestResponseValue_finiteDeadlineTimingProfile_eq_max`
+  (`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineFullReplyCap.lean`)
+  give the generic literal late-row/full-cap calculation used in FA3.
+- `exists_exactFiniteDeadlineTimingNash`, `mixedNash_isQuittingFiniteDeadlineNash`,
+  and `finiteDeadline_mixedNash_neverSupport_payoff_eq_never`
+  (`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean`)
+  already establish generic finite-menu existence and supported-Never
+  indifference. FA2 is an explicit formula for this solved table, not
+  a new existence theorem for finite menus.
+- `isUniformEquilibriumPayoff_iff_diagonal_mem_terminalSemanticCarrier`
+  (`UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean`)
+  supplies the exact fixed-target uniform semantic interpretation in FA5.
+
+The primary-paper source was read in its own terms; the narrow project
+lookup found no KPS transcription. No Lean command, build, or source
+implementation was run for this ordinary mathematical test.
+
+Exact rational arithmetic recomputed u_N and b_N³ recursively for
+C∈{1,2,10,100} and N=1,…,9, checking both closed formulas, the finite
+Quit/Continue identity, and L_N=C+1−b_N³. All checks passed. Cubic
+roots are only used to recover probabilities from these positive
+rational cubes; no decimal rounding supports a conclusion. For C=1,
+
+    u_N=(2^(N+1)−2)/(2^(N+1)−1),
+    b_N³=2ᴺ/(2^(N+1)−1),       Dᶜ(p_N)→2.
+
+The complete proof retires automatic utility-preserving realization of
+ALL finitely approximable refined FA equilibria, and automatic native
+absorption completion from large row shifts plus small joint Never
+penalty. It does NOT retire the paper's valid existence/continuity
+theorems, good equilibrium selection, or a source that additionally
+controls moving unrestricted tests by an ACTUAL mechanism. The exact
+tables here have known ordinary UE from the start; they neither narrow
+the genuine positive-gap class nor settle Fin4. No export is proposed.
+
+Concrete next question: can one choose an executable global continuation
+family that improves the omitted deleted-survival cap, rather than a
+finite-menu or finitely additive equilibrium family that records only
+each fixed tester? Merely adding that cap as a supplied hypothesis
+would restate the missing producer, not answer this question.
 
 ## Fixed-table selection trial: a false persistent-gap candidate has an asymmetric actual escape
 
