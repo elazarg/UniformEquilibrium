@@ -3159,3 +3159,130 @@ supported Never variations and a known positive price for complete
 block replay. The construction controlling that price is still open;
 compatible charge, return, tail Nash and UE are not consequences. The
 claimed structural increment itself is complete and genuinely produced.
+
+## Whole-artifact NP assembly: fully paid nonsure finite bridge
+
+Reviewer: CODEX_BROUWER. Final artifact read ENTIRELY, including all
+definitions, source proofs and complete boundary tables:
+`notes/CODEX_MORSE__FULLY_PAID_NONSURE_FINITE_BRIDGE.md`,1016 lines,
+SHA256 `21e596e53595811ad4f83b657d97b3942d53e313d69bb2e9e243c2ee2af11953`.
+The hash was verified before and after the full reading. The artifact
+was not edited. No NOETHER final-artifact verdict was consulted.
+
+Contribution disclosure: I contributed earlier BG bridge mathematics and
+the earlier canonical source assembly, so this review does not replace
+independent certification of those contributions. I independently
+reconstructed the NEW signed whole-row producer, strict full/absorbing
+separation, every-minimum positive Never/debt floor, contact-free head
+and root application, and periodic full-cap comparison, and checked
+their integration with every supplied source/rigidity argument here.
+
+Ordinary mathematical and assembly verdict: PASS. No unresolved source
+or mathematical objection. Separate significant export-value verdict:
+PASS, subject to the coordinator's independent placement gate. No
+Lean seal or UE conclusion is conferred.
+
+### Self-contained producer and exact scope retained
+
+The1016-line artifact includes the full stopping-law semantics, original
+no-UE/gap bridge, actual normalization hypotheses, signed whole-row
+translation and full-pair coupling estimate. Its zero-own table has
+positive ABSORBING gap but unrestricted gap0; this distinction is
+explicit. Small positive row constants then produce a strictly positive
+FULL gap below the absorbing floor by the quantitative all-law bound.
+No companion absorbing minimum, inverse signed affine invariance or
+assumed attained clock profile is inserted.
+
+The generic table is selected before coordinate-regular real recipient
+scales. Both gap values are continuous over their fixed actual profile
+classes, so this SAME final table retains strict separation while ALL
+its unweighted full minima share the derived vector. Positive debts
+and Never floors hold at every minimizing sequence, not just a favorable
+marked selection. The fixed-carrier derivative argument is correctly
+separate from differentiation of a moving reward-space infimum.
+
+The whole old-quantile producer and ALL-moving-response convergence
+proof are present, as are two-sided supported-atom/conditional-law
+transport, bounded nonnegative signed densities, whole-date cuts,
+compact lower gaps, upper-family affine stability and multiaffine
+interior-minimum constancy. Literal Never and the last finite c test
+remain distinct. These inputs no longer rely on conference files or
+93 contact inequalities, and no contact exclusions are silently carried.
+
+The contact-free no-head proof uses e_i<1 from every positive Never
+mass and d_i>0 from the exact joint-Never debt bound. It does not need
+the old deterministic-spectrum exclusion. The one-supplier proof
+includes the actual suffix conditioning, full-cap membership and full
+global debt floor rather than declaring a tail Nash or minimum. The
+root box then forces a paid root/later bridge, whose later point is
+FINITE because literal Never is strictly suboptimal. Every positive
+root rate is mixed. Generic rows distinguish PAYOFF kernels on an
+original positive-probability root event, with literal finite witnesses.
+Far endpoint evaluations are selected regrets only, as stated.
+
+### Fresh tracked periodic-source check
+
+I opened the declarations under their actual imports in
+UniformEquilibrium/Quitting/Cycles/PeriodicFiniteReplyPrefix.lean:
+quittingPureTimeValue_periodizedPrefix_block_interpolation,
+quittingPeriodicWindowRefusalValue_periodizedPrefix_eq_div,
+and quittingBestReplyValue_periodizedPrefix_le_max.
+
+Their assumptions and conventions match Section11. The period length
+is window+1. A last supported original date N is followed by an
+EMPTY phase N+1, so choosing length N+2 correctly represents every
+old finite response value, including the post-support solo value.
+At least two root suppliers keep every opponent survival h_i<1,
+including an owner whose own law is Never, and keep the denominators
+uniformly positive along late finite approximants. The tracked bound
+requires ALL first-block finite phases, not merely prescribed support;
+Section11 supplies exactly that bound B_i.
+
+A maximizing first-block phase gives the lower bound B_i. Literal
+Never gives R_i/(1−h_i). Together with the tracked unrestricted upper
+bound they give EXACT equality max(B_i,R_i/(1−h_i)), including signed
+R_i and ALL behavioral deviations. The original finite blocks' actual
+periodic profiles absorb almost surely and therefore meet the strictly
+higher absorbing debt floor. Passing full U/B/R/n limits gives P17
+with the correct positive delivery-amplification term and the extra
+gap g. No claimed new periodic formula duplicates this tracked input.
+
+### Independently recomputed complete boundary tables
+
+The all-nonempty−1 translation table correctly falsifies dropping the
+OLD nonnegative-own hypothesis. In the zero-own cyclic pair±1/core
+triple−1 table padded by dummy0, the two pair contributions cancel
+per recipient. Geometric q gives U_i=−q³/[1−(1−q)⁴], finite response
+−q²(1−q)^(3t), Never0 and total debt tending0. Thus adding constants
+does not manufacture A>0. All sixty coordinates, including dummy
+coalitions, are assigned by the displayed formula.
+
+For passive2/own1/participant-nonsingleton0 at half-root/halfNever,
+the recomputed values are U=15/16, B=15/8, R=7/4, h=1/8, ν=1/16
+per row. Two-phase periodic replay has U=1,B=2 and increases total
+debt by1/4, with cap birth1/2 and delivery amplification1/4. For
+passive0/own1/participant-nonsingleton−1, the old empty-late cap1/8
+is absent in period1: finite values are negative and full cap0.
+Including the EMPTY phase restores cap1/8. These exact tests check
+the delicate completeness seam, not positive-gap examples.
+
+### Separate strict value and residual
+
+The final full artifact preserves the serious increment assessed in
+the earlier393-line review: from ANY counterexample it produces ONE
+table whose EVERY full near-minimizer has uniformly positive joint
+Never mass and EVERY debt paid, whose first root has no sure owner,
+and whose genuine bridge is finite-to-finite. The canonical source
+allowed sure roots and zero-debt/Never bridges. The new absorbing gap
+separation is genuinely produced and retained at the final table;
+it is not an automatic anchor from minimizing over a smaller domain.
+
+Its periodic leakage conclusion honestly prices the remaining full
+response cap rather than assuming renewal admissibility. This is a
+stronger necessary counterexample source, not a complete consumer.
+It makes no claimed transfer of93 exclusions, old minimum pairs,
+FC absorbing membership, NF9 or SG results; the latter new notes
+remain OUTSIDE this frozen proof. No UE, raw attainment, return,
+charged temporal construction or ordinary existence-class coverage
+overclaim was found. The file is ready for the stated independent
+export/integration gate with exactly the reviewed bytes.

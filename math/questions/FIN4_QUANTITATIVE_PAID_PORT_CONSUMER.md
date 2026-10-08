@@ -1,4 +1,4 @@
-# Consume a mixed first collision at a debt-rigid terminal-debt minimum
+# Consume a fully paid nonsure collision at a separated terminal-debt minimum
 
 ## Game and unrestricted response values
 
@@ -25,17 +25,25 @@ Assume δ>0. This is a lower bound against every actual behavioral profile,
 not only finite-clock, stationary, or bounded-memory profiles.
 Membership in K does not assert that the pair is realized by one profile.
 
+Let K_abs be the closure of full payoff/cap pairs of actual profiles whose
+prescribed play absorbs almost surely. For independent stopping laws this
+means Pr(AllNever)=0, or equivalently at least one marginal has zero Never
+mass. Caps still range over every behavioral replacement. Assume a STRICT
+separation from the original full minimum:
+
+    min[w∈K_abs]D(w)=δ+g,       g>0.
+
 Assume all own singleton rewards s_i are strictly positive, and for every
 player i there is j≠i such that r_i({j})≤s_i.
 
 Assume recipient-row genericity: for each i, the numbers r_i(S) are
 pairwise distinct as S ranges over nonempty coalitions. Assume also that
-there is one nonnegative vector a, with ∑[i∈I]a_i=δ, such that
+there is one STRICTLY POSITIVE vector a, with ∑[i∈I]a_i=δ, such that
 
     D(w)=δ ⇒ d_i(w)=a_i for every i and every w∈K.
 
 Only the debt vector is common. Minimizing payoffs, caps, laws and
-calendars need not coincide. Some a_i may be zero.
+calendars need not coincide.
 
 ## Supplied first-row decomposition
 
@@ -67,9 +75,9 @@ Every T_x(w), x∈[0,1]⁴ and w∈K, belongs to K. Require
 
 Thus a nonsingleton event occurs at the first root of a genuine global
 minimum. The row need not be Nash against u or b. The tail need not
-minimize debt; its only automatic lower bound is D(v)≥δ. Rates zero and
-one are allowed. No positive Never probabilities are assumed, and no
-conditioning on a zero-survival event is permitted.
+minimize debt; its only automatic lower bound is D(v)≥δ. Zero rates are
+allowed, but no rate is one. Every positive rate is strictly mixed.
+No conditioning on a zero-survival event is permitted.
 
 ## Constraint on every minimum prefix
 
@@ -78,15 +86,15 @@ row. For every x∈[0,1]⁴ and w∈K with
 
     ∑[i∈I]x_i>0,      D(T_x(w))=δ,
 
-at least two rates x_i are positive, at least one lies strictly between
-zero and one, and some player i satisfies
+at least two rates x_i are positive, every rate is strictly below one,
+and some player i satisfies
 
     Q_i(x)=A_i(x)+α_i(x)b_i(w).
 
 Thus every nonzero minimum prefix has a random first-root coalition law
 and an exact tie between Quit and the complete Continue response value.
-The player realizing the tie may have zero debt and zero prescribed
-root Quit probability. Sure quitters and α_i(x)=0 remain allowed.
+The player realizing the tie has positive debt a_i, although its prescribed
+root Quit probability may be zero. Every α_i(x) is positive.
 
 For every such row, a tied player's positive singleton margin implies
 that some nonempty opponent coalition S has p_{−i}(S;x)>0. On that
@@ -127,29 +135,66 @@ changes and whole-tail changes must both respect the same global bound;
 neither optimization is restricted to one selected continuation or one
 selected best response.
 
-## Available clock-class reduction
+## Uniform Never mass and finite response witnesses
 
-Let K_abs be the closure of full payoff/cap pairs of actual profiles
-with Pr(AllNever)=0. Let K_fin be the closure of those pairs when each
-of the four marginal stopping laws assigns zero mass to Never. The caps
-in these definitions still range over every behavioral replacement.
+For an actual profile put ν(p)=∏[i∈I]p_i(Never). The exact singleton
+bound and complete-response coupling of a smallest Never-mass replacement give
 
-The nonnegative own singleton rewards and the row witnesses above give
-the entire-carrier identity K_fin=K_abs. If a_k=0 for some player k, then
-the exact bound s_k·Pr_p(AllNever)≤d_k(p), together with full-response
-coupling of small Never-mass replacements, gives
+    s_iν(p)≤d_i(p),
+    δ+g≤D(p)+14Mν(p)^(1/4).
 
-    min[K_abs]D=δ,
-    {w∈K_abs:D(w)=δ}={w∈K:D(w)=δ}⊆K_fin.
+Thus every profile with D(p)≤δ+g/2 has
 
-Consequently either every a_i is positive, or every original minimum
-pair has an actual realizing sequence with all four clocks finite almost
-surely. This permits choosing new realizers; it is not a claim about
-every old realizing sequence. Each new approximant may have finite support;
-there need not be a uniform support bound, raw-date tightness, a uniform
-expected stopping-time bound, or realization of a minimum pair by one
-actual profile. The supplied continuation v still need not
-be minimizing or Nash; the variational constraint remains over all K.
+    ν(p)≥η=(g/(28M))⁴>0,
+    p_i(Never)≥η,       d_i(p)≥s_iη       for every i.
+
+This applies to EVERY sufficiently near-minimal actual profile and every
+realizing sequence of every full minimum. It is not a tightness or actual
+minimum-attainment assertion. In particular every nonzero minimum prefix
+above has c(x)≥η.
+
+For fixed opponent laws, writing h_i=∏[j≠i]p_j(Never), a delayed finite
+response has limit
+
+    V_i(t,p_{−i})→V_i(Never,p_{−i})+h_i s_i.
+
+Near-minimizers therefore have literal Never strictly below the full cap,
+and the full cap is the supremum over finite responses. At a tied minimum
+prefix, Quit at its first root and finite responses strictly later in its
+realizing tails approach the SAME cap. Both gains over the prescribed
+profile approach the positive debt a_i. Exact cap attainment at an ordinary
+finite date is not assumed.
+
+For any nonempty opponent coalition S at that root with positive probability,
+the first response pays r_i(S∪{i}), whereas the later response pays r_i(S).
+Row genericity distinguishes the two payoff kernels on that positive event;
+their expected response values can nevertheless tie.
+
+## Complete periodic-replay account
+
+Take a finite-law minimizing sequence realizing the supplied minimum prefix.
+For each approximant, form a finite block ending after every finite atom
+and including an empty final response date. Repeat its original hazard word
+forever; each player uses its own independent draws. Write U_i,B_i for its
+original full profile values, R_i for its literal Never payoff, n_i for its
+marginal Never mass, ν=∏[i]n_i and h_i=∏[j≠i]n_j.
+
+With h_i<1 for every i and ν<1, this actual absorbing periodic profile has
+
+    prescribed payoff U_i/(1−ν),
+    full behavioral cap max(B_i,R_i/(1−h_i)).
+
+The supplied minimum prefix has at least two positive suppliers, so these
+denominators stay positive along sufficiently late approximants. After a
+joint subsequence of the bounded scalar data, keep the same symbols for
+their limits. The absorbing debt floor gives
+
+    ∑[i∈I](R_i/(1−h_i)−B_i)⁺
+      ≥g+ν/(1−ν)·∑[i∈I]U_i>0.
+
+Here U_i>s_i>0 by the quantitative minimum bounds. Periodic replay must
+therefore create a new upper response cap. Payoff improvement under renewal
+does not assert a debt decrease or a usable temporal return.
 
 ## Question
 
@@ -163,9 +208,10 @@ or prove directly that the supplied conditions are inconsistent.
 
 A positive four-player terminal-gap table, if one exists, permits
 reselection to a bounded table with the positive singleton rewards,
-row witnesses, common-debt and universal minimum-prefix properties
-above and at least one nonzero minimum
-prefix. No old minimizing law is asserted to survive that table change.
+row witnesses, STRICT full/absorbing gap separation, common positive debt
+and universal nonsure minimum-prefix properties above, and at least one
+nonzero minimum prefix. No old minimizing law is asserted to survive that
+table change.
 Consequently an affirmative answer rules out positive terminal gaps and
 gives uniform-equilibrium payoff existence. In that conclusion one fixed
 payoff target must work at every accuracy: the profile and horizon

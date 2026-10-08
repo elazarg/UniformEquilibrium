@@ -17,14 +17,31 @@ opponent event. Both complete expected response values tie. The table is
 selected before every minimum sequence; all finite responses and Never
 remain covered. No old law or MAX source is carried between tables.
 
-Current research question: consume that genuine random first-collision tie
-by a GLOBAL whole-law/table mechanism. The bridge owner may have ZERO
-debt; sure owners and other outcome-equivalent cap plateaus remain possible.
-Conditional tails are not Nash or minimizing. Positive-debtor complete
-replies have a uniform off-minimum excursion under the common-debt source,
-so minimum-return support rotation is unavailable. The forward exact test
-below additionally supplies a distant literal mixed equilibrium after all
-pure coalitions are made escapable; it is NOT a positive-gap source.
+Current forward source: NP1–NP9 has passed TWO independent complete
+mathematical and strict-value reviews. It selects ONE NEW table with
+0<Δ_all<Δ_abs, strictly positive own singletons and one common debt
+vector at EVERY original full minimum. All four debts and all four
+Never atoms are bounded positively there; the first collision has no
+sure owner, and its first-to-LATER-FINITE bridge is PAID. The actual
+whole-block periodic competitor forces a new conditional-Never cap
+strictly above its old cap. This does NOT inherit the earlier table's
+finite contact exclusions or FC zero-debt conclusions.
+The self-contained final draft is
+`CODEX_MORSE__FULLY_PAID_NONSURE_FINITE_BRIDGE.md`, SHA256
+`21e596e53595811ad4f83b657d97b3942d53e313d69bb2e9e243c2ee2af11953`.
+It awaits independent byte-bound final-artifact checks, not self-export.
+The frozen NP body retains its original complete proof; the final
+assembly expands its full cyclic table and audits the tracked periodic
+reply theorem without changing the source conclusion.
+
+Current research question: consume this paid finite first-collision tie
+AND its priced conditional-Never renewal cap by a GLOBAL whole-law/table
+mechanism. Conditional tails are not Nash or minimizing. Positive-debtor
+complete replies have a uniform off-minimum excursion under common debt,
+so minimum-return support rotation is unavailable. The earlier canonical
+table alone still permits zero-debt bridges and sure owners. The forward
+exact test below additionally supplies a distant literal mixed equilibrium
+after all pure coalitions are escapable; it is NOT a positive-gap source.
 
 Current independent work: BA1–BA10 passed two independent soundness
 reviews but is NOTES ONLY: its companion absorbing minimum is not an

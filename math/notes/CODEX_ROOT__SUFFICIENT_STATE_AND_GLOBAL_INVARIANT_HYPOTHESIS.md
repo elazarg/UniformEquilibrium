@@ -1017,3 +1017,40 @@ Run Tests A and B on the current surviving source state before proposing new
 fields. In parallel, formulate Test E on a finite exact abstraction of the
 known recurrent core. These tests distinguish “forgotten information” from
 “missing global theorem” more directly than another producer refinement.
+
+## Finite-word periodic caps: exact library scope
+
+Let a finite independent root word have length L>0. For a responder i,
+let h_i<1 be opponent survival through the word, R_i its accumulated
+passive payoff when i always Continues, and V_i(t) the payoff from a
+finite first-pass response at phase t<L. In the periodic repetition, a
+response after k complete passes has value
+
+    (1−h_i^k)R_i/(1−h_i)+h_i^k V_i(t).
+
+If every first-pass V_i(t)≤B_i, the complete behavioral response cap is
+at most max(B_i,R_i/(1−h_i)). This statement is valid for signed rewards
+and arbitrary complete responses, including Never. It assumes opponent
+contraction, not root Nash or a minimizing continuation.
+
+The inspected declarations are
+`quittingPureTimeValue_periodizedPrefix_block_interpolation`,
+`quittingPeriodicWindowRefusalValue_periodizedPrefix_eq_div`, and
+`quittingBestReplyValue_periodizedPrefix_le_max`, all in
+`UniformEquilibrium/Quitting/Cycles/PeriodicFiniteReplyPrefix.lean`.
+Its upper-bound proof uses
+`sSup_range_quittingTerminalPayoff_update_eq_periodicWindow` for unrestricted
+behavioral replies. The adjacent
+`quittingCyclicTerminalValue_tailWindow_eq_restartDelivery`
+(`UniformEquilibrium/Quitting/Cycles/ConditionedPeriodicRenewal.lean`)
+controls prescribed delivery. The debt/absorption tradeoff
+`debtDrop_div_terminalDebt_le_capNashStackAbsorptionSum`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashRenewalObstruction.lean`)
+does not assert preservation of these response caps or a renewable source.
+
+Applying the cap bound to a finite stopping-law profile requires all phases,
+not just prescribed stopping support. Include an empty response date after
+its last finite atom. Nonnegative own singleton reward makes the old complete
+cap equal its finite-response supremum; a first-pass maximizing test and
+periodic Never then supply the two lower bounds for exact cap equality.
+None of these facts makes a prescribed-payoff return a strategic return.

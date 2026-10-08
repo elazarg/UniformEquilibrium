@@ -554,6 +554,74 @@ participant nonsingleton rewards 0 has unrestricted minimum 0 but
 all-four-finite infimum 9; its row witnesses fail. Positive singleton signs
 alone therefore do not supply the completion.
 
+### Separated full and absorbing gaps — reviewed mathematics
+
+If any signed Fin4 counterexample exists, one can select ONE unit-bounded
+table with all own singletons positive, distinct rewards within each recipient
+row, and
+
+    0<δ=min[K_all]D<min[K_abs]D=δ+g,       g>0.
+
+All full-carrier minima at this table have one common STRICTLY POSITIVE
+debt vector. This is a different source selection from the preceding
+zero-coordinate completion: the two tables and their minimizing laws are
+not identified.
+
+The separation is produced from actual counterexample data. Single-pivot
+normalization followed by a signed whole-recipient-row translation gives an
+all-own-zero table with positive absorbing gap A. Adding a sufficiently small
+positive constant to every nonempty reward row preserves A, makes the full
+gap positive, and puts it strictly below A. Generic perturbation and regular
+positive recipient scaling preserve both gaps and supply common debt at
+EVERY full minimum. No restricted-domain minimum replaces the full one.
+
+For every actual profile p, writing ν(p)=Pr_p(AllNever), small-Never-mass
+replacement gives
+
+    δ+g≤D(p)+14Mν(p)^(1/4).
+
+Thus every profile with D(p)≤δ+g/2 has
+
+    ν(p)≥(g/(28M))⁴>0,
+    d_i(p)≥s_iν(p)>0                 for every i.
+
+Every full-minimum realizing sequence retains positive marginal Never mass
+for ALL four owners. Literal Never is strictly below each full cap, since a
+delayed finite reply tends to its Never payoff plus the positive opponent-
+Never mass times s_i. Finite compact maximizers still need moving ordinary
+deadlines; actual integer-date cap attainment is not asserted.
+
+At EVERY marked full minimum, there is no prescribed pre-active head. The
+first active collision has at least two strictly mixed suppliers and no sure
+quitter. A positive-debt owner maximizes both there and at a later FINITE
+compact test, with distinct payoff kernels on a positive original opponent
+event. The original finite responses give an eventual positive paid gain.
+This source requires no deterministic-outcome contact exclusions.
+
+Whole-block periodic replay has an exact complete-cap account. For a finite-law
+approximant, choose a block ending after every finite atom and containing an
+empty final response date. Let U_i,B_i be its original full profile values,
+R_i its literal Never payoff, h_i the opponents' block-survival mass, and ν
+the joint block survival. With h_i<1 for every i and ν<1, replay delivers
+U_i/(1−ν) and has full cap
+
+    max(B_i,R_i/(1−h_i)).
+
+At the marked minimum, the absorbing debt floor forces
+
+    ∑[i](R_i/(1−h_i)−B_i)⁺
+      ≥g+ν/(1−ν)·∑[i]U_i>0.
+
+Blind replay therefore creates a quantitatively positive new response cap;
+it is not a return consumer. A whole-law modification must control this
+renewal leakage or produce another complete contradiction to δ>0.
+
+The [separated-source proof](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md#forward-global-source-strict-absorbing-gap-separation-forces-a-fully-paid-finite-bridge)
+has two independent mathematical reviews. These restrictions are ordinary
+mathematics, not Lean-checked declarations. No UE consumer, actual minimum
+attainment, Nash continuation or preservation of an earlier selected chronology
+is claimed.
+
 ### Original-profile stage restrictions — reviewed mathematics
 
 A uniform original-profile restriction follows: for each fixed table with
@@ -1962,7 +2030,7 @@ one accepted instance or an equivalent unrestricted proof.
 | --- | --- |
 | Finite laws | Select the three independent nonpivot laws with inner repair value tending to zero. |
 | Maximum-regret sources | Consume either the generic singleton-bearing source or the single-pivot source with strict pressure and a singleton-removing delay, controlling the changed nonmover caps. |
-| Total-debt source | Consume a debt-rigid global-minimum collision: either all common debts are positive, or every original minimum has an all-four-finite realizing sequence. Retain the arbitrary-carrier tail constraint and control simultaneous cap switches; neither branch supplies a Nash row, minimizing tail, or temporal return. |
+| Total-debt source | Consume the selected separated-gap minimum: every debt is positive, its first collision has no sure quitter, and a paid bridge connects two finite responses. Retain the arbitrary-carrier tail constraint and account for the positive born cap under periodic replay. The source supplies neither a Nash row, minimizing tail, nor temporal return. |
 | Forward play | Produce the bounded absorption-relative packets or the punishment-vector sure root from the remaining table. |
 | Global obstruction | Exclude every full robust polynomial/positive invariant barrier, or construct one for an explicit table. |
 | Matrix classification | Consume tables surviving full and quotient degree tests, guarded crossed-response tests, and the matrix-free oriented-pair test, using actual all-behavior realization. |

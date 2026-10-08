@@ -34,10 +34,9 @@ interfaces:
 
 1. Select finite stopping laws with vanishing unrestricted exploitability in
    the single-pivot normalization.
-2. Consume a mixed first collision at a debt-rigid global minimum, retaining
-   the unrestricted cap constraint on every nonzero minimum prefix: either
-   every common debt is positive, or every minimum pair admits realizers
-   whose four clocks are finite almost surely.
+2. Consume a fully paid nonsure first collision at a debt-rigid global
+   minimum strictly below the absorbing-profile debt floor, retaining
+   every nonzero minimum prefix and the complete periodic-renewal cap account.
 3. Produce approximate Nash–Bellman blocks with unbounded charge, or a
    summable-error persistent spine.
 4. Prove that the compact controller value is zero, or construct a positive

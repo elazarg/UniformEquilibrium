@@ -99,11 +99,28 @@ Status of RM10–RM21: COMPLETE ORDINARY PROOF DRAFTS, not independently
 reviewed, not Lean-checked, and not exported. Their necessary conditions
 and local table prices do not assert that the GLOBAL infimum rises.
 
-The remaining consumer must EXIT or jointly control that saturated
-sure family, account for a zero-root-mass bridging owner or several
-sure roots, and retain ALL unrestricted observer caps. A worst-table
-comparison would need to handle EVERY selected minimum, including
-owner switching, unsupported bridges, and newly active response branches.
+MORSE's NP1–NP9 now has my complete independent mathematics PASS and
+affirmative strict source-reduction verdict in the existing feedback.
+From ANY counterexample it selects a FRESH generic debt-rigid table with
+0<Δ_all<Δ_abs, positive owns, and a quantitative positive joint Never
+mass and ALL positive debts at EVERY sufficiently near-minimal actual law.
+Every marked full minimum has a nonsure paid finite-to-finite first-root
+bridge. Its whole-block renewal competitor proves that a conditional-Never
+upper cap MUST grow. This is not yet a promoted standalone artifact; no
+canonical93 contact exclusion or old minimum is transported. It makes
+RM18–RM21's sure-owner normalization unnecessary for this stronger source,
+while their proofs and exact equality-boundary regressions remain useful.
+
+The live consumer is now RM22: a WHOLE original finite block, followed by
+an arbitrary independent continuation on its joint-Never branch, has exact
+payoff/cap accounting. This matches BROUWER's independently derived SG graft;
+his all-slack exclusion is not counted as my new result. The surviving
+clipped-tail boundary cannot be consumed from the budget and Γ positivity
+alone: RM22 gives a complete60-entry solved-table regression where that
+auxiliary budget is globally nonnegative. This is a falsifier of a proposed
+universal tail-exit implication, NOT an actual positive-global-minimum or
+no-UE example. The next mechanism must use additional genuine minimum-source
+ancestry or attack the zero-own ABSORBING gap directly, not supply a cap sign.
 No full Fin4 contradiction or new export is claimed.
 
 The body retains the independently reviewed compact/source reductions,
@@ -18117,3 +18134,157 @@ owner-indifferent stationary tail with EVERY deadline optimal. Exploit that
 actual free timing only if one can bound ALL exposed observer caps or choose
 the opponent punishment jointly to achieve a true same-table debt descent.
 The equality arm RM19 has a different obstruction and is not merged into it.
+
+### RM22. Whole-Never continuation budget and a complete closed-budget falsifier
+
+Status: COMPLETE ORDINARY CALCULATION AND EXACT FAILED-IMPLICATION TEST.
+The literal graft agrees with BROUWER's independent SG1–SG5 calculation;
+his all-slack source exclusion is not claimed here as an independent new
+counterexample reduction. The60-entry regression below is solved by an
+actual absorbing Nash profile. It is NOT a positive-global-debt source.
+
+Question. At the freshly produced NP table, let q be a marked true ORIGINAL
+full minimum with payoffs U_i, full caps B_i, individual Never masses
+n_i>0, joint Never ν=∏n_i, deleted Never values R_i, and
+h_i=∏_(j≠i)n_j. All owns s_i>0 and all debts are positive. Can replacing
+the joint-Never branch by one independent complete continuation strictly
+lower FULL debt, with every observer test included? No public joint draw,
+Nash tail, conditional minimum or prescribed-owner best reply is assumed.
+
+Take original finite-law approximants. Preserve EVERY original finite atom,
+and begin the continuation STRICTLY after their last finite atom and one
+empty finite response date. For each player independently, retain its old
+finite draw; conditional only on its own old Never draw, use its prescribed
+continuation law. This is an actual independent full law. The continuation
+is reached in prescribed play exactly with probabilityν. For any actual
+tail w with semantic data u_i,b_i, the complete accounting is
+
+    U_i'=U_i+νu_i,
+    B_i'=max(B_i,R_i+h_i b_i),
+    D'=δ−νΣ_i u_i+Σ_i h_i(b_i−κ_i)⁺,
+    κ_i=(B_i−R_i)/h_i≥s_i.                     (WN1)
+
+All tests before the seam are old finite tests. The extra empty date retains
+their whole finite supremum, equal to the old FULL cap because s_i≥0.
+Every later finite test and Never has value R_i+h_i times its corresponding
+tail response. Thus WN1 is an exact FULL cap, not an upper bound supplied
+on selected old tests. Truncation of a tail realizing sequence, then a
+diagonal graft, gives the same formula for EVERY w in the ORIGINAL full
+carrier. A new minimizer need not preserve old chronological cap labels.
+
+Globality gives the entire-law budget
+
+    Φ(w):=Σ_i (b_i−κ_i)⁺/n_i−Σ_i u_i≥0.        (WN2)
+
+AllNever realizesΦ0. If w is absorbing, the graft is absorbing and NP's
+STRICT Δ_abs−δ=g yieldsΦ(w)≥g/ν. In particular an arbitrary absorbing
+tail cannot be treated as a free replacement of Never. Repeated old blocks
+are one explicitly priced case, already consumed in NP9.
+
+If every κ_i>s_i, choose the actual Γ-simplex λ with Γλ>0 from the tracked
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+One finite root of small ratesρλ followed by Never has all u_i>0 because
+rλ>s, whereas b_i=s_i+O(ρ). It violatesWN2. Consequently at least one
+κ_i=s_i. This independently verifies the elementary sign behind SG's
+surviving finite-endpoint boundary, not the complete SG transport artifact.
+
+Let E={i:κ_i=s_i}. Sending only playerk's Never mass to one new finite
+date with probabilityρ gives, for sufficiently smallρ, the necessary price
+
+    Σ_(j∈E,j≠k) max(r_j({k})−s_j,r_j({j,k})−s_j,0)/n_j
+      ≥Σ_i r_i({k}).                           (WN3)
+
+At that date a tester j may joink; immediately after it a tester j may take
+the passive singleton reward. BOTH branches and the old cap are included.
+Nonbinding rows have a strict old threshold and incur no small-ρ clipping.
+WN3 is a consequence, not the missing global consumer. Its right side may
+be negative for individualk; Γ positivity only gives a positive weighted
+combination of column totals.
+
+The tempting universal strengthening is FALSE:
+
+    positive owns + full normal core + Γλ>0 + E nonempty
+    ⇒ some independent tail hasΦ<0.            (FAILED WN4)
+
+Here are ALL15 reward vectors, hence ALL60 finite coordinates, for an exact
+countertest. I={0,1,2,3}, all owns1, Never0; triples/pairs are unordered.
+
+| Coalition | Reward vector (r_0,r_1,r_2,r_3) |
+| --- | --- |
+| {0} | (1,−1/3,−1/3,−1/3) |
+| {1} | (5,1,5,5) |
+| {2} | (5,5,1,5) |
+| {3} | (0,−5/2,−5/2,1) |
+| {0,1} | (1,−1/3,−1/3,−1/3) |
+| {0,2} | (1,−1/3,−1/3,−1/3) |
+| {0,3} | (1,−1/3,−1/3,−1/3) |
+| {1,2} | (5,11/3,11/3,11/3) |
+| {1,3} | (5,11/3,11/3,11/3) |
+| {2,3} | (5,11/3,11/3,11/3) |
+| {0,1,2} | (1,−1/3,−1/3,−1/3) |
+| {0,1,3} | (1,−1/3,−1/3,−1/3) |
+| {0,2,3} | (1,−1/3,−1/3,−1/3) |
+| {1,2,3} | (5,11/3,11/3,11/3) |
+| {0,1,2,3} | (1,−1/3,−1/3,−1/3) |
+
+Set AUXILIARY n=(1/4,1/2,1/2,1/2), κ=(1,6,6,6). These numbers are NOT
+claimed to come from a true source of this solved table. Every cap is≤5,
+so only row0 is clipped. Every finite terminal coalition has total
+
+    T_S:=Σ_i r_i(S)=4(r_0(S)−1).                (WN5)
+
+For ANY independent complete tail, with its own joint Never probabilityχ,
+terminal linearity gives
+
+    Σ_i u_i=4(u_0−1+χ).
+
+Player0's date0 Quit response always gets1: every coalition containing0
+has row0 reward1, and no opponent exits before date0. Hence b_0≥1.
+The ordinary positive-own joint-Never debt bound gives b_0−u_0≥χ.
+Therefore, for ALL finite/Never laws, unrestricted caps and all limit pairs,
+
+    Φ(w)=4(b_0−1)−Σ_i u_i
+         =4(b_0−u_0−χ)≥0.                     (WN6)
+
+AllNever hasΦ0; the absorbing pure singleton{1} also hasΦ0. This is a
+global proof over independent laws, not a finite root grid or pointwise
+screen. All mixed behavioral deviations are included in b_0.
+
+The normalized singleton matrix has a negative row0 entry at column3,
+and every other row has a negative entry at column0. Thus the full set is
+closed under normal-core blockers. The actual positive simplex witness
+λ=(0,1/2,1/2,0) gives
+
+    Γλ=(4,2,2,4)>0.
+
+Within-row genericity does not repairFAILED WN4. First lower sufficiently
+slightly the three nonown coordinates in every column0/3, and the two
+free nonown nonzero coordinates in columns1/2. For nonsingleton coalitions
+lower their nonzero row1/2/3 entries slightly. This makes the inequality
+T_S<4(r_0(S)−s_0) strict for EVERY coalition, preserves positive owns and
+the displayed strict Γ/core comparisons, and leaves all reward upper
+bounds<6. A sufficiently small arbitrary-coordinate neighborhood preserves
+these strict inequalities and contains tables with ALL within-row entries
+distinct. For any such table, terminal linearity and the joint-Never bound
+still give Σu≤4(b_0−s_0), henceΦ≥0 with κ_0=s_0 and κ_j=6.
+No optimized punishment equality is incorrectly treated as a generic
+hyperplane: the exact base has P_0=s_0=1 attained by AllNever opponents.
+
+There is no full-gap or absorption-gap counterexample here. At the exact
+table, player1 surely quits at date0 and everybody else Never. Player1's
+own full cap is1. The outsiders' prescribed passive rewards are5; their
+root joins pay1 for player0 and11/3 for players2/3, while later responses
+stay passive5. Thus every full debt is0. This strict outsider screen survives
+small perturbations, and the player's AllNever-opponents cap stays its own
+singleton. It is an actual absorbing terminal Nash/UE producer.
+
+What survives. WN1–WN3 remain necessary at the genuine NP source. WN6 only
+falsifies consumption from the clipped-tail budget, positive owns, normality
+and Γ positivity ALONE. It does not supply true-minimum ancestry, common
+positive debt or NP's strict full/absorbing gap, and cannot refute a consumer
+that genuinely uses those hypotheses. In particular the absorbing tail
+Φ0 here is forbidden by the NP boundΦ≥g/ν. A successful next route must
+force such a tail from actual source structure, or rule out a positive
+zero-own absorbing gap; it must not repackageWN2 as a supplied upper-cap
+condition. The full Fin4 goal remains OPEN.

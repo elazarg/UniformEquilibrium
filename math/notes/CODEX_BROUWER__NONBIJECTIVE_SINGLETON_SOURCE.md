@@ -29,9 +29,12 @@ the common-zero-debt arm. PF below rules out reviving exact finite-menu
 Nash selection from that fact. The separately reviewed NP fresh-table
 candidate takes another branch: strict full/absorbing separation forces
 all debts and all Never masses positive, with paid finite bridges. It
-is not a property borrowed at the old table. PC1–PC5 below is a COMPLETE
-UNREVIEWED restriction on that explicit geometry: no finite prescribed
-mass lies after the latest full maximizing clock. It is not a UE consumer.
+is not a property borrowed at the old table. SG1–SG5 below is a COMPLETE
+UNREVIEWED actual end-graft proof: the final finite empty test c must
+maximize for SOME owner. This strictly subsumes PC's L<c alternative.
+Its global tail budget keeps ALL original tail laws, but does not yet
+consume the surviving c-active wall or prove UE. NF9 records the NP
+universal minimum-prefix strengthening without adding source hypotheses.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -8183,3 +8186,177 @@ declaration, independent gate or export is asserted. The next
 question is whether the L=c residual, or the final retained
 collision when L<c, supplies an ACTUAL whole-law change controlling
 all born caps rather than another clock-count refinement.
+
+## NP universal finite-prefix corollary and an actual end-Never graft
+
+### NF9. Every minimum prefix at the SAME separated table has a paid nonsure bridge
+
+This is an ordinary source application, not an extra assumption of NP.
+At its ONE final separated, row-generic, common-debt table fix ANY
+x∈[0,1]⁴ with Σx_i>0 and ANY w=(u,b) in ORIGINAL K such that
+D(T_x(w))=δ. Realize w by finite-law tails and prefix EXACT rates x
+at date0. These literal profile pairs converge to T_x(w), hence form
+a TRUE original full-minimum sequence.
+
+NP's universal near-minimum joint-Never floor gives
+∏_i(1−x_i)≥η>0. In particular every x_i<1. The fixed positive
+first-date mixture interval is retained under the marked producer.
+No prescribed pre-active head forces it to be the FIRST active stage.
+NP's at-least-two-suppliers proof then gives at least two positive
+STRICTLY MIXED x_i. Its root/later bridge has a FINITE later moving
+tester and positive common debt. All survival factors α_i>0.
+
+The root response is Q_i. Every later response is bounded above
+by C_i=A_i+α_i b_i, and conditional finite/Never tail near-cap tests
+give full prefix cap at least C_i. A later source maximizer has value
+equal to Q_i. These two inequalities give Q_i=C_i. Its nonempty
+opponent-root event has positive probability and generic row rewards
+distinguish join and wait payoff kernels. No tail Nash, minimum,
+cap attainment, old chronology or contact93 is inferred.
+This applies afresh after EVERY same-table minimum-preserving graft.
+
+### SG1. Exact global end-graft question and status
+
+COMPLETE ORDINARY DERIVATION, UNREVIEWED. Work at ANY produced true
+full minimum q with all n_i=q_i(Never)>0 and positive own s_i.
+Write R_i=V_i(Never), h_i=∏_(j≠i)n_j and ν=∏_i n_i>0.
+For an arbitrary actual independent tail with pair v=(u,b), replace
+each owner's ORIGINAL Never branch by that tail, strictly after
+the entire finite original block. Old finite draws stay unchanged.
+
+The exact complete limiting ledger is
+
+    U_i^graft=U_i+ν u_i,
+    B_i^graft=max(B_i,R_i+h_i b_i).
+
+This is a genuine independent finite-amplitude competitor, not
+a discounted law, a shared lottery, a supplied response selector
+or a signed insertion at a nonisolated marked point.
+
+### SG2. Literal finite witnesses and every response cap
+
+For a finite-support original approximant p^k, let L_k be its LAST
+finite support date. Keep every old finite atom, and replace only
+its Never branch by the shifted arbitrary finite tail law, starting
+at L_k+2. No stretch between old dates is used: new empty dates
+between old simultaneous stages could change old full caps.
+The old calendar already has empty finite dates after L_k, so
+date L_k+1 retains their old response value.
+
+Any finite reply through L_k is unchanged exactly. An empty reply
+after L_k but before the new tail pays R_i^k+h_i^k s_i, an old
+finite response value and thus≤B_i^k. Later finite tail replies
+pay R_i^k+h_i^k V_i(t,v_-i): any old finite opponent exit screens
+the tail, while the all-opponent-old-Never cylinder has probability
+h_i^k and carries the actual tail response. Literal Never has
+the same formula with tail Never. Taking ALL finite replies and
+Never gives EXACTLY
+
+    B_i^{k,graft}=max(B_i^k,R_i^k+h_i^k b_i).
+
+The old finite supremum is represented before the tail because
+positive own s_i makes it dominate old literal Never, and the
+old support is finite. Prescribed pay gains exactly ν_k u_i:
+only the original joint-Never event reaches the appended tail.
+
+All U_i^k,B_i^k,R_i^k,n_i^k converge under the full marked
+compiler, including the separate literal Never kernel. Thus
+the graft ledger converges to SG1 and lies in original K. A
+second diagonal tail approximation extends the SAME ledger to
+EVERY v∈K. Arbitrary finite/Never tail responses remain included.
+If v∈K_abs, realize it by absorbing tails; each actual graft
+is then absorbing and its limiting debt has the stronger floor
+δ_abs. No tail minimality or strategic equilibrium is used.
+
+### SG3. A global tail budget, not a renamed cap price
+
+Define the strictly positive end budgets
+
+    κ_i=(B_i−R_i)/h_i≥s_i.
+
+For EVERY v=(u,b)∈K, actual globality gives
+
+    Σ_i h_i[(b_i−κ_i)⁺−n_i u_i]≥0.
+
+At a separated NP table the SAME expression is≥g>0 for EVERY
+v∈K_abs. The old AllNever tail has u=0,b=s and gives equality0,
+as it must. This inequality retains ALL original tail laws and
+caps; it does not assume compatible punishments or convexify K.
+
+### SG4. Actual positive-simplex tail kills the all-strict budget branch
+
+At the actual Fin4 no-UE table, the checked producer
+exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff
+in UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean
+gives z_j≥0, Σz_j=1 and (Γz)_i>0 for EVERY i. The exact matrix
+quittingProjectiveLCPMatrix in
+UniformEquilibrium/Quitting/Projective/SingletonLCP.lean is
+Γ_ij=r_i({j})−s_i, with recipient ROW i. This tracked source
+and its imports were inspected narrowly; it is not a supplied
+punishment plan or a homogeneous zero-residual vector.
+
+Take the actual one-date independent tail in which player j
+quits with probabilityρ z_j and otherwise uses Never. As ρ↓0,
+
+    u_i(ρ)=ρ v_i+O(ρ²),
+    v_i=Σ_j z_j r_i({j})=s_i+(Γz)_i>0.
+
+Uniform marginal coupling with AllNever gives
+|b_i(ρ)−s_i|≤2Mρ, including ALL finite responses and Never.
+The payoff remainder is bounded by2Mρ², from singleton weight
+errors plus nonsingleton probability. Choose ρ>0 small enough
+that every u_i(ρ)>0. This is an actual finite tail, not an
+asymptotic Nash or a bounded-controller certificate.
+
+If every κ_i>s_i, choose the SAME positive ρ also small enough
+that b_i(ρ)<κ_i for every i. SG1 then leaves every original
+full cap EXACTLY unchanged and increases EVERY original payoff
+by ν u_i(ρ)>0. Its true SUM debt is strictly belowδ.
+
+More explicitly, for all large original finite indices the
+strict budget inequalities hold with B_i^k,R_i^k,h_i^k.
+Their actual grafted full caps equal B_i^k, and
+D(p^{k,graft})=D(p^k)−ν_kΣ_i u_i(ρ)→δ−νΣ_i u_i(ρ)<δ.
+Some sufficiently large k supplies an ACTUAL finite-law
+competitor belowδ. No cap claim at an unattained marked
+deadline is needed.
+
+Therefore every produced positive-Never source has SOME owner
+with κ_i=s_i, equivalently
+
+    B_i=R_i+h_i s_i=V_i(c).
+
+The final EMPTY finite compact test c is genuinely maximizing.
+It has zero prescribed own/mixture point mass and is distinct
+from literal Never, which is strictly suboptimal. This is a
+strict actual-source exclusion of the all-strict end-budget
+geometry, not a local gain-charge inequality or cap alias count.
+
+### SG5. Remaining source and boundary honesty
+
+PC's upper-support restriction is valid but becomes vacuous at
+this produced source: SG4 forces latest active point L=c.
+No packet is proposed for PC's already subsumed alternative.
+The relevant surviving end wall is now an actual solo-valued
+finite test on the positive all-opponent-Never cylinder.
+
+SG4 does NOT say the root/later bridge owner is the c-active
+owner, that ALL caps contain c, that the c response is attained
+at an original finite deadline, or that its active wall permits
+the positive-simplex tail. At this wall the appended tail can
+raise caps, and SG3 prices that increase. No UE, rank or full
+consumer is asserted.
+
+Without the positive singleton/Q source the strict-budget branch
+need not have a useful singleton delivery column; it is not
+retired by an unweighted or incorrectly oriented matrix sum.
+At a profile which is NOT a true global minimum, SG3 need not
+hold even if its profile debt is positive. Its derivation uses
+the actual finite witnesses and the original ALL-law floor,
+not the absorbing minimum as a substitute.
+
+The next concrete question is whether the nonempty c-active
+owner set can be joined to the paid first-root/later-cap bridge
+by a whole-law change whose born cap is controlled by SG3,
+including every finite/Never tail. Counting those owners or
+bounding the first-order leakage alone would not be a consumer.
