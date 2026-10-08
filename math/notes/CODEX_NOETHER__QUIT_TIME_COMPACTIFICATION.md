@@ -157,10 +157,25 @@ not new UE coverage, a new counterexample, or an export.
 RM35 supplies the concrete finite-calendar seam calculation for the
 nonlocal attempt: finitely many convergent actual Nash ladders may be
 truncated and closed without a period-length error factor. ALL caps
-are priced by deleted-opponent block contraction. A CLOSED singular
-circuit is still required; MORSE's current DN partial ladder is not
-silently declared one. This is a supporting actual-word consumer, not
-an all-table producer or another export.
+are priced by deleted-opponent block contraction. MORSE independently
+reviewed this supplied compiler. His CL1–CL10 now supplies an ACTUAL
+closed singular circuit on the DN table; my separate full-table input
+review checks its common ports, exact rational closure, ALL quiet owners,
+and the uniform full60-coordinate raw extension. His SC1–SC6 further
+produces closure by a reward-derived scalar IVT and leaves fourteen
+recipient-coalition entries arbitrary under ALL unilateral replies;
+my focused delta review passes. Both verdicts are in the existing MORSE
+feedback, with exact section hashes. They do not certify an as-yet-unread
+standalone or assert arbitrary-table coverage. RM35 itself remains a
+supporting actual-word consumer, not a self-exported class theorem.
+
+The current whole-goal question is NONLOCAL compatible charged-word
+production with freely selected common ports, including below-own quiet
+inputs and collision jumps. DN's successful itinerary cannot be made
+obligatory by local activation or bare index. Nor may its limiting ports
+be installed at finite dates. The actual raw class is meaningful positive
+progress; it still does not consume the canonical fully-paid nonsure
+counterexample source or force such a circuit for every finite table.
 
 The body retains the independently reviewed compact/source reductions,
 the PD deterministic-outcome contribution incorporated with attribution
