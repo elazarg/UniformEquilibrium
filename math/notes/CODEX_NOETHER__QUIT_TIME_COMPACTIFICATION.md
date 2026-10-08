@@ -2,8 +2,15 @@
 
 ## Current status and exact open consumer
 
-The current global line is RM39–RM40, not the retired clipped-tail
-consumer. RM39 maximizes the TRUE full SUM gap over passive taxes with
+The live consumer question is a legal independent whole-law modification
+below the TRUE native own-zero ABSORBING minimum, with EVERY finite and
+Never cap controlled. RM43 supplies a fresh table with only random minima;
+it is not silently merged with a tax or radial maximum. RM44 now disproves
+the attempted extension of its pure-contact sign push to a random sure-root
+family: a moving cap wall lowers the family minimum. The actual table in
+that test has gap0, so this is a mechanism falsifier, not a no-UE source.
+The random whole-law consumer is still open. RM39 maximizes the TRUE full
+SUM gap over passive taxes with
 owns/Never fixed, producing at most five limiting minimum/response
 ledgers; consuming their source switching remains open. RM40 separately
 maximizes the native ZERO-OWN ABSORBING SUM gap. Its actual three-player
@@ -22940,3 +22947,142 @@ and `minimumTerminalSemantic_literalNash_support_budget` in
 The last two retain their FULL-carrier hypotheses: the local native
 prefix argument uses only their explicit algebra with the separately
 proved absorbing-domain floor, not a rewritten Lean declaration.
+
+## RM44: random sure-root cap walls defeat the pure-contact sign push
+
+Status: COMPLETE ORDINARY EXACT COUNTERTEST, not independently reviewed,
+Lean-checked or an export. It retires one attempted comparator, not the
+native absorbing-minimum consumer. The table has an exact absorbing
+zero-debt pure profile. In particular its actual A_abs is0, and the
+random family minimum below is NOT a genuine global minimum.
+
+### SW1. Precise failed implication and complete raw data
+
+GD3 pushes every nonzero membership-toggle difference toward the SAME
+sign of magnitude2. Every pure nonsingleton contact weakly increases,
+and every positive one strictly increases. The attempted inference was
+that this also prevents a RANDOM three-sure-root family's minimum SUM
+debt from decreasing. That inference is false even when all original
+prescribed coordinates and caps at the family minimum are positive.
+
+Players are0,1,2,3; owns and live/Never rewards are0. ALL60 terminal
+coordinates are given here, with columns in recipient order0,1,2,3:
+
+| S | r(S) |
+| --- | --- |
+| 0 | (0,0,0,0) |
+| 1 | (0,0,0,0) |
+| 2 | (0,0,0,0) |
+| 3 | (0,0,0,0) |
+| 01 | (0,0,0,0) |
+| 02 | (0,11/10,0,0) |
+| 03 | (0,0,0,0) |
+| 12 | (8/5,0,0,0) |
+| 13 | (0,0,0,0) |
+| 23 | (0,0,0,0) |
+| 012 | (1,1,1,1) |
+| 013 | (0,0,0,0) |
+| 023 | (0,0,0,0) |
+| 123 | (99/100,0,0,0) |
+| I | (1,1,1,1/2) |
+
+The family is a literal independent date0 profile: owners0,1,2 stop
+surely at0; owner3 stops at0 with probability p and Never with1−p.
+It absorbs surely. No tail or hidden correlation is supplied.
+
+### SW2. EVERY complete test and the genuine family minimum
+
+Deleting ANY tester still leaves at least TWO sure date0 opponents.
+Thus a finite test at0 joins them, whereas EVERY finite test>0 and
+literal Never has the SAME passive reward. There is no earlier clock.
+Mixtures and unrestricted behavioral deviations average these two test
+values. Consequently the complete payoff/cap data are
+
+    U=(1,1,1,1−p/2),
+    B₀=max(1,8/5−61p/100),
+    B₁=max(1,11(1−p)/10),
+    B₂=1,   B₃=1,
+    D(p)=(3/5−61p/100)⁺+(1/10−11p/10)⁺+p/2.       (SW.1)
+
+The two member walls are1/11 and60/61, in that order. The slopes of
+D on the three open intervals are−121/100,−11/100,+1/2. Therefore
+the UNIQUE minimum within this ENTIRE p∈[0,1] family is
+
+    p*=60/61,   D(p*)=30/61,
+    U(p*)=(1,1,1,31/61),   B(p*)=(1,1,1,1).         (SW.2)
+
+The endpoint debts are D(0)=7/10 and D(1)=1/2, both strictly larger.
+This is an actual unrestricted-cap calculation WITHIN the family,
+not a restricted-menu minimum or a claim of global optimality.
+
+### SW3. The literal full-table sign target and its moving wall
+
+For EVERY recipient i and nonempty K⊆I\{i}, write
+wᵢ,K=rᵢ(K)−rᵢ(K∪{i}). Keep the four owns0. Choose targets
+(passive,participant)=(+1,−1) when w≥0, and(−1,+1) when w<0,
+including sign₊(0)=+1, exactly as GD3. This specifies ALL56 remaining
+coordinates without conflict. Put rᵅ=(1−α)r+α target, 0≤α≤1.
+The original table is not in the unit cube, but it stays within the
+fixed reward bound8/5; this does not affect the tested implication.
+
+Against the SAME actual family, the date0 Quit and late/Never values
+are, respectively,
+
+    Q₀=Q₁=1−2α+2αp,
+    C₀=(1−α)(8/5−61p/100)+α(1−2p),
+    C₁=(1−α)11(1−p)/10+α(1−2p),
+    Q₂=1, C₂=−α,
+    Q₃=1/2−3α/2, C₃=1.
+
+Thus ALL complete caps are max(Qᵢ,Cᵢ), with Uᵢ=Qᵢ for the three
+sure owners and U₃=pQ₃+(1−p)C₃. Define
+
+    a₀=(3+7α)/5,    b₀=(1+199α)/100,
+    a₁=(1+19α)/10, b₁=1+α,    L=(1+3α)/2.
+
+The EXACT family objective is
+
+    Dᵅ(p)=[(1−p)a₀−pb₀]⁺+[(1−p)a₁−pb₁]⁺+pL.   (SW.3)
+
+For0≤α<1 its walls retain their order, since the positive cross
+numerator is(1−α)(599+2381α). Before the first wall its slope is
+−(121+479α)/100; between walls it is−(11+189α)/100; after the
+second it is L>0. Hence its UNIQUE unrestricted-within-family
+minimum is at the moving owner0 wall
+
+    pᵅ=(60+140α)/(61+339α),
+    min_p Dᵅ(p)=(1+3α)(60+140α)/[2(61+339α)].       (SW.4)
+
+Both pure endpoint contacts STRICTLY INCREASE:
+
+    Dᵅ(0)=(7+33α)/10,    Dᵅ(1)=(1+3α)/2.
+
+Nevertheless the derivative of the actual family minimum at0 is
+−410/3721<0. More strongly, its minimum is below30/61 for EVERY
+0<α<41/1281. For the exact choice α=1/100 it is31621/64390,
+less than30/61 by2819/3927790. Pure-contact pressure does not
+control motion of the all-response cap-switch wall.
+
+### SW4. Literal global-floor caveat and direction change
+
+The ORIGINAL table has the exact date0 pure coalition{0,3}, with
+owners1,2 Never. All prescribed rewards are0. Member caps are0
+because both their own and passive singleton/paired rewards are0;
+outsider caps are0 because r₁(03)=r₁(013)=0 and
+r₂(03)=r₂(023)=0. Every later test/Never is screened by a sure member,
+so these are the FULL caps. Thus A_abs(r)=0. No positive-global-gap
+source, worst-table property, native margin theorem or radial ledger
+is being supplied by this countertest.
+
+The precise retired inference is monotonicity of the RANDOM family
+infimum from monotonicity of every pure contact. GD's deterministic
+minimum exclusion remains valid. This does NOT refute a different
+whole-table perturbation consumed using genuine all-law minimality.
+The next attempt changes comparator rather than supplying a mixed-wall
+sign as a hypothesis. It must produce a same-domain lower-debt law
+with every changed cap controlled, or consume actual no-UE ancestry.
+
+The source algebra is the literal max-prefix cap definition already
+used in RM43 and in `quittingTerminalSemanticPrefix` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+No general theorem about fresh minima is imported into SW.1–SW.4.
