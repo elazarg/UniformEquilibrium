@@ -9819,6 +9819,102 @@ such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
 
+## Forward BA extension: preserve strictly positive own singletons
+
+Status: COMPLETE ORDINARY PROOF DRAFT BAP1–BAP4, separate from the
+frozen BA1–BA10 section. The output strengthens BA's SAME-table
+producer so ALL four own-singleton rewards are strictly positive.
+It does not change its two-domain distinction, relative-error scope
+or absence of a random collision consumer.
+
+### BAP1. Actual counterexample normalization, not a supplied sign hypothesis
+
+Assume a Fin4 counterexample r exists. Some pivot m has s_m>0,
+otherwise AllNever is uniform equilibrium0. The tracked declaration
+`normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean`
+and `all_punishmentNormal_of_normalCore_eq_univ` in
+`UniformEquilibrium/Quitting/Classification/LCP/NormalCorePunishmentNormal.lean`
+give actual original all-player punishment normality P_i≤s_i.
+
+Use the literal single-pivot normalization
+
+    r'_i(S)=(r_i(S)−h_i)/s_m,
+    h_m=0,  h_i=s_i for i≠m.
+
+Its own singleton vector is exactly e_m. The reverse actual
+payoff-set transport `isUniformEquilibriumPayoff_original_of_singlePivotNormalized`
+in `UniformEquilibrium/Quitting/Punishment/SinglePivotUniformPayoff.lean`
+uses precisely this original normality and positive pivot. Therefore
+r′ is STILL a counterexample: a uniform target there would lift to
+one in r. No unchanged-law/minimum-profile transport is asserted;
+the reverse theorem constructs its own actual same-prefix lifts.
+
+The definitions and own-singleton identity are
+`quittingSinglePivotNormalizedReward`, `quittingSinglePivotOffset`
+and `quittingSoloReward_singlePivotNormalized` in
+`UniformEquilibrium/Quitting/Root/SinglePivotNormalization.lean`.
+These exact source declarations and imports were narrowly read.
+
+### BAP2. Make every singleton positive by whole-row translations
+
+Choose any η>0. For each i≠m add η to EVERY finite-coalition
+coordinate in recipient row i, not merely its own singleton entry.
+Each old own singleton is0, so BA2's exact all-response identity
+applies at every successive row addition. For EVERY old law p,
+
+    D_new(p)=D_{r′}(p)+3η c(p)≥D_{r′}(p).
+
+Thus the actual global positive gap is preserved without needing
+a Lipschitz smallness estimate or an old minimizing law. The new
+own-singleton vector is(1 at m, η elsewhere). Reward magnitudes
+are still finite. Positive common scaling into the unit cube gives
+one hypothetical counterexample with ALL s_i=a_i>0. Original
+terminal Never remains0 at every step. This is NOT an arbitrary
+affine shift of a negative-own-singleton row.
+
+### BAP3. The table-fiber selection retains all positive own floors
+
+Replace BA7's single-coordinate fiber by the compact unit-cube fiber
+
+    r_i({i})≥a_i>0  for EVERY i.
+
+The initial table is in that fiber and has Δ_abs>0. Its attained
+worst absorbing gap Ω_abs is positive. The prefix-only singleton
+margin of BA6 gives Ω_abs≤1−a_i for each i, hence Ω_abs<1.
+The sign-adaptive SA endpoint has EVERY own target1, so its whole
+convex segment stays in this fiber. Thus the complete ≤93-contact
+comparison still applies, with all moving minima and no carried
+old response selector. Inward contraction, rowwise genericization
+and regular positive recipient scales may leave the exact original
+fiber, but can be chosen close enough to retain ALL own rewards
+strictly positive. Nothing later requires fiber maximality again.
+
+BA8's positive m-row penalty and its final close positive scales
+retain that property too. All full/absorbing source comparisons
+and relative estimates therefore hold at ONE final r† with
+
+    s_i(r†)>0  for all four owners.
+
+The absorbing source's finite-a.s. anchor consequently has a
+positive singleton, regardless of which owner supplies it. The
+owner need not be paid, sure at the first root or a pure deadline.
+
+### BAP4. Scope of the extra clock restriction
+
+The strengthened producer from EVERY hypothetical counterexample
+now gives ALL the BA outputs and an absorbing-carrier minimum with
+a finite-a.s. POSITIVE-singleton clock. It still does NOT put that
+anchored pair at the original full-carrier minimum. Original full
+minima still need not have an anchor. A positive singleton on the
+anchor eliminates its literal Never-versus-delayed-solo sign jump,
+but does not make the other tail laws Nash, minimize a non-sure
+root over arbitrary K_all tails, or control an excursion gap by
+the two objectives' relative proximity. Common normalization keeps
+all own rewards positive but can make them arbitrarily small.
+No comparison of the relative error with a table-dependent
+quadratic margin is made here.
+
 ## Forward global attempt: an absorbing carrier and a terminal-row penalty
 
 Status: BA1–BA10 are a COMPLETE ORDINARY PROOF DRAFT, not independently

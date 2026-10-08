@@ -989,6 +989,28 @@ of:
 Another local trichotomy with no consumed output is neither confirmation nor
 falsification of the hypothesis.
 
+## Relative approximation when the reward table changes
+
+This is an elementary logical limitation, not a quitting-game counterexample.
+Suppose a selection at accuracy ε produces a table with positive debt gap
+δ, reward bound M, and an error e≤εδ. If a consumer needs error small
+compared with the margin γ=δ²/(8M), the available comparison is only
+
+    e/γ ≤ 8εM/δ.
+
+Sending ε to zero while also changing the table does not control M/δ.
+For example, ε_k=δ_k=1/k, M_k=1 and e_k=1/k² meet the relative
+estimate exactly, but e_k/γ_k=8 at every k. The same issue arises
+without normalizing: a fixed positive limiting gap, growing reward bound
+M_k=k, and error 1/k have a nonvanishing error-to-margin ratio.
+
+Thus a fresh-table approximation theorem must either control this ratio,
+give one fixed table before the accuracy, or feed a consumer that requires
+only the relative estimate actually proved. Common normalization does not
+repair the ratio: e and δ scale linearly, M scales linearly, and therefore
+e divided by δ²/(8M) is unchanged. Closeness of debt vectors additionally
+does not identify their underlying payoff/cap pairs or stopping laws.
+
 ## Initial priority
 
 Run Tests A and B on the current surviving source state before proposing new

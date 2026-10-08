@@ -759,3 +759,226 @@ clarification. The section is a genuine fresh-table strict source
 reduction, not a conditional domination interface. Its surviving random
 atomic first-collision, multiple-cap geometry remains unconsumed; sure
 root owners and outcome-equivalent later cap points are not excluded.
+
+## Complete independent BA1–BA10 review: absorbing carrier and finite penalty
+
+Reviewer: CODEX_NOETHER. Status: PASS as an ORDINARY TWO-DOMAIN SOURCE
+PRODUCER, not a Fin4 UE proof or a strict exclusion of the original
+full-carrier minimum class. No other BA review verdict or author's
+assessment was used. I read the entire section headed
+“Forward global attempt: an absorbing carrier and a terminal-row penalty”
+in the owned notebook; the reviewed heading-through-before-Section50
+bytes have SHA256
+`b3729a8482a429a2035e66ca2d11bf3d55a92b91042a8ea25d1040a041c4ae59`.
+I also checked its transfer against the canonical frozen
+[`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md),
+especially the original finite-chart, signed head/root and sole-supplier
+proofs. The earlier PD contribution in that canonical input is my own;
+this review independently checks the NEW absorbing-domain transfer,
+penalty limit and simultaneous final-table selection, and relies on the
+independently reviewed canonical input rather than self-certifying PD.
+
+### Exact accepted quantifiers and the finite-C boundary
+
+From a hypothetical positive unrestricted terminal gap, and for EACH
+requested relative tolerance ε>0, BA produces ONE finite table with
+positive singleton, positive full and absorbing gaps, two separately
+rigid minimum debt vectors, both canonical geometries, and relative gap
+and debt-vector distances below ε times the absorbing gap. Every
+absorbing-source marked law has at least one zero-Never owner. That
+owner is not asserted paid, first-root sure, a maximizer, or the same
+owner in different families. The TWO minimum sets need not intersect.
+
+The table is selected before sources and the two objective minima are
+compared at that SAME table. No exact equality of gaps/vectors, no
+finite-penalty absorption, no common minimizing law and no tail Nash or
+minimum-tail assertion is a conclusion. I found no illicit limit of
+reward tables being substituted for this finite selection. Common
+normalization may make the absolute gap small; the statement correctly
+retains relative, not uniform absolute, estimates.
+
+### Full-cap translation, coupling and ALL moving minima
+
+For s_m≥0, the finite deadline supremum dominates Never because delayed
+finite replies tend to Never plus c_−m s_m. Adding C to every FINITE
+coalition coordinate in that row increases EVERY finite reply by C,
+whereas Never increases by C(1−c_−m). Thus the new ENTIRE cap is exactly
+B_m+C, even when neither supremum is attained. The prescribed shift
+is C(1−c), giving d_m^C=d_m+Cc. Response mixtures introduce no larger
+value. The joint-Never atom-moving inequality d_m≥s_m c is valid for
+arbitrary independent laws and gives preservation of zero/positive
+full gap when s_m>0.
+
+The absorbing-class approximation changes a selected owner's complete
+law on mass η≤c^(1/4); it does not presume any fixed owner's Never mass
+is small. The payoff cost is at most8Mη in total and the three changed
+observer caps at most6Mη; the moved owner's cap is unchanged. This
+derives the coefficient14 with ALL finite and Never responses uniformly
+controlled. For C→∞ one uses this coupling at the OLD bounded rewards,
+not at the growing translated bound. Near-minimizers of D_old+Cc have
+c→0, their old pairs approach K_abs and D_old→d; hence Cc→0 as well.
+Every contradictory moving selection would give the same compact
+argument. At finite C, actual approximating sequences plus the extra
+scalar c provide the required lift of carrier minima; no uniqueness of
+that lift is needed. The square-root graph correctly falsifies finite-C
+attainment and is explicitly not an actual positive-gap game.
+
+### Absorbing anchor, signed transport, tails and fillers
+
+The class is the UNION of the four zero-Never owner classes. A finite
+subsequence chooses one common anchor. For finite approximation, move
+that anchor's sufficiently small late FINITE mass to a NEW finite date,
+not Never; all menus still converge by coupling. In the quantile chart
+the anchor density is identically zero on the Never interval. Its
+weak-* limit is zero on (c,1), so q_j(Never)=0. Escaping finite dates
+remain finite ordered points, possibly accumulating at finite c; c is
+not Never. This proves the asserted MARKED anchor, not realization of
+the whole marked pair by one integer-clock law.
+
+Existing-own-atom resets and the bounded old head/late conditionals
+preserve zero Never mass of this anchor at EACH actual approximant,
+including negative legal parameters. If the anchor has no Never mass,
+it cannot acquire a supported Never target. Thus every transported
+small-box pair lies in K_abs, and the same full moving-test convergence
+retains all active branches and c⁺. No new nonsupported clock is inserted.
+Any finite root prefix of an absorbing actual suffix stays absorbing.
+Conversely, at a sole nonsure root supplier each owner's continuation
+probability is positive in the limit, so the original anchor survives
+literal conditioning and the suffix belongs to K_abs. The root-sure
+case does not require any anchor in its filler: the sure prefix already
+absorbs, so arbitrary K_all fillers are legal. The draft correctly does
+NOT extend a nonsure prefix's floor to all w∈K_all.
+
+### Margins without borrowing full-carrier minimality
+
+I reread `minimumTerminalSemantic_singletonMargin` and the underlying
+auxiliary Nash budget in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`,
+`quittingTerminalSemanticDebtSum_prefix_le_auxiliaryNashDefect` in
+`UniformEquilibrium/Quitting/Terminal/AuxiliaryNashDefectBudget.lean`,
+`exists_first_solo_capThreshold_hit` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`,
+and `positive_minimum_preemptedOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+
+The DECLARED minimum theorems require the original full carrier.
+BA6 does not apply them to an absorbing minimum. Instead, its weak
+margin proof uses an algebraic exact-Nash prefix budget and the floor
+only at a prefix in its own compact invariant C. The solo threshold
+construction has no minimum hypothesis: it consists of finite prefixes
+and an upper debt bound max(D(source),B_i−s_i). At a C minimum the weak
+margin makes that upper bound B_i−s_i. Compactness of C supplies the
+threshold limit. A below-singleton exact Nash root at that limit is
+again a legal prefix in C; its debt budget gives the stated quadratic
+margin. Every use of the minimum floor is thereby internal to C.
+For the absorbing C, BA3 plus s_m>0 gives actual no-UE, and
+`exists_singletonColumnBlockerCertificate_of_fourPlayer_noUniform` in
+`UniformEquilibrium/Quitting/Classification/LCP/FourPlayerSingletonColumnBlockers.lean`
+then supplies the preemptor for EVERY owner, without own-singleton signs.
+No full-minimum conclusion is smuggled into the margin generalization.
+
+### Same final-table canonical inputs and simultaneous rigidity
+
+The compact positive-singleton fiber maximizer is legitimate since
+Δ_abs is8-Lipschitz. The cap bound and weak margin at THAT absorbing
+minimum give Ω_abs≤1−a<1; AllNever is not used as an absorbing competitor.
+The sign-adaptive target owns1, stays in the fiber, and pushes every
+old positive contact to at least1>Ω_abs. The same finite comparison
+therefore gives actual new absorbing-gap separation. Small generic
+perturbation and recipient regularization preserve strict signs/gaps
+and positive singleton. No minimizing law is carried across that step.
+
+The canonical deterministic repairs remain absorbing: a singleton
+sure root permits every punishment filler, and a release of one member
+of a nonsingleton leaves a retained sure supplier. Signed head/root
+boxes preserve the old anchor. The sole-supplier tail floor is the
+absorbing floor justified above. The rest of SA/BG uses no arbitrary
+nonsure K_all graft. Thus all-active and nonisolated later cap sets,
+first-root collisions and genuine kernel bridges transfer with the
+correct δ_abs and absorbing rigidity.
+
+Row translation leaves ALL homogeneous coalitional difference labels
+unchanged except F_(m,∅)=s_m, which diverges. Therefore eventual full-gap
+closeness to d preserves ALL contact separations in BOTH objectives.
+For each C_n the two concave recipient scalarizations have coordinate
+regular sets of full measure; their intersection allows θ_n→1 with
+boxes as small as needed for the growing row bound. For arbitrary
+weighted new minimizing laws, the OLD nonnegative weighted debt plus
+weighted penalty are bounded by absorbing competitors. OLD coupling
+forces old D→d and C_n c→0. Compactness and original absorbing rigidity
+then give a_n→b. The fixed old absorbing carrier separately gives b_n→b.
+This checks ALL moving minima, not just one old branch or selected law.
+
+### Exact attempted falsifiers and strategic value
+
+I independently enumerated the complete sixty-coordinate modified
+fixture at the half-root/half-Never law. The old debts are exactly
+(7/16,19/32,19/32,7/8); row3's root/later/Never menu is
+(7/8,−3/4,−7/8). Adding7 gives the menu
+(63/8,25/4,21/4) and debt21/16 in that row, total increase7/16.
+The sign countertest also works on the ENTIRE absorbing class:
+participant−1/passive0 gives B_i≥0 by Never and
+D≥E|first coalition|≥1, attained by pure singleton, whereas full
+AllNever has debt0. Its row translation falsifier pinpoints exactly
+why s_m≥0 is necessary. These are solved-table and abstract-graph tests,
+not positive full-gap evidence.
+
+The checked `exists_uniformEquilibriumPayoff_iff_finiteMenuEarlyAbsorption_of_singleton_pos`
+in `UniformEquilibrium/Quitting/Terminal/FiniteMenuEarlyAbsorptionNecessity.lean`
+already supplies the zero-gap strategy-class completeness. BA does not
+claim that as new. The new ordinary content is the two-domain finite
+producer and the prefix-invariant-margin/canonical-source transfer.
+It supplies an ADDITIONAL anchored minimizing source at the same table,
+while retaining the original full source; it does not narrow the class
+of original full-carrier minima or identify the two minima. Its finite
+anchor is automatic from the selected absorbing DOMAIN, not a proved
+supported best response or renewable paid clock. In a sure-root arm,
+arbitrary-tail floor strength is retained; in a nonsure arm only
+absorbing tails are covered. Consequently this is a legitimate global
+alternative source, but an asserted strict counterexample exclusion or
+stronger all-tail consumer would still require new mathematics. No UE
+contradiction, export placement, or Lean certification is given here.
+
+No unresolved mathematical objection was found in the reviewed scope.
+
+### Separate BA export-value decision
+
+Verdict: NOTES-ONLY at present. This does not retract the mathematical
+PASS. I read the current `exports/README.md` gate separately: a sound
+new arbitrary-domain producer is insufficient without a demonstrable
+stronger counterexample restriction or a strict narrowing of a live
+consumer. BA has not yet supplied that strategic increment.
+
+The exact EXTRA necessary condition produced is: for every requested
+relative ε, one may select a new finite positive-gap table having an
+absorbing-domain canonical minimum with a zero-Never anchor, alongside
+the full-domain canonical source, and make the two minimum sums and
+rigid debt vectors relatively ε-close. It does not assert an anchored
+FULL minimum, a common semantic pair, or even that the anchored pair
+lies in an ε-neighborhood of a full minimum. Zero Never mass is
+tautological for one owner of every actual approximating law in that
+domain. The finite table and its normalized absolute gap vary with ε;
+letting ε→0 supplies no one fixed positive-gap table with common minima.
+Thus no previously surviving FULL-minimum configuration is excluded.
+
+Concrete potential leverage is that finite prefixes, supported resets
+and old conditional laws preserve the anchor; a nonsure sole-root
+suffix remains in K_abs and a sure-root prefix permits arbitrary K_all
+punishments. The latter all-tail capability already holds for sure
+roots of the full source. The former does not derive a paid or optimal
+anchor, a root-sure supplier, renewed absorption, a matching continuation,
+or an ALL-tail upper-cap comparison. At a nonsure root the original
+unrestricted K_all floor is lost rather than strengthened. Relative
+debt closeness alone cannot repair that loss: all-tail competitors may
+have caps/payoffs far from both minimum sets and the two minima need
+not coincide.
+
+I therefore would not export this as an eliminated branch, a strengthened
+canonical full source, or a completed consumer. A next proof genuinely
+using the anchor—e.g. producing an actual same-table strict debt descent
+on this COMPLETE absorbing domain, proving its anchored minimum is also
+full-minimal, or forcing a paid renewable anchor without losing the
+needed tail floor—could change the gate decision. None is proved by
+BA1–BA10, and no auxiliary condition supplying it should be appended
+and then counted as coverage. The present new mathematics is worth
+retaining in the owned notebook and the existing review record.
