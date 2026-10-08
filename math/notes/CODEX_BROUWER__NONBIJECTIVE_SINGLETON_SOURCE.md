@@ -25,6 +25,17 @@ and exact architecture falsifiers below have not supplied one. SG's
 actual end-Never graft has an independent focused PASS; the other live
 supporting derivations retain their explicit ordinary/unreviewed status.
 
+CA below now retires an infinitesimal coupled-law consumer based only
+on the sole-zero-rate-bridger/later-only configuration. Its exact table
+has that configuration, R₀ degree1, punishment normality and strict
+numerical own-floor margins, but is a strict minimum against EVERY
+small independent whole-law change, including arbitrary future clocks.
+A far pure-solo equilibrium gives global debt0. Thus it is not the
+actual positive global source or a class exclusion. The live attack
+has moved to finite-amplitude comparison using the SAME source's
+global floor and honest excess-debt suffix; no local constant or
+response-menu strengthening is proposed.
+
 The retained independent global source is RS: the native ZERO-OWN
 ABSORPTIVE infimum, not the native unrestricted gap (AllNever already
 has zero debt). At a positive Euclidean-ball maximum, source-switching
@@ -15092,3 +15103,324 @@ selection, source-dependent maps with unbounded displacement, an
 absorbing-only restricted gap, or the at/after-α whole-law competitor.
 The latter must therefore price the complete envelope rather than
 hope that max(copy/preempt/delay/Quit0/Never) is universally sufficient.
+
+## CA: the sole-zero-rate bridge can have a full-law local wall
+
+### CA1. Exact obstruction and indispensable missing premise
+
+Status: COMPLETE ORDINARY, UNREVIEWED falsifier of an INFINITESIMAL
+coupled-law mechanism, not a source reduction, positive-gap game or
+UE nonexistence claim. Unlike the earlier JL four-supported-bridge
+wall, this example has the precise owner pattern in SB: owner0 is
+the sole root/later bridger and uses pure Never; owner1 is later-only;
+owners2,3 are root-only. It also has full R₀ degree1 and punishment
+normality. It does NOT have the actual source's GLOBAL positive
+minimum, absorbing separation, generic recipient rows, or common
+debt vector at all global minima. Those premises are not repaired
+or silently omitted from the consumer question.
+
+Every small simultaneous independent law change, not just Never
+release or two selected responses, increases full debt. Explicitly,
+write TV for half the ℓ¹ distance of two marginal probability laws.
+For the product p specified below, ANY independent laws q on
+ℕ⊔{Never} satisfy
+
+    0<Σ_i TV(q_i,p_i)<1/2000000  ⇒  D(q)>D(p)=1.  (CA.1)
+
+No bound is imposed on q's finite support, horizon, future dates,
+or number of collisions. In particular this covers the simultaneous
+at/after-α operation even with every born response included. A
+literal joint-product TV distance less than1/8000000 also suffices,
+because marginalization contracts TV and there are four marginals.
+The radii are deliberately crude, not optimized.
+
+### CA2. Full table, all old responses, and the far global exit
+
+Never pays0. In recipient order0,1,2,3 the complete raw table is
+
+    {0}:     (  1,17, 21,−23)
+    {1}:     (  7, 1,−21, −5)
+    {2}:     (−17,15,  1, 17)
+    {3}:     ( 23,25, −3,  1)
+    {0,1}:   ( −2,16,  1,  1)
+    {0,2}:   (−26, 1, 20,  1)
+    {0,3}:   ( 14, 1,  1,−24)
+    {1,2}:   (  2,13,−20,  4)
+    {1,3}:   (  2,23, 40, −4)
+    {2,3}:   (  2, 1, −1, 19)
+    {0,1,2}: ( 12, 1,100,  1)
+    {0,1,3}: ( 12, 1,  1,100)
+    {0,2,3}: ( 12, 1,100,100)
+    {1,2,3}: (  1, 3, 38,  2)
+    I:       ( −2, 1,100,100).
+
+Set p₀=δ_Never and, independently, p₁=p₂=p₃=(δ₀+δ_Never)/2.
+Its literal joint Never is1/8. The prescribed payoffs and ENTIRE
+root / every later finite / Never response values are
+
+    U=(5/2,81/8,17/4,17/4),
+    root=(21/8,10,9/2,9/2),
+    laterFinite=(21/8,21/2,17/4,17/4),
+    Never=(5/2,41/4,4,4).
+
+Thus d=(1/8,3/8,1/4,1/4), D=1 and the owner sets are exactly
+as stated. All later integer dates have the same value; α is the
+first empty finite date after root0. Never is distinct and strictly
+lower than every owner's cap. Numerical own-floor margins satisfy
+B_i−1>D and U_i>1, including owner0's B₀−1=13/8.
+
+For the TRUE singleton premiums Γ_ij=r_i({j})−r_i({i}),
+
+    Γ=[[  0,  6,−18,22],
+       [ 16,  0, 14,24],
+       [ 20,−22,  0,−4],
+       [−24, −6, 16, 0]].                        (CA.2)
+
+These are NOT scheduled joining gaps. Every column has a negative
+entry, and every principal determinant of size≥2 is nonzero. Hence
+the homogeneous LCP has no nonzero complementary root: singleton
+support fails at a negative column entry and larger support fails
+at the nonsingular active principal matrix. Thus Γ is R₀. At offset
+(−1,−2,−3,−5) exhaustive exact support enumeration gives the ONE root
+
+    x=(185/664,0,485/664,427/664),
+    Γx+q=(0,9335/332,0,0).
+
+Its active principal determinant is5312>0, so its regular index and
+R₀ degree are+1. Consequently Γ is standard Q. The exact degree
+inputs are the previously inspected
+exists_finset_r0Degree_eq_sum_sign_det in
+MathUE/LinearProgramming/R0DegreeSum.lean and
+isStandardQ_of_r0Degree_ne_zero in
+MathUE/LinearProgramming/R0Degree.lean; this is ordinary arithmetic,
+not a new Lean-checked instance. Punishment normality follows by
+forcing opponent2 for recipient0, opponent1 for recipient2,
+opponent0 for recipient3, and simultaneous opponents{0,2,3} for
+recipient1; in each case every own stopping response pays at most1.
+
+The independent profile (Quit0,Never,Never,Never) is nevertheless
+exact FULL terminal Nash. Owner0 gets1 under every finite response
+and0 under Never. The other owners receive (17,21,−23); joining
+at0 instead gives (16,20,−24), and every later response or Never
+retains the passive payoff. Its debt is0 and it absorbs. This is
+the explicit global-minimum failure, not counterexample evidence.
+
+### CA3. Arbitrary whole-law perturbations and an explicit TV radius
+
+For any q near p put
+
+    t=q₀(0),    η_m=q_m({finite dates≥1}),
+    q_m(0)=1/2+h_m for m=1,2,3,
+    ρ=t+Σ_m η_m,    H=Σ_{m=1}³|h_m|,    L=H+ρ.
+
+Each conditional future law is unrestricted and independently
+sampled by its owner. For ANY q let Q_i be its actual pure-date0
+response value and let E_i be the limiting late-FINITE response
+value. The latter is Never payoff plus the opponents' Never
+product times own singleton1. The supremum defining the FULL cap
+contains this limit, even with infinite future support. Define
+
+    P=max(Q₀,E₀)+E₁+Q₂+Q₃−Σ_i U_i,
+    G=Q₀−E₀,
+    S=(E₀+E₁+Q₂+Q₃−Σ_i U_i)+G/2.
+
+Then EXACTLY P=S+|G|/2 and D(q)≥P(q). These are actual reply
+utilities, not freely supplied cap annotations. Every omitted or
+born finite/Never cap can only increase D−P. At p, P=D=1.
+
+First turn off t and all η, retaining root rates x=1/2+h₁,
+y=1/2+h₂,z=1/2+h₃. Direct table subtraction gives
+
+    g(x,y,z)=−9(x+y+z)+28(xy+xz+yz)−60xyz,
+    F(x,y,z)=4−2(x+y+z),
+    G=g,    S=F+g/2.
+
+Writing s=h₁+h₂+h₃, these are the exact identities
+
+    g=4s−s²+‖h‖₂²−60h₁h₂h₃,
+    S−1=(‖h‖₂²−s²)/2−30h₁h₂h₃.                (CA.3)
+
+Now include the actual head t and arbitrary future masses η.
+The first derivatives of the SMOOTH lower functional S at p are
+
+    ∂_t S=585/8,
+    (∂_η₀ S,∂_η₁ S,∂_η₂ S,∂_η₃ S)
+       =(2,21/4,3/4,13/4).                      (CA.4)
+
+They do not depend on any conditional future date. To first order
+there is just one new finite clock; it produces a singleton if all
+old root clocks continue. Collisions of two new finite branches
+have product probability at least second order. In particular
+(CA.4) contains the sole bridge's half-kink charge, not a fictitious
+fixed-cap estimate. Its two parts can be checked from
+
+    ∂_η(E₀+E₁+Q₂+Q₃−ΣU)=(2,6,−3/2,6),
+    ∂_η G=(0,−3/2,9/2,−11/2).
+
+For completeness, the following UNIFORM remainder estimates price
+arbitrary future order and collisions. With M=100 and L≤1/4,
+
+    S(q)≥S(root)+3ρ/4−6400ρL,
+    |G(q)−g(h)|≤800ρ.                          (CA.5)
+
+Each utility in S is a bounded multilinear expectation of the
+independent laws, and the sum of absolute coefficients is8.
+Decompose each law increment into its old root change of TV|h_m|
+and its new head/future change of TVe_m, where Σe_m=ρ.
+Every term after the displayed first-order head/future terms has
+at least two increments and at least one e. Their absolute total
+is at most
+
+    8M·2ρ[exp(2L)−1]≤8M·8ρL=6400ρL.
+
+This bound is independent of future dates and follows by expanding
+the four product factors (or integrating their e-derivative).
+The second estimate follows even more directly by coupling the
+root-reference opponents to q: Q₀ and E₀ each change by at most
+2MΣη, while owner0's law does not enter G. The looser800ρ is
+retained for the uniform radius. These bounds allow arbitrary
+future ties; no upper bound on a selected reply is mistaken for
+an upper bound on the complete cap.
+
+Take L≤r=1/1000000. From (CA.3),
+
+    |g−4s|≤5‖h‖₂²,
+    s²≤3G²/16+120000ρ²+(75/16)H²‖h‖₂²,
+    |G|≤805L.
+
+Here |h₁h₂h₃|≤H‖h‖₂²/2 and (a+b+c)²≤3(a²+b²+c²)
+give the inequalities directly using (CA.5). Combining them yields
+
+    P−1≥(1/2−15r−75r²/32)‖h‖₂²
+          +(1/2−(3/32)805r)|G|
+          +(3/4−6400r−60000r)ρ
+        ≥(‖h‖₂²+|G|+ρ)/4.                    (CA.6)
+
+This is strict unless q=p. Finally L≤2Σ_i TV(q_i,p_i): for each
+old mixed owner, |h_m|+η_m≤2 TV, and owner0's TV is t+η₀.
+Thus (CA.1) follows. The bound keeps all entire future laws and
+uses the actual full debt, not finite-menu exploitability.
+
+### CA4. Runnable exact finite checks and the direction change
+
+The standard-library verifier below checks the table, ENTIRE old
+response menu, far FULL Nash, exact regular LCP root census, the
+first-order whole-law coefficients, and the explicit radius
+inequalities. The uniform infinite-law remainder proof is CA3,
+not something inferred from this finite check.
+
+```python
+from fractions import Fraction as F
+from itertools import product, combinations
+
+r = {
+ 1:(1,17,21,-23),2:(7,1,-21,-5),4:(-17,15,1,17),8:(23,25,-3,1),
+ 3:(-2,16,1,1),5:(-26,1,20,1),9:(14,1,1,-24),
+ 6:(2,13,-20,4),10:(2,23,40,-4),12:(2,1,-1,19),
+ 7:(12,1,100,1),11:(12,1,1,100),13:(12,1,100,100),
+ 14:(1,3,38,2),15:(-2,1,100,100)}
+A = [[r[1<<j][i]-1 for j in range(4)] for i in range(4)]
+assert A == [[0,6,-18,22],[16,0,14,24],
+             [20,-22,0,-4],[-24,-6,16,0]]
+assert all(any(A[i][j]<0 for i in range(4)) for j in range(4))
+
+def linear(a,b):
+    n=len(a)
+    if not n:return [],F(1)
+    a=[list(map(F,row))+[F(b[i])] for i,row in enumerate(a)]
+    det=F(1)
+    for k in range(n):
+        p=next((j for j in range(k,n) if a[j][k]),None)
+        if p is None:return None,F(0)
+        if p!=k:a[p],a[k]=a[k],a[p];det=-det
+        pivot=a[k][k];det*=pivot;a[k]=[v/pivot for v in a[k]]
+        for j in range(n):
+            if j!=k:
+                c=a[j][k];a[j]=[u-c*v for u,v in zip(a[j],a[k])]
+    return [a[i][-1] for i in range(n)],det
+
+qoffset=[-1,-2,-3,-5];roots=[]
+for n in range(5):
+    for supp in combinations(range(4),n):
+        if n==1:continue  # Negative active offset with zero diagonal.
+        ap=[[A[i][j] for j in supp] for i in supp]
+        xx,det=linear(ap,[-qoffset[i] for i in supp])
+        assert det
+        if any(x<=0 for x in xx):continue
+        x=[F(0)]*4
+        for i,value in zip(supp,xx):x[i]=value
+        w=[qoffset[i]+sum(A[i][j]*x[j] for j in range(4))
+           for i in range(4)]
+        if any(w[i]<0 for i in range(4) if i not in supp):continue
+        roots.append((supp,x,w,det))
+assert roots == [((0,2,3),[F(185,664),0,F(485,664),F(427,664)],
+                 [0,F(9335,332),0,0],F(5312))]
+
+# Clock3 is Never; clocks0,1,2 are finite. Clock2 tests the late limit.
+def utility(laws):
+    u=[F(0)]*4
+    for clocks in product(*[tuple(law) for law in laws]):
+        weight=F(1)
+        for i,t in enumerate(clocks):weight*=laws[i][t]
+        first=min(clocks)
+        if first==3:continue
+        coal=sum(1<<i for i,t in enumerate(clocks) if t==first)
+        for i in range(4):u[i]+=weight*r[coal][i]
+    return u
+
+def replies(laws,i):
+    values=[]
+    for t in (0,2,3):
+        pp=list(laws);pp[i]={t:F(1)};values.append(utility(pp)[i])
+    return values
+
+base=[{3:F(1)}]+[{0:F(1,2),3:F(1,2)} for _ in range(3)]
+u=utility(base);v=[replies(base,i) for i in range(4)]
+assert u == [F(5,2),F(81,8),F(17,4),F(17,4)]
+assert v == [[F(21,8),F(21,8),F(5,2)],
+             [10,F(21,2),F(41,4)],
+             [F(9,2),F(17,4),4],[F(9,2),F(17,4),4]]
+assert [max(v[i])-u[i] for i in range(4)] == [F(1,8),F(3,8),F(1,4),F(1,4)]
+far=[{0:F(1)}]+[{3:F(1)} for _ in range(3)]
+assert all(max(replies(far,i))==utility(far)[i] for i in range(4))
+
+def smooth(laws):
+    vals=[replies(laws,i) for i in range(4)];u=utility(laws)
+    g=vals[0][0]-vals[0][1]
+    return vals[0][1]+vals[1][1]+vals[2][0]+vals[3][0]-sum(u)+g/2
+
+assert smooth(base)==1
+for i,coefficient in enumerate([F(2),F(21,4),F(3,4),F(13,4)]):
+    pp=[dict(law) for law in base]
+    pp[i][3]-=F(1,4);pp[i][1]=F(1,4)
+    assert 4*(smooth(pp)-smooth(base))==coefficient
+pp=[dict(law) for law in base];pp[0]={0:F(1,4),3:F(3,4)}
+assert 4*(smooth(pp)-smooth(base))==F(585,8)
+radius=F(1,1000000)
+assert F(1,2)-15*radius-F(75,32)*radius**2 >= F(1,4)
+assert F(1,2)-F(3,32)*805*radius >= F(1,4)
+assert F(3,4)-66400*radius >= F(1,4)
+print('CA exact table, full old caps, far Nash, R0 degree1, '
+      'whole-law coefficients and TV radius: PASS')
+```
+
+The bounded lookup for this exact question reuses the selected source
+Sections6–7 and15–19, the inspected late-limit and own-Never identity
+quittingTerminalPayoff_update_finiteTime_tendsto_of_profile in
+UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean,
+and the exact R₀ degree declarations named in CA2. The narrow search
+also found JL's supported four-bridge full-TV wall and the old binding
+Never-tail trap; neither had this unsupported sole-bridger/later-only
+owner pattern. No implementation, build or export review is claimed.
+
+CA retires the specific hope that the remaining branch's LOCAL
+configuration and matrix/own-floor information force a small
+coupled at/after-α decrease. Even local least-Never at debt1 is
+vacuous here because the point is isolated at that level nearby.
+The ACTUAL selected minimum is globally stronger, and CA does not
+refute or weaken it. The next concrete question is a finite-amplitude
+change of its honest whole suffix AND root laws, using the actual
+global floor/common debts/least Never to select the change while
+retaining every max branch. An unrelated zero-debt or minimizing
+tail is not supplied by this example. No further local constants,
+fixtures, menu refinements or export gate are proposed.
