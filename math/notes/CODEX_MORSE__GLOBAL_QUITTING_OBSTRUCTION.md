@@ -9852,6 +9852,126 @@ such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
 
+## Native all-own-zero attempt: the exact small-constant limit is NONabsorbing
+
+Question. Let z be a fixed finite signed Fin4 table with ALL own
+singletons0 and A=Δ_abs(z)>0. This is the actual native residual
+produced by NP, not a claim that ordinary UE fails at z. Can taking
+the added positive singleton constants t↓0 force absorbing near-Nash
+laws? The precise answer to this proposed squeeze is NO: its full
+minima converge to a positive-Never stratum. This is an ordinary
+complete value-function calculation, not a new export or UE theorem.
+
+### ZV1. One reward-independent augmented carrier covers ALL moving minima
+
+Let H be the closure of the actual triples
+(U_z(p),B_z(p),ν(p)), where ν=∏p_i(Never). It is compact in
+[−M,M]⁸×[0,1], for a positive bound M on z. This keeps Never
+mass as a coordinate: the eight semantic coordinates alone need
+not recover it. Put d_i=B_i−U_i≥0 and D=Σd_i on H.
+
+Let r^t add t>0 to EVERY finite coordinate of EVERY row. Both
+old and new own signs are nonnegative. The exact signed translation
+from NP gives, on EVERY actual profile and then on H,
+
+    d_i^t=d_i+tν,   D_t=D+4tν,
+    f(t)=Δ_all(r^t)=min_H[D+4tν].                 (ZV1)
+
+The full pair map(U_i,B_i)↦(U_i+t(1−ν),B_i+t) is continuous
+on H and maps H ONTO the entire original carrier for r^t: take
+subsequences of actual old triples for one direction, and use
+their actual images for the reverse direction. Thus(ZV1) includes
+EVERY new full minimum, not just selected old profiles. Each new
+minimum has at least one minimizing lift in H. No derivative of
+a fixed cap selector or unchanged minimizing law is used.
+
+### ZV2. The least-Never zero-debt stratum has strictly positive mass
+
+The zero-debt subset Z={h∈H:D(h)=0} is nonempty because
+actual AllNever belongs to it. Set
+
+    μ=min_(h∈Z)ν(h).
+
+This is an attained minimum on the augmented closed carrier,
+not an attained raw-ℕ equilibrium. The whole-profile completion
+estimate at z closes continuously to give
+
+    A≤D(h)+14Mν(h)^(1/4) for EVERY h∈H.
+
+Consequently μ≥(A/(14M))⁴>0. Ordinary zero debt at own-zero
+AllNever does not contradict this positive ABSORBING gap.
+
+### ZV3. Exact first-order value and uniformity over every minimum
+
+Evaluate(ZV1) at a least-Never point of Z to obtain f(t)≤4tμ.
+For ANY minimizing lift h_t∈H,
+
+    0≤D(h_t)≤4tμ,   ν(h_t)≤μ.
+
+Every cluster of such lifts as t↓0 lies in Z. Its Never mass
+is therefore≥μ; the displayed upper bound makes it exactlyμ.
+Compactness makes this convergence UNIFORM over all minimizing
+lifts: otherwise a sequence of counterexamples has a conflicting
+cluster. It follows that
+
+    ν(h_t)→μ>0,
+    f(t)/(4t)→μ,
+    D(h_t)/t→0,
+    d_i^t(h_t)/t→μ for EVERY i,                  (ZV2)
+
+uniformly over EVERY complete minimizing family. The third limit
+follows by subtracting4ν(h_t) from f(t)/t; the final one uses
+0≤d_i≤D. In particular the small paid debts at the positive-own
+tables have equal leading order, while the joint Never mass does
+NOT become small. Every individual Never mass is at least the
+joint mass, so none is forced to zero either.
+
+The full value f is concave as the infimum of affine functions
+of t. Equation(ZV2) identifies its positive right slope at0
+without an envelope formula involving old maximizing testers.
+No regular-scale common-debt selection is needed for this fact.
+
+### ZV4. Why this changes the native consumer, not the conjecture
+
+Taking t↓0 gives zero COMPLETE debt at z, but only on a stratum
+whose joint Never mass is at leastμ>0. The absorbing-domain value
+stays EXACTLY A by signed translation on ν=0. Thus a proposal
+to prove A=0 merely from f(t)→0 silently changes strategy class.
+The two facts coexist quantitatively: f(t)∼4μt whereas
+Δ_abs(r^t)=A. In particular no comparison of a vanishing full
+gap with a table-dependent quadratic margin transfers the
+absorbing floor or supplies absorption.
+
+This is a global falsification of the small-constant squeeze,
+conditional on precisely the positive-A residual under research,
+not a solved-table numerical surrogate. It does not certify a
+positive-A table. The direct native target remains to rule out
+A>0 by an actual absorbing approximate-Nash construction.
+
+The exact source inspected for these limits is the tracked
+`prod_stoppingLaw_none_mul_singleton_le_terminalDebt` in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`,
+together with the actual pair/cap correspondence in
+`UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean`.
+The signed translation and14M whole-cap coupling are the complete
+ordinary proofs retained in NP. A bounded additional lookup of
+`minimumTerminalSemantic_exactNash_criticalFace` and
+`minimumTerminalSemantic_auxiliaryNash_eq_allContinue` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+also retires the attempted claim that no absorbing Nash root
+against the minimum's prescribed payoff is new leverage: the
+complete critical-face statement is already checked, and four
+positive debt coordinates exclude its sole-debtor branch directly.
+
+Concrete next question. At a least-Never zero-debt point of H,
+can a finite-amplitude chronological construction reduce ν while
+keeping complete debt0, or produce absorbing laws of debt→0?
+Such a construction would contradict μ>0 and close the native
+residual. Affine row shifts of fixed total do not help: their
+ENTIRE all-profile SUM objective is unchanged by signed translation.
+The required step must alter whole independent laws or use a
+non-affine reward-table comparison, not just send t to0.
+
 ## Forward global source: strict absorbing-gap separation forces a fully paid finite bridge
 
 Status: COMPLETE ORDINARY PROOF DRAFT NP1–NP9, UNREVIEWED. This
