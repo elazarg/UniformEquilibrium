@@ -24962,6 +24962,26 @@ for example by reshuffling entire OLD FINITE conditional laws while retaining
 their Never probabilities, or should explicitly pay for a less-absorptive
 adapted root by reducing D(w). A positive root alone remains insufficient.
 
+Stronger SAME-TABLE version of the RETURN FILTER: fresh common ν is needed
+for the displayed equality, but NOT for the lower bound on c_x. At the
+ORIGINAL canonical least-Never source, every augmented full minimum has
+ν≥ν_min=c_aν_v. For the paired surely-finite mixture, each ACTUAL realizing
+index has ν_tail^k=(1−t)(1−s)ν_v^k. Prefixing an actual root x^k multiplies
+this by its actual joint Continue product c_x^k. Extract roots and the
+ENTIRE payoff/cap/ν coordinates on one subsequence. Its augmented output
+therefore has exactly ν=c_x(1−t)(1−s)ν_v. If its D=δ it lies in the SAME
+H_min of frozen Section18, and hence
+
+    c_x≥c_a/[(1−t)(1−s)].                       (NC.28)
+
+Thus c_x≤c_a is excluded for every nonzero pair intensity, and the region
+(1−t)(1−s)<c_a admits no minimum output at all, already at the ORIGINAL
+selected table. There is no re-selection or assumed cap/chronology transport
+in this filter; the honest suffix is still off minimum. Equality in (NC.28)
+is NOT forced there. The earlier equality statement remains correctly scoped
+to NC9's fresh common-ν table. This same-table filter keeps the actual paired
+test on the original source rather than beginning another normalization loop.
+
 Actual conditional-finite operation now under test: for each chosen owner,
 keep its entire Never probability n_i, and privately mix its OLD finite
 conditional law toward a moving finite full-cap reply. This preserves the
