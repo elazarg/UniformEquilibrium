@@ -30,11 +30,17 @@ Nash selection from that fact. The separately reviewed NP fresh-table
 candidate takes another branch: strict full/absorbing separation forces
 all debts and all Never masses positive, with paid finite bridges. It
 is not a property borrowed at the old table. SG1–SG5 below is a COMPLETE
-UNREVIEWED actual end-graft proof: the final finite empty test c must
-maximize for SOME owner. This strictly subsumes PC's L<c alternative.
+actual end-graft proof, with MORSE's independent focused mathematical
+and value PASS: the final finite empty test c must maximize for SOME
+owner. Its frozen original section status is retained below; the
+current review is in the existing MORSE feedback file. This strictly
+subsumes PC's L<c alternative.
 Its global tail budget keeps ALL original tail laws, but does not yet
 consume the surviving c-active wall or prove UE. NF9 records the NP
 universal minimum-prefix strengthening without adding source hypotheses.
+EG reuses an old exact table to exclude ALL end-Never-only repairs
+without the true global floor; the live consumer must change existing
+finite stopping mass or use that full-law floor in a genuinely new way.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -8186,6 +8192,81 @@ declaration, independent gate or export is asserted. The next
 question is whether the L=c residual, or the final retained
 collision when L<c, supplies an ACTUAL whole-law change controlling
 all born caps rather than another clock-count refinement.
+
+## Reusing the old symmetric trap: end-Never grafts fail over ALL tails
+
+### EG1. Exact whole-family failure, not a new solved-table trap
+
+This reuses the already recorded positive symmetric table:
+own singletons1, EVERY passive reward100, participant pairs108,
+participant triples92 and grand rewards100. It specifies all60
+coordinates. Give every owner half date0/half Never. Direct enumeration
+gives in every row
+
+    Q=B=701/8, R=175/2, U=1401/16,
+    n=1/2, h=1/8, ν=1/16, d=1/16, D=1/4.
+
+Root and last empty finite responses tie; Never is strictly below.
+The end budgets κ=(B−R)/h are EXACTLY1 for every owner. This is
+NOT a true global minimum: pure date0 pair A, with outsiders Never,
+has payoff/cap108 for its members and100 for outsiders, so trueΔ0.
+
+Stronger than its previously retained infinitesimal failure, NO
+finite-amplitude replacement of ONLY its original Never branches
+by ANY actual independent tail can lower this profile's full debt.
+All response deadlines/Never and arbitrarily long tail laws are
+covered. Thus a consumer confined to that whole-law subclass fails,
+not merely one chosen tail or one derivative.
+
+### EG2. Complete unrestricted all-tail inequality
+
+Take ANY actual tail v with marginal Never masses m_i and joint
+mass c=∏m_i. Every player's passive reward is100, so its Never
+response pays100(1−c_-i). Its arbitrarily late finite reply pays
+
+    1+99(1−c_-i), c_-i=∏_(j≠i)m_j.
+
+Hence its FULL tail cap satisfies b_i−1≥99(1−c_-i)≥0.
+On every sample with a finite exit, at least THREE owners have
+a finite opponent (four if at least two owners exit finitely).
+Taking expectations gives
+
+    Σ_i(1−c_-i)≥3(1−c).
+
+The total reward of the first coalition is at most416: the
+singleton/pair/triple/grand totals are301/416/376/400.
+Thus Σ_i u_i≤416(1−c). Combining these exact bounds yields
+
+    2Σ_i(b_i−1)−Σ_i u_i≥178(1−c)≥0.
+
+The ledger SG1 then gives for EVERY end-Never graft
+
+    D_graft−1/4
+      =(1/16)[2Σ_i(b_i−1)−Σ_i u_i]
+      ≥(89/8)(1−c)≥0.
+
+AllNever is the unique tail probability mode with c=1 and the
+only way to have zero stated lower bound. Every tail with ANY
+finite absorption probability makes the actual debt strictly larger.
+Closing, the nonnegativity holds on ALL tail carrier K as well.
+
+### EG3. Mechanism change and exact nonclaim
+
+This is a genuine global failure of a tail-only repair architecture
+at an old recorded solved profile, without new constants tuning.
+It does not falsify SG's necessary original-minimum inequality:
+that inequality is exactly satisfied here. It also does not
+falsify NP's TRUE global source, because the unrestricted full
+floor atδ=1/4 is absent. A proof may still combine the ALL-tail
+budget with that missing full-law floor. The conclusion is that
+the budget alone cannot be a consumer: a successful repair may
+have to change EXISTING finite stopping mass, not only its old
+Never branches. The actual distant pure-pair competitor does so.
+
+The next mechanism must use that full-law/global input and retain
+the paid finite bridge; I will not strengthen this solved table
+or optimize its constants. This is supporting failure evidence,
+not an export or a new equilibrium-class claim.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 

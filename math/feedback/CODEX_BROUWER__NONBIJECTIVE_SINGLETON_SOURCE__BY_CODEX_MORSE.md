@@ -805,3 +805,127 @@ at EVERY produced minimum. It gives no positive bridge-owner debt,
 automatic independent finite-amplitude repair, debt-support rank drop,
 distinctness of every cap kernel, or full Fin4 UE. Subject to those
 explicit boundaries, the complete BG argument has no unresolved gap.
+
+## Independent SG1–SG5 end-Never graft falsification
+
+Target: the section from `### SG1. Exact global end-graft question and
+status` through SG5/EOF in
+`../notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`, exact SHA256
+`9e7cb53849007feea9c83c3cd0e05199a56adc646851cdfe9415d135df14b07f`.
+I read the whole section and reconstructed its actual finite witnesses.
+I did not read another SG review. I contributed the earlier NP source;
+that source is not self-certified here. SG's appended-tail argument and
+its Γ application are BROUWER's distinct inference checked below.
+
+Verdict: PASS as ordinary mathematics, with a genuine additional source
+restriction. No unresolved mathematical objection. This is not a UE
+consumer or an assertion that the paid root bridger owns the final cap.
+
+### Exact unrestricted graft and both carrier domains
+
+For an original finite approximant with last finite support L, retaining
+EVERY old finite atom and putting the tail at L+2 has the stated ledger.
+No response through L can see the new opponent draws. The old full
+finite cap is represented among these responses and the empty date L+1:
+all later old finite responses pay R_i+h_i s_i, and positive s_i makes
+old Never smaller than that value. Thus retaining an empty date BEFORE
+the tail is sufficient; the proof does not insert extra dates inside
+the old supported chronology.
+
+At any later response the all-opponent-old-Never cylinder has probability
+h_i and carries the tail response. Its complement is already screened
+by the old first finite opponent coalition and supplies exactly R_i.
+This is true for literal Never as well as every finite deadline. The cap
+is therefore max(B_i,R_i+h_i b_i), not a chosen lower bound. A full
+behavioral replacement is covered by affinity in its complete stopping
+law. Prescribed rewards change only on the all-player-old-Never cylinder,
+giving U_i+νu_i. The owners use independent private branch replacements;
+no shared random event or correlation is introduced.
+
+All original U,B,R,n quantities converge in the marked chart, so this
+entire pair is in the original full carrier. Finite approximation of an
+arbitrary tail is uniform for ALL response caps by the same coupling
+estimate; a diagonal realizes any v in K. For K_abs one may choose actual
+absorbing tails throughout. If finite witnesses are desired, preserve a
+Never-zero owner by moving its finite tail remainder to a finite cutoff,
+rather than to Never. The total variation error tends to0 uniformly in
+all tests. The graft then has joint Never mass0. Consequently the stronger
+absorbing-domain floor really applies to every v in K_abs; it is not a
+substitution of a different minimum for the original source.
+
+Subtracting the old true minimum gives exactly
+
+    Σ_i h_i[(b_i−κ_i)⁺−n_i u_i]≥0,
+    κ_i=(B_i−R_i)/h_i≥s_i.
+
+At the separated table its value is≥g on K_abs. The signs and factors
+match ν=h_i n_i, and the original AllNever tail makes the expression0.
+
+### Checked Γ producer and the sign of the finite tail
+
+I read the complete tracked file
+`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+under its displayed imports. The exact declaration
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+takes ONLY actual Fin4 no-UE and produces a simplex weight with strict
+positive image under the actual receiver-row projective matrix. The
+actual no-UE premise is supplied by the positive full gap. It does not
+require the own-singleton vector e_m or an additional StandardQ witness.
+
+I also read `quittingProjectiveLCPMatrix` and its definition in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`:
+Γ_ij=r_i({j})−s_i, not the transpose or its negative. Therefore the
+first-order prescribed tail payoff is
+
+    v_i=Σ_j z_j r_i({j})=s_i+(Γz)_i>0.
+
+The strict sign uses this source's positive own singleton rewards.
+For the finite tail with probabilities ρz_j, the singleton weight
+error plus nonsingleton probability is bounded by2ρ², so the displayed
+2Mρ² remainder is safe. Coupling each opponent with AllNever has total
+changed probability≤ρ, uniformly over EVERY test. The old AllNever
+full cap is s_i; hence |b_i(ρ)−s_i|≤2Mρ, including Never.
+
+If all κ_i>s_i, one common sufficiently small positive ρ gives both
+u_i>0 and b_i<κ_i for every owner. The strict inequalities hold on all
+large original approximants. Their ACTUAL grafted caps are unchanged and
+their debt tends to δ−νΣ_i u_i<δ. This is an actual contradiction to the
+full all-law floor, not a derivative of a fixed cap or a selected tester.
+
+Thus some κ_i=s_i. In the marked producer, V_i(c)=R_i+h_i s_i;
+c is the final finite empty tester and has zero mixture/own mass. The
+claimed maximizing end wall follows without raw-integer attainment.
+
+### Independent exact full-cap regression
+
+Complete sixty-entry table: own singleton1, every passive coordinate2,
+every participant coordinate of a nonsingleton3. Old laws give each owner
+mass1/2 at date0 and1/2 at Never. Direct exact independent enumeration
+gives U_i=9/4, B_i=11/4, R_i=7/4, h_i=1/8 and κ_i=8.
+The singleton Γ has diagonal0 and every off-diagonal entry1, so its
+uniform simplex image is3/4>0. Use the one-date tail with quit rate1/4
+for every owner: u_i=45/32 and b_i=69/32. Append it at date2 to the
+old Never branches, retaining the empty date1. Its laws are exactly
+
+    p_i(0)=1/2, p_i(2)=1/8, p_i(Never)=3/8.
+
+Enumerating EVERY finite-response phase and Never gives
+U_i'=1197/512 and B_i'=11/4, exactly the two graft equations. Total
+debt falls from2 to211/128. The table itself is solved by pure all-Quit,
+so this is not a positive-gap example. It specifically confirms why
+positive profile debt cannot replace the true global-minimum premise.
+
+### Exact source value and remaining limitations
+
+NP's paid first-to-later bridge did not locate a maximizing last finite
+tester. SG excludes the all-strict κ>s geometry at EVERY produced
+positive-Never true minimum, using ONE actual whole-tail competitor. It
+is a real additional source restriction, not an alias for point-count
+or a conditional price supplied without an underlying profile.
+
+At an end contact, the same positive tail can raise caps. The universal
+budget prices this and gives no automatic consumer. The c-active owner
+need not be the first-root bridger; not all owners must cap at c; c need
+not be an attained raw natural deadline. No joint punishment, minimizing
+tail, Nash continuation, renewable paid reset or UE is established. The
+review does not add SG to the separately frozen NP standalone artifact.

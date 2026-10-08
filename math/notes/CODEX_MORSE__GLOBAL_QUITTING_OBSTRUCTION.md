@@ -26,10 +26,11 @@ sure owner, and its first-to-LATER-FINITE bridge is PAID. The actual
 whole-block periodic competitor forces a new conditional-Never cap
 strictly above its old cap. This does NOT inherit the earlier table's
 finite contact exclusions or FC zero-debt conclusions.
-The self-contained final draft is
-`CODEX_MORSE__FULLY_PAID_NONSURE_FINITE_BRIDGE.md`, SHA256
+The self-contained final packet is
+`../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`, SHA256
 `21e596e53595811ad4f83b657d97b3942d53e313d69bb2e9e243c2ee2af11953`.
-It awaits independent byte-bound final-artifact checks, not self-export.
+Both independent byte-bound whole-artifact reviews passed; it is exported
+ordinary mathematics, not Lean-checked mathematics or Fin4 UE closure.
 The frozen NP body retains its original complete proof; the final
 assembly expands its full cyclic table and audits the tracked periodic
 reply theorem without changing the source conclusion.
