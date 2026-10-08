@@ -25,7 +25,21 @@ claimed. The next full-goal question is whether arbitrary raw data force
 a compatible finite-charge closed itinerary, or whether a genuine
 all-behavior negative certificate can obstruct every such itinerary.
 
-Latest supporting result: PS1–PS7 gives a complete ALL-PATH, absorption-
+Latest complete candidate: TB1–TB6 gives an ORDINARY UNREVIEWED actual
+competitor for the independent negative-participant-tax boundary.
+Bounded-price surviving owners form a core of at most three players;
+existing positive-own stationary/cyclic producers and exact native row
+translation supply absorbing PERIODIC core approximate equilibria.
+A compact finite menu, with globally empty phases removed, gives a
+positive hazard at EVERY date. Large negative omitted-participant
+prices then make literal Never their EXACT full best reply. Thus the
+native absorbing gap tends0 on the formerly uncontrolled lower-tax
+face. No counts-only consumer, fixed-price zero-gap theorem, old-source
+transport or Fin4 closure is claimed. WF1–WF4 separately retires the
+static weighted-welfare/punishment certificate by existing floor
+invariance; this is not new equilibrium coverage.
+
+Earlier supporting result: PS1–PS7 gives a complete ALL-PATH, absorption-
 relative seeded construction falsifier. On a solved rational table the
 true punishment is0, there is no sure root at ANY annotation, and EVERY
 sufficiently accurate robust word starting at0 has charge at most1.
@@ -9979,6 +9993,363 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Whole-game welfare barrier: an existing floor invariant retires the static ansatz
+
+Status: COMPLETE ORDINARY COROLLARY / MECHANISM RETIREMENT, not new UE
+coverage. The punishment-floor root invariant used here is ALREADY
+implemented. This section preserves the failed global negative ansatz;
+it does not pretend that feasible individually rational payoffs are
+equilibrium payoffs.
+
+### WF1. The sufficient barrier that was tested
+
+Let I be a finite nonempty player set. Terminal rewards are r_i(S) for
+nonempty S⊆I, all own singletons are0, and Never pays0. Let P_i be the
+TRUE punishment infimum over all independent opponent behavioral laws
+of the complete behavioral response cap. A possible all-law negative
+certificate would be
+
+    P_i≥0 for every i,
+    ∑[i] λ_i r_i(S)≤−κ for EVERY nonempty S,
+
+where λ_i≥0, not all zero, and κ>0. Indeed EVERY absorbing prescribed
+profile would have ∑λ_i U_i≤−κ, while B_i≥P_i≥0. Its weighted
+debt would be at leastκ. No stationary-class completeness assumption
+is involved in that sufficiency argument.
+
+The proposed pair of premises is impossible, in any finite dimension.
+
+### WF2. Why true punishment excludes a negative finite-Nash head
+
+Against an independent binary root q write h_i for opponent Continue
+mass, Q_i for immediate Quit payoff and R_i for the nonempty opponent
+absorption contribution when i Continues. At continuation0, a finite
+exact Nash root has head
+
+    F_i=max(Q_i,R_i).
+
+If F_i<0, both Q_i and R_i are negative. Then h_i<1, because h_i=1
+forces R_i=0. Repeating the SAME opponent row gives the actual full
+stationary response cap
+
+    max(Q_i,R_i/(1−h_i))<0.
+
+It follows that P_i<0. Thus P_i≥0 forces EVERY coordinate of every
+exact Nash head at continuation0 to be nonnegative. This is precisely
+the zero-floor case of the existing punishment-floor invariance.
+
+Now raise ONLY every own-singleton entry byε>0, keeping all other
+entries and Never unchanged. This increases every actual response
+payoff weakly, hence increases each true punishment floor weakly.
+Take ε<κ/max_i λ_i. Every nonempty coalition still has strictly
+negative λ-weighted reward. But AllContinue is no longer a finite
+Nash root at continuation0: every owner can earn its new ownε by
+Quitting. Finite mixed Nash existence therefore gives a root with
+positive absorption a. WF2 forces its weighted head payoff≥0, whereas
+its expected terminal contribution is a strictly negative weighted
+average of nonempty coalition rewards. Contradiction.
+
+### WF3. The strongest elementary statement that survives
+
+For arbitrary signed r with normality s_i:=r_i({i})≥P_i, every ε>0
+supplies an ACTUAL absorbing stationary profile whose payoff satisfies
+
+    U_i≥P_i−ε for EVERY i.
+
+To see this, choose a finite exact Nash root at continuation v=P−ε1.
+AllContinue is not Nash because s_i≥P_i>v_i. Thus a=1−c(q)>0 and
+the stationary repetition absorbs almost surely. The approximate
+punishment-floor endpoint inequality gives F_i≥v_i. Write H_i for
+the one-date prescribed terminal contribution; then
+
+    F_i=H_i+c(q)v_i,
+    U_i=H_i/a≥v_i.
+
+If some s_i>P_i, the same argument at v=P gives an exact stationary
+individually rational payoff. With all s_i=P_i, it gives approximating
+payoffs. Consequently conv{r(S):S≠∅} intersects P+ℝ_+^I by compactness,
+and for every λ≥0
+
+    max[S≠∅] ∑[i]λ_i(r_i(S)−P_i)≥0.
+
+These are PAYOFF statements, not Nash statements for the repeated root.
+In particular the stationary Never cap can exceed U_i. No debt estimate
+or global minimum comparison follows from individual rationality.
+
+### WF4. Exact source overlap and direction change
+
+The concrete existing inputs inspected under their imports are:
+
+- `exists_isZeroQuittingRootNash` in
+  `UniformEquilibrium/Quitting/Root/NashExistence.lean`;
+- `quittingStationaryUnilateralCap_eq_max_div` and
+  `quittingPunishmentValue_le_stationaryUnilateralCap` in
+  `UniformEquilibrium/Quitting/Stationary/MinMax.lean`;
+- `quittingPunishmentValue_sub_le_rootEndpointMax` in
+  `UniformEquilibrium/Quitting/Punishment/FiniteWordPunishmentFloor.lean`;
+- `quittingPunishmentValue_le_rootSuccessorPayoff_of_tail_ge` in
+  `UniformEquilibrium/Quitting/Bellman/Finite/PunishmentFloorForward.lean`.
+
+The floor-preserving exact relation and the finite-punishment anchor are
+already tracked; WF2 is not a newly discovered invariant. A narrow
+search in Stationary/Root/Punishment/Projective did not locate WF3 under
+an individually-rational stationary-payoff name; no comprehensive
+novelty claim is made for this elementary corollary.
+
+The attempted static welfare/floor certificate is retired. A genuine
+negative barrier must encode strategic chronology or full response
+kernel information, rather than separate an outcome polytope from the
+punishment orthant. PS below likewise prevents treating the punishment
+vector as a universal viable initialization. The next argument instead
+uses an actual periodic core to price ALL omitted-player deadlines.
+
+## Independent participant-price boundary: a finite periodic core screens every deadline
+
+Status: COMPLETE ORDINARY UNREVIEWED candidate boundary theorem. This
+section consumes the unbounded negative PARTICIPANT-price face with
+bounded passive rows and a bounded surviving core. It does not prove
+Fin4 UE, an interior tax consumer, or a playable mixture of response
+ledgers. The core strategy is selected from already implemented
+arbitrary at-most-three-player producers, with its literal periodic
+structure reconstructed below their weaker outer statement. No Lean
+implementation or export claim is made.
+
+### TB1. Raw theorem and complete strategy semantics
+
+Let I have four players and θ_i(S) be bounded by1 on all nonempty
+coalitions. For parameters c,k∈ℝ⁴ define
+
+    r_i({i})=0,
+    r_i(S)=θ_i(S)+c_i              if i∉S,
+    r_i(S)=θ_i(S)+k_i              if i∈S and |S|≥2.
+
+Never pays0. The parameters affect only the indicated entries; own
+singletons are held exactly0. Let A(c,k) be the infimum of the SUM of
+the four complete debts over independent absorbing-a.s. stopping laws
+on ℕ∪{Never}. Responses may be arbitrary complete behavioral laws,
+including Never and replacements that make the profile nonabsorbing.
+
+Consider a sequence of these tables, allowing θ to vary in the same
+bounded cube. Suppose all passive parameters c_i remain bounded and
+all k_i are bounded above. After subsequence extraction suppose
+
+    D={i:k_i→−∞} is nonempty,
+    B=I\D has each k_j bounded below as well as above.
+
+Then
+
+    A(c,k)→0 along this subsequence.                    (TB.1)
+
+Every unbounded lower-face sequence with those c/upper-k bounds has
+such a further subsequence. The theorem supplies actual absorbing
+competitors with all full caps controlled; it is not a limit argument
+discarding small collision probabilities while retaining their prices.
+
+### TB2. The actual native three-player source is periodic and absorbing
+
+Claim used: for EVERY native own-zero table z on a NONEMPTY core B
+of at most three players and every ε>0, there is an actual periodic
+product-root profile with joint absorption a.s. and
+
+    B_j(z,p)−U_j(z,p)≤ε for every j∈B.                 (TB.2)
+
+The source is not the trivial AllNever equilibrium of z. Define the
+positive-own table z⁺_j(S)=z_j(S)+1 on every nonempty reward entry,
+with Never still0. Its own singletons are exactly1. For a requested
+error less than min(ε,1), inspect the existing at-most-three-player
+construction rather than just the outer “small hazard” predicate:
+
+For cardinality1 or2,
+`exists_stationaryTerminalNash_of_card_le_two` in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardTransport.lean`
+selects a literal stationary terminal approximate Nash profile.
+For cardinality3,
+`of_normalizedThreePlayer` in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`
+dispatches through `of_normalizedFeasibleSingletonMixture` or
+`exists_exactStationaryTerminalNash_of_normalizedInfeasibleMixture`.
+The former produces either a literal stationary root or
+`of_rightSingletonCycle` / `of_leftSingletonCycle`.
+Those latter declarations BOTH call `of_singletonArcCycle`, which
+selects one finite subdivision m>0 and the literal
+`quittingCyclicRootSequence` of a finite phase table. Its full terminal
+Nash bound is
+`singletonArcCycle_isTerminalNash_and_hasValue` in
+`UniformEquilibrium/Quitting/Cycles/SingletonArcCycle.lean`.
+
+The stationary root cannot have joint absorption0: that would mean
+AllNever, whose prescribed payoff0 has a profitable own-singleton
+response1 for every core owner, exceeding the requested error<1.
+Thus it absorbs a.s. by geometric repetition. In the cyclic branches,
+the strict right/left rates lie in(0,1), the retained mesh hazards are
+positive, and `right_coarse_contracts` / `left_coarse_contracts` in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/CyclicCompiler.lean`
+give deleted-opponent contraction. Joint contraction follows as well.
+These are literal finite PERIODIC clocks, not a nonperiodic sequence
+whose hazards merely happen to be bounded above.
+
+For clarity, the row-translation seam must include ALL responses.
+In a native own-zero row every finite response absorbs for sure, so
+
+    V_j(z⁺,finite τ)=V_j(z,finite τ)+1.
+
+As τ→∞ the native finite-response value tends to its Never value:
+the own-singleton survivor contribution is0 and the probability of
+a tie at the particular remote finite date tends0. Therefore native
+Never is already below the supremum of finite response values.
+Under z⁺ the Never value equals its old value plus the probability
+that some opponent stops, at most1. Hence, exactly,
+
+    B_j(z⁺,p)=B_j(z,p)+1.
+
+For the selected absorbing prescribed profile,
+U_j(z⁺,p)=U_j(z,p)+1. EVERY complete debt is unchanged. This proves
+(TB.2) with the same periodic roots. It is a forward use of a produced
+positive-own profile; no inverse affine-invariance assertion for an
+arbitrary nonabsorbing profile is used.
+
+### TB3. Deleting empty phases is legal and cannot increase any full cap
+
+In any finite-period absorbing root list, discard phases at which
+EVERY core player Continues surely. There is at least one remaining
+phase, because a completely empty period would not absorb. Repeat
+the remaining finite list forever in its inherited chronological order.
+
+The prescribed terminal coalition distribution is unchanged. Every
+pure finite response in the shortened list corresponds to the SAME
+retained date in the old repeated list and has exactly the same payoff.
+Never has the same payoff as well. Old empty-date responses are simply
+removed. Since a complete behavioral replacement is a mixture of its
+pure deadlines and Never, the shortened full cap is no larger than
+the old full cap. Thus (TB.2) survives deletion.
+
+The remaining finite phase table has
+
+    η(p):=min[phase] (1−∏[j∈B](1−q_{j,phase}))>0.      (TB.3)
+
+This is the EACH-PHASE bound needed below. Absorption a.s. or
+periodicity alone would not justify it; removing empty phases does.
+No empty phase is later inserted, and no new initial waiting date is
+prepended. A quiet omitted player has no earlier “date−1” available.
+
+### TB4. A compact reward cover gives a finite menu and one uniform phase bound
+
+The restricted B-tables of TB1 range in one compact reward box with
+own singletons0: θ,c_B,k_B are all bounded. Fix ε>0. At every table
+z in this box select a profile from TB2 with debts at mostε/2, then
+shorten it as in TB3.
+
+For a FIXED actual profile p, any reward perturbation of supnorm≤ρ
+changes every prescribed coordinate by at mostρ. The same bound
+holds for EVERY full behavioral response, and hence for its supremum
+cap. Thus every debt changes by at most2ρ, including Never and
+arbitrarily late tests. These estimates do not depend on a clock
+truncation, a maximizing response, or the period length.
+
+The selected fixed p therefore has debts≤ε on the reward ball of
+radiusε/4 about z. Finitely many such balls cover the compact box.
+Keep their finitely many fixed periodic profiles p¹,…,p^N and set
+
+    η_ε=min[ℓ=1..N]η(p^ℓ)>0.                         (TB.4)
+
+Every core table in the box has ONE actual menu profile with all
+core full debts≤ε and EVERY phase joint hazard≥η_ε. The controller
+selects that one profile deterministically from the reward table;
+the finite cover is NOT a public or independent random mixture of
+profiles. The bound may deteriorate arbitrarily as ε↓0, which is
+harmless: ε is fixed before the participant prices go to−∞.
+
+### TB5. Exact omitted-player Bellman screening, including solo and Never
+
+Assume B is nonempty. Use TB4's selected core profile and prescribe
+every omitted i∈D to Never. Let M≥1 bound the absolute value of EVERY
+omitted passive reward θ_i(S)+c_i along the sequence. At each date
+the core has joint absorption probability a_t≥η_ε. A deviating i
+that Quits at that date gets own0 on the empty opponent event and
+its participant reward at most k_i+1 on a nonempty opponent event.
+For k_i+1<0,
+
+    Q_i(t)≤(k_i+1)a_t≤(k_i+1)η_ε.                    (TB.5)
+
+Once k_i+1≤−M/η_ε, every Quit endpoint is at most−M.
+Let w_i(t) be the ACTUAL conditional payoff of i's Never response
+against the selected periodic core starting at date t. The core
+absorbs a.s., and every resulting reward to i is passive, so
+
+    −M≤w_i(t)≤M,
+    w_i(t)=R_i(t)+h_i(t)w_i(t+1).
+
+Consequently Q_i(t)≤w_i(t) at EVERY date. Also the player-deleted
+survival L_i(t) equals the core's joint survival and tends0. The
+bounded sequence w_i is therefore an exact full tester Bellman dual:
+Quit inequality, Continue equality and deleted-survival transversality
+all hold. The declaration
+`quittingTester_primal_eq_dual_eq_behavioralCap` in
+`UniformEquilibrium/Quitting/ControllerTester/TesterFlowDuality.lean`
+identifies its upper bound with the COMPLETE cap, and literal Never
+attains w_i(0). Thus
+
+    B_i=U_i=w_i(0),       d_i=0 for every i∈D.         (TB.6)
+
+The same conclusion follows by telescoping each finite deadline and
+Never, then taking mixtures. This prices solo PREEMPTION as well as
+joining: the omitted player cannot find any empty calendar date at
+which its own0 avoids the core's negative-price screening.
+
+Core owners' prescribed outcomes and unilateral replacement outcomes
+always have terminal coalitions inside B, because every D owner is
+Never. Their complete payoffs/caps are exactly those in the B-game;
+arbitrary later dates and Never remain available. Hence the entire
+four-player profile is absorbing and has SUM debt≤|B|ε≤3ε.
+
+If B is empty, choose ANY owner h sure at date0 and all others Never.
+For sufficiently negative all k, every observer j has joining reward
+≤k_j+1≤−M≤r_j({h}); all its later deadlines and Never pay r_j({h}).
+The host earns own0, and with all opponents Never its complete cap is0.
+This is an exact absorbing full Nash profile, so its debt sum is0.
+
+Since ε is arbitrary and each divergent k_i eventually crosses its
+fixed threshold in TB5, (TB.1) follows. No uniform accuracy-dependent
+hazard bound and no attained absorbing minimum are claimed.
+
+### TB6. What this repairs, and what it does not consume
+
+This addresses the EXACT missing face in JT2/JT4 of
+`CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md`: passive parameters
+bounded, participant parameters bounded above, one or more participant
+parameters tending to−∞. His earlier Never inference from negative
+joining gaps was false. TB5 instead PRODUCES a different child
+chronology whose EVERY date has a uniformly positive opponent hazard
+for the fixed requested accuracy, then screens all solo deadlines.
+
+In particular for any fixed a>0 there is no unbounded lower-k sequence
+with those passive/upper-k bounds and A(c,k)≥a. Combined with the
+separately established positive-gap bounds on c and upper k in that
+tax study, this supplies the missing boundedness of positive-gap
+superlevel sets and permits an attained full eight-parameter maximum.
+That integration belongs to the whole tax argument; no old spherical,
+NP or relay minimum is carried onto the fresh tax-maximizing table.
+
+The boundary theorem is an actual whole-behavior competitor result,
+not an equilibrium statement about the original finite-price table.
+It is asymptotic and may give no effective rate as k_i→−∞. It is
+NOT a proof that all negative participant levels beyond a universal
+constant give A=0 at a fixed parameter tuple.
+
+The subsequent interior variational account and its consumer remain
+open. In particular NOETHER's separate same-profile countertest shows
+that even EXACT conservation of passive/own-singleton/joint-member
+probabilities does not force zero debt: WHICH coalition pays matters.
+TB does not replace full coalition kernels by those three counts, mix
+the menu into play, infer a common old/new minimum, or prove arbitrary
+Fin4 existence.
+
+Concrete independent check requested: try to break TB2's ACTUAL
+periodic/absorbing source, TB3's full-clock empty-phase deletion, or
+TB4–TB5's quantifier order and simultaneous all-omitted-owner screening.
+If they survive, use the repaired compact tax maximum only with its
+newly generated source, retaining full coalition response ledgers.
 
 ## Global relay sequel: true punishment can seed an all-path robust trap
 
