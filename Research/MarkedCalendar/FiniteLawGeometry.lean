@@ -16,8 +16,10 @@ atomless base. The actual Radon--Nikodym density of each limiting marginal is
 constant almost everywhere on every retained gap, including a nonempty Never
 gap, on the same supplied source subsequence. Actual mapped marginals are
 concentrated on the genuine marked menu, retain the exact common mixture, and
-have zero Never mass when its interval is empty. Finite-atom classification
-and original variation witnesses remain separate obligations.
+have zero Never mass when its interval is empty. Finite mixture atoms are exactly
+the retained finite-gap midpoints, with their interval masses; actual own masses
+are determined by the RN constants. Every such atom is isolated in the genuine
+limiting menu. Original variation witnesses remain a separate obligation.
 -/
 
 noncomputable section
@@ -743,5 +745,178 @@ theorem map_limit_chartLaw_top_eq_zero_of_cutoff_eq_one
   rw [Measure.coe_nnreal_smul_apply, map_volume_collapseClock_top, hcutoff] at htop
   apply le_antisymm ?_ zero_le
   simpa using htop
+
+private theorem collapseClock_fiber_midpoint
+    (limit : MathUE.MarkedCalendar.Calendar) {a b : ℝ}
+    (hgap : Math.Topology.IsGap limit.endpoints a b) (hb : b ≤ (limit.cutoff : ℝ)) :
+    limit.collapseClock ⁻¹' {(((a + b) / 2 : ℝ) : WithTop ℝ)} =
+      {x : unitInterval | a < (x : ℝ) ∧ (x : ℝ) < b} := by
+  let first : unitInterval := ⟨a, limit.endpoints_subset hgap.1⟩
+  let last : unitInterval := ⟨b, limit.endpoints_subset hgap.2.1⟩
+  have hab := hgap.2.2.1
+  ext x
+  constructor
+  · intro hx
+    change limit.collapseClock x = (((a + b) / 2 : ℝ) : WithTop ℝ) at hx
+    have hxc : x < limit.cutoff := by
+      by_contra hnot
+      rw [(limit.collapseClock_eq_top_iff x).mpr (le_of_not_gt hnot)] at hx
+      exact WithTop.top_ne_coe hx
+    rw [limit.collapseClock_of_lt hxc] at hx
+    have hmid := WithTop.coe_injective hx
+    constructor
+    · by_contra hnot
+      have hle : x ≤ first := le_of_not_gt hnot
+      have horder := limit.monotone_midpointClock hle
+      rw [limit.midpointClock_eq_of_mem (x := first) hgap.1] at horder
+      change limit.midpointClock x ≤ a at horder
+      linarith
+    · by_contra hnot
+      have hle : last ≤ x := le_of_not_gt hnot
+      have horder := limit.monotone_midpointClock hle
+      rw [limit.midpointClock_eq_of_mem (x := last) hgap.2.1] at horder
+      change b ≤ limit.midpointClock x at horder
+      linarith
+  · rintro ⟨hax, hxb⟩
+    change limit.collapseClock x = (((a + b) / 2 : ℝ) : WithTop ℝ)
+    rw [limit.collapseClock_of_lt (show x < limit.cutoff from hxb.trans_le hb),
+      limit.midpointClock_of_gap hgap hax hxb]
+
+/-- A retained finite-gap midpoint has mixture mass exactly its raw interval length. -/
+theorem map_volume_collapseClock_midpoint
+    (limit : MathUE.MarkedCalendar.Calendar) {a b : ℝ}
+    (hgap : Math.Topology.IsGap limit.endpoints a b) (hb : b ≤ (limit.cutoff : ℝ)) :
+    (volume : Measure unitInterval).map limit.collapseClock
+      {(((a + b) / 2 : ℝ) : WithTop ℝ)} = ENNReal.ofReal (b - a) := by
+  rw [Measure.map_apply limit.measurable_collapseClock (measurableSet_singleton _),
+    collapseClock_fiber_midpoint limit hgap hb]
+  exact unitInterval.volume_Ioo (x := ⟨a, limit.endpoints_subset hgap.1⟩)
+    (y := ⟨b, limit.endpoints_subset hgap.2.1⟩)
+
+/-- Every positive finite mixture atom is the midpoint of an actual retained finite gap.
+Only a null latent singleton is discarded; collapsed ties are not discarded. -/
+theorem exists_gap_of_map_volume_collapseClock_atom
+    (limit : MathUE.MarkedCalendar.Calendar) {t : ℝ}
+    (hatom : (volume : Measure unitInterval).map limit.collapseClock {↑t} ≠ 0) :
+    ∃ a b : ℝ, Math.Topology.IsGap limit.endpoints a b ∧
+      b ≤ (limit.cutoff : ℝ) ∧ t = (a + b) / 2 := by
+  rw [Measure.map_apply limit.measurable_collapseClock (measurableSet_singleton _)] at hatom
+  have hne : ∀ᵐ x : unitInterval ∂volume, (x : ℝ) ≠ t := by
+    have hcountable := (Set.countable_singleton t).preimage
+      (f := fun x : unitInterval => (x : ℝ)) Subtype.val_injective
+    exact hcountable.ae_notMem volume
+  obtain ⟨x, hx, hxt⟩ := Measure.exists_mem_of_measure_ne_zero_of_ae hatom
+    (ae_restrict_of_ae hne)
+  change limit.collapseClock x = (t : WithTop ℝ) at hx
+  have hxc : x < limit.cutoff := by
+    by_contra hnot
+    rw [(limit.collapseClock_eq_top_iff x).mpr (le_of_not_gt hnot)] at hx
+    exact WithTop.top_ne_coe hx
+  rw [limit.collapseClock_of_lt hxc] at hx
+  have hmid := WithTop.coe_injective hx
+  have hxE : (x : ℝ) ∉ limit.endpoints := by
+    intro hxE
+    rw [limit.midpointClock_eq_of_mem hxE] at hmid
+    exact hxt hmid
+  obtain ⟨hgap, hleft, hright⟩ := limit.gap_of_not_mem hxE
+  refine ⟨limit.lowerEndpoint x, limit.upperEndpoint x, hgap, ?_, ?_⟩
+  · exact (limit.monotone_upperEndpoint hxc.le).trans_eq
+      (limit.upperEndpoint_eq_of_mem limit.cutoff_mem)
+  · exact hmid.symm.trans (limit.midpointClock_of_gap hgap hleft hright)
+
+/-- The actual own atom mass is the actual RN gap constant times the mixture interval length. -/
+theorem exists_rnDeriv_constant_and_map_chartLaw_midpoint
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints)) (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    {a b : ℝ} (hgap : Math.Topology.IsGap limit.endpoints a b)
+    (hb : b ≤ (limit.cutoff : ℝ)) :
+    ∃ value : ℝ, (0 ≤ value ∧ value ≤ (Fintype.card ι : ℝ)) ∧
+      (∀ᵐ x : unitInterval ∂volume, a < (x : ℝ) → (x : ℝ) < b →
+        ((law : Measure unitInterval).rnDeriv volume x).toReal = value) ∧
+      ((law : Measure unitInterval).map limit.collapseClock).real
+        {(((a + b) / 2 : ℝ) : WithTop ℝ)} = value * (b - a) := by
+  obtain ⟨value, hvalue, hrho⟩ :=
+    exists_rnDeriv_toReal_constant_on_limit_gap source subsequence hE i hlaw hgap
+  refine ⟨value, hvalue, hrho, ?_⟩
+  have hbound : (law : Measure unitInterval) ≤
+      (Fintype.card ι : NNReal) • (base : Measure unitInterval) :=
+    ProbabilityMeasure.le_of_tendsto_of_le_measure _ hlaw
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
+  have habs : (law : Measure unitInterval) ≪ volume :=
+    Measure.absolutelyContinuous_of_le_smul hbound
+  let gap : Set unitInterval := {x | a < (x : ℝ) ∧ (x : ℝ) < b}
+  have hgapMeasurable : MeasurableSet gap := measurableSet_Ioo.preimage measurable_subtype_coe
+  have hvolume : (volume : Measure unitInterval).real gap = b - a := by
+    change ((volume : Measure unitInterval)
+      (Ioo ⟨a, limit.endpoints_subset hgap.1⟩
+        ⟨b, limit.endpoints_subset hgap.2.1⟩)).toReal = b - a
+    rw [unitInterval.volume_Ioo, ENNReal.toReal_ofReal (sub_nonneg.mpr hgap.2.2.1.le)]
+  calc
+    ((law : Measure unitInterval).map limit.collapseClock).real
+        {(((a + b) / 2 : ℝ) : WithTop ℝ)} = (law : Measure unitInterval).real gap := by
+      simp only [measureReal_def, Measure.map_apply limit.measurable_collapseClock
+        (measurableSet_singleton _), collapseClock_fiber_midpoint limit hgap hb, gap]
+    _ = ∫ x in gap, ((law : Measure unitInterval).rnDeriv volume x).toReal ∂volume :=
+      (Measure.setIntegral_toReal_rnDeriv habs gap).symm
+    _ = ∫ _ in gap, value ∂(volume : Measure unitInterval) := by
+      apply integral_congr_ae
+      filter_upwards [ae_restrict_mem hgapMeasurable, ae_restrict_of_ae hrho] with x hx hr
+      exact hr hx.1 hx.2
+    _ = value * (b - a) := by
+      simp only [integral_const, measureReal_def, Measure.restrict_apply_univ, smul_eq_mul]
+      rw [← measureReal_def, hvolume, mul_comm]
+
+/-- A finite location without mixture atom has zero mass under every actual limiting marginal. -/
+theorem map_limit_chartLaw_atom_eq_zero_of_map_volume_eq_zero
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    (limit : MathUE.MarkedCalendar.Calendar) (i : ι)
+    {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    {t : ℝ} (hzero : (volume : Measure unitInterval).map limit.collapseClock {↑t} = 0) :
+    (law : Measure unitInterval).map limit.collapseClock {↑t} = 0 := by
+  have hbound : (law : Measure unitInterval) ≤
+      (Fintype.card ι : NNReal) • (base : Measure unitInterval) :=
+    ProbabilityMeasure.le_of_tendsto_of_le_measure _ hlaw
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
+  have hmap := Measure.map_mono hbound limit.measurable_collapseClock
+  rw [Measure.map_smul _ limit.measurable_collapseClock.aemeasurable] at hmap
+  have hatom := hmap {↑t}
+  change (law : Measure unitInterval).map limit.collapseClock {↑t} ≤
+    ((Fintype.card ι : NNReal) • (volume : Measure unitInterval).map
+      limit.collapseClock) {↑t} at hatom
+  rw [Measure.coe_nnreal_smul_apply, hzero, mul_zero] at hatom
+  exact le_antisymm hatom zero_le
+
+/-- Every positive finite mixture atom is an isolated point of the genuine limiting menu. -/
+theorem isOpen_singleton_limit_menu_of_map_volume_atom
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
+    {t : ℝ} (hatom : (volume : Measure unitInterval).map limit.collapseClock {↑t} ≠ 0) :
+    ∃ ht : t ∈ menu, IsOpen ({⟨t, ht⟩} : Set menu) := by
+  obtain ⟨a, b, hgap, hb, rfl⟩ := exists_gap_of_map_volume_collapseClock_atom limit hatom
+  have ht := midpoint_mem_limit_menu_of_gap source subsequence hE hc hT hgap hb
+  refine ⟨ht, ?_⟩
+  have heq : (Subtype.val : menu → ℝ) ⁻¹' Ioo a b = {⟨(a + b) / 2, ht⟩} := by
+    ext x
+    constructor
+    · intro hx
+      have hx' : (x : ℝ) ∈ (menu : Set ℝ) ∩ Ioo a b := ⟨x.property, hx⟩
+      rw [limit_menu_inter_gap source subsequence hE hc hT hgap hb] at hx'
+      exact Set.mem_singleton_iff.mpr (Subtype.ext (Set.mem_singleton_iff.mp hx'))
+    · intro hx
+      have heq := congrArg Subtype.val (Set.mem_singleton_iff.mp hx)
+      change a < (x : ℝ) ∧ (x : ℝ) < b
+      rw [heq]
+      have hab := hgap.2.2.1
+      constructor <;> linarith
+  rw [← heq]
+  exact isOpen_Ioo.preimage continuous_subtype_val
 
 end GameTheory.MarkedCalendarChart

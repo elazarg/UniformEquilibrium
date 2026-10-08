@@ -43,8 +43,10 @@ Example 1's table, printed delta-proper family and proper limit are formalized
 below. The printed family's equilibrium exclusions have explicit small-error
 thresholds; they are not exclusions of every stationary pair. Its separate
 exact stationary witness corrects the specific Section 4 cross-reference.
-Example 2's literal table and strategy families are presented below; its
-proper-limit and equilibrium conclusions remain separate obligations.
+Example 2's literal table, delta-proper families and both proper limits are
+presented below. The absorbing limit's exclusion has an explicit small-error
+threshold; the printed families' approximate-equilibrium conclusions remain
+separate obligations.
 Example 4 and the three final remarks are not formalized here.
 The canonical statements do not settle the original model reduction. This file
 does not claim complete paper coverage or a fixed-target
@@ -406,9 +408,8 @@ def example1HalfStrategy : StationaryStrategy (Fin 2) :=
 def example1FirstStrategy : StationaryStrategy (Fin 2) :=
   example1Strategy 0 le_rfl (by norm_num)
 
-/-- The first/first limit of the printed delta family is a proper pair. -/
-theorem example1_firstFirst_proper :
-    IsProperPair example1Data example1FirstStrategy example1FirstStrategy := by
+private theorem exists_exampleDeltaSequence :
+    ∃ δ : ℕ → ℝ, Tendsto δ atTop (𝓝 0) ∧ ∀ n, 0 < δ n ∧ δ n ≤ 1 / 2 := by
   let δ : ℕ → ℝ := fun n => (1 / 2 : ℝ) * (1 / (n + 1 : ℝ))
   have hδ : ∀ n, 0 < δ n ∧ δ n ≤ 1 / 2 := by
     intro n
@@ -424,6 +425,12 @@ theorem example1_firstFirst_proper :
     simpa [δ] using
       (tendsto_one_div_add_atTop_nhds_zero_nat :
         Tendsto (fun n : ℕ => 1 / (n + 1 : ℝ)) atTop (𝓝 0)).const_mul (1 / 2 : ℝ)
+  exact ⟨δ, hδlimit, hδ⟩
+
+/-- The first/first limit of the printed delta family is a proper pair. -/
+theorem example1_firstFirst_proper :
+    IsProperPair example1Data example1FirstStrategy example1FirstStrategy := by
+  obtain ⟨δ, hδlimit, hδ⟩ := exists_exampleDeltaSequence
   let xs : ℕ → StationaryStrategy (Fin 2) :=
     fun n => example1Strategy (δ n) (hδ n).1.le (hδ n).2
   have hx : Tendsto (fun n => (xs n).1) atTop (𝓝 example1FirstStrategy.1) := by
@@ -802,6 +809,279 @@ theorem example2_recurrent_pureColumnPayoff (δ : ℝ) (hδ : 0 < δ)
       AbsorbingGameData.payoffNumerator2, AbsorbingGameData.absorptionCoefficients,
       example2Data, example2RecurrentRowStrategy, example2RowStrategy,
       Fin.sum_univ_three] <;> field_simp [hden.ne', hone.ne'] <;> ring
+
+private theorem example2_weightBounds (δ : ℝ) (hδ : 0 < δ) (hδhalf : δ ≤ 1 / 2) :
+    0 < 1 - δ ^ 2 - δ ^ 4 ∧
+      δ ^ 2 ≤ δ * (1 - δ ^ 2 - δ ^ 4) ∧
+      δ ^ 4 ≤ δ * δ ^ 2 ∧ δ ^ 4 ≤ δ * (1 - δ ^ 2 - δ ^ 4) := by
+  have hsq : δ ^ 2 ≤ 1 / 4 := by
+    nlinarith [mul_nonneg hδ.le (sub_nonneg.mpr hδhalf)]
+  have hfour : δ ^ 4 ≤ 1 / 16 := by
+    nlinarith [mul_nonneg (show 0 ≤ 1 / 4 + δ ^ 2 by positivity)
+      (show 0 ≤ 1 / 4 - δ ^ 2 by linarith)]
+  have hfirst : δ ≤ 1 - δ ^ 2 - δ ^ 4 := by linarith
+  have hlarge := mul_le_mul_of_nonneg_left hfirst hδ.le
+  have hminor : δ ^ 2 ≤ δ := by
+    nlinarith [mul_nonneg hδ.le (show 0 ≤ 1 - δ by linarith)]
+  have hmiddle := mul_le_mul_of_nonneg_left hminor (sq_nonneg δ)
+  have htail := mul_le_mul_of_nonneg_left
+    (show δ ^ 2 ≤ 1 - δ ^ 2 - δ ^ 4 by linarith) hδ.le
+  refine ⟨by linarith, ?_, ?_, ?_⟩ <;> nlinarith
+
+/-- The columns in the absorbing family strictly prefer their second action. -/
+theorem example2_absorbing_column_ranking (δ : ℝ) (hδ : 0 < δ) (hδhalf : δ ≤ 1 / 2) :
+    pureStationaryPayoff2 example2Data (example2AbsorbingRowStrategy δ hδ.le hδhalf) 0 <
+      pureStationaryPayoff2 example2Data (example2AbsorbingRowStrategy δ hδ.le hδhalf) 1 := by
+  rw [example2_absorbing_pureColumnPayoff δ hδ hδhalf,
+    example2_absorbing_pureColumnPayoff δ hδ hδhalf]
+  norm_num
+  have hsq : δ ^ 2 ≤ 1 / 4 := by
+    nlinarith [mul_nonneg hδ.le (sub_nonneg.mpr hδhalf)]
+  have hfactor := mul_pos (show 0 < 1 - δ ^ 2 by linarith)
+    (show 0 < 1 + δ ^ 2 + δ ^ 4 by positivity)
+  apply (div_lt_iff₀ (show 0 < 1 + δ ^ 2 by positivity)).mpr
+  nlinarith
+
+/-- The columns in the recurrent family strictly prefer their first action. -/
+theorem example2_recurrent_column_ranking (δ : ℝ) (hδ : 0 < δ) (hδhalf : δ ≤ 1 / 2) :
+    pureStationaryPayoff2 example2Data (example2RecurrentRowStrategy δ hδ.le hδhalf) 1 <
+      pureStationaryPayoff2 example2Data (example2RecurrentRowStrategy δ hδ.le hδhalf) 0 := by
+  rw [example2_recurrent_pureColumnPayoff δ hδ hδhalf,
+    example2_recurrent_pureColumnPayoff δ hδ hδhalf]
+  norm_num
+  have hsq : δ ^ 2 ≤ 1 / 4 := by
+    nlinarith [mul_nonneg hδ.le (sub_nonneg.mpr hδhalf)]
+  have hfactor := mul_pos (show 0 < 1 - δ ^ 2 by linarith)
+    (show 0 < 1 + δ ^ 2 + δ ^ 4 by positivity)
+  apply (lt_div_iff₀ (show 0 < 1 + δ ^ 2 by positivity)).mpr
+  nlinarith
+
+/-- The first printed Example 2 family is delta-proper on a concrete small-delta interval. -/
+theorem example2_absorbing_deltaProper (δ : ℝ) (hδ : 0 < δ) (hδhalf : δ ≤ 1 / 2) :
+    IsDeltaProperPair example2Data δ (example2AbsorbingRowStrategy δ hδ.le hδhalf)
+      (example2AbsorbingColumnStrategy δ hδ.le hδhalf) := by
+  have hweights := example2_weightBounds δ hδ hδhalf
+  have hsq : δ ^ 2 ≤ 1 / 4 := by
+    nlinarith [mul_nonneg hδ.le (sub_nonneg.mpr hδhalf)]
+  have hcolumn := example2_absorbing_column_ranking δ hδ hδhalf
+  rw [example2_absorbing_pureColumnPayoff δ hδ hδhalf,
+    example2_absorbing_pureColumnPayoff δ hδ hδhalf] at hcolumn
+  norm_num at hcolumn
+  have hcolumnWeight : δ ^ 2 ≤ δ * (1 - δ ^ 2) := by
+    nlinarith [mul_nonneg hδ.le (show 0 ≤ 1 - δ ^ 2 - δ by linarith)]
+  refine ⟨hδ, by linarith, (example2AbsorbingRowStrategy δ hδ.le hδhalf).2,
+    (example2AbsorbingColumnStrategy δ hδ.le hδhalf).2, ?_, ?_, ?_, ?_⟩
+  · intro i
+    fin_cases i <;> norm_num [example2AbsorbingRowStrategy, example2RowStrategy] <;>
+      nlinarith [hweights.1, sq_pos_of_pos hδ, pow_pos hδ 4]
+  · intro j
+    fin_cases j <;> norm_num [example2AbsorbingColumnStrategy, abs_of_pos hδ] <;>
+      nlinarith [sq_pos_of_pos hδ]
+  · intro i e h
+    change pureStationaryPayoff1 example2Data
+      (example2AbsorbingColumnStrategy δ hδ.le hδhalf) e <
+        pureStationaryPayoff1 example2Data
+          (example2AbsorbingColumnStrategy δ hδ.le hδhalf) i at h
+    rw [example2_absorbing_pureRowPayoff δ hδ hδhalf,
+      example2_absorbing_pureRowPayoff δ hδ hδhalf] at h
+    fin_cases i <;> fin_cases e <;> norm_num at h
+    all_goals
+      norm_num [example2AbsorbingRowStrategy, example2RowStrategy]
+      nlinarith [hweights.2.1, hweights.2.2.1, hweights.2.2.2]
+  · intro j f h
+    change pureStationaryPayoff2 example2Data
+      (example2AbsorbingRowStrategy δ hδ.le hδhalf) f <
+        pureStationaryPayoff2 example2Data
+          (example2AbsorbingRowStrategy δ hδ.le hδhalf) j at h
+    rw [example2_absorbing_pureColumnPayoff δ hδ hδhalf,
+      example2_absorbing_pureColumnPayoff δ hδ hδhalf] at h
+    fin_cases j <;> fin_cases f <;> norm_num at h
+    all_goals
+      norm_num [example2AbsorbingColumnStrategy]
+      nlinarith
+
+/-- The second printed family is delta-proper; its column limit is the first action. -/
+theorem example2_recurrent_deltaProper (δ : ℝ) (hδ : 0 < δ) (hδhalf : δ ≤ 1 / 2) :
+    IsDeltaProperPair example2Data δ (example2RecurrentRowStrategy δ hδ.le hδhalf)
+      (example2RecurrentColumnStrategy δ hδ.le hδhalf) := by
+  have hweights := example2_weightBounds δ hδ hδhalf
+  have hsq : δ ^ 2 ≤ 1 / 4 := by
+    nlinarith [mul_nonneg hδ.le (sub_nonneg.mpr hδhalf)]
+  have hcolumn := example2_recurrent_column_ranking δ hδ hδhalf
+  rw [example2_recurrent_pureColumnPayoff δ hδ hδhalf,
+    example2_recurrent_pureColumnPayoff δ hδ hδhalf] at hcolumn
+  norm_num at hcolumn
+  have hcolumnWeight : δ ^ 2 ≤ δ * (1 - δ ^ 2) := by
+    nlinarith [mul_nonneg hδ.le (show 0 ≤ 1 - δ ^ 2 - δ by linarith)]
+  refine ⟨hδ, by linarith, (example2RecurrentRowStrategy δ hδ.le hδhalf).2,
+    (example2RecurrentColumnStrategy δ hδ.le hδhalf).2, ?_, ?_, ?_, ?_⟩
+  · intro i
+    fin_cases i <;> norm_num [example2RecurrentRowStrategy, example2RowStrategy] <;>
+      nlinarith [hweights.1, sq_pos_of_pos hδ, pow_pos hδ 4]
+  · intro j
+    fin_cases j <;> norm_num [example2RecurrentColumnStrategy, example1Strategy,
+      abs_of_pos hδ] <;>
+      nlinarith [sq_pos_of_pos hδ]
+  · intro i e h
+    change pureStationaryPayoff1 example2Data
+      (example2RecurrentColumnStrategy δ hδ.le hδhalf) e <
+        pureStationaryPayoff1 example2Data
+          (example2RecurrentColumnStrategy δ hδ.le hδhalf) i at h
+    rw [example2_recurrent_pureRowPayoff δ hδ hδhalf,
+      example2_recurrent_pureRowPayoff δ hδ hδhalf] at h
+    fin_cases i <;> fin_cases e <;> norm_num at h
+    all_goals
+      norm_num [example2RecurrentRowStrategy, example2RowStrategy]
+      nlinarith [hweights.2.1, hweights.2.2.1, hweights.2.2.2]
+  · intro j f h
+    change pureStationaryPayoff2 example2Data
+      (example2RecurrentRowStrategy δ hδ.le hδhalf) f <
+        pureStationaryPayoff2 example2Data
+          (example2RecurrentRowStrategy δ hδ.le hδhalf) j at h
+    rw [example2_recurrent_pureColumnPayoff δ hδ hδhalf,
+      example2_recurrent_pureColumnPayoff δ hδ hδhalf] at h
+    fin_cases j <;> fin_cases f <;> norm_num at h
+    all_goals
+      norm_num [example2RecurrentColumnStrategy, example1Strategy]
+      nlinarith
+
+/-- The common first-row limit of both printed Example 2 families. -/
+def example2FirstRowStrategy : StationaryStrategy (Fin 3) :=
+  example2AbsorbingRowStrategy 0 le_rfl (by norm_num)
+
+/-- The second-column limit of the absorbing family. -/
+def example2SecondColumnStrategy : StationaryStrategy (Fin 2) :=
+  example2AbsorbingColumnStrategy 0 le_rfl (by norm_num)
+
+private theorem tendsto_example2RowStrategy (δ : ℕ → ℝ)
+    (hδ : Tendsto δ atTop (𝓝 0)) (hsmall : ∀ n, 0 < δ n ∧ δ n ≤ 1 / 2)
+    (recurrent : Bool) :
+    Tendsto (fun n => (example2RowStrategy (δ n) (hsmall n).1.le (hsmall n).2 recurrent).1)
+      atTop (𝓝 example2FirstRowStrategy.1) := by
+  have hfirst : Tendsto (fun n => 1 - δ n ^ 2 - δ n ^ 4) atTop (𝓝 (1 : ℝ)) := by
+    simpa using ((tendsto_const_nhds :
+      Tendsto (fun _ : ℕ => (1 : ℝ)) atTop (𝓝 1)).sub (hδ.pow 2)).sub (hδ.pow 4)
+  apply tendsto_pi_nhds.mpr
+  intro i
+  cases recurrent <;> fin_cases i
+  · simpa [example2RowStrategy, example2FirstRowStrategy] using hfirst
+  · simpa [example2RowStrategy, example2FirstRowStrategy] using hδ.pow 4
+  · simpa [example2RowStrategy, example2FirstRowStrategy] using hδ.pow 2
+  · simpa [example2RowStrategy, example2FirstRowStrategy] using hfirst
+  · simpa [example2RowStrategy, example2FirstRowStrategy] using hδ.pow 2
+  · simpa [example2RowStrategy, example2FirstRowStrategy] using hδ.pow 4
+
+private theorem tendsto_example2AbsorbingColumnStrategy (δ : ℕ → ℝ)
+    (hδ : Tendsto δ atTop (𝓝 0)) (hsmall : ∀ n, 0 < δ n ∧ δ n ≤ 1 / 2) :
+    Tendsto (fun n => (example2AbsorbingColumnStrategy
+      (δ n) (hsmall n).1.le (hsmall n).2).1) atTop (𝓝 example2SecondColumnStrategy.1) := by
+  apply tendsto_pi_nhds.mpr
+  intro j
+  fin_cases j
+  · simpa [example2AbsorbingColumnStrategy, example2SecondColumnStrategy] using hδ.pow 2
+  · simpa [example2AbsorbingColumnStrategy, example2SecondColumnStrategy] using
+      tendsto_const_nhds.sub (hδ.pow 2)
+
+private theorem tendsto_example2RecurrentColumnStrategy (δ : ℕ → ℝ)
+    (hδ : Tendsto δ atTop (𝓝 0)) (hsmall : ∀ n, 0 < δ n ∧ δ n ≤ 1 / 2) :
+    Tendsto (fun n => (example2RecurrentColumnStrategy
+      (δ n) (hsmall n).1.le (hsmall n).2).1) atTop (𝓝 example1FirstStrategy.1) := by
+  apply tendsto_pi_nhds.mpr
+  intro j
+  fin_cases j
+  · simpa [example2RecurrentColumnStrategy, example1Strategy, example1FirstStrategy] using
+      tendsto_const_nhds.sub (hδ.pow 2)
+  · simpa [example2RecurrentColumnStrategy, example1Strategy, example1FirstStrategy] using
+      hδ.pow 2
+
+/-- The first printed family has the stated absorbing proper limit. -/
+theorem example2_absorbing_proper :
+    IsProperPair example2Data example2FirstRowStrategy example2SecondColumnStrategy := by
+  obtain ⟨δ, hδ, hsmall⟩ := exists_exampleDeltaSequence
+  refine ⟨example2FirstRowStrategy.2, example2SecondColumnStrategy.2, δ,
+    (fun n => (example2AbsorbingRowStrategy (δ n) (hsmall n).1.le (hsmall n).2).1),
+    (fun n => (example2AbsorbingColumnStrategy (δ n) (hsmall n).1.le (hsmall n).2).1),
+    hδ, tendsto_example2RowStrategy δ hδ hsmall false,
+    tendsto_example2AbsorbingColumnStrategy δ hδ hsmall, ?_⟩
+  exact fun n => example2_absorbing_deltaProper (δ n) (hsmall n).1 (hsmall n).2
+
+/-- The second printed family has the stated recurrent proper limit. -/
+theorem example2_recurrent_proper :
+    IsProperPair example2Data example2FirstRowStrategy example1FirstStrategy := by
+  obtain ⟨δ, hδ, hsmall⟩ := exists_exampleDeltaSequence
+  refine ⟨example2FirstRowStrategy.2, example1FirstStrategy.2, δ,
+    (fun n => (example2RecurrentRowStrategy (δ n) (hsmall n).1.le (hsmall n).2).1),
+    (fun n => (example2RecurrentColumnStrategy (δ n) (hsmall n).1.le (hsmall n).2).1),
+    hδ, tendsto_example2RowStrategy δ hδ hsmall true,
+    tendsto_example2RecurrentColumnStrategy δ hδ hsmall, ?_⟩
+  exact fun n => example2_recurrent_deltaProper (δ n) (hsmall n).1 (hsmall n).2
+
+theorem example2_absorbing_limit_absorption :
+    canonicalAbsorptionProbability example2Data example2FirstRowStrategy
+      example2SecondColumnStrategy = 1 := by
+  norm_num [canonicalAbsorptionProbability, GameTheory.RecursiveAbsorption.absorptionMass,
+    Math.Probability.expect_eq_sum, stationaryLaw, ofVector_toReal,
+    AbsorbingGameData.canonicalData, example2Data, example2FirstRowStrategy,
+    example2AbsorbingRowStrategy, example2RowStrategy, example2SecondColumnStrategy,
+    example2AbsorbingColumnStrategy, Fin.sum_univ_three, Fin.sum_univ_two]
+
+theorem example2_recurrent_limit_absorption :
+    canonicalAbsorptionProbability example2Data example2FirstRowStrategy
+      example1FirstStrategy = 0 := by
+  norm_num [canonicalAbsorptionProbability, GameTheory.RecursiveAbsorption.absorptionMass,
+    Math.Probability.expect_eq_sum, stationaryLaw, ofVector_toReal,
+    AbsorbingGameData.canonicalData, example2Data, example2FirstRowStrategy,
+    example2AbsorbingRowStrategy, example2RowStrategy, example1FirstStrategy,
+    example1Strategy, Fin.sum_univ_three, Fin.sum_univ_two]
+
+theorem example2_absorbing_limit_payoff (who : Bool) :
+    canonicalPayoff example2Data none
+      (canonicalStationaryProfile example2Data example2FirstRowStrategy
+        example2SecondColumnStrategy) who = Bool.rec 4 (-3) who := by
+  cases who <;> rw [lemma2_2_canonical] <;>
+    norm_num [GameTheory.RecursiveAbsorption.absorbingContribution,
+      GameTheory.RecursiveAbsorption.absorptionMass, Math.Probability.expect_eq_sum,
+      stationaryLaw, ofVector_toReal, AbsorbingGameData.canonicalData,
+      example2Data, example2FirstRowStrategy, example2AbsorbingRowStrategy,
+      example2RowStrategy, example2SecondColumnStrategy, example2AbsorbingColumnStrategy,
+      Fin.sum_univ_three, Fin.sum_univ_two]
+
+private theorem pureColumnPayoff_le_of_canonicalNash {A B : Type}
+    [Fintype A] [Fintype B] (G : AbsorbingGameData A B)
+    (x : StationaryStrategy A) (y : StationaryStrategy B) {ε : ℝ}
+    (hNash : (canonicalGame G).IsεAsymptoticNash (canonicalPayoff G none) ε
+      (canonicalStationaryProfile G x y)) (j : B) :
+    pureStationaryPayoff2 G x j ≤
+      canonicalPayoff G none (canonicalStationaryProfile G x y) true + ε := by
+  have hprofile : Function.update (canonicalStationaryProfile G x y)
+      true (fun _ _ => PMF.pure j) =
+        GameTheory.RecursiveAbsorption.stationaryProfile G.canonicalData
+          (stationaryLaw x) (PMF.pure j) := by
+    funext who time history
+    cases who <;> simp [canonicalStationaryProfile,
+      GameTheory.RecursiveAbsorption.stationaryProfile,
+      GameTheory.StochasticGame.stationaryBehaviorProfile,
+      GameTheory.RecursiveAbsorption.mixedAction] <;> rfl
+  have h := hNash true (fun _ _ => PMF.pure j)
+  rw [hprofile] at h
+  exact (pureStationaryPayoff2_eq_canonical G x j).le.trans h
+
+/-- The absorbing proper limit fails at errors below three, via an actual column deviation. -/
+theorem example2_absorbing_limit_not_smallErrorNash {ε : ℝ} (hε : ε < 3) :
+    ¬ (canonicalGame example2Data).IsεAsymptoticNash (canonicalPayoff example2Data none) ε
+      (canonicalStationaryProfile example2Data example2FirstRowStrategy
+        example2SecondColumnStrategy) := by
+  intro hNash
+  have hpure := pureColumnPayoff_le_of_canonicalNash example2Data
+    example2FirstRowStrategy example2SecondColumnStrategy hNash 0
+  have hvalue : pureStationaryPayoff2 example2Data example2FirstRowStrategy 0 = 0 := by
+    norm_num [pureStationaryPayoff2, Math.Probability.RatioProperPair.columnRatio,
+      AbsorbingGameData.payoffNumerator2, AbsorbingGameData.absorptionCoefficients,
+      example2Data, example2FirstRowStrategy, example2AbsorbingRowStrategy,
+      example2RowStrategy, Fin.sum_univ_three]
+  rw [hvalue, example2_absorbing_limit_payoff] at hpure
+  norm_num at hpure
+  linarith
 
 /-! ## Section 4: the Example 1 cross-reference
 

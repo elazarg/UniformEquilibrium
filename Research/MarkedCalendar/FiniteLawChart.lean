@@ -12,8 +12,12 @@ The source is an actual finite family of finite stopping laws. Its average
 determines positive interval cells, with Never ordered after every finite date.
 The base is canonical unit-interval volume, not a supplied density law.
 
-The actual densities give normalized chart laws, pointwise domination, and the
-exact common-mixture identity. The interval decoder recovers the same original
+One density compiler realizes every finite law on the fixed reference cells.
+Normalization and decoder recovery are derived for those literal cell weights;
+domination follows from their bound relative to the old interval widths. The
+original chart laws specialize this compiler and retain the exact common-mixture
+identity, which is not asserted for arbitrary replacement cell laws.
+The interval decoder recovers the same original
 laws and their independent product, with fallback confined to a derived-null
 complement. The actual endpoint calendar collapses each cell to its midpoint
 or literal Never. The full finite reply-menu image preserves comparisons with
@@ -198,30 +202,39 @@ theorem pairwise_disjoint_interval (laws : ι → FinDist (Option ℕ)) :
   · exact (not_lt_of_ge ((right_le_left_of_lt laws h).trans hxb.1)) hxa.2
   · exact (not_lt_of_ge ((right_le_left_of_lt laws h).trans hxa.1)) hxb.2
 
-/-- Actual density ratio on each positive mixture cell. -/
-def density (laws : ι → FinDist (Option ℕ)) (i : ι) (x : unitInterval) : ℝ :=
-  ∑ a : Cell laws,
-    (interval laws a).indicator (fun _ => ownWeight laws i a / weight laws a) x
+/-- The finite source law on its actual common positive-cell carrier. -/
+def cellLaw (laws : ι → FinDist (Option ℕ)) (i : ι) : FinDist (Cell laws) :=
+  FinDist.ofWeights (ownWeight laws i) (ownWeight_nonneg laws i) (sum_ownWeight laws i)
 
-theorem measurable_density (laws : ι → FinDist (Option ℕ)) (i : ι) :
-    Measurable (density laws i) := by
+theorem cellLaw_prob (laws : ι → FinDist (Option ℕ)) (i : ι) (a : Cell laws) :
+    (cellLaw laws i).prob a = ownWeight laws i a := FinDist.prob_ofWeights ..
+
+/-- An arbitrary finite cell law is realized on the unchanged reference intervals. -/
+def referenceDensity (laws : ι → FinDist (Option ℕ)) (p : FinDist (Cell laws))
+    (x : unitInterval) : ℝ :=
+  ∑ a : Cell laws,
+    (interval laws a).indicator (fun _ => p.prob a / weight laws a) x
+
+theorem measurable_referenceDensity (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) : Measurable (referenceDensity laws p) := by
   apply Finset.measurable_sum
   intro a _
   exact measurable_const.indicator (measurableSet_interval laws a)
 
-theorem density_nonneg (laws : ι → FinDist (Option ℕ)) (i : ι) (x : unitInterval) :
-    0 ≤ density laws i x := by
+theorem referenceDensity_nonneg (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) (x : unitInterval) : 0 ≤ referenceDensity laws p x := by
   apply Finset.sum_nonneg
   intro a _
   apply Set.indicator_nonneg
   intro _ _
-  exact div_nonneg (ownWeight_nonneg laws i a) (weight_pos laws a).le
+  exact div_nonneg (p.prob_nonneg a) (weight_pos laws a).le
 
-theorem density_eq_of_mem_interval (laws : ι → FinDist (Option ℕ)) (i : ι)
+theorem referenceDensity_eq_of_mem_interval (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws))
     {a : Cell laws} {x : unitInterval} (hx : x ∈ interval laws a) :
-    density laws i x = ownWeight laws i a / weight laws a := by
+    referenceDensity laws p x = p.prob a / weight laws a := by
   classical
-  unfold density
+  unfold referenceDensity
   rw [Finset.sum_eq_single a]
   · exact Set.indicator_of_mem hx _
   · intro b _ hba
@@ -230,34 +243,38 @@ theorem density_eq_of_mem_interval (laws : ι → FinDist (Option ℕ)) (i : ι)
   · intro ha
     exact (ha (Finset.mem_univ a)).elim
 
-theorem density_eq_zero_of_notMem (laws : ι → FinDist (Option ℕ)) (i : ι)
-    {x : unitInterval} (hx : ∀ a, x ∉ interval laws a) : density laws i x = 0 := by
+theorem referenceDensity_eq_zero_of_notMem (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) {x : unitInterval} (hx : ∀ a, x ∉ interval laws a) :
+    referenceDensity laws p x = 0 := by
   apply Finset.sum_eq_zero
   intro a _
   exact Set.indicator_of_notMem (hx a) _
 
-theorem density_le_card (laws : ι → FinDist (Option ℕ)) (i : ι) (x : unitInterval) :
-    density laws i x ≤ (Fintype.card ι : ℝ) := by
+/-- Literal cell weights supply the bound; positivity of the bound is not assumed. -/
+theorem referenceDensity_le (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) (C : NNReal)
+    (hbound : ∀ a, p.prob a ≤ (C : ℝ) * weight laws a) (x : unitInterval) :
+    referenceDensity laws p x ≤ (C : ℝ) := by
   by_cases hx : ∃ a, x ∈ interval laws a
   · obtain ⟨a, ha⟩ := hx
-    rw [density_eq_of_mem_interval laws i ha]
-    exact (div_le_iff₀ (weight_pos laws a)).mpr (ownWeight_le laws i a)
-  · rw [density_eq_zero_of_notMem laws i (not_exists.mp hx)]
-    exact Nat.cast_nonneg _
+    rw [referenceDensity_eq_of_mem_interval laws p ha]
+    exact (div_le_iff₀ (weight_pos laws a)).mpr (hbound a)
+  · rw [referenceDensity_eq_zero_of_notMem laws p (not_exists.mp hx)]
+    exact C.property
 
-theorem integrable_density (laws : ι → FinDist (Option ℕ)) (i : ι) :
-    Integrable (density laws i) (volume : Measure unitInterval) := by
-  apply Integrable.of_bound (measurable_density laws i).aestronglyMeasurable (Fintype.card ι)
-  apply Eventually.of_forall
-  intro x
-  simpa only [Real.norm_eq_abs, abs_of_nonneg (density_nonneg laws i x)] using
-    density_le_card laws i x
+theorem integrable_referenceDensity (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) :
+    Integrable (referenceDensity laws p) (volume : Measure unitInterval) := by
+  apply integrable_finsetSum
+  intro a _
+  exact (integrable_const _).indicator (measurableSet_interval laws a)
 
-theorem integral_density (laws : ι → FinDist (Option ℕ)) (i : ι) :
-    ∫ x, density laws i x ∂(volume : Measure unitInterval) = 1 := by
-  unfold density
+theorem integral_referenceDensity (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) :
+    ∫ x, referenceDensity laws p x ∂(volume : Measure unitInterval) = 1 := by
+  unfold referenceDensity
   rw [integral_finsetSum]
-  · rw [← sum_ownWeight laws i]
+  · rw [← p.sum_prob]
     apply Finset.sum_congr rfl
     intro a _
     rw [integral_indicator_const _ (measurableSet_interval laws a), measureReal_def,
@@ -265,6 +282,40 @@ theorem integral_density (laws : ι → FinDist (Option ℕ)) (i : ι) :
     field_simp [(weight_pos laws a).ne']
   · intro a _
     exact (integrable_const _).indicator (measurableSet_interval laws a)
+
+/-- Actual density ratio on each positive mixture cell, using the reference-law compiler. -/
+def density (laws : ι → FinDist (Option ℕ)) (i : ι) : unitInterval → ℝ :=
+  referenceDensity laws (cellLaw laws i)
+
+theorem measurable_density (laws : ι → FinDist (Option ℕ)) (i : ι) :
+    Measurable (density laws i) := measurable_referenceDensity laws (cellLaw laws i)
+
+theorem density_nonneg (laws : ι → FinDist (Option ℕ)) (i : ι) (x : unitInterval) :
+    0 ≤ density laws i x := referenceDensity_nonneg laws (cellLaw laws i) x
+
+theorem density_eq_of_mem_interval (laws : ι → FinDist (Option ℕ)) (i : ι)
+    {a : Cell laws} {x : unitInterval} (hx : x ∈ interval laws a) :
+    density laws i x = ownWeight laws i a / weight laws a := by
+  simpa only [density, cellLaw_prob] using
+    referenceDensity_eq_of_mem_interval laws (cellLaw laws i) hx
+
+theorem density_eq_zero_of_notMem (laws : ι → FinDist (Option ℕ)) (i : ι)
+    {x : unitInterval} (hx : ∀ a, x ∉ interval laws a) : density laws i x = 0 :=
+  referenceDensity_eq_zero_of_notMem laws (cellLaw laws i) hx
+
+theorem density_le_card (laws : ι → FinDist (Option ℕ)) (i : ι) (x : unitInterval) :
+    density laws i x ≤ (Fintype.card ι : ℝ) := by
+  apply referenceDensity_le laws (cellLaw laws i) (Fintype.card ι : NNReal) _ x
+  intro a
+  simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le laws i a
+
+theorem integrable_density (laws : ι → FinDist (Option ℕ)) (i : ι) :
+    Integrable (density laws i) (volume : Measure unitInterval) :=
+  integrable_referenceDensity laws (cellLaw laws i)
+
+theorem integral_density (laws : ι → FinDist (Option ℕ)) (i : ι) :
+    ∫ x, density laws i x ∂(volume : Measure unitInterval) = 1 :=
+  integral_referenceDensity laws (cellLaw laws i)
 
 theorem volume_iUnion_interval (laws : ι → FinDist (Option ℕ)) :
     volume (⋃ a : Cell laws, interval laws a) = 1 := by
@@ -292,33 +343,68 @@ theorem ae_sum_density (laws : ι → FinDist (Option ℕ)) :
   rw [← card_mul_averageClockLaw_prob]
   exact mul_div_cancel_right₀ _ (weight_pos laws a).ne'
 
+/-- The normalized measure for a literal finite law on the old reference cells. -/
+def referenceMeasure (laws : ι → FinDist (Option ℕ)) (p : FinDist (Cell laws)) :
+    Measure unitInterval :=
+  volume.withDensity (fun x => ENNReal.ofReal (referenceDensity laws p x))
+
+instance referenceMeasure_isProbability (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) : IsProbabilityMeasure (referenceMeasure laws p) where
+  measure_univ := by
+    rw [referenceMeasure, withDensity_apply _ MeasurableSet.univ,
+      Measure.restrict_univ,
+      ← ofReal_integral_eq_lintegral_ofReal (integrable_referenceDensity laws p)
+        (Eventually.of_forall (referenceDensity_nonneg laws p)), integral_referenceDensity,
+      ENNReal.ofReal_one]
+
+/-- The actual probability law, with normalization derived from the cell-law probabilities. -/
+def referenceLaw (laws : ι → FinDist (Option ℕ)) (p : FinDist (Cell laws)) :
+    ProbabilityMeasure unitInterval := ⟨referenceMeasure laws p, inferInstance⟩
+
+theorem referenceMeasure_absolutelyContinuous (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) : referenceMeasure laws p ≪ volume :=
+  withDensity_absolutelyContinuous volume
+    (fun x => ENNReal.ofReal (referenceDensity laws p x))
+
 /-- The actual density measure constructed from the specified player's original law. -/
 def chartMeasure (laws : ι → FinDist (Option ℕ)) (i : ι) : Measure unitInterval :=
-  volume.withDensity (fun x => ENNReal.ofReal (density laws i x))
+  referenceMeasure laws (cellLaw laws i)
 
 instance chartMeasure_isProbability (laws : ι → FinDist (Option ℕ)) (i : ι) :
-    IsProbabilityMeasure (chartMeasure laws i) where
-  measure_univ := by
-    rw [chartMeasure, withDensity_apply _ MeasurableSet.univ,
-      Measure.restrict_univ,
-      ← ofReal_integral_eq_lintegral_ofReal (integrable_density laws i)
-        (Eventually.of_forall (density_nonneg laws i)), integral_density, ENNReal.ofReal_one]
+    IsProbabilityMeasure (chartMeasure laws i) :=
+  referenceMeasure_isProbability laws (cellLaw laws i)
 
 /-- The normalized actual chart law, not a supplied density or probability oracle. -/
 def chartLaw (laws : ι → FinDist (Option ℕ)) (i : ι) : ProbabilityMeasure unitInterval :=
-  ⟨chartMeasure laws i, inferInstance⟩
+  referenceLaw laws (cellLaw laws i)
 
 /-- Canonical Lebesgue probability on the unit interval. -/
 def base : ProbabilityMeasure unitInterval := ⟨volume, inferInstance⟩
 
+theorem referenceMeasure_le (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) (C : NNReal)
+    (hbound : ∀ a, p.prob a ≤ (C : ℝ) * weight laws a) :
+    referenceMeasure laws p ≤ (C : ENNReal) • (volume : Measure unitInterval) := by
+  calc
+    referenceMeasure laws p ≤ volume.withDensity
+        (fun _ : unitInterval => ENNReal.ofReal (C : ℝ)) := by
+      exact withDensity_mono (Eventually.of_forall fun x =>
+        ENNReal.ofReal_le_ofReal (referenceDensity_le laws p C hbound x))
+    _ = _ := by rw [withDensity_const, ENNReal.ofReal_coe_nnreal]
+
+theorem referenceLaw_le (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) (C : NNReal)
+    (hbound : ∀ a, p.prob a ≤ (C : ℝ) * weight laws a) :
+    (referenceLaw laws p : Measure unitInterval) ≤ C • (base : Measure unitInterval) := by
+  change referenceMeasure laws p ≤ C • (volume : Measure unitInterval)
+  rw [← Measure.coe_nnreal_smul]
+  exact referenceMeasure_le laws p C hbound
+
 theorem chartMeasure_le (laws : ι → FinDist (Option ℕ)) (i : ι) :
     chartMeasure laws i ≤ (Fintype.card ι : ENNReal) • (volume : Measure unitInterval) := by
-  calc
-    chartMeasure laws i ≤ volume.withDensity
-        (fun _ : unitInterval => ENNReal.ofReal (Fintype.card ι : ℝ)) := by
-      exact withDensity_mono (Eventually.of_forall fun x =>
-        ENNReal.ofReal_le_ofReal (density_le_card laws i x))
-    _ = _ := by rw [withDensity_const]; simp only [ENNReal.ofReal_natCast]
+  apply referenceMeasure_le laws (cellLaw laws i) (Fintype.card ι : NNReal)
+  intro a
+  simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le laws i a
 
 theorem chartLaw_le (laws : ι → FinDist (Option ℕ)) (i : ι) :
     (chartLaw laws i : Measure unitInterval) ≤
@@ -336,7 +422,8 @@ theorem sum_chartMeasure (laws : ι → FinDist (Option ℕ)) :
         (fun x : unitInterval => ∑ i, ENNReal.ofReal (density laws i x)) := by
       have hsum : (∑ i, chartMeasure laws i) = volume.withDensity
           (∑ i, fun x : unitInterval => ENNReal.ofReal (density laws i x)) := by
-        simpa only [chartMeasure, tsum_fintype, Measure.sum_fintype] using
+        simpa only [chartMeasure, referenceMeasure, density, tsum_fintype,
+          Measure.sum_fintype] using
           (withDensity_tsum (μ := (volume : Measure unitInterval))
             (fun i => (measurable_density laws i).ennreal_ofReal)).symm
       rw [hsum]
@@ -348,13 +435,6 @@ theorem sum_chartMeasure (laws : ι → FinDist (Option ℕ)) :
       filter_upwards [ae_sum_density laws] with x hx
       rw [← ENNReal.ofReal_sum_of_nonneg (fun i _ => density_nonneg laws i x), hx]
     _ = _ := by rw [withDensity_const]; simp only [ENNReal.ofReal_natCast]
-
-/-- The finite source law on its actual common positive-cell carrier. -/
-def cellLaw (laws : ι → FinDist (Option ℕ)) (i : ι) : FinDist (Cell laws) :=
-  FinDist.ofWeights (ownWeight laws i) (ownWeight_nonneg laws i) (sum_ownWeight laws i)
-
-theorem cellLaw_prob (laws : ι → FinDist (Option ℕ)) (i : ι) (a : Cell laws) :
-    (cellLaw laws i).prob a = ownWeight laws i a := FinDist.prob_ofWeights ..
 
 /-- Relabelling actual cells recovers the specified original law, including Never. -/
 theorem cellLaw_map_val (laws : ι → FinDist (Option ℕ)) (i : ι) :
@@ -433,61 +513,80 @@ theorem measurable_decodeCell (laws : ι → FinDist (Option ℕ)) :
   · exact (MeasurableSet.iUnion (measurableSet_interval laws)).compl
   · exact MeasurableSet.empty
 
-/-- The fallback region has zero mass for every actual chart law. -/
-theorem chartMeasure_compl_iUnion_interval (laws : ι → FinDist (Option ℕ)) (i : ι) :
-    chartMeasure laws i (⋃ a : Cell laws, interval laws a)ᶜ = 0 := by
-  apply (withDensity_absolutelyContinuous volume
-    (fun x => ENNReal.ofReal (density laws i x)))
+/-- Decoder fallback is null for every compiled law on the unchanged reference cells. -/
+theorem referenceMeasure_compl_iUnion_interval (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) :
+    referenceMeasure laws p (⋃ a : Cell laws, interval laws a)ᶜ = 0 := by
+  apply referenceMeasure_absolutelyContinuous laws p
   rw [measure_compl (MeasurableSet.iUnion (measurableSet_interval laws))
     (measure_ne_top _ _), volume_iUnion_interval, measure_univ, tsub_self]
 
-theorem chartMeasure_interval (laws : ι → FinDist (Option ℕ)) (i : ι) (a : Cell laws) :
-    chartMeasure laws i (interval laws a) = ENNReal.ofReal (ownWeight laws i a) := by
-  rw [chartMeasure, withDensity_apply _ (measurableSet_interval laws a)]
+theorem referenceMeasure_interval (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) (a : Cell laws) :
+    referenceMeasure laws p (interval laws a) = ENNReal.ofReal (p.prob a) := by
+  rw [referenceMeasure, withDensity_apply _ (measurableSet_interval laws a)]
   calc
-    ∫⁻ x in interval laws a, ENNReal.ofReal (density laws i x) ∂volume =
+    ∫⁻ x in interval laws a, ENNReal.ofReal (referenceDensity laws p x) ∂volume =
         ∫⁻ _ in interval laws a,
-          ENNReal.ofReal (ownWeight laws i a / weight laws a) ∂volume := by
+          ENNReal.ofReal (p.prob a / weight laws a) ∂volume := by
       apply setLIntegral_congr_fun (measurableSet_interval laws a)
       intro x hx
-      change ENNReal.ofReal (density laws i x) =
-        ENNReal.ofReal (ownWeight laws i a / weight laws a)
-      rw [density_eq_of_mem_interval laws i hx]
+      change ENNReal.ofReal (referenceDensity laws p x) =
+        ENNReal.ofReal (p.prob a / weight laws a)
+      rw [referenceDensity_eq_of_mem_interval laws p hx]
     _ = _ := by
       rw [lintegral_const, Measure.restrict_apply_univ, volume_interval,
-        ← ENNReal.ofReal_mul (div_nonneg (ownWeight_nonneg laws i a)
+        ← ENNReal.ofReal_mul (div_nonneg (p.prob_nonneg a)
           (weight_pos laws a).le), div_mul_cancel₀ _ (weight_pos laws a).ne']
 
-theorem ae_decodeCell_mem_interval (laws : ι → FinDist (Option ℕ)) (i : ι) :
-    ∀ᵐ x ∂chartMeasure laws i, x ∈ interval laws (decodeCell laws x) := by
-  have hmem := (withDensity_absolutelyContinuous volume
-    (fun x => ENNReal.ofReal (density laws i x))).ae_le (ae_mem_interval laws)
+theorem ae_decodeCell_mem_interval_referenceMeasure (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) :
+    ∀ᵐ x ∂referenceMeasure laws p, x ∈ interval laws (decodeCell laws x) := by
+  have hmem := (referenceMeasure_absolutelyContinuous laws p).ae_le (ae_mem_interval laws)
   filter_upwards [hmem] with x hx
   obtain ⟨a, ha⟩ := hx
   rw [decodeCell_of_mem_interval laws ha]
   exact ha
 
-/-- The actual interval decoder has precisely the original weights on the finite carrier. -/
-theorem chartMeasure_map_decodeCell (laws : ι → FinDist (Option ℕ)) (i : ι) :
-    (chartMeasure laws i).map (decodeCell laws) = (cellLaw laws i).toMeasure := by
+/-- The old interval decoder recovers exactly the supplied finite cell law. -/
+theorem referenceMeasure_map_decodeCell (laws : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell laws)) :
+    (referenceMeasure laws p).map (decodeCell laws) = p.toMeasure := by
   apply Measure.ext_of_measureReal_singleton
   intro a
   rw [map_measureReal_apply (measurable_decodeCell laws) (measurableSet_singleton a),
-    FinDist.toMeasure_real_singleton, cellLaw_prob]
+    FinDist.toMeasure_real_singleton]
   calc
-    (chartMeasure laws i).real (decodeCell laws ⁻¹' {a}) =
-        (chartMeasure laws i).real (interval laws a) := by
+    (referenceMeasure laws p).real (decodeCell laws ⁻¹' {a}) =
+        (referenceMeasure laws p).real (interval laws a) := by
       apply measureReal_congr
-      filter_upwards [ae_decodeCell_mem_interval laws i] with x hx
+      filter_upwards [ae_decodeCell_mem_interval_referenceMeasure laws p] with x hx
       apply propext
       change decodeCell laws x = a ↔ x ∈ interval laws a
       constructor
       · intro h
         exact h ▸ hx
       · exact decodeCell_of_mem_interval laws
-    _ = ownWeight laws i a := by
-      rw [measureReal_def, chartMeasure_interval,
-        ENNReal.toReal_ofReal (ownWeight_nonneg laws i a)]
+    _ = p.prob a := by
+      rw [measureReal_def, referenceMeasure_interval, ENNReal.toReal_ofReal (p.prob_nonneg a)]
+
+/-- The fallback region has zero mass for every actual chart law. -/
+theorem chartMeasure_compl_iUnion_interval (laws : ι → FinDist (Option ℕ)) (i : ι) :
+    chartMeasure laws i (⋃ a : Cell laws, interval laws a)ᶜ = 0 :=
+  referenceMeasure_compl_iUnion_interval laws (cellLaw laws i)
+
+theorem chartMeasure_interval (laws : ι → FinDist (Option ℕ)) (i : ι) (a : Cell laws) :
+    chartMeasure laws i (interval laws a) = ENNReal.ofReal (ownWeight laws i a) := by
+  simpa only [chartMeasure, cellLaw_prob] using referenceMeasure_interval laws (cellLaw laws i) a
+
+theorem ae_decodeCell_mem_interval (laws : ι → FinDist (Option ℕ)) (i : ι) :
+    ∀ᵐ x ∂chartMeasure laws i, x ∈ interval laws (decodeCell laws x) :=
+  ae_decodeCell_mem_interval_referenceMeasure laws (cellLaw laws i)
+
+/-- The original chart specializes the one reference-cell decoder compiler. -/
+theorem chartMeasure_map_decodeCell (laws : ι → FinDist (Option ℕ)) (i : ι) :
+    (chartMeasure laws i).map (decodeCell laws) = (cellLaw laws i).toMeasure :=
+  referenceMeasure_map_decodeCell laws (cellLaw laws i)
 
 /-- Original clock, not the collapsed real midpoint; Never remains literal top. -/
 def decodeClock (laws : ι → FinDist (Option ℕ)) (x : unitInterval) : WithTop ℕ :=

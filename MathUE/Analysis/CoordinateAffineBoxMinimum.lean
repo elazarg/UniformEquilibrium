@@ -1,6 +1,12 @@
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
+import MathUE.Probability.FiniteIndependentMixture
+import Mathlib.Topology.MetricSpace.Pseudo.Pi
 
-/-! # Coordinate-affine functions attain box minima at vertices -/
+/-! # Box minima of coordinate-affine functions
+
+Coordinate-affine functions attain box minima at vertices. An interior box
+minimum forces global constancy, without a continuity or derivative premise.
+-/
 
 noncomputable section
 
@@ -124,5 +130,147 @@ theorem IsCoordinateAffine.exists_vertex_minimum
   intro point hpoint
   rw [hvalue]
   exact hmin hpoint
+
+private theorem IsCoordinateAffine.eq_const_of_eq_on_vertices
+    {function : (ι → ℝ) → ℝ} (haffine : IsCoordinateAffine function)
+    (lower upper : ι → ℝ) (hwidth : ∀ i, lower i < upper i) (value : ℝ)
+    (hvertices : ∀ vertex : ι → ℝ,
+      (∀ i, vertex i = lower i ∨ vertex i = upper i) → function vertex = value) :
+    ∀ point, function point = value := by
+  have hstep : ∀ active : Finset ι, ∀ point : ι → ℝ,
+      (∀ i, i ∉ active → point i = lower i ∨ point i = upper i) →
+        function point = value := by
+    intro active
+    induction active using Finset.induction_on with
+    | empty =>
+        intro point hpoint
+        exact hvertices point (fun i => hpoint i (by simp))
+    | @insert i active hnot ih =>
+        intro point hpoint
+        have hendpoint (endpoint : ℝ)
+            (hend : endpoint = lower i ∨ endpoint = upper i) :
+            function (Function.update point i endpoint) = value := by
+          apply ih
+          intro j hj
+          by_cases heq : j = i
+          · subst j
+            simpa only [Function.update_self] using hend
+          · simpa only [Function.update_of_ne heq] using
+              hpoint j (by simp only [Finset.mem_insert, not_or]; exact ⟨heq, hj⟩)
+        have hupper := hendpoint (upper i) (Or.inr rfl)
+        have hlower := hendpoint (lower i) (Or.inl rfl)
+        let weight := (upper i - point i) / (upper i - lower i)
+        have hvalue : (1 - weight) * upper i + weight * lower i = point i := by
+          dsimp [weight]
+          field_simp [ne_of_gt (sub_pos.mpr (hwidth i))]
+          ring
+        have hinterpolate := haffine.update_interpolate point i
+          (lower i) (upper i) weight
+        rw [hvalue, Function.update_eq_self, hupper, hlower] at hinterpolate
+        calc
+          function point = (1 - weight) * value + weight * value := hinterpolate
+          _ = value := by ring
+  intro point
+  exact hstep Finset.univ point (by simp)
+
+/-- An interior minimum on a box forces a coordinate-affine function to be globally constant. -/
+theorem IsCoordinateAffine.eq_const_of_isMinOn_box
+    {function : (ι → ℝ) → ℝ} (haffine : IsCoordinateAffine function)
+    (lower upper minimum : ι → ℝ)
+    (hlower : ∀ i, lower i < minimum i) (hupper : ∀ i, minimum i < upper i)
+    (hmin : IsMinOn function (Set.Icc lower upper) minimum) :
+    ∀ point, function point = function minimum := by
+  classical
+  let weight : ι → ℝ := fun i => (upper i - minimum i) / (upper i - lower i)
+  have hwidth (i : ι) : lower i < upper i := (hlower i).trans (hupper i)
+  have hweightPos (i : ι) : 0 < weight i :=
+    div_pos (sub_pos.mpr (hupper i)) (sub_pos.mpr (hwidth i))
+  have hweightLt (i : ι) : weight i < 1 := by
+    dsimp [weight]
+    apply (div_lt_one (sub_pos.mpr (hwidth i))).mpr
+    linarith [hlower i]
+  let laws : ι → GameTheory.Math.Probability.FinDist ℝ := fun i =>
+    GameTheory.Math.Probability.FinDist.mix (weight i) (hweightPos i).le
+      (hweightLt i).le (GameTheory.Math.Probability.FinDist.pure (lower i))
+      (GameTheory.Math.Probability.FinDist.pure (upper i))
+  have hbary (i : ι) : (laws i).expect id = minimum i := by
+    dsimp [laws]
+    rw [GameTheory.Math.Probability.FinDist.expect_mix]
+    simp only [GameTheory.Math.Probability.FinDist.expect_pure, id_eq]
+    dsimp [weight]
+    field_simp [ne_of_gt (sub_pos.mpr (hwidth i))]
+    ring
+  have haverage : function minimum =
+      (GameTheory.Math.Probability.FinDist.pi laws).expect function := by
+    have h := GameTheory.Math.Probability.FinDist.expect_pi_eq_of_separatelyAffine
+      (fun (_ : ι) (law : GameTheory.Math.Probability.FinDist ℝ) => law.expect id)
+      function laws (by
+        intro i point law
+        obtain ⟨offset, slope, hline⟩ := haffine point i
+        rw [hline]
+        have hexpand :
+            law.expect (fun x => function (Function.update point i x)) =
+              offset + slope * law.expect id := by
+          simp_rw [hline]
+          rw [GameTheory.Math.Probability.FinDist.expect_add,
+            GameTheory.Math.Probability.FinDist.expect_const]
+          have hmul := law.expect_mul_const id slope
+          simpa only [id_eq, mul_comm] using congrArg (offset + ·) hmul
+        exact hexpand.symm)
+    have hprofile : (fun i => (laws i).expect id) = minimum := funext hbary
+    rwa [hprofile] at h
+  have hsupport (vertex : ι → ℝ) :
+      vertex ∈ (GameTheory.Math.Probability.FinDist.pi laws).support ↔
+        ∀ i, vertex i = lower i ∨ vertex i = upper i := by
+    rw [GameTheory.Math.Probability.FinDist.mem_support_pi]
+    apply forall_congr'
+    intro i
+    exact GameTheory.Math.Probability.FinDist.mem_support_mix_pure_iff
+      (weight i) (hweightPos i).le (hweightLt i).le
+      (hweightPos i) (hweightLt i) (lower i) (upper i) (vertex i)
+  have hvertices : ∀ vertex : ι → ℝ,
+      (∀ i, vertex i = lower i ∨ vertex i = upper i) →
+        function vertex = function minimum := by
+    intro vertex hvertex
+    have hnegative :
+        (GameTheory.Math.Probability.FinDist.pi laws).expect (fun x => -function x) =
+          -function minimum := by
+      have h := (GameTheory.Math.Probability.FinDist.pi laws).expect_mul_const function (-1)
+      simpa only [mul_neg_one, ← haverage] using h
+    have heq := (GameTheory.Math.Probability.FinDist.pi laws).eq_of_expect_eq_of_le
+      (fun x => -function x) (-function minimum) (by
+        intro x hx
+        apply neg_le_neg
+        apply hmin
+        have hx' := (hsupport x).mp hx
+        constructor <;> intro i
+        · rcases hx' i with heq | heq
+          · exact heq.ge
+          · exact (hwidth i).le.trans_eq heq.symm
+        · rcases hx' i with heq | heq
+          · exact heq.le.trans (hwidth i).le
+          · exact heq.le) hnegative ((hsupport vertex).mpr hvertex)
+    exact neg_injective heq
+  exact haffine.eq_const_of_eq_on_vertices lower upper hwidth (function minimum) hvertices
+
+/-- A local minimum forces a coordinate-affine function to be globally constant. -/
+theorem IsCoordinateAffine.eq_const_of_isLocalMin
+    {function : (ι → ℝ) → ℝ} (haffine : IsCoordinateAffine function)
+    (minimum : ι → ℝ) (hmin : IsLocalMin function minimum) :
+    ∀ point, function point = function minimum := by
+  change {point | function minimum ≤ function point} ∈ nhds minimum at hmin
+  obtain ⟨radius, hradius, hball⟩ := Metric.mem_nhds_iff.mp hmin
+  apply haffine.eq_const_of_isMinOn_box
+    (fun i => minimum i - radius / 2) (fun i => minimum i + radius / 2) minimum
+  · intro i
+    linarith
+  · intro i
+    linarith
+  · intro point hpoint
+    apply hball
+    rw [Metric.mem_ball, dist_pi_lt_iff hradius]
+    intro i
+    rw [Real.dist_eq, abs_lt]
+    constructor <;> linarith [hpoint.1 i, hpoint.2 i]
 
 end Math

@@ -31,7 +31,9 @@ namespace GameTheory.RecursiveAbsorption
 
 variable {I J : Type} [Fintype I] [Fintype J]
 
-private theorem isAsymptoticNash_of_pure_gaps (D : Data I J) (x : PMF I) (y : PMF J)
+/-- Both players' pure reply bounds imply unrestricted behavioral Nash bounds
+at every initial state of the actual canonical game. -/
+theorem isAsymptoticNash_of_pure_gaps (D : Data I J) (x : PMF I) (y : PMF J)
     {ε : ℝ} (hε : 0 ≤ ε)
     (hrow : ∀ i, stationaryPayoff D (PMF.pure i) y false ≤ stationaryPayoff D x y false + ε)
     (hcolumn : ∀ j, stationaryPayoff D x (PMF.pure j) true ≤ stationaryPayoff D x y true + ε) :
