@@ -63,8 +63,15 @@ absorbing gap. Current consuming target is instead a strict same-domain
 competitor at a true K_abs minimum, using the direct strict margins
 restored in NOETHER's RM24. Those margins belong to K_abs at A>0,
 not to ZV's zero-full-debt stratum. The alternative greatest jump–flow
-route has been narrowly reread; executable nonemptiness is not supplied,
-and convexifying its product-root jump images is not authorized.
+attempt JF1–JF6 now proves a complete ORDINARY UNREVIEWED falsifier:
+the ENTIRE actual equilibrium-payoff set can be nonconvex, including
+a fully specified R₀/StandardQ/degree1 table. Its all-behavior midpoint
+barrier refutes convexifying the whole payoff family, beyond the earlier
+one-step jump-image obstruction. The exact grand-only model's faithful
+nonconvex greatest family is computed and executed. Both tables have
+explicit proper equilibria; no positive-gap class is excluded. The
+remaining producer target is nonempty coherent execution without
+convexification or a strict competitor at a true native K_abs minimum.
 
 Current independent work: BA1–BA10 passed two independent soundness
 reviews but is NOTES ONLY: its companion absorbing minimum is not an
@@ -9873,6 +9880,359 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Global jump–flow attempt: the WHOLE equilibrium payoff set is nonconvex
+
+Question. Can one repair the joint essential jump–flow route by
+convexifying not merely its one-step jump image but the ENTIRE set
+of actual uniform-equilibrium payoff targets? The distinction matters:
+BLINDSPOT's exact jump-image example expressly does not rule out that
+a newly convexified point might still be an equilibrium payoff through
+another law. The answer to the proposed repair is NO, even in signed
+all-own-zero Fin4 games whose singleton matrix is R₀, StandardQ,
+degree1, with positive simplex image and strict column preemptors.
+
+The grand-only table in JF1–JF4 has Γ=0; the stronger singleton-matrix
+properties belong to the separate, fully specified perturbation in JF5.
+The following is complete ORDINARY UNREVIEWED mathematics. It gives
+a whole-behavior target barrier and an exact nonconvex family that
+CAN be executed without convexification. It is mechanism triage,
+NOT a positive unrestricted game gap, Fin4 closure or new producer
+coverage for an arbitrary table. The games here have explicit proper
+equilibria, so their absorbing gaps are0.
+
+### JF1. A literal grand-only table and its entire full-reply ledger
+
+Let I={0,1,2,3}. Give EVERY owner reward1 on coalition I and reward0
+on EVERY other nonempty coalition. Never also pays0. These formulas
+specify all60 finite coordinates; all own singletons are0. All four
+players have real agency: quitting prematurely prevents a grand
+coalition rather than acting as a free public coin.
+
+Take ANY independent behavioral profile, equivalently stopping laws
+pᵢ on ℕ∪{Never}. No finite support or absorption assumption is
+made. Write pᵢ(t) for finite-date masses and set
+
+    θ(t)=∏[i∈I]pᵢ(t),    a=∑[t∈ℕ]θ(t),
+    qᵢ(t)=∏[j≠i]pⱼ(t),  bᵢ=sup[t∈ℕ]qᵢ(t).
+
+The prescribed terminal payoff is Uᵢ=a for EVERY i. A pure finite
+deadline t pays exactly qᵢ(t): any earlier or later opponent stop
+precludes the grand coalition, while all three opponents stopping
+at t produces it. Literal Never pays0. Every unrestricted behavioral
+deviation is a mixture of these pure responses. Therefore the ACTUAL
+complete cap is Bᵢ=bᵢ and
+
+    dᵢ=bᵢ−a≥0,
+    dᵢ=bᵢpᵢ(Never)+∑[t∈ℕ]pᵢ(t)[bᵢ−qᵢ(t)],
+    D=∑[i∈I]bᵢ−4a.                              (JF1)
+
+The sum identity includes all mass, not only grand-winning dates.
+This is an exact all-behavior description, not a root screen.
+
+### JF2. Complete classification of all zero-debt payoff targets
+
+The zero-debt PAYOFF projection of the full actual carrier, and of
+the absorbing carrier, is exactly
+
+    {a·(1,1,1,1): a=0 or a=k⁻³ for some integer k≥1}. (JF2)
+
+In particular it is not convex. This classifies limits of arbitrary
+near-Nash profiles, not just exact finite laws or one tagged grammar.
+
+Necessity. Let ANY sequence of profiles have Dₙ→0 and prescribed
+payoff aₙ→a>0. From(JF1), bᵢ,ₙ∈[aₙ,aₙ+Dₙ]. Choose ηₙ>0 with
+ηₙ→0 and Dₙ/ηₙ→0, for example √Dₙ+1/(n+1). For large n put
+
+    Gₙ={t: qᵢ,ₙ(t)>aₙ−ηₙ for EVERY i}.
+
+For a bad date of row i, bᵢ,ₙ−qᵢ,ₙ(t)≥ηₙ. Hence(JF1)
+gives total pᵢ,ₙ mass on those dates at most dᵢ,ₙ/ηₙ. Since
+θₙ(t)=pᵢ,ₙ(t)qᵢ,ₙ(t)≤(aₙ+Dₙ)pᵢ,ₙ(t), the union bound yields
+
+    ∑[t∉Gₙ]θₙ(t)≤(aₙ+Dₙ)Dₙ/ηₙ→0.             (JF3)
+
+At EVERY good date, use the exact product identity
+
+    θₙ(t)³=∏[i∈I]qᵢ,ₙ(t).
+
+It follows that
+
+    (aₙ−ηₙ)^(4/3)<θₙ(t)≤(aₙ+Dₙ)^(4/3).
+
+Thus Gₙ is finite, with uniformly bounded cardinality. Pass to
+a subsequence with constant cardinality k. Equation(JF3) and the
+two-sided bound give
+
+    a=k a^(4/3),   so a=k⁻³ and k≥1.
+
+No convergence of raw dates or attainment of a profile is required.
+The argument quantifies over EVERY realizing near-Nash sequence.
+
+Sufficiency. For each integer k≥1 let all four players independently
+choose a uniformly random deadline among k distinct finite dates.
+Then a=k/k⁴=k⁻³ and bᵢ=k⁻³, so this is an ACTUAL exact terminal
+Nash profile with bounded support and sure absorption. Value0 is
+also an ACTUAL absorbing exact Nash payoff: one owner quits alone
+at date0 and every other owner Never. No unilateral deviation can
+create the grand coalition. These profiles supply both full and
+absorbing diagonal carrier membership for every point in(JF2).
+
+Fixed-target semantic scope. The tracked declaration
+`isUniformEquilibriumPayoff_iff_diagonal_mem_terminalSemanticCarrier`
+in
+`UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean`
+was inspected completely under its imports. It identifies the full
+diagonal carrier with actual fixed uniform-equilibrium payoff targets,
+for arbitrary finite nonempty player types. Consequently(JF2) is
+also the ENTIRE uniform-equilibrium payoff set of this table. The
+absorbing version concerns absorbing terminal near-Nash targets;
+all the sufficient positive profiles are already bounded and absorbing.
+
+### JF3. A literal uniform all-behavior barrier around the midpoint
+
+There is a convenient exact quantitative strengthening:
+
+    49/100≤a≤51/100  ⇒  D≥1/100.                  (JF4)
+
+Suppose instead D<1/100. Then a≤bᵢ<a+1/100≤52/100. Define
+
+    G={t: qᵢ(t)>39/100 for EVERY i}.
+
+On a bad date of row i, bᵢ−qᵢ(t)≥49/100−39/100=1/10.
+The deficiency identity(JF1), followed by the union bound, gives
+
+    ∑[t∉G]θ(t)≤(52/100)·10D<52/1000.
+
+At a good date,
+
+    (39/100)^(4/3)<θ(t)<(52/100)^(4/3).
+
+Exact integer comparisons show
+
+    (39/100)⁴>(26/100)³,
+    (52/100)⁴<(43/100)³.
+
+Thus 26/100<θ(t)<43/100. Two good dates would contribute more
+than52/100, exceeding a≤51/100, so |G|≤1. Consequently
+
+    a<43/100+52/1000=241/500<49/100,
+
+contradiction. This is an unrestricted positive debt barrier at a
+PAYOFF TARGET WINDOW, not a claim D is positive over the whole game.
+The game's unrestricted and absorbing infima are both0.
+
+### JF4. Faithful nonconvex jump–flow pruning solves the exact model
+
+In this table every executable payoff is diagonal a·1 with0≤a≤1.
+A proper viable singleton-flow source at positive a is impossible:
+the flow owner's activity condition is a=own-singleton0. Thus all
+positive executable states must use genuine product-root jumps.
+
+At positive diagonal continuation y·1, classify exact root Nash
+points. AllContinue returns y and is a zero-progress self-loop.
+AllQuit produces1 and absorbs surely. Any other positive-output
+Nash root must have ALL rates strictly between0 and1. Indeed, a
+zero rate together with positive nonsure rates makes each active
+player's Quit payoff0 while its Continue payoff is positive. A sure
+rate together with positive nonsure rates forces every such rate
+to be sure. Sure/zero configurations with no grand probability
+produce only0, not a positive output. The remaining all-mixed
+case has indifference equations
+
+    ∏[j≠i]xⱼ=y∏[j≠i](1−xⱼ).
+
+Comparing them shows all odds xᵢ/(1−xᵢ) equal. Therefore
+
+    xᵢ=y^(1/3)/(1+y^(1/3)),
+    source=T(y)=y/(1+y^(1/3))³.                   (JF5)
+
+Value0 and1 are literal absorbing terminal states. After removing
+AllContinue self-loops, the faithful payoff-level predecessor on
+diagonal sets is
+
+    O(E)={0,1}∪T(E),    T(0)=0.
+
+Start G₀=[0,1] and iterate without convexification. Since T is
+continuous increasing and T(k⁻³)=(k+1)⁻³, exact induction gives
+
+    Gₙ={k⁻³:1≤k≤n}∪[0,(n+1)⁻³],   n≥1.
+
+The greatest surviving family is precisely(JF2)'s scalar set.
+Every positive surviving point k⁻³ is executable by a FINITE
+tagged word: prefix rates1/k to the uniform(k−1)-date profile.
+Both root endpoints pay1/k³, and every resulting clock is uniform
+on k dates. Terminate at AllQuit for k=1. This directly realizes
+the exact witnesses, with no public choice of equilibrium branches.
+
+The inverse positive jump subtracts1 from source^(-1/3). A positive
+noninteger starting value cannot sustain a legal chain to the terminal1
+state; it eventually asks for a continuation above1. The convex hull
+[0,1] would nevertheless retain all of those values. In particular
+1/2 lies in that convex hull but is excluded by the all-behavior
+barrier(JF4). This identifies an actual failure of convexified
+execution, not merely loss of a selected one-step witness.
+
+The exact inspected tracked execution inputs are
+`isUniformEquilibriumPayoff_rootSuccessor_of_isZeroRootNash` in
+`UniformEquilibrium/Quitting/Root/ExactSuccessorClosure.lean`,
+`isUniformEquilibriumPayoff_singletonArc_of_viable_proper` in
+`UniformEquilibrium/Quitting/EssentialAPS/ProperSingletonFlowClosure.lean`,
+`isUniformEquilibriumPayoff_singletonArc_before_rootSuccessor` in
+`UniformEquilibrium/Quitting/EssentialAPS/JumpFlowClosure.lean`, and
+`CompatibleFiniteJumpFlowWord.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/EssentialAPS/FiniteJumpFlowCompiler.lean`.
+Their supplied-word hypotheses are not assumed to arise for arbitrary
+games. The construction above actually supplies them for this table.
+
+### JF5. Whole-payoff nonconvexity survives the actual singleton-matrix screens
+
+The preceding literal grand-only table does NOT satisfy the claimed
+singleton-matrix screens. Here is a separate full60-coordinate table
+which does, and whose ENTIRE actual payoff set is still nonconvex.
+This is not an inference that the screens survive Γ=0.
+
+Put η=1/10000, λ=η/99, and γ=(0,99,99,−1). For every recipient i
+and quitting coalition S define
+
+    z*ᵢ({j})=λγ(j−i mod4),
+    z*ᵢ(S)=0                         if 2≤|S|≤3,
+    z*ᵢ(I)=1,                        Never=0.       (JF6)
+
+All own singletons are0 and the reward bound is1. The singleton
+matrix is λ times RZ's exact matrix, not its pair or higher rows.
+Its determinant is λ⁴·3900797. For the unscaled matrix the adjacent
+principal2 determinants are99, opposite principal2 determinants
+are−9801, all principal3 determinants are970398, and the principal4
+determinant is3900797. Singleton principal matrices are0, with no
+nonzero nonnegative homogeneous complementarity solution because
+each column has its negative predecessor entry. For every larger
+principal support the matrix is nonsingular; thus the complete
+homogeneous complementarity census proves R₀. The complete ones-
+anchor inverse-support census is exactly the RZ census: adjacent
+supports have a negative inverse coordinate, opposite supports have
+a negative outside slack, triple supports have a negative coordinate,
+and the full support alone is admissible, with inverse vector
+(1/197)·1 and positive determinant. Positive scaling divides these
+inverse vectors by λ and leaves outside slacks unchanged. The degree
+is therefore1. The tracked degree-to-StandardQ declarations inspected
+for RZ apply under those exact hypotheses; no genericity claim is
+needed. The uniform simplex vector has Γ* image λ·197/4>0 in EVERY
+coordinate, and each column has a strictly negative entry −λ.
+
+There are two ACTUAL absorbing exact Nash payoffs. The first is
+
+    v_high=(1,1,1,1),
+
+realized by all four owners quitting surely at date0. Withdrawing
+produces a triple and pays the deviator0; hence all finite and Never
+deviations are screened, not merely mixed root deviations.
+
+For the second put
+
+    σ=(−1+√(103/99))/2,    p=1−σ,
+    −1+99σ+99σ²=0,        1/100<σ<1/99.
+
+Repeat FOREVER the four-date owner order 0,3,2,1. At each phase only
+its named owner has Quit hazard p; everyone else Continues. This is
+an actual infinite profile, not a finite word ending in Never.
+Every prescribed clock is finite almost surely. In reverse-phase
+coordinates write γ′=(0,−1,99,99) and
+
+    F=(0,0,99+99σ,99).
+
+The exact recurrence F(k)=γ′(k)+σF(k+1 mod4) follows from the
+displayed quadratic identity. Conditional prescribed payoffs at
+each phase are λpF(k), all nonnegative. At an owner's own phase its
+Quit payoff is0 and its Continue payoff is λpF(1)=0, so it is
+indifferent. At every other phase, a pure immediate Quit gives0:
+it produces either its own singleton or a pair, both paying0 to
+that recipient. Continuing gives a nonnegative conditional value.
+These Bellman inequalities screen EVERY deadline, not only the
+four first phases: iterate to that deadline and use the nonnegative
+terminal conditional value. Never is also screened because the
+three opponents' survival after each complete period contracts by
+σ³, so the residual bounded continuation tends to0. Finally every
+unrestricted behavioral response is a mixture of pure deadlines
+and Never. Thus the complete caps equal the prescribed payoffs
+and this profile is an ACTUAL exact terminal Nash profile with
+
+    v_low=(0,0,η(1−σ²),η(1−σ)).                   (JF7)
+
+It is also a fixed uniform-equilibrium payoff. For a direct proof,
+the opponents' uniformly geometric absorption bound controls the
+live prefix and the absorption-date delay uniformly over EVERY
+deviation. Long finite averages and small-discount averages
+therefore converge uniformly to their terminal values. This uses
+proper geometric opponent clocks, not an inference that every
+terminal Nash profile is automatically uniform. The actual open-
+sign cyclic declaration
+`QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean`
+was also inspected; its selected cycle and zero-own activity
+conditions agree with this explicit recurrence.
+
+Nevertheless the midpoint v_mid=(v_high+v_low)/2 is NOT an
+equilibrium payoff through ANY other law. Table(JF6) differs from
+JF1's grand-only table by at most η in each finite coordinate and
+agrees at Never. Coupling each prescribed profile and each complete
+response without changing the laws gives
+
+    |U*ᵢ−a|≤η,   |B*ᵢ−bᵢ|≤η,   |D*−D|≤8η.       (JF8)
+
+The cap estimate holds after supremizing over ALL deadlines and
+Never; no selected best response is frozen. If a realizing near-
+Nash sequence delivered v_mid, its coordinate0 payoff would tend
+to1/2. Hence the old grand-only scalar a eventually lies in
+[49/100,51/100]. JF3 forces D≥1/100, and(JF8) then forces
+
+    D*≥1/100−8η=23/2500>0,
+
+contradicting D*→0. The same proof excludes a diagonal full-carrier
+point with that prescribed payoff, an absorbing-carrier point,
+and a fixed uniform-equilibrium payoff via the inspected exact
+semantic equivalence in JF2. This proves nonconvexity of the WHOLE
+actual payoff set even with R₀, StandardQ, degree1, a strictly
+positive simplex image and strict negative column preemptors.
+It does NOT give a positive absorbing gap: both explicit endpoints
+already have zero debt. In particular no known-producer noncoverage
+is asserted; v_high is pure grand and v_low is a cyclic producer.
+
+### JF6. Source overlap, exact tests, and the mechanism decision
+
+The narrow source comparison is with Section4 of
+`CODEX_BLINDSPOT__FIN4_GLOBAL_ROUTE_AUDIT.md`, and Sections1,5,6 of
+`CODEX_BLINDSPOT__ONE_JUMP_TWO_SORTED_ESSENTIAL_APS.md`. Their exact
+one-step jump nonconvexity is valid, but explicitly leaves open
+whether convexified payoffs might be produced by some OTHER actual
+law. JF2–JF3 and JF5 settle that stronger escape in these literal
+tables by a complete unrestricted-response barrier. This is not a
+rediscovery of an existence theorem or of the supplied finite-word
+compiler. The named tracked execution declarations are recorded
+in JF4 and their supplied inputs remain explicit.
+
+Exact rational experiments checked the two power inequalities in
+JF3, the upper bound241/500<49/100, and the separation23/2500.
+Uniform k-date laws and the root-prefix recurrence were checked
+for k=1,…,7 using rational arithmetic; the proof holds for all k.
+The cyclic balance and all four conditional values in JF5 were
+checked symbolically, including the infinite-period Never screen.
+These are tests of displayed exact proofs, not a bounded-grid
+certificate for arbitrary profiles.
+
+Direction decision. Convexifying the ENTIRE equilibrium-payoff
+family cannot repair the nonempty executable greatest-family
+problem, even after the usual singleton-matrix restrictions.
+Private independent clocks do not implement a public coin choosing
+between two equilibrium profiles. The faithful nonconvex family
+in JF4, however, IS nonempty and fully executable. Thus this retires
+only the convexification shortcut, not the tagged jump–flow route.
+The new result is a complete exact falsifier, NOT a positive-gap
+class reduction or an arbitrary-game producer. No export is proposed.
+For a native zero-own table with A=Δ_abs>0, a nonempty coherent
+executable family or a strict same-domain whole-law competitor is
+still missing. Further work must produce one of those actual objects
+rather than treating the present solved model as a counterexample.
 
 ## Native root-only falsifier: quiet uniqueness survives the strongest basic Γ screens
 

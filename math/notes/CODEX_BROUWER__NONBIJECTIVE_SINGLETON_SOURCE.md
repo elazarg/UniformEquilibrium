@@ -54,6 +54,10 @@ PS below retires a different global attempt: a payoff-only screen at the
 own-singleton threshold cannot exclude the surviving source, because its
 already-produced singleton direction gives an actual absorbing profile
 strictly above ALL those thresholds. Full cap pricing remains essential.
+CV1–CV4 is a complete ordinary, unreviewed global ledger for conditioning
+an owner's ENTIRE old finite mass or Never branch: the absorbing gap
+forces a positive cap-mixing dividend and uniformly incompatible endpoint
+response witnesses. It supplies no favorable coupled comparison or UE.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -8502,10 +8506,11 @@ This does not consume the source. A nontrivial end-Never graft decreases
 strict when the appended tail has positive absorption probability, by
 NR4 and its literal joint-Never product. A successful equal-debt return
 would need compensating changes of EXISTING finite mass. Preserving ν
-is necessary for such a return, not sufficient. The next question is a
-coupled old-law comparison on this fixed-ν minimum level, not further
-tail-only release or counting the incoming walls of NR6. NR9 below
-tests and rejects a proposed lossless mixing step on that level.
+is necessary for such an EQUAL-debt return, not sufficient. NR9 below
+tests and rejects a proposed lossless mixing step on that level, and NR10
+rules out imposing the fixed-ν restriction on a LOWER-debt competitor.
+The consuming question is therefore a ν-changing coupled old-law
+comparison, not further tail-only release or counting NR6's walls.
 
 ### NR9. Exact full-law fixed-Never optimization still has a collision barrier
 
@@ -8706,6 +8711,113 @@ not to weaken the same copied-outcome inequality. The live consumer must
 change existing finite mass while retaining ALL counterfactual caps and
 allowing ν to vary. Neither a payoff-positive stationary source nor an
 auxiliary Nash root above a minimizing payoff supplies that comparison.
+
+## Global purification prices for the entire existing finite law
+
+### CV1. Exact all-response ledger, not a consuming construction
+
+COMPLETE ORDINARY SUPPORTING CALCULATION, not independently reviewed.
+This examines a genuinely ν-changing modification of EXISTING finite
+mass, not an appended end-Never tail. It does not produce a descent or
+new counterexample-class exclusion. Work at a fixed original NP table
+with Δ_all=δ>0 and Δ_abs=δ+g, g>0. For an ACTUAL profile p and owner j
+write n=p_j(Never), m=1−n, and suppose 0<n<1. Let f replace ONLY j's
+whole law by its conditional FINITE law, and let e replace ONLY j by
+literal Never. All other complete laws remain the original independent
+ones. These are actual profiles; f is absorbing and e has joint Never
+ν(p)/n. The mixing identity p_j=m f_j+n e_j concerns j's private law,
+not an observed public lottery between whole game profiles.
+
+Every prescribed payoff is affine on this one-law chord. The cap of j
+is unchanged. Every other COMPLETE cap is the supremum of affine pure
+reply values, hence convex. Therefore the exact cap-mixing dividend is
+
+    J_j(p)=Σ[i≠j](m B_i(f)+n B_i(e)−B_i(p))≥0,
+    J_j(p)=m D(f)+n D(e)−D(p).                 (CV1)
+
+No maximizing clock or common witness is chosen. Arbitrarily late finite
+tests, original Never, and every changed maximizing branch remain inside
+the three FULL caps in this identity. It follows from the original
+floors that
+
+    J_j(p)≥m g−(D(p)−δ).                      (CV2)
+
+Thus whole-law purification is not controlled by the mover's original
+gain alone: the true minimum relies on a STRICT cap-mixing dividend
+whenever that owner has positive finite mass.
+
+### CV2. Literal original-minimum sequences and the NR strict extra term
+
+Take ANY original finite-law minimizing sequence p^k and a subsequence
+with n_j^k→n∈(0,1). Finite conditional laws f_j^k are actual probabilities,
+with no conditioning of opponents or zero-probability event. The f^k
+pairs belong to K_abs; the e^k pairs belong to K_all. Extract a joint
+subsequence of their bounded payoff/FULL-cap pairs. The exact identities
+(CV1) pass to these Euclidean limits, giving J_j≥(1−n)g>0.
+
+At the augmented-rigid fresh table of NR1–NR8, original ν(p^k)→ν*>0.
+The Never endpoint has ν(e^k)→ν*/n>ν*. NR4's uniform all-law collar
+therefore gives some ζ>0 with D(e^k)≥δ+ζ eventually. Consequently
+
+    J_j≥(1−n)g+nζ>0.                          (CV3)
+
+This conclusion uses actual full-cap endpoints of the ENTIRE old finite
+law. It does not assume endpoint minimality, atom attainment, tail Nash,
+or constancy of the old payoffs/caps. If n=1 there is no finite branch
+and no positive dividend conclusion. If n=0 the source is absorbing and
+is not a full NP minimum. The two-sided density transports used earlier
+are not needed for these literal endpoint comparisons.
+
+There is also a literal uniform incompatible-witness statement. At each
+actual p, some i≠j contributes at least J_j/3. For EVERY pure finite or
+Never test t, its endpoint response values satisfy
+
+    m[B_i(f)−V_i(t;f_{−i})]+n[B_i(e)−V_i(t;e_{−i})]
+      ≥m B_i(f)+n B_i(e)−B_i(p)≥J_j/3.         (CV4)
+
+The first inequality is exact one-law affinity plus V_i(t;p_{−i})≤B_i(p).
+Along a minimizing sequence with positive limiting J_j, pass to one fixed
+i and a fixed positive lower bound in(CV4). Thus there is NO sequence of
+common finite/Never tests approaching BOTH endpoint caps. No attainment
+or endpoint calendar identification is required: the witnesses and the
+inequality are literal at every original index. This concerns endpoint
+responses, not necessarily two current maximizing points at p. Unique
+current attainment can coexist with strict Jensen loss; no current
+active-face exclusion is asserted.
+
+### CV3. Exact old-table test and the nonconsumed remaining problem
+
+Reuse EG, without a new table: owns1, all passive rewards100, participant
+pairs108, triples92, grand100. The half-date-zero/half-Never profile has
+D=1/4 and B_i=701/8. Fix j. Its f endpoint has j surely Quit at0 and
+all other rates1/2. The other three caps are100 and their debts1; j's
+debt is0. Thus D(f)=3. At e, j Never, the other three caps are309/4 and
+their debts9/8; j's debt is1/8. Hence D(e)=7/2, and exactly
+
+    J_j=(1/2)·3+(1/2)·(7/2)−1/4=3.
+
+Each nonmover contributes1 to this dividend. The Never endpoint raises
+ν from1/16 to1/8; the finite endpoint has ν=0. Every cap here is the
+maximum of the literal root response and the complete later/Never
+response, not a selected row cap. The table has true gap0 at a pure
+pair Nash, so it is NOT an example satisfying the separated-gap premise.
+It illustrates the ledger rather than proving (CV2) from profile debt.
+
+The calculation rejects the proposed whole-law inference “purifying a
+finite conditional branch preserves other cap prices” even before a
+joint calendar construction is attempted. It also shows why convexity
+gives no descent: D(p) is BELOW, not above, the endpoint average. A
+ν-changing coupled comparison must control changes in these mixing
+dividends as well as prescribed payoffs. No bound making that comparison
+favorable is proved here; CV is not a gain-to-charge consumer or export.
+
+The narrow source lookup inspected
+`quittingContinuationBestResponseValue_source_sub_stoppingLawMixture_le`
+and `abs_quittingTerminalSemanticDebt_stoppingLawMixture_sub_le` in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticStoppingLawMinimumTangent.lean`,
+plus the exact singleton and actual absorbing-completion facts used by
+the canonical NP proof. The algebra above uses their ordinary one-law
+affinity/convexity principle; it is not a new checked declaration.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 

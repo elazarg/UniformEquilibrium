@@ -58,7 +58,18 @@ and sole-root-supplier boundary is therefore excluded, not a surviving
 consequence of that weak estimate. This is a useful overlap and ordinary
 zero-own extension, not a new export. The native source still loses NP's
 fully-paid/unrestricted-all-tail strength. A native random-collision consumer
-or an actual same-NP joint-law exit remains unproved.
+or an actual same-NP joint-law exit remains unproved. RM25 proves a literal
+lower-FULL-debt absorbing completion for sufficiently penalized tables with
+a nonpositive observer column, then identifies the exact cancellation which
+prevents it from beating the native absorbing floor. RM26 changes producer:
+an almost-sure hazard-constrained host admits an actual profile at which ALL
+three observers are unrestricted Nash and the host is constrained-optimal.
+The full host cap is not controlled by the anchor; a complete delayed-pair
+family has uniformly positive payoffs and nonvanishing host debt as the
+hazard vanishes. Thus arbitrary anchored-Nash selection is retired, not
+counted as a new counterexample-class reduction. The next global step must
+select or couple whole profile families, rather than import observer-cap
+continuity into the host's deleted-anchor cap.
 No full Fin4 contradiction or new export is claimed.
 
 The body retains the independently reviewed compact/source reductions,
@@ -18757,3 +18768,197 @@ exit must change the original prescribed finite laws and beat the
 actual floor after ALL cap effects are retained, or derive a new
 whole-table comparison. A further penalty-size optimization cannot
 remove the exact cancellation in(NC6).
+
+### RM26. A global anchored-Nash producer and the deleted-anchor escape
+
+Status: COMPLETE ORDINARY PRODUCER, FULL-CAP LIMIT CHECK, AND EXACT FAILED
+CONSUMER. This changes mechanism after NC6. It constructs actual absorbing
+profiles from arbitrary finite reward data, not a supplied response box.
+It does NOT prove small unrestricted exploitability, attain the native
+minimum, or narrow the remaining counterexample class. The failed inference
+is a GLOBAL selection inference, not an unpriced local observer cap.
+
+Question and probability model. Let I={0,1,2,3}, let z be ANY finite
+reward table with |z_i(S)|≤M, and fix a host h and 0<θ<1. Players use
+independent laws on ℕ∪{Never}; the public live history before absorption
+contains only the calendar. For a host law q put S_q(t)=P_q(T≥t), with
+S_q(0)=1, and impose
+
+    S_q(t+1)≤(1−θ)S_q(t) for every t.                     (AN1)
+
+Thus the host's conditional Quit hazard is at least θ at EVERY live date.
+The host law is almost-sure finite and S_q(t)≤(1−θ)^t. The other three
+players have no restriction, including literal Never and arbitrary later
+deadlines. Is there an actual profile in which the three observers are
+unrestricted Nash and the host is optimal among ALL laws satisfying AN1?
+Yes. Does choosing such profiles as θ↓0 automatically produce terminal
+approximate Nash profiles? No, even when all four prescribed payoffs stay
+uniformly positive. No public correlation is introduced in either claim.
+
+AN2: actual producer with all observer caps. For an integer N, let H_(θ,N)
+be the finite host-law polytope satisfying AN1 before N and stopping surely
+by N. Its constraints are linear in the masses on {0,…,N}; it is nonempty
+and has finitely many vertices. Give the host those vertices as pure
+actions. Give every observer the finite menu {0,…,N,Never}. Extend the
+literal terminal payoff multilinearly in the independent chosen laws.
+Finite mixed Nash existence supplies a profile. A mixture of host vertices
+is again a member of H_(θ,N), and Nash optimality against every vertex
+implies optimality against the ENTIRE polytope.
+
+Every observer's Nash condition in this finite game is already its FULL
+behavioral condition. If the observer switches to any date>N or Never,
+the retained host stops by N and screens that response. All those tests
+therefore equal the displayed Never payoff. Dates≤N are in the menu;
+mixed and behavioral stopping responses average these pure tests. No
+claim of host full-cap control follows: its own deviation deletes the
+anchor, and the other three menu laws may all have Never mass.
+
+Take N→∞. The host laws are uniformly tight by AN1 and have a subsequence
+converging to an actual probability law satisfying AN1, with zero Never
+mass. The observers' laws have a weakly convergent subsequence in the
+ordinary compact space ℕ∪{Never}. For a cutoff L, modify every observer
+law by sending its mass after L to Never. On the event that the host
+stops before L, this changes no prescribed outcome; each payoff changes
+by at most 2M(1−θ)^L. Against ANY pure or behavioral deviation of an
+observer, the same retained host still screens every event after L.
+Consequently the observer's complete cap is uniformly approximated by
+finitely many tests and its Never test, with error at most
+2M(1−θ)^L. The finite prefix probabilities are continuous in the laws.
+Letting L→∞ proves joint continuity of all prescribed payoffs and ALL
+three observer caps on this uniformly anchored family. Their full regrets
+therefore converge to zero, not merely their displayed menu regrets.
+
+For the host's constrained comparisons, take ANY q satisfying AN1 and
+truncate it to min(T,N). This law lies in H_(θ,N); its total-variation
+distance from q is at most (1−θ)^N, so its payoff differs by at most
+2M(1−θ)^N, uniformly over the observer laws. In the comparison with q
+the candidate q itself retains the uniform absorbing anchor. Its payoff
+is continuous along the chosen observer subsequence by the same cutoff
+argument. Passing to the limit in finite host Nash optimality proves
+optimality against every q satisfying AN1. This argument uses no
+continuity assertion for the UNRESTRICTED host cap. It produces an actual
+absorbing profile p^θ with
+
+    d_i(p^θ)=0 for i≠h,
+    U_h(p^θ)≥U_h(q,p^θ_−h) for every q satisfying AN1.       (AN2)
+
+The first statement includes every later deadline and Never, not only
+the finite menus. Finite N anchors are used only before the limit; no
+finite-support exact terminal Nash producer has been inferred.
+
+AN3: the true native floor prices the deleted-anchor escape. Now assume
+own singletons are zero and the true absorbing infimum is A>0. Every
+AN2 profile is in P_abs, so its sole debt satisfies d_h≥A. Write V_h(t)
+for the actual pure-date-t response value and B_h for its FULL cap.
+Let the host use hazard θ until t, then Quit surely at t. This allowed
+law can be coupled with the pure deadline t, differing only if its
+geometric forced stop occurs before t. Thus AN2 gives
+
+    U_h≥V_h(t)−2M[1−(1−θ)^t],
+    B_h−V_h(t)≥A−2M[1−(1−θ)^t].                          (AN3)
+
+For own0, V_h(t)→R_h, the Never payoff, for any fixed actual opponent
+laws; hence B_h=sup_(t finite) V_h(t), with Never included by that
+limit. Since 1−(1−θ)^t≤θt, every t≤A/(4Mθ) has
+
+    V_h(t)≤B_h−A/2.                                    (AN4)
+
+In particular, no uniformly bounded deadline can approximately attain
+the host cap as θ↓0 in a genuine positive-A table. A response can escape
+on scale 1/θ, or the cap can be attained only by Never. This is derived
+from the actual SAME-DOMAIN floor, not a supplied far-response gap.
+It does not contradict any bound on observer caps: those responses keep
+the host, whereas this response deletes it.
+
+AN4 is a necessary condition on the produced family, not a lower-debt
+competitor. RM24 applies only if such profiles approach A. AN2 alone
+does not make them minimum profiles, and observer Nash does not let us
+replace them by a native minimum while preserving their Nash conditions.
+
+AN5: complete four-player delayed-pair test of arbitrary selection.
+Here is one entire 60-coordinate table, specified on ALL fifteen nonempty
+coalitions without omitted data. Set h=0 and put
+
+    z_0(S)=0 when 0∈S, and z_0(S)=1 when 0∉S;
+    z_i(S)=0 when i∈S, for each i∈{1,2,3};
+    z_i(S)=1 when i∉S and 0∈S;
+    z_i(S)=0 when i∉S and 0∉S.                         (AN5)
+
+All four own singletons are0 and every reward lies in[0,1]. Choose ANY
+L≥1. Let the host use geometric hazard θ from date0 onward; let players
+1 and2 stop surely at L, and let player3 Never. Put x=(1−θ)^L.
+The actual prescribed payoff and complete cap vectors are exactly
+
+    U=((1−θ)x, 1−x, 1−x, 1−x),
+    B=(1,       1−x, 1−x, 1−x).                       (AN6)
+
+To check ALL observer responses, before L an observer's pure-date-t
+payoff is 1−(1−θ)^t: only host absorption strictly before t pays1,
+and a coalition containing that observer pays0. At L it is1−x.
+After L and for Never it is again1−x, because at least one of the
+other two fixed pair owners screens the response. For observer3,
+both fixed owners remain. Thus every finite response is at most1−x
+and the prescribed observer law attains it. All three observers have
+zero unrestricted regret exactly.
+
+Against the two retained sure-L observers, the host gets1 precisely
+when its stop is strictly after L, and0 otherwise. ANY AN1 law has
+P(T>L)≤(1−θ)^(L+1), and the geometric law attains this upper bound.
+The host is therefore optimal over the ENTIRE constrained law class,
+not merely over stationary hazards. Its Never response pays1; every
+response after L also pays1. Its full debt is
+
+    D(p^θ)=1−(1−θ)^(L+1).                            (AN7)
+
+Choose integer L=L(θ) with θL→a>0. All prescribed payoffs tend to
+(exp(−a),1−exp(−a),1−exp(−a),1−exp(−a)), strictly positive, while
+the sole host debt tends to1−exp(−a)>0. Thus even uniformly positive
+payoffs plus ALL observers' exact unrestricted Nash conditions do not
+give a vanishing host debt. The anchor's deleted-clock cap is precisely
+the missing term, rather than an observer-tail seam.
+
+This is NOT an absorbing-gap counterexample. The very same table has
+the actual absorbing terminal Nash profile: players1 and2 sure at date0,
+host0 and player3 Never. The host receives1 and cannot improve by
+joining; each pair member receives0 and gets0 on withdrawing; player3
+receives0 on every response. Hence A=0. Indeed the same constrained-host
+family also has good observer-Nash selections with L=0 and host debt θ.
+The exact failed implication is that an ARBITRARY anchored equilibrium
+selection has small full debt as its forced hazard vanishes. It does not
+refute the stronger existential selection question, and no obstruction
+from this solved table is attributed to a true positive native minimum.
+
+AN6: route decision and source audit. The global producer is honest but
+its automatic consumer is false. A useful continuation would need an
+actual selection or coupled-family argument controlling the deleted-anchor
+cap across ALL observer equilibria; merely proving their existence,
+continuity, positive payoffs or exact observer caps does not do this.
+We do not weaken the conclusion by adding that cap control as an input.
+Nor is an off-minimum forced-host family substituted for RM24's native
+minimum or NP's fully paid minimum. The arbitrary-selection route is
+retired after this complete test; no threshold or extra screens are sought.
+
+The narrow source lookup inspected
+`exists_exactFiniteDeadlineTimingNash` and
+`mixedNash_isQuittingFiniteDeadlineNash` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean`,
+and the imported literal law/payoff adapters
+`quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU` and
+`quittingFiniteDeadlineTimingProfile_update_pureTime_eq_mixedEU` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingGame.lean`.
+Their exact finite-menu Nash existence supplies the finite-game step;
+the changed host polytope and anchored limit are ordinary arguments here,
+not checked extensions of those declarations. The existing
+`exists_periodOne_literalPaidCapChain_of_fourPlayer_noUniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/PeriodOneOffMinimumPaidPort.lean`
+was inspected before changing route: its stationary paid-port output is
+off minimum and does not solve this selection question. No Glicksberg
+theorem is invoked without an absorbing continuity proof. The finite-menu
+obstruction RZ5 in MORSE's notebook is consistent with AN2, which asserts
+neither a full finite-menu Nash profile nor a finite-support equilibrium.
+
+Concrete next global question: can an original native minimum, rather
+than the unrelated forced-host equilibrium correspondence, be varied
+through a legal whole-law family whose total FULL debt is strictly below
+A? A fresh whole-table producer is another permissible route, but ALL
+source switches and active host response clocks must then be controlled.
