@@ -9881,6 +9881,141 @@ such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
 
+## Independent producer trial: a nonlinear hazard box is consumed by existing coverage
+
+Status: complete ORDINARY construction and exact source-level retirement,
+not a new counterexample-class reduction. This is a producer attempt after
+JF, rather than another convexity falsifier. The raw class has all own
+singletons0 and, in one cyclic order,
+
+    Γᵢ,ᵢ₊₁=−bᵢ<0,   Γᵢ,ᵢ₊₂=aᵢ>0,   Γᵢ,ᵢ₊₃=cᵢ>0,
+    Γw>0 for some w>0.                                  (HB1)
+
+ALL nonsingleton rewards are arbitrary bounded real data. We seek actual
+proper private clocks and full terminal approximate Nash, not a supplied
+tail solution. The following box argument supplies the four balance
+hazards without assuming circulant symmetry or equal hazards.
+
+Write x_j=p_j/(1−p_j) for the odds of the phase-j hazard. Requiring
+owner i's continuation immediately after its own phase to equal0 gives
+
+    −bᵢpᵢ₊₁+(1−pᵢ₊₁)aᵢpᵢ₊₂
+      +(1−pᵢ₊₁)(1−pᵢ₊₂)cᵢpᵢ₊₃=0.
+
+Equivalently x=F(x), where
+
+    Fᵢ₊₁(x)=[aᵢxᵢ₊₂/(1+xᵢ₊₂)
+       +cᵢxᵢ₊₃/((1+xᵢ₊₂)(1+xᵢ₊₃))]/bᵢ.            (HB2)
+
+F is continuous, nonnegative, and bounded coordinatewise by
+(aᵢ+cᵢ)/bᵢ. Its derivative at0 is the nonnegative matrix L with
+Lᵢ₊₁,ᵢ₊₂=aᵢ/bᵢ and Lᵢ₊₁,ᵢ₊₃=cᵢ/bᵢ. Assumption(HB1) means
+Lw>w, so choose κ>0 with Lw≥(1+κ)w.
+
+For ε>0 sufficiently small, Brouwer on one fixed large positive
+box produces x^ε=F(x^ε)+εw. These fixed points are strictly
+positive and uniformly bounded. They CANNOT converge to0: if
+max_j x^ε_j≤r, then directly from(HB2)
+
+    F(x^ε)≥(1+r)⁻² Lx^ε.
+
+Let m=min_j x^ε_j/w_j>0 and choose a minimizing row j. If r is
+small enough that (1+r)⁻²(1+κ)>1, its fixed-point equation gives
+
+    m≥(1+r)⁻²(1+κ)m+ε>m,
+
+contradiction. A cluster point x≠0 therefore satisfies x=F(x).
+If some x_j=0, equation(HB2) forces both following coordinates0,
+and iteration forces all coordinates0. Thus every x_j>0, and
+p_j=x_j/(1+x_j) lies strictly between0 and1. No eigenvector
+selection or supplied nonlinear solution was hidden in this step.
+
+Repeat the four singleton phases with these hazards forever. The
+displayed balances imply the original owner's conditional values
+at its own phase and the next phase are0. Its conditional values
+at the two other phases are nonnegative: at the last phase before
+its own they equal cᵢpᵢ₊₃>0; at two phases after its own they equal
+aᵢpᵢ₊₂+(1−pᵢ₊₂)cᵢpᵢ₊₃>0. Consequently this is actual finite
+data for `BalancedSingletonCycleCertificate`. Its hazard, owner
+activity, Bellman arc, solo-floor and deleted-opponent divergence
+fields all arise from(HB1)–(HB2). The declaration
+`BalancedSingletonCycleCertificate.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`
+was previously inspected under its imports; it supplies the full
+deviation conclusion for arbitrary nonsingleton rewards.
+
+Directly, split every phase into m dates with hazard
+1−(1−p_j)^(1/m). The original coarse payoffs and activity remain
+exact. A pure nonowner Quit has conditional value at most
+2M max_j[1−(1−p_j)^(1/m)] above Continue; an owner Quit is
+indifferent. Restoring the original tail before the final pure
+Quit transports this ONE endpoint error, rather than summing
+errors over dates. Never is the limit of those restorations
+because every deleted-opponent cycle survival is strictly below1.
+All behavioral responses average pure tests. Thus this supplies
+proper near-Nash profiles with one fixed payoff as m→∞.
+
+Exact asymmetric test. Set a_i=1, c_i=2 and
+
+    b=(7/5,26/9,10/3,11/10),
+    x=(1/2,1/3,1/4,1/5),   p=(1/3,1/4,1/5,1/6).
+
+All four equations(HB2) hold exactly. Γx=(11/60,43/90,1/2,17/60)>0.
+The period survival is1/3 and its first-absorption masses are
+(1/3,1/6,1/10,1/15). With all nonsingleton coordinates0 the actual
+infinite cycle is already exact terminal Nash, with initial payoff
+(0,2/3,2/3,0), and every clock finite almost surely. The unequal
+b_i show that no circulant symmetry was used.
+
+Complete coverage retirement. Narrow lookup found RENY's
+`CODEX_RENY__HETEROGENEOUS_SINGLETON_PERRON_CYCLE_PRODUCER.md`
+and its Section8 COMPLETE matrix-class comparison. The present
+raw class is inside that producer, not outside it. Indeed its
+nonnegative four-weight matrix at period survival1 has exactly
+the matrix L above, so Lw>w forces its Perron crossing above1.
+The explicit 2×2 elimination in that note supplies the same
+positive balance at a survival below1. More importantly, EVERY
+proper principal player set has a homogeneous simplex-LCP vertex:
+choose j in the set whose predecessor lies outside it; restricted
+column j has no negative entry. Therefore if full Γ is StandardQ,
+`isProjectiveQMatrix_iff_standard_or_homogeneous` and the definition
+of `IsProjectiveQBarMatrix` in
+`UniformEquilibrium/Quitting/Classification/LCP/MatrixClasses.lean`
+make full Γ projective Q-bar. The exact strategic conclusion is
+`exists_uniformEquilibriumPayoff_of_projectiveQBar_snell` in
+`UniformEquilibrium/Quitting/AbsorptionPath/PunishmentNormalPathStrategicSnell.lean`.
+The full normal core is all four players. A proper positive
+homogeneous support is impossible because an included row with
+successor outside the support has strictly positive residual;
+a singleton support fails at its negative predecessor. A full
+homogeneous solution would satisfy Lz=z with z>0, contradicting
+Lw>w by the same minimum-ratio comparison. Thus, if Γ is not
+StandardQ, it meets every field of `OrdinaryNonQMatrixBranch`
+in `UniformEquilibrium/Quitting/Classification/LCP/Gate.lean`,
+consumed by `exists_uniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch`
+in `UniformEquilibrium/Quitting/Classification/LCP/OrdinaryNonQClosure.lean`.
+Both actual declarations and their imports were inspected narrowly.
+
+The native all-own-zero absorption conclusion must NOT be inferred
+from ordinary UE at z itself, since AllNever is already Nash there.
+For the absorption use, lift EACH whole finite reward row by a
+positive constant C. This preserves Γ and its matrix branch. The
+exact forward identity is D_(z+C)=D_z+4Cν. The checked strategy
+producer applied to the lifted table therefore gives D_z→0 and
+ν→0. Moving a smallest Never atom to one finite date changes ALL
+payoffs/caps by at most14Mν^(1/4) in sum debt and supplies absorbing
+near-Nash profiles for z. This is the previously proved genuine
+forward use of the affine identity, not inverse invariance of Never.
+
+Decision: the nonlinear box proof is an alternative explicit
+table-to-cycle construction inside an ALREADY SOLVED entire class.
+It does not increase coverage, consume the surviving hard class,
+or justify an export. Further production must handle sign patterns
+whose proper principals are not automatically projective Q, or
+a truly nonconvex multiple-cap jump–flow family. The anchored-Nash
+producer of NOETHER's RM26 is another distinct actual object, but
+its unconstrained host cap cannot be imported as a controlled port.
+
 ## Global jump–flow attempt: the WHOLE equilibrium payoff set is nonconvex
 
 Question. Can one repair the joint essential jump–flow route by

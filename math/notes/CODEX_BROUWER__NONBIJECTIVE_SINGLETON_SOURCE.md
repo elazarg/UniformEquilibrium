@@ -58,6 +58,8 @@ CV1–CV4 is a complete ordinary, unreviewed global ledger for conditioning
 an owner's ENTIRE old finite mass or Never branch: the absorbing gap
 forces a positive cap-mixing dividend and uniformly incompatible endpoint
 response witnesses. It supplies no favorable coupled comparison or UE.
+UD1–UD3 retires uniform ν-changing finite-clock acceleration on the
+already-solved cyclic test; the live attempt is genuinely asymmetric.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
