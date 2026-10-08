@@ -71,6 +71,12 @@ family from actual original laws; it does not produce a favorable member.
 The geometric-pivot check identifies why a payoff-preserving tail
 compression is not such a member: its hazard must respect an old atom,
 and the critical finite branch need not lie beyond the opponents' clocks.
+ZE isolates the boundary where that relocation has NO own-gain at
+any owner: exact row subtraction gives a nontrivial native-zero-own
+near-Nash source while preserving the positive absorbing gap. This is
+a transfer to the absorbing problem, not its solution. Outside that
+boundary an excess debt exists, but TW does not yet put it at a
+critical owner with old finite mass.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -9091,6 +9097,142 @@ solved traps have n_i=1/2 and satisfy the required positive-odds budget,
 so they do not falsify(TW6) and do not validate a universal repair.
 The remaining task is to couple a change of that produced old finite
 branch with another law/calendar change and bound ALL born caps.
+
+## Zero excess debt transfers the live source to a nontrivial native equilibrium
+
+### ZE1. Exact excess decomposition and the useful boundary
+
+This is COMPLETE ORDINARY, UNREVIEWED supporting mathematics. It
+does not assert that the boundary must occur, that a native-zero-own
+equilibrium is absorbing, or that a paid-clock consumer is available.
+Its role is to identify precisely when AP's own-gain term vanishes
+at EVERY owner, rather than interpreting every finite branch as useful
+payoff slack.
+
+At a produced NP minimum let
+
+    eᵢ=dᵢ−νsᵢ,   hᵢ=∏[j≠i]n_j,   mᵢ=1−nᵢ.
+
+For mᵢ>0, denote by Aᵢ^F the payoff of its original conditional
+finite law against the original opponents. Then
+
+    Uᵢ=mᵢ Aᵢ^F+nᵢRᵢ,
+    eᵢ=mᵢ(Bᵢ−Aᵢ^F)+nᵢ(Bᵢ−Rᵢ−hᵢsᵢ).               (ZE)
+
+Both summands are nonnegative: the finite conditional strategy is
+an actual deviation, and the late finite-response limit is
+Rᵢ+hᵢsᵢ≤Bᵢ. The same identities follow on the old marked chart by
+bounded original likelihood transport. For mᵢ=0, simply use
+
+    eᵢ=Bᵢ−Rᵢ−hᵢsᵢ,
+
+because nᵢ=1. Thus eᵢ≥0 for every owner, and eᵢ=0 implies BOTH
+
+    Bᵢ=Rᵢ+hᵢsᵢ,
+    Aᵢ^F=Bᵢ whenever mᵢ>0.
+
+More explicitly, in the second assertion the finite conditional
+prescribed law has zero integral of the nonnegative cap shortfall;
+its compact finite clocks are cap-maximizing almost everywhere. No
+attained actual ℕ deadline is inferred. At NR's further table both
+d and ν are common to all minima, so the numbers eᵢ are likewise
+common. This is not payoff or profile uniqueness.
+
+The actual unrestricted lower bound νsᵢ≤dᵢ is also supplied by
+`prod_stoppingLaw_none_mul_singleton_le_terminalDebt`
+in `UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`.
+The declaration has no cap-attainment, Nash, or sign hypothesis on
+the other reward coordinates. Its proof, and the adjacent finite-
+response limit declaration, were inspected statically for this step.
+
+### ZE2. ALL-zero excess gives actual native-zero-own near equilibria
+
+Assume now eᵢ=0 for all four owners. Define ONE new raw table
+
+    zᵢ(S)=rᵢ(S)−sᵢ for every nonempty S.
+
+Never remains0, so z has own singletons0. This is a different game,
+not a claim that original no-UE, original margins, or an original
+minimum automatically survives row translation.
+
+For EVERY actual profile p with joint Never probability ν(p), one
+has the exact identities
+
+    Uᵢ^z(p)=Uᵢ^r(p)−sᵢ(1−ν(p)),
+    Bᵢ^z(p)=Bᵢ^r(p)−sᵢ,
+    dᵢ^z(p)=dᵢ^r(p)−ν(p)sᵢ.                          (ZT)
+
+Here the cap equality has a complete finite/Never check. Every
+deterministic finite response absorbs surely, hence its value shifts
+by exactly −sᵢ. In r, Never is dominated by the limiting finite
+responses because sᵢ≥0. In z, whose own reward is0, delayed finite
+responses converge to its Never value itself. Thus the supremum of
+finite responses is the full cap in BOTH tables, even if the
+supremum is not attained. Behavioral responses are already included
+by the pure-clock cap reduction. These facts prove (ZT), not merely
+an inequality for a selected old maximizing response.
+
+Use the ORIGINAL actual finite-law minimizing sequence pⁿ.
+Its Never products converge to ν>0 and its original debt vector
+converges to d. By (ZT) all four native debts converge to0, while
+
+    Uᵢ^z(pⁿ) → Uᵢ−sᵢ(1−ν)=Bᵢ−sᵢ,
+    Bᵢ^z(pⁿ) → Bᵢ−sᵢ.
+
+The same sequence retains the original positive first-date mixture,
+its random first-root coalition law, and at least two mixed suppliers.
+It is not an AllNever realizing sequence. The unchanged finite-root
+response payoff differences also retain the original positive-event
+root/later kernel distinction. Its native bridger now has ZERO debt;
+original paidness must not be transported to z.
+
+Indeed ZE1 and (ZT) give native Never value
+
+    Rᵢ^z=Rᵢ−sᵢ(1−hᵢ)=Bᵢ−sᵢ
+
+for EVERY owner. Native Never and the old finite cap tests all
+maximize. Thus this transfer expressly does not create an absorbing
+native Nash law. The actual sequence is an unrestricted terminal
+ε-Nash sequence as ε→0, with the displayed fixed payoff limit.
+The corresponding native uniform-equilibrium payoff follows from
+`quittingGame_isUniformEquilibriumPayoff_of_terminalNash_tendsto`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+Its exact hypotheses were inspected: vanishing nonnegative Nash errors,
+payoff convergence, and bounded finite game data, all supplied here.
+This is an ordinary adapter using a tracked semantic endpoint, not a
+claim that ZE's new source inference has been checked in Lean.
+
+### ZE3. Absorbing floor survives; no absorption conclusion follows
+
+On EVERY absorbing actual profile ν(p)=0, (ZT) gives
+
+    D_z(p)=D_r(p).
+
+Consequently the actual absorbing infima and their closed-carrier
+debt minima agree:
+
+    Δ_abs(z)=Δ_abs(r)=δ+g>0.
+
+On the native FULL class, by contrast, AllNever is an exact
+equilibrium, and the nontrivial sequence in ZE2 also has debt→0.
+The full minimum is0, not the old δ. No original positive-minimum
+margin or original debt rigidity is asserted in z. The singleton
+matrix does remain exactly Γ: its off-diagonal entries are
+zᵢ({j})−zᵢ({i})=rᵢ({j})−sᵢ.
+
+Thus the ALL-zero-excess branch supplies stronger native data than
+the trivial AllNever equilibrium, but still presents an honest
+absorbing-equilibrium problem. An assertion that the same sequence
+can be made absorbing with no full-cap cost is precisely unproved.
+It would close this branch; merely replaying the native law is not
+that proof, because a responder can wait through its earlier blocks.
+
+If some eᵢ>0 instead, AP's strict own-gain applies ONLY when such
+an i is also c-active and has mᵢ>0. TW alone has not produced this
+intersection. If eᵢ>0 only at other finite or pure-Never owners,
+the two-law relocation still requires a genuinely coupled head
+comparison, with every changed head cap retained. This is the exact
+remaining distinction, not a favorable-member claim.
 
 ## Coupled existing-finite-mass relocation with every born cap retained
 
