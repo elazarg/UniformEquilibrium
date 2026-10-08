@@ -93,6 +93,13 @@ dates. Inserting a free empty date was not justified. CS gives its exact
 cap-birth cost and an actual two-date affine-law family containing the
 original minimum, with every new cap explicit. It is a completed ordinary
 adapter for the live construction, not a favorable-member result.
+ZP below retires a proposed shortcut in ZE's native boundary: a strictly
+positive nonabsorbing equilibrium payoff need not admit ANY nonzero
+exact Nash prefix at that payoff. At a genuine zero-excess original
+minimum, such prefixes are in fact already forbidden by the tracked
+minimum cap--Nash invariant. The exact whole-root test is solved and is
+not a positive-gap counterexample. The consumer must change existing
+laws nonexactly, or change more than a fixed equilibrium cap state.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -7936,6 +7943,26 @@ root/later active face, beyond one selected bridge and the
 fixed-source row price retired in CP2. A single favorable selected
 cap price cannot stand in for that face.
 
+### PL8. The 2026 APS extension does not supply the missing atomic selection
+
+Ashkenazi-Golan, Krasikov, Rainer and Solan, *The APS approach for
+undiscounted quitting games* (2026), defines Flesch paths with only
+one continuously active quitter. Definition2.9 requires its payoff
+at that quitter to be0. Theorem2.11 realizes sequentially perfect
+paths; it does not produce their nonemptiness. Theorem4.10 adds a
+circuit hypothesis to the characterization. The introduction explicitly
+restricts the path class; simultaneous atomic exits are not included.
+See the [primary article, Sections2 and4](https://link.springer.com/article/10.1007/s00182-026-00982-6).
+
+The paper's own-zero normalization subtracts the own reward ALSO
+from Never; it is not ZE's native table, which keeps Never0. At the
+native zero-excess source the original strict margins give
+u_i=B_i−s_i>0 for ALL i. Such a vector cannot itself be the starting
+payoff of the paper's sequentially perfect Flesch path, by its stated
+zero-coordinate condition. A different attainable payoff or a produced
+atomic path would still be needed. No new ordinary existence theorem
+or completeness claim is imported.
+
 ## Proper finite-menu Nash is not an all-four-finite approximation producer
 
 ### PF1. Question and exact scope
@@ -9783,6 +9810,186 @@ root anew. These facts do not yet force a favorable finite-amplitude
 point. The benefit of (CS5) is that this remaining decision is an actual
 finite numerical comparison, with no changed-head cap hidden in an
 unproduced field and no free-calendar assumption.
+
+## Native equilibrium positivity does not create a nonzero exact prefix
+
+### ZP1. Global source question and the already-known cap obstruction
+
+This is COMPLETE ORDINARY supporting mathematics and an exact
+architecture falsifier, not a new counterexample-class reduction.
+The proposed route was to close ZE's ALL-zero-excess boundary by
+prepending a nonzero one-stage Nash root to its native equilibrium
+payoff. That route cannot be used without a genuinely different
+strategic operation.
+
+Assume the same NP table r and original minimum as ZE, with
+
+    d_i=νs_i for EVERY i,       ν>0,       s_i>0.
+
+Write S=Σ_i s_i, so δ=νS. At the native table
+z_i(A)=r_i(A)−s_i for nonempty A, Never0, ZE gives an ACTUAL
+terminal near-Nash sequence pⁿ with caps and payoffs both tending to
+
+    u_i=B_i−s_i>0.
+
+The strict positivity follows from the SAME original all-owner
+singleton margin, not normality transported to z. The native
+absorbing floor remains Δ_abs(z)=δ+g>0. These are the real source
+data; the test in ZP2 does NOT have this absorbing floor.
+
+If x is exact root Nash in z with continuation u, prefix it to pⁿ.
+The pure root endpoints and every continuation cap converge, so
+the complete cap--Nash cancellation gives native total debt→0.
+The joint Never product tends to c(x)ν. The exact ZE row-translation
+identity then gives ORIGINAL total debt tending to
+
+    c(x)νS=c(x)δ.
+
+If x is nonzero this is strictly below the ORIGINAL all-law floorδ.
+Thus EVERY such exact root is AllContinue. This is also immediate
+from the already-known original minimum cap game: root payoffs in
+z at continuation u are root payoffs in r at continuation B minus
+s_i in EVERY pure action profile, including AllContinue. The two
+root games are strategically equivalent.
+
+The precise checked cancellation is
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash`
+and its actual-profile total-debt specialization
+`quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash`
+in `UniformEquilibrium/Quitting/Root/CapNashRootStack.lean`.
+The existing architectural no-go
+`exactCapPrefix_joint_eq_self_of_unique_allContinue`
+in `Research/Quitting/UniqueAllContinueCapStackNoGo.lean` was inspected
+under its imports: an exact stack at such a fixed cap state is
+allContinue and has zero absorption. This is Research evidence,
+not an integrated new consumer. The native reformulation above
+does not evade that invariant.
+
+The actual finite-sequence argument matters: z is a different game,
+the limiting native marked law need not be an attained ℕ profile,
+and no global minimum assertion in z is made. Each prefixed pⁿ is
+literal and all finite/Never response caps are retained before
+applying the original floor.
+
+### ZP2. A complete actual positive native equilibrium with no nonzero root
+
+The following exact Fin4 table shows that positivity and a nontrivial
+terminal Nash source alone do not force an escape from that cap
+plateau. All own singletons are0 and Never pays0. Players0,1,2
+are core players; player3 is a passive dummy. The following fifteen
+rows give ALL60 finite rewards, in recipient order0,1,2,3:
+
+    coalition        reward vector
+    {0}              (0,2,2,8/7)
+    {1}              (4/3,0,0,8/7)
+    {2}              (4/3,0,0,8/7)
+    {0,1}            (4/3,5,2,8/7)
+    {0,2}            (4/3,2,−1,8/7)
+    {1,2}            (4/3,−2,2,8/7)
+    {0,1,2}          (4/3,1,3,8/7)
+    {3}              (0,0,0,0)
+    {0,3}            (0,2,2,−1)
+    {1,3}            (4/3,0,0,−1)
+    {2,3}            (4/3,0,0,−1)
+    {0,1,3}          (4/3,5,2,−1)
+    {0,2,3}          (4/3,2,−1,−1)
+    {1,2,3}          (4/3,−2,2,−1)
+    {0,1,2,3}        (4/3,1,3,−1).
+
+Equivalently, adding3 to a nonempty core coalition leaves every
+core reward unchanged; the core rewards at {3} are0. Dummy3
+receives8/7 when passive and some core player quits, −1 when it
+joins a core coalition, and0 when alone.
+
+Let each core player's actual independent law put mass1/2 at date0
+and mass1/2 at Never, while3 plays Never. Then ν=1/8 and EVERY
+owner has U_i=B_i=1. A complete pure-clock check is
+
+    owner             Quit0       ANY finite t≥1      Never
+      0                  1                1               1
+      1                  1                1               1
+      2                  1                1               1
+      3                −7/8               1               1.
+
+For example Q_1=(0+5−2+1)/4=1 and its Never value is
+(0+2+0+2)/4=1. For owner2, Q_2=(0−1+2+3)/4=1 and its Never
+value is again1. Owner0's positive passive value occurs with
+opponent-exit probability3/4, giving (3/4)(4/3)=1. The dummy
+observes a core exit with probability7/8 and hence obtains1.
+Since own singletons are0, EVERY late finite deadline is exactly
+the Never value. Behavioral deviations are averages of these
+pure clocks, so this is an unrestricted terminal Nash profile,
+not just a date-zero binary-game equilibrium.
+
+Now form the one-stage game with continuation u=(1,1,1,1).
+Claim: its ONLY exact Nash root is AllContinue. This is universal
+over all four root rates and includes EVERY quiet, mixed and sure
+boundary, not merely the old half-rate root.
+
+First, Continue strictly dominates Quit for dummy3: on a nonempty
+core opponent event its advantage is8/7+1, and on the empty event
+it is1. Thus every Nash root has x_3=0. Put
+
+    a=x_0,       b=x_1,       c=x_2.
+
+The exact three endpoint differences g_i=Quit_i−Continue_i are
+
+    g_0=−(1−b)(1−c),
+    g_1=−1+4a−(1+3a)c,
+    g_2=−1−2a+(3+a)b.                           (ZP)
+
+These formulas follow by the actual opponent-coalition expansion,
+including the empty event's continuation1. That expansion agrees
+with `quittingRootEndpointDifference_eq_sum_opponentCoalitionToggle`
+in `UniformEquilibrium/Quitting/Root/OpponentCoalitionPayoff.lean`,
+whose definitions and proof were inspected for this calculation.
+
+If c=1, then g_1=−2+a<0, so b=0; but then g_2=−1−2a<0,
+which forbids c=1. If b=1, then g_2=2−a>0, so c=1, already
+impossible. Consequently b,c<1 at EVERY Nash root. This makes
+g_0<0, hence a=0. Then g_1=−1−c<0 gives b=0; finally
+g_2=−1<0 gives c=0. AllContinue is itself strict Nash because
+each own singleton0 is below continuation1. This proves the
+claim without a numerical equilibrium search.
+
+In particular EVERY finite exact cap--Nash stack over the displayed
+actual profile is the identity. Positivity of all four equilibrium
+payoffs, independent positive Never masses, a random root outcome,
+and supported finite maximizing clocks do not change that fact.
+
+### ZP3. Exact nonclaims and the mechanism decision
+
+This table is solved, not an unrestricted positive-gap example.
+The pure date-zero coalition {2} is an absorbing terminal Nash
+profile: its payoff vector is (4/3,0,0,8/7); owner2 is indifferent
+to continuing, owner0 is indifferent to joining, and the joining
+payoffs of owners1 and3 are respectively−2 and−1. Every other
+finite/Never response sees the same already-absorbed outcome.
+Thus Δ_abs(z)=0, unlike the genuine ZE source's δ+g>0.
+The table is neither claimed row-generic nor an NP source.
+
+For a further transparent boundary check, add1 to EVERY nonempty
+reward, retaining Never0. The displayed half-rate profile then
+has U_i=15/8, B_i=2 and d_i=1/8 for every owner, total debt1/2.
+Its one-stage cap game at continuation(2,2,2,2) is exactly the
+same game (ZP), up to row translation, so all exact cap prefixes
+remain inert. Nevertheless pure{2} is still an exact absorbing
+equilibrium and the TRUE debt minimum is0. Positive profile debt
+and even an actual fixed-state plateau cannot replace the global
+minimum hypothesis.
+
+This falsifier does NOT refute an absorbing-equilibrium theorem
+which uses the strict native absorbing gap or other produced data.
+It retires the specific automatic nonzero-Nash-prefix inference.
+The new APS scope check in PL8 also cannot supply that inference:
+its sequential continuous path requires a zero payoff coordinate,
+whereas ZE's source has all four native coordinates strictly positive.
+
+The direct construction therefore returns to NONEXACT changes of
+existing finite mass, with full root/intermediate/tail maxima kept
+in the same ledger. A fixed-state exact-Nash extension is no longer
+a live producer. No new export, UE theorem, native absorption
+producer or additional positive-gap class exclusion is asserted.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
