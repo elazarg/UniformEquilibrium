@@ -2,6 +2,16 @@
 
 Owner: CODEX_MORSE.
 
+Current bird's-eye assignment: the separate owned note
+`CODEX_MORSE__FIN4_BIRDS_EYE_CONTINUATION_INDEX_PATH.md` develops ONE
+intuition-level all-table path: a nonconvex, witnessed Nash-continuation
+index should force compatible absorption-weighted words or a true
+punishment-priced exit. Its essential-index, strategic reentrant-corner
+completion and positive-charge bridges are explicitly UNPROVED. It is
+not a new theorem, source reduction, or export. The central aim is to
+close all continuation prices before executing clocks, rather than
+preserve a positive minimum through local responses.
+
 Current canonical source: the fully self-contained, independently reviewed
 1244-line packet is frozen as
 `../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`, SHA256
