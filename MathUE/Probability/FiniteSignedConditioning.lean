@@ -12,6 +12,10 @@ The singleton specialization resets toward an existing positive atom using
 the same constructor. Event mass one is allowed and gives a redundant
 direction. The distant parameter one is not claimed to lie in this small
 signed interval; ordinary conditioning already supplies that endpoint.
+
+The safe event wrapper leaves the original law unchanged outside the positive
+legal branch. Its support, likelihood bounds, and zero identity are unconditional;
+affine conditional identities apply only on the actual positive legal branch.
 -/
 
 noncomputable section
@@ -189,6 +193,55 @@ theorem expect_signedCond (p : FinDist α) (A : Set α) (he : 0 < p.probOf A)
         parameter * (p.condOn A (exists_mem_support_of_probOf_pos p A he)).expect u := by
   simp only [expect_eq_sum, prob_signedCond_eq_affine, add_mul, mul_assoc,
     Finset.sum_add_distrib, Finset.mul_sum]
+
+/-- A total signed-event source law, retaining the original law when the event or radius is
+unavailable. This does not identify a distant parameter with ordinary conditioning. -/
+def signedCondOrSelf (p : FinDist α) (A : Set α) (parameter : ℝ) : FinDist α := by
+  classical
+  exact if h : 0 < p.probOf A ∧ |parameter| ≤ p.signedCondRadius A then
+    p.signedCond A h.1 parameter h.2
+  else p
+
+/-- Only the positive legal branch is identified with the affine signed constructor. -/
+theorem signedCondOrSelf_eq_signedCond (p : FinDist α) (A : Set α)
+    (he : 0 < p.probOf A) (parameter : ℝ)
+    (hparameter : |parameter| ≤ p.signedCondRadius A) :
+    p.signedCondOrSelf A parameter = p.signedCond A he parameter hparameter := by
+  rw [signedCondOrSelf, dite_eq_left ⟨he, hparameter⟩]
+
+theorem signedCondOrSelf_eq_self_of_not (p : FinDist α) (A : Set α) (parameter : ℝ)
+    (h : ¬(0 < p.probOf A ∧ |parameter| ≤ p.signedCondRadius A)) :
+    p.signedCondOrSelf A parameter = p := by
+  rw [signedCondOrSelf, dite_eq_right h]
+
+/-- Support equality includes every fallback index and every real parameter. -/
+theorem support_signedCondOrSelf (p : FinDist α) (A : Set α) (parameter : ℝ) :
+    (p.signedCondOrSelf A parameter).support = p.support := by
+  classical
+  unfold signedCondOrSelf
+  split
+  · exact support_signedCond ..
+  · rfl
+
+/-- The positive legal branch and the fallback have the same unconditional probability bounds. -/
+theorem prob_signedCondOrSelf_bounds (p : FinDist α) (A : Set α)
+    (parameter : ℝ) (a : α) :
+    (1 / 2 : ℝ) * p.prob a ≤ (p.signedCondOrSelf A parameter).prob a ∧
+      (p.signedCondOrSelf A parameter).prob a ≤ (3 / 2 : ℝ) * p.prob a := by
+  classical
+  unfold signedCondOrSelf
+  split
+  · exact prob_signedCond_bounds ..
+  · have hnonneg := p.prob_nonneg a
+    constructor <;> linarith
+
+theorem signedCondOrSelf_zero (p : FinDist α) (A : Set α) :
+    p.signedCondOrSelf A 0 = p := by
+  classical
+  unfold signedCondOrSelf
+  split
+  · exact signedCond_zero ..
+  · rfl
 
 end Finite
 

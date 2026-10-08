@@ -163,24 +163,14 @@ theorem tendsto_decodeCell_ownMass_of_limit_gap
 
 /-- An all-index law on the old cells. Unavailable signed resets leave the original law intact. -/
 def signedSelectedCellLaw (laws : ι → FinDist (Option ℕ)) (i : ι)
-    (x : unitInterval) (parameter : ℝ) : FinDist (Cell laws) := by
-  classical
-  let p := cellLaw laws i
-  let cell := decodeCell laws x
-  exact if h : 0 < p.prob cell ∧ |parameter| ≤ p.signedCondRadius {cell} then
-    p.signedCond {cell} (by simpa only [FinDist.probOf_singleton] using h.1) parameter h.2
-  else p
+    (x : unitInterval) (parameter : ℝ) : FinDist (Cell laws) :=
+  (cellLaw laws i).signedCondOrSelf {decodeCell laws x} parameter
 
 /-- Both signs preserve the original support, including at fallback indices. -/
 theorem support_signedSelectedCellLaw (laws : ι → FinDist (Option ℕ)) (i : ι)
     (x : unitInterval) (parameter : ℝ) :
-    (signedSelectedCellLaw laws i x parameter).support = (cellLaw laws i).support := by
-  classical
-  unfold signedSelectedCellLaw
-  dsimp only
-  split
-  · exact FinDist.support_signedCond ..
-  · rfl
+    (signedSelectedCellLaw laws i x parameter).support = (cellLaw laws i).support :=
+  FinDist.support_signedCondOrSelf ..
 
 /-- The closed signed branch and the fallback share the same uniform likelihood bounds. -/
 theorem prob_signedSelectedCellLaw_bounds (laws : ι → FinDist (Option ℕ)) (i : ι)
@@ -188,14 +178,8 @@ theorem prob_signedSelectedCellLaw_bounds (laws : ι → FinDist (Option ℕ)) (
     (1 / 2 : ℝ) * (cellLaw laws i).prob cell ≤
         (signedSelectedCellLaw laws i x parameter).prob cell ∧
       (signedSelectedCellLaw laws i x parameter).prob cell ≤
-        (3 / 2 : ℝ) * (cellLaw laws i).prob cell := by
-  classical
-  unfold signedSelectedCellLaw
-  dsimp only
-  split
-  · exact FinDist.prob_signedCond_bounds ..
-  · have hnonneg := (cellLaw laws i).prob_nonneg cell
-    constructor <;> linarith
+        (3 / 2 : ℝ) * (cellLaw laws i).prob cell :=
+  FinDist.prob_signedCondOrSelf_bounds ..
 
 /-- The common old-reference envelope is derived, not supplied with the variation. -/
 theorem prob_signedSelectedCellLaw_le (laws : ι → FinDist (Option ℕ)) (i : ι)
@@ -209,13 +193,8 @@ theorem prob_signedSelectedCellLaw_le (laws : ι → FinDist (Option ℕ)) (i : 
   nlinarith
 
 theorem signedSelectedCellLaw_zero (laws : ι → FinDist (Option ℕ)) (i : ι)
-    (x : unitInterval) : signedSelectedCellLaw laws i x 0 = cellLaw laws i := by
-  classical
-  unfold signedSelectedCellLaw
-  dsimp only
-  split
-  · exact FinDist.signedCond_zero ..
-  · rfl
+    (x : unitInterval) : signedSelectedCellLaw laws i x 0 = cellLaw laws i :=
+  FinDist.signedCondOrSelf_zero ..
 
 /-- Positive gap mass supplies one closed signed radius, eventually valid for all parameters.
 Exceptional indices need no positivity and use the literal fallback. -/
@@ -253,9 +232,8 @@ theorem eventually_signedSelectedCellLaw_affine_of_limit_gap
     have hsmall := hparameter.trans (min_le_right _ _)
     change |parameter| ≤ mass / 4 at hsmall
     linarith
-  unfold signedSelectedCellLaw
-  dsimp only
-  rw [dite_eq_left ⟨hpos, hradius⟩]
+  rw [signedSelectedCellLaw, FinDist.signedCondOrSelf_eq_signedCond _ _
+    (by simpa only [FinDist.probOf_singleton] using hpos) _ hradius]
   exact FinDist.prob_signedCond_singleton _ _ hpos parameter hradius cell
 
 /-- Only the two raw endpoints are exceptional. Positive-mass collapsed ties are not removed. -/
@@ -368,9 +346,9 @@ private theorem integral_referenceLaw_signedSelectedCellLaw
     by_cases hmem : y ∈ interval laws (decodeCell laws x)
     · rw [Set.indicator_of_mem (heq.mpr hmem), Set.indicator_of_mem hmem]
     · rw [Set.indicator_of_notMem (fun h => hmem (heq.mp h)), Set.indicator_of_notMem hmem]
-  unfold signedSelectedCellLaw
-  dsimp only
-  rw [dite_eq_left ⟨hpositive, hparameter⟩, referenceLaw_signedCond]
+  rw [signedSelectedCellLaw, FinDist.signedCondOrSelf_eq_signedCond _ _
+    (by simpa only [FinDist.probOf_singleton] using hpositive) _ hparameter,
+    referenceLaw_signedCond]
   have hmass : 0 < (referenceLaw laws (cellLaw laws i) : Measure unitInterval).real
       (decodeCell laws ⁻¹' {decodeCell laws x}) := by
     rw [referenceLaw_decodeCell_event_real, FinDist.probOf_singleton]

@@ -2,6 +2,7 @@ import Literature.FleschThuijsmanAndVrieze1997
 import Mathlib.Order.Filter.AtTopBot.CountablyGenerated
 import Mathlib.Geometry.Convex.ConvexSpace.Barycenter
 import MathUE.Probability.RatioProperPair
+import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.ProperPairLimit
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.BestReplyMassEstimate
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.PathwisePayoff
@@ -60,8 +61,10 @@ stationary pair with limiting Nash bounds and a common finite-horizon cutoff.
 Remark 1's literal subset-constrained domain, compact convex geometry and
 sufficiently-small-delta feasibility are formalized below. Its unrestricted
 printed delta range is refuted by the empty two-action domain at delta 3/4.
-Restricted-game equilibrium existence and its limiting ranking properties are
-separate obligations. Example 4 is not formalized here. The original-model
+Restricted linearized auxiliary Nash existence is established for sufficiently
+small delta on that literal domain. Its limiting ranking properties and the
+remark's nonlinear restricted-game assertion remain separate obligations.
+Example 4 is not formalized here. The original-model
 versions of Remarks 2 and 3 still require the absorbing-stage reduction.
 The canonical statements do not settle the original model reduction. This file
 does not claim complete paper coverage or a fixed-target
@@ -1537,8 +1540,9 @@ of every nonempty proper subset of actions, not just a coordinate floor.
 Its printed range `0 < delta < 1` can make that domain empty: with two actions,
 both singleton masses must be at least delta. The exact feasibility threshold
 is delta at most 1/2. The general uniform witness below establishes feasibility
-for sufficiently small delta; it does not establish a restricted-game Nash
-equilibrium or the remark's limiting ranking properties.
+for sufficiently small delta. The following auxiliary Nash result uses the
+source's linearized payoff, not the actual stationary payoff of the game.
+The remark's limiting ranking properties remain separate obligations.
 -/
 
 /-- The literal Remark 1 domain, with every nonempty proper-subset mass constraint. -/
@@ -1670,6 +1674,198 @@ theorem remark1_printedDeltaRange_refuted : ¬ Remark1FinTwoAllDeltaFeasibilityC
   obtain ⟨x, hx⟩ := hclaim (3 / 4) (by norm_num) (by norm_num)
   rw [remark1_finTwo_threeQuarter_empty] at hx
   exact hx
+
+private theorem remark1_delta_le_one {A : Type*} [Fintype A] {δ : ℝ}
+    (hδ : 0 < δ) (hsmall : δ ≤ (Fintype.card A : ℝ)⁻¹) : δ ≤ 1 := by
+  by_cases hzero : Fintype.card A = 0
+  · have hnonpos : δ ≤ 0 := by simpa only [hzero, Nat.cast_zero, inv_zero] using hsmall
+    exact False.elim ((not_le_of_gt hδ) hnonpos)
+  · have hcard : (1 : ℝ) ≤ Fintype.card A := by
+      exact_mod_cast Nat.one_le_iff_ne_zero.mpr hzero
+    exact hsmall.trans ((inv_le_one₀ (lt_of_lt_of_le zero_lt_one hcard)).mpr hcard)
+
+/-- Literal singleton constraints imply the weaker cardinality-power coordinate floor. -/
+theorem remark1_restrictedStrategies_subset_lowerSimplex {A : Type*} [Fintype A]
+    {δ : ℝ} (hδ : 0 < δ) (hδOne : δ ≤ 1) :
+    remark1RestrictedStrategies A δ ⊆ Math.Probability.RatioProperPair.lowerSimplex A δ := by
+  classical
+  intro x hx
+  refine ⟨hx.1, ?_⟩
+  intro i
+  by_cases hfull : ({i} : Finset A) = Finset.univ
+  · have hxi : x i = 1 := by
+      have hsum := (GameTheory.Math.Probability.mem_simplexWeights.mp hx.1).2
+      rw [← hfull] at hsum
+      simpa only [Finset.sum_singleton] using hsum
+    rw [hxi]
+    exact pow_le_one₀ hδ.le hδOne
+  · have hproper : ({i} : Finset A) ⊂ Finset.univ :=
+      Finset.ssubset_iff_subset_ne.mpr ⟨Finset.subset_univ _, hfull⟩
+    have hsingleton := hx.2 {i} (by simp) hproper
+    simp only [Finset.card_singleton, Finset.sum_singleton] at hsingleton
+    exact (pow_le_pow_of_le_one hδ.le hδOne (Nat.sub_le _ _)).trans hsingleton
+
+private def remark1Barycenter {A : Type*} [Fintype A] (δ : ℝ) (n : ℕ)
+    (weights : Convexity.StdSimplex ℝ (Fin (n + 1)))
+    (points : Fin (n + 1) → remark1RestrictedStrategies A δ) :
+    remark1RestrictedStrategies A δ :=
+  ⟨∑ a, weights.weights a • (points a).val,
+    (remark1_convex_restrictedStrategies A δ).sum_mem
+      (fun a _ => weights.weights_nonneg a) weights.total_of_fintype
+      (fun a _ => (points a).property)⟩
+
+private theorem continuous_remark1Barycenter {A : Type*} [Fintype A]
+    (δ : ℝ) (n : ℕ) (points : Fin (n + 1) → remark1RestrictedStrategies A δ) :
+    Continuous fun weights : Convexity.StdSimplex ℝ (Fin (n + 1)) =>
+      remark1Barycenter δ n weights points := by
+  apply Continuous.subtype_mk
+  apply continuous_finsetSum
+  intro a _
+  exact (Convexity.StdSimplex.continuous_weights_apply ℝ a).smul continuous_const
+
+private theorem remark1Barycenter_linear {A : Type*} [Fintype A]
+    (δ : ℝ) (n : ℕ) (weights : Convexity.StdSimplex ℝ (Fin (n + 1)))
+    (points : Fin (n + 1) → remark1RestrictedStrategies A δ) (coefficient : A → ℝ) :
+    (∑ i, (remark1Barycenter δ n weights points).val i * coefficient i) =
+      ∑ a, weights.weights a * (∑ i, (points a).val i * coefficient i) := by
+  change (∑ i, (∑ a, weights.weights a • (points a).val) i * coefficient i) = _
+  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  simp_rw [Finset.mul_sum, mul_assoc]
+
+omit [Fintype I] in
+private theorem continuous_remark1_rowValue (G : AbsorbingGameData I J)
+    {δ : ℝ} (hδ : 0 < δ) (hδOne : δ ≤ 1) (i : I) :
+    Continuous fun y : remark1RestrictedStrategies J δ =>
+      pureStationaryPayoff1 G ⟨y.val, y.property.1⟩ i := by
+  let inclusion : remark1RestrictedStrategies J δ →
+      Math.Probability.RatioProperPair.lowerSimplex J δ :=
+    fun y => ⟨y.val, remark1_restrictedStrategies_subset_lowerSimplex hδ hδOne y.property⟩
+  have hcontinuous : Continuous inclusion := continuous_subtype_val.subtype_mk _
+  exact (Math.Probability.RatioProperPair.continuous_rowRatio_lowerSimplex
+    G.absorptionCoefficients G.payoffNumerator1
+    (fun i j => (G.absorptionProbability i j).property.1) hδ i).comp hcontinuous
+
+omit [Fintype J] in
+private theorem continuous_remark1_columnValue (G : AbsorbingGameData I J)
+    {δ : ℝ} (hδ : 0 < δ) (hδOne : δ ≤ 1) (j : J) :
+    Continuous fun x : remark1RestrictedStrategies I δ =>
+      pureStationaryPayoff2 G ⟨x.val, x.property.1⟩ j := by
+  let inclusion : remark1RestrictedStrategies I δ →
+      Math.Probability.RatioProperPair.lowerSimplex I δ :=
+    fun x => ⟨x.val, remark1_restrictedStrategies_subset_lowerSimplex hδ hδOne x.property⟩
+  have hcontinuous : Continuous inclusion := continuous_subtype_val.subtype_mk _
+  exact (Math.Probability.RatioProperPair.continuous_columnRatio_lowerSimplex
+    G.absorptionCoefficients G.payoffNumerator2
+    (fun i j => (G.absorptionProbability i j).property.1) hδ j).comp hcontinuous
+
+private def remark1LinearizedGame {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) (δ : ℝ) (hδ : 0 < δ)
+    (hA : δ ≤ (Fintype.card A : ℝ)⁻¹) (hB : δ ≤ (Fintype.card B : ℝ)⁻¹) :
+    GameTheory.CompactBarycentricGame where
+  Player := Bool
+  Strategy := fun who => match who with
+    | false => remark1RestrictedStrategies A δ
+    | true => remark1RestrictedStrategies B δ
+  strategyTopology := fun who => by cases who <;> infer_instance
+  compactStrategy := fun who => by
+    cases who
+    · exact isCompact_iff_compactSpace.mp (remark1_isCompact_restrictedStrategies A δ)
+    · exact isCompact_iff_compactSpace.mp (remark1_isCompact_restrictedStrategies B δ)
+  nonemptyStrategy := fun who => by
+    cases who
+    · exact (remark1_restrictedStrategies_nonempty_of_smallDelta hδ hA).to_subtype
+    · exact (remark1_restrictedStrategies_nonempty_of_smallDelta hδ hB).to_subtype
+  payoff := fun profile who => match who with
+    | false => ∑ i, (profile false).val i *
+        pureStationaryPayoff1 G ⟨(profile true).val, (profile true).property.1⟩ i
+    | true => ∑ j, (profile true).val j *
+        pureStationaryPayoff2 G ⟨(profile false).val, (profile false).property.1⟩ j
+  payoffContinuous := fun who => by
+    let : (player : Bool) → TopologicalSpace (match player with
+      | false => remark1RestrictedStrategies A δ
+      | true => remark1RestrictedStrategies B δ) := fun player => by
+        cases player <;> infer_instance
+    let Profile := (player : Bool) → match player with
+      | false => remark1RestrictedStrategies A δ
+      | true => remark1RestrictedStrategies B δ
+    have hrow : Continuous (fun profile : Profile => (profile false).val) :=
+      continuous_subtype_val.comp (continuous_apply false)
+    have hcolumn : Continuous (fun profile : Profile => (profile true).val) :=
+      continuous_subtype_val.comp (continuous_apply true)
+    cases who
+    · apply continuous_finsetSum
+      intro i _
+      exact ((continuous_apply i).comp hrow).mul
+        ((continuous_remark1_rowValue G hδ (remark1_delta_le_one hδ hB) i).comp
+          (continuous_apply true))
+    · apply continuous_finsetSum
+      intro j _
+      exact ((continuous_apply j).comp hcolumn).mul
+        ((continuous_remark1_columnValue G hδ (remark1_delta_le_one hδ hA) j).comp
+          (continuous_apply false))
+  barycenter := fun who => by
+    cases who
+    · exact remark1Barycenter δ
+    · exact remark1Barycenter δ
+  barycenterContinuous := fun who => by
+    cases who
+    · exact continuous_remark1Barycenter δ
+    · exact continuous_remark1Barycenter δ
+  payoffBarycentric := by
+    intro profile who n weights points
+    cases who
+    · simpa only [Function.update_self, Function.update_of_ne (by decide : true ≠ false)]
+        using remark1Barycenter_linear δ n weights points
+          (pureStationaryPayoff1 G ⟨(profile true).val, (profile true).property.1⟩)
+    · simpa only [Function.update_self, Function.update_of_ne (by decide : false ≠ true)]
+        using remark1Barycenter_linear δ n weights points
+          (pureStationaryPayoff2 G ⟨(profile false).val, (profile false).property.1⟩)
+
+/-- Remark 1's literal small-delta domains admit Nash for the linearized auxiliary payoffs. -/
+theorem remark1_exists_restrictedLinearizedNash {A B : Type} [Fintype A] [Fintype B]
+    (G : AbsorbingGameData A B) {δ : ℝ} (hδ : 0 < δ)
+    (hA : δ ≤ (Fintype.card A : ℝ)⁻¹) (hB : δ ≤ (Fintype.card B : ℝ)⁻¹) :
+    ∃ (x : StationaryStrategy A) (y : StationaryStrategy B),
+      x.val ∈ remark1RestrictedStrategies A δ ∧
+      y.val ∈ remark1RestrictedStrategies B δ ∧
+      (∀ x' : StationaryStrategy A, x'.val ∈ remark1RestrictedStrategies A δ →
+        (∑ i, x'.val i * pureStationaryPayoff1 G y i) ≤
+          ∑ i, x.val i * pureStationaryPayoff1 G y i) ∧
+      (∀ y' : StationaryStrategy B, y'.val ∈ remark1RestrictedStrategies B δ →
+        (∑ j, y'.val j * pureStationaryPayoff2 G x j) ≤
+          ∑ j, y.val j * pureStationaryPayoff2 G x j) := by
+  obtain ⟨profile, hprofile⟩ := (remark1LinearizedGame G δ hδ hA hB).exists_nash
+  refine ⟨⟨(profile false).val, (profile false).property.1⟩,
+    ⟨(profile true).val, (profile true).property.1⟩,
+    (profile false).property, (profile true).property, ?_, ?_⟩
+  · intro x' hx'
+    let deviation : (remark1LinearizedGame G δ hδ hA hB).Strategy false := ⟨x'.val, hx'⟩
+    let updated := Function.update profile false deviation
+    have hself : updated false = deviation := Function.update_self _ _ _
+    have hother : updated true = profile true :=
+      Function.update_of_ne (by decide : (true : Bool) ≠ false) _ _
+    have hbound := hprofile false deviation
+    change (∑ i, (updated false).val i *
+        pureStationaryPayoff1 G ⟨(updated true).val, (updated true).property.1⟩ i) ≤
+      ∑ i, (profile false).val i *
+        pureStationaryPayoff1 G ⟨(profile true).val, (profile true).property.1⟩ i at hbound
+    rw [hself, hother] at hbound
+    exact hbound
+  · intro y' hy'
+    let deviation : (remark1LinearizedGame G δ hδ hA hB).Strategy true := ⟨y'.val, hy'⟩
+    let updated := Function.update profile true deviation
+    have hself : updated true = deviation := Function.update_self _ _ _
+    have hother : updated false = profile false :=
+      Function.update_of_ne (by decide : (false : Bool) ≠ true) _ _
+    have hbound := hprofile true deviation
+    change (∑ j, (updated true).val j *
+        pureStationaryPayoff2 G ⟨(updated false).val, (updated false).property.1⟩ j) ≤
+      ∑ j, (profile true).val j *
+        pureStationaryPayoff2 G ⟨(profile false).val, (profile false).property.1⟩ j at hbound
+    rw [hself, hother] at hbound
+    exact hbound
 
 /-! ## Section 4: Remark 2
 
