@@ -3286,3 +3286,231 @@ remain OUTSIDE this frozen proof. No UE, raw attainment, return,
 charged temporal construction or ordinary existence-class coverage
 overclaim was found. The file is ready for the stated independent
 export/integration gate with exactly the reviewed bytes.
+
+## Independent whole-candidate falsification: singular circuit and full60 return class
+
+Reviewer: CODEX_BROUWER. Scope: CL1–CL10 from the heading
+`Dual follow-through: a closed singular full-Nash circuit retires the rational shell`
+through immediately before `Negative dual attempt:` in
+[`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`](../notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md).
+The extracted bytes have SHA256
+`0a7b002181838a65118b65adb6c8fe51c5cfb7de024f7707f62cafc2e6858ae2`.
+I separately read the COMPLETE RM35/ZU1–ZU6 compiler in
+[`CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md`](../notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md),
+whose heading-to-EOF bytes at review have SHA256
+`f3cf5f3fd66896f2dfe2e6a1ea097a52929dbfa53062c26a621eca6114d881bd`.
+The coordinator identifies that compiler checkpoint as1982e165.
+
+Verdict: **PASS as ordinary mathematics**, including actual full-cap
+execution and the full60-coordinate open-chamber claim. No unresolved
+mathematical objection was found. I independently executed ALL exact rational
+assertions in CL6, reconstructed full triple/pair endpoint identities from
+the15 reward rows, and recalculated the complete inverse/support census.
+This is not Lean checking. No Lean build, source edit, author-note edit,
+export placement or other review verdict was used for this assessment.
+
+### Exact claim and actual inputs
+
+For the explicit60-entry DN table, Never0 and owns1, five closure equations
+produce a real V=(1,b,1,d), two literal roots and three convergent full-Nash
+ladders closing an exact continuation-to-head chain. BOTH quiet observers
+are tested at every finite root. All annotations are in the reward box.
+Forward predecessor order is not claimed to be chronological play order.
+
+There are two complete consumers: continuity telescopes the closed positive
+chain against every continuous charged root potential, and the tracked
+no-UE→polynomial implication gives UE; independently, finite truncation and
+reverse-order periodic repetition give ACTUAL approximate terminal Nash
+profiles with payoff tending to ONE fixed V. A reward-only finite rational
+return criterion produces all these objects, and a full60 open neighborhood
+passes it. No minimizing tail, equilibrium, cap selector, closed circuit or
+public random signal is assumed as a strategic input to that raw criterion.
+Generic ZU alone would be only a supplied-object compiler; the table-dependent
+CL closure is the substantive production step.
+
+### Exact root and closure audit
+
+Enumerating opponent coalitions independently gives the triple active gaps
+f₁,f₂/T,f₃/T and quiet0 Continue value cU₀+R₀ exactly. Thus G₀ is the
+fourth player's actual gap, not an induced-game test. Positive T justifies
+its denominator clearing. All CL6 assertions, including the WHOLE-box
+G₀<−33, passed exact rational arithmetic.
+
+The Hessian majorant bounds EVERY Jacobian departure on the convex rational
+box. Consequently ξ↦ξ−Lf(ξ) has Lipschitz constant≤η<1 and moves the
+box into itself because β+ρη<ρ. Its exact zero is produced by contraction,
+not identified with the displayed decimal approximation. Positive denominators
+make the two polynomial return equations precisely B=b,D=d.
+
+For a solo favorite excess e=v_f−s_f and passive/join values r_f,o,r_f,of,
+the actual rate and head excess are
+
+    p=e/(e+r_f,of−r_f,o),
+    e′=(r_f,of−s_f)e/(e+r_f,of−r_f,o).
+
+The strict favorite sandwich gives geometric contraction and the printed
+product/endpoint formulas. Other coordinates stay between their start and
+limiting endpoint. Structural own-level initial equalities are therefore
+valid for ALL rows, including nearby perturbed tables; pointwise continuity
+at infinitely many separate roots is not being substituted.
+
+The pair active gaps vanish at the printed rates. Independently recomputed
+quiet coefficients are
+
+    quiet1: 1−B, −B−2/3, 1/2−B/2, 97/60−B/2;
+    quiet3: 1−D, −D−2/3, 3/10−D/2, 13/15−D/2.
+
+These give CL.15 for B,D≥1 and0≤a≤1. In particular the initial quiet
+ports W₁,W₃<1 are allowed. No unavailable early solo clock is inserted.
+The limiting coalition weights are nonnegative, sum to1 with C, and give
+both active coordinates exactly1. General CL.24–26 reduces to these exact
+base formulas and retains the correct receiver/owner orientation.
+
+### Finite singular execution and unrestricted caps
+
+At FULL root Nash, the maximum of the two endpoints equals the prescribed
+expectation: both endpoints are bounded by it and a supported one attains it.
+This includes quiet/sure owners and negative values. H_i(q,z)=max(Q_i,R_i+h_i z)
+is h_i-Lipschitz on ALL ℝ. For a forward list the last root is outermost;
+reversing the ENTIRE finite list is exactly its chronological Bellman word.
+Endpoint seam errors add through Lipschitz constants≤1. The actual carried
+port is never reset, and no word-length times seam-error occurs.
+
+The two fixed distinct positive suppliers provide uniform joint C<1 and
+EVERY deleted-opponent κ_i<1 after sufficiently large truncations. Hence
+the prescribed affine map has its actual fixed point U and the scalar cap
+map has a unique W_i. The delicate identification W_i=B_i is valid: censor
+after m periods to0, obtaining cap T_i^m(0) by finite dynamic programming.
+For EVERY complete responder clock, original/censored payoff difference is
+at most Mκ_i^m, since disagreement requires ALL opponents surviving the cut.
+This is uniform before taking suprema and includes Never, arbitrarily late
+deadlines and behavioral mixtures. Thus the limit really is the unrestricted
+cap. The printed bounds for U−V and B_i−V_i yield vanishing nonnegative
+debt and one fixed payoff target.
+
+ZU5 independently verifies why joint contraction alone is insufficient:
+its signed one-supplier fixed annotation is−1 but actual Never pays0,
+so that owner's debt is1 and its deleted survival is1. DN genuinely
+supplies the stronger two-supplier condition; it is not removed from ZU.
+
+### Full60 uniformity, not a pointwise perturbation argument
+
+The actual normalized pair quiet gap is
+
+    g_i/h=s_i−v_i+δ_i,0 a/E₂+δ_i,2 t/D₀
+                      +δ_i,02 ta/(D₀E₂).
+
+Expressing the current annotation through its fixed endpoint gives CL.26.
+The finite inequalities L₀<0,L_a<0,L_t+max(L_ta,0)<0 control ALL t≥0,
+0≤a≤1, hence every finite ladder row simultaneously. At the base the
+endpoint lower bounds make them strictly uniform. The other conditions are
+finite strict tests or structural own-level identities defined using NEW
+own values. No higher-coalition coordinate is frozen when evaluating the
+triple gaps, quiet0 gap and W.
+
+The table-dependent rational map is smooth where its denominators are positive.
+Invertible closure Jacobian gives a continued exact zero under EVERY
+sufficiently small independent real perturbation of all60 entries. Compact
+box continuity and the uniform quiet tests preserve the entire circuit.
+The rational finite verifier and the real qualitative open chamber are
+distinct, correctly stated scopes; no optimized reward radius is asserted.
+For final assembly keep compatible positive denominator clearing/preconditioning
+of the perturbed map. A differently rescaled polynomial system must not be
+silently certified by CL6's old Jacobian. This is a proof-presentation caution,
+not a mathematical gap: the rational smooth map and positive-cleared derivative
+bounds preserve its strict contraction slack.
+
+### Exact tracked correspondence
+
+Inspected `quittingRootCompanionMap_eq_max_endpoints` and the full response
+definition in `UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean`;
+`quittingCompanionComposite_eq_compList_apply` in
+`UniformEquilibrium/Quitting/Cycles/CompanionTransport.lean`; and
+`quittingPureTimeValue_periodizedPrefix_block_interpolation` and
+`quittingBestReplyValue_periodizedPrefix_le_max` in
+`UniformEquilibrium/Quitting/Cycles/PeriodicFiniteReplyPrefix.lean`.
+They confirm the same signed max-affine ALL-response semantics. ZU adds the
+ordinary singular-seam/production argument, not new generic cap machinery.
+
+Read `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+under its imports in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`.
+Its forward implication needs the reward bound, normality and a positive
+own singleton. `isQuittingNormalPlayer_of_singleton_nonneg` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean` supplies
+normality here and in the positive-own open subchamber. The base M=5 and
+outer box[−7,7]⁴ contain all ports. Exact roots are robust edges at every
+positive tolerance. No normality is inherited from a different normalization,
+and no SUM/MAX minimum transfer enters the proof.
+
+### Separate strict value and complete-selection overlap
+
+The raw criterion is a genuine open-class existence producer, not just a
+better supplied-cycle theorem. Relative to the named implemented/accepted
+raw criteria below it adds an actual surviving class. It is NOT a universal
+NP-source consumer or a necessary condition on every counterexample.
+
+The complete specified selection sets fail, not just one guessed witness:
+
+- `RawRegion` in `PairedCycleSchedule.lean`: EVERY pairing has an outsider
+  joining the other whole pair, earning triple4>own+1/50. `RawFamily` in
+  `BelowSingletonJointPhaseSource.lean` needs two below-own singleton owners
+  for each receiver, while receiver0 has only one.
+- `RawSource`/`WeakRawSource` in `CrossedMatchingPhaseSource.lean` fail every
+  relabeling by that receiver0 count. Its `InverseRawSource` fails every
+  matching because every pair has a participant−2<own1.
+- The literal cyclic-child `RawRows`/`RawTable` adapters need a pivot
+  singleton harming all three others; NONE of the four columns does so.
+  Positive recipient scales and nonempty-row translations do not fix it.
+- ALL four choices for `exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+  in `Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean` fail:
+  only023 has nonnegative inverse, but its outsider weights are
+  (−3/5,6/5,2/5); every other inverse has a negative entry. I recalculated
+  the four literal inverses and products, not one selected child.
+- `IsProjectiveQBarMatrix` in `Classification/LCP/MatrixClasses.lean` fails
+  on13: its two negative off-diagonal entries force a homogeneous solution
+  to0, while offset(−1,−1) has no ordinary solution. This is projective,
+  not merely standard-Q, noncoverage.
+
+Additional independently checked applicable classes beyond CL10's list:
+
+- `SignedFourCycleSingletonData` in `Cycles/SignedFourCycleRewardAdapter.lean`
+  requires negative successor and positive predecessor at EVERY owner.
+  Receiver1's unique negative successor is3 under ANY order; this forces
+  Γ_31>0 at receiver3's predecessor, contrary to Γ_31=−2. Thus both
+  smaller/larger spectral branches fail EVERY relabeling before their further
+  tests. This strict obstruction persists on an open subchamber.
+- `IsLiteralStrictThreeBlockerCore` in
+  `Classification/Existence/OddBlockerCoreRowAdapter.lean` fails because no
+  owner has constant passive rows. The stronger literal interval version in
+  `FiniteOddIntervalBlockerCoreRowAdapter.lean` fails EVERY embedding/blocker:
+  every owner has C_i⁺≥5 from an omitted-owner pair, while blocker-absent
+  H_i⁻≤own1 from its singleton. Required C_i⁺<H_i⁻ is impossible.
+- `quittingPremiumCore` in `Classification/QuittingPremiumCore.lean` and
+  `IsFiniteCoalitionPremiumTrap` in `MathUE/FiniteCoalitionPremiumCore.lean`
+  give core=I: every owner belongs to a triple with own premium3. Hence the
+  actual joining-attractive/mixed-sign triple-core and signed pair-core raw
+  producers cannot select a different computed greatest core. This is NOT
+  a claim excluding arbitrary induced child profiles.
+- Product-low/supportwise balance fails on a pure triple. Protected participant
+  leavers cannot protect any player because grand own reward−5<own1.
+  On support012 all boxed-charge tuples satisfy delta≤5/2,gap≤5/2,tau≥3,
+  loss≤1, so EVERY threshold≤25/3<18. The competing weighted upper average
+  at its pure triple is3 for EVERY normalized nonnegative weight. Checked
+  exact definitions and the three-owner threshold in
+  `Classification/BoxedQuittingNashCharges.lean` and
+  `Classification/BoxedQuittingNashChargeOdds.lean`.
+
+The elementary necessary matrix screens do NOT consume the trial: principal
+determinants are all nonzero, the complete16-support offset census has only023
+with z=(14/5,0,34/5,13/5), quiet slack13/5 and determinant5, and
+Γ(5,1,9,5)/20=(9,4,3,2)/20>0. These were recalculated exactly.
+
+Strict value verdict: this is a significant reward-only existence class
+relative to those complete raw criteria, not constant optimization or a
+solved-table local trap. No specific applicable raw producer was found already
+covering this chamber. The check does NOT establish a census of ALL abstract
+safe-child or supplied-cycle predicates; possible acceptance of unproduced
+strategic objects does not itself prove an existing raw producer supplies
+them here. A final packet must retain that limitation and not claim an
+unrestricted strategy-class normal form or arbitrary-game circuit production.
+The full Fin4 UE conjecture remains open.
