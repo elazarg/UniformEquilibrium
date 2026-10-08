@@ -39,8 +39,10 @@ including zero absorption. The canonical Theorem 3.1 selects one stationary
 pair before every initial state and every unilateral behavioral deviation.
 It is not a proof of the paper's reduction of general absorbing stage games
 with state-dependent action sets to action-independent absorbing rewards.
-Example 1's table and printed delta-proper family are formalized below; its
-proper-limit and equilibrium-exclusion conclusions remain separate obligations.
+Example 1's table, printed delta-proper family and proper limit are formalized
+below. The printed family's equilibrium exclusions have explicit small-error
+thresholds; they are not exclusions of every stationary pair. Its separate
+exact stationary witness corrects the specific Section 4 cross-reference.
 Examples 2 and 4 and the three final remarks are not formalized here.
 The canonical statements do not settle the original model reduction. This file
 does not claim complete paper coverage or a fixed-target
@@ -51,7 +53,7 @@ noncomputable section
 
 open _root_.Math.ProbabilityMassFunction
 open Filter
-open scoped Topology
+open scoped BigOperators Topology
 
 namespace Literature.FleschThuijsmanAndVrieze1996
 
@@ -247,6 +249,54 @@ theorem pureStationaryPayoff2_eq_canonical {A B : Type} [Fintype A] [Fintype B]
     _ = _ := (GameTheory.RecursiveAbsorption.liminfPayoff_stationary_none
       G.canonicalData (stationaryLaw x) (PMF.pure j) true).symm
 
+/-- Lemma 2.2's second quotient, weighted by the pure rows' absorption probabilities. -/
+theorem lemma2_2_absorptionWeightedRow_canonical {A B : Type}
+    [Fintype A] [Fintype B] (G : AbsorbingGameData A B)
+    (x : StationaryStrategy A) (y : StationaryStrategy B) :
+    canonicalPayoff G none (canonicalStationaryProfile G x y) false =
+      (∑ i, x.1 i *
+        GameTheory.RecursiveAbsorption.absorptionMass G.canonicalData
+          (PMF.pure i) (stationaryLaw y) * pureStationaryPayoff1 G y i) /
+      (∑ i, x.1 i * GameTheory.RecursiveAbsorption.absorptionMass G.canonicalData
+        (PMF.pure i) (stationaryLaw y)) := by
+  have hpure : ∀ i, pureStationaryPayoff1 G y i =
+      GameTheory.RecursiveAbsorption.stationaryPayoff G.canonicalData
+        (PMF.pure i) (stationaryLaw y) false := fun i =>
+    (pureStationaryPayoff1_eq_canonical G y i).trans
+      (GameTheory.RecursiveAbsorption.liminfPayoff_stationary_none
+        G.canonicalData (PMF.pure i) (stationaryLaw y) false)
+  rw [lemma2_2_canonical,
+    GameTheory.RecursiveAbsorption.absorbingContribution_eq_expect_mass_mul_pureRowPayoff
+      G.canonicalData (stationaryLaw x) (stationaryLaw y) false,
+    GameTheory.RecursiveAbsorption.absorptionMass_eq_expect_pureRow
+      G.canonicalData (stationaryLaw x) (stationaryLaw y)]
+  simp only [Math.Probability.expect_eq_sum, stationaryLaw, ofVector_toReal,
+    hpure, mul_assoc]
+
+/-- The corresponding absorption-weighted pure-column quotient in Lemma 2.2. -/
+theorem lemma2_2_absorptionWeightedColumn_canonical {A B : Type}
+    [Fintype A] [Fintype B] (G : AbsorbingGameData A B)
+    (x : StationaryStrategy A) (y : StationaryStrategy B) :
+    canonicalPayoff G none (canonicalStationaryProfile G x y) true =
+      (∑ j, y.1 j *
+        GameTheory.RecursiveAbsorption.absorptionMass G.canonicalData
+          (stationaryLaw x) (PMF.pure j) * pureStationaryPayoff2 G x j) /
+      (∑ j, y.1 j * GameTheory.RecursiveAbsorption.absorptionMass G.canonicalData
+        (stationaryLaw x) (PMF.pure j)) := by
+  have hpure : ∀ j, pureStationaryPayoff2 G x j =
+      GameTheory.RecursiveAbsorption.stationaryPayoff G.canonicalData
+        (stationaryLaw x) (PMF.pure j) true := fun j =>
+    (pureStationaryPayoff2_eq_canonical G x j).trans
+      (GameTheory.RecursiveAbsorption.liminfPayoff_stationary_none
+        G.canonicalData (stationaryLaw x) (PMF.pure j) true)
+  rw [lemma2_2_canonical,
+    GameTheory.RecursiveAbsorption.absorbingContribution_eq_expect_mass_mul_pureColumnPayoff
+      G.canonicalData (stationaryLaw x) (stationaryLaw y) true,
+    GameTheory.RecursiveAbsorption.absorptionMass_eq_expect_pureColumn
+      G.canonicalData (stationaryLaw x) (stationaryLaw y)]
+  simp only [Math.Probability.expect_eq_sum, stationaryLaw, ofVector_toReal,
+    hpure, mul_assoc]
+
 /-- Definition 2.3: full mixing and both strict-payoff ranking inequalities. -/
 def IsDeltaProperPair (G : AbsorbingGameData I J) (δ : ℝ)
     (x : StationaryStrategy I) (y : StationaryStrategy J) : Prop :=
@@ -263,8 +313,8 @@ def IsProperPair (G : AbsorbingGameData I J)
 
 Only the first row/first column entry stays live. The other three entries
 absorb with probability one. The printed family has both players use
-`(1 - delta^2, delta^2)`. The proper-limit and Nash-exclusion conclusions are
-not inferred merely from the numerical rankings below.
+`(1 - delta^2, delta^2)`. The proper-limit conclusion uses an explicit sequence;
+the small-error exclusions below apply actual behavioral pure deviations.
 -/
 
 /-- The literal zero-sum table in Example 1. -/
@@ -353,6 +403,125 @@ def example1HalfStrategy : StationaryStrategy (Fin 2) :=
 /-- The first pure action used in the Example 1 limit and source audit. -/
 def example1FirstStrategy : StationaryStrategy (Fin 2) :=
   example1Strategy 0 le_rfl (by norm_num)
+
+/-- The first/first limit of the printed delta family is a proper pair. -/
+theorem example1_firstFirst_proper :
+    IsProperPair example1Data example1FirstStrategy example1FirstStrategy := by
+  let δ : ℕ → ℝ := fun n => (1 / 2 : ℝ) * (1 / (n + 1 : ℝ))
+  have hδ : ∀ n, 0 < δ n ∧ δ n ≤ 1 / 2 := by
+    intro n
+    have hn : 0 ≤ (n : ℝ) := Nat.cast_nonneg n
+    have hinv : (1 / (n + 1 : ℝ)) ≤ 1 :=
+      (div_le_one (by positivity)).mpr (by linarith)
+    constructor
+    · dsimp [δ]
+      positivity
+    · simpa only [mul_one] using
+        mul_le_mul_of_nonneg_left hinv (by norm_num : (0 : ℝ) ≤ 1 / 2)
+  have hδlimit : Tendsto δ atTop (𝓝 0) := by
+    simpa [δ] using
+      (tendsto_one_div_add_atTop_nhds_zero_nat :
+        Tendsto (fun n : ℕ => 1 / (n + 1 : ℝ)) atTop (𝓝 0)).const_mul (1 / 2 : ℝ)
+  let xs : ℕ → StationaryStrategy (Fin 2) :=
+    fun n => example1Strategy (δ n) (hδ n).1.le (hδ n).2
+  have hx : Tendsto (fun n => (xs n).1) atTop (𝓝 example1FirstStrategy.1) := by
+    apply tendsto_pi_nhds.mpr
+    intro i
+    fin_cases i
+    · simpa [xs, example1Strategy, example1FirstStrategy] using
+        (tendsto_const_nhds.sub (hδlimit.pow 2))
+    · simpa [xs, example1Strategy, example1FirstStrategy] using hδlimit.pow 2
+  exact ⟨example1FirstStrategy.2, example1FirstStrategy.2,
+    δ, (fun n => (xs n).1), (fun n => (xs n).1), hδlimit, hx, hx,
+    fun n => example1_deltaProper (δ n) (hδ n).1 (hδ n).2⟩
+
+private theorem pureRowPayoff_le_of_canonicalNash {A B : Type}
+    [Fintype A] [Fintype B] (G : AbsorbingGameData A B)
+    (x : StationaryStrategy A) (y : StationaryStrategy B) {ε : ℝ}
+    (hNash : (canonicalGame G).IsεAsymptoticNash (canonicalPayoff G none) ε
+      (canonicalStationaryProfile G x y)) (i : A) :
+    pureStationaryPayoff1 G y i ≤
+      canonicalPayoff G none (canonicalStationaryProfile G x y) false + ε := by
+  have hprofile : Function.update (canonicalStationaryProfile G x y)
+      false (fun _ _ => PMF.pure i) =
+        GameTheory.RecursiveAbsorption.stationaryProfile G.canonicalData
+          (PMF.pure i) (stationaryLaw y) := by
+    funext who time history
+    cases who <;> simp [canonicalStationaryProfile,
+      GameTheory.RecursiveAbsorption.stationaryProfile,
+      GameTheory.StochasticGame.stationaryBehaviorProfile,
+      GameTheory.RecursiveAbsorption.mixedAction] <;> rfl
+  have h := hNash false (fun _ _ => PMF.pure i)
+  rw [hprofile] at h
+  exact (pureStationaryPayoff1_eq_canonical G y i).le.trans h
+
+/-- The printed Example 1 family's live-state row payoff is at most three halves. -/
+theorem example1_printedFamily_rowPayoff_le (δ : ℝ) (hδ : 0 < δ)
+    (hδhalf : δ ≤ 1 / 2) :
+    canonicalPayoff example1Data none
+      (canonicalStationaryProfile example1Data (example1Strategy δ hδ.le hδhalf)
+        (example1Strategy δ hδ.le hδhalf)) false ≤ 3 / 2 := by
+  have hsq : δ ^ 2 ≤ 1 / 4 := by
+    nlinarith [mul_nonneg hδ.le (sub_nonneg.mpr hδhalf)]
+  have hfirst : 0 ≤ 1 - δ ^ 2 := by linarith
+  have hmass : GameTheory.RecursiveAbsorption.absorptionMass example1Data.canonicalData
+      (stationaryLaw (example1Strategy δ hδ.le hδhalf))
+      (stationaryLaw (example1Strategy δ hδ.le hδhalf)) = δ ^ 2 * (2 - δ ^ 2) := by
+    norm_num [GameTheory.RecursiveAbsorption.absorptionMass, Math.Probability.expect_eq_sum,
+      stationaryLaw, ofVector_toReal, AbsorbingGameData.canonicalData,
+      example1Data, example1Strategy, Fin.sum_univ_two,
+      ENNReal.toReal_ofReal hfirst, ENNReal.toReal_ofReal (sq_nonneg δ)]
+    ring
+  have hnum : GameTheory.RecursiveAbsorption.absorbingContribution example1Data.canonicalData
+      (stationaryLaw (example1Strategy δ hδ.le hδhalf))
+      (stationaryLaw (example1Strategy δ hδ.le hδhalf)) false =
+        3 * δ ^ 2 * (1 - δ ^ 2) := by
+    norm_num [GameTheory.RecursiveAbsorption.absorbingContribution,
+      Math.Probability.expect_eq_sum, stationaryLaw, ofVector_toReal,
+      AbsorbingGameData.canonicalData, example1Data, example1Strategy, Fin.sum_univ_two,
+      ENNReal.toReal_ofReal hfirst, ENNReal.toReal_ofReal (sq_nonneg δ)]
+    ring
+  rw [lemma2_2_canonical, hnum, hmass]
+  apply (div_le_iff₀ (mul_pos (sq_pos_of_pos hδ) (by linarith))).mpr
+  nlinarith [sq_nonneg (δ ^ 2)]
+
+/-- The printed family is not an approximate equilibrium at errors below one half. -/
+theorem example1_printedFamily_not_smallErrorNash (δ : ℝ) (hδ : 0 < δ)
+    (hδhalf : δ ≤ 1 / 2) {ε : ℝ} (hε : ε < 1 / 2) :
+    ¬ (canonicalGame example1Data).IsεAsymptoticNash
+      (canonicalPayoff example1Data none) ε
+      (canonicalStationaryProfile example1Data (example1Strategy δ hδ.le hδhalf)
+        (example1Strategy δ hδ.le hδhalf)) := by
+  intro hNash
+  have hpure := pureRowPayoff_le_of_canonicalNash example1Data
+    (example1Strategy δ hδ.le hδhalf) (example1Strategy δ hδ.le hδhalf) hNash 0
+  rw [example1_pureStationaryPayoff1 δ hδ hδhalf] at hpure
+  norm_num at hpure
+  have hpayoff := example1_printedFamily_rowPayoff_le δ hδ hδhalf
+  linarith
+
+/-- The proper first/first limit is not an approximate equilibrium at errors below one. -/
+theorem example1_firstFirst_not_smallErrorNash {ε : ℝ} (hε : ε < 1) :
+    ¬ (canonicalGame example1Data).IsεAsymptoticNash
+      (canonicalPayoff example1Data none) ε
+      (canonicalStationaryProfile example1Data example1FirstStrategy example1FirstStrategy) := by
+  intro hNash
+  have hpure := pureRowPayoff_le_of_canonicalNash example1Data
+    example1FirstStrategy example1FirstStrategy hNash 1
+  have hvalue : pureStationaryPayoff1 example1Data example1FirstStrategy 1 = 1 := by
+    norm_num [pureStationaryPayoff1, Math.Probability.RatioProperPair.rowRatio,
+      AbsorbingGameData.payoffNumerator1, AbsorbingGameData.absorptionCoefficients,
+      example1Data, example1FirstStrategy, example1Strategy, Fin.sum_univ_two]
+  have hpayoff : canonicalPayoff example1Data none
+      (canonicalStationaryProfile example1Data example1FirstStrategy example1FirstStrategy)
+        false = 0 := by
+    rw [lemma2_2_canonical]
+    norm_num [GameTheory.RecursiveAbsorption.absorbingContribution,
+      GameTheory.RecursiveAbsorption.absorptionMass, Math.Probability.expect_eq_sum,
+      stationaryLaw, ofVector_toReal, AbsorbingGameData.canonicalData,
+      example1Data, example1FirstStrategy, example1Strategy, Fin.sum_univ_two]
+  rw [hvalue, hpayoff] at hpure
+  linarith
 
 theorem example1_halfFirst_payoff (who : Bool) :
     canonicalPayoff example1Data none

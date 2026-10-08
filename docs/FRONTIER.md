@@ -1182,7 +1182,7 @@ uniform-equilibrium consumer is claimed.
 
 The scalar and compact minimum notions are now identified exactly.
 `quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum`
-(`UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean`)
+(`UniformEquilibrium/Quitting/Terminal/TerminalDebtSumInf.lean`)
 proves that the infimum of literal behavioral-profile debt equals the debt of
 every global minimizer on the terminal-semantic carrier.  For nonempty finite
 player types,
