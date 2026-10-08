@@ -2,6 +2,17 @@
 
 ## Current status and exact open consumer
 
+The current global line is RM39–RM40, not the retired clipped-tail
+consumer. RM39 maximizes the TRUE full SUM gap over passive taxes with
+owns/Never fixed, producing at most five limiting minimum/response
+ledgers; consuming their source switching remains open. RM40 separately
+maximizes the native ZERO-OWN ABSORBING SUM gap. Its actual three-player
+absorbing boundary adapter and selected negative-tax comparison force
+a finite cap-approximating response genuinely different from Never at
+ONE newly produced positive absorbing minimum. No old NP minimum,
+debt rigidity, paid owner or lower-debt competitor is inferred. The
+live question is how to consume this actual finite branch globally.
+
 The canonical common-source reduction is
 [`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
 At ONE compatibly selected row-generic debt-rigid positive table, EVERY
@@ -39,7 +50,7 @@ canonical93 contact exclusion or old minimum is transported. It makes
 RM18–RM21's sure-owner normalization unnecessary for this stronger source,
 while their proofs and exact equality-boundary regressions remain useful.
 
-The live consumer is now RM22: a WHOLE original finite block, followed by
+RM22's completed earlier attempt uses a WHOLE original finite block, followed by
 an arbitrary independent continuation on its joint-Never branch, has exact
 payoff/cap accounting. This matches BROUWER's independently derived SG graft;
 his all-slack exclusion is not counted as my new result. The surviving
@@ -21972,3 +21983,224 @@ payoffs and cap maxima; serial blocks can create a cap-mixing price.
 The complete boundary proof makes the global variation legitimate, but
 it does not itself eliminate a surviving positive-gap class. This block
 remains supporting mathematics until that interior step is proved.
+
+## RM40: native absorbing passive taxes force a genuine finite response branch
+
+Status: COMPLETE ORDINARY SOURCE ARGUMENT, NOT INDEPENDENTLY REVIEWED OR
+LEAN-CHECKED. The three-player step is an absorbing-domain adapter of the
+existing actual producer, not a new three-player UE class. The selected
+finite-response conclusion is a fresh native ABS minimum restriction;
+it is not a paid bridge, a full-SUM minimum restriction, or a lower-debt
+competitor. RM39's full-SUM maximum and its proof bytes remain separate.
+
+AT1: literal finite data and domains. Let I have four owners and let z
+be a signed finite reward table with z_i({i})=0. AllNever pays0. Each
+owner independently samples a clock T_i∈ℕ∪{Never}; this represents its
+complete behavioral strategy before absorption. Let P_abs consist of
+ALL such profiles with joint Never mass ν=∏_i n_i=0, where n_i is its
+Never probability. Unilateral responses remain unrestricted finite/Never
+clocks and their behavioral mixtures, even if the replacement ceases to
+absorb. Write
+
+    A(z)=inf[p∈P_abs]Σ_i(B_i(z,p)−U_i(z,p)).            (AT.1)
+
+Suppose A(z)>0. This is compatible with native AllNever being FULL Nash;
+that profile is outside P_abs. A hypothetical Fin4 counterexample with
+positive owns s_i yields such a z by z_i(S)=r_i(S)−s_i: on ν=0 its
+FULL debts equal those of r, as proved in AT2. Thus A(z)≥Δ_all(r)>0.
+The separated NP absorbing floor is not otherwise used or transported.
+
+AT2: exact cap translation, including every Never response. For ANY
+finite number m≥1 of owners, any native zero-own table z, and any law
+profile p, translate EVERY nonempty reward by the same row constant1:
+
+    r_i(S)=z_i(S)+1,    allNever remains0.
+
+If τ<∞ is a pure response, its resulting profile always absorbs, so
+V_i(r,p,τ)=V_i(z,p,τ)+1. If τ=Never, let
+h_i=∏_{j≠i}n_j and R_i=V_i(z,p,Never). Then its translation is only
+1−h_i, namely V_i(r,p,Never)=R_i+1−h_i. Crucially, bounded convergence
+for actual deadlines τ→∞ gives
+
+    V_i(z,p,τ)→R_i+h_i z_i({i})=R_i.
+
+Therefore B_i(z,p)=sup[τ<∞]V_i(z,p,τ): the old Never value is
+approximable from finite tests and cannot exceed that supremum. The new
+Never value is at most B_i(z,p)+1, while the finite supremum equals
+B_i(z,p)+1. COMPLETE behavioral responses average pure-clock values,
+so these are the full caps, not a restricted menu. Consequently
+
+    U_i(r,p)=U_i(z,p)+1−ν,
+    B_i(r,p)=B_i(z,p)+1,
+    d_i(r,p)=d_i(z,p)+ν,
+    D_r(p)=D_z(p)+mν.                                   (AT.2)
+
+Exactly the same argument allows any nonnegative recipient-specific
+translation s_i instead of1, giving d_i(z+s,p)=d_i(z,p)+νs_i.
+Nothing translates the Never payoff. Finite-test attainment is not needed.
+
+AT3: actual absorbing approximate equilibria for m≤3. Apply
+`GameTheory.QuittingThreePlayerStrategyClass.of_card_le_three`, in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardAllSigns.lean`,
+to r=z+1. Its conclusion
+`StationaryOrSmallHazardTerminalEquilibrium`, defined in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`,
+supplies an ACTUAL terminal ε-Nash profile against ALL behavioral
+deviations. Thus each d_i(r,p)≤ε. Equation(AT.2), together with the
+nonnegativity of native debts, gives D_z(p)≤mε and ν≤ε.
+
+For m≥1 choose h with n_h≤ν^(1/m)≤ε^(1/m). Move exactly its original
+Never mass to date0, leaving every other law unchanged. This is a literal
+legal stopping law, not a limit-clock operation. It has n_h'=0 and so
+the changed product profile p' is absorbing. Couple the two h clocks;
+they differ with probability n_h. If |z_i(S)|≤M, the expected reward
+changes by at most2Mn_h in EVERY row. For any fixed complete response
+of an observer the same coupling bounds its payoff difference by2Mn_h;
+taking the supremum preserves that cap bound. The h cap itself is
+unchanged because it depends only on the opponents. Hence safely
+
+    D_z(p')≤mε+4mM ε^(1/m)→0.                          (AT.3)
+
+The empty child, if ever needed, is handled directly. Our actual boundary
+below always has m=3. This proves an absorbing all-errors family, not an
+exact absorbing Nash profile or a finite-menu equilibrium. No clock
+tightness, absorption-time bound, stationary attainment or fixed target
+was assumed.
+
+Narrow source/overlap check: I reread the two three-player declarations
+above under their imports. The exact late-clock statement is already
+tracked as `quittingTerminalPayoff_update_finiteTime_tendsto_of_profile`
+in `UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`;
+that file also proves `prod_stoppingLaw_none_mul_singleton_le_terminalDebt`.
+The literal TV coupling is elementary and agrees with the same Never-fill
+semantics there. A bounded search in the three-player, small-player,
+terminal and TOOLKIT sources found no declaration stating the complete
+zero-own/card≤3 absorbing conclusion(AT.3). This is not a global
+producer census or a claim of new three-player strategy-class coverage.
+`Stationary/RewardRowTranslation.lean` explicitly limits its own claims
+to stationary residuals; it is not substituted for the all-response
+identity(AT.2).
+
+AT4: both boundaries for ONE native tax family. For λ∈ℝ⁴ put
+
+    z_i^λ(S)=z_i(S)−λ_i·1_{i∉S},   Never pays0.         (AT.4)
+
+All participant rows and own zeros stay fixed. The domain P_abs is fixed
+before the table variation. The same passive-probability accounting as
+PT1 proves |A(z^λ)−A(z^η)|≤Σ_i|λ_i−η_i|.
+
+Set u_i=1+max(0,max[∅≠T⊆I\{i}](z_i(T)−z_i(T+i))). If
+λ_i≥u_i, hold i sure at date0, choose a binary mixed Nash of its three
+opponents at that date, and prescribe AllNever afterward. Sure i screens
+every other owner's later/Never tests. For i the empty opponent event
+gives0 whether it quits, continues forever, or quits later. Every nonempty
+event has strictly positive joining difference. Its Quit value dominates
+every Continue branch, so this is an exact absorbing full Nash profile.
+It follows A(z^λ)=0, for ANY other taxes.
+
+Set q_i=max[i∈S]z_i(S)≥0, m_i=min[∅≠T⊆I\{i}]z_i(T), and
+l_i=m_i−q_i−1. If λ_i≤l_i, all of i's passive rewards exceed EVERY
+participant reward, including own0. Supply the ACTUAL absorbing child
+approximate equilibria of AT3 on I\{i}, and prescribe i Never. On every
+child-terminal sample, an earlier/joining i receives a lower participant
+reward; a later i does not change the outcome. On the child-allNever
+sample any finite i could only earn its own0, the same as Never. Thus
+i's Never is a COMPLETE best reply, including to all behavioral mixtures.
+The child regrets are unchanged and tend0; the parent remains literally
+absorbing. Again A(z^λ)=0 for ANY other taxes.
+
+Therefore the nonnegative continuous A(z^λ) vanishes whenever any
+coordinate leaves [l_i,u_i]. Since A(z)>0, its global maximum is attained
+at a strictly interior λ*, with
+
+    A*=A(z*)>0,   z*=z^{λ*}.                            (AT.5)
+
+Take M=max_{i,S}|z_i*(S)|>0. This is a FRESH native zero-own table and a
+true native ABS maximum selected BEFORE any minimizing source. It is NOT
+PT's full-SUM worst table, BROUWER's spherical worst table, the original
+NP table, or an inherited debt-rigid/generic minimum.
+
+AT5: source-switching comparison in a useful global direction. Raise
+EVERY passive row by ε>0, equivalently replace λ* by λ*−ε(1,1,1,1).
+Choose ACTUAL absorbing ε²-minimizers p_ε for that NEW table. Write
+D_old and D_new for their actual debts. Global maximality and the fixed
+absorbing domain give
+
+    D_old(p_ε)≥A*,   D_new(p_ε)≤A*+ε²,
+    D_old(p_ε)→A*.                                     (AT.6)
+
+For each i choose an OLD-cap-approximating pure FINITE deadline τ_i,ε
+with payoff at least B_i(old,p_ε)−ε². Such finite tests always exist
+by AT2, even if the old cap is only approached as deadlines tend∞.
+Let t_i,ε be its prescribed participation probability and let
+φ_i,ε=P[min_{j≠i}T_j≥τ_i,ε], its participation probability after
+the response. Both prescribed and responding profiles absorb. Raising
+the passive rewards changes their payoffs by ε(1−t_i,ε) and
+ε(1−φ_i,ε), respectively. The new cap is at least the value of that
+SAME actual test. Consequently, with L_i,ε=φ_i,ε−t_i,ε,
+
+    D_new(p_ε)≥D_old(p_ε)−εΣ_i L_i,ε−4ε²,
+    Σ_i L_i,ε≥−5ε.                                    (AT.7)
+
+This is a selected OLD-test comparison along actual NEW-table minimizers,
+not an envelope claim for ALL old active tests. Their source may switch.
+Extract the finite-dimensional U/B, terminal distribution, n_i, t_i
+and φ_i limits along one sequence ε↓0. They retain a true old native
+ABS minimum realizing sequence and cap-approximating COMPLETE responses.
+No raw deadline attainment or newly born cap branch is asserted.
+
+AT6: the selected finite response is genuinely non-Never. RM24's direct
+native absorbing margin applies at this SAME old minimum, without an
+all-paid, row-generic or minimizing-tail hypothesis:
+
+    U_i≥A*−d_i+(A*)²/(8M)≥a:=(A*)²/(8M)>0.            (AT.8)
+
+Every p_ε is literally absorbing, so some owner h has n_h,ε=0. Pass
+to a subsequence with the same h. Put h_i,ε=∏_{j≠i}n_j,ε. Native
+own0 makes h's reward0 on the event that all opponents Never. Else its
+reward is at most M. Thus U_h(p_ε)≤M(1−h_h,ε), and in the limit
+
+    1−h_h≥a/M.                                        (AT.9)
+
+On any sample of an absorbing profile the number of participants is at
+least1. The sum Σ_i(t_i,ε−h_i,ε) is its expected number of
+participants on samples where at least TWO original clocks are finite:
+if only one is finite, its participant indicator contributes1 and the
+corresponding h cylinder also contributes1; if at least two are finite,
+every h cylinder contributes0. Hence
+
+    Σ_i(t_i−h_i)≥P[at least two finite]=1−h_h≥a/M.      (AT.10)
+
+For each selected finite test, φ_i,ε≥h_i,ε, and more precisely
+
+    φ_i,ε−h_i,ε
+      =P[τ_i,ε≤min_{j≠i}T_j<∞].                       (AT.11)
+
+It is the probability that this response wins/joins while at least one
+OPPONENT ORIGINAL clock is also finite, possibly at a later date. Using
+(AT.7),(AT.10), the selected limiting source obeys
+
+    Σ_i(φ_i−h_i)=Σ_i L_i+Σ_i(t_i−h_i)≥a/M,
+    SOME i has φ_i−h_i≥(A*)²/(32M²)>0.                (AT.12)
+
+Along a further subsequence this one owner's OLD-cap-approximating
+FINITE responses have probability in(AT.11) bounded below by half
+that constant. On EVERY sample in(AT.11), the response terminal coalition
+contains i, whereas its literal Never replacement produces an opponent
+coalition not containing i. Thus this is a genuinely different complete
+response OUTCOME kernel on positive opponent mass, not a c/Never alias.
+The response payoff difference from Never need not be strictly positive;
+the owner may have zero debt. No attained finite raw deadline, supported
+response atom, common cap time, strict chronological rank, or paid edge
+is inferred from these actual finite test sequences.
+
+Exact scope and open consumer. From ANY positive native absorbing gap,
+AT4–AT6 PRODUCE one fresh same-table native absorbing minimum with a
+non-Never-equivalent finite maximizing response kernel in its augmented
+semantic limit. Therefore a source consisting only of Never-equivalent
+maximizing response kernels is unavailable at this selected maximum.
+The claim is NOT universal over every minimum of the starting table and
+does NOT eliminate all native positive-gap games. It also does not give
+an actual absorbing competitor with D<A*. Constructing or globally
+selecting that competitor is the live remaining question; convexly
+mixing the extracted ledgers is not an authorized independent profile.

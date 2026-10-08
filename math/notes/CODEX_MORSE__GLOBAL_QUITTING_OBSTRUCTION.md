@@ -40,14 +40,15 @@ behavioral debt floor. This retires fair forward selection, not globally
 selected charged components, a no-UE source, or arbitrary Fin4 existence.
 
 Preserved bird's-eye program: the separate owned note
-`CODEX_MORSE__FIN4_BIRDS_EYE_CONTINUATION_INDEX_PATH.md` develops ONE
-intuition-level all-table path: a nonconvex, witnessed Nash-continuation
-index should force compatible absorption-weighted words or a true
-punishment-priced exit. Its essential-index, strategic reentrant-corner
-completion and positive-charge bridges are explicitly UNPROVED. It is
-not a new theorem, source reduction, or export. The central aim is to
-close all continuation prices before executing clocks, rather than
-preserve a positive minimum through local responses.
+`CODEX_MORSE__FIN4_BIRDS_EYE_CONTINUATION_INDEX_PATH.md` now centers
+ROBUST strategic relays and finite charge-relative corner recharge,
+not an assumed persistent exact Nash index. Arbitrary-table GLOBAL
+relay forcing remains explicitly UNPROVED. It compares whole-table,
+native absorbing and whole-law/certificate alternatives and retains
+RM37/RM38, GS, EC and quiet-index countertests. It is exploratory,
+not a new theorem, source reduction or export. The RB sequel below
+shows generic local charged-root availability is automatic at binding
+corners; compatible successor/whole-relay selection is still missing.
 
 Actual follow-through: the separate continuation-index test below gives
 a COMPLETE ORDINARY UNREVIEWED four-player Nash circuit, with matched
@@ -9968,6 +9969,211 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Robust relay sequel: binding corners always admit local charged root approximations
+
+Question. Could the bird’s-eye global obstruction be a simultaneous lack
+of locally charge-relative root exits at a quiet binding corner?
+
+Status: the root-availability version is FALSE. The following ordinary
+finite-game calculation gives a nonzero approximate root at EVERY
+binding point of the upper own-singleton rectangle, at EVERY positive
+absorption-relative tolerance. It does NOT give a compatible return,
+unbounded charge, a full behavioral equilibrium, or a new counterexample
+class reduction. Its consequence is a direction change: the missing
+global theorem must control WHERE the available exits go, not merely
+prove that a root can leave the corner.
+
+### RB1. Exact data and the corner alternative
+
+Let I be any nonempty finite player set, with arbitrary finite signed
+rewards r_i(S), zero live/Never reward, and own singletons s_i.
+Fix a real continuation annotation v with v_i≥s_i for all i and a
+nonempty binding set J={i:v_i=s_i}. Use independent Bernoulli rates q,
+the actual Quit/Continue endpoints Q_i,C_i, successor F_i and ordinary
+root regrets
+
+    e_i(v,q)=max(Q_i(q),C_i(v,q))−F_i(v,q).
+
+The physical absorption is a(q)=1−∏[i](1−q_i).
+
+Then ONE of the following holds:
+
+1. There is a nonzero EXACT product-root Nash at v.
+2. There is λ supported on J, λ≥0, ∑[i]λ_i=1, such that
+
+       ∑[j∈J] H_ij λ_j≤0       for every i∈J,
+
+   where H_ii=0 and
+   H_ij=r_i({i,j})−r_i({j}) for i≠j.
+
+Under alternative2, for every τ>0 and all sufficiently small t>0,
+the literal rates q_i=tλ_i satisfy
+
+    a(q)>0,       e_i(v,q)≤τ a(q)       for ALL i.
+
+The source port is EXACTLY v; its successor is EXACTLY F(v,q).
+There is no artificial Bellman mismatch. If v lies in a reward-buffer
+box, the successor lies there too by the convex payoff formula.
+
+Alternative1 is not claimed to be an instant UE exit: its annotation
+need not be the true punishment vector or an actual Nash tail.
+Alternative2 does not imply that its successor stays in any chosen
+sublevel domain.
+
+### RB2. The finite Nash argument supplies the linear direction
+
+Only the case with no nonzero exact root at v needs proof. Finite
+Nash existence then says that the exact root set at v is {0}.
+
+For ε>0 lower every binding coordinate by ε, keeping the others fixed:
+
+    v^ε_i=v_i−ε       if i∈J,
+    v^ε_i=v_i         if i∉J.
+
+Select ANY full finite-game Nash root q^ε at this perturbed annotation.
+AllContinue is not Nash because every i∈J has Quit advantage ε there.
+The exact Nash conditions are closed in (v,q). Compactness of the root
+cube and uniqueness at v give q^ε→0 as ε→0.
+
+For k∉J the original endpoint gap at zero is s_k−v_k<0.
+It stays strictly negative near (v,0), so eventually q^ε_k=0:
+a Nash player with negative Quit-minus-Continue gap cannot put positive
+mass on Quit. Thus the roots are eventually supported on J.
+
+Let t_ε=∑[i∈J]q^ε_i>0 and λ^ε=q^ε/t_ε. Take a subsequence with
+λ^ε→λ in the finite simplex. For i∈J, q^ε_i<1 eventually, hence
+the exact Nash condition gives g_i(v^ε,q^ε)≤0, where g_i=Q_i−C_i.
+
+The finite product-polynomial expansion at the unperturbed corner is
+
+    g_i(v,q)=∑[j∈J]H_ij q_j+O((∑[j∈J]q_j)²).
+
+Changing the continuation contributes exactly
+
+    g_i(v^ε,q)=g_i(v,q)+ε h_i(q),
+
+where h_i=∏[j≠i](1−q_j). This nonnegative term may be dropped
+from the upper inequality. Dividing by t_ε gives
+
+    (H λ^ε)_i≤O(t_ε).
+
+Pass to the selected limit: Hλ≤0 on J. No comparison between ε and
+t_ε is needed. In particular, this is not the unjustified inference
+that an absolute Nash error is already absorption-relative.
+
+### RB3. Why the same corner now has relative approximate roots
+
+Take q=tλ, with λ as in alternative2. For i∈J,
+
+    g_i(v,tλ)=t(Hλ)_i+O(t²)≤O(t²).
+
+The exact root regret identity is
+
+    e_i=(1−q_i)[g_i]^+ +q_i[−g_i]^+.
+
+The positive part of g_i is O(t²). Its negative part is O(t), but
+it is paid only with the prescribed Quit mass q_i=O(t). Therefore
+EVERY binding player has e_i=O(t²).
+
+For k∉J the gap stays strictly negative and q_k=0, so e_k=0.
+Meanwhile
+
+    a(tλ)≥t−t²/2≥t/2       for 0<t≤1.
+
+Thus max_i e_i/a≤C t→0. The claim follows by choosing t small
+relative to τ. Notice why this differs from exact-root selection:
+a small Quit mass can pay an O(t) negative gap at cost O(t²).
+No exact indifference is required in the limiting direction.
+
+All quantities here are actual finite-stage product probabilities.
+This does not price a later full behavioral test unless a compatible
+whole word and actual continuation are subsequently constructed.
+
+### RB4. A stronger support identity, not needed for availability
+
+Along the ε-Nash subsequence, at least one active coordinate has
+g_i(v^ε,q^ε)=0. The expansion bounds ε/t_ε, so after another
+subsequence ε/t_ε→ℓ≥0. Then
+
+    Hλ+ℓ·1≤0,
+    λ_i[(Hλ)_i+ℓ]=0.
+
+Equivalently, λ is supported on the maximizers of Hλ, whose common
+value is −ℓ≤0. This is a finite algebraic restriction on possible
+corner directions, not an assumed index or a solved continuation
+selection problem.
+
+For a binding pair, unique-zero-root would force reciprocal positive
+joining gains by the existing singleton-probe theorem. Such a pair
+has NO λ with Hλ≤0, so it must have a nonzero exact root. This recovers
+the endpoint-level pair exclusion; its strategic content is already
+close to the checked binding-pair/complementarity machinery.
+No new pair-source export is proposed.
+
+### RB5. Exact positive test and the remaining incompatibility
+
+Use EC1’s complete already-solved four-player table:
+own1; singleton favorite passive0, other passive3; nonsingleton
+members2 and outsiders3. At v=(1,1,1,1), every exact root is zero.
+Each row of H has one entry2 and two entries−1, so uniform λ is
+feasible with Hλ=0.
+
+Write all four rates as u, with u>0 small. Direct calculation gives
+
+    g_i=−3u²+2u³,
+    e_i=3u³−2u⁴,
+    a=1−(1−u)⁴,
+    F_i(v,q)=1+3u−4u³+2u⁴.
+
+Thus the corner admits arbitrarily accurate charged root approximations
+even though it has no nonzero exact root. But EVERY successor of this
+particular approximation is strictly above all own singletons.
+It enters the quiet side, not the next phase of EC’s successful
+asynchronous relay. A useful local root alone does not pay the next
+continuation invoice.
+
+The same distinction applies to GS’s all-own endpoint:
+its H=D has a feasible uniform direction, since its row sums are
+(−21/2,−11/2,−9/2,−7/2). Hence the endpoint is not locally dead
+for relative approximate roots. Its previously proved exact-path
+stall and late-debt floor remain unchanged. One has to leave the
+chosen exact family and examine the successors, not declare a
+compatible charged return from this lemma.
+
+### RB6. Source overlap and the changed global question
+
+Narrow declarations inspected:
+
+- exists_quittingSingletonCollisionGain_pos_of_unique_allContinue
+  and the exact solo-probe endpoint formulas, in
+  UniformEquilibrium/Quitting/Punishment/SingletonCapBindingCollision.lean;
+- quittingSingletonCollisionGain_pos_of_bindingFinset_card_eq_two,
+  in Research/Quitting/BindingCollisionGainPositivity.lean;
+- FinFourStrictRayForwardExactCapTail.bindingFinset_card_ne_two,
+  in Research/Quitting/FinFourProducerAtlas/StrictRayBindingCardinalityExplicit.lean;
+- singletonFace_drift and its moving-source quotient, in
+  UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean.
+
+The existing strict-ray pair theorem has more source-specific content
+and a checked complete complementarity proof. The present observation
+does not replace that producer or claim new counterexample restriction.
+Nor does it add a new first-derivative contradiction: collision-adjusted
+solo probes already force the relevant singleton-face drift inequalities.
+
+The program should therefore NOT spend its next step proving generic
+corner-root availability. That availability is automatic in the robust
+sense above. The actual global question is whether the ENTIRE family
+of such exits, plus literal nonzero roots, can be forced into a useful
+compatible relay rather than all feeding quiet traps or incompatible
+future prices. RM37’s above-own head and the EC calculation show
+exactly why this extra question cannot be omitted.
+
+A meaningful next candidate would derive an incompatibility among the
+head/continuation equations of ALL candidate terminal traps on ONE
+table. Merely adding a binding-pair lemma, a simplex direction or a
+continuous ordinary Nash selector does not do that.
+
 
 ## Global dual sequel: finite exact capacity is not a sufficient negative certificate
 
