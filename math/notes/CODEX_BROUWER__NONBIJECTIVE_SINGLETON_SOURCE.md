@@ -49,6 +49,11 @@ joint Never mass as well as the same debt vector. Every nonzero minimum
 prefix then has a STRICTLY nonminimal old tail, and changing one root
 rate over that tail strictly raises full debt at EVERY finite amplitude.
 This is a global necessary restriction, not a repair or UE consumer.
+NR10 rules out requiring a LOWER-debt competitor to preserve that mass.
+PS below retires a different global attempt: a payoff-only screen at the
+own-singleton threshold cannot exclude the surviving source, because its
+already-produced singleton direction gives an actual absorbing profile
+strictly above ALL those thresholds. Full cap pricing remains essential.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -8588,6 +8593,119 @@ This rejects the proposed fixed-ν repair mechanism, not NR's producer.
 The next comparison must permit changed ν while controlling the born
 caps through the actual unrestricted floor; no more fixed-level mixing
 or scalarization is being pursued as a consumer.
+
+## Why an own-threshold payoff-only global screen cannot consume the source
+
+### PS1. Exact question, overlap and status
+
+COMPLETE ORDINARY CONSEQUENCE of the existing singleton source, not a new
+UE theorem, counterexample reduction or export candidate. The attempted
+different mechanism was to use independent-clock two-copy inequalities
+to prove that EVERY actual absorbing profile has some U_i≤s_i. Native
+zero-own absorbing minima have strict U_i>0 by the reviewed fixed-bound
+BA6 argument, so such a screen would apparently exclude positive native
+absorbing gaps. The following actual construction shows that this entire
+own-threshold architecture is ALREADY inconsistent with the singleton
+source, before any collision inequality is needed.
+
+Let r be a finite signed table, |r_i(S)|≤M, with M>0, and let
+Γ_ij=r_i({j})−s_i for j≠i, Γ_ii=0. Suppose λ≥0, Σλ_i=1, and
+
+    ε=min_i(Γλ)_i>0.
+
+Then an ACTUAL independent stationary profile, absorbing almost surely,
+has U_i>s_i for EVERY owner. No conclusion about its full debts follows.
+
+### PS2. Complete actual construction and quantitative payoff bound
+
+Choose 0<ρ≤1/2. At every live date player i privately Quits with
+probability ρλ_i. One-period total hazard is ρ>0, so its all-Continue
+probability is strictly below1 and prescribed play absorbs almost surely.
+No public coin, new state or infinite prescribed clock is used.
+
+Let a be its one-period absorption probability and N_i the one-period
+absorbing payoff contribution. Then U_i=N_i/a. The total mass of all
+singleton events differs from ρ by at most ρ², and the nonsingleton mass
+is at most ρ²/2. More explicitly,
+
+    0≤ρλ_j−Pr(first-period coalition={j})
+      ≤ρ²λ_j(1−λ_j),
+    0≤ρ−a≤ρ²/2,       a≥ρ−ρ²/2≥ρ/2.
+
+The singleton barycenter t_i=Σ_jλ_j r_i({j}) satisfies |t_i|≤M.
+Thus |N_i−ρt_i|≤(3M/2)ρ² and
+
+    |U_i−t_i|≤4Mρ,       t_i=s_i+(Γλ)_i.
+
+Taking ρ<ε/(8M) gives U_i>s_i+ε/2 for all i simultaneously.
+The constants are only a proof of convergence; no optimization is used.
+Zero λ_i is harmless: that owner prescribes Never, while another positive
+λ_j still makes the entire profile absorbing.
+
+The exact source inspected is
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+It supplies this λ from ANY actual Fin4 no-UE game, with no payoff-sign
+or supplied-strategy hypothesis. The tracked direction estimate
+`abs_stationaryPayoff_sub_singletonDirectionBarycenter_le` in
+`UniformEquilibrium/Quitting/Circulation/DirectionBarycenter.lean` gives
+the same limit with bound6Mρ. Its total-hazard contraction declaration
+`quittingStationaryContinueMass_lt_one_of_totalHazard_pos` was also read.
+These declarations were statically inspected under their imports, not
+built in this session; the elementary calculation above is ordinary math.
+
+### PS3. The native zero-own absorbing question has the same obstruction
+
+This does NOT identify a native absorbing minimum with an NP full minimum.
+Let z have all own rewards0, bound M>0 and A=Δ_abs(z)>0. For any t>0
+add t to EVERY nonempty reward row, leaving AllNever0. Old and new own
+rewards are nonnegative, so the exact full-cap translation gives
+
+    D_{z+t}(p)=D_z(p)+4tν(p),       Δ_abs(z+t)=A.
+
+The actual one-marginal absorbing completion bound is
+A≤D_z(p)+14Mν(p)^(1/4). Consequently, at EVERY actual profile, either
+D_z(p)≥A/2 or ν(p)≥(A/(28M))⁴. Therefore
+
+    Δ_all(z+t)≥min(A/2,4t(A/(28M))⁴)>0.
+
+The terminal exploitability bridge excludes UE for z+t. Its centered
+singleton Γ is EXACTLY that of z, so the named Fin4 simplex source yields
+Γλ>0 at this SAME native table. PS2 now produces an actual absorbing z
+profile with ALL U_i>0. It need not minimize debt; this is consistent with
+the strict positivity of every hypothetical native absorbing minimum.
+This uses the ordinary normalization/completion argument in the canonical
+fully-paid source, not a new normality assumption at z.
+
+Thus a universal test of the form “every actual absorbing profile has
+some nonpositive coordinate” can never reach a native positive-gap table
+with the required singleton source. Two-copy coalition incompatibilities
+remain useful ONLY if they also price full response caps or impose a
+stronger, actually supplied quantitative payoff condition. This statement
+does not rule out every payoff-dependent argument or inequalities with
+thresholds strictly above the own singleton vector.
+
+### PS4. Exact positive-payoff profile still has large complete debt
+
+Set r_i(S)=0 when i∈S and r_i(S)=1 when i∉S, specifying all60 entries.
+Owns are0 and Γ has all off-diagonal entries1. At the actual stationary
+profile with common hazard q∈(0,1), every owner is finite almost surely and
+
+    U_i=(1−q)[1−(1−q)³]/[1−(1−q)⁴]>0,       B_i=1.
+
+Literal Never attains that cap because the other three eventually Quit.
+At q=1/2, U_i=7/15 and D=32/15; as q↓0, U_i→3/4 and D→1, not0.
+The table's TRUE absorbing and full infima are nevertheless0: pure solo
+date-zero Quit by one owner, others Never, is full Nash. The quitter can
+obtain only0, and outsiders lose their passive1 if they join. This solved
+test distinguishes payoff delivery from unrestricted deviation control;
+it is not an example satisfying the positive native or NP gap hypothesis.
+
+The mechanism decision is to abandon own-threshold payoff-only exclusions,
+not to weaken the same copied-outcome inequality. The live consumer must
+change existing finite mass while retaining ALL counterfactual caps and
+allowing ν to vary. Neither a payoff-positive stationary source nor an
+auxiliary Nash root above a minimizing payoff supplies that comparison.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 

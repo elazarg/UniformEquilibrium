@@ -1054,3 +1054,57 @@ its last finite atom. Nonnegative own singleton reward makes the old complete
 cap equal its finite-response supremum; a first-pass maximizing test and
 periodic Never then supply the two lower bounds for exact cap equality.
 None of these facts makes a prescribed-payoff return a strategic return.
+
+## Two exact tests of mechanism fit, rather than missing state
+
+The following observations distinguish an inadequate proof target from
+information lost during composition. They do not settle the conjecture.
+
+### Own-singleton payoff improvement is already available
+
+Put s_i=r_i({i}), Γ_ii=0 and Γ_ij=r_i({j})−s_i for i≠j.
+If λ is a probability vector with Γλ strictly positive coordinatewise,
+independent stationary hazards ρλ_i absorb almost surely and satisfy
+
+    |U_i−∑_j λ_j r_i({j})|≤6Mρ,       0<ρ≤1/2.
+
+For sufficiently small ρ, every U_i>s_i. The tracked no-UE simplex
+source supplies such λ for Fin4. Therefore the inputs Γλ>0 and
+arbitrary collision rewards cannot imply that every absorbing profile
+has some U_i≤s_i. The construction refutes that universal implication
+over its entire proposed input class. It does not forbid a stronger
+payoff inequality using additional global information, or a reward-table
+criterion excluding Γλ>0. For this construction the missing strategic
+issue is unrestricted caps, not payoff delivery.
+
+The named declarations inspected are
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+and `abs_stationaryPayoff_sub_singletonDirectionBarycenter_le` in
+`UniformEquilibrium/Quitting/Circulation/DirectionBarycenter.lean`.
+The complete-response boundary example is preserved in
+`CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`, PS1–PS4.
+
+### A produced all-cap bound can still leave the objective unchanged
+
+For a zero-own table z, adding C>0 to every finite reward gives the exact
+identity D_{z+C}(p)=D_z(p)+4Cν(p), where ν is joint Never mass.
+Under a nonpositive observer singleton column j, an actual geometric
+completion of those Never branches can preserve every z-cap in the limit
+and change the total prescribed z-payoff by νT_j, where
+T_j=∑_i z_i({j})≤0. Its completed debt is then
+
+    D_z(p)−νT_j.
+
+The apparent 4Cν benefit at the shifted table cancels the 4Cν penalty
+exactly. This is an accounting obstruction even with the whole response
+class retained, not an unrecorded chronology or an uncontrolled cap.
+The ordinary, unreviewed proof and its exact domain restrictions are
+preserved in `CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md`, RM25/NC1–NC6.
+
+These tests weakly favor the missing-global-theorem explanation over
+insufficient state for these particular attempts only. They give no
+evidence that a positive-gap table exists or that every other mechanism
+has adequate state. A candidate must beat the same-domain full-debt
+floor after pricing its manufactured source and all new cap branches;
+positive delivery or a large auxiliary penalty is not that comparison.

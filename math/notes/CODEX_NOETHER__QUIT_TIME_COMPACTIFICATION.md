@@ -18627,3 +18627,133 @@ within P_abs to preserve or upper-control EVERY cap and strictly increase
 total prescribed payoff, using(NA1) rather than the discarded sole-head
 boundary? Merely importing NP's nonsure ALL-tail floor or forcing a
 zero-full-debt least-Never point to coincide with this minimum is invalid.
+
+### RM25. An actual all-cap completion consumes large-penalty nonabsorption, not the native gap
+
+Status: COMPLETE ORDINARY GLOBAL FAMILY COMPARISON AND FAILED ABSORBING
+EXIT. This uses true full minima and the original absorbing floor, not a
+solved-table regression or a supplied cap domination field. It proves a
+literal lower-debt absorbing competitor in one raw subcase. The remaining
+native gap is NOT eliminated and there is no new export claim.
+
+Question and finite data. Keep ANY fixed zero-own z with |z|≤M and
+A=Δ_abs(z)>0. Suppose some singleton column j is nonpositive in every
+observer row:
+
+    z_k({j})≤0 for every k≠j.
+
+Put T_j=Σ_i z_i({j})≤0. For C>0 let r^C=z+C in EVERY finite entry of
+EVERY row. All actual caps and unilateral responses remain unrestricted.
+Then there is a FINITE penalty threshold, not merely an infinite-limit
+statement:
+
+    Δ_all(r^C)=A when 4C+T_j≥0;
+    EVERY full minimum has joint Never mass0 when 4C+T_j>0.     (NC1)
+
+For a full-carrier law with positive joint Never and 4C+T_j>0, the proof
+constructs an absorbing competitor of strictly smaller FULL debt. Thus
+this is an actual branch consumer at those r^C tables. It is not an
+assertion that every NP table has such a column or such a large penalty.
+
+The simultaneous low-cap tail is actually produced. Prepend an empty
+date, then let j alone use a geometric Quit hazard θ>0 and every other
+owner Never. The resulting tail is absorbing. At table z its prescribed
+payoff vector is z({j}); j's full cap is0. An observer k's tests at and
+after the geometric stage interpolate between θ z_k({j,k}) and
+z_k({j})≤0; its earlier empty-date Quit test pays own0. Hence EVERY
+tail cap lies in[0,Mθ], including all finite deadlines and Never. This
+is a simultaneous punishment-cap construction, NOT a Nash tail: observers
+may receive negative payoff and have positive regret.
+
+At table r^C the same absorbing tail has
+
+    u_i=C+z_i({j}),    b_i≤C+Mθ.                 (NC2)
+
+Translation is legitimate because both own signs are nonnegative. No
+best-reply choice is made for the prescribed tail owner; its actual
+geometric law and all other prescribed Never laws are retained.
+
+Whole-law graft and its complete caps. First take a finite-support
+original profile p. Write ν=∏n_i, h_i=∏_(k≠i)n_k and R_i^z for its
+literal Never-response payoff at z. Preserve EVERY original finite clock
+and add the preceding tail behind its last clock and one empty tester,
+on the independent original Never branches. At z, the last finite test
+gives R_i^z because own0, so B_i^z≥R_i^z. The exact RM22 formula at
+r^C gives
+
+    U_i'=U_i^{r^C}+ν[C+z_i({j})],
+    B_i'=max(B_i^{r^C},R_i^{r^C}+h_i b_i).
+
+Since B_i^{r^C}=C+B_i^z and
+R_i^{r^C}=R_i^z+C(1−h_i), (NC2) yields
+
+    B_i^{r^C}≤B_i'≤B_i^{r^C}+h_i Mθ,
+    D_{r^C}(p')≤D_{r^C}(p)−ν(4C+T_j)+MθΣ_i h_i.             (NC3)
+
+These bounds include every after-insertion test: early tests are exactly
+old, the empty seam pays R_i^{r^C}+h_i C, all continuation clocks obey
+the produced cap b_i, and Never is bounded by the finite endpoint. If
+ν>0 and 4C+T_j>0, choose θ>0 so the final error is less than half
+ν(4C+T_j). The absorbing profile p' then has strictly smaller full debt.
+
+Carrier and all moving profiles. To pass from actual infinite-support
+laws to an augmented carrier point, approximate the original laws by
+finite-support laws in total variation, retaining their actual Never
+masses to the needed accuracy. Keep ν as an augmented coordinate.
+Let θ→0 after the approximating finite profile is selected. The old
+full caps are preserved in the limit and the prescribed payoff increment
+is exactly ν z({j}) at z. All new profiles are absorbing, so their limit
+pair belongs to K_abs(z). Consequently for EVERY augmented actual-carrier
+point (U_z,B_z,ν),
+
+    A≤D_z−ν T_j.                               (NC4)
+
+No compact clock attained minimum or exact geometric tail at θ=0 is
+asserted. For a strict comparison (NC3) supplies actual θ>0 witnesses.
+Using D_{r^C}=D_z+4Cν, (NC4) becomes
+
+    D_{r^C}≥A+ν(4C+T_j).                       (NC5)
+
+Absorbing approximate minima have ν0 and their debts are invariant under
+the shift, so Δ_all≤A. Thus (NC1) follows, including ALL full minima via
+their augmented lifts. At equality 4C+T_j=0 positive-Never minima are
+NOT excluded. Applying (NC4) to AllNever gives A≤−T_j. Equality is
+actually impossible when A>0: the constructed absorbing limit would
+then be a minimum with every z-cap0, contradicting RM24's weak floor.
+Hence A<−T_j, but no significance is claimed for this extra bound.
+
+Precise failed next implication. Finite penalty attainment does NOT
+produce an absorbing competitor below A. For an absorbing original
+profile ν0, the graft is unreachable to prescribed payoffs, so (NC3)
+has no negative term. If each original finite law is first mixed with
+Never, making joint mass ν>0, then
+
+    D_{r^C}(p)=D_z(p)+4Cν,
+    D_{r^C}(completed p)→D_z(p)−ν T_j.          (NC6)
+
+The seemingly large4Cν payoff dividend cancels EXACTLY the4Cν debt
+introduced by that mixing. Increasing C cannot turn it into an
+absorbing decrease. The surviving inequality D_z(p)−ν T_j≥A is
+the genuine original absorbing floor, not a missing supplied sign.
+The completed profile is legal and its full caps are controlled, but
+its debt need not be below that floor. Thus this is a global finite-C
+source transition, not a native UE consumer or a refutation of NP's
+small-C separated source. The raw column condition also need not hold
+at NP's selected table, and no old minimum is carried across a shift.
+
+Bounded source audit. The complete graft is RM22's actual original-law
+construction (independently also BROUWER SG). The solo response endpoint
+calculation was checked against
+`quittingRootEndpointDifference_soloStationaryRoot_other` and the exact
+full-profile/row distinction in
+`UniformEquilibrium/Quitting/Punishment/SoloQuitterEquilibrium.lean`.
+The tail is not claimed to satisfy its Nash criterion. Original carrier
+completion, total-variation all-cap transport and signed nonnegative-own
+translation are the previously reviewed NP/FC arguments. New NC1–NC6 are
+ordinary mathematical statements, not newly checked Lean declarations.
+
+The research direction after this attempt remains global: an absorbing
+exit must change the original prescribed finite laws and beat the
+actual floor after ALL cap effects are retained, or derive a new
+whole-table comparison. A further penalty-size optimization cannot
+remove the exact cancellation in(NC6).
