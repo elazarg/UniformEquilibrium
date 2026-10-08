@@ -202,6 +202,29 @@ the first response pays r_i(S∪{i}), whereas the later response pays r_i(S).
 Row genericity distinguishes the two payoff kernels on that positive event;
 their expected response values can nevertheless tie.
 
+## Two response configurations at the supplied least-Never prefix
+
+Require the supplied root q and its SAME augmented continuation to satisfy
+one of these two alternatives:
+
+1. At least two DISTINCT owners i satisfy Q_i(q)=C_i(q).
+2. Exactly one owner i satisfies Q_i(q)=C_i(q), its root rate q_i is zero,
+   and some DIFFERENT owner j satisfies C_j(q)>Q_j(q).
+
+A tied owner maximizes both by Quitting at the root and by Continuing to
+complete later responses. The strict inequality for j means its entire
+maximizing response family lies later, not at the root. Later cap values
+have moving FINITE-deadline witnesses on the same actual realizing tails;
+neither ordinary-date cap attainment nor a unique later maximizer is
+required. Multiple maximizing times for one owner do not count as two
+owners. No prescribed finite mass for the sole tied owner is assumed.
+
+This strengthened disjunction concerns ONLY the supplied prefix realizing
+the chosen literal full-profile probability ν*. It is not imposed on
+every arbitrary nonzero minimum prefix in the earlier universal condition.
+It supplies no root-Nash statement, minimum-tail statement, or temporal
+matching of the two responses.
+
 ## Complete periodic-replay account
 
 Take a finite-law minimizing sequence realizing the supplied minimum prefix.
