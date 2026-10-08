@@ -13,7 +13,7 @@ ZERO debt. This is independently reviewed ordinary mathematics, not
 an equilibrium producer or an assertion that distinct clock labels
 always distinguish payoff effects.
 
-The live attempt is RM1–RM17 at the end of this notebook. RM1–RM5
+The live attempt is RM1–RM18 at the end of this notebook. RM1–RM5
 select a genuine compact GLOBAL minimum with maximal root mass and
 identify the nonlinear-wall failure of naïve purification. A sole
 bridger is at its own root rate0 or1. RM6–RM9 prove that if it is the
@@ -53,7 +53,19 @@ opposite row direction gives an ACTUAL lower-debt changed-table profile
 by releasing the floor and adjusting one free rate. Zero debt at all
 old minima does not license a nonnegative derivative of the global gap.
 
-Status of RM10–RM17: COMPLETE ORDINARY PROOF DRAFTS, not independently
+RM18 changes mechanism from local row prices to a same-table clock
+graft. ANY sure-root FULL minimum can be punishment-canonicalized
+without changing its semantic pair, regardless of how many owners
+bridge. If the sure owner's true punishment is below max(s_i,0),
+the SAME full-minimum pair belongs to the closure of profiles with
+TWO finite-a.s. clocks. If P_i<s_i, punishment is actually attained
+by stationary opponents, giving an ACTUAL full minimum with the
+original root and one stationary suffix. Equality at the all-Never
+ceiling is a genuine boundary, not silently genericized away.
+This is an unreviewed supporting source simplification, not a UE
+consumer or an export; two clocks alone are not proved consuming.
+
+Status of RM10–RM18: COMPLETE ORDINARY PROOF DRAFTS, not independently
 reviewed, not Lean-checked, and not exported. Their necessary conditions
 and local table prices do not assert that the GLOBAL infimum rises.
 
@@ -16841,7 +16853,7 @@ without assuming cap stability at all its simultaneous active kernels.
 ## Global maximal root-mass selection: a real max-wall blocks naïve purification
 
 Status: COMPLETE ORDINARY ATTEMPT RM1–RM9, followed by a new complete
-ordinary proof drafts RM10–RM17 awaiting focused falsification. No new
+ordinary proof drafts RM10–RM18 awaiting focused falsification. No new
 UE/source-class consumer is claimed. The compact selection is genuinely GLOBAL and keeps every
 full cap. Its proposed purification fails at a nonlinear active wall;
 the precise failed inference and strongest local consequence are saved.
@@ -17601,3 +17613,156 @@ Current decision: retain these complete true-source calculations as
 supporting ordinary proof drafts. A full consumer must price ALL source
 switches/multiple active branches simultaneously, or leave the c=0
 family by a SAME-table law change. No new field or export is introduced.
+
+### RM18. Same FULL minimum, two finite-a.s. clocks, and actual stationary attainment
+
+Status: COMPLETE ORDINARY PROOF DRAFT. This is a same-table source
+simplification, not an equilibrium proof, an absorbing-domain substitute
+for the true minimum, or a renewed-clock construction. No export is
+proposed. It uses actual global minimality, not a supplied upper-cap
+price. It applies equally to MULTIPLE root/later bridges.
+
+Let the SAME finite table have true full-carrier minimum δ>0. Suppose
+an exact carrier prefix T_q(v) attains δ and some owner i is sure at
+the first root. All other root rates and all full caps are retained.
+Let P_i be its TRUE unrestricted independent punishment infimum and
+let s_i=r_i({i}); |r|≤M, M>0. Denote by K₂ the closure of the full
+payoff/cap pairs of actual profiles with at least TWO owners j satisfying
+p_j(Never)=0. This is an actual law class, with unrestricted deviations;
+neither clock owner is assumed a best reply or an original debtor.
+
+The following assertions are proved below.
+
+1. If at least two root rates are sure, the original minimizing pair
+   is realized by the ACTUAL date-zero root profile, with every optional
+   owner's unspent mass assigned to Never. In particular it lies in K₂.
+2. If i is the sole sure root owner, write h=∏_(j≠i)(1−q_j)>0.
+   The original pair equals the full-cap pair obtained in the limit
+   by keeping q fixed and putting actual ε-optimal i-punishments
+   behind it, with i's prescribed continuation Never. Its owner cap
+   is exactly max(Q_i,A_i+hP_i). No bridge or zero-debt premise is used.
+3. If in addition P_i<max(s_i,0), those approximants can all have TWO
+   finite-a.s. clocks, so the SAME original FULL minimum lies in K₂.
+   Thus min_(K₂) D=δ at this SAME table, not only relatively close
+   after another reward selection. The second clock owner may vary
+   before passing to a subsequence and need not carry positive debt.
+4. If P_i<s_i, there is an ACTUAL stationary punishment attaining P_i.
+   Keeping the original q and grafting that punishment gives an ACTUAL
+   full minimizing profile: one root followed by stationary opponent
+   hazards, with i's irrelevant own continuation Never. It has two
+   finite-a.s. clocks. No attainment of the original tail is assumed.
+
+For(1), every unilateral responder has another sure root owner among
+its opponents. Therefore ALL later deadlines and Never are screened
+at that root, for every owner. The full payoff/cap pair is independent
+of every suffix coordinate. The displayed literal date-zero profile
+has exactly the original pair and already has two finite-a.s. owners.
+
+For(2), each free owner's prescribed payoff and ENTIRE cap are likewise
+screened by i's sure root. The owner has U_i=Q_i and cap
+max(Q_i,A_i+h b_i(v)), while b_i(v)≥P_i follows by closure from the
+true infimum. Choose actual punishment tails with owner cap tending
+to P_i and prescribe i to play Never there. The new root keeps EVERY
+U and every free cap exactly fixed; its limiting owner cap is
+
+    B_i′=max(Q_i,A_i+hP_i)≤B_i.
+
+This limiting pair belongs to the ORIGINAL full carrier. If B_i′<B_i
+its total debt would be strictly below δ. Hence B_i′=B_i. The ENTIRE
+semantic pair is preserved. In particular a cap-winning Continue
+branch forces b_i(v)=P_i, whereas a root-winning branch need not
+force that scalar equality. An owner with zero debt is not made to
+best-respond its prescribed suffix; that suffix was chosen Never.
+
+For(3), use the exact inspected
+`quittingPunishmentValue_eq_stationaryPunishmentValue` and
+`quittingStationaryUnilateralCap_eq_max_div` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`, under its imports.
+They select actual ε-optimal constant independent opponent hazards y
+with FULL cap
+
+    Φ_i(y)=max(Q_i(y), A_i(y)/(1−h_i(y))).          (RM26)
+
+At y=0 the full cap is max(s_i,0), using the actual Never reply.
+Choose ε<max(s_i,0)−P_i. Any selected y with Φ_i(y)<P_i+ε then has
+some positive opponent hazard. That opponent's geometric suffix is
+finite a.s.; attaching the fixed root does not introduce any Never
+mass in its complete law. Owner i is pure finite at the root, giving
+the second finite-a.s. clock. Taking ε↓0 and using(2) gives membership
+of the original minimum in K₂. Since K₂⊆K, its infimum equals δ.
+This is EXACT full-minimum anchoring in this supplied sure subgeometry,
+not the BA two-objective finite-penalty closeness argument.
+
+For(4), put t=s_i−P_i>0 and choose stationary ε_n-optimal hazards
+y^n with ε_n↓0. The root Quit payoff satisfies
+
+    Q_i(y)≥s_i−2M(1−h_i(y)).
+
+Since Φ_i(y^n)≥Q_i(y^n) and Φ_i(y^n)≤P_i+ε_n, eventually
+
+    1−h_i(y^n)≥t/(4M)>0.                         (RM27)
+
+The closed opponent hazard cube is compact. Along a subsequence
+y^n→y* the same bound holds, so the denominator in(RM26) stays
+strictly positive. Its polynomials and maximum are continuous there,
+and Φ_i(y*)=P_i. This is a genuine attained stationary punishment,
+not compactness at the discontinuous all-Continue row. It has at
+least one positive opponent hazard. The root followed by y* is an
+ACTUAL profile; by(2) its full pair is the original minimum exactly.
+One need not assume contraction of every other deleted hazard product:
+only the scalar punished owner's formula is used in this limit, and
+the sure root screens all free-player caps. The broader declaration
+`continuousOn_quittingStationaryHazardCap` in
+`UniformEquilibrium/Quitting/Stationary/HazardPayoffCap.lean` was read
+as a consistency check, not applied without its stronger all-owner
+contraction hypothesis. Narrow lookup in MinMax and the selected
+punishment subtree found no declaration claiming this strict-solo
+attainment/source graft. No whole-library overlap assertion is made.
+
+There are two exact equality-boundary tests; neither is a positive-gap
+table, so neither falsifies the incoming global δ>0 source.
+
+First, give owner0 own singleton−1, ALL seven passive coalition
+coordinates−2, and ALL seven other participant coordinates0. Give
+each other recipient all fifteen finite coordinates0. This specifies
+all sixty entries. For a nonzero stationary opponent hazard row,
+write h<1. Then Q_0=−h and A_0/(1−h)=−2, so Φ_0=−h. At y=0 the
+cap is0. Thus the TRUE value P_0=−1=s_0 is approached by h↑1 but
+not attained by any stationary row. In fact NO actual opponent law
+attains it: if the opponents never quit the cap is0; otherwise their
+earliest date n of positive finite exit probability has no earlier
+exit. Quitting at n then pays−1 with probability1−p and0 with
+probabilityp>0, hence −1+p>−1. This includes arbitrary opponent
+laws and arbitrary finite dates. It rules out dropping P_i<s_i from
+actual attainment, even though P_i<max(s_i,0) still gives K₂ limits.
+The full table has AllNever debt0 and is not a no-UE example.
+
+Second, give owner0 own singleton0 and ALL seven passive coordinates1.
+Give participant coalition {0,2} value0 and EVERY other nonsingleton
+participant coalition value2. Give all other recipient rows0. Again
+all sixty coordinates are specified. The TRUE punishment value is0:
+the date-zero response is always nonnegative and all opponents Never
+attain cap0. Against ANY opponent profile absorbing a.s., owner0's
+Never response pays1, so its FULL cap is at least1. Consequently every
+two-finite-a.s.-clock profile has B_0≥1, and the same holds throughout
+K₂, because at least one such clock belongs to an opponent of0.
+
+Now prescribe q_0=1, q_1=1/3, q_2=1/2, q_3=0 at date0 and otherwise
+Never. Then h_0=1/3, A_0=2/3, Q_0=2/3. Its actual U_0=B_0=2/3;
+every later finite and Never reply also pays2/3. All other payoffs
+and caps are0. This is a TRUE full debt-zero minimum with an owner
+root/later tie and P_0=s_0=0. Its SEMANTIC pair does NOT lie in K₂
+because its cap2/3 is below the universal two-clock bound1. A graft
+with an absorbing opponent suffix would raise its owner cap to at
+least A_0+h_0=1. Thus the clipped equality boundary can genuinely
+prevent even SAME-PAIR two-clock augmentation; it is not merely a
+failure to pick the right stationary optimizer. This solved-table
+regression supplies no positive full-gap barrier.
+
+The meaningful next question is now different from another local
+one-row price. Can an ACTUAL minimum with one sure root and an attained
+stationary punishment suffix be consumed while retaining every free
+observer cap after releasing that root? If not, can full globality
+rule out the remaining clipped equality P_i=max(s_i,0) in the positive
+sure-source case? Two finite-a.s. clocks alone, even at the FULL
+minimum, have not been proved to yield a renewal or a debt descent.
