@@ -12,6 +12,10 @@ The same subsequence gives every fixed finite-outcome expectation and every
 original response expectation whose actual marks converge; Never is separate.
 The integral dictionaries also apply to arbitrary actual finite laws on the old
 reference cells, without changing the reference calendar or its reply marks.
+Their actual expectations converge under eventual bounds on the literal cell
+probabilities and weak convergence of the compiled reference laws. Product
+domination and moving-kernel convergence are derived internally. Concrete signed
+atom and chronological-cut constructors must still supply these hypotheses.
 
 The subsequence and limit objects are chosen before any test or limiting legal
 mark. The menu is not enlarged to all geometrically compatible marks. Finite
@@ -255,7 +259,44 @@ end ResponseIntegrals
 private instance base_nullSingleton : NullSingletonClass (base : Measure unitInterval) :=
   inferInstanceAs (NullSingletonClass (volume : Measure unitInterval))
 
-/-- Actual moving outcome kernels converge under the same weakly converging source chart laws. -/
+/-- Actual replacement outcomes converge on the unchanged reference calendars. Eventual
+cell-probability bounds suffice; neither kernel convergence nor product domination is supplied. -/
+theorem tendsto_reference_outcome_expect
+    (source : ℕ → ι → FinDist (Option ℕ))
+    (replacement : (n : ℕ) → ι → FinDist (Cell (source n))) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (C : ι → NNReal)
+    (hweights : ∀ᶠ k in atTop, ∀ i (a : Cell (source (subsequence k))),
+      (replacement (subsequence k) i).prob a ≤ (C i : ℝ) * weight (source (subsequence k)) a)
+    (hlaws : Tendsto (fun k i =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) i))
+      atTop (𝓝 marginals))
+    (reward : Finset ι → ℝ) :
+    Tendsto (fun k => ((FinDist.pi (fun i =>
+      referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i))).map
+      quittingFirstStoppingOutcome).expect (fun outcome => reward (outcomeLabelsEquiv outcome)))
+      atTop (𝓝 (∫ sample, MathUE.MarkedCalendar.payoffKernel limit reward sample
+        ∂(ProbabilityMeasure.pi marginals : Measure (ι → unitInterval)))) := by
+  have hproduct := ProbabilityMeasure.continuous_pi.continuousAt.tendsto.comp hlaws
+  have hbound := hweights.mono fun k hk => ProbabilityMeasure.pi_le_smul_pi_of_le
+    (fun _ : ι => base)
+    (fun i => referenceLaw (source (subsequence k)) (replacement (subsequence k) i)) C
+    (fun i => referenceLaw_le (source (subsequence k)) (replacement (subsequence k) i)
+      (C i) (hk i))
+  have h := ProbabilityMeasure.tendsto_integral_moving_test_of_tendsto_of_le_smul
+    (ProbabilityMeasure.pi (fun _ : ι => base)) (∏ i, C i)
+    hproduct hbound (MathUE.MarkedCalendar.payoffKernel limit reward)
+    (MathUE.MarkedCalendar.integrable_payoffKernel limit reward _)
+    (fun k => MathUE.MarkedCalendar.payoffKernel (calendar (source (subsequence k))) reward)
+    (Eventually.of_forall fun k => MathUE.MarkedCalendar.integrable_payoffKernel
+      (calendar (source (subsequence k))) reward _)
+    (MathUE.MarkedCalendar.tendsto_integral_norm_payoffKernel_sub base hE hc reward)
+  simpa only [Function.comp_def, integral_payoffKernel_referenceProduct] using h
+
+/-- The original source laws specialize the same moving-outcome proof. -/
 theorem tendsto_source_outcome_expect
     (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
     {limit : MathUE.MarkedCalendar.Calendar} {marginals : ι → ProbabilityMeasure unitInterval}
@@ -268,23 +309,68 @@ theorem tendsto_source_outcome_expect
       quittingFirstStoppingOutcome).expect (fun outcome => reward (outcomeLabelsEquiv outcome)))
       atTop (𝓝 (∫ sample, MathUE.MarkedCalendar.payoffKernel limit reward sample
         ∂(ProbabilityMeasure.pi marginals : Measure (ι → unitInterval)))) := by
-  have hproduct := ProbabilityMeasure.continuous_pi.continuousAt.tendsto.comp hlaws
-  have hbound (k : ℕ) := ProbabilityMeasure.pi_le_smul_pi_of_le
-    (fun _ : ι => base) (chartLaw (source (subsequence k)))
-    (fun _ : ι => (Fintype.card ι : NNReal)) (chartLaw_le (source (subsequence k)))
-  have h := ProbabilityMeasure.tendsto_integral_moving_test_of_tendsto_of_le_smul
-    (ProbabilityMeasure.pi (fun _ : ι => base)) (∏ _ : ι, (Fintype.card ι : NNReal))
-    hproduct (Eventually.of_forall hbound) (MathUE.MarkedCalendar.payoffKernel limit reward)
-    (MathUE.MarkedCalendar.integrable_payoffKernel limit reward _)
-    (fun k => MathUE.MarkedCalendar.payoffKernel (calendar (source (subsequence k))) reward)
-    (Eventually.of_forall fun k => MathUE.MarkedCalendar.integrable_payoffKernel
-      (calendar (source (subsequence k))) reward _)
-    (MathUE.MarkedCalendar.tendsto_integral_norm_payoffKernel_sub base hE hc reward)
-  simpa only [Function.comp_def, integral_payoffKernel_chartProduct] using h
+  have h := tendsto_reference_outcome_expect source (fun n => cellLaw (source n))
+    subsequence hE hc (fun _ => (Fintype.card ι : NNReal))
+    (Eventually.of_forall fun k i a => by
+      simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le (source (subsequence k)) i a)
+    hlaws reward
+  simpa only [referenceOriginalLaw_cellLaw] using h
 
 section ResponseLimits
 
 variable [DecidableEq ι]
+
+/-- Arbitrary original dates are tested against the actual replacement laws on the old chart.
+Their old marks, not their indices or membership in a replacement menu, converge. -/
+theorem tendsto_reference_finite_reply_expect
+    (source : ℕ → ι → FinDist (Option ℕ))
+    (replacement : (n : ℕ) → ι → FinDist (Cell (source n))) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (C : ι → NNReal)
+    (hweights : ∀ᶠ k in atTop, ∀ i (a : Cell (source (subsequence k))),
+      (replacement (subsequence k) i).prob a ≤ (C i : ℝ) * weight (source (subsequence k)) a)
+    (hlaws : Tendsto (fun k i =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) i))
+      atTop (𝓝 marginals))
+    (who : ι) (reward : Finset ι → ℝ) (dates : ℕ → ℕ) {t : ℝ}
+    (ht : Tendsto (fun k => mark (source (subsequence k)) (dates k)) atTop (𝓝 t)) :
+    Tendsto (fun k => ((FinDist.pi (Function.update
+      (fun i => referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)) who
+      (FinDist.pure (some (dates k))))).map quittingFirstStoppingOutcome).expect
+        (fun outcome => reward (outcomeLabelsEquiv outcome))) atTop
+      (𝓝 (∫ sample, MathUE.MarkedCalendar.responsePayoffKernel limit who (t : WithTop ℝ)
+        reward sample ∂(ProbabilityMeasure.pi (fun j : {j : ι // j ≠ who} => marginals j.val) :
+          Measure ({j : ι // j ≠ who} → unitInterval)))) := by
+  have hopponents : Tendsto
+      (fun k => fun j : {j : ι // j ≠ who} =>
+        referenceLaw (source (subsequence k)) (replacement (subsequence k) j.val))
+      atTop (𝓝 (fun j : {j : ι // j ≠ who} => marginals j.val)) :=
+    tendsto_pi_nhds.mpr fun j => hlaws.apply_nhds j.val
+  have hproduct := ProbabilityMeasure.continuous_pi.continuousAt.tendsto.comp hopponents
+  have hbound := hweights.mono fun k hk => ProbabilityMeasure.pi_le_smul_pi_of_le
+    (fun _ : {j : ι // j ≠ who} => base)
+    (fun j : {j : ι // j ≠ who} =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) j.val))
+    (fun j : {j : ι // j ≠ who} => C j.val)
+    (fun j => referenceLaw_le (source (subsequence k)) (replacement (subsequence k) j.val)
+      (C j.val) (hk j.val))
+  have h := ProbabilityMeasure.tendsto_integral_moving_test_of_tendsto_of_le_smul
+    (ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base))
+    (∏ j : {j : ι // j ≠ who}, C j.val) hproduct hbound
+    (MathUE.MarkedCalendar.responsePayoffKernel limit who (t : WithTop ℝ) reward)
+    (MathUE.MarkedCalendar.integrable_responsePayoffKernel limit who _ reward _)
+    (fun k => MathUE.MarkedCalendar.responsePayoffKernel (calendar (source (subsequence k)))
+      who (mark (source (subsequence k)) (dates k) : WithTop ℝ) reward)
+    (Eventually.of_forall fun k => MathUE.MarkedCalendar.integrable_responsePayoffKernel
+      (calendar (source (subsequence k))) who _ reward _)
+    (MathUE.MarkedCalendar.tendsto_integral_norm_responsePayoffKernel_sub base hE hc ht
+      (fun k => atomCompatible_mark (source (subsequence k)) (dates k)) who reward)
+  exact h.congr' (Eventually.of_forall fun k =>
+    integral_responsePayoffKernel_referenceOpponents
+      (source (subsequence k)) (replacement (subsequence k)) who (some (dates k)) reward)
 
 /-- Arbitrary original finite dates are allowed; their actual marks, not their indices, converge. -/
 theorem tendsto_source_finite_reply_expect
@@ -302,31 +388,63 @@ theorem tendsto_source_finite_reply_expect
       (𝓝 (∫ sample, MathUE.MarkedCalendar.responsePayoffKernel limit who (t : WithTop ℝ)
         reward sample ∂(ProbabilityMeasure.pi (fun j : {j : ι // j ≠ who} => marginals j.val) :
           Measure ({j : ι // j ≠ who} → unitInterval)))) := by
+  have h := tendsto_reference_finite_reply_expect source (fun n => cellLaw (source n))
+    subsequence hE hc (fun _ => (Fintype.card ι : NNReal))
+    (Eventually.of_forall fun k i a => by
+      simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le (source (subsequence k)) i a)
+    hlaws who reward dates ht
+  simpa only [referenceOriginalLaw_cellLaw] using h
+
+/-- Literal Never has its own response limit under the actual replacement laws. -/
+theorem tendsto_reference_never_reply_expect
+    (source : ℕ → ι → FinDist (Option ℕ))
+    (replacement : (n : ℕ) → ι → FinDist (Cell (source n))) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (C : ι → NNReal)
+    (hweights : ∀ᶠ k in atTop, ∀ i (a : Cell (source (subsequence k))),
+      (replacement (subsequence k) i).prob a ≤ (C i : ℝ) * weight (source (subsequence k)) a)
+    (hlaws : Tendsto (fun k i =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) i))
+      atTop (𝓝 marginals))
+    (who : ι) (reward : Finset ι → ℝ) :
+    Tendsto (fun k => ((FinDist.pi (Function.update
+      (fun i => referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)) who
+      (FinDist.pure none))).map quittingFirstStoppingOutcome).expect
+        (fun outcome => reward (outcomeLabelsEquiv outcome))) atTop
+      (𝓝 (∫ sample, MathUE.MarkedCalendar.responsePayoffKernel limit who ⊤ reward sample
+        ∂(ProbabilityMeasure.pi (fun j : {j : ι // j ≠ who} => marginals j.val) :
+          Measure ({j : ι // j ≠ who} → unitInterval)))) := by
   have hopponents : Tendsto
-      (fun k => fun j : {j : ι // j ≠ who} => chartLaw (source (subsequence k)) j.val)
+      (fun k => fun j : {j : ι // j ≠ who} =>
+        referenceLaw (source (subsequence k)) (replacement (subsequence k) j.val))
       atTop (𝓝 (fun j : {j : ι // j ≠ who} => marginals j.val)) :=
     tendsto_pi_nhds.mpr fun j => hlaws.apply_nhds j.val
   have hproduct := ProbabilityMeasure.continuous_pi.continuousAt.tendsto.comp hopponents
-  have hbound (k : ℕ) := ProbabilityMeasure.pi_le_smul_pi_of_le
+  have hbound := hweights.mono fun k hk => ProbabilityMeasure.pi_le_smul_pi_of_le
     (fun _ : {j : ι // j ≠ who} => base)
-    (fun j : {j : ι // j ≠ who} => chartLaw (source (subsequence k)) j.val)
-    (fun _ : {j : ι // j ≠ who} => (Fintype.card ι : NNReal))
-    (fun j => chartLaw_le (source (subsequence k)) j.val)
+    (fun j : {j : ι // j ≠ who} =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) j.val))
+    (fun j : {j : ι // j ≠ who} => C j.val)
+    (fun j => referenceLaw_le (source (subsequence k)) (replacement (subsequence k) j.val)
+      (C j.val) (hk j.val))
   have h := ProbabilityMeasure.tendsto_integral_moving_test_of_tendsto_of_le_smul
     (ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base))
-    (∏ _ : {j : ι // j ≠ who}, (Fintype.card ι : NNReal)) hproduct
-    (Eventually.of_forall hbound)
-    (MathUE.MarkedCalendar.responsePayoffKernel limit who (t : WithTop ℝ) reward)
+    (∏ j : {j : ι // j ≠ who}, C j.val) hproduct hbound
+    (MathUE.MarkedCalendar.responsePayoffKernel limit who ⊤ reward)
     (MathUE.MarkedCalendar.integrable_responsePayoffKernel limit who _ reward _)
     (fun k => MathUE.MarkedCalendar.responsePayoffKernel (calendar (source (subsequence k)))
-      who (mark (source (subsequence k)) (dates k) : WithTop ℝ) reward)
+      who ⊤ reward)
     (Eventually.of_forall fun k => MathUE.MarkedCalendar.integrable_responsePayoffKernel
       (calendar (source (subsequence k))) who _ reward _)
-    (MathUE.MarkedCalendar.tendsto_integral_norm_responsePayoffKernel_sub base hE hc ht
-      (fun k => atomCompatible_mark (source (subsequence k)) (dates k)) who reward)
-  exact h.congr' (Eventually.of_forall fun k =>
-    integral_responsePayoffKernel_chartOpponents
-      (source (subsequence k)) who (some (dates k)) reward)
+    (MathUE.MarkedCalendar.tendsto_integral_norm_never_responsePayoffKernel_sub base hE hc
+      who reward)
+  have hsource (k : ℕ) := integral_responsePayoffKernel_referenceOpponents
+    (source (subsequence k)) (replacement (subsequence k)) who none reward
+  simp only [quittingStoppingTimeValue, markedClock, WithTop.map_top] at hsource
+  simpa only [Function.comp_def, hsource] using h
 
 /-- Literal Never has its own response limit, not the finite cutoff response. -/
 theorem tendsto_source_never_reply_expect
@@ -343,31 +461,12 @@ theorem tendsto_source_never_reply_expect
       (𝓝 (∫ sample, MathUE.MarkedCalendar.responsePayoffKernel limit who ⊤ reward sample
         ∂(ProbabilityMeasure.pi (fun j : {j : ι // j ≠ who} => marginals j.val) :
           Measure ({j : ι // j ≠ who} → unitInterval)))) := by
-  have hopponents : Tendsto
-      (fun k => fun j : {j : ι // j ≠ who} => chartLaw (source (subsequence k)) j.val)
-      atTop (𝓝 (fun j : {j : ι // j ≠ who} => marginals j.val)) :=
-    tendsto_pi_nhds.mpr fun j => hlaws.apply_nhds j.val
-  have hproduct := ProbabilityMeasure.continuous_pi.continuousAt.tendsto.comp hopponents
-  have hbound (k : ℕ) := ProbabilityMeasure.pi_le_smul_pi_of_le
-    (fun _ : {j : ι // j ≠ who} => base)
-    (fun j : {j : ι // j ≠ who} => chartLaw (source (subsequence k)) j.val)
-    (fun _ : {j : ι // j ≠ who} => (Fintype.card ι : NNReal))
-    (fun j => chartLaw_le (source (subsequence k)) j.val)
-  have h := ProbabilityMeasure.tendsto_integral_moving_test_of_tendsto_of_le_smul
-    (ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base))
-    (∏ _ : {j : ι // j ≠ who}, (Fintype.card ι : NNReal)) hproduct
-    (Eventually.of_forall hbound) (MathUE.MarkedCalendar.responsePayoffKernel limit who ⊤ reward)
-    (MathUE.MarkedCalendar.integrable_responsePayoffKernel limit who _ reward _)
-    (fun k => MathUE.MarkedCalendar.responsePayoffKernel (calendar (source (subsequence k)))
-      who ⊤ reward)
-    (Eventually.of_forall fun k => MathUE.MarkedCalendar.integrable_responsePayoffKernel
-      (calendar (source (subsequence k))) who _ reward _)
-    (MathUE.MarkedCalendar.tendsto_integral_norm_never_responsePayoffKernel_sub base hE hc
-      who reward)
-  have hsource (k : ℕ) := integral_responsePayoffKernel_chartOpponents
-    (source (subsequence k)) who none reward
-  simp only [quittingStoppingTimeValue, markedClock, WithTop.map_top] at hsource
-  simpa only [Function.comp_def, hsource] using h
+  have h := tendsto_reference_never_reply_expect source (fun n => cellLaw (source n))
+    subsequence hE hc (fun _ => (Fintype.card ι : NNReal))
+    (Eventually.of_forall fun k i a => by
+      simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le (source (subsequence k)) i a)
+    hlaws who reward
+  simpa only [referenceOriginalLaw_cellLaw] using h
 
 /-- The actual source subsequence precedes all rewards, players, and reply sequences.
 Kernel L¹ convergence and product domination are derived, not supplied as hypotheses. -/

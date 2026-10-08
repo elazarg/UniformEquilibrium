@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Stationary.SignedInfluenceCycleBalance
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticWorstSumRewardSource
 
 /-! # Sign-adaptive endpoints for actual four-player reward contacts
 
@@ -9,9 +10,12 @@ the strict joining signs and turns all weakly nonnegative withdrawals positive.
 The typed contact family keeps all canonical labels and only the eligible
 mixed labels, with their cohorts fixed from the original table. Values are
 convex-linear, change by at most eight times the reward-coordinate error,
-and originally positive contacts have endpoint value at least one. Finite
-contact separation, row genericity and the final source producer remain
-separate obligations.
+and originally positive contacts have endpoint value at least one. Every
+positive worst SUM table admits an arbitrarily small common step with
+positive new SUM and all fixed labels separated from that new infimum.
+Row genericity, recipient-scale rigidity and the final source producer
+remain separate obligations. This endpoint changes own singletons; the
+older singleton-preserving eight-coordinate source is a separate scope.
 -/
 
 noncomputable section
@@ -767,5 +771,235 @@ theorem quittingSignAdaptiveContactValue_endpoint_ge_one_of_positive
           rw [quittingSignAdaptiveContactEndpoint_ownSingleton]
           have h := endpoint_grand_nonpos original who
           linarith
+
+private theorem continuous_signAdaptiveContactStep
+    (original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) :
+    Continuous (quittingSignAdaptiveContactStep original) := by
+  apply continuous_pi
+  intro terminal
+  apply continuous_pi
+  intro who
+  exact ((continuous_const.sub continuous_id).mul continuous_const).add
+    (continuous_id.mul continuous_const)
+
+private theorem signAdaptiveContactStep_zero
+    (original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) :
+    quittingSignAdaptiveContactStep original 0 = original := by
+  funext terminal who
+  simp [quittingSignAdaptiveContactStep]
+
+/-- Every convex step stays in the whole unit reward cube. -/
+theorem abs_quittingSignAdaptiveContactStep_le_one
+    (original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hbound : ∀ terminal who, |original terminal who| ≤ 1)
+    {alpha : ℝ} (halpha : 0 ≤ alpha) (halphaOne : alpha ≤ 1)
+    (terminal : {S : Finset (Fin 4) // S.Nonempty}) (who : Fin 4) :
+    |quittingSignAdaptiveContactStep original alpha terminal who| ≤ 1 := by
+  have hfirst := mul_le_mul_of_nonneg_left (hbound terminal who)
+    (sub_nonneg.mpr halphaOne)
+  have hsecond := mul_le_mul_of_nonneg_left
+    (abs_quittingSignAdaptiveContactEndpoint_le_one original terminal who) halpha
+  calc
+    |quittingSignAdaptiveContactStep original alpha terminal who| ≤
+        |(1 - alpha) * original terminal who| +
+          |alpha * quittingSignAdaptiveContactEndpoint original terminal who| := abs_add_le _ _
+    _ = (1 - alpha) * |original terminal who| +
+        alpha * |quittingSignAdaptiveContactEndpoint original terminal who| := by
+      rw [abs_mul, abs_mul, abs_of_nonneg (sub_nonneg.mpr halphaOne), abs_of_nonneg halpha]
+    _ ≤ 1 := by linarith
+
+/-- The literal error in every reward coordinate is at most twice the step parameter. -/
+theorem abs_quittingSignAdaptiveContactStep_sub_le
+    (original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hbound : ∀ terminal who, |original terminal who| ≤ 1)
+    {alpha : ℝ} (halpha : 0 ≤ alpha)
+    (terminal : {S : Finset (Fin 4) // S.Nonempty}) (who : Fin 4) :
+    |quittingSignAdaptiveContactStep original alpha terminal who - original terminal who| ≤
+      2 * alpha := by
+  have hpair :
+      |quittingSignAdaptiveContactEndpoint original terminal who - original terminal who| ≤
+        2 := by
+    calc
+      |quittingSignAdaptiveContactEndpoint original terminal who - original terminal who| ≤
+          |quittingSignAdaptiveContactEndpoint original terminal who| +
+            |original terminal who| := abs_sub _ _
+      _ ≤ 1 + 1 := add_le_add
+        (abs_quittingSignAdaptiveContactEndpoint_le_one original terminal who) (hbound _ _)
+      _ = 2 := by norm_num
+  have heq : quittingSignAdaptiveContactStep original alpha terminal who - original terminal who =
+      alpha * (quittingSignAdaptiveContactEndpoint original terminal who -
+        original terminal who) := by
+    unfold quittingSignAdaptiveContactStep
+    ring
+  rw [heq, abs_mul, abs_of_nonneg halpha]
+  exact (mul_le_mul_of_nonneg_left hpair halpha).trans_eq (mul_comm alpha 2)
+
+/-- An arbitrarily small common positive step separates every fixed contact from its new SUM. -/
+theorem exists_small_quittingSignAdaptiveContactStep_avoiding_sumInf
+    (original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hbound : ∀ terminal who, |original terminal who| ≤ 1)
+    (hpositive : 0 < quittingTerminalDebtSumInf original)
+    (hmaximum : ∀ candidate : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+      (∀ terminal who, |candidate terminal who| ≤ 1) →
+        quittingTerminalDebtSumInf candidate ≤ quittingTerminalDebtSumInf original)
+    {tolerance : ℝ} (htolerance : 0 < tolerance) :
+    ∃ alpha : ℝ, 0 < alpha ∧ alpha < 1 ∧ alpha < tolerance ∧
+      0 < quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha) ∧
+      (∀ terminal who, |quittingSignAdaptiveContactStep original alpha terminal who| ≤ 1) ∧
+      (∀ label : QuittingSignAdaptiveContactLabel original,
+        quittingSignAdaptiveContactValue original
+          (quittingSignAdaptiveContactStep original alpha) label ≠
+            quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha)) ∧
+      (∀ coalition, 2 ≤ coalition.card →
+        quittingSignAdaptiveMemberCohort original coalition =
+          coalition.filter (fun who =>
+            0 < -quittingMembershipGain (quittingSignAdaptiveContactStep original alpha)
+              who (coalition.erase who))) ∧
+      (∀ coalition, coalition.Nonempty →
+        quittingSignAdaptiveOutsiderCohort original coalition =
+          Finset.univ.filter (fun who => who ∉ coalition ∧
+            0 < quittingMembershipGain (quittingSignAdaptiveContactStep original alpha)
+              who coalition)) := by
+  classical
+  let omega := quittingTerminalDebtSumInf original
+  have homega : omega ≤ 4 / 5 :=
+    quittingTerminalDebtSumInf_le_four_fifths_of_unitReward original hbound
+  have hsumContinuous : Continuous (fun alpha : ℝ =>
+      quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha)) :=
+    continuous_quittingTerminalDebtSumInf.comp (continuous_signAdaptiveContactStep original)
+  have hsumLimit : Filter.Tendsto (fun alpha : ℝ =>
+      quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha))
+      (nhds 0) (nhds omega) := by
+    simpa only [signAdaptiveContactStep_zero] using
+      (hsumContinuous.continuousAt (x := 0)).tendsto
+  have hnearPositive : ∀ᶠ alpha : ℝ in nhds 0,
+      0 < quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha) :=
+    hsumLimit.eventually (Ioi_mem_nhds hpositive)
+  have hnearLabels : ∀ᶠ alpha : ℝ in nhds 0,
+      ∀ label : QuittingSignAdaptiveContactLabel original,
+        quittingSignAdaptiveContactValue original original label ≠ omega →
+          quittingSignAdaptiveContactValue original
+            (quittingSignAdaptiveContactStep original alpha) label ≠
+              quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha) := by
+    apply Filter.eventually_all.mpr
+    intro label
+    by_cases hequal : quittingSignAdaptiveContactValue original original label = omega
+    · exact Filter.Eventually.of_forall fun _ hne => False.elim (hne hequal)
+    have hline : (fun alpha : ℝ => quittingSignAdaptiveContactValue original
+        (quittingSignAdaptiveContactStep original alpha) label) =
+        (fun alpha : ℝ => (1 - alpha) *
+          quittingSignAdaptiveContactValue original original label + alpha *
+            quittingSignAdaptiveContactValue original
+              (quittingSignAdaptiveContactEndpoint original) label) := by
+      funext alpha
+      exact quittingSignAdaptiveContactValue_convex_combination original original
+        (quittingSignAdaptiveContactEndpoint original) alpha label
+    have hcontactContinuous : Continuous (fun alpha : ℝ =>
+        quittingSignAdaptiveContactValue original
+          (quittingSignAdaptiveContactStep original alpha) label) := by
+      rw [hline]
+      exact ((continuous_const.sub continuous_id).mul continuous_const).add
+        (continuous_id.mul continuous_const)
+    have hcontactLimit : Filter.Tendsto (fun alpha : ℝ =>
+        quittingSignAdaptiveContactValue original
+          (quittingSignAdaptiveContactStep original alpha) label)
+        (nhds 0) (nhds (quittingSignAdaptiveContactValue original original label)) := by
+      simpa only [signAdaptiveContactStep_zero] using
+        (hcontactContinuous.continuousAt (x := 0)).tendsto
+    have hnear := (hcontactLimit.sub hsumLimit).eventually
+      (eventually_ne_nhds (sub_ne_zero.mpr hequal))
+    filter_upwards [hnear] with alpha hne _
+    exact sub_ne_zero.mp hne
+  obtain ⟨radius, hradius, hball⟩ := Metric.mem_nhds_iff.mp
+    (hnearPositive.and hnearLabels)
+  let alpha := min (radius / 2) (min (tolerance / 2) (1 / 2))
+  have halpha : 0 < alpha := by dsimp only [alpha]; positivity
+  have halphaRadius : alpha < radius :=
+    (min_le_left _ _).trans_lt (by linarith)
+  have halphaTolerance : alpha < tolerance :=
+    ((min_le_right _ _).trans (min_le_left _ _)).trans_lt (by linarith)
+  have halphaOne : alpha < 1 :=
+    ((min_le_right _ _).trans (min_le_right _ _)).trans_lt (by norm_num)
+  have hnear := hball (show alpha ∈ Metric.ball (0 : ℝ) radius by
+    simpa only [Metric.mem_ball, Real.dist_eq, sub_zero, abs_of_pos halpha] using halphaRadius)
+  have hstepBound := abs_quittingSignAdaptiveContactStep_le_one original hbound
+    halpha.le halphaOne.le
+  refine ⟨alpha, halpha, halphaOne, halphaTolerance, hnear.1, hstepBound, ?_,
+    fun coalition hcard => quittingSignAdaptiveMemberCohort_eq_step_positive original
+      halpha halphaOne coalition hcard,
+    fun coalition hne => quittingSignAdaptiveOutsiderCohort_eq_step_positive original
+      halpha halphaOne coalition hne⟩
+  intro label
+  by_cases hequal : quittingSignAdaptiveContactValue original original label = omega
+  · have hendpoint := quittingSignAdaptiveContactValue_endpoint_ge_one_of_positive original
+      label (hequal.symm ▸ hpositive)
+    have hline := quittingSignAdaptiveContactValue_convex_combination original original
+      (quittingSignAdaptiveContactEndpoint original) alpha label
+    change quittingSignAdaptiveContactValue original
+      (quittingSignAdaptiveContactStep original alpha) label = _ at hline
+    rw [hequal] at hline
+    have hstepSum : quittingTerminalDebtSumInf
+        (quittingSignAdaptiveContactStep original alpha) ≤ omega := hmaximum _ hstepBound
+    have hstrict : omega < quittingSignAdaptiveContactValue original
+        (quittingSignAdaptiveContactStep original alpha) label := by
+      nlinarith
+    exact ne_of_gt (hstepSum.trans_lt hstrict)
+  · exact hnear.2 label hequal
+
+/-- A positive original SUM supplies a worst table and one common contact-separated step. -/
+theorem exists_positive_quittingSignAdaptiveContact_source
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hpositive : 0 < quittingTerminalDebtSumInf reward)
+    {tolerance : ℝ} (htolerance : 0 < tolerance) :
+    ∃ original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4), ∃ alpha : ℝ,
+      (∀ terminal who, |original terminal who| ≤ 1) ∧
+      0 < quittingTerminalDebtSumInf original ∧ quittingTerminalDebtSumInf original ≤ 4 / 5 ∧
+      (∀ candidate : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+        (∀ terminal who, |candidate terminal who| ≤ 1) →
+          quittingTerminalDebtSumInf candidate ≤ quittingTerminalDebtSumInf original) ∧
+      0 < alpha ∧ alpha < 1 ∧ alpha < tolerance ∧
+      0 < quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha) ∧
+      (∀ terminal who, |quittingSignAdaptiveContactStep original alpha terminal who| ≤ 1) ∧
+      (∀ terminal who,
+        |quittingSignAdaptiveContactStep original alpha terminal who - original terminal who| ≤
+          2 * alpha) ∧
+      ∀ label : QuittingSignAdaptiveContactLabel original,
+        quittingSignAdaptiveContactValue original
+          (quittingSignAdaptiveContactStep original alpha) label ≠
+            quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha) := by
+  obtain ⟨original, hbound, horiginalPositive, _, hmaximum⟩ :=
+    exists_positive_maximum_quittingTerminalDebtSumInf_unitReward reward hpositive
+  obtain ⟨alpha, halpha, halphaOne, halphaTolerance, hstepPositive, hstepBound, hlabels, _, _⟩ :=
+    exists_small_quittingSignAdaptiveContactStep_avoiding_sumInf original hbound
+      horiginalPositive hmaximum htolerance
+  exact ⟨original, alpha, hbound, horiginalPositive,
+    quittingTerminalDebtSumInf_le_four_fifths_of_unitReward original hbound, hmaximum,
+    halpha, halphaOne, halphaTolerance, hstepPositive, hstepBound,
+    abs_quittingSignAdaptiveContactStep_sub_le original hbound halpha.le, hlabels⟩
+
+/-- Failure of a uniform payoff supplies the actual common contact-separated step. -/
+theorem exists_quittingSignAdaptiveContact_source_of_not_uniformPayoff
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hnot : ¬∃ target : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none target)
+    {tolerance : ℝ} (htolerance : 0 < tolerance) :
+    ∃ original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4), ∃ alpha : ℝ,
+      (∀ terminal who, |original terminal who| ≤ 1) ∧
+      0 < quittingTerminalDebtSumInf original ∧ quittingTerminalDebtSumInf original ≤ 4 / 5 ∧
+      (∀ candidate : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+        (∀ terminal who, |candidate terminal who| ≤ 1) →
+          quittingTerminalDebtSumInf candidate ≤ quittingTerminalDebtSumInf original) ∧
+      0 < alpha ∧ alpha < 1 ∧ alpha < tolerance ∧
+      0 < quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha) ∧
+      (∀ terminal who, |quittingSignAdaptiveContactStep original alpha terminal who| ≤ 1) ∧
+      (∀ terminal who,
+        |quittingSignAdaptiveContactStep original alpha terminal who - original terminal who| ≤
+          2 * alpha) ∧
+      ∀ label : QuittingSignAdaptiveContactLabel original,
+        quittingSignAdaptiveContactValue original
+          (quittingSignAdaptiveContactStep original alpha) label ≠
+            quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha) := by
+  exact exists_positive_quittingSignAdaptiveContact_source reward
+    (quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff.mpr hnot) htolerance
 
 end GameTheory

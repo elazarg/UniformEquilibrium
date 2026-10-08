@@ -18,6 +18,8 @@ dominates every behavioral deviation from every initial state. If its maximal
 pure value is negative, a strictly positive minimum pure absorption hazard is
 derived and forces the actual live-state probability to vanish. No fictitious
 zero-payoff action or nonnegative floor is added to the best-response value.
+The same potential proof also provides a finite-horizon cap whose cutoff is
+chosen before every behavioral deviation.
 -/
 
 noncomputable section
@@ -323,14 +325,13 @@ private theorem deviationLiveMass_nonneg (D : Data I J)
   intro history
   cases history.2 <;> simp only [liveValue, zero_le_one, le_refl]
 
-private theorem tendsto_deviationLiveMass_zero_of_hazard_floor (D : Data I J)
+private theorem deviationLiveMass_le_geometric_of_hazard_floor (D : Data I J)
     (actions : ∀ who, PMF (Action I J who)) (who : Bool)
     (deviation : (game D).BehaviorStrategy who) (floor : ℝ)
-    (hpositive : 0 < floor) (hupper : floor ≤ 1)
+    (hupper : floor ≤ 1)
     (hfloor : ∀ action, floor ≤ pureResponseAbsorptionMass D actions who action) :
-    Tendsto (deviationLiveMass D actions who deviation) atTop (𝓝 0) := by
+    ∀ time, deviationLiveMass D actions who deviation time ≤ (1 - floor) ^ time := by
   have hratio : 0 ≤ 1 - floor := sub_nonneg.mpr hupper
-  have hratio_lt : 1 - floor < 1 := by linarith
   have hzero : deviationLiveMass D actions who deviation 0 = 1 :=
     (game D).expectedStateValue_zero
       (Function.update ((game D).stationaryBehaviorProfile actions) who deviation)
@@ -349,32 +350,21 @@ private theorem tendsto_deviationLiveMass_zero_of_hazard_floor (D : Data I J)
       _ = _ := expect_const_mul _ _ _
   have henvelope := _root_.Math.sequence_le_geometric_of_step
     (deviationLiveMass D actions who deviation) 1 (1 - floor) hratio (le_of_eq hzero) hstep
-  exact _root_.Math.tendsto_zero_of_sequence_le_geometric
-    (deviationLiveMass D actions who deviation) 1 (1 - floor)
-    (deviationLiveMass_nonneg D actions who deviation) hratio hratio_lt henvelope
+  exact fun time => by simpa only [mul_one] using henvelope time
 
-private theorem liminfPayoff_deviation_le_of_pure_cap (D : Data I J)
+private theorem finiteAveragePayoff_deviation_le_of_pure_cap_with_live_error (D : Data I J)
     (actions : ∀ who, PMF (Action I J who)) (who : Bool) (value : ℝ)
     (hvalue : ∀ action, pureStationaryResponsePayoff D actions who action ≤ value)
-    (deviation : (game D).BehaviorStrategy who) :
-    liminfPayoff D none
-      (Function.update ((game D).stationaryBehaviorProfile actions) who deviation) who ≤ value := by
+    (deviation : (game D).BehaviorStrategy who) {horizon : ℕ} (hpositive : 0 < horizon) :
+    (game D).finiteAveragePayoff none horizon
+        (Function.update ((game D).stationaryBehaviorProfile actions) who deviation) who ≤
+      value + (horizon : ℝ)⁻¹ * ∑ time ∈ Finset.range horizon,
+        max (-value) 0 * deviationLiveMass D actions who deviation time := by
   let profile := Function.update ((game D).stationaryBehaviorProfile actions) who deviation
   let potential : (game D).HistoryPotential :=
     fun _ history => responsePotential D who value history.2
   let error : ℕ → ℝ := fun time =>
     max (-value) 0 * deviationLiveMass D actions who deviation time
-  have herror : Tendsto error atTop (𝓝 0) := by
-    by_cases hnonneg : 0 ≤ value
-    · have hmax : max (-value) 0 = 0 := max_eq_right (by linarith)
-      simp only [error, hmax, zero_mul]
-      exact tendsto_const_nhds
-    · obtain ⟨floor, hpositive, hupper, hfloor⟩ :=
-        exists_positive_pure_hazard_floor_of_negative_cap D actions who value hvalue
-          (lt_of_not_ge hnonneg)
-      have hlive := tendsto_deviationLiveMass_zero_of_hazard_floor
-        D actions who deviation floor hpositive hupper hfloor
-      simpa only [mul_zero] using hlive.const_mul (max (-value) 0)
   have hmono (time : ℕ) : (game D).expectedHistoryValue profile none potential (time + 1) ≤
       (game D).expectedHistoryValue profile none potential time :=
     expectedHistoryValue_responsePotential_antitone D actions who value hvalue deviation time
@@ -388,21 +378,69 @@ private theorem liminfPayoff_deviation_le_of_pure_cap (D : Data I J)
       (game D).expectedHistoryValue profile none
         (fun _ history => responsePotential D who value history.2) time + error time
     linarith
-  have hfinite {horizon : ℕ} (hpositive : 0 < horizon) :
-      (game D).finiteAveragePayoff none horizon profile who ≤
-        value + (horizon : ℝ)⁻¹ * ∑ time ∈ Finset.range horizon, error time := by
-    have hcap := (game D).finiteAveragePayoff_le_of_expectedHistoryValue_supermartingale_ge
-      profile none who potential error hmono hstage hpositive
-    rw [(game D).expectedHistoryValue_zero profile (none : (game D).State) potential] at hcap
-    exact hcap
-  have hlimit : Tendsto (fun horizon : ℕ =>
-      value + (horizon : ℝ)⁻¹ * ∑ time ∈ Finset.range horizon, error time)
-      atTop (𝓝 value) := by
-    simpa only [add_zero] using tendsto_const_nhds.add herror.cesaro
-  apply le_of_tendsto_of_tendsto
-    (tendsto_finiteAveragePayoff_liminfPayoff D profile none who) hlimit
-  filter_upwards [eventually_gt_atTop (0 : ℕ)] with horizon hpositive
-  exact hfinite hpositive
+  have hcap := (game D).finiteAveragePayoff_le_of_expectedHistoryValue_supermartingale_ge
+    profile none who potential error hmono hstage hpositive
+  rw [(game D).expectedHistoryValue_zero profile (none : (game D).State) potential] at hcap
+  exact hcap
+
+/-- A cap on actual pure responses yields one finite-horizon cutoff before all deviations.
+When the cap is negative, its strictly positive hazard floor is derived internally. -/
+theorem eventually_forall_finiteAveragePayoff_deviation_le_of_pure_cap (D : Data I J)
+    (actions : ∀ who, PMF (Action I J who)) (who : Bool) (value : ℝ)
+    (hvalue : ∀ action, pureStationaryResponsePayoff D actions who action ≤ value)
+    {η : ℝ} (hη : 0 < η) :
+    ∀ᶠ horizon in atTop, ∀ deviation : (game D).BehaviorStrategy who,
+      (game D).finiteAveragePayoff none horizon
+          (Function.update ((game D).stationaryBehaviorProfile actions) who deviation) who ≤
+        value + η := by
+  by_cases hnonneg : 0 ≤ value
+  · have hmax : max (-value) 0 = 0 := max_eq_right (by linarith)
+    filter_upwards [eventually_gt_atTop (0 : ℕ)] with horizon hpositive
+    intro deviation
+    have hcap := finiteAveragePayoff_deviation_le_of_pure_cap_with_live_error
+      D actions who value hvalue deviation hpositive
+    simp only [hmax, zero_mul, Finset.sum_const_zero, mul_zero, add_zero] at hcap
+    exact hcap.trans (le_add_of_nonneg_right hη.le)
+  · obtain ⟨floor, hpositive, hupper, hfloor⟩ :=
+      exists_positive_pure_hazard_floor_of_negative_cap D actions who value hvalue
+        (lt_of_not_ge hnonneg)
+    have hratio : 0 ≤ 1 - floor := sub_nonneg.mpr hupper
+    have hratio_lt : 1 - floor < 1 := by linarith
+    let charge : ℕ → ℝ := fun time => max (-value) 0 * (1 - floor) ^ time
+    have hcharge : Tendsto charge atTop (𝓝 0) := by
+      simpa only [charge, mul_zero] using
+        (tendsto_pow_atTop_nhds_zero_of_lt_one hratio hratio_lt).const_mul (max (-value) 0)
+    have haverage := hcharge.cesaro
+    filter_upwards [eventually_gt_atTop (0 : ℕ), haverage.eventually_lt_const hη]
+      with horizon hhorizon havg
+    intro deviation
+    have hcap := finiteAveragePayoff_deviation_le_of_pure_cap_with_live_error
+      D actions who value hvalue deviation hhorizon
+    have huniform : (horizon : ℝ)⁻¹ * ∑ time ∈ Finset.range horizon,
+        max (-value) 0 * deviationLiveMass D actions who deviation time ≤
+          (horizon : ℝ)⁻¹ * ∑ time ∈ Finset.range horizon, charge time := by
+      apply mul_le_mul_of_nonneg_left _ (by positivity)
+      apply Finset.sum_le_sum
+      intro time _
+      exact mul_le_mul_of_nonneg_left
+        (deviationLiveMass_le_geometric_of_hazard_floor
+          D actions who deviation floor hupper hfloor time) (le_max_right (-value) 0)
+    exact hcap.trans ((add_le_add (le_refl value) huniform).trans
+      (add_le_add (le_refl value) havg.le))
+
+private theorem liminfPayoff_deviation_le_of_pure_cap (D : Data I J)
+    (actions : ∀ who, PMF (Action I J who)) (who : Bool) (value : ℝ)
+    (hvalue : ∀ action, pureStationaryResponsePayoff D actions who action ≤ value)
+    (deviation : (game D).BehaviorStrategy who) :
+    liminfPayoff D none
+      (Function.update ((game D).stationaryBehaviorProfile actions) who deviation) who ≤ value := by
+  apply le_of_forall_pos_le_add
+  intro η hη
+  apply le_of_tendsto (tendsto_finiteAveragePayoff_liminfPayoff D
+    (Function.update ((game D).stationaryBehaviorProfile actions) who deviation) none who)
+  filter_upwards [eventually_forall_finiteAveragePayoff_deviation_le_of_pure_cap
+    D actions who value hvalue hη] with horizon hcap
+  exact hcap deviation
 
 /-- One actual pure stationary response dominates all behavioral deviations at every initial state.
 The maximizing action is chosen once, before both the deviation and the initial state. -/

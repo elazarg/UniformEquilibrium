@@ -9,10 +9,13 @@ isolated summand, not the finite cutoff. The response function integrates the
 actual first-coalition kernel against the independent limiting chart laws.
 Its continuity and attained maximum follow from the actual source geometry,
 domination, and checked moving-kernel convergence, without density constancy.
+The bounded-marginal versions require no marginal convergence premise.
 
 The source dictionary identifies this maximum with the existing unrestricted
 stopping-law cap. Its reward extension assigns empty labels zero, and its clock
 dictionary covers every original finite date and literal Never. Complete caps
+for arbitrary finite replacement laws on the old cells also have this exact
+old-menu representation; no replacement average calendar is substituted. Original caps
 converge along the whole specified source subsequence. One actual-source
 compactification is selected before all reward tables and players, and carries
 both the original prescribed-payoff limits and these complete-cap limits.
@@ -56,7 +59,7 @@ private instance base_nullSingleton : NullSingletonClass (base : Measure unitInt
   inferInstanceAs (NullSingletonClass (volume : Measure unitInterval))
 
 /-- Every finite response sequence inside the actual limit menu has the correct response limit. -/
-theorem continuous_responseValue_limit_menu
+theorem continuous_responseValue_limit_menu_of_le_smul
     (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
     {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
     {marginals : ι → ProbabilityMeasure unitInterval}
@@ -64,18 +67,16 @@ theorem continuous_responseValue_limit_menu
       (𝓝 limit.endpoints))
     (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
     (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
-    (hlaws : Tendsto (fun k => chartLaw (source (subsequence k))) atTop (𝓝 marginals))
-    (who : ι) (reward : Finset ι → ℝ) :
+    (C : ι → NNReal) (who : ι)
+    (hbound : ∀ j : {j : ι // j ≠ who},
+      (marginals j.val : Measure unitInterval) ≤ C j.val • (base : Measure unitInterval))
+    (reward : Finset ι → ℝ) :
     Continuous (fun t : menu => responseValue limit marginals who reward (t.val : WithTop ℝ)) := by
-  have hbound (i : ι) : (marginals i : Measure unitInterval) ≤
-      (Fintype.card ι : NNReal) • (base : Measure unitInterval) :=
-    ProbabilityMeasure.le_of_tendsto_of_le_measure _ (hlaws.apply_nhds i)
-      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
   have hproductBound := ProbabilityMeasure.pi_le_smul_pi_of_le
     (fun _ : {j : ι // j ≠ who} => base)
     (fun j : {j : ι // j ≠ who} => marginals j.val)
-    (fun _ : {j : ι // j ≠ who} => (Fintype.card ι : NNReal))
-    (fun j => hbound j.val)
+    (fun j : {j : ι // j ≠ who} => C j.val)
+    hbound
   apply continuous_iff_seqContinuous.mpr
   intro tests t ht
   have htests : Tendsto (fun k => (tests k).val) atTop (𝓝 t.val) :=
@@ -86,7 +87,7 @@ theorem continuous_responseValue_limit_menu
     who reward
   have h := ProbabilityMeasure.tendsto_integral_moving_test_of_tendsto_of_le_smul
     (ProbabilityMeasure.pi (fun _ : {j : ι // j ≠ who} => base))
-    (∏ _ : {j : ι // j ≠ who}, (Fintype.card ι : NNReal))
+    (∏ j : {j : ι // j ≠ who}, C j.val)
     (laws := fun _ : ℕ => ProbabilityMeasure.pi
       (fun j : {j : ι // j ≠ who} => marginals j.val))
     tendsto_const_nhds (Eventually.of_forall fun _ => hproductBound)
@@ -99,6 +100,73 @@ theorem continuous_responseValue_limit_menu
   exact h
 
 /-- Never is continuous as an isolated summand; no unrestricted `WithTop` isolation is used. -/
+theorem continuous_limitReplyValue_of_le_smul
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
+    (C : ι → NNReal) (who : ι)
+    (hbound : ∀ j : {j : ι // j ≠ who},
+      (marginals j.val : Measure unitInterval) ≤ C j.val • (base : Measure unitInterval))
+    (reward : Finset ι → ℝ) :
+    Continuous (limitReplyValue limit menu marginals who reward) := by
+  apply continuous_sum_dom.mpr
+  constructor
+  · exact continuous_responseValue_limit_menu_of_le_smul
+      source subsequence hE hc hT C who hbound reward
+  · change Continuous (fun _ : Unit => responseValue limit marginals who reward ⊤)
+    exact continuous_const
+
+/-- The actual limiting finite/Never response carrier has an attained response maximum. -/
+theorem exists_limitReplyValue_eq_maximum_of_le_smul
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
+    (C : ι → NNReal) (who : ι)
+    (hbound : ∀ j : {j : ι // j ≠ who},
+      (marginals j.val : Measure unitInterval) ≤ C j.val • (base : Measure unitInterval))
+    (reward : Finset ι → ℝ) :
+    ∃ reply : LimitReply menu,
+      limitReplyValue limit menu marginals who reward reply =
+        limitReplyMaximum limit menu marginals who reward ∧
+      ∀ other, limitReplyValue limit menu marginals who reward other ≤
+        limitReplyValue limit menu marginals who reward reply := by
+  obtain ⟨reply, _, hmax⟩ := isCompact_univ.exists_isMaxOn
+    (s := (univ : Set (LimitReply menu))) univ_nonempty
+    (continuous_limitReplyValue_of_le_smul
+      source subsequence hE hc hT C who hbound reward).continuousOn
+  have hgreatest : IsGreatest
+      (Set.range (limitReplyValue limit menu marginals who reward))
+      (limitReplyValue limit menu marginals who reward reply) := by
+    refine ⟨⟨reply, rfl⟩, ?_⟩
+    rintro _ ⟨other, rfl⟩
+    exact hmax (mem_univ other)
+  exact ⟨reply, hgreatest.csSup_eq.symm, fun other => hmax (mem_univ other)⟩
+
+/-- Original limiting charts supply the marginal bound to the one continuity proof. -/
+theorem continuous_responseValue_limit_menu
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
+    (hlaws : Tendsto (fun k => chartLaw (source (subsequence k))) atTop (𝓝 marginals))
+    (who : ι) (reward : Finset ι → ℝ) :
+    Continuous (fun t : menu => responseValue limit marginals who reward (t.val : WithTop ℝ)) :=
+  continuous_responseValue_limit_menu_of_le_smul source subsequence hE hc hT
+    (fun _ => (Fintype.card ι : NNReal)) who
+    (fun j => ProbabilityMeasure.le_of_tendsto_of_le_measure _ (hlaws.apply_nhds j.val)
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) j.val)) reward
+
 theorem continuous_limitReplyValue
     (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
     {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
@@ -109,14 +177,12 @@ theorem continuous_limitReplyValue
     (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
     (hlaws : Tendsto (fun k => chartLaw (source (subsequence k))) atTop (𝓝 marginals))
     (who : ι) (reward : Finset ι → ℝ) :
-    Continuous (limitReplyValue limit menu marginals who reward) := by
-  apply continuous_sum_dom.mpr
-  constructor
-  · exact continuous_responseValue_limit_menu source subsequence hE hc hT hlaws who reward
-  · change Continuous (fun _ : Unit => responseValue limit marginals who reward ⊤)
-    exact continuous_const
+    Continuous (limitReplyValue limit menu marginals who reward) :=
+  continuous_limitReplyValue_of_le_smul source subsequence hE hc hT
+    (fun _ => (Fintype.card ι : NNReal)) who
+    (fun j => ProbabilityMeasure.le_of_tendsto_of_le_measure _ (hlaws.apply_nhds j.val)
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) j.val)) reward
 
-/-- The actual limiting finite/Never response carrier has an attained response maximum. -/
 theorem exists_limitReplyValue_eq_maximum
     (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
     {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
@@ -131,17 +197,11 @@ theorem exists_limitReplyValue_eq_maximum
       limitReplyValue limit menu marginals who reward reply =
         limitReplyMaximum limit menu marginals who reward ∧
       ∀ other, limitReplyValue limit menu marginals who reward other ≤
-        limitReplyValue limit menu marginals who reward reply := by
-  obtain ⟨reply, _, hmax⟩ := isCompact_univ.exists_isMaxOn
-    (s := (univ : Set (LimitReply menu))) univ_nonempty
-    (continuous_limitReplyValue source subsequence hE hc hT hlaws who reward).continuousOn
-  have hgreatest : IsGreatest
-      (Set.range (limitReplyValue limit menu marginals who reward))
-      (limitReplyValue limit menu marginals who reward reply) := by
-    refine ⟨⟨reply, rfl⟩, ?_⟩
-    rintro _ ⟨other, rfl⟩
-    exact hmax (mem_univ other)
-  exact ⟨reply, hgreatest.csSup_eq.symm, fun other => hmax (mem_univ other)⟩
+        limitReplyValue limit menu marginals who reward reply :=
+  exists_limitReplyValue_eq_maximum_of_le_smul source subsequence hE hc hT
+    (fun _ => (Fintype.card ι : NNReal)) who
+    (fun j => ProbabilityMeasure.le_of_tendsto_of_le_measure _ (hlaws.apply_nhds j.val)
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) j.val)) reward
 
 /-- Extend actual quitting rewards by zero at the empty labels, which encode Never. -/
 def quittingLabelReward (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -173,15 +233,19 @@ theorem sourceOutcome_expect_eq_stoppingLawExpectedPayoff
   simp only [quittingLabelReward, Equiv.symm_apply_apply]
   rfl
 
-/-- Every original response, unsupported and late finite dates included, has its exact payoff. -/
-theorem responseValue_markedClock_eq_original_pureReply
+/-- Every original response has its exact replacement-law payoff at the old reference mark. -/
+theorem responseValue_reference_markedClock_eq_original_pureReply
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (laws : ι → FinDist (Option ℕ)) (who : ι) (choice : Option ℕ) :
-    responseValue (calendar laws) (chartLaw laws) who (quittingLabelReward reward who)
-        (markedClock laws (quittingStoppingTimeValue choice)) =
+    (reference : ι → FinDist (Option ℕ)) (p : ι → FinDist (Cell reference))
+    (who : ι) (choice : Option ℕ) :
+    responseValue (calendar reference) (fun i => referenceLaw reference (p i)) who
+        (quittingLabelReward reward who)
+        (markedClock reference (quittingStoppingTimeValue choice)) =
       quittingBehaviorPureTimePayoff reward
-        (quittingStoppingLawProfile reward (fun i => (laws i).toPMF)) who choice := by
-  rw [responseValue, integral_responsePayoffKernel_chartOpponents,
+        (quittingStoppingLawProfile reward
+          (fun i => (referenceOriginalLaw reference (p i)).toPMF)) who choice := by
+  let laws := fun i => referenceOriginalLaw reference (p i)
+  rw [responseValue, integral_responsePayoffKernel_referenceOpponents,
     sourceOutcome_expect_eq_stoppingLawExpectedPayoff]
   have hupdate : (fun i => (Function.update laws who (FinDist.pure choice) i).toPMF) =
       Function.update (fun i => (laws i).toPMF) who (PMF.pure choice) := by
@@ -193,6 +257,19 @@ theorem responseValue_markedClock_eq_original_pureReply
   rw [hupdate, ← quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff,
     quittingTerminalPayoff_stoppingLawProfile_update_pure_eq]
   rfl
+
+/-- The original source laws specialize the exact old-reference response dictionary. -/
+theorem responseValue_markedClock_eq_original_pureReply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (laws : ι → FinDist (Option ℕ)) (who : ι) (choice : Option ℕ) :
+    responseValue (calendar laws) (chartLaw laws) who (quittingLabelReward reward who)
+        (markedClock laws (quittingStoppingTimeValue choice)) =
+      quittingBehaviorPureTimePayoff reward
+        (quittingStoppingLawProfile reward (fun i => (laws i).toPMF)) who choice := by
+  change responseValue (calendar laws) (fun i => referenceLaw laws (cellLaw laws i)) who
+    (quittingLabelReward reward who) (markedClock laws (quittingStoppingTimeValue choice)) = _
+  simpa only [referenceOriginalLaw_cellLaw] using
+    responseValue_reference_markedClock_eq_original_pureReply reward laws (cellLaw laws) who choice
 
 /-- The image of every original pure response in the actual finite/Never chart carrier. -/
 def sourceReply (laws : ι → FinDist (Option ℕ)) :
@@ -227,6 +304,19 @@ theorem sourceReply_surjective (laws : ι → FinDist (Option ℕ)) :
       cases terminal
       exact ⟨none, rfl⟩
 
+theorem limitReplyValue_reference_sourceReply_eq_original_pureReply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (reference : ι → FinDist (Option ℕ)) (p : ι → FinDist (Cell reference))
+    (who : ι) (choice : Option ℕ) :
+    limitReplyValue (calendar reference) (legalMenuCompacts reference)
+        (fun i => referenceLaw reference (p i)) who
+        (quittingLabelReward reward who) (sourceReply reference choice) =
+      quittingBehaviorPureTimePayoff reward
+        (quittingStoppingLawProfile reward
+          (fun i => (referenceOriginalLaw reference (p i)).toPMF)) who choice := by
+  rw [limitReplyValue, sourceReply_clock]
+  exact responseValue_reference_markedClock_eq_original_pureReply reward reference p who choice
+
 theorem limitReplyValue_sourceReply_eq_original_pureReply
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (laws : ι → FinDist (Option ℕ)) (who : ι) (choice : Option ℕ) :
@@ -234,31 +324,53 @@ theorem limitReplyValue_sourceReply_eq_original_pureReply
         (quittingLabelReward reward who) (sourceReply laws choice) =
       quittingBehaviorPureTimePayoff reward
         (quittingStoppingLawProfile reward (fun i => (laws i).toPMF)) who choice := by
-  rw [limitReplyValue, sourceReply_clock]
-  exact responseValue_markedClock_eq_original_pureReply reward laws who choice
+  change limitReplyValue (calendar laws) (legalMenuCompacts laws)
+    (fun i => referenceLaw laws (cellLaw laws i)) who
+    (quittingLabelReward reward who) (sourceReply laws choice) = _
+  simpa only [referenceOriginalLaw_cellLaw] using
+    limitReplyValue_reference_sourceReply_eq_original_pureReply
+      reward laws (cellLaw laws) who choice
 
-/-- The chart maximum is exactly the existing unrestricted complete stopping-law cap. -/
-theorem sourceFullCap_eq_replyMaximum
+/-- The old reference menu represents the unrestricted original cap for the actual replacement
+laws. No support restriction on the deviator and no replacement-calendar equality is assumed. -/
+theorem referenceFullCap_eq_replyMaximum
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (laws : ι → FinDist (Option ℕ)) (who : ι) :
-    quittingStoppingLawReplacementPayoffCap reward (fun i => (laws i).toPMF) who =
-      limitReplyMaximum (calendar laws) (legalMenuCompacts laws) (chartLaw laws) who
+    (reference : ι → FinDist (Option ℕ)) (p : ι → FinDist (Cell reference)) (who : ι) :
+    quittingStoppingLawReplacementPayoffCap reward
+        (fun i => (referenceOriginalLaw reference (p i)).toPMF) who =
+      limitReplyMaximum (calendar reference) (legalMenuCompacts reference)
+        (fun i => referenceLaw reference (p i)) who
         (quittingLabelReward reward who) := by
   rw [quittingStoppingLawCap_eq_continuationBestResponseValue_stoppingLawProfile]
   change quittingBehaviorDeviationPayoffCap reward
-    (quittingStoppingLawProfile reward (fun i => (laws i).toPMF)) who = _
+    (quittingStoppingLawProfile reward
+      (fun i => (referenceOriginalLaw reference (p i)).toPMF)) who = _
   rw [quittingBehaviorDeviationPayoffCap_eq_pureTime]
   unfold quittingBehaviorPureTimePayoffCap limitReplyMaximum
   congr 1
   ext value
   constructor
   · rintro ⟨choice, rfl⟩
-    exact ⟨sourceReply laws choice,
-      limitReplyValue_sourceReply_eq_original_pureReply reward laws who choice⟩
+    exact ⟨sourceReply reference choice,
+      limitReplyValue_reference_sourceReply_eq_original_pureReply reward reference p who choice⟩
   · rintro ⟨reply, rfl⟩
-    obtain ⟨choice, rfl⟩ := sourceReply_surjective laws reply
+    obtain ⟨choice, rfl⟩ := sourceReply_surjective reference reply
     exact ⟨choice,
-      (limitReplyValue_sourceReply_eq_original_pureReply reward laws who choice).symm⟩
+      (limitReplyValue_reference_sourceReply_eq_original_pureReply
+        reward reference p who choice).symm⟩
+
+/-- The original chart maximum specializes the one unrestricted-cap dictionary. -/
+theorem sourceFullCap_eq_replyMaximum
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (laws : ι → FinDist (Option ℕ)) (who : ι) :
+    quittingStoppingLawReplacementPayoffCap reward (fun i => (laws i).toPMF) who =
+      limitReplyMaximum (calendar laws) (legalMenuCompacts laws) (chartLaw laws) who
+        (quittingLabelReward reward who) := by
+  change quittingStoppingLawReplacementPayoffCap reward (fun i => (laws i).toPMF) who =
+    limitReplyMaximum (calendar laws) (legalMenuCompacts laws)
+      (fun i => referenceLaw laws (cellLaw laws i)) who (quittingLabelReward reward who)
+  simpa only [referenceOriginalLaw_cellLaw] using
+    referenceFullCap_eq_replyMaximum reward laws (cellLaw laws) who
 
 /-- A genuine original atom-gap-menu reply attains the unrestricted source cap. -/
 theorem exists_original_reply_eq_sourceFullCap
