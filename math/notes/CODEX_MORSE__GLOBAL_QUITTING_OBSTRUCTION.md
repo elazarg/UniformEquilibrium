@@ -9949,6 +9949,405 @@ such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
 
+## Scalar raw producer: one-variable closure and fourteen genuinely free reward coordinates
+
+Status: COMPLETE ORDINARY INDEPENDENTLY UNREVIEWED strengthening of CL.
+This is a reward-only sufficient class, not a supplied-circuit assumption.
+The scalar reduction, finite coefficient criterion, whole-interval base
+verification and exact deviation-unreachable coordinates are explicit.
+No new assertion about arbitrary four-player tables is made. CL remains
+frozen independently of this section. The actual cap/finite-word compiler
+is unchanged; this section PRODUCES its closed-circuit inputs from raw
+data without a contraction, chosen Jacobian or numerical root premise.
+
+### SC1. Raw data and one fixed scalar interval
+
+Let r be ANY finite signed four-player reward table, with Never0. Write
+sᵢ=rᵢ({i}), rᵢ,j=rᵢ({j}), and rᵢ,jk=rᵢ({j,k}); longer subscripts
+denote the corresponding unordered set. Own-singleton signs need NOT
+be positive for this direct construction. Set
+
+    I_Y=[1/40,13/500],       m=51/2000,       ρ=1/2000.
+
+The intended forward predecessor itinerary is solo0 ladder, solo3
+ladder, literal solo1, literal triple123, pair02 ladder. This itinerary
+is fixed; its rates and all ports are derived from the REWARD DATA.
+Actual chronological periods reverse finite truncations of the whole
+list, not just each ladder separately.
+
+The following finite scalar criterion is sufficient for a fixed-payoff
+uniform equilibrium. It permits signed rewards, noncontractive return
+maps, multiple zeros and all untouched terminal rows. No true minimum,
+punishment, equilibrium selection, positive-gap premise, all-tail Nash
+assumption or chosen terminal clock is an input.
+
+### SC2. Eliminate the triple rates directly from membership gains
+
+Use the actual joins in triple123:
+
+    d₁₂=r₁,12−r₁,2,    d₁₃=r₁,13−r₁,3,
+    d₁,23=r₁,123−r₁,23,
+    d₂₁=r₂,12−r₂,1,    d₂₃=r₂,23−r₂,3,
+    d₂,13=r₂,123−r₂,13,
+    d₃₁=r₃,13−r₃,1,    d₃₂=r₃,23−r₃,2,
+    d₃,12=r₃,123−r₃,12.
+
+Define A₂=r₂,12−s₂ and C₃=s₃−r₃,1. Require A₂,C₃>0. For Y∈I_Y
+form the following RATIONAL functions of the raw rewards and Y:
+
+    Z=−d₁₂Y/(d₁₃+d₁,23Y),
+    D_X=C₃(d₂₁+d₂,13Z)+A₂(d₃₁+d₃,12Y),
+    X=−(C₃d₂₃Z+A₂d₃₂Y)/D_X,
+    p=−(d₃₁X+d₃₂Y+d₃,12XY)/C₃,
+    x=X/(1+X),       y=Y/(1+Y),       z=Z/(1+Z).        (SC.1)
+
+Require d₁₃+d₁,23Y>0, D_X>0, X,Z>0 and 0<p<1 THROUGHOUT I_Y.
+Then x,y,z are strictly between0 and1. Let q=(0,x,y,z), c=(1−x)(1−y)(1−z)
+and compute Qᵢ(q),Rᵢ(q) directly from r by opponent-product averaging.
+For the annotation
+
+    U=(u₀,s₁,s₂+A₂p,s₃−C₃p),                         (SC.2)
+
+the three active gaps, divided by deleted survivals, are
+
+    g₁/h₁=d₁₂Y+d₁₃Z+d₁,23YZ,
+    g₂/h₂=−A₂p+d₂₁X+d₂₃Z+d₂,13XZ,
+    g₃/h₃=C₃p+d₃₁X+d₃₂Y+d₃,12XY.
+
+All three vanish IDENTICALLY by (SC.1). Thus no active Nash equation
+is still an existence premise. The only triple test left is the ONE
+quiet gap Q₀−R₀−cu₀≤0, which will be a finite scalar inequality.
+The triple head coordinates1,2,3 are exactly Q₁,Q₂,Q₃.
+
+### SC3. Solve the corner return linearly before choosing a zero
+
+For pair02 set
+
+    A₀=r₀,02−s₀,    C₀=s₀−r₀,2,     D₀=A₀+C₀,
+    B₂=s₂−r₂,02,    C₂=r₂,0−s₂,     E₂=B₂+C₂,
+    H=C₀C₂+A₀C₂+B₂C₀.                               (SC.3)
+
+Require A₀,B₂,C₀,C₂>0. Put a=s₂−Q₂(q) and require 0<a<1 on I_Y.
+For a formal pair excess t, let
+
+    Δ(t)=(1+t/C₀)(1+a/C₂),
+    Pᵢ(t)=Qᵢ+(a/C₂)rᵢ,0
+       +t[rᵢ,2/C₀+a(B₂rᵢ,0/(C₂H)+A₀rᵢ,2/(C₀H)+rᵢ,02/H)]
+
+for i=1,3. The pair ladder's exact corner returns are
+b=P₁(t)/Δ(t), d=P₃(t)/Δ(t). These formulas are linear-fractional
+in t; they include all passive singleton AND pair rewards.
+
+For the two solo ladders put
+
+    L₀₃=s₃−r₃,0,       L₁₃=s₁−r₁,3,
+    J₂₁=r₂,12−r₂,1,     m₂=s₂+J₂₁p/(1−p).
+
+Require L₀₃,L₁₃,J₂₁>0. Define the AFFINE-in-t expressions
+
+    D_s(t)=(r₁,0−r₁,3)[P₃(t)−r₃,0Δ(t)]
+            +L₀₃[P₁(t)−r₁,0Δ(t)],
+    N_s(t)=(r₂,0−r₂,3)[P₃(t)−r₃,0Δ(t)]
+            +L₀₃(s₂−r₂,0)Δ(t),
+    E(t)=(r₂,3−m₂)D_s(t)+L₁₃N_s(t).
+
+Let e₀=E(0), e₁=∂E/∂t. Require e₁>0 on I_Y and set
+
+    t=−e₀/e₁,
+    b=P₁(t)/Δ(t),       d=P₃(t)/Δ(t),
+    λ₀=L₀₃/(d−r₃,0),
+    λ₃=L₁₃(d−r₃,0)/D_s(t)·Δ(t),
+    u₀=(1−p)[r₀,3+λ₃(s₀−r₀,3)]+p r₀,1.           (SC.4)
+
+The displayed λ₃ uses D_s with the pair denominators cleared; equivalently
+
+    λ₃=L₁₃(d−r₃,0)/[(r₁,0−r₁,3)(d−r₃,0)
+                           +L₀₃(b−r₁,0)].
+
+These are all reward-derived rational functions of Y. Require t>0,
+b>s₁,d>s₃, D_s(t)>0 on I_Y. The favorite2 equation is ALREADY solved
+by E(t)=0, not assumed at a later chosen port.
+
+Indeed the exact two-solo endpoints from V=(s₀,b,s₂,d) are
+
+    V₁,ᵢ=rᵢ,0+λ₀(Vᵢ−rᵢ,0),
+    V₂,ᵢ=rᵢ,3+λ₃(V₁,ᵢ−rᵢ,3).                      (SC.5)
+
+Their active/favorite coordinates are V₁,₀=s₀,V₁,₃=s₃ and
+V₂,₁=s₁,V₂,₃=s₃. Substitution gives
+
+    V₂,₂=r₂,3+L₁₃N_s(t)/D_s(t)=m₂.
+
+Hence the literal solo1 rate p is exactly the favorite2 indifference
+rate against V₂. Its head is exactly U in (SC.2): favorite2 has
+U₂=Q₂(solo1)=s₂+A₂p, and quiet3 has U₃=s₃−C₃p.
+
+Only the owner0 corner return remains unsolved. Form
+
+    Ψ(Y)=t−c u₀−R₀(q)+s₀.                           (SC.6)
+
+Require Ψ(1/40)<0<Ψ(13/500). Continuity then supplies a zero Y*∈I_Y.
+At this zero W₀=c u₀+R₀=s₀+t, so the triple head is the EXACT
+pair-ladder input (s₀+t,Q₁,s₂−a,Q₃). Equations (SC.3–4) return
+it to (s₀,b,s₂,d). ALL five ports now match. No contraction or
+chosen root accuracy enters this production.
+
+### SC4. Finite raw full-Nash criterion, including all infinite ladder rows
+
+In addition to the strict interval conditions above require the following
+RAW constant comparisons:
+
+    r₃,03>s₃>r₃,0,       r₁,13>s₁>r₁,3,
+    r₁,0>s₁,             r₁,01<r₁,0,
+    r₀,3>s₀,             r₀,03<r₀,3,
+    r₂,23<r₂,3,          r₀,01<r₀,1,
+    r₃,13<r₃,1,          s₂>r₂,1.                    (SC.7)
+
+These are all strict at the CL table. The two solo favorite rates
+adapt at EVERY row to the current favorite annotation, not to an old
+fixed numerical rate. Their excess contraction factors are respectively
+(r₃,03−s₃)/(r₃,03−r₃,0) and
+(r₁,13−s₁)/(r₁,13−r₁,3), strictly between0 and1.
+
+Full quiet coverage follows by finite endpoint facts:
+
+- Solo0 quiet1 starts at b>s₁, is pulled toward r₁,0>s₁ and has
+  strictly negative nonempty joining gap. Quiet2 starts EXACTLY at
+  s₂, is pulled toward r₂,0>s₂ and has gap −E₂<0.
+- Solo3 quiet0 starts EXACTLY at s₀, is pulled toward r₀,3>s₀
+  and has strictly negative joining gap. Quiet2 stays between V₁,₂
+  and V₂,₂, both strictly above s₂. The former follows from C₂>0,
+  λ₀<1; the latter from V₂,₂=m₂ and J₂₁,p>0. Its joining gap is
+  strictly negative. Positive λ₀,λ₃<1 follow from b>s₁,d>s₃
+  and (SC.7), not from a separate infinite-row hypothesis.
+- At literal solo1, quiet0 has V₂,₀>s₀ and negative joining gap.
+  Quiet3 starts at s₃ and has negative joining gap. Owner1 ties,
+  and favorite2 ties by the exact linear elimination.
+- Require the triple quiet0 gap Q₀−R₀−cu₀<0 on I_Y. Its three
+  active owners already tie identically by SC2.
+
+For the pair ladder use its exact terminal weights
+
+    C=1/[(1+t/C₀)(1+a/C₂)],       P₀₂=Cta/H,
+    P₀=C[a/C₂+B₂ta/(C₂H)],
+    P₂=C[t/C₀+A₀ta/(C₀H)].                            (SC.8)
+
+The active excess recursion t′=A₀t/(D₀+t), a′=B₂a/(E₂+a)
+contracts geometrically. For i=1,3 set Bᵢ=b,d respectively and
+
+    δᵢ,0=rᵢ,0i−rᵢ,0,
+    δᵢ,2=rᵢ,2i−rᵢ,2,
+    δᵢ,02=rᵢ,02i−rᵢ,02,
+    ℓ₀=sᵢ−Bᵢ,
+    ℓ_t=(rᵢ,2−Bᵢ)/C₀+δᵢ,2/D₀,
+    ℓ_a=(rᵢ,0−Bᵢ)/C₂+δᵢ,0/E₂,
+    ℓ_ta=−Bᵢ/(C₀C₂)+B₂rᵢ,0/(C₂H)+A₀rᵢ,2/(C₀H)
+          +rᵢ,02/H+δᵢ,02/(D₀E₂).
+
+Require throughout I_Y
+
+    ℓ₀<0,      ℓ_a<0,      ℓ_t<0,      ℓ_t+ℓ_ta<0.    (SC.9)
+
+At EVERY finite pair stage its actual normalized quiet gap is
+ℓ₀+ℓ_t tₙ+ℓ_a aₙ+ℓ_ta tₙaₙ. Since 0<aₙ<1, (SC.9) makes
+it strictly negative for ALL n, including arbitrarily late rows near
+the active binding endpoint. It does not assume that initial quiet
+ports are above their own singletons. This is the finite UNIFORM
+quiet proof needed to persist under general table perturbation.
+
+Precise finite coefficient test. All functions in SC1–4 are rational
+expressions derived from finitely many raw reward entries. Require each
+ORIGINAL denominator to have the displayed positive sign; cancellation
+of a removable singularity does not waive this requirement. For any
+additional rational inequality f(Y)>0, write f=N/D with D positive
+on I_Y and expand each polynomial at m:
+
+    N(m+e)=Σ nⱼeʲ,        D(m+e)=Σ dⱼeʲ.
+
+It suffices to check the TWO finite coefficient inequalities
+
+    n₀>Σ_{j≥1}|nⱼ|ρʲ,       d₀>Σ_{j≥1}|dⱼ|ρʲ.       (SC.10)
+
+Apply this to all interval inequalities in SC1–4, and to both ℓ_t
+and ℓ_t+ℓ_ta as stated; no max or universal semialgebraic oracle is
+needed. Endpoint signs of Ψ are exact rational substitutions. For
+real rather than rational tables the same finite inequalities still
+define a legitimate mathematical class; rationality is needed only
+for a fully exact machine arithmetic certificate. Denominator clearing
+uses the actual current table, not a Jacobian transplanted from CL6.
+
+The criterion is therefore a finite REWARD-ONLY sufficient UE producer.
+Its hypotheses are coefficient inequalities and literal reward gaps,
+not the existence of a closed word. IVT supplies Y*, all five exact
+Nash pieces are then explicit, and the finite truncation compiler yields
+absorbing terminal approximate Nash at every accuracy with the ONE
+fixed payoff V(Y*). The proof retains all full behavioral caps as in
+CL8: two fixed positive suppliers0,3 make every deleted period survival
+uniformly less than1, and scalar companion fixed points price Never
+and every later deadline. No ω+ω chronology, charge-only substitute
+for deleted survival, or restricted equilibrium is inferred.
+
+### SC5. Complete scalar verification on the actual CL reward table
+
+At that table, (SC.1) simplifies to
+
+    Z=8Y/(7−2Y),
+    X=4Y(23−2Y)/(63−57Y+2Y²),
+    k=p/2=2Y(43−18Y)/(63−57Y+2Y²).
+
+Writing Qᵢ and R₀ as the literal triple averages, let a=1−Q₂ and
+
+    B_n(t)=Q₁+3a/2+(2+7a/4)t,
+    D_n(t)=Q₃+(2+a)t,       Δ(t)=(1+t)(1+a/2).
+
+The linear favorite return equation reduces to
+
+    E*(t)=4D_n(t)−B_n(t)−3Δ(t)
+            −k[33D_n(t)+3B_n(t)−21Δ(t)]=0.
+
+The SC3 coefficient e₁ is ∂E*/∂t divided by1−2k, so both are
+positive on I_Y. Taking t=−E*(0)/(∂E*/∂t), b=B_n(t)/Δ(t),
+d=D_n(t)/Δ(t), T=33d+3b−21 gives u₀=4−45d/T. The resulting
+Ψ=t−cu₀−R₀+1 is a rational function with numerator and denominator
+degrees16. Its endpoint values satisfy EXACTLY
+
+    Ψ(1/40)<0<Ψ(13/500).                              (SC.11)
+
+The following complete rational verifier checks the WHOLE interval,
+not samples. It has no numerical root premise, optimization or floating
+comparison. Its simplified expressions are the actual current-table
+denominator clearing; their nonzero denominators are separately checked.
+
+```python
+import sympy as s
+Y,t,e=s.symbols('Y t e')
+Z=8*Y/(7-2*Y)
+X=s.factor(4*(Y+2*Z)/(9-Y-4*Z))
+k=s.factor(Y+(1+Y)*X/4)
+x=s.factor(X/(1+X)); y=Y/(1+Y); z=s.factor(Z/(1+Z))
+p=2*k; c=s.factor((1-x)*(1-y)*(1-z))
+Q1=1-3*y+z/2+s.Rational(11,2)*y*z
+Q2=1+x/2-3*z+s.Rational(11,2)*x*z
+Q3=1-3*x-3*y+9*x*y
+a=s.factor(1-Q2)
+R0=4*x*(1-y)*(1-z)+4*z*(1-x)*(1-y)+5*(
+    x*y*(1-z)+x*z*(1-y)+y*z*(1-x))-4*x*y*z
+Q0=c-2*x*(1-y)*(1-z)+s.Rational(3,2)*y*(1-x)*(1-z)
+Q0+=-2*z*(1-x)*(1-y)+4*(x*y*(1-z)+x*z*(1-y)
+    +y*z*(1-x))-5*x*y*z
+BN=Q1+3*a/2+(2+7*a/4)*t
+DN=Q3+(2+a)*t; Den=(1+t)*(1+a/2)
+NN=s.factor(4*DN-BN-3*Den)
+TT=s.factor(33*DN+3*BN-21*Den)
+E=s.factor(NN-k*TT)
+coef=s.factor(s.diff(E,t))
+tt=s.factor(-E.subs(t,0)/coef)
+b=s.factor(BN.subs(t,tt)/Den.subs(t,tt))
+d=s.factor(DN.subs(t,tt)/Den.subs(t,tt))
+T=s.factor(33*d+3*b-21); N=s.factor(4*d-b-3)
+u0=s.factor(4-45*d/T)
+g0=s.factor(Q0-R0-c*u0)
+psi=s.factor(tt-c*u0-R0+1)
+mid=s.Rational(51,2000); rho=s.Rational(1,2000)
+def polybound(f):
+    P=s.Poly(s.expand(f.subs(Y,mid+e)),e)
+    terms=P.as_dict(); cc=terms.get((0,),s.S.Zero)
+    err=sum(abs(co)*rho**j[0] for j,co in terms.items() if j[0])
+    return cc-err,cc+err
+def iv(f):
+    n,q=s.fraction(s.factor(f)); ql,qh=polybound(q)
+    if qh<0: n,q,ql,qh=-n,-q,-qh,-ql
+    assert ql>0
+    nl,nh=polybound(n)
+    vals=[nl/ql,nl/qh,nh/ql,nh/qh]
+    return min(vals),max(vals)
+for f,lo,hi in [(X,0,1),(Z,0,1),(p,0,1),(tt,0,2),
+    (a,0,1),(b,1,3),(d,1,3),(T,0,100),(N,0,5),
+    (u0,1,4),(g0,-10,0)]:
+    ll,hh=iv(f); assert ll>lo and hh<hi
+for f in [7-2*Y,9-Y-4*Z,coef,1-p,1+x,1+y,1+z]:
+    ll,hh=iv(f); assert ll>0
+ll,hh=iv(s.fraction(psi)[1]); assert hh<0
+assert psi.subs(Y,s.Rational(1,40))<0
+assert psi.subs(Y,s.Rational(13,500))>0
+```
+
+The interval bounds produced by exact coefficient arithmetic include
+1.501<b<1.527,1.374<d<1.400, .914<t<1.004,
+.060<a<.063, 1.826<u₀<1.915 and −1.171<g₀<−1.092.
+These displayed short decimal enclosures are rational widened bounds,
+not approximate root evidence. The base pair quiet coefficients satisfy
+(SC.9) uniformly already from b>3/2,d>13/10. All original denominator
+signs follow from the checked positive factors and the explicit positive
+table constants; e₁=coef/(1−p)>0. The circle can therefore be closed
+by IVT directly, without the five-variable rational contraction.
+
+### SC6. The fourteen arbitrary coordinates: ALL unilateral deviations
+
+The support sets occurring at ANY finite root in the itinerary are
+
+    {0}, {3}, {1}, {1,2,3}, {0,2}.
+
+Let A be the support at one chronological date. If player i replaces
+its ENTIRE clock by any unrestricted behavioral strategy, the opponent
+quitters at that date form a subset T⊆A\{i}. The terminal coalition
+is either T, with i continuing, or T∪{i}, with i quitting. Because
+absorption occurs at the FIRST date with any quitter, players quitting
+at different dates cannot be combined into a later terminal coalition.
+This reasoning applies to every finite deadline, Never, mixed clocks
+and all full live-history strategies, not only one-period replies.
+
+Prescribed terminal coalitions are the nine nonempty sets
+
+    {0},{1},{2},{3},{0,2},{1,2},{1,3},{2,3},{1,2,3}.
+
+All36 recipient coordinates in those rows are potentially paid and
+are retained. The ONLY additional coordinates that an observer's
+unilateral reply can create are
+
+    r₀,01, r₀,03, r₀,012, r₀,013, r₀,023, r₀,0123,
+    r₁,01, r₁,012, r₃,03, r₃,023.
+
+Hence the following FOURTEEN coordinates are genuinely unused:
+
+| Coalition | Arbitrary recipients |
+| --- | --- |
+| {0,1} | 2,3 |
+| {0,3} | 1,2 |
+| {0,1,2} | 2,3 |
+| {0,1,3} | 1,2,3 |
+| {0,2,3} | 1,2 |
+| I | 1,2,3 |
+
+For each listed coordinate (S,i), S is neither a prescribed coalition
+nor a subset of A\{i} nor T∪{i} for any T⊆A\{i} and any itinerary
+support A. The explicit support enumeration gives46 used and14 unused
+coordinates, agreeing with the formula. No assumption on their values
+is needed. Changing them, by any finite amount and independently,
+leaves each constructed profile's payoff and each owner's ENTIRE
+unrestricted cap EXACTLY unchanged. Even a deviator using history to
+choose a later phase cannot make two opponent suppliers simultaneous
+at a date where their prescribed support does not allow it.
+
+Consequently the finite criterion defines a46-coordinate sufficient
+class times an unrestricted14-coordinate affine factor. Starting from
+the actual base, its strict coefficient signs persist on an open chamber
+in the46 used coordinates; the other14 may range over ALL real values.
+This is stronger than merely a tiny full60 neighborhood. In particular
+grand rewards for recipients1,2,3 may be arbitrary without affecting
+the constructed approximate-equilibrium family. A new sure-root or
+known producer may incidentally appear after such changes; the direct
+constructor remains valid and never uses absence of those alternatives.
+
+Scope and next action. This is a NEW UNREVIEWED raw class strengthening,
+not contained in the frozen CL review verdicts. Its main mechanism is
+one-dimensional reward-derived closure plus a full response-support mask,
+not optimizing an old chamber radius. It does not force the itinerary
+for every table or consume the general fully-paid nonsure source.
+Independent delta falsification of SC2–4 algebra, SC5 interval signs and
+SC6 full-clock unreachability is required before final packet inclusion.
+No additional isolated-table or constant search is part of this checkpoint.
+
 ## Dual follow-through: a closed singular full-Nash circuit retires the rational shell
 
 Status: COMPLETE ORDINARY INDEPENDENTLY UNREVIEWED mathematics. The exact
