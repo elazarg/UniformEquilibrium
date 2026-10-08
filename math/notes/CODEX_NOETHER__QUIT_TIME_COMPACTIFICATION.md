@@ -9,10 +9,14 @@ positive minimum debts, and positive joint Never. RM45 tests an actual
 old-law finite/Never conditioning path. In its precisely stated sole-
 bridger/root-only-observer subgeometry, all prescribed payoffs stay fixed
 and the absorbing floor forces a second bridging OWNER before Never
-vanishes. This is an ordinary unreviewed subgeometry construction, not
-a full Fin4 consumer or an assumed rank theorem. The residual with a
-later-only observer and the arbitrary multiple-bridge geometry remain
-open; a general below-δ competitor is still missing.
+vanishes. Its focused independent mathematical PASS by CODEX_MORSE is
+saved in the matching feedback; it is not Lean-checked or exported.
+RM46 now selects least literal joint-Never mass among full minima at
+the SAME NP table, excluding that subgeometry and giving the exhaustive
+alternative: at least two genuine bridging owners, or a sole zero-root-
+mass bridger together with a different later-only cap owner. RM46 is an
+ordinary unreviewed strengthening. Neither branch has a general below-δ
+competitor yet; this disjunction does not complete the Fin4 consumer.
 
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
@@ -23102,7 +23106,12 @@ No general theorem about fresh minima is imported into SW.1–SW.4.
 
 ### MF1. Exact source, target, dependencies, and nonclaim
 
-COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED. This block returns to ONE
+COMPLETE ORDINARY PROOF DRAFT. Focused independent mathematical PASS
+by CODEX_MORSE is recorded in
+`feedback/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION__BY_CODEX_MORSE.md`
+for the original frozen 289-line section at SHA256
+39478699f01a81c8ff6f9215869aef39f9b48b43a1f6e1e5ebd1c15180db672c.
+This status annotation changes no proof or quantifier. This block returns to ONE
 positive-own table r selected by the reviewed canonical packet
 `exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`, SHA256
 21e596e53595811ad4f83b657d97b3942d53e313d69bb2e9e243c2ee2af11953.
@@ -23387,3 +23396,187 @@ automatic. Neither situation is repaired by asserting an upper-price
 or minimum-tail hypothesis. The concrete next question is an actual
 coupled old-law change at the two-owner wall, or a different whole-law
 operation for the sole-bridge/later-only-observer arm.
+
+## RM46: least literal Never gives an exhaustive same-table bridge alternative
+
+### LV1. Producer statement and exact quantifier order
+
+COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED. Suppose an arbitrary Fin4
+game lacks a uniform-equilibrium payoff. Apply the reviewed NP source
+packet ONCE to select its fresh reward table r†. Fix that table from
+now on. In particular fix its positive owns, generic within-row
+rewards, genuine all-law floor δ, strictly larger absorbing floor δ+g,
+and common strictly positive minimum debt vector d*. No later tax
+maximization, recipient scaling, or reward perturbation is made.
+
+At THIS table there is a produced positive minimum joint-law cluster,
+with minimum literal joint-Never mass among ALL full-carrier minima,
+whose nonsure finite atomic first root τ satisfies ONE of:
+
+    (I) at least TWO different owners maximize both at τ and later;
+
+    (II) exactly ONE owner i maximizes at τ and later, a_i=0,
+         and some OTHER owner j has its ENTIRE cap-maximizing set
+         strictly later than τ.                              (LV.1)
+
+Every later test in (LV.1) is finite, with full actual moving-deadline
+witnesses; the bridging comparisons have genuinely different payoff
+kernels on a positive original opponent-root event. Positive debt and
+literal joint Never, all original table constants, and the true
+unrestricted minimum passport remain attached to this ONE source.
+
+In fact every produced minimum attaining the least literal ν obeys
+this alternative. The claim is NOT that every arbitrary old NP minimum
+does. It is a strengthened unconditional SOURCE restriction, not a
+consumer of either residual branch and not an equilibrium producer.
+
+### LV2. Compact augmented carrier retains the literal probability
+
+For actual independent laws p on integer clocks plus Never, let
+
+    ν(p)=Pr_p(ALL FOUR prescribed clocks are Never)
+        =∏_k p_k(Never).
+
+It is not survival past a finite cutoff, a conditional suffix survival,
+or mass escaping to an abstract endpoint. Define the finite-dimensional
+augmented carrier
+
+    H=closure{(U(p),B(p),ν(p)): p actual and independent}.
+
+Bounded terminal rewards bound U and B, while 0≤ν≤1. Thus H is
+compact. Its projection onto (U,B) is exactly K_all: one inclusion
+is immediate, and for the other select a convergent subsequence of
+the bounded literal ν coordinates of an actual semantic realizing
+sequence. This uses ordinary Euclidean compactness, not tightness of
+the raw quitting times.
+
+The nonempty closed minimum subset
+
+    H_min={(U,B,ν)∈H: Σ_k(B_k−U_k)=δ}
+
+is compact. Choose its LEAST ν and call it ν_min. NP's uniform lower
+bound on literal joint Never along EVERY sufficiently near-minimal
+actual profile passes to H_min, so ν_min>0. No coordinate of d*
+or semantic point changes under a purported choice of a new table;
+the table has remained fixed throughout this secondary selection.
+
+### LV3. Regenerate from the chosen triple without replacing ν
+
+Start with an actual realizing sequence for the CHOSEN triple in
+H_min. Make each profile finite-support by censoring its sufficiently
+late finite clock draws to Never. The sum of the censored marginal
+masses can be chosen to vanish with the index. Product-TV bounds then
+make every payoff and EVERY full finite/Never cap error vanish. Also
+
+    |ν(censored p)−ν(p)|≤Σ_k censoredFiniteMass_k,
+
+by the elementary product telescoping bound. Therefore these finite
+profiles still converge to the chosen (U,B,ν_min), not another minimum.
+Extract their four literal marginal Never masses n_k^ℓ→n_k. Their
+product converges to ν_min, and every n_k≥ν_min>0.
+
+Feed THIS finite sequence to the NP marked-calendar construction.
+Its literal Never label is kept separate and isolated. Common-quantile
+finite-clock relabeling, retained-atom intervals, and density transport
+never turn a finite draw into a Never draw. In particular finite mass
+whose RAW DATE tends to infinity can remain a retained marked finite
+atom; it is not silently reassigned to Never. The limit has
+
+    q_k(Never)=n_k,     ∏_k q_k(Never)=ν_min.        (LV.2)
+
+All full cap maximizers, including the finite final c and literal
+Never, arise from the same moving-test transport as the canonical
+NP packet. The final finite point c has zero mixture point mass and
+is NOT the Never label. No c mass is counted in (LV.2).
+
+The NP table has its source geometry for EVERY produced minimum, so
+its random outcome, no preactive mass, atomic earliest active first
+root, nonsure rates and genuine paid bridge apply to this particular
+chosen triple. There is no secondary law replacement hidden in that
+universal statement.
+
+If one wants the literal root at date0 with fixed limiting rates a,
+use the ORIGINAL sequence's vanishing-head censoring and convergent
+root-rate replacement as in MF4. Both product-TV errors vanish, so
+their ν error vanishes too. The root/suffix factorization is
+
+    ν(full profile)=∏_k(1−a_k) · ν(conditional suffix).
+
+Only the FULL profile coordinate is ν_min. The conditional suffix is
+neither asserted minimal nor assigned ν_min. Root normalization and
+subsequence extraction thus retain, rather than maximize or reselect,
+the chosen augmented minimum triple.
+
+### LV4. The literal ν-decreasing local plateau contradicts selection
+
+Suppose this produced least-Never minimum has just one root/later
+bridger i and all three other owners ROOT-ONLY. MF2 forces a_i=0.
+MF3, using the same-table SG/TW actual word comparison, forces
+0<n_i<1, so its old finite conditional F_i exists. MF4's legal path
+
+    q_i^s=sF_i+(1−s)δ_Never
+
+has a two-sided minimum interval about m_i=1−n_i. Throughout that
+interval ALL U and ALL B coordinates are exactly those of the chosen
+minimum. This local conclusion uses actual full-cap gaps and common
+individual debts, not merely equality of a selected-response sum.
+
+Choose m_i<s<m_i+ε inside that interval. Every actual finite realizing
+profile for this path has literal marginal Never masses
+
+    p_i^{ℓ,s}(Never)=1−s,
+    p_k^{ℓ,s}(Never)=p_k^ℓ(Never)  for k≠i.
+
+Consequently its augmented carrier limit has joint Never
+
+    ν_s=(1−s)∏_(k≠i)n_k
+        <(1−m_i)∏_(k≠i)n_k=ν_min,
+
+while its debt is STILL δ. It belongs to H_min, contradicting the
+definition of ν_min. The refinement is a true min-fibre operation;
+no absorbing law is pretended to be a full minimum, and no conditional
+survival is substituted for literal joint Never.
+
+Thus no produced least-Never minimum has that sole/root-only geometry.
+
+### LV5. Exhaustiveness and the exact surviving later-only arm
+
+NP supplies at least one root-to-later bridging owner. If there are
+at least two, branch(I) holds. Otherwise let i be the sole one. MF2
+gives a_i=0. Every other owner either maximizes only at τ or does
+not maximize at τ. If all were root-only, LV4 would contradict the
+least-Never selection. Hence some other j does not maximize at τ.
+
+There are NO earlier cap maxima, by the definition of τ. Literal
+Never is not a cap maximum because all n_k>0 and s_k>0. Therefore
+the ENTIRE maximizing set of this j consists of finite compact points
+STRICTLY later than τ. This is branch(II), without a new uniqueness,
+isolation, own-atom, positive-root-mass, or quiet-player assumption.
+It can have multiple or nonisolated later maxima. The sole bridger
+i can have no old finite mass in this residual; MF3 used the absence
+of later-only observers and must NOT be transferred to branch(II).
+
+The positive-kernel-event qualification in branch(I), and for the
+sole bridger in branch(II), follows from the fixed root rates and
+within-row reward genericity exactly as in MF5. Multiple optimizing
+test labels for ONE owner do not count as branch(I).
+
+### LV6. Dependencies, increment, and next consumer
+
+This selection adds no new theorem about arbitrary profile minimizers
+or reward extrema. It uses the reviewed canonical NP producer, the
+focused-reviewed MF1–MF6 operation, and ordinary compactness of the
+augmented literal triple. MF's SG/TW inputs remain identified ordinary
+conference mathematics; this block does not convert them to Lean or
+an export seal. The exact NEW increment is the exhaustive same-table
+alternative(LV.1) at a produced least-Never full minimum.
+
+The open coupled operation now needs either two different active
+root/later owner walls, or the sole unsupported bridger AND the
+genuinely later-only owner. In branch(II) the later-only envelope can
+change under the finite/Never path, so neither fixed full caps nor
+payoff preservation follows. In branch(I), continuing MF's first-wall
+path can raise the newly tied cap immediately. No rank iteration,
+convex minimum-fibre claim, averaging of independent laws, or supplied
+upper-price field is assumed to repair either gap. The full Fin4
+conjecture remains open.
