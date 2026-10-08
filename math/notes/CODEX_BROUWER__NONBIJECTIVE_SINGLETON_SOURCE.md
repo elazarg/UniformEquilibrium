@@ -62,8 +62,19 @@ whole-law substitution with all born caps priced. No radial identity,
 count balance or selected response lower ledger is used as a cap upper
 bound. The live boundary question now permits nonvanishing terminal
 payments but must actually produce negligible deleted-player seam
-charges, not assume a favorable Nash selector. All older unique proofs,
-tests and objections are retained below.
+charges, not assume a favorable Nash selector. BT supplies a COMPLETE
+ORDINARY, UNREVIEWED positive test: fixed prices and an explicitly
+constructed exact-Nash word family on the already-solved RZ table do
+control every original and repeated full cap. Its seed and solo-cycle
+inequalities are produced from that literal table, not from arbitrary
+positive-gap game data. BU then retires the entire arbitrary-price
+EXACT finite-Nash/repetition producer: another already-solved cyclic
+table blocks every strictly negative boundary vector and every menu
+size, with a positive FULL stationary-debt floor. This is not a native
+positive-gap example. Exact finite Nash is no longer the live producer;
+a new whole-game forcing principle is required, not an assumed
+low-error replacement family. All older unique proofs, tests and
+objections are retained below.
 
 
 ## Original singleton-matrix question
@@ -10600,6 +10611,469 @@ elementary proof, but is no strategic coverage increment. NOETHER
 independently verified this exact source overlap before a QC audit.
 No redundant full gate or export is requested; retain the exact proof,
 infinite-final-block seam and signed boundary tests as supporting notes.
+
+## Nonvanishing boundary payments: an actual exact-Nash word family succeeds
+
+### BT1. Concrete producer question and honest table scope
+
+Status: COMPLETE ORDINARY, UNREVIEWED. This is a positive mechanism
+test, not a new UE class or a counterexample-source exclusion. Use the
+literal RZ table displayed with all60 entries in BP2 below: own
+singletons0, passive singleton reward−1 to the successor of the
+quitter and99 to the other two observers; adjacent-pair participants
+are0 to the successor and98 to its predecessor, opposite-pair
+participants98, all pair passives0; triple and grand participants−1,
+triple passives0. Labels are modulo4. Original Never pays0.
+
+For each finite word, change ONLY its AllNever outcome to−c, with
+the SAME strictly positive vector
+
+    c=(133,261,261,5).
+
+Produce an exact mixed Nash equilibrium in that finite clock menu,
+then independently repeat its private stopping-law block. No public
+signal or common random draw is allowed. The question is whether an
+explicit family, with c NOT tending to zero, controls every original
+and repeated finite/Never cap. The answer on this table is YES.
+
+The RZ table already has a tracked cyclic-open-sign producer; BT does
+not add coverage. BP's entire vanishing-price family failure and BT's
+successful fixed-price family are compatible. The construction tests
+whether the new boundary architecture is genuinely capable of paying
+its deleted-player seam, rather than merely replacing an absolute
+terminal-error bound by an unproduced relative one.
+
+### BT2. A literal fixed-price seed, not an assumed continuation
+
+Take last-row odds x=(1,1,1,65), hence rates
+
+    q=(1/2,1/2,1/2,65/66).
+
+For recipient i, put F=x_(i−1), let A,B be its other two
+opponent odds, and H=F(A+B)+AB+FAB. Direct enumeration of the
+singleton, pair, triple and grand entries gives
+
+    Q_i=α_i[98(A+B)−H],
+    C_i(−c)=α_i[99(A+B)−F−c_i],
+    α_i=∏_(j≠i)(1−q_j).
+
+Here 98(A+B)−H=99(A+B)−F−c_i for EVERY i. Their common
+head values are EXACTLY
+
+    u=(0,784/33,784/33,24).
+
+Thus q is a full, strictly mixed last-row Nash root for the
+specified negative boundary. The actual seed Never marginals and
+joint survival are
+
+    n=(1/2,1/2,1/2,1/66),    ν=1/528.
+
+These u values are the finite GAME's values including the negative
+boundary, not the original native prescribed payoffs. In particular
+the seed's original native payoff is u_i+c_iν. The zero coordinate
+needed next is derived exactly; it is not inserted as an arbitrary
+payoff resolution at an escaping clock limit.
+
+### BT3. Produce each new exact-Nash root and retain nonnegative values
+
+Given a head vector v≥0 with v_i=0 and v_(i+1)>0, prepend a
+single-supplier row of owner i with probability
+
+    p=v_(i+1)/(1+v_(i+1))∈(0,1).
+
+The new head w is the literal Bellman average
+
+    w=(1−p)v+p z({i}).
+
+The owner's Quit and Continue values are0. Its successor has
+Quit value0, and Continue value (1−p)v_(i+1)−p=0.
+Each other observer j has Quit value98p and Continue value
+99p+(1−p)v_j≥99p. Thus every coordinate satisfies its FULL
+root Nash inequality, w≥0, and w_i=w_(i+1)=0. The other two
+coordinates are strictly positive. No triple reward is silently
+used in this singleton row; all triple rewards were used at the
+seed itself.
+
+Starting at BT2, prepend owners0,1,2,3,0,1,2,3,… successively.
+Prepending is backward construction: the actual natural-date word
+is the reversed list of these new rows followed by the original
+seed. No empty date is inserted. At each step the active owner's
+value is0, because the previous row set that successor's value0.
+Its next successor is one of the other two strictly positive
+coordinates. Hence the construction never stalls.
+
+The first rate is p₀=784/817>1/2. At each subsequent step, the
+next successor was a nonfavorite observer in the previous row,
+so its value is at least99p_prev. Consequently
+
+    p_next≥99p_prev/(1+99p_prev)≥99/101>1/2.
+
+All rates remain strictly below1; all menu Never marginals remain
+positive. Backward induction over these literal independent root
+rows produces an EXACT finite-menu Nash profile at every length,
+against every allowed pure deadline and Never, at the same−c
+boundary. These are not merely small root defects.
+
+After k prepended rows, each owner has occurred at least⌊k/4⌋
+times. Its old Never mass is multiplied by at most
+2^(−⌊k/4⌋). In particular every deleted-opponent survival obeys
+
+    h_i≤h_i(seed)·2^(−3⌊k/4⌋)→0,
+    ν≤ν(seed)·2^(−4⌊k/4⌋)→0.
+
+Every u coordinate stays in[0,99], as it is a convex combination
+of the prior nonnegative value and singleton rewards and the
+successor is stopped EXACTLY at0. Joint absorption alone is not
+being used to infer the deleted bounds.
+
+### BT4. Complete native caps and independent repetition
+
+Let K_i be the native passive payoff from refusing the ENTIRE
+finite word; F_i is the maximum native payoff over its finite
+deadlines. The original native reward of each within-word pure
+finite test is unchanged by the negative AllNever payment.
+Finite-menu Nash gives F_i≤u_i. Every owner also has positive
+finite mass from the seed, so F_i=u_i. Every owner has positive
+menu Never mass, and therefore its modified Never test ties:
+
+    K_i−c_i h_i=u_i,    K_i=u_i+c_i h_i.
+
+Every original finite deadline after the whole word earns K_i,
+because one's solo payoff is0 on the cylinder where all opponents
+survive the word. Original literal Never also earns K_i. Thus the
+original UNRESTRICTED cap is EXACTLY
+
+    B_i=K_i,    U_i=u_i+c_iν,
+    D=Σ_i c_i(h_i−ν)→0.
+
+Now repeat the block by PRIVATE independent redraws after each
+surviving block. All n_i<1, so all four actual clocks are finite
+almost surely. All h_i<1 already at the seed. Write G_i=u_i+c_iν
+for the native one-block prescribed payoff. The complete periodic
+calculation in BP1, including arbitrary late deadlines and literal
+Never, gives
+
+    U_i*=G_i/(1−ν),
+    B_i*=max(F_i,K_i/(1−h_i))=K_i/(1−h_i).
+
+The last equality uses u_i≥0 and c_i h_i>0. It is a full cap
+UPPER identification, not a lower ledger from one selected test.
+Consequently the exact repeated debt is
+
+    D*=Σ_i (h_i−ν)(u_i+c_i)/[(1−h_i)(1−ν)]→0.
+
+The denominators are uniformly positive: the seed has
+max_i h_i=1/8 and ν=1/528, and prepending can only decrease
+these survivals. No division by a possible h_i=1 is hidden;
+that general case was separately retained in BP1. Here it is
+excluded by the actually produced seed.
+
+For reproducibility, the first two prepend rates are784/817 and
+78400/79217. The first new head is
+(0,0,78400/817,78408/817). The next is
+(7761600/79217,0,0,7840008/79217). The displayed60-entry table,
+these exact Bellman recurrences and the fixed price vector
+regenerate every subsequent word and full-cap value by rational
+arithmetic. No search output or floating-point inequality is a
+premise.
+
+### BT5. Source correspondence and the actual unresolved producer
+
+The repeated full-cap identities use the already inspected
+`sSup_range_quittingTerminalPayoff_update_eq_periodicWindow`,
+`quittingPeriodicPureTimeTerminalValue_add_period_eq_interpolation`,
+and `quittingRootSequenceTerminalValue_eq_windowRestartDelivery_of_periodic`
+in UniformEquilibrium/Quitting/Cycles/PeriodicWindowEvaluation.lean.
+`quittingBestReplyValue_periodizedPrefix_le_max` in
+UniformEquilibrium/Quitting/Cycles/PeriodicFiniteReplyPrefix.lean
+is the corresponding finite-prefix bound. None of these declarations
+produces the boundary seed or the charged word.
+
+Existing `QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff`
+in UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean
+already consumes RZ's singleton signs with arbitrary collision
+rewards. Thus BT is NOT a new raw class, and the same-native-table
+absorbing infimum here is0, not the hypothetical positive value A.
+
+The full-box no-UE potential route was inspected narrowly at
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean,
+`exists_quittingRobustChargedRelation_rationalPotential_of_finiteBudget`
+in UniformEquilibrium/Quitting/Projective/RobustChargedRelationPolynomialSeparator.lean,
+and `IsQuittingFloorFreeRobustEdge` /
+`quittingFloorFreeRobustChargedRelation` in
+UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean.
+Its state is only a boxed payoff vector; its two edge inequalities
+are absorption-relative ordinary Nash regret and Bellman residual.
+No punishment floor or universal outgoing root is supplied. The
+characterization additionally requires the named same-table normality
+and a positive own singleton; it is not directly a native-own0
+certificate.
+
+BT demonstrates a concrete way to avoid BP's ghost terminal seeds:
+choose a nonvanishing boundary which produces a zero head coordinate,
+then use actual root inequalities to reach a component charging
+every owner. On an arbitrary positive-gap native table neither this
+zero seed nor the sign cycle is supplied. The next conjecture-facing
+question is whether globality can force an accessible charged
+component (possibly using multiple-supplier roots), or whether a
+different whole-game construction is needed. A universal playable
+successor on a payoff slab, or an assumed favorable finite Nash
+selector, would simply restore an already falsified premise.
+
+
+## Arbitrary negative boundary prices cannot rescue exact finite Nash
+
+### BU1. Full data and the whole architecture being falsified
+
+Status: COMPLETE ORDINARY, UNREVIEWED, notes only. This is a whole
+producer-family falsifier on an explicitly solved table, not a new
+counterexample to UE or a positive-absorbing-gap source. It tests the
+nonvanishing-price mechanism left live after BP, including BT's
+successful special case; it is not a further constant optimization.
+
+Let I={0,1,2,3}, indices modulo4. The following rules specify all60
+native reward entries:
+
+    z_i({i})=0;
+    z_i({j})=−1 if i=j+1, and99 otherwise, for i≠j;
+    z_i(S)=1 if |S|≥2 and i∈S;
+    z_i(S)=100 if |S|≥2 and i∉S.
+
+Original Never is0. For ANY N≥0 and ANY vector c with EVERY c_i>0,
+consider the finite clock game {0,…,N,Never} which changes ONLY the
+AllNever outcome to−c. Players randomize privately and independently.
+Select ANY EXACT normal-form Nash law. Independently repeat its finite
+clock block if the whole block survives.
+
+Claim: there is a fixed η>0, depending only on this literal table,
+such that EVERY such repeated actual profile has unrestricted SUM
+debt at leastη, uniformly over c, N and the Nash selection. This
+includes unbounded or unequal prices, not just BP's vanishing prices.
+
+### BU2. Strong no-sure and a full strictly-positive-port census
+
+Write g_i=Q_i−C_i(v), α_i=∏_(j≠i)(1−q_j), and let P(S) be
+the exact independent root coalition probability. A participant's
+Quit value is
+
+    Q_i=1−α_i.
+
+There is no sure full Nash root at ANY real v. If j is sure,
+both nonfavorite observers k≠j,j+1 have g_k≤−98: refusing
+gives99 if j is alone and100 if more opponents join, while
+joining gives1. They must be quiet. The favorite j+1 then has
+gap1−(−1)=2 and must also be sure. Against that sure favorite,
+owner j has gap1−99=−98 and cannot be sure. This argument
+retains all multiple-quitter cases and does not divide by survival.
+
+The exact weighted identity is
+
+    Σ_i q_i g_i(q;v)
+      =−96Σ_adjacent pairs P(S)−196Σ_opposite pairs P(S)
+       −297Σ_triples P(S)−396P(I)−Σ_i q_i α_i v_i.       (BU1)
+
+It follows by grouping each coalition S: its coefficient is
+Σ_(i∈S)[z_i(S)−z_i(S\{i})], with singleton withdrawal
+payoff v_i. Adjacent pair coefficients are−98+2=−96;
+opposite pairs give−196; triples−297; grand−396. These
+are all coalition terms, not a first-order singleton expansion.
+
+At a full Nash root every active q_i g_i is nonnegative. If
+v_i>0 for ALL i and q≠0, the right side of(BU1) is strictly
+negative: any positive nonempty-coalition probability either is
+a negative collision term or a singleton term with v_i>0.
+Therefore the ONLY full Nash root at any strictly positive
+continuation is AllContinue.
+
+### BU3. EVERY exact finite-menu equilibrium uses only its final row
+
+First every menu Never mass is positive. Otherwise take the earliest
+date at which some player's cumulative stopping probability reaches1.
+All players survive TO that date with positive probability. Conditional
+on that survival, each player's positive-mass future-clock law remains
+optimal: payoffs of ALL future tests differ from their original
+values by the same earlier-event term and the same positive opponent
+survival factor. The corresponding root is Nash for its actual finite
+suffix continuation and has a sure owner, contradicting BU2.
+
+AllNever is not equilibrium because immediate solo0 beats−c_i.
+At the last occupied date t, the actual conditional root has
+continuation−c. It cannot have one supplier j: the quiet favorite
+j+1 has gap2q_j+c_(j+1)(1−q_j)>0. Thus it has at least
+two suppliers. Every α_i<1, and every head value satisfies
+
+    u_i≥Q_i=1−α_i>0.
+
+Backward induction now uses the strictly-positive-port census:
+every preceding row must be AllContinue. The date t must be N.
+If t<N, EVERY positive-mass Never test is strictly beaten by
+a finite test after t, which restores c_iα_i>0 on the surviving
+opponent cylinder. All α_i are positive by the no-sure result.
+
+Hence EVERY menu Nash law consists of one nonsure root at N,
+followed by its positive Never mass. Earlier dates are unused.
+Conversely a last-row root Nash at−c extends to the whole menu:
+earlier solo tests pay0, below its strictly positive head values.
+This is a whole-correspondence statement, not one unfavorable
+selection or a supplied subgame-perfect hypothesis.
+
+The independently repeated profile is therefore exactly a stationary
+product root q, with all q_i<1 and at least two positive suppliers.
+Empty phases before the last row cannot help: all earlier pure tests
+are retained, and the equivalent nonempty phases have the same joint
+and deleted block survivals. We do not insert an empty phase to claim
+a smaller cap.
+
+### BU4. Complete stationary caps have a UNIFORM positive debt floor
+
+In fact the entire stationary family q∈[0,1]^4\{0} has debt
+bounded away from0. Prescribed and deviation laws are the literal
+independent geometric clocks; a q_i=0 coordinate is Never.
+Let ν=∏(1−q_i), a=1−ν>0, h_i=α_i, and K_i be the passive
+one-root numerator. Its native prescribed value is U_i=G_i/a.
+When h_i<1, the complete periodic compiler gives
+
+    B_i=max(Q_i,K_i/(1−h_i)).                           (BU2)
+
+Every phase-k deadline interpolates between these two values;
+literal Never is K_i/(1−h_i). Thus(BU2) is an ALL-deadline
+UPPER identity, not just a necessary first-row test. If h_i=1,
+all opponents are Never; K_i=0 and every finite/ Never payoff
+to i is0. This case is handled directly, without division.
+
+Suppose for contradiction that stationary q^k have D(q^k)→0.
+Extract q^k→q*. All prescribed values are bounded by100.
+
+If q*≠0, a*>0 and U(q^k)→U(q*) by the explicit absorbed
+reward average. An owner can either Quit immediately or Continue
+one phase and then use its original stationary law, so full caps
+satisfy B_i≥Q_i and B_i≥C_i(q;U(q)). The latter comparison
+is an ACTUAL unilateral stopping law, even when h_i=1.
+Together with the exact Bellman average, D→0 implies q* is
+full root Nash at continuation U(q*).
+
+If q* has one supplier j, its successor's prescribed value is−1
+while its immediate-Quit value is q*_j>0, impossible at zero
+debt. If q* has at least two suppliers, ALL Q_i>0, and hence
+ALL U_i>0. BU2's full positive-port census again contradicts
+q*≠0. Thus necessarily q^k→0.
+
+Put ρ_k=Σ_i q_i^k and extract q_i^k/ρ_k→λ_i, where λ≥0
+and Σλ=1. Exact singleton asymptotics, with collision error
+O(ρ_k²), give
+
+    U_i(q^k)→(Γλ)_i=99(1−λ_i)−100λ_(i−1).
+
+Since B_i≥Q_i≥0 and D→0, Γλ≥0. No λ_i can equal1,
+because then its successor has Γλ=−1. Therefore all deleted
+first-order survivals have positive coefficients1−λ_i, and
+the literal Never part of(BU2) gives
+
+    lim K_i/(1−h_i)=(Γλ)_i/(1−λ_i).
+
+Combining this lower test with D→0 and Γλ≥0 forces
+
+    λ_i(Γλ)_i=0 for EVERY i.                            (BU3)
+
+This system has no solution. If λ_i>0 and λ_(i−1)=0,
+then Γλ_i=99(1−λ_i)>0, violating(BU3). Thus support
+is predecessor-closed and hence all four λ_i are positive.
+Then Γλ=0, contradicting Σ_i(Γλ)_i=197. This exact
+cycle argument is the R₀ obstruction for the displayed matrix;
+no normalized-rate branch or price bound was assumed.
+
+The contradictory compactness argument proves η>0 uniformly
+over the ENTIRE stationary family. Applied to BU3, it proves
+the claimed arbitrary-price/menu/selector repetition failure.
+No optimized value ofη is needed or claimed.
+
+### BU5. The actual absorbing escape is explicit and approximate
+
+This table is nevertheless solved; its absorbing infimum is0.
+Set
+
+    σ=(−1+√(103/99))/2,    −1+99σ+99σ²=0,
+    F=(0,0,99+99σ,99).
+
+Reverse labels so new k is original−k. The singleton coefficient
+vector is γ′=(0,−1,99,99), and F(k)=γ′(k)+σF(k+1).
+For coarse active-owner phase a put V_a(k)=(1−σ)F(a−k).
+These values are nonnegative, and the active owner a has value0
+at both its own and the next phase. The exact recurrence is
+
+    V_a=(1−σ)z({original owner−a})+σV_(a+1).
+
+For each m≥1 let ρ=1−σ^(1/m). At m consecutive dates let
+only the specified owner quit with independent hazardρ, and
+repeat the four owner blocks in ORIGINAL order0,3,2,1 forever.
+All clocks are finite almost surely: each individual survives
+one full period with probabilityσ<1. Every deleted profile
+survives a period with probabilityσ³<1.
+
+The actual continuation with ℓ dates remaining in a block is
+(1−σ^(ℓ/m))z({owner})+σ^(ℓ/m)V_next. Its endpoints V_a
+and V_next are nonnegative, so all these intermediate values
+are nonnegative. The block owner has value0 identically.
+At any date its own Quit endpoint is0; every nonowner's
+Quit endpoint is exactlyρ, since only one opponent can quit
+and every pair participant reward is1.
+
+Always Continue follows prescribed Continue everywhere except
+one's active dates; there both prescribed actions have value0.
+Deleted-opponent contraction makes the terminal remainder vanish,
+so Never earns EXACTLY the prescribed value. Any finite pure
+test earns prescribed value plus opponent survival to its date
+times its Quit-minus-current-value difference, at mostρ.
+Arbitrary finite/Never mixtures therefore satisfy D≤4ρ→0.
+The prescribed target is independent of m:
+
+    (0,0,99−99σ²,99−99σ).
+
+This is an ACTUAL private-independent all-four-finite family,
+not a conjectured good sharing-rule resolution or an approximate
+finite-menu Nash selector. The roots have small ABSOLUTE quiet
+regrets; exactness of every root is deliberately not asserted.
+
+### BU6. Overlap, inspected sources and direction change
+
+The singleton coefficients satisfy the existing
+`QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff`
+in UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean;
+that producer permits arbitrary nonsingleton rewards. The exact
+all-period cap compiler is
+`sSup_range_quittingTerminalPayoff_update_eq_periodicWindow` in
+UniformEquilibrium/Quitting/Cycles/PeriodicWindowEvaluation.lean.
+These named sources were inspected before the claim. Thus no new
+UE class is asserted for BU's table.
+
+There is also a preexisting conceptual and stronger exact-path
+guardrail: MORSE's EC1–EC7 uses own1, passive singletons0/3,
+nonsingleton members2 and nonmembers3, and bounds ALL finite
+exact-path capacity in a box while producing robust charged cycles.
+The present table is not a renamed positive-gap example. BU makes
+the concrete remaining boundary producer's failure explicit at
+ALL prices, including its complete stationary full-cap floor.
+MORSE's Section26 already retires a different bounded scalar
+completion homotopy. Those prior no-gos are not being re-exported
+as a new global reduction.
+
+BT remains a valid positive special-case construction. Its lesson
+cannot be upgraded to arbitrary-game production: this literal
+table's negative-boundary exact Nash seeds all land strictly above
+own, and ANY further exact Nash construction is inert. No choice
+of those seeds, menu length or strictly positive price vector repairs
+that defect. The exact finite-Nash boundary/repetition route is
+therefore RETIRED, rather than weakened to a favorable selector.
+
+An approximate-root route is not accepted merely because BU5 works:
+from arbitrary data it would still have to PRODUCE a private word
+with complete capped-response control and appropriate continuation
+delivery. An assumed low-error family, a root oracle or a charged
+component named without accessibility would not fill the missing
+global forcing step. The next mechanism must supply that step or
+change the whole-game construction.
+
 
 ## A native absorbing spherical maximum and full response-distribution duality
 
