@@ -4,164 +4,46 @@ Author: CODEX_BROUWER. Ordinary mathematics, not Lean-checked.
 
 ## Current full-goal status
 
-The canonical ordinary-mathematical source theorem is frozen in
-[RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md)
-after two independent whole-artifact falsifications. From any Fin4
-counterexample it selects ONE fresh bounded row-generic table with
-positive unrestricted SUM-debt minimum and ONE common debt vector at
-ALL carrier minima. EVERY produced marked minimum has a random terminal
-law, no prescribed mass before its earliest active point, and a finite
-isolated first collision with at least two root suppliers. Some owner
-has genuinely different maximizing root and later PAYOFF kernels on
-a positive-probability original opponent event. That owner can have
-ZERO debt. This is a source restriction, not a UE theorem.
+The full Fin4 uniform-equilibrium conjecture is OPEN. The strongest
+accepted source used here is
+[FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md](../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md).
+It selects ONE fresh table from any counterexample: its unrestricted
+SUM-debt minimum is positive, its absorbing infimum is strictly larger,
+all minimum debts and original Never masses are positive, and a random
+nonsure first collision has a paid root-to-later-finite PAYOFF-kernel
+bridge. No row Nash, minimum tail or attained tail deadline is assumed.
+The earlier canonical
+[random-collision](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md)
+and [four-finite](../exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md)
+source results remain distinct; their tables are not silently identified.
 
-The exact open task is to consume that source by an actual independent
-finite-amplitude root/tail change with an upper ledger for EVERY changed
-response cap, or another genuinely global contradiction. Neither the
-first row nor the old tail is assumed Nash or debt-minimizing. All finite
-deadlines, Never, zero/sure root rates and actual carrier realization
-remain in scope. Different cap kernels alone are not a paid charge.
+The exact missing consumer is an ACTUAL independent stopping-law
+competitor with lower full debt, controlling EVERY finite deadline and
+Never, or another global contradiction. Completed comparison ledgers
+and exact architecture falsifiers below have not supplied one. SG's
+actual end-Never graft has an independent focused PASS; the other live
+supporting derivations retain their explicit ordinary/unreviewed status.
 
-The accepted [four-finite source theorem](../exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md)
-adds a new four-finite realizing sequence for EVERY original minimum in
-the common-zero-debt arm. PF below rules out reviving exact finite-menu
-Nash selection from that fact. The canonical stronger fresh-table source
-[FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md](../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md)
-takes another branch: strict full/absorbing separation forces
-all debts and all Never masses positive, with paid finite bridges. It
-is not a property borrowed at the old table. SG1–SG5 below is a COMPLETE
-actual end-graft proof, with MORSE's independent focused mathematical
-and value PASS: the final finite empty test c must maximize for SOME
-owner. Its frozen original section status is retained below; the
-current review is in the existing MORSE feedback file. This strictly
-subsumes PC's L<c alternative.
-Its global tail budget keeps ALL original tail laws, but does not yet
-consume the surviving c-active wall or prove UE. NF9 records the NP
-universal minimum-prefix strengthening without adding source hypotheses.
-EG reuses an old exact table to exclude ALL end-Never-only repairs
-without the true global floor; the live consumer must change existing
-finite stopping mass or use that full-law floor in a genuinely new way.
+The current independent global attempt is RS: the native ZERO-OWN
+ABSORPTIVE infimum, not the native unrestricted gap (AllNever already
+has zero debt). At a positive Euclidean-ball maximum, source-switching
+comparison yields a radial convex combination of at most57 complete
+response-minus-prescribed probability ledgers from SAME-table minima.
+Its averaged prescribed law contains every singleton and cannot consist
+entirely of deterministic minima. Existing SAME-table completion permits
+finite-support, all-four-finite realizing laws at each index. RS is
+COMPLETE ORDINARY, UNREVIEWED supporting mathematics, not a UE theorem
+or an independently reviewed counterexample-class elimination.
 
-NR1–NR8 below is a COMPLETE ORDINARY, UNREVIEWED augmented
-scalarization. At ONE further fresh table, every minimum has the SAME
-joint Never mass as well as the same debt vector. Every nonzero minimum
-prefix then has a STRICTLY nonminimal old tail, and changing one root
-rate over that tail strictly raises full debt at EVERY finite amplitude.
-This is a global necessary restriction, not a repair or UE consumer.
-NR10 rules out requiring a LOWER-debt competitor to preserve that mass.
-PS below retires a different global attempt: a payoff-only screen at the
-own-singleton threshold cannot exclude the surviving source, because its
-already-produced singleton direction gives an actual absorbing profile
-strictly above ALL those thresholds. Full cap pricing remains essential.
-CV1–CV4 is a complete ordinary, unreviewed global ledger for conditioning
-an owner's ENTIRE old finite mass or Never branch: the absorbing gap
-forces a positive cap-mixing dividend and uniformly incompatible endpoint
-response witnesses. It supplies no favorable coupled comparison or UE.
-UD1–UD3 retires uniform ν-changing finite-clock acceleration on the
-already-solved cyclic test; the live attempt is genuinely asymmetric.
-TW1–TW5 is COMPLETE ORDINARY, UNREVIEWED: an actual response-complete
-finite word removes joining spikes and proves that SOME c-active owner
-has positive OLD finite mass. It excludes an all-pure-Never c-wall,
-not the surviving wall with finite prescribed mass or the full conjecture.
-AP below gives the exact ALL-response ledger for changing a second
-owner's old finite/Never mixture while relocating the critical owner's
-existing finite mass to a late finite word. It produces the comparison
-family from actual original laws; it does not produce a favorable member.
-The geometric-pivot check identifies why a payoff-preserving tail
-compression is not such a member: its hazard must respect an old atom,
-and the critical finite branch need not lie beyond the opponents' clocks.
-ZE isolates the boundary where that relocation has NO own-gain at
-any owner: exact row subtraction gives a nontrivial native-zero-own
-near-Nash source while preserving the positive absorbing gap. This is
-a transfer to the absorbing problem, not its solution. Outside that
-boundary an excess debt exists, but TW does not yet put it at a
-critical owner with old finite mass.
-GR below tests a different global hook. At a differentiability point of
-the full60-coordinate debt infimum, EVERY produced marked minimum admits
-a mixture of its complete maximizing response kernels with ONE common
-regret-coefficient vector. This is ordinary, unreviewed supporting
-mathematics. Its mixtures are LOWER supporting ledgers, not cap upper
-bounds. An exact actual global-minimum matching-pennies test, in an OPEN
-zero-gap reward neighborhood, falsifies the proposed upper-pricing use.
-The live construction therefore retains actual root births and must
-control the changed maxima directly; neither AP nor GR yields a favorable
-coupled member.
-CS below makes the next chronological family literal: extract the old
-tail's ACTUAL first date before splitting finite mass between two root
-dates. Inserting a free empty date was not justified. CS gives its exact
-cap-birth cost and an actual two-date affine-law family containing the
-original minimum, with every new cap explicit. It is a completed ordinary
-adapter for the live construction, not a favorable-member result.
-ZP below retires a proposed shortcut in ZE's native boundary: a strictly
-positive nonabsorbing equilibrium payoff need not admit ANY nonzero
-exact Nash prefix at that payoff. At a genuine zero-excess original
-minimum, such prefixes are in fact already forbidden by the tracked
-minimum cap--Nash invariant. The exact whole-root test is solved and is
-not a positive-gap counterexample. The consumer must change existing
-laws nonexactly, or change more than a fixed equilibrium cap state.
-GC below falsifies a later proposed two-finite-owner exclusion: even
-at an actual native equilibrium with positive full payoffs and singleton
-column blockers, a conditional tail cap can be NEGATIVE. Its occupied
-first date prevents the presumed early solo test. The exact interior
-empty-date insertion costs5/192 debt. This seam must remain priced
-in any nonexact geometric-cohort change.
+These ledgers are not one playable profile or a public signal. RS10
+retires pure-coalition and single-owner-geometric consumption of balance
+plus positive deliveries alone; its exact test is solved and violates
+the genuine minimum cap margin. The live next question is whether the
+ALL-law floor and that strict margin force a legal independent
+whole-law substitution with all born caps priced. No radial identity,
+count balance or selected response lower ledger is used as a cap upper
+bound. All older unique proofs, tests and objections are retained below.
 
-BB below changes mechanism to the full finite-word control problem.
-Its continuous soft-cap barrier has an explicit error for EVERY root,
-not just exact Nash roots. The Nash-edge consequence overlaps existing
-production, and no reachable return or favorable word is produced.
-The attempted exact-discount variant weighted by original Never mass
-is falsified by the source's actual absorbing payoff direction. Thus
-neither version is a new counterexample-class reduction or UE consumer.
-
-QC below is an independent elementary coarsening proof, COMPLETE ORDINARY
-and UNREVIEWED, retained only as supporting mathematics. The already-checked
-common-quantile-clock transport gives the same unrestricted semantic error
-with a smaller uniform calendar, exact Never masses and BOTH directions of
-ALL finite/Never response transport. Its existing finite-scale and global
-counterexample semidecision program already covers QC's finite-certification
-route. QC is not a new class reduction or export candidate. The open global
-step remains to produce an actual equilibrium or a satisfying positive-gap
-certificate; an additional compression or verification interface cannot
-supply either. No independent QC gate is requested.
-
-RS below is the current independent GLOBAL attempt. Its objective is the
-native ZERO-OWN ABSORPTIVE SUM infimum, not the unrestricted native gap
-(AllNever already has zero native debt). From a hypothetical counterexample
-it selects a positive Euclidean-ball maximum and derives a convex combination
-of at most57 SAME-table limiting minimum/response probability ledgers equal
-to the radial reward vector. The proof follows NEW-table minimizing laws and
-OLD finite full-cap approximants. It supplies no one-source proportionality,
-playable profile mixture, or equilibrium. The live question is whether its
-ALL-law minimum floor forces a legal absorbing competitor. A complete exact
-early test rejects a raw pure-coalition shortcut, not that global consumer.
-RS7 now consumes a genuine part of that floor: with the native strict payoff
-margin, the radial mixture CANNOT consist entirely of deterministic terminal
-minimum ledgers. At least one selected native minimum is random. This is an
-ordinary, unreviewed compatible restriction at the spherical table, not the
-canonical EVERY-minimum random theorem or a full consumer.
-RS8 strengthens its event content: the averaged ORIGINAL prescribed law
-has positive mass at EVERY singleton, with actual selected finite responses
-destroying some such singleton paths. RS9 permits finite-support, all-four-
-finite realizing laws using the existing SAME-table FC completion adapter;
-none of these averages is a playable product law or a native FULL minimum.
-
-NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
-source: delete vanishing original pre-date mass, normalize the first
-date to0, extract an ACTUAL carrier tail even at sure-owner boundaries,
-and obtain an exact Q_i=A_i+α_i b_i bridge. Randomness forces a strictly
-mixed root rate. NF8 makes this UNIVERSAL at EVERY nonzero finite-prefix
-minimum of the SAME canonical table, including new grafted minima.
-This is supporting consumer simplification, not a new export or an
-additional counterexample-class reduction.
-
-All earlier unique mathematical proofs, failed implications and exact
-tests remain below. In particular local descent, separate-block repair,
-atomless regularization, weak-clock security and convexified-payoff
-sharing have been retired as universal producers. HP/EA7 remain
-unreviewed supporting reselections; a late plateau is not a genuine
-kernel charge. The full finite-quitting UE conjecture remains open.
 
 ## Original singleton-matrix question
 
@@ -11124,6 +11006,117 @@ FULL minimum. No new whole-carrier theorem or Lean-checked native adapter
 is claimed; this is reuse of the reviewed completion and the explicit
 ordinary same-table initialization. The live consumer remains a legal
 independent change of these laws with EVERY born cap controlled.
+
+### RS10. The radial identity does not force a pure or single-supplier competitor
+
+This EXACT test retires a concrete attempted consumer, not the RS global
+source. It has the full radial identity, actual full cap tests and positive
+deliveries, but its caps VIOLATE the genuine minimum margin B_i>A. Its
+cyclic singleton signs are already in a tracked solved class. No further
+bounded search or constant improvement is part of this attempt.
+
+All clocks below are independent and supported on dates0,…,4; every row
+of counts is divided by256. Use two base profiles and selected replies:
+
+    P⁰: (64,14,51,127,0),   (95,30,15,115,1),
+        (93,15,98,50,0),    (0,63,16,127,50);
+    P¹: (125,131,0,0,0),    (15,32,64,18,127),
+        (82,144,0,0,30),    (46,67,47,32,64);
+    τ⁰=(4,4,0,2),           τ¹=(3,0,2,2).              (RS.22)
+
+Write ρ_j(S) for cyclic addition of j to all owner labels. For a∈{0,1},
+let μᵃ be the actual terminal law of Pᵃ and μᵃ_i its law after the literal
+replacement by τᵃ_i. Define the full native row vectors
+
+    Vᵃ(S)=¼Σ_i[μᵃ_i(ρ_iS)−μᵃ(ρ_iS)]  if S≠{0},
+    Vᵃ({0})=Vᵃ(∅)=0.
+
+For masks0,…,15 the exact integer vectors 4·256⁴Vᵃ are
+
+    A⁰=(0,0,880295284,−746478222,255009908,−110088372,
+        282909554,−210336018,−689889420,742770034,
+        225480524,−71707410,−243697038,226123502,
+        356770030,−358160360),
+    A¹=(0,0,60210602,50765698,2787127466,−1928115312,
+        639314050,−400740864,−664297558,664919938,
+        −461411440,28225024,508862338,−271110656,
+        −145842688,−69363664).
+
+Take the exact norm-minimizing coefficient on this chord,
+
+    w=−⟨A¹,A⁰−A¹⟩/‖A⁰−A¹‖₂²
+     =2919993234482309189/3206597336624768103 ∈(0,1),
+    V=wV⁰+(1−w)V¹,       R_i(S)=V(ρ_{−i}S).           (RS.23)
+
+Thus (RS.22)–(RS.23) specify ALL60 rational reward entries, including
+own singletons0 and Never0. Include the four cyclic rotations of each
+base profile with weights w/4 and (1−w)/4 respectively, rotating its
+selected replies as well. The resulting E-projected response-difference
+mixture is EXACTLY R. These eight sources are bookkeeping, not a legal
+publicly mixed profile. The norm-minimizing equation makes the selected
+regret sum at each base profile, hence each rotation, exactly
+
+    D₀=‖R‖₂²
+      =144338660145900502269995879009157185 /
+       3696955026009735821942381482006806528,
+    39/1000<D₀<40/1000.                               (RS.24)
+
+The selected tests really maximize the FULL caps. Because every opponent
+is finite by4, test5 is outcome-equivalent to every later finite deadline
+and Never; the six tests0,…,5 are exhaustive. Direct rational enumeration
+gives maximizing-test sets
+
+    P⁰: {4,5}, {4,5}, {0}, {2};
+    P¹: {3}, {0}, {2,3,4,5}, {2,3,4,5}.
+
+It also gives, at both base profiles and all rotations,
+
+    U_i>1/200000,       B_i<26/1000<D₀.               (RS.25)
+
+This checks (RS.24) as ACTUAL unrestricted debt, rather than the value of
+a selected branch. For every pure nonempty coalition S, its actual debt
+is Σ_i[R_i(S△{i})−R_i(S)]⁺; all15 such values exceed44/1000>D₀.
+The exact calculation uses μᵃ(S)=256⁻⁴Σ_{t:first coalition S}∏_iPᵃ_i(t_i)
+and the analogous three-opponent sum for each replacement. All displayed
+intervals and maximizer comparisons were checked with rational arithmetic,
+not inferred from floating-point discovery.
+
+In fact EVERY absorbing single-supplier stopping law, not merely every
+geometric rate, costs more than D₀. For supplier j choose i=j+1 mod4.
+Cyclic invariance gives
+
+    R_i({j})=V({3})<−40/1000,
+    R_i({i,j})=V({0,3})>0.
+
+With all other prescribed laws Never, observer i's prescribed payoff is
+R_i({j}); its date-zero test pays0 if j stops later and the positive pair
+reward if j stops now. Its cap is therefore ≥0 and its debt exceeds
+40/1000. This covers all finite-a.s. laws of j, all geometric hazards,
+and arbitrary offsets. It does not restrict the remaining actual product
+laws, which may have several suppliers and many phases.
+
+The failure is conspicuously nonglobal. After reversing the cyclic labels,
+the normalized singleton coefficients are
+
+    γ₁=V({3})<0, γ₂=V({2})>0, γ₃=V({1})>0,
+    γ₁+γ₂+γ₃>0.
+
+Hence the complete table meets `QuittingCyclicSingletonOpenSignData`, whose
+`isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean`
+produces the actual balanced cyclic tail with unrestricted nonsingleton
+rewards. Its `tailData` has survival strictly between0 and1; the underlying
+thinned cyclic profiles are absorbing and give A(R)=0. The named structure,
+the cyclic matrix definition and consumer were inspected, together with
+the hazard construction in `CyclicSingletonTailProducer.lean`. No build,
+new producer, or positive-gap example is claimed here.
+
+In particular (RS.25) is incompatible with the genuine native minimum
+cap margin. The exact test defeats balance+positive-delivery consumption
+by these simple competitor families; it does NOT defeat a comparator
+using the true ALL-law floor and that margin. The next construction must
+use those hypotheses, rather than infer a favorable pure/solo member
+from the radial identity alone.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
