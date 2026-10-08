@@ -141,6 +141,11 @@ margin, the radial mixture CANNOT consist entirely of deterministic terminal
 minimum ledgers. At least one selected native minimum is random. This is an
 ordinary, unreviewed compatible restriction at the spherical table, not the
 canonical EVERY-minimum random theorem or a full consumer.
+RS8 strengthens its event content: the averaged ORIGINAL prescribed law
+has positive mass at EVERY singleton, with actual selected finite responses
+destroying some such singleton paths. RS9 permits finite-support, all-four-
+finite realizing laws using the existing SAME-table FC completion adapter;
+none of these averages is a playable product law or a native FULL minimum.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -11031,6 +11036,94 @@ pure rule(RS.18) no longer holds. Even with no singleton on a particular
 sample, an owner cannot choose a response contingent on an unobserved
 coalition. Extending the flow contradiction to those actual random laws,
 with ALL birth caps retained, is the open global step.
+
+### RS8. Every own singleton must appear in the ORIGINAL radial ledgers
+
+Status: COMPLETE ORDINARY, UNREVIEWED. This stronger event restriction uses
+the actual all-law floor directly. It does not require the native strict
+payoff margin for its numerical inequality, nor identify the different
+component profiles. Put
+
+    m(S)=Σ_aα_a μ^a(S),  v_i(S)=Σ_aα_a μ_i^a(S).
+
+These are probability bookkeeping distributions, not actual independently
+mixed laws. For every j, let ONLY j use an actual geometric finite clock
+with hazard θ∈(0,1) and let every other owner Never. It is absorbing.
+Owner j has payoff and cap0. Every observer i≠j has prescribed payoff
+r_i({j}). Its response at time t has the exact value
+
+    r_i({j})+(1−θ)^t[θr_i({i,j})−r_i({j})].
+
+Never has value r_i({j}), so the ENTIRE finite/Never cap is exactly
+max(r_i({j}),θr_i({i,j})). The all-law floor and θ↓0 give
+
+    a≤Σ_(i≠j)[−r_i({j})]⁺.                         (RS.20)
+
+In particular some observer has r_i({j})<0 at EVERY singleton column j.
+This is a direct absorbing comparison, not a transported full no-UE screen.
+The radial identity supplies ar_i({j})=v_i({j})−m({j}), with v_i({j})≥0.
+Hence
+
+    a²≤Σ_(i≠j)[m({j})−v_i({j})]⁺≤3m({j}),
+    m({j})≥a²/3>0 for EVERY j.                       (RS.21)
+
+The role is event coverage, not improving a worst-value constant.
+For each j there is therefore SOME actual native minimizing component
+with positive original probability of first coalition{j}. Such a component
+must be genuinely random by the strict native payoff margin: a point mass
+at{j} pays its participant own0. This is compatible with the SAME radial
+table and its all-law floor. It does not force all four singleton events
+at ONE prescribed minimum or preserve an old NP component.
+
+Moreover choose a negative observer r_i({j})<0. Then v_i({j})<m({j}),
+so at least one component has strictly smaller selected-response singleton-j
+mass than its original mass. Couple its actual original clocks and selected
+finite test. A loss of the original coalition{j} can only occur when that
+test is no later than j's original first date: it strictly preempts to{i}
+or ties to{i,j}. A gain in singleton-j mass may come from removing an
+original solo i and exposing j later. The STRICT net loss implies positive
+limiting mass of original singleton-j paths destroyed by the chosen FULL
+cap test. These are actual moving finite witnesses, not outcome-equivalent
+Never aliases. The observer's debt at THIS component may still be zero;
+the joining outcome's reward may also be smaller than its old passive
+reward. No paid event or favorable own-law relocation is inferred.
+
+This gives a shorter alternative to RS7's deterministic-only contradiction:
+if every component were deterministic, (RS.21) would require deterministic
+singleton minima, forbidden by native strict U>0. RS7's separate actual
+pure-outcome/full-cap argument remains valid and retains its clock seam.
+
+### RS9. Use the existing SAME-table four-finite completion, not a new Never estimate
+
+The ordinary adapter in NOETHER RM40/AT7–AT8 and the independently reviewed
+whole-carrier FC completion have the following exact scope: for ANY signed
+table with own singletons≥0 and recipient row witnesses
+∀i∃j≠i:r_i({j})≤r_i({i}), the carrier closure of all-four-finite actual
+laws equals K_abs. At a native table with A>0, the row witnesses are
+regenerated at that SAME table via its TV absorbing completion estimate,
+a sufficiently large positive terminal-row translation and actual full
+normal-core classification. They are not borrowed from an older NP table.
+This is distinct from RS8's direct singleton COLUMN witnesses.
+
+It follows that the spherical comparison may choose each NEW-table
+near-minimizer with all FOUR Never masses exactly0. Indeed for sufficiently
+small ε, (RS.3) gives A(r+εu)>0, so apply that adapter separately there
+BEFORE selecting its actual ε²-minimizing laws. Whole-pair closure supplies
+all-four-finite laws with that error. Truncate each finite-a.s. law in TV,
+moving its finite tail mass to one finite date, to make its support finite
+while keeping Never mass EXACTLY0. The prescribed payoffs and ALL observer
+finite/Never caps change uniformly by a quantity tending0 under this literal
+coupling; the mover's own cap is unchanged. Select the truncation error
+smaller than the remaining minimization budget.
+
+Thus the SAME RS4–RS8 proof works with an appropriately defined Z_fin,
+whose components have finite-support, all-four-finite realizing laws at
+EVERY index. This does not assert raw clock tightness, an attained native
+absorbing minimum, a finite limiting response deadline, or an original
+FULL minimum. No new whole-carrier theorem or Lean-checked native adapter
+is claimed; this is reuse of the reviewed completion and the explicit
+ordinary same-table initialization. The live consumer remains a legal
+independent change of these laws with EVERY born cap controlled.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
