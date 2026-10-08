@@ -120,6 +120,16 @@ one separate actual GF witness, with a complete finite-carrier census
 and retained-output exclusions; it does not claim full old-producer
 separation or settle the original conjecture.
 
+The active global attempt is now the selected least-Never source's
+sole ZERO-root-rate bridger plus a different later-only owner. SB below
+records a whole-envelope chronology consequence: the sole bridger
+has no finite prescribed mass strictly before the earliest later-only
+cap. This is COMPLETE ORDINARY, UNREVIEWED supporting mathematics,
+NOT elimination of that branch. The actual supplied suffix retains
+its compulsory excess debt. The next consumer attempt must couple
+changes at or after the first later cap and price all born response
+branches, including multiple and nonisolated maximizing sets.
+
 
 ## Original singleton-matrix question
 
@@ -14869,3 +14879,129 @@ and a tied owner's honest supplied suffix debt is d*_i/c. A replacement
 tail cannot be chosen from an unrelated minimum to erase this excess.
 The next concrete attempt is a coupled MULTIROW or whole-law update,
 not another fixed copy/preempt/delay ledger.
+
+## SB: whole-law attack on the sole-bridger/later-only source
+
+### SB1. Exact selected-source chronology claim
+
+Status: COMPLETE ORDINARY, UNREVIEWED supporting lemma. No branch
+elimination, UE producer, export or Lean claim. Its role is to locate
+the first genuine obstacle to a finite/Never whole-law move, before
+attempting a coupled update there.
+
+Use ONLY the SAME selected marked minimum in
+[LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md](../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md),
+Part II alternative(II). Its table is fixed, its sum-debt is the true
+unrestricted global minimum δ>0, and its literal joint Never is the
+least value ν_min>0 among augmented FULL minima at that table. Let
+τ be its first active point and i its SOLE root/later bridging owner.
+Thus q_i({τ})=0. Every other owner is either root-only, with complete
+maximizing set {τ}, or later-only, with its entire maximizing set
+finite and strictly afterτ. Let J be the nonempty later-only set and
+M_j its full maximizing set. Compactness gives
+
+    α=min ⋃[j∈J] M_j > τ.
+
+Then
+
+    q_i({finite clocks strictly beforeα})=0.       (SB.1)
+
+This includes the possibility q_i=δ_Never. It asserts NOTHING about
+mass atα, finite mass later thanα, isolation ofα, which owner has an
+atom there, the numerical cap on a new calendar, or the honest
+conditional suffix being a minimum.
+
+**Proof with all caps priced.** Suppose some strict cut a<α has
+e=q_i(clock<a)>0. There is no own mass beforeτ or atτ, so its old
+conditional law F_i=q_i(·|clock<a) is surely finite and strictly
+afterτ. Since n_i=q_i(Never)>0, e<1. Change ONLY this actual
+independent law on a sufficiently small TWO-SIDED interval:
+
+    q_i^λ=(1−λ)q_i+λF_i.
+
+The likelihood factors are 1+λ(1/e−1) on the conditioning event and
+1−λ off it. They are positive near0. This is an old chronological
+conditional, not a new pure atom or a shared lottery. Section7 of
+the source transports it on the unchanged original finite calendars
+with uniformly bounded densities. Every modified complete pair is
+therefore in the original carrier, and its literal Never product
+is retained by the SAME realization, as in source Section18.1.
+
+The own cap B_i is unchanged because its opponents are unchanged.
+For every root-only k, the root response remains exactly unchanged:
+both q_i and F_i have zero mass throughτ. Its unique isolated cap
+has a strict compact complementary gap. Uniform product-TV response
+bounds consequently keep its ENTIRE cap at that root response on
+a small signed interval.
+
+For j∈J and EVERY response t>a, including Never, a draw from F_i
+terminates play strictly before the response. Thus there is one
+number C_j, independent of t, such that EXACTLY
+
+    V_j(t,q_-j^λ)=(1−λ)V_j(t,q_-j)+λC_j,  t>a.
+
+The compact lower test set througha excludes M_j and has a strict
+uniform gap below B_j. The TV bound preserves that gap locally.
+Since 1−λ>0, ordering and ties among ALL upper tests are preserved,
+including every nonisolated or multiple member of M_j. Hence the
+actual FULL cap is
+
+    B_j(λ)=(1−λ)B_j+λC_j.
+
+Every prescribed U_k(λ) is affine, since exactly one independent
+coordinate changes. Consequently the true complete D(λ) is affine
+on an open legal interval, has D(0)=δ, and has D(λ)≥δ there by the
+original all-law floor. It is identicallyδ on that interval.
+
+But F_i(Never)=0, and all other original Never masses are unchanged.
+The augmented realization for small λ>0 therefore gives
+
+    ν(λ)=(1−λ)ν_min < ν_min
+
+at a FULL minimum, contradicting the selection. Thus no such cut
+exists. If there were positive finite q_i mass strictly beforeα,
+continuity from below of the strict initial cuts would supply one,
+proving (SB.1). The old-cut compiler handles retained atom endpoints
+and zero-mixture cuts exactly as source Section7; a cut outside the
+response set specifies the corresponding old initial segment. No
+response date is inserted or deleted in this argument.
+
+**Scope and nearby source check.** The narrow source lookup was the
+source's Sections6–7 (actual chart and old conditional compiler),
+15–19 (whole root/later classification and least FULL literal Never),
+and its exact listed declarations `quittingTerminalSemanticCarrier`,
+`quittingTerminalSemanticPrefix` and
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+Those declarations establish the underlying actual carrier/prefix
+semantics, not this unreviewed selected-source lemma. A narrow search
+of the owned earlier EA/HP arguments and the current Noether/Morse
+sole-bridge discussions found the applicable early-submeasure affine
+upper-family identity, not (SB.1) as a completed consumer.
+
+### SB2. The actual remaining coupled-law obligation
+
+SB1 does NOT repeat the source's root-only finite-branch argument:
+it works when J is nonempty but stops atα precisely because the
+later-only family can acquire a genuine cap wall there. It also does
+not supply finite mass for i. The supplied full source permits i to
+be pure Never, and the c-active finite owner can instead belong to J.
+
+If i has finite mass, any finite/Never reweighting necessarily touches
+the clock region of at least one later-only cap. At a mass atα the
+opponent can quit SIMULTANEOUSLY rather than strictly later, so the
+constant C_j identity in SB1 is false for that test. Beyondα it can
+also fail on whole lower active sets. Replacing that family by one
+favorable selected late response is invalid. An isolated atom atα
+and a zero-mixture/nonisolated α are distinct cases; neither grants
+permission to insert an unpriced earlier empty date.
+
+The concrete next question is whether a simultaneous change of the
+sole bridger's actual late law and a later-only owner's actual law
+can cross this FIRST complete cap wall with D<δ, using the supplied
+suffix (whose tied-owner debt is d*_i/c and whose total excess is
+strictly positive). A separately chosen full minimum is not a tail
+substitute. Root-only rates, born empty finite deadlines and literal
+Never must remain in the same all-law calculation. SB1 is retained
+only as a restriction on that concrete consumer problem, not as a
+new export or an infinite sequence of source refinements.
