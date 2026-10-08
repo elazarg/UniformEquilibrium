@@ -73,6 +73,14 @@ I, without a source-like fixture or a positive-minimum impossibility claim.
 The next chronological move must act on genuinely later original finite
 laws/caps, rather than repeat early-root refinements.
 
+NC8 rules out another complete replacement class at this FRESH positive-own
+separated table: exact mixed Nash profiles of arbitrary full finite timing
+grids have full debt uniformly separated above δ. Near-minimum positive
+Never masses would make their entire caps the late empty-clock values,
+while every supported finite atom stays uniformly suboptimal, contrary
+to the marked minimum's active first atom. This does not transport an old
+profile to the single-pivot table or exclude coupled subsequent repairs.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -24446,3 +24454,101 @@ iteration supplies the realization used here. The quadratic all-owner
 margin remains the same previously inspected declaration. No new Lean
 theorem, independent export, or claim of unrestricted strategy-class
 coverage is attached to this mechanism falsifier.
+
+### NC8. A fresh exact finite-grid Nash cannot approach this full minimum
+
+PROVED ORDINARY SAME-TABLE CLASS SEPARATION; INTERNAL, NOT A CONSUMER.
+This is a bounded check of a possible WHOLE-law replacement: select a
+different exact mixed Nash of a complete finite timing grid, rather than
+hold three opponents fixed. Its failure here quantifies over EVERY horizon
+and EVERY Nash selection. It does not reject arbitrary approximate,
+source-dependent, or subsequently repaired laws.
+
+The table is the FRESH all-own-positive separated table selected by the
+canonical source, not the canonical single-pivot table. No unchanged law,
+payoff, cap, or minimum is transported between those tables by this result.
+
+Let N range over positive integers. Consider the finite strategic game
+whose independent actions are {0,…,N−1,Never}, with the ORIGINAL terminal
+table and zero AllNever reward. Let E be the class of all its actual
+behavioral realizations of exact mixed Nash equilibria, for all N. Each
+profile has the literal AllContinue suffix from N onward. Finite-game
+Nash existence makes E nonempty. The claim at our ONE canonical table is
+
+    inf_(p∈E) D(p)>δ.                            (NC.16)
+
+Suppose instead that p^k∈E has D(p^k)→δ, with horizons N_k arbitrary.
+The source's uniform near-minimum Never floor gives
+
+    n_i^k≥η>0,   ν_k≥η>0
+
+eventually, for every i. Hence each owner's Never action is in its mixed
+Nash support. Affinity of payoff and finite-menu Nash imply the exact
+indifference
+
+    U_i^k=R_i^k=V_i(Never,p^k_-i).
+
+Every permitted finite menu test t<N_k is at most U_i^k. Every finite
+test t≥N_k has exactly the same payoff, since all prescribed finite clocks
+are strictly earlier, namely
+
+    V_i(t,p^k_-i)=U_i^k+h_i^k s_i,
+    h_i^k=∏_(j≠i)n_j^k.
+
+Literal Never remains separate and pays U_i^k. Thus the ENTIRE full
+envelope, not just its upper bound, is
+
+    B_i^k=U_i^k+h_i^k s_i;
+    every supported finite-clock reply is ≤U_i^k<B_i^k.  (NC.17)
+
+The strict gap is at least ηs_i>0, uniformly in k. No date beyond the
+menu or moving finite tester is omitted. The raw clock c_k of the final
+empty finite test is an actual full cap attainer of EVERY owner and has
+zero prescribed mass.
+
+Apply the canonical source's original finite-law marked compiler to this
+minimizing sequence. Every retained positive finite mixture atom comes
+from a moving supported date. The corresponding pure-response payoff
+converges and, by (NC.17), is strictly below that owner's full cap for
+EVERY owner. Yet Part I proves that the earliest complete cap at EVERY
+produced marked full minimum is a positive prescribed mixture atom.
+These conclusions contradict each other. Therefore no such sequence
+exists. Since D≥δ on all actual profiles, an infimum equal to δ would
+produce such a sequence, proving (NC.16).
+
+This uses the genuine all-law minimum and its first-stage theorem; it is
+not a positive-debt regression table or an assertion that the exact Nash
+laws exist near the supplied source. Horizons need not be cofinal and
+the selection can change every player's entire law. The strict absorbing
+gap also prices any absorbing member of E, but is used here through the
+positive Never floor, not by incorrectly labeling every finite-grid Nash
+absorbing.
+
+Exact declarations checked narrowly:
+`QuittingFiniteDeadlineTimingAction`, `quittingFiniteDeadlineTimingGame`,
+`quittingFiniteDeadlineTimingProfile`, and
+`quittingFiniteDeadlineTimingLaw_none` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingGame.lean`;
+`IsQuittingFiniteDeadlineNash` and
+`isQuittingFiniteDeadlineNash_iff_pure` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineReplyCap.lean`;
+`QuittingFiniteDeadlineNashProfile` and
+`quittingRootSequencePureTimeTerminalValue_late_sub_none_eq` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFiniteDeadlineNashEscalation.lean`;
+`QuittingFiniteDeadlineNashProfile.bestResponseValue_le_max_late` in
+`UniformEquilibrium/Diagnostics/Quitting/FiniteDeadlineNashDebtBounds.lean`.
+The tracked finite Nash existence/debt producer in
+`FiniteDeadlineTimingNashDebt.lean` was inspected under these imports.
+
+Comparison: NC3 excludes exact finite Nash PREFIXES with cap-adapted
+virtual terminal rewards near the original full caps. NC8 instead concerns
+arbitrary fresh entire finite-grid Nash profiles with literal zero tail.
+The latter's own delivery and full cap are distinct, and all unrestricted
+regret lies beyond its menu when all Never masses are positive. Neither
+result supplies a UE producer. Actual source-dependent repairs, including
+changing every law after this outer selection, remain entirely open.
+
+Concrete next operation remains the legal LATER original-law/cap change.
+An exact finite Nash search cannot supply a zero-excess replacement by
+itself; its excess debt and its outside-grid finite caps must be consumed
+by the coupled repair, not dropped from the ledger.
