@@ -190,6 +190,11 @@ has exact true punishment floors, no sure roots anywhere above them,
 and hard R₀/StandardQ singleton data. This is not a positive-gap example.
 It rejects the whole threshold-slab viability premise, not the existing
 selected-return consumer or a suitably selected smaller viable subset.
+RM38 separately retires EXACT growing finite-menu Nash selection: a complete
+rational table has, for EVERY last menu date, ONE restricted-menu equilibrium
+and its unrestricted full debt is always7/8. This table is already solved by
+the tracked positive-inverse three-child producer. Approximate FULL-cap
+finite words and genuinely selected nonlocal returns are not refuted.
 
 The body retains the independently reviewed compact/source reductions,
 the PD deterministic-outcome contribution incorporated with attribution
@@ -21534,3 +21539,190 @@ A sufficiently chosen smaller viable set is not excluded. The whole
 quitting construction may need genuine above-own excursion and a nonlocal
 return, or extra global no-UE structure; it cannot keep EVERY feasible
 strict-below input in the threshold slab by this elementary argument.
+
+## RM38: every exact finite-menu equilibrium can retain a fixed late cap debt
+
+Status: complete ordinary exact countertest, not checked in Lean and not an
+export. The table below HAS a uniform-equilibrium payoff by an existing raw
+producer. It falsifies a proposed global SELECTION architecture, not UE.
+
+FM1: precise failed assertion. For a last date N≥0 let M_N={0,…,N,Never}.
+An M_N profile consists of independent stopping laws supported on M_N;
+an M_N Nash equilibrium permits each owner to replace its WHOLE stopping
+law by any other law on M_N. Payoffs are expected eventual coalition
+rewards, with Never0, NOT finite-horizon average payoffs. The proposed rule
+would select exact M_N Nash equilibria along N→∞ with their unrestricted
+original-game terminal debt tending0. In the example EVERY such equilibrium,
+for EVERY N, has full debt7/8. No good selection from this correspondence
+exists. Approximate M_N Nash or approximate FULL-cap selection is different
+and is not excluded by this result.
+
+FM2: complete60-coordinate reward table. Players0,1,2 are the core and3
+is the passive observer. Own singleton rewards are all1. The terminal
+reward columns are recipients0,1,2,3; live rewards and allNever reward0.
+
+| S | r(S) |
+| --- | --- |
+| 0 | (1,3,0,10) |
+| 1 | (0,1,3,10) |
+| 2 | (3,0,1,10) |
+| 3 | (−1,−1,−1,1) |
+| 01 | (−1,4,10,10) |
+| 02 | (4,10,−1,10) |
+| 03 | (0,10,10,1) |
+| 12 | (10,−1,4,10) |
+| 13 | (10,0,10,1) |
+| 23 | (10,10,0,1) |
+| 012 | (9,9,9,10) |
+| 013 | (9,11,−10,1) |
+| 023 | (11,−10,9,1) |
+| 123 | (−10,9,11,1) |
+| I | (−11,−11,−11,1) |
+
+Write π(0)=1,π(1)=2,π(2)=0. For EACH core receiver i and EVERY nonempty
+opponent coalition T, the literal table satisfies
+
+    r_i(T∪{i})−r_i(T)=1−2·1_{π(i)∈T}.          (FM.1)
+
+For owner3 EVERY participant reward is1 and EVERY passive reward is10.
+For arbitrary continuation w and rates q∈[0,1]⁴ put
+h_i=∏[j≠i](1−q_j), and let g_i=Quit_i−Continue_i in the full binary
+root game. Averaging ALL opponent coalitions, including the empty one,
+gives the exact equations
+
+    g_i(w,q)=1−2q_{π(i)}−h_iw_i   (i=0,1,2),
+    g₃(w,q)=−9+h₃(10−w₃).                     (FM.2)
+
+A root is Nash iff q_i=0⇒g_i≤0, q_i=1⇒g_i≥0, and0<q_i<1⇒g_i=0.
+These equations describe the WHOLE binary game, including every boundary.
+
+FM3: no sure coordinate at ANY actual tail. If q₀=1 then h₂=0 and
+g₂=−1 force q₂=0; then h₁=0 and g₁=1 force q₁=1; now h₀=0 and
+g₀=−1 contradict q₀=1. Rotate this proof to exclude EVERY core sure
+coordinate, for EVERY real annotation w, without a floor assumption.
+If q₃=1 all core h_i=0, so the odd anti-coordinate cycle has only
+q₀=q₁=q₂=1/2: a core zero forces its predecessor sure, which was just
+excluded, and all mixed indifferences fix the halves. Owner3 then has
+
+    g₃=−31/4−w₃/8<0 whenever w₃≥0.
+
+Every ACTUAL terminal continuation has w₃≥0, since all its rewards for3
+are1 or10 or allNever0. Thus a Nash root facing an arbitrary actual tail,
+whether or not that tail is Nash, has ALL q_i<1 and positive joint survival.
+For reference the actual unrestricted punishment values are
+
+    P=(−10,−10,−10,1).                         (FM.3)
+
+For each core owner Never guarantees≥−10, while the other three owners
+sure at date0 give only Continue−10 or Quit−11. For3 Quit at date0
+guarantees1, and all opponents Never give full cap1. These are actual
+independent punishments; no correlation is used. In particular the
+whole-annotation no-sure statement holds at every w≥P too.
+
+FM4: exact roots at the two relevant continuation regions. At w=0,
+the core part of(FM.2) has the unique root with all three rates1/2,
+independently of q₃. The preceding no-sure argument excludes core zeros;
+all three mixed ties then force the halves. Owner3's gap is−31/4, so
+
+    q*=(1/2,1/2,1/2,0),
+    W=F(0,q*)=(13/4,13/4,13/4,35/4).           (FM.4)
+
+For example a core Quit payoff is[1−1+4+9]/4=13/4, and the observer
+receives10 on the core's absorption event of probability7/8.
+
+At EVERY annotation w with ALL w_i>1, the ONLY full Nash root is q=0.
+Owner3's Continue payoff is a convex combination of10 and w₃, hence
+strictly exceeds its constant Quit payoff1, so q₃=0. Core sure rates
+are impossible by FM3. A singleton active core owner has g_i=1−w_i<0.
+For a two-owner core support choose the receiver whose π-owner is the
+other active owner. Its gap as a function x of that other rate is
+1−2x−w_i(1−x), a strictly negative convex combination of1−w_i and−1.
+Thus proper nonempty core supports are impossible. If all three core
+rates are mixed, their tie equations imply each q_i<1/2 and, multiplying,
+
+    ∏[i=0..2]w_i
+      =∏[i=0..2](1−2q_i)/(1−q_i)²<1.           (FM.5)
+
+Each positive factor is strictly below1 because
+(1−q_i)²−(1−2q_i)=q_i²>0. But ALL w_i>1 imply the left side>1.
+This excludes the last nonempty support. Finally q=0 is Nash since
+every gap is1−w_i<0. The uniqueness conclusion holds on the ENTIRE
+strict upper orthant, not just at the particular head W.
+
+FM5: ALL finite menus and their ENTIRE Nash correspondence. Let p be
+any exact M_N Nash equilibrium. At each reached all-Continue history
+its current rates are a binary Nash root against the actual future
+payoff w: a player can change just its current action and resume its
+old conditional law. FM3 therefore makes ALL current rates<1. Inducting
+from date0, EVERY menu date is reached with positive probability.
+At each such history the conditional remaining-menu profile is itself
+Nash. Indeed a profitable whole-law tail replacement can be spliced at
+that public history, and its gain is multiplied by the positive reach
+probability. Private randomization does not obstruct the splice; the
+unique live history leaves independent conditional stopping laws.
+
+At date N the continuation is0, so FM4 forces q*. Its preceding tail
+payoff is W, hence date N−1 must have q=0 by the upper-orthant theorem.
+Repeating backwards, EVERY earlier date has q=0 and continuation W.
+Conversely this last-date-only profile is M_N Nash: the core's Never
+and dateN rewards both equal13/4, any earlier singleton test gives1;
+the observer's Never reward35/4 exceeds its dateN/earlier Quit reward1.
+These are all M_N pure tests, and mixtures add none. Thus for EVERY N
+the FULL restricted-menu equilibrium correspondence has exactly this
+profile, with jointNever1/8. No growing-menu or alternate-root selection
+can change it.
+
+FM6: exact unrestricted caps. In this profile the complete finite/Never
+response values, not merely the allowed-menu values, are
+
+| owner | prescribed U | dateN Quit | Never | any date>N Quit | full B | debt |
+| --- | --- | --- | --- | --- | --- | --- |
+| each of0,1,2 | 13/4 | 13/4 | 13/4 | 7/2 | 7/2 | 1/4 |
+| 3 | 35/4 | 1 | 35/4 | 71/8 | 71/8 | 1/8 |
+
+Any date<N Quit, when such a date exists, has reward1. A late core
+response receives the passive13/4, plus its own singleton1 on the two
+core opponents' jointNever event of probability1/4. Owner3 analogously
+adds1/8. Since nothing happens after N, this lists EVERY finite deadline
+and Never. Randomized deadlines and arbitrary behavioral deviations
+average these pure test values. Therefore
+
+    D_full(p)=3·(1/4)+1/8=7/8   for EVERY N.    (FM.6)
+
+The finite-menu equilibria are not approximate full terminal equilibria
+at any error below1/4. The distinction persists as N→∞; simply moving
+the last occupied date later does not change terminal debt.
+
+FM7: existing UE overlap and the exact mechanism change. The actual
+singleton-difference matrix, with receiver first, is
+
+    Γ=[0,−1,2,−2;
+       2,0,−1,−2;
+       −1,2,0,−2;
+       9,9,9,0].                              (FM.7)
+
+For the selected three-core child012,
+
+    A=[0,−1,2;2,0,−1;−1,2,0],  det A=7,
+    A⁻¹=(1/7)[2,4,1;1,2,4;4,1,2]>0,
+    Γ_{3,012}A⁻¹=(9,9,9)>0.                  (FM.8)
+
+I reread the complete declaration
+`exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+under its imports in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+Its actual original-game UE conclusion needs just this selected child
+cardinality, nonzero determinant, nonnegative inverse and the literal
+outside inverse weights, all verified in(FM.8). Thus THIS table is
+already covered by a tracked positive producer, irrespective of the
+remaining participant premiums. This is not a conjectural paper lift.
+An independent exact rational calculation checked ALL21 joining
+differences, the observer rows, every cap in FM6 and the inverse weights.
+No Lean implementation or new UE-class claim is made here.
+
+The retired architecture is specifically EXACT finite-menu terminal
+Nash selection, even with growing menus and free root selection. The
+table does not refute approximate full-cap finite-word selection,
+charged periodic/nonlocal circuits, or their possible all-table source.
+The next attempt must change the selection mechanism rather than add
+extra late tests to this already complete restricted correspondence.
