@@ -45,6 +45,16 @@ over every exact finite-menu Nash selection cannot supply the full-game
 producer here. This is ordinary unreviewed mechanism triage, not a
 positive all-behavior gap, export, or new counterexample-source reduction.
 
+Latest reference-law test: DR1–DR4 below rejects two automatic repairs
+of the unsupported-clock seam. At the critical density ceiling4, the
+endogenous reference equilibrium condition admits a completely frozen
+all-grand profile on EVERY table; on the saved RZ positive-own table
+its full debt is exactly4. Adding a positive reference floor and enough
+strict density slack instead makes the ENTIRE correspondence equal
+to exact finite-menu Nash, so FX's all-selector debt floor applies.
+This is a failed nonlocal forcing mechanism, not a new coverage claim.
+A genuinely cap-aware nonslack selector is not refuted, but not produced.
+
 Current completed class result: CL1–10 and SC1–6 have each passed two
 independent mathematical checks. The negative DN trial is retired by a
 closed singular full-Nash circuit with three convergent ladders and two
@@ -10967,6 +10977,135 @@ finite-menu Nash along the construction? Any proposed selection must
 permit the RT6 rotating witness and FX5 finite approximations. No such
 arbitrary-table producer has been proved here. This result is mechanism
 triage, not a new positive-gap table or a conjecture-facing source reduction.
+
+## Endogenous reference-law selection is either vacuous or falls back into exact finite Nash
+
+Status: COMPLETE ORDINARY UNREVIEWED operation falsifier. This is not
+new UE coverage, a full-game positive-gap example, or another supplied
+interface proposed for export. The actual nonlocal trial below fails
+before it can force small unrestricted debt. Critical nonslack selections
+using additional full-cap data remain open.
+
+### DR1. The actual proposed finite-law producer
+
+Fix any finite timing menu A containing date0 and literal Never. An
+actual profile consists of four independent probability laws μ_i on A.
+Their displayed pure-response payoff is F_i(a;μ_−i), and
+
+    U_i=Σ[a∈A]μ_i(a)F_i(a;μ_−i).
+
+These are actual terminal payoffs with AllNever reward0, not finite
+averages. A hypothetical reference-law mechanism adds the nonlocal law
+
+    Λ=(1/4)Σ[i]μ_i,
+
+and requires μ_i to maximize displayed payoff over the density-capped
+simplex
+
+    K_i(Λ)={ν∈Δ(A): ν(a)≤4Λ(a) for every a∈A}.       (DR.1)
+
+Each original μ_i is feasible, since μ_i≤Σ_jμ_j=4Λ. The reference uses
+the WHOLE prescribed law, not a rowwise temperature or an assumed cap.
+One might attempt to prove existence through a separate reference
+coordinate, then infer that the reference closes unrestricted replies.
+The following exact tests retire that automatic inference.
+
+### DR2. At the critical ceiling, existence can be completely vacuous
+
+For EVERY game choose μ_i=δ_0 for all four players. Then Λ=δ_0, and
+K_i(Λ) contains ONLY δ_0: its upper bound is zero at every other action.
+Every owner therefore maximizes over its reference-feasible set,
+regardless of the sixty reward coordinates. The same reference choice
+also minimizes its distance to the average laws if such an optimizing
+reference coordinate is used. Thus existence of this endogenous
+equilibrium says nothing strategic by itself.
+
+On the actual positive-own table r=z+1 from RT1/FX, all four quitting
+at date0 pays r_i(I)=0. If owner i Continues instead, the other three
+quit at date0 and its passive triple reward is1. Every finite deadline
+later than0 and literal Never gives1, while date0 gives0. Hence this
+reference equilibrium has the EXACT unrestricted account
+
+    U_i=0,       B_i=1,       d_i=1,       D=4.      (DR.2)
+
+The omitted profitable response exists even when it is already a
+displayed menu action: the reference simply assigns it zero capacity.
+This fixed bad branch exists at EVERY calendar length, on a game
+with the separate explicit rotating exact equilibrium in RT6. It
+disproves automatic small full regret from reference-equilibrium
+existence, not every critical-ceiling cap-aware selector.
+
+There is a valid but insufficient contact observation. If a critical
+reference equilibrium has F_i(a)>U_i at a displayed date, optimality
+forces μ_i(a)=4Λ(a). Indeed some owned action b has F_i(b)<F_i(a),
+and otherwise one could transfer a small amount from b to a. Since
+4Λ=Σ_jμ_j, equality implies μ_j(a)=0 for every j≠i. Consequently a
+paid reply cannot occur at a date carrying another owner's prescribed
+mass. The example shows why this does not close the problem: all paid
+replies can live completely outside the reference support. It is not
+a minimum-selection or a full-cap consumer.
+
+### DR3. Strict-slack, full-support repair collapses the ENTIRE correspondence
+
+Here is an all-selector result, not just another bad branch. Fix a
+full-support probability law u on A, 0<α<1 and R>0 with
+
+    R(1−α)>4.
+
+Replace the reference and feasible set by
+
+    Λ=(1−α)(1/4)Σ_jμ_j+αu,
+    K_i^R(Λ)={ν∈Δ(A): ν(a)≤RΛ(a) for all a}.       (DR.3)
+
+For EVERY μ and EVERY i,a,
+
+    RΛ(a)≥[R(1−α)/4]μ_i(a)+Rαu(a)>μ_i(a).        (DR.4)
+
+Thus every original law is feasible and has strict upper-bound slack
+at every menu action, including actions outside its current support.
+If μ is reference Nash and F_i(a)>U_i, there is b with μ_i(b)>0 and
+F_i(b)<F_i(a). By(DR.4), moving sufficiently small positive mass from
+b to a stays feasible and strictly improves displayed payoff. This
+contradiction proves F_i(a)≤U_i for every menu action and owner.
+Therefore μ is an ORDINARY exact Nash profile of the full timing menu.
+
+Conversely, an ordinary exact timing-menu Nash law is feasible by
+(DR.4) and maximizes over every subset of its full simplex, including
+K_i^R(Λ). Hence the two correspondences are EXACTLY EQUAL. There are
+no extra reference-law selectors hidden by this reduction.
+
+Apply this identity to the SAME solved positive-own RZ table, with
+A={0,…,N,Never}. FX classifies every member of that correspondence:
+
+    Pr(AllNever)=1/4,       D=a+1/(2a)≥√2,
+    1/2≤a≤1,               for EVERY N and EVERY selector.    (DR.5)
+
+Thus the strict-slack full-support nonlocal repair cannot produce
+vanishing unrestricted debt, even if one globally minimizes the true
+full debt over its entire equilibrium correspondence. This is source
+reuse of FX, not a new contraction of the surviving conjecture class.
+
+### DR4. What changed and what is still unproved
+
+The critical self-average density condition has an explicit universally
+frozen branch. The strict-slack/full-support repair reintroduces the
+exact finite-menu intermediary already retired by FX/BP/BU. Therefore
+this proposed automatic nonlocal forcing principle is RETIRED. There
+is no reason to formalize an existence theorem for its reference
+coordinate as an all-game producer of good profiles.
+
+Neither calculation excludes a genuinely nonslack reference selector
+using full response data, approximate finite laws, or charge-relative
+whole-word construction. Those would need a new forcing argument;
+changing the reference language does not supply one.
+
+The finite timing payoff and pure-response semantics remain the
+declarations inspected in FX6 in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingGame.lean`
+and `FiniteDeadlineReplyCap.lean`. No new source theorem, Lean build,
+or export is claimed. The original source-control target remains an
+ACTUAL approximate word whose unrestricted cutoff error is paid by
+its own survival, not an exact Nash word at a fixed continuation band.
 
 ## Actual cap-domain control does not automatically select a charged path
 

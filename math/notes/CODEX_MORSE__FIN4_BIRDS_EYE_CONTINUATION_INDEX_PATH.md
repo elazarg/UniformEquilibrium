@@ -69,6 +69,17 @@ not new frontier contraction. Exact finite-menu Nash therefore cannot
 be the required intermediary even though arbitrary finite approximate
 profiles and the rotating exact infinite profile solve this game.
 
+The DR nonlocal reference-law trial is now retired in its automatic
+form. At critical density ceiling4 the all-grand point is an endogenous
+reference equilibrium for every table, because every other action has
+zero reference capacity; its actual full debt on the RZ positive-own
+fixture is4. A full-support reference floor with strict density slack
+makes the ENTIRE reference correspondence exactly ordinary finite-menu
+Nash, so FX's ≥√2 debt floor applies to every selector. This is a
+mechanism failure using existing same-fixture evidence, not a new
+counterexample restriction. A cap-aware nonslack or genuinely approximate
+whole-word producer remains unproduced.
+
 ## 1. The decisive picture
 
 My strongest current intuition is:

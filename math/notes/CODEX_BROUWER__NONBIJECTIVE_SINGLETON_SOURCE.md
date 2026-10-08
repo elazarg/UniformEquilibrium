@@ -83,7 +83,7 @@ exclusion. The next mechanism must retain profile-adapted response
 selection or produce a below-floor word with every new cap priced.
 All older unique proofs, tests and objections are retained below.
 
-The latest positive attempt is MP. A COMPLETE ORDINARY, UNREVIEWED
+The latest positive attempt is MP. A COMPLETE ORDINARY, INDEPENDENTLY REVIEWED
 two-pair producer supplies exact absorbing terminal Nash profiles on
 a full-dimensional open region around an explicit nonbijective
 two-cycle-plus-leaves table, with arbitrary signed own levels obtained
@@ -91,10 +91,15 @@ by literal row translation. It includes positive-own tables, where
 AllNever is not Nash. Its actual four-hazard Jacobian is invertible,
 and every passive finite/Never cap is proved. The original full-goal
 source is NOT assumed to belong to this region. Targeted raw-source
-and quotient screens are recorded in MP6; no global coverage or export
-is asserted. The next question is whether mixed scheduled-premium
-signs can be consumed beyond this open region without losing those
-passive caps.
+and quotient screens are recorded in MP6. The two independent reviews
+PASS its mathematics but FAIL export significance: the implemented
+no-UE normalization plus empty-premium-core producer already covers
+the entire sufficiently small MP region, including signed own levels.
+The exact-profile proof is retained; the original MP region is NOT
+being exported as new existence coverage. The separately stated FE
+extension below allows arbitrary unused coordinates, including a
+four-player positive-premium trap. FE's complete-set source preflight
+is separate from its exact profile proof; no full-goal closure follows.
 
 
 ## Original singleton-matrix question
@@ -13120,3 +13125,748 @@ insufficient. The next producer question is whether the mixed signs
 c=(-1/2,-1/2,1/2,1/2) permit a larger actual-data two-pair selection
 theorem, including passive caps, beyond the local neighborhood(MP.1).
 The full Fin4 conjecture remains OPEN.
+
+## FE: exact free-coordinate extension and complete-carrier preflight
+
+### FE1. Review disposition and the raw completion family
+
+The preceding MP1–MP6 text is retained as the independently checked
+version. The reviews
+[Morse](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__MP__BY_CODEX_MORSE.md)
+and [Noether](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__MP__BY_CODEX_NOETHER.md)
+both PASS the exact algebra, four-variable Jacobian, all behavioral
+deviations, signed translation and uniform quantifiers. They FAIL
+significance of the original local UE class: under radius less than
+1/2 every participant nonsingleton premium is negative. The implemented
+empty-core existence theorem, composed with the bare-noUE single-pivot
+normalization, already excludes every SIGNED empty-core counterexample.
+This objection is accepted. No original MP export is requested.
+
+The following extension is COMPLETE ORDINARY, UNREVIEWED. It concerns
+the same actual four-player quitting game: privately independent draws,
+public all-Continue live history, first nonempty coalition absorbing,
+zero live and Never rewards, and complete behavioral deviations. It is
+a producer from raw rewards, not a supplied-rate verifier.
+
+Let s∈ℝ⁴ be arbitrary. Retain the MP singleton comparison matrix Γ.
+Prescribe the sixteen singleton coordinates by
+
+    r_i({j})=s_i+Γ_ij,                         including Γ_ii=0,
+
+and the two COMPLETE scheduled rows by
+
+    r(03)=s+(−3/2,0,0,−1/2),
+    r(12)=s+(0,−3/2,−1/2,0).                         (FE.1)
+
+Impose the following twelve raw upper bounds, independently:
+
+| owner i | S | upper bound for r_i(S)−s_i |
+|---|---|---:|
+| 0 | 01,02,012 | −1,−3/2,−1 respectively |
+| 1 | 01,13,013 | −1,−3/2,−1 respectively |
+| 2 | 02,23,023 | −1/2,−1,−1 respectively |
+| 3 | 13,23,123 | −1/2,−1,−1 respectively |
+
+Every other coordinate is an ARBITRARY finite real number. These are
+exactly twenty-four free coordinates: eight outsider coordinates on the
+four nonscheduled pairs, twelve unused triple coordinates, and all four
+grand coordinates. The twenty-four fixed coordinates are the sixteen
+singletons and eight entries of the two scheduled pair rows. Together
+with the twelve bounded coordinates they account for all sixty entries.
+
+THEOREM. Every raw table in this family has the literal proper MP2
+profile as an exact terminal Nash profile. Its fixed target is v+s,
+with v in(MP.4). The same profile witnesses the uniform contract at
+every accuracy, by increasing only the horizon threshold.
+
+Proof. The on-policy absorption coalitions are singletons,03 and12.
+They and all active endpoints remain exactly as in MP. A passive owner's
+forced Quit uses its own singleton, its two listed cross-pair coordinates,
+and its one listed triple coordinate. Reducing any of the last three
+can only reduce this endpoint. Thus all four passive caps retain the
+strict MP margins. The four policy equalities and every action inequality
+are unchanged or improved. Deleted-opponent survival remains bounded
+by169/384, independently of the free coordinates and of the deviation.
+The iteration in MP3 therefore bounds every complete behavioral
+replacement, including Never, with target v+s. With
+M=max_(i,S)|r_i(S)| the same finite bound C=768/215 gives delivery error
+MC/H and regret2MC/H. Rates and target precede the accuracy. ∎
+
+The term UNUSED refers to each recipient's OWN payoff and own cap,
+not to a full replacement payoff vector. For example S012 can occur
+when owner0 deviates, but r_1(012) never enters owner1's own payoff
+or deviation cap for this profile. The grand coalition really is
+unreachable under every unilateral replacement: at most two unchanged
+owners are scheduled, and one deviator can add at most one quitter.
+No statement about simultaneous deviations is needed or claimed.
+
+The independently verified four-variable IFT also gives an open version
+of this family: allow a sufficiently small centered perturbation of the
+thirty-six used coordinates, and leave the other twenty-four coordinates
+unrestricted. The field and passive caps depend ONLY on the used cells.
+Apply IFT on that finite coordinate projection and shrink by the same
+four strict margins. Thus one common used-coordinate radius works for
+every choice of the twenty-four free cells. Each table produces its
+own rates and target before accuracy; the radius is not numerical.
+This is not an inference that general UE existence is open.
+
+### FE2. Full positive-own premium-core witness; an exact stationary caveat
+
+Take s=(1,1,1,1), retain every MP centered coordinate except
+
+    z_i(I)=1 for all i,       z_0(123)=2.               (FE.2)
+
+Here z=r−s denotes only centered arithmetic. The complete ORIGINAL
+table is:
+
+| S | r₀(S) | r₁(S) | r₂(S) | r₃(S) |
+|---|---:|---:|---:|---:|
+| 0 | 1 | 2 | 5/2 | 0 |
+| 1 | 2 | 1 | 0 | 5/2 |
+| 2 | −1 | 0 | 1 | 1/2 |
+| 3 | 0 | −1 | 1/2 | 1 |
+| 01 | 0 | 0 | 1 | 1 |
+| 02 | −1/2 | 1 | 1/2 | 1 |
+| 03 | −1/2 | 1 | 1 | 1/2 |
+| 12 | 1 | −1/2 | 1/2 | 1 |
+| 13 | 1 | −1/2 | 1 | 1/2 |
+| 23 | 1 | 1 | 0 | 0 |
+| 012 | 0 | 0 | 0 | 1 |
+| 013 | 0 | 0 | 1 | 0 |
+| 023 | 0 | 1 | 0 | 0 |
+| 123 | 3 | 0 | 0 | 0 |
+| I | 2 | 2 | 2 | 2 |
+
+All own values are1. Every proper nonsingleton participant premium is
+negative, whereas every grand participant premium is1. Consequently
+the ENTIRE trap family is{I}, and the premium core is all four players.
+AllNever is not Nash. The grand pure profile is not Nash: owner0
+withdraws for3 rather than2. No protected player has all participant
+premiums nonnegative. The empty-core normalization composition does
+not apply; positive scaling preserves the grand premium witnesses.
+
+There IS an exact stationary absorbing Nash profile:
+
+    q=(0,0,1/2,1/2),       terminal target=(0,0,1/2,1/2).
+
+For owners2/3, both stationary action endpoints equal1/2. Owners0/1
+have Continue and Quit endpoints both0; the simultaneous23 event in
+their Quit uses the retained negative participant triple. Opponents
+absorb geometrically for every owner, proving full behavioral Nash.
+This exact selected profile is recorded rather than suppressed.
+It does NOT make the entire FE completion family stationary-solvable:
+raising the FREE cells r_0(023) or r_1(123) destroys its quiet caps.
+Thus neither stationary nonexistence nor disjointness from every
+abstract supplied-stationary certificate is asserted. The question is
+whether an EXISTING actual-data producer covers the raw FE family.
+
+The earlier proposed variant which raises the eight unused participant
+triple cells to centered2 and the four outsider triple cells to centered3
+also has sure-owner stationary Nash points. It is not being used as a
+coverage witness or as evidence of failure of stationary equilibria.
+Repeated fixture surgery is retired; the further global criterion GF
+below varies the actual singleton and phase coefficients instead.
+
+### FE3. Complete trap, quiet-carrier and persistent-base tests at FE2
+
+The following exclusions concern COMPLETE selection sets of the named
+producers, not just a chosen root or weight. They are ordinary mathematics.
+They do not claim an exhaustive census of every theorem consequence.
+
+Trap producers: the sole trap I fails every nonzero nonnegative
+support-upper average, because at S=I that average is the sum of its
+weights, strictly positive. For every strictly positive trap weight,
+the weighted leave test at T=023 equals λ_1>0. Hence the weighted
+floor-and-leave producer fails. Unweighted larger-trap leave charges
+fail at that same T: L_I(023)=1. Thus boxed Nash charges, mixed-premium
+traps and mixed-upper-or-charge have no admissible certificate for this
+trap. The signed pair-core and the triple-core producers fail the
+computed core cardinality; protected common/support-specific leavers
+fail their nonempty protected-set premise.
+
+Universal quiet extensions: let h map a singleton host to its UNIQUE
+positive joining responder:
+
+    h(0)=3, h(3)=1, h(1)=2, h(2)=0.
+
+Every positive joining gap is exactly1/2; every other cross-player
+joining gap at a singleton is negative. This h is one four-cycle.
+For EVERY nonempty proper child S⊊I choose j∈S with h(j)∉S,
+which exists because a nonempty h-invariant set would be all of I.
+The child profile where j quits at date0 and every other child owner
+Never quits is exact child terminal Nash: j receives own1 rather than
+Never0, and each other child owner weakly prefers staying out because
+its joining gap at j is negative. Child debt is0 in every coordinate
+and joint Never is0. In the quiet parent lift outsider h(j) gains1/2
+by quitting at date0. Therefore NO universal debt bound
+
+    d_k(quiet(p))≤Σ_i c_ki d_i(p)+ρ_k·jointNever(p)
+
+can hold on that child for this outsider, for ANY finite nonnegative
+coefficients. This excludes ALL proper-child choices for the capped-clock
+certificate families and all five withdrawal F/J certificate kinds.
+The actual declarations inspected are
+`quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt_add_slack`
+in `UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockChildDeletionAdapter.lean`
+and `withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess`
+in `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`.
+Their bounds apply to EVERY child profile, so one exact child witness
+per carrier is sufficient. A safe SELECTED child profile may still
+exist, as FE2 explicitly demonstrates; no quiet strategy-class exclusion
+is being inferred from this universal-certificate exclusion.
+
+Persistent bases: every singleton-base acceptance is excluded on its
+ENTIRE induced free Nash carrier. Use centered gaps, which equal the
+original nonempty-event gaps, and remember the original own level1.
+For base owner0, put u=q_1,x=q_2,y=q_3. The other owners' exact gaps are
+
+    g_1=−2+x+y+xy,       g_2=−2+u+y+uy,
+    g_3=1/2−3(u+x)/2+7ux/2.                         (FE.3)
+
+Every Nash point of this three-player free game is exactly one of:
+
+    (u,x,y)=(0,0,1),  (1,1,1),
+    (t,t,(2−t)/(1+t)),   t=(3+√2)/7.                (FE.4)
+
+Here is the exhaustive boundary argument. If u=0 or x=0, the other
+bad gap forces both zero, then g_3 forces y=1. If u=1 with x<1,
+interior x would force y=1/2 but make g_1<0; x=0 was excluded.
+Thus u=1 forces x=1, and conversely, then y=1. If both bad hazards
+are proper, their equalities force u=x=t and y=(2−t)/(1+t).
+y=0 is impossible, and y=1 would give t=1/2 with g_3=−1/8<0.
+Thus y is proper and 7t²−6t+1=0. The smaller root gives y>1;
+the larger root gives the one point in(FE.4). This includes all sure,
+zero and tied free hazards.
+
+At the two pure points owner0 has withdrawal gain respectively1/2
+and1, so it fails its base screen. At the mixed point, t<2/3 gives
+y>4/5. The original punishment floor p_0 is at least the minimum
+original reward−1. Hence its empty-opponent Quit-minus-floor-Continue
+gap is1−p_0≤2. Every nonempty opponent coalition containing3 has
+owner0 joining gap at most−1/2. All remaining events have gap at
+most2. Its full floor-priced endpoint difference is consequently
+
+    g_0^floor≤2(1−y)−y/2=2−5y/2<0.                 (FE.5)
+
+It also fails. This uses a LOWER bound on the actual punishment floor,
+not an assumed normality or an invented tail value.
+
+For base owner1, the free owner0 has gap at most−1, hence q_0=0;
+owner3 then has gap at most−1, hence q_3=0; owner2 then quits surely.
+Base owner1 withdraws from12 with gain1/2. For base owner3, free owner0
+has gap at most−1/2, forcing q_0=0; free owner2 then has negative gap,
+forcing q_2=0; owner1 quits surely. Base owner3 withdraws from13 with
+gain2. These statements cover all free-player boundary choices.
+
+For base owner2, put w=q_0,u=q_1,x=q_3. The free gaps are
+
+    g_0=3(1−u)(1−x)/2−1,
+    g_1=−1/2−w/2−x/2+5wx/2,
+    g_3=−1/2−w/2−u/2+5wu/2.                       (FE.6)
+
+w=0 would force u=x=0 and then g_0>0, so w>0. If u=0 or x=0,
+both vanish and w=1. If u=1 or x=1, g_0<0 forces w=0, a contradiction.
+With both u,x proper their equations give
+(u−x)(−1/2+5w/2)=0. The exceptional w=1/5 makes both gaps−3/5,
+so u=x. If w is proper, g_0=0 forces x=1−√(2/3)<1/2, whereas
+g_1 is strictly negative for every0≤w≤1 at that x. If w=1,
+g_1=0 forces x=1/2, but g_0=−5/8<0. Thus the ONLY free Nash
+point has w=1,u=x=0. Base owner2 withdraws from02 with gain2.
+
+For a restricted free set and extra fixed Continue outsiders, an
+accepted point would be a Nash point for every nonbase owner, since
+the outsider join screen supplies exactly their missing inequalities.
+Thus the complete four singleton classifications above still apply;
+they did not assume every nonbase owner has a positive hazard.
+For a base of size at least two, acceptance gives a FULL one-stage
+Nash point with at least two sure hazards. Choose any sure owner as
+singleton base: opponent survival is then0 and its floor screen is
+exactly its one-stage Continue screen. It would contradict the preceding
+classification. Hence all large-base selection sets fail as well.
+The exact producer declarations inspected are
+`exists_uniformPayoff_or_singletonBase_pos_gap` and
+`exists_uniformPayoff_or_persistentLargeBase_pos_gap`
+in `UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`.
+This does not contradict FE2's stationary profile, which has NO sure
+owner and whose safe quiet child is not universally certified.
+
+The singleton-matrix screens from MP6 still apply: one favorable entry
+per row, a nonbijective two-cycle-plus-leaves graph, mixed inverse columns,
+R0 degree1, and a negative scheduled mate gap in every partition. Thus
+all matching-favorite, signed-four-cycle and three-cycle-child raw families
+fail under every relabeling and positive row affine transformation.
+Every three-player principal inverse also has a negative entry. The
+four actual triple inverses, in increasing player order, are
+
+    012: [[−2,4,−2],[−3,6,−4],[−2,3,−2]],
+    013: [[6,−3,−4],[4,−2,−2],[3,−2,−2]],
+    023: [[1,−2,−4],[−2,4,6],[3,−8,−12]],
+    123: [[1,−4,−2],[3,−12,−8],[−2,6,4]].
+
+The scalar singular-circuit criterion requires positive participant
+PAIR premiums, impossible here for every relabeling. The triple–singleton
+collision-box criterion requires six positive within-triple joining gaps;
+each actual triple contains a pair with a negative joining gap, excluding
+all triple choices. Fixed-fixture IFT neighborhoods are NOT claimed
+exhaustively disjoint merely because their centers have different signs;
+their complete existential coverage remains a separate review question.
+
+For response quotients, the MP row-sum argument leaves only the potential
+nontrivial partition{{0,1},{2,3}}. Any positive affine row scales compatible
+with it must be equal within0/1 (their negative total row sums force this)
+and within2/3 (their equal nonzero row sums into{0,1} force this).
+At all hazards1 the actual gaps for0 and1 are respectively−1 and+1.
+They cannot agree under equal positive scales, so the modification
+z_0(123)=2 destroys that candidate response invariance. The discrete
+partition still has degree1 and mixed inverse columns. No strategic
+smaller-player quotient is inferred from a singleton block sum.
+
+The FE family is therefore not dismissed by the original empty-core
+overlap, and FE2 supplies complete carrier/root/weight tests for the
+named major existential sources. This is still NOT a complete census
+of all current existence consequences. In particular, the unspecified
+reach of older fixed-fixture neighborhoods must not be replaced by a
+claim of their maximal domain. FE is internal until its own complete
+coverage review. It is not a class containing the arbitrary noUE source.
+
+### FE4. Runnable exact table/carrier/gap verifier
+
+Run the following standard-library verifier with Python3. It checks the
+coordinate inventory, full trap family, every proper child's exact pure
+Nash witness and positive outside response, the actual free-game gap
+polynomials used in the COMPLETE base proof, and the displayed stationary
+point. The boundary classification and punishment inequality in FE3 are
+proved in prose, not replaced by numerical root search.
+
+```python
+from fractions import Fraction as F
+from itertools import product
+
+z = {
+  1:(0,1,F(3,2),-1), 2:(1,0,-1,F(3,2)),
+  4:(-2,-1,0,F(-1,2)), 8:(-1,-2,F(-1,2),0),
+  3:(-1,-1,0,0), 5:(F(-3,2),0,F(-1,2),0),
+  9:(F(-3,2),0,0,F(-1,2)), 6:(0,F(-3,2),F(-1,2),0),
+  10:(0,F(-3,2),0,F(-1,2)), 12:(0,0,-1,-1),
+  7:(-1,-1,-1,0), 11:(-1,-1,0,-1),
+  13:(-1,0,-1,-1), 14:(2,-1,-1,-1), 15:(1,1,1,1)
+}
+z = {S:tuple(map(F,row)) for S,row in z.items()}
+r = {S:tuple(v+1 for v in row) for S,row in z.items()}
+used = set()
+for i in range(4):
+    mate = 3-i
+    opposite = [j for j in range(4) if j not in (i,mate)]
+    for j in range(4): used.add((i,1<<j))
+    used.add((i,(1<<i)|(1<<mate)))
+    used.add((i,sum(1<<j for j in opposite)))
+    for T in (1<<opposite[0],1<<opposite[1],
+              sum(1<<j for j in opposite)):
+        used.add((i,T|(1<<i)))
+allcells = {(i,S) for i in range(4) for S in range(1,16)}
+assert len(used)==36 and len(allcells-used)==24
+assert all((i,15) not in used for i in range(4))
+assert (0,14) not in used
+
+def trap(A):
+    return all(any(S & (1<<i) and S & ~A == 0 and z[S][i]>0
+                   for S in range(1,16))
+               for i in range(4) if A & (1<<i))
+assert [A for A in range(1,16) if trap(A)] == [15]
+h = (3,2,0,1)
+for child in range(1,15):
+    host = next(j for j in range(4)
+                if child & (1<<j) and not child & (1<<h[j]))
+    for i in range(4):
+        if i!=host and child & (1<<i):
+            assert r[(1<<host)|(1<<i)][i] < r[1<<host][i]
+    k=h[host]
+    assert r[(1<<host)|(1<<k)][k]-r[1<<host][k]==F(1,2)
+    assert r[1<<host][host]==1
+
+# Exact sparse polynomials in the three nonbase hazard variables.
+zero=(0,0,0)
+def const(c): return {zero:F(c)} if c else {}
+def add(p,q):
+    out=p.copy()
+    for e,c in q.items():out[e]=out.get(e,F(0))+c
+    return {e:c for e,c in out.items() if c}
+def scale(c,p): return {e:F(c)*v for e,v in p.items() if c*v}
+def mul(p,q):
+    out={}
+    for e,c in p.items():
+        for f,d in q.items():
+            g=tuple(e[j]+f[j] for j in range(3))
+            out[g]=out.get(g,F(0))+c*d
+    return {e:c for e,c in out.items() if c}
+variables=[{tuple(int(j==k) for j in range(3)):F(1)} for k in range(3)]
+one=const(1)
+def gap(base,owner):
+    others=[j for j in range(4) if j!=base]
+    answer={}
+    opponents=[j for j in others if j!=owner]
+    for bits in product((0,1),repeat=len(opponents)):
+        S=1<<base;weight=one
+        for j,b in zip(opponents,bits):
+            p=variables[others.index(j)]
+            weight=mul(weight,p if b else add(one,scale(-1,p)))
+            if b:S|=1<<j
+        answer=add(answer,scale(z[S|(1<<owner)][owner]-z[S][owner],weight))
+    return answer
+u,x,y=variables
+assert gap(0,1)==add(const(-2),add(x,add(y,mul(x,y))))
+assert gap(0,2)==add(const(-2),add(u,add(y,mul(u,y))))
+assert gap(0,3)==add(const(F(1,2)),add(scale(F(-3,2),add(u,x)),scale(F(7,2),mul(u,x))))
+w,u,x=variables
+assert gap(2,0)==add(scale(F(3,2),mul(add(one,scale(-1,u)),add(one,scale(-1,x)))),const(-1))
+assert gap(2,1)==add(const(F(-1,2)),add(scale(F(-1,2),add(w,x)),scale(F(5,2),mul(w,x))))
+assert gap(2,3)==add(const(F(-1,2)),add(scale(F(-1,2),add(w,u)),scale(F(5,2),mul(w,u))))
+
+q=(F(0),F(0),F(1,2),F(1,2))
+def mass(T,omitted=None):
+    out=F(1)
+    for j in range(4):
+        if j!=omitted:out*=q[j] if T & (1<<j) else 1-q[j]
+    return out
+absorption=1-mass(0)
+U=tuple(sum(mass(S)*r[S][i] for S in range(1,16))/absorption
+        for i in range(4))
+assert U==(0,0,F(1,2),F(1,2))
+for i in range(4):
+    Q=sum(mass(T,i)*r[T|(1<<i)][i]
+          for T in range(16) if not T & (1<<i))
+    C=sum(mass(T,i)*(r[T][i] if T else U[i])
+          for T in range(16) if not T & (1<<i))
+    assert Q==C==U[i]
+print('FE exact inventory, sole grand trap, all 14 child witnesses, base gap polynomials, stationary caveat PASS')
+```
+
+## GF: a global nine-parameter mixed-sign raw criterion
+
+### GF1. Self-contained statement and its precise two conclusions
+
+Status: COMPLETE ORDINARY, UNREVIEWED proposed raw class theorem. This
+is a substantial direct extension beyond a fixed center or IFT radius.
+Its source-coverage audit is not complete, and no export is requested.
+The ordinary Fin4 conjecture remains OPEN.
+
+Use the original four-player independent behavioral quitting semantics
+from FE1, including zero live and Never payoffs and unrestricted deviations.
+Take ANY real own levels s_i and positive row units λ_i. In centered,
+row-normalized arithmetic put
+
+    z_i(S)=[r_i(S)−s_i]/λ_i,       s_i=r_i({i}).
+
+Assume there are strictly positive A,B,C,D,H,α,β and real E,F with
+
+    F<β+2√(Dβ)
+
+such that the COMPLETE singleton matrix of z is
+
+    G=[[0,A,−B,−H],
+       [A,0,−H,−B],
+       [C,−H,0,−D],
+       [−H,C,−D,0]],                              (GF.1)
+
+and the two complete scheduled rows are
+
+    z(03)=(−H−α,E,F,−H+β),
+    z(12)=(E,−H−α,−H+β,F).                       (GF.2)
+
+The twelve actual passive-joining bounds are
+
+    z_0(01),z_1(01) ≤ A,
+    z_0(02),z_1(13) ≤ −B−H−α,
+    z_0(012),z_1(013) ≤ E,
+    z_i({i}∪T)≤0 for i=2,3 and ∅≠T⊆O(i),         (GF.3)
+
+where O(0)=O(3)={1,2} and O(1)=O(2)={0,3}.
+All remaining twenty-four coordinates are unrestricted finite reals,
+including every grand reward and every outsider triple reward. The
+positive units and nine scalar coefficients are numerical reward data,
+not strategies, roots, continuations, or supplied Nash certificates.
+The scheduled premiums of good owners may be POSITIVE: β>H is allowed.
+The favorable pair01 may also have two positive participant premiums;
+both its coordinates are allowed to be as high as A>0. In particular
+this is not an empty-premium-core class under a disguised sign convention.
+
+Define the raw singleton discriminant
+
+    Δ=(B+H)(C−H)−AD.
+
+DIRECT PRODUCER. If C>H and Δ>0, the table has an internally produced
+proper period-two exact terminal Nash profile, alternating03 and12.
+The same profile and one fixed target meet every accuracy at all long
+horizons. No matrix Q, R0, inverse-sign, normality or degree hypothesis
+is needed for this direct conclusion.
+
+UNCONDITIONAL RAW CLASS. Even WITHOUT C>H and Δ>0, every table
+satisfying(GF.1)–(GF.3) has a uniform-equilibrium payoff. Outside that
+branch the original-game singleton standard-Q necessity supplies UE;
+an exact period-two profile is asserted ONLY in the direct branch.
+The unconditional conclusion is a fixed-target semantic existence
+theorem, not an explicit two-rate formula in the non-Q exit.
+
+### GF2. Produce both proper hazards from one global crossing
+
+Assume C>H and Δ>0. Put h=H−β, which may have either sign, and define
+
+    T(a)=C−h(1−a),
+    ψ(a)=(1−a)T(a)−β.
+
+T(a)>0 on[0,1], since its endpoint values are C−H+β>0 and C>0.
+ψ(0)=C−H>0 and ψ(1)=−β<0. Choose the LEAST zero a₀∈(0,1) of
+this nonzero quadratic or linear polynomial. Existence follows from
+IVT; the finite zero set makes the least choice legitimate. Thus ψ>0
+on[0,a₀). Define on the whole compact interval[0,a₀]
+
+    den(a)=(1−a)[aT(a)+D(1−a)−F a],
+    b(a)=aψ(a)/den(a).                            (GF.4)
+
+The denominator is positive throughout that interval, as follows from
+the exact difference below. The branch is continuous,
+
+    b(0)=b(a₀)=0,       0<b(a)<1 for0<a<a₀.
+
+For0<a<1, put x=a/(1−a)>0. The exact identity is
+
+    den(a)−aψ(a)=D(1−a)²−F a(1−a)+βa
+                =a(1−a)[D/x+β(1+x)−F]
+                ≥a(1−a)[β+2√(Dβ)−F]>0.         (GF.5)
+
+The AM–GM step is(√D/√x−√β√x)²≥0, equivalently
+D/x+βx≥2√(Dβ). At a=0 the
+difference is D>0. On[0,a₀] the numerator aψ(a) is nonnegative,
+so den>0 everywhere there. For0<a<a₀ the positive numerator and
+strict difference give exactly0<b<1. This allows a positive F up
+to the stated raw threshold; F≤0 was an unnecessary earlier restriction.
+
+Let a denote the common hazard of owners0/1 and b that of owners2/3.
+The normalized active/passive values are
+
+    X_bad=−(H+α)b,          W_bad=−αb/(1−b),
+    X_good=(β−H)a,         W_good=βa/(1−a).        (GF.6)
+
+The actual passive Continue endpoints, with their next active values,
+are
+
+    C_bad=Aa(1−b)−Bb(1−a)+Eab
+                         −(H+α)b(1−a)(1−b),
+    C_good=Ca(1−b)−Db(1−a)+Fab
+                         +(β−H)a(1−a)(1−b).      (GF.7)
+
+Their scheduled opposite-pair payoffs E and F are retained. Direct
+clearing gives
+
+    (1−a)(C_good−W_good)=aψ(a)−b den(a).
+
+Thus(GF.4) solves the good passive identity at EVERY branch point.
+Define g(a)=C_bad(a,b(a))−W_bad(b(a)). It is continuous on[0,a₀]
+and differentiable near0, with
+
+    g(0)=0,       b′(0)=(C−H)/D,
+    g′(0)=A−(B+H)(C−H)/D=−Δ/D<0.                 (GF.8)
+
+The negative derivative gives some η∈(0,a₀) with g(η)<0. At the
+other endpoint b(a₀)=0, so g(a₀)=Aa₀>0. IVT supplies one
+a∈(η,a₀) with g(a)=0. Fix such a once, and set b=b(a). Both hazards
+are proper and ALL four passive Continue identities are produced.
+No uniqueness, globally smooth parameter selection or oracle root
+is assumed. One may choose η first from the derivative and then the
+least zero of the cleared nonzero polynomial in[η,a₀]; no such
+definite choice is needed for the equilibrium existence theorem.
+
+### GF3. Full cap proof, payoff realization and fixed-target horizon bound
+
+Use hazard a for0/1 and b for2/3, scheduling03 at even dates and12
+at odd dates; owners outside the current pair Continue. All private
+coins are independent. An active bad owner has Quit value−(H+α)b
+and Continue value
+
+    −Hb+(1−b)W_bad=−(H+α)b.
+
+An active good owner has Quit value(β−H)a and Continue value
+
+    −Ha+(1−a)W_good=(β−H)a.
+
+All active action indifferences are therefore exact. The passive
+Continue identities were produced in GF2; it remains to upper-price
+EVERY passive Quit endpoint, not a lower response ledger.
+
+For a good owner, own solo reward is0 and all three nonempty joining
+rewards in(GF.3) are≤0. Thus Q_good≤0<W_good.
+At the selected bad root C_bad=W_bad, apply the THREE distinct actual
+joining bounds in(GF.3), including the triple coordinate:
+
+    Q_bad≤Aa(1−b)−(B+H+α)b(1−a)+Eab
+          =C_bad−(H+α)b²(1−a)<W_bad.             (GF.9)
+
+The singleton favorable join may be positive; its contribution is
+upper-priced against the corresponding ACTUAL Continue singleton event.
+The bad joint-row continuation term is fully paid by the harmful join
+bound. No expectation lower ledger or convex mixture is used as a cap.
+
+Hence all phase policy identities and all own action inequalities
+hold. For owner i the opponent-only two-date survival factor is
+
+    κ_i=∏_(j≠i)(1−q_j)<1,       κ=max_iκ_i<1.
+
+Iterate Bellman equality for prescribed play and inequality under
+any unilateral behavioral strategy, using the opponents' unchanged
+deterministic hazard schedule on every live history. A bounded tail
+remainder vanishes geometrically, regardless of the replacement's
+private memory, stopping date or Never choice. This identifies the
+actual terminal payoff and proves exact full-behavioral Nash.
+
+For row-normalized z the even target is
+
+    v=(X_bad,W_bad,W_good,X_good).
+
+Since every unilateral profile absorbs almost surely, positive row
+units and row offsets preserve actual terminal gain ordering. The
+original target is u_i=s_i+λ_i v_i. This is a proof using actual
+absorption, not a general affine UE invariance with Never=0.
+For the original table let M=max_(i,S)|r_i(S)| and K=2/(1−κ).
+Every unilateral stopping profile satisfies E(τ+1)≤K. Thus delivery
+error is at most MK/H and finite-horizon regret at most2MK/H.
+The table, selected rates, profile and u are fixed BEFORE accuracy;
+only the horizon threshold varies. ∎
+
+### GF4. The original Q source removes both extra branch hypotheses
+
+The exact inspected source is
+`isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+It makes the actual receiver-row singleton matrix textbook standard Q
+from bare original no UE, without a normality, own-sign or reward-sign
+input. This is a checked existing declaration; GF is not implemented.
+
+Suppose a table in the raw class has no UE. Its actual singleton matrix
+is diag(λ)G. Positive left diagonal scaling preserves standard Q:
+the LCP with offset diag(λ)q has residual diag(λ)(Gx+q), preserving
+nonnegativity and complementarity. Hence G is standard Q.
+
+If C≤H, use offset q=(−1,−1,−1,−1). Any feasible x≥0 would require
+(Gx)_2+(Gx)_3≥2, whereas
+
+    (Gx)_2+(Gx)_3=(C−H)(x_0+x_1)−D(x_2+x_3)≤0.
+
+So C>H. If Δ≤0, use q=(−1,−1,−t,−t) with
+t>(C−H)/A. Feasibility of core rows forces x_0,x_1>0. Their
+complementarity therefore gives both core equalities, whose sum is
+
+    A(x_0+x_1)=2+(B+H)(x_2+x_3).
+
+Substitution in the leaf residual sum yields
+
+    (Gx)_2+(Gx)_3
+        =2(C−H)/A+[Δ/A](x_2+x_3)
+        ≤2(C−H)/A<2t,
+
+contrary to feasibility. Thus standard Q forces Δ>0 as well.
+The same actual raw table is consequently in GF's direct branch,
+where GF2–GF3 produce a UE, a contradiction. This proves the full
+raw class theorem without silently changing its table or its caps.
+
+### GF5. Runnable exact global-identity verifier
+
+This standard-library script checks identities as sparse rational
+polynomials in all ELEVEN reward/rate variables, not by sampling tables.
+It also verifies the matrix elimination used in the Q contradiction.
+The IVT, positive-branch and behavioral arguments remain the proofs
+in GF2–GF4, not conclusions inferred from this verifier.
+
+```python
+from fractions import Fraction as R
+n=15
+zero=(0,)*n
+def p(c):return {zero:R(c)} if c else {}
+def plus(f,g):
+    out=f.copy()
+    for e,c in g.items():out[e]=out.get(e,R(0))+c
+    return {e:c for e,c in out.items() if c}
+def times(f,g):
+    out={}
+    for e,c in f.items():
+        for d,b in g.items():
+            u=tuple(e[j]+d[j] for j in range(n))
+            out[u]=out.get(u,R(0))+c*b
+    return {e:c for e,c in out.items() if c}
+def neg(f):return {e:-c for e,c in f.items()}
+def sub(f,g):return plus(f,neg(g))
+def product(*args):
+    out=p(1)
+    for f in args:out=times(out,f)
+    return out
+v=[{tuple(int(j==i) for j in range(n)):R(1)} for i in range(n)]
+A,B,C,D,H,alpha,beta,E,F,a,b,x0,x1,x2,x3=v
+one=p(1); oa=sub(one,a); ob=sub(one,b)
+T=sub(C,product(sub(H,beta),oa))
+psi=sub(product(oa,T),beta)
+den=product(oa,sub(plus(product(a,T),product(D,oa)),product(F,a)))
+numerator=product(a,psi)
+Cbad=sub(plus(sub(product(A,a,ob),product(B,b,oa)),product(E,a,b)),
+         product(plus(H,alpha),b,oa,ob))
+Cgood=plus(plus(sub(product(C,a,ob),product(D,b,oa)),product(F,a,b)),
+           product(sub(beta,H),a,oa,ob))
+assert sub(sub(product(oa,Cgood),product(beta,a)),
+           sub(numerator,product(b,den)))=={}
+assert sub(sub(den,numerator),
+           plus(sub(product(D,oa,oa),product(F,a,oa)),product(beta,a)))=={}
+Qbad=sub(plus(product(A,a,ob),product(E,a,b)),
+         product(plus(plus(B,H),alpha),b,oa))
+assert plus(sub(Qbad,Cbad),product(plus(H,alpha),b,b,oa))=={}
+
+def rate_coefficient(f,ea,eb):
+    out={}
+    for e,c in f.items():
+        if e[9]==ea and e[10]==eb:
+            u=list(e);u[9]=u[10]=0;u=tuple(u)
+            out[u]=out.get(u,R(0))+c
+    return {e:c for e,c in out.items() if c}
+Gb=plus(product(ob,Cbad),product(alpha,b))
+assert rate_coefficient(Gb,1,0)==A
+assert rate_coefficient(Gb,0,1)==neg(plus(B,H))
+assert rate_coefficient(numerator,1,0)==sub(C,H)
+assert rate_coefficient(den,0,0)==D
+delta=sub(product(plus(B,H),sub(C,H)),product(A,D))
+assert plus(sub(product(A,D),product(plus(B,H),sub(C,H))),delta)=={}
+
+cores=plus(x0,x1);leaves=plus(x2,x3)
+core_residual=sub(sub(product(A,cores),p(2)),product(plus(B,H),leaves))
+leaf_image=sub(product(sub(C,H),cores),product(D,leaves))
+assert sub(product(A,leaf_image),
+           plus(plus(product(sub(C,H),core_residual),product(p(2),sub(C,H))),
+                product(delta,leaves)))=={}
+print('GF exact global good equation, denominator, bad derivative, full cap subtraction and Q elimination PASS')
+```
+
+### GF6. Coverage and the live next question
+
+GF is a raw all-parameter scalar producer, not another local radius
+or a verifier whose nonlinear root remains assumed. In the direct
+branch it supplies the rates, every passive cap, actual payoff and
+uniform target. Its off-branch existence exit is the original Q
+necessity, not a claim that the direct rates exist there.
+
+Unlike the original MP class,(GF.1)–(GF.3) put NO restriction on grand
+participant premiums or unused triple entries. They permit a full
+four-player premium core, and β>H permits a positive scheduled leaf
+premium. Mixed mate-joining signs are therefore not used as a proxy
+for true participant premium geometry. The nonbijective singleton
+favorite graph persists throughout the positive parameter range.
+
+The harmful-join cap does NOT contain the original MP center, whose
+bad harmful joining cells are higher. FE and GF are distinct positive regions.
+Nor does the raw family claim to contain every completion of its
+singleton matrix, every least-Never source or every Fin4 table.
+Its complete-producer overlap check is still pending: a handful of
+failed paired/matching tests alone does not establish new coverage.
+No claim of export significance is made before that check.
+
+The next full-goal question is whether this scalar branch and its
+cap estimate survive asymmetric coefficients and weaker aggregate
+joining bounds, or whether the real least-Never whole-law source
+supplies an analogous legal coupled repair with all born caps priced.
+The completed global family is being retained as actual-data research,
+not used to stop at a supporting interface.

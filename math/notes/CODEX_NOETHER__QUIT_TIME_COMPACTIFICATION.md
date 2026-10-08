@@ -43,6 +43,16 @@ but an explicit new EARLY owner2 clock lowers its full debt. That legal
 competitor exposes its failure of the canonical quantitative cap-minus-
 singleton margin; the fixture is not a positive-global-minimum source.
 
+RM48 uses that canonical margin at the TRUE global minimum instead.
+It rules out every absorbing exact Nash finite-calendar prefix throughout
+an enlarged cube of annotations below the original ENTIRE caps. This is
+a whole-profile global-floor consequence, including every later response,
+not another local fixture. It also gives a finite cap-drop barrier for
+an early sole-quitter branch with an arbitrary changed suffix. Neither
+restriction is counted as new counterexample-class contraction: the
+actual competitor must leave these entire families, rather than improve
+their constants. The finite nonlocal suffix/cap change remains open.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -23969,3 +23979,217 @@ laws, using the genuine SAME-TABLE full floor. A chain of increasingly
 decorated local fixtures is not the research objective. In particular,
 one cannot transfer this profile's positive local debt to a true global
 minimum, or conclude that the reviewed two-owner branch is impossible.
+
+## RM48: whole finite Nash calendars cannot leave the true cap moat
+
+### NC1. Same-source data and exact nonlocal question
+
+PROVED ORDINARY CONSEQUENCE, INTERNAL, NOT AN EXPORT OR A CONSUMER.
+Keep the fixed table and global full minimum from RM47, with |r_i(S)|≤M,
+M>0, positive own s_i, minimum pair (U,B), and total debt δ>0.
+The tracked quadratic margin gives
+
+    B_i−s_i≥δ+κ,       κ=δ²/(8M)>0.
+
+The intended whole-law competitor was an arbitrary finite prefix,
+chosen by finite-game Nash against a profile-adapted continuation near
+the actual caps, followed by the ORIGINAL full suffix. This is stronger
+than changing one root: the finite prefix may have any length, use any
+finite stopping distributions, and allocate positive mass to any dates.
+The following consequence proves that this entire exact-Nash family
+cannot produce an absorbing prefix in a quantitative cap-shift cube.
+It does not say that all independent prefix profiles are Nash, or rule
+out a jointly changed suffix outside that cube.
+
+Source declarations inspected narrowly for this calculation:
+
+- `positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`;
+- `minimumTerminalSemantic_auxiliaryNash_budget`,
+  `minimumTerminalSemantic_auxiliaryNash_eq_allContinue`, and
+  `minimumTerminalSemantic_auxiliaryNash_criticalFace` in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`;
+- `quittingTerminalSemanticDebtSum_prefix_le_auxiliaryNashDefect` in
+  `UniformEquilibrium/Quitting/Terminal/AuxiliaryNashDefectBudget.lean`;
+- `quittingTerminalSemanticPrefix_mem_carrier` and the exact literal
+  prefix correspondence in
+  `UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+
+The existing one-root open auxiliary cube h_i<δ is already implemented.
+The calculation below is a complete finite-calendar extension and a
+quantitative closed-cube enlargement, not a claim that the old moat was
+missing. Its purpose is to falsify this proposed nonlocal Nash-prefix
+consumption mechanism at the actual source, not export a better constant.
+
+The arbitrary-word comparison is also narrow. The checked
+`quittingTerminalDebtSum_capNashRootStack_eq` in
+`UniformEquilibrium/Quitting/Root/CapNashRootStack.lean` folds exact debt
+scaling through a finite word whose EVERY root is Nash against its
+then-current full suffix cap. This is a stronger stagewise hypothesis
+than normal-form Nash for one finite timing game with a fixed virtual
+terminal reward. The checked
+`QuittingFiniteExactNashBellmanBlock.root_eq_allContinue_of_terminal_mem_uniqueBasin`
+and `terminal_not_mem_uniqueBasin_of_positiveAbsorption` in
+`UniformEquilibrium/Quitting/Bellman/Finite/AllContinueBasinRestartMoat.lean`
+already rule out arbitrary exact Bellman words terminating in a supplied
+unique-AllContinue basin. NC3's normal-form proof needs no phasewise
+equilibrium at unreachable late histories and applies to every independent
+finite Nash timing profile. This scope comparison does not make its
+quantitative exclusion a new UE class or a missing general consumer.
+
+### NC2. Exact all-response prefix/suffix accounting
+
+Let a finite prefix contain dates0,…,T, with independent complete prefix
+draws in {0,…,T,Never}. If all prefix draws are Never, attach the original
+independent suffix after date T. Let
+
+    a_i=Pr(prefix draw i is finite),
+    H_i=∏[j≠i](1−a_j),       c=∏[i](1−a_i),
+    π_i=a_i H_i=Pr(only owner i has a finite prefix draw),
+    P₁=Σ_i π_i,       P₂=Pr(at least two prefix draws are finite),
+    A=1−c=P₁+P₂.
+
+These count underlying complete finite draws, NOT just observed first
+quitting coalitions. A later prefix draw screened by an earlier quitter
+still contributes to P₂. No common coin or conditioning on another
+player's hidden draw is introduced.
+
+Fix an annotation v and give the auxiliary finite timing game reward v
+if every prefix draw is Never. Write w_i for its literal prescribed
+payoff and R_i for the passive prefix payoff when owner i continues
+through the prefix. Assume the prefix laws are an exact mixed Nash in
+THIS finite game, against every finite prefix deadline and prefix Never.
+Thus every finite prefix response pays at most w_i, and
+
+    R_i+H_i v_i≤w_i.
+
+After the original actual suffix is attached, prescribed delivery is
+
+    U_i(new)=w_i+c(U_i−v_i).
+
+Every response strictly after the prefix has payoff R_i+H_i times its
+ORIGINAL suffix-response payoff. Consequently its entire upper envelope
+is R_i+H_i B_i. Literal Never is included. Every response inside the
+prefix is the same finite pure response tested by the auxiliary Nash;
+it forces prefix absorption and never uses the fictitious annotation.
+There is no omitted intermediate or later response. If h_i=B_i−v_i≥0,
+
+    B_i(new)≤w_i+H_i h_i,
+    D(new)≤cδ+Σ_i(H_i−c)h_i
+          =cδ+Σ_i π_i h_i.                         (NC.1)
+
+This is an actual full-profile inequality. If (U,B) is a closed-carrier
+minimum rather than a raw attained profile, attach this FIXED finite
+prefix to actual suffix profiles whose complete pairs converge to
+(U,B). Prefix responses are fixed; every later cap is exactly affine
+in the actual suffix cap; prescribed payoffs are affine in the actual
+suffix payoff. Their whole pairs therefore converge to the displayed
+pair, which belongs to the same carrier. In particular D(new)≥δ.
+No signed-law transport or fixed selected tester is assumed.
+
+### NC3. Quantitative finite-calendar exclusion
+
+Define
+
+    η=δκ/(64M)=δ³/(512M²).
+
+Claim: for EVERY vector h with 0≤h_i≤δ+η, EVERY exact Nash of EVERY
+finite timing game above with annotation v=B−h has a_i=0 for all i.
+Equivalently, its entire prefix is literal AllNever.
+
+First, the finite reward bound and the quadratic margin imply δ≤2M
+and κ≤M/2. Hence η≤κ/32. Since owns are positive,
+
+    0<s_i+κ−η≤v_i≤B_i≤M,
+    v_i−s_i≥κ/2.                                  (NC.2)
+
+Suppose a_i>0. Some finite deadline has positive prescribed probability,
+so Nash says that deadline pays at least as much as prefix Never. On
+the event that every opponent prefix draw is Never, the former pays
+s_i and the latter v_i, a loss at least κ/2. On the complementary event,
+both outcomes are nonempty absorbing rewards in [−M,M], so any advantage
+is at most2M. If A_{−i}=1−H_i, this gives
+
+    0≤−(κ/2)H_i+2M A_{−i},
+    A_{−i}≥κ/(4M+κ)≥κ/(8M)=:e.                   (NC.3)
+
+This argument uses an ACTUAL finite supported deadline and the complete
+prefix-Never deviation. It does not assert every inactive or unsupported
+action is indifferent, or use a stationary-stage approximation.
+
+Let N be the number of underlying finite prefix draws. By independence,
+
+    Σ_i a_i H_i=P₁,
+    Σ_i a_i(1−H_i)=E[N·1_{N≥2}]≤4P₂.
+
+For every i with a_i>0, (NC.3) implies
+a_i(1−H_i)≥e a_i H_i/(1−e); zero a_i contribute nothing. Thus
+
+    eP₁≤4(1−e)P₂,
+    P₂≥e A/(4−3e)≥κ A/(32M).                     (NC.4)
+
+If A>0, substitute (NC.4) and h_i≤δ+η into the full ledger (NC.1):
+
+    D(new)≤cδ+(δ+η)P₁
+          =δ−δP₂+ηP₁
+          ≤δ−δκ A/(32M)+η A
+          =δ−η A<δ.                               (NC.5)
+
+This contradicts the SAME-TABLE global floor. Therefore A=0, proving
+the claim. In particular, adding arbitrarily many dates and selecting
+an exact finite Nash does not escape this source's cap moat.
+
+The count P₂ is crucial: it is the probability of two or more finite
+PREFIX LAWS, not the first tied collision probability. Prefix owners
+may stop at distinct dates, and the proof still applies. The original
+prefix payoff/cap inequality is what prices all temporal responses.
+
+### NC4. A finite whole-law barrier for an early sole-quitter branch
+
+There is also a useful complementary exact lower bound. Change the
+entire suffix to ANY independent law profile w, and prepend a new date
+where only owner i quits, with probability α>0. Other owners continue
+that new date. Let u(w),b(w),D(w) be its full suffix data. The responding
+owner's new entire cap is max(s_i,b_i(w)); every other owner's later
+full cap is at least the affine old suffix cap. Therefore
+
+    D(new)≥(1−α)D(w)+α(b_i(w)−s_i)+(s_i−b_i(w))⁺.
+
+Since D(w)≥δ, a strict descent requires
+
+    b_i(w)<s_i+δ≤B_i−κ.                            (NC.6)
+
+Thus an infinitesimal cap-preserving suffix change cannot repair the
+failed early-solo competitor. For raw laws, the complete response-cap
+coupling estimate gives
+
+    |b_i(w)−B_i|≤2M Σ[j≠i] TV(w_j,q_j).
+
+Whenever the original minimum is attained by such actual laws, (NC.6)
+forces total opponent variation strictly greater than
+κ/(2M)=δ²/(16M²). At an unattained marked minimum the exact cap-drop
+requirement remains valid through actual whole-pair approximants;
+no raw total-variation metric is silently imposed on its chart.
+
+This does not prove that a sufficiently distant punishment suffix
+produces descent. Its own D(w) can be much larger than δ, and born early
+joining responses can dominate. Both costs remain in the actual full
+problem. It is a global-family barrier, not a successful consumer.
+
+### NC5. Status and next genuinely nonlocal operation
+
+NC3 is a consequence at the real positive global minimum, not a regression
+with unsupplied minimum hypotheses. NC4 similarly retains the full floor
+for every changed suffix. Neither uses an old tax optimum, a fictitious
+free cap vector, or source data from another table. They do not resolve
+either reviewed multiple-bridge alternative, and do not use least Never
+to manufacture a descent. The improved cube constant is explicitly NOT
+counted as conjecture-facing breakthrough or queued for export.
+
+The next candidate must jointly change the original finite suffix laws
+enough to cross a full cap-drop barrier, or use a non-Nash prefix outside
+the entire annotation family above. The concrete target is to combine a
+profile-adapted punishment/cap drop with the second actual bridger (or
+later-only observer), preserving all the finite moving response envelopes.
+A new selected-response price identity without a legal whole-profile
+competitor would not answer this question.
