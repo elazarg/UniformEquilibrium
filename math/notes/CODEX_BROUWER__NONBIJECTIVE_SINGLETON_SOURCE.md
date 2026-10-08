@@ -60,6 +60,10 @@ forces a positive cap-mixing dividend and uniformly incompatible endpoint
 response witnesses. It supplies no favorable coupled comparison or UE.
 UD1–UD3 retires uniform ν-changing finite-clock acceleration on the
 already-solved cyclic test; the live attempt is genuinely asymmetric.
+TW1–TW5 is COMPLETE ORDINARY, UNREVIEWED: an actual response-complete
+finite word removes joining spikes and proves that SOME c-active owner
+has positive OLD finite mass. It excludes an all-pure-Never c-wall,
+not the surviving wall with finite prescribed mass or the full conjecture.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -8364,13 +8368,13 @@ by(NR2), hence equals this same (a,v). Thus the ENTIRE coefficient
 sequence converges. Applying(NR2) gives exactly NR1, not a favorable
 subsequence or uniqueness of underlying pairs.
 
-This is a genuine fifth-coordinate extension of ordinary DR. The current
-WORKTREE declaration `Math.CompactLinearMinimum.exists_mem_open_all_minimizers_eq`
+This is a genuine fifth-coordinate extension of ordinary DR. The generic
+declaration `Math.CompactLinearMinimum.exists_mem_open_all_minimizers_eq`
 in `MathUE/Analysis/CompactLinearMinimumRigidity.lean` has one fixed compact
 coefficient set and a regular weight in every open region; its Rademacher
-proof was statically inspected, not checked here. That file is untracked
-external-formalizer work, NOT a tracked/integrated input. The ordinary
-coordinate/Fubini argument above is the mathematical proof used here.
+proof was statically inspected, not checked here. The ordinary
+coordinate/Fubini argument above is the mathematical proof used here;
+the generic declaration is not a checked whole-NR producer.
 The ACTUAL extra ν coefficient and semantic signed table transport are
 also ordinary mathematics, not claimed implemented.
 
@@ -8910,6 +8914,176 @@ remaining problem: find a genuinely asymmetric ν-changing comparison
 whose born caps are paid at a TRUE global minimum. No constants or new
 local trapping table are being sought. The old cyclic table's actual
 escape already demonstrates the needed change of calendar mechanism.
+
+## A response-complete finite word forces an old finite branch at the c-wall
+
+### TW1. Global finite-word producer and every moving response
+
+COMPLETE ORDINARY DERIVATION, UNREVIEWED. This narrows a source geometry;
+it is not a universal repair or a density-based UE producer. Work at the
+SAME separated NP table r, with s_i>0 and Γ_ij=r_i({j})−s_i for i≠j,
+Γ_ii=0. For ANY simplex λ and ANY ρ∈(0,1], define independent ACTUAL
+finite laws
+
+    p_i^N(k)=ρλ_i/N  at k=1,…,N,
+    p_i^N(Never)=1−ρλ_i.
+
+Date0 is empty. No public coin, prescribed response cap, or new minimum
+is assumed. Let θ∈[0,1] and put
+
+    μ_j=∫₀¹ ρλ_j ∏[ℓ≠j](1−ρλ_ℓ t)dt,
+    u_i=Σ_j μ_j r_i({j}),
+    F_i(θ)=s_i+∫₀^θ Σ[j≠i] ρλ_j
+                    ∏[ℓ≠i,j](1−ρλ_ℓ t) Γ_ij dt,
+    b_i=max[θ∈[0,1]]F_i(θ).                    (TW1)
+
+Then the FULL actual pairs(U(p^N),B(p^N)) converge to(u,b)∈K.
+The original joint Never is exactly ∏_i(1−ρλ_i), also at the limit.
+
+Here is the full response proof. Couple the finite clocks to independent
+uniform grid locations conditional on their own finite draws. A pair
+of finite clocks collides with probability at most1/N, so the probability
+of ANY prescribed nonsingleton outcome is at most6/N. Conditional on no
+tie, singleton-first probabilities are Riemann sums for μ_j. The bounded
+reward error vanishes, hence all prescribed payoffs converge to u.
+
+For ANY pure finite tester k, set θ_N=clamp((k−1)/N,0,1). The tester
+receives passive singleton rewards from an opponent's earlier first
+quit, and its own singleton if all opponents survive until its clock.
+The cumulative passive terms are the corresponding Riemann sums. Ties
+among opponents cost O(M/N), uniformly through every cutoff. A collision
+AT the tester's clock has probability at mostρ/N and costs O(M/N), even
+when joining rewards have arbitrary sign or size up to M. Thus uniformly
+over ALL finite k, its payoff differs from F_i(θ_N) by O(M/N). This
+includes k=0, k>N, and arbitrarily moving deadlines. Every θ is approached
+by actual grid testers, including the actual empty date0 and the actual
+finite dateN+1 after the whole word. Continuous F_i therefore gives the
+maximum in(TW1) as the finite supremum limit. Never has its separate
+passive integral; the late finite test adds
+
+    s_i ∏[j≠i](1−ρλ_j)≥0.
+
+Never is dominated by that actual late finite test for every N, not
+discarded by a convention. Affinity of complete-law deviations now
+identifies these as the FULL behavioral caps. The constants in the
+uniform errors are inessential; no bounded response menu or omitted
+clock class is used.
+
+This word is only a finite-law REALIZATION of the explicit pair(TW1).
+It is not an assertion that an atomless controller suffices for UE;
+DR6 already disproves that different architecture.
+
+### TW2. Full finite/Never prices, including simultaneous-response spikes
+
+Write γ_i=(Γλ)_i. Uniformly in θ,
+
+    F_i(θ)=s_i+ρθγ_i+O(Mρ²),
+    u_i=ρ(s_i+γ_i)+O(Mρ²),
+    b_i=s_i+ργ_i⁺+O(Mρ²).                     (TW2)
+
+These follow directly by expanding the at-most-three survival factors
+in(TW1). The singleton probabilities give the second equality because
+Σλ_i=1. This is a produced full-cap expansion, not a favorable cap
+selector. If γ_i>0, F_i is strictly increasing for all sufficiently
+smallρ, since F_i′=ρ(γ_i+O(Mρ)) uniformly on[0,1].
+
+One cannot replace the word by one common quitting date. Reuse the
+earlier exact table with owns1, ALL passives2, ALL nonsingleton
+participants3. For λ_i=1/4 and ρ=1/2, (TW1) gives
+
+    μ_j=1695/16384,
+    u_i=11865/16384,
+    b_i=681/512,
+    D(u,b)=9927/4096.
+
+Indeed F_i is increasing, its late value is1+[1−(7/8)³], and each
+singleton column sums to7. At ONE common date with the same finite
+probabilities1/8, the exact cap is instead425/256, with prescribed
+payoff201/256 and sum debt7/2. Its joining test, not its late test,
+causes the larger cap. This complete sixty-entry table is already
+solved by pure grand Nash; it tests the word's response accounting,
+not a positive-gap claim or a stronger trapping regression.
+
+### TW3. A derived all-direction constraint at every original minimum
+
+Fix ANY produced marked ORIGINAL full minimum, and retain its actual
+limits n_i>0, ν=∏n_i, h_i=ν/n_i, R_i, U_i and B_i. Set
+
+    κ_i=(B_i−R_i)/h_i≥s_i,
+    E={i:κ_i=s_i}.
+
+SG proves E nonempty. Its literal finite-block+EMPTY-seam graft puts
+EVERY carrier tail w=(u,b) on ONLY the original Never branches and gives
+
+    D(graft)−δ=ν[Σ_i(b_i−κ_i)⁺/n_i−Σ_i u_i].   (TW3)
+
+All old finite masses, original finite/Never tests and moving later
+tests are retained as in SG. Apply this to the actually produced(TW1),
+for EVERY λ and ρ, and use the TRUE all-law minimum. This gives the
+global finite-amplitude inequality
+
+    Σ_i (max_θ F_i(θ)−κ_i)⁺/n_i
+       ≥Σ_j μ_j Σ_i r_i({j}).                 (TW4)
+
+For i∉E the clipping term is zero for sufficiently smallρ. Dividing
+byρ and using(TW2), without differentiating a selected strategy, gives
+
+    Σ[i∈E] (Γλ)_i⁺/n_i
+       ≥Σ_i [s_i+(Γλ)_i]  for EVERY simplex λ. (TW5)
+
+The earlier one-date price included pair-joining spikes. The complete
+word suppresses those spikes while retaining ALL actual responses,
+so(TW5) contains only the singleton matrix. It does not assert that
+the old cap is unchanged, or that any arbitrary positive-payoff tail
+is free. Its right side can be negative for some λ.
+
+### TW4. Actual source exclusion: not all c-active owners can play only Never
+
+At THIS SAME no-UE table, the tracked theorem
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+produces λ with γ_i=(Γλ)_i>0 for EVERY i. Its only semantic hypothesis
+is no uniform-equilibrium payoff for that literal Fin4 table; no
+normality or another reward normalization is transported. The positive
+full floor provides that hypothesis, as in NP. The projective matrix
+is exactly the receiver-row singleton difference matrix Γ here.
+
+For this produced λ, (TW5) rewrites as
+
+    Σ[i∈E] [(1−n_i)/n_i] γ_i
+       ≥Σ_i s_i+Σ[i∉E]γ_i>0.                 (TW6)
+
+Consequently SOME j∈E has n_j<1. Thus EVERY produced original minimum
+has a c-active owner with BOTH strictly positive ORIGINAL finite mass
+and strictly positive ORIGINAL Never mass. Pure-Never observers cannot
+carry the entire c-wall. This is not just an alias-counting statement.
+
+The contradiction is literal. If every j∈E had n_j=1, (TW2) makes
+the bracket in(TW3) strictly negative for some sufficiently small fixedρ.
+Choose N large, then an old finite-law minimum approximant and the
+original empty-seam graft. Full-cap convergence makes that ACTUAL
+independent finite law have D<δ. Its joint Never is lower, which is
+legal: common-ν rigidity concerns only equality, not a lower competitor.
+Thus no cap-control or target-minimum premise was supplied.
+
+### TW5. Surviving claim and concrete next comparison
+
+This is a pointwise source restriction, not a full consumer or an export
+request. It uses an end graft only to eliminate the named pure-Never
+c-wall geometry. It now PRODUCES an owner j whose ENTIRE old finite
+conditional law exists with mass1−n_j>0 AND whose last-empty finite
+cap equals R_j+h_j s_j. CV's ν-changing finite/Never conditioning
+comparison is therefore applicable at a c-active owner, not merely
+some unrelated mover. The all-direction inequality(TW5) is also exact
+data for an asymmetric existing-mass comparison.
+
+The selected j need not own the earliest bridge, stop at an atom,
+have all its finite clocks maximizing, or be the only c-active owner.
+No debt descent is claimed when such a finite branch exists. Both old
+solved traps have n_i=1/2 and satisfy the required positive-odds budget,
+so they do not falsify(TW6) and do not validate a universal repair.
+The remaining task is to couple a change of that produced old finite
+branch with another law/calendar change and bound ALL born caps.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
