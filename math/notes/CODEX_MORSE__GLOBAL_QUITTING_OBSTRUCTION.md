@@ -2,6 +2,19 @@
 
 Owner: CODEX_MORSE.
 
+Current endogenous-family candidate: QCUT1–QCUT7 below gives an actual
+quantile-cut/punishment-tail repair of singleton-concentrating profiles
+whose outsider FULL debts vanish. All born finite deadlines and Never
+are bounded. At ONE hypothetical Fin4 counterexample, the tracked
+normal-core theorem supplies the owner's true punishment inequality;
+the existing varying-period cyclic alternative supplies the remaining
+hypotheses. Thus its owner-concentration arm is consumed, not merely
+renamed. The resulting ordinary draft forces vanishing TOTAL hazard
+for every interior cyclic family with period times error tending0.
+This goes beyond the tracked period-one concentration consumer; exact
+overlap and independent falsification remain to be assessed. It does
+not consume the fully diffuse arm or prove arbitrary-game UE.
+
 Current completed class result: CL1–10 and SC1–6 have each passed two
 independent mathematical checks. The negative DN trial is retired by a
 closed singular full-Nash circuit with three convergent ladders and two
@@ -10037,6 +10050,307 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Quantile-cut punishment repair consumes varying-period owner concentration
+
+Status: complete ordinary mathematical DRAFT, not independently reviewed
+or implemented. This section consumes a produced branch at ONE fixed
+counterexample table. It is not an arbitrary-game equilibrium producer,
+and the fully diffuse cyclic branch remains open.
+
+### QCUT1. Question, semantics and exact dependency boundary
+
+Let I be a finite nonempty player set of size n, r a fixed quitting reward
+table, and M>0 a bound on the absolute value of EVERY terminal reward.
+Live rewards and literal Never rewards are0. On the unique live history,
+the prescribed behavioral profile is an independent product of clock laws
+N_i∈ℕ∪{Never}. A complete unilateral replacement is unrestricted;
+its best reply is the supremum over every finite pure deadline and Never.
+Write U_i(p), B_i(p), d_i(p)=B_i(p)−U_i(p), D=Σd_i and
+s_i=r_i({i}). The terminal coalition is the set of owners at the first
+finite date. No profile below is assumed Nash in its tail or at any date.
+
+Fix an owner h. Put
+
+    η(p)=1−P_p(terminal coalition={h}).
+
+The proposed repair uses TWO properties, neither silently supplied by
+singleton payoff convergence alone:
+
+    η(p_k)→0;
+    d_j(p_k)→0 for EVERY j≠h.
+
+The third hypothesis is the TRUE unrestricted punishment inequality
+P_h≤s_h. It does not assert that arbitrary tail payoffs exceed P_h.
+Only one near-optimal actual opponent punishment is chosen.
+
+Named sources read under their imports:
+
+- `nonempty_interiorApproximateNashCyclicBlock`,
+  `InteriorApproximateNashCyclicBlock.quitProbability_odds_eq_exp`,
+  EndogenousInteriorCyclicBlock.lean;
+- `InteriorApproximateNashCyclicBlock.terminalDeviationDebt_le`,
+  InteriorApproximateNashCyclicProfile.lean;
+- `exists_interiorCyclicFixedDebtor_and_ownerEscape_of_terminalGap`,
+  InteriorCyclicTerminalDebtRatio.lean, and the literal
+  `InteriorCyclicOwnerConcentrationSubsequence` in
+  InteriorCyclicDebtEscape.lean;
+- `normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff`,
+  Classification/LCP/ThreeCore/AmbientCarrierElimination.lean;
+  `all_punishmentNormal_of_normalCore_eq_univ`,
+  Classification/LCP/NormalCorePunishmentNormal.lean;
+- `exists_quittingStationaryPunishmentRoot_lt_add`,
+  Punishment/InstantPunishment.lean, using the actual full-cap definition
+  of `quittingPunishmentValue` in Stationary/MinMax.lean;
+- `quittingRootSequenceHazardTerminalValue_le_sSup_pureTime`,
+  Cycles/InfinitePureTimeExtremality.lean;
+- `false_of_periodOne_ownerConcentration_of_finFour_noUniformPayoff`,
+  Cycles/PeriodOneOwnerConcentrationContradiction.lean;
+- `quittingRootSequenceHazardTerminalValue_quittingPhaseSwitchRoots_le_of_plan_add`
+  and `isUniformEquilibriumPayoff_soloReward_of_approximate_caps`,
+  Punishment/ApproximateCompletedCycle.lean; and the isolation-dependent
+  compiler in Punishment/CompletedCycle.lean.
+
+These files are all under UniformEquilibrium/Quitting/. No new Lean
+declaration or build is claimed. The two fixed-payoff/positive-gap
+semantic endpoints remain Terminal/TargetTail/TerminalUniformPayoffSelection.lean
+and Terminal/ExploitabilityGap.lean.
+
+### QCUT2. A chronological quantile controls BOTH relevant probabilities
+
+Assume0≤η<ε<1. Since owner Never excludes terminal singleton {h},
+P(N_h=Never)≤η<ε. Therefore there is a least finite date T with
+
+    a=P(N_h>T)≤ε.
+
+For T=0, P(N_h≥T)=1>ε. For T>0, minimality gives
+P(N_h≥T)>ε. Here ≥ and > refer to literal chronological dates;
+Never is larger than every finite date. The cutoff INCLUDES the full
+date T. No atom is split and no date is inserted inside an old atom.
+
+Let o=P(min_{j≠h}N_j≤T). The clocks are independent. On the event
+
+    {N_h≥T}∩{min_{j≠h}N_j≤T},
+
+some opponent stops before h or ties h, so the terminal coalition is
+NOT {h}. Consequently
+
+    P(N_h≥T)·o≤η, hence o≤η/ε.                 (QCUT.1)
+
+This is the key game-specific quantile fact. It uses the terminal
+COALITION law, not merely the payoff vector, and includes ties. It
+does not commute conditioning with an unrestricted cap.
+
+### QCUT3. The legal repaired profile and complete-cap seam
+
+Fix ζ>0 and assume P_h≤s_h. The actual punishment producer supplies
+an independent stationary opponent row with h's complete cap less
+than P_h+ζ≤s_h+ζ. The same construction could use any actual opponent
+plan with that cap bound. No punishment infimum attainment is needed.
+Choose h's own tail to Continue; its own choice does not affect its cap.
+Every actual tail reward and every cap is bounded in absolute value by M.
+
+Construct p′ by following the ORIGINAL live-history roots through date T
+and, if still live, switching at T+1 to that punishment plan. This is
+an ordinary independent behavioral profile on ℕ. The switch is a public
+deterministic date, not a private revelation or a countable ordinal.
+The profile is not periodized, and the tail need not be Nash.
+
+Every prescribed reward changes only on original joint survival past T,
+whose probability is at most a≤ε. Coupling at that event gives
+
+    |U_i(p′)−U_i(p)|≤2Mε for EVERY i.          (QCUT.2)
+
+For a responding outsider j≠h, every pure deadline t≤T has EXACTLY
+the old payoff. Its coalition has already been chosen before the switch.
+For t>T and for Never, the change is bounded by2M times deleted-j
+survival past T. That survival is at most P(N_h>T)≤ε because h is
+one of j's prescribed opponents. Therefore
+
+    B_j(p′)≤B_j(p)+2Mε;
+    d_j(p′)≤d_j(p)+4Mε.                      (QCUT.3)
+
+This includes deadlines arbitrarily far past the cutoff and Never,
+without an attained maximizing response or a response-support assumption.
+Taking the supremum after a common upper bound preserves that bound.
+Pure-time extremality then gives the SAME bound for every behavioral
+replacement, including responses that change their time with k.
+
+For h, a pure deadline t≤T pays s_h on the event that no opponent
+stops by T. On its complement, of probability o, the reward difference
+from s_h is at most2M. Hence all these old-prefix tests are bounded
+above by s_h+2Mo.
+
+For any responding deadline AFTER T, or Never, write its payoff as
+
+    R_h(T)+(1−o)·V_tail,
+
+where R_h(T) is h's passive reward contribution from opponents stopping
+by T while h Continues. Its absolute value is at most Mo, and
+V_tail≤s_h+ζ by the FULL punishment cap. Thus
+
+    R_h(T)+(1−o)V_tail≤s_h+2Mo+ζ.
+
+This estimate keeps the sign of s_h attached to its survival factor;
+it remains valid for negative own singleton rewards. Together with the
+old-prefix tests it proves
+
+    B_h(p′)≤s_h+2Mo+ζ.                       (QCUT.4)
+
+The original prescribed terminal payoff satisfies
+|U_h(p)−s_h|≤2Mη, since terminal singleton {h} has mass1−η.
+Using(QCUT.2) yields
+
+    d_h(p′)≤2M(η+ε+o)+ζ.                    (QCUT.5)
+
+Combining all coordinates, without a maximizing-deadline selection,
+
+    D(p′)≤Σ[j≠h]d_j(p)+2Mη+2Mη/ε+(4n−2)Mε+ζ.   (QCUT.6)
+
+Also EVERY prescribed payoff is within2M(η+ε) of r({h}).
+For0<η<1 choose ε=√η, obtaining the convenient bound
+
+    D(p′)≤Σ[j≠h]d_j(p)+2Mη+4nM√η+ζ.          (QCUT.7)
+
+If η=0, choose any ε>0; then o=0 and the same unoptimized bound
+in(QCUT.6) tends0 with ε,ζ. No division by0 is used.
+
+### QCUT4. Actual singleton-concentration consumer
+
+Theorem draft. For ONE fixed finite table and ONE owner h, if actual
+independent profiles p_k satisfy η(p_k)→0, every outsider full debt→0,
+and P_h≤s_h, then r({h}) is a uniform-equilibrium payoff.
+
+Proof. Choose ε_k→0 with η_k<ε_k and η_k/ε_k→0, including η_k=0;
+for example ε_k=√η_k+1/k after discarding a finite prefix. Choose
+ζ_k→0 and construct the literal p′_k above. Equation(QCUT.6) gives
+D(p′_k)→0 and(QCUT.2) gives U(p′_k)→r({h}). The actual terminal
+approximate-Nash/fixed-target semantic endpoint supplies one fixed
+uniform payoff r({h}) before the requested accuracy. The profiles
+p′_k may vary with accuracy and need not themselves absorb surely.
+There is no assertion of a raw minimizing profile or raw cap attainment.
+
+### QCUT5. Consume the EXISTING varying-period branch at the SAME table
+
+Assume a FOUR-player table r has no uniform-equilibrium payoff. The
+tracked normal-core producer and its punishment-normality consequence
+give P_i≤s_i for ALL i on this SAME table. No row subtraction, new
+recipient scale, tax maximization or alternate carrier is introduced.
+
+The tracked negative endpoint supplies a fixed positive terminal gap δ.
+This is the MAX-exploitability floor used to select a debtor, NOT a
+SUM-minimum source. No minimizing profile or common-debt field is imported.
+Let L_k≥1 be ANY finite period schedule, e_k≥0 ANY local error schedule,
+and p_k ANY choice of produced interior cyclic blocks with
+
+    L_k e_k→0.
+
+Choose ANY initial phase for each actual periodic profile. The tracked
+fixed-debtor/owner-escape theorem applies: it returns one owner h, a
+strict subsequence with h's full debt bounded below, and either
+owner concentration or vanishing total displayed hazard.
+
+The owner-concentration output includes the literal terminal LAW
+convergence to {h}, not only payoffs, and every outsider FULL debt→0.
+These are exactly QCUT4's first two hypotheses. The SAME r's normal-core
+producer supplies its third hypothesis P_h≤s_h. QCUT4 produces a
+uniform-equilibrium payoff at r, contradicting the original no-UE premise.
+
+Thus the owner-concentration arm is IMPOSSIBLE for arbitrary varying
+periods, arbitrary family selections and arbitrary initial phases. The
+surviving produced branch has vanishing TOTAL hazard, not merely a
+small deleted denominator. This is a source-to-consumer closure of one
+named branch; it is not a supplied-ratio compiler.
+
+In fact the WHOLE family, not just one selected subsequence, satisfies
+
+    H_k=Σ[phase,i]q_i(k,phase)→0.             (QCUT.8)
+
+If not, select a subsequence H_k≥a>0. The same fixed-gap theorem applies
+to that subsequence. Its concentration arm is impossible by QCUT4;
+its vanishing-H arm contradicts H_k≥a. This proves(QCUT.8) with no
+compactness assumption on a fixed period and no uniform bound on L_k.
+
+An efficient-ratio family necessarily has L_k e_k→0, since every
+deleted absorption is≤1. Hence under the hypothetical counterexample
+ALL such candidates must be fully diffuse. This does NOT prove that
+some efficient-ratio family exists or rule out fully diffuse blocks.
+
+### QCUT6. Overlap and exact boundary tests
+
+The tracked period-one concentration contradiction extracts an actual
+positive solo limiting root and invokes the exact solo-cycle compiler.
+That source extraction uses a fixed phase space. QCUT4 does NOT need
+an exact limiting root, a positive per-date rate, phase compactness,
+or bounded period. It repairs the original approximate profiles by
+their own terminal LAW quantiles. The existing approximate cycle
+compiler treats an exactly isolated owner; here the opponents can
+have nonzero mass at EVERY old phase and every finite date.
+The generic phase-switch comparison already supplies the outsider
+stability mechanism. The new step is the produced concentration
+quantile that simultaneously controls the owner's before-cut response
+and its born tail responses. Exact overlap beyond these inspected
+declarations remains subject to independent review.
+
+The all-interior efficiency premise is genuinely false BEFORE a
+counterexample/normal-core restriction. Reuse the already-saved C-row
+table: own rewards C≥1, nonsingleton participants C−1, passives C+1,
+Never0. EVERY strictly interior periodic profile, at EVERY period and
+error, has B_i=C+1 because each deleted opponent group absorbs surely.
+For terminal coalition S the total reward is n(C+1)−1 if |S|=1 and
+n(C+1)−2|S| otherwise. Thus ΣU≤n(C+1)−1 and D≥1 for the ENTIRE
+interior family. There can be no globally efficient ratio selection on
+this solved table. The known pure-host equilibrium is not interior.
+
+This is not a new table or a new negative UE claim. It specifically
+refutes treating the pointwise interior producer as strategy-class
+complete. QCUT3 repairs its owner branch by ending the irrelevant
+opponent trembles rather than repeating them forever.
+
+Exact check at C=1,n=4: use the stationary row
+q=(1/2,1/10000,1/10000,1/10000). Its infinite periodic full debt is
+greater than1. Follow100 copies, then all Never. The new full debt is
+less than1/10 (approximately0.030456), while singleton failure of the
+old periodic profile is approximately0.000600. These claims were
+checked using exact rational sums over all15 coalitions. The finite
+prefix cap was the maximum over ALL100 prefix deadlines, the first
+late solo deadline, and Never; no numerical root solver was used.
+
+The punishment premise cannot be dropped. In the two-player table
+r({h})=(−1,1), r({j})=(1,1), r({h,j})=(1,1), Never0, h quitting at
+date0 and j Never gives η=0 and outsider debt0. But h's true
+punishment is0>−1: its Never reply always pays≥0, and all-Continue
+opponents achieve cap0. No profile can have h's complete debt vanish
+while its payoff approaches−1. Thus literal singleton concentration
+alone does not justify an AllNever suffix or a negative-own anchor.
+
+### QCUT7. Full-goal interpretation and the next decisive question
+
+The intuition-level route now has a concrete completed operation:
+produce actual interior approximate cycles; if their asymptotic debt
+is caused by one eventual singleton supplier, END the irrelevant
+opponent clocks at a concentration quantile and price that supplier's
+remaining response by its actual punishment. All observers are already
+protected by the supplied full-cap estimate; the owner is protected by
+the new complete seam. This yields actual independent approximate Nash
+and then ONE fixed uniform payoff, without a returned itinerary.
+
+For arbitrary surviving tables, however, this is only ONE branch.
+Under no UE every low period-error family is forced into H_k→0 by
+QCUT5. Normalizing these shrinking words can still select an above-own
+singleton lottery or a quiet component; none of the saved exact/robust
+seed countertests is contradicted. A new global forcing argument must
+consume THAT fully diffuse regime, or produce an efficient family by
+a different regularization. It cannot retain an assumed finite charge,
+assumed return or assumed compatible UE tail.
+
+The single weakest unproved step in this end-to-end story is therefore:
+at a true no-UE four-player table, can the fully diffuse endogenous
+families ALL persist for every period/error choice, or must some legal
+scale separation produce a nonvanishing obligation that the quantile
+repair or an efficient full-cap cycle actually consumes? At present no
+game-equation reason rules out the former. This section is honest
+branch progress, not a persuasive completed proof of the conjecture.
 
 ## Actual cap-domain control does not automatically select a charged path
 

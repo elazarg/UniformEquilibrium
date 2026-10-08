@@ -61,21 +61,20 @@ the genuine minimum cap margin. The live next question is whether the
 ALL-law floor and that strict margin force a legal independent
 whole-law substitution with all born caps priced. No radial identity,
 count balance or selected response lower ledger is used as a cap upper
-bound. The live boundary question now permits nonvanishing terminal
-payments but must actually produce negligible deleted-player seam
-charges, not assume a favorable Nash selector. BT supplies a COMPLETE
-ORDINARY, UNREVIEWED positive test: fixed prices and an explicitly
-constructed exact-Nash word family on the already-solved RZ table do
-control every original and repeated full cap. Its seed and solo-cycle
-inequalities are produced from that literal table, not from arbitrary
-positive-gap game data. BU then retires the entire arbitrary-price
-EXACT finite-Nash/repetition producer: another already-solved cyclic
-table blocks every strictly negative boundary vector and every menu
-size, with a positive FULL stationary-debt floor. This is not a native
-positive-gap example. Exact finite Nash is no longer the live producer;
-a new whole-game forcing principle is required, not an assumed
-low-error replacement family. All older unique proofs, tests and
-objections are retained below.
+bound. BT is an exact positive boundary/repetition demonstration on a
+solved table; BU retires that EXACT negative-boundary Nash architecture
+as a universal producer. Neither is a new counterexample-class reduction.
+
+The current independent attempt is an ALL-law comparison, not an exact
+root selector: finite occupied words with the literal full-cap prefix
+operator, or a direct full-behavioral negative certificate. WD below
+records one completed obstruction to the latter: the fixed four-response
+copy/preempt/delay kernel cannot have a positive pointwise symmetrized
+lower bound for ANY native table. Its exact thirteen-pattern cancellation
+is not a playable correlated profile. The next certificate attempt must
+use genuine product-law constraints, or the word comparison must produce
+a below-floor word; selected-response lower ledgers alone do neither.
+All older unique proofs, tests and objections are retained below.
 
 
 ## Original singleton-matrix question
@@ -11074,6 +11073,236 @@ delivery. An assumed low-error family, a root oracle or a charged
 component named without accessibility would not fill the missing
 global forcing step. The next mechanism must supply that step or
 change the whole-game construction.
+
+
+## Whole-law word control and a failed pointwise copy-response certificate
+
+Status: COMPLETE ORDINARY, UNREVIEWED obstruction to ONE newly tested
+negative-certificate architecture. No positive-gap table, source-class
+reduction or UE producer is claimed. The exact cancellation below is
+reproducible from the displayed integer data; no floating-point solver
+output is used as evidence.
+
+### WD1. The exact occupied-word comparison, and its existing overlap
+
+For a bounded signed table, let (u,b) be the payoff/full-cap pair of an
+actual tail or a limit of actual tails. A product root q has joint
+Continue mass ν and opponent-Continue masses α_i. Write Q_i(q) for
+immediate Quit, A_i(q) for the nonempty opponent-root contribution when
+i continues, and C_i(q;b)=A_i(q)+α_i b_i. The literal prefix has
+
+    u'_i=H_i(q)+νu_i,       b'_i=max(Q_i(q),C_i(q;b)).
+
+In particular this retains ALL finite and Never tests, also when α_i=0.
+Define the ordinary root defect
+
+    e_i(q;b)=max(Q_i,C_i)−q_i Q_i−(1−q_i)C_i ≥0.
+
+The exact arbitrary-root identity is
+
+    d'_i=νd_i+e_i(q;b),       D'=νD+∑[i] e_i(q;b).          (WD.1)
+
+There is no Nash assumption in (WD.1). At a true native absorbing
+minimum A>0, every literal prefix is still absorbing, so its all-law
+floor gives ∑e_i(q;b)≥(1−ν)A. This is not a selected-response upper
+estimate and does not price e_i at a new tail. A useful word would have
+to beat the accumulated complete defects, not merely concatenate
+payoff ledgers.
+
+The enticing special case of Nash roots at continuations between u and
+b is already covered, for TRUE FULL-carrier minima, by
+`minimumTerminalSemantic_auxiliaryNash_budget` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+and `minimumTerminalSemantic_weightedAuxiliaryNash_budget` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticWeightedAuxiliaryNashBudget.lean`.
+Those two files and `UniformEquilibrium/Quitting/Root/TerminalSemanticDebt.lean`
+were inspected narrowly. Native AllNever has full debt zero, so that
+checked FULL-minimum hypothesis is NOT silently asserted at a native
+absorbing minimum; the native prefix-floor statement above has its own
+direct absorbing-class justification. No new cap-band theorem is claimed.
+
+Likewise finite occupied words with an actual absorbing completion do
+not give a new completeness route: the previously reviewed SAME-table
+K_fin=K_abs adapter already permits finite-support all-four-finite
+realizers. A tail attached after all their finite supports is invisible
+to both prescribed play and every opponent-deleted continuation. The
+missing output remains a favorable WORD, not another completion compiler.
+
+### WD2. A legal direct negative test on ALL absorbing laws
+
+The independent certificate attempt instead fixes native rewards
+r_i({i})=0, original Never payoff0, and arbitrary other finite rewards.
+Let p_i be arbitrary privately independent stopping laws on ℕ∪{Never}.
+They are absorbing exactly when some owner has p_i(Never)=0.
+
+For each i, use an independent fresh draw to form four legal complete
+responses: Quit0; Never; draw p_i and delay its finite clock by1; draw
+p_{i+1 mod4} and preempt its finite clock by1, clipped at0. Both clock
+maps retain Never. These draws are not observations of anyone's actual
+clock. The full behavioral cap dominates the equally weighted mean of
+these four responses. Hence their total payoff-minus-prescribed ledger
+L_r(p) satisfies L_r(p)≤D_r(p) for EVERY actual product profile.
+
+A positive bound L_r(p)≥c>0 over ALL absorbing p would be an actual
+negative certificate. The attempted verifier made this stronger:
+symmetrize its payoff kernel over two interchangeable clock samples
+per owner and require the resulting kernel to be ≥c POINTWISE on every
+sample tuple with at least one owner's two clocks both finite. Such a
+pointwise inequality really would imply the claimed absorbing bound.
+The next exact test rules out this verifier for EVERY native table.
+
+### WD3. Define the complete symmetrized kernel
+
+A sample tuple s=(s_0^0,s_0^1,…,s_3^0,s_3^1) has eight clock values.
+For ε∈{0,1}⁴, prescribed clocks are t_i=s_i^(ε_i). The delayed test
+uses s_i^(1−ε_i)+1; the preempting test uses
+max(0,s_{i+1}^(1−ε_{i+1})−1). Never is retained. Let R_i(t) denote the
+literal terminal reward under deterministic clocks, zero for AllNever.
+For each i and each of the four tests, replace only clock i in t.
+The kernel K_r(s) is 1/64 times the sum, over all16 ε, all4 owners and
+all4 tests, of the test reward minus R_i(t).
+
+Under independent pairs of samples, E[K_r(s)]=L_r(p), by exchangeability.
+If p absorbs, the sample tuple almost surely has an owner whose two
+samples are finite. Thus no conditioning or correlated profile is
+introduced in the SOUND implication from pointwise positivity.
+
+### WD4. An exact thirteen-pattern obstruction
+
+Let n stand for Never. Use these thirteen tuples and positive integer
+weights, whose sum is128955:
+
+| two clocks of owners0,1,2,3 | weight |
+|---|---:|
+| (0,1; 0,1; 1,n; 0,n) | 87168 |
+| (0,0; n,n; 1,1; 1,1) | 7264 |
+| (0,0; 0,0; n,n; 1,1) | 1884 |
+| (1,1; n,n; 1,1; n,n) | 2724 |
+| (0,0; 0,0; 0,0; 0,0) | 3441 |
+| (0,n; 0,n; 1,1; 1,1) | 7536 |
+| (0,0; 0,n; 0,0; 1,1) | 8080 |
+| (0,0; n,n; 1,1; n,n) | 1816 |
+| (0,0; n,n; n,n; 1,1) | 1256 |
+| (0,0; 0,0; 1,1; n,n) | 2292 |
+| (0,0; 1,1; n,n; n,n) | 1884 |
+| (0,0; 0,0; 0,n; 1,1) | 3104 |
+| (0,0; n,n; 0,0; n,n) | 506 |
+
+Every tuple passes the finite-anchor sample condition. For EVERY
+cyclically symmetric native reward table,
+
+    ∑[a=1..13] weight_a K_r(s_a)=0.                        (WD.2)
+
+Here cyclic symmetry means r_i(S)=r_0(S−i mod4). Its14 free recipient0
+coordinates are coalitions encoded by bit masks2,3,…,15; mask1 is the
+fixed own singleton0. The following exact integer verifier reconstructs
+the coefficient of EVERY free coordinate in64 K_r(s), rather than
+evaluating one favorable reward table:
+
+```python
+from itertools import product
+
+n = None
+data = [
+ ((0,1,0,1,1,n,0,n),87168), ((0,0,n,n,1,1,1,1),7264),
+ ((0,0,0,0,n,n,1,1),1884), ((1,1,n,n,1,1,n,n),2724),
+ ((0,0,0,0,0,0,0,0),3441), ((0,n,0,n,1,1,1,1),7536),
+ ((0,0,0,n,0,0,1,1),8080), ((0,0,n,n,1,1,n,n),1816),
+ ((0,0,n,n,n,n,1,1),1256), ((0,0,0,0,1,1,n,n),2292),
+ ((0,0,1,1,n,n,n,n),1884), ((0,0,0,0,0,n,1,1),3104),
+ ((0,0,n,n,0,0,n,n),506),
+]
+
+def terminal_mask(clocks):
+    first = min((x for x in clocks if x is not None), default=None)
+    if first is None:
+        return 0
+    return sum(1 << i for i, x in enumerate(clocks) if x == first)
+
+def coefficients(sample):
+    row = [0] * 14
+    for eps in product(range(2), repeat=4):
+        clocks = [sample[2*i + eps[i]] for i in range(4)]
+        base = terminal_mask(clocks)
+        for i in range(4):
+            own = sample[2*i + 1-eps[i]]
+            j = (i+1) % 4
+            nxt = sample[2*j + 1-eps[j]]
+            delayed = None if own is None else own+1
+            early = None if nxt is None else max(0, nxt-1)
+            for response in (0, None, delayed, early):
+                changed = clocks.copy()
+                changed[i] = response
+                for coalition, sign in ((terminal_mask(changed),1),
+                                         (base,-1)):
+                    relative = sum(((coalition >> ((k+i) % 4)) & 1) << k
+                                   for k in range(4))
+                    if relative >= 2:
+                        row[relative-2] += sign
+    return row
+
+assert sum(w for _, w in data) == 128955
+total = [sum(w*coefficients(s)[j] for s,w in data) for j in range(14)]
+assert total == [0] * 14
+print(total)
+```
+
+The displayed verifier was run, and the14 weighted coefficients were
+exactly zero. Floating-point minimum-norm search only discovered this
+support; its output is unnecessary once these rational weights and
+integer identities are checked.
+
+To cover an ARBITRARY native table, suppose it passed the pointwise
+kernel bound c>0. Average the table over the four cyclic player
+relabelings. The tuple domain is invariant under those relabelings and
+the fixed test grammar is equivariant, so the averaged table still
+passes the SAME pointwise bound c. It is cyclically symmetric. Applying
+(WD.2) yields 0≥128955c, a contradiction. No sign, normalization of the
+other56 rewards, or pure-Nash screen is needed.
+
+### WD5. Why this is not an actual-law counterexample to the expected test
+
+The weighted pattern mixture is not a legal independent profile.
+Each pattern has a finite anchor, so under the mixture the four
+prescribed clocks are jointly Never with probability zero. Yet every
+owner's prescribed Never marginal is strictly positive after the
+within-owner swaps: different patterns carry different anchors. Thus
+the four prescribed clocks are not independent. Cyclic averaging does
+not repair this obstruction.
+
+Consequently (WD.2) disproves only pointwise symmetrized positivity,
+not a positive EXPECTED bound restricted to actual products. It neither
+shows A_abs(r)=0 for every r nor supplies a positive-gap table. It also
+does not cover changed test weights, adaptive ranks, additional samples
+or nonlinear uses of the independent marginal laws.
+
+A simpler caution explains why dropping Quit0 and Never was not a
+promising repair. If every player uses the uniform law on{0,…,L−1},
+ANY fixed mixture of independent copied clocks translated by integers
+of magnitude at most R (negative times clipped at0) is within total
+variation R/L of that same law. Each selected test gain is at most
+2MR/L for |r|≤M, although full debt need not be small. This statement
+is about translations, not arbitrary bounded-displacement maps.
+For the solved native table r_i(S)=0 when i∈S and −1 otherwise,
+
+    B_i=0,  U_i=−1+(L+1)²/(4L²),  D=3−2/L−1/L² →3.
+
+Pure grand Quit has debt0. This exact regression is therefore NOT a
+positive-minimum source. The four-test obstruction above already retains
+both omitted extreme tests and does not rely on this regression.
+
+### WD6. Changed mechanism and the exact open step
+
+The global certificate attempt must use the independent PRODUCT-law
+constraints, not just exchangeability of two copies and pointwise
+payoff inequalities. A correlated cancellation of these polynomial
+ledgers is not a contradiction to the native all-law floor, just as RS's
+convex mixture of ledgers is not playable correlation. The all-root
+word alternative likewise still needs an actual word with smaller full
+debt; (WD.1) must control its entire defects at its ACTUAL intermediate
+cap states. Neither missing step is assumed here. This certificate
+grammar is retired in its tested pointwise form; it is not exported or
+enlarged by tuning its constants.
 
 
 ## A native absorbing spherical maximum and full response-distribution duality
