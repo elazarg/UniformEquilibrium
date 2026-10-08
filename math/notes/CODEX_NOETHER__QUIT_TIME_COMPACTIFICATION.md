@@ -51,10 +51,14 @@ no-UE example. The next mechanism must use additional genuine minimum-source
 ancestry or attack the zero-own ABSORBING gap directly, not supply a cap sign.
 RM23 carries out the latter finite-penalty/limit attempt: it produces a
 native absorbing minimum with weak cap/payoff margins and proves the native
-worst absorbing gap is<1. The strict full payoff margin does NOT survive
-the limit; a sole-debtor/sole-head boundary remains. This alternative source
-loses NP's fully-paid/all-tail strength and is internal, not a substitute
-consumer or an additional export.
+worst absorbing gap is<1. Its strict full payoff estimate does NOT survive
+the limit. RM24 restores a strict margin at EVERY native absorbing minimum
+directly, by the already reviewed BA6 prefix-invariant argument; the sole-head
+and sole-root-supplier boundary is therefore excluded, not a surviving
+consequence of that weak estimate. This is a useful overlap and ordinary
+zero-own extension, not a new export. The native source still loses NP's
+fully-paid/unrestricted-all-tail strength. A native random-collision consumer
+or an actual same-NP joint-law exit remains unproved.
 No full Fin4 contradiction or new export is claimed.
 
 The body retains the independently reviewed compact/source reductions,
@@ -18481,3 +18485,145 @@ stationary cap definitions underlying the already used stationary-punishment
 bridge. All new finite-C, limit and native target arguments above are
 ordinary mathematics, not fresh Lean declarations. No full Fin4 conclusion
 or new export is claimed.
+
+### RM24. Direct native absorbing margins: BA6 restores the strict inequality
+
+Status: COMPLETE ORDINARY PROOF, BUILDING ON THE PREVIOUSLY REVIEWED BA6
+ARGUMENT; NOT A NEW EXPORT OR FULL FIN4 CONSUMER. This corrects the live
+interpretation of RM23 without changing its valid limit calculation. The
+weak bound obtained by taking C→∞ is not the strongest bound available on
+the limiting domain. No native minimum is identified with an NP full
+minimum or with MORSE's least-Never zero-full-debt stratum.
+
+Finite data and quantifiers. Let z be ANY finite signed four-player table
+with z_i({i})=0 for every i and |z_i(S)|≤M, M>0. Let P_abs be ALL
+independent stopping-law profiles with joint Never mass0; unilateral
+responses still range over EVERY finite deadline and literal Never. Let
+K_abs be the closure of their complete payoff/cap pairs. Suppose its
+true global SUM minimum is A>0. Then EVERY minimizing pair satisfies
+
+    B_i≥A+A²/(8M),
+    U_i≥A−d_i+A²/(8M)>0, for EVERY owner i.       (NA1)
+
+All bounds concern that SAME table, domain and actual full caps. There is
+no minimizing-tail, row-Nash or supported-cap assumption. This is ordinary
+mathematics, not a tracked Lean statement with its hypotheses changed.
+
+Native preemptors are actually supplied. For each owner h there exists
+k≠h with z_k({h})<0. Otherwise let h alone use a stationary geometric
+Quit hazard θ>0 and all other owners Never. This is absorbing because h's
+clock is finite a.s. Owner h receives0 and its full cap is0. Observer k
+receives z_k({h})≥0. Its complete finite response values interpolate
+between θ z_k({h,k}) and z_k({h}); Never gives z_k({h}). Therefore
+
+    B_k=max(z_k({h}),θ z_k({h,k})),
+    d_k≤Mθ.
+
+Taking θ↓0 gives absorbing D→0, contradicting A>0. This is a direct
+absorbing producer; alternatively any fixed z+C with C>0 has positive
+full gap by NP's actual completion estimate and supplies the same strict
+column preemptors through the tracked no-UE declaration. Neither argument
+claims no UE at the own-zero table z (AllNever is its full Nash profile).
+
+Closed-domain hypotheses. K_abs is compact, D and all debts are continuous,
+and each debt is nonnegative. Every finite independent root prefix of an
+absorbing actual tail remains absorbing; exact semantic prefixing extends
+continuously to K_abs. These are the only global comparison operations used
+in the following margin proof. All own-zero full caps are bounded by M.
+
+Weak singleton floor. Take a root Nash at auxiliary continuation B−h,
+where 0≤h_i<A. The algebraic full-cap prefix budget gives
+
+    D(prefix)≤(1−a)A+a max_i h_i,
+
+with a its root absorption probability. Its prefix is in K_abs, so the
+floor A forces a=0. Nash at AllContinue then gives B_i−h_i≥0. Let
+h_i↑A to obtain B_i≥A for every i. This reproduces the prefix-invariant
+ordinary proof in MORSE BA6; it does not invoke a full-carrier minimum.
+
+Strict crossing argument. Fix owner h, put L=B_h≥A, and choose its
+native preemptor k. For a sufficiently small θ>0 start from the minimizing
+pair and repeatedly prefix a solo θ-hazard of h. Until the first cap
+threshold crossing, all caps exceed4Mθ. Every outside cap then strictly
+selects its Continue branch and has update
+
+    B_j'=θ z_j({h})+(1−θ)B_j   (j≠h),
+    B_h'=B_h=L.
+
+The prescribed payoff update is the same passive mixture for every row,
+and h's new Quit pays its own0. Hence the FULL debt update is exactly
+
+    D'=(1−θ)D+θL≤L.                            (NA2)
+
+This is an all-response envelope identity, including Never; no deadline
+selector is frozen. The k cap's affine iteration would tend to the
+negative z_k({h}), so some threshold must be crossed in finitely many
+steps. At the first crossing a fixed cap lies in(2Mθ,4Mθ]: a one-step
+cap decrement is at most2Mθ, and its previous Continue branch was active.
+The owner cap L never crosses. Select θ↓0, one fixed crossing label and
+a compact pair y∈K_abs. Then its cap in that row is0 and
+
+    A≤D(y)≤L.
+
+Take a root Nash at continuation y.B−A/2. The zero cap row now lies
+A/2 below its own singleton0, so the literal below-singleton bound gives
+root absorption a≥A/(4M+A). This finite prefix is still in K_abs. Its
+complete-cap auxiliary debt budget implies
+
+    A≤D(y)−a[D(y)−A/2]
+      ≤D(y)−[A/(4M+A)][D(y)−A/2].
+
+Rearranging yields D(y)≥A+A²/(8M), so L has the same lower bound.
+Since d_h=B_h−U_h, (NA1) follows for every h. In particular the bound
+is UNIVERSAL over all absorbing minimizing pairs, not just the particular
+large-C limiting selection in RM23.
+
+Actual class consumer supplied by this restoration. Suppose a nonzero
+minimum prefix has exactly one positive supplier h. If its rate is1,
+U_h=0 contradicts(NA1). If 0<a_h<1, its original conditional suffix is
+absorbing and has D(w)≥A, while h's own cap is B_h and all observer
+debts are at least(1−a_h) times their suffix debts. The exact owner ledger
+therefore gives
+
+    D(prefix)≥(1−a_h)D(w)+a_h B_h
+             ≥A+a_h A²/(8M)>A.                (NA3)
+
+Thus EVERY nonzero native minimum prefix has at least two positive rates.
+Likewise BA's signed strict-head argument forcing original U_h=0 now
+contradicts(NA1); the sole-debtor allowance (ZA5) was only a limitation of
+the weak limit estimate, not a surviving native source branch. These
+exclusions are the zero-own extension of BA6–BA7, not counted as separate
+new coverage.
+
+Restrictions retained. A nonsure prefix T_x(w) is a legal absorbing
+competitor for w∈K_abs, NOT for arbitrary w∈K_all. A sure prefix allows
+any actual tail while the whole profile remains absorbing. A supported-law
+or bounded conditional signed variation is legal only when it preserves
+some zero-Never anchor; inserting Never into EVERY anchor is not licensed
+by compactification. The c/Never payoff aliases at four-finite clocks do
+not constitute distinct kernel directions. No all-paid common debt, NP
+gap separation, or equality of absorbing/full minima is asserted here.
+
+Exact source/overlap check. The previously independently reviewed ordinary
+input is MORSE's heading 'Forward global attempt: an absorbing carrier and
+a terminal-row penalty', BA5–BA6, in
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`. The exact tracked
+algebra inspected under its imports is
+`quittingTerminalSemanticDebtSum_prefix_le_auxiliaryNashDefect` in
+`UniformEquilibrium/Quitting/Terminal/AuxiliaryNashDefectBudget.lean`;
+`quittingTerminalSemanticDebt_prefix_le_auxiliaryNashDefect` in
+`UniformEquilibrium/Quitting/Terminal/AuxiliaryNashDebt.lean`;
+`belowSingleton_exactRoot_absorptionMass_lowerBound` in
+`UniformEquilibrium/Quitting/Root/BelowSingletonRootAbsorption.lean`;
+and the solo threshold construction and full quadratic proof already
+recorded in RM23. The prefix-invariant weak-margin proof was also read in
+`minimumTerminalSemantic_weightedSingletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticWeightedAuxiliaryNashBudget.lean`.
+Its original carrier premise is replaced only by the explicitly proved
+ordinary compact/prefix-closed-domain argument above, not silently reused.
+
+Concrete next question. Can a native random absorbing minimum be modified
+within P_abs to preserve or upper-control EVERY cap and strictly increase
+total prescribed payoff, using(NA1) rather than the discarded sole-head
+boundary? Merely importing NP's nonsure ALL-tail floor or forcing a
+zero-full-debt least-Never point to coincide with this minimum is invalid.

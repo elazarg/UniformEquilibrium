@@ -10058,7 +10058,82 @@ in `UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`
 were also inspected. The explicit calculation above separately checks
 absorption and all complete replies; it is not new existence coverage.
 
-### RZ5. Consumed implication and the honest remaining target
+### RZ5. Even the ENTIRE exact finite-calendar Nash family is inert
+
+There is a stronger whole-strategy falsifier, not just an auxiliary
+root observation. For this table EVERY actual independent terminal
+Nash profile with finite-support clocks is AllNever. Consequently,
+for EVERY N, the finite normal-form game with deadlines
+{0,…,N,Never} has only the AllNever Nash profile. Its exact Nash
+selectors do not converge to an absorbing solution, although bounded
+proper approximate equilibria exist.
+
+First, no complete cap-Nash root at ANY continuation tail can have
+a sure coordinate z. Against a sure z, every free nonfavorite owner
+i≠z,z+1 has root gap exactly−1: if z is the sole opponent quitter,
+the gap is Kᵢz=−1, and with any further opponent quitter it is
+participant−1 minus passive0, also−1. The opponent sure atom
+screens every later response, so no tail payoff changes this fact.
+Both nonfavorites must be quiet. The remaining favorite z+1 then
+has root gap1 and is forced sure too. But z's withdrawal from
+this adjacent pair gains1. Its opponent favorite is now sure,
+screening its own continuation as well. This is a contradiction.
+This proof covers shared-sure boundaries and arbitrary tails, not
+just continuation0 or one selected punishment.
+
+Second, a true terminal Nash profile can be conditioned on joint
+survival to any date t at which every own survival is positive.
+For owner i, every pure deadline at or after t has payoff
+
+    prior opponent reward Aᵢ(t)+hᵢ(t)·tail deadline payoff,
+
+where hᵢ(t)>0. Every deadline with positive prescribed own mass
+is a global maximizing response; all conditional prescribed support
+remains maximizing after division by hᵢ(t). Thus the independent
+conditional suffix is a true unrestricted terminal Nash profile.
+This is the exact support/best-response identity for an ACTUAL Nash
+profile, not an assumption about a conditional tail of a positive
+debt minimum or a claim about an arbitrary carrier point.
+
+If a finite-support Nash profile has a proper clock, let t be the
+earliest date at which any owner's cumulative finite clock mass
+becomes1. Every owner survives TO t with positive probability,
+by earliestness. The conditioned suffix is Nash and its root at t
+has a sure owner. The previous paragraph excludes it.
+
+Otherwise all four clocks have positive Never mass. If any finite
+prescribed mass exists, take the latest such date t. All four own
+survivals to t are positive. Its conditional suffix is Nash, its
+root is nonquiet, and its continuation after t is AllNever. It
+would therefore be a nonquiet auxiliary Nash root at continuation0,
+contrary to RZ2. Thus no finite prescribed mass exists at all.
+
+For finite-action deadline game {0,…,N,Never}, EVERY pure deadline
+later than N has exactly the same payoff as Never: each opponent
+either already stopped by N or is Never; on all-opponent-Never,
+the added own singleton pays0. Therefore its normal-form Nash
+profiles are already Nash against the ENTIRE original reply set.
+The conclusion just proved applies, rather than merely a restricted
+finite-game best-response conclusion.
+
+For comparison, the proper infinite profile in RZ4 can be made
+bounded while retaining arbitrarily small FULL debt. Keep its first
+k full periods, and push each clock's remaining mass σᵏ to one
+common final finite date. All four clocks are then finite surely.
+The terminal reward coupling error is at most8Mσᵏ per row and
+the uniform all-reply cap error at most6Mσᵏ per owner. Hence
+
+    D_bounded≤392ρ+56Mσᵏ=392ρ+5544σᵏ.
+
+Choose m then k large. This is an explicit absorbing bounded
+approximate Nash profile, while exact finite-support Nash is
+uniquely AllNever at EVERY calendar size. A forced final coalition
+is not asserted to be Nash; its entire error is covered by the
+coupling estimate. The example sharply separates exact Nash
+selection, approximate Nash construction, finite support, and
+finite-a.s. clock completeness.
+
+### RZ6. Consumed implication and the honest remaining target
 
 Exact rational/symbolic experiments regenerated the full60 table,
 all15 pure-coalition escapes, all inverse-principal candidates and
@@ -10069,9 +10144,12 @@ was checked modulo the exact balance polynomial.
 RETIRED: the claim that the surviving Γ degree/StandardQ/blocker
 screens alone force a nonzero exact root at continuation0. It fails
 over the WHOLE auxiliary root family, even with all pure coalitions
-strictly escapable. The distant absorbing construction demonstrates
-why a genuine whole-law mechanism can succeed when that root-only
-consumer has no output.
+strictly escapable. Also retired on this exact table is the proposal
+to select exact Nash profiles in increasingly large finite deadline
+games and expect absorbing limits: the COMPLETE selector set is
+AllNever at every size. The distant absorbing construction demonstrates
+why a genuine whole-law approximate mechanism can succeed when these
+exact root/finite-game consumers have no output.
 
 NOT RETIRED: the μ=1 branch under the FULL native premise A>0.
 Here A=0 and μ=0, because the explicit absorbing zero-debt limit
