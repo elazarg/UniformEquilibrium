@@ -24,7 +24,13 @@ and whole-word compatibility remain open. I currently do NOT have a
 convincing arbitrary-table forcing argument for the relay picture.
 TB supplies a concrete different GLOBAL screening move on an escaping
 tax boundary, not the missing interior consumer. Its status is ordinary
-unreviewed mathematics, separate from the reviewed scalar class.
+mathematics with a focused independent check, separate from the
+reviewed scalar class and not an exported interior-source consumer.
+DK makes the next obstruction precise: pure deadline orientation is
+lost when replies or moving minimizers are averaged. CR also retires
+an attempted nonnegative-floor argument for correlated rounding;
+native own0 need not imply true punishment0. No convincing all-game
+forcing principle has emerged from these two supporting tests.
 
 ## 1. The decisive picture
 
@@ -159,7 +165,8 @@ most three players, uses its ACTUAL absorbing periodic approximate
 equilibria, removes empty phases, and obtains a finite reward-cover
 menu with positive hazard at EVERY date. Large negative omitted-player
 participant prices then screen EVERY deadline against literal Never.
-This is a complete ordinary unreviewed asymptotic boundary proof, not
+This is a complete ordinary asymptotic boundary proof with a focused
+independent mathematical PASS, not
 an asserted interior tax theorem or a transport of old NP/spherical
 minima. It gives a concrete game-specific global intervention rather
 than a supplied quiet-child cap assumption.
@@ -171,6 +178,11 @@ recipient's passive / own-singleton / nonsingleton-member masses,
 yet positive debt. Its table is solved elsewhere, so it does not
 refute a true-global-floor consumer. It proves that the FULL coalition
 payoff kernels and changed-profile cap births have to remain visible.
+BROUWER's radial test further warns that even exact FULL-coalition
+balance and positive delivery need not consume the source: his
+solved construction fails the genuine minimum cap margin. A next
+comparison must actually use that margin and the all-law floor,
+not discard them after obtaining a balanced occupation measure.
 
 **Native absorbing existence.** A reduction passes through all-own-zero
 rewards with a positive absorbing gap; ordinary AllNever equilibrium
@@ -535,6 +547,20 @@ seeded prefixes also retain a full-cap debt floor. The SAME game has
 unrooted cyclic equilibrium words. Global forcing must select its
 whole chronology, not simply launch every game from a canonical seed.
 
+### I. Native own0 is not the true-punishment floor
+
+The saved RZ table has an exact absorbing correlated full equilibrium
+paying197/4 to EVERY owner. But a proposed independent-payoff
+separation argument was withdrawn: favorite predecessor sure0 plus
+one other opponent halfQuit0/halfNever gives a receiver complete
+cap−1/2, despite its own singleton0. Its true punishment is negative.
+The same table has a full mixed root q=(1/10)⁴ at the feasible
+annotation v=(−109/729)⁴ above true punishment, with head
+(1981/125)⁴ strictly positive. No actual Nash tail at v is supplied.
+This is a premise failure, not a correlated-rounding impossibility
+theorem. It explains why a proof cannot replace legal negative
+continuation faces by the native all-Continue value0.
+
 ## 9. One concrete research target, and the weakest point
 
 The next target is not another generic local root lemma. It is the
@@ -562,7 +588,8 @@ TB provides an actual three-player-core chronology on the escaping
 negative-price boundary, with full omitted-player caps screened.
 At an interior candidate, the relevant transition is not just
 “participant versus passive”: for each recipient and each fixed
-opponent sample, its original law and a pure response move between
+opponent sample with a finite first time, its original law and a
+pure finite response move between
 own singleton, the SAME earliest-opponent coalition H, and H∪{i}.
 The first two outcomes may have different dates; ties are physical.
 
@@ -575,6 +602,28 @@ response, and therefore refutes the easiest conservation argument.
 This is a concrete obstruction test for a new forcing mechanism,
 not a claimed theorem that balanced response flows must form an
 executable cycle. I do not presently have such a theorem.
+
+DK separates the valid fixed-test orientation from what is lost:
+each PURE deadline moves solo preemption in one direction before
+its threshold and the other afterwards, while its tie injection
+occurs at one date. A mixed best response or a family of moving
+minimum laws has no common threshold or original calendar. The
+coarse moments can balance even on one common profile. Neither
+averaging the thresholds nor rounding the resulting correlated
+flow has been justified by the game equations.
+
+The actual comparison now needed is unambiguous: on ONE selected
+native table with A>0, build an independent absorbing competitor
+with COMPLETE D<A, or contradict its whole minimizing family
+using the true minimum margins. On those minima B_i>A and
+U_i>A−d_i, but conditional tails need not retain either inequality
+or be near Nash. What holds unconditionally is B_tail≥trueP
+and U_tail≥trueP−d_tail, not U_tail≥trueP; those tail debts
+need not be small. The actual punishment vector can also be
+negative. CR's delayed-quitting estimate would need a
+nonnegative floor AND vanishing global debt; neither is supplied
+by the positive absorbing-minimum source. It therefore cannot be
+used as the missing global consumer.
 
 The weakest bridge remains global strategic selection, especially
 competitive trapping and nested singular ports. I do not presently
