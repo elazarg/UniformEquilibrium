@@ -9,10 +9,15 @@ singleton conditioning uses the literal original cell law whenever the selected
 own atom or the signed radius is unavailable; this makes the source family
 well-defined even at exceptional indices.
 
-This first slice proves the selector geometry, convergence of its own mass to
-the actual limiting gap mass, and the common signed radius and finite-law bounds. Actual
-limiting likelihood laws, their convergence, and semantic carrier consumers are
-separate subsequent steps, not hypotheses hidden in this construction.
+The selector geometry determines convergence of its own mass to the actual
+limiting gap mass, a common signed radius, and finite-law bounds. Interval masks
+converge in base L1 for every fixed integrable real test. The actual reference
+laws then converge, on the same source subsequence, to the explicitly constructed
+measurable signed conditional law. No limiting replacement law is supplied.
+
+Finite-clock and Never collapsed-reset facades and semantic carrier consumers
+remain separate subsequent steps. In particular, parameter one is not identified
+with the signed constructor's fallback.
 -/
 
 noncomputable section
@@ -247,5 +252,225 @@ theorem eventually_signedSelectedCellLaw_affine_of_limit_gap
   dsimp only
   rw [dite_eq_left ⟨hpos, hradius⟩]
   exact FinDist.prob_signedCond_singleton _ _ hpos parameter hradius cell
+
+/-- Only the two raw endpoints are exceptional. Positive-mass collapsed ties are not removed. -/
+theorem ae_eventually_mem_selectedCell_interval_iff
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints)) {a b : ℝ} (hgap : Math.Topology.IsGap limit.endpoints a b)
+    {x : unitInterval} (hax : a < (x : ℝ)) (hxb : (x : ℝ) < b) :
+    ∀ᵐ y : unitInterval ∂volume, ∀ᶠ k in atTop,
+      y ∈ interval (source (subsequence k)) (decodeCell (source (subsequence k)) x) ↔
+        a < (y : ℝ) ∧ (y : ℝ) < b := by
+  obtain ⟨hleft, hright⟩ :=
+    tendsto_decodeCell_endpoints_of_limit_gap source subsequence hE hgap hax hxb
+  let first : unitInterval := ⟨a, limit.endpoints_subset hgap.1⟩
+  let last : unitInterval := ⟨b, limit.endpoints_subset hgap.2.1⟩
+  filter_upwards [volume.ae_ne first, volume.ae_ne last] with y hyfirst hylast
+  have hya : (y : ℝ) ≠ a := fun h => hyfirst (Subtype.ext h)
+  have hyb : (y : ℝ) ≠ b := fun h => hylast (Subtype.ext h)
+  have hleftMem : ∀ᶠ k in atTop,
+      left (source (subsequence k)) (decodeCell (source (subsequence k)) x) ≤ (y : ℝ) ↔
+        a < (y : ℝ) := by
+    rcases lt_or_gt_of_ne hya with hya | hay
+    · filter_upwards [tendsto_const_nhds.eventually_lt hleft hya] with k hk
+      exact iff_of_false (not_le_of_gt hk) (not_lt_of_gt hya)
+    · filter_upwards [hleft.eventually_lt tendsto_const_nhds hay] with k hk
+      exact iff_of_true hk.le hay
+  have hrightMem : ∀ᶠ k in atTop,
+      (y : ℝ) < right (source (subsequence k)) (decodeCell (source (subsequence k)) x) ↔
+        (y : ℝ) < b := by
+    rcases lt_or_gt_of_ne hyb with hyb | hby
+    · filter_upwards [tendsto_const_nhds.eventually_lt hright hyb] with k hk
+      exact iff_of_true hk hyb
+    · filter_upwards [hright.eventually_lt tendsto_const_nhds hby] with k hk
+      exact iff_of_false (not_lt_of_gt hk) (not_lt_of_gt hby)
+  filter_upwards [hleftMem, hrightMem] with k hkleft hkright
+  change (_ ≤ (y : ℝ) ∧ (y : ℝ) < _) ↔ _
+  exact and_congr hkleft hkright
+
+/-- Actual interval masks converge in base L1 for every fixed base-integrable real test. -/
+theorem tendsto_integral_norm_selectedCell_indicator_sub
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints)) {a b : ℝ} (hgap : Math.Topology.IsGap limit.endpoints a b)
+    {x : unitInterval} (hax : a < (x : ℝ)) (hxb : (x : ℝ) < b)
+    (test : unitInterval → ℝ) (htest : Integrable test (volume : Measure unitInterval)) :
+    Tendsto (fun k => ∫ y, ‖(interval (source (subsequence k))
+      (decodeCell (source (subsequence k)) x)).indicator test y -
+        ({z : unitInterval | a < (z : ℝ) ∧ (z : ℝ) < b}).indicator test y‖ ∂volume)
+      atTop (𝓝 0) := by
+  let gap : Set unitInterval := {y | a < (y : ℝ) ∧ (y : ℝ) < b}
+  have hgapMeasurable : MeasurableSet gap := measurableSet_Ioo.preimage measurable_subtype_coe
+  have h := tendsto_integral_of_dominated_convergence
+    (μ := (volume : Measure unitInterval))
+    (F := fun k y => ‖(interval (source (subsequence k))
+      (decodeCell (source (subsequence k)) x)).indicator test y - gap.indicator test y‖)
+    (f := fun _ => (0 : ℝ)) (fun y => 2 * ‖test y‖)
+    (fun k => (((htest.indicator (measurableSet_interval _ _)).sub
+      (htest.indicator hgapMeasurable)).norm).aestronglyMeasurable)
+    (htest.norm.const_mul 2) (fun k => Eventually.of_forall fun y => by
+      rw [norm_norm]
+      calc
+        _ ≤ ‖(interval (source (subsequence k))
+            (decodeCell (source (subsequence k)) x)).indicator test y‖ +
+              ‖gap.indicator test y‖ := norm_sub_le _ _
+        _ ≤ ‖test y‖ + ‖test y‖ :=
+          add_le_add (norm_indicator_le_norm_self _ _) (norm_indicator_le_norm_self _ _)
+        _ = _ := by ring) (by
+      filter_upwards [ae_eventually_mem_selectedCell_interval_iff source subsequence hE
+        hgap hax hxb] with y hy
+      apply tendsto_const_nhds.congr'
+      filter_upwards [hy] with k hk
+      have heq : (interval (source (subsequence k))
+          (decodeCell (source (subsequence k)) x)).indicator test y = gap.indicator test y := by
+        classical
+        by_cases hmem : y ∈ gap
+        · rw [Set.indicator_of_mem (hk.mpr hmem), Set.indicator_of_mem hmem]
+        · rw [Set.indicator_of_notMem (fun h => hmem (hk.mp h)), Set.indicator_of_notMem hmem]
+      simp only [heq, sub_self, norm_zero])
+  simpa only [integral_zero] using h
+
+/-- Moving old-cell masks have their actual limiting integral under the original marginal laws. -/
+theorem tendsto_integral_selectedCell_chartLaw
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints)) (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    {a b : ℝ} (hgap : Math.Topology.IsGap limit.endpoints a b)
+    {x : unitInterval} (hax : a < (x : ℝ)) (hxb : (x : ℝ) < b)
+    (test : unitInterval → ℝ) (htest : Integrable test (volume : Measure unitInterval)) :
+    Tendsto (fun k => ∫ y, (interval (source (subsequence k))
+      (decodeCell (source (subsequence k)) x)).indicator test y
+        ∂(chartLaw (source (subsequence k)) i : Measure unitInterval)) atTop
+      (𝓝 (∫ y, ({z : unitInterval | a < (z : ℝ) ∧ (z : ℝ) < b}).indicator test y
+        ∂(law : Measure unitInterval))) := by
+  exact ProbabilityMeasure.tendsto_integral_moving_test_of_tendsto_of_le_smul base
+    (Fintype.card ι : NNReal) hlaw
+    (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
+    _ (htest.indicator (measurableSet_Ioo.preimage measurable_subtype_coe)) _
+    (Eventually.of_forall fun k => htest.indicator (measurableSet_interval _ _))
+    (tendsto_integral_norm_selectedCell_indicator_sub source subsequence hE hgap hax hxb test htest)
+
+private theorem integral_referenceLaw_signedSelectedCellLaw
+    (laws : ι → FinDist (Option ℕ)) (i : ι) (x : unitInterval) (parameter : ℝ)
+    (hpositive : 0 < (cellLaw laws i).prob (decodeCell laws x))
+    (hparameter : |parameter| ≤ (cellLaw laws i).signedCondRadius {decodeCell laws x})
+    (test : unitInterval → ℝ)
+    (htest : Integrable test (chartLaw laws i : Measure unitInterval)) :
+    ∫ y, test y ∂(referenceLaw laws (signedSelectedCellLaw laws i x parameter) :
+      Measure unitInterval) =
+        (1 - parameter) * (∫ y, test y ∂(chartLaw laws i : Measure unitInterval)) +
+          (parameter / (cellLaw laws i).prob (decodeCell laws x)) *
+            ∫ y, (interval laws (decodeCell laws x)).indicator test y
+              ∂(chartLaw laws i : Measure unitInterval) := by
+  classical
+  have hevent : MeasurableSet (decodeCell laws ⁻¹' {decodeCell laws x}) :=
+    (measurableSet_singleton _).preimage (measurable_decodeCell laws)
+  have hintegral : ∫ y in decodeCell laws ⁻¹' {decodeCell laws x}, test y
+      ∂(referenceLaw laws (cellLaw laws i) : Measure unitInterval) =
+        ∫ y, (interval laws (decodeCell laws x)).indicator test y
+          ∂(chartLaw laws i : Measure unitInterval) := by
+    rw [← integral_indicator hevent]
+    apply integral_congr_ae
+    filter_upwards [ae_decodeCell_mem_interval_referenceMeasure laws (cellLaw laws i)] with y hy
+    have heq : y ∈ decodeCell laws ⁻¹' {decodeCell laws x} ↔
+        y ∈ interval laws (decodeCell laws x) := by
+      change decodeCell laws y = decodeCell laws x ↔ _
+      constructor
+      · intro h
+        simpa only [h] using hy
+      · exact fun h => decodeCell_of_mem_interval laws h
+    by_cases hmem : y ∈ interval laws (decodeCell laws x)
+    · rw [Set.indicator_of_mem (heq.mpr hmem), Set.indicator_of_mem hmem]
+    · rw [Set.indicator_of_notMem (fun h => hmem (heq.mp h)), Set.indicator_of_notMem hmem]
+  unfold signedSelectedCellLaw
+  dsimp only
+  rw [dite_eq_left ⟨hpositive, hparameter⟩, referenceLaw_signedCond]
+  have hmass : 0 < (referenceLaw laws (cellLaw laws i) : Measure unitInterval).real
+      (decodeCell laws ⁻¹' {decodeCell laws x}) := by
+    rw [referenceLaw_decodeCell_event_real, FinDist.probOf_singleton]
+    exact hpositive
+  have hradius : |parameter| ≤ (referenceLaw laws (cellLaw laws i)).signedCondRadius
+      (decodeCell laws ⁻¹' {decodeCell laws x}) := by
+    rw [referenceLaw_signedCondRadius]
+    exact hparameter
+  have h := ProbabilityMeasure.integral_signedCond (referenceLaw laws (cellLaw laws i))
+    (decodeCell laws ⁻¹' {decodeCell laws x}) hevent hmass parameter hradius test htest
+  simpa only [referenceLaw_decodeCell_event_real, FinDist.probOf_singleton, hintegral,
+    chartLaw] using h
+
+/-- The all-index finite variations converge to their internally constructed signed probability
+law on the SAME source subsequence. No limiting replacement law or test convergence is supplied. -/
+theorem tendsto_referenceLaw_signedSelectedCellLaw
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints)) (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    {a b : ℝ} (hgap : Math.Topology.IsGap limit.endpoints a b)
+    {x : unitInterval} (hax : a < (x : ℝ)) (hxb : (x : ℝ) < b)
+    (hmass : 0 < (law : Measure unitInterval).real {y | a < (y : ℝ) ∧ (y : ℝ) < b})
+    (parameter : ℝ) (hparameter : |parameter| ≤ min (1 / 2 : ℝ)
+      ((law : Measure unitInterval).real {y | a < (y : ℝ) ∧ (y : ℝ) < b} / 4)) :
+    Tendsto (fun k => referenceLaw (source (subsequence k))
+      (signedSelectedCellLaw (source (subsequence k)) i x parameter)) atTop
+      (𝓝 (law.signedCond {y | a < (y : ℝ) ∧ (y : ℝ) < b}
+        (by
+          change MeasurableSet ((Subtype.val : unitInterval → ℝ) ⁻¹' Ioo a b)
+          exact measurableSet_Ioo.preimage measurable_subtype_coe) hmass parameter (by
+          change |parameter| ≤ min (1 / 2 : ℝ)
+            ((law : Measure unitInterval).real {y | a < (y : ℝ) ∧ (y : ℝ) < b} / 2)
+          refine le_min (hparameter.trans (min_le_left _ _)) ?_
+          have hsmall := hparameter.trans (min_le_right _ _)
+          linarith))) := by
+  let gap : Set unitInterval := {y | a < (y : ℝ) ∧ (y : ℝ) < b}
+  have hgapMeasurable : MeasurableSet gap := by
+    change MeasurableSet ((Subtype.val : unitInterval → ℝ) ⁻¹' Ioo a b)
+    exact measurableSet_Ioo.preimage measurable_subtype_coe
+  have hmasslim := tendsto_decodeCell_ownMass_of_limit_gap
+    source subsequence hE i hlaw hgap hax hxb
+  have hmassgap : 0 < (law : Measure unitInterval).real gap := hmass
+  have hradius : |parameter| ≤ law.signedCondRadius gap := by
+    apply le_min (hparameter.trans (min_le_left _ _))
+    have hsmall := hparameter.trans (min_le_right _ _)
+    change |parameter| ≤ (law : Measure unitInterval).real gap / 4 at hsmall
+    linarith
+  let signed := law.signedCond gap hgapMeasurable hmassgap parameter hradius
+  change Tendsto _ atTop (𝓝 signed)
+  have hvalid : ∀ᶠ k in atTop,
+      0 < (cellLaw (source (subsequence k)) i).prob (decodeCell (source (subsequence k)) x) ∧
+        |parameter| ≤ (cellLaw (source (subsequence k)) i).signedCondRadius
+          {decodeCell (source (subsequence k)) x} := by
+    have hhalf : (law : Measure unitInterval).real gap / 2 <
+        (law : Measure unitInterval).real gap := by linarith
+    filter_upwards [hmasslim.eventually (lt_mem_nhds hhalf)] with k hk
+    refine ⟨by linarith, ?_⟩
+    rw [FinDist.signedCondRadius, FinDist.probOf_singleton]
+    refine le_min (hparameter.trans (min_le_left _ _)) ?_
+    have hsmall := hparameter.trans (min_le_right _ _)
+    change |parameter| ≤ (law : Measure unitInterval).real gap / 4 at hsmall
+    linarith
+  apply ProbabilityMeasure.tendsto_iff_forall_integral_tendsto.mpr
+  intro test
+  have hplain := (ProbabilityMeasure.tendsto_iff_forall_integral_tendsto.mp hlaw) test
+  have hmasked := tendsto_integral_selectedCell_chartLaw source subsequence hE i hlaw
+    hgap hax hxb test (test.integrable volume)
+  have h := (hplain.const_mul (1 - parameter)).add
+    (((tendsto_const_nhds : Tendsto (fun _ : ℕ => parameter) atTop (𝓝 parameter)).div
+      hmasslim hmass.ne').mul hmasked)
+  have hintegral := ProbabilityMeasure.integral_signedCond law gap hgapMeasurable hmassgap
+    parameter hradius test (test.integrable (law : Measure unitInterval))
+  rw [← integral_indicator hgapMeasurable] at hintegral
+  change Tendsto _ atTop (𝓝 (∫ y, test y ∂(signed : Measure unitInterval)))
+  change (∫ y, test y ∂(signed : Measure unitInterval)) = _ at hintegral
+  rw [hintegral]
+  apply h.congr'
+  filter_upwards [hvalid] with k hk
+  exact (integral_referenceLaw_signedSelectedCellLaw (source (subsequence k)) i x parameter
+    hk.1 hk.2 test (test.integrable _)).symm
 
 end GameTheory.MarkedCalendarChart

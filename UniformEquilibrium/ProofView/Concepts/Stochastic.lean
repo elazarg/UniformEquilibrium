@@ -1,4 +1,5 @@
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.Absorbing
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Classes.AbsorbingPathwisePayoff
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.BehaviorTransfer
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.DependentActionPadding
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.Disintegration
@@ -15,6 +16,7 @@ import UniformEquilibrium.ProofView.Concepts.Stochastic.ZeroSum.DiscountedShaple
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.Feasible
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayMeasure
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayLawTransfer
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic.LiminfAverageBridge
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Strategy.Controller.MemoryController
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Welfare.PunishmentLevel

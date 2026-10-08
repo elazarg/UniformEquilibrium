@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Certificates.Public.FullHorizonPublicHistoryEnvelope
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayLawTransfer
 
 /-!
 # Finite-horizon profile-law transfer
@@ -96,19 +97,9 @@ theorem histDist_eq_of_profilesAgreeBefore
     ∀ time, time ≤ fuel →
       G.histDist left initial time =
         G.histDist right initial time := by
-  intro time time_le
-  induction time with
-  | zero =>
-      rfl
-  | succ time ih =>
-      have time_lt : time < fuel := by omega
-      rw [G.histDist_succ, G.histDist_succ, ih (Nat.le_of_lt time_lt)]
-      apply bind_congr_on_support
-      intro history _
-      rw [
-        G.stageActionDist_eq_of_profilesAgreeBefore
-          hagree history time_lt
-      ]
+  exact G.histDist_eq_of_stageActionDist_eq_on_support
+    (fun _ history time_lt _ => G.stageActionDist_eq_of_profilesAgreeBefore
+      hagree history time_lt)
 
 /-- Every finite terminal-payoff expectation is invariant under agreement
 before the terminal horizon. -/

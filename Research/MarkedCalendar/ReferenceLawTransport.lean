@@ -1,4 +1,6 @@
 import Research.MarkedCalendar.FiniteLawChart
+import MathUE.Probability.FiniteSignedConditioning
+import MathUE.MeasureTheory.SignedConditioning
 
 /-! # Actual finite-law transport on an unchanged reference chart
 
@@ -10,8 +12,10 @@ outcome law against these opponents. Unsupported finite deadlines and empty
 opponent products are included.
 
 No replacement average chart is identified with the reference chart. Signed
-weight constructors, moving-law convergence, and complete-cap transport are
-separate obligations; no cap or convergence oracle is used here.
+conditioning on any finite cell event commutes with this one density compiler;
+the decoded event mass and its signed radius are derived from the actual finite
+law. Moving-law convergence and complete-cap transport are separate obligations;
+no cap or convergence oracle is used here.
 -/
 
 noncomputable section
@@ -42,6 +46,76 @@ def referenceOriginalLaw (reference : ι → FinDist (Option ℕ))
 theorem referenceOriginalLaw_cellLaw (reference : ι → FinDist (Option ℕ)) (i : ι) :
     referenceOriginalLaw reference (cellLaw reference i) = reference i :=
   cellLaw_map_originalChoice reference i
+
+/-- A decoded old-cell event has exactly its finite-law mass, including decoder fallback. -/
+theorem referenceLaw_decodeCell_event_real (reference : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell reference)) (event : Set (Cell reference)) :
+    (referenceLaw reference p : Measure unitInterval).real (decodeCell reference ⁻¹' event) =
+      p.probOf event := by
+  have hevent : MeasurableSet event := event.toFinite.measurableSet
+  rw [← map_measureReal_apply (measurable_decodeCell reference) hevent]
+  change ((referenceMeasure reference p).map (decodeCell reference)).real event = p.probOf event
+  rw [referenceMeasure_map_decodeCell, FinDist.toMeasure_real_apply p hevent]
+
+/-- The finite and measurable constructors use the same derived closed signed radius. -/
+theorem referenceLaw_signedCondRadius (reference : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell reference)) (event : Set (Cell reference)) :
+    (referenceLaw reference p).signedCondRadius (decodeCell reference ⁻¹' event) =
+      p.signedCondRadius event := by
+  rw [ProbabilityMeasure.signedCondRadius, FinDist.signedCondRadius,
+    referenceLaw_decodeCell_event_real]
+
+/-- Signed finite conditioning compiles to the actual measurable signed law on the OLD chart.
+The decoded event's normalizer and radius are derived, not extra supplied hypotheses. -/
+theorem referenceLaw_signedCond (reference : ι → FinDist (Option ℕ))
+    (p : FinDist (Cell reference)) (event : Set (Cell reference))
+    (hmass : 0 < p.probOf event) (parameter : ℝ)
+    (hparameter : |parameter| ≤ p.signedCondRadius event) :
+    referenceLaw reference (p.signedCond event hmass parameter hparameter) =
+      (referenceLaw reference p).signedCond (decodeCell reference ⁻¹' event)
+        (event.toFinite.measurableSet.preimage (measurable_decodeCell reference))
+        (by rw [referenceLaw_decodeCell_event_real]; exact hmass) parameter
+        (by rw [referenceLaw_signedCondRadius]; exact hparameter) := by
+  classical
+  have hformula (x : unitInterval) :
+      referenceDensity reference (p.signedCond event hmass parameter hparameter) x =
+        referenceDensity reference p x *
+          (referenceLaw reference p).signedCondLikelihood
+            (decodeCell reference ⁻¹' event) parameter x := by
+    by_cases hx : ∃ cell : Cell reference, x ∈ interval reference cell
+    · obtain ⟨cell, hcell⟩ := hx
+      rw [referenceDensity_eq_of_mem_interval reference _ hcell,
+        referenceDensity_eq_of_mem_interval reference p hcell,
+        FinDist.prob_signedCond, FinDist.signedCondWeight,
+        ProbabilityMeasure.signedCondLikelihood, referenceLaw_decodeCell_event_real]
+      simp only [Set.indicator_apply, mem_preimage,
+        decodeCell_of_mem_interval reference hcell]
+      ring
+    · have hnot : ∀ cell : Cell reference, x ∉ interval reference cell :=
+        fun cell hcell => hx ⟨cell, hcell⟩
+      rw [referenceDensity_eq_zero_of_notMem reference _ hnot,
+        referenceDensity_eq_zero_of_notMem reference p hnot, zero_mul]
+  apply ProbabilityMeasure.toMeasure_injective
+  rw [ProbabilityMeasure.coe_signedCond]
+  change volume.withDensity (fun x => ENNReal.ofReal
+      (referenceDensity reference (p.signedCond event hmass parameter hparameter) x)) =
+    (volume.withDensity (fun x => ENNReal.ofReal (referenceDensity reference p x))).withDensity
+      (fun x => ENNReal.ofReal ((referenceLaw reference p).signedCondLikelihood
+        (decodeCell reference ⁻¹' event) parameter x))
+  rw [← withDensity_mul volume (measurable_referenceDensity reference p).ennreal_ofReal
+    ((referenceLaw reference p).measurable_signedCondLikelihood
+      (decodeCell reference ⁻¹' event)
+      (event.toFinite.measurableSet.preimage (measurable_decodeCell reference))
+      parameter).ennreal_ofReal]
+  apply withDensity_congr_ae
+  apply Eventually.of_forall
+  intro x
+  change ENNReal.ofReal
+      (referenceDensity reference (p.signedCond event hmass parameter hparameter) x) =
+    ENNReal.ofReal (referenceDensity reference p x) *
+      ENNReal.ofReal ((referenceLaw reference p).signedCondLikelihood
+        (decodeCell reference ⁻¹' event) parameter x)
+  rw [hformula, ENNReal.ofReal_mul (referenceDensity_nonneg reference p x)]
 
 theorem referenceOriginalLaw_map_stoppingTimeValue (reference : ι → FinDist (Option ℕ))
     (p : FinDist (Cell reference)) :

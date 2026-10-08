@@ -1,6 +1,5 @@
 import GameTheory.Math.Probability.FinDist
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
+import MathUE.Probability.SignedConditioningLikelihood
 
 /-! # Signed conditioning of finite probability laws
 
@@ -66,31 +65,8 @@ private theorem signedCond_likelihood_bounds (p : FinDist α) (A : Set α)
         (if a ∈ A then parameter / p.probOf A else 0) ∧
       (1 - parameter) + (if a ∈ A then parameter / p.probOf A else 0) ≤ 3 / 2 := by
   classical
-  have hhalf : |parameter| ≤ (1 / 2 : ℝ) := hparameter.trans (min_le_left _ _)
-  have hehalf : |parameter| ≤ p.probOf A / 2 := hparameter.trans (min_le_right _ _)
-  by_cases ha : a ∈ A
-  · rw [ite_eq_left ha]
-    have heone := probOf_le_one p A
-    have hcoefficient : 0 ≤ 1 / p.probOf A - 1 := by
-      apply sub_nonneg.mpr
-      apply (le_div_iff₀ he).mpr
-      simpa only [one_mul] using heone
-    have hcoefficientUpper : 1 / p.probOf A - 1 ≤ 1 / p.probOf A := by linarith
-    have hproduct : |parameter * (1 / p.probOf A - 1)| ≤ (1 / 2 : ℝ) := by
-      calc
-        |parameter * (1 / p.probOf A - 1)| =
-            |parameter| * (1 / p.probOf A - 1) := by
-          rw [abs_mul, abs_of_nonneg hcoefficient]
-        _ ≤ |parameter| * (1 / p.probOf A) :=
-          mul_le_mul_of_nonneg_left hcoefficientUpper (abs_nonneg parameter)
-        _ = |parameter| / p.probOf A := by ring
-        _ ≤ 1 / 2 := (div_le_iff₀ he).mpr (by linarith)
-    have hidentity : (1 - parameter) + parameter / p.probOf A =
-        1 + parameter * (1 / p.probOf A - 1) := by ring
-    rw [hidentity]
-    constructor <;> linarith [(abs_le.mp hproduct).1, (abs_le.mp hproduct).2]
-  · rw [ite_eq_right ha, add_zero]
-    constructor <;> linarith [(abs_le.mp hhalf).1, (abs_le.mp hhalf).2]
+  exact _root_.Math.Probability.signedConditioningLikelihood_bounds
+    (p.probOf A) he (probOf_le_one p A) parameter hparameter (a ∈ A)
 
 /-- Closed-radius bounds imply that every old positive atom stays positive. -/
 theorem signedCondWeight_bounds (p : FinDist α) (A : Set α) (he : 0 < p.probOf A)

@@ -54,21 +54,11 @@ theorem StochasticGame.finiteAveragePayoff_le_of_forall_expectedStagePayoff_le
     (hM0 : 0 ≤ M)
     (hbound : ∀ t < T, G.expectedStagePayoff σ s₀ t who ≤ M) :
     G.finiteAveragePayoff s₀ T σ who ≤ M := by
-  rw [G.finiteAveragePayoff_eq_sum_expectedStagePayoff]
   rcases Nat.eq_zero_or_pos T with hT0 | hTpos
   · subst hT0
     simpa using hM0
-  · have hsum : ∑ t ∈ Finset.range T, G.expectedStagePayoff σ s₀ t who ≤
-        (T : ℝ) * M := by
-      calc ∑ t ∈ Finset.range T, G.expectedStagePayoff σ s₀ t who
-          ≤ ∑ _t ∈ Finset.range T, M :=
-            Finset.sum_le_sum fun t ht => hbound t (Finset.mem_range.mp ht)
-        _ = (T : ℝ) * M := by
-            simp [Finset.sum_const, Finset.card_range, nsmul_eq_mul]
-    calc (T : ℝ)⁻¹ * ∑ t ∈ Finset.range T, G.expectedStagePayoff σ s₀ t who
-        ≤ (T : ℝ)⁻¹ * ((T : ℝ) * M) :=
-          mul_le_mul_of_nonneg_left hsum (by positivity)
-      _ = M := by field_simp
+  · exact G.finiteAveragePayoff_le_of_forall_expectedStagePayoff_le_of_pos
+      σ s₀ who T hTpos hbound
 
 /-- The finite-horizon analogue of
 `quittingTerminalPayoff_update_quittingAlwaysContinue_le_max`: at every

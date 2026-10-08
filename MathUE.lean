@@ -75,6 +75,7 @@ import MathUE.Analysis.CurvatureHomogeneity
 import MathUE.Analysis.FaceDriftAdditiveExclusion
 import MathUE.Analysis.FaceDriftScalarCompositionExclusion
 import MathUE.Analysis.CompactMinimumEnvelope
+import MathUE.Analysis.CompactLinearMinimumRigidity
 import MathUE.Analysis.FiniteLogSumExp
 import MathUE.Analysis.CoordinateResetFTC
 import MathUE.Analysis.Examples.CoupledCubicShape
@@ -565,6 +566,7 @@ import MathUE.Probability.FiniteKernelPeriodicMixing
 import MathUE.Probability.FiniteLawRepair
 import MathUE.Probability.FiniteLawRepairExpectation
 import MathUE.Probability.FiniteSignedConditioning
+import MathUE.Probability.SignedConditioningLikelihood
 import MathUE.Probability.FinitePathLawAdapter
 import MathUE.Probability.FinDistIntegral
 import MathUE.Probability.FinitePMF
@@ -831,3 +833,4 @@ import MathUE.WeierstrassCurve
 import MathUE.WeightedBlackwellFerguson
 import MathUE.MeasureTheory.BoundedDensityWeakCompactness
 import MathUE.MeasureTheory.FiniteProductDominatedWeakCompactness
+import MathUE.MeasureTheory.SignedConditioning
