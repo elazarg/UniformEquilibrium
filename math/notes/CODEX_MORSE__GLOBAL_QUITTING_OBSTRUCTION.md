@@ -38,11 +38,13 @@ same-table alignment with original minima, and a nonlocal diffuse
 clock completion then supplies an all-four-finite-a.s. realizing
 sequence for each original minimum pair. Its self-contained final
 assembly is
-`CODEX_MORSE__FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md`, pending
-byte-bound whole-assembly checks. It includes every needed original
-source/contact/rigidity/bridge proof and has no conference dependencies.
+`../exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md`, SHA256
+`0452b5cdebd2cc3186634b98df67ea841c15cba1794e8749931199bfb4c3766b`.
+Both byte-bound whole-artifact reviews pass. It includes every needed
+original source/contact/rigidity/bridge proof and has no conference dependencies.
 The frozen FC body retains its historical draft label; the current
-review status is stated here. This is not UE closure or an export.
+review status is stated here. The export is ordinary mathematics, not
+Lean-checked mathematics or UE closure.
 ZR1–ZR4 separately proves the proposed full-conjecture equivalence
 with absorbing approximate Nash in ALL-own-zero games; CN1–CN3 gives
 the proposed counterexample normal form arbitrarily near constant1/2,
