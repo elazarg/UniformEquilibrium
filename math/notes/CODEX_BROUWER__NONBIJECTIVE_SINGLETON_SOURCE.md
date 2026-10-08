@@ -15005,3 +15005,90 @@ substitute. Root-only rates, born empty finite deadlines and literal
 Never must remain in the same all-law calculation. SB1 is retained
 only as a restriction on that concrete consumer problem, not as a
 new export or an infinite sequence of source refinements.
+
+## FM: even the maximum of the four response maps is incomplete
+
+Status: COMPLETE ORDINARY, UNREVIEWED architecture falsifier, not
+a UE theorem or an absorbing-profile producer. This closes ONE new
+attempt to replace the canceled fixed WD ledger by a profile-adaptive
+maximum over the same four maps. It is not an extended search over
+fixed weights or additional tables. The at/after-α FULL-cap consumer
+remains the actual global task.
+
+**Exact statement.** Fix ANY real Fin4 table, with absolute reward
+bound M>0 and Never payoff0. For the four legal independent response
+laws β_i(p) equal to Quit0, Never, own clock delayed one date, and
+next-owner clock preempted one date and clipped at0 (both maps retain
+Never), there are actual independent finite-support profiles p with
+
+    max_i max(0,max_β U_i(β_i(p),p_-i)−U_i(p))
+      ≤2Mε+τ log4+2M(1−ε)^N                      (FM.1)
+
+for EVERY ε∈(0,1), τ>0 and integer N≥1. Thus the restricted full
+maximum can be made arbitrarily small on every table, even though
+the unrestricted full debt may stay strictly positive. Marginal
+Never masses are allowed; absorption is NOT asserted. This does
+not falsify an absorbing-only menu claim.
+
+**Finite actual-law proof.** Work on the product of four simplices
+of laws on {0,…,N,Never}. The finite reply β_i^N uses the SAME menu,
+except that own delay is clipped atN. All four reply-law maps are
+affine and continuous on this finite-dimensional product. Let
+v_{ik}(p) be the actual terminal utility of clipped reply k against
+the original three opponent laws, and define
+
+    w_{ik}(p)=exp(v_{ik}(p)/τ)/Σ_l exp(v_{il}(p)/τ),
+    F_i(p)=ε δ0+(1−ε)Σ_k w_{ik}(p)β_{ik}^N(p).
+
+The expected utilities v are finite payoff polynomials, so F is a
+continuous self-map of the nonempty compact convex product of
+simplices. Brouwer gives ONE fixed point p=F(p). The mixture in
+F_i is a private choice of that owner's whole law; the four sampled
+laws remain independent. No profile lottery is played.
+
+For integer t∈[0,N] put H(t)=max_i p_i({finite dates t,…,N}). Never
+is NOT counted in this tail. Quit0 and Never contribute nothing for
+t≥1. Own clipped delay can contribute only original finite clocks
+at least t−1; next-owner preemption can contribute only clocks at
+least t+1, which is an even smaller subset. Hence, at the fixed point,
+
+    H(t)≤(1−ε)H(t−1),
+    H(N)≤(1−ε)^N.
+
+Write A_i=Σ_k w_{ik}v_{ik} and B_i^N=max_k v_{ik}. The elementary
+softmax identity A_i=τ logΣ_k exp(v_{ik}/τ)−τ entropy(w_i), with
+entropy at most log4, gives B_i^N−A_i≤τ log4. By own-law affinity
+and the fixed point,
+
+    U_i(p)=ε v_{i,Quit0}+(1−ε)A_i,
+    B_i^N−U_i(p)≤2Mε+τ log4.
+
+The true and clipped menus differ ONLY on the delayed image of own
+mass p_i(N): its actual date is N+1 instead ofN. Their total-variation
+distance is at most p_i(N)≤H(N). Coupling gives true-reply utility
+error at most2M H(N), uniformly in the unchanged opponents. This
+proves (FM.1), including the actual off-menu date N+1. First choose
+ε andτ small and then N large. No limiting strategy or favorable
+boundary Nash selector is needed.
+
+**Exact source lookup and disposition.** The bounded topology lookup
+was the toolkit's normalized radial fixed-point route,
+`Math.exists_fixedPoint_of_normalized_radial_map` in
+`MathUE/Topology/NormalizedRadialFixedPoint.lean`, followed ONLY to
+its imported `brouwer_fixed_point` declaration in the pinned
+`FixedPointTheorems.brouwer` module. The latter explicitly supplies
+the finite-dimensional nonempty compact convex self-map theorem.
+It is NOT being claimed that FM's selector or regret bound is checked
+in Lean. The nearby owned finite-common-menu entropy construction
+uses actual Nash of a different regularized game; it is not this
+profile-dependent bounded-displacement map or its geometric clipping
+estimate. No build or implementation ran.
+
+FM retires a universal positive-gap certificate using this entire
+four-map maximum, not merely its equal average. It also explains why
+adding adaptive weights inside that menu does not repair completeness.
+It does NOT address arbitrary pure-clock responses, full best-response
+selection, source-dependent maps with unbounded displacement, an
+absorbing-only restricted gap, or the at/after-α whole-law competitor.
+The latter must therefore price the complete envelope rather than
+hope that max(copy/preempt/delay/Quit0/Never) is universally sufficient.
