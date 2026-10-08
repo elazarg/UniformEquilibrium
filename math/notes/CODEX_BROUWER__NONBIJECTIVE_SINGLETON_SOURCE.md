@@ -87,6 +87,12 @@ zero-gap reward neighborhood, falsifies the proposed upper-pricing use.
 The live construction therefore retains actual root births and must
 control the changed maxima directly; neither AP nor GR yields a favorable
 coupled member.
+CS below makes the next chronological family literal: extract the old
+tail's ACTUAL first date before splitting finite mass between two root
+dates. Inserting a free empty date was not justified. CS gives its exact
+cap-birth cost and an actual two-date affine-law family containing the
+original minimum, with every new cap explicit. It is a completed ordinary
+adapter for the live construction, not a favorable-member result.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -9635,6 +9641,148 @@ the root uses the exact max(Q_i,A_i+α_i b_i) adapter. Original common ν is
 not imposed on a lower-debt competitor. No source-forced favorable member
 of this new family has yet been proved. GR supplies no missing upper
 bound, and a merely formal active-mixture field would not close that gap.
+
+## Actual two-date cohort changes must retain the original intermediate clock
+
+### CS1. The missing calendar seam and the exact repair
+
+The current direct construction moves existing finite mass onto a genuine
+root maximizing clock, including an owner whose old root rate is0, and
+changes another owner's finite/Never balance. A tempting numerical family
+is T_x(T_y(v)), with old source T_q(v), taking x=q,y=0 at the old point.
+That last assertion is NOT automatic: T_0(v) inserts an ACTUAL empty date
+before the old tail, and its caps are max(s_i,b_i(v)).
+
+Thus a zero-rate stage is not the identity on an arbitrary original
+carrier tail. The previous finite-prefix adapter retains exactly this
+branch. The repair here is to extract the tail's EXISTING first stage,
+not to supply cap domination or ignore an early reply.
+
+This section is COMPLETE ORDINARY, UNREVIEWED supporting mathematics.
+It introduces no new source assumption and does not claim that the
+resulting family contains a lower-debt member. Its finite realization is
+part of the direct construction; the remaining global comparison is open.
+
+### CS2. Exact cap price of an inserted empty date
+
+At an arbitrary original prefix pair T_q(v), write
+
+    B_i^p=max(Q_i(q),A_i(q)+α_i(q)b_i(v)).
+
+Inserting one empty date AFTER its root, while shifting the ENTIRE old
+tail one date later, leaves prescribed terminal payoffs unchanged and
+gives exactly
+
+    B_i^new=max(B_i^p,A_i(q)+α_i(q)s_i),
+    D_new−D_old=Σ_i[A_i(q)+α_i(q)s_i−B_i^p]⁺.       (CS1)
+
+This is a full cap equality: root tests give Q; the new empty-date test
+gives A+αs; every shifted old finite tail test and literal Never keeps
+its old value. No further date has a new outcome kernel. In particular,
+if i is an old root/later bridger and b_i(v)<s_i, its cap rises by
+
+    α_i(q)[s_i−b_i(v)]>0                           (CS2)
+
+at an NP minimum, since α_i(q)>0 there. Strong ORIGINAL margins
+B_i^p>s_i do not imply that this intermediate cap is dominated.
+
+A minimal full-Fin4 boundary test specifies all60 entries by
+r_i(S)=1 when S={i}, and0 otherwise. The actual tail with ALL four
+players sure at date0 has U=B=0 and is full Nash. An inserted empty date
+keeps U=0 but gives every owner a solo payoff1 by quitting in that date,
+so B_i=1 and D=4. All later finite tests and Never pay0. This is a
+zero-gap solved table, not an NP counterexample; it isolates the false
+calendar identity without any approximate or missing-response issue.
+
+### CS3. Extract an ACTUAL second root at the same source sequence
+
+Use the literal finite conditional-tail sequence v^k supplied by NF for
+the original minimum T_q(v), not a new independently selected tail.
+Its own Never masses converge to n_i^v>0 by NP. Let z_i^k be the mass
+of its ACTUAL date0. Condition on not stopping at that date, and shift
+all later finite dates down by1; keep Never unchanged. Call this actual
+independent product tail w^k. For all large k,
+
+    1−z_i^k≥n_i^v/2>0.
+
+Thus the conditional law exists ordinarily for EVERY owner, with a
+uniform density multiplier at most2/n_i^v. Both payoffs and complete
+caps of w^k are bounded. Pass to ONE subsequence on which z^k→z,
+(U(w^k),B(w^k))→w∈K, and its Never masses also converge. The exact
+literal prefix formula and its continuity give
+
+    v=T_z(w),       T_q(v)=T_q(T_z(w)),             (CS3)
+    z_i<1,     n_i^w=n_i^v/(1−z_i)>0.
+
+All finite/Never responses are included: a tail response at0 is the
+second original root response, and a response at a later finite date
+or Never is the translated full conditional-tail response. No Nash,
+minimum, cap attainment, or sure filler is required for w. At NP source
+survival boundaries there are no sure z_i; outside this source the
+usual arbitrary law filler at zero survival is harmless in exactly the
+same α=0 cases as NF4, not a license to discard the sole-sure owner's
+opponent continuation cap.
+
+If b_i(v)<s_i, then the root response Q_i(z)≤b_i(v) and the reward bound
+|r|≤M gives
+
+    1−α_i(z)≥[s_i−b_i(v)]/(2M)>0.                 (CS4)
+
+Indeed Q_i(z)=s_i on the all-opponent-Continue event and differs from it
+by at most2M on its complement. Hence some OTHER owner has a positive
+actual second-stage rate. This is an output, not supplied second-stage
+mass. It does not assert two second-stage suppliers or second-stage Nash.
+
+### CS4. Complete finite-amplitude family, with existing mass coordinates
+
+Fix the produced w. For arbitrary x,y∈[0,1]⁴ the actual pair
+T_x(T_y(w)) belongs to original K: prefix exact x,y to the SAME finite
+w^k witnesses, then take limits. Define
+
+    H_i(t)=t_i Q_i(t)+(1−t_i)A_i(t),
+    c_t=∏_j(1−t_j).
+
+Its prescribed payoff and FULL cap are exactly
+
+    U_i'=H_i(x)+c_x H_i(y)+c_x c_y u_i(w),
+    B_i'=max{Q_i(x),
+             A_i(x)+α_i(x)Q_i(y),
+             A_i(x)+α_i(x)A_i(y)+α_i(x)α_i(y)b_i(w)}.   (CS5)
+
+These are respectively root0, root1, and the ENTIRE old conditional
+tail cap. In particular the third branch retains all arbitrarily late
+finite replies and Never; no named tail maximizer is required. Formula
+(CS5) remains valid at every zero/sure rate without dividing by survival.
+
+The affine OWN-law coordinates are absolute masses
+
+    a_i=x_i,       ℓ_i=(1−x_i)y_i,
+    t_i=1−a_i−ℓ_i=(1−x_i)(1−y_i).
+
+On the triangle a_i,ℓ_i≥0, a_i+ℓ_i≤1, the literal law puts a_i at
+date0, ℓ_i at date1, and t_i on the shifted old law w_i^k. The original
+point is a_i=q_i, ℓ_i=(1−q_i)z_i. Moving a_i versus ℓ_i changes EXISTING
+finite mass between the two dates. Changing their sum also changes old
+tail and Never mass; its joint Never limit is
+
+    ν'=∏_i[t_i n_i^w].                             (CS6)
+
+No common-ν restriction is imposed on a lower-debt competitor. Supported
+atoms allow two-sided changes in their positive masses; a zero original
+root atom permits only positive insertion there. A negative insertion
+is not smuggled into the signed old-law theorem. A single-owner triangle
+change has convex D because all its pure response payoffs and prescribed
+payoffs are affine in that owner's law; true globality therefore blocks
+it. The live attempt changes at least two owners.
+
+The original source point satisfies D'=δ, not just a selected-polynomial
+equality. Every point has D'≥δ by the actual global floor. At any point
+with D'=δ, common debts and, at the optional NR table, common ν apply;
+NF9's same-table first-root constraint applies to every nonzero first
+root anew. These facts do not yet force a favorable finite-amplitude
+point. The benefit of (CS5) is that this remaining decision is an actual
+finite numerical comparison, with no changed-head cap hidden in an
+unproduced field and no free-calendar assumption.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
