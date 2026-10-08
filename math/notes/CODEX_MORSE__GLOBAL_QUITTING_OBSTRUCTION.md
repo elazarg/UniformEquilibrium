@@ -41,7 +41,18 @@ invariance; this is not new equilibrium coverage.
 TB has a focused independent mathematical PASS in the corresponding
 CODEX_NOETHER feedback; it has not entered the export gate.
 
-Latest direction test: CR1–CR6 is a RETIRED payoff-rounding attempt,
+Latest global rethink: DG1–DG7 below tests two general discontinuous-game
+existence mechanisms, outside the relay/radial/tax constructions. On one
+explicit solved positive-own game, the compact complete-law game fails
+Reny's better-reply security. Its convex payoff completion has a sharing
+rule whose UNIQUE equilibrium is AllNever with payoff(7/4)^4, yet EVERY
+original full-behavior near-equilibrium stays away from that payoff.
+Thus neither direct security nor arbitrary sharing-rule realization is
+an all-game producer. Good existential sharing-rule selection is NOT
+refuted. This is ordinary unreviewed mechanism triage, not a positive-gap
+example, new UE class or counterexample-source reduction.
+
+Earlier direction test: CR1–CR6 is a RETIRED payoff-rounding attempt,
 not an independent-play impossibility theorem. Its exact absorbing
 correlated equilibrium pays197/4 to all four owners, but the proposed
 independent payoff restriction incorrectly required a nonnegative
@@ -10006,6 +10017,247 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Discontinuous-game existence meets an unliftable infinity equilibrium
+
+### DG1. Self-contained question and narrow source choice
+
+Can a general equilibrium theorem for discontinuous normal-form games
+produce independent terminal approximate Nash profiles in every Fin4
+quitting game, without first constructing a charged continuation word?
+The natural complete action space is T=ℕ∪{∞}, with ∞ meaning literal
+Never, finite dates isolated, and t→∞ in its one-point compactification.
+Each player's mixed action space is the compact convex weak space P(T).
+Before absorption the unique live history is all-Continue, so these
+independent complete stopping laws represent the full behavioral endpoint,
+not only stationary or common-rate controls. A unilateral replacement
+may use any law in P(T).
+
+Two PRIMARY paper results were inspected for this concrete question:
+
+- Philip J. Reny, *On the Existence of Pure and Mixed Strategy Nash
+  Equilibria in Discontinuous Games*, Econometrica67(5),1999, §2–§3,
+  definitions and Theorem3.1, pp1032–1034. The strategy sets may be compact
+  subsets of topological vector spaces. Compactness, own quasiconcavity
+  and better-reply security imply Nash existence. Security requires a
+  fixed reply guaranteeing improvement uniformly near the opponents of
+  a nonequilibrium strategy/payoff graph-limit point.
+  [Original paper](https://kylewoodward.com/blog-data/pdfs/references/reny-econometrica-1999A.pdf).
+- Leo K. Simon and William R. Zame, *Discontinuous Games and Endogenous
+  Sharing Rules*, Econometrica58(4),1990, §2, pp864–865. Compact metric
+  action spaces and a bounded upper-hemicontinuous nonempty compact
+  convex-valued payoff correspondence admit a measurable sharing-rule
+  selection together with an independent mixed Nash equilibrium for
+  that selected rule. A convex completion of the payoff graph supplies
+  such a correspondence. The rule is selected, not the old fixed payoff
+  convention; the introductory inverse-approximation discussion is not
+  an ordinary quitting-game realization theorem.
+  [Original paper](https://kylewoodward.com/blog-data/pdfs/references/simon%2Bzame-econometrica-journal-of-the-econometric-society-1990A.pdf).
+
+A narrow search for Reny/better-reply security/endogenous sharing in
+`docs/TOOLKIT.md`, `docs/FRONTIER.md`, `Literature/` and `arch/` found no
+named project adapter for either result. This is not a global source
+census. The actual endpoint declaration reread was
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+Its nearby fixed-target reverse declaration is
+`exists_terminalNash_terminalPayoff_close_of_isUniformEquilibriumPayoff`.
+The unconditional signed endpoint distinction was also reread in
+`quittingTerminalPayoff_stoppingLawProfile_pure_tendsto_never_add`
+in `UniformEquilibrium/Quitting/Terminal/FiniteOpponentPivotNeverResponse.lean`:
+late finite responses have an extra surviving singleton contribution;
+literal Never is not a freely selectable infinity reward.
+
+### DG2. Complete reward data, with existing coverage resolved immediately
+
+Let I={0,1,2,3}. For EVERY nonempty S⊆I set
+
+  r_i(S)=1 if S={i};
+  r_i(S)=0 if i∈S and |S|≥2;
+  r_i(S)=2 if i∉S.
+
+Never pays0. This formula supplies all60 coordinates. Every own singleton
+is1; all nonsingleton participant rewards are0. This is deliberately NOT
+a negative candidate. A host quitting surely at date0, everyone else
+Never, is an exact unrestricted terminal equilibrium. The host earns1
+and can obtain at most1 against all-Never opponents. Each outsider earns2;
+joining date0 pays0, and every later deadline or Never pays2. Its terminal
+payoff(1,2,2,2), with any host permutation, is a fixed UE payoff by the
+already checked exact-terminal semantic endpoint.
+
+The game is used only to falsify a universal theorem adapter. No normality,
+true-minimum margin, spherical/tax selection, or original positive gap is
+asserted. Its full unrestricted exploitability infimum is0.
+
+### DG3. Compact-law better-reply security fails exactly
+
+At index n≥1 all four independent clocks are uniform on
+{n,n+1,…,2n−1}. These actual absorbing laws converge weakly to δ_∞.
+For one owner,
+
+  P(unique first owner)= (n−1)²/(4n²),
+  P(owner absent from first coalition)=1−(n+1)²/(4n²).
+
+The first identity sums k³ for k=0,…,n−1; the second sums k³ for
+k=1,…,n. Therefore
+
+  U_i(n)=(7n²−6n−1)/(4n²) →7/4.
+
+Against these opponents, literal Never pays2 exactly, and no reward can
+exceed2. Thus the COMPLETE cap is B_i(n)=2 and
+
+  D(n)=1+6/n+1/n² →1, not0.
+
+The strategy/payoff graph-limit point is
+((δ_∞)^4,(7/4)^4). The original strategy AllNever is not Nash: date0
+Quit pays1 rather than0. Yet any FIXED replacement law σ_i, against
+opponents exactly AllNever, pays P_σ_i(T_i<∞)≤1. Those opponents belong
+to every neighborhood of (δ_∞)^3. No player can secure a payoff strictly
+above7/4 at this graph-limit point. Consequently the compact complete-law
+game fails Reny's better-reply security.
+
+The other stated hypotheses are not the missing issue here: P(T) is
+compact convex in its weak signed-measure vector space, payoffs are bounded
+and linear in one's own law. This test does not refute Reny's theorem;
+it proves that its decisive hypothesis is absent even in a solved game.
+Reciprocal upper semicontinuity also fails at this point: all actual
+AllNever payoffs are0 while all graph-limit coordinates are7/4.
+
+### DG4. A genuine selected-sharing equilibrium, not an original equilibrium
+
+Take the pure-date payoff graph on the dense subset ℕ^4 of T^4.
+At a tuple with some finite date the earliest coalition and reward are
+locally fixed, including the coordinates equal to∞. At (∞)^4 the graph
+closure contains every terminal reward vector: move any prescribed
+first coalition together to date n and put the others at later finite
+dates. Its convex completion therefore contains the uniform average of
+the four singleton rewards,
+
+  u*=(7/4,7/4,7/4,7/4).
+
+Define a Borel sharing rule equal to the ORIGINAL payoff at every pure
+tuple except (∞)^4, and equal to u* there. This is a legitimate selection
+of the convex completion. The original Never vector0 is itself the grand
+reward, so the original rule is another admissible selection; selection
+has not removed the old convention from the correspondence.
+
+Under the displayed NEW sharing rule, (δ_∞)^4 is an exact Nash equilibrium:
+a finite deviation against all-Never opponents pays1; staying Never pays
+7/4. More strongly this sharing rule has NO OTHER equilibrium. For any
+opponent pure tuple, compare an own finite deadline t with own Never:
+
+- If the opponents quit strictly before t, both pay2.
+- If their first time equals t, finite Quit pays0 and Never pays2.
+- If their first time is finite and greater than t, finite Quit pays1
+  and Never pays2.
+- If they are all Never, finite Quit pays1 and selected Never pays7/4.
+
+Never weakly dominates every finite deadline, with gain at least3/4
+whenever the opponent first time is not strictly before that deadline.
+If an independent profile has any positive prescribed finite mass, there
+is a LEAST date with positive mass for some owner. Its opponents never
+quit earlier, so replacing that owner's entire law by Never gives a
+strict gain on its positive atom, and never loses elsewhere. Thus every
+selected-rule equilibrium prescribes AllNever. This is an exact
+all-selection statement for THIS fixed sharing rule, not for all rules
+admitted by Simon–Zame.
+
+### DG5. The selected payoff is separated from EVERY original near-equilibrium
+
+Let p be ANY independent complete stopping-law profile in the ORIGINAL
+game, including arbitrary infinite supports and positive Never masses.
+Write n_i=P(T_i=∞), ν=∏n_i, prescribed payoffs U_i, and full debts
+d_i=B_i−U_i≥0. Every terminal coalition has total reward at most7;
+the singleton total is7 and a coalition of size at least2 has total
+2(4−|S|)≤4. Hence
+
+  ∑U_i≤7(1−ν).
+
+If |U_i−7/4|≤η for all four i, this yields ν≤4η/7. Choose an owner m
+with n_m≤ν^(1/4), which is always possible, including ν=0. For each
+j≠m, the literal Never deviation pays
+
+  2(1−∏[k≠j] n_k)≥2(1−n_m).
+
+This is a LOWER bound on the unrestricted cap, needing no maximizer,
+finite support, continuation Nash, or conditional punishment floor.
+The three observers alone give
+
+  D(p)≥3/4−3η−6(4η/7)^(1/4).                    (DG5)
+
+In particular η=7/4194304 gives the exact positive lower bound
+2359275/4194304>1/2. Therefore NO sequence of original terminal
+approximate Nash profiles has payoff tending to u*. The fixed-target
+reverse endpoint rules out u* as an original uniform-equilibrium payoff,
+even though the selected-sharing game has u* as its unique equilibrium
+payoff. The proof covers EVERY original behavioral deviation class
+through complete laws; it is not a stationary or common-clock failure.
+
+The formulas in DG3 were independently enumerated using exact Fractions
+for n=1,…,6, and the DG5 rational bound was checked exactly. Those finite
+tests supplement, not replace, the all-law argument.
+
+### DG6. Exact direction change and limits of the falsifier
+
+The failed implication is NOT “general discontinuous games lack an
+equilibrium theorem.” The two precise rejected project shortcuts are:
+
+  compact complete stopping laws ⇒ better-reply security;
+
+  an equilibrium of an arbitrary convex-completion sharing rule
+  ⇒ realizable original approximate equilibrium at its payoff.
+
+The second failure is stronger than merely showing one obvious clock
+approximation has high debt: DG5 excludes the ENTIRE original profile
+class near the selected payoff. It does not settle or contradict the
+paper's discussion of approximation by *nearby finite games*, whose
+payoff conventions need not be this fixed original reward table.
+
+Good EXISTENTIAL selection of a sharing rule and equilibrium is not
+refuted: the original rule has the pure-host equilibrium in DG2. An
+all-game proof through endogenous sharing would need a game-specific
+reason to choose a strategically realizable rule, rather than applying
+the theorem and accepting its existential rule without further control.
+No such reason is supplied here. In particular imposing U≥B in an
+augmented fiber would merely restate the desired missing producer unless
+its nonempty convex equilibrium-compatible correspondence is proved.
+
+The obstruction is visible in exact endpoint data: the genuine escaping
+clock sequence has payoff7/4 but full cap2 for EVERY owner. At the selected
+AllNever point the modified game instead caps each owner at7/4. The
+sharing rule has changed the response value, not just compactified the
+same game. Arbitrary convex payoff completion cannot retain that full
+strategic information by assertion.
+
+### DG7. What remains worth trying, and what is now retired
+
+Direct Reny security and arbitrary Simon–Zame payoff completion are retired
+as universal adapters. This does NOT narrow the genuine positive-gap
+counterexample class. The new search would have to select original
+strategic outcomes globally, keeping the moving response kernels as well
+as payoffs, or find an existence mechanism whose discontinuity condition
+actually follows from quitting-game equations. At present there is no
+convincing all-Fin4 argument that such a selection exists.
+
+The tempting repair is boundary-stratum descent: replace a ghost infinity
+equilibrium by one with a genuine finite sure supplier, leaving only three
+free owners. DG2 realizes that repair in this table, but the general claim
+is ALREADY false. The solved RZ table in this notebook has no sure binary
+Nash root at ANY annotation, and its arbitrary-continuation first-sure
+argument excludes all exact finite-calendar equilibria except AllNever.
+It is solved by a nonsure periodic profile. Therefore a pure finite anchor
+cannot be the universal substitute for infinity sharing. A soft anchor
+also needs its host's DELETED-anchor full cap controlled; the anchored-Nash
+and growing-menu countertests already show why such control cannot be
+read off observer optimality or an arbitrary exact equilibrium selection.
+
+The concrete unresolved target is consequently not a new boundary slogan:
+find a source theorem whose admissible discontinuity resolution preserves
+the ORIGINAL four complete-response inequalities, and prove it has an
+equilibrium without assuming realizability. No such source is presently
+available here. Existing seeded robust traps and finite-charge sinks also
+exclude a predetermined orbit as its adapter. This is an honest failed
+global theorem attempt, not a supplied-object interface or export.
 
 ## Correlated relaxation meets a negative true-punishment face
 
