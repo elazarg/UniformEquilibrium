@@ -24883,3 +24883,134 @@ so that the own cap can fall and/or the other newly born caps are hedged.
 The next concrete candidate is an independent paired whole-law replacement,
 with ALL hybrid outcome and response terms retained. No gate/export is
 requested for this obstruction, and the full conjecture remains open.
+
+Live next candidate, UNPROVED: choose two different owners i,j and two
+actual replacement conditional tail laws ℓ_i,ℓ_j. Use the independent laws
+
+    p_i(t)=(1−t)p_i+tℓ_i,
+    p_j(s)=(1−s)p_j+sℓ_j,       0≤t,s≤1,
+
+with the other tail laws unchanged. At each actual finite realizing index
+this is legal independent play. Its FOUR hybrid prescribed payoff profiles
+have weights (1−t)(1−s), t(1−s), (1−t)s, ts. A respondent's own changed
+coordinate is DELETED: owner i's full response family uses only the two
+j-hybrids, owner j's only the two i-hybrids, and either untouched owner
+uses all four. For EACH actual finite/Never response, first average these
+hybrid RESPONSE values and THEN take the complete supremum. Averaging the
+four separately maximized caps instead would be only an upper bound and
+could erase the cap hedging that the operation is supposed to exploit.
+Every collision and newly born moving reply stays in this full supremum.
+
+The root must now be profile-adapted too. At the all-four-tie original root,
+a tail cap decrease gets NO positive credit in (NC.22): it removes clipping
+but does not lower the old Quit cap. Thus a cap-dropping tail with lower
+welfare need not help at that fixed root. For a root x that is exact Nash
+against the changed ACTUAL tail caps, the checked full identity gives
+
+    D(T_x(w(t,s)))=c_x D(w(t,s)),
+    success metric = c_x D(w(t,s))−δ <0.
+
+Initially x=a and w(0,0)=v give exactly0. A nonzero root alone is insufficient:
+its absorption must exceed the changed honest-tail excess budget. Finite
+normal-form Nash existence supplies a root at each supplied cap vector,
+possibly only the all-Continue root. It does not supply a continuous selected
+branch from a. Any attempt to follow such a branch must keep every zero-rate
+boundary, sure-rate boundary and fold/singular point explicit; no IFT branch
+continuation through those points is assumed. No replacement laws or paired
+path forcing strict budget crossing have yet been proved to exist.
+
+Narrow route check: FRONTIER's fixed-tail compiler led to
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/FixedTailCapNashPrefixClockEscape.lean`.
+The inspected `stoppingLaw_none_eq_ownPrefixProduct_mul` and
+`pmfGeneralTV_tendsto_one_sub_min` concern an already supplied fixed-tail
+cap-Nash prefix ray and positive floor; they do not select the paired laws,
+produce a nonzero next root, or cross the displayed budget. This supporting
+route is therefore not being re-proved or mistaken for a source consumer.
+
+An exact GLOBAL return constraint changes that candidate before any branch
+following. Apply this paragraph only at NC9's ONE FRESH ν-rigid table,
+and reselect its marked minimum and honest suffix there. If that minimum
+is in the all-four-bridge submode, write its original survival as c_a and
+its honest suffix Never mass as ν_v, so ν*=c_aν_v. There is no unchanged
+profile transport from the older canonical table in this use of NC9.
+
+If both replacement laws ℓ_i,ℓ_j are surely FINITE (as with full-response
+mixtures), the actual independent law identity at every realizing index
+gives, in the limit,
+
+    ν(w(t,s))=(1−t)(1−s)ν_v.
+
+For ANY prefixed output that is a full minimum, common ν* consequently
+requires
+
+    c_x=c_a/[(1−t)(1−s)].
+
+For (t,s)≠(0,0), this requires LESS root absorption, not more. In particular
+every such output with c_x≤c_a has D>δ, and if (1−t)(1−s)<c_a then NO
+root whatsoever can return that tail to a minimum. For exact cap–Nash roots
+the same statement is strict positivity of the success metric c_xD(w)−δ.
+It includes arbitrary finite amplitudes, all off-minimum tail debt and all
+actual new cap branches; no root branch continuation is used.
+
+This is return accounting under the genuine global source, not an exhibited
+counterexample, a contradiction, or an exclusion of arbitrary coupled later
+changes. It does not turn the honest suffix into a minimum. It invalidates
+the specific proposed combination of surely-finite paired reply mixtures
+and a more-absorptive root branch as a zero-budget continuation. The next
+paired operation should instead preserve or increase the tail Never mass,
+for example by reshuffling entire OLD FINITE conditional laws while retaining
+their Never probabilities, or should explicitly pay for a less-absorptive
+adapted root by reducing D(w). A positive root alone remains insufficient.
+
+Actual conditional-finite operation now under test: for each chosen owner,
+keep its entire Never probability n_i, and privately mix its OLD finite
+conditional law toward a moving finite full-cap reply. This preserves the
+joint tail Never probability. There is an exact funded-gain ledger, not
+an assumption that positive total tail debt is spendable by this operation.
+Put R_i=V_i(Never), h_i=∏_(j≠i)n_j, ν_v=∏n_i, and define
+
+    γ_i=∫_(finite old prescribed t) [b_i−V_i(t)] dp_i(t)≥0,
+    κ_i=(b_i−R_i)/h_i≥s_i.
+
+All individual tail Never masses are positive. If its finite mass is0,
+set γ_i=0 and there is no finite conditional law to reshuffle for that owner.
+The complete-cap/late-finite identity gives the exact decomposition
+
+    d_i(v)−ν_v s_i = γ_i+ν_v(κ_i−s_i).          (NC.27)
+
+For a single conditional-finite best-reply mixture of intensity t, own cap
+stays b_i and own prescribed tail surplus is precisely tγ_i. This is not
+t d_i(v): the Never loss is not removed. The first term in (NC.27) is old
+finite prescribed suboptimality; the second is premium of the ENTIRE cap
+above the late empty finite reply. Neither moving witnesses nor caps are
+discarded by this distinction. A paired operation still has all four hybrid
+payoff/response terms, including their mixed term; γ_i=γ_j=0 alone does
+NOT exclude a coupled cross gain.
+
+There is, however, one whole-class boundary, at the SAME source table and
+without a new normalization. Let S=Σ_i s_i and
+
+    E*=δ−ν*S≥0.
+
+The inequality is the actual full law bound D(p)≥ν(p)S, passed to the
+augmented carrier. The original charged all-four-bridge edge gives
+
+    Σ_i[d_i(v)−ν_v s_i]=E*/c.
+
+If E*=0, EVERY actual independent whole-law profile with joint Never ν*
+has D≥ν*S=δ. Thus any number of conditional finite-law changes preserving
+that joint Never cannot produce a below-δ profile. This is not just a
+two-coordinate or local assertion. In this equality mode, (NC.27) forces
+ALL γ_i=0 and κ_i=s_i in the honest tail, so the proposed own best-reply
+surplus is also exactly0. No claim is made that an actual no-UE table
+realizes the mode; the implication is conditional INSIDE the source's
+honest remaining quantitative alternatives, not a constructed example.
+
+For E*>0, the paired conditional-finite test remains OPEN. A positive
+γ_i can fund an own surplus, but NC10 already prices an isolated such
+change; the paired laws and their adapted exact root must hedge every
+new full cap and actually satisfy c_xD(w)−δ<0. If all γ_i=0 while E*>0,
+the excess lives entirely in the late-cap premiums; no direct own finite-
+conditional best reply spends it. That fact alone does not settle the paired
+cross terms. The next calculation stays on this actual operation rather
+than presume that every positive excess debt supplies a finite-law gain.

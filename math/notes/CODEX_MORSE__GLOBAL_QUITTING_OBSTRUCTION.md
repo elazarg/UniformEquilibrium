@@ -2,17 +2,18 @@
 
 Owner: CODEX_MORSE.
 
-Current full-game direction (NI1–NI6 at the end): an unrestricted
-negative-certificate search, not another clock-repair recipe. The exact
-root correspondence can be held fixed while sixteen actual reward
-coordinates control every successor. The fresh rational table in NI3
-is normal and has no sure Nash root at ANY annotation. No polynomial
-barrier has been found, no unrestricted positive gap is claimed, and
-numerical stationary/cycle searches are not nonexistence proofs. The
-full Fin4 question remains OPEN. This route must deliver an actual
-full-domain absorption-relative certificate or be falsified by an
-actual charged return; a further supplied-object interface is not its
-endpoint.
+Current full-game direction (NI1–NI9 at the end): an unrestricted
+negative-certificate search, with its FIRST center now RETIRED by a
+literal charged return. NI7–NI9 certify eight simultaneous active
+equations and every quiet inequality for an actual four-pair periodic
+word on the fresh NI3 table. The same exact word controls EVERY
+behavioral deviation and excludes EVERY full exact/robust potential,
+not merely low-degree fits. Normality and strong no-sure were valid
+but did not signal a counterexample. Half of the sixteen transport
+controls are invisible to this whole word and all unilateral replies,
+so their changes alone cannot revive the negative center. No export,
+novel class count or full sixteen-control family theorem is claimed.
+The full Fin4 question and both least-Never consumers remain OPEN.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
@@ -19852,8 +19853,9 @@ easier to analyze. Full Fin4 UE remains OPEN.
 
 ## NI. Nonstrategic inverse design of an unrestricted negative certificate
 
-Status: ORDINARY UNREVIEWED exact parametrization and experiment.
-Neither a counterexample nor a new UE class is claimed. This changes
+Status: ORDINARY UNREVIEWED exact parametrization, experiments, and
+the CERTIFIED ORDINARY center falsifier NI7–NI9. Neither a
+counterexample nor a new UE class count is claimed. This changes
 the current mechanism from three-law selection to a full-domain dual
 search. The old DN/SC table is NOT reused: its reviewed singular
 circuit already prevents every successful negative certificate.
@@ -20052,11 +20054,12 @@ These observations explain why replacing the full domain by a quiet
 upper rectangle or by sampled feasible payoff ports would be a
 dangerous false-positive search restriction.
 
-Separate floating-point searches found no stationary exact-Nash root
+Initial separate floating-point searches found no stationary exact-Nash root
 and no closed full-root word among the tested finite support words.
 They are NOT complete censuses and establish NO nonexistence statement.
 The previously solved RZ examples and DN/SC show exactly why failure
-of such searches cannot be treated as a counterexample.
+of such searches cannot be treated as a counterexample. NI7 subsequently
+finds and certifies a different literal word on this SAME fresh table.
 
 A second experiment alternated quartic fits with small ACTUAL changes
 of the sixteen controls in the box just specified. Each transport
@@ -20124,4 +20127,257 @@ Any serious inverse-designed barrier must couple EVERY player to
 another player. The quartic fits above already allowed such coupling;
 their numerical failure is NOT upgraded by this supporting theorem.
 The next research test remains an actual all-domain coupled barrier
-or an exact charged return for the selected reward data.
+or an exact charged return. NI7–NI9 now settle the selected NI3 center
+by the latter, so searching higher degrees at that center is retired.
+
+### NI7. An exact simultaneous four-pair return retires the center
+
+Completed ordinary proof with the rational interval verifier NI9.
+No independent mathematical review or Lean theorem is asserted.
+
+The deterministic chronological period is
+
+    {0,3}, {0,2}, {1,2}, {1,3}.                         (NI.6)
+
+At each phase only the displayed two owners randomize independently;
+the other two Continue surely. Order the eight actual active rates as
+x=(q_0^0,q_3^0,q_0^1,q_2^1,q_1^2,q_2^2,q_1^3,q_3^3).
+Their rational box is
+
+    c=(671306058,63433025,102682748,812751589,
+       381443492,324288890,251302563,767875821)/10^9,
+    rho=10^(-6),       X=product_k[c_k-rho,c_k+rho].     (NI.7)
+
+Every rate in X lies strictly between0 and1. For phase t, active pair
+{i,j}, rates u,z, and indices modulo4, define ACTUAL product-law data
+
+    C_t=(1-u)(1-z),
+    A_t=u(1-z)r({i})+z(1-u)r({j})+uz r({i,j}),
+    L=1-product_t C_t,
+    N_t=sum_{m=0}^3 [product_{ell<m} C_{t+ell}] A_{t+m},
+    V_t=N_t/L.                                        (NI.8)
+
+In particular V_t=A_t+C_t V_{t+1}; these are the literal cyclic values
+of ONE word, not annotations imported from another minimum or game.
+The eight simultaneous polynomial equations are
+
+    f_{t,i}=L(Q_{t,i}-R_{t,i})-h_{t,i}N_{t+1,i}=0       (NI.9)
+
+for the two active owners at each phase. Here for active i and other
+active j with rate z, Q=(1-z)s_i+z r_i({i,j}),
+R=z r_i({j}) and h=1-z. Thus these are exactly the FULL root gaps
+at V_{t+1}, with positive denominator L cleared.
+
+NI9 freezes a rational8x8 preconditioner K and proves by exact
+Fraction interval arithmetic on the ENTIRE eight-variable box X
+
+    ||K f(c)||_infinity <=10^(-8),
+    sup_X ||I-K Df||_infinity <=1/100,
+    99/100<L<1.                                       (NI.10)
+
+Therefore Phi(x)=x-K f(x) is a contraction from X strictly into itself,
+since 10^(-8)+rho/100<rho. Banach supplies a unique x* in X.
+Also ||I-K Df(c)||<1 makes K Df(c) invertible by the Neumann series;
+as these are square matrices, K is invertible. Thus a fixed point
+K f(x*)=0 genuinely solves ALL eight equations f(x*)=0.
+No guessed numerical root, symmetric reduction, or floating-point
+inversion is part of this proof: K is merely chosen rational data.
+
+On the SAME box and with the SAME V from NI.8, the verifier proves
+
+    |V_{t,k}|<=5,
+    Q_{t,k}-R_{t,k}-h_{t,k}V_{t+1,k}<=-4/5             (NI.11)
+
+for EVERY quiet coordinate k at EVERY phase. The active equations
+and these eight inequalities hold simultaneously at x*. Hence every
+row is a full exact product-root Nash row and the word closes.
+
+Its total charge is above2. Summing the supposed potential inequalities
+P(V_{t+1})-P(V_t)>=1-C_t yields 0>0. This excludes EVERY full
+exact-root potential on any box containing[-5,5]^4, regardless of
+degree, smoothness or rationality. The same exact roots are robust
+edges at every nonnegative tolerance, so every full robust potential
+is excluded too. The NI3 center is completely RETIRED as a negative
+certificate candidate; higher-degree fitting there is pointless.
+
+### NI8. Unrestricted deviations, one uniform target, and the bounded slice
+
+The same verifier proves joint period survival <1/250 and, for EACH i,
+
+    H_i=product_t product_{j!=i}(1-q_j^t)<1/20.         (NI.12)
+
+Repeat NI.6 forever with independent private coins. For any replacement
+behavioral law of one player, its opponents have probability at most
+H_i^m of remaining live after m periods, independently of that
+replacement. Backward Bellman induction using the actual full Nash
+rows bounds every finite-deadline reward by V_0 with a bounded tail
+residual on precisely this event. Taking m to infinity removes the
+residual and also handles literal Never. Every infinite-support
+stopping law and every unilateral behavioral strategy along the
+deterministic survival calendar is a mixture of these complete
+deadlines/Never and obeys the same bound. No current-action,
+stationary, finite-menu or bounded-controller deviation restriction
+is being used. All prescribed rows have positive live reach because
+all active rates are below1; the opponent tail bound handles all
+deviation histories too.
+
+The profile is thus exact terminal Nash after every phase. Its payoff
+V_0 is fixed BEFORE accuracy; the unique x* fixes the entire strategy,
+not just a sequence of possibly changing targets. For ANY deviation,
+the expected terminal time, counting its terminal stage, is at most
+4/(1-H_i)<5 because the game stops no later than its opponents.
+Rewards have absolute value at most5, so the expected N-stage average
+differs from the corresponding terminal payoff by at most25/N.
+Prescribed pay has the same bound, and any N-stage deviation gains
+at most50/N. This proves ordinary uniform equilibrium with the ONE
+target V_0, not merely a terminal or selected-root conclusion.
+
+A limited class-wide corollary requires no extra optimization. Fix at5
+the eight USED pair-passive controls
+
+    b_0({1,2}), b_0({1,3}), b_1({0,2}), b_1({0,3}),
+    b_2({0,3}), b_2({1,3}), b_3({0,2}), b_3({1,2}).
+
+The other eight of NI3's sixteen controls correspond to unused opponent
+pairs {0,1},{2,3} or to opponent triples. Their opponent masses vanish
+at every row of NI.6. By NI.2–3, varying them while keeping s,d fixed
+leaves the SAME prescribed V and EVERY root gap unchanged. Consequently
+this literal return and its unrestricted compiler survive arbitrary
+finite real values of those eight controls (sixteen linked actual
+reward cells). Use the resulting finite reward bound for the horizon
+estimate if desired. This is NOT an arbitrary independent variation
+of used cells, the entire sixteen-control box, a complete producer
+comparison or a new UE class count.
+
+Research decision: do not try to revive this center through higher
+polynomial degree or its invisible controls. A further negative
+region must change USED transport or root geometry and have a clear
+class-wide reason to avoid the literal return. Full Fin4 UE remains
+open; this exact test table is now SOLVED, not a noUE input.
+
+### NI9. Exact rational interval verifier, standard library only
+
+This proves NI.10–12 by rational assertions and forward-mode interval
+derivatives of ALL eight active equations. The preconditioner is fixed
+rational data. No NumPy, SciPy, floats or numerical root is used.
+
+```python
+# NI9 exact rational interval verifier
+from fractions import Fraction as F
+class I:
+    def __init__(self,lo,hi=None):
+        self.lo,self.hi=F(lo),F(lo if hi is None else hi)
+    def __add__(self,o):
+        o=asI(o); return I(self.lo+o.lo,self.hi+o.hi)
+    __radd__=__add__
+    def __neg__(self): return I(-self.hi,-self.lo)
+    def __sub__(self,o): return self+-asI(o)
+    def __rsub__(self,o): return asI(o)+-self
+    def __mul__(self,o):
+        o=asI(o)
+        p=[a*b for a in (self.lo,self.hi) for b in (o.lo,o.hi)]
+        return I(min(p),max(p))
+    __rmul__=__mul__
+    def __truediv__(self,o):
+        o=asI(o); assert o.lo*o.hi>0
+        return self*I(1/o.hi,1/o.lo)
+    def abs(self): return max(abs(self.lo),abs(self.hi))
+def asI(x): return x if isinstance(x,I) else I(x)
+class AD:
+    def __init__(self,v,g=None):
+        self.v=asI(v)
+        self.g=[I(0) for _ in range(8)] if g is None else g
+    def __add__(self,o):
+        o=asAD(o); return AD(self.v+o.v,[a+b for a,b in zip(self.g,o.g)])
+    __radd__=__add__
+    def __neg__(self): return AD(-self.v,[-a for a in self.g])
+    def __sub__(self,o): return self+-asAD(o)
+    def __rsub__(self,o): return asAD(o)+-self
+    def __mul__(self,o):
+        o=asAD(o)
+        return AD(self.v*o.v,[a*o.v+self.v*b for a,b in zip(self.g,o.g)])
+    __rmul__=__mul__
+def asAD(x): return x if isinstance(x,AD) else AD(x)
+r=[
+ [0,0,0,0],[1,3,3,0],[4,1,-1,-1],[-2,-2,5,5],
+ [0,2,1,2],[F(1,2),5,-2,5],[5,-2,F(-1,2),5],[4,4,4,-4],
+ [4,-2,0,1],[-2,5,5,F(1,2)],[5,F(-3,2),5,-2],[4,4,-4,4],
+ [5,5,-2,-2],[4,-4,4,4],[-4,4,4,4],[-5,-5,-5,-5]]
+r=[[F(a) for a in row] for row in r]
+pairs=[(0,3),(0,2),(1,2),(1,3)]; word=[9,5,6,10]
+c=[F(a,10**9) for a in [671306058,63433025,102682748,812751589,
+                        381443492,324288890,251302563,767875821]]
+rho=F(1,10**6)
+Kint=[
+ [-421953,100100084,15156371,-10256876,-1582297,30080727,1920211,-31740321],
+ [-15689247,2360549,16079615,-94906,146264,1458634,-898,-2219134],
+ [-634552,51427850,3856612,-19910890,-353313,46341182,-1414078,-48392738],
+ [-286320,32293609,39837715,-1298369,2000973,19954921,-12284,-30358974],
+ [-2626961,212904615,15965871,-7852765,-1462668,146629176,-5854099,-200339645],
+ [-64948,6463035,1541398,-1037742,-17016421,3005647,21816887,-3331392],
+ [-118262,80752496,4247936,-2874735,-443477,8430843,430548,-84048088],
+ [-227595,22648235,5401480,-3636531,-210027,10532607,46391474,-11674106]]
+K=[[F(a,10**8) for a in row] for row in Kint]
+def variables(radius):
+    return [AD(I(a-radius,a+radius),[I(int(k==j)) for j in range(8)])
+            for k,a in enumerate(c)]
+def quantities(x):
+    cs=[]; AA=[]
+    for t,(i,j) in enumerate(pairs):
+        u,z=x[2*t:2*t+2]; cs.append((1-u)*(1-z))
+        AA.append([u*(1-z)*r[1<<i][k]+z*(1-u)*r[1<<j][k]+
+                   u*z*r[word[t]][k] for k in range(4)])
+    L=1-cs[0]*cs[1]*cs[2]*cs[3]; Ns=[]
+    for start in range(4):
+        factor=1; row=[0]*4
+        for step in range(4):
+            t=(start+step)%4
+            row=[row[k]+factor*AA[t][k] for k in range(4)]
+            factor=factor*cs[t]
+        Ns.append(row)
+    eq=[]
+    for t,(i,j) in enumerate(pairs):
+        for off,k in enumerate((i,j)):
+            other=j if off==0 else i; z=x[2*t+1-off]
+            Q=(1-z)*r[1<<k][k]+z*r[word[t]][k]
+            R=z*r[1<<other][k]
+            eq.append(L*(Q-R)-(1-z)*Ns[(t+1)%4][k])
+    return eq,L,Ns,cs
+fp,_,_,_=quantities(variables(F(0)))
+fx,L,Ns,cs=quantities(variables(rho))
+res=max(abs(sum(K[i][k]*fp[k].v.lo for k in range(8))) for i in range(8))
+eta=F(0)
+for i in range(8):
+    row=F(0)
+    for j in range(8):
+        e=I(int(i==j))-sum((K[i][k]*fx[k].g[j] for k in range(8)),I(0))
+        row+=e.abs()
+    eta=max(eta,row)
+assert res<=F(1,10**8)
+assert eta<=F(1,100)
+assert res+rho*eta<rho
+assert F(99,100)<L.v.lo<=L.v.hi<1
+assert all(0<a-rho<a+rho<1 for a in c)
+q=[[I(0) for _ in range(4)] for _ in range(4)]
+for t,(i,j) in enumerate(pairs):
+    u=q[t][i]=I(c[2*t]-rho,c[2*t]+rho)
+    z=q[t][j]=I(c[2*t+1]-rho,c[2*t+1]+rho)
+    for k in range(4):
+        V=Ns[t][k].v/L.v
+        assert -5<=V.lo<=V.hi<=5
+        if k in (i,j): continue
+        Q=((1-u)*(1-z)*r[1<<k][k]+u*(1-z)*r[(1<<i)|(1<<k)][k]+
+           z*(1-u)*r[(1<<j)|(1<<k)][k]+u*z*r[word[t]|(1<<k)][k])
+        R=u*(1-z)*r[1<<i][k]+z*(1-u)*r[1<<j][k]+u*z*r[word[t]][k]
+        gap=Q-R-(1-u)*(1-z)*(Ns[(t+1)%4][k].v/L.v)
+        assert gap.hi<=F(-4,5)
+for i in range(4):
+    H=I(1)
+    for t in range(4):
+        for j in range(4):
+            if j!=i: H=H*(1-q[t][j])
+    assert H.hi<F(1,20)
+assert 1-L.v.lo<F(1,250)
+assert sum(1-z.v.hi for z in cs)>2
+print("NI9 PASS: simultaneous contraction, every quiet gap, full tail bounds")
+```
