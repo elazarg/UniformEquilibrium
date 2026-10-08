@@ -1,5 +1,6 @@
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.RecursiveAbsorption.ProperPairApproximation
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Asymptotic
+import Mathlib.Order.Filter.Finite
 
 /-!
 # Proper-pair limits in the canonical recursive absorption model
@@ -18,6 +19,11 @@ paper's reduction from general absorbing stage games and state-dependent
 action sets remains a separate obligation. This module does not identify this
 canonical model with that source class or assert a fixed-target
 uniform-equilibrium payoff.
+
+The finite-horizon extension uses the checked potential cap uniformly over
+behavioral deviations. A strict error slack gives one horizon cutoff before
+every initial state and deviation; the stationary producer selects its profile
+at a smaller accuracy internally. This is not a fixed-payoff-target assertion.
 -/
 
 noncomputable section
@@ -401,5 +407,93 @@ theorem exists_stationary_liminfApproximateEquilibrium [Nonempty I] [Nonempty J]
         · intro j
           rw [stationaryPayoff_eq_zero_of_mass_eq_zero D x y true hzero, zero_add]
           exact (hcolumn j).trans ((le_of_not_gt hcolumnprofit).trans hε.le)
+
+private theorem finiteAveragePayoff_some (D : Data I J)
+    (profile : (game D).BehaviorProfile) (pair : I × J) (who : Bool)
+    {horizon : ℕ} (hhorizon : 0 < horizon) :
+    (game D).finiteAveragePayoff (some pair) horizon profile who = D.reward pair.1 pair.2 who := by
+  have hreal : (horizon : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr (Nat.ne_of_gt hhorizon)
+  rw [(game D).finiteAveragePayoff_eq_sum_expectedStagePayoff profile (some pair) who horizon]
+  simp only [expectedStagePayoff_some, Finset.sum_const, Finset.card_range, nsmul_eq_mul,
+    ← mul_assoc, inv_mul_cancel₀ hreal, one_mul]
+
+/-- Strict slack converts stationary limiting Nash into finite-horizon Nash uniformly.
+One horizon cutoff precedes every initial state and unrestricted behavioral deviation. -/
+theorem eventually_isHorizonNash_of_stationary_liminfNash (D : Data I J)
+    (x : PMF I) (y : PMF J) {κ ε : ℝ}
+    (hNash : (game D).IsεAsymptoticNash (liminfPayoff D none) κ (stationaryProfile D x y))
+    (hslack : κ < ε) :
+    ∀ᶠ horizon in atTop, ∀ initial,
+      (game D).IsεHorizonNash initial horizon ε (stationaryProfile D x y) := by
+  have hκ : 0 ≤ κ := by
+    have hself := hNash false ((stationaryProfile D x y) false)
+    rw [Function.update_eq_self] at hself
+    linarith
+  have hε : 0 ≤ ε := hκ.trans hslack.le
+  let η : ℝ := (ε - κ) / 2
+  have hη : 0 < η := div_pos (sub_pos.mpr hslack) (by norm_num)
+  have hpure : ∀ who action, pureStationaryResponsePayoff D (mixedAction x y) who action ≤
+      liminfPayoff D none (stationaryProfile D x y) who + κ := by
+    intro who action
+    have hprofile : Function.update (stationaryProfile D x y)
+        who (fun _ _ => PMF.pure action) =
+          pureStationaryResponse D (mixedAction x y) who action := by
+      funext player time history
+      cases who <;> cases player <;>
+        simp [pureStationaryResponse, stationaryProfile,
+          StochasticGame.stationaryBehaviorProfile, mixedAction] <;> rfl
+    have h := hNash who (fun _ _ => PMF.pure action)
+    rw [hprofile] at h
+    exact h
+  have hdev : ∀ᶠ horizon in atTop, ∀ who, ∀ deviation : (game D).BehaviorStrategy who,
+      (game D).finiteAveragePayoff none horizon
+          (Function.update (stationaryProfile D x y) who deviation) who ≤
+        liminfPayoff D none (stationaryProfile D x y) who + κ + η := by
+    apply Filter.eventually_all.mpr
+    intro who
+    exact eventually_forall_finiteAveragePayoff_deviation_le_of_pure_cap
+      D (mixedAction x y) who _ (hpure who) hη
+  have hbaseline : ∀ᶠ horizon in atTop, ∀ who,
+      liminfPayoff D none (stationaryProfile D x y) who - η <
+        (game D).finiteAveragePayoff none horizon (stationaryProfile D x y) who := by
+    apply Filter.eventually_all.mpr
+    intro who
+    have hlimit := tendsto_finiteAveragePayoff_liminfPayoff D (stationaryProfile D x y) none who
+    exact hlimit.eventually (Ioi_mem_nhds (by linarith))
+  filter_upwards [hdev, hbaseline, eventually_gt_atTop (0 : ℕ)]
+    with horizon hcap hlower hhorizon
+  intro initial who deviation
+  cases initial with
+  | none =>
+      have hupper := hcap who deviation
+      have hlower' := hlower who
+      dsimp [η] at hupper hlower'
+      linarith
+  | some pair =>
+      rw [finiteAveragePayoff_some D (stationaryProfile D x y) pair who hhorizon,
+        finiteAveragePayoff_some D (Function.update (stationaryProfile D x y) who deviation)
+          pair who hhorizon]
+      exact le_add_of_nonneg_right hε
+
+/-- One internally selected stationary profile has both limiting and uniform horizon Nash bounds.
+The profile and common horizon cutoff precede every initial state and every deviation. -/
+theorem exists_stationary_liminfApproximateEquilibrium_with_eventual_horizonNash
+    [Nonempty I] [Nonempty J] (D : Data I J) {ε : ℝ} (hε : 0 < ε) :
+    ∃ (x : PMF I) (y : PMF J),
+      (∀ initial, (game D).IsεAsymptoticNash (liminfPayoff D initial) ε
+        (stationaryProfile D x y)) ∧
+      ∃ cutoff : ℕ, 0 < cutoff ∧ ∀ horizon, cutoff ≤ horizon → ∀ initial,
+        (game D).IsεHorizonNash initial horizon ε (stationaryProfile D x y) := by
+  obtain ⟨x, y, hxy⟩ := exists_stationary_liminfApproximateEquilibrium
+    D (show 0 < ε / 2 by linarith)
+  have hhorizon := eventually_isHorizonNash_of_stationary_liminfNash
+    D x y (hxy none) (show ε / 2 < ε by linarith)
+  obtain ⟨cutoff, hcutoff⟩ := Filter.eventually_atTop.mp hhorizon
+  refine ⟨x, y, ?_, max cutoff 1, by omega, ?_⟩
+  · intro initial who deviation
+    have h := hxy initial who deviation
+    linarith
+  · intro horizon hlarge initial
+    exact hcutoff horizon ((le_max_left cutoff 1).trans hlarge) initial
 
 end GameTheory.RecursiveAbsorption

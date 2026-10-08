@@ -15,8 +15,10 @@ The source dictionary identifies this maximum with the existing unrestricted
 stopping-law cap. Its reward extension assigns empty labels zero, and its clock
 dictionary covers every original finite date and literal Never. Complete caps
 for arbitrary finite replacement laws on the old cells also have this exact
-old-menu representation; no replacement average calendar is substituted. Original caps
-converge along the whole specified source subsequence. One actual-source
+old-menu representation; no replacement average calendar is substituted. Their
+complete caps converge along the whole specified source subsequence under eventual
+cell-weight bounds and actual latent marginal convergence. Original caps specialize
+the same proof. One actual-source
 compactification is selected before all reward tables and players, and carries
 both the original prescribed-payoff limits and these complete-cap limits.
 Original semantic-carrier minima and signed old-law variations remain separate
@@ -411,7 +413,60 @@ private theorem original_reply_le_sourceFullCap
   rw [quittingStoppingLawCap_eq_continuationBestResponseValue_stoppingLawProfile]
   exact quittingTerminalPayoff_update_le_continuationBestResponseValue reward _ who _
 
-/-- The moving finite-reply limit is literally the original behavioral payoff. -/
+/-- Moving old-chart marks give the actual modified original behavioral payoff limit. -/
+theorem tendsto_reference_finite_reply_payoff
+    (source : ℕ → ι → FinDist (Option ℕ))
+    (replacement : (n : ℕ) → ι → FinDist (Cell (source n))) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (C : ι → NNReal)
+    (hweights : ∀ᶠ k in atTop, ∀ i (a : Cell (source (subsequence k))),
+      (replacement (subsequence k) i).prob a ≤ (C i : ℝ) * weight (source (subsequence k)) a)
+    (hlaws : Tendsto (fun k i =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) i))
+      atTop (𝓝 marginals))
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) (dates : ℕ → ℕ)
+    {t : ℝ} (ht : Tendsto (fun k => mark (source (subsequence k)) (dates k)) atTop (𝓝 t)) :
+    Tendsto (fun k => quittingBehaviorPureTimePayoff reward
+      (quittingStoppingLawProfile reward (fun i =>
+        (referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)).toPMF))
+      who (some (dates k))) atTop
+      (𝓝 (responseValue limit marginals who (quittingLabelReward reward who) (t : WithTop ℝ))) :=
+  (tendsto_reference_finite_reply_expect source replacement subsequence hE hc C hweights hlaws
+    who (quittingLabelReward reward who) dates ht).congr' (Eventually.of_forall fun k =>
+      source_updated_expect_eq_original_reply reward
+        (fun i => referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i))
+        who (some (dates k)))
+
+/-- Literal Never has its own actual modified-law behavioral payoff limit. -/
+theorem tendsto_reference_never_reply_payoff
+    (source : ℕ → ι → FinDist (Option ℕ))
+    (replacement : (n : ℕ) → ι → FinDist (Cell (source n))) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (C : ι → NNReal)
+    (hweights : ∀ᶠ k in atTop, ∀ i (a : Cell (source (subsequence k))),
+      (replacement (subsequence k) i).prob a ≤ (C i : ℝ) * weight (source (subsequence k)) a)
+    (hlaws : Tendsto (fun k i =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) i))
+      atTop (𝓝 marginals))
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
+    Tendsto (fun k => quittingBehaviorPureTimePayoff reward
+      (quittingStoppingLawProfile reward (fun i =>
+        (referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)).toPMF))
+      who none) atTop
+      (𝓝 (responseValue limit marginals who (quittingLabelReward reward who) ⊤)) :=
+  (tendsto_reference_never_reply_expect source replacement subsequence hE hc C hweights hlaws
+    who (quittingLabelReward reward who)).congr' (Eventually.of_forall fun k =>
+      source_updated_expect_eq_original_reply reward
+        (fun i => referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i))
+        who none)
+
+/-- The original finite-reply limit specializes the one modified-law payoff bridge. -/
 theorem tendsto_original_finite_reply_payoff
     (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
     {limit : MathUE.MarkedCalendar.Calendar} {marginals : ι → ProbabilityMeasure unitInterval}
@@ -424,10 +479,13 @@ theorem tendsto_original_finite_reply_payoff
     Tendsto (fun k => quittingBehaviorPureTimePayoff reward
       (quittingStoppingLawProfile reward (fun i => (source (subsequence k) i).toPMF))
         who (some (dates k))) atTop
-      (𝓝 (responseValue limit marginals who (quittingLabelReward reward who) (t : WithTop ℝ))) :=
-  (tendsto_source_finite_reply_expect source subsequence hE hc hlaws who
-    (quittingLabelReward reward who) dates ht).congr' (Eventually.of_forall fun k =>
-      source_updated_expect_eq_original_reply reward (source (subsequence k)) who (some (dates k)))
+      (𝓝 (responseValue limit marginals who (quittingLabelReward reward who) (t : WithTop ℝ))) := by
+  have h := tendsto_reference_finite_reply_payoff source (fun n => cellLaw (source n))
+    subsequence hE hc (fun _ => (Fintype.card ι : NNReal))
+    (Eventually.of_forall fun k i a => by
+      simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le (source (subsequence k)) i a)
+    hlaws reward who dates ht
+  simpa only [referenceOriginalLaw_cellLaw] using h
 
 /-- The original Never reply retains its separate payoff limit. -/
 theorem tendsto_original_never_reply_payoff
@@ -440,34 +498,52 @@ theorem tendsto_original_never_reply_payoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
     Tendsto (fun k => quittingBehaviorPureTimePayoff reward
       (quittingStoppingLawProfile reward (fun i => (source (subsequence k) i).toPMF)) who none)
-      atTop (𝓝 (responseValue limit marginals who (quittingLabelReward reward who) ⊤)) :=
-  (tendsto_source_never_reply_expect source subsequence hE hc hlaws who
-    (quittingLabelReward reward who)).congr' (Eventually.of_forall fun k =>
-      source_updated_expect_eq_original_reply reward (source (subsequence k)) who none)
+      atTop (𝓝 (responseValue limit marginals who (quittingLabelReward reward who) ⊤)) := by
+  have h := tendsto_reference_never_reply_payoff source (fun n => cellLaw (source n))
+    subsequence hE hc (fun _ => (Fintype.card ι : NNReal))
+    (Eventually.of_forall fun k i a => by
+      simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le (source (subsequence k)) i a)
+    hlaws reward who
+  simpa only [referenceOriginalLaw_cellLaw] using h
 
-/-- Complete original caps converge on the whole chosen source subsequence, for every actual
-limiting menu. Maximizing replies are extracted only inside the proof of convergence. -/
-theorem tendsto_sourceFullCap
-    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+/-- Complete modified original caps converge on the whole supplied subsequence, using the old
+source menu. Maximizing replies are extracted only inside the proof of convergence. -/
+theorem tendsto_referenceFullCap
+    (source : ℕ → ι → FinDist (Option ℕ))
+    (replacement : (n : ℕ) → ι → FinDist (Cell (source n))) (subsequence : ℕ → ℕ)
     {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
     {marginals : ι → ProbabilityMeasure unitInterval}
     (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
       (𝓝 limit.endpoints))
     (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
     (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
-    (hlaws : Tendsto (fun k => chartLaw (source (subsequence k))) atTop (𝓝 marginals))
+    (C : ι → NNReal)
+    (hweights : ∀ᶠ k in atTop, ∀ i (a : Cell (source (subsequence k))),
+      (replacement (subsequence k) i).prob a ≤ (C i : ℝ) * weight (source (subsequence k)) a)
+    (hlaws : Tendsto (fun k i =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) i))
+      atTop (𝓝 marginals))
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
     Tendsto (fun k => quittingStoppingLawReplacementPayoffCap reward
-      (fun i => (source (subsequence k) i).toPMF) who) atTop
+      (fun i =>
+        (referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)).toPMF)
+      who) atTop
       (𝓝 (limitReplyMaximum limit menu marginals who (quittingLabelReward reward who))) := by
   classical
+  let modified := fun k i =>
+    referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)
   let payoff := fun k choice => quittingBehaviorPureTimePayoff reward
-    (quittingStoppingLawProfile reward (fun i => (source (subsequence k) i).toPMF)) who choice
+    (quittingStoppingLawProfile reward (fun i => (modified k i).toPMF)) who choice
   let caps := fun k => quittingStoppingLawReplacementPayoffCap reward
-    (fun i => (source (subsequence k) i).toPMF) who
+    (fun i => (modified k i).toPMF) who
   let target := limitReplyMaximum limit menu marginals who (quittingLabelReward reward who)
-  obtain ⟨reply, hreply, hmax⟩ := exists_limitReplyValue_eq_maximum
-    source subsequence hE hc hT hlaws who (quittingLabelReward reward who)
+  have hbound (j : {j : ι // j ≠ who}) :
+      (marginals j.val : Measure unitInterval) ≤ C j.val • (base : Measure unitInterval) :=
+    ProbabilityMeasure.le_of_tendsto_of_le_measure _ (hlaws.apply_nhds j.val)
+      (hweights.mono fun k hk => referenceLaw_le (source (subsequence k))
+        (replacement (subsequence k) j.val) (C j.val) (hk j.val))
+  obtain ⟨reply, hreply, hmax⟩ := exists_limitReplyValue_eq_maximum_of_le_smul
+    source subsequence hE hc hT C who hbound (quittingLabelReward reward who)
   have hupper (other : LimitReply menu) :
       limitReplyValue limit menu marginals who (quittingLabelReward reward who) other ≤ target := by
     exact (hmax other).trans_eq hreply
@@ -480,14 +556,15 @@ theorem tendsto_sourceFullCap
         refine ⟨fun k => some (dates k), ?_⟩
         dsimp only [target]
         rw [← hreply]
-        exact tendsto_original_finite_reply_payoff source subsequence hE hc hlaws reward who
-          dates hdates
+        exact tendsto_reference_finite_reply_payoff source replacement subsequence hE hc
+          C hweights hlaws reward who dates hdates
     | inr terminal =>
         cases terminal
         refine ⟨fun _ => none, ?_⟩
         dsimp only [target]
         rw [← hreply]
-        exact tendsto_original_never_reply_payoff source subsequence hE hc hlaws reward who
+        exact tendsto_reference_never_reply_payoff source replacement subsequence hE hc
+          C hweights hlaws reward who
   obtain ⟨reference, href⟩ := hreference
   have identify (indexes : ℕ → ℕ) (hindexes : Tendsto indexes atTop atTop) {value : ℝ}
       (hvalue : Tendsto (fun k => caps (indexes k)) atTop (𝓝 value))
@@ -495,23 +572,24 @@ theorem tendsto_sourceFullCap
     apply hvalueUpper.antisymm
     exact le_of_tendsto_of_tendsto (href.comp hindexes) hvalue
       (Eventually.of_forall fun k => original_reply_le_sourceFullCap reward
-        (source (subsequence (indexes k))) who (reference (indexes k)))
+        (modified (indexes k)) who (reference (indexes k)))
   change Tendsto caps atTop (𝓝 target)
   apply Filter.tendsto_of_subseq_tendsto
   intro indexes hindexes
   have hattains (k : ℕ) : ∃ choice ∈ quittingFiniteOpponentAtomGapReplyMenu
-      (quittingFiniteStoppingCalendar (source (subsequence (indexes k)))),
+      (quittingFiniteStoppingCalendar (modified (indexes k))),
       payoff (indexes k) choice = caps (indexes k) :=
-    exists_original_reply_eq_sourceFullCap reward (source (subsequence (indexes k))) who
+    exists_original_reply_eq_sourceFullCap reward (modified (indexes k)) who
   choose choices _hchoices hcaps using hattains
   by_cases hnever : ∃ᶠ k in atTop, choices k = none
   · obtain ⟨next, hnext, hnone⟩ := exists_seq_forall_of_frequently hnever
     have hvalue : Tendsto (fun k => caps (indexes (next k))) atTop
         (𝓝 (responseValue limit marginals who (quittingLabelReward reward who) ⊤)) := by
-      apply ((tendsto_original_never_reply_payoff source subsequence hE hc hlaws reward who).comp
+      apply ((tendsto_reference_never_reply_payoff source replacement subsequence hE hc
+        C hweights hlaws reward who).comp
         (hindexes.comp hnext)).congr'
       filter_upwards [] with k
-      simpa only [payoff, Function.comp_def, hnone k] using hcaps (next k)
+      simpa only [payoff, modified, Function.comp_def, hnone k] using hcaps (next k)
     have heq := identify (fun k => indexes (next k)) (hindexes.comp hnext) hvalue
       (hupper (Sum.inr ()))
     exact ⟨next, by simpa only [heq] using hvalue⟩
@@ -543,15 +621,37 @@ theorem tendsto_sourceFullCap
     have hvalue : Tendsto (fun k => caps (indexes (next k + start))) atTop
         (𝓝 (responseValue limit marginals who (quittingLabelReward reward who)
           (point.val : WithTop ℝ))) := by
-      apply (tendsto_original_finite_reply_payoff source
+      apply (tendsto_reference_finite_reply_payoff source replacement
         (fun k => subsequence (indexes (next k + start)))
-        (hE.comp hindices) (hc.comp hindices) (hlaws.comp hindices) reward who
+        (hE.comp hindices) (hc.comp hindices) C (hindices.eventually hweights)
+        (hlaws.comp hindices) reward who
         (fun k => dates (next k)) hmarks).congr'
       filter_upwards [] with k
-      simpa only [hchoice (next k)] using hcaps (next k + start)
+      simpa only [payoff, modified, hchoice (next k)] using hcaps (next k + start)
     have heq := identify (fun k => indexes (next k + start)) hindices hvalue
       (hupper (Sum.inl ⟨point.val, hmem⟩))
     exact ⟨fun k => next k + start, by simpa only [heq] using hvalue⟩
+
+/-- Original caps specialize the one old-reference modified-law envelope proof. -/
+theorem tendsto_sourceFullCap
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
+    (hlaws : Tendsto (fun k => chartLaw (source (subsequence k))) atTop (𝓝 marginals))
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
+    Tendsto (fun k => quittingStoppingLawReplacementPayoffCap reward
+      (fun i => (source (subsequence k) i).toPMF) who) atTop
+      (𝓝 (limitReplyMaximum limit menu marginals who (quittingLabelReward reward who))) := by
+  have h := tendsto_referenceFullCap source (fun n => cellLaw (source n))
+    subsequence hE hc hT (fun _ => (Fintype.card ι : NNReal))
+    (Eventually.of_forall fun k i a => by
+      simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le (source (subsequence k)) i a)
+    hlaws reward who
+  simpa only [referenceOriginalLaw_cellLaw] using h
 
 /-- One actual-source subsequence precedes every reward table and every player's original
 payoff and complete cap. No minimizing marked law or response-limit oracle is supplied. -/

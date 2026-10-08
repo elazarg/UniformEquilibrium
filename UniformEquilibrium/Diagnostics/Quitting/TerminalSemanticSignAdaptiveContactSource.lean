@@ -1,5 +1,6 @@
 import UniformEquilibrium.Quitting.Stationary.SignedInfluenceCycleBalance
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticWorstSumRewardSource
+import MathUE.Topology.CoordinateAffineAvoidance
 
 /-! # Sign-adaptive endpoints for actual four-player reward contacts
 
@@ -13,8 +14,9 @@ convex-linear, change by at most eight times the reward-coordinate error,
 and originally positive contacts have endpoint value at least one. Every
 positive worst SUM table admits an arbitrarily small common step with
 positive new SUM and all fixed labels separated from that new infimum.
-Row genericity, recipient-scale rigidity and the final source producer
-remain separate obligations. This endpoint changes own singletons; the
+Arbitrarily close row-generic tables retain the fixed contacts and original
+cohorts. Recipient-scale rigidity and the final source producer remain separate
+obligations. This endpoint changes own singletons; the
 older singleton-preserving eight-coordinate source is a separate scope.
 -/
 
@@ -1000,6 +1002,418 @@ theorem exists_quittingSignAdaptiveContact_source_of_not_uniformPayoff
           (quittingSignAdaptiveContactStep original alpha) label ≠
             quittingTerminalDebtSumInf (quittingSignAdaptiveContactStep original alpha) := by
   exact exists_positive_quittingSignAdaptiveContact_source reward
+    (quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff.mpr hnot) htolerance
+
+private theorem setReward_scale
+    (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (rate : ℝ) (coalition : Finset (Fin 4)) (who : Fin 4) :
+    quittingSetReward (scaleQuittingReward rate table) coalition who =
+      rate * quittingSetReward table coalition who := by
+  by_cases hne : coalition.Nonempty <;> simp [quittingSetReward, scaleQuittingReward, hne]
+
+private theorem membershipGain_scale
+    (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (rate : ℝ) (coalition : Finset (Fin 4)) (who : Fin 4) :
+    quittingMembershipGain (scaleQuittingReward rate table) who coalition =
+      rate * quittingMembershipGain table who coalition := by
+  simp only [quittingMembershipGain, MathUE.binaryJoinGain, setReward_scale]
+  ring
+
+private theorem contactValue_zero
+    (original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (label : QuittingSignAdaptiveContactLabel original) :
+    quittingSignAdaptiveContactValue original 0 label = 0 := by
+  cases label with
+  | inl label =>
+      cases label <;> simp [quittingSignAdaptiveContactValue,
+        quittingSignAdaptiveCanonicalContactValue, quittingMembershipGain,
+        MathUE.binaryJoinGain, quittingSetReward]
+  | inr coalition =>
+      simp [quittingSignAdaptiveContactValue, quittingMembershipGain,
+        MathUE.binaryJoinGain, quittingSetReward]
+
+/-- Every fixed original-table contact scales by the same actual common reward factor. -/
+theorem quittingSignAdaptiveContactValue_scaleQuittingReward
+    (original table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (rate : ℝ) (label : QuittingSignAdaptiveContactLabel original) :
+    quittingSignAdaptiveContactValue original (scaleQuittingReward rate table) label =
+      rate * quittingSignAdaptiveContactValue original table label := by
+  have h := quittingSignAdaptiveContactValue_convex_combination original 0 table rate label
+  have heq : (fun terminal who => (1 - rate) *
+      (0 : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) terminal who +
+      rate * table terminal who) = scaleQuittingReward rate table := by
+    funext terminal who
+    simp [scaleQuittingReward]
+  rw [heq, contactValue_zero, mul_zero, zero_add] at h
+  exact h
+
+private theorem reward_coordinate_error_le_dist
+    (first second : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (terminal : {S : Finset (Fin 4) // S.Nonempty}) (who : Fin 4) :
+    |first terminal who - second terminal who| ≤ dist first second := by
+  rw [← Real.dist_eq]
+  exact (dist_le_pi_dist (first terminal) (second terminal) who).trans
+    (dist_le_pi_dist first second terminal)
+
+private theorem continuous_contactValue
+    (original : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (label : QuittingSignAdaptiveContactLabel original) :
+    Continuous (fun table => quittingSignAdaptiveContactValue original table label) := by
+  have h : LipschitzWith 8 (fun table =>
+      quittingSignAdaptiveContactValue original table label) := by
+    apply LipschitzWith.of_dist_le_mul
+    intro first second
+    simpa only [Real.dist_eq, NNReal.coe_ofNat] using
+      abs_quittingSignAdaptiveContactValue_sub_le original first second (dist first second)
+        (reward_coordinate_error_le_dist first second) label
+  exact h.continuous
+
+private theorem continuous_membershipGain (who : Fin 4) (coalition : Finset (Fin 4)) :
+    Continuous (fun table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4) =>
+      quittingMembershipGain table who coalition) := by
+  have h : LipschitzWith 2 (fun table => quittingMembershipGain table who coalition) := by
+    apply LipschitzWith.of_dist_le_mul
+    intro first second
+    simpa only [Real.dist_eq, NNReal.coe_ofNat] using
+      membershipGain_difference_le first second (dist first second) dist_nonneg
+        (reward_coordinate_error_le_dist first second) who coalition
+  exact h.continuous
+
+private abbrev ContactTerminal := {S : Finset (Fin 4) // S.Nonempty}
+private abbrev ContactJoinIndex :=
+  {pair : Fin 4 × Finset (Fin 4) // pair.2.Nonempty ∧ pair.1 ∉ pair.2}
+
+private theorem dense_flat_rowwiseDistinct :
+    Dense {point : ContactTerminal × Fin 4 → ℝ |
+      ∀ who first second, first ≠ second → point (first, who) ≠ point (second, who)} := by
+  classical
+  let Comparison := {pair : Fin 4 × (ContactTerminal × ContactTerminal) //
+    pair.2.1 ≠ pair.2.2}
+  let field := fun (pair : Comparison) (point : ContactTerminal × Fin 4 → ℝ) =>
+    point (pair.val.2.1, pair.val.1) - point (pair.val.2.2, pair.val.1)
+  have hcontinuous : ∀ pair : Comparison, Continuous (field pair) := fun pair =>
+    (continuous_apply (pair.val.2.1, pair.val.1)).sub
+      (continuous_apply (pair.val.2.2, pair.val.1))
+  have hvariation : ∀ (pair : Comparison) point rate,
+      field pair (Function.update point (pair.val.2.1, pair.val.1)
+        (point (pair.val.2.1, pair.val.1) + rate)) = field pair point + 1 * rate := by
+    intro pair point rate
+    have hne : (pair.val.2.2, pair.val.1) ≠ (pair.val.2.1, pair.val.1) := by
+      intro heq
+      exact pair.property (congrArg Prod.fst heq).symm
+    simp only [field, Function.update_self, Function.update_of_ne hne]
+    ring
+  have hdense := Math.Topology.dense_iInter_nonzero_of_coordinate_affine field
+    (fun pair => (pair.val.2.1, pair.val.1)) (fun _ => 1) hcontinuous
+    (fun _ => one_ne_zero) hvariation
+  apply hdense.mono
+  intro point hpoint who first second hne
+  have h := Set.mem_iInter.mp hpoint (⟨(who, (first, second)), hne⟩ : Comparison)
+  exact sub_ne_zero.mp h
+
+private theorem exists_rowwiseDistinct_near_preserving_contacts
+    (original center : ContactTerminal → Payoff (Fin 4))
+    (hunit : ∀ terminal who, |center terminal who| < 1)
+    (hpositive : 0 < quittingTerminalDebtSumInf center)
+    (hcontacts : ∀ label : QuittingSignAdaptiveContactLabel original,
+      quittingSignAdaptiveContactValue original center label ≠ quittingTerminalDebtSumInf center)
+    (hjoins : ∀ pair : ContactJoinIndex,
+      quittingMembershipGain center pair.val.1 pair.val.2 ≠ 0)
+    {tolerance : ℝ} (htolerance : 0 < tolerance) :
+    ∃ final : ContactTerminal → Payoff (Fin 4),
+      dist final center < tolerance ∧
+      (∀ terminal who, |final terminal who| < 1) ∧
+      0 < quittingTerminalDebtSumInf final ∧
+      (∀ label : QuittingSignAdaptiveContactLabel original,
+        quittingSignAdaptiveContactValue original final label ≠ quittingTerminalDebtSumInf final) ∧
+      (∀ pair : ContactJoinIndex,
+        (0 < quittingMembershipGain final pair.val.1 pair.val.2 ↔
+          0 < quittingMembershipGain center pair.val.1 pair.val.2) ∧
+        (quittingMembershipGain final pair.val.1 pair.val.2 < 0 ↔
+          quittingMembershipGain center pair.val.1 pair.val.2 < 0)) ∧
+      ∀ who first second, first ≠ second → final first who ≠ final second who := by
+  classical
+  have hnearUnit : ∀ᶠ table in nhds center, ∀ terminal who, |table terminal who| < 1 := by
+    apply Filter.eventually_all.mpr
+    intro terminal
+    apply Filter.eventually_all.mpr
+    intro who
+    have hcoordinate : Continuous (fun table : ContactTerminal → Payoff (Fin 4) =>
+        table terminal who) :=
+      (continuous_apply who).comp (continuous_apply terminal)
+    have h : Filter.Tendsto (fun table : ContactTerminal → Payoff (Fin 4) =>
+        |table terminal who|) (nhds center) (nhds |center terminal who|) :=
+      (continuous_abs.comp hcoordinate).continuousAt.tendsto
+    exact h.eventually (Iio_mem_nhds (hunit terminal who))
+  have hnearPositive : ∀ᶠ table in nhds center, 0 < quittingTerminalDebtSumInf table :=
+    continuous_quittingTerminalDebtSumInf.continuousAt.tendsto.eventually
+      (Ioi_mem_nhds hpositive)
+  have hnearContacts : ∀ᶠ table in nhds center,
+      ∀ label : QuittingSignAdaptiveContactLabel original,
+        quittingSignAdaptiveContactValue original table label ≠
+          quittingTerminalDebtSumInf table := by
+    apply Filter.eventually_all.mpr
+    intro label
+    have h := ((continuous_contactValue original label).sub
+      continuous_quittingTerminalDebtSumInf).continuousAt.tendsto.eventually
+        (eventually_ne_nhds (sub_ne_zero.mpr (hcontacts label)))
+    filter_upwards [h] with table htable
+    exact sub_ne_zero.mp htable
+  have hnearSigns : ∀ᶠ table in nhds center, ∀ pair : ContactJoinIndex,
+      (0 < quittingMembershipGain table pair.val.1 pair.val.2 ↔
+        0 < quittingMembershipGain center pair.val.1 pair.val.2) ∧
+      (quittingMembershipGain table pair.val.1 pair.val.2 < 0 ↔
+        quittingMembershipGain center pair.val.1 pair.val.2 < 0) := by
+    apply Filter.eventually_all.mpr
+    intro pair
+    have h : Filter.Tendsto (fun table : ContactTerminal → Payoff (Fin 4) =>
+        quittingMembershipGain table pair.val.1 pair.val.2) (nhds center)
+        (nhds (quittingMembershipGain center pair.val.1 pair.val.2)) :=
+      (continuous_membershipGain pair.val.1 pair.val.2).continuousAt.tendsto
+    rcases lt_or_gt_of_ne (hjoins pair) with hnegative | hpositiveJoin
+    · filter_upwards [h.eventually (Iio_mem_nhds hnegative)] with table htable
+      constructor <;> constructor <;> intro hsign <;> linarith
+    · filter_upwards [h.eventually (Ioi_mem_nhds hpositiveJoin)] with table htable
+      constructor <;> constructor <;> intro hsign <;> linarith
+  obtain ⟨radius, hradius, hball⟩ := Metric.mem_nhds_iff.mp
+    (hnearUnit.and (hnearPositive.and (hnearContacts.and hnearSigns)))
+  let region := Homeomorph.piCurry ⁻¹' Metric.ball center (min radius tolerance)
+  have hopen : IsOpen region := Metric.isOpen_ball.preimage Homeomorph.piCurry.continuous
+  have hnonempty : region.Nonempty := by
+    refine ⟨Function.uncurry center, ?_⟩
+    change Function.curry (Function.uncurry center) ∈ Metric.ball center (min radius tolerance)
+    simpa only [Function.curry_uncurry] using
+      Metric.mem_ball_self (lt_min hradius htolerance)
+  obtain ⟨point, hgeneric, hregion⟩ := dense_flat_rowwiseDistinct.exists_mem_open hopen hnonempty
+  let final := Function.curry point
+  have hdist : dist final center < min radius tolerance := hregion
+  have hnear := hball ((lt_min_iff.mp hdist).1)
+  exact ⟨final, (lt_min_iff.mp hdist).2, hnear.1, hnear.2.1, hnear.2.2.1,
+    hnear.2.2.2, hgeneric⟩
+
+/-- A chosen actual table retains all fixed contacts and cohorts and has distinct terminal rows. -/
+structure QuittingSignAdaptiveRowGenericSource
+    (original final : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) : Prop where
+  strictUnit : ∀ terminal who, |final terminal who| < 1
+  positiveSum : 0 < quittingTerminalDebtSumInf final
+  contact_ne_sum : ∀ label : QuittingSignAdaptiveContactLabel original,
+    quittingSignAdaptiveContactValue original final label ≠ quittingTerminalDebtSumInf final
+  member_cohort : ∀ coalition, 2 ≤ coalition.card →
+    quittingSignAdaptiveMemberCohort original coalition = coalition.filter (fun who =>
+      0 < -quittingMembershipGain final who (coalition.erase who))
+  outsider_cohort : ∀ coalition, coalition.Nonempty →
+    quittingSignAdaptiveOutsiderCohort original coalition =
+      Finset.univ.filter (fun who => who ∉ coalition ∧
+        0 < quittingMembershipGain final who coalition)
+  row_distinct : ∀ who first second, first ≠ second → final first who ≠ final second who
+
+namespace QuittingSignAdaptiveRowGenericSource
+
+variable {original final : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+
+/-- Positive joins are exactly the strict positive original joins. -/
+theorem join_pos_iff (source : QuittingSignAdaptiveRowGenericSource original final)
+    (who : Fin 4) (background : Finset (Fin 4)) (hne : background.Nonempty)
+    (hwho : who ∉ background) :
+    0 < quittingMembershipGain final who background ↔
+      0 < quittingMembershipGain original who background := by
+  classical
+  have h := Finset.ext_iff.mp (source.outsider_cohort background hne) who
+  simpa only [quittingSignAdaptiveOutsiderCohort, Finset.mem_filter, Finset.mem_univ,
+    hwho, not_false_eq_true, true_and] using h.symm
+
+/-- Each legal nonempty joining pair has different actual final rewards. -/
+theorem join_ne_zero (source : QuittingSignAdaptiveRowGenericSource original final)
+    (who : Fin 4) (background : Finset (Fin 4)) (hne : background.Nonempty)
+    (hwho : who ∉ background) : quittingMembershipGain final who background ≠ 0 := by
+  rw [membershipGain_eq_actual_pair_difference final who background hne hwho]
+  apply sub_ne_zero.mpr
+  apply source.row_distinct
+  intro heq
+  have hset : insert who background = background := congrArg Subtype.val heq
+  have hmem := Finset.mem_insert_self who background
+  rw [hset] at hmem
+  exact hwho hmem
+
+/-- Negative joins are exactly the weakly nonpositive original joins, including original zeros. -/
+theorem join_neg_iff (source : QuittingSignAdaptiveRowGenericSource original final)
+    (who : Fin 4) (background : Finset (Fin 4)) (hne : background.Nonempty)
+    (hwho : who ∉ background) :
+    quittingMembershipGain final who background < 0 ↔
+      quittingMembershipGain original who background ≤ 0 := by
+  constructor
+  · intro hnegative
+    by_contra hnot
+    have hpositive := (source.join_pos_iff who background hne hwho).mpr (not_le.mp hnot)
+    linarith
+  · intro hnonpositive
+    have hnot : ¬0 < quittingMembershipGain final who background := by
+      intro hpositive
+      exact (not_lt_of_ge hnonpositive)
+        ((source.join_pos_iff who background hne hwho).mp hpositive)
+    exact lt_of_le_of_ne (le_of_not_gt hnot) (source.join_ne_zero who background hne hwho)
+
+/-- A positive grand withdrawal is exactly the weakly nonnegative original withdrawal. -/
+theorem grandWithdrawal_pos_iff (source : QuittingSignAdaptiveRowGenericSource original final)
+    (who : Fin 4) :
+    0 < -quittingMembershipGain final who (Finset.univ.erase who) ↔
+      0 ≤ -quittingMembershipGain original who (Finset.univ.erase who) := by
+  classical
+  have h := Finset.ext_iff.mp (source.member_cohort Finset.univ (by decide)) who
+  simpa only [quittingSignAdaptiveMemberCohort, Finset.mem_filter, Finset.mem_univ,
+    true_and] using h.symm
+
+end QuittingSignAdaptiveRowGenericSource
+
+/-- One row-generic actual table is chosen before any new minimizing laws. -/
+theorem exists_rowGeneric_quittingSignAdaptiveContact_source
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hpositive : 0 < quittingTerminalDebtSumInf reward)
+    {tolerance : ℝ} (htolerance : 0 < tolerance) :
+    ∃ original final : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+      (∀ terminal who, |original terminal who| ≤ 1) ∧
+      0 < quittingTerminalDebtSumInf original ∧ quittingTerminalDebtSumInf original ≤ 4 / 5 ∧
+      (∀ candidate : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+        (∀ terminal who, |candidate terminal who| ≤ 1) →
+          quittingTerminalDebtSumInf candidate ≤ quittingTerminalDebtSumInf original) ∧
+      QuittingSignAdaptiveRowGenericSource original final ∧
+      ∀ terminal who, |final terminal who - original terminal who| < tolerance := by
+  classical
+  have hquarter : 0 < tolerance / 4 := by positivity
+  obtain ⟨original, alpha, hbound, horiginalPositive, horiginalUpper, hmaximum,
+      halpha, halphaOne, halphaSmall, hstepPositive, hstepBound, hstepClose, hstepContacts⟩ :=
+    exists_positive_quittingSignAdaptiveContact_source reward hpositive hquarter
+  let step := quittingSignAdaptiveContactStep original alpha
+  let shrink := min (tolerance / 4) (1 / 2)
+  let rate := 1 - shrink
+  let center := scaleQuittingReward rate step
+  have hshrink : 0 < shrink := by dsimp only [shrink]; positivity
+  have hshrinkHalf : shrink ≤ 1 / 2 := min_le_right _ _
+  have hshrinkSmall : shrink ≤ tolerance / 4 := min_le_left _ _
+  have hrate : 0 < rate := by dsimp only [rate]; linarith
+  have hrateOne : rate < 1 := by dsimp only [rate]; linarith
+  have hcenterUnit : ∀ terminal who, |center terminal who| < 1 := by
+    intro terminal who
+    change |rate * step terminal who| < 1
+    rw [abs_mul, abs_of_pos hrate]
+    exact ((mul_le_mul_of_nonneg_left (hstepBound terminal who) hrate.le).trans_eq
+      (mul_one rate)).trans_lt hrateOne
+  have hcenterPositive : 0 < quittingTerminalDebtSumInf center := by
+    rw [quittingTerminalDebtSumInf_scaleQuittingReward hrate.le]
+    exact mul_pos hrate hstepPositive
+  have hcenterContacts : ∀ label : QuittingSignAdaptiveContactLabel original,
+      quittingSignAdaptiveContactValue original center label ≠
+        quittingTerminalDebtSumInf center := by
+    intro label hequal
+    rw [quittingSignAdaptiveContactValue_scaleQuittingReward,
+      quittingTerminalDebtSumInf_scaleQuittingReward hrate.le] at hequal
+    exact hstepContacts label (mul_left_cancel₀ hrate.ne' hequal)
+  have hstepJoins : ∀ pair : ContactJoinIndex,
+      quittingMembershipGain step pair.val.1 pair.val.2 ≠ 0 := by
+    intro pair
+    by_cases hjoin : 0 < quittingMembershipGain original pair.val.1 pair.val.2
+    · exact ne_of_gt ((quittingSignAdaptiveContactStep_join_pos_iff original halpha
+        halphaOne pair.val.1 pair.val.2 pair.property.1 pair.property.2).mpr hjoin)
+    · exact ne_of_lt ((quittingSignAdaptiveContactStep_join_neg_iff original halpha
+        halphaOne pair.val.1 pair.val.2 pair.property.1 pair.property.2).mpr (le_of_not_gt hjoin))
+  have hcenterJoins : ∀ pair : ContactJoinIndex,
+      quittingMembershipGain center pair.val.1 pair.val.2 ≠ 0 := by
+    intro pair
+    rw [membershipGain_scale]
+    exact mul_ne_zero hrate.ne' (hstepJoins pair)
+  obtain ⟨final, hdist, hfinalUnit, hfinalPositive, hfinalContacts, hfinalSigns, hfinalRows⟩ :=
+    exists_rowwiseDistinct_near_preserving_contacts original center hcenterUnit
+      hcenterPositive hcenterContacts hcenterJoins hquarter
+  have hfinalJoinSigns (who : Fin 4) (background : Finset (Fin 4))
+      (hne : background.Nonempty) (hwho : who ∉ background) :
+      (0 < quittingMembershipGain final who background ↔
+        0 < quittingMembershipGain step who background) ∧
+      (quittingMembershipGain final who background < 0 ↔
+        quittingMembershipGain step who background < 0) := by
+    have h := hfinalSigns (⟨(who, background), hne, hwho⟩ : ContactJoinIndex)
+    change (0 < quittingMembershipGain final who background ↔
+      0 < quittingMembershipGain (scaleQuittingReward rate step) who background) ∧
+      (quittingMembershipGain final who background < 0 ↔
+        quittingMembershipGain (scaleQuittingReward rate step) who background < 0) at h
+    rw [membershipGain_scale] at h
+    have hnegative : rate * quittingMembershipGain step who background < 0 ↔
+        quittingMembershipGain step who background < 0 := by
+      constructor
+      · intro hneg
+        nlinarith
+      · exact mul_neg_of_pos_of_neg hrate
+    have hpositive : 0 < rate * quittingMembershipGain step who background ↔
+        0 < quittingMembershipGain step who background := by
+      constructor
+      · intro hpos
+        nlinarith
+      · exact mul_pos hrate
+    exact ⟨h.1.trans hpositive, h.2.trans hnegative⟩
+  refine ⟨original, final, hbound, horiginalPositive, horiginalUpper, hmaximum,
+    ⟨hfinalUnit, hfinalPositive, hfinalContacts, ?_, ?_, hfinalRows⟩, ?_⟩
+  · intro coalition hcard
+    rw [quittingSignAdaptiveMemberCohort_eq_step_positive original
+      halpha halphaOne coalition hcard]
+    ext who
+    simp only [Finset.mem_filter]
+    by_cases hwho : who ∈ coalition
+    · simp only [hwho, true_and]
+      have hne : (coalition.erase who).Nonempty := by
+        apply Finset.card_pos.mp
+        rw [Finset.card_erase_of_mem hwho]
+        omega
+      simpa only [neg_pos] using
+        (hfinalJoinSigns who (coalition.erase who) hne (by simp)).2.symm
+    · simp [hwho]
+  · intro coalition hne
+    rw [quittingSignAdaptiveOutsiderCohort_eq_step_positive original
+      halpha halphaOne coalition hne]
+    ext who
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    by_cases hwho : who ∈ coalition
+    · simp [hwho]
+    · simp only [hwho, not_false_eq_true, true_and]
+      exact (hfinalJoinSigns who coalition hne hwho).1.symm
+  · intro terminal who
+    have hfinalCenter : |final terminal who - center terminal who| < tolerance / 4 :=
+      (reward_coordinate_error_le_dist final center terminal who).trans_lt hdist
+    have hcenterStep : |center terminal who - step terminal who| ≤ tolerance / 4 := by
+      have heq : center terminal who - step terminal who = -shrink * step terminal who := by
+        dsimp only [center, scaleQuittingReward, rate]
+        ring
+      rw [heq, abs_mul, abs_neg, abs_of_pos hshrink]
+      exact ((mul_le_mul_of_nonneg_left (hstepBound terminal who) hshrink.le).trans_eq
+        (mul_one shrink)).trans hshrinkSmall
+    have heq : final terminal who - original terminal who =
+        (final terminal who - center terminal who) +
+          (center terminal who - step terminal who) +
+          (step terminal who - original terminal who) := by ring
+    rw [heq]
+    calc
+      |(final terminal who - center terminal who) +
+          (center terminal who - step terminal who) +
+          (step terminal who - original terminal who)| ≤
+          |final terminal who - center terminal who| +
+            |center terminal who - step terminal who| +
+            |step terminal who - original terminal who| :=
+        (abs_add_le _ _).trans (add_le_add (abs_add_le _ _) (le_refl _))
+      _ < tolerance := by linarith [hstepClose terminal who]
+
+/-- The no-uniform-payoff input supplies a row-generic table with all fixed contact gaps. -/
+theorem exists_rowGeneric_quittingSignAdaptiveContact_source_of_not_uniformPayoff
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hnot : ¬∃ target : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none target)
+    {tolerance : ℝ} (htolerance : 0 < tolerance) :
+    ∃ original final : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+      (∀ terminal who, |original terminal who| ≤ 1) ∧
+      0 < quittingTerminalDebtSumInf original ∧ quittingTerminalDebtSumInf original ≤ 4 / 5 ∧
+      (∀ candidate : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4),
+        (∀ terminal who, |candidate terminal who| ≤ 1) →
+          quittingTerminalDebtSumInf candidate ≤ quittingTerminalDebtSumInf original) ∧
+      QuittingSignAdaptiveRowGenericSource original final ∧
+      ∀ terminal who, |final terminal who - original terminal who| < tolerance := by
+  exact exists_rowGeneric_quittingSignAdaptiveContact_source reward
     (quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff.mpr hnot) htolerance
 
 end GameTheory

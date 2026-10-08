@@ -434,7 +434,7 @@ theorem ae_mem_limit_menu_of_mem_endpoints
   by_contra hxT
   exact hx (mem_exceptionalEndpoints_of_notMem_limit_menu source subsequence hE hc hT hxE hxc hxT)
 
-private theorem integral_indicator_chartLaw (laws : ι → FinDist (Option ℕ)) (i : ι)
+theorem integral_indicator_chartLaw (laws : ι → FinDist (Option ℕ)) (i : ι)
     (s : Set unitInterval) (hs : MeasurableSet s) :
     ∫ x, s.indicator (fun _ => (1 : ℝ)) x ∂(chartLaw laws i : Measure unitInterval) =
       ∫ x in s, density laws i x ∂volume := by

@@ -51,8 +51,10 @@ below for every sufficiently small positive real delta, with the recurrent
 construction using its fixed limiting column. Their sequence formulations
 also apply to every positive delta sequence tending to zero.
 Remark 2's payoff-convention equality is formalized for the canonical model,
-even for arbitrary behavioral profiles. Example 4 and Remarks 1 and 3 are not
-formalized here.
+even for arbitrary behavioral profiles. Canonical Remark 3 selects one
+stationary pair with limiting Nash bounds and a common finite-horizon cutoff.
+Example 4 and Remark 1 are not formalized here. The original-model versions of
+Remarks 2 and 3 still require the absorbing-stage reduction.
 The canonical statements do not settle the original model reduction. This file
 does not claim complete paper coverage or a fixed-target
 uniform-equilibrium payoff from Theorem 3.1.
@@ -1446,7 +1448,7 @@ the expectation of the pathwise liminf. The canonical recursive-absorption
 model's existing convergence theorem identifies these conventions even for
 arbitrary behavioral profiles. This is not a claim that the general original
 absorbing-stage model has been reduced to this canonical model. Remarks 1 and 3
-remain separate obligations, as does Example 4.
+for that original model remain separate obligations, as does Example 4.
 -/
 
 /-- Remark 2's alternative limiting-average payoff convention for the canonical game. -/
@@ -1484,5 +1486,31 @@ theorem remark2_theorem3_1_canonical {A B : Type} [Fintype A] [Fintype B]
   exact ⟨x, y, fun initial =>
     (remark2_canonical_equilibrium_iff G initial ε (canonicalStationaryProfile G x y)).mpr
       (hxy initial)⟩
+
+/-! ## Section 4: Remark 3
+
+The canonical producer selects its stationary pair at a smaller error and
+uses a finite-horizon potential bound uniformly over behavioral deviations.
+Consequently one positive cutoff works for all initial states and every longer
+horizon. Pointwise convergence for separately fixed deviations is not used
+as a substitute for that uniform bound. The original absorbing-stage reduction
+is still pending; no fixed-payoff-target conclusion is asserted here.
+-/
+
+open GameTheory.RecursiveAbsorption in
+/-- Canonical Remark 3: one stationary pair is limiting Nash and eventually finite-horizon Nash. -/
+theorem remark3_canonical {A B : Type} [Fintype A] [Fintype B]
+    [Nonempty A] [Nonempty B] (G : AbsorbingGameData A B) {ε : ℝ} (hε : 0 < ε) :
+    ∃ (x : StationaryStrategy A) (y : StationaryStrategy B),
+      (∀ initial, (canonicalGame G).IsεAsymptoticNash (canonicalPayoff G initial) ε
+        (canonicalStationaryProfile G x y)) ∧
+      ∃ cutoff : ℕ, 0 < cutoff ∧ ∀ horizon, cutoff ≤ horizon → ∀ initial,
+        (canonicalGame G).IsεHorizonNash initial horizon ε (canonicalStationaryProfile G x y) := by
+  obtain ⟨x, y, hxy⟩ :=
+    exists_stationary_liminfApproximateEquilibrium_with_eventual_horizonNash
+      G.canonicalData hε
+  refine ⟨⟨toVector x, toVector_mem_stdSimplex x⟩,
+    ⟨toVector y, toVector_mem_stdSimplex y⟩, ?_⟩
+  simpa only [canonicalStationaryProfile, stationaryLaw, ofVector_toVector] using hxy
 
 end Literature.FleschThuijsmanAndVrieze1996
