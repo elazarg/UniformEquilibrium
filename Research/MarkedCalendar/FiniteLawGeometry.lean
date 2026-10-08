@@ -1,4 +1,5 @@
 import Research.MarkedCalendar.FiniteLawCompactification
+import Mathlib.MeasureTheory.Function.AEEqOfIntegral
 
 /-! # Geometry of the actual finite-law marked calendars
 
@@ -11,8 +12,12 @@ In a retained finite gap, the limiting actual menu contains exactly its
 midpoint. Limiting compatibility is derived from this identity, not supplied.
 Endpoints below the cutoff but outside the limiting menu form a countable
 subset of the existing exceptional endpoints, hence are null for every
-atomless base. Limiting density constancy, complete caps, and original
-variation witnesses remain separate obligations.
+atomless base. The actual Radon--Nikodym density of each limiting marginal is
+constant almost everywhere on every retained gap, including a nonempty Never
+gap, on the same supplied source subsequence. Actual mapped marginals are
+concentrated on the genuine marked menu, retain the exact common mixture, and
+have zero Never mass when its interval is empty. Finite-atom classification
+and original variation witnesses remain separate obligations.
 -/
 
 noncomputable section
@@ -552,5 +557,191 @@ theorem exists_tendsto_density_on_limit_gap
     filter_upwards [heq] with k hk
     exact (hk i y (hq'.trans_le (min_le_right _ _))
       ((le_max_right _ _).trans_lt hr')).symm
+
+/-- The limiting marginal has its actual RN density constant on each retained gap. This uses
+the same source subsequence and also applies to a nonempty Never gap. -/
+theorem exists_rnDeriv_toReal_constant_on_limit_gap
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints)) (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    {a b : ℝ} (hgap : Math.Topology.IsGap limit.endpoints a b) :
+    ∃ value : ℝ, (0 ≤ value ∧ value ≤ (Fintype.card ι : ℝ)) ∧
+      ∀ᵐ x : unitInterval ∂volume, a < (x : ℝ) → (x : ℝ) < b →
+        ((law : Measure unitInterval).rnDeriv volume x).toReal = value := by
+  obtain ⟨value, hvalue, hpointwise⟩ :=
+    exists_tendsto_density_on_limit_gap source subsequence hE i hlaw hgap
+  have hdomination : (law : Measure unitInterval) ≤
+      (Fintype.card ι : NNReal) • (base : Measure unitInterval) :=
+    ProbabilityMeasure.le_of_tendsto_of_le_measure _ hlaw
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
+  obtain ⟨hmeasurable, hbounded, hrepresentation, _⟩ :=
+    ProbabilityMeasure.rnDeriv_toReal_spec_of_le_smul base law
+      (Fintype.card ι : NNReal) hdomination
+  let rho : unitInterval → ℝ := fun x =>
+    ((law : Measure unitInterval).rnDeriv volume x).toReal
+  change Measurable rho at hmeasurable
+  change ∀ᵐ x ∂volume, 0 ≤ rho x ∧ rho x ≤ (Fintype.card ι : ℝ) at hbounded
+  change volume.withDensity (fun x => ENNReal.ofReal (rho x)) =
+    (law : Measure unitInterval) at hrepresentation
+  have hintegrable : Integrable rho (volume : Measure unitInterval) := by
+    apply Integrable.of_bound hmeasurable.aestronglyMeasurable (Fintype.card ι : ℝ)
+    filter_upwards [hbounded] with x hx
+    simpa only [Real.norm_eq_abs, abs_of_nonneg hx.1] using hx.2
+  have hindicator (s : Set unitInterval) (hs : MeasurableSet s) :
+      ∫ x, s.indicator (fun _ => (1 : ℝ)) x ∂(law : Measure unitInterval) =
+        ∫ x in s, rho x ∂volume := by
+    rw [← hrepresentation, integral_withDensity_eq_integral_toReal_smul
+      hmeasurable.ennreal_ofReal (Eventually.of_forall fun _ => ENNReal.ofReal_lt_top),
+      ← integral_indicator hs]
+    apply integral_congr_ae
+    apply Eventually.of_forall
+    intro x
+    change (ENNReal.ofReal (rho x)).toReal • s.indicator (fun _ => (1 : ℝ)) x =
+      s.indicator rho x
+    rw [ENNReal.toReal_ofReal (show 0 ≤ rho x from ENNReal.toReal_nonneg), smul_eq_mul]
+    by_cases hx : x ∈ s
+    · simp only [Set.indicator_of_mem hx, mul_one]
+    · simp only [Set.indicator_of_notMem hx, mul_zero]
+  let gap : Set unitInterval := {x | a < (x : ℝ) ∧ (x : ℝ) < b}
+  have hgapMeasurable : MeasurableSet gap := measurableSet_Ioo.preimage measurable_subtype_coe
+  have hequal : rho =ᵐ[(volume : Measure unitInterval).restrict gap] fun _ => value := by
+    apply Integrable.ae_eq_of_forall_setIntegral_eq rho (fun _ => value)
+      hintegrable.integrableOn (integrable_const _)
+    intro s hs _
+    simp only [Measure.restrict_restrict hs]
+    have hset : MeasurableSet (s ∩ gap) := hs.inter hgapMeasurable
+    have hconvergence := tendsto_integral_of_dominated_convergence
+      (μ := (volume : Measure unitInterval).restrict (s ∩ gap))
+      (F := fun k x => density (source (subsequence k)) i x) (f := fun _ => value)
+      (fun _ => (Fintype.card ι : ℝ))
+      (fun k => (measurable_density (source (subsequence k)) i).aestronglyMeasurable)
+      (integrable_const _) (fun k => Eventually.of_forall fun x => by
+        simpa only [Real.norm_eq_abs, abs_of_nonneg (density_nonneg _ _ _)] using
+          density_le_card (source (subsequence k)) i x) (by
+        filter_upwards [ae_restrict_mem hset] with x hx
+        exact hpointwise x hx.2.1 hx.2.2)
+    have hweak := ProbabilityMeasure.tendsto_integral_of_tendsto_of_le_smul base
+      (Fintype.card ι : NNReal) hlaw
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
+      ((s ∩ gap).indicator (fun _ => (1 : ℝ))) ((integrable_const _).indicator hset)
+    rw [hindicator _ hset] at hweak
+    have hweak' : Tendsto (fun k => ∫ x in s ∩ gap,
+        density (source (subsequence k)) i x ∂volume) atTop
+        (𝓝 (∫ x in s ∩ gap, rho x ∂volume)) := by
+      apply hweak.congr'
+      exact Eventually.of_forall fun k =>
+        integral_indicator_chartLaw (source (subsequence k)) i (s ∩ gap) hset
+    exact tendsto_nhds_unique hweak' hconvergence
+  refine ⟨value, hvalue, ?_⟩
+  filter_upwards [(ae_restrict_iff' hgapMeasurable).mp hequal] with x hx hax hxb
+  exact hx ⟨hax, hxb⟩
+
+/-- The actual limiting marked menu together with literal Never. -/
+def markedMenuSet (menu : NonemptyCompacts ℝ) : Set (WithTop ℝ) :=
+  insert ⊤ ((fun t : ℝ => (t : WithTop ℝ)) '' (menu : Set ℝ))
+
+private theorem measurableSet_markedMenuSet (menu : NonemptyCompacts ℝ) :
+    MeasurableSet (markedMenuSet menu) :=
+  ((menu.isCompact.image WithTop.continuous_coe).insert ⊤).isClosed.measurableSet
+
+/-- Raw chart samples land in the actual limiting menu almost surely, not merely in the
+larger class of atom-compatible marks. -/
+theorem ae_collapseClock_mem_limit_menu
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu)) :
+    ∀ᵐ x : unitInterval ∂volume, limit.collapseClock x ∈ markedMenuSet menu := by
+  filter_upwards [ae_mem_limit_menu_of_mem_endpoints source subsequence hE hc hT volume]
+    with x hx
+  by_cases hxc : limit.cutoff ≤ x
+  · rw [(limit.collapseClock_eq_top_iff x).mpr hxc]
+    exact Set.mem_insert ⊤ _
+  · have hxc' : x < limit.cutoff := lt_of_not_ge hxc
+    rw [limit.collapseClock_of_lt hxc']
+    apply Set.mem_insert_of_mem
+    refine ⟨limit.midpointClock x, ?_, rfl⟩
+    by_cases hxE : (x : ℝ) ∈ limit.endpoints
+    · rw [limit.midpointClock_eq_of_mem hxE]
+      exact hx hxE hxc'
+    · obtain ⟨hgap, hleft, hright⟩ := limit.gap_of_not_mem hxE
+      have hupper : limit.upperEndpoint x ≤ (limit.cutoff : ℝ) :=
+        (limit.monotone_upperEndpoint hxc'.le).trans_eq
+          (limit.upperEndpoint_eq_of_mem limit.cutoff_mem)
+      rw [limit.midpointClock_of_gap hgap hleft hright]
+      exact midpoint_mem_limit_menu_of_gap source subsequence hE hc hT hgap hupper
+
+/-- The actual mapped limiting marginal gives the complement of the genuine marked menu zero
+mass. Absolute continuity is derived from the original chart domination. -/
+theorem map_limit_chartLaw_compl_menu
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
+    (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law)) :
+    (law : Measure unitInterval).map limit.collapseClock (markedMenuSet menu)ᶜ = 0 := by
+  have hbound : (law : Measure unitInterval) ≤
+      (Fintype.card ι : NNReal) • (base : Measure unitInterval) :=
+    ProbabilityMeasure.le_of_tendsto_of_le_measure _ hlaw
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
+  have habs : (law : Measure unitInterval) ≪ volume :=
+    Measure.absolutelyContinuous_of_le_smul hbound
+  have hae := habs.ae_le (ae_collapseClock_mem_limit_menu source subsequence hE hc hT)
+  rw [Measure.map_apply limit.measurable_collapseClock
+    (measurableSet_markedMenuSet menu).compl]
+  exact ae_iff.mp hae
+
+/-- The actual collapsed marginals retain the exact common mixture; no new chart is chosen. -/
+theorem sum_map_limit_chartLaws
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {marginals : ι → ProbabilityMeasure unitInterval}
+    (hlaws : Tendsto (fun k => chartLaw (source (subsequence k))) atTop (𝓝 marginals))
+    (limit : MathUE.MarkedCalendar.Calendar) :
+    (∑ i, (marginals i : Measure unitInterval).map limit.collapseClock) =
+      (Fintype.card ι : NNReal) • (volume : Measure unitInterval).map limit.collapseClock := by
+  have hsum : (∑ i, (marginals i : Measure unitInterval)).map limit.collapseClock =
+      ∑ i, (marginals i : Measure unitInterval).map limit.collapseClock := by
+    simp only [← Measure.mapₗ_apply_of_measurable limit.measurable_collapseClock, map_sum]
+  rw [← hsum, sum_limit_chartLaws source subsequence hlaws,
+    Measure.map_smul _ limit.measurable_collapseClock.aemeasurable]
+  rfl
+
+/-- The Never mixture mass is its actual terminal interval length, including the empty case. -/
+theorem map_volume_collapseClock_top (limit : MathUE.MarkedCalendar.Calendar) :
+    (volume : Measure unitInterval).map limit.collapseClock {⊤} =
+      ENNReal.ofReal (1 - (limit.cutoff : ℝ)) := by
+  rw [Measure.map_apply limit.measurable_collapseClock (measurableSet_singleton _)]
+  have hfiber : limit.collapseClock ⁻¹' {⊤} = Ici limit.cutoff := by
+    ext x
+    exact limit.collapseClock_eq_top_iff x
+  rw [hfiber, unitInterval.volume_Ici]
+
+/-- If the Never interval is empty, every actual limiting marginal has zero Never mass. -/
+theorem map_limit_chartLaw_top_eq_zero_of_cutoff_eq_one
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    (limit : MathUE.MarkedCalendar.Calendar) (hcutoff : limit.cutoff = 1)
+    (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law)) :
+    (law : Measure unitInterval).map limit.collapseClock {⊤} = 0 := by
+  have hbound : (law : Measure unitInterval) ≤
+      (Fintype.card ι : NNReal) • (base : Measure unitInterval) :=
+    ProbabilityMeasure.le_of_tendsto_of_le_measure _ hlaw
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
+  have hmap := Measure.map_mono hbound limit.measurable_collapseClock
+  rw [Measure.map_smul _ limit.measurable_collapseClock.aemeasurable] at hmap
+  have htop := hmap {⊤}
+  change (law : Measure unitInterval).map limit.collapseClock {⊤} ≤
+    ((Fintype.card ι : NNReal) • (volume : Measure unitInterval).map
+      limit.collapseClock) {⊤} at htop
+  rw [Measure.coe_nnreal_smul_apply, map_volume_collapseClock_top, hcutoff] at htop
+  apply le_antisymm ?_ zero_le
+  simpa using htop
 
 end GameTheory.MarkedCalendarChart

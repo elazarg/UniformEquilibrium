@@ -43,7 +43,9 @@ Example 1's table, printed delta-proper family and proper limit are formalized
 below. The printed family's equilibrium exclusions have explicit small-error
 thresholds; they are not exclusions of every stationary pair. Its separate
 exact stationary witness corrects the specific Section 4 cross-reference.
-Examples 2 and 4 and the three final remarks are not formalized here.
+Example 2's literal table and strategy families are presented below; its
+proper-limit and equilibrium conclusions remain separate obligations.
+Example 4 and the three final remarks are not formalized here.
 The canonical statements do not settle the original model reduction. This file
 does not claim complete paper coverage or a fixed-target
 uniform-equilibrium payoff from Theorem 3.1.
@@ -455,12 +457,12 @@ private theorem pureRowPayoff_le_of_canonicalNash {A B : Type}
   rw [hprofile] at h
   exact (pureStationaryPayoff1_eq_canonical G y i).le.trans h
 
-/-- The printed Example 1 family's live-state row payoff is at most three halves. -/
-theorem example1_printedFamily_rowPayoff_le (δ : ℝ) (hδ : 0 < δ)
+/-- The printed Example 1 family's live-state row payoff is strictly below three halves. -/
+theorem example1_printedFamily_rowPayoff_lt (δ : ℝ) (hδ : 0 < δ)
     (hδhalf : δ ≤ 1 / 2) :
     canonicalPayoff example1Data none
       (canonicalStationaryProfile example1Data (example1Strategy δ hδ.le hδhalf)
-        (example1Strategy δ hδ.le hδhalf)) false ≤ 3 / 2 := by
+        (example1Strategy δ hδ.le hδhalf)) false < 3 / 2 := by
   have hsq : δ ^ 2 ≤ 1 / 4 := by
     nlinarith [mul_nonneg hδ.le (sub_nonneg.mpr hδhalf)]
   have hfirst : 0 ≤ 1 - δ ^ 2 := by linarith
@@ -482,12 +484,12 @@ theorem example1_printedFamily_rowPayoff_le (δ : ℝ) (hδ : 0 < δ)
       ENNReal.toReal_ofReal hfirst, ENNReal.toReal_ofReal (sq_nonneg δ)]
     ring
   rw [lemma2_2_canonical, hnum, hmass]
-  apply (div_le_iff₀ (mul_pos (sq_pos_of_pos hδ) (by linarith))).mpr
-  nlinarith [sq_nonneg (δ ^ 2)]
+  apply (div_lt_iff₀ (mul_pos (sq_pos_of_pos hδ) (by linarith))).mpr
+  nlinarith [sq_pos_of_pos (sq_pos_of_pos hδ)]
 
-/-- The printed family is not an approximate equilibrium at errors below one half. -/
+/-- The printed family is not an approximate equilibrium at errors at most one half. -/
 theorem example1_printedFamily_not_smallErrorNash (δ : ℝ) (hδ : 0 < δ)
-    (hδhalf : δ ≤ 1 / 2) {ε : ℝ} (hε : ε < 1 / 2) :
+    (hδhalf : δ ≤ 1 / 2) {ε : ℝ} (hε : ε ≤ 1 / 2) :
     ¬ (canonicalGame example1Data).IsεAsymptoticNash
       (canonicalPayoff example1Data none) ε
       (canonicalStationaryProfile example1Data (example1Strategy δ hδ.le hδhalf)
@@ -497,7 +499,7 @@ theorem example1_printedFamily_not_smallErrorNash (δ : ℝ) (hδ : 0 < δ)
     (example1Strategy δ hδ.le hδhalf) (example1Strategy δ hδ.le hδhalf) hNash 0
   rw [example1_pureStationaryPayoff1 δ hδ hδhalf] at hpure
   norm_num at hpure
-  have hpayoff := example1_printedFamily_rowPayoff_le δ hδ hδhalf
+  have hpayoff := example1_printedFamily_rowPayoff_lt δ hδ hδhalf
   linarith
 
 /-- The proper first/first limit is not an approximate equilibrium at errors below one. -/
@@ -697,6 +699,109 @@ theorem lemma3_2_canonical_column {A B : Type} [Fintype A] [Fintype B]
       (stationaryLaw x) anchor hx' hs hbest hhazard hbad hε
   simpa only [canonicalPayoff, canonicalStationaryProfile,
     pureStationaryPayoff2_eq_canonical] using hfloor
+
+/-! ### Example 2
+
+The first entry is live with payoff zero; all other entries absorb with
+probability one. The two printed families differ in their row weights and
+their limiting column. Their properness and equilibrium conclusions require
+separate arguments; the table and pure values alone do not establish them.
+-/
+
+/-- The literal three-row, two-column table in Example 2. -/
+def example2Data : AbsorbingGameData (Fin 3) (Fin 2) where
+  absorptionProbability := fun i j =>
+    if i = 0 ∧ j = 0 then ⟨0, by constructor <;> norm_num⟩
+    else ⟨1, by constructor <;> norm_num⟩
+  reward1 := !![0, 4; 3, 1; 1, 3]
+  reward2 := !![0, -3; -2, -4; -4, -2]
+
+private def example2RowStrategy (δ : ℝ) (hδ0 : 0 ≤ δ) (hδhalf : δ ≤ 1 / 2)
+    (recurrent : Bool) : StationaryStrategy (Fin 3) :=
+  ⟨if recurrent then ![1 - δ ^ 2 - δ ^ 4, δ ^ 2, δ ^ 4]
+    else ![1 - δ ^ 2 - δ ^ 4, δ ^ 4, δ ^ 2], by
+    have hsq : δ ^ 2 ≤ 1 / 4 := by
+      nlinarith [mul_nonneg hδ0 (sub_nonneg.mpr hδhalf)]
+    have hfour : δ ^ 4 ≤ 1 / 16 := by
+      nlinarith [mul_nonneg (show 0 ≤ 1 / 4 + δ ^ 2 by positivity)
+        (show 0 ≤ 1 / 4 - δ ^ 2 by linarith)]
+    rw [GameTheory.Math.Probability.mem_simplexWeights]
+    constructor
+    · intro i
+      cases recurrent <;> fin_cases i <;> norm_num [abs_of_nonneg hδ0] <;>
+        nlinarith [sq_nonneg δ, pow_nonneg hδ0 4]
+    · cases recurrent <;> norm_num [Fin.sum_univ_three]
+      ring⟩
+
+/-- The row strategy whose printed proper limit is absorbing. -/
+abbrev example2AbsorbingRowStrategy (δ : ℝ) (hδ0 : 0 ≤ δ) (hδhalf : δ ≤ 1 / 2) :=
+  example2RowStrategy δ hδ0 hδhalf false
+
+/-- The row strategy whose printed proper limit is recurrent. -/
+abbrev example2RecurrentRowStrategy (δ : ℝ) (hδ0 : 0 ≤ δ) (hδhalf : δ ≤ 1 / 2) :=
+  example2RowStrategy δ hδ0 hδhalf true
+
+/-- The column strategy in the absorbing-limit family. -/
+def example2AbsorbingColumnStrategy (δ : ℝ) (hδ0 : 0 ≤ δ) (hδhalf : δ ≤ 1 / 2) :
+    StationaryStrategy (Fin 2) :=
+  ⟨![δ ^ 2, 1 - δ ^ 2], by
+    have hsq : δ ^ 2 ≤ 1 / 4 := by
+      nlinarith [mul_nonneg hδ0 (sub_nonneg.mpr hδhalf)]
+    rw [GameTheory.Math.Probability.mem_simplexWeights]
+    constructor
+    · intro j
+      fin_cases j <;> norm_num [abs_of_nonneg hδ0] <;> nlinarith [sq_nonneg δ]
+    · norm_num [Fin.sum_univ_two]⟩
+
+/-- The recurrent family's column strategy is the same vector as in Example 1. -/
+abbrev example2RecurrentColumnStrategy := example1Strategy
+
+theorem example2_absorbing_pureRowPayoff (δ : ℝ) (hδ : 0 < δ)
+    (hδhalf : δ ≤ 1 / 2) (i : Fin 3) :
+    pureStationaryPayoff1 example2Data (example2AbsorbingColumnStrategy δ hδ.le hδhalf) i =
+      ![4, 1 + 2 * δ ^ 2, 3 - 2 * δ ^ 2] i := by
+  have hsq : δ ^ 2 ≤ 1 / 4 := by
+    nlinarith [mul_nonneg hδ.le (sub_nonneg.mpr hδhalf)]
+  have hden : 0 < 1 - δ ^ 2 := by linarith
+  fin_cases i <;>
+    norm_num [pureStationaryPayoff1, Math.Probability.RatioProperPair.rowRatio,
+      AbsorbingGameData.payoffNumerator1, AbsorbingGameData.absorptionCoefficients,
+      example2Data, example2AbsorbingColumnStrategy, Fin.sum_univ_two] <;>
+    field_simp [hden.ne'] <;> ring
+
+theorem example2_absorbing_pureColumnPayoff (δ : ℝ) (hδ : 0 < δ)
+    (hδhalf : δ ≤ 1 / 2) (j : Fin 2) :
+    pureStationaryPayoff2 example2Data (example2AbsorbingRowStrategy δ hδ.le hδhalf) j =
+      ![-(4 + 2 * δ ^ 2) / (1 + δ ^ 2), -3 + δ ^ 2 - δ ^ 4] j := by
+  have hden : 0 < δ ^ 4 + δ ^ 2 := by positivity
+  have hone : 0 < 1 + δ ^ 2 := by positivity
+  fin_cases j <;>
+    norm_num [pureStationaryPayoff2, Math.Probability.RatioProperPair.columnRatio,
+      AbsorbingGameData.payoffNumerator2, AbsorbingGameData.absorptionCoefficients,
+      example2Data, example2AbsorbingRowStrategy, example2RowStrategy,
+      Fin.sum_univ_three] <;> field_simp [hden.ne', hone.ne'] <;> ring
+
+theorem example2_recurrent_pureRowPayoff (δ : ℝ) (hδ : 0 < δ)
+    (hδhalf : δ ≤ 1 / 2) (i : Fin 3) :
+    pureStationaryPayoff1 example2Data (example2RecurrentColumnStrategy δ hδ.le hδhalf) i =
+      ![4, 3 - 2 * δ ^ 2, 1 + 2 * δ ^ 2] i := by
+  fin_cases i <;>
+    norm_num [pureStationaryPayoff1, Math.Probability.RatioProperPair.rowRatio,
+      AbsorbingGameData.payoffNumerator1, AbsorbingGameData.absorptionCoefficients,
+      example2Data, example2RecurrentColumnStrategy, example1Strategy,
+      Fin.sum_univ_two] <;> field_simp [hδ.ne'] <;> ring
+
+theorem example2_recurrent_pureColumnPayoff (δ : ℝ) (hδ : 0 < δ)
+    (hδhalf : δ ≤ 1 / 2) (j : Fin 2) :
+    pureStationaryPayoff2 example2Data (example2RecurrentRowStrategy δ hδ.le hδhalf) j =
+      ![-(2 + 4 * δ ^ 2) / (1 + δ ^ 2), -3 - δ ^ 2 + δ ^ 4] j := by
+  have hden : 0 < δ ^ 2 + δ ^ 4 := by positivity
+  have hone : 0 < 1 + δ ^ 2 := by positivity
+  fin_cases j <;>
+    norm_num [pureStationaryPayoff2, Math.Probability.RatioProperPair.columnRatio,
+      AbsorbingGameData.payoffNumerator2, AbsorbingGameData.absorptionCoefficients,
+      example2Data, example2RecurrentRowStrategy, example2RowStrategy,
+      Fin.sum_univ_three] <;> field_simp [hden.ne', hone.ne'] <;> ring
 
 /-! ## Section 4: the Example 1 cross-reference
 
