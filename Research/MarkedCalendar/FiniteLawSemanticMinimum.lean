@@ -11,10 +11,16 @@ of the original closed attainable semantic carrier. Every limit of any finite
 source family minimizing the original SUM debt has that same minimum value.
 The compactification is selected once, before reward tables and consumers.
 
+Actual replacement laws on the same old reference cells also converge to
+their prescribed-payoff and unrestricted-cap pair. Eventual cell bounds and
+their actual marginal limits imply original carrier membership and the
+original SUM floor, without a minimizing-source assumption.
+
 These statements do not assume a marked minimizer. Existing finite-clock
 semantic approximation supplies an actual finite minimizing source, packaged
-without changing its laws or Never mass. Identifying gap densities and
-realizing signed old-law variations remain separate tasks.
+without changing its laws or Never mass. Concrete finite/Never signed resets
+and chronological conditional producers remain separate consumers; the floor
+does not assert that a replacement law is itself a minimum.
 -/
 
 noncomputable section
@@ -35,6 +41,52 @@ def limitSemanticPair (limit : MathUE.MarkedCalendar.Calendar) (menu : NonemptyC
       ∂(ProbabilityMeasure.pi marginals : Measure (ι → unitInterval)),
     fun who => limitReplyMaximum limit menu marginals who (quittingLabelReward reward who))
 
+/-- Actual old-cell replacements converge in both coordinates of the original semantic pair.
+The cap coordinate is the unrestricted original behavioral cap, not a selected-response value. -/
+theorem tendsto_referenceSemanticPair
+    (source : ℕ → ι → FinDist (Option ℕ))
+    (replacement : (n : ℕ) → ι → FinDist (Cell (source n))) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
+    (C : ι → NNReal)
+    (hweights : ∀ᶠ k in atTop, ∀ i (a : Cell (source (subsequence k))),
+      (replacement (subsequence k) i).prob a ≤ (C i : ℝ) * weight (source (subsequence k)) a)
+    (hlaws : Tendsto (fun k i =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) i))
+      atTop (𝓝 marginals))
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    Tendsto (fun k => quittingTerminalSemanticPair reward
+      (quittingStoppingLawProfile reward (fun i =>
+        (referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)).toPMF)))
+      atTop (𝓝 (limitSemanticPair limit menu marginals reward)) := by
+  apply Tendsto.prodMk_nhds
+  · apply tendsto_pi_nhds.mpr
+    intro who
+    apply (tendsto_reference_outcome_expect source replacement subsequence hE hc C hweights
+      hlaws (quittingLabelReward reward who)).congr'
+    apply Eventually.of_forall
+    intro k
+    exact (sourceOutcome_expect_eq_stoppingLawExpectedPayoff reward
+      (fun i => referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i))
+      who).trans
+      (quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff reward
+        (fun i =>
+          (referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)).toPMF)
+        who).symm
+  · apply tendsto_pi_nhds.mpr
+    intro who
+    apply (tendsto_referenceFullCap source replacement subsequence hE hc hT C hweights hlaws
+      reward who).congr'
+    exact Eventually.of_forall fun k =>
+      quittingStoppingLawCap_eq_continuationBestResponseValue_stoppingLawProfile reward
+        (fun i =>
+          (referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)).toPMF)
+        who
+
 /-- Every specified actual marked limit is the limit of the original executable semantic pairs. -/
 theorem tendsto_sourceSemanticPair
     (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
@@ -49,23 +101,63 @@ theorem tendsto_sourceSemanticPair
     Tendsto (fun k => quittingTerminalSemanticPair reward
       (quittingStoppingLawProfile reward (fun i => (source (subsequence k) i).toPMF)))
       atTop (𝓝 (limitSemanticPair limit menu marginals reward)) := by
-  apply Tendsto.prodMk_nhds
-  · apply tendsto_pi_nhds.mpr
-    intro who
-    apply (tendsto_source_outcome_expect source subsequence hE hc hlaws
-      (quittingLabelReward reward who)).congr'
-    apply Eventually.of_forall
-    intro k
-    exact (sourceOutcome_expect_eq_stoppingLawExpectedPayoff reward
-      (source (subsequence k)) who).trans
-      (quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff reward
-        (fun i => (source (subsequence k) i).toPMF) who).symm
-  · apply tendsto_pi_nhds.mpr
-    intro who
-    apply (tendsto_sourceFullCap source subsequence hE hc hT hlaws reward who).congr'
-    exact Eventually.of_forall fun k =>
-      quittingStoppingLawCap_eq_continuationBestResponseValue_stoppingLawProfile reward
-        (fun i => (source (subsequence k) i).toPMF) who
+  have h := tendsto_referenceSemanticPair source (fun n => cellLaw (source n))
+    subsequence hE hc hT (fun _ => (Fintype.card ι : NNReal))
+    (Eventually.of_forall fun k i a => by
+      simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le (source (subsequence k)) i a)
+    hlaws reward
+  simpa only [referenceOriginalLaw_cellLaw] using h
+
+/-- Every bounded actual reference-law limit belongs to the original closed attainable carrier.
+No minimizing hypothesis or new subsequence is required. -/
+theorem referenceLimitSemanticPair_mem_carrier
+    (source : ℕ → ι → FinDist (Option ℕ))
+    (replacement : (n : ℕ) → ι → FinDist (Cell (source n))) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
+    (C : ι → NNReal)
+    (hweights : ∀ᶠ k in atTop, ∀ i (a : Cell (source (subsequence k))),
+      (replacement (subsequence k) i).prob a ≤ (C i : ℝ) * weight (source (subsequence k)) a)
+    (hlaws : Tendsto (fun k i =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) i))
+      atTop (𝓝 marginals))
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    limitSemanticPair limit menu marginals reward ∈ quittingTerminalSemanticCarrier reward := by
+  apply (quittingTerminalSemanticCarrier_isCompact reward).isClosed.mem_of_tendsto
+    (tendsto_referenceSemanticPair source replacement subsequence hE hc hT C hweights hlaws reward)
+  exact Eventually.of_forall fun k => subset_closure
+    ⟨quittingStoppingLawProfile reward (fun i =>
+      (referenceOriginalLaw (source (subsequence k)) (replacement (subsequence k) i)).toPMF), rfl⟩
+
+/-- An actually realized reference-law limit obeys the original SUM floor. This is not a
+minimum assertion for the replacement laws. -/
+theorem debtSumInf_le_referenceLimitSemanticPair
+    (source : ℕ → ι → FinDist (Option ℕ))
+    (replacement : (n : ℕ) → ι → FinDist (Cell (source n))) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar} {menu : NonemptyCompacts ℝ}
+    {marginals : ι → ProbabilityMeasure unitInterval}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (hT : Tendsto (fun k => legalMenuCompacts (source (subsequence k))) atTop (𝓝 menu))
+    (C : ι → NNReal)
+    (hweights : ∀ᶠ k in atTop, ∀ i (a : Cell (source (subsequence k))),
+      (replacement (subsequence k) i).prob a ≤ (C i : ℝ) * weight (source (subsequence k)) a)
+    (hlaws : Tendsto (fun k i =>
+      referenceLaw (source (subsequence k)) (replacement (subsequence k) i))
+      atTop (𝓝 marginals))
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    quittingTerminalDebtSumInf reward ≤
+      quittingTerminalSemanticDebtSum (limitSemanticPair limit menu marginals reward) := by
+  obtain ⟨minimum, hminimum, hleast⟩ := exists_minimum_quittingTerminalSemanticDebtSum reward
+  rw [quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum
+    minimum hminimum hleast]
+  exact hleast _ (referenceLimitSemanticPair_mem_carrier
+    source replacement subsequence hE hc hT C hweights hlaws reward)
 
 /-- Carrier membership is derived from actual source profiles, for every actual marked limit. -/
 theorem limitSemanticPair_mem_carrier
@@ -79,10 +171,11 @@ theorem limitSemanticPair_mem_carrier
     (hlaws : Tendsto (fun k => chartLaw (source (subsequence k))) atTop (𝓝 marginals))
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     limitSemanticPair limit menu marginals reward ∈ quittingTerminalSemanticCarrier reward := by
-  apply (quittingTerminalSemanticCarrier_isCompact reward).isClosed.mem_of_tendsto
-    (tendsto_sourceSemanticPair source subsequence hE hc hT hlaws reward)
-  exact Eventually.of_forall fun k => subset_closure
-    ⟨quittingStoppingLawProfile reward (fun i => (source (subsequence k) i).toPMF), rfl⟩
+  exact referenceLimitSemanticPair_mem_carrier source (fun n => cellLaw (source n))
+    subsequence hE hc hT (fun _ => (Fintype.card ι : NNReal))
+    (Eventually.of_forall fun k i a => by
+      simpa only [cellLaw_prob, NNReal.coe_natCast] using ownWeight_le (source (subsequence k)) i a)
+    hlaws reward
 
 /-- Any minimizing finite source has the original SUM infimum at every marked limit. -/
 theorem limitSemanticPair_debtSum_eq_inf_of_minimizing_source

@@ -15,9 +15,12 @@ converge in base L1 for every fixed integrable real test. The actual reference
 laws then converge, on the same source subsequence, to the explicitly constructed
 measurable signed conditional law. No limiting replacement law is supplied.
 
-Finite-clock and Never collapsed-reset facades and semantic carrier consumers
-remain separate subsequent steps. In particular, parameter one is not identified
-with the signed constructor's fallback.
+Positive finite atoms of the actual collapsed marginal determine a retained gap,
+its exact raw mass, and one selector before every legal signed parameter. Positive
+Never mass similarly supplies the actual nonempty terminal gap and one selector.
+Mapped reset identities, chronological facades, and semantic carrier consumers
+remain separate subsequent steps. Parameter one is not identified with the signed
+constructor's fallback.
 -/
 
 noncomputable section
@@ -472,5 +475,200 @@ theorem tendsto_referenceLaw_signedSelectedCellLaw
   filter_upwards [hvalid] with k hk
   exact (integral_referenceLaw_signedSelectedCellLaw (source (subsequence k)) i x parameter
     hk.1 hk.2 test (test.integrable _)).symm
+
+/-- A positive own finite atom produces its actual retained gap and exact raw mass.
+The mixture atom is derived from marginal domination, not supplied separately. -/
+theorem exists_limit_gap_of_positive_finite_own_atom
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    (limit : MathUE.MarkedCalendar.Calendar) (i : ι)
+    {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    {t : ℝ}
+    (hatom : 0 < ((law : Measure unitInterval).map limit.collapseClock).real {↑t}) :
+    ∃ a b : ℝ, Math.Topology.IsGap limit.endpoints a b ∧
+      b ≤ (limit.cutoff : ℝ) ∧ t = (a + b) / 2 ∧ t < (limit.cutoff : ℝ) ∧
+      limit.collapseClock ⁻¹' {(t : WithTop ℝ)} =
+        {x : unitInterval | a < (x : ℝ) ∧ (x : ℝ) < b} ∧
+      (law : Measure unitInterval).real {x | a < (x : ℝ) ∧ (x : ℝ) < b} =
+        ((law : Measure unitInterval).map limit.collapseClock).real {↑t} := by
+  have hmixture : (volume : Measure unitInterval).map limit.collapseClock {↑t} ≠ 0 := by
+    intro hzero
+    have hown := map_limit_chartLaw_atom_eq_zero_of_map_volume_eq_zero
+      source subsequence limit i hlaw hzero
+    have hfalse : (0 : ℝ) < 0 := by
+      simpa only [measureReal_def, hown, ENNReal.toReal_zero] using hatom
+    exact (lt_irrefl 0) hfalse
+  obtain ⟨a, b, hgap, hb, ht⟩ := exists_gap_of_map_volume_collapseClock_atom limit hmixture
+  have hfiber : limit.collapseClock ⁻¹' {(t : WithTop ℝ)} =
+      {x : unitInterval | a < (x : ℝ) ∧ (x : ℝ) < b} := by
+    rw [ht]
+    exact collapseClock_fiber_midpoint limit hgap hb
+  refine ⟨a, b, hgap, hb, ht, ?_, hfiber, ?_⟩
+  · have hab := hgap.2.2.1
+    linarith
+  · simp only [measureReal_def, Measure.map_apply limit.measurable_collapseClock
+      (measurableSet_singleton _), hfiber]
+
+/-- One actual finite own atom selects its gap and old-cell selector before every legal signed
+parameter. The limiting probability law is constructed from that same marginal and raw event. -/
+theorem exists_signedSelectedCellLaw_limit_of_positive_finite_atom
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints)) (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    {t : ℝ}
+    (hatom : 0 < ((law : Measure unitInterval).map limit.collapseClock).real {↑t}) :
+    ∃ (a b : ℝ) (x : unitInterval)
+      (hmass : 0 < (law : Measure unitInterval).real
+        {y | a < (y : ℝ) ∧ (y : ℝ) < b}),
+      Math.Topology.IsGap limit.endpoints a b ∧ b ≤ (limit.cutoff : ℝ) ∧
+      t = (a + b) / 2 ∧ (x : ℝ) = t ∧ t < (limit.cutoff : ℝ) ∧
+      limit.collapseClock ⁻¹' {(t : WithTop ℝ)} =
+        {y : unitInterval | a < (y : ℝ) ∧ (y : ℝ) < b} ∧
+      (law : Measure unitInterval).real {y | a < (y : ℝ) ∧ (y : ℝ) < b} =
+        ((law : Measure unitInterval).map limit.collapseClock).real {↑t} ∧
+      ∀ (parameter : ℝ) (hparameter : |parameter| ≤ min (1 / 2 : ℝ)
+        ((law : Measure unitInterval).real {y | a < (y : ℝ) ∧ (y : ℝ) < b} / 4)),
+        Tendsto (fun k => referenceLaw (source (subsequence k))
+          (signedSelectedCellLaw (source (subsequence k)) i x parameter)) atTop
+          (𝓝 (law.signedCond {y | a < (y : ℝ) ∧ (y : ℝ) < b}
+            (by
+              change MeasurableSet ((Subtype.val : unitInterval → ℝ) ⁻¹' Ioo a b)
+              exact measurableSet_Ioo.preimage measurable_subtype_coe)
+            hmass parameter (by
+              change |parameter| ≤ min (1 / 2 : ℝ)
+                ((law : Measure unitInterval).real
+                  {y | a < (y : ℝ) ∧ (y : ℝ) < b} / 2)
+              refine le_min (hparameter.trans (min_le_left _ _)) ?_
+              have hsmall := hparameter.trans (min_le_right _ _)
+              linarith))) := by
+  obtain ⟨a, b, hgap, hb, ht, htc, hfiber, hmassEq⟩ :=
+    exists_limit_gap_of_positive_finite_own_atom source subsequence limit i hlaw hatom
+  have hat : a < t := by linarith [hgap.2.2.1]
+  have htb : t < b := by linarith [hgap.2.2.1]
+  have htIcc : t ∈ Icc (0 : ℝ) 1 :=
+    ⟨(limit.endpoints_subset hgap.1).1.trans hat.le,
+      htb.le.trans (limit.endpoints_subset hgap.2.1).2⟩
+  let x : unitInterval := ⟨t, htIcc⟩
+  have hmass : 0 < (law : Measure unitInterval).real
+      {y | a < (y : ℝ) ∧ (y : ℝ) < b} := by
+    rw [hmassEq]
+    exact hatom
+  refine ⟨a, b, x, hmass, hgap, hb, ht, rfl, htc, hfiber, hmassEq, ?_⟩
+  intro parameter hparameter
+  exact tendsto_referenceLaw_signedSelectedCellLaw source subsequence hE i hlaw
+    hgap (show a < (x : ℝ) from hat) (show (x : ℝ) < b from htb)
+    hmass parameter hparameter
+
+/-- Positive own Never mass forces the actual terminal gap to be nonempty. Its open raw
+interval has exactly that mass; the two raw endpoints are null by derived domination. -/
+theorem limit_never_gap_of_positive_own_atom
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    (hatom : 0 < ((law : Measure unitInterval).map limit.collapseClock).real {⊤}) :
+    (limit.cutoff : ℝ) < 1 ∧
+      Math.Topology.IsGap limit.endpoints (limit.cutoff : ℝ) 1 ∧
+      limit.collapseClock ⁻¹' {⊤} = Ici limit.cutoff ∧
+      (law : Measure unitInterval).real
+        {x | (limit.cutoff : ℝ) < (x : ℝ) ∧ (x : ℝ) < 1} =
+        ((law : Measure unitInterval).map limit.collapseClock).real {⊤} := by
+  have hcut : (limit.cutoff : ℝ) < 1 := by
+    apply lt_of_le_of_ne limit.cutoff.property.2
+    intro heq
+    have hcutoff : limit.cutoff = 1 := Subtype.ext heq
+    have hzero := map_limit_chartLaw_top_eq_zero_of_cutoff_eq_one
+      source subsequence limit hcutoff i hlaw
+    have hfalse : (0 : ℝ) < 0 := by
+      simpa only [measureReal_def, hzero, ENNReal.toReal_zero] using hatom
+    exact (lt_irrefl 0) hfalse
+  have hgap : Math.Topology.IsGap limit.endpoints (limit.cutoff : ℝ) 1 := by
+    refine ⟨limit.cutoff_mem, limit.one_mem, hcut, ?_⟩
+    intro x hx
+    have hnot := limit_endpoints_notMem_Ioo_cutoff_one source subsequence hE hc hx
+    by_cases hxc : x ≤ (limit.cutoff : ℝ)
+    · exact Or.inl hxc
+    · exact Or.inr (le_of_not_gt fun hxone => hnot ⟨lt_of_not_ge hxc, hxone⟩)
+  have hfiber : limit.collapseClock ⁻¹' {⊤} = Ici limit.cutoff := by
+    ext x
+    exact limit.collapseClock_eq_top_iff x
+  have hbound : (law : Measure unitInterval) ≤
+      (Fintype.card ι : NNReal) • (base : Measure unitInterval) :=
+    ProbabilityMeasure.le_of_tendsto_of_le_measure _ hlaw
+      (Eventually.of_forall fun k => chartLaw_le (source (subsequence k)) i)
+  have habs : (law : Measure unitInterval) ≪ volume :=
+    Measure.absolutelyContinuous_of_le_smul hbound
+  have hae : {x : unitInterval | (limit.cutoff : ℝ) < (x : ℝ) ∧ (x : ℝ) < 1}
+      =ᵐ[(law : Measure unitInterval)] Ici limit.cutoff := by
+    filter_upwards [habs.ae_le (volume.ae_ne limit.cutoff), habs.ae_le (volume.ae_ne 1)]
+      with x hxc hxone
+    have hxcReal : (x : ℝ) ≠ (limit.cutoff : ℝ) := fun h => hxc (Subtype.ext h)
+    have hxoneReal : (x : ℝ) ≠ 1 := fun h => hxone (Subtype.ext h)
+    apply propext
+    change ((limit.cutoff : ℝ) < (x : ℝ) ∧ (x : ℝ) < 1) ↔
+      (limit.cutoff : ℝ) ≤ (x : ℝ)
+    exact ⟨fun h => h.1.le, fun h =>
+      ⟨lt_of_le_of_ne h hxcReal.symm, lt_of_le_of_ne x.property.2 hxoneReal⟩⟩
+  refine ⟨hcut, hgap, hfiber, ?_⟩
+  rw [measureReal_def, measureReal_def, Measure.map_apply limit.measurable_collapseClock
+    (measurableSet_singleton _), hfiber, measure_congr hae]
+
+/-- The actual positive Never atom chooses one terminal-gap selector before every legal signed
+parameter, and the literal replacement laws converge along the same source subsequence. -/
+theorem exists_signedSelectedCellLaw_limit_of_positive_never_atom
+    (source : ℕ → ι → FinDist (Option ℕ)) (subsequence : ℕ → ℕ)
+    {limit : MathUE.MarkedCalendar.Calendar}
+    (hE : Tendsto (fun k => (calendar (source (subsequence k))).endpoints) atTop
+      (𝓝 limit.endpoints))
+    (hc : Tendsto (fun k => cutoff (source (subsequence k))) atTop (𝓝 limit.cutoff))
+    (i : ι) {law : ProbabilityMeasure unitInterval}
+    (hlaw : Tendsto (fun k => chartLaw (source (subsequence k)) i) atTop (𝓝 law))
+    (hatom : 0 < ((law : Measure unitInterval).map limit.collapseClock).real {⊤}) :
+    ∃ (x : unitInterval)
+      (hmass : 0 < (law : Measure unitInterval).real
+        {y | (limit.cutoff : ℝ) < (y : ℝ) ∧ (y : ℝ) < 1}),
+      (limit.cutoff : ℝ) < 1 ∧
+      Math.Topology.IsGap limit.endpoints (limit.cutoff : ℝ) 1 ∧
+      (x : ℝ) = ((limit.cutoff : ℝ) + 1) / 2 ∧
+      (law : Measure unitInterval).real
+        {y | (limit.cutoff : ℝ) < (y : ℝ) ∧ (y : ℝ) < 1} =
+        ((law : Measure unitInterval).map limit.collapseClock).real {⊤} ∧
+      ∀ (parameter : ℝ) (hparameter : |parameter| ≤ min (1 / 2 : ℝ)
+        ((law : Measure unitInterval).real
+          {y | (limit.cutoff : ℝ) < (y : ℝ) ∧ (y : ℝ) < 1} / 4)),
+        Tendsto (fun k => referenceLaw (source (subsequence k))
+          (signedSelectedCellLaw (source (subsequence k)) i x parameter)) atTop
+          (𝓝 (law.signedCond {y | (limit.cutoff : ℝ) < (y : ℝ) ∧ (y : ℝ) < 1}
+            (by
+              change MeasurableSet
+                ((Subtype.val : unitInterval → ℝ) ⁻¹' Ioo (limit.cutoff : ℝ) 1)
+              exact measurableSet_Ioo.preimage measurable_subtype_coe)
+            hmass parameter (by
+              change |parameter| ≤ min (1 / 2 : ℝ)
+                ((law : Measure unitInterval).real
+                  {y | (limit.cutoff : ℝ) < (y : ℝ) ∧ (y : ℝ) < 1} / 2)
+              refine le_min (hparameter.trans (min_le_left _ _)) ?_
+              have hsmall := hparameter.trans (min_le_right _ _)
+              linarith))) := by
+  obtain ⟨hcut, hgap, _, hmassEq⟩ :=
+    limit_never_gap_of_positive_own_atom source subsequence hE hc i hlaw hatom
+  have hxIcc : ((limit.cutoff : ℝ) + 1) / 2 ∈ Icc (0 : ℝ) 1 := by
+    constructor <;> linarith [limit.cutoff.property.1]
+  let x : unitInterval := ⟨((limit.cutoff : ℝ) + 1) / 2, hxIcc⟩
+  have hmass : 0 < (law : Measure unitInterval).real
+      {y | (limit.cutoff : ℝ) < (y : ℝ) ∧ (y : ℝ) < 1} := by
+    rw [hmassEq]
+    exact hatom
+  refine ⟨x, hmass, hcut, hgap, rfl, hmassEq, ?_⟩
+  intro parameter hparameter
+  have hleft : (limit.cutoff : ℝ) < (x : ℝ) := by dsimp only [x]; linarith
+  have hright : (x : ℝ) < 1 := by dsimp only [x]; linarith
+  exact tendsto_referenceLaw_signedSelectedCellLaw source subsequence hE i hlaw
+    hgap hleft hright hmass parameter hparameter
 
 end GameTheory.MarkedCalendarChart

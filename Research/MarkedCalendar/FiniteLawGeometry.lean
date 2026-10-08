@@ -746,7 +746,7 @@ theorem map_limit_chartLaw_top_eq_zero_of_cutoff_eq_one
   apply le_antisymm ?_ zero_le
   simpa using htop
 
-private theorem collapseClock_fiber_midpoint
+theorem collapseClock_fiber_midpoint
     (limit : MathUE.MarkedCalendar.Calendar) {a b : ℝ}
     (hgap : Math.Topology.IsGap limit.endpoints a b) (hb : b ≤ (limit.cutoff : ℝ)) :
     limit.collapseClock ⁻¹' {(((a + b) / 2 : ℝ) : WithTop ℝ)} =

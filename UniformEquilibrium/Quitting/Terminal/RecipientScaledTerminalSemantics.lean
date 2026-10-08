@@ -10,7 +10,9 @@ Positive playerwise reward scaling transports the entire original semantic
 carrier by a diagonal homeomorphism. Its literal new SUM-debt infimum equals
 the weighted infimum over the fixed original debt image. Both coordinates
 retain their actual behavioral meaning, including the unrestricted reply cap.
-This module does not select a fresh reward table or assert uniqueness of pairs.
+Every nonempty open positive-weight region contains weights with one common
+new debt vector at all scaled-carrier SUM minima. This does not assert
+uniqueness of pairs or select a near-identity contact-preserving reward table.
 -/
 
 noncomputable section
@@ -206,5 +208,62 @@ theorem quittingTerminalDebtSumInf_recipientScale_bounds
         (hweights who).2 (quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair who)
     rw [quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum pair hpair hminimum]
     exact hvalue.trans hsum
+
+/-- One positive weight vector has one actual new debt vector at every new SUM minimum. -/
+theorem exists_recipientScale_all_minimum_debts_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (region : Set (Payoff ι)) (hopen : IsOpen region) (hregion : region.Nonempty)
+    (hpositive : ∀ weights ∈ region, ∀ who, 0 < weights who) :
+    ∃ weights ∈ region, ∃ debt : Payoff ι,
+      (∃ pair ∈ quittingTerminalSemanticCarrier
+          (quittingPlayerwiseAffineReward reward weights 0),
+        quittingTerminalSemanticDebtSum pair =
+            quittingTerminalDebtSumInf (quittingPlayerwiseAffineReward reward weights 0) ∧
+          quittingTerminalSemanticDebt pair = debt) ∧
+      ∀ pair ∈ quittingTerminalSemanticCarrier
+          (quittingPlayerwiseAffineReward reward weights 0),
+        quittingTerminalSemanticDebtSum pair =
+            quittingTerminalDebtSumInf (quittingPlayerwiseAffineReward reward weights 0) →
+          quittingTerminalSemanticDebt pair = debt := by
+  have hcompact := quittingTerminalSemanticDebtImage_isCompact reward
+  obtain ⟨weights, hweights, coefficient, hcoefficient, hminimum, hall⟩ :=
+    _root_.Math.CompactLinearMinimum.exists_mem_open_all_minimizers_eq hcompact
+      (quittingTerminalSemanticDebtImage_nonempty reward) hopen hregion
+  have hweightsPositive := hpositive weights hweights
+  refine ⟨weights, hweights, (fun who => weights who * coefficient who), ?_, ?_⟩
+  · obtain ⟨original, horiginal, rfl⟩ := hcoefficient
+    refine ⟨quittingRecipientScaleSemanticPair weights original, ?_, ?_, ?_⟩
+    · rw [quittingTerminalSemanticCarrier_recipientScale reward weights hweightsPositive]
+      exact ⟨original, horiginal, rfl⟩
+    · rw [quittingTerminalSemanticDebtSum_recipientScale,
+        quittingTerminalDebtSumInf_recipientScale reward weights hweightsPositive]
+      exact (_root_.Math.CompactLinearMinimum.value_eq_of_isMinOn
+        (quittingTerminalSemanticDebtImage reward) weights
+        (quittingTerminalSemanticDebt original) ⟨original, horiginal, rfl⟩ hminimum).symm
+    · funext who
+      exact quittingTerminalSemanticDebt_recipientScale weights original who
+  · intro pair hpair hpairMinimum
+    rw [quittingTerminalSemanticCarrier_recipientScale reward weights hweightsPositive] at hpair
+    obtain ⟨original, horiginal, rfl⟩ := hpair
+    have hvalue : _root_.Math.CompactLinearMinimum.pairing
+        (quittingTerminalSemanticDebt original) weights =
+        _root_.Math.CompactLinearMinimum.value (quittingTerminalSemanticDebtImage reward)
+          weights := by
+      simpa only [quittingTerminalSemanticDebtSum_recipientScale,
+        quittingTerminalDebtSumInf_recipientScale reward weights hweightsPositive] using
+        hpairMinimum
+    have horiginalMinimum : IsMinOn
+        (fun candidate => _root_.Math.CompactLinearMinimum.pairing candidate weights)
+        (quittingTerminalSemanticDebtImage reward) (quittingTerminalSemanticDebt original) := by
+      intro candidate hcandidate
+      change _root_.Math.CompactLinearMinimum.pairing
+          (quittingTerminalSemanticDebt original) weights ≤
+        _root_.Math.CompactLinearMinimum.pairing candidate weights
+      rw [hvalue]
+      exact _root_.Math.CompactLinearMinimum.value_le hcompact weights hcandidate
+    have hdebt := hall (quittingTerminalSemanticDebt original)
+      ⟨original, horiginal, rfl⟩ horiginalMinimum
+    funext who
+    rw [quittingTerminalSemanticDebt_recipientScale, hdebt]
 
 end GameTheory

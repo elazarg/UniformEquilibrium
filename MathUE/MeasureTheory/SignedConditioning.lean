@@ -203,4 +203,45 @@ theorem signedCond_eq_self_of_measureReal_eq_one (law : ProbabilityMeasure X) (e
         sub_add_cancel, ENNReal.ofReal_one, Pi.one_apply]
     _ = (law : Measure X) := withDensity_one
 
+open Classical in
+/-- If a measurable map is constant almost everywhere on the conditioning event, its mapped
+real masses have the literal affine reset formula, also for negative legal parameters. -/
+theorem map_signedCond_real_of_ae_eq_const
+    {Y : Type*} [MeasurableSpace Y]
+    (law : ProbabilityMeasure X) (event : Set X) (hevent : MeasurableSet event)
+    (hmass : 0 < (law : Measure X).real event) (parameter : ℝ)
+    (hparameter : |parameter| ≤ law.signedCondRadius event)
+    (φ : X → Y) (hφ : Measurable φ) (a : Y)
+    (hconst : ∀ᵐ x ∂(law : Measure X).restrict event, φ x = a)
+    (target : Set Y) (htarget : MeasurableSet target) :
+    ((law.signedCond event hevent hmass parameter hparameter : Measure X).map φ).real target =
+      (1 - parameter) * ((law : Measure X).map φ).real target +
+        parameter * (if a ∈ target then (1 : ℝ) else 0) := by
+  classical
+  let test : X → ℝ := (φ ⁻¹' target).indicator (fun _ => 1)
+  have hpreimage : MeasurableSet (φ ⁻¹' target) := htarget.preimage hφ
+  have htest : Integrable test (law : Measure X) :=
+    (integrable_const _).indicator hpreimage
+  have hmap (μ : Measure X) : ∫ x, test x ∂μ = (μ.map φ).real target := by
+    rw [show test = (φ ⁻¹' target).indicator (fun _ => (1 : ℝ)) from rfl,
+      integral_indicator_const _ hpreimage]
+    simp only [smul_eq_mul, mul_one, measureReal_def, Measure.map_apply hφ htarget]
+  have hrestricted : test =ᵐ[(law : Measure X).restrict event]
+      fun _ => if a ∈ target then (1 : ℝ) else 0 := by
+    filter_upwards [hconst] with x hx
+    simp only [test, Set.indicator_apply, Set.mem_preimage, hx]
+  have hset : ∫ x in event, test x ∂(law : Measure X) =
+      (law : Measure X).real event * (if a ∈ target then (1 : ℝ) else 0) := by
+    rw [integral_congr_ae hrestricted, integral_const, measureReal_restrict_apply_univ,
+      smul_eq_mul]
+  calc
+    _ = ∫ x, test x ∂(law.signedCond event hevent hmass parameter hparameter : Measure X) :=
+      (hmap _).symm
+    _ = (1 - parameter) * (∫ x, test x ∂(law : Measure X)) +
+        (parameter / (law : Measure X).real event) *
+          ∫ x in event, test x ∂(law : Measure X) :=
+      integral_signedCond law event hevent hmass parameter hparameter test htest
+    _ = _ := by
+      rw [hmap, hset, ← mul_assoc, div_mul_cancel₀ _ hmass.ne']
+
 end MeasureTheory.ProbabilityMeasure

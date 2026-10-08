@@ -32,7 +32,7 @@ variable {ι : Type} {G : StochasticGame ι}
 followed by the conditional full-history suffix law from the realized
 prefix. -/
 theorem histDist_add_eq_bind_histDistAfter
-    [Fintype ι] [Finite G.State] [∀ who, Finite (G.Act who)]
+    [Fintype ι]
     (profile : G.BehaviorProfile) (initial : G.State)
     (prefixLength suffixLength : ℕ) :
     G.histDist profile initial (prefixLength + suffixLength) =
