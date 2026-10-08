@@ -4,15 +4,20 @@ Owner: CODEX_MORSE.
 
 Current independent negative/dual attempt: seek an ACTUAL rational table
 and a sufficient polynomial certificate on EVERY absorption-relative
-robust root edge in the whole fixed payoff box. The new dual section
-below gives a complete ORDINARY UNREVIEWED buffered exact-to-robust repair
-under the stronger, explicitly verified no-sure-root-at-any-annotation
-hypothesis of one provisional table. It does NOT produce a potential,
-a positive gap, or a new counterexample-class exclusion. Small stationary
-and periodic searches and low-degree fitting failures are experiments
-only; no bounded-search failure is used as a certificate. The remaining
-task is an actual nonseparable high-degree barrier or a charged full-root
-construction that retires the table. No export is proposed.
+robust root edge in the whole fixed payoff box. The DN trial table is now
+RETIRED by a complete ORDINARY UNREVIEWED closed singular Nash circuit:
+three convergent, finite-charge ladders and two literal roots have exactly
+matched ports, certified by rational contraction arithmetic. This rules
+out EVERY continuous charged potential, not just low degree. Finite
+truncation, chronological reversal and repeated-word full-cap contraction
+also give actual absorbing approximate equilibria with one fixed payoff;
+there is no execution of ω+ω dates. The algebraic ladder formulas give
+uniform finite quiet-player inequalities and a reusable return-map
+criterion, hence a full60-coordinate open UE chamber around this trial.
+Complete overlap with ALL existing UE producers has NOT been established;
+the bounded named comparisons and their scope appear in CL10. No export,
+arbitrary-table producer, or positive-gap example is claimed. Frozen DN1–9
+is preserved unchanged as the record of the failed negative search.
 
 Preserved bird's-eye program: the separate owned note
 `CODEX_MORSE__FIN4_BIRDS_EYE_CONTINUATION_INDEX_PATH.md` develops ONE
@@ -9943,6 +9948,624 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Dual follow-through: a closed singular full-Nash circuit retires the rational shell
+
+Status: COMPLETE ORDINARY INDEPENDENTLY UNREVIEWED mathematics. The exact
+five-variable closure certificate, full root inequalities and literal
+finite-word/all-cap construction are given below. The rational verifier
+uses exact finite arithmetic; it is NOT a Lean proof or a numerical root
+certificate. The reusable raw criterion and qualitative full60-coordinate
+open chamber are proved separately from the single-table calculation.
+No universal source consumer or complete known-producer census is claimed.
+DN1–9 below is frozen historical mathematics; its unresolved shell is
+resolved HERE, not silently amended there.
+
+### CL1. Fixed literal game, ports and the precise conclusion
+
+Coordinates are ordered 0,1,2,3, Never pays zero, and every own singleton
+is 1. This is the NEW DN table, not the old CI or RZ solved fixture:
+
+| S | r(S) |
+| --- | --- |
+| {0} | (1,3,3,0) |
+| {1} | (4,1,−1,−1) |
+| {2} | (0,2,1,2) |
+| {3} | (4,−2,0,1) |
+| {0,1} | (−2,−2,5,5) |
+| {0,2} | (3/2,5,−2,5) |
+| {0,3} | (−2,5,5,3/2) |
+| {1,2} | (5,−2,3/2,5) |
+| {1,3} | (5,3/2,5,−2) |
+| {2,3} | (5,5,−2,−2) |
+| {0,1,2} | (4,4,4,−4) |
+| {0,1,3} | (4,4,−4,4) |
+| {0,2,3} | (4,−4,4,4) |
+| {1,2,3} | (−4,4,4,4) |
+| I | (−5,−5,−5,−5) |
+
+For an independent product root q set c=∏ᵢ(1−qᵢ), charge a(q)=1−c,
+and F(v,q)=cv+Σ_{S≠∅}μ_q(S)r(S). Root Nash means every player's TWO
+action endpoints are at most its prescribed expectation, including all
+quiet spectators. These are full binary roots against the annotation v,
+not Nash claims about a conditional tail or an induced subgame.
+
+There exist real b,d and one triple root (0,x,y,z) such that the following
+FORWARD continuation-to-head circuit closes:
+
+    V=(1,b,1,d) → M₀(V) → M₃(M₀(V)) → U → W → M₀₂(W)=V.     (CL.1)
+
+M₀,M₃,M₀₂ are limits of actual full-Nash root ladders with summable
+positive charges. U and W are heads of two literal finite roots. Every
+port and every finite ladder annotation lies in [−5,5]⁴. Consequently:
+
+1. No continuous P on [−7,7]⁴ decreases by at least a(q) on EVERY full
+   exact root edge v→F(v,q). In particular no rational robust polynomial
+   certificate exists at any positive absorption-relative tolerance.
+2. Legal finite PERIODIC independent product-root profiles have full
+   terminal debt tending to zero and terminal payoff tending to V.
+   They absorb almost surely, as do every player's deleted-opponent
+   clocks. Thus V is a uniform-equilibrium payoff in the original game.
+3. A uniform finite raw return-map criterion below produces the same
+   type of circuit for an open neighborhood in ALL60 reward coordinates.
+   No one-dimensional or singleton-only perturbation is substituted.
+
+The order in (CL.1) is NOT chronological play order. Actual finite
+periods reverse concatenated finite forward predecessor lists. No root
+is placed after an infinite ladder at a finite ordinary date.
+
+### CL2. Exact solo0 ladder, then exact solo3 ladder
+
+Start at V=(1,b,1,d), with b,d>1. At a current solo0 port
+(1,bₙ,cₙ,dₙ), use
+
+    q=(pₙ,0,0,0),       pₙ=(dₙ−1)/(dₙ+1/2).              (CL.2)
+
+Owner0 ties. Favorite3 ties because its Quit-minus-Continue gap is
+(1−pₙ)(1−dₙ)+(3/2)pₙ=0. Spectators1,2 are quiet: their annotations
+are at least 1 and their nonempty joining gaps are respectively −5,−5.
+Their annotations remain at least1 because passive r₁({0})=r₂({0})=3.
+Every finite root is therefore FULL Nash, not only an owner/favorite root.
+
+The favorite port evolves as dₙ₊₁=(3/2)dₙ/(dₙ+1/2), with
+0<dₙ₊₁−1≤(dₙ−1)/3. The entire ladder has finite total charge and
+its total continuation product is 1/d. Its exact endpoint is
+
+    M₀(V)=(1, 3+(b−3)/d, 3−2/d, 1).                    (CL.3)
+
+Write A=5d+b−3. At M₀(V), run solo3 with favorite1:
+
+    q=(0,0,0,pₙ),       pₙ=(v₁,ₙ−1)/(v₁,ₙ+5/2).        (CL.4)
+
+Owner3 ties, favorite1 ties with joining gap 7/2, and the favorite
+excess contracts by at most1/7. Quiet0 starts at1 and is pulled toward
+passive4; its joining gap is −6. Quiet2 is pulled toward passive0, but
+stays at least1 if its ENDPOINT is at least1; its joining gap is −2.
+Thus the whole ladder is full Nash provided (9d−6)/A≥1. The total
+continuation product is 3d/A and the endpoint is
+
+    M₃(M₀(V))=(4−9d/A, 1, (9d−6)/A, 1).              (CL.5)
+
+The final certificate below has A>0 and (9d−6)/A>1 strictly. It also
+has 4−9d/A>1. These are endpoint inequalities for the ENTIRE infinite
+ladder, not continuity assertions at each separately chosen finite row.
+
+### CL3. Literal solo1 root and the genuinely new triple branch
+
+Put N=4d−b−3, T=33d+3b−21 and k=N/T. If N>0, the literal root
+
+    q=(0,2k,0,0)                                      (CL.6)
+
+is Nash against (CL.5): owner1 ties, favorite2 ties, quiet0 has an
+annotation strictly above1 and joining gap −6, and quiet3 has empty
+gap0 and nonempty joining gap −1. Its exact head is
+
+    U=(4−45d/T, 1, 1+k, 1−4k).                      (CL.7)
+
+At U seek a literal root (0,x,y,z) with 0<x,y,z<1. Set
+
+    c=(1−x)(1−y)(1−z),
+    Q₁=1−3y+z/2+(11/2)yz,
+    Q₂=1+x/2−3z+(11/2)xz,
+    Q₃=1−3x−3y+9xy,
+    R₀=4x(1−y)(1−z)+4z(1−x)(1−y)
+       +5[xy(1−z)+xz(1−y)+yz(1−x)]−4xyz.
+
+All three active owners are indifferent precisely when
+
+    f₁=(7z−8y−yz)/2=0,
+    f₂=−N(1−x)(1−z)+T[(5/2)x(1−z)−2z(1−x)−xz]=0,
+    f₃=4N(1−x)(1−y)+T[−x(1−y)−4y(1−x)−xy]=0.        (CL.8)
+
+f₂,f₃ are T times the actual gaps; T>0. The quiet owner0 must be
+tested too. Its forced-Quit value is
+
+    Q₀=c−2x(1−y)(1−z)+(3/2)y(1−x)(1−z)−2z(1−x)(1−y)
+       +4[xy(1−z)+xz(1−y)+yz(1−x)]−5xyz.
+
+Its gap numerator is
+
+    G₀=T(Q₀−R₀)−c(4T−45d).                         (CL.9)
+
+The exact certificate proves G₀<−33 on the WHOLE closure box.
+Therefore every active and inactive Nash inequality holds. The head is
+
+    W=(c(4−45d/T)+R₀,Q₁,Q₂,Q₃).                    (CL.10)
+
+This macroscopic branch, not another solo continuation, is essential:
+U₃<1 while U₂>1. An attempt to keep the old solo1 branch cannot simply
+activate a nearby spectator and preserve its favorite constraint.
+
+### CL4. Pair02 ladder: quiet inequalities remain valid below own levels
+
+At a current pair port (1+t,v₁,1−a,v₃), with t>0 and 0<a≤1, set
+
+    q₀=a/(a+5),       q₂=t/(t+3/2),       q₁=q₃=0.      (CL.11)
+
+Both active owners tie exactly. Their head excesses obey
+
+    t′=(1/2)t/(t+3/2),       a′=3a/(a+5),             (CL.12)
+
+so tₙ,aₙ→0 geometrically and the charges are summable. Explicitly
+
+    1/tₙ=3ⁿ(1/t₀+1)−1,
+    1/aₙ=(5/3)ⁿ(1/a₀+1/2)−1/2.
+
+The total surviving mass is C=1/[(1+t)(1+a/2)]. The terminal coalition
+weights of the FORWARD composition, equivalently the reversed finite
+words in the limit, are
+
+    P₀₂=Cta/6,
+    P₀=C a(2+t)/4,
+    P₂=Ct(1+a/12).                                  (CL.13)
+
+These are nonnegative, sum with C to1, and can also be derived by
+solving the two active endpoint-payoff equations and total-mass equation.
+The endpoint is
+
+    M₀₂(1+t,v₁,1−a,v₃)=(1,B,1,D),
+    B=C[v₁+(3/2)a+2t+(7/4)ta],
+    D=C[v₃+2t+ta].                                  (CL.14)
+
+IMPORTANT: W₁ and W₃ in (CL.10) are BELOW1. Requiring initial quiet
+ports ≥1 would invalidate this circuit. The correct full quiet check
+uses the endpoint B,D. At EACH finite pair stage its current ports are
+
+    v₁=(1+t)(1+a/2)B−(3/2)a−2t−(7/4)ta,
+    v₃=(1+t)(1+a/2)D−2t−ta.
+
+Divide each quiet gap by h=(1−q₀)(1−q₂)>0. Direct substitution gives
+
+    g₁/h=1−B−t(B+2/3)−a(B/2−1/2)−ta(B/2−97/60),
+    g₃/h=1−D−t(D+2/3)−a(D/2−3/10)−ta(D/2−13/15).
+
+For B,D≥1 and 0≤a≤1 these are bounded above by
+
+    g₁/h≤1−B−(11/20)t≤0,
+    g₃/h≤1−D−(13/10)t−a/5≤0.                      (CL.15)
+
+Thus EVERY finite pair root is full Nash. When B,D>1 the quiet gaps
+even have strict normalized margins down to the limiting port. No
+approximate quiet test or old-tail Nash assumption enters this proof.
+
+### CL5. Five explicit polynomial closure equations
+
+Let tₙᵤₘ=c(4T−45d)+(R₀−1)T, so the first coordinate of W is
+1+tₙᵤₘ/T. Let a=1−Q₂. In addition to f₁=f₂=f₃=0 impose
+
+    f₄=b(T+tₙᵤₘ)(1+a/2)
+       −[T(Q₁+3a/2)+2tₙᵤₘ+(7/4)tₙᵤₘa]=0,
+    f₅=d(T+tₙᵤₘ)(1+a/2)
+       −[TQ₃+2tₙᵤₘ+tₙᵤₘa]=0.                   (CL.16)
+
+All five fᵢ are explicit rational POLYNOMIALS in (b,d,x,y,z). Positive
+denominators in the next certificate make f₄=f₅=0 exactly equivalent
+to the two return equations B=b,D=d in (CL.14).
+
+Take the rational center
+
+    c₀=(15168171051,13897264189,368214035,249887724,286609115)/10¹⁰
+
+and the closed ℓ∞ box X={ξ:‖ξ−c₀‖∞≤ρ}, ρ=10⁻⁷. Let J=Df(c₀)
+and L=J⁻¹. The exact rational checks below establish
+
+    β=‖Lf(c₀)‖∞<10⁻⁹,
+    η=‖|L|E‖∞<1/1000,
+    β+ρη<ρ,                                         (CL.17)
+
+where Eᵢⱼ=ρΣₖ mag(∂ₖ∂ⱼfᵢ) and, for p=Σp_αξ^α,
+mag(p)=Σ|p_α|∏ⱼ(|c₀,ⱼ|+ρ)^αⱼ. This bounds EVERY Hessian value
+on X, not just one numerical Jacobian. Hence ξ↦ξ−Lf(ξ) maps X
+strictly into itself and is an η-contraction. It has a unique exact
+zero ξ* in X by the contraction theorem.
+
+The same rational bounds prove throughout X:
+
+    3/2<b<8/5,     13/10<d<7/5,       0<x,y,z<1,
+    29<T<30,       1<N<11/10,          28<tₙᵤₘ<29,
+    3/50<a<7/100,
+    94/100<Q₁<95/100, 93/100<Q₂<94/100,
+    82/100<Q₃<83/100,                  G₀<−33.        (CL.18)
+
+In particular t>0, a∈(0,1), b,d>1, all three active triple rates
+are strictly interior, and every solo/pair endpoint condition holds.
+For example A>0 and N>0 give (9d−6)/A>1, while b,d bounds give
+4−9d/A>1; T>29 and d<7/5 give U₀>4−63/29>1. Every finite
+root map is a convex combination of its annotation and reward vectors;
+starting at V∈[−5,5]⁴ proves the entire circuit lies there. The
+characterization's fixed box for M=5 is [−7,7]⁴, so no buffer or
+box-rescaling assumption is needed for the contradiction.
+
+### CL6. Reproducible EXACT verification, without an approximate root premise
+
+The following uses SymPy only for rational polynomial arithmetic and
+matrix inversion. There is no nsolve, float comparison, rounded root
+acceptance, grid quantifier or numerical optimization in the verifier.
+It was executed successfully with every assertion shown.
+
+```python
+import sympy as s
+from functools import lru_cache
+b,d,x,y,z=s.symbols('b d x y z'); X=(b,d,x,y,z)
+T=33*d+3*b-21; N=4*d-b-3
+c=(1-x)*(1-y)*(1-z)
+Q1=1-3*y+z/2+s.Rational(11,2)*y*z
+Q2=1+x/2-3*z+s.Rational(11,2)*x*z
+Q3=1-3*x-3*y+9*x*y
+R0=4*x*(1-y)*(1-z)+4*z*(1-x)*(1-y)+5*(
+    x*y*(1-z)+x*z*(1-y)+y*z*(1-x))-4*x*y*z
+Q0=c-2*x*(1-y)*(1-z)+s.Rational(3,2)*y*(1-x)*(1-z)
+Q0+=-2*z*(1-x)*(1-y)+4*(x*y*(1-z)+x*z*(1-y)
+    +y*z*(1-x))-5*x*y*z
+tn=s.expand(c*(4*T-45*d)+(R0-1)*T); a=1-Q2
+f=s.Matrix([
+ s.expand((7*z-8*y-y*z)/2),
+ s.expand(-N*(1-x)*(1-z)+T*(s.Rational(5,2)*x*(1-z)
+    -2*z*(1-x)-x*z)),
+ s.expand(4*N*(1-x)*(1-y)+T*(-x*(1-y)-4*y*(1-x)-x*y)),
+ s.expand(b*(T+tn)*(1+a/2)-(T*(Q1+3*a/2)+2*tn
+    +s.Rational(7,4)*tn*a)),
+ s.expand(d*(T+tn)*(1+a/2)-(T*Q3+2*tn+tn*a))])
+c0=tuple(s.Rational(n,10**10) for n in
+    (15168171051,13897264189,368214035,249887724,286609115))
+r=s.Rational(1,10**7); sub=dict(zip(X,c0)); J=f.jacobian(X)
+L=J.subs(sub).inv(); beta=max(abs(t) for t in L*f.subs(sub))
+u=tuple(abs(t)+r for t in c0)
+@lru_cache(None)
+def mag(p):
+    return sum(abs(co)*s.prod(u[j]**mon[j] for j in range(5))
+        for mon,co in s.Poly(s.expand(p),*X).terms())
+def err(p): return r*sum(mag(s.diff(p,t)) for t in X)
+E=s.Matrix(5,5,lambda i,j:r*sum(mag(s.diff(J[i,j],t)) for t in X))
+W=L.applyfunc(abs)*E
+eta=max(sum(W[i,j] for j in range(5)) for i in range(5))
+assert beta<s.Rational(1,10**9)
+assert eta<s.Rational(1,1000)
+assert beta+r*eta<r
+for p,lo,hi in [(T,29,30),(N,1,s.Rational(11,10)),(tn,28,29),
+ (a,s.Rational(3,50),s.Rational(7,100)),
+ (Q1,s.Rational(94,100),s.Rational(95,100)),
+ (Q2,s.Rational(93,100),s.Rational(94,100)),
+ (Q3,s.Rational(82,100),s.Rational(83,100))]:
+    center=p.subs(sub)
+    assert center-err(p)>lo and center+err(p)<hi
+G0=s.expand(T*(Q0-R0)-c*(4*T-45*d))
+assert G0.subs(sub)+err(G0)<-33
+assert c0[0]-r>s.Rational(3,2) and c0[0]+r<s.Rational(8,5)
+assert c0[1]-r>s.Rational(13,10) and c0[1]+r<s.Rational(7,5)
+assert all(0<t-r<t+r<1 for t in c0[2:])
+```
+
+For orientation ONLY, the exact zero is approximately
+
+    (b,d,x,y,z)≈(1.516817105116,1.389726418910,
+                 .036821403487,.024988772412,.028660911470).
+
+Its two finite heads are approximately
+
+    U≈(1.873693886,1,1.035431423,.858274309),
+    W≈(1.969282184,.943303244,.938232310,.822850567).
+
+These decimals do no proof work. In particular the quiet pair inputs
+below1 are not concealed by rounding them to singleton levels.
+
+### CL7. Contradiction of EVERY continuous charged potential
+
+Suppose P is continuous on the fixed box and satisfies
+P(v)−P(F(v,q))≥a(q) for EVERY full exact root there. On one finite
+prefix of any ladder, summing yields
+
+    P(start)−P(xₙ)≥Σ_{j<n}a(qⱼ).
+
+As n→∞, continuity and convergence of the actual annotated ports give
+P(start)−P(endpoint) at least the ladder's positive charge. This is a
+limit of finite algebraic inequalities; it does NOT execute a root
+after infinitely many ordinary dates. Add this inequality for all
+three ladders and the two literal roots in (CL.1). Every port cancels
+and the right side is strictly positive, yielding 0>0.
+
+Every exact root edge is also an absorption-relative robust edge at
+EVERY τ>0, with target F(v,q) itself. Thus no rational polynomial
+robust potential can exist, irrespective of degree, separability or
+the buffered DN5 upgrade. The declaration
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`
+has been reread under its imports: all own singles1 imply normality,
+M=5 is a reward bound, and a positive own singleton exists. Its
+forward implication alone now rules out no-UE for this actual table.
+The no-sure proof in DN3 is compatible but not needed to infer this
+contradiction from the no-UE→potential direction. No SUM/MAX minimum
+or freshly selected reward table enters this argument.
+
+### CL8. Literal behavioral realization, including NEVER and all later deadlines
+
+The following reconstructs NOETHER's independently developed ZU seam
+argument for this supplied circuit, rather than importing an unreviewed
+cap-control hypothesis. Define for each actual root q
+
+    Hᵢ(q,z)=max(Qᵢ(q),Rᵢ(q)+hᵢ(q)z).
+
+Hᵢ is monotone and hᵢ-Lipschitz. At FULL root Nash against v,
+Hᵢ(q,vᵢ)=Fᵢ(v,q), including a quiet owner. The affine prescribed
+root map has Lipschitz constant c(q). For a finite forward list of
+roots, compose them in application order. Its prescribed block map f
+is C-Lipschitz, C=∏c(q), and its complete scalar cap map Tᵢ is
+κᵢ-Lipschitz, κᵢ=∏hᵢ(q). This is finite backward induction in the
+REVERSE chronological block. It retains every deadline inside that
+block and the choice to continue to its exit cap.
+
+Truncate the three ladders at finite lengths, keep both literal roots,
+concatenate the five predecessor lists and reverse the ENTIRE finite
+list to obtain one legal chronological period. Let E be the sum of
+the three endpoint-port errors. Repeated application of Lipschitz
+constants at most1 gives
+
+    ‖f(V)−V‖∞≤E,       |Tᵢ(Vᵢ)−Vᵢ|≤E for ALL i.     (CL.19)
+
+No artificial reset to a limiting port occurs at a finite date. E→0
+geometrically and there is NO word-length times E term. The first
+solo0 and solo3 rates are fixed and strictly positive. Including them
+in every truncation provides uniform C≤C*<1 and κᵢ≤κ*ᵢ<1 for all
+i: each owner has at least one of these two suppliers as an opponent.
+
+Repeat the finite word periodically. Its ACTUAL payoff U* satisfies
+U*=f(U*), hence ‖U*−V‖∞≤E/(1−C). Its true unrestricted cap Bᵢ*
+is the unique fixed point of Tᵢ. To prove this last identification,
+truncate the repeated game after m periods, censoring nonabsorption
+to zero. Finite dynamic programming gives cap Tᵢᵐ(0). For EVERY
+complete clock, including Never and deadlines beyond the censoring
+date, the payoff changes by at most 5κᵢᵐ. This is the probability
+that all OPPONENTS survive to the cut, times the terminal reward bound;
+it is not merely the joint survival probability. Taking suprema and
+then m→∞ proves Bᵢ* is the scalar fixed point. Therefore
+
+    0≤Bᵢ*−Uᵢ*≤E/(1−κᵢ)+E/(1−C).                  (CL.20)
+
+These are the complete original-game behavioral caps; mixing clocks
+cannot exceed them. Their debts tend to0 and actual payoffs tend to
+the ONE fixed V. Every period has positive joint and deleted-opponent
+absorption, so all these profiles absorb almost surely. The usual
+terminal-to-uniform fixed-payoff endpoint gives UE at V. CL7 separately
+gave the original endpoint from the checked characterization, without
+depending on this ordinary compiler reconstruction.
+
+### CL9. Raw-data extension: exact formulas and UNIFORM open-class coverage
+
+The extension is not pointwise continuity at separately fixed finite
+rows. The three ladders themselves adapt to the perturbed TABLE.
+Write sᵢ=rᵢ({i}), rᵢ,j=rᵢ({j}), and rᵢ,jk=rᵢ({j,k}). Start at
+V=(s₀,b,s₂,d). Solo0 uses the favorite3 indifference rate
+
+    p=(v₃−s₃)/(v₃−s₃+r₃,03−r₃,0).
+
+If r₃,03>s₃>r₃,0, its excess contracts and its rational endpoint is
+
+    E₀,ᵢ=rᵢ,0+λ₀(Vᵢ−rᵢ,0),
+    λ₀=(s₃−r₃,0)/(d−r₃,0).                        (CL.21)
+
+The active coordinate remains s₀. Quiet1,2 remain Nash throughout if
+their start and endpoint annotations are ≥sᵢ and
+r₁,01<r₁,0, r₂,02<r₂,0. Each annotation stays between its two
+endpoints. These conditions are strict at the base except the
+STRUCTURAL start coordinate V₂=s₂; its passive target r₂,0>s₂
+and strictly negative nonempty gap persist uniformly.
+
+Solo3 analogously has favorite1 and endpoint
+
+    E₃,ᵢ=rᵢ,3+λ₃(E₀,ᵢ−rᵢ,3),
+    λ₃=(s₁−r₁,3)/(E₀,₁−r₁,3),                     (CL.22)
+
+provided r₁,13>s₁>r₁,3 and E₀,₁>s₁. Quiet0 is controlled by
+its structural initial value s₀, passive r₀,3>s₀ and joining gap
+r₀,03−r₀,3<0. Quiet2 is controlled by E₀,₂,E₃,₂>s₂ and
+r₂,23−r₂,3<0. The literal solo1 root uses
+
+    p=(E₃,₂−s₂)/(E₃,₂−s₂+r₂,12−r₂,1),
+    Uᵢ=(1−p)E₃,ᵢ+p rᵢ,1.                          (CL.23)
+
+At the base r₂,12>s₂>r₂,1 and E₃,₂>s₂. Quiet0 has
+E₃,₀>s₀ and r₀,01<r₀,1. Quiet3 has its structural annotation
+s₃ and r₃,13<r₃,1. These finite strict comparisons are all open
+in the table and the corner box.
+
+At U form the three actual active gaps of q=(0,x,y,z), its quiet0
+gap, and W=F(U,q), using the FULL perturbed reward table. No omitted
+triple/grand coordinate is frozen. Set t=W₀−s₀, a=s₂−W₂ and
+
+    A=r₀,02−s₀,       C₀=s₀−r₀,2,       D₀=A+C₀,
+    B=s₂−r₂,02,       C₂=r₂,0−s₂,       E₂=B+C₂.
+
+Require A,B,C₀,C₂>0. The pair02 rates are
+q₂=t/(D₀+t), q₀=a/(E₂+a), and their excesses obey
+
+    t′=At/(D₀+t),       a′=Ba/(E₂+a).                (CL.24)
+
+Their contraction factors A/D₀,B/E₂ are strictly below1. Put
+H=C₀C₂+A C₂+B C₀. The exact terminal weights are
+
+    C=1/[(1+t/C₀)(1+a/C₂)],       P₀₂=Cta/H,
+    P₀=C[a/C₂+Bta/(C₂H)],
+    P₂=C[t/C₀+Ata/(C₀H)].                            (CL.25)
+
+Thus the returned corner has coordinates s₀,s₂ and quiet coordinates
+Bᵢ=CWᵢ+P₀rᵢ,0+P₂rᵢ,2+P₀₂rᵢ,02 for i=1,3. These rational
+expressions are exact for arbitrary sufficiently nearby reward rows,
+not just a fitted perturbation of (CL.14).
+
+Most importantly, at every finite pair stage express its quiet current
+annotation through the fixed endpoint Bᵢ. With
+δᵢ,0=rᵢ,0i−rᵢ,0, δᵢ,2=rᵢ,2i−rᵢ,2 and
+δᵢ,02=rᵢ,02i−rᵢ,02, its normalized gap is EXACTLY
+
+    gᵢ/h=L₀+L_t t+L_a a+L_ta ta,
+    L₀=sᵢ−Bᵢ,
+    L_t=(rᵢ,2−Bᵢ)/C₀+δᵢ,2/D₀,
+    L_a=(rᵢ,0−Bᵢ)/C₂+δᵢ,0/E₂,
+    L_ta=−Bᵢ/(C₀C₂)+B rᵢ,0/(C₂H)+A rᵢ,2/(C₀H)
+          +rᵢ,02/H+δᵢ,02/(D₀E₂).                  (CL.26)
+
+The FINITE inequalities
+
+    L₀<0,       L_a<0,       L_t+max(L_ta,0)<0       (CL.27)
+
+imply strict quiet Nash for ALL t≥0,0≤a≤1. Their largest values
+occur at the smallest Bᵢ in the corner box, since every displayed
+coefficient of Bᵢ is negative. At the base with B₁≥3/2,B₃≥13/10,
+the inequalities have ample strictly negative margins. This proves
+uniform coverage of infinitely many ladder rows approaching the
+binding active endpoint. Pointwise continuity alone would not do so.
+
+Reusable FINITE raw criterion. For any rational table form the rational
+five-variable map consisting of its three triple active gaps and its
+two corner return residuals b−B₁,d−B₃. On the FIXED rational corner/rate
+box of CL5 check the following finite conditions:
+
+1. All denominators in (CL.21–26) are positive; the favorite comparisons,
+   finite nonfavorite start/endpoint comparisons, 0<x,y,z<1, t>0,
+   0<a<1, quiet0 triple gap<0 and (CL.27) hold throughout the box.
+2. Its five equations have a rationally preconditioned contraction on
+   that box: ‖L f(c₀)‖∞+ρη<ρ and
+   sup_X‖I−L Df‖∞≤η<1, with positive denominator clearing allowed.
+3. Own singletons are positive and the supplied reward/port bound M
+   includes the whole corner box.
+
+This criterion takes REWARD DATA and fixed rational coefficients/box,
+not a supplied equilibrium, minimizing tail, favorable cap selector or
+claimed closed circuit. All checks are finite rational arithmetic:
+clear positive denominators, expand each numerator in ξ−c₀, and use
+Σ_{α≠0}|coefficient_α|ρ^|α| to bound departures from its central
+value. Hessians similarly certify the Jacobian variation. If needed,
+rational subdivision tightens such bounds. Successful checks PRODUCE
+the exact closure by contraction and then actual periodic approximate
+equilibria by CL8. This is a raw computable sufficient UE criterion,
+not a theorem asserting that every table passes it.
+
+At the base CL6 certifies the closure and all the other inequalities
+have the uniform strict factorizations just proved. The Jacobian is
+invertible. The implicit-function theorem therefore continues the
+corner and three active rates for EVERY sufficiently small independent
+perturbation of all60 entries; compact box continuity and (CL.27)
+preserve every full-root ladder condition. Equivalently a slightly
+enlarged rational enclosure with the same strict contraction slack
+continues to pass the finite criterion. This proves a FULL60-coordinate
+open UE chamber. A numerical radius in reward space is NOT optimized
+or asserted here; the finite criterion is the explicit reusable form.
+The open chamber is not inferred merely from general closedness of
+the UE property: its stable singular circuit is the produced mechanism.
+
+### CL10. Bounded overlap, exact source screens and the changed direction
+
+The DN4 named raw-class failures remain valid. Further named sources
+were read under their imports, without surveying the entire Lean tree:
+
+- `RawRegion` in
+  `UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean` and
+  `exists_exact_allSuffix_uniformPayoff_of_rawRegion` in
+  `UniformEquilibrium/Quitting/Cycles/PairedCycleEquilibrium.lean`;
+- `RawFamily` and `exists_uniformEquilibriumPayoff_of_rawFamily` in
+  `UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseSource.lean`;
+- `RawSource`, `WeakRawSource`, `InverseRawSource`, their reindex wrappers
+  and `exists_exact_cycle_of_positive_inverse_all_initial` in
+  `UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`;
+- the actual singleton `RawRows` and `RawTable` in
+  `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicChildSingletonAdapter.lean`
+  and `UniformEquilibrium/Quitting/Cycles/CyclicChildJointPhaseSource.lean`;
+- `exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple` in
+  `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`;
+- `IsProjectiveQBarMatrix` in
+  `UniformEquilibrium/Quitting/Classification/LCP/MatrixClasses.lean` and
+  `isStandardQ_quittingProjectiveLCPMatrix_of_finFour_no_uniformPayoff` in
+  `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+
+These COMPLETE specified source choices fail at the trial:
+
+1. Every paired RawRegion has an outsider facing the whole other pair;
+   its joining triple pays4>own+1/50. Thus EVERY ordered pair partition
+   fails. BelowSingleton's all scheduled-participant premiums must be
+   negative; every perfect matching contains a pair with a participant
+   premium+1/2, except the matching {01,23}. That remaining matching
+   still fails its two equal lower-singleton identities: receiver0's
+   other singletons are4,0,4, and no choice gives two equal values
+   strictly below1. This also follows directly from receiver0 having
+   only one singleton below its own level, not the required two.
+2. Strict/weak crossed matching requires two singleton levels below/
+   at own for EACH receiver. Receiver0 has levels4,0,4, hence cannot
+   meet ANY relabeling. Its positive-inverse alternative also requires
+   all scheduled-pair participants ≥own. EVERY actual pair has a
+   participant−2<1, so no matching passes, independently of its inverse.
+3. A cyclic-child RawRows/RawTable pivot singleton must harm ALL three
+   other owners relative to their own levels. NONE of the four literal
+   singleton columns does so; every column rewards some other owner
+   above1. This sign failure survives positive recipient scales and
+   nonempty-row shifts when comparing to the shifted own-singleton
+   level. No arbitrary selected safe child is thereby excluded.
+4. The literal singleton matrix Γ has rows
+
+       (0,3,−1,3), (2,0,1,−3), (2,−2,0,−1), (−1,−2,1,0).
+
+   Of its FOUR triple inverses, only Γ_{023}⁻¹ is entrywise nonnegative:
+
+       Γ_{023}⁻¹=(1/5)·[[1,3,1],[1,3,6],[2,1,2]].
+
+   Its sole outsider row gives Γ_{1,023}Γ_{023}⁻¹=(−3/5,6/5,2/5).
+   The other inverses have a negative entry: for triples012,013,123
+   respectively entries (1,2)=−1/5,(1,0)=−1,(2,0)=−1/4 in their
+   displayed increasing-label indexing. Thus ALL four selections in
+   the named nonnegative-inverse triple producer fail, not just one.
+5. Projective Q-bar fails already on principal pair13, whose two
+   off-diagonal entries are −3,−2: there is no nonzero homogeneous
+   complementarity vector and offset (−1,−1) admits no ordinary LCP
+   solution. This is the actual projective, not standard-only, test.
+
+Conversely this table PASSES the elementary no-UE necessary matrix
+screens. All six pair determinants and all four triple determinants,
+and detΓ=25, are nonzero; every singleton column has a negative outside
+entry. Thus Γ is R₀. At regular offset (−1,−2,−3,−4), direct ALL16
+support enumeration gives the sole complementarity root
+z=(14/5,0,34/5,13/5), supported023, with quiet residual13/5 and
+active determinant5>0. The ordinary degree calculation is1. A positive
+simplex image is supplied by λ=(5,1,9,5)/20:
+Γλ=(9,4,3,2)/20>0. No non-Q or missing-positive-image shortcut
+retires this trial. The complete complementarity census is exact
+finite algebra, not a new checked declaration for this literal table.
+
+These failures are strict where used, so they persist on a sufficiently
+small subchamber of CL9. They are NOT a census of every existing UE
+producer: existential safe-child choices, arbitrary supplied cycle
+certificates, other normal-core/partition constructions and all possible
+projective source predicates have not been ruled out. In particular
+the supplied-object two-pair verifier could accept a different unknown
+profile. Do not call this table outside ALL known UE classes.
+
+Changed direction. Stationary and short-pattern failures did not signal
+a positive gap; they missed a nonlocal circuit with a triple collision
+and THREE singular ports. DN5's exact-to-robust reduction remains valid,
+but searching any degree of potential on this shell is now pointless.
+The concrete next negative question is whether a rational table can
+avoid EVERY such compatible charged circuit while still passing the
+known existence screens, or whether the return-map construction can
+be made obligatory for a substantially broader raw class. A second
+locally trapped or common-rate trial is not that question.
 
 ## Negative dual attempt: a rational no-sure table and absorption-relative buffered root repair
 
