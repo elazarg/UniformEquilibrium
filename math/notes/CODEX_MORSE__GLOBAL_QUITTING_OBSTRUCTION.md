@@ -2,7 +2,7 @@
 
 Owner: CODEX_MORSE.
 
-Current endogenous-family candidate: QCUT1–QCUT7 below gives an actual
+Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
 whose outsider FULL debts vanish. All born finite deadlines and Never
 are bounded. At ONE hypothetical Fin4 counterexample, the tracked
@@ -11,8 +11,12 @@ the existing varying-period cyclic alternative supplies the remaining
 hypotheses. Thus its owner-concentration arm is consumed, not merely
 renamed. The resulting ordinary draft forces vanishing TOTAL hazard
 for every interior cyclic family with period times error tending0.
-This goes beyond the tracked period-one concentration consumer; exact
-overlap and independent falsification remain to be assessed. It does
+The closer tracked approximate solo-cap/punishment consumer ALREADY
+covers even QCUT4 via a first-supported-clock-atom adapter, recorded in
+QCUT-O below. Its proposed new export coverage is therefore RETIRED;
+the frozen cutoff proof remains supporting ordinary mathematics while
+the independent checks finish. The varying-period/all-family corollary
+is a newly recorded composition, not a new equilibrium class. It does
 not consume the fully diffuse arm or prove arbitrary-game UE.
 
 Current completed class result: CL1–10 and SC1–6 have each passed two
@@ -167,8 +171,9 @@ sure owner, and its first-to-LATER-FINITE bridge is PAID. The actual
 whole-block periodic competitor forces a new conditional-Never cap
 strictly above its old cap. This does NOT inherit the earlier table's
 finite contact exclusions or FC zero-debt conclusions.
-The self-contained final packet is
-`../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`, SHA256
+This source is preserved byte-for-byte as Part I of the current
+`../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`. The former component
+artifact was `../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`, SHA256
 `21e596e53595811ad4f83b657d97b3942d53e313d69bb2e9e243c2ee2af11953`.
 Both independent byte-bound whole-artifact reviews passed; it is exported
 ordinary mathematics, not Lean-checked mathematics or Fin4 UE closure.
@@ -10050,6 +10055,99 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Direct production overlap retires the quantile consumer's new-coverage claim
+
+Status: ordinary exact source-to-consumer composition. The frozen QCUT
+proof remains unchanged below. This is a scope/overlap correction, not
+a counterexample to that proof and not a new raw-game UE class.
+
+### QCUT-O1. One existing consumer covers the entire supplied sequence
+
+Keep QCUT4's ONE fixed table, owner h, actual profiles p_k,
+η_k=1−P(terminal={h})→0, outsider full debts→0 and P_h≤s_h.
+Discard a finite prefix so η_k<1. Since terminal {h} has positive mass,
+h's clock has some positive finite atom. Let T_k be its EARLIEST such
+date and α_k=P(N_h=T_k)>0. No lower bound on α_k is asserted.
+
+There is no prescribed h mass before T_k. Therefore ANY opponent
+stopping by T_k prevents terminal singleton {h}: earlier opponents
+win, and a tie produces a nonsingleton. Independence is not needed
+for this inclusion. Thus
+
+    P(min_{j≠h}N_j≤T_k)≤η_k.                 (QCUT-O.1)
+
+For an outsider j, compare its ORIGINAL pure response Quit at T_k
+with the Quit endpoint of a solo stationary row in which h quits
+with probability α_k and everybody else Continues. Couple the old
+h clock's event {N_h=T_k} with that one Bernoulli root. Outside the
+event that some player other than h,j stops by T_k, both payoffs are
+EXACTLY r_j({h,j}) when N_h=T_k and r_j({j}) otherwise. The bad-event
+probability is at most η_k; every reward difference is at most2M.
+Hence the solo root's Quit value satisfies
+
+    Q_j^solo≤B_j(p_k)+2Mη_k
+             ≤r_j({h})+d_j(p_k)+4Mη_k.       (QCUT-O.2)
+
+The source uses the UNCONDITIONAL atom probability α_k; there is no
+division by joint survival, tiny atom size, or a relative root error.
+Since α_k>0, the exact stationary solo full cap at outsider j is
+max(Q_j^solo,r_j({h})). Put
+
+    e_k=Σ[j≠h]d_j(p_k)+4Mη_k.
+
+Then EVERY outsider's solo full cap≤r_j({h})+e_k and e_k→0.
+The already tracked
+`isUniformEquilibriumPayoff_soloReward_of_approximate_caps`
+(UniformEquilibrium/Quitting/Punishment/ApproximateCompletedCycle.lean)
+produces the fixed target r({h}) from these actual positive solo rows
+and the SAME true punishment inequality P_h≤s_h. Its theorem explicitly
+needs NO positive lower bound on α_k and permits α_k→0 arbitrarily fast.
+The underlying cap formula is `quittingStationaryUnilateralCap_solo_other`,
+used in that inspected proof. The closely related
+`isUniformEquilibriumPayoff_soloReward_of_deletedQuitLimits`
+(UniformEquilibrium/Quitting/Cycles/ConditionedDeletedClockSoloCompletion.lean)
+also packages the delete-opponent-root route.
+
+Thus QCUT4's strategic existence coverage is ALREADY a direct composition
+of production results plus this elementary atom coupling. The quantile
+construction has a different explicit competitor and quantitative bound,
+but is not needed to produce the target or consume the source branch.
+
+### QCUT-O2. The exact varying-period source is covered, not just a toy
+
+In the existing owner-concentration branch, terminal LAW→{h} and ALL
+outsider FULL debts→0 are literal output fields. Fin4 no-UE supplies
+P_h≤s_h via the existing normal-core chain on that SAME table. Apply
+QCUT-O1 to those original periodic profiles, without transporting a
+minimum or a tail between tables. This proves the varying-period branch
+closure and the whole-family H_k→0 corollary recorded in QCUT5.
+
+Those two corollaries were not among the inspected named declarations;
+they are now explicit source compositions. However no missing strategic
+consumer is supplied by the new quantile lemma. No standalone export
+or new equilibrium-class coverage is requested. The fully diffuse arm
+still needs an actual independent full-cap construction.
+
+### QCUT-O3. Direction change, not a solved-fixture expansion
+
+The family’s fully interior tail is intrinsically too restrictive for
+some already-solved games; QCUT6's whole-family C-row test isolates
+that failure. A correct arbitrary-table proof would first dispatch
+those solved branches or allow quiet owners and punishment completion.
+
+After the produced concentration arm is consumed by QCUT-O1, making
+periods longer is not yet a global forcing principle: under no UE,
+EVERY family with L_k e_k→0 has total displayed hazard H_k→0.
+Such words can still generate nontrivial singleton lotteries by
+infinite repetition. The actual play is not AllNever, and replacing
+it by AllNever is not a payoff- or full-cap-preserving limit.
+
+The next investigation concerns that diffuse family itself. It must
+explain how the game equations force an efficient/nonlocal selection,
+or establish that this regularized family is not a sufficient all-game
+architecture. No quiet-component index or supplied error ratio is
+assumed as the answer.
 
 ## Quantile-cut punishment repair consumes varying-period owner concentration
 
