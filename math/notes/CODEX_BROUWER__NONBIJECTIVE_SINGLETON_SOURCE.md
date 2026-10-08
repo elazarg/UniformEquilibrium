@@ -7533,3 +7533,334 @@ in NF7 and the UNIVERSAL minimum-prefix constraint NF9. Any
 successful repair must price all old and new response caps, not
 merely enlarge a Nash menu whose continuation omits later finite
 responses.
+
+## Unsupported-root recipient pricing: a complete fixed-source price and its obstruction
+
+### CP1. The tempting global-row consumer
+
+Fix the SAME canonical unit-cube table, true global minimum δ>0,
+common minimum debt a, and a nonzero minimum prefix T_q(v).
+Suppose owner i has q_i=0 and a root cap, so Q_i=B_i′; in particular
+this covers the surviving c>0 unsupported sole-bridge mode.
+Let γ=δ²/8. In recipient row i define the unit-cube endpoint
+
+    h_i(S)=+1 if i∈S, and−1 otherwise,
+
+leaving Never0. Interpolate that row toward h, leaving all other
+recipient rows unchanged. This is a globally legal reward-table
+direction; it is not a law change at the old table.
+
+There is a COMPLETE fixed-source price, not merely a response
+derivative. Against the old independent laws the h-root response
+pays1. Since i has no root mass, the h-prescribed payoff satisfies
+
+    U_i^h≤−(1−α_i)+α_i·1=2α_i−1.
+
+The old root response satisfies
+
+    Q_i−s_i
+      =Σ_(S≠∅)p_-i(S)[r_i(S∪{i})−s_i]
+      ≤2(1−α_i).
+
+The actual quadratic minimum margin gives
+2(1−α_i)≥δ+γ. Since a_i≤δ, the h-selected root regret is therefore
+
+    1−U_i^h≥2(1−α_i)≥a_i+γ.
+
+For EVERY interpolation parameter η∈[0,1], recomputing the new
+FULL cap and merely lower-bounding it by this legal root response
+gives
+
+    d_i^η(old laws)≥(1−η)a_i+η(1−U_i^h)
+                  ≥a_i+ηγ,
+    D^η(old laws)≥δ+ηγ.
+
+The same calculation holds at the marked source using its literal
+original finite witnesses and limiting kernels; it does not need
+cap attainment at a tail clock. The direction stays in the reward
+cube, and the margin is from the FINAL same table. This calculation
+is complete ordinary mathematics, not a new consumer or an export.
+
+### CP2. Why it cannot uniformly price the active face
+
+The desired next implication would be that NEW moving minimizers
+must pay this source price. That implication is unproved and cannot
+follow from the fixed-source calculation alone.
+
+The zero-debt boundary supplies a concrete ACTUAL obstruction to
+any single-recipient ALL-active-branch version. For an arbitrary
+bounded recipient reward direction k, retain the old source and
+write the selected regret slope at test t as
+
+    L_i(t)=V_i^k(t,q_-i)−U_i^k(q).
+
+If a_i=0, the old prescribed law q_i is supported, up to null
+sets, on its FULL old maximizing test set: its expected nonnegative
+old regret is0. Reward affinity and independence give EXACTLY
+
+    ∫L_i(t)dq_i(t)=0.
+
+Hence one cannot have L_i(t)>0 uniformly on that whole active
+set. For the CP1 direction its unsupported ROOT branch has a
+strictly positive slope, while some OWN-supported later active
+branches necessarily have nonpositive slopes. Never is included
+if it has prescribed mass; finite calendar endpoint mass remains
+separate. No hypothesis of unique response attainment, finite
+support, or positive prescribed mass at the root is being made.
+
+The bridging owner can have zero debt in the genuine canonical
+source, so this is not a removable boundary. A positive fixed-source
+MAX slope is not a positive price of EVERY branch which a moving
+law can select. CP1 did recompute the new cap at FIXED laws, but
+does not control the law movement before taking the infimum.
+
+### CP3. Minimal exact envelope falsifier
+
+For clarity, the failed optimization implication already has the
+two-branch finite algebraic model
+
+    F(t,η)=δ+max(t+η,−t−η)=δ+|t+η|.
+
+At η=0 the unique current minimizing t is0; at that FIXED point
+F(0,η)=δ+η. Nevertheless, for every small η>0 the legal moving
+point t=−η has F=δ. Both branch expressions are affine. A rigid
+unique old minimum does not repair the inference.
+
+This model is NOT an actual positive-gap quitting table and does
+not refute a statement using all of the genuine source geometry.
+Its role is only to falsify the attempted envelope step from CP1
+and cap affinity. CP2 supplies the actual zero-debt active-face
+reason that mixed-sign branch slopes cannot simply be discarded.
+
+### CP4. Surviving statement and changed mechanism
+
+The fixed-source unit-row price CP1 is valid. A source-neighborhood
+or worst-table consumer would additionally have to control the
+NEW maximizing branch and simultaneous old-law movement, or
+derive a positive aggregate price over the full cap-selection
+face. Neither is produced by CP1–CP3. The sole-bridge mixed-own-rate
+fiber reduction and nonlinear-wall no-go already recorded in
+NOETHER RM2–RM4 were checked before pursuing this direction; they
+are not new findings here.
+
+No new export or paid-port claim follows. The single-row envelope
+route is retired in this form. The next investigation is genuinely
+global: whether an existing positive recursive/absorbing/quitting
+equilibrium theorem can consume the compatible positive-table
+normal form, with its original independent behavioral and uniform
+payoff semantics. Merely making rewards nearly constant cannot
+itself shrink original exploitability after inverting the scales.
+
+## Positive near-constant rewards: primary theorem scope and an exact missing-hypothesis test
+
+### PL1. Standalone question and probability mode
+
+Suppose a Boolean Fin4 quitting table has, for every nonempty coalition,
+
+    |r_i(S)−1/2|≤ρ<1/2,       r_i({i})=1/2,
+
+and Never pays0. Each player still has exactly ONE observed Continue
+action and ONE Quit action. Players independently randomize their own
+complete behavioral strategies. Does a primary positive recursive,
+absorbing or quitting-game existence theorem produce unrestricted
+terminal ε-Nash profiles at every ε>0 in THIS game, hence one fixed
+uniform payoff by the tracked semantic selection theorem?
+
+This section assumes the displayed normal form only conditionally.
+It neither proves nor duplicates the independently investigated
+counterexample-preserving normalization. It is a bounded primary-source
+scope check, not a claim that no other theorem exists in the literature.
+
+### PL2. The applicable ordinary quitting theorem still requires payoff order
+
+Solan–Vieille, *Quitting Games* (2001), Theorem1.2 assumes positive
+own singleton rewards, normalized to1, and participant rewards no larger
+than own singleton. It produces cyclic subgame-perfect approximate
+equilibria. Proposition2.2 permits a broader hypothesis: at EVERY
+continuation in its specified compact low-coordinate set, select a
+one-stage Nash root which is allContinue, or has a positive quitter
+whose root payoff is at most its own singleton. Positivity alone is not
+that root-selection hypothesis. See the
+[primary paper, Theorem1.2 and Proposition2.2](https://www.math.tau.ac.il/~eilons/quitting19.pdf).
+
+The exact tracked conditions are QuittingUnitSoloExit,
+QuittingCappedJointExit and QuittingWeakSoloExitPreference in
+UniformEquilibrium/Quitting/Classification/SoloExitPreference.lean.
+The ordinary production declaration
+exists_uniformEquilibriumPayoff_of_soloExitPreference and its upstream
+exists_cyclic_subgamePerfectTerminalNash_of_soloExitPreference are in
+UniformEquilibrium/Quitting/Classification/Existence/PerfectSequenceExtraction.lean.
+Their statements and the delegation from Literature/SolanAndVieille2001.lean,
+theorem1_2, were inspected under the displayed imports, without a Lean
+build. In particular this existence result is already implemented;
+reidentifying its payoff condition is not a new consumer.
+
+For a positive row affine transformation r_i′(S)=θ_i r_i(S)+β_i,
+θ_i>0, one has the exact finite-coalition identity
+
+    r_i′(S)−r_i′({i})=θ_i[r_i(S)−r_i({i})].
+
+Thus making these numbers small does not change an above-own
+participant reward into the required below-own reward. This finite
+identity makes no strategic assertion about a transformation leaving
+Never0 rather than translating Never as well.
+
+### PL3. Arbitrarily near-constant positive tables can fail even the broader root criterion
+
+Here is a complete Fin4 table, not a positive-gap example. Fix
+0<η<ρ<1/2 and put, for EVERY i and nonempty S,
+
+    r_i(S)=1/2+η if i∈S and |S|≥2;
+           1/2 otherwise.
+
+All60 finite rewards lie withinρ of1/2 and all own singletons
+equal1/2. In the one-stage game with continuation
+w_i=1/2−ζ for every i, where 0<ζ<1/2, fix arbitrary independent
+opponent root rates and write α_i=P(no opponent quits). Then
+
+    Quit_i=1/2+η(1−α_i),
+    Continue_i=(1/2)(1−α_i)+(1/2−ζ)α_i,
+    Quit_i−Continue_i=η(1−α_i)+ζα_i>0.
+
+Quit is strictly dominant for every player. Consequently the sole
+one-stage Nash root is allQuit, and EVERY positive quitter's payoff
+is1/2+η>r_i({i}). Scaling all finite rewards and w by2 puts
+own singletons at1 and this w inside the compact set in
+Proposition2.2, but there is still no low-paid active quitter and
+allContinue is not Nash. Thus the displayed positive near-constant
+normal form does NOT by itself supply that proposition's complete
+root-selection input.
+
+This is a sharp missing-hypothesis test, not failure of equilibrium
+existence: allQuit is an exact unrestricted equilibrium of this same
+table. If a player continues instead of joining the other three
+date-zero quitters, it receives1/2 rather than1/2+η; later behavior
+cannot undo their absorption. Hence its true gap is0. The test is
+not asserted to satisfy the canonical typed93 no-contact screens.
+
+### PL4. Positive general quitting results require unavailable information or actions
+
+Solan–Solan, *Sunspot Equilibrium in Positive Recursive General
+Quitting Games*, arXiv1803.00878, Definition2.3 and Theorem2.5,
+give approximate equilibria with an independent public signal at
+each date. Their Theorem2.6 for Boolean positive quitting games
+leaves either such a low-hazard sunspot construction or a uniformly
+absorbing limit of stationary discounted equilibria; Lemma2.7
+consumes an absorbing limit. Neither positivity nor the displayed
+reward radius supplies that absorbing alternative. See the
+[primary preprint, Section2](https://arxiv.org/pdf/1803.00878).
+
+Solan–Solan–Solan, *Jointly Controlled Lotteries with Biased Coins*
+(2020), Theorem3.1 removes the public correlation for positive
+recursive general quitting games when TWO players each have at
+least TWO continuing actions. Section3 uses those observed continuing
+actions for its pre-absorption lotteries. Its footnote states the
+uniform conclusion too. See the
+[primary paper, Section3](https://www.math.tau.ac.il/~eilons/JointlyPublished.pdf).
+The Boolean game fails the action-cardinality hypothesis for
+every player. Merely giving Continue two observable names changes
+the public information and is not a strategy-preserving padding.
+
+The corresponding Literature/future/SolanAndSolan201819.lean
+and Literature/future/JointlyControlledLotteriesWithBiasedCoins.lean
+were inspected: they are empty source-audit namespaces, not checked
+versions of these theorems. No producer is borrowed from those files.
+
+The exact agency obstruction to THIS lottery adapter is elementary.
+At a fixed date t, on the event that the original Boolean game is
+still alive, its observed past is the ONE deterministic word
+(Continue,Continue,Continue,Continue) repeated t times. Every
+publicly history-measurable variable is therefore constant on
+that event. A common lottery output announced at a deterministic
+date before absorption cannot have two values of positive
+conditional probability. A public-history stopping rule for ending
+a communication block also has a deterministic first live date:
+its test receives the same sole live word at every date. Private
+coins are not public observations, and a revealed Quit absorbs
+before any later living continuation. This rules out simply
+compiling the inspected public-signal construction by duplicate
+Continue labels; it does NOT rule out a different ordinary producer
+which avoids those signals altogether.
+
+### PL5. A recent ordinary positive-absorbing theorem excludes the Boolean absorption graph
+
+Solan–Vieille, *Undiscounted Equilibrium in Positive Recursive
+Absorbing Games with Non-Rectangular Absorption Structure*,
+arXiv2512.04306, Definition2.6 and Theorem2.8, give an ordinary
+equilibrium payoff when EVERY connected component of nonabsorbing
+pure action profiles is nonrectangular. Remark2.9 gives the uniform
+version. See the
+[primary preprint, Section2.3](https://arxiv.org/pdf/2512.04306).
+
+In our original Boolean game the set of nonabsorbing pure profiles
+is the singleton {allContinue}=∏[i] {Continue_i}. Its sole
+component is rectangular. Changing finite rewards, their signs or
+their radius leaves this absorption graph unchanged. Thus this
+ordinary theorem does not consume the proposed normal form.
+The adjacent Literature/future/SolanAndVieille2025.lean and
+Literature/future/SolanAndVieille2025b.lean were inspected and are
+empty audit namespaces. No Lean theorem or acceptance status is
+inferred from their names or from the preprint.
+
+### PL6. The LCP alternative and inverse-accuracy bookkeeping are unchanged
+
+The accepted May2018 manuscript of Solan–Solan,
+*Quitting Games and Linear Complementarity Problems* (2020),
+Theorem2.13 gives ordinary ε-equilibria in its non-Q branch and
+sunspot ε-equilibria in its Q branch, with the stated normal-player
+and zero-LCP hypotheses. The accepted text, rather than arXiv v1's
+different numbering and normal-player definition, was inspected in
+the [primary manuscript](https://econ.biu.ac.il/sites/econ/files/seminars/sunspot11.pdf).
+Theorem2_13_nonQ in Literature/SolanAndSolan2020.lean states the
+ordinary branch under SoloExitNormalized, TablePayoffsBounded,
+HasNormalPlayers, no nontrivial zero projective-LCP solution and
+non-Q. Its implementation and imports were inspected narrowly.
+
+For the standard singleton-difference matrix Γ_ij=r_i({j})−s_i,
+the above row change gives Γ′=diag(θ)Γ. Standard Q is invariant
+under this positive row scaling: for EVERY offset q′, the same z
+solves q′+diag(θ)Γz≥0 and complementary iff it solves
+diag(θ)⁻¹q′+Γz≥0 and complementary, because each coordinate
+residual has been multiplied by a positive number. This ordinary
+one-line argument uses the EXACT definitions StandardLCPSolution
+and IsStandardQMatrix in
+UniformEquilibrium/Quitting/Classification/LCP/MatrixClasses.lean,
+which were inspected. It does not import the paper's normal-player
+set from an unnormalized table. In particular no inference
+“all finite rewards positive, so the old hard Q matrix disappears”
+is valid. The normalized differences, not their uncentered signs,
+enter the criterion.
+
+Finally suppose one bounds debt at orderρ by choosing a simple
+profile in a near-constant table. To transport a recipient's error
+back through scaleθ_i one must divide that error byθ_i; an O(ρ)
+bound need not be o(θ_i). As a transparent finite-law test, apply
+r_i′(S)=1/2+θ_i[r_i(S)−s_i] to a prescribed profile and to a
+unilateral deviation BOTH absorbing almost surely. Their exact
+payoff difference is θ_i times the old difference; the common
+1/2 cancels. Therefore a positive old gain g_i appears as a small
+new gain θ_i g_i, not as a gain tending to0 after inversion.
+This statement deliberately restricts both laws to a.s. absorption:
+for laws with Never mass, the row translation has an additional
+absorption-probability term and cannot silently be treated as a
+strategic affine equivalence.
+
+### PL7. Decision and concrete next question
+
+The inspected primary theorems do not produce ordinary equilibrium
+from the displayed Boolean positive near-constant hypothesis alone.
+The exact missing inputs are, respectively, payoff order or a
+complete low-paid active-root selector; public correlation;
+two observable continuing actions at each of two players;
+a nonrectangular absorption graph; or a non-Q singleton matrix.
+PL3 is an exact falsifier of the most plausible automatic-selector
+shortcut. No full literature census, new equilibrium class,
+counterexample to Fin4 UE or export is claimed.
+
+The research returns to the SAME-table c>0 carrier comparison in
+NF7, retaining the universal minimum-prefix constraint. The next
+concrete question is whether all-minimum debt rigidity imposes
+an actual product-law restriction on the ENTIRE simultaneous
+root/later active face, beyond one selected bridge and the
+fixed-source row price retired in CP2. A single favorable selected
+cap price cannot stand in for that face.
