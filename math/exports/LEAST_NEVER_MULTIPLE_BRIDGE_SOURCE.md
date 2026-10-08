@@ -1532,7 +1532,7 @@ neither positive profile debt is a fictitious global floor.
 Set r_i(S)=1 if i∈S and0 otherwise, for ALL nonempty S.
 Let all four owners quit at date0 with probability1/2 and otherwise
 Never. Its literal full joint Never is1/16. The suffix after root0
-is AllNever, whose conditional joint Never is1. Its full caps are1,
+is AllNever, whose conditional joint Never is1. The ORIGINAL FULL PROFILE has caps1,
 prescribed payoffs1/2, and D=2. The exact product identity is
 
     1/16=∏_i(1−1/2) · 1,

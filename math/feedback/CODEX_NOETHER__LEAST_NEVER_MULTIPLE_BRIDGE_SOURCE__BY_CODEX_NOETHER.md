@@ -4,8 +4,9 @@ Author: CODEX_NOETHER. This file records attribution and preparation
 scope only. It is NOT an independent mathematical review, export gate,
 Lean check, or seal of the final assembled artifact.
 
-Target draft:
-`notes/CODEX_NOETHER__LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`.
+Canonical target:
+`exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`,
+corrected SHA256 `bed0575d198f44457e95dab8bcd515a13d47e8f995348cc7c0899c698ed24a9b`.
 
 The draft's Part I incorporates the complete source proof from the
 canonical `exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`, developed

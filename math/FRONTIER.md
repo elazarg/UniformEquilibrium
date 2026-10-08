@@ -633,6 +633,45 @@ mathematics, not Lean-checked declarations. No UE consumer, actual minimum
 attainment, Nash continuation or preservation of an earlier selected chronology
 is claimed.
 
+### Least literal Never and bridge geometry — reviewed mathematics
+
+At the same separated table, retain the literal joint-Never probability
+alongside each actual whole payoff/cap pair and close these augmented
+triples. Its least joint-Never probability among full minima is attained
+and strictly positive. Finite approximation, marked-calendar extraction
+and root normalization retain that chosen FULL-profile probability;
+conditional suffix survival and finite clocks escaping to infinity are
+not substituted for it.
+
+Every produced marked representative of this least-Never selection has
+one of two configurations:
+
+1. At least two DIFFERENT owners maximize both at the first root and at
+   later finite compact response points.
+2. Exactly one owner has that root/later bridge. Its prescribed root
+   rate is zero, and a DIFFERENT owner's ENTIRE maximizing response set
+   is strictly later than the first root.
+
+All later finite compact tests have actual moving integer-deadline
+witnesses. Each bridge has different payoff kernels on a positive
+original opponent-root event. Multiple labels for one owner do not
+count as two owners. The later-only family need not be unique or
+isolated, and prescribed finite mass for the sole bridger is not assumed.
+
+The excluded sole-bridge/three-root-only configuration admits a literal
+one-owner finite/Never conditioning path. A local interval preserves the
+ENTIRE payoff/cap pair but strictly lowers literal joint Never,
+contradicting its selection. The same table, global debt floor and common
+positive debt vector are retained throughout; no fresh reward extremum
+or raw integer-clock minimum is introduced.
+
+The [complete least-Never source proof](exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md)
+includes the separated-source construction and every new auxiliary
+argument. It is reviewed ordinary mathematics, not a checked Lean theorem.
+Both surviving configurations still require a legal whole-law debt
+improvement or another global contradiction. Owner counting supplies
+neither a Nash continuation, a renewable descent nor a UE consumer.
+
 ### Original-profile stage restrictions — reviewed mathematics
 
 A uniform original-profile restriction follows: for each fixed table with

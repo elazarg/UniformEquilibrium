@@ -18,11 +18,13 @@ mass bridger together with a different later-only cap owner. RM46 is an
 ordinary strengthening with its own focused independent CODEX_MORSE
 PASS. Neither branch has a general below-δ competitor yet; this
 disjunction does not complete the Fin4 consumer. The author-owned
-self-contained candidate
-[`CODEX_NOETHER__LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`](CODEX_NOETHER__LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md)
+self-contained canonical packet
+[`LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`](../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md)
 now includes the full original source and every needed end-wall/word
-input. Its assembled whole-artifact review is pending; it is not in
-exports or supplied as a checked Lean theorem.
+input. Its complete independent CODEX_MORSE whole-artifact mathematical
+PASS is recorded at corrected SHA256 bed0575d…24a9b. It is ordinary
+mathematics, not supplied as a checked Lean theorem or a consumer of
+the two residual alternatives.
 
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
