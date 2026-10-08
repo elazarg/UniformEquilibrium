@@ -650,8 +650,17 @@ minimum family debt-rigid while leaving its laws, payoffs, caps and response
 times different. The complete source application and independent focused
 check are recorded in
 [the global-obstruction notebook](CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
-and its BROUWER feedback. Its standalone artifact is subject to the full
-export gate.
+and its BROUWER feedback.
+
+The stronger actual-source conclusion, including the complete scalarization
+proof, is stated in
+[the first-collision bridge reduction](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
+It selects one counterexample table before its minimum families. At that
+table every produced minimum has a random first collision and two genuinely
+different root/later response payoff kernels with equal maximal expectation.
+This is a source restriction, not a temporal or paid consumer. The tied
+player can have zero debt, so the distinction of kernels cannot substitute
+for a positive best-response gain.
 
 The useful completion test is whether a legal operation is proved to remain
 inside that minimum family. If it is, debt rigidity controls every coordinate
@@ -660,6 +669,44 @@ its target is off-minimum, rigidity gives no missing return edge. Generic
 weights alone therefore do not repair chronological splicing or solve UE;
 the actual supported-earliest-cap exclusion separately proves the required
 full-cap stability and local minimum preservation.
+
+### Debt rigidity forces a macroscopic excursion when a positive debtor is reset
+
+The following elementary consequence is ordinary mathematics, not a new
+Lean claim or an export. Let K be a compact terminal payoff/cap carrier,
+D its total debt, δ=min_K D, and assume every minimizing pair has one
+common debt vector a. Fix a player i with a_i>0. The compact set
+
+    Z_i={w∈K : d_i(w)≤a_i/2}
+
+is disjoint from the minimum set. If it is nonempty, continuity gives
+η_i=min_{Z_i} D−δ>0. Consequently every pair in Z_i has
+D≥δ+η_i. Nonemptiness holds for an actual quitting-game carrier: keep
+opponents fixed, take an arbitrarily accurate complete best response of i,
+and make its own debt smaller than a_i/2. No exact cap attainment is needed.
+
+Now let actual source pairs approach the minimum set, and let player i
+replace its complete strategy by increasingly accurate best responses.
+The source debts converge to a by compactness and minimum-family rigidity.
+The replacement has d_i→0, since the mover's opponents and full cap are
+unchanged. Its total debt is eventually at least δ+η_i. In the exact
+one-player leakage identity, this implies
+
+    liminf ∑[j≠i](d_j(replacement)−d_j(source)) ≥ a_i+η_i.
+
+Thus cross-coordinate leakage strictly overcompensates the eliminated debt;
+it cannot merely rotate the same debt vector inside the minimum family.
+This applies even when some other coordinates of a are zero. It is a
+statement about the specially selected debt-rigid table, not every original
+reward table, and gives no effective lower bound on η_i.
+
+Two different tasks must therefore not be conflated. A positive debtor's
+complete reply requires consuming a uniformly off-minimum excursion. A
+zero-debt player's tied response need not leave the minimum and supplies
+no payment. Returning an off-minimum excursion by exact prefixing would
+spend positive absorption, but the existence of one such return, let alone
+extension-compatible renewal, is not proved by the compact gap above.
+This sharpens the completion test without resolving the seam obstruction.
 
 ### Several cap dates need not be several strategic branches
 

@@ -259,3 +259,15 @@ Subject to that source-status repair and the required distinct whole
 review, this has export-level value as a strict common-source reduction.
 It leaves the substantive simultaneous multiple-cap consumer open.
 
+## Narrow source-hold resolution
+
+The coordinator's reference-only correction is now hash
+`2543579ed99eaf2710bb43c2352832b80a2e8c8ebe18c7065bf9d512df58ef81`,
+independently checked. It removes the redundant untracked SUM-infimum
+equivalence citation and instead uses Section 2's ordinary proof with
+the tracked `ExploitabilityGap.lean` bridge. The coordinator confirmed
+the exact diff changes no mathematics or quantifiers; the other changes
+are status wording and one trailing blank. The specific tracked-reference
+HOLD in this review is resolved. The ordinary mathematical PASS and
+precise scope above are unchanged. No repeated whole audit was performed.
+

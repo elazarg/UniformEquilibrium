@@ -220,3 +220,25 @@ does not restrict all original no-UE tables, claim a deterministic
 outcome or debtor-rank drop, or solve unrestricted strategy-class
 completeness. The precise theorem as written, including these nonclaims,
 has no unresolved mathematical objection from this review.
+
+## Narrow source-metadata repair acceptance
+
+The coordinator made a reference/status-only repair, with new artifact
+SHA256 `2543579ed99eaf2710bb43c2352832b80a2e8c8ebe18c7065bf9d512df58ef81`:
+the opening no longer says candidate, the redundant direct SUM-iff
+citation is replaced by Section2's ordinary argument and the tracked
+`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`, and the
+trailing blank is removed. The coordinator verified no mathematical
+or quantifier change. I reread the repaired source paragraph and the
+actual tracked gap declaration and checked the new hash; the earlier
+ordinary-proof PASS is retained without another full audit.
+
+My earlier read of `TerminalDebtSumInf.lean` was a READ of an untracked
+draft, not evidence that it was a checked/tracked dependency. The
+earlier dependency entry must not be used as such a certification.
+The repaired artifact now correctly uses the ordinary argument already
+checked in Section2: D≥δ>0 gives one owner debt≥δ/4 at each profile;
+approximate its unrestricted cap withinδ/8 to obtain a literal actual
+gain≥δ/8, and apply the tracked no-UE/gain bridge. This suffices for
+SAME-table normality, and does not change HR or its source scope.
