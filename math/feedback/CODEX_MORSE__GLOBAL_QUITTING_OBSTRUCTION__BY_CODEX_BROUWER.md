@@ -2819,3 +2819,166 @@ BA's unknown gap error. The proof does not supply that repair,
 control escaping finite clocks, make a bridger paid, produce a
 tail Nash or close UE. These residuals must remain explicit in a
 final packet. No unresolved mathematical objection was found.
+
+## Whole-artifact FC assembly and falsification: four finite clocks at original minima
+
+Reviewer: CODEX_BROUWER. Artifact checked in full:
+`exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md`,
+1787 lines, SHA256
+`0452b5cdebd2cc3186634b98df67ea841c15cba1794e8749931199bfb4c3766b`.
+The review was performed on the identical source draft preserved at
+commit `2dbc0cf8`; the canonical target above carries the same bytes.
+The hash was verified again after the complete reading. The artifact was
+not edited. I contributed the earlier BG source material and authored the
+earlier canonical source assembly; this verdict does not substitute for
+independent certification of those contributions. I independently checked
+the newly assembled positive-own initialization, whole-carrier finite-clock
+completion, minimum-set alignment, and fresh-source regeneration, and
+reconstructed their interface with the entire supplied source proof.
+
+Verdict: ordinary mathematical PASS, with no unresolved mathematical or
+named-source objection. This is not a Lean seal or export authorization.
+
+### Exact claim checked
+
+For any signed Fin4 table with nonnegative own singletons and an actual
+recipient-row witness r_m({j})≤s_m for every m and some j≠m, the ENTIRE
+payoff/full-cap closures satisfy K_fin=K_abs. At ONE freshly selected
+positive-own counterexample table, all original minima have a common debt
+vector. If any coordinate is zero, EVERY original minimum pair belongs
+to K_fin and the three entire minimum-pair sets are exactly equal, at
+the original full gap. New all-four-finite realizing sequences regenerate
+the canonical random first-collision and different-payoff root/later bridge.
+The all-positive debt alternative is retained, not eliminated.
+
+### Table production and strategic-input audit
+
+The initial positive pivot is forced because otherwise AllNever has zero
+debt. The reverse single-pivot payoff transport uses actual original
+punishment normality, obtained from the full-core counterexample theorem;
+it is not affine invariance of old prescribed laws. The three zero-own
+rows are then raised using F3, whose exact all-profile debt increment is
+3η times joint Never mass. This produces positive own floors before the
+compact worst-fiber selection. Section7's Ω<1 follows from the true
+all-owner margin and the cube cap bound. Its endpoint owns are all1,
+so the endpoint segment remains in that fiber. Contraction, genericity
+and regular recipient scales occur afterwards, preserve positive own
+signs and all93 contact gaps, and do not reuse old fiber maximality.
+
+The final row witnesses are produced AGAIN from final-table positive
+full gap and actual full normal core. I checked the exact declarations
+normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff in
+UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean,
+all_punishmentNormal_of_normalCore_eq_univ in
+UniformEquilibrium/Quitting/Classification/LCP/NormalCorePunishmentNormal.lean,
+exists_core_blocker_of_mem_normalCore in
+UniformEquilibrium/Quitting/Classification/LCP/NormalCore.lean,
+and normalizedSoloMatrix_eq_soloReward_sub in
+UniformEquilibrium/Quitting/Classification/PreemptionGateDictionary.lean.
+The last identity has recipient m in the matrix ROW and quitter j in
+its column, giving r_m({j})−s_m, precisely the needed orientation.
+
+The exact reverse declaration is
+isUniformEquilibriumPayoff_original_of_singlePivotNormalized in
+UniformEquilibrium/Quitting/Punishment/SinglePivotUniformPayoff.lean;
+its two relevant hypotheses are a positive pivot own reward and
+original all-player punishment normality. The original no-UE/gap
+equivalence is the named declaration in Terminal/ExploitabilityGap.lean.
+The all-owner quadratic margin declaration in
+Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean
+requires the true unweighted global carrier minimum, four players,
+positive reward bound and positive debt, and has no unproduced Nash
+or tail-minimum premise. All these hypotheses match the packet.
+
+### Independent all-response completion reconstruction
+
+For any actual absorbing profile choose an unchanged proper anchor m.
+If it is the sole anchor, replace ONLY the Never branch of the row
+witness j by a late geometric finite law with maximum atom≤η.
+The old anchor screens all prescribed payoffs and every cap except
+its own, uniformly over the responder's complete law. The j cap is
+exactly unchanged because its prescribed law is deleted.
+
+When m itself responds, the screening anchor is deleted. I checked
+the exceptional-event split in F7 separately: outside an OLD finite
+opponent tail beyond T, an old finite exit screens the filler; on
+the old all-opponent-Never cylinder, responses before H pay s_m,
+after H pay r_m({j})≤s_m, and only coincidence can exceed s_m.
+The coincidence probability is≤η for EVERY moving finite deadline.
+Never has no coincidence excess. Thus the displayed uniform upper
+bound holds simultaneously for all late finite tests and Never.
+Its benchmark V_m^old(Never)+c_-m s_m is the old late-finite
+limit and is at most the old FULL cap.
+
+The lower bound fixes an old finite near-cap test FIRST and then
+places the filler strictly later. This is justified by s_m≥0 and
+the delayed finite limit, not by cap attainment or pointwise-only
+convergence. The second stage has two unchanged proper anchors,
+so every responder retains an opponent anchor. It screens ALL
+remaining Never replacements uniformly. Parameters are chosen
+in order; no uniform anchor-tail estimate while parameters vary
+is required. Closing these full-pair approximations gives the
+WHOLE identity K_fin=K_abs, not just equality of infima.
+
+The packet's three completion falsifiers are exact. In particular:
+passive10/own1/participant-nonsingleton0 has δ_all=δ_abs=0 but
+δ_fin=9 for the ENTIRE proper class, so positivity without a row
+witness is insufficient. At an equality witness with pair reward100,
+the deleted-anchor cap is exactly1+99 sup H({t}); merely delaying a
+pure filler is insufficient. For the all-negative table the old
+anchor's Never cap0 cannot be approximated by the four-proper cap−1,
+so the nonnegative-own lower-cap hypothesis is indispensable.
+
+### Exact minimum equality and the new source seam
+
+The actual declaration
+prod_stoppingLaw_none_mul_singleton_le_terminalDebt in
+UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean
+holds without attainment or sign hypotheses. At the positive-own
+table and a common zero coordinate it forces the realizing JOINT
+Never products to zero. The smallest marginal Never mass is bounded
+by the fourth root of that product. Moving that one small marginal
+mass to a finite date changes the ENTIRE pair by vanishing uniform
+TV bounds, while leaving the changed owner's cap exactly unchanged.
+This puts EVERY full minimum pair in K_abs. Inclusion and equal
+minimum values give exact set equality; F9 then gives equality with
+Min(K_fin,D). No restricted-domain floor replaces the original
+all-tail floor.
+
+Finite support at each index is obtained by moving finite tail mass
+to a FINITE date, not to Never. Thus all four original Never masses
+remain exactly0. Extracting the Section3 chart afresh has c_n=1,
+c=1 and an empty Never interval. Each marked prescribed Never mass
+is literally0, and the final finite endpoint has zero mixture mass.
+Moving finite dates may still escape on the raw integer calendar.
+The fresh producer handles that escape by its ordered chart and
+ALL moving tests; it does not assert raw tightness, retain an old
+calendar, or identify the finite endpoint with literal Never.
+
+I read the complete supplied quantile, signed-parameter, active-box,
+typed-contact, rigidity, deterministic-release and bridge proofs,
+not only the new final sections. Their signed likelihood bounds,
+whole-date cuts, full-cap extraction and selected-polynomial versus
+actual-endpoint distinction are retained in the assembly. The final
+table is fixed before every source sequence. Applying that complete
+producer to the new finite-clock sequence therefore preserves the
+original minimum pair, the common debt vector and unrestricted caps.
+
+### Separate strict export-value verdict
+
+PASS for a significant incremental source reduction, subject to the
+normal independent placement gate. Unlike the earlier merely close
+absorbing companion, this supplies exact membership of EVERY
+original minimum pair in the four-finite closure, at ONE fixed table,
+in the common-zero-debt arm. The old canonical source did not impose
+that condition, and the actual normal-core theorem supplies all
+completion hypotheses. The whole-class boundary tests distinguish
+this from an automatic anchor inside a restricted domain.
+
+The concrete new leverage is a whole-law four-finite consumer starting
+at a TRUE unrestricted minimum and retaining comparison with ANY
+actual tail. The packet does not supply that consumer, an actual
+minimizing profile, raw tightness, a Nash tail, or a paid bridge in
+the zero-coordinate arm. Those nonclaims are stated correctly. No
+SUM/MAX transfer, normalization of old minima, source input left
+unproduced, or actual far-endpoint cap overclaim was found.
