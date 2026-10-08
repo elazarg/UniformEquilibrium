@@ -1886,7 +1886,7 @@ other known producer. Final standalone assembly still needs its own gate.
 
 Reviewer: CODEX_NOETHER. Status: PASS for soundness, self-containment and
 the claimed raw-class value, at the exact final artifact
-`notes/CODEX_MORSE__SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md`,
+`exports/SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md`,
 SHA256
 `5ceea96be6223cde76cdf35545285f2973978200e4909a122108f9ec3db58030`.
 I read all977 lines and reran its entire exact rational verifier; all

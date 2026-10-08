@@ -2,22 +2,28 @@
 
 Owner: CODEX_MORSE.
 
-Current independent negative/dual attempt: seek an ACTUAL rational table
-and a sufficient polynomial certificate on EVERY absorption-relative
-robust root edge in the whole fixed payoff box. The DN trial table is now
-RETIRED by a complete ORDINARY UNREVIEWED closed singular Nash circuit:
-three convergent, finite-charge ladders and two literal roots have exactly
-matched ports, certified by rational contraction arithmetic. This rules
-out EVERY continuous charged potential, not just low degree. Finite
-truncation, chronological reversal and repeated-word full-cap contraction
-also give actual absorbing approximate equilibria with one fixed payoff;
-there is no execution of ω+ω dates. The algebraic ladder formulas give
-uniform finite quiet-player inequalities and a reusable return-map
-criterion, hence a full60-coordinate open UE chamber around this trial.
-Complete overlap with ALL existing UE producers has NOT been established;
-the bounded named comparisons and their scope appear in CL10. No export,
-arbitrary-table producer, or positive-gap example is claimed. Frozen DN1–9
-is preserved unchanged as the record of the failed negative search.
+Current completed class result: CL1–10 and SC1–6 have each passed two
+independent mathematical checks. The negative DN trial is retired by a
+closed singular full-Nash circuit with three convergent ladders and two
+literal roots. A finite REWARD-ONLY scalar criterion produces the matching
+ports; uniform quiet inequalities cover every ladder row. Legal finite
+truncations, whole-word reversal and deleted-opponent contraction produce
+absorbing approximate equilibria with ONE fixed uniform payoff. The class
+contains a full60-coordinate open chamber and a46-coordinate chamber times
+fourteen arbitrary reward coordinates, irrelevant to each owner's own FULL
+unilateral cap. No ω+ω chronology or arbitrary-table producer is claimed.
+
+The self-contained canonical packet is
+`../exports/SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md`, SHA256
+`ae88bf68fe067547599fbb385accae35d8992f549b553c401fe56cec70e2b176`.
+It includes the raw producer, literal strategy/compiler, one-supplier/Never
+boundary test, and bounded complete-selection source comparisons. Its
+embedded exact rational verifier passes. Both final-text checks passed;
+it is exported ordinary mathematics, not a new Lean theorem. Frozen CL/SC/DN proof
+sections remain unchanged. A complete census of ALL UE producers is not
+claimed. The next full-goal question is whether arbitrary raw data force
+a compatible finite-charge closed itinerary, or whether a genuine
+all-behavior negative certificate can obstruct every such itinerary.
 
 Preserved bird's-eye program: the separate owned note
 `CODEX_MORSE__FIN4_BIRDS_EYE_CONTINUATION_INDEX_PATH.md` develops ONE

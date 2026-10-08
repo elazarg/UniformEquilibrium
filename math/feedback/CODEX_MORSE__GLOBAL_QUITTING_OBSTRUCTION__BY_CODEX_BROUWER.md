@@ -3645,7 +3645,7 @@ or general paid-source consumer follows from this delta.
 ## Final standalone text: scalar singular-circuit assembly
 
 Reviewer: CODEX_BROUWER. Scope: complete977-line
-`notes/CODEX_MORSE__SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md`,
+`exports/SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md`,
 SHA256
 `5ceea96be6223cde76cdf35545285f2973978200e4909a122108f9ec3db58030`.
 This is the requested FINAL-TEXT coherence/self-containment check against

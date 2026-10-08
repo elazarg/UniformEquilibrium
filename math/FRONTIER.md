@@ -2013,6 +2013,36 @@ example fails every basic capped-clock proper-child test; the full-ceiling
 example fails all four three-player-child tests. No guard or passing pair
 is produced for an arbitrary remaining table.
 
+### Scalar singular-circuit reward class — reviewed mathematics
+
+The [scalar reward criterion](exports/SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md)
+gives a direct signed Fin4 existence class with Never payoff zero. Finite
+reward-derived coefficient and sign tests on one fixed scalar interval
+produce an exactly closed continuation-price circuit; no root, matched
+port, cap selector or equilibrium is assumed as strategic input.
+
+The predecessor circuit consists of solo-0 and solo-3 convergent Nash
+ladders, a literal solo-1 root, a mixed {1,2,3} root, and a convergent
+{0,2} ladder. All four players' endpoint inequalities hold throughout.
+Truncate the three ladders and reverse the entire finite predecessor
+word before periodic repetition. Two distinct positive suppliers bound
+every deleted-opponent period survival away from one. The resulting
+complete behavioral caps, including Never and every later deadline,
+approach the same fixed payoff as the prescribed profiles. Period length
+may grow with accuracy; an infinite ladder is not executed at a finite date.
+
+The sufficient class contains an open set in 46 recipient-coalition
+reward coordinates with the other 14 arbitrary. Those 14 affect neither
+the constructed prescribed payoffs nor any player's own unilateral
+response payoff. Their irrelevance is specific to this itinerary, not
+to arbitrary strategies or games. The explicit rational witness fails
+the complete named raw producer criteria compared in the packet; no
+census of all abstract supplied-cycle or safe-child predicates is claimed.
+
+This class theorem and its actual-data adapter are reviewed ordinary
+mathematics, not checked Lean declarations. No theorem forces an arbitrary
+surviving reward table to satisfy this criterion.
+
 Standard Q alone is not an existence theorem.
 Neither a fixed small periodic class nor the proper-child extension tests
 are known to cover all remaining tables.
