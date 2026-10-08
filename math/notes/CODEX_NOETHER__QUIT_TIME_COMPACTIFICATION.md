@@ -19,6 +19,12 @@ stays bounded. An early solo0 reply defeats the proposed automatic
 Never/three-player lift. The valid all-player capped-premium boundary
 does not close that single-row face. No three-class conserving source
 or native absorbing equilibrium is inferred from this attempt.
+RM42 now retires counts-only consumption even after aligning the source:
+an exact four-finite-clock profile has class-preserving FULL-cap response
+mixtures and positive numerical native margins, but D=5/3. A literal
+pure-pair competitor has D=0, so the profile is NOT a genuine minimum.
+The remaining consumer must use the true global floor or full
+coalition-valued balance to control the changed caps, not class counts.
 
 The canonical common-source reduction is
 [`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
@@ -22550,3 +22556,168 @@ tests and all three observer caps? An arbitrary three-player child,
 an averaged ledger, or deleting h's small collision mass is not such
 a competitor. The original native passive-tax interior consumer also
 remains open; JT1's unsupported eight-direction passport is withdrawn.
+
+## RM42: exact class conservation does not consume even one aligned law
+
+Status: COMPLETE EXACT FALSIFIER OF COUNTS-ONLY CONSUMPTION. All four
+original clocks and all displayed cap-response mixtures are finite.
+All full finite/Never caps are computed below. This is ordinary,
+independently unreviewed supporting mathematics, not an export or a
+positive-gap table. Its actual absorbing gap is0: the pure pair{0,2}
+is exact full Nash. In particular δ=5/3 below is FICTITIOUS AS A
+GLOBAL FLOOR; it is only the displayed profile's debt.
+
+The assertion being tested is: at a common absorbing profile, positive
+native payoff/cap margins, native punishment normality, and complete-cap
+response mixtures conserving each row's passive / own-singleton /
+nonown-participant masses suffice to remove its debt. This is stronger
+count conservation than the available averaged common-participation
+tax comparison. It still does not suffice. The table is NOT claimed to
+satisfy a worst-gap radial identity, an actual global minimum passport,
+or a supplied legal upper bound for the caps of a changed profile.
+
+### CF1. All60 raw rewards and the independent finite clocks
+
+Own singletons and Never pay0. Rows below list rewards to recipients
+0,1,2,3 in that order, and give EVERY nonempty coalition.
+
+| Coalition | Reward vector |
+|---|---|
+| {0} | (0,4,3,−1) |
+| {1} | (1,0,−1,3) |
+| {2} | (−1,−1,0,0) |
+| {3} | (1,−1,6,0) |
+| {0,1} | (6,0,0,0) |
+| {0,2} | (0,4,3,7) |
+| {0,3} | (6,0,0,0) |
+| {1,2} | (0,0,0,0) |
+| {1,3} | (1,15,4,18) |
+| {2,3} | (0,0,0,0) |
+| {0,1,2} | (0,0,0,0) |
+| {0,1,3} | (6,0,0,0) |
+| {0,2,3} | (0,0,0,0) |
+| {1,2,3} | (0,0,0,0) |
+| {0,1,2,3} | (0,0,0,0) |
+
+The reward bound is M=18. Use independent stopping clocks
+
+    q₀: date1 surely,
+    q₁: date0 with1/6, date2 with5/6,
+    q₂: date1 with1/2, date3 with1/2,
+    q₃: date0 with1/5, date3 with4/5.
+
+Every clock is finite a.s. No public or correlated lottery is used.
+The prescribed terminal distribution is exactly
+
+    μ({1})=2/15,       μ({3})=1/6,      μ({1,3})=1/30,
+    μ({0,2})=1/3,      μ({0})=1/3,      all others0.    (CF.1)
+
+The first three masses sum1/3; when both players1,3 survive date0,
+player0 stops at date1 and either ties player2 or stops alone. Thus
+
+    U=(1/3,3,3,3).                                     (CF.2)
+
+For example U₁=−1/6+15/30+4/3+4/3=3,
+U₂=−2/15+6/6+4/30+3/3+3/3=3, and
+U₃=3·2/15+18/30+7/3−1/3=3.
+
+### CF2. EVERY complete pure-clock response
+
+For each recipient, replacing its complete strategy by a pure deadline
+τ gives the following exact payoff. Every integer deadline is covered;
+the last column includes Never separately, not an attained limit claim.
+
+| Recipient | τ=0 | τ=1 | τ=2 | Every τ≥3 | Never |
+|---|---|---|---|---|---|
+| 0 | 2 | 1/3 | 2 | 1/3 | 1/3 |
+| 1 | 3 | −1/5 | 3 | 3 | 3 |
+| 2 | 0 | 3 | 3 | 3 | 3 |
+| 3 | 3 | 1/2 | 3 | 3 | 3 |
+
+For recipient0, the ORIGINAL opponent minimum equals0,1,2 with
+probability1/3 each. Its date0 joint rewards are all6; its date1
+joint reward is0; its date2 joint reward is6. Passive contributions
+at those opponent dates are respectively1/3,−1/3,1/3. This gives
+the first row of the response table.
+
+For recipient1, date0 meets player3 with probability1/5 and pays15,
+so its value is3. Date1 receives the earlier passive contribution−1/5
+and zero joint rewards. Every date≥2 and Never receives
+−1/5+(4/5)·4=3.
+
+For recipient2, date0 joint rewards against{1},{3},{1,3} are all0.
+The early passive contribution at date1 is
+−2/15+6/6+4/30=1; the surviving2/3 joins player0 for reward3,
+giving3. Every later deadline and Never instead receives that same
+early1 plus (2/3)·3=3.
+
+For recipient3, date0 joins player1 with probability1/6 and pays18,
+giving3. Date1 receives only the earlier passive (1/6)·3=1/2,
+since both possible joint rewards with player0 are0. Every later
+deadline and Never receives
+1/2+(5/6)·[(7−1)/2]=3.
+
+Complete behavioral responses are independent stopping-clock mixtures,
+so these pure-clock bounds give the unrestricted full caps exactly:
+
+    B=(2,3,3,3),       d=(5/3,0,0,0),       D=5/3.    (CF.3)
+
+### CF3. Exact class-preserving FULL-cap response mixtures
+
+Let the three row classes be passive (recipient absent), own singleton,
+and nonown participant (recipient present with at least one other).
+Choose the COMPLETE cap-optimal responses
+
+    σ₀=(1/2)·date0+(1/2)·date2,
+    σ₁=q₁,       σ₂=q₂,       σ₃=q₃.
+
+Each supporting deadline in σ₁,σ₂,σ₃ is maximal in CF2, not merely
+an on-path best reply. For recipient0 its original class masses are
+(1/3,1/3,1/3). A date0 response has masses(0,2/3,1/3), and a
+date2 response has masses(2/3,0,1/3). Their half mixture has EXACTLY
+the original masses. For every other recipient σᵢ=qᵢ, so all three
+class masses are trivially unchanged. In particular both passive
+conservation and every stronger rowwise participant-class conservation
+hold at ONE actual law, with no source switching or aliases.
+
+Nevertheless recipient0 gains5/3. The three class probabilities do
+not determine their coalition composition: the original joint event
+is{0,2}, rewarding it0, whereas the response's joint events reward6.
+Its passive event composition changes too. This is an actual
+coalition-valued payoff gain invisible to the class ledger.
+
+### CF4. The actual native screens and the essential missing floor
+
+Every participant reward is nonnegative. Pure Quit at date0 therefore
+guarantees each recipient at least0 against ANY independent opponent
+laws. Conversely a single opponent sure at date0 gives cap0 for:
+recipient0 punished by2, recipient1 punished by2, recipient2 punished
+by1, and recipient3 punished by0. In each case its joint payoff is0
+and its Never payoff is−1. Thus the TRUE independent punishment values
+are P=(0,0,0,0), not nominal floors.
+
+The negative singleton witnesses also cover every row and column:
+r₃({0})=r₂({1})=r₀({2})=r₁({3})=−1. These literal screens do
+not imply a positive absorbing gap.
+
+Even the numerical RM24 margins do not rescue counts alone. With
+δ:=D(q)=5/3 and M=18, their positive correction is
+δ²/(8M)=25/1296. CF2–CF3 satisfy, for EVERY recipient,
+
+    Bᵢ≥δ+25/1296,
+    Uᵢ≥δ−dᵢ+25/1296.                                (CF.4)
+
+But δ here is NOT a global infimum. The literal date0 pure pair{0,2}
+with outsiders Never is exact absorbing full Nash: the two members'
+caps are max(0,−1)=0 and max(3,3)=3; the two outsiders' caps are
+max(4,0)=4 and max(7,0)=7. Its payoff is(0,4,3,7), and D=0.
+
+Exact retirement: class conservation, even at one aligned law with
+all four clocks finite, all positive original payoffs, native normality,
+and the numerical margin inequalities, is not a consumer. It supplies
+no ALL-cap upper bound for a coupled modification. This DOES NOT
+falsify a consumer that additionally uses the genuine all-law floor
+or the full coalition-valued radial identity; those are precisely the
+remaining data that this test lacks. The next global attempt must
+use them to select/control an actual absorbing competitor rather
+than promote a class-count ledger to a playable equilibrium.
