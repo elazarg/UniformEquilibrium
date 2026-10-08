@@ -115,6 +115,17 @@ The attempted exact-discount variant weighted by original Never mass
 is falsified by the source's actual absorbing payoff direction. Thus
 neither version is a new counterexample-class reduction or UE consumer.
 
+QC below is an independent elementary coarsening proof, COMPLETE ORDINARY
+and UNREVIEWED, retained only as supporting mathematics. The already-checked
+common-quantile-clock transport gives the same unrestricted semantic error
+with a smaller uniform calendar, exact Never masses and BOTH directions of
+ALL finite/Never response transport. Its existing finite-scale and global
+counterexample semidecision program already covers QC's finite-certification
+route. QC is not a new class reduction or export candidate. The open global
+step remains to produce an actual equilibrium or a satisfying positive-gap
+certificate; an additional compression or verification interface cannot
+supply either. No independent QC gate is requested.
+
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
 date to0, extract an ACTUAL carrier tail even at sure-owner boundaries,
@@ -10336,6 +10347,335 @@ the STRICT absorbing gap forces an actual finite word with aggregate
 root regret below its physical charge, or forces a closed charged root
 return at reachable cap states. A supplied return, fixed annotations or
 the existence of an absorbing payoff above s is not such a producer.
+
+## A uniform full-cap calendar compression and a finite whole-table gap test
+
+### QC1. Exact unconditional question and result
+
+Fix I={0,1,2,3}, a finite real reward table |rᵢ(S)|≤M with M>0,
+and ANY actual independent behavioral stopping laws pᵢ on ℕ∪{Never}.
+Nonabsorption pays0. The original public live history is all Continue,
+so all unilateral behavioral deviations are mixtures of complete pure
+finite clocks and Never. Write U(p),B(p) for prescribed terminal payoffs
+and FULL unrestricted caps, and D(p)=Σᵢ(Bᵢ−Uᵢ).
+
+For EVERY θ∈(0,1] there is an ACTUAL independent profile p′ supported on
+
+    {0,…,N−1,Never},       N=⌈24/θ⌉+1,
+
+such that ALL marginal Never masses are retained EXACTLY and
+
+    |Uᵢ(p′)−Uᵢ(p)|≤12Mθ,
+    |Bᵢ(p′)−Bᵢ(p)|≤12Mθ                 for EVERY i.       (QC.1)
+
+No minimum, positive gap, positive own reward, Nash row, actual tail
+equilibrium, response attainment or dominated-density condition is needed.
+The operation is ONE common deterministic nondecreasing map on finite
+clock dates, with Never kept separate. It merges only blocks having small
+UNCONDITIONAL clock mass and preserves every large-mass date as a literal
+singleton block. It neither inserts an early empty clock nor uses public
+randomization. This is a complete ordinary derivation, NOT Lean-checked or
+independently reviewed. Its finite whole-table interpretation in QC5 is
+already covered by the checked quantile-clock hierarchy and semidecision
+program recorded in QC7; this elementary proof makes no novelty claim.
+
+### QC2. The finite ordered partition of the entire original calendar
+
+Put m(t)=Σᵢpᵢ({t}); then Σ_t m(t)≤4. Declare a date LARGE if
+m(t)>θ/2. There are at most8/θ such dates. Keep every large date as
+a SINGLETON block, including a large original date0. Between successive
+large dates, and before the first/after the last, every date has
+m(t)≤θ/2. Partition each nonempty such interval greedily into consecutive
+blocks with total m-mass≤θ.
+
+The exact existence/count argument includes the infinite final interval.
+If an interval's entire remaining mass is≤θ, take its whole remainder
+as its final block. Otherwise there is a first finite date at which its
+cumulative mass would exceed θ. End the current block just BEFORE that
+date. Its mass is>θ/2, since the next individual date has mass≤θ/2.
+Continue. There are at most8/θ completed blocks of mass>θ/2 over
+ALL intervals, because their total mass is≤4. Each interval has at
+most one final block; there are at most8/θ+1 intervals. Thus the whole
+partition has at most
+
+    8/θ large singleton blocks
+      +8/θ completed small blocks
+      +(8/θ+1) final small blocks =24/θ+1.              (QC.2)
+
+Intervals of ZERO mass are NOT silently deleted: if they contain original
+dates, they remain one small block. Consecutive large dates have no
+intervening block if their original interval is empty. The partition covers
+ALL ℕ, including its infinite final small block. Hence no fictitious
+clock is inserted before an occupied macro date. The harmless terminal
+small block may have zero prescribed finite mass.
+
+Index the nonempty blocks B₀,…,B_{L−1} in their original order,
+L≤N. Define f(t)=a for t∈B_a and f(Never)=Never. For each owner
+let p′ᵢ=f_*pᵢ. Since f is common and deterministic, the laws remain
+independent; their finite support is in0,…,L−1 and all Never atoms are
+exactly retained. Unused final dates up to N−1 have zero prescribed
+mass, with no change to U or B. This construction does NOT require a
+preliminary finite truncation, positive Never mass or a hazard bound.
+
+For a small block let aᵢ(B)=pᵢ(B). Then aᵢ(B)≤θ for every i and
+Σ_B aᵢ(B)≤1. These UNCONDITIONAL bounds are the only probability
+budget used below. Conditional hazards within the block may be large;
+the proof never assumes that they are small.
+
+### QC3. Prescribed payoff and ALL finite/Never response comparisons
+
+Couple each original finite draw Tᵢ with its new draw f(Tᵢ), keeping
+Never unchanged. Different players' draws are still independent.
+The prescribed first terminal coalition is unchanged unless at least
+two owners draw finite clocks in the SAME small block. Large blocks
+are single dates, so they preserve all original ties. For any pair i<j,
+
+    Σ_(small B) P(Tᵢ∈B,Tⱼ∈B)
+      =Σ_B aᵢ(B)aⱼ(B)≤θΣ_B aᵢ(B)≤θ.
+
+There are six pairs. Therefore the bad event has probability≤6θ;
+on its complement the terminal coalition AND nonabsorption are identical.
+The rewards differ by at most2M, so
+
+    |Uᵢ(p′)−Uᵢ(p)|≤12Mθ.                            (QC.3)
+
+Fix an owner i and a literal finite OLD response clock τ. Use the NEW
+clock f(τ). Among its three opponents the analogous coalition-merging
+bad event has probability≤3θ. If τ lies in a small block, the additional
+event that ANY opponent draws in that block has probability≤3θ by
+the union bound. Outside these two events the responder's before/at/after
+relations, the first terminal coalition and nonabsorption are unchanged.
+If τ lies in a large block its singleton nature preserves the response
+tie exactly and no extra event is needed. Thus, UNIFORMLY over EVERY
+finite τ, including arbitrarily late clocks,
+
+    |Vᵢ(τ;p_−i)−Vᵢ(f(τ);p′_−i)|≤12Mθ.              (QC.4)
+
+The literal Never responses are compared using only the opponents'
+merging bad event, so their payoff difference is≤6Mθ. These are exact
+original/Never couplings; Never is not treated as a finite late clock.
+
+Conversely, for a NEW finite clock a<L choose ANY actual old date τ∈B_a.
+The same coupling gives (QC.4). For new clocks a≥L, the opponent laws
+are already either stopped or literally Never after L−1; all those
+finite tests are outcome-equivalent to clock L. There need not be an
+actual finite OLD date after the infinite final block. Handle this seam
+by taking old finite responses τ→∞ instead:
+
+    lim_(τ→∞) Vᵢ(τ;p_−i)=Rᵢ(p_−i)+hᵢsᵢ,
+    Rᵢ=Vᵢ(Never;p_−i), hᵢ=∏_(j≠i)pⱼ(Never),
+    sᵢ=rᵢ({i}).                                      (QC.5)
+
+On a draw with at least one finite opponent clock, this limit receives
+the ORIGINAL first-opponent coalition's passive reward. On an all-Never
+opponent draw it receives the own singleton. The new clock L has the
+same description with the coarsened opponent coalition, so the two
+values differ by≤6Mθ, again by the opponents' merging bad event.
+The old limit is≤Bᵢ(p) because every old finite test is≤Bᵢ(p).
+Hence the NEW terminal late test is≤Bᵢ(p)+6Mθ. New Never is covered
+separately as above. This proves the upper comparison for EVERY new
+finite/Never test without claiming a nonexistent old finite witness
+after the entire infinite block.
+
+Taking suprema in both directions proves the cap part of QC.1.
+Mixtures and private-memory behavioral deviations are fully covered by
+pure-time extremality on the unique live history. All signs of sᵢ and
+passive rewards are allowed. In particular when sᵢ<0 the late limit in
+QC.5 may be BELOW the Never response, which was never omitted.
+
+### QC4. Exact tests, including an occupied-clock seam
+
+First complete60-entry test: rᵢ(S)=1 iff i∈S, otherwise0, for every
+nonempty S. Owners2,3 use Never. The other independent laws are
+
+    p₀(0)=p₀(2)=1/16,       p₀(Never)=7/8,
+    p₁(1)=p₁(3)=1/16,       p₁(Never)=7/8.
+
+At θ=1/4 the four original dates are one small block. The old prescribed
+payoffs are (31/256,29/256,0,0), the coarsened payoffs are
+(1/8,1/8,0,0), and every original/new cap is1. The coarsening creates
+genuine ties and need not preserve payoffs exactly, but the change is
+charged by the small block mass as claimed. Never masses are EXACTLY
+unchanged. This is a solved boundary test, not a positive-gap source.
+
+Second complete60-entry test: for every nonempty S and every recipient i,
+
+    rᵢ(S)=0 if S={i}, otherwise−1.
+
+Owner0 quits surely at original date0, and the other three use Never.
+Then U=B=(0,−1,−1,−1), so D=0. Its occupied date0 is LARGE for any
+θ≤1 and remains the FIRST singleton block. The remaining zero-mass
+calendar is after it, so compression leaves the full semantics unchanged.
+Inserting a FREE empty clock before that large date would instead make
+B=(0,0,0,0) while preserving U, hence D=3. This is exactly the forbidden
+cap birth: QC2 does not insert that clock. Consecutive occupied large
+dates likewise retain their adjacency if their original interval is empty.
+
+I also executed50 independent exact rational tests with80 finite original
+dates per owner, arbitrary signed integer rewards in[−5,5], and direct
+scans of EVERY pure finite response, the final empty response and Never.
+All bound assertions passed. This is experimental regression evidence
+only; the proof is QC2–QC3, not these tests or floating-point optimization.
+
+### QC5. A finite semialgebraic certificate for an unrestricted positive gap
+
+For N≥1 define δ_N(r) as the minimum of FULL summed debt over ALL
+independent marginal laws on {0,…,N−1,Never}. These are arbitrary actual
+controller probabilities, NOT exact Nash equilibria of that menu. The
+parameter space is a finite product of compact simplexes. Prescribed
+payoffs are degree≤4 polynomials in those probabilities. A complete
+reply menu is
+
+    {0,…,N,Never},
+
+because every finite response after N is outcome-equivalent to the first
+empty date N. The individual response values are degree≤3 polynomials;
+their finite maxima are exactly the FULL behavioral caps. Thus D is
+continuous and δ_N is attained and expressible by a finite real
+semialgebraic optimization. No tail cap or equilibrium choice is supplied.
+
+Let δ_all(r)=inf_(ALL original behavioral profiles)D. Equivalently this
+is the minimum on the closed original payoff/full-cap carrier. From QC.1,
+for θ=2⁻ᵏ and N_k=24·2ᵏ+1,
+
+    δ_Nk(r)−96M·2⁻ᵏ ≤ δ_all(r) ≤ δ_Nk(r).             (QC.6)
+
+The left inequality follows by applying the compression to ANY profile:
+|D(p′)−D(p)|≤Σ_i(|B′−B|+|U′−U|)≤96Mθ. Take its infimum.
+The right inequality is inclusion of the actual finite-controller class.
+The estimate is UNIFORM over EVERY table with |r|≤M and every original
+behavioral profile; it does not use NP or identify a restricted minimum
+with an original one. All Never masses, even zeros and sure-owner
+boundaries, remain unchanged during the compression.
+
+Consequently
+
+    δ_all(r)>0 ⇔ ∃k≥1, δ_Nk(r)>96M·2⁻ᵏ.              (QC.7)
+
+The forward direction takes k so the displayed error is below δ_all;
+the converse uses QC.6. For a rational table and rational bound M the
+right side is a finite exact polynomial inequality certificate: decide
+whether there exists any finite-controller probability tuple with
+D≤96M2⁻ᵏ. Epigraph variables yᵢ≥EVERY reply polynomial and
+Σyᵢ−ΣUᵢ≤96M2⁻ᵏ give an equivalent finite existential real formula.
+This is a global optimization over ALL controller laws, not a sampled
+law, a local minimum, an exact-menu Nash family, or a chosen root orbit.
+
+For the terminal-to-UE implication use exactly
+`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`.
+If δ_all>0, every profile has some cap debt≥δ_all/4; pure-time or
+behavioral near-attainment supplies an ACTUAL deviation of gain>δ_all/8.
+Conversely its uniform actual deviation gapγ forces D≥γ for every
+profile. Thus positive SUM infimum is equivalent to no UE without
+replacing SUM by MAX or assuming cap attainment. QC.7 is a direct
+unrestricted counterexample certificate, not only an absorbing-gap test.
+No certificate is claimed to be satisfied by any present example.
+
+### QC6. Whole-table minimax and the exact remaining decision
+
+Positive common scaling permits the reward bound M=1. Set
+
+    E= max_(r∈[−1,1]^60) δ_all(r),
+    E_k=max_(r∈[−1,1]^60) δ_Nk(r).
+
+Both maxima exist. For the full value, every fixed-profile payoff and
+cap changes by≤‖r−r′‖∞, so D and its infimum change by≤8‖r−r′‖∞.
+For the finite value the same bound holds, or use compact parameter
+continuity. The UNIFORM QC.6 gives
+
+    E ≤ E_k ≤ E+96·2⁻ᵏ.                               (QC.8)
+
+Hence the full Fin4 conjecture is equivalent to the explicit finite
+whole-table inequalities
+
+    ∀k≥1, E_k≤96·2⁻ᵏ.                                (QC.9)
+
+If any real counterexample exists, continuity supplies a rational one
+with positive gap, and some finite QC.7 certificate exists. Alternatively
+each test E_k>96·2⁻ᵏ is a finite first-order real formula: existentially
+choose the60 rewards, universally choose the four finite-controller
+simplex points, and compare the finite maximum reply polynomial with
+the bound. Exact real quantifier elimination decides each fixed test.
+Enumerating k therefore semidecides existence of an unrestricted
+counterexample, without a root-Nash potential or a normality source.
+The dimensional bounds are very large; no practical computation or
+termination when UE holds is asserted.
+
+This identifies a finite WHOLE-table minmax problem with an unrestricted
+error bound, but the checked hierarchy already supplies this route. It
+does NOT prove QC.9, exhibit a positive E_k certificate, settle UE or
+narrow the NP source class. The unresolved step is an actual finite
+minimax certificate or a uniform proof of QC.9, not another finite
+verification interface. No negative-polynomial witness is supplied.
+
+### QC7. Exact checked overlap and notes-only role
+
+Read `exists_finiteDeadlineTimingProfile_approximation` and
+`isUniformEquilibriumPayoff_iff_finiteMenu_fullCap_target_approximation`
+in `UniformEquilibrium/Quitting/Terminal/FiniteMenuFullProfileApproximation.lean`.
+They provide actual finite-menu full-deviation/payoff approximation, with
+a cutoff depending on the supplied profile and tolerance; they do not
+give the game-independent upper deadline in QC.1/QC.6.
+
+Read `quittingFiniteOpponentAtomGapReplyMenu`,
+`quittingAtomGapRepresentative` and its before/after identities in
+`UniformEquilibrium/Quitting/Terminal/FiniteOpponentAtomGapReplyMenu.lean`.
+Its exact atom/successor/Never menu justifies the finite complete-response
+scan, not a claim that naive calendar retiming preserves caps.
+
+Read `exists_elementaryCompressedProfile_terminalSemantics_close` in
+`UniformEquilibrium/Quitting/Terminal/TailCompression/ElementaryTailSemanticReduction.lean`
+and the public summary in its `All.lean`. The cutoff-dependent elementary
+tail theorem supplies complete cap/payoff density, not this uniform
+calendar-length bound. The payoff-only common/sparse calendar summaries
+in TOOLKIT explicitly disclaim cap preservation; QC includes the small
+tie and empty-clock costs instead.
+
+The existing
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`
+already gives a different robust full-Nash polynomial certificate under
+its actual normality/positive-singleton hypotheses. QC is not a claim
+that negative semidecidability has never been accessible by that route.
+The initial search above missed the relevant integrated producer. Read
+`HasEscapeAwareQuantileClockPayoffTransportAtBound`,
+`hasEscapeAwareQuantileClockPayoffTransportAtBound`,
+`hasEscapeAwareQuantileClockCompressionAtBound` and
+`hasEscapeAwareQuantileClockCompression_of_normalized` in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`.
+They produce a common monotone finite-clock quotient for EVERY actual
+profile, preserve EACH Never mass exactly, compare EVERY old and new
+pure finite/Never response in BOTH directions, and give full (U,B)
+error12M/j on a calendar of size8j+1. Their hypotheses are an explicit
+bounded reward table and j>0, not supplied Nash roots or cap control.
+Thus the full strategy-class content of QC.1 is already checked, with
+a smaller support bound.
+
+Read `escapeAwareQuantileClock_normalized_quantitative_bracket` and
+its Fin4 specialization in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockApproximation.lean`.
+The general continuous-score infimum API applies to SUM debt, which
+is8-Lipschitz in semantic sup distance; its96M/j SUM bracket is the
+direct same-source counterpart of QC.6. The production global search
+is stronger than a supplied finite verifier: read
+`finFourCounterexampleStep_sound` and
+`exists_finFourCounterexampleStep_iff_exists_real_infimum_pos` in
+`Research/Quitting/FinFourCounterexampleSemidecision.lean`. The latter
+equates an actual finite positive certificate emitted by the recursive
+search with existence of a real Fin4 positive-exploitability-gap table.
+Nontermination or failure of bounded search proves nothing.
+
+The prior mathematical and production records are
+`formalized/ESCAPE_AWARE_QUANTILE_CLOCK_SEMIALGEBRAIC_HIERARCHY.md`,
+`formalized/EXACT_FIN4_SCALE_RESOLUTION_AND_COUNTEREXAMPLE_SEMIDECISION.md`
+and `Experiments/fin4_exact_search/README.md`. Their unrestricted finite
+certificate/minimax program predates this derivation. The distinct
+total-unconditional-mass greedy partition in QC2 may be useful as an
+elementary proof, but is no strategic coverage increment. NOETHER
+independently verified this exact source overlap before a QC audit.
+No redundant full gate or export is requested; retain the exact proof,
+infinite-final-block seam and signed boundary tests as supporting notes.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
