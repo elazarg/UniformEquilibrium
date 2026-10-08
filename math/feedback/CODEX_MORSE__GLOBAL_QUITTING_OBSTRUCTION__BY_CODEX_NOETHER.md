@@ -588,3 +588,174 @@ arbitrary Fin4 nor the general stochastic-game conjecture, and it carries
 no additional L/A/C evidence claim. I did not edit the packet, export it,
 edit or build Lean, stage, commit or push. This is the final byte-bound
 independent acceptance of the hash above.
+
+## Focused independent Section 50 / SA1–SA11 review
+
+Reviewed the COMPLETE Section 50 of
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, heading through EOF,
+final section SHA256
+`751097321e6ec2cbdca761ec94a55a4275be3a99800e26a760d9bf86844e4773`.
+The first reviewed bytes had section hash `4d60149d…`; the author then
+made only the ordered-cut/raw-prefix clarification described below.
+I read those changes and independently checked the final section hash.
+This is a focused ordinary-mathematical PASS for the combined source
+theorem, not another whole-artifact gate or a UE verdict.
+
+### Exact accepted common-source conclusion
+
+Assuming some signed Fin4 no-UE table exists, the construction produces
+ONE fresh unit-cube table with positive true unweighted SUM gap, all
+canonical 82 exclusions, all included mixed-cohort exclusions, and
+ALL-original-minimum debt rigidity. At EVERY minimum's retained
+old-calendar marked representation, the prescribed outcome is random,
+there is no prescribed mass strictly before the earliest point of the
+UNION of ALL active cap sets, and that point is a finite isolated
+positive-mixture first collision with at least two positive own atoms.
+
+These restrictions allow multiple, infinite and accumulating active sets.
+They allow sure root owners. They do not assume a tail minimum or root
+Nash. The separately proved HR theorem applies at this SAME final table
+because its inputs are precisely the preserved canonical exclusions,
+rigidity, positive actual minimum, and fresh same-table normality. HR
+does not require the particular numerical endpoint used to select its
+earlier table. No minimizing law or debt vector is transported between
+the two selections.
+
+Here "marked representation" must retain its stated producer meaning:
+the old-calendar compactification with complete cap convergence and
+bounded-density signed transport. The proof does not cover an arbitrary
+abstract ordered product law merely assigned the same payoff/cap pair.
+Within the produced class, the universal representation quantifier is
+correct; it does not depend on one favorable selected cap.
+
+### Complete target and actual deterministic-outcome consumer
+
+The endpoint assigns every one of the sixty coordinates exactly once.
+The old-zero branch choices are load-bearing: lower joins equal to zero
+move negative, while grand withdrawals equal to zero move positive.
+The new lower-positive joins and positive grand withdrawals therefore
+have exactly the stated old sign cohorts. Positive recipient scaling
+preserves them, with no need for full-table ordered-difference genericity.
+
+I checked all old canonical contacts, including C singleton with mixed
+signs, C pair, the opposite C triple/withdrawal sign, individual joins,
+all passive floors including Never, and own-minus-grand. Their positive
+contacts target at least one. For the additional labels V_A, the values
+are exactly |E_A|/2+2|Z_A| for pairs, |E_A|/2+|Z_A| for triples and
+|E_A| for grand. Every included label thus targets at least one, strictly
+above Ω≤4/5. No positive-only replacement of a C sum is made.
+
+The coefficient bound eight gives 16α label motion. The full new gap
+lies in [Ω−16α,Ω], and 32α<σ separates every old noncontact. This covers
+EVERY moving new minimizer. Choosing a regular recipient scale afterward
+preserves every finite gap, gives all-family rigidity on the fixed old
+carrier, and finally concerns unweighted minimizers at the fixed fresh
+table. It is not a derivative of one chosen active tester.
+
+For deterministic nonempty coalition A with at least two members,
+independence forces its members pure at the same finite clock, with all
+outsiders strictly later. The full cap is the root-versus-withdrawal
+maximum for members and the passive-versus-join maximum for outsiders.
+Earlier singleton tests are strictly inactive by the tracked cap margin.
+Thus the entire semantic pair is EXACTLY that of the literal date-zero
+pure-A profile with outsiders Never. This equality, rather than old-chart
+atom insertion, licenses the actual nonlocal replacement.
+
+The mixed-cohort label equals actual total debt when there are at least
+two indebted members or any indebted outsider. The target prices all
+those possibilities, including paid outsider joins. Zero indebted
+members/outsiders gives zero debt. The remaining case is exactly one
+indebted member and no indebted outsider. Releasing that member to Never
+with probability ρ reduces its debt to (1−ρ)δ. Every other member's
+strict root-versus-wait gap survives uniform 2Mρ response changes,
+including the pair's newly reachable late responses. Every outsider
+still faces a retained sure date-zero member, so ALL late and Never
+replies remain its prescribed passive payoff and its root join stays
+strictly worse. The whole debt is exactly (1−ρ)δ, a contradiction.
+This repair uses no punishment hypothesis.
+
+Singleton deterministic absorption has U_h=s_h and is excluded by the
+strict prescribed margin; deterministic Never forces all laws Never
+and zero debt. All deterministic outcome labels are therefore consumed,
+not merely coalitions with every member unhappy.
+
+### All-active head box and original support collapse
+
+For each fixed ordered cut u<a<τ, the head targets have positive old mass
+and bounded legal likelihood factors of both signs. Their raw prefixes
+contain WHOLE original atom intervals. The strong prefix-indicator limit
+and bounded old densities give weak-* transport; unchanged products and
+ALL moving test kernels realize the full payoff/cap pair in the original
+carrier. Nothing is inherited from an arbitrary zero-mass insertion.
+
+Every nonoriginal opponent-product term includes an exit ≤u. Consequently
+the SAME positive affine transform acts on EVERY response above a,
+including Never and all accumulating active points. The compact lower
+set has no active response and a strict gap. This stabilizes the ENTIRE
+old cap set, not just a representative branch. The summed polynomial is
+actual debt on a two-sided neighborhood, hence constant by minimality.
+All-family debt rigidity then makes each individual selected-regret
+polynomial constant. Its remote endpoint remains only algebraic.
+
+For one head owner, its conditional payoff is its singleton and individual
+constancy forces ORIGINAL U_h=s_h. I reread
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+under its stated imports. Its full hypotheses are indeed actual carrier,
+global SUM minimum, four players, positive bound and total debt, and all
+reward coordinates bounded. Its conclusion gives U_h−s_h≥δ−d_h+δ²/8>0
+at the FINAL table. No singleton-sign or Nash-tail premise is present.
+Thus the sole-head arm is eliminated, not left as a last-sure residual.
+
+With at least two head owners, another conditioned head screens both
+the given owner's late prescribed branch and its selected response.
+Their raw regret is zero. Since preactive prescribed mass gives strictly
+positive ORIGINAL debt, polynomial constancy forces its ORIGINAL head
+probability to be one. A non-head owner's selected polynomial vanishes
+at the all-head endpoint, so it cannot carry any preactive mass. Hence
+each nonempty head set is the entire preactive set P, and every member
+of P is sure by that cut.
+
+The original draft's decreasing "regular cut" wording could be misread as
+RAW endpoints approaching an isolated retained midpoint, which is
+impossible. The final bytes fix this: ordered clock cuts pull back to
+whole-atom RIGHT prefixes; those raw boundaries may remain constant.
+An isolated lower support endpoint is handled by ONE cut in its right
+clock gap. A nonisolated endpoint uses decreasing ordered null cuts.
+In either case the ORIGINAL P laws are pure at one common finite date
+strictly before τ, and all outsiders are later. This deterministic
+outcome contradicts the preceding actual consumer. No endpoint cap is
+declared actual merely because its selected polynomial was constant.
+
+### First-root boundary and countertests
+
+Once all original mass is at or after τ, earliest Never means all laws
+Never and contradicts positive debt. A zero-mixture finite τ would pay
+its earliest owner exactly its singleton and violate the cap margin.
+Thus τ is a retained isolated finite atom and the first prescribed stage.
+
+If only one owner has a root atom, the sure-root case violates its
+prescribed margin. In the nonsure case, the original-calendar conditional
+suffix has positive surviving masses and an actual carrier subsequence;
+its total debt is at least δ, not assumed equal to δ. The displayed
+ledger uses all suffix replies for lower bounds on nonowner caps and
+the exact owner cap max(s_h,b_h). The strict quadratic cap margin gives
+δ≥(1−q)D_tail+q(B_h−s_h)>δ. This genuinely excludes the sole-root atom
+without treating its conditioned suffix as Nash or minimal.
+
+I recalculated the complete sixty-coordinate coefficient fixture. Its
+actual global gap is zero because all own singletons are zero and
+all-Never has debt zero. At coefficient level 1/2 the stated C contact,
+five two-indebted-member pairs, four triples, omitted sole-member pair,
+and zero grand label have exactly the reported target values. This is
+a target conflict countertest, not evidence of a positive-gap table.
+The independent-profile mixing falsifier is not evaded by the proof:
+all local laws change independently relative to one old source, and
+the deterministic repair is a literal profile with proved equal full
+caps.
+
+No unresolved mathematical objection remains after the ordered-cut
+clarification. The section is a genuine fresh-table strict source
+reduction, not a conditional domination interface. Its surviving random
+atomic first-collision, multiple-cap geometry remains unconsumed; sure
+root owners and outcome-equivalent later cap points are not excluded.

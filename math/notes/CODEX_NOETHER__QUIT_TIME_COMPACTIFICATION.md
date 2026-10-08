@@ -2,17 +2,30 @@
 
 ## Current best attempt
 
-PD1–PD4 is the newest complete UNREVIEWED consumer draft at the end.
-At one fresh generic debt-rigid table it excludes ALL deterministic
-prescribed terminal outcomes, including pure coalitions whose earliest
-cap is a paid outsider join. Its mixed-debt labels use the preserved
-signs; an unpriced single indebted member is consumed by an ACTUAL
-one-law strict decrease with all other zero debts preserved. This is
-distinct from MORSE's broader MH/weak-unhappy source comparison, which
-is being assembled. No new artifact or export is prepared.
+The current common-source frontier is the independently checked
+MORSE Section50/SA1–SA11 plus BROUWER BG1–BG6, not a new export.
+At ONE compatibly selected row-generic debt-rigid positive table,
+EVERY produced minimum has random prescribed outcome, no preactive
+mass, and a finite atomic FIRST active collision. Some owner maximizes
+BOTH there and later, with genuinely distinct PAYOFF kernels on a
+positive opponent-root event; that owner may have zero debt. My
+focused complete checks are saved in the authors' existing feedback.
+The broader all-active head collapse needs NO row-difference genericity.
+Genericity is selected before DR, preserving all93 strict gaps/signs,
+only to turn BG's coalition-kernel distinction into payoff distinction.
 
-The newest complete SOURCE/TABLE consumer draft is ZH1–ZH4 plus
-TP1–TP5 at the end, unreviewed. At one fresh GENERIC debt-rigid
+PD1–PD4 below is my complete deterministic-outcome contribution,
+now incorporated with attribution in MORSE's independently restated
+and focused-reviewed Section50. The final sign target already makes
+the required W/J gaps nonzero, so PD's extra genericity is unnecessary
+for that consumer. The global root-mass attempt RM1–RM5 at the end
+retains a precise nonlinear-wall obstruction, not a completed consumer.
+No new artifact or export is prepared.
+
+The older SOURCE/TABLE consumer draft ZH1–ZH4 plus
+TP1–TP5 at the end is retained, unreviewed and superseded in strength
+by Section50's direct non-generic all-active head collapse.
+At one fresh GENERIC debt-rigid
 positive table, ZH reduces a zero-mixture earliest active point
 with MULTIPLE caps to an ORIGINAL pure triple/grand coalition.
 TP's full sign-adapted target preserves all82 contact directions
@@ -25,11 +38,12 @@ frozen export is modified. One combined independent falsification
 of the actual all-active head box and full finite target is requested.
 
 I independently accepted BROUWER's HR1–HR6 all-unique source exclusion
-in owned feedback. That result uses head-only exact positive affine
-cap transport and all-family debt rigidity, not generic row differences;
-it is separate from the frozen worst-SUM packet and still needs its
-assembled-artifact gate. ZH/TP concern genuinely MULTIPLE active sets,
-not another all-unique reselection.
+and completed the separate 1636-line WHOLE-artifact mathematical gate
+in standalone owned feedback: ordinary PASS, with a tracked-reference
+hold for the redundant external TerminalDebtSumInf citation. That
+result uses head-only exact positive affine cap transport and all-family
+debt rigidity, not generic row differences. The stronger SA+BG common
+source has a genuine root/later kernel wall, not only two test labels.
 
 The newest finite-amplitude consumer is SQ1–SQ6 at the end, accepted
 in CODEX_BROUWER's focused independent feedback: in SC's
@@ -17087,3 +17101,182 @@ plateau described by MH/ZH. It does NOT exclude a random absorbing
 coalition or consume an arbitrary atomic multiple-cap root. The next
 question is whether the minimum can be forced to a deterministic law
 without assuming cap stability at all its simultaneous active kernels.
+
+## Global maximal root-mass selection: a real max-wall blocks naïve purification
+
+Status: COMPLETE ORDINARY ATTEMPT RM1–RM5, not a new UE/source-class
+consumer. The compact selection is genuinely GLOBAL and keeps every
+full cap. Its proposed purification fails at a nonlinear active wall;
+the precise failed inference and strongest local consequence are saved.
+This is not a new prescribed-tail minimization assumption. It begins
+after the checked SA+BG common-source selection described above.
+
+### RM1. A compact producer which does not minimize a supplied tail
+
+Fix ONE final table r with δ=Δ(r)>0, all93 exclusions and cohort
+signs, row genericity and ALL-original-minimum debt rigidity. Write K
+for its ORIGINAL compact attainable payoff/cap carrier. For p∈[0,1]⁴
+and (v,b)∈K, define the literal root-prefix pair
+
+    Q_i(p)=E[r_i(S∪{i})], opponent root coalition S;
+    A_i(p)=E[1_(S≠∅) r_i(S)],
+    h_i(p)=∏_(j≠i)(1−p_j), c(p)=∏_j(1−p_j),
+    U_i(p,v)=p_i Q_i+(1−p_i)A_i+c v_i,
+    B_i(p,b)=max(Q_i,A_i+h_i b_i).
+
+The empty S term of Q_i is s_i. These are FULL caps: root versus
+EVERY finite suffix reply and Never. Their dependence on (p,v,b) is
+continuous. The carrier is prefix-invariant, so the resulting pair
+belongs to K for every input, and its total debt is at least δ.
+The exact inspected declaration is
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, under
+its imports. Its prefix definition is precisely the displayed max,
+not a root Nash condition.
+
+The compact set
+
+    M={(p,v,b): (v,b)∈K, D(prefix(p,v,b))=δ}
+
+is nonempty: p=0 and ANY old minimum pair suffice. Maximize the
+continuous quantity S(p)=Σ_i p_i over M. This selects a genuine
+GLOBAL minimum prefix pair; the tail (v,b) is not asserted minimal.
+It need not be an executable exact tail, but a convergent sequence of
+actual tails realizes both its prescribed and full-cap coordinates,
+and fixed prefixing realizes the chosen pair in the actual closure.
+
+There are members of M with positive root mass. Start with a produced
+minimum supplied by SA, whose first atomic stage has positive rates.
+In its original finite sequence censor the vanishing strictly-earlier
+head mass and cut at the retained root date. Reindex that date to0.
+Removed earlier empty tests paid s_i, strictly below B_i by the minimum
+singleton margin, while the censored head has uniform payoff/cap error
+O(total head mass). Thus no positive full cap is lost in the limit.
+For owners with positive survival probability use their literal
+conditional suffixes. For owners sure at the root choose any suffix
+law whenever the finite conditional is undefined: its own continuation
+does not affect its own cap, and another sure root screens its
+continuation from every other relevant coordinate. Extract a full
+suffix pair in K by compactness. The continuous prefix identity then
+recovers the original minimum with its positive root rates.
+
+Every selected prefix minimum has a produced representative, obtained
+by prefixing the actual tail approximants before applying the marked
+producer. SA forces its positive date-zero root to be the earliest
+active stage; BG applies at that same fixed table. Since S(max)>0,
+if all selected p_i were0 or1, at least one sure root would make its
+terminal outcome deterministic, forbidden by SA. Hence SOME p_i is
+strictly between0 and1. This is a true compact selection of a random
+atomic root, not purification of a supplied row at a restricted minimum.
+
+### RM2. What a single bridging recipient actually permits
+
+Call i a ROOT BRIDGER when
+
+    Q_i(p)=A_i(p)+h_i(p)b_i.
+
+For this selected prefix representative, this is root/later full-cap
+equality; the actual suffix cap is witnessed by its compact tail tests.
+BG guarantees at least one bridger. For other owners, either the root
+or the entire later envelope wins strictly, so their full cap has a
+strict numerical branch gap in the finite prefix formula. This notion
+does not discard several later maximizing tests: their envelope b_i
+is retained as a full actual cap.
+
+Suppose there is exactly ONE bridger i and 0<p_i<1. Vary ONLY p_i,
+keeping the entire actual tail pair fixed. Its own two cap branches
+do not depend on its own rate, so its equality stays exact. Every
+other numerical branch gap survives in a neighborhood. All selected
+caps are therefore the ACTUAL full caps there, and total debt is
+AFFINE in p_i. Global minimality at the interior rate forces that
+affine function constant. Increasing p_i slightly gives another M
+member with larger S, contradicting the global selection.
+
+Therefore at the maximal root-mass minimum a sole bridging owner has
+p_i=0 or1. This is a genuine consequence of full actual caps and
+compact selection, not a claim that all root suppliers become pure.
+If p_i=1 it is a sure-root wall; if p_i=0 its earliest best response
+has zero own atom. Both are genuine surviving possibilities, and the
+bridger can have zero debt. No claim that the selected minimum has
+more than one bridger has been proved.
+
+### RM3. Why variations of the other mixed root owners do not purify
+
+Suppose the only bridging recipient i is at its boundary. Changes
+of another mixed rate p_j can split its equality. Keeping that
+equality means constraining the remaining product rates to
+
+    G_i(p_-i)=Q_i(p)-A_i(p)-h_i(p)b_i=0.
+
+G_i is multiaffine, but its zero set is generally NOT affine or a
+product box. On this wall the chosen debt polynomial is multiaffine
+in ambient rates, yet its restriction can have a strict local minimum.
+The interior-minimum ⇒ constant-polynomial argument requires a genuine
+two-sided PRODUCT neighborhood with all caps fixed; it cannot be
+applied on this nonlinear wall. Maximizing S over the true minimum
+fiber does not manufacture that missing neighborhood.
+
+The same defect blocks an attempted rank argument: moving to the next
+new cap tie is only justified after proving the WHOLE actual debt
+stays δ on the intervening path. The root/later equality of the first
+recipient alone does not prove this. An endpoint which screens its
+prescribed late branch can still increase another recipient's cap or
+the total debt before that endpoint is reached.
+
+### RM4. Exact polynomial falsifier of the missing flat-wall inference
+
+This is a finite algebraic falsifier, NOT a quitting table or a positive
+global game-gap example. Let x,y,z∈[0,1] and define four nonnegative
+coordinates
+
+    d₀=max(1/8−xyz,0),
+    d₁=x/16, d₂=y/16, d₃=z/16.
+
+Their sum is a max of multiaffine branch expressions, with exactly
+one active max wall at xyz=1/8. It has a UNIQUE global minimum at
+x=y=z=1/2, of value3/32. Thus the entire minimum family is debt-rigid,
+the bridging coordinate is ZERO at the minimum, and three independent
+product rates remain strictly mixed.
+
+Proof: write t=(xyz)^(1/3). AM–GM gives x+y+z≥3t. For t≥1/2,
+the sum is at least3t/16≥3/32, with equality only at the displayed
+point. For t≤1/2 it is at least
+
+    f(t)=1/8+3t/16−t³.
+
+This is concave on [0,1/2]; its endpoint values are1/8 and3/32.
+Its minimum is3/32, strictly only at t=1/2, and AM–GM equality
+again gives x=y=z=1/2. On the wall the sum reduces to
+(x+y+z)/16, which has a strict constrained minimum by AM–GM even
+though that ambient polynomial is affine.
+
+This kills the proposed purely polynomial implication
+
+    multiaffine branch data + all-minimum debt rigidity
+    + one max tie + mixed rates ⇒ a flat minimum direction.
+
+The numbers lie below the Ω≤4/5 threshold and the raw polynomial
+coefficients are bounded; those bounds do not repair the implication.
+It does NOT prove this algebraic pattern is realizable at a genuine
+quitting global minimum with same-table normality and the checked
+prescribed margins. Such a realization or an exclusion requires the
+strategic structure omitted by the false flat-wall argument.
+
+### RM5. Decision and exact remaining global question
+
+The root-prefix carrier provides a legitimate GLOBAL compact selection
+and the one-bridger/interior-own-rate exclusion in RM2. It does not
+produce a cap-rank increase or deterministic endpoint exhaustively.
+The strongest unresolved arm is a boundary bridging owner and several
+mixed opponents balanced on its nonlinear floor wall. A sure bridger
+can have zero debt, so its true punishment floor cannot be charged
+as a positive original debt merely from root/later equality.
+
+No new export or conditional domination field is proposed. The next
+mechanism must use the strategic link between this owner's TRUE
+unrestricted punishment and those same opponents' FULL debts, or a
+whole-table variation pricing every active branch of this nonlinear
+wall. Neither a fixed-response endpoint nor ambient multiaffinity
+supplies that upper price. The actual source still has the checked
+SA random first collision and BG distinct-kernel bridge; neither is
+weakened to a supplied tail minimum to make the wall easier.

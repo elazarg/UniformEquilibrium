@@ -103,6 +103,21 @@ finite-law punishment graft. No export or UE is yet claimed. Multiple
 outcome-equivalent late plateaus remain explicitly unconsumed even
 under the candidate's conclusion.
 
+The new COMPLETE UNREVIEWED source restriction BG1–BG6 attacks
+genuinely random atomic earliest outcomes rather than counting late
+aliases. At one compatible row-generic debt-rigid positive table,
+EVERY produced minimum either has deterministic terminal outcome or
+has a genuine active root-to-later PAYOFF-kernel bridge. Randomness
+first removes all strict pre-active heads. If no owner maximizes
+both at the earliest atom and later, the full signed root box keeps
+ALL complete active sets stable; individual rigidity forces every
+root participant originally pure, making the outcome deterministic.
+The bridge differs on a positive-probability original root event,
+with literal moving-test finite witnesses. Its owner may have ZERO
+debt. No deterministic-outcome exclusion or resulting bridge consumer
+is assumed. MH2's focused-review calendar-cut clarification and the
+stronger all-owner payoff margin are retained.
+
 No full UE producer, positive unrestricted-gap example, or new export
 is claimed. The next genuine target is a finite-amplitude coupled law
 change with a proved upper ledger for ALL changed caps, consuming a
@@ -6713,3 +6728,291 @@ Hence MH1's U_h=s_h is impossible; no second debtor is needed.
 This theorem and `exists_minimumTerminalSemanticDebt_le_sqrt_of_fourPlayer`
 in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPayoffEnvelope.lean`
 were narrowly inspected. No change to the frozen HR artifact follows.
+
+## A random minimum forces a root-to-later active payoff-kernel bridge
+
+Status: COMPLETE ordinary-mathematical candidate BG1–BG6, not yet
+independently falsified. It is a source restriction at one compatible
+generic debt-rigid positive table, not an equilibrium consumer. It
+strictly distinguishes root-to-later active kernels from late/Never
+plateau aliases. No conclusion that the bridging owner has positive
+debt is made. Deterministic outcomes are retained as a separate
+alternative; no unreviewed deterministic-outcome exclusion is used.
+
+### BG1. Exact data and compatible fresh-table selection
+
+Take the intermediate positive-gap unit-cube table with the 82
+strict no-contact gaps from the complete source/table construction,
+then, BEFORE selecting new minima, make its recipient rows generic:
+
+    r_i(S)≠r_i(S′) for every i and distinct nonempty S,S′.
+
+This selection is legal. First contract the whole table by a common
+factor arbitrarily close to1 so that every entry is strictly inside
+the unit cube. Every homogeneous contact value and the true SUM
+infimum contract by the SAME factor, so all contact gaps and the
+positive gap persist. Next take a sufficiently small perturbation
+inside this open cube outside the finitely many row-equality
+hyperplanes. Their complement is dense. If the perturbation size is
+β, the full-law SUM infimum changes by at most8β and each contact
+by at most6β; choose β below the positive-gap and contact margins.
+This retains Δ>0 and all 82 strict gaps. Now perform the ordinary
+positive recipient-scale selection DR on THIS fixed carrier. Positive
+row scales preserve all within-row inequalities, and arbitrarily
+small scales preserve the contact gaps. This produces ONE fixed
+table with generic recipient rows and ALL-minimum debt-vector
+rigidity. No old minimizing law, cap family or normality datum is
+transferred.
+
+At that table fix ANY produced marked TRUE global minimum q.
+Use its complete independent laws on X=T⊔{Never}, full continuous
+response functions and all original finite/Never response witnesses.
+Put δ=Δ(r)>0, d_i=B_i−U_i, and let τ be the earliest point in the
+union of ALL active cap sets. It is finite by EA. “Deterministic
+outcome” means that the prescribed terminal outcome law, including
+Never, is a point mass, not merely that its payoff is constant.
+
+Claim: either the prescribed terminal outcome is deterministic,
+or there exist an owner i and a later compact test σ>τ such that
+
+    V_i(τ,q_-i)=V_i(σ,q_-i)=B_i,
+
+where τ is a finite isolated positive mixture atom, no prescribed
+owner stops before τ, and the TWO actual response PAYOFF KERNELS
+differ on a positive-probability set of opponent draws. Their
+EXPECTED payoffs are equal maxima; the pointwise kernel distinction
+does not mean their cap values differ. In particular a genuinely
+random minimum cannot have ONLY late/Never outcome-equivalent cap
+multiplicity.
+
+### BG2. Randomness eliminates all strict pre-active heads
+
+Let A={i:q_i(clock<τ)>0}. The signed old-head argument MH applies
+without uniqueness or an isolated τ. At a whole-date cut u<τ,
+every response above a slightly larger cut a<τ has one positive
+affine rescaling under each conditional old-head change. The
+compact lower test set has no active point and has a strict gap.
+All full active upper sets therefore remain active together on a
+legal two-sided box. Actual original finite witnesses use WHOLE
+retained dates/right-end cuts or null boundaries; they never split
+an old atomic interval. The SUM polynomial is constant by global
+minimality and each individual polynomial is constant by debt rigidity.
+
+If A is nonempty and exactly one owner has any mass before τ,
+the single-head argument gives its U_h=s_h. This contradicts the
+checked SAME-table all-owner quadratic payoff margin stated in MH3,
+under original carrier membership, global SUM minimality, a positive
+reward bound, four players and δ>0:
+
+    U_h−s_h≥δ−d_h+δ²/(8M)>0.
+
+If A has at least two members, MH2's cut descent makes ALL of them
+pure at one common t₀<τ, and every outsider stops≥τ. For precision,
+these are decreasing CALENDAR events, not decreasing raw coordinates
+through an isolated midpoint. At an isolated t₀ the whole-date
+event at its retained right endpoint already suffices; in the
+nonisolated case regular whole-atom/null-boundary cuts decrease
+to t₀. This prescribed terminal outcome is the deterministic
+coalition A.
+
+Thus a NONDETERMINISTIC minimum has A empty. If its earliest active
+point had zero mixture mass, EA's actual all-response result would
+supply an owner stopping strictly before it surely, contradicting
+A empty. Hence τ has positive mixture mass and is isolated. Every
+prescribed law is on clocks≥τ, and its mass on clocks≤τ is precisely
+its own atom at τ. This excludes no deterministic arm by assumption.
+
+### BG3. If no cap bridges the root, the complete root box is stable
+
+Assume the nondeterministic minimum has NO owner maximizing both
+at τ and at a later compact point. Let
+
+    R={j:a_j=q_j({τ})>0}.
+
+R is nonempty. Every owner whose cap contains τ has cap set EXACTLY
+{τ}. This is not an assumption that the other owners' caps are
+unique: they may have arbitrary compact later maximizing sets,
+including equivalent finite/Never plateaus.
+
+For j∈R independently use the existing supported-atom reset
+
+    q_j^λ=(1−λ_j)q_j+λ_jδ_τ.
+
+The original retained positive interval supplies actual finite
+targets at its retained date n_k. Its own atom mass tends to a_j>0,
+so small parameters of BOTH signs are legal. The old-chart density
+
+    (1−λ_j)f_j^k+λ_j 1_(J_k)/|J_k|
+
+is uniformly bounded and nonnegative; interval indicators converge
+in L¹, yielding weak-* convergence, product/payoff convergence and
+ALL moving-cap convergence. Unit mass gives a redundant direction,
+not an illicit negative probability. Never stays separate and c⁺
+duplicates c exactly; no new mass is inserted at a nonisolated point.
+
+A root-only cap has the isolated compact complement gap. For an
+owner with ALL its active points later, compactness and isolation
+of τ permit one cut a>τ strictly below its entire active set; when
+the only active point is Never choose τ<a<c. Each product term
+containing a reset opponent quits at τ, before EVERY response t>a.
+Consequently on the WHOLE upper family,
+
+    V_i(t,q_-i^λ)=k_i(λ)V_i(t,q_-i)+C_i(λ),
+    k_i=∏_(j∈R,j≠i)(1−λ_j)>0.
+
+This preserves ALL maximizing equalities and upper orderings, not
+just one selector. The compact lower set contains no active point
+and remains below the upper maximum locally. Thus EVERY full cap
+stays represented by its original active set on one signed box,
+even if every later cap set is multiple and nonisolated.
+
+Select any original maximizer σ_i for each owner. The selected
+summed-regret polynomial is the ACTUAL debt throughout this box.
+It is multiaffine, has interior global minimum δ, and hence is
+constant. Every box pair is a true original-carrier minimum. ALL-
+minimum rigidity now makes EACH individual polynomial identically
+d_i, algebraically at distant parameter endpoints too. Those far
+evaluations remain SELECTED regrets, not actual endpoint cap claims.
+
+### BG4. This forces a deterministic original root cohort
+
+If R={h}, every opponent is strictly after τ. The reset target
+pays s_h to h. Its cap is independent of its own law. Individual
+constancy forces U_h=s_h when a_h<1; if a_h=1 the same equality
+is immediate. The all-owner quadratic payoff margin contradicts
+this. Thus |R|≥2.
+
+Consider any h∈R. If its cap is root-only, its own reset toward
+its maximizing root has
+
+    d_h(q^λ)=(1−λ_h)d_h(q)
+
+on the actual box. Rigidity forces d_h=0. The ONLY maximizing
+point is τ, so zero expected regret implies the ORIGINAL q_h
+is pure at τ. This is actual original purity, not a polynomial
+endpoint inference.
+
+If all its cap points are later, its positive prescribed atom at
+the strictly suboptimal root gives d_h>0. In the polynomial identity
+condition all OTHER members of R to the root. There is another
+sure root owner. With h on its old conditional late law (>τ),
+both its prescribed clock and any selected σ_h>τ are screened
+by the same other-owner root coalition, so the raw regret is zero.
+With h conditioned to the root, its selected regret is d_h by
+individual polynomial constancy. Leaving h original gives
+
+    d_h=a_h d_h+(1−a_h)·0,
+
+forcing a_h=1. If a_h=1 already, no late conditional is defined
+or needed. Again this is ORIGINAL purity. All outside-R laws are
+strictly after τ by BG2 and their zero root masses.
+
+Every member of R is therefore originally pure at τ, and every
+other owner is later. The actual prescribed terminal coalition is
+deterministically R, contradicting nondeterminism. This proves that
+a nondeterministic positive minimum MUST have a root-to-later bridge,
+not merely some pair of abstract maximizing point labels.
+
+### BG5. The bridge really distinguishes payoff kernels
+
+Choose the bridging owner i and any later active σ. The root
+response is its full cap, so the singleton margin gives
+
+    V_i(τ)=B_i≥s_i+δ>s_i.
+
+If no opponent had positive root mass, its response at τ would
+be its own singleton s_i, impossible. Thus with positive probability
+at least one opponent exits at τ. On that event let S≠∅ be the
+opponents' tied root coalition. Because there are no earlier draws,
+the response at τ gives coalition S∪{i}, while the response at
+ANY σ>τ, including Never, gives coalition S. These are different
+coalitions on a set of positive probability. At least one such
+nonempty S has positive event probability, since there are finitely
+many possible S.
+
+The fresh row genericity gives
+
+    r_i(S∪{i})≠r_i(S).
+
+Thus the two FULL response payoff kernels differ on that positive
+probability set of the ORIGINAL opponent laws. This is not merely
+a c/Never alias behind a sure old owner. Equality of their expectations
+is the genuine active tie that remains to be priced. No claim about
+a sign of the pointwise differences, a positive debt of i, or a
+root Nash condition is made.
+
+This distinction has literal finite witnesses as well. Retain the
+original root date n_k and one original moving response σ_k for σ
+(or literal Never). Since τ is isolated and σ>τ, σ_k>n_k eventually.
+For a nonempty root coalition S with positive limiting opponent
+probability, the event that EXACTLY its members stop at n_k and
+all other opponents are later has probability tending to that
+positive value. Root masses and through-root masses converge by
+the retained interval's endpoint density tests. On this event the
+two actual finite responses give respectively S∪{i} and S. The
+SAME fixed generic reward difference is nonzero for every k. No
+new nonisolated insertion or asymptotic tester alias supplies the
+kernel distinction.
+
+### BG6. Exact boundaries, source comparison and the remaining consumer
+
+The participant-indicator table from the earlier cap-atom boundary
+test, r_i(S)=1 if i∈S and0 otherwise, has each owner half root/half
+Never. Its terminal outcome is genuinely random, every cap is
+root-only, and D=2. Resetting the root masses legally decreases D.
+Its true δ is0. Thus a random PROFILE with positive debt cannot
+replace a genuine global positive minimum in BG3–BG4.
+
+Within-row genericity is needed ONLY for the PAYOFF-kernel upgrade,
+not for the coalition-kernel bridge. For the complete table
+r_i(S)=1 for every i,S, let owner0 be pure at date0 and every
+other owner be half date0/half Never. The prescribed coalition is
+random, U_i=B_i=1 and δ=0. For any owner j≠0, date0 and Never
+are both maximizing responses. Their first-coalition kernels differ:
+the former joins owner0 and the latter does not. Their payoff
+kernels are nevertheless identically1 against these opponents.
+This exact table shows why different test or coalition labels
+alone cannot be upgraded to different payoff kernels without
+checking the reward data.
+
+One attempted finite-amplitude consumer of the bridge was repeated
+root prefixing. Its precise all-branch ledger, with no pre-root
+mass and a fixed actual old tail (u,b), is
+
+    Q_i(a)=root-Quit reward,
+    A_i(a)=opponent root-absorption reward,
+    c_-i=∏_(j≠i)(1−a_j), c=∏_j(1−a_j),
+    B_i(a,u,b)=max(Q_i,A_i+c_-i b_i),
+    U_i(a,u)=a_i Q_i+(1−a_i)A_i+c u_i.
+
+If EVERY Q_i ties its later cap, the root is exact Nash AGAINST
+the tail CAP vector b; the debt cancellation is D=cΣ_i(b_i−u_i).
+It is NOT exact Nash against u or the global root cap vector.
+Prefixing the SAME row again changes its continuation caps and
+can break all these ties; no repeated-root contraction follows.
+
+The exact declarations
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash`,
+`quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash`
+and `exists_quittingCapNashRootStack` in
+`UniformEquilibrium/Quitting/Root/CapNashRootStack.lean` were
+inspected under their imports. They require each chosen root to be
+exact Nash against its executable suffix's COMPLETE cap. They
+produce finite cap-Nash stacks, not absorption of those stacks,
+a debt-minimizing old tail, or preservation of the SAME root's Nash
+property after another prefix. The global positive-minimum auxiliary
+budget in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`
+was also inspected; it constrains prefixed auxiliary Nash roots,
+not this original first row. No false Nash hypothesis is inserted
+to close the repeated-root route.
+
+The new source restriction concerns genuinely RANDOM atomic earliest
+outcomes, independently of any proposed finite-contact elimination
+of deterministic outcomes. Even if such an elimination is later
+proved, BG alone supplies no debt decrease. The next consumer must
+price a real root-versus-later max tie, possibly carried by a
+ZERO-debt owner, while permitting changes to the independent old
+tails and controlling every moving finite response and Never.
+A late-plateau-only multiplicity argument or a locally linear
+selector cannot settle that remaining branch.

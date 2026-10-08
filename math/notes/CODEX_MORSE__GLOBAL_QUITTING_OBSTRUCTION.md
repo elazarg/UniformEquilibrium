@@ -10080,8 +10080,13 @@ has several points. There is no linear outcome-mixture repair.
 
 Let q be ANY freshly produced final-table marked minimum, with full
 compact response sets A_i and τ=min(⋃_i A_i), allowing Never.
-Choose finite regular cuts u<a<τ; neither cut splits a retained atom,
-and q_j(clock=u)=0 for all j. Put B={i:e_i=q_i(clock≤u)>0}.
+Choose finite regular ORDERED cuts u<a<τ with q_j(clock=u)=0
+for all j. These are cuts in the collapsed chronological clock order,
+not raw quantile coordinates. The event clock≤u includes each retained
+date WHOLE; its raw π-preimage boundary is the RIGHT endpoint after
+its last included atom, which need not equal u. In an isolated-point
+clock gap this raw prefix boundary can stay fixed as u varies.
+Put B={i:e_i=q_i(clock≤u)>0}.
 If B is nonempty, for each i∈B use the OLD conditional head
 ν_i=q_i(·|clock≤u) and independent signed parameters
 
@@ -10092,9 +10097,10 @@ They are positive and bounded on a common small two-sided box.
 An e_i=1 direction is redundant; no new clock is introduced.
 
 This is realized on the ORIGINAL finite minimizing sequence using
-chronological conditionals at whole old atom intervals. Their cut
-boundaries converge to the old-chart regular cut; their indicators
-converge in L¹, and their positive masses tend to e_i. The literal
+chronological conditionals at whole old atom intervals. Their raw cut
+boundaries converge to the π-preimage prefix boundary just specified,
+not to a cut through an interval midpoint. Their indicators converge
+in L¹, and their positive masses tend to e_i. The literal
 old density is multiplied by
 
     (1−λ_i)+(λ_i/e_i^k)1_(clock≤u_k).
@@ -10171,11 +10177,17 @@ the all-head endpoint. Its selected polynomial is0 there, so
 d*_j=0. Thus no j∉B can have positive pre-active mass: B=P.
 
 If P is nonempty, choose the smallest essential support endpoint
-t₀ of its mixture. There are decreasing regular cuts u_n↓t₀,
-all below τ, with some positive head present. Singleton B is
-impossible; for EACH n the preceding paragraph gives B=P,
-|P|≥2 and q_i(clock≤u_n)=1 for every i∈P. It follows that
-EVERY P owner is PURE at ONE finite t₀<τ in the ORIGINAL source.
+t₀ of its mixture. If t₀ is isolated in the retained clock set,
+use ONE ordered cut u in its right clock gap and below τ. Its
+whole-atom raw prefix ends at the RIGHT endpoint of t₀'s retained
+interval; there is some positive head, and the preceding paragraph
+gives B=P and q_i(clock≤u)=1 for every i∈P. By minimality of
+t₀ and the clock gap, all those laws are pure at t₀. If t₀ is
+nonisolated, it has zero mixture atom; use decreasing regular ORDERED
+cuts u_n↓t₀ below τ, each with some positive head present. For
+EACH n, singleton B is impossible and the preceding paragraph gives
+B=P, |P|≥2 and q_i(clock≤u_n)=1 for every i∈P. Again EVERY
+P owner is PURE at ONE finite t₀<τ in the ORIGINAL source.
 Every outsider stops≥τ>t₀. Its prescribed terminal outcome is
 therefore deterministically P, contradicting SA7.
 

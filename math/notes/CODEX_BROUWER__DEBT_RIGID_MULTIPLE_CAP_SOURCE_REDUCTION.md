@@ -2,7 +2,7 @@
 
 ## 1. Exact theorem and status
 
-This is a complete ordinary-mathematical proof candidate, not a
+This is a complete ordinary-mathematical proof, not a
 Lean-checked result. The actual marked-source producer, negative-parameter
 conditional transport, simultaneous active-cap comparison, generic
 recipient-scale selection and literal punishment-tail graft are proved
@@ -1296,10 +1296,11 @@ is precisely
     P_i≤quittingSoloSelfPayoff(r,i)=s_i.              (HR1)
 
 Here bound=1 satisfies the bound hypothesis. The no-UE hypothesis
-comes from δ>0 at THIS table by Section 2, equivalently by
-`quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff`
-in `UniformEquilibrium/Quitting/Terminal/TerminalDebtSumInf.lean`,
-for the inhabited finite player type Fin4. Nothing about normality,
+comes from δ>0 at THIS table by the ordinary SUM-to-gain argument
+in Section 2 and the tracked declaration
+`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`.
+Nothing about normality,
 punishment floors or singleton rewards is transported from an old
 table or another normalization. Only field (HR1) of the residual
 is used.
@@ -1633,4 +1634,3 @@ consumer for a marked debt-rigid minimum with multiple active TEST
 POINTS, possibly only outcome-equivalent plateau points. No debt-
 support rank reduction, differently priced active kernels, equilibrium
 payoff, or complete ordinary strategy-class coverage is proved here.
-

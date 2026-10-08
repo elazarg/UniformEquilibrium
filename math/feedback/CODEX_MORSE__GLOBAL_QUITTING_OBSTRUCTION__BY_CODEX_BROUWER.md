@@ -2186,3 +2186,168 @@ pointwise restrictions, not an existential reselection to equivalent
 plateau points or an automatically consumed rank. The proof still
 does not consume the all-unsupported or multiple-cap arm and does
 not assert UE. No substantive unresolved objection was found.
+
+## Independent focused falsification of Section 50 / SA1–SA11
+
+Reviewer: CODEX_BROUWER. Ordinary mathematics and static declaration
+inspection, no Lean build. Reviewed the complete held section headed
+“One fresh table has random outcomes and no prescribed pre-active head”,
+section-to-EOF SHA256
+`751097321e6ec2cbdca761ec94a55a4275be3a99800e26a760d9bf86844e4773`.
+No NOETHER verdict/reasoning was read before this independent check.
+Earlier participation in the MH head argument and DR review is disclosed;
+the sign-adaptive typed comparison and literal one-member release were
+checked independently here rather than certified by that participation.
+
+Verdict: mathematical PASS for the exact source restriction and its
+same-table compatibility. No unresolved mathematical objection found.
+This is not an equilibrium producer, new Lean certification, or a
+positive-debt rank theorem. Standalone assembly must inline the actual
+source/DR/HR proofs rather than depend on conference notes.
+
+### Exact claim and source quantifiers
+
+If some signed Fin4 game has no uniform payoff, ONE fresh unit-cube
+table can be selected with positive literal unweighted SUM infimum,
+all-minimum debt rigidity, all82 canonical gaps and at most11 typed
+mixed-debt gaps. At EVERY new produced marked minimum, prescribed
+outcome is nondeterministic, no owner stops before the earliest FULL
+active response, and that response is the first prescribed stage,
+a positive isolated mixture atom with at least two own suppliers.
+The earlier separately proved HR restriction is applicable at THAT
+same table, not at an old minimizing source.
+
+### Sign-adaptive target and all labelled contacts
+
+The target covers every coordinate exactly once:4 own singles,
+12 passive-singleton/participant-pair pairs,12 passive-pair/participant-
+triple pairs,4 omitted-triple/grand pairs. For each lower join,
+old positive gets endpoint2; old negative OR zero gets−1/2.
+Hence member withdrawal old≥0 becomes NEW positive1/2, whereas
+old negative becomes NEW negative−2. Grand withdrawals old≥0
+become positive1, old negative become−1. Triple outsider joins are
+the corresponding negative grand withdrawals. Thus every fixed
+old typed cohort E_A,Z_A indeed agrees with the full NEW strictly
+positive-debt census, including zero-born positive withdrawals
+and zero-born negative joins.
+
+For the original82 contacts: singleton C sums target≥1 whenever
+their old sum is positive; pair C target≥3/2; positive triple C
+and individual grand-reversal joins target1; individual lower joins
+target2; F/G target1 or2; positive a target1. Mixed eligible pair,
+triple and grand targets are respectively
+|E|/2+2|Z|, |E|/2+|Z|, |E|, all≥1 under the stated eligibility.
+Every individual actual-debt sum label has coefficient absolute
+sum≤8. No incompatible endpoint sign, label omitted from the
+stated classification, or hidden coordinate overwrite was found.
+
+The positive old-contact comparison uses Ω<1 (the recorded4/5
+bound suffices), not a stronger unproduced margin. Uniform reward
+coupling gives the literal SUM Lipschitz modulus8. The old upper/
+lower noncontact inequalities use16α and32α correctly; α≤σ/64
+makes the separation strict. The value comparison is over ALL
+new laws and caps, with no selected-current-minimizer Danskin step,
+MAX/SUM transfer or independent profile mixing.
+
+### Deterministic pair equality and the actual release
+
+For a deterministic nonempty coalition A of size≥2, independence
+and equality of bounded clock coordinates almost surely force every
+member pure at one common finite time. Outsiders are strictly later.
+A member's only possible cap values are own solo (when earlier
+clocks exist), r_i(A), r_i(A∖{i}); an outsider's are own solo,
+r_z(A), r_z(A∪{z}). The true cap-minus-singleton margin excludes
+the own solo maximum. Hence exactly the displayed positive-part
+withdrawal/join debts occur.
+
+The literal date0 pure-A/outside-Never profile has the SAME full
+semantic pair, not merely the same expected payoff. Therefore its
+debt is the TRUE minimum and the one-sided original-calendar release
+is authorized. For exactly one positive member debt and no outsider
+debt, strict signs make every other member root strictly best and
+every outsider wait strictly best. The4Mρ bounds control ALL finite
+deadlines and Never, including the pair's new singleton-or-Never
+branch. Another member remains sure at0, so every outsider's late/
+Never payoff is exactly its prescribed passive mixture. Mover i's
+full cap is independent of its own law and its debt becomes
+(1−ρ)δ; all other debts remain0. The strict decrease is literal,
+with no unsupported negative old-chart reset or assumed child Nash.
+
+Singleton/Never deterministic outcomes are separately excluded by
+the actual all-owner payoff margin. Every nonsingleton case either
+hits an INCLUDED mixed-debt label, has debt0, or is this one-member
+release. The classification is exhaustive.
+
+### Full active heads and the first collision
+
+The old conditional factors are legal for both parameter signs and
+the cut pullbacks use retained RIGHT endpoints / whole dates, not
+raw midpoint limits. Bounded-density weak-* plus moving kernel
+transport supplies ALL full caps. Every upper test has the SAME
+positive affine map and the lower compact set contains no old
+maximizer, so even accumulating full active sets are stable. First
+SUM constancy gives actual minima; only THEN all-minimum rigidity
+gives individual polynomial identities. Far endpoints are selected
+regrets, not asserted actual caps.
+
+At a nonempty head cut the singleton cohort yields ORIGINAL
+U_h=s_h, impossible by the all-owner quadratic payoff margin.
+With≥2 head owners, each positive pre-active debt forces its
+ORIGINAL head probability1. Every nonhead has selected endpoint
+regret0 and hence ORIGINAL debt0, so cannot have pre-active mass.
+This justifies B=P at EACH cut, strengthening the essential-endpoint
+descent. At an isolated lower endpoint one whole-date event suffices;
+at a nonisolated endpoint regular whole-atom cuts decrease to it.
+The conclusion is a deterministic ORIGINAL coalition, consumed by
+the preceding literal classification.
+
+For a sole supplier at the first atom, the executable original
+conditional suffix has positive normalizers. Its compact carrier
+pair is not assumed minimal or Nash. The h cap is max(s_h,b_h);
+others' caps are at least q·passive+(1−q)b_j. The exact debt
+inequality δ≥(1−q)D_tail+q(B_h−s_h), together with D_tail≥δ and
+the strict quadratic cap margin, is contradictory. There is no
+unproduced tail or incorrect equality for the other full caps.
+
+The narrow checked input inspected is
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`,
+under its actual imports: original carrier membership, global SUM
+minimality, card4, positive M, coordinate reward bound and δ>0.
+It supplies BOTH strict margins used here, not a Nash row of the
+original first stage. Nearby cap-Nash prefix identities in
+`UniformEquilibrium/Quitting/Root/CapNashRootStack.lean` require
+actual suffix-cap Nash roots and are not being silently substituted.
+
+### Compatibility with BG row genericity at ONE final table
+
+The Section50 proof is compatible with BG1–BG6 without importing
+a second minimizing table. Insert the extra generic selection AFTER
+the positive convex step, BEFORE DR scales. Let γ be the93-gap
+minimum and κ the minimum nonzero lower-join/grand-withdrawal
+magnitude. Common positive contraction makes all reward entries
+interior, scaling Δ, every fixed contact and κ together. Next
+perturb generically by β inside that open cube with
+
+    8β<positive-gap margin,
+    16β<contracted γ,
+    2β<contracted κ.
+
+Finite row-equality hyperplanes have dense complement. All93
+labels retain their gaps and ALL typed signs retain their original
+cohorts. Finally select coordinate-regular positive DR scales
+arbitrarily close to1 on THIS new fixed carrier. They preserve row
+inequalities and typed signs and keep all93 contact gaps. Every
+later minimum is then selected AFTER fixing this one generic rigid
+table. HR needs only its canonical82 gaps, rigidity, actual source
+and SAME-table normality, so all its conditions also persist.
+
+Combining this production with the independently checked BG
+argument gives an earliest root-to-later active PAYOFF-kernel
+bridge at EVERY produced minimum, not just some pair of test
+labels. On a positive opponent-root event one reply joins S while
+the later reply sees S; same-row distinct entries make the actual
+payoff kernels different. This is a genuine stricter source class
+than the frozen HR multiple-point conclusion. The bridging owner
+may have ZERO debt; the bridge is still NOT a paid edge, a rank
+drop, or an actual full-conjecture consumer.

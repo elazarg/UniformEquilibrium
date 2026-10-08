@@ -638,3 +638,170 @@ illegal negative reset, public correlation, or endpoint cap overclaim
 was found. The precise surviving alternative remains multiple complete
 test-point maximizers OR a unique zero-own-point-mass maximizer for
 at least one owner. Its downstream global consumer remains open.
+
+## Focused independent BG1–BG6 bridge review
+
+Reviewer: CODEX_MORSE. Reviewed the ENTIRE final section
+“A random minimum forces a root-to-later active payoff-kernel bridge”
+of `../notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`, BG1–BG6.
+Exact heading-to-EOF SHA256:
+`a74e319a2e70999513399e527ce48769d9ef0013dece01272afb95df122c1afc`.
+No CODEX_NOETHER BG verdict or feedback was read. The author's bytes
+were not changed. Verdict: PASS as ordinary mathematics, with no
+unresolved mathematical objection to the exact source restriction.
+
+This review does not independently certify my own base recipient-scale
+DR contribution. That full artifact already has two blind reviews;
+here I check the NEW bridge inference and its exact compatibility
+with one fresh final table. No export or Lean certification follows.
+
+### Claim and exact compatible-table quantifiers
+
+At a produced positive true global SUM minimum of one bounded,
+debt-rigid table with pairwise distinct nonempty-coalition payoffs in
+each recipient row, either the prescribed terminal outcome is
+deterministic, OR some owner has BOTH the earliest active root τ and
+a later response σ>τ maximizing its full cap. The root is finite,
+isolated, has positive mixture mass and has no prescribed mass before
+it. The two response PAYOFF KERNELS, not just their test labels or
+coalition names, differ on a positive-probability set of old opponent
+draws. Their expected values remain equal maxima.
+
+The bridging owner can have zero individual debt. This is a producer
+of genuine tied source data, not a debt decrease, cap-Nash root or UE
+consumer. A random outcome may still have many other plateau aliases.
+
+BG's stated82 table can be combined with the COMPLETE typed93 family
+in MORSE Section50 at ONE final table. The correct construction order
+is important. Start at the sign-adapted intermediate r^α, before its
+recipient-scale selection. Common contraction by c∈(0,1) arbitrarily
+close to1 sends Δ and every homogeneous raw label to c times its old
+value, preserving all93 gaps, positivity and every nonzero lower-join
+and grand-withdrawal sign. It puts every reward strictly inside the
+unit cube. Choose a sufficiently small full-table perturbation inside
+that cube outside the finitely many within-row equality hyperplanes.
+For93 labels the coefficient bound is8, so the combined value/gap
+change is at most16β, rather than BG1's82-only14β. Choose β below
+the finite gap, positive Δ and all28 sign margins; the dense generic
+set meets this open neighborhood. All OLD cohorts E_A,Z_A still give
+the EXACT fresh positive branches; do not relabel them after selection.
+
+NOW perform DR on that fixed actual carrier. Positive row scales
+preserve within-row inequality and within-row join/withdrawal signs;
+their arbitrary smallness preserves all93 gaps and positive Δ.
+Coordinate-regular selection makes ALL FINAL unweighted minimizers
+debt-rigid. Arbitrary reward perturbation AFTER selecting regular
+weights would not preserve rigidity automatically, and is not used.
+Apply SA, HR and BG afresh at this ONE table. Same-table normality is
+obtained from its positive infimum, not inherited through perturbation.
+Thus the combined random-outcome and bridge conclusions do not switch
+minimizing families or import an old fixed tester. The author's82
+statement is valid; the93 compatibility requires only this explicit
+coefficient adjustment and finite-sign preservation, not new strategy
+data or another independent producer hypothesis.
+
+### Full cap-box and original-source falsification checks
+
+1. BG2's strict-head argument treats ALL active response sets. Before
+   τ, every old-head term is already absorbed, so every upper tester
+   has one common positive affine transform. The compact lower set
+   has no active point. Actual signed original conditionals use whole
+   retained dates/RIGHT endpoints or null boundaries; an isolated
+   endpoint is not approached by raw cuts splitting its interval.
+   Individual constancy is derived only after the cap-stable actual
+   box is made a family of true minima. A sole head gives U_h=s_h,
+   contradicted by the checked four-player quadratic prescribed margin.
+   Multiple heads collapse original laws to one common pure coalition.
+   Thus nondeterminism genuinely excludes all strict pre-active mass.
+
+2. If no owner bridges root to later, every cap containing τ is EXACTLY
+   {τ}. Each such cap has the isolated uniform complement gap. Each
+   other cap set is compact, excludes τ and is entirely later, so one
+   ordered cut separates it from τ even if it accumulates elsewhere.
+   For every upper response all reset-containing opponent terms quit
+   atτ and supply the SAME constant; the original term has positive
+   coefficient. This preserves every upper tie/order. The lower gap
+   excludes all other responses locally. There is no hidden unique-
+   later-max assumption and no selected branch derivative.
+
+3. Supported resets for all positive root suppliers have literal
+   old retained finite dates and bounded two-sided densities. ALL
+   original moving test kernels are retained, including empty dates,
+   arbitrarily late deadlines, Never and the exact finite c/c⁺
+   duplicate. Hence the selected multiaffine sum equals actual D on
+   an open signed box. Global minimality makes it constant; common
+   debt then makes each selected polynomial constant. No actual far
+   endpoint cap or Nash status is inferred.
+
+4. Every root-only-cap supplier has zero individual debt under its
+   own supported reset and therefore is originally pure at its
+   unique root cap. Every later-cap supplier has positive debt from
+   its suboptimal positive root atom. With every OTHER root supplier
+   algebraically reset to root, its own late prescribed branch and
+   its selected later cap see the SAME passive root coalition. Thus
+   d_h=a_h d_h, giving ORIGINAL a_h=1. A redundant a_h=1 is handled
+   directly; no zero-mass conditional is defined. A sole supplier is
+   excluded by U_h=s_h and the prescribed margin. Therefore no-bridge
+   would force the actual original prescribed outcome to be a pure
+   root coalition, contradicting the hypothesized random outcome.
+
+The cap box genuinely handles multiple later cap points, including
+points with identical kernels. The only contradiction is against
+the missing ROOT-to-later bridge, not point multiplicity alone.
+
+### Positive-event PAYOFF-kernel distinction and finite witnesses
+
+For a bridging owner i, its root cap exceeds s_i by the true global
+singleton margin. Without any opponent root mass its root response
+would equal s_i, so there is positive probability of a nonempty
+opponent root coalition S. On that event, with no earlier exit, the
+root deviation gives S∪{i} and EVERY later deviation gives S. These
+are two nonempty coalitions; row genericity applies to them directly
+and gives r_i(S∪{i})≠r_i(S). Finitely many S imply at least one
+event has strictly positive probability. Equality of the two caps'
+EXPECTED values does not invalidate their pointwise difference.
+
+For original finite witnesses, root atom and through-root masses
+converge by retained interval endpoint tests. The exact event with
+members S at the retained n_k and all other opponents later has
+probability tending to the positive limit. A fixed later compact
+test has original σ_k>n_k eventually, since its limiting point is
+strictly larger than the isolated τ; Never is literal Never. The
+two finite responses give the SAME two different fixed reward
+coordinates on that event. No limit-born response or artificial
+nonisolated atom supplies the distinction. The change in absorbing
+decision date does not alter terminal or uniform asymptotic reward
+semantics.
+
+### Minimal exact failures and consumer boundary
+
+The complete participant-indicator table with half root/half Never
+laws has random outcomes and root-only caps with D=2, but its TRUE
+global infimum0 permits descent. It falsifies replacing the global
+positive minimum by positive profile debt. The complete constant-one
+table with one sure root owner has random coalitions and tied root/
+later response POINTS with different coalition kernels, but payoff
+kernels are identically1. Its global gap0 and nongeneric rows make
+it a precise countertest to the unconditional payoff-kernel upgrade.
+
+The repeated-root ledger was checked algebraically: simultaneous
+root/later cap ties make the row exact Nash against the OLD suffix
+CAP vector b, and D=cΣ(b−u). They do not make it Nash against u
+or preserve those ties after prefixing the same row again. The named
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash`,
+`quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash`
+in `UniformEquilibrium/Quitting/Root/CapNashRootStack.lean` require exact
+cap-Nash against the executable suffix caps. The same file's
+`exists_quittingCapNashRootStack` DOES produce a finite stack over ANY
+executable terminal continuation and ANY finite depth, without a
+supplied Nash premise. It supplies neither an absorbing stack nor
+invariance of a repeatedly used fixed root. BG does not invent a
+scaling hypothesis or infer absorption from finite stack existence.
+
+The real increment is exclusion of the ONLY-late-plateau multiplicity
+source when outcomes are random. Combining with SA at the compatible
+fresh table gives a genuine first-root-versus-later payoff-kernel tie
+at EVERY produced minimum. It gives no positive bridge-owner debt,
+automatic independent finite-amplitude repair, debt-support rank drop,
+distinctness of every cap kernel, or full Fin4 UE. Subject to those
+explicit boundaries, the complete BG argument has no unresolved gap.

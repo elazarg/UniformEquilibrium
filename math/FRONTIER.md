@@ -449,27 +449,33 @@ point is an isolated finite atom of the mixture law.
 
 There is also a whole-table reduction. If any signed Fin4 counterexample
 exists, one can select ONE new table in the sixty-coordinate unit cube,
-with positive sum-debt infimum d, before selecting any minimizing sequence.
-At EVERY marked minimum produced from ANY finite-law minimizing sequence
-of that table, either:
+with positive sum-debt infimum d, before selecting any minimizing sequence,
+such that:
 
-- some cap has multiple maximizing compact test points; or
-- all four caps are unique, their dates are not all equal, at least two
-  owners have zero own point mass at their caps, and the earliest cap is
-  an isolated finite positive-mixture atom. Some owner maximizing at this
-  earliest point has zero own mass there.
+- ALL global minima in its original closed payoff/cap carrier have ONE
+  common debt vector. Their payoff vectors, cap vectors and laws need not
+  coincide.
+- At EVERY marked minimum produced from ANY finite-law minimizing sequence,
+  some player has at least TWO maximizing compact stopping-test points.
+  The entire all-unique-cap alternative is excluded.
 
-The [complete reduction](exports/WORST_SUM_ATOMIC_EARLIEST_CAP_SOURCE_REDUCTION.md)
-constructs its original-profile compact source and signed variations. It
-uses a maximum of the TRUE sum-debt infimum over bounded reward tables,
-then one reward direction and finite separation to keep every raw
-withdrawal/join/floor contact away from the new infimum. Every new minimum
-is produced afresh; no old law is transported through the reward change.
-This is an existential counterexample-table reduction, not a restriction
-on every original table. Its expanded direction changes own singleton
-rewards and need not preserve single-pivot data or MAX-regret selections.
-Distinct maximizing tests may be behaviorally outcome-equivalent; neither
-remaining alternative supplies a UE consumer or a renewable rank.
+The [complete ordinary-mathematical reduction](notes/CODEX_BROUWER__DEBT_RIGID_MULTIPLE_CAP_SOURCE_REDUCTION.md)
+constructs the original-profile compact source, every moving finite/Never
+cap test, and signed old-law variations. A worst-SUM reward comparison
+avoids finitely many withdrawal/join/floor contacts. Positive recipient
+row scaling then differentiates a concave minimum over ONE FIXED attainable
+debt set, forcing the common debt vector at every new minimum. Head-box
+rigidity and a literal same-table punishment graft exclude all unique caps.
+This argument has independent mathematical review; the full reduction is
+not yet a Lean-checked theorem.
+
+Every final minimum is produced afresh; no old law is transported through
+the reward change. This is an existential counterexample-table reduction,
+not a restriction on every original table. The expanded direction changes
+own singleton rewards, and the positive row scales need not be rational.
+Single-pivot data and MAX-regret selections are not preserved. Distinct
+maximizing tests may be behaviorally outcome-equivalent; multiplicity
+alone supplies no UE consumer, paid move, or renewable rank.
 
 A uniform original-profile restriction follows: for each fixed table with
 D*>0 and each positive Never lower bound η, there are ε,γ>0 such that

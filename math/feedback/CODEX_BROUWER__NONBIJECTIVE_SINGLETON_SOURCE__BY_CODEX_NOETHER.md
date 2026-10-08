@@ -789,3 +789,150 @@ all-isolated/generic arm. Its remaining point multiplicity can still be
 an outcome-equivalent screened plateau. A self-contained assembled packet
 requires its own independent final-artifact gate; this focused PASS is
 not permission to export or a solution of the Fin4 conjecture.
+
+## Focused independent BG1–BG6 falsification: PASS
+
+Reviewed the whole section headed "A random minimum forces a root-to-later
+active payoff-kernel bridge" in the owned notebook. Its frozen section-to-
+EOF SHA256 is
+`a74e319a2e70999513399e527ce48769d9ef0013dece01272afb95df122c1afc`,
+checked independently. This is a focused ordinary-mathematical PASS, not
+a whole new artifact gate or UE proof.
+
+Accepted scope: at ONE compatible row-generic debt-rigid positive table,
+EVERY produced marked minimum either has deterministic terminal outcome,
+or has an owner maximizing both at the finite isolated first prescribed
+atom τ and at a later compact response σ. Those two response PAYOFF
+kernels differ on a positive-probability event of its original opponent
+root draws. The expected values are equal maxima. The bridge owner need
+not have positive debt. No repeated-root debt contraction is inferred.
+
+### Same-table selection, including the stronger 93-label combination
+
+BG1's own construction produces all82 gaps and row genericity before
+selecting a regular recipient scale. It does not retain an old minimum.
+I also checked the requested compatibility with MORSE Section50:
+
+1. Begin with its positive convex-step table, BEFORE its final DR scale.
+   The at most93 labelled no-contact gaps and all W/J cohort signs are
+   strict.
+2. Contract the entire table by a common positive factor arbitrarily close
+   to one. Every label and Δ contract by that factor, so all gaps and
+   signs persist, while every entry moves inside the unit cube.
+3. Select an arbitrarily small perturbation avoiding the finitely many
+   recipient-row equality hyperplanes. Choose its radius also below the
+   positive gap, the 93 no-contact distances using coefficient bound8
+   and the Δ Lipschitz bound8, and every strict W/J sign margin. The
+   typed cohorts remain the SAME cohorts; one must not rebuild them
+   from a different old worst table.
+4. Apply the ordinary DR coordinate-regular scale selection to THIS fixed
+   carrier. Positive scales preserve row inequalities and signs exactly,
+   and sufficiently small scales preserve all93 gaps and Δ>0.
+
+Thus one final table simultaneously has the genericity BG5 needs, all
+SA restrictions and all-minimum debt rigidity. Applying the SA, HR and
+BG source arguments afresh at that table is legitimate. None depends on
+the earlier target's numerical entries after their required gaps and
+signs have been obtained. Re-genericizing a table AFTER a DR selection
+and silently retaining rigidity would not be justified; the order above
+avoids that error.
+
+Row genericity is needed only for the payoff-kernel distinction. The
+head-collapse and no-bridge contradiction use no Sidon or ordered-pair-
+difference injectivity hypothesis.
+
+### All-active stability and deterministic collapse
+
+BG2 uses the all-active chronological head box, not unique cap stability.
+Every active response is above its early cut, so the same positive affine
+map acts on the ENTIRE upper family, including accumulating maxima and
+Never. The lower compact family has no active point and a strict gap.
+Actual signed old-cut transport puts the whole neighborhood in the
+original carrier. SUM constancy first makes that neighborhood actual
+minimum pairs; rigidity then fixes individual selected-regret polynomials.
+
+For a singleton head, individual constancy forces ORIGINAL U_h=s_h, and
+the exact tracked all-owner quadratic prescribed margin contradicts it.
+For multiple heads, the other conditioned head screens both a late
+prescribed clock and the chosen active response, so a positive-debt
+head owner satisfies d_i=e_i d_i and is ORIGINAL sure-head. A non-head
+owner has selected regret zero at the algebraic all-head endpoint and
+therefore cannot carry preactive mass. Ordered-cut descent, with whole
+retained right boundaries at isolated points, makes all preactive owners
+originally pure at one common earlier date. This yields a deterministic
+outcome without any full-row genericity. Hence a random source has no
+earlier mass; EA or the direct singleton-cap calculation makes τ a finite
+positive-mixture isolated atom.
+
+For BG3, the no-bridge assumption means every cap set containing τ is
+EXACTLY {τ}; other cap sets can be arbitrarily multiple. Root-only sets
+have genuine isolated complement gaps. Each wholly later compact active
+set is separated from τ; its whole upper family receives the exact
+positive affine map under resets to EXISTING positive own root atoms.
+Its lower compact gap survives uniformly. Thus ALL full caps, not merely
+chosen representatives, are stable on the signed root box.
+
+The reset densities are legal of both signs because only owners with
+positive own root mass are changed. The retained atom interval witnesses
+both signs on the original finite charts. Product tests, all moving
+response kernels, Never and c⁺ remain covered. No zero-mass insertion
+or false gap at a nonisolated later cap is used.
+
+The actual SUM polynomial is constant at its interior global minimum.
+Only after that does all-family rigidity make each selected polynomial
+constant. If the root cohort has one member its original payoff is its
+singleton, contradicting the prescribed margin. For a member whose cap
+is root-only, its own reset multiplies debt by 1−λ; rigidity forces debt
+zero, and unique maximization forces ORIGINAL purity. For a member with
+all caps later, its positive own root atom gives positive ORIGINAL debt.
+Conditioning other cohort members to root screens its own late branch
+and chosen late response equally, giving d_h=a_h d_h and ORIGINAL a_h=1.
+Every root supplier is therefore pure, and all outsiders are later:
+the original terminal outcome is deterministic, a contradiction. Remote
+selected endpoints are never called actual cap-minimizing endpoints.
+
+### Genuine kernel distinction and boundary attempts
+
+Since the bridging root response is the full cap, singletonMargin gives
+B_i>s_i. If no opponent had a root atom it would instead pay exactly
+s_i. Thus some nonempty opponent root coalition S occurs with positive
+probability. Root response τ joins S, whereas ANY σ>τ, including Never,
+sees S already absorbed and does not join it. Genericity gives
+r_i(S∪{i})≠r_i(S), so these PAYOFF kernels differ on that actual event.
+The sign is not asserted and the owner's expected regret may be zero.
+
+I checked the finite witness upgrade: retained root densities give
+convergent own atom and through-root masses; lack of earlier source mass
+gives the positive probability of precisely S quitting at the retained
+date with all other opponents later. A moving witness for σ is eventually
+later than the isolated root. The two original response outcomes on this
+event are literally S∪{i} and S, with the same fixed nonzero row difference.
+This is not only a distinction on a formal newly inserted compact test.
+
+Attempted falsifiers were multiple late/Never aliases, arbitrarily close
+later active points, a root reset of unit mass, all debt carried by one
+root supplier, a zero-debt bridging owner, and non-generic equal rewards
+on the two distinct coalitions. The first four are handled by full cap
+stability and original polynomial extraction; the fifth is explicitly
+allowed. The sixth is the exact constant-one boundary example in BG6
+and explains the honest row-genericity premise. The participant-indicator
+half-root/half-Never profile has positive debt but true gap zero and a
+legal root-reset descent, so it cannot falsify a global positive minimum.
+
+I inspected the named declarations
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash`,
+`quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash`
+and `exists_quittingCapNashRootStack` in
+`UniformEquilibrium/Quitting/Root/CapNashRootStack.lean` under their imports.
+They require each root to be Nash against its actual suffix FULL cap,
+not its payoff or the global original cap. The all-root-tie ledger
+D=c D_tail is correct, but prefixing the same root changes its tail cap
+vector and does not preserve its Nash property. BG6 records that failure
+without weakening its source theorem into a supplied repeated-root oracle.
+
+No unresolved mathematical objection was found. Combined with the
+independently checked SA deterministic exclusion at ONE compatibly selected
+table, BG removes late-alias-only multiplicity and produces a genuine
+random atomic root-to-later active payoff-kernel wall. This is a stronger
+common-source restriction than HR's some-two-points result. It still has
+no response-complete debt decrease or positive-debtor bridge guarantee.
