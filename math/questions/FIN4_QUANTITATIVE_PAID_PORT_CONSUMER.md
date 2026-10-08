@@ -1,4 +1,4 @@
-# Consume a fully paid nonsure collision at a separated terminal-debt minimum
+# Consume a least-Never fully paid nonsure collision at a separated debt minimum
 
 ## Game and unrestricted response values
 
@@ -45,10 +45,32 @@ there is one STRICTLY POSITIVE vector a, with ∑[i∈I]a_i=δ, such that
 Only the debt vector is common. Minimizing payoffs, caps, laws and
 calendars need not coincide.
 
+## Least literal Never among all full minima
+
+For an actual profile p let ν(p)=Pr_p(AllNever). Retain this actual
+coordinate together with its complete payoff/cap pair, and put
+
+    H=closure{(U(p),B(p),ν(p)): p is an actual product-law profile},
+    H_min={(u,b,ν)∈H: D(u,b)=δ},
+    ν*=min{ν:(u,b,ν)∈H_min}.
+
+The compact sets H and H_min are nonempty, and the strict absorbing
+gap implies ν*>0. The selection ranges over ALL full minima, not one
+fixed semantic fibre or one chosen sequence. H is not formed by freely
+adjoining a probability to a semantic pair: every triple has one common
+actual realizing sequence for all three coordinates.
+
+Require the supplied first-row decomposition below to realize a triple
+with literal full-profile Never probability ν*. The existence of some
+other triple above the same payoff/cap pair with probability ν* is not
+sufficient. Conditional suffix Never and finite clocks escaping to infinity
+are not substituted for this coordinate.
+
 ## Supplied first-row decomposition
 
-Fix an actual carrier continuation v=(u,b)∈K and an independent product
-root q∈[0,1]⁴. Player i Quits at the first date with probability q_i;
+Fix an augmented carrier continuation (u,b,ν_tail)∈H, write v=(u,b),
+and fix an independent product root q∈[0,1]⁴.
+Player i Quits at the first date with probability q_i;
 on all-Continue the continuation is v. This means the continuous semantic
 limit of literal one-row prefixes over actual realizing tails, not play
 followed by an unattained strategy at an infinite date.
@@ -72,6 +94,16 @@ Every T_x(w), x∈[0,1]⁴ and w∈K, belongs to K. Require
 
     D(T_q(v))=δ,
     R(q)=∑[S⊆I,|S|≥2] ∏[i∈S]q_i · ∏[j∉S](1−q_j)>0.
+
+The literal augmented prefix is
+
+    T̂_q(u,b,ν_tail)=(u′,b′,c(q)ν_tail),
+    c(q)=∏[i∈I](1−q_i),       c(q)ν_tail=ν*.
+
+Its witnesses prefix the same fixed row q to actual tails jointly
+realizing (u,b,ν_tail). Thus the complete prefixed triple belongs to
+H_min and retains the selected FULL-profile coordinate. Neither the
+tail's semantic pair nor its Never probability is required to be minimal.
 
 Thus a nonsingleton event occurs at the first root of a genuine global
 minimum. The row need not be Nash against u or b. The tail need not
@@ -209,9 +241,10 @@ or prove directly that the supplied conditions are inconsistent.
 A positive four-player terminal-gap table, if one exists, permits
 reselection to a bounded table with the positive singleton rewards,
 row witnesses, STRICT full/absorbing gap separation, common positive debt
-and universal nonsure minimum-prefix properties above, and at least one
-nonzero minimum prefix. No old minimizing law is asserted to survive that
-table change.
+and universal nonsure minimum-prefix properties above. A least literal
+Never triple and a nonzero minimum prefix realizing that same triple
+can also be selected. No old minimizing law is asserted to survive that
+table change, and no raw clock profile attaining the triple is assumed.
 Consequently an affirmative answer rules out positive terminal gaps and
 gives uniform-equilibrium payoff existence. In that conclusion one fixed
 payoff target must work at every accuracy: the profile and horizon
