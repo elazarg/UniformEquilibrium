@@ -2058,3 +2058,228 @@ It produces a NEW maximizing table, not transportation of any old
 minimum. Strategic value is limited to repairing that genuine global
 boundary; RM42's counts-only falsifier and the open full-coalition
 interior consumer remain intact. No Lean build/check is claimed here.
+
+## Independent UR1–UR5 family review and full-dimensional strengthening
+
+Reviewed scope: the complete `## UR` section through EOF in
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, frozen at commit
+`8d7fbc02`. Section SHA256:
+`7939466de2cb2b32086880367be64256e697548440a5140871af8f03418413d6`.
+The live section was byte-identical to that committed section when checked.
+I also read NI2–NI3's complete table, parametrization and no-sure proof.
+This review was developed independently; no counterpart UR review was read.
+Other sections and earlier reviews in this file are not reopened.
+
+Soundness verdict: PASS for unconditional ordinary UE throughout the
+stated sixteen-parameter raw family. A qualitative strengthening to a
+FULL-dimensional neighborhood is proved below. Neither is full Fin4
+closure, a Lean implementation of this raw producer, an export verdict,
+or proof that its entire class lies outside existing existential producers.
+
+### Exact table, every root support and the all-active inequality
+
+NI2 is a bijection: each recipient's own singleton, seven opponent passive
+entries and seven joining differences specify all fifteen entries. UR
+freezes the own and singleton data and every joining gap, while varying
+all twelve pair-passive and all four triple-passive controls through their
+full intervals. Thus it really changes used payoff transport coordinates,
+not just an invisible-cell mask. Every participant triple is at most4 and
+every grand participant is at most0. Rewards remain in [−5,5].
+
+The no-sure proof retains every sure face at every REAL continuation. With
+one sure owner, every nonfavorite free owner has a strictly negative join
+gap on every possible opponent coalition, so it must be quiet; the sole
+favorite then must be sure. Two or more sure owners give the stated strict
+withdrawal contradiction. Annotation values disappear because the relevant
+opponent-empty probability is0. The actual triple-opponent date-zero law
+also supplies normality; no old minimum is transported across controls.
+
+For nonsure exact roots, active indifference gives the printed odds equation
+at each active coordinate, and Fᵢ=Qᵢ. Quiet inequalities remain part of full
+Nash even though the numerical estimates need only active equations. The
+four missing-owner coefficient pairs computed directly from NI3 are
+(1,4), (5,2), (6,6), (5,4), as printed. In the three-active case the proof
+actually gives STRICT return: assuming Qᵢ≥1 gives xy≥x+y, hence x,y>1
+and kᵢ≥(A+1)x+(B+1)y>A+B+2. The last three rows contradict kᵢ≤9;
+the first row is contradicted by αβ≥1 and the same printed square estimate.
+This harmless strengthening is used in the neighborhood proof below.
+
+I independently expanded A T+C D, computed its y-discriminant, and converted
+the power coefficients of Δ(3t/2) to Bernstein coefficients using
+b_m=Σ[k=0..m] a_k·binom(m,k)/binom(4,k), rather than merely evaluating the
+author's asserted expansion. The numerator, discriminant and all five
+negative Bernstein coefficients agree exactly. The leading coefficient is
+at most−9/2 on [0,3/2]. Therefore the all-four-active upper bound is strictly
+negative throughout its ENTIRE feasible odds region. The A≤0 branch is also
+valid: it forces z≤1 and C<0. No symmetric-rate assumption, omitted quiet
+owner or sampled polynomial estimate is involved.
+
+Support one returns at its active owner's own value1. Support two gives
+strict return because every pair participant is strictly below1. Support
+three and support four give strict return as just checked. These exhaust
+all positive supports after the full no-sure proof. The conclusion controls
+arbitrary annotations throughout box8, not just realized tails or a floor.
+
+### Actual consumer and unrestricted fixed-target quantifiers
+
+I read the complete tracked declarations under their imports:
+
+- `HasBoxedSelectedSingletonSublevelReturn` and
+  `not_isQuittingFullExactRootPotential_of_selectedSingletonSublevelReturn`
+  in `UniformEquilibrium/Quitting/Projective/SelectedSingletonSublevelReturnSmoothDrift.lean`;
+- `exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound`
+  in `UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`;
+- `exists_uniformEquilibriumPayoff_of_continuous_boundaryDifferentiable_potential_exclusion`
+  in `UniformEquilibrium/Quitting/Classification/Existence/BoundaryDifferentiablePotentialUniformPayoff.lean`;
+- `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+  in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`;
+- `isQuittingFullExactRootPotential_of_robustPotential` in
+  `UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`;
+- `not_isQuittingFullExactRootPotential_of_convexReturnDomain` in
+  `UniformEquilibrium/Quitting/Projective/ConvexReturnDomainSmoothDrift.lean`;
+- `quittingRewardBound` in `UniformEquilibrium/Quitting/RewardBound.lean`;
+- `IsεHorizonNash`, `IsUniformεEquilibrium` and `IsUniformEquilibriumPayoff`
+  in `UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Uniform.lean`.
+
+The direct consumer requires nonnegative owns, coordinate bound M, M<bound,
+bound≤canonical reward bound+2, and the produced selected-return property.
+Here M=5, bound=7 and the canonical sum bound is already at least7 from
+the fixed singleton0 row. Finite exact Nash existence, checked in
+`exists_isZeroQuittingRootNash` in `Quitting/Root/NashExistence.lean`, produces
+a root at every annotation; a source strictly below some own value cannot
+have an all-Continue Nash root. UR's all-root return therefore supplies
+the selected-return property, with no continuous selector premise.
+
+The actual output is ONE target selected before accuracy. For every ε>0
+there are one full behavioral profile and one horizon threshold such that
+for EVERY later horizon its prescribed average payoff is ε-close to that
+target and EVERY whole unilateral behavioral replacement gains at most ε.
+It is not merely terminal Nash, a constrained-root conclusion, a different
+target at every accuracy, or a public-correlated equilibrium.
+
+The independent convex-box potential exclusion and SAME-function robust
+restriction also match their hypotheses. The direct payoff consumer is
+already sufficient, however; UR does not need a new finite exact return
+word, a minimizing suffix, or an additional unproduced potential theorem.
+
+I additionally checked `hasFixedBoxPackets_of_uniformEquilibriumPayoff_of_noSureRoot`
+in `UniformEquilibrium/Quitting/Projective/FixedBoxForwardCharacterization.lean`
+and `HasAbsorptionWeightedFiniteForwardPackets` in
+`UniformEquilibrium/Quitting/Projective/AbsorptionWeightedForwardPacketProducer.lean`.
+Its accuracy and NONNEGATIVE charge target are quantified after the fixed
+box. Normality, positive owns and no sure root at true punishment are supplied
+here. Thus the packet corollary is valid. It does not identify packet annotations
+with full actual suffix caps, produce a literal closed word, or assert an
+explicit periodic architecture; those stronger statements are not claimed.
+
+### Falsification attempt: strictness alone does not give robustness
+
+An automatic argument “all positive roots return strictly, so use compactness”
+would be FALSE. At every table in this family take
+
+    q=(1/2,0,0,0),       v=(1,8,8,8).
+
+This is a full exact root: all quiet comparisons are strict. Its actual head
+is F=(1,11/2,11/2,4). The only singleton-sublevel return is equality at the
+active owner. Moreover, active support can disappear in a limit. Therefore
+there is no global absolute strict-return margin on the compact root set.
+The following support-loss argument repairs that precise attempted failure;
+it does not assume a uniform strict margin that the family lacks.
+
+### Material strengthening: a full-dimensional UE neighborhood
+
+Let K be the ENTIRE compact sixteen-control family in UR1, inside the
+56-dimensional affine space of normalized tables with all owns1. Every
+pair participant in K is at most1/2. Every base exact root with at least
+two active owners has a STRICT below-own head, by the support checks above.
+
+Claim: there is an open neighborhood of K in that normalized table space
+where EVERY positive exact root on box8 still has some head coordinate≤1.
+
+Suppose not. Take normalized tables rⁿ with distance to K tending to0,
+boxed annotations vⁿ, and positive exact roots qⁿ whose EVERY head is>1.
+After a subsequence, (rⁿ,vⁿ,qⁿ)→(r,v,q) with r∈K. The finite full endpoint
+inequalities are polynomial, so q is full exact Nash for (r,v). If q has
+at least two active owners, the strict return at that base root persists
+by continuity, contradicting the bad heads for large n.
+
+It remains to check roots with zero or one active owner. Choose α>0 such
+that every nearby normalized pair participant is≤1−α, and choose a finite
+uniform upper bound C≥0 for every nearby participant reward minus1.
+For any owner i let ξ=Σ[j≠i]qⱼ. Its pure-Quit value satisfies
+
+    Qᵢ−1≤−α P(exactly one opponent Quits)
+                +C P(at least two opponents Quit)
+         ≤−α ξ(1−ξ)+(C/2)ξ².
+
+The last estimates follow directly from independent Bernoulli opponents:
+Σ qⱼ∏[k≠i,j](1−q_k)≥ξ(1−ξ) when ξ<1, and the probability of at least
+two is at most Σ[j<k]qⱼq_k≤ξ²/2. Hence Qᵢ<1 for all sufficiently small
+positive ξ, and Qᵢ=1 at ξ=0. The constants are only qualitative bounds;
+no optimization is intended.
+
+If the limit q has one active owner i, then qᵢⁿ>0 eventually and its opponent
+ξⁿ tends to0. Exact Nash gives Fᵢⁿ=Qᵢⁿ≤1, contradiction. If q=0, choose
+an active owner along a further finite-index subsequence; all opponent rates
+again tend to0, giving the same contradiction. This includes new active
+owners, all-Continue limiting roots and support collisions. It does not
+require preserving the favorite gaps, the old root geometry or a selected
+Nash branch. This proves the claimed neighborhood.
+
+Shrink that neighborhood qualitatively so coordinate rewards are bounded
+by6 and the canonical sum bound is>5, still witnessed by the singleton0 row
+near its old absolute sum7. The existing consumer applies with M=6, bound=7:
+6<7 and 7≤canonical+2. Owns remain1. Thus every table in this normalized
+open neighborhood has ordinary unrestricted UE.
+
+Finally let an actual nearby table have positive owns sᵢ, and normalize by
+
+    r̂ᵢ(S)=rᵢ(S)/sᵢ.
+
+This is valid recipient multiplication, with Never0 preserved. Transition,
+information and behavior domains are identical. EVERY finite-horizon payoff
+and deviation gain for recipient i is multiplied by sᵢ on scaling back.
+For a requested original ε use normalized accuracy ε/maxᵢsᵢ; the same
+profile and threshold work, and the fixed target scales coordinatewise.
+This follows directly from `quittingGame` in
+`UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/Game.lean`
+and the uniform definition above. The related actual scaling contract
+`isεAsymptoticNash_playerwiseScale` in
+`Quitting/Terminal/TerminalAffineNashTransfer.lean` was also checked; no
+terminal-only translation is substituted for this finite-horizon argument.
+
+The map r↦r̂ is continuous on positive-own tables. The inverse image of the
+normalized neighborhood is therefore an OPEN subset of the full ℝ⁶⁰ reward
+space containing K (and its positive recipient-scaled copies). This is the
+requested full-dimensional qualitative strengthening, not merely the old
+sixteen-control slice or a fixed-geometry neighborhood.
+
+### Significance and exact remaining boundary
+
+The unconditional raw family theorem and its neighborhood are genuine
+ordinary producers: the return input is DERIVED from actual reward data,
+then passed to an already implemented whole-game consumer. They retire
+the complete stated inverse-design box, rather than only one logistic
+branch, one polynomial degree or the old center word.
+
+This is distinct from proving demonstrably new coverage against the UNION
+of all accepted/implemented existential producers. That census has NOT been
+completed here and remains unresolved. Narrow exact checks confirm that
+the center's premium core is all four: each member has a within-triple
+participant value4>own1. Thus the direct empty/pair-core premise in
+`exists_uniformEquilibriumPayoff_of_empty_or_signed_pair_core_weakSameSign`
+in `Quitting/Classification/Existence/SignedPairCoreRewardClosure.lean`
+does not apply to that center. The definitions in
+`Quitting/Classification/QuittingPremiumCore.lean` and
+`MathUE/FiniteCoalitionPremiumCore.lean` were inspected. Also every center
+full-support opponent-pair inserted-premium sum is6>0, so the literal
+middle condition in `QuittingTrapChargeCoefficients` in
+`Quitting/Classification/BoxedQuittingNashCharges.lean` fails. These are
+only specific complete-criterion nonclaims, NOT exclusion of other full
+existence packets or an unknown local-neighborhood radius.
+
+No missing mathematical premise was found in UR1–UR5. No constants need
+optimization. The full-dimensional strengthening is material and has a
+complete support-loss proof above; the author may incorporate it, but I
+have not edited the author's note/export. The review does not consume
+either canonical least-Never branch or settle ordinary four-player UE.
