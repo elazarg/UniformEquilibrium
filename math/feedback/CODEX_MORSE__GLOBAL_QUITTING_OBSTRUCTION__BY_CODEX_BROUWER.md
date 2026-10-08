@@ -3641,3 +3641,104 @@ strengthening of CL's tiny all60 neighborhood. Some points in that larger
 class may acquire other known equilibria; absence of such alternatives is
 not an input to the constructor. No arbitrary-table itinerary completeness
 or general paid-source consumer follows from this delta.
+
+## Final standalone text: scalar singular-circuit assembly
+
+Reviewer: CODEX_BROUWER. Scope: complete977-line
+`notes/CODEX_MORSE__SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md`,
+SHA256
+`5ceea96be6223cde76cdf35545285f2973978200e4909a122108f9ec3db58030`.
+This is the requested FINAL-TEXT coherence/self-containment check against
+the separately reviewed CL/ZU and SC claims, not a new mathematical seal
+for a stronger result. I read every line and the exact terminal-family
+consumer and companion declarations named below. No other final-text
+verdict was read, no author file was edited, and no Lean build was run.
+
+Verdict: the assembled mathematical chain retains the sealed claims,
+with ONE literal sign-definition repair required before promotion.
+There is no other unresolved assembly objection.
+
+### The required literal correction
+
+Section11 says Γᵢⱼ=sᵢ−rᵢ,j, but its displayed matrix and all subsequent
+inverse, principal13 and signed-cycle calculations use
+
+    Γᵢⱼ=rᵢ,j−sᵢ for i≠j,       Γᵢᵢ=0.
+
+For example r₀,1=4 and s₀=1, so the printed Γ₀₁=3 has this latter
+sign. The literal `outsideRow` in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`
+is passive singleton minus own singleton, as is `normalizedSoloMatrix`
+in
+`UniformEquilibrium/Quitting/Classification/LCP/Normalization.lean`.
+Change only the definition, not the printed matrix or conclusions.
+This is an assembly typo in the overlap paragraph; the direct construction
+in Sections2–8 never uses Γ. The current hash remains the checked
+pre-repair scope until a minimal corrected delta is supplied.
+
+### Full self-contained production and semantic endpoint
+
+The original denominator signs, positive rates, affine elimination
+coefficient, opposite scalar endpoint signs, all quiet rows and all four
+pair coefficient tests remain explicit. The coefficient test checks each
+original denominator separately even after cancellation. Thus the raw
+class still produces the scalar zero, all ports and every full-Nash
+ladder row; no oracle, chosen circuit, reply, minimizer or equilibrium
+selection is introduced by assembly. Signed own levels remain allowed.
+
+Section8 contains the complete literal compiler: finite truncations,
+reversal of the ENTIRE word, sum-of-endpoint-errors rather than word-length
+inflation, fixed distinct suppliers0 and3, uniform joint/deleted contractions,
+actual periodic payoff fixed point and censoring for EVERY behavioral cap.
+Its selected target is fixed before accuracy. It neither assigns Never a
+zero cap nor assumes the perturbed periodic roots are still exactly Nash.
+The one-supplier negative boundary test is retained and excludes the missing
+deleted-contraction shortcut.
+
+The statement
+`quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family`
+in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`
+was read under its imports. Its input is exactly an actual indexed
+terminal-approximate-Nash family approaching ONE target, with no positive-own
+or normality condition. Section8 supplies it and its conclusion supplies
+the horizon threshold at all later horizons. The original live selection
+date pays0 and subsequent absorbing dates pay r(S), as required.
+
+The named companion declarations in
+`UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean`,
+`UniformEquilibrium/Quitting/Cycles/CompanionTransport.lean` and
+`UniformEquilibrium/Quitting/Cycles/PeriodicFiniteReplyPrefix.lean`
+are identified only as existing one-root/composition/periodic response
+principles. In particular their supplied response-solution hypotheses
+are not misreported as an existing raw producer or silently used to
+obtain the new strategy. The ordinary censoring proof supplies the new
+full-cap identification directly.
+
+### Class scope and absence of added claims
+
+The explicit complete60-entry table and exact rational coefficient
+verifier are retained. The recipient-specific mask still gives46 used
+and14 arbitrary finite coordinates, covering entire unilateral laws,
+not only one-period probes. The open chamber is in the46 used coordinates
+with an unrestricted ℝ¹⁴ factor; no uniform reward bound over that
+unbounded factor is asserted.
+
+The bounded whole-selection comparisons are plainly not a census of
+all UE proofs and do not replace the constructor. The theorem is the
+sealed sufficient raw class with fixed-payoff unrestricted approximate
+equilibria and uniform-payoff endpoint. No arbitrary-Fin4, exact finite
+Nash, circuit completeness or strict-gap-source consumer has been added.
+The narrow Lean handoff correctly lists unimplemented producer/compiler
+targets rather than declaring them already checked. Subject to the
+single Γ-definition correction, the text is ready for the coordinator's
+final byte/delta check; no repeat CL/ZU or SC audit is needed.
+
+Corrected byte verification: the refrozen977-line artifact has SHA256
+`ae88bf68fe067547599fbb385accae35d8992f549b553c401fe56cec70e2b176`.
+Replacing only the corrected Γ-definition sign back in a read-only stream
+reproduces EXACTLY the original SHA256
+`5ceea96be6223cde76cdf35545285f2973978200e4909a122108f9ec3db58030`.
+Thus every other proof byte is unchanged and the sole required repair is
+verified. Final-text coherence/self-containment PASS at the corrected hash;
+no unresolved objection remains. This does not enlarge the sealed result.

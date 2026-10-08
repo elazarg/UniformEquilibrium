@@ -1881,3 +1881,104 @@ unbounded raw cylinder is stronger than the small60-coordinate CL chamber.
 It is a concrete reward-only sufficient class, not arbitrary-game coverage,
 not an assertion that this itinerary is obligatory, and not absence of every
 other known producer. Final standalone assembly still needs its own gate.
+
+## Final-text consistency check of the scalar singular-circuit packet
+
+Reviewer: CODEX_NOETHER. Status: PASS for soundness, self-containment and
+the claimed raw-class value, at the exact final artifact
+`notes/CODEX_MORSE__SCALAR_SINGULAR_CIRCUIT_UNIFORM_EQUILIBRIUM.md`,
+SHA256
+`5ceea96be6223cde76cdf35545285f2973978200e4909a122108f9ec3db58030`.
+I read all977 lines and reran its entire exact rational verifier; all
+assertions passed. This is the requested final-TEXT assembly check against
+the separately checked CL/SC mathematics, not a third independent research
+audit or an inferred verdict from another review. No other reviewer's
+final-text verdict was read.
+
+Contribution disclosure: the closed-ladder compiler overlaps my own RM35/ZU
+argument. My prior CL actual-input review and SC delta review are separate
+and identified above. The present check does not self-certify that overlap
+as an additional blind review. I have not edited the author's packet.
+
+The assembled statement retains the exact output quantifiers: ONE zero of
+the reward-derived scalar function is selected before accuracy; it fixes
+ONE target V. The independent finite periodic profile, its period and the
+uniform horizon threshold may depend on accuracy. The output bounds EVERY
+complete unilateral behavioral deviation, not selected deadlines or a
+finite response menu. Joint and each deleted-opponent absorption are almost
+sure. Neither exact Nash of a finite period nor arbitrary-table coverage
+is asserted.
+
+Sections2–5 retain all load-bearing hypotheses. They check the original
+denominators independently of cancellations, positive pair/solo gaps,
+positive triple odds and 0<p<1, 0<a<1, the linear coefficient e₁>0,
+positive eliminated ports, both scalar endpoint signs, the actual triple
+quiet gap, and ALL four factored pair inequalities for BOTH spectators.
+Favorite indifference is derived by the linear equation, not assumed.
+The scalar IVT gives actual strategic closure; no continuation port,
+closed word, equilibrium selection or approximate profile is a raw input.
+The exact verifier includes the original denominator factors and matches
+the literal15-row table. Its execution uses rational inequalities, not
+a numerical root or contraction assumption.
+
+Section8 includes the whole finite-list reversal, summable ladder errors,
+the prescribed AND companion seam bounds with no period-length factor,
+and retention of the first positive solo0 and solo3 roots. These DISTINCT
+suppliers give a uniform contraction for EVERY deleted-opponent block.
+The censoring argument uniformly bounds ALL unilateral terminal responses
+by Mκᵢᵐ, including Never and arbitrarily late deadlines. Thus the scalar
+fixed point is the actual complete cap, not merely a formal companion
+solution. Its signed-payoff treatment and the one-supplier countertest
+retain the precise boundary already checked in ZU. No infinite ordinal
+chronology or free empty date has entered the final text.
+
+Section7 retains the exact recipient-specific46/14 mask. All36 entries
+on the nine prescribed rows are retained. The10 extra response-only
+entries are also retained in this packet; it makes NO downward-ray
+extension claim. Each of the listed14 unused coordinates is absent from
+that recipient's own full unilateral reply outcomes. The full60 open
+neighborhood and stronger open46-coordinate chamber times ℝ¹⁴ follow
+from FINITELY many strict coefficient tests, not from pointwise late-row
+strictness. The theorem allows arbitrary finite values in those14 entries.
+
+I reread the exact declaration
+`quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family`
+under its imports in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+Its hypotheses match the terminal family produced here; it keeps a member
+of that actual family and supplies one threshold for EVERY later horizon.
+It has no normality or positive-own premise. The named companion and
+periodic-reply declarations are correctly identified as reused mechanisms;
+Section8 itself supplies the full ordinary cap proof, rather than deferring
+an essential premise to an unproved source. No Lean build or axiom audit
+is claimed by this review.
+
+Strict value verdict: AFFIRMATIVE for the special-case raw producer and
+its unbounded14-coordinate cylinder. It genuinely produces the missing
+common-port strategic closure from finite reward inequalities and gives
+actual unrestricted approximate equilibria; it is not another verifier
+with closure supplied. Section11 keeps the bounded whole-selection overlap
+evidence distinct from a complete producer census. No unresolved correction
+was found, and no claim of settling full Fin4 follows.
+
+Final-text qualification pending the author's corrected freeze: a separate
+check identified a Section11 sign-definition typo that my initial PASS
+missed. The printed Γ and its inverse/Q calculations use
+Γᵢⱼ=rᵢ,j−sᵢ, whereas the old artifact writes Γᵢⱼ=sᵢ−rᵢ,j.
+For example its literal row0 entry at column1 is4−1=3, as printed.
+The old hash above therefore is NOT a fully clean final-text acceptance.
+The correction must reverse that definition, not the printed matrix or
+calculations. Sections2–10's reward criterion, closure and full-cap
+construction do not use Γ and are unaffected. I will bind the minimal
+repaired delta to its new frozen hash before accepting placement; this
+record preserves rather than silently overwrites the missed objection.
+
+Minimal corrected freeze: PASS restored at the same artifact, SHA256
+`ae88bf68fe067547599fbb385accae35d8992f549b553c401fe56cec70e2b176`.
+I checked the repaired definition Γᵢⱼ=rᵢ,j−sᵢ and verified that reverting
+ONLY that one definition in a read-only stream reproduces the old full-file
+SHA256 `5ceea96be6223cde76cdf35545285f2973978200e4909a122108f9ec3db58030`.
+Thus every other byte is unchanged. The sign now agrees with the literal
+matrix and calculations, and no remaining correction is requested. This
+is an exact repaired-delta check, not another mathematical audit. The
+soundness and strict-value verdict above applies to this corrected hash.
