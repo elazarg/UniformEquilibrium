@@ -856,3 +856,117 @@ with an additional bridging owner and no change to its whole semantic
 pair. Its downstream value is exactly that reselection. It does not
 consume the two-owner wall or the sole-bridge/later-only arm, and it
 does not show arbitrary-game UE. No unresolved objection remains.
+
+## Focused RM46 augmented least-Never source: PASS
+
+Reviewed by CODEX_MORSE on 2026-10-08. I read the complete heading
+`RM46: least literal Never gives an exhaustive same-table bridge alternative`
+through EOF, 183 lines, SHA256
+`cfd58d9a99d194aeed71bf2531b9452a2456b450654434d99e020d900a3c3092`.
+No unresolved mathematical objection was found. This verdict checks the
+new producer quantifier and the literal probability seam; it is ordinary
+mathematics, not a Lean check, export decision, or full UE consumer.
+
+The source statement selects ONE fresh NP table first. At that table
+it selects a least-LITERAL-joint-Never augmented full minimum. Every
+produced marked minimum retaining that choice has either TWO DISTINCT
+root/later bridging owners, or a sole such owner with root rate0 and
+another owner whose ENTIRE maximizing family is strictly later-only.
+It does not impose this alternative on every old NP minimum or transfer
+fields from another reward extremum.
+
+### Compactness, projection and exact probability retention
+
+H is an ordinary finite-dimensional closed bounded carrier of triples
+(U,B,ν). Its projection is exactly K_all. In the nontrivial inclusion,
+start with an actual semantic-pair approximating sequence and take a
+subsequence of its bounded literal ν coordinates. Thus every semantic
+minimum has an augmented lift; no raw-calendar tightness is required.
+The closed subset with summed debtδ is nonempty and compact, so the
+secondary minimum ofν is attained THERE. NP's uniform near-minimum
+literal-Never floor givesν_min>0, rather than merely a nonnegative
+limit that might be0.
+
+Finite-support approximation changes only the late FINITE draws to
+the separate Never atom. The vanishing sum of those marginal changes
+bounds the prescribed-pair error, ALL behavioral caps uniformly, and
+|∏n'_k−∏n_k|. Therefore the finite sequence realizes the CHOSEN triple,
+not only its semantic-pair projection. A further subsequence gives
+n_k^ℓ→n_k and∏n_k=ν_min; each n_k≥ν_min>0 follows directly because
+all other factors are at most1.
+
+In the marked chart, the final Never interval has limiting length
+equal to the average of these four literal masses. Its marginal
+density integrals retain each n_k. The finite part ends at c; c is
+a zero-mixture finite test, while Never remains a separate isolated
+label. Finite atoms whose integer dates drift to infinity are NOT
+reassigned to Never. This exact distinction is what permits(LV.2).
+
+Removing a vanishing pre-root head and correcting converging root
+rates are vanishing product-TV modifications. Their literal ν errors
+therefore vanish too. The resulting full triple retainsν_min. Its
+conditional suffix has the different factor ν_min/∏(1−a_k), with no
+claim that this suffix is itself minimal. I found no hidden replacement
+of literal joint Never by tail survival or by compact endpoint mass.
+
+### The MF2 extension with later-only observers is valid
+
+I checked this afresh from the actual prefix formula, not merely by
+referring to the root-only MF review. At a sole bridger i, i's two
+numerical branches tie and its cap is independent of a_i. Every OTHER
+owner has a STRICT numerical branch gap: root-only means Q_k>C_k;
+later-only means Q_k<C_k. Multiple later maximizers still share the
+ONE fixed tail envelope b_k, so they do not destroy this numerical
+strictness or the affineness of C_k in a_i.
+
+For0<a_i<1 a common small signed interval preserves all these strict
+branches. Each complete cap and payoff is affine there. Original
+carrier globality makes the affine total debt constantδ; common
+minimizing debts then contradict the strict change of
+d_i=(1−a_i)h_i(b_i−v_i)>0. This proves a_i=0 with arbitrary later-only
+observers as well. It uses neither their unique cap dates nor local
+full-cap fixation under the DIFFERENT finite/Never law path. The latter
+path is used only when all three observers are root-only.
+
+### Local ν descent and exhaustive owner qualification
+
+Under the sole/root-only geometry, MF3 supplies positive original
+finite mass for i, and MF4 gives a signed interval of TRUE full minima
+for q_i^s=sF_i+(1−s)Never. Its all-response and individual-payoff
+arguments were checked in the preceding focused verdict. For every
+actual finite realizer the NEW own Never mass is exactly1−s, while
+the other three Never masses are unchanged. The limiting triple is
+therefore in H_min withν_s=(1−s)∏[k≠i]n_k. Choosing s>1−n_i inside
+the proven plateau lowers literalν strictly, contradicting selection.
+No use of the distant absorbing endpoint as an old minimum is needed.
+
+NP supplies a root/later owner. With only one, MF2 gives its root
+rate0. Every other owner either maximizes atτ, in which case sole
+bridging makes it ROOT-ONLY, or does not maximize there. If all were
+root-only, the strict localν descent just proved is impossible.
+Consequently some different owner has no root maximum. The original
+earliest-cap definition excludes earlier maxima, and positive owns
+plus positive Never masses exclude literal Never. Its ENTIRE cap
+family is therefore finite and strictly later. This classification
+does not require that family's uniqueness, isolation, positive own
+mass or positive root rate.
+
+For each actual root/later bridge, at least two unchanged nonsure
+suppliers provide a positive nonempty opponent-root cylinder.
+Root response joins it and any later response is passive; row
+genericity distinguishes the two literal payoff kernels. Two labels
+of one owner are not counted as two owners. The fixed-root realization
+and actual moving finite witnesses supply the chronology qualification.
+
+### Value and fences
+
+This is a genuine source restriction beyond MF's conditional first
+wall: after ONE table selection and a compact secondary probability
+selection, the sole-bridge/three-root-only arm is eliminated outright.
+The resulting two arms are exhaustive at every produced least-Never
+minimum, with the original unrestricted floor, full pair and common
+debts still attached. It does not claim an arbitrary old source was
+transported, an attained integer-clock minimum, a coupled consumer
+for either residual arm, or arbitrary-game UE. In particular MF3's
+positive finite mass for the sole bridger is NOT inherited by the
+later-only arm. The draft explicitly keeps that boundary. PASS.
