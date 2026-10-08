@@ -123,6 +123,19 @@ strengthen the boundary cone. This is ordinary unreviewed supporting
 mathematics, not a no-UE table, UE proof or new class exclusion.
 No full Fin4 contradiction or new export is claimed.
 
+RM32 records a FULL-Nash-graph obstruction, distinct from BD's boundary
+field. The strict AllContinue sheet above the own thresholds has local
+Nash index+1 but zero physical charge. On a compact strict-quiet collar,
+even absorption-relative approximate roots cannot approach it through
+arbitrarily small nonzero hazards. At an ACTUAL positive full-debt minimum
+the complete-cap price has ONLY this neutral root, by the already checked
+auxiliary-Nash budget. The global continuation account must therefore
+handle the quiet sheet using actual tail/port data; replacing the boundary
+field by the ordinary full Nash index does not repair BD. These are
+supporting obstruction calculations, not another positive-gap restriction
+or an export. The live question is a global, physically charged return
+through the threshold/collision graph, not a supplied relative-index axiom.
+
 The body retains the independently reviewed compact/source reductions,
 the PD deterministic-outcome contribution incorporated with attribution
 in the canonical packet, the honest SQ supplied-subgeometry exclusion,
@@ -20302,3 +20315,179 @@ is claimed here. Current next question: retain the actual terminal
 homotopy/payoff-port data while replacing this zero plain-boundary
 normalization by a physically charged relative account, or change the
 global consumer mechanism. No supplied convexity/index axiom is added.
+
+## RM32: full Nash index can be trapped on a robust zero-charge sheet
+
+Question. Does passing from BD's artificial boundary field to the FULL
+binary Nash-root graph by itself turn an essential index into positive
+physical absorption, perhaps by adding an arbitrarily small hazard? The
+answer to that implication is NEGATIVE. The calculation uses the full
+independent root, every owner's actual Quit/Continue endpoint, and one
+common continuation port. It does not construct a no-UE table, refute a
+correctly formulated relative index, or consume a positive gap. No terminal
+tail is inferred merely from feasibility of its price.
+
+NG1: finite data and the full root graph. Let I={0,1,2,3}, let r(S) be
+an arbitrary complete sixty-coordinate reward table, and assume
+|r_i(S)|≤M with M≥0. Own rewards are s_i=r_i({i}). At a continuation
+PRICE v and a product root q, write
+
+    a(q)=1−∏_i(1−q_i),
+    Q_i(q)=E_{q_-i}[r_i(T∪{i})],
+    C_i(v,q)=Pr_{q_-i}(T=∅)v_i
+               +E_{q_-i}[1_{T≠∅}r_i(T)],
+    F_i(v,q)=q_i Q_i+(1−q_i)C_i,
+    e_i(v,q)=max(Q_i,C_i)−F_i.
+
+Every root is private independent Bernoulli randomization; a unilateral
+root deviation replaces one Bernoulli coin. These are the FULL finite
+Nash inequalities, not those of an active-player subgame. They are also
+not a claim that this finite root controls all terminal responses until
+its continuation is physically realized. The exact graph keeps the tag
+(v,q,F(v,q)); its physical charge is a(q).
+
+Fix a compact strict-quiet collar
+
+    K_{R,η}={v: |v_i|≤R and v_i≥s_i+η for all i},
+    R≥0, η>0, L=1+3M+R,
+    b=min(1,η/(2L))>0.
+
+At EVERY v in this collar, q=0 is a strict full Nash equilibrium,
+F(v,0)=v and a(0)=0. Strictness supplies an isolated root of ordinary
+local Nash index+1: in a sufficiently small root neighborhood every
+player's unique best reply is Continue. The best-response fixed-point
+equation there is q=0, with local displacement q and determinant1.
+This is an ordinary finite-game index statement, not a charged index.
+
+NG2: ALL-observer quantitative quarantine, including approximate roots.
+Put H=Σ_j q_j and h_i=Σ_{j≠i}q_j. The probability of a nonempty opponent
+coalition is at most h_i. Since its conditional rewards and s_i lie in
+[−M,M], while |v_i|≤R,
+
+    |Q_i(q)−s_i|≤2M h_i,
+    |C_i(v,q)−v_i|≤(M+R)h_i.
+
+No pair, triple or grand reward is omitted: both bounds condition on the
+ENTIRE nonempty opponent event. Hence, for H≤b,
+
+    Q_i−C_i≤−η+(3M+R)H≤−η/2
+                                  for EVERY i.             (NG.1)
+
+Thus Continue is uniquely optimal for ALL owners simultaneously, and
+
+    e_i=q_i(C_i−Q_i)≥(η/2)q_i,
+    Σ_i e_i≥(η/2)H≥(η/2)a(q).                              (NG.2)
+
+If EVERY owner satisfies the absorption-relative approximation
+e_i≤ε a(q), with ε<η/8, then a nonzero q with H≤b would give
+
+    (η/2)H≤4ε a(q)≤4ε H<(η/2)H,
+
+a contradiction. Consequently EVERY such approximate full root is either
+q=0 or has H>b and therefore a(q)≥max_i q_i≥H/4>b/4. Exact roots are
+covered by ε=0. There is uniform positive charge separation on the
+whole compact collar, not only uniqueness at one port.
+
+No continuous full-root path staying in K_{R,η} can leave the AllContinue
+sheet and enter a charged branch. The same conclusion holds for a
+connected family of the displayed approximate roots: charge would have
+to pass continuously through (0,b/4], where NG.2 forbids it. This uses
+the literal common port and ALL observer inequalities. It does NOT
+prohibit a global path that leaves the strict-quiet collar, reaches an
+own-threshold stratum, or changes its itinerary through a macroscopic
+collision. It also does not say every Nash root at a quiet port is zero;
+distant charged roots can coexist in other games.
+
+NG3: the obstruction occurs at an ACTUAL positive global minimum, not
+only on a solved test. Let (U,B) belong to the actual full terminal-semantic
+carrier K, minimize D=Σ_i(B_i−U_i), and have δ=D>0. For ANY independent
+root q exact Nash against the common complete-cap price B, the literal
+prefix operation has
+
+    B'_i=max(Q_i,A_i+χ_i B_i)=F_i(B,q),
+    U'_i=F_i(B,q)−c(q)(B_i−U_i),
+    d'_i=c(q)d_i,       D'=c(q)δ.                            (NG.3)
+
+Here A_i is the contribution of nonempty opponent root coalitions and
+χ_i=∏_{j≠i}(1−q_j). The first equality uses actual root optimality;
+the prefix cap retains EVERY late finite test and Never in the SAME
+tail carrier. Prefix closure makes (U',B') an actual competitor in K.
+If q≠0 then c(q)<1, contradicting global minimality. Thus the ENTIRE
+Nash-root fibre at B is {0}, not merely one selected neutral root.
+
+The tracked minimum singleton margin also gives B_i−s_i≥δ for
+EVERY i. This actual port therefore lies in a strict-quiet collar and
+its unique strict finite Nash equilibrium has ordinary index+1 and
+ZERO physical charge. This does not call B a prescribed equilibrium
+payoff: at the same actual law the prescribed payoff is U≠B. Paying
+B as a common continuation is precisely the unimplemented obligation.
+
+NG.3 and the singleton margin are ALREADY supplied by
+`minimumTerminalSemantic_auxiliaryNash_eq_allContinue` (take h=0) and
+`minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`.
+I read those exact declarations under their imports for this block.
+This is not counted as a new source exclusion. Its role is to expose
+a specific failure of the ordinary-index-to-charge consumer at the
+GENUINE conjecture-facing source, rather than infer that failure only
+from an arbitrary solved positive-debt profile.
+
+NG4: exact whole-fibre regression retaining all sixty raw entries.
+Use the COMPLETE BD1 fixture, without changing any reward. For EVERY
+v_i>1, its FULL root Nash set is exactly {0}. This strengthens the
+local isolation calculation on this solved table to its entire strict-
+quiet orthant, and is proved over all supports and boundaries.
+
+For a proper nonempty active support A={i:q_i>0}, the positive singleton
+joining arrows form one four-cycle
+
+    f: 0→2→1→3→0.
+
+All other directed singleton joins r_i({i,j})−r_i({j}) are strictly
+negative. Some i∈A has f(i)∉A, since a proper nonempty subset cuts this
+cycle. In i's complete gap Q_i−C_i, the empty opponent coalition gives
+1−v_i<0. Every possible singleton opponent coalition gives a negative
+join, since f(i) is quiet. Every possible two-opponent coalition gives
+triple-participant4 minus passive-pair5, namely−1. No three-opponent
+event occurs because A is proper. Thus Q_i−C_i<0 for EVERY product
+law on A\{i}, including sure coordinates and all boundary masses.
+An active i cannot be Nash. This excludes every proper support.
+
+For full support use the exact all-owner identity
+
+    Σ_i(1−q_i)(Q_i−C_i)
+      =c(q)Σ_i(1−v_i)
+         +Σ_{∅≠S⊊I}Pr_q(S) C_S,
+    C_S=Σ_{i∉S}[r_i(S∪{i})−r_i(S)].                         (NG.4)
+
+The literal table gives singleton C_S values
+(−405,−402,−403,−403), pair C_S=−2 for ALL six pairs,
+and triple C_S=−196 for ALL four triples. At a full-support Nash root
+the left side is0: mixed owners have Q_i=C_i and sure owners have
+factor0. If all are mixed then c>0 and the right side is negative.
+If some but not all are sure, some proper coalition has positive mass,
+so it is again negative. If ALL four are sure, direct withdrawal gives
+−4 instead of−200; that case cannot be discarded merely because both
+sides of NG.4 vanish. Hence full support is impossible as well.
+
+AllContinue is strict Nash for v_i>1, so this census is complete.
+In particular BD's quiet price x*=(5/4)^4 has ONLY the neutral full
+Nash root and total ordinary Nash index+1, with zero absorption. It
+is a feasible singleton lottery but is not promoted to an actual
+Nash tail. MORSE's CI circuit instead leaves this strict-quiet orthant
+and uses exact common ports at own thresholds or below them. Its
+one-entry perturbation obstruction shows local continuation of one
+successful itinerary is not the missing global selector. Neither
+calculation supplies a no-UE table or a universal nonlocal return.
+
+Scope and next question. The plain boundary degree is already blocked
+by BD. Replacing it by the unqualified full finite Nash index, or by a
+tiny-hazard perturbation of its essential AllContinue root, is blocked
+by NG1–3. A physically charged relative account must handle the quiet
+sheet explicitly and preserve actual continuation/payoff ports when it
+passes the own-threshold boundary. That account is NOT supplied here.
+The next whole-game attempt must produce an actual charged return or
+explain the global strategic continuation through those threshold and
+collision strata; it cannot assume positive index after deleting the
+quiet sheet. This block is complete ordinary supporting mathematics,
+independently UNREVIEWED, with no export or new class-narrowing claim.
