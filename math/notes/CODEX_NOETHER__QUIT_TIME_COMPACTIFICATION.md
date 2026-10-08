@@ -63,6 +63,16 @@ strict excess-tail-debt barrier. Thus a coupled cap drop cannot be
 funded by exchanging the original tail for another zero-excess minimum.
 This is internal accounting, not a consumer or a new export.
 
+NC7 completes the actual old-root/ENTIRE-upper accounting for a coupled
+chronological refinement. In the still-permitted all-four-bridger mode,
+moving any small nonzero collection of ORIGINAL root masses to one earlier
+date strictly INCREASES full debt. Every upper response shifts by the same
+offset, the early tester is priced explicitly, and the two old cap branches
+are retained. This falsifies early splitting as a consumer of all of branch
+I, without a source-like fixture or a positive-minimum impossibility claim.
+The next chronological move must act on genuinely later original finite
+laws/caps, rather than repeat early-root refinements.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -24296,3 +24306,143 @@ with excess debt, alter its entire caps, and recover that cost through
 a genuinely coupled non-Nash prefix or original finite-law change.
 The full-goal research remains on that legal competitor, not on exporting
 this additional restriction.
+
+### NC7. Earlier splitting of the original root is priced, not a descent
+
+EXACT MECHANISM FALSIFIER AT THE TRUE SOURCE; INTERNAL, NO EXPORT.
+The candidate operation was to split the source's nonsure first collision
+by privately advancing small pieces of its ORIGINAL root draws. Such a
+change acts on finite laws, not just their original Never branches, and
+the old entire upper families admit exact common-offset control. This
+section calculates that complete operation rather than extrapolate a
+selected-response derivative.
+
+There is a still-permitted submode of source alternative I in which ALL
+FOUR owners bridge at the original root. Write its rates as a_i, its full
+payoff/cap pair as (U,B), and its honest conditioned suffix as v=(u,b)∈K.
+Thus Q_i=C_i=B_i for every i. The suffix is NOT a minimum or Nash; NC6
+actually forces its excess debt. At least two a_i are positive, every
+a_i<1, and the root continue product is positive. Keep this exact v.
+
+For each i choose 0≤ε_i≤a_i. Add one genuinely new earlier date, and shift
+the WHOLE original root and its realizing tail one date later together.
+An original root draw of owner i is privately advanced with total mass
+ε_i; the remaining old root mass is a_i−ε_i. The original tail mass
+1−a_i and its conditional law are unchanged. There is no stretch between
+the old root and its old tail, and no private conditioning on another
+owner's draw. In behavioral hazards this is precisely
+
+    new earlier root: ε_i;
+    old root on own survival: (a_i−ε_i)/(1−ε_i);
+    original conditional tail on surviving both roots.
+
+All denominators are positive. Prefixing these TWO actual rows to one
+common realizing suffix sequence proves membership in K and preserves
+all original moving finite suffix witnesses. This does not ask for a
+new unsupported atom transport on an old marked chart.
+
+Let E_i(ε) be the new earlier Quit test, Q_i(ε) the old-root Quit test,
+and L_i(ε) the ENTIRE cap of all tests after the old root. For every such
+late test, including literal Never, the opponent survival probability
+through both rows is the ORIGINAL H_i=∏_(j≠i)(1−a_j). The only change is
+the passive payoff on exits before the suffix. Therefore
+
+    V_i^new(t)=V_i^old(t)+Δ_i(ε),  t after old root,
+    L_i(ε)=B_i+Δ_i(ε).
+
+This preserves the ordering among EVERY late test, including nonisolated
+maximizers. It implies the exact FULL cap formula
+
+    B_i^new=max(E_i(ε),Q_i(ε),L_i(ε)).              (NC.11)
+
+No inter-row tester is missing: the pure test at the old-root date is
+Q_i(ε); all strictly later raw tests are the original suffix tests.
+At ε=0, E_i=s_i and Q_i=L_i=B_i. Put ℓ=Σ_i ε_i and
+Λ=δ+κ, κ=δ²/(8M). Product coupling bounds the changes in Q_i,L_i by
+2Mℓ and gives E_i≤s_i+2Mℓ. Since B_i−s_i≥Λ, whenever
+4Mℓ<Λ the new earlier tester is strictly dominated. On that complete
+small legal region, (NC.11) is exactly max(Q_i,L_i), not an assumed
+cap selector.
+
+For i≠h define the ORIGINAL averaged joining gap, conditioning h to
+its old root draw,
+
+    J_ih=Σ_[T⊆I∖{i,h}] p(T;a)
+                 [r_i(T∪{i,h})−r_i(T∪{h})].      (NC.12)
+
+The other root draws in this expectation remain independent. There is
+no sign hypothesis on J. For direction z≥0 supported on owners with
+a_i>0, set ε=t z. At t=0, moving h's root draw earlier changes the old
+root test by
+
+    ∂_h Q_i=r_i({h})−Σ_T p(T;a)r_i(T∪{i,h}),
+
+and the whole later envelope by
+
+    ∂_h L_i=r_i({h})−Σ_T p(T;a)r_i(T∪{h}).
+
+Both formulas follow because the new earlier h event is now a passive
+singleton, whereas its old event joined the original root coalition.
+Hence Q_i′−L_i′=−Z_i, where Z_i=Σ_(h≠i)z_h J_ih.
+
+The owner's prescribed tail response average shifts by the SAME Δ_i
+as its entire late cap. Its old-root branch has mass a_i−ε_i, and its
+new earlier branch has mass ε_i. Thus the prescribed payoff derivative
+is
+
+    U_i′=z_i(s_i−B_i)+a_i Q_i′+(1−a_i)L_i′.
+
+Taking the actual maximum of the two tied old branches gives
+
+    d_i′=z_i(B_i−s_i)+φ_(a_i)(Z_i),
+    φ_a(Z)=(−Z)⁺+aZ
+           =aZ if Z≥0, and −(1−a)Z if Z≤0.        (NC.13)
+
+Since 0≤a_i≤1, EVERY φ term is nonnegative, even when coupled opponent
+directions cancel each other's joining effects. Therefore
+
+    D′(0+)≥Λ Σ_i z_i>0 for every nonzero z.        (NC.14)
+
+There is a uniform finite version, not just a directional claim. All
+payoffs above are multiaffine in the UNCONDITIONAL ε coordinates. A
+kth-order coefficient has absolute value at most 2^k M, by replacing
+k marginal laws by the signed difference δ_early−δ_oldRoot. For ℓ≤1,
+the sum of terms of degree at least two is at most 4Mℓ² for each
+prescribed payoff, and at most (10/3)Mℓ² for each fixed response branch
+Q_i,L_i. The maximum changes by no more than the larger branch error.
+Summing the four prescribed and four cap errors gives less than
+30Mℓ². The linear part in (NC.13) consequently yields
+
+    D(ε)≥δ+Λℓ−30Mℓ².
+
+For every legal nonzero refinement with
+
+    0<ℓ≤Λ/(60M),
+
+the earlier test remains strictly dominated, ℓ<1, and
+
+    D(ε)≥δ+(Λ/2)ℓ>δ.                            (NC.15)
+
+The needed crude bound Λ≤(5/2)M follows from δ≤2M and κ≤M/2 at the
+true minimum. Thus all radius conditions used above are consistent.
+This is a complete full-cap lower bound for the entire small refinement
+family, retaining born early tests, every old-root test, the complete
+unattained later envelope, literal Never, and common actual realizers.
+
+Conclusion and pivot: the tempting implication that privately refining
+the first collision earlier gives a descent is FALSE as a source consumer.
+The permitted all-four-bridger mode instead forces strict debt growth for
+every small nonzero such refinement. No positive-minimum counterexample
+table has been invented or claimed; this is an implication INSIDE the
+canonical source's actual hypotheses. It neither eliminates that mode nor
+proves that a large refinement cannot return. The full source alternatives
+remain open. The next chronological operation must release or modify
+genuinely LATER original finite mass/caps (and its off-minimum suffix
+cost), rather than repeat this earlier splitting calculation.
+
+The tracked exact prefix correspondence in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean` and its two-row
+iteration supplies the realization used here. The quadratic all-owner
+margin remains the same previously inspected declaration. No new Lean
+theorem, independent export, or claim of unrestricted strategy-class
+coverage is attached to this mechanism falsifier.
