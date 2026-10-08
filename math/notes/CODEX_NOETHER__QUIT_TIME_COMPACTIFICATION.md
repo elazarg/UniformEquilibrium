@@ -98,6 +98,17 @@ new cap clipping must exceed the total prescribed-payoff surplus. This is
 an actual whole-law mechanism obstruction, not a local source-like fixture;
 the next repair must move at least two tail laws and hedge their new caps.
 
+NC11 now tests the literal γ-positive paired finite-conditional repair on
+an ENTIRE unrestricted law class, not another four-player root-local fixture.
+Even when BOTH γ's are positive, its exact full caps and all cap–Nash roots
+can leave every finite-amplitude paired repair at the same positive class
+floor. The small two-player table has TRUE global floor0 and is expressly
+not the canonical source. In the SAME table, a legal redistribution of
+individual Never probabilities preserving their product strictly lowers
+that class floor and births absorbing roots at its endpoint. This changes
+the live operation to individual-Never redistribution with all late caps
+priced. No genuine positive-minimum branch is excluded by the test.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -25034,3 +25045,127 @@ the excess lives entirely in the late-cap premiums; no direct own finite-
 conditional best reply spends it. That fact alone does not settle the paired
 cross terms. The next calculation stays on this actual operation rather
 than presume that every positive excess debt supplies a finite-law gain.
+
+### NC11. A γ-positive whole paired repair can only transfer the surplus
+
+EXACT COMPLETE-CLASS MECHANISM FALSIFIER, NOT A POSITIVE ALL-LAW MINIMUM.
+The implication tested is that positive finite-conditional surplus supplies
+a debt-improving independent paired finite-conditional best-reply repair,
+possibly after exact cap–Nash root adaptation. This implication is already
+false in the following two-player complete-law problem. This is NOT an
+elimination of the canonical four-player two-supplier submode: the true
+global floor, common positive minimum debts, least-Never source and strict
+absorbing/full separation are not supplied by this regression.
+
+For two players 0,1 take own-singleton rewards1, passive-singleton rewards
+L>1, both participant rewards at {0,1} equal0, and Never payoff0. Fix
+individual Never probabilities n₀,n₁∈(0,1), put mᵢ=1−nᵢ and ν=n₀n₁,
+and allow ANY independent finite conditional laws F₀,F₁ on ℕ. In particular
+the laws need not have bounded support or share a calendar.
+
+For EVERY such profile its ENTIRE caps and Never response values are
+
+    Bᵢ=nⱼ+L mⱼ,       Rᵢ=L mⱼ,       κᵢ=1.        (NC.29)
+
+Indeed against a finite opponent draw any response earns at most L, and
+against an opponent Never draw it earns at most1. Finite deadlines tending
+to∞ attain the resulting upper bound in the limit by bounded convergence.
+Never earns L mⱼ, strictly below Bᵢ. This accounts for all finite clocks,
+Never and all unrestricted behavioral mixtures, not merely the displayed
+finite atoms. Let C=P(both original draws finite and equal). Every other
+finite terminal coalition is a singleton, with aggregate reward L+1.
+Consequently, for the complete unconditional prescribed laws,
+
+    U₀+U₁=(L+1)(1−ν−C),
+    D=2ν+(L−1)m₀m₁+(L+1)C.                    (NC.30)
+
+Thus the infimum over the ENTIRE fixed-individual-Never class is attained
+by disjoint finite supports and is 2ν+(L−1)m₀m₁. Its excess above the own
+late floor 2ν is strictly positive. The complete cap envelopes do not hedge:
+they are constant throughout that whole class.
+
+Here is the literal paired best-reply test with BOTH initial γ's positive.
+Take F₀=(δ₀+δ₂)/2 and F₁=δ₁. Use the old-opponent full maximizing finite
+replies σ₀=4 and σ₁=5, and privately make the independent replacements
+
+    F₀(t)=(1−t)F₀+tδ₄,
+    F₁(s)=(1−s)F₁+sδ₅,             0≤t,s≤1.
+
+Every pair of supports is disjoint, so C=0 at EVERY finite amplitude.
+Put A=(L−1)m₀m₁ and
+
+    p(t,s)=s+(1−s)(1−t)/2.
+
+Conditional on both draws being finite, player0 is first with probability p.
+The exact individual debts and funded finite surpluses are
+
+    d₀=ν+A p,       d₁=ν+A(1−p),
+    γ₀=A p,        γ₁=A(1−p).                   (NC.31)
+
+Initially γ₀=γ₁=A/2>0. An isolated best-reply move removes its owner's
+finite loss but transfers it to the other owner. The simultaneous old
+best-reply replacements also leave total D=2ν+A unchanged. The mixed
+term, all new opponent replies and every potential late response have
+already been included in (NC.29)–(NC.31); this is not a linearized claim.
+
+Full root adaptation cannot rescue this operation in the interior class.
+For ANY tail in that class, Bᵢ=1+(L−1)mⱼ>1. Against an opponent root
+Quit rate xⱼ, pure Quit minus pure Continue at that ACTUAL full cap is
+
+    (1−xⱼ)(1−Bᵢ)−L xⱼ<0.
+
+Therefore the ONLY exact cap–Nash root is all Continue, with survival1.
+This covers all exact roots, not a selected quiet-owner branch. The complete
+paired operation cannot improve either its full tail debt or its prefixed
+debt. There are no omitted positive-rate or fold branches in this example.
+
+For a small exact instance choose L=2 and n₀=n₁=1/2. Then ν=1/4,
+B₀=B₁=3/2, U₀=U₁=9/8 at the initial profile, d₀=d₁=3/8,
+γ₀=γ₁=1/8, and D=3/4 throughout the displayed square. The TRUE
+unconstrained global debt is0: prescribing player0 surely at date0 and
+player1 Never is an unrestricted terminal Nash profile, with U=B=(1,2).
+No positive-global-gap assertion is attached to the class value3/4.
+
+There is a genuinely different legal operation in the SAME table. Retain
+the disjoint original finite conditional laws, fix ν, and change individual
+Never probabilities by n₀=z and n₁=ν/z. For the numeric instance,
+1/2≤z≤1 gives
+
+    D(z)=7/4−z−1/(4z),
+    B₀(z)=2−1/(4z),       B₁(z)=2−z.
+
+The ENTIRE caps still satisfy the exact bound (NC.29). The debt is strictly
+smaller than3/4 for every z>1/2, and reaches1/2 at z=1. Joint Never
+remains1/4. At this endpoint player0's whole law is Never, B₁=own₁=1,
+and the exact cap–Nash root set changes: x₀=0 and ANY x₁∈[0,1] is Nash.
+Taking x₁=1 absorbs and gives debt0. This is a finite-amplitude legal
+path and its actual new root boundary, not assumed branch continuation.
+
+The mechanism distinction is important. Preserving EACH nᵢ froze the
+positive excess A even though both γᵢ were funded and positive. Preserving
+only their PRODUCT did not freeze A. Thus NC10's E*>0 is not sufficient
+funding for a finite-conditional repair, and NC10's E*=0 product-Never
+barrier does not justify freezing all marginal Never probabilities in
+the E*>0 mode. The next canonical test will permit individual Never
+redistribution while retaining the same honest excess-debt suffix and
+pricing ALL of its late responses.
+
+The exact root semantics were checked narrowly in
+`quittingRootQuitPayoff`, `quittingRootContinuePayoff`, and
+`quittingRootExpectedPayoff_update_eq_endpointMix` in
+`UniformEquilibrium/Quitting/Root/SuccessorCertificate.lean`,
+`IsεQuittingRootNash` in `UniformEquilibrium/Quitting/Root/FirstBranch.lean`,
+`exists_isZeroQuittingRootNash` in `UniformEquilibrium/Quitting/Root/NashExistence.lean`,
+and `quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash`
+in `UniformEquilibrium/Quitting/Root/CapNashRootStack.lean`. The law/class
+calculation above is ordinary mathematics, not a new checked declaration,
+an export or a counterexample to the four-player conjecture.
+
+The genuinely canonical source test is still OPEN. For a tail change
+preserving joint ν_v, an actual cap–Nash prefix with cₓ<c_a and
+cₓD(w)≤δ would already contradict least literal Never; strict D<δ is
+unnecessary. Exact two-supplier odds alone do not verify the inactive
+owners' full inequalities, and neither ≥3 suppliers nor partial bridges
+are covered by that calculation. The next root selection will consider
+ALL four-player exact cap–Nash roots, including owner entry, folds and
+all-Continue outcomes; no supplier branch will be silently continued.
