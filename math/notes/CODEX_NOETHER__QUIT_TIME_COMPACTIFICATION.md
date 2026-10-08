@@ -13,91 +13,17 @@ ZERO debt. This is independently reviewed ordinary mathematics, not
 an equilibrium producer or an assertion that distinct clock labels
 always distinguish payoff effects.
 
-The live attempt is RM1–RM21 at the end of this notebook. RM1–RM5
-select a genuine compact GLOBAL minimum with maximal root mass and
-identify the nonlinear-wall failure of naïve purification. A sole
-bridger is at its own root rate0 or1. RM6–RM9 prove that if it is the
-ONLY sure root owner, its unreachable tail cap must equal its TRUE
-independent punishment value: a cheaper actual punishment would
-preserve the entire minimum pair while removing the required bridge.
-No prescribed-tail minimization or automatic owner best reply is used.
-
-RM10–RM13 refine that genuine saturated source. Every mixed free root
-coordinate has a nonzero owner-floor derivative, with one COMMON
-strict shadow price between0 and1. This follows from actual global
-minimality and ALL-minimum debt rigidity, not a supplied max-polynomial
-model. A literal one-row membership perturbation then raises the FULL
-debt of every nearby sure-owner law by a derived positive amount, even
-after arbitrary joint changes of its free root rates and tail. The
-comparison is local to the actual sole-bridge sure geometry; the final
-canonical table is not silently promoted to an absolute worst table,
-and new minima are not silently carried through the perturbation.
-
-RM14–RM15 treat the distinct unsupported sole bridge at root rate0.
-At maximal root mass its mixed-coordinate floor price is also strictly
-between0 and1: the checked UNIVERSAL finite-prefix bridge theorem
-excludes the apparent zero-price, zero-debt flat side.
-Installing that owner's genuine root best reply has strictly positive
-aggregate external debt cost, even at zero own debt. These are new
-complete ordinary proof drafts awaiting focused falsification.
-
-RM16 now covers the unsupported bridge when ANOTHER owner is sure:
-true-punishment canonicalization of that screening owner supplies an
-ALL-tail price as well. Consequently every c=0 sole-bridge geometry
-has a derived positive local one-row table price. The complementary
-c>0 whole-tail problem remains unpriced; multiple bridges and global
-owner/source switching still prevent a full consumer.
-
-RM17 also shows why the local price is not a global increase: the
-opposite row direction gives an ACTUAL lower-debt changed-table profile
-by releasing the floor and adjusting one free rate. Zero debt at all
-old minima does not license a nonnegative derivative of the global gap.
-
-RM18 changes mechanism from local row prices to a same-table clock
-graft. ANY sure-root FULL minimum can be punishment-canonicalized
-without changing its semantic pair, regardless of how many owners
-bridge. If the sure owner's true punishment is below max(s_i,0),
-the SAME full-minimum pair belongs to the closure of profiles with
-TWO finite-a.s. clocks. If P_i<s_i, punishment is actually attained
-by stationary opponents, giving an ACTUAL full minimum with the
-original root and one stationary suffix. Equality at the all-Never
-ceiling is a genuine boundary, not silently genericized away.
-This is an unreviewed supporting source simplification, not a UE
-consumer or an export; two clocks alone are not proved consuming.
-
-MORSE's FC1–FC6 has now passed my independent full-section review in
-the existing feedback: at a compatibly selected ALL-positive-own table,
-a common zero debt makes EVERY original minimum pair realizable in the
-closure of ALL-FOUR-finite-a.s. clocks, at the SAME gap and with the full
-arbitrary-tail floor. Actual normal-core ROW witnesses supply completion.
-Thus RM18's two-clock simplification is superseded in that produced branch;
-its strict stationary-attainment assertion and boundary calculations remain
-distinct. FC is not an actual finite-clock minimum-attainment theorem.
-
-RM19 checks the remaining positive-own equality P_i=s_i. All-Continue
-opponents actually attain it, so ANY sure-root minimum in that equality
-case has an ACTUAL one-date/Never realization with exactly its original
-semantic pair. Equality can nevertheless hold throughout an open row-generic
-reward region satisfying the normal-core ROW condition. In its strict
-participant-premium subcase NO absorbing opponent law attains P_i; a saturated
-sure bridge cannot be clock-completed by an EXACT absorbing suffix graft.
-FC's closure remains valid and is not silently upgraded to attainment.
-Genericity alone therefore cannot remove this wall. No actual positive-gap
-counterexample in that region or full Fin4 consumer has been constructed.
-
-RM20 rejects a global shortcut: zero-sum constant row transfers preserve the
-FULL debt objective at EVERY law, but also preserve the equality wall and
-every singleton margin. They supply no descent or new source restriction.
-
-RM21 narrows the strict attained-punishment attempt: generic stationary
-optimizers either admit a pure witness or tie BOTH owner branches, making
-every tail deadline optimal. An exact robust full-law countertest rules out
-pure punishment normalization in general. Free owner timing still lacks the
-needed upper bound on ALL observers' caps; no debt descent is claimed.
-
-Status of RM10–RM21: COMPLETE ORDINARY PROOF DRAFTS, not independently
-reviewed, not Lean-checked, and not exported. Their necessary conditions
-and local table prices do not assert that the GLOBAL infimum rises.
+RM1–RM21 at the end retain the genuine-minimum sure/unsupported-bridge
+attempts and their exact failed global implications. Local row prices do
+not raise the global infimum when sources switch. RM18's two-clock closure
+is superseded by MORSE's independently reviewed FC original-minimum
+four-clock realization in the zero-debt arm; actual stationary attainment
+and the equality tests remain distinct. RM19 proves that P_i=s_i can persist
+on an open generic normal-core region, where an absorbing punishment need
+not attain it. RM20's zero-sum row shifts are globally debt-flat. RM21's
+robust exact test excludes pure punishment normalization even when P_i<s_i.
+RM10–RM21 are complete ordinary proof drafts, not independently reviewed,
+Lean-checked or exported. None supplies a full Fin4 consumer.
 
 MORSE's NP1–NP9 now has my complete independent mathematics PASS and
 affirmative strict source-reduction verdict in the existing feedback.
@@ -106,7 +32,9 @@ From ANY counterexample it selects a FRESH generic debt-rigid table with
 mass and ALL positive debts at EVERY sufficiently near-minimal actual law.
 Every marked full minimum has a nonsure paid finite-to-finite first-root
 bridge. Its whole-block renewal competitor proves that a conditional-Never
-upper cap MUST grow. This is not yet a promoted standalone artifact; no
+upper cap MUST grow. The complete independently reviewed canonical source is
+[`FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`](../exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md),
+SHA25621e596e5…11953. No
 canonical93 contact exclusion or old minimum is transported. It makes
 RM18–RM21's sure-owner normalization unnecessary for this stronger source,
 while their proofs and exact equality-boundary regressions remain useful.
@@ -18204,7 +18132,8 @@ combination of column totals.
 
 The tempting universal strengthening is FALSE:
 
-    positive owns + full normal core + Γλ>0 + E nonempty
+    positive owns + full normal core + Γλ>0 + StandardQ
+    + NO nonzero homogeneous LCP solution + E nonempty
     ⇒ some independent tail hasΦ<0.            (FAILED WN4)
 
 Here are ALL15 reward vectors, hence ALL60 finite coordinates, for an exact
@@ -18213,9 +18142,9 @@ countertest. I={0,1,2,3}, all owns1, Never0; triples/pairs are unordered.
 | Coalition | Reward vector (r_0,r_1,r_2,r_3) |
 | --- | --- |
 | {0} | (1,−1/3,−1/3,−1/3) |
-| {1} | (5,1,5,5) |
-| {2} | (5,5,1,5) |
-| {3} | (0,−5/2,−5/2,1) |
+| {1} | (5,1,20,−10) |
+| {2} | (5,−10,1,20) |
+| {3} | (0,20,−25,1) |
 | {0,1} | (1,−1/3,−1/3,−1/3) |
 | {0,2} | (1,−1/3,−1/3,−1/3) |
 | {0,3} | (1,−1/3,−1/3,−1/3) |
@@ -18228,9 +18157,10 @@ countertest. I={0,1,2,3}, all owns1, Never0; triples/pairs are unordered.
 | {1,2,3} | (5,11/3,11/3,11/3) |
 | {0,1,2,3} | (1,−1/3,−1/3,−1/3) |
 
-Set AUXILIARY n=(1/4,1/2,1/2,1/2), κ=(1,6,6,6). These numbers are NOT
-claimed to come from a true source of this solved table. Every cap is≤5,
-so only row0 is clipped. Every finite terminal coalition has total
+Set AUXILIARY n=(1/4,1/2,1/2,1/2), κ=(1,26,26,26). These numbers are NOT
+claimed to come from a true source of this solved table. Every cap is≤5
+in row0 and≤20 in other rows, so only row0 is clipped. Every finite terminal
+coalition has total
 
     T_S:=Σ_i r_i(S)=4(r_0(S)−1).                (WN5)
 
@@ -18247,41 +18177,95 @@ Therefore, for ALL finite/Never laws, unrestricted caps and all limit pairs,
     Φ(w)=4(b_0−1)−Σ_i u_i
          =4(b_0−u_0−χ)≥0.                     (WN6)
 
-AllNever hasΦ0; the absorbing pure singleton{1} also hasΦ0. This is a
+AllNever hasΦ0; the absorbing pure triple{1,2,3} also hasΦ0. This is a
 global proof over independent laws, not a finite root grid or pointwise
 screen. All mixed behavioral deviations are included in b_0.
 
 The normalized singleton matrix has a negative row0 entry at column3,
 and every other row has a negative entry at column0. Thus the full set is
 closed under normal-core blockers. The actual positive simplex witness
-λ=(0,1/2,1/2,0) gives
+λ=(0,4/9,1/3,2/9) gives
 
-    Γλ=(4,2,2,4)>0.
+    Γλ=(26/9,5/9,8/3,13/9)>0.
 
-Within-row genericity does not repairFAILED WN4. First lower sufficiently
-slightly the three nonown coordinates in every column0/3, and the two
-free nonown nonzero coordinates in columns1/2. For nonsingleton coalitions
-lower their nonzero row1/2/3 entries slightly. This makes the inequality
-T_S<4(r_0(S)−s_0) strict for EVERY coalition, preserves positive owns and
-the displayed strict Γ/core comparisons, and leaves all reward upper
-bounds<6. A sufficiently small arbitrary-coordinate neighborhood preserves
-these strict inequalities and contains tables with ALL within-row entries
+Within-row genericity does not repairFAILED WN4. First lower the three
+nonown coordinates in column0 byε>0; lower the two nonown coordinates in
+rows1/2/3 of each column1/2/3 byε. For nonsingleton coalitions containing0, lower the
+row1/2/3 coordinates byε. For pairs not containing0, lower their participant
+coordinates byε and their omitted nonzero recipient by2ε; for triple123
+lower its three participants byε. This makes T_S<4(r_0(S)−s_0) strict
+for EVERY coalition and makes the triple's member withdrawal comparisons
+strict. For sufficiently smallε it preserves positive owns and the displayed
+strict Γ/core/degree comparisons, and keeps reward upper bounds<26.
+A sufficiently small arbitrary-coordinate neighborhood preserves these
+strict inequalities and contains tables with ALL within-row entries
 distinct. For any such table, terminal linearity and the joint-Never bound
-still give Σu≤4(b_0−s_0), henceΦ≥0 with κ_0=s_0 and κ_j=6.
+give Σu≤4(b_0−s_0). Clipping is≥4(b_0−s_0) whether or not b_0≥s_0,
+soΦ≥0 with κ_0=s_0 and κ_j=26.
 No optimized punishment equality is incorrectly treated as a generic
 hyperplane: the exact base has P_0=s_0=1 attained by AllNever opponents.
 
-There is no full-gap or absorption-gap counterexample here. At the exact
-table, player1 surely quits at date0 and everybody else Never. Player1's
-own full cap is1. The outsiders' prescribed passive rewards are5; their
-root joins pay1 for player0 and11/3 for players2/3, while later responses
-stay passive5. Thus every full debt is0. This strict outsider screen survives
-small perturbations, and the player's AllNever-opponents cap stays its own
-singleton. It is an actual absorbing terminal Nash/UE producer.
+The singleton-hard-class check is exact, not only Γλ>0. The matrix is
+
+    Γ=[  0     4     4    −1
+       −4/3    0   −11    19
+       −4/3   19     0   −26
+       −4/3  −11    19     0 ].
+
+Principal determinants for pairs01,02,03,12,13,23 are
+(16/3,16/3,−4/3,209,209,494); for triples012,013,023,123 they are
+(−128/3,−116,164,3713); the full determinant is29188/3. All are nonzero.
+Every column has a negative off-diagonal entry. A nonzero homogeneous LCP
+solution has nonempty positive support: size≥2 would solve Γ_SS x=0 on a
+nonsingular principal block; size1 would have an inadmissible negative
+outside slack. Thus there is NO nonzero homogeneous LCP solution.
+
+At positive anchor a=(1,1,1,1), the complete principal candidates for rhs−a
+are listed below. Empty support fails the residual−a≥0; singleton supports
+are impossible by their active equations. Listed coordinates follow increasing support order.
+
+| Support | Principal inverse candidate | Inadmissibility or strict off slack |
+| --- | --- | --- |
+| 01 | (−3/4,1/4) | negative coordinate |
+| 02 | (−3/4,1/4) | negative coordinate |
+| 03 | (−3/4,−1) | negative coordinate |
+| 12 | (1/19,−1/11) | negative coordinate |
+| 13 | (−1/11,1/19) | negative coordinate |
+| 23 | (1/19,−1/26) | negative coordinate |
+| 012 | (−723/128,−11/32,19/32) | negative coordinate |
+| 013 | (−74/29,19/87,−11/87) | negative coordinate |
+| 023 | (371/164,26/123,−19/123) | negative coordinate |
+| 123 | (1141/3713,856/3713,691/3713) | omitted row0 slack3584/3713>0 |
+| 0123 | (−2688/7297,1141/7297,856/7297,691/7297) | negative coordinate |
+
+The sole admissible support123 has positive determinant, giving R0 degree1.
+The precise bounded dependencies inspected under their imports are
+`r0Degree_eq_sum_admissible_inverse_supports` in
+`MathUE/LinearProgramming/FiniteSupportDegree.lean` and
+`isStandardQ_of_r0Degree_ne_zero` in `MathUE/LinearProgramming/R0Degree.lean`.
+Their negative-column, nonsingular-principal, positive-anchor and strict
+inactive-slack premises are all verified above. Thus Γ IS StandardQ.
+The exact inverse/determinant census was checked with rational symbolic
+arithmetic; the table is an ordinary certificate, not new Lean code.
+All candidate exclusion signs and the one strict admissible off slack are
+open, so these matrix properties survive the small generic perturbations.
+If unit-cube bounds are desired, multiply the entire table and everyκ by
+1/26; n is unchanged, Φ scales positively and every matrix property persists.
+
+There is nevertheless no full-gap or absorption-gap counterexample here.
+At the exact table, players1,2,3 surely quit at date0 and player0 Never.
+Members receive11/3; deleting one's Quit leaves a sure pair giving the same
+passive11/3, and root Quit also gives11/3. Thus their full caps are11/3.
+Player0 receives passive5 and its root join gives1, so its full cap is5.
+Every debt is0, andΦ=4(5−1)−(5+11)=0. After the explicitε perturbation,
+all member withdrawal comparisons and the outsider join comparison are
+strict, so an open generic neighborhood retains this actual absorbing
+terminal Nash/UE producer.
 
 What survives. WN1–WN3 remain necessary at the genuine NP source. WN6 only
-falsifies consumption from the clipped-tail budget, positive owns, normality
-and Γ positivity ALONE. It does not supply true-minimum ancestry, common
+falsifies consumption from the clipped-tail budget, positive owns, normality,
+Γ positivity and its StandardQ/nonhomogeneous hard class ALONE. It does not
+supply true-minimum ancestry, common
 positive debt or NP's strict full/absorbing gap, and cannot refute a consumer
 that genuinely uses those hypotheses. In particular the absorbing tail
 Φ0 here is forbidden by the NP boundΦ≥g/ν. A successful next route must
