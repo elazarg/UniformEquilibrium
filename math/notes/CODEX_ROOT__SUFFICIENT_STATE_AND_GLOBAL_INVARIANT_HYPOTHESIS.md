@@ -1108,3 +1108,78 @@ evidence that a positive-gap table exists or that every other mechanism
 has adequate state. A candidate must beat the same-domain full-debt
 floor after pricing its manufactured source and all new cap branches;
 positive delivery or a large auxiliary penalty is not that comparison.
+
+## Three tests separating complete information from successful selection
+
+The supporting arguments below are ordinary, unreviewed mathematics in
+the authors' notebooks. They are not new counterexample exclusions. Their
+role here is to distinguish a missing response from a failed operation
+on a response-complete object.
+
+### Endpoint response incompatibility can have a quantitative price
+
+Fix one table with full debt infimum δ and absorbing-profile debt infimum
+δ+g, where g>0. For an actual profile p, let one owner's Never mass be
+n∈(0,1), and put m=1−n. Let f replace that owner's law by its conditional
+finite law, and let e replace it by Never, leaving all opponents unchanged.
+Then f is absorbing, p is the private law mixture mf+ne, prescribed
+payoffs are affine, and the owner's own cap is unchanged. Every other cap
+is convex along this law segment. The exact nonnegative dividend is
+
+    J = ∑[i≠owner](mB_i(f)+nB_i(e)−B_i(p))
+      = mD(f)+nD(e)−D(p)
+      ≥ mg−(D(p)−δ).
+
+Thus, as D(p)→δ with n bounded away from 1, this particular conditioning
+operation has a positive cap-mixing price. Some observer cannot use one
+response sequence that is asymptotically optimal at both endpoints, after
+passing to a subsequence fixing that observer.
+The endpoint caps are retained, not forgotten. Both endpoints may lie
+off the minimum fibre, so this does not contradict a common-response
+theorem whose endpoints are required to stay on that fibre.
+
+The complete ledger and its solved-table test are in
+`CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`, CV1–CV4. A useful next
+test is a coupled change of existing finite mass that beats the SAME full
+debt floor after this price, rather than assuming the price disappears.
+
+### A complete payoff family need not admit convexification
+
+For the grand-only Fin4 table, every player gets 1 at the grand coalition
+and 0 at every other coalition and Never. The proposed exact classification
+of its entire uniform-equilibrium payoff set is
+
+    {0} ∪ {k⁻³·(1,1,1,1) : k is a positive integer}.
+
+Its midpoint obstruction is against every behavioral profile delivering
+that target, not just against one jump image. A separate explicit
+perturbation retains nonconvexity while satisfying the relevant singleton
+matrix screens. Both tables have equilibria and zero global debt infimum.
+
+The complete ordinary proofs are in
+`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, JF1–JF6; their independent
+mathematical review remains open. If correct, these examples distinguish
+failure of convexification from failure to record all attainable payoffs.
+A nonconvex existence or execution argument remains possible; the examples
+do not show that the complete payoff family is insufficient information.
+
+### Anchoring all observer caps does not select the host's best family
+
+A host constrained to a Quit hazard of at least θ>0 at every date admits
+an actual absorbing profile where all three observers are unrestricted
+Nash and the host is optimal over the entire constrained law class.
+The same retained host clock uniformly screens every observer deviation.
+It does not screen a host deviation, which deletes that clock.
+
+The complete delayed-pair table in
+`CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md`, RM26, has anchored Nash
+selections whose sole host debt stays positive as θ→0, and other selections
+whose debt tends to zero. It therefore refutes arbitrary selection, not
+the existence of a good selection from the whole correspondence. The next
+useful test is existential and global: produce a good selected family, or
+show that a true minimum supplies a strict same-domain improvement.
+
+Taken together, these tests weakly favor a missing global selection theorem
+or an unsuitable operation over missing information for these particular
+attempts. They do not decide between existence and a positive-gap table,
+and none turns a conditional object into a conjecture-closing producer.
