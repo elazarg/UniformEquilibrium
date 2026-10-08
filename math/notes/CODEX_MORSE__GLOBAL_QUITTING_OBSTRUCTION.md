@@ -9834,6 +9834,399 @@ such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
 
+## Forward global source: strict absorbing-gap separation forces a fully paid finite bridge
+
+Status: COMPLETE ORDINARY PROOF DRAFT NP1–NP9, UNREVIEWED. This
+is a fresh-table counterexample producer, not a fixed-table conclusion
+about the previously selected FC source and not a UE proof. Its new
+whole-game mechanism deliberately makes the ORIGINAL full gap strictly
+smaller than the absorbing gap. Every full minimum and every sufficiently
+near-minimal ACTUAL profile then has a quantitative positive joint-Never
+mass and ALL four positive debts. The source never passes to a restricted
+minimum. It consequently excludes every sure first root and every
+zero-debt bridge at this ONE new table. The canonical93 contact exclusions
+are NOT carried; the direct bridge proof does not need them here.
+
+### NP1. Exact question and complete source conclusion
+
+For signed Fin4 tables let P_all,P_abs and K_all,K_abs have the
+definitions used in FC. Define Δ_all=min_(K_all)D and
+Δ_abs=min_(K_abs)D. All caps contain ALL finite deadlines and Never.
+Independent complete behavioral laws, not common randomization, are
+used throughout. Never terminal reward remains0.
+
+If ANY Fin4 no-UE game exists, the proposed theorem produces ONE
+unit-bounded table r† with all own s_i>0 such that
+
+    0<δ=Δ_all(r†)<Δ_abs(r†)=δ+g, g>0.               (NP1)
+
+All its full minimum pairs have one common debt vector d*. Every
+sufficiently near-minimal ACTUAL profile has joint Never probability
+bounded below by one positive constant and therefore every individual
+Never mass and every individual debt bounded below. Every marked
+full minimum has:
+
+* all four Never masses strictly positive; hence ALL debts positive;
+* literal Never STRICTLY below the full cap for EVERY owner;
+* no prescribed pre-active head; a finite isolated first active
+  collision supplied by at least TWO STRICTLY MIXED owners;
+* a PAID owner with full maximizing responses at the first root
+  and at a LATER FINITE compact test, whose payoff kernels genuinely
+  differ on a positive original opponent-root event.
+
+Every root rate is<1, its continue product is positive, and the
+root has at least three positive nonempty coalition labels.
+The common-debt and generic-row selections happen BEFORE every
+final minimum and preserve(NP1). No old minimum law, tail Nash,
+cap selector, original chronology, or MAX source is transported.
+
+NP9 also consumes a complete nonlocal competitor: periodically
+repeat the ORIGINAL finite profile block. Its exact FULL caps
+show that a minimizing source must have a quantitatively positive
+conditional-Never renewal leakage. This is a whole-law comparison,
+not a supplied cap sign or a local root derivative.
+
+### NP2. Signed whole-row translations with nonnegative old AND new own reward
+
+For any actual profile p let ν(p)=∏_i p_i(Never) and
+h_i(p)=∏_(j≠i)p_j(Never). Delayed finite response convergence is
+
+    V_i(t)→V_i(Never)+h_i s_i.
+
+If s_i≥0, the FULL cap equals the finite-response supremum.
+Add a constant C to EVERY nonempty reward in row i. If BOTH
+s_i≥0 and s_i+C≥0, the same statement holds before and after
+translation. EVERY finite-response payoff increases by exactly C,
+so its finite supremum, hence full cap, also increases by C.
+The prescribed payoff increases by C(1−ν). Thus
+
+    B_i^new=B_i+C,
+    U_i^new=U_i+C(1−ν),
+    d_i^new=d_i+Cν.                               (NP2)
+
+Here C may be NEGATIVE. The lower bound C≥−s_i is essential;
+this is not general affine invariance of a negative-own row.
+For any absorbing profile ν=0, the ENTIRE pair translates by
+(U_i,B_i)↦(U_i+C,B_i+C) and debt is exactly unchanged.
+Closing gives the corresponding affine map of K_abs and equality
+of its total-debt minimum values.
+
+### NP3. Produce a zero-own table with a positive ABSORBING gap
+
+Start with an ACTUAL Fin4 counterexample. Some positive pivot
+exists, since otherwise AllNever has full debt0. The tracked
+normal-core and punishment-normality declarations in BAP1/FC1,
+under their actual hypotheses, and the tracked reverse
+single-pivot uniform-target transport produce a STILL no-UE
+table r′ with own vector e_m. The original no-UE/terminal-gap
+bridge gives Δ_all(r′)>0, hence Δ_abs(r′)>0.
+
+Subtract1 from EVERY nonempty entry in recipient row m, leaving
+other rows and Never0 unchanged. Its old own is1 and its new
+own is0, so(NP2), not an inverse unproved affine invariance,
+applies. The new table z has ALL four own singletons0 and
+
+    Δ_abs(z)=Δ_abs(r′)=A>0.                       (NP3)
+
+Ordinary Δ_all(z)=0 at AllNever is harmless and expected. Only
+its absorbing gap is used. The full-conjecture ZR equivalence
+is NOT needed: this direction follows directly from the actual
+tracked normalization and the proved signed translation.
+
+### NP4. Small positive row constants force STRICT full/absorbing separation
+
+Choose 0<t<A/8 and add t to EVERY nonempty coordinate in EVERY
+row of z. Call the table z^t. Its own vector is(t,t,t,t).
+Repeated application of(NP2) gives, for EVERY actual profile,
+
+    D_(z^t)(p)=D_z(p)+4tν(p),
+    Δ_abs(z^t)=A,
+    Δ_all(z^t)≤D_(z^t)(AllNever)=4t<A/2.          (NP4)
+
+The full gap is nevertheless POSITIVE. Here is a quantitative
+all-law proof, not a compactness assertion about an assumed
+absorbing minimum. For any table with a positive own singleton
+t and actual profile p, the exact joint-Never debt bound gives
+tν≤d_i≤D. Moving the smallest Never atom to one finite date
+changes ENTIRE payoffs/caps by a coupling error, and creates an
+absorbing profile. If M>0 bounds rewards, its total debt differs
+by at most14Mν^(1/4). Thus, at z^t,
+
+    A≤D+14Mν^(1/4)≤D+14M(D/t)^(1/4).
+
+If D≥A/2 it is bounded positively; otherwise the displayed
+inequality implies D≥t(A/(28M))⁴. Consequently
+
+    Δ_all(z^t)≥min(A/2,t(A/(28M))⁴)>0.             (NP5)
+
+Therefore z^t is an ACTUAL no-UE game by the original terminal
+gap correspondence, and(NP1) holds already. It is not an
+absorbing-domain companion. This selection does not rely on
+finite penalty attainment: SMALL row constants put the FULL
+minimum strictly BELOW the absorbing floor.
+
+### NP5. One final table with common debt and generic rows
+
+Scale z^t by a positive common reward bound into the unit cube,
+then contract slightly inward. Both Δ_all and Δ_abs scale by
+the same factor; strict own positivity and strict gap separation
+remain. BOTH value functions have the SAME8-Lipschitz table
+modulus, since the relevant actual law class is fixed and every
+payoff/full cap changes by at most the reward sup distance.
+
+Choose a sufficiently small open perturbation ball so that
+Δ_all>0, Δ_abs−Δ_all>0 and every own s_i>0 survive. Avoid
+the finitely many within-row equality hyperplanes. At the chosen
+r̂ all nonempty-coalition entries are distinct within each row.
+
+Apply the fixed-carrier positive-recipient scalarization from DR:
+on the ORIGINAL full attainable debt carrier A_all,
+
+    W(θ)=min_(a∈A_all) θ·a.
+
+It is concave and finite. At coordinate-regular real θ, the
+two supporting inequalities force every minimizing a_i to equal
+∂_iW(θ). Positive row scales map the actual full carrier EXACTLY,
+so the new unweighted full minima ALL have one vector d*.
+Choose such θ sufficiently close to1 inside a positive box.
+The table modulus preserves Δ_abs>Δ_all>0; row genericity and
+positive own signs are preserved exactly by positive scaling.
+
+This produces ONE final r† and(NP1). It has a true FULL minimum
+and common debt, not the old table's weighted minimum. Every
+new full minimum is included. No maximization over tables or
+canonical93 contact selection is invoked after this step.
+
+### NP6. A uniform actual Never floor and positive debt at EVERY full minimum
+
+For ANY actual p at this final table, moving the smallest Never
+atom as in NP4 gives
+
+    δ+g≤D(p)+14Mν(p)^(1/4).                       (NP6)
+
+Hence EVERY sufficiently near-minimum profile, for example
+D(p)≤δ+g/2, satisfies
+
+    ν(p)≥(g/(28M))⁴=:η_near>0,
+    p_i(Never)≥η_near,
+    d_i(p)≥s_iη_near>0 for EVERY i.                (NP7)
+
+For any original full-minimum pair and ANY actual realizing
+sequence, all subsequential Never-mass limits instead satisfy
+
+    ν≥(g/(14M))⁴=:η>0.                            (NP8)
+
+The marked compiler retains these marginal Never masses: its
+Never interval has the limiting total mass, and strong moving-
+interval/weak-* density convergence gives each own mass. Thus
+every produced marked minimum has all n_i=q_i(Never)≥η and
+all d_i≥s_iη. This also follows by taking limits in the exact
+joint-Never debt bound. The common vector d* is therefore
+STRICTLY positive in every coordinate.
+
+For every actual and marked response menu,
+
+    B_i≥V_i(Never)+h_i s_i,
+    h_i=∏_(j≠i)n_j≥ν≥η at a minimum.               (NP9)
+
+The last finite compact tester is the limit of delayed finite
+responses and is DISTINCT from literal Never. Thus Never is
+STRICTLY suboptimal for every owner. All full maximizing points
+lie in the FINITE compact test set. No raw-ℕ cap attainment is
+inferred; a maximizing finite compact endpoint can still require
+moving original deadlines.
+
+### NP7. No pre-active head, at least two mixed first-root suppliers
+
+Use the actual marked source and legal signed chronological
+conditionals proved in Sections49–50 and the canonical source
+construction. These inputs apply to ANY finite-law full-minimum
+sequence; their proofs do not require contact separation.
+The point q is in the ORIGINAL full carrier at δ and has d*.
+Never is isolated and nonmaximizing by(NP9). Let τ be the
+earliest FULL maximizing point among all owners.
+
+For any regular ordered cut u<a<τ with a positive head, put
+B={i:e_i=q_i(clock≤u)>0}. For each i∈B vary BOTH signs toward
+its OLD head conditional. Because n_i≥η, EVERY e_i<1. The
+original whole-date/raw-boundary transport realizes all these
+families in the full carrier. All upper response kernels have
+the SAME positive affine transformation; the compact lower
+tester set has no old maximum and keeps a strict uniform gap.
+Thus FULL active families stay fixed on a small signed box.
+
+The summed-regret multiaffine polynomial has an interior true
+minimum δ and is constant. Every box pair is a full minimum,
+so common-debt rigidity makes EACH regret polynomial identically
+d*_i. If B={h}, conditioning only h to its head gives own
+payoff s_h (all opponents are later), hence original U_h=s_h.
+This contradicts the tracked strict quadratic prescribed margin
+at a positive FULL Fin4 SUM minimum.
+
+If |B|≥2, fix i∈B and condition all other B owners to their
+heads in the polynomial. Its own late branch and its selected
+response≥τ are both screened by a sure other head, so the late
+regret is0. The all-head selected regret is d*_i, giving
+
+    d*_i=e_i d*_i.
+
+Since d*_i>0 and e_i<1, this is impossible. Far endpoint caps
+are not claimed fixed: only polynomial constancy is evaluated.
+There is therefore NO positive prescribed mass before τ.
+
+If the mixture had zero atom at τ, every opponent would stop
+strictly later and an owner active at τ would get exactly s_i,
+contrary to the full cap-minus-singleton margin. So τ is a
+positive mixture atom, isolated by the retained chart, and the
+FIRST prescribed stage. Its own rates a_i=q_i({τ}) satisfy
+
+    a_i≤1−n_i≤1−η<1,
+    ∏_i(1−a_i)≥ν≥η.                               (NP10)
+
+There cannot be just one supplier h with 0<a_h<1. The literal
+original conditioned suffix after the retained root belongs to
+the same full carrier and has total debt≥δ. The full h cap
+has B_h−s_h≥δ+δ²/(8M), and the exact one-supplier ledger gives
+
+    δ≥(1−a_h)D_tail+a_h(B_h−s_h)>δ.
+
+This is impossible. It is the all-tail floor, NOT tail optimality
+or Nash. At least TWO suppliers are therefore STRICTLY mixed.
+Independence makes the root's singleton labels for either supplier
+and their pair label all positive (set all other root draws to
+Continue, an event of positive probability). Prescribed Never
+also has positive probability. No deterministic-outcome spectrum
+or literal coalition release is needed to exclude this geometry.
+
+### NP8. A PAID first-to-later FINITE payoff-kernel bridge
+
+Suppose no owner maximizes at both τ and a later point. Every
+cap containing τ is then root-only; other complete cap families
+lie strictly later. Independently reset the EXISTING positive
+root atoms toward τ with small parameters of BOTH signs.
+Root-only caps have isolated complement gaps. On whole later
+families all response kernels change by one positive affine
+map, since a term containing a reset opponent exits at τ.
+A compact lower gap remains strict. Thus the entire root box
+is cap-stable, with legal original signed transport, including
+all moving tests and literal Never.
+
+The summed polynomial is constant by globality, and EACH polynomial
+is constant by common debt. A root supplier whose cap is root-only
+has d_h(λ_h)=(1−λ_h)d*_h; rigidity contradicts d*_h>0.
+If its caps are later, set every other root supplier algebraically
+to τ. There is another sure root owner. Its old late branch
+and selected response are screened identically, giving
+
+    d*_h=a_h d*_h.
+
+This contradicts d*_h>0 and a_h<1. Hence a root/later bridge
+exists. Its later point σ is FINITE, since(NP9) excludes Never
+from EVERY active set. The owner has positive debt, uniformly
+bounded below by s_iη, and a pure first-root response on the
+original sequence has terminal gain≥d*_i/2 for all large indices.
+
+The first response value B_i>s_i implies a positive opponent-
+root event. On any nonempty tied opponent set S at τ, response
+τ pays r_i(S+i), whereas response σ>τ pays r_i(S). At least
+one such S has positive probability; row genericity makes its
+reward difference nonzero. Both expected values equal B_i.
+Original retained root dates and moving FINITE later responses
+give exact positive-event kernel distinctions for large indices,
+and their values tend to B_i. Exact co-maximality at each raw
+finite index is NOT asserted.
+
+This is a source-level strict increment: the bridge is PAID,
+finite-to-finite, and has NO sure root owner. It does NOT give
+admissible return, paid renewal, compatible charge or UE. All
+four complete debts can still leak to nonmovers after a reset.
+
+### NP9. An actual whole-block periodic competitor prices the residual
+
+Write R_i=V_i(Never), ν=∏n_i and h_i=∏_(j≠i)n_j at ANY
+produced marked full minimum. NP7 supplies at least two finite
+root suppliers, so h_i<1 for EVERY i, and ν<1. The strict
+quadratic full-minimum margin gives U_i>s_i>0 and B_i>s_i.
+
+On an original finite-law approximant, choose a block ending
+STRICTLY after its last finite date. Repeat its hazard block
+PERIODICALLY forever on the live history. Each owner redraws
+only its own private independent law each new block. The honest
+periodic profile absorbs almost surely because ν<1. Some owners
+may still prescribe Never forever if their n_i=1; full absorbing
+play, not all-four-finite play, is sufficient here.
+
+The one-block prescribed reward is U_i and joint block survival
+is ν, so repeated delivery is U_i/(1−ν). A responder can wait
+k complete blocks and then use any one-block finite test t.
+Its payoff is
+
+    R_i(1+h_i+…+h_i^(k−1))+h_i^k V_i(t).
+
+Literal Never in the periodic opponents gives R_i/(1−h_i).
+The old finite support menu contains its full finite supremum
+(include one empty final date), and own positivity makes that
+supremum the OLD full cap. Taking the supremum over ALL k,t
+and Never therefore gives the EXACT unrestricted periodic cap
+
+    B_i^rep=max(B_i,R_i/(1−h_i)).                  (NP11)
+
+Every unrestricted behavioral response is covered: its payoff is
+affine in its complete stopping law, hence is bounded by these
+pure finite deadlines and Never. This is not merely a within-
+one-cycle comparison or a finite word ending in Never.
+
+The original finite approximants' U,B,R,n all converge to the
+displayed marked data. The denominators stay bounded away from0
+because the limiting root has at least two suppliers. Their
+actual periodic profiles lie in P_abs and have debt≥δ+g.
+Pass to the exact limit using(NP11) to obtain
+
+    Σ_i[R_i/(1−h_i)−B_i]⁺
+      ≥g+ν/(1−ν)·Σ_i U_i>g>0.                    (NP12)
+
+This is a consumed all-law minimum comparison. In particular
+some owner satisfies R_i>(1−h_i)B_i>0: its conditional passive
+Never payoff creates a new upper cap upon full block renewal.
+If every renewal cap stayed≤the old cap, periodic replay would
+STRICTLY LOWER full debt, contradicting the original minimum.
+This quantitative leakage is not a sign chosen at one old cap.
+
+Bounded source lookup: the exact no-UE bridge, single-pivot
+reverse transport, normal-core punishment producer and strict
+quadratic margin were already read under their imports. New
+lookup read `ConditionedPeriodicRenewal.lean` and the first full
+descent/delivery part of `TerminalCapNashRenewalObstruction.lean`:
+they produce honest conditioned deliveries and warn that cap–Nash
+prefix iteration need not descend. Neither supplies this original
+FULL/absorbing gap separation or its all-minimum Never floor;
+NP11 reconstructs the complete cap instead of assuming renewal
+does not raise it. The raw condition all passive rewards≤own
+would make R_i/(1−h_i)≤s_i<B_i and is therefore consumed, but
+it already makes the normalized singleton matrix entrywise
+nonpositive, excluding the tracked StandardQ counterexample side.
+NO additional raw existence-class coverage is claimed from it.
+
+Exact scope tests: signed translation across a NEGATIVE own
+reward fails (the all-nonempty−1 table has literal Never cap0
+before, but finite cap−1); this cannot replace NP2. Small positive
+constants on a table with Δ_abs=0 cannot produce(NP1); e.g. the
+all-own-zero three-cycle pair±1/grand−1 game, padded by a dummy,
+has all-four-proper geometric profiles of total debt
+3q³/[1−(1−q)⁴]→0. Adding a common terminal constant leaves
+that absorbing debt unchanged, despite AllNever now having
+positive debt4t. Positive profile debt is not positive gap.
+The ordinary table may have c≪1 at arbitrary profiles; the
+uniform floor is only for sufficiently near-minimal profiles
+of THIS produced separated table.
+
+Concrete next question: use the paid first-to-later tie AND the
+forced conditional-Never renewal cap leakage at this nonsure
+full minimum to construct one complete lower-debt law. Merely
+replaying the block is now exactly priced by(NP12), so a changed
+tail or whole-table mechanism must control that born cap rather
+than omit it. The conjecture remains open.
+
 ## Forward exact residual: all own singletons zero, absorption required
 
 Status: COMPLETE ORDINARY PROOF DRAFT ZR1–ZR4, UNREVIEWED. This is

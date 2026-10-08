@@ -13,7 +13,7 @@ ZERO debt. This is independently reviewed ordinary mathematics, not
 an equilibrium producer or an assertion that distinct clock labels
 always distinguish payoff effects.
 
-The live attempt is RM1–RM20 at the end of this notebook. RM1–RM5
+The live attempt is RM1–RM21 at the end of this notebook. RM1–RM5
 select a genuine compact GLOBAL minimum with maximal root mass and
 identify the nonlinear-wall failure of naïve purification. A sole
 bridger is at its own root rate0 or1. RM6–RM9 prove that if it is the
@@ -89,7 +89,13 @@ RM20 rejects a global shortcut: zero-sum constant row transfers preserve the
 FULL debt objective at EVERY law, but also preserve the equality wall and
 every singleton margin. They supply no descent or new source restriction.
 
-Status of RM10–RM20: COMPLETE ORDINARY PROOF DRAFTS, not independently
+RM21 narrows the strict attained-punishment attempt: generic stationary
+optimizers either admit a pure witness or tie BOTH owner branches, making
+every tail deadline optimal. An exact robust full-law countertest rules out
+pure punishment normalization in general. Free owner timing still lacks the
+needed upper bound on ALL observers' caps; no debt descent is claimed.
+
+Status of RM10–RM21: COMPLETE ORDINARY PROOF DRAFTS, not independently
 reviewed, not Lean-checked, and not exported. Their necessary conditions
 and local table prices do not assert that the GLOBAL infimum rises.
 
@@ -17966,3 +17972,148 @@ minimum, then apply the singleton margin to force a contradiction. Both sides
 of that margin translate identically, so there is none. This changes direction
 away from constant row redistribution. A genuine consumer still must alter
 membership effects or actual laws with ALL observer caps controlled.
+
+### RM21. Strict attained punishment gives a tied tail or a pure stationary witness
+
+Status: COMPLETE ORDINARY PROOF DRAFT. This substantial strict-arm attempt
+does not consume the full minimum. Its exact falsifier prevents replacing an
+attained punishment by a pure opponent clock, even at a generic positive-own
+table. It is not another two-clock closure claim or export proposal.
+
+Let row i have DISTINCT rewards at all distinct nonempty coalitions and let
+P_i<s_i. RM18 supplies an actual stationary minimizing opponent hazard y.
+Write S={j:y_j=1}, V={j:0<y_j<1}; all other opponent hazards are0. The full
+cap is max(Q,A/H), H=1−h>0. Either a PURE stationary punishment exists, or
+every stationary optimizer has V nonempty and BOTH branches satisfy
+
+    Q_i(y)=A_i(y)/H_i(y)=P_i.                         (RM32)
+
+Proof: if V is empty the optimizer itself is pure, with nonempty S because
+P_i<s_i excludes all-Continue. Otherwise work on its open V-dimensional
+face, retaining S and the zero coordinates. If Q>A/H strictly, local
+minimality makes the multiaffine Q have an interior minimum. It is constant
+on that face. At two distinct pure V corners the participant coalitions
+S∪{i} and S∪{i,v} therefore have equal reward, contradicting row distinctness.
+If S is empty the empty corner already gives Q=s_i=P_i, also impossible.
+
+If A/H>Q strictly, local minimality of A/H makes the MULTIAFFINE polynomial
+A−P_i H nonnegative near y and0 at y. Its interior-minimum principle makes
+it identically0 on the face. When S is nonempty, two distinct passive corner
+coalitions have reward P_i, again violating distinctness. When S is empty
+and |V|≥2, the two singleton corners likewise give equal passive rewards.
+The sole remaining strict-Continue case has S empty, V={j}. Here A/H is the
+constant r_i({j})=P_i. Since Q(y_j)<P_i<s_i, necessarily r_i({i,j})<P_i;
+raising y_j to1 gives cap exactly P_i. This supplies a PURE stationary
+optimizer. If neither strict branch holds,(RM32) holds. These possibilities
+exhaust the original optimizer; no distant polynomial cap is asserted.
+
+Under(RM32), the actual stationary opponent law gives EVERY finite owner
+deadline and Never the SAME expectation P_i. Indeed its finite deadline t
+value is
+
+    (A/H)(1−h^t)+h^t Q=P_i,
+
+with Never value A/H=P_i. Thus ANY prescribed owner continuation also has
+payoff P_i and zero owner debt against this opponent law. The checked
+`quittingBestReplyValue_stationary` and
+`quittingStationaryUnilateralCap_eq_max_div` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean` were reread for the exact
+unrestricted response interpretation. This is expected-value indifference,
+not equality of pointwise response kernels.
+
+At a sole-sure true-minimum bridge with Q_root=A_root+h_root P_i, grafting
+this actual opponent optimizer preserves the entire original minimum pair
+by RM18. Releasing the owner to ANY conditional continuation still preserves
+its prescribed payoff and complete cap exactly. The owner stays debt0.
+However the three observers' full caps are NOT fixed after that release.
+Global minimality gives a genuine lower bound on their aggregate debt, not
+the upper bound needed for descent. The tail's selected weighted regrets
+are not a three-player debt minimum. This is the precise remaining joint
+choice problem, now at an actual attained optimizer with free owner timing.
+
+The proposed shortcut—choose an optimizer with a pure opponent, then use
+that clock to screen every other tail cap—is FALSE. Here is a complete
+Fin4 table demonstrating why that route is not general. In recipient row0:
+
+* own singleton and EVERY proper participant coalition containing0 pay1/8;
+* grand coalition pays−7/8;
+* passive singleton coalitions pay−1;
+* passive pair coalitions pay2/3;
+* passive triple coalition pays1.
+
+Every other recipient's FIFTEEN rewards are0. These instructions specify
+all60 entries. Let x,y,z be the three opponent stationary hazards and put
+w=xyz. The exact owner root quantities are
+
+    Q=1/8−xyz,
+    A=−(x+y+z)+(8/3)(xy+yz+zx)−4xyz.
+
+The TRUE punishment value is0, and its UNIQUE stationary optimizer is
+x=y=z=1/2. At that point Q=A=0. To prove the global lower bound and
+uniqueness, w<1/8 gives Q>0. Otherwise define a=1/x,b=1/y,c=1/z,
+so a,b,c≥1 and abc≤8. Then
+
+    A/(xyz)=−f(a,b,c),
+    f=ab+bc+ca−(8/3)(a+b+c)+4.
+
+On this compact domain f≤0, with equality ONLY a=b=c=2. Here is the full
+extremum check. If a boundary coordinate is1, put v=bc∈[1,8]. Since
+b+c≥2√v,
+
+    f≤v−(10/3)√v+4/3<0.
+
+For u=√v∈[1,2√2] the last quadratic is convex and has endpoint values
+−1 and(28−20√2)/3<0; the latter follows from784<800. In the interior
+with abc<8, vanishing derivatives force a=b=c=4/3 and f=−4/3.
+On the remaining boundary abc=8 with all coordinates>1, Lagrange
+multipliers give (a−b)(c−8/3)=0 and its cyclic counterparts. At least two
+coordinates must coincide. Put b=c=t, a=8/t², 1≤t≤√8. Direct factoring gives
+
+    3t²f=(t−2)²(3t²−4t−16)≤0.
+
+The second factor is strictly negative on this interval: its convex quadratic
+has endpoint values−17 and8−4√8<0. Equality therefore forces t=2 and a=2.
+These exhaust all extrema. Hence A≥0 when xyz≥1/8, strictly positive except
+at the half-hazard point. Since H>0 there, max(Q,A/H)≥0 with equality only
+at that point. The tracked equality of stationary and TRUE independent
+punishment values proves P_0=0<1/8=s_0; no restriction to stationary
+deviations was imposed on the responder.
+
+The example excludes a PURE opponent clock even for ARBITRARY opponent law
+profiles, not just pure stationary vectors. If an opponent is pure at finite
+n>0, or pure Never, the deadline0 response can never meet all three opponents
+at0 and therefore pays exactly1/8. If an opponent is pure at0, all complete
+owner responses are screened there. Let the other two root probabilities be
+y,z and v=yz. Its cap is exactly
+
+    max(1/8−v, −1+(5/3)(y+z)−(4/3)v).
+
+This is uniformly at least1/1024. If the first branch is<1/1024, then
+v>127/1024. By y+z≥2√v the second branch is at least
+g(v)=−1+(10/3)√v−(4/3)v. This is increasing for0≤v≤1. Moreover
+√(127/1024)>351/1000 and127/1024<1/8 give
+
+    g(127/1024)>−1+117/100−1/6=1/300>1/1024.
+
+Thus ANY opponent law profile with ANY pure marginal has cap at least
+1/1024, whereas the optimal half-hazard law has cap0. All three punishment
+marginals genuinely need randomness. The constant is only an exact robustness
+certificate, not a numerical optimization aim.
+
+This failure persists under small FULL-table genericization. If every reward
+changes by≤η<1/4096, all full caps and punishment infima change by≤η. Every
+profile with a pure opponent marginal has cap≥1/1024−η>η, while the old
+half-hazard law has new cap≤η. Also the new s_0≥1/8−η>P_0′. Avoiding all
+proper within-row hyperplanes and making the other owns small and positive
+is possible inside this open ball. Thus row distinctness and strictly
+positive own singletons do not make pure punishment available. This table
+and the genericization are NOT asserted to have positive global debt: the
+unperturbed table has actual Nash at the pure singleton0 with others Never.
+No counterexample-class exclusion is counted from this solved regression.
+
+Current direction: pure/sure punishment normalization is retired as a
+universal strict-arm consumer. The genuine surviving arm instead permits an
+owner-indifferent stationary tail with EVERY deadline optimal. Exploit that
+actual free timing only if one can bound ALL exposed observer caps or choose
+the opponent punishment jointly to achieve a true same-table debt descent.
+The equality arm RM19 has a different obstruction and is not merged into it.
