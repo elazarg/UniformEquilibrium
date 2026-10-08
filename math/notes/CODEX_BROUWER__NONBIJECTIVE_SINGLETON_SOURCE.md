@@ -64,6 +64,13 @@ TW1–TW5 is COMPLETE ORDINARY, UNREVIEWED: an actual response-complete
 finite word removes joining spikes and proves that SOME c-active owner
 has positive OLD finite mass. It excludes an all-pure-Never c-wall,
 not the surviving wall with finite prescribed mass or the full conjecture.
+AP below gives the exact ALL-response ledger for changing a second
+owner's old finite/Never mixture while relocating the critical owner's
+existing finite mass to a late finite word. It produces the comparison
+family from actual original laws; it does not produce a favorable member.
+The geometric-pivot check identifies why a payoff-preserving tail
+compression is not such a member: its hazard must respect an old atom,
+and the critical finite branch need not lie beyond the opponents' clocks.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -9084,6 +9091,199 @@ solved traps have n_i=1/2 and satisfy the required positive-odds budget,
 so they do not falsify(TW6) and do not validate a universal repair.
 The remaining task is to couple a change of that produced old finite
 branch with another law/calendar change and bound ALL born caps.
+
+## Coupled existing-finite-mass relocation with every born cap retained
+
+### AP1. Actual family and current status
+
+This is a COMPLETE ORDINARY, UNREVIEWED comparison ledger, not a
+new source theorem or a UE producer. The live question is whether its
+finite-amplitude parameters, or a genuinely richer simultaneous calendar
+change, can force debt below the true original minimum. No favorable
+head payoff, head cap or continuation equilibrium is supplied.
+
+Fix the same NP table, a produced original minimum, and an actual
+finite-law realizing sequence pⁿ. Write nᵢ>0 for the limiting marginal
+Never masses, ν=∏ᵢnᵢ>0 and mᵢ=1−nᵢ. TW supplies an owner j with
+
+    m_j>0,  B_j=R_j+h_j s_j,  h_j=∏[i≠j] nᵢ.
+
+Choose another owner k≠j with m_k>0. Such an owner exists: the
+first collision has at least two positive root suppliers, whether or
+not j is one of them. For sufficiently large n, let F_jⁿ,F_kⁿ be the
+literal old laws conditioned on stopping at a finite date. All other
+old laws remain unchanged. For arbitrary parameters s,x∈[0,1], form
+the actual head
+
+    j: s F_jⁿ+(1−s)δ_Never,
+    k: x F_kⁿ+(1−x)δ_Never.
+
+Take the fixed original marked source chart. These are bounded old-law
+likelihood reweightings: on j's finite mass the ratio is s/m_jⁿ,
+on its Never mass (1−s)/n_jⁿ, and similarly for k. The denominators
+have positive limits. Thus the same rectangle-product and ALL-moving-
+tester argument gives limiting head data Uʰ(s,x),Bʰ(s,x),Rʰ(s,x).
+In particular Bʰ is the unrestricted cap, not a restricted finite menu.
+This appeal is only to the ordinary source/transport proof already
+recorded here; it does not claim a new checked Lean theorem.
+
+After the ENTIRE literal head, insert an actual empty date and N new
+dates. Redirect absolute probability ℓ from j's head Never mass to
+the uniform law on those N dates, with 0≤ℓ≤1−s. Its residual Never
+mass is 1−s−ℓ. If 1−s=0 then ℓ=0 and no conditioning is performed.
+First take the original-source limit, then N→∞, or use a diagonal
+sequence. Every finite stage is an independent actual stopping-law
+profile. No common random calendar selector or payoff sharing is used.
+
+### AP2. Exact full-cap formula and zero-survival boundaries
+
+Put
+
+    h_jʰ=(1−x)∏[r≠j,k]n_r,
+    Wᵢʰ=∏[r≠i,j]n_rʰ  for i≠j,
+    n_kʰ=1−x,  n_rʰ=n_r for r≠j,k,
+    Lᵢʰ=Rᵢʰ+Wᵢʰ(1−s)sᵢ  for i≠j.
+
+The empty date after the whole head is an ACTUAL finite response, so
+Lᵢʰ≤Bᵢʰ. The limiting complete new pair is exactly
+
+    Uᵢ′=Uᵢʰ+h_jʰ ℓ rᵢ({j})                           for every i,
+    B_j′=B_jʰ,
+    Bᵢ′=max(Bᵢʰ, Lᵢʰ+Wᵢʰ ℓ Γᵢⱼ⁺)                  for i≠j,
+    ν′=h_jʰ(1−s−ℓ).
+
+These are multiplication formulas; they divide by no survival
+probability. They remain valid at s=1, x=1, ℓ=0 and ℓ=1−s.
+For j, the full cap is independent of its own stopping law.
+
+Here is the ALL-response upper and lower check for another owner i.
+Every actual finite response through the old head has exactly its
+head value: j's new late finite branch is still invisible at that test.
+The empty seam and every later test have, apart from one joining atom,
+value
+
+    Rᵢʰ+Wᵢʰ[(1−s)sᵢ+ℓ θ Γᵢⱼ],  0≤θ≤1.
+
+The joining atom has probability at most ℓ/N and payoff error at most
+2Mℓ/N, uniformly over ALL moving test dates. There are no further
+opponent finite atoms in the word. The supremum of the displayed
+affine values is Lᵢʰ+WᵢʰℓΓᵢⱼ⁺; θ=0 and θ=1 are attained by
+actual finite tests before and after the word. A Never response gives
+
+    Rᵢʰ+Wᵢʰℓrᵢ({j});
+
+the θ=1 finite response exceeds it by
+Wᵢʰ(1−s−ℓ)sᵢ≥0. This uses the actual same-table nonnegative own
+singletons. Consequently Never introduces no omitted cap. Combining
+the old-head tests, seam, word, later tests and Never proves both
+bounds for Bᵢ′. Behavioral deviations add no larger value, since the
+unrestricted cap is the supremum of these pure stopping choices.
+
+Thus the COMPLETE debt comparison is
+
+    D′=Dʰ−h_jʰℓ∑ᵢrᵢ({j})
+       +∑[i≠j](Lᵢʰ+WᵢʰℓΓᵢⱼ⁺−Bᵢʰ)⁺.                 (AP)
+
+The head caps in (AP) are actual produced data at the changed head,
+not inherited upper bounds from the old minimum. Forgetting that
+distinction would incorrectly turn this identity into a consumer.
+
+### AP3. The old c-active finite branch has an exact own-gain ledger
+
+Hold x=m_k and relocate a∈[0,m_j] of j's OLD finite mass:
+
+    s=m_j−a,  ℓ=a.
+
+Its original marginal Never mass is retained. Let A_j^F be j's
+payoff against the original opponents when using its literal old
+conditional finite law. Then
+
+    U_j=m_j A_j^F+n_jR_j,
+    d_j=m_j(B_j−A_j^F)+νs_j.
+
+The new j-payoff increases by exactly
+
+    a(B_j−A_j^F)=a(d_j−νs_j)/m_j ≥0,
+
+and B_j is unchanged. This is an actual relocation of old finite
+stopping mass, not an end-Never-only extension. Equality is possible:
+the old finite conditional law may already consist of j's cap tests.
+Nothing here assigns the other owners a nonpositive cap cost.
+
+Changing x as well gives a genuinely ν-changing coupled comparison:
+for x=m_k+b and the same relocation, ν′=n_j(n_k−b)
+∏[r≠j,k]n_r. One may also choose ℓ≠a to change j's Never mass.
+All admissible choices are covered by (AP), including sure endpoints.
+The true floor requires D′≥δ for every such choice; a strict reverse
+inequality would give a literal finite witness after choosing large
+enough source and word indices. No parameter choice producing that
+reverse inequality has been proved.
+
+### AP4. Exact geometric-pivot scope and a minimal hazard countertest
+
+The narrow source route inspected is `exists_geometric_pivot_payoff_eq_and_caps_le`
+and `exists_geometric_pivot_payoff_eq_and_exploitability_le`
+in `UniformEquilibrium/Quitting/Terminal/GeometricPivotCapDomination.lean`,
+with `quittingTerminalPayoff_pivot_late_response_eq`
+in `UniformEquilibrium/Quitting/Terminal/FiniteOpponentPivotResponseFormula.lean`
+and `geometricPivotStoppingLaw`
+in `MathUE/ProbabilityMassFunction/GeometricPivotStoppingLaw.lean`.
+The exact declarations and needed definitions were read statically;
+no Lean build was run for this note.
+
+Against opponents whose finite choices all precede a deadline, a
+pivot's head and Never atom are retained and its finite tail is
+replaced by a geometric finite law. Prescribed outcome probabilities
+and payoffs are preserved for EVERY positive hazard. The cap-safe
+hazard is selected by
+
+    tail mass × hazard = old first positive late atom.
+
+Every new late response is then a convex interpolation of the old
+response at that atom and the old limiting late response. The latter
+need not be attained. This proves genuine ALL-cap domination for
+that selected hazard, including Never. It does not prove domination
+for an arbitrarily small hazard, and does not put TW's finite j-mass
+beyond all its opponents' finite clocks.
+
+For the hazard issue alone the following THREE-player complete table
+is sufficient. Players are h,j,o. The h row is the participant
+indicator: r_h(S)=1 iff h∈S, otherwise0. The j row is1 only on
+the singleton {j}, and0 on the other six nonempty coalitions.
+The o row is1 on {o} and {h}, and0 on the other five coalitions.
+Thus all own singletons are1. Prescribe
+
+    h: ½ at date0, ½ Never;
+    j: ½ at date1, ½ Never;
+    o: Never.
+
+The payoff vector is (½,¼,½). The full caps are (1,½,¾): o's
+test at0 pays½, its test at1 or any later finite date pays¾, and
+Never pays½. There is no actual gap test between dates0 and1.
+For j the first late atom equals its whole finite tail, so the
+matched geometric hazard is1. Replacing that tail by hazard½
+preserves ALL prescribed payoffs and Never masses but gives o a
+date1 response worth7/8. Its full cap is7/8, the other caps remain
+1 and½, and total debt rises from1 to9/8. This falsifies the
+unrestricted-hazard strengthening, not the named matched producer.
+
+In the same table the existing c-active j branch can instead be
+completed in a genuinely ν-changing cap-controlled fashion. Increase
+its finite tail from½ to¾, decrease Never to¼, and choose hazard2/3,
+so the first atom remains½. All three full caps remain (1,½,¾),
+j's prescribed payoff rises from¼ to3/8, and total debt falls from1
+to7/8. Every late o-test interpolates the unchanged first value¾
+and the new late limit5/8; this checks ALL deadlines and Never.
+The regression is already solved: pure singleton {h} at date0 is
+an unrestricted Nash profile with D=0. It is neither a positive-gap
+example nor a counterexample to the genuine global-minimum floor.
+
+The strongest surviving use is therefore (AP), with actual changed
+head caps retained. A matched payoff-preserving geometric compression
+alone changes no ν and supplies no descent; its cap-safe hazard does
+not remove the coupled-head pricing problem. The next calculation
+must change the old head as well and compare its complete caps, rather
+than inserting an unproduced empty-gap or free-hazard hypothesis.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
