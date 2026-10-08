@@ -26,16 +26,22 @@ so minimum-return support rotation is unavailable. The forward exact test
 below additionally supplies a distant literal mixed equilibrium after all
 pure coalitions are made escapable; it is NOT a positive-gap source.
 
-Current independent attempt: BA1–BA10 below compares the COMPLETE
-almost-surely absorbing strategy class with all profiles. A positive
-singleton recipient-row translation gives the exact full-debt penalty
-C·P(AllNever), with ALL responses reoptimized. The candidate source
-selection carries BOTH carriers at ONE final table, with arbitrarily
-small RELATIVE gap/debt-vector discrepancy and an absorbing-carrier
-finite-a.s. clock anchor. These are DIFFERENT minimizing families;
-no finite penalty makes their minima equal or anchors an original
-all-profile minimum. This is a new ordinary proof draft, not reviewed
-or a consumer of the remaining random collision.
+Current independent work: BA1–BA10 passed two independent soundness
+reviews but is NOTES ONLY: its companion absorbing minimum is not an
+original minimum, and relative gap proximity does not restore the
+lost nonsure all-tail floor. Its exact whole-law penalty
+C·P(AllNever), with all replies reoptimized, is retained internally.
+BAP1–BAP4 preserves every positive singleton. New UNREVIEWED FC1–FC6
+uses that sign scope: a zero common debt coordinate forces EXACT
+same-table alignment with original minima, and a nonlocal diffuse
+clock completion then supplies an all-four-finite-a.s. realizing
+sequence for each original minimum pair. This is not UE closure.
+ZR1–ZR4 separately proves the proposed full-conjecture equivalence
+with absorbing approximate Nash in ALL-own-zero games; CN1–CN3 gives
+the proposed counterexample normal form arbitrarily near constant1/2,
+with all own singletons exactly1/2. These new sections are ordinary
+unreviewed mathematics, not exports. The consuming question is a
+true all-four-clock minimum or the fully paid bridge residual.
 
 The canonical packet passed both complete final-artifact falsification
 reviews. These are ordinary mathematical results, not Lean implementations
@@ -9818,6 +9824,436 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Forward exact residual: all own singletons zero, absorption required
+
+Status: COMPLETE ORDINARY PROOF DRAFT ZR1–ZR4, UNREVIEWED. This is
+a literal equivalence with the full signed Fin4 UE conjecture, not
+an existence proof. Its all-own-zero game has the ordinary exact
+AllNever equilibrium0; the imposed a.s. absorption is ESSENTIAL.
+All responses remain unrestricted behavioral deviations.
+
+### ZR1. The residual statement
+
+Consider the following proposition Z:
+
+    For EVERY Fin4 reward table z with z_i({i})=0 for all owners,
+    and EVERY ε>0, there exists an actual independent complete
+    stopping-law profile p with p(AllNever)=0 and
+    Σ_i[B_i^z(p)−U_i^z(p)]<ε.
+
+The laws may have infinite support and the profile may depend on ε.
+No common deadline, fixed controller, restricted reply class,
+correlation or sunspot is permitted. No zero error or attainment
+of any cap is required. Finite-player nonnegative debt makes this
+equivalent to requiring every individual full debt<ε for each
+accuracy (with the corresponding accuracy rescaling).
+
+For this section K_abs and its infimum have exactly BA1's actual
+definitions. Proposition Z says Δ_abs(z)=0 for EVERY all-own-zero
+table, not merely Δ_all(z)=0. The latter is automatic via AllNever.
+
+### ZR2. Full Fin4 UE implies Z, through a positive-row game
+
+Assume the full signed Fin4 conjecture. Given z with own vector0,
+add1 to EVERY coordinate of EVERY nonempty recipient row, leaving
+Never0; call this table y. Its own vector is(1,1,1,1). The full
+conjecture gives UE in y and therefore Δ_all(y)=0. BA3's exact
+positive-singleton/joint-Never coupling gives Δ_abs(y)=0.
+
+For EVERY actual profile p the old z own singletons are0, so its
+complete cap equals its finite-response supremum. The finite-row
+shift calculation consequently gives
+
+    d_i^y(p)=d_i^z(p)+c(p),
+    D_y(p)=D_z(p)+4c(p).
+
+On ALL absorbing profiles c=0, the complete debts coincide EXACTLY,
+including Never responses. Thus Δ_abs(z)=Δ_abs(y)=0 and Z follows.
+This does not infer absorption from UE in the all-own-zero game.
+
+### ZR3. Z implies full signed Fin4 UE, using actual normalization
+
+Suppose Z and suppose, for contradiction, that a signed Fin4 table
+r has no UE. It has a positive pivot singleton and actual all-player
+punishment normality as checked in BAP1. The tracked single-pivot
+reverse payoff transport gives a STILL-noUE table r′ with own
+vector e_m. Define an all-own-zero table z by subtracting1 from
+the ENTIRE finite recipient row m, keeping all other rows and
+Never unchanged. This is not asserted to preserve unrestricted
+UE or an original minimum: z has its trivial AllNever equilibrium.
+
+For absorbing profiles, however, the DEBTS are exactly preserved.
+Derive this in the valid direction: r′ is obtained from z, whose
+own vector is0, by a NONNEGATIVE whole finite-row shift+1 in row m.
+Both old and new full caps equal their finite suprema, so BA2
+gives d_m^{r′}=d_m^z+c and all other debts unchanged. Hence on
+P_abs, D_{r′}=D_z. Proposition Z supplies absorbing profiles with
+D_{r′}→0. Their actual full gaps tend to0, yielding a fixed UE
+target in r′ by the usual compact terminal-to-uniform consumer.
+The tracked reverse payoff transport then gives UE in r, contradiction.
+
+Therefore Z is EQUIVALENT to full signed Fin4 UE. Normality was
+produced only under the no-UE contrary hypothesis, not assumed
+for every arbitrary initial table. The subtraction step transported
+complete ABSORBING debts, not arbitrary nonabsorbing UE profiles.
+
+### ZR4. Consequences and exact nonclaims
+
+An all-own-zero table with Δ_abs(z)>0 would already be a full
+counterexample producer: the literal table z+1 in every finite row
+has the same positive absorbing gap, and positive own singletons
+give Δ_all(z+1)>0 by BA3. Thus a negative construction may work
+entirely in the residual zero-singleton game. Conversely no
+positive absorbing gap in that class is proved here.
+
+The residual itself always has an equilibrium0 at AllNever, so
+neither its ordinary UE nor a single all-Continue Nash root is
+evidence for Z. The required actual profiles must absorb a.s.
+and cap ALL complete behavioral deviations. With Δ_abs=0, bounded
+terminal payoff compactness selects one fixed target; profiles
+still depend on accuracy. No actual terminal Nash is asserted.
+
+The inspected tracked sources are the literal affine/finite-cap
+declarations in `UniformEquilibrium/Quitting/Terminal/TerminalAffineReward.lean`
+and `UniformEquilibrium/Quitting/Punishment/FinitePureReplyValue.lean`,
+the positive-singleton joint-Never bound in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`,
+and the actual normalization/normality declarations named in BAP1.
+`exists_uniformEquilibriumPayoff_iff_finiteMenuEarlyAbsorption_of_singleton_pos`
+does NOT directly apply to z: its strict positive-singleton
+hypothesis fails. The conditional full-early-absorption compiler
+also does not produce absorption from arbitrary zero-singleton
+data. Narrow lookup found no declaration asserting Z or this
+exact all-own-zero absorbing residual equivalence. No literature
+priority or exhaustive producer novelty is claimed.
+
+Concrete next question: exploit the residual's literal zero own
+payoffs to produce absorbing approximate Nash laws, or an actual
+positive lower bound on the ENTIRE absorbing law class. A bounded
+grid, an atomless-only obstruction, a finite-horizon Nash selector
+or a bad stationary source is not such a bound.
+
+## Forward full-source consumer: zero debt and complete finite clocks
+
+Status: COMPLETE ORDINARY PROOF DRAFT FC1–FC6, UNREVIEWED. This is
+separate from frozen BA1–BA10. It does NOT prove UE. Its proposed
+new counterexample restriction concerns ORIGINAL global minimum
+pairs, not relatively close companion minima: either every common
+debt coordinate is positive, or the two carriers' minimum sets
+coincide EXACTLY and every original minimum pair can be realized
+by a new sequence with ALL FOUR Never masses exactly0.
+
+### FC1. Preserve all positive singleton floors in the ORIGINAL source
+
+BAP1–BAP2 produce from any counterexample one unit-cube table with
+all s_i≥a_i>0. For this paragraph maximize Δ_all, NOT Δ_abs, on
+the compact unit-cube fiber s_i≥a_i for EVERY owner. The attained
+worst value Ω is positive. At an original full minimum, the weak
+singleton margin B_i−s_i≥Ω and B_i≤1 give
+
+    Ω≤1−a_i<1.
+
+The canonical sign-adaptive SA endpoint has all own targets1, so
+its convex comparison stays inside this fiber. Its old positive
+≤93 contacts still have target values≥1>Ω; the same finite σ and
+8-Lipschitz comparison apply to ALL new minimizing laws. Subsequent
+small inward contraction, generic row selection and coordinate-
+regular recipient scales preserve all positive own signs and the
+finite contact exclusions. Those steps need not preserve exact
+membership in the original fiber. No further fiber optimality is
+used. This gives ONE actual fresh counterexample table with the
+canonical ORIGINAL full source, common minimum debt vector a, and
+ALL s_i>0. Its every marked minimum still has the genuine random
+first-collision bridge. A fixed old law, old maximizing tester or
+MAX-regret source is not retained.
+
+All source inputs are precisely the reviewed direct canonical
+source's inputs; only its worst-table domain is this compact fiber.
+The strict bound Ω<1 replaces the earlier Ω≤4/5 for the target
+comparison. All subsequent canonical source arguments depend on
+the fresh positive full gap, finite contact separation, generic
+rows and debt rigidity, not on whole-cube maximality.
+
+### FC2. A zero debt coordinate forces EXACT carrier-minimum alignment
+
+Suppose one common original minimum coordinate a_k=0. For ANY
+original minimum pair x and ANY actual sequence p_n realizing it,
+the exact joint-Never bound gives
+
+    0≤c(p_n)≤d_k(p_n)/s_k→0.
+
+Move the smallest Never atom to a finite date as in BA3. All FULL
+payoff/cap changes tend to0, and the modified profiles are absorbing.
+Thus x belongs to K_abs of THIS SAME table, not a changed table.
+Because K_abs⊆K_all, this proves
+
+    δ_abs=δ_all=δ>0,
+    Min(K_abs,D)=Min(K_all,D).                   (FC1)
+
+The second equality uses the common zero debt coordinate for EVERY
+full minimum; every absorbing minimum is a full minimum when the
+values agree. The vectors, gaps and semantic minimum pairs now
+coincide EXACTLY, not approximately. The original all-K_all floor
+for every root and every actual tail remains available. This
+conclusion does not use BA4's infinite-penalty limit or a comparison
+of an approximation error with a quadratic margin.
+
+### FC3. A nonlocal clock completion preserving the ENTIRE pair
+
+Here is the ordinary full-response completion lemma needed to
+strengthen the source further. Assume all own s_i≥0 and that each
+recipient m has some j≠m with
+
+    r_m({j})≤s_m.                               (FC2)
+
+Let p be ANY actual absorbing independent profile. Choose an anchor
+m with p_m(Never)=0. There are actual profiles with ALL four Never
+masses0 whose ENTIRE payoff/cap pairs approach (U(p),B(p)).
+
+If a second anchor already exists, skip the next step. Otherwise
+choose j from(FC2). Keep all old finite atoms of p_j and replace
+only its Never atom by a law H supported after a cutoff T, with
+ALL finite mass1 and maximal atom at most η. For instance use
+a geometric clock of hazardη starting at T; take 0<η<1. The new
+j-clock has Never mass0; the original m-anchor is unchanged.
+
+Every prescribed payoff changes by at most2M·P(p_m≥T), using the
+coupling in which only j's old Never branch is modified. For any
+respondent i≠m,j the unchanged opponent m screens that modification
+unless its clock is≥T, so EVERY pure finite/Never response changes
+by at most2M·P(p_m≥T), uniformly. Owner j's cap is unchanged because
+its opponents are unchanged. Hence these payoff/cap errors vanish
+as T→∞.
+
+The delicate cap is m's, whose own clock is deleted by its responses.
+Let ξ_T be the sum of the OLD opponents' late FINITE masses at or
+after T; ξ_T→0. Replies at dates before T are unchanged exactly.
+For any finite reply t≥T, outside the exceptional old finite-tail
+event all old finite opponent exits are before T and unchanged.
+On the old all-opponent-Never event the only new opponent is j.
+The respondent's payoff on that cylinder is a mixture of
+
+    s_m  (m precedes j),
+    r_m({j})  (j precedes m),
+    r_m({m,j})  (their dates coincide).
+
+The middle value is≤s_m by(FC2), while coincidence has probability
+at mostη. Thus EVERY such finite response is at most
+
+    V_m^old(Never)+c_{−m}^old s_m+2Mη+4Mξ_T
+    ≤B_m^old+2Mη+4Mξ_T.                         (FC3)
+
+The Never response has the same upper bound without the coincidence
+term. The first expression without the error is the exact limit
+of old delayed finite replies, so is≤the OLD full cap. To obtain
+the converse limiting cap inequality, s_m≥0 makes the old cap equal
+to its finite-response supremum. Fix any near-maximizing OLD finite
+deadline first and then choose T beyond it; that response is unchanged.
+Taking T→∞ and η↓0 proves B_m^new→B_m^old. Thus the ENTIRE semantic
+pair, not just its total debt, is preserved in the limit.
+
+Now two old anchors m,j have Never mass0. Replace the Never atoms
+of all remaining owners by sufficiently late finite dates. For
+EVERY respondent i at least one of m,j is an unchanged opponent.
+That anchor's probability of reaching the new dates tends to0,
+and screens the modification otherwise, uniformly over ALL finite
+and Never responses. Prescribed payoffs have the same screen.
+Consequently all full payoff/cap errors tend to0 and every owner's
+Never mass is now0. Diagonal choices of T,η and the final dates
+give the claimed full-pair approximation. There is no uniform
+raw-time cutoff, bound on expected clock length, or stationary
+completion asserted.
+
+### FC4. Actual row witnesses and a WHOLE-carrier identity
+
+A Fin4 counterexample supplies(FC2) for EVERY row: its normal core
+is full, and `exists_core_blocker_of_mem_normalCore` in
+`UniformEquilibrium/Quitting/Classification/LCP/NormalCore.lean`
+gives j≠m with normalizedSoloMatrix(m,j)≤0. The literal identity
+`normalizedSoloMatrix_eq_soloReward_sub` reads this as
+r_m({j})−s_m≤0. This is a ROW witness, distinct from the earlier
+strict preemptor in every COLUMN. Its original no-UE source is
+`normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean`.
+The exact declarations and the row/column orientation were read.
+
+Define K_fin to be the closure of actual full payoff/cap pairs from
+profiles with p_i(Never)=0 for ALL four owners. Under(FC2) and all
+s_i≥0, FC3 gives the WHOLE-carrier equality
+
+    K_fin=K_abs.                                (FC4)
+
+Indeed K_fin⊆K_abs is immediate. For each actual absorbing profile
+FC3 approximates its entire pair from the smaller class; a diagonal
+sequence gives the reverse closure inclusion for any K_abs point.
+This statement is not merely equality of infima or a zero-gap
+strategy-class equivalence.
+
+In FC2's zero-debt branch, (FC1) and(FC4) imply that EVERY original
+global minimum pair has a realizing sequence with ALL four Never
+masses exactly0. Apply the canonical source construction to THAT
+new sequence. The retained Never masses remain exactly0 in the
+marked limit, so ALL four prescribed compact calendar clocks are
+finite almost surely and ALL their own singletons are positive.
+The random first collision, complete root/later cap tie, true full
+SUM minimum and common debt vector are retained by the new source.
+They are produced afresh; old collision dates and ancestry are
+not claimed unchanged. Both literal Never and the zero-mass finite
+endpoint remain in every FULL response menu.
+
+No assertion is made that EVERY arbitrary original realizing
+sequence already has all four Never masses0. It is every MINIMUM
+PAIR that admits this new realizing sequence. Nor are marked
+calendar clocks literal tight limits on the original integer dates:
+the delayed deadlines can tend to infinity. Thus the older
+two-proper-RAW-clock law-realization consumer is not invoked.
+
+### FC5. Complete counterexample restriction and the honest residual
+
+Combining FC1–FC4 gives an actual producer from any hypothetical
+counterexample, with ONE final all-positive-singleton table and
+the canonical genuine random first-collision source. Exactly one
+of the following exhaustive debt-vector alternatives holds:
+
+* All four common debt coordinates a_i are strictly positive;
+  in particular every bridge owner is paid.
+* Some a_k=0. The original and absorbing minimum-pair sets are
+  equal at the SAME numerical gap. Every original minimum pair
+  admits a full-source realization with ALL four prescribed clocks
+  finite a.s. and positive-singleton; its arbitrary all-K_all tail
+  floor is not lost.
+
+This genuinely strengthens the ZERO-DEBT branch beyond companion
+absorbing minima or relative gap proximity. It is not a contradiction
+of that branch. Complete best replies can still create macroscopic
+off-minimum leakage; the clock-completed source may still have many
+cap walls and zero-debt bridges. No old tail Nash, finite expected
+time, chronological paid renewal or absorbing actual equilibrium
+has been proved.
+
+The next consuming question is now about a TRUE original minimum
+with all four finite-a.s. positive clocks, OR the fully paid bridge
+branch, rather than transporting a companion minimum across a gap.
+
+### FC6. Exact whole-class falsifier if the row condition is dropped
+
+Consider the complete Fin4 table: every own singleton1, every
+passive coalition coordinate10, and every participant coordinate
+in a coalition of size≥2 equal0. A pure date-zero singleton,
+all other players Never, is unrestricted terminal Nash: the owner
+gets1 and its complete cap is1; every outsider gets10 and cannot
+improve by joining. Thus Δ_all=Δ_abs=0.
+
+For ANY profile with all four clocks finite a.s., each owner's
+Never response pays10 because some opponent exits surely. Hence
+B_i≥10. Every nonempty-coalition TOTAL reward is at most31:
+singleton31, pair20, triple10, grand0. Therefore
+
+    D≥40−Σ_i U_i≥9.
+
+Distinct deterministic dates attain9, so the ENTIRE all-four-finite
+clock class has infimum9, not merely one failed selector. Each row
+has r_m({j})=10>s_m=1 for all j≠m, precisely violating(FC2).
+Diffuse late replacement cannot repair that passive cap jump.
+All own singletons are positive, so positive signs alone are not
+enough. The exact all-class barrier in this SOLVED table is retained
+to prevent silently advertising all-finite strategy completeness
+for arbitrary games. Under an actual counterexample, the row
+witnesses are supplied by checked normal-core exclusion instead.
+
+## Forward normal form: counterexamples arbitrarily near one constant table
+
+Status: COMPLETE ORDINARY PROOF DRAFT CN1–CN3, UNREVIEWED. This is a
+counterexample normal form, not an equilibrium construction or an
+open-neighborhood UE theorem. It uses the exact whole-law terminal
+affine identity, not inverse affine invariance of Never.
+
+### CN1. Literal transform and the exact full objective
+
+Starting from a hypothetical counterexample, use BAP1's checked
+actual single-pivot normalization to obtain a counterexample r
+with own singleton vector e_m. All old s_i≥0 and s_m=1. Fix ANY
+ε>0 and put ε′=min(ε,1/4). Let
+
+    L=max_{i,S≠∅}|r_i(S)−s_i|,
+    C>1+L/(2ε′),
+    λ_i=1/[2(C+s_i)],
+    r_i^flat(S)=λ_i(r_i(S)+C).
+
+Only finite terminal rewards are changed; Never stays0. Each new
+own singleton is exactly1/2, and every coordinate satisfies
+
+    |r_i^flat(S)−1/2|
+      =|r_i(S)−s_i|/[2(C+s_i)]<ε′≤ε.
+
+Thus all sixty entries are positive and arbitrarily close to the
+constant1/2 table, with all FOUR own singletons exactly1/2.
+BA2's cap calculation and positive recipient scaling give for
+EVERY actual law, with all responses recomputed,
+
+    d_i^flat=λ_i d_i+λ_i C c,
+    D_flat=Σ_i λ_i d_i+C(Σ_i λ_i)c
+           ≥(min_i λ_i)D_r.                    (CN1)
+
+The original positive global gap therefore supplies a positive
+global gap at r^flat. The infimum cannot secretly fall to0 through
+moving laws. No old minimizing pair, cap selector, degree witness
+or selected root is transported. Since c≤D_r by the positive
+pivot singleton bound, also
+
+    D_flat≤[max_i λ_i+CΣ_i λ_i]D_r.
+
+Hence these two specific tables have zero-gap equivalence. Their
+NUMERICAL infima and minimum laws need not coincide. The lower
+bound alone already proves the counterexample normal form.
+
+### CN2. Exact conjecture reduction, and no robustness conclusion
+
+The full Fin4 UE conjecture is equivalent to the following LOCAL
+existence statement at the constant positive table:
+
+    There is some ε₀>0 such that EVERY Fin4 reward table with
+    own singletons exactly1/2 and every terminal coordinate
+    within ε₀ of1/2 has a uniform-equilibrium payoff.
+
+One direction is immediate. For the other, any hypothetical
+counterexample produces by CN1 a positive-gap table inside this
+fixed neighborhood, contradiction. This is an equivalence on the
+56-dimensional fixed-singleton affine slice; a full60-coordinate
+open neighborhood would of course suffice. There is NO claim
+that any such ε₀ has been found, that the constant table's UE is
+uniformly robust, or that counterexamples actually exist.
+
+The constant table itself has full debts d_i=c/2 and D=2c;
+any absorbing profile is exact terminal Nash at target(1/2)^4.
+CN1 warns that a proof of a nontrivial uniform neighborhood around
+that degenerate constant table would settle arbitrary signed Fin4,
+not merely a harmless special chamber. The transformed positive
+gap can shrink to0 as ε→0, so gap robustness at the center cannot
+be inferred from pointwise continuity.
+
+### CN3. Source overlap and separation from annotation translation
+
+The tracked `quittingTerminalPayoff_playerwiseAffine`,
+`quittingTerminalPayoff_finiteTime_playerwiseAffine` and
+`quittingFinitePureReplyValue_playerwiseAffine` in
+`UniformEquilibrium/Quitting/Terminal/TerminalAffineReward.lean`
+support the literal pieces used here. The complete cap is the
+finite cap because OLD and NEW own singletons are nonnegative;
+the finite/Never supremum equivalence is in
+`UniformEquilibrium/Quitting/Punishment/FinitePureReplyValue.lean`.
+The full `TerminalAffineNashTransfer.lean` was also read: its
+general shift-back theorem costs the shift bound and does not
+state this zero-gap normal form. The root and stationary
+`UpwardTranslation` declarations change supplied continuation
+annotations and have absorption-scaled regret bounds; they are
+not silently identified with (CN1)'s actual all-law terminal shift.
+The exact no-UE normalization prerequisite remains the tracked
+single-pivot reverse payoff transport, not an assumed affine
+equivalence for arbitrary signed singleton rows. Narrow search
+in these selected files found no near-constant counterexample
+normal form. This is not a global source census.
 
 ## Forward BA extension: preserve strictly positive own singletons
 
