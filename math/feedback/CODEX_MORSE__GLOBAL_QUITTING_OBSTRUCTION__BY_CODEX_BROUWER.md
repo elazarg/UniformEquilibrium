@@ -3742,3 +3742,248 @@ reproduces EXACTLY the original SHA256
 Thus every other proof byte is unchanged and the sole required repair is
 verified. Final-text coherence/self-containment PASS at the corrected hash;
 no unresolved objection remains. This does not enlarge the sealed result.
+
+## UR1–UR5: independent all-parameter adversarial review
+
+Reviewer: CODEX_BROUWER. Reference: commit8d7fbc02, the bounded
+`## UR` section of CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md.
+The section from its heading through EOF has SHA256
+`7939466de2cb2b32086880367be64256e697548440a5140871af8f03418413d6`.
+The working text and that committed section have identical hashes. I read
+UR1–UR5 and its NI1–NI3 raw definitions, independently recomputed the
+support/odds algebra, and read the exact named consumers below under their
+imports. No other review was read, no author text was edited, and no Lean
+build or new implementation was performed.
+
+**Soundness verdict: PASS.** All sixteen transport controls can vary
+simultaneously over the stated closed intervals. The all-root return proof
+and the actual-game uniform-payoff conclusion survive the adversarial checks.
+There is no unresolved mathematical objection in the reviewed statement.
+This is ordinary mathematics using an existing tracked consumer, not a
+Lean seal on the new raw producer and not a proof for arbitrary Fin4 games.
+
+**Coverage verdict: bounded separation verified, complete prior-producer
+coverage unresolved.** The exact comparison below shows that this family is
+not wholly contained in several important complete raw criteria. It does
+not establish that one point escapes the UNION of every implemented and
+accepted existential producer. UR5 already declines a novel class count;
+that limitation must remain if no further complete comparison is supplied.
+
+### Raw table and sure-face census
+
+The data are complete:4 owns,12 singleton passive entries,12 fixed
+pair-participant entries,12 pair-passive controls,12 linked triple-participant
+entries,4 triple-passive controls, and4 linked grand entries total60 cells.
+Every linked participant is its corresponding passive control minus1.
+The twelve opponent-pair controls lie in[−4,5] and the four opponent-triple
+controls in[−4,1]. Therefore every reward lies in[−5,5]. The links do not
+create additional independent controls or leave unspecified entries.
+
+I recomputed the favorite cycle0→3→1→2→0. Against an opponent singleton,
+its favorite's joining gap is1/2; every nonfavorite gap is strictly negative.
+Against ANY opponent pair or triple the joining gap is−1. This data is
+independent of all sixteen controls and of the continuation annotation.
+
+With at least three sure players, a sure member sees at least two sure
+opponents, hence has negative gap−1. With exactly two sure players, one
+member has negative singleton joining gap because the favorite cycle has
+no two-cycle; any additional quitter replaces that gap by−1. Its expected
+gap is strictly negative. With one sure player z, every free nonfavorite
+has negative gap on every possible opponent outcome, so is forced quiet.
+The remaining favorite f(z) then has gap1/2 against z and is forced sure,
+contradicting the two-sure case. This covers the entire cube, including
+otherwise mixed free owners. No sure face was lost by dividing into odds.
+
+The punishment check is also literal: the three opponents quitting surely
+at the first date give the player control b by Continue or any later reply,
+and b−1 by Quit. Its unrestricted best response is b≤1. Equality at b=1
+is allowed by normality; no strict normality premise is used.
+
+### Every nonsure support, including quiet coordinates
+
+At an active nonsure root, h_i>0 and root indifference gives
+
+    v_i=1+Σ[∅≠T⊆I∖{i}] o_T d_i(T),
+    F_i(v,q)=Q_i(q),      k_i=1−v_i≤9.
+
+These are consequences of FULL root Nash. Quiet-player inequalities remain
+in the root hypothesis, even if their annotations are below their owns.
+The return proof does not need those inequalities for its active-coordinate
+upper bound, which is legitimate rather than a subgame replacement.
+
+Support1 returns with Q_i=1. At support2 every actual pair participant is
+strictly below1, and each active player sees its partner with positive
+probability, so both active Q values are strictly below1.
+
+For support3, deleting j and choosing i=f(j) leaves two nonfavorite pair
+participants, each−2. Its participant triple is at most4. I checked all
+four coefficient rows: the missing owners0,1,2,3 respectively give active
+starts3,2,0,1 and(A,B)=(1,4),(5,2),(6,6),(5,4). Thus Q_i>1 would imply
+xy>x+y and k_i=Ax+By+xy>(A+1)x+(B+1)y. For the last three rows this is
+strictly greater than9. In the first, x=1+α,y=1+β with αβ>1 gives
+2α+5β>√40>6, so k_i>13. Each contradicts the ACTUAL annotation bound.
+No restriction to equal hazards or selected missing owners occurred.
+
+For support4, independently expanding the fixed joining gaps gives
+
+    k₀=6o₁−y/2+6z+o₁y+o₁z+yz+o₁yz,
+    k₁=5x+4y−z/2+xy+xz+yz+xyz.
+
+If z>3/2, the first is greater than6z>9. Thus z≤3/2; this remains valid
+with arbitrarily large other odds, and requires only v₀≥−8. The upper
+participant bounds give exactly
+
+    (Q₁−1)/h₁≤−3x−3y−5z/2+3xy+3xz+3yz−xyz=X.
+
+Writing X=Ax+C and the second annotation inequality as Dx≤T yields the
+printed D,A,C,T. When A≤0, positivity of y and z≤3/2 forces z≤1 and
+C<0, hence X<0. When A>0, the inequality direction in DX≤AT+CD is
+correct. I independently expanded AT+CD to the printed quadratic N and
+recomputed its discriminant. Its leading coefficient is at most−9/2,
+and the five Bernstein coefficients after z=3t/2 are exactly
+
+    −1044, −837, −4365/8, −4905/16, −2079/16.
+
+All are strictly negative on the entire closed parameter interval.
+The quadratic is therefore negative for EVERY real y, not only feasible
+positive y or a numerical mesh. This proves X<0, with no missing near-sure
+branch or extra bound on o₁,x,y. The exact SymPy identities were rerun
+independently and passed.
+
+There is a useful whole-family cross-check: the root relation is identical
+at all sixteen-control values, while every Q_i is coordinatewise increasing
+in its relevant participant controls. The simultaneous upper vertex has
+all participant triples4 and grand entries0. Proving the above return there
+already upper-bounds every active Q_i throughout the family. Lower controls
+cannot spoil the active-coordinate return. The uniform reward/annotation
+box and sure reduction are also common. This makes the universal parameter
+claim an actual monotone comparison, not inference from sampled vertices.
+
+### Exact whole-game consumer and temporal scope
+
+I read `HasBoxedSelectedSingletonSublevelReturn` and
+`not_isQuittingFullExactRootPotential_of_selectedSingletonSublevelReturn`
+in UniformEquilibrium/Quitting/Projective/SelectedSingletonSublevelReturnSmoothDrift.lean,
+and the whole declaration
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound`
+in UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean.
+
+Its hypothesis asks for ONE exact root at each boxed source strictly below
+some own, with SOME successor coordinate at most its own. It does not require
+a continuous selector, a realized behavioral annotation, an exact periodic
+return, or a supplied equilibrium. `exists_isZeroQuittingRootNash` in
+Quitting/Root/NashExistence.lean supplies an exact finite root. AllContinue
+is not Nash at such a source because pure Quit gives its own1 instead of
+the strictly lower source coordinate. Hence the supplied root absorbs,
+and UR.1 gives the required selected successor.
+
+The parameter substitution is valid: owns1≥0, coordinate bound M=5,
+B=7 with5<7, and7≤quittingRewardBound r+2. In Quitting/RewardBound.lean
+the canonical bound is the sum of ALL absolute reward coordinates; the
+fixed singleton0 row alone contributes7. Head box preservation follows
+from the convex Bellman mixture of boxed v and rewards, exactly as in
+`abs_quittingRootSuccessorPayoff_le_bound` in Quitting/Root/BoundedEndpoint.lean.
+
+I also read the imported whole-game theorem
+`exists_uniformEquilibriumPayoff_of_continuous_boundaryDifferentiable_potential_exclusion`
+in Classification/Existence/BoundaryDifferentiablePotentialUniformPayoff.lean.
+Its positive-own branch excludes the genuine rational robust potential
+using the exact-root restriction, not a controller/menu obstruction. Its
+conclusion is the original `IsUniformEquilibriumPayoff`. The literal
+definition in ProofView/Concepts/Stochastic/Equilibrium/Uniform.lean fixes
+ONE payoff before ε, then chooses a profile and ONE threshold working at
+EVERY later horizon, against every whole behavioral-strategy replacement.
+This is exactly UR1's strategic endpoint. No absorption-path equivalence
+or shared randomization is inserted.
+
+The auxiliary convex-box exclusion in
+`not_isQuittingFullExactRootPotential_of_convexReturnDomain` in
+Projective/ConvexReturnDomainSmoothDrift.lean also matches the all-root
+statement, but is not needed for the direct consumer. Finally,
+`hasFixedBoxPackets_of_uniformEquilibriumPayoff_of_noSureRoot` in
+Projective/FixedBoxForwardCharacterization.lean has the stated M=5 bound,
+normality, positive singleton, UE and true-punishment no-sure inputs.
+They are all supplied here, so its box7 packet corollary is valid. Neither
+it nor selected-return asserts a literal finite EXACT closed word at every
+parameter. NI7–NI9's separate center-specific periodic witness was not
+silently promoted to that stronger all-parameter conclusion.
+
+### Independent bounded existing-coverage check
+
+Take the simultaneous upper vertex r⁺: every opponent-pair control is5
+and every opponent-triple control1. Its singleton and pair rows are the
+fixed NI3 rows; each triple gives4 to its three participants and1 to its
+outsider; grand gives0 to every recipient. This is one fully specified
+member of the UR family, not an altered unrelated fixture.
+
+At the actual product root q=(3/5)⁴ its pure-Quit values are
+
+    Q=(182/125,158/125,34/25,182/125)> (1,1,1,1).
+
+Thus it fails the COMPLETE `HasProductLowQuittingPremium` predicate in
+Classification/ProductLowQuittingPremium.lean, whose quantifier is over
+all product roots, not only exact roots at boxed annotations. This does
+not falsify UR: the associated full-active annotations have coordinates
+far below−8 and are outside UR's box.
+
+The greatest own-premium core at r⁺ is all four players: every triple is a
+trap. At full support A=I, every pair T has inserted-premium sum P_A(T)=6>0.
+Therefore the full-support middle condition in `QuittingTrapChargeCoefficients`
+in Classification/BoxedQuittingNashCharges.lean fails, for every choice of
+its constants and reward bound. Consequently the COMPLETE
+`HasBoxedQuittingNashCharges` raw predicate in BoxedQuittingNashChargeReturn.lean
+and the larger-trap clause of exports/MIXED_PREMIUM_TRAPS_UNIFORM_EQUILIBRIUM.md
+both fail here, not merely a selected package at the center.
+
+The full-support upper-average alternative in
+exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md also fails for
+EVERY nonnegative weight choice: writing W=Σw_i>0, its test at the triple
+I∖{j} is3W−4w_j≤0 for each j. Summing would give8W≤0. Since its charge
+alternative fails too, this complete mixed raw criterion does not cover r⁺.
+The distinct participant-only `IsSupportwiseBalancedQuittingPremiumTable`
+in Classification/SupportwiseQuittingPremium.lean fails as well: each triple's
+test is3Σ[i∈S]w_i≤0, forcing every nonnegative full-support weight to vanish.
+This checks its whole weight-feasibility set, not just equal weights.
+Every player also has a pair-participant reward
+below its own, so the protected set P_max in
+exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md is empty. Empty-core,
+core-at-most-two and core-at-most-three raw hypotheses fail at this vertex.
+
+Some additional exclusions apply to the ENTIRE UR family, since its
+singleton and pair-participant entries are fixed. Its literal singleton
+comparison matrix is
+
+    Γ=((0,3,−1,3),(2,0,1,−3),(2,−2,0,−1),(−1,−2,1,0)),
+    detΓ=25.
+
+Independently enumerating all24 cyclic labelings gives no order having
+both a negative next entry and positive previous entry at every row.
+Thus no `SignedFourCycleSingletonData` in
+Cycles/SignedFourCycleRewardAdapter.lean exists at any relabeling, before
+its spectral tests, and the larger-eigenvalue extension's same raw signs
+fail too. Its inverse has mixed-sign columns and a zero entry; no column
+signing can make Γ⁻¹diag(σ)>0. This excludes the complete signed-inverse
+column criterion in exports/SIGNED_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md,
+not merely a matching. The scalar singular-circuit packet's necessary
+positive participant-pair premium A₂>0 fails for every relabeling because
+EVERY pair participant throughout UR has reward<own1.
+
+For the four choices in
+`exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple` in
+Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean, only the
+023 principal inverse is nonnegative. Its outsider row times that inverse
+is(−3/5,6/5,2/5), so that choice fails too; the other three have a negative
+inverse entry. These are complete finite choices in THAT named producer.
+All these matrix computations were exact. They are not a statement that
+arbitrary supplied circuits, stationary certificates, or alternative safe
+children fail.
+
+This is deliberately NOT a complete union-coverage verdict. Remaining
+uncompared existential raw output sets include the broader cyclic-child/
+guarded producer branches, raw proper and zero-rate/sure-boundary stationary
+producers, other accepted neighborhood/free-coordinate chambers, and any
+other supplied-structure raw adapter not listed above. A generic verifier
+or characterization accepting an independently supplied UE does not count
+as an old raw producer. Conversely failure of the finite tests above cannot
+exclude an untested genuine producer. UR's all-sixteen-parameter theorem
+is sound without claiming that additional audit has been completed.
