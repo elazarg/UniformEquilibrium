@@ -559,3 +559,146 @@ strictly earliest and nonisolated. Common unique caps are excluded,
 but two-or-more unsupported or multiple-cap sources remain. This
 conclusion consumes original complete-source identities, not fixed-row
 optimization or a bounded strategy grid.
+
+## Independent RM35/ZU1–ZU6 compiler check
+
+Reviewer: CODEX_MORSE. Target: the ENTIRE section headed
+`## RM35: literal truncation of a singular common-port circuit` through
+EOF of `notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md`, SHA256
+`f3cf5f3fd66896f2dfe2e6a1ea097a52929dbfa53062c26a621eca6114d881bd`.
+I read all six parts and recomputed the semantic seams. No counterpart
+review was read. Verdict: PASS for the stated ordinary mathematical
+compiler, with no unresolved mathematical objection. This is not a
+Lean-check or a certificate that arbitrary games supply its input.
+
+Contribution disclosure: I supplied the DN table and singular circuit
+under parallel investigation. That actual input is NOT certified by
+this review; NOETHER is independently checking it. I also reconstructed
+the ZU argument in my CL8 after reading this draft. The independent
+subject here is NOETHER's finite truncation/error/cap theorem, not my
+own circuit closure or any claimed broader source production.
+
+### Exact claim and chronological reconstruction
+
+The inputs are a FINITE closed chain of finite or convergent countable
+pieces, each piece consisting of ACTUAL full binary Nash roots against
+its own recursively carried annotation. At least two distinct owners
+have positive quit probability at some finite list positions. There
+is no conditional-tail Nash assumption, prescribed minimizing carrier,
+public lottery, or cap-control hypothesis. Countable pieces are not
+played consecutively in a countable-order calendar.
+
+For one forward predecessor list q₀,…,q_(N−1), its actual finite
+chronological block is q_(N−1),…,q₀. Thus the LAST-applied forward
+root is the OUTERMOST Bellman map. Concatenating all finite forward
+pieces and THEN reversing the entire list also reverses the piece
+order, as required. Reversing only inside each piece would generally
+give the wrong whole-period map. The draft explicitly uses the correct
+whole-list reversal. Every truncation is an ordinary finite period on
+ℕ; neither ω+ω execution nor a finite-date reset to a limiting port
+is present.
+
+### Whole companion maps, including quiet and sure owners
+
+At full root Nash against v, BOTH action endpoints are at most the
+prescribed expectation F_i(v,q), and some supported endpoint attains
+it. Therefore H_i(q,v_i)=F_i(v,q). This also covers q_i=0 and q_i=1;
+the identity does not rely on active indifference. If only the moving
+owners were checked, it would fail for spectators, which is why the
+FULL-root input is substantive.
+
+H_i(q,z)=max(Q_i,R_i+h_i z) is monotone and h_i-Lipschitz on the
+whole real line. Its finite composition prices the complete choice
+of stopping inside the reversed block or continuing to the exit cap.
+The block slope bound is the product of DELETED-opponent survivals,
+not the joint survival. Signed rewards and negative reference prices
+are harmless. The prescribed affine map has joint slope C separately.
+
+I read under their imports the declarations
+`quittingRootCompanionMap_eq_max_endpoints`,
+`quittingCompanionComposite_of_isQuittingCyclicResponseSolution` and
+`quittingCyclicResponseSolution_eq_companionLabel_fixedPoint` in
+`UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean`,
+and `quittingCompanionComposite_eq_compList_apply` in
+`UniformEquilibrium/Quitting/Cycles/CompanionTransport.lean`.
+These support the draft's overlap statement and distinguish exact
+supplied response solutions from the approximately closing finite
+blocks constructed here. They do not automatically produce a circuit.
+
+### Uniform seam error and the two-owner requirement
+
+Each piece transports its reference payoff and ALL four reference
+caps exactly to its finite endpoint. If the carried port differs from
+the next reference, its error is at most the previous error plus that
+one piece's endpoint error, because every whole-piece Lipschitz bound
+is at most1. Iterating over the FIXED finite number of pieces gives
+both inequalities in ZU.2 with E=Σ e_ℓ. The accumulation is over pieces,
+not over individual dates: there is no N_ℓE term and no assumption on
+the rate of convergence of a countable piece. Rates as slow as1/log N
+would still suffice.
+
+Choose two fixed positive finite rates of distinct owners j,k and
+include them in every sufficiently long truncation. For each deviating
+owner i, at least one of j,k is an OPPONENT. Its factor 1−q is strictly
+below1 and bounds that owner's entire deleted period survival away
+from1 uniformly in all additional dates. Joint survival is also bounded
+away from1. This argument does not silently require all four suppliers,
+uniform per-date hazard, or an infinite cumulative hazard in one piece.
+
+The signed one-owner example in ZU5 checks exactly. Root (p,0,0,0)
+is full Nash against (−1,0,0,0), its formal head is the same reference,
+and H₀(z)=max(−1,z) has the formal fixed point−1 but deleted slope1.
+Actual Never gives0, so owner0's true debt is1. Joint contraction alone
+therefore does not identify that owner's full cap. The draft retains
+the two-owner hypothesis and does not claim it is necessary in every
+nonnegative special case.
+
+### True cap identification, not only a formal fixed point
+
+Repeat the finite word. For the prescribed law, geometric joint
+survival proves almost-sure absorption and the unique affine fixed
+point U=f(U). For owner i, let W_i be the unique fixed point of the
+strictly contractive companion composite T_i.
+
+To identify W_i with the ORIGINAL unrestricted cap, censor the game
+to zero when opponents survive m full periods. Finite stopping dynamic
+programming gives T_i^m(0). A complete deviating clock, including Never
+or a deadline after the censoring date, agrees with the original game
+before that date. The possible terminal-reward difference afterward
+is at most Mκ_i^m, because reaching the censor without OPPONENT
+absorption has probability κ_i^m. Earlier own quitting can only reduce
+this event. The bound is uniform in every deviating clock and thus
+survives the supremum over all behavioral deviations. Consequently
+B_i=lim_m T_i^m(0)=W_i. No full-cap attainment or restriction to a
+finite-menu best reply is inferred.
+
+I also read `quittingPureTimeValue_periodizedPrefix_block_interpolation`
+and `quittingBestReplyValue_periodizedPrefix_le_max` in
+`UniformEquilibrium/Quitting/Cycles/PeriodicFiniteReplyPrefix.lean`.
+They retain signed later-block interpolation and actual behavioral
+suprema; their basic mechanism is the same and the draft correctly
+does not claim that machinery is new.
+
+### Endpoint and value scope
+
+Approximate fixed-point residuals E imply
+‖U−v⁰‖∞≤E/(1−C) and |B_i−v⁰_i|≤E/(1−κ_i).
+Since the actual prescribed law is an admissible deviation, B_i≥U_i;
+subtracting the two estimates gives exactly ZU.6. Both denominators
+have uniform positive lower bounds over the truncation sequence.
+Hence the full terminal debts tend to0 while the payoff tends to the
+ONE fixed v⁰. For each requested accuracy first choose a finite period,
+then its sufficiently large horizon threshold. Deleted-opponent
+geometric tails control all deviations at those horizons as well.
+No single infinite limiting word, exact finite truncation equilibrium,
+or common horizon threshold across all accuracies is asserted.
+
+The compiler is a sound and useful CONSTRUCTIVE seam once a genuinely
+closed singular circuit is produced. Alone it is a supplied-object
+consumer, not a new arbitrary-table existence class or a positive-gap
+source reduction. Its current intended use is substantive because CL
+supplies actual table data and separately certifies the closure. That
+separate author input must pass its own independent review. The closing
+sentence that MORSE's previously supplied endpoints do not close records
+the draft's earlier chronological checkpoint, not an extra hypothesis
+or a mathematical error in ZU1–6.
