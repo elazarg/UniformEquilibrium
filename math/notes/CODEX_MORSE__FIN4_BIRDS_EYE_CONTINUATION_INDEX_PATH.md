@@ -15,6 +15,17 @@ The stronger surviving idea is a globally selected, absorption-relative
 robust relay. Its strategic selection theorem is UNPROVED and is the
 main mathematical gap, not an index fact already available.
 
+Latest direction check: PS excludes EVERY sufficiently accurate
+absorption-relative word rooted at true punishment in one solved game.
+Thus universal punishment/AllNever initialization is now retired,
+not merely an unfortunate choice of exact successor. RB has already
+discharged generic LOCAL binding-corner availability; its destination
+and whole-word compatibility remain open. I currently do NOT have a
+convincing arbitrary-table forcing argument for the relay picture.
+TB supplies a concrete different GLOBAL screening move on an escaping
+tax boundary, not the missing interior consumer. Its status is ordinary
+unreviewed mathematics, separate from the reviewed scalar class.
+
 ## 1. The decisive picture
 
 My strongest current intuition is:
@@ -137,6 +148,29 @@ ALL moving minimizing profiles and tied responses. That interior
 consumer is open. A fixed-active-profile derivative is false, and an
 interior maximum alone does not identify an equilibrium. This is a
 genuinely different promising route, not a lemma of the relay picture.
+
+The attempted eight-independent passive/participant-tax compactification
+was withdrawn when participant prices could tend to minus infinity:
+negative joining gaps do not make Never beat an early solo response.
+A common participant shift has a valid lower boundary using the actual
+capped-premium producer, but gives only aggregate participation data.
+The new TB boundary argument instead selects a bounded core of at
+most three players, uses its ACTUAL absorbing periodic approximate
+equilibria, removes empty phases, and obtains a finite reward-cover
+menu with positive hazard at EVERY date. Large negative omitted-player
+participant prices then screen EVERY deadline against literal Never.
+This is a complete ordinary unreviewed asymptotic boundary proof, not
+an asserted interior tax theorem or a transport of old NP/spherical
+minima. It gives a concrete game-specific global intervention rather
+than a supplied quiet-child cap assumption.
+
+Even if that boundary repairs full tax compactness, its interior
+consumer cannot use category counts alone. NOETHER's CF has ONE actual
+four-finite profile and complete cap-optimal responses conserving EACH
+recipient's passive / own-singleton / nonsingleton-member masses,
+yet positive debt. Its table is solved elsewhere, so it does not
+refute a true-global-floor consumer. It proves that the FULL coalition
+payoff kernels and changed-profile cap births have to remain visible.
 
 **Native absorbing existence.** A reduction passes through all-own-zero
 rewards with a positive absorbing gap; ordinary AllNever equilibrium
@@ -489,6 +523,18 @@ It must output an actual packet/profile with D<δ, not only pass
 TestsA–F on solved tables. Failure here would expose a missing
 global selection premise rather than justify a new local assumption.
 
+### H. True punishment is not a universal robust seed
+
+PS has true punishment0 and no sure root at ANY annotation. Its unique
+full Nash root at0 sends the head strictly above every own reward.
+The entire surrounding quiet moat excludes EVERY nonzero sufficiently
+accurate absorption-relative root, including arbitrarily small hazard.
+Therefore EVERY finite robust word rooted at true punishment has
+charge at most1, regardless of selector or length. Actual AllNever-
+seeded prefixes also retain a full-cap debt floor. The SAME game has
+unrooted cyclic equilibrium words. Global forcing must select its
+whole chronology, not simply launch every game from a canonical seed.
+
 ## 9. One concrete research target, and the weakest point
 
 The next target is not another generic local root lemma. It is the
@@ -507,14 +553,28 @@ would permit an exhaustive actual-table algebraic test. An accumulation
 of incompatible ghost ports would falsify that finite localization
 and require a different global mechanism.
 
-The first bounded test is whether the apparent coordination escape
-at a port with two binding owners and reciprocal positive pair joins
-actually discharges any of these simultaneous exit equations.
-Existing strict-ray binding-pair and box-complementarity producers
-must be checked first. Even a nonzero root would only solve the
-LOCAL root obligation; it would not supply a return or a usable
-component. If its hypotheses cannot be produced by the global trap,
-do not turn the generic lemma into the next research deliverable.
+The local binding-owner test is now retired as the next research
+target: RB already supplies local absorption-relative exits, while
+GS and PS show why exits and canonical initialization do not force
+a useful whole word. The current concrete alternative is GLOBAL
+deadline-transition flow at ONE freshly chosen native tax extremum.
+TB provides an actual three-player-core chronology on the escaping
+negative-price boundary, with full omitted-player caps screened.
+At an interior candidate, the relevant transition is not just
+“participant versus passive”: for each recipient and each fixed
+opponent sample, its original law and a pure response move between
+own singleton, the SAME earliest-opponent coalition H, and H∪{i}.
+The first two outcomes may have different dates; ties are physical.
+
+An actual next target must exploit this threshold structure together
+with the genuine all-law floor to control the complete coalition-valued
+flow and every born cap of a legal competitor. It may NOT treat an
+averaged balanced ledger as an independent playable law. CF shows
+that all role counts can balance despite a strictly profitable full
+response, and therefore refutes the easiest conservation argument.
+This is a concrete obstruction test for a new forcing mechanism,
+not a claimed theorem that balanced response flows must form an
+executable cycle. I do not presently have such a theorem.
 
 The weakest bridge remains global strategic selection, especially
 competitive trapping and nested singular ports. I do not presently

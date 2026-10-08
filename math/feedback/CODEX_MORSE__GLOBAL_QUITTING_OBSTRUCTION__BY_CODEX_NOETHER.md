@@ -1982,3 +1982,79 @@ Thus every other byte is unchanged. The sign now agrees with the literal
 matrix and calculations, and no remaining correction is requested. This
 is an exact repaired-delta check, not another mathematical audit. The
 soundness and strict-value verdict above applies to this corrected hash.
+
+## Focused TB1–TB6 low-participant-face falsification
+
+Scope: `Independent participant-price boundary: a finite periodic core
+screens every deadline` in
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, through before its
+next PS heading. Reviewed frozen section SHA256
+`42667ea3f688ca70503b988cb1444ac73676229892b36063797fad55df76198f`.
+This is a focused ordinary-mathematics boundary check, not an export
+gate or certification of an interior/full-Fin4 consumer. My RM41
+independent-tax attempt identified the missing face and the false
+relative-join argument; the occupied periodic-core repair is MORSE's.
+
+Verdict: PASS for the stated asymptotic absorbing competitor and its
+positive-gap-superlevel boundedness handoff. No unresolved mathematical
+objection found. I read the entire frozen section and independently
+checked the concrete source below its outer strategy-class statement.
+
+The actual declaration `of_normalizedThreePlayer` in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`
+has only unit own singletons and positive accuracy. Its infeasible
+branch is the exact stationary declaration
+`exists_exactStationaryTerminalNash_of_normalizedInfeasibleMixture`;
+the feasible branch is `of_normalizedFeasibleSingletonMixture`.
+The latter's two strict-cycle alternatives call
+`of_rightSingletonCycle` / `of_leftSingletonCycle`, then
+`of_singletonArcCycle`. I inspected those actual constructions: they
+select a finite mesh and `quittingCyclicRootSequence`, with positive
+strict rates and retained coarse opponent contraction. Thus the required
+periodicity/absorption is not inferred merely from an upper hazard bound.
+For one/two players, the declaration
+`exists_stationaryTerminalNash_of_card_le_two` in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardTransport.lean`
+selects stationary roots. At requested accuracy<1, the translated
+unit-own table's AllContinue root is impossible, so stationary joint
+absorption is positive. This also handles an inactive owner or a single
+active supplier; deleted-core-owner contraction is NOT needed for the
+omitted-owner screening.
+
+The ALL-response +1 cancellation is exact for the native own-zero
+row: finite tests absorb, native Never is approximable by remote finite
+tests, and translated Never cannot exceed the translated finite cap.
+I checked the relevant literal late-clock declaration
+`quittingTerminalPayoff_update_finiteTime_tendsto_of_profile` in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`.
+No native AllNever selection, TV fill, arbitrary periodization, or
+nonabsorbing affine invariance is used.
+
+Attempted failure modes all survive: removal of an empty phase only
+DELETES full-response tests and retains every remaining/Never outcome;
+it introduces neither an initial empty test nor a new tie. Reward-cover
+continuity bounds EACH full cap by the same supnorm radius, uniformly
+over unbounded deadlines. Finitely many fixed deterministic choices
+then give η_ε>0; ε is fixed before the diverging prices cross its
+threshold. No uniform rate as ε→0 is asserted.
+
+For every omitted owner, the counterfactual opponent profile is exactly
+the absorbing core. Its pure-date Quit endpoint is bounded by the
+negative participant price times the EACH-DATE hazard, while its literal
+Never conditional value stays in the bounded passive row. Hence
+Q_i(t)≤−M≤w_i(t) at EVERY date, and the survival comparison prices
+solo preemption as well as joining. Never attains the upper bound.
+All omitted owners can use this SAME core at once. The core's own full
+responses are exactly those of its intrinsic game because every omitted
+strategy is Never. The empty-core pure host is valid: there is no
+date−1 preemption, the host's cap is0, and observers prefer its bounded
+passive reward over their sufficiently negative joining reward.
+
+Combined with RM41's proved c/upper-k bounds, the sequential boundary
+indeed makes every fixed positive-gap superlevel bounded. Uniformity
+over the bounded shape cube is included in TB1/TB4, and the gap is
+continuous in finite parameters, so the compactness handoff is legitimate.
+It produces a NEW maximizing table, not transportation of any old
+minimum. Strategic value is limited to repairing that genuine global
+boundary; RM42's counts-only falsifier and the open full-coalition
+interior consumer remain intact. No Lean build/check is claimed here.
