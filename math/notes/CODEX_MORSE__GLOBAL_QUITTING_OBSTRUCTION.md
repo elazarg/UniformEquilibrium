@@ -73,6 +73,17 @@ explicit proper equilibria; no positive-gap class is excluded. The
 remaining producer target is nonempty coherent execution without
 convexification or a strict competitor at a true native K_abs minimum.
 
+Current fixed-table producer attempt HN1–HN5 is complete ORDINARY
+UNREVIEWED supporting mathematics. The least FULL host debt over the
+ENTIRE anchored-Nash correspondence is actually attained. An exact
+60-coordinate example makes this optimized value discontinuous in the
+reward table, even after all equilibrium selections are minimized over.
+This retires a transfer of the fixed-domain Lipschitz comparison, not
+the fixed-table good-selection question as the hazard floor vanishes.
+That question is the current attempt; no new positive-gap class is
+excluded. HB's nonlinear hazard-box construction is separately retired
+as new coverage by its complete source comparison with existing producers.
+
 Current independent work: BA1–BA10 passed two independent soundness
 reviews but is NOTES ONLY: its companion absorbing minimum is not an
 original minimum, and relative gap proximity does not restore the
@@ -9880,6 +9891,221 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Global anchored selection: an attained objective with an exact ALL-selection discontinuity
+
+Status: complete ORDINARY UNREVIEWED supporting mathematics. This
+continues the global good-selection attempt, not a new UE-class exclusion.
+It supplies an actual attained selection objective and an exact four-player
+counterexample to importing the original gap's Lipschitz table comparison
+into that objective. It does NOT refute good selection as the hazard floor
+vanishes, and the example has absorbing gap0. No export is proposed.
+
+### HN1. Fixed-table producer and the precise global selection question
+
+Fix an all-own-zero Fin4 table z with |z_i(S)|≤M, a host h, and
+0<θ<1. Let H_θ be the class of actual host laws with
+
+    S_h(t+1)≤(1−θ)S_h(t),    S_h(t)=P(T_h≥t).
+
+Let E_h,θ(z) be the ENTIRE correspondence of independent profiles
+whose host law lies in H_θ, all three other players are unrestricted
+terminal Nash, and the host maximizes payoff over ALL of H_θ against
+the retained opponents. NO full host-cap restriction is part of E.
+
+NOETHER's RM26 supplies this actual nonempty correspondence from ANY
+finite table. The argument uses finite host-law polytopes, finite mixed
+Nash existence, then the uniform host bound S_h(t)≤(1−θ)^t to transport
+all observer caps. It does not assume tail Nash or a positive minimum.
+The exact finite-game declarations inspected for that argument are
+`exists_exactFiniteDeadlineTimingNash` and
+`mixedNash_isQuittingFiniteDeadlineNash` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean`,
+with literal payoff/pure-test adapters in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingGame.lean`.
+The changed host-polytope and infinite anchored limit remain ordinary
+mathematics, not those declarations' implemented conclusion.
+
+The correct GLOBAL selection value is
+
+    f_h(θ,z)=min_[p∈E_h,θ(z)] [B_h(p)−U_h(p)].        (HN1)
+
+Since all observer debts0 and the host is proper, EVERY such p is
+absorbing and its full SUM debt equals the displayed host debt. Hence
+Δ_abs(z)≤f_h(θ,z). A genuine producer would establish, for every fixed
+z, vanishing f_h along some host/floor selection. This is the unproved
+target, not an input silently added to RM26. Replacing full debt by host
+payoff, a displayed root regret, or constrained regret changes that target.
+
+### HN2. The minimum in(HN1) is ACTUALLY attained
+
+The law space on ℕ∪{Never}, with the one-point compactification topology,
+is compact in the weak probability topology. H_θ is closed by its finite
+prefix linear inequalities and uniformly tight by the geometric bound.
+Thus H_θ times the three unrestricted observer-law spaces is compact.
+
+On this product, ALL prescribed payoffs and ALL observer caps are jointly
+continuous. Cut every observer clock after L to Never: the retained host
+screens every prescribed outcome and every observer deviation except on
+an event of probability at most(1−θ)^L. The uniform error is at most
+2M(1−θ)^L. The remaining finitely many prefix probabilities and the
+observer Never test are continuous. Host constrained comparisons against
+any fixed q∈H_θ are continuous for exactly the same reason, using q as
+the retained anchor. Consequently E_h,θ(z) is closed: it is the intersection
+of the observer zero-regret equalities and all host constrained inequalities.
+It is therefore an actual nonempty compact set of laws, not an anonymous
+terminal-pair closure or an assumed compact Nash family at θ=0.
+
+The UNRESTRICTED host cap need not be jointly continuous. But it is lower
+semicontinuous here. For own0, each finite pure response value V_h(t) is
+continuous in the retained opponent laws, and for every fixed opponent
+profile V_h(t)→V_h(Never) as t→∞. Thus
+
+    B_h=sup_[t finite]V_h(t)
+
+already includes literal Never, and is the supremum of continuous functions.
+Subtracting the continuous U_h gives a lower-semicontinuous full host debt.
+It attains its minimum on E. This proves(HN1)'s attainment without claiming
+continuity of the deleted-anchor cap. For each FIXED actual opponent law,
+the raw finite-test sequence converges to Never and its maximum is attained
+at a finite deadline or Never; the deadline need not be uniform as θ changes.
+
+### HN3. One entire Fin4 table family and its exact selection value
+
+Fix host0, strategic observer1, and two genuine observers2,3. For
+0≤γ≤1 specify EVERY finite coalition coordinate by
+
+    z_0(S)=1 if 1∈S and 0∉S, otherwise0;
+    z_1(S)=1 if {0,1}⊆S;
+            γ if 0∈S and 1∉S;
+            0 otherwise;
+    z_i(S)=−1 if i∈S and |S|≥2, otherwise0, i=2,3.
+
+Never pays0. These formulas specify all60 entries, all own singletons0,
+and reward bound1. The additional observers are NOT inert public coins:
+their simultaneous membership is punished. The exact WHOLE correspondence
+value is
+
+    f_0(θ,z^γ)=θ   if 0≤γ<θ,
+    f_0(θ,z^γ)=0   if θ≤γ≤1.                        (HN2)
+
+This quantifies over ALL actual anchored equilibria, arbitrary stopping
+laws, every finite deadline and Never, not merely one selected family.
+
+### HN4. Proof of(HN2), including all dummy and clock-boundary cases
+
+First consider any p∈E. An extra observer's Never payoff is0 and every
+finite pure test has payoff at most0. Hence every finite atom in its
+prescribed Nash law must have pure-test payoff0. Let t be the earliest
+finite atom of either extra observer. If neither core clock has stopped
+surely before t, then S_0(t),S_1(t)>0. The host's floor gives p_0(t)>0.
+The other extra observer has no earlier finite mass. Independence then
+gives a positive event where the deviating extra observer and the host
+quit together at t before any earlier opponent stop. Its payoff is−1,
+so its pure test has strictly negative value, impossible.
+
+Therefore if a core clock first becomes surely finite by date τ, ALL extra
+observer finite atoms lie strictly after τ. If neither core clock becomes
+sure by any finite date, BOTH extra observers are literal Never. This
+allows out-of-path extra-observer clocks after a sure core date; they are
+not silently forbidden. Such clocks are screened in the comparisons below
+by whichever retained core owner stops surely by τ.
+
+Assume γ<θ. The pure date0 response of observer1 pays p_0(0)≥θ, since
+neither extra observer can stop at date0. If observer1 had positive Never
+mass, it would have no finite sure date. The extra observers would then
+be Never, or stop only after a finite sure host date. Its Never response
+would therefore receive exactly γ, below its cap. Nash rules out that
+Never mass. Observer1 is proper.
+
+If the host is the first core clock sure by date τ, both extra observers
+stop only later. Every observer1 response after τ and Never pays γ.
+Since its cap is at least θ>γ, observer1 must put all its mass at dates≤τ.
+It is also sure by τ. Retaining this bounded observer law, all extra
+observers are screened. The host payoff is exactly
+
+    U_0=∑_[t≤τ]p_1(t)S_0(t+1).
+
+Every H_θ law has S_0(t+1)≤q^(t+1), q=1−θ, and the geometric law
+attains these bounds simultaneously. Optimality therefore forces the
+host's survival to equal q^(t+1) through observer1's last positive date.
+In particular the host cannot be sure at or before that last date.
+Thus the first finite sure core date, if present, belongs to observer1,
+not to the host alone or to both at the same date.
+
+If observer1 has no finite sure date, the host cannot have one by the
+previous paragraph. The extra observers are Never. The same payoff
+formula, now summed over all dates, shows that constrained host optimality
+forces the ENTIRE geometric host law: any excessive hazard at a finite
+date lowers survival afterwards, and observer1 has positive mass after
+every cutoff. For this law observer1's pure values are
+
+    V_1(t)=γ+(θ−γ)q^t,    V_1(Never)=γ.
+
+They strictly decrease from θ. Its only maximizing response is date0,
+contradicting the assumed unbounded proper support. Hence observer1 has
+a finite sure date τ.
+
+With this retained sure observer, the host is geometric through τ.
+Every supported observer date t≤τ has the same displayed pure value,
+and every supported test must equal its full cap. Again the strict
+decrease forces observer1 to be pure date0. Host optimality gives
+p_0(0)=θ. Its prescribed payoff is1−θ and its full cap is1, since
+observer1's sure date0 screens all extra observers and every host response
+after date0 earns1. The full host debt is EXACTLY θ in every p∈E.
+
+Existence attaining this value is explicit: host geometric θ,
+observer1 pure date0, extras Never. The pure-value formula screens ALL
+observer1 deadlines and Never. Extras get0 by Never and cannot improve;
+the host is optimal over H_θ because it maximizes P(T_0>0)=1−θ.
+This completes the first branch of(HN2) without assuming an old cap
+maximizer stays fixed across profiles.
+
+For γ≥θ take host geometric θ and all three observers Never.
+Observer1's displayed pure values are now at most γ, attained by Never.
+Each extra observer's finite test has negative value from a positive
+host-tie event, while Never pays0. The host always earns its own0 and
+has complete cap0. This is already an absorbing FULL exact Nash profile,
+so f_0=0. At γ=θ all of observer1's tests tie; the good Never selection
+is still legal. This proves the boundary case and the second branch.
+
+### HN5. What the discontinuity actually retires
+
+At the fixed floor θ, tables with γ arbitrarily close BELOW θ have
+optimal full host debt θ, whereas γ=θ or γ just above it has value0.
+The reward sup distance is the corresponding |γ−θ|. No finite
+reward-table Lipschitz bound, including the original SUM-gap bound8,
+holds for this new selection value. The jump survives minimization over
+the ENTIRE actual correspondence; it is not the arbitrary bad-selection
+phenomenon in RM26's delayed-pair example. It is consistent with HN2's
+lower semicontinuity, which permits new favorable branches at the limit.
+
+The table family is solved: if γ>0 choose any ε≤γ as geometric host
+hazard and all observers Never to get an actual absorbing full Nash
+profile. If γ=0 use geometric ε, observer1 sure0 and extras Never;
+its total full debt is ε→0. Thus Δ_abs=0 throughout. For every FIXED
+γ, f_0(θ,z^γ)→0 as θ↓0. The discontinuity does NOT falsify this native
+good-selection producer, an asymptotic value function, or the conjecture.
+The example has no full normal-core/non-Q-bar claim; it is not presented
+as surviving existing UE classes.
+
+The narrow lookup in the exact finite timing-game and root-successor
+modules found no anchored-debt selection continuity theorem being
+consumed. Exact rational tests verified the displayed finite-response
+formulas, the strict early-deadline maximum below γ=θ, and arbitrarily
+small reward distances with the fixed jump θ. The all-selection proof
+above, not those tests, establishes(HN2).
+
+Direction decision. The original whole-table gap comparison works over
+a FIXED law/response carrier. E_h,θ(z) instead changes with the reward
+table. Its optimal full host debt is attained, but cannot be substituted
+for that fixed-domain value in a worst-table Lipschitz comparison.
+The remaining question is still the concrete fixed-table global producer
+f_h(θ,z)→0 along some host/floor choice, or a genuine all-law lower bound
+showing why it fails. No deleted-host cap control is supplied as a hypothesis,
+and no minimizing anchored equilibrium is identified with an original
+K_abs minimum. A separate asymptotic comparison would require a proof,
+not a transfer of the original finite-θ modulus.
 
 ## Independent producer trial: a nonlinear hazard box is consumed by existing coverage
 
