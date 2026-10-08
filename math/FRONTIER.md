@@ -489,6 +489,17 @@ head/root boxes force the genuine collision-to-later bridge. This argument
 has independent mathematical review; the full reduction is not yet a
 Lean-checked theorem.
 
+Two source-selection components are tracked. The theorem
+`exists_recipientScale_all_minimum_debts_eq` in
+`UniformEquilibrium/Quitting/Terminal/RecipientScaledTerminalSemantics.lean`
+selects one positive recipient scale in any nonempty open positive region,
+with one debt vector at every new global SUM minimum.
+`exists_recipientRigid_signAdaptiveContact_source_of_not_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticRecipientRigidContactSource.lean`
+produces the contact-preserving row-generic source from no UE, retaining
+the original worst-table contacts and cohorts. Neither declaration supplies
+the marked first-collision classification or transports an old minimum.
+
 Every final minimum is produced afresh; no old law is transported through
 the reward change. This is an existential counterexample-table reduction,
 not a restriction on every original table. The expanded direction changes
