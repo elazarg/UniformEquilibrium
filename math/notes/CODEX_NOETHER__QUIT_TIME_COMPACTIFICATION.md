@@ -24332,6 +24332,46 @@ Thus Q_i=C_i=B_i for every i. The suffix is NOT a minimum or Nash; NC6
 actually forces its excess debt. At least two a_i are positive, every
 a_i<1, and the root continue product is positive. Keep this exact v.
 
+There is nevertheless a genuine charged edge: this PARTICULAR original
+root is exact cap–Nash against b, its ACTUAL suffix envelope. In particular
+
+    d*_i=c d_i(v),   δ=c D(v),   ν*=c ν_tail.
+
+This uses the original b, not the output B and not the delivery u. It is
+the exact checked scaling in
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash`
+in `UniformEquilibrium/Quitting/Root/CapNashRootStack.lean`.
+
+The same observation settles arbitrary finite prefix rearrangements
+WITHOUT a small-perturbation restriction if every owner's total prefix
+finite probability is kept a_i and the honest suffix v is unchanged.
+Let W_i be the prescribed finite-prefix payoff when its AllContinue
+terminal reward is b_i. The entire actual cap dominates every finite
+prefix test and the complete tail branch, so B_i^new≥W_i. Actual delivery
+is W_i−c(b_i−u_i), hence
+
+    d_i^new≥c d_i(v)=d*_i,   D_new≥δ.
+
+Equality requires exact normal-form prefix Nash against b; it does not
+license replacing v by a minimum. This is routine full-cap accounting,
+not a new frontier contraction. It is why the genuinely later operation
+below must change original suffix laws or total prefix survival.
+
+For the opposite operation, retain the ORIGINAL one-row root but replace
+the WHOLE suffix by an arbitrary actual carrier w=(u^w,b^w)∈K. Its entire
+cap and delivery give the exact global comparison
+
+    D(T_a(w))−δ
+      =c[Σ_i (b_i^w−b_i)⁺/(1−a_i)−Σ_i(u_i^w−u_i)].
+
+All denominators are positive. This formula includes newly dominating
+tail responses, not a transported choice of old maximizing clocks. Thus
+v globally maximizes the clipped-welfare objective
+Σ_i u_i^w−Σ_i(b_i^w−b_i)⁺/(1−a_i) over K. Finding a STRICT improvement
+would be an actual whole-suffix descent at the fixed root. The formula
+does not establish such an improvement or supply a free cap box; that
+is the still-open research task, not a completed conditional consumer.
+
 For each i choose 0≤ε_i≤a_i. Add one genuinely new earlier date, and shift
 the WHOLE original root and its realizing tail one date later together.
 An original root draw of owner i is privately advanced with total mass
@@ -24552,3 +24592,19 @@ Concrete next operation remains the legal LATER original-law/cap change.
 An exact finite Nash search cannot supply a zero-excess replacement by
 itself; its excess debt and its outside-grid finite caps must be consumed
 by the coupled repair, not dropped from the ledger.
+
+Bounded literature check, 2026-10-09: Ashkenazi-Golan, Krasikov, Rainer
+and Solan, [The APS approach for undiscounted quitting games](https://doi.org/10.1007/s00182-026-00982-6),
+published 2026-04-02, is distinct from their tracked 2024 absorption-path
+paper. The publisher's Introduction, §2.1 and Theorem4.10 were inspected:
+the theorem concerns singleton-flow SFAP payoffs under additional
+circuit-face avoidance, not arbitrary collision paths. Its model uses
+own singleton0 and negative AllContinue payoff, unlike our Never0 table;
+no unchanged-profile normalization is inferred. No new proof audit was
+performed. Through the existing `EssentialAPS/All.lean` import facade, the
+actual declaration in
+`UniformEquilibrium/Quitting/EssentialAPS/AdaptiveMeshUniformPayoff.lean`,
+`quittingEssentialAPS_isUniformEquilibriumPayoff_of_terminalFree_unique_live_adaptiveMesh`
+was checked narrowly through TOOLKIT: it also requires a supplied component
+and does not produce one from this source. The whole-suffix consumer remains
+open; the bibliographical check is not a mathematical contraction.
