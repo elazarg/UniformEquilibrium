@@ -77,6 +77,16 @@ near-Nash source while preserving the positive absorbing gap. This is
 a transfer to the absorbing problem, not its solution. Outside that
 boundary an excess debt exists, but TW does not yet put it at a
 critical owner with old finite mass.
+GR below tests a different global hook. At a differentiability point of
+the full60-coordinate debt infimum, EVERY produced marked minimum admits
+a mixture of its complete maximizing response kernels with ONE common
+regret-coefficient vector. This is ordinary, unreviewed supporting
+mathematics. Its mixtures are LOWER supporting ledgers, not cap upper
+bounds. An exact actual global-minimum matching-pennies test, in an OPEN
+zero-gap reward neighborhood, falsifies the proposed upper-pricing use.
+The live construction therefore retains actual root births and must
+control the changed maxima directly; neither AP nor GR yields a favorable
+coupled member.
 
 NF1–NF8 below gives an ordinary finite-prefix restatement of the accepted
 source: delete vanishing original pre-date mass, normalize the first
@@ -9426,6 +9436,205 @@ alone changes no ν and supplies no descent; its cap-safe hazard does
 not remove the coupled-head pricing problem. The next calculation
 must change the old head as well and compare its complete caps, rather
 than inserting an unproduced empty-gap or free-hazard hypothesis.
+
+## Full reward sensitivity supplies a lower kernel ledger, not a coupled consumer
+
+### GR1. Exact question, source inspection and status
+
+Could differentiability of the GLOBAL full-debt infimum supply an upper
+price for all cap branches born after moving existing finite mass to a
+maximizing ROOT response? The scalar recipient/constant directions used
+in DR and NR do not specify those branches. Here the numerical parameter
+is the ENTIRE60-coordinate table, not an old profile, Nash row or supplied
+response selector.
+
+The following common-kernel lemma is a COMPLETE ORDINARY, UNREVIEWED
+derivation. The proposed upper-pricing implication is exactly FALSE by
+GR4. This is supporting mathematics and a mechanism retirement, not a UE
+consumer, unrestricted positive-gap example or export request.
+
+Narrow source lookup for this attempt inspected
+`lipschitzWith_quittingTerminalDebtSumInf`,
+`abs_quittingTerminalDebtSumInf_sub_le_of_reward_close` and
+`continuous_quittingTerminalDebtSumInf` in
+`UniformEquilibrium/Quitting/Terminal/TerminalDebtSumRewardGeometry.lean`.
+Their actual infimum changes by at most8 times the uniform reward error.
+The Rademacher application and the distinction between a regular value
+and unique underlying minimizers were inspected in
+`MathUE/Analysis/CompactLinearMinimumRigidity.lean`, including
+`exists_mem_open_all_minimizers_eq`. That LINEAR-infimum declaration is
+not invoked as a nonlinear-infimum theorem here. The ordinary marked
+source argument used below is the original-chart, rectangle-kernel and
+ALL-moving-response proof already retained in this notebook and in the
+canonical NP packet. It is not claimed to be fully Lean-integrated.
+
+### GR2. Every marked minimum has one common convexified regret kernel
+
+Let Δ(r)=inf_p D_r(p), with p ranging over ALL actual independent complete
+laws and caps ranging over ALL finite responses and Never. At a table r
+where Δ is differentiable, write its derivative as
+
+    dΔ_r(H)=Σ_i Σ_[S≠∅] G_i(S) H_i(S).
+
+Fix ANY produced marked minimum q at this table. Let μ(S) be its ORIGINAL
+prescribed first-coalition probabilities, so Σ_S μ(S)=1−ν. For each
+complete compact test point t let σ_i(t,S) be the first-coalition
+probabilities when ONLY owner i replaces its whole law by that pure
+test. These are probability coefficients independent of rewards;
+Never may leave total mass below1. Put
+
+    M_i={t: Σ_S r_i(S)σ_i(t,S)=B_i(q)}.
+
+The marked kernel proof gives continuity of t↦σ_i(t,·), including
+retained ties, zero-mixture cuts, the final finite test c and Never.
+It also gives, for EVERY other bounded reward table a at the SAME laws
+and SAME old-chart witness sequence,
+
+    F_q(a)=Σ_i max_t Σ_S a_i(S)σ_i(t,S)
+                  −Σ_i Σ_S a_i(S)μ(S),
+    Δ(a)≤F_q(a),       F_q(r)=Δ(r).                (GR1)
+
+No minima are transported between tables: the inequality follows simply
+by reusing that literal actual witness sequence. Finite dimensionality
+and the compact complete test menu make the directional derivative of
+F_q the maximum of its CURRENT maximizing test slopes. This is an INNER
+maximum statement, not the false OUTER fixed-minimizer Danskin formula.
+Differentiating only the upper inequality in (GR1) gives, for EVERY H,
+
+    Σ_i H_i·[G_i+μ]≤Σ_i max_[t∈M_i] H_i·σ_i(t).    (GR2)
+
+Finite-dimensional separation now implies
+
+    G_i+μ∈conv{σ_i(t):t∈M_i}  for EVERY owner i.    (GR3)
+
+Indeed a separating row direction, with all other rows zero, would
+contradict (GR2). The convex hull is compact. Consequently each owner
+has a probability mixture β_i of at most16 maximizing compact tests
+whose EXPECTED terminal coefficient vector equals G_i+μ. These tests
+need not be outcome-equivalent and their mixture is a mathematical
+selector, not a joint public signal. No prescribed strategy is changed.
+In the nonsure NP source Never is strictly submaximal; all maximizing
+tests are finite and their coefficient sums are1. Thus
+
+    Σ_S G_i(S)=ν,      r_i·G_i=d_i.                (GR4)
+
+The vector G is selected by the TABLE before q. Hence all produced
+marked minima at a regular NP table have common d AND common ν without
+claiming common prescribed outcomes or response laws.
+
+Every minimum pair in the original closed carrier admits a finite-law
+approximating sequence, by the actual finite-law approximation theorem;
+the marked producer may be applied to a subsequence of that sequence.
+Thus the common d conclusion also covers EVERY carrier minimum pair,
+not just a chosen marked realization. Joint Never is not a coordinate
+of that carrier pair; its common value is asserted for the produced
+realizations and the actual minimizing limits.
+
+The remaining coefficient consequence is
+
+    μ(S)+G_i(S)≥0;
+    G_i(S)<0 ⇒ μ(S)>0 at EVERY produced minimum.   (GR5)
+
+This is the strongest pointwise coefficient information proved here.
+There is no assertion that G itself is a terminal distribution.
+
+### GR3. Fresh selection is possible; upper cap pricing does not follow
+
+Starting with the reviewed separated table, common-contract slightly if
+needed to enter the strict unit cube. Positive own rewards, δ>0 and the
+strict full/absorbing separation persist on a nonempty open numerical
+neighborhood, by the actual8-Lipschitz estimates for each domain.
+Rademacher supplies differentiability points of Δ of full measure in
+this finite-dimensional neighborhood. Remove the finitely many row
+equality hyperplanes and choose ONE point. This selection is before ALL
+new minimizing sequences. At that point (GR4) supplies common minimum
+debts directly; the original ordinary NP geometry can then be applied.
+No old common-debt or chronology assertion is preserved by fiat. This
+is an alternative supporting source selection, not another export.
+
+The hoped-for consumer does NOT follow. For the selectors β chosen at
+one minimum define at another actual profile p
+
+    L_β(p)=Σ_i E payoff_i(β_i,p_-i)−Σ_i U_i(p).
+
+By definition of the FULL caps,
+
+    L_β(p)≤D_r(p),       L_β(q)=δ.                (GR6)
+
+The inequality has the wrong direction for proving that a proposed
+coupled p has lower debt. A lower value of L_β does not price the changed
+maxima from above. Differentiability of the OUTER value does not convert
+the selected mixtures into common maximizing responses after law
+movement. The exact next test falsifies that inference even at a TRUE
+global minimum, with all own rewards positive and an OPEN regular-value
+neighborhood. It does not falsify GR2 or a future use of additional NP
+hypotheses.
+
+### GR4. Complete actual boundary test: smooth global value, uncontrolled births
+
+Let I={0,1,2,3}. The following formula specifies ALL60 nonempty entries,
+with independent private complete laws and AllNever payoff0.
+
+    r_0(S)=1 if 0∈S, and0 otherwise.
+
+For recipient1, if 0∈S set r_1(S)=1 exactly when the membership bits of
+1 and2 agree, and0 otherwise. If 0∉S set r_1(S)=1 exactly when 1∈S.
+For recipient2, if 0∈S set r_2(S)=1 exactly when those two bits differ,
+and0 otherwise. If 0∉S set r_2(S)=1 exactly when 2∈S.
+For recipient3, if 0∈S set r_3(S)=1 exactly when 3∉S, and0 otherwise;
+if 0∉S set r_3(S)=1 exactly when 3∈S. Every own singleton pays1.
+
+Take p_0=δ_0, p_3=δ_Never, and let owners1,2 quit at0 with rates
+q_1=1/2+a, q_2=1/2+b, keeping all remaining mass on Never.
+Owner0's full cap and prescribed payoff are1. Owner3's are also1.
+Because owner0 stops SURELY at0, EVERY finite response after0 and Never
+of owner1 or2 has the same passive outcome; there is no omitted late
+solo or joining response. Their exact full ledgers are
+
+    U_1=1/2+2ab,       B_1=1/2+|b|,
+    U_2=1/2−2ab,       B_2=1/2+|a|,
+    D=|a|+|b|.                                     (GR7)
+
+At a=b=0 this is an ACTUAL terminal Nash profile and true full minimum0.
+Fix β_0=δ_0, β_3=δ_1, and β_1=β_2=(δ_0+δ_1)/2. All selected tests are
+FINITE and maximize at the original profile. Their response outcome
+distributions equal its prescribed distribution μ, so G=0 in (GR3).
+Yet for ALL a,b∈[−1/2,1/2], their expected response payoffs for owners1,2
+remain1/2, whence
+
+    L_β(p)=0,  while D_r(p)=|a|+|b|.               (GR8)
+
+Thus even an exact common response-kernel selector and a flat complete
+selected-regret polynomial leave the born full caps entirely unpaid.
+The changed mass is existing finite root mass and Never; this is not an
+atomless approximation or a failure caused by an excluded deadline.
+
+The OUTER value Δ really is smooth here. In the full60-coordinate
+sup-norm ball of radius1/20 about this table, the two-player root game
+between1 and2 still has one interior mixed Nash pair with both rates
+in(3/10,7/10): each endpoint action difference has its old sign and
+magnitude at least9/10. Anchor0's root payoff is at least19/20, whereas
+any later test is at most1/20+(7/10)²; Never is no larger. Dummy3's wait
+payoff is at least19/20 and its root join payoff at most1/20. Hence the
+same sure anchor and passive dummy extend that mixed pair to a FULL
+actual Nash profile throughout the ball. All later finite/Never responses
+of1,2 remain exactly their root-Wait action because the anchor is sure.
+Consequently Δ=0 on this OPEN full-table neighborhood, so its full
+derivative is identically0. The failure cannot be repaired merely by
+asking for outer differentiability or regular reward data.
+
+### GR5. Decision and the precise surviving root construction
+
+Do not use GR's convexified selectors as an upper-cap compiler. AP remains
+a correct actual comparison, but its fixed conditional-finite library
+can omit a root clock of an unsupported bridger. The next finite-mass
+construction instead inserts that ACTUAL retained root clock and changes
+a second owner's Never/finite balance. Conditional old tails are changed
+by literal bounded likelihoods; their full caps must be recomputed, and
+the root uses the exact max(Q_i,A_i+α_i b_i) adapter. Original common ν is
+not imposed on a lower-debt competitor. No source-forced favorable member
+of this new family has yet been proved. GR supplies no missing upper
+bound, and a merely formal active-mixture field would not close that gap.
 
 ## NP universal finite-prefix corollary and an actual end-Never graft
 
