@@ -69,6 +69,20 @@ not new frontier contraction. Exact finite-menu Nash therefore cannot
 be the required intermediary even though arbitrary finite approximate
 profiles and the rotating exact infinite profile solve this game.
 
+The PR canonical repair trial now tests a genuinely approximate
+whole-profile output: choose exact finite-menu Nash, keep only its
+three nonpivot laws, then optimize the ENTIRE unrestricted pivot law
+by the tracked full-exploitability LP. On r=RZ+(1,0,0,0), the entire
+menu correspondence at EVERY deadline is one last-row root, with
+Continue probabilities (√3−1,(3−√3)/2,(3+√3)/6,1). Any pivot repair,
+including infinite support and Never, still has max full debt at least
+(√3−1)/4. The same canonical table has absorbing approximate equilibria
+by RZ4's actual-absorption row transport. Thus inner LP optimization
+cannot salvage that entire outer Nash-source carrier. The three outer
+laws themselves must move; arbitrary approximate outer laws and genuine
+minimum-dependent selection remain open. This is operation triage,
+not a new positive-gap example or UE class.
+
 The DR nonlocal reference-law trial is now retired in its automatic
 form. At critical density ceiling4 the all-grand point is an endogenous
 reference equilibrium for every table, because every other action has

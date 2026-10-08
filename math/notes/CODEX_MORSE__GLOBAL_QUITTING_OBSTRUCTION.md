@@ -55,6 +55,17 @@ to exact finite-menu Nash, so FX's all-selector debt floor applies.
 This is a failed nonlocal forcing mechanism, not a new coverage claim.
 A genuinely cap-aware nonslack selector is not refuted, but not produced.
 
+Latest genuinely approximate repair test: PR1–PR6 below moves to the
+CANONICAL single-pivot version of the same solved RZ table. At EVERY
+finite deadline its ENTIRE exact menu Nash correspondence is one
+last-row profile. Keeping those three nonpivot laws, even the OPTIMAL
+unrestricted behavioral pivot repair has full exploitability at least
+(√3−1)/4. Thus the tracked finite-LP repair cannot rescue this whole
+outer-source correspondence, although the actual game has absorbing
+approximate equilibria. This is a new scope of operation failure,
+not a positive game gap, new UE coverage, or a genuine noUE input.
+The outer laws must themselves leave the exact-menu Nash carrier.
+
 Current completed class result: CL1–10 and SC1–6 have each passed two
 independent mathematical checks. The negative DN trial is retired by a
 closed singular full-Nash circuit with three convergent ladders and two
@@ -11106,6 +11117,269 @@ and `FiniteDeadlineReplyCap.lean`. No new source theorem, Lean build,
 or export is claimed. The original source-control target remains an
 ACTUAL approximate word whose unrestricted cutoff error is paid by
 its own survival, not an exact Nash word at a fixed continuation band.
+
+## Canonical exact-menu opponent selection cannot be rescued by ANY pivot repair
+
+Status: COMPLETE ORDINARY UNREVIEWED mechanism falsifier. This is a
+genuinely approximate-profile trial, not a requirement that the repaired
+profile remain exact menu Nash. Every complete pivot law, including
+infinite support and Never, is allowed. No export or new counterexample
+class contraction is claimed. The fixed table is already solved.
+
+### PR1. Actual source rule and complete canonical reward data
+
+The candidate all-game construction was: normalize to one positive own
+singleton, choose an exact finite-menu Nash profile at some deadline,
+retain only its three NONPIVOT laws, and solve the already tracked full
+one-pivot repair LP. Unlike FX, the output can be genuinely approximate,
+can move all pivot mass, can use arbitrary new clocks, and need not be
+Nash in any restricted menu. Does optimizing the inner problem salvage
+the exact-menu outer source? The answer is NO over the ENTIRE finite
+Nash correspondence, even on the canonical table below.
+
+Let I={0,1,2,3}, modulo4, and s=(1,0,0,0). Use the SAME full native
+RZ1 table z and put r_i(S)=z_i(S)+s_i at EVERY finite nonempty coalition.
+Never remains0. Explicitly, let γ=(0,99,99,−1), and for i≠j put
+K_ij=1 if i=j+1, otherwise K_ij=−1. All sixty entries are specified by:
+
+    r_i({j})=s_i+γ(j−i),
+    r_i({i,j})=s_i+γ(j−i)+K_ij,
+    r_i(S)=s_i if |S|=2 and i∉S,
+    r_i(S)=s_i−1 if |S|≥3 and i∈S,
+    r_i(S)=s_i if |S|=3 and i∉S.
+
+Thus the own vector is LITERALLY (1,0,0,0), not a positive-all-own
+fixture used in place of canonical normalization. Independent private
+clocks are arbitrary probability laws on ℕ∪{Never}. Every unilateral
+behavioral deviation is represented by such a law. For fixed r write
+U_i, B_i and d_i=B_i−U_i≥0 for actual terminal payoff, unrestricted cap,
+and debt. M=100 bounds every reward.
+
+The singleton comparison matrix Γ is unchanged from RZ: R₀,
+StandardQ, degree1, positive simplex image and a negative entry in
+every column. Punishment normality also holds directly here: for any
+owner prescribe all THREE opponents sure at date0. Its passive triple
+reward is s_i and its joint grand reward is s_i−1, so its full cap is
+s_i. Hence P_i≤s_i for all i. These screens do not repair the mechanism.
+No positive global minimum is assumed or supplied by this solved table.
+
+The inspected source declarations are
+`singlePivot_fullExploitability_eq_max_menuExploitability_scalar` and
+`singlePivot_mixedNash_pivot_neverSupport_debt_eq_deletedNever`, in
+`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`;
+`singlePivotFiniteMenuScalarSource_iff_smallPivotRepairValue`, in
+`SinglePivotRepairSourceEquivalence.lean`; and
+`QuittingPivotRepairLPInput.exists_objective_minimizer_eq_behavioral_infimum`,
+in `PivotRepairBehavioralInfimum.lean`. They prove the full inner-LP
+value and source equivalences, not a small-value selection of its three
+outer laws. The following calculation tests that actual source choice.
+
+### PR2. Unique complete last-row Nash root, not a selected branch
+
+For root q let t_i=1−q_i and h_i=∏_{j≠i}t_j. At continuation0 the
+literal canonical Quit-minus-Continue gap is
+
+    g_i=2t_{i+1}t_{i+2}−1−(1−s_i)h_i.           (PR.1)
+
+This is FX.3 with the exact row-offset/empty-event correction, not
+translation of the Never payoff. The no-sure lemma FX2 applies at ANY
+signed continuation after arbitrary row offsets: a sure opponent screens
+both endpoints, so its finite reward offset cancels. Thus all t_i>0.
+
+If q_0=0, a canonical Nash root would also be a native z Nash root
+at continuation0: the three other gaps coincide and the quiet pivot's
+native gap is its canonical gap MINUS h_0. RZ2 then forces q=0,
+contradicting the canonical pivot gap1. Therefore 0<q_0<1 and
+
+    t_1t_2=1/2.                                     (PR.2)
+
+If q_1=0, then t_1=1,t_2=1/2 and q_2>0. Its equality gives
+t_0t_3=1, contradicting q_0>0. If q_2=0, then t_2=1,t_1=1/2;
+g_3=t_0/2−1<0 forces t_3=1 and the active owner1 equality then
+forces t_0=1, again impossible. Hence q_1,q_2 are proper and
+
+    t_2t_3(2−t_0)=1,
+    t_0t_3(2−t_1)=1.                              (PR.3)
+
+If q_3>0, its equality is t_0t_1(2−t_2)=1. The first two equalities
+give t_0=2t_2/(2+t_2−t_1). Substitution into the third, using(PR.2),
+gives t_1=2t_2 and hence t_1=1, contradicting q_1>0. Thus t_3=1.
+Equations(PR.2)–(PR.3) now give
+
+    t_0=√3−1,
+    t_1=(3−√3)/2,
+    t_2=(3+√3)/6,
+    t_3=1.                                        (PR.4)
+
+The other quadratic root for t_1 exceeds1. All printed t_i are in
+(0,1], with q_0,q_1,q_2 proper. The remaining quiet gap is
+g_3=(7√3−13)/2<0. Conversely all active equalities and the quiet
+inequality hold. This classifies the ENTIRE four-cube Nash set,
+including every zero, proper and sure boundary.
+
+The actual root payoff minus its raw own offset is
+
+    U_0−1=197/2−33√3,
+    U_1=−199/2+397√3/6,
+    U_2=887/2−493√3/2,
+    U_3=151−135√3/2.                              (PR.5)
+
+All are strictly positive, for example by5/3<√3<7/4. These are
+literal fifteen-row endpoints. In particular no low/negative head
+continuation has been silently substituted in the preceding-date step.
+
+### PR3. ENTIRE finite normal-form Nash correspondence at EVERY deadline
+
+For each N≥0 the menu is {0,…,N,Never}, with original AllNever reward0.
+Every finite normal-form Nash profile has positive own and deleted reach
+at every conditional row: otherwise choose the EARLIEST date at which
+an owner's cumulative finite mass reaches1. Every owner survives TO
+that date with positive probability. Conditional support optimality gives
+a literal root Nash there, with a sure owner, contradicting the no-sure
+lemma. This is the same direct positive-reach argument proved in FX4;
+it is not an assumed subgame-perfect equilibrium or Bellman-Nash word.
+
+The conditional root at N therefore exists and has continuation0,
+hence is EXACTLY(PR.4). Its native head(PR.5) is strictly positive
+coordinatewise. The RZ2/FX4 weighted-root identity makes AllContinue
+the UNIQUE earlier root at every strictly positive native continuation.
+Backward induction thus leaves no prescribed finite mass before N.
+Conversely placing(PR.4) at N and AllContinue before it is menu Nash:
+earlier own singleton replies have smaller payoff than(PR.5)+s,
+and every date-N/Never support point is optimal at the final root.
+
+Consequently for EVERY N the entire correspondence is ONE profile:
+
+    P(T_i=N)=q_i=1−t_i,
+    P(T_i=Never)=t_i,
+
+with(PR.4); owner3 is always Never. In particular every canonical
+exact-menu outer selector, however it selects N, fixes the SAME three
+nonpivot laws, up to their common date. The unmodified profile has
+nonpivot full debts0 and pivot full debt EXACTLY h_0=t_1t_2t_3=1/2,
+by the checked canonical cap identity. Joint Never is t_0/2>0.
+
+### PR4. All-law full-gap lower bound after arbitrary pivot repair
+
+Fix ANY N and its three nonpivot laws from PR3. Replace player0 by
+ANY complete behavioral stopping law, with arbitrary infinite support
+and arbitrary Never mass. No menu, support or atom-size constraint is
+imposed. Set
+
+    a=P(T_0<N),       b=P(T_0=N),
+    c=P(N<T_0<∞),    d=P(T_0=Never),
+    a+b+c+d=1.                                    (PR.6)
+
+For N=0 one simply has a=0. Let
+
+    V=t_1+t_2−1=1−√3/3,
+    A=1/2+99V=199/2−33√3.
+
+The pivot's pure response at N pays A. Its passive reward from opponents
+stopping at N is also A, because
+
+    100(q_1t_2+q_2t_1)+q_1q_2
+      =100V+(1/2−V)=A.
+
+EVERY pure response after N pays A+1/2, including arbitrarily late
+dates. Earlier responses, when available, pay1; literal Never pays A.
+Thus the COMPLETE pivot cap is A+1/2. Its prescribed payoff and debt are
+
+    U_0=a+(1−a)A+c/2,
+    d_0=1/2+(A−1)a−c/2
+        ≥(A−1/2)a+d/2,                           (PR.7)
+
+where the inequality uses c≤1−a−d. This upper-caps EVERY behavioral
+pivot reply, not an asymptotic ledger or an assumed best response.
+
+For nonpivot1 let Q be its ORIGINAL pure response Quit at N and W
+its literal Never response under the repaired pivot law. Product event
+enumeration gives
+
+    Q=−a−q_2 b+98q_2(c+d),
+    W=−a−t_2 b+99q_2(c+d)−t_2c.
+
+Its unchanged own law is q_1 at N and t_1 Never, so its ACTUAL payoff
+is U_1=q_1Q+t_1W. Therefore
+
+    Q−U_1=q_1(b+c)−t_1q_2d
+          =q_1(1−a)−d/2,                        (PR.8)
+
+using q_1+t_1q_2=1−t_1t_2=1/2. Its unrestricted cap includes this
+literal response at N, hence d_1≥Q−U_1 even when the right side is
+negative. Summing(PR.7) and(PR.8) gives the uniform all-law inequality
+
+    d_0+d_1≥q_1+(A−1/2−q_1)a≥q_1=(√3−1)/2.      (PR.9)
+
+The coefficient of a is strictly positive, since A−1/2=99−33√3>41
+whereas q_1<1/2. Debts2/3 are nonnegative. Consequently EVERY repaired
+profile, even the best one, satisfies
+
+    Σ_i d_i≥(√3−1)/2,
+    max_i d_i≥(√3−1)/4>0.                        (PR.10)
+
+This covers all N, ALL exact-menu selectors, and ALL unrestricted pivot
+repairs, including nonexistent-attainment boundary cases of the finite LP.
+The checked equality of that LP optimum with the behavioral infimum
+therefore makes its attained objective at least(PR.10). Solving the inner
+LP more accurately or choosing a different pivot-law approximation cannot
+make this outer source good.
+
+### PR5. Solved-game witness and precise previous-mechanism comparison
+
+This is NOT a positive-gap quitting-game example. RZ4 gives actual
+absorbing approximate equilibria of z with a fixed target; every deleted
+opponent group also absorbs. Adding s to all finite absorbing rows thus
+adds s to prescribed payoff AND every unilateral payoff, preserving all
+full gains. The SAME profiles produce a fixed target for r=z+s before
+accuracy. Equivalently use the tracked cyclic singleton source on z
+and this actual-absorption transport. No general affine UE transport
+with positive joint Never is asserted. Full Fin4 UE remains OPEN.
+
+FX already rules out exact-menu Nash on the SAME RZ table with ALL own
+levels1. BP uses the native all-own-zero table with ALL strictly positive
+negative-boundary penalties tending0, followed by independent repetition.
+BU uses a DIFFERENT native completion and covers arbitrary strictly
+positive boundary penalties and every stationary repeated profile.
+PR is not their positive-all-own or strict-all-price instance: its raw
+own vector is(1,0,0,0), equivalent to the one-stage boundary(−1,0,0,0),
+and it replaces rather than repeats a whole marginal. More importantly
+the repair need not be exact or periodic, and it is optimized over the
+ENTIRE behavioral pivot law space by the already implemented finite LP.
+Thus(PR.10) closes a genuinely larger repair option than the unmodified
+exact-menu scalar calculation on this canonical table. It remains
+operation triage, not extra conjecture-class contraction.
+
+I independently entered all sixty finite cells, computed every endpoint
+at(PR.4), and simplified(PR.5), the quiet gap, A, the complete pivot
+debt and(PR.8) by exact symbolic arithmetic. The proof of(PR.9) is the
+displayed elementary all-law inequality; no floating search or numerical
+failure of the inner optimization is used.
+
+### PR6. Changed direction and concrete unresolved global question
+
+RETIRED: exact finite-menu Nash opponent laws, followed by arbitrary
+one-marginal full-exploitability optimization, are automatically an
+all-game canonical source. The claim fails over that ENTIRE outer
+correspondence and ENTIRE inner repair space on one fixed solved table.
+This is stronger than the prior observation that one selected menu
+equilibrium can have a nonzero exceptional scalar.
+
+NOT RETIRED: the tracked three-law small-repair-value source itself,
+arbitrary finite APPROXIMATE outer laws, simultaneous coupled changes
+of those laws, or a selector genuinely using a positive actual minimum
+and its full response kernels. PR supplies no noUE table and no failure
+of such source-dependent selection. The genuine outer-law producer must
+let the three nonpivot laws themselves move off the exact-menu Nash
+carrier; an optimal pivot tail by itself cannot pay their whole account.
+
+Concrete next question: produce those THREE independent outer laws
+directly with small inner value, allowing approximate whole words and
+pricing their complete cutoff replies. Neither an exact-menu seed plus
+pivot repair nor a constrained/reference fixed point is an obligatory
+intermediary. The available reviewed least-Never geometry is still two
+tied owners, OR one unsupported tied owner and a different later-only
+owner; it is not assumed to select these global outer laws.
 
 ## Actual cap-domain control does not automatically select a charged path
 

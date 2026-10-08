@@ -53,6 +53,16 @@ restriction is counted as new counterexample-class contraction: the
 actual competitor must leave these entire families, rather than improve
 their constants. The finite nonlocal suffix/cap change remains open.
 
+NC6 now rejects a different GLOBAL substitution mechanism, rather than
+strengthening the GR4 fixture: no nonzero one-row prefix over ANY full
+minimum can itself be a full minimum. At a returned root/later tie,
+the corresponding suffix debt would have to be d*_i/c>d*_i, contrary
+to the common debt vector of all minima. For the supplied source root,
+every tied owner's actual tail debt is d*_i/c; compactness gives a
+strict excess-tail-debt barrier. Thus a coupled cap drop cannot be
+funded by exchanging the original tail for another zero-excess minimum.
+This is internal accounting, not a consumer or a new export.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -24193,3 +24203,96 @@ profile-adapted punishment/cap drop with the second actual bridger (or
 later-only observer), preserving all the finite moving response envelopes.
 A new selected-response price identity without a legal whole-profile
 competitor would not answer this question.
+
+### NC6. A global-minimum suffix is not a possible one-row return
+
+PROVED ORDINARY GLOBAL CONSEQUENCE; INTERNAL, NOT A UE CONSUMER.
+This check follows the completed independent FE/GF review recorded in
+`feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__FE_GF__BY_CODEX_NOETHER.md`.
+That frozen producer passes soundness; its additional existential coverage
+remains unresolved. It supplies no canonical-source consumer here.
+
+Keep the ONE original table, its TRUE floor δ, the common strictly positive
+minimum debt vector d*, and the entire root/suffix correspondence. Let w=(u,b)
+be any suffix in K, x any fixed root, and c=∏_i(1−x_i). With
+
+    Q_i=root Quit endpoint,
+    C_i=A_i+H_i b_i=ENTIRE later response cap,
+    g_i=Q_i−C_i,
+
+the exact INDIVIDUAL debt identity is
+
+    d_i(T_x(w))=c d_i(w)+(g_i)⁺−x_i g_i.          (NC.7)
+
+It follows by substituting the actual prescribed payoff and full cap;
+the tail cap is not a chosen response. Each extra term is nonnegative.
+If Q_i=C_i, that term is zero, so the identity is especially rigid.
+
+Suppose w is itself ANY full minimum, D(w)=δ, and x is nonzero. If
+D(T_x(w))=δ, the source's first-stage theorem applies to actual prefixes
+over one common realizing tail sequence. The root is nonsure, has at least
+two suppliers, and some owner i ties root Quit and the entire later cap.
+Its later cap has moving finite-deadline witnesses; no raw attainment is
+being assumed. The common debt vector holds at BOTH minimum pairs.
+But (NC.7) then gives
+
+    d*_i=c d*_i,
+
+which is impossible since d*_i>0 and c<1. A sure root was already excluded
+by the absorbing floor; a one-supplier minimum is excluded by the supplied
+global first-stage theorem. Therefore
+
+    D(w)=δ, x≠0  ⇒  D(T_x(w))>δ.                  (NC.8)
+
+This quantifies over ALL full minima, not merely the particular least-Never
+representative. It uses only the universal one-tie first-stage consequence,
+not the stronger two-owner/later-only disjunction (which is selected at
+least literal Never). Thus the proof does not silently extend that selected
+disjunction to every minimum prefix.
+
+For the supplied least-Never prefix q over its honest original suffix v,
+write J={i:Q_i=C_i}, with its nonempty tie set. Its root survival c is in
+(0,1). The actual suffix must satisfy, for EVERY i∈J,
+
+    d_i(v)=d*_i/c>d*_i.                            (NC.9)
+
+The set
+
+    K_J(c)={w∈K: d_i(w)≥d*_i/c for every i∈J}
+
+is compact and contains v. It is disjoint from ALL global minima by common
+debt rigidity. Consequently the following positive quantity is well-defined:
+
+    χ_J(c)=min_(w∈K_J(c)) [D(w)−δ]>0,
+    D(v)≥δ+χ_J(c).                                (NC.10)
+
+No numerical constant is proposed. This is not an assertion that the
+suffix itself is minimizing, or that its excess is recoverable by a Nash
+prefix. At an attempted minimum return keeping the same root and its old
+ties, the excess debt is compulsory in the WHOLE actual suffix. In
+particular, choosing another minimum with favorable cap coordinates does
+not supply a compatible replacement tail. The minimum set is not a free
+cap box and cannot be substituted into the old root decomposition.
+
+Narrow source comparison: `quittingTerminalSemanticPrefix_mem_carrier`
+in `UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean` supplies
+actual membership, and the source's common-debt and one-tie first-stage
+proof supplies the nontrivial contradiction. The narrow search in that
+file, `TerminalSemanticEqualityStratum.lean`,
+`TerminalSemanticAuxiliaryNashBudget.lean`, and `CapNashRootStack.lean`
+did not reveal this as a named general return theorem. The existing
+cap-Nash stack identity has a different hypothesis: every stage must be
+Nash against its current full suffix cap. No new checked declaration is
+claimed, and no finite-word return is ruled out by (NC.8).
+
+That final caveat is important. A two-or-more-row prefix may first raise
+debt above δ at its LAST row and then lower it back to δ at an earlier
+row. Its first conditioned suffix need not be a minimum. Iterating
+(NC.8) as though every intermediate suffix remained minimizing would be
+false logic. An absorbing punishment suffix is also unavailable for a
+minimum return, because its entire prefix stays absorbing and pays at
+least δ+g. Thus the next actual candidate must use a NONabsorbing suffix
+with excess debt, alter its entire caps, and recover that cost through
+a genuinely coupled non-Nash prefix or original finite-law change.
+The full-goal research remains on that legal competitor, not on exporting
+this additional restriction.
