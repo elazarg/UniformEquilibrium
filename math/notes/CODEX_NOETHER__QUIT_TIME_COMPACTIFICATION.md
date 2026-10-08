@@ -144,7 +144,11 @@ solve a standard LCP, but its ACTUAL terminal continuation is strictly
 above the discounted port and an active owner's unrestricted Never cap
 is strictly higher still. Arbitrary fixed-period discount selection thus
 cannot supply the missing physical return. A nonlocal/variable-length
-word producer remains possible and unproved. As a bounded positive test,
+word producer remains possible and unproved. RM34 now rejects a proposed
+period-index escape: a negative index of the repeated small-rate branch
+can be compensated by phase-concentrated branches which ALSO have only
+discount-order absorption. No global degree-to-fast-word inference is
+made. As a bounded positive test,
 the literal RZ cyclic construction is already EXACT Nash at its coarse
 four macroscopic phases; refinement is not needed for that particular
 table. Both statements are ordinary unreviewed supporting mathematics,
@@ -20800,3 +20804,166 @@ consumer question is whether a GLOBAL selection of growing compatible
 words can achieve physical opponent absorption dominating approximation
 loss, or yield a punishment-priced exit, without choosing false discounted
 ports or presuming local itinerary continuation. No export is proposed.
+
+## RM34: a period-index discrepancy need not buy physical charge
+
+Question. Could a local index change when a discounted stationary branch
+is regarded as a two-phase word force a NONLOCAL discounted equilibrium
+with physical absorption dominating discount loss? This would be a real
+selection mechanism rather than arbitrary Fink selection. The proposed
+shortcut is false: the compensating branches may simply concentrate the
+same small hazards into different phases. The exact example below retains
+full discounted Nash, actual terminal payoffs, and unrestricted terminal
+caps. It is NOT a no-UE example or a new strategy-class exclusion.
+
+PI1: complete finite data. Players are ℤ/4ℤ, owns s_i=1, and
+
+    Γ = [  0 −1  2  2 ]
+        [  2  0 −1  2 ]
+        [  2  2  0 −1 ]
+        [ −1  2  2  0 ].
+
+For singleton {j} set r_i({j})=1+Γ_ij. For EVERY pair set its
+two participant rewards to5/2 and its two passive rewards to5. For
+EVERY triple set participant rewards to4 and the omitted reward to−4.
+Set the grand reward to−5 for every player. Never pays0. These rules
+give all60 entries; |r|≤5. The table is used only as an exact architecture
+test. No complete producer census, no positive exploitability gap, and
+no new UE coverage are asserted.
+
+Its singleton matrix is R₀. Every column has a negative entry; adjacent
+principal pair determinants are2, opposite pair determinants are−4,
+all four triple determinants are10, and the full determinant is39.
+The ordinary negative-column/nonsingular-principal argument read in
+`isR0Matrix_of_negative_columns_of_nonsingular_principals`
+(`MathUE/LinearProgramming/SupportTest.lean`) applies. The standard LCP
+at right-hand side1 has the UNIQUE solution λ=(1/3,1/3,1/3,1/3).
+Singleton supports are impossible because the diagonal is0; adjacent
+pairs have one negative candidate; opposite pairs have weights1/2 but
+an off-support residual−1/2. On support012 the candidate is
+(7/10,−1/5,2/5), and cyclic rotations handle the other triples.
+The full candidate is the stated positive vector. These matrix facts
+do not identify a terminal equilibrium.
+
+PI2: exact one-root scalar equation and two different discounted words.
+At a symmetric root with all rates p, the forced-Quit payoff and passive
+contribution are
+
+    Q(p)=1+(9/2)p−(21/2)p³,
+    R(p)=6p+3p²−13p³,       χ(p)=(1−p)³.
+
+For discount θ=1−h, consider
+
+    f(β,p)=Q(p)[1−βχ(p)]−R(p).
+
+Here f(1,0)=0 and ∂_p f(1,0)=−3. The ordinary implicit-function
+theorem gives a unique small positive solution p(β) for β<1 near1,
+with p(β)=(1−β)/3+O((1−β)²). No numerical solver is needed.
+
+The first two-phase equilibrium repeats the stationary root p(θ) at
+BOTH phases. Its common discounted port is θQ(p(θ)); forced Quit
+and Continue are exactly indifferent, so the four mixed-root conditions
+hold. Its leading rates are p(θ)=h/3+O(h²).
+
+The second word uses p(θ²) at phase0 and AllContinue at phase1.
+Set v₀=θQ(p(θ²)), v₁=θ²Q(p(θ²)). The active-phase Continue payoff
+is R(p)+χ(p)v₁=Q(p), by the defining equation. Thus phase0 is full
+Nash and v₀=θF(v₁,q₀). Phase1 has v₁=θv₀, and AllContinue is
+STRICT full Nash there because
+
+    p(θ²)=(2/3)h+O(h²),
+    v₀=1+2h+O(h²)>1,       v₁=1+h+O(h²)>1.
+
+Rotating the two phases gives a THIRD equilibrium. All three objects
+are genuine discounted Bellman equilibria against unrestricted original
+behavioral deviations, by the DP1 telescoping proof. The two concentrated
+words are distinct from the repeated stationary word.
+
+PI3: literal local-index calculation, not an assumed strategic index.
+For a general k-phase discounted profile q, let v(q) be its unique
+discounted Bellman payoff. Write
+
+    g_{t,i}=Q_i(q_t)−R_i(q_t)−χ_i(q_t)v_{t+1,i}(q).
+
+The continuous cube self-map T(q)=clip(q+g(q)) has fixed points exactly
+at the full discounted root Nash profiles. At an interior fixed point
+its ordinary local index is sign det(−Dg), when that determinant is
+nonzero. This is the ordinary Jacobian index for this SPECIFIC self-map;
+it is not a physical charge or a supplied continuation-index axiom.
+
+Define the full-mixed indifference equations
+
+    E_{t,i}=Q_i(q_t)−R_i(q_t)−θχ_i(q_t)Q_i(q_{t+1}).
+
+Bellman gives the exact identity
+
+    E_{t,i}=g_{t,i}−θχ_i(q_t)(1−q_{t+1,i})g_{t+1,i}.
+
+At an equilibrium its differential is DE=L Dg. The cyclic owner block
+of L has determinant 1−θ^k∏_t c(q_t)>0. Thus this elimination changes
+no determinant sign. In the limit θ→1,q→0, put
+
+    P_ij=r_i({i,j})−s_i=3/2 for i≠j, P_ii=0,
+    J=P−Γ,       K=P+J=2P−Γ.
+
+The two-phase limit of DE is [J,−P;−P,J]. The sum/difference
+decomposition gives determinant det(J−P)det(J+P)=det(−Γ)det(K).
+In the present four-player example
+
+    K = [ 0 4 1 1 ]
+        [ 1 0 4 1 ]
+        [ 1 1 0 4 ]
+        [ 4 1 1 0 ],       det K=−240.
+
+Hence the repeated stationary two-phase branch has index−1 for all
+sufficiently small h. Each concentrated branch has index+1: the four
+quiet-phase coordinates have strict negative gaps and contribute an
+identity block to I−DT, while the active block is the stationary
+discount-θ² problem. Multiplying its negative-gap Jacobian by the
+positive Bellman elimination factor gives a matrix tending to Γ,
+whose determinant is39>0; a finite unscaled Jacobian limit is NOT
+asserted.
+Therefore the THREE explicit perturbative branches already contribute
+
+    −1+1+1=1.
+
+This does not claim they exhaust the two-phase equilibrium set. It
+does not need such a claim to falsify the inference "the repeated
+branch has the wrong index, so its compensation must be macroscopic".
+Even the whole-cube degree1 can be matched inside the small-rate region.
+The ordinary cube normalization is the same self-map principle underlying
+the read declaration
+`r0Degree_quittingSingletonMatrix_eq_one_of_discounted_fixedPoint_localization`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedClippedDegree.lean`);
+that declaration itself concerns a DIFFERENT stationary clipped map and
+is not cited as a checked periodic-index theorem.
+
+PI4: physical caps, including Never, reject all three branches as returns.
+Deleting the empty dates from a concentrated word leaves the same
+terminal law as the stationary root with rate p(θ²). The repeated word
+has rate p(θ). In either case p→0, singleton absorption weights tend to
+1/4, and an owner's deleted-opponent weights tend to1/3. Consequently
+
+    U_i→7/4,       Never payoff→2,       immediate Quit→1.
+
+For small p, the deleted-opponent Never value at EVERY phase strictly
+exceeds the Quit endpoint. Its periodic Bellman inequality and deleted
+survival contraction therefore price ALL finite deadlines by Never,
+not only a finite menu. Thus the complete cap is Never and
+
+    d_i→1/4,       D→1.
+
+All three equilibria have physical opponent absorption of order h,
+not an absorption-relative vanishing terminal error. Their local indices
+do not distinguish this defect. No old minimum, tail, or payoff carrier
+was transported in this computation.
+
+Decision. The simple parity/index route is retired. An actual nonlocal
+selection needs more than a wrong index of one repeated branch; every
+small timing branch, including boundary-support allocations, must be
+accounted for. Nothing here excludes growing approximate words with
+matched ACTUAL terminal ports. PI1–4 is complete ordinary, independently
+UNREVIEWED supporting mathematics; no export or positive-gap narrowing
+is proposed. The live question remains a whole-game physically charged
+word producer, with no discount-port substitution and no presumed local
+continuation of a successful itinerary.
