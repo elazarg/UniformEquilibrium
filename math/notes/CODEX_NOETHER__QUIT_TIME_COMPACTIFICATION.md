@@ -13,7 +13,7 @@ ZERO debt. This is independently reviewed ordinary mathematics, not
 an equilibrium producer or an assertion that distinct clock labels
 always distinguish payoff effects.
 
-The live attempt is RM1–RM16 at the end of this notebook. RM1–RM5
+The live attempt is RM1–RM17 at the end of this notebook. RM1–RM5
 select a genuine compact GLOBAL minimum with maximal root mass and
 identify the nonlinear-wall failure of naïve purification. A sole
 bridger is at its own root rate0 or1. RM6–RM9 prove that if it is the
@@ -48,7 +48,12 @@ has a derived positive local one-row table price. The complementary
 c>0 whole-tail problem remains unpriced; multiple bridges and global
 owner/source switching still prevent a full consumer.
 
-Status of RM10–RM16: COMPLETE ORDINARY PROOF DRAFTS, not independently
+RM17 also shows why the local price is not a global increase: the
+opposite row direction gives an ACTUAL lower-debt changed-table profile
+by releasing the floor and adjusting one free rate. Zero debt at all
+old minima does not license a nonnegative derivative of the global gap.
+
+Status of RM10–RM17: COMPLETE ORDINARY PROOF DRAFTS, not independently
 reviewed, not Lean-checked, and not exported. Their necessary conditions
 and local table prices do not assert that the GLOBAL infimum rises.
 
@@ -16836,7 +16841,7 @@ without assuming cap stability at all its simultaneous active kernels.
 ## Global maximal root-mass selection: a real max-wall blocks naïve purification
 
 Status: COMPLETE ORDINARY ATTEMPT RM1–RM9, followed by a new complete
-ordinary proof drafts RM10–RM16 awaiting focused falsification. No new
+ordinary proof drafts RM10–RM17 awaiting focused falsification. No new
 UE/source-class consumer is claimed. The compact selection is genuinely GLOBAL and keeps every
 full cap. Its proposed purification fails at a nonlinear active wall;
 the precise failed inference and strongest local consequence are saved.
@@ -17535,3 +17540,64 @@ No extra93 spectrum, raw sign certificate, row genericity or punishment
 normality is needed for the PRICE calculations. Those stronger canonical
 facts produce the inputs from arbitrary no-UE data elsewhere; they are
 not silently used to select a convenient new minimizing law here.
+
+### RM17. Opposite row directions really lower the GLOBAL gap
+
+An important failed global inference is now falsified by an ACTUAL
+source comparison, not an abstract support-function model:
+
+    d_i*=0 at ALL old minima does NOT imply that altering recipient
+    row i cannot lower the global debt infimum to first order.
+
+At the supported sure sole-bridge source of RM10–RM12, use the OPPOSITE
+target H_i^+=(participant1, passive−1), changing no other reward row.
+The true new punishment satisfies P_i^α≤(1−α)P_i+α by the uniform
+upper payoff bound, with supremum then infimum in the correct order.
+Consequently
+
+    g^α≤(1−α)g−2α(1−h).                          (RM25)
+
+Keep the other free rates at p⁰. For any chosen mixed j, move just p_j
+by β/b_j, with β=αη and η chosen as in RM12. The OLD owner floor
+is exactly β, and the OLD free-regret sum is exactly δ−κβ. For small
+α, (RM25) makes the NEW floor strictly negative: along this move
+1−h≥2η, so g^α≤(1−α)β−4αη<0. The new sure-family infimum is
+therefore
+
+    F^α(p')=δ−κβ<δ.                              (RM26)
+
+Choose an ACTUAL NEW-table ε-punishment for i with hε<κβ/2;
+its literal sure-root profile has FULL debt<δ−κβ/2. Thus the GLOBAL
+new infimum is strictly smaller than δ. Normality, exact punishment
+attainment and a child Nash tail are all unnecessary. A small enough
+α still leaves the new gap positive by the uniform one-row estimate
+|Δ_new−δ|≤4α; no negative-gap or UE conclusion is claimed.
+
+At RM16's unsupported bridge i screened by a different sure z, use
+the opposite H_i^-=(participant−1, passive1). Its free gap is exactly
+g^α=(1−α)g−2α. Hold p_i=0 and shift one mixed k by β/b_k, now
+β=α. Then OLD g=β and R=δ−κβ, while NEW g^α<0. All other rows
+and P_z are unchanged, so the entire NEW sure-z infimum is again
+δ−κβ. An actual ε-punishment for z realizes FULL debt below δ.
+This covers the other c=0 sole-bridge role, with EVERY cap retained.
+
+The original source had zero recipient-i debt; at its unchanged root
+the new debt is also zero. Nevertheless the moving floor releases room
+to change another player's root rate and lower the aggregate regret.
+Hence pointwise old-minimum payoff/cap derivatives cannot replace a
+GLOBAL minimization calculation. In particular a Danskin-style claim
+that the derivative is the minimum of nonnegative fixed-source owner
+derivatives would discard this actual moving-wall repair.
+
+Combined with RM12/RM24, each c=0 sole-bridge source has a genuine
+two-sided local sensitivity: one membership target positively prices
+its whole nearby sure family; the opposite target supplies an actual
+lower-debt profile in the changed game. An absolute worst table can
+therefore be supported by switching between source families or roles.
+This is the precise obstruction to upgrading the local positive price
+to a global increase, and not evidence for a closed positive barrier.
+
+Current decision: retain these complete true-source calculations as
+supporting ordinary proof drafts. A full consumer must price ALL source
+switches/multiple active branches simultaneously, or leave the c=0
+family by a SAME-table law change. No new field or export is introduced.

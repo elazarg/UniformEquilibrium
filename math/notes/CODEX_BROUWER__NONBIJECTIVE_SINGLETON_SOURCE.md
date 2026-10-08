@@ -7304,3 +7304,232 @@ for arbitrary tables satisfying these displayed UNIVERSAL minimum
 constraints would be sufficient for UE, since the canonical selection
 produces them from any no-UE table. No pointwise preservation of an
 arbitrary earlier game's minimizing laws or normality is asserted.
+
+## Exact finite-common-menu Nash selection fails for a whole solved table
+
+### FN1. Complete game, probability mode and claim
+
+This is a COMPLETE ordinary-mathematical falsifier of one candidate
+producer, not a positive-gap game or a Fin4 source reduction. There
+are THREE players I=ℤ/3ℤ. A player loves its predecessor ℓ(i)=i−1.
+For every nonempty quitter coalition S, define
+
+    r_i(S)=1                 if i∈S,
+           3                 if i∉S and i−1∈S,
+           0                 otherwise.
+
+Never pays0. The complete twenty-one terminal entries are
+
+    S        r(S)
+    {0}      (1,3,0)
+    {1}      (0,1,3)
+    {2}      (3,0,1)
+    {0,1}    (1,1,3)
+    {0,2}    (1,3,1)
+    {1,2}    (3,1,1)
+    {0,1,2}  (1,1,1).
+
+For ANY nonempty finite COMMON menu F⊆ℕ, consider the normal-form
+terminal game whose pure actions are F∪{Never}, mixed independently.
+The payoff is the original first-quitter terminal payoff, NOT a
+finite-horizon average. The claim is that this game has exactly ONE
+Nash LAW profile: everybody puts mass1/3 at n=max F and mass2/3 at
+Never. Its unrestricted full debt is4/3, irrespective of |F| or
+the calendar gaps. Therefore EVERY exact Nash selector from EVERY
+such finite common menu fails to approximate unrestricted terminal
+Nash. Approximate menu Nash selection is NOT excluded.
+
+### FN2. No sure root at any continuation
+
+At any allowed date write p_i for the conditional own Quit probability.
+Let u_i be its own conditional continuation payoff. Since every
+participant reward is1, the root Quit value is Q_i=1. With
+j=i−1 and k=i+1, its prescribed Continue value is
+
+    C_i=3p_j+(1−p_j)(1−p_k)u_i.
+
+Any root Nash has p_i<1 for EVERY i, regardless of u. Indeed, if
+p_i=1, player i+1 loves that sure quitter, so its Continue value
+is3 and its Quit value1. Thus p_(i+1)=0. Player i−1 dislikes
+the sure quitter i while its loved opponent i+1 is quiet, so
+its Continue value is0 and its Quit value1. Thus p_(i−1)=1.
+But player i then loves the sure quitter i−1, so its own Continue
+value is3, contradicting p_i=1.
+
+This handles arbitrary off-path own continuation laws at a sure
+coordinate; all relevant Continue comparisons have opponent survival
+factor0, and do not rely on the own continuation choice.
+
+### FN3. The last menu date has one Nash row
+
+At the last allowed date the only continuation is Never, so u=0 and
+
+    Q_i−C_i=1−3p_(i−1).
+
+By FN2 no rate is sure. If p_i=0, its Continue optimality forces
+p_(i−1)≥1/3. That predecessor is strictly mixed and hence forces
+p_(i+1)=1/3. The latter owner is now strictly mixed and forces
+p_i=1/3, a contradiction. All rates are strictly mixed and the
+three indifference equations give p_i=1/3.
+
+Conversely that row is Nash, since each player's Quit and Continue
+values are1. Its prescribed payoff vector is u=(1,1,1).
+
+### FN4. Every earlier date is quiet
+
+Suppose the conditional tail Nash payoff is (1,1,1). Then
+
+    G_i=Q_i−C_i=p_(i+1)−2p_(i−1)−p_(i−1)p_(i+1).
+
+FN2 again rules out sure rates. Any positive rate is strictly mixed
+and has G_i=0; a zero rate has p_iG_i=0 as well. Consequently
+
+    0=Σ_i p_iG_i
+      =−(p₀p₁+p₁p₂+p₂p₀)−3p₀p₁p₂.
+
+Every term on the right is nonpositive, so at most one rate is
+positive. If only p_i>0, the quiet player i−1 has G_(i−1)=p_i>0
+and strictly prefers Quit. Thus all rates must be0. Conversely,
+with all rates0 both root choices give1, so the quiet row is Nash
+and preserves the tail payoff (1,1,1).
+
+Here backward induction applies to NORMAL-FORM Nash on complete
+independent stopping laws, not an assumed subgame-perfect selection.
+Any such Nash induces a root Nash, by unilateral changes to the
+own root mixture with the old own conditional tail retained.
+FN2 gives c=∏(1−p_i)>0. Keeping the root fixed and changing only
+one conditional tail changes its total payoff by c times the tail
+payoff change. Therefore the prescribed tail must itself be a
+restricted Nash. Conversely a root Nash over the old tail Nash
+payoffs, together with that tail Nash, bounds every complete own
+law through the exact root max(Q,C) formula.
+
+Induction through the ordered allowed dates therefore gives the
+unique law in FN1. Missing natural-number dates are irrelevant to
+the restricted game; the argument applies to ANY finite common F.
+The all-quiet earlier choices are uniquely forced even though each
+individual is indifferent when all three are quiet.
+
+### FN5. Its COMPLETE unrestricted caps
+
+For the unique law, the prescribed payoff is
+
+    U_i=(1/3)·1+(2/3)·[3·(1/3)]=1.
+
+A pure finite reply before n gives own solo1. A reply at n always
+participates and gives1. Any finite reply after n receives3 if
+its loved opponent quits at n, and receives own solo1 when both
+opponents chose Never. Hence its payoff is
+
+    3·(1/3)+(2/3)²=13/9.
+
+A Never reply receives3 with probability1/3 and otherwise0, so
+it gives1. These cases exhaust ALL finite deadlines and Never;
+affinity of the actual complete-law payoff bounds arbitrary own
+behavioral deviations by their pure sup. Thus
+
+    B_i=13/9,        d_i=4/9,        D=4/3.
+
+The original joint-Never mass is8/27 for every menu. Enlarging the
+menu only moves the unique finite mass to its new maximum; the
+omitted response is always a still later finite deadline. For the
+empty menu, the only law is all Never and its full debt is3.
+
+### FN6. Explicit ACTUAL unrestricted exact equilibrium
+
+At natural date3k+j only player j has Quit hazard1/2; the other two
+Continue. The resulting independent complete laws are
+
+    q_i(3k+i)=2^(−k−1),       q_i(Never)=0.
+
+A full period has solo outcome masses1/2,1/4,1/8 and survival1/8.
+Consequently its complete first-quitter distribution is
+(4/7,2/7,1/7) on the singleton labels, and
+
+    U=(1,2,1).
+
+To verify EVERY behavioral deviation, define the live-phase
+potential v_i(j)=2 if i=j+1, and1 otherwise. A Quit response pays1
+even if the scheduled opponent also quits, so it is≤v_i(j).
+For Continue:
+
+    i=j:    next-phase potential1 equals current potential1;
+    i=j+1:  (1/2)·3+(1/2)·1=2;
+    i=j−1:  (1/2)·0+(1/2)·2=1.
+
+Every own action therefore satisfies the one-step potential bound,
+and the prescribed own action attains equality. Against an arbitrary
+behavioral deviator, its TWO opponents each face one independent
+half-Quit chance per period. Their joint survival probability is
+at most4^(−K) after K periods, regardless of the own reply.
+The bounded remaining live potential contributes at most2·4^(−K),
+which vanishes. Iterating the one-step bound therefore proves
+ALL actual unilateral terminal payoffs≤v_i(0). The prescribed law
+attains this vector, either by the displayed singleton distribution
+or by equality and its own joint-survival decay. Thus
+
+    B=U=(1,2,1),       D=0.
+
+This exact terminal equilibrium suffices to show the TRUE global
+gap is0. TV-truncating each geometric finite law to Never after
+K periods also gives actual finite-menu profiles with full debt→0
+and payoff→(1,2,1), uniformly over ALL finite/Never replies. FN4
+shows those profiles cannot be exact restricted Nash. Hence this
+example does NOT obstruct finite-law approximation or an
+approximately-Nash producer with a separately proved full-cap bound.
+
+### FN7. Narrow source/overlap audit and direction change
+
+The named unconditional theorem
+QuittingCyclicSingletonOpenSignData.isUniformEquilibriumPayoff in
+UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean
+already consumes this table's singleton matrix with coefficient
+sequence γ=(0,−1,2), arbitrary nonsingleton rewards. The balance
+equation −1+2s=0 gives s=1/2. The definition
+CyclicSingletonTailData.coarse in
+UniformEquilibrium/Quitting/Cycles/CyclicSingletonTailProducer.lean
+agrees with the displayed cyclic payoff. The inspected
+quittingSingletonMatrix in
+UniformEquilibrium/Quitting/Classification/LCP/QuittingRewardAdapter.lean
+is exactly r_i({j})−r_i({i}). No new UE class or producer is claimed;
+FN6 is an independent elementary full-response verification.
+
+This is NOT the literal FTV1996 Example2: example2Data in
+Literature/future/FleschThuijsmanAndVrieze1996.lean is a TWO-player
+3×2 absorbing action table, with one live entry and the recorded
+reward matrices. This test shares the singleton rows of the
+FTV1997 three-player table, but its nonsingleton rows DIFFER:
+terminalReward in
+UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/Credibility.lean
+has pair01=(1,0,1), pair02=(0,1,1), pair12=(1,1,0) and grand0,
+rather than the four collision rows in FN1. Literature's paper
+transcription is evidence about the published table, not an adapter
+claim for the modified collision completion. This bounded comparison
+does NOT assert global bibliographic novelty for finite-menu selection.
+
+The chosen finite-menu neighborhood was also checked:
+exists_exactFiniteDeadlineTimingNash in
+UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean
+is unconditional exact menu existence, not full-cap control.
+The existing SinglePivotFiniteMenuRegression in
+UniformEquilibrium/Diagnostics/Quitting gives ONE bad menu Nash,
+whereas FN1–FN5 rule out EVERY exact selector for this ONE complete
+table over ALL finite common menus. No matching whole-selector
+statement was found by the narrow menu/deadline search in that
+diagnostics subtree and the cyclic three-player example subtree.
+No Lean check or whole-tree novelty audit was performed here.
+
+The retired implication is therefore precise: increasing common
+finite pure-deadline menus plus selecting exact terminal Nash laws
+does not by itself produce unrestricted small debt, even when
+exact unrestricted Nash exists. Approximate menu equilibria,
+player-specific menus, completion mechanisms and actual global
+minimum comparisons remain unexcluded. No dummy lift of this
+three-player table to Fin4 is claimed: a fourth player's Quit can
+absorb, so a zero recipient row alone is not a transparent dummy.
+
+The next active question returns to the c>0 TRUE-carrier objective
+in NF7 and the UNIVERSAL minimum-prefix constraint NF9. Any
+successful repair must price all old and new response caps, not
+merely enlarge a Nash menu whose continuation omits later finite
+responses.
