@@ -1334,22 +1334,27 @@ theorem minimumLabels_cellMark_eq_originalOutcome (laws : ι → FinDist (Option
   simpa only [stoppingTimeValue_originalChoice, markedClock_cell,
     outcomeLabelsEquiv_apply] using h
 
+/-- The fixed reference geometry transports every absolutely-continuous latent product.
+No original or replacement density is supplied as an outcome oracle. -/
+theorem ae_chartOutcome_eq_originalOutcome_of_absolutelyContinuous
+    (laws : ι → FinDist (Option ℕ)) (μ : ι → Measure unitInterval)
+    [∀ i, SigmaFinite (μ i)] (hμ : ∀ i, μ i ≪ volume) :
+    chartOutcome laws =ᵐ[Measure.pi μ]
+      fun sample => quittingFirstStoppingOutcome
+        (fun i => originalChoice (decodeCell laws (sample i))) := by
+  have hscalar (i : ι) : (calendar laws).collapseClock =ᵐ[μ i]
+      fun x => cellMark laws (decodeCell laws x) :=
+    (hμ i).ae_le (ae_collapseClock_eq_cellMark_decodeCell laws)
+  filter_upwards [Measure.ae_eq_pi hscalar] with sample hclock
+  unfold chartOutcome MathUE.MarkedCalendar.firstLabels
+  rw [hclock, minimumLabels_cellMark_eq_originalOutcome, Equiv.symm_apply_apply]
+
 theorem ae_chartOutcome_eq_originalOutcome (laws : ι → FinDist (Option ℕ)) :
     chartOutcome laws =ᵐ[Measure.pi (chartMeasure laws)]
       fun sample => quittingFirstStoppingOutcome
-        (fun i => originalChoice (decodeCell laws (sample i))) := by
-  have hscalar (i : ι) : (calendar laws).collapseClock =ᵐ[chartMeasure laws i]
-      fun x => cellMark laws (decodeCell laws x) :=
-    (withDensity_absolutelyContinuous volume
-      (fun x => ENNReal.ofReal (density laws i x))).ae_le
-        (ae_collapseClock_eq_cellMark_decodeCell laws)
-  have heach (i : ι) :=
-    (measurePreserving_eval (chartMeasure laws) i).quasiMeasurePreserving.ae (hscalar i)
-  filter_upwards [ae_all_iff.mpr heach] with sample hsample
-  have hclock : (fun i => (calendar laws).collapseClock (sample i)) =
-      fun i => cellMark laws (decodeCell laws (sample i)) := funext hsample
-  unfold chartOutcome MathUE.MarkedCalendar.firstLabels
-  rw [hclock, minimumLabels_cellMark_eq_originalOutcome, Equiv.symm_apply_apply]
+        (fun i => originalChoice (decodeCell laws (sample i))) :=
+  ae_chartOutcome_eq_originalOutcome_of_absolutelyContinuous laws (chartMeasure laws)
+    (fun i => referenceMeasure_absolutelyContinuous laws (cellLaw laws i))
 
 /-- Exact first-outcome law from the specified original independent source family.
 The equality includes literal none, not just finite coalition probabilities. -/
@@ -1474,23 +1479,21 @@ theorem opponentCellProduct_map_originalChoice (laws : ι → FinDist (Option �
         (fun j => cellLaw laws j.val)).symm
     _ = _ := congrArg FinDist.pi (funext fun j => cellLaw_map_originalChoice laws j.val)
 
-theorem ae_chartResponseOutcome_eq_originalOutcome (laws : ι → FinDist (Option ℕ))
-    (who : ι) (choice : Option ℕ) :
+/-- An arbitrary original response is transported against any absolutely-continuous opponent
+product on the old reference chart, including an empty opponent product. -/
+theorem ae_chartResponseOutcome_eq_originalOutcome_of_absolutelyContinuous
+    (laws : ι → FinDist (Option ℕ)) (who : ι) (choice : Option ℕ)
+    (μ : {j : ι // j ≠ who} → Measure unitInterval)
+    [∀ j, SigmaFinite (μ j)] (hμ : ∀ j, μ j ≪ volume) :
     chartResponseOutcome laws who choice
-      =ᵐ[Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)]
+      =ᵐ[Measure.pi μ]
       fun sample => quittingFirstStoppingOutcome
         ((Equiv.funSplitAt who (Option ℕ)).symm
           (choice, fun j => originalChoice (decodeCell laws (sample j)))) := by
-  have hscalar (i : ι) : (calendar laws).collapseClock =ᵐ[chartMeasure laws i]
+  have hscalar (j : {j : ι // j ≠ who}) : (calendar laws).collapseClock =ᵐ[μ j]
       fun x => cellMark laws (decodeCell laws x) :=
-    (withDensity_absolutelyContinuous volume
-      (fun x => ENNReal.ofReal (density laws i x))).ae_le
-        (ae_collapseClock_eq_cellMark_decodeCell laws)
-  have heach (j : {j : ι // j ≠ who}) :=
-    (measurePreserving_eval
-      (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val) j).quasiMeasurePreserving.ae
-        (hscalar j.val)
-  filter_upwards [ae_all_iff.mpr heach] with sample hsample
+    (hμ j).ae_le (ae_collapseClock_eq_cellMark_decodeCell laws)
+  filter_upwards [Measure.ae_eq_pi hscalar] with sample hsample
   have hclock : MathUE.MarkedCalendar.responseClock (calendar laws) who
       (markedClock laws (quittingStoppingTimeValue choice)) sample =
       (Equiv.funSplitAt who (WithTop ℝ)).symm
@@ -1501,9 +1504,20 @@ theorem ae_chartResponseOutcome_eq_originalOutcome (laws : ι → FinDist (Optio
     · simp only [MathUE.MarkedCalendar.responseClock, Equiv.funSplitAt_symm_apply,
         dite_eq_left hj]
     · simpa only [MathUE.MarkedCalendar.responseClock, Equiv.funSplitAt_symm_apply,
-        dite_eq_right hj] using hsample ⟨j, hj⟩
+        dite_eq_right hj] using congrFun hsample ⟨j, hj⟩
   unfold chartResponseOutcome MathUE.MarkedCalendar.responseLabels
   rw [hclock, minimumLabels_responseCellClock_eq_originalOutcome, Equiv.symm_apply_apply]
+
+theorem ae_chartResponseOutcome_eq_originalOutcome (laws : ι → FinDist (Option ℕ))
+    (who : ι) (choice : Option ℕ) :
+    chartResponseOutcome laws who choice
+      =ᵐ[Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)]
+      fun sample => quittingFirstStoppingOutcome
+        ((Equiv.funSplitAt who (Option ℕ)).symm
+          (choice, fun j => originalChoice (decodeCell laws (sample j)))) :=
+  ae_chartResponseOutcome_eq_originalOutcome_of_absolutelyContinuous laws who choice
+    (fun j => chartMeasure laws j.val)
+    (fun j => referenceMeasure_absolutelyContinuous laws (cellLaw laws j.val))
 
 /-- Exact response law with the original independent opponents, including an empty opponent set. -/
 theorem chartOpponentProduct_map_responseOutcome (laws : ι → FinDist (Option ℕ))

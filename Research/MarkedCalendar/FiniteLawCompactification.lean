@@ -1,4 +1,4 @@
-import Research.MarkedCalendar.FiniteLawChart
+import Research.MarkedCalendar.ReferenceLawTransport
 import MathUE.MeasureTheory.FiniteProductDominatedWeakCompactness
 import MathUE.Topology.NonemptyCompactLimits
 
@@ -10,6 +10,8 @@ laws. The limiting marginals retain domination and the exact common mixture.
 Every mark in the limiting menu is approached by genuine original menu replies.
 The same subsequence gives every fixed finite-outcome expectation and every
 original response expectation whose actual marks converge; Never is separate.
+The integral dictionaries also apply to arbitrary actual finite laws on the old
+reference cells, without changing the reference calendar or its reply marks.
 
 The subsequence and limit objects are chosen before any test or limiting legal
 mark. The menu is not enlarged to all geometrically compatible marks. Finite
@@ -173,7 +175,27 @@ private theorem integral_outcomeLaw_eq_expect (law : FinDist (QuittingTerminalOu
   rw [integral_fintype (Integrable.of_finite), FinDist.expect_eq_sum]
   simp only [FinDist.toMeasure_real_singleton, smul_eq_mul]
 
-/-- The chart kernel integral is the expectation under the same original terminal law. -/
+/-- The unchanged reference kernel integrates to the actual replacement terminal law. -/
+theorem integral_payoffKernel_referenceProduct (laws : ι → FinDist (Option ℕ))
+    (p : ι → FinDist (Cell laws)) (reward : Finset ι → ℝ) :
+    (∫ sample, MathUE.MarkedCalendar.payoffKernel (calendar laws) reward sample
+      ∂(ProbabilityMeasure.pi (fun i => referenceLaw laws (p i)) :
+        Measure (ι → unitInterval))) =
+      ((FinDist.pi (fun i => referenceOriginalLaw laws (p i))).map
+        quittingFirstStoppingOutcome).expect
+        (fun outcome => reward (outcomeLabelsEquiv outcome)) := by
+  change (∫ sample, MathUE.MarkedCalendar.payoffKernel (calendar laws) reward sample
+    ∂Measure.pi (fun i => referenceMeasure laws (p i))) = _
+  have hreward : StronglyMeasurable (fun outcome : QuittingTerminalOutcome ι =>
+      reward (outcomeLabelsEquiv outcome)) :=
+    (measurable_of_countable _).stronglyMeasurable
+  have h := integral_map_of_stronglyMeasurable
+    (μ := Measure.pi (fun i => referenceMeasure laws (p i)))
+    (measurable_chartOutcome laws) hreward
+  rw [referenceProduct_map_outcome, integral_outcomeLaw_eq_expect] at h
+  simpa only [chartOutcome, Equiv.apply_symm_apply, MathUE.MarkedCalendar.payoffKernel] using h.symm
+
+/-- The original chart is the source-cell specialization of the reference dictionary. -/
 theorem integral_payoffKernel_chartProduct (laws : ι → FinDist (Option ℕ))
     (reward : Finset ι → ℝ) :
     (∫ sample, MathUE.MarkedCalendar.payoffKernel (calendar laws) reward sample
@@ -181,18 +203,39 @@ theorem integral_payoffKernel_chartProduct (laws : ι → FinDist (Option ℕ))
       ((FinDist.pi laws).map quittingFirstStoppingOutcome).expect
         (fun outcome => reward (outcomeLabelsEquiv outcome)) := by
   change (∫ sample, MathUE.MarkedCalendar.payoffKernel (calendar laws) reward sample
-    ∂Measure.pi (chartMeasure laws)) = _
-  have hreward : StronglyMeasurable (fun outcome : QuittingTerminalOutcome ι =>
-      reward (outcomeLabelsEquiv outcome)) :=
-    (measurable_of_countable _).stronglyMeasurable
-  have h := integral_map_of_stronglyMeasurable (μ := Measure.pi (chartMeasure laws))
-    (measurable_chartOutcome laws) hreward
-  rw [chartProduct_map_outcome, integral_outcomeLaw_eq_expect] at h
-  simpa only [chartOutcome, Equiv.apply_symm_apply, MathUE.MarkedCalendar.payoffKernel] using h.symm
+    ∂(ProbabilityMeasure.pi (fun i => referenceLaw laws (cellLaw laws i)) :
+      Measure (ι → unitInterval))) = _
+  simpa only [referenceOriginalLaw_cellLaw] using
+    integral_payoffKernel_referenceProduct laws (cellLaw laws) reward
 
 section ResponseIntegrals
 
 variable [DecidableEq ι]
+
+/-- Every original reply has its exact replacement-law expectation on the old reference chart,
+including unsupported deadlines and literal Never. -/
+theorem integral_responsePayoffKernel_referenceOpponents (laws : ι → FinDist (Option ℕ))
+    (p : ι → FinDist (Cell laws))
+    (who : ι) (choice : Option ℕ) (reward : Finset ι → ℝ) :
+    (∫ sample, MathUE.MarkedCalendar.responsePayoffKernel (calendar laws) who
+      (markedClock laws (quittingStoppingTimeValue choice)) reward sample
+      ∂(ProbabilityMeasure.pi (fun j : {j : ι // j ≠ who} => referenceLaw laws (p j.val)) :
+        Measure ({j : ι // j ≠ who} → unitInterval))) =
+      ((FinDist.pi (Function.update (fun i => referenceOriginalLaw laws (p i))
+        who (FinDist.pure choice))).map quittingFirstStoppingOutcome).expect
+          (fun outcome => reward (outcomeLabelsEquiv outcome)) := by
+  change (∫ sample, MathUE.MarkedCalendar.responsePayoffKernel (calendar laws) who
+    (markedClock laws (quittingStoppingTimeValue choice)) reward sample
+    ∂Measure.pi (fun j : {j : ι // j ≠ who} => referenceMeasure laws (p j.val))) = _
+  have hreward : StronglyMeasurable (fun outcome : QuittingTerminalOutcome ι =>
+      reward (outcomeLabelsEquiv outcome)) :=
+    (measurable_of_countable _).stronglyMeasurable
+  have h := integral_map_of_stronglyMeasurable
+    (μ := Measure.pi (fun j : {j : ι // j ≠ who} => referenceMeasure laws (p j.val)))
+    (measurable_chartResponseOutcome laws who choice) hreward
+  rw [referenceOpponentProduct_map_responseOutcome_update, integral_outcomeLaw_eq_expect] at h
+  simpa only [chartResponseOutcome, Equiv.apply_symm_apply,
+    MathUE.MarkedCalendar.responsePayoffKernel] using h.symm
 
 /-- Every original reply, including Never, has its exact source expectation in the fixed chart. -/
 theorem integral_responsePayoffKernel_chartOpponents (laws : ι → FinDist (Option ℕ))
@@ -204,18 +247,8 @@ theorem integral_responsePayoffKernel_chartOpponents (laws : ι → FinDist (Opt
       ((FinDist.pi (Function.update laws who (FinDist.pure choice))).map
         quittingFirstStoppingOutcome).expect
           (fun outcome => reward (outcomeLabelsEquiv outcome)) := by
-  change (∫ sample, MathUE.MarkedCalendar.responsePayoffKernel (calendar laws) who
-    (markedClock laws (quittingStoppingTimeValue choice)) reward sample
-    ∂Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val)) = _
-  have hreward : StronglyMeasurable (fun outcome : QuittingTerminalOutcome ι =>
-      reward (outcomeLabelsEquiv outcome)) :=
-    (measurable_of_countable _).stronglyMeasurable
-  have h := integral_map_of_stronglyMeasurable
-    (μ := Measure.pi (fun j : {j : ι // j ≠ who} => chartMeasure laws j.val))
-    (measurable_chartResponseOutcome laws who choice) hreward
-  rw [chartOpponentProduct_map_responseOutcome_update, integral_outcomeLaw_eq_expect] at h
-  simpa only [chartResponseOutcome, Equiv.apply_symm_apply,
-    MathUE.MarkedCalendar.responsePayoffKernel] using h.symm
+  simpa only [chartLaw, referenceOriginalLaw_cellLaw] using
+    integral_responsePayoffKernel_referenceOpponents laws (cellLaw laws) who choice reward
 
 end ResponseIntegrals
 

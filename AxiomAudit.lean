@@ -522,6 +522,7 @@ import MathUE.Probability.FinitePathLawAdapter
 import MathUE.Probability.FiniteProductFlowKinematics
 import MathUE.Probability.FiniteProductFlowTwoStateRegression
 import MathUE.Probability.FiniteReachableClosedClass
+import MathUE.Probability.FiniteSignedConditioning
 import MathUE.Probability.FiniteStoppingSimplexReconstruction
 import MathUE.Probability.FiniteWeightVariation
 import MathUE.Probability.FirstStoppingCoalitionRelabel
