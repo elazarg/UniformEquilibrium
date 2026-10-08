@@ -88,6 +88,13 @@ a rank on F_b is not thereby a rank on ALL J edges. The missing steps
 are that actual rank-extension adapter AND a literal nonconvex boundary
 index (or a different quitting-specific consumer). Neither is supplied
 by contractibility, and the convex conclusion is not transferred.
+TG7 now computes the exact local descending link: an m-slab corner
+has link S^(m−2) and local Euler contribution (−1)^(m−1). The full
+four-face corner contributes−1; a three-active Fin4 stratum with a
+tangential minimum contributes+1 despite ALL individual-piece descent
+tests and a contractible local fibre. Thus the shortcut "no boundary
+minimum ⇒no boundary-index terms ⇒degree χ(C)" is retired. This is a
+local falsifier, NOT a complete seven-hypothesis counterexample or UE.
 No full Fin4 contradiction or new export is claimed.
 
 The body retains the independently reviewed compact/source reductions,
@@ -19386,3 +19393,104 @@ asserts that implication, and the canonical NP/minimum packets do not
 enter this route. The potential-extension and nonconvex-index gaps are
 kept separate; the artificial fibre segments are not silently treated
 as behavioural Nash edges.
+
+TG7: targeted local-index falsification, with complete pair calculation.
+It is false that the absence of a constrained boundary minimum makes
+every boundary Euler/index contribution vanish. This does NOT by itself
+disprove the general no-smooth-rank assertion, but it blocks the proposed
+shortcut assigning the boundary-gradient degree χ(C) without an account
+for the reentrant strata.
+
+For m≥2 set
+
+    D_m={x∈ℝᵐ:min_i x_i≤0},  φ(x)=−Σ_i x_i.
+
+At0 every slab {x_j≤0} has strict descent e_k for any k≠j,
+while ∇φ(0)=−1 is nonzero. Fix 0<η<ε and use the local lower
+and upper sublevels inside the closed radius-ε ball:
+
+    L={x∈D_m:‖x‖₂≤ε, Σx_i≥η},
+    U={x∈D_m:‖x‖₂≤ε, Σx_i≥−η}.
+
+U is star-shaped at0, hence contractible. L strongly deformation
+retracts onto the slice
+
+    S={Σx_i=η, ‖x‖₂≤ε, min_i x_i≤0}
+
+by the radial map x↦ηx/(Σx_i). During its straight radial homotopy
+the sum remains≥η, the ball condition is preserved and the cone D_m
+is preserved. In the affine hyperplane H={Σx_i=η}, let
+
+    Δ={x∈H:ALL x_i≥0}, c=(η/m,…,η/m).
+
+The whole simplex Δ lies in the radius-ε ball: its norm is at mostη.
+The slice S is exactly (H∩ball)\relativeInterior(Δ). Along every ray
+from c there is a unique Δ-boundary point. Radially project each S
+point to that point. The segment remains outside the relative interior
+of Δ; it also remains in H∩ball by convexity of the ball, because
+both its endpoints do. This supplies a strong deformation retraction
+
+    S≃∂Δ≃S^(m−2).
+
+Equivalently, the m convex slice caps {x_j≤0} have the proper-subset
+nerve of an (m−1)-simplex: every proper intersection is nonempty and
+convex, and the full intersection is empty. The radial proof above
+does not borrow a nerve theorem or a global Morse formula. Therefore
+the exact local relative Euler account is
+
+    χ(U,L)=χ(U)−χ(L)
+          =1−[1+(−1)^(m−2)]
+          =(−1)^(m−1).                            (TG7)
+
+This is the local sublevel/Morse contribution in the precise sense
+of the displayed pair. A theorem identifying a GLOBAL Brouwer degree
+with a sum of these contributions still needs its own hypotheses and
+proof; no such theorem is silently inserted here.
+
+At the FULL four-slab corner, m=4 gives descending link S² and
+contribution−1. That single contribution does not by itself cancel
+the positive index of an interior minimum. Fin4 also has a relevant
+THREE-active stratum: near a point with x₀=x₁=x₂=0 and x₃>0,
+the domain is D₃×ℝ. In local coordinates write
+
+    ψ(x₀,x₁,x₂,t)=−x₀−x₁−x₂+t².
+
+For lower and upper sublevels inside a small joint Euclidean ball,
+lowering t to0 preserves the lower sublevel ψ≤−η and decreases
+the norm. Its lower level then retracts exactly as above to S¹.
+The upper sublevel ψ≤η is star-shaped at0, since
+
+    ψ(λx,λt)=λψ(x,t)−λ(1−λ)t²≤λη≤η.
+
+Its local pair therefore has Euler contribution+1. The gradient is
+(−1,−1,−1,0), and for EACH active slab j, a segment in direction
+e_k with k≠j among the three active coordinates remains in that
+slab and decreases ψ by exactly its Euclidean length. There is no
+boundary constrained minimum and no ambient zero gradient, but a
+nonzero POSITIVE boundary contribution is nevertheless present.
+
+Contractibility of the LOCAL fibre does not remove this calculation.
+On a sufficiently small compact source neighborhood, take the fibre
+
+    G(x)={x}∪⋃[k active][x,x+ρe_k]
+
+with fixed smallρ>0. It is a compact star, intrinsically contractible
+at x. Every edge in it pays its Euclidean length under φ (or ψ with
+t unchanged). For an active slab j select k≠j; its source/target
+distances to that slab agree because x_j is unchanged. The full
+segment is retained and has lengthρ. Thus the local per-piece distance
+escape and contractible-fibre tests coexist with TG7's nonzero index.
+This is NOT claimed to cover the global compact truncated boundary,
+supply a full terminal homotopy, or yield a quitting F_b edge.
+
+Route decision. The generic shortcut "no boundary minimum, hence no
+boundary terms, hence degree χ(C)=1" is refuted by the exact local
+pair. A +1 three-active contribution can occupy the Euler account
+that this shortcut assigns to an interior minimum; claiming that it
+actually cancels the ENTIRE global degree would require a completed
+global example or a full index calculation, neither supplied here.
+The remaining generic no-smooth-rank question is open in this note.
+I will not repair its proof by declaring the slab union convex, using
+only its homotopy type, or averaging actual targets out of C. A credible
+continuation must control these reentrant terms from additional actual
+quitting data or construct a complete globally compatible example.
