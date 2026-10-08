@@ -25,6 +25,15 @@ claimed. The next full-goal question is whether arbitrary raw data force
 a compatible finite-charge closed itinerary, or whether a genuine
 all-behavior negative certificate can obstruct every such itinerary.
 
+Latest supporting result: GS1–6 gives a complete ORDINARY UNREVIEWED
+actual-root-graph falsifier on the solved scalar-circuit table. A cone of
+feasible ports strictly below ALL own values has unique full Nash roots
+with all four suppliers uniformly represented, yet its forced forward
+trajectory has finite total charge and approaches the all-own dead port.
+Every finite reversed prefix followed by Never retains a positive FULL
+behavioral debt floor. This retires fair forward selection, not globally
+selected charged components, a no-UE source, or arbitrary Fin4 existence.
+
 Preserved bird's-eye program: the separate owned note
 `CODEX_MORSE__FIN4_BIRDS_EYE_CONTINUATION_INDEX_PATH.md` develops ONE
 intuition-level all-table path: a nonconvex, witnessed Nash-continuation
@@ -9954,6 +9963,383 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Graph-wide sequel: an all-active Nash sink with a positive terminal debt floor
+
+Status: complete ORDINARY UNREVIEWED supporting mathematics. This is a
+whole-fibre failure of a forward root-selection shortcut, not a new UE
+class or an unrestricted-gap counterexample. The literal table is already
+solved by the scalar singular circuit. The question here is whether
+remaining in the feasible strict singleton sublevel, choosing exact
+full Nash roots, and keeping every player a uniformly positive share
+of the hazards forces enough total charge to compile a terminal
+approximate equilibrium. It does not, even when every encountered
+Nash fibre is a singleton. Global reselection of a different component
+is necessary.
+
+### GS1. Fixed actual data and the all-own boundary dead port
+
+Use I={0,1,2,3}, Never0, and the following complete reward table:
+
+| S | r(S) |
+| --- | --- |
+| {0} | (1,3,3,0) |
+| {1} | (4,1,−1,−1) |
+| {2} | (0,2,1,2) |
+| {3} | (4,−2,0,1) |
+| {0,1} | (−2,−2,5,5) |
+| {0,2} | (3/2,5,−2,5) |
+| {0,3} | (−2,5,5,3/2) |
+| {1,2} | (5,−2,3/2,5) |
+| {1,3} | (5,3/2,5,−2) |
+| {2,3} | (5,5,−2,−2) |
+| {0,1,2} | (4,4,4,−4) |
+| {0,1,3} | (4,4,−4,4) |
+| {0,2,3} | (4,−4,4,4) |
+| {1,2,3} | (−4,4,4,4) |
+| I | (−5,−5,−5,−5) |
+
+Owns are s=(1,1,1,1). True unrestricted punishments are P=(−4)^4:
+Never guarantees at least−4 against every opponent law, and opponents
+all quitting immediately bound every reply by max(−4,−5)=−4.
+
+There is no full Nash root with a sure coordinate at ANY real
+annotation. With at least three sure, a sure member's gap is−1.
+With two sure, their pair has a member whose pair-minus-passive-solo
+gap is negative; conditional on any extra quitters its gap is−1.
+With one sure host z, its two nonfavorite free observers have uniformly
+negative gaps and must be quiet; its favorite must then be sure,
+contradicting the two-sure case. The host-to-favorite cycle is
+
+    f: 0→3→1→2→0.
+
+At the all-own annotation v=s, the ONLY full Nash root is q=0.
+For a proper active support A with |A|≥2, choose a RECEIVER i∈A
+with f⁻¹(i)∉A. Its only positive singleton joining gap is against
+that missing incoming host. Every nonempty opponent joining gap is
+negative and its empty gap is0, hence g_i<0, contradicting activity.
+For singleton support {z}, quiet f(z) has positive gap q_z times
+its positive joining gain. Sure faces were already excluded.
+
+For full mixed support use the exact identity
+
+    Σ_i(1−q_i)g_i(v,q)
+      =c(q)Σ_i(s_i−v_i)
+       +Σ_{∅≠S⊊I} μ_q(S) C_S,
+    C_S=Σ_{i∉S}[r_i(S+i)−r_i(S)].
+
+At v=s the empty term is0. For this table the singleton C_S values
+in host order0,1,2,3 are
+
+    (−17/2,−9/2,−13/2,−9/2);
+
+every pair C_S=−2 and every triple C_S=−1. Full mixing assigns
+positive mass to proper coalitions, so the identity is strictly
+negative, whereas all g_i=0 at a full mixed Nash root. Contradiction.
+
+This dead port belongs to the ordinary convex terminal payoff hull:
+give each triple weight3/14 and the grand coalition weight1/7.
+The four triple vectors have average(2,2,2,2). Moreover these five
+vectors are affinely independent and all weights are positive, so
+s is an INTERIOR point of their4-dimensional simplex. A whole small
+neighborhood of s is therefore in the convex terminal hull. This
+does not assert that every such port is an independently realizable
+terminal Nash payoff.
+
+The incoming-predecessor cut, not the outgoing cut f(i)∉A, is needed
+in the support proof. Noether's cross-check identified that correction
+to my initial informal message. The theorem itself is unchanged.
+
+### GS2. The literal mixed-root chart, not an auxiliary dynamical field
+
+For q near0 define
+
+    Φ_i(q)=[Q_i(q)−R_i(q)]/h_i(q).
+
+Here Q_i is forced Quit, R_i is the nonempty passive contribution,
+and h_i is deleted-opponent survival. For all q_i∈(0,1),
+q is a full mixed Nash root against Φ(q). Its head is exactly Q(q).
+This is the actual root graph.
+
+Write D for the membership-gain Jacobian at0 and Γ for the
+passive-minus-own matrix:
+
+    D=[ 0,−6, 3/2,−6;
+       −5, 0,−4, 7/2;
+       −5, 5/2,0,−2;
+        3/2,−1,−4,0 ],
+
+    Γ=[0,3,−1,3; 2,0,1,−3; 2,−2,0,−1; −1,−2,1,0].
+
+Thus Γ_ij=r_i({j})−s_i, not the opposite sign. Direct opponent
+product averaging gives
+
+    Φ(0)=Q(0)=s,
+    DΦ(0)=D,       DQ(0)=D+Γ,
+    det D=16377/16≠0.
+
+The inverse function theorem gives a local analytic inverse of Φ
+near s. Set
+
+    K(q)=Φ⁻¹(Q(q)),       DK(0)=J=D⁻¹(D+Γ).
+
+Whenever q and K(q) are positive and small, the head of q is the
+annotation of the next full mixed root K(q). These are ordinary
+finite Nash edges. No ω+ω order or modified continuation is used.
+
+### GS3. Exact dominant spectrum and strict support census
+
+The characteristic polynomial of J is
+
+    χ(z)=16377z⁴−35602z³+27432z²−8742z+935.
+
+There is one simple real root in EACH of
+
+    (21/100,23/100), (53/100,55/100), (57/100,58/100),
+    (84008/100000,84009/100000).
+
+Opposite exact signs at the two endpoints of each disjoint interval
+prove this: a quartic has no room for additional roots or multiplicity.
+Let r denote the largest root. In particular0<r<1 and all other
+eigenvalues are less than58/100<r.
+
+Put
+
+    B(z)=16377z³−26383z²+12947z−1893,
+    w(z)=(1,
+      8(−63z²+88z−29)/B(z),
+      384(4z²−4z+1)/B(z),
+      8(111z²−128z+37)/B(z)).
+
+This is the first-column adjugate eigenvector normalized to first
+coordinate1. At z=r, w>0 coordinatewise and u=Dw<0 coordinatewise.
+Those signs hold on the ENTIRE rational interval containing r.
+They are certified by the exact coefficient verifier below.
+
+The homogeneous complementarity problem for−D has only q=0.
+Every principal D_A with |A|≥2 is nonsingular. Hence a nonzero
+homogeneous support of that size is impossible. A singleton support
+is impossible because its host column has a positive favorite
+entry outside the support. This is the literal R₀ check for−D,
+not an inference from the differently signed Γ.
+
+At the inhomogeneous direction u=Dw, the system
+
+    q≥0,       u−Dq≥0,       q_i(u−Dq)_i=0
+
+has the UNIQUE solution q=w, with all four coordinates positive.
+The empty support fails because u<0. A singleton active equation
+would require u_i=0, also impossible. Every pair and triple support
+is ruled out by a strict sign in this exact census:
+
+| Support | A negative proposed rate | A negative quiet residual |
+| --- | --- | --- |
+| 01 | — | 3 |
+| 02 | 2 | 1,3 |
+| 03 | 0 | 1,2 |
+| 12 | 1 | 0 |
+| 13 | 3 | 2 |
+| 23 | — | 1 |
+| 012 | — | 3 |
+| 013 | 0,3 | 2 |
+| 023 | — | 1 |
+| 123 | 1,3 | 0 |
+
+For full support, D⁻¹u=w>0 and the residual is0. The signs in
+the table are strict throughout the same rational spectral interval,
+so the support exclusions persist on a neighborhood of the direction u.
+
+Here is the complete rational arithmetic check. Floating-point
+eigenvectors and a sampled LCP census are NOT proof premises.
+
+```python
+import sympy as s
+import itertools
+z,e=s.symbols('z e')
+D=s.Matrix([[0,-6,s.Rational(3,2),-6],
+    [-5,0,-4,s.Rational(7,2)],[-5,s.Rational(5,2),0,-2],
+    [s.Rational(3,2),-1,-4,0]])
+G=s.Matrix([[0,3,-1,3],[2,0,1,-3],
+    [2,-2,0,-1],[-1,-2,1,0]])
+J=D.inv()*(D+G)
+chi=s.factor(J.charpoly(z).as_expr()*16377)
+assert chi==16377*z**4-35602*z**3+27432*z**2-8742*z+935
+intervals=[(s.Rational(21,100),s.Rational(23,100)),
+    (s.Rational(53,100),s.Rational(55,100)),
+    (s.Rational(57,100),s.Rational(58,100)),
+    (s.Rational(84008,100000),s.Rational(84009,100000))]
+for lo,hi in intervals:
+    assert chi.subs(z,lo)*chi.subs(z,hi)<0
+adj=(z*s.eye(4)-J).adjugate()
+w=s.simplify(adj[:,0]/adj[0,0]); u=s.simplify(D*w)
+lo,hi=intervals[-1]; mid=(lo+hi)/2; rad=(hi-lo)/2
+def bounds(f):
+    n,d=s.fraction(s.factor(f))
+    def polybound(p):
+        cs=s.Poly(s.expand(p.subs(z,mid+e)),e).as_dict()
+        c=cs.get((0,),s.S.Zero)
+        er=sum(abs(a)*rad**k[0] for k,a in cs.items() if k[0])
+        return c-er,c+er
+    dl,dh=polybound(d)
+    if dh<0: n,d,dl,dh=-n,-d,-dh,-dl
+    assert dl>0
+    nl,nh=polybound(n)
+    vals=[nl/dl,nl/dh,nh/dl,nh/dh]
+    return min(vals),max(vals)
+assert D.det()==s.Rational(16377,16)
+for f in w: assert bounds(f)[0]>0
+for f in u: assert bounds(f)[1]<0
+for k in [2,3]:
+    for A in itertools.combinations(range(4),k):
+        DA=D.extract(A,A); assert DA.det()!=0
+        qa=s.simplify(DA.inv()*u.extract(A,[0]))
+        q=s.zeros(4,1)
+        for j,i in enumerate(A): q[i]=qa[j]
+        residual=s.simplify(u-D*q)
+        badq=[i for i in A if bounds(q[i])[1]<0]
+        badr=[i for i in range(4) if i not in A
+            and bounds(residual[i])[1]<0]
+        assert badq or badr
+```
+
+### GS4. A forward-invariant cone of ALL-fibre unique roots
+
+Because the four real eigenvalues are distinct, choose an eigenbasis
+with w as its dominant vector. Write a point in rate space as
+q=a w+z, where a>0 and z lies in the other three eigenspaces.
+Choose a sufficiently narrow eigen-coordinate cone ‖z‖≤ηa.
+The positivity of w and negativity of Dw ensure q>0 and Dq<0
+throughout this cone. The linear map J contracts a by r and the
+transverse coordinates by at most58/100. Thus it maps the projective
+cone strictly into itself.
+
+The actual map K is Jq+O(‖q‖²). Make a uniformly small a-cutoff.
+Its quadratic term is then smaller than the strict cone margin.
+Consequently K maps the truncated cone into itself, and for some
+r₋,r₊ with0<r₋<r<r₊<1 its dominant amplitude obeys
+
+    r₋a≤a′≤r₊a.
+
+This is the usual elementary invariant-cone proof; it supplies
+nonzero positive iterates forever and geometric decay, not a
+hypothesis assumed of an itinerary. Narrow the cone and cutoff
+again if necessary. Its annotations Φ(q)=s+Dq+O(‖q‖²) then satisfy
+
+    trueP<Φ(q)<s
+
+coordinatewise and lie in the convex terminal payoff hull by GS1.
+
+These ports have NO competing root branch. Here is the full
+compactness justification, rather than merely uniqueness of the
+mixed chart. As v→s every full Nash root tends to0, by GS1 and
+closedness of finite-game Nash. Thus nearby roots are nonsure.
+For a sequence v=s+a u′ with a→0 and u′ near u, a root q cannot
+satisfy ‖q‖/a→∞: normalizing its gaps would give a nonzero
+homogeneous complementarity solution for−D, excluded in GS3.
+Nor can ‖q‖/a→0 when u′<0, since every empty gap is then positive
+and the root cannot be Nash. Hence normalized rates are bounded
+above and below. Every cluster solves the inhomogeneous linear
+complementarity problem at a direction near u. Its strictly
+excluded pair/triple faces and the singleton impossibility force
+full support. The active equalities then give q=Φ⁻¹(v), by the
+local inverse theorem.
+
+This argument is uniform on a sufficiently narrow compact set of
+directions, so it covers the entire truncated cone. Its every port
+has exactly ONE full Nash root, all four suppliers positive. The
+head is the next port because Φ(K(q))=Q(q). Starting at any such
+port therefore forces the forward trajectory q_{n+1}=K(q_n);
+there is no alternative Nash selector inside that starting fibre.
+
+All four hazards have uniformly positive PROJECTIVE shares:
+
+    inf_n min_i q_{n,i}/Σ_jq_{n,j}>0.
+
+Nevertheless Σ_nΣ_iq_{n,i}<∞. Both total joint charge and each
+deleted-opponent charge are finite. The reference ports converge
+to the all-own dead port s; no nonzero root is available there.
+Thus all-player activity, full relative supplier fairness, and
+strict sublevel membership at every finite edge do not force
+divergent physical charge.
+
+### GS5. Actual-clock ledger: every finite compiled prefix stays exploitable
+
+Let v₀=Φ(q₀)>0 be a starting port in the cone, and let
+v_{n+1}=Q(q_n)=F(v_n,q_n). For N≥0 compose the finite forward
+list q₀,…,q_N and reverse it to actual chronological order
+q_N,…,q₀. Follow this finite word by literal AllNever. These are
+legal independent clock laws in the original game. No root is
+executed after an infinite ladder.
+
+Let C_N=∏_{n=0}^N c(q_n). Finite total charge and q_n<1 give
+C_N↓C_∞>0. The exact prescribed affine identity is
+
+    U^N=v_{N+1}−C_Nv₀.
+
+Therefore U^N→s−C_∞v₀, NOT the reference endpoint s.
+The reference prices have not been delivered; the surviving
+AllNever event retains the initial port mismatch.
+
+For each player there is an actual unrestricted deviation gaining
+EXACTLY C_N: keep its prescribed finite stopping law, but move
+its Never atom to the date immediately after the finite word.
+All opponent finite mass has already stopped by then. The only
+changed terminal event is old joint AllNever, probability C_N;
+it now pays that player's own singleton1. All other outcomes and
+payoffs are unchanged. Hence
+
+    ∀N,i,  B_i^N−U_i^N≥C_N≥C_∞>0.
+
+In addition immediate Quit at the first chronological date gives
+B_i^N≥Q_i(q_N)→s_i, so
+liminf_N(B_i^N−U_i^N)≥C_∞v₀,i>0.
+Both are FULL behavioral lower bounds, not finite-menu evidence.
+
+The positive floor applies to this entire forced-prefix family,
+not to every profile of the table. The scalar circuit elsewhere
+provides approximate equilibria. This is NOT an unrestricted
+positive-gap table and none of these profiles is claimed to be an
+original-carrier global minimum.
+
+### GS6. Consequence for the bird's-eye route and exact next question
+
+The graph-wide rule “choose a nonzero full Nash successor, remain
+strictly below some own value, and ensure every supplier participates
+fairly” is not a progress theorem. It can be uniquely forced into a
+finite-charge sink even when ALL coordinates stay strictly below
+their own values and above actual punishment. The all-own boundary
+falsifier is its endpoint, not a discontinuous arbitrary controller.
+
+A globally selected compact proper charged component is a DIFFERENT
+claim, not refuted here. The actual solved table has such a component,
+produced nonlocally by the scalar circuit. Within this proposed
+charged-component/forward-selection route, an all-game proof must select
+such a component or produce a genuine terminal exit; merely ruling out
+single-owner starvation, demanding supplier fairness, or following an
+arbitrary Nash fibre from a feasible port is insufficient. No necessity
+for every conceivable proof of UE is asserted.
+
+Named narrow sources inspected for this sequel:
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in
+`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`;
+the global-minimum declarations in
+`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMinimum.lean`;
+and the route map in `docs/TOOLKIT.md`. The characterization's
+no-sure premise is the punishment-vector alternative, NOT absence
+of sure roots at every annotation. The latter is proved separately
+for this literal table. No polynomial is produced by this sequel,
+no global minimum is transported and no SUM/MAX source is mixed.
+
+Next question: can the all-game no-UE source force a charged
+component OUTSIDE every such ghost basin, using joint actual
+payoff/cap or robust-budget information that a root chart lacks?
+The generic Γ/feasible-slab premises alone are insufficient.
+Noether's distinct strict-input/above-own-output mask is another
+reason not to claim that the entire threshold slab is invariant.
+I will not turn either mask into a supplied “viability” interface
+or optimize the present cone's radius.
+
 
 ## Scalar raw producer: one-variable closure and fourteen genuinely free reward coordinates
 
