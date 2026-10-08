@@ -154,6 +154,14 @@ four macroscopic phases; refinement is not needed for that particular
 table. Both statements are ordinary unreviewed supporting mathematics,
 not new UE coverage, a new counterexample, or an export.
 
+RM35 supplies the concrete finite-calendar seam calculation for the
+nonlocal attempt: finitely many convergent actual Nash ladders may be
+truncated and closed without a period-length error factor. ALL caps
+are priced by deleted-opponent block contraction. A CLOSED singular
+circuit is still required; MORSE's current DN partial ladder is not
+silently declared one. This is a supporting actual-word consumer, not
+an all-table producer or another export.
+
 The body retains the independently reviewed compact/source reductions,
 the PD deterministic-outcome contribution incorporated with attribution
 in the canonical packet, the honest SQ supplied-subgeometry exclusion,
@@ -20967,3 +20975,170 @@ UNREVIEWED supporting mathematics; no export or positive-gap narrowing
 is proposed. The live question remains a whole-game physically charged
 word producer, with no discount-port substitution and no presumed local
 continuation of a successful itinerary.
+
+## RM35: literal truncation of a singular common-port circuit
+
+Question. MORSE's DN iteration has exact finite-charge pair and solo
+Nash ladders converging to threshold ports, where a new macroscopic
+root exists. Such a root cannot simply be played "after infinitely
+many dates". If a FINITE chain of these singular pieces closes, can
+one truncate every piece and obtain legal approximate periodic Nash
+profiles against ALL original deviations? The answer is yes, with an
+error bound independent of the total number of dates. This is a
+concrete constructive module for that nonlocal word search. It does
+NOT assert that DN closes or that arbitrary games supply such circuits.
+The max-affine ingredients overlap existing production; no export or
+new counterexample-class exclusion is claimed.
+
+ZU1: self-contained data. Fix any finite quitting table |r|≤M. Fix
+finitely many reference ports v⁰,…,vᴸ with vᴸ=v⁰. For each piece
+ℓ=0,…,L−1 supply a finite or countably infinite sequence of independent
+product roots q_{ℓ,n}, and EXACT source ports
+
+    x_{ℓ,0}=v^ℓ,
+    x_{ℓ,n+1}=F(x_{ℓ,n},q_{ℓ,n}),
+    q_{ℓ,n} is full root Nash against x_{ℓ,n}.
+
+For an infinite piece require x_{ℓ,n}→v^(ℓ+1); for a finite piece
+require its final port equal v^(ℓ+1). All four players' Quit and
+Continue inequalities are retained at every root. No observer is
+tested only in an induced game. Require that TWO DISTINCT owners have
+a positive prescribed quit rate somewhere in the entire supplied list.
+There is no prescribed tail, minimum carrier, punishment, or correlation
+in these inputs. References are finite real vectors, not fictitious
+public randomization. Finite-total-charge Zeno pieces are allowed, but
+not required: convergence of their actual ports is the needed property.
+
+Claim. There exist legal finite PERIODIC product-root words whose actual
+terminal payoff tends to the fixed v⁰ and whose total FULL deviation
+debt tends to0. Thus the supplied circuit yields a uniform-equilibrium
+payoff. No countable-order chronology or added empty date is used.
+
+ZU2: whole-block maps retain every response. For one root define
+
+    H_i(q,z)=max(Q_i(q),R_i(q)+χ_i(q)z),
+    χ_i(q)=∏_{j≠i}(1−q_j).
+
+H_i is monotone and χ_i-Lipschitz on the WHOLE real line. At full
+root Nash against v,
+
+    H_i(q,v_i)=F_i(v,q).
+
+Indeed both action endpoints are at most the prescribed expectation,
+and at least one supported endpoint attains it. This includes quiet
+and sure coordinates. For a finite predecessor word q₀,…,q_(N−1),
+compose these maps in that order of application: H(q_(N−1),·) is
+outermost. The resulting scalar T_i is κ_i-Lipschitz, where
+
+    κ_i=∏[n<N]χ_i(q_n).
+
+It is exactly the cap for all stops INSIDE the reverse-chronological
+block and for Continue through the block into a scalar exit cap z.
+This follows by finite backward induction; it is not a cap over only
+the prescribed own clock. The corresponding prescribed block map f
+is affine with joint survival C=∏[n<N]c(q_n) and is C-Lipschitz.
+For the exact piece in ZU1,
+
+    f(v^ℓ)=x_{ℓ,N},       T_i(v^ℓ_i)=x_{ℓ,N,i}.       (ZU.1)
+
+The same reference vector is used for payoff and every observer cap.
+
+ZU3: stitch FINITE truncations before choosing their actual ports. Choose
+lengths N_ℓ→∞ on infinite pieces, keeping finite pieces whole. Put
+e_ℓ=‖x_{ℓ,N_ℓ}−v^(ℓ+1)‖∞ and E=Σ_ℓ e_ℓ. Concatenate the
+finite predecessor lists, then REVERSE the entire resulting list to
+obtain the actual chronological period. Compose its affine f and all
+four scalar T_i. Successive application of ZU.1 and Lipschitz constants
+at most1 gives
+
+    ‖f(v⁰)−v⁰‖∞≤E,
+    |T_i(v⁰_i)−v⁰_i|≤E for EVERY i.                (ZU.2)
+
+This tracks the carried port after every block. The actual port is
+never reset to a limiting reference at a finite date. Because L is
+fixed and every infinite piece converges, E→0. There is NO N_ℓE
+term, even if convergence is as slow as1/log(N_ℓ).
+
+Choose the lengths large enough to include one fixed positive root
+rate of each of the two distinct owners in ZU1. Their unchanged
+opponent products then imply, UNIFORMLY in all further truncations,
+
+    C≤C₀<1,       κ_i≤κ₀_i<1 for EVERY i.          (ZU.3)
+
+For each owner at least one of those two rates belongs to an opponent.
+These are ACTUAL period survival coefficients, not formal physical
+charges inferred from index. Sure rates, if any, simply give coefficient0.
+
+ZU4: actual terminal fixed points and full caps. Let U be the actual
+terminal payoff of the reversed repeated finite word. Joint contraction
+and its affine recursion give U=f(U). Thus
+
+    ‖U−v⁰‖∞≤E/(1−C).                              (ZU.4)
+
+For owner i, let W_i be the unique fixed point of T_i. Deleted-opponent
+contraction gives
+
+    |W_i−v⁰_i|≤E/(1−κ_i).                         (ZU.5)
+
+W_i is the TRUE unrestricted terminal cap. To verify this without a
+finite stopping assumption, truncate the repeated opponents after m
+periods and give nonabsorption payoff0. Finite dynamic programming
+gives cap T_i^m(0). For ANY complete clock of i, its payoff in this
+truncated game differs from its original terminal payoff by at most
+Mκ_i^m: the two games agree before the cutoff, and reaching that
+cutoff without opponent absorption has probability κ_i^m, independently
+of i's policy. This estimate includes Never. Taking suprema shows
+|B_i−T_i^m(0)|≤Mκ_i^m. Contraction gives T_i^m(0)→W_i, hence
+B_i=W_i. One may equivalently price pure deadlines and Never and
+then use their clock mixtures. Negative reference or response values
+are allowed; no free early singleton test or unpriced empty date is
+inserted.
+
+Consequently, for EVERY owner,
+
+    0≤d_i=W_i−U_i≤E/(1−κ_i)+E/(1−C).             (ZU.6)
+
+Equations ZU.3–6 yield U→v⁰ and D→0. The terminal-to-uniform endpoint
+then gives the stated fixed payoff, with the profile depending on
+accuracy. The proof prices ALL behavioral deviations at the original
+game, not at supplied discounted ports or a new observer annotation.
+
+ZU5: exact missing-boundary test. Joint contraction alone is insufficient.
+For four players set r₀(S)=−1 if0∈S and0 otherwise; for i≠0 set
+r_i(S)=−2 if i∈S and0 otherwise. These rules specify all60 entries.
+Against reference v=(−1,0,0,0), the root (p,0,0,0), 0<p<1, is
+full exact Nash and F(v,q)=v. Joint survival is1−p<1. Owner0's
+scalar companion map is max(−1,z), which has fixed point−1 but has
+κ₀=1. Its actual Never payoff is0, and its full debt is1. Thus a
+formal fixed-point equation at a noncontractive owner need not price
+Never. ZU1's two-owner condition cannot simply be deleted in the
+arbitrary-signed statement. A separate admissibility or nonnegative
+fixed-point condition could repair some one-owner cases, but is not
+substituted here.
+
+ZU6: exact source overlap, scope and live production question. I read
+`quittingRootCompanionMap_eq_max_endpoints`,
+`quittingCompanionComposite_of_isQuittingCyclicResponseSolution` and
+`quittingCyclicResponseSolution_eq_companionLabel_fixedPoint`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean`,
+and `quittingCompanionComposite_eq_compList_apply` in
+`UniformEquilibrium/Quitting/Cycles/CompanionTransport.lean`. Their
+definitions identify the same max-affine block map. The signed
+all-later-deadline interpolation and Never evaluation were also read
+in `quittingPureTimeValue_periodizedPrefix_block_interpolation` and
+`quittingBestReplyValue_periodizedPrefix_le_max`
+(`UniformEquilibrium/Quitting/Cycles/PeriodicFiniteReplyPrefix.lean`).
+They already supply the basic periodic cap machinery. ZU is an ordinary
+seam calculation for the current singular-path attempt, not a claim
+of new generic holonomy formalization or a checked Lean result.
+
+MORSE's DN pair02 and solo0/3 limits give ACTUAL exact pieces of the
+required kind, but their currently supplied endpoints do NOT close.
+The source-to-conclusion gap is therefore still the nonlocal selection
+of a closed chain, not cap continuity or execution of a Zeno stage.
+Neither the nearby CI itinerary obstruction nor PI's small-hazard index
+compensation is bypassed by assuming such a closure. ZU1–6 is complete
+ordinary independently UNREVIEWED supporting mathematics. The next
+whole-goal task is to produce a compatible charged return from arbitrary
+game data, or refute that specific mechanism with an actual full-graph
+obstruction; no closed circuit is supplied by this section.
