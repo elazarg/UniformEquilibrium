@@ -69,7 +69,16 @@ family has uniformly positive payoffs and nonvanishing host debt as the
 hazard vanishes. Thus arbitrary anchored-Nash selection is retired, not
 counted as a new counterexample-class reduction. The next global step must
 select or couple whole profile families, rather than import observer-cap
-continuity into the host's deleted-anchor cap.
+continuity into the host's deleted-anchor cap. RM27 now changes to the
+global Simon-orbit mechanism: bounded variation at one tolerance and the
+actual normalized-motion gap produce a bounded SMOOTH strict potential
+at a smaller tolerance. Its word transport is uniform in length; no
+source/minimum is reidentified. This overlaps the existing, stronger
+robust-capacity→smooth→rational-potential production and is supporting
+mathematics, not new counterexample-class narrowing. The missing consumer is topological:
+exclude that smooth potential on the ACTUAL quitting correspondence,
+not an arbitrary supplied graph. This is an ordinary producer candidate,
+not a full conjecture proof or an independently reviewed export.
 No full Fin4 contradiction or new export is claimed.
 
 The body retains the independently reviewed compact/source reductions,
@@ -18962,3 +18971,236 @@ than the unrelated forced-host equilibrium correspondence, be varied
 through a legal whole-law family whose total FULL debt is strictly below
 A? A fresh whole-table producer is another permissible route, but ALL
 source switches and active host response clocks must then be controlled.
+
+### RM27. A bounded-orbit hypothesis actually produces a smooth global rank
+
+Status: COMPLETE ORDINARY ANALYTIC PRODUCER CANDIDATE. This is a genuinely
+different GLOBAL mechanism after the forced-host selection failure. It
+replaces a supplied potential by a construction from the complete quitting
+correspondence. It does NOT assert that such a potential is topologically
+impossible, or that a native minimum already supplies an F-orbit. No
+counterexample table, equilibrium producer or new export is claimed.
+The final narrow lookup below finds an existing stronger production
+route. Accordingly this section is SUPPORTING OVERLAP, not a claimed new
+counterexample restriction or an export candidate.
+
+Question and finite data. Let r be any finite quitting table, let p_i be
+its TRUE independent-opponent behavioral punishment value, and let
+P=conv({0}∪{r(S):S nonempty}) be the feasible payoff polytope. For ε>0
+put
+
+    K_ε={x: x_i≥p_i−ε for ALL i and dist₂(x,P)≤ε}.
+
+For an independent Boolean product root q, write
+
+    c(q)=∏_i(1−q_i),
+    f_q(x)=A(q)+c(q)x,
+    E_ε(x): every action with positive q-support is ε-optimal
+             against the one-stage continuation x.
+
+In detail, if Q_i(q) is i's pure Quit payoff and C_i(x,q) its pure
+Continue payoff, then q_i>0 implies Q_i≥C_i−ε and q_i<1 implies
+C_i≥Q_i−ε. These are RAW support-local inequalities, not their
+probability-weighted Nash-defect replacements. Let F_ε have the edge
+x→f_q(x) exactly when q∈E_ε(x), with BOTH endpoints in K_ε.
+The cost is their Euclidean distance. Probability, independent agency
+and the rational/feasible carrier are fixed throughout.
+
+Assume that for some a>0 and B<∞ EVERY finite F_a orbit has total
+variation≤B. Also assume a true normalized-motion gap: some ρ>0 obeys
+
+    ‖f_q(x)−x‖₂≥ρ[1−c(q)]                           (GL1)
+
+whenever x∈K_ρ and q∈E_ρ(x). No root or orbit is supplied beyond these
+whole-game hypotheses. Then for some b>0 there is a globally bounded
+C∞ function G:ℝ^I→ℝ such that EVERY actual F_b edge obeys
+
+    G(x)−G(f_q(x))≥½‖f_q(x)−x‖₂.                  (GL2)
+
+The function is produced below. The result is valid in any finite player
+dimension; it does not use a Fin4-only cap interface or presumed common
+minimum. GL1 is the actual hard-branch normalized-motion conclusion,
+not an inequality assumed at one selected response row.
+
+GL3: exact fixed-word transport, uniformly in word length. Fix ANY
+finite root word q₀,…,q_(N−1) and generated payoff orbit x_(k+1)=f_(q_k)(x_k).
+From another starting point y₀, generate the SAME word. Write C₀=1 and
+C_k=∏_(j<k)c(q_j). Affineness gives exactly
+
+    y_k−x_k=C_k(y₀−x₀).
+
+If η=‖y₀−x₀‖₂, the Continue-minus-Quit gap at row i changes by at
+most η: its continuation coefficient is the opponent Continue mass,
+which is≤1, and C_k≤1. Every support condition at tolerance ε
+therefore survives at ε+η. Every rational-coordinate and near-feasible
+condition also survives at ε+η. Crucially, variation errors do NOT
+accumulate an Nη term. The error between the two kth increments is
+
+    (C_(k+1)−C_k)(y₀−x₀),
+
+so the triangle inequality and telescoping give
+
+    |Var(y-word)−Var(x-word)|
+       ≤η Σ_(k<N)(C_k−C_(k+1))
+       =η(1−C_N)≤η.                               (GL3)
+
+This checks ALL word rows, including zero-absorption roots. Neither an
+own best reply nor an opponent response is silently reselected. It is a
+payoff-word argument; the word's orientation is Simon's predecessor
+orientation and is not called a playable forward chronology.
+
+GL4: tolerance averaging supplies an actual Lipschitz Bellman function.
+For 0<ε≤a define W_ε(x) as the supremum of variation over ALL finite
+F_ε orbits starting at x. Include the zero-length path. If x∉K_ε set
+W_ε(x)=0. Then 0≤W_ε(x)≤B and W_ε(x) is monotone in ε. For ALL
+x,y with η=‖x−y‖₂ and ε+η≤a, GL3 gives
+
+    W_ε(x)≤W_(ε+η)(y)+η.                           (GL4)
+
+For x outside K_ε the assertion follows from nonnegativity. For x
+inside it, EVERY finite admissible word is transported, and its new
+carrier and support conditions were checked in GL3. Supremizing is
+therefore legitimate; no continuity or attainment of the supremum is
+assumed.
+
+Choose τ>0 with 3τ≤a and τ≤ρ. Define
+
+    V(x)=(1/τ)∫_[τ,2τ] W_ε(x) dε.
+
+The bounded monotone ε-function is Riemann integrable for every fixed
+x. Thus this definition requires no unproved joint measurability of
+the orbit-length supremum. For η≤τ, integrate GL4 and shift the
+tolerance interval. Monotonicity and the bound B give
+
+    V(x)≤V(y)+(1+B/τ)η.
+
+Interchange x,y. Subdividing any line segment into lengths≤τ makes
+V globally Lipschitz with L=1+B/τ, and 0≤V≤B. This is where changing
+tolerance, rather than presuming same-tolerance continuity of W_ε,
+removes a genuine selection discontinuity.
+
+For EVERY F_τ edge x→y, a continuation word counted by W_ε(y) can
+be prefixed by this edge for ALL ε∈[τ,2τ]. Hence
+
+    W_ε(x)≥‖y−x‖₂+W_ε(y),
+    V(x)−V(y)≥‖y−x‖₂.                              (GL5)
+
+All endpoints are in the enlarged carrier; the zero-length continuation
+is included. V is an actually constructed bounded strict potential,
+not a domination field introduced into the statement.
+
+GL6: smoothing preserves strictness because transport error is paid by
+absorption, not by the number of graph edges. Take a nonnegative smooth
+unit-mass convolution kernel supported in a ball of radius h, where
+
+    h≤τ/2 and (L+1)h≤ρ/2.
+
+Put G(x)=∫ V(x+z)ψ(z) dz. This is a bounded C∞ function with values
+in[0,B]. Consider ANY F_(τ/2) edge x→y=f_q(x), and abbreviate c=c(q).
+For every z in the kernel's support, the SAME root gives an F_τ edge
+
+    x+z → y+c z.
+
+Both carrier and support conditions are legal by GL3's one-edge check.
+Apply GL5, then use the Lipschitz bound on V to replace y+c z by y+z:
+
+    V(x+z)−V(y+z)
+      ≥‖(y+c z)−(x+z)‖₂−L(1−c)‖z‖₂
+      ≥‖y−x‖₂−(L+1)(1−c)h.
+
+Since τ/2≤ρ, GL1 applies to the ORIGINAL root. Integration gives
+
+    G(x)−G(y)≥‖y−x‖₂−(ρ/2)(1−c)
+              ≥½‖y−x‖₂.
+
+This is GL2 with b=τ/2. If c=1 then x=y and both sides are0. No
+division by an individual stopping rate, negative law mass, compact-test
+maximizer gap, prescribed tail minimum or response-clock cutoff occurs.
+
+Scope and exact remaining global consumer. A finite variation bound plus
+the hard-branch motion gap produce an actual SMOOTH rank on ALL smaller-
+tolerance edges of the original game, not only selected orbit edges.
+The converse direction is immediate by summing GL2: every such finite
+orbit has variation≤2B. This is an analytic completeness statement for
+this type of bounded-orbit witness, not a new supplied-object verifier.
+It does NOT prove completeness of finite-cell or rational-polyhedral
+certificates, since a smooth function need not have a finite exact cell
+description with infinitesimal edge inequalities.
+
+The conjecture-facing use is now precise. In the corrected Simon hard
+branch, failure of the all-tolerances finite-variation condition yields
+the input bound at SOME a. GL1 is independently produced by the existing
+normalized-motion theorem below. Thus the orbit obstruction can be
+studied with a smooth gradient, rather than an arbitrary discontinuous
+supremum over all finite words. To close Fin4 one still must prove that
+the ACTUAL quitting-game topological data cannot admit GL2, or exhibit
+one such game together with the required negative semantic adapter.
+Neither direction is supplied here. In particular, Simon's seven generic
+topological hypotheses are NOT silently strengthened to convex graph
+fibres, lower hemicontinuity or a continuous source selector. His
+contractible fibres alone do not justify convex averaging of responses.
+
+Source audit and dependency boundary. The exact production definitions
+`QuittingSimonFiniteOrbitCarrier`, `QuittingSimonFEdgeAt`, and
+`QuittingSimonFiniteNearOrbitConditionAt` were read in
+`UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/SuppliedCorrespondence.lean`.
+The literal support inequalities and f=A+cx also appear in Simon(2007),
+Section4.2, transcribed in `Literature/Simon2007.lean`; the corrected
+branch language is Simon(2012), Lemma2.1/Theorem2.1, with the primary
+publisher record [A Topological Approach to Quitting Games](https://pubsonline.informs.org/doi/10.1287/moor.1110.0524).
+The attempted online full-PDF fetch failed; this new proof relies on the
+displayed production formulas, not a claimed newly read paper proof.
+
+`exists_normalizedMotionLowerBound_of_not_branches` and its defined
+`HasQuittingNormalizedMotionLowerBoundAt` in
+`UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/NormalizedMotionStationaryPrefixProducer.lean`
+give a positive coordinatewise motion rate on ALL rational support-local
+rows, hence GL1 in Euclidean norm. I read that exact declaration and its
+imports. Turning an arbitrary no-UE game into the finite-variation input
+still uses the corrected Simon orbit/terminal adapters developed earlier
+in this notebook; no completed production theorem is claimed where
+`SuppliedQuittingSimonFiniteOrbitNecessity` remains supplied. The present
+standalone implication GL1+bounded actual orbits ⇒GL2 has no paper
+necessity premise and is ordinary mathematics, not newly Lean-checked.
+
+Production-overlap check. After completing the proof, the current
+`docs/TOOLKIT.md` led to
+`quittingRobustChargedEdge_charge_add_smoothedCapacity_target_le_source`
+in `UniformEquilibrium/Quitting/Projective/RobustChargedRelationSmoothing.lean`.
+I read the entire source under its imports: it constructs a globally
+smooth rank from finite OUTER robust absorption capacity and preserves
+the FULL absorption charge on every INNER edge by actual one-sided
+endpoint translation. The capacity zero extension, measurability and
+convolution are produced, not supplied. I also read
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`
+under its three imports. For normal Fin4 data with a positive own singleton,
+it constructs a rational polynomial certificate on the entire fixed-box
+robust relation from no uniform payoff. This is stronger conjecture-facing
+production than GL2 on the rational/near-feasible Simon carrier. GL3–GL6
+retain a different direct tolerance-averaging proof and avoid an assumed
+same-tolerance continuous Bellman value, but receive NO new source-narrowing
+credit. No build or expanded transitive audit was run in this math session.
+
+The current mathematical consumer attempt regularizes the two-projection
+difference a−b by a small gradient term. Strict rank controls this near
+every diagonal value, including an interior PARAMETER mapped to a
+boundary diagonal VALUE. A possible contradiction still needs a relative
+coincidence index/boundary degree from the LITERAL per-polytope escape
+conditions. That implication is unproved; neither convex graph fibres nor
+an everywhere legal continuous response selector is introduced.
+
+Before trying a topological consumer I also read
+`QuestionOneHypotheses` in `MathUE/Topology/SimonViabilityQuestion.lean`
+and its actual graph-source distinction. Its homotopy is a parametrized
+pair (a(x),b(x)); the first coordinate is NOT assumed to be x. Nor are
+all intermediate straight-line homotopy pairs graph edges. These facts
+block the naive inference that a minimum of G over its domain has a
+legal small inward edge. Any claimed consumer must prove that step from
+the literal source data, not add it as an assumption.
+
+Next concrete question. Does smooth GL2 on the actual smaller-tolerance
+quitting graph contradict its essential Nash homotopy plus the literal
+coordinate-piece escape fibres? A proof must retain the two-projection
+homotopy and deal with genuinely large jumps; smoothing alone does not
+turn that graph into the flow of −∇G.
