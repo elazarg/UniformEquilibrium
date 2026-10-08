@@ -9994,6 +9994,149 @@ such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
 
+## Full coalition deadline flow: the exact orientation before, and not after, averaging
+
+Status: COMPLETE ORDINARY SUPPORTING IDENTITY AND FALSIFIER OF AN
+AVERAGING SHORTCUT. Not a new UE producer, a positive-gap table, or
+an export. This is the current full-kernel continuation of TB's actual
+boundary mechanism. The genuine global-floor consumer remains open.
+
+### DK1. One recipient, one independent law, all opponent coalitions retained
+
+Work in a native own-zero game. Fix one ACTUAL independent profile p
+with all four prescribed clocks finite a.s.; this premise is explicit,
+not inferred from joint absorption alone. For recipient i let
+
+    R=min[j≠i]T_j,
+    H={j≠i:T_j=R},
+    κ_i(t,H)=Pr(R=t and earliest opponent coalition is H).
+
+Thus R is finite a.s., H is nonempty, and κ is a probability law on
+dates times nonempty subsets of I\{i}. Let
+
+    a_i(t)=Pr(T_i<t),       b_i(t)=Pr(T_i=t).
+
+Independence is used here: the own law does not depend on (R,H).
+The original outcome is own singleton if T_i<R, is H∪{i} if T_i=R,
+and is H if T_i>R. Changing i to a pure finite response τ retains
+the SAME original opponent sample (R,H). Define the signed flows
+
+    z_i(H)=∑[t]κ_i(t,H)(1_{τ<t}−a_i(t)),
+    w_i(H)=κ_i(τ,H)−∑[t]κ_i(t,H)b_i(t).              (DK.1)
+
+z is the change of SOLO PREEMPTION mass classified by the latent
+earliest-opponent coalition; w is the change of TIED participation
+classified by that coalition. All sums converge absolutely.
+If g_i(S) denotes response terminal mass minus original terminal mass,
+
+    g_i({i})=∑[H]z_i(H),
+    g_i(H∪{i})=w_i(H),
+    g_i(H)=−z_i(H)−w_i(H).                           (DK.2)
+
+These formulas cover every coalition for this recipient. The different
+H values are disjoint coordinates and must not be replaced by a role
+count. Taking the payoff pairing gives the EXACT gain
+
+    V_i(τ,p)−U_i(p)
+      =−∑[H]r_i(H)z_i(H)
+        +∑[H](r_i(H∪{i})−r_i(H))w_i(H).             (DK.3)
+
+No Nash, minimizing profile, true-floor premise or attained cap is
+required for the identity. When τ approximates the full cap, its
+left side approximates the complete debt. For a response mixture,
+replace 1_{τ<t} and 1_{τ=t} by its own distribution's strict CDF and
+atom mass; all formulas persist. For literal Never they are0. Every
+pure finite deadline and Never is covered, not merely root replies.
+
+### DK2. The useful temporal orientation, and its precise limitation
+
+For one PURE deadline τ,
+
+    1_{τ<t}−a_i(t)≤0 for t≤τ,
+    1_{τ<t}−a_i(t)≥0 for t>τ.                        (DK.4)
+
+Thus solo preemption is lost only on early opponent samples and gained
+only on late opponent samples. The positive tied-flow term is injected
+at ONE tested dateτ; its negative part removes old ties from other
+dates. This is real chronological information, not a directed edge
+between coalition labels inferred from their signs alone.
+
+But a mixture of cap-maximizing deadlines can have MULTIPLE changes
+of sign. A convex family of old minimizing profiles and selected tests
+does not share a calendar, opponent kernel or thresholdτ. Therefore
+the one-threshold orientation cannot be silently assigned to its
+averaged coalition ledger. This is exactly where a naive earliest-
+response argument would import a common source it has not produced.
+
+### DK3. Exact role balance hides a strictly positive full-kernel gain
+
+At a source where EACH row's own-singleton and nonown-participant
+flows average to0, DK2 implies only
+
+    E[∑[H]z_i(H)]=0,       E[∑[H]w_i(H)]=0.         (DK.5)
+
+For r_i(H)=θ_i(H)+c_i and
+r_i(H∪{i})=θ_i(H∪{i})+k_i, DK3 becomes after averaging
+
+    E[V_i−U_i]
+      =E[−∑[H]θ_i(H)z_i(H)
+          +∑[H](θ_i(H∪{i})−θ_i(H))w_i(H)].          (DK.6)
+
+The prices cancel, but the payoff gain need not. This does NOT produce
+a playable circulation or a legal changed-profile cap bound.
+
+The exact CF example in NOETHER's RM42 gives a minimal calculation
+inside one profile. Recipient0's original clock is date1 surely.
+Its opponent kernel is
+
+    κ(0,{1})=2/15, κ(0,{3})=1/6, κ(0,{1,3})=1/30,
+    κ(1,{2})=1/3,  κ(2,{1})=1/3.
+
+Its cap-optimal response is half date0, half date2. Then
+
+    z({1})=−1/6,      z({2})=1/6,
+    w({1})=7/30,      w({3})=1/12,
+    w({1,3})=1/60,    w({2})=−1/3,
+
+and all other z,w are0. Both total flows vanish. Nevertheless the
+passive rewards on H={1},{3},{1,3},{2} are (1,1,1,−1), and its
+joining gaps there are (5,5,5,1). Thus
+
+    −∑r_i(H)z_i(H)=1/3,
+    ∑joiningGap_i(H)w_i(H)=4/3,
+    complete response gain=5/3.
+
+The exact rational calculation was executed independently using
+these κ and clock laws. The source profile has all four clocks finite;
+both deadlines in the reply are complete cap maximizers, not selected
+instantaneous root maximizers. The full table and all-cap ledger are
+retained in NOETHER's RM42; this section does not claim that δ=5/3
+is its global gap. Its actual absorbing gap is0 at a different pure
+pair equilibrium. The test defeats the ORIENTATION/COUNTS shortcut,
+not a consumer using a genuine all-law minimum and full kernels.
+
+### DK4. Actual next whole-game obligation, without an assumed cycle
+
+TB supplies an actual chronology on an escaping tax boundary. At an
+interior tax maximum, the old-cap/new-minimizer comparison can yield
+balanced role counts across a moving family. DK1–DK3 shows exactly
+what remains: profitable redistribution between DIFFERENT opponent
+coalition kernels, possibly supported by several tied best deadlines.
+
+The next candidate must use the GLOBAL debt floor to rule out that
+entire family as an obstruction or construct one actual competitor
+whose ALL newly born caps are controlled. It cannot pick a preferred
+kernel, average its clocks into play, impose one threshold on averaged
+tests, or cite the native all-Never equilibrium. No such consumer is
+proved here. Finite coalition labels and a formal circulation alone
+do not provide compatible ports or an independent chronology.
+
+The exact source set remains TB's three-player periodic producers,
+native finite/Never cap translation and the tester-flow Bellman dual.
+DK1 is derived directly from independent first-clock semantics; no
+new evaluator API is proposed. The revised bird's-eye note records
+the same honest boundary: global forcing is not yet convincing.
+
 ## Whole-game welfare barrier: an existing floor invariant retires the static ansatz
 
 Status: COMPLETE ORDINARY COROLLARY / MECHANISM RETIREMENT, not new UE
