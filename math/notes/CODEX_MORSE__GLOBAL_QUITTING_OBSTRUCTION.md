@@ -59,6 +59,19 @@ disconnected. This retires convex OR acyclic-fiber selection of those
 actual equilibrium outcomes as an automatic fixed-point premise; it
 does not rule out some other strategically faithful completion theorem.
 
+Latest independent positive-control attempt: FCAP1–FCAP5 below uses
+actual FULL-cap feasibility, not an assumed continuation payoff. The
+upward attainable cap hull is closed and prefix-invariant, and a cap-Nash
+prefix exactly contracts actual debt. Neither fact forces charged
+successors. The saved seeded robust trap ALREADY starts at an actual
+absorbing full-cap vector. An additional exact calculation realizes an
+RM37-style sublevel exit at an actual absorbing cap state, rather than
+merely a feasible payoff port. Fixed-target forward safety budgets also
+recover the old Nash-indifference obligation instead of discharging it.
+These are ordinary supporting identities and mechanism failures, NOT
+new UE coverage, an all-path obstruction on the RM37 table, or a
+counterexample-source reduction. The whole-game forcing step is open.
+
 Earlier direction test: CR1–CR6 is a RETIRED payoff-rounding attempt,
 not an independent-play impossibility theorem. Its exact absorbing
 correlated equilibrium pays197/4 to all four owners, but the proposed
@@ -10024,6 +10037,231 @@ the toy violates U_i>s_i at every owner and is not substituted for
 such a minimum. The prospective two-outcome finite-contact extension
 is retired in this form. Section50's deterministic pricing and the
 separately reviewed bridge source theorem are not contradicted.
+
+## Actual cap-domain control does not automatically select a charged path
+
+### FCAP1. Exact forward budgets recover, rather than evade, indifference
+
+This is ordinary mathematics and mechanism triage. Fix ONE signed Fin4
+table, independent product roots and unrestricted behavioral deviations.
+For one root q write c=∏(1−q_i)>0, α_i=∏_(j≠i)(1−q_j),
+Q_i for the current Quit payoff, A_i for the passive absorbing
+contribution if i Continues, and
+
+    H_i=q_iQ_i+(1−q_i)A_i.
+
+Suppose a proposed forward controller carries a prescribed payoff
+promise e_i and complete-response upper budget w_i. The exact conditional
+promises after surviving the root must be
+
+    e_i′=(e_i−H_i)/c,
+    w_i′=(w_i−A_i)/α_i.
+
+The old immediate test is safe only if Q_i≤w_i. Independently of any
+existence claim, direct algebra gives
+
+    e_i′−w_i′=[e_i−w_i+q_i(w_i−Q_i)]/c.            (FCAP.1)
+
+An actual continuation with U_i=e_i′ and B_i≤w_i′ requires e_i′≤w_i′.
+If e_i=w_i, immediate safety and(FCAP.1) force q_i>0 ⇒Q_i=w_i.
+For an inactive owner, Q_i≤w_i=A_i+α_iw_i′. Thus a zero-slack safe
+controller is exactly a Nash-indifferent root at the NEXT continuation
+budget w′. The forward ledger does not make the strategic choice free.
+At sure roots the divisions are invalid and the literal zero-survival
+formulas must be used instead.
+
+Exact source scope: `quittingTester_primal_eq_dual_eq_behavioralCap`
+in `UniformEquilibrium/Quitting/ControllerTester/TesterFlowDuality.lean`
+identifies the primal and Bellman dual with the unrestricted behavioral
+cap for a SUPPLIED arbitrary chronology. The source
+`exists_bounded_exact_quittingNashBellmanSpine` in
+`UniformEquilibrium/Quitting/Bellman/Finite/NashBellmanSpine.lean`
+produces bounded exact roots/values, not the missing absorption or
+deleted-survival transversality. Those declarations and the relevant
+forward ledger were inspected narrowly. No new producer is inferred.
+
+### FCAP2. A genuine actual-cap hull and its global Bellman account
+
+Let K be the compact ORIGINAL closure of full actual pairs(U,B), and
+fix a table bound M. Define within[−M,M]⁴
+
+    E={w: some (u,b)∈K has b≤w coordinatewise}.
+
+E is closed and upward closed. Raising coordinates to(M,M,M,M)
+contracts E to that point. This is only contractibility; E need not
+be convex, and a convex mixture of profiles is not legal play.
+
+For any product root q define
+
+    F_q(w)_i=max(Q_i,A_i+α_iw_i).
+
+Actual fixed-root prefixing gives F_q(w)∈E whenever w∈E. If q is
+exact Nash at the continuation vector w, its successor satisfies
+
+    F_q(w)_i=H_i+c w_i.
+
+For an actual-carrier witness(u,b) with b≤w, the same prefix has
+payoff H+c u and complete cap at most F_q(w). Consequently
+
+    d_i(prefix)≤c(w_i−u_i).
+
+When b=w and q is cap-Nash, this is equality: every actual debt is
+multiplied by c. More generally the exact prefix ledger is
+
+    D(T_q(u,b))=cD(u,b)+Σ_i R_i(q;b),
+    R_i(q;b)=max(Q_i,A_i+α_i b_i)
+             −[q_iQ_i+(1−q_i)(A_i+α_i b_i)]≥0.  (FCAP.2)
+
+Here R_i is the full binary-root Nash defect at the TAIL CAP b,
+not at the prescribed tail payoff u. Every born finite test and Never
+is inside the displayed max; no selected later tester is substituted.
+
+The whole-cap constrained value has an attained finite-dimensional
+maximum
+
+    G(w)=max{Σ_i u_i:(u,b)∈K, b≤w},
+    W(w)=Σ_iw_i−G(w)≥Δ_all.
+
+The feasible subset is compact. W need not be continuous; no concavity
+of G or smooth selection is asserted. Actual prefixing proves
+
+    W(F_q(w))≤cW(w)+Σ_iR_i(q;w).                 (FCAP.3)
+
+For a cap-Nash root this contracts W by c. A chronology with arbitrarily
+large accumulated charge and appropriately small running defects would
+therefore contradict a positive floor. But(FCAP.3) produces no such
+chronology. It is an actual-carrier control account, not a solution of
+its global viability problem. BROUWER independently obtained the exact
+debt identity(FCAP.2); neither calculation is claimed as new coverage.
+
+### FCAP3. The seeded robust trap already lies in the actual absorbing cap domain
+
+Use the COMPLETE PS table already recorded in PS1, without changing
+its rewards or Never convention. Its pure grand coalition pays−1
+to every participant, and an omitted-triple passive recipient gets0.
+At the ACTUAL one-date profile where ALL four quit surely,
+
+    U=(−1,−1,−1,−1),   B=(0,0,0,0).
+
+Every date0 Quit response pays−1. Every later finite response and
+literal Never is screened by three sure opponents and pays0. Thus
+the cap calculation includes all behavioral deviations, and this
+absorbing profile witnesses0∈E, even using K_abs instead of K_all.
+
+PS proves that EVERY sufficiently accurate absorption-relative robust
+word seeded at the true punishment0 enters the strict quiet moat
+after its first charged edge and has total charge at most1. Therefore
+“restrict the seed to an actual cap vector” does NOT fix that failure.
+This is a direct consequence of the saved all-path test, not a new
+regression or a theorem that EVERY unrooted E path fails. The table
+already has a cyclic UE producer.
+
+### FCAP4. An actual absorbing cap state still leaves the singleton-sublevel domain
+
+The following calculation strengthens only the feasibility aspect of
+the RM37 port test. It does not assert a positive gap or a universal
+trap at this table. Here is its COMPLETE rational reward table;
+columns are recipients0,1,2,3, and Never pays0:
+
+| Coalition |0|1|2|3|
+| --- | ---: | ---: | ---: | ---: |
+|0|1|3|3|0|
+|1|4|1|−2/5|−1|
+|2|0|2|1|2|
+|3|4|−1/2|0|1|
+|01|3|4|−1/2|10|
+|02|1|−5/2|2|10|
+|03|5|10|10|1|
+|12|10|1|−7/5|10|
+|13|10|−3/2|−5/2|0|
+|23|10|−1/2|1|1|
+|012|9|−3/2|−3/2|−10|
+|013|9|11|10|11|
+|023|11|10|11|9|
+|123|−10|−3/2|−3/2|9|
+|0123|−11|11|11|−11|
+
+At continuation v=(0,2,2,0), the literal root gaps are
+g=(1−2q_1,−1+2q_0,−1+2q_3,1−2q_2). This identity follows
+from the full reward table, not a pair-only truncation.
+
+Now prescribe the ACTUAL date0 rates q̂=(1/2,1,1,1/2), followed by
+literal Never. Exact independent enumeration gives
+
+    Û=(−1/2,9/4,33/20,−1/2),
+    B̂=(0,9/4,33/20,0)=w.
+
+All finite responses after date0 and Never are the passive endpoints;
+all earlier possibilities are date0 itself. Owners1 and2 are sure,
+so the profile absorbs. Thus w is an ACTUAL absorbing full-cap vector,
+not merely a feasible payoff or an arbitrary above-punishment annotation.
+It lies strictly below own singleton1 at coordinates0 and3.
+
+At this actual w the complete root gaps become
+
+    g_0=1−2q_1,
+    g_1=−1+2q_0−h_1/4,
+    g_2=−1+2q_3+7h_2/20,
+    g_3=1−2q_2,
+    h_i=∏_(j≠i)(1−q_j).
+
+There is no boundary root. If q_0=0 then g_1<0 forces q_1=0,
+making g_0=1; if q_0=1, then g_1=1 forces q_1=1, making
+g_0=−1. Both contradict q_0's own constraint. If q_3=0 then
+g_2≤−13/20<0 forces q_2=0, making g_3=1; if q_3=1 then
+g_2=1 forces q_2=1, making g_3=−1. Thus q_0,q_3 are interior,
+so q_1=q_2=1/2. The remaining equations are
+
+    q_0=1/2+H/8,  q_3=1/2−7H/40,
+    H=(1−q_0)(1−q_3)/2,
+    7H²+632H−80=0.
+
+There is exactly one feasible positive root, with1/8<H<13/100.
+Therefore q_0∈(1/2,13/25), q_3∈(47/100,1/2), and every
+owner mixes. Its head equals its Quit endpoints, which the full table
+gives as
+
+    Q_0=7/2,
+    Q_1=(49q_0q_3+q_0−10q_3+4)/4,
+    Q_2=(216q_0q_3+9q_0−q_3−4)/20,
+    Q_3=(11−q_0)/4.
+
+The displayed rational bounds imply
+
+    Q_1>2203/800>1, Q_2>1269/500>1, Q_3>131/50>1.
+
+Hence EVERY root at this actual absorbing cap state leaves the
+singleton-sublevel domain. The symbolic gap factorization, actual
+pair and head formulas were independently checked with exact SymPy
+arithmetic. No bounded-grid failure is used in this proof.
+
+This is NOT an all-path quiet moat at w, nor a proof that a different
+E-successor domain fails. No positive all-behavior gap, normal-source
+ancestry or equilibrium nonexistence follows. It specifically prevents
+replacing the failed feasible-sublevel premise by “actual cap-sublevel”
+and silently treating that as a universal selection rule.
+
+### FCAP5. A bounded neglected-literature check and the remaining choice
+
+The primary paper Flesch–Predtetchinski–Sudderth, “Discrete stop-or-go
+games” (2021), Section2 and Theorem7, was read directly:
+[published paper](https://link.springer.com/article/10.1007/s00182-021-00762-4).
+In that model Stop freezes the CURRENT state, rather than selecting an
+absorbing coalition reward. Stop can be temporary; simultaneous stoppers
+or a single active controller are treated separately. Its existence
+proof uses pure auxiliary threats and visible deviations. These facts
+do not supply a Boolean quitting-game adapter: coalition-dependent
+rewards, irreversible absorption and private random deadlines remain.
+No completeness claim about the stopping-game literature is made.
+
+Current decision: abandon automatic actual-cap seeded viability as a
+producer. The exact E account may still help a genuinely unrooted global
+choice, but the known actual-cap trap means contractibility or cap
+realizability alone cannot force the desired charge. Fixed-target safety
+also merely recovers Nash indifference. A next positive mechanism must
+produce a whole independent chronology with all born caps controlled,
+not assume a charged successor, an absorbing Nash tail or a good
+sharing-rule selection. No such arbitrary-table mechanism is proved here.
 
 ## A faithful infinity fiber is disconnected even in the solved security test
 
