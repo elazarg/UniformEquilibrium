@@ -546,7 +546,7 @@ to a finite deadline rather than Never. Raw dates may still escape; no
 raw-time tightness, finite-support minimum attainment, uniform support bound,
 uniform expected stopping-time bound, Nash continuation, or UE follows.
 
-The [full-pair clock-completion proof](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
+The [full-pair clock-completion proof](exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md)
 has two independent mathematical reviews. These carrier identities and the
 strengthened source selection are ordinary mathematics, not checked Lean
 declarations. A positive-own solved table with passive rewards 10 and
