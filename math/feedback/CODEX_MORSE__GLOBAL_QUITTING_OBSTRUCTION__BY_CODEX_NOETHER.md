@@ -1124,3 +1124,178 @@ separate relatively close companion. It supplies no paid reset, raw-time
 renewal, finite expected duration, equilibrium or strict debt descent. Those
 remain open; none is silently supplied as a conditional field. No unresolved
 mathematical objection was found in the exact frozen FC scope.
+
+## Final whole-artifact FC assembly and falsification review
+
+Artifact: `FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md`; canonical lifecycle
+target `exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md`.
+Exact SHA256:
+`0452b5cdebd2cc3186634b98df67ea841c15cba1794e8749931199bfb4c3766b`.
+I read the ENTIRE frozen artifact, Sections1–18, including the rebuilt
+positive-own source and all boundary tests; the file has1786 newline
+characters and1787 logical lines. This verdict concerns these exact bytes,
+not an inferred certification from the shorter FC review. No other final
+artifact verdict was read. The packet was not edited.
+
+Verdict: WHOLE-ARTIFACT ordinary mathematical PASS; no unresolved objection.
+Separate export-value verdict: AFFIRMATIVE. Final placement, review-count and
+repository tracking checks remain the coordinator's gate, not this review's
+authority. No Lean certification or full Fin4 UE completion is asserted.
+
+Contribution disclosure: the retained sole-indebted deterministic-coalition
+release incorporates my earlier PD contribution, already independently
+reviewed by MORSE and BROUWER. I do not count this review as an independent
+origin audit of that contribution. I checked its literal date-zero use and
+integration here, and independently checked the rebuilt normalization,
+positive-own fiber, whole-carrier completion and complete source quantifiers.
+The other canonical inputs have prior independent ordinary reviews, but the
+entire source→final-clock chain was read and stress-tested afresh here.
+
+### Complete input-to-source chain
+
+Sections1–2 keep the original information structure literal: independent
+complete clocks, all finite/Never responses, and original zero Never payoff.
+The correspondence declarations named in
+`UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean` were
+located and reread under their imports. They identify actual laws with
+behavioral payoffs and unrestricted replacement caps. The declared no-UE/gap
+equivalence in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`
+has the stated all-profile quantifier. Section2's ordinary SUM conversion
+does not require a best-response supremum to be attained.
+
+The positive pivot is produced, not assumed. Original full normal core and
+true punishment normality satisfy precisely the hypotheses of
+`isUniformEquilibriumPayoff_original_of_singlePivotNormalized` in
+`UniformEquilibrium/Quitting/Punishment/SinglePivotUniformPayoff.lean`.
+The transport creates new profiles and a fixed affine target; it is not
+unchanged-law affine invariance. The own vector becomes e_m. Section14's
+FULL-cap shift then raises all three zero owns while preserving the positive
+gap. A common normalization gives the positive floors used in Section7.
+
+The worst positive-singleton fiber is compact and the TRUE SUM infimum is
+8-Lipschitz. Its own floors plus the actual full-minimum margin imply Ω<1.
+Every relevant contact target is at least1 and the entire convex segment
+stays in that fiber. The proof correctly uses fiber maximality only in this
+ONE comparison. All93 cohorts include old zeros in their correct future
+positive branches. The60 assignments are disjoint; their signs, label
+coefficients, Ω−16α interval and32α<σ arithmetic are consistent.
+
+Afterwards contraction, row-distinct genericization and positive recipient
+scales may leave the fiber. The later proofs require only retained signs,
+contact gaps, fresh positive unweighted gap and debt rigidity. The concave
+fixed-carrier scalarization produces coordinate-regular weights, not a
+maximizer of that scalarization. At such weights the two supporting
+inequalities fix EVERY minimizing debt vector. This supplies ONE final table
+BEFORE its actual minimizing sequences, while preserving positive own signs.
+No old minimum, cap point or debt vector is carried through genericization.
+
+### Marked full caps, all-active boxes and genuine kernel bridge
+
+Sections3–5 give the actual finite-law approximation, chronological atom
+charts, bounded marginal weak-* limits, separate endpoint/test-set limits,
+product rectangle-density argument and AE/L¹ outcome-kernel transport.
+Positive mixture atoms are retained isolated midpoints; other finite points
+have zero mass. All moving finite responses and Never are transported, not
+only a favorable fixed tester. The finite endpoint c has zero mass and is
+distinct from the separate Never label; c⁺ is only a finite-kernel duplicate.
+
+Both kinds of signed target have explicit ORIGINAL legal likelihood bounds.
+Whole retained dates are conditioned using their raw LEFT/RIGHT boundaries;
+ordered clock coordinates are not confused with those quantile boundaries.
+The old density and kernel maps remain bounded and unchanged. Every fixed
+small signed parameter pair belongs to the ORIGINAL carrier and retains the
+true global floor. Nonisolated upper caps are stabilized by the SAME positive
+affine transformation on the WHOLE upper test family, not by false isolation.
+
+I reread the exact declaration
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+Its full-carrier membership/minimum, Fin4, reward bound and positive debt
+premises are supplied at every use. No absorbing or old weighted minimum
+substitutes for that premise. The deterministic case's literal date-zero
+pair equality removes unsupported-calendar insertion; its retained supplier
+uniformly screens the unilateral release. The all-active head polynomial
+then uses rigidity only on ACTUAL small-box minima, with fixed-cut transport
+even when cutoff masses later degenerate. Far endpoints remain selected
+regrets, not full-cap or minimum claims.
+
+The no-preactive-mass conclusion precedes the earliest active atom argument.
+The sole-root supplier's conditional suffix is an actual carrier limit,
+possibly above δ, and the ledger gives the strict contradiction with the
+quadratic cap margin. Under no root/later bridge, the entire supported root
+box is cap-stable; individual regret constancy forces ORIGINAL suppliers
+pure, not just a pure algebraic endpoint. Randomness rules that out. Fresh
+row distinctness and a positive original opponent-root coalition event make
+the final bridge's payoff kernels genuinely different. Moving finite tests
+witness the distinction exactly; only their values become co-maximal in the
+limit. No finite-index exact co-maximality or paid bridge is asserted.
+
+### Whole-carrier completion and exact original-minimum regeneration
+
+Section15 reapplies actual no-UE normal-core production to the FINAL table.
+I reread `exists_core_blocker_of_mem_normalCore` and
+`normalizedSoloMatrix_eq_soloReward_sub`: their ROW witness is precisely
+r_m({j})≤s_m, j≠m. It is neither a COLUMN preemptor nor inherited normality
+after a table perturbation.
+
+The independent delayed geometric replacement preserves old finite atoms.
+Its maximal atom controls ALL simultaneous tests of the deleted anchor. The
+old finite-tail exceptional event is distinguished from old Never masses;
+the latter yield the explicit s_m/passive/tie payoff comparison. The resulting
+upper bound is uniform in every finite response and Never. Nonnegative own
+reward supplies an unchanged near-best FINITE test for the lower bound. Two
+unchanged anchors then screen simultaneous completion of the other clocks,
+with the final dates chosen after the first delayed law. Thus K_fin=K_abs
+holds for ENTIRE pairs, under exactly the stated weak ROW/nonnegative-own
+hypotheses, including equality cases.
+
+A common zero debt and a strictly positive singleton force c_n→0 for ANY
+realizing sequence of ANY original minimum. Moving a smallest Never atom
+therefore preserves its full pair and supplies absorption. This proves BOTH
+directions of exact minimum-set alignment at the SAME table/gap. The original
+arbitrary K_all-tail floor remains unchanged. Section17 then truncates finite
+tails to FINITE dates at EACH index, never to Never. Its new minimizing chart
+has c_n=c=1, empty Never interval, and zero mass at the finite endpoint c.
+All four prescribed marked clocks are finite a.s.; the complete response menu
+is not shortened. Earlier chronology and raw tightness are expressly not
+claimed. Reapplication of the canonical producer is legitimate at that same
+true original minimum.
+
+### Exact falsification attempts and strict value verdict
+
+All added Section18 tests check. The passive10/participant0 table has exact
+whole P_fin debt floor9 while a pure singleton gives full/absorbing debt0;
+it removes the ROW hypothesis and nothing else. The equality witness1 with
+tie reward100 gives cap1+99 sup H({t}), so delayed deterministic replacement
+fails and diffuse maximal-atom control is essential. The all−1 table has the
+deleted anchor's Never cap0 but every all-four-finite cap−1, isolating the
+nonnegative-own lower-cap premise. The participation-indicator table separates
+K_all from K_abs even though the claimed minimum sets agree. These are entire
+class or exact semantic countertests, not positive full-gap examples.
+
+My RM19 equality wall survives intact and is NOT a missing hypothesis here:
+generic positive-own P_i=s_i may be attained only by all-Never opponents.
+FC supplies a closure realization, not an actual absorbing punishment,
+stationary optimizer, or actual minimizing profile. No strict P_i<s_i is used
+in the theorem, and neither the packet's four clocks nor its handoff silently
+upgrades this to attainment. RM18's two-clock closure is superseded in the
+produced zero-coordinate arm; its stationary attainment remains separate.
+
+The significant increment over the frozen random-collision bridge source is
+EXACT original-minimum alignment PLUS FOUR finite-a.s. marked clocks, without
+losing its arbitrary all-law tail floor. Previously allowed zero-debt minima
+with no such same-pair realization are excluded at the produced table. This
+is stronger than BA's approximately close absorbing companion and stronger
+than implemented zero-gap finite-menu early-absorption equivalence. The
+counterexample producer supplies all strategic hypotheses: positive owns,
+ROW witnesses, rigidity, table separations and realizing sequences. No
+conditional punisher, controller, cap selector or tail Nash is unproduced.
+
+I found no deferred ordinary proof, dependency on a conference note, or
+untracked declaration in the artifact. Every named strategic declaration was
+located in its cited project file; the nearby MAX/weighted-source citations
+are clearly overlap distinctions, not proof inputs. Repository tracking and
+hash promotion remain mechanical coordinator checks. Affirmative export value
+does NOT imply a consumer of the residual: chronological paid renewal,
+off-minimum cap leakage control, actual minimizing-law attainment and uniform
+equilibrium remain open exactly as Section18 states.

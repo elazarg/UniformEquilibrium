@@ -13,7 +13,7 @@ ZERO debt. This is independently reviewed ordinary mathematics, not
 an equilibrium producer or an assertion that distinct clock labels
 always distinguish payoff effects.
 
-The live attempt is RM1–RM19 at the end of this notebook. RM1–RM5
+The live attempt is RM1–RM20 at the end of this notebook. RM1–RM5
 select a genuine compact GLOBAL minimum with maximal root mass and
 identify the nonlinear-wall failure of naïve purification. A sole
 bridger is at its own root rate0 or1. RM6–RM9 prove that if it is the
@@ -85,7 +85,11 @@ FC's closure remains valid and is not silently upgraded to attainment.
 Genericity alone therefore cannot remove this wall. No actual positive-gap
 counterexample in that region or full Fin4 consumer has been constructed.
 
-Status of RM10–RM19: COMPLETE ORDINARY PROOF DRAFTS, not independently
+RM20 rejects a global shortcut: zero-sum constant row transfers preserve the
+FULL debt objective at EVERY law, but also preserve the equality wall and
+every singleton margin. They supply no descent or new source restriction.
+
+Status of RM10–RM20: COMPLETE ORDINARY PROOF DRAFTS, not independently
 reviewed, not Lean-checked, and not exported. Their necessary conditions
 and local table prices do not assert that the GLOBAL infimum rises.
 
@@ -17898,3 +17902,67 @@ minimum. Releasing the sure owner to a later guaranteed finite clock still
 exposes NEW observer joining caps. Neither(RM30) nor debt rigidity bounds those
 caps above. An automatic owner's best reply or another local row price does
 not repair that missing global comparison.
+
+### RM20. Global singleton redistribution is exactly flat, not a debt descent
+
+Status: COMPLETE ORDINARY PROOF DRAFT; supporting calculation, no export.
+This is an ALL-law comparison, not a price on one supplied source. Start with
+all own s_i≥0 and choose constants C_i with s_i+C_i≥0 and Σ_i C_i=0. Add C_i
+to EVERY nonempty coalition coordinate in row i, retaining Never payoff0.
+For every actual independent profile p, all finite response values shift C_i.
+OLD and NEW nonnegative own singletons make each full cap its finite-response
+supremum, including an unattained late limit. Hence
+
+    B_i′(p)=B_i(p)+C_i,
+    U_i′(p)=U_i(p)+C_i(1−c(p)),
+    d_i′(p)=d_i(p)+C_i c(p),
+    D′(p)=D(p).                                         (RM31)
+
+Negative C_i is allowed precisely because the NEW own remains nonnegative;
+one must check its Never test as well as the finite responses. The positive-
+only BA2 identity is insufficient on its own, but the same finite-supremum
+proof applies to both endpoint tables. The literal pieces are tracked in
+`UniformEquilibrium/Quitting/Terminal/TerminalAffineReward.lean` and the full
+finite-supremum equivalence in
+`UniformEquilibrium/Quitting/Punishment/FinitePureReplyValue.lean`, inspected
+in the FC/BA review. Thus the two tables have EXACTLY the same global debt
+infimum, and the same actual minimizing laws whenever any are attained.
+Punishment changes by P_i′=P_i+C_i. Equality P_i=s_i is invariant.
+
+If the old table is FC's positive-own rigid table with some common d*_k=0,
+EVERY old minimizing sequence has c_n→0. Since(RM31) preserves its total
+objective at every law, a sequence minimizing for the new table is also an
+old minimizing sequence. Consequently the ENTIRE new minimum-pair set is
+exactly the coordinate translation
+
+    (U,B) ↦ (U+C,B+C)
+
+of the old minimum-pair set, and all new minimizing debt vectors remain d*.
+This is not an affine pair identification away from the minimum: the U shift
+there depends on the actual c. It is also not an assertion that arbitrary
+reward shifts preserve zero Never payoff semantics.
+
+Γ and every within-row coalitional difference are unchanged. Thus row
+genericity, membership-join signs and all contact labels consisting only of
+these differences stay unchanged. Own-singleton labels may move and must be
+checked separately; no frozen-source contact conclusion is silently retained
+after a contact crossing. For small generic transfers keeping all owns>0,
+all finite contact gaps are preserved. If the minimum is realized by FC's
+ALL-four-finite marked clocks, every owner has an opponent exiting finitely
+a.s.; literal Never responses then shift C_i too. All full active test sets
+and payoff-kernel DIFFERENCES at that marked source are unchanged.
+
+For example the positive singleton mass may be redistributed toward an
+equality owner by subtracting some other owns and adding their total to that
+row, with no global gap cost. At the endpoint all other own singletons can be
+zero, but this forfeits the positive-own presentation and requires separate
+checks of any own-only contact label. It does NOT reduce the saturated wall:
+P_i−s_i, U_i−s_i, B_i−s_i and all minimum debts are invariant. Therefore this
+apparently favorable global freedom cannot make equality strict, price a
+bridge, or convert FC's limiting clocks into an exact absorbing optimizer.
+
+The rejected next implication was: change own floors while retaining the true
+minimum, then apply the singleton margin to force a contradiction. Both sides
+of that margin translate identically, so there is none. This changes direction
+away from constant row redistribution. A genuine consumer still must alter
+membership effects or actual laws with ALL observer caps controlled.
