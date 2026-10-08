@@ -26,6 +26,23 @@ PASS is recorded at corrected SHA256 bed0575d…24a9b. It is ordinary
 mathematics, not supplied as a checked Lean theorem or a consumer of
 the two residual alternatives.
 
+RM47 now discards another whole-law family without reopening that
+source: arbitrary independent private retries confined to the original
+Never branches are already the Q1 arbitrary-tail graft, including all
+their new finite tests and literal Never. More retries therefore do not
+escape RM22's unconsumed closed-budget obstruction. The live operation
+must change original finite root/suffix laws as well. RM47 records the
+exact root/suffix debt formula and keeps its full-envelope and same-table
+tail ancestry explicit. No new source reduction or below-δ profile is
+claimed by this restart.
+
+Its single GR4 regression now separates those local operations from an
+actual whole-profile comparison: it has a strict minimum against all
+nearby root changes and a nonnegative budget for every terminal graft,
+but an explicit new EARLY owner2 clock lowers its full debt. That legal
+competitor exposes its failure of the canonical quantitative cap-minus-
+singleton margin; the fixture is not a positive-global-minimum source.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -23589,3 +23606,366 @@ path can raise the newly tied cap immediately. No rank iteration,
 convex minimum-fibre claim, averaging of independent laws, or supplied
 upper-price field is assumed to repair either gap. The full Fin4
 conjecture remains open.
+
+## RM47: private retries are already priced; the original finite laws must move
+
+### GR1. Fixed source, agency, and the operation being tested
+
+RESEARCH RESTART, NOT A NEW SOURCE RESTRICTION OR CONSUMER. Fix the
+ONE table and least-literal-Never marked minimum in the independently
+reviewed `LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`. Its unrestricted full
+floor is δ>0, absorbing floor is δ+g>δ, all minimum debts equal the
+strictly positive vector d*, and literal joint Never equals ν_min>0.
+All random draws below remain private and independent across owners.
+The target is an actual independent profile with ENTIRE full debt below
+δ, not merely a favorable pair of selected responses.
+
+Consider first a modification leaving EVERY original finite clock draw
+unchanged and replacing only each owner's original Never branch by a
+private retry rule. A rule can use an arbitrary number of later blocks,
+owner-dependent retry probabilities, deterministic delays, private
+memory, and a positive probability of never making another finite draw.
+All later dates begin after the original finite block. No player is
+given another player's private Never draw.
+
+At an original finite realizer the new rule is precisely one independent
+tail stopping law w_i conditional on that owner's original Never draw.
+After the old last support date the public live event means ALL original
+draws were Never. The four conditional tails remain independent, since
+this conditioning event factors by player. Hence this is exactly the
+arbitrary-tail graft of Part II Section 14, with full ledgers
+
+    U_i(new)=U_i(old)+ν u_i(w),
+    B_i(new)=max(B_i(old), R_i(old)+h_i b_i(w)),
+    ν(new)=ν ν(w),       h_i=ν/n_i.                 (GR.1)
+
+For infinite retry rules, first censor finite tail mass after a cutoff to
+Never. The product coupling estimate from Part I Section 6 controls ALL
+pure response values uniformly, so both payoffs and entire caps converge.
+Thus (GR.1) also covers these complete rules. Empty finite tests before
+the new tail, tests inside EVERY retry block, tests after the last finite
+tail support, and literal Never are all present. A private retry process
+is not an extra strategic degree of freedom beyond its complete law.
+
+Consequently every such rule is subject to the SAME necessary global
+inequality already established for arbitrary tails:
+
+    Σ_i (b_i(w)−κ_i)^+/n_i ≥ Σ_i u_i(w),
+    κ_i=(B_i(old)−R_i(old))/h_i.                    (GR.2)
+
+If the rule preserves total debt δ, least literal Never requires
+ν(w)=1, so its complete tail is all-Never. This is a statement about
+an actual minimum-fibre graft, not a proof that nontrivial tails have
+a uniform positive cost. RM22's complete solved-table regression already
+shows that the displayed budget, positive owns, and a positive Γ-simplex
+alone do not force an exit. Retrying or optimizing constants inside
+(GR.1) therefore does not supply the missing mechanism. This family is
+retired as a distinct route; no frozen source proof is re-audited.
+
+### GR2. Exact root/suffix law comparison retained for the next attempt
+
+Normalize the original retained first root to date0, as allowed by the
+source. Its rates a_i are all below1 and at least two are positive.
+Extract the ORIGINAL conditional suffix's entire semantic pair (v,b)
+and its literal marginal Never masses n_i'. This pair belongs to the
+same table's actual semantic carrier; it need not minimize debt. Write
+
+    e_i=b_i−v_i≥0,
+    h_i(a)=∏_(j≠i)(1−a_j),
+    C_i(a)=A_i(a)+h_i(a)v_i,
+    z_i(a)=Q_i(a)−C_i(a),
+
+where Q_i is the complete root Quit value and A_i is the passive reward
+from nonempty opponent quitting sets at that root. The entire cap is
+max(Q_i,A_i+h_i b_i), so EVERY fixed-root prefix of THIS suffix has
+
+    d_i(a)=max(z_i(a),h_i(a)e_i)−a_i z_i(a),
+    ν(a)=∏_i(1−a_i)n_i'.                           (GR.3)
+
+This formula includes ALL suffix responses through b_i; it is not
+evaluation of an old selected late deadline. It is the definition
+`quittingTerminalSemanticPrefix` and its actual-carrier closure theorem
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, inspected
+in their source. Its Nash-specialized debt formula
+`quittingTerminalSemanticDebt_prefix_eq_blockAct` was also inspected;
+no Nash hypothesis is imposed on the original root here.
+
+The original root/later bridges are exactly z_i(a)=h_i(a)e_i.
+Changing a has genuine cap walls at those equalities. Changing the
+suffix requires an ACTUAL independent family w, whose complete values
+v(w),b(w),n'(w) replace v,b,n' in (GR.3); these three vectors cannot be
+chosen freely or mixed by a public lottery. Every resulting prefix
+still obeys the true same-table debt floor. Only if a point actually
+has debtδ may one invoke common coordinate debts or least ν.
+
+### GR3. Exact open global question and source boundary
+
+Can a legal change of the ORIGINAL conditional finite and Never laws,
+together with the original root rates, produce a prefix in (GR.3) with
+total debt<δ, using either of the two reviewed least-Never alternatives?
+A proposed proof must control b(w) for ALL moving finite tests and
+Never. Opposite level-set constraints for two selected laws do not
+provide that control. A sure finite response replacement absorbs and
+therefore lies aboveδ+g, so forcing one such replacement is not itself
+a descent. A root Nash chosen against v(w) weakly decreases the suffix
+debt, but that suffix may lie strictly aboveδ; the existing checked
+Nash-prefix contraction does not compare its endpoint withδ.
+
+The bounded source inspection for this restart comprised the exact target
+`quittingUniformEquilibriumPayoffConjecture` in
+`UniformEquilibrium/Quitting/Conjecture/Basic.lean`, the positive endpoint
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`,
+the negative endpoint
+`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`, and the
+named semantic-carrier/root declarations above. Narrow searches were
+restricted to these terminal/root neighborhoods and the corresponding
+frontier/toolkit entries. No Lean build or implementation was attempted.
+The reviewed source is used unchanged; (GR.1)–(GR.3) record containment
+and exact accounting, not a new conjecture-facing result. The complete
+Fin4 contradiction and both source consumers remain open.
+
+### GR4. An actual two-bridge local minimum with a globally closed graft budget
+
+EXACT MECHANISM FALSIFIER, NOT A GENUINE POSITIVE ALL-LAW MINIMUM.
+The implication tested is: two paid supported root/later bridges,
+positive own rewards and all debts, strict U_i>s_i, and positive literal
+Never must allow either a nearby root-rate descent or an arbitrary
+terminal-Never graft descent. The following actual four-player profile
+refutes that implication. Its TRUE all-law minimum, a common debt vector
+at ALL global minima, least Never among global minima, and strict
+absorbing/global gap separation are NOT supplied. In particular this
+does not falsify the frozen canonical source or its open consumer.
+
+#### Complete table and actual profile
+
+Let the core be J={0,1,2}. Work first with rewards in [0,9]; division
+of EVERY row entry by9 puts the same example in [0,1] without changing
+any argument. For nonempty S put K=S∩J. For core recipient i define
+
+    r_i(S)=1                         if i∈K,
+           2                         if i∉K and
+                                        ((i−1 mod3)∈K or |K|≥2),
+           0                         if K≠∅ and neither case holds,
+           8                         if K=∅.
+
+Make two exceptions: r_0({0,3})=9; add1/10 to r_2(S) whenever
+{0,2}⊆K. For recipient3 put
+
+    r_3(S)=2                         if 3∉S,
+           1/2                       if S={3},
+           1                         if 3∈S and K={0},
+           3                         if 3∈S and K={1},
+           2                         in the remaining cases.
+
+This specifies all sixty entries. The owns are (1,1,1,1/2).
+All-Never pays0. Different entries in a row need not be distinct.
+
+Set
+
+    t*=(275+sqrt(680295))/1195,
+    x(t)=70t/(11+70t),       y(t)=t/(1+t).
+
+The positive root of P(t)=1195t²−550t−506 lies strictly in
+(23/25,93/100), by evaluating P at those rational endpoints; it
+is t*. Let each player independently quit at date0 with probabilities
+
+    a=(x(t*),0,y(t*),t*),
+
+and otherwise use literal Never. The complete response menu is
+date0, any finite date≥1, and Never. Thus this is a supplied ACTUAL
+finite law, whose ENTIRE caps are calculated exactly below.
+
+Along the displayed curve, all caps are the late finite value; owners0
+and2 also maximize at date0. Owners1 and3 are strictly later-only.
+The root-minus-late differences for those latter owners are respectively
+
+    −2t(35t+68)/((1+t)(70t+11)),
+    −70t/((1+t)(70t+11)).
+
+Both bridging owners have positive original root mass. On the positive
+opponent event where only3 quits at the root, owner0's root and late
+replies pay9 and8. On the positive opponent event where only0 quits,
+owner2's replies pay11/10 and0. These are genuine payoff-kernel
+bridges. Every root supplier is nonsure. Literal joint Never is
+
+    ν(t)=11(1−t)/((1+t)(70t+11))>0.
+
+The exact debts on the curve are
+
+    d_0=d_1=d_2=ν(t),
+    d_3=ν(t)/2+t x(t)/(1+t),
+    D(t)=7(20t²−11t+11)/(2(1+t)(70t+11)).        (GR.4)
+
+All four are positive. With L(t)=(1+t)(70t+11), the numerators of
+U_0−1, U_1−1, U_2−1, and 2(U_3−1/2), when put over L(t), are
+
+    560t²+99t−11,
+    70t²+147t−11,
+    7t²+18t−11,
+    70t²+254t−11.
+
+They are strictly positive for 23/25<t<93/100. Thus EVERY prescribed
+payoff strictly exceeds its own singleton; this is not merely a
+positive numerical margin in one row.
+
+#### Strict local minimality for ALL root-rate changes
+
+Keep the suffix all-Never, but allow all four root rates to change.
+Use coordinates (x,z,y,t), with z the root rate of player1. Let
+Q_i be root Quit value, L_i the late finite cap, and U_i the literal
+prescribed payoff. Put F=Σ_i L_i−Σ_i U_i and H_i=Q_i−L_i.
+Because H_1,H_3 are strictly negative at the displayed profile, its
+EXACT full-debt objective in a neighborhood is
+
+    D_root=F+H_0^++H_2^+.
+
+The two active wall polynomials are
+
+    H_0=t y z−t y−t z+t−y z−y+z,
+    H_2=−(70t xz−70t x−70t z+70t+10xz−11x+10z)/10.
+
+At z=0 these vanish precisely on x=x(t), y=y(t). Their derivatives
+with respect to (x,y) have nonzero determinant. Consequently
+(t,H_0,H_2,z) are smooth local coordinates, with the legal boundary
+z≥0. In these coordinates, at the displayed curve the two derivatives
+of F in the wall coordinates are −μ_0 and −μ_2, where
+
+    μ_0=7(31t−11)/(2(1+t)(70t+11)),
+    μ_2=(70t²−34t+35)/((1+t)(70t+11)).
+
+These identities follow by differentiating the complete cap/payoff
+polynomials, equivalently solving
+F_x+μ_0(H_0)_x+μ_2(H_2)_x=0 and the analogous y equation.
+For 23/25<t<93/100 both multipliers are strictly between0 and1.
+The derivative in z while holding the two wall coordinates fixed is
+
+    G(t)=(4900t⁴+7455t³+15870t²−5263t−1232)
+           /((1+t)²(70t+11)²)>0.
+
+The strict sign follows directly from the same rational t interval.
+Finally,
+
+    D'(t)=7P(t)/((1+t)²(70t+11)²).
+
+Since P crosses from negative to positive at t*, D(t) has a strict
+local minimum there. Continuity supplies a neighborhood where the
+wall derivatives of F stay in (−1,0), and its z derivative stays
+positive. Integrating one coordinate at a time, the positive parts
+then give positive costs for any nonzero H_0 or H_2 and for z>0;
+on H_0=H_2=z=0 the one-dimensional strict minimum applies. This proves
+strict local minimality against EVERY legal root-rate perturbation.
+It is not a statement about all distant roots or all complete laws.
+
+#### EVERY tail-only graft is strictly more expensive
+
+At this profile every cap maximizes at the empty late finite point,
+so all the graft thresholds κ_i are exactly the owns s_i. The
+original marginal Never masses are
+
+    n_0=11/(70t*+11),    n_1=1,
+    n_2=1/(1+t*),       n_3=1−t*.
+
+For ANY independent complete tail w define
+
+    c=Pr_w(some core clock is finite),
+    p=Pr_w(first finite quitting coalition is exactly {3}).
+
+These probabilities refer to its underlying complete independent laws,
+even if some late draw is screened by an earlier exit. Recipient3's
+passive reward from every nonempty core coalition is exactly2. A finite
+response tending past all core finite draws gives
+
+    b_3(w)−1/2≥(3/2)c.
+
+For core recipient i let p_i be the opponent-law probability of first
+coalition {3}, and q_i the probability of any other nonempty first
+coalition. Deleting i's draw makes p_i≥p, while q_i≤c. All passive
+core rewards are nonnegative, and reward8 applies on {3}. The last
+finite response therefore gives
+
+    b_i(w)−1≥7p_i−q_i≥7p−c,
+    (b_i(w)−1)^+≥(7p−c)^+.
+
+These last-finite inequalities follow by cutoff limits for arbitrary
+infinite laws; no finite cap attainment is assumed. The table's social
+reward is49/2 at coalition {3}, and at most12 at every coalition
+containing a core player. Hence
+
+    Σ_i u_i(w)≤(49/2)p+12c.
+
+Put W=1/n_0+1/n_1+1/n_2 and K=(3/2)/n_3. The rational interval for
+t* gives W>7/2 and K>31/2. The COMPLETE graft budget is consequently
+at least
+
+    W(7p−c)^+ + Kc − (49/2)p −12c.              (GR.5)
+
+If 7p≤c, (GR.5) is at least (K−31/2)c≥0. If 7p>c, write it as
+
+    7(W−7/2)(p−c/7)+(K−31/2)c≥0.
+
+The strict constants make the budget positive whenever c+p>0.
+If c=p=0 every tail law is literal Never. Therefore EVERY nontrivial
+independent tail-only graft strictly raises full debt at this profile,
+including arbitrary diffuse or infinite retry tails.
+
+#### A concrete whole-profile competitor proves this is not a global minimum
+
+The frozen source also has the stronger quantitative cap-minus-singleton
+margin, which this regression does NOT supply. Here
+
+    B_2−s_2=x(t*)/10 < D(t*).
+
+Indeed, after putting the difference over
+2(1+t)(70t+11), its numerator is126t²−91t+77, a quadratic with negative
+discriminant and positive leading coefficient. This strict failure can
+be consumed by a complete independent profile, not just a differential
+ledger.
+
+Shift EVERY original root draw to date1. At the new date0 only owner2
+quits, with probability1/2; on Continue that owner follows its original
+law. The other owners have no new early draw. This is a legal public
+calendar and independent private coin, followed by the original profile.
+Owner2's ENTIRE cap stays B_2, since its opponents have no early mass
+and B_2>s_2. For i≠2 the full cap is the greater of the new root Quit
+test and the affine transform of the ORIGINAL full suffix cap.
+Those later caps dominate exactly: for i=0 the new root value is1,
+whereas the later value is1+B_0/2; for i=1 the root value is1 whereas
+the later value is B_1/2>1; for i=3 their difference is
+(B_3−1/2)/2>0. The inequality B_1>2 follows from its displayed rational
+formula and t*>23/25. Literal Never and every finite suffix test are
+included in these cap comparisons.
+
+Thus all nonmover debts become d_i/2, while owner2's debt becomes
+d_2/2+(B_2−s_2)/2. The resulting actual profile has
+
+    D_new=(D(t*)+B_2−s_2)/2 < D(t*),
+    ν_new=ν(t*)/2.                                  (GR.6)
+
+It follows rigorously that this profile is NOT a global all-law minimum.
+The comparison is an instance of the already checked root-prefix
+accounting, not a new prefix lemma or a consumer of the canonical source.
+It shows precisely why a true full floor and its stronger own-margin
+restriction are essential to the open source consumer.
+
+#### Minimal failed implication and next operation
+
+The falsified assertion is exactly that this weaker source-like geometry
+forces either a LOCAL root-rate descent or a tail-only graft descent.
+Both response envelopes were calculated completely, with all born tail
+tests; this is not a selected-response fixture. It does not establish
+the global minimum of even the fixed-suffix root cube. It supplies
+NONE of the canonical source's true all-law minimum, common global
+minimum debts, global least-Never selection, or strict absorbing gap.
+In fact (GR.6) explicitly falsifies its candidacy as a global minimum;
+its quantitative source cap-minus-singleton margin fails as stated above.
+The regression is an internal mechanism falsifier, not a new no-UE
+example, source reduction, or export candidate.
+
+The next attempt must change ORIGINAL finite laws jointly with other
+laws, using the genuine SAME-TABLE full floor. A chain of increasingly
+decorated local fixtures is not the research objective. In particular,
+one cannot transfer this profile's positive local debt to a true global
+minimum, or conclude that the reviewed two-owner branch is impossible.

@@ -33,6 +33,18 @@ failure of every asymmetric selector. The current direction is nonlocal
 whole-word selection from actual global source data, not another local
 temperature adjustment.
 
+Latest nonlocal selection test: FX1–FX6 below classifies the ENTIRE
+finite-deadline Nash correspondence on that SAME positive-own table.
+For every menu{0,…,N,Never}, every exact menu equilibrium puts all
+finite mass at N, has joint Never probability EXACTLY1/4, and has
+unrestricted total debt a+1/(2a)≥√2. The final roots form an explicit
+one-parameter family; this is not one bad selected sequence or failure
+of a numerical search. Arbitrary finite approximate Nash laws and the
+rotating exact infinite equilibrium remain available. Thus optimizing
+over every exact finite-menu Nash selection cannot supply the full-game
+producer here. This is ordinary unreviewed mechanism triage, not a
+positive all-behavior gap, export, or new counterexample-source reduction.
+
 Current completed class result: CL1–10 and SC1–6 have each passed two
 independent mathematical checks. The negative DN trial is retired by a
 closed singular full-Nash circuit with three convergent ladders and two
@@ -10705,6 +10717,256 @@ question is whether the positive actual GLOBAL minimum and its original
 response kernels can select a whole nonlocal word that avoids this
 collapsed branch; local temperature rescaling alone does not use those
 data. This attempt changes the mechanism, not the conjecture frontier.
+
+## Every exact finite-menu Nash selector stays a fixed distance from full Nash
+
+Status: complete ordinary mathematical falsifier FX1–FX6, unreviewed.
+This is the nonlocal sequel to RT, on its SAME fixed positive-own table.
+It classifies all equilibria, rather than exhibiting one bad selector.
+The game is solved by RT6's explicit rotating exact equilibrium.
+
+### FX1. Exact question and the full finite correspondence
+
+Keep all sixty coordinates r=z+1 from RT1 and Never reward0. For each
+N≥0, each player chooses an independent law on{0,…,N,Never}. A menu
+Nash profile permits EVERY mixed deviation in that same finite set.
+After N, prescribed clocks are Never. Its original full debt instead
+allows every finite integer deadline, including dates later than N,
+and literal Never. These are distinct strategic comparison classes.
+
+Claim. The ENTIRE menu Nash correspondence consists of the laws
+
+    P(T_i=N)=1−t_i,   P(T_i=Never)=t_i,
+    (t_0,t_1,t_2,t_3)=(a,b,a,b),
+    a∈[1/2,1],    b=1/(2a).                    (FX.1)
+
+There is no finite mass before N. For every such profile,
+
+    P(AllNever)=1/4,
+    d=(b/2,a/2,b/2,a/2),
+    D=a+b=a+1/(2a)∈[√2,3/2].                 (FX.2)
+
+Hence even the BEST exact menu Nash selector at every N has full
+debt√2. This is not a lower bound against arbitrary behavioral profiles;
+RT6 gives an exact behavioral equilibrium of the same table.
+
+### FX2. No exact root at any continuation can have a sure owner
+
+This finite-game fact works in both z and r, at EVERY signed continuation
+vector. Suppose h quits surely. For every i≠h,h+1, the Quit-minus-Continue
+gap is exactly−1. If h is the sole opponent quitter, it is K_ih=−1;
+if some further opponent quits, it is a triple/grand member reward−1
+minus passive nonsingleton reward0. The sure h screens continuation.
+Thus these two nonfavorites must Continue surely.
+
+The favorite h+1 now faces only sure h and has gap+1, so must Quit
+surely. But h's withdrawal from their adjacent pair gains1; the sure
+favorite screens h's continuation. This contradicts h quitting surely.
+Whole-row translation leaves each screened gap unchanged.
+
+Consequently every exact root has all Continue probabilities positive.
+In particular conditioning a finite menu Nash profile on joint survival
+never reaches a sure root that could make later menus irrelevant.
+
+### FX3. Complete classification of the final root
+
+At the final date N the r continuation after everybody Continues is0.
+Equivalently use the z table with continuation vector(−1,−1,−1,−1),
+then add1 to EVERY root endpoint and head payoff. This is an exact
+one-stage identity; it is not a translation of the Never reward.
+
+Let q_i=1−t_i. Grouping by the independent three-opponent coalition
+gives the unusually simple EXACT gap
+
+    g_i=Q_i−C_i=2t_{i+1}t_{i+2}−1.            (FX.3)
+
+For clarity, if x_j=q_j/t_j, dividing the gap by the positive deleted
+survival h_i=∏[j≠i]t_j gives
+
+    1+x_{i−1}−x_{i+1}−x_{i+2}
+       −Σ[j<k, j,k≠i]x_jx_k−∏[j≠i]x_j
+      =2(1+x_{i−1})−∏[j≠i](1+x_j),
+
+which is(FX.3) after multiplication by h_i. The sixty-coordinate
+table determines these coefficients; no singleton-only approximation
+is used.
+
+By FX2 no q_i is1. A positive q_i is mixed and requires g_i=0;
+q_i=0 requires g_i≤0. There are only the following support cases:
+
+* Zero or one active owner is impossible: some active owner, or every
+  quiet owner in the zero case, has its two displayed t-factors equal1.
+* Two adjacent active owners are impossible: one has both displayed
+  opponents quiet and gap1. Two opposite active owners force their
+  own t-values to1/2 and the other two t-values to1; all gaps are0.
+* Three active owners are impossible. For example t_0=1 and the
+  other three t-values<1 give t_3=t_1=1/2 from the i=2,3 equations,
+  then t_2=1 from i=1. Rotations cover the four missing-owner cases.
+* Four active owners satisfy t_1t_2=t_2t_3=t_3t_0=t_0t_1=1/2.
+  Thus t_0=t_2=a, t_1=t_3=b, ab=1/2, with a,b∈(1/2,1).
+
+The opposite two-owner roots are exactly the endpoints of the same
+closed family(FX.1). Conversely EVERY point of that family has all
+four gaps0 and is an exact root. This exhausts the ENTIRE cube.
+
+For an owner with its own Continue probability t=a or b, its z head is
+
+    H_i=97/4+99(1−t)^2/(4t²)≥97/4>0.          (FX.4)
+
+The identity uses Q_i=C_i at all roots, including the endpoint quiet
+owners. It follows directly by substituting ab=1/2 into the exact
+three-opponent endpoint formula. Thus every final r head is at least
+101/4, and its z head is strictly positive at ALL four coordinates.
+
+### FX4. Every earlier root is quiet, with all conditional comparisons legal
+
+For ANY z continuation v with v_i>0 at every owner, the weighted-root
+identity from RZ2 becomes
+
+    Σ_i q_i g_i(q;v)
+      =−2[p_q({0,2})+p_q({1,3})]
+       −3Σ[|S|=3]p_q(S)−4p_q(I)
+       −Σ_i q_i h_i v_i.                      (FX.5)
+
+At an exact Nash root, every q_i>0 has g_i≥0. By FX2, h_i>0 for
+all i. A nonquiet root would therefore make the left side nonnegative
+and the right side strictly negative. AllContinue is the UNIQUE exact
+root at every strictly positive z continuation vector.
+
+To apply this to a menu Nash profile, first establish the standard
+conditional support fact directly. At any reached live date t, every
+finite deadline or Never with positive own prescribed mass is a global
+maximizer in the menu. For a responding deadline at or after t its
+unconditional payoff is an unchanged earlier-opponent contribution
+plus positive deleted-opponent survival times the corresponding
+conditional payoff. Thus every retained support point remains maximizing
+after conditioning. The conditional suffix is a Nash profile in the
+remaining finite menu. Its immediate root is exact Nash at its ACTUAL
+prescribed continuation: positive Continue support averages only those
+maximizing later responses. This is a proof about finite menu Nash,
+not an assumed Nash or minimum property of a positive-debt source tail.
+
+The reach argument precedes the backwards induction. Write
+s_i(t)=P(T_i≥t), treating Never as later than every finite date.
+At date0 every s_i(0)=1. If some s_i(t+1)=0, choose the EARLIEST
+such date t. Then every s_j(t)>0, so joint live reach∏_j s_j(t)
+and each deleted reach∏[j≠i]s_j(t) are positive. The conditional
+finite-menu Nash argument just given therefore applies at t. Its
+root has conditional q_i(t)=1 for at least one owner, forbidden by
+FX2. Thus s_i(t)>0 for every i and every t≤N+1; in particular all
+four Never masses and ALL live/deleted factors used below are positive.
+No subgame-perfect assumption is used, and arbitrary behavior at
+zero-reach histories is irrelevant: none of these live rows has zero
+reach in a menu Nash profile. At date N, FX3 gives the strict
+positive z head(FX.4). Working backwards, FX5 makes every earlier root
+AllContinue and preserves that same continuation vector. This proves
+that EVERY menu Nash profile has precisely the laws(FX.1).
+
+Conversely, put a final root(FX.1) at N and AllContinue before it.
+The final root is Nash, and every earlier root is Nash at the positive
+z continuation by FX5. Alternatively check the finite pure menu directly:
+all earlier r deadlines give own singleton1, while date N and Never
+give the common value U_i≥101/4. Their arbitrary mixtures cannot improve
+that value. Thus every displayed profile IS menu Nash.
+
+### FX5. Original all-deadline and Never caps, optimized over every selector
+
+For the final root, define h_i=∏[j≠i]t_j. Its actual prescribed r
+payoff U_i equals the Never payoff, because the endpoint gaps are0
+and each Continue probability is positive. Directly, the z Continue
+endpoint is A_i−h_i; translating the one-stage root adds1, giving
+U_i=A_i+1−h_i. The literal r Never response pays exactly that value.
+
+Every original pure deadline has one of three values:
+
+    k<N:        1;
+    k=N:        U_i;
+    k>N:        U_i+h_i.
+
+The last value adds the own singleton1 on the event that all opponents
+are Never after N. This event has probability h_i. On its complement
+the already-selected opponent coalition and passive payoff are unchanged.
+There is no additional late-deadline limit or missing accumulation mode:
+ALL deadlines beyond N have exactly the same value. Literal Never is
+U_i, and pure-time extremality supplies the same upper bound for every
+unrestricted behavioral replacement. Since U_i≥101/4, the full cap is
+
+    B_i=U_i+h_i,    d_i=h_i.
+
+For t=(a,b,a,b), ab=1/2, deleted survival is h_even=b/2 and h_odd=a/2.
+Hence(FX.2) follows. The lower bound a+b≥2√(ab)=√2 is attained at
+a=b=1/√2. The upper bound3/2 follows from a∈[1/2,1], or
+(a−1/2)(a−1)≤0. Joint Never is (ab)²=1/4 independently of N and a.
+
+This result excludes an efficient original full-cap selection from the
+ENTIRE exact finite Nash correspondence. It does not exclude arbitrary
+finite approximate equilibria. Truncating RT6's proper exact rotating
+profile after k periods and making the surviving clocks quit at one
+final common date changes each prescribed payoff and full cap by at
+most a constant times σ^k. The uniform coupling controls ALL responses,
+including the born final-date and later responses. Thus legal finite
+profiles with full debt→0 exist on THIS table; they are not exact
+menu Nash at their own cutoff.
+
+### FX6. Dependencies, exact checks, and the changed producer question
+
+The root gaps(FX.3), all four head identities(FX.4), deleted survival
+vector, total debt and joint Never were regenerated by exact SymPy
+enumeration of all eight opponent coalitions for every owner. Every
+claimed whole-correspondence conclusion is proved by the finite support
+case split and backwards argument above, not inferred from an experiment.
+RT1 gives the complete fixed table and RT6 gives the literal exact
+rotating solved-game witness. Its R₀/StandardQ/degree1, negative blockers,
+positive own rewards, punishment≤own and no solo-host completion also
+remain exactly as recorded there.
+
+Selected original source statements inspected were
+`quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU` and
+`quittingFiniteDeadlineTimingProfile_update_pureTime_eq_mixedEU` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingGame.lean`,
+whose actual menu is Option(Fin deadline), so our N means deadline=N+1;
+`exists_exactFiniteDeadlineTimingNash` and
+`finiteDeadline_mixedNash_neverSupport_payoff_eq_never` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean`;
+and `IsQuittingFiniteDeadlineNash` and
+`isQuittingFiniteDeadlineNash_iff_pure` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineReplyCap.lean`.
+Those declarations certify the menu encoding, actual-payoff adapter
+and menu-only nature of the Nash comparison under their imports. They
+do NOT already classify this particular table or prove(FX.1)–(FX.2).
+No Lean implementation, build or new checked theorem is claimed.
+
+Bounded conference-source comparison read BP1–BP6 and BU1–BU6 in
+[`CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`](CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md).
+BP ALREADY proves the entire final-row Nash census on this native RZ
+table for all sufficiently small, possibly unequal negative AllNever
+price vectors, and a uniform positive full-debt floor after independent
+repetition. BU ALREADY retires every strictly negative price vector
+and every Nash selector after repetition, on its DIFFERENT completion
+whose nonsingleton members get1 and passives100. Those results mean
+that the broad exact finite-Nash boundary/repetition failure is NOT new.
+FX retains the explicit complete census at the NONsmall common price1
+on the ORIGINAL RZ completion and its exact transfer to one fixed
+ordinary positive-own game. Its unrestricted gap√2, fixed joint Never
+1/4 and alternating family concern the original unrepeated profiles.
+This sharper same-fixture calculation is not counted as new producer
+noncoverage, a frontier contraction, or new equilibrium coverage.
+
+The global finite-menu attempt is therefore RETIRED in the form:
+select exact finite Nash at larger calendars, minimizing unrestricted
+debt over all selections if needed, and obtain full approximate Nash.
+The entire optimized correspondence has a fixed positive error on a
+solved table. Merely imposing projective compatibility would not repair
+this example: its finite equilibria move a fixed positive boundary mass
+to each new cutoff, so no such compatible exact family exists.
+
+Current concrete next question: can actual global-minimum source data
+produce a finite APPROXIMATE word or a nonlocal returned chronology,
+with the cutoff error paid by its own survival, without requiring exact
+finite-menu Nash along the construction? Any proposed selection must
+permit the RT6 rotating witness and FX5 finite approximations. No such
+arbitrary-table producer has been proved here. This result is mechanism
+triage, not a new positive-gap table or a conjecture-facing source reduction.
 
 ## Actual cap-domain control does not automatically select a charged path
 

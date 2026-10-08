@@ -83,6 +83,19 @@ exclusion. The next mechanism must retain profile-adapted response
 selection or produce a below-floor word with every new cap priced.
 All older unique proofs, tests and objections are retained below.
 
+The latest positive attempt is MP. A COMPLETE ORDINARY, UNREVIEWED
+two-pair producer supplies exact absorbing terminal Nash profiles on
+a full-dimensional open region around an explicit nonbijective
+two-cycle-plus-leaves table, with arbitrary signed own levels obtained
+by literal row translation. It includes positive-own tables, where
+AllNever is not Nash. Its actual four-hazard Jacobian is invertible,
+and every passive finite/Never cap is proved. The original full-goal
+source is NOT assumed to belong to this region. Targeted raw-source
+and quotient screens are recorded in MP6; no global coverage or export
+is asserted. The next question is whether mixed scheduled-premium
+signs can be consumed beyond this open region without losing those
+passive caps.
+
 
 ## Original singleton-matrix question
 
@@ -12637,3 +12650,473 @@ owner set can be joined to the paid first-root/later-cap bridge
 by a whole-law change whose born cap is controlled by SG3,
 including every finite/Never tail. Counting those owners or
 bounding the first-order leakage alone would not be a consumer.
+
+## A mixed-sign paired producer on the nonbijective two-cycle-plus-leaves branch
+
+### MP1. Full data, exact positive theorem and scope
+
+Status: COMPLETE ORDINARY, UNREVIEWED positive producer, internal note.
+This supplies an ACTUAL exact absorbing terminal equilibrium and an
+open reward region, not a positive-gap example, a numerical claim,
+a supplied root verifier, or a full Fin4 theorem. The region is not
+asserted to contain the least-Never counterexample source.
+
+Let I={0,1,2,3}, with privately independent behavioral randomization
+on the unique live history at each natural date. Never pays0. Consider
+the following complete native reward table z, whose own singletons
+are zero:
+
+| S | z₀(S) | z₁(S) | z₂(S) | z₃(S) |
+|---|---:|---:|---:|---:|
+| {0} | 0 | 1 | 3/2 | −1 |
+| {1} | 1 | 0 | −1 | 3/2 |
+| {2} | −2 | −1 | 0 | −1/2 |
+| {3} | −1 | −2 | −1/2 | 0 |
+| {0,1} | −1 | −1 | 0 | 0 |
+| {0,2} | −3/2 | 0 | −1/2 | 0 |
+| {0,3} | −3/2 | 0 | 0 | −1/2 |
+| {1,2} | 0 | −3/2 | −1/2 | 0 |
+| {1,3} | 0 | −3/2 | 0 | −1/2 |
+| {2,3} | 0 | 0 | −1 | −1 |
+| {0,1,2} | −1 | −1 | −1 | 0 |
+| {0,1,3} | −1 | −1 | 0 | −1 |
+| {0,2,3} | −1 | 0 | −1 | −1 |
+| {1,2,3} | 0 | −1 | −1 | −1 |
+| I | −1 | −1 | −1 | −1 |
+
+Its singleton matrix is EXACTLY the Γ in this notebook's initial
+two-cycle-plus-leaves source. Its favorable map is
+
+    f(0)=1, f(1)=0, f(2)=0, f(3)=1,
+
+and its full inverse has mixed-sign columns. This is not a matching
+of favorable owners.
+
+The positive theorem has two parts:
+
+1. For EVERY vector s∈ℝ⁴, the raw table r_i(S)=z_i(S)+s_i on all
+   nonempty S has one exact absorbing terminal Nash profile, with
+   all unilateral behavioral deviations bounded. The same profile
+   and its own fixed target work at every sufficiently long horizon.
+2. There exists ε₀>0 such that EVERY arbitrary raw table r satisfying
+
+       max_(i,S≠∅) |r_i(S)−r_i({i})−z_i(S)| < ε₀             (MP.1)
+
+   has an exact absorbing period-two terminal Nash profile. Its rates
+   and target are produced from that table before the accuracy is
+   selected. Own singleton values may be any signed real numbers.
+
+Condition(MP.1) is an open region in the entire60-entry reward space.
+It is an open neighborhood of every row translate of z. It fixes the
+centered reward comparisons near z; it does NOT permit arbitrary
+nonsingleton completions or assert one target common to different
+tables. The neighborhood radius is existential, not numerical.
+Choosing s_i=1 already gives a positive-own table, where AllNever
+has a profitable finite solo Quit. Thus the meaningful positive
+coverage is not the native table's trivial AllNever equilibrium.
+
+### MP2. Produce the two proper hazards without a root oracle
+
+Define
+
+    P(a)=3a⁷−7a⁶+a⁴−8a³+13a²−15a+4,
+    D(a)=1−a³,    N(a)=a−a²−a³,    b(a)=N(a)/D(a).
+
+Exactly,
+
+    P(1/3)=37/243>0,
+    P(3/8)=−451543/2097152<0.
+
+The intermediate value theorem gives a root a∈(1/3,3/8). One may
+fix the least root in that closed rational interval to make the
+table's initial choice definite; the endpoint values are nonzero
+and P is a nonzero polynomial. Put b=b(a). Then
+
+    3/16 < b < 1/5.                                  (MP.2)
+
+Here D>0. For the lower bound, the inequality b>3/16 is equivalent
+to L(a)=13a³+16a²−16a+3<0. This L is convex on the interval and
+has L(1/3)=−2/27 and L(3/8)=−33/512. Convexity bounds it above
+by the endpoint chord, proving strict negativity throughout.
+For the upper bound, b<1/5 is equivalent to
+4a³+5a²−5a+1>0. Write a=1/3+t, 0≤t≤1/24. The last expression is
+
+    1/27−t/3+9t²+4t³ ≥ 1/27−1/72 = 5/216>0.
+
+No floating-point root or assumed equilibrium-selection rule is used.
+Decimal values a≈0.350403281 and b≈0.192896504 are orientation only.
+
+At every even date, owners0 and3 quit with hazards a and b respectively;
+owners1 and2 continue. At every odd date, owners1 and2 quit with
+hazards a and b respectively; owners0 and3 continue. The four complete
+laws are independent, induced by those deterministic hazard sequences.
+Each player has a proper positive chance to quit in every two-date
+block and hence has Never mass0. Every opponent-deleted profile also
+absorbs almost surely. No shared coin or observable private draw is used.
+
+### MP3. All actual endpoints and complete behavioral deviations
+
+Write X_i for owner i's value in its active phase and W_i for its value
+in the opposite, passive phase. Define
+
+    X₀=X₁=−3b/2,        W₀=W₁=−b/[2(1−b)],
+    X₂=X₃=−a/2,         W₂=W₃=a/[2(1−a)].             (MP.3)
+
+The initial even-phase target is
+
+    v=(−3b/2, −b/[2(1−b)], a/[2(1−a)], −a/2).         (MP.4)
+
+Negative entries are intentional. The proof uses actual conditional
+payoffs, not a blanket singleton-floor condition.
+
+In an active phase the only possible opponent quitter is the mate,
+whose singleton pays−1 to this owner. For owners0 and1, Quit pays
+−3q_m/2 and Continue pays
+
+    −q_m+(1−q_m)·[−q_m/(2(1−q_m))]=−3q_m/2.
+
+For owners2 and3, Quit pays−q_m/2 and Continue pays
+
+    −q_m+(1−q_m)·[q_m/(2(1−q_m))]=−q_m/2.
+
+Thus each active owner's actual mixed action is indifferent, with
+the corresponding X_i in(MP.3).
+
+In a passive phase the two opponents use a,b and their joint coalition
+pays0 to the waiting owner. The Continue values are
+
+    C_bad=a(1−b)−2b(1−a)−(3/2)b(1−a)(1−b),
+    C_good=(3/2)a(1−b)−(1/2)b(1−a)
+                                −(1/2)a(1−a)(1−b).
+
+Direct clearing gives
+
+    2(1−b)(C_bad−W_bad)
+       =3(a−1)b³+(10−8a)b²+(3a−6)b+2a,
+    2(1−a)(C_good−W_good)
+       =(a³−1)b−a³−a²+a.
+
+Substituting b=N/D makes the second polynomial identically zero.
+Multiplying the first by D³ gives exactly a(a−1)P(a), hence zero.
+Therefore every prescribed passive Continue action realizes W_i.
+
+Every passive Quit endpoint is also explicit. For owners0 and1 it is
+
+    Q_bad=−a−3b/2+3ab/2 ≤ −a < −1/3,
+
+whereas W_bad>−1/8 by(MP.2). Their strict Continue margin exceeds
+5/24. For owners2 and3 it is
+
+    Q_good=−a/2−b+ab/2 < 0,
+
+whereas W_good>1/4. Their strict Continue margin exceeds1/4.
+These computations include all three nonempty opponent coalitions;
+an unpriced simultaneous-response spike is not omitted.
+
+The phase values satisfy the literal Bellman policy equations, and
+each possible own action is bounded above by its current phase value.
+Iterating those inequalities against ANY complete unilateral behavioral
+deviation bounds its expected terminal payoff by the initial coordinate
+in(MP.4). The remainder vanishes because that deviator's three opponents
+absorb with a geometric block tail independently of its own actions.
+Iterating policy equality for the prescribed actions identifies the
+actual payoff with(MP.4). This bounds all finite deadlines, literal Never
+and every randomized history-dependent behavioral replacement.
+
+For completeness, the deleted-opponent two-date survival factor is at
+most κ=169/384<1: a deleted bad owner leaves survival
+(1−a)(1−b)², and a deleted good owner leaves
+(1−a)²(1−b). The bounds(MP.2) put both below κ. Consequently every
+unilateral profile has expected absorption date plus one at most
+
+    C=2/(1−κ)=768/215.
+
+With reward bound M, its terminal-to-finite-average error is at most
+MC/H. The live quitting date pays0 in the project's convention, so
+the exact path factor is (H−τ−1)⁺/H, and the omitted initial live
+mass is bounded by E(τ+1)/H. Terminal Nash thus gives finite-horizon
+regret at most2MC/H and prescribed delivery error at most MC/H.
+For z one can take M=2. The same literal profile and fixed target
+therefore meet every requested accuracy for all sufficiently long H.
+
+Row translation is now justified at the FULL deviation level. Against
+this profile every unilateral deviation still absorbs almost surely,
+so replacing z_i(S) by z_i(S)+s_i adds EXACTLY s_i to every prescribed
+and every deviation terminal payoff. Their gain differences are unchanged.
+The translated profile remains exact terminal Nash, with target v+s.
+Its finite-horizon bounds use the new finite bound M=max|z_i(S)+s_i|.
+No row-translation rule for arbitrary nonabsorbing profiles is assumed.
+
+### MP4. The actual four-hazard Jacobian is nonsingular
+
+This is a four-coordinate calculation. A two-coordinate symmetric
+Jacobian alone would not prove persistence under arbitrary raw-table
+perturbations.
+
+Let the mate map be m=(3,2,1,0). For arbitrary nearby raw rewards r
+and proper hazards q define s_i=r_i({i}),
+
+    p_i=r_i({i,m(i)})−s_i,
+    c_i=r_i({i,m(i)})−r_i({m(i)}),
+    X_i=s_i+p_iq_m,
+    W_i=s_i+c_iq_m/(1−q_m).
+
+For the two opposite-phase owners j,k define their literal passive
+Continue value
+
+    C_i=q_j(1−q_k)r_i({j})+q_k(1−q_j)r_i({k})
+                  +q_jq_kr_i({j,k})+(1−q_j)(1−q_k)X_i,
+    F_i(r,q)=(1−q_m)(C_i−s_i)−c_iq_m.               (MP.5)
+
+These F_i are polynomials in all raw rewards and all four hazards.
+F=0 is EXACTLY the four passive Continue identities; the active
+indifference identities remain automatic at every proper q.
+
+At r=z, q=(a,a,b,b), differentiation of(MP.5) gives
+
+    J = [[0,A,B,C],
+         [A,0,C,B],
+         [D,E,0,F],
+         [E,D,F,0]],
+
+where
+
+    A=1+3b/2−4b²+3b³/2,           F=(a³−1)/2,
+    B+C=9ab²/2−8ab+3a/2−9b²/2+10b−3,
+    D+E=3a²b/2−3a²/2−a+1/2,
+    B−C=−3ab²/2+3ab+a/2+3b²/2−3b−1,
+    D−E=−a²b/2+a²/2+ab−a−2b+5/2.
+
+Elementary monomial interval arithmetic on
+R=[1/3,3/8]×[3/16,1/5] gives the deliberately loose rational bounds
+
+    9/8 ≤ A ≤ 6/5,          −1/2 ≤ F ≤ −7/15,
+    −11/8 ≤ B+C ≤ −1,       −1/16 ≤ D+E ≤ 1/16,
+    −5/4 ≤ B−C ≤ −11/10,    9/5 ≤ D−E ≤ 2.
+
+The symmetric and antisymmetric coordinate subspaces are invariant.
+Their two block determinants are
+
+    Δ_plus=AF−(B+C)(D+E) ≤ −281/640<0,
+    Δ_minus=AF−(B−C)(D−E) ≥ 69/50>0.
+
+Hence det J=Δ_plusΔ_minus≠0 throughout R, in particular at EVERY
+root chosen in MP2. This does not depend on uniqueness of that root.
+
+The following runnable STANDARD-LIBRARY exact verifier checks the
+root endpoint signs, the cleared substitution identity and all six
+interval bounds. The actual field/Jacobian relation is the printed
+derivative calculation from(MP.5), not a numerical finite difference.
+
+```python
+from fractions import Fraction as R
+
+def add(*polys):
+    out={}
+    for p in polys:
+        for k,v in p.items():
+            out[k]=out.get(k,R(0))+v
+    return {k:v for k,v in out.items() if v}
+
+def scale(p,c):
+    return {k:v*c for k,v in p.items() if v*c}
+
+def mul(p,q):
+    out={}
+    for i,u in p.items():
+        for j,v in q.items():
+            out[i+j]=out.get(i+j,R(0))+u*v
+    return {k:v for k,v in out.items() if v}
+
+def power(p,n):
+    out={0:R(1)}
+    for _ in range(n):
+        out=mul(out,p)
+    return out
+
+def value(p,x):
+    return sum(c*x**i for i,c in p.items())
+
+P={7:R(3),6:R(-7),4:R(1),3:R(-8),2:R(13),1:R(-15),0:R(4)}
+D={0:R(1),3:R(-1)}
+N={1:R(1),2:R(-1),3:R(-1)}
+assert value(P,R(1,3))==R(37,243)
+assert value(P,R(3,8))==R(-451543,2097152)
+left=add(
+    mul({1:R(3),0:R(-3)},power(N,3)),
+    mul({0:R(10),1:R(-8)},mul(power(N,2),D)),
+    mul({1:R(3),0:R(-6)},mul(N,power(D,2))),
+    mul({1:R(2)},power(D,3)),
+)
+assert left==mul({2:R(1),1:R(-1)},P)
+assert add(mul({3:R(1),0:R(-1)},N),mul(N,D))=={}
+
+alo,ahi=R(1,3),R(3,8)
+blo,bhi=R(3,16),R(1,5)
+def interval(p):
+    lo=hi=R(0)
+    for (i,j),c in p.items():
+        ends=(c*alo**i*blo**j,c*ahi**i*bhi**j)
+        lo+=min(ends);hi+=max(ends)
+    return lo,hi
+
+rows=[
+ ({(0,0):R(1),(0,1):R(3,2),(0,2):R(-4),(0,3):R(3,2)},
+  (R(9,8),R(6,5))),
+ ({(3,0):R(1,2),(0,0):R(-1,2)},(R(-1,2),R(-7,15))),
+ ({(1,2):R(9,2),(1,1):R(-8),(1,0):R(3,2),
+   (0,2):R(-9,2),(0,1):R(10),(0,0):R(-3)},(R(-11,8),R(-1))),
+ ({(2,1):R(3,2),(2,0):R(-3,2),(1,0):R(-1),(0,0):R(1,2)},
+  (R(-1,16),R(1,16))),
+ ({(1,2):R(-3,2),(1,1):R(3),(1,0):R(1,2),
+   (0,2):R(3,2),(0,1):R(-3),(0,0):R(-1)},(R(-5,4),R(-11,10))),
+ ({(2,1):R(-1,2),(2,0):R(1,2),(1,1):R(1),(1,0):R(-1),
+   (0,1):R(-2),(0,0):R(5,2)},(R(9,5),R(2))),
+]
+for p,(lower,upper) in rows:
+    lo,hi=interval(p)
+    assert lower<=lo<=hi<=upper
+assert R(9,8)*R(-7,15)+R(11,8)*R(1,16)==R(-281,640)
+assert R(6,5)*R(-1,2)-R(-11,10)*R(9,5)==R(69,50)
+print('exact IVT endpoints, cleared identities, and full Jacobian bounds pass')
+```
+
+### MP5. Produce the open region and keep the target before accuracy
+
+Apply the ordinary parameterized implicit function theorem to(MP.5)
+at the chosen (z,q). Its derivative in q is invertible by MP4.
+It gives an open neighborhood of the centered table z and a continuous
+selected branch q(r) solving all four passive identities. Shrink that
+neighborhood so every q_i stays proper and every STRICT passive Quit
+margin in MP3 stays positive. There are only four margins, and their
+payoff formulas are continuous in r and q. The same active identities,
+policy recursion and deleted-opponent contraction then give a literal
+exact terminal Nash profile for EVERY table in that neighborhood.
+
+All sixty raw entries are allowed to vary. Entries absent from(MP.5)
+may still occur in passive Quit bounds; those bounds were strictly
+slack and are retained by the same neighborhood shrinkage. Entries
+never encountered by this two-active-owner schedule or a unilateral
+deviation can vary freely. No perturbed table is assumed to have
+the original symmetry, inverse signs, matrix degree or equal hazards.
+The four hazard coordinates are solved afresh.
+
+More precisely, apply IFT on the56-dimensional centered table space,
+where own entries are zero. Choose a positive supnorm ball radius ε₀
+contained in the resulting neighborhood. For arbitrary raw r obeying
+(MP.1), set s_i=r_i({i}) and z'_i(S)=r_i(S)−s_i. This centered z' lies
+in that ball. Produce its proper exact periodic profile, then translate
+back by the row-translation argument in MP3: every opponent-deleted
+profile absorbs, so every complete unilateral terminal payoff gains
+exactly s_i. This proves the arbitrary-own-level form of MP1 without
+extrapolating the local IFT outside its neighborhood.
+
+The table r is fixed first, then its branch q(r) and actual phase target
+are fixed. The accuracy only determines a horizon threshold. Continuity
+of the hazard branch also permits uniform properness/contraction bounds
+on a smaller centered ball, but no numerical radius is claimed.
+
+### MP6. Targeted source overlap, genuine coverage and the remaining question
+
+This construction uses an existing CHECKED consumer, not a new strategy
+soundness architecture: `GameTheory.PairedCycle.twoPair_exact_terminal_and_fixedProfile`
+in `UniformEquilibrium/Quitting/Cycles/TwoPairExactCertificate.lean` takes
+the four passive Continue identities and passive Quit bounds for proper
+hazards, then derives active indifference, exact policy, full terminal
+Nash and one fixed profile at every accuracy. Its actual hypotheses and
+imports were read. MP supplies those identities and bounds from ONE
+explicit table and then produces them for arbitrary nearby centered
+reward data. Neither the consumer nor MP is claimed implemented here.
+`GameTheory.PairedCycle.TwoPairOdds.passiveEquation_eq_scaled_post_sub_continue`
+in `UniformEquilibrium/Quitting/Cycles/TwoPairOddsValues.lean` was also
+inspected; it states the actual arbitrary-table odds identity, not
+root production in this mixed-sign source.
+
+The relevant raw positive producers were inspected through the toolkit:
+
+- `GameTheory.PairedCycle.exists_exact_allSuffix_uniformPayoff_of_rawRegion`
+  in `UniformEquilibrium/Quitting/Cycles/PairedCycleEquilibrium.lean` uses
+  `RawRegion` in `UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean`.
+  That region permits at most one below-own singleton per recipient;
+  every MP row has TWO. No scheduled relabeling or positive row affine
+  change removes that obstruction.
+- `GameTheory.PairedCycle.CrossedMatching.exists_uniformEquilibriumPayoff`
+  in `UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`
+  requires a favorite MATCHING and scheduled join payoff strictly above
+  the scheduled singleton. The favorite map printed in MP1 is not
+  bijective. For the three possible pair schedules, the vectors of
+  scheduled membership gaps include negative entries in EVERY case:
+
+      schedule 01/23: c=(-2,-2,-1/2,-1/2),
+      schedule 02/13: c=(1/2,1/2,-2,-2),
+      schedule 03/12: c=(-1/2,-1/2,1/2,1/2).
+
+  Thus the original all-positive-c degree producer in this notebook
+  also does not apply. The positive-inverse branch in the same tracked
+  crossed-matching source requires a strictly positive full singleton
+  inverse and nonnegative participant increments. MP has mixed inverse
+  columns and negative participant increments.
+- `GameTheory.PairedCycle.BelowSingleton.exists_exact_terminal_and_fixedProfile_of_rawFamily`
+  in `UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseSource.lean`
+  requires favorite/scheduled/other equalities with a favorable matching
+  and a common below-singleton premium. The nonbijective favorite map
+  excludes its raw family after every relabeling and positive row scale.
+  Its local persistence source is attached to its own different fixture;
+  MP makes no claim about how far that existential neighborhood extends.
+
+The response-quotient sources were checked as well. The exact theorem
+`quittingSingletonBlockRowSum_eq_of_responseInvariant` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`
+requires equality of Γ row sums into EVERY block. MP's total row sums
+are(−2,−2,0,0). A nontrivial partition must therefore refine
+{{0,1},{2,3}}. Merging only0/1 fails the row sums into singleton{2};
+merging only2/3 fails the row sums into singleton{0}. Thus the ONLY
+possible nondiscrete partition is exactly those two pairs. It is
+indeed response-invariant, supplied by the literal simultaneous swap
+0↔1,2↔3 and
+`responseInvariant_of_reward_subgroup_automorphisms` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPlayerOrbits.lean`.
+
+Its actual singleton quotient is
+
+    Q=[[1,−3],[1/2,−1/2]],     det Q=1,
+    Q⁻¹=[[-1/2,3],[-1/2,1]].
+
+It is R₀: neither singleton support has a homogeneous root, and Q
+is nonsingular. At offset(−1,−1), neither singleton support is
+feasible and the unique full-support root is(5/2,1/2), with positive
+Jacobian determinant1. Its R₀ degree is therefore+1. The discrete
+partition retains the original Γ's degree+1. Thus the degree-not-one
+and negative-determinant/nonnegative-inverse quotient consumers do
+not close this table. Their exact declarations inspected are
+`exists_uniformEquilibriumPayoff_finFour_of_responseInvariant_degree_ne_one`
+in `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`
+and `finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+in `UniformEquilibrium/Diagnostics/Quitting/FinFourResponseQuotientCriterion.lean`.
+This is not a claim that response invariance identifies a smaller
+quitting game. Arbitrary tables in the MP neighborhood need not retain
+the swap or ANY nondiscrete response quotient.
+
+These are exact screens of NAMED raw interfaces, not a global novelty
+claim, an audit of every known class, or a statement that their own
+existential neighborhoods are disjoint from MP's. The real positive
+output is the arbitrary-table producer(MP.1), including positive-own
+tables and unrestricted behavioral deviations, after supplying its
+open radius internally. It does not inherit any positive full minimum,
+least-Never property or paid-source margin from the conjecture source.
+
+Exploratory finite-word and unrestricted periodic searches initially
+left positive numerical debt at this table. They were heuristic local
+searches and are superseded by the exact producer above; their apparent
+floors are NOT retained as counterexample evidence. The exact rates were
+found by solving the actual two-pair policy equations, with every new
+cap then evaluated. No experimental runtime artifact is needed.
+
+No Lean files were changed or built. No export has been requested before
+an independent mathematical check. A useful falsification check is the
+FULL four-coordinate Jacobian and the arbitrary-own translation with
+literal Never included; a symmetric two-coordinate check alone is
+insufficient. The next producer question is whether the mixed signs
+c=(-1/2,-1/2,1/2,1/2) permit a larger actual-data two-pair selection
+theorem, including passive caps, beyond the local neighborhood(MP.1).
+The full Fin4 conjecture remains OPEN.

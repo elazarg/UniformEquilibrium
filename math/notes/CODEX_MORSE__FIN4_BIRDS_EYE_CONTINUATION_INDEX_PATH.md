@@ -58,6 +58,17 @@ automatic efficiency from that local temperature adjustment and makes
 actual global-minimum response kernels the next selection input; no
 forcing principle for a whole compatible word has yet been proved.
 
+The FX finite-menu sequel exactly classifies all Nash selectors at the
+nonsmall common negative boundary price1 on the original RZ completion,
+then transfers the result to ONE fixed positive-own ordinary game.
+Every finite-deadline menu equilibrium waits until its final date, has
+joint Never exactly1/4, and has full debt at least√2. BP/BU in BROUWER's
+owned note already retire the broad negative-boundary exact-Nash and
+independent-repetition mechanism; FX is a sharper same-fixture census,
+not new frontier contraction. Exact finite-menu Nash therefore cannot
+be the required intermediary even though arbitrary finite approximate
+profiles and the rotating exact infinite profile solve this game.
+
 ## 1. The decisive picture
 
 My strongest current intuition is:
