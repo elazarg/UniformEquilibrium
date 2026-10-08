@@ -31,15 +31,22 @@ reviews but is NOTES ONLY: its companion absorbing minimum is not an
 original minimum, and relative gap proximity does not restore the
 lost nonsure all-tail floor. Its exact whole-law penalty
 C·P(AllNever), with all replies reoptimized, is retained internally.
-BAP1–BAP4 preserves every positive singleton. New UNREVIEWED FC1–FC6
+BAP1–BAP4 preserves every positive singleton. FC1–FC6 passed TWO
+independent complete mathematical and strict-value reviews. It
 uses that sign scope: a zero common debt coordinate forces EXACT
 same-table alignment with original minima, and a nonlocal diffuse
 clock completion then supplies an all-four-finite-a.s. realizing
-sequence for each original minimum pair. This is not UE closure.
+sequence for each original minimum pair. Its self-contained final
+assembly is
+`CODEX_MORSE__FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md`, pending
+byte-bound whole-assembly checks. It includes every needed original
+source/contact/rigidity/bridge proof and has no conference dependencies.
+The frozen FC body retains its historical draft label; the current
+review status is stated here. This is not UE closure or an export.
 ZR1–ZR4 separately proves the proposed full-conjecture equivalence
 with absorbing approximate Nash in ALL-own-zero games; CN1–CN3 gives
 the proposed counterexample normal form arbitrarily near constant1/2,
-with all own singletons exactly1/2. These new sections are ordinary
+with all own singletons exactly1/2. ZR and CN remain ordinary
 unreviewed mathematics, not exports. The consuming question is a
 true all-four-clock minimum or the fully paid bridge residual.
 

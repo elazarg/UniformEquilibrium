@@ -145,9 +145,10 @@ coupling of small Never-mass replacements, gives
 Consequently either every a_i is positive, or every original minimum
 pair has an actual realizing sequence with all four clocks finite almost
 surely. This permits choosing new realizers; it is not a claim about
-every old realizing sequence. It does not imply finite support, raw-date
-tightness, bounded expected stopping time, or realization of a minimum
-pair by one actual profile. The supplied continuation v still need not
+every old realizing sequence. Each new approximant may have finite support;
+there need not be a uniform support bound, raw-date tightness, a uniform
+expected stopping-time bound, or realization of a minimum pair by one
+actual profile. The supplied continuation v still need not
 be minimizing or Nash; the variational constraint remains over all K.
 
 ## Question

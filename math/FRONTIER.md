@@ -540,9 +540,11 @@ Thus either every common debt coordinate is positive, or EVERY original
 minimum pair admits an all-four-finite realizing sequence. The latter can
 be used to construct a fresh marked first-collision source, retaining the
 full arbitrary-K tail lower bound rather than a companion-carrier bound.
-This is not an assertion about every old realizing sequence. Finite raw
-dates may escape; no raw-time tightness, finite support, actual minimum
-attainment, finite expected stopping time, Nash continuation, or UE follows.
+This is not an assertion about every old realizing sequence. Each new
+approximant can have finite support, by moving its small finite tail mass
+to a finite deadline rather than Never. Raw dates may still escape; no
+raw-time tightness, finite-support minimum attainment, uniform support bound,
+uniform expected stopping-time bound, Nash continuation, or UE follows.
 
 The [full-pair clock-completion proof](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
 has two independent mathematical reviews. These carrier identities and the
