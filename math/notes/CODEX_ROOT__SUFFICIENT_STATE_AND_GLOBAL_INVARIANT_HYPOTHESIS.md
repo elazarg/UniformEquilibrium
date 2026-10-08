@@ -1183,3 +1183,18 @@ Taken together, these tests weakly favor a missing global selection theorem
 or an unsuitable operation over missing information for these particular
 attempts. They do not decide between existence and a positive-gap table,
 and none turns a conditional object into a conjecture-closing producer.
+
+## Finitely additive existence is not behavioral realization
+
+Khan, Pedersen and Stinchcombe's
+[All Games Have Equilibria, version 2](https://arxiv.org/html/2607.15452v2)
+gives finitely additive existence. Its Theorem E requires a decoded
+countably additive measure avoiding payoff discontinuities and additional
+semicontinuity. These paper claims are not independently checked here.
+
+At a positive-own-singleton quitting table, AllNever is a payoff
+discontinuity: a sole finite deadline tends to Never but still pays its
+singleton reward. A decoder preserving a positive AllNever mass cannot
+meet the discontinuity-avoidance premise. Another selection and a uniform
+full-response realization theorem would be needed; existence in the larger
+model is not the project's endpoint.
