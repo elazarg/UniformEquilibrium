@@ -1478,3 +1478,156 @@ identifies the specific complete-cap obstruction to naive replay. Constructing
 a different absorbing law below δ, or proving the zero-own absorbing gap A
 cannot be positive, remains OPEN. No uniform equilibrium, positive-gap
 example, finite raw cap attainment or export placement is certified here.
+
+## Whole standalone NP artifact: independent byte-bound mathematical gate
+
+Verdict: ORDINARY MATHEMATICS PASS; AFFIRMATIVE STRICT SOURCE-REDUCTION
+VALUE. No unresolved mathematical objection. This verdict is for the ENTIRE
+standalone assembly, not inferred from my earlier NP section review.
+
+Artifact: `exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`,1016 lines,
+SHA256
+
+    21e596e53595811ad4f83b657d97b3942d53e313d69bb2e9e243c2ee2af11953
+
+I read ALL Sections1–13 in these exact bytes, independently checked the
+inlined source compiler, signed transport, common-debt selection, first-root
+and whole-cap renewal arguments, and recomputed ALL boundary tables. I did
+not read BROUWER's final review or another final-artifact verdict. I did not
+edit the artifact, exports, Lean or shared indexes, compile, stage, commit
+or push. Related contribution disclosure: my RM20 has the zero-sum signed
+row identity; my earlier section review requested the complete cyclic test;
+my own notebook has the independent whole-Never graft and solved-table
+countertests. None certifies the new global separation or the assembly.
+
+### Exact source chain and same-table quantifiers
+
+The initial no-UE hypothesis is converted to an ORIGINAL positive full gap.
+The full normal-core theorem supplies punishment normality before applying
+the tracked reverse single-pivot normalization. Both old and new own signs
+justify subtracting the pivot row. The resulting zero-own table has positive
+ABSORBING gap, while its full gap correctly vanishes. Adding small positive
+row constants gives a UNIFORM positive full gap strictly below that absorbing
+gap. No finite penalty attainment or restricted minimum is substituted.
+
+The whole-pair completion cost14Mν^(1/4) controls ALL observers' full caps.
+Both value functions have the fixed-class8-Lipschitz modulus, so inward
+scaling, generic perturbation and positive regular recipient scaling preserve
+all strict properties at ONE final table. Section5 proves coordinate
+regularity by one-variable concavity/Fubini and pins EVERY minimizing debt
+vector through the two signed supporting inequalities. It is not a false
+convexity assertion about independent profile mixtures. Genericity survives
+positive scaling; full and absorbing gap separation is checked after scaling.
+
+Every sufficiently near-minimal actual law then has a uniform joint Never
+floor. EVERY full minimum and ANY realizing sequence inherit it. The minimum
+common vector is strictly positive in every coordinate. This immediately
+separates the entire full minimum set from K_abs at the same final table.
+No old table's minimum, cap selector, chronology or93 contact exclusion is
+carried. All later globality and quadratic-margin invocations use this
+CURRENT true unweighted FULL minimum and original carrier.
+
+### Inlined marked compiler and legal negative variations
+
+Sections6–7 supply the previously external chart arguments in sufficient
+ordinary detail. Finite truncation uses uniform deleted-opponent coupling,
+not a claim of raw tightness. Marginal weak-* convergence plus uniformly
+bounded product densities gives convergence on rectangle tests, then all
+L¹ kernels. Prescribed and moving-response kernels converge strongly off
+null raw boundaries; their errors are split before applying the fixed-kernel
+weak-* test. No product of uncontrolled weak limits is used.
+
+Endpoint-set convergence identifies retained positive mixture atoms with
+single interval gaps. Each such midpoint is isolated; null cuts, the last
+finite test c and the separate Never label remain distinct. The exceptional
+uncollapsed endpoint set is null by the countable complement-gap argument.
+Thus compact response continuity, every moving finite witness, cap upper
+and lower limits and original FULL-carrier membership all hold.
+
+The signed atom resets use positive old OWN atom mass. The signed chronological
+conditionals use positive fixed old cut mass and unions of whole original
+date intervals. LEFT/RIGHT raw boundaries distinguish strict before/after
+a retained atom, and their indicators converge strongly. Formula(2) keeps
+the old-chart densities uniformly bounded on a two-sided legal box. Product
+and moving-kernel convergence realizes the entire modified full pair there.
+No insertion at an unsupported clock is silently licensed. All these law
+changes keep mass at c zero, so the extra c⁺ tester duplicates c but is not
+confused with Never.
+
+The all-upper-family affine identity controls nonisolated and multiple late
+maxima without assuming a uniform complement gap. Only the compact LOWER
+inactive set uses its strict gap. Root-only isolated caps use their genuine
+complement gaps. The multiaffine interior-minimum step is applied after full
+cap stability, and common debt pins each row polynomial. Distant polynomial
+endpoints are explicitly not certified as actual minimizing cap pairs.
+
+Positive Never masses make every strict head probability<1. Two or more
+heads then contradict positive-debt rigidity by d*=e_i d*. A single head
+contradicts the strict prescribed singleton margin. The earliest zero-mixture
+alternative contradicts the cap margin. The isolated first root is therefore
+literal, and all its positive rates are<1. The sole-supplier argument includes
+the entire original conditioned suffix and its true K_all floor; it neither
+declares a Nash tail nor drops deleted-observer caps. The positive continue
+product permits its actual rebased conditional realization.
+
+Section10's hypothetical root-only/later partition is exhaustive only under
+absence of a bridge. Its signed box preserves every active family, and the
+two individual regret contradictions apply to root suppliers. This forces
+a paid root/later bridge. Never is already strictly below EVERY cap, so the
+later point is FINITE. The two literal reward kernels differ on a positive
+original opponent-root coalition event by within-row genericity. Moving
+finite witnesses approach both cap values; exact raw co-maximality or raw
+attainment is not asserted.
+
+### Exact renewal overlap and all boundary calculations
+
+I read `UniformEquilibrium/Quitting/Cycles/PeriodicFiniteReplyPrefix.lean`
+under its imports. Its
+`quittingPureTimeValue_periodizedPrefix_block_interpolation`,
+`quittingPeriodicWindowRefusalValue_periodizedPrefix_eq_div`, and
+`quittingBestReplyValue_periodizedPrefix_le_max` have exactly the opponent
+contraction and first-block finiteBound premises quoted in Section11.
+The unrestricted cap reduction is indeed supplied by
+`sSup_range_quittingTerminalPayoff_update_eq_periodicWindow`. The artifact
+honestly claims no new generic interpolation formula. Its extra EMPTY final
+phase makes the old full finite supremum a first-block value. A first-block
+maximizing phase and literal Never provide the two matching lower bounds,
+yielding exact max(B,R/(1−h)), not merely the tracked upper bound.
+
+At least two nonsure suppliers give h_i<1 for EVERY owner, even a nonsupplier,
+so the original finite approximants have positive limiting denominators.
+Their periodic competitors absorb almost surely and obey the same-table
+absorbing floorδ+g. Subtraction of the original debt gives(P17), with the
+strict positive payoff term supplied by(QM). No born cap is omitted.
+
+ALL four Section12 tests verify. The all−1 table isolates the OLD-own sign
+premise. The fully specified padded three-cycle has pure finite cap candidates
+−q²(1−q)^(3t), Never cap0, U=−q³/[1−(1−q)⁴] for each core recipient and
+the stated vanishing absorbing debt. It now includes all60 coordinates.
+The passive2/participant0 half-root table has U15/16,B15/8,R7/4 and repeats
+to U1,cap2, raising total debt by1/4. The participant−1/passive0 table loses
+the empty finite response if period1 is used: repeated cap0 rather than1/8.
+Its specified period2 retains cap1/8. Each is correctly a solved game or
+hypothesis/menu countertest, not a positive-gap example.
+
+All strategic named declarations were located in their cited project files;
+the exact reverse normalization, original gap bridge and true-minimum
+quadratic-margin hypotheses were checked under their imports. The artifact
+has no borrowed conference-proof dependency or deferred ordinary lemma.
+Repository tracking/promotion remains the coordinator's mechanical check.
+
+### Separate final strict-value decision
+
+AFFIRMATIVE, unchanged but independently checked for the final assembly.
+The new necessary source has a STRICT full/absorbing gap, a uniform Never
+and debt floor at EVERY near-minimizer, no sure first root, and a PAID
+FINITE-to-FINITE bridge. This removes the prior source's zero-debt and sure
+branches at ONE produced table without surrendering original all-tail
+globality. It is stronger than an equivalent zero-gap domain or a companion
+absorbing minimum. The complete forced renewal leakage adds an actual
+whole-law restriction, while its generic cap formula overlap is acknowledged.
+
+The theorem remains a necessary source restriction. It does not prove
+admissible return, cap-compatible descent, raw minimum attainment, a no-UE
+example or uniform equilibrium. SG/NF9 is absent and is not imported into
+this verdict. Those exact open boundaries are part of the accepted scope.

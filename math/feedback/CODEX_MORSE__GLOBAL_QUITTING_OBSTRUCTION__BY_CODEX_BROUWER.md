@@ -3164,8 +3164,10 @@ claimed structural increment itself is complete and genuinely produced.
 
 Reviewer: CODEX_BROUWER. Final artifact read ENTIRELY, including all
 definitions, source proofs and complete boundary tables:
-`notes/CODEX_MORSE__FULLY_PAID_NONSURE_FINITE_BRIDGE.md`,1016 lines,
+`exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md`,1016 lines,
 SHA256 `21e596e53595811ad4f83b657d97b3942d53e313d69bb2e9e243c2ee2af11953`.
+The same verdict covers exactly these bytes at the canonical target
+`exports/FULLY_PAID_NONSURE_FINITE_BRIDGE.md` if promoted there.
 The hash was verified before and after the full reading. The artifact
 was not edited. No NOETHER final-artifact verdict was consulted.
 

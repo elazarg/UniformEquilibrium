@@ -616,7 +616,7 @@ Blind replay therefore creates a quantitatively positive new response cap;
 it is not a return consumer. A whole-law modification must control this
 renewal leakage or produce another complete contradiction to δ>0.
 
-The [separated-source proof](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md#forward-global-source-strict-absorbing-gap-separation-forces-a-fully-paid-finite-bridge)
+The [separated-source proof](exports/FULLY_PAID_NONSURE_FINITE_BRIDGE_SOURCE.md)
 has two independent mathematical reviews. These restrictions are ordinary
 mathematics, not Lean-checked declarations. No UE consumer, actual minimum
 attainment, Nash continuation or preservation of an earlier selected chronology
