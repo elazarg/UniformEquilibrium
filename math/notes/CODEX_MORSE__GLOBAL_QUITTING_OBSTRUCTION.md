@@ -2,17 +2,24 @@
 
 Owner: CODEX_MORSE.
 
-Current full-game direction (NI1–NI9 at the end): an unrestricted
-negative-certificate search, with its FIRST center now RETIRED by a
-literal charged return. NI7–NI9 certify eight simultaneous active
+Current full-game direction (NI1–NI9 and UR below): an unrestricted
+negative-certificate search, with its FIRST center RETIRED by a
+literal charged return and its ENTIRE stated sixteen-control box now
+retired by UR's all-root odds calculation. NI7–NI9 certify eight simultaneous active
 equations and every quiet inequality for an actual four-pair periodic
 word on the fresh NI3 table. The same exact word controls EVERY
 behavioral deviation and excludes EVERY full exact/robust potential,
 not merely low-degree fits. Normality and strong no-sure were valid
 but did not signal a counterexample. Half of the sixteen transport
-controls are invisible to this whole word and all unilateral replies,
-so their changes alone cannot revive the negative center. No export,
-novel class count or full sixteen-control family theorem is claimed.
+controls are invisible to this whole word and all unilateral replies.
+UR instead varies ALL sixteen controls at once in the original box,
+including the used ones, and produces singleton-sublevel return for
+EVERY boxed positive exact root. A named actual-game consumer then
+gives a fixed unrestricted uniform payoff for every table in that box.
+This is an ordinary unreviewed raw-family proof, not a literal closed
+word for every parameter, a new class count or an export. The next
+negative attempt must change this used-transport REGION or the root
+geometry, not increase degree at its solved points.
 The full Fin4 question and both least-Never consumers remain OPEN.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
@@ -20073,6 +20080,10 @@ not a quartic no-go or exclusion of the whole control box.
 
 ### NI5. The concrete next mathematical test
 
+Historical live question; the ENTIRE stated control box is now retired
+by UR, not merely the center retired by NI7–NI9. The following search
+description is retained as provenance, not a still-open subproblem.
+
 The sixteen transport controls in NI3 give a sharper inverse-design
 problem than selecting another clock grammar: the full Nash-cell
 domain remains identical while successors vary by the exact linear
@@ -20380,4 +20391,287 @@ for i in range(4):
 assert 1-L.v.lo<F(1,250)
 assert sum(1-z.v.hi for z in cs)>2
 print("NI9 PASS: simultaneous contraction, every quiet gap, full tail bounds")
+```
+
+## UR. All-root odds return retires the entire inverse-design control box
+
+Status: COMPLETE ORDINARY UNREVIEWED proof for the sixteen-parameter
+raw family below. This is not a full Fin4 theorem, an export or a
+novel counterexample-class count. Unlike NI8's invisible-coordinate
+slice, ALL sixteen controls vary simultaneously through their full
+original intervals, including every control USED by the four-pair
+word. No continuation of that word or IFT neighborhood is assumed.
+The result comes from the ENTIRE exact-root relation, followed by
+an existing actual-game uniform-payoff consumer.
+
+### UR1. The actual raw family and the whole-game endpoint
+
+Use EXACTLY NI3's four singleton rows and twelve pair-participant
+entries. Equivalently, fix its own values s_i=1 and all its join gaps
+d_i(T). The favorite cycle is 0 -> 3 -> 1 -> 2 -> 0. On an opponent
+singleton the favorite join gap is 1/2; the other join gaps are the
+literal ones in NI3. On every opponent pair or triple the join gap
+is -1. Keep NI3's twelve singleton outsider entries fixed too.
+
+For EACH i and EACH opponent pair T, choose b_i(T) independently
+in [-4,5]. For EACH i and its opponent triple, choose b_i(T)
+independently in [-4,1]. Set the corresponding participant entry
+r_i(T union {i})=b_i(T)-1. These are ALL sixteen controls from NI3,
+not sixteen independent modifications to arbitrary entries. They
+specify the full sixty-cell table through the bijection NI2.
+
+The claim is:
+
+    For EVERY such table r there is ONE payoff u such that, for
+    EVERY epsilon>0, a profile sigma and a common sufficiently
+    late horizon make its prescribed payoff epsilon-close to u
+    and every unilateral BEHAVIORAL gain at most epsilon.
+
+Never pays zero; players' randomizations are independent; the only
+preabsorption public observation is survival. Strategies, deviations,
+support, calendar length and memory are unrestricted. The target u
+is selected before epsilon. This is ordinary uniform equilibrium,
+not a terminal-only claim or a constrained-root equilibrium.
+
+Every reward is in [-5,5]. All owns are1. The three opponents surely
+quitting at date0 bound the true punishment of i by b_i(I\{i})<=1,
+because Quit gives b_i(I\{i})-1 and every later reply, including
+Never, gives b_i(I\{i}). Thus every player is normal. NI3's complete
+strong no-sure argument is unchanged: its root gaps depend only on
+s,d. In particular EVERY exact root at EVERY real annotation has
+all rates <1. No old semantic minimum is transported between tables.
+
+### UR2. Uniform singleton-sublevel return for all boxed roots
+
+We prove the stronger finite statement
+
+    For EVERY v in [-8,8]^4 and EVERY exact FULL Nash root q,
+    if a(q)>0 then SOME i has F_i(v,q)<=1.             (UR.1)
+
+The head also lies in [-8,8]^4 by the literal convex Bellman formula.
+Annotations need not be actual behavior payoffs or satisfy any floor.
+All quiet inequalities are part of the hypothesis, even when a quiet
+coordinate is below its own reward. Strong no-sure above covers every
+sure face; it is not silently discarded in an odds parametrization.
+
+For active i, 0<q_i<1, set o_i=q_i/(1-q_i). For quiet i set o_i=0.
+Let h_i=product_{j!=i}(1-q_j)>0. Exact active indifference gives
+
+    v_i=1+sum_{nonempty T subset I\{i}} product_{j in T}o_j d_i(T).
+
+Write k_i=1-v_i. Each active k_i is at most9. Exact Nash also gives
+F_i=Q_i for every active i, where Q_i is its pure-Quit endpoint.
+These identities retain every coalition and are not active-subgame
+Nash in place of full Nash.
+
+If the support has one member i, its Q_i=1 and (UR.1) follows.
+If it has two members, every pair participant entry is strictly
+below1. Consequently either active player's Q_i is strictly below1.
+
+For support size three, let j be its missing owner and let i=f(j).
+Then i is active but its favorite predecessor is missing. Its two
+nonfavorite pair participant entries are both -2. Its participant
+triple entry is at most4. If x,y are the other two active odds,
+
+    (Q_i-1)/h_i <= -3x-3y+3xy.
+
+Suppose Q_i>1. Then xy>x+y, so x,y>1 and
+(x-1)(y-1)>1. Its active annotation satisfies
+
+    k_i=A x+B y+xy
+       >(A+1)x+(B+1)y,
+
+with the following exhaustive missing-owner data (either order of
+x,y is allowed if A,B are swapped with them):
+
+| missing j | active start i=f(j) | (A,B) |
+|---|---|---|
+| 0 | 3 | (1,4) |
+| 1 | 2 | (5,2) |
+| 2 | 0 | (6,6) |
+| 3 | 1 | (5,4) |
+
+For the last three rows, k_i>A+B+2>=9 already contradicts k_i<=9.
+For (A,B)=(1,4), put alpha=x-1,beta=y-1, so alpha*beta>1.
+Then 2alpha+5beta>6, since its square is at least40alpha*beta>40.
+Therefore k_i>7+2alpha+5beta>13>9, again a contradiction.
+Thus this same active start has Q_i<=1. The chosen start and its
+negative gaps are literal finite data, not an arbitrary leaver oracle.
+
+### UR3. The all-four-active branch: a strict two-source-coordinate moat
+
+Only support size four remains. Put x=o_0, y=o_2, z=o_3;
+o_1 is also positive but need not be bounded separately. The ACTUAL
+active gap identities from the fixed NI3 data give
+
+    k_0=6o_1-y/2+6z+o_1 y+o_1 z+yz+o_1 yz <=9,
+    k_1=5x+4y-z/2+xy+xz+yz+xyz <=9.                (UR.2)
+
+If z>3/2, the first expression is at least
+6z+(z-1/2)y>9. Hence 0<z<=3/2. This uses the full original
+annotation lower bound, not a singleton-floor assumption.
+
+The pair participants of player1 are -2,-2,-3/2. Its participant
+triple entries are at most4 and its grand entry is at most0. Therefore
+
+    (Q_1-1)/h_1 <= X
+      =-3x-3y-5z/2+3xy+3xz+3yz-xyz.              (UR.3)
+
+We show X<0, which proves STRICT return at player1 for every
+all-four-active root, uniformly over all sixteen controls.
+
+Define
+
+    D=5+z+(1+z)y >0,
+    T=9+z/2-(4+z)y,
+    A=(3-z)y+3(z-1),
+    C=3(z-1)y-5z/2.
+
+Then X=A x+C and the second inequality (UR.2) is D x<=T.
+If A<=0, it forces z<=1, and C<0 because z>0. Thus X<0.
+If A>0, multiply by D and use D x<=T to obtain
+
+    D X <= A T+C D=N(y,z),
+    N=(4z²+z-15)y²+(-3z²-7z+24)y+(-z²+13z-27).  (UR.4)
+
+For 0<=z<=3/2 the quadratic leading coefficient is at most -9/2.
+Its discriminant is
+
+    Delta(z)=25z⁴-162z³+225z²+552z-1044.
+
+With z=3t/2, 0<=t<=1, its degree-four Bernstein coefficients are
+
+    (-1044, -837, -4365/8, -4905/16, -2079/16).
+
+More explicitly Delta(3t/2)=sum_{m=0}^4 b_m binom(4,m)
+t^m(1-t)^(4-m) with these five b_m. Each is strictly negative.
+Thus Delta<0 on the ENTIRE interval. A quadratic with negative
+leading coefficient and negative discriminant is strictly negative
+for EVERY real y. This proves N<0, hence X<0 and Q_1<1.
+The expression is an exact polynomial inequality, not a sampled
+discriminant estimate or a merely symmetric derivative calculation.
+
+Together UR2 and UR3 exhaust all positive supports and prove (UR.1).
+The result controls all four active equations for actual nonsymmetric
+rates, not a chosen equality-rate branch. In particular a positive
+root cannot escape to a quiet all-above-own head anywhere in this
+boxed domain, even though such escapes occur in other solved tables.
+
+### UR4. Actual-game UE and what temporal realization is being used
+
+Set B=7=M+2. Statement (UR.1) holds on this smaller box too, and
+every head is boxed. Finite Nash existence supplies a root at EVERY
+boxed annotation. At a source strictly below some own singleton,
+AllContinue is not Nash, so EVERY supplied Nash root has positive
+absorption and (UR.1) supplies its singleton-sublevel successor.
+Thus the raw table itself produces
+HasBoxedSelectedSingletonSublevelReturn r 7; that property is not
+an extra supplied-object assumption in the family theorem.
+
+The exact declaration
+`exists_uniformEquilibriumPayoff_of_selectedSingletonSublevelReturn_of_reward_bound`
+in `UniformEquilibrium/Quitting/Classification/Existence/SelectedSingletonSublevelReturnUniformPayoff.lean`
+was read completely under its imports. Its inputs are own rewards
+nonnegative, a coordinate reward bound M, M<B, B<=the canonical
+reward bound+2, and this selected-return property. Here M=5,B=7;
+the canonical reward bound is at least7 because the fixed singleton0
+row alone has absolute-coordinate sum7. Its literal sum definition
+in `Quitting/RewardBound.lean` was checked. All inputs are produced above.
+It gives EXACTLY UR1's fixed uniform target and unrestricted
+behavioral-deviation conclusion. No finite-menu Nash-first selector,
+minimizing suffix substitution or public correlation is inserted.
+
+For an independent transparent check of the negative-certificate
+composition, take the whole box as the closed convex region in
+`not_isQuittingFullExactRootPotential_of_convexReturnDomain`
+in `Projective/ConvexReturnDomainSmoothDrift.lean`. Its return
+hypotheses are precisely box preservation and (UR.1). This excludes
+every C¹ full exact-root potential on box7, with continuity on the
+singleton-sublevel domain and ambient differentiation on the lower
+singleton boundary sufficient. In particular it excludes every
+polynomial. The SAME-function restriction
+`isQuittingFullExactRootPotential_of_robustPotential` in
+`Projective/ExactRootPotentialRestriction.lean` and the noUE iff
+no-sure-and-rational-potential declaration named in NI1 then give
+the same actual-game UE conclusion. The latter normality and
+positive-own gates were verified in UR1.
+
+The direct selected-return consumer is already a WHOLE-GAME
+compiler; the new work is the raw all-root producer above, not
+another unproduced conditional interface. Its analytic proof uses
+the compact singleton-sublevel minimum, lower-boundary derivative
+signs and selected downward return. It does NOT infer a literal
+finite exact closed word from one-step root existence.
+
+Since the true-punishment sure alternative fails throughout this
+family, the named fixed-box characterization
+`hasFixedBoxPackets_of_uniformEquilibriumPayoff_of_noSureRoot` in
+`Projective/FixedBoxForwardCharacterization.lean` additionally
+supplies absorption-weighted finite forward packets on box7 at
+EVERY positive accuracy and EVERY charge target. These are the
+tracked actual finite chronological packet objects with their
+relative-error accounts, not semantic recurrence with free seams.
+No new proof of an explicit periodic profile, nor an exact finite
+return at every parameter, is claimed. NI7–NI9's literal return
+remains a separate center-specific witness.
+
+### UR5. Scope and the surviving full-game question
+
+This retires the ENTIRE NI3 box as a negative-search region, not
+just the eight invisible controls, one logistic selector or one
+sampled polynomial degree. The root geometry stayed fixed while
+all actual transport controls moved. The proof derives the missing
+global sublevel return from finite raw data and makes no assumption
+that an endpoint is a favorable global minimum or that approximate
+root error is automatically efficient relative to deleted absorption.
+
+A narrow overlap check read
+`BoxedQuittingNashCharges.lean`, `BoxedQuittingNashChargeOdds.lean`
+and `Existence/BoxedQuittingNashChargesUniformPayoff.lean`. Their
+full-support middle-layer inserted-premium test is nonpositive;
+at the original center it is6 on every opponent pair, so that
+particular finite coefficient package does not directly certify
+the center. This is NOT a complete existing-producer or
+open-neighborhood coverage audit and is not evidence for a novel
+UE class. The existing selected-return and convex-return consumers
+are expressly reused. No export or new frontier contraction is
+inferred without independent soundness/significance checks.
+
+The fresh bird's-eye direction was to test whether the ENTIRE root
+relation could force charged realization, not to tune the found
+cycle. In this meaningful USED-transport region it does: every
+positive boxed root returns, and the actual-game compiler supplies
+uniform profiles/relative packets. It does NOT prove that arbitrary
+noUE source tables have this return property. RM37 already forbids
+a universal one-step selected-return theorem under the ordinary
+normal/no-sure screens. Both least-Never branches remain open.
+
+The concrete next full-goal question is therefore nonlocal: can
+above-own bad-root excursions at a genuine surviving noUE source
+be forced to re-enter a singleton sublevel with relative seam
+control, without requiring a one-step return at every price?
+The present proof says such excursions are impossible in this
+entire finite box. It does not settle them in the surviving class,
+and it does not justify another degree fit or invisible-control
+search at its solved tables.
+
+Exact algebra check, independent of numerical optimization:
+
+```python
+# UR5 exact polynomial identity verifier (SymPy, exact rational arithmetic)
+import sympy as s
+y,z,t=s.symbols('y z t')
+D=5+z+(1+z)*y
+A=(3-z)*y+3*(z-1)
+C=3*(z-1)*y-s.Rational(5,2)*z
+T=9+z/2-(4+z)*y
+N=(4*z*z+z-15)*y*y+(-3*z*z-7*z+24)*y+(-z*z+13*z-27)
+assert s.expand(A*T+C*D-N)==0
+Delta=s.discriminant(N,y)
+assert s.expand(Delta-(25*z**4-162*z**3+225*z**2+552*z-1044))==0
+b=[-1044,-837,-s.Rational(4365,8),-s.Rational(4905,16),-s.Rational(2079,16)]
+assert all(u<0 for u in b)
+B=sum(b[m]*s.binomial(4,m)*t**m*(1-t)**(4-m) for m in range(5))
+assert s.expand(Delta.subs(z,3*t/2)-B)==0
+print('UR5 PASS: exact numerator, discriminant, all negative Bernstein coefficients')
 ```

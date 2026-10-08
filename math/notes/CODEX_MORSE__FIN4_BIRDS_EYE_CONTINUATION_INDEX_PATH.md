@@ -8,7 +8,7 @@ The requested endpoint is UE for EVERY signed four-player quitting table,
 against EVERY unilateral behavioral deviation, with ONE payoff target
 fixed before the requested accuracy.
 
-Current independent pivot: NI1–NI9 in the owned global notebook tests
+Current independent pivot: NI1–NI9 and UR in the owned global notebook test
 an unrestricted negative certificate on a DIFFERENT rational table,
 not another repair of the solved RZ clocks. Exact root geometry depends
 only on own values and the28 opponent-coalition join gaps; sixteen
@@ -21,14 +21,25 @@ SAME cyclic values; deleted-opponent geometric bounds cover EVERY
 behavioral deviation and ONE fixed uniform target. The literal return
 excludes EVERY full potential, not just the failed sampled fits. It
 survives arbitrary changes of eight invisible transport controls
-(sixteen linked actual reward cells), not the entire sixteen-control
-family. An exact supporting argument also rejects every barrier with
-one additively isolated player. No new class count, export or source
-contraction is inferred. Negative research now needs different USED
-transport/root geometry and a clear class-wide possibility, not
-higher-degree fitting or cycle-constant optimization at this solved
-center. Both least-Never configurations and the full Fin4 target
-remain open.
+(sixteen linked actual reward cells). UR now goes beyond that slice:
+ALL sixteen controls vary throughout their original box. For EVERY
+exact full Nash root at EVERY port in[-8,8]^4, positive absorption
+forces a singleton-sublevel head. The all-four-active case is an
+exact odds/discriminant calculation with all negative rational
+Bernstein coefficients, not a symmetry restriction or a grid.
+An existing actual-game selected-return consumer then gives one
+fixed unrestricted uniform payoff at EVERY table in this box.
+This retires the entire tested USED-transport region, not just its
+center; it does not supply a literal periodic word at every parameter.
+The proof is ordinary and unreviewed. No new class count, export or
+source contraction is inferred. An exact supporting argument also
+rejects every barrier with one additively isolated player. Negative
+research now needs different USED transport/root geometry, not
+higher-degree fitting at these solved tables. General above-own
+bad-root excursions remain the nonlocal forcing obstruction: RM37
+already forbids extending one-step selected return from the normal/
+no-sure screens alone. Both least-Never configurations and the full
+Fin4 target remain open.
 
 This refresh replaces the earlier suggestion that a useful exact
 continuation index should simply persist. Exact Nash paths can have
