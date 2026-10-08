@@ -83,6 +83,15 @@ laws themselves must move; arbitrary approximate outer laws and genuine
 minimum-dependent selection remain open. This is operation triage,
 not a new positive-gap example or UE class.
 
+The focused ER test strengthens that postprocessor warning on ONE
+genuine symmetric period-one logistic/Bellman branch of the canonical
+RZ table. Keeping three Geometric(q) laws, q≤1/1000, EVERY unrestricted
+fourth clock leaves full debt at least32/5. A two-Never-deviation bound
+and an exact exponential-rounding coupling prove the discrete statement.
+This is not failure of every endogenous selector or a noUE-source
+restriction. The next producer must select the three outer laws together;
+another clock-grammar census would not decide the full Fin4 conjecture.
+
 The DR nonlocal reference-law trial is now retired in its automatic
 form. At critical density ceiling4 the all-grand point is an endogenous
 reference equilibrium for every table, because every other action has

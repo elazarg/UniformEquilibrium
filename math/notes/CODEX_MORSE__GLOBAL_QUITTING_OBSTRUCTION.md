@@ -66,6 +66,15 @@ approximate equilibria. This is a new scope of operation failure,
 not a positive game gap, new UE coverage, or a genuine noUE input.
 The outer laws must themselves leave the exact-menu Nash carrier.
 
+Latest endogenous-branch repair test: ER1–ER3 below keeps THREE identical
+small geometric clocks from an actual period-one logistic/Bellman branch
+on that same canonical table. EVERY unrestricted fourth clock, including
+infinite support and Never, leaves full debt at least32/5. This is a
+focused failure of one-pivot postprocessing on a solved table, not a
+restriction on genuine noUE sources or every endogenous selector.
+The remaining direction is simultaneous approximate selection of the
+three outer laws, not a broader census of failed clock grammars.
+
 Current completed class result: CL1–10 and SC1–6 have each passed two
 independent mathematical checks. The negative DN trial is retired by a
 closed singular full-Nash circuit with three convergent ladders and two
@@ -11380,6 +11389,133 @@ pivot repair nor a constrained/reference fixed point is an obligatory
 intermediary. The available reviewed least-Never geometry is still two
 tied owners, OR one unsupported tied owner and a different later-only
 owner; it is not assumed to select these global outer laws.
+
+## One symmetric endogenous branch cannot be rescued by ANY fourth clock
+
+Status: ordinary unreviewed exact mechanism falsifier, not an export,
+positive game gap, or new counterexample-source reduction. The complete
+table and its already solved status are retained in PR1 and PR5 above.
+Only ONE genuine endogenous branch is tested; no universal statement
+about Brouwer selectors is made.
+
+### ER1. Actual discrete clocks and a two-deviation comparison
+
+Use the SAME sixty-cell table r=z+(1,0,0,0) of PR1, Never payoff0 and
+reward bound M=100. Keep owners1,2,3 independently at Geometric(q) on
+dates0,1,…, with mass q(1−q)^n, where0<q≤1/1000. Owner0 may use ANY
+independent law μ on those dates and Never. This includes every
+unrestricted behavioral pivot strategy: the only unabsorbed public
+history is that everyone has continued. We will bound actual discrete
+full exploitability, not a continuous-time replacement game.
+
+Write t=1−q and β=−log t. Independently couple each fixed opponent clock
+as floor(E_j), where E_j has exponential rateβ. Keep the pivot clock T₀
+at its actual integer date, or∞. For a computational comparison ONLY,
+let the exponentials quit at their real dates; their first exit is a
+singleton, and ties with the independent pivot have probability0. Set
+
+    m=E[t^(3T₀)],     m₂₃=E[t^(2T₀)],
+
+with both integrands0 at∞. Concavity gives m₂₃≤m^(2/3) for EVERY μ.
+The auxiliary prescribed payoffs and two pure Never payoffs are
+
+    U₀ᶜ=m+(1−m)·200/3,       V₀ᶜ(Never)=200/3,
+    U₁ᶜ=66−67m,              V₁ᶜ(Never)=99−100m₂₃.
+
+Indeed, owner0 receives1 if it wins, and100,100,0 from the other three
+singleton hosts; owner1 receives−1 from pivot0 and0,99,99 from hosts
+1,2,3. Deleting owner1 leaves hosts2,3 with common rateβ. Consequently
+
+    V₀ᶜ−U₀ᶜ=(197/3)m,
+    V₁ᶜ−U₁ᶜ≥33+67m−100m^(2/3).                 (ER.1)
+
+If m≤1/8, the second lower bound is at least33−25=8. If m≥1/8,
+the first is at least197/24>8. This split requires neither attainment
+of a behavioral optimum nor any restriction on the pivot law's support.
+
+### ER2. Exact collision error gives a discrete full-gap bound
+
+The comparison is uniformly accurate over ALL μ. Conditional on the
+first opponent exponential, the two remaining residual exponentials
+have rateβ. The probability that another opponent rounds to the same
+integer is at most2q. If the pivot at integer k wins in the auxiliary
+comparison but an opponent rounds to k, the first opponent exponential
+lies in[k,k+1); conditional on T₀=k this event has probability at most
+1−t³≤3q. These are the only ways prescribed terminal coalitions differ.
+Thus their disagreement probability is at most5q, independently of μ.
+All compared rewards have absolute value at mostM, so
+
+    |Uᵈ_i−Uᶜ_i|≤10Mq.
+
+For Never0 there are three opponent exponentials and no pivot, giving
+disagreement probability at most2q and payoff error at most4Mq. For
+Never1 there are two opponent exponentials plus the pivot: their
+rounding collision costs at mostq, and the pivot interval at most2q.
+Its payoff error is therefore at most6Mq. Outside these events the
+terminal coalition, and hence each recipient's reward, is identical;
+no assumption on joint-Never or endpoint-limit transport is used.
+
+Let d_i=B_i−Uᵈ_i use the actual unrestricted discrete behavioral cap.
+The two literal Never deviations give
+
+    d₀≥(197/3)m−14Mq,
+    d₁≥33+67m−100m^(2/3)−16Mq.                 (ER.2)
+
+At M=100 and q≤1/1000, m≤1/8 implies d₁≥32/5. At m≥1/8,
+d₀≥197/24−7/5=817/120>32/5. Therefore
+
+    ∀ μ,    max_i d_i(μ,Geom(q),Geom(q),Geom(q))≥32/5. (ER.3)
+
+This is an actual discrete all-pivot-law statement. The exponential
+comparison is just an exact coupling estimate, not a proposed strategy
+architecture with changed simultaneity semantics. The result does not
+say that arbitrary three opponent laws, or arbitrary full profiles,
+have positive gap on this solved game.
+
+### ER3. This seed is a genuine logistic/Bellman branch, not fake rows
+
+Let all FOUR native RZ clocks have common geometric rate q and t=1−q.
+Their common actual terminal payoff is
+
+    u(q)=[197qt³+196q²t²−3q³t−q⁴]/[1−t⁴].
+
+At continuation u(q), the native Quit and Continue endpoints are
+
+    Q=196qt²−3q²t−q³,      C=197qt²+t³u(q),
+    g(q)=Q−C=−qt²−3q²t−q³−t³u(q)<0.
+
+Positivity of u follows already for0<q≤1/2 from197t³≥197/8,
+3q²t+q³≤7/8, and the remaining positive term. The canonical
+row translation adds s_i to BOTH endpoints at continuation u+s,
+because all relevant clocks and deleted groups actually absorb.
+Thus the common endpoint difference is still g(q), and Bellman holds
+exactly with value u+s. Define
+
+    τ(q)=g(q)/log(q/(1−q))>0.
+
+Then q/(1−q)=exp(g(q)/τ(q)) EXACTLY. As q→0, u→197/4,
+g→−197/4 and τ→0. All roots are interior, values are reward-bounded,
+and the logistic endpoint defect is at mostτ. This gives actual
+period-one data satisfying `InteriorApproximateNashCyclicBlock`,
+including its exact softened-response equation, not merely arbitrary
+approximate Nash rows. The relevant inspected declarations are
+`binaryEndpointDefect_interiorBinaryApproximateResponse_le` and
+`InteriorApproximateNashCyclicBlock.quitProbability_odds_eq_exp` in
+`UniformEquilibrium/Quitting/Cycles/EndogenousInteriorCyclicBlock.lean`.
+The total displayed rate4q and the per-row absorption1−t⁴ both vanish.
+
+Therefore even a genuine symmetric endogenous branch cannot be made
+efficient merely by optimizing one whole marginal after freezing its
+other three clocks. This sharpens RT's selected-branch failure to an
+ENTIRE unrestricted one-pivot postprocessor, without claiming failure
+of other symmetric branches, asymmetric selectors, or actual noUE
+source laws. The same table has the absorbing approximate equilibria
+and fixed target of PR5; no unrestricted negative-gap example results.
+
+Concrete next question remains the actual simultaneous three-law
+producer: exploit genuine minimum/cap kernels to choose all outer laws
+approximately, with the inner full gap tending0. Further exponential
+clock-class or compact-floor expansions are not the research endpoint.
 
 ## Actual cap-domain control does not automatically select a charged path
 
