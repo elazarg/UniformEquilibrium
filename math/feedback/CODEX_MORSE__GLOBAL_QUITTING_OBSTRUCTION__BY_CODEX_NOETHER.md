@@ -1779,3 +1779,105 @@ supplies its missing actual charged closure. Neither this review nor CL
 claims arbitrary Fin4 UE, universally obligatory circuits, a positive-gap
 example or noncoverage by ALL existing producers. An export needs its own
 self-contained final artifact/gate; this review does not place a packet.
+
+## Focused SC1–SC6 scalar-producer and free-coordinate delta check
+
+Verdict: PASS, with no unresolved mathematical objection. I read the
+complete section “Scalar raw producer: one-variable closure and fourteen
+genuinely free reward coordinates” through BEFORE “Dual follow-through:”
+in `notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, section SHA256
+
+    4eb42752d24e980aa464ce8c78d40fd5baee316b8a8d8937fe52473e55492cd2
+
+This is a targeted delta verdict, not a new compiler audit or certification
+of a future standalone. The preceding CL verdict remains byte-bound to its
+own hash. My ZU contribution remains disclosed. No other SC review was
+read; no author/export/Lean edits or git operations were performed.
+
+### Actual algebra produces the strategic closure
+
+For an active triple owner, the forced-Quit-minus-Continue gap divided by
+opponent survival is own-minus-continuation plus the three actual membership
+gains times the two opponent odds and their product. I independently formed
+these equations with generic symbols. Substitution of SC1 makes ALL three
+active gaps vanish identically: Z solves owner1, p solves owner3, and the
+stated D_X and X solve the remaining owner2 equation. The signs of the
+original divisors are explicit interval hypotheses; no hidden zero is
+cancelled away. Positive X,Y,Z gives interior rates, and0<p<1 is separately
+retained.
+
+The pair quiet return coordinates are linear-fractional in t. Direct
+substitution shows D_s is the positive-denominator-cleared solo3 favorite
+denominator and N_s is the corresponding solo2-coordinate numerator.
+Consequently V₂,₂=r₂,3+L₁₃N_s/D_s. Setting E(t)=0 actually enforces
+V₂,₂=s₂+J₂₁p/(1−p). Since E is affine and e₁>0, t=−e₀/e₁ solves it
+exactly. Thus the literal solo1 root is Nash by the derived favorite
+indifference, not by a supplied compatibility field. Its resulting head
+has precisely the three coordinates used to derive the triple equations.
+
+The remaining Ψ=0 sets W₀=s₀+t. The pair map then returns the SAME b,d
+chosen by its fractional formulas. Every port in the five-piece itinerary
+matches. The fixed interval denominator conditions make Ψ continuous;
+the two strict endpoint signs produce an interior zero by IVT. Any one
+such zero may be fixed before the accuracy choice. Neither uniqueness,
+contractivity of this scalar return nor a numerical root is required.
+
+### Interval certificate and ALL active/quiet inequalities
+
+I executed the entire SC5 exact rational verifier; every assertion passed.
+Independently checked generic elimination specializes to its printed X,Z,p.
+The raw favorite equation equals E*/(1−p), so its t-coefficient is indeed
+coef/(1−p), positive on the interval. All original denominators have
+positive factors proved separately: D_X,1−p,d−r₃,0, D_s, the pair factors,
+and the positive constants. The factored denominator of Ψ may be negative;
+its sign is explicitly checked, not falsely declared an original positive
+divisor. The interval-ratio routine reverses signs consistently and uses
+all four endpoint ratios. Coefficient magnitudes bound the ENTIRE interval,
+not finitely many samples.
+
+The whole-interval bounds give b>s₁,d>s₃,t>0,a∈(0,1) and a strict quiet0
+triple gap. The constants in SC7 and the endpoint comparisons cover all
+three solo pieces, including structural quiet coordinates initially at
+their own thresholds. Positive λ₀,λ₃<1 follow from those conditions.
+The pair coefficient tests ℓ_t<0 and ℓ_t+ℓ_ta<0 are equivalent to the
+uniform condition needed for every aₙ∈(0,1); with ℓ₀,ℓ_a<0 they cover
+every pair root, however close to the limiting threshold port. No quiet
+player is automatically declared Nash because its INITIAL price is above
+own; in particular the below-own triple outputs retain the endpoint-based
+pair test.
+
+The explicit coefficient criterion consists of finite reward-derived
+inequalities. It produces, rather than assumes, the actual closed-circuit
+inputs already consumed by the unchanged complete-cap compiler. Signed own
+levels are harmless because deleted-opponent contraction, supplied by two
+distinct positive-rate owners, controls Never; no appeal to positive-own
+normalization is used for the direct strategic construction.
+
+### Exact unrestricted-response support mask
+
+I independently enumerated every itinerary support A and every recipient i,
+all subsets T⊆A\{i}, and both possible terminal coalitions T and T∪{i}.
+The resulting set has EXACTLY46 recipient-coalition coordinates. Its
+complement is exactly the fourteen coordinates listed in SC6; all36 entries
+of the nine prescribed rows are included. This checks the individual
+recipient coordinates, not merely whether the coalition itself is reachable.
+
+At an unabsorbed date every public live history still consists only of
+Continue actions. Replacing an owner's ENTIRE behavioral clock can choose
+any later date/phase, but cannot make unchanged opponents outside that
+date's support quit. Distinct dates cannot accumulate into one terminal
+coalition. The mask therefore covers every finite deadline, Never, clock
+mixture and history-dependent unilateral deviation, not only on-path
+expectations. A listed free entry might matter in a DIFFERENT deviator's
+terminal vector, but that deviator's payoff uses a different recipient
+coordinate; it does not enter its cap. This distinction is respected.
+
+Arbitrary finite changes of the fourteen entries leave each constructed
+profile's entire payoff vector and every owner's full unilateral cap
+unchanged. They also leave all raw scalar/quiet criteria unchanged. The
+strict finite inequalities persist on an open set of the46 used coordinates;
+the other14 range independently over ALL real numbers. The resulting
+unbounded raw cylinder is stronger than the small60-coordinate CL chamber.
+It is a concrete reward-only sufficient class, not arbitrary-game coverage,
+not an assertion that this itinerary is obligatory, and not absence of every
+other known producer. Final standalone assembly still needs its own gate.

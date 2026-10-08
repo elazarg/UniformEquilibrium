@@ -3514,3 +3514,130 @@ strategic objects does not itself prove an existing raw producer supplies
 them here. A final packet must retain that limitation and not claim an
 unrestricted strategy-class normal form or arbitrary-game circuit production.
 The full Fin4 UE conjecture remains open.
+
+## Focused SC delta: scalar production and14 unrestricted coordinates
+
+Reviewer: CODEX_BROUWER. This review covers ONLY SC1–SC6, heading
+`Scalar raw producer: one-variable closure and fourteen genuinely free reward coordinates`
+through immediately before `Dual follow-through:` in the same owned MORSE
+notebook. Extracted SHA256 is
+`4eb42752d24e980aa464ce8c78d40fd5baee316b8a8d8937fe52473e55492cd2`.
+It does not re-review or change the separately sealed CL/ZU verdict.
+
+Verdict: **PASS as ordinary mathematics** for the raw interval criterion,
+scalar IVT producer, complete coefficient verifier and the46-used/14-unused
+coordinate cylinder. No unresolved mathematical objection found. I independently
+executed every rational assertion in SC5, verified generic SC2 elimination and
+the base linear-elimination identity by exact symbolic arithmetic, and
+enumerated the response-support mask from the five allowed root supports.
+No numerical zero, author update, Lean build or other SC review was used.
+
+### The scalar really produces every active equation and port
+
+The normalized triple endpoint gaps have the exact form printed in SC2.
+Substituting Z kills the first. Substituting X kills the combination
+C₃g₂/h₂+A₂g₃/h₃, and the formula for p kills the third; since C₃>0
+the second then vanishes too. The positivity hypotheses keep EVERY original
+denominator nonzero and give strictly interior triple rates. No active Nash
+equation or root-selection existence hypothesis remains.
+
+For the pair return, P_i(t) and Δ(t) are affine in t; the claimed corner
+coordinates are exactly the limiting weights already verified in CL.
+The two-solo denominator satisfies
+
+    D_s(t)/Δ(t)=(d−r₃,0)(V₁,₁−r₁,3).
+
+Likewise N_s(t)/Δ(t) is the favorite2 numerator after the two solos.
+Therefore E(t)=0 gives V₂,₂=m₂ EXACTLY, not just its sign or a selected
+expectation. E is affine in t, and e₁>0 produces the unique t=−e₀/e₁.
+The interval tests give t>0, positive pair/solo denominators and b>s₁,d>s₃.
+In particular λ₀∈(0,1); V₁,₁>s₁ and s₁>r₁,3 then give λ₃∈(0,1).
+Thus the literal solo1 has its actual favorite2 indifference rate p, and
+its head is U=(u₀,s₁,s₂+A₂p,s₃−C₃p).
+
+The only remaining return coordinate is W₀. The scalar Ψ is continuous
+on the ENTIRE interval because all original denominators retain their
+positive signs. Its strict endpoint signs produce an interior zero by IVT,
+where W₀=s₀+t. The other two return coordinates were already solved
+linearly. This closes every port and produces the exact circuit without a
+Jacobian, a contraction premise or an approximate root.
+
+### All quiet rows and signed own levels
+
+The constant comparisons and finite endpoint tests control both quiet owners
+along each solo ladder. Their annotations stay between the actual starting
+and limiting ports. Structural initial equalities at own levels are preserved
+using the current table. For solo3's quiet2, both V₁,₂>s₂ and V₂,₂=m₂>s₂
+are DERIVED, so no omitted infinite-row floor enters. Solo1 quiet0 has
+V₂,₀>s₀, quiet3 has V₂,₃=s₃, and both nonempty joining gaps are strictly
+negative. The triple's one quiet test is expressly retained.
+
+For the pair stage the exact gap polynomial is the same one checked in CL.
+The four inequalities ℓ₀<0,ℓ_a<0,ℓ_t<0,ℓ_t+ℓ_ta<0 control all
+0<a_n<1 and t_n≥0, including infinitely late rows. They do not presume
+that the initial quiet ports exceed their own singletons. This is uniform
+coverage, not rowwise continuity with shrinking margins.
+
+Every such comparison is relative to s_i. Absolute own-level nonnegativity
+is unnecessary for the DIRECT finite compiler: the two positive suppliers
+still make every deleted survival contract, so its cap fixed-point proof
+prices Never even for negative labels. The no-UE→polynomial alternative
+with normality is not silently used for this signed extension.
+
+### Exact coefficient verification
+
+SC5's rational verifier passed as written. It bounds numerator AND denominator
+on the whole interval by finite centered coefficient sums before dividing;
+it never accepts a rounded zero or samples a grid. The generic original
+denominators remain separate hypotheses even after symbolic cancellation.
+At the base, the checked factors and strict b,d>1 give the two-solo original
+denominator positivity as well as Δ>0. Directly,
+
+    E(t)=E*(t)/(1−p),
+
+so e₁=coef/(1−p)>0 as stated. The extra denominator-normalization sign in
+the simplified Ψ does not waive any original positive denominator. Its two
+endpoint signs are exact rational substitutions. For base pair quiet tests,
+b,d>1 already imply all four required strict coefficients; the stronger
+displayed decimal enclosures are not required for that inference.
+
+The coefficient inequalities are finite reward-data conditions. Real inputs
+define the same mathematical sufficient class; rationality is required only
+for machine-exact arithmetic evaluation, not for the IVT existence theorem.
+Their strictness gives an open46-coordinate neighborhood at the certified
+base. No new numerical radius is needed.
+
+### Exact full-deviation support mask
+
+I independently enumerated every subset of each root support
+{0},{3},{1},{1,2,3},{0,2}. There are exactly9 prescribed nonempty terminal
+coalitions, giving36 prescribed reward coordinates. For each deviator i I
+then enumerated both T⊆A\{i} and T∪{i} at every support A. Adding those
+own-payoff coordinates gives exactly46 used and the14 unused coordinates
+in the printed table, with no discrepancy.
+
+This is an OWN-response mask, not a claim that unused S is unreachable
+under every OTHER player's deviation. An unused coordinate(S,i) can be
+paid to a NONdeviating i when another player creates S, but that payoff
+does not enter i's prescribed payoff or i's unilateral cap. This distinction
+is essential and the section's quantifiers are correct.
+
+Before absorption every public action history is all Continue. Changing an
+owner's whole behavioral law can change its own stopping event and calendar
+phase, but cannot make two unchanged opponents quit simultaneously outside
+the support of that actual date. Quit at one date ends the live path, so
+opponents quitting at different dates cannot be merged into a coalition.
+The set argument therefore covers ALL deadlines, Never, behavioral mixtures
+and live-history policies, not only one-period probes. Postabsorption actions
+cannot alter the fixed terminal reward. No extra information or correlation
+is being assumed.
+
+Consequently arbitrary FINITE changes to those14 coordinates leave each
+constructed profile's entire prescribed payoff and EACH unilateral cap
+exactly unchanged. A global reward bound remains finite for every changed
+table; it need not be uniform over the unbounded free factor. The resulting
+class is an open46-coordinate neighborhood times ℝ¹⁴, hence a genuine
+strengthening of CL's tiny all60 neighborhood. Some points in that larger
+class may acquire other known equilibria; absence of such alternatives is
+not an input to the constructor. No arbitrary-table itinerary completeness
+or general paid-source consumer follows from this delta.
