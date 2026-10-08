@@ -83,6 +83,14 @@ exclusion. The next mechanism must retain profile-adapted response
 selection or produce a below-floor word with every new cap priced.
 All older unique proofs, tests and objections are retained below.
 
+WD8 now extends that SAME fixed-ledger falsifier to EVERY signed
+Fin4 table, including positive own singletons. Each listed product
+has at least two surely finite owners, so every unilateral response
+absorbs and recipient-row centering cancels in its ledger. The exact
+all-sixty-coordinate verification passes. This strengthens only the
+scope of the retired fixed response architecture, not the conjecture
+or the positive-minimum source.
+
 The latest positive attempt is MP. A COMPLETE ORDINARY, INDEPENDENTLY REVIEWED
 two-pair producer supplies exact absorbing terminal Nash profiles on
 a full-dimensional open region around an explicit nonbijective
@@ -14790,3 +14798,74 @@ old union or requesting a GS/GF export. Any unlisted raw input class
 also remains outside the bounded comparison rather than being silently
 declared false. This is the final bounded coverage disposition for
 this ONE witness; no additional coordinate surgery is planned.
+
+## WD8: the fixed four-response ledger fails for arbitrary signed own rewards
+
+Status: COMPLETE ORDINARY, UNREVIEWED exact architecture falsifier.
+It extends WD7 to the actual positive-own setting now used by the
+least-Never source. It does not change that source, prove a positive
+gap, eliminate a noUE class, or bound the complete full debt above.
+There is no new profile family, LP search or modified response menu.
+
+**Statement.** For EVERY signed finite Fin4 reward table r, with
+Never payoff zero and arbitrary own singleton rewards, one of WD7's
+SAME forty-four independent absorbing profiles satisfies L_r(p)≤0
+for its SAME equal-weight responses: Quit0, Never, independent own
+clock delayed one date, and independent next-owner clock preempted
+one date and clipped at0, with all maps retaining Never.
+
+**Proof.** Each of the eleven displayed owner-law rows has at least
+TWO owners whose Never probability is zero. Rotations preserve this.
+Therefore the unchanged opponents of EVERY owner absorb surely
+against EVERY unilateral replacement, including each of the four
+selected responses and literal Never. Prescribed play absorbs too.
+
+Set s_i=r_i({i}) and z_i(S)=r_i(S)−s_i on every nonempty S, while
+keeping the native Never reward zero. For each listed product p and
+each selected response β_i, the actual terminal law has mass1, so
+
+    U_i^r(p)=U_i^z(p)+s_i,
+    U_i^r(β_i,p_-i)=U_i^z(β_i,p_-i)+s_i.
+
+The four response weights sum1. Hence L_r(p)=L_z(p) for EACH listed
+product, not only their weighted aggregate. Now z has own singleton0.
+WD7 gives one listed product with L_z(p)≤0, proving the statement.
+Row translation was justified from actual deleted-opponent absorption;
+no general affine invariance with Never0 was assumed.
+
+The same positive integer weights actually cancel ALL SIXTY raw
+reward coefficients. This follows from the native cancellation and
+the per-recipient row-translation identity just proved; it can also
+be reproduced directly by retaining singleton coordinates in WD7's
+verifier. The following mechanical specialization reads only WD7's
+displayed standard-library block and makes these EXACT changes:
+56→60, retain singleton columns in the coordinate inventory and
+payoff coefficient, and check at least two finite owners per row.
+
+    awk '/^### WD7\./{found=1;next} found && /^\x60\x60\x60python/{code=1;next} code && /^\x60\x60\x60/{exit} code{print}' notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md |
+      sed -e 's/56/60/g' -e 's/        if S != 1 << i]/        ]/' -e '/        if coalition != 1 << i:/d' -e 's/            out\[index\[i,coalition\]\] += weight/        out[index[i,coalition]] += weight/' -e 's/assert any(p\[2\]==0 for p in profile)/assert sum(p[2]==0 for p in profile)>=2/' |
+      python3
+
+The command was run and printed:
+
+    44 independent absorbing product witnesses; total weight 1860;
+    all 60 coefficients exactly zero
+
+As before, the positive-weight family is a separation witness used
+to select ONE actual product after evaluating r. It is never played
+as correlated randomization. Nor does L≤0 imply D≤0: full debt only
+dominates this selected lower ledger. The conclusion retires this
+fixed equal-weight four-response universal positive-certificate
+architecture even on arbitrary positive-own tables. Adaptive weights,
+profile-adapted or full optimal responses, different maps, and genuine
+whole-law competitors are not ruled out.
+
+The actual current global target is the least-Never source's TWO
+response configurations, with its actual same-source suffix and every
+finite/Never cap retained. No one-row return is being assumed: the
+newly read NC6 source consequence in Noether's owned note says every
+nonzero single prefix over ANY full minimum has debt STRICTLY aboveδ,
+and a tied owner's honest supplied suffix debt is d*_i/c. A replacement
+tail cannot be chosen from an unrelated minimum to erase this excess.
+The next concrete attempt is a coupled MULTIROW or whole-law update,
+not another fixed copy/preempt/delay ledger.
