@@ -982,3 +982,145 @@ needed tail floor—could change the gate decision. None is proved by
 BA1–BA10, and no auxiliary condition supplying it should be appended
 and then counted as coverage. The present new mathematics is worth
 retaining in the owned notebook and the existing review record.
+
+## Independent FC1–FC6 full-clock source review
+
+Reviewed the ENTIRE section `Forward full-source consumer: zero debt and
+complete finite clocks` in `notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`,
+ending before `Forward normal form: counterexamples arbitrarily near one
+constant table`. Exact section SHA256:
+`d5ba4cc57104b3ccce875e435200432eeb2c7af5462d924d9340dfdb38b1541d`.
+No other FC verdict was consulted. This is ordinary mathematics, not a Lean
+check or final standalone-artifact certification.
+
+Verdict: MATHEMATICAL PASS. The stronger necessary counterexample condition
+also has affirmative export-level value, subject to standalone assembly and
+the usual independent gate. This differs from the BA value verdict because
+FC identifies ORIGINAL full minima at the SAME table and exact numerical gap;
+the increment is not merely a finite-a.s. anchor in another domain.
+
+### Source selection and exact minimum alignment
+
+FC produces a counterexample table with ALL own singletons strictly positive
+and the canonical full-source inputs. Every full minimum pair has one common
+nonnegative debt vector a. Either all entries are positive, or EVERY full
+minimum pair admits realization by profiles whose FOUR clocks are finite a.s.
+The latter arm retains the original gap, original minimum-pair set, rigidity,
+and floor over ALL original carrier tails. New clocks and collision ancestry
+are allowed; old ones are not claimed unchanged.
+
+I read BAP1–BAP2, rather than assume a positive-singleton adapter. The actual
+reverse transport is `isUniformEquilibriumPayoff_original_of_singlePivotNormalized`
+in `UniformEquilibrium/Quitting/Punishment/SinglePivotUniformPayoff.lean`.
+Its positive pivot and original punishment-normality premises are supplied.
+`quittingSoloReward_singlePivotNormalized` in
+`UniformEquilibrium/Quitting/Root/SinglePivotNormalization.lean` gives own
+vector e_m. Translating each zero-own row uses BA2's actual full-cap identity
+and cannot lower the positive full gap. This is not assumed inverse affine
+invariance with Never fixed. Common positive rescaling is legitimate.
+
+The ORIGINAL gap is continuous on the compact positive-singleton fiber. Its
+maximum Ω is positive; the weak full-minimum margin and unit cap bound give
+Ω≤1−a_i<1. The sign-adaptive endpoint stays in that fiber and pushes positive
+contacts to at least1. Thus the contact proof needs only Ω<1 here. Generic
+perturbation and regular positive recipient scaling preserve strict own signs
+and contact separations. Minima are selected afresh; no later argument needs
+continued fiber optimality.
+
+The exact joint-Never debt inequality in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean` gives
+c_n≤d_k(p_n)/s_k→0 for ANY realizing sequence of ANY full minimum when a_k=0.
+Moving a smallest Never atom to a finite date has a vanishing uniform coupling
+bound for every payoff and every pure response, hence also every full cap.
+The resulting profiles absorb a.s. at the SAME table. Common debt rigidity
+applies this to ALL full minima. Since K_abs⊆K_all, both gaps and both complete
+minimum-pair sets coincide exactly. No penalty limit or relative error enters.
+
+### All-response completion and actual ROW witnesses
+
+For an actual absorbing independent profile, choose a finite-a.s. owner m.
+If it has no second anchor, choose j≠m with r_m({j})≤s_m and replace ONLY j's
+old Never atom by a delayed all-finite law of maximal atom η. Its old finite
+part stays fixed. Multiplying the new law by the old Never mass only reduces
+coincidence. Prescribed payoffs and all caps except m's and j's are uniformly
+screened by m's old clock; j's full cap is exactly unchanged.
+
+The deleted-own-clock issue for m is handled separately, not hidden in that
+screen. Outside OLD opponent finite-tail events, old exits are before T or
+all opponents were Never. On the latter cylinder the new test pays a mixture
+of s_m, r_m({j})≤s_m and a tie reward, whose probability is at mostη for ANY
+finite test date. The old delayed finite-reply limit is
+V_m(Never)+c_{−m}s_m≤B_m. Thus FC3 uniformly bounds ALL new finite responses
+and the literal Never response by the old full cap plus an error tending0.
+Moving near-best tests cannot bypass this bound.
+
+Conversely s_m≥0 makes the OLD full cap its finite-test supremum. Fix one old
+near-best finite test first, then put T beyond it; that test is unchanged.
+This gives convergence of the entire cap, not just an upper estimate. The
+geometric clock can have arbitrarily long duration; no uniform time bound was
+used. Once TWO anchors are fixed, every responder has an unchanged anchor
+among its opponents. All remaining Never atoms may therefore be moved to
+sufficiently late finite dates with uniformly vanishing payoff/cap errors.
+Those final dates are chosen AFTER the first delayed law is fixed. The stated
+diagonal choice has the correct order. Closure gives K_fin=K_abs, not just
+equality of gaps or zero-gap completeness.
+
+I independently read `exists_core_blocker_of_mem_normalCore` in
+`UniformEquilibrium/Quitting/Classification/LCP/NormalCore.lean`: it is a ROW
+witness M(m,j)≤0 with j≠m. The actual no-UE declaration is
+`normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean`.
+`normalizedSoloMatrix_eq_soloReward_sub` in
+`UniformEquilibrium/Quitting/Classification/PreemptionGateDictionary.lean`
+literally identifies M(m,j)=r_m({j})−r_m({m}). This is NOT a transposed
+COLUMN preemption condition. `IsQuittingNormalPlayer` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean` is true
+P_m≤s_m; FC does not assume that punishment is attained.
+
+### Source regeneration, falsifiers, and significant increment
+
+Every zero-debt-branch minimum pair now has all-four-finite actual
+approximants. For the finite-profile marked producer, truncate small late
+FINITE masses to another FINITE deadline, not Never. Total-variation pair
+control justifies this preliminary step. The separate Never indicator is
+continuous in the marked topology, so its exactly0 mass stays0 in the limit.
+Both literal Never and the zero-mass finite endpoint remain full responses.
+Raw integer dates can escape: these are newly produced finite-a.s. COMPACT
+calendar clocks, not raw-time tightness or old-calendar preservation.
+
+The canonical source theorem applies afresh because the table, pair, true
+full numerical minimum, contact exclusions and debt vector are unchanged.
+Absorbing-domain minimality is never substituted for full minimality. Random
+first collision and a genuine root/later kernel bridge are produced anew.
+
+FC6's COMPLETE raw table checks exactly. A pure singleton, all other owners
+Never, is unrestricted Nash. At EVERY all-four-finite profile every Never
+response pays10, while prescribed total reward is at most31; D≥9, attained
+by distinct deterministic dates. This falsifies arbitrary all-finite
+completeness and isolates the missing ROW condition. Positive own signs alone
+are insufficient. Infinite test dates, long geometric tails, simultaneous
+completion, and arbitrary original realizing sequences yielded no falsifier
+under FC's actual hypotheses.
+
+The inspected `FiniteMenuEarlyAbsorptionNecessity.lean` equivalence at gap0
+does not prove whole positive-gap carrier equality or original minimum-set
+identity. The nearby finite-menu punishment and early-absorption sources do
+not give this ROW-witness completion. This is a bounded overlap check, not an
+exhaustive producer census.
+
+My unreviewed RM18 sure-owner graft produces at most TWO finite-a.s. clocks
+under a strict punishment-versus-AllNever-ceiling premise. FC subsumes that
+clock simplification in the produced zero-debt branch: EVERY original minimum
+pair admits FOUR finite-a.s. clocks, without a sure root, a sole bridge,
+punishment attainment, or strict P_m<s_m. RM18's stationary attainment and
+solved equality-boundary tests are distinct mathematics, not FC exceptions.
+
+The actual excluded source mode is a zero-common-debt original minimum pair
+having NO all-four-finite realization at its own exact semantic value. The
+remaining consumer may take an ORIGINAL all-four-finite minimum retaining the
+arbitrary K_all tail floor, or a branch whose EVERY bridging owner is paid.
+This is a genuine stronger necessary counterexample condition, unlike BA's
+separate relatively close companion. It supplies no paid reset, raw-time
+renewal, finite expected duration, equilibrium or strict debt descent. Those
+remain open; none is silently supplied as a conditional field. No unresolved
+mathematical objection was found in the exact frozen FC scope.

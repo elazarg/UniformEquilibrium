@@ -25,6 +25,9 @@ Assume δ>0. This is a lower bound against every actual behavioral profile,
 not only finite-clock, stationary, or bounded-memory profiles.
 Membership in K does not assert that the pair is realized by one profile.
 
+Assume all own singleton rewards s_i are strictly positive, and for every
+player i there is j≠i such that r_i({j})≤s_i.
+
 Assume recipient-row genericity: for each i, the numbers r_i(S) are
 pairwise distinct as S ranges over nonempty coalitions. Assume also that
 there is one nonnegative vector a, with ∑[i∈I]a_i=δ, such that
@@ -100,10 +103,10 @@ re-establishing the conditions for the changed table and carrier.
 ## Quantitative minimum constraints
 
 The following all-owner inequalities are available at every minimizing
-pair w=(a,c)∈K, with γ=δ²/(8M):
+pair w=(u,b)∈K, with γ=δ²/(8M):
 
-    c_i−s_i≥δ+γ,
-    a_i−s_i≥δ−(c_i−a_i)+γ≥γ.
+    b_i−s_i≥δ+γ,
+    u_i−s_i≥δ−(b_i−u_i)+γ≥γ.
 
 For the supplied decomposition put c(q)=∏[i](1−q_i) and
 g_i(q)=Q_i(q)−C_i(q). Its exact total-debt identity is
@@ -124,6 +127,29 @@ changes and whole-tail changes must both respect the same global bound;
 neither optimization is restricted to one selected continuation or one
 selected best response.
 
+## Available clock-class reduction
+
+Let K_abs be the closure of full payoff/cap pairs of actual profiles
+with Pr(AllNever)=0. Let K_fin be the closure of those pairs when each
+of the four marginal stopping laws assigns zero mass to Never. The caps
+in these definitions still range over every behavioral replacement.
+
+The nonnegative own singleton rewards and the row witnesses above give
+the entire-carrier identity K_fin=K_abs. If a_k=0 for some player k, then
+the exact bound s_k·Pr_p(AllNever)≤d_k(p), together with full-response
+coupling of small Never-mass replacements, gives
+
+    min[K_abs]D=δ,
+    {w∈K_abs:D(w)=δ}={w∈K:D(w)=δ}⊆K_fin.
+
+Consequently either every a_i is positive, or every original minimum
+pair has an actual realizing sequence with all four clocks finite almost
+surely. This permits choosing new realizers; it is not a claim about
+every old realizing sequence. It does not imply finite support, raw-date
+tightness, bounded expected stopping time, or realization of a minimum
+pair by one actual profile. The supplied continuation v still need not
+be minimizing or Nash; the variational constraint remains over all K.
+
 ## Question
 
 For every reward table and every collection of data satisfying these
@@ -135,8 +161,9 @@ table such that
 or prove directly that the supplied conditions are inconsistent.
 
 A positive four-player terminal-gap table, if one exists, permits
-reselection to a bounded table with the common-debt and universal
-minimum-prefix properties above and at least one nonzero minimum
+reselection to a bounded table with the positive singleton rewards,
+row witnesses, common-debt and universal minimum-prefix properties
+above and at least one nonzero minimum
 prefix. No old minimizing law is asserted to survive that table change.
 Consequently an affirmative answer rules out positive terminal gaps and
 gives uniform-equilibrium payoff existence. In that conclusion one fixed

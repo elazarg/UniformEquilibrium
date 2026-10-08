@@ -499,6 +499,61 @@ The bridge owner may have ZERO debt; the collision may have sure quitters,
 and its conditional tail need not minimize debt or be Nash. No paid move,
 temporal return, renewable rank, or UE consumer follows from the tie alone.
 
+### All-finite-clock realization of original minima — reviewed mathematics
+
+The selected counterexample table can additionally have every own singleton
+sᵢ strictly positive. The worst-SUM comparison can be made on a compact
+positive-singleton fiber; its sign-adaptive target stays in that fiber.
+Generic perturbations and positive recipient scales retain these signs,
+the common debt vector, and the original-carrier collision restrictions.
+
+Let K_abs be the closure of full payoff/cap pairs of actual profiles that
+absorb almost surely, and let K_fin be the closure of those pairs when
+every player's own stopping clock is finite almost surely. These conditions
+are different: K_abs needs only one zero marginal Never mass, while K_fin
+requires all four to be zero. Responses remain unrestricted in both carriers.
+
+For nonnegative own singletons, if every row has a witness j≠i with
+
+    rᵢ({j})≤sᵢ,
+
+then the entire carriers satisfy K_fin=K_abs. A counterexample supplies these
+row witnesses through its full normal core. The proof completes an absorbing
+profile by first replacing a second player's Never mass with a delayed diffuse
+finite clock. Its maximal date atom controls simultaneous-quitting gains in
+the first player's unrestricted cap; the row witness controls the late passive
+payoff. Once two clocks are finite almost surely, an unchanged opponent clock
+screens each remaining late replacement uniformly over all responses.
+
+If the common minimum debt vector has a zero coordinate aₖ=0, then sₖ>0 and
+
+    sₖ·Prₚ(AllNever)≤dₖ(p)
+
+force joint Never mass to zero along every realizing minimum sequence. Moving
+one small marginal Never atom to a finite date preserves the whole pair in
+the limit. Consequently, at the SAME table and numerical minimum,
+
+    min[K_abs]D=min[K]D=D*,
+    {w∈K_abs:D(w)=D*}={w∈K:D(w)=D*}⊆K_fin.
+
+Thus either every common debt coordinate is positive, or EVERY original
+minimum pair admits an all-four-finite realizing sequence. The latter can
+be used to construct a fresh marked first-collision source, retaining the
+full arbitrary-K tail lower bound rather than a companion-carrier bound.
+This is not an assertion about every old realizing sequence. Finite raw
+dates may escape; no raw-time tightness, finite support, actual minimum
+attainment, finite expected stopping time, Nash continuation, or UE follows.
+
+The [full-pair clock-completion proof](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md)
+has two independent mathematical reviews. These carrier identities and the
+strengthened source selection are ordinary mathematics, not checked Lean
+declarations. A positive-own solved table with passive rewards 10 and
+participant nonsingleton rewards 0 has unrestricted minimum 0 but
+all-four-finite infimum 9; its row witnesses fail. Positive singleton signs
+alone therefore do not supply the completion.
+
+### Original-profile stage restrictions — reviewed mathematics
+
 A uniform original-profile restriction follows: for each fixed table with
 D*>0 and each positive Never lower bound η, there are ε,γ>0 such that
 EVERY actual behavioral profile with D≤D*+ε and every marginal Never
@@ -1905,7 +1960,7 @@ one accepted instance or an equivalent unrestricted proof.
 | --- | --- |
 | Finite laws | Select the three independent nonpivot laws with inner repair value tending to zero. |
 | Maximum-regret sources | Consume either the generic singleton-bearing source or the single-pivot source with strict pressure and a singleton-removing delay, controlling the changed nonmover caps. |
-| Total-debt source | Consume an early original collision of a near-minimizer, or its global-minimum first-root limit with an actual carrier continuation; control simultaneous cap switches rather than assuming a Nash row or a minimizing tail. |
+| Total-debt source | Consume a debt-rigid global-minimum collision: either all common debts are positive, or every original minimum has an all-four-finite realizing sequence. Retain the arbitrary-carrier tail constraint and control simultaneous cap switches; neither branch supplies a Nash row, minimizing tail, or temporal return. |
 | Forward play | Produce the bounded absorption-relative packets or the punishment-vector sure root from the remaining table. |
 | Global obstruction | Exclude every full robust polynomial/positive invariant barrier, or construct one for an explicit table. |
 | Matrix classification | Consume tables surviving full and quotient degree tests, guarded crossed-response tests, and the matrix-free oriented-pair test, using actual all-behavior realization. |
