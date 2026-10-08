@@ -1109,7 +1109,7 @@ has adequate state. A candidate must beat the same-domain full-debt
 floor after pricing its manufactured source and all new cap branches;
 positive delivery or a large auxiliary penalty is not that comparison.
 
-## Four tests separating complete information from successful selection
+## Tests separating complete information from successful selection
 
 The supporting arguments below are ordinary, unreviewed mathematics in
 the authors' notebooks. They are not new counterexample exclusions. Their
@@ -1225,7 +1225,7 @@ or an unsuitable operation over missing information for these particular
 attempts. They do not decide between existence and a positive-gap table,
 and none turns a conditional object into a conjecture-closing producer.
 
-## Finitely additive existence is not behavioral realization
+### Finitely additive existence is not behavioral realization
 
 Khan, Pedersen and Stinchcombe's
 [All Games Have Equilibria, version 2](https://arxiv.org/html/2607.15452v2)
@@ -1239,3 +1239,44 @@ singleton reward. A decoder preserving a positive AllNever mass cannot
 meet the discontinuity-avoidance premise. Another selection and a uniform
 full-response realization theorem would be needed; existence in the larger
 model is not the project's endpoint.
+
+There is also a complete-family test, not just this missing-hypothesis
+warning. The ordinary, independently unreviewed argument in
+`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`, FA1–FA7, uses the complete
+four-player table, for C≥1,
+
+    r_i({i})=C;
+    r_i(S)=C−1 if i∈S and |S|≥2;
+    r_i(S)=C+1 if i∉S;
+    Never=0.
+
+For every menu {0,…,N−1,Never} it constructs a full-support exact Nash
+law with common payoff u_N and marginal Never mass b_N satisfying
+
+    b_N³=2ᴺ/[2ᴺ(C+1)−C],
+    u_N=(C+1)(1−b_N³).
+
+Every menu response, including Never, has value u_N, but the COMPLETE
+behavioral cap is C+1−b_N³. Thus total unrestricted debt tends to
+4C/(C+1)>0 while every fixed finite response has zero regret once it
+belongs to the menu. The missing maximizing date moves with N.
+
+The proposed entire-law ultrafilter limit retains independence,
+finitely additive Nash, and the paper's indicated finite-approximation
+and finite weak-dominance refinements. Its payoff is C·(1,1,1,1).
+The same argument classifies this table's ENTIRE ordinary UE payoff
+set as the four vectors with C at one owner and C+1 at the other
+three. The limit payoff therefore has distance1 from every actual UE
+target in the maximum norm. This is a solved table with zero global
+debt, not a positive-gap example or a refutation of finitely additive
+existence. The paper's discontinuity-avoidance hypothesis fails for
+this family, so its realization theorem is not contradicted either.
+
+If independently validated, the test excludes a universal
+utility-preserving behavioral decoder even for this refined family.
+It does NOT exclude a good existential selection from the complete
+equilibrium correspondence. For this operation the failure is not
+forgotten finite labels or absence of equilibrium: it is a probability
+mode change and nonuniform control of moving responses. A useful next
+test must select a realizable branch or derive a uniform full-response
+estimate; adding more fixed-response coordinates is not that estimate.
