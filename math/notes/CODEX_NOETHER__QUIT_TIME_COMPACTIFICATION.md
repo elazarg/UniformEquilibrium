@@ -22204,3 +22204,95 @@ does NOT eliminate all native positive-gap games. It also does not give
 an actual absorbing competitor with D<A*. Constructing or globally
 selecting that competitor is the live remaining question; convexly
 mixing the extracted ledgers is not an authorized independent profile.
+
+### AT7. Same-native-table row witnesses and the existing whole-carrier completion
+
+Status: SOURCE/OVERLAP ADDENDUM, USING THE REVIEWED FC WHOLE-CARRIER
+THEOREM; NOT A NEW CLOCK REDUCTION. It makes AT5's realizing sequences
+simpler, without aligning any absorbing minimum with a full minimum.
+
+Work at ANY native zero-own z with |z_i(S)|≤M and A(z)=A>0. For an
+arbitrary actual p with joint Never mass ν, choose h with n_h≤ν^(1/4)
+and move ONLY that Never atom to date0. The changed profile is literally
+absorbing. The coupling in AT3 controls four U coordinates by2Mn_h
+each and three observer caps by2Mn_h each; the h cap is unchanged.
+Therefore
+
+    D_z(p)≥A−14Mν^(1/4).                              (AT.13)
+
+For r^C_i(S)=z_i(S)+C, C>0 and Never0, AT2 gives
+D_{r^C}(p)=D_z(p)+4Cν. Put η=(A/(28M))⁴; here A≤4M ensures
+0<η<1. If ν≤η, (AT.13) gives D_{r^C}(p)≥A/2. If ν≥η,
+nonnegative native debt gives D_{r^C}(p)≥4Cη. Consequently
+
+    C≥A/(8η)  ⇒  Δ_all(r^C)≥A/2>0.                  (AT.14)
+
+This is an ACTUAL full-domain positive gap at a translated table, not
+the vacuous full gap of the native own-zero table. The exact terminal
+gap/no-UE bridge in `Terminal/ExploitabilityGap.lean` applies to r^C.
+I inspected the declaration
+`normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff`
+under its imports in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean`,
+and `exists_core_blocker_of_mem_normalCore` in
+`UniformEquilibrium/Quitting/Classification/LCP/NormalCore.lean`.
+Using `normalizedSoloMatrix_eq_soloReward_sub` in
+`UniformEquilibrium/Quitting/Classification/PreemptionGateDictionary.lean`,
+they give, for EVERY recipient m, some j≠m with
+
+    r^C_m({j})−r^C_m({m})=z_m({j})≤0.                 (AT.15)
+
+This is a recipient ROW witness, not RM24's different negative witness
+in EACH singleton quitter's COLUMN. It is regenerated from the SAME
+native table via an actual translated full counterexample. No old table
+passport or a no-UE premise at the native table is imported.
+
+In fact every native positive-A table has a STRICT row witness. If all
+z_m({j})≥0 for one row m, raise all of m's passive entries by any
+0<ε<A. The native absorbing gap changes by at mostε, so remains
+positive. Apply(AT.15) anew to that changed native table. It would require
+some z_m({j})+ε≤0, a contradiction. Thus
+
+    ∀m ∃j≠m: z_m({j})<0.                              (AT.16)
+
+The independently reviewed canonical
+[`FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md`](../exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md),
+Section15 F6–F9, already proves K_fin=K_abs for ANY signed table with
+nonnegative own singletons and the weak row witnesses(AT.15). Its actual
+full-cap construction uses a delayed diffuse second anchor and then two
+unchanged anchors to screen all later replacements. Its scope includes
+own zeros and equality witnesses. Apply that WHOLE-CARRIER statement
+literally to z. It yields equality of the ENTIRE payoff/cap carriers
+and their absorbing minimum sets, with four finite-a.s. realizing clocks.
+This is stronger than a new large-C proof of only two finite anchors.
+I am therefore not developing that redundant reduction.
+
+The four-clock source is still at A(z) over K_abs=K_fin. It is NOT a
+full minimum of r^C, whose gap may be strictly below A for EVERY finite
+C, nor of native z, whose full gap is0. Equation(AT.14) only produces
+the row witnesses needed for the already proved completion.
+
+### AT8. The selected tax sequence may retain all counterfactual absorption
+
+For 0<ε<A*/8, the NEW native table of AT5 has absorbing gap at least
+A*−4ε>0. Apply AT7 to that NEW table too, rather than transporting a
+weak old row witness through a positive passive increment. Its WHOLE
+carrier equality permits choosing its actual ε²-minimizers p_ε in
+P_fin. This is an allowed choice in the same AT5 comparison, so all
+four original clocks are finite a.s. at EVERY index. Every deleted
+opponent profile also absorbs almost surely. Old debt still tends A*,
+and old cap-approximating finite tests retain(AT.7).
+
+Now h_i,ε=0 exactly and Σ_i t_i,ε≥1. In particular the same selected
+limit obeys Σ_i φ_i≥1, so some finite full-cap-approximating response
+wins/joins with probability at least1/4 in the limit, against an
+opponent profile that is already finite a.s. The earlier quantitative
+incidence proof remains valid; this simplification comes from the
+existing whole-carrier completion, not constant optimization.
+
+Complete caps are unchanged in the limiting pair, not merely the
+prescribed outcome law. Response deadlines may still move, and winning
+can precede the opponent's finite date rather than collide with it.
+No positive collision premium, payoff-kernel difference from Never,
+paid response, or strict below-A* competitor follows automatically.
+The remaining consumer must use more than the completion or ledger.
