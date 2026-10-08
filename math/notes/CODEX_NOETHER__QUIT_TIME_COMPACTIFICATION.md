@@ -22296,3 +22296,88 @@ can precede the opponent's finite date rather than collide with it.
 No positive collision premium, payoff-kernel difference from Never,
 paid response, or strict below-A* competitor follows automatically.
 The remaining consumer must use more than the completion or ledger.
+
+### AT9. A strictly Continue-priced nonsure root has an actual same-domain descent
+
+Status: COMPLETE ORDINARY SUBGEOMETRY EXCLUSION USING THE TRUE NATIVE
+ABS FLOOR. No supplied upper-cap-price field, Nash root, minimum tail or
+debt rigidity is used. It is not an exhaustive producer of this geometry
+and not a whole native absorbing consumer. The proof gives a literal
+small joint-rate descent if the excluded geometry were supplied.
+
+Fix a native zero-own table of reward bound M>0 with A=δ_abs>0.
+Let w=(u,b)∈K_abs be ANY actual payoff/full-cap carrier point. It
+need not minimize debt. Let x_i∈[0,1) be nonsure date-zero Quit rates,
+not all0, and suppose its genuine prefix T_x(w) has debt A. Write
+
+    h_i(x)=∏_{j≠i}(1−x_j),    c(x)=∏_j(1−x_j),
+    Q_i(x)=the exact date-zero Quit payoff,
+    H_i(x)=the passive date-zero payoff sum,
+    C_i(x)=H_i(x)+h_i(x)b_i.
+
+The exact COMPLETE prefix cap, including every later finite/Never test,
+is max(Q_i,C_i); the exact prescribed payoff is
+x_i Q_i+(1−x_i)[H_i+h_i u_i]. Suppose, for contradiction,
+
+    C_i(x)>Q_i(x)   for EVERY i.                        (AT.17)
+
+Let J={i:x_i>0}, a nonempty set. Every x_i, i∈J, is interior in(0,1).
+All other rates remain0. The finitely many strict polynomial inequalities
+(AT.17) give a small TWO-SIDED legal product box around x_J where
+EVERY full cap still equals C_i. Its debt there is the multiaffine
+polynomial
+
+    F(y)=Σ_i{C_i(y)−y_i Q_i(y)
+              −(1−y_i)[H_i(y)+h_i(y)u_i]}.              (AT.18)
+
+The box varies actual independent root rates; no unsupported signed
+calendar atom is inserted. Every such finite prefix of w lies in K_abs,
+by actual prefix realizers and closure. Therefore F≥A throughout this
+box and F(x)=A. A multiaffine polynomial with an interior minimum is
+constant: center the box at x, average its corners to get F(x), and
+nonnegativity forces equality at ALL corners of every smaller box.
+Multiaffine interpolation then gives equality on an open box, and the
+polynomial identity extends to every value of y_J with other rates0.
+
+At y=0, the FIXED-Continue polynomial equals Σ_i(b_i−u_i)=D(w).
+Hence D(w)=A. This conclusion is about the actual tail point w already
+in K_abs. It does NOT identify a selected polynomial cap with an actual
+cap at an unverified endpoint; even if some b_i were negative initially,
+the algebraic identity for F(0) still gives the actual tail debt. RM24
+now applies to this genuine tail minimum and gives
+
+    b_i≥A+A²/(8M)>A   for EVERY i.                     (AT.19)
+
+For any h∈J, set only y_h=t and all other rates0 in the SAME polynomial.
+Its h Quit reward is its own0; every observer's passive head term
+cancels between cap and payoff. Thus the literal identity is
+
+    F(t e_h)=(1−t)D(w)+t b_h.                          (AT.20)
+
+Constancy forces b_h=A, contradicting(AT.19). Equivalently F is NOT
+constant, so its original interior point cannot be a minimum: there
+exists an arbitrarily close legal joint rate change y with all strict
+Continue branches retained and D(T_y(w))=F(y)<A. This is the actual
+same-domain competitor, and the true absorbing floor rules it out.
+
+Therefore EVERY nonzero nonsure minimum prefix with an absorbing carrier
+tail has SOME date-zero Quit cap active: Q_i(x)≥C_i(x) for some i.
+The owner can be quiet, and the inequality can be strict or tied. No
+later maximizing kernel, positive debt or distinct-payoff bridge follows
+automatically. Sure root rates lie on a one-sided boundary and are not
+covered by the interior polynomial argument.
+
+Source/overlap scope: exact prefix cap identities are the ones already
+recorded in RM24 and the tracked terminal auxiliary-Nash budget sources;
+the native strict floor is the ordinary RM24 argument, not an invocation
+of a full-domain minimum theorem at an absorbing point. The bounded
+purification/paid-port declarations in
+`Diagnostics/Quitting/StoppingLaw/FiniteClockMinimumPurification.lean` and
+`Diagnostics/Quitting/StoppingLaw/FiniteClockMinimumPaidPort.lean` concern
+literal finite-clock FULL global minima and route strict off-minimum
+targets to paid responses. They do not provide this native below-A root
+comparison or make arbitrary conditional tails minimize. This proof
+uses neither their paid-port output nor its off-minimum target as a
+debt reduction. The native first collision and its active head branches
+still need global production/consumption; AT9 is not counted as a new
+raw-table UE class or export.
