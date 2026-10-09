@@ -133,7 +133,7 @@ least-Never minimum: maximize attainable first-root absorption, without a
 Nash restriction on that root or minimum restriction on its suffix. Compact
 augmented root/suffix data attain this maximum. A two-mass whole-law chart
 then excludes one sparse multiple-bridge configuration at this newly selected
-source. This is COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED; neither full source
+source. This has one independent ordinary mathematical PASS; neither full source
 alternative is consumed. It is not another solved-table test or an export.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
@@ -23281,7 +23281,8 @@ print('JB PASS: complete table, all four symbolic caps, sure-owner later/Never a
 
 ## RA. Maximal actual first-root absorption on the least-Never minimum fibre
 
-Status: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED selected-source restriction.
+Status: COMPLETE ORDINARY selected-source restriction, with one independent
+mathematical PASS in CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_BROUWER.
 This is not a uniform-equilibrium consumer or a closure of alternative(I).
 The maximum is over arbitrary ACTUAL product-root/suffix realizations of a
 global minimum, not exact Nash roots against a supplied annotation.
@@ -23326,8 +23327,10 @@ S(a)≥ν₀; all root rates are strictly less than1.
 Realize the chosen suffix by finite laws with vanishing full-cap, payoff and
 Never errors and prepend the FIXED selected root at literal date0. Apply
 the universal accepted source §§6–10 to THIS sequence at the SAME table.
-Its positive root mass and absence of earlier physical dates imply that
-date0 is the earliest full cap and first prescribed collision. It has at
+If its earliest full cap were later than its positive root0 atom, Section9's
+universal no-prescribed-mass-before-cap theorem would be violated. There is
+no earlier physical response date. Thus date0 is its earliest full cap and
+first prescribed collision. It has at
 least two positive nonsure suppliers and a root/later bridge. Sections16
 and18–19 therefore give the same alternatives(I)/(II), now at this extra
 extremal selection. This does not transfer an independently chosen source
@@ -23475,5 +23478,7 @@ RA3 only uses an ACTUAL affine tie line in the same-owner two-mass chart,
 and does not infer flatness on multiaffine root-equality surfaces. The extra
 least-Never criterion is what forces this particular flat direction to
 change the root rate. The claimed new content is only RA2–RA3's precisely
-stated selected sparse exclusion, pending independent overlap/soundness check.
+stated selected sparse exclusion. Brouwer's independent bounded review passed
+the actual-source reconstruction, signed whole-family envelope, affine tie
+line and honest suffix return to Z, and checked this overlap distinction.
 No Lean implementation, build, export or Git action is claimed.

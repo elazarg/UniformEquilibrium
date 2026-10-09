@@ -4014,3 +4014,131 @@ comparison by itself. Verdict: LOCAL raw producer, NOT a global
 itinerary producer; overlap with its produced neighborhood union
 remains UNRESOLVED by this bounded check. No new soundness audit,
 novelty conclusion or output-grammar census is claimed.
+
+
+## RA1–RA4: independent actual-root extremum and sparse exclusion review
+
+Reviewed the bounded `## RA. Maximal actual first-root absorption on the
+least-Never minimum fibre` section in the author's global notebook,
+SHA256 `088b9da8daa3aa8a41259c57a7105d63fccde9f5a6b0c60a41d42b8cd4373b1a`.
+Verdict: PASS, with no unresolved mathematical objection at the stated
+selected-source scope. This is ordinary mathematics, not a Lean-checked
+declaration, full counterexample-class consumer or export approval.
+
+**Claim checked.** At ONE final positive-own, separated-gap, row-generic
+table with common strictly positive full-minimum debts, select least
+ORIGINAL joint Never ν₀ over the augmented full minimum carrier, then
+maximize literal first-root absorption 1−∏(1−a_h) over ALL product-root/
+actual augmented suffix decompositions of that selected fibre. At this
+extra extremal source, it is impossible to have distinct i,j,p,q with
+i's root rate and post-root finite mass both positive, p,q ROOT-ONLY,
+and no post-root finite owner outside {i,j}. No optimal finite conditional
+or positive future mass of j is assumed. The especially useful case has
+i,j as the two bridging owners, at least one supported with future mass.
+
+**Compact selection and first-root eligibility.** I independently checked
+the literal prefix formulas and the primary declarations
+`quittingTerminalSemanticPrefix`,
+`quittingTerminalSemanticPair_rootThenContinuation`,
+`quittingTerminalSemanticPrefix_mem_carrier`,
+`quittingTerminalSemanticCarrier_isCompact`, and
+`quittingTerminalSemanticPrefix_allContinue_eq_of_singleton_le_cap`
+in `UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean` under its
+imports. `continuous_quittingTerminalSemanticPrefix` is stated for a
+FIXED root; joint continuity in root coordinates follows separately from
+the displayed finite polynomials and maxima, as the note explicitly says.
+No tracked declaration is misrepresented as already including literal ν.
+
+The augmented carrier H is compact in the bounded payoff/cap box times
+[0,1]. Fixed actual prefixing multiplies the SAME realizing sequence's
+Never probability by its root survival. Thus Ψ really maps into H, Z is
+closed compact, and the least-ν minimum has an all-Continue representation
+because its full caps exceed its singletons. The accepted source's honest
+first-root/suffix decomposition gives a positive-absorption member of Z.
+Its attained maximal value is positive, and S(a)ξ=ν₀>0 forces every rate
+below1 and S(a) bounded away from0. No suffix-minimum assertion is used.
+
+I rechecked the universal quantifier in accepted source Sections6–10.
+It applies to ANY finite-law minimizing sequence at this SAME final table.
+Prepending the FIXED selected root at physical date0 preserves its positive
+root masses in the compiler. If the earliest full maximizing point were
+strictly later, this would violate Section9's exclusion of prescribed mass
+before that point. There is no earlier physical date. Consequently date0
+is the eligible earliest cap/first collision of THIS reconstructed minimum;
+the at-least-two-supplier and bridge conclusions apply to it. Least ORIGINAL
+ν is retained jointly, so Sections16 and18–19 give the stated alternatives.
+Eligibility is not inferred merely from a positive arbitrary prefix or
+from an exact cap-Nash selection on a different annotated fibre.
+
+**Two-mass family and all cap hinges.** i's positive root/future/Never
+amounts give an actual two-sided triangle in (a,f), retaining its ENTIRE
+old finite conditional F. B_i is independent of i's own law. Every U is
+affine because just one marginal varies. p,q have no future finite mass
+and their FULL root-only gaps persist by all-response TV control and the
+isolated root; their true caps are affine root values independent of f.
+For j, its own law disappears from every response. The only possible
+finite suffix opponent is i, so every later finite response is
+A_j(a)+C_j[(1−a)s_j+fW_j(t;F)]. Taking the ENTIRE old compact tester set
+gives exactly the one affine envelope with bounded L_j=sup W_j. Signed,
+zero and nonisolated L_j cause no failure. No pre-first-F empty date is
+manufactured. Never is dominated by the retained final finite tester,
+with strictly positive gap C_j(1−a−f)s_j. Hence the TRUE full D is indeed
+the maximum of TWO affine functions, not a selected-response lower ledger.
+
+The old actual realizers and bounded conditional densities give convergence
+of payoff AND all-response caps for this legal family. Literal ν is
+C_N(1−a−f), with its positive other-player product from the SAME sequence.
+This is not an arbitrary coefficient model or a profile convexification.
+As a diagnostic, I independently checked the finite-law formula against
+direct exact product enumeration: 80 full-cap evaluations across20 signed
+integer tables with positive owns, including7 negative-L tables and6 strict
+p/q-root-only cases. All finite occupied/empty dates and Never were included.
+Payoff affinity, own-i cap constancy, the j envelope and literal ν identities
+passed. This calculation checks algebra only, not positive global minimality.
+
+**Why the line contradicts the selected maximum.** If one branch is strict,
+or the two branches coincide identically, interior global minimality makes
+the affine debt constant on a small full box; increasing f lowers ORIGINAL
+ν, contradicting the primary selection. Otherwise the nonzero branch
+difference gives a genuine two-sided affine tie line. Global minimality
+makes the TRUE debt identically δ on that segment. Least ORIGINAL ν then
+forces its direction to satisfy z_a+z_f=0. Nonzero direction therefore
+has z_a≠0, and one legal sign increases a. Literal ν stays EXACTLY ν₀,
+while first-root absorption increases by z_a∏(1−a_h)>0.
+
+Conditioning those SAME modified actual laws on surviving literal root0
+has uniformly positive survival. Compact extraction of their honest suffix
+payoff/cap/Never triples and the exact prefix formula yields another member
+of Z with the larger root absorption, a contradiction. No favorable suffix
+minimum is substituted, no tail excess is erased, and no nonzero own
+finite-regret gap is needed. An affine kernel alone or zero directional
+derivative would not suffice; actual globality produces the minimum segment.
+
+**Bounded overlap and surviving scope.** I read Noether's original RM1–RM5
+`Global maximal root-mass selection` mechanism, including its explicit
+nonlinear-wall falsifier. RA correctly reuses its compact actual-minimum
+root/suffix selection rather than claiming new compactification. The added
+least-ORIGINAL-Never fibre and the sparse one-marginal two-mass chart are
+what make the present flat direction increase the root. Neither Noether's
+old multiaffine wall nor the tracked exact-cap-Nash maximal-root selection
+supplies this conclusion by itself. The latter fixes an exact-root fibre
+against a supplied cap annotation; RA's Z is unrestricted actual-minimum
+prefixing and need not be cap-Nash.
+
+The accepted source's supported-SOLE-bridge exclusion and this reviewer's
+CB/CS/CT/CU/CW restrictions do not already give RA's two-future/multiple-
+bridge sparse conclusion. In particular CS/CT concern source(II) with one
+future owner, whereas RA can have TWO future owners and two bridging owners.
+Some overlapping one-future cases are already excluded and should not be
+counted twice. This is a genuine additional selected-source restriction,
+not a new raw reward-class equilibrium producer requiring a fabricated
+union-coverage claim.
+
+The conclusion does NOT exclude two unsupported bridgers, supported
+bridgers with no future mass, an extra future owner, or an additional
+later-only observer facing two finite suffix laws. In the latter setting
+the complete envelope can have three or more active affine branches and
+the flat-line argument is unavailable. General purification of nonlinear
+root surfaces, elimination of case(I)/(II), whole-debt funding and the
+ordinary Fin4 conjecture remain open. No unresolved objection to RA1–RA4's
+bounded statement remains after this independent falsification attempt.

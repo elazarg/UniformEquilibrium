@@ -1559,3 +1559,45 @@ These are NOT covered by the conclusion. A root-only p's inactive tie is
 correctly allowed. Zero-future, multiple-future and case(I) modes remain
 open; no quantitative paid move, full-II consumer or fixed UE target is
 produced by this review.
+
+## Bounded CY strict-END bridge extension check
+
+Reviewed `## CY: the strict-END bridge submode is impossible at the original
+source` through its frozen EOF, SHA256
+`cb2bba19e4df128e72fbc03dedd7e10053e794b964f9cfac817f49ccc37efc87`.
+Verdict: ordinary mathematical PASS, with exactly its stated proper-hazard,
+strict-endpoint and source-rigidity hypotheses. This is a strengthening of
+CX's END arm at the ORIGINAL same-table source, not another full audit or
+complete sparse consumer.
+
+Keeping root rates and finite amount f fixed, varying the entire proper
+conditional F_z leaves EVERY prescribed coalition probability, the entire
+payoff vector and literal joint Never fixed. The already reviewed complete
+finite/END/Never formula applies on a genuine two-sided interval because
+0<z₀<1. i's strictly END-active envelope is a constant, so its root/END
+equality is a max of TWO constants, not a surviving variable hinge. k's own
+cap is constant as well. q's later-only strict FIRST branch is affine with
+nonzero slope H_q f P_q: both probability factors are positive and the
+accepted within-row distinctions give P_q≠0, regardless of its sign. p's
+ROOT-ONLY full gap fixes its cap even if its inactive tail endpoints tie;
+if later-only, its stipulated strict endpoint fixes one affine cap branch.
+Consequently TRUE D is affine locally. There are no omitted moving finite,
+late supremum or Never replies in that assertion.
+
+Global minimality makes that affine debt constant on the whole small
+interval, not just zero to first order. Every point is a genuine full
+minimum in the same augmented carrier. The common individual debts then
+force each full cap to be constant because all prescribed values are
+unchanged, contradicting q's nonzero slope. Finite proper-geometric
+truncations retain literal Never and price all responses just as in CW/CX.
+Least-Never itself is not used in this final contradiction; its role is only
+in the inherited source input. No new generic polynomial avoidance or
+reward perturbation is required.
+
+Thus the END conclusion of the earlier CX review has this strictly shorter
+same-table proof; it should not be counted twice as fresh-generic progress.
+CX's FIRST-i resultant mechanism remains distinct. z=0/1, i's extra active
+tail tie, p's active tail tie, or absence of a strict FIRST later-only
+supplier are honestly outside CY. An inactive p tie remains allowed. No
+zero-/multiple-future exclusion, general case(I)/(II) consumer, paid port or
+fixed UE target is supplied.

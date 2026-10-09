@@ -659,6 +659,25 @@ original opponent-root event. Multiple labels for one owner do not
 count as two owners. The later-only family need not be unique or
 isolated, and prescribed finite mass for the sole bridger is not assumed.
 
+The least-original-Never selection can be refined at the SAME table by
+maximizing first-root absorption over all product-root/actual augmented
+suffix decompositions of its minimum fibre. This is not a maximum over
+cap-Nash roots, and the honest suffix need not be a minimum. At this
+extra selected source, if two owners are root-only cap owners and all
+post-root prescribed finite mass belongs to the other two owners, neither
+of those remaining owners can have positive prescribed mass both at the
+root and strictly after it. Its legal two-mass variation has true full
+debt equal to a maximum of two affine functions. Least original Never
+forces a minimum line to preserve the sum of its root and later masses;
+one sign then increases root absorption, contradicting its attained
+maximum. The
+[maximal-root sparse exclusion](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md#ra-maximal-actual-first-root-absorption-on-the-least-never-minimum-fibre)
+has an independent ordinary-mathematics review, not a Lean declaration.
+It applies in particular to a two-bridge/two-root-only pattern, but does
+not exclude unsupported bridgers, supported bridgers without future mass,
+extra future owners or additional late-cap observers. It supplies no
+general root-absorption pump or consumer for either source configuration.
+
 In configuration 2, some POSITIVE first-root supplier k has strictly
 suboptimal prescribed finite conditional law. Write a_k for its first-root
 Quit rate, n_k for its original Never probability, F_k for its law

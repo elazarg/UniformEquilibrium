@@ -15,7 +15,7 @@ augmented fibre. The maximizing witness has the universal source's literal
 first root. A legal same-owner root/whole-future/Never chart excludes one
 sparse multiple-bridge pattern: two bridgers, two root-only cap owners, all
 future finite mass on the bridgers, and a supported bridger with positive
-future finite mass. This is a complete ordinary UNREVIEWED draft, not a
+future finite mass. This has one independent ordinary mathematical PASS, not a
 consumer for either source case or an export. Its affine tie-line argument
 does not revive purification on Noether's nonlinear root walls. Additional
 late-cap observers can produce several active hinges, so the extension to
