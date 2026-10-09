@@ -135,12 +135,16 @@ augmented root/suffix data attain this maximum. A two-mass whole-law chart
 then excludes one sparse multiple-bridge configuration at this newly selected
 source. This has one independent ordinary mathematical PASS; neither full source
 alternative is consumed. It is not another solved-table test or an export.
-RA5 then adds two UNREVIEWED ordinary draft restrictions on the two-bridge/
+RA5 then adds two independently reviewed ordinary restrictions on the two-bridge/
 two-root-only pattern without bounding the number of future owners: a
 supported bridger has no future mass before its partner's first late cap,
 and has no future mass at all if that partner has an isolated sole late cap.
 Their full-family arguments use actual early exit screening or a genuine
 isolated complement gap, not a selected upper reply.
+RA6 adds an UNREVIEWED global least-Never support fence: no owner prescribes
+finite mass after the latest full cap of the OTHER owners. Together with
+RA5 and the actual retained-atom isolation lemma, it removes RA5(S)'s assumed
+isolation for a partner with a sole later cap. No consumer is claimed.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
@@ -23491,8 +23495,9 @@ No Lean implementation, build, export or Git action is claimed.
 
 ### RA5. Two larger multiple-bridge patterns without a future-owner bound
 
-Status of THIS extension: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED.
-RA1–RA4's independent PASS does not automatically review these additions.
+Status of THIS extension: COMPLETE ORDINARY, independently reviewed PASS in
+CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_BROUWER, distinct from the
+earlier RA1–RA4 review.
 They concern the SAME max-A least-original-Never source and use actual
 whole-law first-hit identities, not a new certificate interface.
 
@@ -23580,3 +23585,123 @@ additional later-only owners and genuinely multiple/nonisolated upper
 active families remain. One cannot infer an owner's prescribed support
 from the existence of its full best reply. The remaining global step is
 still an actual whole-debt move through those surviving configurations.
+
+### RA6. Global OTHER-owner latest-cap fence and a stronger sole-cap corollary
+
+Status of THIS extension: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED.
+The already reviewed RA1–RA5 remain separate. The global fence below uses
+least ORIGINAL Never but does NOT use root-absorption maximality, common
+individual debts, cap uniqueness, isolation of maximizing points, or any
+bound on future owners. It applies to EVERY produced marked representative
+of ANY same-table augmented full minimum with least ν₀>0.
+
+Fix such a representative q on X=T⊔{Never}. Its finite test set T is compact,
+all response functions are continuous, every marginal Never mass n_h>0,
+and Never is strictly suboptimal for every owner. All full maximizing sets
+
+    M_h={t∈T:V_h(t,q_-h)=B_h}
+
+are therefore nonempty compact FINITE-clock sets (not necessarily finite
+sets or raw integer dates). For each owner i define
+
+    L_-i=max(⋃_(h≠i) M_h).
+
+The exact conclusion is
+
+    q_i({finite clocks t>L_-i})=0.                  (RA.10)
+
+This is a condition on the actual marked law/response incidence at the
+selected same-table minimum. It is not a cap bound for an arbitrary positive
+debt profile and not a new behavioral-equilibrium producer.
+
+Suppose(RA.10) fails. Choose a regular old whole-date cut u>L_-i with
+
+    e=q_i({finite clocks>u})>0.
+
+For λ near0 vary ONLY i's old law by
+
+    q_i^λ=q_i+λ[eδ_Never−q_i|_(finite clocks>u)].   (RA.11)
+
+Its late finite mass has factor1−λ and its literal Never atom is n_i+λe.
+Both signs are legal on a sufficiently small interval since e,n_i>0.
+All other laws remain fixed. The actual old-calendar realization is exactly
+the whole finite-tail/Never transport used in PC2 of Brouwer's
+`A paid Never source has no finite prescribed tail after its last cap`:
+take convergent regular whole-date cuts in the original finite realizers,
+retain the separate old Never interval, and use(RA.11) at each index.
+The tail indicators (also their finite boundary c_N→c) converge strongly;
+the new densities stay nonnegative and bounded on a common signed interval.
+The original prescribed and moving-response kernels are unchanged. Hence
+payoff, ALL finite/Never caps and literal ν converge to this marked family
+in the SAME original augmented H. No date is inserted or raw finite escape
+silently moved to Never.
+
+For EVERY other owner h≠i and EVERY response t≤u, the changed i draw was
+finite>u or Never. Both lie strictly after that finite h response; its
+first-coalition kernel is IDENTICAL under either draw. Thus all such response
+values remain exactly unchanged. In particular every old full maximizer
+of h, which lies≤L_-i<u, retains B_h. The compact remaining test set
+
+    (T∩[u,c]) ⊔ {Never}
+
+contains no old h maximizer and has a strict uniform gap below B_h. Product
+coupling bounds all its changed responses uniformly by 2M|λ|e. Shrink the
+interval to preserve every such gap. Therefore EVERY other owner's complete
+cap stays EXACTLY fixed. i's own complete cap is independent of its own law,
+even if its maximizing clocks are after u, so it stays fixed too. This is
+why the relevant threshold is the OTHER-owner latest cap, not the latest
+cap over all owners.
+
+Every prescribed payoff is affine in the one changed marginal. Thus TRUE
+D(λ) is affine on this legal two-sided interval. The original actual-carrier
+floor D≥δ and D(0)=δ force it to be constant. Every nearby point is a true
+full minimum, with EXACT literal Never probability
+
+    ν(λ)=(n_i+λe)∏_(h≠i)n_h.
+
+Choosing λ<0 lowers ν strictly and contradicts least ORIGINAL ν₀. This
+proves(RA.10). No individual debt rigidity or far polynomial endpoint is
+used. The compact complement gap here follows from a strict ordered cut
+above ALL other active sets, not from uniqueness of a nonisolated maximum.
+
+Now return to the SAME max-A source of RA1. Suppose alternative(I) has
+exactly two bridgers i,j and the other cap owners p,q are ROOT-ONLY. If
+a_i>0, RA5(E) and(RA.10) give the two-sided support fence
+
+    q_i((0,σ_j))=0,
+    q_i({finite t>ℓ_j})=0,
+    σ_j=min(M_j\{0}), ℓ_j=max(M_j\{0}).            (RA.12)
+
+If j has a SOLE later maximizing point σ_j, these bounds force ANY positive
+post-root finite mass of i to be EXACTLY q_i({σ_j})>0. This is the SAME
+marked point that is j's full response; no raw-date identification is made.
+The actual producer in accepted source Section6 proves that every positive
+finite MIXTURE atom is a retained interval midpoint and is ISOLATED in T.
+Since the average law has mass at least q_i({σ_j})/4>0 there, σ_j is isolated.
+(If σ_j=c, the producer's q_i({c})=0 already rules the mass out.) RA5(S)
+now contradicts positive own future finite mass. Consequently
+
+    if j has a SOLE later full maximizer and a_i>0,
+    then i has NO prescribed post-root finite mass,              (RA.13)
+
+WITHOUT assuming that the sole point was isolated beforehand. Uniqueness
+alone is still not used to infer a complement gap: the actual forced own
+point mass is the extra input supplying isolation at the same marked point.
+
+Bounded overlap: Brouwer PC1–PC5 excludes mass after the latest active clock
+of ALL owners, using a multiaffine family and common-debt endpoint identity.
+Its conclusion does not already give(RA.10) when i alone has later active
+clocks than everybody else. The present one-law/least-Never argument prices
+all caps without moving i's own cap tests and gives precisely this stronger
+threshold. LC1–LC6 concern a separate all-unique/support geometry, not this
+general multiple-cap assertion. These primary bounded sections and accepted
+source Sections6–7,9,18 were inspected. No new source theorem is attributed
+to a Lean declaration.
+
+If both bridgers are supported and have positive future finite mass, each
+must now have at least TWO DISTINCT later full maximizers, and their finite
+future laws lie in the partner's first/last late-cap band. Unsupported
+bridgers, zero-future bridgers, additional later-only observers and genuine
+multiple-late-cap hinges remain. This is a stronger ACTUAL selected-source
+restriction, not a response-count certificate, full-I consumer, temporal
+return, unrestricted positive-gap table or solution of the Fin4 conjecture.
