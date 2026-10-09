@@ -679,6 +679,20 @@ It gives no regret floor in terms of the debt minimum and reward bound,
 no funding of other players' cap increases, and no consumer for either
 surviving configuration.
 
+In configuration 2, a root-only positive first-root supplier with
+prescribed finite mass strictly after that root cannot be the ONLY owner
+with such post-root finite mass. Keeping its entire old later conditional
+fixed and varying its root and later masses gives a legal two-dimensional
+family whose true total debt is the maximum of two affine functions.
+A tied minimum line would either lower original joint Never or change
+one coordinate of the common minimum debt vector. The
+[sole-late-owner exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cs-a-paid-root-only-supplier-cannot-be-the-sole-post-root-finite-owner)
+is independently reviewed ordinary mathematics, not a checked Lean
+theorem. It supplies another actual finite-law owner in this submode,
+not alignment of that owner's mass with a maximizing date, a favourable
+joining sign, or a funded joint replacement. Neither complete source
+configuration is consumed.
+
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date
 response value:
