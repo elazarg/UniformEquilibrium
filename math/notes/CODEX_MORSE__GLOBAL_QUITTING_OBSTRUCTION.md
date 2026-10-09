@@ -55,6 +55,19 @@ it is NOT a Fin4 counterexample or a source-class contraction. Thus
 local security at the actual minimum cannot replace a game-specific
 global selection argument. No exact-grid Nash-first repair is inferred.
 
+Latest ACTUAL quitting investigation: PT below changes the root geometry
+to positive pair joining, one designated triple leaver, and negative
+grand joining. It is not NI/SG's one-opponent join rule. The common-ratio
+architecture is completely solved by an explicit two-sure-quitter
+selection over all81 leaver maps, with arbitrary signed transports.
+A genuinely heterogeneous rational four-cycle fixture has NO full root
+with two sure quitters and excludes the ACTUAL punishment-sure gate;
+nevertheless an exact scalar crossing produces a proper-three-player
+absorbing stationary full-Nash self-loop. Thus this negative fixture
+too is RETIRED by actual unrestricted play, not a failed fit. No
+novelty/old-producer coverage claim or new export is made. The full
+Fin4 question remains open, and neither least-Never case is consumed.
+
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
 whose outsider FULL debts vanish. All born finite deadlines and Never
@@ -21874,6 +21887,21 @@ produce actual localization of the selected profiles at the minimum.
 The latter is NOT produced here and cannot be replaced by exact-grid
 Nash first. No surviving Fin4 counterexample class is changed.
 
+Bounded prior-work comparison: Sections2–4 of
+[TARSKI_PREMIUM's infinity-fiber security note](CODEX_TARSKI_PREMIUM__RENY_SECURITY_AT_THE_INFINITY_PAYOFF_FIBER.md)
+and Sections1–4 of
+[NOETHER_SUPPORT's payoff-image audit](CODEX_NOETHER_SUPPORT__COMPACT_PAYOFF_IMAGE_BRS_LEVERAGE_AUDIT.md)
+were read. Their actual quitting result is stronger for the ORIGINAL
+global security proposal: under punishment normality the all-Never
+secure-value supremum equals the own singleton, while the entire actual
+payoff image lies over all-Never in the payoff-graph closure. A genuine
+no-UE source supplies an actual payoff strictly above every singleton,
+so full boundary security fails already on that source. Twenty-date
+payoff realization changes neither caps nor that security obstruction.
+LM addresses the different, weakened MINIMUM-LOCAL globalization step;
+it does not reopen full BRS, claim literature priority, or repair it by
+finite payoff realization. No further security variant is planned.
+
 The exact finite arithmetic was checked independently of the infinite
 cap limit, compactness and security arguments, which are proved above:
 
@@ -21898,8 +21926,266 @@ assert F(1,2)-5*F(1,40)==F(3,8)
 print('LM exact minimum, unique aggregate vertex and zero-Never gap: PASS')
 ```
 
-Concrete next question: can quitting's first-hit coalition invariance
-force GLOBAL localization of genuinely approximate independent laws,
-without exact-menu Nash first or an assumed continuity modulus at a
-moving seam? A conditional localization statement is not a result;
-its actual game-specific forcing step must be proved or falsified.
+Concrete next question, outside security: can actual full-root dynamics
+in the punishment-safe region force a realized charged recurrence rather
+than an above-own quiet endpoint? The indispensable distinction is
+infinite cumulative absorption/actual payoff realization versus finite
+total charge ending at an unrealized continuation vector. Alternatively
+a negative candidate must satisfy the COMPLETE all-root drift and the
+ACTUAL punishment-vector sure gate. There is presently no produced
+recurrence, certified negative table, or new counterexample-class result.
+
+## PT1–PT4. Actual pair-core/triple-leaver test, not a security model
+
+Status: COMPLETE ORDINARY POSITIVE FAMILY PROOF and exact retirement of
+one new rational negative fixture. Not independently reviewed, not a
+Lean theorem, not exported, and no new raw-class count is claimed.
+The table is an actual four-player quitting table with independent
+private root coins and unrestricted unilateral behavioral replies.
+This is a different first-hit root geometry, not another abstract
+auxiliary game or a modification of the solved NI/SG controls.
+
+### PT1. Complete raw family and a transport-independent sure selection
+
+Let I={0,1,2,3}. Choose a map L:I→I with L(k)≠k: in the triple
+I\{k}, L(k) is its designated leaver. Choose K>0, arbitrary row scales
+c_i>0, arbitrary own singletons s_i∈ℝ, and arbitrary passive cells
+b_i(T)∈ℝ for EVERY nonempty T⊆I\{i}. These are finite raw data.
+Define the full60 recipient cells by
+
+    r_i({i})=s_i;  r_i(T)=b_i(T) if i∉T;
+    r_i(T∪{i})=b_i(T)+d_i(T) for nonempty T⊆I\{i},
+
+where d_i(T)=c_i for |T|=1, d_i(T)=−Kc_i for |T|=3, and for |T|=2,
+with {k}=I\(T∪{i}), d_i(T)=−Kc_i if L(k)=i and c_i otherwise.
+Thus every pair has two positive joining premiums; every triple has
+one negative and two positive joining premiums; grand joining is
+negative. Own values and ALL28 passive transports remain arbitrary,
+including signed values. Their signs play no role in the selection.
+
+If L has a two-cycle c↔d, let S=I\{c,d}. Make both owners of S quit
+surely and both outsiders Continue. The S members have joining gain
+c_i>0; outsiders have gain−Kc_i<0. This is a pure exact Nash root.
+
+Otherwise L has a four-cycle or a three-cycle with one leaf. There
+exist distinct outsiders c,d such that
+
+    L(c)≠d, L(d)≠c, L(c)≠L(d).
+
+For a four-cycle a→b→c→d→a choose opposite cycle vertices a,c.
+For a three-cycle a→b→c→a with leaf d→a choose d,b. Hence their
+two DISTINCT images are exactly S=I\{c,d}. Make S quit surely and
+make each outsider quit independently with p=1/(1+K).
+
+For an outsider i, the other two sure owners already quit. Its
+joining gain is c_i with probability1−p and −Kc_i with probabilityp,
+so the complete root gap is c_i[1−(1+K)p]=0. For a sure owner i,
+the other sure owner is always present; i is the designated leaver
+in exactly ONE of the two possible triples. Its joining gain is
+negative exactly when that one outsider quits, irrespective of the
+other outsider. Thus its root gap is the SAME expression, zero.
+The expected raw payoffs cancel in these comparisons because the
+first-hit coalition is T or T∪{i}; this is literal quitting incidence.
+No continuation annotation occurs: every owner has a sure opponent.
+
+Therefore the selected root is exact Nash at EVERY annotation. It
+has at least two sure quitters. Under ANY unilateral behavioral
+replacement an opponent still quits surely at date0. The only payoff
+choice is own Quit0 versus own Continue0: every later finite response
+and Never is equivalent to Continue0 because absorption already occurs.
+The root inequalities therefore bound EVERY full behavioral deviation,
+not merely stationary, finite-calendar or controller deviations.
+Its payoff u=Σ_{nonempty S}μ_q(S)r(S) is ONE fixed uniform target.
+All finite-horizon Nash inequalities are exact; the one-date live-zero
+convention contributes only O(1/horizon) payoff error.
+
+This solves the ENTIRE stated raw family. It also supplies a literal
+charged self-loop F(u,q)=u, absorption1, excluding EVERY full exact
+or robust potential on any box containing the raw rewards and u.
+No punishment calculation, normality or own positivity is needed.
+
+### PT2. A heterogeneous genuine negative fixture and its actual sure gate
+
+The common-ratio premise is substantive. To test the architecture
+beyond it, fix L(k)=k+1 modulo4 and use
+
+    α=(4,3,2,1)/100,   s_i=1,
+    d_i(T)=α_i−1_{{i+1,i+2}⊆T} for nonempty T⊆I\{i}.
+
+Thus pair joining is α_i>0; triple/grand negative joining is
+−(1−α_i). The exact FULL root gap is
+
+    g_i(q,v)=H_i(q)(1−v_i−α_i)+α_i−q_{i+1}q_{i+2},
+    H_i(q)=∏_{j≠i}(1−q_j).                         (PT.1)
+
+Set EVERY passive b_i(T)=2, except b_i({j})=0 when i≠2 and
+i=j+1 modulo4. Keep every other passive cell2. Together with own1
+and the displayed joining premiums this specifies ALL60 rational
+cells, each in[0,51/25]. All row2 coalition rewards containing2
+are≥1; all rewards excluding2 are2. Therefore Quit0 guarantees1,
+while all-Never opponents give cap1, proving actual P_2=1 directly.
+All own rewards are positive, so actual punishment normality is also
+available independently of any supposed no-UE conclusion.
+
+Here NO Nash root at ANY annotation has two or more sure quitters.
+Three sure players fail at their triple's designated leaver, whose
+join gap remains −(1−α_i) even if the fourth joins. Four sure players
+also fail. For two sure players, adjacent-core complements force
+one outsider sure and then a failing three-sure leaver. Opposite
+cores have two outsider chicken equilibria: their pure equilibria
+again give a failing triple; the mixed ones force the outsider rates
+α of the opposite owner. Core{1,3} then has gains α_1−α_0<0 and
+α_3−α_2<0. Core{0,2} has gains α_0−α_3>0 but α_2−α_1<0.
+No two-sure full root survives.
+
+If exactly i is sure, all three other rates must be positive and
+nonsure: a zero rate makes one of their gaps strictly positive,
+forcing an additional sure player. Writing the other owners as
+a=i+1,b=i+2,c=i+3, their equations are
+
+    α_a−q_bq_c=0, α_b−q_c=0, α_c−q_a=0.
+
+Thus q_a=α_c, q_c=α_b, q_b=α_a/α_b, requiring α_a<α_b.
+For this α only i=2 qualifies. Its unique possible opponent root is
+q=(1/4,1/25,1,3/100), and the sure-owner inequality is
+
+    v_2≤1−367/174600 <1=P_2.                      (PT.2)
+
+Consequently the ACTUAL punishment-vector sure-root gate is excluded.
+This is not the stronger all-annotation exclusion: those roots DO
+exist at sufficiently low v_2. Normality and the gate alone therefore
+left an honest negative candidate before the unrestricted test below.
+
+### PT3. An exact proper stationary self-loop retires that candidate
+
+Set q=(x,y,z,0), where
+
+    y=1−1/[51(1−x)],
+    z=(25−51x)/[51(24−25x)],
+    H=(1−x)(1−z).
+
+On the rational interval
+
+    20357/10^6≤x≤20359/10^6,
+
+all x,y,z lie strictly between0 and1. For owners0,2, every possible
+opponent-only coalition in this support pays2, so their stationary
+Continue fixed-point values are EXACTLY U_0=U_2=2. Their root
+indifference equations (PT.1) are exactly the first two displayed
+formulas for y,z. For owner1, its Continue absorbing contribution
+is2z, hence U_1=2z/(1−H). Its indifference equation is
+
+    2zH−(1−H)[(97/100)H+3/100]=0.                (PT.3)
+
+After substitution, this equals P(x)/[260100(25x−24)^2], where
+
+    P(x)=145323072x^4−441144288x^3+448922488x^2
+          −156104700x+2995625.
+
+The exact rational endpoint values have opposite signs: positive at
+20357/10^6, negative at20359/10^6. IVT supplies ONE x* in the
+interval, chosen once before accuracy. The three active Nash
+equations and the Bellman equations hold simultaneously at this x*.
+This is not a numerical root or a symmetric reduction.
+
+The SAME stationary word gives
+
+    U_3=2−2z/(50+z)>1,
+    H_3=(1−z)/51,  c=∏_i(1−q_i)=(1−z)/51<1/51.
+
+Its quiet gap is
+g_3=H_3(1−U_3−1/100)+1/100−xy<0: on the whole interval,
+x>1/50 and y>97/100 imply xy>1/100. Thus EVERY quiet inequality
+uses the same literal values as the active equations. All opponents'
+survival products are strictly below1. The stationary Bellman root
+therefore controls every unilateral behavioral replacement, including
+all finite deadlines and Never. It yields one fixed unrestricted
+uniform target U; no efficient-error premise or unsupported clock is
+required. Since F(U,q)=U and absorption>50/51, this exact self-loop
+excludes every full exact/robust potential, whatever its degree.
+The selected heterogeneous negative fixture is RETIRED.
+
+### PT4. Exact checks, named semantics and stopping boundary
+
+The source-independent semantic compiler inspected is
+`terminalNash_and_sameProfileUniform_of_stationaryBoundary` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientSameProfile.lean`,
+with `IsQuittingStationaryBoundaryAdmissible` and the complete cap
+endpoint bound in `UniformEquilibrium/Quitting/Stationary/EndpointCompiler.lean`.
+For PT1 every deleted-opponent survival is0; for PT3 it is<1.
+The saturated boundary is therefore vacuous in both cases. The
+definition `IsQuittingFullExactRootPotential` and
+`isQuittingFloorFreeRobustEdge_of_exactRoot` were reread in
+`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`.
+The exact root box estimates were read in
+`UniformEquilibrium/Quitting/Root/BoundedEndpoint.lean` under its imports.
+No new Lean file, implementation or build is claimed.
+
+The complete finite-map selection and signed raw-coordinate gap check,
+plus PT3's exact scalar identities and rational signs, are reproduced
+below. The infinite/full-deviation conclusions use the proofs above
+and the named compiler, not a sampled timing response menu.
+
+```python
+# PT exact finite-map and heterogeneous stationary identities
+from fractions import Fraction as F
+from itertools import product, combinations
+import sympy as s
+I=range(4)
+maps=[L for L in product(I,repeat=4) if all(L[i]!=i for i in I)]
+assert len(maps)==81
+for L in maps:
+    for K in map(F,('1/2','1','3','7')):
+        pair=next(((c,d) for c,d in combinations(I,2)
+                   if L[c]==d and L[d]==c),None)
+        pure=pair is not None
+        if not pure:
+            pair=next((c,d) for c,d in combinations(I,2)
+                      if L[c]!=d and L[d]!=c and L[c]!=L[d])
+        q=[(F(0) if pure else 1/(1+K)) if i in pair else F(1) for i in I]
+        def b(i,T): return F((sum(T)+3*i)%7-3)
+        def d(i,T):
+            if len(T)==1:return F(1)
+            if len(T)==3:return -K
+            k=next(j for j in I if j not in T and j!=i)
+            return -K if L[k]==i else F(1)
+        def r(i,S):
+            if i not in S:return b(i,S)
+            T=S-{i}
+            return F(i-3) if not T else b(i,T)+F(i+1,3)*d(i,T)
+        assert sum(t==1 for t in q)>=2
+        for i in I:
+            others=[j for j in I if j!=i];gap=F(0)
+            for bits in product((0,1),repeat=3):
+                T={j for j,t in zip(others,bits) if t};mass=F(1)
+                for j,t in zip(others,bits):mass*=q[j] if t else 1-q[j]
+                if mass:
+                    assert T
+                    gap+=mass*(r(i,T|{i})-r(i,T))
+            assert (q[i]==0 and gap<=0) or (q[i]==1 and gap>=0) or gap==0
+x=s.symbols('x')
+y=1-1/(51*(1-x));z=(25-51*x)/(51*(24-25*x));H=(1-x)*(1-z)
+E=2*z*H-(1-H)*(s.Rational(97,100)*H+s.Rational(3,100))
+P=145323072*x**4-441144288*x**3+448922488*x**2-156104700*x+2995625
+assert s.cancel(E-P/(260100*(25*x-24)**2))==0
+assert s.cancel((1-x)*(1-y)-s.Rational(1,51))==0
+assert s.cancel(s.Rational(1,25)-s.Rational(26,25)*(1-y)*(1-z)-y*z)==0
+lo,hi=F(20357,10**6),F(20359,10**6)
+def poly(t):return 145323072*t**4-441144288*t**3+448922488*t**2-156104700*t+2995625
+assert poly(lo)>0>poly(hi)
+for t in (lo,hi):
+    Y=1-1/(51*(1-t));Z=(25-51*t)/(51*(24-25*t))
+    assert F(97,100)<Y<1 and 0<Z<1 and F(1,50)<t<1
+assert F(1,1)-F(367,174600)<1
+print('PT all81 maps, signed root gaps, literal stationary equations/signs: exact PASS')
+```
+
+Research boundary: common-ratio triple-leaver design cannot support a
+negative barrier; heterogeneous ratios by themselves are not evidence
+of one, even with a complete actual no-sure gate as PT2 shows. Neither
+result closes arbitrary Fin4 or consumes the selected least-Never
+source. No old-producer coverage census or novelty assertion is made.
+I will not optimize this fixture's constants or fit higher-degree
+potentials at its solved point. The next substantive task is the
+bounded strengthened CB source review, then a genuinely different
+full-game forcing/negative mechanism, not further PT coefficient tuning.

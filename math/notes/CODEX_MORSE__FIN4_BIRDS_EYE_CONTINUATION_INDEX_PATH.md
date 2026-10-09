@@ -85,6 +85,18 @@ it is not a Fin4 negative example or a reduction of the surviving
 source class. A new global proof must use exact quitting incidence,
 not merely minimum-local compactness/security. No local interface
 or exact-grid Nash-first selector has been produced by this test.
+PT in the global notebook next tests ACTUAL quitting data with positive
+pair joining and one designated triple leaver, a different two-opponent
+product root geometry. The common-ratio family is solved for ALL81
+leaver maps and arbitrary signed passive transports by an exact root
+with two sure quitters; every behavioral reply is priced at date0.
+A heterogeneous rational four-cycle fixture excludes the ACTUAL
+punishment-vector sure gate (P_2=1 directly) but is still retired by
+an exact proper-three-player stationary self-loop. One scalar IVT
+polynomial, the same literal active values and a strict quiet gap
+give the full unrestricted fixed-target consumer. This is ordinary
+unreviewed actual-family mathematics, not a new class count or export.
+Its solved constants will not be tuned into another barrier search.
 General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/
