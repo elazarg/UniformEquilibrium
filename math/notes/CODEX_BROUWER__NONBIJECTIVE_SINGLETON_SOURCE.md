@@ -112,8 +112,15 @@ CW reuses the tracked geometric pivot-cap domination to replace the
 sole-future owner's ENTIRE finite conditional. The actual source's
 global floor makes its full payoff/cap/literal-Never triple unchanged;
 the universal earliest-root bridge theorem keeps the same sole bridging
-owner. CW is COMPLETE ORDINARY, UNREVIEWED as an actual-source adapter,
-not a new generic compression lemma, outer-law selection or UE consumer.
+owner. CW has an independent Morse source-adapter PASS, not a new generic
+compression lemma, outer-law selection or UE consumer. CX below is a new
+COMPLETE ORDINARY, UNREVIEWED source-dependent exclusion: on a FRESH
+source table avoiding explicit homogeneous two-row resultants, a proper
+interior geometric conditional and a positive later-only first-tail
+supplier require an additional active tail-endpoint tie. Its proof uses
+a genuine two-marginal family, the global floor, least ORIGINAL Never,
+and common minimum debts. It does not consume the endpoint/tie survivors,
+the zero-future mode or general alternative(II).
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -16969,3 +16976,256 @@ outer opponent laws. No new generic geometric lemma or full-producer
 coverage audit is being asserted. The new ordinary contribution here
 is the actual least-Never minimum adapter(CW.3), with the separate
 earliest-root bridge argument that retains the sparse source geometry.
+
+
+## CW independent review disposition
+
+Morse's bounded source-adapter review gave PASS, recorded in
+[the appended CW review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
+It independently checked actual censoring, positive-hazard selection,
+the zero-hazard finite-word limit with ORIGINAL Never, global-floor
+equality of EVERY full cap, and the universal earliest-root argument
+needed separately to preserve the sole tie. The frozen CW proof bytes
+are unchanged. No coupled funding or full source-case consumer follows.
+
+
+## CX: a coupled source-minimum box forces a two-row resultant
+
+Status: COMPLETE ORDINARY, UNREVIEWED actual-source SUBMODE EXCLUSION.
+This is not a generic own-gain/cap-cost interface or a solved-table test.
+It uses the global full minimum, least ORIGINAL Never, and common debts.
+The fixed-table necessity is proved first. Additional generic avoidance
+then gives a FRESH counterexample-source reduction; it does not perturb
+an already selected minimum or transport its laws across reward changes.
+
+### CX1. Exact input, row polynomials and conclusion
+
+At the SAME table and least-Never minimum in CW's ONE-future mode, use
+the original geometric representative with hazard 0<z₀<1. Labels i,p,q,k
+are DISTINCT. i is PureNever and the sole root/later bridger; k has root
+rate0, finite mass f₀∈(0,1), and conditional F_z₀. p,q have positive
+nonsure root rates a_p,a₀, all their finite mass at root0. Assume:
+
+- q is LATER-ONLY and its tail cap is STRICTLY first-tail:
+  z₀P_q>Γ_q, where P_h=r_h({h,k})−s_h, Γ_h=r_h({k})−s_h.
+- i's tail cap has ONE strict endpoint: z₀P_i>Γ_i (FIRST), or
+  z₀P_i<Γ_i (END). Its FULL cap still ties root and tail.
+- p is ROOT-ONLY, or p is LATER-ONLY with z₀P_p≠Γ_p.
+
+k's root-only OR later-only label remains unrestricted. Define
+
+    Δ_iq=r_i({i,q})−r_i({q}),
+    Δ_ip=r_i({i,p})−r_i({p}),
+    Δ_ipq=r_i({i,p,q})−r_i({p,q}),
+    A_q=s_q−r_q({k}),
+    B_q=r_q({p,q})−r_q({p}),
+    A_i^FIRST=Δ_iq,          B_i^FIRST=Δ_ipq,
+    A_i^END=Δ_iq+Γ_i,       B_i^END=Δ_ipq−Δ_ip,
+    R^e_(i,p,q,k)=A_q B_i^e−B_q A_i^e.            (CX.1)
+
+These are literal raw reward entries, not scheduled mate-joining gaps.
+The fixed-table conclusion is
+
+    R^e_(i,p,q,k)=0,                                (CX.2)
+
+where e is i's strict tail endpoint. Thus a source table with this
+resultant NONZERO excludes the stated submode. No assertion is made
+when z₀=0 or1, i has a first/END tail tie, p is later-only with such a
+tie, or q is END-active or first/END-tied instead of strictly FIRST.
+
+### CX2. A legal two-marginal family with ENTIRE caps
+
+Fix p's original rate, put C_p=1−a_p>0, and write w₀=f₀z₀. Vary q's
+root rate a and k's ENTIRE finite/Never law. Use coordinates
+
+    x=(1−a)f,    y=(1−a)fz=w₀(1−a),
+    f=x/(1−a),   z=y/x.                              (CX.3)
+
+At (a₀,x₀), x₀=(1−a₀)f₀ and 0<y₀<x₀<1−a₀. Therefore a,x vary
+on a genuine TWO-SIDED open box, with 0<a<1 and 0<y<x<1−a throughout.
+q independently draws aδ₀+(1−a)Never; k independently draws fF_z+(1−f)Never.
+The laws of i and p are unchanged. There is no public mixture of profiles.
+No atom or response date is added before the first suffix date1.
+
+For every recipient h, including q and k, the prescribed value is
+
+    U_h=a_p r_h({p})+a J_h+C_p x r_h({k}),
+    J_h=C_p r_h({q})+a_p[r_h({p,q})−r_h({p})].     (CX.4)
+
+Thus EVERY U_h is affine in a,x. The literal joint Never is EXACTLY
+
+    ν=C_p(1−a−x).                                   (CX.5)
+
+For h≠k the tracked geometric formula in CW prices EVERY finite tail
+response, its unattained END supremum and literal Never. It gives:
+
+    T_i=A_i(a)+C_p[(1−a)s_i+max(yP_i,xΓ_i)],
+    T_p=a r_p({q})+(1−a)s_p+max(yP_p,xΓ_p),
+    T_q=a_p r_q({p})+C_p[s_q+max(yP_q,xΓ_q)/(1−a)],
+    B_h=max(Q_h,T_h).                               (CX.6)
+
+Here A_i(a) is the actual passive root field and Q_h is the literal
+root-Quit value against the other two root laws. With a_p fixed, Q_i,
+Q_p,Q_k,A_i,A_k are affine in a; Q_q and A_q^root=a_p r_q({p}) are
+constant. (A_q^root is DIFFERENT from the row coefficient A_q in CX.1.)
+Own k cap is max(Q_k(a),A_k(a)+C_p(1−a)s_k), independent of its own law.
+Its strict root/later gap selects one affine branch locally.
+
+Because y=w₀(1−a), q's strict first branch has CONSTANT full cap
+
+    B_q^full=A_q^root+C_p(s_q+w₀P_q).                (CX.7)
+
+Its strict root and END gaps persist on a smaller box. If p is root-only,
+its strict FULL gap fixes Q_p even if its inactive tail endpoints tie.
+If p is later-only, the stated strict endpoint selects one affine T_p.
+i's strict tail endpoint similarly selects one affine T_i, while its
+FULL root/tail tie is retained as a maximum. Consequently the TRUE full
+summed debt, not selected-response debt, is
+
+    D(a,x)=max(F₀(a,x),F₁(a,x)),                     (CX.8)
+
+with TWO affine functions, distinguished only by i's root versus tail
+cap. All old/new finite testers, moving deadlines and Never are included.
+Literal Never is dominated by the finite END test because all retained
+Never masses and all own singletons remain positive.
+
+Every family point is an actual independent proper-geometric profile.
+Truncating k's conditional to a sufficiently late FINITE date, rather
+than moving its tail to Never, preserves f and all prescribed values;
+its product-TV cap error tends to0. On a small closed box hazards have a
+positive lower bound, so this approximation is uniform. Thus all family
+triples are in the SAME original augmented carrier. The original global
+floor gives D≥δ everywhere, and (a₀,x₀) has D=δ by CW. No minimum suffix,
+zero-budget reroot or changed reward table is used.
+
+### CX3. True minima, least Never and common debts force CX.2
+
+At the original point F₀=F₁=δ. If G=F₀−F₁ is identically0 on the box,
+then D is affine and its interior global minimum makes the WHOLE box
+minimum. Increasing a or x lowers CX.5, contradicting least original ν.
+Otherwise G has a nonzero linear part. Along its kernel line through the
+original point, D is affine and has an interior true minimum δ. It is
+therefore identically δ on a small TWO-SIDED line segment. These are
+actual full minima, not just zero first derivatives.
+
+Least original ν forces EVERY kernel direction v to satisfy v_a+v_x=0;
+otherwise one of its two signs lowers CX.5 on that true-minimum segment.
+In dimension2 the kernel direction is consequently proportional to(1,−1).
+Common individual debts apply to EVERY triple on this segment. Since
+q's full cap CX.7 is fixed, q's prescribed value must also be fixed.
+Differentiating the AFFINE CX.4 in direction(1,−1) gives
+
+    0=Q_q−A_q^root−C_p r_q({k})
+     =C_p A_q+a_p B_q.                              (CX.9)
+
+This conclusion uses common debts AFTER the true-minimum argument; it
+does not infer individual rigidity from a zero total-debt derivative.
+
+To write i's same kernel restriction explicitly, put
+
+    E_i(a)=Q_i(a)−A_i(a)−C_p(1−a)s_i
+          =a_p Δ_ip+a[−a_p Δ_ip+C_p Δ_iq+a_p Δ_ipq].  (CX.10)
+
+If i is FIRST, its tie is E_i(a)=C_p yP_i. On the minimum line,
+y=w₀(1−a), and this affine identity has zero slope AND zero value.
+Adding its intercept and slope gives C_pΔ_iq+a_pΔ_ipq=0. This is an
+algebraic identity, not a claim that the far value a=1 is a legal profile.
+If i is END, its tie is E_i(a)=C_p xΓ_i. Direction(1,−1) gives
+−a_pΔ_ip+C_pΔ_iq+a_pΔ_ipq+C_pΓ_i=0. In either case,
+
+    C_p A_i^e+a_p B_i^e=0.                          (CX.11)
+
+Eliminate a_p between CX.9 and CX.11 using the EXACT identity
+
+    (C_p A_q+a_p B_q)B_i^e
+      −(C_p A_i^e+a_p B_i^e)B_q=C_p R^e_(i,p,q,k).
+
+C_p>0 proves CX.2. A vanished kernel slope alone would not establish
+this result; globality, least original Never and common individual debts
+were all indispensable in the preceding steps.
+
+### CX4. Compatible FRESH generic source and exact scope
+
+For each ordered DISTINCT quadruple i,p,q,k and each e∈{FIRST,END},
+R^e is a NONZERO polynomial of the original60 reward coordinates.
+Indeed its derivative in the independent entry r_i({i,q}) is −B_q,
+which is not the zero polynomial. Under positive recipient-row scaling
+r_h(S)↦θ_h r_h(S),
+
+    R^e↦θ_i θ_q R^e.                                (CX.12)
+
+Thus its nonvanishing is preserved by the source's regular row scaling.
+
+Given ANY hypothetical no-UE table, run Part I of the accepted source
+through its positive-own, strict full/absorbing gap, interior bounded
+perturbation ball in Section5. When choosing r̂ INSIDE that open ball,
+avoid not only the within-row equality hyperplanes, but also these
+48 nonzero polynomial zero sets. Their finite union has empty interior:
+a nonzero real polynomial cannot vanish on an open box, as follows by
+successive one-variable polynomial identities. Their complements are
+open dense. The separated gaps and positive owns persist throughout the
+chosen ball by the already established reward-Lipschitz bounds.
+
+Now carry out the SAME coordinate-regular positive row scaling near1
+from Section5. It supplies common positive minimum debts and retains the
+strict gaps, unit bound and all within-row distinctions; CX.12 preserves
+ALL the newly imposed resultant nonvanishings. Then carry out the SAME
+least-original-Never selection and chronology construction of Part II.
+CS/CT/CU/CW apply at this FRESH table with their unchanged proofs.
+This order is essential: an already selected table/minimum is NOT
+perturbed, and no old laws, caps, suffix or chronology are transported
+through the new reward selection.
+
+Therefore at this stronger FRESH source, in the ONE-future alternative(II)
+mode with 0<z<1, if a positive later-only supplier q has a STRICT first-tail
+cap, then either i has a first/END tail tie, or the other supplier p is
+later-only with such a tie. Otherwise CX.2 contradicts the nonzero
+resultant. This is a strict source-class reduction, not all of II:
+
+- z=0 diffuse and z=1 sure-first conditional boundaries remain open.
+- A positive later-only supplier can be END-active or first/END-tied;
+  the proof assumes a STRICT first-tail supplier.
+- i's extra tail tie, or a later-only p's extra tail tie, supplies another
+  hinge in CX.8 and is explicitly NOT discarded.
+- Zero-future, two-or-more-future and case(I) modes remain open.
+
+The operational survivor with an extra tie has a whole geometric tail
+family of maximizing responses, not one frozen tester. A coupled move
+there must preserve or fund this ENTIRE plateau; the single-hinge affine
+argument above cannot be extended silently. No scalar cap ratio, local
+fixture, arbitrary-pivot repair or unrestricted equilibrium is asserted.
+
+Source preflight: the accepted source's Sections5,6–10,18–19 and the
+tracked geometric-pivot declarations listed in CW were re-inspected.
+A narrow search in `TerminalSemanticEqualityStratum.lean`,
+`GeometricPivotCapDomination.lean` and `PivotRepairExactObjective.lean`
+found no existing resultant or coupled affine-minimum declaration.
+This is ordinary mathematics; no Lean implementation/build or export.
+
+The following standard-library checker verifies the endpoint and
+elimination identities exactly. It does NOT test global minimality or
+replace the source/legality argument above.
+
+```python
+from fractions import Fraction as F
+from random import Random
+rng = Random(612)
+for trial in range(1000):
+    ap = F(rng.randint(1, 9), 10)
+    Cp = 1 - ap
+    si, sq, rip, riq, rik, riip, riiq, ripq, riipq, rqp, rqk, rqpq = [
+        F(rng.randint(-20, 20)) for _ in range(12)
+    ]
+    Aq, Bq = sq - rqk, rqpq - rqp
+    E0 = ap * (riip - rip)
+    E1 = -ap * (riip - rip) + Cp * (riiq - riq) + ap * (riipq - ripq)
+    Eq = Cp * Aq + ap * Bq
+    for kind in ("first", "end"):
+        Ai = riiq - riq if kind == "first" else riiq - riq + rik - si
+        Bi = riipq - ripq if kind == "first" else riipq - ripq - riip + rip
+        Ei = Cp * Ai + ap * Bi
+        assert Ei == (E0 + E1 if kind == "first" else E1 + Cp * (rik - si))
+        resultant = Aq * Bi - Bq * Ai
+        assert Eq * Bi - Ei * Bq == Cp * resultant
+print("PASS: 2000 exact endpoint and resultant identities")
+```
