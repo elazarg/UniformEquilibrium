@@ -227,9 +227,19 @@ a zero-future minimum with exactly two finite suppliers cannot have a
 c-active PureNever observer whose singleton comparisons to BOTH suppliers
 are negative. In particular the NC.42o core-three/census arm is excluded
 at that fresh source. The complete ordinary proof draft below includes
-the true positive full gap and actual-carrier realization; it awaits
-independent falsification. No old minimum is transported, no full-core-four
+the true positive full gap and actual-carrier realization; Brouwer's focused
+independent falsification gives PASS for its exact scope. No old minimum
+is transported, no full-core-four
 mode is consumed, and neither broad source configuration is closed.
+
+NC.44 strengthens the SAME fresh-source two-supplier/zero-future reduction:
+BOTH prescribed finite suppliers must be strictly later-only. Its exact
+full-debt proof uses the PureNever bridge's actual participant comparisons,
+not a guessed passive/core sign. This retires the entire l-root-only word
+arm, including its full-core-four completions, at the fresh source.
+NC.44 is a separate, presently unreviewed ordinary proof; NC.43's PASS
+does not silently certify the enlargement. Three-plus suppliers, future
+finite mass, and the both-later-only two-supplier residual remain open.
 
 NC.41 now constructs a true-overlap candidate with complete cap control:
 independent two-owner tail survivors give a STRAIGHT trace of singleton
@@ -27680,7 +27690,9 @@ This is internal ordinary mathematics, without review or export.
 
 ## NC.43: a fresh small-own source excludes doubly negative c-active observers
 
-Status: COMPLETE ORDINARY PROOF DRAFT, awaiting independent falsification.
+Status: COMPLETE ORDINARY PROOF, with a focused independent mathematical
+PASS in `CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION__BY_CODEX_BROUWER.md`
+(NC.43 review of frozen SHA23c23e91…). No Lean check or export seal.
 This is a genuine FRESH-source submode exclusion, not a funded two-date
 word, a theorem about every old table, or a full Fin4 consumer. No frozen
 export is changed. Its key choice is to fix a generic own-zero native
@@ -27948,8 +27960,8 @@ from ANY counterexample. Both broad canonical configurations remain
 open; in particular this does not treat future finite laws, three or
 four suppliers, or arbitrary two-supplier cap censuses. The next task
 is a full-law consumer in the surviving source geometry, not improving
-b or t's numerical bound. No Lean theorem, independent review PASS or
-export seal is asserted by this draft.
+b or t's numerical bound. The independent PASS is for THIS NC.43 scope;
+no Lean theorem, whole-Fin4 conclusion or export seal is asserted.
 
 Falsification checks for the new implication: the native AllNever profile
 really has debt0, so the proof does NOT use its false positive full-gap
@@ -27979,3 +27991,127 @@ Narrow primary declarations inspected for the reused source steps are
 literal-Never augmentation and marked transport are ordinary mathematics
 proved in the reviewed source, not extra fields asserted to appear in
 the cited Lean prefix declaration. No compiler check was run for NC.43.
+
+## NC.44: both finite suppliers are later-only at the same small-own source
+
+Status: COMPLETE ORDINARY PROOF DRAFT, separate from the independently
+reviewed NC.43 claim. No independent PASS, Lean check or export yet.
+This strengthens the SAME selected table, without another perturbation,
+smaller-t choice, or transported minimum.
+
+### NC44a. Exact reduction and actual full-cap data
+
+Use exactly the native z, constants A,L,m,b, raise t, and regular scales
+θ selected in NC.43. At ANY produced full minimum with exactly two
+positive finite suppliers and NO prescribed finite mass after their
+first root, BOTH suppliers are strictly later-only full-cap owners.
+This applies in either canonical configuration, without cap–Nash,
+premium-core, quiet-owner, or donor-sign premises. It does not exclude
+this entire zero-future/two-supplier mode.
+
+NC.43's expanded source14.3 argument supplies a c-active finite supplier;
+call it i, and call the other supplier l. Its explicit retained-root
+and product-TV argument supplies an actual root0/Never profile with
+the SAME full pair and literal Never. Write x,y∈(0,1) for i,l's root
+rates, n_i=1−x, n_l=1−y, ν=n_i n_l, and S=Σ_h s_h<4t. The other two
+owners use PureNever. Every full cap is max(Q_h,C_h), because Never
+is strictly below the late-empty reply C_h.
+
+For a finite supplier h the other supplier's positive rate multiplies
+the difference between two distinct entries of recipient row h.
+Consequently Q_h≠C_h: a finite supplier cannot bridge at this root.
+The supplied original root/later bridge therefore belongs to a
+PureNever owner k. This uses Part I Section10's bridge, not an assumed
+cap-class alignment. The source also gives δ≤D(AllNever)=S.
+
+Since i is c-active, put
+
+    α=r_i({l})−r_i({i,l})>0,      α≥m/2.
+
+Thus i is strictly later-only. Suppose the other supplier l were
+ROOT-ONLY. Then
+
+    β=r_l({i,l})−r_l({i})>0,      β≥m/2.
+
+The complete played debts are EXACTLY
+
+    d_i=νs_i+xyα,
+    d_l=νs_l+x(1−y)β.
+
+Each remaining owner's complete debt is at least its singleton/Never
+floor νs_h. In fact it is νs_h+[Q_h−C_h]⁺ at this actual profile, so
+no omitted response or negative residual is being used. Therefore
+
+    δ≥νS+x[yα+(1−y)β]≥νS+xm/2.
+
+Combining δ≤S and 1−ν=x+y−xy≤x+y gives
+
+    x/(x+y)≤2S/m<8t/m<b².                      (NC.44a)
+
+### NC44b. The original PureNever bridge forbids that rate ratio
+
+Retain all of k's actual root participant rewards. Define
+
+    a=r_k({k,i})−r_k({i}),
+    d=r_k({k,l})−r_k({l}),
+    e=r_k({k,i,l})−r_k({i,l}).
+
+The same-row finite translation cancels from EACH difference, so these
+are θ_k times the fixed native differences. Row distinctness gives
+|d|≥θ_k m, while |a|,|d|,|e|≤2θ_k L. The complete root/later bridge
+identity, including the simultaneous i,l event and its triple reply, is
+
+    0=Q_k−C_k=x(1−y)a+(1−x)yd+xye
+                 =xa+yd+xy(e−a−d).
+
+Hence
+
+    y θ_k m≤y|d|
+      ≤x|a|+xy|e−a−d|
+      ≤2θ_k Lx+6θ_k Lxy≤8θ_k Lx.
+
+No sign of a,d,e was guessed. Cancel θ_k>0 to obtain
+
+    y≤(8L/m)x,
+    x/(x+y)≥m/(m+8L).                          (NC.44b)
+
+Finally, each recipient row contains FIFTEEN distinct nonempty entries
+of the fixed native table, all in [−L,L]. Sort any one row: fourteen
+successive gaps, each at least m, fit inside length2L. Therefore
+
+    14m≤2L,      m≤L/7,
+    b²=m²/(m+L)²<m/(m+8L),                     (NC.44c)
+
+where the last inequality is equivalent to 6m<L. Equations
+(NC.44a–c) contradict one another. Thus l cannot be root-only; since
+it cannot bridge either, it is strictly later-only. Both prescribed
+finite conditionals have positive regret at their actual first root.
+
+### NC44c. Scope and the next mechanism
+
+The fixed bound on t already used in NC.43 suffices. The argument does
+NOT choose a new t after seeing k, x,y, their joining signs, or a cap
+selector. Its only alignment is derived: a finite c-active supplier
+exists, and a root bridger cannot be either finite supplier. All other
+owners' complete debts are kept through their nonnegative excess above
+νs_h. The full minimum and its literal Never are identified with an
+actual profile before applying any of these formulas.
+
+This excludes the ENTIRE l-root-only/two-supplier/zero-future census
+at the NC.43 fresh source, regardless of whether its premium core has
+three or four players. It therefore retires that original word attempt,
+not just a cheap response selector inside it. It is not an exclusion
+at every old table and does not settle either canonical configuration.
+The remaining two-supplier zero-future geometry has both finite suppliers
+later-only and at least one PureNever bridge; it still needs a genuine
+whole-law competitor or another complete contradiction. No independent
+review of this enlarged claim has yet been recorded.
+
+Falsification attempt: enumerate actual root/later/Never caps on1299
+exact rational signed native tables with finite i later-only, finite l
+root-only and a PureNever k root/later tie, imposing that tie through
+its TRUE triple reward rather than discarding the collision. With the
+displayed small-t choice, all tests give D>S and verify the full debt
+bound and bridge rate-ratio bound. These tables are not asserted to
+have a positive absorbing/global gap; the tests check the conditional
+algebra only. The proof above supplies the source contradiction.
