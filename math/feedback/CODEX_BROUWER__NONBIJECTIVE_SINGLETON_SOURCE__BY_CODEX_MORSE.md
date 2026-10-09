@@ -1667,3 +1667,106 @@ active endpoint hinges at positive z, absence of a strict-FIRST supplier,
 zero-/multiple-future modes and general multiple bridging also remain
 open. No pure Never limit, minimizing-tail substitution, fixed UE target
 or full-II consumer is inferred.
+
+## Bounded DA whole-conditional/root-only-supplier exclusion check
+
+Reviewed ONLY frozen `## DA: a sole future owner forces both root suppliers
+to be later-only` through EOF, SHA256
+`37dae2efbf6dc84b045eb6618b82da7ad93df4b3c11f6ba8bf1cb1ac079bc463`.
+Verdict: ordinary mathematical PASS at the stated SAME-table least-original-
+Never/max-A source. No unresolved full-cap, signed-coefficient, old-calendar
+realization or root-max eligibility objection was found. This is an additional
+selected-source submode exclusion, not a full case(II) consumer or UE theorem.
+
+**Actual premise and strategic quantifiers.** Accepted source alternative(II),
+then the independently reviewed CT/CU, supply a sole future owner k distinct
+from the sole bridger i, with a_k=a_i=0, i PureNever, and two other positive
+nonsure root suppliers p,q whose suffix laws are Never. The future owner's
+response class remains ROOT-ONLY OR LATER-ONLY. It is not inferred from its
+zero root rate. CB says at least one of p,q is later-only here: a root-only
+supplier with no later finite mass has zero finite-conditional regret. If p
+is the proposed root-only supplier, q is consequently later-only. Every
+deviation is an unrestricted independent stopping law, not just a displayed
+finite deadline; its cap equals the supremum over ALL pure finite/Never
+responses by the actual first-hit representation.
+
+**Entire signed envelopes.** Direct first-coalition conditioning gives
+W_h(t)=Γ_h F(u<t)+P_h F({t}) for every finite post-root tester, and
+V_h(t)=A_h+H_h[s_h+f W_h(t)] for h≠k. The positive factors H_h,f preserve
+the order of the ENTIRE upper family. Removing the isolated root leaves a
+compact upper tester set; its supremum L_h includes the old first available
+suffix tester, moving cuts, ties and final-empty tester. It may be negative
+or zero. There is no inserted pre-first-suffix test that would incorrectly
+force L_h≥0. For i,q, H_h=c_h(1−b), so their whole upper envelopes really
+are affine in b,x=(1−b)f. q's strict nonbridger gap leaves one affine cap;
+i alone retains max(root,upper). For p, its root endpoint is constant and
+its strict FULL root-only gap holds against the entire possibly nonaffine
+inactive upper envelope. For k, both endpoints are affine in b and its
+strict original nonbridger gap selects one. Thus there are genuinely only
+TWO affine total-debt branches, regardless of any ties internal to an upper
+family. Literal Never is separately and strictly beaten by the final finite
+tester by s_h times the positive opponent-Never product, for every h.
+
+The prescribed payoff formula reduces to
+
+    U_h=b(1−a)r_h(p)+a(1−b)r_h(q)+ab r_h(pq)
+          +(1−a)x r_h(k),
+    ν=(1−a)(1−b−x).
+
+Both are affine in the two open coordinates. These identities are for every
+recipient, not only active owners. I reran the author's independent rational
+enumerator: PASS,600 complete-response checks,192 negative upper coefficients,
+147 tied envelopes. Those arbitrary tables are arithmetic diagnostics, not
+purported actual positive minima; the proof of source validity is separate.
+
+**Original carrier and honest suffix.** I re-read primary accepted source
+Sections6–7,9,15,18 and the literal prefix definition/invariance in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, especially
+`quittingTerminalSemanticPrefix`,
+`quittingTerminalSemanticPair_rootThenContinuation` and
+`quittingTerminalSemanticPrefix_mem_carrier`. The normalized actual realizing
+sequence retains the old positive root and every later occupied/empty date.
+The finite masses being censored to literal Never tend to zero because the
+marked compiler retains the separate finite/Never boundary and root pieces.
+Product-TV errors therefore vanish uniformly for ALL replies as well as U.
+Reweighting p's root/Never and k's old whole finite/Never pieces then has
+bounded positive densities on a common two-sided box. The primary moving-
+tester kernel convergence prices all finite caps, the final tester and
+literal Never in the SAME augmented H. It does not equate escaped finite
+mass with Never or require F to be geometric.
+
+At any nearby true minimum with ν=ν₀, actual conditioning on root survival
+gives the honest k-only suffix f F_N+(1−f)Never, all other suffixes Never.
+Its literal joint Never is exactly1−f and its bounded augmented cluster is
+in H. Shifting the old suffix dates down one and prefixing the unchanged
+physical root recovers the family point exactly. Therefore it is a member
+of RA1's SAME closed Z. No minimum, Nash or favorable substitution property
+is asserted of the suffix. First-root eligibility was already supplied for
+the selected original maximizer by RA1; the new Z contradiction does not
+silently require a new source selection at the modified point.
+
+**Exact, not merely tangent, progress.** At the original point i's two
+branches coincide. If their affine difference is zero identically, true
+interior minimality makes D constant on the box and ν can decrease. Otherwise
+its one-dimensional kernel is an actual two-sided affine equality line.
+The true global floor makes D identicallyδ on that line. Least ORIGINAL ν
+forces db+dx=0; a nonzero direction then has db≠0. Its positive sign leaves
+ν exactlyν₀ and increases A by(1−a)db>0. The honest suffix above puts this
+point in Z, contradicting its attained maximum. No first-derivative-to-
+flatness inference, multiaffine-wall purification or relative-error repair
+is used. Interchanging p,q proves that BOTH suppliers must be later-only.
+
+**Bounded significance.** CB supplied only one paid positive root supplier;
+CT/CU restricted the identity/root rate of the sole future owner. CW supplied
+whole-conditional replacement, not this exclusion. CZ imposed strict-FIRST/
+endpoint conditions to hold a later-only supplier's cap while changing a
+geometric hazard. DA instead holds a ROOT-ONLY supplier's full cap and keeps
+the entire arbitrary old conditional. It additionally excludes root-only
+suppliers at END/tied/hazard-boundary configurations not consumed by CZ.
+RA2's varied owner was a supported bridger with its own future mass, absent
+here. The primary source packet does not already force both suppliers
+later-only. This is consequently a genuinely stronger necessary property of
+the selected one-future source, not a new raw UE class or either general
+source case's closure. The two-later-only one-future mode, zero-/multiple-
+future modes and case(I) still require actual funding/global selection.
+No export, Lean build or trust seal is claimed by this review.
