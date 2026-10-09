@@ -27483,3 +27483,58 @@ complete nine-parameter paired producer, or eliminate this source subcase.
 The operational next question is whether a t punishment followed by the
 positive k donor can fund i's change while accommodating the actual i,t
 joining responses; (NC.42j,o) alone cannot discard those responses.
+
+### The negative singleton pair does not have a two-player premium core
+
+Continue the ADDITIONAL census of (NC.42o), including H_i<0 and K_ik≥0.
+This is actual participant information at the SAME original source, not a
+claim for every zero-future source. The common root multiplier gives
+
+    P_x=−n_l S+yα+n_lβ=θH_i=θ y p_l/x<0.
+
+Since P is affine in x and P(0,y)=n_l S, it follows that
+
+    δ=n_l S+θ y p_l,
+    yα+n_lβ=n_l S+θ y p_l/x<δ.
+
+The strict output margin B_i−s_i=yΓ_il>δ now implies
+
+    y(Γ_il−α)>n_lβ>0,
+    r_i({i,l})−s_i=Γ_il−α>0.                  (NC.42p)
+
+Also Γ_li>0 and β>0 from (NC.42o), so
+r_l({i,l})−s_l=Γ_li+β>0. Finally Γ_ki>0 and p_i>0 give
+r_k({i,k})−s_k=Γ_ki+p_i>0. The three distinct players i,l,k therefore
+form a genuine own-premium trap: use {i,l} for i and l, and {i,k} for k.
+Consequently
+
+    {i,l,k} ⊆ quittingPremiumCore.             (NC.42q)
+
+In particular the premium core cannot be any two-player set, including
+the reciprocal negative singleton pair i,t. This blocks that proposed
+application of a pair-core existence producer; it is not a new UE producer
+or a canonical source-arm elimination. The core can still have cardinality
+three or four, and no joining comparison or outsider hypothesis is supplied.
+
+The exact adapters inspected were `IsQuittingPremiumTrap` and
+`quittingPremiumCore` in
+`UniformEquilibrium/Quitting/Classification/QuittingPremiumCore.lean`, and
+`MathUE.IsFiniteCoalitionPremiumTrap.subset_core` in
+`MathUE/FiniteCoalitionPremiumCore.lean`. No participant nonnegativity beyond
+the three displayed strict witnesses is used for trap containment. The
+three-core alternative is not automatically a consumer either:
+`exists_uniformEquilibriumPayoff_of_weakMixedSignTriple_core` in
+`UniformEquilibrium/Quitting/Classification/Existence/MixedSignTripleCoreRewardClosure.lean`
+requires the complete `HasWeakMixedSignTripleJoining` predicate, defined in
+`Classification/MixedSignTripleCorePassivePerturbation.lean`, including two
+exact triple joining equalities. None follows from (NC.42p–q).
+
+Operationally (NC.42p) fixes the sign that was previously undecided in the
+negative-t/positive-k two-date pilot: censoring σ of l's original root mass
+LOWERS i's original-root response by σ[r_i({i,l})−s_i]>0. Thus l relocation
+has a real i payoff cost even if the later i cap is held exactly fixed.
+It cannot be credited as an own-payoff gain using Γ_it<0. Full-cap funding
+for the coupled word, including simultaneous i,l,t and the counterfactual
+four-player k reply, remains the next concrete question. This supporting
+source consequence is ordinary mathematics, not independently reviewed or
+exported.
