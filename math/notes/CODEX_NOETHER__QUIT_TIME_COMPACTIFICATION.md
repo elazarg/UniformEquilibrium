@@ -26251,3 +26251,61 @@ in (NC.39h), or change which original finite portions are relocated.
 The positive source-selected A proves a nontrivial legal curve but has
 not bounded the counterfactual W_k(z) costs. No two-branch consumer,
 new raw producer, or export claim follows from this section.
+
+**A minimal failed OUTER-shape implication.** The selective optimization
+is convex in i's law with j fixed. It does NOT follow that its constrained
+SUM value is concave in the donor parameter. The following exact check
+retires that shortcut; it is not another purported positive-minimum table.
+
+Use two players i,j, Never0, and reward vectors (recipient order i,j)
+
+    r({i})=(1,−3),   r({j})=(3,1),   r({i,j})=(0,−3).
+
+Fix j mass1/5 at0, η at2, and 4/5−η at Never. Optimize over ALL actual
+i stopping laws with i debt EXACTLY2/5 and i Never mass at most1/2.
+Its full cap is B_i=7/5+2η. At η=0 the original law with mass1/2 at1
+and1/2 at Never is c-active and has finite mass, Γ_ij=2 and A_ij=1/2>0.
+These facts do NOT make it a global minimum.
+
+For any i law let x₀,x₁,x₂ be its masses at0,1,2, y its entire finite
+mass after2, and z its literal Never mass. Its prescribed i payoff
+depends only on these five masses. The exact debt constraint becomes
+
+    (3/5+2η)x₀+2ηx₁+3ηx₂+(4/5−η)z=2/5.
+
+Put n=4/5−η and b=3/5+2η. The actual j response at0 pays1−4x₀;
+its prescribed payoff is
+
+    (1/5+η)(1−4x₀)−4η(x₁+x₂)−3n(1−z).
+
+Hence FULL sum debt, for EVERY i law, is at least
+
+    2/5+n(4−4x₀−3z)+4η(x₁+x₂).
+
+Eliminate x₀ using the constraint. The x₁,x₂ coefficients are strictly
+positive, and the z coefficient is n(4n/b−3)≤0 for η≥7/50. Thus the
+lower bound is minimized by x₁=x₂=0 and z=1/2. It is attained by the
+actual law
+
+    x₀=5η/(6+20η),  y=1/2−x₀ at3,  z=1/2 at Never.
+
+Its j full cap is exactly1−4x₀: all pre3 replies are no larger, and
+every reply at/after3 is at most−1. This proves the unrestricted-law
+optimized SUM value, not just the value of a bounded controller,
+
+    V(η)=13/10−3η/2+(33/10)/(3+10η),
+                                    7/50≤η≤4/5.
+
+In particular V(1/5)=83/50, V(2/5)=41/35, V(3/5)=23/30, and
+
+    41/35 < 91/75 = (83/50+23/30)/2.
+
+This falsifies generic OUTER concavity even with the displayed positive
+donor startup and the c-active finite owner. The original profile is
+not even the η=0 constrained optimum; the table has global debt0 at
+the pure-j solo equilibrium. It supplies NO true positive all-law floor,
+common global debts, least-Never minimum or strict absorbing separation.
+It therefore does NOT refute the canonical source or the NC.39 candidate.
+No constants, decoration, export or independent gate is sought. The next
+source-dependent test must use actual cap turnover/selective relocation;
+neither outer convexity nor outer concavity is being assumed.
