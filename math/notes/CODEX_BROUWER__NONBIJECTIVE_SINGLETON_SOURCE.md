@@ -168,14 +168,22 @@ is free. This is an actual-source OPERATION FALSIFIER, not exclusion of
 the source submode. Other hazards/conditionals and the nonsaturated
 FIRST-i/ROOT-k boundary remain open; no coupled funding is proved.
 
-DF gives a new COMPLETE ORDINARY, UNREVIEWED actual-source sign
-exclusion. In DC's positive-hazard one-future minimum, at least ONE
+DF gives a new COMPLETE ORDINARY actual-source sign exclusion with
+an independent Morse soundness PASS. In DC's positive-hazard
+one-future minimum, at least ONE
 of its two paid positive root suppliers has a STRICTLY POSITIVE
 ENTIRE late-cap coefficient max(zP_h,Γ_h). A genuine three-marginal
 variation and the strict AllNever comparison force this by a
 negative tangent Hessian; all endpoint ties and z=1 are allowed.
 This aligns an actual supplier with k, but does not yet fund moving
 its paid mass or close the surviving one-future/II class.
+This disposition supersedes DF's frozen draft-status line below;
+its proof bytes are unchanged. The focused independent review
+checked both k-cap branches, signed/tied/all-clock caps, actual
+Never-preserving realizers, the global AllNever comparison and the
+seam-only negative-plane argument, with no unresolved mathematical
+objection. See [Morse's review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
+No total funding, full-II, Lean or export claim follows.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
