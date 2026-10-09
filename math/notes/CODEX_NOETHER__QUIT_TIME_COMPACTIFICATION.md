@@ -188,6 +188,13 @@ a legal small-donation own-debt-matching root, supplied unconditionally
 in the zero-future source-II arm. Its FULL old/root/start/end budget is
 explicit below but has no proved funding sign. This is supporting actual-
 law mathematics, not another source consumer or an export candidate.
+Its complete source-priced decomposition now separates the universally
+nonnegative Q5 exit-cone budget from the signed pair premium and every
+original-root clip. A single exact standard-Q/normal-core matrix witness
+shows that varying eligible labels cannot force a negative premium from
+those matrix/cone constraints alone. It does NOT realize a canonical
+minimum. The live target has shifted to the actual participant-dependent
+root-clip release, with full source minimality still indispensable.
 
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
@@ -26828,3 +26835,203 @@ has to be checked. In particular a decrease of R, a favorable final
 tail cap, or strict absorbing separation by itself does not settle
 the intermediate full budget. This exact full-cap feasibility/sign
 question remains open; no additional source restriction is claimed.
+
+### A genuine global-source cone inequality, and the remaining signed funding
+
+There is a stronger use of the original source than simply reasserting
+G≥δ. Work throughout this paragraph in the ZERO-FUTURE source-II arm,
+with sole bridger k. Its prescribed law is pure Never. The Q6-selected
+i is distinct from k, has positive root mass, and is later-only. Put
+C=E_c, the ORIGINAL full c-active set, and S_l=Σ_t r_t({l}).
+Source (Q5), applied to a simplex supported on i,j and then multiplied
+by its total mass, gives
+
+    F(I,J)=Σ_(t∈C)(Γ_ti I+Γ_tj J)⁺/n_t
+                                      −I S_i−J S_j ≥0             (NC.41j)
+
+for EVERY I,J≥0. Pure-Never members of C and C=all are included.
+This is the actual original-minimum graft inequality; it is NOT an
+assertion that the censored base is minimizing.
+
+Define the following actual affine old-root branches on that base:
+
+    B_t^0(ρ)=C_t(ρ) if t∈C, and Q_t(ρ) if t∉C,
+    Σ_t B_t^0(ρ)−Σ_t U_t^base(ρ)=δ+ρT_C.
+
+The original c-active i has B_i^0=B_i, independent of its own censoring.
+For t≠i define the nonnegative new-tail cap increments
+
+    a_j=ρe(Γ_ji)⁺,
+    a_t=e_t(Γ_ti I+Γ_tj J)⁺,       t≠i,j.
+
+Let v_t(ρ)=Q_t(ρ)−C_t(ρ), and retain ALL old-root clipping as
+
+    L_clip=Σ_(t∈C, t≠i)[v_t(ρ)−a_t]⁺
+                  +Σ_(t∉C)[−v_t(ρ)+a_t]⁺ ≥0.
+
+Indeed the complete cap of every t≠i is max(Q_t,C_t+a_t),
+including t=j after deleting its own prescribed law. Thus these are
+EXACT cap identities even after an old branch changes, not a quiet-
+owner bound. Subtracting (NC.41f), using I=n_jρ−z and J=n_iη+z,
+gives the exact complete SUM account
+
+    G−δ=ρT_C+eF(I,J)+ezK+L_clip,
+    K=1_(j∈C)(Γ_ji)⁺/n_j−Γ_ij/n_i.             (NC.41k)
+
+Here (NC.41h) has fixed i's individual debt, but (NC.41k) itself
+is just the total-debt identity and remains valid before matching.
+The term eF is globally NONNEGATIVE by the original source. The
+signed pair premium ezK, and the old-root cost/clipping, are what
+must actually fund the operation. Discarding them and retaining a
+favorable tail endpoint is therefore not a valid source comparison.
+
+The global source also fixes a strict sign relation for T_C. Censor
+only ρ of i's original root mass to Never, allowing both signs of ρ
+near0, with no added tail. Since the original sole bridger is k,
+all other root/c-wall gaps remain strict and
+
+    v_k(ρ)=ρH,
+    D_root(ρ)=δ+ρT_C+(ρH)⁺.                      (NC.41l)
+
+This exact two-branch formula uses one changed marginal, so there
+are no hidden quadratic or moving-tester errors. If ρ<0, its joint
+Never is strictly below ν*; equality D_root=δ would contradict
+least original Never. If ρ>0, joint Never is strictly above ν*.
+Player k is still pure Never, so its debt is at least the actual
+late-empty gain ν(root) s_k. At the original bridge its debt is
+EXACTLY d*_k=ν* s_k. Equality D_root=δ would contradict common
+minimum debts. The full global floor and the exact linear pieces
+therefore force STRICT slopes on both sides. In particular
+
+    H≠0,       T_C=−θH for one θ∈(0,1).          (NC.41m)
+
+This θ is an algebraic response weight, not a public strategy mixture.
+If H<0, T_C>0. If H>0, T_C<0 but T_C+H>0. Neither orientation
+is supplied by the source, and no positive lower bound for θ or
+1−θ is asserted.
+
+Equations (NC.41j–m) decide some operation signs without a solved-
+table regression. If H<0 and K≥0, EVERY legal positive-amplitude
+straight-trace move has G>δ. That is a full-family retirement test,
+not elimination of this canonical source geometry by all operations.
+If H<0 and K<0, funding requires
+
+    ez(−K)≥ρT_C+eF(I,J)+L_clip,
+
+so in particular η>T_C/[e(−K)], since z<ρη. If H>0 and K≥0,
+funding must release a genuine part of k's old root clip:
+
+    a_k≥(1−θ)Hρ.
+
+For k=j this means e(Γ_ki)⁺≥(1−θ)H; for k≠j it means
+e_k(Γ_ki I+Γ_kj J)⁺≥(1−θ)Hρ. These are only necessary
+conditions, with all the other terms of (NC.41k) still payable.
+The remaining H>0,K<0 case may spend both signed mechanisms.
+
+No source theorem currently forces the negative premium or the
+required root-clip release to win the COMPLETE budget. Conversely,
+their mere availability does not prove funding. This is the exact
+minimal surviving sign/cap issue for the straight-trace attempt;
+the one-dimensional own-budget curve is no longer the missing
+legality question. No canonical source case or unrestricted
+counterexample class is counted as consumed by this account.
+
+### One exact falsifier of forced negative-premium label selection
+
+COMPLETE FINITE MATRIX/CONSTRAINT FALSIFIER, NOT AN ACTUAL MINIMUM SOURCE.
+This tests ONLY the implication that the complete singleton/normal-core
+conditions and all source Q5 simplex inequalities force an eligible
+c-active-finite owner/donor pair with K<0. No root profile, actual c-active
+set, full positive minimum δ, common minimum debts, least literal Never,
+or strict absorbing/full separation is supplied by this witness.
+
+Take unscaled own values s_t=1/4, numerical labels
+C={0,1}, n=(1/2,1,1/2,1/2), and the recipient-row matrix
+
+    Γ = ( (0,       20,   −1/10, −1/10),
+          (201/5,    0,     −12,      1),
+          (−76/5,   19,       0, −13/10),
+          (10,   −1/10,    1/10,      0) ).
+
+Every row has a distinct strictly negative entry, so the recursive
+normal core is full. Every column has a distinct strictly negative
+entry as well; blocker rows for columns0,1,2,3 can be2,3,0,0.
+These are the actual matrix conditions, not a weak screen of only
+one chosen row. The definition `normalLayer` in
+`Quitting/Classification/LCP/NormalCore.lean` was inspected, as was
+`all_punishmentNormal_of_normalCore_eq_univ` in
+`Quitting/Classification/LCP/NormalCorePunishmentNormal.lean`.
+Thus any reward completion with these own/singleton entries is
+punishment-normal by the latter declaration. No completion is being
+claimed to have no UE. Dividing all specified rewards by50 gives
+positive unit-bounded singleton data without changing any sign below.
+
+For the actual simplex λ=(1/5,2/3,1/15,1/15),
+
+    Γλ=(333/25, 548/75, 477/50, 97/50)>0.
+
+ALL Q5 inequalities hold, not just this λ. Put
+z=(1,−1/10,−1,−1), so
+
+    zΓ=(59/50,11/10,1,11/10)≥(1,1,1,1).
+
+For any simplex x write γ=Γx. Since
+2γ₀⁺≥2γ₀ and γ₁⁺≥(9/10)γ₁,
+
+    Σ_(t∈C)γ_t⁺/n_t−Σ_t γ_t
+      =2γ₀⁺+γ₁⁺−Σ_tγ_t ≥zΓx≥1=Σ_t s_t.
+
+This is an explicit dual BOX witness, with coefficients2 and9/10
+inside the allowed intervals[0,1/n₀] and[0,1/n₁]. The chosen positive
+simplex also satisfies Q6 strictly: its left side is333/25 and its
+right side is1+477/50+97/50=312/25.
+
+The matrix is R0 AND standard-Q, so absence of the original Q-matrix
+necessity is not the explanation. For R0, every nonsingleton principal
+block is nonsingular. In lexicographic support order their determinants
+are
+
+    size2: −804, −38/25, 1, 228, 1/10, 13/100;
+    size3: 178581/50, 100201/500, 363/250, 17/50;
+    size4: −14704677/5000.
+
+A nonzero homogeneous complementarity root with nonsingleton support
+would be killed by its principal determinant, while a singleton support
+is killed by that column's negative blocker. This proves R0.
+
+At offset(−1,−1,−1,−1), EVERY complementarity solution has x₀=0.
+Otherwise complementarity and z's three negative coordinates give
+zΓx≤Σ_t z_t=−11/10, whereas zΓ≥1 gives zΓx≥Σ_t x_t≥0.
+The row0 feasibility inequality then forces x₁>0. Row1
+complementarity gives x₃=1+12x₂>0; row3 complementarity gives
+x₂=x₁+10>0. Row2 now forces the UNIQUE solution
+
+    x=(0,1583/34,1923/34,11555/17),
+    Γx−1=(17131/20,0,0,0).
+
+Its inactive residual is strict and its active determinant is17/50>0.
+The entire regular root-sum degree is therefore1. The inspected
+`exists_finset_r0Degree_eq_sum_sign_det` in
+`MathUE/LinearProgramming/R0DegreeSum.lean`, followed by
+`isStandardQ_of_r0Degree_ne_zero` in
+`MathUE/LinearProgramming/R0Degree.lean`, is exactly this ordinary
+degree-to-Q argument. The instance has not been implemented in Lean;
+the rational determinants and root identities were checked separately.
+
+Nevertheless C has only ONE finite member0. Its sole eligible donor
+is1:
+
+    A_01=79/8>0,      A_02=A_03=−7/40<0,
+    K_01=Γ_10/n₁−Γ_01/n₀=1/5>0.
+
+Owner1 is pure Never in the numerical labels and cannot be a paid
+finite owner. Thus EVERY eligible label choice has positive rather
+than negative overlap premium. The C,n labels have not been realized
+as an actual cap/minimum profile, and H/T_C are not supplied; this
+does not falsify the canonical theorem or show that a true source has
+these signs. It DOES refute forced negative-premium selection from
+the stated complete matrix/cone conditions. No decorated family of
+local regression tables, export, or independent audit is proposed.
+The next genuine-source operation must use actual participant/root
+information to release the bridger's clip, or invoke a global-minimum
+constraint beyond these singleton/cone conditions.
