@@ -121,6 +121,15 @@ least-Never choice forbid a minimum return, including variants that deliberately
 reduce joint Never. The positive-γ chamber and the exact pure-tail-Never,
 passive-dominant exception remain open; no source configuration is excluded.
 
+NC.35–36 change the operation to a private diffuse late word. Its uniform
+tester bound removes the one-date joining spike. A fully priced two-supplier
+submode is then impossible: explicit quiet signs supply EVERY inactive-owner
+Nash inequality, and a weak funding inequality yields either debt<δ or an
+actual augmented minimum with smaller literal Never. These are additional
+source-submode hypotheses, not properties supplied by the canonical theorem;
+neither full residual alternative has been consumed. The bounded proof below
+is ordinary mathematics awaiting independent review, not an exported result.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -25560,3 +25569,181 @@ finite-response mean, or the root beyond exact cap–Nash prefixing. The
 The next root-funding test must use one of those live inputs rather than
 retest the strict-excess family; Brouwer's independent finite-law mechanism
 addresses a different operation.
+
+### NC.35–36. A diffuse late word and one exactly funded root submode
+
+This is a different actual-law/root operation, not a selector change on the
+strict-excess tail retired by NC.34. The theorem excludes ONE explicitly
+specified additional submode of the original canonical source. It does not
+assert a producer from arbitrary reward data, close the two-owner branch,
+or cover three/four original root suppliers or the sole-bridger alternative.
+
+**Complete statement.** Keep the SAME fresh table, true minimum δ, least
+literal Never ν*, actual marked minimum and honest original suffix v from
+the frozen source. In addition assume:
+
+- Its original root a is exact Nash against the ENTIRE suffix cap b(v),
+  with exactly two positive rates a_i,a_j∈(0,1); all other rates are0.
+- Owner i is c-active and all its prescribed finite mass is at that
+  original root. Thus its honest suffix is pure Never, n_i^v=1, and its
+  whole finite surplus γ_i=0 follows from the exact root tie.
+- Γ=Γ_ij=r_i({j})−s_i>0 and
+  J=r_i({i,j})−r_i({j})>0.
+- For BOTH quiet owners k∉{i,j}, with y_i=a_i/(1−a_i),
+
+      Γ_kj=r_k({j})−s_k≤0,
+      P_k=[r_k({k,j})−r_k({j})]
+               +y_i[r_k({k,i,j})−r_k({i,j})]≤0.
+
+Put e=∏_(k≠i,j)n_k^v>0, S_j=Σ_k r_k({j}), D_v=D(v), and
+c_a=(1−a_i)(1−a_j). These hypotheses force the STRICT budget condition
+
+    Γ−S_j > (1−a_j)D_v Γ/J.                   (NC.36)
+
+In particular the submode with S_j≥Γ is impossible. More generally, if
+the displayed strict condition fails, the proof produces an actual legal
+augmented competitor with debt<δ, or debt=δ and joint Never<ν*.
+All original extra assumptions are stated above: none follows merely from
+two bridges, c-activity, common debts, or least Never.
+
+**The literal diffuse modification and its ENTIRE cap.** At every actual
+finite realizing index, preserve all old finite draws. Replace η of one
+owner j's Never mass by η/N at each of N consecutive new finite dates,
+all strictly after the old last supported date AND an old empty final test.
+There are no other new finite draws. Every choice remains private and
+independent. Write base n_j,e_k,R_k,E_k as in NC.30, and
+θ_k=(E_k−R_k−n_j e_k s_k)/e_k≥0 for k≠j.
+
+All old finite replies are unchanged. A tester during the word, after
+a proportion t of its new j mass, has value within 2Mη/N of
+
+    R_k+n_j e_k s_k+η e_k t Γ_kj,       0≤t≤1.
+
+Indeed only j can collide at that date, with probability η/N. Earlier
+new j exits give the passive singleton; survival at the test gives the
+tester singleton. The joining correction is at most 2Mη/N, uniformly over
+EVERY finite tester date, including moving dates and the endpoints. After
+the word the finite empty test has that expression at t=1. Literal Never
+has the same passive term but lacks (n_j−η)e_k s_k>0, so is dominated.
+The t=0 old empty test is also retained. Consequently the FULL limit is
+
+    B_k(new)=E_k+e_k[η(Γ_kj)⁺−θ_k]⁺.          (NC.35)
+
+Its finite-index cap error is at most 2Mη/N. Player j's complete cap
+is unchanged, because its prescribed law is ignored by its deviation.
+The prescribed payoff gains are EXACTLY η h_j r_k({j}) for every k,
+including j, where h_j is its base opponent Never product. Thus NC.31's
+debt formula holds with T_kj replaced by (Γ_kj)⁺ in this diffuse limit.
+One common final date would retain its pair-joining spike and would not
+prove (NC.35). This explicitly attempts the natural collision falsifier.
+
+Apply this construction to the honest suffix v, replacing a fixed
+ε∈(0,n_j^v) of j's SUFFIX Never mass. For i, original c-activity gives
+θ_i=0. For either quiet owner, Γ_kj≤0 keeps its whole cap fixed regardless
+of its old cap premium or maximizing set. With n_i^v=1 the result w has
+
+    b_i(w)=b_i+ε e Γ,       b_j(w)=b_j,
+    b_k(w)=b_k  (k∉{i,j}),
+    D(w)=D_v+ε e(Γ−S_j),
+    ν_w=ν_v(1−ε/n_j^v).
+
+No minimum-tail assertion is used. These formulas include remote old
+maximizers and every new finite response, not just the supplied bridge tests.
+
+**An actual FULL cap–Nash root, with quiet inequalities proved.** Write
+y_j=a_j/(1−a_j). Because only i,j have positive rates, their original
+active root equalities are
+
+    b_i=s_i+y_j J,
+    b_j=s_j+y_i[r_j({i,j})−r_j({i})].
+
+Take a NEW root x with odds
+
+    y_i^x=y_i,       y_j^x=y_j+ε e Γ/J,
+    y_k^x=0  (k∉{i,j}).
+
+Both active equalities against b(w) hold exactly. For quiet k, divide its
+Quit-minus-Continue gap by its positive opponent Continue product. The
+old divided gap is≤0; its new divided gap is exactly
+
+    old divided gap+(ε e Γ/J)P_k≤0.
+
+Thus BOTH quiet inequalities hold, including their equality boundaries.
+This proves full cap–Nash directly; it does not assume quiet owners stay
+inactive or invoke a continuous selector. Its joint Continue probability is
+
+    c_x=c_a/[1+ε e(1−a_j)Γ/J] < c_a.
+
+Prefix this fixed independent root to the SAME realizing sequence for w.
+Exact cap–Nash debt scaling and the literal Never product give
+
+    D(T_x(w))
+       =c_a[D_v+ε e(Γ−S_j)]/[1+ε e(1−a_j)Γ/J],
+    ν(T_x(w))=c_x ν_v(1−ε/n_j^v)<c_aν_v=ν*.
+
+The original cap–Nash hypothesis gives δ=c_aD_v. Therefore
+
+    D(T_x(w))−δ
+       =c_a ε e F/[1+ε e(1−a_j)Γ/J],
+    F=Γ−S_j−(1−a_j)D_v Γ/J.
+
+If F<0 this is strict full debt descent. If F=0 the augmented output is
+an EXACT full minimum with smaller FULL Never, contradicting the chosen
+least-ν point. This proves (NC.36), not merely positive-root existence.
+
+**Actual finite realization, especially equality.** First fix ε>0.
+Normalize the original actual finite roots and condition their honest
+suffixes as in frozen Section15/Q7. The suffix i finite mass tends to0;
+all their U,B,n coordinates converge to v's data. Add the described word
+with N tending to∞ after each source's old empty final test. The uniform
+cap error 2Mε/N is independent of its old calendar length. The source
+errors and this error tend to0 together, so the new full pair converges
+to w; the prescribed gains and Never products converge to those displayed.
+Prefix the FIXED limiting root x. Continuity of the literal prefix map
+gives its exact U,B limit, even if x is only approximately Nash against
+each finite-index suffix cap. No finite-index exact-root selector is needed.
+
+For F<0 the limiting improvement has one fixed positive size; choose word
+and source errors smaller than that size to obtain actual profiles of
+debt<δ. For F=0, vanishing positive debt errors alone would NOT suffice.
+Instead the actual (U,B,ν) triples converge to the displayed triple in the
+source's augmented carrier H. Its exact limiting debt isδ and its literal
+ν is strictly smaller thanν*. Frozen Section18 selects least ν over ALL
+augmented triples of debtδ, so this triple is excluded. It need not be the
+same marked law or belong to a purported closed seam of an open-upper chart.
+
+**Inspected sources and narrow overlap.** The exact prefix identity and
+carrier adapter used are quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash
+in UniformEquilibrium/Quitting/Root/CapNashRootStack.lean and
+quittingTerminalSemanticPair_rootThenContinuation,
+quittingTerminalSemanticPrefix_mem_carrier in
+UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean, reread under
+their stated imports. Literal ν uses the SAME actual profile sequence.
+Frozen Sections14.2 and18 provide, respectively, the already-reviewed
+all-clock thin-word mechanism and the actual augmented least-Never scope.
+NC.35 is a special one-new-owner word, not a claim that thin words are new.
+The raw joining gap agrees with quittingPairJoiningGap in
+UniformEquilibrium/Quitting/Root/PairInactiveGapNumerator.lean.
+
+The unaltered full-profile word graft is already frozen Q1/Q2; no new
+coverage is claimed for it. Here the honest suffix changes AND the actual
+root changes, with its absorption priced exactly. The inspected
+minimumTerminalSemantic_auxiliaryNash_budget and
+minimumTerminalSemantic_auxiliaryNash_eq_allContinue in
+UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean
+require that same pair to be globally minimum, unlike v or w. The inspected
+QuittingFiniteExactNashBellmanBlock.root_eq_allContinue_of_terminal_mem_uniqueBasin
+in UniformEquilibrium/Quitting/Bellman/Finite/AllContinueBasinRestartMoat.lean
+concerns an exact word ending in a unique-AllContinue basin, not this
+changed-tail competitor. Neither gives (NC.36) by substituting a minimum tail.
+
+The inspected exists_uniformEquilibriumPayoff_of_empty_or_signed_pair_core_weakSameSign
+in UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClosure.lean
+already covers empty premium core and EXACT pair core with nonnegative product
+of the two joining gaps. Our statement supplies no core census and places no
+sign condition on the reverse joining gap. There is no claim of a new raw
+existential producer or union-coverage novelty. This bounded submode exclusion
+is ordinary mathematics awaiting independent falsification/review. The full
+source can fail ANY of its extra geometric/quiet/funding assumptions; the
+next problem is a globally valid operation when a quiet owner is forced to
+enter, or when the actual funding coefficient F is strictly positive.
