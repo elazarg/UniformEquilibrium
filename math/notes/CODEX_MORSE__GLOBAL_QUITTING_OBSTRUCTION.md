@@ -2,6 +2,16 @@
 
 Owner: CODEX_MORSE.
 
+Current independent global lane: SP below uses the ENTIRE labelled first-hit
+coalition law, not a convex payoff relaxation or a selected root chart. A
+two-copy coordinate-swap argument identifies exactly which singleton/crossed-
+pair probabilities must pay for two disjoint pair probabilities. This is
+ordinary UNREVIEWED supporting mathematics, not an unrestricted negative
+table, a new source exclusion, or a supplied-barrier export. The existing
+square-root pair law already supplies the coarse obstruction. The unfinished
+step is a genuine FULL-response producer of a forbidden law region from one
+actual table; no such producer is claimed. PZ is closed and is not extended.
+
 Latest independent global selection test: PZ below retires the ENTIRE
 nonnegative scalar terminal-price Nash recipe on ONE fixed, already solved
 canonical single-pivot table. For EVERY finite calendar, EVERY price λ≥0
@@ -24479,6 +24489,179 @@ regression evidence, not an independent proof review or a Lean check.
 Reproduce with
 
     awk '/^# PZ_EXACT_DIAGNOSTIC/{active=1} active && /^```$/{exit} active{print}' notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md | python
+
+## SP. A full first-hit-law swap account, before any negative-table claim
+
+Status: ordinary UNREVIEWED supporting theorem and a bounded architecture
+test. No actual reward table with a positive unrestricted gap is produced.
+The independent global question is whether small FULL unilateral regret
+can force an unattainable labelled coalition law. This is not another
+least-Never/root-transfer variation or a claim that prescribed payoffs
+determine response caps.
+
+### SP1. Exact data, independence, ties and Never
+
+Let T₀,T₁,T₂,T₃ be independent random variables in ℕ∪{Never}, with
+arbitrary complete probability laws. Define H as the nonempty set of ALL
+owners attaining the smallest FINITE clock, or H=∅ when all clocks are
+Never. Write μ_S=P(H=S), including μ_∅=∏_i P(T_i=Never). Thus every
+coalition label is physical; neither a limiting finite clock nor a tie
+is identified with Never. There is no public profile lottery.
+
+For the partition 01|23 the following two inequalities hold simultaneously:
+
+    μ₀₁ μ₂₃ ≤ μ₀ μ₁+μ₂ μ₃+μ₀₂ μ₁₃,
+    μ₀₁ μ₂₃ ≤ μ₀ μ₁+μ₂ μ₃+μ₀₃ μ₁₂.                 (SP.1)
+
+Hence the crossed term can be replaced by the minimum of the two products.
+Relabeling gives the same account for every partition into two pairs.
+These inequalities apply to every unrestricted behavioral profile through
+its independent live stopping laws; they impose no finite-support, positive-
+Never, stationary, periodic or bounded-controller assumption.
+
+Proof. Sample TWO independent copies X,Y of the full four-clock vector.
+The event H(X)=01,H(Y)=23 has probability μ₀₁μ₂₃. Let a,b be its two
+finite first dates. Exchanging the X and Y values of ANY specified owner
+preserves the product probability measure, including atoms at Never.
+
+If a<b, exchange owner1's clocks. X now has the unique first owner0 at a,
+and Y has the unique first owner1 at a: its other clocks were all at least
+b. This image is a subset of H(X)=0,H(Y)=1 and has probability at most
+μ₀μ₁. If a>b, exchange owner3's clocks. The image has unique first owners
+3 and2 respectively, giving at most μ₃μ₂. Each exchange is an involution;
+there is no multiplicity or conditional-probability loss.
+
+If a=b, exchange owners1 AND2. X has exact first coalition02 and Y exact
+first coalition13, giving at most μ₀₂μ₁₃. Alternatively exchange owners1
+AND3 to obtain03 and12. Summing the three disjoint original chronology
+events proves each inequality. The different image events need not be
+disjoint: they are only used as separate probability upper bounds. Countable
+support makes the argument a direct nonnegative sum; the same product-space
+measure-preserving swaps prove it without truncation.
+
+In fact each image above has the SAME finite first date in X and Y. Thus
+the proof gives the stronger date-resolved version, replacing every product
+μ_Aμ_B on the right by Σ_t P(H=A,first=t)P(H=B,first=t). SP.1 is sufficient
+for the present test; no additional date-resolved consumer is claimed.
+
+### SP2. Bounded comparison with the existing first-stopping laws
+
+Read under its imports:
+`twoDisjointFirstStoppingPairMasses_sqrt_sum_add_never_le_one` and
+`twoDisjointFirstStoppingPairMasses_finiteLeftover_ge_two_sqrt_mul`
+in `MathUE/Probability/IndependentFirstStoppingPair.lean`. They already give
+
+    √μ₀₁+√μ₂₃+√μ_∅ ≤1,
+    2√(μ₀₁μ₂₃) ≤1−μ₀₁−μ₂₃−μ_∅.
+
+Their actual-profile adapter is
+`quittingBehaviorExactFiniteFirstCoalitionMass_eq_terminalOutcomeMass`
+in `UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`,
+as indexed in TOOLKIT. No new adapter implementation is asserted here.
+`PairMassForcingConsumer.lean` already consumes supplied affine lower bounds
+on two pair masses; I read its full forcing/gap/pure-response statements.
+It does NOT produce such bounds from arbitrary rewards. SP does not fill
+that missing hypothesis or re-export the existing conditional consumer.
+
+SP.1 does retain information absent from the two selected pair coordinates.
+For example the probability vector
+
+    μ₀₁=μ₂₃=1/10,   μ₀₁₂₃=4/5,   every other μ_S=0
+
+satisfies every pair-projection square-root inequality (and the displayed
+Never-retaining inequality), but violates BOTH SP.1: its left side is1/100
+and its right side0. The known pair-only-law rigidity theorem does not
+apply, because total pair mass here is1/5, not1. This is an unattainable
+probability vector, NOT an actual quitting-game counterexample, an equilibrium
+payoff, or a produced near-Nash law. No completeness audit of all previously
+proved coalition-law inequalities is claimed.
+
+### SP3. What has and has not been tested operationally
+
+The intended negative mechanism would need ONE rational reward table and
+literal unrestricted reply inequalities that force its sufficiently small-
+debt laws into a closed region violating SP.1. A convex restriction on the
+PRESCRIBED payoff alone does not supply this. Static punishment/welfare
+separation was already retired by WS, and common clock shifts preserve
+the entire prescribed coalition law while changing available preemption
+replies. The missing step is therefore a full-response inequality, not a
+stronger generic probability bound or a payoff-realization theorem.
+
+Brouwer's FM theorem, read in its owned note, also already excludes a positive
+gap proved using only the max over Quit0/Never/own-delay/next-preempt, even
+with profile-dependent weights. Adding SP.1 to an account that only tests
+those four maps cannot defeat FM: its actual fixed-point profiles already
+satisfy every valid first-hit-law inequality. Any successful forcing account
+must use additional genuine full replies; a law inequality cannot repair an
+incomplete reply menu by itself. This is a constraint on the current search,
+not a new restriction on possible counterexample tables.
+
+Next concrete question: can the COMPLETE late-finite/Never envelope, together
+with actual finite quantile responses, force a forbidden region in the FULL
+coalition-law variables on one table? Quantile maps must retain real ties,
+the first available date and the separate ∞−/Never endpoint. A finite family
+of bounded-displacement response maps or an unproduced law-selection
+interface is not an answer. No candidate forcing table has passed this test.
+
+The earlier local-noise idea is not a new result:
+`exists_open_linearAbsorptionDefect_of_compact_strictAllContinue` in
+`Root/StrictAllContinueBasinLinearAbsorptionDefect.lean` already blocks
+absorption-relative activation near a strict all-Continue minimum fibre.
+Likewise the cubic radial-reversal test only excludes an INTERIOR cubic
+minimum; the known reflection theorem explicitly allows upper-face minima.
+Neither supplied the missing global producer, and neither is pursued here.
+
+Exact diagnostic, not an independent proof gate or Lean check:
+
+```python
+# SP_EXACT_DIAGNOSTIC
+from fractions import Fraction as Q
+from itertools import product
+from random import Random
+rng=Random(913)
+calendar=range(4)  # 0,1,2; 3 is literal Never in this finite check
+def host(t):
+    first=min(t)
+    return 0 if first==3 else sum(1<<i for i,x in enumerate(t) if x==first)
+for trial in range(120):
+    laws=[]
+    for i in range(4):
+        weights=[rng.randrange(8) for _ in calendar]
+        if not sum(weights): weights[3]=1
+        laws.append([Q(x,sum(weights)) for x in weights])
+    mu=[Q(0)]*16
+    for t in product(calendar,repeat=4):
+        weight=Q(1)
+        for i in range(4): weight*=laws[i][t[i]]
+        mu[host(t)]+=weight
+    assert sum(mu)==1
+    left=mu[3]*mu[12]
+    common=mu[1]*mu[2]+mu[4]*mu[8]
+    assert left<=common+min(mu[5]*mu[10],mu[9]*mu[6])
+counts=[0,0,0]
+for clocks in product(calendar,repeat=8):
+    x,y=list(clocks[:4]),list(clocks[4:])
+    if host(x)!=3 or host(y)!=12: continue
+    a,b=min(x),min(y)
+    def exchange(owners):
+        u,v=x.copy(),y.copy()
+        for i in owners: u[i],v[i]=v[i],u[i]
+        return host(u),host(v),min(u),min(v)
+    if a<b:
+        assert exchange([1])==(1,2,a,a)
+        counts[0]+=1
+    elif a>b:
+        assert exchange([3])==(8,4,b,b)
+        counts[1]+=1
+    else:
+        assert exchange([1,2])==(5,10,a,a)
+        assert exchange([1,3])==(9,6,a,a)
+        counts[2]+=1
+assert counts==[49,49,98]
+print('SP exact diagnostic PASS: 120 rational product laws; 196 swap incidences')
+```
+
+    awk '/^# SP_EXACT_DIAGNOSTIC/{active=1} active && /^```$/{exit} active{print}' notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md | python
 
 No larger price cutoff, constant optimization, or stationary table census
 is pursued. The next whole-game selection must permit genuinely approximate

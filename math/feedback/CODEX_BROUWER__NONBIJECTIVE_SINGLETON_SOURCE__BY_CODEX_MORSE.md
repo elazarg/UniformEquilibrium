@@ -1824,3 +1824,126 @@ The genuinely positive-hazard survivor, proper/sure-first boundaries and
 endpoint ties not otherwise excluded, zero-/multiple-future modes and the
 general two source cases remain open. No full-II or Fin4 closure, new raw
 class count, Lean seal or export is inferred.
+
+## Independent DF full-cap and bridge-seam falsification check
+
+Reviewed frozen `## DF: both paid root suppliers cannot have negative entire
+late coefficients` through EOF, SHA256
+`4a8b390fae8d1d7c7332e2139454d5c86e0a8ef39ca1844a39c781c615cb1991`.
+Verdict: ordinary mathematical PASS for the stated DC actual-source sign
+exclusion, with no unresolved objection. This is one focused source restriction,
+not a full export gate, one-future consumer or proof of Fin4 UE.
+
+**Exact scope.** At the SAME actual positive global minimum supplied by DC,
+i is PureNever, p/q are positive root-only PRESCRIBED suppliers but have strict
+LATER-ONLY FULL caps, and k has a fixed positive-hazard geometric finite
+conditional with amplitude f. All a,b,f are interior and 0<z≤1. Define
+L_h=max(z[r_h(hk)−s_h],r_h(k)−s_h). Then L_p>0 or L_q>0. No alignment
+of the two suppliers' endpoint labels, strict FIRST/END gap, two-sided
+hazard variation, both-positive conclusion or funded relocation is used.
+
+**Primary global input.** I read
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+under its imports, and the accepted source's Part I Sections5 and8. The
+declaration requires carrier membership, a TRUE unweighted global total-debt
+minimum, four players, M>0, the absolute reward bound, and positive total
+debt. It derives no-UE internally; there is no extra normality, root-Nash,
+selected-prefix or favorable-suffix premise. AllNever has cap s_h and payoff0
+because s_h>0. Therefore δ≤Σs_h, and equality would make THIS actual pair
+a positive global minimum with 0=B_h−s_h≥δ+δ²/(8M). The strict comparison
+Σs_h>δ is valid. The margin theorem is applied to AllNever only in the
+equality contradiction, never to the geometric suffix.
+
+**Entire actual cap box.** I recomputed DC's root0, every later t≥1 and
+literal Never values. For h≠k the entire finite trace is
+
+    A_h+H_h[s_h+fΓ_h+f(1−z)^(t−1)(zP_h−Γ_h)].
+
+Its supremum is A_h+H_h(s_h+fL_h), including signed L_h. Proper-hazard END
+need not be attained; at z=1 date1 is FIRST and date2 already gives END.
+At a FIRST/END tie the whole fixed-conditional trace is constant. Changing
+positive a,b,f factors cannot change its internal ordering. Never is below
+END by H_h(1−f)s_h>0. For k, the two full branches are Q_k and R_k+C s_k,
+independent of its own law. Their strict nonbridge gap fixes one branch on
+a small two-sided box, as do the strict p/q root-versus-upper gaps.
+Consequently the displayed TRUE D=max(F₀,F₁) includes every finite/Never
+reply, not just the old maximizing tests or a selected lower ledger.
+
+The three amplitudes describe actual independent original laws, not a
+correlated profile lottery. Their prescribed payoffs retain every possible
+root coalition and the later singleton k. Root triple tester cells remain
+in Q_i,Q_k. Grand and later prescribed collisions are genuinely unreachable
+in THIS box; they are not being assigned bounds valid for other competitors.
+The finite realization retaining the whole tail mass at N+1 has product-TV
+error≤f(1−z)^N, and thus uniformly controls EVERY moving pure response,
+Never, and all prescribed payoffs. At z=1 it is finite already. Since DC
+has exact actual attainment, the raw three-amplitude family directly lies
+in the original carrier; no new marked-calendar or first-root transport
+assumption is required. A small legal box retains a,b,f in(0,1).
+
+**The kink does not imply a full positive-semidefinite Hessian.** The proof
+correctly uses less. Row distinction and z>0 make L_i≠0, so the tied-cap
+surface g=Q_i−E_i=0 has nonzero f derivative −C L_i. Local minimality of
+the TRUE max along f supplies a CONSTANT μ∈[0,1] with L_f=0 for
+L=(1−μ)F₀+μF₁. On the legal smooth two-dimensional seam, L=D≥δ.
+Hence ∇L is proportional to ∇g; its f component makes that multiplier0.
+Thus ∇L=0 and the Hessian is nonnegative on the seam tangent plane T.
+A two-sided smooth curve in the seam realizes every tangent direction,
+and stationarity removes its acceleration term. Endpoints μ=0,1 are
+harmless: the proof never asserts a minimum of L away from the seam.
+
+**Exact identities and attempted sign falsification.** With n_p=1−b,
+n_q=1−a and τ=μL_i−Σ_h r_h(k), I independently expanded BOTH legitimate
+k-cap branches in SymPy. They give exactly
+
+    L_f=n_q L_p+n_p L_q+n_p n_q τ,
+    n_p L_bf+L_f=n_q L_p,
+    n_q L_af+L_f=n_p L_q,
+    L_baf=τ,
+    L(0,0,0)=Σ_h s_h.
+
+All three diagonal second derivatives vanish. The exact multiaffine Taylor
+formula, full stationarity and L_f=0 therefore give
+
+    Σs_h−δ=αba+f[bL_p/n_p+aL_q/n_q],
+    α=L_ba,  β=L_bf=n_q L_p/n_p,
+    γ=L_af=n_p L_q/n_q.
+
+The polynomial endpoint is only an algebraic evaluation. Its cap labels
+need not remain active there; every evaluated cap polynomial nevertheless
+has the correct singleton value at (0,0,0).
+
+If both supplier coefficients are negative, strict Σs_h>δ forces α>0,
+while β,γ<0. I independently checked the plane
+
+    w=−αu/(2γ)−αv/(2β)
+
+has Hessian form −(αβ/γ)u²−(αγ/β)v², strictly negative for every nonzero
+point. This is a two-dimensional plane W in ℝ³. Its intersection with
+the two-dimensional legal tangent plane T is nonzero, contradicting the
+actual seam minimum. This addresses arbitrary seam normals, not a selected
+symmetric tangent or a full-Hessian assumption. The author's 400 exact
+rational checks also reran PASS. Those arbitrary polynomial examples are
+diagnostics, not actual positive-minimum tables. The mixed-sign positive-
+plane control is consistent with, and does not enlarge, the theorem.
+
+**Significance separately.** The strict AllNever comparison is reuse of the
+tracked minimum margin, not a new source theorem. The resulting alignment
+with the ACTUAL future owner k is stronger than CB's paid finite regret or
+DA's two later-only supplier labels: E_p>Q_p does not itself imply L_p>0,
+because E_p contains the other root supplier's passive payoff. CZ addresses
+different proper-hazard endpoint conditions, and DB's positive Γ suppliers
+concerned the now-excluded z=0 boundary. DF covers both proper and sure-first
+positive hazards with all endpoint ties. A bounded lookup in the named
+margin source, Terminal subtree and owned Morse/Noether records found no
+existing declaration or proved step supplying this sign conclusion. This
+is not an exhaustive prior-producer audit or a new raw existence-class count.
+
+After the source reduction the Hessian argument needs true global minimality,
+the strict AllNever comparison, positive interior amplitudes and the strict
+three nonbridge gaps. It does not additionally spend least ν, common individual
+debts or max-A. Those selections remain available for subsequent work. No
+actual below-floor competitor, smaller-ν minimum, charged return, unrestricted
+positive-gap table or consumer of the remaining source cases is produced.
+No Lean build, trust seal or export recommendation follows from this PASS.

@@ -847,6 +847,25 @@ strict-FIRST supplier in the proper-hazard case, and zero or multiple
 future owners remain unconsumed. Neither complete source configuration
 is eliminated.
 
+At this ACTUAL one-future minimum, the two paid first-root suppliers p,q
+cannot both have negative entire later-response coefficients. With k
+the future owner and the SAME geometric hazard z, put
+
+    L_h=max(z[r_h({h,k})−s_h], r_h({k})−s_h),       h=p,q.
+
+Then L_p>0 or L_q>0. Thus at least one actual paid supplier has a positive
+singleton or collision comparison with the actual future owner; an
+unrelated donor is not substituted. The conclusion includes z=1 and all
+FIRST/END ties. The
+[three-amplitude sign exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#df-both-paid-root-suppliers-cannot-have-negative-entire-late-coefficients)
+has an independent mathematical review, not a Lean declaration. Its legal
+variation changes the two original root rates and the future owner's
+finite/Never amplitude. True full debt is the maximum of two multiaffine
+polynomials; global minimality and the strict AllNever comparison rule out
+the two-negative sign pattern by the Hessian on their equality surface.
+This supplies actual-source alignment, not a funded law modification or
+a consumer of the one-future case.
+
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date
 response value:

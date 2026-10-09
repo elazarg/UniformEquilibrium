@@ -8,6 +8,22 @@ The requested endpoint is UE for EVERY signed four-player quitting table,
 against EVERY unilateral behavioral deviation, with ONE payoff target
 fixed before the requested accuracy.
 
+Current independent global lane: SP in the owned global notebook tests the
+FULL labelled first-hit coalition law as a possible nonlinear obstruction.
+For arbitrary independent finite/Never clocks, a two-copy coordinate swap
+proves μ₀₁μ₂₃≤μ₀μ₁+μ₂μ₃+min(μ₀₂μ₁₃,μ₀₃μ₁₂), retaining actual ties and
+all chronology orders. This tracks which leakage coalitions pay for two
+disjoint pairs; the known square-root pair laws already give the coarse
+obstruction. The missing step remains an actual FULL-response inequality
+forcing a forbidden law region from one table. Neither prescribed-payoff
+separation nor a maximum over Brouwer FM's four bounded-displacement reply
+maps supplies it: FM's actual near-fixed profiles satisfy every valid law
+inequality. This is ordinary unreviewed supporting structure, NOT a negative
+table, new source exclusion or consumer. The next test must retain genuine
+finite quantile and separate late-finite/Never responses, not export another
+conditional mass-forcing interface. Local minimum noise and an interior-
+minimum cubic test did not produce a global route and are left behind.
+
 Latest simultaneous whole-game selection test: PZ in the global notebook
 uses an endogenous NONNEGATIVE scalar AllNever price λe₀ in the canonical
 single-pivot finite game. Its exact price-removal bound is
