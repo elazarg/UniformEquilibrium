@@ -25169,3 +25169,123 @@ owners' full inequalities, and neither ≥3 suppliers nor partial bridges
 are covered by that calculation. The next root selection will consider
 ALL four-player exact cap–Nash roots, including owner entry, folds and
 all-Continue outcomes; no supplier branch will be silently continued.
+
+Live original-source operation, UNPROVED consumer. It acts on the WHOLE
+original marginals, including their root atoms, so it is not restricted to
+all-four bridging owners. Choose two owners with 0<nᵢ,nⱼ<1 (there are at
+least two finite root suppliers), and retain their OLD finite conditional
+laws Fᵢ,Fⱼ. At each ACTUAL finite realizing index set
+
+    xᵢ(t)=nᵢ+t(1−nᵢ),       xⱼ(t)=nᵢnⱼ/xᵢ(t),
+    pᵢ(t)=xᵢ(t)Never+(1−xᵢ(t))Fᵢ,
+    pⱼ(t)=xⱼ(t)Never+(1−xⱼ(t))Fⱼ,       0≤t≤1,
+
+with that index's actual n,F used before taking limits. Other original laws
+stay put. This preserves each index's joint Never product EXACTLY, and its
+limiting whole-profile Never is the original ν*. It introduces neither a
+public profile lottery nor a new stopping date. At t=1, owner i is pure Never.
+
+Every new cap can be retained on ONE whole parameter path, not only for
+separately selected t's. For each recipient and EVERY finite/Never reply
+at an actual index, record its four payoff values under the finite/Never
+corner replacements of owners i,j. Close this response-coefficient set in
+[−M,M]^4. It is nonempty compact. A common Hausdorff subsequence, together
+with the four corner prescribed payoffs, gives a compact limiting joint
+response set for every recipient. The full cap at any probabilities (x,y)
+is the supremum of the SAME response tuple averaged with weights
+
+    ((1−x)(1−y), (1−x)y, x(1−y), xy).
+
+Hausdorff convergence gives UNIFORM convergence of these support values
+on the whole probability square, since the weights are nonnegative and
+sum to1. Prescribed payoffs use the same four weights. Thus every t on the
+displayed reciprocal path has its actual augmented payoff/full-cap/Never
+limit on that same subsequence. All newly maximizing, colliding, unsupported
+or remote finite replies are included in the joint coefficient set. No
+open-upper chart identity, cap-box approximation, public mixture, or selected
+old response in place of an upper bound is used.
+
+The old first-date root rates are NOT free variables in this operation.
+Writing βᵢ=aᵢ/(1−nᵢ), they become aᵢ(t)=βᵢ(1−xᵢ(t)), and similarly
+for j; all other root rates remain the original ones. Let c(t) be their
+joint Continue product. It stays positive because the whole profile has
+joint Never ν*>0. Condition the SAME actual laws after that retained root,
+and let w(t) be their honest full semantic suffix. Its Never is ν*/c(t),
+not ν_v unless c(t)=c_a. It is not a minimizing tail.
+
+For ALL owners, including nonbridgers, retain
+
+    g_k(t)=Q_k(a(t))−A_k(a(t))−H_k(a(t))b_k(w(t)),
+    D(p(t))=c(t)D(w(t))+Σ_k[(g_k(t))⁺−a_k(t)g_k(t)].
+
+The last terms cannot be deleted for partial bridges. At the original
+source put Ψ=Σ_k[(g_k)⁺−a_k g_k]≥0. Since all original rates are<1,
+Ψ=0 EXACTLY when that original root is full cap–Nash: every positive-rate
+owner ties, every quiet owner has g_k≤0. All four bridges imply this, but
+some partial-bridge configurations also do. There is no cap–Nash assumption
+for general source case I with exactly two or three bridges, or case II.
+
+If a fixed ORIGINAL root a is used to compare a changed honest suffix w
+instead, the exact clipping formula keeping every nonbridger branch is
+
+    D(T_a(w))−δ
+      =c_a{Σ_k [max(ℓ_k,Δb_k)−(ℓ_k)⁺]/(1−a_k)−Σ_k Δu_k},
+    ℓ_k=(Q_k−A_k−H_k b_k)/H_k.
+
+Bridgers give the old positive-part clipping. A later-only cap (ℓ_k<0)
+credits an actual cap drop until the root branch catches it. A root-only
+cap (ℓ_k>0) allows an increase up to that gap before clipping begins.
+These genuine signed gaps, and both signs of honest b_k−s_k, are retained;
+the OUTPUT singleton margin is not transferred to an off-minimum suffix.
+
+The optional re-rooting is a SEPARATE legal operation: at each supplied
+w(t), minimize survival over the compact nonempty set of ALL four-player
+exact cap–Nash roots. Let its minimum be c_min(t). Prefixing any minimizing
+root to the same realizing suffix gives full debt c_min(t)D(w(t)) and
+Never c_min(t)ν*/c(t). A closing target is
+
+    c_min(t)D(w(t))<δ,
+    or c_min(t)D(w(t))≤δ AND c_min(t)<c(t).
+
+The second target contradicts original least literal Never. No continuous
+root selector, inactive-owner inequality or branch continuation is assumed;
+the minimizing root may change support or disappear into all Continue.
+Initially globality requires
+
+    c_min(0)≥δ/D(v)=c_a+Ψ/D(v).
+
+When Ψ=0 the original root is admissible and equality c_min(0)=c_a follows.
+When Ψ>0 the initial inequality is in fact STRICT. Suppose some full
+cap–Nash root x over the SAME honest suffix v attained δ. Its debt vector
+would be c_x d(v), so common minimum debts force c_x d_k(v)=d*_k for every
+k. Choose ANY original bridger k, supplied by the frozen source. Its old
+correction is zero and d*_k=c_a d_k(v)>0, hence c_x=c_a. Summing the new
+debt vector would then give δ=c_a D(v), contradicting Ψ>0. Compactness
+of the ENTIRE exact-root set therefore gives
+
+    c_min(0)D(v)>δ                    when Ψ>0.
+
+This positive debt gap persists for all sufficiently small t on the actual
+Never-redistribution path. Indeed w(t)→v as a FULL semantic pair: original
+root survival stays bounded away from0, and conditioning the uniformly
+TV-continuous law path preserves full-cap continuity. If the assertion
+failed, roots x_m at t_m→0 would have a convergent subsequence; polynomial
+root-Nash inequalities pass to its limit, and the exact prefixed debts
+c_{x_m}D(w(t_m)) converge to a cap–Nash debt at v no larger than δ.
+The same argument gives a uniform fraction of the displayed strict gap.
+
+Thus a source configuration with Ψ>0 has NO zero-budget initial cap–Nash
+branch, even after arbitrary root-support changes, and no infinitesimal
+version of this whole-law operation can repair that loss. A finite-amplitude
+tail change must pay it first. This is not an exclusion of partial bridges:
+some partial-bridge configurations have Ψ=0, and the all-four-bridge
+configuration certainly does. It is an internal complete-root mechanism
+boundary, not a below-δ competitor or a new source branch reduction.
+
+In the exactly-two-supplier submode, deleting one supplier at t=1 leaves
+a positive one-supplier original root. A putative minimum there contradicts
+frozen Section9's singleton-margin/all-tail-floor ledger. This is already
+part of the source, not a new branch reduction. It blocks transporting
+NC11's solved endpoint root birth to the genuine source. The interior full
+response envelopes and optional complete-root success inequalities remain
+OPEN; neither the finite surplus γ nor preserving joint ν proves them.
