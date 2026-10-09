@@ -66,6 +66,20 @@ question is a genuinely coupled change of the opponents' finite laws
 preserving or compensating the passive safety, not another refinement
 of this fixed-block repetition or the paired final-date template.
 
+CB below gives a COMPLETE ORDINARY, UNREVIEWED actual-source SUBMODE
+exclusion: in the sole-zero-rate-bridger/later-only alternative, some
+POSITIVE FIRST-ROOT SUPPLIER has a prescribed finite conditional that
+is NOT a full best reply. Optimality of all those finite conditionals
+is NOT supplied by the canonical source. The proof
+keeps the later owner's entire finite conditional fixed, prices its
+full cap on the original calendar, and uses a multiaffine true-minimum
+surface plus least literal Never (or common individual debts in its
+last step). It does not insert a pre-first-
+suffix clock or assume its price. The remaining branch has a genuinely
+suboptimal finite conditional; no debt-funded operation consuming
+that positive finite regret is proved yet. Neither alternative(I)
+nor general alternative(II) is closed.
+
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
 separations but the full existential-producer union still UNRESOLVED.
@@ -15855,3 +15869,313 @@ three opponents' ENTIRE finite laws to discharge their debts while
 retaining or compensating the deleted owner's passive safety. Fixed
 block repetition, root-only changes and one-owner Never bookkeeping
 do not establish that. No new fixed-menu program is proposed.
+
+
+## CB: the sole-bridger source needs finite regret at a root supplier
+
+### CB1. Exact additional premise and consumed source submode
+
+Status: COMPLETE ORDINARY MATHEMATICS, UNREVIEWED. This is an
+actual-source SUBMODE exclusion, not a full Fin4 consumer or a raw
+table equilibrium producer. No Lean implementation or check is claimed.
+
+Use ONE selected table and marked full minimum from
+[LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md](../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md),
+in its alternative(II). In particular the full unweighted minimum is
+δ>0; EVERY full minimum has the same positive individual debts d*;
+all own singleton rewards s_k are positive; all original n_k>0;
+the first actual root τ has at least two positive nonsure suppliers;
+there is a sole root/later bridger i with a_i=0, and at least one
+different later-only owner. Root-only owners have ENTIRE maximizing
+set {τ}; later-only owners have their ENTIRE maximizing set strictly
+later. Source Section14.3 supplies a final-empty-test-active owner
+with positive prescribed finite mass. Never is strictly below every
+full cap. All variations below are independent whole-law changes on
+actual finite realizers, followed by limits in the original carrier.
+
+For m_k=1−n_k>0 let F_k be the ORIGINAL prescribed finite conditional
+law. Its expected response value is V_k(F_k), and define
+
+    γ_k=B_k−V_k(F_k)≥0.
+
+The ADDITIONAL premise tested here is ONLY
+
+    γ_k=0 for EVERY k with a_k>0.                  (CB.1)
+
+It is NOT a canonical source conclusion. We prove that (CB.1) is
+impossible in alternative(II). Thus that alternative necessarily has
+some actual POSITIVE FIRST-ROOT SUPPLIER whose entire prescribed finite
+conditional has STRICT positive regret γ_k. No optimality is assumed
+of the sole zero-rate bridger's finite conditional or of any other
+zero-root owner. No size bound on that regret, or operation paying all
+other caps under its replacement, is asserted. In particular this
+leaves a genuine remaining branch, rather than assuming (CB.1).
+
+In concrete support terms the surviving alternative(II) must have
+EITHER a later-only owner with positive prescribed mass at the FIRST
+root (itself strictly suboptimal), OR a root-only positive supplier
+with positive prescribed finite mass STRICTLY AFTER that root (also
+strictly suboptimal). No prescribed clock precedes the first root.
+This is equivalent to the root-supplier finite-regret conclusion,
+not a claim that either bad-mass branch has already been consumed.
+
+### CB2. The two root-only suppliers and a two-sided entire-law move
+
+Under (CB.1), the prescribed finite mass of each POSITIVE ROOT SUPPLIER
+is supported on full maximizing clocks: the nonnegative integrand
+B_k−V_k(t) has integral zero. Every such supplier maximizes at τ.
+It cannot be
+later-only, and cannot be the sole bridger i because a_i=0. It is
+root-only; hence ALL its finite mass is at τ. There are at least two
+such suppliers. With four players, i and a later-only owner already
+occupying the other two roles, there are exactly two root-only owners
+ℓ,h, both with positive nonsure rates x₀,y₀, and exactly one later-only
+owner j with root rate zero. The conditional suffixes of ℓ,h are
+PureNever. Nothing yet assumes that i is PureNever.
+
+Suppose i has finite mass m_i>0. Vary its ENTIRE law two-sided as
+zF_i+(1−z)Never around z=m_i, leaving all other laws and root rates
+fixed. This law has no root mass. Own cap B_i is fixed. The root-only
+caps B_ℓ,B_h stay at their root endpoints by their strict full
+root/later gaps. The later-only root gap for j also stays strict.
+
+In the honest suffix, j faces just ONE possibly finite opponent i.
+At every pure finite response t its payoff has the form
+
+    s_j+z f_j(t),
+
+where f_j(t) is bounded and independent of z. Consequently its full
+finite cap is s_j+z sup_t f_j(t), affine for z>0. Literal Never is
+strictly dominated by the late finite response since (1−z)s_j>0;
+it cannot add a branch. This prices ALL finite clocks, including
+nonisolated maximizing families, on the unchanged actual calendars.
+Prefixing the fixed root preserves affinity of j's full cap.
+
+Thus ALL full caps and all prescribed payoffs are affine in z on a
+two-sided interval. True global minimality forces total debt to be
+constant δ there. At each actual finite realizing index the literal
+Never probability is EXACTLY
+
+    ν(z)=(1−z)∏_[k≠i] n_k.
+
+The original-source augmented carrier therefore contains full minima
+with strictly smaller literal Never when z>m_i is sufficiently close.
+This contradicts the SAME selected minimum's LEAST literal Never.
+Therefore i is PureNever. This step requires NO optimality of F_i;
+V_i(F_i)−R_i may even vanish. It does not substitute conditional
+survival for literal Never or an unrelated least-Never representative.
+
+Now the only potentially finite suffix owner is j. It has positive
+finite mass m∈(0,1): source Section14.3's c-active finite owner
+cannot be either root-only owner, and i is PureNever. Its entire
+finite conditional F_j is retained below, however complicated or
+nonisolated its compact-clock realization is.
+
+### CB3. All-response pricing on the ORIGINAL one-opponent calendar
+
+Keep F_j fixed and vary its finite mass m. Every suffix observer
+k≠j has finite response values
+
+    s_k+m f_k(t),
+    f_k(t)=F_j(clock<t)[r_k({j})−s_k]
+                   +F_j(clock=t)[r_k({j,k})−s_k].
+
+Take the supremum over EVERY actual finite response on that suffix
+calendar and write L_k=sup_t f_k(t). The full suffix cap is EXACTLY
+
+    b_k(m)=s_k+m L_k,             b_j(m)=s_j.     (CB.2)
+
+Literal Never has value m r_k({j}); the late finite value adds
+(1−m)s_k>0, so it is included and dominated. Crucially L_k can be
+NEGATIVE: a finite clock BEFORE the first suffix atom is not invented
+when the original consecutive root/suffix dates lack one. Formula
+(CB.2) uses the existing complete response calendar, including its
+final empty test. No diffusion or inserted empty gap is performed.
+
+For actual original realizers, first remove the vanishing unwanted
+suffix mass of ℓ,h and the vanishing finite mass of i. Product-TV
+changes alter ALL pure response payoffs uniformly by a vanishing
+amount. Retain j's complete conditional finite calendars F_j^q and
+extract their bounded L_k^q. Formula(CB.2) holds at EVERY finite index
+and is uniform in m. Its limits therefore give simultaneously valid
+full payoff/cap pairs for all m in a compact interior interval and
+all fixed roots near (x₀,y₀). They are in the ORIGINAL full carrier.
+No compact point is called an executable integer stopping time.
+
+Let c=(1−x)(1−y). With root rates x,y for ℓ,h and zero for i,j, write
+Q_k for pure root-Quit value, A_k for passive root payoff, and R_k^0
+for the prescribed one-root terminal payoff, taking zero on the
+all-root-Continue event. All are multiaffine polynomials in x,y:
+
+    R_i^0=A_i, R_j^0=A_j,
+    R_ℓ^0=x Q_ℓ+(1−x)A_ℓ,
+    R_h^0=y Q_h+(1−y)A_h.
+
+Every prescribed full payoff, with no unpriced future coalition, is
+
+    U_k=R_k^0+c m r_k({j}).                      (CB.3)
+
+In a neighborhood of the original parameters the strict root-only
+and later-only gaps give B_ℓ=Q_ℓ, B_h=Q_h and B_j=A_j+c s_j. The
+ENTIRE i cap is
+
+    B_i=max(Q_i,A_i+c[s_i+m L_i]).               (CB.4)
+
+Its original two branches tie. Define the root polynomial
+
+    W(x,y)=Q_i−A_i−c s_i,       W(0,0)=0.
+
+The tie equation is W=c m L_i. All these formulas are full-cap
+equalities, not lower ledgers for selected responses.
+
+### CB4. A true-minimum multiaffine surface gives the contradiction
+
+If L_i=0, keep the original root fixed and vary m two-sided. Both
+i cap branches, and every other full cap, are then constant locally.
+All prescribed payoffs are affine. Global minimality gives total debt
+δ throughout the interval. Increasing m strictly lowers the literal
+Never c(1−m), contradicting least Never. Equivalently common individual
+debts would require constant d_j=c(1−m)s_j. Contradiction.
+
+If L_i≠0, solve the tie EXACTLY for
+
+    m(x,y)=W(x,y)/[c(x,y)L_i].                   (CB.5)
+
+Since the original m lies strictly between0 and1 and c>0, this is
+feasible on an open two-sided rectangle around the original positive
+nonsure x₀,y₀. The strict other-owner cap gaps persist there. Let
+S_j=∑_k r_k({j}) be j's social singleton column, of ANY sign.
+On the entire tie surface, the true full debt is
+
+    P(x,y)=Q_i+Q_ℓ+Q_h+A_j+c s_j−∑_k R_k^0
+                                                  −(S_j/L_i)W.
+
+This is a MULTIAFFINE POLYNOMIAL in x,y. Every nearby point is an
+original attainable-carrier pair with D=P≥δ, with equality at its
+interior original point. A multiaffine polynomial with an interior
+minimum on an open rectangle is constant. (For two variables, its
+linear terms at the minimum vanish, and a nonzero mixed term takes
+both signs.) Thus the whole local tie surface consists of TRUE full
+minima, not merely zero first-order directions.
+
+Common individual debts now make
+
+    d_j(x,y)=s_j[c(x,y)−W(x,y)/L_i]              (CB.6)
+
+constant on that rectangle. It too is a polynomial, hence constant
+algebraically everywhere. Evaluate this IDENTITY at x=y=0: c=1 and
+W=0, giving d_j=s_j. At the original actual source it instead equals
+
+    d_j=c₀(1−m₀)s_j=ν_min s_j<s_j,
+
+because x₀,y₀>0, m₀>0, all rates are nonsure and s_j>0. Contradiction.
+The distant point (0,0) need not preserve caps or describe a minimum;
+ONLY a polynomial identity is evaluated there. No unrelated minimum
+suffix, cap–Nash root, or independent public mixture is used.
+
+There is also a proof of this last step using ONLY least literal Never:
+on the true-minimum rectangle ν(x,y)=c−W/L_i is multiaffine, is at
+least ν_min and equals ν_min at its interior original point. It must
+therefore be constant, again contradicting its algebraic (0,0) value1.
+Common individual debts are thus available but unnecessary for CB.
+
+This closes precisely (CB.1) in alternative(II). It does not show
+that the canonical source supplies (CB.1), eliminate a later-only
+owner with suboptimal prescribed root mass, or handle multiple bridge
+owners. The next full-goal attempt must consume a strictly positive
+finite-conditional regret without ignoring ALL opponent cap inflation.
+
+Sources inspected: `quittingTerminalSemanticPair_rootThenContinuation`
+and `quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, together
+with source Sections6–7,14.3,15–16,18–19. The narrow conditional-
+finite-best-reply search in the mapped root/terminal-diagnostic subtree
+and FRONTIER found no declaration claiming this submode exclusion.
+This is not a complete old-producer coverage audit or an export claim.
+
+### CB5. Runnable exact all-clock and polynomial cross-check
+
+Run the following standard-library verifier from the repository or math
+directory. It checks100 complete random reward tables on genuine
+independent calendars, ALL available finite deadlines and Never, the
+root/suffix envelope and payoff formulas, and multiaffinity after tie
+elimination. Forty cases have L_i<0, so it tests the missing pre-first-
+suffix clock rather than quietly supplying one. The eliminated m can
+leave [0,1] in the POLYNOMIAL checks only; these are algebraic identities,
+not claimed profiles. This supports, but does not replace, CB1–CB4.
+
+```python
+from fractions import Fraction as F
+from itertools import product
+from random import Random
+R=Random(70541); nv=99; j=1
+
+def value(r,laws,k,t=None):
+    q=[dict(p) for p in laws]
+    if t is not None:q[k]={t:F(1)}
+    z=F(0)
+    for clocks in product(*(p.keys() for p in q)):
+        weight=F(1)
+        for a,p in zip(clocks,q):weight*=p[a]
+        first=min(clocks)
+        if first!=nv:
+            S=sum(1<<a for a,c in enumerate(clocks) if c==first)
+            z+=weight*r[k][S]
+    return z
+
+def fields(r,x,y):
+    roots=[{nv:F(1)},{nv:F(1)},{0:x,nv:1-x},{0:y,nv:1-y}]
+    Q=[value(r,roots,k,0) for k in range(4)]
+    A=[value(r,roots,k,nv) for k in range(4)]
+    V=[value(r,roots,k) for k in range(4)]
+    return Q,A,V,(1-x)*(1-y)
+
+negative=0; nonzero=0
+for case in range(100):
+    r=[{S:F(R.randint(-8,8)) for S in range(1,16)} for k in range(4)]
+    for k in range(4):r[k][1<<k]=F(R.randint(1,3))
+    s=[r[k][1<<k] for k in range(4)]
+    finite=[{nv:F(1)},{1:F(1,3),3:F(2,3)},{nv:F(1)},{nv:F(1)}]
+    L=[max(value(r,finite,k,t)-s[k] for t in (1,2,3,4))
+       if k!=j else F(0) for k in range(4)]
+    negative+=L[0]<0
+    for x,y,m in ((F(1,3),F(2,5),F(1,4)),
+                  (F(2,3),F(1,5),F(3,4))):
+        laws=[{nv:F(1)},{1:m/3,3:2*m/3,nv:1-m},
+              {0:x,nv:1-x},{0:y,nv:1-y}]
+        Q,A,V,c=fields(r,x,y)
+        for k in range(4):
+            assert value(r,laws,k)==V[k]+c*m*r[k][1<<j]
+            H=(1-y if k==2 else 1-x if k==3 else c)
+            suffix=s[k]+m*L[k]
+            assert max(value(r,laws,k,t) for t in (0,1,2,3,4,nv)) \
+                   ==max(Q[k],A[k]+H*suffix)
+    if L[0]==0:continue
+    nonzero+=1; social=sum(r[k][1<<j] for k in range(4))
+    def polynomials(x,y):
+        Q,A,V,c=fields(r,x,y)
+        W=Q[0]-A[0]-c*s[0]
+        P=Q[0]+Q[2]+Q[3]+A[1]+c*s[1]-sum(V)-social*W/L[0]
+        dj=s[1]*(c-W/L[0])
+        return P,dj
+    corners=[polynomials(F(x),F(y))
+             for x,y in ((0,0),(0,1),(1,0),(1,1))]
+    for x,y in ((F(1,3),F(2,5)),(F(2,7),F(4,5))):
+        direct=polynomials(x,y)
+        for k in (0,1):
+            interp=((1-x)*(1-y)*corners[0][k]
+                    +(1-x)*y*corners[1][k]
+                    +x*(1-y)*corners[2][k]+x*y*corners[3][k])
+            assert direct[k]==interp
+        Q,A,V,c=fields(r,x,y); W=Q[0]-A[0]-c*s[0]
+        m=W/(c*L[0])
+        formal=Q[0]+Q[2]+Q[3]+A[1]+c*s[1]-sum(V)-c*m*social
+        assert formal==direct[0]
+    assert polynomials(F(0),F(0))[1]==s[1]
+print('PASS: 100 exact all-clock calendars; negative L_i cases',
+      negative,'; nonzero-L polynomial cases',nonzero)
+```
+
+The displayed command was run and printed PASS with40 negative-L_i
+calendars and92 nonzero-L_i polynomial cases. No new table, local
+constant or bounded response-menu producer is attached to this check.
