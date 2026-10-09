@@ -27400,3 +27400,86 @@ of all independent draws and all five pure response classes on30 arbitrary
 signed tables at four donation amplitudes. This checks the algebra only:
 those tables are not global-minimum sources, and no numeric feasibility,
 novelty, export, or independently reviewed source exclusion is claimed.
+
+### Full finite transfer cannot leave the paid owner quietly at its floor
+
+This is a separate finite-amplitude boundary, NOT a successful repair.
+Keep the same supplied labels and set i to PureNever. Leave l's original
+root rate y unchanged. Give t root rate ξ∈[0,x), and give k the sole
+future finite rate
+
+    η=(x−ξ)/(1−ξ) at date2, with Never rate n_i/(1−ξ).
+
+All four laws are independent. The literal joint Never is now EXACTLY
+ν*=n_i n_l; the k finite rate is positive throughout the stated interval.
+The prescribed finite i mass has been transferred to other owners rather
+than relocated, so the old matching equation (NC.42f) is not imposed.
+
+Write q_i=r_i({i,k})−r_i({k}), T_ik=Γ_ik+q_i⁺, as above. Deleting i's
+law, its complete nonroot envelope is the larger of joining k and waiting
+until after k. The old empty test is also included because Γ_ik>0. Let
+G_i(ξ) be its root reply minus that entire nonroot envelope. Conditioning
+on t's root draw, or directly enumerating all independent outcomes, gives
+
+    G_i(ξ)=−(1−ξ)g_i−n_l(x−ξ)T_ik+ξe_i,
+    d_i(ξ)=ν*s_i+n_l(x−ξ)q_i⁺+G_i(ξ)⁺.          (NC.42n)
+
+Here g_i=B_i−Q_i>0 is the ORIGINAL i root gap and e_i is the full
+mixed joining coefficient in (NC.42k), with l's root rate y; it does
+not depend on i's deleted root law. The original minimum debt is
+d_i*=ν*s_i+xg_i. Thus any output with D≤δ must satisfy the exact
+necessary equality
+
+    n_l(x−ξ)q_i⁺+G_i(ξ)⁺=xg_i.
+
+Indeed the global floor first makes it a full minimum, and the SAME
+table's common minimum debt vector then supplies the equality. In the
+additional q_i≤0 subcase, any potential return must have a STRICTLY
+dominant new i-root cap, G_i=xg_i>0. It cannot leave i quietly c-active.
+Since G_i is affine, G_i(0)<0 and G_i(x)=−n_i g_i+xe_i, a necessary
+condition for such a return with ξ<x is e_i>g_i/x. In particular the
+ENTIRE quiet-i cell fails, and even e_i≤g_i/x rules out this full-transfer
+family in that q_i≤0 subcase. The q_i>0 joining-cap exception is explicit
+and live; none of these hypotheses is supplied universally by the source.
+This prices why simply over-repairing the selected owner's finite regret
+does not finish the all-player funding argument. No source arm is excluded.
+The full own-debt identity was separately checked on50 signed rational
+tables and four amplitudes; this is algebra validation, not source evidence.
+
+### A source-supplied reciprocal negative singleton comparison
+
+One stricter source census supplies more actual negative-column information
+for the next coupled test. Suppose, IN ADDITION, that l is root-only and t
+is c-active. Then C={i,k,t}. Put
+
+    α=r_i({l})−r_i({i,l})>0,
+    β=r_l({i,l})−r_l({i})>0,    S=Σ_h s_h.
+
+On the selected smooth branch P from (NC.42a), exact debt subtraction gives
+
+    P(x,y)=(1−x)(1−y)S+xyα+(1−y)xβ.
+
+The SAME common θ from (NC.42b) gives P_y=θH_l>0, because H_i<0
+and H_l>0. Consequently xα>n_iS+xβ and, at the minimum,
+δ=P>n_iS+xβ. On the other hand the genuine output margin gives
+B_l−s_l=x(Γ_li+β)>δ. These two inequalities force Γ_li>0.
+
+Now apply the COMPLETE Q5 inequality to the singleton column λ=e_i.
+Owners k and t have marginal Never1; Γ_ki>0 follows from K_ik≥0.
+The diagonal i entry is0 and l is the sole non-C owner, so Q5 reads
+
+    Γ_ki+(Γ_ti)⁺≥s_i+Γ_li+Γ_ki+Γ_ti.
+
+It follows that
+
+    Γ_ti≤−s_i−Γ_li<0, while Γ_it<0.             (NC.42o)
+
+Thus this ACTUAL source subcase has the reciprocal negative singleton
+pair i,t, and reciprocal positive singleton pairs i,l and i,k. No local
+fixture, new source selection or absorbing-floor substitution was used.
+This does not supply a sign for the i,t participant joining rewards or
+any outsider triple. It does not identify the premium core, satisfy the
+complete nine-parameter paired producer, or eliminate this source subcase.
+The operational next question is whether a t punishment followed by the
+positive k donor can fund i's change while accommodating the actual i,t
+joining responses; (NC.42j,o) alone cannot discard those responses.
