@@ -34,6 +34,13 @@ test. Thus no full exact/robust drift potential exists anywhere in
 that family. The true-punishment gate correction survives; another
 counterexample attempt must change the odd-three root/control
 mechanism, not fit a larger polynomial at its solved points.
+AF below tests a genuinely different whole-game positive mechanism:
+an auxiliary proximal value-agent game built from a hypothetical full
+potential. Its Nash existence is valid, but the hoped positive charge
+is false. Under that very potential EVERY auxiliary equilibrium is
+AllContinue, and its global above-own minimum explicitly supplies one.
+This is an exact failure of charge/actual-payoff forcing, not a problem
+with Kakutani, a positive-gap table or another clock-grammar census.
 The full Fin4 question and both least-Never consumers remain OPEN.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
@@ -21489,3 +21496,171 @@ assert s.simplify(s.diff(f,S)-(14/u**3-8/u**5-8)) == 0
 assert f.subs(S,s.Rational(1,2)) == -s.Rational(2679,2500)
 print('SG4 full-table active crossing and universal quiet lift: exact PASS')
 ```
+
+## AF. A whole-game proximal value-agent fixed point forces the WRONG branch
+
+Status: COMPLETE ordinary mechanism falsifier. This is an attempt at an
+arbitrary-table positive proof, not another selected transport table.
+The auxiliary Nash construction is valid; its hoped positive-absorption
+conclusion is false. It actually selects only zero-charge equilibria
+under a hypothetical full potential. No UE class, negative table,
+additional frontier reduction or export is claimed.
+
+### AF1. The intended all-game contradiction and actual auxiliary game
+
+Fix ANY finite nonempty player set, original reward table |r|≤M and
+box radius B>M. Suppose φ is C² on the box and decreases by at least
+a(q) on EVERY full exact Nash edge v→F(v,q) there. For normal Fin4
+tables with a positive own, the rational polynomial characterization
+is the actual no-UE source of such a φ; no selected clock family or
+stationary completeness assumption is used in this test.
+
+The proposed route was to add value players whose optimization turns
+that asserted positive drift into a contradiction at an internally
+produced exact root. The original hazard owners choose independent
+rates q_i∈[0,1]. Two AUXILIARY analytical players choose vectors
+u,w in the full convex box. They are NOT agents in the original game,
+and no implementation of their choices as live rewards is assumed.
+
+Fix 0<λ<1. Write c(q)=∏(1-q_i), a=1-c and
+R(q)=Σ[S≠∅]μ_q(S)r(S). Define the discount/live-value payoff
+
+    U(u,q)=[R(q)+λc(q)u]/[a(q)+λc(q)].
+
+This is continuous even at q=0, where U=u, and belongs to the same
+box. Each original hazard owner's auxiliary payoff is U_i. Let L
+bound the Euclidean Hessian operator norm of φ on that box, choose
+2κ>L, and give the value players payoffs
+
+    u-player: -φ(U(u,q))-κ‖u-w‖²,
+    w-player: -‖w-U(u,q)‖².
+
+This exact finite-dimensional game has a PURE equilibrium in these
+continuous rate/value variables. Each U_i is a linear-fractional
+function of its own q_i with strictly positive denominator, so its
+best-reply set is an endpoint or the entire interval and hence convex.
+For fixed q,w put δ=λc/(a+λc)∈[0,1]. The u-player's minimization
+objective has Hessian
+
+    δ²D²φ(U)+2κI ≽ (2κ-L)I>0,
+
+so its best reply is unique. The w-player also has a unique reply.
+Continuity and compactness make all best-reply correspondences upper
+hemicontinuous. Kakutani on the product of intervals and boxes thus
+produces the stated equilibrium. This does not average a nonconvex
+potential or pretend that a mixed coordinator gives a pure mean root.
+
+At such an auxiliary equilibrium w=U. Put
+
+    v=(1-λ)U+λu.
+
+The actual ORIGINAL reward table satisfies F(v,q)=U, and q is FULL
+binary root Nash at v. Indeed the displayed fraction is the unique
+stationary Bellman solution for live continuation v; its dependence
+on an owner's rate is linear-fractional, with the same sign as its
+Quit-minus-Continue root gap. Endpoint maxima, including quiet and
+sure owners, are exactly the ordinary root Nash conditions. Thus
+this part of the hoped producer is entirely valid and literal.
+
+### AF2. Every charged auxiliary equilibrium contradicts φ, including sure faces
+
+The feasible u-direction U-u is in the convex box. First-order
+optimality for the u-player, using w=U, gives
+
+    δ∇φ(U)·(U-u)-2κ‖U-u‖²≥0.
+
+If δ=0, this forces u=U. Then v=U and any a>0 is an actual charged
+self-loop, immediately contradicting full drift. No division by a
+sure-face survival is hidden here.
+
+If δ>0, Taylor's bound along the SAME boxed segment gives
+
+    φ(v)-φ(U)
+      ≤[Lλ²/2-2λκ/δ]‖U-u‖²≤0.
+
+The coefficient is strictly negative: δ≤1, λ<1 and 2κ>L imply
+2κ/δ>Lλ/2. This bound is stronger than an absorption-relative seam
+estimate: the actual source/head potential difference is nonpositive.
+Full drift would require it to be≥a. Therefore EVERY auxiliary
+equilibrium under the hypothetical certificate has a=0 and q=0.
+Neither λ→0 nor a uniform positive hazard assumption is needed.
+
+This reverses, rather than proves, the indispensable positive-charge
+implication of the proposed whole-game route.
+
+### AF3. The quiet branch is internally supplied and NOT an actual payoff witness
+
+The dead branch is not an accidental bad selector that generic Nash
+existence might avoid. Let m be ANY global minimum of φ on the box.
+The implemented theorem
+`IsQuittingFullExactRootPotential.minimum_above_singleton` in
+`Projective/FullExactRootPotentialMinimum.lean` implies
+
+    m_i>r_i({i})  for EVERY owner i.
+
+That source declaration was read with its exact imports and minimum,
+box and derivative hypotheses; no normality is needed for this fact.
+Now take q=0, u=w=m. Owners strictly prefer Continue, since their
+auxiliary live payoff is m_i and own Quit gives r_i({i})<m_i.
+The w-player is optimal. The u-player's alternative u′ gives
+φ(u′)+κ‖u′-m‖²≥φ(m), so it too is optimal. Hence THIS quiet
+auxiliary equilibrium exists at every λ and κ as above, independently
+of the fixed-point theorem. AF2 says there is no charged alternative
+when the full potential assumption holds.
+
+At q=0 the original raw game actually plays AllNever and pays0,
+NOT m. The vector m is only the auxiliary live-payment/continuation
+annotation. Its strict-above-own property is exactly why this
+unrealized fixed point is Nash. Positive own singletons make the
+actual original AllNever profile profitable to deviate from; they
+do NOT make this auxiliary quiet branch profitable to leave. No
+actual stopping law, terminal payoff or unrestricted cap vector
+has been produced at m.
+
+Even without assuming a full potential, the false positive-charge
+assertion has a tiny explicit solved-game falsifier: all original
+terminal rows equal(1,1,1,1), B=3, φ(v)=Σ_i(v_i-2)², κ=2.
+For every λ∈(0,1), q=0,u=w=(2,2,2,2) is the auxiliary equilibrium
+just checked. The original game is solved by immediate quitting;
+this φ is NOT a full potential. Thus the example refutes only the
+charge-forcing inference from auxiliary Nash existence, not Fin4 UE
+or any actual no-UE source. No reward-table search is involved.
+
+The general no-UE source inspected is
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `Projective/PolynomialForwardCertificateCharacterization.lean`;
+AF uses its full-potential output only hypothetically. The positive
+own/normal/actual punishment-sure gate would still have to be present
+to invoke that source. The full characterization declaration was
+reread here; SG1 had already pinned its negative consumer and actual
+sure-root gate. The new narrow lookup found no proximal/value-agent
+theorem in the chosen projective subtree.
+
+The exact algebra behind AF1 was separately checked as follows;
+the fixed-point and global-minimum arguments above are not attributed
+to this short symbolic calculation.
+
+```python
+# AF exact one-owner Bellman and Nash-sign identities
+import sympy as s
+q,h,la,Q,R,u = s.symbols('q h la Q R u', real=True)
+a = 1-(1-q)*h
+c = (1-q)*h
+U = (q*Q+(1-q)*R+la*c*u)/(a+la*c)
+v = (1-la)*U+la*u
+assert s.simplify(q*Q+(1-q)*(R+h*v)-U) == 0
+gap = Q-(R+h*v)
+assert s.simplify(s.diff(U,q)-gap/(a+la*c)) == 0
+print('AF literal Bellman and full-rate endpoint sign transfer: exact PASS')
+```
+
+Direction change: pure proximal augmentation does NOT turn a global
+negative certificate into an absorbing root. Its fixed points are
+compatible with the certificate precisely because their payoff is
+unrealized at zero hazard. I will not optimize κ, add forced hazard
+floors (whose error/charge ratio is uncontrolled), or tune a selected
+table to repair this dead branch. A surviving all-game proof must
+enforce actual payoff/cap realization OR use a genuinely nonlocal
+return mechanism, while an unrestricted negative search must retain
+the complete actual sure gate and all-edge drift. The conjecture and
+both least-Never consumers remain open.

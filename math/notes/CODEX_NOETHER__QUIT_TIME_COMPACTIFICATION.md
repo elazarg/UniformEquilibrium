@@ -25357,3 +25357,82 @@ A c-active finite owner need not itself supply the original first root;
 no such strengthening of frozen Section14.3 is assumed. No source case,
 including Ψ=0 partial bridges or ≥3 suppliers, is counted as consumed by
 these identities.
+
+One exact funding boundary of this family is now settled. Put
+S_i^solo=Σ_k r_k({i}). If S_i^solo≤0, (NC.31) gives
+
+    D(new)≥D(base)≥δ
+
+for EVERY legal x,z and every original finite law shape. Thus this single
+final-owner operation cannot itself descend in that sign chamber. Joint
+Never remains ν*, so equality alone does not contradict least Never. A
+different cap–Nash re-rooting with smaller full Never is not excluded.
+When S_i^solo>0 the exact direct-descent test, not yet proved, is
+
+    μ h_i S_i^solo > D(base)−δ
+                         +Σ_(k≠i)e_k[μ T_ki−θ_k]⁺.
+
+Frozen Section14.3 supplies c-activity and finite mass, NOT positivity of
+this COLUMN's social singleton reward. The positive Γ-simplex gives
+Σ_i λ_i S_i^solo=S+Σ_k(Γλ)_k>0, so some column is positive, but does not
+identify it with the supplied c-active finite owner. No row/column or
+bridge/c-activity implication fills this gap. If all such owners have
+nonpositive solo social reward, the next literal operation must change
+which owners contribute the new final finite mass, or fund a genuine
+re-rooting; repeating a one-owner final relocation cannot repair it.
+
+The positive-column transfer was tested literally, not inferred from that
+column's sign. Suppose the chosen c-active finite donor i has nonpositive
+S_i^solo. The positive Γ-simplex supplies a DISTINCT owner j with
+S_j^solo>0. Let m_i=1−n_i and remove μ∈[0,m_i] of i's old finite mass,
+proportionally from F_i. Add a NEW final finite mass to j, keeping ALL its
+old finite draws unchanged:
+
+    n_i^new=n_i+μ,       η=n_j μ/(n_i+μ),
+    n_j^new=n_j−η=n_i n_j/(n_i+μ).
+
+The new j mass η is at one empty date after every old finite draw. This
+works even if j originally had NO finite mass; no nonexistent F_j is used.
+All other laws stay unchanged. The whole joint Never product is unchanged.
+The base is the actual profile with only i's finite mass censored to Never;
+j is still its OLD law there. The same complete final-cap formula gives
+
+    D(new)=D(base)+Σ_(k≠j)e_k[η T_kj−θ_k(base)]⁺
+                           −μ h_i S_j^solo,    (NC.32)
+
+where h_i is the ORIGINAL product of i's opponent Never masses, and the
+base's deleted survival and late premium define e_k,θ_k as before with
+j replacing the final owner. The coefficient equality η h_j(base)=μ h_i
+is exact, not first order. In particular a positive social column removes
+the previous wrong-sign barrier but does not price D(base)−δ.
+
+There is a mandatory born cap on the donor i itself. Its base cap and
+Never response are unchanged by its own censoring, hence θ_i(base)=0
+by original c-activity. Put
+
+    Γ_ij=r_i({j})−s_i,
+    T_ij=max(0,r_i({i,j})−s_i,Γ_ij),
+    γ_i=∫_(old finite t)[B_i−V_i(t)] dp_i(t)≥0.
+
+Exact own payoff and cap subtraction yields
+
+    d_i(new)−d*_i
+       =−μ γ_i/m_i
+         +μ h_i[T_ij/(n_i+μ)−Γ_ij].            (NC.33)
+
+Thus if γ_i=0, the donor debt is STRICTLY larger than d*_i for EVERY
+0<μ<m_i. Indeed the fresh table has Γ_ij≠0: its own and passive singleton
+entries are distinct. If Γ_ij<0 the bracket is positive; if Γ_ij>0,
+T_ij≥Γ_ij and n_i+μ<1 again make it positive. Common debt at every full
+minimum then forces D(new)>δ throughout this ENTIRE interior family.
+At μ=m_i the strict conclusion persists unless Γ_ij>0 and T_ij=Γ_ij;
+that equality endpoint is not asserted to be a minimum or a consumer.
+
+This is an actual finite-amplitude obstruction to spending a positive
+column through a finite-best-reply donor, including the γ_i=0 premium-only
+mode. It is not a table counterexample or an exclusion of that source mode.
+For γ_i>0, (NC.33) retains the exact funded term rather than replacing it
+by total debt. In either mode a different root over the honest changed
+suffix can still lie outside this direct-transfer calculation. Its complete
+cost c_xD(w)−δ and its actual full Never remain the next funding test;
+the donor's mandatory cap cannot be removed by changing only its own law.

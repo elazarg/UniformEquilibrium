@@ -63,6 +63,16 @@ target, excluding every full exact/robust potential, not failed
 numerical fits. The buffered gate repair survives, but the next
 counterexample attempt must change the odd-three crossing/quiet-lift
 mechanism itself; local sure-root geometry supplied no positive gap.
+The independent AF test then tries an arbitrary-table proximal
+value-agent Nash construction instead of another table or clock
+architecture. Its fixed-point existence and exact ORIGINAL root
+identity F((1−λ)U+λu,q)=U are valid. But its indispensable positive
+charge is false: under a full C² drift potential EVERY auxiliary
+equilibrium has q=0, and a global potential minimum above every own
+singleton explicitly supplies this quiet equilibrium. Its stored U
+is an auxiliary live payoff, not original AllNever0. Thus pure Nash
+augmentation is not a global realization/forcing principle; the
+attempt is retired without hazard-floor or coefficient tuning.
 General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/
