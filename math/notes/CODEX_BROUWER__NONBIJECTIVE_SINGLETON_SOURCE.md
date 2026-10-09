@@ -50,6 +50,12 @@ which equality in one owner's joint-Never debt floor makes that PRODUCT
 constant on the whole minimum fibre. It still fixes no individual mass
 and supplies no debt-nonincreasing operation.
 
+The subsequent FP check retires one generic finite-amplitude shortcut:
+minimizing over ALL independent laws at fixed literal joint Never need
+not attain the summed singleton debt floor. Its two-player exact
+unrestricted calculation is not a counterexample to the positive-full-
+minimum source and does not forbid product-preserving changes there.
+
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
 separations but the full existential-producer union still UNRESOLVED.
@@ -15663,3 +15669,66 @@ this result. No full-envelope nonincrease, finite-amplitude descent,
 or minimum-fibre return has been established. The next question is
 still to construct such an actual coupled operation, now respecting
 the equality budget in this subcase.
+
+## FP: fixed joint Never does not make the singleton floor attainable
+
+Status: COMPLETE ordinary exact falsifier of a GENERIC proposed
+subproblem, not independently reviewed or Lean checked. It changes
+the current whole-law mechanism: do not try to close FG.S merely by
+asserting that product-preserving redistribution plus finite-conditional
+best responses reaches Σ_i s_iν. Additional original-source data
+would be indispensable for that assertion. This is not a new local
+wall, another table surgery, a strategy-class no-go, or a noUE table.
+
+There are TWO players0,1 with independent stopping laws on ℕ∪{Never},
+zero nonabsorbing payoffs, and complete reward data
+
+    r({0})=(1,0),   r({1})=(0,1),   r({0,1})=(1/2,1/2).
+
+Never pays0. Each deviation is an arbitrary complete independent
+stopping law, equivalently unrestricted behavioral stopping on the
+unique live history. For EVERY prescribed pair, put n_i=p_i(Never)
+and fix n₀n₁=ν∈[0,1]. Use the FULL finite/Never cap, and SUM debt D.
+The exact global answer over ALL such laws is
+
+    inf_{p₀,p₁: n₀n₁=ν} D(p₀,p₁)=√ν+ν.       (FP.1)
+
+Proof. Every nonempty absorbing coalition has TOTAL reward1. Hence
+Σ_i U_i=1−ν for every profile, regardless of its finite support,
+unbounded delays, ties or diffuse masses. The legal response Quit0
+has value1−p_j(0)/2 for player i. Therefore its ENTIRE cap obeys
+
+    B_i≥1−p_j(0)/2≥(1+n_j)/2.
+
+No upper-pricing or selected-response replacement is used in this
+lower bound. Consequently
+
+    D=Σ_i B_i−Σ_i U_i
+       ≥ν+(n₀+n₁)/2≥ν+√ν.
+
+Take independently p_i=(1−√ν)δ₀+√νδ_Never. Its full response
+menu consists of Quit0 with value(1+√ν)/2, EVERY later finite
+response with value√ν, and Never with value0. Thus its entire
+cap is(1+√ν)/2 and its SUM payoff is1−ν, attaining the bound.
+This verifies (FP.1) against ALL responses, not merely date0.
+For 0<ν<1 the minimizing marginals are necessarily n₀=n₁=√ν;
+equality in both Quit0 bounds then forces every finite prescribed
+mass to be at0. The displayed minimizing independent profile is
+therefore unique at that fixed product.
+
+Since √ν+ν>2ν for 0<ν<1, the two singleton floors d_i≥s_iν
+are NOT jointly attainable at fixed product. At its actual optimum,
+both finite conditional laws already realize their owner's full cap;
+each inactive Never part bears debt (√ν+ν)/2, larger than ν.
+The final empty finite clock is not maximizing. Thus even exact
+finite-conditional best-response play with movable individual Never
+probabilities does not supply the hoped-for end-floor certificate.
+
+The game itself is SOLVED: (Quit0,Quit0) has payoff(1/2,1/2),
+full caps(1/2,1/2), and debt0. It is an exact terminal Nash profile
+and supplies this fixed uniform payoff after the one-date absorption.
+The positive value in (FP.1) is a RESTRICTED fixed-ν minimum, not
+an unrestricted positive minimum. In particular its own-floor
+payoff/cap margins do not match the accepted source. No Fin4 branch
+has been excluded. The next actual-source operation must reduce
+the real full debt, not an unattainable universal fixed-product floor.
