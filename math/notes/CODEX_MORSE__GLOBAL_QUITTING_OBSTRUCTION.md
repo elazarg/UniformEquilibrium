@@ -2,6 +2,19 @@
 
 Owner: CODEX_MORSE.
 
+Latest independent global selection test: PZ below retires the ENTIRE
+nonnegative scalar terminal-price Nash recipe on ONE fixed, already solved
+canonical single-pivot table. For EVERY finite calendar, EVERY price λ≥0
+and EVERY ordinary independent-law menu Nash profile of the auxiliary game
+with AllNever payoff λe₀, the ORIGINAL unrestricted pivot debt is at least
+1/81. For λ<1 every earlier row is quiet and all final Continue masses
+are at least1/3; for λ≥1 the pivot is literally Never and its original
+debt is at least1. Positive live reach is proved before conditional Nash
+is used. Thus neither λ↑1 from below nor small deleted Never rescues this
+recipe. This is complete ordinary UNREVIEWED mechanism triage, NOT a
+negative quitting table, an exclusion of any actual no-UE source, or a
+retirement of arbitrary terminal vectors/approximate auxiliary selectors.
+
 Latest whole-game test: PD below leaves the selected-source cap charts and
 tests phase-separated, player-specific SIGNED discount pulses. On EVERY
 positive-own table with an actual strictly positive singleton-surplus
@@ -24060,3 +24073,417 @@ was also read; it produces an off-minimum paid port, not impossibility.
 No new active-face use or all-law nonattainment theorem was obtained.
 The attainment/KKT globalization route is therefore not pursued on the
 strength of this already-priced seam; neither actual source case is closed.
+
+## PZ. Every nonnegative scalar terminal-price Nash selector fails on a solved game
+
+Status: COMPLETE ORDINARY UNREVIEWED recipe falsifier. The table is a fixed
+canonical normalization of the previously saved EC table, not a new negative
+candidate or a change of its constants. No actual no-UE source is excluded.
+
+### PZ1. A whole-game scalar-price selection attempt
+
+For an arbitrary canonical four-player quitting table with own singletons
+s=e₀, consider a finite strategic-form game on
+
+    F_N={0,…,N−1,Never},  N≥1.
+
+All four players privately and independently sample complete clocks. A finite
+first coalition S pays the ORIGINAL r(S); only joint Never is changed to the
+auxiliary vector λe₀, where the selector may choose ANY λ≥0. This is an
+auxiliary finite game, not the actual quitting game, whose Never reward stays
+zero. Select any ordinary mixed Nash of this game. The proposed producer
+would then remove the artificial terminal price and use the same clocks in
+the original game. Neither a public lottery nor a controller restriction is
+introduced. Nash in the auxiliary game compares every mixed law on F_N;
+the desired original conclusion compares EVERY finite deadline and Never,
+hence every complete unilateral behavioral law.
+
+Here is the exact reason this appeared to bypass the old zero-price menu
+obstruction. Let n_i be the literal Never masses, ν=∏_i n_i, and
+h₀=∏_(i≠0)n_i. Let U₀ and B₀ be the original prescribed payoff and full cap.
+The auxiliary prescribed payoff is U₀+λν. An auxiliary finite pure reply
+has its original value; an auxiliary Never reply has its original value
+plus λh₀. Every original deadline after the menu has the Never value plus
+h₀. Consequently auxiliary exact menu Nash gives
+
+    B₀−U₀ ≤ max(λν, h₀[1−λ(1−n₀)]).                 (PZ.1)
+
+Every nonpivot full original debt is zero: its price is zero, and its own
+singleton is zero, so its omitted late reply equals its menu Never reply.
+The tempting scalar feedback is
+
+    λ(1−n₀)≥1,     λν→0.                            (PZ.2)
+
+This is SUFFICIENT, not necessary. Small h₀ could instead make the second
+term of(PZ.1) small even when the feedback fails. The result below excludes
+ALL λ≥0 selections on the fixed table, including both alternatives. It
+does not rely on treating(PZ.2) as a necessary equilibrium condition.
+
+### PZ2. Literal fixed table, root algebra and the solved-game caveat
+
+Indices are modulo4. Set z=r−e₀ at EVERY finite nonempty coalition. Its
+own singletons are zero, its singleton host j gives−1 to j+1 and2 to the
+other two observers, and EVERY nonsingleton gives1 to its members and2
+to nonmembers. The entire ORIGINAL canonical reward table is
+
+| S | r(S) |
+| --- | --- |
+| 0 | (1,−1,2,2) |
+| 1 | (3,0,−1,2) |
+| 2 | (3,2,0,−1) |
+| 3 | (0,2,2,0) |
+| 01 | (2,1,2,2) |
+| 02 | (2,2,1,2) |
+| 03 | (2,2,2,1) |
+| 12 | (3,1,1,2) |
+| 13 | (3,1,2,1) |
+| 23 | (3,2,1,1) |
+| 012 | (2,1,1,2) |
+| 013 | (2,1,2,1) |
+| 023 | (2,2,1,1) |
+| 123 | (3,1,1,1) |
+| 0123 | (2,1,1,1) |
+
+Original Never is0. This is exactly EC's r−(0,1,1,1), with no change in
+its normalized singleton matrix. The EC7 cyclic-tail data therefore STILL
+apply after reversing player order: Γ offsets(0,−1,2,2), A=1+√3,
+survival1/A and tails(0,0,A,2). The directly inspected
+`CyclicSingletonTailData.isUniformEquilibriumPayoff` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonTailProducer.lean` allows
+arbitrary solo levels and arbitrary nonsingleton rewards. Thus this actual
+canonical game ALREADY has an unrestricted fixed uniform-equilibrium target.
+It is not a no-UE example or a restriction on a hypothetical actual no-UE
+source. The price recipe fails to select the available approximate laws.
+
+For a product root q, let t_i=1−q_i, χ=∏_i t_i and h_i=∏_(j≠i)t_j.
+Write g_i(v,q)=Quit−Continue in the z root with annotation v, and H(v,q)
+for its head. Root translation is exact:
+
+    F_r(w,q)−e₀=F_z(w−e₀,q),
+    g^r_i(w,q)=g^z_i(w−e₀,q).                        (PZ.3)
+
+Thus the terminal z annotation of the priced finite game is
+v=(λ−1,0,0,0). This is a one-stage algebraic identity used consistently at
+EVERY conditional row, not a claim that changing finite rewards preserves
+the original Never payoff. Because z's participant reward is1 whenever
+any opponent quits,
+
+    Q_i(q)=1−h_i,    H_i(v,q)≥Q_i(q)                 (PZ.4)
+
+at EVERY exact binary Nash root. The head inequality follows separately
+for a quiet owner, a mixing owner and a sure owner. There is NO sure Nash
+root at ANY signed annotation. Indeed, if h is sure, both nonfavorite
+observers i∉{h,h+1} have gap−1 conditional on h quitting, regardless of
+all other rates, and must be quiet. The favorite h+1 then has gap2 and
+must be sure. Owner h now has gap−1 against that sure favorite and cannot
+be sure, a contradiction. This checks the entire sure slab, not only
+pure coalitions or a stationary annotation.
+
+Two consequences of the full upper-orthant census will be used. At v≥0
+every nonzero root is a SINGLE supplier j, with
+
+    v_j=0,    v_(j+1)≥2q_j/(1−q_j).                 (PZ.5)
+
+Its head has H_j=0 and H_i>0 at EVERY other owner. To recheck the census:
+a proper active set A of size≥2 contains i∈A with predecessor i−1∉A.
+Every nonempty opponent event inside A has joining gap−1 for i, and the
+empty event has gap−v_i≤0. It cannot be active. For full support, the
+sure slab has already been excluded, and the exact identity is
+
+    Σ_i t_i g_i = −χΣ_i v_i
+                  −2Σ_(|S|=2)μ_q(S)−Σ_(|S|=3)μ_q(S)<0,             (PZ.6)
+
+contradicting all four mixed gaps zero. For singleton j, its own gap is
+−v_j and its favorite's gap is2q_j−(1−q_j)v_(j+1), proving(PZ.5).
+The favorite head is at least q_j>0; the two nonfavorites have head at
+least2q_j>0. In particular v>0 has ONLY AllContinue.
+
+### PZ3. Ordinary menu Nash has positive live reach; no off-path root assumption
+
+Fix a mixed Nash of the AUXILIARY finite strategic-form game. Define
+s_i(t)=P(T_i≥t), treating Never as later than every finite date. Every
+positive-mass own pure clock is a global best reply in that finite game.
+At a date t with every s_i(t)>0, the payoff of an own clock at/after t is
+the common earlier-opponent contribution plus a POSITIVE deleted-opponent
+survival factor times its conditional payoff. Thus the conditional own
+law is supported on best replies in the conditional suffix menu. Its
+positive Continue branch averages maximizing later replies; its immediate
+root is Nash at its ACTUAL prescribed conditional continuation. This uses
+only ordinary independent-law normal-form Nash.
+
+Suppose some s_i(t+1)=0, and choose the EARLIEST such t. All s_j(t)>0,
+so the conditional argument applies at t with positive live and deleted
+reach. For an owner whose Continue branch has zero mass, choose any legal
+future clock law as a fallback. Its prescribed finite clock at t is a
+global best reply, so Quit is at least EVERY such Continue deviation;
+the binary Nash inequality holds for that fallback too. If another owner
+is sure, the relevant continuation is screened altogether. Thus this
+would-be boundary really supplies a binary Nash root at a common legal
+continuation; no undefined zero-probability conditional is assumed.
+Its root has at least one sure quitter, forbidden by PZ2 at EVERY
+annotation. Therefore every s_i(t)>0 through N, and in particular EVERY
+literal n_i>0. All conditional roots used below are reached and legitimate.
+No sequential/perfect equilibrium hypothesis is imposed. There are no
+unreachable live dates on which an arbitrary completion or an unused clock
+could change the marginal-Never argument. A row hazard zero means exactly
+zero own finite mass there, since own survival is positive.
+
+### PZ4. All prices below1 have an explicit full original debt floor
+
+Suppose 0≤λ<1. The terminal z annotation is in[−1,0]^4. Its final root
+cannot be quiet: owner0 has gap1−λ>0. It cannot have only one supplier
+j either. Supplier0's own gap1−λ is nonzero; for j≠0 its favorite has
+gap2q_j−(1−q_j)v_(j+1)>0, since v_(j+1)≤0, so that favorite cannot
+be quiet. Hence the final root has at least two suppliers. By(PZ.4) its
+ENTIRE head is strictly positive: each owner has some positive-rate
+opponent and all t_j>0. PZ2 now makes every earlier root AllContinue,
+preserving that same head. This proves the final-row conclusion for the
+entire ordinary menu Nash correspondence, not a chosen root word.
+
+Here is an exact uniform quantitative bound, avoiding any numerical compact
+minimum. At a Nash root with annotation v∈[−1,0]^4, suppose q_h>2/3.
+For either nonfavorite i∉{h,h+1}, conditional on h quitting its gap is−1.
+Conditional on h not quitting its gap is at most2: the empty gap is
+−v_i≤1, a favorite singleton gap is2, every other nonempty gap is−1.
+Thus
+
+    g_i≤−q_h+2(1−q_h)=2−3q_h<0.
+
+Both nonfavorites must be quiet. The favorite h+1 then has gap
+2q_h−(1−q_h)v_(h+1)>0 and must be sure, contradicting the sure-slab
+exclusion. Consequently q_i≤2/3 for EVERY owner, so
+
+    n_i≥1/3,     h₀≥1/27,     ν≥1/81.               (PZ.7)
+
+Let Q₀ and W₀ be the original pivot's final-date and Never values.
+Its original prescribed payoff is q₀Q₀+n₀W₀, while the full cap is at
+least BOTH Q₀ and W₀+h₀. Therefore
+
+    B₀−U₀
+      =q₀(B₀−Q₀)+n₀(B₀−W₀) ≥ n₀h₀=ν≥1/81.       (PZ.8)
+
+All original dates before the final row, at it, after the menu, and Never
+are available to the responder. Additional early replies can only increase
+this lower bound. In particular λ↑1 from below and h₀→0 are not missed
+escape modes. This conclusion uses the ACTUAL independent clock laws.
+
+### PZ5. Every price at least1 keeps the pivot literally Never
+
+Now λ≥1. Terminal z annotation v=(λ−1,0,0,0) lies in the upper orthant.
+If λ=1, PZ2 leaves only AllContinue at the final date and, inductively,
+at every earlier date. If λ>1, the LAST nonquiet root, if any, must be
+singleton3: all possible active owners need own annotation0, and a
+favorite with strictly positive annotation; only owner3 has favorite0.
+The head has sole zero coordinate3, all others strictly positive.
+Every earlier nonquiet root must therefore have the SAME supplier3.
+Quiet rows preserve the input. Thus EVERY priced-menu Nash has
+
+    T₀=T₁=T₂=Never surely; only T₃ may have finite mass.               (PZ.9)
+
+The original pivot prescribed payoff is exactly0, since r₀({3})=0 and
+original Never is0. Quitting at date0 gives at least1, hence its full
+original debt is at least1, irrespective of λ, deadline and owner3's law.
+Moreover its auxiliary prescribed payoff is λn₃ and its auxiliary finite
+date0 reply is at least1. Thus λν=λn₃≥1: even a vanishing n₃ as λ→∞
+does not pay the artificial terminal price.
+
+For completeness, the ENTIRE ordinary priced Nash correspondence in this
+regime can also be checked without roots. Write p_m=P(T₃=m) and
+F_<m=Σ_(t<m)p_t. For laws(PZ.9), owner3 is indifferent between every
+clock, owners1 and2 optimally Never, and pivot0 optimally Never exactly if
+
+    λn₃ ≥ max_(0≤m<N)[1−F_<m+p_m].                 (PZ.10)
+
+Their original full debts are0 for owners1,2,3; pivot0's full debt is
+exactly the right side of(PZ.10), at least1. Original post-menu replies
+give n₃ and Never gives0, so none is omitted from that exact cap. For
+owners1,2, any finite reply pays2F_<m+p_m≤2(1−n₃), their Never value.
+This also proves ordinary normal-form sufficiency of(PZ.10). The λ=1
+case forces every p_m=0 by the first positive atom test.
+
+Combining(PZ.8) and(PZ.9), for EVERY λ≥0, EVERY N≥1, and EVERY auxiliary
+menu Nash,
+
+    ORIGINAL unrestricted exploitability ≥1/81.                     (PZ.11)
+
+N=0, if permitted, has only Never and original pivot debt1, so adds no
+exception. The lower bound concerns this auxiliary-selector class ONLY.
+The same actual game has finite approximate full Nash profiles and the
+existing unrestricted fixed uniform-payoff consumer described in PZ2.
+For the finite claim, truncate its proper approximating cycle clocks after
+a sufficiently large finite date and send their small residual mass to
+Never. The total-variation coupling bounds each prescribed payoff change
+by2M times the sum of all repaired masses, and EVERY response value change
+by2M times the sum of its opponents' repaired masses. Thus the finite
+approximation controls the ENTIRE full cap, not just a displayed reply set.
+
+### PZ6. Exact sources, overlap, diagnostic and the stopping boundary
+
+The original zero-price finite timing encoding and support-best-reply bridge
+were read in `quittingFiniteDeadlineTimingGame`,
+`quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU` and
+`quittingFiniteDeadlineTimingProfile_update_pureTime_eq_mixedEU` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingGame.lean`, plus
+`finiteDeadline_mixedNash_neverSupport_payoff_eq_never` and
+`exists_exactFiniteDeadlineTimingNash` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean`.
+The named production encoding fixes Never0; the λ-priced auxiliary variant
+and the all-selector census above are ordinary finite-game mathematics,
+NOT claimed declarations of those modules. The finite/deleted-Never cap
+identity was checked in
+`quittingFiniteDeadlineTimingProfile_pureTime_eq_never_add_of_le` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineFullReplyCap.lean` and
+`singlePivot_fullExploitability_eq_max_menuExploitability_scalar` in
+`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`.
+Canonical row normalization was read in `quittingSinglePivotNormalizedReward`
+and `quittingSoloReward_singlePivotNormalized` in
+`UniformEquilibrium/Quitting/Root/SinglePivotNormalization.lean`.
+The cyclic solved-game caveat uses the explicit named consumer in PZ2 and
+the actual data from EC7, not a numerical Nash sample.
+
+FX/BP/BU already retire important zero-/negative-price exact-menu selection
+and repetition recipes. PZ does not count another frontier contraction:
+its question was the distinct NONNEGATIVE ONE-COORDINATE endogenous terminal
+price and its exact sufficient transfer(PZ.1). Its full λ-range conclusion
+prevents silently replacing the false feedback inference by λ↑1 from below
+or by small deleted Never. It says nothing about arbitrary vector terminal
+prices, negative scalar prices, genuinely approximate auxiliary Nash,
+time-dependent payoff perturbations, or every simultaneous law selector.
+The earlier EC graph proof supplies the upper-root census; the new use is
+the full normal-form calendar argument and the original full-debt price
+transfer, not a new root-class theorem.
+
+The following exact diagnostic checks the full sixty-cell table, root
+polynomial identities, every sure-slab/nonfavorite identity, the endpoint
+bounds underlying(PZ.7), actual finite-law price transfer for ALL menu replies
+in each tested profile, and the exact(PZ.10) host-law witnesses. The
+normal-form reach/census proof is PZ3–PZ5, not a sampled conclusion.
+
+```python
+# PZ_EXACT_DIAGNOSTIC
+from fractions import Fraction as F
+from itertools import product
+from math import prod
+from random import Random
+import sympy as sp
+
+literal = {
+  1:(1,-1,2,2), 2:(3,0,-1,2), 4:(3,2,0,-1), 8:(0,2,2,0),
+  3:(2,1,2,2), 5:(2,2,1,2), 9:(2,2,2,1),
+  6:(3,1,1,2), 10:(3,1,2,1), 12:(3,2,1,1),
+  7:(2,1,1,2), 11:(2,1,2,1), 13:(2,2,1,1),
+  14:(3,1,1,1), 15:(2,1,1,1)}
+z = {}
+for mask in range(1,16):
+    if mask.bit_count() == 1:
+        j = mask.bit_length()-1
+        row = tuple(0 if i == j else -1 if i == (j+1)%4 else 2
+                    for i in range(4))
+    else:
+        row = tuple(1 if mask >> i & 1 else 2 for i in range(4))
+    z[mask] = row
+    assert literal[mask] == tuple(row[i] + (i == 0) for i in range(4))
+q, v = sp.symbols('q0:4'), sp.symbols('v0:4')
+t = [1-x for x in q]
+chi = prod(t)
+mu = {m:prod(q[i] if m >> i & 1 else t[i] for i in range(4))
+      for m in range(1,16)}
+g, Q = [], []
+for i in range(4):
+    quit, cont = 0, 0
+    for m in range(16):
+        if m >> i & 1:
+            continue
+        w = prod(q[j] if m >> j & 1 else t[j]
+                 for j in range(4) if j != i)
+        quit += w * z[m | (1 << i)][i]
+        cont += w * (z[m][i] if m else v[i])
+    Q.append(sp.expand(quit))
+    g.append(sp.expand(quit-cont))
+    assert sp.expand(quit - (1-prod(t[j] for j in range(4) if j != i))) == 0
+expected = -chi*sum(v) - 2*sum(mu[m] for m in mu if m.bit_count()==2)
+expected -= sum(mu[m] for m in mu if m.bit_count()==3)
+assert sp.expand(sum(t[i]*g[i] for i in range(4))-expected) == 0
+endpoint_checks = 0
+for h in range(4):
+    favorite = (h+1)%4
+    quiet = {q[j]:0 for j in range(4) if j not in (h,favorite)}
+    assert sp.expand(g[favorite].subs(quiet) -
+                     (2*q[h]-(1-q[h])*v[favorite])) == 0
+    for i in range(4):
+        if i in (h,favorite):
+            continue
+        assert sp.expand(g[i].subs(q[h],1)+1) == 0
+        other = [j for j in range(4) if j not in (i,h)]
+        for bits in product((0,1), repeat=2):
+            for vi in (-1,0):
+                sub = {q[h]:0, v[i]:vi}
+                sub.update({q[j]:b for j,b in zip(other,bits)})
+                assert g[i].subs(sub) <= 2
+                endpoint_checks += 1
+
+actions = (0,1,2,None)
+def outcome(choices, price):
+    finite = [x for x in choices if x is not None]
+    if not finite:
+        return (price,F(0),F(0),F(0))
+    first = min(finite)
+    mask = sum(1 << i for i,x in enumerate(choices) if x == first)
+    return tuple(map(F,literal[mask]))
+def eu(laws, price):
+    total = [F(0)]*4
+    for choices in product(*(tuple(law) for law in laws)):
+        weight = prod(laws[i][choices[i]] for i in range(4))
+        values = outcome(choices,price)
+        total = [total[i]+weight*values[i] for i in range(4)]
+    return total
+def response(laws, who, time, price):
+    changed = list(laws)
+    changed[who] = {time:F(1)}
+    return eu(changed,price)[who]
+rng = Random(817)
+for sample in range(40):
+    laws = []
+    for i in range(4):
+        weights = [rng.randrange(1,8) for _ in actions]
+        laws.append({a:F(w,sum(weights)) for a,w in zip(actions,weights)})
+    price = F(rng.randrange(0,31),rng.randrange(1,8))
+    nu = prod(law[None] for law in laws)
+    original, auxiliary = eu(laws,F(0)), eu(laws,price)
+    for i in range(4):
+        h = prod(laws[j][None] for j in range(4) if j != i)
+        assert auxiliary[i]-original[i] == (price*nu if i == 0 else 0)
+        for clock in actions:
+            delta = response(laws,i,clock,price)-response(laws,i,clock,F(0))
+            assert delta == (price*h if i == 0 and clock is None else 0)
+        never = response(laws,i,None,F(0))
+        assert response(laws,i,3,F(0)) == never + (h if i == 0 else 0)
+for price in map(F,(1,2,4,7,100)):
+    rate = (price-1)/(price+2)
+    laws = [{None:F(1)} for _ in range(3)] + [{2:rate,None:1-rate}]
+    values = eu(laws,price)
+    for i in range(4):
+        assert all(response(laws,i,a,price) <= values[i] for a in actions)
+    assert eu(laws,F(0))[0] == 0
+    full = max(response(laws,0,a,F(0)) for a in actions+(3,))
+    assert full == 1+rate and full >= 1
+print('PZ exact diagnostic PASS: 60 cells; root identities;',
+      endpoint_checks, 'endpoint bounds; 40 full finite-law price transfers;',
+      '5 ordinary-menu-Nash host witnesses')
+```
+
+The diagnostic was run on these bytes and returned PASS:60 cells, all
+displayed root identities,64 endpoint bounds,40 complete finite-law price
+transfers and5 ordinary-menu-Nash host witnesses. It is arithmetic
+regression evidence, not an independent proof review or a Lean check.
+Reproduce with
+
+    awk '/^# PZ_EXACT_DIAGNOSTIC/{active=1} active && /^```$/{exit} active{print}' notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md | python
+
+No larger price cutoff, constant optimization, or stationary table census
+is pursued. The next whole-game selection must permit genuinely approximate
+law changes not constrained to this exact finite auxiliary correspondence,
+or supply a different all-product-root obstruction. Both actual least-Never
+source configurations and the full Fin4 conjecture remain OPEN. No export,
+Lean implementation/build, source-class count or all-behavior negative table
+is asserted.

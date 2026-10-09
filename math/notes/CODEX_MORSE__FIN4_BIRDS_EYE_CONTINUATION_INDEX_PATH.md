@@ -8,6 +8,24 @@ The requested endpoint is UE for EVERY signed four-player quitting table,
 against EVERY unilateral behavioral deviation, with ONE payoff target
 fixed before the requested accuracy.
 
+Latest simultaneous whole-game selection test: PZ in the global notebook
+uses an endogenous NONNEGATIVE scalar AllNever price λe₀ in the canonical
+single-pivot finite game. Its exact price-removal bound is
+max(λν,h₀[1−λ(1−n₀)]); the feedback λ(1−n₀)≥1 is only sufficient.
+On the SAME fixed canonical EC table, EVERY price λ≥0, EVERY finite
+calendar and EVERY ordinary independent-law priced menu Nash nevertheless
+has ORIGINAL unrestricted pivot debt≥1/81. For λ<1 positive live reach
+and the full root census force only a final nonquiet row, with all
+Never masses≥1/3. For λ≥1 only owner3 can ever have finite mass;
+pivot0 is Never and gains at least1 by quitting. Thus λ↑1 from below,
+small deleted Never and unbounded positive prices do not rescue this
+exact auxiliary selector. The table ALREADY has the tracked cyclic
+singleton uniform payoff with arbitrary nonsingleton rewards. PZ is
+complete ordinary unreviewed recipe triage, no actual no-UE source
+contraction, no negative table, and no claim about vector prices or
+approximate auxiliary laws. The next independent lane must leave this
+entire exact scalar-price correspondence, not tune its cutoff.
+
 Latest independent whole-game attempt: PD in the global notebook tests
 phase-separated player-specific SIGNED discounts, not another least-Never
 cap chart. Even order-t discount pulses admit an exact unrestricted
