@@ -108,6 +108,10 @@ individual Never probabilities preserving their product strictly lowers
 that class floor and births absorbing roots at its endpoint. This changes
 the live operation to individual-Never redistribution with all late caps
 priced. No genuine positive-minimum branch is excluded by the test.
+The live family now also relocates old finite mass of the supplied c-active
+finite owner to a new final date. NC.30–31 retain its complete born final
+collision cap and honest off-minimum censored base. Funding that cost, or
+its complete cap–Nash re-rooting, is the concrete open calculation.
 
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
@@ -25289,3 +25293,67 @@ part of the source, not a new branch reduction. It blocks transporting
 NC11's solved endpoint root birth to the genuine source. The interior full
 response envelopes and optional complete-root success inequalities remain
 OPEN; neither the finite surplus γ nor preserving joint ν proves them.
+
+The next literal family changes finite conditional laws as well. Choose the
+source's c-active owner i with positive finite mass (frozen Section14.3),
+so its OLD final empty reply attains B_i. Choose a distinct finite owner j.
+At each actual finite index choose one new finite date c strictly after all
+old finite draws, retaining the old empty final test before c. For x near
+n_i with 0<x≤1 and y=n_i n_j/x∈(0,1], set
+
+    p_i=x Never+(1−x)[(1−z)F_i+z δ_c],
+    p_j=y Never+(1−y)F_j,              0≤z≤1,
+
+and leave all other laws unchanged. Every random choice remains private and
+independent. Joint Never is exactly the original product. The point
+(x,z)=(n_i,0) is the original profile; at z=1 ALL remaining finite mass of
+i has genuinely moved to the new final date. This is not a Never-only retry.
+
+There is exact full-cap accounting for every amplitude. Define the ACTUAL
+censored base by replacing only i's new final mass μ=(1−x)z by Never. Its
+Never mass is N_i=x+μ; its old finite mass is (1−x)(1−z). Keep j's law at
+the displayed y. For k≠i write
+
+    e_k=∏_(ℓ≠i,k) n_ℓ^base,
+    R_k=V_k(Never,base),      E_k=B_k(base),
+    θ_k=(E_k−R_k−N_i e_k s_k)/e_k≥0,
+    T_ki=max(0,r_k({i,k})−s_k,r_k({i})−s_k).
+
+The nonnegative θ_k is the base's full premium above its OLD empty final
+reply, not a margin transferred from a global minimum. All base finite
+draws precede c. Every finite response before c has its exact base payoff.
+At c the new response adds μ e_k r_k({i,k}) and has singleton term
+x e_k s_k; after c it instead adds μ e_k r_k({i}) with the SAME singleton
+term. Literal Never is dominated by that after-c finite response because
+x e_k s_k>0. Consequently the ENTIRE new cap is exactly
+
+    B_k(new)=E_k+e_k[μ T_ki−θ_k]⁺.             (NC.30)
+
+This includes the newly born simultaneous final coalition {i,k}; taking
+only the after-c passive test would be false. Before-c remote/moving clocks
+are all retained in E_k. For i its own entire cap is unchanged from the
+base, since a unilateral replacement ignores its prescribed law. Its new
+payoff gain is μ h_i s_i, where h_i=∏_(ℓ≠i)n_ℓ^base. Every other prescribed
+payoff gains μ n_k^base e_k r_k({i})=μ h_i r_k({i}). Thus
+
+    D(new)=D(base)+Σ_(k≠i)e_k[μ T_ki−θ_k]⁺
+                        −μ h_i Σ_k r_k({i}).   (NC.31)
+
+These are actual finite-index identities. Along any fixed whole parameter
+path, the previous joint coefficient-set construction and ordinary product
+continuity pass them to the same augmented carrier, including cases where
+the old full cap is approached only by moving finite tests. No δ or minimum
+debt vector is substituted for D(base): the censored, reciprocally reweighted
+base is honestly off minimum and has joint Never (N_i/x)ν*.
+
+The finite-amplitude funding test is still UNPROVED. It must control the
+actual D(base)−δ in (NC.31), all θ_k and the final collision clipping, or
+the exact changed-suffix/cap–Nash cost c_xD(w)−δ with its actual new Never.
+Neither c-activity of i nor singleton social reward alone supplies that
+control. IF there are exactly two original first-root suppliers AND the
+chosen c-active i is one of them, z=1 deletes that supplier, so the earlier
+one-supplier minimum exclusion still blocks an automatic endpoint return.
+A c-active finite owner need not itself supply the original first root;
+no such strengthening of frozen Section14.3 is assumed. No source case,
+including Ψ=0 partial bridges or ≥3 suppliers, is counted as consumed by
+these identities.
