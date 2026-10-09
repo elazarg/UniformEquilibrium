@@ -89,8 +89,9 @@ accounts; quantitative funding and a source-case consumer remain OPEN.
 See [Morse's review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
 The proof section is unchanged. No export or Lean seal is claimed.
 
-CS below gives a further COMPLETE ORDINARY, UNREVIEWED actual-source
-submode exclusion: a ROOT-ONLY POSITIVE first-root supplier cannot be
+CS below gives a further COMPLETE ORDINARY actual-source submode
+exclusion, with an independent Morse soundness PASS: a ROOT-ONLY
+POSITIVE first-root supplier cannot be
 the SOLE owner with prescribed finite mass strictly after that root.
 Its whole old later conditional stays fixed. Two independent mass
 coordinates make the TRUE full debt a maximum of two affine functions;
@@ -99,6 +100,14 @@ individual debts. Every later maximizing calendar is retained, including
 negative single-finite-law cap coefficients. Thus CB's bad-later arm
 requires at least one OTHER owner with post-root finite mass. No total
 funding inequality, general alternative(II) closure or export is claimed.
+CT separately strengthens this to EVERY positive first-root supplier,
+using only its NONZERO root/later gap. CT is COMPLETE ORDINARY,
+with an independent Morse sign/boundary PASS: if exactly one owner has
+post-root finite mass in alternative(II), that owner's root rate is0.
+CU separately excludes that sole future owner being the sole bridger
+itself; CU is COMPLETE ORDINARY, UNREVIEWED. A zero-root NONBRIDGER
+sole-future owner (root-only OR later-only) and the all-zero-future mode
+remain OPEN. No general source-case consumer is inferred.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -16532,3 +16541,238 @@ print('PASS: 100 exact all-clock sparse-suffix tables; negative L_i cases',
 The displayed verifier was run and returned PASS with33 negative-L_i
 cases. No solved fixture, stationary selection or favorable cap choice
 is used to assert the actual-source exclusion.
+
+
+## CS independent review disposition
+
+The frozen CS1–CS4 has an independent Morse soundness PASS with no
+unresolved objection. The review checked complete finite/Never envelopes,
+negative and zero L_h, nonisolated later calendars, original augmented
+carrier transport, legal two-sided mass variation, TRUE minimum lines
+and both selection contradictions. It also checked that the exact accepted
+source and CB do not already supply this second post-root finite owner.
+See [Morse's CS review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
+This disposition supersedes CS's historical draft-status line without
+altering its proof bytes. Neither general alternative(II), alternative(I),
+nor an actual total-debt-funded operation is proved. No export or Lean
+seal is attached.
+
+
+## CT: a sole post-root finite owner in case II has zero root rate
+
+Status: COMPLETE ORDINARY, UNREVIEWED sign-strengthened actual-source
+SUBMODE EXCLUSION. The independently checked CS proof stays unchanged.
+This extension changes its hypothesis, not the full-cap account or
+probability model.
+
+**Exact statement.** Use the SAME selected least-ORIGINAL-Never full
+minimum in accepted source alternative(II), with sole bridger i at
+root rate0. If EXACTLY ONE owner k has positive prescribed finite mass
+strictly after the first root τ, then
+
+    a_k=0.                                             (CT.1)
+
+Thus ANY POSITIVE first-root supplier with post-root finite mass requires
+some DIFFERENT owner with post-root finite mass. This includes a
+LATER-ONLY positive supplier, whose root action is bad, as well as CS's
+ROOT-ONLY supplier, whose later finite actions are bad. The theorem does
+NOT exclude a zero-root sole-future owner or the mode with no future
+finite owner. It does not locate the different owner's mass at β or
+give a funding inequality.
+
+**The same legal open triangle and all response families.** Suppose
+instead a_k>0. Because the sole bridger has a_i=0, k≠i and k is a
+NONBRIDGER, either root-only or later-only. All other post-root laws are
+literal Never. Keep k's ENTIRE old post-root finite conditional F and
+vary ONLY its PRIVATE law
+
+    q_k^(a,f)=a δ_τ+f F+(1−a−f)δ_Never.
+
+At the original point all THREE masses are strictly positive. Therefore
+the same open TWO-SIDED box is legal even when k is later-only: root
+optimality was never needed for feasibility. With C, C_h, L_h, Q_h,
+A_h, R_h^0 defined exactly as in CS2, every cap for h≠k remains
+
+    B_h=max(Q_h(a), A_h(a)+C_h[(1−a)s_h+f L_h]),
+
+and every prescribed payoff remains
+
+    U_h=R_h^0(a)+C f r_h({k}).
+
+These hold for the ENTIRE finite calendars, ALL moving finite testers
+and Never; negative or zero L_h are unchanged. k's own full cap is
+independent of its OWN law and is the constant
+
+    B_k=max(Q_k,A_k+C s_k).
+
+No root-only premise occurs in these formulas or their original-carrier
+transport. Censoring other owners' vanishing post-root masses, keeping
+F and every old empty/occupied date, and taking the bounded L_h limit
+is precisely CS2's uniformly controlled construction. All resulting
+triples lie in the SAME original augmented carrier. Strict nonbridger
+root/later numerical gaps fix one affine branch for EVERY h≠i,
+including k. Only i retains two affine branches, so TRUE full debt is
+again the maximum of TWO affine functions on the open box.
+
+**Only the sign changes.** Define the constant own root/later gap
+
+    G_k=Q_k−A_k−C s_k.
+
+k is a nonbridger, hence G_k≠0. It is positive for root-only k and
+NEGATIVE for later-only k. The CS3 kernel-of-branch-difference line is
+still a TWO-SIDED legal line of TRUE global minima with D≡δ. If its
+direction z=(z_a,z_f) has z_a+z_f≠0, one orientation makes
+ν=C(1−a−f)<ν_min. Otherwise z_f=−z_a with z_a≠0, and
+
+    dU_k/dt=z_a[Q_k−A_k−C s_k]=z_a G_k≠0.
+
+Since k's OWN full cap is fixed, its individual full debt changes
+between TRUE minima, contradicting the SAME d*_k at all minima.
+The argument requires NONZERO gap, not positive gap. Both contradictions
+and every all-calendar affine formula survive in the later-only arm.
+This proves(CT.1). The excluded a_k>0 case is interior; no signed
+motion or flat-line assertion is made at the retained a_k=0 boundary.
+
+The existing CS4 exact verifier already checks the own cap as
+max(Q_k,A_k+C s_k), rather than assuming the root branch wins. Its
+all-clock algebra and own-cap invariance therefore check both signs.
+The theorem itself is the source/minimum-line argument above, not a
+finite-calendar existence claim.
+
+A bounded consequence combining CT with reviewed CB is worth separating
+from closure: when AT MOST ONE owner has post-root finite mass, CB's
+paid positive root supplier must be LATER-ONLY, with no prescribed
+finite mass after the root. If it were root-only, its finite conditional
+would be the root best reply, contrary to CB. If there is a unique
+future owner, CT makes it zero-root, so it is different from this paid
+supplier. This leaves a BAD-ROOT arm involving distinct actual owners;
+it does not eliminate that arm, the zero-future mode, or either full
+canonical source alternative. The next question remains a legal coupled
+whole-law change with all its ENTIRE born caps funded.
+
+
+## CT independent review disposition
+
+Morse independently checked the bounded CT sign/boundary extension and
+gave PASS: NONZERO G_k suffices for both root-only and later-only k;
+the three original positive masses make the same two-sided box legal;
+no flat-line claim is made at a_k=0. The bounded CB consequence about
+a positive later-only bad-root supplier in every at-most-one-future
+mode also passed. See [the appended CT review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
+This supersedes CT's historical unreviewed line without modifying its
+frozen proof. No funding inequality, general II closure or export follows.
+
+
+## CU: the sole post-root finite owner cannot be the sole bridger
+
+Status: COMPLETE ORDINARY, UNREVIEWED actual-source SUBMODE EXCLUSION.
+The independently checked CS and CT proofs remain byte-unchanged.
+This handles ONE zero-root boundary, not all zero-root future owners.
+
+**Exact statement.** Take the SAME selected least-ORIGINAL-Never global
+full minimum in accepted source alternative(II), with exactly one root/
+later bridger i and a_i=0. It is impossible that i is the ONLY owner
+with positive prescribed finite mass strictly after the first root τ:
+
+    f_i=1−n_i>0, and f_h=1−a_h−n_h=0 for EVERY h≠i.   (CU.1)
+
+No optimality of any finite conditional, prescribed later mass at an
+active date, root Nash condition or sign of a social column is assumed.
+Other positive root suppliers may be later-only with bad root mass.
+
+**ONE legal marginal, ENTIRE cap formulas.** Suppose(CU.1), let F be
+i's ENTIRE OLD post-root finite conditional, and vary only its PRIVATE
+finite amount:
+
+    q_i^m=m F+(1−m)δ_Never,      0<m<1.
+
+The original m₀=f_i lies in an open TWO-SIDED interval since source
+Never masses are positive. There is NO variation of i's zero root rate.
+Every other law is a_h δ_τ+(1−a_h)δ_Never. Set
+
+    C=∏[h≠i](1−a_h)>0,
+    H_h=∏[ℓ≠h](1−a_ℓ)  with a_i=0.
+
+All root fields Q_h,A_h,R_h^0 are independent of m. For each h≠i
+define, on the ENTIRE UNCHANGED original finite suffix calendar,
+
+    L_h=sup[all finite suffix t] V_h(t;F_i,Never_{−i})−s_h.
+
+EVERY finite suffix response against mF_i+(1−m)Never has value
+s_h+m[V_h(t;F_i,Never_{−i})−s_h]. Multiplication by m>0 preserves
+the ENTIRE order, ties and maximizing families, including negative or
+zero L_h and nonisolated calendars. Literal Never pays m r_h({i});
+the old final empty finite tester adds (1−m)s_h>0. Thus the unrestricted
+suffix cap is s_h+mL_h, not a selected favorable branch. i's own
+suffix cap is exactly s_i because all its suffix opponents are Never.
+The FULL caps and prescribed payoffs are consequently
+
+    B_h(m)=max(Q_h,A_h+H_h[s_h+mL_h])       (h≠i),
+    B_i(m)=max(Q_i,A_i+C s_i),
+    U_h(m)=R_h^0+C m r_h({i})              (EVERY h).   (CU.2)
+
+i's two original root/later cap branches are equal and CONSTANT in m;
+more basically, its own full cap is independent of its OWN law. Every
+OTHER owner is a NONBRIDGER. Its strict root-versus-ENTIRE-later gap
+persists on a small interval, so exactly one affine branch supplies
+its full cap there. This is the point specific to(CU.1): a later-only
+observer has no additional actual finite opponent in the suffix, so its
+full envelope scales by the same positive factor. No uniqueness or
+isolated later maximizing clock is required.
+
+**Actual original carrier and literal Never.** On the SAME finite
+realizing sequence, censor the vanishing post-root finite masses of
+h≠i to literal Never; normalize their nonsure root rates as in source
+Section15, and retain EVERY old occupied and empty suffix date. These
+are vanishing product-TV modifications for prescribed values and ALL
+responses. i's original positive post-root finite mass permits its
+old finite conditioning with bounded density. Extract the bounded
+complete L_h coefficients along one subsequence, exactly as in CS2.
+Equations(CU.2) hold on every finite calendar and converge uniformly on
+the m interval. Every modified full pair belongs to the SAME original
+augmented carrier, with the EXACT ORIGINAL probability
+
+    ν(m)=C(1−m).                                       (CU.3)
+
+Never is not merged with a final-empty test. No new pre-first-suffix
+date is inserted, no actual finite conditional of a different owner
+is substituted, and no favorable minimum suffix is selected.
+
+**Full minimum contradiction.** On that legal two-sided interval, ALL
+full caps and prescribed payoffs are affine in m. Hence TRUE summed
+full debt is affine, has its interior global minimum δ at m₀, and
+must be identically δ on a smaller interval. Increasing m strictly
+decreases(CU.3), contradicting least ORIGINAL ν_min. This is an exact
+line of full minima, not a first-order calculation. Common individual
+debts are available but are not needed for CU. This proves(CU.1).
+
+**Precisely retained sparse mode.** Combine reviewed CT with CU. If
+there is EXACTLY ONE post-root finite owner k, then k has root rate0
+and is DISTINCT from i. Therefore i is PureNever. Fin4 and the source's
+at-least-two-positive-root-suppliers theorem make the other TWO owners
+exactly the two positive nonsure first-root suppliers, both with ALL
+their prescribed finite mass at that root. Reviewed CB makes at least
+one of those two suppliers LATER-ONLY, hence its finite regret is at
+the ROOT, not an unsupported claim that its root action is optimal.
+
+k itself remains either ROOT-ONLY or LATER-ONLY, since it is not the
+sole bridger. Zero prescribed root mass does NOT determine that cap
+classification. In particular CS/CT do not license a two-sided change
+of a_k at0, and CU does not exclude a zero-root ROOT-ONLY k. The mode
+with NO post-root finite owner also stays open. Neither full canonical
+source alternative nor its remaining bad-root branch is consumed.
+
+Operational next question: in the retained ONE-future mode, all
+prescribed payoffs and literal ν are independent of the INTERNAL
+calendar of k's sole finite conditional. A genuine alteration of that
+ENTIRE conditional may lower multiple later cap envelopes without any
+payoff-delivery loss. It must still price every finite tester and Never,
+retain the old pre-first-suffix opportunity exactly when claimed, and
+either obtain D<δ or an exact minimum with smaller original ν. A
+diffuse replacement is not automatically safe when some L_h<0.
+
+CS's existing all-clock exact verifier can also be run with a=0 in
+all three mass points; this directly checks(CU.2–3) without presuming
+source minimality. The root/finite/Never cap transport and source
+dependencies are the same named declarations and source sections
+listed in CS, not a new Lean assertion or a complete raw-producer audit.

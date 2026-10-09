@@ -679,19 +679,24 @@ It gives no regret floor in terms of the debt minimum and reward bound,
 no funding of other players' cap increases, and no consumer for either
 surviving configuration.
 
-In configuration 2, a root-only positive first-root supplier with
-prescribed finite mass strictly after that root cannot be the ONLY owner
-with such post-root finite mass. Keeping its entire old later conditional
-fixed and varying its root and later masses gives a legal two-dimensional
-family whose true total debt is the maximum of two affine functions.
-A tied minimum line would either lower original joint Never or change
-one coordinate of the common minimum debt vector. The
-[sole-late-owner exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cs-a-paid-root-only-supplier-cannot-be-the-sole-post-root-finite-owner)
-is independently reviewed ordinary mathematics, not a checked Lean
-theorem. It supplies another actual finite-law owner in this submode,
-not alignment of that owner's mass with a maximizing date, a favourable
-joining sign, or a funded joint replacement. Neither complete source
-configuration is consumed.
+In configuration 2, if EXACTLY ONE owner has positive prescribed finite
+mass strictly after the first root, that owner's root rate is zero.
+Equivalently, any positive first-root supplier with post-root finite mass
+requires another owner with such mass. Keeping its entire old later
+conditional fixed and varying its root and later masses gives a legal
+two-dimensional family whose true total debt is the maximum of two affine
+functions. A tied minimum line would either lower original joint Never
+or change one coordinate of the common minimum debt vector. The
+[sole-late-owner exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#ct-a-sole-post-root-finite-owner-in-case-ii-has-zero-root-rate)
+is independently reviewed ordinary mathematics, not a checked Lean theorem.
+When at most one owner has post-root finite mass, the preceding finite-regret
+restriction therefore supplies a positive LATER-ONLY first-root supplier
+whose entire prescribed finite conditional is its suboptimal root atom.
+It is distinct from the sole later finite owner, if one exists. The
+zero-root sole-future and zero-future configurations remain unconsumed.
+No alignment with a maximizing date, favourable joining sign, or funded
+joint replacement is supplied; neither complete source configuration
+is consumed.
 
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date

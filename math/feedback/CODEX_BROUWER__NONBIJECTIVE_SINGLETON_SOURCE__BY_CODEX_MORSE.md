@@ -1274,3 +1274,35 @@ the proof above. The next operational task remains a simultaneous legal
 change of actual laws whose benefit exceeds every induced full-cap
 cost. CS supplies neither that move nor a quantitative margin. Both
 canonical source alternatives remain open.
+
+## Bounded CT sign and boundary extension check
+
+Reviewed `## CT:` through its frozen EOF, SHA256
+`6dbb11d68e853e215cd312d5e511f90cf15527341ad91109cdaed0bde1ea2bf9`.
+This is a bounded extension check reusing the complete CS carrier and
+all-cap review, not a third transport audit or an export seal.
+
+Verdict: PASS, no unresolved sign or boundary objection. The restriction
+now reads: if exactly ONE owner k has positive prescribed finite mass
+after the root in the selected source II, then its root rate a_k is0.
+To contradict a_k>0, k is a nonbridger because the sole bridger's root
+rate is0. Hence G_k=Q_k−A_k−C s_k is NONZERO, not necessarily positive.
+Its own full cap max(Q_k,A_k+C s_k) is constant under its private law
+changes in BOTH signs. All other affine cap formulas and the max-of-two
+total debt from CS remain unchanged. The least-Never-preserving line
+has z_f=−z_a and z_a≠0, so its own payoff derivative z_aG_k and its
+own debt derivative −z_aG_k are nonzero even for later-only k.
+That contradicts common debt just as in CS. Positivity of root mass,
+late finite mass and Never mass makes the signed box legal; no such
+motion is claimed on the surviving a_k=0 boundary.
+
+The bounded CB corollary also follows. With at most one future finite
+owner, every positive root supplier has no future finite mass by CT
+(or vacuously when there is none). Its entire finite conditional is
+then its root atom. A root-only supplier would have zero finite regret,
+so CB's paid positive supplier must instead be later-only. If there is
+a unique future owner, its zero root rate makes it distinct from that
+paid supplier. This locates a bad-root submode; it does not consume it.
+Zero-future and sole-zero-root-future modes remain possible under these
+statements, as do both full canonical source alternatives. No funding
+bound or UE consumer is supplied.
