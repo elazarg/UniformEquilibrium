@@ -66,7 +66,7 @@ question is a genuinely coupled change of the opponents' finite laws
 preserving or compensating the passive safety, not another refinement
 of this fixed-block repetition or the paired final-date template.
 
-CB below gives a COMPLETE ORDINARY, UNREVIEWED actual-source SUBMODE
+CB below gives a COMPLETE ORDINARY actual-source SUBMODE
 exclusion: in the sole-zero-rate-bridger/later-only alternative, some
 POSITIVE FIRST-ROOT SUPPLIER has a prescribed finite conditional that
 is NOT a full best reply. Optimality of all those finite conditionals
@@ -79,6 +79,15 @@ suffix clock or assume its price. The remaining branch has a genuinely
 suboptimal finite conditional; no debt-funded operation consuming
 that positive finite regret is proved yet. Neither alternative(I)
 nor general alternative(II) is closed.
+
+Current CB disposition supersedes the historical draft-status line in
+its frozen proof: the strengthened CB1–CB5 has an independent Morse
+soundness PASS, including moving calendars, negative/zero L_i, true
+minimum surfaces and ORIGINAL least Never. Its first-root finite-regret
+conclusion is additional to the accepted source and bounded prior
+accounts; quantitative funding and a source-case consumer remain OPEN.
+See [Morse's review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
+The proof section is unchanged. No export or Lean seal is claimed.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -16179,3 +16188,106 @@ print('PASS: 100 exact all-clock calendars; negative L_i cases',
 The displayed command was run and printed PASS with40 negative-L_i
 calendars and92 nonzero-L_i polynomial cases. No new table, local
 constant or bounded response-menu producer is attached to this check.
+
+
+## CR: root-only suppliers cannot put bad finite mass before the next cap
+
+Status: COMPLETE ORDINARY, UNREVIEWED supporting source restriction.
+CB1–CB5 remains byte-frozen. This new statement locates the bad-later
+mass in CB's root-only-supplier arm; it does not fund its replacement
+or consume either canonical full source alternative.
+
+Use the SAME selected least-literal-Never full minimum in source
+alternative(II), with sole zero-rate bridger i and later-only set J.
+Write M_i^later for i's ENTIRE later maximizing set and M_j for each
+j∈J's ENTIRE maximizing set. The isolated first root makes the
+following compact minimum finite and strictly later than τ:
+
+    β=min(M_i^later ∪ ⋃_[j∈J] M_j)>τ.
+
+For EVERY ROOT-ONLY POSITIVE ROOT SUPPLIER k, the claim is
+
+    q_k({finite clocks strictly between τ and β})=0.   (CR.1)
+
+In particular if CB's paid first-root supplier is root-only, its
+strictly suboptimal later finite mass occurs at or AFTER β. This
+does not assert any finite mass at β, prescribe a response at β, or
+identify β with SB's α=min⋃_[j∈J]M_j. Always β≤α. The later-only
+bad-root-supplier arm is not changed by(CR.1).
+
+**Two feasible directions in ONE independent marginal.** If(CR.1)
+failed, choose a regular old cut b<β and a positive old finite
+conditional F=q_k(·|τ<clock≤b), with total conditioning mass e>0.
+It has no mass at τ or Never. Use the two-parameter whole-law family
+
+    q_k^(u,v)=(1−u−v)q_k+u δ_τ+v F.              (CR.2)
+
+This is feasible on an OPEN two-sided box about(0,0): the original
+root atom a_k>0 permits signed subtraction of δ_τ; the old conditional
+has bounded density1/e and permits signed subtraction of F; every
+remaining old component, including Never, has positive factor1−u−v.
+There is no common lottery over profiles. Only owner k's PRIVATE law
+changes. Both replacements use original finite support and calendars.
+
+All realized pairs belong to the original carrier by the same signed
+old-law transport in source Sections6–7. Its augmented coordinate is
+EXACTLY
+
+    ν(u,v)=(1−u−v)ν_min.                         (CR.3)
+
+**ENTIRE cap control.** Own cap B_k is fixed. Every other root-only
+cap stays at its root point on a small box by its isolated strict
+complement gap. For EVERY response t>b and each observer h≠k,
+
+    V_h(t;q_k^(u,v))=(1−u−v)V_h(t;q_k)
+                                      +u C_h+v E_h,
+
+where C_h,E_h do not depend on t: either replacement exits before
+t. Since1−u−v>0, ALL upper response ordering and ties are preserved,
+even for nonisolated or multiple maximizing families. The lower
+compact tester set through b has no maximum except possibly τ,
+and all remaining lower tests have a uniform gap. Product-TV control
+keeps that gap. Thus every later-only cap is affine in(u,v), and i's
+ENTIRE cap is the max of exactly two affine branches: its root
+endpoint and its preserved entire later envelope. Literal Never is
+in the upper response formula and remains strictly suboptimal.
+
+All prescribed payoffs are affine because just ONE marginal changes.
+Consequently the TRUE full debt is the max of two affine functions
+on the open legal box. Their difference is an affine function G,
+with G(0,0)=0. Choose a nonzero vector z=(z₁,z₂) in the kernel of
+its linear part. If that part is zero, any nonzero vector may be
+used. On the small two-sided line (u,v)=t z, the two branches remain
+tied and total debt is affine. True global minimality therefore
+forces D≡δ on that line: it consists of FULL minima, not stationary
+first-order points of a nonlinear coupled problem.
+
+If z₁+z₂≠0, one orientation of t makes(CR.3) strictly smaller than
+ν_min, contradicting ORIGINAL least literal Never. Hence a permitted
+flat direction must have z₁+z₂=0. Since z≠0, then z₁≠0, and the
+own prescribed payoff on that line has NONZERO derivative
+
+    z₁[B_k−V_k(F)].
+
+It is nonzero because k is root-only and F is strictly afterτ:
+V_k(F)<B_k. Its own cap is fixed, so its individual debt changes.
+This contradicts the SAME common positive debt vector d* at EVERY
+full minimum. These two possibilities exhaust all nonzero z and
+prove(CR.1).
+
+The new proof uses precisely the actual source's isolated τ,
+complete upper-family affine identity, common minimum debts and
+least ORIGINAL ν. No assumed optimal finite conditional, new atom,
+new pre-suffix date, cap–Nash root or unrelated minimum tail is used.
+At finite indices choose the original normalized root and old
+conditioning interval with uniformly positive masses; all displayed
+response formulas and (CR.3) hold before passage to the same augmented
+carrier. This is the same bounded dependency set inspected for SB/CB,
+not a new Lean or full-producer coverage claim.
+
+Operational scope: moving early bad mass would have produced a real
+minimum-fibre contradiction; the canonical source therefore does not
+supply that shortcut. In the remaining bad-later arm the mass is
+already at/after a genuine maximizing response. A future whole-law
+move must price that active family and every newly optimal response,
+rather than treating the paid finite regret as freely removable.
