@@ -128,6 +128,14 @@ are exact; no polynomial fit or reward tuning follows. This is a bounded
 candidate retirement, not a negative table, source restriction or new
 existence class. A general invariant search remains open.
 
+RA below instead makes a GLOBAL extremal choice at the actual same-table
+least-Never minimum: maximize attainable first-root absorption, without a
+Nash restriction on that root or minimum restriction on its suffix. Compact
+augmented root/suffix data attain this maximum. A two-mass whole-law chart
+then excludes one sparse multiple-bridge configuration at this newly selected
+source. This is COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED; neither full source
+alternative is consumed. It is not another solved-table test or an export.
+
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
 whose outsider FULL debts vanish. All born finite deadlines and Never
@@ -23270,3 +23278,202 @@ assert margin==F(707041,1000000)>0
 assert F(707041,976800)-F(44,263)>0
 print('JB PASS: complete table, all four symbolic caps, sure-owner later/Never and self-loop margins')
 ```
+
+## RA. Maximal actual first-root absorption on the least-Never minimum fibre
+
+Status: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED selected-source restriction.
+This is not a uniform-equilibrium consumer or a closure of alternative(I).
+The maximum is over arbitrary ACTUAL product-root/suffix realizations of a
+global minimum, not exact Nash roots against a supplied annotation.
+
+### RA1. Exact question and same-table extremal source
+
+Take the final positive-own, bounded, row-generic table r from
+LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE. Its full semantic minimum is δ>0;
+every full minimum has the same strictly positive individual debt vector.
+Let H be the closure of the actual independent triples (U,B,ν), where B
+prices EVERY unilateral behavioral deviation and ν is literal joint Never.
+Let ν₀>0 be the least ν on its full minimum fibre. No table or recipient
+scale is changed in the following selection.
+
+For a∈[0,1]⁴ and w=(v,b,ξ)∈H, put S(a)=∏_h(1−a_h) and define
+
+    Ψ(a,w)=(quittingTerminalSemanticPrefix_r(a,(v,b)), S(a)ξ).
+
+The explicit payoff/complete-cap prefix formula is polynomial followed by
+coordinatewise maxima, so Ψ is jointly continuous in a,w. Moreover Ψ(a,w)
+belongs to H: apply the FIXED root to actual tail realizers of w, retaining
+their literal Never products. This is an ordinary augmentation of the
+tracked semantic-prefix theorem, not a claim that its Lean statement already
+contains ν. A suffix in this definition need not be Nash or a minimum.
+
+The set
+
+    Z={(a,w)∈[0,1]⁴×H : D(Ψ(a,w))=δ, ν(Ψ(a,w))=ν₀}
+
+is compact and nonempty. An all-Continue prefix of a full minimum leaves
+its pair unchanged because its complete caps exceed its own singletons.
+More importantly the accepted source's actual first-root normalization and
+conditional suffix extraction produce a member with 1−S(a)>0. Retain the
+suffix's literal Never coordinate by subsequence extraction; its value is
+ν₀/S(a), not ν₀. Choose a member of Z maximizing
+
+    A(a)=1−S(a),                                   (RA.1)
+
+and denote its positive attained value by A₀. Since S(a)ξ=ν₀>0 and ξ≤1,
+S(a)≥ν₀; all root rates are strictly less than1.
+
+Realize the chosen suffix by finite laws with vanishing full-cap, payoff and
+Never errors and prepend the FIXED selected root at literal date0. Apply
+the universal accepted source §§6–10 to THIS sequence at the SAME table.
+Its positive root mass and absence of earlier physical dates imply that
+date0 is the earliest full cap and first prescribed collision. It has at
+least two positive nonsure suppliers and a root/later bridge. Sections16
+and18–19 therefore give the same alternatives(I)/(II), now at this extra
+extremal selection. This does not transfer an independently chosen source
+onto the maximizing root. The universal quantifier over actual minimizing
+sequences is essential.
+
+### RA2. One exact sparse pattern cannot occur at this selected source
+
+Here is a bounded consequence of the new selection. Let i,j,p,q be distinct.
+Suppose the selected marked minimum has:
+
+- 0<a_i<1 and i has positive prescribed FINITE mass after date0;
+- p,q are ROOT-ONLY cap owners (their entire full maximizing sets are {0});
+- all prescribed finite mass AFTER date0 belongs to i,j.
+
+There is NO assumption that i's prescribed future conditional is optimal,
+that j's future mass is positive, or that j has one isolated later cap.
+In the multiple-bridge application i,j are the two bridgers and p,q the two
+root-only owners. The conclusion is that this pattern is impossible at the
+RA1 selected source. It is not asserted at every unselected least-Never
+minimum.
+
+Keep all other whole laws fixed. Write i's original law as
+
+    a₀δ₀+f₀F+(1−a₀−f₀)Never,
+
+where F is its ENTIRE old strict-post-root finite conditional. The three
+amounts are positive: a₀>0 by premise, f₀>0 by premise, and Never by the
+source floor. Hence the family
+
+    q_i^(a,f)=aδ₀+fF+(1−a−f)Never                   (RA.2)
+
+is legal on a genuine two-sided open neighbourhood of (a₀,f₀). Original
+finite realizers use their corresponding entire old conditional F_N.
+No clock is inserted before its first suffix support; all existing suffix
+finite, empty-final and Never testers remain. The accepted old-chart
+transport proves payoff AND full-cap convergence at every fixed (a,f),
+with literal joint Never
+
+    ν(a,f)=C_N(1−a−f),  C_N=∏_(h≠i)n_h>0.          (RA.3)
+
+Own i's complete cap is constant because its opponents' laws are unchanged.
+All four prescribed values are affine in (a,f). The ROOT-ONLY full caps of
+p,q stay their root values on a smaller neighbourhood: date0 is isolated,
+its compact complement has a strict full gap, and opponent-TV control is
+uniform over ALL testers. Those root values are affine in a and do not
+depend on f.
+
+For j there is only ONE potentially finite suffix opponent, i. Put
+
+    C_j=∏_(h≠i,j)(1−a_h)>0,
+    L_j=sup_(old finite suffix tests t) W_j(t;F),
+
+where W_j is j's payoff against the proper conditional F minus s_j.
+This is the ENTIRE old suffix test set, including ties and its last finite
+empty test. There is no manufactured pre-F date. It is a bounded maximum
+on the compact marked test set; it can be negative or zero. Its complete
+later envelope is exactly
+
+    T_j(a,f)=A_j(a)+C_j[(1−a)s_j+fL_j].             (RA.4)
+
+Indeed the suffix response to one finite-opponent law has value s_j plus
+its finite amount times W_j; f≥0 preserves the order of every such test.
+Literal Never is strictly below the final finite test since own s_j>0 and
+all retained Never amounts are positive. Nonisolated maximizers cause no
+gap assumption in (RA.4). The root value Q_j(a) is affine. Thus the TRUE
+full total debt near (a₀,f₀) is
+
+    D(a,f)=max(H₀(a,f),H₁(a,f)),                    (RA.5)
+
+for two affine functions, distinguished only by j's root versus its full
+later envelope. Global actual-carrier minimality gives D≥δ, with equality
+at the original point.
+
+### RA3. Least Never followed by largest root gives the contradiction
+
+If just one branch of (RA.5) is active at the original point, it remains
+active locally. The affine function has an interior minimum and is constant
+on that neighbourhood; increasing f would lower (RA.3), contradiction.
+The same argument applies if the branch difference is identically zero.
+
+Otherwise both branches tie and their affine difference has nonzero linear
+part. Let z=(z_a,z_f) be a nonzero direction in its kernel. On the small
+two-sided tie line through (a₀,f₀), D is affine with an interior global
+minimum. Consequently it is identically δ there. Least ORIGINAL ν₀ then
+forces z_a+z_f=0, since otherwise one sign lowers (RA.3). Nonzero z thus
+has z_a≠0. Choose its sign so z_a>0. On this line ν remains EXACTLY ν₀,
+while the prescribed root absorption strictly increases:
+
+    dA/dt=z_a∏_(h≠i)(1−a_h)>0.                     (RA.6)
+
+The modified law still has the same literal root0 and positive survival.
+Condition its ACTUAL finite realizers on surviving root0 and extract their
+augmented suffix triple. Their payoff/cap/Never limits obey the same exact
+prefix formula and belong to H. They therefore produce a member of Z with
+larger A than A₀, contradiction. The suffix is not substituted by a more
+favourable minimum; it is the honest excess-debt suffix of the modified law.
+
+This argument does not need a nonzero own finite-regret gap. In particular
+it still works when a supported bridger's entire finite conditional is a
+full best reply. Common minimum debts remain inputs to the universal source,
+but are not used to manufacture a nonzero slope on this final tie line.
+
+### RA4. Scope, overlap and the indispensable missing global step
+
+RA1 is an actual all-counterexample extremal source selection. RA2–RA3 give
+one ordinary submode exclusion at THAT selection. They do not exclude the
+entire two-bridge alternative: supported bridgers can have no future finite
+mass; other future owners or later-only cap owners can remain. Nor do they
+exclude unsupported bridging owners. No fixed target or approximate Nash
+profile has been produced.
+
+The intuitive whole-game route would be to show that every nonzero selected
+first root admits an actual least-Never minimum-preserving move increasing
+its absorption. RA proves precisely one such case. Its first generalization
+is NOT automatic: a second additional late-cap observer may face TWO finite
+suffix opponents. Varying (a,f) then yields a supremum of many affine forms,
+not the single affine later envelope (RA.4). A three-hinge convex corner can
+have no flat improving line. This is the exact full-cap obstacle; parameter
+counting or a chosen displayed late response does not remove it. Actual
+source incidence must either control those whole late families or fund a
+different genuinely simultaneous move. This remains the concrete next
+question, not another supplied-response interface.
+
+Narrow primary lookup: quittingTerminalSemanticPrefix,
+quittingTerminalSemanticPair_rootThenContinuation,
+continuous_quittingTerminalSemanticPrefix,
+quittingTerminalSemanticPrefix_mem_carrier,
+quittingTerminalSemanticCarrier_isCompact, and
+quittingTerminalSemanticPrefix_allContinue_eq_of_singleton_le_cap, all in
+UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean. Joint root/pair
+continuity follows directly from the inspected formula. The actual augmented
+transport and universal source quantifiers are in accepted source §§6–10,
+15,18–19. The older supplied-packet note
+SOCIAL_WEIGHT_REVIEW__VANISHING_MAXIMAL_ROOT_BINDING_FORK_AND_SURE_WALL
+maximizes absorption over exact cap-Nash roots against a supplied annotation;
+it does NOT make the arbitrary actual-minimum prefix selection (RA1).
+Noether's older `Global maximal root-mass selection: a real max-wall blocks
+naïve purification`, RM1–RM5 in CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION,
+DOES already make a compact unrestricted global-minimum root/suffix
+selection, maximizing Σa_i without the least-original-Never secondary fibre.
+RA1 is therefore reuse/refinement of that valid selection mechanism, not a
+new compactification. Its nonlinear-wall purification failure is retained:
+RA3 only uses an ACTUAL affine tie line in the same-owner two-mass chart,
+and does not infer flatness on multiaffine root-equality surfaces. The extra
+least-Never criterion is what forces this particular flat direction to
+change the root rate. The claimed new content is only RA2–RA3's precisely
+stated selected sparse exclusion, pending independent overlap/soundness check.
+No Lean implementation, build, export or Git action is claimed.

@@ -1430,3 +1430,132 @@ the exact original full pair and sparse root geometry. This is useful
 source-data compression, not outer-law Nash selection, a paid coupled
 move, a full-II consumer, or a UE proof. The distinct positive supplier's
 bad-root mass and all induced full-cap costs still require funding.
+
+## Bounded CX coupled actual-source resultant check
+
+Reviewed frozen `## CX: a coupled source-minimum box forces a two-row
+resultant` through EOF, SHA256
+`d3a3e1a7bf6aad59c83629756c530ffd6bb0fd0233c193beda780c0563534091`.
+Verdict: ordinary mathematical PASS for the stated fixed-table necessity
+AND compatible FRESH-source exclusion. No unresolved algebra, full-cap,
+realization or generic-selection gap found. This is a bounded submode
+restriction, not closure of alternative(II), a UE consumer or an export
+recommendation. The argument is distinct from the reviewed CW generic
+geometric replacement and its source adapter.
+
+Exact scope: at the SAME CW one-future minimum, i is PureNever and the
+sole bridger; k has zero root rate and finite amount f₀∈(0,1); p,q are
+the two positive nonsure root/Never suppliers. The geometric conditional
+has 0<z₀<1. q must be later-only with STRICT first-tail endpoint.
+i must have a STRICT first or END tail endpoint, and p must be root-only
+or later-only with one strict tail endpoint. k is root-only OR later-only,
+with no inferred strategic label from its zero prescribed root rate.
+Then the appropriate literal two-row resultant R^e vanishes. At a fresh
+source avoiding the 48 nonzero polynomials, this precise configuration
+cannot occur.
+
+The coupled chart is genuinely open and independent. With w₀=f₀z₀>0,
+its y=w₀(1−a), f=x/(1−a), z=y/x satisfies 0<y<x<1−a at the original
+point and on a small two-sided (a,x) box. Thus q is an independent
+root/Never law and k an independent proper-geometric/Never law at every
+point. Fixing y/(1−a) does not introduce a public correlation signal.
+The raw support begins at literal1; no new pre-first-suffix date is used.
+I recomputed the prescribed first-coalition masses: {p} has a_p(1−a),
+{q} has C_p a, {p,q} has a_p a, and {k} has C_p x. They give exactly
+CX.4 for ALL four recipients and literal Never C_p(1−a−x).
+
+The full caps use the SAME actual laws. Reading
+`quittingTerminalPayoff_geometric_pivot_late_response_eq_affine`,
+`quittingTerminalPayoff_geometric_pivot_eq`, and
+`exists_geometric_pivot_payoff_eq_and_caps_le` in
+UniformEquilibrium/Quitting/Terminal/GeometricPivotCapDomination.lean,
+I independently expanded any finite suffix reply at1+n against k:
+
+    V_h(1+n)=s_h+fΓ_h+f(1−z)^n(zP_h−Γ_h).
+
+Thus its complete finite supremum is s_h+f max(zP_h,Γ_h), INCLUDING
+negative and zero endpoint coefficients. Never is f r_h({k}), strictly
+below the END supremum by (1−f)s_h>0. Incorporating root passive fields
+gives exactly all three nonpivot formulas CX.6; k's own later cap is
+A_k+C_p(1−a)s_k and is independent of its own law. All dates0,1+n,
+the potentially unattained END, and literal Never are therefore priced.
+This is not a check only of a displayed first response.
+
+q's strict first branch gives the constant full cap
+A_q^root+C_p(s_q+w₀P_q). Its root and END gaps persist. p's whole
+root-only gap suffices even when its INACTIVE tail endpoints tie; if p
+is later-only, its assumed strict endpoint selects an affine expression.
+k's strict root/later gap follows from its nonbridger status and persists.
+i alone retains a full max hinge. Its assumed strict tail endpoint makes
+each of its two competing full branches affine. Consequently CX.8 really
+is the TRUE D, not a frozen-test lower estimate.
+
+Proper geometric profiles are actual unrestricted behavioral profiles.
+Replacing their conditional tail beyond a sufficiently late date by a
+FINITE last atom preserves f, all prescribed values and literal Never;
+coupling bounds EVERY behavioral response by the vanishing tail-TV error.
+On a small closed box z is bounded away from0, so this error can be made
+uniform. Each point belongs to the SAME original augmented carrier. The
+true minimum floor therefore applies, even though no suffix minimum or
+stationary-Nash claim is supplied.
+
+For an actual max of two affine functions at an INTERIOR global minimum,
+CX3 correctly produces a two-sided TRUE-minimum line: either both affine
+branches coincide identically (then the full box is minimum), or the
+kernel of their nonzero difference is a tie line on which the remaining
+affine value is minimized internally, hence constant. The first case
+contradicts least original Never immediately. In the second, least ν
+forces its direction to be (1,−1) up to a nonzero scalar. Only AFTER this
+global argument may common individual debts be applied. Since q's full
+cap is fixed, its U_q must be fixed, giving
+
+    C_p(s_q−r_q({k}))+a_p(r_q({p,q})−r_q({p}))=0.
+
+I expanded i's root-minus-base-tail field independently as
+
+    a_pΔ_ip+a[−a_pΔ_ip+C_pΔ_iq+a_pΔ_ipq].
+
+For the FIRST endpoint the exact tie holds over an a-interval and equals
+C_p w₀(1−a)P_i. Adding its intercept and slope eliminates w₀P_i, giving
+C_pΔ_iq+a_pΔ_ipq=0. This is an identity of affine polynomials; it does
+NOT evaluate an actual law at the illegal endpoint a=1. For END the
+tie-line derivative instead gives
+C_p(Δ_iq+Γ_i)+a_p(Δ_ipq−Δ_ip)=0. Combining either identity with q's
+using the displayed elimination formula proves R^e=0 without dividing by
+A_q, B_q, A_i or B_i. Vanishing individual coefficients therefore cause
+no lost boundary case. I reran the author's Fraction checker: PASS for
+2000 exact endpoint/elimination identities. It is arithmetic evidence,
+not a substitute for the preceding actual-source argument.
+
+Fresh generic avoidance is compatible with the PRIMARY source packet,
+not merely with an already selected numerical table. I re-read its
+Sections5,6–10,18–19. Section5 genuinely permits an arbitrary small open
+60-coordinate perturbation ball with positive owns and strict separated
+gaps BEFORE row scaling and BEFORE all final minimizing sequences. The
+derivative of each R^e in the independent coordinate r_i({i,q}) is −B_q,
+a nonzero polynomial. Thus each zero set is closed with empty interior,
+and the finite union of 48 sets and the row-equality hyperplanes can be
+avoided inside that ball. Both row factors are linear in their recipient's
+entries, so positive row scaling multiplies R^e by θ_iθ_q exactly.
+Nonvanishing survives EVERY allowed positive regular scaling, while the
+primary scalarization then supplies common debts at ALL genuine final
+unweighted minima. Least-original-Never selection and CW follow only
+afterward. No old minimum, law, cap or chronology is transported through
+the new reward choice.
+
+The narrow inspected source files/packet contain no existing two-row
+resultant or this coupled cap-held source exclusion. Within-row reward
+distinctions alone do not exclude this quadratic identity; CB's paid-root
+necessity and CS/CT/CU's support restrictions likewise do not state it.
+This is an additional ordinary FRESH-source submode restriction, subject
+to the explicit endpoint assumptions—not an independent existence class.
+
+The exclusions at the boundary are honest. At z=0 the chart loses an open
+proper-hazard neighbourhood and uniform tail approximation; at z=1 its
+strict y<x condition becomes a boundary. i's extra tail tie, or p's active
+extra tie, introduces another hinge and invalidates the max-two-affines
+step. q END-active or endpoint-tied does not have CX.7's held full cap.
+These are NOT covered by the conclusion. A root-only p's inactive tie is
+correctly allowed. Zero-future, multiple-future and case(I) modes remain
+open; no quantitative paid move, full-II consumer or fixed UE target is
+produced by this review.

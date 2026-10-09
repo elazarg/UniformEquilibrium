@@ -8,6 +8,19 @@ The requested endpoint is UE for EVERY signed four-player quitting table,
 against EVERY unilateral behavioral deviation, with ONE payoff target
 fixed before the requested accuracy.
 
+Latest ACTUAL source attempt: RA in the global notebook reuses/refines
+Noether's valid compact global root/suffix selection by first fixing least
+ORIGINAL joint Never, then maximizing first-root absorption on that CLOSED
+augmented fibre. The maximizing witness has the universal source's literal
+first root. A legal same-owner root/whole-future/Never chart excludes one
+sparse multiple-bridge pattern: two bridgers, two root-only cap owners, all
+future finite mass on the bridgers, and a supported bridger with positive
+future finite mass. This is a complete ordinary UNREVIEWED draft, not a
+consumer for either source case or an export. Its affine tie-line argument
+does not revive purification on Noether's nonlinear root walls. Additional
+late-cap observers can produce several active hinges, so the extension to
+every multiple-bridge source still needs indispensable new actual-cap control.
+
 Current independent pivot: NI1–NI9 and UR in the owned global notebook test
 an unrestricted negative certificate on a DIFFERENT rational table,
 not another repair of the solved RZ clocks. Exact root geometry depends

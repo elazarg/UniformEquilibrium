@@ -120,7 +120,9 @@ interior geometric conditional and a positive later-only first-tail
 supplier require an additional active tail-endpoint tie. Its proof uses
 a genuine two-marginal family, the global floor, least ORIGINAL Never,
 and common minimum debts. It does not consume the endpoint/tie survivors,
-the zero-future mode or general alternative(II).
+the zero-future mode or general alternative(II). CY below separately
+excludes CX's strict-END-i submode on the ORIGINAL row-generic source,
+without fresh resultant avoidance; CY is ordinary/unreviewed.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -17229,3 +17231,61 @@ for trial in range(1000):
         assert Eq * Bi - Ei * Bq == Cp * resultant
 print("PASS: 2000 exact endpoint and resultant identities")
 ```
+
+
+## CY: the strict-END bridge submode is impossible at the original source
+
+Status: COMPLETE ORDINARY, UNREVIEWED source SUBMODE EXCLUSION, separate
+from the frozen CX proof. This strengthens its END arm and needs NO fresh
+generic selection, no two-row resultant and no change of reward table.
+
+**Input and conclusion.** At CW's SAME least-Never minimum and ONE-future
+geometric representative, let 0<z₀<1. Labels i,p,q,k are the four distinct
+owners: i is PureNever and the sole root/later bridger, k is the sole
+post-root finite owner with positive finite and Never mass, and p,q have
+positive nonsure root rates and all their finite mass at root0. Assume:
+
+- i's later cap is STRICTLY END-active: z₀P_i<Γ_i.
+- q is later-only and STRICTLY first-tail-active: z₀P_q>Γ_q.
+- p is root-only, or p is later-only with z₀P_p≠Γ_p.
+
+Then this submode is IMPOSSIBLE. k's root-only OR later-only label is
+unrestricted. P_h=r_h({h,k})−s_h and Γ_h=r_h({k})−s_h are literal row
+differences, not scheduled mate-joining gaps. The two geometric hazard
+boundaries and the extra p endpoint-tie mode are NOT excluded.
+
+**Entire-law proof.** Keep every root rate and every marginal Never mass
+fixed. Vary ONLY k's entire proper geometric finite conditional F_z on
+a TWO-SIDED interval about z₀. CW's actual finite-truncation argument
+places every full triple in the SAME augmented carrier. Its prescribed
+payoff vector and ORIGINAL ν are EXACTLY unchanged. Every finite deadline,
+the late finite supremum and literal Never are priced by the full formula
+
+    B_h(z)=max(Q_h,A_h+H_h[s_h+f max(zP_h,Γ_h)])  (h≠k),
+    B_k(z)=max(Q_k,A_k+C s_k).
+
+i's full root/END tie is between TWO constants: its END coefficient Γ_i
+is strictly above zP_i locally. Hence i's full cap is constant, rather
+than an unpriced root/tail hinge. k's full cap is also constant. q's
+strict root and END gaps give an AFFINE full cap with nonzero slope
+H_q f P_q. This is nonzero because H_q,f>0 and within-row genericity makes
+r_q({q,k})≠r_q({q}). If p is root-only its full cap is locally constant
+even when its inactive tail endpoints tie; if p is later-only, its strict
+tail endpoint chooses one affine cap branch locally. Therefore the TRUE
+summed full debt D(z) is affine on a smaller two-sided interval.
+
+Original globality gives D(z)≥δ and D(z₀)=δ. An affine function with an
+interior minimum is constant, so EVERY point of that interval is a TRUE
+full minimum. The source's common individual debts apply to all of them.
+Their prescribed U are unchanged; thus EVERY full B must be constant.
+This contradicts q's nonzero full-cap slope. Selected responses or a
+first-order zero are not being substituted for full caps/true minima.
+
+This proof uses the global floor and common minimum debts; it does NOT
+need least-Never selection beyond CW's input and does not infer anything
+from an unrelated solved fixture. It produces no off-minimum paid port.
+CX's stronger fresh-source argument remains independently valid, but
+its END conclusion has this shorter ORIGINAL-table proof. The case with
+i's extra first/END tie, p's active endpoint tie, z₀=0 or1, or no strict
+FIRST later-only supplier remains open, as do zero/two-or-more future
+owners and general case(I)/(II). No complete sparse consumer is claimed.
