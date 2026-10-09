@@ -127,8 +127,19 @@ submode is then impossible: explicit quiet signs supply EVERY inactive-owner
 Nash inequality, and a weak funding inequality yields either debt<δ or an
 actual augmented minimum with smaller literal Never. These are additional
 source-submode hypotheses, not properties supplied by the canonical theorem;
-neither full residual alternative has been consumed. The bounded proof below
-is ordinary mathematics awaiting independent review, not an exported result.
+neither full residual alternative has been consumed. Brouwer's independent
+falsification review gives mathematical PASS for this exact bounded statement;
+it remains ordinary mathematics, not an exported result or coverage claim.
+
+NC.37 now changes the mechanism again: price the ORIGINAL arbitrary root,
+without requiring the changed root to be Nash. The exact finite-amplitude
+account keeps j's original startup term and every other owner's complete
+root/tail clipping, so quiet entry need not be guessed or suppressed. It
+works with 2/3/4 suppliers and partial bridges if a chosen owner is BOTH
+c-active and root-bridging and has an admissible nonzero joining slope.
+Those intersection/slope conditions are not supplied in general. The exact
+debt/ν success test below is a live consumer attempt, not a proved full source
+contradiction; NC.35–36's independent PASS does not certify NC.37.
 
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
@@ -25743,7 +25754,201 @@ already covers empty premium core and EXACT pair core with nonnegative product
 of the two joining gaps. Our statement supplies no core census and places no
 sign condition on the reverse joining gap. There is no claim of a new raw
 existential producer or union-coverage novelty. This bounded submode exclusion
-is ordinary mathematics awaiting independent falsification/review. The full
+is ordinary mathematics with the independent falsification PASS recorded below. The full
 source can fail ANY of its extra geometric/quiet/funding assumptions; the
 next problem is a globally valid operation when a quiet owner is forced to
 enter, or when the actual funding coefficient F is strictly positive.
+
+Independent review record: CODEX_BROUWER's `NC.35–36` section in
+feedback/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION__BY_CODEX_BROUWER.md
+was read completely. It reviews frozen full-notebook SHA
+1cc3c6cc9ac29ed187a844ad36c7f0315137babb107dbcf7eac88a72c044bd46
+and bounded section SHA
+0272c166ffe90032476a8f5b74a72dd9f1dda65d8d41b1d3e6ee359c5205cc9b.
+Verdict mathematical PASS: complete moving tester/collision pricing, both
+quiet gaps, fixed-margin finite realization and augmented equality arm.
+Its exact rational falsification checks cover thirty finite-calendar cap
+tables and one hundred root-odds cases. No unresolved mathematical objection
+was found. The named same-sign pair-core producer does not automatically
+apply, but full union-coverage novelty and nonemptiness of the extra source
+submode remain unproved. No export or Lean seal is inferred from this review.
+
+### NC.37. Exact paid original-root refinement, with every owner clipped
+
+The next actual operation does NOT demand a new cap–Nash selector. It retains
+the original arbitrary root and its honest excess-debt suffix, then pays
+all root defects literally. This avoids the Ψ>0 startup loss created by
+substituting a new exact root. There is no first-order approximation in
+the displayed finite-amplitude debt or Never identities.
+
+**Question and precise extra geometry.** Work at the SAME original frozen
+least-Never full minimum (U,B,ν*) with debtδ and original nonsure root a.
+Let v be its honest suffix, with full cap b, Never response R, marginal
+Never n, total debt D_v and ν_v=∏_k n_k>0. Write
+
+    y_k=a_k/(1−a_k),       c_a=∏_k(1−a_k),
+    Δ_k(T)=r_k({k}∪T)−r_k(T)  for nonempty T⊆I∖{k},
+    ℓ_k=s_k−b_k+Σ_(∅≠T⊆I∖{k}) (∏_(h∈T)y_h)Δ_k(T),
+    φ_y(z)=max(z,−yz)=z⁺+y(−z)⁺.
+
+The divided root Quit-minus-Continue gap is ℓ_k. The unconditional exact
+debt formula, for ANY root, gives
+
+    δ=c_a[D_v+Σ_k φ_(y_k)(ℓ_k)].               (NC.37a)
+
+This includes all original nonbridger corrections. No original cap–Nash
+hypothesis is imposed. Choose a distinct pair i,j such that owner i is
+BOTH a root bridger AND c-active. Then ℓ_i=0 and the honest suffix's
+old late empty response attains b_i. These two properties are additional
+requirements; the canonical source does not generally provide their
+intersection. Section14's c-active finite owner need not bridge.
+
+Define the exact effective root joining slopes, holding every other odds
+coordinate fixed,
+
+    P_k=Σ_(T⊆I∖{k,j}) (∏_(h∈T)y_h)Δ_k(T∪{j})  (k≠j).
+
+The empty T is included. In particular P_i is the coefficient of y_j in
+the divided i gap; it includes every prescribed root coalition of the
+other owners. Let Γ=Γ_ij=r_i({j})−s_i>0 and assume P_i≠0.
+Neither the sign nor nonvanishing of P_i is supplied by the frozen source.
+
+**One actual diffuse word, all caps, then one actual root.** Add a j-only
+private diffuse word of fixed suffix mass ε∈(0,n_j), after all old finite
+draws and an old empty final test, exactly as in NC.35. Preserve every old
+finite conditional law. Put
+
+    e=∏_(k≠i,j)n_k,       h_j=n_i e,
+    e_k=∏_(h≠k,j)n_h,
+    θ_k=(b_k−R_k−n_j e_k s_k)/e_k≥0  (k≠j),
+    Δb_k=e_k[ε(Γ_kj)⁺−θ_k]⁺  (k≠j),       Δb_j=0.
+
+These are ENTIRE cap changes in the actual diffuse limit, with uniform
+finite-word error≤2Mε/N. C-activity gives θ_i=0, hence Δb_i=ε e Γ.
+The exact prescribed payoff gains are ε h_j r_k({j}), so
+
+    D(w)=D_v+Σ_(k≠j)Δb_k−ε n_i e S_j,
+    ν_w=ν_v(1−ε/n_j),       S_j=Σ_k r_k({j}).
+
+No old finite response, moving tester, or literal Never is omitted. The
+new collision error is uniformly small; its limit is NOT the one-date
+pair spike. The cap changes are not an average of selected old responses.
+
+Set t=ε e Γ/P_i and change ONLY the original root odds y_j to y_j+t.
+Assume y_j+t≥0, so this is a legal finite nonsure root x; all its other
+odds stay original. Its survival is exactly
+
+    c_x=c_a/[1+(1−a_j)t].
+
+The new divided root gaps are
+
+    ℓ_i(new)=0,
+    ℓ_j(new)=ℓ_j,
+    ℓ_k(new)=ℓ_k+tP_k−Δb_k  (k∉{i,j}).
+
+This restores i's root/later tie. It makes NO Nash assertion for any other
+owner, whether positive-rate, quiet, root-only, later-only, or bridging.
+The actual root may have new profitable deviations; all are priced next.
+
+**Complete finite-amplitude cost.** For k∉{i,j} define
+
+    E_k(ε)=Δb_k+φ_(y_k)(ℓ_k+tP_k−Δb_k)−φ_(y_k)(ℓ_k)
+          =max(ℓ_k+tP_k,
+                   (1+y_k)Δb_k−y_k(ℓ_k+tP_k))
+               −max(ℓ_k,−y_kℓ_k).
+
+This is the exact ROOT/LATER full-cap clipping, with all original signed
+gaps retained. In particular it is not assumed nonnegative: original
+branches can genuinely drop when a priced gap moves. Owner j contributes
+the exact extra startup correction t(−ℓ_j)⁺, because its root rate changes
+while its own divided gap remains fixed. Direct substitution in (NC.37a)
+gives the actual whole-profile identity
+
+    D(T_x(w))−δ
+      =c_a L(ε)/[1+(1−a_j)t],                  (NC.37b)
+    L(ε)=ε e[Γ−n_i S_j]+t(−ℓ_j)⁺+Σ_(k∉{i,j})E_k(ε)
+                       −(δ/c_a)(1−a_j)t,
+    ν(T_x(w))=c_x ν_v(1−ε/n_j).                (NC.37c)
+
+The success metric uses δ/c_a WITH the original defects, not an invented
+minimum suffix or D_v in its place. Both signs of every ℓ_k survive.
+No quiet sign, exact-Nash-root continuation, support count or γ assumption
+is needed for these identities.
+
+If P_i>0, every fixed ε∈(0,n_j) is admissible, t>0 and c_x<c_a, hence
+the displayed FULL Never is strictly smaller thanν*. Consequently the
+true global floor and original least-Never selection require
+
+    L(ε)>0 for EVERY ε∈(0,n_j).                (NC.37d)
+
+A legal parameter with L(ε)<0 produces strict debt descent; L(ε)=0
+produces an EXACT augmented minimum with lower ν. These are actual limit
+statements, not conclusions from a vanishing first-order coefficient.
+For P_i<0 the same exact identities hold whenever y_j+t≥0. Strict debt
+descent still suffices; equality additionally closes only if
+
+    1+(1−a_j)t > 1−ε/n_j,
+
+which is exactly the smaller-FULL-Never condition. A zero coefficient
+without this condition is not declared a contradiction.
+
+**A fully priced sufficient inequality, not suppressed quiet entry.**
+For P_i>0 put q=Γ/P_i. The identity for E_k and the full cap bound yield
+
+    E_k(ε)≤max(tP_k,(1+y_k)Δb_k−y_k tP_k),
+    Δb_k≤ε e(n_i/n_k)(Γ_kj)⁺.
+
+Thus L(ε)≤ε e F, where
+
+    F=Γ−n_i S_j+q(−ℓ_j)⁺
+       +Σ_(k∉{i,j})max(qP_k,
+                     (1+y_k)(n_i/n_k)(Γ_kj)⁺−y_k qP_k)
+       −(δ/c_a)(1−a_j)q.                      (NC.37e)
+
+If F≤0 this ACTUAL legal operation contradicts (NC.37d). Therefore the
+stated additional source geometry forces F>0. F is a uniform upper bound
+on the EXACT finite-amplitude ledger, not just a tangent coefficient;
+F=0 cannot be silently changed into an exact debt equality. Instead it
+gives actual limiting debt≤δ and lower Never, and the two exhaustive
+possibilities debt<δ/debt=δ are both excluded. When F>0 the exact L can
+still be smaller because of honest cap premiums and old branch gaps;
+no claim that the entire operation loses follows from F>0 alone.
+
+NC.35–36 is its special case n_i=1, only i,j positive rates, all original
+gaps cap–Nash, Γ_kj≤0 and P_k≤0 for the two quiet owners. The present
+formula removes EVERY one of those requirements except Γ_ij>0 and the
+i c-active bridge/positive slope, by paying rather than assuming their effects.
+It is not a constant optimization or a claim that quiet owners enter
+helpfully. In the all-four-bridger submode, Section14 supplies the c-active
+bridge intersection; the positive Γ-simplex supplies some positive Γ_ij,
+but NOT a positive corresponding P_i. In partial-bridge and sole-bridger
+modes even the intersection remains an additional unproved requirement.
+
+**Actual carrier and proof scope.** Fix ε and the resulting finite root x
+before taking limits. Use the SAME original finite realizing sequence,
+its honest original suffixes, and j-only words with N tending to∞.
+Positive n and root-survival denominators make ε eventually legal, and
+every U,B,ν coordinate converges. The all-clock error≤2Mε/N is uniform
+in the old calendar and moving tester. Prefixing fixed x is literal and
+continuous in U,B; the joint Never product is computed on that same
+actual sequence. Therefore (NC.37b–c) belongs to the original augmented
+carrier. A fixed negative L survives sufficiently small finite errors;
+L=0 with smallerν invokes its EXACT augmented minimum, not finite-index
+approximate minimality. An asymptotic expansion alone would not prove this.
+
+The unconditional correction formula is the direct payoff/full-cap
+specialization of quittingTerminalSemanticPair_rootThenContinuation in
+UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean and frozen Q7,
+with the old all-owner correction already recorded above. The diffuse word
+is NC.35's fully priced actual modification. No new Lean theorem, auxiliary
+moat substitution, marked-seam identity, or source re-selection is invoked.
+This is ordinary mathematics awaiting independent review; the previous
+NC.35–36 PASS does not certify these broadened claims.
+
+The whole source remains OPEN. The next concrete question is whether its
+actual c-active/bridge geometry forces some admissible pair and ε with
+L(ε)≤0, or whether the positive slope and funding conditions can all fail
+while respecting the true all-law floor. The supplied cap-minus-singleton
+output margin is kept, but has not been used to invent a sign for P_i or
+for the honest tail margins. No conditional pricing formula is counted as
+a completed consumer of either full canonical alternative.
