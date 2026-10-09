@@ -2,6 +2,18 @@
 
 Owner: CODEX_MORSE.
 
+Latest whole-game test: PD below leaves the selected-source cap charts and
+tests phase-separated, player-specific SIGNED discount pulses. On EVERY
+positive-own table with an actual strictly positive singleton-surplus
+direction, an explicit exact unrestricted discounted Nash branch has order-t
+discount pulses, order-t² actual absorption, and a strictly positive limiting
+ORIGINAL full deviation debt. The singleton-surplus direction is produced
+at a hypothetical no-UE table by the named ambient-Q source. Thus pulse
+separation alone cannot force efficient absorption. This is an ordinary
+unreviewed recipe falsifier, extending rather than rediscovering Noether's
+ordinary-discount RM33. It excludes no actual counterexample class, supplies
+no negative table, and does NOT retire all schedules or global selectors.
+
 Current full-game direction (NI1–NI9 and UR below): an unrestricted
 negative-certificate search, with its FIRST center RETIRED by a
 literal charged return and its ENTIRE stated sixteen-control box now
@@ -141,7 +153,8 @@ supported bridger has no future mass before its partner's first late cap,
 and has no future mass at all if that partner has an isolated sole late cap.
 Their full-family arguments use actual early exit screening or a genuine
 isolated complement gap, not a selected upper reply.
-RA6 adds an UNREVIEWED global least-Never support fence: no owner prescribes
+RA6 adds an independently reviewed ordinary global least-Never support fence:
+no owner prescribes
 finite mass after the latest full cap of the OTHER owners. Together with
 RA5 and the actual retained-atom isolation lemma, it removes RA5(S)'s assumed
 isolation for a partner with a sole later cap. No consumer is claimed.
@@ -23588,7 +23601,9 @@ still an actual whole-debt move through those surviving configurations.
 
 ### RA6. Global OTHER-owner latest-cap fence and a stronger sole-cap corollary
 
-Status of THIS extension: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED.
+Status of THIS extension: COMPLETE ORDINARY, independently reviewed PASS in
+CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_BROUWER, distinct from the
+earlier RA1–RA5 reviews. No unresolved mathematical objection is recorded.
 The already reviewed RA1–RA5 remain separate. The global fence below uses
 least ORIGINAL Never but does NOT use root-absorption maximality, common
 individual debts, cap uniqueness, isolation of maximizing points, or any
@@ -23705,3 +23720,305 @@ bridgers, zero-future bridgers, additional later-only observers and genuine
 multiple-late-cap hinges remain. This is a stronger ACTUAL selected-source
 restriction, not a response-count certificate, full-I consumer, temporal
 return, unrestricted positive-gap table or solution of the Fin4 conjecture.
+
+## PD. Strong phase-separated signed discount pulses still admit quiet collapse
+
+Status: COMPLETE ORDINARY recipe falsifier, independently UNREVIEWED.
+No export, actual no-UE-class contraction, or unrestricted negative table.
+This tests a new whole-game selection mechanism, not a variation of the
+retired NI/SG/PT fixtures or another least-Never root-transfer chart.
+
+### PD1. Exact question, data and narrow source scope
+
+The attempted producer uses a finite public phase calendar and positive
+player-specific continuation factors. Individual factors may EXCEED one,
+but each player's full-period product is below one. Thus this is a literal
+contractive terminal discounted game, not an artificial root interface.
+The hope was that large, separated owner-specific discount/reward pulses
+could force physical absorption before the weak net discount accumulates.
+The first decisive implication was: order-t phase pulses should preclude
+an exact discounted Nash branch with only order-t² absorption and positive
+original terminal debt. The implication is FALSE.
+
+Fix ANY four-player quitting table r on ALL fifteen nonempty coalitions,
+with arbitrary bounded signed entries. Never pays zero. Assume only
+
+    s_i=r_i({i})>0,
+    λ_i>0,    c_i=Σ_(j≠i) λ_j Γ_ij>0 for every i,
+    Γ_ij=r_i({j})−s_i,    Γ_ii=0.                 (PD.1)
+
+Write T=Σ_i λ_i and T_-i=T−λ_i>0. Pair premiums
+P_ij=r_i({i,j})−s_i may have EITHER sign. Choose a finite constant
+
+    K>1+max_(i≠j) λ_j(|Γ_ij|+|P_ij|).
+
+All triple/grand cells and passive pair cells remain completely free.
+
+The exact declaration
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`
+produces a simplex λ with Γλ>0 from BARE Fin4 no-UE. The definition
+`quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean` is precisely
+the Γ in(PD.1). Perturb that produced weight a sufficiently small amount
+toward the uniform simplex weight: all coordinates then become positive
+and all four strict image inequalities persist. Thus the λ premise is
+NOT an extra restriction at a positive-own no-UE table. Positive own is
+an explicit hypothesis here; the ambient-Q declaration does not itself
+produce it, and no inverse row-translation invariance is asserted.
+
+Bounded overlap lookup: Noether's `RM33: periodic discounted ports versus
+actual physical absorption` proves the failure of every fixed-period
+ordinary-discount selection at its generic positive-own no-UE source.
+RM34 additionally refutes an ordinary-index escape. Neither uses signed
+within-period factors exceeding one. PD is only a stronger-pulse recipe
+test beyond those arguments, not a newly discovered ordinary-discount
+obstruction. Its proof does not assume no UE or matrix R₀.
+
+### PD2. An explicit exact all-behavior discounted equilibrium
+
+Take t>0 small. On the four-date public period, phase j prescribes ONLY
+owner j to Quit with probability
+
+    a_j=t²λ_j,
+
+using independent private coins. Every other owner Continues. Replay the
+period forever. All four prescribed clocks are finite almost surely;
+there is no public random signal or correlated choice of a schedule.
+Define positive phase values, with phase indices modulo four,
+
+    V_i^j = s_i                 if j=i,
+            s_i+tK             if j≠i.
+
+Write C_i=s_i+tK. Define EXOGENOUS continuation factors
+
+    d_i^i = s_i/V_i^(i+1),
+    d_i^j = (C_i−a_j r_i({j})) /
+            ((1−a_j)V_i^(j+1))       if j≠i.      (PD.2)
+
+These are explicit functions of r,λ,K,t, fixed before any play or
+deviation; they are not recomputed when a player deviates. Their
+numerators and denominators are positive for all sufficiently small t.
+The modified payoff for a finite coalition exit at date n is r_i(S)
+multiplied by the factors d_i at all PRIOR live transitions. Never pays
+zero. A quitting date itself is not discounted a second time.
+
+Telescoping the phase values gives the exact full-period factor
+
+    D_i(t)=∏_j d_i^j
+          =∏_(j≠i) [1−t²λ_j r_i({j})/C_i] /
+                     [1−t²λ_j],
+    1−D_i(t)=t² c_i/s_i+O(t³)>0.              (PD.3)
+
+Thus 0<D_i(t)<1. In contrast, the two phase transitions surrounding
+i's active phase have
+
+    d_i^i=1−tK/s_i+O(t²),
+    d_i^(i−1)=1+tK/s_i+O(t²).
+
+These are genuinely signed order-t pulses, while the net period loss
+is only order t². The remaining phase factors are 1+O(t²).
+
+At phase i, i's Quit endpoint is s_i and Continue endpoint is exactly
+d_i^i V_i^(i+1)=s_i. Thus its prescribed mixing is optimal. At phase
+j≠i, i's prescribed Continue endpoint is exactly C_i by(PD.2), whereas
+its Quit endpoint is
+
+    (1−a_j)s_i+a_j r_i({i,j})
+      =s_i+t²λ_j P_ij < s_i+tK=C_i.          (PD.4)
+
+Hence ALL four root inequalities and Bellman equations hold at EVERY
+phase for the SAME displayed V. No symmetry or selected two-variable
+derivative is used.
+
+This is an unrestricted behavioral Nash equilibrium in the MODIFIED
+discounted game. For any unilateral behavioral deviation, iterate the
+two endpoint inequalities through a finite truncation. The remaining
+discounted value is bounded in absolute value by a fixed within-period
+partial-product bound times max|V| times D_i(t)^m, which tends to zero.
+The discounted payoff inequality survives the limit, including literal
+Never and arbitrary infinite-support clocks. Prescribed play attains V
+by the same iteration. Factors greater than one cause no hidden tail:
+the finite partial products are bounded and the full-period product is
+strictly below one. No appeal to a local Nash theorem is substituted for
+this complete-deviation argument.
+
+### PD3. The ORIGINAL unrestricted cap is exactly Never
+
+Now remove ALL discount factors, leaving precisely the same actual four
+independent stopping laws. Only singleton exits are prescribed. Put
+
+    ρ=∏_j(1−a_j),
+    R_i=Σ_j a_j ∏_(h<j)(1−a_h) r_i({j}),
+    U_i=R_i/(1−ρ).
+
+For the response problem of i, omit i's draw throughout the entire
+period. Define
+
+    ρ_i=∏_(j≠i)(1−a_j),
+    R_-i=Σ_(j≠i) a_j ∏_(h<j,h≠i)(1−a_h) r_i({j}),
+    N_i=R_-i/(1−ρ_i).
+
+This N_i is the ORIGINAL literal Never payoff against the unchanged
+opponents, not a discounted port. Direct expansion gives
+
+    U_i → s_i+c_i/T,
+    N_i → s_i+c_i/T_-i > s_i.                 (PD.5)
+
+To price EVERY finite response, let H_i^j be its first-period payoff
+when it quits at phase j: the accumulated opponent singleton rewards
+strictly before j, plus their survival to j times
+
+    Q_i^j=s_i                       if j=i,
+           s_i+a_j P_ij             if j≠i.
+
+Every one of these sixteen H_i^j tends to s_i. A pure response at date
+4m+j, m≥0, has the EXACT original payoff
+
+    N_i+ρ_i^m(H_i^j−N_i).                    (PD.6)
+
+For all sufficiently small t, H_i^j<N_i for EVERY i,j. Equation(PD.6)
+therefore bounds ALL finite deadlines strictly below Never, including
+arbitrarily late and off-phase tie replies. Since 0<ρ_i<1, late finite
+replies approach Never from below. The complete behavioral stopping-law
+representation takes averages of finite/Never replies; hence the FULL
+original cap is exactly B_i=N_i, and
+
+    B_i−U_i → c_i λ_i/[T T_-i] >0,
+    total full debt → Σ_i c_i λ_i/[T T_-i] >0. (PD.7)
+
+Actual total period absorption is 1−ρ∼t²T. Deleted-opponent absorption
+is 1−ρ_i∼t²T_-i. In particular
+
+    [−log D_i(t)]/[1−ρ_i]
+       → c_i/[s_i T_-i] >0.                 (PD.8)
+
+Thus order-t signed pulses, exact discounted Nash and contractive net
+discount do not provide the absorption-relative vanishing loss needed
+for an ORIGINAL terminal or uniform equilibrium. The original U,
+discounted V and full original cap N are three different vectors.
+
+### PD4. What fails, and what remains open
+
+The first decisive implication of the proposed separated-pulse forcing
+mechanism fails on EVERY table satisfying(PD.1), including a hypothetical
+positive-own no-UE source with its actually produced Γ-positive weight.
+This is not a small sampled region or a newly proposed negative fixture.
+The exact bad branch persists even with within-period pulses of a larger
+asymptotic order than both net discount and physical absorption.
+
+Quantifier boundary: this constructs ONE explicit family of signed
+discount schedules and ONE unrestricted exact Nash branch for each
+table in(PD.1). It does NOT show failure of EVERY signed schedule, EVERY
+equilibrium selection, a genuinely growing-period/global selector, or
+arbitrary finite approximate profiles. It consumes neither least-Never
+case and does not narrow the actual no-UE class. Existing ordinary
+discount RM33 remains a separate stronger all-selection statement under
+its own fixed-period/source hypotheses. No need remains to tune pulse
+constants or fit potentials on another solved table for this recipe.
+
+Concrete next question: can a genuinely simultaneous ORIGINAL-game
+finite-law selection control complete debts without importing auxiliary
+discounted values or optimizing one law at a time? This remains open;
+PD supplies no missing selector and no counterexample to UE.
+
+### PD5. Exact finite arithmetic diagnostic
+
+The following standard-library Fraction checker independently exercises
+the displayed formulas on one hundred complete rational tables, including
+2300 negative reward cells. It checks the SAME values and factors in all
+sixteen Bellman endpoint accounts, all four period-product identities,
+the two signed pulses for each owner, and every first-period ORIGINAL
+finite endpoint against its literal Never cap. Equation(PD.6), not a
+finite sampling of dates, supplies the all-calendar conclusion. Random
+data are reproducible arithmetic tests, not evidence for no UE.
+
+Stable extraction marker: the Python comment `PD_EXACT_DIAGNOSTIC`.
+
+```python
+# PD_EXACT_DIAGNOSTIC
+from fractions import Fraction as F
+from random import Random
+from math import prod
+rng = Random(493301)
+lam = list(map(F, [1, 2, 3, 4]))
+negative = 0
+for sample in range(100):
+    r = {mask: [F(rng.randrange(-12, 13)) for _ in range(4)]
+         for mask in range(1, 16)}
+    s = [F(rng.randrange(1, 6)) for _ in range(4)]
+    for i in range(4):
+        r[1 << i][i] = s[i]
+        for j in range(4):
+            if i != j:
+                r[1 << j][i] = s[i] + rng.randrange(-5, 9)
+        c = sum(lam[j] * (r[1 << j][i] - s[i])
+                for j in range(4) if j != i)
+        if c <= 0:
+            j = next(j for j in range(4) if j != i)
+            r[1 << j][i] += (1 - c) / lam[j]
+    c = [sum(lam[j] * (r[1 << j][i] - s[i])
+             for j in range(4) if j != i) for i in range(4)]
+    assert all(v > 0 for v in c)
+    negative += sum(v < 0 for row in r.values() for v in row)
+    K = 2 + max(lam[j] * (abs(r[1 << j][i] - s[i]) +
+                abs(r[(1 << i) | (1 << j)][i] - s[i]))
+                for i in range(4) for j in range(4) if i != j)
+    for exponent in range(1, 100):
+        t = F(1, 2 ** exponent)
+        a = [t * t * l for l in lam]
+        if max(a) >= 1:
+            continue
+        V = [[s[i] if j == i else s[i] + t * K
+              for j in range(4)] for i in range(4)]
+        d = [[s[i] / V[i][(j + 1) % 4] if j == i else
+              (V[i][j] - a[j] * r[1 << j][i]) /
+              ((1 - a[j]) * V[i][(j + 1) % 4])
+              for j in range(4)] for i in range(4)]
+        if not all(x > 0 for row in d for x in row):
+            continue
+        D = [prod(row) for row in d]
+        if not all(0 < x < 1 for x in D):
+            continue
+        U, N, H = [], [], []
+        for i in range(4):
+            total, surv = F(0), F(1)
+            for j in range(4):
+                total += surv * a[j] * r[1 << j][i]
+                surv *= 1 - a[j]
+            U.append(total / (1 - surv))
+            total, surv, endpoints = F(0), F(1), []
+            for j in range(4):
+                Q = s[i] if j == i else s[i] + a[j] * (
+                    r[(1 << i) | (1 << j)][i] - s[i])
+                endpoints.append(total + surv * Q)
+                if j != i:
+                    total += surv * a[j] * r[1 << j][i]
+                    surv *= 1 - a[j]
+            N.append(total / (1 - surv))
+            H.append(endpoints)
+        if all(h < N[i] for i in range(4) for h in H[i]):
+            break
+    else:
+        raise AssertionError('no small parameter found')
+    for i in range(4):
+        for j in range(4):
+            cont = d[i][j] * V[i][(j + 1) % 4] if i == j else (
+                a[j] * r[1 << j][i] +
+                (1 - a[j]) * d[i][j] * V[i][(j + 1) % 4])
+            Q = s[i] if i == j else s[i] + a[j] * (
+                r[(1 << i) | (1 << j)][i] - s[i])
+            assert cont == V[i][j]
+            assert Q == cont if i == j else Q < cont
+        formula = prod((1 - a[j] * r[1 << j][i] / (s[i] + t*K)) /
+                       (1 - a[j]) for j in range(4) if j != i)
+        assert formula == D[i]
+        assert d[i][i] < 1 < d[i][(i - 1) % 4]
+        assert N[i] > U[i]
+        rho = prod(1 - a[j] for j in range(4) if j != i)
+        for m in [0, 1, 2, 13, 100]:
+            for h in H[i]:
+                assert N[i] + rho ** m * (h - N[i]) < N[i]
+print('PD exact diagnostic PASS:', sample+1, 'complete tables;',
+      negative, 'negative reward cells')
+```

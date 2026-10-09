@@ -8,6 +8,19 @@ The requested endpoint is UE for EVERY signed four-player quitting table,
 against EVERY unilateral behavioral deviation, with ONE payoff target
 fixed before the requested accuracy.
 
+Latest independent whole-game attempt: PD in the global notebook tests
+phase-separated player-specific SIGNED discounts, not another least-Never
+cap chart. Even order-t discount pulses admit an exact unrestricted
+discounted Nash branch with only order-t² absorption and strictly positive
+limiting ORIGINAL full debt, on EVERY positive-own table with Γλ>0 for a
+positive weight λ. Bare Fin4 no-UE produces that matrix-image condition.
+The construction prices ALL finite/Never replies exactly; all joint-coalition
+rewards are arbitrary. This retires pulse separation as an automatic
+noncollapse/efficiency principle, not every schedule or equilibrium selector.
+It extends Noether RM33's ordinary-discount obstruction in a different
+direction, consumes no actual source case, and gives no negative table.
+The bounded PD1–PD5 proof is ordinary and independently unreviewed.
+
 Latest ACTUAL source attempt: RA in the global notebook reuses/refines
 Noether's valid compact global root/suffix selection by first fixing least
 ORIGINAL joint Never, then maximizing first-root absorption on that CLOSED
@@ -27,7 +40,7 @@ complement gap. Thus at a two-bridge/two-root-only selected source a supported
 bridger cannot have future mass before its partner's first late cap; an
 isolated sole partner late cap forbids all its future mass. Multiple or
 nonisolated late families, unsupported bridges and no-future bridges remain.
-RA6's new UNREVIEWED global extension uses least ORIGINAL Never alone:
+RA6's independently reviewed ordinary global extension uses least ORIGINAL Never alone:
 an owner's prescribed finite support cannot extend past the latest full
 maximizing clock of the OTHER owners. Moving an old strict finite tail
 against Never keeps every other active reply exactly unchanged and its
