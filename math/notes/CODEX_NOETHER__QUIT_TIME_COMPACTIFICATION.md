@@ -189,6 +189,14 @@ atom candidate retains all pair/triple testers; total funding is still
 open, and neither its paid-owner nor donor labels are silently aligned
 with an independently supplied owner.
 
+In NC.42's H_i<0 subcase the negative-premium supplier l has a
+UNIQUE possible profitable solo-outcome joiner: the fourth owner t.
+The actual absorbing floor therefore supplies
+r_t({t,l})−r_t({l})≥δ+g>0. Moving l into a common-date hedge cannot
+assume that t stays quiet; censoring i toward its full capacity also
+forces t's original root-vs-c branch to turn positive. This is a
+source-paid response constraint, not yet a total funding contradiction.
+
 NC.41 now constructs a true-overlap candidate with complete cap control:
 independent two-owner tail survivors give a STRAIGHT trace of singleton
 exit masses. Every other recipient's intermediate replies are bounded by
@@ -27208,3 +27216,61 @@ The existing
 in `UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClosure.lean`
 requires the ACTUAL premium core to be precisely that pair. Positive
 Γ_ik and Γ_ki, or p_i>0 alone, do not supply that core hypothesis.
+
+### The fourth player's hedge response is supplied and quantitatively paid
+
+Still suppose H_i<0, with Q6's selected owner i. There are exactly FOUR
+owners i,l,k,t. Since i is c-active and later-only, and l is its only
+opponent with finite prescribed mass, its strict root gap is
+
+    Q_i−C_i=y*[r_i({i,l})−r_i({l})]<0.
+
+The previous participant calculation also gives
+
+    r_k({k,l})−r_k({l})=p_l<0.
+
+Consider the ACTUAL absorbing profile in which l quits surely at date0
+and all other owners use Never. Owner l's full cap is its positive own
+s_l; i and k prefer waiting to joining, so all THREE have zero debt.
+For t, every finite reply after0 and Never give r_t({l}); the only
+other class, Quit0, gives r_t({t,l}). Consequently its COMPLETE sum
+debt is exactly
+
+    [r_t({t,l})−r_t({l})]⁺.
+
+This is not merely a pure-root or bounded-deviation screen. These are
+all pure response dates, and every behavioral response is their mixture.
+The source's true absorbing floor Δ_abs=δ+g therefore forces
+
+    p_tl:=r_t({t,l})−r_t({l})≥δ+g>0.             (NC.42h)
+
+Thus the negative-premium supplier's solo outcome has exactly ONE
+profitable joiner, with a source-scale gain. No statement about that
+joiner's prescribed finite mass is needed: t is pure Never here.
+
+This gives an actual turnover constraint for (NC.42c–f), not a guessed
+quiet-owner premise. Write v_t(ρ)=Q_t(ρ)−C_t(ρ) in the same censored
+base used by the paired-atom candidate. This is affine on [0,x*]. At
+full censoring only l has original finite root mass, hence
+
+    v_t(x*)=y* p_tl≥y*(δ+g)>0.                  (NC.42i)
+
+If t was originally later-only, v_t(0)<0 and there is ONE root-cap
+crossing ρ_t strictly between0 and x*. If t was originally root-only,
+v_t(0)>0 and affinity keeps it positive throughout. In neither case
+may Q_t(ρ) be discarded from the full cap. In the former case the
+crossing is a property of the honest censored base; the occupied-date
+or after-date cap can still dominate it in the actual candidate, but
+must pay at least that positive gap to do so. The fixed positive
+bound at (NC.42i) does not by itself bound d_t(new) from below by its
+old debt: its prescribed pair payoff changes too, and is kept in
+(NC.42e). No whole-family impossibility has been inferred.
+
+For the proposed next hedge, relocating positive l mass to the SAME
+new date also creates t's {t,l} joining response with coefficient
+p_tl>0 on the event that the other scheduled owners do not quit there.
+That event has positive probability at every proper interior amplitude;
+any {t,i,l}, {t,k,l} or four-owner collision terms remain separately
+signed, rather than erased using (NC.42h). The operational change is
+therefore to price this supplied paid entry while choosing the hedge,
+not to select a negative p_l and assume all other caps stay quiet.
