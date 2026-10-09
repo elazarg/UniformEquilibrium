@@ -693,7 +693,19 @@ When at most one owner has post-root finite mass, the preceding finite-regret
 restriction therefore supplies a positive LATER-ONLY first-root supplier
 whose entire prescribed finite conditional is its suboptimal root atom.
 It is distinct from the sole later finite owner, if one exists. The
-zero-root sole-future and zero-future configurations remain unconsumed.
+sole later finite owner also cannot be the sole bridger: varying only
+its old finite amount against literal Never would leave an interval of
+true full minima with strictly smaller original joint Never. Thus in
+the one-future mode the bridger is PureNever, and the other two owners
+are exactly the positive nonsure first-root suppliers, with all their
+prescribed finite mass there. At least one is later-only and has
+strictly suboptimal root mass. The future owner itself may be root-only
+OR later-only; zero prescribed root mass does not determine its optimal
+response class. This additional
+[sole-bridger exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cu-the-sole-post-root-finite-owner-cannot-be-the-sole-bridger)
+has an independent ordinary-mathematics review, not a Lean declaration.
+The zero-root nonbridger sole-future and zero-future configurations remain
+unconsumed.
 No alignment with a maximizing date, favourable joining sign, or funded
 joint replacement is supplied; neither complete source configuration
 is consumed.

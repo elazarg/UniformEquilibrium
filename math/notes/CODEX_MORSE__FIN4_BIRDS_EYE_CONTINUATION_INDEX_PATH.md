@@ -127,6 +127,23 @@ crossings produce a proper-three-player geometric full Nash profile,
 with every active and quiet cap verified for the SAME values. No barrier
 fit or constant tuning follows. Only this candidate/forced-pair implication
 is discarded, not a general two-team architecture or a no-UE source class.
+WS in the global notebook next tests a whole-game STATIC welfare barrier
+at the TRUE punishment vector. Its exact saturation boundary is also
+positively consumed: for any finite game with positive owns and strictly
+positive weights, if every NONEMPTY coalition's weighted payoff is at
+most the weighted punishment total, then that punishment vector is a
+fixed unrestricted uniform-equilibrium payoff. The actual stationary
+root family has a full-cap pressure bound; diffuse hazard limits are
+efficient, while a single dominant owner forces exact solo-host signs.
+The latter is proved, not assumed. Signed punishment targets and Never's
+separate0 are retained. This is an ordinary unreviewed whole-class proof
+draft, not another supplied-tail interface. HOWEVER its Fin4 input is
+already disjoint from the implemented actual Γ-simplex-positive source:
+the static welfare bound makes every positive-weighted singleton column
+nonpositive. Thus it closes no additional surviving source case and is
+not a new existence-class count or export candidate. A negative invariant
+for the remaining source must use actual dynamic/full-response information;
+the static punishment-priced coalition bound is retired even at equality.
 General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/

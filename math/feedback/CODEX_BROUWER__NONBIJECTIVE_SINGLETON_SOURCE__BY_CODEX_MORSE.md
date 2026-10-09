@@ -1306,3 +1306,38 @@ paid supplier. This locates a bad-root submode; it does not consume it.
 Zero-future and sole-zero-root-future modes remain possible under these
 statements, as do both full canonical source alternatives. No funding
 bound or UE consumer is supplied.
+
+## Bounded CU zero-root amount extension check
+
+Reviewed `## CU:` through its frozen EOF, SHA256
+`0e1fb001a00950a9ed89d50405ead0d4c2ea7ffd6196522a76926fa01296cb65`.
+Verdict: PASS, no unresolved boundary or sign objection. This is a short
+extension check reusing CS's all-clock original-carrier proof.
+
+If the unsupported sole bridger i alone has positive post-root finite
+mass, its finite amount m and Never amount1−m are both positive. Varying
+these TWO existing categories is legal on a two-sided interval even
+though its fixed root rate is0. No root-rate boundary motion is used.
+Its own full cap is constant because its opponents are unchanged and
+are all Never in the conditional suffix. EVERY other owner is a
+nonbridger and faces just i's old finite conditional F in that suffix;
+its ENTIRE finite envelope is s_h+mL_h for any signed L_h, with Never
+strictly dominated by the old final empty tester. Strict root/later
+numerical gaps fix one affine branch locally. Thus all full caps and
+prescribed payoffs are affine in m. Original global minimality makes
+an exact interval of full minima, and increasing m strictly lowers
+ORIGINAL ν=C(1−m). Least Never contradicts this. Common debt is not
+needed. Old calendar transport is the reviewed CS construction; no
+pre-first-suffix date, favorable suffix or new response clock is added.
+
+CT plus CU therefore leaves a sole future owner k with root rate0 and
+k≠i. In that mode i is literal PureNever. The primary source packet's
+Section9 explicitly supplies at least TWO positive first-root suppliers.
+Neither i nor k can be one, so the other two labels are exactly those
+two nonsure suppliers, with no future finite mass. CB implies at least
+one is later-only, since a root-only supplier's entire prescribed finite
+law would now be its root best reply. The classification of k remains
+ROOT-ONLY OR LATER-ONLY; zero prescribed root mass imposes no strategic
+label. Neither this argument nor CT excludes the zero-future mode.
+Both full source alternatives and the retained bad-root branch remain
+open, with no quantitative coupled-law funding or UE consumer.

@@ -101,6 +101,23 @@ proper-three-player stationary full Nash profile. The literal payoff
 target, every active cap and the quiet cap use the same two scalar roots.
 No polynomial fit, control tuning or broader pair-family claim is made.
 
+WS below next tests a whole-game punishment-priced welfare obstruction,
+not another rational-center fit. Its exact SATURATION version also fails
+as a negative architecture: in ANY finite game with positive own rewards,
+if a strictly positive weighted total of EVERY nonempty coalition payoff
+is at most that weighted true-punishment total, then the punishment vector
+itself is a fixed unrestricted uniform-equilibrium payoff. The ordinary
+proof explicitly handles vanishing hazards and their one-owner boundary;
+it does not assume that an individually rational stationary payoff is
+Nash. This nonempty-coalition cap need not hold at literal Never, so it
+is stronger than the strict static-barrier contradiction in WF and not
+an application of a uniform all-profile welfare cap. Nevertheless its
+Fin4 input is ALREADY excluded by the actual positive Γ-simplex source.
+No additional surviving source class, export or new existence-class count
+is claimed. A static punishment-priced coalition welfare separation is
+therefore not the missing negative invariant, even at equality. The
+remaining global route must use actual response/chronology information.
+
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
 whose outsider FULL debts vanish. All born finite deadlines and Never
@@ -22782,4 +22799,266 @@ lower=6*lo*(1-hi)*(1-yhi)-(1-lo)**2*yhi-hi**2*(1-ylo) \
 assert lower==F(47957,200000)>0
 assert 1-5*lo+2*hi*yhi<0
 print('PC complete stationary root producer and quiet box: exact PASS')
+```
+
+## WS. Punishment-priced coalition welfare saturation cannot be a negative invariant
+
+Status: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED. This is a whole-game
+positive theorem for a stated class, not a full Fin4 proof, a new surviving
+source restriction or an export. Its Fin4 existence coverage is already
+disjoint from the implemented positive singleton-flow source. The fixed
+target and arbitrary finite player count are additional explicit outputs
+of the argument, not claims of new raw-class coverage.
+
+### WS1. The actual-game barrier question and exact conclusion
+
+Let I be finite and nonempty. Prescribed stopping clocks are independent;
+each law has finite integer clocks and literal Never. At the first finite
+clock the actual tied coalition S receives r(S); joint Never receives0.
+Every unilateral behavioral deviation, equivalently every finite/Never
+stopping law, is allowed. Assume own singletons s_i=r_i({i})>0. Let
+
+    P_i=inf[all actual independent opponent behavioral laws]
+                    sup[all own behavioral replies] terminal payoff.
+
+This is the TRUE punishment vector, not a stationary candidate annotation
+or an assumed secure strategy. Let λ_i>0 for EVERY owner and suppose
+
+    Σ_i λ_i r_i(S) ≤ Σ_i λ_i P_i
+                       for EVERY nonempty S⊆I.                    (WS.1)
+
+Then P is a uniform-equilibrium payoff with ONE fixed target before all
+positive accuracies. Each accuracy has an ordinary independent behavioral
+profile, a common eventual finite-horizon cutoff, delivery close to P,
+and Nash comparisons against EVERY unilateral behavioral deviation.
+
+Thus even non-strict welfare saturation cannot create a positive gap.
+The premise concerns NONEMPTY coalition rewards only. It need not hold
+for joint Never: Σλ_iP_i can be negative. No such outcome is silently
+added to the welfare bound.
+
+WF already ruled out strict static welfare separation and produced
+stationary individually rational payoffs. The new implication tested
+here is whether exact saturation converts those actual payoffs into
+unrestricted Nash/UE. The answer is yes, with a genuine complete-law
+hazard-pressure estimate and a separate concentrated boundary repair.
+
+### WS2. Actual stationary source and the full response-pressure account
+
+Fix ε>0 and v=P−ε1. Positive own rewards imply P_i≤s_i by the actual
+all-opponents-Never cap. Take a finite exact Nash root q at continuation
+v. All Continue is not Nash since s_i>v_i, so its joint absorption
+
+    a=1−c>0,       c=∏_i(1−q_i),
+
+is positive. Repeat this SAME independent product row forever. It is an
+actual profile and absorbs almost surely. Write its terminal payoff U,
+and for responder i write
+
+    h_i=∏[j≠i](1−q_j),
+    Q_i=payoff from Quit now,
+    A_i=one-row reward from opponent absorption when i Continues,
+    F_i=q_iQ_i+(1−q_i)(A_i+h_iv_i).
+
+Root Nash means BOTH endpoints are at most F_i, while the actual
+stationary payoff satisfies F_i=aU_i+cv_i. The punishment-floor endpoint
+inequality gives F_i≥v_i, hence U_i≥v_i. By almost-sure absorption,
+(WS.1) applies to the actual first-coalition law. Therefore, with
+Λ=Σλ_i and d_i=U_i−v_i,
+
+    0≤d_i,       Σ_i λ_i d_i≤εΛ,
+    d_i≤εΛ/λ_i,  |U_i−P_i|≤ε max(1,Λ/λ_i).        (WS.2)
+
+THIS alone does not make the repetition Nash. When h_i<1, the full
+behavioral response cap is
+
+    B_i=max(Q_i,N_i),        N_i=A_i/(1−h_i).
+
+Every finite-date response has value N_i+h_i^n(Q_i−N_i), and literal
+Never pays N_i; arbitrary behavioral replies are convex mixtures of
+those values. Negative N_i is retained, not clipped to0 when the
+opponents almost surely absorb. Root Nash and (WS.2) give
+
+    Q_i≤F_i=v_i+a d_i≤U_i,
+    A_i+h_iv_i≤F_i,
+    N_i−U_i≤[a/(1−h_i)−1]d_i
+             =[q_i h_i/(1−h_i)]d_i.
+
+Consequently
+
+    0≤B_i−U_i≤[q_i h_i/(1−h_i)] εΛ/λ_i.          (WS.3)
+
+The factor is an ACTUAL selected-root hazard ratio. It is not assumed
+bounded, and (WS.3) is not declared efficient on the one-owner boundary.
+
+### WS3. Every boundary of the actual source is consumed
+
+Choose ε_n↓0 and one exact root at each scale. By root-cube compactness,
+pass to q^n→q*. Equation(WS.2) gives U^n→P independently of that choice.
+
+If q* is not All Continue, a*>0. Actual stationary payoff is continuous
+there, so repeating q* has payoff P. Root Nash also passes to its
+continuation P, so both exact endpoints are at most P. For each owner
+with h_i*<1 this gives Q_i*≤P_i and N_i*≤P_i; hence its ENTIRE cap
+is P_i. The only possible h_i*=1 belongs to a sole positive quitter.
+Its actual payoff is s_i=P_i>0, and its full cap is max(s_i,0)=P_i.
+Thus q* repeats as exact unrestricted terminal Nash, with target P.
+No claim of cap continuity on that degenerate opponent face was used.
+
+Now suppose q*=0. Let t_n=Σ_i q_i^n>0, and pass to normalized weights
+q_i^n/t_n→w_i, Σ_iw_i=1. If at least two DIFFERENT w_i are positive,
+then for every i
+
+    (1−h_i^n)/t_n→1−w_i>0.
+
+Thus every pressure factor in(WS.3) is bounded. The ACTUAL stationary
+repetitions have full behavioral debt tending0 and terminal payoff
+tending the SAME target P. The terminal-to-uniform fixed-target family
+consumer supplies P as a uniform payoff. There is no period/error or
+deleted-absorption ratio imported from a different family.
+
+The remaining case is w=e_j, exactly one dominant owner j. Collision
+probability is o(t_n), and the first-coalition law of the absorbing
+stationary repetitions tends to the singleton {j}. Hence
+
+    r_i({j})=P_i for EVERY i,          s_j=P_j>0.       (WS.4)
+
+For all sufficiently large n every q_i^n<1. Root Nash therefore says
+Q_i^n≤A_i^n+h_i^n v_i^n. Passing to q^n→0 first implies s_i≤P_i;
+combined with P_i≤s_i it gives s_i=P_i for every i. For i≠j, let
+G_i^n=Q_i^n−A_i^n−h_i^n(P_i−ε_n)≤0. Keeping the j-only term exact,
+all terms involving another opponent have total mass o(q_j^n). Their
+uniformly bounded coefficients give
+
+    G_i^n=ε_n(1−q_j^n)
+                  +q_j^n[r_i({i,j})−P_i]+o(q_j^n).
+
+Its first term is NONNEGATIVE. Thus division by q_j^n>0 yields
+r_i({i,j})≤P_i. No assertion ε_n/q_j^n→0 is needed.
+
+Use the ACTUAL pure profile with j Always Quit at date0 and every other
+owner Never. Its target is exactly P by(WS.4). Own j's full cap is
+max(s_j,0)=P_j. Every other owner can only join at date0 or stay passive,
+paying respectively r_i({i,j})≤P_i or r_i({j})=P_i. All later deadlines
+and literal Never are screened by j's sure first exit. This is exact
+unrestricted terminal Nash. It consumes the concentrated boundary
+without substituting a minimizing tail or assuming a solo-host sign.
+
+Each case yields terminal Nash or an actual terminal approximate family
+with payoffs approaching ONE target P. The fixed-target terminal-to-uniform
+consumer gives the asserted uniform equilibrium, including unrestricted
+behavioral replies and an eventual horizon chosen before those replies.
+
+### WS4. A negative-target regression and exact source coverage boundary
+
+A complete rational four-player regression is
+
+    r_i({j})=1 if i=j, and −5/3 otherwise;
+    r_i(S)=−1 for EVERY i when |S|≥2.
+
+Every nonempty coalition has unweighted total−4. For every owner,
+Quit0 against ANY opponents pays at least−1; against three sure opponents
+both Quit0 and Never pay−1. Thus the TRUE punishment vector is P=−1.
+(WS.1) holds with λ_i=1, while joint Never has welfare0>−4. The literal
+AllQuit profile is full terminal Nash at P. This confirms why the theorem
+does not require an all-profile welfare cap or a nonnegative target.
+The example is solved and illustrates the theorem, not a new UE class.
+
+For Fin4 the theorem's EXISTENCE input is already disjoint from the
+implemented counterexample source. Let Γ_ij=r_i({j})−s_i. From(WS.1)
+and P_i≤s_i, every singleton column satisfies
+
+    Σ_i λ_i Γ_ij≤Σ_i λ_i(P_i−s_i)≤0.
+
+But bare Fin4 no-UE already produces an actual simplex w with Γw>0
+coordinatewise. Strictly positive λ would give λ·Γw>0, contradiction.
+Thus WS is not an additional surviving-source exclusion. In particular
+choosing a different positive welfare weight cannot bypass this veto.
+The full Fin4 goal and both least-Never alternatives remain open.
+
+The failed global barrier mechanism is now precise: a STATIC coalition
+welfare cap priced at the actual punishment floor fails even at exact
+equality. A genuinely negative certificate must retain more than the
+terminal coalition-welfare separation; dynamic/full-response information
+is indispensable. This does not rule out a nonlinear full-root potential.
+
+Named exact dependencies inspected under their imports:
+
+- `exists_isZeroQuittingRootNash` in
+  `UniformEquilibrium/Quitting/Root/NashExistence.lean`;
+- `quittingPunishmentValue_sub_le_rootEndpointMax` in
+  `UniformEquilibrium/Quitting/Punishment/FiniteWordPunishmentFloor.lean`;
+- `quittingStationaryUnilateralCap_eq_max_div`, the actual all-behavior
+  stationary cap results, and `quittingPunishmentValue_le_max_solo` in
+  `UniformEquilibrium/Quitting/Stationary/MinMax.lean`;
+- `quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family`
+  and `quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact`
+  in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`;
+- `quittingProjectiveLCPMatrix` in
+  `UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`, and
+  `exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+  in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+
+The bounded docs/source lookup also inspected
+`EquivariantSecurityWelfareAssembly.lean`. Its supplied one-sided security
+and GLOBAL all-profile welfare-cap input is not the premise here; the
+negative-target regression fails that global cap. No exhaustive prior
+class comparison or new export significance claim is made.
+
+### WS5. Exact full-cap arithmetic cross-check
+
+The checker below verifies the pressure account on100 COMPLETE signed
+sixty-entry tables with exact mixed root-Nash annotations and d_i≥0.
+It includes97 negative stationary Never caps. Those test annotations are
+not certified punishment values; the experiment checks the all-reply
+algebra, not existence of a game satisfying(WS.1). The theorem follows
+from WS1–WS3, not from sampled eligibility. Marker: `WS EXACT CHECKER`.
+
+```python
+from fractions import Fraction as F
+from itertools import combinations
+from random import Random
+I=range(4)
+coals=[frozenset(S) for n in range(1,5) for S in combinations(I,n)]
+rng=Random(20261009)
+checked=negative=0
+for attempt in range(10000):
+    r={(S,i):F(rng.randint(-8,8)) for S in coals for i in I}
+    for i in I:r[(frozenset({i}),i)]=F(rng.randint(1,3))
+    q=[F(rng.randint(1,9),10) for i in I]
+    c=F(1)
+    for p in q:c*=1-p
+    a=1-c
+    rows=[]
+    for i in I:
+        opp=[j for j in I if j!=i]
+        Q=A=F(0)
+        h=F(1)
+        for j in opp:h*=1-q[j]
+        for n in range(4):
+            for ss in combinations(opp,n):
+                S=frozenset(ss);pr=F(1)
+                for j in opp:pr*=q[j] if j in S else 1-q[j]
+                Q+=pr*r[(S|{i},i)]
+                if S:A+=pr*r[(S,i)]
+        v=(Q-A)/h
+        U=(q[i]*Q+(1-q[i])*A)/a
+        rows.append((Q,A,h,v,U))
+    if any(U<v for Q,A,h,v,U in rows):continue
+    for i,(Q,A,h,v,U) in enumerate(rows):
+        N=A/(1-h);d=U-v;cap=max(Q,N)
+        assert Q==A+h*v and Q==v+a*d and Q<=U
+        assert cap-U==q[i]*h/(1-h)*d
+        for n in range(7):assert N+h**n*(Q-N)<=cap
+        negative+=N<0
+    checked+=1
+    if checked==100:break
+assert checked==100 and negative==97
+for S in coals:
+    row=[F(1) if i in S else F(-5,3) for i in I] if len(S)==1 \
+        else [F(-1) for i in I]
+    assert sum(row)==-4
+    assert all(row[i]>=-1 for i in S)
+print('WS exact full stationary cap pressure: PASS',checked,
+      'complete tables;',negative,'negative Never caps')
 ```

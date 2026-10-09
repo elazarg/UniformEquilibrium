@@ -158,6 +158,27 @@ root supplier identity, or a minimizing suffix. The complete old-law
 deletion response envelopes remain in the test; no funding sign or
 consumer is presently claimed.
 
+The selective continuation of NC.39 keeps this SAME supplied pair and
+changes which original i draws pay for the increased cap. Its exact
+own-budget equation below separates positive finite regret from zero
+finite regret: finite-only repair is infinitesimal in the former case,
+but requires a fixed positive finite relocation in the latter. A repair
+changing only the old Never draws is already RM47, not a new route.
+Neither regime has a total-cap funding sign. The current question is
+whether actual original-head relocation/response turnover supplies it,
+without importing CB's different paid first-root supplier as owner i.
+
+NC.40 now retires one complete part of that selective family: original
+finite-only relocation to a new i word BEFORE the donated j word.
+Every actual prescribed/pure-response value is jointly affine in the
+relocation submeasure and donor mass, so adaptive selection and full
+cap turnover still give a convex optimized debt budget. In the supplied
+zero-future source-II arm the exact budget is finite PWL with strictly
+positive initial cost, hence no finite-amplitude escape. This is an
+operation boundary, not elimination of that source arm. The remaining
+operation must put relocated i finite mass after some donated j mass,
+or deliberately change i's Never mass and price the resulting cross term.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -26309,3 +26330,226 @@ It therefore does NOT refute the canonical source or the NC.39 candidate.
 No constants, decoration, export or independent gate is sought. The next
 source-dependent test must use actual cap turnover/selective relocation;
 neither outer convexity nor outer concavity is being assumed.
+
+**The selective ORIGINAL-finite test, before another cap shortcut.**
+Keep the source-selected i,j and the ordered diffuse j/i words of
+NC.39. Write ζ_i for i's ORIGINAL prescribed finite-conditional
+regret. For an original finite draw z put g_z=B_i−V_i(z)≥0, so
+the integral of g_z over the original finite sublaw equals ζ_i.
+Here ζ_i is not the positive simplex residual γ_i in (NC.39a).
+Choose a submeasure p of that sublaw to relocate to the i word,
+and put ρ=p(Finite), G=∫g_z dp. Optionally relocate β∈[0,n_i]
+of the original i Never draw to that word too. The original finite
+draws outside p are retained, not publicly correlated with j's draw.
+As before j moves η of its Never mass into its preceding late word.
+
+The i word is a full best response against the changed opponents.
+An original finite i draw stays before the j word, and its prescribed
+payoff is unchanged. Its regret increases by ηeΓ_ij. Moving that
+draw to the i word therefore gains g_z+ηeΓ_ij. An i Never draw
+instead gains e s_i(n_j−η). Consequently the exact limiting own
+debt and literal full Never are
+
+    d_i(new)=d_i*+ηeA_ij−G−ρηeΓ_ij
+                                      −βe s_i(n_j−η),
+    ν(new)=e(n_i−β)(n_j−η).                       (NC.39j)
+
+These follow on the original finite realizers and then pass with the
+same uniform word cap error. At a fixed η>0 the strictly positive
+ηeΓ_ij eventually dominates the finite c-activity error, so the
+new full i cap is identified rather than assumed. The finite law p
+and its own regret integral must come from that SAME realizer; no
+arbitrary head payoff coefficients are supplied.
+
+Thus d_i(new)=d_i* is EXACTLY the budget requirement
+
+    G+ρηeΓ_ij+βe s_i(n_j−η)=ηeA_ij.              (NC.39k)
+
+It makes two operational regimes explicit. If ζ_i=0, every original
+finite draw has g_z=0 almost surely. A FINITE-ONLY repair, β=0,
+must then relocate
+
+    ρ=A_ij/Γ_ij=m_i−n_i s_i/Γ_ij∈(0,m_i),
+
+independently of η. Such a repair is genuinely finite amplitude even
+when the donor change tends to0; it is not an infinitesimal path with
+a presumed cheap integration. This does not rule out the finite
+amplitude operation or mixed finite/Never relocation, and makes no
+claim about its other owners' cap costs.
+
+If ζ_i>0, select an actual positive-regret tranche of finite mass q>0
+and mean regret gbar>0. Removing ρ/q of this tranche with
+
+    ρ=ηeA_ij/(gbar+ηeΓ_ij),       β=0,
+
+is legal for all sufficiently small η and satisfies (NC.39k), with
+ρ=O(η). Both regimes strictly reduce full ν at η>0. The canonical
+source does NOT force this selected c-active i to have ζ_i>0;
+CB's paid first-root supplier need not be i or j.
+
+There is one supplied-geometry arm where it DOES follow without
+aligning CB's witness: source II with NO prescribed finite mass after
+its first root. The Q6-selected i has finite mass, all at that root.
+It cannot be the sole bridger, whose root rate is0. Since i∈C, it
+is strictly later-only, so ζ_i=a_i(B_i−Q_i)>0. This is a genuine
+alignment for the selective paid-root test in that submode, not its
+funding conclusion. Modes with future mass retain both ζ regimes.
+
+For comparison, p=0 gives the debt-preserving Never-only repair
+
+    β=ηA_ij/[s_i(n_j−η)],
+    ν(new)=ν*−ηe m_iΓ_ij/s_i,
+    0<η≤n_i n_j s_i/(m_iΓ_ij).
+
+It leaves EVERY original finite draw unchanged and is exactly RM47's
+arbitrary-tail graft, including both new words, every tester, and
+literal Never. It is not a new selective mechanism. Equation
+(NC.39k) prices only i's delivery, NOT the changed old/maximizing
+responses of j and the other owners. Those full cap costs remain
+the live test; no source case, positive-γ chamber, or zero-γ chamber
+is counted as consumed by this operational split.
+
+## NC.40: selective finite relocation BEFORE the donor stays jointly convex
+
+COMPLETE INTERNAL ORDINARY-MATHEMATICS FAMILY OBSTRUCTION, UNREVIEWED.
+This is not a new source-class exclusion or equilibrium producer. The
+full minimum already forbids any lower-debt legal competitor. The useful
+increment here is the exact joint convexity of a genuinely two-law class,
+including adaptive original-finite selection and EVERY cap turnover.
+No generic outer-LP convexity is inferred from this special cancellation.
+
+Fix the SAME source-selected i,j of NC.39, with A_ij>0, Γ_ij>0,
+c-active i, e=∏_(k≠i,j)n_k, and a=eA_ij>0. On one actual original
+finite realizer, let μ_i be i's original finite sublaw. Choose ANY
+submeasure p≤μ_i, of mass ρ. Relocate exactly those i finite draws
+to a uniform i-only word I after ALL old dates. Its original Never
+mass n_i remains unchanged. Move η of j's old Never mass to a
+uniform j-only word J strictly AFTER I, with all old j finite draws
+unchanged. The words have N dates, are disjoint, and the parameters
+change their masses, not their order. All randomness is independent;
+no public mixture of profiles is used. This reverses NC.39's two
+new-word order and retains the original arbitrary root literally.
+
+### The actual mixed term is zero for every response, not only played payoffs
+
+The product law is formally bilinear in p and η. Its mixed terminal
+term is nevertheless EXACTLY zero. Conditional on an i draw belonging
+to p, BOTH its original time and its relocated time lie strictly before
+EVERY date in J. Replacing j Never by a J draw therefore cannot change
+the terminal outcome in either of those two cases: i already quits
+before J, or some still earlier owner quits. This is a pointwise labelled-
+outcome assertion for every other-player clock realization, including
+Never, so it is valid for arbitrary signed rewards.
+
+It follows that the prescribed payoff vector U(p,η) is JOINTLY affine.
+For a pure responder k≠i,j, fixing ANY response time, including Never
+or a date in either new word, preserves the same pointwise argument.
+If k=i or j, its own law is deleted and the response value is affine
+in the remaining parameter immediately. Hence EVERY pure response
+value V_k(z;p,η) is jointly affine. Therefore the ENTIRE caps and debt
+
+    B_k(p,η)=sup_(all finite z and Never) V_k(z;p,η),
+    D(p,η)=Σ_k[B_k(p,η)−U_k(p,η)]
+
+are jointly convex. This includes old root and moving old responses,
+the two joining seams, all within-word replies, the last empty test,
+and literal Never. It is not an upper bound from four selected tests.
+At each actual finite index, only finitely many occupied/empty response
+values are distinct, so this full debt is finite convex PWL. The
+infinite-chart limit is convex; it need not be finite PWL.
+
+The narrow existing machinery inspected for this test comprises the
+affine `prescribedPayoff` and `pureResponsePayoff` definitions in
+`Quitting/Terminal/PivotRepairFiniteLP.lean`, and the all-pure-time cap
+identity used in `geometric_cap_le_of_endpoints` in
+`Quitting/Terminal/PivotRepairExactObjective.lean`. The inspected
+`exists_geometric_pivot_payoff_eq_and_caps_le` in
+`Quitting/Terminal/GeometricPivotCapDomination.lean` genuinely preserves
+the prescribed vector while lowering EVERY cap, but is not needed to
+make this mixed term zero. The tracked repair infimum/objective results
+are for MAX regret; none is cited as a constrained SUM theorem here.
+A narrow search found no pre-donor/joint-cancellation result in these
+repair files or the semantic-root neighborhood.
+
+### Exact source own-budget, with finite realization rather than a false margin transfer
+
+In the source limit put g_z=B_i−V_i(z)≥0 and ζ_i=∫g_z dμ_i.
+The i-word pure payoff is the old final empty payoff B_i, BEFORE
+j's new word. Its full cap, which deletes i's own law, is instead
+B_i+ηeΓ_ij, attained after J. Thus
+
+    U_i(new)=U_i+∫g_z dp+ηn_i e r_i({j}),
+    d_i(new)=d_i*+ηa−∫g_z dp,
+    ν(new)=n_i(n_j−η)e.                           (NC.40a)
+
+At an original finite index use its ACTUAL final empty value C_i
+instead of B_i in the relocation gain. The affine budget is
+
+    ∫[C_i−V_i(z)]dp=ηeA_ij.                       (NC.40b)
+
+Here its original entire cap may exceed C_i by a vanishing c-activity
+error. The new cap lies within 2Mη/N of
+max(B_i,C_i+ηeΓ_ij). For a fixed η>0, Γ_ij>0 makes the second
+term eventually dominant. Thus (NC.40b) gives own debt tending to
+d_i*, without pretending that every finite realizer already has an
+exact c-active cap or that a suffix is minimizing. Prescribed payoffs
+and full ν are exact at each index; all finite/Never cap errors are
+uniform and vanish as N increases.
+
+If ζ_i=0, the exact source budget ∫g_z dp=ηa has no solution
+at ANY positive η: all original finite draws already give full i
+best-response delivery. This is only a minimum-return obstruction for
+this finite-only/pre-donor operation, not a source-case exclusion.
+Changing old Never draws or placing finite mass after J changes the
+equation and remains outside this family.
+
+If ζ_i>0, minimize the ENTIRE debt over p≤μ_i subject to the
+linear budget (NC.40b), at each finite index. This is a compact finite
+convex optimization in (p,η); partial minimization gives a convex
+value function of η on its feasible interval. On every fixed compact
+subinterval below min(n_j,ζ_i/a), one may extract a limit of these
+bounded convex values. They have value δ at0 and give an actual
+augmented source-family limit at every positive η. This last fact
+uses the original carrier compactification, not attainment of an
+arbitrary behavioral LP boundary. Full ν is n_i(n_j−η)e<ν*.
+Consequently a limit value≤δ would be a strict full-floor descent,
+or an exact augmented minimum with lower literal Never. Thus the
+limit value is strictly greater than δ at every positive feasible η.
+The new content is that it is convex and nondecreasing from δ even
+when p and the ENTIRE maximizing response sets change with η.
+
+### Supplied zero-future arm and the actual next operation
+
+In source II with no post-root prescribed finite mass, the SAME
+Q6-selected i is a positive later-only supplier, as proved just after
+(NC.39k). All its finite mass a_i is at the original root. Put
+g=B_i−Q_i>0, so ζ_i=a_i g. The selection submeasure has only
+one effective coordinate ρ, and exact own-budget matching requires
+
+    ρ=ηa/g,       0≤η≤min(n_j,a_i g/a).            (NC.40c)
+
+The complete limiting cap chart consists of the old root and the
+ordered-word endpoints, finitely many AFFINE values in (ρ,η).
+Its full debt along (NC.40c) is therefore convex finite PWL.
+The full floor makes its initial slope nonnegative. If that slope
+were0, its initial PWL segment would have debt EXACTLYδ and full
+ν<ν*, contradicting the source's least literal Never selection.
+Its initial slope is strictly positive, and convexity prevents ANY
+later full-cap turnover from funding the cost at a larger amplitude.
+No constant optimization or independent gate is requested for this
+internal mechanism obstruction.
+
+This retires the ENTIRE pre-donor finite-only selective class as a
+late-turnover funding route, not the zero-future source mode or either
+canonical source case. A genuine mixed term requires that some moved
+i finite mass lie AFTER some donated j mass, or that i's Never mass
+change. For a fixed paid tranche of mean regret gbar, splitting the
+j word so that θ∈[0,η] occurs before the new i word gives own gain
+ρ(gbar+θeΓ_ij) and matching
+
+    ρ=ηa/(gbar+θeΓ_ij).
+
+Only θ=0 belongs to the convex family proved here. Positive θ,
+all newly born middle caps, and the original root responses remain
+the concrete live funding test. No outside paid-owner alignment is
+being assumed, and no unrestricted below-δ profile has been obtained.
