@@ -111,6 +111,28 @@ minimize debt; its only automatic lower bound is D(v)≥δ. Zero rates are
 allowed, but no rate is one. Every positive rate is strictly mixed.
 No conditioning on a zero-survival event is permitted.
 
+## Maximal first-row absorption at the selected Never probability
+
+Refine the choice of the supplied decomposition on the SAME table. Define
+
+    Z={(x,w): x∈[0,1]⁴, w∈H,
+               D(T_x(w))=δ, c(x)ν(w)=ν*},
+    A(x)=1−c(x).
+
+Here T_x(w) uses the payoff/cap coordinates of w, and ν(w) is its
+joint-Never coordinate. Its full augmented prefix is the previously
+defined T̂_x(w). The set Z is compact and nonempty; the supplied
+nonzero minimum prefix makes its maximum absorption positive. Require
+the supplied root q and its SAME augmented continuation to attain
+
+    A(q)=max{A(x):(x,w)∈Z}>0.
+
+The comparison includes EVERY product root and every honest augmented
+carrier continuation with the displayed minimum and Never coordinates.
+It is not restricted to exact Nash roots, one chosen suffix, one law
+fibre, or minimizing continuations. To use maximality after a change,
+prove that its root and continuation belong to this SAME set Z.
+
 ## Constraint on every minimum prefix
 
 Require the following on the ENTIRE same carrier, not just the supplied
@@ -265,9 +287,10 @@ A positive four-player terminal-gap table, if one exists, permits
 reselection to a bounded table with the positive singleton rewards,
 row witnesses, STRICT full/absorbing gap separation, common positive debt
 and universal nonsure minimum-prefix properties above. A least literal
-Never triple and a nonzero minimum prefix realizing that same triple
-can also be selected. No old minimizing law is asserted to survive that
-table change, and no raw clock profile attaining the triple is assumed.
+Never triple and a decomposition maximizing first-row absorption over
+Z can also be selected, with the stated response configurations. No old
+minimizing law is asserted to survive the table change, and no raw clock
+profile attaining the triple is assumed.
 Consequently an affirmative answer rules out positive terminal gaps and
 gives uniform-equilibrium payoff existence. In that conclusion one fixed
 payoff target must work at every accuracy: the profile and horizon
