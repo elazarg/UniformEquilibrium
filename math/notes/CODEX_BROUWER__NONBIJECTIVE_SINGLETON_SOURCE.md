@@ -137,7 +137,8 @@ LATER-ONLY. Varying a ROOT-ONLY supplier's root rate jointly with the
 future owner's entire finite/Never amplitude gives a genuine two-affine
 minimum line. It uses the old finite conditional and all its testers,
 so has no geometric-hazard, strict-endpoint or endpoint-tie exception.
-DB below is a new COMPLETE ORDINARY, UNREVIEWED boundary consumer:
+DB below is a COMPLETE ORDINARY boundary consumer with an independent
+Morse soundness PASS:
 the entire ZERO-HAZARD one-future CW representative is impossible.
 If the PureNever bridger's singleton gap to k is nonpositive, changing
 only k's finite/Never amplitude gives a true flat minimum interval with
@@ -147,6 +148,12 @@ k-only diffuse words have full debt tending0, contradicting δ>0.
 The proper/sure-hazard one-future mode with two later-only suppliers,
 the zero-future mode, multiple future owners and general alternatives
 (I)/(II) remain OPEN.
+DC records the immediate actual-attainment consequence: since DB removes
+z=0, CW now supplies a genuine RAW root-plus-one-geometric-clock global
+minimum in the one-future case, with all four marginal Never atoms and
+the same least original ν/root-max membership. END may still be an
+unattained raw-clock cap supremum. The surviving four real parameters
+do not replace the ORIGINAL unrestricted global-minimum hypothesis.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -17832,6 +17839,20 @@ contradiction using that extra information, is still required. Zero-
 future, multiple-future and case(I) remain open as well.
 
 
+## DB independent review disposition
+
+Morse independently checked frozen DB1–DB4 and gave PASS with no unresolved
+objection to either actual arm: the two-sided full-minimum f family,
+literal original-Never decrease, or the actual absorbing singleton-k word
+with ALL behavioral caps bounded. The Γ_i=0 case is harmless (although
+absent at the selected generic table). See
+[the recorded DB review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
+This supersedes the historical unreviewed status in the unchanged proof.
+The full zero-hazard one-future boundary is excluded; positive-hazard
+one-future and general case(II) are not. No new solo strategy-class
+existence theorem, export or Lean seal is claimed.
+
+
 ## DB: the complete zero-hazard one-future boundary is impossible
 
 Status: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED actual-source boundary
@@ -17968,3 +17989,137 @@ boundaries. The useful next question is a finite-amplitude coupled
 change of BOTH suppliers and k's entire conditional at those survivors,
 not sharpening the zero-hazard error or another paid endpoint. General
 case(II), zero-future/multiple-future and case(I) remain open.
+
+
+## DC: actual positive-hazard minimum and the precise surviving problem
+
+This is a DIRECT COROLLARY of independently reviewed CW/DA/DB and RA1,
+not another normalization, source selection, new export packet or raw
+existence producer. Its role is to put the remaining repair problem at
+an ACTUAL independent stopping-law profile instead of merely a marked
+compact representative. No additional independent audit is requested.
+
+### DC1. Actual attainment, including the unattained END cap
+
+Use the SAME final table and least-ORIGINAL-Never/max-A source. Suppose
+its alternative(II) has exactly ONE post-root finite owner. CW preserves
+the entire original (U,B,ν) and root rates under whole-conditional
+replacement by one geometric clock, allowing a diffuse z=0 limit.
+DB excludes that limit, so its selected hazard is z∈(0,1]. DA supplies
+two positive LATER-ONLY root suppliers. For distinct i,p,q,k the laws
+are consequently ACTUAL raw stopping laws on ℕ⊔{Never}:
+
+    p_i=δ_Never,
+    p_p=bδ₀+(1−b)δ_Never,
+    p_q=aδ₀+(1−a)δ_Never,
+    p_k({t})=f z(1−z)^(t−1)  for every integer t≥1,
+    p_k(Never)=1−f,
+    0<a,b,f<1,  0<z≤1.                       (DC.1)
+
+The probabilities sum to1 and the four private draws are independent.
+For z=1 k's finite conditional is the single date1. For 0<z<1 it has
+a positive atom at EVERY integer date≥1. It is not surely finite as
+a whole law: the literal Never mass1−f stays strictly positive.
+
+The exact raw all-clock formula, not just a marked moving-test limit,
+is for EVERY h≠k and every integer t≥1:
+
+    V_h(t)=A_h+H_h[s_h+f Γ_h
+                +f(1−z)^(t−1)(zP_h−Γ_h)],
+    Γ_h=r_h({k})−s_h,  P_h=r_h({h,k})−s_h.   (DC.2)
+
+Q_h is the root0 response; A_h,H_h have the literal original root
+meaning. Every finite t≥1 is between its FIRST and END values, so
+
+    E_h=A_h+H_h[s_h+f max(zP_h,Γ_h)],
+    B_h=max(Q_h,E_h)                         (h≠k),
+    B_k=max(Q_k,A_k+H_k s_k).                (DC.3)
+
+For 0<z<1 and strict END dominance, the END is a SUPREMUM as t→∞,
+not a claimed finite response. If FIRST/END tie, all finite t≥1 have
+the same value; if z=1 the END is attained after date1. Never's exact
+value for h≠k is A_h+H_h f r_h({k}), strictly below the END value by
+H_h(1−f)s_h>0. Own k's cap follows directly from its opponents having
+only root0/Never clocks. Thus EVERY raw finite/Never response, and by
+averaging every behavioral replacement, is included in(DC.3).
+
+These exact values coincide with CW's limiting formulas at its selected
+positive z. Its prescribed payoffs and literal ν also coincide exactly.
+Therefore(DC.1) ATTAINS the ORIGINAL unrestricted full global minimum
+δ, common debt vector d*, and least literal ν₀. This does not infer
+attainment of any missing END maximizing integer. Conversely its
+constant actual sequence has a marked representative containing that
+END test as usual; no finite escape is relabeled Never.
+
+Its honest root-conditioned geometric suffix is itself actual, has
+literal probability1−f and an augmented point in H. Prefixing the
+unchanged physical root recovers(DC.1). Since CW preserves that root,
+its root/suffix pair is still in RA1's SAME Z at attained A₀. There
+is no switch to an unrelated minimum tail or an arbitrary root fibre.
+
+### DC2. Four-parameter full-cap data and genuinely global constraints
+
+Put C=(1−b)(1−a). For EVERY recipient h,
+
+    R_h=b(1−a)r_h({p})+(1−b)a r_h({q})+ba r_h({p,q}),
+    U_h=R_h+C f r_h({k}),
+    ν=C(1−f),    A=1−C.                      (DC.4)
+
+For h=i,k, A_h=R_h and H_h=C. For h=p,
+A_p=a r_p({q}), H_p=1−a and
+Q_p=(1−a)s_p+a r_p({p,q}). For h=q,
+A_q=b r_q({p}), H_q=1−b and
+Q_q=(1−b)s_q+b r_q({p,q}). The other two root caps are
+
+    Q_h=C s_h+b(1−a)r_h({h,p})
+                 +(1−b)a r_h({h,q})+ba r_h({h,p,q})  (h=i,k).
+
+The surviving actual selected source satisfies exactly
+
+    Q_i=E_i,       Q_p<E_p,       Q_q<E_q,
+    Q_k≠A_k+C s_k,                            (DC.5)
+    B_h−U_h=d*_h>0 for all h,    Σ_h d*_h=δ>0,
+    ν=ν₀>0,       A=A₀ in the original Z.
+
+Crucially the remaining global premises are NOT restricted to these
+four parameters: EVERY independent stopping-law profile has full
+summed debt≥δ; every absorbing profile has debt≥δ+g; all augmented
+full minima at the table have the SAME d*; and none has literal ν<ν₀.
+Nor may another honest suffix be assigned these full-minimum properties.
+
+A direct actual absorbing k-only uniform-word comparison gives the
+useful compulsory singleton-column obstruction
+
+    Σ_(h≠k) (−Γ_h)⁺ ≥ δ+g>0.                 (DC.6)
+
+Indeed its full debt tends to precisely that sum, with all caps given
+by max(s_h,r_h({k})) plus the uniform joining error from DB3. Thus at
+least one observer really prefers its own singleton to passive k.
+This uses the separated absorbing floor at the SAME table, not a
+generic cone screen or a sign inferred from a different solved fixture.
+
+At proper 0<z<1, reviewed CZ retains its exact endpoint-tie obstruction
+when a supplier is strictly FIRST-active. At z=1 no proper-hazard
+two-sided argument is imported. DB excludes z=0 altogether. No
+claim that the remaining inequalities describe an equilibrium, an
+arbitrary-game raw producer, or strategy-class completeness is made.
+
+### DC3. The actual positive-hazard repair question
+
+Can the ACTUAL independent profile(DC.1), with ALL the unrestricted
+global premises above, exist? A conjecture-facing answer must construct
+an actual whole-law competitor with D<δ, or a true full minimum with
+smaller ORIGINAL ν (or the same ν and larger A in the SAME Z), or
+derive a complete impossibility of this surviving source class.
+
+The live operation now keeps the positive first k atom and prices
+joint FIRST-date responses when relocating the two paid root suppliers.
+Their FULL caps are later, so the ROOT-ONLY supplier cancellation used
+in DA is unavailable. Moving their atoms into k's first occupied date
+can create triple and grand-coalition tester payoffs not present in the
+old root/one-clock formula; these must be included. Replacing all such
+collisions by diffusion can instead create a pre-first empty cap when
+an old signed upper coefficient is negative. Neither omission is a
+funded repair. Entire k finite-conditional changes and both suppliers'
+Never masses remain free; the four-parameter grammar is an actual
+incoming minimizer, not a restriction on legal competitors.
