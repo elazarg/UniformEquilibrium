@@ -659,6 +659,17 @@ original opponent-root event. Multiple labels for one owner do not
 count as two owners. The later-only family need not be unique or
 isolated, and prescribed finite mass for the sole bridger is not assumed.
 
+At the same source, some owner has both positive prescribed finite mass
+and positive literal Never mass, and its full cap equals its late empty-date
+response value:
+
+    0<n_i<1,    B_i=R_i+h_i s_i,    h_i=∏[j≠i]n_j.
+
+Here R_i is its Never payoff; the empty-date values are retained through
+the actual finite approximants. This owner need not be a bridging owner,
+a first-root supplier, or an owner whose singleton column has positive
+social payoff. Those alignments are not supplied by the theorem.
+
 The excluded sole-bridge/three-root-only configuration admits a literal
 one-owner finite/Never conditioning path. A local interval preserves the
 ENTIRE payoff/cap pair but strictly lowers literal joint Never,
