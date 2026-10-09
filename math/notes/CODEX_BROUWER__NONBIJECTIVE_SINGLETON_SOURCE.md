@@ -137,8 +137,16 @@ LATER-ONLY. Varying a ROOT-ONLY supplier's root rate jointly with the
 future owner's entire finite/Never amplitude gives a genuine two-affine
 minimum line. It uses the old finite conditional and all its testers,
 so has no geometric-hazard, strict-endpoint or endpoint-tie exception.
-The one-future mode with two later-only suppliers, the zero-future mode,
-multiple future owners and general alternatives(I)/(II) remain OPEN.
+DB below is a new COMPLETE ORDINARY, UNREVIEWED boundary consumer:
+the entire ZERO-HAZARD one-future CW representative is impossible.
+If the PureNever bridger's singleton gap to k is nonpositive, changing
+only k's finite/Never amplitude gives a true flat minimum interval with
+smaller original Never. If it is positive, DA/CZ make EVERY observer
+prefer the singleton k outcome to its own singleton, and actual absorbing
+k-only diffuse words have full debt tending0, contradicting δ>0.
+The proper/sure-hazard one-future mode with two later-only suppliers,
+the zero-future mode, multiple future owners and general alternatives
+(I)/(II) remain OPEN.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -17822,3 +17830,141 @@ survival factor, hence becomes a genuine rational term in b,x. A
 funded coupled change of both suppliers' whole laws, or a global
 contradiction using that extra information, is still required. Zero-
 future, multiple-future and case(I) remain open as well.
+
+
+## DB: the complete zero-hazard one-future boundary is impossible
+
+Status: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED actual-source boundary
+consumer. This reuses independently reviewed DA and CZ, with CW's actual
+zero-hazard finite-word interpretation. It excludes ALL z=0 one-future
+representatives at the SAME least-ORIGINAL-Never/maximal-root source,
+not the whole one-future class or case(II). No genericity beyond the
+already selected table is added.
+
+### DB1. Exact input and exhausted sign split
+
+Use the SAME source, extremal selection and one-future pattern as DA:
+sole bridger i is PureNever; k≠i is the sole finite post-root owner with
+root rate0 and finite/Never mass f₀,1−f₀>0; p,q are the positive nonsure
+root suppliers with no post-root finite mass. By reviewed DA BOTH p,q
+are LATER-ONLY. Write C=(1−a_p)(1−a_q)>0 and
+
+    Γ_h=r_h({k})−s_h,    P_h=r_h({h,k})−s_h   (h≠k).
+
+Suppose CW's actual representative has hazard z=0. This means uniform
+finite k words of total mass f₀ and literal Never1−f₀, NOT raw Never.
+Its ENTIRE upper cap coefficient for h≠k is L_h=max(0,Γ_h).
+Reviewed CZ's zero-hazard arm excludes a positive LATER-ONLY supplier
+with Γ_h<0; within-row genericity excludes Γ_h=0. Therefore
+
+    Γ_p>0, Γ_q>0.                              (DB.1)
+
+We now exhaust Γ_i≤0 and Γ_i>0. k's ROOT-ONLY versus LATER-ONLY cap
+label remains unrestricted. Active FIRST/END ties at Γ_i=0 cause no
+problem in the first arm.
+
+### DB2. Nonpositive bridger gap gives a genuine flat minimum interval
+
+Keep all four root rates fixed and vary ONLY k's total finite mass
+f near f₀, retaining the zero-hazard diffuse interpretation. At every
+finite index use the PRIVATE independent laws
+
+    p_k^N(t)=f/N for t=1,…,N,
+    p_k^N(Never)=1−f,
+
+with the same exact root/Never p,q laws and i PureNever. For each h≠k
+EVERY suffix finite reply satisfies
+
+    V_h,N(t)=s_h+f(t−1)Γ_h/N+fP_h/N   (1≤t≤N),
+    V_h,N(t)=s_h+fΓ_h                 (t>N).
+
+At a word date the displayed error from its straight-line trace is at
+most2M/N. No pre-first-suffix empty date is inserted: for a negative
+Γ_h the FIRST word date approaches s_h with that same error bound.
+As in CZ3 the ENTIRE finite cap converges uniformly to
+s_h+f max(0,Γ_h). Literal Never pays f r_h({k}) and is below the final
+finite tester by(1−f)s_h>0. Root prefixing multiplies the cap error by
+H_h≤1 and cannot enlarge it. Own k cap is exactly independent of f.
+Thus every fixed f near f₀ realizes a triple in the SAME H, with
+ALL born/moving finite and Never responses priced.
+
+Let Q_h and A_h,H_h be the original fixed-root quantities. If Γ_i≤0,
+both i's root and entire-upper values
+
+    Q_i,    A_i+H_i s_i
+
+are independent of f and agree at f₀. Hence its FULL B_i is constant
+on the whole interval. The other owners are strict nonbridgers. For
+p,q, their full LATER-ONLY gaps persist and
+
+    B_h(f)=A_h+H_h[s_h+f max(0,Γ_h)]   (h=p,q)
+
+is affine. For k, whichever of ROOT-ONLY/LATER-ONLY holds originally,
+its full cap is independent of f because a player's own law never
+affects its cap. Every prescribed payoff is affine, explicitly
+
+    U_h(f)=U_h^root+C f r_h({k}),
+    ν(f)=C(1−f).
+
+Therefore TRUE full summed debt is affine in f on a genuine two-sided
+interval about f₀. Its ORIGINAL global floor and equality D(f₀)=δ
+force D(f)=δ on this interval. Take f>f₀. The exact literal Never
+probability is strictly smaller than ν₀, contradicting its least
+selection over ALL original augmented minima. Neither an infinitesimal
+zero alone nor a minimum tail is used. This first arm does not need
+maximal root absorption, common individual debts, or DA's supplier
+labels; those labels are needed for the remaining positive-gap arm.
+
+### DB3. Positive bridger gap gives actual absorbing below-floor words
+
+If Γ_i>0, then(DB.1) says r_h({k})>s_h for EVERY observer h≠k.
+Use a DIFFERENT actual profile: only k draws a uniform finite time
+on1,…,N, with total finite mass1, and all other players use Never.
+It is genuinely absorbing and independent at every index. Its exact
+payoff vector is U_h=r_h({k}). Own k has cap s_k=U_k and debt0.
+
+For h≠k, a finite response before the word pays s_h≤r_h({k}); a
+word-date response is
+
+    s_h+(t−1)Γ_h/N+P_h/N;
+
+a response after the word, or literal Never, pays r_h({k}). The
+straight-line term at a word date is at most r_h({k}), and its signed
+joining error is at most |P_h|/N≤2M/N. Thus EVERY unrestricted cap
+is at most r_h({k})+2M/N. Behavioral replacements average pure replies,
+so the same bound controls all of them, not just finite tests.
+
+Consequently these actual profiles have full summed debt at most6M/N.
+Choose N sufficiently large to obtain D<δ, contradicting the ORIGINAL
+ALL-law full floor (also the separated absorbing floor). This uses an
+actual full-game competitor, not a supplied three-player equilibrium
+whose outsider safety is assumed. In this arm every outsider is safe
+by the explicit singleton inequality and the complete word bound.
+
+The two arms exhaust all signs and prove that z=0 cannot be the CW
+representative of a one-future source selected as above.
+
+### DB4. Boundaries and next actual funding question
+
+DB consumes the whole zero-hazard boundary, including arbitrary signed
+pair-joining payoffs and either k cap class. It strengthens CZ's prior
+negative-supplier zero-hazard exclusion by using DA's BOTH-later-only
+necessity and the bridger's complete cap. The unreviewed status here
+is about this new assembly/flat-f consumer; the invoked DA/CZ/CW
+proofs have independent Morse PASSes.
+
+All original primary sources are exactly those recorded in DA/CZ/CW:
+accepted source Sections6–7,9,15,18, RA1's SAME extremal selection,
+and actual pure-clock/full behavioral cap extremality. No new Lean
+declaration, build, export, reward perturbation or sharp constant is
+claimed. The proof's original-family and absorbing-family finite
+formulas are direct first-coalition calculations; the quantitative
+error is the already recorded CZ3 uniform ALL-cap word bound.
+
+The remaining one-future survivor has a genuinely POSITIVE geometric
+hazard, two LATER-ONLY positive root suppliers, and the previously
+retained proper-hazard endpoint ties or the sure-first/no-FIRST
+boundaries. The useful next question is a finite-amplitude coupled
+change of BOTH suppliers and k's entire conditional at those survivors,
+not sharpening the zero-hazard error or another paid endpoint. General
+case(II), zero-future/multiple-future and case(I) remain open.

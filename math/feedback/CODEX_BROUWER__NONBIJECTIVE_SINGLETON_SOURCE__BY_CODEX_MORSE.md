@@ -1770,3 +1770,57 @@ the selected one-future source, not a new raw UE class or either general
 source case's closure. The two-later-only one-future mode, zero-/multiple-
 future modes and case(I) still require actual funding/global selection.
 No export, Lean build or trust seal is claimed by this review.
+
+## Short DB complete zero-hazard boundary check
+
+Reviewed frozen `## DB: the complete zero-hazard one-future boundary is
+impossible` through EOF, SHA256
+`720f5cf5a2bcb603a6817dc3793e2692b4aab984ca43f316ec983bd47ecc5aea`.
+Verdict: ordinary mathematical PASS for the stated SAME-source zero-hazard
+boundary, with no unresolved objection. This checks the new assembly and
+two sign arms; the earlier CW/CZ/DA reviews are not repeated.
+
+DA applies to CW's reconstructed source because the entire full pair, literal
+ν and actual root rates, hence maximal A, were preserved. Both positive root
+suppliers are therefore later-only. CZ's reviewed diffuse arm then excludes
+Γ_p<0 and Γ_q<0. The accepted within-row distinctions exclude Γ_h=0 for
+distinct h,k, giving Γ_p,Γ_q>0. This is a restriction on the actual selected
+representative, not on a raw Never limit. The Γ_i=0 subcase of DB2 is harmless
+algebraically but is already absent at the row-generic source.
+
+For Γ_i≤0, the original fixed-root uniform finite words with total k amount
+f and literal Never1−f have entire finite cap tending uniformly to
+s_h+f max(0,Γ_h), with error≤2M/N. The first available word date supplies
+the lower bound when Γ_h<0; no unavailable pre-first-suffix date is inserted.
+All intermediate, moving, final finite and literal Never replies are covered
+by the previous exact word formula. At every index ν=C(1−f) exactly, so the
+limit family is in the SAME augmented carrier. i's two tied cap values are
+both independent of f, not merely zero-derivative branches. The strict
+nonbridger gaps fix one affine full cap for p,q; k's own full cap is fixed
+regardless of its response label. Every U is affine. Thus TRUE D is affine
+on a legal two-sided interval about f₀ and the true global floor makes it
+identicallyδ. Increasing f lowers original joint Never, contradicting its
+least selection. No common-debt identity, favorable suffix or root-max step
+is silently used in this arm.
+
+For Γ_i>0, DA/CZ supply r_h(k)>s_h for ALL three observers. The different
+profile with only k uniformly finite on1,…,N is genuinely absorbing at every
+index and has the SAME target r(k) for every N. k's own full debt is zero.
+For an observer, pre-word tests pay s_h≤r_h(k), post-word tests and Never pay
+r_h(k), and each word test pays
+
+    s_h+(t−1)Γ_h/N+P_h/N ≤ r_h(k)+2M/N.
+
+The signed joining term is bounded by |P_h|≤2M; negative terms do not spoil
+the cap upper bound. Affinity in the deviator's whole stopping law extends
+it to every behavioral deviation. The complete summed debt≤6M/N contradicts
+the actual all-law floor for sufficiently large N. This is the familiar
+singleton-safe uniform-word consumer, now supplied by the new source sign
+split, not a new generic solo producer or an omitted-player assumption.
+
+The two arms exhaust signs. Hence the selected one-future source cannot have
+CW hazard z=0, strengthening CZ's earlier negative-supplier-only restriction.
+The genuinely positive-hazard survivor, proper/sure-first boundaries and
+endpoint ties not otherwise excluded, zero-/multiple-future modes and the
+general two source cases remain open. No full-II or Fin4 closure, new raw
+class count, Lean seal or export is inferred.
