@@ -3987,3 +3987,30 @@ or characterization accepting an independently supplied UE does not count
 as an old raw producer. Conversely failure of the finite tests above cannot
 exclude an untested genuine producer. UR's all-sixteen-parameter theorem
 is sound without claiming that additional audit has been completed.
+
+## UR bounded coverage clarification: full-dimensional cyclic-child input
+
+Checked independently after the UR review, at the coordinator's request.
+The EXACT raw assertion in
+`exports/FULL_DIMENSIONAL_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md` is
+∀η>0 ∃d_η>0 ∀r, ‖r−R^η‖∞<d_η ⇒ the internally selected
+proper joint03/solo1/solo2 profile and fixed uniform target exist.
+The complete center R^η is specified there; the proof selects its
+algebraic root in a fixed rational rectangle and applies the local
+implicit function theorem to the actual four active gaps. The sections
+"Actual-data adapter, source correspondence and Lean handoff" and
+"Scope and nonclaims" expressly retain this local raw input.
+
+There is NO asserted producer for every table merely admitting the
+joint/solo/solo output itinerary. The referenced `PeriodicCompiler`
+consumers take already supplied policy/cap/contraction certificates;
+they do not turn this output grammar into a raw existence criterion.
+Thus a numerical itinerary at r⁺ proves neither membership nor
+nonmembership in the packet's produced neighborhoods. Conversely,
+the unspecified d_η prevents excluding r⁺ merely because it is not a
+center or because its center-distance is positive. Relabeling or
+independently justified transport does not repair this missing input
+comparison by itself. Verdict: LOCAL raw producer, NOT a global
+itinerary producer; overlap with its produced neighborhood union
+remains UNRESOLVED by this bounded check. No new soundness audit,
+novelty conclusion or output-grammar census is claimed.
