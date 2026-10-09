@@ -56,6 +56,16 @@ not attain the summed singleton debt floor. Its two-player exact
 unrestricted calculation is not a counterexample to the positive-full-
 minimum source and does not forbid product-preserving changes there.
 
+PB below tests a distinct whole-law operation without preserving joint
+Never: delete the c-active finite owner and independently repeat the
+ORIGINAL opponent blocks. At the actual source this supplies an absorbing
+profile where that owner has EXACTLY zero full debt and a payoff above
+its old cap. It does NOT fund the other three debts. Reusing CA, with no
+new table, gives full repeated debt17/3 instead of1. The outstanding
+question is a genuinely coupled change of the opponents' finite laws
+preserving or compensating the passive safety, not another refinement
+of this fixed-block repetition or the paired final-date template.
+
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
 separations but the full existential-producer union still UNRESOLVED.
@@ -15732,3 +15742,116 @@ an unrestricted positive minimum. In particular its own-floor
 payoff/cap margins do not match the accepted source. No Fin4 branch
 has been excluded. The next actual-source operation must reduce
 the real full debt, not an unattainable universal fixed-product floor.
+
+## PB: passive-safe deletion does not fund the opponent debts
+
+Status: COMPLETE ordinary tested whole-law mechanism, UNREVIEWED;
+not a UE producer, a source branch exclusion or an export. This is
+distinct from exact finite-menu Nash plus repetition: its block is the
+ORIGINAL source realizer, not a new Nash selector. It is also distinct
+from the censored-final-atom transfer in Noether NC.30–33. No literal
+Never product is required to stay fixed.
+
+Let p be an ACTUAL independent finite-support profile, with own rewards
+s_k>0. Choose owner i, write h_i=∏[k≠i]p_k(Never)<1,
+R_i=V_i(Never,p_-i), and use its entire cap B_i. First set
+q=(Never_i,p_-i). Repeatedly and independently redraw each opponent's
+same private block law after its block-Never outcome; the deleted
+owner stays Never. Retain an empty final date in every block, and
+start the first block at its original date0. Equivalently, opponent k's
+finite law at block m and phase t is n_k^m p_k(t). All choices across
+owners are independent. At least one opponent is surely finite in this
+infinite repeated law, and the profile absorbs almost surely.
+
+For the censored one-block q let U_k^q, B_k^q, R_k^q be its FULL
+prescribed payoff, cap and Never-response payoff; put
+
+    H_k^q=∏[l≠k]q_l(Never),       ν_q=h_i.
+
+For EVERY owner with H_k^q<1, a response in block m and phase t is
+
+    R_k^q(1−(H_k^q)^m)/(1−H_k^q)+(H_k^q)^m V_k(t,q_-k).
+
+All phases, old final empty dates, arbitrarily late blocks and literal
+Never are included. Their exact complete statistics are
+
+    U_k^rep=U_k^q/(1−h_i),
+    B_k^rep=max(B_k^q,R_k^q/(1−H_k^q)).          (PB.1)
+
+An empty gap before a subsequent block is the retained final empty
+phase of the preceding block, not a new unpriced preemption clock.
+Never realizes the displayed refusal quotient. Affinity in the owner's
+complete deviation law gives the same cap for unrestricted behavior.
+If H_k^q=1, every opponent is Never, R_k^q=0, and B_k^rep=s_k
+directly; no 0/0 quotient is used. The payoff formula still applies
+because h_i<1. The original independent product is not a correlated
+lottery over block profiles.
+
+For the deleted owner, B_i^q=B_i and R_i^q=R_i. If its old final
+empty test is maximizing, B_i=R_i+h_i s_i. If also B_i>s_i, then
+
+    R_i/(1−h_i)−B_i=h_i(B_i−s_i)/(1−h_i)>0.     (PB.2)
+
+Consequently its prescribed Never law is an EXACT unrestricted best
+reply in the absorbing repeated profile: U_i^rep=B_i^rep and d_i^rep=0.
+
+The accepted source supplies such a c-active finite owner. Since there
+are at least two originally finite owners, h_i<1, and its positive
+original full-minimum margin gives B_i>s_i. At the source's actual
+finite realizers the c-wall may only converge to equality, but the
+strict difference (PB.2) persists for every sufficiently large index:
+R_i^k/(1−h_i^k)>B_i^k. Thus the source supplies actual absorbing
+independent profiles with this deleted owner EXACTLY cap–Nash. The
+deletion is performed at each actual index before repetition. No
+minimum, source payoff or cap is assigned to the censored q itself.
+
+The remaining ENTIRE debt is, with the preceding H=1 convention,
+
+    D_rep=∑[k≠i] {max(B_k^q,R_k^q/(1−H_k^q))
+                                 −U_k^q/(1−h_i)}.        (PB.3)
+
+These B_k^q are the caps of the ACTUAL censored base, not the original
+B_k. Deleting i can increase them; subsequent repetitions can increase
+them again. The original d* and quadratic margins supply no presently
+proved upper bound making (PB.3) at mostδ. At the genuine source,
+every such absorbing profile instead has D_rep≥δ+g unless a
+contradiction is proved. The one zero debt coordinate is not a
+minimum-fibre return by itself.
+
+There is an exact funding failure on the ALREADY recorded CA table;
+no additional fixture or local constant is introduced. Take its
+c-active finite owner i=1. Censoring it gives q_0=q_1=Never and
+q_2=q_3=(Quit0+Never)/2. Its exact one-block statistics are
+
+    U^q=(2,41/4,−3/4,37/4),
+    B^q=(9/4,21/2,0,10),
+    R^q=(2,41/4,−3/2,17/2),
+    H^q=(1/4,1/4,1/2,1/2),        h_1=1/4.
+
+Applying (PB.1) gives
+
+    U^rep=(8/3,41/3,−1,37/3),
+    B^rep=(8/3,41/3,0,17),
+    d^rep=(0,0,1,14/3),            D_rep=17/3>1.
+
+The original CA debt is1. Both deleted owners happen to be safe here,
+yet the other two full debts grow. CA is globally solved, not the
+positive-global-minimum source; this refutes only funding from the
+c-wall and the numerical own margins ALONE. It does not refute a
+source-dependent coupled modification using globality, absorbing
+separation and common minimum debts.
+
+Source check: the narrow lookup re-inspected
+`sSup_range_quittingTerminalPayoff_update_eq_periodicWindow`,
+`quittingPeriodicPureTimeTerminalValue_add_period_eq_interpolation`,
+and `quittingRootSequenceTerminalValue_eq_windowRestartDelivery_of_periodic`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicWindowEvaluation.lean`.
+These are the already tracked repetition evaluator, not a raw block
+producer or a checked PB statement. Source Sections14.3 and18 provide
+the same-table owner and actual realizing scope. No Lean command ran.
+
+The next full-goal question is whether one can jointly change the
+three opponents' ENTIRE finite laws to discharge their debts while
+retaining or compensating the deleted owner's passive safety. Fixed
+block repetition, root-only changes and one-owner Never bookkeeping
+do not establish that. No new fixed-menu program is proposed.

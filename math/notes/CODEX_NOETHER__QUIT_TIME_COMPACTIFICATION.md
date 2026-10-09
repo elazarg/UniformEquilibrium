@@ -113,6 +113,14 @@ finite owner to a new final date. NC.30–31 retain its complete born final
 collision cap and honest off-minimum censored base. Funding that cost, or
 its complete cap–Nash re-rooting, is the concrete open calculation.
 
+NC.34 now completes the ALL-root funding test for that family's zero-γ
+donor chamber. Any retained donor finite mass in the HONEST suffix creates
+a strictly positive singleton-floor excess; every exact cap–Nash root
+scales rather than erases that excess. Common minimum debts and the original
+least-Never choice forbid a minimum return, including variants that deliberately
+reduce joint Never. The positive-γ chamber and the exact pure-tail-Never,
+passive-dominant exception remain open; no source configuration is excluded.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -25436,3 +25444,119 @@ by total debt. In either mode a different root over the honest changed
 suffix can still lie outside this direct-transfer calculation. Its complete
 cost c_xD(w)−δ and its actual full Never remain the next funding test;
 the donor's mandatory cap cannot be removed by changing only its own law.
+
+The honest-tail/full-root comparison can be completed in the ZERO finite
+surplus chamber, not merely left as a direct-profile inequality. The following
+ordinary-mathematics calculation consumes no source case and uses the ORIGINAL
+selected table, not the additional NC9 re-selection. It retains arbitrary
+other owners' root support, all new final collisions, and both signs of the
+honest suffix's singleton margins.
+
+First, for EVERY independent profile and its actual augmented limit,
+
+    d_k=γ_k+n_k(B_k−R_k)≥ν s_k,
+    γ_k=∫_(finite t)[B_k−V_k(t)] dp_k(t)≥0.
+
+Indeed the late empty finite test gives B_k−R_k≥h_k s_k. If the supplied
+c-active owner i has γ_i=0, its attained final test gives
+
+    d*_i=ν* s_i.
+
+At ANY full minimum of the same original table, common debts and least
+literal Never therefore yield
+
+    ν* s_i=d_i≥ν s_i≥ν* s_i.
+
+As s_i>0, EVERY minimum has ν=ν*, γ_i=0 and B_i−R_i=h_i s_i.
+This is an attained one-owner singleton floor, not a transfer of the output
+margin to an arbitrary suffix. It does not follow when γ_i>0.
+
+Now make the actual old-law transfer with ARBITRARY amounts: censor
+μ∈[0,m_i] of i's old finite law proportionally, and transfer
+η∈(0,n_j) of j's old Never mass to one new final finite date. Retain ALL
+old j finite mass. Product preservation is OPTIONAL; the NC.32 curve is
+η=n_j μ/(n_i+μ). All old root rates except i's remain unchanged, and
+
+    a_i^μ=a_i(1−μ/m_i).
+
+Condition this SAME actual profile after its original first root. In the
+honest suffix w put
+
+    N_i=(n_i+μ)/(1−a_i^μ),
+    ε=η/(1−a_j),       n_j^v=n_j/(1−a_j),
+    e_i=∏_(k≠i,j)n_k^v,       ν_w=N_i(n_j^v−ε)e_i.
+
+Here 0<N_i≤1, 0<ε<n_j^v and e_i>0. The original c-active response lies
+strictly after the first root, so its original honest suffix cap is also
+the late empty value:
+
+    b_i=R_i^v+n_j^v e_i s_i.
+
+Whole-profile γ_i=0 implies that the original tail finite conditional law,
+if nonempty, has mean response b_i. If the original root rate a_i>0,
+its root Quit response also equals the whole cap; if a_i=0 there is no
+prescribed root response to remove. Thus this implication does not assume
+that every owner bridges or that the whole original root is cap–Nash.
+
+The new final j mass leaves EVERY old finite i reply unchanged: it replaces
+j's Never by a date later than that reply. The donor's own censoring never
+changes its response cap. The complete NC.30 ledger with old c-wall premium0
+therefore gives, with the SAME T_ij and Γ_ij as NC.33,
+
+    b_i(w)=b_i+ε e_i T_ij,
+    R_i(w)=R_i^v+ε e_i r_i({j}),
+    u_i(w)=(1−N_i)b_i+N_i[R_i^v+ε e_i r_i({j})].
+
+All old finite responses, the new simultaneous {i,j} response, the empty
+response after j's new date, and literal Never have been included. In
+particular the final collision cannot be replaced by just the passive
+singleton reward. Exact subtraction gives
+
+    d_i(w)−ν_w s_i
+       =ε e_i[T_ij−N_i Γ_ij].                  (NC.34)
+
+For actual finite realizers the old finite mean may differ from b_i; its
+nonnegative gap tends to0 because γ_i=0. The proportional retained masses
+and positive root-survival denominators are uniformly bounded. Hence the
+displayed identities pass on the same whole-parameter coefficient subsequence
+used for NC.30–33. No tail minimization or selected-cap upper bound is used.
+
+The fresh row has Γ_ij≠0 and T_ij≥max(0,Γ_ij). Consequently the excess in
+(NC.34) is STRICTLY positive whenever N_i<1. If N_i=1 it is strictly
+positive unless Γ_ij>0 and T_ij=Γ_ij. Interior μ<m_i gives N_i<1 exactly
+when i originally had finite mass strictly AFTER the original first root.
+If all its old finite mass was at that root, N_i=1 throughout, and the
+stated exception is real rather than suppressed.
+
+Take ANY exact full cap–Nash root x over this honest w, retaining every
+inactive-owner inequality. Its actual prefixed carrier has
+
+    d_i(T_x(w))=c_x d_i(w),       ν(T_x(w))=c_x ν_w.
+
+These are the exact per-coordinate identities of
+quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash in
+UniformEquilibrium/Quitting/Root/CapNashRootStack.lean, already inspected
+under its stated imports; the augmented-Never factor comes from the same
+actual prefix. A root with c_x=0 would produce an absorbing profile of
+debt0, excluded by the source's positive absorbing floor. Thus c_x>0.
+If (NC.34) is positive and this output were a full minimum, it would have
+ν=ν* and d_i=d*_i=ν* s_i by the earlier floor argument. But its i-excess
+is c_x times the strictly positive (NC.34), a contradiction. The true
+global floor now forces
+
+    D(T_x(w))>δ
+
+for EVERY full cap–Nash root, not only one chosen two-supplier branch.
+The same scaling argument applies to a finite exact cap–Nash stack, if one
+is used. At η=n_j the honest suffix already absorbs and every prefixed
+profile has debt at least δ+g; no missing zero-Never endpoint is supplied.
+
+This settles this operation's ALL-root funding attempt in its stated strict
+zero-γ chamber, even without product preservation. It neither proves such
+a chamber occurs in an actual no-UE table nor eliminates it: a different
+whole-law operation may change the donor's old finite conditional law, its
+finite-response mean, or the root beyond exact cap–Nash prefixing. The
+γ_i>0 funded case and N_i=1, Γ_ij>0, T_ij=Γ_ij remain separate OPEN inputs.
+The next root-funding test must use one of those live inputs rather than
+retest the strict-excess family; Brouwer's independent finite-law mechanism
+addresses a different operation.
