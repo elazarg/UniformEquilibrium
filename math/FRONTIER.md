@@ -756,8 +756,7 @@ its old finite amount against literal Never would leave an interval of
 true full minima with strictly smaller original joint Never. Thus in
 the one-future mode the bridger is PureNever, and the other two owners
 are exactly the positive nonsure first-root suppliers, with all their
-prescribed finite mass there. At least one is later-only and has
-strictly suboptimal root mass. The future owner itself may be root-only
+prescribed finite mass there. The future owner itself may be root-only
 OR later-only; zero prescribed root mass does not determine its optimal
 response class. This additional
 [sole-bridger exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cu-the-sole-post-root-finite-owner-cannot-be-the-sole-bridger)
@@ -767,6 +766,22 @@ unconsumed.
 No alignment with a maximizing date, favourable joining sign, or funded
 joint replacement is supplied; neither complete source configuration
 is consumed.
+
+At the SAME least-Never/maximal-root selection, BOTH first-root suppliers
+in this one-future mode must be LATER-ONLY, so each prescribed root atom
+is strictly suboptimal. If one supplier were ROOT-ONLY, varying its root
+mass b and the future owner's ENTIRE old finite amount f, with coordinates
+b and x=(1−b)f, would make every prescribed payoff and every nonbridger's
+full cap affine locally. The sole bridger contributes only one root/whole-
+upper hinge, so true total debt is the maximum of two affine functions.
+A genuine minimizing line either lowers original joint Never or preserves
+it while increasing the selected root absorption. The
+[arbitrary-conditional one-future exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#da-a-sole-future-owner-forces-both-root-suppliers-to-be-later-only)
+has an independent ordinary-mathematics review, not a Lean declaration.
+It retains the arbitrary old conditional, signed upper coefficients and
+all tied/moving finite responses and Never; no geometric-hazard or
+endpoint-tie assumption is needed. The two-later-only-supplier survivor,
+zero or multiple future owners and general multiple bridging remain open.
 
 In the retained one-future mode, its whole later finite conditional can
 be replaced by a geometric law with one parameter z∈(0,1], or by an
@@ -786,15 +801,14 @@ neither the sparse mode nor either complete source configuration.
 At the SAME least-Never/maximal-root source, in the one-future mode with
 proper geometric hazard 0<z<1, suppose one later-only first-root supplier
 has a strictly FIRST-active tail response. Then either the sole bridger
-has an additional FIRST/END tail tie, or the other root supplier is
-later-only and has that additional tie. Otherwise a legal coupled change
+has an additional FIRST/END tail tie, or the other later-only root supplier
+has that additional tie. Otherwise a legal coupled change
 of one supplier's root mass and the future owner's whole law gives a
 two-dimensional true-debt maximum of two affine functions. Global
 minimality and least original Never force a minimum line that increases
 root absorption, contradicting its attained maximum. No further reward
-perturbation or polynomial avoidance is needed. An inactive tail tie for
-a root-only supplier is allowed; the forced ties constrain the response
-laws, not exceptional reward-table equalities.
+perturbation or polynomial avoidance is needed. The forced ties constrain
+the response laws, not exceptional reward-table equalities.
 
 At that selected source, the diffuse boundary z=0 is also restricted:
 every later-only first-root supplier h must satisfy
