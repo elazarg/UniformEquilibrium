@@ -206,6 +206,19 @@ not sign any participant comparison. No funded fold is established:
 the precise open test is the finite minimum in (NC.42m), not an endpoint
 or a selected-response surrogate.
 
+NC.42p–w price a different two-date accommodation without importing that
+missing sign. In the explicit l-root-only/t-c-active census the source
+forces a premium trap {i,l,k}, so the reciprocal negative i,t singleton
+pair cannot use a computed pair-core producer. If the actual premium core
+has size three, t's late FIRST reply is strictly dominated by the preceding
+EMPTY tester: a claimed full FIRST/END tie is false. The correct complete
+t cap is ROOT/PRE-FIRST/END, with an exact positive collision charge and
+root clipping; the mandatory k and t return budgets are retained below.
+This falsifies the cheap accommodation, not the whole word or a source
+branch. Simultaneous funding of those budgets and the i/l payoff losses
+remains open; no extra active clocks or discarded four-owner responses
+have been used to repair the failed tie.
+
 NC.41 now constructs a true-overlap candidate with complete cap control:
 independent two-owner tail survivors give a STRAIGHT trace of singleton
 exit masses. Every other recipient's intermediate replies are bounded by
@@ -27538,3 +27551,117 @@ for the coupled word, including simultaneous i,l,t and the counterfactual
 four-player k reply, remains the next concrete question. This supporting
 source consequence is ordinary mathematics, not independently reviewed or
 exported.
+
+### A genuine preemption cap falsifies the cheap FIRST/END accommodation
+
+There is a concrete failure of one version of the negative-t/positive-k
+repair, not a failure of the canonical source. Continue (NC.42o–q) and make
+the FURTHER case distinction that the actual premium core has cardinality
+three. It is then EXACTLY {i,l,k}, and t is outside it. Every coalition
+containing t has t's participant reward at most s_t: otherwise the existing
+trap {i,l,k} could be extended by t. Within-row distinctness makes this
+inequality strict on every nonsingleton coalition. This uses
+`MathUE.not_positive_on_core_insert` in `MathUE/FiniteCoalitionPremiumCore.lean`,
+not the nonnegative-participant adapter that would assert equality.
+
+The supplied t–l joining floor consequently gives
+
+    a_tl=s_t−r_t({t,l})>0,
+    Γ_tl=−a_tl−p_tl<−δ_abs,    Γ_ti<0.
+
+The SAME-source strictly positive vector Γλ forces Γ_tk>0. Moreover
+Γ_ik>0, so the actual singleton column-k blocker must be l:
+
+    Γ_tk>0,       Γ_lk<0.                     (NC.42r)
+
+For the last step the exact inspected declaration is
+`exists_singletonColumnBlockerCertificate_of_fourPlayer_noUniform` in
+`UniformEquilibrium/Quitting/Classification/LCP/FourPlayerSingletonColumnBlockers.lean`,
+selected from `docs/FRONTIER.md`. Its certificate has a distinct negative
+recipient in EVERY singleton column of the SAME genuine no-UE table; its
+own-minus-passive orientation becomes Γ_lk<0 here. Thus k can increase t's
+passive reward, but simultaneously has a negative singleton comparison for
+l. Neither sign pays a participant or triple cap.
+
+Test one literal independent word, with NO extra active clocks:
+
+    i: root0 mass x−ρ, date4 massρ, Never n_i;
+    l: root0 mass y−σ, date2 massσ, Never n_l;
+    k: date4 massη, Never1−η;
+    t: date2 massξ, Never1−ξ.
+
+Here 0≤ρ≤x, 0≤σ≤y and 0<η,ξ<1; the interesting overlap has σ>0.
+All responses at root0, empty1, join2, empty3, join4, empty5 and Never
+are retained. The literal joint Never is ν=n_i n_l(1−η)(1−ξ)<ν*.
+For t, write E for its empty5 reply, V for its empty1 reply, J for its
+join2 reply and Q for its root0 reply. Direct conditioning gives
+
+    V−J=G=(n_i+ρ)σa_tl>0.                     (NC.42s)
+
+Therefore J is NEVER t's full best reply in this word. In particular a
+proposed full FIRST/END cap tie J=E is invalid: the actual empty1 tester
+is strictly above BOTH. This is an exact family falsifier, not a numerical
+regression or a first-order objection. More generally it remains true if
+i also has finite mass at date2: t's own rewards on every nonempty
+simultaneous opponent coalition are below s_t, so empty1 strictly dominates
+join2 whenever another owner has positive atom there. In that extension
+k's counterfactual join2 response includes the actual four-owner reward;
+no such reward may be dropped. The formulas below keep i's date2 mass ZERO,
+so no response can reach four simultaneous owners at any date.
+
+For the stated four-law word the ENTIRE t cap has an especially short form.
+Its empty3 reply is below V because Γ_tl<0. Its join4 reply is no greater
+than empty3 because every t participant reward on {t,i}, {t,k}, {t,i,k}
+is below s_t. Never is below E because s_t>0 and all three opponent Never
+masses are positive. Hence, with every original and new response included,
+
+    B_t=max(Q,V,E).
+
+Put W=V−E and R=Q−E. The actual prescribed t payoff is
+ξJ+(1−ξ)(E−n_i n_l(1−η)s_t). Consequently the COMPLETE debt is
+
+    d_t=νs_t+max(W,R,0)−ξW+ξG
+       =νs_t+[W⁺−ξW]+ξG+[R−W⁺]⁺.            (NC.42t)
+
+All three terms after νs_t are nonnegative, including the old-root clipping.
+There is no hidden compactification or missing finite test in this identity.
+With c_t=r_t({i,k})−r_t({i}), the exact scalar comparison is
+
+    W=−(n_i+ρ)σΓ_tl−n_lρΓ_ti
+                    −n_lη[n_iΓ_tk+ρc_t].     (NC.42u)
+
+Thus the cheaper prospective tie is PRE-FIRST/END, W=0, not FIRST/END.
+Even at W=0, the prescribed collision costs ξG and any root clipping
+[R]⁺. If instead J=E, then W=G and the cost after νs_t is at least G,
+not zero. This changes the cap mechanism; it is not a constant improvement.
+
+The other PureNever source owner k also has an exact budget in this word.
+Its own finite response at date4, denoted K, satisfies
+
+    K−Never_k=n_l(1−ξ)[n_i s_k+ρp_i].
+
+Writing L_k=B_k−K≥0 with B_k the ENTIRE root/empty/join envelope gives
+
+    d_k=νs_k+(ν/n_i)ρp_i+L_k.                 (NC.42v)
+
+At any hypothetical output with D≤δ, the true global floor makes it a
+minimum and the SAME table's common debt vector forces d_k=ν*s_k and
+d_t=ν*s_t. The two mandatory return budgets are therefore
+
+    (ν/n_i)ρp_i+L_k=(ν*−ν)s_k,
+    [W⁺−ξW]+ξG+[R−W⁺]⁺=(ν*−ν)s_t.           (NC.42w)
+
+These are necessary, not sufficient. In particular choosing η only to
+hold i's cap does NOT establish either equation, and setting J=E does
+not remove the t charge. The prescribed i and l payoffs and all their
+pair/triple caps still have to be included in the total debt. No below-δ
+competitor, D=δ lower-Never return, or source subcase exclusion is claimed.
+The exact question left by this falsified accommodation is whether the
+positive Γ_tk donation can pay (NC.42w) while paying the now-forced
+Γ_lk<0 damage to l and the positive i,l participant cost from (NC.42p).
+
+The t full-cap, preemption-gap and debt identities were checked separately
+by160 exact rational independent-law enumerations on signed tables with
+t's displayed outside-core inequalities. Those checks validate algebra
+only: the tables are not asserted to be genuine global-minimum sources.
+This is internal ordinary mathematics, without review or export.
