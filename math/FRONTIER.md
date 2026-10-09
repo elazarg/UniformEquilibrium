@@ -810,21 +810,31 @@ root absorption, contradicting its attained maximum. No further reward
 perturbation or polynomial avoidance is needed. The forced ties constrain
 the response laws, not exceptional reward-table equalities.
 
-At that selected source, the diffuse boundary z=0 is also restricted:
-every later-only first-root supplier h must satisfy
+At that selected source, the ENTIRE diffuse boundary z=0 is impossible.
+Write Γ_h=r_h({k})−s_h, where k is the sole future finite owner and i
+the sole bridger. Both later-only first-root suppliers must have Γ_h>0:
+a negative gap gives the two-affine minimum line and root increase, while
+the selected within-row distinctions exclude a zero gap.
 
-    Γ_h=r_h({k})−s_h>0,
+If Γ_i≤0, varying only k's total finite amount f near its original value
+keeps i's tied full cap constant, every other full cap affine and every
+prescribed payoff affine. Each family point is realized by independent
+uniform finite clock words with literal Never mass 1−f and whole-cap
+error at most 2M/N. True total debt is affine with an interior global
+minimum, hence constant; increasing f lowers original joint Never,
+contradicting its least selection. Escaped finite mass is not identified
+with Never.
 
-where k is the sole future finite owner. Its tail cap is therefore END-
-active. A negative Γ_h would give the same two-affine minimum line and
-root increase. The proof realizes each family point by independent
-uniform finite clock words, with exact original finite/Never amounts and
-whole-response cap error at most 2M/N. It does not identify escaped finite
-mass with Never. The
-[same-table coupled and diffuse exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cz-maximal-root-absorption-strengthens-the-coupled-sparse-exclusion)
-has a focused independent mathematical review, not a Lean declaration.
-The sure-first hazard boundary z=1, additional active tail ties, absence
-of a strict-FIRST supplier in the proper-hazard case, and zero or multiple
+If Γ_i>0, every observer h≠k satisfies r_h({k})>s_h. The actual absorbing
+profile in which only k stops uniformly on N dates has prescribed payoff
+r({k}), zero k debt and each other unrestricted debt at most 2M/N.
+For large N it contradicts the original positive total-debt floor.
+The two signs exhaust the boundary. The
+[complete diffuse-boundary exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#db-the-complete-zero-hazard-one-future-boundary-is-impossible)
+has an independent mathematical review, not a Lean declaration. Thus the
+one-future geometric representative has genuinely positive hazard.
+The sure-first boundary z=1, additional active tail ties, absence of a
+strict-FIRST supplier in the proper-hazard case, and zero or multiple
 future owners remain unconsumed. Neither complete source configuration
 is eliminated.
 
