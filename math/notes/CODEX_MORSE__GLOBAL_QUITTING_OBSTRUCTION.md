@@ -117,6 +117,16 @@ No additional surviving source class, export or new existence-class count
 is claimed. A static punishment-priced coalition welfare separation is
 therefore not the missing negative invariant, even at equality. The
 remaining global route must use actual response/chronology information.
+JB below takes that instruction back to ACTUAL rational data: a stronger
+directed joining cycle with a nonuniform grand-coalition penalty, not a
+change inside the solved NI/SG transport-control boxes. All pure stopping
+profiles are unstable. The table is nevertheless retired at the complete
+mixed-root test by a one-row unrestricted terminal Nash profile, also
+an actual positive exact Nash--Bellman self-loop at the SAME target.
+The free-player equations and the sure owner's later/Never comparisons
+are exact; no polynomial fit or reward tuning follows. This is a bounded
+candidate retirement, not a negative table, source restriction or new
+existence class. A general invariant search remains open.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
@@ -23061,4 +23071,202 @@ for S in coals:
     assert all(row[i]>=-1 for i in S)
 print('WS exact full stationary cap pressure: PASS',checked,
       'complete tables;',negative,'negative Never caps')
+```
+
+## JB. A stronger joining cycle still has a complete sure-owner self-loop
+
+Status: COMPLETE ORDINARY exact candidate retirement, UNREVIEWED.
+No full negative table, class count or export is asserted. The table
+changes the USED joining geometry, not the degree of a failed fit or
+the invisible controls of a solved NI/SG family. Its singleton data
+are retained only to avoid the already-excluded all-positive-Γ shortcut.
+No candidate-minimum or source is inferred from that retention.
+
+### JB1. Complete rational candidate and why pure-clock tests miss its escape
+
+Let I={0,1,2,3}, independent private stopping clocks, literal Never payoff0,
+and reward only at the first actual tied quitting coalition. All behavioral
+deviations are unrestricted. The sixty rewards are exactly:
+
+| S | r(S), recipients0,1,2,3 |
+|---|---|
+| {0} | (1,3,3,0) |
+| {1} | (4,1,−1,−1) |
+| {2} | (0,2,1,2) |
+| {3} | (4,−2,0,1) |
+| {0,1} | (3,2,2,2) |
+| {0,2} | (5,2,2,2) |
+| {0,3} | (3,2,2,5) |
+| {1,2} | (2,1,4,2) |
+| {1,3} | (2,3,2,−2) |
+| {2,3} | (2,2,−1,1) |
+| {0,1,2} | (3,0,3,2) |
+| {0,1,3} | (0,3,2,3) |
+| {0,2,3} | (3,2,0,3) |
+| {1,2,3} | (2,3,3,0) |
+| I | (0,3,3,3) |
+
+Every own singleton is1 and all entries lie in[−2,5]. The favorite
+joining cycle is f(0)=3, f(3)=1, f(1)=2, f(2)=0. On an opponent
+singleton, favorite joining gain is+5, all nonfavorite joining gains−1.
+Every outsider to a pair/triple receives2. A triple participant gets3
+if its predecessor is present and0 otherwise. The grand exception is
+recipient0's payoff0. This is NOT NI/UR's favorite gain1/2 with every
+larger-coalition joining gain−1, or SG's odd-three control geometry.
+
+Every pure stopping profile is unstable. All Never loses to own Quit0.
+If the first coalition is a singleton {j}, f(j) can join there for gain5.
+A pair has a member whose predecessor is absent (the cycle has no
+two-cycle); that member gains1 by leaving its partner to quit alone.
+A triple has a member with absent predecessor; leaving improves0 to2.
+At the grand coalition owner0 gains2 by leaving. These arguments use
+the SAME earliest coalition even when other pure clocks occur later.
+They give no obstruction to independent MIXED play.
+
+### JB2. One scalar crossing produces every actual cap simultaneously
+
+Let x be the unique root in(63/100,16/25) of
+
+    p(x)=7x²+16x−13=0,
+    x=(√155−8)/7.
+
+The signs are p(63/100)=−1417/10000 and
+p(16/25)=67/625; p is strictly increasing there. Set
+
+    u=(2x−1)/(1−x),       v=(1+x)/(2+x),
+    q=(x,u,1,v).
+
+All three free rates lie strictly in(0,1). Use ONE actual product row
+at date0 and literal Never thereafter. Owner2 surely quits at date0.
+For responder i write Q_i for its date0 Quit payoff, A_i for its
+passive date0 terminal contribution, and h_i for opponent survival
+at that row. Direct enumeration of the COMPLETE table gives
+
+    h_0=h_1=h_3=0,
+    Q_0−A_0=p(x)/[(x−1)(x+2)]=0,
+    Q_1=A_1=Q_3=A_3=2,
+    A_0=2x(x−2)/[(x−1)(x+2)],
+    h_2=(2−3x)/(x+2)>0,
+    Q_2=(3x³−3x²−14x+7)/[(x−1)(x+2)],
+    Q_2−A_2−h_2
+        =(3x³+x²+12x−8)/[(1−x)(x+2)].             (JB.1)
+
+The last numerator is increasing for x>0 and at63/100 equals
+707041/1000000>0. Its denominator is positive and at most
+9768/10000 on the same box. Thus
+
+    Q_2−A_2−h_2 ≥ 707041/976800>0.                (JB.2)
+
+For free owners0,1,3, ALL behavioral responses reduce to join at date0
+or remain passive: owner2 otherwise exits surely at that SAME row.
+Their two endpoint values coincide by(JB.1), so their entire cap equals
+their actual prescribed payoff. For owner2, the original opponents
+have only date0 and Never mass. EVERY own finite time strictly after0
+pays A_2+h_2 s_2=A_2+h_2; literal Never pays A_2. Those are the entire
+later/Never families, not selected local Bellman replies. Equation(JB.2)
+makes Quit0 its strict best reply. Affinity in the deviator's whole law
+therefore gives an exact unrestricted terminal Nash profile with target
+
+    U=(A_0,2,Q_2,2).                              (JB.3)
+
+The target is fixed BEFORE accuracy. The existing exact-terminal-Nash
+fixed-profile consumer makes this SAME actual profile a uniform witness
+at every positive accuracy, against all behavioral deviations and at
+all sufficiently long horizons. No minimizing or punishment tail is
+inserted and no marginal lottery over profiles is used.
+
+### JB3. The actual punishment gate and full-barrier stopping criterion
+
+For every owner the true punishment is≤own1, by the actual opponents-
+Never bound. At continuation TRUE P, all free root endpoints still tie:
+their h_i=0. The sure owner's Continue value is A_2+h_2P_2≤A_2+h_2<Q_2.
+Thus q is ALSO an actual root Nash with a sure quitter at TRUE P.
+The proposed necessary no-sure gate for a negative table fails, not just
+an artificial all-annotation exclusion.
+
+There is an even direct full-relation falsifier. Since Q_2≤5 from the
+reward table and h_2≤11/263 on the root box,
+
+    Q_2−A_2−h_2 Q_2
+       ≥707041/976800−44/263>0.
+
+At continuation U from(JB.3), EVERY coordinate is exact root Nash.
+Joint Continue mass is0, so its successor is exactly U and absorption
+charge is1. This is a literal positive exact self-loop in the FULL
+Nash--Bellman relation. It excludes EVERY strict full-root drift potential,
+not merely a degree-bounded fit or a sampled domain. U lies inside the
+actual reward cube and the relevant fixed box. No all-edge negativity
+search is justified after this exact obstruction.
+
+The named semantic inputs are `quittingTerminalSemanticPrefix` and
+`quittingTerminalSemanticPair_rootThenContinuation` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`,
+`quittingPunishmentValue_le_max_solo` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean`, and
+`quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+The exact actual-gate type and full-root certificate surface were already
+inspected in `Projective/FixedBoxForwardCharacterization.lean` and
+`Projective/ExactRootPotentialRestriction.lean`; the direct full-cap
+proof above does not depend on assuming counterexample normality.
+
+Stopping scope: this SINGLE rational candidate, with its fixed joining
+cycle/grand penalty, is RETIRED by complete actual play. No general
+cyclic-family exclusion, complete stationary census, raw-producer
+novelty claim, new no-UE source restriction or Fin4 solution follows.
+Do not tune its constants or fit a larger potential. The next negative
+architecture needs a real full-relation obstruction rather than only
+the absence of pure stopping equilibria.
+
+### JB4. Embedded exact whole-table checker
+
+Marker: `JB EXACT CHECKER`. Symbolic equalities use differences reduced
+to0 rather than syntactic comparison of rational expressions.
+
+```python
+from fractions import Fraction as F
+from itertools import combinations
+import sympy as s
+I=range(4);fav={0:3,3:1,1:2,2:0};pred={v:k for k,v in fav.items()}
+single=[[1,4,0,4],[3,1,2,-2],[3,-1,1,0],[0,-1,2,1]]
+def reward(S,i):
+    if len(S)==1:return s.Integer(single[i][next(iter(S))])
+    if i not in S:return s.Integer(2)
+    if len(S)==2:
+        j=next(iter(S-{i}))
+        return s.Integer(single[i][j]+(5 if pred[i]==j else -1))
+    if len(S)==3:return s.Integer(3 if pred[i] in S else 0)
+    return s.Integer(0 if i==0 else 3)
+coals=[frozenset(S) for n in range(1,5) for S in combinations(I,n)]
+assert len(coals)*4==60
+assert all(reward(frozenset({i}),i)==1 for i in I)
+assert min(reward(S,i) for S in coals for i in I)==-2
+assert max(reward(S,i) for S in coals for i in I)==5
+x=s.symbols('x');u=(2*x-1)/(1-x);v=(1+x)/(2+x)
+q=[x,u,s.Integer(1),v];p=7*x*x+16*x-13;fields=[]
+for i in I:
+    opp=[j for j in I if j!=i];Q=A=s.Integer(0)
+    h=s.prod(1-q[j] for j in opp)
+    for n in range(4):
+        for ss in combinations(opp,n):
+            S=frozenset(ss)
+            pr=s.prod(q[j] if j in S else 1-q[j] for j in opp)
+            Q+=pr*reward(S|{i},i)
+            if S:A+=pr*reward(S,i)
+    fields.append((Q,A,h))
+Q,A,h=fields[0]
+assert h==0 and s.factor(Q-A-p/((x-1)*(x+2)))==0
+for i in [1,3]:
+    Q,A,h=fields[i]
+    assert h==0 and s.factor(Q-2)==0 and s.factor(A-2)==0
+Q,A,h=fields[2]
+assert s.factor(Q-A-h-(3*x**3+x**2+12*x-8)/((1-x)*(x+2)))==0
+assert s.factor(h-(2-3*x)/(x+2))==0
+lo,hi=F(63,100),F(16,25);poly=lambda t:7*t*t+16*t-13
+assert poly(lo)==F(-1417,10000) and poly(hi)==F(67,625)
+assert 0<lo<hi<F(2,3)<1
+margin=3*lo**3+lo**2+12*lo-8
+assert margin==F(707041,1000000)>0
+assert F(707041,976800)-F(44,263)>0
+print('JB PASS: complete table, all four symbolic caps, sure-owner later/Never and self-loop margins')
 ```

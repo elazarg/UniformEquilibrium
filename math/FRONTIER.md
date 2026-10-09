@@ -710,6 +710,21 @@ No alignment with a maximizing date, favourable joining sign, or funded
 joint replacement is supplied; neither complete source configuration
 is consumed.
 
+In the retained one-future mode, its whole later finite conditional can
+be replaced by a geometric law with one parameter z∈(0,1], or by an
+actual diffuse finite-word limit when z=0. This preserves the SAME full
+payoff vector, every unrestricted cap, original joint Never, sole
+bridger and root-only/later-only classifications. The observer's complete
+suffix-cap coefficient is max(zP_h,Γ_h), where
+P_h=r_h({h,k})−s_h and Γ_h=r_h({k})−s_h. The
+[actual-source adapter](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cw-actual-sparse-minima-admit-geometric-whole-conditional-replacement)
+reuses tracked geometric cap domination and has an independent
+ordinary-mathematics review; the new source adapter is not Lean-checked.
+The diffuse boundary keeps the positive finite mass and original Never
+at every realizing index, rather than identifying escaped clocks with
+Never. This simplifies the coupled-law funding question but consumes
+neither the sparse mode nor either complete source configuration.
+
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date
 response value:

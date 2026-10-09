@@ -144,6 +144,17 @@ nonpositive. Thus it closes no additional surviving source case and is
 not a new existence-class count or export candidate. A negative invariant
 for the remaining source must use actual dynamic/full-response information;
 the static punishment-priced coalition bound is retired even at equality.
+JB then returns to a concrete rational negative candidate with a stronger
+joining cycle and a grand-coalition penalty, outside the solved NI/SG
+control families. Every pure stopping profile is unstable, but an exact
+scalar crossing gives a one-row mixed profile with a sure owner. Full
+Quit/later/Never comparisons prove unrestricted terminal Nash at ONE
+target; a quantitative strict margin also gives a positive exact
+Nash--Bellman self-loop at that SAME target. Thus both the actual
+punishment-sure gate and every full drift potential are excluded for
+this candidate. No stationary census, control tuning, general cyclic
+family claim or new existence-class count follows. The full Fin4
+producer/negative-certificate search remains open.
 General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/

@@ -1341,3 +1341,92 @@ ROOT-ONLY OR LATER-ONLY; zero prescribed root mass imposes no strategic
 label. Neither this argument nor CT excludes the zero-future mode.
 Both full source alternatives and the retained bad-root branch remain
 open, with no quantitative coupled-law funding or UE consumer.
+
+## Bounded CW actual geometric-minimum adapter check
+
+Reviewed `## CW: actual sparse minima admit geometric whole-conditional
+replacement` through its frozen EOF, SHA256
+`49fe9491e3a579c8fef534e724dbbb5d7e75b8d246490deaf17e73f559fc9a11`.
+Verdict: PASS, no unresolved source-realization or bridge-retention gap.
+This checks the actual sparse-source adapter; generic geometric cap
+domination is already supplied by a named source declaration. Neither
+full source alternative is consumed and no new generic theorem/export
+or numerical funding statement is inferred.
+
+The input is the SAME table and minimum in the reviewed CT/CU one-future
+mode: i PureNever, zero-root future owner k≠i with finite mass f∈(0,1),
+and the other two owners having positive nonsure prescribed laws whose
+finite mass is exclusively at the root. Their caps need not be root-only.
+k's strategic cap label remains root-only OR later-only. The
+primary packet's original actual realizing sequence may be normalized
+and censored exactly as described: only masses whose limits are0 move
+to Never, root probabilities converge to their fixed nonsure limits,
+and uniform product-TV bounds control prescribed payoffs AND every
+behavioral response. Thus the resulting opponents of k really are
+date0/Never laws at each sufficiently late finite index, not an abstract
+semantic pair standing in for opponent laws.
+
+I read `GeometricPivotCapDomination.lean` in full under its displayed
+imports, including `exists_geometric_pivot_payoff_eq_and_caps_le`,
+`quittingTerminalPayoff_geometric_pivot_late_response_eq_affine`, and
+`quittingTerminalPayoff_geometric_pivot_eq`. With deadline1 these actual
+opponent laws satisfy its finite-head premise. k's late-finite mass is
+bounded away from0, so the selected first positive late-atom/finite-mass
+ratio z_N belongs to(0,1]. The theorem preserves EVERY payoff and k's
+literal Never atom, and bounds all full response caps, including all
+new geometric dates and signed late limits. The new conditional need
+not preserve the old occupied calendar; the actual all-deadline theorem
+is what prices that change. It does not create an unpriced empty reply
+before its first suffix date1.
+
+For each nonpivot observer, all geometric finite replies interpolate
+between coefficients zP_h and Γ_h, so the full finite supremum is
+max(zP_h,Γ_h). Never is below the limiting late finite value by the
+strict positive amount(1−f)s_h. Own k cap is fixed. These statements
+are valid for negative or zero coefficients and for an unattained late
+limit. Taking z_N→0 changes the cap formula to max(0,Γ_h), NOT to the
+cap of an actual Never conditional. Positive finite mass f persists
+at EVERY realizing index. Proper geometric tails can be censored to
+a sufficiently late FINITE atom with vanishing TV cap error, keeping
+Never exactly fixed; uniform finite words give the same zero-hazard
+endpoint, with all-test error O(M/N). Hence the displayed triple belongs
+to the ORIGINAL augmented carrier, with ν=C(1−f)=ν_min.
+
+Coordinatewise full-cap domination gives B_geo≤B* and prescribed U_geo=U*.
+Original globality gives D_geo≥δ; summing the cap comparison gives
+D_geo≤δ. Their equality forces EVERY nonnegative cap decrement to0,
+so the full pair and original Never coordinate are unchanged. This
+argument needs the true all-law floor and does not mistakenly assign
+δ to a suffix or assume common debt to recover coordinate equality.
+
+Crucially, cap equality alone does NOT preserve i's later branch. CW3
+repairs that correctly with the universal source theorem. Original
+root-only nonbridgers keep their strict numerical gaps because their
+root endpoints stay fixed and later envelopes cannot increase. Original
+later-only owners keep the same later branch because cap equality and
+their strict original gaps force it; k's own gap is wholly independent
+of its own law. Thus no other label becomes a root/later bridger.
+
+The resulting finite realizing sequence is at this SAME row-generic
+table, realizes an ORIGINAL full minimum, retains positive marginal
+Never, and still has prescribed first-root atoms of p,q at literal0.
+i's full cap remains its unchanged Q_i there, so that root is the
+earliest full maximizing point of every reconstructed marked minimum.
+There is no earlier raw finite date; all later response tests have been
+priced by the full-cap formula and retained compactification. Primary
+packet Sections6–9 explicitly apply to ANY finite-law full-minimum
+sequence at this final table, not merely the original selected sequence.
+Section10's bridge argument likewise uses only that produced marked
+minimum, legal supported-root variations and common debts at EVERY
+minimum. It therefore applies to THIS reconstructed sequence. If i's
+later branch had fallen strictly below Q_i, it would have no first-root
+bridger at all, contradicting that universal conclusion. The same sole
+tie and strict nonbridger classification consequently survive. No
+two-case property is assumed for an arbitrary unrelated prefix.
+
+Bounded significance: an actual one-future source conditional may now
+be chosen from a one-parameter geometric/diffuse family while retaining
+the exact original full pair and sparse root geometry. This is useful
+source-data compression, not outer-law Nash selection, a paid coupled
+move, a full-II consumer, or a UE proof. The distinct positive supplier's
+bad-root mass and all induced full-cap costs still require funding.
