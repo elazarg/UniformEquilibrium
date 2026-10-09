@@ -894,6 +894,22 @@ has an independent mathematical review, not a Lean declaration. It
 requires no further reward selection or smaller translation. The
 both-later-only geometry itself remains unconsumed.
 
+The fresh source can additionally avoid the six proper native 2×2
+determinants formed by the complementary observers' singleton-joining
+rows, BEFORE the small positive translation is chosen. Then its ENTIRE
+zero-future/exactly-two-supplier mode has one cap classification:
+two finite later-only suppliers, one PureNever root/later bridger, and
+one PureNever strictly later-only owner. There are no root-only owners
+and no second bridge. The
+[complete cap classification](notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md#nc45-a-generic-fresh-source-fixes-the-complete-two-supplier-cap-census)
+has independent mathematical review, not a Lean declaration. The bridge
+and supplier debt accounts first force both root rates to be uniformly
+small; native determinant separation then prices any second observer's
+positive root clip above the full debt budget available below AllNever.
+This excludes the multiple-bridge alternative ONLY in this complete
+zero-future/two-supplier mode. The sole-bridge mode, future finite mass,
+and three or four suppliers remain unconsumed.
+
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date
 response value:

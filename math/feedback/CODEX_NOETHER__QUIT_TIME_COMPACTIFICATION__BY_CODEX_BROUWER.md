@@ -842,3 +842,169 @@ tables are NOT claimed to have positive global/absorbing gaps;
 the tests check the algebra, not the counterexample-source producer.
 No compiler or full existing-producer/export gate was run. The
 source order and the narrower stated exclusion pass independently.
+
+## Independent review of NC.45: the complete two-supplier zero-future census
+
+Reviewer: CODEX_BROUWER. Ordinary independent mathematical review;
+no Lean build, implementation, export gate or general-case consumer.
+Reference: author's whole notebook SHA256
+`87775ac06e4cf2056cea8290b2525b347022af3da79e77022765f6973151b90c`,
+bounded heading `## NC.45` through its original EOF.
+
+Verdict: PASS, with no unresolved mathematical objection to the stated
+FRESH-source restriction. The complete zero-future/two-supplier mode
+is not excluded: its sole-PureNever-bridge/all-other-later-only census
+still requires an actual whole-law consumer.
+
+### Exact assertion checked
+
+Assuming an actual Fin4 no-uniform-payoff game, select ONE fresh source
+table with positive full gap, strictly larger absorbing gap, positive
+own rewards, row distinctness, common minimum debt vector and least
+literal Never/maximal first-root absorption as already constructed.
+At every produced minimum having exactly two positive finite suppliers
+and no prescribed finite mass after their common first root, both
+suppliers are strictly later-only, one PureNever owner is the SOLE root
+bridger, and the other PureNever owner is strictly later-only. There
+are no root-only owners in this mode. This excludes the multiple-bridge
+alternative only WITHIN this mode, not throughout canonical case I.
+
+### Proper determinant avoidance and source-selection order
+
+On the own-zero native affine slice, the four joining gaps
+a_k,d_k,a_h,d_h use non-own entries of two different recipient rows.
+Within each row their pair and passive-singleton entries are distinct
+coordinates. They can therefore be assigned independently. The displayed
+(1,0,0,1) assignment proves the determinant polynomial is proper on
+that slice; it need not itself satisfy the other desired generic
+conditions. A nonzero real polynomial cannot vanish on an open set.
+The complement of the finite union of these six polynomial zero sets
+and the row-equality hyperplanes is dense in the native slice.
+
+The positive absorbing-gap set is OPEN there by the reviewed uniform
+all-profile perturbation estimate. Consequently the additional avoidance
+is compatible with A>0 and the open half cube. Fixing this native table
+fixes A,L,m and all joining coefficients BEFORE choosing any t or any
+minimum. Repeatedly choosing a better perturbation after t would not
+prove the statement; NC.45 does not do that.
+
+Every nonempty terminal-row translation cancels from the joining gaps,
+including the triple-minus-passive-pair gap. Positive recipient scales
+multiply the determinant by θ_kθ_h and do not change its zero set.
+The uniform bounds for ALL θ∈(1/2,1)⁴ let the coordinate-regular scales
+be chosen after t without spoiling any previously fixed estimate.
+The full-gap and common-debt reconstruction, original-Never selection
+and max-root selection are fresh selections, not transport of an old
+minimum. NC.43's signed translation/completion argument remains valid
+for the additionally generic native table.
+
+### Compact separation is genuinely uniform near the empty root
+
+For one partition the invertible matrix with rows (a_k,d_k),(a_h,d_h)
+has no nonzero common kernel. The compact positive unit segment
+u,v≥0, u+v=1 therefore has strictly positive minimum η_pair of the
+maximum of its two absolute linear forms. Taking the minimum over six
+partitions is legal and keeps η>0. H is finite; it may be zero.
+
+For 0<x,y≤ε, division by x+y makes the quadratic error at most
+
+    Hxy/(x+y)≤Hε/2≤η/4.
+
+If the COMPLETE native k bridge G_k=0 holds, its normalized linear
+form has absolute value at most η/4. The other normalized linear form
+must then have absolute value at least η by the definition of η.
+After its own quadratic error, |G_h|/(x+y)≥3η/4>κ=η/2.
+No simultaneous triple reply has been dropped from either equation.
+No sign of either observer's joining gaps is needed here.
+
+### Actual realization, both supplier classes and the complete budget
+
+The zero-future assumption is essential to the reused marked-to-raw
+identification: the retained first-root masses and ORIGINAL literal
+Never masses exhaust each old law in the limit. Censoring the remaining
+finite mass and adjusting root weights has vanishing product-TV error
+uniformly over all finite and Never replies. Pre-root replies, if any,
+pay only s_j<B_j. Moving the retained root to0 therefore preserves the
+ENTIRE payoff/cap pair and original Never, not just selected testers.
+
+At that actual root0/Never profile each full cap is max(Q_j,C_j).
+Never is strictly lower than C_j by the positive opponent-Never product
+times s_j. For a finite supplier Q_j−C_j is the other supplier's positive
+rate times a nonzero within-row joining gap. Thus neither supplier can
+bridge. The supplied earliest-root bridge belongs to a PureNever owner.
+
+The reviewed NC.44 both-later-only reduction applies to this smaller t.
+Independently, its potential root-only arm would have complete debt
+νs_l+x(1−y)β while the supplied c-active supplier has
+νs_i+xyα. Their uniform positive gaps force x/(x+y)<b², contradicting
+the bridge's signed rate estimate and m≤L/7. This uses no assumed
+favorable participant sign. Both suppliers consequently have the
+exact debts νs_i+xyα_i and νs_l+xyα_l, with α_i+α_l≥m.
+
+The bridge equation gives the two separate estimates
+y≤8Lx/m and x≤8Ly/m. For the reverse estimate one uses the OTHER
+nonzero joining coefficient and exchanges x,y; row distinctness
+supplies the same spacing m in both orientations.
+
+Keeping EVERY owner's full debt, not only the suppliers', gives
+
+    xym≤δ−νS≤S(1−ν)≤S(x+y).
+
+Division by y or x and the respective rate estimate gives
+x,y≤4t(m+8L)/m²=Ct<ε. The constant C and the constraint ε/C
+are fixed before all final minima. This does not assume that rates
+are small merely because δ is small; the bridge and BOTH paid
+finite conditionals are used to prove it.
+
+For the other PureNever observer h the true complete debt is
+
+    d_h=νs_h+[θ_hG_h]⁺.
+
+The compact separation excludes G_h=0. If G_h>0, the entire root clip
+is greater than (κ/2)(x+y), since θ_h>1/2. The FULL available excess
+budget, even before charging the suppliers' positive excess, is
+
+    δ−νS≤S(1−ν)<4t(x+y)<(κ/2)(x+y),
+
+contradiction. Hence G_h<0. This proves the claimed strict later-only
+class without guessing a cap selector or ignoring a born root branch.
+The two suppliers are later-only, k bridges and h is later-only; this
+exhausts the four owners. The remaining formula
+δ=νS+xy(α_i+α_l) is exact in this census.
+
+### Negative test, sources and independent rational checks
+
+The author's determinant-necessity regression is valid. Identical
+observer joining triples (1,−1,−2) give G=x−y−2xy, with simultaneous
+bridges at y=x/(1+2x) for arbitrarily small x>0. Such joining triples
+are compatible with otherwise distinct native row entries. Thus
+row distinctness alone does NOT imply the new uniform separation.
+The additional proper-polynomial avoidance is doing real work.
+
+I re-inspected the reviewed source's P4–P10, fixed-carrier coordinate
+regularization, zero-future mass exhaustion and Section14.3 finite
+c-active supplier argument. Exact tracked inputs re-inspected under
+their imports are `positive_minimum_fourPlayer_allOwner_quadraticMargins`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+and `prod_stoppingLaw_none_mul_singleton_le_terminalDebt` in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`.
+A bounded search in the chosen terminal subtree found no declaration
+asserting this observer determinant/census result; no global coverage
+census was attempted or needed for this requested source check.
+
+Independent exact rational enumeration checked253 root/Never profiles
+with native own0, distinct entries, both finite suppliers later-only,
+a true k bridge and nonzero observer determinant. All1012 owner checks
+verified prescribed payoffs and EVERY root/later/Never cap, the native
+separation bound, both rate bounds and the full excess budget. In110
+cases the other observer's positive root clip forced D>D(AllNever).
+The other143 cases had its gap negative and D≤D(AllNever), verifying
+that the proof is a strict cap-census restriction, not elimination
+of the remaining mode. These tables are NOT asserted to satisfy the
+global positive-minimum/absorbing-gap source hypotheses. The exact
+calculations support the conditional algebra; the proof above, not
+the sampling, supplies the source conclusion.
+
+No unresolved soundness objection remains in this bounded review.
+No positive-hazard one-future result, broad I/II closure, Lean seal
+or permission to ignore future participant responses is inferred.
