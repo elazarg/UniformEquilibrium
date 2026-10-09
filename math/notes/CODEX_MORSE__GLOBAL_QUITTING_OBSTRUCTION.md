@@ -20399,8 +20399,9 @@ print("NI9 PASS: simultaneous contraction, every quiet gap, full tail bounds")
 
 ## UR. All-root odds return retires the entire inverse-design control box
 
-Status: COMPLETE ORDINARY UNREVIEWED proof for the sixteen-parameter
-raw family below. This is not a full Fin4 theorem, an export or a
+Status: COMPLETE ORDINARY proof for the sixteen-parameter raw family,
+with TWO independent soundness PASS reviews; coverage remains UNRESOLVED.
+This is not a full Fin4 theorem, an export or a
 novel counterexample-class count. Unlike NI8's invisible-coordinate
 slice, ALL sixteen controls vary simultaneously through their full
 original intervals, including every control USED by the four-pair
@@ -20987,3 +20988,294 @@ an already solved table, the next substantive attempt returns to
 arbitrary surviving-table forcing: actual nonlocal root excursions,
 with chronological realization and absorption-relative seams. The
 full Fin4 endpoint and both least-Never configurations remain open.
+
+## SG. Reopening the true sure-root gate, not another strong-no-sure table
+
+Status: ORDINARY method correction and a DIFFERENT fully specified
+negative-search architecture, not a counterexample, new UE class or
+export. No complete potential has been found. This section removes
+an unnecessary search restriction; it does not claim that the needed
+unrestricted certificate exists. The full Fin4 endpoint is unchanged.
+
+### SG1. Buffered C² exact drift implies robust drift WITHOUT strong no-sure
+
+Let |r|≤M, B=M+2, B′=B+1. Suppose P is C² on a neighborhood of
+box B′ and
+
+    P(v)-P(F(v,q))≥a(q)
+
+for EVERY full exact product-root Nash q at EVERY v in box B′.
+Then there is a positive rational τ≤1/4 such that 2P satisfies the
+full floor-free robust relation on box B. No normality, punishment
+floor, support assumption or absence of sure roots is needed for
+THIS repair. The later noUE consumer still requires its ACTUAL
+punishment-sure-root gate and other named hypotheses.
+
+This strengthens DN5 only by removing its artificial strong-no-sure
+assumption. It is not an exact-capacity converse: EC's exact/robust
+separation is unaffected, because a common C² potential is essential.
+
+Proof. Put K=M+B′. Let G bound the gradient 1-norm and H the
+Hessian ∞→1 operator norm on the buffered box. First suppose
+0<a≤1/2. EVERY q_i≤a≤1/2 automatically. Set ε=√τ and delete
+q_i<εa, obtaining q′ with deleted ℓ¹ mass d≤4εa and
+
+    (1-4ε)a≤a′≤a.
+
+All opponent survival products for q′ are≥1/8. Robust Nash gives
+g_i≤2τa for ALL owners; at retained owners it also gives
+g_i≥-ε. The gap has rate-Lipschitz constant2K, so
+
+    |g_i(v,q′)|≤(1+8K)ε       on retained active owners,
+    [g_i(v,q′)]⁺≤(2+8K)εa    on quiet/deleted owners.
+
+Correct active annotations by g_i/h_i and raise quiet annotations
+only when their gap is positive. This makes (v′,q′) a FULL exact
+Nash root, with
+
+    ‖v′-v‖∞≤C₀ε,   C₀=8(2+8K).
+
+For C₀ε<1 it lies in the buffered box. DN5's cancellation applies
+without change:
+
+    ‖D_v[P(v)-P(F(v,q′))]‖₁≤a′(G+HK).
+
+After the annotation correction, deleted-root change and robust
+target change, one obtains
+
+    P(v)-P(y)≥a[1-C_*√τ-Gτ],
+    C_*=4+C₀(G+HK)+4GK.
+
+Thus choose C_*√τ+Gτ≤1/2. This covers arbitrarily small charge
+with RELATIVE, not absolute, error. No survival denominator is ever
+estimated near a sure root in this branch.
+
+For a≥1/2 use joint compactness instead. On the compact inner-box
+product with the entire hazard cube, the four Nash defects are
+continuous and their common zero set E is closed. For every ρ>0
+there is η(ρ)>0 such that defects≤η imply distance<ρ from E,
+in the metric ‖v-v′‖∞+‖q-q′‖₁. Otherwise a convergent sequence
+of points away from E with defects tending0 gives an exact limit
+in E, contradiction. This is JOINT closeness: the source may change.
+No upper hemicontinuity assertion at a fixed Nash fiber is substituted.
+It includes all quiet, mixed and sure boundary faces.
+
+Choose an exact (v′,q′) at that distance. Then a′≥a-ρ and,
+because F is 1-Lipschitz in the source and K-Lipschitz in rates,
+
+    P(v)-P(F(v,q))≥a-C_big ρ,
+    C_big=1+G(2+K).
+
+Take ρ≤1/(8C_big). Since a≥1/2 the right side is≥3a/4.
+For τ≤η(ρ) and Gτ≤1/4, the target perturbation leaves at
+least a/2. Together with the small-charge branch this proves the
+claimed drift for2P. At a=0 the robust conditions force y=v.
+All restrictions on τ admit a positive rational choice. ∎
+
+If P is a rational polynomial,2P is the required rational polynomial
+with the same degree. For a general C² function this statement is
+only the robust-potential repair; a separate rational approximation
+or bounded-budget consumer would still have to be justified before
+claiming the specifically rational negative certificate.
+
+The narrow source check reread `IsQuittingFullExactRootPotential` and
+`isQuittingFullExactRootPotential_of_robustPotential` in
+`Projective/ExactRootPotentialRestriction.lean`, the literal defects
+in `Projective/RobustChargedRelation.lean`, and the compact-fiber
+declarations in `Root/CompactExactNashFiberMoat.lean`. That last
+module is a nearby-source zero-statistic moat, NOT the joint compact
+argument asserted here. The exact negative theorem remains
+`quittingGame_not_exists_uniformEquilibriumPayoff_of_noSureRoot_of_rationalPotential`
+in `Projective/PolynomialForwardCertificateConsumer.lean`, with the
+actual `HasQuittingPunishmentVectorNashRootWithSureQuitter` gate.
+No new implemented declaration or unrestricted positive-gap table
+is being claimed.
+
+### SG2. A concrete weak-gate architecture with an entire sure-root face
+
+This is a real sixteen-control game family, not a choice of fictitious
+annotations without raw rewards. Retain the four singleton rows
+
+    (1,3,3,0), (4,1,-1,-1), (0,2,1,2), (4,-2,0,1)
+
+for owners0,1,2,3. All own singletons are1. For nonempty opponent
+coalitions T define the joining differences by
+
+    d_0(T)=-1,
+    d_j(T)=+2 if ν(j)∉T, and -2 if ν(j)∈T, j=1,2,3,
+    ν(1)=2, ν(2)=3, ν(3)=1.
+
+The twelve singleton passive values are the displayed fixed rows.
+For EVERY opponent pair/triple choose the sixteen b_i(T)
+independently in these intervals:
+
+    i=0:       -4≤b_i(T)≤5;
+    j≠0,d=+2: -5≤b_j(T)≤3;
+    j≠0,d=-2: -3≤b_j(T)≤5.
+
+Define ALL remaining original rewards by
+r_i(T)=b_i(T), r_i(T∪{i})=b_i(T)+d_i(T), and r_i({i})=1.
+Each recipient coordinate is assigned exactly once by this inverse
+data. The fixed singleton comparisons also respect these bounds;
+hence EVERY reward is in[-5,5]. All playerwise punishment values
+lie in[-5,1]: the lower bound is the literal global reward floor,
+and opponents AllNever give own Quit1 or Never0, supplying the upper
+bound. Thus the entire family is normal with positive owns, WITHOUT
+assuming a no-UE conclusion. The exact named normality discharge is
+`isQuittingNormalPlayer_of_singleton_nonneg` in
+`Classification/AbnormalPlayers.lean`; its definition is own≥punishment.
+
+Its sure-root classification is exact and independent of all16
+controls. If j∈{1,2,3} is sure, its cyclic predecessor has gap-2
+on EVERY actual opponent outcome and must be quiet. That player's
+predecessor then has gap+2 on every outcome and must be sure.
+The original j now has its successor sure and hence gap-2,
+contradicting its own sure action. This works for arbitrary q_0
+and annotations because an opponent is sure throughout each step.
+Therefore none of1,2,3 can EVER be sure in a full root.
+
+If0 is sure, every other player's gap is exactly
+
+    g_j=2-4q_ν(j).
+
+The odd three-cycle has the unique Nash hazard vector
+q_1=q_2=q_3=1/2. None of these owners can be quiet, since a
+quiet q_ν would force a sure predecessor, already excluded; each
+is therefore mixed and its successor rate equals1/2. For owner0,
+
+    h_0=1/8,   g_0=(-6-v_0)/8.
+
+Consequently EVERY sure full root, at EVERY real annotation, is
+EXACTLY
+
+    q=(1,1/2,1/2,1/2),   v_0≤-6,
+
+with v_1,v_2,v_3 completely arbitrary. Conversely these are all full
+Nash roots. The true P_0≥-5 excludes the ENTIRE sure face at actual
+punishment. Thus the exact theorem's weak gate holds throughout the
+family, whereas DN5's former strong box gate fails on box7 or8.
+This is genuinely different root geometry from NI3/UR; its +2/-2
+joining pattern is not the favorite-singleton/-1 collision pattern.
+
+The indispensable negative mathematics is still a rational polynomial
+P with unit drift on EVERY exact full root in box8 (or a direct
+quantitatively robust certificate on box7), followed by SG1. In
+particular P must satisfy
+
+    P(v)-P(H)≥1
+
+on the WHOLE sure-face slab v_0∈[-8,-6], v_1,v_2,v_3∈[-8,8],
+where H=(1/8)Σ[T⊆{1,2,3}]r({0}∪T) is the SAME literal head
+for every annotation on that slab. Omitting this face or checking
+only nonsure active-support cells would be an invalid certificate.
+No sampled fit, alleged positive gap or all-game producer follows
+from these guard calculations.
+
+### SG3. Early exact falsifier: an entire stationary portion is already solved
+
+Do not start by tuning the maximal transport table. If
+b=b_1({2,3})≥5/2, an actual stationary Nash profile is already
+available, for ALL values of the other fifteen controls:
+
+    q=(0,0,1/3,1/3),
+    U=((8+b_0({2,3}))/5, b/5, 0, 2).
+
+The two active owners have both endpoints0 and2 respectively,
+from the fixed pair23 participant rewards(-2,4) and singleton
+passive rewards(0,2). For quiet0 and1 the full endpoint gaps are
+
+    g_0=-(37+4b_0({2,3}))/45<0,
+    g_1=(10-4b)/45≤0.
+
+All deleted-opponent survival rates are<1, so the actual stationary
+Bellman/endpoint compiler bounds EVERY behavioral deviation and
+gives one fixed uniform target U at every requested positive accuracy,
+for all sufficiently late horizons. The named semantic route is
+`terminalNash_and_sameProfileUniform_of_stationaryBoundary` and
+`isUniformEquilibriumPayoff_of_stationaryEndpointCertificate_contracts`
+in `Stationary/ResponseInvariantQuotientSameProfile.lean` and
+`Stationary/EndpointCompiler.lean`, respectively. Their applications
+were also inspected in `Stationary/GuardedCrossedResponseStrategic.lean`;
+no guarded raw producer hypotheses are being assumed. The formulas
+themselves produce the full certificate from the displayed raw test.
+
+This is an exact early architecture falsifier, not a new existence
+class claim or a reason to optimize its constants. In particular the
+all-upper-control point has sure-face head(11/4,4,4,13/4), ALL above
+own, but ALSO has this actual stationary equilibrium. A sure-root
+head escaping every singleton sublevel is therefore not evidence
+of a full negative certificate, even in the deliberately weak-gate
+architecture. Any negative search in this family must at least
+retain b_1({2,3})<5/2; that restriction is necessary, not sufficient.
+
+The current full-goal task is the ALL-root certificate itself, with
+every quiet and sure face retained, or an exact obstruction that
+retires this architecture wholesale. The gate repair is supporting
+work only. No experiment is counted as a counterexample lead.
+
+The following exact symbolic checker reconstructs ALL sixty original
+coordinates from the inverse data. It checks the endpoint formulas on
+the sure face, ALL four stationary Bellman equations and gaps, and the
+all-upper-control head. The proof of completeness of the sure-root
+classification and the unrestricted semantic compiler are the ordinary
+arguments above, not consequences of this finite calculation.
+
+```python
+# SG exact inverse-data and endpoint checker (SymPy; no floating-point data)
+import sympy as s
+q = s.symbols('q0:4')
+v = s.symbols('v0:4')
+nu = {1: 2, 2: 3, 3: 1}
+single = {1: (1,3,3,0), 2: (4,1,-1,-1),
+          4: (0,2,1,2), 8: (4,-2,0,1)}
+reward = {S: [None]*4 for S in range(1,16)}
+passive = {}
+upper = {}
+for i in range(4):
+    reward[1 << i][i] = s.Integer(1)
+    for T in range(1,16):
+        if T & (1 << i):
+            continue
+        d = -1 if i == 0 else (-2 if T & (1 << nu[i]) else 2)
+        z = s.Integer(single[T][i]) if T in single else s.Symbol(f'b{i}_{T}')
+        passive[i,T] = z
+        reward[T][i], reward[T | (1 << i)][i] = z, z+d
+        if z.free_symbols:
+            lo, hi = (-4,5) if i == 0 else ((-3,5) if d == -2 else (-5,3))
+            assert -5 <= lo <= hi <= 5 and -5 <= lo+d <= hi+d <= 5
+            upper[z] = hi
+        else:
+            assert -5 <= z <= 5 and -5 <= z+d <= 5
+assert len(upper) == 16
+assert all(z is not None for row in reward.values() for z in row)
+
+def endpoints(i, hazard):
+    quit, cont = 0, 0
+    for T in range(16):
+        if T & (1 << i):
+            continue
+        w = s.prod(hazard[j] if T & (1 << j) else 1-hazard[j]
+                   for j in range(4) if j != i)
+        quit += w*reward[T | (1 << i)][i]
+        cont += w*(reward[T][i] if T else v[i])
+    return s.expand(quit), s.expand(cont)
+
+for i in range(1,4):
+    Q, C = endpoints(i, [1,q[1],q[2],q[3]])
+    assert s.expand(Q-C) == 2-4*q[nu[i]]
+Q, C = endpoints(0, [1,s.Rational(1,2),s.Rational(1,2),s.Rational(1,2)])
+assert s.expand(Q-C) == (-6-v[0])/8
+
+hazard = [0,0,s.Rational(1,3),s.Rational(1,3)]
+U = [(8+passive[0,12])/5, passive[1,12]/5, 0, 2]
+expected = [-(37+4*passive[0,12])/45, (10-4*passive[1,12])/45, 0, 0]
+for i in range(4):
+    Q, C = endpoints(i, hazard)
+    Q, C = Q.subs(dict(zip(v,U))), C.subs(dict(zip(v,U)))
+    assert s.simplify(hazard[i]*Q+(1-hazard[i])*C-U[i]) == 0
+    assert s.simplify(Q-C-expected[i]) == 0
+H = [s.expand(sum(reward[1 | T][i] for T in [0,2,4,6,8,10,12,14])/8)
+     for i in range(4)]
+assert [z.subs(upper) for z in H] == [s.Rational(11,4),4,4,s.Rational(13,4)]
+print('SG inverse data, sure endpoints and stationary certificate: exact PASS')
+```

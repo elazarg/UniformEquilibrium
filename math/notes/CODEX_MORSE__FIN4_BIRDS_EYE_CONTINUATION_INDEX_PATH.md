@@ -43,7 +43,21 @@ compatible joint/solo/solo output is not membership in that raw input.
 No new class count, export or source contraction is inferred. An exact supporting argument also
 rejects every barrier with one additively isolated player. Negative
 research now needs different USED transport/root geometry, not
-higher-degree fitting at these solved tables. General above-own
+higher-degree fitting at these solved tables. SG now repairs DN5's
+unnecessary strong-no-sure restriction: a buffered C² ALL-exact-root
+unit drift implies robust drift by small-absorption purification plus
+JOINT compactness on all larger-absorption faces. The actual no-UE
+consumer only excludes a sure root at true punishment. A different
+real sixteen-control family has ALL sure roots classified as
+q=(1,1/2,1/2,1/2), v0≤−6, whereas its actual punishment floor is≥−5;
+normality and positive owns are produced directly from the raw table.
+This opens a genuinely different negative-search domain, NOT a
+negative table or potential. Its entire b1({2,3})≥5/2 portion is already
+retired by a full stationary certificate with all other controls free.
+The next indispensable test is the ALL-root drift, including the
+entire sure slab below true punishment, or a whole-architecture
+falsifier; local sure-root geometry alone supplies neither.
+General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/
 no-sure screens alone. Both least-Never configurations and the full
