@@ -833,6 +833,15 @@ The two signs exhaust the boundary. The
 [complete diffuse-boundary exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#db-the-complete-zero-hazard-one-future-boundary-is-impossible)
 has an independent mathematical review, not a Lean declaration. Thus the
 one-future geometric representative has genuinely positive hazard.
+Consequently this subcase has an ACTUAL integer-clock minimum profile:
+the two suppliers use first-row/Never laws, the bridger uses Never, and
+the future owner uses finite masses fz(1−z)^(t−1) at t≥1 and Never mass
+1−f. The exact ROOT/FIRST/END-supremum formulas reproduce the selected
+whole payoff/cap pair and original Never probability. For proper z<1,
+an END response may still be an unattained supremum; actual profile
+attainment does not imply finite-date best-response attainment. This
+consequence of the reviewed replacement and boundary exclusion is
+specific to the one-future mode, not all minimum points.
 The sure-first boundary z=1, additional active tail ties, absence of a
 strict-FIRST supplier in the proper-hazard case, and zero or multiple
 future owners remain unconsumed. Neither complete source configuration
