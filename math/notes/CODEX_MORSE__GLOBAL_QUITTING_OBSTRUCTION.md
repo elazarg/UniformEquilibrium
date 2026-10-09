@@ -24022,3 +24022,41 @@ for sample in range(100):
 print('PD exact diagnostic PASS:', sample+1, 'complete tables;',
       negative, 'negative reward cells')
 ```
+
+### Post-PD boundary: actual attainment does not isolate the infinity seam
+
+The next proposed whole-game implication was: an actual product of complete
+stopping laws attaining a strictly positive GLOBAL total-debt infimum should
+be impossible, because its fixed discrete calendar isolates the active cap
+tests and permits a small late release. The proposed isolation step FAILS.
+At an actual profile with positive Never masses n_i, the finite response
+values converge to R_i+s_i∏_(j≠i)n_j, not to literal Never R_i. This genuine
+∞− endpoint may maximize the full cap without any finite attaining date;
+its approximating finite replies have no compact strict complement gap.
+Actual profile attainment therefore does not remove the born-late-cap seam.
+This is a precise failed implication, NOT a quitting counterexample to the
+unproved nonattainment theorem itself.
+
+The initially proposed all-strict-late-buffer escape is ALREADY contained
+in Brouwer's `An actual late release and its complete cap account` LR1–LR6,
+and accepted `LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE` Sections14.1–14.3.
+Its simultaneous strengthening is the accepted exact graft and Brouwer's
+SG1–SG4: for EVERY actual-carrier tail (u,b),
+
+    Σ_i h_i[(b_i−κ_i)⁺−n_i u_i]≥0,
+    h_i=∏_(j≠i)n_j,  κ_i=(B_i−R_i)/h_i≥s_i.
+
+At the separated source its lower bound is the positive separation g for
+absorbing tails. A constant realizing sequence for an actual minimizer
+does not bypass this budget. The late BUFFER B_i−R_i−h_i s_i must not be
+confused with behavioral DEBT B_i−U_i: the latter is strictly positive at
+the selected source even when the former vanishes. The actual late-limit
+declaration and full-cap bound were read in
+`UniformEquilibrium/Quitting/Terminal/CompactStoppingLawCapUpperBound.lean`,
+with the literal-profile wrapper and movement identity in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`.
+The older formalized `PURE_FINITE_CLOCK_MINIMUM_DEADLINE_RANK_TO_PAID_PORT`
+was also read; it produces an off-minimum paid port, not impossibility.
+No new active-face use or all-law nonattainment theorem was obtained.
+The attainment/KKT globalization route is therefore not pursued on the
+strength of this already-priced seam; neither actual source case is closed.

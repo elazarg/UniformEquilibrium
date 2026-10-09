@@ -155,6 +155,11 @@ the same least original ν/root-max membership. END may still be an
 unattained raw-clock cap supremum. The surviving four real parameters
 do not replace the ORIGINAL unrestricted global-minimum hypothesis.
 
+DD records the current coupled late-word alternative with a movable
+whole k law, actual independent finite realizers and all five cap
+classes. Its funding inequality remains OPEN. The fixed-k common-debt
+filter is supporting accounting, not an excluded source mode.
+
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
 separations but the full existential-producer union still UNRESOLVED.
@@ -18123,3 +18128,232 @@ an old signed upper coefficient is negative. Neither omission is a
 funded repair. Entire k finite-conditional changes and both suppliers'
 Never masses remain free; the four-parameter grammar is an actual
 incoming minimizer, not a restriction on legal competitors.
+
+
+## DD: coupled late-word repair with a genuinely movable k law
+
+Status: COMPLETE ORDINARY, UNREVIEWED supplied-family cap account;
+its source-funding inequality is OPEN. It is not a new normalization,
+raw existence producer, source-class exclusion or export candidate.
+The coupled-FIRST-date repair remains unresolved, not falsified. This
+different family relocates paid p/q root draws into a late independent
+word and allows k's WHOLE head/finite/Never law to change. It avoids
+unpriced first-date triple/grand rewards by an explicit uniform finite
+collision estimate, not by deleting their entries from the game.
+
+### DD1. Actual independent finite realizers
+
+Start with DC's actual source and retain its notation n_p=1−b,
+n_q=1−a. Select
+
+    0≤x≤b,  0≤y≤a,  L≥1,  F≥0,  0<z≤1,
+    θ=1−z,  H=F(1−θ^L)<1,  0<κ≤1−H.
+
+Player p has root mass b−x, word mass x and Never mass n_p;
+q has root mass a−y, word mass y and Never mass n_q. Player i
+stays PureNever. Player k's head masses at dates j=1,…,L are
+F z θ^(j−1), its word mass is1−H−κ, and its Never mass is κ.
+These are unconditional masses, not hazards or public lotteries.
+
+Write the three WORD-start and WORD-end survivals as
+
+    σ=(n_p+x,n_q+y,1−H),    e=(n_p,n_q,κ),
+    ℓ_j=log(σ_j/e_j)≥0,     Λ=ℓ_p+ℓ_q+ℓ_k,
+    C'=(n_p+x)(n_q+y),      P₀=C'(1−H),
+    ν'=n_p n_q κ=P₀ exp(−Λ).
+
+If Λ>0 put ω_j=ℓ_j/Λ. The continuous word is shorthand for the
+following ACTUAL independent laws, one for every integer N≥1:
+at word date L+m, m=1,…,N, owner j∈{p,q,k} has mass
+
+    σ_j[exp(−ℓ_j(m−1)/N)−exp(−ℓ_j m/N)].       (DD.1)
+
+Its preceding root/head atoms and literal Never atom e_j are as above.
+All these masses are nonnegative and sum to1 owner by owner. The word
+totals telescope to σ_j−e_j. Thus the four laws are product-realized,
+with joint ORIGINAL Never exactly ν' at EVERY N. No correlated mixture
+or independence of a merely specified first-exit lottery is assumed.
+If Λ=0 there are no word atoms and every formula below uses its
+constant zero-word interpretation.
+
+Conditional on joint word entry, independent survival is exp(−Λ t),
+0≤t≤1. The limiting first-exit singleton j has unconditional mass
+ω_j(P₀−ν'). Therefore the exact limiting prescribed payoff is
+
+    U'_h=R_h(b−x,a−y)+C'H r_h({k})
+                         +(P₀−ν')Σ_j ω_j r_h({j}). (DD.2)
+
+Here R_h is DC's root-outcome polynomial, now at the two reduced
+root rates. Changing F,z,κ changes k's entire finite conditional,
+not just a response against frozen opponent laws. Neither x/y nor
+this head/word grammar is asserted to be a complete competitor class.
+
+### DD2. All five complete cap classes
+
+Let A'_h,H'_h,Q'_h be the ordinary passive root reward, other-owner
+continue product and root-Quit value at rates b−x,a−y. Precisely,
+for h=i,k one has A'_h=R_h(b−x,a−y), H'_h=C'; for h=p,
+A'_p=(a−y)r_p({q}), H'_p=n_q+y; for h=q,
+A'_q=(b−x)r_q({p}), H'_q=n_p+x. The Q' formulas are exactly
+DC2's formulas with those two reduced root rates. In particular
+the old ROOT triple tester rewards are retained.
+
+For h≠k use Γ_h=r_h({k})−s_h and P_h=r_h({h,k})−s_h as before.
+The full head response at EVERY j=1,…,L is
+
+    T_h(j)=A'_h+H'_h[s_h+FΓ_h
+                              +F θ^(j−1)(zP_h−Γ_h)]. (DD.3)
+
+For h=k set T_k(j)=A'_k+H'_k s_k. The signed geometric trace in
+(DD.3) is monotone or constant, so both endpoints j=1,L price its
+ENTIRE head, including negative coefficients, ties and z=1.
+
+Immediately before the limiting word the response values are
+
+    W_h^pre=A'_h+H'_h[H r_h({k})+(1−H)s_h] (h≠k),
+    W_k^pre=A'_k+H'_k s_k.
+
+The PRE label is a moving finite test at the beginning of the word;
+it does NOT insert an extra empty date before the retained head.
+Its possible increase over the incoming cap is fully included.
+
+Set σ_i=e_i=1 and ℓ_i=0. For EVERY tester h, including an active
+word owner, remove its own law and define
+
+    v_h=∏_(j≠h)σ_j,   v_h^end=∏_(j≠h)e_j,
+    Λ_-h=Σ_(j≠h)ℓ_j,
+    Z_h=Σ_(j≠h)ℓ_j r_h({j})/Λ_-h  if Λ_-h>0.
+
+Its COMPLETE word-response trace is
+
+    V'_h(t)=W_h^pre+v_h(1−exp(−Λ_-h t))(Z_h−s_h),
+    W_h^end=W_h^pre+(v_h−v_h^end)(Z_h−s_h).       (DD.4)
+
+For Λ_-h=0 the trace is constant and END=PRE. This calculation
+removes the tester's OWN clock: using the prescribed all-owner shares
+ω_j for an active tester would be incorrect. Whatever the sign of
+Z_h−s_h, every word response lies between its PRE and END values.
+The after-word finite test gives END; literal Never gives exactly
+END−v_h^end s_h<END because every own singleton and end survival
+is positive. Thus EVERY pure finite/Never response, and by averaging
+EVERY behavioral deviation, is priced by exactly the five classes
+
+    B'_h=max(Q'_h,T_h(1),T_h(L),W_h^pre,W_h^end). (DD.5)
+
+No ROOT/FIRST/END identity from the incoming source is imposed on
+the changed profile. New caps may change class or tie. In particular
+the word PRE cap is not discarded when an old signed coefficient
+is negative, and k's cap is not inferred from its own new law.
+
+### DD3. Uniform all-response realization and the open funding inequality
+
+Let R bound the absolute rewards at this SAME table. In (DD.1) each
+word-date hazard is at most ℓ_j/N. The probability of ANY prescribed
+multiple-owner word collision is at most Λ²/(2N), by the union bound
+over dates and owner pairs. For an arbitrary tester date, the chance
+that an opponent quits in its word bin is at most Λ/N. Coupling the
+independent exponential clocks to their discretized bins therefore
+controls prescribed payoff error and EVERY pure-response error by
+
+    ε_N=2R(Λ²+Λ)/N.                           (DD.6)
+
+This deliberately loose common bound includes singleton-order changes,
+tester joins, simultaneous triple/grand tester coalitions and all raw
+reward coordinates on them. ROOT and retained head atoms are exact.
+Taking the supremum preserves the same bound for full caps. Literal
+Never is compared separately by the same passive-outcome collision
+coupling. Hence (U',B',ν') belongs to the ORIGINAL augmented actual
+carrier, not to a correlated or newly enlarged strategy space.
+
+For fixed finite parameters no limiting zero hazard is relabeled Never:
+the finite masses telescope and Never is always the explicitly retained
+e_j. The source's global floor implies
+
+    Φ=Σ_h B'_h−Σ_h U'_h−δ ≥0.
+
+The desired contradiction would instead establish Φ<0, or Φ≤0 with
+ν'<ν₀, for one legal choice. Strict negativity gives actual below-floor
+finite realizers; equality with smaller ORIGINAL ν contradicts its
+least selection over augmented full minima. This is the specific OPEN
+full funding inequality. The common debt vector, absorbing gap and
+global floor still concern all original independent laws, not just
+this family or a favorable replacement suffix.
+
+The incoming actual geometric profile is recovered at the carrier
+boundary x=y=0, F=f₀, z=z₀, κ=1−f₀ and L→∞. The leftover original
+k finite tail has mass f₀(1−z₀)^L; diffusing it changes caps by at
+most a constant times that mass. This checks startup, but does NOT
+prove a finite-amplitude funding inequality or permit dropping PRE.
+
+### DD4. Why the old k law cannot simply be frozen
+
+Here is an exact source-specific FILTER, not a source-mode exclusion.
+Suppose k is originally LATER-ONLY, and consider the special limit
+where ALL its old finite mass f remains BEFORE the new p/q word,
+its Never mass1−f stays fixed, and only p/q paid root draws are
+relocated. Such profiles are realized by the same construction with
+k having no word mass, a head of total f and increasing head length.
+Let I,J be the word first-exit masses computed WITHOUT k's Never
+factor, so
+
+    I+J=(n_p+x)(n_q+y)−n_p n_q,
+    W=I[r_k({p})−s_k]+J[r_k({q})−s_k].
+
+Own k's word-PRE and word-END debts are respectively EXACTLY
+
+    ν₀s_k−(1−f)W,      ν₀s_k+fW.             (DD.7)
+
+Its full debt includes both, and possibly an even larger ROOT cap.
+Originally d*_k=ν₀s_k. Therefore every W≠0 gives d'_k>d*_k.
+If this candidate were a full minimum, the source's COMMON individual
+minimum debts would contradict that inequality. Together with the
+global floor, its limiting summed debt is consequently STRICTLY above
+δ whenever W≠0. This prices a genuine entire cap pair, not a selected
+response lower bound substituted for the full envelope.
+
+At W=0 this only removes that particular cost: it proves neither a
+minimum return nor funding. It also makes no assertion when original
+k is ROOT-ONLY or k's finite/Never law changes. The movable-k family
+(DD1–3) retains precisely those honest possibilities. Thus the filter
+must not be promoted to a discarded source mode or to completeness
+of frozen-k relocations. The next selection problem is the full Φ
+inequality with genuinely changed k law, not sharpening (DD.7).
+
+The identities in (DD.7) and the positive-W own-debt-preserving scalar
+identity f'=f₀ C s_k/(C s_k−W), C=n_p n_q, have the following runnable
+exact symbolic check (SymPy, no numerical fixture):
+
+```python
+import sympy as S
+np, nq, f, x, y, t, sk, rkp, rkq, Rk = S.symbols(
+    'np nq f x y t sk rkp rkq Rk')
+C = np*nq
+I, J = nq*x+t*x*y, np*y+(1-t)*x*y
+Cp = (np+x)*(nq+y)
+assert S.expand(I+J-(Cp-C)) == 0
+Uk = Rk+Cp*f*sk+(1-f)*(I*rkp+J*rkq)
+Pre = Rk+Cp*sk
+End = Rk+I*rkp+J*rkq+C*sk
+W = I*(rkp-sk)+J*(rkq-sk)
+base = C*(1-f)*sk
+assert S.expand(Pre-Uk-base+(1-f)*W) == 0
+assert S.expand(End-Uk-base-f*W) == 0
+f0 = S.symbols('f0')
+fnew = f0*C*sk/(C*sk-W)
+assert S.factor((C*(1-f)*sk+f*W-C*(1-f0)*sk).subs(f, fnew)) == 0
+print('PASS: DD7 debts and positive-W scalar identity')
+```
+
+The f' identity is ONLY an algebraic check for that fixed-order special
+case, not the three-clock funding selection or a claim that this is the
+required choice of k law. The five-class account itself follows the
+independent density and coupling calculations above, and remains
+ordinary/unreviewed.
+
+Primary-source scope is unchanged from DC and the accepted source;
+the new word is defined explicitly here, not invoked as an existing
+raw producer. A narrow search for constant-share/exponential-survival
+word formulas in `UniformEquilibrium/Quitting/Terminal` and
+`UniformEquilibrium/Quitting/Paths` found no named declaration used
+for this calculation. No Lean result, build, export or class coverage
+is inferred from that lookup.

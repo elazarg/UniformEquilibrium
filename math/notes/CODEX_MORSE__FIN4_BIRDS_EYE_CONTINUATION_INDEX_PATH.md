@@ -20,6 +20,12 @@ noncollapse/efficiency principle, not every schedule or equilibrium selector.
 It extends Noether RM33's ordinary-discount obstruction in a different
 direction, consumes no actual source case, and gives no negative table.
 The bounded PD1–PD5 proof is ordinary and independently unreviewed.
+The subsequent actual-attainment pivot gives no new result: a fixed actual
+calendar still has nonisolated finite reply values converging to its ∞−
+cap, distinct from Never. Accepted Section14 and Brouwer SG1–SG4 already
+price every simultaneous tail at that seam. Thus actual attainment does
+not justify a strict-gap late release; no all-law nonattainment theorem
+or new source exclusion was obtained. The full-game lane remains open.
 
 Latest ACTUAL source attempt: RA in the global notebook reuses/refines
 Noether's valid compact global root/suffix selection by first fixing least
