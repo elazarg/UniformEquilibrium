@@ -179,6 +179,16 @@ operation boundary, not elimination of that source arm. The remaining
 operation must put relocated i finite mass after some donated j mass,
 or deliberately change i's Never mass and price the resulting cross term.
 
+NC.42 adds actual participant information in source II with ZERO future
+finite mass and EXACTLY TWO positive root suppliers: their root-censor
+orientations, and the sole bridger's two singleton-joining premiums, have
+opposite signs. The proof uses one common cusp weight and the constrained
+second derivative on the actual cap wall. It is ordinary, unreviewed
+mathematics, not elimination of this whole submode. The new common late-
+atom candidate retains all pair/triple testers; total funding is still
+open, and neither its paid-owner nor donor labels are silently aligned
+with an independently supplied owner.
+
 NC.41 now constructs a true-overlap candidate with complete cap control:
 independent two-owner tail survivors give a STRAIGHT trace of singleton
 exit masses. Every other recipient's intermediate replies are bounded by
@@ -27035,3 +27045,166 @@ local regression tables, export, or independent audit is proposed.
 The next genuine-source operation must use actual participant/root
 information to release the bridger's clip, or invoke a global-minimum
 constraint beyond these singleton/cone conditions.
+
+## NC.42: opposite participant signs in the two-supplier zero-future arm
+
+PROVED ORDINARY SOURCE RESTRICTION; UNREVIEWED AND NOT EXPORTED.
+The coupled late-pair funding candidate below remains OPEN. This is a
+statement about the SAME genuine global source, not the Γ-only constraint
+witness above. It does not cover three root suppliers or any prescribed
+future finite mass, and it does not eliminate the entire two-supplier arm.
+
+Assume source II has no post-root prescribed finite mass and exactly TWO
+positive root suppliers i,l. Write their root rates x,y∈(0,1). All other
+owners, including the sole bridger k, are pure Never. The original root
+is not assumed cap–Nash. Its limiting law/cap/Never data equal those of
+the actual root0/Never profile: the actual finite realizers' mass outside
+the retained root and isolated Never tends to0. Thus all root variations
+used here are literal legal profiles at the fixed table.
+
+For root rates near the source, let P(x,y) be the sum debt obtained by
+choosing the original C branch for every original c-active owner and the
+original Q branch for every root-only owner. Put g(x,y)=Q_k−C_k.
+Both P and g are BILINEAR, and every other full cap has a strict branch
+gap. Consequently the complete local debt is
+
+    D(x,y)=P(x,y)+g(x,y)⁺,     g(x*,y*)=0,
+    P(x*,y*)=δ.
+
+Let H_i=−∂g/∂x and H_l=−∂g/∂y at the source, with the MINUS signs
+because H measures CENSORING root mass rather than increasing its rate.
+The strict two-sided cusp proof (NC.41l–m) applies separately to BOTH
+positive suppliers, whether c-active or root-only. Hence both H's are
+nonzero. First-order global minimality in every two-sided root direction
+also supplies ONE common θ∈(0,1), not independent weights:
+
+    ∇P=−θ∇g.
+
+Indeed on directions orthogonal to ∇g both signs force ∇P to vanish;
+the two halfspaces then force θ∈[0,1], and the already strict coordinate
+cusps exclude its endpoints. Thus the bilinear L=P+θg is stationary
+at (x*,y*). At (0,0), every selected Q/C branch equals its own singleton
+and every prescribed payoff is0, while g(0,0)=0. Therefore
+
+    L(x,y)=δ+c(x−x*)(y−y*),
+    c=(Σ_t s_t−δ)/(x*y*)>0.                       (NC.42a)
+
+The strict sign has a genuine source proof. AllNever has debt Σs≥δ.
+If equality held, common minimum debts would identify its k-debt s_k
+with the original d*_k=ν*s_k<s_k, impossible since s_k>0 and the two
+suppliers make ν*<1. No minimizing suffix is substituted here.
+
+On the smooth local wall g=0, the ACTUAL full debt is P=L and has a
+minimum at the source. Using x as a local parameter, y'=−g_x/g_y.
+The second derivative there is 2c y', because ∇L=0. It is nonnegative,
+so y'≥0. Both partials are nonzero; hence y'>0 and
+
+    H_i H_l<0.                                   (NC.42b)
+
+This rules out either same-sign root-censor orientation at an actual
+two-supplier source. It is not the invalid multiaffine-flatness argument
+on a nonlinear cap wall: the constrained second derivative is retained.
+
+The signs are actual participant data. Set
+
+    p_i=r_k({k,i})−r_k({i}),
+    p_l=r_k({k,l})−r_k({l}),
+    p_il=r_k({k,i,l})−r_k({i,l}).
+
+The empty-opponent joining comparison is0, so
+
+    g=x(1−y)p_i+(1−x)y p_l+xy p_il.
+
+Differentiation and g=0 give x*H_i=y*p_l and y*H_l=x*p_i.
+Thus p_i p_l<0. In particular, if the Q6-selected paid owner i has
+H_i<0, then the other supplier has H_l>0 and the bridger's joining
+premium p_i at i's SINGLETON is POSITIVE. This is supplied participant
+information, unlike an assumed favorable social singleton column.
+No assertion that l is paid, c-active, an eligible donor, or CB's
+selected first-root supplier has been made.
+
+### A literal paired late atom uses that positive participant reward
+
+Consider the additional subcase in which the eligible donor is j=k
+and H_i<0. If also K_ik≥0, NC.41's ENTIRE straight diffuse family loses.
+Here p_i>0 is nevertheless supplied by (NC.42b). Change the operation:
+remove ρ≤x* of i's ORIGINAL finite mass from root0 and place it at ONE
+new common late date2; replace η∈(0,1) of k's Never by that SAME date.
+Date1 is empty and retains the old final test; date3 is empty and late.
+All choices remain independent. The finite pair {i,k} occurs with
+positive probability eρη; its reward is not erased by diffusion.
+All other original laws stay put, and ν_new=e n_i(1−η)<ν*.
+
+Use the censored-base U_t+ρΔ_t, Q_t(ρ), C_t(ρ), R_t(ρ) as above,
+with e=∏_(t≠i,k)n_t and g_i=B_i−Q_i>0. Put
+
+    q_i=r_i({i,k})−r_i({k}),
+    T_ik=Γ_ik+q_i⁺,
+    T_ki=Γ_ki+p_i.
+
+The eligible Γ_ik is positive. In the K_ik≥0 subcase Γ_ki>0, so
+T_ki>0 as well. Deleting each owner's law separately gives EXACT caps
+
+    B_i(new)=B_i+ηe T_ik,
+    B_k(new)=max(Q_k(ρ), C_k(ρ)+ρe T_ki).          (NC.42c)
+
+For i, the possible new response is the join at date2 or the passive
+response at date3; taking their maximum is why q_i⁺ appears. For k,
+its positive joining premium makes date2 dominate the after-date
+response. A root response can still dominate and is retained.
+
+For every OTHER recipient t, define e_t=∏_(h≠i,k,t)n_h. Its two new
+response values are
+
+    J_t=R_t(ρ)+e_t[ρ(1−η)r_t({i,t})+ηn_i r_t({k,t})
+                         +ρηr_t({i,k,t})+n_i(1−η)s_t],
+    A_t=R_t(ρ)+e_t[ρ(1−η)r_t({i})+ηn_i r_t({k})
+                           +ρηr_t({i,k})+n_i(1−η)s_t],
+    B_t(new)=max(Q_t(ρ),C_t(ρ),J_t,A_t).          (NC.42d)
+
+Every newly born pair or TRIPLE tester is explicit in J_t; suppressing
+that response would be false. These four finite classes exhaust all
+dates, and Never is dominated by A_t since n_i(1−η)e_t s_t>0.
+Every recipient's actual prescribed payoff is
+
+    U_t(new)=U_t+ρΔ_t+e[ρ(1−η)r_t({i})+ηn_i r_t({k})
+                                                   +ρηr_t({i,k})]. (NC.42e)
+
+In particular own-i matching is now
+
+    ρ=[ηe(A_ik+q_i⁺)]/[g_i+ηe(Γ_ik+q_i)].        (NC.42f)
+
+The denominator is positive for sufficiently small η, and then ρ is
+legal and positive. Its sign and the capacity ρ≤x* must be checked
+at every larger amplitude. This is not the old logarithmic curve.
+In this H_i<0 subcase Q_k(ρ)−C_k(ρ)=ρH_i<0 EXACTLY, not just to
+first order: only i's original root rate was changed. Since T_ki>0,
+the new joining cap strictly dominates both old branches for every
+ρ>0. Thus k's own debt is always
+
+    d_k(new)=e(1−η)[n_i s_k+ρp_i].                (NC.42g)
+
+The positive joining premium is ACTUALLY paid on the pair event, but
+also creates the counterfactual cap cost; (NC.42g) prices both. It
+cannot be treated as a free prescribed-payoff gain.
+
+The full funding test is Σ_t[B_t(new)−U_t(new)]≤δ with ALL branches
+of (NC.42c–d), at an actual legal root (NC.42f). Its numerator after
+multiplying by the positive denominator is the maximum of finitely
+many quadratics; this is an exact finite-law test, not a relaxed or
+selected-cap objective. It has not been proved feasible. Neither the
+supplied p_i>0 nor k's isolated debt formula pays the other owners'
+root/triple caps. The live research question is this complete paired-
+atom budget, with ≥3 suppliers, j≠k, and H_i>0 still visible outside
+the supplied-sign subcase. No export or full-source consumer is claimed.
+
+The cap and matching identities were separately checked by expanding
+the actual independent finite draws, rather than using a diffuse trace
+identity at the occupied date. The joining-gap convention is exactly
+`quittingPairJoiningGap` in
+`UniformEquilibrium/Quitting/Root/PairInactiveGapNumerator.lean`.
+The existing
+`exists_uniformEquilibriumPayoff_of_signed_pair_core_weakSameSign`
+in `UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClosure.lean`
+requires the ACTUAL premium core to be precisely that pair. Positive
+Γ_ik and Γ_ki, or p_i>0 alone, do not supply that core hypothesis.
