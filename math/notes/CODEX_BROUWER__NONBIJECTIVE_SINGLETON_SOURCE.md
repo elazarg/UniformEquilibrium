@@ -114,7 +114,8 @@ global floor makes its full payoff/cap/literal-Never triple unchanged;
 the universal earliest-root bridge theorem keeps the same sole bridging
 owner. CW has an independent Morse source-adapter PASS, not a new generic
 compression lemma, outer-law selection or UE consumer. CX below is a new
-COMPLETE ORDINARY, UNREVIEWED source-dependent exclusion: on a FRESH
+COMPLETE ORDINARY source-dependent exclusion with an independent Morse
+PASS: on a FRESH
 source table avoiding explicit homogeneous two-row resultants, a proper
 interior geometric conditional and a positive later-only first-tail
 supplier require an additional active tail-endpoint tie. Its proof uses
@@ -122,7 +123,11 @@ a genuine two-marginal family, the global floor, least ORIGINAL Never,
 and common minimum debts. It does not consume the endpoint/tie survivors,
 the zero-future mode or general alternative(II). CY below separately
 excludes CX's strict-END-i submode on the ORIGINAL row-generic source,
-without fresh resultant avoidance; CY is ordinary/unreviewed.
+without fresh resultant avoidance; CY also has an independent Morse PASS.
+CZ below is a new ordinary/unreviewed SAME-table selected-source variant:
+least original Never followed by maximal first-root absorption removes
+the resultant requirement and also prices a zero-hazard diffuse-word
+extension. Full sparse/II closure and total coupled funding remain open.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -17289,3 +17294,169 @@ its END conclusion has this shorter ORIGINAL-table proof. The case with
 i's extra first/END tie, p's active endpoint tie, z₀=0 or1, or no strict
 FIRST later-only supplier remains open, as do zero/two-or-more future
 owners and general case(I)/(II). No complete sparse consumer is claimed.
+
+
+## CX/CY independent review disposition
+
+Morse independently checked both bounded proofs and gave PASS, recorded
+in [the CX and CY reviews](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
+CX's legal two-marginal box, true-minimum kernel, exact resultant and
+FRESH generic selection/row scaling were checked; CY's shorter original-
+table strict-END argument was separately checked. Frozen proof bytes
+are unchanged. Proper-hazard and active endpoint-tie boundaries remain
+explicit. These are source restrictions, not a general UE producer.
+
+
+## CZ: maximal root absorption strengthens the coupled sparse exclusion
+
+Status: COMPLETE ORDINARY, UNREVIEWED selected-source VARIANT, reusing
+reviewed RA1 compact selection and CX's actual coupled family. It is
+not a new compactification, reward perturbation, resultant theorem or
+general root-absorption pumping consumer. Its zero-hazard arm is a
+finite diffuse-word construction, not a raw Never conditional.
+
+### CZ1. SAME-table extremal source and exact exclusion
+
+At the SAME final positive-own/row-generic source table, let H be the
+original augmented full payoff/cap/literal-Never carrier and ν₀ its least
+Never on full minima. Use RA1 in
+[Morse's global note](CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md): among
+ALL (a,w) with a∈[0,1]⁴, w=(u,b,ξ)∈H, and
+
+    D(T_a(u,b))=δ,    c(a)ξ=ν₀,
+    c(a)=∏_h(1−a_h),
+
+choose an attained maximum A₀ of A(a)=1−c(a). This compact actual-prefix
+selection and earliest-root eligibility have this author's independent
+RA1–RA4 review PASS. It does NOT impose cap-Nash on a or minimum debt on w.
+
+Apply the accepted source's same-table universal minimum facts and
+CB/CT/CU/CW at THIS source. If its alternative(II) has exactly ONE
+post-root finite owner, CW gives the representative: sole bridger i
+PureNever, sole future k≠i with root0 and f₀∈(0,1), and the other two
+owners p,q positive nonsure ROOT suppliers with all their finite mass at
+root0. At least one is later-only. CW changes NONE of its root rates,
+full payoff/cap triple or original Never. Its geometric/diffuse augmented
+suffix still has a literal same-root prefix decomposition in H. Hence
+this representative RETAINS the attained maximal absorption A₀, not
+merely the least ν fibre.
+
+If its geometric hazard satisfies 0<z₀<1, suppose q is later-only with
+STRICT first-tail cap z₀P_q>Γ_q; i has one strict tail endpoint; and p
+is root-only or later-only with one strict tail endpoint. This pattern
+is IMPOSSIBLE at the selected source. No two-row nonvanishing or FRESH
+reward selection is required. Extra active tail ties and z₀=1 remain
+outside this conclusion.
+
+The zero-hazard extension is stronger than an assumed proper-hazard
+limit argument: if z₀=0, the mode with ANY positive later-only supplier
+q having Γ_q=r_q({k})−s_q<0 is also IMPOSSIBLE. The construction and the
+automatic endpoint gaps at that boundary are given in CZ3.
+
+### CZ2. The actual coupled minimum line increases A
+
+Put C_p=1−a_p, a=a_q, and w₀=f₀z₀. Use the SAME two-marginal family
+as CX: q's root/Never law varies and k's ENTIRE finite/Never law varies,
+while i and p are fixed. Let
+
+    x=(1−a)f,   y=w₀(1−a),   z=y/x.
+
+For 0<z₀<1 its original point satisfies 0<y<x<1−a, so a,x vary on a
+genuine two-sided open box of independent proper-geometric profiles.
+Every U is affine:
+
+    U_h=a_p r_h({p})
+       +a[(1−a_p)r_h({q})+a_p(r_h({p,q})−r_h({p}))]
+       +C_p x r_h({k}).
+
+Original joint Never is EXACTLY ν=C_p(1−a−x). All finite/END/Never caps
+are those in CX.6. In particular q's STRICT first cap is held exactly
+constant by y=w₀(1−a); p and k each keep one affine full branch; i's
+strict tail endpoint leaves just its root/tail hinge. Therefore TRUE D
+is max(F₀,F₁) for TWO affine functions of a,x, with equality δ at the
+original interior point. All family triples lie in the SAME H by actual
+proper-geometric finite truncations, preserving Never and pricing EVERY
+response. Global full minimality therefore gives D≥δ on the whole box.
+
+If the branch difference is identically0, D is affine with an interior
+minimum and the whole box is minimum; increasing a or x lowers original
+ν, contradiction. Otherwise its nonzero linear part gives a two-sided
+kernel line of TRUE full minima, exactly as in CX3. Least original ν₀
+forces its direction to satisfy da+dx=0. Thus da≠0, and one legal sign
+has da>0. On that true-minimum segment ν remains EXACTLY ν₀, while
+
+    A(a)=1−C_p(1−a),    dA=C_p da>0.             (CZ.1)
+
+The new honest suffix is the ACTUAL k-only geometric law after root0,
+with the other three owners Never. Its augmented triple is in H. Prefix
+its fixed new root (a_p,a,0,0) to its actual finite approximants; this
+is precisely the family just priced, including all prefix caps. Thus
+the new pair/root belongs to RA1's SAME maximizing set and has larger
+A than A₀, contradiction. No favorable minimum tail or unrelated prefix
+is selected. Common individual debts and the CX resultant are not needed
+for this final contradiction; the exact root maximum replaces them.
+
+### CZ3. The z=0 family is an actual diffuse-word box
+
+At z₀=0 set w₀=y=0, but keep x>0 and x<1−a on the two-sided a,x box.
+For each family point let f=x/(1−a)>0. Realize k's finite conditional by
+the uniform word on dates1,…,N with total finite mass f and literal Never
+mass1−f. q's root law is aδ₀+(1−a)Never, p's root law is unchanged,
+and i stays Never. These are PRIVATE independent laws at EVERY index.
+
+Every prescribed payoff is EXACTLY the affine vector in CZ2 and joint
+Never is EXACTLY C_p(1−a−x) at EVERY index. CW's uniform all-response
+bound gives the limiting finite cap coefficient max(0,Γ_h). Explicitly,
+for every h≠k and every word date 1≤t≤N, its suffix reply is
+
+    V_h,N(t)=s_h+f(t−1)Γ_h/N+fP_h/N.
+
+At EVERY finite t>N it is exactly s_h+fΓ_h. Since |P_h|≤2M, the word
+trace is within 2Mf/N of its straight-line value. If Γ_h≥0 the END test
+already gives the limiting maximum; if Γ_h<0 the FIRST word test gives
+at least s_h−2Mf/N. Hence the ENTIRE suffix finite cap differs from
+s_h+f max(0,Γ_h) by at most 2Mf/N≤2M/N, for ALL signed P_h,Γ_h.
+Prefixing multiplies that error by H_h≤1 and max with the unchanged
+root cap cannot enlarge it. Own k cap is EXACTLY unchanged. Literal
+Never is strictly below the END finite test by(1−f)s_h>0. These bounds
+cover every moving date, the first date and the final-empty test,
+uniformly on the small box and therefore also every behavioral cap.
+Consequently every displayed limiting triple, including its honest
+suffix triple, belongs to the SAME original H. No probability mass f
+is silently moved to Never in the limit.
+
+q with Γ_q<0 is STRICT first-tail-active at z=0 and its full later cap
+is the constant A_q^root+C_p s_q. Its strict full root gap persists.
+Within-row genericity gives Γ_i,Γ_p≠0, because r_h({k})≠r_h({h}) for
+h≠k. Hence i automatically has one strict endpoint at z=0; a later-only
+p does too, while an inactive p endpoint tie is immaterial. All complete
+caps are again affine except sole i's root/tail max. The TWO-affine
+true-minimum-line argument in CZ2 applies unchanged. Its exact fixed-ν
+direction increases A and produces another member of RA1's original
+maximizing set, contradicting maximality. This proves the zero-hazard
+submode exclusion, not an existence assertion about a raw zero-hazard law.
+
+### CZ4. Boundaries and operational survivors
+
+At the SAME-table least-ν/max-A selected source, a ONE-future proper
+interior representative with a strict-FIRST later-only root supplier
+therefore requires i's extra first/END tail tie, or such a tie at a
+later-only p. This is CX's reduction with NO extra reward-genericity.
+In the z=0 representative, every positive later-only root supplier must
+instead have Γ_h>0, hence an END cap. CB still supplies at least one such
+later-only bad-root supplier, but its paid root draws are not yet funded.
+
+The z=1 boundary is NOT covered: fixing q's first cap fixes its absolute
+first atom, and the root-increasing fixed-ν direction would decrease f
+below that atom, leaving the legal conditional-hazard region. At positive
+z an extra active endpoint tie gives a third hinge and can remove the flat
+line. No strict-FIRST supplier also stays open. Zero-future, multiple-
+future and case(I) are unaffected by this variant. This is a bounded
+selected-source exclusion, not a proof that every nonzero root can be
+pumped or that either full source alternative has been consumed.
+
+Primary inputs are precisely the accepted source, the named geometric
+cap-domination/endpoint declarations in CW, and RA1's actual augmented
+prefix selection under `TerminalSemanticPair.lean`'s imports. The extra
+root-maximizer seam and actual zero-hazard finite-word arm are ordinary
+mathematics pending one short independent check; no Lean/export claim.
