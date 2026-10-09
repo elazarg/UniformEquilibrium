@@ -237,9 +237,16 @@ BOTH prescribed finite suppliers must be strictly later-only. Its exact
 full-debt proof uses the PureNever bridge's actual participant comparisons,
 not a guessed passive/core sign. This retires the entire l-root-only word
 arm, including its full-core-four completions, at the fresh source.
-NC.44 is a separate, presently unreviewed ordinary proof; NC.43's PASS
-does not silently certify the enlargement. Three-plus suppliers, future
+NC.44 has its own independent mathematical PASS from Morse; NC.43's PASS
+was not used to silently certify the enlargement. Three-plus suppliers, future
 finite mass, and the both-later-only two-supplier residual remain open.
+
+NC.45 is a new, unreviewed fresh-source restriction: avoid six proper
+native joining determinants BEFORE t, then use the full small-own budget
+to show that the two-supplier/zero-future source has exactly one PureNever
+bridge and three strictly later-only cap owners. This excludes canonical I
+ONLY in that specified mode; the resulting canonical-II mode is still open.
+No NC.43/44 review is being extended to this extra generic choice.
 
 NC.41 now constructs a true-overlap candidate with complete cap control:
 independent two-owner tail survivors give a STRAIGHT trace of singleton
@@ -27994,8 +28001,9 @@ the cited Lean prefix declaration. No compiler check was run for NC.43.
 
 ## NC.44: both finite suppliers are later-only at the same small-own source
 
-Status: COMPLETE ORDINARY PROOF DRAFT, separate from the independently
-reviewed NC.43 claim. No independent PASS, Lean check or export yet.
+Status: COMPLETE ORDINARY PROOF, with a separate independent mathematical
+PASS in `CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION__BY_CODEX_MORSE.md`
+(NC.44 review of frozen SHA6846d5b7…). No Lean check or export seal.
 This strengthens the SAME selected table, without another perturbation,
 smaller-t choice, or transported minimum.
 
@@ -28104,8 +28112,8 @@ not just a cheap response selector inside it. It is not an exclusion
 at every old table and does not settle either canonical configuration.
 The remaining two-supplier zero-future geometry has both finite suppliers
 later-only and at least one PureNever bridge; it still needs a genuine
-whole-law competitor or another complete contradiction. No independent
-review of this enlarged claim has yet been recorded.
+whole-law competitor or another complete contradiction. The independent
+PASS covers exactly this NC.44 scope, not a both-later-only consumer.
 
 Falsification attempt: enumerate actual root/later/Never caps on1299
 exact rational signed native tables with finite i later-only, finite l
@@ -28115,3 +28123,170 @@ displayed small-t choice, all tests give D>S and verify the full debt
 bound and bridge rate-ratio bound. These tables are not asserted to
 have a positive absorbing/global gap; the tests check the conditional
 algebra only. The proof above supplies the source contradiction.
+
+## NC.45: a generic fresh source fixes the complete two-supplier cap census
+
+Status: COMPLETE ORDINARY PROOF DRAFT, not independently reviewed.
+This is a further FRESH-source restriction, not a silent enlargement
+of NC.43 or NC.44's reviewed table. Its additional generic choice is
+made on the own-zero native slice BEFORE choosing any raise or scale.
+No old minimum, cap class or root is transported.
+
+### NC45a. Exact conclusion and the additional finite generic condition
+
+From any four-player quitting counterexample one can select a fresh
+least-literal-Never/maximal-first-root-absorption source with ALL the
+reviewed source properties and this additional restriction:
+
+> If exactly two owners supply prescribed finite mass and all that mass
+> is at their first root, BOTH suppliers are strictly later-only, ONE
+> PureNever owner is the sole root bridger, and the fourth owner is
+> PureNever and strictly later-only. There are NO root-only cap owners.
+
+Thus canonical configuration I has NO zero-future/two-supplier mode
+at this source. The stated part of configuration II remains open;
+this is not a consumer of that mode, of sources with future mass,
+or of three/four root suppliers.
+
+In NC.43's native construction, before fixing z, impose finitely many
+additional nonvanishing conditions. For each distinct finite pair i,l
+with complementary observers k,h, define fixed NATIVE joining gaps
+
+    a_j=z_j({j,i})−z_j({i}),
+    d_j=z_j({j,l})−z_j({l}),
+    e_j=z_j({j,i,l})−z_j({i,l}),
+    c_j=e_j−a_j−d_j,            j∈{k,h},
+
+and require
+
+    a_k d_h−d_k a_h≠0.                         (NC.45a)
+
+Each excluded equality is a proper polynomial on the own-zero affine
+slice: for this pair one may assign the four displayed pair joining
+gaps (a_k,d_k,a_h,d_h)=(1,0,0,1) independently using non-own entries
+in the two different recipient rows. This witnesses that the determinant
+polynomial is not identically zero; it is not proposed as the chosen
+generic table. Its zero set has empty interior. Avoiding all six
+finite-pair determinants and the existing within-row equality hyperplanes
+therefore still meets the open set with A>0 inside the half cube.
+NOW fix z,A,L,m,b as in NC.43. No future genericity is asserted for
+an already chosen native table.
+
+### NC45b. Uniform separation of the two complete bridge equations
+
+For each fixed native partition let
+
+    η_pair=min_(u,v≥0,u+v=1)
+               max(|a_k u+d_k v|,|a_h u+d_h v|)>0.
+
+The minimum is attained on the compact positive unit segment, and
+is positive by (NC.45a). Let η be the minimum of these six positive
+numbers and let H be the largest |c_j| over all displayed gaps. Put
+
+    ε=min(1/2, η/[2(1+H)])>0,     κ=η/2>0.
+
+For x,y>0 define the EXACT native root/later differences
+
+    G_j(x,y)=x(1−y)a_j+(1−x)yd_j+xye_j
+                         =xa_j+yd_j+xyc_j.
+
+If x,y≤ε and G_k(x,y)=0, then
+
+    |G_h(x,y)|≥κ(x+y).                          (NC.45b)
+
+Indeed normalize u=x/(x+y), v=y/(x+y). Since xy/(x+y)≤ε/2,
+the quadratic correction to each normalized linear form is at most
+Hε/2≤η/4. The k linear form is therefore at mostη/4 in absolute
+value. The definition of η forces the h linear form to have absolute
+value at leastη. Subtract its quadratic error to get at least3η/4,
+which is more than κ. This keeps BOTH complete root/late equations,
+including their simultaneous triple replies.
+
+Define the fixed constant C=4(m+8L)/m². Choose the raise ONCE with
+
+    0<t<min(1/2,A/8,b²m/8,ε/C,κ/8).             (NC.45c)
+
+Then choose regular θ∈(1/2,1)⁴, exactly as in NC.43. Its full-gap,
+strict absorbing separation, common-debt and actual fresh extremal
+source proof is unchanged and applies to this native choice. The
+determinants' nonzero property is also unchanged by the positive
+recipient scales. All these choices precede every final minimum.
+
+### NC45c. The actual complete source budget rules out the second root cap
+
+Take any produced zero-future/two-supplier minimum of this source.
+NC.44 applies at this t and makes both finite suppliers i,l strictly
+later-only. Its root/Never actual-carrier identification applies too.
+Write x,y∈(0,1), ν=(1−x)(1−y) and S=Σ_j s_j<4t. Let
+
+    α_i=r_i({l})−r_i({i,l})≥m/2,
+    α_l=r_l({i})−r_l({i,l})≥m/2.
+
+As before the supplied root bridge k must be PureNever. Its native
+equation is G_k=0; the raise cancels from every joining difference
+and its positive recipient scale does not alter the zero set. The
+NC.44 signed bridge estimate, in both orientations, gives
+
+    y/x≤8L/m,        x/y≤8L/m.
+
+The FULL minimum budget, not just the two selected debts, has
+
+    δ≥νS+xy(α_i+α_l)≥νS+xym,
+    δ≤S.
+
+Consequently
+
+    xm≤S(1+x/y)≤4t(1+8L/m),
+    ym≤S(1+y/x)≤4t(1+8L/m),
+    x,y≤Ct<ε.                                  (NC.45d)
+
+Let h be the other PureNever owner. Equation (NC.45b) applies to it.
+Its ACTUAL full-cap root/later difference is θ_hG_h, because EVERY
+finite recipient translation cancels from that difference. Thus it
+is nonzero, ruling out a second bridger. If it were positive, h would
+be root-only, and its COMPLETE debt would be
+
+    d_h=νs_h+θ_hG_h>νs_h+(κ/2)(x+y).
+
+Keeping all other debts above their singleton/Never floors would give
+
+    (κ/2)(x+y)<δ−νS≤S(1−ν)<4t(x+y),
+
+contradicting t<κ/8. Therefore θ_hG_h<0: h is strictly later-only.
+This proves the entire displayed cap census. In particular every owner
+is c-active, but only k maximizes at the root, and its prescribed root
+rate is zero. This is precisely a further restriction of configuration II,
+not a different equilibrium or a newly chosen minimum suffix.
+
+### NC45d. Exact effect and remaining full-law task
+
+The argument excludes two bridges AND a positive root-only observer
+by the same actual all-player budget. It is not merely an isolated
+solution count for two displayed equations. The small native raise
+forces both actual source rates uniformly small, so the fixed generic
+linear separation prices a positive root clip above the ENTIRE excess
+budget available below AllNever. Neither cap selectors nor a relaxed
+independent-profile mixture are used.
+
+Within the remaining mode, the exact original minimum is
+
+    δ=νS+xy(α_i+α_l),
+
+with the one k hinge active and all three other root tests strictly
+submaximal. There is still no proved whole-law descent. In particular
+moving one finite supplier to a later date can expose k's joining
+reply, and the positive singleton comparison to one supplier supplied
+by NC.43 does not control that participant cap. The next question is
+a complete coupled-law competitor in THIS reduced geometry, not
+another genericity condition or a sharper choice of t.
+
+Falsification attempt for the added generic input: within-row distinctness
+alone does NOT separate the bridge equations. Both observer rows may have
+joining triples (a,d,e)=(1,−1,−2), compatible with distinct complete row
+entries. Then both differences are x−y−2xy, so both bridge simultaneously
+on y=x/(1+2x) at arbitrarily small positive rates. This is not claimed
+to be an actual positive-global-minimum source; it falsifies only the
+attempt to infer (NC.45b) from the previously reviewed distinctness data.
+The new determinant avoidance and its placement BEFORE t are essential
+to the present proof. The current native choice satisfies that added
+condition by the proper-polynomial argument, not by this regression.
