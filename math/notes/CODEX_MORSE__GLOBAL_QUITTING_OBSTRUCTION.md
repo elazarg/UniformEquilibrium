@@ -24,6 +24,16 @@ is not a literal closed word for every parameter, a new class count or
 an export. The next
 negative attempt must change this used-transport REGION or the root
 geometry, not increase degree at its solved points.
+SG below then removes DN5's unnecessary all-annotation no-sure
+restriction, but its genuinely different weak-gate sixteen-control
+architecture is ALSO retired: SG4 produces an actual absorbing
+stationary full-Nash self-loop for EVERY parameter. A global scalar
+crossing, not a sampled root, solves its previously unretired region;
+an exact quiet-player inequality supplies every missing deviation
+test. Thus no full exact/robust drift potential exists anywhere in
+that family. The true-punishment gate correction survives; another
+counterexample attempt must change the odd-three root/control
+mechanism, not fit a larger polynomial at its solved points.
 The full Fin4 question and both least-Never consumers remain OPEN.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
@@ -20992,10 +21002,11 @@ full Fin4 endpoint and both least-Never configurations remain open.
 ## SG. Reopening the true sure-root gate, not another strong-no-sure table
 
 Status: ORDINARY method correction and a DIFFERENT fully specified
-negative-search architecture, not a counterexample, new UE class or
-export. No complete potential has been found. This section removes
-an unnecessary search restriction; it does not claim that the needed
-unrestricted certificate exists. The full Fin4 endpoint is unchanged.
+negative-search architecture RETIRED WHOLESALE by SG4 below, not a
+counterexample, new UE class count or export. SG1 removes an unnecessary
+search restriction; SG4 excludes every full drift potential at every
+table in this particular family by an actual stationary self-loop.
+The full Fin4 endpoint is unchanged.
 
 ### SG1. Buffered C² exact drift implies robust drift WITHOUT strong no-sure
 
@@ -21208,10 +21219,11 @@ of a full negative certificate, even in the deliberately weak-gate
 architecture. Any negative search in this family must at least
 retain b_1({2,3})<5/2; that restriction is necessary, not sufficient.
 
-The current full-goal task is the ALL-root certificate itself, with
-every quiet and sure face retained, or an exact obstruction that
-retires this architecture wholesale. The gate repair is supporting
-work only. No experiment is counted as a counterexample lead.
+At this checkpoint the task was the ALL-root certificate itself,
+with every quiet and sure face retained, or an exact obstruction
+retiring the architecture wholesale. SG4 completes the second option.
+The gate repair is supporting work only. No experiment is counted
+as a counterexample lead.
 
 The following exact symbolic checker reconstructs ALL sixty original
 coordinates from the inverse data. It checks the endpoint formulas on
@@ -21278,4 +21290,202 @@ H = [s.expand(sum(reward[1 | T][i] for T in [0,2,4,6,8,10,12,14])/8)
      for i in range(4)]
 assert [z.subs(upper) for z in H] == [s.Rational(11,4),4,4,s.Rational(13,4)]
 print('SG inverse data, sure endpoints and stationary certificate: exact PASS')
+```
+
+### SG4. Global scalar crossing RETIRES THE ENTIRE sixteen-control architecture
+
+Claim (COMPLETE ordinary proof, not independently reviewed or exported).
+For EVERY table of SG2 there is a jointly absorbing stationary product
+profile satisfying its actual Bellman equations and FULL endpoint Nash
+against all four owners. Every deleted-opponent survival is<1. Hence
+it is terminal Nash against EVERY unilateral behavioral strategy and
+has ONE fixed uniform payoff target for all positive accuracies and
+all sufficiently late horizons. In particular its actual self-loop
+rules out every full exact unit-drift potential on box8 and every full
+robust charged-relation potential on box7, at EVERY positive tolerance.
+
+For A=b_1({2,3})≥5/2 this is SG3. Suppose henceforth A<5/2, and put
+
+    B=b_2({1,3})≤5,   C=b_3({1,2}).
+
+Temporarily keep0 always quiet and seek a fully mixed stationary root
+on1,2,3, with positive odds x,y,z respectively. These are genuine
+private quitting probabilities q_1=x/(1+x), q_2=y/(1+y),
+q_3=z/(1+z), not an averaged joint controller. For an owner i among
+1,2,3 put p_i=∏[j≠i, j∈{1,2,3}](1+o_j), and let A_i,B_i be the
+odds-weighted forced-Quit and passive-nonempty reward numerators.
+The stationary active equation is exactly
+
+    E_i=(p_i-1)A_i-p_i B_i=0.
+
+It ensures both endpoints and the actual stationary payoff equal
+A_i/p_i. Reconstructing the original rewards gives the THREE equations
+
+    E_1=-2(z+1)²y²+[(1-A)z-1]y+2z²+3z,
+    E_2=-2(x+1)²z²+[(1-B)x+1]z+2x(x+1),
+    E_3=-2(y+1)²x²+[(1-C)y+2]x+2y²-y.
+
+The displayed E_i are CLEARED polynomials, not unnormalized ordinary
+Nash gaps. Their zero conditions are exact, and they retain ALL three
+passive-pair controls; no unused reward is silently assigned a new value.
+
+First solve E_2=0 for z as a continuous function of x≥0. Its quadratic
+leading coefficient is negative; for x>0 its constant term is positive,
+so it has exactly ONE positive root. The continuous extension at0 is
+
+    z(x)=([ (1-B)x+1 ]+
+          √([ (1-B)x+1 ]²+16x(x+1)³))/(4(x+1)²),
+    z(0)=1/2,   lim[x→∞]z(x)=1.
+
+For every z>0, E_1 as a quadratic in y has negative leading coefficient
+and positive constant term. Thus its unique positive root y(z) is
+continuous and finite. At z=1/2,
+
+    E_1(1/2,1/2)=(5-2A)/8>0,
+
+so y(1/2)>1/2. Consider E_3 along the ACTUAL simultaneous E_1,E_2
+root curve x↦(x,y(z(x)),z(x)). At x=0 its value is
+y(1/2)[2y(1/2)-1]>0. As x→∞, y(z(x))→y(1)>0 and
+
+    E_3/x²→-2[y(1)+1]²<0.
+
+The intermediate value theorem supplies a finite x*>0 with E_3=0.
+Both y*=y(z(x*)) and z*=z(x*) are positive. This is a produced
+three-active stationary root for EVERY A<5/2 and finite B,C, not a
+supplied-root theorem or an IFT around one solved center.
+
+It remains essential to check player0, whose rewards were NOT part of
+the child equations. First every simultaneous root constructed above
+satisfies
+
+    S=x+z>1/2.
+
+Indeed E_2(B=5)=E_2(B)-(5-B)xz≤0 at an actual root. If x+z≤1/2,
+then 0<x≤1/2 and 0≤z≤1/2-x. The polynomial E_2(B=5) is strictly
+concave in z, and both its endpoint values are positive:
+
+    E_2(B=5,z=0)=2x(x+1)>0,
+    E_2(B=5,z=1/2-x)=x²(3-2x)(2x+5)/2>0.
+
+Concavity makes it positive throughout that interval, contradiction.
+This exact range argument is why the actual B≤5 bound matters.
+
+Set p=(1+x)(1+y)(1+z), and let R_0 be the passive nonempty reward
+numerator for player0. Since every one of its four multi-opponent
+passive rewards is≥-4, the original singleton values4,0,4 give
+
+    R_0≥4x+4z-4(xy+xz+yz+xyz)
+       =8x+4y+8z-4(p-1).
+
+Joining0 always changes a nonempty reward by-1, so its forced-Quit
+numerator is Q_0=2-p+R_0. Its actual quiet stationary payoff is
+U_0=R_0/(p-1), and its Quit-minus-Continue gap is
+
+    g_0=[(p-1)(2-p)-R_0]/[p(p-1)].
+
+Thus the CLEARED quiet gap E_0=p(p-1)g_0 satisfies
+
+    E_0≤(p-1)(6-p)-8S-4y.
+
+This is uniformly STRICTLY negative, without using the other active
+equations again. Put t=(1+x)(1+z). Completing the square in y gives
+
+    (p-1)(6-p)-4y
+      =-t²[y-(t(7-2t)-4)/(2t²)]²+m(t),
+    m(t)=41/4-14/t+4/t².
+
+Here t≥1 and m′(t)=2(7t-4)/t³>0. Since
+t≤(1+S/2)², define f(S)=m((1+S/2)²)-8S. For S≥1/2,
+writing u=1+S/2≥5/4,
+
+    f′(S)=14/u³-8/u⁵-8
+           ≤896/125-8=-104/125<0,
+    f(1/2)=-2679/2500.
+
+Therefore E_0≤-2679/2500<0 and player0 is quiet-Nash at the SAME
+actual values as all three active owners. No scalar crossing was
+allowed to discard this fourth behavioral cap.
+
+Finally put U_i=A_i/p_i for i=1,2,3 and U_0=R_0/(p-1).
+The three cleared equations give FULL endpoint Nash and Bellman
+fixedness for the original four-player profile
+
+    q=(0,x*/(1+x*),y*/(1+y*),z*/(1+z*)).
+
+The Bellman solution is unique because joint survival is<1, and is
+the actual terminal payoff of this product stationary profile. Hence
+|U_i|≤5 at every coordinate. Each owner has another active opponent,
+so all deleted-opponent survivals are<1. The exact stationary semantic
+declarations cited in SG3 therefore cover EVERY unilateral behavioral
+deviation, including Never, not merely stationary deviations. They
+also retain the SAME payoff target U for every requested accuracy and
+every sufficiently late horizon. At v=U the literal head F(U,q)=U
+and a(q)>0; it is consequently an exact full charged self-loop in
+box5, hence in both named certificate boxes. Any asserted positive
+potential drift on that edge reads0≥a(q), impossible. ∎
+
+No new existence-class/export claim is made from this architecture
+retirement, and no complete previous-producer comparison is attempted.
+SG1's full-domain buffered repair remains valid independently of this
+solved family. This result genuinely changes the negative-search
+direction: changing only these sixteen bounded transport coordinates,
+or checking only the below-punishment sure slab, cannot work. The next
+unrestricted negative architecture must change the odd-three active
+crossing/quiet-lift mechanism itself. A global forcing proof for arbitrary
+Fin4 data, or an ALL-root negative table, remains the endpoint.
+
+```python
+# SG4 exact complete-table crossing/quiet identities (SymPy; no numerical root)
+import sympy as s
+x,y,z,A,B,C,t,S = s.symbols('x y z A B C t S')
+odds = [0,x,y,z]
+nu = {1:2,2:3,3:1}
+single = {1:(1,3,3,0),2:(4,1,-1,-1),4:(0,2,1,2),8:(4,-2,0,1)}
+reward = {T:[None]*4 for T in range(1,16)}
+for i in range(4):
+    reward[1 << i][i] = s.Integer(1)
+    for T in range(1,16):
+        if T & (1 << i):
+            continue
+        d = -1 if i == 0 else (-2 if T & (1 << nu[i]) else 2)
+        b = s.Integer(single[T][i]) if T in single else s.Symbol(f'b{i}_{T}')
+        b = b.subs({s.Symbol('b1_12'):A,s.Symbol('b2_10'):B,s.Symbol('b3_6'):C})
+        reward[T][i],reward[T | (1 << i)][i] = b,b+d
+assert all(r is not None for row in reward.values() for r in row)
+
+def numerators(i):
+    p = s.prod(1+odds[j] for j in range(4) if j != i)
+    Q = sum(s.prod(odds[j] for j in range(4) if T & (1 << j))*
+            reward[T | (1 << i)][i] for T in range(16) if not T & (1 << i))
+    R = sum(s.prod(odds[j] for j in range(4) if T & (1 << j))*
+            reward[T][i] for T in range(1,16) if not T & (1 << i))
+    return p,s.expand(Q),s.expand(R)
+
+E = [None,
+     -2*(z+1)**2*y**2+((1-A)*z-1)*y+2*z*z+3*z,
+     -2*(x+1)**2*z**2+((1-B)*x+1)*z+2*x*(x+1),
+     -2*(y+1)**2*x**2+((1-C)*y+2)*x+2*y*y-y]
+for i in range(1,4):
+    p,Q,R = numerators(i)
+    assert s.expand((p-1)*Q-p*R-E[i]) == 0
+assert s.expand(E[1].subs({y:s.Rational(1,2),z:s.Rational(1,2)})-(5-2*A)/8) == 0
+E5 = E[2].subs(B,5)
+assert s.expand(E5.subs(z,0)-2*x*(x+1)) == 0
+assert s.expand(E5.subs(z,s.Rational(1,2)-x)-x*x*(3-2*x)*(2*x+5)/2) == 0
+
+p,Q,R = numerators(0)
+assert s.expand(Q-(2-p+R)) == 0
+worst = {b:s.Integer(-4) for b in R.free_symbols if str(b).startswith('b0_')}
+assert s.expand(R.subs(worst)-(8*x+4*y+8*z-4*(p-1))) == 0
+assert s.expand(((p-1)*Q-p*R).subs(worst)-((p-1)*(6-p)-8*x-4*y-8*z)) == 0
+L = t*(7-2*t)-4
+m = s.Rational(41,4)-14/t+4/t**2
+assert s.expand((t*(1+y)-1)*(6-t*(1+y))-4*y-
+                (-t*t*(y-L/(2*t*t))**2+m)) == 0
+assert s.simplify(s.diff(m,t)-2*(7*t-4)/t**3) == 0
+f = m.subs(t,(1+S/2)**2)-8*S
+u = 1+S/2
+assert s.simplify(s.diff(f,S)-(14/u**3-8/u**5-8)) == 0
+assert f.subs(S,s.Rational(1,2)) == -s.Rational(2679,2500)
+print('SG4 full-table active crossing and universal quiet lift: exact PASS')
 ```

@@ -51,12 +51,18 @@ consumer only excludes a sure root at true punishment. A different
 real sixteen-control family has ALL sure roots classified as
 q=(1,1/2,1/2,1/2), v0≤−6, whereas its actual punishment floor is≥−5;
 normality and positive owns are produced directly from the raw table.
-This opens a genuinely different negative-search domain, NOT a
-negative table or potential. Its entire b1({2,3})≥5/2 portion is already
-retired by a full stationary certificate with all other controls free.
-The next indispensable test is the ALL-root drift, including the
-entire sure slab below true punishment, or a whole-architecture
-falsifier; local sure-root geometry alone supplies neither.
+This opens a genuinely different negative-search DOMAIN, NOT a
+negative table or potential. SG4 now RETIRES THE ENTIRE tested
+sixteen-control architecture: for b1({2,3})<5/2, a global scalar
+crossing simultaneously solves all three active stationary equations;
+an exact bound≤−2679/2500 for the cleared fourth-player quiet gap
+retains EVERY allowed passive transport control. The complementary
+region already has SG3's two-active root. These are actual absorbing
+stationary full-Nash self-loops with ONE fixed unrestricted uniform
+target, excluding every full exact/robust potential, not failed
+numerical fits. The buffered gate repair survives, but the next
+counterexample attempt must change the odd-three crossing/quiet-lift
+mechanism itself; local sure-root geometry supplied no positive gap.
 General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/
