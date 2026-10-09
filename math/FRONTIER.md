@@ -678,6 +678,23 @@ not exclude unsupported bridgers, supported bridgers without future mass,
 extra future owners or additional late-cap observers. It supplies no
 general root-absorption pump or consumer for either source configuration.
 
+Two larger restrictions hold at that same maximum when there are exactly
+two bridgers i,j and two root-only cap owners. If i is a positive first-root
+supplier, its prescribed finite law has no mass strictly between the root
+and j's earliest later maximizing point. The other owners' future laws
+are unrestricted. Reweighting i's root mass, an early finite sublaw and
+the remaining law INCLUDING Never preserves the ordering of every upper
+j-response, because each early draw has already absorbed. The full debt
+again has only two affine branches, and a minimum line increases the
+selected root absorption. If j's entire later maximizing family is one
+ISOLATED point, the same argument excludes all i's post-root finite mass.
+Isolation here is a genuine compact-response gap; uniqueness alone is not
+being used. These
+[supported-bridge restrictions](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md#ra5-two-larger-multiple-bridge-patterns-without-a-future-owner-bound)
+have an independent ordinary-mathematics review, not a Lean declaration.
+They do not exclude unsupported bridgers, zero-future bridgers, extra
+later-only owners or the general multiple/nonisolated later-cap families.
+
 In configuration 2, some POSITIVE first-root supplier k has strictly
 suboptimal prescribed finite conditional law. Write a_k for its first-root
 Quit rate, n_k for its original Never probability, F_k for its law

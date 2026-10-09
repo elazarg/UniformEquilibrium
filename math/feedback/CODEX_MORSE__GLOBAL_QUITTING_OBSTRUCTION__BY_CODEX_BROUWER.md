@@ -4142,3 +4142,111 @@ the flat-line argument is unavailable. General purification of nonlinear
 root surfaces, elimination of case(I)/(II), whole-debt funding and the
 ordinary Fin4 conjecture remain open. No unresolved objection to RA1–RA4's
 bounded statement remains after this independent falsification attempt.
+
+
+## RA5: independent three-bucket chronological and isolated-cap check
+
+Reviewed ONLY the frozen `### RA5. Two larger multiple-bridge patterns
+without a future-owner bound` extension through its EOF, SHA256
+`176afaf138893129191d51cb9617b3a82e6f4454bb99f0540d2d34d4673425a6`.
+Verdict: PASS at its exact selected-source scope, with no unresolved
+cut, complete-cap or actual-realization objection. RA1–RA4's earlier
+independent review remains separate. No full case(I) consumer follows.
+
+**Exact statements checked.** At the SAME least-ORIGINAL-Never/maximal-
+root-absorption source, assume exactly two root/later bridging owners i,j,
+the other two cap owners p,q ROOT-ONLY, and a_i>0. Then(E) i has no
+prescribed finite mass strictly between root0 and j's earliest later
+maximizing point σ_j. If(S) j's ENTIRE later maximizing set is the ONE
+ISOLATED marked point σ_j, i has no prescribed future finite mass at all.
+Other owners' future laws may be arbitrary. Neither statement assumes
+finite-plan optimality, unique raw-date attainment or a minimum suffix.
+
+**Cuts and lower gap.** I re-read accepted source Sections6–7 and9–10,
+especially its whole-date chronological conditional construction. Root0
+is an isolated marked point. j's nonroot maximizing set is closed in the
+compact test set with that isolated point removed; it is nonempty by
+bridging and excludes literal Never by positive owns/Never. Thus its
+earliest point σ_j exists and is strictly separated from0. It need not
+be an ordinary finite date or an isolated late maximizer.
+
+Positive i mass in(0,σ_j) admits a regular u<σ_j with positive head
+mass and a further regular v between u andσ_j. One can avoid positive
+atoms at these cuts. The normalized head F is supported strictly before
+EVERY upper finite tester t≥v. The complement G has positive mass because
+it contains i's positive Never atom. Relative to the original three
+disjoint root/head/complement pieces, the new factors a/a₀, f/f₀ and
+(1−a−f)/g₀ stay positive and uniformly bounded on a small two-sided box.
+Original cut indicators converge strongly, the retained root interval
+converges, and the source's bounded weak-* densities/kernel argument
+therefore realizes the complete family in the ORIGINAL carrier.
+
+The lower tester set T∩(0,v] is genuinely compact: removal of the isolated
+root leaves a closed subset, and the remaining order cutoff is closed.
+It contains no old j maximizer because v<σ_j. Continuity therefore gives
+a strict uniform lower gap. This is not the false complement gap of a
+unique nonisolated maximum. Uniform all-response TV control preserves
+the lower gap and p,q's isolated root-only full gaps for a small family.
+
+**All upper replies and honest Never.** For δ₀ or F in i's slot, a finite
+opponent exit occurs BEFORE every t≥v. Even with arbitrary future p,q
+laws, first hit is before t, so j is absent from that first coalition;
+the terminal outcome and its signed payoff are independent of t. This
+proves RA.9 for EVERY upper finite tester, not merely its old maximizers:
+aR_j+fE_j+(1−a−f)V_j(t;G). The last multiplier is strictly positive.
+Hence its complete upper supremum is one affine expression and the
+ordering of the entire upper family is preserved. No sign of R_j,E_j
+or the upper coefficient is needed; nonisolated/multiple upper maxima
+are permitted. Literal Never remains strictly below the retained final
+finite tester, by positive own singleton times positive opponent-Never
+product. The early/head terms also give the same constants at Never,
+but Never is not substituted for that finite tester.
+
+Own i cap ignores i's law, all prescribed U are affine, and p,q's true
+full root values are affine. Thus j's root-versus-ENTIRE-upper envelope
+really is the only variable max hinge in the total debt. Original law
+reweighting gives both full-cap/payoff convergence and literal probability
+C_N G(Never)(1−a−f), with strictly positive coefficient from the SAME
+actual realizers. The true full minimum and least original Never imply
+the RA3 affine minimum line with direction da+df=0. Its legal positive-a
+sign increases root absorption, and honest conditional suffix extraction
+returns to the SAME Z. No supplied favorable suffix is substituted.
+
+As an algebra diagnostic I independently enumerated exact product laws
+for30 signed integer tables, arbitrary finite future laws of the other
+owners, four legal root/head/complement weights, and every response in
+a complete finite upper calendar plus Never. All720 exact RA.9 identities
+passed. This checks the all-upper first-hit cancellation only; it is not
+evidence that these random laws are global minima or satisfy p/q's gaps.
+
+**Isolated sole later point.** In(S), both0 andσ_j are isolated and the
+ENTIRE full maximizing set is exactly those two points. Their complement
+is therefore compact and has a strict uniform gap. Reweighting i's whole
+finite conditional preserves this gap by the same all-response bound,
+regardless of where its mass lies relative toσ_j or other future laws.
+Both fixed marked tester payoffs are affine, so total debt is again a max
+of two affines and the same true-minimum/root-max argument applies. A
+positive mixture atom supplies isolation in the compiler; uniqueness
+alone does NOT. The argument uses marked/moving-test transport and does
+not assert that σ_j is attained at one fixed ordinary finite date. The
+formal final finite tester's duplicate is counted as specified in the
+accepted source, not as a new distinct maximizing marked point.
+
+**Additional scope and boundaries.** Accepted source Section7 supplies
+the whole-upper affine identity/transport, not the selected-source support
+conclusion. The earlier no-head theorem only concerns prescribed mass
+BEFORE the first root; it does not already forbid the band between root0
+and partner's first later maximum. RA2's one-finite-opponent envelope
+allows complex j caps without chronological support control, but requires
+future-owner sparsity. RA5 instead allows arbitrary other future laws and
+uses either a true ordered early head or the isolated two-point cap gap.
+This reviewer's SB/CR/CS/CT/CU results concern the sole-bridge source(II)
+and do not subsume the supported TWO-bridge case checked here.
+
+Crossed support fences when both bridgers are supported follow by swapping
+i,j in(E). If both also have future mass, applying(S) likewise shows that
+neither partner has an isolated sole later cap. Unsupported bridges,
+zero-future bridges, several/nonisolated later maximizers, additional
+later-only observers and the general whole-debt funding problem remain
+open. No owner's prescribed support is inferred just from its available
+best reply, and no general purification or full Fin4 conclusion is approved.
