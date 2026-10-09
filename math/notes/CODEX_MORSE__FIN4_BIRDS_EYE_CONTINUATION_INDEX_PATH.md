@@ -110,6 +110,16 @@ separate QUASICONVEXITY of the outer objective is false. This retires
 convex outer selection, not arbitrary approximate/coupled selection or
 nonconvex global optimization. The fixture has explicit full equilibria,
 so no no-UE source class, positive gap or new UE class is inferred.
+CC then uses a DIFFERENT canonical rational table to test exact nonconvex
+ONE-whole-law minimization, not tune OC. Its outer value has a positive
+global minimum in EACH of the three whole-law coordinates after full
+pivot repair, even allowing arbitrary infinite-support host laws. The
+host coordinate has an exact all-first-hit ledger bound; simultaneous
+changes to TWO other outer laws give literal strict descent and eventually
+a full equilibrium. Thus strict coordinate descent can halt at positive
+debt; a coupled/global selection theorem is still needed. Flat-law escape
+and nonconvex joint methods are NOT refuted. The table is solved and no
+counterexample class is excluded by this method falsifier.
 General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/

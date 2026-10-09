@@ -82,6 +82,18 @@ behavior and every player's full finite/Never replies; its inner infimum
 is attained by a literal two-clock law. This retires a proposed convex
 outer-selection proof, not approximate selection generally. The table is
 explicitly solved, and no additional no-UE source restriction is asserted.
+CC below then uses a DIFFERENT canonical rational table to test a stronger
+nonconvex algorithm: optimize ONE entire opponent law jointly with the
+full pivot repair, accept only strict decreases, and cycle coordinates.
+The actual outer value has a positive coordinatewise GLOBAL minimum over
+ALL three whole-law coordinates, although a simultaneous change to TWO
+outer laws strictly lowers it and the game has an explicit full equilibrium.
+The sure-host coordinate is checked against arbitrary infinite-support
+finite/Never laws by a complete first-hit event ledger, not a root-only
+screen. Thus inner repair plus whole-coordinate minimization does not itself
+force zero debt. Flat-coordinate escape, coupled/nonlocal selectors and
+the full Fin4 question remain open. This is a method falsifier, not an
+unrestricted negative table or a source-class contraction.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
@@ -22400,4 +22412,230 @@ for den in range(1,25):
 assert value(F(0))==value(F(1))==value(F(2,3))==0
 assert value(F(1,2))==F(1,4)
 print('OC inner value and global lower bound: exact rational PASS')
+```
+
+## CC1–CC4. Positive whole-coordinate minima of the canonical inner value
+
+Status: COMPLETE ORDINARY EXACT METHOD FALSIFIER, unreviewed and not
+Lean-checked. This changes the selection attempt after OC: even exact
+nonconvex minimization of ONE entire outer law together with the unrestricted
+pivot repair need not strictly lower the positive objective. It is not a
+new response interface or a table for a conjectural negative barrier.
+The actual fixture is explicitly solved by a date0 full equilibrium.
+
+### CC1. Self-contained sixty-cell table and the tested algorithm
+
+I={0,1,2,3}, pivot0, g=1/4. Put E={0,1,3} and
+
+    pred(0)=3, pred(1)=0, pred(3)=1.
+
+For EVERY nonempty coalition S specify all rows as follows:
+
+    r_2(S)=0 always.
+
+If 2∈S, for each i∈E put
+
+    r_i(S)=g·1_{pred(i)∈S}  when i∈S,
+           −g              when i∉S.
+
+If 2∉S, put
+
+    r_0(S)=1  when 0∈S,  and −1 when 0∉S;
+    r_i(S)=0  when i∈S,  and −1 when i∉S, for i=1,3.
+
+Every reward lies in[−1,1], and the own-singleton vector is exactly e₀.
+This is not the OC coordination table with tuned constants; its finite
+root regrets are a cyclic dominant-action system. Independent private
+stopping laws and unrestricted full behavioral deviations are retained.
+
+For an outer triple p=(p_1,p_2,p_3), define
+
+    Φ(p)=inf_{ALL pivot behavior} max_i(B_i−U_i).
+
+Use the complete behavioral infimum, equivalently the actual inner LP
+when the opponents have finite support. Consider the actual triple
+
+    p*= (Never, Quit0, Never).
+
+Claim: Φ(p*)=g>0, and replacing ANY ONE of its three whole laws by ANY
+independent finite/infinite-support finite/Never law cannot give value<g,
+even after completely reoptimizing the pivot. But changing p_1 and p_3
+together gives a strict improvement. A strict-descent-only whole-coordinate
+algorithm can therefore halt here at positive full exploitability.
+
+### CC2. Exact optimization of both effective outer coordinates
+
+Keep p_2=Quit0. Then all effective players' full replies reduce to Quit0
+or Continue0, since that sure opponent screens every later deadline and
+Never. Owner2 has identically zero reward also under its own unscreened
+deviations. For i∈E let q_i be its date0 Quit mass. The COMPLETE debt is
+
+    d_i=g(1−q_i)(1+q_pred(i)),   d_2=0.              (CC-A)
+
+Indeed Quit0 pays gq_pred(i) and every Continue0 reply pays−g; Quit is
+always weakly/strictly better, and prescribed payoff is their own mixture.
+At p*, writing x=q_0, the debts include g(1+x) for owner1; hence the
+inner optimum is x=0 and Φ(p*)=g.
+
+Replace the ENTIRE law of owner1 and write t=p_1(Quit0); owner3 stays
+Never. For every pivot law, owner3's debt is g(1+t), while pivotNever
+attains that maximum. Thus the exact whole-law value is
+
+    Φ(p_1,Quit0,Never)=g(1+t)≥g.                   (CC-B)
+
+Replace instead the ENTIRE law of owner3, writing t=p_3(Quit0), with
+owner1 still Never. By(CC-A), the inner problem is
+
+    g min_{0≤x≤1} max((1−x)(1+t), 1+x, 1−t).
+
+The first two terms meet at x=t/(2+t). Below that x the first term
+is no smaller than their crossing value; above it the second is no
+smaller. The third is dominated at the crossing. Hence
+
+    Φ(Never,Quit0,p_3)=2g(1+t)/(2+t)≥g.             (CC-C)
+
+These are optimizations against every complete pivot law and every
+full reply. The nonhead portions of p_1 or p_3 can be arbitrary, not
+necessarily Never; they are screened by the FIXED sure date0 owner2.
+There is no finite-menu-Nash selection premise.
+
+### CC3. The sure-host coordinate requires and receives an ALL-law check
+
+Keep p_1=p_3=Never, and let BOTH the host2 law and pivot0 law be arbitrary
+complete independent stopping laws. Write h=Pr(T₂=0), x=Pr(T₀=0).
+Let a,b,c be the probabilities of the complete first-hit events
+
+    a: host2 alone first;
+    b: pivot0 alone first;
+    c: host2 and pivot0 tie at their finite first time.
+
+The remaining probability is joint literal Never. No support bound,
+calendar compactification, stationarity or limit interpolation is needed.
+From the actual table,
+
+    U_0=b−g a,
+    U_1=U_3=−g(a+c)−b.
+
+The COMPLETE cap B_0 is at least its immediate-Quit0 value 1−h.
+The COMPLETE cap B_1 is at least its immediate-Quit0 value ghx:
+the only positive event for that reply is the independent date0 tie
+of host2 and pivot0. All other coalitions for owner1's date0 reply
+pay0. These are actual replies, not assigned continuation annotations.
+Consequently
+
+    d_0≥1−h−b+g a,
+    d_1≥ghx+g(a+c)+b.
+
+Independence at date0 gives a≥h(1−x), and a+c≥h. Adding yields
+
+    d_0+d_1≥1−h+2gh,
+    max_i d_i≥(1−h+2gh)/2=1/2−h/4≥g.              (CC-D)
+
+This proves the lower bound against EVERY complete host law and EVERY
+complete pivot strategy, including all later-atom/first-late-atom choices.
+Later finite/Never responses may raise the caps; they cannot invalidate
+these valid full-cap lower bounds. If h<1, the last inequality is strict;
+if h=1 but x>0, d_1≥g(1+x)>g. The original sure host and pivotNever
+attain g. Thus the third whole coordinate also has no improving move.
+No artificially available pre-tail clock has been inserted.
+
+### CC4. Literal joint descent, exact consumer boundary and limitations
+
+For 0<t≤1 change BOTH effective outer laws to
+
+    p_1=p_3=t Quit0+(1−t)Never,
+
+keeping p_2=Quit0. Choose the legal pivot law with the SAME date0 mass t,
+independently. Equation(CC-A) gives ALL full debts exactly
+
+    d_0=d_1=d_3=g(1−t²),  d_2=0.
+
+Therefore the reoptimized inner value is at most g(1−t²)<g. At t=1,
+all four quit at date0 and the target is (g,g,0,g). Every active player's
+full cap is its delivered g, while row2 is identically zero under any
+deviation. This literal profile is a full terminal Nash equilibrium and
+has the same fixed uniform target, with only the conventional O(1/H)
+time-zero finite-horizon boundary if required by the model. The table is
+SOLVED, not a positive-gap candidate.
+
+The precise method falsified is
+
+    positive Φ + exact whole-coordinate optimality ⇒ a strict one-coordinate descent.
+
+It is false even with generic-signed/canonical LP input and unrestricted
+inner behavior. These are GLOBAL coordinate minima, not a local gradient
+calculation or a sampled optimizer. They do not say that ALL coordinate
+algorithms fail: zero-cost moves can install invisible later laws behind
+the sure host and may permit later escape. No all-tie-selector failure,
+strict full-neighborhood local minimum, or two-coordinate-descent no-go
+has been proved. A genuinely coupled/global method remains legitimate.
+In particular no statement about actual no-UE sources follows.
+
+Source correspondence is the same `exists_objective_minimizer_eq_behavioral_infimum`
+in `PivotRepairBehavioralInfimum.lean`, not a producer beyond that theorem;
+the direct complete-law proof establishes the infinite-law host-coordinate
+bound without importing LP attainment. The canonical question is unchanged.
+The first late atom remains a legitimate generic LP variable. Equation(CC-D)
+does NOT remove it WLOG: it covers all choices by actual first-hit events.
+
+Exact arithmetic regression, separate from the all-law proof:
+
+```python
+# CC EXACT CHECKER: independent 60-cell table and whole-coordinate obstruction
+from fractions import Fraction as F
+from itertools import product,combinations
+g=F(1,4); I=range(4); pred={0:3,1:0,3:1}
+def reward(S,i):
+    if i==2: return F(0)
+    if 2 in S: return g*(pred[i] in S) if i in S else -g
+    if i==0: return F(1) if i in S else -F(1)
+    return F(0) if i in S else -F(1)
+coalitions=[frozenset(S) for n in range(1,5) for S in combinations(I,n)]
+assert [reward(frozenset({i}),i) for i in I]==[1,0,0,0]
+assert len(coalitions)*4==60
+
+def payoff(laws):
+    out=[F(0)]*4
+    for samples in product(*[tuple(l.items()) for l in laws]):
+        clocks=[v[0] for v in samples]; prob=F(1)
+        for _,m in samples: prob*=m
+        finite=[c for c in clocks if c is not None]
+        if finite:
+            first=min(finite); S=frozenset(i for i in I if clocks[i]==first)
+            for i in I: out[i]+=prob*reward(S,i)
+    return out
+
+for den in range(1,14):
+    for num in range(den+1):
+        t=F(num,den); opt=t/(2+t)
+        assert max((1-opt)*(1+t),1+opt,1-t)==2*(1+t)/(2+t)
+        for numx in range(den+1):
+            x=F(numx,den)
+            assert max((1-x)*(1+t),1+x,1-t)>=2*(1+t)/(2+t)
+
+lawsToTest=[{0:F(1)},{None:F(1)},
+            {0:F(1,2),1:F(1,4),None:F(1,4)},
+            {1:F(1,3),3:F(1,3),None:F(1,3)},
+            {0:F(1,4),3:F(3,4)}]
+for host,pivot in product(lawsToTest,repeat=2):
+    laws=[pivot,{None:F(1)},host,{None:F(1)}]
+    u=payoff(laws); h=host.get(0,F(0)); x=pivot.get(0,F(0))
+    debts=[]
+    for i in I:
+        values=[]
+        for c in (0,1,2,3,4,None):
+            upd=list(laws); upd[i]={c:F(1)}; values.append(payoff(upd)[i])
+        debts.append(max(values)-u[i])
+    assert debts[0]+debts[1]>=1-h+2*g*h
+    assert max(debts)>=g
+for t in (F(0),F(1,4),F(1,2),F(1)):
+    laws=[{0:t,None:1-t},{0:t,None:1-t},{0:F(1)},{0:t,None:1-t}]
+    u=payoff(laws); debts=[]
+    for i in I:
+        values=[]
+        for c in (0,1,3,None):
+            upd=list(laws); upd[i]={c:F(1)}; values.append(payoff(upd)[i])
+        debts.append(max(values)-u[i])
+    assert debts==[g*(1-t*t),g*(1-t*t),0,g*(1-t*t)]
+print('CC whole-host ledger, coordinate optima and coupled descent: exact PASS')
 ```
