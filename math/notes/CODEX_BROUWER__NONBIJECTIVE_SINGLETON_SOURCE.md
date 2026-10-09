@@ -89,6 +89,17 @@ accounts; quantitative funding and a source-case consumer remain OPEN.
 See [Morse's review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
 The proof section is unchanged. No export or Lean seal is claimed.
 
+CS below gives a further COMPLETE ORDINARY, UNREVIEWED actual-source
+submode exclusion: a ROOT-ONLY POSITIVE first-root supplier cannot be
+the SOLE owner with prescribed finite mass strictly after that root.
+Its whole old later conditional stays fixed. Two independent mass
+coordinates make the TRUE full debt a maximum of two affine functions;
+the resulting minimum line violates least ORIGINAL Never or common
+individual debts. Every later maximizing calendar is retained, including
+negative single-finite-law cap coefficients. Thus CB's bad-later arm
+requires at least one OTHER owner with post-root finite mass. No total
+funding inequality, general alternative(II) closure or export is claimed.
+
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
 separations but the full existential-producer union still UNRESOLVED.
@@ -16291,3 +16302,233 @@ supply that shortcut. In the remaining bad-later arm the mass is
 already at/after a genuine maximizing response. A future whole-law
 move must price that active family and every newly optimal response,
 rather than treating the paid finite regret as freely removable.
+
+
+## CS: a paid root-only supplier cannot be the sole post-root finite owner
+
+Status: COMPLETE ORDINARY, UNREVIEWED actual-source SUBMODE EXCLUSION.
+CB's reviewed proof and CR are unchanged. This is not a generic own-gain
+ledger or a solved-fixture obstruction: the contradiction uses the SAME
+global minimum, least ORIGINAL literal Never and common individual debts.
+
+### CS1. Exact statement and independent law parameters
+
+Take ONE selected source table and augmented full minimum from
+[LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md](../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md),
+in alternative(II). All singleton owns s_h are positive. Its isolated
+first prescribed root is τ, all marginal Never masses n_h are positive,
+and every root rate a_h is nonsure. Exactly one owner i bridges between
+the root and its ENTIRE later cap, with a_i=0; all other owners are
+root-only or later-only. There is a later-only owner. The total full
+debt is the GLOBAL minimum δ, every full minimum has the SAME debt
+vector d*, and this marked minimum has least ORIGINAL joint Never ν_min.
+
+Suppose k is a ROOT-ONLY POSITIVE ROOT SUPPLIER, a_k>0, with positive
+prescribed finite mass after τ. The claim is that some DIFFERENT owner
+also has positive prescribed finite mass after τ. Equivalently, the
+following actual submode is impossible:
+
+    a_k>0, f_k=1−a_k−n_k>0,
+    k is root-only, and f_h=1−a_h−n_h=0 for EVERY h≠k.    (CS.1)
+
+No optimality of any prescribed finite conditional is assumed. In
+particular a later-only observer may have strictly suboptimal prescribed
+root mass. Nothing is concluded when the sole post-root finite owner
+is not a positive root-only supplier, or when no owner has post-root
+finite mass. No claim is made about source alternative(I).
+
+Assume(CS.1), write a=a_k and f=f_k, and let F be k's ENTIRE OLD
+finite conditional strictly after τ. It can have arbitrarily many atoms
+or a nonisolated limiting calendar. Keep F and all other laws fixed.
+The actual independent family is
+
+    q_k^(a,f)=a δ_τ+f F+(1−a−f)δ_Never.                 (CS.2)
+
+The original point a₀,f₀ is interior to the legal triangle a>0, f>0,
+1−a−f>0. Thus these are TWO-SIDED feasible independent mass changes
+on an open box, not an unsupported new best-response clock or a common
+profile lottery. Only k's PRIVATE law changes. For h≠k the whole law
+is a_h δ_τ+(1−a_h)δ_Never. Set
+
+    C=∏[h≠k](1−a_h)>0,
+    C_h=∏[ℓ≠h,k](1−a_ℓ)  for h≠k.
+
+The ORIGINAL full joint-Never coordinate is exactly
+
+    ν(a,f)=C(1−a−f).                                  (CS.3)
+
+### CS2. ALL later testers and original-carrier realization
+
+Normalize τ to the original root0 as in source Section15. Let
+Q_h(a), A_h(a), R_h^0(a) be respectively h's root Quit endpoint,
+root passive endpoint, and prescribed one-root payoff, treating every
+surviving draw as Never for this one-root calculation. These are affine
+in a. Q_k and A_k are constant, since their opponents are unchanged.
+
+On the UNCHANGED suffix calendar, put all owners other than k at Never
+and k at its surely-finite OLD conditional F. For h≠k let
+
+    L_h=sup[ALL available finite suffix t]
+                       V_h(t;F_k,Never_{−k})−s_h.
+
+This is the ENTIRE finite envelope coefficient, not one selected
+maximizer. It may be NEGATIVE or zero: no empty date before F's first
+suffix atom is inserted. For conditional finite mass m=f/(1−a)∈(0,1),
+EVERY finite suffix response has value
+
+    s_h+m[V_h(t;F_k,Never_{−k})−s_h].
+
+Since m>0 its FULL finite envelope is s_h+m L_h, with ALL ordering
+and ties preserved on the entire old calendar. Literal Never pays
+m r_h({k}); a finite response after the old finite support pays this
+plus (1−m)s_h>0. This proves Never is dominated before passing to the
+limit. For k its opponents are all Never in the suffix, so its full
+suffix cap is s_k. Affinity in a deviator's ENTIRE law identifies these
+finite/Never suprema with unrestricted behavioral caps.
+
+Consequently the complete later-root branches for h≠k are
+
+    T_h(a,f)=A_h(a)+C_h[(1−a)s_h+f L_h],               (CS.4)
+
+and the FULL caps are B_h=max(Q_h,T_h). For k the FULL cap is
+max(Q_k,A_k+C s_k). Since k is root-only, its STRICT root gap is
+
+    G_k=Q_k−A_k−C s_k>0,                             (CS.5)
+
+and B_k=Q_k is fixed throughout(CS.2). Every prescribed payoff is
+
+    U_h(a,f)=R_h^0(a)+C f r_h({k}).                   (CS.6)
+
+Thus ALL cap branches and payoffs are affine in the TWO whole-marginal
+mass coordinates. Every nonbridger's strict numerical root/later gap
+persists on a small box. Its full cap is ONE affine branch there,
+even when its entire later maximizing family has several or nonisolated
+points. Only the sole bridger i retains a max of two affine branches.
+
+These are ORIGINAL attainable-carrier families, not a fictitious
+semantic extension. On the selected finite realizing sequence, all
+other post-root finite masses converge to0 under(CS.1). Censor those
+vanishing masses to literal Never, normalize the convergent nonsure
+root masses, and retain EVERY old occupied or empty suffix date. The
+product-TV payoff and ALL-response errors vanish uniformly. k's old
+post-root finite conditional exists with mass bounded away from0. On
+each such calendar define L_h^N by the complete finite supremum above.
+The bounded coefficients have a common convergent subsequence. Equations
+(CS.3–6) hold at every finite index and converge uniformly on the legal
+box. Hence every displayed full pair together with its literal ν lies
+in the SAME original augmented carrier H. This neither inserts a new
+pre-suffix test nor replaces the honest suffix by a favorable minimum.
+
+### CS3. A genuine minimum line, not a first-order approximation
+
+On this open box, TRUE summed full debt is the maximum of TWO affine
+functions: use all fixed nonbridger branches, and choose the root or
+later branch only for i. At the original point those two functions tie.
+Let their difference have linear part g. Choose nonzero z=(z_a,z_f)
+with g·z=0; if g=0, any nonzero z is allowed. On the small two-sided
+line (a,f)=(a₀,f₀)+t z, i's two ENTIRE cap branches stay EXACTLY tied
+and full debt is affine. Every point is attainable and has D≥δ.
+Interior minimality therefore forces D≡δ on that line. These are TRUE
+full minima, not directions with only vanishing first derivative.
+
+If z_a+z_f≠0, choose the orientation of t that increases a+f. By
+(CS.3) it has ν<ν_min, contradicting least ORIGINAL literal Never.
+Otherwise z_f=−z_a and z_a≠0. Own k cap is fixed and
+
+    U_k=a Q_k+(1−a)A_k+C f s_k.
+
+Its derivative along the minimum line is z_a G_k≠0 by(CS.5).
+Thus its individual full debt changes on that line, contradicting
+the SAME d*_k at EVERY full minimum. This exhausts all possible z
+and proves(CS.1) impossible.
+
+Operational consequence: if CB's paid positive first-root supplier is
+ROOT-ONLY, its bad post-root finite law cannot be the only prescribed
+post-root finite law in the selected source. CR already locates that
+bad mass at/after β; CS says there is another actual finite-law owner
+to reckon with there, not merely an off-minimum paid endpoint. CS does
+not locate that other owner's mass relative to β, guarantee a useful
+joining sign, or finance any coupled replacement. The concrete next
+question is whether changing TWO such original finite laws can hedge
+the changing ENTIRE later caps and produce D<δ, or D=δ with lower ν.
+
+Dependencies inspected: `quittingTerminalSemanticPair_rootThenContinuation`
+and `quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, and the
+accepted source's Sections5–7,15–16,18. A narrow sole-finite/root-only
+search in that file and `TerminalSemanticEqualityStratum.lean` and
+`TerminalSemanticSoloCapThreshold.lean` found no checked declaration
+stating this submode exclusion. This is not a full old raw-producer
+coverage audit or a Lean theorem.
+
+### CS4. Runnable exact all-clock cross-check
+
+The following standard-library script checks the sparse-suffix payoff
+and ENTIRE finite/Never cap formulas on100 complete random integer
+tables, with three different legal (a,f) points on each old calendar.
+It includes33 negative L_i cases, independently checks own k cap
+invariance, and uses no source minimality assumption in its algebra
+tests. The source contradiction is CS1–CS3, not numerical evidence.
+
+```python
+from fractions import Fraction as F
+from itertools import product
+from random import Random
+R=Random(61381); nv=99; k=2
+
+def value(r,laws,h,t=None):
+    q=[dict(p) for p in laws]
+    if t is not None:q[h]={t:F(1)}
+    z=F(0)
+    for clocks in product(*(p.keys() for p in q)):
+        weight=F(1)
+        for a,p in zip(clocks,q):weight*=p[a]
+        first=min(clocks)
+        if first!=nv:
+            S=sum(1<<a for a,c in enumerate(clocks) if c==first)
+            z+=weight*r[h][S]
+    return z
+
+negative=0
+for case in range(100):
+    r=[{S:F(R.randint(-8,8)) for S in range(1,16)} for h in range(4)]
+    for h in range(4):r[h][1<<h]=F(R.randint(1,3))
+    s=[r[h][1<<h] for h in range(4)]
+    a1=F(R.randint(1,5),7); a3=F(R.randint(1,5),7)
+    C=(1-a1)*(1-a3)
+    finite=[{nv:F(1)},{nv:F(1)},
+            {1:F(1,3),3:F(2,3)},{nv:F(1)}]
+    L=[max(value(r,finite,h,t)-s[h] for t in (1,2,3,4))
+       if h!=k else F(0) for h in range(4)]
+    negative+=L[0]<0; owncaps=[]
+    for a,f in ((F(1,3),F(1,4)),(F(2,5),F(1,5)),
+                (F(1,5),F(3,5))):
+        roots=[{nv:F(1)},{0:a1,nv:1-a1},
+               {0:a,nv:1-a},{0:a3,nv:1-a3}]
+        laws=[dict(p) for p in roots]
+        laws[k]={0:a,1:f/3,3:2*f/3,nv:1-a-f}
+        Q=[value(r,roots,h,0) for h in range(4)]
+        A=[value(r,roots,h,nv) for h in range(4)]
+        rootU=[value(r,roots,h) for h in range(4)]
+        for h in range(4):
+            H=F(1)
+            for ell in range(4):
+                if ell!=h:
+                    H*=1-(a1 if ell==1 else a if ell==k
+                          else a3 if ell==3 else F(0))
+            cap=max(Q[h], A[h]+H*(s[h]+f/(1-a)*L[h]))
+            assert cap==max(value(r,laws,h,t)
+                            for t in (0,1,2,3,4,nv))
+            assert value(r,laws,h)==rootU[h]+C*f*r[h][1<<k]
+            if h==k:owncaps.append(cap)
+        assert (1-a1)*(1-a3)*(1-a-f)==C*(1-a-f)
+    assert len(set(owncaps))==1
+    Qk=value(r,roots,k,0); Ak=value(r,roots,k,nv)
+    assert Qk-Ak-C*s[k]==Qk-value(r,finite,k,1)*C-Ak
+print('PASS: 100 exact all-clock sparse-suffix tables; negative L_i cases',
+      negative)
+```
+
+The displayed verifier was run and returned PASS with33 negative-L_i
+cases. No solved fixture, stationary selection or favorable cap choice
+is used to assert the actual-source exclusion.
