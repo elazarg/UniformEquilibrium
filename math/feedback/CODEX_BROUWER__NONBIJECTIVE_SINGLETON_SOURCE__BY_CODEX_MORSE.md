@@ -929,3 +929,190 @@ need not be the first-root bridger; not all owners must cap at c; c need
 not be an attained raw natural deadline. No joint punishment, minimizing
 tail, Nash continuation, renewable paid reset or UE is established. The
 review does not add SG to the separately frozen NP standalone artifact.
+
+## Independent strengthened CB1–CB5 review
+
+Reviewed the complete bounded section beginning `## CB:` in
+`notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`, SHA256
+`e0fef9e1d10c29489c4a22da4914c97c2bfce3de3f2d98a79cfce9558e4eba0b`.
+The frozen whole-note hash supplied for that section was
+`8b32300a8d8a293bf565114b1731dbb561ae00ddc601394b6d7994ad43d11a3f`.
+I read the complete proof and checker, rechecked the source and prefix
+declarations below, and ran the bounded checker. This is an independent
+ordinary-mathematical review, not a Lean verification or an export seal.
+
+Soundness verdict: PASS. No unresolved mathematical objection.
+Source significance: the positive-FIRST-ROOT-supplier localization is a
+genuine further restriction relative to the accepted source and the
+bounded existing finite-surplus accounting checked here. It consumes
+neither source alternative and supplies no quantitative funding or UE
+consumer. Export significance remains a separate operational decision.
+
+### Exact statement and the role of the extra premise
+
+Keep the actual SAME-table, least-literal-joint-Never canonical source
+and its alternative II: one root/later tied owner i with root rate0,
+and at least one different later-only owner. The claim is that SOME
+owner k with positive prescribed FIRST root rate has
+
+    γ_k = B_k − V_k(F_k) > 0,
+
+where F_k is its ENTIRE prescribed finite conditional law. This is not
+the unconditional finite surplus, which equals m_kγ_k; here m_k>0 for
+every positive supplier. It does not assert regret at the zero-rate
+bridger or at an arbitrary tail owner. The contradictory hypothesis
+γ_k=0 is used ONLY for positive first-root suppliers.
+
+Every first root has at least two positive nonsure suppliers. A positive
+supplier cannot be later-only under this hypothesis: its root atom has
+a strict positive full-cap loss. A root-only supplier cannot put positive
+finite mass after the first root, since its ENTIRE later cap is strictly
+below its root cap. These conclusions follow directly from integrating
+the nonnegative pure-regret integrand; uniform root-versus-upper gaps
+also prove them without any questionable pointwise inference under weak
+clock convergence. The bridger i has root rate0. Counting four owners
+therefore leaves EXACTLY two positive root-only suppliers ℓ,h, with
+rates x₀,y₀∈(0,1), and one remaining zero-rate later-only owner j.
+The conditional suffixes of ℓ,h are literal PureNever.
+
+### The first affine path really rules out bridger finite mass
+
+If i has finite mass m_i>0, preserve its ENTIRE old finite conditional
+law and replace its whole law by zF_i+(1−z)Never near m_i. No clock is
+introduced. Its own cap is independent of its own law. The caps of ℓ,h
+stay at their root endpoints by their strict full upper gaps and the
+uniform product-TV bound. In the suffix, owner j faces just one possibly
+finite opponent, i, so every existing finite reply has value
+
+    s_j + z f_j(t).
+
+For z>0 its complete finite cap is s_j+z sup_t f_j(t), an affine function
+even when the supremum is negative. Literal Never pays z r_j({i}); an
+existing final empty response exceeds it by (1−z)s_j>0. The source's
+strict later-only gap keeps j's root endpoint inactive in a two-sided
+neighborhood. ALL four caps and ALL prescribed payoffs are thus affine
+on this actual whole-law path.
+
+Global minimality makes total debt constant locally. The augmented
+carrier then gives the decisive contradiction without assuming γ_i=0:
+increasing z strictly decreases ORIGINAL joint Never,
+(1−z)∏_{k≠i}n_k, while retaining total debt δ. Therefore i is PureNever.
+The source's final-empty c-active owner with positive finite mass cannot
+be ℓ or h (their cap is root-only), nor i. It is j, so j's retained
+finite mass satisfies 0<m<1. No finite-optimality premise for j is used.
+
+### Literal moving calendars and the negative-L branch
+
+The realization is legitimate on the original finite approximants.
+After root normalization, censor only vanishing unwanted suffix mass
+of ℓ,h and i to Never. Uniform product-TV control bounds prescribed
+values AND every finite/Never response, independently of its moving
+date. Keep the entire conditional finite law F_j and its original
+calendar. Its first occupied suffix date, every later finite test, the
+original final empty test, and Never all remain in the test set.
+Before-root tests, if present before normalization, pay s_k plus a
+vanishing error and remain uniformly below the old caps B_k>s_k in
+the local parameter neighborhood. They are not silently replaced by
+an unavailable pre-first-suffix date.
+
+At each finite index the one-opponent formula is exact. Its bounded
+four suprema L_k admit a convergent subsequence; cap errors remain
+uniform in m on a compact subinterval of(0,1). Root prefixing is the
+literal full-cap map, so every fixed nearby (x,y,m) has a realizing
+sequence in the ORIGINAL augmented carrier. This argument needs no
+attained raw infinite date and no joint lottery over profiles.
+
+In particular L_i is NOT automatically nonnegative. For a direct
+signed regression, let s_i=1, let j's entire finite law stop at the
+first available suffix date, and put r_i({j})=0,
+r_i({i,j})=−1. The available same-date reply has f_i=−2, all later
+finite replies have f_i=−1, hence L_i=−1. The complete suffix cap is
+1−m, while Never pays0. Inserting an earlier empty date would falsely
+change L_i to0. CB's proof uses the correct L_i=−1. With instead
+r_i({j})=1 and r_i({i,j})=0, the same calendar gives L_i=0, confirming
+the separate zero branch. Both examples preserve the final empty
+reply rather than creating a pre-tail response.
+
+### Independent tie-surface algebra
+
+Write c=(1−x)(1−y),
+
+    W=Q_i−A_i−c s_i,
+    U_k=R_k⁰+c m r_k({j}),
+    B_j=A_j+c s_j,
+    B_i=max(Q_i,A_i+c[s_i+mL_i]).
+
+The other caps are Q_ℓ,Q_h locally. The root polynomials Q,A,R⁰ and
+c are multiaffine; W(0,0)=0 because Q_i(0,0)=s_i and A_i(0,0)=0.
+These are all coordinates of the same literal semantic pair.
+
+If L_i=0, changing m locally leaves every cap fixed and makes every
+payoff affine. Total debt is again constant at its interior minimum,
+while c(1−m) strictly falls. This contradicts least ORIGINAL Never.
+No division by L_i is made.
+
+If L_i≠0, the exact tie is m=W/(cL_i). Since the original c>0 and
+0<m<1, this is feasible on an open rectangle about the actual root.
+The complete true debt there is exactly
+
+    P=Q_i+Q_ℓ+Q_h+A_j+c s_j−Σ_k R_k⁰−(S_j/L_i)W,
+    S_j=Σ_k r_k({j}).
+
+No sign of L_i or S_j is assumed. P is multiaffine and attains its
+global minimum δ at an interior point. Its two first derivatives vanish;
+a nonzero xy coefficient would then take both signs on centered
+opposite quadrants. Thus P is constant and the entire local rectangle
+consists of actual full minima.
+
+The original joint Never on that surface is
+
+    ν=c−W/L_i.
+
+It too is multiaffine and attains its least value ν_min at an interior
+point. The same argument makes it constant as a polynomial. Evaluating
+THIS POLYNOMIAL IDENTITY at(0,0) gives ν_min=1, whereas the actual root
+has x₀,y₀>0 and 0<m₀<1, so ν_min=c₀(1−m₀)<1. This proves the
+contradiction using least Never alone. The alternative common-debt
+argument is also correct: d_j=s_jν, and its polynomial identity at
+(0,0) conflicts with d_j=s_jν_min<s_j. Neither argument declares
+(0,0,m(0,0)) a feasible source minimum.
+
+### Named dependencies and bounded prior-overlap check
+
+The actual source dependencies are `LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`,
+its complete old-calendar response transport and admissible whole-law
+variation, the root normalization, the c-active finite-owner conclusion,
+and least LITERAL original Never selection. The exact production prefix
+surface is `quittingTerminalSemanticPrefix`,
+`quittingTerminalSemanticPair_rootThenContinuation`, and
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, read under
+its displayed imports. Its cap coordinate is the max of root-Quit and
+root-Continue using the own suffix cap, not a Nash continuation value.
+
+The accepted packet already gives root/later RESPONSE contacts and a
+final-empty c-active owner with positive finite mass. It does NOT put
+suboptimal prescribed finite mass at a POSITIVE FIRST-ROOT supplier.
+Those are distinct assertions. The bounded finite-surplus discussion
+in `CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md` gives
+d_k=γ_k^unconditional+n_k(B_k−R_k), and discusses zero-finite-surplus
+chambers and conditional pricing; it explicitly does not exclude that
+chamber or consume the source. Its later paid-finite coupled accounting
+requires additional bridge/c-active and budget conditions. Neither
+already supplies CB's first-root-supplier conclusion. The unrelated
+sole-sure saturation sign test in the same note concerns a sure root
+and is not this nonsure canonical alternative II.
+
+The embedded exact checker passed all100 actual calendars, including
+40 negative-L_i cases and92 nonzero-L_i polynomial cases. This supports
+the algebra but is not the proof of carrier realization above.
+
+Final scope: CB excludes precisely the submode in which every positive
+first-root supplier has an optimal entire finite conditional. The paid
+finite loss must occur either at a later-only owner's prescribed root,
+or in a root-only supplier's after-root finite mass. It yields no
+uniform numerical γ bound, no joint independent move whose benefit
+exceeds induced cap costs, no absorbing strategy, and no UE. Both
+canonical source alternatives remain unconsumed. No unresolved soundness
+objection remains; a further operational use is still needed before
+treating this supporting restriction as an equilibrium mechanism.

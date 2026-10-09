@@ -659,6 +659,26 @@ original opponent-root event. Multiple labels for one owner do not
 count as two owners. The later-only family need not be unique or
 isolated, and prescribed finite mass for the sole bridger is not assumed.
 
+In configuration 2, some POSITIVE first-root supplier k has strictly
+suboptimal prescribed finite conditional law. Write a_k for its first-root
+Quit rate, n_k for its original Never probability, F_k for its law
+conditional on finite stopping, and V_k(F_k) for that complete law's payoff
+against the original opponents.
+The additional restriction is
+
+    a_k>0,    1−n_k>0,    B_k−V_k(F_k)>0.
+
+Equivalently, either a later-only owner puts positive prescribed mass at
+the first root, or a root-only positive supplier also puts positive finite
+mass strictly after it. The possibility that every positive root supplier's
+finite conditional is a full best reply is excluded. This is independently
+reviewed ordinary mathematics, not a checked Lean theorem. The
+[root-supplier finite-regret proof](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cb-the-sole-bridger-source-needs-finite-regret-at-a-root-supplier)
+retains the same literal Never selection and all original response calendars.
+It gives no regret floor in terms of the debt minimum and reward bound,
+no funding of other players' cap increases, and no consumer for either
+surviving configuration.
+
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date
 response value:
@@ -678,8 +698,8 @@ positive debt vector are retained throughout; no fresh reward extremum
 or raw integer-clock minimum is introduced.
 
 The [complete least-Never source proof](exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md)
-includes the separated-source construction and every new auxiliary
-argument. It is reviewed ordinary mathematics, not a checked Lean theorem.
+includes the separated-source construction and the two-configuration
+dispatch. It is reviewed ordinary mathematics, not a checked Lean theorem.
 Both surviving configurations still require a legal whole-law debt
 improvement or another global contradiction. Owner counting supplies
 neither a Nash continuation, a renewable descent nor a UE consumer.
