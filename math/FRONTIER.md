@@ -866,6 +866,22 @@ the two-negative sign pattern by the Hessian on their equality surface.
 This supplies actual-source alignment, not a funded law modification or
 a consumer of the one-future case.
 
+The separated table can also be selected with a fixed own-zero native
+reward spacing before an arbitrarily small common positive translation
+and regular recipient scaling. At EVERY produced zero-future minimum
+with exactly two positive first-root suppliers, a PureNever observer
+whose full cap is attained at the final empty finite test has a positive
+singleton comparison with at least one of those suppliers. Both
+comparisons cannot be negative. The argument identifies this minimum
+with an actual root/Never profile, retains its complete behavioral caps,
+and compares a fixed native reward gap with the arbitrarily small full
+debt minimum. This
+[fresh-source sign exclusion](notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md#nc43-a-fresh-small-own-source-excludes-doubly-negative-c-active-observers)
+has an independent mathematical review, not a Lean declaration. It does
+not apply to an arbitrary old table, a root-only PureNever observer,
+three or four suppliers, or positive post-root finite mass. Neither
+complete source configuration is eliminated.
+
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date
 response value:

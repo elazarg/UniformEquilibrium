@@ -684,3 +684,161 @@ These checks support, but do not replace, the foregoing proof. No
 Lean build or implementation ran. No unresolved mathematical objection
 was found in this bounded result; the larger quiet-entry/funded case
 remains OPEN.
+
+## Independent review of NC.43: fixed native spacing before the small own raise
+
+Reviewer: CODEX_BROUWER. Ordinary independent mathematical review;
+no Lean compilation, new export or general-source consumer is claimed.
+Review reference: the author's whole notebook SHA256
+`23c23e91f0ae73a95acd4592cab2a8f19ab8d27b4a31477eac3d1c935b9a22b4`,
+bounded heading `## NC.43` through its original EOF.
+
+Verdict: PASS, with no unresolved mathematical objection to the stated
+fresh-source restriction or its explicitly conditional core-three
+corollary. Neither broad canonical source case is closed.
+
+### Exact assertion checked
+
+From ANY actual Fin4 no-uniform-payoff table, select one FRESH table
+with the reviewed positive full/strictly separated absorbing gaps,
+positive owns, common positive debt vector at every full minimum and
+least literal joint Never, optionally followed by maximal first-root
+absorption on that same minimum fibre. At every produced minimum
+with exactly two positive finite suppliers and NO prescribed finite
+mass after their first root, every final-empty-test-active PureNever
+observer has a positive own-singleton comparison with at least one
+supplier. An arbitrary PureNever ROOT-ONLY observer is not covered.
+
+### Translation, perturbation and regularization order
+
+Part I Sections2–4 of the reviewed source supply an own-zero native
+table with a positive ABSORBING gap, not a positive native FULL gap.
+The signed translation identity applies when both old and new owns
+are nonnegative; subtracting the normalized pivot own1 is therefore
+legal. Native AllNever has full debt0 throughout this step.
+
+Scale inside the half cube, perturb within the own-zero affine slice,
+and FIX z,A,L,m before choosing t. Every forbidden within-row equality
+is a genuine hyperplane on that slice, since just one entry per row
+is fixed. The absorbing value is uniformly sup-norm continuous on
+the SAME absorbing-law class, so the perturbation preserves A>0.
+The fixed finite table has L,m>0. A bound on t can now depend on these
+fixed quantities; choosing m after t would not prove the result.
+
+For EVERY sufficiently small positive t, P4 gives the exact all-law
+identity D_(z+t)=D_z+4tν, while the absorbing infimum remains A.
+P5 and the P6 absorbing completion bound imply the displayed positive
+FULL lower bound. Thus the proof really reconstructs an ordinary
+counterexample after the raise, including complete deviations; it
+does not use native AllNever's false positive-gap premise.
+
+Every recipient scale in (1/2,1)⁴ preserves positive full gap and gives
+absorbing gap>A/2 and full gap<4t<A/2. Concave scalarization on the
+one fixed z+t carrier admits coordinate-regular scales in this open
+box. No closeness-to1 hypothesis is needed elsewhere after these
+uniform bounds are proved. Own positivity, row distinctness, unit
+boundedness and true unweighted common minimum debts all survive.
+The scales may depend on t; the argument gives no single regular
+scale required to work for all t. It DOES permit arbitrarily small
+t AFTER the same native z,A,L,m have been fixed.
+
+Least-original-Never and optional maximal-root selections are made
+anew on this table. Their compact sets use actual augmented triples
+and fixed-root prefixes, not a minimum-suffix assertion. The honest
+suffix need not minimize full debt. No old minimum is transported
+through a reward perturbation or through the subsequent row scaling.
+
+### The finite c-active supplier and actual root/Never identification
+
+The source §14.3 graft is reproduced with its ENTIRE cap formula.
+Its independent thin word has uniformly vanishing play collisions
+AND collisions at any moving tester. Both empty endpoints are
+retained, and Never is below the final finite tester by a strictly
+positive opponent-Never product times the own singleton. Therefore
+the limiting b_h expansion is a full behavioral cap, not just a
+radial or selected-response lower bound.
+
+The actual Γ-simplex is strictly positive in EVERY recipient row.
+Dividing the global graft inequality and taking small word amplitude
+gives NC.43c′. Its strictly positive right side rules out all c-active
+owners being PureNever. In the claimed two-supplier zero-future mode,
+that finite c-active owner is consequently one of the two ACTUAL
+root suppliers. This is a supplied alignment, not an assumed one.
+
+The marked-to-raw realization is also sound. A positive mixture root
+atom comes from one retained OLD atom at a common old date; its four
+individual masses converge. Literal Never masses are tracked
+separately. Under the ZERO-FUTURE hypothesis these limiting root and
+Never masses exhaust each law, so all other original finite mass
+tends to0. Censoring it and adjusting root weights has vanishing
+product-TV error for prescribed payoffs AND uniformly for every
+finite/Never response. This includes moving and pre-root testers.
+
+After censoring, pre-root finite tests, if present, pay s_h and are
+strictly below B_h by the true-minimum margin. Deleting only those
+tests by moving the single retained root to0 preserves the full
+pair. Later finite tests all pay C_h and Never pays R_h<C_h. Hence
+the raw root/Never profile has exactly B_h=max(Q_h,C_h), with c
+activity and literal joint Never preserved. This conclusion depends
+on zero future mass; it is not general marked-law attainment.
+
+### Exact exclusion and its scope
+
+For the finite c-active supplier i, C_i−Q_i=yα≥0. Distinctness
+gives α>0, and the fixed native spacing gives α≥m/2 after scaling.
+Direct complete-law enumeration gives
+
+    d_i=(1−x)(1−y)s_i+xyα≥xyα.
+
+For a PureNever c-active h, its full cap is C_h. If both supplier
+comparisons were negative, the STRICT true-minimum margin B_h>s_h
+would imply
+
+    m[(1−y)/y+(1−x)/x]<L.
+
+Consequently x,y>m/(m+L)=b and δ≥d_i>b²m/2. The chosen t gives
+δ<4t<b²m/2, contradiction. Row scaling cancels in the observer
+inequality; it supplies the factor1/2 only in the supplier spacing.
+No minimum property is assigned to an honest tail in this argument.
+
+In NC.42o–q's ADDITIONAL census, Γ_ti<0 and c activity therefore force
+Γ_tl>0. Its supplied positive t–l joining gap then makes t's true
+participant premium on {t,l} positive. Adding that witness to the
+already proved trap {i,l,k} gives the full four-owner premium core.
+Alternatively the stated core-three outsider inequalities would
+force Γ_tl<0, immediately contradicting the new fresh-source theorem.
+These conclusions require that entire named census; NC.43 does not
+assert them for every two-supplier source or every old selected table.
+
+### Primary sources and independent exact checks
+
+Inspected under their actual imports:
+
+- `exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+  in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`;
+- `quittingProjectiveLCPMatrix` in
+  `UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`;
+- `quittingTerminalSemanticCarrier`,
+  `exists_terminalProfile_sequence_tendsto_semanticPair`,
+  `quittingTerminalSemanticCarrier_isCompact`,
+  `quittingTerminalSemanticPrefix` and
+  `quittingTerminalSemanticPrefix_mem_carrier` in
+  `UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`; and
+- the previously inspected
+  `positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+
+The native translation/completion, chart mass exhaustion and thin-word
+graft were checked directly against the reviewed source's P3–P10,
+Section6 and Section14.3; the literal-Never augmentation is not
+silently attributed to the Lean semantic-pair carrier definition.
+
+An independent exact rational enumeration of5000 full four-row
+signed native tables checked the raw root/Never payoff and all
+root/later/Never caps. In37 tests satisfying the relevant c-active
+and doubly-negative observer premises, it verified the complete
+supplier debt identity, x,y>b and D>b²m/2>4t. These randomly chosen
+tables are NOT claimed to have positive global/absorbing gaps;
+the tests check the algebra, not the counterexample-source producer.
+No compiler or full existing-producer/export gate was run. The
+source order and the narrower stated exclusion pass independently.
