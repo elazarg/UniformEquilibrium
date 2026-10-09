@@ -97,6 +97,19 @@ polynomial, the same literal active values and a strict quiet gap
 give the full unrestricted fixed-target consumer. This is ordinary
 unreviewed actual-family mathematics, not a new class count or export.
 Its solved constants will not be tuned into another barrier search.
+The strengthened CB source review is now complete: positive prescribed
+finite-conditional loss must occur at a POSITIVE first-root supplier in
+canonical alternative II, but neither full source case is consumed. The
+independent outer-selection lane's OC calculation then tests the actual
+canonical inner-LP VALUE, not another exact-menu Nash postprocessor.
+A complete rational sixty-cell quitting table has Φ(0)=Φ(1)=0 but
+Φ(1/2)=1/4 when only ONE whole opponent law is mixed; the other two
+remain fixed and independent. The inner optimum is literal and every
+behavioral pivot/reply is priced by the sure date0 screen. Thus even
+separate QUASICONVEXITY of the outer objective is false. This retires
+convex outer selection, not arbitrary approximate/coupled selection or
+nonconvex global optimization. The fixture has explicit full equilibria,
+so no no-UE source class, positive gap or new UE class is inferred.
 General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/

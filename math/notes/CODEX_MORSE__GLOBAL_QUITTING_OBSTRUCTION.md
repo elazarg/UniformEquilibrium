@@ -68,6 +68,21 @@ too is RETIRED by actual unrestricted play, not a failed fit. No
 novelty/old-producer coverage claim or new export is made. The full
 Fin4 question remains open, and neither least-Never case is consumed.
 
+Post-PT boundary: the strengthened CB source review is complete, with
+ordinary soundness PASS and its narrowly new positive-first-root-supplier
+restriction separated from the absent funding/UE consumer. The independent
+global lane then leaves the deletion-only approach: a three-player
+equilibrium does not supply its omitted player's joining/preemption cap.
+No source case was consumed. The static payoff-security detour was stopped
+by the ALREADY saved stronger WF1–WF4 invariant, with no new result counted.
+OC below now tests the actual canonical inner-repair objective directly.
+Even in ONE outer-law coordinate it is not convex or quasiconvex, despite
+the inner LP's convexity. The complete rational example prices ALL pivot
+behavior and every player's full finite/Never replies; its inner infimum
+is attained by a literal two-clock law. This retires a proposed convex
+outer-selection proof, not approximate selection generally. The table is
+explicitly solved, and no additional no-UE source restriction is asserted.
+
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
 whose outsider FULL debts vanish. All born finite deadlines and Never
@@ -22189,3 +22204,200 @@ I will not optimize this fixture's constants or fit higher-degree
 potentials at its solved point. The next substantive task is the
 bounded strengthened CB source review, then a genuinely different
 full-game forcing/negative mechanism, not further PT coefficient tuning.
+
+## OC1–OC3. The actual canonical outer repair value is not separately quasiconvex
+
+Status: COMPLETE ORDINARY EXACT CALCULATION, unreviewed and not Lean-checked.
+This is a bounded falsifier of a genuinely different selection attempt:
+globally minimize the inner-repair value over the three independent outer
+laws by treating it as convex, or at least quasiconvex, in each whole law.
+The inner minimization is an LP; partial minimization does NOT transfer
+that convexity to the opponent-law variables. No UE class or surviving
+counterexample class is claimed. The fixture itself is solved.
+
+### OC1. Complete rational quitting table and unrestricted quantifiers
+
+Players are I={0,1,2,3}; player0 is the distinguished pivot. Specify all60
+reward coordinates by the following rule, for every nonempty coalition S:
+
+* If 2∈S, put r_2(S)=r_3(S)=0 and r_0(S)=r_1(S)=h(S), where
+
+      h(S)=2  if 0∉S and 1∉S,
+           1  if 0∈S and 1∈S,
+           0  otherwise.
+
+* If 2∉S, put r_1(S)=r_2(S)=r_3(S)=0; put r_0(S)=1 when S={0},
+  and r_0(S)=0 otherwise.
+
+All rewards lie in[0,2]. The own-singleton vector is EXACTLY(1,0,0,0),
+so this is a canonical single-pivot table, not an additive normalization.
+Never pays0. For t∈[0,1], fix these THREE actual independent outer laws:
+
+    p_1^t=t Quit0+(1−t)Never,
+    p_2=Quit0,
+    p_3=Never.
+
+Let Φ(t) be the infimum of FULL terminal exploitability over EVERY
+behavioral pivot strategy, with the three laws above fixed. Every player's
+deviation is likewise an unrestricted behavioral replacement. The assertion
+is about one WHOLE outer-law coordinate, not a path changing two opponents
+together or a correlation between their private draws.
+
+Since player2 quits surely at date0, termination is sure at date0 under
+every pivot replacement and every deviation by players0,1,3. A complete
+pivot strategy therefore affects all payoff/cap coordinates ONLY through
+x=Pr_pivot(Quit0). Its later finite mass and literal Never mass give the
+same Continue0 outcome. Full replies by players0,1 likewise reduce to
+Quit0 versus Continue0; all later deadlines and Never are priced. Player2
+and player3 have identically zero reward against EVERY full deviation,
+including the unscreened histories created by player2 continuing. Thus their
+complete caps and debts are0. No conditional-Nash or off-path perfection
+argument is used.
+
+The common prescribed payoff of players0,1 is
+
+    u(t,x)=tx+2(1−t)(1−x).
+
+Their COMPLETE caps are respectively
+
+    B_0(t)=max(t,2(1−t)),
+    B_1(x)=max(x,2(1−x)).
+
+Consequently the exact full objective for EVERY pivot law is
+
+    G(t,x)=max(0, B_0(t)−u(t,x), B_1(x)−u(t,x)),
+    Φ(t)=min_{0≤x≤1}G(t,x).
+
+Conversely every x is realized by the literal pivot law
+x Quit0+(1−x)Never. There is no relaxed-boundary nonattainment or missing
+first late atom here. The own singleton1 of player0 is not forgotten: its
+unreachable solo event is screened by the FIXED sure opponent2. The
+canonical beyond-menu correction has opponent-Never product0 exactly.
+
+### OC2. Exact inner optimum at every parameter, not a sampled fit
+
+The full value is
+
+    Φ(t)=t(2−3t)             for 0≤t≤2/3,
+         (1−t)(3t−2)       for 2/3≤t≤1.
+
+The optimizer is x=t, realized by the actual two-clock pivot law above.
+Here is a global lower proof against all x, hence all pivot behavior.
+
+For t≤2/3, write g=2−3t≥0. If x≥t, the pivot's Continue0 cap gives
+pivot debt xg≥tg. If x≤t, player1's Continue0 response gives gain
+t(2−3x)≥t(2−3t)=tg. At x=t BOTH complete caps prefer Continue0 and
+both debts equal tg. This includes t=0 and t=2/3 without division.
+
+For t≥2/3, write g=3t−2≥0. If x≤t, the pivot's Quit0 cap gives
+pivot debt (1−x)g≥(1−t)g. If x≥t, player1's Quit0 response gives
+gain (1−t)(3x−2)≥(1−t)(3t−2). At x=t BOTH complete caps prefer
+Quit0 and both debts equal (1−t)g. This includes t=1.
+
+In particular
+
+    Φ(0)=Φ(2/3)=Φ(1)=0,
+    Φ(1/2)=1/4>0.
+
+The law p_1^{1/2} is the literal affine midpoint of p_1^0 and p_1^1,
+with both other outer laws unchanged. Thus Φ is not even QUASICONVEX in
+one outer-law coordinate. Its first branch is strictly concave between
+the zero-valued laws at0 and2/3. Inner LP attainment, continuity and
+affine fixed-opponent constraints imply neither separate convexity nor
+separate quasiconvexity of the selected outer objective.
+
+### OC3. Scope, exact sources and the next global obligation
+
+The exact production correspondence inspected under imports is
+`exists_objective_minimizer_eq_behavioral_infimum`, in
+`UniformEquilibrium/Quitting/Terminal/PivotRepairBehavioralInfimum.lean`.
+It is generic signed data and fixed actual finite opponent laws. The
+definitions `QuittingPivotRepairLPInput.prescribedPayoff`, `constraintGain`
+and `objective`, in `PivotRepairFiniteLP.lean`, have affine pivot-mass
+constraints for FIXED opponents. They make no outer-convexity claim.
+`smallPivotRepairValue_iff_exists_uniformEquilibriumPayoff`, in
+`PivotRepairUniformPayoffCharacterization.lean`, correctly leaves selection
+of the three laws open. The canonical question in
+`questions/FIN4_SINGLE_PIVOT_FINITE_MENU_SELECTION.md` still permits every
+approximate independent finite law, not only exact finite-menu Nash.
+No mismatch or question edit is needed.
+
+This example has literal full equilibria at t=0,2/3,1 with x=t. Thus it
+does not supply a positive global gap; it does not challenge the inner-LP
+equality, finite-law equivalence, or unrestricted behavioral compiler.
+The all-law quantifier in the inner calculation is genuine, but the failure
+is ONLY a convex/quasiconvex outer-minimization proof. A global selector can
+still choose one of the good endpoint/interior roots; no coordinate-descent
+trap or failure of every nonconvex optimizer has been proved. In particular
+no restriction on actual no-UE sources follows from this solved table.
+
+The full Fin4 task remains to force inf Φ=0 over THREE independently varied
+finite laws, or certify one table with a positive floor over all such laws
+and hence all behavior. Any future optimization argument must control its
+nonconvex product geometry rather than appeal to the inner LP alone.
+There is no new export, frontier contraction or coefficient-tuning program.
+
+Exact algebra regression (supporting the proof, not substituting for it):
+
+```python
+# OC EXACT CHECKER: full canonical one-coordinate outer repair value
+from fractions import Fraction as F
+from itertools import product, combinations
+
+I=range(4)
+def reward(S,i):
+    if 2 in S:
+        if i in (2,3): return F(0)
+        return F(2) if 0 not in S and 1 not in S else F(1) if 0 in S and 1 in S else F(0)
+    return F(1) if i==0 and S==frozenset({0}) else F(0)
+
+coalitions=[frozenset(S) for size in range(1,5) for S in combinations(I,size)]
+assert len(coalitions)*4==60
+assert [reward(frozenset({i}),i) for i in I]==[1,0,0,0]
+assert all(0<=reward(S,i)<=2 for S in coalitions for i in I)
+
+def payoff(laws):
+    out=[F(0) for _ in I]
+    for samples in product(*[tuple(law.items()) for law in laws]):
+        clocks=[v[0] for v in samples]
+        prob=F(1)
+        for _,p in samples: prob*=p
+        finite=[c for c in clocks if c is not None]
+        if finite:
+            first=min(finite); S=frozenset(i for i in I if clocks[i]==first)
+            for i in I: out[i]+=prob*reward(S,i)
+    return out
+
+for t in (F(0),F(1,3),F(1,2),F(2,3),F(1)):
+    for x in (F(0),F(1,4),F(1,2),F(3,4),F(1)):
+        # Arbitrary nonhead split: positive finite atoms remain distinct from Never.
+        laws=[{0:x,1:(1-x)/3,3:(1-x)/3,None:(1-x)/3},
+              {0:t,None:1-t},{0:F(1)},{None:F(1)}]
+        u=t*x+2*(1-t)*(1-x)
+        assert payoff(laws)==[u,u,0,0]
+        caps=[]
+        for i in I:
+            vals=[]
+            for clock in (0,1,3,None):
+                new=list(laws); new[i]={clock:F(1)}
+                vals.append(payoff(new)[i])
+            caps.append(max(vals))
+        assert caps==[max(t,2*(1-t)),max(x,2*(1-x)),0,0]
+
+def gain(t,x):
+    u=t*x+2*(1-t)*(1-x)
+    return max(F(0), max(t,2*(1-t))-u, max(x,2*(1-x))-u)
+
+def value(t):
+    return t*(2-3*t) if t<=F(2,3) else (1-t)*(3*t-2)
+
+for den in range(1,25):
+    for num in range(den+1):
+        t=F(num,den)
+        assert gain(t,t)==value(t)
+        for x in [F(0),F(1),F(2,3),t]+[F(j,den) for j in range(den+1)]:
+            assert gain(t,x)>=value(t)
+assert value(F(0))==value(F(1))==value(F(2,3))==0
+assert value(F(1,2))==F(1,4)
+print('OC inner value and global lower bound: exact rational PASS')
+```
