@@ -45,7 +45,10 @@ product-Jensen cap dividend must exceed the entire actual corner excess,
 not just the movers' old debts. No such inequality or consumer has yet
 been obtained. Individual marginal Never masses remain free to redistribute;
 neither fixing the root nor freezing each marginal is justified by the
-joint-probability passport.
+joint-probability passport. FG.S records an original-source subcase in
+which equality in one owner's joint-Never debt floor makes that PRODUCT
+constant on the whole minimum fibre. It still fixes no individual mass
+and supplies no debt-nonincreasing operation.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -15595,3 +15598,68 @@ recipient shift of ALL outcomes, including AllNever, reconciles
 that convention with positive owns; shifting only nonempty rows
 would not. No paper claim is promoted to a tracked Lean result,
 and no new source transcription or implementation was made.
+
+### FG.S. Original-source floor saturation gives an equality budget
+
+Status: ordinary supporting derivation, not independently reviewed;
+no new consumer or class exclusion. This refines the choice of feasible
+global operations in ONE explicitly additional subcase. It does not
+import NC9's further freshly selected table.
+
+For an actual independent profile write n_k for its literal Never
+mass, ν=∏n_k, R_k for its Never response value, and V_k(F_k) for
+the response value of its own finite conditional law when n_k<1.
+Its ENTIRE cap B_k gives the exact nonnegative decomposition
+
+    d_k−s_kν
+      =n_k[B_k−R_k−s_k∏_{l≠k}n_l]
+          +(1−n_k)[B_k−V_k(F_k)] ≥0.           (FG.S1)
+
+When n_k=1 the second summand is defined to be0. The first summand
+is nonnegative because the late empty finite test has value
+R_k+s_k∏_{l≠k}n_l; the second uses the FULL cap, not a selected
+response. This also follows from the exact inspected declaration
+`prod_stoppingLaw_none_mul_singleton_le_terminalDebt` in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`.
+The source's marked/augmented convergence preserves all the numerical
+coordinates and conditional expectations needed here; n_k stays
+positive. Alternatively the inequality alone passes through actual
+finite realizers, which suffices for the next assertion.
+
+If ANY owner k of the selected least-Never full minimum satisfies
+
+    d*_k=s_kν_min,
+
+then EVERY full minimum at this SAME ORIGINAL table has ν=ν_min.
+Indeed at another augmented full minimum with literal ν′ the same
+common debt vector and (FG.S1) give s_kν′≤d*_k=s_kν_min;
+s_k>0 gives ν′≤ν_min. The original least-Never selection gives
+the reverse inequality. The two selections are not performed at
+different tables. Consequently the first summand in (FG.S1) vanishes
+at EVERY minimum for this k, so its late empty-date test remains
+maximizing. Whenever it has positive finite mass, its own finite
+conditional law also has response value equal to the entire cap.
+
+In the sole-bridger branch a sufficient concrete condition is:
+the sole i has q_i=δ_Never AND its final empty finite date c
+maximizes. Then n_i=1, U_i=R_i, and
+B_i=R_i+s_iν_min, giving the required saturation. Neither
+PureNever alone NOR root/later bridging alone supplies the c condition;
+the later maximizing family could lie strictly before c. No assertion
+that this subcase exhausts the source is made.
+
+Within that additional subcase the exact original FG family can return
+to a full minimum only under
+
+    c_x(1−t)(1−s)=c_a,
+
+not merely the earlier inequality. More generally a nonzero finite
+prefix word cannot have BOTH its tail and output at full minima of
+this table, since literal ν_out=c_wordν_tail and c_word<1.
+Its HONEST original suffix remains legal: it has ν_tail=ν_min/c_a
+and is NOT a full minimum. Product-preserving redistribution of
+individual Never masses remains allowed and is not priced away by
+this result. No full-envelope nonincrease, finite-amplitude descent,
+or minimum-fibre return has been established. The next question is
+still to construct such an actual coupled operation, now respecting
+the equality budget in this subcase.
