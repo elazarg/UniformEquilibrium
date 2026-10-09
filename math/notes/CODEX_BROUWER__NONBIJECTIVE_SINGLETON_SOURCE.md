@@ -159,6 +159,14 @@ DD records the current coupled late-word alternative with a movable
 whole k law, actual independent finite realizers and all five cap
 classes. Its funding inequality remains OPEN. The fixed-k common-debt
 filter is supporting accounting, not an excluded source mode.
+Further DD controls are not being added. DE tests a different operation:
+overlap a paid supplier's finite clock with k at the EXISTING geometric
+dates. Its entire discrete quadratic cap formula is exact. The natural
+EXACT-BEST-REPLY matching family is strictly above δ whenever the incoming
+source has a saturated END debt, even though k's finite/Never amplitude
+is free. This is an actual-source OPERATION FALSIFIER, not exclusion of
+the source submode. Other hazards/conditionals and the nonsaturated
+FIRST-i/ROOT-k boundary remain open; no coupled funding is proved.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -18422,3 +18430,221 @@ DD base. Root accommodation is a possible
 finite-amplitude cap-turnover hedge after a genuinely changed base,
 not an unpaid infinitesimal consumer. Neither endpoint debt bound
 forces a successful interior fold, and no successful fold is proved.
+
+
+## DE: exact geometric overlap and the saturated-END matching obstruction
+
+Status: COMPLETE ORDINARY, UNREVIEWED all-response calculation and
+ACTUAL-SOURCE OPERATION FALSIFIER. No source class is eliminated. The
+new operation overlaps two private clocks at the old positive-hazard
+dates, retaining prescribed pair outcomes and triple tester rewards.
+It is NOT an iteration of CW's one-pivot cap-domination theorem: that
+theorem requires all nonpivot finite clocks before one deadline and
+does not apply to two overlapping geometric opponents.
+
+### DE1. Exact additional premise and independent laws
+
+Start with DC's SAME actual least-Never/max-A full minimum, with
+distinct i,p,q,k, root rates b,a, and k's mass f₀ and hazard z. Assume
+the EXTRA submode premise that supplier p has an active FIRST/END tie
+
+    0<z<1,   z P_p=Γ_p,
+    P_p=r_p({p,k})−s_p,   Γ_p=r_p({k})−s_p.
+
+DC does NOT supply this tie in every one-future mode. p is already
+LATER-ONLY by DA, so EVERY date t≥1 is then a FULL best response to
+its ORIGINAL opponents. Write γ_p=B_p−Q_p>0, n_p=1−b, n_q=1−a.
+Let F_z(t)=z(1−z)^(t−1), t≥1. For 0≤x≤b and 0≤f≤1 use
+
+    i=Never,    q=aδ₀+n_qδ_Never,
+    p=(b−x)δ₀+x F_z+n_pδ_Never,
+    k=f F_z+(1−f)δ_Never.                         (DE.1)
+
+All four draws are independent; matching their DISTRIBUTIONS is not
+sharing a clock sample. k's finite/Never amplitude is free, but its
+conditional hazard is explicitly fixed at the source's z. No claim
+that this family exhausts whole-k changes is made. Set θ=1−z,
+d=2−z, n_k=1−f and B=b−x. Conditional only on q not quitting at0,
+the unconditional late first-coalition masses are
+
+    m_p=x(1−f/d),
+    m_k=n_p f+x f θ/d,
+    m_pk=x f z/d,
+    m_p+m_k+m_pk+n_p n_k=n_p+x.
+
+Thus for EVERY recipient h the exact prescribed value and Never are
+
+    U'_h=R_h(B,a)+n_q[m_p r_h({p})+m_k r_h({k})
+                                           +m_pk r_h({p,k})],
+    ν'=n_p n_q(1−f).                             (DE.2)
+
+R_h is DC's literal root-outcome polynomial. Unlike DD, a nonzero
+pair {p,k} occurs in prescribed play. It is not treated as a small
+collision error.
+
+### DE2. ENTIRE discrete quadratic response envelope
+
+For an observer h∈{i,q}, abbreviate r_p=r_h({p}), r_k=r_h({k}),
+r_pk=r_h({p,k}), r_hp=r_h({h,p}), r_hk=r_h({h,k}),
+r_hpk=r_h({h,p,k}) and s=s_h. Put
+
+    E=m_p r_p+m_k r_k+m_pk r_pk+n_p n_k s,
+    A=x n_k[z(r_hp−s)−(r_p−s)]
+                       +n_p f[z(r_hk−s)−(r_k−s)],
+    C=x f[−(θ(r_p+r_k)+z r_pk)/d
+                   +θ²s+zθ(r_hp+r_hk)+z²r_hpk].   (DE.3)
+
+For EVERY integer t≥1, w=θ^(t−1), its late reply equals
+
+    V_i(t)=R_i(B,a)+n_q[E_i+A_i w+C_i w²],
+    V_q(t)=B r_q({p})+E_q+A_q w+C_q w².          (DE.4)
+
+Here E_i,A_i,C_i and E_q,A_q,C_q mean (DE.3) in the indicated
+recipient rows, not root passive fields. To check (DE.4), the earlier
+p-only, k-only and pair masses are respectively
+
+    x n_k(1−w)+x f θ(1−w²)/d,
+    n_p f(1−w)+x f θ(1−w²)/d,
+    x f z(1−w²)/d.
+
+At the test, the four probabilities for only h, h with p, h with k,
+and h with both are
+
+    (n_p+xθw)(n_k+fθw),
+    xzw(n_k+fθw),   fzw(n_p+xθw),   xfz²w².
+
+Multiplication by their ORIGINAL signed rewards proves (DE.3–4).
+In particular the triple tester coefficient r_h({h,p,k}) is retained.
+There is no fourth simultaneous late quitter: only p,k have late
+prescribed clocks. ROOT testers are still DC's full literal root
+formulas at rates B,a and retain their three-player coalitions.
+The grand coalition has probability EXACTLY zero under every pure
+tester here: q's only finite clock is0, whereas k's are strictly later.
+
+The exact late supremum is over the DISCRETE set
+
+    w∈{1,θ,θ²,…}∪{0}.                           (DE.5)
+
+For C≥0 the quadratic is convex and its exact supremum is at1 or0.
+For C<0 put w*=−A/(2C). If w*≤0 or w*≥1 the appropriate endpoint
+maximizes. If 0<w*<1, choose the adjacent powers θ^m≥w*≥θ^(m+1).
+The EXACT supremum is the larger value at those two powers; include
+the endpoints harmlessly. These powers are actual finite responses
+at dates m+1,m+2. If w* is itself a power only one is needed. A
+continuous vertex value is only an upper bound and is NOT substituted
+for the discrete cap. The endpoint0 can be an unattained supremum.
+For example at θ=1/2, the quadratic (2/3)w−w² has continuous maximum
+1/9 at w=1/3, but exact discrete maximum5/48 at w=1/4, date3.
+
+Owner p's entire cap is
+
+    B'_p=max(Q_p,a r_p({q})+n_q[s_p+fΓ_p]),     (DE.6)
+
+because the matching identity makes every one-clock late reply equal.
+For owner k its entire cap is
+
+    B'_k=max(Q_k(B,a),R_k(B,a)
+              +n_q[(n_p+x)s_k+x max(zP_kp,Γ_kp)]),
+    P_kp=r_k({k,p})−s_k,  Γ_kp=r_k({p})−s_k.  (DE.7)
+
+Together with ROOT and (DE.4–5) these price EVERY finite reply. Never
+is the END value minus s_h times its opponent-Never product, which is
+nonnegative here; thus it never exceeds END, including f=1. Affinity
+in a deviator's complete law then prices unrestricted behavior.
+
+The laws are actual infinite-support laws, not just marked objects.
+For finite realizers move each geometric finite tail after N to date
+N+1, not to Never. Joint Never remains EXACTLY ν' at every index;
+product-TV error is at most (x+f)θ^N. The bounded payoff coupling
+therefore gives uniform prescribed-payoff AND all-response/cap
+convergence. This separately justifies original augmented membership
+without iterating the inapplicable one-pivot theorem.
+
+### DE3. The matched family cannot return when an END debt is saturated
+
+Suppose, in addition, that SOME incoming owner h satisfies
+
+    d*_h=ν₀s_h.                                  (DE.8)
+
+For DC it suffices that k is LATER-ONLY OR that i has END as an active
+tail endpoint; an i FIRST/END tie counts. No such premise is assumed
+on every remaining source. The proof of joint-ν rigidity is exactly
+FG.S: at ANY full minimum common individual debts and the universal
+bound d_h≥νs_h give ν≤ν₀, while least ORIGINAL Never gives ν≥ν₀.
+Thus EVERY full minimum at this table has ν=ν₀. This fixes the joint
+product, not arbitrary individual Never masses.
+
+In the PARTICULAR family (DE.1), n_p,n_q are fixed and positive.
+Consequently any full-minimum return would require f=f₀. At this
+value k's ENTIRE law and q's law are the original ones. The new p
+finite conditional F_z is an exact full best reply at ALL its dates,
+while its prescribed ROOT action is worse by γ_p>0. Hence, EXACTLY,
+
+    d'_p=d*_p−xγ_p  for every 0≤x≤b, f=f₀.    (DE.9)
+
+For x>0 this contradicts the common individual debt vector of ANY
+full minimum. Combining with the original unrestricted D≥δ floor,
+
+    D(DE.1)>δ   for EVERY 0<x≤b and 0≤f≤1.    (DE.10)
+
+All other newly born caps are the full envelopes (DE.4–7), not a
+selected-response lower ledger. The strict inequality does NOT say
+that the source submode is impossible; it says the exact matched-
+best-reply operation cannot fund a return there, even with arbitrary
+k finite/Never amplitude. It is genuinely source-dependent: both
+common minimum debts and least original Never are indispensable.
+It does not apply to arbitrary changes of individual Never masses,
+new hazards/conditionals, or to the nonsaturated strict-FIRST-i and
+ROOT-ONLY-k submode. Those possibilities remain the next funding
+question; there is no positive-hazard or full-II consumer.
+
+Primary lookup: `prod_stoppingLaw_none_mul_singleton_le_terminalDebt`
+in `UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`
+was read under its imports, together with the previously inspected
+one-pivot geometric declarations. A narrow two-geometric/quadratic-
+reply search in `UniformEquilibrium/Quitting/Terminal` and `Paths`
+found no matching theorem used here. No Lean build or seal is claimed.
+
+The following standard-library checker verifies the exact quadratic
+identity against direct chronological probabilities. It is an algebra
+check, not an independent review of the source argument (DE.8–10).
+
+```python
+from fractions import Fraction as Q
+from random import Random
+rng = Random(613)
+checks = 0
+for trial in range(200):
+    z = Q(rng.randrange(1, 10), 10)
+    theta, d = 1-z, 2-z
+    np = Q(rng.randrange(1, 10), 10)
+    x = (1-np)*Q(rng.randrange(11), 10)
+    f = Q(rng.randrange(11), 10)
+    nk = 1-f
+    s, rp, rk, rpk, rhp, rhk, rhpk = [
+        Q(rng.randrange(-20, 21)) for _ in range(7)]
+    mp = x*(1-f/d)
+    mk = np*f+x*f*theta/d
+    mpk = x*f*z/d
+    assert mp+mk+mpk+np*nk == np+x
+    E = mp*rp+mk*rk+mpk*rpk+np*nk*s
+    A = x*nk*(z*(rhp-s)-(rp-s))+np*f*(z*(rhk-s)-(rk-s))
+    C = x*f*(-(theta*(rp+rk)+z*rpk)/d+theta**2*s
+             +z*theta*(rhp+rhk)+z*z*rhpk)
+    for date in range(1, 11):
+        w = theta**(date-1)
+        pp = x*nk*(1-w)+x*f*theta/d*(1-w*w)
+        kk = np*f*(1-w)+x*f*theta/d*(1-w*w)
+        pk = x*f*z/d*(1-w*w)
+        direct = (pp*rp+kk*rk+pk*rpk
+            +(np+x*theta*w)*(nk+f*theta*w)*s
+            +x*z*w*(nk+f*theta*w)*rhp
+            +f*z*w*(np+x*theta*w)*rhk+x*f*z*z*w*w*rhpk)
+        assert direct == E+A*w+C*w*w
+        checks += 1
+    Gamma = Q(rng.choice([j for j in range(-10, 11) if j]))
+    P = Gamma/z
+    assert (theta*Gamma+z*P)/d == Gamma
+assert Q(2, 3)*Q(1, 4)-Q(1, 4)**2 == Q(5, 48) < Q(1, 9)
+print('PASS:', checks, 'exact two-clock reply identities; 200 BR identities')
+```
