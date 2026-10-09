@@ -678,22 +678,44 @@ not exclude unsupported bridgers, supported bridgers without future mass,
 extra future owners or additional late-cap observers. It supplies no
 general root-absorption pump or consumer for either source configuration.
 
-Two larger restrictions hold at that same maximum when there are exactly
-two bridgers i,j and two root-only cap owners. If i is a positive first-root
-supplier, its prescribed finite law has no mass strictly between the root
-and j's earliest later maximizing point. The other owners' future laws
-are unrestricted. Reweighting i's root mass, an early finite sublaw and
-the remaining law INCLUDING Never preserves the ordering of every upper
+At ANY produced least-original-Never minimum, owner i has no prescribed
+finite mass strictly after the latest full maximizing clock of the OTHER
+owners. This threshold uses their entire compact maximizing sets, not
+selected testers; i's own later responses do not enlarge it. Reweighting
+an old finite tail beyond a strict cut against literal Never leaves every
+other owner's active response unchanged and preserves its full cap by a
+uniform inactive gap. The changed owner's cap is independent of its own
+law. True total debt is therefore affine on a legal two-sided interval;
+global minimality makes the interval minimizing, and one sign lowers
+original joint Never. This contradicts its selection. The
+[latest-other-response support fence](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md#ra6-global-other-owner-latest-cap-fence-and-a-stronger-sole-cap-corollary)
+has an independent ordinary-mathematics review, not a Lean declaration.
+It needs neither root-absorption maximality nor unique or isolated caps.
+
+At the maximum-root selection, suppose there are exactly two bridgers
+i,j and two root-only cap owners. If i is a positive first-root supplier,
+its prescribed finite law has no mass strictly between the root and j's
+earliest later maximizing point. The other owners' future laws are
+unrestricted. Reweighting i's root mass, an early finite sublaw and the
+remaining law INCLUDING Never preserves the ordering of every upper
 j-response, because each early draw has already absorbed. The full debt
 again has only two affine branches, and a minimum line increases the
-selected root absorption. If j's entire later maximizing family is one
-ISOLATED point, the same argument excludes all i's post-root finite mass.
-Isolation here is a genuine compact-response gap; uniqueness alone is not
-being used. These
-[supported-bridge restrictions](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md#ra5-two-larger-multiple-bridge-patterns-without-a-future-owner-bound)
-have an independent ordinary-mathematics review, not a Lean declaration.
-They do not exclude unsupported bridgers, zero-future bridgers, extra
-later-only owners or the general multiple/nonisolated later-cap families.
+selected root absorption. Combining this
+[early support restriction](notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md#ra5-two-larger-multiple-bridge-patterns-without-a-future-owner-bound)
+with the latest-other-response fence confines i's future finite law to
+the closed band between j's earliest and latest later maximizers.
+
+If j has just ONE later maximizing point, positive future mass of i
+would be an atom at that SAME marked point. The source's retained-mixture
+atom construction makes that point isolated; its final empty tester
+instead has zero prescribed mass. The full compact complement gap then
+excludes i's future mass. Uniqueness alone is not being used to infer
+isolation. Thus if both bridgers are positive first-root suppliers and
+both have future finite mass, EACH has at least TWO DISTINCT later full
+maximizers, and each future law lies in the partner's late-cap band.
+These are independently reviewed source restrictions, not Lean declarations.
+Unsupported bridgers, zero-future bridgers, extra later-only owners and
+genuine multiple-late-cap configurations remain unconsumed.
 
 In configuration 2, some POSITIVE first-root supplier k has strictly
 suboptimal prescribed finite conditional law. Write a_k for its first-root
