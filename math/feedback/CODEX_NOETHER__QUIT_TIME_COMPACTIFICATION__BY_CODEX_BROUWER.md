@@ -542,3 +542,145 @@ of deleting the ACTUAL tester assumption, not of SQ's positive-minimum
 claim or of UE. The derived full-cap upper control is the substantive
 increment; overlapping heads or accumulating no-gap heads remain open.
 No unresolved mathematical objection was found.
+
+## NC.35–36: independent diffuse-word/full-root falsification review
+
+Reviewer: CODEX_BROUWER. Verdict: mathematical PASS for the EXACT
+stated additional source submode and strict necessary budget inequality.
+This is ordinary mathematics, not a Lean certification, an arbitrary-
+table producer, exclusion of the whole two-owner source branch, or Fin4
+closure. No author note or export was edited. The whole author notebook
+SHA256 reviewed is
+`1cc3c6cc9ac29ed187a844ad36c7f0315137babb107dbcf7eac88a72c044bd46`;
+the terminal subsection from `### NC.35–36` through EOF has SHA256
+`0272c166ffe90032476a8f5b74a72dd9f1dda65d8d41b1d3e6ee359c5205cc9b`.
+
+### Restated claim and indispensable extra inputs
+
+At the SAME least-literal-Never true full minimum of the accepted
+source, assume an actual full cap–Nash first root with exactly two
+strictly mixed suppliers i,j. Owner i is final-empty-test-active and
+has NO prescribed finite mass after that root. Assume its positive
+singleton difference Γ_ij and positive joining gap J_ij, and both
+displayed quiet-owner inequalities Γ_kj≤0 and P_k≤0. The conclusion
+is the STRICT inequality
+
+    Γ_ij−∑_k r_k({j})
+        >(1−a_j)D(v)Γ_ij/J_ij.
+
+The honest suffix v is not minimum. Neither a Nash original root,
+exactly two suppliers, final c-activity, zero postroot i mass, nor
+the quiet inequalities is supplied by the general two-bridge source.
+These limitations are correctly explicit. Failure of the strict
+inequality yields either actual debt belowδ or an EXACT augmented
+full minimum with strictly smaller literal joint Never.
+
+### Every old, new, moving and Never response
+
+For a finite realizer, a new j-only word strictly after ALL old finite
+draws leaves every old finite reply unchanged, including the retained
+old final empty test. During that word, any other recipient's response
+is its old final-empty value plus the passive-singleton integral
+η e_k t Γ_kj and a single joining-atom correction. The absolute
+correction is≤2Mη/N, uniformly over all integer dates and all old
+calendar lengths. The before-word and after-word empty tests supply
+the endpoints t=0,1 exactly. Thus both the upper bound and the lower
+attainment witnesses give NC.35, not only a selected old cap bound.
+
+Literal Never gains η e_k r_k({j}), but the finite test after the
+word also has the strictly positive residual singleton term
+(n_j−η)e_k s_k. Never therefore cannot be an omitted new maximum.
+For j, its whole prescribed law is removed by unilateral replacement,
+so its cap is unchanged. Every prescribed payoff gain is EXACTLY
+η h_j r_k({j}), even at finite N. Keeping one common final atom
+instead would have a nonvanishing pair-premium spike and is not
+an alternative proof.
+
+In the honest suffix, n_i^v=1 makes h_j=e. C-activity of the FULL
+minimum passes through its literal original-root factorization to
+θ_i=0. Hence the i-cap gain is ε e Γ_ij. Each quiet Γ_kj≤0 keeps
+its FULL limiting cap fixed without assumptions about its old
+maximizing family. The stated D(w), b(w) and ν_w formulas follow.
+Actual suffix i finite mass only tends to0; uniform product coupling
+and the uniform tester error cover that case as the author states.
+
+### Pair odds, both quiet inequalities, and total funding
+
+Directly dividing active Quit-minus-Continue by the positive partner
+Continue mass gives b_i=s_i+y_j J_ij and
+b_j=s_j+y_i J_ji. Increasing only y_j by ε e Γ_ij/J_ij makes both
+active gaps0 against b(w). For a quiet k the COMPLETE divided gap is
+
+    s_k−b_k+y_i[r_k({k,i})−r_k({i})]
+        +y_j[r_k({k,j})−r_k({j})]
+        +y_i y_j[r_k({k,i,j})−r_k({i,j})].
+
+Its increment is precisely (ε e Γ_ij/J_ij)P_k. The original
+cap–Nash inequality and P_k≤0 therefore prove both quiet gaps≤0,
+including equality boundaries. The simultaneous triple response is
+included; no quiet-entry branch is suppressed. No sign of J_ji is
+needed. The finite positive new odds give the stated nonsure c_x.
+
+The exact playerwise cap–Nash debt identity scales the ACTUAL tail
+D(w), notδ. Its total then gives the author's rational expression
+for D(T_x(w))−δ, with coefficient F exactly as displayed. The
+original δ=c_aD(v) uses its separately assumed full cap–Nash root.
+
+### The equality arm is an actual augmented-carrier contradiction
+
+Fix ε strictly between0 and n_j^v before taking source and word
+limits. Eventually that same ε is legal at every finite index.
+All prescribed payoffs, FULL caps and Never masses converge jointly.
+Prefixing the FIXED limiting root x is a literal continuous operation;
+it need not be exactly Nash at any finite index. For F<0, a fixed
+strict debt improvement survives small source and word errors.
+
+For F=0, the limit has debt EXACTLYδ. The same actual profile sequence
+has Never limit c_xν_v(1−ε/n_j^v), strictly below c_aν_v=ν*.
+Frozen Section18 defines H as the closure of all actual independent
+(U,B,ν) triples and selects least ν over its ENTIRE δ-minimum fibre.
+Therefore this triple is forbidden. This argument does not infer a
+minimum from finite-index errors, replace a chart seam by its closure,
+or attach unrelated ν to a semantic pair.
+
+### Bounded named-pair-core overlap verdict
+
+The inspected exact declarations are
+`exists_uniformEquilibriumPayoff_of_signed_pair_core_weakSameSign` and
+`exists_uniformEquilibriumPayoff_of_empty_or_signed_pair_core_weakSameSign`
+in `UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClosure.lean`.
+Their actual input is empty premium core OR an EXACT two-owner premium
+core and nonnegative product of the two joining gaps. The core is a
+reward-table trap census, not an actual root support. Its literal
+pair-premium consequence was checked in `quittingPremiumCore_pair_reward_gt_singleton`
+in `UniformEquilibrium/Quitting/Classification/QuittingPremiumCorePair.lean`.
+
+NC.35–36 proves neither exact core={i,j} nor J_ji≥0. The quiet
+P_k is a weighted sum of TWO joining gaps and does not, by itself,
+exclude positive participant premiums at other coalitions. Thus the
+named raw same-sign pair-core producer does NOT automatically apply
+from the displayed additional hypotheses. Where its exact core and
+reverse-gap hypotheses separately hold, that portion is already solved
+and gives no new source scope. This is a bounded comparison, not a
+proof that the candidate has nonempty coverage beyond the union of
+all existing raw producers, or that the remaining submode occurs.
+
+Other exact sources re-inspected under their stated imports:
+`quittingPairJoiningGap` and
+`quittingPairInactiveGapNumerator_eq_mul_endpointDifference` in
+`UniformEquilibrium/Quitting/Root/PairInactiveGapNumerator.lean`;
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash`
+in `UniformEquilibrium/Quitting/Root/CapNashRootStack.lean`;
+`quittingTerminalSemanticPair_rootThenContinuation` and
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`.
+
+Additional falsification checks used exact rational arithmetic: thirty
+actual four-law finite-calendar tables, every finite date through and
+after the new word plus Never, verified the NC.35 full-cap error and
+all payoff gains; one hundred rational cases verified active odds,
+the complete quiet gap increment, survival and scalar budget identities.
+These checks support, but do not replace, the foregoing proof. No
+Lean build or implementation ran. No unresolved mathematical objection
+was found in this bounded result; the larger quiet-entry/funded case
+remains OPEN.
