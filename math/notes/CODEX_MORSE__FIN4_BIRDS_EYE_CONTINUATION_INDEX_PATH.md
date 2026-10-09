@@ -120,6 +120,13 @@ a full equilibrium. Thus strict coordinate descent can halt at positive
 debt; a coupled/global selection theorem is still needed. Flat-law escape
 and nonconvex joint methods are NOT refuted. The table is solved and no
 counterexample class is excluded by this method falsifier.
+The independent negative lane's PC test next attempts to force a
+correlated mixture of two disjoint pair exits. Its complete rational
+table is retired at the early unrestricted-root test: exact scalar
+crossings produce a proper-three-player geometric full Nash profile,
+with every active and quiet cap verified for the SAME values. No barrier
+fit or constant tuning follows. Only this candidate/forced-pair implication
+is discarded, not a general two-team architecture or a no-UE source class.
 General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/

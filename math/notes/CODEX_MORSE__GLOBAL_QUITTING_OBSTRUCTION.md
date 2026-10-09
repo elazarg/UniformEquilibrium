@@ -94,6 +94,12 @@ screen. Thus inner repair plus whole-coordinate minimization does not itself
 force zero debt. Flat-coordinate escape, coupled/nonlocal selectors and
 the full Fin4 question remain open. This is a method falsifier, not an
 unrestricted negative table or a source-class contraction.
+The subsequent PC test leaves coordinate descent entirely: a rational
+two-team table was intended to force a correlated mixture of disjoint
+pair exits. It is discarded at the FIRST complete-law test, by an exact
+proper-three-player stationary full Nash profile. The literal payoff
+target, every active cap and the quiet cap use the same two scalar roots.
+No polynomial fit, control tuning or broader pair-family claim is made.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
@@ -22638,4 +22644,142 @@ for t in (F(0),F(1,4),F(1,2),F(1)):
         debts.append(max(values)-u[i])
     assert debts==[g*(1-t*t),g*(1-t*t),0,g*(1-t*t)]
 print('CC whole-host ledger, coordinate optima and coupled descent: exact PASS')
+```
+
+## PC. Early complete-law retirement of a forced-pair-correlation candidate
+
+Status: COMPLETE ORDINARY CANDIDATE RETIREMENT, not an export or a new UE
+class claim. This is a DIFFERENT actual negative architecture, not another
+coordinate-descent example or a revival of NI/PT/SG. The proposed route
+was to force every low-debt absorption law into a nonindependent mixture
+of the two disjoint pair coalitions. Its first implication fails on the
+tested table: a three-active geometric profile is full Nash and puts
+positive mass on singleton and cross-pair absorption. I discard this
+candidate without fitting a full-domain polynomial or tuning its constants.
+
+### Complete table
+
+I={0,1,2,3}, teams A={0,1}, B={2,3}. For all nonempty S define all60 cells:
+
+* Singleton S={j}: owner j gets1, its teammate gets−1, each opposite-team
+  player gets3.
+* Same-team pair S=A or B: participants get1, outsiders get−1.
+* Cross-team pair: participants get−2, outsiders get1.
+* Triple: the two members of its contained full team get−1; its singleton
+  other-team participant gets0; the omitted player gets1.
+* Grand coalition: everyone gets0.
+
+All own rewards are1 and all entries lie in[−2,3]. Every nontrivial pure
+coalition has an explicit joining/leaving defect, but that observation
+is not used as a no-sure-punishment gate. Pure roots are not a substitute
+for complete stationary or behavioral replies. The singleton comparison
+matrix has within-team entry−2 and cross-team entry2; its uniform simplex
+image is1/2>0, so the first ambient positive-flow screen does not retire
+this table.
+
+### Exact three-active stationary witness
+
+Use product rates q=(x,x,y,0), repeating them independently at every
+live date. Let
+
+    f(x)=−4−6x+16x²−5x³.
+
+Exact rational signs f(9/10)<0<f(91/100) give one root
+x*∈(9/10,91/100). Fix this root BEFORE any accuracy request. For that
+same x*, choose y*∈(45/100,46/100) by the scalar equation
+
+    2x+(x²−3x−2)y+(4x−x²−3)y²=0.                 (PC-A)
+
+The polynomial is positive at y=45/100 and negative at y=46/100 for
+EVERY x in the stated box. For example its constant term lies in
+[1.8,1.82], its linear coefficient in[−3.9019,−3.89], and its quadratic
+coefficient in[−.21,−.1881]. Substituting the unfavorable endpoints gives
+strict signs, so this is an actual IVT producer, not a numerical solution.
+
+Write Q_i for one-row immediate-Quit payoff, R_i for the one-row passive
+opponent-absorption contribution, and h_i for opponent survival. Exact
+coalition enumeration gives for i=0,1
+
+    Q_i=1−3y+xy,
+    h_i=(1−x)(1−y),
+    R_i=−x+3y−xy.
+
+Equation(PC-A) is EXACTLY Q_i(1−h_i)=R_i. For i=2,
+
+    Q_2=(1−x)(1−5x), h_2=(1−x)², R_2=6x−7x²,
+    Q_2(1−h_2)−R_2=x f(x)=0.                     (PC-B)
+
+Every active player's full geometric stopping cap is therefore
+max(Q_i,R_i/(1−h_i))=Q_i, and its delivered terminal value is that SAME
+Q_i. This includes literal Never, not merely the stationary Quit gap.
+The mixed active values can be below own1; immediate opponent mixing
+makes the solo outcome unavailable as a guaranteed cash-out.
+
+For the quiet owner3,
+
+    Q_3=(1−x)(1−5x+2xy)<0,
+    h_3=(1−x)²(1−y),
+    R_3=6x(1−x)(1−y)−(1−x)²y−x²(1−y)
+          +2x(1−x)y+x²y.
+
+Across the same box, R_3≥47957/200000>0. Also
+1−5x+2xy≤1−5(9/10)+2(91/100)(46/100)<0.
+Hence the delivered quiet value U_3=R_3/(1−h_3)>0 strictly exceeds Q_3;
+its COMPLETE cap is U_3. All h_i<1, so every finite deadline has value
+R_i/(1−h_i)+h_i^n[Q_i−R_i/(1−h_i)], and Never is the limiting value.
+Affineness in a complete stopping law covers every behavioral replacement.
+
+Thus the literal geometric profile at (x*,x*,y*,0) is exact terminal
+Nash with ONE fixed target
+
+    (1−3y*+x*y*, 1−3y*+x*y*, (1−x*)(1−5x*),
+      R_3(x*,y*)/[1−(1−x*)²(1−y*)]).
+
+The opponent products contract, so the existing stationary same-profile
+compiler gives the fixed unrestricted uniform target. The exact named
+consumer previously inspected is
+`terminalNash_and_sameProfileUniform_of_stationaryBoundary`, in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientSameProfile.lean`,
+using the literal stationary boundary and full-cap endpoint definitions.
+No sure-owner punishment completion or min-source tail is required.
+
+This retires ONLY the displayed candidate and its proposed forced-pair
+implication. It does not exclude every two-team game, establish a paired
+raw-family coverage theorem, or restrict the actual no-UE class. The next
+negative attempt must supply an invariant valid on ALL coalitions and full
+replies; appealing to coordination of the two highlighted pair exits is
+insufficient here.
+
+```python
+# PC EXACT CHECKER: rational producer box and same-box quiet inequality
+from fractions import Fraction as F
+from itertools import combinations
+I=range(4); A=frozenset({0,1}); B=frozenset({2,3})
+def reward(S,i):
+    if len(S)==1:
+        j=next(iter(S))
+        return F(1) if i==j else F(-1) if (i in A)==(j in A) else F(3)
+    if len(S)==2:
+        same=S==A or S==B
+        return F(1 if i in S else -1) if same else F(-2 if i in S else 1)
+    if len(S)==3:
+        full=A if A<=S else B
+        return F(-1) if i in full else F(0) if i in S else F(1)
+    return F(0)
+coalitions=[frozenset(S) for n in range(1,5) for S in combinations(I,n)]
+assert len(coalitions)*4==60
+assert [reward(frozenset({i}),i) for i in I]==[1,1,1,1]
+f=lambda x:-4-6*x+16*x*x-5*x*x*x
+lo,hi=F(9,10),F(91,100)
+assert f(lo)<0<f(hi)
+ylo,yhi=F(45,100),F(46,100)
+aLo,aHi=F(-21,100),F(-1881,10000)
+bLo,bHi=F(-39019,10000),F(-389,100)
+assert 2*lo+bLo*ylo+aLo*ylo*ylo>0
+assert 2*hi+bHi*yhi+aHi*yhi*yhi<0
+lower=6*lo*(1-hi)*(1-yhi)-(1-lo)**2*yhi-hi**2*(1-ylo) \
+      +2*lo*(1-hi)*ylo+lo**2*ylo
+assert lower==F(47957,200000)>0
+assert 1-5*lo+2*hi*yhi<0
+print('PC complete stationary root producer and quiet box: exact PASS')
 ```
