@@ -129,7 +129,8 @@ PASS:
 least original Never followed by maximal first-root absorption removes
 the resultant requirement and also prices a zero-hazard diffuse-word
 extension. Full sparse/II closure and total coupled funding remain open.
-DA below is a new COMPLETE ORDINARY, UNREVIEWED source-class exclusion:
+DA below is a COMPLETE ORDINARY source-class exclusion with an independent
+Morse soundness PASS:
 at that SAME least-Never/maximal-root source, if exactly one owner has
 finite mass after the root, BOTH positive first-root suppliers must be
 LATER-ONLY. Varying a ROOT-ONLY supplier's root rate jointly with the
@@ -17480,6 +17481,19 @@ finite-word bound. See
 [the recorded CZ review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
 This supersedes the frozen proof's historical unreviewed status. Proof
 bytes are unchanged; its original boundary/scope caveats remain exact.
+
+
+## DA independent review disposition
+
+Morse independently checked frozen DA1–DA5 and gave PASS with no unresolved
+objection: signed/tied entire upper envelopes, both k response classes,
+the original moving-test/Never realization, the true minimum line and
+return to the SAME root-max set were all checked. See
+[the recorded DA review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
+This supersedes the historical unreviewed status inside the unchanged
+proof below. The new necessity is genuinely BOTH positive root suppliers
+later-only, rather than CB's at least one. No full case(II) consumer,
+arbitrary-table strategy producer, export or Lean seal follows.
 
 
 ## DA: a sole future owner forces both root suppliers to be later-only
