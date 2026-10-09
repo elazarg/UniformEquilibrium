@@ -725,6 +725,27 @@ at every realizing index, rather than identifying escaped clocks with
 Never. This simplifies the coupled-law funding question but consumes
 neither the sparse mode nor either complete source configuration.
 
+A fresh separated-gap source can additionally avoid a finite list of
+nonzero two-recipient-row polynomial identities. Avoidance is made BEFORE
+regular recipient scaling and before selecting any minimum; row homogeneity
+preserves it through that scaling. At this stronger source, in the
+one-future mode with proper geometric hazard 0<z<1, suppose one later-only
+first-root supplier has a strictly FIRST-active tail response. Then either
+the sole bridger has an additional FIRST/END tail tie, or the other root
+supplier is later-only and has that additional tie. Otherwise a legal
+coupled change of one supplier's root mass and the future owner's whole law
+gives a two-dimensional true-debt maximum of two affine functions. Global
+minimality and least original Never force a minimum line; the common debt
+vector then forces one of the avoided two-row identities. This
+[coupled-source exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cx-a-coupled-source-minimum-box-forces-a-two-row-resultant)
+has a focused independent mathematical review, not a Lean declaration.
+An inactive tail tie for a root-only supplier is allowed. The new forced
+ties are constraints on the response laws, not exceptional reward-table
+equalities. The diffuse and sure-first hazard boundaries, absence of a
+strict-FIRST later-only supplier, and zero or multiple future owners remain
+unconsumed. No earlier selected source is transported through the fresh
+reward choice, and neither complete source configuration is eliminated.
+
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date
 response value:
