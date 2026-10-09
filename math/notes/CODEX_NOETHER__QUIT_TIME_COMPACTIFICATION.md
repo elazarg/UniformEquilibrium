@@ -138,8 +138,16 @@ root/tail clipping, so quiet entry need not be guessed or suppressed. It
 works with 2/3/4 suppliers and partial bridges if a chosen owner is BOTH
 c-active and root-bridging and has an admissible nonzero joining slope.
 Those intersection/slope conditions are not supplied in general. The exact
-debt/ν success test below is a live consumer attempt, not a proved full source
-contradiction; NC.35–36's independent PASS does not certify NC.37.
+debt/ν account below is not a proved full source contradiction;
+NC.35–36's independent PASS does not certify NC.37.
+
+NC.38 now completes the actual positive-slope ray test: its EXACT priced
+ledger is convex piecewise linear, initially exactly linear. The all-law
+floor and least Never force a strictly positive initial coefficient, hence
+the operation loses at EVERY amplitude. This is a complete mechanism
+boundary, not an exclusion of its source geometry. The next operation must
+curve several root odds/laws or change an old response set; increasing ε
+or choosing a different exact-root selector on this same ray is not a repair.
 
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
@@ -25952,3 +25960,82 @@ while respecting the true all-law floor. The supplied cap-minus-singleton
 output margin is kept, but has not been used to invent a sign for P_i or
 for the honest tail margins. No conditional pricing formula is counted as
 a completed consumer of either full canonical alternative.
+
+### NC.38. The entire paid ray loses: exact initial slope, then convexity
+
+The finite-amplitude test in NC.37 is settled in its positive-P_i arm.
+Retain ALL its additional geometry, original signed gaps, cap premiums and
+root defects. This is ordinary mathematics not independently reviewed.
+It is not a table counterexample, proof that the submode occurs, or exclusion
+of that submode. It identifies precisely why a larger ε on this ray cannot
+fund its initial loss.
+
+Write α=eΓ/P_i>0, so t=αε. Each complete diffuse cap change
+
+    Δb_k(ε)=e_k[ε(Γ_kj)⁺−θ_k]⁺
+
+is convex piecewise linear. The exact combined root/later price is
+
+    E_k(ε)=max(ℓ_k+αεP_k,
+                 (1+y_k)Δb_k(ε)−y_k(ℓ_k+αεP_k))
+                    −φ_(y_k)(ℓ_k).
+
+Its first branch is affine and second branch is convex; y_k≥0 makes
+1+y_k>0. Their maximum is convex piecewise linear. Consequently the
+EXACT L(ε) in NC.37 is convex piecewise linear on [0,n_j), with L(0)=0.
+This uses the complete finite-response supremum already computed in NC.35,
+not a selected old tester's affine value. There are finitely many kink
+locations despite possibly infinite old maximizing sets: every old cap
+enters as its ENTIRE scalar b_k and the new word has the proved uniform
+two-endpoint cap formula.
+
+Its exact initial coefficient can be read without an asymptotic oracle.
+For k∉{i,j} set
+
+    β_k=e_k(Γ_kj)⁺ if θ_k=0,       β_k=0 if θ_k>0.
+
+For some positive ε₀, all those cap changes equal β_k ε on [0,ε₀].
+If ℓ_k≠0, shrink ε₀ so its new divided gap keeps the old sign; ℓ_k=0
+already has two linear branches from0. Hence E_k(ε)=ε A_k EXACTLY there,
+where
+
+    A_k=αP_k                         if ℓ_k>0,
+    A_k=(1+y_k)β_k−y_kαP_k           if ℓ_k<0,
+    A_k=max(αP_k,(1+y_k)β_k−y_kαP_k) if ℓ_k=0.
+
+These are, respectively, root-only, later-only, and root/later co-max
+pricing, including positive prescribed root rates in every case. Thus
+
+    L(ε)=ε λ₀  on [0,ε₀],
+    λ₀=e(Γ−n_iS_j)+α(−ℓ_j)⁺+Σ_(k∉{i,j})A_k
+                         −(δ/c_a)(1−a_j)α.    (NC.38)
+
+The canonical global floor forces λ₀≥0. Least literal Never strengthens
+this to λ₀>0: if λ₀=0, the preceding equality produces actual augmented
+debt EXACTLYδ for EVERY sufficiently small positive ε, whereas NC.37c
+gives strictly smaller FULL ν. This is not an inference from a zero
+first-order term. Its exact flat interval is supplied by the finite
+piecewise-linear formula and enters the SAME augmented carrier by the
+actual finite source/word/prefix sequence.
+
+Convexity and L(0)=0 now give L(ε)≥λ₀ε>0 for ALL ε∈(0,n_j).
+The denominator in NC.37b is positive, so
+
+    D(T_x(w(ε)))>δ for EVERY positive amplitude.
+
+The new root need not be Nash, every new cap branch is included, and no
+profile lottery or minimum-tail substitution was used. This is a GLOBAL
+source/least-Never consequence, not an experiment at a solved local fixture.
+It does not prohibit a DIFFERENT root path, changes of multiple odds, or
+changes of original finite responses: those need not retain this convex
+one-ray ledger. Nor does it derive the missing c-active/bridge intersection
+or slope sign from the canonical source.
+
+The next genuinely coupled candidate must leave this ray. One concrete
+option is two changed root odds together with two private late contributors:
+the root coalition terms and survival then have mixed products rather than
+the present affine gap dependence, so the above convexity argument does not
+apply automatically. Such an operation still must price EVERY old full cap,
+new word response and original root defect, and prove actual debt<δ or a
+minimum with smaller full ν. No favorable cross-gain or branch continuation
+is currently proved.
