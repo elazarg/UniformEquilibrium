@@ -124,10 +124,20 @@ and common minimum debts. It does not consume the endpoint/tie survivors,
 the zero-future mode or general alternative(II). CY below separately
 excludes CX's strict-END-i submode on the ORIGINAL row-generic source,
 without fresh resultant avoidance; CY also has an independent Morse PASS.
-CZ below is a new ordinary/unreviewed SAME-table selected-source variant:
+CZ below is a SAME-table selected-source variant with an independent Morse
+PASS:
 least original Never followed by maximal first-root absorption removes
 the resultant requirement and also prices a zero-hazard diffuse-word
 extension. Full sparse/II closure and total coupled funding remain open.
+DA below is a new COMPLETE ORDINARY, UNREVIEWED source-class exclusion:
+at that SAME least-Never/maximal-root source, if exactly one owner has
+finite mass after the root, BOTH positive first-root suppliers must be
+LATER-ONLY. Varying a ROOT-ONLY supplier's root rate jointly with the
+future owner's entire finite/Never amplitude gives a genuine two-affine
+minimum line. It uses the old finite conditional and all its testers,
+so has no geometric-hazard, strict-endpoint or endpoint-tie exception.
+The one-future mode with two later-only suppliers, the zero-future mode,
+multiple future owners and general alternatives(I)/(II) remain OPEN.
 
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
@@ -17460,3 +17470,341 @@ cap-domination/endpoint declarations in CW, and RA1's actual augmented
 prefix selection under `TerminalSemanticPair.lean`'s imports. The extra
 root-maximizer seam and actual zero-hazard finite-word arm are ordinary
 mathematics pending one short independent check; no Lean/export claim.
+
+
+## CZ independent review disposition
+
+Morse independently gave PASS to the bounded CZ1–CZ4 variant, including
+the same maximizing-set incidence and the uniform ALL-cap zero-hazard
+finite-word bound. See
+[the recorded CZ review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
+This supersedes the frozen proof's historical unreviewed status. Proof
+bytes are unchanged; its original boundary/scope caveats remain exact.
+
+
+## DA: a sole future owner forces both root suppliers to be later-only
+
+Status: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED. This is an actual
+selected-source submode exclusion, not a generic cap verifier, a new
+geometric compression, or a full case(II) consumer. It reuses RA1's
+compact least-ORIGINAL-Never/maximal-root selection. Unlike CZ it has
+NO conditional-hazard or active-endpoint-tie hypothesis.
+
+### DA1. Exact selected source and conclusion
+
+Fix the SAME positive-own/row-generic table r supplied by the accepted
+[least-Never source](../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md),
+with true full summed-debt minimum δ>0, common positive individual
+minimum debts, and original augmented carrier H of payoff/cap/literal-
+Never triples. Let ν₀>0 be least Never among ALL full minima. Use RA1
+in [Morse's note](CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md) to select
+an attained maximum A₀ of root absorption over
+
+    Z={(a,w): a∈[0,1]⁴, w=(u,b,ξ)∈H,
+                D(T_a(u,b))=δ, c(a)ξ=ν₀},
+    c(a)=∏_h(1−a_h),   A(a)=1−c(a).
+
+RA1's actual-prefix invariance, positive-root eligibility and universal
+marked-minimum argument permit the accepted source alternatives at this
+SAME selection. No cap-Nash root or minimum suffix is assumed.
+
+Suppose its alternative(II) has exactly ONE owner k with positive
+prescribed finite mass after root0. Reviewed CT/CU give the precise
+pattern: sole bridger i is PureNever; k≠i has root rate0 and finite
+mass f₀∈(0,1); the other two owners p,q have positive nonsure root
+rates, all their finite mass is at root0, and at least one is LATER-ONLY
+by CB. k is ROOT-ONLY or LATER-ONLY, never an additional bridger.
+
+Claim: BOTH p and q are LATER-ONLY. Equivalently, a ROOT-ONLY positive
+first-root supplier is impossible in this one-future submode. The
+entire old finite conditional of k is retained in the proof, whatever
+its atoms, diffuse parts, maximizing calendars, or geometric hazard.
+Neither strict FIRST/END labels nor uniqueness/isolation of later
+maximizers are required. No assertion excludes zero future owners or
+the one-future survivor with two later-only suppliers.
+
+### DA2. Legal independent old-calendar family and ENTIRE upper caps
+
+Suppose p is ROOT-ONLY. Write a=a_q∈(0,1), b₀=a_p∈(0,1), and let F
+be k's ENTIRE old conditional on finite clocks strictly after0. Its
+old mass is f₀; i remains Never. Independently vary ONLY p and k:
+
+    q_p=b δ₀+(1−b)δ_Never,
+    q_k=f F+(1−f)δ_Never,
+    x=(1−b)f.
+
+q keeps its old root/Never law and i stays PureNever. The original
+point has 0<b₀<1 and 0<x₀=(1−b₀)f₀<1−b₀. Thus b,x have a genuine
+two-sided open box with f=x/(1−b)∈(0,1). Every point is a product of
+FOUR private marginal laws; there is no common random choice of words.
+
+Let s_h=r_h({h}). For h≠k set Γ_h=r_h({k})−s_h and
+P_h=r_h({h,k})−s_h. For EVERY old finite tester t>0 define
+
+    W_h(t)=Γ_h F({finite u<t})+P_h F({t}),
+    L_h=sup_(t∈T, t>0) W_h(t).
+
+The isolated root has been removed from the compact finite test set,
+so the upper set is compact and the supremum exists. L_h may be
+negative or zero. It retains ALL tied, moving, empty and final tests;
+no selected deadline substitutes for this supremum.
+
+Let Q_h(b) be h's root-Quit payoff, A_h(b) the passive contribution
+from opponent root exits, and H_h(b) the probability all opponents
+continue at root. The root rates are (a_p,a_q,a_i,a_k)=(b,a,0,0).
+For h≠k and EVERY finite t>0 the exact response formula is
+
+    V_h(t)=A_h(b)+H_h(b)[s_h+f W_h(t)].       (DA.1)
+
+Because H_h,f>0, taking the ENTIRE upper supremum preserves its
+ordering even when L_h is signed or attained by multiple calendars.
+For h=i,q, H_h(b)=c_h(1−b), with c_i=1−a and c_q=1. Hence
+
+    E_h(b,x)=A_h(b)+c_h(1−b)s_h+c_h x L_h    (h=i,q)  (DA.2)
+
+is affine in b,x, and Q_h(b) is affine in b. Source q is LATER-ONLY
+(p is ROOT-ONLY and CB supplies a later-only supplier), so its strict
+root/ENTIRE-upper gap persists on a small box and B_q=E_q throughout.
+Source i is the sole bridger, so
+
+    B_i=max(Q_i(b),E_i(b,x)).                (DA.3)
+
+For p its root cap Q_p=(1−a)s_p+a r_p({p,q}) is CONSTANT, independent
+of its own b and k's f. Its complete upper cap is
+
+    a r_p({q})+(1−a)[s_p+f L_p].
+
+ROOT-ONLY gives a strict gap at the original point. Continuity of
+f=x/(1−b) keeps the ENTIRE upper envelope below Q_p on a small box;
+therefore B_p=Q_p exactly. No affine claim is made for p's inactive
+upper envelope in b,x.
+
+Own k's upper cap is A_k(b)+H_k(b)s_k, since no opponent has finite
+mass after root0. Its root cap Q_k(b) is affine too. k is a strict
+nonbridger, so whichever of ROOT-ONLY/LATER-ONLY holds originally
+retains ONE affine full cap on a small box. Both response classes
+are covered, not only an END-active k.
+
+Literal Never is priced separately. For every h, the final finite
+tester adds s_h times the positive opponent-Never product to its
+Never response. Since all Never masses stay positive and all s_h>0,
+Never is strictly dominated on the box. Formula(DA.1) includes that
+finite final tester; it is not identified with literal Never.
+
+For EVERY recipient h independence gives
+
+    U_h=b r_h({p})
+       +a[(1−b)r_h({q})+b(r_h({p,q})−r_h({p}))]
+       +(1−a)x r_h({k}),                    (DA.4)
+    ν(b,x)=(1−a)(1−b−x).                   (DA.5)
+
+Thus every U is affine, every non-i full B is affine, and TRUE total
+debt has EXACTLY the form
+
+    D(b,x)=max(F₀(b,x),F₁(b,x))              (DA.6)
+
+for TWO affine functions. Endpoint ties inside an upper envelope do
+not create extra hinges: F and its ENTIRE W_h ordering are fixed,
+and the positive multiplier H_h f scales all upper testers equally.
+
+### DA3. Original finite realization and honest return to Z
+
+All these are ORIGINAL marked-law variations. No new clock, empty
+gap, late finite-to-Never identification, or geometric replacement
+is introduced. At fixed b,f the root/Never pieces of p have bounded
+positive relative factors b/b₀ and (1−b)/(1−b₀); k's old finite/Never
+pieces have factors f/f₀ and (1−f)/(1−f₀). They remain positive and
+uniformly bounded on a common small box. Root0 is the old retained
+positive mixture atom and Never is the separate retained positive
+interval. These are legal two-sided OLD-chart densities.
+
+More explicitly, take the SAME normalized finite realizers of this
+selected full minimum. As in accepted source Section15 and CW3,
+censor only vanishing finite mass of i, root mass of k, and post-root
+mass of p,q to Never, and replace the convergent root rates by their
+limits. Their product-TV errors vanish, preserving U, ALL caps and
+literal ν. k's remaining finite mass tends to f₀>0; normalize its
+entire finite conditional to F_N, on the SAME old post-root occupied
+and empty calendar. Use exact rates b,a and k's exact mass f with
+conditional F_N at every finite index. The four marginals are actual
+independent stopping laws. The old root atom remains occupied because
+a,b>0; no pre-first-suffix test is silently inserted.
+
+Accepted source Sections6–7 give unchanged original first-coalition
+and EVERY moving-response kernel convergence with these bounded
+densities. Removing the isolated root gives the compact upper tester
+set, so upper suprema converge as well, not merely clipped full caps.
+All formulas(DA.1)–(DA.6) therefore are the limits of the actual FULL
+payoff/cap coordinates for every fixed box point. The old final c_N,
+its duplicate finite tester, and literal Never are all included; zero
+mass at c is retained. In particular every displayed triple lies in
+the SAME H and has D≥δ by the ORIGINAL full floor.
+
+For the final root-max contradiction, condition each finite realizer
+on all four owners continuing at root0 and shift its post-root dates
+down by one. Its honest suffix has only k's law f F_N plus literal
+Never1−f; the other three suffix laws are Never. Extract its bounded
+augmented triple w∈H. Its literal coordinate is EXACTLY ξ=1−f at every
+index and in the limit. The exact fixed-root prefix formula and its
+continuity recover precisely the family point above. Consequently
+
+    (root(b,a,0,0),w)∈Z whenever D(b,x)=δ
+                              and ν(b,x)=ν₀.        (DA.7)
+
+This is the SAME actual root-max set, not a favorable unrelated
+minimum suffix, a cap-Nash root fibre, or an arbitrary abstract
+compact-law carrier. The suffix itself need not minimize any debt.
+
+### DA4. True minimum line contradicts least ν or maximal A
+
+At the original interior point both i branches equal its full cap,
+so F₀=F₁=δ. If their affine difference is identically0, TRUE D is
+affine with an interior minimum and is constant on the box. One sign
+of b or x lowers(DA.5), contradicting least original ν₀.
+
+Otherwise take a nonzero direction in the kernel of the linear part
+of F₀−F₁. Along its two-sided line through the original point, the
+two branches coincide. TRUE D is affine there; the actual global
+floor and interior equality force it to be IDENTICALLY δ on a short
+interval. These are genuine full minima, not a zero first derivative
+or a selected-response ledger.
+
+Least ORIGINAL ν₀ forces db+dx=0, since otherwise one sign decreases
+(DA.5). A nonzero line direction then has db≠0. Choose its legal sign
+with db>0. The literal ν stays EXACTLY ν₀ while root absorption is
+
+    A(b)=1−(1−a)(1−b),   dA=(1−a)db>0.      (DA.8)
+
+By(DA.7) the new honest root/suffix pair lies in the SAME maximizing
+set Z, contradicting attained A₀. This excludes p ROOT-ONLY. Interchange
+p,q to obtain the claimed two LATER-ONLY suppliers.
+
+Common individual debts, positive absorbing gap and reward genericity
+are not used in this final two-coordinate contradiction; they belong
+to the accepted source and earlier CT/CU/CB reductions. No fresh table
+or alteration of the selected table is needed.
+
+### DA5. Scope, exact diagnostic and concrete next question
+
+The actual new exclusion uses a ROOT-ONLY supplier DISTINCT from the
+sole future owner. CS/CT instead constrain the root rate of that future
+owner; CU excludes the future owner being i. RA2 varies a SUPPORTED
+BRIDGER that itself has future mass, whereas here i is PureNever and
+the varied positive supplier has only root finite mass. CZ fixes a
+strict-FIRST supplier's own cap and changes conditional hazard; DA
+fixes a ROOT-ONLY supplier's cap and retains the whole conditional.
+Thus DA covers signed upper coefficients, arbitrary endpoint ties,
+proper, sure-first and genuinely diffuse old future laws. It is not
+an assertion that the general source's earliest root can be pumped.
+
+Primary inputs inspected: accepted source Sections6–7,9,15,18;
+RA1–RA4 and the independently reviewed CT/CU/CB; the definition
+`quittingTerminalSemanticCarrier` and the exact fixed-root invariance
+`quittingTerminalSemanticPrefix_mem_carrier`
+in `UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean` under
+its imports. The affine full-cap statement is proved above in ordinary
+mathematics; no new Lean declaration/build/export is claimed.
+
+The following exact standard-library diagnostic checks ALL finite and
+Never response formulas, independent product realization, signed upper
+coefficients and coordinate affinity on finite calendars. It does NOT
+pretend its arbitrary test tables are actual positive full minima.
+
+```python
+from fractions import Fraction as Q
+from itertools import product
+
+nv=6
+a=Q(2,5)
+points=[(Q(1,4),Q(1,5)),(Q(2,5),Q(1,4))]
+points.append(tuple((points[0][j]+points[1][j])/2 for j in range(2)))
+conds=[{1:Q(1,3),3:Q(1,6),4:Q(1,2)},{1:Q(1)}]
+
+def expect(R,laws,h):
+    ans=Q(0)
+    for ts in product(*(tuple(v) for v in laws)):
+        prob=Q(1)
+        for j,t in enumerate(ts): prob*=laws[j][t]
+        first=min(ts)
+        if first<nv:
+            S=sum(1<<j for j,t in enumerate(ts) if t==first)
+            ans+=prob*R[h][S]
+    return ans
+
+negative=ties=checks=0
+for seed in range(25):
+    R=[[Q(0)]+[Q(((11*seed+7*h+5*S+seed*S*S)%31)-15)
+                    for S in range(1,16)] for h in range(4)]
+    for h in range(4): R[h][1<<h]=Q(h+2)
+    if seed==0: R[0][8]=R[0][9]=-Q(3)
+    for F in conds:
+        vals=[]
+        for b,x in points:
+            f=x/(1-b)
+            laws=[{nv:Q(1)},{0:b,nv:1-b},{0:a,nv:1-a},
+                  {**{t:f*w for t,w in F.items()},nv:1-f}]
+            U=[expect(R,laws,h) for h in range(4)]
+            branch=[]
+            for h in range(4):
+                pure=[]
+                for t in range(nv+1):
+                    dev=list(laws); dev[h]={t:Q(1)}
+                    pure.append(expect(R,dev,h))
+                root=pure[0]
+                Ah=Hh=Q(0)
+                # Actual root outcomes of the OTHER players only.
+                for ep,eq in product((0,1),repeat=2):
+                    if (h==1 and ep) or (h==2 and eq): continue
+                    prob=(b if ep else (1 if h==1 else 1-b))
+                    prob*=a if eq else (1 if h==2 else 1-a)
+                    S=(2 if ep else 0)+(4 if eq else 0)
+                    if S: Ah+=prob*R[h][S]
+                    else: Hh+=prob
+                sh=R[h][1<<h]
+                if h==3: upper=Ah+Hh*sh
+                else:
+                    G=R[h][8]-sh; P=R[h][(1<<h)|8]-sh
+                    W=[G*sum(w for u,w in F.items() if u<t)
+                       +P*F.get(t,Q(0)) for t in range(1,nv)]
+                    L=max(W)
+                    negative+=int(L<0)
+                    ties+=int(W.count(L)>1)
+                    upper=Ah+Hh*(sh+f*L)
+                assert max(pure)==max(root,upper)
+                assert upper==max(pure[1:nv])
+                assert pure[nv]<pure[nv-1]
+                want=(b*R[h][2]+a*((1-b)*R[h][4]
+                       +b*(R[h][6]-R[h][2]))+(1-a)*x*R[h][8])
+                assert U[h]==want
+                branch.append((root,upper))
+                checks+=1
+            # p's inactive upper cap is intentionally NOT asserted affine.
+            affine=U+[branch[0][0],branch[0][1],branch[1][0],
+                       branch[2][0],branch[2][1],branch[3][0],branch[3][1],
+                       (1-a)*(1-b-x),1-(1-a)*(1-b)]
+            vals.append(affine)
+        assert vals[2]==[(v+w)/2 for v,w in zip(vals[0],vals[1])]
+assert negative>0 and ties>0
+print('PASS: independent full-response checks',checks,
+      'negative upper coefficients',negative,'tied envelopes',ties)
+```
+
+The embedded checker was run and returned exactly:
+
+    PASS: independent full-response checks 600 negative upper coefficients 192 tied envelopes 147
+
+Reproduce directly from this notebook without writing another file:
+
+```bash
+awk '/^### DA5\./{section=1} section && /^```python$/{code=1;next} code && /^```$/{exit} code{print}' math/notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md | python
+```
+
+Concrete next question: consume the remaining ONE-future configuration
+where BOTH positive root suppliers are LATER-ONLY with paid root mass.
+DA deliberately does not freeze either supplier's marginal Never mass.
+Its affine trick no longer applies directly when the varied supplier's
+own FULL cap is later: that cap depends on f WITHOUT its own root-
+survival factor, hence becomes a genuine rational term in b,x. A
+funded coupled change of both suppliers' whole laws, or a global
+contradiction using that extra information, is still required. Zero-
+future, multiple-future and case(I) remain open as well.
