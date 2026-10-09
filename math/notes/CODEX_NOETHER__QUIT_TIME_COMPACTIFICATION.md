@@ -149,6 +149,15 @@ boundary, not an exclusion of its source geometry. The next operation must
 curve several root odds/laws or change an old response set; increasing ε
 or choosing a different exact-root selector on this same ray is not a repair.
 
+NC.39 starts a genuinely two-law operation with SOURCE-SUPPLIED owners,
+not two guessed c-active bridges. Q6 supplies a c-active finite owner i
+and a partner j for which the exact i-cap debt startup is positive. The
+construction changes j's original Never branch and i's ENTIRE original
+law. Its debt-preserving curve is legal without a root joining slope,
+root supplier identity, or a minimizing suffix. The complete old-law
+deletion response envelopes remain in the test; no funding sign or
+consumer is presently claimed.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -26039,3 +26048,206 @@ apply automatically. Such an operation still must price EVERY old full cap,
 new word response and original root defect, and prove actual debt<δ or a
 minimum with smaller full ν. No favorable cross-gain or branch continuation
 is currently proved.
+
+### NC.39. A source-supplied pair, and its literal whole-law funding test
+
+ORDINARY MATHEMATICS, INTERNAL. The coverage choice below is proved.
+The final full-cap funding sign is OPEN. This uses the ORIGINAL source
+table and original augmented minimum, not NC9's reselection. It applies
+to either source alternative, including partial bridges. In particular,
+the chosen c-active finite owner need not be a bridge or root supplier.
+
+Write n_i>0, m_i=1−n_i, s_i>0, C=E_c, and Γ_ij=r_i({j})−s_i,
+Γ_ii=0. Source14.1 supplies a simplex λ with γ_i=(Γλ)_i>0 for ALL i.
+Source14.3 supplies
+
+    Σ_(i∈C)(m_i/n_i)γ_i ≥ Σ_i s_i+Σ_(i∉C)γ_i.       (NC.39a)
+
+There exist i∈C and j≠i with
+
+    A_ij=m_i Γ_ij−n_i s_i>0.                         (NC.39b)
+
+For otherwise m_iΓ_ij≤n_i s_i for every such pair, and Γ_ii=0 gives
+
+    (m_i/n_i)γ_i≤s_i(1−λ_i)  for every i∈C.
+
+If C is proper, summing is strictly below the RHS of (NC.39a), because
+all omitted owns are positive (and omitted γ's are positive too). If
+C is all owners, the difference is Σ_i s_iλ_i>0 since λ is a simplex.
+Both cases contradict (NC.39a). Pure-Never members of C cause no gap:
+their m_i is0 and cannot satisfy (NC.39b). Thus the selected i has BOTH
+finite and Never mass, Γ_ij>0, and j's Never mass is positive. This
+averaging argument selects a possibly DIFFERENT i from an arbitrary
+witness of source14.3; it does not strengthen every such witness.
+
+The exact tracked dependency is
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+Its definition uses the recipient ROW of `quittingProjectiveLCPMatrix`
+in `UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`. The former
+file was read in full for this test. The remainder here is actual-law
+accounting, not a newly named checked Lean declaration.
+
+**The independent paired laws.** On each original finite realizing
+profile retain EVERY old date. Move η∈(0,n_j) of j's original Never mass
+uniformly over a new j-only word after all old dates and an empty test.
+Replace i's ENTIRE law, with private probability t∈[0,1], by a uniform
+i-only word strictly AFTER that j word. The two words have N dates each;
+every other law is unchanged. No public profile mixture is used.
+
+Let e=∏_(k≠i,j)n_k, d=d*_i, and a=e A_ij>0. The i word is an actual
+FULL best response against the CHANGED opponents: c-activity and
+Γ_ij>0 give B_i(new)=B_i+ηeΓ_ij, attained at every empty date after
+the j word. Therefore
+
+    d_i(η,t)=(1−t)(d+aη),
+    ν(η,t)=(1−t)ν*(1−η/n_j).                       (NC.39c)
+
+This retains the changed original root: its i rate is (1−t)a_i,
+the j root rate is unchanged, and no root Nash identity is inferred.
+At t=1 the actual profile is absorbing; its debt has the source's
+strict absorbing lower bound. A full-minimum return would require
+d_i=d. The concrete positive budget-matching curve is
+
+    t(η)=aη/(d+aη),       0<η<n_j.                  (NC.39d)
+
+It keeps i's FULL debt EXACTLY d, and strictly decreases FULL Never.
+Consequently D≤δ on this curve would be a complete source contradiction
+(strict debt descent, or a minimum with smaller literal Never).
+
+**Every old and new tester.** Write V_k(z) for an old response value
+and W_k(z) for that SAME response when i's original law is replaced by
+pure Never, with other original laws unchanged. Include the empty
+date after the last old support. For k≠i define the ENTIRE old envelope
+
+    E_k(t)=sup_old z [(1−t)V_k(z)+tW_k(z)].
+
+This is not the average of separately maximized caps. It includes every
+moving old finite response. The extra i-deleted profile is actual and
+need not be a minimum. Let R_k and R_k^{iNever} denote the corresponding
+Never-response values, and put, for k∉{i,j},
+
+    e_k=∏_(ℓ≠i,j,k)n_ℓ,
+    Z_k(t)=(1−t)(R_k+n_i n_j e_k s_k)
+                    +t(R_k^{iNever}+n_j e_k s_k).
+
+The full new cap is EXACTLY the limiting envelope
+
+    B_k(η,t)=max(E_k(t),
+       Z_k(t)+η[n_i+(1−n_i)t]e_kΓ_kj,
+       Z_k(t)+η[n_i+(1−n_i)t]e_kΓ_kj
+                                      +t(n_j−η)e_kΓ_ki).    (NC.39e)
+
+The three terms price old tests, the end of the j word, and the end
+of the i word. Values within each word interpolate linearly between
+its two endpoints, apart from the bounded tester collision error.
+For j, whose own new word is deleted by its response,
+
+    B_j(η,t)=max(E_j(t),
+       (1−t)(R_j+n_i e s_j)
+          +t(R_j^{iNever}+e s_j)+te(Γ_ji)⁺).           (NC.39f)
+
+This cap is independent of η, but generally NOT constant in t.
+Literal Never is dominated by the last empty finite test while joint
+Never is positive; at an absorbing endpoint it is still included as
+the same passive endpoint. Tester collisions have error at most
+2M(η+t)/N uniformly over ALL moving dates. New prescribed exits are
+on disjoint words and create no new prescribed ties.
+
+If P_k is the prescribed payoff of the ORIGINAL profile with i pure
+Never, the actual prescribed payoff is
+
+    U_k(η,t)=(1−t)[U_k+ηn_i e r_k({j})]
+        +t[P_k+n_j e r_k({i})
+                         +ηe(r_k({j})−r_k({i}))].       (NC.39g)
+
+All P_k, W_k(z), and E_k(t) are from the SAME actual original sequence.
+At finite indices E_k(t) is a supremum of affine functions and is
+uniformly 2M-Lipschitz. A subsequence gives uniform convergence in t;
+no unsupported common affine-cap selector is imposed. Together with
+the uniform word error this identifies (NC.39c–g) with the original
+augmented full-law carrier, including literal ν and complete caps.
+
+**Current exact test, not a funding conclusion.** Substitute (NC.39d)
+and multiply debt minus δ by d+aη. The old-response cap terms become
+suprema of affine functions dV_k(z)+aηW_k(z). The two new late terms
+for k∉{i,j} have respective quadratic coefficients
+
+    ae_k Γ_kj,       ae_k(Γ_kj−Γ_ki).
+
+The multiplied prescribed payoff has quadratic coefficient
+ae(r_k({j})−r_k({i})). Thus the budget is not the convex/PWL ray of
+NC.38. In particular its actual old-response deletion envelopes and
+its born intermediate cap can neither be discarded nor priced by
+Γ_ij alone. Positive A_ij proves legality and exact own-debt funding,
+NOT total funding. No sign for the remaining budget, no c-active/root-
+bridge alignment, and no exclusion of either source branch is claimed.
+The concrete next test is this actual full envelope, rather than an
+unproduced pair of c-active bridges or another cap–Nash selector.
+
+The ALL-player budget can be written without hiding the deletion cost.
+Put L=d+aη and Z_k=P_k+n_j e r_k({i})−U_k. Define, for k≠i,
+the multiplied cap Btilde_k=L B_k(η,t(η)). For j it is
+
+    Btilde_j=max(sup_old z[dV_j(z)+aηW_j(z)],
+       d(R_j+n_i e s_j)
+              +aη[R_j^{iNever}+e s_j+e(Γ_ji)⁺]).
+
+For k∉{i,j}, put C_k=R_k+n_i n_j e_k s_k and
+C_k^N=R_k^{iNever}+n_j e_k s_k. Then
+
+    Btilde_k=max(sup_old z[dV_k(z)+aηW_k(z)],
+       dC_k+aηC_k^N+η(dn_i+aη)e_kΓ_kj,
+       dC_k+aηC_k^N+η(dn_i+aη)e_kΓ_kj
+                                         +aη(n_j−η)e_kΓ_ki).
+
+These are FULL cap envelopes, not four independently maximized hybrid
+caps. The exact scaled funding test is
+
+    F(η)=(d+aη)[D(η,t(η))−δ]
+       =Σ_(k≠i)[Btilde_k−(d+aη)B_k]
+          −ηΣ_(k≠i)[dn_i e r_k({j})+aZ_k]
+          −aη²eΣ_(k≠i)[r_k({j})−r_k({i})].          (NC.39h)
+
+The i term cancels because its debt is EXACTLY preserved, not because
+its cap is zero or its honest suffix is a minimum. Every OTHER own
+debt, including j's, remains in (NC.39h). The negative quadratic payoff
+term is NOT an available gain until the maximizing cap branches have
+been priced. In particular the intermediate j-word cap has coefficient
+ae_kΓ_kj and the final i-word cap ae_k(Γ_kj−Γ_ki); neither may be
+replaced by a guessed social-column sign.
+
+There are exact endpoint constraints. F(0)=0. At η=n_j, j's whole
+law is surely finite at every actual index, even though t(n_j)<1.
+Thus the augmented endpoint belongs to K_abs and
+
+    F(n_j)≥(d+an_j)g>0.                             (NC.39i)
+
+Original global minimality gives F(η)≥0, and least literal Never makes
+it strict for 0<η≤n_j. This last strictness alone is just the already
+supplied source selection, NOT a new reason to declare a consumer lost.
+The conjecture-facing target is still an independently derived upper
+bound F(η)≤0 at a positive η, contradicting that selection.
+
+One exact mechanical test explains why a fixed-cap shortcut does not
+fund the pair. IF, as an additional hypothesis, one fixed old tester
+or one fixed word-endpoint branch for each k≠i realizes its COMPLETE
+cap throughout 0≤η≤n_j, (NC.39h) is one quadratic
+
+    F(η)=η(b+cη).
+
+The initial all-law floor gives b≥0, whereas (NC.39i) gives
+b+cn_j>0. Hence b+cη>0 for 0<η≤n_j and this whole no-turnover arm
+loses at EVERY amplitude, irrespective of the sign of c. In that arm,
+a negative mixed coefficient does not by itself finance the initial
+cost. This is a conditional shape obstruction, not a source mode
+exclusion: the canonical source does NOT supply fixed maximizing
+testers throughout this family. At an infinite-chart limit the old
+envelope need not even be finite piecewise linear.
+
+Accordingly no fixed-root or fixed-four-tester ledger is being revived.
+The live unresolved operation must use actual response turnover/hedging
+in (NC.39h), or change which original finite portions are relocated.
+The positive source-selected A proves a nontrivial legal curve but has
+not bounded the counterfactual W_k(z) costs. No two-branch consumer,
+new raw producer, or export claim follows from this section.
