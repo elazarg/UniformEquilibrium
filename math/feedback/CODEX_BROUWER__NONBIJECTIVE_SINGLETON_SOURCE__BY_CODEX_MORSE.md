@@ -1116,3 +1116,161 @@ exceeds induced cap costs, no absorbing strategy, and no UE. Both
 canonical source alternatives remain unconsumed. No unresolved soundness
 objection remains; a further operational use is still needed before
 treating this supporting restriction as an equilibrium mechanism.
+
+## Independent CS1–CS4 review
+
+Reviewed the complete section `## CS:` through its frozen EOF in
+`notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md`, bounded SHA256
+`c046551783bbcba26cd891946ac76d3610be446a4b218096e400bddf83b1e38e`.
+The supplied whole-note SHA256 was
+`88e35c15ea13011026be1d19ce9d79c991ed3d823d51b090615d66c9028cb446`.
+I read the primary source packet and named prefix declarations, derived
+the two-mass cap account independently, and ran the complete embedded
+exact checker. This review is ordinary mathematics, not a Lean check.
+
+Soundness verdict: PASS. No unresolved mathematical objection.
+Significance: a further conditional restriction on the ACTUAL selected
+alternative-II source, not a consumer of that alternative. It rules out
+one sole-post-root-owner submode. It does not say all paid root suppliers
+are root-only, produce another helpful joining sign, quantify funding,
+or exclude either complete source alternative. No export recommendation
+is inferred from this supporting restriction alone.
+
+### Statement actually checked
+
+Keep the SAME selected reward table, true full minimum δ, common debt
+vector at EVERY full minimum, and least ORIGINAL joint-Never augmented
+minimum supplied by `LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`. In its
+alternative II there is exactly one root/later bridger i with a_i=0,
+and at least one later-only owner. Suppose a positive root-only supplier
+k has positive finite mass f_k after the retained root. Then some OTHER
+owner must also have positive prescribed finite mass after that root.
+
+The contradictory submode fixes every other whole law to
+a_h δ_root+(1−a_h)Never and varies only k's independent private law
+
+    a δ_root+f F+(1−a−f)Never,
+
+where F is its ENTIRE existing post-root finite conditional. The original
+point satisfies a>0, f>0, 1−a−f>0. No finite-best-reply premise is used;
+a later-only owner is allowed positive, suboptimal prescribed root mass.
+No common random signal or unsupported replacement clock is introduced.
+
+### All-cap affineness, including signed and nonisolated envelopes
+
+Let C=∏[h≠k](1−a_h) and C_h=∏[ℓ≠h,k](1−a_ℓ). For h≠k every existing
+finite suffix response against k's conditional finite mass m=f/(1−a)
+has value s_h+m[V_h(t;F)−s_h]. Because m>0, the ENTIRE finite envelope
+is s_h+mL_h, with L_h the supremum over the unchanged full finite
+calendar. This remains true for L_h<0 and L_h=0; multiplication by a
+positive scalar preserves all orderings and all multiple/nonisolated
+maximizing families. An empty date before the first F atom is NOT needed
+and must not be inserted.
+
+Literal suffix Never pays m r_h({k}). At every finite realizing index
+the old final empty test pays this plus (1−m)s_h. Its strictly positive
+margin persists locally because both own rewards and k's Never mass
+are positive. Thus the all-behavior suffix cap is the finite envelope,
+not the maximum with an unaccounted Never branch. Affinity in the
+deviator's whole stopping law gives unrestricted behavioral coverage.
+
+Root survival for responder h is (1−a)C_h, so the conditional fraction
+cancels EXACTLY:
+
+    T_h=A_h(a)+C_h[(1−a)s_h+f L_h],
+    B_h=max(Q_h(a),T_h).
+
+Root Q_h and A_h are affine in a. For own k the opponents are fixed;
+the suffix cap is s_k, and root-only strictness gives
+
+    B_k=Q_k,
+    G_k=Q_k−A_k−C s_k>0.
+
+The prescribed account is U_h=R_h⁰(a)+C f r_h({k}) for EVERY h,
+including k. Indeed surviving finite absorption by k has unconditional
+probability C f, regardless of F's internal calendar. In particular
+U_k=aQ_k+(1−a)A_k+C f s_k. No quotient remains in these whole-law
+coordinates. This is why the two-mass parameterization works even if
+some later-only observer has a positive root rate.
+
+All nonbridgers have strict numerical root-versus-ENTIRE-later gaps.
+They persist on a small legal box by the uniform response bound. One
+affine branch therefore supplies each such full cap. Only i retains a
+max of two affine branches. The argument assumes neither isolation of
+a late maximizer nor a uniform gap within the late maximizing family.
+
+### The line consists of original global minima
+
+The source's Sections6–7 give uniform prescribed and ALL-response
+transport on the original moving calendars. Under the contradictory
+submode, unwanted post-root masses of other owners tend to zero and
+may be censored to literal Never with vanishing product-TV error.
+Normalize their convergent nonsure root masses but retain every old
+occupied or empty suffix date. k's positive finite conditional has mass
+bounded away from zero and remains an existing conditional at each
+finite index. The two-mass changes are legal on one common small box
+because its old root, post-root finite and Never masses are all positive.
+
+At each index define L_h from the COMPLETE finite response set. Bounded
+coefficients have a common convergent subsequence. All displayed affine
+accounts then converge uniformly on the box; maxima of their two
+branches converge too. Before-root tests removed in source Section15
+pay s_h in the limit, strictly below the original B_h, and stay below
+on a sufficiently small box. Never stays separate from the final empty
+test. Thus every modified triple (U,B,ν) belongs to the SAME original
+augmented carrier, with ν=C(1−a−f). No favorable minimizing suffix or
+new pre-first-suffix response has been substituted.
+
+Writing the true total debt locally as max(F_root,F_later) for two
+affine functions, choose nonzero z perpendicular to their difference
+gradient. Their difference vanishes at the original point, hence it
+vanishes EXACTLY along the small two-sided z-line, even when the gradient
+is zero. True debt is affine there and bounded below by δ. Its interior
+minimum therefore makes it CONSTANT δ, not merely stationary to first
+order. Every point on this line is an original full minimum.
+
+If z_a+z_f≠0, one orientation reduces C(1−a−f), contradicting least
+ORIGINAL ν. Otherwise z_f=−z_a and z_a≠0. Own cap Q_k is fixed, while
+the derivative of U_k is z_aG_k≠0. Its debt changes between genuine
+global minima, contradicting their supplied common individual debt
+vector. These cases exhaust every nonzero z, with no sign assumption
+on any L_h and no exceptional zero-envelope case.
+
+### Exact dependencies, overlap and remaining use
+
+The primary packet's Section5 supplies common individual debt at EVERY
+minimum of this SAME final table; Sections6–7 supply old-law and complete
+response transport; Sections15–16 supply literal root normalization,
+strict nonbridger gaps and a zero-rate sole bridger; Section18 supplies
+the augmented carrier and least ORIGINAL joint Never at that table.
+The suffix is neither a minimum nor a Nash continuation.
+
+I read `quittingTerminalSemanticPrefix`,
+`quittingTerminalSemanticPair_rootThenContinuation`, and
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean` under its
+displayed imports. Their cap coordinate is exactly max(root-Quit,
+root-Continue with the own suffix cap). They do not provide augmented
+Never transport by themselves; the packet and the actual law formula
+above supply that separate coordinate. Narrow sole-finite/root-only
+searches in that file, `TerminalSemanticEqualityStratum.lean`,
+`TerminalSemanticSoloCapThreshold.lean`, and the packet found no existing
+statement of this CS exclusion.
+
+The packet's c-active owner with positive ORIGINAL finite mass does not
+already force a second post-root finite owner: that owner's finite mass
+could be at the first root. Nor does CB already prove CS: CB supplies a
+paid positive root supplier, but permits a later-only supplier with its
+loss at the root, or a root-only supplier with paid later finite mass.
+CS excludes precisely the latter supplier being the SOLE later finite
+owner, using a new two-dimensional whole-law minimum line. It is a real
+bounded refinement relative to these exact source statements, not a
+global audit of all project consequences.
+
+The embedded checker passed 100 exact all-clock sparse-suffix tables,
+including 33 negative-L_i cases. It checks the full root/suffix/Never
+account, not globality or carrier realization; those were checked by
+the proof above. The next operational task remains a simultaneous legal
+change of actual laws whose benefit exceeds every induced full-cap
+cost. CS supplies neither that move nor a quantitative margin. Both
+canonical source alternatives remain open.
