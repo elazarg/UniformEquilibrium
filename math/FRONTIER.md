@@ -882,6 +882,18 @@ not apply to an arbitrary old table, a root-only PureNever observer,
 three or four suppliers, or positive post-root finite mass. Neither
 complete source configuration is eliminated.
 
+At that SAME fresh table, in the zero-future/exactly-two-supplier mode,
+BOTH finite suppliers are strictly later-only full-cap owners. Neither
+can bridge, because its root/later comparison is a positive opponent
+rate times a nonzero within-row reward difference. Thus an original
+bridge belongs to a PureNever owner. If the second supplier were
+root-only, the full minimum-debt account and the bridge's complete
+triple-inclusive comparison would impose incompatible root-rate ratios.
+This [two-later-only restriction](notes/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md#nc44-both-finite-suppliers-are-later-only-at-the-same-small-own-source)
+has an independent mathematical review, not a Lean declaration. It
+requires no further reward selection or smaller translation. The
+both-later-only geometry itself remains unconsumed.
+
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date
 response value:

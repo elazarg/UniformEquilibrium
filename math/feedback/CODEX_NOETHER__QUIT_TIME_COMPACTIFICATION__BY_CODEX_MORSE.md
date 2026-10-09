@@ -970,3 +970,112 @@ transported, an attained integer-clock minimum, a coupled consumer
 for either residual arm, or arbitrary-game UE. In particular MF3's
 positive finite mass for the sole bridger is NOT inherited by the
 later-only arm. The draft explicitly keeps that boundary. PASS.
+
+## Independent NC.44 same-source two-supplier falsification check
+
+Reviewer: CODEX_MORSE, 2026-10-09. Verdict: ordinary mathematical
+PASS for `NC.44: both finite suppliers are later-only at the same small-own
+source` through the frozen EOF. The whole author note reviewed has SHA256
+`6846d5b7734c0c77ae437e65222fc6d9f3201a112b75c1e2b8d39ac871389182`.
+I read NC.43's complete source construction and NC.44 directly, not another
+review of NC.44. No unresolved mathematical objection was found. This is
+not a Lean check, a full-source consumer, or an export recommendation.
+
+The exact claim is about the ONE fresh table selected in NC.43. At ANY
+produced full minimum with exactly two positive finite suppliers and no
+prescribed finite mass after their first root, BOTH suppliers are strictly
+later-only. It does not rule out that whole mode, apply to arbitrary old
+tables, or classify sources with three suppliers or future finite mass.
+
+### Actual cap account and inherited source inputs
+
+I checked the primary packet `LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`,
+Part I Sections3–6,8–10 and Part II Section14. These provide, separately,
+the fresh-table translation/scaling construction, uniform-cap finite-law
+realization, positive original Never masses, strict cap-minus-own margin,
+an original root/later bridge, and a c-active finite supplier. Section14.3
+really supplies finite AND Never mass for a c-active owner; an arbitrary
+selected late tester would not suffice. Its actual positive Γ-simplex
+input is exactly
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+I inspected that declaration under its imports. No hidden reward-sign or
+normality hypothesis is imported there.
+
+The zero-future identification in NC.43 is sufficient here: all unwanted
+finite mass tends to zero, so censoring it and correcting the retained
+root masses is a vanishing product-TV change. Its payoff bound is uniform
+over ALL unilateral replies and therefore over full caps. Any removed
+before-root date pays only the own singleton, strictly below the original
+cap by `positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+I inspected that declaration and its actual carrier/global-minimum
+hypotheses. Rebase to root0 adds no needed earlier reply and loses no
+maximizer. The actual final-empty reply at1 remains distinct from Never.
+
+For supplier rates x,y, all literal Never masses are positive, so
+0<x,y<1 and ν=(1−x)(1−y)>0. Writing R_h for the Never value, the ENTIRE
+cap at this actual profile is max(Q_h,C_h), with C_h−R_h equal to
+s_h times deleted Never survival. Never is strictly dominated. A finite
+supplier has Q_h−C_h equal to the other supplier's positive rate times
+ONE within-row nonzero reward difference; neither finite supplier can
+bridge. The packet's existing bridge must consequently be a PureNever
+owner k. No new alignment premise is assumed.
+
+If c-active supplier i is later-only and the other supplier l is
+root-only, direct averaging gives exactly
+
+    d_i=νs_i+xyα,       d_l=νs_l+x(1−y)β,
+    α=r_i(l)−r_i(il)>0, β=r_l(il)−r_l(i)>0.
+
+The other two debts equal νs_h+[Q_h−C_h]⁺, not just a selected late
+debt. Hence δ≥νS+xm/2, where S=Σs_h, because α,β≥m/2. AllNever
+has ENTIRE debt S. Combining δ≤S and 1−ν≤x+y yields
+x/(x+y)≤2S/m<8t/m<b². Signs of all other finite rewards are unrestricted.
+
+### Full triple-inclusive bridge and quantitative contradiction
+
+For the actual PureNever bridge k, define a,d,e as in NC44b. Its exact
+identity is
+
+    0=x(1−y)a+(1−x)yd+xye=xa+yd+xy(e−a−d).
+
+The xye term uses the TRUE triple reply kil against the simultaneous
+pair il. Omitting it would be invalid. Native row separation gives
+|d|≥θ_k m and |a|,|d|,|e|≤2θ_k L. No sign choice is needed to obtain
+yθ_k m≤2θ_k Lx+6θ_k Lxy≤8θ_k Lx. Thus the SAME rate ratio obeys
+x/(x+y)≥m/(m+8L).
+
+All FIFTEEN native row entries are distinct, including the fixed own
+zero. Sorting any row gives fourteen gaps of size at least m inside
+length2L. Therefore m≤L/7, so 6m<L and
+
+    b²=m²/(m+L)²<m/(m+8L).
+
+This is the stated contradiction. Equality in intermediate rate bounds
+does not repair it: the final comparisons are strict. L,m are chosen
+after the own-zero-slice perturbation and BEFORE t; θ is selected only
+after t and stays in (1/2,1)⁴. The bounds are uniform in that box, so
+there is no circular shrinking of t after a minimum or bridge is chosen.
+NC.44 needs neither new cap contacts nor an unchanged old-table minimum.
+
+I independently enumerated exact caps at root0, the final-empty date
+and Never on 200 complete rational signed native tables, imposing the
+PureNever bridge through its actual triple entry. All 200 verified the
+two supplier debt identities, nonnegative residual debts, full bridge
+identity, rate bound, 15-entry spacing and D>S for the stipulated small
+raise; the tables contained 5547 negative finite cells. These are algebra
+regressions, NOT claimed counterexample tables or minimum witnesses.
+The source-level inequalities above supply the proof.
+
+### Significance and remaining obstruction
+
+This is a genuine additional FRESH-source restriction beyond NC.43:
+the latter gives one later-only finite c-active supplier and excludes
+certain PureNever observer signs, but does not prohibit the second
+supplier from being root-only. The general CB paid-root restriction
+likewise supplies at least one bad-root supplier, not both. The reviewed
+DA two-later-only conclusion is for the DIFFERENT one-future mode and
+does not consume this zero-future census. No whole-table UE conclusion
+follows here. The two later-only suppliers and at least one PureNever
+bridge remain a live source geometry requiring a funded whole-law move.
