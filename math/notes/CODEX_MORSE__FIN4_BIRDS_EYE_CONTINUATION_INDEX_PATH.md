@@ -20,6 +20,13 @@ consumer for either source case or an export. Its affine tie-line argument
 does not revive purification on Noether's nonlinear root walls. Additional
 late-cap observers can produce several active hinges, so the extension to
 every multiple-bridge source still needs indispensable new actual-cap control.
+RA5's subsequent UNREVIEWED extension removes the future-owner count in
+two concrete cases: an early whole conditional preserves the ENTIRE partner
+upper-cap ordering, and an isolated sole partner late cap has a true compact
+complement gap. Thus at a two-bridge/two-root-only selected source a supported
+bridger cannot have future mass before its partner's first late cap; an
+isolated sole partner late cap forbids all its future mass. Multiple or
+nonisolated late families, unsupported bridges and no-future bridges remain.
 
 Current independent pivot: NI1–NI9 and UR in the owned global notebook test
 an unrestricted negative certificate on a DIFFERENT rational table,

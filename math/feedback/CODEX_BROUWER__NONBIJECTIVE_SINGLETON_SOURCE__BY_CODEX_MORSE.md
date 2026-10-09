@@ -1601,3 +1601,69 @@ tail tie, p's active tail tie, or absence of a strict FIRST later-only
 supplier are honestly outside CY. An inactive p tie remains allowed. No
 zero-/multiple-future exclusion, general case(I)/(II) consumer, paid port or
 fixed UE target is supplied.
+
+## Short CZ max-A and diffuse-seam extension check
+
+Reviewed frozen `## CZ: maximal root absorption strengthens the coupled
+sparse exclusion` through EOF, SHA256
+`4a208832ddb70fff5b0eef72f8dd87d8f90b30a2f5ce9e5ce973a7b06a5780b0`.
+Verdict: ordinary mathematical PASS for the proper-interior variant and
+the stated zero-hazard boundary exclusion. This is a bounded check of
+the new extremal seam/diffuse realization, not a re-audit of CX's box or
+generic resultant construction. Neither full source case is consumed.
+
+CW's replacement keeps every root rate, the ENTIRE original full pair and
+literal ν unchanged. Its reconstructed actual geometric/diffuse suffix
+is in the SAME augmented H; prefixing the unchanged physical root gives
+that same triple. Consequently it retains RA1's maximizing value A₀,
+not merely least Never. This is exactly the maximizer eligibility needed
+in CZ, and does not assume that CW's conditional suffix is a minimum.
+
+In the proper-interior box already checked in CX, least original ν forces
+the actual true-minimum kernel direction to satisfy da+dx=0, with da≠0.
+Its positive sign increases A=1−C_p(1−a). The honest new k-only suffix has
+the displayed proper finite conditional and its original Never amount;
+the other three suffix owners are Never. Its full triple belongs to H,
+so exact physical prefixing gives another member of RA1's CLOSED Z at
+the SAME δ and ν₀. This contradicts the attained maximum directly.
+No common-debt equation or two-row generic resultant is needed for this
+replacement argument. The proper input still needs the exact strict
+endpoint/branch assumptions that made CX's TRUE D a max of two affines.
+
+The zero-hazard seam is independently valid, not a silent conversion of
+finite mass to Never. k's conditional word on1,…,N retains finite mass f
+and Never mass1−f at EVERY index. Against any nonpivot finite response
+1≤t≤N, direct first-hit enumeration gives
+
+    s_h+f[(t−1)Γ_h+P_h]/N.
+
+Every finite t>N has END value s_h+fΓ_h. The within-word straight-line
+part lies between the0 and Γ_h endpoints; its signed perturbation is
+bounded by2Mf/N. Thus the actual finite supremum is at most the limiting
+value s_h+f max(0,Γ_h) plus2Mf/N. For Γ_h≥0 the END is already a matching
+lower bound; for Γ_h<0 the FIRST test is at least s_h−2Mf/N. This proves
+the claimed TWO-SIDED full-cap error≤2M/N uniformly in the family and all
+moving deadlines. Prefix max with the unchanged root cannot enlarge it.
+k's own cap is exactly independent of its law. Never is strictly below
+END by(1−f)s_h>0. Every prescribed payoff and original ν remain EXACT,
+and the honest conditional suffix satisfies the same error bound. All
+displayed limits consequently belong to the SAME actual augmented H.
+
+At z=0, Γ_q<0 really gives a held strict-FIRST later-only cap. The accepted
+within-row genericity gives Γ_i,Γ_p≠0 for these distinct recipients, so
+i and every active later-only p automatically have strict endpoints of
+max(0,Γ). A root-only p need only its full inactive-envelope gap. k remains
+an unrestricted root-only OR later-only nonbridger. Therefore the limiting
+true debt is still max of TWO affines on an OPEN(a,x) box; no open hazard
+interval about0 is asserted. The true-floor/least-ν/max-A line argument
+then applies to these actual-carrier diffuse limits exactly as stated.
+
+Since Γ_h=0 is excluded by source row genericity, a positive later-only
+supplier surviving at z=0 must have Γ_h>0, hence an END cap. This is an
+additional selected-source boundary restriction, not paid-law funding.
+z=1 stays excluded: the positive-root, fixed-ν direction decreases f
+while holding its full first atom fz fixed, forcing an illegal z>1. Extra
+active endpoint hinges at positive z, absence of a strict-FIRST supplier,
+zero-/multiple-future modes and general multiple bridging also remain
+open. No pure Never limit, minimizing-tail substitution, fixed UE target
+or full-II consumer is inferred.

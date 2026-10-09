@@ -135,6 +135,12 @@ augmented root/suffix data attain this maximum. A two-mass whole-law chart
 then excludes one sparse multiple-bridge configuration at this newly selected
 source. This has one independent ordinary mathematical PASS; neither full source
 alternative is consumed. It is not another solved-table test or an export.
+RA5 then adds two UNREVIEWED ordinary draft restrictions on the two-bridge/
+two-root-only pattern without bounding the number of future owners: a
+supported bridger has no future mass before its partner's first late cap,
+and has no future mass at all if that partner has an isolated sole late cap.
+Their full-family arguments use actual early exit screening or a genuine
+isolated complement gap, not a selected upper reply.
 
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
@@ -23482,3 +23488,95 @@ stated selected sparse exclusion. Brouwer's independent bounded review passed
 the actual-source reconstruction, signed whole-family envelope, affine tie
 line and honest suffix return to Z, and checked this overlap distinction.
 No Lean implementation, build, export or Git action is claimed.
+
+### RA5. Two larger multiple-bridge patterns without a future-owner bound
+
+Status of THIS extension: COMPLETE ORDINARY PROOF DRAFT, UNREVIEWED.
+RA1–RA4's independent PASS does not automatically review these additions.
+They concern the SAME max-A least-original-Never source and use actual
+whole-law first-hit identities, not a new certificate interface.
+
+Suppose its alternative(I) has exactly TWO bridgers i,j, and the other two
+owners p,q are ROOT-ONLY. Let i be a POSITIVE first-root supplier. Other
+owners may now have arbitrary post-root finite laws. At this source:
+
+    (E) i has NO prescribed finite mass strictly between root0 and σ_j,
+        the earliest later full maximizing point of j;
+
+    (S) if j's ENTIRE later maximizing set is one ISOLATED point σ_j,
+        then i has NO prescribed post-root finite mass at all.
+
+σ_j exists, is finite, and is separated from the isolated root. Isolation
+in(S) is a genuine extra hypothesis, not inferred from unique maximization.
+It holds in particular if σ_j is a positive mixture atom. No assumption
+about i's finite-conditional regret, either sign of late rewards, or a
+favorable suffix is made. These are necessary properties of the selected
+source, NOT a consumer for the general multiple-bridge alternative.
+
+For(E), suppose the forbidden own mass is positive. Choose old regular
+ordered cuts 0<u<v<σ_j with f₀=q_i((0,u])>0. Put a₀=q_i({0})>0 and
+g₀=1−a₀−f₀>0, the latter containing positive literal Never. Let F be the
+normalized ENTIRE old own sublaw on(0,u], and G its normalized remaining
+law on clocks>u, INCLUDING Never. Vary only i's independent law by
+
+    q_i^(a,f)=aδ₀+fF+(1−a−f)G.                    (RA.7)
+
+There is a two-sided open triangle about(a₀,f₀). Its original finite
+realizers reweight the retained root interval, the old whole-date segment
+(0,u], and its complement separately. The bounded chart densities and
+strong cut-indicator convergence from accepted source §7 give BOTH actual
+payoff and full-cap transport. This remains true if the head has diffuse
+mass or infinitely many retained atoms; no new calendar date is inserted.
+Literal joint Never is
+
+    ν(a,f)=C_N G(Never)(1−a−f),                    (RA.8)
+
+with strictly positive constant coefficient from those SAME laws.
+
+For EVERY finite j response t≥v, the product term containing δ₀ or F
+has a prescribed finite exit BEFORE t. Its payoff is independent of t,
+even when the other two opponents have arbitrary future laws. Hence
+
+    V_j(t;q_i^(a,f))
+      =aR_j+fE_j+(1−a−f)V_j(t;G),  t≥v,          (RA.9)
+
+for fixed signed numbers R_j,E_j. Since the last coefficient is positive,
+the ordering of the ENTIRE upper family is unchanged and its envelope is
+one affine function. At the original point every nonroot maximizer of j
+is in that upper set. The compact lower tester set(0,v] has a strict gap;
+all-response TV control preserves it. Root0 is a separate candidate, and
+literal Never remains below the final finite test. Thus j's TRUE full cap
+is max of its affine root value and the single affine upper envelope.
+
+Own i's complete cap is fixed, every prescribed value is affine, and p,q's
+FULL root-only caps persist by their isolated complement gaps. The true D
+on(RA.7) is therefore max of TWO affine functions. RA3 applies verbatim,
+with(RA.8) in place of(RA.3): globality yields a true minimum tie line,
+least ORIGINAL Never forces its direction to have z_a+z_f=0, and the
+nonzero positive-root component increases A. Honest actual conditional
+suffix extraction returns to Z, contradiction. This proves(E). In
+particular, unlike RA2, it does not require the other two owners' future
+finite masses to vanish.
+
+For(S), use(RA.2) with i's ENTIRE old finite post-root conditional F,
+without a chronological support restriction. j's full maximizing set is
+exactly{0,σ_j}. Both points are isolated, so their compact complement has
+a strict full gap. Uniform opponent-TV control preserves this gap. The
+payoffs of BOTH fixed j testers are affine in(a,f), regardless of the
+other owners' future laws or whether F lies before, at or after σ_j.
+Every other full cap is handled just as above. Thus true D is again max
+of TWO affine functions, and RA3 gives the same contradiction. A unique
+NONISOLATED later cap does not justify this step and is explicitly not
+covered. This proves(S).
+
+These are complementary extensions, not an automatic strengthening of
+every RA2 instance: RA2 can use a whole one-opponent envelope even when
+j's cap set is complicated and i's mass lies after its first late cap;
+(E)/(S) instead allow extra finite suffix owners. If both bridgers are
+supported and both have future finite mass, (E) imposes the two crossed
+support fences q_i((0,σ_j))=q_j((0,σ_i))=0, and(S) says neither has an
+isolated sole later cap. Unsupported bridgers, zero-future bridgers,
+additional later-only owners and genuinely multiple/nonisolated upper
+active families remain. One cannot infer an owner's prescribed support
+from the existence of its full best reply. The remaining global step is
+still an actual whole-debt move through those surviving configurations.

@@ -179,6 +179,16 @@ operation boundary, not elimination of that source arm. The remaining
 operation must put relocated i finite mass after some donated j mass,
 or deliberately change i's Never mass and price the resulting cross term.
 
+NC.41 now constructs a true-overlap candidate with complete cap control:
+independent two-owner tail survivors give a STRAIGHT trace of singleton
+exit masses. Every other recipient's intermediate replies are bounded by
+the actual start/end replies for arbitrary signed coefficients; i/j
+deleted-law caps are handled separately. Positive finite regret gives
+a legal small-donation own-debt-matching root, supplied unconditionally
+in the zero-future source-II arm. Its FULL old/root/start/end budget is
+explicit below but has no proved funding sign. This is supporting actual-
+law mathematics, not another source consumer or an export candidate.
+
 The separate earlier native own-zero ABSORBING consumer is also open.
 RM43 supplies a fresh table with only random minima;
 it is not silently merged with a tax or radial maximum. RM44 now disproves
@@ -26406,7 +26416,7 @@ arbitrary-tail graft, including both new words, every tester, and
 literal Never. It is not a new selective mechanism. Equation
 (NC.39k) prices only i's delivery, NOT the changed old/maximizing
 responses of j and the other owners. Those full cap costs remain
-the live test; no source case, positive-γ chamber, or zero-γ chamber
+the live test; no source case or positive/zero finite-regret chamber
 is counted as consumed by this operational split.
 
 ## NC.40: selective finite relocation BEFORE the donor stays jointly convex
@@ -26553,3 +26563,268 @@ Only θ=0 belongs to the convex family proved here. Positive θ,
 all newly born middle caps, and the original root responses remain
 the concrete live funding test. No outside paid-owner alignment is
 being assumed, and no unrestricted below-δ profile has been obtained.
+
+## NC.41: a straight two-exit trace removes the intermediate cap spike
+
+ACTUAL-LAW CANDIDATE AND COMPLETE CAP ACCOUNT, INTERNAL AND UNREVIEWED.
+The below-δ or lower-ν minimum conclusion is NOT proved. This operation
+changes original finite draws and is not RM47's Never-only graft. It also
+does not assert a convexity property of a generic outer repair LP.
+
+Use the SAME source-selected i,j, A_ij>0 and Γ_ij>0. Assume the selected
+i has positive original finite regret, an additional premise in general,
+but supplied by source II with zero future finite mass as shown above.
+Select an actual positive-regret original finite tranche of mass q>0
+and mean full regret g>0. Move ρ∈(0,q] of that tranche out of the old
+calendar and into a new tail AFTER all retained old finite dates, keeping
+i's literal Never mass n_i UNCHANGED. Move η∈(0,n_j) of j's old Never
+mass into that SAME new calendar. Every other law is unchanged. The
+tranche and all old response charts come from one original source sequence;
+they are not independent payoff coefficients or a minimizing suffix.
+
+### Independent survivors and literal Never
+
+Put S₀=(n_i+ρ)n_j, S₁=n_i(n_j−η), Q=S₁/S₀∈(0,1), and
+
+    α=log((n_i+ρ)/n_i)/log(S₀/S₁)∈(0,1).
+
+On a continuous auxiliary calendar let q(t) decrease from1 to Q and
+give the two independent tail survival masses
+
+    S_i(t)=(n_i+ρ)q(t)^α,
+    S_j(t)=n_j q(t)^(1−α).
+
+These are UNCONDITIONAL marginal masses after the old block, not two
+draws publicly conditioned on a shared lottery. Their endpoints are
+exactly n_i and n_j−η. Thus the marginal relocated finite masses are
+exactly ρ and η and FULL literal Never is
+
+    ν_new=e n_i(n_j−η)<ν*,      e=∏_(k≠i,j)n_k.
+
+Define I(t),J(t) as the two singleton-exit probabilities in this tail,
+without the common factor e from other owners. Independence gives
+
+    dI=−S_j dS_i,  dJ=−S_i dS_j,
+    I(t)=α[S₀−S_i(t)S_j(t)],
+    J(t)=(1−α)[S₀−S_i(t)S_j(t)].                 (NC.41a)
+
+Hence the entire exit trace is a straight segment. At its endpoint
+put L=S₀−S₁=n_jρ+n_iη, I=αL, J=(1−α)L, and
+
+    z=n_jρ−I=J−n_iη,       0≤z≤ρη.              (NC.41b)
+
+For the inequality, z is exactly the probability that a donated j draw
+precedes a relocated i draw, namely the integral of j's cumulative
+donated mass against i's relocated finite sublaw. Its integrand is
+between0 and η. This is a product-law timing identity, not a free
+additional parameter. It is strictly positive when ρ,η>0 in this
+proper-overlap construction.
+
+### Every old response and each deleted-law cap
+
+Temporarily censor the selected ρ old i finite draws to Never, without
+adding either new tail. Write U_k^base(ρ)=U_k+ρΔ_k for its prescribed
+payoff, R_k(ρ) for its Never-response payoff, and E_k(ρ) for its ENTIRE
+old finite-response envelope, including the last empty old test.
+All individual old response values are affine in ρ; E_k is their
+supremum, not an average of separately chosen caps. Define
+
+    e_k=∏_(ℓ≠i,j,k)n_ℓ,
+    C_k(ρ)=R_k(ρ)+(n_i+ρ)n_j e_k s_k,
+                                                    k≠i,j,
+    C_j(ρ)=R_j(ρ)+(n_i+ρ)e s_j.
+
+For an OTHER recipient k≠i,j responding at a new finite date t,
+the complete limiting payoff is
+
+    C_k(ρ)+e_k[Γ_ki I(t)+Γ_kj J(t)].             (NC.41c)
+
+Since (I(t),J(t)) is straight, this is affine in the common scalar
+S₀−S_i(t)S_j(t) for ARBITRARY signed Γ_ki,Γ_kj. Every intermediate
+reply lies between the actual start and end replies. Thus its full cap is
+
+    B_k(new)=max(E_k(ρ), C_k(ρ),
+                    C_k(ρ)+e_k[Γ_ki I+Γ_kj J]).  (NC.41d)
+
+Both old/root clipping and the start value remain present. Literal
+Never is dominated by the final empty finite reply, whose extra gain
+is n_i(n_j−η)e_k s_k>0. No quiet sign or endpoint-minimum hypothesis
+has been imposed.
+
+The straight joint trace CANNOT be used when responding player i or j
+has its own law deleted. Those caps instead are
+
+    B_i(new)=B_i+ηeΓ_ij,
+    B_j(new)=max(E_j(ρ), C_j(ρ)+ρe(Γ_ji)⁺).       (NC.41e)
+
+The first identity uses ORIGINAL c-activity of i and Γ_ij>0: a pure
+i response after all donated j mass attains the cap, regardless of i's
+prescribed new law. For j, deleting its law leaves only i as a new
+finite owner; its payoff interpolates between C_j and C_j+ρeΓ_ji.
+Thus all behavioral response caps have been priced separately, not by
+pretending that deleted-law traces equal the prescribed two-owner trace.
+
+Prescribed payoffs for EVERY recipient are
+
+    U_k(new)=U_k+ρΔ_k+e[I r_k({i})+J r_k({j})].  (NC.41f)
+
+### Actual finite clocks and the own-budget root
+
+The continuous calendar is a calculation of a limit, not an additional
+strategy space. Subdivide a fixed decreasing q(t) into N intervals and
+give each owner's actual new finite atom the difference of its consecutive
+survival masses. Their literal Never masses remain EXACTLY n_i,n_j−η
+at every N, and their new finite totals are exactly ρ,η. Use one empty
+test before the new block and one after it. The finite choices remain
+private and independent; simultaneous new quitting is allowed.
+
+For fixed positive η,ρ with Q>0, these survival functions have bounded
+derivatives on [Q,1], so the maximal atom is O(1/N). Prescribed i/j
+collision probability tends to0. For a pure responder at ANY moving
+date the extra collision probability is bounded by the sum of the two
+maximal atoms, and the discrete cumulative exit trace converges uniformly
+to (NC.41a). Bounded rewards give uniformly vanishing payoff error over
+ALL finite replies and Never, including occupied seams and triple joins.
+Thus (NC.41d–f) are actual full-cap/payoff limits in the original augmented
+carrier. They do not erase a closed seam by assumption. Original finite
+c-activity errors are also retained until the source limit, as in NC.40.
+
+Using (NC.41b), i's complete own debt is exactly
+
+    d_i(new)=d_i*+ηeA_ij−gρ−eΓ_ij z.            (NC.41g)
+
+For each sufficiently small FIXED η>0, choose ρ by
+
+    gρ+eΓ_ij z(ρ,η)=ηeA_ij.                     (NC.41h)
+
+This is a genuine legal root: at ρ=0 the left minus right is negative,
+whereas at ρ=ηeA_ij/g≤q it is nonnegative, because z≥0. Continuity
+and Γ_ij>0 give a root in that interval, in fact strictly below its
+upper endpoint for positive overlap. This argument does NOT prove a
+branch extends to η=n_j, nor does it ignore a root-capacity/fold boundary.
+In zero-future source II the entire finite tranche is at the supplied
+root, g=B_i−Q_i>0, and the changed ORIGINAL root rate is a_i−ρ;
+the other original root rates remain as actually played, not Nash-selected.
+
+### The true full budget, presently unresolved
+
+In the zero-future arm, E_k(ρ) reduces to the root response Q_k(ρ)
+and the empty post-root value C_k(ρ). Both are affine in ρ. After
+imposing (NC.41h), substitute
+
+    Z=(ηeA_ij−gρ)/(eΓ_ij),
+    I=n_jρ−Z,       J=n_iη+Z.
+
+Keep the actual straight-trace restriction Z=z(ρ,η); not every relaxed
+point (ρ,η,Z) is realizable by this law shape. The exact full debt is
+
+    G(ρ,η)=d_i*+Σ_(k≠i)[B_k(new)−U_k−ρΔ_k
+                                  −e(I r_k({i})+J r_k({j}))],
+
+with EVERY cap from (NC.41d–e), including every original root response.
+Its algebraic extension after the substitution is convex finite PWL
+in (ρ,η), but the actual independent straight-trace locus is nonlinear.
+Minimizing that extension over a convenient convex set is NOT a lawful
+equilibrium producer or proof of feasibility. No sign for G−δ follows
+merely from A_ij>0, g>0, or the absence of an intermediate spike.
+
+The success test is exactly G(ρ,η)≤δ at an ACTUAL positive-η root
+of (NC.41h). Strict inequality would give finite-clock debt descent;
+equality would give an augmented full minimum with literal ν<ν*,
+using the fixed positive-η discretization/compactification above. This
+test has not succeeded. The finite root/start/end budget, not a chosen
+favorable endpoint or a cap–Nash root over an assumed minimum suffix,
+is the next mathematical question. No source case is counted as closed.
+
+### Boundary check for the ACTUAL full-budget curve
+
+The matching curve can be analyzed without replacing it by the relaxed
+plane. This prices a real boundary of the candidate, not another local
+quitting-table fixture. Set
+
+    u=ρ/n_i,  v=η/n_j,
+    A=log(1+u),  B=−log(1−v),
+    zbar=z/(n_i n_j)=(uB−vA)/(A+B),
+    k=g/(e n_j Γ_ij)>0,
+    b=A_ij/(n_i Γ_ij)>0.
+
+Then the exact own-budget is k u+zbar=b v. Direct differentiation gives
+
+    ∂zbar/∂u=B[A+B−(u+v)/(1+u)]/(A+B)²>0,
+    ∂zbar/∂v=A[(u+v)/(1−v)−A−B]/(A+B)²>0.
+
+The first sign follows from log(1+u)>u/(1+u) and
+−log(1−v)>v/(1+u). The second follows from
+log(1+u)<u/(1−v) and −log(1−v)<v/(1−v).
+Consequently for EVERY v∈(0,1) the unconstrained equation has one and
+only one positive root u(v): at u=0 its left side is0<bv, and the
+term ku tends to infinity. This is a continuous differentiable root,
+but it is a legal tranche relocation only where n_i u(v)≤q.
+
+Moreover r(v)=u(v)/v is strictly decreasing. To see this, at fixed
+r>0 write
+
+    zbar(rv,v)/v=(r+1)B/[log(1+rv)+B]−1.
+
+The ratio log(1+rv)/B is strictly decreasing in v. Indeed the ratio
+of the integrands of the two zero-at0 functions is
+r(1−v)/(1+rv), strictly decreasing, and the ratio of their integrals
+is its positive weighted average. Thus zbar(rv,v)/v strictly increases
+in v. At fixed v the function kr+zbar(rv,v)/v strictly increases in r,
+by the first derivative above. Its root at value b must therefore
+strictly decrease with v. Its endpoint limits are
+
+    r(0+)=b/k,       r(1−)=b/(k+1).
+
+Equivalently the physical ratio R(η)=ρ(η)/η strictly decreases from
+eA_ij/g to eA_ij/(g+e n_jΓ_ij). This does NOT mean the relocated
+mass itself decreases: initially ρ'(0+)=eA_ij/g>0, whereas
+ρ'(η)→−∞ as η↑n_j. For the latter assertion, u(v) tends to the
+positive number b/(k+1), ∂zbar/∂u tends to1, and
+∂zbar/∂v tends to infinity by its displayed formula. Implicit
+differentiation gives u'=(b−∂zbar/∂v)/(k+∂zbar/∂u).
+Thus ρ has an interior maximum strictly above its absorbing-endpoint
+limit
+
+    ρ_end=e n_j A_ij/(g+e n_jΓ_ij).
+
+A tranche-capacity failure can occur in the interior even if the
+formal absorbing endpoint has ρ_end≤q. No extension through that
+capacity boundary, uniqueness of an interior maximum, or uniform
+finite-clock estimate up to the absorbing endpoint is inferred.
+
+In the zero-future source-II arm write the COMPLETE finite PWL
+budget, after the own-budget substitution, as
+
+    G(ρ,η)−δ=max_ℓ[−h_ℓ+p_ℓρ+q_ℓη],  h_ℓ≥0.
+
+This is just the finite collection of all combinations of the actual
+root/start/end cap branches in (NC.41d–e), not four selected responses.
+The branches with h_ℓ=0 are exactly those active at the original point;
+new start and end branches can both be active there even if their
+owner is not a root bridger. The full funding test on the ACTUAL curve
+is therefore the simultaneous system
+
+    η[p_ℓ R(η)+q_ℓ]≤h_ℓ       for EVERY ℓ.        (NC.41i)
+
+All original-active branches must have p_ℓ R(η)+q_ℓ≤0. The old
+pre-donor comparison NC.40 has strictly positive initial slope λ.
+Here z=ρη/2+O((ρ+η)³), so the matching curve satisfies
+ρ=(eA_ij/g)η+O(η²). Its complete full caps differ from the
+pre-donor ones by only O(η²), uniformly over the finite list of
+branches. Hence the SAME strict initial slope survives:
+
+    G(ρ(η),η)=δ+λη+O(η²),      λ>0.
+
+This excludes infinitesimal funding, not a finite-amplitude return.
+One exact all-amplitude retirement check is available: if an
+original-active branch has p_ℓ≤0 and
+p_ℓ(eA_ij/g)+q_ℓ>0, then monotonicity of R makes that single ACTUAL
+cap combination a strictly positive lower bound at EVERY legal η.
+No such coefficient sign is currently derived from the source. If
+it does not hold, every inequality (NC.41i), including the inactive
+original-root branches and the tranche-capacity condition, still
+has to be checked. In particular a decrease of R, a favorable final
+tail cap, or strict absorbing separation by itself does not settle
+the intermediate full budget. This exact full-cap feasibility/sign
+question remains open; no additional source restriction is claimed.

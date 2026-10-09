@@ -744,26 +744,36 @@ at every realizing index, rather than identifying escaped clocks with
 Never. This simplifies the coupled-law funding question but consumes
 neither the sparse mode nor either complete source configuration.
 
-A fresh separated-gap source can additionally avoid a finite list of
-nonzero two-recipient-row polynomial identities. Avoidance is made BEFORE
-regular recipient scaling and before selecting any minimum; row homogeneity
-preserves it through that scaling. At this stronger source, in the
-one-future mode with proper geometric hazard 0<z<1, suppose one later-only
-first-root supplier has a strictly FIRST-active tail response. Then either
-the sole bridger has an additional FIRST/END tail tie, or the other root
-supplier is later-only and has that additional tie. Otherwise a legal
-coupled change of one supplier's root mass and the future owner's whole law
-gives a two-dimensional true-debt maximum of two affine functions. Global
-minimality and least original Never force a minimum line; the common debt
-vector then forces one of the avoided two-row identities. This
-[coupled-source exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cx-a-coupled-source-minimum-box-forces-a-two-row-resultant)
+At the SAME least-Never/maximal-root source, in the one-future mode with
+proper geometric hazard 0<z<1, suppose one later-only first-root supplier
+has a strictly FIRST-active tail response. Then either the sole bridger
+has an additional FIRST/END tail tie, or the other root supplier is
+later-only and has that additional tie. Otherwise a legal coupled change
+of one supplier's root mass and the future owner's whole law gives a
+two-dimensional true-debt maximum of two affine functions. Global
+minimality and least original Never force a minimum line that increases
+root absorption, contradicting its attained maximum. No further reward
+perturbation or polynomial avoidance is needed. An inactive tail tie for
+a root-only supplier is allowed; the forced ties constrain the response
+laws, not exceptional reward-table equalities.
+
+At that selected source, the diffuse boundary z=0 is also restricted:
+every later-only first-root supplier h must satisfy
+
+    Γ_h=r_h({k})−s_h>0,
+
+where k is the sole future finite owner. Its tail cap is therefore END-
+active. A negative Γ_h would give the same two-affine minimum line and
+root increase. The proof realizes each family point by independent
+uniform finite clock words, with exact original finite/Never amounts and
+whole-response cap error at most 2M/N. It does not identify escaped finite
+mass with Never. The
+[same-table coupled and diffuse exclusion](notes/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md#cz-maximal-root-absorption-strengthens-the-coupled-sparse-exclusion)
 has a focused independent mathematical review, not a Lean declaration.
-An inactive tail tie for a root-only supplier is allowed. The new forced
-ties are constraints on the response laws, not exceptional reward-table
-equalities. The diffuse and sure-first hazard boundaries, absence of a
-strict-FIRST later-only supplier, and zero or multiple future owners remain
-unconsumed. No earlier selected source is transported through the fresh
-reward choice, and neither complete source configuration is eliminated.
+The sure-first hazard boundary z=1, additional active tail ties, absence
+of a strict-FIRST supplier in the proper-hazard case, and zero or multiple
+future owners remain unconsumed. Neither complete source configuration
+is eliminated.
 
 At the same source, some owner has both positive prescribed finite mass
 and positive literal Never mass, and its full cap equals its late empty-date
