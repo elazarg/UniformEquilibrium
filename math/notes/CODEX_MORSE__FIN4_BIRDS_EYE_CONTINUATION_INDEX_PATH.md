@@ -8,6 +8,20 @@ The requested endpoint is UE for EVERY signed four-player quitting table,
 against EVERY unilateral behavioral deviation, with ONE payoff target
 fixed before the requested accuracy.
 
+Latest payoff-sensitive selector test: GP in the global notebook assigns
+the pivot utility minus ORIGINAL full maximum debt, leaving the other
+three payoff agents unchanged. For EVERY canonical table and EVERY
+common finite calendar, its exact auxiliary Nash profiles are EXACTLY
+the original ordinary menu Nash profiles. Nonpivot full debt equals menu
+debt; at their best replies all those debts vanish, so a menu-best pivot
+already minimizes its unavoidable full pivot debt. Conversely any menu
+payoff improvement would initially lower the auxiliary maximum. Thus
+PZ's saved λ=0 all-selector gap on the explicitly solved EC table applies
+without a new census. This retires that exact objective recipe only,
+not approximate auxiliary profiles, all global selection, or a genuine
+no-UE source. The next lane is the own-zero native absorbing problem;
+no whole-family translation consumer is yet produced.
+
 Latest full-law selector test: SQ in the global notebook builds an explicit
 TV-continuous private sampled-clock response map, covering ALL finite/Never
 replies with uniform error12M/(K+1)+τlog(6K+2). Yet on the actual solved table

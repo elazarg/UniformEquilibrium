@@ -2,6 +2,18 @@
 
 Owner: CODEX_MORSE.
 
+Latest payoff-sensitive global-selector test: GP below replaces the
+pivot's payoff by the negative ORIGINAL full maximum deviation debt,
+leaving the three other payoff agents unchanged. On EVERY canonical
+table and EVERY common finite calendar its exact Nash correspondence
+is nevertheless IDENTICAL to ordinary finite-menu Nash. Thus it has
+no new exact selection power and inherits PZ's already proved λ=0
+obstruction on the explicitly solved canonical EC table. This is a
+short structural retirement of the new objective, not another census,
+a no-go for approximate auxiliary profiles, or a source contraction.
+The next independent global investigation moves to the own-zero native
+absorbing problem; no producer there is claimed.
+
 Latest full-law global-selector test: SQ below constructs an explicit
 TV-continuous private sampled-clock response map with a UNIFORM full-response
 error bound, then falsifies its approximate fixed-point producer on an
@@ -24917,3 +24929,124 @@ or supply a different all-product-root obstruction. Both actual least-Never
 source configurations and the full Fin4 conjecture remain OPEN. No export,
 Lean implementation/build, source-class count or all-behavior negative table
 is asserted.
+
+## GP. A regret-minimizing pivot does not change exact finite-menu Nash
+
+Status: COMPLETE ORDINARY UNREVIEWED mechanism retirement. The tested
+objective is different from PZ's scalar terminal price and SQ's sampler:
+it retains ORIGINAL payoffs and full caps, and every actual Nash profile
+is a fixed point. The exact finite-calendar test nevertheless reduces
+the whole auxiliary correspondence to an ALREADY retired intermediary.
+No new table census, export or counterexample-class restriction follows.
+
+### GP1. Standalone producer attempt and exact probability semantics
+
+Fix any signed Fin4 quitting table with Never payoff0 and canonical own
+singletons s_0=1, s_1=s_2=s_3=0. All nonsingletons and outsider singletons
+are arbitrary finite real data. Fix an integer last date N≥0. Every agent
+chooses an independent law on C_N={0,…,N,Never}. The choices are full
+private stopping laws, not supplied root-Nash words or a public mixture.
+
+Write U_i(p) for ORIGINAL prescribed terminal payoff and B_i(p) for its
+ORIGINAL unrestricted behavioral cap, including all finite dates and
+literal Never. Put d_i=B_i−U_i≥0 and J=max_i d_i. In the auxiliary game
+agent0 minimizes J over its own C_N law; each other agent maximizes its
+original U_i over its C_N law. All four retain real agency. In particular
+agent0's deviation changes every observer's full cap in J.
+
+Why this looked useful: if such an auxiliary equilibrium were available
+over the ENTIRE actual law space, the three payoff agents would have
+zero full debt. Positive pivot debt would then strictly decrease under
+a sufficiently small pivot move toward a better FULL response; observer
+debts start at zero and vary continuously in that own-law mixture. Hence
+the full auxiliary fixed point would be terminal Nash. This does NOT
+produce that unrestricted fixed point. The decisive proposed production
+step was instead finite auxiliary Nash followed by calendar growth.
+
+### GP2. Complete finite caps and the structural equivalence
+
+For EVERY independent C_N profile and i≠0,
+
+    B_i=B_i^menu,       d_i=d_i^menu.               (GP.1)
+
+After N all opponent finite atoms have already occurred. A later finite
+reply pays V_i(Never)+h_i s_i, where h_i is the ORIGINAL deleted Never
+product. Since s_i=0, this is exactly the available Never value. Earlier
+dates are all in C_N; affinity in arbitrary response laws completes the
+full-cap equality. For the pivot, the sole missing price is explicit:
+
+    B_0=max(B_0^menu,V_0(Never)+h_0).               (GP.2)
+
+These are the exact tracked declarations
+`singlePivot_nonpivot_fullCap_eq_menuCap` and
+`singlePivot_pivot_fullCap_eq_max_menu_never_add_deletedNever` in
+`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`.
+I read them under their imports, with the complete late-response account
+in `UniformEquilibrium/Quitting/Terminal/FiniteDeadlineFullReplyCap.lean`.
+Our C_N corresponds to formal deadline N+1, since that implementation
+uses Fin deadline for the available finite dates. No Nash or positive
+reach hypothesis is needed for (GP.1–2).
+
+**Exact correspondence theorem.** A profile p is Nash in this auxiliary
+game IF AND ONLY IF it is ordinary independent-law C_N-menu Nash in the
+ORIGINAL quitting table.
+
+First suppose p is auxiliary Nash. The three payoff agents are menu
+best replies and (GP.1) makes their FULL debts zero. Let c=d_0(p).
+If c=0, the pivot is already a full best reply and hence menu-optimal.
+If c>0 and an available pivot law q improves original payoff by g>0,
+consider p_0^α=(1−α)p_0+αq for small α>0. The pivot cap deletes its
+own law, so its debt is EXACTLY c−αg. Each observer full debt is
+continuous in α and starts at0. In fact, if |r|≤M, it is at most4Mα
+by the uniform payoff/cap coupling bound. Choose α so that4Mα<c and
+αg<c. Then EVERY full debt is strictly below c, hence J(p^α)<J(p)=c.
+This contradicts the pivot's auxiliary optimality. It must therefore
+also be an ordinary menu best reply.
+
+Conversely suppose p is ordinary menu Nash. Again (GP.1) makes every
+observer FULL debt zero, so J(p)=d_0(p). For EVERY available pivot law q,
+menu optimality and the deleted-own-law cap identity give
+
+    d_0(q,p_-0)=B_0(p_-0)−U_0(q,p_-0)
+               ≥B_0(p_-0)−U_0(p)=d_0(p).
+
+Thus J(q,p_-0)≥d_0(p)=J(p). The pivot globally minimizes J on its
+ENTIRE finite law simplex, not merely among pure clock changes. The
+three other agents are already payoff-optimal, proving auxiliary Nash.
+
+This proof covers arbitrary mixed laws, signed rewards, zero-reach rows
+and unused/off-path finite atoms. It uses complete stopping-law payoffs
+directly; no conditional backward induction or subgame perfection is
+substituted for ordinary Nash. The decisive failure is that pricing a
+missing pivot reply in the objective does not make that reply AVAILABLE.
+
+### GP3. Existing exact obstruction and direction decision
+
+`exists_exactFiniteDeadlineTimingNash` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean`
+therefore already produces all the existence content of this finite
+auxiliary game. The changed objective has not added a strategic selector.
+The narrow pivot-repair/finite-menu search found no claim that this
+regret-agent game supplies a new outer-law selection theorem.
+
+Apply the equivalence to PZ2's literal canonical EC table. PZ's original
+all-nonnegative-price theorem at λ=0 already proves that EVERY ordinary
+finite-menu Nash profile at EVERY calendar has ORIGINAL unrestricted
+pivot debt at least1/81. Hence the SAME lower bound holds for EVERY exact
+finite auxiliary Nash profile here. This reuses the full-correspondence
+proof, including its ordinary-menu/off-path qualification; it is not a
+new census or merely one bad branch. The table is explicitly solved by
+the named cyclic singleton producer recorded in PZ2. No no-UE source is
+being restricted by this solved-table recipe falsifier.
+
+Conclusion: retire exact finite-calendar equilibrium of the regret-pivot
+auxiliary game as a global producer. Approximate auxiliary profiles are
+NOT excluded: the proof above gives no obstruction to their errors and
+calendar seams tending to zero simultaneously. Nor is an unrestricted
+auxiliary Nash equilibrium assumed to exist. I do not add a conditional
+fixed-point interface or tune its objective further. The next global
+lane is the equivalent own-zero native ABSORBING problem, where ordinary
+AllNever equilibrium is irrelevant and every unilateral finite/Never
+reply must still be priced. A whole-family small-positive-translation
+argument would have to choose its row scales and minima honestly as the
+translation changes; no fixed-law ancestry or new consumer is claimed.
