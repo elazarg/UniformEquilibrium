@@ -219,6 +219,18 @@ branch. Simultaneous funding of those budgets and the i/l payoff losses
 remains open; no extra active clocks or discarded four-owner responses
 have been used to repair the failed tie.
 
+NC.43 changes the source choice rather than adding another word control.
+Fix a row-distinct own-zero native table with a positive absorbing gap,
+then raise EVERY nonempty recipient reward by one sufficiently small t,
+then choose regular positive row scales. At this freshly selected source,
+a zero-future minimum with exactly two finite suppliers cannot have a
+c-active PureNever observer whose singleton comparisons to BOTH suppliers
+are negative. In particular the NC.42o core-three/census arm is excluded
+at that fresh source. The complete ordinary proof draft below includes
+the true positive full gap and actual-carrier realization; it awaits
+independent falsification. No old minimum is transported, no full-core-four
+mode is consumed, and neither broad source configuration is closed.
+
 NC.41 now constructs a true-overlap candidate with complete cap control:
 independent two-owner tail survivors give a STRAIGHT trace of singleton
 exit masses. Every other recipient's intermediate replies are bounded by
@@ -27665,3 +27677,305 @@ by160 exact rational independent-law enumerations on signed tables with
 t's displayed outside-core inequalities. Those checks validate algebra
 only: the tables are not asserted to be genuine global-minimum sources.
 This is internal ordinary mathematics, without review or export.
+
+## NC.43: a fresh small-own source excludes doubly negative c-active observers
+
+Status: COMPLETE ORDINARY PROOF DRAFT, awaiting independent falsification.
+This is a genuine FRESH-source submode exclusion, not a funded two-date
+word, a theorem about every old table, or a full Fin4 consumer. No frozen
+export is changed. Its key choice is to fix a generic own-zero native
+table BEFORE choosing the small positive own raise. In that order the
+finite reward differences have a fixed positive lower bound.
+
+### NC43a. Exact conclusion and the choice order
+
+From any ordinary four-player quitting counterexample one can select ONE
+fresh table with ALL properties of the reviewed least-Never source, and
+if desired its SAME-table maximal-first-root-absorption refinement, with
+the following extra restriction:
+
+> At any produced full minimum whose entire prescribed finite mass is at
+> its first root and whose positive finite suppliers are exactly two
+> owners p,q, EVERY c-active PureNever owner h has
+> Γ_hp>0 or Γ_hq>0.
+
+Here c-active means the final empty finite test attains the ENTIRE cap;
+Γ_hj=r_h({j})−s_h, with recipient row h. Zero comparisons are excluded by
+within-row distinctness. The statement does not require that the first
+root be cap–Nash. It applies to this precisely specified zero-future,
+two-supplier mode in EITHER canonical configuration. Three or four root
+suppliers, prescribed future mass, and PureNever ROOT-ONLY observers are
+not covered. No unchanged-profile transport from an old table is asserted.
+
+First obtain an OWN-ZERO native table with positive ABSORBING gap by
+Part I §§2–4 of `LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`: positive-pivot
+normalization of a genuine no-UE table, followed by the legal finite-row
+translation that makes the pivot own zero. The native table itself has
+ordinary AllNever equilibrium and is NOT claimed to be a counterexample.
+Its absorbing gap is the retained positive quantity.
+
+Scale this native table by a fixed positive scalar so that all entries are
+strictly inside (−1/2,1/2). Then perturb it ON THE AFFINE SLICE of tables
+whose four own singletons are zero, preserving a positive absorbing gap.
+The bound |Δ_abs(r)−Δ_abs(r′)|≤8‖r−r′‖∞, proved in source (P7), permits
+this: take the perturbation radius smaller than one sixteenth of the
+scaled old absorbing gap and smaller than the distance to the half-cube
+boundary. On that slice the finitely many equal-entry hyperplanes in each
+recipient row still have empty interior: only ONE entry of each row is
+fixed at zero. Choose a native table z off all of them, still strictly
+inside the half cube, and NOW FIX it. Put
+
+    A=Δ_abs(z)>0,
+    L=max_(h,S≠∅)|z_h(S)|>0,
+    m=min_(h,S≠T, S,T≠∅)|z_h(S)−z_h(T)|>0,
+    b=m/(m+L)>0.
+
+All these constants are fixed BEFORE the next choices. Select ONE
+
+    0<t<min(1/2, A/8, b²m/8),
+    z^t_h(S)=z_h(S)+t for EVERY nonempty S.       (NC.43a)
+
+Only after t is fixed choose positive recipient scales
+θ∈(1/2,1)⁴ at a coordinate-regular point of the fixed-carrier concave
+minimum function, and put
+
+    r_h(S)=θ_h[z_h(S)+t],      s_h=θ_h t.        (NC.43b)
+
+The scales may depend on t. All estimates below hold for EVERY scale in
+this box, so they do not assume a uniform differentiability choice.
+
+### NC43b. The full gap, rigid debts and actual extremal source survive
+
+The native absorbing gap alone is not enough; verify the FULL gap here.
+At every actual independent profile, the signed translation identity (P4)
+and the singleton/Never bound (P5) give
+
+    D_(z^t)=D_z+4tν,    Δ_abs(z^t)=A,
+    tν≤d_h^(z^t)≤D_(z^t).
+
+The absorbing completion estimate (P6), with reward bound1, implies
+
+    A≤D_(z^t)+14ν^(1/4)
+      ≤D_(z^t)+14[D_(z^t)/t]^(1/4).
+
+Thus Δ_all(z^t)≥min(A/2,t(A/28)⁴)>0. This is an ALL-profile lower
+bound, not a minimizing-tail substitution. The named original
+exploitability-gap correspondence therefore makes z^t a genuine ordinary
+no-UE table for every chosen t>0.
+
+Positive row scaling gives d_h^r=θ_h d_h^(z^t) at the SAME actual laws;
+it maps the complete closed payoff/cap carrier onto the new one. Hence
+
+    δ=Δ_all(r)>0,
+    Δ_abs(r)≥(min_h θ_h)A>A/2,
+    δ≤D_r(AllNever)=tΣ_hθ_h<4t<A/2.             (NC.43c)
+
+So the FULL and absorbing minima are strictly separated. The table is
+unit-bounded, all owns are positive, and every within-row entry difference
+is θ_h times its fixed native difference. Concave scalarization on ONE
+fixed carrier, as proved in source §5, supplies a coordinate-regular θ in
+this open box and ONE common debt vector at EVERY full minimum. The gap
+bounds just proved do not require θ close to1. This avoids changing t
+after regularization or using an old minimum as the current one.
+
+All hypotheses for source §§6–10,14–19 now hold at THIS r. In particular
+actual near-minimal Never and debt floors, the quantitative cap-minus-own
+margin, finite-law marked realization, the c-active finite owner, and
+the exhaustive bridging alternatives all follow there. Select least
+literal ν on the fresh augmented carrier H at this same r and δ.
+Its positive attainment follows from compactness and the uniform
+near-minimum Never floor, exactly as in source §18.
+
+Maximal first-root absorption can then be reselected at THIS source if
+required. Over (a,w)∈[0,1]⁴×H impose D(T_a(w))=δ and c(a)ν(w)=ν_min.
+The set is compact and nonempty; the actual positive first-root
+factorization supplies a nonzero member. The continuous absorption
+1−c(a) attains its positive maximum. Fixed-root prefixes of actual tail
+realizers retain the augmented literal Never product and ALL caps, so
+the chosen triple is actual-carrier attainable. The universal source
+construction applied to its own realizers gives the same minimum-source
+facts, as in reviewed RA1 of
+`CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`. Its honest suffix is NOT
+asserted to minimize debt. No old marked law, cap, ν, or maximal root is
+transported through (NC.43a–b).
+
+### NC43c. Complete two-supplier exclusion at this fresh source
+
+Take any produced minimum with zero prescribed finite mass beyond its
+first root and exactly two positive finite suppliers. Here is the full
+finite c-active input, not a further label assumption. Write n_h>0 for
+the original Never masses, ν=∏_h n_h, H_h=∏_(j≠h)n_j, R_h for the
+Never response value, and κ_h=(B_h−R_h)/H_h≥s_h. Put
+E_c={h:κ_h=s_h}. The SAME fresh no-UE table supplies a simplex λ with
+γ_h=(Γλ)_h>0 for EVERY h, by
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+in `UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`.
+The recipient-row orientation and zero diagonal are the definition
+`quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`.
+
+For a fixed small ρ>0 replace each ORIGINAL Never branch by the
+independent N-date tail with masses ρλ_j/N at each date and remaining
+Never mass1−ρλ_j. Append it strictly after each original finite realizer,
+retaining the empty date immediately before the word. Pair ties in play
+have probability O(1/N); ties at ANY deviating deadline also have
+probability O(1/N), uniformly in that deadline. Riemann sums for the
+singleton events therefore give full tail payoff/cap limits
+
+    u_h=ρ(s_h+γ_h)+O(ρ²),
+    b_h=s_h+ρ γ_h⁺+O(ρ²).
+
+The error is uniform over ALL finite testers, including moving dates
+and both empty endpoints. Literal Never is retained separately and
+dominated by the final finite test, since the surviving opponent-Never
+product and s_h are positive. Thus these are unrestricted behavioral
+caps, not selected response prices. The exact original-law graft has
+
+    U_h′=U_h+νu_h,
+    B_h′=max(B_h,R_h+H_h b_h).
+
+Every original finite tester is unchanged, and every new tester has
+the displayed conditional-tail value. The true all-law floor, first
+at finite indices and then in their actual carrier limit, implies
+
+    Σ_h(b_h−κ_h)⁺/n_h ≥ Σ_h u_h.
+
+For h∉E_c the clipped term vanishes when ρ is sufficiently small.
+Divide by ρ and let ρ decrease to0. Since every γ_h>0, rearranging gives
+
+    Σ_(h∈E_c)[(1−n_h)/n_h]γ_h
+      ≥ Σ_h s_h+Σ_(h∉E_c)γ_h>0.                 (NC.43c′)
+
+Consequently some h∈E_c has n_h<1: a c-active owner has positive
+ORIGINAL prescribed finite mass as well as positive Never mass.
+If all c-active owners were PureNever, the small fixed-ρ limiting
+graft would have debt strictly belowδ; choose ρ, then N, then an
+original finite index to realize the strict improvement. This is
+source §14.3's complete argument and uses no minimizing/Nash tail.
+In the present zero-future/two-supplier mode relabel THAT owner i
+and the other supplier l, with root probabilities x,y∈(0,1).
+The remaining two owners are PureNever.
+
+This mode has an exact root0/Never realization with the SAME full pair
+and literal Never. To check this identification, source §6 realizes
+the positive first mixture atom by ONE original date with a retained
+interval of positive limiting length. Its four prescribed masses
+converge individually to the selected root masses. The four ORIGINAL
+literal Never masses also converge individually. Since the marked
+laws are supported only at this root and Never, the remaining finite
+mass of every original realizer tends to zero. Censor exactly that
+remaining mass to Never and adjust the four root masses to their limits.
+The total marginal TV error tends to zero. Product coupling changes
+each prescribed payoff by at most twice the reward bound times the
+sum of marginal TV errors. The same bound for EVERY responder uses
+only its opponent errors, hence controls its ENTIRE cap uniformly,
+including Never and moving finite deadlines.
+
+After this censoring, replies before the retained root, if such dates
+exist, all pay s_h; the root reply is Q_h, every later finite reply
+is the single empty-after-root value C_h, and Never pays R_h. Source
+§8 supplies B_h>s_h at the original minimum. Thus the limit of the
+old full caps is max(Q_h,C_h,R_h), whether or not those pre-root
+dates existed. Moving the retained root to literal0 deletes ONLY
+the now strictly submaximal pre-root response s_h. The resulting
+actual integer-law profile therefore has exactly the original U,B
+and original joint Never ν. Moreover C_h−R_h=s_h∏_(j≠h)n_j>0,
+so its full behavioral cap is exactly max(Q_h,C_h). C activity is
+preserved, with its final empty finite test at literal1. This is a
+direct actual-carrier identification, not an assumption that every
+marked minimum is generally attained on integer clocks.
+
+For i the exact root and later values differ by
+
+    C_i−Q_i=yα,
+    α=r_i({l})−r_i({i,l}).
+
+Its c activity gives α≥0; within-row distinctness gives α≠0. Therefore
+α>0, i is STRICTLY later-only, and (NC.43b) gives α≥m/2. Its complete
+played debt is
+
+    d_i=(1−x)(1−y)s_i+xyα,
+    δ≥d_i≥xyα.                                  (NC.43d)
+
+This uses the supplied positive finite c-active owner, not an assumed
+Nash prefix or a paid-owner/donor alignment. It does not require l to
+be root-only, and applies equally if one or both PureNever owners bridge.
+
+Suppose a PureNever c-active owner h had Γ_hi<0 AND Γ_hl<0. Its complete
+c cap is its exact later-empty value, so with n_i=1−x, n_l=1−y,
+
+    0<B_h−s_h
+     =xn_l Γ_hi+n_i y Γ_hl+xy[r_h({i,l})−s_h].
+
+The strict inequality is the true-minimum output margin. Since the native
+owns are zero and all native row differences are at least m,
+
+    Γ_hi≤−θ_h m,   Γ_hl≤−θ_h m,
+    r_h({i,l})−s_h=θ_h z_h({i,l})≤θ_h L.
+
+Consequently
+
+    m[(1−y)/y+(1−x)/x]<L,
+    x>b, y>b,
+    δ≥xyα>b²m/2.                               (NC.43e)
+
+But (NC.43a,c) give δ<4t<b²m/2, contradiction. A doubly negative
+c-active PureNever observer is therefore IMPOSSIBLE at this ONE fresh
+source. The proof concerns the true full minimum; it does not derive or
+assume any sign at an honest off-minimum suffix.
+
+### NC43d. Effect on the live core-three word, and exact remaining scope
+
+In the stricter census of NC.42o–q, t is PureNever and c-active,
+Γ_ti<0, and {i,l,k} is an actual premium trap. If the premium core had
+cardinality three, t would be outside it; the actual pure-l absorbing
+floor then forces Γ_tl<0, as proved in NC.42r. This contradicts
+(NC.43e). Hence that ENTIRE core-three/census submode cannot occur at
+the freshly selected source. The PRE-FIRST/END word begun to repair it
+is unnecessary for consuming THIS fresh-source mode; its unfunded
+calculation is not being represented as a successful competitor.
+
+More directly, (NC.43e) forces Γ_tl>0 in this census. Together with the
+supplied p_tl>0, this gives r_t({t,l})−s_t=Γ_tl+p_tl>0. Adjoining t
+with witness {t,l} to the trap {i,l,k} forces the actual premium core
+to be ALL FOUR players. This is a complete source-class restriction,
+not an existence theorem for that full core.
+
+The original frozen source may have larger own rewards relative to its
+finite differences, so no unchanged-table exclusion of its core-three
+mode is inferred. The new order selects an alternative fresh source
+from ANY counterexample. Both broad canonical configurations remain
+open; in particular this does not treat future finite laws, three or
+four suppliers, or arbitrary two-supplier cap censuses. The next task
+is a full-law consumer in the surviving source geometry, not improving
+b or t's numerical bound. No Lean theorem, independent review PASS or
+export seal is asserted by this draft.
+
+Falsification checks for the new implication: the native AllNever profile
+really has debt0, so the proof does NOT use its false positive full-gap
+premise; that gap is proved only AFTER t is raised. The perturbation is
+made BEFORE t, so m is not allowed to shrink with t. The regular scales
+need not be close to1: the displayed full/absorbing bounds are uniform
+throughout (1/2,1)⁴. A marked profile is not simply declared attained;
+the positive retained root and zero remaining finite mass give the
+explicit uniform-cap TV identification above. The possible equality
+α=0 is excluded by the fixed native row distinctness. Finally, c activity
+and the true-minimum strict cap-minus-own margin are essential: a merely
+selected late tester or an arbitrary solved table does not imply
+0<B_h−s_h. These checks retain the full source hypotheses rather than
+mistaking a local regression for a positive-global-minimum example.
+
+Narrow primary declarations inspected for the reused source steps are
+`exists_finFour_simplex_positive_projectiveResidual_of_no_uniformPayoff`
+(`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`),
+`quittingProjectiveLCPMatrix`
+(`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`), and
+`quittingTerminalSemanticCarrier`,
+`exists_terminalProfile_sequence_tendsto_semanticPair`,
+`quittingTerminalSemanticCarrier_isCompact`,
+`quittingTerminalSemanticPrefix`, and
+`quittingTerminalSemanticPrefix_mem_carrier`
+(`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`). The
+literal-Never augmentation and marked transport are ordinary mathematics
+proved in the reviewed source, not extra fields asserted to appear in
+the cited Lean prefix declaration. No compiler check was run for NC.43.
