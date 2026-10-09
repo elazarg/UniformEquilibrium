@@ -168,6 +168,15 @@ is free. This is an actual-source OPERATION FALSIFIER, not exclusion of
 the source submode. Other hazards/conditionals and the nonsaturated
 FIRST-i/ROOT-k boundary remain open; no coupled funding is proved.
 
+DF gives a new COMPLETE ORDINARY, UNREVIEWED actual-source sign
+exclusion. In DC's positive-hazard one-future minimum, at least ONE
+of its two paid positive root suppliers has a STRICTLY POSITIVE
+ENTIRE late-cap coefficient max(zP_h,Γ_h). A genuine three-marginal
+variation and the strict AllNever comparison force this by a
+negative tangent Hessian; all endpoint ties and z=1 are allowed.
+This aligns an actual supplier with k, but does not yet fund moving
+its paid mass or close the surviving one-future/II class.
+
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
 separations but the full existential-producer union still UNRESOLVED.
@@ -18647,4 +18656,293 @@ for trial in range(200):
     assert (theta*Gamma+z*P)/d == Gamma
 assert Q(2, 3)*Q(1, 4)-Q(1, 4)**2 == Q(5, 48) < Q(1, 9)
 print('PASS:', checks, 'exact two-clock reply identities; 200 BR identities')
+```
+
+
+## DF: both paid root suppliers cannot have negative entire late coefficients
+
+Status: COMPLETE ORDINARY, UNREVIEWED ACTUAL-SOURCE SUBMODE
+EXCLUSION. This is a strict restriction on DC's SAME positive global
+minimum, not a raw existence producer, a funded whole-law replacement
+or a consumer of all one-future sources. No extra endpoint tie,
+strict FIRST/END label, proper-hazard assumption or reward perturbation
+is made. The operation changes THREE independent original marginal
+amplitudes, not a correlated profile mixture.
+
+### DF1. Statement, exact data and strict AllNever comparison
+
+Use the same selected table, owners i,p,q,k and actual laws(DC.1).
+Thus i is PureNever, p and q have only positive root atoms b,a, k
+has finite amplitude f and fixed geometric conditional F_z, and
+
+    0<a,b,f<1,   0<z≤1,
+    Q_i=E_i,   Q_p<E_p,   Q_q<E_q,
+    Q_k≠R_k+(1−b)(1−a)s_k.
+
+These shape and gap properties are the reviewed CW/DA/DB conclusions;
+global full debt is δ>0. Set, for each h≠k,
+
+    Γ_h=r_h({k})−s_h,
+    P_h=r_h({h,k})−s_h,
+    L_h=max(zP_h,Γ_h).
+
+All entries within each reward row are distinct and z>0, so Γ_h
+and zP_h are nonzero and hence L_h≠0. The conclusion is
+
+    L_p>0 OR L_q>0.                              (DF.1)
+
+Equivalently at least one positive paid root supplier h has either
+r_h({k})>s_h or r_h({h,k})>s_h, with the positive term actually
+making its complete late-cap coefficient positive. This is an
+alignment with the ACTUAL future owner k; a simplex donor unrelated
+to this source does not replace it. It does not assert both gaps,
+the same endpoint as the sole bridger, or a funded relocation.
+
+Write S₀=Σ_h s_h. AllNever is an actual independent profile with
+prescribed payoff0 and full cap s_h because every s_h>0. Global
+minimality gives S₀≥δ. Equality would make its pair a TRUE positive
+full minimum. The declaration
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+would then give, for any absolute reward bound M>0,
+
+    0=B_h−s_h≥δ+δ²/(8M)>0.
+
+Therefore
+
+    S₀>δ.                                        (DF.2)
+
+This invocation is at an original UNWEIGHTED GLOBAL minimum, not an
+honest off-minimum suffix or a restricted-carrier minimum. No
+quantitative lower bound on S₀−δ is needed.
+
+### DF2. TRUE full caps on a legal three-amplitude box
+
+Keep z and the entire finite conditional F_z fixed. Vary b,a,f on
+a sufficiently small two-sided open box about their source values:
+
+    p=bδ₀+(1−b)δ_Never,
+    q=aδ₀+(1−a)δ_Never,
+    k=fF_z+(1−f)δ_Never,
+    i=δ_Never.                                   (DF.3)
+
+Every point is an actual independent product law with literal
+ν=(1−b)(1−a)(1−f). Nothing fixes any of the three individual Never
+masses, and no zero-budget prefix or minimum suffix is required.
+Put C=(1−b)(1−a), and use the literal polynomials R_h,Q_h from DC2.
+For every point of the box ALL prescribed payoffs are
+
+    U_h=R_h+C f r_h({k}).
+
+Every later finite response of h≠k has exactly the DC.2 trace;
+its ENTIRE supremum, including the possibly unattained END, is
+
+    E_i=R_i+C(s_i+fL_i),
+    E_p=a r_p({q})+(1−a)(s_p+fL_p),
+    E_q=b r_q({p})+(1−b)(s_q+fL_q).
+
+All maximizing finite calendars and FIRST/END ties are retained:
+changing a positive amplitude or root-survival factor does not
+change the ordering of the complete fixed-conditional trace.
+Never is below END by the positive opponent-Never product times
+s_h. This includes z=1, where END is an actual date after1. k's
+entire cap is independent of its own law. The strict three nonbridge
+gaps persist on a small enough box, so let K(b,a) be k's fixed
+selected branch, either Q_k or R_k+C s_k. Consequently the TRUE
+full summed debt throughout the box is
+
+    D=max(F₀,F₁),
+    F₀=Q_i+E_p+E_q+K−Σ_h U_h,
+    F₁=E_i+E_p+E_q+K−Σ_h U_h.                    (DF.4)
+
+F₀,F₁ are multiaffine polynomials in THREE variables b,a,f,
+and both equal δ at the source. No other owner's cap has been
+replaced by a selected-response lower ledger. Triple ROOT tester
+rewards remain in Q_i,Q_k; all coalitions allowed by these actual
+laws remain in R_h. There are no late prescribed collisions and
+the grand coalition has probability0 for every pure tester.
+
+The scalar box is already in the original actual-law carrier.
+If finite realizers are desired, move k's geometric tail after N
+to date N+1, not to Never. Its literal finite/Never amplitudes are
+unchanged. For z<1 the product-TV error is at most f(1−z)^N,
+uniformly on the box after shrinking its closure if necessary;
+bounded rewards give uniform error for EVERY raw moving finite
+test and Never, hence for full caps and prescribed payoffs. At
+z=1 the laws are finite already. There is no marked test/seam
+identification or additional independent-clock compression here.
+
+### DF3. A stationary combination and the true bridge-seam curvature
+
+Let g=F₀−F₁=Q_i−E_i. At the source
+
+    g=0,   ∂_f g=−C L_i≠0.
+
+Along the f coordinate the slopes of the two active branches must
+straddle0, since the ACTUAL full debt has a local minimum. Choose
+μ∈[0,1] such that the polynomial
+
+    L=(1−μ)F₀+μF₁
+
+satisfies ∂_f L=0 at the source. The smooth surface g=0 is explicitly
+f=(Q_i−R_i−C s_i)/(C L_i), for b,a near their original values.
+It stays inside the legal box. On this surface D=F₀=F₁=L≥δ, so
+∇L is normal to its two-dimensional tangent plane T. Since
+∂_f L=0 and ∂_f g≠0, that normal multiplier is0. Thus
+
+    ∇L=0,   vᵀ(∇²L)v≥0 for EVERY v∈T.           (DF.5)
+
+For the Hessian assertion take a legal smooth surface curve with
+initial velocity v. Its second derivative of L is vᵀ(∇²L)v
+because ∇L=0. Its attained local minimum makes that derivative
+nonnegative. L is NOT claimed to have a minimum off the seam or
+to be the full debt at distant parameters. Endpoints μ=0,1 cause
+no change in this argument: a stationary single branch is then
+the selected combination, and only its SEAM-tangent Hessian is
+required nonnegative. The full debt is still kinked in the f
+normal because ∂_f g≠0. Every tangent curve is legal for BOTH
+signs of sufficiently small time, since a,b,f are interior.
+No two-sided variation of z is used, even when z=1. A FIRST/END
+tie is smooth in this box because its entire conditional trace
+is fixed and all its values get the same positive affine factor.
+
+Let n_p=1−b and n_q=1−a denote the SOURCE values and
+S_k=Σ_h r_h({k}). The entire f-dependent part of L is
+
+    f[(1−a)L_p+(1−b)L_q
+                        +(1−b)(1−a)(μL_i−S_k)].
+
+Hence stationarity in f gives
+
+    τ:=μL_i−S_k=−L_p/n_p−L_q/n_q.
+
+Define its three mixed second derivatives at the source by
+
+    α=∂_b∂_a L,
+    β=∂_b∂_f L=n_q L_p/n_p,
+    γ=∂_a∂_f L=n_p L_q/n_q.                    (DF.6)
+
+All three diagonal second derivatives vanish. The third derivative
+∂_b∂_a∂_f L is τ. For offsets u,v,w from the source, the EXACT
+multiaffine Taylor formula is
+
+    L=δ+αuv+βuw+γvw+τuvw.                      (DF.7)
+
+At the polynomial endpoint (b,a,f)=(0,0,0), each of Q_i,E_i,E_p,
+E_q,K is its owner's singleton and every U_h=0, so L(0,0,0)=S₀.
+This is an algebraic evaluation of the same polynomials; their
+branch labels are NOT asserted to be active away from the box.
+Substituting offsets (−b,−a,−f) in(DF.7) gives
+
+    S₀−δ=αba+f[b L_p/n_p+a L_q/n_q].            (DF.8)
+
+Now suppose L_p<0 and L_q<0. Equation(DF.2), positive b,a,f and
+(DF.8) force α>0, while(DF.6) gives β<0 and γ<0. The Hessian
+quadratic form is
+
+    2(αuv+βuw+γvw).
+
+On the two-dimensional plane
+
+    W={ (u,v,w): w=−αu/(2γ)−αv/(2β) }
+
+it equals
+
+    −(αβ/γ)u²−(αγ/β)v²<0
+
+for every nonzero vector. Both W and T have dimension2 in ℝ³,
+so their intersection contains a nonzero vector. This contradicts
+(DF.5). Thus the two supplier coefficients cannot both be negative.
+Their row-generic nonzero property proves(DF.1).
+
+### DF4. Scope, lookup and exact algebra check
+
+The conclusion excludes one actual-source sign submode in BOTH the
+proper and sure-first one-future cases, including every endpoint-tie
+configuration. It uses no saturation d*_h=ν₀s_h and is not DE's
+fixed-Never matching template. Global minimality and the strict
+AllNever comparison supply the crucial input; no fictitious
+full-minimum cap margin is assigned to an off-minimum tail. The
+least-Never/common-debt/max-A source properties remain available
+but are not needed after they have supplied DC's actual shape.
+
+Primary lookup: `positive_minimum_fourPlayer_allOwner_quadraticMargins`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+was read with its imports after the `docs/TOOLKIT.md` margin route.
+The accepted source's within-row distinctness was checked in Part I
+Section5. A bounded search for Hessian, negative entire-late supplier
+coefficients and a three-amplitude sign exclusion in the Terminal
+and Diagnostics quitting subtrees and the Morse/Noether notebooks
+found no result supplying(DF.1). This is not a completeness audit of
+all existing UE producers; the output is a source restriction, not
+a new raw payoff-class existence claim. No Lean check is claimed.
+
+The next operational question is to consume the now-aligned positive
+supplier coefficient in an ACTUAL multi-owner law change, while
+paying all observer caps and retaining the source's global selection
+constraints. No such funded operation is proved here.
+
+The standard-library checker below checks the field-to-mixed-derivative
+identities, stationary endpoint identity and a negative vector in an
+ARBITRARY candidate tangent plane, in400 exact rational tests. Its
+polynomial fields are algebra tests, not claimed actual-source games;
+the global/source and all-envelope arguments remain the proof above.
+As a positive sign-pattern control, at b=a=f=1/2, L_p=1,L_q=−1
+and S₀−δ=1/2, the identities allow α=2,β=1,γ=−1,τ=0.
+The tangent plane w=u−v then has Hessian form 2(u²+v²)>0.
+Thus the negative-plane argument does NOT silently exclude the
+mixed-sign survivor or assert that BOTH coefficients are positive.
+This is only a test of the necessary polynomial condition, not
+an actual positive-minimum game or a conjectural counterexample.
+
+```python
+from fractions import Fraction as Q
+from random import Random
+rng = Random(614)
+for trial in range(400):
+    b, a, f = [Q(rng.randrange(1, 10), 10) for _ in range(3)]
+    np, nq = 1-b, 1-a
+    lp, lq = [-Q(rng.randrange(1, 31), 10) for _ in range(2)]
+    gap = Q(rng.randrange(1, 31), 10)
+    beta, gamma = nq*lp/np, np*lq/nq
+    tau = -lp/np-lq/nq
+    alpha = (gap-f*(b*lp/np+a*lq/nq))/(b*a)
+    assert alpha > 0 and beta < 0 and gamma < 0
+    tab = alpha-f*tau
+    tb, ta = -tab*a-f*beta, -tab*b-f*gamma
+    delta = Q(1)
+    def J(B, A):
+        return (1-A)*lp+(1-B)*lq+(1-B)*(1-A)*tau
+    t0 = delta-tb*b-ta*a-tab*b*a-f*J(b, a)
+    def L(B, A, F):
+        return t0+tb*B+ta*A+tab*B*A+F*J(B, A)
+    c = [b, a, f]
+    def mixed(indices):
+        ans = Q(0)
+        for mask in range(1 << len(indices)):
+            v = c.copy()
+            for j, index in enumerate(indices):
+                if mask & (1 << j):
+                    v[index] += 1
+            sign = (-1)**(len(indices)-mask.bit_count())
+            ans += sign*L(*v)
+        return ans
+    assert L(*c) == delta and J(b, a) == 0
+    assert all(mixed([j]) == 0 for j in range(3))
+    assert [mixed([0, 1]), mixed([0, 2]), mixed([1, 2]),
+            mixed([0, 1, 2])] == [alpha, beta, gamma, tau]
+    assert L(0, 0, 0)-delta == gap
+    gx, gy, gz = [Q(rng.randrange(-9, 10)) for _ in range(3)]
+    h1 = gx-gz*alpha/(2*gamma)
+    h2 = gy-gz*alpha/(2*beta)
+    u, v = (h2, -h1) if (h1, h2) != (0, 0) else (Q(1), Q(0))
+    w = -alpha*u/(2*gamma)-alpha*v/(2*beta)
+    assert gx*u+gy*v+gz*w == 0
+    form = 2*(alpha*u*v+beta*u*w+gamma*v*w)
+    assert form == -alpha*beta/gamma*u*u-alpha*gamma/beta*v*v < 0
+for u, v in [(Q(1), Q(0)), (Q(0), Q(1)), (Q(2), Q(-3))]:
+    w = u-v
+    assert 2*(2*u*v+u*w-v*w) == 2*(u*u+v*v) > 0
+print('PASS: 400 exact field/gradient/Hessian/endpoint/negative-tangent checks;'
+      ' mixed-sign positive-plane control')
 ```
