@@ -8,6 +8,19 @@ The requested endpoint is UE for EVERY signed four-player quitting table,
 against EVERY unilateral behavioral deviation, with ONE payoff target
 fixed before the requested accuracy.
 
+Latest full-law selector test: SQ in the global notebook builds an explicit
+TV-continuous private sampled-clock response map, covering ALL finite/Never
+replies with uniform error12M/(K+1)+τlog(6K+2). Yet on the actual solved table
+r_i(S)=1 for members,2 for outsiders, one fixed K,τ gives marginal-TV
+displacement>1/1024 at EVERY profile. Uniform coverage makes every output
+Never mass<9/16; any near-fixed input would then have full total debt
+>1333/8192, while the response estimate would give debt<7/64. The table
+has the pure terminal Nash target(1,2,2,2), so this excludes only this exact
+simultaneous-law fixed-point recipe. It is ordinary unreviewed mechanism
+triage, not a positive-gap game, all-sampler no-go, source restriction or
+export. The next global route must preserve payoff/cap near-optimality
+instead of insisting that indifferent prescribed laws nearly self-confirm.
+
 Current independent global lane: SP in the owned global notebook tests the
 FULL labelled first-hit coalition law as a possible nonlinear obstruction.
 For arbitrary independent finite/Never clocks, a two-copy coordinate swap

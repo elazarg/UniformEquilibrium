@@ -2,6 +2,16 @@
 
 Owner: CODEX_MORSE.
 
+Latest full-law global-selector test: SQ below constructs an explicit
+TV-continuous private sampled-clock response map with a UNIFORM full-response
+error bound, then falsifies its approximate fixed-point producer on an
+explicit already solved table. At one fixed finite K and positive temperature,
+EVERY independent profile is more than1/1024 away from its image in at least
+one marginal TV distance. This is an all-law mechanism falsifier, not an
+equilibrium nonexistence claim, all-sampler no-go or actual source contraction.
+The next global selection must retain payoff/cap near-optimality rather than
+require prescribed laws to be nearly fixed by this indifferent-reply sampler.
+
 Current independent global lane: SP below uses the ENTIRE labelled first-hit
 coalition law, not a convex payoff relaxation or a selected root chart. A
 two-copy coordinate-swap argument identifies exactly which singleton/crossed-
@@ -24662,6 +24672,243 @@ print('SP exact diagnostic PASS: 120 rational product laws; 196 swap incidences'
 ```
 
     awk '/^# SP_EXACT_DIAGNOSTIC/{active=1} active && /^```$/{exit} active{print}' notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md | python
+
+## SQ. Continuous full-response sampling does not produce law fixed points
+
+Status: COMPLETE ordinary UNREVIEWED simultaneous full-law recipe falsifier.
+The response-approximation theorem is uniform over arbitrary signed tables
+and arbitrary independent stopping laws. Its putative fixed-point producer
+fails on ONE explicitly solved actual table, with positive displacement
+against EVERY product of finite/Never laws. This is not a bounded-response
+menu counterexample, a bad selected equilibrium branch, a negative quitting
+table, an all-sampler theorem or an exclusion of compact counterfactual-state
+methods. No export or Lean check is claimed.
+
+### SQ1. Exact simultaneous private-law selector
+
+Fix four players, an actual table with |r_h(S)|≤M, M>0, and Never payoff0.
+At a product law p, let v_i(t) be the expected payoff of the PURE clock t
+against its ORIGINAL three opponents, including t=Never. Put
+B_i=sup_t v_i(t), the unrestricted behavioral cap by pure-time extremality.
+
+Fix integer K≥1 and temperature τ>0. For owner i independently sample K
+FRESH clocks from EACH opponent law. These are private artificial draws
+from known distributions, NOT the actual opponent clocks or extra public
+signals. Each sampled finite date t contributes two candidate entries t,t+1;
+a sampled Never contributes0,1 instead. Add one0 and ONE literal Never.
+This produces an ordered catalogue of L=6K+2 entries, with repetitions
+retained. Conditional on the sampled catalogue, choose entry t with weight
+
+    exp(v_i(t)/τ) / Σ_catalogue exp(v_i(entry)/τ).
+
+Call the resulting complete private law β_i(p). The catalogue may be sampled
+and the entire stopping clock selected before play. Each player's draws
+are independent of all actual opponents and of the other players' draws.
+Thus β(p) is another legal product of behavioral stopping laws, not a
+lottery over correlated profiles. No law of actual opponents is changed
+when evaluating the one-player reply β_i(p).
+
+For fixed K,τ the map β is continuous in product total variation. Indeed
+the product law of i's3K samples changes by at most KΣ_(j≠i)TV(p_j,q_j).
+Every pure-reply payoff changes uniformly by at most2MΣ_(j≠i)TV(p_j,q_j).
+On coupled identical catalogues, the finite softmax distribution is TV-
+Lipschitz with constant1/τ in the sup norm of its payoff vector. Pushing
+forward catalogue choices cannot increase TV. Consequently
+
+    TV(β_i(p),β_i(q))
+      ≤(K+2M/τ)Σ_(j≠i)TV(p_j,q_j).                  (SQ.1)
+
+This is strong TV continuity on the actual countable law simplex. Compactness,
+weak continuity at escaped finite mass, and a fixed point do NOT follow.
+
+### SQ2. Uniform coverage of EVERY finite and Never response
+
+Let Z_i be the highest payoff among the FINITE sampled candidate entries.
+For EVERY fixed finite target t*,
+
+    v_i(t*)−E Z_i ≤12M/(K+1).                      (SQ.2)
+
+Proof. Target0 is already present. For t*>0, if any sampled actual finite
+clock equals t*, that clock is present. Otherwise select s equal to one
+plus the greatest sampled actual finite clock strictly below t*, or0 if
+there is no such sample. Then s≤t* and s is present. Couple replies s and
+t* against ONE independent sample of the three actual opponent clocks.
+Their first-hit coalitions agree unless an opponent clock lies in[s,t*)
+or equals t*. For a fixed opponent j the first event requires its actual
+clock, truncated to dates<t*, to be STRICTLY greater than all its K fresh
+copies; invalid clocks, including Never, are placed below finite dates for
+this rank argument only. Exchangeability bounds this probability by1/(K+1).
+The tie event matters only when no sampled clock equals t*. Its probability
+is at most m_j(1−m_j)^K≤1/(K+1), where m_j=p_j(t*). A union bound over
+the three opponents therefore gives disagreement probability≤6/(K+1).
+The absolute payoff difference is at most2M. Since Z_i≥v_i(s) on each
+catalogue, this proves(SQ.2).
+
+Taking a supremum over t* gives B_i^finite−E Z_i≤12M/(K+1), without
+assuming an attained finite maximizing clock. The exact Never entry makes
+the same bound valid for the maximum over ALL candidates versus full B_i.
+The conditional softmax utility is within τlog L of that catalogue maximum.
+Thus the ACTUAL unrestricted reply satisfies, for EVERY product law p,
+
+    B_i−U_i(β_i(p),p_-i)
+       ≤ e:=12M/(K+1)+τlog(6K+2).                 (SQ.3)
+
+This includes unattained ∞− finite suprema, every supported/unsupported
+finite deadline, real ties and literal Never. It does not identify Never
+with a large finite date. The empirical samples only select candidate dates;
+their ACTUAL expected payoffs v_i are used, not noisy empirical rewards.
+
+If finite replies dominate Never, v_i(Never)≤B_i^finite, the same argument
+also bounds the output's Never mass. Conditional on the catalogue, its ONE
+Never softmax weight is at most
+
+    1/[1+exp((Z_i−v_i(Never))/τ)]
+      ≤1/2+(B_i^finite−Z_i)/(4τ).
+
+Here Z_i≤B_i^finite and the logistic derivative is at most1/4. Therefore
+
+    β_i(p)(Never)≤1/2+3M/[τ(K+1)].                (SQ.4)
+
+No law fixed-point hypothesis is used in any of these statements.
+
+### SQ3. One solved actual table excludes EVERY approximate fixed point
+
+Take the self-contained rational table
+
+    r_i(S)=1 if i∈S,    r_i(S)=2 if i∉S,
+    r_i(∅ at Never)=0.                            (SQ.5)
+
+All own singletons equal1 and M=2. The profile where owner0 quits surely
+at0 and the other three are Never is exact unrestricted terminal Nash:
+owner0 obtains1 from ANY finite clock and0 from Never; every other owner
+obtains2 from waiting or Never, and only1 by joining at0. Its fixed payoff
+target is(1,2,2,2). Hence this is an explicitly SOLVED table, not a proposed
+counterexample or a restriction on a hypothetical no-UE source.
+
+For an ARBITRARY product law p put n_i=p_i(Never), ν=∏n_i,
+h_i=∏_(j≠i)n_j and m_i=P(i belongs to the finite first coalition).
+Against a pure finite response t,
+
+    v_i(t)=2−∏_(j≠i)P(T_j≥t),
+    B_i=2−h_i,   v_i(Never)=2(1−h_i)≤B_i,
+    U_i=2−2ν−m_i,
+    d_i=B_i−U_i=2ν+m_i−h_i.                     (SQ.6)
+
+The first formula counts ties as participant payoff1, not outsider payoff2.
+The full cap is its finite supremum, whether or not attained. Since
+Σm_i=E|H|≥1−ν, the TRUE full sum debt obeys
+
+    D(p)≥1+7ν−Σh_i≥1−Σh_i.                     (SQ.7)
+
+Now fix ONCE AND FOR ALL
+
+    K=2²⁰,     τ=1/1024,     η=1/1024.
+
+Then6K+2<2²³ and log2<1 give e<3/128 in(SQ.3). Equation(SQ.4) gives
+β_i(p)(Never)<9/16 for EVERY p. Suppose all four marginal distances
+TV(p_i,β_i(p))≤η. Each input Never mass is then less than
+9/16+1/1024<19/32. Equation(SQ.7) gives
+
+    D(p)>1−4(19/32)³=1333/8192.
+
+On the other hand own-law payoff affinity, |r|≤2 and(SQ.3) give
+
+    d_i(p)≤e+4η,
+    D(p)≤4e+16η<7/64=896/8192.
+
+Contradiction. Thus for EVERY actual independent profile, unrestricted
+support and Never masses allowed,
+
+    max_i TV(p_i,β_i(p))>1/1024.                  (SQ.8)
+
+In particular this explicit TV-continuous full-response approximate-best-
+reply map has NO exact fixed point and NO arbitrarily accurate approximate
+law fixed points on(SQ.5). This is a whole-profile displacement theorem,
+not a census of a stationary grammar or one bad selected branch.
+
+### SQ4. Why this changes the next mechanism, without changing the conjecture
+
+The initially proposed positive route was: approximate FULL replies by a
+continuous endogenous finite catalogue, obtain approximate fixed points of
+the simultaneous law map, and use terminal approximate Nash selection.
+The first step really succeeds uniformly for every table; the second step
+is FALSE even on(SQ.5). The map unnecessarily moves owners between many
+indifferent finite replies and underweights the single Never entry. Requiring
+law near-fixity is stronger than requiring those owners' payoffs/caps to be
+nearly optimal. Continuity alone supplies no tight compact invariant domain.
+
+No larger K, alternative clock cutoff or improved constant is pursued.
+The result does not retire EVERY sampling weight, every equilibrium-preserving
+reply map, payoff/cap near-optimality, or compact counterfactual-state selection.
+It gives no positive exploitability gap on(SQ.5), which already has the fixed
+unrestricted target above. The next independent global attempt must preserve
+that distinction rather than make laws self-confirm in this selector.
+
+Bounded source lookup: the exact atom/successor/zero/Never catalogue is already
+the finite-support menu in `FiniteOpponentAtomGapReplyMenu.lean`, especially
+`exists_mem_quittingFiniteOpponentAtomGapReplyMenu_payoff_eq_cap`. I read it
+under its imports. SQ's fresh-sample estimate and TV-continuous whole-law map
+are ordinary calculations, not claimed checked declarations. A narrow search
+for sampled/empirical clock response producers in Terminal, Paths and the
+toolkit did not locate this uniform sampler or(SQ.8); no global novelty audit
+is claimed. The semantic positive/negative endpoints remain the tracked
+terminal Nash/gap equivalences, neither of which supplies a fixed-point
+theorem for this noncompact law simplex. Brouwer FM is different: its four
+bounded-displacement maps admit actual near-fixed profiles but do not cover
+all replies; SQ covers all replies but fails law near-fixity.
+
+Exact constant/cap regression, not a proof of the general sampling estimate:
+
+```python
+# SQ_EXACT_DIAGNOSTIC
+from fractions import Fraction as Q
+from itertools import product
+from random import Random
+K=2**20
+tau=Q(1,1024)
+eta=Q(1,1024)
+assert 6*K+2<2**23
+assert Q(24,K+1)+23*tau<Q(3,128)  # log L < 23
+assert Q(1,2)+Q(6,1)/(tau*(K+1))<Q(9,16)
+assert Q(9,16)+eta<Q(19,32)
+assert 1-4*Q(19,32)**3==Q(1333,8192)>Q(7,64)
+assert 4*Q(3,128)+16*eta==Q(7,64)
+rng=Random(473)
+for trial in range(120):
+    laws=[]
+    for i in range(4):
+        raw=[rng.randrange(9) for _ in range(4)]
+        if not sum(raw): raw[3]=1
+        laws.append([Q(x,sum(raw)) for x in raw])
+    n=[law[3] for law in laws]
+    nu=Q(1)
+    for x in n: nu*=x
+    membership=[Q(0)]*4
+    utility=[Q(0)]*4
+    for clocks in product(range(4),repeat=4):
+        weight=Q(1)
+        for i in range(4): weight*=laws[i][clocks[i]]
+        t=min(clocks)
+        if t==3: continue
+        for i in range(4):
+            member=clocks[i]==t
+            membership[i]+=weight*member
+            utility[i]+=weight*(1 if member else 2)
+    debts=[]
+    hs=[]
+    for i in range(4):
+        h=Q(1)
+        for j in range(4):
+            if j!=i: h*=n[j]
+        hs.append(h)
+        assert utility[i]==2-2*nu-membership[i]
+        debts.append(2-h-utility[i])
+        assert debts[-1]==2*nu+membership[i]-h>=0
+    assert sum(debts)>=1+7*nu-sum(hs)>=1-sum(hs)
+print('SQ exact diagnostic PASS: rational displacement constants; 120 complete-law cap/debt accounts')
+```
+
+    awk '/^# SQ_EXACT_DIAGNOSTIC/{active=1} active && /^```$/{exit} active{print}' notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md | python
 
 No larger price cutoff, constant optimization, or stationary table census
 is pursued. The next whole-game selection must permit genuinely approximate
