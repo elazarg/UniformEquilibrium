@@ -73,6 +73,18 @@ singleton explicitly supplies this quiet equilibrium. Its stored U
 is an auxiliary live payoff, not original AllNever0. Thus pure Nash
 augmentation is not a global realization/forcing principle; the
 attempt is retired without hazard-floor or coefficient tuning.
+The independent LM test in the global notebook then retires a different
+abstract route: security of one finite reply at an attained global
+regret minimum does NOT suffice for global approximate-Nash selection.
+An exact compact four-law example retains positive common debts,
+positive Never masses, a zero-Never minimum gap and two supported
+bridge owners, but has total full regret≥5/2 at EVERY profile.
+Its finite-menu Nash sequence escapes outside the secure minimum.
+Crucially it violates quitting's first-hit coalition invariance;
+it is not a Fin4 negative example or a reduction of the surviving
+source class. A new global proof must use exact quitting incidence,
+not merely minimum-local compactness/security. No local interface
+or exact-grid Nash-first selector has been produced by this test.
 General above-own
 bad-root excursions remain the nonlocal forcing obstruction: RM37
 already forbids extending one-step selected return from the normal/

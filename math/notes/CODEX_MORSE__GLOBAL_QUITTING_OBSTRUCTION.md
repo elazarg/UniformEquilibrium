@@ -43,6 +43,18 @@ This is an exact failure of charge/actual-payoff forcing, not a problem
 with Kakutani, a positive-gap table or another clock-grammar census.
 The full Fin4 question and both least-Never consumers remain OPEN.
 
+Latest independent bird's-eye test: LM below retires an abstract
+minimum-local continuity argument. An exact compact four-player
+mixed-law game has an attained strictly positive global regret
+minimum, positive common debts and Never masses, two supported
+root/later bridges, a strict zero-joint-Never minimum gap, AND a fixed
+finite reply that securely improves at its minimizing profile.
+Nevertheless EVERY independent mixed profile has positive regret.
+This game deliberately fails quitting's first-hit coalition invariance;
+it is NOT a Fin4 counterexample or a source-class contraction. Thus
+local security at the actual minimum cannot replace a game-specific
+global selection argument. No exact-grid Nash-first repair is inferred.
+
 Current endogenous-family attempt: QCUT1–QCUT7 below gives an actual
 quantile-cut/punishment-tail repair of singleton-concentrating profiles
 whose outsider FULL debts vanish. All born finite deadlines and Never
@@ -21664,3 +21676,230 @@ enforce actual payoff/cap realization OR use a genuinely nonlocal
 return mechanism, while an unrestricted negative search must retain
 the complete actual sure gate and all-edge drift. The conjecture and
 both least-Never consumers remain open.
+
+Bounded follow-up lookup, NOT a new mathematical claim: the exact finite
+lower-certificate surface was inspected in
+`Research/Quitting/FinFourIndependentCertificateSoundness.lean`
+(`FinFourExactScaleCertificate.lower_verifies_infimum_sound`),
+`Research/Quitting/FinFourRationalSingleShellLower.lean`
+(`finFourRationalSingleShellLowerProblem`, its auxiliary/equality,
+cap-upper and max-debt expressions), and
+`Research/Quitting/FinFourSingleShellOuter.lean`
+(`finFourSingleShell_quantitative_bracket`). The small relevant split/
+leaf definitions in `MathUE/Interval/RationalLowerBoxSearch.lean` were
+also inspected. The key center constraint is ZERO prescribed mass at
+the auxiliary after-support finite date, while that SAME date remains
+an allowed full pure response. Thus ordinary finite-game Nash/Sperner
+does not itself produce a feasible zero-debt center: it may use the
+excluded auxiliary mass. The saved FX/PR all-correspondence failures
+already forbid importing such an exact-Nash-first selector here.
+No new Sperner theorem, certificate impossibility or Research code
+change follows from this lookup; that tempting route is not pursued.
+
+The concrete next test remains whether the full exact-root relation
+can force an actual charged return OUTSIDE the solved NI/UR/SG
+regions, or whether one full-domain rational certificate can satisfy
+all support, quiet and sure faces at a genuinely different actual
+table. AF prohibits replacing that test by proximal value-agent
+existence or by pretending its zero-charge annotation is realized.
+
+## LM1–LM3. Minimum-local security does not globalize by compactness
+
+Status: COMPLETE ORDINARY EXACT FALSIFIER of the proposed abstract
+argument, not reviewed, not a quitting table, not a negative Fin4
+construction and not an export. This independent bird's-eye attempt
+asks whether actual attainment of a positive global full-regret minimum,
+plus a secure finite deviation at that minimum, suffices for a
+discontinuous-game fixed-point existence argument. The missing step is
+globalization: why must the selected approximate fixed points approach
+that minimum rather than another payoff-graph boundary? The following
+example answers that abstract question negatively, even with several
+features of the selected least-Never source retained.
+
+### LM1. Complete finite data, full caps and the exact global minimum
+
+Begin with two players H,L. Their pure action space is
+A={0,1,2,...}∪{N}; N is literal Never. Give A its one-point
+compactification topology: every finite action is isolated, and finite
+actions tend to N. Mixed laws are all Borel probabilities on A, with
+weak topology. They form a compact convex space. Players randomize
+independently and can replace their ENTIRE law unilaterally; there is
+no behavioral-controller or support restriction in this static game.
+
+For the nine ordered special pairs (H action,L action), prescribe
+
+| Actions | Payoffs (H,L) |
+| --- | --- |
+| (0,0), (0,N) | (1,0) |
+| (N,0) | (0,1) |
+| (1,0) | (2,−3) |
+| (0,1) | (−3,2) |
+| (1,1) | (−3,−3) |
+| (1,N) | (0,−1) |
+| (N,1) | (−1,0) |
+| (N,N) | (0,0) |
+
+Let E={2,3,...}. If both actions lie in E, the larger action gets1
+and the smaller−1; ties give both0. If exactly one action lies in E,
+that player gets1 and the other gets−1, including against Never.
+This specifies the ENTIRE payoff function, bounded in[−3,2].
+Against an opponent law with aggregate masses
+(t,u,v,n)=(p(0),p(1),p(E),p(N)), the pure replies have values
+
+    H's0: t+n−3u−v;  L's0: n−3u−v;
+    either1: 2t−3u−v;  eitherN: −u−v.
+
+Every escape action k∈E pays at most1, and its payoff tends1 as
+k→∞, for EVERY opponent law, because the finite tail above k has
+vanishing mass. Hence the exact unrestricted cap for either player is
+
+    C(t,u,v,n)=max(1, 2t−3u−v).
+
+This includes EVERY finite pure reply, Never and EVERY mixed reply;
+the supremum1 need not be attained at a general opponent law.
+For player laws p=(t,u,v,n), r=(T,U,V,N), their delivered-payoff sum is
+
+    W=tT+tN+nT−tU−uT−uN−nU−6uU.
+
+All interactions involving an escape action have payoff sum0. Thus
+their total full debt is exactly C(p)+C(r)−W, independent of the
+internal distribution of escape mass.
+
+Split each aggregate simplex by 2t−3u−v=1. On each product of the
+two resulting polytopes the debt is separately affine. Its minimum
+therefore occurs at a pair of vertices. The COMPLETE common vertex
+list is
+
+    N=(0,0,0,1), 0=(1,0,0,0), 1=(0,1,0,0), E=(0,0,1,0),
+    0N=(1/2,0,0,1/2), 01=(4/5,1/5,0,0),
+    0E=(2/3,0,1/3,0).
+
+The cutting plane meets exactly the three simplex edges from0 to
+the other vertices, giving the last three points; no vertex is omitted.
+The49 exact rational evaluations give minimum5/4 ONLY at(0N,0N).
+Separate affine interpolation also proves uniqueness, not merely
+existence of a vertex minimum: any other point uses a vertex pair
+whose value is strictly larger. If one player is constrained to
+n=0, the corresponding face has vertices0,1,E,01,0E and its pair
+minimum is4/3.
+
+Now use two independent copies of this pair game, on players(0,1)
+and(2,3), with the first member playing H. A payoff depends ONLY on
+that player's own pair; the four private laws are independent.
+The global four-player total-debt minimum is therefore
+
+    δ=5/2, attained UNIQUELY at p_i=(δ₀+δ_N)/2 for all i.
+
+The delivered payoff vector there is(1/2,1/4,1/2,1/4), the full cap
+vector is(1,1,1,1), and the common minimum debt vector is
+(1/2,3/4,1/2,3/4), strictly positive in every coordinate. Joint Never
+mass is1/16. On the zero-joint-Never stratum (at least one n_i=0),
+the exact minimum is4/3+5/4=31/12, strictly above δ by1/12.
+This is a zero-Never analogue, NOT the absorbing-domain minimum of
+an actual quitting game.
+
+Against this minimizing profile, H players0,2 attain their cap at
+BOTH first date0 and later date1, with positive prescribed root rate1/2.
+The kernels of those two replies differ: against mate0 they pay1
+and2, and against mateN they pay1 and0. L players1,3 have root reply
+value1/2 below cap1, and attain cap at the strictly later replies1
+and every k∈E. Never pays0. Thus the abstract two-owner bridge and
+later-only response geometry is present, with actual paid positive
+regrets, not zero kernels or an unsupported supremum.
+
+For EVERY four-law profile, total full debt≥5/2. Some owner has full
+regret≥5/8; for any ε<5/8, a finite pure reply approximating that
+cap gives actual gain>ε. Consequently this static game has NO ε-Nash
+profile for any ε<5/8, against unrestricted mixed deviations.
+
+### LM2. A finite reply is securely profitable at the unique minimum
+
+Take an L player and its fixed reply1. Its delivered minimum payoff
+is1/4. In the weakly open opponent-law neighborhood
+
+    |t−1/2|<1/40,  u<1/40,
+
+this reply pays 2t−3u−v≥3t−2u−1>3/8, since v≤1−t−u.
+It therefore secures gain>1/8 relative to the original delivered
+minimum value, even if all untracked mass escapes to arbitrarily
+late finite actions. The neighborhood is weakly open because finite
+singleton sets0,1 are clopen in A. This is a SINGLE finite deviation,
+not a moving maximizer or a claim of tail continuity.
+
+Yet finite-menu Nash profiles need not approach the secure minimum.
+For every M≥2, the profile where all four players choose M is Nash
+on{0,...,M,N}: it pays0, while every different available action pays−1.
+Its FULL debt is4, not δ=5/2. As M→∞ these menu profiles converge
+weakly to AllNever, with prescribed payoff vector0. This payoff-graph
+boundary is outside the unique minimizing set. No fixed finite reply
+secures a positive payoff against the escaping sequence. Only ONE
+such Nash sequence is claimed, not a census of the menu correspondence.
+The all-profile regret bound already proves the negative conclusion.
+
+### LM3. The exact missing quitting hypothesis and direction change
+
+This is NOT realizable by a fixed quitting reward table. If the H
+player chooses date0, its payoffs against mateN, mate1 and mate2 are
+respectively1,−3,−1, although all three give the SAME first terminal
+coalition consisting of H alone. An ordinary quitting table must give
+the SAME reward r_H({H}) in those three cases. Later opponent laws
+cannot alter a first-hit singleton reward. The example also has
+infinitely many raw action cells rather than the60 fixed Fin4 reward
+cells. No assertion is made that it satisfies the ENTIRE separated/
+least-Never source, its distinct-row hypotheses, or actual cap clocks.
+
+Bounded source check for this distinction: the definitions
+`quittingEarliestStoppingValue`, `quittingEarliestStoppingCoalition`
+and `quittingFirstStoppingOutcome` in
+`UniformEquilibrium/Quitting/Paths/CounterfactualStoppingLaw.lean`
+were read under their imports. The exact independent-law expectation
+definition and `quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff`,
+together with
+`quittingStoppingLawCap_eq_continuationBestResponseValue_stoppingLawProfile`,
+were reread in
+`UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean`.
+`quittingBehaviorExactFiniteFirstCoalitionMass_eq_terminalOutcomeMass`
+in `UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`
+was also read. These are actual quitting semantics, not a theorem
+about arbitrary countable-action games. LM's proof itself uses only
+the displayed finite data and complete elementary cap calculation.
+
+What fails is precisely the abstract inference from minimum-local
+security to global approximate Nash existence. Attained positive
+minimum, all-positive minimum debts/Never masses, a zero-Never gap and
+two supported bridge owners do not suffice after exact first-hit
+incidence has been discarded. A valid all-game argument must either
+use that quitting incidence in its GLOBAL strategic selection or
+produce actual localization of the selected profiles at the minimum.
+The latter is NOT produced here and cannot be replaced by exact-grid
+Nash first. No surviving Fin4 counterexample class is changed.
+
+The exact finite arithmetic was checked independently of the infinite
+cap limit, compactness and security arguments, which are proved above:
+
+```python
+from fractions import Fraction as F
+V=[('N',(0,0,0,1)),('0',(1,0,0,0)),('1',(0,1,0,0)),
+   ('E',(0,0,1,0)),('0N',(F(1,2),0,0,F(1,2))),
+   ('01',(F(4,5),F(1,5),0,0)),('0E',(F(2,3),0,F(1,3),0))]
+def cap(p):
+    t,u,v,n=p
+    return max(F(1),2*t-3*u-v)
+def debt(p,r):
+    t,u,v,n=p; T,U,V,N=r
+    W=t*T+t*N+n*T-t*U-u*T-u*N-n*U-6*u*U
+    return cap(p)+cap(r)-W
+values=[(debt(p,r),a,b) for a,p in V for b,r in V]
+assert min(d for d,a,b in values)==F(5,4)
+assert [(a,b) for d,a,b in values if d==F(5,4)]==[('0N','0N')]
+assert min(debt(p,r) for a,p in V if p[3]==0 for b,r in V)==F(4,3)
+assert F(4,3)+F(5,4)-F(5,2)==F(1,12)
+assert F(1,2)-5*F(1,40)==F(3,8)
+print('LM exact minimum, unique aggregate vertex and zero-Never gap: PASS')
+```
+
+Concrete next question: can quitting's first-hit coalition invariance
+force GLOBAL localization of genuinely approximate independent laws,
+without exact-menu Nash first or an assumed continuity modulus at a
+moving seam? A conditional localization statement is not a result;
+its actual game-specific forcing step must be proved or falsified.
