@@ -31,8 +31,16 @@ An existing actual-game selected-return consumer then gives one
 fixed unrestricted uniform payoff at EVERY table in this box.
 This retires the entire tested USED-transport region, not just its
 center; it does not supply a literal periodic word at every parameter.
-The proof is ordinary and unreviewed. No new class count, export or
-source contraction is inferred. An exact supporting argument also
+Two independent ordinary soundness reviews have passed this raw-family
+theorem. UR6–UR7 then exclude EVERY absorbing stationary equilibrium
+and EVERY proper alternating disjoint-two-pair policy root at its
+fixed upper vertex, by exact full-table coefficient checks and all
+proper-support cases. These are bounded coverage exclusions, not a
+positive gap over unrestricted nonstationary profiles. The complete
+old-producer coverage gate remains UNRESOLVED at the actual produced
+local balls in FULL_DIMENSIONAL_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM:
+compatible joint/solo/solo output is not membership in that raw input.
+No new class count, export or source contraction is inferred. An exact supporting argument also
 rejects every barrier with one additively isolated player. Negative
 research now needs different USED transport/root geometry, not
 higher-degree fitting at these solved tables. General above-own

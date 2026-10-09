@@ -16,8 +16,12 @@ UR instead varies ALL sixteen controls at once in the original box,
 including the used ones, and produces singleton-sublevel return for
 EVERY boxed positive exact root. A named actual-game consumer then
 gives a fixed unrestricted uniform payoff for every table in that box.
-This is an ordinary unreviewed raw-family proof, not a literal closed
-word for every parameter, a new class count or an export. The next
+The raw-family theorem has TWO independent ordinary soundness PASS
+reviews. UR6–UR7 give bounded exact stationary/two-pair coverage
+exclusions at its upper vertex, but the complete old-producer coverage
+gate remains UNRESOLVED at the named cyclic-child neighborhood. This
+is not a literal closed word for every parameter, a new class count or
+an export. The next
 negative attempt must change this used-transport REGION or the root
 geometry, not increase degree at its solved points.
 The full Fin4 question and both least-Never consumers remain OPEN.
@@ -20675,3 +20679,311 @@ B=sum(b[m]*s.binomial(4,m)*t**m*(1-t)**(4-m) for m in range(5))
 assert s.expand(Delta.subs(z,3*t/2)-B)==0
 print('UR5 PASS: exact numerator, discriminant, all negative Bernstein coefficients')
 ```
+
+### UR6. Exact upper vertex: no stationary Nash and no proper two-pair cycle
+
+Status: COMPLETE ORDINARY coverage calculation, not Lean checked or
+independently reviewed. It is part of the UR family gate, not a new
+export or a positive unrestricted-deviation gap. UR1–UR5 themselves
+have now received two independent soundness PASS reviews, in
+`feedback/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_BROUWER.md`
+and `feedback/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION__BY_CODEX_NOETHER.md`.
+The latter also supplies a separate complete support-loss argument for
+a full-dimensional neighborhood; that strengthening is not used here.
+
+Fix ONE original table r⁺: all twelve opponent-pair controls equal5,
+and all four opponent-triple controls equal1. Its complete rows are
+
+    0:   (1,3,3,0)          1:   (4,1,-1,-1)
+    01:  (-2,-2,5,5)        2:   (0,2,1,2)
+    02:  (1/2,5,-2,5)       12:  (5,-2,-1/2,5)
+    012: (4,4,4,1)          3:   (4,-2,0,1)
+    03:  (-2,5,5,1/2)       13:  (5,-3/2,5,-2)
+    013: (4,4,1,4)          23:  (5,5,-2,-2)
+    023: (4,1,4,4)          123: (1,4,4,4)
+    I:   (0,0,0,0).
+
+All strategies in this calculation still use independent private coins;
+Never pays0. A stationary profile uses arbitrary hazards q∈[0,1]⁴.
+We exclude actual terminal Nash against all behavioral deviations by
+necessary legal action tests, not by restricting the deviation domain.
+This does NOT assert a positive gap over arbitrary nonstationary profiles:
+UR has already proved this same table has unrestricted UE.
+
+Write h_i=∏[j≠i](1-q_j), Q_i=E[r_i(T∪{i})], and
+R_i=E[1_{T≠∅}r_i(T)], with T the actual independent opponent
+coalition. Put
+
+    E_i(q)=(1-h_i)Q_i-R_i.
+
+At every mixed active owner of an absorbing stationary Nash profile,
+Q_i=U_i=h_i U_i+R_i, hence E_i=0. More explicitly its actual policy
+equation is aU_i=q_iQ_i+(1-q_i)R_i, not q_iQ_i+R_i, with
+a=1-(1-q_i)h_i. Nash indifference gives the stated cancellation.
+UR1's no-sure proof excludes every sure owner at EVERY annotation,
+including the actual stationary payoff. AllContinue is not Nash
+because immediate Quit pays1. The following cases therefore exhaust
+every possible stationary terminal Nash profile.
+
+One active owner is impossible: its successor in the positive joining
+cycle has passive singleton reward respectively0,-1,0,-2 and pair
+joining gain1/2. That quiet owner's Quit-minus-Continue is
+(1-q_owner)(1-passive)+q_owner/2>0. With two active owners,
+each of02,03,12,13 has a participant with positive joining gap1/2;
+its E_i=q_j[(1-q_j)(1-A_i)+1/2]>0, since its pair participant
+A_i<1. For01, owner0 has E_0=q_1[3(1-q_1)-6]<0. For23,
+owner3 has E_3=q_2[3(1-q_2)-4]<0. Thus no two-owner support works.
+
+For three active owners, use positive odds o_i=q_i/(1-q_i).
+The exactly scaled equation is
+
+    E_i/h_i²=(p_i-1)A_i-p_i B_i,
+    p_i=∏[j≠i](1+o_j),
+    A_i=1+Σ[T≠∅]o_T r_i(T∪{i}),
+    B_i=Σ[T≠∅]o_T r_i(T).
+
+On support012, E_1/h_1² has ONLY strictly negative nonconstant
+coefficients, and is strictly negative at positive o_0,o_2.
+On support013 the same holds for E_0/h_0². On support023,
+the tensor degree-two Bernstein coefficients of
+4E_0+7E_2+9E_3 on the entire three-coordinate hazard cube are
+strictly negative except the zero coefficient at the origin. The
+exact checker below derives all27 coefficients from the raw rows.
+Thus none of these three supports can have all its active E_i=0.
+
+For support123 set x=o_1,y=o_2,z=o_3>0. The owner3 equation is
+
+    (1+y)²x²+(9y+5y²-2)x+y+4y²=0.
+
+Its left side increases with y. At y=1/8 it is
+(81x²-51x+12)/64>0: the discriminant is-1287. Consequently
+y<1/8. Owner1's equation is
+
+    (1-y-2y²)z²+(6-15y-10y²)z=8y²+2y.
+
+Both left coefficients are positive; the linear coefficient is
+>127/32 and the right side is<3/8. Thus z<12/127<1/10.
+But twice E_2/h_2² is
+
+    (1-z-2z²)x²+(4-11z-6z²)x+2z-4z²,
+
+which is strictly positive for x>0 and 0<z<1/10. Contradiction.
+This resolves the final proper support without numerical root search.
+
+For full support the degree-(2,2,2,2) tensor Bernstein coefficients
+of S=7E_0+5E_1+2E_2+7E_3 are ALL strictly negative except
+the zero origin coefficient. Their largest nonzero value is-3/2.
+Therefore, throughout the entire hazard cube,
+
+    S≤-(3/2)[1-∏_i(1-q_i)²]<0  whenever q≠0.
+
+Full support would require all four E_i=0. This final contradiction
+proves NO stationary terminal Nash profile at r⁺, including proper
+faces, quiet owners and sure boundaries. It excludes any old source
+whose actual conclusion contains an exact stationary equilibrium,
+at this table and under arbitrary relabeling/positive recipient
+scaling. It does not, by itself, exclude accuracy-dependent stationary
+approximations, arbitrary reward translations or other calendars.
+
+There is also a short complete nonstationary output exclusion. Partition
+the owners into two disjoint scheduled pairs, with partner map p(i),
+and let EVERY owner use an arbitrary proper hazard q_i∈(0,1) when
+its pair is scheduled. The two pairs alternate forever. For owner i,
+let A_i=r_i({i,p(i)}), d_i=A_i-r_i({p(i)}). Active indifference forces
+
+    activeValue_i=1+q_p(A_i-1),
+    postValue_i=1+d_i q_p/(1-q_p).
+
+Let j,k be the other two owners. At i's passive phase its actual
+Continue value is
+
+    C_i=(1-q_j)(1-q_k)activeValue_i
+        +q_j(1-q_k)r_i({j})+(1-q_j)q_k r_i({k})+5q_jq_k.
+
+Thus every actual Nash--Bellman policy of this grammar must solve
+
+    K_i=(1-q_p)C_i-[(1-q_p)+q_p d_i]=0,  i∈I.
+
+For EACH of the three possible pair partitions, the tensor degree-two
+Bernstein coefficients of 7K_0+5K_1+K_2+7K_3 are nonnegative,
+with positive coefficients. At proper hazards every Bernstein basis
+factor is strictly positive, so this weighted polynomial is strictly
+positive. The four active/policy equations therefore cannot all hold.
+No passive Nash inequality was discarded to create a favorable root:
+even the full policy/active equalities have no solution. This excludes
+the entire proper two-pair output grammar, not merely a symmetric-rate
+branch or the center equations of the below-singleton IFT neighborhood.
+It does not exclude longer words or joint/solo/solo calendars.
+
+Exact raw checker (SymPy rational arithmetic; no optimizer):
+
+```python
+# UR6 exact full-table stationary and proper two-pair exclusions
+import sympy as s
+from itertools import product
+q=s.symbols('q0:4')
+R=[[0]*4,[1,3,3,0],[4,1,-1,-1],[-2,-2,5,5],
+   [0,2,1,2],[s.Rational(1,2),5,-2,5],[5,-2,s.Rational(-1,2),5],
+   [4,4,4,1],[4,-2,0,1],[-2,5,5,s.Rational(1,2)],
+   [5,s.Rational(-3,2),5,-2],[4,4,1,4],[5,5,-2,-2],
+   [4,1,4,4],[1,4,4,4],[0]*4]
+def bernstein(P,variables):
+    P=s.Poly(s.expand(P),*variables)
+    return {a:sum(c*s.prod(s.Rational(s.binomial(a[j],d[j]),
+                         s.binomial(2,d[j])) for j in range(len(variables)))
+                  for d,c in P.terms() if all(d[j]<=a[j] for j in range(len(a))))
+            for a in product(range(3),repeat=len(variables))}
+E=[]
+for i in range(4):
+    h=s.prod(1-q[j] for j in range(4) if j!=i); Q=B=0
+    for T in range(16):
+        if T>>i&1: continue
+        mu=s.prod(q[j] if T>>j&1 else 1-q[j] for j in range(4) if j!=i)
+        Q+=mu*R[T|(1<<i)][i]; B+=mu*R[T][i]
+    E.append(s.expand((1-h)*Q-B))
+be=bernstein(sum(w*e for w,e in zip([7,5,2,7],E)),q)
+assert len(be)==81 and be[(0,0,0,0)]==0
+assert all(v<0 for a,v in be.items() if a!=(0,0,0,0))
+assert max(v for v in be.values() if v<0)==-s.Rational(3,2)
+A=[0,2,3]
+be=bernstein((4*E[0]+7*E[2]+9*E[3]).subs(q[1],0),[q[i] for i in A])
+assert len(be)==27 and be[(0,0,0)]==0
+assert all(v<0 for a,v in be.items() if a!=(0,0,0))
+o=s.symbols('o0:4')
+def scaled(i,A):
+    p=s.prod(1+o[j] for j in A if j!=i); Q=B=0
+    for T in range(16):
+        if T>>i&1 or any(T>>j&1 for j in range(4) if j not in A): continue
+        mu=s.prod(o[j] for j in A if T>>j&1)
+        Q+=mu*R[T|(1<<i)][i]; B+=mu*R[T][i]
+    return s.expand((p-1)*Q-p*B)
+for A,i in [([0,1,2],1),([0,1,3],0)]:
+    P=s.Poly(scaled(i,A),*[o[j] for j in A if j!=i])
+    assert P.TC()==0 and all(c<0 for d,c in P.terms() if any(d))
+x,y,z=o[1:4]
+P=(1+y)**2*x*x+(9*y+5*y*y-2)*x+y+4*y*y
+assert s.expand(scaled(3,[1,2,3])+P)==0
+assert s.expand(64*P.subs(y,s.Rational(1,8))-(81*x*x-51*x+12))==0
+assert s.discriminant(81*x*x-51*x+12,x)==-1287
+P1=(1-y-2*y*y)*z*z+(6-15*y-10*y*y)*z-8*y*y-2*y
+P2=(1-z-2*z*z)*x*x+(4-11*z-6*z*z)*x+2*z-4*z*z
+assert s.expand(2*scaled(1,[1,2,3])-P1)==0
+assert s.expand(2*scaled(2,[1,2,3])-P2)==0
+assert s.Rational(12,127)<s.Rational(1,10)
+for partner in [[1,0,3,2],[2,3,0,1],[3,2,1,0]]:
+    K=[]
+    for i in range(4):
+        p=partner[i]; js=[j for j in range(4) if j not in [i,p]]
+        j,k=js; h=(1-q[j])*(1-q[k])
+        active=1+q[p]*(R[(1<<i)|(1<<p)][i]-1)
+        d=R[(1<<i)|(1<<p)][i]-R[1<<p][i]
+        C=h*active+q[j]*(1-q[k])*R[1<<j][i]+(1-q[j])*q[k]*R[1<<k][i]+5*q[j]*q[k]
+        K.append(s.expand((1-q[p])*C-(1-q[p]+q[p]*d)))
+    be=bernstein(sum(w*k for w,k in zip([7,5,1,7],K)),q)
+    assert all(v>=0 for v in be.values()) and any(v>0 for v in be.values())
+print('UR6 PASS: all stationary supports; all three proper two-pair partitions')
+```
+
+### UR7. Bounded old-producer comparison and its precise unresolved boundary
+
+The source declarations were chosen from `docs/TOOLKIT.md`, not from
+a whole-tree survey. Besides UR4's actual-game consumer, the bounded
+reads include the raw producer statements in
+`Stationary/GuardedCrossedResponseRawProducer.lean`,
+`GuardedCrossedResponseHalfCeilingProducer.lean`,
+`GuardedCrossedResponseWeakPolynomialProducer.lean`,
+`GuardedCrossedResponseWeakBoundaryTarget.lean`, and
+`Examples/GuardedCrossedResponseFullRewardNeighborhood.lean`;
+the matrix-free `Stationary/OneSidedWeakUnitProducer.lean`;
+`Cycles/CyclicChildJointPhaseSource.lean`,
+`Classification/LCP/ThreeCore/CyclicChildSingletonAdapter.lean`,
+the raw definitions in `NegativePremiumCyclicChildEndpoints.lean`
+and the signed normalization in `NegativePremiumCyclicChildSource.lean`;
+`Cycles/CrossedMatchingPhaseSource.lean` and
+`Cycles/BelowSingletonJointPhaseSource.lean`;
+`Examples/BlockPair/PairedResponseQuotientClass.lean`,
+`PairedCubicLocalPersistence.lean`, and
+`PairedCubicLocalPersistenceStrategic.lean`.
+
+The fixed singleton matrix, throughout the entire UR box, is
+
+    Γ=((0,3,-1,3),(2,0,1,-3),(2,-2,0,-1),(-1,-2,1,0)),
+    Γ⁻¹=((8,5,9,3),(3,5,-6,-2),(14,15,-3,24),(10,0,5,10))/25.
+
+All guarded strict/half/weak inverse branches require entrywise
+nonnegative full inverse, so they fail under EVERY relabeling and
+positive recipient affine normalization, not just one guard choice.
+Their full-reward-ball producers derive a positive actual inverse
+internally, so those input balls cannot contain this table either.
+The matrix-free one-sided producer is different: its conclusion is
+stationary Nash or instant no-join, not a positive-inverse test.
+UR6 excludes its stationary arm, while the positive joining cycle
+excludes instant no-join for EVERY owner. Its entire raw/polynomial
+guard selector is therefore excluded here too.
+
+Every genuine cyclic-child raw source with positive harms requires
+a pivot column having all three off-diagonal entries negative.
+Each column of Γ has a positive entry. Thus ALL pivots, child
+rotations, positive row units and signed own translations fail the
+literal raw rows; the same argument applies to the fixed signed
+negative-premium singleton rows. It is not an exclusion of an
+unconditional full-coordinate IFT neighborhood.
+
+The strict/weak crossed-matching predicates and the below-singleton
+RawFamily require at most one strictly positive off-diagonal singleton
+entry per recipient. Recipient0 has TWO, so all schedules and
+relabelings fail. The generalized positive-inverse two-pair branch
+fails Γ⁻¹≥0. Their pure-pair boundaries cannot evade UR1's full
+no-sure result. More strongly, UR6 excludes every proper two-pair
+policy/active solution, so it excludes the COMPLETE actual output
+grammar of `BelowSingletonJointPhaseFixture.exists_reward_supnorm_radius`
+in `Examples/BelowSingletonJointPhaseLocalPersistence.lean`, without
+estimating an unknown neighborhood radius. The cubic stationary IFT
+producer's COMPLETE three-active/one-quiet output likewise fails by
+UR6; its center matrix alone is not the reason.
+
+The independent review already records complete premium-core/leaver,
+weighted-floor, boxed-charge, support-upper, signed inverse-column,
+signed-four-cycle and passive triple-inverse failures at r⁺. Those
+finite criteria are not repeated as new research here. In particular
+triple leave gain1 does not supply a protected participant floor:
+every player has a pair participant below own1, so the protected
+set is empty despite the full premium core. These exclusions do not
+prove that EVERY old producer fails, nor that the whole UR box is
+uncovered; trap-free portions can already use older theorems.
+
+ONE specific remaining blocker prevents a complete coverage verdict:
+`exports/FULL_DIMENSIONAL_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md` supplies
+a qualitative produced reward ball about the specific R^η center,
+for every η>0. Its actual INPUT is membership in that ball, not the
+mere existence of a joint/solo/solo profile. The centers' singleton
+rows are independent of η and have a column negative at all three
+other recipients, so no center itself equals r⁺ after any relabeling
+or positive recipient affine normalization. But its radius is not
+specified, and raw membership of r⁺ in the actual produced balls,
+including allowable normalized center families, has NOT been settled.
+Different center signs alone do not decide that quantitative input.
+UR6's stationary/two-pair exclusions do NOT exclude its output
+grammar. For scope illustration only, a bounded NUMERICAL experiment
+at r⁺ in fact finds a compatible policy/active root for
+
+    joint{1,3}, solo0, solo2,
+    (q0,q1,q2,q3)≈(.4725488,.15222662,.69483991,.67529476),
+
+with all eight quiet Quit-minus-Continue gaps negative. This is NOT
+an exact root certificate, a supplied-object UE claim, membership in
+that old produced reward ball, or proof that the old family subsumes
+UR. Compatible output grammar is NOT the unresolved raw input and
+does not authorize a twelve-grammar census. The separately read
+`TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md` retains above-own joint
+phase values; r⁺'s strictly below-own pair participants exclude THAT
+above-floor output grammar immediately, but not the first packet.
+
+Coverage verdict: UNRESOLVED, not PASS or FAIL. The bounded raw proof
+and two soundness reviews remain valid regardless. No new export,
+old-union novelty claim or frontier contraction is requested. Rather
+than turn this checkpoint into another elimination/search census at
+an already solved table, the next substantive attempt returns to
+arbitrary surviving-table forcing: actual nonlocal root excursions,
+with chronological realization and absorption-relative seams. The
+full Fin4 endpoint and both least-Never configurations remain open.
