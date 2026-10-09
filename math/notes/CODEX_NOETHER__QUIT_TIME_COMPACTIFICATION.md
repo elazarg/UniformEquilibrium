@@ -197,6 +197,15 @@ assume that t stays quiet; censoring i toward its full capacity also
 forces t's original root-vs-c branch to turn positive. This is a
 source-paid response constraint, not yet a total funding contradiction.
 
+The next literal accommodation now changes t's Never into Quit at the
+ORIGINAL root, not at an unproduced favorable late date. NC.42j–m below
+reduce its COMPLETE all-owner budget to at most three cap folds, keeping
+k's four-owner root response and the changed prescribed payoffs. The
+source's full normal core also forces Γ_it<0 in this subcase; this does
+not sign any participant comparison. No funded fold is established:
+the precise open test is the finite minimum in (NC.42m), not an endpoint
+or a selected-response surrogate.
+
 NC.41 now constructs a true-overlap candidate with complete cap control:
 independent two-owner tail survivors give a STRAIGHT trace of singleton
 exit masses. Every other recipient's intermediate replies are bounded by
@@ -27274,3 +27283,120 @@ any {t,i,l}, {t,k,l} or four-owner collision terms remain separately
 signed, rather than erased using (NC.42h). The operational change is
 therefore to price this supplied paid entry while choosing the hedge,
 not to select a negative p_l and assume all other caps stay quiet.
+
+### A root-first fourth-law accommodation retains every cap fold
+
+COMPLETE FINITE-LAW ACCOUNT; FUNDING OPEN. Keep all the additional
+NC.42c–g premises explicit, including the Q6 choice i, j=k, H_i<0 and
+K_ik≥0. No assertion below covers three suppliers, prescribed future
+mass, or the missing source-wide paid-owner/donor alignment.
+
+One extra sign really does follow at the SAME source table. Since i is
+c-active and l is its only finite opponent, B_i=s_i+y*Γ_il. The supplied
+B_i−s_i>δ gives Γ_il>0; eligibility gives Γ_ik>0. The full normal core
+gives i a distinct nonpositive singleton comparison. Within-row
+distinctness makes it strictly negative, and the only remaining owner
+is t. Therefore
+
+    Γ_it<0.                                      (NC.42j)
+
+Here the exact inspected declarations are
+`normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean`,
+and `exists_core_blocker_of_mem_normalCore` in
+`UniformEquilibrium/Quitting/Classification/LCP/NormalCore.lean`;
+`normalizedSoloMatrix_eq_projectiveLCPMatrix`, used in
+`UniformEquilibrium/Quitting/Projective/FinFourAmbientQSimplex.lean`,
+identifies the comparison convention. The fresh table itself has no UE,
+so the normal-core theorem applies to it, not only to its ancestor.
+(NC.42j) does NOT sign r_i({i,t})−r_i({t}) or a triple premium.
+
+Take any legal positive (ρ,η) on (NC.42f). Its actual base profile v has
+i masses x*−ρ,ρ,n_i at dates0,2,Never; l masses y*,n_l at0,Never;
+k masses η,1−η at2,Never; and t PureNever. Now replace t's law by
+Quit0 with probability ξ and Never with probability1−ξ, independently
+of all three other private laws. This is an actual finite law, not a
+relaxed endpoint chart. Its literal Never is
+
+    ν(ξ)=n_i n_l(1−η)(1−ξ)<ν*    for 0≤ξ<1.
+
+Write a=x*−ρ, y=y*. Let U_h,B_h,Q_h denote v's prescribed payoff,
+full cap and root response. For h≠t, let W_h be the maximum of its
+EMPTY1, JOIN2 and AFTER3 replies, and put g_h=Q_h−W_h. Thus
+B_h=W_h+g_h⁺, with every old/new late branch already retained in W_h.
+Never is dominated by AFTER3 for ξ<1 by the positive own singleton
+and positive opponents' literal Never; at ξ=1 they agree after the
+sure root absorption.
+
+Condition on t quitting surely at0. For h≠t let J_h be h's root reply
+and P_h its passive payoff at that root. ALL replies strictly after0,
+including Never, then have value P_h. Set e_h=J_h−P_h and
+(a_i,a_l,a_k)=(a,y,0). Conditional prescribed payoffs are exactly
+a_h J_h+(1−a_h)P_h, not P_h for a positive root supplier. Independence
+and deletion of h's law therefore give the COMPLETE cap identity
+
+    B_h(ξ)=max((1−ξ)Q_h+ξJ_h, (1−ξ)W_h+ξP_h).  (NC.42k)
+
+This accounts for all integer response dates. In particular the upper
+branches share ONE multiplier and ONE constant, so taking their entire
+maximum is exact. The root branch is separately retained; no closed-seam
+or generic upper-affinity theorem is assumed.
+
+The coefficients include the actual four-owner counterfactual:
+
+    e_i=(1−y)[r_i({i,t})−r_i({t})]
+                     +y[r_i({i,l,t})−r_i({l,t})],
+    e_l=(1−a)[r_l({l,t})−r_l({t})]
+                     +a[r_l({i,l,t})−r_l({i,t})],
+    e_k=(1−a)(1−y)[r_k({k,t})−r_k({t})]
+           +a(1−y)[r_k({i,k,t})−r_k({i,t})]
+           +(1−a)y[r_k({k,l,t})−r_k({l,t})]
+           +ay[r_k({i,k,l,t})−r_k({i,l,t})].
+
+No sign of these mixed joining coefficients follows just from
+(NC.42h) or (NC.42j). The deleted t law, and hence B_t, is unchanged.
+Its prescribed payoff is (1−ξ)U_t+ξQ_t; the original-root reply is
+
+    Q_t=(1−a)(1−y)s_t+a(1−y)r_t({i,t})
+                   +(1−a)y r_t({l,t})+ay r_t({i,l,t}).
+
+Let D₀ be the COMPLETE sum debt of v. Combining all four actual
+prescribed-payoff changes with (NC.42k) gives the exact convex PWL
+budget
+
+    D(ξ)=(1−ξ)[D₀−Σ_(h≠t)g_h⁺]
+          +ξ[B_t−Q_t−Σ_(h≠t)a_h e_h]
+          +Σ_(h≠t)[(1−ξ)g_h+ξe_h]⁺.            (NC.42l)
+
+The old i-debt matching (NC.42f) is used ONLY to choose v; it is not
+assumed to persist after this additional law change. The final own
+and total debts are precisely those in (NC.42l). At ξ=1 this profile
+absorbs surely at0, so the actual source floor gives D(1)≥δ+g. At
+ξ=0, D₀>δ because v already has smaller joint Never. Those endpoint
+bounds do not bound a convex function from below in its interior.
+
+For a fixed legal positive (ρ,η), the entire remaining check is finite.
+Put
+
+    Ξ={0,1} ∪ { −g_h/(e_h−g_h) : h≠t,
+                         e_h≠g_h, 0<−g_h/(e_h−g_h)<1 }.
+
+There are at most THREE interior folds. The target is exactly
+
+    min_(ξ∈Ξ) D(ξ)≤δ.                           (NC.42m)
+
+Either endpoint is already strictly above δ; a successful fold would
+be proper, legal, and have ν<ν*. Thus ≤δ alone would contradict the
+global floor or least original Never. Conversely failure at every fold
+retires this fixed (ρ,η) root-accommodation pilot, not the canonical
+source or every paired operation. No source argument presently forces
+a successful fold as (ρ,η) varies on the legal matching curve. The
+specific unresolved funding is the simultaneous clipping in
+(NC.42l–m), especially the k-root coefficient containing the four-owner
+reward; replacing it by the supplied t–l gain would be false.
+
+The identities were independently checked by exact rational enumeration
+of all independent draws and all five pure response classes on30 arbitrary
+signed tables at four donation amplitudes. This checks the algebra only:
+those tables are not global-minimum sources, and no numeric feasibility,
+novelty, export, or independently reviewed source exclusion is claimed.
