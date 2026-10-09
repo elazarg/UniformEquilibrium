@@ -18357,3 +18357,68 @@ word formulas in `UniformEquilibrium/Quitting/Terminal` and
 `UniformEquilibrium/Quitting/Paths` found no named declaration used
 for this calculation. No Lean result, build, export or class coverage
 is inferred from that lookup.
+
+### DD5. Reserve fourth-law root accommodation, not a local free repair
+
+The exact conditioning in Noether's NC.42k–m, under the heading
+“A root-first fourth-law accommodation retains every cap fold” in
+[CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md](CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md),
+also adapts to the DD base. This is an ordinary/unreviewed adapter,
+not a claim that his zero-future premises hold here or that this extra
+control is needed before solving DD3's open movable-k budget.
+
+For a fixed DD base v, replace its PureNever i by independently
+Quit0 with probability ξ and Never with probability1−ξ. Write
+D₀,U_h,B_h,Q_h for the base's full data, and for h≠i put
+
+    W_h=max(T_h(1),T_h(L),W_h^pre,W_h^end),
+    g_h=Q_h−W_h,    a_p=b−x, a_q=a−y, a_k=0.
+
+Conditioning on i quitting surely at0 gives each h≠i one root reply
+J_h and one passive value P_h for EVERY nonroot response, including
+Never. Put e_h=J_h−P_h. Its conditional prescribed payoff is
+a_h J_h+(1−a_h)P_h, NOT merely P_h for a root supplier. Therefore
+the exact complete cap is
+
+    B_h(ξ)=max((1−ξ)Q_h+ξJ_h,
+                         (1−ξ)W_h+ξP_h).       (DD.8)
+
+Every internal head/word maximizer scales by the SAME nonnegative
+multiplier and receives the SAME additive constant. Thus no new
+head/word response ordering assumption is used. Owner i's cap is
+unchanged because its own law never affects it, and its new payoff
+is (1−ξ)U_i+ξQ_i. The exact full sum debt consequently is
+
+    D(ξ)=(1−ξ)[D₀−Σ_(h≠i)g_h⁺]
+        +ξ[B_i−Q_i−Σ_(h≠i)a_h e_h]
+        +Σ_(h≠i)[(1−ξ)g_h+ξe_h]⁺.           (DD.9)
+
+The new literal Never is (1−ξ)ν(v). This is a convex PWL function,
+so its minimum on [0,1] occurs at0,1 or one of at most THREE
+interior folds −g_h/(e_h−g_h). The finite DD realizers and their
+uniform cap convergence still apply after this independent root coin.
+The coefficients J/P are full original root values: with
+B=b−x, A=a−y, σ_p=1−B, σ_q=1−A, in particular
+
+    e_k=σ_pσ_q[r_k({i,k})−r_k({i})]
+       +Bσ_q[r_k({i,p,k})−r_k({i,p})]
+       +σ_p A[r_k({i,q,k})−r_k({i,q})]
+       +BA[r_k({i,p,q,k})−r_k({i,p,q})].       (DD.10)
+
+The grand-coalition root tester is therefore fully retained, not
+bounded using a pair joining premium or a singleton-column sign.
+
+There is an important startup qualification. Apply this SAME root
+coin to the ORIGINAL DC global minimum, before any DD relocation.
+All three other owners are strict ROOT-ONLY/LATER-ONLY nonbridgers,
+so their g_h are nonzero. The exact budget is therefore AFFINE on
+one initial interval. Its slope cannot be negative, by the global
+debt floor; it cannot be zero, because then proper ξ would remain
+at δ with strictly smaller ORIGINAL ν. Its initial slope is thus
+STRICTLY POSITIVE. Convexity then rules out an improvement at EVERY
+positive ξ on that unchanged source, not merely infinitesimally.
+This statement concerns the original source, not every off-minimum
+DD base. Root accommodation is a possible
+finite-amplitude cap-turnover hedge after a genuinely changed base,
+not an unpaid infinitesimal consumer. Neither endpoint debt bound
+forces a successful interior fold, and no successful fold is proved.
