@@ -4250,3 +4250,88 @@ zero-future bridges, several/nonisolated later maximizers, additional
 later-only observers and the general whole-debt funding problem remain
 open. No owner's prescribed support is inferred just from its available
 best reply, and no general purification or full Fin4 conclusion is approved.
+
+
+## RA6: independent latest-OTHER-cap fence and same-point isolation check
+
+Reviewed ONLY frozen `### RA6. Global OTHER-owner latest-cap fence and a
+stronger sole-cap corollary` through EOF, SHA256
+`ce8b9fd3db537985d20988ef7f56ca9efdaca2886c34b1254ae43f85dee1456b`.
+Verdict: PASS as ordinary mathematics at the stated selected-source scope,
+with no unresolved cap, realization, least-Never or isolation objection.
+The earlier independent RA1–RA5 reviews remain separate. No full case(I)
+consumer follows.
+
+**Exact global claim.** For ANY produced marked representative of a
+same-table full augmented minimum having least literal joint Never ν₀>0,
+owner i has no finite prescribed mass strictly after the latest full cap
+of the OTHER owners. The threshold is the maximum over their entire compact
+finite-clock maximizing sets, not selected testers, a finite response menu,
+or the latest cap of all owners. No root maximality or common individual
+debt rigidity is needed for this first statement.
+
+I re-read accepted source Sections6–7 and18 and this reviewer's PC2 literal
+finite-tail/Never transport. Every marginal Never mass is positive. The
+finite final tester beats literal Never by the positive singleton reward
+times the positive opponent-Never product, so all full maximizing points
+lie in compact T. Consequently L_-i exists. Positive prescribed finite
+mass strictly above it supplies a regular whole-date cut u>L_-i with
+positive remaining finite tail e; one may choose u<c since the compiler
+puts zero own mass at c. When L_-i=c the conclusion is already vacuous.
+
+**Both legal signs and the original carrier.** The three disjoint pieces
+before the cut, finite after the cut, and literal Never have respective
+factors1,1−λ,1+λe/n_i. They stay nonnegative and uniformly bounded for
+both signs near0. This is not finite escape relabeled as Never. The
+original whole-date cut indicators and separate finite boundary c_N→c
+converge strongly, and the retained positive Never interval remains a
+separate atom. The bounded OLD-chart density and unchanged prescribed/
+moving-test kernels give full payoff/cap convergence and the literal
+product coordinate in the SAME augmented carrier. Source Section18
+minimizes ν over all debt-δ augmented triples, not one semantic fibre;
+the varied family is therefore eligible for the selection contradiction.
+
+**Entire caps, including the changing owner's later tests.** For h≠i,
+every finite response t≤u sees either changed i draw strictly AFTER its
+own response, whether that draw is finite>u or Never. The first-coalition
+kernel and response payoff are exactly identical. ALL old h maximizers
+are retained below u. The remaining set `(T∩[u,c]) ⊔ {Never}` is compact
+and contains no old h maximizer, hence has a genuinely uniform strict
+gap. The all-response coupling bound2M|λ|e preserves that gap on a small
+two-sided interval. No unique/nonisolated-max complement argument is
+being smuggled in. i's ENTIRE cap is independent of its own law even if
+some of its active tests lie after u. Thus every full B is exactly fixed.
+
+Every U is affine in this one changed marginal. The TRUE summed debt is
+therefore affine on a legal interval containing0 in its interior. The
+actual global floor forces it to equalδ everywhere near0. Taking λ<0
+strictly decreases `(n_i+λe)∏_(h≠i)n_h`, contradicting least ORIGINAL ν₀.
+No far-endpoint cap equality, off-minimum suffix replacement, common-debt
+argument or favorable branch selection is required.
+
+**The sole later cap is the SAME forced atom.** At the reviewed two-bridge/
+two-root-only max-A source, RA5's early fence and this latest-OTHER fence
+confine supported i's future mass to j's ENTIRE late-cap band. If that band
+is the single marked point σ_j, any positive i future mass is literally
+q_i({σ_j})>0. Hence the mixture atom at this SAME σ_j has mass at least
+q_i({σ_j})/4. Accepted source Section6 makes every such positive finite
+mixture atom a retained interval midpoint isolated in T. This is the extra
+reason isolation holds; uniqueness alone would not provide it. If σ_j=c,
+the compiler's q_i({c})=0 already rules out that future mass. Otherwise
+RA5(S) applies with its genuine compact complement gap and rules it out.
+No fixed ordinary integer date is identified with the marked point. The
+formal duplicate final finite test is counted by the source's convention,
+not treated as a separate cap or as literal Never.
+
+**Bounded novelty and survivors.** PC1–PC5's all-owner latest-cap fence
+does not imply this OTHER-owner fence when i alone has a later active
+clock. Its multiaffine/common-debt endpoint proof also does not substitute
+for RA6's direct least-Never argument. RA5 supplied the early fence and
+the isolated sole-cap result, but not the forced-atom step removing the
+isolation premise. Swapping the two supported future bridgers therefore
+correctly forces at least two DISTINCT later maximizing marked points
+for each and confines each future law to the partner's late-cap band.
+Unsupported or zero-future bridges, additional later-only cap owners and
+genuine multiple-late-cap configurations survive. This is an actual-source
+restriction, not a behavioral equilibrium producer or Fin4 closure. No
+Lean implementation, build, seal or export is attached to this review.
