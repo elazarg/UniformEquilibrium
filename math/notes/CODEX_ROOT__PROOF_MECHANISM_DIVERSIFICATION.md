@@ -488,6 +488,140 @@ verifier successfully. This checks one bounded positive refinement; it is
 not a search failure suggestive of a positive gap and not a universal
 portfolio-improvement theorem.
 
+## Target preservation is stronger than target-free existence recovery
+
+A convexified payoff/cap point need not be realizable with its prescribed
+payoff. This does not by itself refute recovery for an existence proof:
+the recovered profile may have a different payoff, provided its complete
+behavioral debts are small. The terminal-all-errors consumer can select
+one payoff target afterward. Neither a chosen relaxed target nor a common
+realizing strategy across accuracies is an input to that consumer.
+
+The ordinary mathematical recovery theorem in
+`CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md`, Sections 3–6,
+makes this distinction quantitative. Let F be a nonempty prefix-closed
+family of complete payoff/cap pairs in the reward box, with nonnegative
+debts, and let eta be its infimum maximum debt. Convexify once and apply
+any finite independent-root word. If its resulting maximum debt is
+epsilon and its joint prefix survival is S, then
+
+    eta <= n epsilon / S                         if S > 0,
+    eta <= epsilon + 2R sqrt(S) + 2RS             for every S.
+
+The first branch can select an unprefixed constituent; the second selects
+one constituent and retains the word. It is essential that extraction is
+not required to retain the original source or its payoff. One constituent
+controls all caps simultaneously: choose its cap small for a player with
+maximal deleted-player survival, while every other cap is screened by at
+most sqrt(S). These are unrestricted cap estimates, not finite-menu tests.
+
+The bounds give a recovery modulus independent of word length. They also
+iterate through a fixed finite bound d on publicly observed future draws.
+Their small-error exponent deteriorates roughly as 1/3^d, so they do not
+give recovery when d grows arbitrarily with accuracy. The proof and its
+bounded independent mathematical check are recorded in the owned note and
+`../feedback/CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION__BY_CODEX_EMMY_BOX.md`.
+This is not a Lean check or an arbitrary-game producer.
+
+Thus fixed-target decoding, target-free recovery, and recovery uniform in
+an increasing number of signal rounds are three different mathematical
+questions. A no-go for the first must not be used to reject the second.
+Conversely, solving the second is not permission to interchange the depth
+and accuracy limits in the third. A concrete next test is an existence
+producer in this exact relaxation together with the quantitative recovery
+it needs; convexity alone supplies neither.
+
+## Changing permitted operations is different from changing the objective
+
+An objective cannot select a successful profile if every profile in its
+permitted output class has a positive unrestricted regret floor. The exact
+test in `CODEX_EMMY_BOX__OBJECTIVES_AND_GLOBAL_SELECTION.md` makes this
+distinction explicit. In one three-player singleton game, every infinite
+deterministic owner word with the selected owner quitting with hazard one
+half has maximum complete debt at least 1/12. Yet simultaneous independent
+stationary hazards tending to zero approach the same positive equilibrium
+payoff. The obstruction covers all such owner words, not just periodic or
+finite-state ones. The calculations have a bounded independent check.
+
+This is an operation-level control experiment on a solved game, not new
+counterexample-class coverage. The existing CEDAR one-active obstruction
+already treats a stronger variable-hazard restriction on a different table.
+The lesson is not that nonlinear objectives are useless on the full
+strategy space. It is that changing an objective while retaining an
+insufficient root alphabet does not change the available strategies.
+
+The same example gives a whole-tree test, not just a one-word test. Finite
+trees with H fresh uniform owner signals and a literal Never leaf have
+complete debt 2^(-H). Every finite half-hazard owner word followed by Never
+has debt at least 1/48. Thus recursive child selection and keeping or
+dropping existing prefixes cannot have a recovery loss uniform in signal
+depth, even with only three players. The proof and its bounded check are
+in the Emmy note. This does not disprove arbitrary-root recovery: that
+restricted word family is closed only under its three allowed roots, not
+under all product roots. Introducing a new sure-collision root already
+solves this particular table.
+
+There is also a positive operation with precise limits. In Section 9 of
+`CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md`, an exogenous public
+signal may determine the product root separately at each calendar date,
+with independent fresh signals and no retained public state. Suppose its
+conditional total Quit hazard is at most delta at every date and signal.
+Replacing each player's hazard by its signal average gives an actual
+private profile with
+
+    private maximum debt <= public maximum debt + 8R delta.
+
+The proof compares first stopping coalitions for every deleted-player
+system, uniformly over all deterministic deadlines and Never. It allows
+calendar variation and positive Never mass. It does not require a lower
+bound on opponent absorption. The ordinary proof has a bounded independent
+check; it is not a general-game producer or a Lean declaration.
+
+Neither of its two main hypotheses is cosmetic. A rare public sure
+grand-coalition signal has small expected hazard but large conditional
+hazard; replacing it by independent marginal hazards leaves a fixed regret
+gap. A public signal that permanently assigns a sole owner can instead
+have uniformly tiny conditional hazards and exact public equilibrium,
+while averaging away that retained state also leaves a fixed regret gap.
+The latter example excludes the particular averaged payoff as a private
+uniform payoff, not the existence of other private equilibrium targets.
+
+Nor can the small-hazard source be imposed on every table. The participant
+indicator game, in which a player receives one exactly when it quits,
+has an exact sure-collision equilibrium but a positive regret floor for
+uniformly diffuse public protocols. A stronger source comparison in the
+Turing note uses the checked Solan--Vieille boundary table: serialization
+and its complete one-active regret floor exclude vanishing-error,
+vanishing-hazard, no-retained-state public families, although that table
+has a checked period-two equilibrium. These are solved-game restrictions
+on an attempted construction, not positive-gap counterexamples.
+
+Thus the constructive alternative must retain the freedom to change joint
+roots, use substantial simultaneous quitting where needed, and select a
+different equilibrium target. Target-free finite-tree extraction remains
+an available operation, but its dependence on signal depth is an actual
+missing estimate. Small-root averaging is another available operation,
+but general history-dependent public strategies do not satisfy its input.
+Neither operation should be presented as a universal replacement for the
+existing temporal route without its own source theorem.
+
+The direct-selection test in
+`CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION.md` distinguishes
+another pair of quantifiers. A single auxiliary game with small private
+Never bonuses can have both a bad exact finite-menu equilibrium branch
+and a good branch whose original unrestricted debt tends to zero. The bad
+branch even disproves a proposed weak-continuity hypothesis, while the
+good branch remains available in that same full equilibrium correspondence.
+Consequently neither an arbitrary-selector failure nor failure of that
+topological theorem refutes existential global selection. The calculation
+of the two global limit orders has a bounded independent mathematical
+check; the other auxiliary claims remain ordinary proof drafts. None
+provides new reward-table coverage or a Lean check.
+The unresolved positive task is to select from the entire correspondence
+while choosing the menu and approximation parameters jointly; the local
+bonus-transport identity alone only reproduces Nash--Bellman recursion in
+augmented payoffs and does not solve that task.
+
 ## Sources inspected and next question
 
 - `ideas/NONLOCALITY_TECHNIQUE_CATALOGUE.md`.
