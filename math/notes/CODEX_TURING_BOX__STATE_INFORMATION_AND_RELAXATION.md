@@ -28,6 +28,13 @@ calculation: a local exact periodic continuation can turn out of the legal
 hazard region at its first inactive wall. It does not exclude distant
 equilibria or unrestricted approximate strategies.
 
+Section 17 is a separate ordinary proof candidate for consuming the
+singleton-concentration escape arm, even when periods grow. It reorganizes
+an actual profile at an independent-law quantile cutoff and installs an
+owner punishment afterward. Its source is a supplied concentrated family
+with vanishing outsider debts, not arbitrary reward data alone. Independent
+review and the exact source-overlap judgment remain pending.
+
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits
 one convexification of the
@@ -1740,3 +1747,270 @@ source/payoff/support jump or a truly approximate mechanism. This scoped
 falsifier belongs in the notebook, not in a new export or a positive-gap
 claim against unrestricted actual profiles. No full bifurcation
 classification is needed for the direction-changing conclusion.
+
+## 17. Quantile cutoff consumes a normal singleton-concentration family
+
+Status: ordinary mathematical proof candidate, not independently checked,
+not checked in Lean and not exported. This is an actual profile constructor
+from a supplied family, with an application to the independently produced
+interior-cyclic escape alternative. It is not an unconditional producer of
+that alternative and not a solution of the vanishing-hazard branch.
+
+### 17.1. Self-contained statement and agency
+
+Fix a finite nonempty player set I and a finite quitting reward table with
+|r_j(S)|<=R for every nonempty coalition S and recipient j, where R>0.
+Never pays zero. An actual profile consists of INDEPENDENT laws T_j on
+N union{Never}. Each complete unilateral replacement is unrestricted;
+equivalently its terminal payoff is a mixture of its pure finite-deadline
+and Never payoffs against the fixed independent opponent laws. No public
+seed or correlated law is introduced below.
+
+Fix one player i, write s=r({i}) and d=s_i, and define its behavioral
+punishment value by
+
+    chi_i = inf_opponent plans sup_complete private replacements
+                         E[r_i(terminal coalition)].                    (46)
+
+The original zero Never payoff is retained in(46). Assume normality
+chi_i<=d. The stationary stopping minmax theorem guarantees that for every
+eta>0 there is an independent constant opponent root, repeated at every
+future date, whose complete reply cap for i is at most d+eta. Its own i
+coordinate can be set to Continue without changing that cap. Normality
+does not assert attainment, and the punishment root may depend on eta.
+
+Let sigma be any actual independent profile. Define
+
+    alpha = 1-P(T_i < min_{j!=i} T_j, T_i finite),
+    delta = max_{j!=i} D_j(sigma),                                      (47)
+
+with the maximum over no outsiders defined to be zero. Thus alpha is the
+literal terminal-law mass outside singleton{i}, including Never and ties.
+Choose alpha<theta<1 and eta>0. Then there is an actual independent
+profile sigma' obtained by retaining sigma through one finite cutoff k
+and replacing its whole suffix by an eta-optimal punishment of i, such that
+
+    ||U(sigma')-s||_infinity <= 2R(alpha+theta),
+    D_j(sigma') <= D_j(sigma)+4R theta                 (j!=i),
+    D_i(sigma') <= eta+2R(alpha/theta+alpha+theta).                       (48)
+
+No small atom, conditional hazard, period, source ancestry, limiting
+calendar, fixed relaxed payoff or exact owner best reply is assumed.
+All caps in(48) include every pure deadline and Never, hence all complete
+behavioral replacements. The source payoff changes, but its limiting target
+s is fixed from the original table before the requested accuracy.
+
+Consequently, if an actual independent family sigma_m satisfies alpha_m->0
+and D_j(sigma_m)->0 for every j!=i, then s is a uniform-equilibrium payoff.
+This conclusion needs no rate or compatibility between the family members.
+
+### 17.2. Independent quantile separation, including large atoms
+
+Let A=min_{j!=i} T_j, where an empty minimum is Never. Choose the FIRST
+integer k such that
+
+    P(T_i<=k)>=1-theta.
+
+It exists because P(T_i finite)>=1-alpha>1-theta. Minimality gives
+P(T_i>=k)>theta: for k>0 the preceding cumulative mass is strictly below
+1-theta, while for k=0 this probability is one. Since T_i and A are
+independent,
+
+    P(A<=k) P(T_i>=k)
+        <= P(not[T_i finite and T_i<A])=alpha.
+
+Here the event on the left includes the equality T_i=A, which must count
+as failure of the singleton coalition. Therefore
+
+    beta:=P(A<=k)<=alpha/theta,       P(T_i>k)<=theta.                   (49)
+
+The large atom at k causes no problem: the two different inequalities
+T_i>=k and T_i>k are intentional. Using >k in both places would lose the
+very atom that distinguishes a tie from a strict singleton.
+
+### 17.3. The legal suffix replacement and all outsider caps
+
+Preserve every player's original finite atoms on dates0,...,k. Conditional
+on that player's clock being later, replace its remaining law by the
+stationary punishment law starting at k+1. Set i's tail to Never. The
+conditional fresh private draws are independent across players, so this
+defines independent complete laws and gives the selected constant product
+root at every surviving date after k. It is not a public-state reset.
+
+For the prescribed baseline, couple the two profiles by identical original
+clock samples through k and independent replacement tails. They agree
+whenever original T_i<=k, since then some player absorbs by k and all
+head clocks are unchanged. Thus for every recipient j,
+
+    |U_j(sigma')-U_j(sigma)|<=2R theta.                                (50)
+
+The original terminal law is singleton{i} with mass1-alpha, so
+|U_j(sigma)-s_j|<=2R alpha. This proves the first line of(48).
+
+Now fix ANY outsider j and ANY complete behavioral replacement tau_j.
+Couple its private replacement identically in the two opponent profiles.
+On original T_i<=k, absorption still occurs no later than k unless the
+replacement itself already absorbed; every other player's head is the
+same, including i's head. Outcomes therefore agree on this event for
+every tau_j, including Never and all deadlines later than k. Hence
+
+    |U_j(tau_j,sigma'_-j)-U_j(tau_j,sigma_-j)|<=2R theta.
+
+Taking suprema is now legitimate because the same bound holds for EVERY
+tau_j. It gives |B_j(sigma')-B_j(sigma)|<=2R theta, and with(50),
+D_j(sigma')<=D_j(sigma)+4R theta. The probability cost is theta, not the
+possibly large survival probability of all opponents after deleting i:
+i is not the deviator in this comparison, so its retained head clock
+provides the uniform absorption event.
+
+### 17.4. The owner's entire deadline/Never envelope
+
+For i the preceding coupling is invalid: its replacement can discard the
+head clock that made the other players safe. Instead use(49).
+
+Against sigma'_-i, the probability an opponent quits by k is exactly beta.
+For any pure own deadline t<=k, its own payoff equals d on the event all
+opponents survive k. On the remaining event its payoff lies in[-R,R].
+Consequently this deadline's payoff is at most d+2R beta.
+
+For a pure deadline t>=k+1 or Never, the event A<=k contributes a payoff
+in[-R,R]. Conditional on A>k, the opponents enter the chosen fresh
+stationary punishment root. The shifted deadline or Never payoff is at
+most its COMPLETE reply cap, hence at most d+eta. Thus this deadline's
+payoff is at most
+
+    beta R+(1-beta)(d+eta)<=d+eta+2R beta.                              (51)
+
+The last inequality uses d>=-R and eta>0, not d>=0. The same conclusion
+holds for all complete private replacements by their pure-clock mixture.
+Therefore
+
+    B_i(sigma')<=d+eta+2R alpha/theta.
+
+By(50) and the original singleton mass,
+U_i(sigma')>=d-2R(alpha+theta). Subtraction proves the last line of(48).
+This includes the owner's Never replacement explicitly; no tail absorption
+or behavioral-cap continuity assumption was used.
+
+### 17.5. Fixed target and uniform finite horizons
+
+For alpha_m>0 choose theta_m=sqrt(alpha_m), after discarding finitely many
+indices with alpha_m>=1; for alpha_m=0 choose any positive theta_m->0.
+Let eta_m->0 and choose one stationary punishment root at that accuracy.
+The produced profiles satisfy
+
+    U(sigma'_m)->s,       max_j D_j(sigma'_m)->0.                       (52)
+
+The actual terminal-target acceptance theorem then yields: for EVERY
+epsilon>0 there is ONE sigma'_m and ONE integer N such that for every
+horizon H>=N, that same independent profile is epsilon-Nash against all
+complete behavioral replacements for the H-stage average, and its
+prescribed average payoff is within epsilon of s in every coordinate.
+The fixed vector s precedes epsilon. The chosen k, eta, punishment root,
+profile and horizon threshold may all depend on epsilon. No uniform tail
+rate over m or convergence of the profiles themselves is claimed.
+
+### 17.6. Exact adapter from the actual interior-cyclic escape source
+
+`InteriorCyclicOwnerConcentrationSubsequence` provides, on its literal strict
+selection of the original interior cyclic blocks, both
+
+    terminalOutcomeMass -> point mass on singleton{i},
+    D_j ->0 for EVERY j!=i.
+
+Its source period may grow. Read its terminal-outcome convergence at the
+singleton coordinate to obtain alpha_m->0; its outsider-debt fields give
+the other premise of(52). If i is punishment-normal, Sections17.2–17.5
+consume that ACTUAL selected family into the singleton uniform payoff.
+There is no need to extract a single compatible Nash--Bellman spine, take
+an exact root limit, or preserve the cyclic profiles after the cutoff.
+
+For Fin4, nonexistence of any uniform payoff already implies full normal
+core, which implies every player's punishment normality. Hence under that
+nonexistence hypothesis the owner-concentration arm of
+`exists_interiorCyclicFixedDebtor_and_ownerEscape_of_terminalGap` is
+impossible for ANY period schedule with period-times-local-error tending
+to zero. Its remaining arm is vanishing TOTAL displayed hazard on a
+strict subsequence of the same originally produced family.
+
+This extends the existing source-family elimination from period one to
+growing periods. It does NOT eliminate the vanishing-hazard arm, impose
+new restrictions on raw counterexample tables beyond full normal core,
+or improve the already available EXISTENCE of a period-one diffuse source.
+Its new claimed role is to consume a named escape arm for an arbitrary
+supplied growing-period interior family, preserving that family until the
+explicit legal tail reorganization. It is not an arbitrary-table UE proof.
+
+### 17.7. Exact positive and boundary tests
+
+- Positive cut test: two independent clocks, owner T_i=0 with probability
+  1/2 and2 otherwise; opponent T_j=1 with probability p andNever otherwise.
+  Then alpha=p/2. Choosing theta>alpha with theta<1/2 forces k=2,
+  beta=p, and P(T_i>=k)=1/2. The estimate beta<=alpha/theta holds. A large
+  owner atom is retained rather than replaced by a tiny-hazard hypothesis.
+- Normality is necessary for this singleton TARGET conclusion. Let player0
+  receive-1 on every coalition containing0 and0 on every other coalition,
+  and let all other players receive0 everywhere. Prescribe0 Quit atdate0,
+  everyone else Never. Alpha=0 and every outsider debt is0, but owner's
+  Never replacement always pays0, so chi_0=0>d=-1 and the singleton vector
+  cannot be a uniform-equilibrium payoff. The game has the all-Never
+  equilibrium target0; this is not a whole-game counterexample.
+- Independence is essential to the CUT lemma. With a forbidden common
+  fair seed, let (T_i,T_j)=(0,1) or(2,3). Owner is strictly first surely,
+  so alpha=0, but no deterministic k has both P(T_i>k)<1/2 and
+  P(T_j<=k)=0. This does not disprove a different correlated-family theorem;
+  it identifies the precise unavailable coupling that(49) cannot assume.
+
+### 17.8. Narrow source correspondence and remaining question
+
+Inspected actual declarations, under their source imports; no Lean build:
+
+- `InteriorCyclicOwnerConcentrationSubsequence`,
+  `InteriorCyclicFixedDebtorSubsequence.nonempty_ownerEscapeAlternative`,
+  `UniformEquilibrium/Quitting/Cycles/InteriorCyclicDebtEscape.lean`.
+- `exists_interiorCyclicFixedDebtor_and_ownerEscape_of_terminalGap`,
+  `nonempty_interiorApproximateNashCyclicBlockFamily`,
+  `UniformEquilibrium/Quitting/Cycles/InteriorCyclicTerminalDebtRatio.lean`.
+- `quittingPunishmentValue`, `quittingPunishmentValue_eq_stationaryPunishmentValue`,
+  `UniformEquilibrium/Quitting/Stationary/MinMax.lean`; and
+  `exists_quittingStationaryPunishmentRoot_lt_add`,
+  `UniformEquilibrium/Quitting/Punishment/InstantPunishment.lean`.
+- `IsQuittingNormalPlayer`, `isQuittingNormalPlayer_of_singleton_nonneg`,
+  `UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`.
+- `normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff`,
+  `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean`;
+  `all_punishmentNormal_of_normalCore_eq_univ`,
+  `UniformEquilibrium/Quitting/Classification/LCP/NormalCorePunishmentNormal.lean`.
+- `quittingGame_isUniformEquilibriumPayoff_of_terminalTargetAcceptance`,
+  `quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family`,
+  `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+
+Bounded overlap checks:
+
+- `false_of_periodOne_ownerConcentration_of_finFour_noUniformPayoff`,
+  `UniformEquilibrium/Quitting/Cycles/PeriodOneOwnerConcentrationContradiction.lean`,
+  already consumes PERIOD ONE by a compact exact solo-root limit and
+  punishment completion. The construction above is unnecessary for that
+  case and claims no additional raw-table coverage there.
+- `exists_periodOne_tropical_twoNever_escape_of_fourPlayer_noUniformPayoff`,
+  `UniformEquilibrium/Quitting/Cycles/PeriodOneVanishingHazardEndpointLimits.lean`,
+  already yields one stationary vanishing-hazard source under no UE. The
+  present statement is stronger about supplied growing-period sources,
+  not stronger about existence of some diffuse source.
+- `isUniformEquilibriumPayoff_soloReward_of_summableConditionedDeletedClock`,
+  `UniformEquilibrium/Quitting/Cycles/ConditionedDeletedClockSoloCompletion.lean`,
+  consumes a particular conditioned, summable deleted-clock chronology.
+- `IsCanonicalExactQuittingNashBellmanSpine.isUniformEquilibriumPayoff_soloReward_of_persistent`,
+  `UniformEquilibrium/Quitting/Classification/Existence/NormalUniquePersistentNashBellmanSpine.lean`,
+  and `QuittingSummableResidualNashBellmanSpine.isUniformEquilibriumPayoff_soloReward_of_uniquePersistent`,
+  `UniformEquilibrium/Quitting/Classification/Existence/AllNormalUnboundedExactBlockHazardCapacity.lean`,
+  consume one exact or summable-residual spine with a persistent owner and
+  summable opponents. No such inter-family spine is an input above.
+
+Requested independent check: validate(49) at a large cutoff atom, the
+uniform outsider comparison for arbitrary replacements in Section17.3,
+and the complete owner cap(51), especially negative d and Never. Then
+check whether the growing-period source implication is already present
+under another nearby declaration. If sound, the genuinely missing global
+step is production and consumption of the remaining ALL-hazards-small
+branch; singleton-monopoly repair itself need not preserve old chronology.
