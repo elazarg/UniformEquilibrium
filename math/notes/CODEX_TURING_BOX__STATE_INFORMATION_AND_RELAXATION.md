@@ -2,6 +2,18 @@
 
 Identity: CODEX_TURING_BOX.
 
+Section37 returns to the ENTIRE realized-discounted Nash correspondence,
+with arbitrary calendars, components and selective Never. On the K10
+fixture, its exact compact source automatically has at least TWO proper
+clocks, and every deleted-opponent clock terminates uniformly conditionally
+over that whole source at each FIXED discount. Original full regret therefore
+attains its minimum on the source. These are ordinary unreviewed source
+facts, not a vanishing-discount selection theorem: the uniform window over
+ALL components necessarily has discount-scale length on the stationary
+branch. The live question is whether a different component supplies original
+full regret tending to zero. Joint fastest absorption alone does not select
+one, even on an elementary solved two-player game.
+
 Section36 tests a bounded ENDOGENOUS clock-overlap penalty, rather than a
 fixed-prior entropy source or a private Never transfer. Finite-menu source
 existence follows from own-strategy concavity. A Nash source on the FULL
@@ -17,7 +29,9 @@ proper tail would become conditionally identical, where Never strictly
 dominates every current deadline for all four recipients, contradicting
 the normalized density first-order conditions. Finite asymmetric source
 selection is still OPEN. This is an actual strategy-mode exclusion, not a whole-selector
-falsifier, UE nonexistence or a reward-class reduction.
+falsifier, UE nonexistence or a reward-class reduction. The universal overlap
+source is PARKED: the focused asymmetric attempt supplied no finite-component
+producer or whole-source falsifier beyond its support restrictions.
 
 Section35 records the exact total-correlation prefix identity and the
 ordinary Lagrangian dual-zero obstruction. These are supporting method
@@ -6605,3 +6619,182 @@ excludes automatic better-reply security after common calendar escape.
 Those facts are not new results here and do not exclude the entire FULL
 regularized correspondence. The present distinct calculation is the
 K10 restriction36.5, not introducing the cost or re-proving that endpoint.
+
+## 37. Entire discounted source: fixed-rate compactness versus global selection
+
+Status: ordinary UNREVIEWED mathematics. This is source analysis, not a new
+UE reward class, a claimed arbitrary-table producer, or an exclusion of the
+whole discounted selector. Section23.4 supplies a checked good component on
+the already-solved Solan calibration; it remains a positive guardrail.
+
+### 37.1 Exact question and the first objective falsifier
+
+Keep the complete private-clock game and D_alpha of23.1. Every unilateral
+replacement law, including every finite deadline and Never, is allowed.
+For arbitrary Fin4 data the live question remains
+
+    liminf_(alpha up to1) min/inf_(p in D_alpha) E_original(p)=0.       (F1)
+
+No calendar, support, prescribed payoff or source ancestry is fixed across
+accuracies. Existence of D_alpha is automatic. Requiring every deleted
+opponent to absorb on the discount-negligible scale is only a sufficient
+strategy restriction, not a necessary game semantic.
+
+Maximizing joint discounted absorption alone does NOT select a good law.
+The minimal two-player example has
+
+    r({0})=(1,0), r({1})=(2,1), r({0,1})=(0,0), Never=0.
+
+Fix alpha in(0,1) and an integer L with 2*alpha^L<=1. Player0 Quit0 and
+player1 QuitL form exact discounted Nash. Player1 receives0 under every
+replacement. Player0's deadlines1,...,L-1 give alpha^t<1, deadlineL gives0,
+and every later deadline or Never gives2*alpha^L<=1. Thus the discounted
+cap is1. Joint discounted absorption is1, the largest possible value,
+while ORIGINAL player0's Never response earns2 instead of1. The equally
+fast profile(Quit0,Never) is exact ORIGINAL Nash. Hence this example defeats
+arbitrary selection among speed maximizers, not the best-component source
+in(F1), nor a cap-sensitive tie breaker. It is not a UE obstruction.
+
+### 37.2 A complete fixed-discount source theorem
+
+Let there be finitely many n>=2 players, |r_i(S)|<=M and all own singleton
+rewards s_i>0. Assume there is NO product binary Nash root with a sure
+quitter, for ANY bounded continuation vector w in[-M,M]^n. A root is tested
+against both Quit and Continue for every player, with actual independent
+coins and w paid only if all coins Continue. This is an explicit raw-table
+hypothesis, not an assumed property of a selected discounted branch.
+
+Then, for each FIXED alpha in(0,1):
+
+(a) D_alpha is nonempty compact in the product weak topology of probability
+laws on X=Nat union{Never}, with its one-point compactification topology.
+
+(b) Every p in D_alpha has at least two proper labels. No individual clock
+has finite proper support, and every finite live date is reached positively.
+
+(c) There is an integer N_alpha>=1 such that, simultaneously for EVERY
+p in D_alpha, EVERY player i and EVERY date t,
+
+    Pr_p(T_-i>=t+N_alpha | T_-i>=t)<=1/2.                         (F2)
+
+Consequently E_p[T_-i+1]<=2*N_alpha. The bound is independent of the chosen
+equilibrium component at this fixed discount, but may depend arbitrarily
+badly on alpha and the table.
+
+(d) Original terminal payoffs and unrestricted full response caps are
+continuous on D_alpha. In particular min_(p in D_alpha) E_original(p)
+is attained. All original finite deadlines AND Never enter this statement.
+
+Proof of(a). Nonemptiness is Fink's stationary source already recorded
+in23.1; it does not restrict the rest of D_alpha. The discounted terminal
+kernel is continuous on X^n: near AllNever its magnitude is bounded by
+M*alpha^(minimum finite clock), and finite first dates are isolated.
+Every pure replacement payoff and prescribed discounted payoff is therefore
+continuous in the product laws. The Nash inequalities define a closed
+subset of the compact product mixed-strategy space, so D_alpha is compact.
+
+Proof of(b). At the first possible sure-quitting date, all individual
+survivals are positive. Exact discounted Nash gives a binary Nash root
+against the actual bounded discounted continuation (arbitrary extensions
+after zero-reach individual histories cause no difficulty). This contradicts
+the raw no-sure hypothesis. Therefore no such date exists and all finite
+survivals are positive.
+
+Write z_j=Pr(T_j=Never). Fix i with Z_-i=product_(j!=i) z_j>0. Let V_i^alpha(t)
+be its pure deadline payoff and W_i^alpha its Never payoff. Dividing their
+difference by alpha^t gives the current Quit payoff on the event all opponents
+survive to t, minus their discounted absorption reward at dates>=t. As t
+tends to infinity, the first term tends to s_i*Z_-i and the absolute value
+of the second is at most M*Pr(t<=T_-i<Never), which tends to0. Thus
+
+    alpha^(-t)*(V_i^alpha(t)-W_i^alpha) -> s_i*Z_-i>0.
+
+Also V_i^alpha(t)->W_i^alpha. Some finite deadline strictly exceeds Never,
+and all sufficiently late deadlines lie below that fixed improvement.
+The complete best-response set is consequently a nonempty FINITE set of
+finite dates. Nash requires p_i supported on that set: i is finite proper,
+contradicting the first paragraph. Hence Z_-i=0 for every i. This is exactly
+the assertion that at least two labels are proper, not that all n are proper.
+
+Proof of(c). The continuous functions
+
+    f_(i,N)(p)=product_(j!=i) Pr_p(T_j>=N)
+
+decrease to Z_-i=0 pointwise on compact D_alpha. The elementary decreasing-
+compact-cover argument makes this convergence uniform. Choose one N_alpha
+with every f_(i,N_alpha)<=1/2. Each reached conditional tail is AGAIN an
+exact Nash law in the SAME D_alpha: copy a player's own original prefix
+and replace its tail; the discounted gain is alpha^t times positive joint
+reach times the conditional gain. Product conditioning preserves independence.
+Applying the uniform bound to that tail gives(F2), with no error/reach
+division or changed discount. Iteration gives survival at k*N_alpha at most
+2^(-k), and summing blocks proves the expectation bound.
+
+Proof of(d). Joint absorption tails are bounded by any deleted-opponent
+survival tail, uniformly over D_alpha. Thus finite-prefix prescribed payoff
+approximations converge uniformly. A response deadline later than H, or
+Never, agrees in payoff with deadline H unless no opponent quits before H;
+their payoff difference has absolute value at most
+
+    2*M*sup_(p in D_alpha) Pr_p(T_-i>=H) ->0.
+
+So the full cap is uniformly approximated by the maximum of finitely many
+finite-deadline payoffs. Those are continuous. Prescribed payoffs, all full
+caps, and their maximum debt are continuous, proving attained minimization.
+No unlabelled weak-order compactification is used: the finite deadline
+labels and their unilateral payoffs remain explicit.
+
+### 37.3 Exact application to K10 and the unresolved quantitative step
+
+The raw K10 table is36.3's table: own singleton1/opposite4/other0;
+adjacent pair donor-1/recipient2/outsiders1; opposite-pair members0/outsiders1;
+triple members-1/outsider10; grand9; Never0.
+
+Here is the whole no-sure-root calculation, independent of continuation.
+Rotate a putative sure quitter to0. Player2's Join-minus-Continue gains,
+as the free opponent coins1,3 select none/one/both, are respectively-4,-2,-1.
+It strictly Continues. With q2=0, player3's gains are-1 or-2, so it Continues.
+Player1 then joins for2 rather than0, hence surely Quits. Owner0 now earns-1
+instead of0 by withdrawing. Contradiction. Thus37.2 applies literally to
+the ENTIRE K10 discounted correspondence.
+
+The new fixed-alpha compactness fact does NOT make its window discount-
+negligible. On the symmetric stationary branch put lambda=1-alpha and
+
+    Q(q)=1-2q-2q^2+12q^3, B(q)=4q-5q^2+11q^3.
+
+The exact interior discounted indifference equation is
+
+    Q(q)*(1-alpha*(1-q)^3)-B(q)=0.                              (F3)
+
+At(lambda,q)=(0,0), its derivatives are1 and-1. Ordinary IFT gives a
+positive stationary source q=lambda+O(lambda^2). The discounted Bellman
+telescope verifies all complete responses. Deleted-opponent survival over
+N dates is(1-q)^(3N); therefore any uniform window in(F2) satisfies
+
+    liminf_(lambda down to0) lambda*N_alpha >= (log2)/3.
+
+Its original stationary prescribed payoff tends to5/4, while Never tends
+to4/3. This is one bad branch, NOT a whole-correspondence lower bound. It
+shows why applying the fixed-alpha bound uniformly over ALL components
+cannot close(F1). Actual best-component selection must change the global
+clock pattern, or use a sharper signed response-loss account.
+
+The unconditional facts here remove an existence/tightness ambiguity from
+the discounted source, but not its decisive deficit. The genuinely missing
+mathematics is a global operation on the whole compact correspondence that
+forces its ATTAINED minimum original full debt to approach0 as alpha approaches1,
+or an invariant showing that every component keeps positive debt. Neither
+fastest absorption, compactness, a stationary index, nor the first-order
+small-hazard expansion supplies that operation. No new audit/export is
+requested for this supporting source analysis.
+
+Named sources reopened for this question:
+`realizedAction_discountedPayoff_update_deviationAfterHistory` and
+`realizedAction_afterHistoryProfile_isDiscountedNash_of_mem_support`,
+`UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/DiscountedContinuation.lean`.
+Their actual positive discounted reach identity is precisely the conditional
+tail step above. Section23.1 lists the separately inspected Fink and quitting
+discounted-payoff bridges. Noether's RM33 was read narrowly: its whole-source
+obstruction fixes the period before taking the discount limit, and does not
+exclude the unrestricted source(F1).
