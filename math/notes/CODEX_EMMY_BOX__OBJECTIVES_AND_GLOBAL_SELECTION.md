@@ -16,8 +16,10 @@ Section13 is a new unreviewed complete proof draft: exogenous public Markov
 roots with regeneration rate kappa and pointwise total hazard delta can be
 replaced by actual private stationary clocks with full-debt loss at most
 40R*delta/kappa. A source producing delta/kappa->0 is NOT established.
-Section14 is separate ordinary UNREVIEWED supporting mathematics for the
-new cap-chamber route. It reuses the existing standard-Q column-sum
+Section14.1--14.3 are separate ordinary supporting mathematics for the
+new cap-chamber route, bounded independently checked by CODEX_TURING_BOX
+in the feedback file linked above. Section14.4 remains UNREVIEWED.
+The seed composition reuses the existing standard-Q column-sum
 obstruction to produce an ACTUAL pure-clock low-cap/surplus seed on every
 nonnegative-own-singleton standard-Q table. It proves no new UE class:
 preservation of a suitable closed region remains the global question.
@@ -27,6 +29,11 @@ table has ONLY the all-Continue cap-Nash root. It lies in the same simple
 chamber as the produced pure-column seed. This refutes automatic nonzero
 escape throughout that chamber, not its possible zero-debt minimum, UE,
 or a selector using a smaller closed region or different weights.
+Section16 is separate ordinary UNREVIEWED supporting mathematics:
+lowered-cap Nash roots have an absorption-weighted error charge and
+strictly improve debt from every positive-debt low-cap point. An exact
+rational prefix escapes Section15's stall but exits the low-cap face;
+no preserved-region or minimum-specific escape theorem is proved.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -1181,8 +1188,10 @@ that is genuinely nonstationary/macroscopic, not stationary averaging.
 
 ## 14. The standard-Q regime already produces actual low-cap surplus seeds
 
-Status: ordinary UNREVIEWED mathematical composition. The matrix
-obstruction itself is already checked and is not claimed as new. The
+Status: ordinary mathematical composition; Sections14.1--14.3 are
+bounded independently checked by CODEX_TURING_BOX in the feedback file
+linked at the top. Section14.4 is UNREVIEWED. The matrix obstruction
+itself is already checked and is not claimed as new. The
 purpose is to identify precisely which input of the successful cap-chamber
 mechanism is still missing on general hard data.
 
@@ -1502,3 +1511,159 @@ such ACTUAL proper-low-face stalls while retaining a produced seed,
 possibly by a finite genuinely joint word with intermediate cap-Nash
 error but a final full-debt decrease? No such operation or universal
 existence assertion is supplied here.
+
+## 16. Lowered-cap Nash roots pay error only on their own Quit mass
+
+Status: ordinary UNREVIEWED mathematics. The general estimate below is
+an elementary consequence of the existing complete-cap prefix formula,
+not a new game-class producer. It clarifies why Section15's exact-root
+stall is not an obstruction to arbitrary legal prefixes. The precise
+unresolved issue remains preservation at a positive constrained minimum.
+
+### 16.1. Actual full-debt estimate, with all root selections allowed
+
+Let I be any nonempty finite player set, let r be ANY finite terminal
+reward table, and let(U,B) be a literal actual semantic pair. In THIS
+section use the production convention
+
+    d_i=B_i-U_i>=0,    E=max_i d_i,    D=sum_i d_i.
+
+Thus E is maximum exploitability and D is TOTAL semantic debt. Earlier
+sections used D for the maximum; the distinction is explicit here.
+Let h_i>=0 be arbitrary. Choose ANY
+exact product Nash root q of the finite stage game whose all-Continue
+continuation is
+
+    T_i=B_i-h_i.
+
+Finite-game Nash existence produces such a root; no strategic witness
+is supplied. Write alpha_i=product_(j!=i)(1-q_j), c=product_j(1-q_j),
+Q_i for i's forced-Quit endpoint, and C_i for its forced-Continue
+endpoint at the TRUE cap B. The Continue endpoint at T is
+C_i-alpha_i*h_i. The actual prefixed cap and payoff are
+
+    B_i'=max{Q_i,C_i},
+    U_i'=q_i Q_i+(1-q_i)C_i-c*d_i.
+
+Consequently, putting
+
+    e_i=max{Q_i,C_i}-[q_i Q_i+(1-q_i)C_i],
+
+we have the EXACT equation and the uniform bound
+
+    d_i'=c*d_i+e_i,
+    0<=e_i<=q_i*alpha_i*h_i.                          (16.1)
+
+To prove the second line, if q_i=0, the Nash inequality gives
+Q_i<=C_i-alpha_i*h_i<=C_i, so e_i=0. If 0<q_i<1,
+indifference gives Q_i=C_i-alpha_i*h_i, hence
+e_i=q_i*alpha_i*h_i. If q_i=1, Nash gives
+Q_i>=C_i-alpha_i*h_i, so e_i=(C_i-Q_i)_+<=alpha_i*h_i.
+These exhaust all pure and mixed boundary cases.
+
+For a constant 0<=h<E, (16.1) gives, for EVERY such Nash root,
+
+    E'<=cE+h(1-c)=E-(E-h)(1-c),                       (16.2)
+
+because q_i*alpha_i is the probability that i is the sole root quitter,
+which is at most the probability1-c of some root absorption. Summing
+(16.1) also gives the separate, stronger total-debt ledger
+
+    D'<=cD+h*Pr(exactly one root quitter)<=cD+h(1-c).
+
+Thus every nonzero root strictly improves E when h<E, and strictly
+improves TOTAL debt D when h<D. This
+is not an absolute h-error accumulated once per date: its cost is paid
+only on the root's own-quit mass.
+
+If B_k-h<s_k=r_k({k}) for SOME player k, all Continue is not Nash in
+the stage game at T. Thus all chosen Nash roots are nonzero and(16.2)
+strictly improves D. In particular every positive-debt actual point
+with min_i(B_i-s_i)<=0 admits a legal strict-E-improving prefix:
+choose any h in(0,E), then ANY finite-stage Nash root at B-h*ones.
+No claim that this prefix preserves the low-cap face is made.
+
+With |r_i(S)|<=R and a low coordinate B_k<=s_k, the already checked
+below-singleton absorption bound also gives
+
+    1-c>=h/(2R+h).
+
+Choosing h=E/2 produces the explicit actual decrease
+
+    E'<=E-E^2/[2(4R+E)].                              (16.3)
+
+The same formulas extend by continuity to the closed actual semantic
+carrier for any FIXED selected root. This does not assert continuous
+Nash selection. Applying the TOTAL ledger with h<D whenever
+min_i(B_i-s_i)<D rederives the established total-minimum cap floor:
+a positive unconstrained minimum D must satisfy B_i>=s_i+D for every
+i. Separately the maximum ledger gives the corresponding floor E at
+a global E minimum. Neither rederivation is a new minimum theorem.
+
+Exact declarations read for the semantic calculation:
+`quittingContinuationBestResponseValue_rootThenContinuation_eq_max`,
+`quittingRootContinuePayoff_update_add`,
+`quittingTerminalDeviationDebt_rootThenContinuation_le_coordinateDefect_add`
+in `UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`;
+`quittingRootCoordinateNashDefect_eq_actionProbability_mul_posPart`
+in `UniformEquilibrium/Quitting/Root/NashDefect.lean`; and
+`belowSingleton_exactRoot_absorptionMass_lowerBound` in
+`UniformEquilibrium/Quitting/Root/BelowSingletonRootAbsorption.lean`.
+After the direct calculation, the narrow overlap check found EXACT
+prior containment: `quittingTerminalSemanticDebt_prefix_le_auxiliaryNash`
+in `UniformEquilibrium/Quitting/Terminal/AuxiliaryNashDebt.lean` already
+states the coordinate bound with singleton mass q_i*alpha_i. Its defect
+version also permits arbitrary inexact roots. The total ledger above
+is precisely the underlying estimate of
+`minimumTerminalSemantic_auxiliaryNash_budget` and
+`minimumTerminalSemantic_singletonMargin` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAuxiliaryNashBudget.lean`,
+and `terminalSemantic_auxiliaryNash_excess_budget` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticCapNashDebtSupport.lean`.
+All three source files and the named declarations were read. The new
+content here is the exact control calculation(16.4), NOT a new auxiliary
+ledger, minimum theorem, or producer interface.
+
+### 16.2. Exact rational escape from Section15 loses ONLY the low-cap test
+
+Keep the COMPLETE table and actual point(15.1). Lower every cap by
+h=7/9, and use the actual root
+
+    q=(2/5,2/5,2/5,0).
+
+Player3 strictly Continues, since its Continue-minus-Quit difference at
+the lowered continuation is
+alpha*(9-h)+(1-alpha)>0 for every product core root. For a symmetric
+core hazard q and odds z=q/(1-q), core indifference at continuation1-h
+is precisely
+
+    h=z/2+z^2.
+
+At q=2/5, z=2/3, the right side is7/9, proving all three active
+equalities. Thus the displayed root is exact Nash at B-(7/9)*ones.
+Enumeration of all finite root coalitions and the complete cap formula
+give the literal prefixed pair
+
+    U'=(114/125,114/125,114/125,106/25),
+    B'=(31/25,31/25,31/25,106/25),
+    d'=(41/125,41/125,41/125,0).                      (16.4)
+
+The only suffix after universal Continue is the ORIGINAL pure core
+triple/Never profile, so these are actual clocks, not annotations.
+All future deadline and Never choices are included through the exact
+max{Quit,Continue-with-full-suffix-cap} formula. In particular
+
+    E'=41/125<1,      D'=123/125<3,
+    sum B'-4=99/25 >5E'=41/25,
+    min_i(B_i'-1)=6/25>0.
+
+Thus this one simultaneous legal root strictly lowers full debt and
+RETAINS the surplus inequality of(15.5), but exits that chamber solely
+through its low-cap condition. It is a control test separating the
+operation's error account from region preservation; it neither
+falsifies minimum-specific escape nor produces an arbitrary-table UE.
+
+The next global question is therefore preservation or return of the
+low-cap geometry under a genuinely joint operation. Simply replacing
+an exact cap-Nash root by a lowered-cap Nash root supplies immediate
+progress but does not supply the required closed invariant domain.

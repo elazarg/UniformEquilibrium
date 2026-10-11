@@ -16,6 +16,15 @@ vanishing-discount selection theorem. The live question is whether a
 component supplies original full regret tending to zero; neither compactness
 nor fastest joint absorption selects it.
 
+Section37.7 records an exactly checked finite-word mechanism test on K10:
+an unrealized discounted terminal annotation selects an actual independent
+clock word with original unrestricted regret below459/1000000. Every rounded
+binary root debt is at most10^(-10), Bellman arithmetic is exact, and all
+deleted prefix survivals are below10^(-80). This is an approximate discounted
+component with controlled physical-tail error, NOT an exact discounted Nash
+component, an all-errors rule, or new reward-table coverage. The missing
+global assertion is access to such good words for arbitrary positive-own data.
+
 Section36 tests a bounded ENDOGENOUS clock-overlap penalty, rather than a
 fixed-prior entropy source or a private Never transfer. Finite-menu source
 existence follows from own-strategy concavity. A Nash source on the FULL
@@ -7048,3 +7057,155 @@ would close the canonical table if all its positive-own perturbations
 were solved. These declarations and their defining hypotheses were
 reopened for this composition. No old payoff, chronology, cap, Nash
 component, or D_alpha correspondence is asserted to survive it.
+
+### 37.7 Exact finite-word test: annotations need not already be actual tails
+
+Status: supporting finite experiment and elementary error lemma, ordinary
+mathematics, not checked in Lean. K10 already has a uniform-equilibrium proof
+by the cap-chamber construction. The experiment tests component selection,
+not new UE coverage or arbitrary-table source completeness.
+
+Use the literal K10 table of37.3 and the owned reproducer
+`../experiments/CODEX_TURING_BOX__DISCOUNTED_ROOT_PREFIX.py`. At the physical
+tail, players0,2 choose Never; players1,3 independently choose Quit0 with
+probability1/2 and Never otherwise. Its actual original and discounted
+payoff is(1/4,5/4,1/4,5/4), and its FULL original cap vector is
+(1/2,5/2,1/2,5/2). Instead of pretending this tail realizes a desired
+discounted value, supply the separate bounded ANNOTATION
+
+    v_N=(1,11/10,2,11/10).
+
+The annotation need not belong to D_alpha. At a backward construction step,
+solve the binary root game with Continue continuation alpha*v_next. Among
+the roots found, select the one maximizing the sum of the new annotated
+values. The search enumerates nonsure supports of size2 and3 algebraically;
+it attempts full-support Newton roots only when those searches find none.
+It does NOT enumerate the entire binary Nash correspondence, including all
+degenerate singleton roots. Consequently neither the selector nor the
+search failure message is a whole-correspondence assertion.
+
+For a root q define Q_i as the immediate Quit endpoint, b_i as the expected
+current opponent-absorption reward when i Continues, L_i as the probability
+all opponents Continue, and c as the probability everyone Continues. The
+declared backward recursion is
+
+    v_i(t)=q_i Q_i+(1-q_i)b_i+alpha*c*v_i(t+1).
+
+The actual physical payoff and FULL cap use, independently,
+
+    U_i(t)=q_i Q_i+(1-q_i)b_i+c*U_i(t+1),
+    B_i(t)=max{Q_i,b_i+L_i*B_i(t+1)}.                  (F7)
+
+Thus all clocks are independent private clocks, and the actual word is
+read in REVERSE order from its backward construction. No public signal or
+correlation is introduced. The physical half-13 tail, including literal
+Never, is present after the word.
+
+Here is the precise residual/tail bound used by the checker. It holds for
+ANY finite root word, not only its numerical generator. Let
+
+    rho_i(t)=max{Q_i,b_i+alpha*L_i*v_i(t+1)}-v_i(t),
+    O_i(t)=product_(s<t) L_i(s), J_t=product_(s<t)c(s).
+
+The first quantity is nonnegative because v_i(t) is the root's own mixed
+expected value. Write B_i^alpha(pi), U_i^alpha(pi) for the full discounted
+cap and prescribed value of the ACTUAL physical tail pi. Iterating the
+two-endpoint cap recursion, using the Lipschitz inequality for max, gives
+
+    (B_i^alpha(word*pi)-v_i(0))_+
+      <=sum_(t<N) alpha^t O_i(t)rho_i(t)
+        +alpha^N O_i(N)(B_i^alpha(pi)-v_i(N))_+.
+
+Also the exact Bellman identity gives
+
+    U_i^alpha(word*pi)-v_i(0)
+      =alpha^N J_N[U_i^alpha(pi)-v_i(N)].             (F8)
+
+These formulas control EVERY finite deadline and Never, not only local
+root responses. If all rho_i(t)<=rho, their combination bounds full
+discounted regret by
+
+    rho/(1-alpha)+alpha^N O_i(N)*
+      [(B_i^alpha(pi)-v_i(N))_+ +|U_i^alpha(pi)-v_i(N)|].
+
+The opponent survival factor is essential: replacing it by joint survival
+would not justify full unilateral agency. In the recorded runs all
+annotations stay within[-10,10], and the physical tail has cap at most5/2;
+the bracket is safely at most25.
+
+There is a separate ORIGINAL tail-independence bound. For any two actual
+independent tails pi,pi' and the SAME fixed word, with rewards bounded in
+absolute value by M, (F7) implies
+
+    |U_i(word*pi)-U_i(word*pi')|<=2M J_N,
+    |B_i(word*pi)-B_i(word*pi')|<=2M O_i(N).
+
+Hence their original maximum regrets differ by at most
+4M*max_i O_i(N). This does not compare two differently selected words,
+nor does it make the annotation an actual continuation.
+
+Exact reproducible command (NumPy search followed by integer certification):
+
+```text
+python -u experiments/CODEX_TURING_BOX__DISCOUNTED_ROOT_PREFIX.py --alpha .9999 --steps 1000 --literal-seed --terminal 1 1.1 2 1.1 --selector sum --check-exact
+```
+
+The script SHA256 for these runs is
+`2ddd6007da9cd20a5fce0192a27bb79144bd576776295bc8cb371cf683086fe0`.
+Each searched hazard is rounded to an integer multiple of10^(-12).
+The checker then reconstructs every coalition probability, annotation,
+original payoff, and FULL cap with integers and common denominators.
+The Bellman equality is separately reconstructed and checked exactly.
+It verifies rho_i(t)<=10^(-10) by integer comparisons at EVERY root and
+recipient; floating residuals below are descriptive, not certificates.
+
+The exact conclusions of the displayed run are:
+
+- original FULL maximum regret E<459/1000000<1/2000;
+- every deleted prefix survival O_i(N)<10^(-80);
+- binary root debt at most10^(-10), and Bellman arithmetic residual zero;
+- actual full discounted regret at most10^(-6)+25*10^(-80);
+- original maximum-regret dependence on changing the physical tail is at
+  most40*10^(-80), for the fixed rounded word.
+
+For diagnostic scale, the largest computed binary root debt is approximately
+4.1251141555544305*10^(-12), the largest active Quit/Continue difference is
+4.403722950360233*10^(-12), and the first number divided by1-alpha is
+approximately4.125114155554885*10^(-8). The EXACT coarse bound uses10^(-10),
+not those floating maxima.
+
+Changing only the discount in the displayed command gives these additional
+integer-checked finite tests; all use the SAME annotation, physical tail,
+selector and1000 construction steps:
+
+| alpha | exact original E upper bound | all O_i(N) below |
+| --- | --- | --- |
+| .99 | 32531/1000000 | 10^(-74) |
+| .999 | 4147/1000000 | 10^(-79) |
+| .9999 | 459/1000000 | 10^(-80) |
+
+This three-point table is NOT an asymptotic theorem. No exact recurrent
+word or arbitrarily accurate family has been proved. In particular, an
+accurate finite discounted source is not silently called a member of
+D_alpha, the EXACT discounted correspondence.
+
+The clean contrasting control is
+
+```text
+python experiments/CODEX_TURING_BOX__DISCOUNTED_ROOT_PREFIX.py --alpha 0.999 --steps 200
+```
+
+With its ACTUAL symmetric stationary discounted seed and the default
+sampled-root selector, it remains at original E approximately.0838721029
+and hazards approximately.0009911124. Thus prepending the selected roots
+does not automatically cure original regret. This control is a branch
+failure, not an exclusion of every other root at that seed.
+
+The mechanism evidence is that a bounded unrealized terminal annotation
+can select macroscopic, changing-support words whose ACTUAL original
+payoff and full caps forget the physical tail, while the small binary
+residual also gives a complete approximate discounted-Nash guarantee.
+The open producer question is what forces access to good such words for
+arbitrary strictly positive-own Fin4 data as accuracy varies. Neither the
+sum selector, the arbitrary annotation, finite-error certification, nor
+fixed-discount compactness supplies that global argument.

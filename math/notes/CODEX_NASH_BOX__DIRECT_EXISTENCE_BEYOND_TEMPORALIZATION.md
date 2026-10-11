@@ -5311,3 +5311,124 @@ A narrow search in the quitting Root/Terminal and Diagnostics subtrees
 for one-finite-date, coalitional-clock and one-shot-full-Nash statements
 did not locate this information/source restriction. It remains ordinary
 unreviewed supporting mathematics, not an export or a new reward class.
+
+## 31. Bounded-information clock compression without independent sources
+
+Status: ordinary supporting theorem, unreviewed. This extends the existing
+cap-aware clock compression to correlated laws; it is NOT a producer of
+zero information. Its concrete role is to control the ENTIRE source
+infimum uniformly in calendar, before trying actual-law variational moves.
+The operation retains multi-date counterfactual tails rather than clearing
+them as in Section30.
+
+### Exact source declarations and what is being extended
+
+The integrated independent-clock compression was reopened in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`,
+under its imports. The relevant actual declarations are:
+
+* `quittingTerminalPayoff_pureStoppingTimeProfile_eq_activeQuotient_of_no_rawCollision`;
+* `quittingTerminalPayoff_pureStoppingTimeProfile_eq_reverseActiveCoupling_of_no_rawCollision`;
+* `pmfMass_quittingQuantileClock_update_pure_collision_toReal_le`;
+* `exists_finiteClockReverseRepresentative`;
+* `quittingQuantileClockCompressedLaws_isFiniteClock`; and
+* `hasEscapeAwareQuantileClockCompressionAtBound`.
+
+The probability input is
+`rawEvenSomeCollisionMass_commonQuantile_toReal_le_choose_div` and its
+pure-update version in `MathUE/Probability/QuantileClockCollision.lean`.
+The independent theorem is already implemented; it is not claimed anew.
+The pointwise equality and reverse representative are deterministic facts
+about tuples, hence remain applicable to a correlated source. Only the
+bad-event probability estimate needs extension.
+
+### Statement and proof
+
+Let n>=2, |r_i(S)|<=R, and let mu be any finite joint complete-clock law,
+on an arbitrarily large original calendar, with total correlation
+
+    I(mu)=KL(mu || product of its marginals) <= M.
+
+For integer level L>C=n(n-1)/2, use the SAME common-quantile marks and
+active-cell quotient constructed from mu's individual marginals. Let
+mu' be its coordinatewise pushforward. It has at most2nL+1 consecutive
+finite dates, retains all individual and joint Never events exactly, and
+I(mu')<=I(mu) by relative-entropy data processing. Put
+
+    p_L=min(1,(M+log2)/log(L/C)),  a_L=2R p_L.
+
+Then every prescribed payoff changes by at most a_L. EVERY original pure
+deadline/Never reply has a compressed representative within a_L, and
+EVERY compressed pure reply (including the padded late class and literal
+Never) has an original representative within a_L. Thus
+
+    |v_i(mu')-v_i(mu)|<=a_L,
+    |C_i(mu')-C_i(mu)|<=a_L.                            (31.1)
+
+Proof of the new probability step: for probability measures lambda,P and
+event E, binary data processing gives
+
+    KL(lambda||P) >= lambda(E) log(1/P(E))-log2.
+
+Therefore P(E)<=C/L and KL(lambda||P)<=M imply lambda(E)<=p_L. For the
+prescribed payoff take lambda=mu and P=product mu_i. The integrated
+quantile theorem gives the required reference collision budget C/L;
+off that collision event deterministic terminal payoffs are identical.
+Bounded coupling then gives2R p_L.
+
+For player i's pure replacement h use
+
+    lambda=delta_h times mu_(I\{i}),
+    P=delta_h times product_(j!=i) mu_j.
+
+Its relative entropy is I(mu_(I\{i}))<=I(mu)<=M. The SAME original
+quantile marks have reference collision budget C/L under every pure
+replacement, as stated by the inspected pure-update declaration. The
+forward deterministic equality applies. For the reverse comparison use
+the inspected reverse representative and reverse deterministic coupling;
+it has the same fixed-original-marks pure-update collision event. Its
+coordinate map sends the replacement to the requested compressed action
+and every opponent to its active-cell quotient, so the pushforward joint
+law is exactly the required compressed-opponent marginal even without
+independence. These two comparisons prove the full sup-cap bound.
+
+This is why arbitrary weak-order-preserving coarsening or empty-date
+insertion is NOT substituted for the active-cell algorithm. In particular
+the known empty-date cap falsifier does not contradict(31.1). The proof
+retains both source-to-target and target-to-source pure comparisons.
+
+### Uniform finite-calendar control of the global information infimum
+
+Suppose this fixed table has a finite strict FULL coarse anchor sigma,
+margin gamma>0, information M=I(sigma), on N_sigma finite dates. Write
+rho for the infimum of information over ALL finite full-coarse laws.
+For large L put
+
+    w_L=2a_L/(gamma+2a_L),
+    K_L=max(2nL+1,N_sigma),
+    omega_L=w_L M+(n-1)h(w_L).
+
+Compress any exact full-coarse source with information at most M. Its
+coarse violation is at most2a_L by(31.1). Mixing sigma with weight w_L
+makes EVERY original reply margin nonnegative, by linearity. The
+dimension-free mixture inequality from Section28 gives information at
+most its previous information plus omega_L. Both laws embed by appending
+dates in the common K_L calendar, not by inserting new response seams.
+Taking sources approaching rho proves
+
+    0 <= rho_(K_L)-rho <= omega_L -> 0.                 (31.2)
+
+No exact auxiliary Nash or fixed payoff is used. For a hypothetical
+counterexample the anchor is obtained only AFTER the legitimate nearby
+positive-gap selection already stated in Section30, not assumed on every
+unperturbed table. Equation(31.2) is a uniform approximation theorem for
+the global NONCONVEX information minimum, not a proof that its value is0.
+
+The remaining producer gap is unchanged in substance: one must exclude
+a positive minimum, rather than simply compute or rename it. The new
+leverage is that high-information rare clock coincidences cannot evade
+every bounded calendar at negligible strategic cost. An actual-law
+compactification must STILL retain which cuts are legal deadlines:
+normalized time coordinates alone forget insertion seams. That is the
+next exact question, before applying entropy variations to a purported
+minimum source.
