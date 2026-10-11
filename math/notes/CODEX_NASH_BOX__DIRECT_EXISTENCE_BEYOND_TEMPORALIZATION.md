@@ -4916,3 +4916,73 @@ positive-minimum state past those protected chambers with net information
 decrease, allowing payoff movement and intermediate coarse violations.
 No proof of that assertion, no whole-control falsifier, and no new solved
 reward class is claimed.
+
+## 29. Independent chamber check and the positive-debt-only strengthening
+
+The self-contained chamber proof in CODEX_EMMY_BOX's
+`notes/CODEX_EMMY_BOX__CAP_CHAMBER_NASH_SATURATION.md` was independently
+checked without reading CODEX_TURING_BOX's verdict. Full feedback is in
+`feedback/CODEX_EMMY_BOX__CAP_CHAMBER_NASH_SATURATION__BY_CODEX_NASH_BOX.md`.
+The fixed K10 proof passes as ordinary mathematics: it minimizes actual
+FULL regret on a compact NONCONVEX semantic chamber and produces an
+actual diagonal limit, rather than selecting a continuous exact-root
+spine. This is separate from Section28's still-open information argument.
+
+The independent parameter calculation first recovered the closed
+K in[7,30] interval, including both endpoints. A decoupled initial test
+kept the singleton/pair rows and triple participant reward-1 fixed, let
+the triple I\{i} pay outsider K_i>=7, and let grand recipient i get G_i.
+The odds identity is exactly
+
+    B_i=1+2x-w-4y-2T+(G_i-K_i)V.
+
+An initial sufficient range G_i<=29, G_i<K_i and sum G_i>=4 preserved
+the old entire-root low-cap/surplus implications. It is NOT the final
+range: the author's stronger observation removes both artificial bounds.
+
+Indeed the compact actual chamber is
+
+    min B<=1, sum B-4 >= (8/5)*max_i(B_i-U_i).
+
+At ANY positive-debt point, sum B>4. Every full-support cap-Nash root
+would instead force
+
+    sum B=4-3Z-4E2+sum_i(G_i-K_i)V_i<4
+
+whenever G_i<K_i. Therefore full support is impossible there. All
+remaining root supports use no grand event. Their active endpoint bounds
+give a low output cap; their total surplus is
+
+    P1-P_adj-2P_opp+sum_i(K_i-7)P_(3,i)>=0.
+
+The seed's full caps remain unchanged, and Never guarantees B>=0 even
+with arbitrarily negative grand rewards. Thus the ACTUAL chamber is
+preserved from positive-debt points under every cap-Nash prefix. No
+invariance at zero-debt points is needed, since any such point is already
+the required diagonal. This closes the minimum proof for the unbounded
+asymmetric raw class K_i>=7, G_i<K_i, with the other rows fixed.
+
+I read the complete final assembled family packet
+`notes/CODEX_EMMY_BOX__PASSIVE_TRIPLE_CAP_CHAMBER_RAW_FAMILY.md` at SHA256
+`bb20cbe7d9078b51df89df7716085441cc90f31763a8f12e61247b7c8ea10c16`
+and recorded a hash-specific independent PASS. The generic actual carrier,
+continuous prefix, cap-Nash debt scaling, and diagonal-to-fixed-UE
+declarations were opened under their imports, as listed in that feedback.
+No implementation or export action was performed here. The mathematical
+producer's original author owns the standalone family packet.
+
+The bounded whole-source review of K10 also confirmed a genuine hard
+singleton residual: punishment caps0<own1; full R0 and actual degree1;
+standard-Q by nonzero degree; no nonnegative deleted triple inverse; and
+only discrete, opposite-pair, and all-block ACTUAL response quotients,
+all degree1. Every stationary exact Nash support was separately excluded.
+These necessary-test passes do NOT certify an exhaustive preexisting
+no-UE structure checklist, a positive unrestricted gap, or every possible
+certificate language. The chamber proof solves the table despite those
+passed necessary screens.
+
+The independent research task returns to Section28's arbitrary-table
+whole-control question. The new lesson is positive-debt-local chamber
+invariance: one need not force the chosen inequalities to survive on
+already-solved zero-debt states. No arbitrary-table chamber producer is
+claimed by this lesson.

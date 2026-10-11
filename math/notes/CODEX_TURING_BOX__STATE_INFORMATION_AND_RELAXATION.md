@@ -3,16 +3,18 @@
 Identity: CODEX_TURING_BOX.
 
 Section37 returns to the ENTIRE realized-discounted Nash correspondence,
-with arbitrary calendars, components and selective Never. On the K10
-fixture, its exact compact source automatically has at least TWO proper
-clocks, and every deleted-opponent clock terminates uniformly conditionally
-over that whole source at each FIXED discount. Original full regret therefore
-attains its minimum on the source. These are ordinary unreviewed source
-facts, not a vanishing-discount selection theorem: the uniform window over
-ALL components necessarily has discount-scale length on the stationary
-branch. The live question is whether a different component supplies original
-full regret tending to zero. Joint fastest absorption alone does not select
-one, even on an elementary solved two-player game.
+with arbitrary calendars, components and selective Never. Section37.6
+removes the no-sure-root hypothesis from its fixed-discount MINIMUM source:
+for EVERY finite table with strictly positive own singletons, joint
+termination makes original prescribed payoffs continuous on the compact
+correspondence, while FULL caps are lower semicontinuous. Thus the minimum
+original regret is attained even when deleted-opponent tails escape and
+caps are not continuous. On K10 the stronger37.2 assumptions additionally
+give TWO proper clocks and uniform conditional DELETED termination at each
+fixed discount. These are ordinary unreviewed source facts, not a
+vanishing-discount selection theorem. The live question is whether a
+component supplies original full regret tending to zero; neither compactness
+nor fastest joint absorption selects it.
 
 Section36 tests a bounded ENDOGENOUS clock-overlap penalty, rather than a
 fixed-prior entropy source or a private Never transfer. Finite-menu source
@@ -6900,3 +6902,124 @@ increase a different player's d_i. The bad symmetric K10 branch of37.3
 has exactly these Never caps. Thus this reduction removes the deadline
 search for this ENTIRE correspondence; it neither asserts(F1), supplies
 the required component, nor excludes unrestricted original UE families.
+
+### 37.6 The whole minimum source needs only joint termination and lower caps
+
+This is ordinary UNREVIEWED supporting mathematics. It broadens the actual
+source of37.2, not its vanishing-discount conclusion. The latter remains
+OPEN. Unlike37.2, the following theorem makes NO no-sure-root assumption,
+no restriction on passive reward signs, and no demand that every deleted
+opponent clock terminate. It applies to all finite tables with strictly
+positive own singleton rewards.
+
+Fix a nonempty finite player set, a bounded original reward table, live
+and Never payoff0, and s_i=r_i({i})>0 for every i. Let X=Nat union{Never}
+with its one-point compactification topology. For fixed alpha in(0,1),
+let D_alpha contain ALL exact Nash profiles of the realized-absorption
+discounted game, as independent probability laws on X. Every unilateral
+complete private replacement law remains allowed. Write U(p), B(p) and
+E(p)=max_i(B_i(p)-U_i(p)) for ORIGINAL undiscounted semantics.
+
+Claim. For every fixed alpha:
+
+1. D_alpha is nonempty compact.
+2. Every component terminates JOINTLY almost surely. The joint survival
+   probabilities tend to0 uniformly over the ENTIRE D_alpha. At every
+   positively reached live tail there is the same uniform conditional
+   joint-termination window.
+3. U is continuous on D_alpha. Each FULL original cap B_i is lower
+   semicontinuous on the WHOLE product law space, because s_i>=0.
+4. E is lower semicontinuous on D_alpha, so its infimum is attained.
+
+The source assertion(F1) therefore has an actual minimum for EVERY such
+positive-singleton table, including components with sure roots and only
+one proper clock. No uniform statement as alpha tends to1 is inferred.
+
+Proof. The discounted pure-clock payoff kernel on X^n is continuous:
+near any finite first date its coalition is determined by finitely many
+clopen date events, while when all clocks go to Never its absolute value
+is at most M*alpha^h once every date is at least h. Hence the mixed payoff
+is jointly continuous. Nonemptiness is the unconditional discounted Nash
+source already used in23.1 and37.2. The Nash set is closed in the compact
+product of probability-law spaces, and is therefore compact.
+
+Suppose a discounted Nash component had positive joint Never mass. By
+independence every player's Never mass m_i would be positive. At every
+finite date t the live event has positive probability, so its conditional
+tail is again an exact discounted Nash profile. For each player,
+
+    Pr(T_i<Never | T_i>=t) tends to0,
+    q_i(t)=Pr(T_i=t | T_i>=t) tends to0.
+
+Every conditional prescribed discounted payoff then tends to0 in absolute
+value: finite absorption probability is at most the sum of the displayed
+conditional finite masses. But Quit now has payoff Q_i(t) tending to s_i>0.
+This contradicts tail Nash. Thus joint Never probability is0. This does NOT
+say all or two individual clocks are proper.
+
+For a fixed integer h let
+
+    J_h(p)=product_i Pr_p(T_i>=h).
+
+Each J_h is continuous, since its marginal tails are complements of finite
+clopen date sets. The functions decrease pointwise to joint Never mass0
+on compact D_alpha. Compactness gives uniform convergence to0 (equivalently,
+apply the finite subcover argument to the increasing open sets J_h<epsilon).
+Choose N_alpha with sup_(p in D_alpha) J_(N_alpha)(p)<=1/2. Every reached
+conditional tail belongs to the SAME D_alpha, so its conditional joint
+survival over N_alpha dates is also at most1/2. A zero-reach tail needs no
+conditioning or asserted law.
+
+The original prescribed payoff truncated to first absorption before h is
+continuous in p, and its difference from U is bounded by M J_h(p).
+Uniform joint termination therefore proves continuity of U on D_alpha.
+This uses JOINT, not deleted-opponent, survival.
+
+For any arbitrary opponent law profile, let f_i(h) be the original value
+of the pure finite deadline h and W_i the original Never value. Each
+f_i(h) is continuous in the opponent laws: only their finite dates through
+h and the clopen remaining tail enter this response kernel. Directly
+splitting at the opponents' first date gives
+
+    lim_(h to infinity) f_i(h)
+        =W_i+s_i*product_(j!=i) Pr(T_j=Never).             (F5)
+
+The tie contribution is bounded by M times the probability that the
+opponents' first date is h, which tends to0. Strictly earlier absorption
+converges to W_i, and strict later survival gives the displayed singleton
+correction. Because s_i>=0, Never is dominated by the limiting finite
+deadlines. Consequently the FULL behavioral cap is exactly
+
+    B_i=sup_(h in Nat) f_i(h),                            (F6)
+
+even if no pure deadline attains it. Arbitrary response mixtures cannot
+exceed this supremum, and Never has not been omitted from the agency class.
+A supremum of continuous functions is lower semicontinuous. Therefore
+E=max_i(B_i-U_i) is lower semicontinuous on compact D_alpha and attains
+its minimum. This proves the claim.
+
+The cap continuity conclusion of37.2 really was stronger than necessary.
+The already-recorded37.1 example demonstrates the distinction without a
+new fixture. For fixed alpha, p_L=(Quit0,QuitL) is discounted Nash for all
+sufficiently large L, and tends weakly to p_infinity=(Quit0,Never).
+All components absorb JOINTLY at date0. Their original player0 caps are
+2 for every finite L but1 at p_infinity. Thus original full caps are NOT
+continuous on D_alpha, while their downward jump is exactly compatible
+with lower semicontinuity and attainment of the original regret minimum.
+
+Narrow overlap/dependency check: the discounted tail step is the actual
+`realizedAction_afterHistoryProfile_isDiscountedNash_of_mem_support` and
+`realizedAction_discountedPayoff_update_deviationAfterHistory` in
+`UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/DiscountedContinuation.lean`.
+Their supported-live-history gain factor is positive wherever conditioning
+is used. The earlier Fink/source and clock agency declarations are recorded
+in23.1. A bounded search in the chosen root, stationary, continuation and
+marked-calendar subtrees found no named lower-semicontinuous original-cap
+minimum theorem; no Lean implementation of this argument is claimed.
+
+This removes an artificial source-side requirement for(F1): full cap
+CONTINUITY and universal deleted-opponent termination are not needed to
+select a best component at a fixed discount. The main missing producer is
+unchanged: choose components across alpha tending to1 whose attained
+original full regret tends to0. Lower semicontinuity, joint tightness and
+the bad/good fastest-absorption tie do not prove that selection.
