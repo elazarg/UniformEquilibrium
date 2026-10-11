@@ -389,3 +389,148 @@ a redundant export or claim of a new conjecture-facing delta.
 No mathematical objection was found in the adapter or full-uniform
 passage within the bounded scope. No new source/consumer coverage is
 established, and no redundant export is recommended.
+## Bounded review of Section 19: the full passive-reward ray
+
+Reviewed frozen whole-file SHA256
+`26f92117e3f456ac3695aaf2113b72723472d082363ea04ee0e0eb9992e291d8`,
+Section 19 only. Reviewer: CODEX_NASH_BOX. This is an independent ordinary
+mathematical check, not a Lean gate or an exhaustive source-completeness
+claim. Earlier cyclic all-behavior consumer facts already checked in this
+feedback are reused, not audited anew.
+
+Verdict: PASS for the stated raw-family existence theorem and the bounded
+source-separation claims checked below, subject to the explicit nonblocking
+boundary-limit wording correction at the end. I found no objection to the
+producer, actual payoff identification, endpoint inequalities, or unrestricted
+terminal/finite-horizon consumer. The new point is an entire K>=0 ray,
+not merely a failed selected branch or a favorable supplied root.
+
+### Independent producer and policy calculation
+
+At T<A<4, D=sqrt((4-A)/(A-1)) is in (0,(3-sqrt(5))/2), and
+J=sqrt((A-1)(4-A)) is in (0,1). Thus C=(1-D)(1-J)>0 and
+Kcrit=C/(1-sqrt(D))^2 is positive and finite.
+
+For the symmetric scalar function, direct differentiation gives
+f'_K(0)=(A-4)-(A-3)=-1. With z=sqrt(D) and
+4-A=(A-1)z^4, direct substitution gives
+
+    f_K(1-z)=1-z^2-(A-1)(1-z)(z^2+z^3)-K(1-z)^2
+              =(1-D)(1-(A-1)D)-K(1-z)^2.
+
+This verifies the exact endpoint C-K*qstar^2. A negative point sufficiently
+near zero and the nonnegative endpoint supply a POSITIVE root in
+(0,qstar], including K=0 and equality K=Kcrit. The zero at q=0 is not
+mistakenly selected.
+
+For K>Kcrit, x=C/K lies in (0,(1-sqrt(D))^2). The displayed radical
+roots have positive sum s=1-D+x and product x. Their discriminant is
+
+    [x-(1-sqrt(D))^2]*[x-(1+sqrt(D))^2]>0.
+
+Their Continue probabilities have positive sum 2-s and product D>0,
+so both hazards are strictly between0 and1. This verifies legal proper
+hazards, ab=x and (1-a)(1-b)=D, without a numerical root test.
+
+The literal complete table is equivariant under tau=(0 2 1 3), including
+both oriented cross pairs and all four triple rows. For instance
+02=(B,K,-B,K) maps to12=(K,-B,B,K); favorite01 maps to23. The policy
+has the same phase equivariance. At phase0 its actual Quit endpoints are
+L=1+(A-1)b and H=1+(A-1)a, and its Continue endpoints are
+4b+(1-b)Z and4a+(1-a)W. The passive recursions are exactly
+W=K ab+dL and Z=K ab+dH. In the symmetric branch both owner equations
+are the same scalar root equation, not only their difference.
+
+In the asymmetric branch, substituting D^2=(4-A)/(A-1) gives
+
+    W-[1+(A-4)a/(1-a)]
+      =Kx+D-1+(A-1)D[b+a(1-b)]
+      =Kx-(1-D)(1-(A-1)D)=0.
+
+Interchanging a,b proves the SECOND owner equation. Thus all sixteen
+policy coordinates satisfy their recursions, and d^4<1 identifies them
+uniquely with actual policy values rather than arbitrary continuations.
+
+The inactive Quit endpoints recompute to
+
+    Q2=d+B(b-a)+(K-1)x,   Q3=d+B(a-b)+(K-1)x.
+
+Their Continue-minus-Quit margins are precisely
+(A-1)db+B(a-b)+x and (A-1)da-B(a-b)+x. Both are positive for equal
+hazards. For asymmetric hazards these become
+Jb+B(a-b)+x and a(J-B)+Bb+x, positive even at B=J. This verifies all
+inactive signs by the literal symmetry. In particular the original triple
+entry K-1 has not been omitted.
+
+Deleting any player leaves three a coins and three b coins per period,
+giving opponent survival d^3<1. This is exactly the contraction needed
+by the previously checked unrestricted Bellman consumer. It handles Never,
+unbounded laws and noncyclic behavioral replacements. The resulting live-time
+sum is at most4/(1-d^3); the stated conservative C_hor=1+4/(1-d^3)
+therefore gives delivery M*C_hor/N and regret2M*C_hor/N. The bound is
+allowed to depend on the fixed original table through M and on its selected
+hazards; no false uniform-in-K reward bound is used.
+
+### Bounded actual source separation
+
+I independently checked the WHOLE induced-Nash exclusion. With owner0
+sure to Quit, mate1 and noncollider2 each have joining advantage respectively
+A-4<0 and -B<0 when the remaining players Continue. If one further
+nonowner quits, each advantage is (K-1)-K=-1; if both do it is
+-1-K<0. Thus both are strictly dominated Quitters against EVERY mixed
+profile. The remaining player3 then has advantage B>0 and quits surely.
+This is the entire induced Nash set. Owner0 gets -B from Quit and0 from
+Continue, with zero all-opponents-Continue coefficient, so no punishment
+floor repairs the leave sign. Equivariance gives all owners. Combining
+the free-Nash, outsider-no-join and other-base leave signs into the full
+one-owner induced game proves the larger/partial base exclusion; it is
+not limited to one selected pure witness.
+
+For EVERY nonempty proper child E, a kappa boundary edge j in E,
+kappa(j) outside exists because kappa is a four-cycle. At singleton{j},
+the outsider's joining gain B is positive. Every available advancement
+donor has gain0, A-4 or -B, all nonpositive. Every withdrawal gain is
+nonpositive: the patient/restart and LP floors are at most own singleton1,
+and the evaluated-security floor is explicitly capped by0. I rechecked
+`deadlineSecurityGainFloor` and its singleton identity in
+`DeadlineWithdrawalSecurityMixedPointwise.lean`; the K-dependent rows do
+not affect this cap. This validates the named raw F/J and N/F/J failure
+over all children and nonnegative donor weights, not a strategic child
+nonexistence assertion.
+
+The singleton Gamma has eigenvalues1,5,-3,-3, determinant45 and the
+displayed positive inverse. Its zero-coordinate argument proves R0,
+and the existing degree is+1. The balanced-singleton argument does cover
+arbitrary words, repeated owners and removable zero-hazard dates: every
+distinct-owner transition must stay in a mate pair, leaving the other
+pair's payoff0<1. The four response-quotient displacement witnesses are
+exactly +/-B and independent of K. Remaining mate/all quotients have
+positive determinants and degree+1; the actual nonnegative-inverse exit
+also requires NEGATIVE determinant. The proof does not incorrectly reject
+the mate quotient's entrywise positive inverse.
+
+I re-opened the actual `RawFamily` in
+`UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseSource.lean`:
+its scheduled premium<-1 and singleton-forced scale1 require both scheduled
+participants negative; each cross pair here has a positive B participant.
+The same singleton data fixes the favorite pairs in the other named finite
+matching tests. The previously checked PairedCycle/CrossedMatching raw
+criteria therefore fail for the stated reasons. The golden singleton
+export's EXACT-singleton favorite cap is T, violated by A>T. The two
+accepted joint-phase export regions require coordinates near5 or fixed5,
+9/2, violated by A<4. The common-large-positive-pair source fails at
+the literal -B participant. These give a genuine bounded new exclusion
+class relative to those exact accepted sources and the WHOLE base/child
+tests, not a claim excluding arbitrary supplied verifiers, unknown
+qualitative IFT neighborhoods, or every stationary equilibrium.
+
+### Required wording correction, outside the main theorem
+
+Section19.7's A downarrow T golden-calendar limit needs FIXED K>0
+(and a fixed B compatible with the range). Then Kcrit->0, the asymmetric
+branch is eventually selected, a->1-D_T=(sqrt(5)-1)/2 and b->0.
+For K=0 the symmetric branch instead approaches a=b=qstar at A=T,
+with qstar=(3-sqrt(5))/2, not the golden one-owner/mate-zero profile.
+If K scales with C, still other limits are possible. This qualification
+does not change the claimed theorem for any fixed allowed A,B,K or any
+of the exact endpoint/consumer computations above.

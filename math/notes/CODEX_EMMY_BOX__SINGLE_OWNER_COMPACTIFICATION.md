@@ -598,6 +598,15 @@ Every p in the SAME compact correspondence N_(a,delta) then has:
   strict finite records;
 - positive joint survival at every finite date and D_a>=gamma.
 
+The foundational chain used here is explicit: Section2 produces the exact
+compact correspondence and its closedness; Section3 gives the optimal
+private-record envelope and complementary equality; Section4 excludes
+bounded proper clocks at the chosen rate; Section5 excludes the owner-only-
+proper case; Section8 and the reached finite-attainment exit in Section11
+give the Never-only cap and infinitely many records; Section11 then supplies
+EXACT same-correspondence re-rooting. None of these roles can be replaced
+by small absolute-error finite-cutoff Nash approximants.
+
 There are a subset A containing a, with |A|>=2, and a nonempty compact
 set K of actual profiles in N_(a,delta) such that:
 
@@ -698,12 +707,56 @@ The compact hull has an attained minimum of owner full loss, and every
 strict-record continuation remains inside the hull with no smaller loss
 than that minimum. Uniform properness and bounded record gaps may depend
 on delta and the selected hull; no delta-independent clock bound follows.
-Stationary bad constrained branches can themselves have all these compact
-recurrence properties. Consequently(9) is NOT a contradiction to a positive
-gap and does NOT remove the need for a joint law or owner-selection operation.
+There is in fact an exact lower bound preventing the particular all-player
+window W=M+2N in(9) from satisfying delta*W->0. Choose the first owner
+record r>=W. It lies at most N dates after W. Binding at r and(9) at u=0
+give
+
+    c^(W+N) <= c^r = Pr(T_a>=r) <= Pr(T_a>=W) <= 1/2.
+
+Therefore
+
+    (-log c)*(W+N) >= log2,
+    (-log c)*W >= (2/3)log2,                            (10)
+
+since W>=2N. Along delta->0 this forces
+liminf delta*W >= (2/3)log2. Thus trying to obtain a vanishing full-regret
+estimate solely by multiplying THIS all-player termination window by
+delta would be mathematically the wrong target, not just an unproved bound.
+An estimate could still compare the owner's record rate with OPPONENT
+termination or control reward-weighted hazard exposure instead.
+
+The old exact two-player bad branch in Section6 illustrates the distinct
+limitation of compactness/record-invariance ALONE. Its strict-record hull
+is a singleton, its active clocks are uniformly conditionally proper, and
+its record gap is L with c^L=1/2. For the nonowner's hazard1/4 grid clock,
+a half-survival window from calendar date1 must be at least3L-1; hence
+delta times that opponent window tends to3log2 rather than0. This fixture
+does NOT satisfy the global-gap or global proper-count-minimal hypotheses:
+its ENTIRE correspondence also has the good owner-only-proper profile
+already recorded in Section6. It therefore tests only an inference from
+compact recurrence, not the whole positive-gap source reduction.
+
+Consequently(9) is NOT a contradiction to a positive gap and does NOT
+remove the need for a joint law or owner-selection operation.
 The next concrete question is whether this exact uniformly terminating
 source admits a loss-improving operation when at least three proper labels
-remain. The two-literal-proper-clock case is being tested independently.
+remain.
+
+For the combined arbitrary-counterexample route, Section13 of
+`CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION.md` proposes the
+independently authored exact two-literal-clock resonance exclusion. It first
+perturbs any positive-gap table inside its gap to satisfy finitely many
+generic pair inequalities, keeps a positive-singleton owner, and then
+chooses c arbitrarily close to1 outside its countable forbidden rate set.
+If that complete ordinary draft and the foundational dependencies above
+are verified, the present construction produces a compact source with at
+least THREE proper labels (three or four in Fin4), all other labels literal
+Never, exact nonowner full Nash, record invariance, continuous caps, and
+the all-calendar conditional termination bound(9). This is a produced
+counterexample source with additional structure, not yet its exclusion or
+a new equilibrium table class. Authorship and proof obligations for the
+resonance step remain in the separate Nash note.
 
 Narrow overlap/source inspection for this section used the existing
 `CompactStoppingLaw` topology and bridge in

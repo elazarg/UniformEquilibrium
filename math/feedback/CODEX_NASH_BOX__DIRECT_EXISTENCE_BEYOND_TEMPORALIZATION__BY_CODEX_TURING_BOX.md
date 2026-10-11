@@ -443,3 +443,122 @@ extra one in the horizon constant. No new transcription or soundness
 objection found. The separately reviewed quotient comparison is retained
 with its positive-inverse/negative-determinant distinction; this final
 check is not a repeat of the independent broad coverage audit.
+
+## Section 13: bounded assessment of literal-two-clock resonance
+
+Reviewed the Section13 text in
+`notes/CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION.md`, SHA-256
+`89e2aad1e34a48d50b88aed980846a36e1ac4ad9aa1ffa0a9bbe6b19134bed6a`.
+This is one bounded adversarial ordinary-mathematics assessment, not a
+new full export audit or a proof that the remaining source has zero loss.
+The foundational constrained-source/record-hull check is saved under
+`feedback/CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION__BY_CODEX_TURING_BOX.md`.
+
+Verdict: no objection found to the claimed whole-correspondence
+at-least-three-proper conclusion under its GLOBAL terminal-gap, generic
+reward and nonresonant-rate hypotheses. I specifically checked nonperiodic
+activity blocks, weak record ties, proper labels lost at compact limits,
+and whether one bad branch was being mistaken for a full correspondence.
+
+### Compactification before combinatorics is necessary and valid
+
+At the chosen rate, bounded-proper and owner-only-proper exits contradict
+the GLOBAL positive gap. Every finite date then has positive joint reach.
+Finite owner-cap attainment gives an exact full-Nash reached record tail,
+so it is likewise impossible. The owner finite deadline values are
+strictly below their Never limit and have infinitely many strict records.
+
+Take a hypothetical point with exactly two proper labels a,b, allowing
+every other label an arbitrary improper law rather than literal Never.
+Its reached record tails remain in the SAME compact exact correspondence.
+Each other label's positive Never mass makes its tail converge to literal
+Never in total variation. At a compact cluster the owner remains proper
+by K_delta; if b became improper, the owner-only-proper exit would apply.
+If it became bounded proper, the bounded exit would apply. Thus the
+cluster has precisely a,b unbounded proper and every other label literal
+Never. This removes the improper finite parts EXACTLY before applying
+two-player formulas. No numerical tail approximation is inserted into
+an exact resonance identity.
+
+The same bookkeeping at the integer minimum of proper count over ALL
+correspondence points preserves every proper label of that minimum.
+There is no unsupported closedness claim for the proper-law set.
+
+### The all-calendar two-clock case analysis checks
+
+For the literal-two-clock point, I independently obtain
+
+    f(t)=u+S_b(t)[s-u+y_t(A-s)],
+    g(t)=v+S_a(t)[s_b-v+x_t(B-s_b)].
+
+Because b is a full best reply with unbounded support, its supported
+deadlines have cap equal to their limiting Never value v. Every b-active
+date therefore has x_t=lambda=(v-s_b)/(B-s_b). The generic inequalities
+and unbounded properness force 0<lambda<1. Every such date is an owner
+weak record, since positive owner atoms must be weak records under the
+exact envelope equality. No strong record is inferred merely from
+positive hazard.
+
+If s>u, any b-quiet date would have f(t)>u, impossible on the Never-only
+owner-cap face. Thus all dates are b-active and have owner hazard lambda.
+Two strict records give the forbidden resonance with k=d.
+
+For s<u and A<s, a b-active date after a quiet date strictly decreases
+f, so cannot be a weak record. Consequently the active set is an initial
+block. Unbounded properness of b forces this block to be all dates;
+again two strict records give k=d. An arbitrary initial quiet prefix
+cannot precede its first active atom in this case.
+
+For s<A<u, a quiet date after an active date L increases f by
+S_b(L)y_L(u-A)>0. Since the active date was already a weak record,
+that first quiet date is a strict record; subsequent quiet dates form
+the current maximum plateau. The next active date increases it by
+S_b(H)y_H(A-s)>0 and is strict. Thus any finite active block has strict
+records at its start and the first quiet date after it, while every
+date inside has owner hazard lambda. An infinite block contains
+infinitely many strict records because f(t)<u tends to u. Both cases
+give a forbidden resonance; no periodicity or bounded quiet-gap premise
+is used.
+
+For A>u>s, the quiet baseline after an active date L lies BELOW f(L)
+by S_b(L)y_L(A-u)>0. Every following quiet date before the next b atom
+has the same baseline, so is not even a weak record and has owner hazard
+zero. Discard the finite prefix before the first b atom. Two later
+strict records H<K are b-active; owner survival between them is precisely
+(1-lambda)^k, where k>=1 counts the b-active dates in[H,K). Binding at
+both strict records gives c^(K-H)=(1-lambda)^k, again forbidden. This
+also covers unbounded quiet gaps and weak active record plateaus.
+
+These cases exhaust pairwise-distinct s,u,A. The countable forbidden
+rate set can be avoided arbitrarily close to1 AFTER the raw table is
+fixed and BEFORE any constrained equilibrium is selected.
+
+### Quantifiers, perturbation and significance
+
+A sup-norm reward perturbation of size epsilon changes each prescribed
+or unilateral payoff by at most epsilon, hence full exploitability by
+at most2epsilon, uniformly over ALL complete independent profiles.
+A genuine positive gap survives a sufficiently small perturbation.
+If no singleton were positive, all-Never would already be exact full
+Nash; thus a counterexample has a positive-singleton owner that can be
+kept positive while avoiding the finitely many raw pair equalities.
+This preserves original Never0 and does not assume row-translation
+invariance. The resulting generic table then admits a sufficiently
+small nonresonant rate with the claimed whole-correspondence conclusion.
+
+The reduction is real at the SOURCE level: it rules out EVERY exact
+constrained source with only two proper labels, including profiles with
+improper finite-mass outsiders, not merely one selected stationary branch.
+Combined with minimal proper-count compactification and the companion
+hull construction, it produces a three/four-proper uniformly terminating
+record-invariant source for any suitably perturbed hypothetical gap table.
+
+It does NOT yet eliminate a raw reward-table counterexample class or
+prove UE: the existence of such a three/four-proper source is not a
+contradiction. A solved table with a bad three-proper branch and a good
+one-proper branch does not refute the theorem, whose hypothesis is a
+GLOBAL gap and whose minimization ranges over the ENTIRE correspondence.
+Conversely such a bad branch cannot establish the remaining global
+selection obstruction. The next substantive obligation is a legal joint
+operation on the produced at-least-three-proper source, not a further
+description of arbitrary constrained equilibria.
