@@ -669,6 +669,22 @@ actual UE objective does not need. Approximate auxiliary sources remain
 possible, but their full-response error must be proved rather than inferred
 from the failed exact construction.
 
+A separate unreviewed calibration in Section 16 of
+`CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION.md` tests a smaller
+exactness requirement. Fix a proper pivot clock that is already part of an
+original profile with full regret 1/N. The draft classifies EVERY exact
+full-response completion of the nonowners at that same pivot, and obtains
+pivot regret 6 - 5/N. If independently confirmed, this excludes even a
+uniformly vanishing repair from joint approximate response to exact
+nonowner response while holding that pivot fixed. It does not exclude
+changing all laws jointly or selecting a different pivot law.
+
+The methodological hypothesis is consequently precise: exactifying a
+subset of players may discard the small incentive slacks that enable a
+good approximate equilibrium. A supporting existence theorem must justify
+that exactification, rather than treating it as harmless preprocessing.
+This is evidence about proof operations, not counterexample tables.
+
 Nor is joint deadline/regularization selection an automatic repair. Section
 22 of `CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md` gives a
 nonnegative four-player rational table on which EVERY exact finite

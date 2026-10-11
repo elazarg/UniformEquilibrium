@@ -69,9 +69,13 @@ Section 23 tests the ENTIRE realized-absorption discounted Nash source,
 with nonstationary clocks and selective Never allowed. The source exists
 automatically; whether its best original regret tends to0 remains open.
 An exact switching calibration defeats a fixed-active-face heuristic,
-but supplies no whole-correspondence conclusion. The current missing
-operation is a global viability-kernel estimate covering macroscopic
-roots and arbitrary switching, or an actual good component.
+and Section23.4 gives a complete unreviewed producer of GOOD growing-period
+components on Solan's already-solved three-player calibration. Its geometric
+joiner bursts have macroscopic physical absorption and vanishing discount
+loss, so original FULL regret tends to0. This refutes the proposed global
+corner-confinement estimate, not the entire discounted selector. The missing
+operation is now production or selection of favorable components from
+arbitrary genuinely four-active tables.
 
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits
@@ -3227,7 +3231,7 @@ arbitrary tables with off-path punishment tails.
 
 The attempted global estimate is
 
-    sup_(v∈K_α) ||v−(1,1,1)|| = O(1−α).           (D3, UNPROVED)
+    sup_(v∈K_α) ||v−(1,1,1)|| = O(1−α).           (D3, FALSE by23.4)
 
 Unlike the fixed-face heuristic, this quantifies over macroscopic roots,
 all support switches, all infinite calendars and the entire viability
@@ -3241,5 +3245,181 @@ through two-owner faces and macroscopic roots before returning to a
 small-hazard region. The one-shot map can amplify a passive coordinate,
 so a coordinatewise maximum argument fails. No exclusion of those
 excursions, no good exact discounted component, and no full-source
-falsifier is claimed. The next actual test is(D3) or an explicit component
-violating it; another isolated bad branch would not advance the question.
+falsifier follows from that argument. The construction below supplies a
+good component and disproves(D3); another isolated bad branch would not
+advance the question.
+
+### 23.4. A good growing-period discounted component on G_ε
+
+The following is a complete ordinary proof draft, not independently
+reviewed or checked in Lean. It supplies an actual favorable component
+of the ENTIRE source(D1) on the displayed, already-solved three-player
+calibration. It is not an arbitrary-table or genuinely four-active source.
+Fix 0<ε<1/3. There are α_k↑1 along a subsequence and exact discounted
+Nash profiles p^k with periods3k such that
+
+    E_original(p^k)→0,  U_original(p^k)→(1,1,2).       (D4)
+
+All three clocks and every opponent-deleted clock are proper. Within
+each phase there is a macroscopic quitting burst, despite α_k→1.
+Consequently(D3) is false: a continuation coordinate tends to2, not1.
+This does not contradict Solan's bounded no-exact-terminal-Nash result,
+because the periods grow and the limiting private laws need not realize
+the limiting payoff. It also does not contradict the fixed-period source
+obstruction in Noether's RM33: its constants fix the period before the
+discount limit, whereas here k grows and (1−α_k)k→0.
+
+Here is the finite producer, including its parameter order. Put
+r=(1+ε)/ε>1 and B*=1/(2+ε), and fix the compact interval
+I=[B*/2,3B*/2]⊂(0,1). For each integer k≥2 and B∈I there is a UNIQUE
+λ=λ_k(B)>0 such that α=1−λ∈(0,1) and the recursion
+
+    b_0=0,
+    b_(t+1)=[λ+(ε+α)b_t]/[αε(1−b_t)],
+    b_(k−1)=B                                             (D5)
+
+has all b_t∈[0,B]. The finite iterates are continuous and strictly
+increasing in λ while below1. Starting at λ=0 gives0, and increasing
+λ until the preceding iterate first reaches B makes its next iterate
+strictly exceed B. Induction gives the asserted unique crossing; its
+inverse B↦λ_k(B) is continuous. In particular no unproved asymptotic
+root is being used as a finite solution. Since the recursion gives
+b_(t+1)≥r b_t+λ/ε, it also gives the uniform estimate
+
+    0<λ_k(B)≤B/[r^(k−1)−1],  kλ_k(B)→0.                (D6)
+
+For this λ define the other active probabilities BACKWARD by
+
+    a_(k−1)=λ/(4−α),
+    a_t=[λ+αa_(t+1)]/[4−α+αa_(t+1)].                   (D7)
+
+They satisfy0<a_t≤λ/2. Indeed the last entry is at most λ/3, and the
+displayed map sends[0,λ/2] into[0,λ/2], since4−α≥3. The phase roots
+are q_t=(a_t,b_t,0),0≤t<k. Repeat this phase with labels rotated once,
+then twice, and replay the resulting3k-date word forever. No public
+randomization or correlation between private clocks is added.
+
+The proposed discounted phase values are
+
+    u_t=(1+εb_t,1−a_t,w_t).
+
+Define w BACKWARD from w_k=1−a_0 by
+
+    w_t=3b_t−2a_tb_t+α(1−a_t)(1−b_t)w_(t+1).           (D8)
+
+This is precisely the passive player's Bellman equation, including the
+rotated child at the phase boundary. The first owner's interior
+indifference is exactly(D5); the second owner's interior indifference
+is exactly(D7). At the phase boundary the second owner's equation is
+1−a_(k−1)=3a_(k−1)+α(1−a_(k−1)), also exactly(D7).
+The remaining first-owner boundary equation is the scalar equation
+
+    G_k(B):=w_0−[1+εB]/[α(1−B)]=0.                   (D9)
+
+At b_0=0 the second player continues and is indifferent; no strictly
+positive hazard is required there. Thus(D9), together with the inactive
+inequality checked below, is the entire finite existence problem.
+
+We now prove a uniform scalar limit on I. Let c_0(B)=B and
+c_(j+1)=c_j/(r+c_j). Reading(D5) backward gives
+
+    b_t=[αεb_(t+1)−λ]/[ε+α+αεb_(t+1)].
+
+On[0,max I] this map differs from x↦x/(r+x) by O_ε(λ), uniformly,
+and the latter is1/r-Lipschitz. Therefore
+
+    max_(0≤j<k)|b_(k−1−j)−c_j(B)|=O_ε(λ),
+    Σ_(j<k)|b_(k−1−j)−c_j(B)|=O_ε(kλ).
+
+The explicit solution and its product are
+
+    c_j=B/[r^j+εB(r^j−1)],
+    ∏_(j<k)(1−c_j)
+      =(1−B)/[1+εB−εB r^(−(k−1))].
+
+The difference between products of numbers in[0,1] is at most the sum
+of the coordinate differences. Hence, uniformly for B∈I,
+
+    P_k(B):=∏_(t<k)(1−b_t)→(1−B)/(1+εB).             (D10)
+
+If a=0 and α=1 in(D8), retaining the SAME b_t and terminal value1,
+the passive values are exactly
+
+    w̄_t=1+2[1−∏_(s=t)^(k−1)(1−b_s)].
+
+The actual a_t≤λ/2, discount lossλ, and terminal error a_0 change each
+one-step affine recurrence by O_ε(λ); all its transmission coefficients
+are in[0,1]. Thus max_t|w_t−w̄_t|=O_ε(kλ), uniformly on I.
+Equations(D6) and(D10) now give
+
+    G_k(B)→G∞(B)
+      =3−2(1−B)/(1+εB)−(1+εB)/(1−B)
+      =(1+ε)B[1−(2+ε)B]/[(1+εB)(1−B)]               (D11)
+
+uniformly on I. Its sign is positive at B*/2 and negative at3B*/2.
+For EVERY sufficiently large k, the ordinary intermediate-value theorem
+therefore gives B_k∈int I with G_k(B_k)=0. Every such selection satisfies
+B_k→B*, since G∞ has exactly one zero on I. Choose this B_k first,
+then λ_k=λ_k(B_k), α_k=1−λ_k, and the actual finite roots(D5)–(D8).
+A monotone subsequence of α_k may be taken if desired; only α_k→1 is
+needed for(D1).
+
+All inactive inequalities hold for these actual finite roots, not only
+at the limit. At any phase date the inactive third player's immediate
+Quit value is Q_2=(1−b_t)(1+εa_t), whereas its prescribed Continue
+value is w_t. Since the remaining b-product includes the last factor
+1−B_k, the exact comparison above gives
+
+    w_t≥1+2B_k−O_ε(kλ_k),
+    Q_2≤1+ελ_k/2.
+
+Because B_k≥B*/2>0 and kλ_k→0, w_t>Q_2 at EVERY phase date once
+k is large. The other two players are indifferent by the exact equations.
+After rotating, these are all nine player/phase families. Thus every root
+is exact Nash at its actual next discounted value. The displayed ports
+are uniformly bounded, and the remainder after n dates has factor α_k^n.
+The Bellman inequality therefore telescopes against ALL pure deadlines,
+Never, and their arbitrary mixed complete replacements. This proves
+p^k∈D_(α_k), not merely a finite-root certificate.
+
+It remains to compare ORIGINAL full responses, including Never. Put
+A_k=∏_(t<k)(1−a_t). Equations(D6),(D7),(D10) give
+
+    A_k→1,  P_k→1/2,  J_k:=A_k P_k→1/2.
+
+Each individual clock survives a full3k-date period with probability J_k;
+every opponent-deleted clock survives that period with probability J_k².
+Thus all those clocks are proper, and their physical absorption bounds
+are uniform. For any player i and ANY complete replacement of its law,
+the first absorbing time is at most the unchanged opponents' first quit
+time. With reward bound M=3,
+
+    |U_i(original replacement)−U_i^α(replacement)|
+       ≤Mλ E[T_−i+1]≤Mλ(3k)/(1−J_k²).
+
+This also holds for the prescribed law. Exact discounted Nash consequently
+implies the original FULL cap bound
+
+    E_original(p^k)≤18λ_k k/(1−J_k²)→0.                (D12)
+
+No finite-deadline or omitted late-response qualification is present.
+At the first date the discounted value is(1,1−a_0,w_0)→(1,1,2).
+The same comparison transfers that limit to original terminal payoffs.
+The tracked terminal-all-errors endpoint can then select the uniform
+payoff; alternatively the fixed target follows from this convergence.
+The harmless fourth-player padding described above keeps player3 Never,
+an exact discounted and original best response with value0, and gives
+the corresponding padded target(1,1,2,0). This is still three-active,
+already-known UE coverage rather than a new Fin4 class.
+
+The mathematical lesson is source-level, not a new conditional consumer:
+the all-component discounted selector survives this hard calibration.
+Its favorable component uses long pair phases and macroscopic bursts;
+the fixed-period small-hazard germ is not the whole correspondence.
+The role of the sparse actual phase is crucial: a geometric b-growth
+builds a fixed physical absorption while the λ-dependent companion a
+and discount loss total only O(kλ). What remains genuinely open is a
+global selector that produces comparable bursts or another favorable
+component from arbitrary four-player reward data. The scalar sign change
+here uses the special cyclic singleton and collision rows and is not
+claimed for an unresolved four-active table.
