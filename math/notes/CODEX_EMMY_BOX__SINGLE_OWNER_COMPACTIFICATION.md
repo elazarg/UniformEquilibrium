@@ -23,15 +23,17 @@ Sections4 and11 also have the narrower independent ordinary check in
 Neither review supplies the missing zero-owner-debt selector or asserts
 unrestricted Fin4 UE existence. Section13 gives immediate whole-face
 selection consequences, not a new conjecture-facing closing theorem.
-Section14 begins the stronger calibration on the canonicalized perturbed
-Solan three-player game, which has UE but no exact Nash. It determines the
-ENTIRE nonowner response correspondence to a fixed geometric owner, but
-does not determine the minimum over all owner laws in K_delta.
-Sections14.4--14.5 add unreviewed ordinary proofs that all three core-owner
-correspondences are equivalent under the canonical shift, every core clock
-is proper, owner-zero dates are completely quiet, and the owner's entire
-pure-deadline payoff sequence is nondecreasing. The attained maximum
-principle on the remaining FLAT plateaux is still unproved.
+Section14 calibrates this source on the canonicalized perturbed Solan
+three-player game, which has UE but no exact Nash. Sections14.4--14.6 now
+give an UNREVIEWED COMPLETE ORDINARY PROOF CANDIDATE that, for all three
+core owners, the ENTIRE constrained-Nash correspondence is the geometric
+component of Section14.1. Its minimum full owner loss tends to2/5, not0.
+The load-bearing new step is the attained whole-correspondence hazard
+maximum argument in Section14.6, including the flat-plateau case. This is
+a proposed falsifier of the three-player sufficient source question(Q),
+not a UE counterexample and not a whole-owner Fin4 falsifier. A fourth
+owner can change the conclusion; Section14.7 keeps that scope separate.
+The independent foundational reviews above do NOT cover Sections14.4--14.6.
 
 ## 1. Self-contained end-to-end question
 
@@ -1013,19 +1015,18 @@ then forces the unique nonowner response profile. For small delta the
 ENTIRE N would be that singleton and its minimum owner loss would tend
 to2/5.
 
-This yields one concrete unproved maximum principle worth testing:
+This yields the concrete maximum principle tested below:
 
     Does the perturbed Solan game force m_delta=delta
     for all sufficiently small delta?                    (MP)
 
-A proof would be a whole-correspondence obstruction for the positive-
-owner0 source, not another bad branch. Conversely any profile improving
-on(14.5) necessarily has m_delta>delta. The statement is not asserted
-true: an optimal owner can allocate its deadline mass across WEAK record
-plateaux, not just use the first-argmax representative. Replacing it by
-that representative while keeping opponents fixed need not preserve the
-opponents' exact best replies. This is the central unresolved joint-law
-issue in trying to prove(MP).
+A proof is supplied as an unreviewed candidate in Section14.6. Conversely
+any profile improving on(14.5) necessarily has m_delta>delta. An optimal
+owner can allocate its deadline mass across WEAK record plateaux, not
+just use the first-argmax representative; replacing it by that
+representative while keeping opponents fixed need not preserve the
+opponents' exact best replies. Section14.6 instead controls the maximum
+hazard over the ENTIRE correspondence and ALL calendar dates.
 
 For the cyclic RAW three-player table the three owner choices are symmetric.
 For the canonical Fin4 table with an extra zero-singleton label, excluding
@@ -1092,7 +1093,7 @@ Never, at both stages.
 
 Local lemma. Suppose the owner's current hazard is0 and its next hazard
 is b in(0,1). Let x,y and x',y' be the current and next nonowner hazards,
-all less than1. Let Y1,Y2 and Y1',Y2' be their raw Never values. Assume
+all less than1. Let Y1,Y2 and Y1',Y2' be their raw Never values in[0,3]. Assume
 the exact recursions and full-response support inequalities
 
     Y1=(1-y)*Y1',             Y2=3*x+(1-x)*Y2',
@@ -1218,6 +1219,213 @@ By(14.13), any hypothetical H_delta>delta must occur on a FLAT
 payoff plateau. Proving that such a global maximum cannot occur on
 a flat plateau would give H_delta=delta, all owner hazards equal
 delta by the survival budget, and the whole-correspondence obstruction
-described in(14.7). That final flat-plateau maximum principle remains
-UNPROVED. In particular the local lemma does not authorize an
-earliest-atom redistribution while keeping nonowner best replies fixed.
+described in(14.7). Section14.6 gives an unreviewed proof candidate for
+that final maximum principle. The local lemma alone does not authorize
+an earliest-atom redistribution while keeping nonowner best replies fixed.
+
+### 14.6. Whole-correspondence maximum principle, including flat plateaux
+
+Status: COMPLETE ORDINARY PROOF CANDIDATE, NOT INDEPENDENTLY REVIEWED.
+No Lean implementation or export claim. Fix
+
+    0<e<min(1/10,e0),       0<delta<1/2,
+
+where e0>0 is any qualitative interval on which the bounded no-actual-
+exact-Nash conclusion of Solan2001 applies. No numerical value of e0 is
+claimed. This uses the paper only for nonexistence of an ACTUAL Nash
+profile with bounded continuation payoffs, not the literal unrestricted
+continuation formulation discussed above.
+
+Claim. For owner0, EVERY point of N_(0,delta) has owner clock
+Geom(delta). Its nonowner clocks are therefore the unique response laws
+in Section14.1. In particular the whole correspondence is a singleton
+and its minimum full owner loss tends to2/5 as delta decreases to0.
+By Section14.4 the same statement, with cyclic relabeling, holds for
+each of the THREE core owners of both the raw and canonical tables.
+
+All maxima and suprema below range over the ENTIRE correspondence and
+ALL calendar dates, not over one selected equilibrium branch. Write h,x,y
+for the conditional hazards of owner0, player1 and player2. Let Y1,Y2
+be the conditional raw Never values of the two nonowners. At every stage
+they belong to[0,3], and their exact recursions and support inequalities are
+
+    Y1=h*(3-2*y)+(1-h)*(1-y)*Y1',
+    Y2=(3-2*h)*x+(1-h)*(1-x)*Y2',
+    Y1>=(1-h)*(1+e*y),       equality if x>0,
+    Y2>=(1-x)*(1+e*h),       equality if y>0.             (14.15)
+
+Define the owner's Quit endpoint, opponent stopping contribution and
+joint opponent survival by
+
+    Q=(1-y)*(1+e*x),   O=y*(3-2*x),   k=(1-x)*(1-y).
+
+The difference between its pure deadlines at this and the next date,
+divided by the positive joint reach to this date, is
+
+    C-Q,             C=O+k*Q'.                           (14.16)
+
+Section14.5 gives C>=Q at EVERY stage. If h>delta then C=Q: a strict
+increase would bind the next survival budget and imply h<=delta.
+
+The compact finite-offset representation at the end of Section14.5
+applies not only to h but also to x,y,Q,Y1,Y2. Their fixed-offset
+conditional functions are continuous on compact N, all finite survival
+denominators are positive, and record re-rooting stays in N. Consequently
+the calendar extrema
+
+    H=max h,       X=max x,       Y=max y,       q=max Q
+
+are attained. We can use M1=sup Y1 as well. Sure hazards are excluded,
+so H<1. The root budget gives H>=delta.
+
+Step1: Q<=1 throughout the correspondence. Suppose its attained global
+maximum q exceeded1. At that stage x>0 and
+y<e*x/(1+e*x). Since Q'<=q, (14.16) gives
+
+    C-q <= y*(3-2*x)-q*(x+y-x*y)
+         < y*(2-x)-x
+         < x*(e*(2-x)/(1+e*x)-1) < 0.
+
+The last inequality holds for e<=1/2 and x>0. This contradicts C>=Q=q.
+Thus Q<=1. In particular
+
+    x>0 ==> y>0.                                        (14.17)
+
+Step2: Y2<=L_H:=1+e*H throughout. If Y2 at some stage exceeded L_H,
+then y=0 there by its support equality in(14.15), and x=0 by(14.17).
+Its recursion would give Y2'=Y2/(1-h)>=Y2>L_H. Repeating forces
+x=y=0 forever after that stage and gives
+Y2(t+n)=Y2(t)/product_(j=t)^(t+n-1)(1-h(j)). Owner properness makes
+this product tend to0. This contradicts the bound Y2<=3.
+
+Step3: a uniform bound on X. At a stage with x=X>0, (14.17) gives
+y>0, so Y2=(1-X)*(1+e*h). Its recursion and the next-stage floor
+Y2'>=(1-x')*(1+e*h')>=1-X imply
+
+    X/(1-X)
+      <= ((1+e)*h+(1-h)*X)/(3-2*h)
+      <= ((1+e)*H+(1-H)*X)/(3-2*H).
+
+The last ratio increases with h; its derivative numerator is
+3*(1+e)-X>0. Rearranging gives
+
+    (1-H)*X^2+(2+e*H)*X <= (1+e)*H,
+    hence X <= (1+e)*H/2.                               (14.18)
+
+This remains true when X=0.
+
+Step4: if H>delta, its attaining stage must have H<1/2. Assume H>delta
+and work at that stage. It is flat by(14.16). If x=0, then the floor
+Y2>=L_H contradicts Y2=(1-H)*Y2'<=(1-H)*L_H. Thus x>0 and y>0.
+The player1 support equality and the next-stage floor Y1'>=1-H give
+
+    (1-H)*(1+e*y)
+      >= H*(3-2*y)+(1-H)^2*(1-y),
+    y >= H*(2+H)/(1+e*(1-H)+H^2).                       (14.19)
+
+Flatness also gives Q>=O, hence
+
+    y <= (1+e*x)/(4+(e-2)*x) <= (1+e)/(2+e) <= 11/21.
+
+If H>=1/2, (14.19) instead gives
+y>=(5/4)/(21/10)=25/42>11/21. Here H<=1 bounds the denominator
+by2+e<=21/10. This contradiction proves H<1/2 in the hypothesized
+H>delta case.
+
+Step5: a uniform bound on Y. When x(t)>0, the support equality gives
+Y1(t)<=(1+e*Y). When x(t)=0, let u>t be the first subsequent date
+with x(u)>0; it exists because player1 is proper. Write A for owner
+conditional survival from t through the dates before u. The player2
+recursion through this x=0 interval gives Y2(t)=A*Y2(u). The floor
+Y2(t)>=1 and Step2 imply A>=1/(1+e*H). Before u, player1's Never
+payoff is at most3 on owner stopping and0 on player2 stopping; its
+continuation contribution is at most A*Y1(u), since raw Y1(u)>=0.
+Therefore
+
+    Y1(t) <= 3*(1-A)+A*(1+e*Y)
+           <= (1+e*Y+3*e*H)/(1+e*H)=:Mbar.
+
+Since 1+e*Y<3, the expression decreases with A. This bound also covers
+x(t)>0. Thus M1<=Mbar=1+e*(Y+2*H)/(1+e*H).
+Use this in the player1 recursion and floor at an arbitrary stage.
+With z=h/(1-h),
+
+    y*(e+Mbar+2*z) <= 3*z+Mbar-1.
+
+The resulting ratio increases with z, since its derivative has positive
+numerator 3*e+Mbar+2. Put Z=H/(1-H), and take the maximum of y.
+With E=Mbar-1=e*(Y+2*H)/(1+e*H), this yields
+
+    Y*(1+e+2*Z) <= 3*Z+E,
+    Y*(1+2*Z+e^2*H/(1+e*H))
+       <= 3*Z+2*e*H/(1+e*H).
+
+In the first line we only dropped the nonnegative term Y*E. Multiplying
+by1-H and dividing gives the exact convenient bound
+
+    Y <= H*[3+2*e*(1-H)/(1+e*H)]
+              /[1+H+e^2*H*(1-H)/(1+e*H)]
+       <= H*(3+2*e)/(1+H) <= (16/5)*H.                 (14.20)
+
+Step6: the attained maximum cannot be flat. Retain the hypothetical
+H>delta, so Step4 gives0<H<1/2. At its attaining stage (14.19) implies
+y>=(9/5)*H. Indeed replacing e by1/10 in the denominator only lowers
+that bound, and
+
+    5*(2+H)-9*[1+(1/10)*(1-H)+H^2]
+       =1/10+(59/10)*H-9*H^2 > 0  for 0<H<1/2.
+
+By(14.18), x<=(11/20)*H<=(3/5)*H. Also Q'>=1-Y. Hence
+
+    C-Q
+      >= y*(3-2*x)-(1-y)*[(1+e)*x+Y*(1-x)]
+      >= y*(3-(6/5)*H)-(1-y)*(193/50)*H.
+
+For the second inequality, bound the negative bracket separately by
+(11/10)*(3/5)*H+(16/5)*H=(193/50)*H. This does not assume
+that the crude bound (16/5)*H is at most1. The last expression increases
+with y, so it is at least
+
+    (9/5)*H*(3-(6/5)*H)-(1-(9/5)*H)*(193/50)*H
+      =H*[77/50+(1197/250)*H] > 0.
+
+This contradicts the flat equality C=Q. Thus H<=delta. Since every
+root hazard is at least delta, H=delta. All hazards in every source are
+at most delta, so their survival products are at least c^t; the K_delta
+budget makes them at most c^t. Equality and induction force every hazard
+to be delta. Section14.1 determines the remaining clocks uniquely and
+computes the loss limit2/5. Section14.4 transfers the full conclusion to
+each core-owner choice. This completes the ordinary proof candidate.
+
+Exact remaining check. Independently falsify Steps1--6, the calendar
+attainment input from Section14.5, and the two-stage support lemma used
+to obtain monotonicity. The earlier foundational reviews do not cover
+these new steps. No claim about every possible fourth-owner padding
+follows from this three-player proof.
+
+### 14.7. Why a fourth owner is a separate selection quantifier
+
+The result proposed in Section14.6 covers all THREE original owners.
+It must not be described as a whole-owner Fin4 obstruction merely by
+adding a label. In particular, a dummy with reward-1 whenever it joins
+(including when it quits alone) and0 otherwise, whose presence does not
+change core rewards, turns its independent Geom(delta) into realized
+discounting of the core by alpha=1-delta. Its singleton is negative, so
+that literal padding lies outside Section1's nonnegative-singleton scope.
+
+There is a distinct nonnegative-singleton variant: add1 to this dummy's
+reward at EVERY finite nonempty coalition, giving dummy reward1 when
+absent and0 when joining, including alone. Because the K_delta dummy
+is proper, that shift is constant under EVERY legal constrained-source
+comparison; the entire dummy-owner constrained correspondence is
+unchanged. Core rewards are left unchanged. At a proper-core component,
+the dummy's full Never cap becomes1 and its full debt still equals the
+probability that it quits no later than the core. A good discounted-core
+component can consequently give a good fourth-owner source even when
+the core-owner branches are bad. This is not the different padding in
+Nash Section14.4, and it is not an asserted constant-shift transport of
+the canonicalized CORE rewards under dummy-first stopping.
+
+The exact discounted-core connection is being checked separately with
+CODEX_TURING_BOX. Its role is to protect the fourth-owner quantifier,
+not to weaken or strengthen the three-core-owner claim above.
