@@ -140,3 +140,184 @@ box against all induced sure-owner and larger-base selections. The current
 S10 fixture does not resolve that comparison. Stop its export claim here
 until an actual source-separating table or another counterexample-class
 increment is proved.
+
+## Section12: independent golden-calendar producer and bounded coverage check
+
+Reviewed frozen notebook SHA256
+`e474baaaa03aa84fe6cc620e530a1b4c4132254fda2583f1b60ca269d7c20f79`,
+Section12 only. Verdict: PASS as ordinary mathematics for the exact raw
+singleton/pair-cap producer, the 16-local/12-upper-only/32-arbitrary
+extension, and the named source separations below. This is not a Lean check,
+an exhaustive novelty classification, or a stationary-nonexistence claim.
+In particular it says nothing about disjointness from unspecified older
+implicit-function neighborhoods.
+
+### Source-to-full-UE chain and coordinate quantifiers
+
+I independently reconstructed the four values from the singleton rows and
+the geometric sum for owner word(0,2,1,3). With q=(sqrt(5)-1)/2 and c=1-q,
+they are precisely
+
+    (1,H,c,1), (1,c,1,H), (H,1,1,c), (c,1,H,1).
+
+Each active owner's Quit and Continue values are one. At an inactive
+coordinate its Quit endpoint is c+q*r_i({i,j}); comparing to the displayed
+phase value gives exactly the twelve upper bounds in12.1. In particular
+the cross-pair caps are genuinely oriented: 02:(1,0), 03:(0,1),
+12:(0,1), 13:(1,0), in increasing participant order. This does not impose
+an all-phase solo floor, which the actual values c<1 violate.
+
+Every deviator meets at most ONE scheduled opponent at any live date.
+Its possible terminal coalition is therefore a singleton or a pair in
+which it is a participant. This remains true for a complete replacement,
+simultaneous quitting, arbitrary private history and Never. The twelve
+nonparticipant pair coordinates, sixteen triple coordinates and four
+grand coordinates never enter the deviator's own payoff. All sixteen
+singleton entries DO enter actual prescribed evaluation; all twelve pair
+participant entries enter only their own inactive Quit endpoints. Thus
+16+12+32=60 is the literal full support partition, not a formal dimension
+count ignoring some response.
+
+For arbitrary nearby singleton data, exposing the three other scheduled
+coins before the returning owner proves exactly
+
+    (1-P)*(U_(t+1),j_t-s_(j_t))=F_t.
+
+The proposed polynomial is therefore an actual owner-indifference field.
+Its three nonzero Jacobian offsets at the golden root are
+-2-q, 2-q, 3q-2; the resulting eigenvalues and negative determinant in12.5
+agree with direct differentiation. The ordinary IFT supplies all four
+hazards from the sixteen raw singleton inputs, in a common compact
+subinterval of(0,1). No root or continuation value is supplied as input.
+
+To make the upper-only quantifier rigorous, choose ONE small radius so
+that the local singleton solution and the twelve inactive inequalities
+remain valid when every participant pair reward is its strict-completion
+value PLUS that radius. Any table below those twelve proxy values has
+identical prescribed evaluation and weakly lower inactive Quit endpoints.
+The selected hazards do not depend on those pair entries. Consequently
+their decreases can be arbitrarily large without invalidating the same
+radius. The other32 coordinates are entirely arbitrary finite numbers;
+their size only changes a table-specific finite reward bound.
+
+Deleting any player leaves three proper opponent coins per period.
+Their survival is at most(c^3)^floor(n/4), or the corresponding uniformly
+contracting bound after the local perturbation. Iterating the exact
+endpoint inequalities therefore bounds every complete response, including
+Never, with a remainder tending to zero. The same opponent clock bounds
+the selecting time under EVERY replacement. Its summable survival gives
+the stated O(M/N) delivery and regret estimates. M is chosen from each
+FIXED input table; it need not be uniform over the32 arbitrary coordinates
+or the12 unbounded-below ones. Thus one actual profile and its fixed
+phase value work for all sufficiently large horizons at every accuracy.
+
+The relevant checked interfaces inspected were
+`quittingSubBellmanValue_le_superSolution_of_survival_zero` and
+`quittingCyclicHazardTerminalValue_le_add_of_quitError_and_continueUpperBound`
+in `UniformEquilibrium/Quitting/Cycles/CyclicSupersolution.lean`, and
+`finiteAverage_delivery_le_of_opponentLiveCesaro_bound` and
+`finiteAverage_deviation_gain_le_of_exact_terminalNash_and_opponentLiveCesaro_bound`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicFiniteHorizonRate.lean`.
+The ordinary argument supplies their semantic premises; no new Lean adapter
+or build is asserted.
+
+### Whole sure-owner, child and raw-pair source sets
+
+For each sure owner j, the two noncolliders' four pure-opponent joining
+gains really are(-1/2,-1,-1,-2). They are strictly dominated against every
+mixed law, leaving the unique induced Nash point with kappa(j) sure Quit.
+The owner's leave gain there is1/2; its all-opponents-Continue coefficient
+is zero. Hence no punishment floor can repair that point. This excludes
+the ENTIRE induced Nash correspondence, partial-free selections plus
+outside no-join signs, and every larger persistent base whose accepted
+signs would give a full root Nash point with a sure quitter. I inspected
+the actual `quittingPersistentBaseUtility`, `quittingPersistentBaseNashSet`
+and `quittingPersistentBaseRoot` definitions in
+`UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean`, and the
+two producer adapters `nonempty_quittingPersistentBaseCertificate_of_inducedNash`
+and `exists_uniformPayoff_of_persistentBase_inducedNash_signs` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseNashSemanticAdapter.lean`.
+
+For ANY proper child, the directed kappa cycle has a member j whose
+positive collider lies outside. Its singleton join gain is1/2, every child
+advance donor has gain0 or-1/2, and every withdrawal donor has gain<=0.
+For terminal-security withdrawal this last step uses the singleton LP
+floor<=1, NOT a false universally nonpositive floor. The actual
+`WithdrawalFutureJoinRewardCertificate.join_row` and five-kind gain
+definitions in `WithdrawalFutureJoinRaw.lean`, with the singleton floor
+bounds in `PatientWithdrawalRaw.lean`, `DeadlineWithdrawalRaw.lean` and
+`DeadlineWithdrawalSecurityLP.lean`, give the advertised all-child,
+all-weight, all-five-kind F/J-only exclusion. Advancing-only and stronger
+N/F/J certificates fail as well.
+
+The arbitrary-word balanced-cycle exclusion is valid: after a positive
+owner phase the two nonmate values exceed one; the first different
+positive owner must therefore be its mate, which pushes the old owner's
+next value below one. This contradicts the literal `soloFloor` in
+`BalancedSingletonCycleCertificate` and its `WithBounds` version in
+`BalancedSingletonCertificate.lean`. The positive predecessor Hamiltonian
+cycle required by `SignedFourCycleSingletonData` in
+`SignedFourCycleRewardAdapter.lean` is absent from the paired graph.
+
+The finite named pair-source comparisons in12.7 also pass their literal
+selection/relabeling checks. In particular the `RawRegion.eq_partner_of_singleton_lt`
+theorem in `PairedCycleSchedule.lean` cannot assign two distinct below-own
+opponents to the unique partner. The strict/weak/inverse capped favorite
+conditions in `CrossedMatchingPhaseSource.lean` fail at the mate pair7/2>1.
+The negative scheduled premium in `BelowSingletonJointPhaseSource.lean`
+fails because every possible cross pair has a positive participant1/2.
+The two-pair join-cap export fails the leave-safe joining condition at
+mate pairs7/2<4 and at each negative cross participant-1/2<0. The two
+frozen four-joint exports have favorite participant5 as an exact or
+radius<=1/2-local input; this fixture has7/2. Their literal stated regions
+therefore do not contain it, under any relabeling preserving singleton
+preferences. No incapacity of their underlying joint-phase methods is
+inferred from these region separations.
+
+### Additional adversarial check: actual response quotients
+
+The strict completion IS equivariant under the transitive four-cycle
+(0 2 1 3), so symmetry must not simply be declared absent. It nevertheless
+does NOT enter the existing favorable response-quotient producer.
+
+By `quittingSingletonBlockRowSum_eq_of_responseInvariant` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`,
+the block sums of Gamma must agree within every merged block. A direct
+enumeration of the fifteen partitions, also immediate from the four
+displayed Gamma rows, leaves only:
+
+    discrete; 01|2|3; 0|1|23; 02|13; 03|12; 01|23; 0123.
+
+All four potentially favorable nondiscrete partitions fail the ACTUAL
+response identity. Write H_i=(1-C_-i)Q_i-E_-i, the literal zero-discount
+`quittingDiscountedDisplacement` in `DiscountedDisplacement.lean`.
+The following block-constant hazard vectors give unequal rows:
+
+| Partition | Hazard vector | Two residuals |
+|---|---|---|
+| 01|2|3 | (0,0,1,0) | H0=1/2, H1=-1/2 |
+| 0|1|23 | (1,0,0,0) | H2=-1/2, H3=1/2 |
+| 02|13 | (1,0,1,0) | H0=1/2, H2=-1/2 |
+| 03|12 | (1,0,0,1) | H0=-1/2, H3=1/2 |
+
+The actual remaining invariant quotients are [[3,-2],[-2,3]] for01|23
+and[1] for the all-player block. Both are P-matrices with degree+1;
+their determinants are positive. Thus neither the degree-not-one producer
+nor `finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+in `UniformEquilibrium/Diagnostics/Quitting/FinFourResponseQuotientCriterion.lean`
+applies. The orbit construction
+`responseInvariant_of_reward_subgroup_automorphisms` in
+`ResponseInvariantQuotientPlayerOrbits.lean` supplies no missing favorable
+quotient. Unlike the older symmetric four-joint center, the present table's
+symmetry does not already solve it through that quotient exit.
+
+The fixture also fails product-low: with only0,1 active at hazards1/2,
+both pure-Quit values are9/4>their own singleton1. This directly violates
+`HasProductLowQuittingPremium` in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`.
+
+No soundness objection remains in this bounded check. The meaningful
+increment is a genuine original-table singleton-calendar producer without
+the balanced certificate's all-phase solo floor, on an open16-coordinate
+source times12 lower sets times32 arbitrary coordinates. Its scope remains
+the stated sufficient class, not a global Fin4 classification.

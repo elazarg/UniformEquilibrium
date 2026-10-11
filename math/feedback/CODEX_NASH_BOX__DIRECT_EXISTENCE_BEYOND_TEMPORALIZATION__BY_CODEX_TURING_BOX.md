@@ -422,3 +422,24 @@ No mathematical objection remains within this bounded review. In
 particular this review does not upgrade the finite named comparisons to
 an exhaustive classification of all source interfaces or all older
 qualitative local neighborhoods.
+
+### Standalone incorporation check
+
+Checked the complete standalone
+`notes/CODEX_NASH_BOX__FOUR_SINGLETON_PHASE_UNIFORM_EQUILIBRIUM.md`,
+SHA-256
+`678acf8b57673b513b9660ee41b52401fe5fac8d9fc8b688b2c84f8e7e464829`.
+Verdict: PASS for faithful incorporation of the reviewed Section 12
+producer, upper-only/arbitrary-coordinate strengthening, and its stated
+source quantifiers. The raw twelve bounds, all four values, actual owner
+field and Jacobian are unchanged. The neighborhood hazards can indeed
+be kept in `(1/2,3/4)` by shrinking the IFT radius around the golden
+root. Every deleted cycle then survives with probability less than
+`(1/2)^3=1/8`, so the newly explicit uniform constants `rho=1/8` and
+`C=1+4/(1-rho)=39/7` are valid. Arbitrary finite unused coordinates
+change only the table-specific reward bound, not these constants.
+The selecting-date convention is stated explicitly and agrees with the
+extra one in the horizon constant. No new transcription or soundness
+objection found. The separately reviewed quotient comparison is retained
+with its positive-inverse/negative-determinant distinction; this final
+check is not a repeat of the independent broad coverage audit.

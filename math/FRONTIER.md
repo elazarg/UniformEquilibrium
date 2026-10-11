@@ -1123,6 +1123,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: all tables in an open sixty-coordinate neighborhood of the explicit two-joint-phase rational table specified below | UE with rates and a fixed target produced from the table. Every singleton and collision reward may vary; only two solo phases require refinement. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: the four-joint-phase reward cylinder specified below | Exact terminal Nash and a fixed UE payoff, with eight proper hazards produced from raw rewards. Thirty-two coordinates lie in a fixed open neighborhood, twelve have only upper bounds, and sixteen are arbitrary finite reals. This is reviewed mathematics awaiting formalization. |
 | Fin4: the four-joint-phase unbounded reward region specified below | Exact terminal Nash and a fixed UE payoff, with rates produced by a two-variable rectangle argument. Passive scheduled rewards and all triple rewards may be arbitrarily large; four negative collision bounds control inactive deviations. This is reviewed mathematics awaiting formalization. |
+| Fin4: the four-singleton-phase reward cylinder specified below | Exact terminal Nash and a fixed UE payoff, without an all-phase singleton floor. Sixteen singleton entries vary locally, twelve participant-pair entries have only upper bounds, and thirty-two entries are arbitrary finite reals. This is reviewed mathematics awaiting formalization. |
 | Fin4: the global two-joint cyclic-child family specified below, for every real R | UE with simultaneous quitting at both retained joint phases. The rates and target are produced from rewards, including the outsider halfspace boundaries. This is reviewed mathematics awaiting formalization. |
 | Fin4: the zero-premium joint-phase family specified below, for every real R and σ≥0 | UE with both joint participants at their singleton rewards and a possibly positive outsider collision payoff. Rates and a fixed target are produced; an opposite-sign pair core is allowed. This is reviewed mathematics awaiting formalization. |
 | Fin4: the negative-premium cyclic-child completion family specified below | UE for arbitrary signed own rewards, with an exact terminal Nash profile and one fixed target produced from raw entries. Both scheduled joint participants have negative premiums. Twenty-eight normalized coordinates are unrestricted. This is reviewed mathematics awaiting formalization. |
@@ -1428,6 +1429,49 @@ and nonnegative-weight withdrawal selections, not only pure coalitions.
 The result retains exact paired singleton and scheduled-row identities.
 Arbitrary tables need not supply those identities or the four negative
 barriers; no general reduction or wall-crossing consumer is claimed.
+
+The **four-singleton-phase criterion** uses singleton rows
+
+    r(0)=(1,4,0,0), r(1)=(4,1,0,0),
+    r(2)=(0,0,1,4), r(3)=(0,0,4,1).
+
+Put q=(√5−1)/2, c=1−q, H=(3+√5)/2 and T=(5+√5)/2.
+The participant-pair upper bounds, in increasing participant order, are
+
+| Pair | Two upper bounds |
+| --- | --- |
+| 01, 23 | (T,T) |
+| 02, 13 | (1,0) |
+| 03, 12 | (0,1) |
+
+There are no lower bounds. All twelve passive pair coordinates, sixteen
+triple coordinates and four grand coordinates are arbitrary finite reals.
+The calendar 0→2→1→3, with only its scheduled player quitting at rate q,
+has exact phase values
+
+    (1,H,c,1), (1,c,1,H), (H,1,1,c), (c,1,H,1).
+
+Every owner is indifferent; the twelve bounds are exactly the inactive
+endpoint inequalities. Every complete deviation encounters at most one
+scheduled opponent per date, so no triple or grand reward enters its own
+payoff. Deleted-opponent survival contracts by c³ per period. The same
+profile is exact terminal Nash and gives a fixed UE payoff at every phase.
+Some phase values equal c<1: an all-phase singleton-floor certificate is
+neither assumed nor inferred.
+
+At the strict completion with mate participant rewards 7/2 and cross
+participant rewards ±1/2 in the displayed orientations, the four actual
+owner-indifference equations have a nonsingular rate Jacobian. One common
+radius therefore allows all sixteen singleton entries to vary locally,
+all twelve participant-pair entries to decrease without bound, and the
+remaining thirty-two entries to remain arbitrary. The selected hazards
+lie in (1/2,3/4).
+
+The [complete singleton-calendar producer](exports/FOUR_SINGLETON_PHASE_UNIFORM_EQUILIBRIUM.md)
+includes a strict full-table witness outside the compared persistent-base,
+withdrawal, balanced-cycle, favorable response-quotient and named pair
+sources. This is a sufficient raw-table class, not arbitrary-completion
+coverage of its singleton matrix or a global Fin4 selector.
 
 The **global two-joint cyclic-child criterion** has parameters
 a,b,c,h₁,h₂,H>0, abc>1, U,V≥1, ξ,η>0, p₁≤a−h₁, p₂≤0,

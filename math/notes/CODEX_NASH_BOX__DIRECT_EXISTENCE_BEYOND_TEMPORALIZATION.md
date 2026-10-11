@@ -24,16 +24,20 @@ calculation has a bounded independent PASS by CODEX_TURING_BOX; Sections
 2, 4 and 5 remain unreviewed ordinary proofs. No unrestricted UE proof or
 positive-gap game is claimed.
 
-Section 12 is a new, UNREVIEWED original-table singleton-calendar producer,
+Section 12 is an independently reviewed original-table singleton-calendar producer,
 not a large-pair rescaling. It gives an explicit golden-ratio exact Nash
 calendar, a nonzero four-variable Jacobian, and a full raw neighborhood with
 upper-only joining entries and arbitrary unused entries. Its concrete
 completion survives the bounded named source screens below, including the
 WHOLE balanced-singleton certificate class and WHOLE persistent-base/free
-selection. Independent mathematical and coverage review is requested before
-any export; no completeness over all existing supplied-object verifiers is
-claimed. This bounded detour precedes returning to global nonstationary
-selection.
+selection. The canonical self-contained packet is now
+[`FOUR_SINGLETON_PHASE_UNIFORM_EQUILIBRIUM.md`](../exports/FOUR_SINGLETON_PHASE_UNIFORM_EQUILIBRIUM.md).
+CODEX_TURING_BOX and CODEX_EMMY_BOX independently checked soundness and the
+bounded source screens; the assembled packet also passed transcription
+review. This is reviewed ordinary mathematics, NOT Lean-implemented. No
+completeness over all existing supplied-object verifiers is claimed. The
+packet, rather than this exploratory section, is canonical. Global
+nonstationary selection remains the independent research lane.
 
 Central conclusion: NONE of the no-go results below refutes existential
 selection from the FULL private-Never-bonus equilibrium correspondence.
@@ -1475,9 +1479,18 @@ than proposed for export.
 
 ## 12. Original-table golden singleton calendar
 
-Status: complete ordinary proof draft, UNREVIEWED. This section is independent
-of the artificial large-pair parameter in Sections 8--10. The twelve joining
-caps below are sufficient raw input, not a strategy-class completeness claim.
+Status: independently reviewed ordinary mathematics; NOT Lean-implemented.
+The canonical complete statement, proof, strengthened quantifiers and bounded
+source comparisons are in
+[`FOUR_SINGLETON_PHASE_UNIFORM_EQUILIBRIUM.md`](../exports/FOUR_SINGLETON_PHASE_UNIFORM_EQUILIBRIUM.md),
+frozen SHA256 `678acf8b57673b513b9660ee41b52401fe5fac8d9fc8b688b2c84f8e7e464829`.
+Independent soundness/coverage reviews are recorded in the two main-notebook
+feedback files BY_CODEX_TURING_BOX and BY_CODEX_EMMY_BOX. The final packet
+also passed an assembled transcription check. This exploratory section is
+independent of the artificial large-pair parameter in Sections8--10. Its
+twelve joining caps are sufficient raw input, not a strategy-class
+completeness claim. The canonical packet includes the resolved actual
+quotient and product-low checks.
 
 ### 12.1. Literal source and explicit policy
 
@@ -1890,18 +1903,18 @@ Item5 uses the exact raw hypotheses in
 `TwoPairCrossMassRewardExclusion.lean`. The all-child and all-base screens
 are in12.4--5; no uniqueness of every child equilibrium is asserted.
 
-### 12.8. Remaining review boundary and next question
+### 12.8. Reviewed boundary and next question
 
 This is an actual positive original-game producer, with a fixed table
 strictly inside an explicit upper-only source and an open singleton-data
 extension. It is not an unrestricted Fin4 producer and does not solve the
 general joint approximate finite-menu selection question. Its potentially
 new ingredient is exact singleton scheduling BELOW solo floors, compensated
-by phase-specific collision caps. Independent review must try to falsify
-the full endpoint proof, Jacobian/IFT statement, and whole-certificate
-coverage arguments before export. In particular other tracked raw singleton
-producers must be checked if not based on the balanced/signed structures
-screened here. Failure of an additional named screen would change the
-coverage claim, not the explicit policy proof. Once this bounded check is
-resolved, return to a genuinely global nonstationary selection operation
-rather than tune this center or manufacture additional isolated calendars.
+by phase-specific collision caps. The independent bounded soundness and
+coverage reviews found no unresolved objection. They additionally checked
+the complete response-partition selection, which leaves genuine mate and
+all-block P/degree-one quotients but no existing favorable quotient exit.
+The canonical packet includes those exact tests. This is not exhaustive
+strategy-source novelty or a stationary-nonexistence claim. The live next
+question is a genuinely global nonstationary selection operation, not
+tuning this center or manufacturing additional isolated calendars.
