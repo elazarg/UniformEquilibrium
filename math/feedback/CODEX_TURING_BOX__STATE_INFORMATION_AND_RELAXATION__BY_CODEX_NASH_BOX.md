@@ -137,3 +137,88 @@ behavioral deviations, private independence, fixed target before accuracy,
 and existential-only radius qualifications are all retained. Bounded
 final-document PASS; this addendum is not a fresh coverage audit or a new
 Lean/export seal.
+
+## Independent Section 15 rectangle-producer check
+
+Checked frozen whole-file SHA256
+`797f0737c9b3682d579093625c020691fb0f170ba6a0863cf1011d695666ec84`,
+Section 15, on 2026-10-11. Verdict: PASS for the producer of Sections
+15.1–15.4. This is independent ordinary-mathematics evidence, not a Lean
+seal, not an arbitrary-table theorem, and not a full new-coverage audit.
+
+I independently reconstructed the literal scheduled singleton/pair rewards
+and expanded every actual policy recursion. With b=g/[2(1-g)] and
+d=a/[2(1-a)], the sixteen recursion residuals
+
+    U_t - immediateReward_t - survival_t U_(t+1)
+
+are exactly (1-a)F_A at A0,C2; (1-g)F_B at B1,D3; and zero at the
+other twelve coordinates. Separately recomputing all eight active
+Quit-minus-Continue gaps gives F_A at A0,C2, F_B at B1,D3, and zero at
+A1,B2,C3,D0. Thus no continuation vector is being supplied independently
+of the actual policy. At a two-variable zero, the contracting periodic
+recursion identifies all four proposed value vectors with actual payoffs.
+
+All rectangle estimates hold literally. For e=1/(4M),
+h=(1-e)/(3/2-e) satisfies b(h)=d(h)=1-e. On the rectangle, all rates
+lie in [1/6,1-e], a,g lie in [1/4,h], and every displayed value belongs
+to [0,M]. The passive formulas are nonnegative combinations with coefficient
+sum at most one. On g=1/4,
+z0>=1+d(V-4)/4>=5/4, hence F_A<=-1/24. On a=1/4,
+
+    w1>=bS/4+(1-b)gW/8>=3/2,
+
+so F_B<=-1/12. The upper g face gives F_A>=3/4. The upper a face
+actually gives F_B>=7/4-e, stronger than the stated 3/4. Coordinate
+order (F_B,F_A) is correct. The rectangle zero is strictly interior.
+
+I read `exists_rectangular_zero_of_strict_face_signs` in
+`MathUE/Topology/RectangularPoincareMiranda.lean`. Its global-continuity
+hypothesis is satisfied by composing the displayed rational field with
+coordinatewise clamping into this rectangle; denominators remain positive.
+The source's two-variable zero theorem is sufficient. The larger
+`exists_uniformEquilibriumPayoff_of_periodic_rectangular_face_signs`
+declaration is not being misused as a two-coordinate/eight-slot adapter.
+
+I enumerated all eight inactive Quit endpoints. Each contains exactly one
+barrier from r0(02),r2(02),r1(13),r3(13), with coefficient a scheduled
+hazard times the other scheduled Continue probability. That coefficient
+is at least e/6=1/(24M). The other terms are precisely singleton one,
+scheduled pair participant reward at most five, and one of the eight
+listed triple coordinates, hence all are <=L. A barrier <-24ML gives
+strictly negative total Quit value. Prescribed Continue is nonnegative.
+The arbitrary F coordinates do not enter prescribed rewards or the
+replacing player's own reward under any unilateral replacement; the
+literal support enumeration in Section 14 supplies this fact without
+discarding any realizable triple.
+
+At the produced zero all rates exceed 1/6. Removing ANY replacing player
+leaves six prescribed opponent coins per period, so survival is bounded
+by rho=(5/6)^6<1 independently of that replacement. The already reviewed
+endpoint telescoping and the inspected
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate` and
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean` therefore
+apply with their actual recursion, exact root Nash and deleted contraction
+hypotheses. A finite table-dependent reward bound suffices for uniform
+payoffs; no uniform bound over the arbitrary F or triple coordinates is
+needed. The target is the original table's actual phase-A payoff and is
+fixed before an accuracy is chosen.
+
+### Additional bounded arithmetic check of Section 15.5
+
+I reconstructed all fifteen rows of (39) and independently expanded the
+three induced-player differences for EACH sure owner. Equations (40),
+(41), and every stated owner2/owner3 grand-row correction are exact. The
+support classification following them is also valid: for owner0/2,
+positive z forces the stated small x bound, then d2<0 and d1>0 give a
+contradiction; for owner1/3, positive z forces y>=K/(K+1), then d0<0
+forces x=0, and z<1 is impossible. The listed Nash sets and floor gaps
+K+Vx or K+Sy follow, with zero opponents-Continue mass, so they do not
+depend on an assumed punishment value.
+
+This extra calculation does NOT audit every subsequent named-source
+containment assertion, does not establish disjointness from all prior
+qualitative neighborhoods, and is not the second coverage/export gate.
+There is no mathematical objection to the raw rectangle producer found
+in this bounded review.

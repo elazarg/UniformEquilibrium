@@ -18,6 +18,16 @@ Section 14 gives the coordinate strengthening by full-deviation payoff
 monotonicity. CODEX_EMMY_BOX independently checked its exact support and
 transfer. The export includes this strengthened source-to-UE conclusion.
 
+Section 15 gives a second independently checked producer on an unbounded
+reward region. Its canonical self-contained export is
+[`FOUR_JOINT_PHASE_RECTANGLE_UNIFORM_EQUILIBRIUM`](../exports/FOUR_JOINT_PHASE_RECTANGLE_UNIFORM_EQUILIBRIUM.md).
+It replaces local Jacobian inversion by opposite rectangle-face signs,
+while retaining exact paired singleton identities and four sufficiently
+negative collision barriers. Section 16 is a separate, unreviewed exact
+calculation: a local exact periodic continuation can turn out of the legal
+hazard region at its first inactive wall. It does not exclude distant
+equilibria or unrestricted approximate strategies.
+
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits
 one convexification of the
@@ -1292,3 +1302,441 @@ all complete replacements, and the proxy reduction(29) passed the bounded
 independent check. The frozen standalone retains the source-to-UE proof;
 the next mathematical question is a producer with genuinely global scope,
 not another widening of this particular local neighborhood.
+
+## 15. An unbounded reward-region rectangle producer with four negative collision barriers
+
+Status: independently reviewed and exported ordinary mathematics, not checked
+in Lean. The canonical self-contained statement and proof are in
+[`FOUR_JOINT_PHASE_RECTANGLE_UNIFORM_EQUILIBRIUM`](../exports/FOUR_JOINT_PHASE_RECTANGLE_UNIFORM_EQUILIBRIUM.md).
+This replaces local Jacobian inversion by a rectangle
+argument on an unbounded structural reward family. It is not arbitrary-table
+existence, an open full-dimensional classification, or a proof of stationary
+nonexistence. The family retains exact paired singleton and half-turn
+identities; those remain genuine restrictions on its conjecture-facing scope.
+
+### 15.1. Raw data and actual conclusion
+
+Use the same independent-clock quitting semantics and four-phase schedule
+A=01,B=12,C=23,D=03. Fix the singleton rows literally as
+
+    r(0)=(1,4,0,0), r(1)=(4,1,0,0),
+    r(2)=(0,0,1,4), r(3)=(0,0,4,1).
+
+Choose any finite parameters
+
+    R>=0, S>=6, V>=10, W>=48,
+
+and prescribe the four scheduled pair rows as
+
+    r(01)=(5,9/2,R,S),       r(23)=(R,S,5,9/2),
+    r(12)=(V,2,2,W),         r(03)=(2,W,V,2).                (30)
+
+Put M=max(5,R,S,V,W). The eight triple coordinates in Section14's C
+set are ARBITRARY finite numbers. Define
+
+    L=max(5, r_0(012),r_2(012),r_1(013),r_3(013),
+              r_0(023),r_2(023),r_1(123),r_3(123)).
+
+The four unscheduled-pair participant coordinates satisfy the literal
+upper bounds
+
+    r_0(02),r_2(02),r_1(13),r_3(13) < -24 M L.             (31)
+
+The remaining sixteen F coordinates are arbitrary finite rewards. No
+strategic witness, continuation, root, target, or limiting law is an input.
+
+**Claim.** EVERY table (30)–(31) has an exact terminal Nash equilibrium
+against all complete behavioral deviations, and its actual phase-A payoff
+is a fixed uniform-equilibrium payoff of the ORIGINAL game. The profile
+is four-periodic with two private scheduled hazards at each phase, each
+strictly larger than1/6 and strictly less than1. It is a nonlocal raw
+producer on an unbounded structural class, not just persistence around
+one numerical center.
+
+### 15.2. Eliminate six owner equations without a continuation input
+
+For variables a,g define
+
+    b=g/[2(1-g)],       d=a/[2(1-a)].
+
+The scheduled hazards are
+
+    A:(a,b), B:(g,d), C:(a,b), D:(d,g),
+
+with the phase's players in increasing order. Define candidate scalar
+values, all explicit functions of a,g and the raw parameters,
+
+    v0=1+4b,             v1=1+(7/2)a,
+    u1=1+d,              u2=1+g,
+    w0=abR+(1-a)(1-b)u2,
+    z0=4g(1-d)+gdV+(1-g)(1-d)w0,
+    z1=4d(1-g)+dgW+(1-d)(1-g)v1,
+    w1=abS+(1-a)(1-b)z1.                                  (32)
+
+Only two residuals remain:
+
+    F_A(a,g)=1-(1-b)z0,
+    F_B(a,g)=1+d-(1-d)w1.                                 (33)
+
+If both vanish, the FOUR phase vectors are
+
+    U_A=(v0,v1,w0,w1),    U_B=(z0,u1,u2,z1),
+    U_C=(w0,w1,v0,v1),    U_D=(u2,z1,z0,u1).                (34)
+
+Here is the exact verification, not an assumed evaluation. The four
+passive-coordinate recursions are exactly the definitions of w0,z0,z1,w1
+in(32). Active A0 has Quit=1+4b and Continue=4b+(1-b)z0, so its equality
+is F_A=0. Active A1 has Quit=1+(7/2)a and Continue=4a+(1-a)(1+d);
+these agree by d=a/[2(1-a)]. Active B1 has Quit=1+d and
+Continue=(1-d)w1, giving F_B=0. Active B2 has Quit=1+g and
+Continue=(1-g)(1+4b), identical by b=g/[2(1-g)]. The half-turn gives
+the other four active equalities. Therefore every coordinate of(34)
+satisfies its LITERAL policy recursion once(33) vanishes. Proper rates
+make the period contracting, so uniqueness of that recursion identifies
+(34) with actual terminal values, not independent continuation data.
+
+### 15.3. Exact opposite-face signs on a data-dependent rectangle
+
+Set
+
+    e=1/(4M),        h=(1-e)/(3/2-e),
+    Q=[1/4,h] x [1/4,h] in coordinates(a,g).               (35)
+
+Since M>=48, h>1/4 and h<2/3. On Q,
+
+    1/4<=a,g<=h<2/3,
+    1/6<=b,d<=1-e<1.
+
+All scalars in(32) lie in[0,M]: first v0<=5, v1<=10/3, u1<=2,
+u2<=5/3; every remaining formula is a nonnegative combination of
+already bounded numbers with total coefficient at most one. In
+particular z0,w1<=M. All formulas are continuous on the closed rectangle.
+
+On the lower g face, g=1/4 and b=1/6. Since d>=1/6 and V>=10,
+
+    z0 >= g[(1-d)4+dV]
+        =1+d(V-4)/4 >=5/4,
+    F_A <=1-(5/6)(5/4)=-1/24.                             (36)
+
+On the lower a face, a=1/4 and d=1/6. Since S>=6,W>=48,g>=1/4,
+
+    w1 >= bS/4+(1-b)gW/8
+        >=(3/2)b+(3/2)(1-b)=3/2,
+    F_B <=7/6-(5/6)(3/2)=-1/12.                           (37)
+
+On the upper g face b=1-e, so
+
+    F_A=1-e z0 >=1-e M=3/4.
+
+On the upper a face d=1-e, so
+
+    F_B=1+d-e w1 >=1-e M=3/4.                             (38)
+
+Apply Poincare–Miranda to the field(F_B,F_A), with its coordinate order
+(a,g). Equations(36)–(38) give a zero STRICTLY inside Q. Consequently all
+eight scheduled hazards are proper and exceed1/6. This is a root produced
+from the raw four parameters, without a nonsingular-Jacobian hypothesis.
+
+### 15.4. Inactive endpoints and all complete clocks
+
+At every inactive slot, the Quit endpoint contains exactly ONE of the
+four negative unscheduled-pair participant rewards in(31). Its product
+weight is x(1-y) or(1-x)y for the two scheduled rates. On Q every rate
+is at least1/6 and every Continue probability is at least e, so this
+weight is at least e/6=1/(24M). All other constituent rewards of that
+inactive Quit endpoint are at most L: they are its own singleton1,
+a scheduled-pair participant reward at most5, or one of the eight triple
+coordinates defining L. Thus(31) makes the complete inactive Quit endpoint
+STRICTLY negative, uniformly on Q. Its Continue value is nonnegative,
+since every prescribed reward in(30) and each singleton is nonnegative.
+This proves all eight inactive root inequalities at the produced zero.
+
+No arbitrary triple reward was deleted or approximated: its possible
+positive contribution is exactly paid by(31). Simultaneous quitting remains
+a product-root event with its literal triple reward.
+
+All active endpoints are equal by Section15.2. Every player's three
+opponents have six prescribed coins per period, each with Quit probability
+>1/6. Deleted-opponent survival is at most(5/6)^6<1, uniformly over the
+replacing player's entire behavior, memory and Never choice. The same
+endpoint telescoping as in Section13 therefore proves exact TERMINAL Nash
+against every complete replacement, not just the symmetric or periodic
+strategy class. A finite reward bound depending on the given table and
+the geometric stopping bound prove that the ACTUAL payoff U_A is one fixed
+uniform target, with the same profile for all sufficiently large horizons.
+This completes the claimed producer proof.
+
+### 15.5. Whole-selection coverage witness, not merely one failed root
+
+For any parameters in(30), take a finite K satisfying
+
+    K>max(4,24M max(5,R+1,W+1)).
+
+Set both unscheduled pair rows equal to(-K,-K,-K,-K), and choose
+
+    r(012)=(-K,-K,R+1,-K),
+    r(013)=(-K,W+1,-K,-K),
+    r(023)=(R+1,-K,-K,-K),
+    r(123)=(-K,-K,-K,W+1),
+    r(I)=(-2K,-2K-1,-2K-2,-2K-3).                          (39)
+
+This is an explicit member of the new source for EVERY unbounded parameter
+choice, not a new isolated small neighborhood. A numerical finite instance
+is R=0,S=6,V=10,W=48,K=56449. Floating root searches give one interior
+root approximately(a,g)=(.56005,.61309), but neither that experiment nor
+uniqueness is used in the exact proof.
+
+Its singleton matrix is exactly Section13's paired Gamma: ordinary standard
+Q, full normal core, degree+1, no homogeneous simplex solution, and no
+projective Q-bar. The same full/triple inverse screens fail. All-sure
+responses are(-K,-K-1,-K-2,-K-3), excluding every nondiscrete literal
+response quotient and its positive row-rescaling repair as before.
+
+Every proper nonnegative quiet child fails over ALL weights. For children
+013,123,012,023 use respectively T=01,23,12,03. The omitted outsider's
+join gain is1 in all four cases, whereas the sole possible donor's gain
+is respectively -K-S,-K-S,-K-V,-K-V. All are negative. The four scheduled
+pair children fail at their whole coalition, with outsider gain1 and no
+child donor. Child02 at T={2} has outsider1 gain2 against donor0 gain-K;
+child13 at T={3} has outsider0 gain2 against donor1 gain-K. Every singleton
+child has an outsider join gain2. Thus no child-selection or weight-selection
+loophole is left in this named quiet-lift criterion.
+
+The ALL-sure-owner Nash sets can also be computed exactly. For owner0,
+write(x,y,z)=(q1,q2,q3). The other players' Quit-minus-Continue differences
+are
+
+    d1=(1-y)(1/2+z/2)-(K+1)yz,
+    d2=(1-z)[-K+(K+1)x]+z[-K-V+(V-2)x],
+    d3=2-(K+S+2)x-2y+(S-1)xy.                             (40)
+
+If z>0, d3>=0 gives x<=2/(K+3). Then d2<0 forces y=0, and d1>0
+forces x=1, a contradiction. Thus z=0. If y<1, d1>0 forces x=1,
+then d2>0 forces y=1. The complete induced Nash set is precisely
+
+    z=0, y=1, x in[K/(K+1),1].
+
+The owner's reward is-K and its Continue payoff is Vx; opponent Continue
+mass is zero, so every punishment-floor excess K+Vx is strictly positive.
+
+For owner1 put(x,y,z)=(q0,q2,q3). The differences are
+
+    d0=(1-z)[1-(K+V+1)y]-Kyz,
+    d2=(1-z)(2-x)-(K+2)xz,
+    d3=-K-Sx+(K+1)y+(S-K-4)xy.                            (41)
+
+If z=0, d2>0 gives y=1, d0<0 gives x=0, then d3=1 contradicts z=0.
+If z>0, d3>=0 gives y>=K/(K+1), since its x coefficient is strictly
+negative. Thus d0<0 gives x=0. If z<1 then d2>0 gives y=1 and d3=1
+gives z=1. The complete Nash set is precisely
+
+    x=0, z=1, y in[K/(K+1),1].
+
+The owner reward is-K and its Continue payoff is Sy; again all floors
+are strictly violated, independently of the punishment value.
+
+Owners2/3 use the half-turn coordinates but NOT an assumed grand-row
+symmetry. For owner2,(x,y,z)=(q3,q0,q1), replace (K+1) in d1 by(K+3),
+(V-2) in d2 by V, and(S-1) in d3 by(S+1). Then d3>=0 bounds
+x<=2/(K+1), still making d2<0 because K>4. The same Nash set and owner
+floor K+Vx follow. For owner3,(x,y,z)=(q2,q0,q1), replace Kyz in d0
+by(K+2)yz, (K+2)xz in d2 by Kxz, and(S-K-4)xy in d3 by(S-K-2)xy.
+Every sign implication in(41) still holds, giving owner floor K+Sy.
+
+Consequently EVERY singleton-owner/free-set punishment compiler fails:
+smaller free sets accepted with outsider no-join signs extend to these
+full induced Nash sets. Every persistent-base/free-set compiler with base
+size>=2 also fails, because its signs would yield a full zero-tail one-shot
+Nash root with a sure quitter, whereas every such owner strictly prefers
+Continue here. This is the whole selection screen, not just pure bases.
+
+All three pair partitions fail the joining-cap sources:01|23 has
+r_0(03)=2>1;02|13 has participant reward-K;03|12 has r_0(01)=5>1.
+For the positive signed-inverse-column test, the first partition has
+K_1=S-1>0, the third K_0=V-1>0, and the second negative participant
+premiums. Every guarded lower face still fails: a nonfavorite partner
+exposes the negative favorite axis, while a favorite partner exposes the
+sure harmful outsider with pair reward-K. Four premium pairs overlap,
+the grand protected set is empty, and the positive singleton graph is two
+transpositions, not a favorable three- or four-cycle. These are the same
+named finite source screens inspected in Section13, checked anew on(39).
+They do not exclude every stationary certificate or establish disjointness
+from earlier qualitative IFT neighborhoods with unspecified radii.
+
+### 15.6. Source correspondence and the remaining global obstacle
+
+I read `exists_rectangular_zero_of_strict_face_signs` in
+`MathUE/Topology/RectangularPoincareMiranda.lean` and the actual consumer
+`exists_uniformEquilibriumPayoff_of_periodic_rectangular_face_signs` in
+`UniformEquilibrium/Quitting/Cycles/PeriodicRectangularFaceSign.lean`.
+The latter enumerates one active slot per field coordinate; it is NOT
+directly a two-coordinate-to-eight-slot adapter. Here the mathematical
+rectangle theorem first produces the two-variable zero; identities(32)–(34)
+then give all eight owner equalities; the already inspected declarations
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean` consume the
+actual policy/root/deleted-contraction data. A clamped extension of the
+rectangle field makes its continuity global if the topology declaration
+requires it. I also read `PairedCollisionReward.exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardExistence.lean`:
+its one-parameter literal reward family is not the class(30)–(31).
+
+The unbounded region removes TWO local proof restrictions: owner production
+does not need a nonzero eight-rate Jacobian, and passive joint rewards may
+be arbitrarily large rather than near a center. All triple own-recipient
+rewards are allowed; four sufficiently negative collision barriers pay
+their entire inactive deviation effect. No public signal is introduced.
+
+What remains is genuinely mathematical. An arbitrary table has neither
+the exact half-turn elimination nor four selectable very negative barrier
+coordinates; those rewards cannot be manufactured by a change of proof
+language. The next global question is whether owner/continuation selection
+can replace the negative barriers, possibly handing off to a different
+macroscopic joint root when the rectangle's inactive wall is first crossed.
+The present proof supplies NO such handoff and NO solved-game-or-barrier
+disjunction. A concrete next test is to relax one barrier in(31) through
+its first inactive wall and determine whether the enlarged active root
+system has an actual continuation branch or instead loses every legal
+periodic producer. Section 16 tests that particular local handoff mechanism;
+its negative conclusion is not part of either exported producer.
+
+## 16. Exact periodic continuation turns the wrong way at its first wall
+
+Status: ordinary mathematical proof draft with exact rational calculations,
+not independently checked or exported. This is a scoped falsifier of a
+particular global-construction mechanism, NOT a uniform-equilibrium
+counterexample, fixed-period completeness claim, stationary exclusion or
+claim that all distant branches fail. The raw table below is only a
+one-parameter change of Section13's explicit table.
+
+### 16.1. A precise local continuation question
+
+Take all Section13 proper rows literally, put
+
+    r(I)=(-100,-101,-102,-103),
+
+and vary ONLY c=r_0(02). Keep the calendar A=01,B=12,C=23,D=03.
+The eight old scheduled hazards q*=(1/2,...,1/2), with every unscheduled
+hazard zero, remain owner-indifferent for EVERY c: that reward is neither
+on path nor in any old active owner's endpoint. Their actual four phase
+values therefore remain Section13's displayed values.
+
+At c_0=-5/2, the inactive slot C0 has exactly zero gap. Its Quit endpoint
+is (1+c+2+15/2)/4, and its Continue value is2; hence its Quit-minus-Continue
+gap is(c+5/2)/4. All other inactive Continue-minus-Quit margins are strict:
+
+    A2:1/8, A3:15/4, B0:15/8, B3:7/8,
+    C1:15/4, D1:7/8, D2:2.                               (42)
+
+Thus this is the FIRST wall reached by increasing c from its original
+value-3, not a simultaneous unresolved boundary. The natural proposed
+handoff activates player0 at C while keeping the old eight owners proper.
+Does that produce a nearby legal exact equilibrium for c>c_0?
+
+**Local falsifier.** There are a parameter radius eta>0 and a neighborhood
+V of this sixteen-hazard four-periodic profile such that, for every
+c in(c_0,c_0+eta), NO legal four-periodic profile in V is an exact terminal
+Nash equilibrium against all complete behavioral replacements. The
+unique enlarged owner-indifference branch has NEGATIVE new C0 hazard.
+
+### 16.2. The actual nine-rate Jacobian and orientation
+
+Introduce the ninth rate z=q_C0 and keep the order
+
+    (a0,a1,b1,b2,c2,c3,d0,d3,z).
+
+At C the independent root has active support{0,2,3}; elsewhere it is the
+original pair root. For real rates near(q*,z=0), evaluate the ACTUAL
+periodic policy by its geometric formula. Its denominator is nonzero.
+Let F consist of the eight original owners' Quit-minus-Continue residuals,
+followed by the new C0 residual, always using those actual policy values.
+At(c_0,q*,0), F=0.
+
+Write K for Section13's displayed8x8 integer matrix, whose old owner
+Jacobian is K/255. The full new rate Jacobian is the exact block matrix
+
+    J9=(1/510) [ 2K   v ]
+                 [ w^T  0 ],
+
+    v=(0,204,816,1024,-2024,525,0,60)^T,
+    w=(0,-96,-16,16,-770,1525,0,128)^T.                    (43)
+
+The reward-parameter derivative F_c is zero in its first eight coordinates
+and equals1/4 in its last coordinate. The top-left block really is the
+unchanged old Jacobian: c affects none of its eight residuals when z=0.
+
+For a reproducible derivation, differentiate actual policy recursion,
+
+    partial U_t=partial G_t+(partial S_t)U_(t+1)
+                                      +S_t partial U_(t+1).
+
+At the base all S_t=1/4. The policy forcing from the newly added C0 rate
+is concentrated at phase C and equals
+
+    (0,-51/16,-4,-15/4).
+
+This is the full vector of expected rewards when player0 Quits at C minus
+U_C, not a proposed replacement continuation. Propagate it with the factor
+1/4 around the four-phase cycle and divide by1-1/256. Differentiate each
+old owner's endpoint to obtain v/510. For the last row, direct derivatives
+of the new Quit endpoint with respect to c2,c3 are1 and11/2; subtract
+the corresponding derivative of U_C0 to obtain w/510. The new diagonal
+entry is zero because that forcing has recipient0 component zero.
+
+Exact elimination, equivalently the Schur complement of K/255, gives
+
+    det J9=365313976064/52200625 !=0,
+    Schur= - (w^T/510)(K/255)^(-1)(v/510)
+          =4281023157/562351180 >0.                       (44)
+
+Thus the implicit function theorem supplies a UNIQUE nearby real
+owner-indifference branch(q(c),z(c)), with
+
+    z'(c_0)=-(1/4)/Schur
+           =-140587795/4281023157 <0.                    (45)
+
+For a further integer check, the determinant of the9x9 integer matrix
+inside(43) is16335113998573531131494400000; dividing by510^9 gives(44).
+All these are exact rational calculations, not a floating sign inference.
+
+### 16.3. Why this excludes every nearby legal four-periodic exact NE
+
+In a sufficiently small full sixteen-hazard neighborhood, all old scheduled
+hazards stay proper and all seven margins(42) stay strictly positive.
+Any exact terminal Nash profile there MUST set those seven inactive
+hazards to zero. Indeed every phase is reached with positive probability,
+so a strict endpoint violation at a date produces a profitable complete
+one-date replacement; a positive hazard on a strictly inferior Quit
+endpoint is impossible. The other eight proper hazards must therefore
+satisfy their owner equalities.
+
+If the remaining new hazard z=0, local invertibility of the old8x8
+Jacobian forces q=q*: its eight equations are independent of c at z=0.
+But for c>c_0 the new C0 Quit endpoint is strictly profitable, contradicting
+terminal Nash. If z>0, it is proper in this neighborhood and must also
+satisfy its endpoint equality. The unique nine-equation solution is then
+the branch(45), whose z is strictly NEGATIVE for c>c_0 sufficiently close.
+This contradicts legality. These two cases prove the local falsifier.
+
+No agency restriction was used in the necessary conditions: the profitable
+one-date endpoint replacement is one allowed complete private law, and
+its realized gains are multiplied by the strictly positive probability of
+reaching that date. Nearby opponent clocks remain geometrically proper,
+so actual phase values and all endpoint comparisons have their intended
+terminal meaning, including late deadlines and Never.
+
+### 16.4. Consequence for a genuinely global producer
+
+This test rejects continuing one chosen exact four-phase equilibrium
+through successive inactive walls merely by activating the violating
+player. Here even the whole nearby exact four-periodic equilibrium set
+disappears on the forward side of the wall. The original game could still
+have a distant four-periodic equilibrium, another period, a different
+support or profiles with arbitrarily small terminal regret; none is
+excluded. In particular preserving the old payoff, ancestry or branch
+would impose an artificial restriction on target-free existence.
+
+Any global homotopy/selection argument must explicitly permit a distant
+source/payoff/support jump or a truly approximate mechanism. This scoped
+falsifier belongs in the notebook, not in a new export or a positive-gap
+claim against unrestricted actual profiles. No full bifurcation
+classification is needed for the direction-changing conclusion.

@@ -1122,6 +1122,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the two-buffer joint/solo family specified below, for every real R | UE allowing all six outsider collision coordinates at the joint phase to be positive, under two weighted raw inequalities. Signed collision rewards and the zero-final-phase boundary are included. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: all tables in an open sixty-coordinate neighborhood of the explicit two-joint-phase rational table specified below | UE with rates and a fixed target produced from the table. Every singleton and collision reward may vary; only two solo phases require refinement. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: the four-joint-phase reward cylinder specified below | Exact terminal Nash and a fixed UE payoff, with eight proper hazards produced from raw rewards. Thirty-two coordinates lie in a fixed open neighborhood, twelve have only upper bounds, and sixteen are arbitrary finite reals. This is reviewed mathematics awaiting formalization. |
+| Fin4: the four-joint-phase unbounded reward region specified below | Exact terminal Nash and a fixed UE payoff, with rates produced by a two-variable rectangle argument. Passive scheduled rewards and all triple rewards may be arbitrarily large; four negative collision bounds control inactive deviations. This is reviewed mathematics awaiting formalization. |
 | Fin4: the global two-joint cyclic-child family specified below, for every real R | UE with simultaneous quitting at both retained joint phases. The rates and target are produced from rewards, including the outsider halfspace boundaries. This is reviewed mathematics awaiting formalization. |
 | Fin4: the zero-premium joint-phase family specified below, for every real R and σ≥0 | UE with both joint participants at their singleton rewards and a possibly positive outsider collision payoff. Rates and a fixed target are produced; an opposite-sign pair core is allowed. This is reviewed mathematics awaiting formalization. |
 | Fin4: the negative-premium cyclic-child completion family specified below | UE for arbitrary signed own rewards, with an exact terminal Nash profile and one fixed target produced from raw entries. Both scheduled joint participants have negative premiums. Twenty-eight normalized coordinates are unrestricted. This is reviewed mathematics awaiting formalization. |
@@ -1391,6 +1392,42 @@ including every induced-Nash persistent-base/free-set selection. It does
 not give a numerical radius, imply that four phases are necessary, or
 exclude stationary equilibria. No reduction of arbitrary tables to this
 cylinder is known.
+
+The **four-joint-phase unbounded region** uses the same schedule and singleton
+rows, but replaces the scheduled pair rows by
+
+    r(01)=(5,9/2,R,S),       r(23)=(R,S,5,9/2),
+    r(12)=(V,2,2,W),         r(03)=(2,W,V,2),
+
+where R≥0, S≥6, V≥10 and W≥48 are arbitrary finite parameters. Set
+
+    M=max(5,R,S,V,W),
+    L=max(5,r₀(012),r₂(012),r₁(013),r₃(013),
+              r₀(023),r₂(023),r₁(123),r₃(123)).
+
+Require only the four further upper bounds
+
+    r₀(02), r₂(02), r₁(13), r₃(13) < −24ML.
+
+All sixteen triple coordinates, the four passive coordinates of02/13,
+and the four grand coordinates are otherwise arbitrary finite reals.
+Positive triple values enter L rather than being omitted.
+
+Half-turn owner identities reduce the actual policy system to two continuous
+equations. Explicit opposite signs on a reward-derived rectangle produce
+all eight hazards, each greater than1/6 and less than1; no rate Jacobian or
+nearby-table premise is needed. The four collision bounds make every inactive
+Quit endpoint negative while prescribed values remain nonnegative.
+Deleted-opponent period survival is at most(5/6)⁶, so the same profile gives
+exact terminal Nash and one fixed uniform payoff against unrestricted
+behavioral deviations.
+
+The [complete rectangle producer](exports/FOUR_JOINT_PHASE_RECTANGLE_UNIFORM_EQUILIBRIUM.md)
+includes an unbounded separating family and checks the complete induced-base
+and nonnegative-weight withdrawal selections, not only pure coalitions.
+The result retains exact paired singleton and scheduled-row identities.
+Arbitrary tables need not supply those identities or the four negative
+barriers; no general reduction or wall-crossing consumer is claimed.
 
 The **global two-joint cyclic-child criterion** has parameters
 a,b,c,h₁,h₂,H>0, abc>1, U,V≥1, ξ,η>0, p₁≤a−h₁, p₂≤0,

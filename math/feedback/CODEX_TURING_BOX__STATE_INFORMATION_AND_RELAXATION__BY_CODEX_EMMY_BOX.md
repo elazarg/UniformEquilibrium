@@ -445,3 +445,159 @@ This is a genuine removal of unused or monotone source assumptions. It
 preserves all sixty finite inputs, full behavioral agency and the fixed-
 target-before-accuracy quantifier. It does not claim uniformity of a
 recomputed strategy across different P data or arbitrary-game completeness.
+
+## Section 15: bounded independent source and whole-selection check
+
+Reviewer: CODEX_EMMY_BOX. **PASS within the stated bounded scope** for
+Section15 of the notebook with SHA256
+`797f0737c9b3682d579093625c020691fb0f170ba6a0863cf1011d695666ec84`.
+This checks the raw producer chain, its explicit witness and the named
+existing source-selection sets; it does not re-audit the generic periodic
+consumer or assert that every older existence theorem is excluded.
+
+The statement produces an actual two-variable zero from finite raw data.
+The eliminated six owner equations agree with the displayed phase values;
+the face-sign coordinate order is correctly (F_B,F_A) on (a,g). The four
+strict face signs exclude boundary zeros and give all eight proper rates
+above1/6. The negative barrier has coefficient at least1/(24M), whereas
+every other reward entering the inactive player's Quit endpoint is at most
+L. Its strict upper bound -24ML therefore makes that endpoint negative.
+Prescribed rewards are nonnegative, so the inactive Continue value is
+nonnegative. No strategic continuation or root is supplied as an input.
+The already-reviewed complete-deviation deleted-survival argument and
+table-specific finite reward bound then supply the exact terminal and
+same-profile fixed uniform conclusions. I found no soundness caveat in
+this source-to-consumer chain.
+
+I independently expanded all twelve induced-owner differences of witness
+(39), including the asymmetric grand-row corrections. They are precisely
+(40), (41), and the listed owner2/3 replacements. For owner0, d3>=0
+forces x<=2/(K+3), making BOTH affine z endpoints of d2 negative;
+thus z>0 is impossible. Owner2 has the slightly weaker bound2/(K+1),
+still sufficient because K>4. For owners1/3 the coefficient of x in
+d3 is strictly negative on0<=y<=1, giving y>=K/(K+1) whenever z>0;
+then d0<0 and the claimed Nash-set conclusion follows. Therefore the
+complete sets really are
+
+    owner0/2: z=0,y=1,x in[K/(K+1),1],
+    owner1/3: x=0,z=1,y in[K/(K+1),1].
+
+The owners' current rewards are -K and Continue rewards Vx or Sy; their
+opponents' all-Continue mass is zero. Hence punishment values cannot repair
+the strictly positive floor excesses K+Vx and K+Sy. This is a whole
+induced-Nash-set check, not a pointwise pure-root rejection.
+
+I re-read `quittingSingletonBaseOwnerFloorExcess_nonpos_iff` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`
+and both `nonempty_quittingPersistentBaseCertificate_of_inducedNash` and
+`exists_uniformPayoff_of_persistentBase_inducedNash_signs` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseNashSemanticAdapter.lean`.
+The latter's accepted free-Nash, base-leave and fixed-outsider-join signs
+would give a full zero-tail root with sure quitters. Picking any sure
+owner would contradict the complete induced sets above. Consequently
+EVERY larger-base/free-set selection of these compilers fails, as claimed.
+For a singleton base with a smaller free set, its outsider signs extend
+the free Nash inequalities to a full induced Nash point, where the floor
+still fails independently of its punishment value.
+
+The quiet-child witness comparisons also hold over all nonnegative donor
+weights: every indicated omitted-player join gain is positive while every
+available child-donor gain is negative or absent. The paired singleton
+matrix is unchanged, so the previously checked singleton-only inverse,
+homogeneous and favorable-singleton-cycle screens have unchanged failures.
+All-sure responses (-K,-K-1,-K-2,-K-3) are indeed distinct. The three
+two-pair partition and guarded-face violations use the same literal signs
+as the preceding bounded review, with -K replacing -3. No hidden choice
+of a base, omitted player, donor weights or pair partition repairs these
+named sources.
+
+The just-exported `FOUR_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md` has a P-coordinate
+radius at most1/2 about W=5/4 and V=2. The present source requires W>=48
+and V>=10, and these are ON-PATH coordinates, not arbitrary F coordinates.
+Thus that literal local source does not cover this unbounded family.
+Schedule-preserving relabeling cannot hide the large passive pair reward:
+positive participant cycle edges must still map to scheduled edges, and
+all their passive center rewards are at most10. The other new scale-family
+proposal from Nash requires ALL twelve pair-participant rewards to have
+one large common positive base; the four participant rewards -K here
+violate that hypothesis.
+
+I also inspected `PairedCollisionReward.reward` in
+`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardTable.lean`
+and `PairedCollisionReward.exists_uniformEquilibriumPayoff` in its
+`PairedCollisionRewardExistence.lean` companion. The named theorem solves
+its literal one-parameter completion, whose member rewards share one
+parameter; it does not solve arbitrary completions of the shared singleton
+matrix and does not cover(39). The prior local stationary and two-joint
+IFT producers have unspecified radii, so no exclusion of every such
+neighborhood follows. The author's explicit caveat about that issue,
+and about possible stationary equilibria, is necessary and correct.
+
+The accepted conclusion of this bounded review is a nonlocal unbounded
+raw source with a concrete unbounded separating family for the NAMED
+singleton, quotient, quiet-child, pair-partition and sure-base sources.
+It is not a claim that four phases are necessary or a global residual
+classification. No unresolved mathematical objection was found here.
+
+### Broader raw withdrawal and F/J-only quiet sources
+
+The preceding quiet-child comparison extends to ALL FIVE implemented
+withdrawal kinds, not merely the advancing-only capped-clock subcone.
+This applies both to Section13's asymmetric separating center and to
+EVERY Section15 witness(39). I inspected the actual definitions
+`DeadlineWithdrawalRewardCertificate` in `DeadlineWithdrawalRaw.lean`,
+`WithdrawalFutureJoinKind.gain` and `WithdrawalFutureJoinRewardCertificate`
+in `WithdrawalFutureJoinRaw.lean`,
+`deadlineSecurityGainFloorWithRestart` in
+`DeadlineWithdrawalRestartPointwiseCore.lean`,
+`patientWithdrawalFloor_le_ownNeverAlternative` in `PatientWithdrawalRaw.lean`,
+and `deadlineWithdrawalSecurityValue_le_singleton` and
+`deadlineWithdrawalSecurityFloor` in `DeadlineWithdrawalSecurityLP.lean`.
+All these files are in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/`.
+
+For every kind, a nonmember of the first coalition A has withdrawal gain0.
+For nonsingleton A and member i its gain is exactly
+r_i(A\{i})-r_i(A), regardless of the singleton restart floor. Thus the
+two member withdrawal gains on scheduled pairs are
+
+    A=01 or23: (-1,-1/2),
+    A=12 or03: (-2,-2).
+
+All are negative. For singleton A={i}, every kind has withdrawal gain at
+most0 here, because s_i=1 and its restart floor is at most1. The patient
+bound follows from its displayed own-Never alternative max(1,0)=1.
+The untruncated security floor is max(zeroFloor,securityValue)<=1 by
+the named singleton bound and zeroFloor<=0. Truncating at0 only lowers
+it; ordinary deadline/cancellation use zeroFloor directly.
+
+Here are complete proper-child witnesses. In the two gain columns, the
+first number is the Section13 center gain and the second is the Section15
+gain. A dash means there is no child nonmember that could advance.
+
+| Child C | First coalition A | Failed outsider e | Outsider join gain | Remaining child advance gain |
+|---|---|---|---|---|
+| 013 | 01 | 2 | 1 /1 | -13 /(-K-S) |
+| 123 | 23 | 0 | 1 /1 | -13 /(-K-S) |
+| 012 | 12 | 3 | 3/4 /1 | -5 /(-K-V) |
+| 023 | 03 | 1 | 3/4 /1 | -5 /(-K-V) |
+| 01 | 01 | 2 | 1 /1 | — |
+| 23 | 23 | 0 | 1 /1 | — |
+| 12 | 12 | 3 | 3/4 /1 | — |
+| 03 | 03 | 1 | 3/4 /1 | — |
+| 02 | 2 | 1 | 2 /2 | -3 /(-K) |
+| 13 | 3 | 0 | 2 /2 | -3 /(-K) |
+| 0,1,2,3 respectively | same singleton | 3,2,1,0 respectively | 2 /2 | — |
+
+Members of A have zero advance gain. Combining the table with the
+nonpositive member withdrawals shows that the join row of
+`WithdrawalFutureJoinRewardCertificate` has strictly positive left side
+and nonpositive right side for EVERY nonnegative pair of weight arrays,
+for patient, deadline, evaluatedSecurity, terminalSecurity and cancellation.
+Hence none of their F/J-only certificates exists for the selected outsider
+of any nonempty proper child. A multiple-outsider family necessarily
+contains that outsider and therefore also fails. Omitting the N row,
+charging its residual to a positive singleton or making joint Never small
+cannot repair this already-failed J row. The stronger full N/F/J raw
+certificates fail a fortiori. This is a whole kind/child/weight selection
+check, not a claim excluding every conceivable quiet-lift mechanism.
