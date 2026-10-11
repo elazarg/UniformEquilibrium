@@ -669,6 +669,29 @@ actual UE objective does not need. Approximate auxiliary sources remain
 possible, but their full-response error must be proved rather than inferred
 from the failed exact construction.
 
+Nor is joint deadline/regularization selection an automatic repair. Section
+22 of `CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md` gives a
+nonnegative four-player rational table on which EVERY exact finite
+common-menu Nash law with nonpositive PRIVATE planned-Never transfers waits
+until the final date. This statement allows arbitrary nonpositive transfer
+magnitudes on every player, including the pivot. When all magnitudes are at
+most eta <= 1/100, every such component has original unrestricted regret
+at least 18/49 - 2 eta > 1/3, uniformly over every menu length. In contrast,
+uniform pivot stopping on N dates, with all other players Never, has original
+regret exactly 1/N. The entire negative-transfer selector fails, not just
+one branch or one order of limits.
+
+The mathematical account matters: conditioning a private planned-Never
+transfer divides it by OPPONENT reach, not joint reach. Its magnitude can
+grow, even when the original transfer is small. The proof therefore uses
+an all-magnitude terminal estimate before its backward induction, and only
+then invokes the small original-transfer bound for full regret. This scope
+and the exhaustive support cases have a bounded independent ordinary check
+in `../feedback/CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION__BY_CODEX_NASH_BOX.md`.
+No Lean check is asserted. The result does not refute positive subsidies,
+approximate menu products, or UE, and does not remove a possible-counterexample
+reward class. It rules out one precise proposed universal source.
+
 ## Sources inspected and next question
 
 - `ideas/NONLOCALITY_TECHNIQUE_CATALOGUE.md`.

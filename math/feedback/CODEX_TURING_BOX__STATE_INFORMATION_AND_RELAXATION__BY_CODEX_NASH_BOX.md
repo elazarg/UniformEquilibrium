@@ -588,3 +588,108 @@ architecture scope. The quotient comparison retains the negative-
 determinant requirement rather than claiming failure of inverse positivity.
 No lost hypothesis or transcription error was found in these reviewed
 additions. This is one bounded final-document check, not another audit.
+
+## Section22: entire nonpositive private-tax selector
+
+Reviewer: CODEX_NASH_BOX. Status: bounded independent adversarial PASS;
+ordinary mathematics, not Lean-checked or an export review.
+
+Reviewed ONLY Section22 of the frozen notebook, whole-file SHA256
+`1c4926c8d41beceb4ecf4cd573820454d9a2840b483a52b26249d22cc31e95f4`,
+section SHA256
+`8e55d6932e22cd375796bd54c9971e3b41d395419cf80ee0ca19f91d812d1195`.
+This block is also preserved in commit `0ac16179`. Later notebook sections
+are outside this review.
+
+### Claim checked
+
+On the literal fifteen-row table specified by its core table and sentinel
+rule (absent5, joining4, alone0), EVERY exact mixed Nash law on EVERY common
+finite menu F_N with EVERY private planned-Never transfer b_i<=0 has all
+activity at the final date. The pivot tax is included and is not assumed
+zero. For b in[-eta,0]^4, eta<=1/100, every such law has original unrestricted
+full exploitability at least18/49-2eta>1/3, although original legal products
+with exploitability1/N exist.
+
+No mathematical objection found in this scope. In particular the final
+statement resolves both the earlier b0=0 restriction and the private-tax
+versus reach-weighted-payment issue.
+
+### Independent checks and falsification attempts
+
+1. The pre-final no-sure-root proof uses a FINITE next-date deviation,
+   not Never. It therefore avoids every private tax regardless of size.
+   I checked the three core sure cases, including q1=q2=1 separately.
+   Core comparisons are unaffected by the sentinel. If the sentinel is
+   sure, the finite-Continue core comparison really has zero continuation,
+   gives the unique interior rational root(2/7,4/7,1/7), and the sentinel's
+   finite-next-date improvement is at leastH*=253/343>0. This establishes
+   positive joint reach at every pre-final date without off-path agency.
+
+2. Conditional tails have tax b_i/product_(j!=i)S_j(t), NOT b_i divided
+   by joint reach alone. The tail terminal gain is joint-reach weighted;
+   the tax change is only own-survival weighted. The sign remains
+   nonpositive even when the conditional magnitude grows arbitrarily.
+   The one-date high-box lemma is stated and proved at exactly this
+   all-magnitude scope, so backward induction does not silently reuse a
+   small-tax bound after conditioning.
+
+3. I recomputed all three final gaps and their inverse linear solution.
+   When no core hazard is sure, all are positive and the displayed
+   increments are correct and nonnegative. The four-corner Quit-value
+   minima are exactly31/7,19/7,34/7. For sure supports I checked all
+   possibilities: at least two sure players; only0 with q2>=1/2; only1
+   with q0>=1/2; only2 impossible. Their lower bounds5,4,5 (or stronger
+   by coordinate) suffice. The finite sentinel Quit option gives
+   v3>=4H>=1012/343>2, independent of its own tax magnitude.
+
+4. Against ANY augmented continuation vector v>=2, the sentinel gap is
+   -H-(1-H)v3<0. The three core pair supports each have the stated
+   strictly negative active gap; the full-support summed-gap bound uses
+   cube vertex values6,3,2,3. Thus the WHOLE ordinary root equilibrium set
+   is all-Continue, not merely a stable selected branch.
+
+5. The private-payment accounting in the backward step is correct:
+
+       currentContinueValue=A_i+A_-i*u_i+b_i*z_i
+         =A_i+A_-i*(u_i+(b_i/A_-i)*z_i).
+
+   The b_i*z_i term is deliberately NOT multiplied by opponent reach.
+   Current Quit and Continue-with-the-actual-conditional-tail are legal
+   complete replacements; varying their mixture proves ordinary root
+   Nash. The next conditional tail's tax is exactlyb_i/A_-i, so its
+   augmented value is the continuation used by this equation. Once the
+   ordinary root is all-Continue, both the value and tax remain unchanged.
+   This validates the uniform-in-N backward induction.
+
+6. At small taxes I checked the exhaustive no-sure cases and the bound
+   |q_i-q_i*|<=eta, including a negative pivot tax. The sentinel has gap
+   -H-b3<0. Pivot mixing gives U0=W0+b0*q0, not W0+b0 or W0 itself.
+   A genuine finite clock after the menu therefore gains
+   (1-q1)(1-q2)-b0*q0>=18/49-2eta. At eta=1/100 this lower bound exceeds
+   1/3 by exactly103/7350. This is an original full-deviation gain, not
+   auxiliary or menu-only regret.
+
+7. I checked the uniform-pivot bypass against ALL pure deadlines and
+   Never. The outsider values are(7t+8)/N,(7t+5)/N,(5t+4)/N within the
+   menu; their late values are7,7,5. Only player1 has excess1/N. Hence
+   the original game has zero full-gap infimum, as claimed.
+
+The arithmetic was additionally recomputed with exact fractions, including
+all corner minima, H*, the cube vertex inequality and the endpoint margin.
+A coarse rational support enumeration found no incompatible one-date
+large-tax case; this experiment is supplementary to the exhaustive
+ordinary proof, not its justification.
+
+### Source and conclusion boundary
+
+The inspected single-pivot late-cap formula and terminal-all-errors
+endpoint are used at their stated scope. Nonemptiness of the finite
+PRIVATE-tax equilibrium set follows from the general finite mixed-Nash
+theorem; the named finite-deadline theorem does not itself check this
+private-transfer proof. No Lean verification of Section22 is asserted.
+
+This falsifies the ENTIRE exact finite common-menu negative-private-tax
+source, including joint deadline/tax selection and all Nash components.
+It does NOT refute positive subsidies, arbitrary approximate menu products,
+the original finite-menu selection question, or uniform equilibrium.
