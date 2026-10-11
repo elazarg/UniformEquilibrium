@@ -4827,6 +4827,47 @@ all-Continue can be the whole root Nash correspondence at a high
 continuation vector. Correlated root controls and temporary information
 increase remain genuinely different allowed operations.
 
+There is a stronger whole-law consequence when combined with Section21's
+safe post-collision erasure. Every root Nash at x in S has AT MOST ONE
+positive quitter rate. The only case not already forced by protection is
+exactly two protected labels C={i,j}, with the other labels k,l both
+having positive rates q_k,q_l. Both protected labels have root rate0.
+Removing the two unprotected labels loses no information: the inequality
+
+    0<=J_I-J_C<=d_k+d_l
+
+gives J_C=rho in the limit.
+
+Apply this independent root law to a sequence realizing x. On the event
+F that both k,l Quit at the new date0, its probability is q_k*q_l and the
+remaining two-clock law is exactly the old marginal mu_C. Replace ONLY
+that conditional law by the product of its two marginals. All four
+unconditional clock marginals are unchanged. Every prescribed payoff and
+every unilateral pure deadline/Never payoff is also unchanged: deleting
+one player leaves at least one of the TWO root quitters. The future core
+clocks cannot be encountered in any of these experiments on F.
+
+With reference equal to the unchanged product marginals, the KL chain
+rule on F and its complement therefore gives the exact improvement
+
+    I(after erasure)=I(after root)-q_k*q_l*I(mu_C).       (28.6)
+
+The rooted sequence is only approximately coarse in general, but that
+same error survives this payoff/cap-preserving operation and tends0.
+Repairing with sigma would produce full-coarse information tending
+rho-q_k*q_l*rho<rho, a contradiction. This verifies the whole root
+correspondence claim, not merely one selected root.
+
+This additional operation is NOT captured by blindly iterating(27.4):
+the root itself erases neither protected coordinate, but a two-quitter
+event makes their remaining correlation strategically irrelevant. The
+argument does not extend to a single unprotected quitter; deleting that
+player can expose both protected future clocks, exactly the singleton
+team boundary of Section21. It therefore leaves a precise live task:
+escape the all-Continue/single-unprotected-quitter root chambers by jointly
+chosen correlated controls, rather than assuming a hidden pair of root
+quitters is available.
+
 ### A uniform positive descent on the K10 neutral face
 
 There is nonetheless an exact face test of the new operation. Let x in S
