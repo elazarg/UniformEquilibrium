@@ -53,7 +53,10 @@ smaller numerical constant is promoted. The current global question in
 Section27 permits a CORRELATED root law as well as changing the entire
 coarse source/payoff. Its exact cost/erasure identity is a control operation,
 not an independence producer; the needed global strict improvement remains
-unproved.
+unproved. A fully rational four-active test lowers information from>1.08
+to<0.705 while changing the exact full-coarse payoff12/5 to187/150.
+The all-subset information and value/cap recursion supplies a fixed-size
+state for jointly chosen root words; no all-errors assertion follows.
 
 Status: active independent research, resumed 2026-10-11. Section 8 now gives
 a positive candidate independently checked for soundness: sufficiently large pair-participation
@@ -4581,3 +4584,124 @@ This assertion is UNPROVED. It may be false. In particular compactness at
 one fixed N does not supply its calendar-uniform decrease, and a successful
 operation on one selected source would not check its global quantifiers.
 No new UE class or arbitrary-table producer is claimed.
+
+### Exact four-active improvement with a changed payoff
+
+Use the literal K10 table of Section24. Let mu recommend at date0 one of
+the four adjacent pairs01,12,23,30 or the grand coalition, each with
+probability1/5; all nonrecommended players play literal Never. For each
+recipient, prescribed value and full cap are12/5, the early Quit cap is
+8/5, and every strictly later deadline and Never give12/5. Thus this is
+an exact FULL coarse source, not an independent profile.
+
+Choose the following correlated prefix law, independently of mu:
+
+    pi(empty)=1/5,
+    pi({i})=1/12                 for each of four singletons,
+    pi({i,i+1})=7/60             for each of four adjacent pairs,
+    pi(B)=0                     for all other coalitions.
+
+The masses sum to1. Write e=1/5,a=1/12,b=7/60. Literal row summation in
+(27.1) gives, for every i,
+
+    u_i=(12/5)e+5a+3b=187/150,
+    Q_i=e+2a-b=1/4,
+    B_i+alpha_i C_i=(12/5)e+(32/5)a+2b=187/150.
+
+Here alpha_i=e+a=17/60. The second constraint binds; the first has slack
+299/300. These calculations test ALL complete deviations through(27.1),
+including literal Never and deadlines beyond the two finite dates. The
+payoff changes from12/5 to187/150; no prescribed target is being retained.
+
+Let h(x)=-x log x-(1-x)log(1-x), with natural logarithms. Direct marginals
+of the five-atom old source give
+
+    I4=4h(3/5)-log5,
+    I3=3h(3/5)-log5,
+    Iadj=2h(3/5)+ (2/5)log(2/5)+(3/5)log(1/5).
+
+All four three-coordinate marginals have information I3, and every
+adjacent two-coordinate marginal has information Iadj. The new root
+marginal Quit probability is19/60. Its information is
+
+    Ipi=4h(19/60)+(1/5)log(1/5)
+          +(1/3)log(1/12)+(7/15)log(7/60).
+
+Consequently(27.3) gives exactly
+
+    Inew=Ipi+(1/5)I4+(1/3)I3+(7/15)Iadj.
+
+The owned reproduction command
+
+    python experiments/CODEX_NASH_BOX__CORRELATED_ROOT_CONTROL.py
+
+checks the probability masses, all exact values/caps, and rational
+logarithm enclosures proving I4>1.08 and Inew<0.705. The logarithm checker
+reduces its positive rational argument to[1,2], uses24 terms of
+log x=2 sum_(k>=0) z^(2k+1)/(2k+1), z=(x-1)/(x+1), and bounds the omitted
+absolute tail by 2|z|^49/[49(1-z^2)]. This is an exact rational certificate,
+not a decimal entropy comparison. It is a substantive positive test of
+the changed operation, NOT a theorem about a global information minimum.
+
+### Fixed-size state and genuinely joint root words
+
+For an arbitrary finite source, store the four values v_i, four full caps
+C_i, and all16 subset informations J_A=I(mu_A). Singletons/empty entries
+are zero, but retaining them simplifies the exact recursion. A root law
+pi sends this24-coordinate state to
+
+    v'_i=sum_(B nonempty)pi(B)r_i(B)+pi(empty)v_i,
+    C'_i=max(sum_B pi(B)r_i(B+i),
+             sum_(B\i nonempty)pi(B)r_i(B\i)
+                    +sum_(B subset {i})pi(B)C_i),
+    J'_A=I(pi_A)+sum_B pi(B)J_(A\B).            (27.4)
+
+These identities hold even when the OLD source is not coarse obedient.
+Thus a whole finite word of root laws can be chosen JOINTLY, imposing
+coarse obedience or approximate obedience only on the final state. There
+is no requirement that intermediate sources obey(27.2), improve an old
+objective, preserve an old payoff, or lie on exact auxiliary equilibria.
+The root laws are independent between dates but may be correlated across
+players. This is a useful controlled subclass of relaxed sources, not a
+claim that every correlated clock law has that form. Every actual product
+finite-clock profile is representable by independent player hazards in
+this subclass, so this representation does not exclude actual product
+answers. A literal all-Never seed has v_i=0,C_i=max(r_i({i}),0),J_A=0;
+starting from it keeps the finite menu's omitted-late option explicit.
+
+The experiment implements(27.4) without materializing a calendar^4 joint
+tensor. The independent enumeration mode
+
+    python experiments/CODEX_NASH_BOX__CORRELATED_ROOT_CONTROL.py --check-state
+
+constructs a three-date joint complete-clock law directly from three
+full-support rational root laws, enumerates all pure deadline/Never
+replacements, and checks all four values/caps EXACTLY against(27.4).
+It also checks overlapping rational entropy enclosures for all16 subset
+informations using the independently enumerated clock law.
+
+Its optional local search over one root at a time is only a discovery
+test. Both symmetric and slightly asymmetric starting sources
+permit repeated local improvements, but these bounded greedy searches
+have not produced an all-errors family or a calendar-uniform contraction.
+They do not compute the global I_N minimum. In particular the symmetric
+search stays symmetric; Section24's actual approximation and Turing's
+identical-clock obstruction show why that is not a justified completeness
+restriction. The next test is jointly varying a whole root word, with
+final full caps and information tested together, rather than optimizing
+the positive example's constants or imposing intermediate exactness.
+
+This whole-word test is now implemented: `--word-depth 4 --starts 8
+--iterations 500` and `--word-depth 8 --starts 8 --iterations 1200` start
+from the literal all-Never state and jointly vary EVERY root law. Storage
+and evaluation are linear in word length. The final objective is
+J_I+lambda*sum_i(max(C_i-v_i,0))^2, with only endpoint feasibility penalized.
+Analytic backpropagation through the complete value/cap/information state
+has tangent finite-difference discrepancies below7e-8 in these tests.
+These asymmetric local runs change payoff directions and can leave or
+reenter the coarse region. They have not yielded an all-errors family,
+global minimization, or a structural uniform contraction. Their finite
+objective values are not promoted as another numerical milestone. The
+precise live question remains whether whole-source/global-minimizer choice
+forces a calendar-uniform improvement, rather than whether more local
+optimization can lower one table's finite constant.
