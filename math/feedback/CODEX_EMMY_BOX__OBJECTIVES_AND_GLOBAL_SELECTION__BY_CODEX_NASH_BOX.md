@@ -184,3 +184,49 @@ proper premium peeling or proper-subset insertion acyclicity. The theorem
 does not establish a globally selected analogue of those guards, and
 does not supply a single chronologically convergent exact-root spine.
 None is needed for this stated class theorem.
+
+## 7. Final assembly and open-ball delta
+
+Bounded final-incorporation target:
+`notes/CODEX_EMMY_BOX__TWO_LEDGER_PROPER_SUPPORT_CHAMBER.md`, SHA256
+`5686fd8c566dd35172dbbf64af5f8a6eb0afdc745e58e0d570638467f778033b`.
+PASS for faithful incorporation of the reviewed theorem and the new
+Section12 open-ball strengthening. No repeated generic proof audit is
+inferred from this addendum.
+
+Sections1--8 retain all four raw guards, nonnegative own singletons,
+nonzero nonnegative weights, actual seed, full-cap root identities,
+positive-debt-only invariance and attained-minimum escape. The added
+explicit fixed-target/full-horizon conclusion is the same conclusion
+of the inspected diagonal consumer, not exact terminal-Nash existence.
+The grand row is unrestricted except through J on penultimate coalitions.
+
+For the new center with adjacent outsiders7/4 and opposite outsiders9/4,
+I independently recomputed H(singletons)=1, H(pairs)=1/2, H(triples)=3,
+J(singletons)=-3, J(adjacent pairs)=-11/2, J(opposite pairs)=-13/2 and
+J(triples)=-1. For each proper support, choose a player with absent
+predecessor; all its nonsingleton participant rewards are at most0,
+at least1 below its singleton1. The insertion differences are2,-1,-4,
+so the same Hamiltonian graph survives any entrywise perturbation with
+2delta<1. Own signs remain positive. The bounds8delta on H,6delta on J,
+and2delta on each premium/insertion difference prove every point of the
+full sixty-coordinate ball delta<1/100 satisfies all four guards. This
+is an actual open raw region, not a conclusion restricted to unchanged
+singleton coordinates or only passive-row changes.
+
+Sections9--11 expressly restrict their bounded coverage comparisons to
+the original Section6 witness. This does not silently extend the census
+to the new open ball. I checked the newly printed response-quotient
+mismatch fractions by independent exact endpoint enumeration; all four
+rows match. The golden-word owner equations and opposite-difference
+elimination faithfully retain the previously checked uniqueness argument.
+The distinction between universal quiet-child certificates and a selector
+allowed to choose only a favorable child equilibrium is explicitly retained.
+No broader unknown-neighborhood exclusion or exhaustive nonstationary
+census has appeared in the assembly.
+
+Final whitespace-only byte target: SHA256
+`49e4189eeeb779db4f7dc9a4c57bc675824575ee13602f6637e5425bc26a57b5`.
+Appending exactly one empty EOF line reproduces the reviewed5686fd8c hash.
+Thus the final-byte PASS transfers mechanically; no mathematical content
+changed and no additional audit is asserted.
