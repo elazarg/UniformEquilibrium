@@ -1441,3 +1441,180 @@ the canonicalized CORE rewards under dummy-first stopping.
 The exact discounted-core connection is being checked separately with
 CODEX_TURING_BOX. Its role is to protect the fourth-owner quantifier,
 not to weaken or strengthen the three-core-owner claim above.
+
+## 15. Genuinely joint approximation on a four-active table
+
+Status: EXACT RATIONAL LOW-REGRET PROFILE, ordinary calculation, not
+Lean-checked. The all-errors construction is OPEN. This changes the
+operation after the exact constrained-response route failed: all four
+laws vary together, no player is required to be an exact best reply,
+and the minimized objective uses COMPLETE terminal caps.
+
+### 15.1. Self-contained table and question
+
+Use I=Z/4Z, Never0. Singleton{i} pays1 to i,4 to i+2 and0 to the
+other two. Adjacent pair{i,i+1} pays-1 to i,2 to i+1 and1 to both
+outsiders. Opposite pairs pay0 to their members and1 to outsiders.
+Every triple pays-1 to its members and1 to its outsider. The grand
+coalition pays(-10,-11,-12,-13). This is the literal four-active test
+in CODEX_TURING_BOX's `STATE_INFORMATION_AND_RELAXATION` Section25.
+That note gives bounded named-source screens, not a universal coverage
+classification or a stationary-Nash nonexistence theorem. Neither is
+asserted here.
+
+Question. Can rotating, overlapping private-clock phases produce actual
+periodic terminal approximate Nash for this FIXED table at every error,
+with all finite dates and Never in every response cap? The period may
+depend on the error. No target, hazard law, or exact response profile is
+supplied as a source premise.
+
+### 15.2. Complete cap of a proper periodic product
+
+Let q_t, 0<=t<L, be the hazard vectors, repeated forever. All players'
+seeds are independent. At each date let p_t(A) be the product probability
+of coalition A and s_t=p_t(empty). If every player has positive stopping
+probability during one period, all clocks are proper. Put
+
+    S_t=product_(u<t) s_u,
+    A_i=sum_(t<L) S_t sum_(A nonempty) p_t(A) r_i(A),
+    U_i=A_i/(1-S_L).
+
+For recipient i delete its own coordinate from the product law. Write
+alpha_(i,t) for opponent Continue probability, Q_(i,t) for its pure-Quit
+endpoint and B_(i,t) for its Continue stopping contribution, excluding
+the all-opponent-Continue event. Define
+
+    Z_(i,t)=product_(u<t) alpha_(i,u),
+    C_(i,t)=sum_(u<t) Z_(i,u) B_(i,u),
+    N_i=C_(i,L)/(1-Z_(i,L)),
+    F_(i,t)=C_(i,t)+Z_(i,t) Q_(i,t).
+
+Here N_i is the actual Never payoff. A deadline at kL+t has payoff
+N_i+Z_(i,L)^k*(F_(i,t)-N_i). Therefore the COMPLETE response cap is
+
+    fullcap_i=max(N_i, max_(0<=t<L) F_(i,t)).            (15.1)
+
+The Never term must not be dropped. It also bounds every deadline in
+later periods, including cases where the supremum is reached only at
+Never. Linearity in the replacing clock law gives every unrestricted
+behavioral replacement on the continuing history. Thus D_i=fullcap_i-U_i
+below is actual terminal debt, not within-period or within-menu regret.
+
+### 15.3. One exact rational joint approximation
+
+Take L=12 and divide every entry of this matrix by1000000:
+
+    [     0,  29739, 239565,  33885]
+    [     0,  25039, 284422,      0]
+    [   163,  50438, 121938,      0]
+    [ 32561, 145969,  82968,      0]
+    [ 29944, 240233,  30019,      0]
+    [ 30473, 262543,      0,      0]
+    [ 61271, 164011,      0,     76]
+    [209564,  77113,      0,  56608]
+    [255164,   5974,      0,  39068]
+    [331913,      0,      0,  74396]
+    [ 60386,      0,  76709, 279524]
+    [    48,      0,  89691, 438846]
+
+Each player is proper and every date has at most THREE prescribed
+potential quitters. A unilateral deviation still permits a grand
+coalition, so its four negative rewards are retained in(15.1).
+Exact rational evaluation gives
+
+    225178/10^8 < D0 < 225179/10^8,
+    313368/10^8 < D1 < 313369/10^8,
+    313267/10^8 < D2 < 313268/10^8,
+    245219/10^8 < D3 < 245220/10^8.
+
+In particular max_i D_i<1/300. The caps are attained at the first-period
+deadlines8,3,Never,Never, respectively, with dates starting at0. The
+payoff coordinates lie respectively between consecutive multiples of
+10^-8 with lower integer numerators
+
+    (222795097,50679254,96102665,119993497).
+
+These are strict rational comparisons using(15.1), not rounded numerical
+claims. One small-profile guarantee does NOT supply all positive errors,
+one uniform target, or an exact terminal Nash profile.
+
+Reproduction of the exact check (Python standard library only):
+
+```python
+from fractions import Fraction as F
+from itertools import product
+qints = [
+ [0,29739,239565,33885], [0,25039,284422,0],
+ [163,50438,121938,0], [32561,145969,82968,0],
+ [29944,240233,30019,0], [30473,262543,0,0],
+ [61271,164011,0,76], [209564,77113,0,56608],
+ [255164,5974,0,39068], [331913,0,0,74396],
+ [60386,0,76709,279524], [48,0,89691,438846]]
+q = [[F(v,10**6) for v in row] for row in qints]
+r = {0:[0]*4}
+for mask in range(1,16):
+    ids = [i for i in range(4) if mask>>i&1]
+    v = [1]*4
+    if len(ids)==1:
+        i=ids[0]; v=[0]*4; v[i]=1; v[(i+2)%4]=4
+    elif len(ids)==2:
+        for i in ids: v[i]=0
+        for i in ids:
+            if (i+1)%4 in ids: v[i]=-1; v[(i+1)%4]=2
+    elif len(ids)==3:
+        for i in ids: v[i]=-1
+    else: v=[-10-i for i in range(4)]
+    r[mask]=v
+A=[F(0)]*4; S=F(1)
+for row in q:
+    for bits in product([0,1],repeat=4):
+        mask=sum(b<<i for i,b in enumerate(bits)); p=F(1)
+        for i,b in enumerate(bits): p*=row[i] if b else 1-row[i]
+        for i in range(4): A[i]+=S*p*r[mask][i]
+    for h in row: S*=1-h
+U=[a/(1-S) for a in A]; caps=[]; winners=[]
+for i in range(4):
+    oth=[j for j in range(4) if j!=i]
+    a=F(0); ss=F(1); dead=[]
+    for row in q:
+        Q=B=F(0)
+        for bits in product([0,1],repeat=3):
+            mask=sum(b<<j for b,j in zip(bits,oth)); p=F(1)
+            for b,j in zip(bits,oth): p*=row[j] if b else 1-row[j]
+            Q+=p*r[mask|1<<i][i]; B+=p*r[mask][i]
+        dead.append(a+ss*Q); a+=ss*B
+        for j in oth: ss*=1-row[j]
+    never=a/(1-ss); caps.append(max(dead+[never]))
+    winners.append('Never' if caps[-1]==never else dead.index(caps[-1]))
+D=[b-u for b,u in zip(caps,U)]
+assert all(x<F(1,300) for x in D)
+assert winners==[8,3,'Never','Never']
+for d,n in zip(D,[225178,313368,313267,245219]):
+    assert F(n,10**8)<d<F(n+1,10**8)
+```
+
+### 15.4. Actual next mechanism, not a decimal optimization task
+
+The dominant supports rotate BACKWARD through adjacent pairs
+12 -> 01 -> 30 -> 23. Around the seams a THIRD player is active; it is
+not the exact two-actor root word ruled out in Turing Section25. All
+laws were varied jointly against the complete objective, rather than
+making three players exact best responders to a chosen owner. The
+initial incomplete searches at periods4,8,12 reached maximum debts
+approximately0.03355,0.00899,0.003134; these are not lower bounds and
+do not prove a period/error law. A separate incomplete stationary
+support search found no root; stationary nonexistence remains UNPROVED.
+
+The concrete next question is whether cyclically rotating overlapping
+phases have a parametrized all-errors construction, or whether their
+seam caps impose a precise structural obstruction. Fixed-period decimal
+improvement alone is not the next milestone. No independent full review
+or export is requested for this bounded diagnostic profile.
+
+A discarded alternative illustrates the early coverage check: if EVERY
+triple participant reward exceeds every relevant pair withdrawal reward,
+then every triple is leave-safe. Either the grand coalition is pure Nash,
+or one grand participant weakly prefers its absent triple, which is then
+pure Nash because its only outsider does not gain by joining. Thus that
+all-triple-large stationary-scale class is already pure-NE covered; no
+scale analysis or new class claim is pursued for it.
