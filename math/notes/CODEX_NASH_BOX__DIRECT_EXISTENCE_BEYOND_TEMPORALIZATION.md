@@ -45,6 +45,15 @@ two-owner pair string and macroscopic three-actor seams. An exact necessary
 inequality forces bridge survival to vanish exponentially if the final
 seam stays macroscopic. This obstructs a nonextinct exact-pair-string
 construction, not arbitrary joint approximation or the entire return word.
+Its extinct-bridge alternative is also ruled out by an exposed outsider's
+complete deviation, without exact seams or a fixed payoff target. That
+particular pair-string operation is retired. Section26 records a bounded
+root-free periodic discovery test; no zero-regret closure was found and no
+smaller numerical constant is promoted. The current global question in
+Section27 permits a CORRELATED root law as well as changing the entire
+coarse source/payoff. Its exact cost/erasure identity is a control operation,
+not an independence producer; the needed global strict improvement remains
+unproved.
 
 Status: active independent research, resumed 2026-10-11. Section 8 now gives
 a positive candidate independently checked for soundness: sufficiently large pair-participation
@@ -4205,10 +4214,11 @@ recipient. This fact is derived from the displayed laws, not imposed on
 the global selection problem.
 
 The script's `--certificate-only --certificate-dates 13` mode checks
-(24.3) using only integer/Fraction arithmetic. The twelve-date baseline
-was separately checked by the coordinator's independent direct tuple
-enumeration; this later thirteen-date calculation is ordinary unreviewed
-supporting mathematics unless separately checked.
+(24.3) using only integer/Fraction arithmetic. Both this thirteen-date
+calculation and the twelve-date baseline were separately checked by the
+coordinator's independent direct tuple enumeration, with the literal table
+independently reconstructed. This is ordinary independently checked
+supporting mathematics, not an all-errors or Lean result.
 
 For comparison, suffix enlargement12->24 in the selected branch gave
 only about.006294. Interior births at old cuts3,8,9,11 gave selected gaps
@@ -4430,3 +4440,144 @@ macroscopic returns, or the K10 UE question. Nonextinct approximate
 families with moving/vanishing seams have not been excluded. A genuinely
 new construction must change the overlap structure so this outsider is
 actually compensated or screened in its own deleted-clock experiment.
+
+## 26. Root-free periodic discovery, not another auxiliary equilibrium
+
+This bounded test changes the *actual complete private laws*. It does not
+ask for exact Nash in a finite, taxed, discounted, or response-completed
+auxiliary game. Fix one block of m dates. Player i's independent one-block
+law has masses p_it and survival z_i=1-sum_t p_it. After a wholly surviving
+block each player independently draws the same block again. Thus z_i is
+NOT literal Never: the actual private Never atom is zero when z_i<1, and
+one when z_i=1. Selective literal Never remains available.
+
+Let A_i be the one-block prescribed absorption payoff, J=product_i z_i,
+B_i the one-block opponent-only absorption payoff to i, and
+a_i=product_(j!=i)z_j. Let c_it be the ordinary pure deadline payoff at
+phase t of the first block. If J<1, exact renewal gives
+
+    U_i=A_i/(1-J),
+    N_i=B_i/(1-a_i)       if a_i<1,
+    N_i=0                if a_i=1.
+
+Here N_i is the payoff of literal Never, NOT of waiting one block. The
+payoff of deadline k*m+t is exactly
+
+    N_i+a_i^k*(c_it-N_i)                         (26.1)
+
+when a_i<1. If a_i=1, no opponent ever quits and all finite deadlines pay
+the own singleton while Never pays zero. Consequently the unrestricted
+cap is, in all cases,
+
+    max(N_i, max_(0<=t<m)c_it).                  (26.2)
+
+All future-period deadlines have been accounted for. Arbitrary complete
+behavioral replacements are mixtures of pure deadlines/Never, so this is
+the full original cap. Formula(26.2) is a direct evaluation of a known
+periodic-cap mechanism, not a new supplied-source theorem. Inspected
+`sSup_range_quittingTerminalPayoff_update_cyclicBehaviorProfile` in
+`UniformEquilibrium/Quitting/Cycles/PeriodicRootResponseSystem.lean`, the
+companion fixed-point description in `PeriodicPureTimeBellman.lean`, and
+`QuittingTerminalExploitabilityWitness.exists_periodicCap_gain` in
+`TerminalExploitabilityPeriodicProfile.lean`.
+
+The owned experiment now has `PeriodicClockProblem` and
+`periodic_certificate`. They optimize/check (26.2) directly, with memory
+linear in m. A tangent finite-difference check of the new gradient has
+maximum discrepancy below4e-10. On both saved certificates, J=a_i=0 for
+every recipient, and the periodic evaluator reproduces EVERY old exact
+value and cap. These are consistency checks, not a new equilibrium.
+
+A bounded thirteen-phase search permitted all masses and every z_i to
+move jointly, starting at four different survival censor levels. It did
+not find a zero-regret closure. No new numerical constant, global
+optimality, fixed-period completeness, or all-errors family is claimed.
+This periodic search is parked rather than optimized further merely to
+reduce a finite error.
+
+## 27. Joint correlated-root control of the whole coarse source
+
+### Exact operation, without root Nash or a frozen payoff
+
+The following operation acts on the FULL coarse relaxation of Section18.
+It is ordinary unreviewed mathematics. Let mu be any finite correlated
+complete-clock source, with prescribed payoff v_i and full pure-deadline/
+Never cap C_i<=v_i. The source, its payoff, and its marginal supports may
+all change between accuracies. They are NOT fixed to Section23's anchor.
+
+Choose an arbitrary law pi on root quitter sets B subset I, independently
+of the entire old correlated clock vector. The new recommendation is
+Quit0 for i in B and the old clock shifted by one for i outside B. The
+root law pi itself may be correlated; no independent-root exactification
+is imposed. This is still a *relaxed* source, not an actual independent
+profile unless its final correlation disappears.
+
+Write pi_-i for the marginal quitter-set law on the opponents, and put
+
+    u_i=sum_(B nonempty) pi(B) r_i(B)+pi(empty)v_i,
+    Q_i=sum_(A subset I\{i}) pi_-i(A) r_i(A+i),
+    B_i=sum_(A nonempty) pi_-i(A) r_i(A),
+    alpha_i=pi_-i(empty).
+
+The new exact FULL cap is
+
+    C'_i=max(Q_i, B_i+alpha_i C_i).              (27.1)
+
+Indeed deadline0 gives Q_i. A strictly later deadline or Never ignores
+the player's root recommendation, obtains B_i on any opponent root
+absorption, and otherwise reaches the old opponent marginal with weight
+alpha_i. This also explains why the continuation coefficient is NOT
+pi(empty): the deviator's own root coin has been deleted.
+
+Thus the necessary and sufficient four-coordinate feasibility tests
+
+    u_i>=Q_i,        u_i>=B_i+alpha_i C_i        (27.2)
+
+are linear inequalities in pi. They are weaker than requiring pi to be
+a root coarse equilibrium at continuation v when C_i<v_i, and much
+weaker than requiring an independent root Nash. Positive slack can pay
+for a root deviation. This is an exact feasible operation, not an
+existence conclusion obtained from the name of an auxiliary game.
+
+### Exact information cost versus erasure
+
+For any finite joint law nu let I(nu)=sum_i H(nu_i)-H(nu), and let mu_A
+denote its coordinate marginal on A (information zero for empty/singleton
+A). Root bits are recoverable from the new clock vector. Conditional on
+B, only the old marginal mu_(I\B) remains. Entropy's chain rule therefore
+gives the exact identity
+
+    I(new source)=I(pi)+sum_B pi(B) I(mu_(I\B)).  (27.3)
+
+The same identity holds for every coordinate subset. The information
+cost I(pi) is precisely the term missing from independent-root erasure;
+it cannot be discarded merely because the root recommendations terminate
+the game. Full-root marginals and old source marginals may both move.
+
+This produces a concrete finite optimization: minimize the right side of
+(27.3) over the entire polytope(27.2), jointly selecting mu when it is not
+already prescribed. A strict decrease would be a genuinely feasible
+correlation-improvement operation with a changed payoff. The independent
+root-Nash fixed-anchor falsifier in Section23 does not itself exclude this
+larger operation, but it supplies no positive theorem for it either.
+
+### First genuinely missing global assertion
+
+Let I_N be the minimum information over ALL full-coarse laws on N finite
+dates plus literal Never, with the omitted-late deadline also tested.
+This minimum exists by finite-dimensional compactness and continuity.
+Appending unused dates after every old finite date embeds the old feasible
+law unchanged; thus I_N is nonincreasing. Pinsker and Section18's full-cap
+comparison would convert I_N->0 into actual product profiles with FULL
+regret->0, permitting every payoff target to move before subsequence
+selection.
+
+The proposed *one-root* producer would need to prove the following
+specific improvement, not merely say to choose a low-regret product:
+for each rho>0 there is a delta_rho>0 such that, whenever I_N>=rho, SOME
+global I_N minimizer mu admits a feasible pi in(27.2) whose value in(27.3)
+is <=I_N-delta_rho, uniformly in N. This would force I_N->0 by iteration.
+This assertion is UNPROVED. It may be false. In particular compactness at
+one fixed N does not supply its calendar-uniform decrease, and a successful
+operation on one selected source would not check its global quantifiers.
+No new UE class or arbitrary-table producer is claimed.

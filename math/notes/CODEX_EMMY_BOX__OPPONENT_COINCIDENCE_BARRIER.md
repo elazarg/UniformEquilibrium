@@ -22,6 +22,10 @@ Section3.4 chain at whole-file SHA256
 `aa1165532b0e8dffb56813b40cea82a2778eafbd1027b111b75cda5317bc2d05`;
 see `feedback/CODEX_EMMY_BOX__OPPONENT_COINCIDENCE_BARRIER__BY_CODEX_NASH_BOX.md`.
 The separate two-hazard consequence below is UNREVIEWED.
+Section3.5 is separate ordinary UNREVIEWED mathematics: an exact
+full-response parameter identity shows why large current collision rewards
+alone cannot consume(7g). Their strategic effect is a FUTURE opponent-
+coincidence preemption penalty, not a current collision penalty.
 
 ## 1. Exact negative-endpoint question
 
@@ -616,6 +620,127 @@ The entire later terminal mass is at most J_T<=gamma/4, so beta<=gamma/2.
 But(7g) gives beta>=gamma-eta>3gamma/4, a contradiction. Finally each
 individual survival is at least J_t, giving the two asserted atom bounds.
 The strict eta endpoint is used to ensure that T is finite.
+
+### 3.5. Full caps see future preemption, not the current K-jackpot
+
+Status: ordinary complete calculation, UNREVIEWED and not Lean-checked.
+This is a structural obstruction to using the large K terms in(1) as a
+local collision penalty. It is not a positive-gap result, an equilibrium
+producer, or a new raw-table class.
+
+Keep the entire family r^K in(1), now allowing K>=0 for comparison.
+Fix ANY independent complete private-clock profile p, and let a denote ANY
+complete unilateral replacement by player i. Define, using the ORIGINAL
+opponent clocks,
+
+    E_i=sum_t product_(j!=i)Pr(T_j=t),
+    C_i(a)=sum_t Pr(T_i^a<t)*product_(j!=i)Pr(T_j=t).
+
+The own replacement is independent of those opponent clocks. All complete
+behavioral replacements are included: the single unabsorbed history
+induces a complete private date-or-Never law. Write C_i(p) for the
+prescribed law and U_i^K(a) for its actual terminal payoff in r^K.
+
+For EVERY such replacement, including Never,
+
+    U_i^K(a)=U_i^0(a)+K*(E_i-C_i(a)).                 (7s)
+
+Indeed r_i^K(S)-r_i^0(S)=K precisely when S contains ALL three opponents,
+whether or not i also belongs to S. Those opponents must coincide at a
+finite date t, and this terminal event occurs exactly when T_i^a>=t.
+The strict-preemption complement is C_i(a). This is an identity of actual
+independent complete laws, not a linearization or a terminal-law-only
+surrogate.
+
+Consequently the COMPLETE regret, with the same prescribed profile at
+every parameter, has the exact representation
+
+    D_i^K(p)=sup_a [U_i^0(a)-U_i^0(p)
+                         +K*(C_i(p)-C_i(a))].        (7t)
+
+In particular, for K'>=K,
+
+    D_i^(K')(p)<=D_i^K(p)+(K'-K)*C_i(p).              (7u)
+
+No assumption that a cap is attained is used. This follows for every
+individual replacement from C_i(a)>=0 and then by taking the supremum.
+If C_i(p)=0, regret is NONINCREASING in K. Thus a prescribed profile that
+never preempts a later opponent triple is helped, not hurt, by increasing
+the jackpot. This does not assert that such profiles can achieve vanishing
+full regret on this table.
+
+#### Exact full-semantic prefix identity
+
+The same phenomenon is visible without dropping caps. Write
+
+    Z_i=U_i^K-K*E_i,       L_i=B_i^K-K*E_i,
+
+where B_i^K is the full behavioral response cap against the displayed
+opponent tail. At an arbitrary product root q let
+
+    m_i=product_(j!=i)q_j,   alpha_i=product_(j!=i)(1-q_j),
+
+and let Q_i^0 and b_i^0 be the base K=0 immediate-Quit and opponent-stop
+reward terms. Then the ACTUAL joint prefix obeys
+
+    E_i'=m_i+alpha_i*E_i,
+    Z_i'=q_i*(Q_i^0-K*alpha_i*E_i)
+                +(1-q_i)*(b_i^0+alpha_i*Z_i),
+    L_i'=max{Q_i^0-K*alpha_i*E_i,
+                              b_i^0+alpha_i*L_i}.    (7v)
+
+The debt is unchanged by the adjustment: L_i-Z_i=B_i^K-U_i^K.
+To verify(7v), both original root endpoints gain K*m_i; subtract
+K*E_i'=K*(m_i+alpha_i E_i) from the exact payoff and full-cap prefix
+formulas. The remaining K term is ONLY the cost of quitting before the
+future opponent coincidence. The full cap prefix formula is the literal
+`quittingTerminalSemanticPrefix` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`; the new
+parameter calculation itself is ordinary mathematics.
+
+#### Exact falsifier of a current-collision K-penalty
+
+Let every player independently Quit0 with probability1/2 and otherwise
+Never. Then E_i=1/8 and C_i(p)=0. In fact C_i(a)=0 for EVERY legal
+replacement, since the opponents' only finite triple coincidence is at
+date0, which no legal clock can strictly preempt. Hence the entire set of
+unilateral payoff DIFFERENCES is independent of K, not just Never gains.
+Direct enumeration gives, for every player,
+
+    U_i^K=(2K+5)/16,
+    pure Quit0 payoff=(K-2)/8,
+    Never payoff=(K+7)/8,
+    every positive finite deadline payoff=(K+8)/8,
+    B_i^K=(K+8)/8,       D_i^K=11/16.                (7w)
+
+The actual joint terminal collision probability is11/16, including grand
+mass1/16, at EVERY K. Thus neither large current collision probability nor
+large current jackpot payoff by itself gives a regret contribution growing
+with K. This example is not low-regret and does not falsify(7g).
+
+More generally, if every opponent-triple coincidence for every recipient
+is supported at date0, then C_i(a)=0 for all legal replacements and ALL
+full regrets are exactly K-independent. Prescribed roots at later dates
+may still contain one or two actors, so this is not restricted to a single
+root calendar.
+
+#### Boundary of the proposed negative mechanism
+
+If one could construct actual terminal approximate equilibria at some K0
+with every C_i(p_n)->0, then(7u) would transfer vanishing FULL regret to
+every fixed K>=K0. Prescribed payoffs at the new K have a convergent
+subsequence by(7s) and boundedness, giving a fixed limiting target. The
+standard terminal-approximation-to-uniform-payoff consumer would then
+apply. No such family is produced here, and no new conditional interface
+is requested.
+
+The operational conclusion is narrower: consuming the mandatory collision
+in(7g) through the large K terms requires a genuinely chronological
+preemption argument. The required missing statement concerns C_i, or
+another full-cap timing quantity; replacing it by actual triple/grand
+mass loses the distinction in(7s). A separate K-independent obstruction
+on pair-root calendars remains logically possible. Neither it nor a
+vanishing-C approximate family is established here.
 
 ## 4. Complete cubic exclusion by ten rational exact edges
 

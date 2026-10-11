@@ -6798,3 +6798,43 @@ tail step above. Section23.1 lists the separately inspected Fink and quitting
 discounted-payoff bridges. Noether's RM33 was read narrowly: its whole-source
 obstruction fixes the period before taking the discount limit, and does not
 exclude the unrestricted source(F1).
+
+### 37.4 The first global enclosure test fails
+
+A proposed shortcut was to prove that all viable discounted continuation
+values lie in the unit box and then contract toward the small symmetric
+branch. Even invariance of that box under the whole root operator is false.
+At alpha=99/100 take the independent root
+
+    q=(1/11,1/11,1/6,0)
+
+and supplied bounded continuation vector
+
+    v=(2/33,32/33,26/33,1) in[0,1]^4.
+
+The effective one-step continuation is
+
+    alpha*v=(3/50,24/25,39/50,99/100).
+
+The three active players are exactly indifferent; their current payoffs are
+Q0=2/3, Q1=49/66 and Q2=119/121. For player3, in opponent odds(1/10,1/10,1/5),
+the Continue absorption numerator is47/100 and the all-Continue denominator
+is363/250. Hence its Continue/current value is
+
+    u3=(47/100+99/100)/(363/250)=365/363>1.
+
+Its Quit value is317/363, so the inactive inequality holds strictly.
+Thus this is a genuine full binary Nash root, not merely three owner
+equations. At any alpha>491/500 the same active root and effective active
+continuations give the same strict unit-box overshoot, after setting the
+fourth next value to1. This does NOT assert that the input v is itself
+in D_alpha, or give an actual discounted infinite clock component. It only
+falsifies the proposed raw root-box invariance used in that global proof.
+
+A bounded floating-point check of three-actor single-rotation periods and
+full-support single-rotation periods found no additional sampled legal
+component; the latter returned only the small symmetric stationary branch.
+This is not an exhaustive root count, a calendar completeness theorem or
+a whole-source obstruction. No fixed period or support pattern is retained
+as a restriction in(F1). The failed enclosure and these diagnostics give
+no license to discard macroscopic roots or arbitrary switching calendars.

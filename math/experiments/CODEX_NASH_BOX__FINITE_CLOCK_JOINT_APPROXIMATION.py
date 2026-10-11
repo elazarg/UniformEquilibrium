@@ -36,7 +36,7 @@ def reward_table(k=10):
     return r
 
 
-def exact_certificate(counts, denominator, k=10):
+def exact_certificate(counts, denominator, k=10, raw=False):
     """Return exact values/caps/gaps for independent complete clock laws.
 
     Columns 0,...,M-1 are finite dates; the last is literal Never.
@@ -91,6 +91,8 @@ def exact_certificate(counts, denominator, k=10):
         "gaps": [Fraction(max(all_caps[i]) * denominator - values[i], d4) for i in range(4)],
         "joint_never": Fraction(int(np.prod([row[-1] for row in counts], dtype=object)), d4),
     }
+    if raw:
+        result["raw_caps"] = [[Fraction(c, denominator ** 3) for c in row] for row in all_caps]
     return result
 
 
@@ -176,6 +178,79 @@ class LinearClockProblem(ClockProblem):
         immediate = self.r[recipient, masks | (1 << controlled)] @ weights
         prefix = np.concatenate(([0.], np.cumsum(earlier)))
         return np.concatenate((prefix[:-1] + immediate, prefix[-1:]))
+
+
+class PeriodicClockProblem(LinearClockProblem):
+    """Unrestricted ORIGINAL regret of repeated independent private blocks.
+
+    The final coordinate is survival through one block, not literal Never.
+    It becomes literal Never precisely for a row with survival equal to one.
+    This is direct law optimization, not a discounted/auxiliary equilibrium.
+    """
+
+    def evaluate_probabilities(self, p, temperature, gradient=True):
+        q = np.array([self.conditional_values(p, i, i) for i in range(4)])
+        block_value = (p * q).sum(axis=1)
+        z = p[:, -1]
+        joint = np.prod(z)
+        assert joint < 1
+        deleted = np.array([np.prod(z[self.opponents[i]]) for i in range(4)])
+        value = block_value / (1 - joint)
+        never = np.divide(q[:, -1], 1 - deleted, out=np.zeros(4), where=deleted < 1)
+        caps = np.concatenate((q[:, :self.m], never[:, None]), axis=1)
+        gains = caps - value[:, None]
+        flat = np.concatenate(([0.], gains.ravel()))
+        if temperature:
+            scaled = np.exp((flat - flat.max()) / temperature)
+            weights = scaled / scaled.sum()
+            objective = flat.max() + temperature * np.log(scaled.sum())
+        else:
+            weights = 2 * np.maximum(flat, 0)
+            objective = np.maximum(flat, 0) @ np.maximum(flat, 0)
+        result = (objective, flat.max(), p, value, np.argmax(gains, axis=1))
+        if not gradient:
+            return result
+        w = weights[1:].reshape((4, self.a))
+        totals = w.sum(axis=1)
+        gp = np.zeros_like(p)
+        for i in range(4):
+            for j in range(4):
+                gp[j] -= totals[i] * self.conditional_values(p, i, j) / (1 - joint)
+            alternative = w[i].copy()
+            if deleted[i] < 1:
+                alternative[-1] /= 1 - deleted[i]
+            else:
+                alternative[-1] = 0
+            signed = p.copy()
+            signed[i] = alternative
+            for j in self.opponents[i]:
+                gp[j] += self.conditional_values(signed, i, j)
+                if deleted[i] < 1:
+                    remaining = [h for h in self.opponents[i] if h != j]
+                    gp[j, -1] += w[i, -1] * q[i, -1] * np.prod(z[remaining]) / (1 - deleted[i]) ** 2
+        boundary_coefficient = -np.dot(totals, block_value) / (1 - joint) ** 2
+        for j in range(4):
+            gp[j, -1] += boundary_coefficient * np.prod(z[self.opponents[j]])
+        return result + (gp,)
+
+
+def periodic_certificate(counts, denominator, k=10):
+    """Exact all-deadline/Never certificate of an actual periodic law."""
+    block = exact_certificate(counts, denominator, k, raw=True)
+    z = [Fraction(row[-1], denominator) for row in counts]
+    joint = np.prod(z, dtype=object)
+    assert joint < 1
+    value = [u / (1 - joint) for u in block["values"]]
+    caps, maximizers = [], []
+    for i in range(4):
+        deleted = np.prod([z[j] for j in range(4) if j != i], dtype=object)
+        never = block["raw_caps"][i][-1] / (1 - deleted) if deleted < 1 else Fraction(0)
+        candidates = block["raw_caps"][i][:-2] + [never]
+        cap = max(candidates)
+        caps.append(cap)
+        maximizers.append([t if t < len(counts[0]) - 1 else "Never" for t, c in enumerate(candidates) if c == cap])
+    return {"values": value, "caps": caps, "maximizers": maximizers,
+            "gaps": [caps[i] - value[i] for i in range(4)], "block_joint_survival": joint}
 
 
 SEED_EIGHT = np.array([
