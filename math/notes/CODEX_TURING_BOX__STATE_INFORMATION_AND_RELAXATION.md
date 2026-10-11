@@ -10,7 +10,13 @@ but that infinite-clock existence/tightness assertion remains OPEN. On the
 genuinely four-active K10 test, an exact ordinary unreviewed calculation
 excludes EVERY identical-clock profile at full regret1/25. Thus symmetry
 cannot supply the missing compact source; asymmetric components remain
-free. This is an actual strategy-mode exclusion, not a whole-selector
+free. Section36.5 proves a further ordinary unreviewed whole-source
+restriction: on K10 EVERY full-clock overlap-regularized Nash, if any,
+has FINITE common support, at every positive temperature. An infinite
+proper tail would become conditionally identical, where Never strictly
+dominates every current deadline for all four recipients, contradicting
+the normalized density first-order conditions. Finite asymmetric source
+selection is still OPEN. This is an actual strategy-mode exclusion, not a whole-selector
 falsifier, UE nonexistence or a reward-class reduction.
 
 Section35 records the exact total-correlation prefix identity and the
@@ -6450,3 +6456,131 @@ propagation is available, but joint finite-to-infinity escape and literal
 Never remain different. Solving only the symmetric branch, presuming a
 fixed proper prior, or repeating an exact-original-Nash nonattainment
 argument would not answer this source question.
+
+### 36.5 Every full source on K10 has FINITE common support
+
+This ordinary UNREVIEWED theorem concerns ALL full-source components,
+not merely an identical-law or stationary branch. For EVERY tau>0, any
+full-clock Nash of(J1) on(J6), if one exists, has finite common support.
+It does not assert existence of such a finite source or a positive original
+gap for all profiles. In particular it is not a UE counterexample theorem.
+
+First record a useful general tail fact. Suppose all own singleton rewards
+s_i are nonnegative and at least one is positive. A full source cannot
+have both infinitely many positive finite atoms and positive Never mass.
+By36.2 its common support includes Never for ALL players or for none.
+If every z_i>0, pure deadline values along the increasing supported dates
+converge to
+
+    V_i(t) -> W_i+s_i*Z_i,    Z_i=product_(j!=i)z_j>0.
+
+The strictly increasing function psi in(J4) and the uniform lower bound
+(J5) imply that rho_i(t) has a limit r_i>0, with sum_i r_i=1. At the
+Never atom(J4) gives tau*psi(rho_i(Never))=W_i-lambda_i. Consequently
+
+    psi(r_i)=psi(rho_i(Never))+s_i*Z_i/tau.
+
+Thus r_i>=rho_i(Never) for every i, strictly for one. Both vectors sum
+to1, a contradiction. The convergence statement also follows directly
+from bounded pure-response values by dominated convergence; it does not
+identify finite escape with literal Never.
+
+It remains to exclude infinite support with ALL laws proper on K10.
+Here V_i(t)->W_i. By the same first-order conditions,
+
+    rho_i(t)->r_i>0,  sum_i r_i=1,
+    tau*psi(r_i)=W_i-lambda_i.                     (J9)
+
+These density limits force conditional tail laws to become identical in
+TOTAL VARIATION, not just weakly. Indeed put m=(1/4)sum_i p_i and
+M_t=sum_(k>=t)m(k). At every supported finite k, p_i(k)=4*rho_i(k)*m(k).
+Uniform convergence rho_i(k)->r_i over k>=t shows
+
+    p_i(. | T_i>=t) - m(. | T>=t) ->0 in TV.        (J10)
+
+All these tails are proper. Formula(J10) follows by dividing both
+4*rho_i(k)*m(k) and its tail sum by4*r_i*M_t; r_i>0 keeps the division
+uniform. Independence is preserved when conditioning all opponents on
+survival to t, because that event is a product of their individual events.
+
+For ANY one proper common clock law, its Never-response value N is at
+least13/10. In fact the polynomial from36.3 satisfies
+
+    B(q)>=(13/10)*(1-(1-q)^3)
+
+for every q, by dN>=0. Summing the three-opponent survival telescope gives
+the bound, since their proper tail survival tends to0. If its initial
+hazard is q, the full conditional Never value is therefore at least
+B(q)+(1-q)^3*(13/10), while immediate Quit has value Q(q). Their gap is
+uniformly positive:
+
+    B(q)+(13/10)*(1-q)^3-Q(q)
+       =3/10+q*(21+9*q-23*q^2)/10 >=3/10.          (J11)
+
+The last quadratic is concave with endpoint values21 and7, hence positive.
+When q=1 the displayed inequality is direct; no conditioning on a zero-
+probability remaining tail is needed. Missing dates before the first atom
+are also permitted. This is a statement about pure current Quit versus
+literal Never, not about a common profile's prescribed value.
+
+Apply(J11) to the proper reference law m(. | T>=t). By(J10) the actual
+three independent opponent tails are at vanishing product-TV distance
+from three copies of that reference. Both immediate Quit and Never are
+bounded measurable outcome functions, with absolute rewards at most10.
+Their conditional values therefore differ from the reference values by
+o(1), uniformly over the four recipients. Restoring the exact opponent
+reach Z_i(t)=product_(j!=i)Pr(T_j>=t)>0 gives, for every sufficiently late
+SUPPORTED finite date,
+
+    W_i-V_i(t)>0       for EVERY i.                 (J12)
+
+Earlier opponent-absorption payoffs cancel in this difference. The
+vanishing TV error is conditional before multiplication by Z_i(t), so
+there is no division of an uncontrolled unconditional error by small reach.
+
+Finally(J4),(J9),(J12) imply psi(rho_i(t))<psi(r_i) for ALL four i at
+the same supported date. Strict monotonicity gives rho_i(t)<r_i for all i,
+contradicting that both vectors sum to1. This excludes every infinite-
+support proper source. Combined with the positive-Never case it proves
+the theorem at every tau>0.
+
+The theorem does NOT exclude finite common support, whether its Never
+atom is positive or zero. In particular a sequence of finite asymmetric
+components can change supports with temperature and still supply all
+errors. Conversely there is no hidden infinite-calendar equilibrium arm
+of this particular regularizer that can simply absorb the missing finite-
+menu selection. Full-source existence on K10 is exactly a FINITE-support
+existence question once the above theorem is granted. Its quantifier over
+all finite supports has not been settled by a bounded search.
+
+### 36.6 What the asymmetric source attempt has and has not supplied
+
+Splitting ANY common atom into two consecutive atoms in the SAME
+proportion for all players leaves every K_i unchanged exactly: each
+new atom has the old density ratio, and their masses sum to the old mass.
+This includes splitting the Never atom into a last finite date and Never.
+It is not an equilibrium-preserving move. Each unilateral split changes
+the ratios against opponents' fixed choices, and its entropy charge is
+scaled by own mass, not by joint game reach. Conditional tail games thus
+have player-specific effective temperature tau divided by OPPONENT
+survival. There is no unproved legal root-synthesis step hidden in the
+cost-invariance observation.
+
+A bounded floating-point Newton diagnostic solved the positive-support
+finite-menu stationarity equations on a four-date menu at several
+temperatures. Every converged sample was the known identical-clock
+component; attempted proper-support solves on menus of sizes3,5,8,12
+found no component. Neither statement is a uniqueness, nonexistence or
+lower-bound certificate. Boundary components and other supports remain
+free, and no decimal output is used in36.5.
+
+The serious outstanding source assertion is now: for arbitrarily small
+tau, does SOME asymmetric finite common-support component satisfy ALL
+original late inequalities? Increasing the menu, selecting only one
+branch, or preserving a cap-neutral ancestry is not justified. The exact
+thirteen-date K10 profile with original full gap below1/300 shows that
+asymmetric JOINT approximation is available at one accuracy; it is not
+an exact overlap-source component or an all-errors producer. The next
+global selection argument must add leverage beyond the finite concave-
+game existence proof, or this regularizer should be parked as an exact-
+source hypothesis with no established production advantage.

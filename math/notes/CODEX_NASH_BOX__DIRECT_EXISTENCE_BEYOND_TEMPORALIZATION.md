@@ -39,6 +39,12 @@ Payoffs and proper labels move; selective Never remains available, and no
 exact auxiliary obedience is imposed. The certificates are finite integer
 arithmetic, not floating-point equilibrium claims. They are TWO accuracies,
 not an all-errors family, UE proof, or new solved class.
+Section25 tests a repeatable structure suggested by those profiles, rather
+than pursuing smaller finite constants: a twisted return with a growing
+two-owner pair string and macroscopic three-actor seams. An exact necessary
+inequality forces bridge survival to vanish exponentially if the final
+seam stays macroscopic. This obstructs a nonextinct exact-pair-string
+construction, not arbitrary joint approximation or the entire return word.
 
 Status: active independent research, resumed 2026-10-11. Section 8 now gives
 a positive candidate independently checked for soundness: sufficiently large pair-participation
@@ -4220,3 +4226,142 @@ small test. This improves experimental scalability, not mathematical
 existence. The meaningful new operation is JOINT interior support birth
 with unrestricted payoff/finite-Never movement; its universal quantitative
 descent property remains unproved.
+
+## 25. Growing pair strings: an exact seam/reach tradeoff
+
+### Question and tested actual calendar
+
+Keep the literal K=10 table of Section24. The finite-law profiles suggest
+an early approximate rotation of continuation values after four roots.
+Test the following ACTUAL periodic behavioral calendar, not an auxiliary
+game or a supplied continuation-payoff source. One block has k+2 roots,
+with k>=1:
+
+    {1,2,3} -> {1,2} repeated k times -> {0,1,2}.
+
+Every listed actor mixes with rate strictly between0 and1; every unlisted
+actor Continues. Four copies with labels rotated successively by-1 form
+a full period. Its continuation values at block boundaries obey
+
+    v_(k+2)=R v_0,  (R v)_i=v_(i+1 mod4).          (25.1)
+
+All finite joint reaches are positive. If this actual periodic profile is
+an unrestricted terminal Nash equilibrium, each active owner's Quit and
+Continue payoffs are equal at every reached root. The lemma below assumes
+only these active-owner equalities and the actual value recursion. It
+does NOT assume that solving the owner equations would automatically make
+inactive actors best replies.
+
+Write the first root's rates as (0,a,b,z), the pair-string rates as
+(0,x_t,y_t,0), t=1,...,k, and the last root's rates as (w,d,e,0).
+Let
+
+    S=product_(t=1,...,k)(1-y_t)
+
+be player2's conditional survival through the pair string. The bridge's
+JOINT survival is at most S. All these are ordinary actual behavioral
+quantities; no time averaging, public randomization, or common clock law
+is imposed.
+
+### Exact necessary inequality
+
+Under the preceding active-owner equations and (25.1),
+
+    w <= 2*y_k/(1-y_k)+x_1
+      <= (4/S+2)*2^(-k).                          (25.2)
+
+Consequently a family with w>=w_*>0 must have
+
+    S <= 4/(2^k*w_*-2)
+
+whenever the denominator is positive. In particular, a uniformly positive
+bridge survival and a uniformly macroscopic final seam cannot coexist
+as k tends to infinity. This is a necessary constraint on this exact
+construction, not a positive exploitability gap for arbitrary profiles.
+
+Proof. At a pair root, the literal rows of Section24 give
+
+    Q_1=1-2*y_t,  C_1=(1-y_t)*v_(t+1),1;
+    Q_2=1+x_t,    C_2=(1-x_t)*v_(t+1),2.
+
+The root's prescribed values equal Q_1,Q_2 by owner indifference.
+For consecutive pair roots this implies
+
+    x_(t+1)=2*x_t/(1-x_t),
+    y_(t+1)=y_t/[2*(1-y_t)].                       (25.3)
+
+Putting X=x_k and Y=y_1, iteration and telescoping give
+
+    x_1 = X/[2^(k-1)+(2^(k-1)-1)*X] <= 2^(1-k),
+    H := y_k/(1-y_k) = 2*Y/(2^k*S).               (25.4)
+
+The latter identity is valid for EVERY legal finite string, including
+Y>=1/2 when that still gives all k rates below1. No decreasing-rate or
+bounded-gap assumption is used.
+
+At the first root, player2's Continue payoff is
+
+    a*z+(1-a)*(1-z)*(1+x_1).
+
+Here the singleton rewards to recipient2 from actors1 and3 are0, and
+r_2({1,3})=1. Since a*z<=1-(1-a)*(1-z), its prescribed value satisfies
+
+    v_0,2 <= 1+x_1.                               (25.5)
+
+At the last pair root, player1's indifference gives the NEXT value
+
+    v_(k+1),1=(1-2*y_k)/(1-y_k)=1-H.
+
+At the last triple root, player1 has Quit payoff
+1+w-(2+w)*e, so
+
+    e=(w+H)/(2+w).
+
+Legality e<1 implies H<2. Player1's Continue payoff at this root is
+w*e+(1-w)*(1-e)*v_(k+2),1. By (25.1), v_(k+2),1=v_0,2.
+Its indifference therefore gives the EXACT identity
+
+    v_0,2-1 = [w*(3-w)-(1+3*w)*H]/[(1-w)*(2-H)]. (25.6)
+
+Combining (25.5) and (25.6), using 0<w<1 and 0<H<2, yields
+
+    2*w <= w*(3-w) <= 4*H+2*x_1.
+
+Now (25.4), Y<1, and x_1<=2^(1-k) imply (25.2). QED.
+
+The algebraic identity(25.6) and the telescoping identity(25.4) were also
+checked exactly with symbolic rational arithmetic for the displayed
+formula and strings of lengths1,...,11. The proof above, not those finite
+tests, establishes all k. This ordinary proof has not been independently
+reviewed or checked in Lean.
+
+### Bounded structural tests and surviving direction
+
+Starting with the first four conditional roots of Section24's thirteen-
+date profile, exact-owner Newton on supports123->12->12->012 drives the
+first seam rate q_3 toward0 while retaining a nonzero residual. Dropping
+that actor gives a positive passive gain. These are numerical failed
+constructions, NOT proofs that the four-root word has no equilibrium.
+
+A separate joint optimization allowed ALL16 hazards in the four-root
+block to move, expanded it into the actual sixteen-root rotated period,
+and tested its complete original deadline/Never caps. It reached regret
+about.001452 but plateaued on the same support word. No exact certificate,
+new accuracy family, or all-errors conclusion is claimed from this run.
+
+The growing-string test imposed only the internal pair relations(25.3),
+leaving both triple seams free. Bounded Newton attempts at k=1,2,3,4,6,8,
+12,20 did not close. At k=20, a selected iterate kept w about.0436 and
+S about.6175; (25.2) would instead require w below9e-6 if its active-owner
+equations actually closed. Thus the precise structural prediction of a
+NONEXTINCT long pair bridge with a fixed macroscopic final seam is ruled
+out by (25.2), independently of numerical solver behavior.
+
+This does not retire approximate joint selection. Full regret need not
+make every conditional owner equation exact, especially at vanishing
+reach. In fact (25.2) leaves the qualitatively different option of an
+almost-surely terminating bridge; it also leaves different seam supports
+and joint law changes. The meaningful next question is whether such
+extinction can be USED with all original caps controlled, rather than
+merely assumed away by a source-preserving construction. No universal
+calendar-extension producer has been obtained.
