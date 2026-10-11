@@ -834,6 +834,42 @@ clock laws jointly, retain strategic memory on the absorption scale, or
 allow controlled auxiliary errors while directly decreasing original full
 regret. Each still needs its own producer and unrestricted-response proof.
 
+## A four-active test separates symmetry from independent feasibility
+
+The cyclic four-player table with own singleton reward 1, opposite singleton
+reward 4, directed adjacent-pair member rewards (-1,2), opposite-pair member
+rewards 0, pair outsider rewards 1, triple rewards (-1,-1,-1,10), and grand
+reward 9 supplies a useful contrast. Never pays zero. The labels rotate
+cyclically; that symmetry of the reward table does not justify identifying
+the four independent stopping laws.
+
+Section 36.3 of
+`CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md` gives an ordinary,
+not independently reviewed survival telescope: every product profile with
+four identical clock laws has full regret above 1/25. It allows arbitrary
+calendar dependence, infinite support and Never mass, not just stationary
+profiles. Its restriction is identical laws, not independence itself.
+
+Section 24 of
+`CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION.md` supplies four
+different rational clock laws on twelve dates plus Never with exact full
+regret 63609521374809 / 10^16, below 1/150. Direct pure-clock tuple
+enumeration reproduces the complete payoff and cap vectors; the cap tests
+include both quitting after the last prescribed date and literal Never.
+The reproducible certificate is
+`../experiments/CODEX_NASH_BOX__FINITE_CLOCK_JOINT_APPROXIMATION.py`.
+This is one finite-error profile, not an all-errors construction.
+
+The contrast tests a genuinely global selection restriction. Averaging
+player laws into one common law can destroy useful strategic asymmetry even
+on a symmetric table. Symmetry-averaging a polynomial certificate on a
+rotation-invariant relation is a different operation and is not refuted.
+For the endogenous clock-overlap auxiliary game in Section 36, finite-menu
+existence permits symmetric components that cannot supply arbitrarily good
+original profiles. An existence proof must select a useful asymmetric
+component or use another operation; neither finite-menu Nash existence nor
+the one low-regret profile supplies that selection theorem.
+
 ## Sources inspected and next question
 
 - `ideas/NONLOCALITY_TECHNIQUE_CATALOGUE.md`.

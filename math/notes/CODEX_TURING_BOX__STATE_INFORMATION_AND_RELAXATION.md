@@ -2,6 +2,21 @@
 
 Identity: CODEX_TURING_BOX.
 
+Section36 tests a bounded ENDOGENOUS clock-overlap penalty, rather than a
+fixed-prior entropy source or a private Never transfer. Finite-menu source
+existence follows from own-strategy concavity. A Nash source on the FULL
+clock space would give original full regret at most temperature*log(n),
+but that infinite-clock existence/tightness assertion remains OPEN. On the
+genuinely four-active K10 test, an exact ordinary unreviewed calculation
+excludes EVERY identical-clock profile at full regret1/25. Thus symmetry
+cannot supply the missing compact source; asymmetric components remain
+free. This is an actual strategy-mode exclusion, not a whole-selector
+falsifier, UE nonexistence or a reward-class reduction.
+
+Section35 records the exact total-correlation prefix identity and the
+ordinary Lagrangian dual-zero obstruction. These are supporting method
+mathematics only; neither supplies the missing independence producer.
+
 Section34 gives an ordinary independently bounded-checked POSITIVE calibration of a different
 whole-source question: exact Nash equilibria on player-specific finite
 deadline menus, each containing date0 and Never. On the canonical Fin4
@@ -6227,3 +6242,211 @@ resets have not been produced. CODEX_NASH_BOX is independently studying
 that resetting operation with TV; formula(I3) supplies a complementary
 information identity, not a second purported source solution. Neither
 (I1), facewise KKT equations, nor(I3) resolves that global stall.
+
+## 36. Bounded endogenous overlap regularization and its symmetry boundary
+
+Status: ordinary unreviewed mathematics. The finite source and full-clock
+endpoint below are proved; existence of a sufficiently useful FULL-clock
+source is OPEN. The four-active calculation is an exact actual-mode
+exclusion, not an entire-selector obstruction or a new solved reward class.
+The private-menu completeness question of34.1 remains open as well.
+
+### 36.1 Exact source, agency, and the first existence assertion
+
+Fix a finite n-player quitting reward table with n>=2, live and Never reward0
+and absolute reward bound R. Every final profile is a PRODUCT of independent
+private complete clock laws on D=Nat union{Never}. Every unilateral response
+may replace its ENTIRE clock law; all finite deadlines and literal Never
+are included. Correlation and a public seed are not introduced.
+
+For a tuple p of private laws write
+
+    m=(1/n)*sum_j p_j,
+    K_i(p)=KL(p_i || m),       0<=K_i<=log(n).
+
+The inequality holds also for countably supported clocks, because
+m>=p_i/n. Relative entropy, rather than a difference of possibly infinite
+Shannon entropies, defines K_i. For temperature tau>0 give the auxiliary
+player the utility
+
+    F_i(p)=U_i(p)-tau*K_i(p).                         (J1)
+
+The prior m includes the player's OWN selected law and therefore changes
+under its deviation. This is not fixed-prior logit, not a payment attached
+only to planned Never, and not a realized reward perturbation. All Nash
+components and all clocks are permitted in the proposed full source.
+
+On any finite common menu X, including literal Never, this game has a Nash
+equilibrium. Original U_i is affine in p_i. With opponents fixed, put
+S(a)=sum_(j!=i)p_j(a). The cost is a sum of functions
+
+    f(x,S)=x*log[n*x/(x+S)],
+
+with value0 at x=0. For S>0,
+
+    partial_x f=log[n*x/(x+S)]+1-x/(x+S),
+    partial_xx f=S^2/[x*(x+S)^2]>=0;
+
+for S=0 it is the linear function x*log(n). Thus K_i is continuous and
+convex in the player's finite mixed strategy. The finite continuous
+concave-game best-response correspondence is nonempty, convex, compact
+and upper hemicontinuous; Kakutani gives finite-menu source existence.
+This ordinary proof does NOT assert infinite-clock compactness.
+
+If a Nash equilibrium of(J1) on the ENTIRE clock space exists, its
+original complete regret has the uniform endpoint
+
+    D_i(p)<=tau*(log(n)-K_i(p))<=tau*log(n).          (J2)
+
+Indeed a pure original response a has auxiliary cost at most log(n),
+including a new finite atom and literal Never. Nash gives
+V_i(a)-tau*K_i(delta_a,p_-i)<=U_i(p)-tau*K_i(p).
+Taking the supremum over all deadlines/Never proves(J2); their private
+mixtures exhaust the complete behavioral response class. Hence full-clock
+existence for arbitrarily small tau would supply actual terminal
+approximate Nash at every error, consumed by
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+No exact original-terminal Nash conclusion is required.
+
+Finite-menu existence alone is insufficient. If X={0,...,N-1,Never},
+put z_j=p_j(Never), W_i=V_i(Never), s_i=r_i({i}). Every original date
+at least N has value W_i+s_i*product_(j!=i)z_j. Thus a finite source obeys
+
+    D_i<=tau*log(n)+max(s_i,0)*product_(j!=i)z_j.     (J3)
+
+For canonical s=(1,0,0,0), only the pivot's omitted late arm remains.
+This is opponent survival, not joint survival. No selection shrinking
+that arm, and no infinite-source existence theorem, has been proved.
+
+### 36.2 Support propagation does not by itself give compactness
+
+At any finite or full-clock Nash of(J1), all players have the SAME positive
+clock support. If S(a)>0 but p_i(a)=0, moving a small mass to a from any
+positive own atom improves the auxiliary payoff: the cost derivative at
+the new atom is minus infinity, while the original payoff derivative and
+the cost derivative at the donor atom are finite. Thus p_i(a)>0.
+
+At a positive atom a, write rho_i(a)=p_i(a)/sum_j p_j(a). First-order
+conditions give
+
+    V_i(a)-tau*psi(rho_i(a))=lambda_i,
+    psi(rho)=log(n*rho)+1-rho.                      (J4)
+
+Moreover sum_a p_i(a)*psi(rho_i(a))
+=K_i+1-sum_a p_i(a)*rho_i(a) lies in[0,log(n)+1]. Consequently
+lambda_i<=R and V_i(a)>=-R imply psi(rho_i(a))>=-2R/tau.
+Since psi(rho)<=log(n*rho)+1, every positive atom has
+
+    rho_i(a)>=exp(-2R/tau-1)/n.                     (J5)
+
+This is uniform mutual domination for FIXED temperature, including the
+Never atom. It does not prohibit all players' finite mass escaping jointly
+to infinity or identify such escape with literal Never. At shrinking
+temperature its lower bound also vanishes. Neither tightness nor automatic
+better-reply security is inferred from(J5).
+
+### 36.3 A four-active exact exclusion of ALL identical-clock profiles
+
+Use I=Z/4Z and the following literal finite K10 rewards:
+
+    singleton{i}: own1, opposite4, other two0;
+    adjacent pair{i,i+1}: donor i gets-1, recipient i+1 gets2,
+                          both outsiders1;
+    opposite pair: members0, outsiders1;
+    triple: participants-1, outsider10;
+    grand: every player9; live/Never0.               (J6)
+
+CLAIM. If all four independent players use ANY ONE identical private clock
+law, with arbitrary finite/infinite date support and arbitrary Never mass,
+then each player's ORIGINAL full regret exceeds1/25. No stationarity,
+period bound, small-hazard condition or auxiliary equilibrium is assumed.
+
+Let s_t=Pr(T>=t), including Never, z=Pr(T=Never), and q_t be the common
+conditional hazard, so s_(t+1)=s_t*(1-q_t). When s_t=0 all subsequent
+contributions are0. Cyclic symmetry gives a common prescribed payoff U
+and a common Never-response payoff N. Exact opponent-set enumeration at
+one date with common hazard q gives
+
+    Q(q)=1-2q-2q^2+12q^3,
+    B(q)=4q-5q^2+11q^3,
+    A(q)=q*Q(q)+(1-q)*B(q)=5q-11q^2+14q^3+q^4.
+
+Therefore, with absolutely convergent expected reward sums,
+
+    N=sum_t s_t^3*B(q_t),
+    U=sum_t s_t^4*A(q_t).                           (J7)
+
+A pure deadline tending to infinity earns a limit L=N+z^3: on the event
+all opponents are Never it earns own singleton1; all finite opponent clocks
+eventually quit first. Hence the full cap is at least L.
+
+Define f(s)=(13/10)*s^3-(5/4)*s^4. For q in[0,1] put
+
+    dN=B(q)-(13/10)*(1-(1-q)^3)
+       =q/10-(11/10)*q^2+(97/10)*q^3,
+    dU=A(q)-(5/4)*(1-(1-q)^4)
+       =-(7/2)*q^2+9*q^3+(9/4)*q^4.
+
+We have dN>=0, since its quadratic factor has negative discriminant
+121-388<0 and positive leading coefficient. If dU<=0 then dN-s*dU>=0.
+If dU>0 and0<=s<=1, then
+
+    dN-s*dU>=dN-dU
+       =q/10+(12/5)*q^2+(7/10)*q^3-(9/4)*q^4
+       >=q/10+(3/20)*q^2+(7/10)*q^3>=0.
+
+Thus at EVERY date, including a sure final atom q=1,
+
+    s^3*B(q)-s^4*A(q)>=f(s)-f(s*(1-q)).             (J8)
+
+Sum(J8), use s_0=1 and s_t->z, and add z^3. The result is
+
+    L-U>=1/20-(3/10)*z^3+(5/4)*z^4.
+
+This quartic has its minimum on[0,1] at z=9/50, with value
+247813/5000000>1/25. This proves the claim against actual ALL-deadline/Never
+caps. In particular the original game cannot have an all-errors UE family
+whose four private laws are identical. Asymmetric calendars remain free;
+no full-game positive gap or reward-table counterexample is claimed.
+
+### 36.4 What the exact test changes for source existence
+
+If a FULL-clock source(J1) on(J6) were symmetric, (J2) and36.3 would
+contradict one another whenever tau*log(4)<1/25. Thus no such symmetric
+source exists at those temperatures. This does NOT exclude the ENTIRE
+endogenous-penalty correspondence: asymmetric components are permitted
+and are the genuine outstanding possibility.
+
+Nevertheless every finite common menu has a symmetric auxiliary Nash
+component. At identical opponents the four best-response problems are
+identical by the transitive cyclic symmetry of(J6). Their common convex
+upper-hemicontinuous best-response correspondence on the finite simplex
+has a fixed point. This supplies an identical-clock Nash, even at small
+tau. Its ORIGINAL full late cap must then stay bad by36.3. Finite symmetric
+source existence cannot be promoted to a symmetric compact infinite source;
+this is an exact boundary covering all identical-clock components, not a
+floating-point branch diagnostic.
+
+The proof of36.3 is distinct from the stationary exclusion and opponent-
+coincidence ledger in `CODEX_EMMY_BOX__OPPONENT_COINCIDENCE_BARRIER`: it uses
+only the iid common-clock survival telescoping. The raw table is restated
+fully here. An exact symbolic enumeration of every opponent coalition for
+each of the four players reproduced Q,B,A and both residual polynomials.
+No independent review or Lean verification of this section is claimed.
+
+The narrow source lookup inspected the actual Gibbs identity
+`smoothMax_eq_weightedMean_add_entropy` in
+`MathUE/Analysis/FiniteLogSumExp.lean` and the beginning of
+`UniformEquilibrium/Quitting/Paths/CommonCalendarSmoothMinimum.lean`.
+Its compact minimum selects full-tester weights, not the endogenous
+overlap Nash source(J1). No infinite-clock existence or private-menu
+selection theorem is attributed to those declarations.
+
+The next exact question is whether the FULL asymmetric overlap source
+exists for arbitrarily small temperature, or whether all finite-menu
+components can retain a nonvanishing omitted late arm. Atom support
+propagation is available, but joint finite-to-infinity escape and literal
+Never remain different. Solving only the symmetric branch, presuming a
+fixed proper prior, or repeating an exact-original-Nash nonattainment
+argument would not answer this source question.
