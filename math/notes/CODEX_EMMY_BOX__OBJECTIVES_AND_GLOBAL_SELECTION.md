@@ -42,12 +42,18 @@ Two finite weighted reward ledgers, proper-support premium peeling, and
 proper-subset insertion acyclicity produce and preserve an actual cap
 chamber and escape its positive-debt minimum. Its bounded whole-source
 comparisons do not assert an exhaustive classification of UE producers.
-Section18 is a different, UNREVIEWED global-source attempt: impose one
+Section18 is a different ordinary global-source attempt: impose one
 shared joint-survival budget rather than fixing a constrained owner.
 The exact source exists and its nonnegative-own full-regret minimum is
 attained. Section18.7 supplies a complete positive whole-minimum calibration
 on the canonical Solan table, using rotating singleton bursts and exact
-binding-date agency. No arbitrary-table selector or new UE class follows.
+binding-date agency. CODEX_TURING_BOX's bounded independent complete-law
+check found no objection at snapshot8a671efd; its exact scope is recorded
+in the feedback linked above, not a full source/existence audit.
+Section18.8 is a separate UNREVIEWED common-price refinement, with an
+actual arbitrary-data producer but no original-regret selection theorem.
+An exact good shared component need not admit those common prices.
+No arbitrary-table selector or new UE class follows.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -2480,3 +2486,183 @@ unresolved global question is how arbitrary raw game data can select
 analogous response-curve phase maxima and binding anchors, or some other
 good shared component. Neither compactness nor standard-Q supplies that
 selection. This result is a calibration, not new Fin4 reward coverage.
+
+### 18.8. Common survival prices: produced source, but a stricter selector
+
+Status: ORDINARY UNREVIEWED proof and an exact operation test. The source
+below is produced from arbitrary finite data. It does NOT produce small
+ORIGINAL full regret. The total prescribed payment and deleted-opponent
+payment are different accounts; conflating them would lose the complete
+deviation quantifier.
+
+Question. Can the joint constraints be supported by ONE nonnegative price
+lambda_t per date, common to every recipient, so that the profile is Nash
+for original terminal utility minus the common expected survival cost?
+This is stronger than Section18.2's generalized Nash property. The narrow
+search in Quitting/Root, Quitting/Terminal and the two other live BOX
+notebooks found the earlier constant/common-menu waiting-tax tests, not
+this endogenous complementary price construction. No Lean declaration
+for the following producer is claimed.
+
+Put b_t=c^(t+1), A_p(t)=product_i S_i(t), and A_-i(t)=product_(j!=i)S_j(t).
+A priced component consists of a shared feasible p and lambda_t>=0 with
+
+    lambda_t*(A_p(t)-b_t)=0,
+    P=sum_t lambda_t*b_t <=2M,
+    U_i(p)-P >= f_i(T)-sum_(t<T)lambda_t*A_-i(t)
+                         for EVERY i and finite T.             (18.11)
+
+The same P is each recipient's prescribed payment, by complementarity.
+Prices may grow with t; only the displayed payment is summable.
+
+Actual-data existence. Fix H, restrict private clocks to{0,...,H}, and
+introduce ONE auxiliary price-setting player choosing the vector
+lambda in product_(t<H)[0,(2M+1)/b_t]. Ordinary players' payoffs are
+
+    U_i(p)-sum_(t<H)lambda_t*A_p(t),
+
+and the price player's payoff is sum_(t<H)lambda_t*(A_p(t)-b_t).
+This finite-dimensional continuous game has compact convex own strategy
+sets and payoffs affine in each player's own choice. Its Nash existence
+does not require convexity of the joint feasible profile set. Equivalently
+the price player can mix the finitely many corners of its box.
+
+At any auxiliary Nash component, A_p(t)>b_t would force
+lambda_t=(2M+1)/b_t and hence prescribed common payment>2M+1.
+Every ordinary player's payoff would then be<-M, whereas Quit0 has
+zero payment and terminal payoff>=-M. This is impossible. Thus all
+constraints hold. A strict constraint makes its price zero, giving
+complementarity. Comparing with Quit0 also gives P<=2M. Every finite
+deadline T<=H satisfies(18.11).
+
+Pass H to infinity. The p's have a weakly convergent subsequence, and
+their payoffs converge by the uniform feasible joint-tail bound. Regard
+mu_t=lambda_t*b_t as a nonnegative measure of total mass<=2M on the
+one-point compactification of N. Pass to a weak limit mu, retaining
+P=mu(N union{Never}); finite coordinates converge. Complementarity and
+every fixed finite-deadline inequality pass to the limit. There is in
+fact NO price mass escaping to Never. Joint termination forces at least
+one label a to have a proper clock. Integrate its limiting finite-deadline
+inequalities against that clock. Tonelli and complementarity give
+
+    sum_T p_a(T)*sum_(t<T)lambda_t*A_-a(t)
+       =sum_t lambda_t*A_p(t)=sum_(t finite)mu_t.
+
+The left side is integrable because the right side is<=P. Since the
+finite deadlines exhaust p_a, the integrated inequality is
+U_a-P>=U_a-sum_(t finite)mu_t. Thus P<=sum_(t finite)mu_t, while the
+reverse inequality already holds. Consequently mu(Never)=0, and(18.11)
+holds with the actual summable prescribed payment P=sum_t mu_t.
+
+Complete source agency. A legal replacement has payment at most P.
+If it uses Never with positive mass, its opponents must contain a proper
+clock: otherwise the joint constraint fails at late dates. Its Never
+response is therefore the limit of its finite deadline responses. Passing
+to the monotone limit of the finite payment sums extends(18.11) to Never
+whenever that replacement is legal. Integrating(18.11) proves no legal
+complete replacement improves ORIGINAL utility. Thus p belongs to N_delta.
+This arbitrary-sign source conclusion does not need s_i>=0.
+
+At s_i>=0, one obtains a little more: Never is at most the limit of
+finite deadline utilities even when it is NOT source-legal. Hence p is
+an actual Nash profile for original utility minus the common survival
+cost, against EVERY complete replacement. A replacement of infinite
+expected cost has modified utility minus infinity; prescribed cost is
+finite. This is an auxiliary-cost claim, not original Nash.
+
+The priced source is compact when written in coordinates(p,mu,P).
+For a convergent sequence use the same proper-label integration to rule
+out escaping price mass. All finite inequalities and complementarity
+then persist. In particular minimum P is attained at fixed delta.
+
+What the price controls. Put C_i=sum_t lambda_t*A_-i(t), possibly infinite.
+From(18.11) and s_i>=0,
+
+    B_i-U_i <= C_i-P,
+    C_i-P=sum_t mu_t*(1/S_i(t)-1)                      (18.12)
+
+whenever the right side is finite, with zero-price summands defined as0;
+a zero S_i at a positive-price date cannot occur because A_p(t)=b_t>0.
+Thus P<=2M is NOT a bound on full
+regret. The factors1/S_i are the deleted-opponent normalization.
+
+For an unbounded proper own clock, equality holds in(18.11) at each
+supported finite deadline. Let supported deadlines grow to infinity.
+The cumulative deleted payment then has a finite limit C_i, and the
+original supported response values are running maxima: moving a finite
+atom to an earlier date is always source-legal. Their limit is the full
+cap, including Never at s_i>=0. Therefore B_i-U_i=C_i-P exactly in this
+case. A player with positive Never mass also has this equality: moving
+part of that mass to a finite deadline is always source-legal, so Never
+dominates all finite deadlines. Its deleted payment is finite, at most
+P divided by its positive Never mass, and its supported modified Never
+inequality is an equality. Literal Never by itself need NOT be a legal
+source replacement. This is a precise
+account, not an upper-control theorem for C_i.
+
+Root interpretation. At a positive-reach date, condition all private
+clocks on survival. If the root has current hazards q, the modified
+one-step Continue continuation is v_next-lambda_t*ones. Thus q is an
+ordinary simultaneous Nash root for this COMMON waiting-cost game.
+At every strict joint-budget date lambda_t=0, it is an ordinary Nash
+root at the modified continuation v_next. Positive prices are possible
+only at binding dates, whose conditional joint absorption is at most
+delta when the previous date binds. The actual terminal payoff and its
+FULL cap are not replaced by these modified continuation values.
+
+Exact calibration boundary. The GOOD source in Section18.7 need not be
+priced. Take its exact e=1/10,k=3 data:
+
+    delta=1/270, c=269/270, R=137/270,
+    L=183, P0=c^183, h=1-P0/R.
+
+Here P0 denotes phase survival, not the common payment P. The only
+binding dates are the first root and the end of each phase. All atoms
+within an own phase have the same ORIGINAL response payoff and positive
+mass. Equality of their modified payoffs forces the price at that first
+root to be0. Therefore any supporting common price is concentrated at
+phase ends; write lambda_m for the price at the end of phase m.
+
+Equality between atoms in consecutive own phases gives, for EVERY m>=0,
+
+    lambda_m+P0*lambda_(m+1)+P0^2*lambda_(m+2)
+        =d,                 d=3P0-2P0^2-1.
+
+Subtract P0 times the next equation. Along each residue class modulo3,
+lambda_m-P0^3*lambda_(m+3)=d*(1-P0). Nonnegativity and finite total
+prescribed payment force
+
+    lambda_m=lambda_*=d/(1+P0+P0^2)             for every m.
+
+Indeed a smaller value eventually becomes negative; a larger value makes
+lambda_m*P0^(m+1) bounded below by a positive constant along that class,
+contradicting summability.
+
+Now consider the last QUIET deadline in a predecessor's phase, just
+before its final anchor. Relative to the next own-phase supported
+deadline, its raw payoff loses2P0*R*h but avoids the final common price
+lambda_*P0^2. Source optimality therefore requires
+
+    lambda_* <=2R*h/P0=2h/(1-h).                       (18.13)
+
+The displayed rational powers violate(18.13) EXACTLY. Direct Fraction
+arithmetic gives h/delta approximately.1606012435 and
+lambda_*/delta approximately1.0719755891, while
+2h/[(1-h)*delta] is approximately.32139365. No floating comparison is
+needed: c^183<=R<c^182 and the sign of
+(3P0-2P0^2-1)*(1-h)-2h*(1+P0+P0^2) are rational tests.
+
+Consequently this actual good component admits no complementary common
+price. This does NOT exclude another good priced component: changing the
+anchor/phase geometry remains possible. It does refute automatic
+inheritance from shared-source optimality to common-price optimality.
+
+Current decision. The common-price game produces a genuine global source
+and converts its slack roots into ordinary Nash roots at modified values.
+But its original-regret account is the SAME difficult deleted-opponent
+quantity in(18.12), and its additional common-price restriction needs a
+new good-component proof even on the solved calibration. Without an
+operation controlling that account, it is not a replacement for the
+whole shared-source selection question. The next question remains an
+actual joint responsibility change that lowers the attained ORIGINAL
+full-regret minimum, not minimization of the unamplified payment alone.
