@@ -3684,3 +3684,48 @@ The inspected periodic cap is
 `quittingTerminalDeviationDebt_cyclicBehaviorProfile_le_card_mul_error_div_opponentAbsorption`
 (`UniformEquilibrium/Quitting/Cycles/PeriodicApproximateNashDeviationCap.lean`);
 it is a consumer for supplied roots, not a producer of overlap seams.
+
+### 25.2 A quadratic obstruction to a continuous diffuse equilibrium flow
+
+The following standalone flow lemma is exact ordinary mathematics. Its
+adapter from discrete approximate equilibria is a PROOF DRAFT, not yet a
+claimed whole-mode exclusion.
+
+Let P exchange the opposite mates in Z/4Z and let R=I+4P be the singleton
+reward matrix, with rows indexed by recipients. There is no locally
+absolutely continuous v:[0,infinity)→R^4 and measurable a:[0,infinity)→R^4
+satisfying almost everywhere
+
+    v_i≥1,  Σ_i v_i=5,
+    a_i≥0,  Σ_i a_i=1,  (v_i−1)a_i=0,
+    v'=v−Ra.                                             (S2)
+
+Indeed put g=v−1 and W=gᵀ(I−4P)g. Since g≥0 and Σg=1, W is bounded
+and W≤Σg_i²≤1. Using P²=I gives (I−4P)R=−15I, while
+(I−4P)1=−3*1. Consequently
+
+    W'=2W−6+30g·a=2W−6.
+
+Thus W(s)=3+(W(0)−3)exp(2s), which is unbounded below since W(0)≤1.
+This contradicts compactness of the simplex containing g. No assumption
+of a fixed active support, periodicity or constant rates enters this lemma.
+
+Intended discrete test. Suppose for this fixed singleton matrix, with ANY
+one fixed finite collision completion, a sequence of private product
+profiles had both original complete regret→0 and maximum conditional
+hazard→0. Reparametrize date by total cumulative log-survival hazard
+s(t)=Σ_(u<t)Σ_i −log(1−q_i(u)). On bounded s intervals the cumulative
+individual hazards are uniformly Lipschitz. Collision mass should vanish
+relative to total hazard; reached tails should have value at least1, and
+policy improvement by suppressing own quitting at positive slack should
+force the complementarity integral ∫(v_i−1) da_i to vanish. Any all-Never
+mass must also vanish: replacing only one's Never branch by an increasingly
+late deadline gains the JOINT all-Never probability, so that probability
+is bounded by full regret. These facts would give a global flow(S2).
+
+The outstanding proof obligation is the full compactification, particularly
+the complementarity integral with all original deviations and possible
+finite individual hazard totals. It must not assume that small root errors
+are small FULL terminal debts. If this adapter survives, it excludes a
+genuine all-hazards-small approximate-equilibrium mode for arbitrary fixed
+collision completions of these singletons; it does not itself produce UE.
