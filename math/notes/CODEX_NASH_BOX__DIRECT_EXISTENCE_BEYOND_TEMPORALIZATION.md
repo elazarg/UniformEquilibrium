@@ -6248,3 +6248,127 @@ The next actual operation must move the first/second roles and their
 private posterior response values. Conditional tail normalization alone
 leaves them unchanged, and the payoff-boundary cases v_j<=s_j remain
 genuine global-selection branches.
+
+## 38. A general coarse-source boundary escape when all labels are protected
+
+Status: ordinary proof, unreviewed. This returns explicitly to the FULL
+COARSE source and its attained 24-state limit set S from Section28, not
+the private-CE source of Sections36--37. The latter cannot inherit the
+root-feasibility step below. The conclusion narrows an information-minimum
+branch, not the raw reward-table class or the UE conjecture.
+
+Assume Section28's finite strict coarse anchor, rho>0 and actual-sequence
+definition of S. Fix x=(v,C,J) in S. Put s_i=r_i({i}) and
+d_i=rho-J_(I\{i}). If EVERY d_i>0, then
+
+    v_i>s_i for every i.                              (38.1)
+
+No singleton or collision sign hypothesis is required. This removes the
+payoff-boundary branch for this protected-label mode, not for all of S.
+
+### Finite-game boundary lemma
+
+Consider the finite Boolean root game with nonempty payoffs r and
+all-Continue payoff v. Suppose all-Continue is its ONLY Nash point.
+Then v>=s. If the set B={i:v_i=s_i} is nonempty, define its zero-diagonal
+matrix
+
+    H_ij=r_i({j})-r_i({i,j}) for i!=j, H_ii=0.
+
+There is a probability vector a supported on B such that
+
+    (H a)_i>=0 for every i in B.                      (38.2)
+
+Proof: decrease v_i by epsilon>0 on B only and choose ANY Nash q^epsilon
+of that finite game. Compactness and the closed Nash graph imply
+q^epsilon->0, since every subsequential limit is Nash at v. For small
+epsilon, all i outside B strictly prefer Continue near q=0, so their
+rates vanish. Some B rate is positive, since all-Continue is not Nash
+in the perturbed game. Let t_epsilon=sum_i q_i^epsilon>0. The root
+Quit-minus-Continue advantage of a boundary player has the uniform
+finite-polynomial expansion
+
+    g_i^epsilon(q)=epsilon-(H q)_i
+                          +O(t_epsilon^2+epsilon*t_epsilon).
+
+At a Nash point with every rate<1, g_i<=0 (equality if its rate is
+positive). Therefore H q>=epsilon*1-O(t_epsilon^2+epsilon*t_epsilon).
+Pass to a subsequence a=lim q/t_epsilon. Division by t_epsilon gives
+H a>=0: the epsilon/t_epsilon term is nonnegative, and the other terms
+tend0. This proves (38.2), including weak equalities and vanishing-rate
+ratios. No interior-root or local-degree assumption is used.
+
+The root conventions were reopened in `quittingRootPayoff` and
+`quittingRootExpectedPayoff`,
+`UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/RootContinuation.lean`.
+Finite-game Nash existence and its elementary compact closed graph are
+used as ordinary mathematics, not claimed newly Lean-implemented here.
+
+### A first-role lottery pays only quadratic information
+
+By Section28, every independent root Nash at x has q_i*d_i=0. When every
+d_i>0, its only Nash point is all-Continue. Thus v>=s. If B is nonempty,
+take a from (38.2). For 0<lambda<1 let the correlated ROOT law be
+
+    pi(empty)=1-lambda,
+    pi({j})=lambda*a_j,
+    pi(A)=0 for |A|>=2.                               (38.3)
+
+This is independent of the old whole clock law; it changes actual
+first-role probabilities and payoffs. Write e=1-lambda. Its new values
+and the two complete coarse cap rows are
+
+    u_i=e*v_i+lambda*sum_j a_j r_i({j}),
+    Q_i=(e+lambda*a_i)*s_i
+                    +lambda*sum_(j!=i) a_j r_i({i,j}),
+    L_i=lambda*sum_(j!=i) a_j r_i({j})+(e+lambda*a_i)*C_i.
+
+Here Q is the new earliest deadline and L is the cap over ALL old
+shifted deadlines and Never. Thus
+
+    u_i-L_i=e*(v_i-C_i)+lambda*a_i*(s_i-C_i)>=0,
+    u_i-Q_i=e*(v_i-s_i)+lambda*(H a)_i.                (38.4)
+
+The first inequality uses a_i>0 only when v_i=s_i and C_i<=v_i.
+The second is nonnegative on B by (38.2), and outside B by choosing
+lambda sufficiently small. Therefore (38.3) is endpoint full-coarse
+feasible. It need not be root Nash and does not preserve the old payoff.
+
+The root information is EXACTLY
+
+    I(pi)=e log e-sum_i(1-lambda*a_i)log(1-lambda*a_i)
+         =sum_(k>=2) lambda^k[1-sum_i a_i^k]/[k(k-1)]
+         <=lambda^2 for lambda<=1/2.                 (38.5)
+
+No lambda*log(1/lambda) cost remains: only singleton root births occur.
+Let D=sum_i a_i*d_i>0. The exact root ledger from Section27 gives
+
+    J'_I=rho+I(pi)-lambda*D.
+
+Choosing also lambda<D makes J'_I<rho, contradicting Section28's
+endpoint-feasible whole-minimum inequality (28.3). Thus B is empty,
+which proves (38.1). The same root applied to the ACTUAL finite laws
+realizing x has vanishing endpoint violations; the fixed strict coarse
+anchor repairs those at vanishing information cost. No arbitrary
+abstract entropy state or original-calendar minimizer is inserted.
+
+### Scope and genuinely remaining branch
+
+This is a general analytical boundary escape, not merely the K10 neutral-
+face calculation. If a positive coarse information minimum has all four
+protected labels, every coordinate lies strictly above its singleton;
+on its realizing sequence Section35 then forces all coarse caps to bind.
+The singleton counterfactual punishment prices of Section33 still remain.
+
+If some d_i=0, the limiting a in (38.2) can be supported entirely on
+those unprotected labels, so D may be0. Also a nontrivial root Nash can
+then exist on such a label. Neither case is a contradiction. The
+surviving boundary source therefore cannot be discarded by importing
+the strict anchor's interior payoff. Private CE has another obstruction:
+its continued recommendations require conditional payoff bounds, while
+new singleton-Quit recommendations face the full old cap. Equation
+(38.4) only averages these and is explicitly coarse, not private.
+
+The next whole-law task remains to move first/second roles and their
+punishment costs in these surviving modes; (38.1) is not a zero-information
+producer and does not justify further exact auxiliary selection.
