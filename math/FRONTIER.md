@@ -2633,6 +2633,40 @@ the stated raw reward region from possible counterexamples; it neither
 forces an arbitrary table into that region nor solves a fixed table by
 varying its rewards with the requested accuracy.
 
+### Three passive reward poles — reviewed mathematics
+
+The [raw endpoint producer](exports/RAW_ENDPOINT_THREE_PASSIVE_POLES_UNIFORM_EQUILIBRIUM.md)
+fixes 57 arbitrary recipient-coalition coordinates of a Fin4 table and
+sets the remaining three passive coordinates to
+
+    r₁({0,2})=−β₁M+e₁,
+    r₂({1,3})=−β₂M+e₂,
+    r₃({0,1})=aM+e₃,
+    β₁,β₂>0,   a≥0,   |eᵢ|≤R.
+
+Eight explicit strict inequalities on the fixed raw coordinates suffice
+for every sufficiently large M to admit an actual full-interior stationary
+terminal Nash profile and a fixed uniform-equilibrium payoff against all
+behavioral deviations. No root, continuation annotation, inverse, degree
+certificate or strategic witness is assumed. Own-singleton levels and
+singleton-matrix signs are unrestricted.
+
+The selected branch has two hazards bounded away from zero and one, one
+hazard of order M⁻¹, and one hazard approaching one with deficit of order
+M⁻¹. Exact polynomial cancellation reduces its limiting equations to a
+scalar quadratic ratio with a strictly negative derivative; the full
+Jacobian is automatically nonsingular. The threshold is uniform over
+compact admissible raw data, bounded a and bounded residuals, not over
+unbounded coordinate shifts. M and the table are fixed before the accuracy
+or horizon varies.
+
+An exact rational family lies outside the compared whole sure-base,
+quiet-child, weighted-charge, crossed-face, quotient and specified
+singleton-word selection sets. This is a bounded source comparison, not
+an exhaustive novelty claim over unnamed verifiers or unknown local radii.
+The theorem is reviewed ordinary mathematics awaiting formalization. It
+does not force arbitrary tables into this reward class.
+
 Standard Q alone is not an existence theorem.
 Neither a fixed small periodic class nor the proper-child extension tests
 are known to cover all remaining tables.
