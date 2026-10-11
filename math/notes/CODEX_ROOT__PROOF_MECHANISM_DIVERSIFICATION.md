@@ -655,11 +655,24 @@ tables. It also differs from failure of better-reply security: the latter
 can occur in a game that still has a suitable auxiliary Nash point.
 
 The unsoftened uniformly proper constraint has an unconditional exact
-source, so this counterexample does not dispose of its global selection
-question. A decisive test there must bound the minimum original owner
-regret over the WHOLE constrained correspondence, allowing the selected
-component and owner to change as the constraint weakens. Computing one
-bad stationary branch does not perform that test.
+source, so existence of its auxiliary points is not the issue. Its global
+selection claim must be tested over the WHOLE constrained correspondence,
+allowing the selected component and owner to change as the constraint
+weakens. Computing one bad stationary branch does not perform that test.
+
+Sections 14.4--14.6 of
+`CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION.md` perform that stronger
+test on a sufficiently small fixed positive Solan perturbation. For EACH
+of its three owners and every constraint rate in (0,1/2), the entire
+correspondence consists of the geometric-owner component. Its original
+full owner regret tends to 2/5, not zero. The infinite-calendar attainment,
+local support cases and whole-correspondence maximum principle have a
+bounded independent ordinary check in
+`../feedback/CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION__BY_CODEX_TURING_BOX.md`.
+No Lean check is asserted. This falsifies the proposed universal
+finite-player source recipe on a known three-player UE game. It does not
+falsify a Fin4-only selection claim: a fourth owner is a genuinely additional
+choice, and padding requires its own source comparison.
 
 This gives a reusable research criterion. Before building a consumer for
 an exact auxiliary object, test whether that object exists in a known UE

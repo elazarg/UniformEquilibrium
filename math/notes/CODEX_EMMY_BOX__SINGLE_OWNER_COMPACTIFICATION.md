@@ -25,7 +25,8 @@ unrestricted Fin4 UE existence. Section13 gives immediate whole-face
 selection consequences, not a new conjecture-facing closing theorem.
 Section14 calibrates this source on the canonicalized perturbed Solan
 three-player game, which has UE but no exact Nash. Sections14.4--14.6 now
-give an UNREVIEWED COMPLETE ORDINARY PROOF CANDIDATE that, for all three
+give a COMPLETE ORDINARY PROOF with a bounded independent adversarial
+check by CODEX_TURING_BOX that, for all three
 core owners, the ENTIRE constrained-Nash correspondence is the geometric
 component of Section14.1. Its minimum full owner loss tends to2/5, not0.
 The load-bearing new step is the attained whole-correspondence hazard
@@ -33,7 +34,11 @@ maximum argument in Section14.6, including the flat-plateau case. This is
 a proposed falsifier of the three-player sufficient source question(Q),
 not a UE counterexample and not a whole-owner Fin4 falsifier. A fourth
 owner can change the conclusion; Section14.7 keeps that scope separate.
-The independent foundational reviews above do NOT cover Sections14.4--14.6.
+The separate bounded review of Sections14.4--14.6 is recorded in
+`../feedback/CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION__BY_CODEX_TURING_BOX.md`.
+It found no objection in precisely the THREE-core-owner scope. The
+result stays internal, not Lean-checked and not exported. It retires(Q)
+as a universal finite-player source, not the Fin4-only selection question.
 
 ## 1. Self-contained end-to-end question
 
@@ -1020,7 +1025,7 @@ This yields the concrete maximum principle tested below:
     Does the perturbed Solan game force m_delta=delta
     for all sufficiently small delta?                    (MP)
 
-A proof is supplied as an unreviewed candidate in Section14.6. Conversely
+A proof with a bounded independent check is supplied in Section14.6. Conversely
 any profile improving on(14.5) necessarily has m_delta>delta. An optimal
 owner can allocate its deadline mass across WEAK record plateaux, not
 just use the first-argmax representative; replacing it by that
@@ -1035,7 +1040,8 @@ all-owner Fin4 falsification is claimed here.
 
 ### 14.4. Properness and the exact three-core-owner quantifiers
 
-Status: ORDINARY PROOF DRAFT, not independently reviewed. Fix
+Status: ORDINARY PROOF, bounded independently checked by CODEX_TURING_BOX
+as part of Sections14.4--14.6. Fix
 0<e<1 and 0<delta<1/2. Every source in N_(0,delta) for the raw
 three-player table has ALL THREE clocks proper and unbounded.
 
@@ -1086,7 +1092,8 @@ quantifier and is not silently removed by this argument.
 
 ### 14.5. An exact zero-hazard lemma removes owner payoff dips
 
-Status: ORDINARY PROOF DRAFT, not independently reviewed. Here assume
+Status: ORDINARY PROOF, bounded independently checked by CODEX_TURING_BOX
+as part of Sections14.4--14.6. Here assume
 0<e<=1/2. The following is a two-stage calculation, not an inference from
 negative periodic searches. It uses full nonowner best replies, including
 Never, at both stages.
@@ -1219,14 +1226,16 @@ By(14.13), any hypothetical H_delta>delta must occur on a FLAT
 payoff plateau. Proving that such a global maximum cannot occur on
 a flat plateau would give H_delta=delta, all owner hazards equal
 delta by the survival budget, and the whole-correspondence obstruction
-described in(14.7). Section14.6 gives an unreviewed proof candidate for
+described in(14.7). Section14.6 gives a bounded independently checked proof for
 that final maximum principle. The local lemma alone does not authorize
 an earliest-atom redistribution while keeping nonowner best replies fixed.
 
 ### 14.6. Whole-correspondence maximum principle, including flat plateaux
 
-Status: COMPLETE ORDINARY PROOF CANDIDATE, NOT INDEPENDENTLY REVIEWED.
-No Lean implementation or export claim. Fix
+Status: COMPLETE ORDINARY PROOF, with a bounded independent adversarial
+check by CODEX_TURING_BOX recorded in the feedback file named above.
+No Lean implementation or export claim. The check covers all THREE core
+owners, not an arbitrary fourth padded owner. Fix
 
     0<e<min(1/10,e0),       0<delta<1/2,
 
@@ -1276,7 +1285,9 @@ the calendar extrema
     H=max h,       X=max x,       Y=max y,       q=max Q
 
 are attained. We can use M1=sup Y1 as well. Sure hazards are excluded,
-so H<1. The root budget gives H>=delta.
+so H<1. The date-zero survival budget of every source gives its initial
+hazard at least delta, hence H>=delta. No conditional hazard floor at
+arbitrary dates is assumed.
 
 Step1: Q<=1 throughout the correspondence. Suppose its attained global
 maximum q exceeded1. At that stage x>0 and
@@ -1390,18 +1401,19 @@ with y, so it is at least
       =H*[77/50+(1197/250)*H] > 0.
 
 This contradicts the flat equality C=Q. Thus H<=delta. Since every
-root hazard is at least delta, H=delta. All hazards in every source are
+INITIAL date-zero hazard is at least delta, H=delta. All hazards in every source are
 at most delta, so their survival products are at least c^t; the K_delta
 budget makes them at most c^t. Equality and induction force every hazard
 to be delta. Section14.1 determines the remaining clocks uniquely and
 computes the loss limit2/5. Section14.4 transfers the full conclusion to
-each core-owner choice. This completes the ordinary proof candidate.
+each core-owner choice. This completes the ordinary proof.
 
-Exact remaining check. Independently falsify Steps1--6, the calendar
-attainment input from Section14.5, and the two-stage support lemma used
-to obtain monotonicity. The earlier foundational reviews do not cover
-these new steps. No claim about every possible fourth-owner padding
-follows from this three-player proof.
+Independent check scope. CODEX_TURING_BOX checked Steps1--6, the calendar
+attainment input from Section14.5, all zero-support cases of the two-stage
+lemma, core-owner canonical transport, and fixed-geometric response
+uniqueness/loss. No objection was found. Its wording clarification about
+the INITIAL hazard budget has been incorporated above. No claim about
+every possible fourth-owner padding follows from this three-player proof.
 
 ### 14.7. Why a fourth owner is a separate selection quantifier
 

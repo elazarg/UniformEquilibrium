@@ -192,3 +192,163 @@ and `quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
 (`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`).
 The last theorem supplies the counterexample-to-positive-terminal-gap
 boundary and the eventual target-free consumer, not the missing selector.
+
+## Bounded adversarial check: whole core-owner maximum principle
+
+Reviewed source: `notes/CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION.md`,
+frozen SHA-256
+`bbee639e29cbdaa5bd07b9f846a7a1eb920894396327f9006ea54ce33bf6eef9`.
+Scope: Sections14.4–14.6, with only their stated dependencies in
+Sections3,11,14.1 and14.3. This is one bounded ordinary-mathematics
+check, not a Lean check, export gate or audit of later padding claims.
+
+Verdict: PASS within the stated THREE-CORE-OWNER scope. I found no
+mathematical objection to the entire-correspondence conclusion for
+fixed0<e<min(1/10,e0) and every0<delta<1/2. The qualitative e0 invokes
+only Solan2001's bounded ACTUAL no-exact-Nash consequence. No numerical
+e0, fourth-owner exclusion or failure of uniform equilibrium follows.
+
+### Claim and essential source hypotheses
+
+The raw three-player table has singleton rows(1,3,0),(0,1,3),(3,0,1),
+the three pair rows printed in Section14, grand0 and Never0. Only one
+owner is constrained to the full compact survival-budget set
+K_delta={p:S_p(t)<=c^t for every finite t}, c=1-delta; no conditional
+hazard floor is silently imposed. Every nonowner retains its complete
+independent clock-law response class, including Never. The claim is
+that every constrained Nash point has geometric owner law and the unique
+stationary nonowner response laws, so its full owner loss tends to2/5.
+The canonical subtraction from recipient columns1,2 is checked on the
+proper-source face, not asserted as global affine invariance of Never.
+
+The hypotheses doing real work are exact nonowner best replies, the
+owner's optimal private running-record envelope, same-correspondence
+re-rooting at strict records, and absence of an actual full Nash profile
+at this small-e table. Compactness alone would neither force the owner
+clock geometric nor bound moving record gaps.
+
+### Properness, local support cases and monotonicity
+
+I reconstructed all three sure-hazard exclusions. At a reached date
+the budget-compatible minimum owner hazard is at most delta because
+S0(t)<=c^t. Accelerating the owner to sure Quit is always legal, and
+reducing a sure hazard by a sufficiently small positive amount with a
+later finite residual is legal. The corresponding strict root comparisons
+exclude a sure owner, a sure player1 and a sure player2; the final gain
+1+e-h*(2+e) stays positive for h<=delta<1/2. Thus all finite joint
+survivals are positive. This justifies actual suffix deviations, not
+unreachable-history perfection.
+
+A proper unbounded nonowner supports arbitrarily late optimal dates;
+its proper owner-opponent makes their payoffs converge to Never. An
+improper nonowner directly supports Never. Hence Never is a full best
+reply for both. If player1 were improper, its residual finite mass tends
+to0 and player2's raw Never value tends to0, contradicting its immediate
+Quit floor tending to at least1. If player2 were improper, player1's raw
+Never value tends to3, strictly above its Quit ceiling1+e; all late
+player1 hazards would vanish, contradicting its proper unbounded law.
+These arguments cover arbitrary nonstationary laws.
+
+In the two-stage zero-owner lemma I checked the y>0, y=0<x, and x=y=0
+cases separately, including vanishing NEXT nonowner hazards. For y>0,
+current support forces x<=1/4 and Y2'=(1-4x)/(1-x); both next hazards
+must be positive. For y=0<x, the x'=0 case is directly negative, while
+x'>0 gives the stated exact y' and upper bound for x'. The x>1/4
+subcase uses the strict crude bound and does not incorrectly invoke the
+nonnegative B regime. For x=y=0, the x'=0 equality case is exactly
+y'=0. The derivative comparison for F(b) holds throughout[0,b]
+because feasibility at b and monotonicity of z keep0<=z<=1 there.
+I independently expanded F(0); it is precisely equation(14.10).
+
+The weak-record restriction on every positive owner atom is justified
+by equality in the private quantile envelope. Choosing the LAST active
+nonowner date in a zero-owner run is legitimate because the run ends
+at a finite next positive owner atom. Completely quiet intervening dates
+identify the conditional values without pretending to preserve the Nash
+profile under calendar deletion. The local lemma would make that next
+positive owner's deadline worse than an earlier one, a contradiction.
+This proves the zero-hazard lemma and monotonicity of the ENTIRE f(t),
+including the positive date preceding a quiet run. Strict increases bind
+the next survival budget, giving h(t)<=delta at every nonflat step.
+
+### Infinite-calendar attainment is valid here
+
+The whole correspondence is compact by the previously checked producer.
+ALL its clocks are proper by Section14.4. The clopen finite-tail functions
+decrease pointwise to0 on that compact set, so properness is uniform;
+this does not assume that arbitrary weak limits of proper laws are proper.
+Uniform opponent censoring makes full owner caps continuous. A finite
+first cap maximizer would be a reached strict-record tail with exact full
+Nash, contrary to the bounded actual Solan consequence. Hence each source
+has a later strict record and the open finite-date improvement sets cover
+the compact correspondence. A finite subcover gives J_delta.
+
+Same-correspondence strict-record re-rooting repeats this bound after
+every record. Every calendar date is therefore an offset at most J_delta
+from a record tail belonging to the SAME correspondence. Finite-offset
+hazards have positive survival denominators and are continuous on compact
+N; conditional Never values are continuous by the same uniform censoring.
+Thus the asserted H,X,Y,q calendar maxima really are attained. A remote
+nonattained maximum or a nonrecord-tail compactification is not being
+substituted. The bound is delta-dependent; no useful uniform window
+estimate is inferred from it.
+
+### The six maximum-principle inequalities
+
+1. At an attained Q=q>1, x>0 and y<e*x/(1+e*x).
+   Using Q'<=q gives C-q<y*(2-x)-x<0 for e<=1/2,
+   contradicting monotonicity. Hence Q<=1 and x>0 implies y>0.
+
+2. If Y2>1+e*H, support forces y=x=0, then its recursion propagates
+   that strict inequality forever. Proper owner survival tends to0,
+   contradicting bounded Y2. This argument needs no stationary tail.
+
+3. At x=X>0, support and the next floor yield
+   X/(1-X)<=((1+e)*h+(1-h)*X)/(3-2*h).
+   The ratio increases in h with derivative numerator3*(1+e)-X.
+   The stated quadratic and X<=(1+e)*H/2 follow exactly.
+
+4. An attaining H>delta is flat. Its x cannot vanish, and its positive
+   x,y support gives(14.19). Flatness gives Q>=O and the stated upper
+   y bound. If H>=1/2 the coarse lower bound25/42 exceeds11/21;
+   hence the hypothetical H lies in(0,1/2).
+
+5. On an x=0 run, Y2(t)=A*Y2(u) and its floor give
+   A>=1/(1+e*H). Player1's pre-u reward is at most3 on owner stopping
+   and0 on player2 stopping, so Mbar is a valid upper bound. Combining
+   the current floor with the recursion gives the stated z-ratio.
+   Moving the Y-dependent part of E to the left yields exactly(14.20);
+   dropping Y*E is in the safe direction.
+
+6. At the hypothetical flat maximum, y>=(9/5)*H, x<=(3/5)*H,
+   Y<=(16/5)*H and Q'>=1-Y imply
+   C-Q>=H*[77/50+(1197/250)*H]>0. Bounding the negative bracket
+   separately is valid even when the crude Y-bound exceeds1. I
+   recomputed the final coefficients. This contradicts flatness.
+
+Therefore every calendar hazard is at most delta. The initial budget
+forces the date-zero hazard at least delta; equality of survival products
+with their global upper bounds then forces EVERY date hazard to equal
+delta. The wording about a "root hazard" should be read as date zero of
+a source profile, not as a presupposed conditional hazard floor at every
+date. The subsequent survival-product argument is correct without that
+stronger premise.
+
+I also recomputed the exact decoupled response maps and their two fixed-
+point quadratics in Section14.1. Their monotone-orbit argument determines
+the entire unrestricted response correspondence to the geometric owner.
+The limits x/delta->1/2,y/delta->2, B->12/5,Q->1,U0->2 give full
+loss2/5. The canonical core-owner transport retains a distinct proper
+opponent under every full owner deviation, so both cap and payoff shift
+by the same constant. Raw cyclic symmetry then covers all THREE core
+owners, not a fourth padded owner.
+
+### Significance boundary
+
+This is a genuine whole-source falsifier for the THREE-PLAYER core-owner
+selection, including every auxiliary component, not a bad selected branch.
+It is not a four-player UE counterexample or exclusion of the all-owner
+Fin4 source. A separately specified fourth-owner padding can supply good
+components; its objective and proper-source transport must be checked on
+its own. No unresolved mathematical objection was found in the bounded
+core theorem above.
