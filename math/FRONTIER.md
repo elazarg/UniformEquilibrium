@@ -1124,6 +1124,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the four-joint-phase reward cylinder specified below | Exact terminal Nash and a fixed UE payoff, with eight proper hazards produced from raw rewards. Thirty-two coordinates lie in a fixed open neighborhood, twelve have only upper bounds, and sixteen are arbitrary finite reals. This is reviewed mathematics awaiting formalization. |
 | Fin4: the four-joint-phase unbounded reward region specified below | Exact terminal Nash and a fixed UE payoff, with rates produced by a two-variable rectangle argument. Passive scheduled rewards and all triple rewards may be arbitrarily large; four negative collision bounds control inactive deviations. This is reviewed mathematics awaiting formalization. |
 | Fin4: the four-singleton-phase reward cylinder specified below | Exact terminal Nash and a fixed UE payoff, without an all-phase singleton floor. Sixteen singleton entries vary locally, twelve participant-pair entries have only upper bounds, and thirty-two entries are arbitrary finite reals. This is reviewed mathematics awaiting formalization. |
+| Fin4: the symmetric/asymmetric passive-reward ray specified below | Exact terminal Nash and a fixed UE payoff for every nonnegative passive parameter K. A symmetric two-phase construction switches to an asymmetric four-phase construction at an explicit threshold. Every persistent-base selection fails throughout the family. This is reviewed mathematics awaiting formalization. |
 | Fin4: the global two-joint cyclic-child family specified below, for every real R | UE with simultaneous quitting at both retained joint phases. The rates and target are produced from rewards, including the outsider halfspace boundaries. This is reviewed mathematics awaiting formalization. |
 | Fin4: the zero-premium joint-phase family specified below, for every real R and σ≥0 | UE with both joint participants at their singleton rewards and a possibly positive outsider collision payoff. Rates and a fixed target are produced; an opposite-sign pair core is allowed. This is reviewed mathematics awaiting formalization. |
 | Fin4: the negative-premium cyclic-child completion family specified below | UE for arbitrary signed own rewards, with an exact terminal Nash profile and one fixed target produced from raw entries. Both scheduled joint participants have negative premiums. Twenty-eight normalized coordinates are unrestricted. This is reviewed mathematics awaiting formalization. |
@@ -1472,6 +1473,41 @@ includes a strict full-table witness outside the compared persistent-base,
 withdrawal, balanced-cycle, favorable response-quotient and named pair
 sources. This is a sufficient raw-table class, not arbitrary-completion
 coverage of its singleton matrix or a global Fin4 selector.
+
+The **symmetric/asymmetric passive-reward ray** retains those exact singleton
+rows and has parameters
+
+    T<A<4,  D=√((4−A)/(A−1)),  J=(A−1)D,
+    0<B≤J,  K≥0.
+
+Its complete pair rows are
+
+    r(01)=(A,A,K,K),       r(23)=(K,K,A,A),
+    r(02)=(B,K,−B,K),      r(03)=(−B,K,K,B),
+    r(12)=(K,−B,B,K),      r(13)=(K,B,K,−B).
+
+At each triple S, participants receive K−1 and its outsider receives K;
+the grand row is (−1,−1,−1,−1). Put
+
+    C=(1−D)(1−J),  Kcrit=C/(1−√D)².
+
+For 0≤K≤Kcrit, a scalar intermediate-value argument produces equal mate
+hazards. For K>Kcrit, put x=C/K: the two hazards are the roots of
+z²−(1−D+x)z+x=0 and lie strictly between zero and one. Assign the larger
+hazard to the calendar owner in 0→2→1→3 and the smaller hazard to its mate.
+Both branches meet at hazard 1−√D. Exact policy recursions, all inactive
+endpoint inequalities, and deleted-opponent period contraction give full
+terminal Nash and a same-profile UE payoff for each fixed original table.
+No horizon bound uniform over K is asserted.
+
+The [complete reward-ray producer](exports/FOUR_PHASE_PASSIVE_REWARD_RAY_UNIFORM_EQUILIBRIUM.md)
+also excludes every persistent-base induced-Nash selection and the compared
+proper-child withdrawal tests. At these exact singleton rows, the positive
+owner solution for the named singleton word is globally unique and has the
+golden hazards; its mate-joining inequality requires A≤T. Thus A>T excludes
+that entire named positive singleton calendar, not merely one selected local
+branch. The result does not exclude arbitrary singleton words or provide
+an arbitrary-table compensation selector.
 
 The **global two-joint cyclic-child criterion** has parameters
 a,b,c,h₁,h₂,H>0, abc>1, U,V≥1, ξ,η>0, p₁≤a−h₁, p₂≤0,

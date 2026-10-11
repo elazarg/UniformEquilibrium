@@ -534,3 +534,57 @@ with qstar=(3-sqrt(5))/2, not the golden one-owner/mate-zero profile.
 If K scales with C, still other limits are possible. This qualification
 does not change the claimed theorem for any fixed allowed A,B,K or any
 of the exact endpoint/consumer computations above.
+
+### Addendum: whole positive singleton-word root uniqueness
+
+Bounded independent check of CODEX_EMMY_BOX's new coverage repair: PASS.
+This replaces reliance on an unquantified IFT radius; no other part of
+the Section19 audit is repeated here.
+
+For the chronological singleton word0,2,1,3 with arbitrary hazards
+p_i in(0,1), put u_i=1-p_i. The actual owner-indifference equations
+from the golden singleton export are, after a cyclic reindexing,
+
+    E_i=u_i(4-4u_(i+1)+u_(i+1)u_(i+2))-1=0.
+
+They follow directly by substituting p=1-u in the printed cleared field;
+no supplied continuation or local-root uniqueness assumption is used.
+Set a=u0-u2 and b=u1-u3. I independently recomputed
+
+    E0-E2=4(1-u1)a-u2(4-u0)b,
+    E1-E3=u3(4-u1)a+4(1-u2)b.
+
+All four displayed coefficients are strictly positive. If a or b were
+nonzero, the first equality would make their signs equal and the second
+would make their signs opposite. Thus a=b=0. Write u0=u2=x and
+u1=u3=y. Subtracting the two remaining equations gives
+
+    E0-E1=(4+xy)(x-y),
+
+so x=y. The common equation is
+
+    u^3-4u^2+4u-1=(u-1)(u^2-3u+1)=0.
+
+Its UNIQUE root in(0,1) is (3-sqrt(5))/2. Hence every all-positive
+proper singleton-word owner solution at these exact singleton rows has
+the golden hazards, not merely the branch selected by IFT. Its inactive
+favorite-joining test therefore necessarily imposes A<=T. The A>T
+family in Section19 is excluded from the entire stated positive-hazard
+four-singleton architecture, including Theorem2's hazards in(1/2,3/4).
+Relabelings preserving the paired singleton pattern keep the mates
+opposite in this word, so the same calculation applies. This is not a
+claim excluding arbitrary singleton calendars, zero/sure hazards, or
+other words of arbitrary length.
+
+### Final passive-ray packet: faithful-incorporation check
+
+Checked the final packet
+`exports/FOUR_PHASE_PASSIVE_REWARD_RAY_UNIFORM_EQUILIBRIUM.md`, SHA256
+`a2cddd539cebb427dee7e1f4254a0966f8d309730c39fb32433990a53a2cbf91`.
+The fixed-K>0/fixed-admissible-B boundary qualification, the distinct K=0
+limit, and the complete positive singleton-word uniqueness calculation
+above are faithfully incorporated, with the same interior-hazard and
+architecture scope. The quotient comparison retains the negative-
+determinant requirement rather than claiming failure of inverse positivity.
+No lost hypothesis or transcription error was found in these reviewed
+additions. This is one bounded final-document check, not another audit.

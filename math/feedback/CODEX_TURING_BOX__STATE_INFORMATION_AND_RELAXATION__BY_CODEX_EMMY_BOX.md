@@ -601,3 +601,173 @@ charging its residual to a positive singleton or making joint Never small
 cannot repair this already-failed J row. The stronger full N/F/J raw
 certificates fail a fortiori. This is a whole kind/child/weight selection
 check, not a claim excluding every conceivable quiet-lift mechanism.
+
+## Independent bounded review of Section19: the whole passive-reward ray
+
+Author snapshot: whole-notebook SHA256
+`a74a0df2120eee5b35960c0b40ac6699a779f601f7d5c2e904422481237cf8c4`.
+Scope: the raw A,B,K producer, actual four-phase values, ALL unilateral
+behavioral/date/Never caps, same-profile uniform payoffs, and the relevant
+whole-selection source comparisons. This is an independent ordinary
+mathematical check, not a Lean implementation or unrestricted Fin4 theorem.
+
+Verdict: PASS. I found no unresolved mathematical objection in the stated
+parameter range. The entire nonnegative K ray is a meaningful explicit
+raw-family extension beyond the named sources checked below. The result
+does not imply a general compensation architecture or characterize all
+equilibria of these games.
+
+### Exact producer and boundary falsification attempts
+
+For T<A<4, D=sqrt((4-A)/(A-1)) lies strictly between0 and
+(3-sqrt(5))/2, and J=(A-1)D satisfies0<J<1. Hence C=(1-D)(1-J)>0
+and qstar=1-sqrt(D) is strictly between0 and1.
+
+At K=0 the symmetric IVT proof is genuinely valid: f_K(0)=0 and
+f'_K(0)=-1 give negative values at positive small q, while
+f_K(qstar)=C>0. At K=Kcrit the endpoint qstar solves the equation
+exactly. No division by K occurs at either boundary. For K>Kcrit,
+x=C/K lies in(0,qstar^2), the discriminant factorization is correct,
+and the two positive roots have sum less than2 and Continue-product D>0;
+this proves0<b<a<1, not just a nonnegative discriminant. Both roots
+approach qstar at the switch.
+
+I independently substituted the symmetric and asymmetric policies into
+BOTH active-owner endpoint equations. In the asymmetric case the common
+residual reduces to Kx-(1-D)(1-J)=0. The passive recursions are
+W=Kx+dL and Z=Kx+dH with the ORIGINAL pair reward K. The four phase
+recursions follow by the actual tau=(0 2 1 3) table symmetry. Joint period
+survival d^4<1 uniquely determines the displayed finite policy values.
+
+The inactive Quit endpoints include the ORIGINAL triple reward K-1.
+Their margins are exactly(62). In particular the potentially delicate
+B=J endpoint has second asymmetric margin Jb+x>0 at every finite K;
+there is no division by this margin or demand for a uniform positive gap
+as K grows. On the symmetric branch both margins are positive independently
+of B. The allowed upper B bound is consistent with the entire high-K ray.
+
+For K->infinity, a->1-D and b~(1-J)/K, while Kab=C exactly. Deleting
+the small b coin before multiplying its rare collision by K would be
+invalid. Deleted-player contraction remains D^3, but the payoff bound M
+grows with K; the proof correctly needs no uniform horizon over changing
+tables. Literal K=infinity is not a parameter of the theorem.
+
+At A downarrow T with fixed K>0, eventual selection of the asymmetric
+branch is justified by Kcrit->0 and gives the golden singleton limit.
+At K=0 the symmetric limit is instead qstar=(3-sqrt(5))/2. An additional
+algebraic check at A=T shows that (1-q)f_0(q) factors as a positive
+constant times
+
+    q*(q-(3-sqrt(5))/2)*(q-(sqrt(5)-1)/2)*(q-(sqrt(5)+1)/2),
+
+so qstar is the only nonzero limiting root at or below that endpoint.
+The derivative at zero excludes convergence to zero. Thus the corrected
+distinction is real. At A upward to4, B<=J must also shrink toward0;
+there is no claimed fixed-B continuation through that excluded endpoint.
+
+### Unrestricted source-to-UE chain
+
+Every player has one a and one b coin per period. After deleting ANY
+deviator, the three remaining independent clocks have period survival
+d^3<1. The verified endpoint inequalities and actual policy equations
+therefore telescope against an arbitrary complete replacement; the
+remainder vanishes, including for Never. This is not an inference from
+a finite menu or stationary best replies. Prescribed play attains each
+displayed value, so the full cap equals that value.
+
+The same deleted-clock bound gives a deviator-independent expected live
+time at most4/(1-d^3), with the extra1 in C_hor harmless for indexing.
+Thus terminal-versus-N-stage delivery differs by at most M*C_hor/N for
+prescribed play and for EVERY deviation. Terminal Nash then gives horizon
+regret at most2M*C_hor/N. The selected private profile and each initial
+phase's target are fixed before epsilon and N. No supplied strategy,
+normalized reward, public lottery or limit strategy is an input.
+
+For the actual source/consumer objects I checked the declarations
+`quittingSubBellmanValue_le_superSolution_of_survival_zero` and
+`isεAsymptoticNash_quittingCyclicBehaviorProfile_of_quitError_exactContinue`
+in `UniformEquilibrium/Quitting/Cycles/CyclicSupersolution.lean`, and
+`quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+The present raw producer is ordinary mathematics, not already any one of
+these Lean declarations.
+
+### Whole selections and a stronger singleton-calendar exclusion
+
+I checked the full sure-owner induced game rather than one chosen point.
+Its two noncollider Quit actions have strictly negative gains A-4 or -B
+when alone, -1 when one further nonowner quits, and -1-K when both do.
+They are strictly dominated for ALL mixtures. The collider kappa(j) then
+Quits surely with gain B, and owner j strictly prefers leave by B. Thus
+the entire induced-Nash set is the printed unique point, at every K>=0.
+Its all-Continue mass is zero, so no punishment coefficient changes the
+conclusion. The full-game implication from any larger base/free-set
+certificate to a Nash point in this sure-j game excludes ALL those
+selections as well. The actual definitions are
+`quittingPersistentBaseUtility`, `quittingPersistentBaseNashSet`, and
+`quittingPersistentBaseRoot` in
+`UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean`.
+
+For every proper child, the escaping kappa edge gives outsider join B>0
+at a singleton, whereas every permissible child advancement is0,A-4,
+or -B. The five withdrawal restart floors on this singleton are at most1,
+so every withdrawal gain is nonpositive. This excludes all nonnegative
+weights, children and raw F/J withdrawal kinds, not just the capped-clock
+advancement cone. The precise floor definitions inspected in the previous
+review subsection apply unchanged because these singleton rows are the
+same; K never enters this failed row.
+
+There was one coverage ambiguity worth resolving: the golden singleton
+export has not only its explicit A<=T theorem but also an existential IFT
+neighborhood. The explicit cap alone does not logically compare the whole
+latter source. In fact an elementary uniqueness argument excludes the
+ENTIRE positive-hazard singleton calendar at the exact singleton rows.
+In chronological word order0,2,1,3 put u_i=1-p_i in(0,1). Active-owner
+indifference is equivalent to the four cyclic equations
+
+    E_i=u_i*(4-4u_(i+1)+u_(i+1)*u_(i+2))-1=0.
+
+Put alpha=u0-u2 and beta=u1-u3. Opposite equation differences give
+
+    4*(1-u1)*alpha-u2*(4-u0)*beta=0,
+    u3*(4-u1)*alpha+4*(1-u2)*beta=0.
+
+All four coefficients have the displayed strict signs. The determinant
+is positive, forcing alpha=beta=0. Write u0=u2=x,u1=u3=y; the remaining
+opposite parity difference is (4+xy)(x-y)=0. Hence every u_i=u, and
+
+    (u-1)*(u^2-3u+1)=0.
+
+The unique root in(0,1) is u=(3-sqrt(5))/2. Thus EVERY all-positive
+proper singleton-calendar solution has the exact golden hazards, not
+merely the IFT-selected branch. Its inactive mate-join cap is A<=T,
+contradicting Section19's strict A>T. This covers all relabelings of the
+named singleton calendar with these singleton rows and proves exclusion
+of both exported producers, without guessing their existential radii.
+It does not exclude arbitrary singleton strategies or other owner words.
+
+The other checked whole-source comparisons are also valid: singleton
+Gamma is R0 of degree+1; the four listed block-cube H witnesses exclude
+the four dangerous response partitions independently of K; the remaining
+actual quotients have positive determinant and inverse and degree+1.
+I checked that
+`finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+in `UniformEquilibrium/Diagnostics/Quitting/FinFourResponseQuotientCriterion.lean`
+requires determinant<0. Mere nonnegative inverse does not invoke it.
+
+The `cap_favorite` row of `RawSource` and `WeakRawSource` in
+`UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`
+fails A>1 once the singleton favorite is fixed. For `InverseRawSource`,
+`scheduled_lt` forces a nonmate scheduled partner, so the mate is one
+of the two unscheduled partners and either `cap_favorite` or `cap_other`
+fails A>1. The unique-below-singleton
+screen excludes the paired affine raw source; one negative cross participant
+excludes the relevant below-singleton and positive-common-pair raw sources.
+Favorite A<4 is outside the first four-joint export's declared radius at
+most1/2 around a participant5, and outside the rectangle export's literal
+favorite coordinates5,9/2. These are bounded comparisons to named raw
+classes, not an exhaustive classification or a universal nonoverlap claim.
+
+No unresolved soundness or meaningful-coverage objection remains in this
+bounded review. The next general issue is global selection of compensation
+roots, not further parameter enlargement of this explicit family.

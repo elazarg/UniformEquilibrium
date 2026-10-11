@@ -39,7 +39,7 @@ to at most two active players per root covers every collision completion.
 The exhibited family is solved by a sure triple, so this is not a new UE
 exclusion or a refutation of a solved-game-or-pair-source disjunction.
 
-Section 19 is a complete, unreviewed ordinary proof draft for a passive-
+Section 19 is independently reviewed ordinary mathematics for a passive-
 reward ray with fixed paired singletons and no persistent-base exit. A
 symmetric/asymmetric branch switch produces exact private-clock terminal
 equilibria and fixed-profile uniform payoffs for every K>=0. Its bounded
@@ -1983,11 +1983,11 @@ resolve the obstacle tested here.
 
 ## 19. A complete passive-reward ray by symmetric/asymmetric joint clocks
 
-Status: complete ordinary proof draft, not independently reviewed or
-Lean-checked. This is a constructive vertical test after the already-solved
-base alternatives have been excluded. It supplies an exact raw-data
-producer on the family below, not arbitrary collision completions or a
-global Fin4 theorem. No export claim is made.
+An explicit symmetric/asymmetric branch switch produces exact private-
+clock terminal equilibria throughout the raw reward family below. The
+same profiles produce fixed uniform-equilibrium payoffs. All persistent-
+base selections fail on this family; no arbitrary-completion or arbitrary-
+Fin4 coverage is asserted.
 
 ### 19.1. Self-contained theorem and exact raw data
 
@@ -2027,7 +2027,7 @@ There is no normalization or modification of these original rewards.
 Live and Never pay zero, randomization is private and independent, and
 every deviation replaces a complete behavioral law, including Never.
 
-Claim: for EVERY allowed A,B,K, the ORIGINAL game has an exact terminal
+Theorem: for EVERY allowed A,B,K, the ORIGINAL game has an exact terminal
 Nash profile against every complete unilateral replacement. Its actual
 value at each initial phase is a uniform-equilibrium payoff, with the
 same profile supplying all positive accuracies over sufficiently long
@@ -2194,9 +2194,8 @@ regret at most2*M*C_hor/N, where
 
     C_hor=1+4/(1-d^3).
 
-This is the same source-free terminal-to-average comparison used in
-Sections13 and15. It proves every fixed actual value Ut in(60) is one
-uniform-equilibrium payoff, chosen before accuracy. More explicitly, if
+Thus every fixed actual value Ut in(60) is one uniform-equilibrium payoff,
+chosen before accuracy. More explicitly, if
 M=max_(i,S)|r_i(S)|, then for every epsilon>0 the SAME selected profile
 is epsilon-horizon Nash and delivers Ut within epsilon whenever
 N>=2*M*C_hor/epsilon. The table-specific
@@ -2240,6 +2239,13 @@ threshold, not an arbitrary local IFT neighborhood or ancestry claim.
 The qualification K>0 is essential: at K=0 the symmetric root instead
 approaches a=b=(3-sqrt(5))/2. If K varies with C, other branch limits
 may occur; the theorem asserts no universal golden limit along such paths.
+To verify the K=0 assertion, put p=(sqrt(5)-1)/2 and c=1-p. At A=T,
+
+    (1-q)*f_0(q)=(T-1)*q*(q-c)*(q-p)*(q-(1+p)).
+
+The only nonzero root at or below the limiting endpoint qstar=c is c.
+The derivative f'_0(0)=-1 uniformly for A near T excludes a limiting
+zero root. Compactness of the selected q in[0,qstar] then forces q->c.
 
 An exact small parameter instance is A=19/5, B=1/2, K=10. Here
 D=1/sqrt(14), J=sqrt(14)/5, and(58) is an exact radical policy.
@@ -2248,8 +2254,7 @@ the source and proof above are exact.
 
 ### 19.8. Whole persistent-base exclusion for every K>=0
 
-This family is not merely the easy solved-base counterexample of
-Section18. For EVERY sure owner j, its mate has joining-minus-passive
+For EVERY sure owner j, its mate has joining-minus-passive
 gain A-4<0 when the other nonowners Continue. Its other noncollider
 has gain -B<0. If one further nonowner quits, either player's gain is
 `(K-1)-K=-1`; if both do it is `-1-K<0`. Both are strictly dominated
@@ -2418,9 +2423,10 @@ both participants of each cross scheduled pair to receive a negative
 reward. But every cross pair here has one participant B>0. Hence
 `GameTheory.PairedCycle.BelowSingleton.RawFamily`
 (`UniformEquilibrium/Quitting/Cycles/BelowSingletonJointPhaseSource.lean`)
-fails every labeling. The accepted raw
-[`TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM`](../exports/TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md)
-producer likewise fails each matching's joining-versus-partner condition:
+fails every labeling. The two-pair join-cap criterion requires
+r_i({i,mate(i)})>=r_i({mate(i)}) for every scheduled mate, plus outsider
+insertion caps at the own singleton. Its joining-versus-partner condition
+fails each matching:
 favorite pairs have A<4, whereas every cross matching contains a
 participant -B below its passive singleton0.
 
@@ -2453,18 +2459,57 @@ refutes `HasProductLowQuittingPremium`
 Finally every triple contains a cross pair with one negative join gap
 -B, excluding raw triple sources requiring six positive pair joins.
 
-The accepted golden singleton-calendar export
-[`FOUR_SINGLETON_PHASE_UNIFORM_EQUILIBRIUM`](../exports/FOUR_SINGLETON_PHASE_UNIFORM_EQUILIBRIUM.md)
-has favorite-participant cap A<=T at these EXACT singleton rows, which
-our strict A>T violates. The first four-joint export requires favorite
-participant coordinates near5 (its declared radius is at most1/2),
-and the rectangle export fixes these coordinates at5 and9/2; both fail
-A<4. The common-large-pair-participant source requires positive common
-participant rewards on all pairs, contradicted by the cross entries-B.
-These comparisons concern the declared raw classes, not every strategy
-architecture or every unquantified neighborhood proved elsewhere.
+For the four-joint local raw class centered at favorite participant5,
+the declared radius is at most1/2, incompatible with A<4. The unbounded
+four-joint rectangle class fixes favorite participant coordinates5 and
+9/2, likewise incompatible with A<4. The common-large-pair-participant
+source requires positive common participant rewards on all pairs,
+contradicted by the cross entries-B. These comparisons concern these
+declared raw classes, not every strategy architecture or every unquantified
+neighborhood.
 
-### 19.12. Source/consumer scope and the remaining global problem
+### 19.12. Whole positive singleton-word exclusion at the exact singleton rows
+
+Consider the named chronological singleton word0,2,1,3 with ANY four
+proper positive hazards p_i, indexed in chronological word order, and
+its corresponding relabelings preserving the paired singleton pattern.
+Each owner's mate occurs two phases later. Write u_i=1-p_i in(0,1).
+An active owner's value must be its singleton1. Its Continue endpoint
+collects zero at the next nonmate, reward4 if its mate quits at the next
+phase, zero at the remaining nonmate, and value1 upon return. Therefore
+the four owner-indifference equations, cyclically indexed, are exactly
+
+    E_i=u_i*(4-4*u_(i+1)+u_(i+1)*u_(i+2))-1=0.      (63)
+
+Put alpha=u0-u2 and beta=u1-u3. Subtract opposite equations:
+
+    E0-E2=4*(1-u1)*alpha-u2*(4-u0)*beta,
+    E1-E3=u3*(4-u1)*alpha+4*(1-u2)*beta.             (64)
+
+All four coefficients displayed in these two rows are strictly positive.
+The determinant of this two-by-two system is
+
+    16*(1-u1)*(1-u2)+u2*u3*(4-u0)*(4-u1)>0.
+
+Hence alpha=beta=0. Put u0=u2=x and u1=u3=y. The remaining equation
+difference is (4+x*y)*(x-y)=0, so x=y=u. The common equation factors as
+
+    u^3-4*u^2+4*u-1=(u-1)*(u^2-3*u+1)=0.
+
+Its unique root in(0,1) is u=(3-sqrt(5))/2. Thus EVERY all-positive
+proper owner solution for this named singleton word has the golden
+hazards p=(sqrt(5)-1)/2, not only one locally continued branch.
+
+At a root of owner j, its inactive mate has policy value H=2+p and
+forced-Quit value 1+p*(A-1). Since T=3+p and p^2=1-p, the required
+inactive inequality is exactly A<=T. Our strict A>T violates it.
+Consequently this entire named positive proper singleton-calendar
+architecture fails on the raw family, including any locally selected
+positive branch at these exact singleton rows. No unspecified IFT
+radius needs to be chosen. This does NOT exclude arbitrary owner words,
+longer calendars, zero/sure hazards or general singleton strategies.
+
+### 19.13. Source/consumer scope and the remaining global problem
 
 The source is entirely raw: for the exact allowed A,B,K, equations
 (56)--(59) PRODUCE the legal hazards. Equations(60)--(62) then identify
@@ -2476,9 +2521,10 @@ is the same mathematical consumer chain represented by
 (`UniformEquilibrium/Quitting/Cycles/CyclicSupersolution.lean`), followed
 by `quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact`
 (`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`).
-The precise raw producer in this section is ordinary mathematics, not
-a named Lean theorem. No new Lean file, build result, source-completeness
-assertion or export is claimed.
+These declarations are semantic consumer anchors; the raw source here
+is the explicit mathematical hazard construction(56)--(59), with its
+own full endpoint and clock proof. The comparison does not assert a
+strategy-class completeness theorem.
 
 What is removed is the need to stay on one locally continued equilibrium
 branch, in one small reward neighborhood, or at uniformly tiny hazards.
