@@ -188,6 +188,83 @@ triple or grand probabilities vanish at fixed K, and does not close an
 invariant barrier. Opponent-coincidence coordinates cannot simply be
 replaced by actual terminal triple probabilities.
 
+### 3.1. A nonlinear independent-law constraint and its limited force
+
+For distinct i,j let A=I\{i,j}. Actual independent clocks satisfy
+
+    E_i*E_j<=G+C_i+C_j,
+    p_(I\i)*p_(I\j)<=G*p_A+C_i+C_j.                  (7a)
+
+These are ordinary exact inequalities, not assertions that the attainable
+law set is convex. To prove the first, expand E_i*E_j as a double sum over
+dates t,s. The t=s terms are
+
+    sum_t p_i(t)*p_j(t)*(product_(k in A)p_k(t))^2<=G.
+
+For t<s, sum the first triple's factor over t, bounding its two shared
+atom factors by1. This contribution is at most
+sum_s Pr(T_j<s)*product_(k!=j)p_k(s)=C_j. The s<t terms similarly give C_i.
+For the second inequality use
+p_(I\i)(t)=Pr(T_i>t)*product_(k!=i)p_k(t). The off-diagonal estimates only
+improve; its diagonal summand is exactly G(t)*p_A(t), and summing is at
+most G*p_A. All sums are nonnegative, so the proof applies to infinite
+laws and positive Never masses by monotone summation.
+
+For example C=0 and G=0 imply that at most ONE counterfactual triple
+coincidence E_i is positive. More generally, if C=0 and G>0, every triple
+or grand coincidence must occur at one common date t0, with no player's
+finite atom strictly before t0. Indeed a positive grand atom at t0
+makes ANY later triple coincidence preempted by its excluded player's
+positive t0 atom. A triple coincidence earlier than t0 similarly preempts
+one of the grand event's deleted triple coincidences. Two different grand
+dates are covered by the same argument. This is an exact zero-C boundary
+description, not a fixed-K low-regret classification: (7) only gives
+C=O(1/K), not C=0 as regret tends0 at the fixed table K=10.
+
+### 3.2. Coincidence/order data alone do not preserve FULL caps
+
+Even the complete joint weak ordering of the four prescribed clocks does
+not determine full deviation caps on the integer calendar. In this ACTUAL
+table take T1 uniform on{0,1} and let the other three clocks be Never.
+Player0 has prescribed payoff0. Its deadline0 payoff is0, deadline1
+payoff-1/2, and every later deadline and Never payoff0. Thus its FULL cap
+is0. Change ONLY T1 to uniform on{0,2}. Every terminal coalition mass,
+prescribed payoff, E_i,C_i,G and the joint clock weak ordering is unchanged.
+But deadline1 now gives player0 payoff1/2. Its full cap is1/2.
+
+The same effect occurs near the K=10 low-debt search, not only in this
+high-debt calibration. The exact twelve-date profile and independent
+integer cap checker in `CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION.md`
+Section24 and `../experiments/CODEX_NASH_BOX__FINITE_CLOCK_JOINT_APPROXIMATION.py`
+give maximum full regret63609521374809/10^16. Insert one all-zero date
+immediately after date0, shifting every old finite date>=1 up by1 and
+leaving Never fixed. The exact same checker gives maximum full regret
+
+    2107022933400569/5000000000000000 > 2/5,
+
+attained by player1's new deadline1. Prescribed payoffs and ALL ordering
+and coincidence data remain identical. This computation was rerun in
+exact integers/Fractions; it is not a claim about the optimizer's global
+minimum. It rules out charging this cap increase solely to a change in
+terminal law, coincidence counts, or clock-order probabilities: those
+changes are exactly zero.
+
+Conversely, deleting globally empty dates is a sound operation: it preserves
+the independent prescribed payoff and cannot INCREASE any full cap. Every
+compressed pure deadline lifts to the original date with the same position
+against all opponents; Never lifts to Never, and arbitrary mixed replies
+are averages. This does not justify inserting dates, coalescing nonempty
+dates, or replacing source-specific menus by a common dense calendar.
+
+A contemplated probability-quantile coarsening is not new: the actual
+full-cap theorem `hasEscapeAwareQuantileClockCompressionAtBound`
+(`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`)
+already controls both payoffs and unrestricted caps. The selected finite
+source `exists_fin4_finiteClockStoppingLaws_exploitability_le`
+(`UniformEquilibrium/Quitting/Paths/QuantitativeFiniteClockSource.lean`)
+approximates the UNKNOWN global infimum, not zero. No new producer or
+barrier follows by rebuilding that compression.
+
 ## 4. Complete cubic exclusion by ten rational exact edges
 
 For the ACTUAL table K=10 there is NO real polynomial P of total degree
