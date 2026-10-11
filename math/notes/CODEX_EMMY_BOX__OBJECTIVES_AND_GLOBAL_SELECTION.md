@@ -34,13 +34,18 @@ lowered-cap Nash roots have an absorption-weighted error charge and
 strictly improve debt from every positive-debt low-cap point. An exact
 rational prefix escapes Section15's stall but exits the low-cap face;
 no preserved-region or minimum-specific escape theorem is proved.
-Section17 is a separate ordinary UNREVIEWED complete finite-player
-raw-class proof draft. Two finite weighted reward ledgers, proper-support
-premium peeling, and proper-subset insertion acyclicity produce and
-preserve an actual cap chamber and escape its positive-debt minimum.
-Its four-player test has no stationary exact Nash and defeats the
-whole weighted-floor/upper-average and boxed-charge selections checked
-there. No exhaustive source census or independent review is claimed.
+Section17 is independently reviewed ordinary mathematics, not Lean-checked.
+Its complete raw finite-player theorem and sixty-coordinate open region
+are frozen in
+[`TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md`](../exports/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md).
+Two finite weighted reward ledgers, proper-support premium peeling, and
+proper-subset insertion acyclicity produce and preserve an actual cap
+chamber and escape its positive-debt minimum. Its bounded whole-source
+comparisons do not assert an exhaustive classification of UE producers.
+Section18 is a different, UNREVIEWED global-source attempt: impose one
+shared joint-survival budget rather than fixing a constrained owner.
+The exact source exists and its nonnegative-own full-regret minimum is
+attained. No small-regret selection theorem or new UE class follows yet.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -1948,3 +1953,204 @@ seed clause but does not supply guards1--4. The requested independent
 check is the COMPLETE §§17.1--17.8 proof, especially zero-weight/weak
 boundary cases, full-support odds signs, and the purported nonstationary
 test. A separate bounded overlap check must precede any export request.
+
+## 18. Shared termination responsibility instead of a fixed owner
+
+Status: ORDINARY UNREVIEWED supporting proof and a new global selection
+question. This is not an equilibrium producer or a new raw-table class.
+The source below exists without any raw preservation ledger. Its small-
+regret selection is not proved, and is not asserted equivalent to UE.
+
+### 18.1. Exact question and a bounded overlap check
+
+Fix any finite player set I with at least two players, a real reward table
+r on its nonempty coalitions, live/Never payoff0, and |r_i(S)|<=M.
+Each profile is a product of private laws on {0,1,...,Never}; complete
+behavioral replacements are precisely arbitrary replacement laws here.
+For a prescribed law put S_i(t)=Pr(T_i>t), including Never in this event.
+Fix delta in(0,1), c=1-delta, and impose ONE joint constraint
+
+    product_i S_i(t) <= c^(t+1)        for every finite t>=0.       (18.1)
+
+Given the other laws, a player may replace its ENTIRE law by any law
+preserving(18.1). Let N_delta consist of the exact independent generalized
+Nash profiles for these feasible replacements, with ORIGINAL unmodified
+terminal utilities. A player may use Never if its opponents already fund
+the required joint termination. No player is designated in advance, and
+the per-player feasible sets depend on the opponents.
+
+The conjecture-facing test, restricted to s_i>=0, is
+
+    liminf_(delta down to0) min_(p in N_delta) E(p) = 0,          (18.2)
+
+where E is ORIGINAL maximum full behavioral regret, not restricted regret.
+If true at every finite table, this sufficient selection statement would
+produce terminal approximate Nash profiles. It must be tested rather than
+treated as a reformulation of known UE existence: approximate full Nash
+profiles need not be near an exact constrained component.
+
+The narrow phrase search for shared-survival budgets and generalized Nash
+in the clock notes and Quitting/Root, Quitting/Terminal subtrees found no
+matching source. This is different from Sections2--14 of the single-owner
+compactification notebook, the independent per-player finite-tail domain
+C_delta, and a public terminal-boundary payment. The following least-Never
+tail attempt, in contrast, was ALREADY covered and is not claimed anew:
+the exact graft formula(Q1) and active end-wall arguments(Q4)--(Q6) are in
+the reviewed LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE, PartII Section14.
+
+### 18.2. The shared constrained source always exists and is compact
+
+Claim. For arbitrary signed rewards, N_delta is nonempty and compact in
+the product weak topology on private clock laws, where t->Never as
+t->infinity. Every one of its profiles absorbs with probability1, with
+the uniform joint-tail bound(18.1). The assertion is ordinary mathematics,
+not a declaration claimed checked in Lean.
+
+The ambient clock space Omega is the one-point compactification of N;
+probability laws on Omega form a compact convex metrizable set. Each
+finite cylinder mass and each S_i(t) is continuous. The feasible profile
+set is closed. On it, prescribed payoffs are continuous: truncating the
+payoff expansion after date H has error at most M*c^(H+1), uniformly over
+all feasible profiles. Its finite expansion is continuous in the laws.
+
+For fixed opponents, the feasible own laws form a nonempty compact convex
+set; Quit0 is feasible. The graph of this feasible correspondence is
+closed. Its needed lower-continuity has an explicit legal construction.
+Given a feasible own law q, first move EVERY draw after a fixed H, including
+Never, to H. Next mix the resulting law with Quit0, with weight epsilon>0.
+All own survivals through H-1 have factor1-epsilon, making every nonzero
+joint constraint there strictly slack. After H they vanish. Consequently
+the same modified law is feasible against all sufficiently close opponent
+laws. Letting H grow and epsilon decrease recovers q weakly. Its payoff
+also recovers that of q whenever the opponents converge and the pairs
+remain feasible, by the preceding uniform joint-tail estimate.
+
+One can apply the usual compact-convex fixed-point argument to the best-
+response correspondences, or avoid an infinite-dimensional invocation as
+follows. Restrict all clocks to {0,...,H}; impose(18.1) up to H-1, after
+which joint survival is0. The finite-dimensional feasible correspondences
+are nonempty compact convex and continuous by the Quit0 mixture above;
+payoffs are affine in the own law. Kakutani gives a generalized Nash
+profile p^H. A weak subsequential limit p satisfies every fixed finite
+constraint. For any feasible replacement q against p's opponents, use
+its fixed finite truncation/strict Quit0 mixture against p^H's opponents.
+It is legal for large H. Pass its restricted Nash inequality to the limit,
+then remove the truncation and mixture using uniform joint-tail continuity.
+This proves p belongs to N_delta.
+
+The identical argument, starting with a convergent sequence already in
+N_delta, proves closedness: approximate every limit-feasible competitor
+by a strict finite competitor, pass the Nash inequality, then remove its
+approximation. Hence N_delta is compact. This proof does not assume that
+the JOINT feasible profile set is convex; it generally is not.
+
+### 18.3. Original full regret has an attained minimum when s>=0
+
+For every finite deadline T, its response payoff f_i(T,p_-i) depends only
+on finite opponent cylinders through T, and is continuous in p_-i.
+For arbitrary opponent laws,
+
+    lim_(T->infinity) f_i(T,p_-i)
+       = f_i(Never,p_-i)+s_i*product_(j!=i)Pr(T_j=Never).
+
+Thus s_i>=0 implies Never<=sup_T f_i(T). By affinity in the complete
+replacement law, B_i=sup_(finite T) f_i(T), so B_i is lower semicontinuous.
+Prescribed U_i is continuous on the shared feasible set by Section18.2.
+Consequently E=max_i(B_i-U_i) is lower semicontinuous on compact N_delta
+and its minimum is attained. No finite maximizing full deadline is inferred.
+
+This supplies the WHOLE attained correspondence extremum in(18.2), with
+no owner choice left outside its quantifiers. It does not bound its value.
+
+There is one direct full-response estimate. Against ANY opponents, for
+every finite T>=1 the law
+
+    (1-c^T)*Quit0 + c^T*QuitT
+
+is feasible for the shared budget: before T its own survival is c^T,
+at most c^(t+1), and from T onward it is0. Therefore every p in N_delta
+satisfies, simultaneously for all labels and all finite T,
+
+    f_i(T)-U_i(p) <= 2M*(1-c^T) <= 2M*delta*T.             (18.3)
+
+Quit0 itself is feasible and gives f_i(0)<=U_i. More sharply, the minimal
+Quit0 mixing weight needed for deadline T is
+
+    eta_i(T)=max_(0<=t<T) (1-c^(t+1)/product_(j!=i)S_j(t))^+,
+
+where a zero opponent product imposes no condition. Then the first upper
+bound in(18.3) improves to2M*eta_i(T). In particular, a good component whose
+full cap is approached by deadlines T_delta with delta*T_delta->0 would
+solve the selection test. Uniform properness at FIXED delta is not this
+estimate; best replies may escape to dates of order1/delta or later.
+
+### 18.4. Exact sign-sensitive whole-source test
+
+The own-sign hypothesis matters. Consider the two-player table
+
+    r({0})=(1,-2),   r({1})=(2,-1),   r({0,1})=(0,0).
+
+For EVERY delta in(0,1), the ENTIRE shared generalized-Nash correspondence
+is exactly
+
+    T0=Never surely;   T1 proper with Pr(T1>t)<=c^(t+1).
+
+Every such source has ORIGINAL full regrets(0,1). This does not falsify
+(18.2) at its nonnegative-own scope.
+
+Proof of necessity. Let m_i=Pr(T_i finite). Joint termination gives
+(1-m0)(1-m1)=0. If player1 had positive Never mass, then player0 would be
+proper. Changing a positive portion of player1's Never mass to Quit0 is
+always feasible, and gains1+Pr(T0=0)>0 over its Never payoff-2. Thus m1=1.
+If m0>0, player1's finite response curve is
+
+    f1(t)=-2Pr(T0<t)-Pr(T0>t),
+    f1(0)=-1+Pr(T0=0)>=-1,
+    lim_t f1(t)=-1-m0<-1.
+
+Moving any positive own atom to an EARLIER date preserves the joint budget.
+Player1 can therefore have no supported finite atom sufficiently late;
+since it is proper, it has a last atom H. Player0 cannot have an atom at H:
+moving a portion to H+1 preserves all constraints (player1 is surely done
+by H) and gains2Pr(T1=H)>0. Hence Pr(T0=H)=0, and
+
+    f1(H)=-1-Pr(T0<H)<=-1.
+
+The earlier-move inequality f1(H)>=f1(0) now implies Pr(T0<=H)=0.
+If m0>0, let K>H be player0's first finite atom. Then f1(K)=-1+Pr(T0=K)>-1.
+A sufficiently small part of player1's H atom can legally move to K:
+the old joint survival is0 after H, and on the FINITE interval H,...,K-1
+choose its mass below the positive minimum budget c^K. This is profitable,
+contradiction. Thus m0=0, and(18.1) reduces to the asserted bound on T1.
+
+Conversely, against proper T1 player0's Never payoff2 dominates all finite
+deadlines and is feasible. Against T0=Never, every legal player1 law must
+be proper and earns-1, so all are constrained best replies. Its full Never
+deviation earns0, proving the claimed original regret.
+
+Adding1 ONLY to player1's reward at EVERY finite terminal coalition leaves
+the ENTIRE shared correspondence unchanged: every feasible profile and every
+legal replacement absorbs surely, so that utility changes by the constant1.
+But this nonnegative-own version has rewards(1,-1),(2,0),(0,1), and every
+listed source is now full exact Nash, with regrets(0,0). Thus a terminal
+constant transport can preserve this constrained source while changing its
+FULL performance completely; an unrestricted deviation may remove the last
+proper clock. No padding or Fin4 exclusion follows from this example.
+
+### 18.5. Current boundary and exact next test
+
+The proved content is automatic compact shared-responsibility source
+existence, attained full-regret minimization in its nonnegative-own lane,
+and the simultaneous all-deadline estimate(18.3). It supplies neither a
+preserved low-cap region nor a zero-regret selector. Its responsibility
+constraint is genuinely joint, but exact generalized Nash may still be
+too strong for arbitrary approximate-equilibrium production.
+
+The concrete next test is the ENTIRE N_delta minimum on the canonicalized
+three-player perturbed Solan table of the single-owner notebook Section14,
+not another fixed geometric or stationary component. There the old K_delta
+selector fails for all three core-owner choices. The question is whether
+shared responsibility permits macroscopic record atoms giving min E->0,
+or whether every shared component still has a uniform original loss.
+Either conclusion must cover all private laws and the exact normalization;
+a bad symmetric component alone does not decide it.
