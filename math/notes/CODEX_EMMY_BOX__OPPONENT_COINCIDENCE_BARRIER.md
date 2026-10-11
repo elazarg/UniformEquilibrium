@@ -1,7 +1,7 @@
 # Opponent-coincidence barriers and a cubic moment obstruction
 
 Status: INTERNAL ordinary mathematics and exact rational computation, not
-Lean checked or independently reviewed. No positive invariant barrier,
+Lean checked. No positive invariant barrier,
 unrestricted positive gap, uniform equilibrium, or new solved raw class is
 claimed. The completed calculation in Section4 excludes EVERY cubic
 polynomial potential for one explicit actual table, not merely a selected
@@ -12,7 +12,16 @@ realization. Section3.3 gives a separate ordinary necessary-mode proof:
 on the paired singleton matrix, sufficiently small FULL regret forces a
 macroscopic root at uniformly positive original joint reach, even when the
 suffix hazards are arbitrary. This is not an exact-Nash compactness theorem.
-The actual all-degree/barrier question remains open.
+Section3.4 gives an ordinary whole-profile proof that
+vanishing FULL regret forces nonvanishing probability of actual joint
+terminal absorption. This is a collision-necessity theorem, not a positive
+exploitability barrier or a new uniform-equilibrium class. The actual
+all-degree/barrier question remains open. CODEX_NASH_BOX's bounded
+independent adversarial review found no objection to the complete
+Section3.4 chain at whole-file SHA256
+`aa1165532b0e8dffb56813b40cea82a2778eafbd1027b111b75cda5317bc2d05`;
+see `feedback/CODEX_EMMY_BOX__OPPONENT_COINCIDENCE_BARRIER__BY_CODEX_NASH_BOX.md`.
+The separate two-hazard consequence below is UNREVIEWED.
 
 ## 1. Exact negative-endpoint question
 
@@ -276,6 +285,8 @@ barrier. It strengthens the all-small-conditional-hazard exclusion in
 `CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md` Section25.3 in one
 specific way: the first macroscopic root occurs at uniformly positive
 ORIGINAL joint reach. It does not transport a cap to a different calendar.
+The older global-premise statement remains valid; this is a stronger
+localization, not a correction of that theorem.
 
 Keep the singleton matrix R=I+4P, where P exchanges opposite mates, but
 allow ANY collision rewards of absolute value at most M, M>=4. Let q_i(t)
@@ -315,7 +326,8 @@ sum J'_t*q_i(t)*(C_it-Q_it)_+, where J'_t>=J_t. This implies(7c).
 
 Set h_it=-log(1-q_i(t)), h_t=sum_i h_it, s_t=sum_(u<t)h_u.
 On the prefix t<T one has h_t<=5delta and J_t=exp(-s_t). Let T0 be
-the first date with s_T0>=1; it exists and T0<=T. Every endpoint up to
+the first date with s_T0>=1; it exists and T0<T, since
+s_T0<=1+5delta<log(1/kappa)<=s_T. Every endpoint up to
 T0 has J_t>=1/4. Interpolate the v_t linearly in hazard time s, and put
 a_i=h_it/h_t on each positive cell. Ignore zero cells. On[0,1], elementary
 logarithm/exponential bounds and the exact payoff recursion give
@@ -375,6 +387,235 @@ conditioning. This does NOT give an actual exact Nash limit: subsequent
 calendar intervals and finite mass can escape to infinity. Nor does it
 justify deleting a diffuse interval between successive macroscopic roots;
 Section3.2 shows why preserving prescribed ordering is not enough.
+
+### 3.4. Actual joint terminal absorption is necessary at vanishing FULL regret
+
+Status: ordinary complete proof, not Lean-checked. A bounded independent
+adversarial check by CODEX_NASH_BOX found no objection to the entire chain
+at the frozen snapshot named above, including complete deviations,
+positive-reach calendar compactness and the whole one-owner contradiction.
+The conclusion is a necessary constraint on ALL actual independent clock
+profiles, not a supplied-calendar test. It does not give positive FULL
+regret without its collision term.
+
+#### Raw data, agency and complete quantified statement
+
+Let P exchange opposite mates on I=Z/4Z. Fix M>=4 and zeta>0. Let r be
+ANY finite reward table with live/Never0, absolute reward bound M, and
+
+    r({j})=e_j+4e_(j+2),
+    r_(j+1)({j,j+1})>=1+zeta       for every j.        (7f)
+
+Every remaining pair, triple and grand coordinate is arbitrary subject
+to the bound. Profiles are independent complete private date-or-Never
+laws; D_i is regret against EVERY complete unilateral replacement, not
+only the prescribed support. Define
+
+    eta=max_i D_i,
+    beta=Pr(first terminal coalition has size at least2).
+
+Claim. There is gamma=gamma(M,zeta)>0 such that EVERY such table and
+EVERY actual profile satisfy
+
+    eta+beta>=gamma.                                 (7g)
+
+In particular on(1) at K=10, some fixed gamma>0 works for ALL private
+clocks, not just identical, periodic, bounded, or one-owner clocks.
+Every full approximate-equilibrium family must retain nonvanishing
+ACTUAL joint terminal absorption. This is stronger than merely requiring
+a large conditional hazard somewhere. It is compatible with Nash's
+exact twelve/thirteen-date upper certificates: their beta values are
+respectively176504962032139/2500000000000000 and
+12860868170899/200000000000000, about.070602 and.064304.
+
+#### A quadratic identity with an actual collision error
+
+Put R=I+4P, A=I-4P, and define
+
+    F(u)=u^T A u+15,        AR=-15I.                  (7h)
+
+At a root q let c=product_i(1-q_i), b_i=q_i*product_(j!=i)(1-q_j),
+d=Pr_q(at least2 Quit), and u=c*v+sum_(S nonempty)Pr_q(S)r(S).
+The polynomial
+
+    E_r(q,v)=F(u)-c^2 F(v)+30*sum_i b_i*(u_i-1)       (7i)
+
+vanishes on EVERY coordinate axis of q, for every v. Indeed on the
+axis q=p e_j one has u=(1-p)v+p R e_j, and AR e_j=-15e_j,
+(R e_j)^T A(R e_j)=-15 give the EXACT identity
+
+    F(u)=(1-p)^2 F(v)-30p*(u_j-1).                   (7j)
+
+Consequently every monomial of E_r, viewed as a polynomial in q with
+coefficients polynomial in v and r, contains at least two distinct q
+variables. Assign each monomial to a pair of these variables. Compactness
+of |v_i|<=M and |r_i(S)|<=M therefore supplies a finite C_M, uniform
+over all the reward completions in(7f), with
+
+    |E_r(q,v)|<=C_M*d.                               (7k)
+
+This uses q_i*q_j<=d and finitely many bounded polynomial coefficients.
+It does not replace q by a closest axis with an O(sqrt d) error.
+
+Apply this to actual conditional tails U_t and joint reaches J_t. As
+usual a complete match-prefix-then-Quit deviation gives
+J_t(Q_it-U_ti)<=eta. A complete finite suppression of just player i's
+hazards at dates with Continue>Quit gives
+
+    sum_t J_t*q_i(t)*(U_ti-Q_it)_+<=D_i.              (7l)
+
+One may pass from finite windows to the full nonnegative sum. Since
+b_i<=q_i and J_t<=1, this implies
+
+    -eta <= sum_t J_t^2*sum_i b_it*(U_ti-Q_it)
+          <=4eta.                                   (7m)
+
+For the lower bound use the pointwise Quit gain and
+sum_t J_t*sum_i b_it<=1. Moreover
+
+    sum_i b_i*|Q_i-1|<=12(M+1)*d,                   (7n)
+
+because |Q_i-1|<=(M+1)*sum_(j!=i)q_j and
+sum_(i<j)q_i*q_j<=6d. Also sum_t J_t*d_t=beta.
+Multiplying(7i) by J_t^2 and telescoping now yields
+
+    |F(U_0)|<=120eta+[C_M+360(M+1)]beta
+                         +(20M^2+15)eta^2.          (7o)
+
+To justify the infinite boundary, joint Never rho<=eta by the legal
+Never-branch-to-late-deadline replacement, own singleton being1.
+Thus limsup_T |J_T^2 F(U_T)|<=(20M^2+15)rho^2. All other error sums
+are absolutely bounded as displayed. This calculation keeps arbitrary
+Never masses and simultaneous quits.
+
+#### Why zero-collision approximate equilibria cannot lose their calendar
+
+Suppose(7g) were false. Choose tables r_n in the bounded closed set(7f)
+and actual profiles with eta_n+beta_n->0. Pass to convergent rewards.
+Diagonal extraction also gives every finite conditional root q_t and
+conditional prescribed value U_t whenever the limiting joint reach is
+positive. For such tails, conditional regret<=eta_n/J_nt and conditional
+collision probability<=beta_n/J_nt, by actual match-prefix deviations
+and the exact first-absorption decomposition. Equation(7o) therefore gives
+
+    F(U_t)=0,        U_t in H:=conv{R e_j:j in I}.    (7p)
+
+The hull conclusion follows directly from the ACTUAL terminal rewards:
+collision mass tends0 and joint Never<=conditional regret tends0.
+It does not assume convexity of attainable independent laws.
+
+At every such root the limiting q_t has support at most1: its one-date
+collision probability tends0. It cannot be all zero. Otherwise the full
+Quit inequalities imply U_ti>=1 for all i. Write g=U_t-1>=0. Since
+sum U_t=5, sum g=1, and
+
+    F(U_t)=g^T A g-3<=1-3=-2,
+
+contradicting(7p). Nor can its sole hazard p be1: the successor receives
+prescribed0 at that sure singleton root, but joining earns at least
+1+zeta. Thus p in(0,1), and the next joint reach is positive. This
+inductively constructs EVERY finite limiting root.
+
+There is in fact a COMMON p_*>0 for all these limiting roots, including
+across their dates and bounded tables. The relevant root triples
+(r,q,U,V) form a compact set with U,V in H, F(U)=F(V)=0, q on the
+union of coordinate axes, and the closed full root-Nash inequalities.
+The preceding all-zero argument excludes q=0 from this compact set.
+Also successor optimality gives
+
+    (1-p)*V_(j+1)=U_(j+1)>=1+zeta*p,
+    V_(j+1)<=4,         hence p<=3/(4+zeta)<1.        (7q)
+
+The first inequality uses ONLY the positive incoming pair premium in(7f).
+Thus the extracted limiting independent clocks have, at every date,
+EXACTLY one positive hazard, lying in[p_*,3/(4+zeta)]. Their joint
+survival tends0 geometrically. No passage to a transfinite or public
+calendar is involved.
+
+Their actual prescribed values equal U_t: iterate the exact payoff
+recursion and let the bounded terminal remainder vanish geometrically.
+All full root-Nash inequalities survive the limit. These imply full
+unrestricted terminal Nash here. For any complete response, backward
+induction bounds its reward truncated after H by U_t, because the
+terminal comparison0<=U_H holds (U_H in H is nonnegative). Bounded
+convergence then handles its actual finite-or-Never terminal payoff.
+Equivalently finite-deadline continuity plus the nonnegative own-singleton
+late-deadline bound controls Never. Private randomization cannot improve
+the pure deadline/Never supremum.
+
+#### Exact one-owner Nash is impossible on these raw rows
+
+For completeness this is a whole-calendar argument, not a fixed word.
+At every positive one-owner root with owner j and hazard p in(0,1),
+exact Nash forces both the current and next j values to be1. A sure
+one-owner root was already excluded by successor joining.
+
+Fix any positive j root and let k be the next DIFFERENT positive owner.
+Such k exists: otherwise both nonmates of j receive0 forever, while
+successor j+1 can join at the current root for more than1.
+
+If k=j+1, its value at its own root is1. At the intervening j-only
+roots it receives0 on absorption, so its earlier value is strictly less
+than1, whereas its current Quit endpoint is greater than1. Impossible.
+If k=j-1, the old j value at the new k root is still1, since all preceding
+j roots preserve it. But j is the successor of k and can join for more
+than1. Impossible. Therefore k=j+2.
+
+Apply the same argument at successive owner changes. All future owners
+are confined to the mate pair{j,j+2}. Both outsiders then receive0 on
+every actual terminal singleton and on Never. At a j root its successor
+nevertheless has a strictly positive joining payoff. This is the final
+contradiction. Hence exact one-owner Nash is impossible, contradicting
+the compactness limit above and proving(7g).
+
+#### Scope and missing full-cap contradiction
+
+This is an unconditional inequality for actual profiles, but NOT an
+unconditional positive exploitability bound: joint collisions can pay
+for the entire gap in(7g). In particular it does not rule out the
+asymmetric low-regret profiles already found. The earlier all-small-hazard
+proof alone did not imply(7g), because large sole-owner roots could have
+zero prescribed collisions. The new ingredients are the collision-error
+quadratic identity, legal suppression with reached weights, and the
+compact all-calendar exact limit.
+
+The next genuinely negative step would have to control the unavoidable
+joint absorption using FULL caps, or show that its cap-consistent
+recurrence is impossible. It cannot discard these collisions or replace
+them by independent root serialization: the new intermediate deadlines
+in Section3.2 are not cap-safe. Narrow source checks inspected
+`pairedFacePotential_boundedCompletion_face_drift` and
+`pairedFacePotential_boundedCompletion_not_fullRoot` in
+`UniformEquilibrium/Quitting/Examples/PairedFacePotentialBoundedCompletion.lean`,
+and `translated_face_drift_ge_one` in
+`MathUE/Analysis/Examples/PairedFacePotential.lean`. Those are singleton-face
+versus full-root potential statements, not(7g). No exhaustive novelty,
+Lean verification or export status is claimed here.
+
+#### Separate unreviewed consequence: two reached macroscopic hazards
+
+Choose gamma in(7g) at most1. If eta<gamma/4, some finite date t has
+
+    J_t>gamma/4,
+    the second-largest q_i(t)>gamma/48.              (7r)
+
+In particular two ORIGINAL private date atoms exceed gamma^2/192.
+This is an ordinary UNREVIEWED consequence, not an additional independent
+check of(7g) or a positive exploitability bound.
+
+Indeed let a_t=1-product_i(1-q_i(t)) and let q_(2)(t) denote the
+second-largest hazard. The union bound over pairs gives
+
+    d_t<=sum_(i<j)q_i*q_j<=3q_(2)*sum_i q_i
+        <=12q_(2)*a_t.
+
+Since joint Never rho<=eta<gamma/4, the first T with J_T<=gamma/4 is
+finite. If every earlier q_(2)<=gamma/48, then collision probability
+before T is at most( gamma/4 )*sum_(t<T)J_t*a_t<=gamma/4.
+The entire later terminal mass is at most J_T<=gamma/4, so beta<=gamma/2.
+But(7g) gives beta>=gamma-eta>3gamma/4, a contradiction. Finally each
+individual survival is at least J_t, giving the two asserted atom bounds.
+The strict eta endpoint is used to ensure that T is finite.
 
 ## 4. Complete cubic exclusion by ten rational exact edges
 
@@ -552,11 +793,12 @@ For this explicit actual table it cannot: a finite collection of FULL
 exact edges defeats every cubic. This is stronger than a sampled failure of
 one ansatz, but weaker than a global obstruction or an existence theorem.
 
-The opponent-coincidence ledger provides additional actual-law information
-that a payoff-only cubic does not capture. The concrete next question is
-whether(6),(7), together with independent-law constraints, supports a closed
-positive-debt invariant set under EVERY product root. The gap is exactly
-that(7) alone permits compensating solo/adjacent-pair mass, and the finite
-moment circulation in Section4 has no concatenation or independence
-purification theorem. Raising the polynomial degree without resolving one
-of those structural seams is not yet a new mechanism.
+The opponent-coincidence ledger and Section3.4 provide additional
+actual-law information that a payoff-only cubic does not capture. The
+concrete next question is whether mandatory joint terminal absorption can
+be consumed by FULL caps, or admits a cap-consistent actual recurrence.
+The collision term in(7g) cannot be discarded, and(6),(7) alone still
+permit compensating solo/adjacent-pair mass. The finite moment circulation
+in Section4 has no chronological concatenation or independent-law
+purification theorem. Raising polynomial degree, averaging the private
+clock laws, or serializing collisions does not resolve these seams.
