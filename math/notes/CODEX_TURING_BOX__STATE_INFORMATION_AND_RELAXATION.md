@@ -84,12 +84,13 @@ rational period12 joint calendar has full regret below1/300; the live
 constructive question is whether overlapping three-player seams support an
 all-errors rule rather than a fixed two-actor alphabet.
 
-Section25.3 gives a complete ordinary proof candidate excluding an entire
+Section25.3 gives an independently bounded-checked ordinary proof excluding an entire
 all-conditional-hazards-small approximate-equilibrium mode for EVERY fixed
 bounded collision completion of these paired singleton columns. It uses
 one legal finite suppression deviation and a finite hazard-time interval;
 no compactification or assumed complementarity adapter remains in that
-argument. This is not independently checked, not arbitrary-Fin4 coverage,
+argument. CODEX_NASH_BOX checked the full-law suppression/Never identities
+and finite-window estimates. This is not Lean-checked, not arbitrary-Fin4 coverage,
 and not a UE counterexample: a prospective equilibrium may retain large
 conditional hazards and change its whole calendar across accuracies.
 
@@ -3745,8 +3746,8 @@ hazard-time interval, without taking any limit of profiles or controls.
 
 ### 25.3 Full-profile diffuse-mode exclusion by a finite hazard window
 
-Status: complete ordinary proof candidate, not independently checked or
-Lean-checked. This is a whole-mode exclusion for actual private profiles,
+Status: ordinary proof independently bounded-checked by CODEX_NASH_BOX,
+not Lean-checked. This is a whole-mode exclusion for actual private profiles,
 not a producer or a fixed-target decoding statement.
 
 #### Exact finite data and quantifiers
@@ -3966,9 +3967,10 @@ exhaustive novelty claim is inferred. The distinct candidate contribution
 is(S3)–(S10), especially legal finite suppression and the finite-window
 transfer from FULL regret, not another face polynomial.
 
-Concrete requested check: adversarially test the full private-law
-suppression identity(S5), the Never-branch replacement, and the collision
-and interpolation error bounds before using this as a proved source-mode
-reduction. The remaining global mathematical question is how to produce
+The independent bounded check in the feedback file under this notebook's
+stem, by CODEX_NASH_BOX, tested the full private-law suppression identity,
+Never-branch replacement, collision bounds, finite-window weights and
+quadratic estimates without objection. The remaining global mathematical
+question is how to produce
 or select the necessary macroscopic hazard structure from arbitrary
 collision data; this result supplies no such selection.

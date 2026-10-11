@@ -1618,3 +1618,115 @@ or one grand participant weakly prefers its absent triple, which is then
 pure Nash because its only outsider does not gain by joining. Thus that
 all-triple-large stationary-scale class is already pure-NE covered; no
 scale analysis or new class claim is pursued for it.
+
+### 15.5. Failed dilution and fixed-support exactification
+
+The common refinement replacing one date q by two dates with each hazard
+1-sqrt(1-q) preserves each player's survival across that old slot. It
+does NOT preserve simultaneous-coalition probabilities or the complete
+deviation cap: it reduces collisions and permits a response between the
+two new dates. Applied to the displayed period12 calibration, its initial
+full regret rose substantially rather than improving. Incomplete joint
+reoptimization at periods24 and48 reached maximum debts approximately
+0.00335 and0.00344. These experiments are neither lower bounds nor a
+period/error law; this dilution/decimal continuation was stopped.
+
+Exact finite-period support equations were also tested, without a positive
+result. For a proper periodic profile each positive-support finite atom of
+a full exact best reply must tie Never. Writing N_i(t) for the actual
+conditional Never payoff, a local exact certificate would satisfy
+Q_i(t)<=N_i(t), with equality wherever q_i(t)>0. The rational profile's
+small UNCONDITIONAL debts do not make it close to that local system:
+some late positive-support conditional gaps are large. Newton solves on
+several numerical support masks and a projected complementarity iteration
+did not find a zero. This is not unsatisfiability of any support class,
+and not an obstruction to joint approximate Nash. The reach-normalization
+seam must remain explicit.
+
+### 15.6. Exact obstruction to a vanishing-entrance three-actor burst
+
+Status: ordinary exact calculation, not independently reviewed. This is
+a support/template obstruction, NOT an unrestricted debt lower bound.
+All table entries are exactly those of Section15.1.
+
+Consider one root with q=(a,b,c,0), all coordinates in[0,1), where players
+0,1,2 satisfy their active endpoint equalities. For these recipients,
+direct product expansion gives
+
+    Q0=1-2b-c+bc,      B0=4c-3bc,  alpha0=(1-b)(1-c),
+    Q1=1+a-2c-ac,      B1=ac,      alpha1=(1-a)(1-c),
+    Q2=1-a+b-2ab,     B2=4a-3ab,  alpha2=(1-a)(1-b).
+
+Their required next continuation values in the undiscounted game are
+W_i=(Q_i-B_i)/alpha_i. In particular
+
+    W0-1=[-b-4c+3bc]/[(1-b)(1-c)],
+    W1-1=[2a-c-3ac]/[(1-a)(1-c)],
+    W2-1=[-4a+2b]/[(1-a)(1-b)].                    (15.2)
+
+Two facts follow.
+
+First, if Q1>=1 and a+c>0, then
+
+    W1-Q1=[(a+c-ac)Q1-ac]/[(1-a)(1-c)]
+           >=[a+c-2ac]/[(1-a)(1-c)]>0.             (15.3)
+
+Thus the middle active player's value strictly increases along any
+consecutive-three-actor burst once it is at least1. For realized discount
+alpha<=1, the required next value is W1/alpha; since Q1>=1 and W1>1,
+the same monotonicity holds. This is an exact inequality, not linearized
+flow reasoning.
+
+Second, suppose Q1>=1 and at the next entrance the values of SOME three
+players are all1. Those three could be any rotated consecutive triple.
+Then a=b=c=0. Indeed, if b+c>0, (15.2) gives W0<1, so player0 must be
+the one player omitted from that next entrance. Hence W1=W2=1. These
+two equations force
+
+    b=2a,       c=2a/(1+3a).
+
+If a>0, substitution gives
+
+    Q1-1=a(a-3)/(1+3a)<0,
+
+contradicting Q1>=1. If a=0 the equations give b=c=0, contradicting
+b+c>0. In the remaining case b=c=0,a>0, W1>1 forces player1 to be
+the omitted player; but W2=(1-5a)/(1-a)<1, another contradiction.
+This proves the exact endpoint assertion, including zero-coordinate
+boundary limits.
+
+For the small positive three-actor unstable branch, the first-order
+active map has expanding direction(a,b,c) proportional to(7/2,0,1).
+Thus Q1-1=a-2c-ac is positive near its entrance. The exact second-order
+expansion enters b>0: parametrizing c=v,
+
+    a=(7/2)v+(26075/4628)v^2+O(v^3),
+    b=(308/1157)v^2+O(v^3),
+    c_next=4v-(4920/1157)v^2+O(v^3).
+
+These coefficients come from substituting the expansions into the three
+displayed exact active equations. Positivity of this branch is therefore
+not obstructed merely by its first-order boundary tangent. The obstruction
+is its inability to match a new entrance with active values1.
+
+Here is the precise asymptotic consequence. A proposed exact terminal or
+discounted-alpha_n Nash calendar, with alpha_n tending to1, cannot consist
+of growing consecutive-three-actor bursts which start on this Q_middle>1
+side, end at macroscopic hazards and reset all hazards to0 at each rotated
+entrance. All active entrance values tend to their singleton1. By(15.3)
+the old middle value remains>=1. Take a last-root subsequential limit.
+Its continuation values are bounded by the fixed reward bound. No such
+limit can have a sure quitter: a sure0 makes mate2 Continue (joining<=0,
+withdrawing>=1), then predecessor3 Continue (joining-1, withdrawing>=0),
+then successor1 Quit (2 rather than0), and owner0 withdraw (0 rather
+than-1); rotations exclude every sure label. This argument uses no
+unpriced continuation event. Hence the last-root limit has all hazards<1
+and satisfies the endpoint equalities in(15.2). The new active entrance
+values are1, so the endpoint assertion forces the last hazards to0,
+contradicting macroscopic activity.
+
+This leaves OPEN arbitrary overlapping calendars, macroscopic matched
+entrances, support changes INSIDE an excursion, and approximate profiles
+whose conditional seam errors do not vanish. No terminal exploitability
+gap or UE nonexistence is inferred. The next mechanism must alter that
+operation, rather than refine the same vanishing-entrance reset template.

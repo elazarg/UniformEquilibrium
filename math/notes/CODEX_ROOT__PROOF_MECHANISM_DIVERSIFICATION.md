@@ -748,6 +748,38 @@ test is whether an analogous finite burst producer works on an uncovered
 four-active table or supplies a genuinely general construction; reproducing
 this calibration with better constants would not answer that test.
 
+## A direct reward-table route does not need a temporal seam
+
+There is a complete contrasting mechanism. Fix signed singleton data with
+strictly positive inverse singleton-difference matrix. Give each recipient
+one selected containing coalition of size dᵢ+1, with reward aᵢL^{dᵢ},
+where dᵢ≥1 and aᵢ>0, and keep its other nonsingleton rewards bounded.
+For sufficiently large fixed L, a normalized radial fixed-point argument
+produces an actual full-support stationary equilibrium, not merely a
+normalized limiting direction. The complete result is
+`../exports/POSITIVE_INVERSE_COALITION_JACKPOTS_UNIFORM_EQUILIBRIUM.md`.
+
+The mathematical operation is explicit. Substituting hazards q=z/L
+cancels each coalition's reward scale, giving an exact polynomial
+indifference field with a positive nonlinear leading term. The positive
+inverse places its image in a compact interior direction simplex. Inner
+and outer radial inequalities survive the bounded signed perturbation,
+so a fixed point exists at positive finite hazards. Every deleted-opponent
+system then contracts, controlling all stopping times and Never and
+delivering the actual fixed uniform payoff. No selected minimum source,
+source renewal, or best-response-to-temporal-edge identification enters
+the proof.
+
+This is evidence for diversifying mechanisms, not for abandoning the
+source-preserving route. The theorem narrows an explicit raw-table class;
+it does not resolve the general minimum residual or force arbitrary
+inverse-positive tables to have positive coalition rewards at these
+scales. In particular, the four-active negative-triple stress family is
+not covered. Its full-response calibration and burst obstructions remain
+tests of a different construction. Their failure cannot be counted again
+as failure of the positive-inverse producer, or as evidence of a positive
+all-behavior gap.
+
 ## Sources inspected and next question
 
 - `ideas/NONLOCALITY_TECHNIQUE_CATALOGUE.md`.
