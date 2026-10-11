@@ -77,6 +77,13 @@ corner-confinement estimate, not the entire discounted selector. The missing
 operation is now production or selection of favorable components from
 arbitrary genuinely four-active tables.
 
+Section25 supplies a four-active stress test with no exact stationary
+terminal Nash profile. The exact support-by-support proof below is ordinary
+unreviewed mathematics, not a whole-game obstruction. A separately recorded
+rational period12 joint calendar has full regret below1/300; the live
+constructive question is whether overlapping three-player seams support an
+all-errors rule rather than a fixed two-actor alphabet.
+
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits
 one convexification of the
@@ -3586,3 +3593,94 @@ found no interior zero, which is incomplete evidence only. Freezing the
 two-player root alphabet would discard a real best response and cannot
 be the proposed global producer. No further reward-parameter expansion
 or UE counterexample conclusion is inferred from this test.
+
+### 25.1 Every exact stationary component is excluded
+
+This is an ordinary exact calculation, not independently reviewed or Lean
+checked. A stationary profile means independent constant conditional Quit
+hazards q_i in[0,1], equivalently geometric clocks when q_i>0 and Never
+when q_i=0. Deviations still include ALL independent complete replacement
+clocks, all pure dates and Never. The table in Section25 has no exact
+terminal Nash profile of this stationary form.
+
+The sure-quitter case was excluded above. Thus assume all q_i<1. If at
+least two players are active, every active player has a proper opponent.
+Write Q_i for its immediate Quit payoff and N_i for the one-date expected
+reward received when it Continues and an opponent quits, and let A_i be
+the opponent absorption probability. A stationary interior best response
+requires
+
+    Q_i=N_i/A_i.                                           (S1)
+
+Indeed the same stationary tail is reached with positive probability, so
+root Quit and Continue must be indifferent. Its value then equals Q_i;
+the Continue recursion gives A_i Q_i=N_i. This value is also the full
+Never payoff. The argument uses no restriction on allowed deviations.
+
+Zero active players leave immediate Quit gain1. With one active player i,
+the successor i+1 receives0 by Never and1+q_i by Quit0. With exactly two
+active opposite players, either player's Never payoff is4 and its Quit
+endpoint is at most1, contradicting(S1). With exactly two active adjacent
+players i,i+1, the latter's Never payoff is0 and its Quit endpoint is
+1+q_i>0, again contradicting(S1).
+
+For three active players, rotate the cyclic labels so q=(a,b,c,0), with
+a,b,c in(0,1). The relevant endpoints, directly summing the four possible
+opponent outcomes, are
+
+    Q_0=1−2b−c+bc,        N_0=(4−3b)c, A_0=b+c−bc,
+    Q_1=1+a−2c−ac,       N_1=ac,       A_1=a+c−ac.
+
+Equation(S1) for player0 gives Q_0>0, hence b<1/2. Also Q_0≤1, so
+
+    (5/2)c < N_0=Q_0 A_0 ≤ A_0 < (1+c)/2,
+
+which forces c<1/4. But Q_1>1−2c>1/2, while N_1/A_1≤c<1/4 because
+A_1≥a. This is impossible. The grand-coalition rewards do not enter this
+case, so cyclic relabeling is legitimate despite their asymmetric values.
+
+It remains to exclude all four positive hazards. Put z_i=q_i/(1−q_i)>0.
+For each i set x_i=z_(i−1), y_i=z_(i+2), w_i=z_(i+1), and
+
+    L_i=x_i+y_i+w_i,
+    T_i=x_i y_i+x_i w_i+y_i w_i,
+    V_i=x_i y_i w_i,
+    A_i'=L_i+T_i+V_i,
+    N_i'=4y_i+T_i+V_i,
+    P_i'=1+2x_i−w_i−T_i−(10+i)V_i.
+
+Here the common denominator for the actual one-date endpoints is
+1+A_i'. Therefore Never=N_i'/A_i' and Quit=P_i'/(1+A_i'). Condition(S1)
+would force all four residuals
+
+    F_i=N_i'(1+A_i')−P_i'A_i'
+
+to vanish. However the following exact polynomial identity holds:
+
+    Σ_i F_i = Σ_i z_i + Q(z)
+      + Σ_i [3T_i(2y_i+w_i)+2T_i²
+        +V_i((9+i)x_i+(15+i)y_i+(12+i)w_i)
+        +(13+i)T_iV_i+(11+i)V_i²],
+
+where
+
+    Q(z)=2Σ_i z_i²+(z_0−z_2)²+(z_1−z_3)²
+         +7Σ_i z_i z_(i+1).
+
+All summands are nonnegative and Σ_i z_i>0, so Σ_i F_i>0, a contradiction.
+For a direct expansion check, the only potentially negative monomials in
+the sum are the quadratic terms−2z_0z_2−2z_1z_3; the displayed Q absorbs
+them into squares. The higher-degree terms follow by expanding
+N_i'+A_i'(N_i'−P_i'). This completes every stationary support case.
+
+This exact exclusion says nothing about the infimum regret over stationary
+profiles or about nonstationary clocks. In particular it is compatible
+with the rational period12 approximate profile in
+`CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION.md`, Section15. The relevant
+consumer for an eventual all-errors construction remains
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+(`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`).
+The inspected periodic cap is
+`quittingTerminalDeviationDebt_cyclicBehaviorProfile_le_card_mul_error_div_opponentAbsorption`
+(`UniformEquilibrium/Quitting/Cycles/PeriodicApproximateNashDeviationCap.lean`);
+it is a consumer for supplied roots, not a producer of overlap seams.
