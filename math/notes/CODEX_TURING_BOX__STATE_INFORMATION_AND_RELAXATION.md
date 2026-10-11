@@ -47,6 +47,9 @@ source comparisons are not an exhaustive classification. The remaining
 global question is how to select collision/clock compensation from arbitrary
 reward data, not how to widen this particular family.
 
+Section 20 closes a separate exact-equilibrium nonattainment test by an
+explicit asymmetric equilibrium. It supplies no new reward-class claim.
+
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits
 one convexification of the
@@ -2539,3 +2542,59 @@ symmetries, passive transfers or owner equations used above. The concrete
 next question is whether a global construction can choose WHERE to retain
 macroscopic joint roots and WHERE to disperse clocks, rather than enlarging
 this family in further parameter directions.
+
+## 20. An asymmetric exact calibration defeats a nonattainment guess
+
+This is ordinary exact arithmetic, not independently reviewed or Lean-checked.
+The three-player table has singleton rows
+
+    r({0})=(1,0,2), r({1})=(2,1,0), r({2})=(0,2,1).
+
+Every pair pays1/4 to each member and0 to its outsider; the grand coalition
+pays−1 to each player; Never pays0. Symmetric stationary small hazards
+approach terminal Nash, but no positive symmetric stationary hazard is exact.
+The stronger guess that NO exact independent-clock equilibrium exists is
+FALSE: use the three periodic independent hazard vectors
+
+    q0=(1/15,0,1/6), q1=(0,1/6,1/15), q2=(1/6,1/15,0).
+
+Each date has joint survival7/9. Direct Bellman recursion gives the ACTUAL
+phase payoffs
+
+    U0=(7/8,21/20,19/20),
+    U1=(21/20,19/20,7/8),
+    U2=(19/20,7/8,21/20).
+
+At phase0 the Quit/Continue endpoint pairs for players0,1,2 are respectively
+
+    (7/8,7/8), (59/72,21/20), (19/20,19/20).
+
+Thus both active owners are indifferent and the inactive player has margin
+83/360. The other phases are coordinate rotations. Every deleted player
+leaves two opponents, each with per-period survival7/9; their joint survival
+49/81 contracts. Telescoping the endpoint inequalities therefore caps ALL
+finite deadlines and Never, hence every complete unilateral law. This is an
+exact terminal Nash profile, not merely a root equilibrium with an unchecked
+continuation value.
+
+The failed step was to extend a symmetric recurrence to all support changes.
+For comparison, writing h for a common hazard and α=3/4, the common Quit
+endpoint is Q(h)=1−2αh−h²/2. All-active symmetric exact continuation requires
+
+    Q(h_next)=[Q(h)−2h(1−h)]/(1−h)²<Q(h),
+
+which forces increasing hazards while that symmetric regime persists. The
+asymmetric pair itinerary above evades precisely that restriction. No claim
+about all asymmetric profiles follows from the symmetric calculation.
+
+There is also no conjecture-facing reason to seek another universal exact-NE
+nonattainment theorem. Solan, *The Dynamics of the Nash Correspondence and
+n-Player Stochastic Games* (2001), Theorem2.1, already obstructs exact sources
+using a different three-player table. The original
+[paper](https://www.math.tau.ac.il/~eilons/value4.pdf) was inspected at its
+definition of admissible inverse iterates and Theorem2.1. Its printed claim
+allows unbounded formal continuation vectors; actual terminal equilibria have
+bounded continuation vectors, so the bounded semantic consequence is the
+relevant one, not unrestricted formal inverse-iterate exclusion. The local
+`SOLAN_2001__CLEANED_TEXT.md` records this distinction. Our displayed fixture
+does not improve that boundary and is parked.

@@ -622,6 +622,53 @@ while choosing the menu and approximation parameters jointly; the local
 bonus-transport identity alone only reproduces Nash--Bellman recursion in
 augmented payoffs and does not solve that task.
 
+## Exact auxiliary existence can be stronger than the objective
+
+A second control experiment distinguishes failure of a sufficient existence
+theorem from failure of the entire proposed source. Restrict one player's
+private clock by the softened survival budget
+
+    Pr(T >= t) <= 1 - alpha + alpha * (1 - delta)^t.
+
+Every full response can be mixed with immediate Quit, with weights
+1-alpha and alpha, to obtain an admissible response. Thus an EXACT Nash
+point of this auxiliary game would have original owner debt at most
+2R alpha, while the other players remain unrestricted best responders.
+This is a sound conditional estimate; it is not an existence proof.
+
+Section 14.4 of
+`CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION.md` gives a stronger
+negative test than an unfavorable selected branch. Using Solan's perturbed
+FTV no-exact-Nash theorem, it excludes the ENTIRE softened exact-Nash
+correspondence on a positive-singleton canonical game. Its nontrivial
+four-player padding explicitly forces the added player to Never. The
+primary paper, the payoff restoration, the reached-tail argument and the
+padding have a bounded independent ordinary check in
+`../feedback/CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION__BY_CODEX_EMMY_BOX.md`.
+The small positive perturbation range is qualitative, not a displayed
+rational interval. This is not a Lean-checked theorem.
+
+The underlying game has a uniform-equilibrium payoff. Consequently the
+failure diagnoses an over-strong exact auxiliary source, not failure of
+approximate terminal existence and not a restriction on UE counterexample
+tables. It also differs from failure of better-reply security: the latter
+can occur in a game that still has a suitable auxiliary Nash point.
+
+The unsoftened uniformly proper constraint has an unconditional exact
+source, so this counterexample does not dispose of its global selection
+question. A decisive test there must bound the minimum original owner
+regret over the WHOLE constrained correspondence, allowing the selected
+component and owner to change as the constraint weakens. Computing one
+bad stationary branch does not perform that test.
+
+This gives a reusable research criterion. Before building a consumer for
+an exact auxiliary object, test whether that object exists in a known UE
+game with no exact terminal Nash. If auxiliary exactness forces a reached
+full-Nash tail, the source has already imposed a requirement that the
+actual UE objective does not need. Approximate auxiliary sources remain
+possible, but their full-response error must be proved rather than inferred
+from the failed exact construction.
+
 ## Sources inspected and next question
 
 - `ideas/NONLOCALITY_TECHNIQUE_CATALOGUE.md`.
