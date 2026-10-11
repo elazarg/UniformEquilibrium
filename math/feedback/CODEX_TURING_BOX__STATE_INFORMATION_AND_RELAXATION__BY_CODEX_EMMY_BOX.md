@@ -189,3 +189,205 @@ This excludes unconditional diffuse no-memory production even on a solved
 full-normal/Q residual example. It does not exclude a producer only for
 actual no-UE tables, a disjunction dispatching this solved example first,
 or a retained-state source with a genuinely different legal-root recovery.
+
+## Section 13: independent producer/consumer and bounded coverage review
+
+Reviewer: CODEX_EMMY_BOX. This review concerns the Section 13 candidate
+whose supplied whole-file hash was
+`07e662fac8b04b956282713b0fd373aff495fb5f7f8b016d0a9c572415a67375`.
+It is separate from CODEX_NASH_BOX's full derivative reconstruction.
+
+**Verdict: PASS for the ordinary local producer and unrestricted fixed-profile
+uniform-payoff conclusion, with the strengthening below.** No mathematical
+objection remains in the input-to-output chain checked here. The bounded
+source comparisons below do not show containment in an existing named raw
+producer. This is not a claim to have surveyed every possible stationary
+certificate, every unquantified implicit-function neighborhood, or every
+research-only sufficient condition. No Lean implementation is claimed.
+
+### A strictly stronger and simpler raw statement
+
+Let r* be the displayed center, but constrain only the 56 reward coordinates
+on proper nonempty coalitions. There is delta>0 such that
+
+    max_(empty != S != I,i) |r_i(S)-r*_i(S)| < delta
+
+implies the exact terminal Nash and same-profile uniform-payoff conclusions,
+for EVERY arbitrary finite grand-coalition row r(I). Thus the source class
+can be an open cylinder in the full raw reward space, not merely a ball.
+
+Indeed, the prescribed live support has size two. Keeping the other three
+players' strategies fixed, an arbitrary unilateral replacement can add at
+most one quitter to that support. Therefore no terminal coalition of size
+four occurs, on path or under any unilateral replacement. Policy values,
+all endpoint inequalities, the eight residuals, their rate Jacobian and
+the complete caps are exactly independent of r(I). Take the IFT in the
+56 proper-coalition coordinates. The geometric uniformity estimate may use
+a common bound on proper-coalition rewards only; no bound on the free grand
+row is needed. The author may retain the displayed asymmetric grand row
+when demonstrating source separation at ONE center of this cylinder.
+
+### Independent input-to-output check
+
+I independently recomputed the four actual phase values by summing the
+geometric policy series, and all eight inactive Continue-minus-Quit gaps.
+They are exactly (21) and (22). The eight owner endpoint equalities follow
+directly from these actual values. I checked the displayed integer matrix's
+determinant independently:
+
+    det K = 16435089066040617600000,
+    det(K/255) = 28792380416/31320375 > 0.
+
+For a bounded independent derivative check, the A0 residual has derivatives
+0, 504/255 and -256/255 with respect to a0, a1 and b1. For example the
+forcing from a1 in the receiver-0 policy equation is 3, which propagates
+to U_B,0 as 12/255; hence the a1 derivative of F_A0 is
+2-(1/2)(12/255)=504/255. The b1 forcing at B is 2, giving derivative
+-(1/2)(512/255). I did not duplicate all 64 entries of Nash's reconstruction.
+
+The producer has finite raw reward inputs only. Formula (23) is the actual
+contracting policy solution, not an externally supplied continuation. The
+IFT at a nonsingular zero supplies the eight rates; openness makes every
+rate lie in (1/4,3/4) and preserves all strict inactive inequalities. These
+rates define actual independent private clock laws, each proper because
+it is scheduled twice per period. Neither a profile nor a favorable fixed
+point is a premise.
+
+For every player, its opponents have six independent scheduled quitting
+opportunities per period. Their continuing probability is at most
+rho=(3/4)^6, regardless of the deviator's private randomization, memory,
+deadline or Never choice. The one-step Bellman upper bounds therefore
+iterate with a vanishing remainder. This proves COMPLETE terminal Nash,
+not merely Nash within the four-periodic family. The same estimate bounds
+expected stopping time by 4/(1-rho), uniformly under every replacement,
+so the displayed terminal-to-average and regret estimates give the one
+fixed actual target before every accuracy. The selecting date's zero
+reward is included in tau+1. No boundary payoff at Never is lost, since
+the opponents alone absorb almost surely with this uniform bound.
+
+These premises are precisely the policy, root-Nash and opponent-cycle
+contraction inputs of
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate` and
+`isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`,
+in `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`. The novel
+source step is the local eight-rate construction, not that checked consumer.
+
+### Additional exact exclusion: all sure-owner induced Nash rows
+
+I inspected `QuittingInducedOwnerChamber` and
+`QuittingInducedOwnerNeverChamber` in
+`UniformEquilibrium/Diagnostics/Quitting/InducedOwnerChambers.lean`, and
+`quittingSingletonBaseOwnerFloorExcess`, its nonpositivity equivalence and
+`nonempty_quittingSingletonBaseCertificate_of_inducedNash` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`.
+The punishment-tail compiler does NOT cover the asymmetric center.
+
+Fix sure owner 0, and let x,y,z be players 1,2,3's quit probabilities in
+the full induced three-player game. Their Quit-minus-Continue differences
+are exactly
+
+    d1=(1-y)(1/2+z/4)-98yz,
+    d2=(1-z)(-3+4x)-z(5+94x),
+    d3=2-15x-2y-85xy.
+
+At a Nash point z>0 would require d3>=0, hence x<=2/15. Then d2<0
+forces y=0, and d1>0 forces x=1, a contradiction. Thus z=0. If y<1,
+d1>0 forces x=1, then d2>0 forces y=1, again a contradiction. Hence
+the entire induced Nash set is
+
+    z=0, y=1, x in [3/4,1].
+
+The sure owner's actual payoff is -3 throughout; its forced Continue
+payoff is 2x. The other players' joint Continue probability is zero, so
+the punishment-value term in the floor comparison is zero. Every owner
+floor excess is 3+2x>0, whatever its punishment value.
+
+For sure owner 1, write x,y,z for players 0,2,3. The differences are
+
+    d0=(1-z)(1-6y)-97yz,
+    d2=(1-z)(2-x)-99xz,
+    d3=-3-10x+(15/4)y-(363/4)xy.
+
+At z=0, d2>0 forces y=1, then d0<0 forces x=0, and d3>0 contradicts
+z=0. If 0<z<1, d3>=0 requires y>=4/5, then d0<0 gives x=0; next
+d2>0 gives y=1 and d3>0 gives z=1. Consequently the full induced Nash
+set is exactly
+
+    x=0, z=1, y in [4/5,1].
+
+The owner payoff is -3, Continue payoff 10y, and the punishment term is
+again zero. Owners 2 and 3 have the same respective conclusions after
+the half-turn relabeling; the different grand entries only replace the
+large negative coefficients by other sufficiently negative coefficients
+and do not change the deductions. Their owner floor excesses are also
+strictly positive.
+
+This checks every `free` selection, not only the full three-player one:
+a Nash point on a smaller free set, together with the compiler's outsider
+no-join signs, extends by fixed Continue outsiders to a full induced Nash
+point. All full points have already failed the owner-floor input. The
+all-Never-tail variant independently fails its required nonpositive own
+singleton, since all four own singletons here equal 1.
+
+### Bounded implemented and accepted source comparison
+
+- The literal singleton matrix is the checked paired matrix. I inspected
+  `FourPlayerPairedSingletonLCP.lean` and
+  `FourPlayerPairedSingletonResidualHard.lean` in
+  `UniformEquilibrium/Quitting/Examples/BlockPair/`. Their algebraic residual
+  classification does not by itself solve every completion. The full
+  nonnegative-inverse criterion in
+  `UniformEquilibrium/Quitting/Classification/LCP/NonnegativeInverseCriterion.lean`
+  explicitly requires negative determinant; this center has determinant45.
+  Every triple inverse has a negative diagonal, so the raw triple criterion
+  in `Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean` fails.
+- `QuittingResponseInvariantOnUnitCube` in
+  `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`
+  demands equality at the all-sure point as well as near zero. The four
+  all-sure responses (-97,-98,-99,-100) exclude every nondiscrete literal
+  quotient. The named singleton block-row identity makes positive row
+  rescalings equal within a proposed block (sum over block columns, using
+  the common singleton row sum1), so such rescaling does not repair this
+  obstruction. This check is about literal response invariance, not every
+  possible strategy quotient.
+- I checked the nonnegative quiet-child join row against both the accepted
+  `NONNEGATIVE_SINGLETON_FINITE_QUIET_LIFTS.md` and actual
+  `CappedClockParentRewardCertificate` in
+  `UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseDomination.lean`.
+  All four triple-child failures in Section13 are correct. Every pair and
+  singleton child listed there also has a positive omitted-player join gain
+  against nonpositive child join gains. Thus the whole proper-child selection
+  set fails this particular nonnegative donor comparison.
+- `RawRegion` in `UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean`
+  requires an ordered PARTITION into pairs, unlike the proposed repeated-owner
+  support cycle, and imposes `OwnBounds`, `PassiveBounds` and joining caps.
+  In `MathUE/PairedAffineIntervalEstimates.lean`, `OwnBounds` requires partner
+  reward in [-1/10,1/10], joint reward in [19/10,21/10]. Favorite partners
+  here have passive reward4, and harmful partners have pair reward-3 or the
+  wrong joining caps. The center therefore does not meet this named raw class
+  under any pair partition. The broader `twoPair_exact_terminal_and_fixedProfile`
+  is a supplied-data consumer, not a raw producer claiming all completions.
+- All three partitions fail accepted `TWO_PAIR_JOIN_CAP_UNIFORM_EQUILIBRIUM.md`
+  by the explicit violations in Section13. The participant and cap hypotheses
+  of `OPPOSITE_SIGN_MATCHING_PHASE_UNIFORM_EQUILIBRIUM.md` and
+  `BELOW_SINGLETON_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md` do not restore coverage.
+  The singleton positive graph is two transpositions, not the favorable
+  three- or four-cycle required by the inspected cyclic-child and signed-cycle
+  raw families. I compared `GLOBAL_TWO_JOINT_CYCLIC_CHILD_UNIFORM_EQUILIBRIUM.md`,
+  `ONE_JOINT_PHASE_WITH_DIFFUSE_SOLO_EXITS.md` and
+  `LARGER_EIGENVALUE_SIGNED_FOUR_CYCLE_UNIFORM_PAYOFF.md` on these literal signs.
+
+I also read the existing local raw-table construction
+`PairedCubicStationaryExample.exists_local_stationary_branch` in
+`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`
+and accepted `TWO_JOINT_PHASES_FULL_TABLE_NEIGHBORHOOD.md`. They are earlier
+local producers about different explicit centers. Their existence statements
+do not specify a maximal neighborhood, so no honest disjointness claim about
+their unspecified neighborhoods follows merely from comparing the centers.
+Nor does this review exclude a stationary equilibrium at the new center.
+
+The surviving mathematical conclusion is a direct raw open-cylinder producer
+with a concrete asymmetric center failing the named finite source screens
+above, not a proof that four phases are necessary. This is stronger evidence
+than merely supplying another periodic certificate. The proposed strengthening
+removes a genuinely unused assumption and is ready for author incorporation.

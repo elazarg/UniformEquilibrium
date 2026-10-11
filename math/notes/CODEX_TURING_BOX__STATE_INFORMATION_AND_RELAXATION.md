@@ -2,6 +2,16 @@
 
 Identity: CODEX_TURING_BOX.
 
+Section 13 gives a new direct source candidate: a four-date cycle of proper
+joint roots, with an explicit rational center and a nonsingular eight-rate
+system. It produces exact terminal equilibria on a full reward-table
+neighborhood, without public signals, supplied strategic witnesses, or
+fixed-payoff decoding. The proof and its bounded coverage comparison are
+ordinary mathematics, not independently reviewed or exported. In particular
+the comparison is not yet a complete export-gate audit. Section 12 records
+why universally dispersing a canonical positive pivot cannot replace these
+macroscopic simultaneous atoms.
+
 Status: ordinary mathematical proof draft, not checked in Lean and not an
 export. The main candidate theorem below permits one convexification of the
 complete payoff/cap state followed by an arbitrary finite independent prefix.
@@ -718,3 +728,402 @@ The bounded source tests show those are insufficient. The concrete next
 question is whether a direct search in the one-convex-seed/prefix class
 can produce rho=0 from arbitrary rewards, without recursively importing
 the same unbounded public-state construction.
+
+## 12. A direct source attempt: dispersed pivot plus recomputed opponents
+
+This section is ordinary mathematics and is not independently reviewed.
+The concrete proposed source was to spread the canonical positive pivot's
+private clock over many dates, then recompute the other three clocks as
+Nash responses in their actual finite game. Unlike freezing a public word,
+this permits new independent clocks and a new payoff at every accuracy.
+The following test shows that unconditional atom dispersion itself is too
+restrictive. It is stronger than a failure of an exact nonpivot selector.
+
+Use I={0,1,2,3}, Never reward zero, and the complete table
+
+    r_0(S)=1 if 0 belongs to S, and 0 otherwise;
+    r_i(S)=-1 if S={0}, and 0 otherwise, for i=1,2,3.
+
+Own-singleton rewards are (1,0,0,0), so this is a genuine canonical
+single-pivot table. Let T_i be arbitrary independent private date-or-Never
+clocks, and suppose only that
+
+    sup_(finite t) Pr(T_0=t) <= delta.
+
+There is no conditional-hazard, support-size, stationarity, or response
+restriction on any clock. Write T_-=min(T_1,T_2,T_3), with minimum Never
+when all three are Never, and put
+
+    A=Pr(T_0<T_-, T_0 finite),
+    J=Pr(T_0=T_-<Never).
+
+The prescribed payoffs and COMPLETE caps are exactly
+
+    U_0=A+J,       B_0=1,
+    U_i=-A,        B_i=0  (i=1,2,3).
+
+For the caps, player 0's pure date 0 guarantees reward 1 and no reward
+exceeds 1. Any nonpivot's pure date 0 guarantees reward 0, and all that
+player's rewards are nonpositive. Thus these are all-date-and-Never caps,
+not displayed-menu comparisons. Independence also gives
+
+    J=sum_t Pr(T_0=t) Pr(T_-=t) <= delta.
+
+Consequently EVERY such actual profile satisfies
+
+    E=max{1-A-J,A} >= (1-J)/2 >= (1-delta)/2.       (20)
+
+In particular, fixing a uniform pivot on N dates and selecting ANY three
+nonpivot laws cannot produce vanishing full regret. Exact or approximate
+nonpivot Nash selection cannot repair it. If the nonpivot full regret is
+at most epsilon, then A<=epsilon and the stronger pivot bound is
+
+    D_0 >= 1-epsilon-delta.
+
+The bound in (20) is sharp at delta=1/N: let players 0 and 1 independently
+use the uniform law on the same N dates and players 2,3 use Never. Then
+J=1/N and A=(1-1/N)/2, so all four debt coordinates equal (1-1/N)/2.
+This exact calculation distinguishes small UNCONDITIONAL pivot atoms
+from small conditional hazards; the last hazard of a uniform clock is one.
+
+The alternative actually tested is a genuinely new joint root: players
+0 and 1 Quit surely at date 0, and players 2,3 use Never. Its payoff is
+(1,0,0,0), its complete caps are the same vector, and it is exact terminal
+Nash. Repeating this same profile gives that fixed uniform payoff. There
+is no public correlation. The collision atom is the repair, not a more
+careful choice among dispersed clocks.
+
+Source/coverage boundary: the semantic lookup for this attempt used
+`PivotRepairBehavioralInfimum.lean`, `PivotRepairSourceCompression.lean`,
+`PivotRepairExactObjective.lean`, and
+`PivotRepairUniformPayoffCharacterization.lean` in
+`UniformEquilibrium/Quitting/Terminal/`, together with the exact root
+prefix definition in `Root/TerminalSemanticPair.lean`. The finite LP
+already permits unrestricted pivot laws; imposing dispersion is therefore
+an extra proposed source condition, not part of that consumer. The fixture
+has an elementary pure-coalition equilibrium and gives NO new coverage
+beyond implemented/accepted anchored-coalition producers. The bounded
+pending-export comparison included `GLOBAL_TWO_JOINT_CYCLIC_CHILD_` and
+`BELOW_SINGLETON_JOINT_PHASE_UNIFORM_EQUILIBRIUM`; this is not a claim to
+extend either class. In particular, no positive-minimum or no-UE hypothesis
+is asserted of the fixture.
+
+Direction change: do not pursue universal pivot dispersion, even with
+freely recomputed opponent laws. The next source attempt must select and
+rebalance macroscopic simultaneous atoms as well as any dispersed tail.
+Making every atom small is not merely an implementation convenience here.
+
+## 13. Four joint phases: a full-dimensional direct source candidate
+
+### Exact raw statement and status
+
+Let I={0,1,2,3}, with the independent-clock and full unilateral-deviation
+semantics in Section 1. The following complete table r* has fifteen rows;
+Never remains zero.
+
+| S | r*(S) |
+|---|---|
+| 0 | (1,4,0,0) |
+| 1 | (4,1,0,0) |
+| 2 | (0,0,1,4) |
+| 3 | (0,0,4,1) |
+| 01 | (5,9/2,13/2,10) |
+| 02 | (−3,−3,−3,−3) |
+| 03 | (2,5/4,2,2) |
+| 12 | (2,2,2,5/4) |
+| 13 | (−3,−3,−3,−3) |
+| 23 | (13/2,10,5,9/2) |
+| 012 | (−3,−3,15/2,−3) |
+| 013 | (−3,2,−3,−3) |
+| 023 | (15/2,−3,−3,−3) |
+| 123 | (−3,−3,−3,2) |
+| 0123 | (−100,−101,−102,−103) |
+
+**Candidate theorem (ordinary proof below).** There is a constant delta>0
+such that every raw reward table r with
+
+    max_(S nonempty,i) |r_i(S)−r*_i(S)| < delta
+
+has an exact terminal Nash equilibrium, against all complete behavioral
+replacements. It is four-periodic with scheduled pairs
+
+    A=01,    B=12,    C=23,    D=03,
+
+and two proper independent hazards at every date; the other two players
+Continue. Its actual phase-A payoff is one fixed original-game uniform
+equilibrium payoff. The same profile and target work at all accuracies
+once the horizon is sufficiently large. All sixty rewards may vary
+independently. The raw neighborhood is not defined by admitting a strategy
+or certificate; delta and its center precede the table being tested.
+
+No unrestricted Fin4 coverage is asserted. In particular, no assertion
+that these tables lack stationary equilibria is made. The present
+comparison excludes the particular implemented/accepted criteria below,
+not every possible proof from the reward data. Independent algebra and
+coverage review are still required before an export claim.
+
+### Actual independent clocks and the center
+
+In the rate ordering
+
+    q=(a0,a1,b1,b2,c2,c3,d0,d3),
+
+set all eight rates to 1/2 at r*. For player i and date t, let q_i(t)
+be its scheduled rate, or zero when unscheduled, and define its private
+clock by
+
+    Pr(T_i=t)=q_i(t) product_(s<t)(1−q_i(s)).
+
+Each player is active twice per period, so its Never mass is zero.
+Sample the four entire clocks independently. The schedule uses only the
+deterministic public date; no correlated seed or communication is present.
+
+The actual phase values at r* are
+
+    V_A=(3,11/4,2,3),       V_B=(2,3/2,3/2,2),
+    V_C=(2,3,3,11/4),      V_D=(3/2,2,2,3/2).             (21)
+
+If phase t schedules {i,j}, the policy identity is exactly
+
+    V_t=(r*(i)+r*(j)+r*(ij)+V_(t+1))/4.
+
+For an active owner i, its Quit and Continue endpoints are respectively
+
+    Q_ti=(s_i+r*_i(ij))/2,
+    C_ti=(r*_i(j)+V_(t+1),i)/2.
+
+Both equal V_ti at every one of the eight active occurrences. For an
+inactive k, Continue equals V_tk; its forced Quit endpoint averages the
+four literal rows k,ki,kj,kij with weight 1/4 each. The eight positive
+Continue-minus-Quit margins, ordered by phase and inactive receiver, are
+
+    (A,2):1/8,   (A,3):15/4,
+    (B,0):2,     (B,3):7/8,
+    (C,0):1/8,   (C,1):15/4,
+    (D,1):7/8,   (D,2):2.                               (22)
+
+Thus every actual prescribed action is optimal against the continuation
+in (21). The asymmetric grand row is intentionally unused: at most two
+players are scheduled, so even a unilateral Quit can create at most a
+triple. Its asymmetry removes a response-quotient overlap; it is not a
+new strategic resource.
+
+### The raw eight-equation producer
+
+For arbitrary nearby rewards r and eight arbitrary rates q, let {i,j}
+be phase t's pair, and write x=q_ti, y=q_tj. Define
+
+    S_t=(1−x)(1−y),
+    G_t=x(1−y)r(i)+(1−x)y r(j)+xy r(ij),
+    P=S_A S_B S_C S_D,
+    U_t=[G_t+S_t G_(t+1)+S_t S_(t+1)G_(t+2)
+                   +S_t S_(t+1) S_(t+2)G_(t+3)]/(1−P).   (23)
+
+Indices are cyclic. These are the actual policy values wherever all
+rates are proper. In particular U_t=G_t+S_t U_(t+1); no independently
+selected continuation value is a variable or hypothesis.
+
+For each active occurrence of i, with scheduled mate j and its rate y,
+define the literal Quit-minus-Continue residual
+
+    F_ti(r,q)=(1−y)s_i+y r_i(ij)
+                          −y r_i(j)−(1−y)U_(t+1),i.      (24)
+
+The eight rows F are ordered A0,A1,B1,B2,C2,C3,D0,D3. Equations (21)
+give F(r*,q*)=0 for q*=(1/2,...,1/2). Since 1−P=255/256 at this point,
+F is smooth in a full neighborhood in R^60×R^8.
+
+The exact rate Jacobian is J=K/255, where
+
+    K = [   0   504  −256   256   −80   −80     0     8 ]
+        [ 249     0     0   128  −128  −128   −10    22 ]
+        [ −24     0     0  1022  −512  −512   −40    88 ]
+        [ −20   −20  1022     0     0  −384    64   −64 ]
+        [ −80   −80     8     0     0   504   256  −256 ]
+        [−128  −128    22   −10   249     0   128     0 ]
+        [   0  −384   −64    64   −20   −20     0  1022 ]
+        [−512  −512    88   −40   −24     0  1022     0 ].
+
+This calculation is reproducible directly from (23)–(24). For example,
+differentiate the policy system:
+
+    partial U_t = partial G_t+(partial S_t)U_(t+1)
+                                      +S_t partial U_(t+1).
+
+At the center, differentiating an owner rate x at its own phase gives
+forcing (r(i)−r(j)+r(ij)−U_(t+1))/2; propagation around the cycle is
+division by 1−(1/4)^4. This yields the displayed K without differentiating
+any source-selected or fictitious value. Exact rational elimination gives
+
+    det K=2^10 3^7 5^5 17^4 ·29·151·6421
+         =16435089066040617600000,
+    det J=28792380416/31320375 >0.                         (25)
+
+The implicit function theorem now produces a smooth local rate selector
+q(r), with q(r*)=q* and F(r,q(r))=0. Shrink a raw reward ball so every
+rate lies in (1/4,3/4). Because the inactive endpoint expressions and
+(23) are continuous, shrink it again so all eight margins in (22)
+remain strictly positive. This single positive delta proves the raw
+existence statement: all strategic inputs are produced from r by (23),
+(24), and the local implicit selector. No strategic witness is assumed.
+The argument currently gives existence of a neighborhood radius, not
+an explicit executable radius or a quantitative rate condition number.
+
+### All complete deadlines, Never, and uniform payoffs
+
+Fix any table in this neighborhood and its produced proper rates. At
+every live date, the assigned U bounds both unilateral endpoints and
+equals the prescribed policy value. Each player has three opponents,
+each scheduled twice per period, so even under an arbitrary complete
+replacement by that player the probability of surviving a whole period
+is at most
+
+    rho=(3/4)^6 <1.                                      (26)
+
+This uses only independent opponent coins on the unique continuing public
+history. A deviator's private history or memory cannot change those coins.
+The deviation can choose different actions at every date, Quit at an
+arbitrarily late deadline, or Never.
+
+Iterate the one-step endpoint inequality through m periods. The terminal
+payoff already realized is retained exactly; the unabsorbed continuation
+remainder has absolute value bounded by a fixed reward/value bound times
+rho^m. Let m grow. Every complete replacement has terminal payoff at
+most U_Ai. The prescribed profile attains U_Ai, hence its COMPLETE cap
+B_i equals U_Ai. This includes the limit of arbitrarily late deadlines
+and the pure Never replacement, not merely the eight displayed actions.
+
+Let M bound every absolute reward in the fixed neighborhood. Under any
+unilateral replacement, if tau is the first quitting date starting at zero,
+
+    E[tau+1] <= 4/(1−rho).
+
+The N-date average reward differs in expectation from terminal reward
+by at most 4M/[(1−rho)N], including the zero selecting date. It follows
+that the prescribed average payoff converges to U_A, and every complete
+behavioral gain in the N-date game is at most 8M/[(1−rho)N]. One common
+threshold therefore works for all deviations and all larger horizons.
+The selected actual target U_A is fixed before the accuracy.
+
+### Bounded implemented and accepted coverage tests
+
+These comparisons are part of the candidate, not a complete novelty seal.
+They concern literal raw criteria and their whole listed finite selection
+sets. A preliminary symmetric grand row (−100,...,−100) WAS covered by
+the half-turn automorphism quotient. The asymmetric row displayed above
+is the final center; none of (21)–(26) changes when it is substituted.
+
+1. **Singleton-only sources.** The literal comparison matrix is
+
+       Gamma=[ 0  3 −1 −1; 3  0 −1 −1;
+              −1 −1  0  3; −1 −1  3  0 ].
+
+   It is the paired matrix with full normal core, standard-Q property,
+   no homogeneous simplex witness, and failure of projective Q-bar
+   established in `FourPlayerPairedSingletonLCP.lean` and
+   `FourPlayerPairedSingletonResidualHard.lean` under
+   `UniformEquilibrium/Quitting/Examples/BlockPair/`. Their conclusions
+   depend only on Gamma, not this completion. Its eigenvalues are
+   1,5,−3,−3, determinant45; its inverse has diagonal2/15, favorite
+   entries7/15, and cross entries1/5. Pair determinants are −9 or −1;
+   every triple determinant is6, and every triple inverse has a diagonal
+   entry−1/6. Thus the full nonnegative-inverse theorem, which requires
+   NEGATIVE determinant, does not apply; its R0 degree is+1. No proper
+   triple passes the nonnegative-inverse child test. Harmful pair matrices
+   are not standard-Q, but no inference from their failure to original
+   parent UE is made. Bare full ordinary-non-Q is unavailable.
+
+2. **Every nondiscrete response quotient.** At all-sure hazards the
+   actual displacements are r_i(I)−r_i(I−i), namely
+
+       (−97,−98,−99,−100).
+
+   They are pairwise distinct. Every nondiscrete partition identifies
+   two players, so its response-invariance condition fails already at
+   this point. This covers all fourteen nondiscrete partitions, including
+   paired and orbit quotients. It survives positive playerwise affine
+   transports: Gamma's row sums all equal1, and the necessary block-row
+   identity forces equal positive row scales inside each block; the
+   displayed unequal responses remain unequal after that common scale.
+   The discrete quotient has Gamma's degree+1.
+
+3. **Every proper quiet child with nonnegative weights.** In the
+   accepted `NONNEGATIVE_SINGLETON_FINITE_QUIET_LIFTS` criterion, its (J)
+   compares outsider join gain with a nonnegative sum of child join
+   gains. Every triple child fails (J):
+
+   | Child | coalition T | omitted outsider's join gain | sole child outside T's join gain |
+   |---|---|---|---|
+   | 013 | 01 | 1 | −13 |
+   | 123 | 23 | 1 | −13 |
+   | 012 | 12 | 3/4 | −5 |
+   | 023 | 03 | 3/4 | −5 |
+
+   Child members in T have zero join gain, so the weighted right side
+   is nonpositive for EVERY nonnegative weight vector. The four pair
+   children01,12,23,03 fail at their whole coalition, with the same
+   positive outsider gains. Child02 fails at T={2}: outsider1's gain2
+   must be at most child0's gain−3 times a nonnegative weight; child13
+   fails at T={3} with outsider0's gain2 and child1's gain−3. Finally
+   each singleton child has some outsider with positive join gain2.
+   This excludes the entire proper-child selection set, not one chosen
+   child or target.
+
+4. **Two-pair joint and matching sources.** Checking the THREE partitions:
+   01|23 has positive outsider joining cap violations, e.g.
+   r_0(03)=2>s_0=1; 02|13 has participant failure−3<0; 03|12 has
+   opposite-pair cap violation r_0(01)=5>s_0=1. This excludes the raw
+   `TWO_PAIR_JOIN_CAP` test, its weak crossed-matching specialization,
+   and sources requiring those same twelve individual caps. The signed
+   inverse-column source has only positive allowable column signs here;
+   partition01|23 violates K_0=11/2<=0, partition03|12 violates K_0=1<=0,
+   and partition02|13 has negative participant premiums. Opposite-sign
+   and below-own joint-premium sources have additional incompatible
+   center equalities or those same joining caps. This last sentence is
+   a bounded raw comparison, not an arbitrary-neighborhood exclusion.
+
+5. **Guarded crossed and one-sided sources.** At any receiver i, the
+   unique positive singleton neighbor is its favorite f(i), with
+   Gamma_i,f(i)=3. If a selected partner is not f(i), the outsider
+   favorite axis has negative displacement for all sufficiently small
+   positive hazards. If the partner is f(i), a sure harmful outsider
+   (2 for i0, 3 for i1, 0 for i2, 1 for i3) gives displacement−3.
+   Thus EVERY ordered lower face fails, covering lower-ranking,
+   weak-polynomial and one-sided lower guards, under all relabelings.
+
+6. **Premium/core and three-child sign patterns.** Pair traps01,12,23,03
+   overlap, so the mixed-premium-trap source's larger-trap inequalities
+   cannot hold. The greatest premium core is all four. The protected
+   set P_max is empty, since every player's grand participant reward
+   is below its singleton. Product-low fails already at pair01, whose
+   two participant rewards exceed their own singletons. The positive
+   singleton graph is two transpositions, not a directed favorable
+   four-cycle or a favorable three-cycle; every proper triple omits
+   one player's favorite. Hence the literal cyclic-child and signed
+   four-cycle source patterns inspected here cannot be selected.
+
+The narrow declaration audit used:
+
+- `exists_uniformEquilibriumPayoff_of_nonnegative_singletonInverse`,
+  `UniformEquilibrium/Quitting/Classification/LCP/NonnegativeInverseCriterion.lean`;
+- `exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`,
+  `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`;
+- `quittingSingletonBlockRowSum_eq_of_responseInvariant`,
+  `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`;
+- `exists_uniformEquilibriumPayoff_of_pairedCenteredCompletion`,
+  `UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientClass.lean`;
+- `exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_strictRawUnit`,
+  `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRawProducer.lean`;
+- `QuittingHalfWeakPolynomialGuards`,
+  `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialFaces.lean`;
+- `QuittingOneSidedWeakUnitGuards`,
+  `UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`;
+- `isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_certificate` and
+  `isUniformEquilibriumPayoff_quittingCyclicTerminalValue_of_certificate`,
+  `UniformEquilibrium/Quitting/Cycles/PeriodicCompiler.lean`.
+
+The new supplied-data-to-strategy step is the eight-rate local producer
+(23)–(25), not the already checked periodic compiler. The concrete next
+requested check is independent reconstruction of the Jacobian and a bounded
+coverage challenge to the asymmetric center. Do not export before resolving
+that comparison against the relevant accepted scheduling-source families.
