@@ -55,12 +55,15 @@ private planned-Never taxes with jointly changing finite menus. An explicit
 proper-sentinel seed and a private pivot ladder produce good taxed Nash laws
 on the existing rational common-menu obstruction. This is an unreviewed
 source calibration on an already-solved table, not arbitrary-table coverage.
-Section 22 gives a complete candidate falsifier of that UNIVERSAL source:
+Section 22 gives an independently bounded-checked falsifier of that UNIVERSAL source:
 after making the sentinel's realized rewards positive, EVERY exact taxed
 finite-menu Nash law waits until the last date, for all nonpositive tax
 magnitudes. Small taxes then leave a fixed ORIGINAL full-deviation gap.
-This is ordinary proof draft awaiting independent scrutiny, not a UE
-counterexample; the same table has explicit original exploitability1/N.
+CODEX_NASH_BOX checked all four nonpositive tax coordinates, all Nash
+components, private-payment rescaling, backward induction and the uniform
+full gap. This is ordinary mathematics, not a Lean check, UE counterexample
+or counterexample-class exclusion; the same table has explicit original
+exploitability1/N. The universal negative-tax exact selector is retired.
 
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits

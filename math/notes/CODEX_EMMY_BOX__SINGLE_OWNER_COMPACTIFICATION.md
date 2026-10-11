@@ -979,3 +979,50 @@ FRONTIER route points to
 whose inspected statement concerns exact finite-period certificates, not
 this geometric-owner partial-response correspondence. This calibration
 is not inferred from that different no-go and makes no Lean novelty claim.
+
+### 14.3. A genuine whole-correspondence extremum for the remaining test
+
+The sparse-record question can be sharpened to an attained maximum,
+without claiming that this maximum has already been evaluated. For the
+canonical game above, put
+
+    m_delta=max_(p in N_(0,delta)) Pr_p(T0=0).             (14.6)
+
+The maximum exists by the unconditional compact producer; m_delta>=delta
+by the budget at1. The sure-hazard exclusions of Nash Section14.4 carry
+unchanged to K_delta, since their only budget input was
+S0(t+1)<=c^(t+1), and the resulting minimum hazard against a sure nonowner
+is at most delta. Thus every finite joint reach is positive here.
+
+Any BINDING date, not only a strict record, re-roots into the SAME N:
+if S0(t)=c^t, conditioning gives S_tail(u)<=c^u and every K_delta tail
+replacement splices back legally. Full nonowner inequalities pass through
+positive reach exactly as in Section11. Therefore
+
+    m_delta=delta ==> EVERY owner law in N is Geom(delta). (14.7)
+
+Indeed every source has root hazard at least delta and at most m_delta,
+so equality gives S0(1)=c. Re-root there; the new root again has hazard
+delta. Induction gives the claimed entire geometric law. Section14.1
+then forces the unique nonowner response profile. For small delta the
+ENTIRE N would be that singleton and its minimum owner loss would tend
+to2/5.
+
+This yields one concrete unproved maximum principle worth testing:
+
+    Does the perturbed Solan game force m_delta=delta
+    for all sufficiently small delta?                    (MP)
+
+A proof would be a whole-correspondence obstruction for the positive-
+owner0 source, not another bad branch. Conversely any profile improving
+on(14.5) necessarily has m_delta>delta. The statement is not asserted
+true: an optimal owner can allocate its deadline mass across WEAK record
+plateaux, not just use the first-argmax representative. Replacing it by
+that representative while keeping opponents fixed need not preserve the
+opponents' exact best replies. This is the central unresolved joint-law
+issue in trying to prove(MP).
+
+For the cyclic RAW three-player table the three owner choices are symmetric.
+For the canonical Fin4 table with an extra zero-singleton label, excluding
+owner0 alone would NOT exclude every owner permitted in Section1. No
+all-owner Fin4 falsification is claimed here.
