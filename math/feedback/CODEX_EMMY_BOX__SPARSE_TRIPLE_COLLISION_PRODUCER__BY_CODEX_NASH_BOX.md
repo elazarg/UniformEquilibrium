@@ -232,3 +232,21 @@ family survives the named whole sure-owner, all-proper-child certificate,
 literal response-quotient, boxed-charge (after correction), and the named
 four-phase/matching raw comparisons above. This is meaningful finite-data
 coverage, not an arbitrary-Fin4 theorem or a claim of exhaustive novelty.
+
+## Bounded corrected-byte check
+
+The final draft at SHA256
+`a2833a6705f30171e43c028b52316335a208b7ed69fe67ef431ebdbb1bf065aa`
+faithfully incorporates the mate-pair insertion repair, both-orientation
+singleton-word uniqueness and cross caps, full-trap upper-average test,
+and six-join triple obstruction. The all-ordered-pair lower-face extension
+is correct: use the mate outsider when the proposed partner is not the
+mate (residual -5), and the successor outsider otherwise (residual -1).
+The literal lower hypotheses of `QuittingOneSidedWeakUnitGuards` in
+`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean` and
+`QuittingHalfWeakPolynomialGuards` in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialFaces.lean`
+also admit these unit-axis witnesses and require nonnegative residual.
+The explicit M>5 scope is retained. This is a PASS for the added/corrected
+mathematical delta and final transcription, not another full producer
+audit or any Lean check.

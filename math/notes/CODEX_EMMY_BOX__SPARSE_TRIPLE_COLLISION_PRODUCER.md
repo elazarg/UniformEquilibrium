@@ -1,13 +1,9 @@
 # Sparse recipient-specific triple rewards produce stationary equilibrium
 
-Author: CODEX_EMMY_BOX.
-
-Status: COMPLETE ORDINARY PROOF CANDIDATE, not independently reviewed,
-not Lean-checked, not exported. This is a raw-table existence producer,
-not an arbitrary-Fin4 theorem. The full-response semantic chain is proved
-below. A separating family passes the elementary pure/sure-owner and
-every-proper-child quiet-lift screens; the bounded comparison against
-other raw producers remains subject to independent coverage review.
+Status: ordinary mathematical theorem and proof, not Lean-checked.
+This is a raw-table existence producer for an unbounded four-player
+reward region, not an arbitrary-four-player theorem or a stationary
+strategy-class completeness claim.
 
 ## 1. Self-contained question and theorem
 
@@ -32,7 +28,7 @@ The question is whether ONLY the four recipient-specific triple rewards
 can offset this hard singleton matrix, without making every triple
 leave-safe or invoking an already supplied strategic witness.
 
-Theorem candidate. For every real R>=0 there are delta>0 and M0>0 such
+Theorem. For every real R>=0 there are delta>0 and M0>0 such
 that for EVERY M>M0 and EVERY finite original reward table satisfying
 
 1. All sixteen singleton coordinates differ from r^0 by less than delta.
@@ -153,7 +149,9 @@ positive t0 and singleton radius delta then give a positive root for
 EVERY d in the cube, every permitted singleton table and every0<t<t0.
 No local root selector is required to agree on overlaps; existence for
 each original table is sufficient. Shrink t0 so all q_i=t z_i<1.
-Set M0=t0^-2. This proves the raw all-parameters producer in Section1.
+Set M0=max(5,t0^-2). This proves the raw all-parameters producer in
+Section1. The extra lower threshold5 is used only in the separating
+family below.
 
 ## 5. Complete terminal agency, Never, and fixed uniform target
 
@@ -240,7 +238,7 @@ the same contradiction pattern is implemented as
 `UniformEquilibrium/Quitting/Examples/NegativePremiumCyclicChildFixtureChildren.lean`.
 No claim is made that unsafe child lifting excludes arbitrary joint play.
 
-### 6.3. Some additional bounded raw-source screens
+### 6.3. Response quotients and actual insertion charges
 
 - The normalized singleton matrix is the hard paired Gamma above,
   unchanged by M. All four labels survive singleton normality. This is
@@ -252,20 +250,108 @@ No claim is made that unsafe child lifting excludes arbitrary joint play.
   The actual definition inspected is `QuittingResponseInvariantOnUnitCube`
   in `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`.
 - The entire player set is a premium trap, since every player receives2>1
-  in the pair with its predecessor. On cross pair{0,2}, the unit-weight
-  leave sum is (-1-0)+(2-0)=1>0. Thus the necessary nonpositive proper
-  leave-sum condition of `QuittingTrapChargeCoefficients.leave_nonpos`
-  fails on that actual trap. This excludes the boxed-charge raw producer
-  `HasBoxedQuittingNashCharges`, whose definitions were inspected in
-  `Classification/BoxedQuittingNashCharges.lean` and
-  `Classification/BoxedQuittingNashChargeReturn.lean`.
-- The exported four-joint-phase local/upper/free source has delta<=1/2
-  and EVERY prescribed pair has both participant center rewards at least2.
-  Every pair in this family has a participant reward-1, so it fails that
-  P-coordinate premise for every relabeling. The rectangle and passive-ray
-  families require a favorite pair with both participant rewards positive,
-  also absent here. These checks concern the named raw statements, not
-  an exhaustive search over all possible periodic equilibria.
+  in the pair with its predecessor. The actual proper-coalition leave
+  comparison sums INSERTION gains of players OUTSIDE that coalition.
+  On the mate pair{0,1} it is
+
+      [r_2(012)-r_2(01)]+[r_3(013)-r_3(01)]
+         =(M-5)+(M-5)=2(M-5)>0.
+
+  Thus `QuittingTrapChargeCoefficients.leave_nonpos` fails on that
+  actual trap, excluding `HasBoxedQuittingNashCharges`. The relevant
+  definitions are `quittingWeightedLeaveSum` in
+  `UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapLeavers.lean`,
+  `QuittingTrapChargeCoefficients` in
+  `UniformEquilibrium/Quitting/Classification/BoxedQuittingNashCharges.lean`
+  and `HasBoxedQuittingNashCharges` in
+  `UniformEquilibrium/Quitting/Classification/BoxedQuittingNashChargeReturn.lean`.
+  This is not a participant-withdrawal sum: on cross pair02 the actual
+  insertion sum is-12, so that pair is not the witness.
+
+### 6.4. Every ordered pair fails the broader crossed lower face
+
+Fix any recipient i and distinct candidate partner p. At the face where
+their two hazards are zero, put hazard1 on one outsider j and zero on
+the remaining outsider. The actual residual from Section2 is then
+
+    H_i=r_i({i,j})-r_i({j}).
+
+If p is not mate(i), choose j=mate(i), giving H_i=-1-4=-5.
+If p is mate(i), choose j=succ(i), giving H_i=-1-0=-1.
+Thus EVERY ordered pair has a strictly negative point on its literal
+closed lower outsider box, independently of the ceiling height and M.
+This violates even a necessary NONNEGATIVE lower face condition, not
+merely one sufficient coefficient ranking.
+
+In particular it excludes `QuittingCrossedSourceGuards` in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseGuards.lean`,
+whose lower face must be strictly positive for every nonzero outsider
+row, and `QuittingOneSidedWeakUnitGuards` in
+`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`,
+whose lower face must be nonnegative. The same point excludes the
+broader weak polynomial lower premise of `QuittingHalfWeakPolynomialGuards`
+in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialFaces.lean`.
+Strict/weak raw-ranking adapters cannot bypass a failure of their actual
+polynomial conclusion.
+
+### 6.5. Two concrete calendar restrictions fail
+
+Any raw calendar premise requiring a prescribed pair with BOTH
+participant rewards positive fails here, under every relabeling: every
+pair has at least one participant reward-1. This includes a local pair
+premise with both center rewards at least2 and radius at most1/2.
+It does not exclude all possible calendars.
+
+There is also a whole-architecture exclusion for the positive singleton
+word0,2,1,3 and its mate-preserving relabelings, not just its symmetric
+hazard choice. Each owner's mate occurs two phases later. Let u_l in(0,1)
+be the four Continue probabilities in chronological order. Owner
+indifference, with own singleton1, is exactly
+
+    E_l=u_l[4-4u_(l+1)+u_(l+1)u_(l+2)]-1=0,
+
+with cyclic indices. Put a=u_0-u_2, b=u_1-u_3. Opposite differences give
+
+    E_0-E_2=4(1-u_1)a-u_2(4-u_0)b,
+    E_1-E_3=u_3(4-u_1)a+4(1-u_2)b.
+
+The determinant is
+
+    16(1-u_1)(1-u_2)+u_2u_3(4-u_0)(4-u_1)>0.
+
+Hence a=b=0. Writing u_0=u_2=x, u_1=u_3=y, the remaining difference
+is (4+xy)(x-y)=0. The common equation factors as
+
+    (u-1)(u^2-3u+1)=0,
+
+so the UNIQUE positive proper owner solution has
+u=(3-sqrt(5))/2 and p=1-u. At a root of one owner, the next nonmate's
+prescribed value is u and the preceding nonmate's prescribed value is1;
+these follow by evaluating their singleton continuation paths, using
+u(4p+u^2)=1. Either nonmate's immediate-Quit value is
+u+p*r_i({i,owner}). Thus their necessary pair-participant caps are
+respectively0 and1. Each actual cross pair here has one participant
+reward2, so some inactive endpoint inequality fails, for either
+orientation. This excludes the ENTIRE named positive singleton-word
+architecture at the reference singleton rows, including any positive
+branch selected by a local implicit-function theorem. No unspecified
+neighborhood radius or all-calendar uniqueness is assumed.
+
+### 6.6. Further exact raw-data boundaries
+
+The grand row rules out every nonzero nonnegative global inserted-premium
+floor: its necessary test is sum_i w_i(-101-i)>=0. The supportwise
+upper-average alternative on the full premium trap fails as well.
+For nonnegative weights put X=w_0+w_1 and Y=w_2+w_3. Testing mate pairs01
+and23 gives respectively
+
+    (M-1)Y<=2X,       (M-1)X<=2Y.
+
+For M>3 these force X=Y=0. Thus no nonzero such weight exists, and it
+cannot rescue the failed insertion-charge arm. Every three-element set
+also contains a mate pair whose two ordered joining gaps are-1-4=-5;
+any source requiring six positive joins within one triple fails for
+EVERY triple.
 
 The common-large-PAIR family has a different scale premise: all twelve
 pair participant entries grow together, whereas here four triple entries
@@ -276,17 +362,35 @@ inference is used. A supplied stationary-root or face-box verifier can
 of course consume the actual root produced here; that is not an earlier
 raw-data producer for this class.
 
-## 7. Review boundary and next concrete question
+## 7. Boundary tests and precise implementation target
 
-The main complete candidate is Sections1--5: raw finite data produce an
-actual proper full-support stationary terminal Nash and fixed UE target,
-uniformly over the forty-four bounded parameters. Sections6.1--6.2 are
-whole-selection source exclusions for an explicit unbounded subfamily.
-No universal novelty claim or arbitrary-Fin4 solution is asserted.
+- R=0 is permitted: the forty-four bounded parameters are then zero,
+  and the same nonsingular base point supplies a root. R=103 is sufficient
+  for the entire explicit separating family. No threshold uniform over
+  unbounded R is asserted.
+- The polynomial value at t=0 is NOT a physical all-Never payoff. At the
+  actual all-Never law the payoff is0 and each singleton deviation earns1
+  at the reference table. All produced profiles have strictly positive
+  t and every player's deleted-opponent system contracts.
+- The jackpot indices are substantive: i's sole unbounded reward contains
+  i and occurs with exactly TWO opponent quits. This is why it enters Q_i
+  at order M*q^2 but never enters B_i. An arbitrary large passive-recipient
+  entry cannot be included in the bounded box without changing the proof.
+- Grand rewards and all other bounded coordinates can have either sign;
+  every unilateral deviation, including a simultaneous grand-coalition
+  quit and Never, is retained in Sections2--5. No coalition is discarded
+  because its equilibrium probability is small.
+- The separating insertion test requires M>5, already ensured by M0.
+  No claim at the threshold or at small jackpots is needed.
 
-Requested independent check: falsify the pole cancellation, the four
-jackpot indices, the Jacobian/root, the compact-box uniform IFT, and the
-complete behavioral/UE chain; separately test whether the explicit
-family is wholly covered by an applicable earlier raw producer. If the
-proof and meaningful coverage survive, prepare one reviewed export.
-No export before that review.
+The new implementation target is the raw polynomial construction in
+Sections3--4: its extension, exact base Jacobian, positive local root
+and uniform compact-parameter quantifiers. Sections2 and5 identify the
+actual stationary value and supply the fixed-point, endpoint and deleted
+contraction hypotheses of the two named checked semantic consumers.
+Implementing those algebraic steps would give an actual-data adapter;
+the present proof does not itself claim a checked Lean producer.
+
+The result is a raw-table existence theorem with explicit whole-selection
+comparisons. It neither settles arbitrary four-player quitting games nor
+claims that its stationary architecture represents every uniform payoff.

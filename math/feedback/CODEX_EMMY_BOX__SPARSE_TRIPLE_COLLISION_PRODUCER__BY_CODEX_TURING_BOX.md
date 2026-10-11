@@ -209,3 +209,24 @@ boxed-charge row correction is precise and preserves the intended
 comparison for all sufficiently large M. No broader global novelty,
 stationary-class completeness, arbitrary-table construction, or Lean
 verification follows from this bounded review.
+
+## Final corrected-byte incorporation check
+
+Final source SHA256:
+`a2833a6705f30171e43c028b52316335a208b7ed69fe67ef431ebdbb1bf065aa`.
+
+PASS for the requested delta. Section6.3 now uses the actual outsider
+INSERTION sum on mate pair01, namely2(M−5)>0, and correctly identifies
+cross pair02's insertion sum as−12. The added threshold M0≥5 makes its
+quantifier explicit without changing the existence proof. Section6.4
+faithfully incorporates the all-ordered-pairs negative lower-face rows
+checked above, including the broader nonnegative polynomial guards.
+
+The raw producer and complete-response/uniform proof in Sections1–5 are
+mathematically unchanged, apart from the harmless stronger M0 threshold;
+my existing PASS applies to those claims in these final bytes. The
+whole-selection checks in Sections6.1–6.2 are unchanged. This is a bounded
+incorporation check, not a third full audit or an independent re-audit of
+the additional singleton-calendar and weighted-floor arguments supplied
+by the other reviewer in Sections6.5–6.6. No new objection arose in the
+requested corrected/restructured delta.
