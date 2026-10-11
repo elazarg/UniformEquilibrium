@@ -23,6 +23,10 @@ Sections4 and11 also have the narrower independent ordinary check in
 Neither review supplies the missing zero-owner-debt selector or asserts
 unrestricted Fin4 UE existence. Section13 gives immediate whole-face
 selection consequences, not a new conjecture-facing closing theorem.
+Section14 begins the stronger calibration on the canonicalized perturbed
+Solan three-player game, which has UE but no exact Nash. It determines the
+ENTIRE nonowner response correspondence to a fixed geometric owner, but
+does not determine the minimum over all owner laws in K_delta.
 
 ## 1. Self-contained end-to-end question
 
@@ -829,3 +833,149 @@ other players' FULL best-response inequalities still are. Shared joint-
 survival quota equilibria were tested as an alternative source: they allow
 reallocation of termination but lose the exact nonowner full-Nash property,
 so no closing implication from that alternative has been established.
+
+## 14. Perturbed Solan calibration: the full geometric-owner response set
+
+Status: NEW ORDINARY PROOF DRAFT, not independently checked. This is a
+necessary performance test, not a new equilibrium table class. The whole
+K_delta selection question remains open. Its stronger relevance than the
+old FTV0 test is that the small positive perturbation has NO exact Nash,
+despite having UE. Thus no easy exact-Nash branch settles the calibration.
+
+Fix 0<e<1 and use the seven raw rows
+
+    g(0)=(1,3,0),       g(1)=(0,1,3),       g(2)=(3,0,1),
+    g(01)=(1+e,0,1),  g(02)=(0,1,1+e),   g(12)=(1,1+e,0),
+    g(012)=(0,0,0).
+
+The canonical version subtracts1 at every nonempty terminal coordinate
+of recipients1,2, leaving recipient0 and Never0 unchanged; its own solo
+vector is(1,0,0). When owner0 is proper, this shift preserves ALL response
+payoffs of recipients1,2 up to the same constant, because they always
+retain a proper opponent. All calculations below may therefore use g.
+
+Question: on this fixed table, does
+
+    inf_(p in N_(0,delta)) D0(p) ->0 as delta->0?          (14.1)
+
+Allowing every owner law in K_delta is essential. Cyclic symmetry of the
+raw g-table makes the corresponding raw-owner minima equal; no favorable
+owner selection is hidden by choosing label0. The canonical shift has not
+been claimed to preserve the full nonowner-as-owner correspondences.
+
+### 14.1. Exact theorem with the owner law FIXED to Geom(delta)
+
+For every 0<delta<1/2, put c=1-delta and prescribe owner0 the private
+geometric clock, conditional hazard delta at EVERY date. The other two
+players may choose ARBITRARY independent private laws, not just stationary
+laws. Their complete Nash response correspondence is a SINGLE stationary
+profile with positive hazards x_delta,y_delta. In particular passing to
+nonstationary opponent clocks does not repair this particular fixed owner.
+
+Here is an independent full-response proof. At any reached date, player1
+cannot Quit surely. If it did, player2's Quit payoff0 is below its Continue
+payoff3-2delta, so player2 surely Continues there. Player1 would receive c
+by immediate Quit. Waiting one date and then Quitting instead yields at
+least 3delta+c^2>c: owner0 quitting now pays3, and conditional next-date
+Quit pays at least c against ANY player2 hazard. Player2 cannot Quit surely
+either: its sure Quit makes player1's current Quit c*(1+e)>delta=Continue,
+forcing the already-excluded sure player1 Quit. Consequently EVERY finite
+joint reach is positive, and every proper nonowner clock is unbounded.
+
+Each nonowner has Never as a full best reply. An improper clock supports
+Never. A proper unbounded clock has optimal finite support tending to
+infinity, whose payoffs converge to its Never payoff because owner0 is
+proper. Let Y1(t),Y2(t) be their conditional raw Never payoffs. Conditional
+full Nash and Never optimality persist at every finite date. If x,y are
+the current nonowner hazards, their exact equations are
+
+    Y1=delta*(3-2y)+c*(1-y)*Y1',
+    Y2=(3-2delta)*x+c*(1-x)*Y2',
+    Y1>=c*(1+e*y),        equality if x>0,
+    Y2>=(1-x)*(1+e*delta), equality if y>0.                (14.2)
+
+These relations FORCE x,y>0 at EVERY date. If x>0 but y=0, the first
+equation and next-date cap Y1'>=c give
+Y1>=3delta+c^2>c, contradicting the equality Y1=c. Thus x>0 implies y>0.
+Put L=1+e*delta. If x=0 and y>0, then Y2=L=c*Y2', so Y2'>L.
+Whenever Y2>L, equality would forbid y>0; the preceding implication then
+also forces x=0. Its next value grows by factor1/c, contradicting the
+bounded payoff Y2<=3. Finally x=y=0 gives Y2>=L and the same next-date
+contradiction. Thus both are positive; the sure-hazard argument also gives
+x,y<1.
+
+Substitution of the equalities in(14.2) at consecutive dates gives the
+DECOUPLED exact maps
+
+    x'=[(3-delta+e*delta^2)*x-delta*L]/[c*L*(1-x)],
+    y'=[(1+e-e*delta+delta^2)*y-delta*(2+delta)]
+          /[e*c^2*(1-y)].                               (14.3)
+
+Each map is increasing on(0,1), tends to infinity at1, and has exactly
+one fixed point there. Explicitly the positive roots are
+
+    c*L*x^2+(2-e*delta+2e*delta^2)*x-delta*L=0,
+    e*c^2*y^2+[1+e*delta+(1-e)*delta^2]*y
+          -delta*(2+delta)=0.                           (14.4)
+
+Both quadratics are negative at0 and positive at1, with positive linear
+coefficient. For either map Phi, Phi(z)-z has the sign of the corresponding
+quadratic. Starting above its fixed point produces a strictly increasing
+forward orbit; starting below produces a strictly decreasing one. Neither
+can remain in(0,1) forever: a bounded monotone limit would be another fixed
+point, while the endpoint limits of Phi exclude0 and1. Therefore every
+infinite response clock sequence must be identically the roots(14.4).
+
+Conversely these stationary hazards satisfy the exact endpoint equalities.
+Never and EVERY finite deadline then give the same nonowner payoff, so
+they are genuine unrestricted best replies. This proves uniqueness, not
+just existence of one stationary response branch.
+
+### 14.2. Positive limiting loss and its precise scope
+
+From(14.4),
+
+    x_delta/delta ->1/2,     y_delta/delta ->2.
+
+Write k=(1-x_delta)*(1-y_delta). Owner0's Never cap candidate and immediate
+Quit payoff are
+
+    B=y_delta*(3-2*x_delta)/(1-k),
+    Q=(1-y_delta)*(1+e*x_delta).
+
+Thus B->12/5 and Q->1. For every sufficiently small delta, B>Q and its
+pure deadline payoff is B+k^t*(Q-B), strictly increasing in t. Every date
+is a strict owner record, so Geom(delta) is indeed its K_delta-optimal
+clock by Section3. Hence this unique partial-response profile actually
+belongs to N_(0,delta). Its actual payoff and full loss are
+
+    U0=[delta*Q+c*y_delta*(3-2*x_delta)]/(1-c*k) ->2,
+    D0=delta*(B-Q)/(1-c*k) ->2/5.                       (14.5)
+
+The proof determines the ENTIRE response correspondence to that fixed
+geometric owner, with unrestricted nonstationary opponents. It does NOT
+give a lower bound on(14.1): K_delta also allows owner atoms larger than
+delta and zero hazards across record plateaux. If every date is a strict
+record at a K_delta optimum, binding forces the geometric law and the
+theorem applies; a successful selector must therefore use genuinely sparse
+record/plateau structure or an increasingly long non-geometric prefix.
+No inference that finite player count bounds the number of such intervals
+is justified.
+
+The next mathematical target is the WHOLE minimum(14.1), not a further bad
+clock branch. One potentially stronger obstruction to test is a positive
+owner-loss lower bound over all proper owner laws for which the two
+nonowners are exact full best replies; that larger-set obstruction would
+imply failure of(14.1), but is currently only a hypothesis.
+
+Source/declaration audit for this calibration: actual Solan2001 PDF,
+Figure1 and Theorem2.1, read independently also for the bounded review of
+Nash Section14.4; the theorem gives only a qualitative small-e interval
+for no exact absorbing inverse iterate. The proof of(14.2)--(14.5) itself
+uses no paper no-exact-Nash theorem and holds for every0<e<1. The tracked
+FRONTIER route points to
+`no_isQuittingBlockCertificate_solanPassivePaddedReward_one` in
+`UniformEquilibrium/Quitting/Boundary/Analytic/SolanPassivePaddingBlockNoGo.lean`,
+whose inspected statement concerns exact finite-period certificates, not
+this geometric-owner partial-response correspondence. This calibration
+is not inferred from that different no-go and makes no Lean novelty claim.

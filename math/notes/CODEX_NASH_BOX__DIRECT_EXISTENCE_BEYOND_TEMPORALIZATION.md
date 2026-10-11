@@ -61,6 +61,12 @@ CODEX_EMMY_BOX's bounded independent falsification found no objection,
 including the primary-paper scope and Fin4 padding. The exact softened
 producer is retired; this result is internal and not exported.
 
+Section15 tests a distinct hazard-paid endogenous response smoothing.
+Its full-deviation estimate survives, but an exact canonical fixture rules
+out EVERY all-proper solution, hence every strictly positive cyclic solution
+at every period for small error. This is an unreviewed mechanism falsifier,
+not a failure of global approximate selection or new UE coverage.
+
 Central conclusion: NONE of the no-go results below refutes existential
 selection from the FULL private-Never-bonus equilibrium correspondence.
 The same auxiliary games have rigorously bad exact selections and good
@@ -2620,3 +2626,144 @@ equilibrium. The two-player producer and BRS failure above remain separate:
 neither alone implied this relevant existence failure. The direction change
 is to abandon this exact softened producer, not to weaken it into another
 unproduced approximate interface.
+
+## 15. A different global response attempt: hazard-paid smoothing
+
+Status: ordinary, unreviewed mathematics. This bounded attempt changes the
+response mechanism, not the softened constraint. Its proposed automatic
+producer fails an exact canonical test; no new UE class is claimed.
+
+### The proposed producer and the full-deviation estimate
+
+Take a finite periodic independent hazard word q_i(t), with actual periodic
+terminal values u_i(t). Let Q_i(t), C_i(t) be its current Quit and Continue
+endpoint values and put
+
+    a_i(t) = 1-product_(j!=i)(1-q_j(t)),
+    ell_i(t) = max(Q_i(t),C_i(t))-u_i(t).
+
+Unlike a uniform stage-error bound, the stronger local inequality
+
+    ell_i(t) <= tau*a_i(t)                                  (15.1)
+
+would imply FULL terminal deviation debt at most tau whenever player i's
+opponents absorb almost surely. Indeed a deadline replacement telescopes
+the Continue advantages before its deadline and the Quit advantage at its
+deadline, each bounded by ell_i(t). If S_-i(t) is opponent survival, its
+total gain is at most
+
+    sum_t S_-i(t)*ell_i(t)
+      <= tau*sum_t S_-i(t)*a_i(t) = tau.
+
+For Never use the same telescoping limit; bounded values and opponent
+properness make the remainder vanish. Arbitrary complete randomized
+replacements are mixtures of deadlines and Never. Thus this estimate is
+not restricted to current-root, bounded-memory, or finite-support replies.
+
+A concrete attempted producer was the self-normalized logistic equation
+
+    q_i(t)=logistic((Q_i(t)-C_i(t))/(tau*a_i(t))).          (15.2)
+
+At every strictly positive word it gives (15.1), by the binary logistic
+loss estimate. The hope was that simultaneous response/Bellman selection
+would retain a global Brouwer producer while paying every error with actual
+deleted-opponent absorption. The next exact example disproves that hope:
+there is no strictly positive solution at ANY finite period for tau<1/2.
+
+Source inspection: `interiorBinaryApproximateResponse`,
+`binaryEndpointDefect_interiorBinaryApproximateResponse_le`, and the
+Brouwer producer `nonempty_interiorApproximateNashCyclicBlock` in
+`UniformEquilibrium/Quitting/Cycles/EndogenousInteriorCyclicBlock.lean`.
+The existing producer uses a fixed positive temperature, NOT (15.2).
+I also inspected the fixed-debtor and owner-escape structures in
+`UniformEquilibrium/Quitting/Cycles/InteriorCyclicDebtEscape.lean`.
+The weighted estimate above is an ordinary argument here, not a claimed
+new Lean declaration.
+
+### Exact all-period falsifier, with a good actual equilibrium
+
+For every nonempty S subset {0,1,2,3}, define the complete canonical table
+
+    r_0(S) = 1 if 0 in S, otherwise 3;
+    r_i(S) = 0 if i in S, otherwise 2,  for i=1,2,3.
+
+Never pays zero. Its own-singleton vector is exactly (1,0,0,0).
+Player0 quitting at date0 and everyone else literally Never is an exact
+unrestricted terminal Nash profile: player0 gets1, while each nonpivot
+gets2 and every finite replacement gives either0 (a tie at date0) or2.
+The same profile is an exact uniform equilibrium. This is an already-solved
+fixture, not a positive-gap example or new source exclusion.
+
+Now take ANY independent profile in which ALL four clocks are proper;
+no periodicity, boundedness, or positive-atom restriction is needed. Let
+J be its first quitting coalition. J is nonempty almost surely. Every
+player's Never deviation is absorbed by the other three proper clocks,
+and gives3 to player0 or2 to a nonpivot. Consequently the four Never
+deviation gains are exactly
+
+    D_i^Never = 2*P(i in J).
+
+Their sum is 2*E|J| >= 2. Hence some player's unrestricted debt is at least
+1/2. In particular NO all-proper periodic profile can satisfy (15.1) with
+tau<1/2, and (15.2) has no strictly positive cyclic solution at ANY period.
+This is an entire strategy-class falsifier of the automatic smoothing
+producer, not merely a bad fixed-point selector.
+
+### What survives, and what does not
+
+Adding a positive regularizer mu to a_i(t) restores the usual continuous
+Brouwer construction, but loses the desired charge: its local error is
+tau*(a_i(t)+mu). At period L, deleted absorption A_i over one period gives
+the bound tau*(1+mu*L/A_i). On the exact fixture, tau<1/2 therefore forces
+some A_i <= tau*mu*L/(1/2-tau). This is a precise source degeneracy, not a
+vanishing full-regret estimate.
+
+The existing singleton-concentration consumer can reconstruct the good
+improper-boundary equilibrium; it should not be counted as new coverage
+of this attempt. More generally, merely letting regularized clocks escape
+does not supply a new global selection argument. The failed implication is
+that hazard-paid smoothing preserves an interior fixed-point producer.
+The weighted full-deviation estimate itself is valid. I am not replacing
+the failed producer by a conditional interface requiring its solution.
+
+Concrete next question: can an original-game global operation select which
+players remain improper while retaining full best-reply control? An
+all-proper continuous regularization cannot by itself do this, and the
+reviewed softened exact producer is separately retired.
+
+### A quick opposite-boundary test: compulsory Never mass also fails
+
+The opposite regularization was tested before further development: require
+EVERY player's Never mass to be at least alpha, with 0<alpha<1. This domain
+is within alpha in total variation of every unconstrained own law, so an
+exact constrained Nash would have original full debt at most2R*alpha.
+It avoids the all-proper obstruction, but exact existence already fails
+on the following canonical TWO-player game:
+
+    r({0})=(1,0), r({1})=(2,0), r({0,1})=(0,1), Never=(0,0).
+
+Write p_i=P(T_i finite), with p_i<=1-alpha. Player0's deadline and Never
+payoffs against player1 are
+
+    f_0(t)=1+P(T_1<t)-P(T_1=t),   W_0=2p_1.
+
+The finite supremum is1+p_1, strictly above W_0 by1-p_1>=alpha. Thus
+an optimal constrained player0 MUST use finite mass1-alpha and attain
+this finite supremum. If player1 has unbounded finite support the
+supremum is unattained, so no optimum exists. Otherwise equality requires
+EVERY player0 finite support date strictly after ALL player1 finite support
+dates: the deficit at t is2P(T_1=t)+P(t<T_1<Never).
+
+But player1's deadline payoff is exactlyP(T_0=t), while Never pays0.
+Since player0 has positive finite mass, its positive maximum atom is
+attained. Player1 therefore must use finite mass1-alpha, supported on
+player0 maximum-atom dates. This contradicts the preceding strict temporal
+ordering. The ENTIRE exact constrained-Nash correspondence is empty for
+every alpha in(0,1), not merely a selected branch.
+
+Nevertheless player0 Geom(h), player1 literalNever has full original
+exploitability exactlyh, for every0<h<1. The owner gets1; the nonpivot's
+best joining value is its date0 atom h. Thus the original game has UE and
+this is only another exact-regularization falsifier. It is not a padding
+claim or unrestricted strategy-class obstruction. No further development
+of this failed producer is intended.

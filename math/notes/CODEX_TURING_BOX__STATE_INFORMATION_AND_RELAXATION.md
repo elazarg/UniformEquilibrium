@@ -50,6 +50,18 @@ reward data, not how to widen this particular family.
 Section 20 closes a separate exact-equilibrium nonattainment test by an
 explicit asymmetric equilibrium. It supplies no new reward-class claim.
 
+Section 21 tests a genuinely different auxiliary source: small NEGATIVE
+private planned-Never taxes with jointly changing finite menus. An explicit
+proper-sentinel seed and a private pivot ladder produce good taxed Nash laws
+on the existing rational common-menu obstruction. This is an unreviewed
+source calibration on an already-solved table, not arbitrary-table coverage.
+Section 22 gives a complete candidate falsifier of that UNIVERSAL source:
+after making the sentinel's realized rewards positive, EVERY exact taxed
+finite-menu Nash law waits until the last date, for all nonpositive tax
+magnitudes. Small taxes then leave a fixed ORIGINAL full-deviation gap.
+This is ordinary proof draft awaiting independent scrutiny, not a UE
+counterexample; the same table has explicit original exploitability1/N.
+
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits
 one convexification of the
@@ -2598,3 +2610,460 @@ bounded continuation vectors, so the bounded semantic consequence is the
 relevant one, not unrestricted formal inverse-iterate exclusion. The local
 `SOLAN_2001__CLEANED_TEXT.md` records this distinction. Our displayed fixture
 does not improve that boundary and is parked.
+
+## 21. Negative private Never taxes admit a proper-sentinel cap pump
+
+Ordinary exact mathematics, not independently reviewed or Lean-checked.
+The GLOBAL question being tested is this: for every Fin4 table with own
+singletons(1,0,0,0) and every η>0, are there a common finite menu
+F_N={0,...,N−1,Never}, taxes b0=0 and −η≤b_i≤0, and an EXACT mixed Nash
+law of the auxiliary payoffs
+
+    U_i(p)+b_i P_p(T_i=Never)
+
+whose ORIGINAL unrestricted exploitability tends0 as η tends0? Selection
+ranges over ALL auxiliary equilibria and all N, changing with η. A tax is
+paid according to the player's PRIVATE planned clock, even if someone else
+quits first. It is neither a terminal-table perturbation nor a live-stage
+reward. No public seed or chronology across accuracies is imposed.
+
+The following construction answers the test positively on the rational
+exact-common-menu obstruction, not on arbitrary tables. Core rewards for
+T=S∩{0,1,2} are0 if T is empty, and otherwise
+
+| T | (r0,r1,r2) |
+| --- | --- |
+| 0 | (1,7,7) |
+| 1 | (7,0,7) |
+| 2 | (7,7,0) |
+| 01 | (6,8,7) |
+| 02 | (9,7,5) |
+| 12 | (7,5,8) |
+| 012 | (7,6,6) |
+
+Player3 receives−1 if it quits with a core player,1 if it is absent and
+player1 or2 quits, and0 otherwise. Never pays0. This is the complete table.
+
+### 21.1. Exact private-tax prefix transport
+
+Suppose a finite common-menu tail is auxiliary Nash with taxes b, original
+payoff u, marginal Never masses z, and AUGMENTED payoff v_i=u_i+b_i z_i.
+Prepend an independent ordinary one-shot Nash root q against continuation v.
+The resulting full law is exact auxiliary Nash with taxes
+
+    b'_i=b_i ∏_{j≠i}(1−q_j).                       (T1)
+
+Its augmented payoff is the ordinary root payoff against v. Indeed, if the
+player Continues, both its conditional terminal payoff and its new tax
+contribution have the common factor∏_{j≠i}(1−q_j); after this division the
+tail objective is u_i+b_i z_i. If it Quits, no planned-Never tax is paid.
+Every complete menu replacement decomposes into these current choices and
+a conditional tail replacement. This proves the full finite-game claim.
+Crucially(T1) uses OPPONENT survival separately for each player, not one
+joint-survival multiplier for every tax.
+
+### 21.2. A literal finite seed and the change of support
+
+On the one-date menu choose independent Quit probabilities
+
+    q=(3/5,13/20,3/10,1),
+    b=(0,0,−11/20,−1657/1000).
+
+The core Quit-minus-Never augmented gaps are
+
+    1+q2−2q1=0,
+    q0−2q2−b1=0,
+    q1−2q0−b2=0.
+
+The probability of some core Quit is451/500, while player3's ORIGINAL
+Never value is151/200. Its tax makes Never equal to its prescribed Quit
+payoff−451/500. The seed is therefore exact auxiliary Nash, with
+
+    v=(1057/200,126/25,547/100,−451/500).
+
+Player3 is PROPER: its seed clock is surely finite. This is the strategic
+property to retain, not just a numerical continuation coordinate.
+
+Put w0=451/500 and prepend the two-active root
+
+    q0=h=w0/(1+w0)=451/951,
+    q3=k=1−1/v0=857/1057, q1=q2=0.
+
+Pivot Quit pays1 and Continue pays(1−k)v0=1. Player3 Quit pays−h and
+Continue pays−(1−h)w0=−h. Player1's Continue-minus-Quit gap is
+
+    −h+(1−h)(1−k)v1 ≥0
+
+because v1−w0 v0=27293/100000>0. Player2's gap is
+2h+(1−h)(1−k)v2>0. Thus this is an ordinary Nash root, and(T1) produces
+another exact auxiliary law. Write its augmented payoff as
+
+    V=(1,V1,V2,−w),  w=h,
+    Vj=[7w0+v_j/v0]/(1+w0), j=1,2.
+
+Then V1≥8w>w and V2>0. Its only nonzero taxes are
+
+    B2=−55000/1005207, B3=−1657/1902.                (T2)
+
+Player3 remains proper under this prefix.
+
+### 21.3. A private pivot ladder actually makes all taxes vanish
+
+Starting from this law, recursively prepend ONLY pivot0 with hazard
+
+    h_n=w/[1+(n+1)w], n=0,1,... .                  (T3)
+
+After n such prefixes the augmented values are
+
+    V0(n)=1,
+    Vj(n)=7+[Vj(0)−7]/(1+nw), j=1,2,
+    V3(n)=−w/(1+nw).
+
+Pivot Quit and Continue equal1. Player3's Quit value−h_n equals its
+Continue value(1−h_n)V3(n), so prescribing Continue is optimal. Player1
+Continues optimally exactly when V1(n)≥w/(1+nw), which follows from
+V1(0)≥w; player2's gap is2h_n+(1−h_n)V2(n)>0. Therefore every root is
+ordinary Nash against the actual AUGMENTED tail value, and(T1) applies at
+every step. For each nonpivot,
+
+    B_i(n)=B_i(0)/(1+nw).                          (T4)
+
+All laws are finite private clocks on one common menu (n+2 finite dates),
+not an execution of infinitely many predecessor roots. Player3 remains
+proper on every one of these finite laws.
+
+### 21.4. Original full caps, including after the entire menu
+
+An auxiliary Nash inequality and |b_i|≤η imply that every original menu
+deviation gains at mostη. For a finite common-menu profile, the full cap
+is exactly the maximum of its menu cap and
+
+    NeverReply_i+s_i ∏_{j≠i} z_j.                 (T5)
+
+Indeed any pure date after ALL finite menu dates yields exactly this value;
+arbitrary replacement laws average pure replies. The nonpivots have s_i=0.
+The pivot has s0=1, but z3=0 by the retained proper sentinel, so its omitted
+late value is already its menu Never reply. Since B0(n)=0, its ORIGINAL
+full debt is exactly0. Thus the constructed original exploitability obeys
+
+    E(n)≤(1657/1902)/(1+nw)→0.                    (T6)
+
+This is a full original-game bound, not only a finite-menu or current-root
+calculation. The actual original payoff converges to the SAME fixed target
+(1,7,7,0): the pivot coordinate is exactly1, coordinates1/2 approach7
+under the solo-pivot recursion, and player3 approaches0. One can instead
+use terminal-all-errors payoff selection, which needs no target fixed by
+the auxiliary source.
+
+For every η>0, sufficiently large n gives BOTH |B_i(n)|≤η and E(n)≤η.
+Hence infimum over the WHOLE negative-tax correspondence, with N free,
+is0 on this fixture. This does not follow by taking taxes to0 on a FIXED
+menu, whose exact Nash limit is the original last-date obstruction.
+
+### 21.5. Source boundary and next mathematical question
+
+The finite-law full-cap identity(T5) is the same semantic distinction
+recorded by `singlePivot_pivot_fullCap_eq_max_menu_never_add_deletedNever`
+and `singlePivot_nonpivot_fullCap_eq_menuCap`
+(`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`).
+The finite Nash existence source is `exists_exactFiniteDeadlineTimingNash`
+(`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean`).
+Neither theorem selects the proper-sentinel seed or the pump. The raw
+seed, signs, and recursions above supply that step on this particular table.
+
+The whole negative-tax selector is NOT thereby produced on an arbitrary
+table. What this test removes is the proposed obstruction that negative
+taxes could only return the robust bad common-menu branch: a distant
+two-active support switch plus a retained proper sentinel bypasses it.
+The open next question is whether an arbitrary table or its WHOLE taxed
+Nash correspondence supplies an analogous proper-source/pump alternative,
+with payoff and source allowed to change, or whether some entire
+correspondence really fails. Merely postulating a seed satisfying a new
+interface would not answer that source question.
+
+## 22. Positive sentinel rewards defeat the ENTIRE negative-tax selector
+
+This is a self-contained ordinary proof draft, not independently reviewed or
+Lean-checked. It is a no-go for a specific auxiliary exact-source mechanism,
+NOT a negative answer to uniform-equilibrium existence.
+
+### 22.1. Exact table, agency, and quantifiers
+
+There are four players0,1,2,3. The core rewards are determined only by the
+core part T=S∩{0,1,2}: they are0 when T is empty and otherwise
+
+| T | (r0,r1,r2) |
+| --- | --- |
+| 0 | (1,7,7) |
+| 1 | (7,0,7) |
+| 2 | (7,7,0) |
+| 01 | (6,8,7) |
+| 02 | (9,7,5) |
+| 12 | (7,5,8) |
+| 012 | (7,6,6) |
+
+Player3 receives5 when3 is absent and T is nonempty,4 when3 is present
+and T is nonempty, and0 when T is empty. This specifies all nonempty
+coalitions. Every reward is nonnegative and at most9. Own singletons are
+(1,0,0,0); live and Never pay0.
+
+For every integer N≥1, all players independently choose a PRIVATE planned
+clock in F_N={0,...,N−1,Never}. A unilateral deviation changes its entire
+law. In the auxiliary finite normal-form game player i's objective is
+
+    original terminal payoff + b_i P(own planned clock=Never),
+    b0,b1,b2,b3≤0.                                 (A1)
+
+The tax is paid whenever that PRIVATE plan is Never, including when another
+player quits earlier. All exact mixed Nash components are in scope.
+The original terminal reward is r(S), where S is the set of players at the
+earliest finite planned date, and is0 if all plans are Never. Write U_i(p)
+for its expectation. ORIGINAL full exploitability means
+
+    E(p)=max_i [sup_{t∈{0,1,...,Never}} U_i(t;p_{−i})−U_i(p)].
+
+The supremum also equals the supremum over arbitrary complete replacement
+laws: a player's payoff is affine in its own private clock law. No public
+signal, conditional correlation, or bounded-controller deviation restriction
+is imposed.
+
+**Claim A (all nonpositive magnitudes).** For EVERY b as in(A1), EVERY exact
+auxiliary Nash law Continues surely at dates0,...,N−2. Its final-date law is
+an exact one-date auxiliary Nash law with the SAME b.
+
+**Claim B (small-tax full gap).** If −η≤b_i≤0 with0≤η≤1/100, every such
+law has ORIGINAL full exploitability at least
+
+    18/49−2η > 1/3.                               (A2)
+
+This is uniform in N, b, and the entire auxiliary Nash correspondence.
+Nevertheless the original table has profiles with full exploitability1/N.
+Thus jointly increasing the menu and removing negative taxes does NOT give
+a universal producer, although it does on Section21's different sentinel
+completion.
+
+### 22.2. Every pre-final tail is reached
+
+Consider an auxiliary Nash law on a common menu with at least two finite
+dates. Write q_i for its first-date Quit probability. A finite next-date
+deviation pays NO Never tax. Nonnegativity of every realized reward ensures
+that its future conditional contribution is nonnegative.
+
+No core player can Quit surely at the current date:
+
+- If q0=1, player2's current Quit payoff minus finite-next-date payoff is
+  q1−2≤−1, forcing q2=0. Player1 then prefers Quit8 to Continue7 (Never
+  adds a nonpositive tax), forcing q1=1. Player0 now earns6 by Quit but7
+  by finite Continue, a contradiction.
+- If q1=1 and q2<1, player0's analogous difference is q2−1<0, forcing
+  q0=0. Player2 then prefers Quit8 to Continue7, forcing q2=1, a
+  contradiction. If q2=1 instead, player1's Quit value5+q0≤6 is below its
+  finite Continue value7.
+- If q2=1, player1's difference q0−2<0 forces q1=0. Player0 then prefers
+  Quit9 to Continue7, forcing q0=1; player2 now prefers finite Continue7
+  to Quit5.
+
+The core rewards are independent of player3's choice, so these comparisons
+also apply if player3 mixes or quits surely.
+
+Nor can player3 Quit surely. If it did, every core player's finite next-date
+choice is effectively Continue now: absorption at the current date gives
+it7 if an opponent core player Quits and0 otherwise. Never adds a
+nonpositive tax and cannot improve this alternative. Thus the core
+first-date probabilities form an ordinary zero-continuation one-shot Nash
+root with gaps
+
+    Δ0=1+q2−2q1, Δ1=q0−2q2, Δ2=q1−2q0.
+
+The previous no-sure argument excludes core sure choices. All three core
+probabilities must then be positive: q0=0 would force q1≥1/2 and then q2>0
+and q0>0; q1=0 contradicts Δ0≤0; q2=0 contradicts Δ1≤0 with q0>0.
+The three zero gaps give
+
+    q*=(2/7,4/7,1/7), H*=P(some core Quit)=253/343.
+
+Player3's prescribed Quit payoff is4H*. A finite-next-date deviation earns
+5H* from current core absorption and a nonnegative contribution otherwise,
+with no planned-Never tax. This is a strict improvement.
+
+Consequently every player's first-date Continue probability is positive.
+Conditional tails retain independence and remain exact auxiliary Nash,
+with taxes rescaled as
+
+    b_i^(t)=b_i/∏_{j≠i} S_j(t),                   (A3)
+
+where S_j(t) is marginal survival to date t. A terminal tail-deviation gain
+is weighted by JOINT prefix reach, but its tax change is weighted only by
+the deviator's OWN prefix survival; division gives(A3). All denominators
+are positive, and all rescaled taxes remain nonpositive, however large.
+Applying the argument successively shows that every pre-final tail is
+reached. No off-path subgame perfection has been assumed.
+
+### 22.3. Every one-date taxed Nash payoff lies in a high box
+
+Take arbitrary b0,b1,b2,b3≤0, with no size restriction. At the final date the
+core Quit-minus-Never augmented gaps, independent of q3, are
+
+    Δ0=1+q2−2q1−b0,
+    Δ1=q0−2q2−b1,
+    Δ2=q1−2q0−b2.                                 (A4)
+
+Let v be the AUGMENTED Nash payoff. Every player can choose finite Quit,
+so v_i is at least its current Quit value Q_i.
+
+If no core player Quits surely, all three probabilities are positive.
+Indeed q0=0 would force q1≥1/2 from Δ0≤0, contradicting Δ2≤0 with
+q2<1. If q1=0 then Δ0>0 forces q0=1. If q2=0 then Δ1≤0 forces
+q0=0. They therefore mix and(A4) vanishes. Writing e_i=−b_i≥0 gives
+
+    q0=2/7+(2e0+e1+4e2)/7,
+    q1=4/7+(4e0+2e1+e2)/7,
+    q2=1/7+(e0+4e1+2e2)/7.                       (A5)
+
+In particular q≥q* coordinatewise. The finite Quit values are
+
+    Q0=1+5q1+8q2−7q1q2,
+    Q1=8q0+5q2−7q0q2,
+    Q2=5q0+8q1−7q0q1.
+
+Each is multi-affine in the two displayed variables. Checking the four
+corners of [q*_j,1]×[q*_k,1] gives respective minima31/7,19/7,34/7.
+Hence every core coordinate v_i>2, and H≥H*.
+
+If some core player Quits surely, either at least two do, only player0
+does and q2≥1/2, or only player1 does and q0≥1/2. For only player0,
+q1<1 and Δ1≤0 imply q2≥(1−b1)/2≥1/2. For only player1, q2<1
+and Δ2≤0 imply q0≥(1−b2)/2≥1/2. Only player2 is impossible:
+q0,q1<1 would give Δ0=2−2q1−b0>0.
+
+With at least two sure core players every Q_i≥5, since each finite Quit
+coalition contains another sure core player. In the case q0=1,q2≥1/2,
+Q1=8−2q2≥6, Q2=5+q1≥5, and
+
+    Q0=1+8q2+(5−7q2)q1≥5.
+
+In the case q1=1,q0≥1/2, Q0=6+q2≥6 and Q2=8−2q0≥6; the
+multi-affine Q1 has minimum4 on [1/2,1]×[0,1]. Thus the core
+coordinates again exceed2 and H=1. Finally
+
+    v3≥Q3=4H≥4H*=1012/343>2.                     (A6)
+
+This lower bound uses the available finite Quit action, so it holds even
+when player3 chooses Never with a large negative tax. We have proved the
+uniform high-box conclusion v_i>2 for EVERY one-date auxiliary Nash law
+and EVERY nonpositive tax magnitude.
+
+### 22.4. The WHOLE earlier root correspondence is all-Continue
+
+For an ordinary one-shot root against ANY continuation vector v_i≥2,
+player3's gap is
+
+    −H−(1−H)v3<0.
+
+Hence q3=0 in every root Nash law. For the core the ordinary gaps are
+
+    Δ_i=g_i+q_(i−1)−2q_(i+1)
+        −v_i(1−q_(i−1))(1−q_(i+1)), g=(1,0,0),
+
+with core indices cyclic. All-Continue is Nash. Every other support fails:
+one active player's gap is g_i−v_i<0; support01 has
+Δ0=(1−q1)(1−v0)−q1≤−1; support02 has
+Δ2=−2q0−v2(1−q0)≤−2; support12 has the analogous Δ1≤−2.
+If all three are active, summing their gaps gives
+
+    ΣΔ_i≤1−Σq_i−2Σ(1−q_j)(1−q_k)≤−1.
+
+For the last inequality the multi-affine expression Σq_i+2Σ(1−q_j)(1−q_k)
+has vertex values6,3,2,3 according as0,1,2,3 coordinates are1, and hence
+is at least2 throughout the cube. Every positive Quit probability requires
+a nonnegative gap, contradicting these inequalities. Thus all-Continue is
+the UNIQUE ordinary root Nash law throughout the high box.
+
+By Section22.2 all conditional tails of an actual finite-menu auxiliary
+Nash law exist and are Nash with the taxes(A3). At any such tail let b
+denote its current rescaled tax vector. Write a_i=1−q_i, and let u_i and
+z_i be the next conditional tail's ORIGINAL payoff and own Never mass.
+Let A_i be player i's current-date expected reward on the event that at
+least one opponent Quits, when i Continues. A deviation which Continues
+now and uses that fixed conditional tail law has augmented payoff
+
+    A_i+(∏_{j≠i}a_j)u_i+b_i z_i
+      =A_i+(∏_{j≠i}a_j)[u_i+(b_i/∏_{j≠i}a_j)z_i].
+
+The private tax term b_i z_i is NOT weighted by opponent survival. The
+displayed rescaling is precisely what permits an ordinary root with the
+next tail's AUGMENTED value; it includes taxes paid when another player
+quits currently. Deviations between current Quit and this fixed conditional
+Continue law show that the actual current root is Nash for that ordinary
+root game. Starting with the final tail's high-box value from Section22.3,
+uniqueness forces the previous root to be
+all-Continue. That preserves the value and taxes. Backward induction forces
+every pre-final root to be all-Continue. This proves Claim A without
+selecting a preferred equilibrium branch.
+
+### 22.5. Uniform small-tax gap and the original approximate bypass
+
+Now0≤η≤1/100. No core sure choice occurs at the final date. If q0=1,
+then Δ2≤−1+η<0 forces q2=0; Δ1>0 forces q1=1, contradicting
+Δ0=−1−b0<0. If q2=1, Δ1≤−1+η<0 forces q1=0, and Δ0>0
+forces q0=1, already excluded. Finally suppose q1=1. The case q2=0
+forces q0=0 by Δ0<0 and then contradicts Δ2>0. Thus q2>0 and
+Δ2≥0 gives q0≤(1+η)/2. If q0=0, Δ2>0 forces q2=1 and
+contradicts Δ1<0. Thus q0>0 and Δ0≥0 gives q2≥1−η. But then
+Δ1≤−3/2+7η/2<0, again contradicting q1=1.
+
+Hence(A5) holds. Every nonnegative increment in(A5) is at mostη.
+Since H≥H*, player3's final gap−H−b3<0 gives q3=0.
+
+Let W0 be the pivot's ORIGINAL menu Never reply. Mixing equates its
+finite Quit value to W0+b0, while its original prescribed payoff is
+U0=W0+b0 q0. At any pure deadline AFTER the final menu date, its payoff is
+
+    W0+(1−q1)(1−q2)(1−q3),
+
+because precisely the event of all opponents choosing Never adds the own
+singleton1. Thus this actual complete unilateral deviation gains at least
+
+    (1−q1)(1−q2)−b0 q0
+      ≥(1−q1)(1−q2)
+      ≥18/49−|q1−4/7|−|q2−1/7|
+      ≥18/49−2η>1/3.
+
+This proves Claim B for all auxiliary components and all N. The large-tax
+statement is ONLY concentration at the last date; the fixed ORIGINAL gap
+statement uses the explicit small-tax bound.
+
+For contrast, let the pivot be uniform on0,...,N−1 and all other players
+choose Never. The original payoff is(1,7,7,5). At a finite date t<N,
+players1,2,3 receive respectively
+
+    (7t+8)/N, (7t+5)/N, (5t+4)/N.
+
+Later replies equal their Never values7,7,5. Every pivot finite reply pays1
+and Never pays0. Hence the ORIGINAL full exploitability is EXACTLY1/N,
+solely at player1. This legal independent-clock sequence proves that the
+table has zero infimum original exploitability, so(A2) excludes the entire
+negative-tax exact-source class, NOT the UE conclusion.
+
+### 22.6. Source correspondence and the restriction actually falsified
+
+The semantic missing reply is the exact late value from
+`singlePivot_pivot_fullCap_eq_max_menu_never_add_deletedNever`
+(`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`).
+Ordinary finite Nash gives a nonempty auxiliary equilibrium correspondence
+at every N,b; the source statement used is finite mixed Nash existence,
+as instantiated by `exists_exactFiniteDeadlineTimingNash`
+(`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean`).
+The original all-errors terminal endpoint is
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+(`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`).
+No declaration is claimed to check the private-tax no-go proved here.
+
+The restriction falsified is EXACT Nash of finite common menus modified
+ONLY by nonpositive private planned-Never transfers, including at the pivot.
+Allowing every tax magnitude, every Nash component, changing menus, and then taking
+taxes to0 does not repair it. Positive planned-Never subsidies or genuinely
+approximate menu Nash laws are not covered. Section21's negative-payoff
+sentinel pump remains valid on its different table, but is not universally
+produced. The next mechanism must allow something beyond this entire
+negative-tax source class, not merely select another branch of it.
