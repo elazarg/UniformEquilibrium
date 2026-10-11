@@ -817,3 +817,79 @@ The successful ingredient is a finite-parameter scalar sign change
 creating a macroscopic b burst while total discount and companion-a
 loss are O(k*lambda). The special cyclic reward rows supply that sign
 change; no arbitrary four-player producer or completeness claim follows.
+
+## Section 25.3: actual small-conditional-hazard full-regret floor
+
+Reviewed source: Section 25.3 at whole-file SHA256
+`55b7be2d4d22b57a7a2d2ab26ecb2a8d656ce83985820d17df524eece52d11f5`.
+Verdict: PASS for the stated whole actual-profile mode. This is ordinary
+mathematics, not Lean checking, a full-game positive-gap example, or a
+new reward-table equilibrium producer. The hypothesis is a bound on
+EVERY conditional hazard, not on unconditional atom sizes.
+
+I independently checked the three complete unilateral replacements.
+Moving ONLY one's private Never atom to a late deadline preserves all
+finite atoms and gives limiting gain equal to the joint all-Never mass.
+The error is supported on opponents' finite clocks surviving that late
+deadline and tends to zero by bounded rewards. Matching the original
+law before a fixed date and quitting there has gain exactly
+J_t(Q_it-v_ti), so (S4) uses actual joint reach, not a conditional regret
+assumption.
+
+Most importantly, finite selective suppression is legal. Replace q_i(t)
+by zero at just the dates where C_it>Q_it, keeping the other dates and
+the original suffix after the window. Bellman telescoping against the
+ORIGINAL prescribed value function gives exact gain
+
+    sum_window J'_t q_i(t)(C_it-Q_it)_+.
+
+Here the deviating reach J'_t is at least J_t. Since
+v_ti-Q_it=(1-q_i(t))(C_it-Q_it), this gives the claimed (S5), indeed
+with the stronger q_i/(1-q_i) coefficient before weakening. It is not
+an invalid sum of independently available datewise improvements.
+
+The first hazard-time crossing of one occurs at a finite original date
+because the joint Never mass is at most eta<exp(-1). Each cell has
+h_t<=5delta, and all used endpoints have J_t>=1/4. The exact singleton
+coefficient error is at most 4delta*h_it; collision probability is at
+most (3/2)delta*h_t. These give the stated 6Mdelta*h_t stopping-reward
+error. Rewriting the exact recursion yields (S6) with
+3M*h_t^2+12Mdelta*h_t<=27Mdelta*h_t; linear interpolation gives (S7)
+with room in the constant 50. There is no limit-profile or compactness
+step hidden in this finite-window interpolation.
+
+For EVERY conditional tail, the collision/absorption ratio is at most
+2delta, including imperfectly absorbing tails. At the used endpoints
+the conditional Never mass is at most 4eta. Singleton reward sums are
+exactly five, so both bounds in (S8) follow. Integrating (S5) after
+h_it<=q_i/(1-delta) gives at most 5eta per player; extending the last
+partial cell only enlarges a nonnegative bound. This verifies the
+20eta+48Mdelta ledger in (S9), with the required reached weights.
+
+For A=I-4P and R=I+4P, AR=-15I and A1=-3*1. The pair-sum/difference
+calculation gives -3L^2/2<=x^T A x<=L^2 for nonnegative mass L, and
+the translation is exactly
+
+    W=x^T A x+6tau*sum x-12tau^2.
+
+The displayed tau, sigma and kappa bounds imply (S10). Differentiation
+therefore gives the stated drift identity and an error at most
+525Mdelta, below the used 600Mdelta. Integration yields
+W(1)-W(0)<=-3.5168, contradicting its lower bound -2.7. All constants
+and signs in this final contradiction check exactly.
+
+The nearby inspected declarations
+`Math.PairedFacePotential.translated_face_drift_ge_one` in
+`MathUE/Analysis/Examples/PairedFacePotential.lean`, and
+`pairedFacePotential_boundedCompletion_face_drift` and
+`pairedFacePotential_boundedCompletion_not_fullRoot` in
+`UniformEquilibrium/Quitting/Examples/PairedFacePotentialBoundedCompletion.lean`,
+concern the singleton-face potential and its distinction from full-root
+inequalities. They do not themselves state the actual all-calendar
+full-regret transfer verified here. No exhaustive novelty claim follows.
+
+The exact surviving conclusion is that every low-regret sequence for
+these singleton rows and a fixed bounded completion must retain some
+conditional hazard above 1/(10000M). It does not exclude macroscopic
+bursts, selective Never laws or changing calendars, and therefore does
+not imply UE nonexistence for any of the covered tables.

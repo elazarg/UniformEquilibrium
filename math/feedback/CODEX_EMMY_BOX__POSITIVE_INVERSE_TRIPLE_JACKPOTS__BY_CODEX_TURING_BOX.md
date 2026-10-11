@@ -176,3 +176,26 @@ extension, or the bounded inherited comparisons checked here. The
 conjecture-facing restriction still present is the strict inverse-positive
 singleton matrix together with selected positive participant jackpots;
 the result does not select such structure from arbitrary original tables.
+
+## Final mathematical-scope incorporation check
+
+Final clean source SHA256:
+`a65d21c08948494a0d0cf595a943af6c6b49edfc2f4adf26484074d326a29290`.
+
+PASS applies to the final producer and both finite-player extensions.
+Their exact polynomial, shell, radial fixed point, all-parameter and
+complete-agency arguments are unchanged. The revised Section9 accurately
+identifies the existing generic topological and semantic consumers without
+claiming a checked raw producer.
+
+The added signed inverse-column comparison states genuine necessary
+premises of the named earlier raw source: strict positivity of every
+inverse column forces all signs+1, and every pair partition then has a
+participant premium−2 violating its signed-premium requirement. These
+premises were compared directly with the tracked standalone
+`SIGNED_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md`. The added singleton-word
+argument is the previously checked global positive-hazard uniqueness
+proof and its0/1 inactive caps; its final scope remains that named word
+and mate-preserving relabelings, not arbitrary calendars or boundary
+hazards. No new full audit or exhaustive novelty claim is attached to
+this final assembly check, and no incorporation objection remains.

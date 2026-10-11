@@ -1148,6 +1148,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the opposite-sign matching-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile, with one pair's passive values below own singletons and the other pair's above. Eight averaged-pair/triple caps suffice; individual cross-pair caps are unnecessary. This is reviewed mathematics awaiting formalization. |
 | Fin4: the signed inverse-column, pair-coefficient and twelve outsider-cap tests specified below | UE from a directly produced proper two-phase terminal Nash profile. The inverse may have negative columns, scheduled singleton comparisons may be favorable, and own rewards are signed. No utility ordering is reversed. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
+| Any finite player set with at least two players: Γ⁻¹ is strictly positive and each recipient has a selected containing coalition with a sufficiently large positive reward at its natural coalition-size scale | Exact full-support stationary terminal Nash and a fixed same-profile UE payoff. Singleton rewards are arbitrary signed reals; every other nonsingleton coordinate ranges over a fixed bounded box. The threshold is uniform on compact parameter sets. This is reviewed mathematics awaiting formalization. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
 | Fin4: one ordered pair passes the sixteen weak lower/joining comparisons below | UE for arbitrary signed rewards, with no matrix condition. A finite outsider joining game produces the root; a negative sole-owner boundary uses the punishment consumer. |
@@ -2559,6 +2560,50 @@ census of all abstract supplied-cycle or safe-child predicates is claimed.
 This class theorem and its actual-data adapter are reviewed ordinary
 mathematics, not checked Lean declarations. No theorem forces an arbitrary
 surviving reward table to satisfy this criterion.
+
+### Positive-inverse coalition jackpots — reviewed mathematics
+
+The [positive-inverse producer](exports/POSITIVE_INVERSE_COALITION_JACKPOTS_UNIFORM_EQUILIBRIUM.md)
+applies to any finite player set I with n≥2. Fix singleton rewards,
+write sᵢ=rᵢ({i}), and define Γᵢᵢ=0 and Γᵢⱼ=rᵢ({j})−sᵢ for i≠j.
+Assume every entry of Γ⁻¹ is strictly positive. For each recipient i,
+choose Sᵢ containing i with dᵢ=|Sᵢ|−1≥1 and aᵢ>0. Given a fixed
+finite R≥0, there is L₀ such that every fixed finite L>L₀ and every table
+satisfying
+
+    rᵢ(Sᵢ)=aᵢL^{dᵢ}+cᵢ,  |cᵢ|≤R,
+    |rᵢ(S)|≤R for every other nonsingleton recipient coordinate
+
+has an actual full-support stationary terminal Nash profile against all
+unilateral behavioral replacements, including Never and arbitrarily late
+deadlines. Its actual payoff is a fixed uniform-equilibrium target; the
+same profile works at every accuracy and all sufficiently long horizons.
+Its hazards are qᵢ=zᵢ/L, with z in a fixed positive compact set. The
+threshold is uniform over compact sets of singleton data and positive a
+within the strict inverse-positive region, and over the entire bounded
+reward box.
+
+The exact stationary indifference field has the form
+
+    Γz = diag(a)P(z) + L⁻¹E(L⁻¹,z),
+    Pᵢ(z) = (∑ⱼ≠ᵢ zⱼ) ∏ⱼ∈Sᵢ∖{i} zⱼ.
+
+The error is an exact polynomial bounded uniformly on a positive compact
+shell. The positive inverse preserves an interior direction simplex;
+every Pᵢ has degree at least two, giving opposing radial barriers. A
+normalized radial fixed-point argument therefore produces an exact root
+without assuming a limiting eigenvector, root regularity, or strategic
+witness. Positive opponent hazards then give the complete behavioral and
+uniform-payoff conclusions.
+
+For Fin4, choose a mate involution m and Sᵢ=I∖{m(i)}. Then the four
+recipient-specific triple rewards grow as Maᵢ, with M=L², and hazards
+are of order M⁻¹ᐟ². Only one participant reward per triple need be large.
+The packet gives an exact signed-singleton family outside the compared
+sure-base, quiet-child, boxed-charge, guarded stationary-response,
+two-pair odds and specified singleton-word criteria. This is a raw-table
+existence class, not a producer for arbitrary inverse-positive tables or
+arbitrary quitting games. The new raw producer is not yet Lean-checked.
 
 Standard Q alone is not an existence theorem.
 Neither a fixed small periodic class nor the proper-child extension tests

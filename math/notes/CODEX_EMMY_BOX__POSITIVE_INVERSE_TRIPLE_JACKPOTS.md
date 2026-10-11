@@ -1,7 +1,7 @@
 # Positive inverse and sparse triple rewards produce stationary equilibrium
 
-Status: complete ordinary proof candidate, not yet independently reviewed
-and not Lean-checked. Sections1--8 give a four-player triple-reward
+Status: ordinary mathematical theorem and proof, not Lean-checked.
+Sections1--8 give a four-player triple-reward
 producer; Section10 proves its arbitrary-finite-player extension, including
 different coalition sizes with their corresponding reward scales. The
 construction is global in the singleton data and positive jackpot ratios.
@@ -342,15 +342,55 @@ different: `exists_positive_odds_of_positive_inverse` in
 nonnegative scheduled participant premiums and nonpositive passive
 increments. Every selected pair here contains a participant premium-2;
 strict positive inverse alone does NOT meet that source's hypotheses.
-Its signed-inverse-column variant cannot repair this: the displayed
-inverse has only positive columns, forcing positive signs while the
-negative pair premium remains.
+The signed inverse-column criterion has, for EACH candidate pair
+partition with partner p(i), the necessary conditions
+
+    sigma_i in{-1,1},
+    Gamma^(-1)diag(sigma)>0 entrywise,
+    sigma_i*[r_i({i,p(i)})-s_i]>=0 for every i.
+
+These cannot hold here: every column of the displayed inverse is strictly
+positive, so its sign condition forces sigma_i=+1 for all i. Every
+selected pair has a participant premium-1-1=-2, violating the last
+necessary inequality. No additional cap or auxiliary-radius choice can
+repair the failure of these conditions.
+
+There is also an exact WHOLE-ARCHITECTURE exclusion for the positive
+singleton word0,2,1,3 and its mate-preserving relabelings. Each owner's
+mate occurs two phases later. For chronological Continue probabilities
+u_l in(0,1), the four owner-indifference equations are
+
+    E_l=u_l[4-4u_(l+1)+u_(l+1)u_(l+2)]-1=0,
+
+with cyclic indices. Put a=u0-u2 and b=u1-u3. Opposite differences give
+
+    E0-E2=4(1-u1)a-u2(4-u0)b,
+    E1-E3=u3(4-u1)a+4(1-u2)b.
+
+The determinant is16(1-u1)(1-u2)+u2u3(4-u0)(4-u1)>0, so a=b=0.
+Writing u0=u2=x and u1=u3=y, the remaining difference is
+(4+xy)(x-y)=0. The common equation factors as
+
+    (u-1)(u^2-3u+1)=0,
+
+whose only root in(0,1) is u=(3-sqrt(5))/2. Thus EVERY positive proper
+owner solution of this named word has this common Continue probability,
+not only its locally continued branch. Put p=1-u. At an owner's root,
+the next nonmate's prescribed value is u and the preceding nonmate's
+is1; evaluate the singleton continuation paths using u(4p+u^2)=1.
+Either nonmate's immediate-Quit value is u+p*r_i({i,owner}). Hence its
+necessary pair cap is respectively0 or1. Every actual cross pair has
+a participant reward2, violating a necessary inactive inequality for
+either word orientation. This excludes the ENTIRE named positive
+singleton-word architecture at the exact singleton rows, including any
+positive root selected by an implicit-function theorem with an
+unspecified radius. It is not an exclusion of arbitrary calendars.
 
 These are bounded actual-source comparisons, not a universal novelty
 survey or a claim that every known supplied-root verifier fails. Any
 sound stationary-root verifier may consume the root newly produced here.
 
-## 9. Dependencies, proof boundary and next question
+## 9. Tracked dependencies and narrow implementation target
 
 The native topological operation in Section5 is already represented by
 `Math.exists_fixedPoint_of_normalized_radial_map` in
@@ -363,17 +403,17 @@ game consumer. The nearby positive-coordinate helper and the two-pair
 odds source were checked to avoid confusing a reusable topological lemma
 with an earlier raw triple-reward producer.
 
-The complete candidate is Sections1--6, with the explicit source tests
-in Sections7--8. Independent falsification should prioritize the exact
-sign in(5)--(6), positivity on the WHOLE shell, endpoint exclusion in(11),
-uniformity over the entire bounded cube and the Never/behavioral consumer.
-No export or Lean proof is claimed.
-
-After this candidate is checked, the next mathematical question is whether
-the positive-inverse condition can be replaced by an actual invariant
-direction set for a larger class of singleton matrices, without supplying
-the stationary root or silently assuming positivity of the signed
-finite-t correction. That broader source is presently OPEN.
+The actual-data implementation target is the exact pole cancellation in
+(3)--(6), the positive inverse-entry bounds, common interior simplex,
+uniform signed-polynomial perturbation bounds on the compact shell and
+the two radial boundary exclusions. These instantiate the named generic
+normalized-radial theorem and output an actual positive finite-t root.
+Equations(1)--(2) then supply actual value, endpoint equalities and
+playerwise deleted contraction to the named semantic consumers. For
+Section10 the same implementation uses arbitrary finite products and
+the indicated coalition-dependent pole powers; no new topological
+theorem is required. No implementation or Lean-checked raw producer is
+claimed here.
 
 ## 10. Arbitrary finite players and selected participant coalitions
 

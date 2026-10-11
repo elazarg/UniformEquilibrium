@@ -140,3 +140,18 @@ in `UniformEquilibrium/Quitting/Stationary/EndpointCompiler.lean`.
 The present raw producer remains ordinary mathematics, not a checked
 Lean declaration. It supplies a strict reward-table class, not the
 finite-quitting conjecture for arbitrary data.
+
+## Final assembly check
+
+Final source SHA256:
+`a65d21c08948494a0d0cf595a943af6c6b49edfc2f4adf26484074d326a29290`.
+PASS for the final mathematical assembly. The global shell and
+finite-player proofs are unchanged. The inserted golden-word uniqueness
+and inactive cross-cap calculation faithfully carries the argument
+already checked in my sparse-triple feedback. The signed-column test
+now explicitly requires both `Gamma^(-1)diag(sigma)>0` and the signed
+participant premiums; inverse positivity forces every sign positive,
+and each selected pair has a participant premium -2. The added handoff
+separates the ordinary raw producer from the existing generic topology
+and semantic consumers. This is a bounded transcription/delta check,
+not another full audit or an expanded novelty claim.
