@@ -69,7 +69,7 @@ Section 23 tests the ENTIRE realized-absorption discounted Nash source,
 with nonstationary clocks and selective Never allowed. The source exists
 automatically; whether its best original regret tends to0 remains open.
 An exact switching calibration defeats a fixed-active-face heuristic,
-and Section23.4 gives a complete unreviewed producer of GOOD growing-period
+and Section23.4 gives a bounded independently checked producer of GOOD growing-period
 components on Solan's already-solved three-player calibration. Its geometric
 joiner bursts have macroscopic physical absorption and vanishing discount
 loss, so original FULL regret tends to0. This refutes the proposed global
@@ -3251,8 +3251,9 @@ advance the question.
 
 ### 23.4. A good growing-period discounted component on G_ε
 
-The following is a complete ordinary proof draft, not independently
-reviewed or checked in Lean. It supplies an actual favorable component
+The following is a complete ordinary proof, bounded independently checked
+by CODEX_NASH_BOX in the corresponding feedback file (D4–D12 only), not
+checked in Lean or exported. It supplies an actual favorable component
 of the ENTIRE source(D1) on the displayed, already-solved three-player
 calibration. It is not an arbitrary-table or genuinely four-active source.
 Fix 0<ε<1/3. There are α_k↑1 along a subsequence and exact discounted
@@ -3423,3 +3424,165 @@ global selector that produces comparable bursts or another favorable
 component from arbitrary four-player reward data. The scalar sign change
 here uses the special cyclic singleton and collision rows and is not
 claimed for an unresolved four-active table.
+
+## 24. The discounted burst source and the constrained-owner quantifier
+
+This exact connection is supporting ordinary mathematics, not additional
+game-class coverage or a full audit of the constrained-owner source.
+Use the core G_ε and the actual components from Section23.4. Add a fourth
+player d whose reward is−1 whenever d joins and0 otherwise. Core rewards
+depend only on the core quitting coalition and are0 if it is empty.
+This LITERAL padding has own reward s_d=−1, so it does NOT meet an
+all-own-nonnegative source hypothesis.
+
+Let δ=1−α and let d use the independent geometric clock
+Pr(T_d=t)=δ(1−δ)^t,t≥0. If the first core quitting date is τ, its
+core reward is retained precisely when T_d≥τ, INCLUDING ties. Thus,
+for every core player and every complete replacement of its own law,
+the ORIGINAL padded payoff equals its realized-discount payoff
+E[α^τ r_i(S_core)1{τ finite}]. Exact discounted core Nash therefore
+means all three core players have original FULL debt exactly0.
+
+Restrict the dummy's law to
+
+    K_δ={p:Pr(T_d≥t, including Never)≤(1−δ)^t for every t≥0}.
+
+These prefix bounds, not a pointwise conditional hazard requirement, are
+the actual constrained-owner domain in
+`CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION`, Section1. Every law in
+K_δ is proper and stochastically no later than Geom(δ). The dummy's
+pure-deadline payoff f(t)=−Pr(τ≥t) is nondecreasing, with f(Never)=0.
+Common-quantile coupling therefore shows that Geom(δ) is K_δ-optimal
+against ANY core profile. Hence the padded profiles just constructed
+are exact Nash in the dummy-owner constrained game.
+
+The unrestricted dummy cap is0, attained by Never. Its debt is exactly
+
+    Pr(T_d≤τ)=E[1−α^(τ+1)]
+      ≤δ E[τ+1]≤3δk/(1−J_k³)→0,
+
+where δ=λ_k, the core joint-period survival is J_k³, J_k→1/2, and
+δk→0. Thus a negative-own dummy owner has GOOD constrained components;
+an obstruction for all three CORE owners does not imply one for this
+fourth owner.
+
+There is an explicit nonnegative-own repair, with a complete source
+comparison rather than presumed affine invariance of Never. Change ONLY
+the dummy column to the following exact values:
+
+    r_d(S)=1 if d∉S and S is nonempty,
+    r_d(S)=0 if d∈S,
+    r_d(Never)=0.
+
+This adds1 to every FINITE-terminal dummy reward, including dummy-alone,
+and does not change core rewards. On the constrained domain K_δ the
+dummy is proper, so every product profile, every constrained dummy
+competitor and every nonowner competitor absorbs surely. Consequently
+the dummy's constrained objective increases by the SAME constant1 for
+all such comparisons. The ENTIRE dummy-owner constrained Nash
+correspondence is unchanged. This is an exact restriction-specific
+transport, not arbitrary payoff-shift invariance for the original game.
+
+At the constructed profiles the CORE is also proper. Its literal Never
+dummy response then earns1; no response earns more than1. Thus the
+full dummy cap is1, its prescribed payoff is1−Pr(T_d≤τ), and its
+debt remains Pr(T_d≤τ)→0. The repaired table has core own rewards1
+and dummy own reward0. It meets the nonnegative-own source assumption.
+This column is NOT the different padding with absent1, joined-core−1
+and dummy-alone0. It also does not silently identify the literal core
+table with a separately canonicalized one: source correspondence under
+any further core-column change requires its own proof.
+
+## 25. Four-active burst test: an inactive wall, not a whole-source no-go
+
+Current question: does the ENTIRE realized-discounted Nash correspondence
+contain original-terminal approximate Nash components on arbitrary
+completions of the hard paired singleton matrix? This permits distant
+support changes and approximate, rather than exact, original equilibria.
+The following one-table test is ordinary unreviewed calculation. It does
+not exclude the whole discounted source, a strategy class with three/four
+simultaneous actors, or UE.
+
+Use cyclic labels I=Z/4Z; the mate of i is i+2. Fix singleton rewards1
+to the quitter,4 to its mate and0 to the other two. Complete the table by:
+
+| coalition | participant rewards | nonparticipant rewards |
+| --- | --- | --- |
+| adjacent pair{i,i+1} | r_i=−1, r_(i+1)=2 | both1 |
+| opposite pair{i,i+2} | both0 | both1 |
+| any triple | all−1 |1 |
+| grand | r_i=−10−i | none |
+
+The original paired labels are obtained by the cyclic order0,2,1,3.
+Thus the singleton comparison matrix is exactly the paired hard matrix
+up to relabeling, not a singleton class with an available homogeneous or
+negative-determinant nonnegative-inverse exit.
+
+Bounded initial coverage test. The four frozen phase sources do not
+supply their named profiles here. The first joint source's favorite-pair
+rates lie in(1/4,3/4); at such a root Quit earns1−b<3/4, while Continue
+earns at least4b>1 whenever the actual next Nash value is nonnegative.
+Every full best-reply value is indeed nonnegative, since Never against
+this table earns only nonparticipant rewards0,1,4. The rectangle source
+requires favorite-pair participant rewards5,9/2; the passive-ray source
+requires them A>T; here both are0. The named proper singleton-calendar
+source has cross-pair participant caps at most1 under either orientation,
+whereas the directed successor receives2. Its global owner-equation
+uniqueness at these singleton rows rules out silently choosing other
+positive rates for that same named calendar. The common-large-pair source
+also has incompatible positive participant premises. The literal ordered
+lower-face stationary guards fail for EVERY partner choice: selecting a
+nonmate leaves a harmful favorite-axis displacement near zero; selecting
+the mate leaves the sure-successor displacement−1. These are bounded
+named-source comparisons, not an exhaustive novelty or stationary-Nash
+nonexistence claim.
+
+The table also has NO root Nash with a sure quitter. If i is sure, its
+mate must Continue: joining gives at most0, whereas Continue gives at
+least1 (or4 at the singleton). Its predecessor i−1 must Continue:
+joining gives a negative reward and Continue is nonnegative. With those
+two absent, successor i+1 must surely join, earning2 rather than0.
+Then i earns−1 from joining and0 from withdrawing, a contradiction.
+This covers all sure-owner induced Nash rows and hence the actual
+persistent-base exits, not merely a chosen pure root.
+
+A two-active extension of Section23.4 is insufficient. Try roots
+q_t=(a_t,b_t,0,0) during one phase, with the next phase shifted one label
+BACKWARD, so the previous owner becomes the next joiner. The exact active
+current values would be u_0=1−2b_t,u_1=1+a_t. Their interior equations are
+
+    a_(t+1)=[λ+(1+α)a_t]/[α(1−a_t)],
+    b_t=[λ+2αb_(t+1)]/[2−α+2αb_(t+1)].
+
+Choose a_0=0, a_(k−1)=B and the boundary value
+b_(k−1)=λ/(2−α). The pair recursions have a geometric-burst regime
+λk→0. Their limiting survival factors, writing the last a-burst as B,
+are
+
+    P_a=(1−B)/(1+B),
+    b_0=2B/(1+5B),
+    X:=1−2b_0=P_b=(1+B)/(1+5B),
+    J=P_aP_b=(1−B)/(1+5B).
+
+The two passive phase recursions force the remaining active seam to
+4J(1−J)+J³=1. Its nontrivial admissible root is
+J=c=(3−sqrt(5))/2, hence B=(1−c)/(1+5c). At the last date the inactive
+predecessor's Continue value tends to(1−B)X, but its forced Quit value
+tends to1−2B. Their difference is EXACTLY
+
+    (1−B)X−(1−2B)=3B(3B−1)/(1+5B)<0,
+
+because the displayed B lies in(0,1/3). Thus this burst word reaches a
+strict inactive wall. The limit calculation, not a fully audited finite-k
+existence theorem for these incomplete root equations, is what is retained.
+Numeric diagnostics at k=15 give B≈0.212395, λ≈1.07e−5 and the offending
+margin≈−0.11215, consistent with the exact limiting margin≈−0.11212.
+No numeric experiment is being used to exclude other components.
+
+The concrete next operation is to admit a third simultaneous actor at
+this wall, or select a distant discounted component. A local repair is
+not assumed to exist: a diagnostic three-active, four-phase Newton search
+found no interior zero, which is incomplete evidence only. Freezing the
+two-player root alphabet would discard a real best response and cannot
+be the proposed global producer. No further reward-parameter expansion
+or UE counterexample conclusion is inferred from this test.

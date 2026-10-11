@@ -75,6 +75,14 @@ three Never opponents has full loss1/N. Thus even exactifying only the
 nonowners is not a harmless preprocessing operation. This is an unreviewed
 internal calculation, not a failure of joint approximate selection.
 
+Section17 tests a global truncation selector with freely chosen PUBLIC
+terminal continuation payoffs, distinct from PRIVATE planned-Never
+transfers. It passes the rational calibration exactly but fails on the
+whole Solan calibration correspondence: every exact finite-game Nash
+with terminal continuation componentwise at least the own singleton has
+original full regret at least1. This ordinary unreviewed first-test
+falsifier retires the exact truncation selector, not joint approximation.
+
 Central conclusion: NONE of the no-go results below refutes existential
 selection from the FULL private-Never-bonus equilibrium correspondence.
 The same auxiliary games have rigorously bad exact selections and good
@@ -2898,3 +2906,166 @@ on all four laws which can exploit these tiny nonowner slacks, while retaining
 macroscopic collisions on tables where diffusion fails. No producer for this
 operation is established here; this failed first step will not be repaired by
 tuning its constants or restricting to one response component.
+
+## 17. Freely selected terminal continuation payoffs: exactness still fails
+
+This is a bounded ordinary, unreviewed mechanism test. It is NOT a new UE
+class, a no-UE game, or an export. The question permits global changes of
+every product law and of the terminal continuation vector.
+
+### Source question and full-cap transport
+
+Fix own singleton values s_i>=0. On the common menu0,...,N-1,Never,
+pay the original absorbing reward at every finite first quit, but pay a
+vector P ONLY on the event that ALL players choose Never. This is a
+PUBLIC terminal continuation payoff, not a transfer for an individual
+private Never plan. Require P_i>=s_i, and let rho be joint Never mass.
+At an exact mixed Nash of this finite game, every original full pure
+reply is bounded by the auxiliary best-reply value: finite menu replies
+coincide; the auxiliary Never reply dominates both original Never and
+every deadline after the menu, because its extra payoff is
+P_i*product_(j!=i)P(T_j=Never), rather than the late reply's s_i times
+that product. The prescribed auxiliary value is U_i+P_i*rho. Hence
+
+    original full debt_i <= P_i*rho.                  (17.1)
+
+Thus a genuinely nontrivial sufficient producer would select, over ALL
+N, ALL bounded P>=s, and ALL auxiliary Nash components, laws with
+rho->0. This is not supplied by finite Nash existence. The following
+two exact tests distinguish it from the earlier private-transfer route
+and then refute it.
+
+Simon, *The Challenge of Non-Zero-Sum Stochastic Games*, accepted version
+17 August2015, published2016, Section5, studies arbitrary terminal
+payoff assignments in finite truncations. I read the primary accepted
+text at https://eprints.lse.ac.uk/63353/1/__lse.ac.uk_storage_LIBRARY_Secondary_libfile_shared_repository_Content_Simon%2C%20R_Challenge%20of%20non-zero-sum_Simon_Challenge%20of%20non-zero-sum_2015.pdf.
+Its theorem is a NECESSARY early-absorption obstruction under uniformly
+positive recursive/absorbing hypotheses, not a converse or this selector
+producer. The Solan calibration below does not satisfy that uniformly
+positive-player hypothesis. No result here is attributed to that theorem.
+
+### Exact positive test on the rational table
+
+Use the rational core table from Section2 and the nonnegative sentinel
+completion in Turing Section22: sentinel3 gets5 absent,4 joining core,
+0 alone. Choose P=(1,0,1,0). Let player1 be uniform on the N finite dates
+with total finite mass N/(N+1), and put its remaining mass1/(N+1) at
+Never. Thus each finite atom has mass1/(N+1). All other players choose
+literal Never.
+
+This is an EXACT auxiliary Nash. Player1 always gets0 under every own
+replacement. Player0's auxiliary Never value is7N/(N+1)+1/(N+1);
+its finite joining reward6 is below its absent reward7, and its solo
+reward1 cannot improve this value. Player2's auxiliary Never value is
+also7N/(N+1)+1/(N+1); its largest finite joining value is attained at
+the last date and is exactly(7N+1)/(N+1). Sentinel3's joins reward4
+rather than its absent5, and its solo reward0 adds nothing. These
+comparisons cover the entire finite menu.
+
+For ORIGINAL full replies, player0 can add exactly1/(N+1) by quitting
+after the menu; player2 gains exactly1/(N+1) by joining at the last
+date. Neither player1 nor3 has a positive gain. Thus original full
+exploitability is EXACTLY1/(N+1). This selector passes the rational
+calibration on which unregularized menus and every negative-private-tax
+component fail. It changes the active owner; it does not preserve the
+earlier good uniform-pivot profile.
+
+### Decisive whole-correspondence Solan test
+
+Use G_epsilon from Section14.4 BEFORE canonical reward translation:
+own singletons are all1, with cyclic singletons(1,3,0), and cyclic pair
+rows(1+epsilon,0,1), and grand reward0. Fix0<epsilon<1/3. For EVERY
+N>=1 and EVERY P in[1,infinity)^3, EVERY exact auxiliary Nash has
+original full exploitability at least1. In particular neither bounded
+P selection nor any auxiliary component avoids the obstruction.
+
+Here is an exhaustive root proof. Against a continuation v>=1, write
+q_i for current hazards, with indices cyclic. The Quit-minus-Continue
+gap satisfies
+
+    Delta_i <= (1+epsilon)q_(i+1)-3q_(i-1)
+                   +(1-epsilon)q_(i+1)q_(i-1).       (17.2)
+
+This follows by substituting the literal table and replacing the
+Continue value v_i by its lower bound1. Exactly two active coordinates
+are impossible: one active player's next coordinate is0 and previous
+coordinate is positive, so its gap is strictly negative. Three active
+coordinates are impossible because summing(17.2), using
+sum_(i<j)q_i*q_j<=sum_i q_i on the unit cube, gives
+
+    sum_i Delta_i <= -sum_i q_i < 0.
+
+Thus any nontrivial root has ONLY ONE active player i. Its Quit value
+is1. Its hazard cannot be1: the punished outsider j=i-1 would prefer
+joining for1+epsilon to continuing for0. Therefore0<q_i<1 and exact
+mixing forces v_i=1. The root output has coordinate i equal to1, while
+the other two coordinates are STRICTLY above1:
+
+    output_(i-1)=(1-q_i)v_(i-1)>=1+epsilon*q_i>1,
+    output_(i+1)=3q_i+(1-q_i)v_(i+1)>=1+2q_i>1.       (17.3)
+
+All-Continue preserves v. Hence the root correspondence preserves
+the box[1,infinity)^3, and its FIRST nontrivial backward step leaves
+exactly one coordinate equal to1. Every subsequent nontrivial backward
+step must use that SAME coordinate as its active owner.
+
+To apply this to arbitrary normal-form Nash, positive reach must not be
+assumed. In fact no core player is ever a sure quitter at a reached
+date, for ANY nonnegative continuation. If q0=1, player1's joining
+reward is0 whereas Continue gives at least1, so q1=0. Then player2
+strictly prefers joining for1+epsilon to Continue0, so q2=1. Player0
+now prefers Continue3 to Quit0, a contradiction. Rotate to exclude
+the other sure coordinates. The auxiliary continuation payoffs are
+nonnegative, so this proof applies at every date. All conditional tails
+therefore exist and remain exact auxiliary Nash by complete-law suffix
+splicing. No subgame-perfect refinement or off-path optimality is used.
+
+Starting at the final vector P>=1, backward induction with(17.2)–(17.3)
+shows that either everyone is Never, or ONE fixed player i is the only
+player with any finite clock mass. All other players are literally Never.
+In the latter case its punished outsider i-1 receives ORIGINAL payoff0,
+but quitting at date0 gives at least1: if the owner also quits there
+the outsider gets1+epsilon, otherwise it quits alone for1. In the former
+case everyone can gain1 by quitting. Thus full original exploitability
+is at least1 in every component, uniformly over N and even unbounded P.
+
+The canonical single-pivot translation subtracts1 from recipients1,2
+on every absorbing coalition and subtracts those same constants from
+P. This preserves auxiliary Nash EXACTLY, because it changes every
+auxiliary realized payoff, INCLUDING all-Never, by one fixed constant.
+Its terminal vectors now range over P'>=(1,0,0). On the classified laws
+the ORIGINAL canonical full exploitability is at least1/2: if the active
+owner is0 or2, its punished zero-solo outsider has debt at least1-rho,
+while player0 has a late or immediate gain at least rho; if the active
+owner is1, its punished outsider0 has debt at least1. All-Never has
+player0 debt1. This is a direct original-payoff calculation, not a
+constant-shift claim for profiles whose absorption is imperfect.
+
+The no-go is THREE-player. No Fin4 padding theorem is claimed here;
+in particular a zero-payoff added player can supply an exogenous-like
+termination clock and need not be passive. The three-player result
+refutes an arbitrary-finite exact producer, not by itself the Fin4-only
+selector with a genuinely active fourth player.
+
+The needed source definitions inspected were `quittingRootPayoff` and
+`quittingRootExpectedPayoff` in
+`UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/RootContinuation.lean`,
+and `timingLawTail_isNash_of_isNash_of_positiveContinue` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingRecursion.lean`.
+The latter is the zero-terminal-payoff theorem; the modified terminal-P
+splicing is proved here by the SAME positive joint-reach cancellation,
+not claimed as an existing Lean instance. The literal G_epsilon primary
+source is Solan2001 Figure1, read in Section14.4.
+
+### Surviving conclusion and direction change
+
+The initial rational pass is real, but does not establish a universal
+producer. Exact bounded terminal-continuation selection is retired by
+the whole Solan correspondence calculation, not merely a bad selection.
+This is not a new no-UE claim: Solan G_epsilon has UE, and Turing
+Section23.4 independently supplies a favorable growing-period discounted
+calibration. Approximate finite games can leave the invariant exact
+box-face structure in(17.3); the result does not bound them.
+
+The next global operation must preserve genuinely joint approximation,
+rather than use exact finite terminal truncations as its producer.
