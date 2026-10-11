@@ -6,8 +6,10 @@ Current checkpoint: Sections33--34 give actual finite-law singleton
 completion and first-two-event reference completion, with their exact
 information charges. Section35 removes the ordered-limit assumption from
 the uniformly interior coarse-binding consequence. Section36 tests FULL
-private-clock recommendation obedience as a distinct source: a bounded-
-information exact four-active source exists, but Section34's completion
+private-clock recommendation obedience as a distinct source. Section18's
+Viossat argument already gives an EXACT one-date private CE with
+information at most n log2 for EVERY table with nonnegative own singletons;
+bounded source existence is not a missing assertion. Section34's completion
 can turn vanishing private regret into a fixed positive private regret.
 That agency mismatch does not refute whole-correspondence CE selection.
 The positive-information/global source producer remains unproved, and
@@ -6022,12 +6024,24 @@ chosen0 for project semantics. Private recommendation agency is the
 explicit difference from the original game, not a transported Nash claim.
 
 The genuine new candidate is selection over the ENTIRE approximate
-private-CE correspondence with total correlation tending to zero. A
-bounded-information approximate source is already a substantive first
-assertion on arbitrary hard data; the printed source's synchronized
-punishment clocks do not establish it. Section34's coarse completion
-cannot be assumed to preserve(36.1), as the exact four-active test below
-shows.
+private-CE correspondence with total correlation tending to zero.
+Bounded-information source existence is ALREADY automatic, by Section18:
+give the finite Boolean quitting game all-Continue payoff s. That outcome
+is Nash but not quasi-strict, since every unused solo-Quit reply ties.
+Viossat's Lemma3, rechecked in the primary PDF linked in Section18, gives
+another correlated equilibrium. The all-Continue atom has zero coefficient
+in every incentive constraint, so deleting it and renormalizing gives a
+law on nonempty coalitions. Interpreting Quit as0 and Continue as Never
+is a full private-clock CE: a recommended sole quitter can tie by delaying
+and loses only by Never when s_i>=0; every other complete deviation is a
+Boolean response. Its clocks have two values each, so I<=n log2.
+No growing-horizon or strict-anchor existence theorem is needed for this
+starting point. Solan--Vohra supplies a different uniform approximation
+theorem; its particular synchronized clock construction need not have
+bounded information. Section34's coarse completion cannot be assumed to
+preserve(36.1), as the exact four-active test below shows. The remaining
+assertion is vanishing information, not bounded information or source
+nonemptiness.
 
 ### An exact bounded-information private CE on the four-active K10 table
 
