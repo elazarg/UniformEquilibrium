@@ -479,3 +479,34 @@ nonstationary or arbitrarily long calendars fail on the witness. In fact
 the new theorem proves UE there. No arbitrary-table implication is claimed:
 standard-Q supplies the seed but does not supply either higher-coalition
 ledger, the flatness guard, or the acyclicity guard.
+
+## Bounded Section18.7 complete-law check
+
+Checked source SHA256
+`8a671efd1dcbfef987982703979815184cfc1856b75e3dc41daa3964bb1c5d15`.
+Scope: the vulnerable cumulative-budget/complete-response step in
+Section18.7, together with its running-maximum inequalities and initial
+seams. This is not a full notebook or export audit.
+
+No objection found. At the end T_(i,n) of player i's nth own phase,
+the fixed opponents have survival P^(2n+i). Thus the shared constraint
+forces every feasible replacement's own survival to be at most P^(n+1),
+exactly the prescribed survival there. The prescribed quantile layer n
+lies wholly in its own phase, where every deadline has the same payoff
+w_(i,n). The replacement draw in that layer is no later than T_(i,n),
+so the proved running maximum bounds its payoff by w_(i,n). This
+argument checks an arbitrary COMPLETE replacement law; it does not infer
+source optimality from one-stage roots. The phase-end bounds also force
+replacement Never mass to zero.
+
+The scalar estimates used here are consistent: minimality of L gives
+P>=(1-delta)R>=1/2+delta, while P<=R<7/10, hence
+F(P)-1=(2P-1)(1-P)>=3delta/5>=e*delta. The successor-phase identity
+and predecessor-phase monotonic bound cover the intermediate deadlines.
+The initial predecessor-only seam for player1 and successor/predecessor
+seam for player2 have the stated first-own-phase maxima.
+
+This supports the claimed positive shared-budget calibration on the
+literal three-player table, not an arbitrary-table selector. In
+particular, earlier fixed-owner or unconditional all-proper selector
+falsifiers do not transfer to the whole shared-budget correspondence.
