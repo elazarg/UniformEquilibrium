@@ -16,6 +16,11 @@ Section13 is a new unreviewed complete proof draft: exogenous public Markov
 roots with regeneration rate kappa and pointwise total hazard delta can be
 replaced by actual private stationary clocks with full-debt loss at most
 40R*delta/kappa. A source producing delta/kappa->0 is NOT established.
+Section14 is separate ordinary UNREVIEWED supporting mathematics for the
+new cap-chamber route. It reuses the existing standard-Q column-sum
+obstruction to produce an ACTUAL pure-clock low-cap/surplus seed on every
+nonnegative-own-singleton standard-Q table. It proves no new UE class:
+preservation of a suitable closed region remains the global question.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -1167,3 +1172,110 @@ Decision: retain13.1–13.4 as an honest operation, but retire its proposed
 universal-source role. A public-memory route that reaches this regime must
 retain strategic state on the absorption time scale or use a replacement
 that is genuinely nonstationary/macroscopic, not stationary averaging.
+
+## 14. The standard-Q regime already produces actual low-cap surplus seeds
+
+Status: ordinary UNREVIEWED mathematical composition. The matrix
+obstruction itself is already checked and is not claimed as new. The
+purpose is to identify precisely which input of the successful cap-chamber
+mechanism is still missing on general hard data.
+
+### 14.1. Self-contained question and exact seed statement
+
+Let I be any nonempty finite player set. Live and Never pay0. Let r_i(S)
+be arbitrary finite terminal rewards, and assume only that all own
+singletons s_i=r_i({i}) are nonnegative. Prescribed clocks are independent
+complete private laws on Nat union{Never}; caps allow ALL unilateral
+complete behavioral replacements. Define the singleton comparison matrix
+
+    Gamma_ij=r_i({j})-s_i,       Gamma_ii=0.
+
+Suppose Gamma is a textbook STANDARD-Q matrix: for every offset y, the
+standard LCP w=y+Gamma*x>=0, x>=0, x_i*w_i=0 is solvable.
+Fix ANY nonzero weight vector a>=0.
+
+Claim. There is a literal actual pure-clock profile p_j (sole j Quit0,
+all other players Never) whose full semantic pair(U,B) satisfies
+
+    B_j=s_j,
+    a dot(B-s)>0.
+
+Either this profile is already exact terminal Nash, or for some lambda>0
+it is an ACTUAL seed of the nonempty compact chamber
+
+    { (U,B) in actual closed carrier:
+          min_i(B_i-s_i)<=0,
+          a dot(B-s)>=lambda*max_i(B_i-U_i) }.           (14.1)
+
+No sign condition on passive or coalition rewards, cap-attainment
+hypothesis, strategic witness, or supplied low-debt family is used.
+The statement produces the seed only, not invariance of(14.1).
+
+### 14.2. Exact proof and all response clocks
+
+Apply standard-Q solvability to offset minus-ones. Its solution x>=0
+satisfies Gamma*x>=ones. Hence
+
+    sum_j x_j * [sum_i a_i Gamma_ij]
+         = a dot(Gamma*x) >= sum_i a_i >0.
+
+At least one column j has strictly positive weighted sum
+C_j=sum_i a_i Gamma_ij>0. This uses only residual feasibility, not
+complementarity of that LCP solution.
+
+For sole j Quit0, the actual prescribed payoff is U_i=r_i({j}).
+Owner j faces opponents who Never. Its finite response dates all pay
+s_j and Never pays0, so B_j=s_j by own nonnegativity. For i!=j,
+Quit0 pays r_i({i,j}), while every positive finite deadline and Never
+pay r_i({j}). Thus the FULL cap is exactly
+
+    B_i=max{r_i({j}),r_i({i,j})}           (i!=j).
+
+Every complete private response is a mixture of these pure clocks,
+so there is no hidden later cap. In particular
+
+    a dot(B-s)>=sum_i a_i[r_i({j})-s_i]=C_j>0,
+    D=max_(i!=j) [r_i({i,j})-r_i({j})]_+.
+
+If D=0, all complete response gains vanish and the actual profile is
+terminal Nash. If D>0, choose lambda=[a dot(B-s)]/D>0. The seed then
+satisfies(14.1), with equality in its surplus inequality. The closed
+actual carrier is compact for every fixed finite reward table, so the
+chamber is compact and nonempty. It is not claimed convex.
+
+### 14.3. Existing declarations and the remaining global problem
+
+Definitions read: `quittingSingletonMatrix` in
+`UniformEquilibrium/Quitting/Classification/LCP/QuittingRewardAdapter.lean`,
+and `StandardLCPSolution`, `IsStandardQMatrix` in
+`UniformEquilibrium/Quitting/Classification/LCP/MatrixClasses.lean`.
+The existing matrix theorem
+`not_isStandardQ_of_forall_column_sum_nonpos` in
+`MathUE/LinearProgramming/ColumnSumQ.lean` is the unweighted special case
+of the simple column-sum argument. That file was read in full. The
+weighted argument above follows directly from the same standard-Q
+definition and does not claim a new linear-programming theorem.
+
+This refines, rather than solves, the arbitrary-game route. On full
+standard-Q residual data with nonnegative own singletons, the ACTUAL
+low-cap/surplus seed is automatic. The missing global step is to find a
+closed region that preserves this advantageous cap geometry while
+admitting a nonzero legal root operation at every positive-debt point.
+In the passive-triple family, exact cap-Nash root analysis supplies that
+preservation and excludes full support by a cap-sum contradiction. No
+analogous invariance follows merely from Gamma being standard Q.
+
+In particular, this seed is NOT the unconstrained global debt minimum.
+The latter's positive-debt cap floors do not supply(14.1)'s low-cap
+condition. Starting from a real pure profile and constraining the domain
+remains load-bearing; scalar reweighting of the old minimum does not
+replace it. For proper normal cores the matrix hypothesis must be applied
+to the ACTUAL retained game, with a separate legal lift if needed: this
+section does not silently identify a proper-core seed with a full-game
+seed.
+
+Concrete next question: does full hard-residual data force a choice of
+a>=0 and a CLOSED subset of(14.1), containing one of these produced
+pure seeds, from whose every positive-debt point some nonzero cap-Nash
+prefix remains inside? No such choice, universal invariance, or UE
+conclusion is asserted here.

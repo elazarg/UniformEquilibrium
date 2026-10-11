@@ -2702,9 +2702,22 @@ singleton hard-class conditions and has no exact stationary Nash profile.
 It also fails the compared whole induced-base, universal quiet-child,
 response-quotient, weighted-charge and specified finite-calendar sources.
 These are bounded source comparisons, not an exhaustive classification of
-all possible certificates. Producing an analogous actual seed and invariant
-region for every remaining table is open. The result is reviewed ordinary
-mathematics, not a new checked Lean declaration.
+all possible certificates. The result is reviewed ordinary mathematics,
+not a new checked Lean declaration.
+
+On the full standard-Q side with nonnegative own singletons s, an actual
+low-cap weighted-surplus seed is automatic for every nonzero a≥0. Indeed,
+standard-Q solvability at offset −1 gives x≥0 with Γx≥1, so some column j
+has a·Γeⱼ>0. In the actual sole-j-Quit0 profile, the full caps are
+
+    Bⱼ=sⱼ,       Bᵢ=max{rᵢ({j}),rᵢ({i,j})} for i≠j.
+
+Thus minᵢ(Bᵢ−sᵢ)≤0 and a·(B−s)>0. Unless already exact Nash, this seeds
+a weighted-surplus/regret chamber with a positive coefficient. This
+ordinary mathematical composition does not imply nonnegative caps in
+general, invariant-region preservation, or nonzero-root escape. Producing
+a suitable preserved region and escape operation for every remaining
+table is open.
 
 Standard Q alone is not an existence theorem.
 Neither a fixed small periodic class nor the proper-child extension tests
