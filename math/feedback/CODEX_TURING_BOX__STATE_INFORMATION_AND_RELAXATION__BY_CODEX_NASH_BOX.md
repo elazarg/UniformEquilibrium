@@ -693,3 +693,127 @@ This falsifies the ENTIRE exact finite common-menu negative-private-tax
 source, including joint deadline/tax selection and all Nash components.
 It does NOT refute positive subsidies, arbitrary approximate menu products,
 the original finite-menu selection question, or uniform equilibrium.
+
+## Bounded independent check: Section23.4, growing discounted periods
+
+Reviewed Section23.4, equations(D4)–(D12), using ONLY the literal table and
+source definitions in Sections23.1–23.2. Frozen whole-file SHA256:
+`0d31a84eb632ae8bac182b27b0d66b09adf4d6b2331fbae09077a1bd1209c656`,
+also preserved in commit `e89e647e`. Section23.3's entire viability-kernel
+identification and other notebook claims are outside this check.
+
+**Verdict: no mathematical objection found in this bounded scope.** For
+every fixed collision parameter epsilon in(0,1/3), the construction gives
+exact realized-discount Nash laws on periods3k for all sufficiently large
+k, with discounts tending to1, ORIGINAL unrestricted terminal
+exploitability tending to0, and original payoff tending to(1,1,2).
+This is an internal calibration on a previously solved three-player game,
+not new Fin4 coverage or a universal discounted selector theorem.
+
+### Finite producer and exact boundary agency
+
+I independently derived the root equations at q=(a,b,0). The two Quit
+values are1+epsilon*b and1-a. Their Continue values are respectively
+alpha*(1-b)*child0 and3a+alpha*(1-a)*child1. The third player's Continue
+recursion is3b-2ab+alpha*(1-a)*(1-b)*child2; its Quit value is
+(1-b)*(1+epsilon*a). These are exactly(D5),(D7),(D8) and the displayed
+inactive comparison.
+
+The rotated child at the END of a phase has value
+
+    (w_0,1,1-a_0),
+
+because b_0=0. Thus the first-owner seam is precisely(D9), the
+second-owner seam is(D7) with the virtual next a equal to0, and the
+passive seam is precisely w_k=1-a_0. No port is silently identified
+with an unrotated child. At the INITIAL phase date b_0=0, player1 is
+allowed to Continue while indifferent; the argument does not require
+strict positive activity there.
+
+For(D5), its forward map is continuous and strictly increasing in both
+lambda and b while0<=b<1. The k=2 crossing is explicit. Inductively,
+increase lambda to the unique earlier crossing b_(k-2)=B: all preceding
+iterates are below B<1 and the next iterate strictly exceeds B. The
+intermediate-value theorem then yields a UNIQUE lambda_k(B) strictly
+before this threshold. Strict monotonicity and continuity give continuous
+B dependence. This verifies actual finite roots, not just formal small-
+lambda expansions. Iterating b_next>=r*b+lambda/epsilon gives exactly
+lambda<=B/(r^(k-1)-1), uniformly on the fixed interval I. The backward
+a map preserves[0,lambda/2], so every actual a_t is positive and at most
+lambda/2.
+
+### Uniform scalar IVT and inactive inequalities
+
+The backward b map is
+
+    x -> (alpha*epsilon*x-lambda)/(epsilon+alpha+alpha*epsilon*x).
+
+On the fixed interval[0,max I] its difference from x/(r+x) is bounded
+by a constant depending only on epsilon times lambda. The latter map
+has Lipschitz constant at most1/r<1. Starting at the SAME terminal B
+therefore gives a uniform O_epsilon(lambda) error for every backward
+iterate, and O_epsilon(k*lambda) for their sum. I checked the exact
+comparison solution and telescoping product:
+
+    c_j=B/[(1+epsilon*B)*r^j-epsilon*B],
+    product_(j<k)(1-c_j)
+      =(1-B)/(1+epsilon*B-epsilon*B*r^(-(k-1))).
+
+These give(D10) uniformly, not merely pointwise in B. The passive
+comparison uses bounded values in[0,3] and transmission factors in[0,1],
+so its accumulated perturbation is O_epsilon(k*lambda), including the
+terminal error a_0. Substitution gives EXACTLY(D11). Its only zero on
+I is B*=1/(2+epsilon); its signs at the two endpoints are strict and
+opposite. Consequently actual roots B_k exist for every sufficiently
+large k, and EVERY such selection tends to B*.
+
+At every t<k the remaining b product contains the final1-B_k factor.
+Hence the passive comparison value is at least1+2B_k, uniformly in t.
+Its perturbation tends uniformly to0, whereas the inactive Quit value
+is at most1+epsilon*lambda_k/2. Since B_k>=B*/2, the stated strict
+passive margin holds at ALL dates, including both phase endpoints.
+After rotation these checks cover every player/date family.
+
+### Actual unrestricted discounted and terminal conclusions
+
+The bounded periodic ports satisfy the actual Bellman equalities, not
+only owner equations. Their prescribed remainder vanishes as alpha^n.
+For any pure deadline the root Nash inequalities telescope to its full
+discounted payoff bound, including the deadline at a phase boundary.
+For Never the same bound follows by the vanishing remainder. Arbitrary
+complete clock laws are mixtures of these replies. Thus the constructed
+laws really are exact discounted Nash against ALL behavioral replacements.
+
+Each individual law survives one3k-date period with probability
+J_k=A_k*P_k. The independent opponent pair therefore survives a period
+with probability J_k^2. I checked the limit J_k->1/2 and the geometric
+bound
+
+    E[T_-i+1] <= 3k/(1-J_k^2).
+
+This bound is UNCHANGED by any full deviation of player i; opponents are
+proper, and absorption under that deviation occurs no later than their
+first quit. Since |r_i|<=3 and1-alpha^t<=lambda*t, both the prescribed
+payoff and EVERY replacement payoff differ from their original terminal
+counterparts by at most9*lambda_k*k/(1-J_k^2). Exact discounted Nash
+therefore gives the full bound(D12), including omitted late deadlines
+and Never. The first port converges to(1,1,2), and the SAME uniform
+comparison transfers that payoff to original terminal play.
+
+The fourth player's specified padding pays-1 whenever it joins and0
+otherwise; its literal Never has value0 and dominates all complete
+replacements, discounted and original. Core deviations keep this player
+Never, so the padded conclusion is valid but still three-active.
+
+The named source bridge `discountedAuxEU_quittingGame_none` in
+`UniformEquilibrium/Quitting/Bellman/Discounted/PayoffBridge.lean` has the
+extra common positive discount factor described in Section23.1; it does
+not change Nash. Pure-clock extremality has the stated full-agency scope
+in `sSup_range_quittingTerminalPayoff_update_eq_pureTime`,
+`UniformEquilibrium/Quitting/Cycles/BehaviorPureTimeExtremality.lean`.
+The ordinary proof above is not claimed Lean-checked.
+
+The successful ingredient is a finite-parameter scalar sign change
+creating a macroscopic b burst while total discount and companion-a
+loss are O(k*lambda). The special cyclic reward rows supply that sign
+change; no arbitrary four-player producer or completeness claim follows.

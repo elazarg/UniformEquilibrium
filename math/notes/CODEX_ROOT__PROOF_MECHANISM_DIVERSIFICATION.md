@@ -708,6 +708,33 @@ No Lean check is asserted. The result does not refute positive subsidies,
 approximate menu products, or UE, and does not remove a possible-counterexample
 reward class. It rules out one precise proposed universal source.
 
+## A positive control: calendar complexity can recover a good component
+
+The tests do not all point toward impossibility. Section 23.4 of
+`CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md` constructs exact
+discounted Nash profiles on the perturbed Solan three-player calibration,
+using periods of length 3k that grow with k. Each phase has a macroscopic
+quitting burst, while its companion hazards and discount loss vanish.
+The deleted-opponent survival per period tends to 1/4 and
+(1 - discount) * k tends to zero. This controls EVERY original unilateral
+terminal response, including Never, and the full original regret tends
+to zero with payoff tending to (1,1,2).
+
+The finite parameter construction, all inactive inequalities and rotated
+seams, and the unrestricted response comparison have a bounded independent
+ordinary check in
+`../feedback/CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION__BY_CODEX_NASH_BOX.md`.
+No Lean check is asserted. This is a known three-player UE class, not new
+four-active reward-table coverage or a universal discounted selector.
+
+The diagnostic contrast is exact: bad stationary and fixed-length
+switching selections coexist with good growing-period selections in the
+same game. Fixed calendar complexity or uniformly small instantaneous
+hazards would exclude the successful operation. The next mathematical
+test is whether an analogous finite burst producer works on an uncovered
+four-active table or supplies a genuinely general construction; reproducing
+this calibration with better constants would not answer that test.
+
 ## Sources inspected and next question
 
 - `ideas/NONLOCALITY_TECHNIQUE_CATALOGUE.md`.
