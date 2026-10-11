@@ -880,6 +880,74 @@ original profiles. An existence proof must select a useful asymmetric
 component or use another operation; neither finite-menu Nash existence nor
 the one low-regret profile supplies that selection theorem.
 
+## A preserved actual-carrier chamber changes the selection question
+
+The reviewed mathematical theorem in
+`../exports/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md`
+provides a complete alternative to temporal compilation on its raw reward
+class. Its conclusion is original UE against every behavioral deviation,
+not equilibrium in a correlated or discounted auxiliary model. Its finite
+guards are reward inequalities and coalition-graph conditions; no strategic
+witness is supplied as an input. The new raw adapter remains ordinary
+mathematics, not Lean-checked.
+
+Let U be prescribed terminal payoff, B the complete cap vector, and
+E=max_i(B_i-U_i). The proof produces an actual seed in the compact region
+
+    min_i(B_i-s_i)<=0,
+    sum_i a_i(B_i-s_i)>=lambda E,          lambda>0.
+
+At a positive-E point, one raw ledger excludes full-support cap-Nash roots.
+Proper-coalition leaving incentives preserve the low-cap condition, while
+a DIFFERENT raw ledger preserves the weighted inequality. Every remaining
+exact root therefore stays in the region and satisfies E'=cE, where c is
+joint Continue mass. At a positive attained minimum, either some cap is
+strictly below its own singleton, or the equality coordinates contain a
+sink of the insertion graph. The former excludes the all-Continue root;
+the latter explicitly supplies a nonzero axis root. Both contradict
+minimality. A zero-debt point in the closed ACTUAL carrier then supplies
+actual approximants and one fixed uniform target.
+
+Three distinctions are essential to the research diagnosis.
+
+1. **Minimizer escape is weaker than pointwise escape.** The exact actual
+   point with unique all-Continue root in Section15 of
+   `CODEX_EMMY_BOX__OBJECTIVES_AND_GLOBAL_SELECTION.md` does not refute
+   escape at a constrained minimum. Its arbitrary-point premise is weaker
+   than the additional minimizing property the proof uses. The theorem
+   does not claim that the simple low-cap/surplus region is preserved on
+   every standard-Q table.
+2. **A compact state need not support temporal iteration.** The proof uses
+   continuity of one fixed-root semantic map and one contradiction at a
+   compact minimizer. It needs no continuous root selector, attained best
+   response, common infinite root word, or recurrence of source passports.
+   Thus failures of those stronger architectures do not obstruct this
+   particular class theorem.
+3. **A successful global invariant is not a universal invariant.** Standard-Q
+   supplies the positive singleton seed but does not supply the two reward
+   ledgers, proper-coalition leavers, or insertion-graph guard. The theorem
+   includes a full sixty-coordinate Fin4 open region, but gives neither a
+   fraction of solved tables nor a transformation of every counterexample
+   into that region.
+
+This is concrete evidence for the missing-global-theorem form of the
+sufficient-state hypothesis on this class, not evidence against the
+conjecture. The important untested extension is global selection of a
+different invariant region, possibly with a different objective or with
+preservation under a selected root rather than every root. A construction
+of such a region must begin from arbitrary surviving reward data and end
+at the actual diagonal; naming a region whose nonemptiness or preservation
+is assumed would only restate the selection problem.
+
+The supporting declarations inspected are
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash` in
+`UniformEquilibrium/Quitting/Root/CapNashRootStack.lean` and
+`isUniformEquilibriumPayoff_of_diagonal_mem_terminalSemanticCarrier` in
+`UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean`.
+The two independent full proof reviews and final open-region checks are
+recorded in the corresponding CODEX_EMMY_BOX feedback files. No new build
+or independent third mathematical review is claimed here.
+
 ## Sources inspected and next question
 
 - `ideas/NONLOCALITY_TECHNIQUE_CATALOGUE.md`.
