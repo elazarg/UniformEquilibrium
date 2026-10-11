@@ -202,3 +202,280 @@ nonempty compact actual-carrier chamber. No sign of passive or joint
 rewards was used. The precise missing input is preservation/escape
 inside that chamber, not seed production. No mathematical objection
 was found in this narrow composition.
+# Bounded independent review of Section17: two-ledger chamber producer
+
+Reviewed source: `notes/CODEX_EMMY_BOX__OBJECTIVES_AND_GLOBAL_SELECTION.md`,
+whole SHA256
+`068b7b33a4be29cfe6d1249da30caaad18c94e6a2373ccd291f9d0a2ec1e8bb9`.
+Scope: complete §§17.1--17.9, with independent exact calculations and a
+bounded whole-selection comparison to implemented/accepted producers.
+This review did not consult the other current review or coordinate its
+initial conclusion with that reviewer. No Lean build or implementation
+claim is made.
+
+Verdict: PASS for the raw theorem and its supplied four-player witness.
+No mathematical objection found. The comparisons below exclude named
+whole source predicates, not every imaginable nonstationary certificate
+or every unknown qualitative neighborhood. The syntactic change in pair
+outsider rewards is not used as the sole argument for new coverage.
+
+## Exact theorem checked
+
+For arbitrary finite I with at least two labels, own singletons s>=0,
+and a nonzero nonnegative weight vector a, assume:
+
+- weighted terminal surplus H_a(S)>=0 on every proper nonempty coalition,
+  strictly positive on one singleton;
+- weighted outsider INSERTION sum J_a(S)<=0 on every such coalition;
+- every proper nonempty support has a participant whose rewards never
+  exceed its own singleton within that support;
+- the positive singleton-insertion digraph has no cycle inside a proper
+  subset.
+
+Then the game has an actual fixed uniform-equilibrium payoff against all
+behavioral deviations. All rewards are finite; live/Never are0; private
+clock laws are independent. No strategic source is assumed.
+
+## Independent soundness reconstruction
+
+1. The sole-j-Quit0 profile has U=r({j}), B_j=s_j and
+   B_i=max(r_i({j}),r_i({i,j})) for i!=j. This includes Never and ALL late
+   deadlines, not just a one-shot response set. Nonnegative own singletons
+   justify B_j=s_j. Thus B>=U and a>=0 give positive weighted cap surplus.
+   Zero regret closes immediately; otherwise lambda=surplus/E is positive.
+
+2. The closure of ACTUAL full (U,B) pairs is compact in the reward cube.
+   For a FIXED root q, its exact prefix map is continuous and preserves
+   this closed carrier. It is legitimate to choose a root Nash only at a
+   limiting pair: the approximating prefixes need not themselves be Nash.
+   No semantic closure point is identified with an actual law profile.
+
+3. At a cap-Nash root the larger endpoint equals the player's own mixed
+   root payoff. Therefore B' is the usual expected root payoff at tail B,
+   and d_i'=c d_i, E'=cE. Sure roots have c=0 and already close the proof.
+   The identities are precisely the statements in
+   `quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash` and
+   `quittingTerminalSemanticPrefix_envelope_eq_rootSuccessorPayoff_of_capNash`
+   in `UniformEquilibrium/Quitting/Root/CapNashRootStack.lean`, reopened here.
+
+4. If all q_i are strictly between0 and1, active indifference gives
+
+       B_i-s_i=sum_(empty!=A subset I\{i}) z_A
+                         [r_i(A+i)-r_i(A)], z_i=q_i/(1-q_i).
+
+   Summing with weights and grouping by the SAME opponent set A gives
+   sum_i a_i(B_i-s_i)=sum_A z_A J_a(A)<=0. This uses outsider insertion,
+   not participant withdrawal. It contradicts positive chamber surplus.
+   I also reconstructed81 exact rational full-support examples at the
+   witness, allowing negative input B; every identity agreed and its
+   surplus was strictly negative. These finite tests supplement the proof.
+
+5. Every remaining nonempty root support A is proper. The flat participant
+   supplied by guard3 has Q_i<=s_i; supported Nash gives B_i'=Q_i<=s_i.
+   Expected terminal-surplus expansion gives
+   L_a(B')=c L_a(B)+sum_(nonempty S) p_q(S)H_a(S)>=cL_a(B).
+   No grand-row H guard is used, because the proper root support makes
+   grand probability zero. All Continue fixes the original pair.
+
+6. At a positive chamber minimum, a strictly low cap already rules out
+   all Continue, so finite Nash supplies a contracting nonzero root. In
+   the remaining boundary case B>=s, the equality set L is nonempty and
+   proper: if it were all I, its weighted surplus would be0, even with
+   some zero weights. A sink i in its positive-insertion digraph has no
+   positive insertion gain toward another label of L. The sole-i root
+   with rate p gives each other player's Continue-minus-Quit difference
+
+       (1-p)(B_j-s_j)+p[r_j({i})-r_j({i,j})].
+
+   It is nonnegative on L, and remains nonnegative off L for sufficiently
+   small p>0 by the strict initial cap gaps and finiteness. Owner i is
+   indifferent. Thus this is a FULL root Nash, including every inactive
+   endpoint, and E'=(1-p)E contradicts the positive minimum.
+
+7. A zero-debt carrier pair is a diagonal. The actual sequence and one
+   fixed target follow from carrier membership, not a maintained root
+   spine or a correlation relaxation. I reopened
+   `isUniformEquilibriumPayoff_of_diagonal_mem_terminalSemanticCarrier`
+   in `UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean`.
+   Its consumer retains ALL behavioral deviations and fixes the payoff
+   before accuracy. The result is not exact terminal-Nash existence.
+
+The argument handles weak H/J inequalities, arbitrary signed unprotected
+rewards, zero weights, nonsure boundary supports, and either kind of
+low-cap boundary. No global B>=0 hypothesis has crept into the theorem.
+
+## Independent witness and stationary falsification
+
+The raw table was reconstructed from the prose with exact Fractions.
+Its (H,J) values are (1,-3) on singletons, (0,-5) on adjacent pairs,
+(0,-6) on opposite pairs, and (3,-1) on triples. Its ONLY premium trap
+is the full set. Its positive insertion graph is the directed4-cycle.
+The actual sole-owner0 seed is exactly
+U=(1,0,4,0), B=(1,2,4,0), E=2, L_a=3, lambda=3/2.
+
+I independently checked the entire stationary exclusion, including the
+boundary cases. A sure i forces its opposite to Continue because its
+four pure endpoint differences are -4,-5/2,-5/2,-1. Its predecessor
+then Continues (differences -1,-5/2), its successor Joins, and i strictly
+withdraws. This excludes ANY sure root for ANY real continuation vector.
+
+With no sure player, supports0/1 fail immediately. Adjacent support2
+has a successor with Never0 and Quit1+a>0. Opposite support2 has Never4
+and Quit1-b<1. Full support gives weighted terminal surplus>0 from its
+positive singleton probabilities, whereas its odds identity is strictly
+negative. For support012, active indifference and nonnegative B0 give
+
+    1-2b-5c+(7/2)bc>=0,
+    b<1/2, c<=(1-2b)/(5-(7/2)b)<=1/5.
+
+Player1 has Q1=1-2c+a(1-c)>=3/5, but its stationary Never value is
+2ac/(a+c-ac)<=2c<=2/5. Its positive hazard requires equality, impossible.
+All cyclic rotations are included. Thus no exact stationary product Nash
+exists, with arbitrary support/hazard choices; this does NOT exclude
+stationary approximations or nonstationary sources.
+
+## Bounded IMPLEMENTED/ACCEPTED whole-source comparison
+
+### Entire persistent-base/free and punishment-tail sets
+
+This is stronger than stationary exclusion. I reopened the actual finite
+binary utilities and Nash-set definition in
+`UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean`.
+Every accepted base of size>=2, free induced Nash point, and omitted-player
+join choice would give a FULL one-shot Nash with a sure label, which the
+continuation-independent proof above excludes. This covers every mixed
+selection, not just a chosen pure induced point.
+
+For singleton bases the actual punishment values are0: Never sees only
+nonnegative passive rewards, and opponents can set the successor to
+Quit0 surely, giving the owner Quit=-1 and all positive deadlines/Never=0.
+The FULL-complement induced Nash set for owner i is the UNIQUE point with
+successor sure and opposite/predecessor Continue. Its owner payoff is-1,
+its Continue value is0, and its empty-opponent probability is0. Hence its
+punishment-floor excess is1, regardless of any installed punishment tail.
+The exact singleton floor-excess semantics was reopened in
+`singletonBase_inducedNash_floorExcess_semantics`,
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/LargeBaseStationarySemanticHandoff.lean`.
+Punishment cannot repair the owner inequality. Arbitrary omitted-player
+choices accepted by their joins again yield the already-impossible sure
+root at continuation0.
+
+For calibration, full-complement adjacent/opposite/triple bases all have
+their outsiders strictly Continue. An adjacent donor has withdrawal gap-1;
+opposite owners have gap-4; triple owners have gap-5/2 or-3, depending on
+the remaining pair; grand owners have gap-1. Thus no larger-base exit was
+missed by only inspecting singleton induced sets.
+
+### Every universal quiet-child certificate
+
+For ANY nonempty proper child C there is j in C with successor j+1 outside
+C. Its actual sole-j-Quit0 profile is exact child Nash: predecessor joining
+gives-1 instead of0, opposite joining gives0 instead of4, and the favorable
+successor is absent. Every child debt is0 and child joint-Never mass is0.
+In its full quiet lift the omitted successor gains2 by Quit0 instead of0.
+
+Thus EVERY child/weight/kind choice fails a universal raw certificate whose
+consumer bounds outside debt by nonnegative weighted child debts plus any
+finite joint-Never residual. This includes the five-kind withdrawal F/J
+families through the actual declarations
+`quittingLiftDeletedProfile_outsideDebt_le_add_neverExcess_of_withdrawalFutureJoin`,
+`quittingLiftDeletedProfile_outsideDebt_le_of_withdrawalFutureJoin`, and
+`isεAsymptoticNash_quietLift_of_withdrawalFutureJoinFamily` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`,
+which I reopened. The same zero/zero witness applies to the capped-clock
+weighted-child-debt/slack consumer. This is a WHOLE raw-certificate
+exclusion, not an exclusion of a new source selecting only a favorable
+particular child equilibrium.
+
+### Whole weights, boxed charges, and stationary raw sources
+
+The only trap is full. Summing its four singleton weighted-floor
+inequalities yields -2sum weights, excluding EVERY nonzero nonnegative
+floor weight. Its grand upper-average premium is8sum weights, excluding
+EVERY corresponding nonzero nonnegative upper-average weight. The actual
+floor and insertion/leave definitions were reopened in
+`UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapLeavers.lean`.
+
+The boxed coefficient restrictions are delta<=2, tau>=8, gap<=3, loss<=1.
+With the ACTUAL four-player threshold
+4sqrt(delta/tau)(gap+loss*delta/tau), every choice gives at most13/2,
+whereas the required singleton-plus-box charge is at least4+4*10=44.
+I reopened `QuittingTrapChargeCoefficients`,
+`QuittingTrapChargeCoefficients.threshold_of_cardinality_four`, and
+`HasBoxedQuittingNashCharges` in `BoxedQuittingNashCharges.lean`,
+`BoxedQuittingNashChargeOdds.lean`, and `BoxedQuittingNashChargeReturn.lean`
+under `UniformEquilibrium/Quitting/Classification/`. There is no remaining
+coefficient-selection loophole in this predicate.
+
+The stationary exclusion rules out EVERY sound source concluding exact
+stationary Nash, including any parameter selection in stationary collision
+chambers. It is not being used to exclude nonstationary punishment or
+calendar sources; those comparisons are separate above/below.
+
+### Singleton, quotient, core, and named finite-calendar classes
+
+The singleton matrix is unchanged from the paired-hard K10 matrix:
+Gamma=circ(0,-1,3,-1), determinant45 and positive inverse with entries
+(2,3,7,3)/15 in cyclic order. The earlier exact degree/R0 check depends
+ONLY on these singleton rows: its degree is1, all deleted triple inverse
+tests fail a negative diagonal, and its adjacent2x2 principal block is
+not standard-Q. There is no non-Q/homogeneous singleton exit.
+
+I recomputed the ACTUAL response polynomials H_i=(1-L_i)Q_i-b_i and tested
+ALL15 partitions by exact symbolic coefficient equality, as defined by
+`QuittingResponseInvariantOnUnitCube` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`.
+Only the discrete partition, opposite02|13, and all-four partition survive.
+Their matrices are Gamma, [[3,-2],[-2,3]], and [1], with degree1 and
+positive determinants. Thus the actual quotient favorable-degree and
+negative-determinant/inverse exits do not apply; singleton block sums
+alone were NOT substituted for actual response equality.
+
+Full premium core excludes pair/triple-core hypotheses. Each participant
+has a negative premium somewhere, excluding the protected nonnegative-
+participant leaver assumptions; adjacent/opposite pairs fail a required
+weak member join, and each triple fails the all-strict-joins premise.
+
+Under the exact paired singleton rows the named positive proper singleton
+word has uniquely golden hazards, by the independently checked difference
+determinant proof printed in Section12 of
+`exports/FOUR_PHASE_PASSIVE_REWARD_RAY_UNIFORM_EQUILIBRIUM.md`.
+Each directed recipient premium2 exceeds the required incoming cross
+bound1 in that named calendar. This rules out its entire positive proper
+owner solution set, not only a chosen IFT branch. Arbitrary longer words
+or boundary hazards are NOT excluded.
+
+The earlier four-joint local/rectangle/passive-ray raw regions require
+scheduled member values that these pairs do not possess: every adjacent
+pair has one member-1 and every opposite pair has both members0. The
+favorite singleton relation fixes the mate permutation under relabeling.
+In particular the first local packet has explicit radius<=1/2 about
+scheduled member values5 and9/2; the literal rectangle and passive-ray
+bounds also fail. This is not a claim about unknown larger neighborhoods
+of OTHER implicit-function constructions.
+
+Finally the preexisting passive-triple cap-chamber export fixes all pair
+outsider values at1. Its singleton pattern forces identity scaling and
+zero translation under any recipient-affine relabeling that could preserve
+the literal singleton data; the new values3/2 and2 cannot be obtained in
+that way or as a limit within that fixed-row class. This syntactic fact is
+only ONE comparison, supplemented above by the whole base, quiet-child,
+weighted/boxed and actual stationary source exclusions.
+
+## Scope and significance
+
+The proof supplies a raw finite class, not merely a conditional chamber
+interface. Its two raw ledgers have different jobs: H preserves the
+weighted-surplus region; J excludes full-support roots at positive
+surplus. Proper-subset flatness preserves a low cap, while proper-subset
+acyclicity gives escape ONLY at the attained minimum. The compact invariant
+minimization argument is generic; these verified raw guards and actual
+seed are the producer content. No chronological return word is required.
+
+The bounded whole-selection comparisons found no containment in the named
+implemented/accepted classes above. This is evidence of additional raw
+coverage, not an exhaustive theorem census or an assertion that all
+nonstationary or arbitrarily long calendars fail on the witness. In fact
+the new theorem proves UE there. No arbitrary-table implication is claimed:
+standard-Q supplies the seed but does not supply either higher-coalition
+ledger, the flatness guard, or the acyclicity guard.
