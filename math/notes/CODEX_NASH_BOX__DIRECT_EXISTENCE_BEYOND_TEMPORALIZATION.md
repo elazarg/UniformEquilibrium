@@ -30,6 +30,13 @@ Solan anchor is stuck. Thus exact coarse-preserving root prefixes cannot
 be the universal independence producer from an arbitrary anchor. The
 global source/product selection problem is not refuted; source changes
 and approximation remain necessary live freedoms.
+Section24 now tests those freedoms on the genuinely four-active K=10
+opponent-coincidence table: direct JOINT finite-law optimization produces
+an explicit denominator10000, twelve-date complete profile with exact
+FULL terminal regret<1/150. Payoffs move, three players retain positive
+Never mass, and no exact auxiliary obedience is imposed. The certificate
+is finite integer arithmetic, not a floating-point equilibrium claim.
+It is ONE accuracy, not an all-errors family, UE proof, or new solved class.
 
 Status: active independent research, resumed 2026-10-11. Section 8 now gives
 a positive candidate independently checked for soundness: sufficiently large pair-participation
@@ -4011,3 +4018,138 @@ coarse law and product profile use the bounded coarse dual to escape every
 positive global minimum, rather than preserving this seed or its payoff?
 The prefix identity may be one allowed variation, but is not a completeness
 claim or a substitute for that global step.
+
+## 24. Joint finite-law approximation on the four-active K=10 test
+
+Status: INTERNAL ordinary calculation with an exact finite certificate;
+not independently reviewed or Lean checked. This is one actual terminal
+approximate Nash profile, not an all-errors existence proof, an export,
+or a reward-class exclusion. The nonconvex optimization is exploratory;
+only the displayed rational profile and its finite verification are claimed.
+
+### Actual game, agency, and the new operation
+
+Use I=Z/4Z, live and Never payoff0, and the ORIGINAL table
+
+    singleton{i}: owner1, opposite4, both other recipients0;
+    adjacent pair{i,i+1}: donor i gets-1, successor gets2, outsiders1;
+    opposite pair: members0, outsiders1;
+    triple: participants-1, outsider10;
+    grand coalition: every recipient9.
+
+This is exactly K=10 in
+[`CODEX_EMMY_BOX__OPPONENT_COINCIDENCE_BARRIER.md`](CODEX_EMMY_BOX__OPPONENT_COINCIDENCE_BARRIER.md),
+Section1. That note's no-stationary and barrier calculations are NOT assumed
+here. This test changes all four passive-triple and grand rewards from
+Section18's earlier calibration. It is not another three-player embedding.
+
+Every player independently samples a complete clock in
+{0,...,11,Never}. There is NO mediator, common private random seed,
+public sunspot, or exact auxiliary equilibrium. A unilateral behavioral
+replacement is unrestricted. Since the only live public history consists
+of survival, every complete replacement is represented by a distribution
+of pure deadlines and Never, independently of the opponents' seeds.
+
+The tested selection operation varies ALL four private clock laws jointly,
+including their finite/Never structure. It minimizes a smooth approximation
+to max_i,b[V_i(b)-U_i] and then uses projected joint steps with the exact
+finite deadline list. New finite dates are allowed to carry actual mass.
+Neither the payoff target nor a fixed correlated anchor is preserved.
+The strict two-quitter anchor of Section18 still has full coarse margin1/4
+on this changed table: the anchor encounters no triple or grand outcome
+before a deviation, and a unilateral insertion produces only a negative
+triple participant. Thus each supplied profile here can also be paired
+with a changing exact full coarse law by the Section18 repair. This does
+not turn the optimizer into a global producer.
+
+### Exact twelve-date profile
+
+All entries below are integer masses divided by10000. Columns are dates
+0,...,11 followed by literal Never. Every row sums to10000.
+
+    p0: 0,0,0,215,554,383,909,1680,2111,0,2040,1842,266
+    p1: 416,188,312,857,1599,1842,947,526,114,0,2966,233,0
+    p2: 1772,2209,1538,470,263,0,0,0,0,1538,0,0,2210
+    p3: 686,59,0,0,0,0,125,511,89,4554,0,0,3976
+
+All four players have positive finite activity. Players0,2,3 have positive
+Never atoms; player1 is proper and quits by date11. Hence the actual game
+absorbs by date11 almost surely, but a deviation by player1 can remove that
+clock. Its deleted-opponent all-Never event and the corresponding late
+singleton payoff MUST still be included.
+
+With common denominator10^16, actual prescribed payoff numerators U,
+FULL pure-response cap numerators C, and gaps C-U are
+
+    U = (22651930796475997, 5828835733198862,
+         8952597421265191, 11145573243558144),
+    C = (22715196096970000, 5892444300000000,
+         9016206942640000, 11208569600000000),
+    C-U = (63265300494003, 63608566801138,
+           63609521374809, 62996356441856).
+
+Thus the complete maximum terminal regret is exactly
+
+    63609521374809 / 10^16 < 1/150.                  (24.1)
+
+The maximizing pure replacements are deadline8 for player0, deadline1
+for player1, BOTH the omitted-late deadline12 and literal Never for
+player2, and deadline0 for player3. Equality of player2's late and Never
+caps follows from its opponent player1 being proper; those two actions
+are nevertheless tested separately. Player1's omitted-late cap includes
+the nonzero product p0(Never)*p2(Never)*p3(Never).
+
+### Complete finite integer verification
+
+Write c_i(t) for the displayed counts, z_i=c_i(Never), D=10000, and
+S_i(t)=sum_(h>=t) c_i(h)+z_i for t<=12. For each finite t and nonempty
+coalition A, its actual first-quitting probability numerator is
+
+    w_t(A)=product_(j in A)c_j(t) * product_(j notin A)S_j(t+1).
+
+Consequently D^4 U_i=sum_t sum_(A nonempty) w_t(A)r_i(A).
+For a fixed recipient i use the analogous THREE-factor opponent weights
+v_t^i(A), A subset I\{i}, and put
+
+    B_i(t)=sum_(h<t) sum_(A nonempty) v_h^i(A)r_i(A).
+
+The pure-deadline, Never, and omitted-late cap numerators with denominator
+D^3 are respectively
+
+    V_i(t) = B_i(t)+sum_A v_t^i(A)r_i(A union{i}),  t=0,...,11;
+    V_i(Never)=B_i(12);
+    V_i(12)=B_i(12)+r_i({i})*product_(j!=i)z_j.       (24.2)
+
+EVERY finite deadline>=12 has the last displayed value: every finite
+opponent clock is at most11. Thus (24.2) covers every complete replacement,
+not just the recommendation menu. A mixture cannot exceed its largest
+pure value, proving the full behavioral statement in(24.1).
+
+The owned executable
+[`CODEX_NASH_BOX__FINITE_CLOCK_JOINT_APPROXIMATION.py`](../experiments/CODEX_NASH_BOX__FINITE_CLOCK_JOINT_APPROXIMATION.py)
+has a literal copy of the table, profile, and integer survival calculation.
+Run its `--certificate-only` mode; the optimization is not run or trusted.
+The certificate uses Python integers and Fractions. Independent numerical
+cross-checks against the payoff tensor agree to machine precision; analytic
+optimizer gradients were also checked by central finite differences with
+maximum discrepancy below2e-11. These numerical checks are debugging,
+not substitutes for the finite integer calculation above.
+
+### Research conclusion and remaining assertion
+
+This is a constructive positive test of JOINT approximate clock selection
+with selective Never and payoff movement on a serious four-active table.
+It does not establish that successive menu enlargement improves the global
+minimum, that this selected branch has errors tending0, or that a fixed
+period/support face is complete. A preliminary eight-date search gave
+regret about.0107; twelve-date joint search/refinement gave the certificate
+above. A larger-menu squared-regret experiment did NOT improve the maximum
+regret, so no monotone convergence claim is made.
+
+The first genuinely missing global assertion remains a quantified calendar
+extension/descent (or another existence principle) that escapes every
+positive GLOBAL minimum while changing all private laws and the selected
+payoff. No exact auxiliary obedience or fixed anchor is imposed by that
+assertion. The next concrete test is a selective birth of new finite clock
+support, including interior calendar seams, with complete caps recomputed;
+there is no permission to treat time insertion as cap-neutral.
