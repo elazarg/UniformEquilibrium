@@ -7023,3 +7023,28 @@ select a best component at a fixed discount. The main missing producer is
 unchanged: choose components across alpha tending to1 whose attained
 original full regret tends to0. Lower semicontinuity, joint tightness and
 the bad/good fastest-absorption tie do not prove that selection.
+
+The positive-own restriction is conjecture-facing by an EXISTENTIAL
+counterexample reduction, not a pointwise WLOG transformation of the
+discounted source. The actual declaration
+`exists_finFour_no_uniformPayoff_iff_exists_singlePivot` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean`
+produces from any Fin4 counterexample SOME canonical counterexample with
+own singleton vector(1,0,0,0). The definition
+`IsSinglePivotSingletonTable` in
+`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`
+is literally that vector. If its positive terminal maximum-exploitability
+infimum is g, raise
+only the three nonpivot OWN singleton coordinates by epsilon, leaving
+all other coordinates and Never0 unchanged. The uniform reward distance
+is epsilon. The actual theorem
+`abs_quittingTerminalExploitabilityInf_sub_le_of_reward_close` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`
+gives a remaining gap at least g-2epsilon>0 when2epsilon<g. Thus any
+Fin4 counterexample yields some counterexample with ALL own singletons
+strictly positive. Equivalently, the same file's
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables`
+would close the canonical table if all its positive-own perturbations
+were solved. These declarations and their defining hypotheses were
+reopened for this composition. No old payoff, chronology, cap, Nash
+component, or D_alpha correspondence is asserted to survive it.

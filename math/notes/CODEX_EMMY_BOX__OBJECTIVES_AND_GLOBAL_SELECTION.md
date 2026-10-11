@@ -21,6 +21,12 @@ new cap-chamber route. It reuses the existing standard-Q column-sum
 obstruction to produce an ACTUAL pure-clock low-cap/surplus seed on every
 nonnegative-own-singleton standard-Q table. It proves no new UE class:
 preservation of a suitable closed region remains the global question.
+Section15 is a separate ordinary UNREVIEWED exact operation falsifier:
+an actual low-cap/positive-surplus point on a four-player R0 standard-Q
+table has ONLY the all-Continue cap-Nash root. It lies in the same simple
+chamber as the produced pure-column seed. This refutes automatic nonzero
+escape throughout that chamber, not its possible zero-debt minimum, UE,
+or a selector using a smaller closed region or different weights.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -1279,3 +1285,220 @@ a>=0 and a CLOSED subset of(14.1), containing one of these produced
 pure seeds, from whose every positive-debt point some nonzero cap-Nash
 prefix remains inside? No such choice, universal invariance, or UE
 conclusion is asserted here.
+
+### 14.4. The two exact general weighted ledgers
+
+These identities hold for ANY finite reward table and any cap vector B;
+no standard-Q, own-payoff sign, actual-carrier membership, convexity or
+root-support assumption is needed. Let s_i=r_i({i}), let a be arbitrary
+real recipient weights, and write L_a(B)=sum_i a_i(B_i-s_i).
+Let q be a simultaneous independent Quit/Continue root which is exact
+Nash when Continue after universal Continue is valued at B. Let
+
+    p_q(S)=product_(i in S)q_i * product_(i notin S)(1-q_i),
+    c=p_q(empty),
+    B_i'=max{Q_i(q), b_i(q)+alpha_i(q)*B_i}.
+
+Here Q_i is the forced-Quit endpoint, b_i is the expected payoff on
+opponent absorption when i Continues, and alpha_i is opponent survival.
+Exact stage Nash identifies B_i' with that stage game's prescribed
+expected payoff, even when q_i is0 or1. Therefore
+
+    B'=c B + sum_(S nonempty) p_q(S) r(S),
+    L_a(B')=c L_a(B)
+      +sum_(S nonempty)p_q(S)*a dot(r(S)-s).             (14.2)
+
+If (U,B) is an actual semantic pair, prefixing the root also gives
+
+    B_i'-U_i'=c(B_i-U_i),       D'=cD.                 (14.3)
+
+No equation(14.3) is asserted for a root not Nash against the FULL B.
+
+For the second identity suppose 0<q_i<1 for EVERY player, and put
+z_i=q_i/(1-q_i). Indifference, divided by opponent survival, gives
+
+    B_i-s_i = sum_(nonempty A subset I\{i})
+                  z_A [r_i(A union{i})-r_i(A)].
+
+Collecting the same opponent monomial across recipients yields
+
+    L_a(B)=sum_(nonempty proper S) z_S *
+                 sum_(i notin S) a_i[r_i(S union{i})-r_i(S)]. (14.4)
+
+Thus(14.2) uses WEIGHTED TERMINAL social-surplus coefficients, whereas
+(14.4) uses OUTSIDER INSERTION gains. They are different finite raw-data
+tests. Standard-Q supplies positive weighted SINGLETON column surplus
+for some column, but imposes neither the higher-coalition signs in
+(14.2) nor the insertion signs in(14.4). The passive-triple proof needs
+both ledgers together with its support-specific cap bounds; merely
+reweighting them does not produce a universal invariant region.
+
+Definitions compared in place: `quittingWeightedLeaveSum` and
+`quittingWeightedInsertedPremium` in
+`UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapLeavers.lean`.
+The former is an OUTSIDER sum. The latter includes every recipient and
+subtracts own singleton rewards, so it must not be identified with
+either coefficient in(14.2) or(14.4) without calculation.
+
+## 15. An actual standard-Q low-cap chamber can contain a unique-root stall
+
+Status: ordinary UNREVIEWED exact mathematical falsifier of automatic
+nonzero-root escape. All payoff rows and all relevant cap-root Nash
+components are specified below. This is NOT a positive terminal-gap
+example, no-UE claim, new solved reward class, or claim about the minimum
+over the entire chamber. Different weights or a smaller closed region
+are not ruled out.
+
+### 15.1. Complete four-player table and actual source
+
+Let I={0,1,2,3}, with core J={0,1,2}. Never/live payoff is0, and every own
+singleton is1. On nonempty coalitions contained in J, the core reward
+coordinates are
+
+    r_J(0)=(1,3,0), r_J(1)=(0,1,3), r_J(2)=(3,0,1),
+    r_J(01)=(5/2,0,1), r_J(02)=(0,1,5/2),
+    r_J(12)=(1,5/2,0), r_J(012)=(0,0,0).
+
+Player3's reward on those coalitions is
+
+    h(0)=h(012)=10,
+    h(1)=h(2)=h(01)=h(02)=h(12)=0.
+
+On singleton{3}, set r(3)=(0,0,0,1). On EVERY coalition S union{3}
+with nonempty S subset J, set all three core recipient rewards equal2,
+and player3's reward equal h(S)-1. This specifies all15 nonempty rows;
+the core rewards at coalitions containing3 are not used in the stalled
+stage game once player3 is shown to Continue, but are fixed data.
+
+The literal independent pure-clock profile in which all three core
+players Quit0 and player3 Never has
+
+    U=(0,0,0,10),       B=(1,1,1,10),       D=1.       (15.1)
+
+For a core player, Quit0 pays0 and every positive deadline or Never
+withdraws from the sure core triple and pays the corresponding absent
+pair reward1. For player3, Quit0 pays9 and every positive deadline or
+Never pays10. Mixtures of these pure clocks exhaust all complete
+unilateral responses. Thus(15.1) is an ACTUAL full semantic pair, not
+an arbitrary continuation annotation or independently unrealized cap.
+
+### 15.2. Its singleton matrix really is R0 standard Q
+
+The literal comparison matrix is
+
+    Gamma=[ 0,-1, 2,-1;
+            2, 0,-1,-1;
+           -1, 2, 0,-1;
+            9,-1,-1, 0 ].                             (15.2)
+
+Write A for its core3 principal. For ANY scalar t, the standard LCP
+with matrix A and offset t*ones has the unique solution
+
+    x=(-t)_+ * ones.                                  (15.3)
+
+Indeed singleton supports cannot solve a nonzero scalar offset, and
+every two-player active block has one negative active coordinate:
+its two equations are t-x_j=0 and t+2x_i=0, in cyclic order. Full
+support gives x=-t*ones because A is invertible and A*ones=ones. At
+t=0, a singleton weight leaves a negative residual at another core
+player, two-player equations force both weights zero, and full support
+also forces zero. The empty support is feasible precisely for t>=0.
+
+For a homogeneous solution of(15.2), fix the fourth weight x_3.
+The core is exactly the LCP in(15.3) at t=-x_3. Consequently
+x_J=x_3*ones. If x_3>0, the fourth residual is7x_3>0, violating its
+complementarity; if x_3=0, all weights vanish. Hence Gamma is R0.
+
+At test offset ones, the core solution is
+x_J=(x_3-1)_+*ones. If x_3>0, the fourth residual is
+1+7(x_3-1)_+>0, again impossible. Thus the ONLY test root is zero,
+with strictly positive residuals and empty active determinant1. The
+standard ambient R0 degree is therefore+1, not-1. The named checked
+degree facts used for this ordinary finite calculation are
+`exists_finset_r0Degree_eq_sum_sign_det` in
+`MathUE/LinearProgramming/R0DegreeSum.lean` and
+`isStandardQ_of_r0Degree_ne_zero` in
+`MathUE/LinearProgramming/R0Degree.lean`; both declarations and their
+statements were read. They imply that Gamma is textbook standard Q.
+This paragraph is ordinary mathematics using those results, not a
+claim that this matrix instance has been checked in Lean.
+
+Every row of Gamma has a negative off-diagonal entry. No assertion
+about the entire maintained counterexample residual, punishment values,
+or exclusion of all existing UE producers is needed or made.
+
+### 15.3. EVERY exact cap-Nash root at(15.1) is all Continue
+
+First, player3 strictly prefers Continue for EVERY product core root.
+If alpha is the probability all core players Continue, its Continue
+endpoint at B_3=10 minus its Quit endpoint is
+
+    alpha*(10-1) + (1-alpha)*1 =1+8alpha>0.            (15.4)
+
+Therefore EVERY stage Nash root has q_3=0. The remaining game is the
+literal three-core table above with Continue continuation(1,1,1).
+
+There is no sure core quitter. If q_0=1, player1's Quit payoff is0
+while its Continue payoff is3(1-q_2)+q_2>0, so q_1=0. Player2 then
+strictly Quits (5/2 versus0), hence q_2=1, but player0 strictly prefers
+Continue3 to Quit0. The other sure cases follow by cyclic rotation.
+
+A root with exactly one active core owner is impossible: the next
+positive-insertion recipient strictly prefers Quit by (5/2)q_owner>0
+and would have to be sure. With exactly two active core players, rotate
+their names to {0,1}. Player0's Quit-minus-Continue endpoint is
+(5/2)q_1>0, forcing q_0=1, already excluded.
+
+For three active players all hazards are strictly between0 and1.
+Set z_i=q_i/(1-q_i). Indifference at continuation1 gives
+
+    0=(5/2)z_(i+1)-3z_(i+2)-z_(i+1)z_(i+2).
+
+Summing over i implies
+
+    0=(1/2)(z_0+z_1+z_2)
+                       +z_0z_1+z_1z_2+z_2z_0,
+
+which is impossible for positive odds. All supports other than the
+empty core support have now been excluded. At all Continue the core
+players are indifferent (own1 versus continuation1), and player3
+strictly Continues, so it is indeed the UNIQUE exact cap-Nash root.
+
+It has c=1 and leaves BOTH U and B in(15.1) unchanged. In particular,
+no choice among cap-Nash roots can create a debt decrease there.
+
+### 15.4. It lies in the same chamber as a produced pure-column seed
+
+Take a=ones in Section14. Column0 of(15.2) sums to10>0. The literal
+sole-player0 Quit0 profile gives
+
+    U_seed=(1,3,0,10),
+    B_seed=(1,3,5/2,10),
+    D_seed=5/2,       L_seed=sum B_seed-4=25/2.
+
+The exact response alternatives are again Quit0 versus positive
+deadlines/Never. Thus Section14's supplied lambda is5, and this seed
+belongs to the actual compact chamber
+
+    C={ (U,B) in actual closed carrier:
+          min_i(B_i-1)<=0,   sum_i B_i-4>=5D }.         (15.5)
+
+The stalled ACTUAL point(15.1) ALSO belongs to(15.5): its minimum cap
+slack is0 and its cap surplus9 exceeds5D=5. Hence full standard-Q,
+own-singleton nonnegativity, a produced pure-column seed, and these
+two chamber inequalities do NOT imply that every positive-debt point
+in the chamber has a nonzero exact cap-Nash root.
+
+This distinguishes nontrivial ESCAPE from preservation: at the stalled
+point the unique allowed root preserves every region containing the
+point but makes no progress. The example does not say that this point
+minimizes D on(15.5), that another weight choice fails, or that no
+smaller reward-derived closed region can avoid it. Those are precisely
+the remaining global selection questions, not consequences of this
+finite root census.
+
+Concrete next question: can a reward-derived viability selection avoid
+such ACTUAL proper-low-face stalls while retaining a produced seed,
+possibly by a finite genuinely joint word with intermediate cap-Nash
+error but a final full-debt decrease? No such operation or universal
+existence assertion is supplied here.

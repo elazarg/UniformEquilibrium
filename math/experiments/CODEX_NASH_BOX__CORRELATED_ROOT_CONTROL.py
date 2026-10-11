@@ -206,6 +206,60 @@ def state_consistency():
     print('EXACT STATE PASS: three roots, all values/caps, all16 subset information enclosures')
 
 
+def reset_certificate():
+    """Enumerate the absorption-branch Never reset, including omitted late."""
+    reward = reward_table().tolist()
+    coalitions = (3, 6, 12, 9, 15)
+    old = {tuple(0 if b >> i & 1 else -1 for i in range(4)): F(1, 5)
+           for b in coalitions}
+    pi = {0: F(1, 5), **{b: F(1, 12) for b in (1, 2, 4, 8)},
+          **{b: F(7, 60) for b in (3, 6, 12, 9)}}
+    law = {}
+    for b, weight in pi.items():
+        if b:
+            clocks = tuple(0 if b >> i & 1 else -1 for i in range(4))
+            law[clocks] = law.get(clocks, F(0)) + weight
+        else:
+            for clocks, mass in old.items():
+                shifted = tuple(t + 1 if t >= 0 else -1 for t in clocks)
+                law[shifted] = law.get(shifted, F(0)) + weight * mass
+
+    def payoff(clocks, i):
+        first = min((t for t in clocks if t >= 0), default=-1)
+        return 0 if first < 0 else reward[i][sum(
+            1 << j for j in range(4) if clocks[j] == first)]
+
+    def marginal_entropy(source, indices):
+        marginal = {}
+        for clocks, weight in source.items():
+            key = tuple(clocks[i] for i in indices)
+            marginal[key] = marginal.get(key, F(0)) + weight
+        return entropy_interval(marginal.values())
+
+    def total_information(source):
+        individual = [marginal_entropy(source, [i]) for i in range(4)]
+        joint_lo, joint_hi = marginal_entropy(source, range(4))
+        return (sum(a for a, _ in individual) - joint_hi,
+                sum(b for _, b in individual) - joint_lo)
+
+    prescribed = [sum(mass * payoff(clocks, i) for clocks, mass in law.items())
+                  for i in range(4)]
+    replies = [[sum(mass * payoff(clocks[:i] + (h,) + clocks[i + 1:], i)
+                    for clocks, mass in law.items()) for h in (0, 1, 2, -1)]
+               for i in range(4)]
+    assert len(law) == 13 and sum(law.values()) == 1
+    assert prescribed == [F(187, 150)] * 4
+    assert replies == [[F(1, 4), F(97, 100), F(113, 100), F(157, 150)]] * 4
+    old_lo, old_hi = total_information(old)
+    new_lo, new_hi = total_information(law)
+    assert old_hi < F(1083, 1000) and new_lo > F(1292, 1000)
+    assert new_lo - old_hi > F(209, 1000)
+    print('EXACT RESET PASS: value=187/150, full cap=113/100, slack=7/60')
+    print('EXACT RESET FALSIFIER: information increases by >209/1000')
+    print('reset information enclosures', (float(old_lo), float(old_hi)),
+          (float(new_lo), float(new_hi)))
+
+
 def simplex_project(p):
     ordered = np.sort(p, axis=1)[:, ::-1]
     cumulative = np.cumsum(ordered, axis=1) - 1
@@ -363,6 +417,7 @@ if __name__ == "__main__":
     parser.add_argument("--explore", action="store_true")
     parser.add_argument("--word-depth", type=int, default=0)
     parser.add_argument("--check-state", action="store_true")
+    parser.add_argument("--check-reset", action="store_true")
     parser.add_argument("--asymmetric", action="store_true")
     parser.add_argument("--steps", type=int, default=10)
     parser.add_argument("--starts", type=int, default=64)
@@ -372,6 +427,8 @@ if __name__ == "__main__":
     certificate()
     if args.check_state:
         state_consistency()
+    if args.check_reset:
+        reset_certificate()
     if args.explore:
         explore(args.steps, args.starts, args.iterations, args.seed, args.asymmetric)
     if args.word_depth:

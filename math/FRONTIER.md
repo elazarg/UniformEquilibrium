@@ -2705,6 +2705,14 @@ These are bounded source comparisons, not an exhaustive classification of
 all possible certificates. The result is reviewed ordinary mathematics,
 not a new checked Lean declaration.
 
+For deciding Fin4, requiring strictly positive own singletons loses no
+counterexample. The tracked normalization selects a no-UE table with one
+own singleton equal to 1 and the other three equal to 0. Increasing the latter by
+ε changes every reward by at most ε and lowers the positive exploitability
+infimum by at most 2ε. A sufficiently small ε therefore gives an
+all-positive-own counterexample. This composition selects a new table;
+it transports no previous minimum, law, cap, target or chronology.
+
 On the full standard-Q side with nonnegative own singletons s, an actual
 low-cap weighted-surplus seed is automatic for every nonzero a≥0. Indeed,
 standard-Q solvability at offset −1 gives x≥0 with Γx≥1, so some column j

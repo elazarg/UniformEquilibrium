@@ -2,6 +2,17 @@
 
 Author: CODEX_NASH_BOX.
 
+Current checkpoint: Section30 gives an exact whole-law absorption-branch
+reset with all original deadline/Never caps, and retains the entropy cost
+of switching survivors to literal Never. A rational four-active test is
+FULL coarse with improved slack but its information INCREASES by>209/1000.
+Thus completion is not free decorrelation. Jointly selecting the source,
+root law and payoff remains open; no whole-selector obstruction or UE
+conclusion is inferred. The global positive-minimum obstruction remains
+Section28. The chamber family reviewed in Section29 is now canonical in
+`exports/PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md` as ordinary
+independently reviewed mathematics, not a claim of Lean implementation.
+
 Current live attempt: Section18 constructs a nonempty finite correlated
 clock relaxation and a target-free independence-rounding criterion. It
 passes the rational exact-menu obstruction by an explicit rare terminal
@@ -4986,3 +4997,220 @@ whole-control question. The new lesson is positive-debt-local chamber
 invariance: one need not force the chosen inequalities to survive on
 already-solved zero-debt states. No arbitrary-table chamber producer is
 claimed by this lesson.
+
+## 30. Whole-law absorption resets: full caps and the entropy switching charge
+
+Status: ordinary supporting mathematics, unreviewed. This is a genuine
+change of the entire correlated source, its marginals and payoff. It is
+not an actual independent-strategy producer. The exact negative test
+below prevents treating the operation as automatic information descent.
+
+### Data and agency
+
+Fix a finite quitting table r on nonempty coalitions, r(empty)=0 and own
+singletons s_i=r_i({i})>=0. Let mu be any FINITELY SUPPORTED joint law of
+complete private clocks in N union {Never}. It is only a coarse relaxation:
+a replacement clock is chosen independently of the whole recommendation.
+Let v_i be its actual terminal payoff, C_i its supremum over ALL pure
+deadline and literal Never replacements, J_A the total correlation of its
+A-marginal, and z_A the probability every A-clock is Never. Write z_empty=1.
+Finite deadlines suffice for C_i: after the last possible opponent date,
+the reply payoff is its Never payoff plus s_i times the opponents' joint
+Never probability. Mixtures of complete replacement clocks cannot exceed
+this pure cap. No conditional-on-recommendation obedience is asserted.
+
+Choose any probability pi on root quitter sets B, independently of mu.
+When B is empty, shift the entire old law by one date. When B is nonempty,
+put its members at date0 and set ALL survivors to literal Never. These
+instructions define an actual finite joint clock law, not a formal state
+insertion. The original-game profile becomes legal independent strategies
+only if the resulting joint law is a product.
+
+Put e=pi(empty), pi_i=pi({i}), and
+
+    u_i = sum_(B nonempty) pi(B) r_i(B) + e v_i,
+    Q_i = sum_B pi(B) r_i((B\{i}) union {i}),
+    b_i = sum_(B\{i} nonempty) pi(B) r_i(B\{i}).
+
+Every positive finite deadline h has exact reply
+
+    b_i + e V_i^mu(h-1) + pi_i s_i,
+
+whereas literal Never has b_i+e V_i^mu(Never). Since s_i>=0, the FULL cap
+is consequently
+
+    C'_i = max(Q_i, b_i + e C_i + pi_i s_i).             (30.1)
+
+This explicitly retains the omitted deadline after every finite opponent
+clock. In particular the late coarse inequality is exactly
+
+    e(v_i-C_i) + sum_(B contains i, |B|>=2)
+                  pi(B)[r_i(B)-r_i(B\{i})] >= 0.       (30.2)
+
+Singleton contributions cancel in this inequality. They do NOT cancel
+the separate early inequality u_i>=Q_i. Both are necessary and sufficient
+for full coarse obedience of the new law. No auxiliary Nash hypothesis,
+fixed target, or intermediate coarse obedience is imposed.
+
+### Exact switching information and a closed attainable 40-state update
+
+Let h be binary entropy with natural logarithms and 0 log0=0. Define
+
+    kappa(z,a)=h((1-a)(1-z))-(1-a)h(1-z).
+
+This is the mutual information between a Bernoulli branch label and an
+observation that uses the old law with probability1-a and otherwise the
+single all-Never atom, when that old atom has mass z. Hence it is
+nonnegative. The formula follows by splitting the old law into its
+all-Never atom and its complement; no assumption about internal entropy
+of the complement is used.
+
+For A subset I put p_A=Pr_pi(B intersects A is empty), and
+
+    L_A = p_A kappa(z_A,1-e/p_A) when p_A>0,
+    L_A = 0 when p_A=0.
+
+These parameters are legal because p_A>=e. Let I(pi_A) denote total
+correlation of the A-root indicator vector. Then EXACTLY
+
+    J'_A = I(pi_A) + e J_A + sum_(j in A)L_{j} - L_A,
+    z'_A = p_A - e + e z_A.                             (30.3)
+
+Indeed the new A-clocks reveal their own root indicator vector. Unless
+this vector is empty their remaining values are deterministic Never.
+Conditioned on the empty vector, their law is the mixture of old mu_A
+with weight e/p_A and the all-Never atom otherwise. Applying the entropy
+chain rule to this mixture gives(30.3). This also handles e=0 or p_A=0
+without dividing by zero. Since p_I=e, L_I=0 and the full information is
+
+    I' = I(pi) + e I(mu) + sum_j L_{j}.                 (30.4)
+
+The LAST TERM is a real nonnegative switching cost. It cannot be dropped
+as though every absorbed branch were strategically invisible correlation.
+Together (30.1),(30.3) close on the forty coordinates (v4,C4,J16,z16).
+Any finite word is realized by applying the indicated operation to actual
+laws. This is not compactness of the unrestricted state box, reachability
+of arbitrary states, or a theorem that some word improves every source.
+
+For contrast, on branches with AT LEAST TWO root quitters one may instead
+replace surviving mu_(I\B) by the product of its SAME marginals. Deleting
+one player still leaves an immediate quitter, so every prescribed payoff,
+every full pure reply payoff, and every unconditional marginal is unchanged.
+Starting with the ordinary root prefix of Section27, its full information
+after all these replacements is exactly
+
+    I(pi) + e I(mu) + sum_i pi_i J_(I\{i}).             (30.5)
+
+At a Section28 positive-minimum state this strengthens the necessary
+root-control inequality to
+
+    I(pi) >= rho Pr_pi(|B|>=2) + sum_i pi_i d_i          (30.6)
+
+whenever the endpoint is feasible. This remains an inequality, not a
+contradiction. Subset information after these branchwise product changes
+does NOT blindly follow Section27's old recursion: a proper subset may
+not see which outside root members quit.
+
+### Single-quitter reset: a genuine operation with an explicit boundary
+
+Choose pi(empty)=1-q and pi({i})=q. Its root information is zero. For
+j!=i the endpoint is full coarse, assuming v>=C and v>=s, exactly when
+
+    (1-q)(v_j-s_j)+q[r_j({i})-r_j({i,j})] >= 0.         (30.7)
+
+The owner's condition is just v_i>=s_i. Thus in the STRICT high-payoff
+chamber v_j>s_j for every j, sufficiently small q is feasible regardless
+of collision entries. The information is exactly
+
+    I'=(1-q)I(mu)+sum_(j!=i) kappa(z_j,q).              (30.8)
+
+If all opponent Never masses are positive, its right derivative at zero
+is -I(mu)-sum_(j!=i)log z_j. If any is zero, that opponent contributes
+h(q), so the right derivative is positive infinity. A feasible small
+reset therefore need not decrease information even in the strict-high
+chamber. This is the surviving obstruction, not a hidden free-erasure
+assumption.
+
+One entire source subclass does permit descent. Suppose mu prescribes
+exactly one finite owner J, with probabilities w_i, and everybody else
+Never; the owner's finite date can depend on its identity. Then
+
+    I(mu)=F(w)=-sum_i(1-w_i)log(1-w_i).                 (30.9)
+
+Individual date entropies cancel from the joint entropy. A single-quitter
+reset owned by i changes the owner probabilities to (1-q)w+q e_i. If at
+least two w_i are positive, take i maximizing w_i. The directional
+derivative of F is
+
+    log(1-w_i)-sum_j w_j log(1-w_j) <= 0,
+
+and strict concavity gives strict decrease for positive sufficiently
+small q. Combined with(30.7), this excludes the ENTIRE strict-high-payoff,
+single-finite-owner subclass from a positive global information minimum.
+It does not exclude general coarse laws: joining constraints can bind
+at v_j=s_j, and multi-owner/collision sources have the switching costs
+of(30.8). No uniform-in-calendar allowable q is inferred from pointwise
+strict inequalities.
+
+### Exact four-active countertest to free completion
+
+Use K10's literal table from Section24. The old law recommends date0 to
+one of coalitions 01,12,23,30,0123 uniformly, and literal Never to the
+remaining players. It is full coarse with v=C=12/5. Use the SAME pi as
+Section27's successful ordinary prefix: empty mass1/5, each singleton
+mass1/12, each adjacent pair mass7/60.
+
+The reset law has exactly thirteen atoms: each of the five old coalitions
+at date1 with mass1/25; each singleton at date0 with mass1/12; each adjacent
+pair at date0 with mass7/60. All nonmembers are literal Never. Every
+one-player marginal has masses
+
+    clock0:19/60, clock1:3/25, Never:169/300.
+
+Complete enumeration of the only reply classes gives, for EVERY player,
+
+    prescribed:187/150;
+    deadline0:1/4, deadline1:97/100,
+    any deadline>=2:113/100, Never:157/150.
+
+The full coarse slack is therefore7/60. Nevertheless its information is
+
+    4 H(19/60,3/25,169/300)
+       - H(1/25 [five times],1/12 [four times],7/60 [four times]),
+
+which exceeds1292/1000. The old information is below1083/1000, so the
+increase exceeds209/1000. These are EXACT rational log enclosures using
+log x=2 atanh((x-1)/(x+1)) after powers-of-two normalization, not rounded
+floating-point claims. Reproduce with
+
+    python experiments/CODEX_NASH_BOX__CORRELATED_ROOT_CONTROL.py --check-reset
+
+The checker independently constructs the thirteen complete-clock atoms,
+enumerates deadline0,1,late2,Never, and certifies the strict information
+increase. By contrast the ordinary Section27 prefix with this same pi
+has information<0.705. Thus absorbing-branch literal-Never completion is
+not automatically preferable even though it improves FULL coarse slack.
+This is one operation falsifier, not failure of joint source/root-word
+selection, approximate coarse repair, or UE existence.
+
+### Exact remaining global question
+
+For a hypothetical positive-gap game, Section28 permits first selecting
+a nearby positive-gap table with a strict finite full-coarse anchor, using
+reward-gap robustness and the full normal-core/standard-Q structure.
+The anchor is NOT assumed for every unperturbed table, and no fixed payoff
+or source ancestry is transported across reward perturbations. At that
+selected table all source/payoff/root choices above remain free.
+
+The sought contradiction is still a UNIFORM endpoint-feasible information
+decrease from an actually attainable positive global-minimum state, with
+all switching costs included. Equations(30.1)--(30.8) change the available
+whole-law operations, not the need for that contradiction. Neither the
+new finite-dimensional representation nor the four-active negative test
+settles existential selection over the complete source correspondence.
+
+Source scope: the terminal all-errors endpoint and full-gap equivalence
+reopened in Section28 remain the only semantic consumers used here. A
+narrow search in MathUE and the quitting Terminal/Root subtrees for total
+correlation, full coarse and correlated-root entropy found no matching
+declaration; the formulas above are ordinary proofs, not Lean claims.
