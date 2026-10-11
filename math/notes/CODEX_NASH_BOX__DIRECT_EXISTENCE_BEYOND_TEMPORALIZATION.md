@@ -2,6 +2,15 @@
 
 Author: CODEX_NASH_BOX.
 
+Current live attempt: Section18 constructs a nonempty finite correlated
+clock relaxation and a target-free independence-rounding criterion. It
+passes the rational exact-menu obstruction by an explicit rare terminal
+anchor, but the actual global correlation-erasure producer is UNPROVED.
+An exact four-active nearest-projection calculation falsifies a naive
+alternating projection/marginalization rule, not existential selection
+over the whole correlated correspondence. This supporting mathematics
+is ordinary and unreviewed; it is not new UE coverage or an export.
+
 Status: active independent research, resumed 2026-10-11. Section 8 now gives
 a positive candidate independently checked for soundness: sufficiently large pair-participation
 rewards near the hard paired singleton matrix produce proper stationary
@@ -3069,3 +3078,218 @@ box-face structure in(17.3); the result does not bound them.
 
 The next global operation must preserve genuinely joint approximation,
 rather than use exact finite terminal truncations as its producer.
+
+## 18. A correlated-clock saddle and the missing independence producer
+
+### Precise question and information boundary
+
+Fix a canonical table with every own singleton s_i>=0 and |r_i(S)|<=R.
+For N>=1, use the common recommendation menu A_N={0,...,N-1,Never}.
+A private mediator samples a JOINT vector of clocks with law mu and
+tells player i only its own clock. This is a mathematical relaxation:
+the original game has independent private seeds and NO such mediator.
+A deviating recipient may replace its whole clock conditional on its
+recommendation. All calculations below are expected terminal payoffs.
+
+Let C_N be the polytope of joint laws satisfying, for every i, every
+recommendation a in A_N and every replacement b in
+{0,...,N,Never},
+
+    sum_(t_-i) mu(a,t_-i)[u_i(a,t_-i)-u_i(b,t_-i)] >= 0.       (18.1)
+
+Here u is the ORIGINAL first-quitting-coalition payoff, with all-Never
+zero. Deadlines >=N have the same payoff against this menu, so (18.1)
+covers ALL complete conditional behavioral replacements. Repeated live
+observations add no information beyond one's recommended clock and
+opponent survival; a complete deviating policy on this unique live
+history is a mixture of pure deadlines and Never conditional on its
+recommendation. No public revelation of the sampled vector is permitted.
+
+### An unconditional nonempty correlated source
+
+The finite Boolean game assigns r(S) to a nonempty quitter set and
+assigns s=(s_i) to the all-Continue outcome. All-Continue is Nash but
+not quasi-strict, since own Quit is an unused tied best reply for every
+player. Viossat's Lemma3 says that a unique correlated equilibrium of
+a finite game is quasi-strict Nash. Hence this game has a correlated
+equilibrium other than the all-Continue point. The all-Continue event
+has ZERO coefficient in every incentive constraint. Delete that event
+and renormalize; the result is a correlated equilibrium supported on
+nonempty coalitions.
+
+Interpret its recommendations as Quit0 or Never. A recommended
+Continue faces at least one opponent quitting at0, so later quitting
+does not change its payoff; joining at0 is precisely the Boolean
+deviation. A recommended sole quitter can obtain s_i by quitting later
+or zero by Never; the Boolean Continue payoff s_i dominates zero
+because s_i>=0. With other quitters present, every delayed replacement
+gives the Boolean Continue payoff. Thus this law is a FULL terminal
+correlated equilibrium in the relaxed private-information structure.
+In particular C_N is nonempty for every N, without an auxiliary Nash
+existence assertion or a properness constraint.
+
+Primary source inspected: Yannick Viossat, *Is having a unique
+equilibrium robust?*, Journal of Mathematical Economics44(11),2008,
+Lemma3 and its finite-game definitions/proof, available in the
+[author's primary PDF](https://www.ceremade.dauphine.fr/~viossat/PDFs/Is_Having_A_Unique_Equilibirum_Robust_JME-versionrevisee-a-resoumettre-avril2007%20-%20copie.pdf).
+The use here is only its finite-game quasi-strictness lemma. The
+clock/terminal information adapter is proved above, not attributed to
+the paper. A narrow Viossat/quasi-strict/correlated-quitting source
+lookup found no matching tracked declaration; no novelty seal follows.
+
+### An exact target-free rounding consumer, not a producer
+
+Let p(mu)=product_i mu_i be the product of the marginals and let
+Delta(mu)=TV(mu,p(mu)), where TV is half the l1 distance. Each bounded
+payoff differs by at most2R*Delta under mu and p. Each fixed-deadline
+replacement payoff differs by at most the same amount, by contraction
+of TV to the opponent marginal. Averaging (18.1) over recommendations
+therefore gives
+
+    full_original_exploitability(p(mu)) <=4R*Delta(mu).         (18.2)
+
+This includes omitted late deadlines and Never, not only menu regret.
+No selected payoff is fixed. Define
+
+    d_N=min_(mu in C_N) TV(mu,product_i mu_i).                  (18.3)
+
+The minimum is attained: C_N is a nonempty compact polytope and the
+objective is continuous. Zero extension embeds C_N into C_(N+1),
+since the old late deadline already covers its newly available late
+deviation. Thus d_N decreases. A genuinely new sufficient assertion
+would be d_N->0 for arbitrary canonical Fin4 data. Equations(18.1)--
+(18.3) do NOT prove it: the objective is nonconvex and finite linear
+minimax alone gives no independence. This is a narrower sufficient
+problem, not claimed equivalent to unrestricted approximate Nash.
+
+The tracked positive endpoint remains
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+The finite-clock compression declarations in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`
+and `UniformEquilibrium/Quitting/Paths/CommonQuantileClockApproximation.lean`
+compress a supplied actual profile and preserve caps quantitatively;
+they do not create d_N->0. A positive maximum-debt minimizer already
+has all-player debt tie by
+`minimumTerminalSemantic_maximumDebt_allPlayersTie` in
+`UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean`;
+renaming this as a saddle does not supply the missing producer.
+
+### Positive calibration: rare terminal anchoring on Section2's table
+
+Let p_N be the GOOD product law: player0 is uniform on0,...,N-1 and
+the other three players are Never. Its original full regret is1/N.
+Put a correlated pure-owner law at date N-1 with owner probabilities
+
+    pi(owner0)=10/31, pi(owner1)=15/31, pi(owner2)=6/31,
+
+and everyone else Never. Under a Never recommendation its gains from
+joining at N-1 are respectively
+
+    (-3,-2,-5,-52)/31.
+
+An earlier quit has gain (-126,-112,-175,-21)/31; later quitting has
+gain zero. Each recommended owner is the sole quitter and obtains its
+nonnegative own singleton, so every alternative deadline/Never obeys.
+The only positive conditional-deviation coefficient of p_N is player1
+joining at its LAST date, with gain1/N. Earlier player1 deadlines have
+gain [1-7(N-1-k)]/N; player2 and player3 have no positive gain.
+
+Consequently, with w_N=31/(2N+31),
+
+    mu_N=(1-w_N)p_N+w_N*pi_(N-1)
+
+satisfies every FULL correlated constraint (18.1): the last player1
+coefficient is exactly (1-w_N)/N-2w_N/31=0, and all other coefficients
+are nonpositive. Recommendations shared by the two mixture branches
+have been checked, rather than treating mixture membership as public.
+Its marginal product differs from p_N by TV at most4w_N, so
+
+    TV(mu_N,p(mu_N))<=5w_N ->0.
+
+Thus (18.3) passes a game on which EVERY sufficiently small negative-tax
+exact finite-menu Nash retains fixed full debt. This is an actual
+finite correlated producer with vanishing independence error on that
+solved calibration, not new UE-table coverage or evidence for every
+four-player table. The exact terminal anchor cannot simply be moved
+to date0: it would then contribute no corrective charge to late joins.
+
+### Four-active stress test and a falsified projection rule
+
+Use cyclic labels mod4, mate i+2. Singletons pay own1, mate4 and other0.
+Adjacent pair {i,i+1} pays participants -1,2 and outsiders1; opposite
+pairs pay participants0 and outsiders1. Triples pay participants -1
+and outsider1; the grand row is (-10,-11,-12,-13). This is Turing's
+Section25 raw four-active fixture, not its payoff-translated variant.
+
+Uniform private recommendation of the four pure singleton owners is
+a full correlated equilibrium: a recommended continuer obtains average
+4/3 versus average joining1/3; a recommended owner obtains1 and can
+only tie by delaying. Its marginal product has q_i=1/4 at date0 and
+Never otherwise, but its FULL original regret is35/64. Thus ordinary
+marginal averaging is not an independence producer, even here.
+
+A stronger proposed rule was: project a product law to its nearest
+FULL correlated law in TV, then take the independent marginals.
+This fails as a regret-descent operation. For p with q_i=1/4, one
+EXACT nearest law mu has the following coalition numerators, in mask
+order0,...,15, over denominator6912:
+
+    (0,729,729,742,729,192,998,81,
+       729,998,0,81,742,81,81,0).                         (18.4)
+
+For each player's Quit recommendation, delaying past0 has coefficient
+zero; replacing it by Never has coefficient -27/256. A Never
+recommendation's joining coefficients are
+
+    (-1093/1152,-2341/2304,-35/36,-2395/2304),
+
+and its late coefficient is zero. Hence (18.4) is a FULL correlated
+equilibrium, checked exactly, not a numerical candidate.
+
+Its distance to the fixed p is209/576, and optimality has a short dual
+certificate. Write z_S=min(mu_S,p_S). Give weights a_S equal to1 on
+empty/opposite pairs/grand, 1/9 on singletons, zero on adjacent pairs
+and7/9 on triples. Summing all Quit-to-late constraints gives
+
+    -mu(adjacent pairs)+8mu(opposite pairs)
+                     +6mu(triples)+50mu(grand)<=0.
+
+Also mu_empty=0 by a Never-to-late deviation. Together with mass1 these
+imply sum a_S mu_S<=1/9. Therefore
+
+    sum z_S<=1/9+sum(1-a_S)p_S=367/576,
+
+and (18.4) attains equality. This independently certifies the LP
+optimal value rather than relying on a solver's feasibility report.
+
+The projected marginal hazards are
+
+    (121/288,113/288,121/288,113/288).
+
+Their FULL original exploitability is
+6352541243/6879707136>0.92, strictly greater than35/64. Every cap was
+computed against Quit0, a late finite deadline and Never; those three
+exhaust the full deviation set for these one-date laws. This falsifies
+an arbitrary nearest-projection/marginalization descent rule, NOT
+existence of a good global minimizer in (18.3), not all nearest
+projections, and not an equilibrium theorem for the raw table.
+
+### Exact remaining gap and next attempt
+
+No theorem here forces the attained correlations d_N to vanish. The
+first genuinely new mathematical step would have to globally erase
+correlation while retaining (18.1), possibly changing both selected
+payoff and the whole clock law and retaining macroscopic collision
+strata. Alternating one nearest linear projection with independent
+marginalization is now ruled out as an automatic descent proof by the
+four-active calculation. The rare terminal anchor is a real positive
+operation, but currently depends on a supplied good approximate
+profile and table-specific negative joining charges. It cannot be
+called an end-to-end arbitrary-data producer.
+
+Concrete next question: can a positive global minimum in (18.3) be
+strictly improved by a joint clock refinement and selective correlated
+terminal anchors, without assuming an already low-regret product law?
+Until that is answered, this is a tested global relaxation with a
+producer gap, not progress closing the Fin4 conjecture.
