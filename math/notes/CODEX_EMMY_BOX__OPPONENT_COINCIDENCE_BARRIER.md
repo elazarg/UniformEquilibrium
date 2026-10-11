@@ -5,7 +5,10 @@ Lean checked or independently reviewed. No positive invariant barrier,
 unrestricted positive gap, uniform equilibrium, or new solved raw class is
 claimed. The completed calculation in Section4 excludes EVERY cubic
 polynomial potential for one explicit actual table, not merely a selected
-cubic ansatz. The actual all-degree/barrier question remains open.
+cubic ansatz. A separate ten-edge certificate does the same even with
+EVERY endpoint nonnegative and in the convex hull of actual terminal
+rewards. Neither certificate is a chronological cycle or an independent-law
+realization. The actual all-degree/barrier question remains open.
 
 ## 1. Exact negative-endpoint question
 
@@ -258,7 +261,102 @@ larger cube but destroyed the claimed positive moment balance. No
 two-active-only cubic exclusion, arbitrary higher-completion exclusion,
 or all-degree consequence is claimed from that failed attempt.
 
-## 5. Current boundary and next mathematical question
+### 4.1. Nonnegative endpoints inside the actual reward hull
+
+Shrinking the auxiliary cube does not rescue the cubic mechanism. For the
+same K=10 table there is NO cubic charged potential even for the restricted
+FULL exact edges with BOTH endpoints in
+
+    Delta={v>=0: sum_i v_i<=99/10}.                     (8)
+
+Delta lies in the convex hull of actual finite rewards and0: if j is the
+outsider of a triple, that reward is11*e_j-ones and the grand reward is
+9*ones; their weights9/10 and1/10 give(99/10)*e_j. This is a convex-hull
+outer constraint only. No convexity of attainable independent payoff laws
+is assumed, and no independent realization of these sources is claimed.
+
+Here is complete rational data for the second certificate. Divide each q
+entry by1000 and each f entry by10. For each player put x=q_(i-1),
+y=q_(i+2),w=q_(i+1) and
+
+    alpha=(1-x)*(1-y)*(1-w),
+    Q=12*w*x*y-w*x+w*y-2*w-2*x*y+x-y+1,
+    B=4*y-3*x*y-3*y*w+x*w+11*x*y*w,
+    h=(Q-B)/alpha.
+
+Set v_i=h if q_i>0; otherwise set l=max(0,h) and
+v_i=l+(10-l)*f_i. Entries f_i at active players are unused.
+
+| Row | q numerators | f numerators |
+| --- | --- | --- |
+| 1 | (0,0,16,10) | (1,0,0,8) |
+| 2 | (0,0,156,87) | (2,0,8,5) |
+| 3 | (0,100,218,0) | (1,10,4,1) |
+| 4 | (0,0,293,85) | (2,0,8,3) |
+| 5 | (436,0,0,516) | (10,1,0,6) |
+| 6 | (0,426,442,0) | (1,3,4,1) |
+| 7 | (0,52,188,18) | (2,6,3,3) |
+| 8 | (169,0,175,0) | (3,3,2,2) |
+| 9 | (273,0,0,146) | (0,1,1,4) |
+| 10 | (175,136,157,133) | (10,8,9,9) |
+
+The same exact script independently enumerates all raw opponent coalitions
+and checks EVERY root inequality, both Delta memberships and positive
+charge. Its nine-feature difference matrix again has rank9 and a
+one-dimensional kernel whose ten coordinates are strictly positive.
+The normalized positive weights are computed in exact rational arithmetic;
+their approximate sizes are(52620,2518,594,361,76,643,500,2.78,2403,1).
+No floating-point decision enters the certificate. Thus the same moment
+argument excludes every C4-invariant cubic. Delta and the relation are
+rotation invariant, so averaging the polynomial excludes EVERY cubic.
+Only the polynomial is averaged, never the players' independent clocks.
+
+For comparison, every FULL exact root target always satisfies
+u_i>=Q_i>=-1, even for an arbitrary auxiliary source. Therefore the earlier
+negative source coordinates could only be entrances, not an exact cycle
+wholly made of those targets. The new certificate shows that eliminating
+those entrances, imposing nonnegativity, and imposing linear terminal
+reward feasibility STILL do not supply a cubic potential. It does not
+exclude higher-degree potentials, actual payoff/cap barriers, or UE.
+
+## 5. Bounded falsification by a previously successful calendar
+
+The numerical diagnostic
+`CODEX_EMMY_BOX__K10_RETURN_CONTINUATION.py` tests the old59-root twisted
+return against table(1), rather than assuming that a successful negative-grand
+calendar fails at K=10. Its adjacent-pair roots do not depend on K. At a
+consecutive-triple root with hazards(a,b,c), only the quiet recipient's
+actual value changes: its additional stopping payoff is(K-1)*a*b*c, and
+its grand Quit endpoint changes by(K+9)*a*b*c relative to the old table.
+Both changes are included in the script; all quiet inequalities are checked.
+
+Experiment, not proof. Starting at K=1, continuation with increments.01
+keeps the original support word legal until one newcomer hazard crosses0
+near K=1.94. Replacing just that root, index20 T3, by its adjacent-pair
+face P3 yields a numerically legal return at K=2, with starting value
+
+    (1.0872918830338,2.2401722986377,.7245417553426,.8559738604894).
+
+The changed word remains numerically legal at K=2.12, starting at
+
+    (1.0883323385124,2.2415201012085,.7212227974483,.8569386807795).
+
+The minimum active hazard there is about.001766 and the minimum quiet
+gap about.008704, but the smallest singular value of the four-dimensional
+return Jacobian is about.0002094. Newton continuation fails at K=2.121.
+This is compatible with a fold of the chosen branch, but establishes
+neither a fold theorem nor absence of another return. No K=10 equilibrium,
+positive gap, or whole-support exclusion follows. The bounded test is
+stopped here instead of interpreting one failed word as an actual-law
+barrier. The exact cubic result in Section4 is independent of this experiment.
+
+Reproduction from math/: `python notes/CODEX_EMMY_BOX__K10_RETURN_CONTINUATION.py
+--step .01 --stop 2.13` (one shell line). At its failed2.13 step the script
+also reports the previous2.12 Jacobian singular values and tries the
+finer2.121 step, reproducing the diagnostic just quoted. NumPy is required;
+these finite-difference/Newton calculations are numerical only.
+
+## 6. Current boundary and next mathematical question
 
 The apparent artificial restriction tested here is that the first permitted
 polynomial degree, three, might already describe a global obstruction.

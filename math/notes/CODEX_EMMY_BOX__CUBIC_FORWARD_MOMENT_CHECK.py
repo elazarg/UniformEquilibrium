@@ -1,4 +1,4 @@
-"""Exact rational check of the ten-edge cubic obstruction.
+"""Exact rational checks of two ten-edge cubic obstructions.
 
 Run: python math/notes/CODEX_EMMY_BOX__CUBIC_FORWARD_MOMENT_CHECK.py
 Requires SymPy. Uses no floating-point decisions or external solver.
@@ -118,3 +118,58 @@ print("weights with last weight 1:")
 for weight in weights:
     print(weight)
 print("positive total weighted charge:", total_charge)
+
+
+# A separate certificate entirely in the nonnegative reward-hull simplex.
+# Roots have denominator1000; fractions specify quiet-source interpolation.
+SECOND_ROOT_NUMERATORS = [
+    (0, 0, 16, 10), (0, 0, 156, 87), (0, 100, 218, 0),
+    (0, 0, 293, 85), (436, 0, 0, 516), (0, 426, 442, 0),
+    (0, 52, 188, 18), (169, 0, 175, 0), (273, 0, 0, 146),
+    (175, 136, 157, 133),
+]
+SECOND_QUIET_FRACTIONS = [
+    (1, 0, 0, 8), (2, 0, 8, 5), (1, 10, 4, 1),
+    (2, 0, 8, 3), (10, 1, 0, 6), (1, 3, 4, 1),
+    (2, 6, 3, 3), (3, 3, 2, 2), (0, 1, 1, 4),
+    (10, 8, 9, 9),
+]
+
+
+def nonnegative_source(root, fractions):
+    value = []
+    for i in range(4):
+        x, y, w = root[(i - 1) % 4], root[(i + 2) % 4], root[(i + 1) % 4]
+        alpha = (1 - x) * (1 - y) * (1 - w)
+        quit = 12*w*x*y - w*x + w*y - 2*w - 2*x*y + x - y + 1
+        stop = 4*y - 3*x*y - 3*y*w + x*w + 11*x*y*w
+        threshold = (quit - stop) / alpha
+        lower = max(R(0), threshold)
+        value.append(threshold if root[i] else
+                     lower + (10 - lower) * R(fractions[i], 10))
+    return value
+
+
+second_columns, second_charges = [], []
+for number, (numerators, fractions) in enumerate(
+        zip(SECOND_ROOT_NUMERATORS, SECOND_QUIET_FRACTIONS), 1):
+    root = [R(x, 1000) for x in numerators]
+    value = nonnegative_source(root, fractions)
+    target, column, charge = edge(root, value)
+    # edge() independently enumerates the literal raw rewards and ALL agents.
+    assert all(0 <= x <= 10 for x in value + target)
+    assert sum(value) <= R(99, 10) and sum(target) <= R(99, 10)
+    second_columns.append(column)
+    second_charges.append(charge)
+    print(f"nonnegative edge {number}: source={value}, target={target}, charge={charge}")
+
+second_matrix = sp.Matrix.hstack(*second_columns)
+assert second_matrix.rank() == 9
+second_kernel = second_matrix.nullspace()
+assert len(second_kernel) == 1
+second_weights = second_kernel[0] / second_kernel[0][-1]
+assert all(weight > 0 for weight in second_weights)
+assert second_matrix * second_weights == sp.zeros(9, 1)
+assert sum(a * w for a, w in zip(second_charges, second_weights)) > 0
+print("nonnegative reward-hull certificate: all ten weights strictly positive;")
+print("exactly zero cubic moment defect and strictly positive total charge")
