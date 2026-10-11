@@ -321,3 +321,119 @@ increment is a genuine original-table singleton-calendar producer without
 the balanced certificate's all-phase solo floor, on an open16-coordinate
 source times12 lower sets times32 arbitrary coordinates. Its scope remains
 the stated sufficient class, not a global Fin4 classification.
+
+## Bounded adversarial check of Section14.4: softened canonical nonexistence
+
+Checked version: whole author notebook SHA256
+`d1d64089966ac56ae60c181fc8160e3ca8084454d2cade3bfe0185691da97053`.
+This check concerns ONLY Section14.4, not the rest of Section14 or an
+unrestricted equilibrium nonexistence claim. Verdict: bounded ordinary
+PASS, conditional on the explicitly cited ordinary paper theorem. No
+mathematical objection found. This is not a Lean-checked result or an
+export recommendation.
+
+### Claim and primary source
+
+For some qualitative e0>0, every fixed 0<e<min(e0,1), every
+0<alpha<1 and every 0<delta<1/2, the displayed seven-row canonical game
+has NO exact Nash when owner0 alone is restricted by
+
+    Pr(T0>=t)<=1-alpha+alpha*(1-delta)^t.
+
+The stated four-player padding also has no such constrained Nash. This
+does not assert positive terminal exploitability or failure of UE.
+
+I independently read the actual local PDF of Eilon Solan, *The Dynamics
+of the Nash Correspondence and n-Player Stochastic Games*, January25,2001:
+Figure1; the admissible, completely-absorbing and trivial definitions;
+Theorem2.1; and its proof/Lemmas3.1--3.6. Figure1 gives exactly the seven
+g-rows quoted by the author. Theorem2.1 gives a sufficiently-small positive
+parameter interval and forbids completely absorbing EXACT admissible
+sequences. It supplies no explicit e0, no positive exploitability gap and
+no UE nonexistence. The paper explicitly contrasts its conclusion with
+existence of a uniform-equilibrium payoff. Subtracting1 from the two
+nonowner terminal coordinates gives exactly all seven canonical rows
+(14.1), including the grand row(0,-1,-1). The paper theorem is used as an
+ordinary source theorem, not inferred from the unrelated tracked
+`Literature/SolanAndVieille2001.lean`.
+
+### Reached-root and improper-owner arguments
+
+All three sure-hazard exclusions check with the literal canonical rows.
+If q1=1, player2's Quit=-1 and Continue=2(1-q0)>=0 force q2=0;
+owner then strictly Quits and player1 strictly Continues. If q2=1,
+owner's Quit=0<3-2q1=Continue forces its minimum feasible hazard, at
+most delta. Player1's joining gain is then
+1+e-q0*(2+e)>0. Finally q0=1 forces q1=0 and q2=1, also impossible.
+The minimum-hazard identity uses only a sure absorbing nonowner and
+moving owner mass from t to t+1, so it does not assume conditional
+soft-budget saturation. Its bound follows from b_(t+1)>=c*b_t.
+Induction consequently gives positive joint reach at EVERY finite date;
+every proper clock is unbounded.
+
+A positive owner Never atom makes Never a FULL best reply, because moving
+any portion to any finite date is a legal speedup. All clocks improper
+then contradict the late-finite gain s0*product(opponent Never masses)>0.
+If owner is improper and player2 proper, player1's full cap is Never:
+this follows either from its own supported Never atom or from unbounded
+optimal finite support and the proper opponent's vanishing tail. Late
+owner conditioning approaches literal Never in total variation. With
+owner Never and player2 proper, player1 gets -1 from Never but [0,e]
+from immediate Quit. If player2 is improper instead, player1 must be
+proper; late player2 conditioning approaches Never, and owner Never
+gets0 against player1 whereas immediate Quit gets at least1. These are
+uniform bounded-payoff coupling contradictions, without dividing an
+approximate Nash error by tiny reach. Conditional Never-cap inequalities
+are valid because every finite future deadline and Never share the same
+pre-cutoff opponent prefix and a positive affine tail factor.
+
+### The quantile equality and full-Nash tail
+
+The softened budget is exactly stochastic domination by the PRIVATE law
+G=Geom(delta) with probability alpha, Never otherwise. The owner's
+supremum is
+
+    alpha*E[max_(u<=Geom(delta)) f(u)]+(1-alpha)*B.
+
+The lower approximation uses a near-cap pure reply only on the private
+G=Never event and remains feasible. At an attained optimum with T0
+proper, equality on that positive-probability event forces some FINITE
+f(H)=B; a proper random variable cannot average to B while every finite
+value is strictly below B. At the first such H, T<=G and equality force
+{T>=H}={G>=H}. Thus S0(H)=b_H exactly, not merely an inequality. The
+conditioned budget has alpha_H=alpha*c^H/b_H in(0,1); every replacement
+splices legally back into the original budget. Positive joint reach was
+already proved. Immediate Quit attains the FULL conditional cap,
+including Never, so constrained optimality makes the H-tail full Nash.
+
+Any full canonical Nash has at least two proper clocks: the all-improper
+case contradicts positive owner singleton, and each of the three possible
+single-proper cases has the same late-tail strict inequality used in the
+author's proof. Therefore EVERY unilateral behavioral replacement leaves
+a distinct proper opponent and absorbs almost surely. Restoring the
+nonowner constant1 consequently changes both prescribed and ALL deviation
+payoffs by exactly1. This is the required justified payoff restoration,
+not a blanket invariance of a terminal shift with Never0. Exact full Nash
+and positive reaches give an actual completely absorbing admissible
+sequence in the paper's G_e, contradicting Theorem2.1.
+
+### Four-player padding
+
+The outsider is not silently assumed passive. Its Never-minus-deadline
+gain is exactly Pr(t<M<Never)+2Pr(M=t), so every supported finite H must
+put ALL finite core minima strictly below H. If any core clock is proper,
+independence gives a bounded proper core clock ending before H. At the
+earliest such last date all core survivors and the outsider have positive
+joint reach, with the outsider still surely Continuing; the three-player
+sure-hazard contradiction applies there. If all core clocks are improper,
+their positive Never masses force every individual finite core atom below
+H. Moving owner Never mass to H then strictly gains singleton1 on the
+positive event that both other core clocks are Never. The outsider cannot
+have quit earlier, and its simultaneous participation does not alter the
+projected core reward. Thus it has no finite support and is literally
+Never, reducing to the already-excluded three-player game.
+
+This independently checks the ENTIRE softened Nash correspondence, not a
+bad selected branch. It decisively retires unconditional exact softened
+production even in the positive-singleton canonical Fin4 setting, while
+leaving the original uniformly proper K_delta selection question open.

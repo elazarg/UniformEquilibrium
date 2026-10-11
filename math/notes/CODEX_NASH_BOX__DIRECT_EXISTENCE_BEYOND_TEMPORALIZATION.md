@@ -44,10 +44,22 @@ nonstationary selection remains the independent research lane.
 Section 13 develops a global exact record-tail compactification inside a
 single-owner constrained-Nash correspondence. It removes improper-clock
 finite tails by a joint compact limit, not by conditioning approximate
-equilibria. An ordinary UNREVIEWED resonance proof then excludes sources
+equilibria. Its resonance proof then excludes sources
 with only two proper clocks at a rate chosen generically before selecting
-the correspondence. This is a proposed strict source reduction, not a new
+the correspondence. CODEX_TURING_BOX's bounded independent adversarial
+assessment found no objection, including the foundational source check.
+This is reviewed INTERNAL ordinary mathematics, not an export or a new
 solved raw-table class or an unrestricted equilibrium producer.
+
+Section14 tests a different global producer: a softened proper-clock
+budget which would charge at most2R*alpha full regret. The whole canonical
+two-player class has an explicit exact producer, but Section14.4 gives a
+source-dependent ordinary proof that the exact producer FAILS in the
+relevant positive/canonical sign domain, including Fin4. Its source is
+Solan's perturbed FTV no-exact-equilibrium theorem, not a no-UE claim.
+CODEX_EMMY_BOX's bounded independent falsification found no objection,
+including the primary-paper scope and Fin4 padding. The exact softened
+producer is retired; this result is internal and not exported.
 
 Central conclusion: NONE of the no-go results below refutes existential
 selection from the FULL private-Never-bonus equilibrium correspondence.
@@ -1931,8 +1943,10 @@ tuning this center or manufacturing additional isolated calendars.
 
 ## 13. Exact record compactification and the two-proper-clock face
 
-Status: complete ordinary proof draft, NOT independently checked and NOT
-Lean-implemented. The constrained-Nash compactness and record operation
+Status: complete ordinary proof draft with a bounded independent adversarial
+assessment by CODEX_TURING_BOX finding no objection. This is INTERNAL
+ordinary mathematics, NOT Lean-implemented and NOT an export. The
+constrained-Nash compactness and record operation
 are developed in CODEX_EMMY_BOX's
 [`SINGLE_OWNER_COMPACTIFICATION.md`](CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION.md),
 Sections 2--5, 8 and 11. The new proposed operation below is joint
@@ -2230,3 +2244,379 @@ THREE-proper-clock source, with one literal Never outsider in Fin4,
 admits a joint nonowner operation lowering its owner deficiency or an
 exact continuation reduction. No reduction from three proper clocks to
 two, and no equilibrium producer for that remaining face, is proved.
+
+### 13.6. A generic-rate three-clock calibration, not a global obstruction
+
+The following exact solved fixture prevents extending the two-clock
+resonance assertion mechanically to three proper clocks. For three
+players0,1,2 take
+
+    r(0)=(1,2,2),       r(1)=(2,1,0),       r(2)=(2,0,1),
+    r(01)=(3/2,5/4,1), r(02)=(3/2,1,5/4), r(12)=(2,3/4,3/4),
+    r(012)=(2,1,1).
+
+Let owner0 and BOTH nonowners independently use Geom(delta), at EVERY
+date. Owner0's Never value is2 and its conditional Quit endpoint is
+1+delta; hence its pure deadline values are
+
+    f_0(t)=2-(1-delta)^(2t+1).
+
+They are strictly increasing, so its exact K_delta optimum is T=G.
+For either nonowner, the two opponent singleton rewards are2 and0,
+their joint reward is1, and their hazards are equal. Its Never value
+is therefore exactly1. Its pure Quit endpoint is also exactly1:
+
+    (1-delta)^2 + delta(1-delta)*(5/4+3/4) + delta^2=1.
+
+Thus this is exact constrained Nash for EVERY delta in(0,1), with all
+three clocks unbounded proper, every date a strict owner record, and
+
+    D_0=(1-delta)/(3-3delta+delta^2) -> 1/3.
+
+The owner pair triples (s,u,A)=(1,2,3/2) are pairwise distinct; both
+two-clock lambdas are4, so the forbidden rate set is empty. The
+record-invariant hull is a singleton and all conditional termination
+properties hold, yet owner loss does not vanish on THIS selected branch.
+
+In the SAME WHOLE correspondence, however, owner0 Geom(delta) and both
+nonowners literal Never is exact FULL terminal Nash: owner0 gets its
+singleton1, each nonowner gets2, and its conditional Quit endpoint
+1+delta/4 is below2. This good branch has only one proper clock. It
+defeats global proper-count minimality and the global-gap hypothesis,
+so the bad branch is NOT a falsifier of the remaining existential
+selection problem or of Section13's whole-correspondence reduction.
+
+A valid Fin4 embedding keeps every displayed active row, with recipient3
+reward2. Put r({3})=(4,0,0,1), r({0,3})=(3,0,0,5/4), and on every
+other coalition containing3 put active-recipient rewards0 and reward
+5/4 to3. Prescribe player3 Never. Any active replacement still sees the
+literal three-player game; player3's Never value is2 and every finite
+Quit endpoint is at most5/4. Both branches above therefore remain actual
+Fin4 constrained/full equilibria with all four own singletons positive.
+For the additional owner-pair data, (s,u_3,A_3)=(1,4,3) and lambda_3=4,
+so all finite generic conditions in13.1 still hold. The only failed
+hypothesis is the whole-game gap, exactly as intended.
+
+## 14. A softened owner budget: useful regret bound and actual existence tests
+
+Status: ordinary exact calculation, not independently reviewed. This is a
+bounded test of a different global operation, not a proposed new interface
+or a negative answer to the positive-owner selection problem.
+
+Fix 0<alpha,c<1 and replace the uniformly proper owner constraint by
+
+    K_(alpha,c)={p: S_p(t)<=1-alpha+alpha*c^t for every t>=0}.
+
+This is compact and convex, but allows Never mass up to1-alpha. For EVERY
+unrestricted replacement law q, the law alpha*Quit0+(1-alpha)*q belongs
+to this set. Consequently an exact constrained Nash point, IF produced,
+has owner full deficiency at most2R*alpha: its constrained payoff is at
+least alpha*f(0)+(1-alpha)*B by approximating the full response supremum.
+All nonowner full debts would be zero. Unlike the original K_delta,
+however, the set has no uniformly proper clock, so the continuous-payoff
+finite-Nash limit argument cannot be reused.
+
+Here is an exact failure of unconditional Nash production on this softened
+domain. There are two players and the complete nonempty rows are
+
+    r(0)=(1,-2), r(1)=(2,-1), r(01)=(0,0), Never=0.
+
+Restrict ONLY owner1 to K_(alpha,c); player0 is unrestricted. There is
+NO exact constrained Nash point for any 0<alpha,c<1. The negative owner
+singleton is essential to this calibration; it is outside the positive-
+owner hypothesis of the active source question.
+
+Proof. Write z=Pr(T1=Never). The constraint gives z<=1-alpha<1.
+Player0's pure finite-deadline payoff and late limit are
+
+    f0(t)=1+Pr(T1<t)-Pr(T1=t),
+    L=2-z,
+    L-f0(t)=Pr(t<T1<Never)+2Pr(T1=t)>=0.
+
+Its Never payoff is2(1-z). Therefore its full cap is L, and if z>0,
+Never is strictly below that cap. Suppose any finite date H belongs to
+player0's best-response support. The displayed nonnegative difference
+forces ALL finite owner mass strictly before H. Choose the FIRST such
+player0 date H and the owner's last finite support date K<H. Owner finite
+mass is positive because its constraint forces some mass already at0.
+Moving a sufficiently small mass m from K to H is legal: between K and H
+the old survival is z, while
+
+    1-alpha+alpha*c^t-z >= alpha*c^H >0.
+
+Before H, player0 cannot have quit; the owner's old K action pays-1,
+whereas its new H action pays -1+Pr(T0=H)>-1. This contradicts owner
+optimality. Hence player0 has NO finite best-response support. It must
+play literal Never, and its best-response inequality then also forces z=0.
+The proper owner receives-1. But the legal law
+alpha*Quit0+(1-alpha)*Never receives-alpha>-1, again a contradiction.
+
+Thus compact convexity and approximate access to every full reply do NOT
+by themselves restore an exact constrained-Nash producer once the uniform
+proper clock is removed. This is a failure of that unrestricted producer,
+not a falsifier for positive/canonical owners, not a whole-game positive
+gap, and not a reason to restrict the original arbitrary approximate-law
+selection problem. The original table has the positive-owner approximate
+exit recorded in Emmy's Section6. Its negative-owner failure alone does
+NOT justify discarding the relevant positive-owner existence problem.
+
+The next global operation must either retain a uniformly proper actual
+clock while changing the JOINT nonowner laws, or supply a genuinely new
+continuation argument through the all-improper boundary; compactness alone
+does not do that work.
+
+### 14.2. Complete positive canonical two-player construction
+
+Take EVERY canonical two-player table
+
+    r(0)=(1,v), r(1)=(u,0), r(01)=(A,B).
+
+Fix any 0<alpha,delta<1, c=1-delta, and h=alpha*delta. The proper
+Geom(h) owner law is feasible because convexity of x->x^t gives
+
+    (1-alpha*delta)^t <= 1-alpha+alpha*(1-delta)^t.
+
+If A>=u, both players Quit0 when B>=v; otherwise owner0 Quit0 and
+player1 Never. These are actual FULL Nash points. If A<u, prescribe
+owner0 Geom(h), and choose player1 Never when B*h<=v, otherwise Quit0.
+Against the owner's geometric law, player1's full finite-deadline payoffs
+are
+
+    f1(t)=v+(1-h)^t*(B*h-v),      Never=v.
+
+Thus the displayed choice is a complete best reply. Against Never, every
+proper owner law is optimal, with payoff1. Against Quit0, the owner wants
+the smallest possible atom at0, which the budget forces to be h; Geom(h)
+attains it. The resulting full owner debt is h*(u-A), at most2R*alpha*delta.
+This proves actual softened constrained Nash production on the ENTIRE
+canonical two-player class, not only a selected fixture. It is a successful
+solved-class calibration, not new UE table coverage.
+
+### 14.3. Primary discontinuous-game hypothesis check
+
+The literal better-reply-security condition in Reny's 1999 paper requires,
+at every nonequilibrium payoff-graph-closure point (p,w), some player to
+secure strictly more than w_i uniformly on an opponent neighborhood.
+Compact convex strategy sets and affine own payoffs alone are insufficient.
+The condition fails on the softened canonical domain even with nonnegative
+rewards. Take r(0)=(1,1), r(1)=(2,0), r(01)=(0,0), and
+
+    p*=(alpha*Geom(delta)+(1-alpha)*Never, Never).
+
+Actual complete caps at p* are (1,alpha), and the owner gets alpha<1.
+The feasible profiles
+
+    p_N=(alpha*Geom(delta)+(1-alpha)*Quit(N+1), QuitN)
+
+converge weakly to p*, while their payoff vectors converge to
+(2-alpha,alpha). No player can secure strictly above this graph-limit
+vector: its neighborhood includes the unchanged opponents at p*, whose
+complete caps are at most these coordinates. Hence the literal security
+hypothesis fails. The same game DOES have a good exact softened Nash point
+by14.2. This is only an obstruction to automatic use of that theorem,
+not a nonexistence result. Primary source: Philip J. Reny, *On the
+Existence of Pure and Mixed Strategy Nash Equilibria in Discontinuous
+Games*, Econometrica67(5), 1029--1056 (1999), publisher abstract and
+Sections2--3 of the [original scan](https://kylewoodward.com/blog-data/pdfs/references/reny-econometrica-1999A.pdf).
+
+### 14.4. Relevant canonical nonexistence: perturbed FTV source
+
+Status: COMPLETE ORDINARY SOURCE-DEPENDENT PROOF, with one bounded
+independent falsification PASS by CODEX_EMMY_BOX. No Lean or export claim.
+The source theorem
+below gives a qualitative small-parameter interval, not an explicit rational
+threshold; no numerical value of that threshold is claimed here.
+
+#### Literal source theorem and canonical table
+
+I read Eilon Solan, *The Dynamics of the Nash Correspondence and N-Player
+Stochastic Games*, dated January25,2001, including Figure1, the admissible/
+completely-absorbing/trivial definitions, Theorem2.1, and its proof and
+Lemmas3.1--3.6. The primary preprint is locally
+`literature/SOLAN_2001__THE_DYNAMICS_OF_THE_NASH_CORRESPONDENCE_AND_N_PLAYER_STOCHASTIC_GAMES.pdf`
+outside this conference, and publicly available as the
+[original paper](https://citeseerx.ist.psu.edu/document?doi=014ea32e8026ac8caf16c85131e0b533b57f7a84&repid=rep1&type=pdf).
+The literature subtree has no transcription of this exact theorem.
+
+Its Figure1 game G_e has Never0 and rows
+
+    g(0)=(1,3,0),       g(1)=(0,1,3),       g(2)=(3,0,1),
+    g(01)=(1+e,0,1),  g(02)=(0,1,1+e),   g(12)=(1,1+e,0),
+    g(012)=(0,0,0).
+
+Theorem2.1 says: there exists e0>0 such that for EVERY 0<e<e0 every
+vector in its exact one-shot Nash inverse-iterate set F_e is trivial,
+meaning no corresponding admissible sequence absorbs almost surely.
+An exact terminal Nash whose every finite prefix is reached and which
+absorbs almost surely would give precisely such a forbidden completely
+absorbing admissible sequence, by taking its actual reached continuation
+values and root hazards. The result is about EXACT equilibrium, not UE;
+the paper explicitly says this three-player game has a uniform-equilibrium
+payoff. I use Theorem2.1 as an ordinary paper theorem, not a checked Lean
+declaration. All its strategic roots are simultaneous independent Quit/
+Continue actions, matching the present information and probability mode.
+
+Fix any e in(0,min(e0,1)). Subtract1 from EVERY nonempty terminal payoff
+coordinate of recipients1,2, leaving recipient0 and Never0 unchanged. The
+resulting complete canonical table is
+
+    r(0)=(1,2,-1),      r(1)=(0,0,2),      r(2)=(3,-1,0),
+    r(01)=(1+e,-1,0), r(02)=(0,0,e),     r(12)=(1,e,-1),
+    r(012)=(0,-1,-1).                                  (14.1)
+
+It has own-singleton vector(1,0,0). The payoff shift will only be used
+below when EVERY unilateral replacement still absorbs almost surely;
+it is NOT claimed to preserve all profiles or all-Never payoffs.
+
+Claim: for EVERY 0<alpha<1 and EVERY 0<delta<1/2, the game(14.1) with
+ONLY positive owner0 constrained to K_(alpha,1-delta) has NO exact
+constrained Nash point.
+
+#### No finite zero-reach boundary
+
+Write b_t=1-alpha+alpha*c^t. At any reached root, if a nonowner surely
+quits and the owner's Quit endpoint Q is below its Continue endpoint C,
+the owner's optimal hazard satisfies
+
+    q0=max(0,1-b_(t+1)/S0(t)) <= 1-b_(t+1)/b_t <= delta. (14.2)
+
+Indeed later owner actions all face the same certain current absorption.
+Moving owner mass from t to t+1 is legal up to the budget at t+1 and
+strictly improves whenever that budget is slack; moving mass earlier is
+always legal. Thus exactly the displayed minimum hazard is optimal.
+If Q>C, optimality instead forces q0=1.
+
+At every reached date let q_i be the actual independent conditional
+hazards. No q_i can equal1. If q1=1, player2's Quit payoff is-1 while
+Continue is2(1-q0)>=0, so q2=0. Owner then compares Q=1+e with C=0,
+forcing q0=1, but player1 strictly prefers Continue2 to Quit-1.
+If q2=1, owner Q=0 and C=3-2q1>=1 give q0<=delta by(14.2).
+Player1's Quit-minus-Continue gap is
+
+    1+e-q0*(2+e)>0,
+
+forcing q1=1, already impossible. If q0=1, player1 strictly Continues
+(Quit=-1, Continue=2(1-q2)>=0), hence q1=0; player2 strictly Quits
+(Quit=e, Continue=-1), hence q2=1, again impossible. All finite joint
+reaches therefore stay positive by induction. Every proper clock is
+unbounded. Nonowner full Nash and any full best-reply Never inequality
+persist on EVERY conditioned finite tail by exact independent-law splicing.
+
+#### The owner cannot be improper
+
+Positive owner Never mass implies Never is a FULL best reply: moving any
+positive portion of that mass to any finite deadline speeds up the law,
+stays legal, and would improve if that deadline beat Never. Consequently
+some clock is proper; if all were improper, the late-finite owner payoff
+would exceed Never by its positive own singleton times the positive
+opponent Never product.
+
+Suppose the owner is improper. If player2 is proper, player1 regards Never
+as a full best reply. For an improper player1 this is its supported action;
+for a proper player1, its unbounded finite best-reply support has payoffs
+converging to Never because player2 is a proper opponent. Condition at
+late dates. Owner0's conditional finite mass tends to0 in total variation,
+while player2 remains proper. Against owner Never and proper player2,
+player1's Never payoff is-1, whereas its immediate Quit endpoint lies
+in[0,e]. Coupling the small owner finite mass changes each payoff by at
+most2R times that mass. This contradicts the exact Never best-reply
+inequality for all sufficiently late dates.
+
+If player2 is improper, player1 must be proper. Condition late so player2
+is arbitrarily close in total variation to literal Never. Owner Never
+against proper player1 pays0; immediate Quit pays1+e*q1>=1. The same
+coupling bound contradicts the owner's full Never best reply. These cases
+exhaust the possibilities. Hence the owner is proper at every putative
+softened constrained Nash point.
+
+#### Proper softened optimum forces finite cap attainment
+
+For fixed opponents, let f(t) be the owner's finite-deadline payoff, V its
+Never payoff and B its full response cap. Couple the owner T<=G, where
+G is Geom(delta) with probability alpha and Never with probability1-alpha.
+On finite G=g, f(T)<=max_(u<=g)f(u); on G=Never, the payoff is at most B.
+The exact supremum of the owner's softened objective is
+
+    alpha*E[max_(u<=Geom(delta)) f(u)]+(1-alpha)*B.       (14.3)
+
+The upper bound is the coupling. For the lower bound, use the first finite
+running maximizer on finite G, and on G=Never a pure reply approaching B.
+This is an allowed PRIVATE choice of one owner law, not public mixing.
+If a proper owner ATTAINS(14.3), equality on the positive-probability
+G=Never event requires a FINITE deadline with payoff B. Thus its full cap
+has a finite first maximizer H.
+
+At that H, equality forces {T>=H}={G>=H}: when G<H one has T<H;
+when G>=H any finite T<H pays strictly below B. Hence S0(H)=b_H.
+Conditioning on survival to H gives the owner the SAME TYPE of budget
+
+    S_tail(t)<=b_(H+t)/b_H
+              =1-alpha_H+alpha_H*c^t,
+    alpha_H=alpha*c^H/b_H in(0,1).
+
+Every legal conditional replacement splices back legally, so constrained
+Nash persists. The full conditional cap is attained by immediate Quit,
+which is legal in this budget. Therefore the reached H-tail is exact FULL
+terminal Nash for ALL players and all complete behavioral replacements.
+Positive joint reach was proved above, so no zero-reach inference occurs.
+
+#### Canonical full Nash would violate the actual paper theorem
+
+Any full Nash of(14.1) likewise has no sure root hazard, by the same root
+signs with unrestricted owner hazard0 whenever Q<C. It must have at least
+two proper clocks. If all are improper, positive owner singleton gives
+positive joint-Never debt. If only owner0 is proper, condition late so both
+others approach Never; player2's supported Never pays-1 while immediate
+Quit has endpoint at least0, a contradiction. If only player1 is proper,
+the owner's supported Never pays0 versus immediate Quit at least1 on
+late tails. If only player2 is proper, player1's supported Never pays-1
+versus immediate Quit at least0. The errors from the two improper opponents
+vanish in total variation in each case. This proves the asserted count,
+without assuming properness is weakly closed.
+
+With at least two proper clocks, EVERY complete unilateral replacement
+leaves a distinct proper opponent and so absorbs almost surely. Restoring1
+to recipient1 and recipient2 at EVERY nonempty coalition therefore adds
+exactly1 to each of those recipients' prescribed payoff AND every deviation
+payoff; recipient0 is unchanged. Hence a full Nash of(14.1) would be a
+full Nash of the literal source G_e. All finite prefixes are reached and
+the actual root/continuation sequence is completely absorbing. This
+contradicts the stated Theorem2.1. The putative softened Nash cannot exist.
+
+#### Canonical Fin4 padding, without an indifferent quitting dummy
+
+Add player3. For a nonempty S put T=S intersect{0,1,2}. Core recipients
+receive r(T) when T is nonempty and0 when T is empty. Player3 receives
+1 when absent, -1 when present with a nonempty core coalition, and0 at
+the singleton{3}. Thus the complete table is specified and its own-
+singleton vector is(1,0,0,0). No source hypothesis is placed on player3.
+
+At any putative softened Nash let M be the first finite core quitting date.
+Owner feasibility gives Pr(M<Never)>0. Player3's Never payoff is Pr(M<Never),
+and its pure deadline payoff is Pr(M<t)-Pr(M=t). The difference is
+
+    Pr(t<M<Never)+2Pr(M=t)>=0.
+
+If player3 has a finite best-reply support date, choose its first such H.
+All finite core minima are then strictly below H. If any core clock is
+proper, independence forces at least one bounded proper core clock ending
+before H. At the earliest last support date of these clocks, player3 still
+Continues surely, joint reach is positive, and the three-player no-sure
+root argument above is a contradiction. If every core clock is improper,
+each has positive Never mass, so the minimum condition forces ALL individual
+core finite support strictly below H. Moving a positive portion of owner0's
+Never mass to H then gains its singleton1 on the positive event that both
+other core clocks are Never; player3 cannot have quit earlier than H and
+its simultaneous participation does not change that core reward. This
+legal speedup contradicts owner optimality. Thus player3 has no finite
+best-reply support and must be literal Never. The core restriction would
+then be the already excluded three-player softened Nash. This proves
+actual NONEXISTENCE on the canonical Fin4 domain as well.
+
+This is a falsifier of EXACT softened-constrained Nash production, including
+its entire correspondence, not of arbitrary approximate-law selection.
+It does not claim any positive full exploitability gap or no uniform
+equilibrium. The two-player producer and BRS failure above remain separate:
+neither alone implied this relevant existence failure. The direction change
+is to abandon this exact softened producer, not to weaken it into another
+unproduced approximate interface.

@@ -15,9 +15,14 @@ is a GLOBAL selection or joint-law operation
 in the remaining case of at least two unbounded proper clocks and an owner
 cap attained ONLY at Never. Section10's global penalty selector does not
 control error relative to tail reach. No arbitrary-Fin4 UE theorem is claimed.
-The bounded-support exit in Section4 has a bounded independent ordinary
-check in `../feedback/CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION__BY_CODEX_NASH_BOX.md`;
-that check does not cover the producer or the missing global selection.
+The foundational source chain in Sections2--5,8,11--12 has a bounded
+independent ordinary check in
+`../feedback/CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION__BY_CODEX_TURING_BOX.md`.
+Sections4 and11 also have the narrower independent ordinary check in
+`../feedback/CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION__BY_CODEX_NASH_BOX.md`.
+Neither review supplies the missing zero-owner-debt selector or asserts
+unrestricted Fin4 UE existence. Section13 gives immediate whole-face
+selection consequences, not a new conjecture-facing closing theorem.
 
 ## 1. Self-contained end-to-end question
 
@@ -305,14 +310,15 @@ players so that the exact source supplies one of these exits? A mere choice
 of a supported debt vector, or replacing one indifferent player by Never
 without checking the other players' response caps, does not answer it.
 
-The finite Nash producer and both exit proofs need independent checking
-before being treated as established ordinary results. No export is requested:
+The finite Nash producer and both exit proofs have the bounded independent
+ordinary check identified at the top of this note. No export is requested:
 the remaining global selection operation has not been supplied, and no new
 raw reward class or unrestricted positive-gap table has been obtained.
 
 ## 8. The actual whole-correspondence minimum and a sharper remaining face
 
-Ordinary proof draft, not independently checked. At FIXED owner a and
+Ordinary proof draft, included in the bounded independent source check
+identified at the top. At FIXED owner a and
 delta>0, N_(a,delta) is a nonempty COMPACT set. The continuity from Section2
 makes every response inequality closed, including arbitrary owner responses
 in K_delta and every unrestricted nonowner response. Their intersection
@@ -582,7 +588,8 @@ does not establish this invariant and cannot replace exact re-rooting.
 
 ## 12. A minimal strict-record hull has uniform conditional termination
 
-Status: ordinary proof draft, not independently checked. This is an exact
+Status: ordinary proof draft, included in the bounded independent source
+check identified at the top. This is an exact
 source reduction, not a new equilibrium producer or a claim that recurrence
 alone solves the remaining selection problem. All probabilities below are
 for the original independent private clocks. No public mixing is introduced.
@@ -765,3 +772,60 @@ previously inspected `OpponentTightTerminalSemanticRealization.lean` and
 `CompactStoppingLawCapUpperBound.lean` for uniform-proper/minimal-proper
 statements. This section makes no Lean-implementation claim and does not
 replace their distinct semantic-minimum results.
+
+## 13. Select the ENTIRE clean face, not one record orbit
+
+Status: ordinary corollary draft of the reviewed Section12 source. This
+does not solve the owner-loss selection problem. Its purpose is to avoid
+adding an unnecessary orbit restriction to the next joint-law variation.
+
+Keep the positive-gap/rate hypotheses and let k be the minimum proper
+count over ALL N_(a,delta), as in Section12. Its construction supplies
+one profile q with exactly k unbounded proper labels A and literal Never
+at every other label. Instead of taking only q's record-tail hull, set
+
+    K_A={p in N_(a,delta): p_j=Never for every j outside A}.     (11)
+
+This is a nonempty compact set because the literal-Never law is a closed
+point of the compact law space. Every point has at most k proper labels,
+and whole-correspondence minimality forces EVERY A label to be proper.
+The gap/bounded-clock exit again makes them unbounded. Every strict-record
+tail stays in the same N and retains the same literal-Never outsiders,
+so K_A is record-invariant directly. Thus ALL of Section12's uniform
+properness, cap continuity, bounded record gaps, all-calendar conditional
+termination, and the delta-window limitation apply to this WHOLE clean
+face, not merely one orbit closure. In particular owner full loss attains
+its minimum over all admissible joint profiles in K_A.
+
+There is also an exact scalar description of this support selection that
+is different from Section10's unsuccessful finite penalty. Define on N
+
+    F(p)=sum_i Pr_p(T_i=Never).
+
+Each Never atom is upper semicontinuous in the one-point law topology,
+so F attains its maximum. Its maximum is exactly n-k. Indeed F(p)<=n-k
+at every p because at least k labels are proper, and q attains n-k.
+Equality forces exactly k proper labels and literal Never at all others.
+Consequently the exact argmax of F is the finite union of the compact
+clean faces(11). It is itself compact and invariant under strict-record
+tails. All full caps are continuous on this union: every recipient has a
+distinct proper opponent, so its joint opponent-survival product tends to
+zero uniformly by the same compact decreasing-cylinder argument. Hence
+one may lexicographically maximize F and then minimize full owner loss,
+with BOTH extrema attained over the ENTIRE exact correspondence.
+
+This is equivalent to the minimum-proper-count source reduction, not a
+new equilibrium result or a repair theorem. It does not say the second
+minimum is zero, or that a unilateral Never replacement remains on(11).
+Its useful distinction from Section10 is exactness: the first optimization
+is over actual constrained Nash, rather than trading a small absolute
+Nash error against a planned-Never bonus and then conditioning that error.
+
+Current concrete operation question: can one lower full owner loss, or
+produce a point with fewer proper labels, by a genuinely joint clock-law
+change and exact re-equilibration within the whole clean-face selection?
+A recurrence argument restricted to one orbit is not required, but the
+other players' FULL best-response inequalities still are. Shared joint-
+survival quota equilibria were tested as an alternative source: they allow
+reallocation of termination but lose the exact nonowner full-Nash property,
+so no closing implication from that alternative has been established.
