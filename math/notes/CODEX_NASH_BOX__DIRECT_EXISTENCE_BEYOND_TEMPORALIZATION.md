@@ -2,14 +2,15 @@
 
 Author: CODEX_NASH_BOX.
 
-Current checkpoint: Section30 gives an exact whole-law absorption-branch
-reset with all original deadline/Never caps, and retains the entropy cost
-of switching survivors to literal Never. A rational four-active test is
-FULL coarse with improved slack but its information INCREASES by>209/1000.
-Thus completion is not free decorrelation. Jointly selecting the source,
-root law and payoff remains open; no whole-selector obstruction or UE
-conclusion is inferred. The global positive-minimum obstruction remains
-Section28. The chamber family reviewed in Section29 is now canonical in
+Current checkpoint: Section30 retires the entire absorbed-tail Never-reset
+word operation on K10, not the whole correlated-law route. Section31 gives
+uniform finite compression of the bounded-information FULL coarse source
+set. Section32 is an unreviewed law-valued minimizing-source proof draft
+in a MARKED ORDERED-LIMIT model, not a literal Nat-plus-Never strategy.
+Every permitted conditional variation must have finite-law lifts. The
+positive-information obstruction remains in singleton counterfactual
+opponent tails; punishment normality alone has not removed it. The chamber
+family reviewed in Section29 is now canonical in
 `exports/PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md` as ordinary
 independently reviewed mathematics, not a claim of Lean implementation.
 
@@ -5432,3 +5433,196 @@ compactification must STILL retain which cuts are legal deadlines:
 normalized time coordinates alone forget insertion seams. That is the
 next exact question, before applying entropy variations to a purported
 minimum source.
+
+## 32. A law-valued minimizing source with marked legal deadline cuts
+
+Status: ordinary proof draft, unreviewed. This is compact attainment of
+the information relaxation in an ORDERED LIMIT clock model, not an actual
+original-game Nash producer. It strengthens Section28's summary-state
+obstruction to a joint probability law on which conditional-law variations
+make sense. Diffuse or densely ordered finite supports need not embed in
+Nat. Only finite-law recovery and variations having finite-law lifts are
+used for conjecture-facing conclusions. The remaining positive-information
+contradiction is not proved.
+
+### Canonical normalization retains the action set, not just a time axis
+
+For a finite joint clock law mu with n players let nu=(sum_i mu_i)/n be
+the average marginal. For each ORIGINAL finite date t put
+
+    a_t=nu({t}),  l_t=nu({s:s<t}),  x_t=l_t+a_t/2.
+
+Push every actual finite clock t to x_t and Never to1. The positive-mass
+intervals [l_t,l_t+a_t] partition [0,m], m=1-nu({Never}). Every positive
+clock atom is represented by its interval midpoint. An empty original
+date has a_t=0 and is represented by its cut l_t. All dates beyond the
+last occupied date represent the late cut m. Record K, the FINITE set
+of every represented legal deadline, together with Never1. This includes
+the late cut even if it has no clock mass. Clock probabilities and K
+are separate data.
+
+The map is injective on all positive-mass clock dates and Never, so it
+preserves information. It preserves all strict orders and ties of actual
+clocks. A zero-mass deadline cut lies between its old neighboring atoms,
+so its pure replacement semantics is exact too. If m=1, the late cut
+and Never share coordinate1, but every player's Never mass is0 and
+their reply payoffs coincide. If m<1 they are distinct.
+
+This is NOT the model with every real point admitted as a new deadline.
+For example inserting an empty date between two occupied consecutive
+dates leaves the normalized joint clock law unchanged but ADDS a cut
+to K. The known K10 insertion falsifier shows that this extra reply can
+destroy coarse obedience. Retaining K avoids that silent change.
+
+### A bounded-information compactness lemma
+
+Take any sequence of these normalized records (mu_k,K_k) with I(mu_k)<=M.
+After a subsequence, mu_k converges weakly on[0,1]^n and K_k converges in
+Hausdorff distance to a nonempty compact K containing1. Call the joint
+limit mu. Products of the marginals converge weakly, and the finite-
+partition formula for relative entropy gives
+
+    I(mu)<=liminf_k I(mu_k)<=M.                         (32.1)
+
+In particular mu is absolutely continuous with respect to the product
+of its OWN limiting marginals. The correlated opponent law is never
+replaced by that product in a payoff calculation.
+
+Three normalization facts control discontinuities.
+
+1. If positive finite aggregate atom weights a,b have ordered centers
+   x<y, then y-x>=(a+b)/2. Empty-date cuts are at distance at least a/2
+   from an atom center of weight a. Therefore every positive limiting
+   aggregate atom x<1 comes from ONE matching old atom with mass tending
+   to its limiting mass. It is an isolated legal action of K. To see no
+   atom can instead arise from many small atoms, the total weight whose
+   centers lie in an interval J is at most |J| plus the largest weight
+   there: their original quantile intervals form a consecutive block,
+   and only its first and last half-intervals can extend outside J.
+   Once a matching positive atom is identified, all other centers and
+   cuts are separated from it by half its mass, so no residual mass can
+   accumulate at the same point.
+
+2. Finite aggregate mass with centers in[1-epsilon,1] is at most2epsilon.
+   Each such interval has weight at most2epsilon, and the left end of
+   the first such interval is at least1-2epsilon. Thus finite mass cannot
+   leak into the Never atom. Every individual Never mass, and their
+   average, converge to their literal limiting Never mass. If the average
+   is positive, K has a genuine gap between its finite late cut m and1.
+
+3. Spurious near-coincidences of distinct finite dates have probability
+   tending0. Fix delta>0 and retain the finitely many aggregate atoms
+   with mass>=delta. Their centers are isolated by the first fact. Off
+   these atoms, a length2epsilon interval has aggregate mass at most
+   2epsilon+delta. Under the PRODUCT reference law the probability that
+   two clocks are epsilon-close without being the same retained atom is
+   consequently at most n*choose(n,2)*(2epsilon+delta). The binary-KL
+   inequality used in Section31 makes its probability under mu_k tend
+   uniformly to0 as epsilon,delta tend0. The same holds after deleting
+   any player, since marginal relative entropy is at most M.
+
+For clarity, the unbounded-information sequence T_1 uniform on0..N-1,
+T_2=T_1+1 is an early negative test: its normalized times collapse onto
+a continuous diagonal, changing a strict order into a tie. Its information
+is log N, so it is excluded by the load-bearing hypothesis, not by a
+claim that arbitrary weak limits preserve terminal coalitions.
+
+It follows that all prescribed terminal payoffs converge. On a retained
+atom, the exact old simultaneous coalition probabilities converge because
+its surrounding action gap isolates the atom. Everywhere else the bad
+near-coincidence estimate makes strict-order comparisons stable. The
+second fact handles all-Never and finite/never distinctions.
+
+More strongly, if h_k in K_k tends to h in K, EVERY pure reply value for
+every recipient converges to its value against the ACTUAL limiting
+opponent marginal. At a positive atom, h_k must eventually be the matching
+isolated old atom. At a nonatom, opponents' probability in a shrinking
+neighborhood of h tends0. If h=1 and the average Never mass is positive,
+h_k is eventually Never; if that average is0, all opponent Never masses
+are0 and deadlines approaching1 have the same limit as Never. Opponent
+ties are covered by the third fact. The forward and reverse Hausdorff
+choices of h_k now give
+
+    v(mu_k)->v(mu),  C(mu_k,K_k)->C(mu,K).              (32.2)
+
+Thus exact full coarse obedience survives this bounded-information limit.
+These caps range over K, not the whole real interval.
+
+### Recovery of information: the infimum is attained, not lost in the limit
+
+Assume the fixed table has the strict finite full-coarse anchor from
+Section31. Take finite exact full-coarse mu_k with I(mu_k)->rho and
+I(mu_k)<=M=I(sigma), and normalize them as above. The limit is full coarse
+by(32.2), and I(mu)<=rho by(32.1). To get equality one must prove a finite
+recovery statement; lower semicontinuity alone is insufficient.
+
+For each fixed quantile level L, compress mu_k by the actual active-cell
+algorithm of Section31. There are at most nL marks and2nL+1 active cells.
+Extract a subsequence on which the number/order of marks and active-cell
+adjacency bits are fixed and every normalized mark location converges.
+Distinct marks can coalesce only at a limiting NONATOM; otherwise the
+positive-atom action gap forbids it. Such coalescing locations have zero
+mass under every marginal. A limiting positive-mass mark instead matches
+the unique old atom exactly. Hence the compressed finite laws converge
+to q_*mu for one measurable coordinatewise ordered finite-cell map q.
+Zero-probability target cells may be retained as legal deadlines; they
+are not filled with clock mass or silently removed. This conclusion is
+the finite partition mapping theorem, with the only discontinuity sets
+being the zero-mass limiting unmarked boundaries.
+
+Information is continuous on that fixed finite alphabet. Data processing
+therefore gives
+
+    lim_k I(compress_L(mu_k)) = I(q_*mu) <= I(mu).
+
+The compressed laws have full-coarse violation at most2a_L by Section31.
+Their fixed-weight anchor repairs are finite EXACT full-coarse sources.
+Taking k to infinity in the repair bound gives rho<=I(mu)+omega_L.
+Then L->infinity proves
+
+    I(mu)=rho.                                         (32.3)
+
+This recovery also shows how a hypothetical I(mu)=0 minimum would be
+consumed: finite deterministic projections and vanishing anchor repairs
+give finite coarse laws with information tending0; their product marginals
+give actual terminal approximate Nash at every error. No strategy on a
+continuum of dates is substituted directly for an original strategy.
+
+### One finite-lifted source variation, and the precise obstruction left
+
+Permitted variation and its lift: at a positive minimum mu, let F be a
+positive-probability event that the FIRST quitter coalition is a particular
+B with |B|>=2 at a particular finite atom t. Replace the conditional future
+clocks of I\B by the product of their SAME conditional marginals. This
+variation is admitted together with the following finite lifts: in any
+normalizing minimizing sequence use the unique matching old atom t_k,
+condition on its corresponding first-coalition event F_k, and perform the
+same conditional product replacement there. All lifted laws are literal
+finite clock laws on their original legal calendars. Every future clock
+remains strictly after t. Unconditional marginals, prescribed payoffs,
+and EVERY pure deadline/Never reply remain unchanged: deleting one
+player leaves an immediate quitter. The KL chain rule gives exact decrease
+
+    Pr(F) * I(mu_(I\B) conditioned on F).
+
+This variation is actually approximable: use the matching old atom t_k
+and event F_k in the minimizing finite sequence, perform the same erasure
+there, and pass to the limit. Conditional relative entropy is lower
+semicontinuous, so a positive limiting decrease would contradict rho.
+Consequently all such conditional survivor laws at the minimum are products.
+Any positive-probability collision is at a marginal atom by finite I,
+so this conclusion covers all collision events (only countably many).
+
+This is NOT permission to erase a singleton's future opponent team.
+Deleting that sole quitter exposes the complete team and may change its
+full cap. Section30's whole reset-word theorem demonstrates exactly why
+blanket erasure cannot be the missing global operation. The attained
+law still may carry information in the joint first-quitter selection and
+in these strategically relevant singleton counterfactual tails.
+
+The new mathematical leverage is law-valued limit-source attainment with
+legal cuts and correlated opponent laws retained. The positive-rho contradiction is
+still missing; postcollision normality alone does not supply it. The next
+substantive task is an endpoint-feasible variation of the singleton-team
+completion, or a genuinely different whole-law operation, not another
+finite-calendar bound or normalization interface.
