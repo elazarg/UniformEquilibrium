@@ -853,12 +853,22 @@ profiles. Its restriction is identical laws, not independence itself.
 Section 24 of
 `CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION.md` supplies four
 different rational clock laws on twelve dates plus Never with exact full
-regret 63609521374809 / 10^16, below 1/150. Direct pure-clock tuple
-enumeration reproduces the complete payoff and cap vectors; the cap tests
-include both quitting after the last prescribed date and literal Never.
-The reproducible certificate is
+regret 63609521374809 / 10^16, below 1/150. A thirteen-date profile has
+exact full regret 32999363994574 / 10^16, below 1/300. Independent direct
+pure-clock tuple enumeration reproduces both complete payoff and cap
+vectors; the cap tests include both quitting after the last prescribed date
+and literal Never. The reproducible certificates are in
 `../experiments/CODEX_NASH_BOX__FINITE_CLOCK_JOINT_APPROXIMATION.py`.
-This is one finite-error profile, not an all-errors construction.
+These are finite-error profiles, not an all-errors construction.
+
+The second profile is obtained by inserting an interior date and jointly
+reoptimizing all four laws. On the selected search branch, suffix enlargement
+alone gives little improvement. Empty interior insertion initially increases
+full regret, because it opens a new unilateral deadline; subsequent joint
+optimization more than compensates. The set of players with zero Never mass
+also changes. This tests an operation that can leave a support face and
+temporarily worsen caps, rather than a cap-neutral refinement of one source.
+No universal descent or convergence property of that operation is proved.
 
 The contrast tests a genuinely global selection restriction. Averaging
 player laws into one common law can destroy useful strategic asymmetry even

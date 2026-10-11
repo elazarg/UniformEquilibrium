@@ -32,11 +32,13 @@ global source/product selection problem is not refuted; source changes
 and approximation remain necessary live freedoms.
 Section24 now tests those freedoms on the genuinely four-active K=10
 opponent-coincidence table: direct JOINT finite-law optimization produces
-an explicit denominator10000, twelve-date complete profile with exact
-FULL terminal regret<1/150. Payoffs move, three players retain positive
-Never mass, and no exact auxiliary obedience is imposed. The certificate
-is finite integer arithmetic, not a floating-point equilibrium claim.
-It is ONE accuracy, not an all-errors family, UE proof, or new solved class.
+explicit denominator10000, twelve- and thirteen-date complete profiles
+with exact FULL terminal regrets<1/150 and<1/300. Interior support birth
+and joint reoptimization outperform suffix extension on this test.
+Payoffs and proper labels move; selective Never remains available, and no
+exact auxiliary obedience is imposed. The certificates are finite integer
+arithmetic, not floating-point equilibrium claims. They are TWO accuracies,
+not an all-errors family, UE proof, or new solved class.
 
 Status: active independent research, resumed 2026-10-11. Section 8 now gives
 a positive candidate independently checked for soundness: sufficiently large pair-participation
@@ -4153,3 +4155,68 @@ payoff. No exact auxiliary obedience or fixed anchor is imposed by that
 assertion. The next concrete test is a selective birth of new finite clock
 support, including interior calendar seams, with complete caps recomputed;
 there is no permission to treat time insertion as cap-neutral.
+
+### Interior support birth: exact thirteen-date improvement
+
+The actual joint operation inserts a new date immediately before old
+date9, then reoptimizes ALL four complete laws. Merely inserting an EMPTY
+date would increase the full gap from about.00636 to about.08623: the
+new date opens an early insertion reply before an old macroscopic event.
+No cap-neutral insertion or monotone intermediate ancestry is assumed.
+After joint reoptimization, rational rounding gives the following profile,
+again with denominator10000 and columns0,...,12,Never:
+
+    p0: 0,0,0,171,536,331,661,1638,2875,74,0,1960,1754,0
+    p1: 452,154,308,798,1619,1884,1036,464,207,62,0,2956,60,0
+    p2: 1878,2241,1390,458,269,0,0,0,0,793,1211,0,0,1760
+    p3: 670,0,0,0,0,0,0,255,322,3563,3204,0,0,1986
+
+All four players are active at the newly born date9. Its conditional
+hazards for players2 and3 are about.21 and.41, not infinitesimal.
+The actual finite/Never structure also changes: now BOTH0 and1 are proper,
+while2 and3 retain positive Never mass. This is not an identical-clock
+profile, a stationary root, or a fixed-active-face refinement.
+
+The same complete integer calculation(24.2), now with horizon13, gives
+common-denominator10^16 numerators
+
+    U = (22766333411968402, 5670793636347674,
+         9049250636005426, 11226056588480590),
+    C = (22798349093900000, 5703136914100000,
+         9082250000000000, 11258150082010000),
+    C-U = (32015681931598, 32343277752326,
+           32999363994574, 32093493529410).
+
+Therefore the EXACT complete maximum terminal regret is
+
+    32999363994574 / 10^16 < 1/300.                 (24.3)
+
+Maximizers are deadline4 for players0,1, deadlines1 AND2 for player2,
+and deadline9 for player3. The omitted-late deadline13 and literal Never
+are still included for EVERY player, whether or not maximizing. With two
+proper clocks, their all-opponent-Never contribution is zero for every
+recipient. This fact is derived from the displayed laws, not imposed on
+the global selection problem.
+
+The script's `--certificate-only --certificate-dates 13` mode checks
+(24.3) using only integer/Fraction arithmetic. The twelve-date baseline
+was separately checked by the coordinator's independent direct tuple
+enumeration; this later thirteen-date calculation is ordinary unreviewed
+supporting mathematics unless separately checked.
+
+For comparison, suffix enlargement12->24 in the selected branch gave
+only about.006294. Interior births at old cuts3,8,9,11 gave selected gaps
+about.005304,.005240,.003199,.006278 before rational rounding; cut9 was
+best in this bounded experiment. After a SECOND birth,13->14, the selected
+best gap is about.002579, with active maximizing dates9,12,1,10 and all four
+Never atoms positive again. This latter figure is exploratory, not another
+claimed exact certificate or a convergence theorem. In particular, proper
+labels may disappear as well as appear when all laws are reoptimized.
+
+The optimizer now also has a LINEAR-memory first-minimum/survival evaluator
+and gradient, avoiding a four-dimensional payoff tensor for larger menus.
+It agrees with the independent tensor evaluator to below1e-14 on a random
+small test. This improves experimental scalability, not mathematical
+existence. The meaningful new operation is JOINT interior support birth
+with unrestricted payoff/finite-Never movement; its universal quantitative
+descent property remains unproved.

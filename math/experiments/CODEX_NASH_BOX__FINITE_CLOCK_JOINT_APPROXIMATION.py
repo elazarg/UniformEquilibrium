@@ -201,6 +201,20 @@ CERTIFICATE_TWELVE = [
     [686, 59, 0, 0, 0, 0, 125, 511, 89, 4554, 0, 0, 3976],
 ]
 
+SEED_THIRTEEN = np.array([
+    [0, 0, 0, 17134110, 53628834, 33061747, 66097713, 163843847, 287463699, 7449407, 0, 195957046, 175363597, 0],
+    [45188244, 15383600, 30759969, 79815811, 161945127, 188360867, 103565675, 46415673, 20731120, 6197700, 0, 295585745, 6050469, 0],
+    [187769908, 224126861, 138955197, 45827168, 26942682, 0, 0, 0, 0, 79287863, 121110097, 0, 0, 175980224],
+    [66948243, 0, 0, 0, 0, 0, 0, 25529472, 32225596, 356336822, 320356216, 0, 0, 198603651],
+]) / 10 ** 9
+
+CERTIFICATE_THIRTEEN = [
+    [0, 0, 0, 171, 536, 331, 661, 1638, 2875, 74, 0, 1960, 1754, 0],
+    [452, 154, 308, 798, 1619, 1884, 1036, 464, 207, 62, 0, 2956, 60, 0],
+    [1878, 2241, 1390, 458, 269, 0, 0, 0, 0, 793, 1211, 0, 0, 1760],
+    [670, 0, 0, 0, 0, 0, 0, 255, 322, 3563, 3204, 0, 0, 1986],
+]
+
 
 def simplex_project(p):
     result = np.empty_like(p)
@@ -259,14 +273,17 @@ def main():
     parser.add_argument("--denominator", type=int, default=10 ** 9)
     parser.add_argument("--projected", action="store_true")
     parser.add_argument("--certificate-only", action="store_true")
+    parser.add_argument("--certificate-dates", type=int, choices=(12, 13), default=12)
     parser.add_argument("--linear", action="store_true")
     args = parser.parse_args()
     if args.certificate_only:
-        result = exact_certificate(CERTIFICATE_TWELVE, 10000)
+        counts = CERTIFICATE_TWELVE if args.certificate_dates == 12 else CERTIFICATE_THIRTEEN
+        bound = Fraction(1, 150 if args.certificate_dates == 12 else 300)
+        result = exact_certificate(counts, 10000)
         for key, value in result.items():
             print(key, value)
-        assert max(result["gaps"]) < Fraction(1, 150)
-        print("PASS: complete terminal regret < 1/150")
+        assert max(result["gaps"]) < bound
+        print("PASS: complete terminal regret <", bound)
         return
     problem = (LinearClockProblem if args.linear else ClockProblem)(args.dates)
     rng = np.random.default_rng(90473)
