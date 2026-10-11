@@ -2,11 +2,27 @@
 
 Author: CODEX_NASH_BOX.
 
-Status: completed independent ordinary mathematical mechanism tests, not
-Lean-checked or exported. Section 6's entire-correspondence limit-order
+Status: active independent research, resumed 2026-10-11. Section 8 now gives
+a positive candidate independently checked for soundness: sufficiently large pair-participation
+rewards near the hard paired singleton matrix produce proper stationary
+exact terminal Nash, uniformly over bounded arbitrary remaining coordinates.
+The rescaled limiting equations have an explicit positive nonsingular root.
+An exact family has no pure-clock equilibrium and fails every proper
+nonnegative quiet-child join test, BUT CODEX_EMMY_BOX found it is covered
+by an existing persistent-base source. Section 9 explains much broader
+generic containment and a failed separation attempt. Section 10 records
+a global degree replacement for the local nonsingular-root producer;
+its proof remains unreviewed and it does not yet supply new coverage.
+No strict-new-coverage claim is made.
+All arguments are ordinary mathematics, not Lean-checked or exported.
+Section 7 gives a genuinely
+different global cap-minimization/minimax producer for affine opposed-team
+games, but a complete singleton-matrix check places that whole class inside
+existing abnormal/non-Q coverage. It therefore supplies NO NEW TABLE CLASS.
+Section 6's entire-correspondence limit-order
 calculation has a bounded independent PASS by CODEX_TURING_BOX; Sections
-2, 4 and 5 remain unreviewed ordinary proofs. No UE proof, positive-gap
-game, or new exclusion from the possible-counterexample class is claimed.
+2, 4 and 5 remain unreviewed ordinary proofs. No unrestricted UE proof or
+positive-gap game is claimed.
 
 Central conclusion: NONE of the no-go results below refutes existential
 selection from the FULL private-Never-bonus equilibrium correspondence.
@@ -674,3 +690,706 @@ objection in that bounded scope; see
 `feedback/CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION__BY_CODEX_TURING_BOX.md`.
 It did not review the arbitrary reward-perturbation proposition, private
 bonus transport, cyclic calibration, or discontinuous-game source audit.
+
+## 7. Resumed research: a global cap-minimizer producer, already-covered class
+
+### Preliminary coverage checks
+
+Two initially plausible constructions were stopped at exact overlap checks.
+Full-cap common-quantile clock compression is already implemented in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`; a
+bounded calendar search alone cannot show its minimum regret is zero.
+
+A weighted-observer lift with old participating rewards nonnegative, the
+observer's participating rewards nonpositive, and its passive payoff above
+a nonnegative combination of old payoff rows implies the existing advancing-
+only F/J certificate. The more general portfolio sandwich independently
+tested by CODEX_EMMY_BOX has the same overlap: Q(empty)=N, N-P(A)=F, and
+Q(A)-P(A)=J, literally in `CappedClockParentRewardCertificate` from
+`Classification/QuietExtension/CappedClockPointwiseDomination.lean`.
+My bounded independent check is in
+`feedback/CODEX_EMMY_BOX__PORTFOLIO_MIMICRY_PLAYER_ELIMINATION__BY_CODEX_NASH_BOX.md`.
+Neither lift is new coverage.
+
+### A complete ordinary positive mechanism
+
+This proof is unreviewed ordinary mathematics. It is not a general Fin4
+producer. Its purpose is to test an actual global optimization argument,
+with jointly changing laws, rather than another exact-selection restriction.
+
+Let there be one distinguished maximizer 0 and m other players J. Let the
+finite terminal payoff table to 0 be g(S), with g({0})>=0 and zero Never.
+For each i in J suppose a_i>0 and b_i are constants such that on EVERY
+nonempty coalition,
+
+    r_0(S)=g(S),       r_i(S)=b_i-a_i g(S).                (A)
+
+Never still gives each player zero, not b_i. We claim this game has actual
+terminal approximate Nash profiles for every positive accuracy, and hence
+one ordinary uniform-equilibrium payoff. The chosen maximizer law will be
+finitely supported on finite dates and will have no Never atom. This makes
+the constants b_i strategically inert for every other player's deviation.
+
+Write X for the product of the m compact stopping-law spaces on the
+one-point compactification of the nonnegative integers. These are actual
+countably additive laws, not relaxed correlated laws. Compactness and the
+PMF bridge are supplied by the construction in
+`MathUE/ProbabilityMassFunction/CompactStoppingLaw.lean`.
+For x in X and each finite date t, define
+
+    C_t(x)=E[g(first coalition) | player 0 uses pure date t].
+
+The game surely ends by t. Thus C_t depends only on the finitely many
+marginal masses at dates <=t and the complementary masses; it is a bounded,
+continuous, separately affine function on X. Fix |g(S)|<=R, R>=0.
+
+Let W(x) be player 0's Never payoff and D(x) the product of opponents'
+Never atoms. Bounded convergence of the actual finite-time outcome gives
+
+    lim_(t->infinity) C_t(x) = W(x)+g({0})D(x) >= W(x).
+
+Consequently its FULL unrestricted response cap is
+
+    F(x)=sup_(finite t) C_t(x),                          (B)
+
+including Never and every behavioral mixture. The supremum of continuous
+functions is lower semicontinuous. Hence F attains its global minimum v at
+one actual product x*. This does not assert continuity of Never payoff.
+
+The key selection step obtains a finite mixture of near-maximizing dates
+which is simultaneously safe against every independent opponent replacement.
+For a tuple y=(y_i) of arbitrary replacement laws, put
+
+    A_t(y)=sum_(i in J) [C_t(x* with i replaced by y_i)-C_t(x*)].
+
+Let x_h have coordinates (1-h)x_i*+h y_i. Multiaffinity gives, uniformly in
+ALL t and y,
+
+    C_t(x_h)=C_t(x*)+h A_t(y)+e_t,
+    |e_t| <= K_m R h^2,      K_m=3^m-1-2m,  0<=h<=1.    (C)
+
+Indeed the exact finite-difference expansion has a subset-S coefficient
+bounded by 2^|S| R; the terms of size at least two total at most
+sum_(k=2)^m binom(m,k)2^k R h^2. For m=3 this is 20R h^2.
+Also |A_t(y)|<=2mR.
+
+Fix eta>0. For sufficiently small h>0, global minimality F(x_h)>=v and
+a date t within h^2 of the supremum F(x_h) imply
+
+    C_t(x*) >= v-eta,       A_t(y) >= -eta/2.            (D)
+
+Explicitly, (C) implies
+v-C_t(x*) <=2mRh+(K_m R+1)h^2 and
+A_t(y)>=(v-C_t(x*))/h-(K_m R+1)h >=-(K_m R+1)h.
+Choose h so both displayed errors are below eta and eta/2, respectively.
+
+Let I_eta={t:C_t(x*)>=v-eta}. For each y, (D) gives some t in I_eta with
+A_t(y)>-eta. Each A_t is continuous in y. These open tests cover the compact
+product X, so finitely many dates t in I_eta already cover it. Write T for
+that finite set. Thus
+
+    inf_y max_(t in T) A_t(y) >= -eta.                  (E)
+
+This is a genuine finite zero-sum minimax problem: if L=max T, every test
+depends only on each y_i's masses at dates <=L and the remaining mass.
+Its minimizing domain is a product of finite simplices; A_t is affine on
+that product (a sum of single-coordinate affine functions). Finite minimax
+therefore gives one probability vector pi on T satisfying
+
+    sum_(t in T) pi_t A_t(y) >= -eta   for EVERY y.      (F)
+
+No convex combination of independently played profiles is being rounded.
+The only mixture chosen by minimax is player 0's own legal stopping law pi.
+
+Use that pi and retain the actual independent opponent laws x*. Player 0's
+prescribed payoff lies in [v-eta,v], whereas its full cap is v. Its debt is
+at most eta. In (F), set every replacement except coordinate i equal to
+x_j*. All other summands then vanish, so
+
+    U_0(pi,x* with i replaced by y_i)-U_0(pi,x*) >=-eta.
+
+Because pi surely quits at a finite date, both games end surely regardless
+of y_i. Equation (A) then gives i's gain at most a_i eta. Hence
+
+    E_r(pi,x*) <= eta max(1,max_i a_i).                 (G)
+
+This covers every complete behavioral deviation, not merely the finite
+test calendar. The opponent laws may be censored at a sufficiently large
+finite cutoff: their total removed finite-tail marginal mass tends to
+zero, and the usual product coupling changes full regrets by at most four
+times the original reward bound times that mass. Thus (G) also supplies
+actual finite menus. The all-errors terminal endpoint selects one fixed
+uniform-equilibrium payoff.
+
+Important features: only the RESPONSE CAP F is minimized; all opponent laws
+may change together. Global minimality supplies the common near-active
+costate pi. No source ancestry, exact menu equilibrium, Nash--Bellman root,
+private Never bonus, or profile-independent positive debt step is used.
+The construction permits arbitrary simultaneous coalition rewards subject
+to (A); no diffusion assumption is imposed on player 0.
+
+### Why this class is already covered in canonical Fin4
+
+Assume own singletons (1,0,0,0), let c_i=g({i}) for i=1,2,3, and write
+c_0=1. Condition (A) forces b_i=a_i c_i. The normalized singleton matrix is
+
+    M_0j=c_j-1,             j!=0;
+    M_ij=a_i(c_i-c_j),      i!=0, all j;
+    M_00=0.
+
+If every c_i>=1, player 0's solo row weakly dominates every other player's
+own singleton: r_i({0})=a_i(c_i-1)>=0. Letting only player 0 quit with a
+small proper hazard is the existing solo-owner producer, irrespective of
+all nonsingleton rewards. The exact full-behavior pair-premium bound is
+`quittingTerminalPayoff_update_solo_other_le_pairPremium` in
+`Classification/Existence/AcyclicSoloPreemption.lean`.
+
+Otherwise choose a least-c nonpivot k, with c_k<1. Players 0 and k retain
+strictly negative mutual entries, so both survive every normality layer.
+Moreover row k is entrywise nonpositive on the FULL matrix, because
+c_k<1 and c_k<=c_j for every nonpivot j. It remains entrywise nonpositive
+on the actual nonempty core. At standard LCP offset equal to minus one,
+its residual is always negative for every nonnegative vector. Thus the
+actual core matrix is NOT standard Q. If it has a homogeneous simplex
+solution, that existing positive branch applies; otherwise it lies in
+`OrdinaryNonQMatrixBranch`. The inspected consumer
+`exists_uniformEquilibriumPayoff_of_ordinaryNonQMatrixBranch` in
+`Classification/LCP/OrdinaryNonQClosure.lean` already covers this class,
+after the existing homogeneous/non-Q dispatch, and supplies stationary
+approximate equilibria.
+
+Correction retained explicitly: an earlier informal coverage calculation
+described the core as precisely {0} plus the c_i<1 players. That is false
+on ties. The actual inspected `normalLayer` definition in
+`Classification/LCP/NormalCore.lean` uses a DISTINCT NONPOSITIVE witness,
+not a strictly negative witness. Zero comparisons may retain extra players.
+The least-c-row argument above avoids any incorrect exact-core assertion.
+
+The exact anti-aligned case b_i=0 is even simpler: c_i=0, the full matrix
+is entrywise nonpositive, with strict negative edges from and to player 0.
+Here every player survives; Mz>=0 forces all nonpivot coordinates to zero
+by row 0, then forces z_0=0 by any nonpivot row. There is no nonzero
+homogeneous solution, so this case lies directly in OrdinaryNonQMatrixBranch.
+
+Verdict: (B)--(G) are a genuinely different complete positive mechanism,
+but not a new table-class theorem beyond the current frontier. No export
+or independent export review is requested for this already-covered class.
+The meaningful next question is whether the common-costate selection step
+can control actual nonpivot incentives in a standard-Q class without merely
+assuming global affine anti-alignment. No such extension is proved here.
+
+### Unconditional source lemma surviving the class overlap
+
+Steps (B) and compact minimization do not require (A). For ANY finite quitting
+table and any owner whose own singleton is nonnegative, its full response cap
+against actual independent opponent laws is lower semicontinuous on their
+compact stopping-law product. Therefore its committed-plan punishment value
+is attained by an ACTUAL independent opponent profile. The bridge is not an
+attained best-response supremum: the owner's best reply may still only be
+approached by finite dates tending to infinity when its singleton is positive.
+
+The distinction matters. It is the opponents' infimum that is attained.
+The proof uses precisely the finite-cylinder continuity and the inequality
+Never<=lim finite dates. A negative own singleton would reverse the useful
+inequality and does not satisfy this argument. The result does not prescribe
+the opponent profile's payoffs, make the opponents mutually best-responding,
+give a shared punishment for different owners, or eliminate any Fin4 table.
+
+I inspected the approximate shared-floor statements in
+`Quitting/Punishment/SharedPunishment.lean` and located actual finite-menu
+attainment in `Quitting/Punishment/FiniteMenuPunishmentValue.lean` and the
+scalar finite-root recursion. I did not find this infinite-clock actual
+attainment statement in that narrow subtree search. That search is not a
+proof of implementation novelty; no export is proposed for this source lemma.
+
+## 8. Collision-dominated stationary selection: a positive asymptotic source
+
+### Complete raw statement and current status
+
+This is an ordinary proof candidate independently checked in bounded scope
+by CODEX_TURING_BOX, not Lean-checked. It is a producer from raw
+reward restrictions, not a hypothesis supplying a stationary root, response
+values, or a certificate. Independent proof and existing-source coverage
+checks are needed before any export or strict-new-coverage claim.
+
+Let I={0,1,2,3}, Never payoff zero, and let the four reference singleton
+vectors be
+
+    r^0(0)=(1,4,0,0),       r^0(1)=(4,1,0,0),
+    r^0(2)=(0,0,1,4),       r^0(3)=(0,0,4,1).
+
+Thus the literal singleton comparison matrix is
+
+    Gamma=[0,3,-1,-1; 3,0,-1,-1;
+           -1,-1,0,3; -1,-1,3,0].                     (S1)
+
+**Candidate theorem.** For every finite R>=0 there are delta>0 and M0>0
+such that EVERY real table satisfying the following restrictions, for ANY
+M>M0, has an exact stationary terminal Nash profile against all behavioral
+replacements and one fixed original-game uniform equilibrium payoff:
+
+1. All sixteen singleton coordinates are within delta of r^0.
+2. For each two-player coalition A and each i in A,
+   r_i(A)=M+c_i(A), with |c_i(A)|<=R.
+3. Every nonsingleton coordinate not specified in item 2 has absolute
+   value at most R.
+
+There is no relation between the bounded coordinates. In particular all
+twelve pair residuals c, twelve pair passive rewards, sixteen triple
+rewards, and four grand rewards may vary independently. For an interior
+choice of these bounds this is a full sixty-coordinate raw open class,
+not a strategy-defined neighborhood. The theorem is asymmetric in scale:
+pair participant rewards grow like M, the other nonsingleton coordinates
+remain bounded. It does not transport any equilibrium back to an arbitrary
+unmodified reward table.
+
+The produced hazards have the form
+
+    q_i=z_i/M,       1/18<z_i<1/6.                     (S2)
+
+At the limiting reference singletons, z_i tends to 1/9. For each fixed
+table these rates are proper and constant across dates; the resulting
+independent geometric clocks are legitimate original-game behavior.
+
+### Exact stationary owner equations
+
+For arbitrary q in (0,1)^4, write p_i(A) for the product probability that
+exactly coalition A of I−{i} quits at a live date. Set
+
+    alpha_i=p_i(empty),
+    Q_i=sum_(A subset I-i) p_i(A) r_i(A+i),
+    B_i=sum_(nonempty A subset I-i) p_i(A) r_i(A).
+
+The actual stationary prescribed value is
+
+    U_i=[q_i Q_i+(1-q_i)B_i]/[1-(1-q_i)alpha_i].
+
+Continue has value C_i=B_i+alpha_i U_i. Direct substitution gives
+
+    Q_i-C_i=H_i/[1-(1-q_i)alpha_i],
+    H_i=(1-alpha_i)Q_i-B_i.                            (S3)
+
+In particular H_i depends only on q_{-i}. If every H_i=0, then U_i=Q_i=C_i,
+so every prescribed positive Quit/Continue mixture is a local root best
+reply. Since all opponents have proper rates, these local equalities
+bound every unrestricted behavioral replacement, not just stationary
+hazard deviations.
+
+### Remove the large-reward pole before applying the implicit theorem
+
+Put theta=1/M and q_i=theta z_i. Each p_i(A) contains theta^|A|. In Q_i,
+only the singleton-opponent terms contain an unbounded reward:
+
+    sum_j p_i({j}) r_i({i,j})
+      =sum_j z_j product_(k distinct i,j)(1-theta z_k)
+       +sum_j p_i({j}) c_i({i,j}).                    (S4)
+
+Consequently Q_i is a POLYNOMIAL in theta,z and the bounded table data,
+after this cancellation. Also 1-alpha_i and every nonempty summand of B_i
+are divisible by theta. Thus the exact rescaled owner field
+
+    Phi_i(theta,z,data)=H_i/theta                     (S5)
+
+extends polynomially through theta=0. This extension is not a terminal
+payoff at an improper zero-hazard profile; it is an algebraic continuation
+used to produce positive hazards at theta>0.
+
+Let s_i=r_i({i}) and Gamma_ij=r_i({j})-s_i for j!=i, with zero diagonal.
+Writing a_i=sum_(j!=i) z_j, the polynomial extension satisfies exactly
+
+    Phi_i(0,z,data)=a_i^2-(Gamma z)_i.                 (S6)
+
+Indeed Q_i at theta zero equals s_i+a_i, (1-alpha_i)/theta equals a_i,
+and B_i/theta equals sum_j z_j r_i({j}). All bounded nonsingleton data
+disappear from (S6).
+
+For (S1), every row sum is one, so
+
+    z*=(1/9,1/9,1/9,1/9)
+
+is a strictly positive zero of (S6). The exact z-Jacobian there is
+
+    B=[0,-7/3,5/3,5/3; -7/3,0,5/3,5/3;
+       5/3,5/3,0,-7/3; 5/3,5/3,-7/3,0].             (S7)
+
+Its eigenvalues are 1,-17/3,7/3,7/3, so det B=-833/27!=0. Its inverse is
+
+    B^(-1)=[50/119,-1/119,5/17,5/17;
+             -1/119,50/119,5/17,5/17;
+             5/17,5/17,50/119,-1/119;
+             5/17,5/17,-1/119,50/119].                (S8)
+
+Both (S6) and (S7) were independently recomputed by exact symbolic
+expansion of the original coalition sums for the explicit family below.
+The determinant and inverse were checked by exact rational arithmetic.
+
+### Uniform producer over the ENTIRE bounded data box
+
+Fix R. The forty-four bounded nonsingleton parameters form the compact
+cube [-R,R]^44. At theta=0, the reference singletons, and z*, equation
+Phi=0 and invertibility (S7) hold at EVERY point of that cube, with the
+same z-Jacobian. Apply the finite-dimensional implicit function theorem
+at each such point, treating theta, all singleton entries and all bounded
+coordinates as parameters. Each application produces a local solution in
+z, which can be kept in the open cube (1/18,1/6)^4.
+
+Choose finitely many of the parameter neighborhoods whose bounded-data
+parts cover [-R,R]^44. Taking a common smaller positive theta interval
+and singleton radius delta gives a solution for every allowed bounded
+data point, every nearby singleton table, and every sufficiently small
+theta>0. No agreement of the local selectors on overlaps is required:
+only existence for each original table is asserted. Shrink theta so all
+q_i=theta z_i are below one. This proves the uniform M0 statement.
+
+For any produced table, H_i=theta Phi_i=0. Equations (S3) therefore give
+actual policy recursion and local root Nash. Since all four rates are
+positive, every player's opponents continue a whole date with probability
+strictly less than one. Telescoping the local inequality has a geometrically
+vanishing remainder for ANY replacement. This proves exact terminal Nash
+and supplies one actual stationary payoff target. The same profile gives
+that original-game uniform payoff; no Never affine-invariance is used.
+
+### Joint approximate finite menus are also produced
+
+Let K bound the absolute rewards of the fixed original table. Censor each
+geometric clock beyond date N to Never, leaving every earlier atom intact.
+By (S2), each changed marginal mass is at most exp(-(N+1)/(18M)). Product
+coupling changes any prescribed payoff by at most 2K times the sum of those
+four masses, uniformly over the replacing law. Hence full exploitability
+of the censored product is at most
+
+    16K exp(-(N+1)/(18M)).                             (S9)
+
+Fix one admissible M representation of the original table. Choosing N
+as appropriate for that fixed table and the error therefore
+gives actual finite product clocks solving its joint approximate-selection
+question. This bound controls the FULL cap, including late deadlines and
+unused-Never slack, not just Nash regret within the censored menu.
+
+### An exact all-pure/all-quiet-child exclusion fixture
+
+For the reference singletons, choose every pair participant reward M and
+every pair passive reward -4. Set the four triple rows and grand row to
+
+    r(012)=(-6,-3,-3,-5),
+    r(013)=(-3,-6,-5,-3),
+    r(023)=(-6,-5,-3,-3),
+    r(123)=(-5,-3,-6,-3),
+    r(0123)=(-100,-101,-102,-103).                     (S10)
+
+Together with the four singleton rows and six pairs just specified, this
+is a complete fifteen-row family. It lies in the theorem with R=103 for
+all sufficiently large M. For M>4 it has NO pure-clock Nash equilibrium:
+
+- A singleton first coalition has an outsider who gains by joining, since
+  pair participation pays M>4, whereas singleton passive payoffs are at
+  most four.
+- Every pair has an outsider with joining reward -3, exceeding its passive
+  reward -4. The sole bad participant in triples012,013,023,123 is
+  respectively0,1,0,2. The associated blocked pair joins are respectively
+  12,03,23,13, all distinct, so no pair has both outsiders blocked.
+- Each triple has a participant with reward -6 who gains by leaving:
+  the resulting pair gives that player passive payoff -4.
+- Every grand participant gains by leaving: -100-i<-5.
+- These arguments directly rule out every coalition at date zero. At a
+  later first date, every possible coalition has at least one receiver
+  below its own singleton one, who can preempt at date zero. All-Never
+  is also defeated by immediate singleton quitting.
+
+The fixture also fails EVERY proper nonnegative quiet-child join criterion,
+not merely one chosen lift. For a triple child C, take its unique bad
+participant d and T=C-d. That donor's join gain is -6-(-4)=-2. The omitted
+outsider e has join gain -3-(-4)=1, because the blocked pairs above are
+distinct. Child members already in T have join gain zero. Thus the (J)
+inequality 1<=-2*w_d fails for all nonnegative child weights. For a pair
+child, take T to be the whole child: some outsider has positive join gain
+one while every donor's join gain is zero. For a singleton child, take its
+whole coalition: an outsider join gain M-r_e({d})>0 again faces zero.
+This is the literal J in `CappedClockParentRewardCertificate`, not an
+informal observer comparison.
+
+These exact failures do not show absence of a uniform equilibrium—the
+candidate theorem produces one. They only avoid two elementary existing
+sources. Matrix (S1) is the known hard paired Q example, so the bare
+homogeneous/ordinary-non-Q and projective-Q-bar sources do not apply.
+Further bounded source screens remain pending.
+
+### Narrow source audit and relation to other work
+
+`isZeroAsymptoticNash_stationary_of_fixedPoint_endpointNash_contracts`
+and `isUniformEquilibriumPayoff_of_stationaryEndpointCertificate_contracts`
+in `UniformEquilibrium/Quitting/Stationary/EndpointCompiler.lean` are the
+exact unrestricted-behavior consumers used here. The theorem's producer
+is the pole-cancelled system (S5)–(S8), not either checked compiler alone.
+
+`QuittingCenteredStationaryFaceCertificate` in
+`Classification/Existence/CenteredStationaryFaceCertificate.lean` is an
+existing supplied-field box verifier. It does not assert existence of its
+uniform error estimate from arbitrary reward data. The present asymptotic
+argument constructs the needed zero directly from the raw scale conditions;
+it is not a claim that the verifier itself was missing.
+
+The narrow search for large pair-participation and stationary perturbation
+sources found no matching producer. I read the entire
+`CODEX_HILBERT__COLLISION_SUBSIDY_POLYNOMIAL_TRANSPORT_TEST.md`: its homotopy
+adds to ALL participating nonsingletons and attempts to transport a fixed
+polynomial tolerance. It stops before its sure-root endpoint. Here only
+pair participant coordinates grow, all higher coalitions stay bounded, and
+there is no back-transport claim or presumed polynomial certificate.
+
+Current concrete request: independently check (S3)–(S8), especially uniform
+IFT over all forty-four bounded coordinates and full-behavior compilation;
+then check whether an existing raw producer already contains the entire
+large-M family (S10), not merely whether a supplied-root verifier can verify
+its produced equilibrium. No export is requested before these checks.
+
+### Independent feedback incorporated
+
+CODEX_TURING_BOX independently checked (S3)–(S8), compact-box uniform IFT,
+full stationary behavioral/Never semantics, terminal-to-uniform passage,
+and the stated pure/quiet-child fixture tests; see the feedback file for
+this notebook. No mathematical objection was found. The truncation paragraph
+now explicitly fixes an admissible M representation of the original table
+before varying N: M is NOT an accuracy-dependent modification of that table.
+
+CODEX_EMMY_BOX found that S10 is already solved by a persistent base:
+q0=q1=1, q2=1/99, q3=1/98. The free-player indifferences are respectively
++1 versus -97 and +1 versus -98. The two base-owner leave margins are
+[9506(M-4)-191]/9702 and [9506(M-4)-195]/9702, both positive for M>=5.
+The named existing consumer is
+`exists_uniformPayoff_of_persistentBase_inducedNash_signs` from
+`Diagnostics/Quitting/Collision/Toggles/PersistentBaseNashSemanticAdapter.lean`.
+Thus S10 is NOT a new-coverage witness. The pure/quiet-child exclusions
+remain correct but are insufficient. No export is proposed on their basis.
+
+## 9. Broad persistent-base containment and a consequential failed limit
+
+This section is unreviewed ordinary mathematics. It concerns the ENTIRE
+fixed-singleton large-pair scale family, not just S10. The bounded data are
+fixed while M grows. No uniform threshold as bounded data degenerate is
+claimed here.
+
+Write
+
+    Delta_i=r_i(I)-r_i(I-i)
+
+for the grand-coalition joining gaps. Assume for this section every Delta_i
+is nonzero. Then for all sufficiently large M an EXISTING persistent-base
+source solves the table. This substantially weakens the novelty case for
+Section 8, even though its separate four-proper-hazard producer is sound.
+
+### At most one positive grand gap: an induced-three-player upper corner
+
+Choose an owner b so all other three Delta_i are negative. If there is one
+positive Delta, choose its player. If all are negative, choose b minimizing
+d_b=-Delta_b>0. Fix b to Quit surely and let its three free players have
+Continue rates epsilon_i=t z_i, with M=1/t^2. For free i, writing j,k for
+the other free players, its exact stage Quit-minus-Continue difference is
+
+    D_i=(M+bounded)epsilon_j epsilon_k
+         +g_ij(1-epsilon_j)epsilon_k
+         +g_ik epsilon_j(1-epsilon_k)
+         +Delta_i(1-epsilon_j)(1-epsilon_k),             (C1)
+
+where both g terms and the displayed bounded residual are independent of
+M. The M pole cancels. At t=0 the field is z_j z_k-d_i. Its positive root
+is z_i=sqrt(d_j d_k/d_i), with Jacobian determinant 2 z_i z_j z_k>0.
+IFT therefore produces an exact fully mixed induced free-player Nash
+point for every sufficiently large M.
+
+One MUST retain the rare-pair subsidy to the owner. With three free players
+almost surely Quitting, the owner's pair-participant payoff contributes
+
+    M Pr(exactly one free Quit) -> sum_(i!=b) d_i.
+
+Thus, if Q_b is its prescribed payoff and B_b its Continue numerator,
+
+    Q_b-B_b -> Delta_b+sum_(i!=b)d_i >0.               (C2)
+
+The strict sign follows from the choice of b. It is NOT merely the grand
+gap Delta_b. Dropping the scale times the vanishing pair probability led
+to a false proposed one-owner exclusion; that argument is withdrawn.
+
+The actual singleton-base test prices Continue at the exact punishment
+value v_b, not at stationary Never. Its excess is
+
+    B_b+alpha_b v_b-Q_b,
+    alpha_b=product_(i!=b)epsilon_i ->0.                (C3)
+
+All non-pair-participant rewards are bounded below independently of M, and
+the owner can be punished by having all three opponents Quit at date zero;
+its cap there is max(r_b(I),r_b(I-b)), also uniformly bounded. Hence v_b
+is uniformly bounded on this fixed-data scale family. The extra term in
+(C3) vanishes. Equation (C2) gives a strictly NEGATIVE actual floor excess
+for all sufficiently large M. The owner therefore passes the EXISTING
+singleton-persistent-base source, not only a stationary Never comparison.
+
+### Two or more positive grand gaps: a two-free-player source
+
+If all four grand gaps are positive, all-Quit is exact Nash. If there is
+one negative player b, inspect T=I-b. Its outsider b prefers Continue.
+If every participant prefers staying in T, it is already pure Nash.
+Otherwise take i in T with
+
+    g_i=r_i(T)-r_i(T-i)<0.
+
+Use base A=T-i, and free players i,b. Player i has negative joining gap
+when b Continues and positive gap Delta_i when b Quits. Player b has
+negative gap Delta_b when i Quits. If b's gap when i Continues is nonpositive,
+both-Continue is an induced Nash point. Otherwise the free two-player game
+is matching pennies with an interior Nash point. In either case there is
+an induced Nash with BOTH free Quit rates strictly below one.
+
+For exactly two positive and two negative grand gaps, first use the two
+positive players as base. For the two negative free players a,b, if their
+joining gaps at both-Continue have the same weak sign, the two-player game
+has an induced Nash with both Quit rates below one (including zero-gap
+endpoints). The only remaining case is, up to interchange, g_a>0>g_b.
+Its unique pure induced point has a Quit, b Continue. Inspect T=I-b.
+If the two original base players also prefer staying, T is pure Nash.
+Otherwise remove a base player c with negative leave gap from T and make
+c,b the two free players. Now c has positive grand gap and negative initial
+gap, while b has negative grand gap. This is exactly the preceding
+matching-pennies/both-Continue construction.
+
+At any produced induced point with both free Quit probabilities below one,
+the no-free-Quit probability p is positive and independent of M. Each base
+owner gets M+bounded on that event, whereas its Continue payoff is uniformly
+bounded. Its leave margin is at least M p-constant. Both base owners therefore
+pass the existing large-base screen for all sufficiently large M. All other
+players are free, so there is no untested fixed outsider.
+
+### Surviving scope and boundaries
+
+This proves GENERIC fixed-data containment in existing persistent-base or
+pure-coalition sources. It does NOT prove whole-class containment when one
+or more grand gaps are exactly zero. Generic density alone cannot handle
+a fixed M: the positive no-free-Quit mass p, and hence the threshold M0,
+can degenerate as a grand gap tends to zero. No boundary-class theorem or
+strict-new-coverage claim is inferred from this failure of the generic proof.
+The conference direction is to keep this overlap and move to a more global
+mechanism, not tune increasingly intricate fixtures to rescue a neighborhood.
+
+Exact definitions inspected: `quittingSingletonBaseOwnerFloorExcess`,
+`quittingSingletonBaseOwnerFloorExcess_nonpos_iff`, and
+`quittingPersistentLargeBaseExcess_nonpos_iff` in
+`Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`;
+`exists_uniformPayoff_of_persistentBase_inducedNash_signs` in the adapter
+above. These distinguish the actual punishment floor in (C3) from a mere
+stationary Never value. The source theorem is supplied an induced Nash and
+all base/free/outsider signs; the constructions here produce those inputs.
+
+## 10. Global nonlinear degree producer beyond a nonsingular limiting root
+
+This is a NEW UNREVIEWED ordinary proof attempt, not a new coverage claim.
+It replaces the special paired-matrix IFT root in Section 8 by a global
+complementarity argument. All boundary solutions remain explicit.
+
+Fix n>=2 players and ANY singleton table with comparison matrix Gamma of
+zero diagonal. Assume Gamma is R0 and its canonical complementarity degree
+d is nonzero. Fix all other bounded data as in Section 8, with every pair
+participant reward M+bounded and every other nonsingleton reward bounded.
+Then for all sufficiently large M there is an exact stationary terminal
+Nash equilibrium with total Quit rate O(1/M). A quantitative matrix margin
+or supplied nonlinear root is not an input. Singleton own rewards may have
+either sign in this degree version.
+
+The exact polynomial field Phi(theta,z) is the same pole-cancelled field
+(S5), now in n dimensions. Its limit is
+
+    Phi_i(0,z)=(sum_(j!=i)z_j)^2-(Gamma z)_i.           (D1)
+
+Seek a NONZERO complementarity solution
+
+    z>=0,   Gamma z-a(z)^2>=0,
+    z_i[(Gamma z)_i-a_i(z)^2]=0.                       (D2)
+
+### Global compactness and a nonzero limit solution
+
+Let G bound all absolute entries of Gamma. If z>=0 and Gamma z>=a(z)^2,
+put T=sum z and choose z_j>=T/n. For any i!=j,
+
+    T^2/n^2 <= a_i(z)^2 <= (Gamma z)_i <= G T.
+
+Thus T<=n^2 G. The entire feasible set is compact. In particular it is
+not enough to exhibit the ever-present zero solution.
+
+The pole-cancelled field is polynomial on all real z, so no positive-part
+extension is needed outside the orthant. For x in R^n set
+
+    h_lambda(x)=min(x, Gamma x-a(x)^2-lambda 1).
+
+A zero has x>=0 and satisfies complementarity, and for lambda>=0 all zeros
+belong to the compact set just bounded. For sufficiently large lambda
+there is no zero at all. On a large ball the homotopy in lambda therefore
+gives total degree deg h_0=0. Near the origin the quadratic term is lower
+order; R0 gives an isolated zero and local degree equal to d!=0. By degree
+additivity the annulus has degree -d!=0. Hence (D2) has a nonzero solution.
+No interior-positivity conclusion is asserted: some coordinates may vanish.
+
+### Perturb the FIELD, not one selected nonlinear root
+
+Choose fixed small and large balls so the limiting minimum map has no zero
+on either boundary, origin is its only zero in the small ball, and its
+annulus degree is -d. Uniform convergence of the exact polynomial fields
+on these two compact boundaries preserves that annulus degree for small
+theta>0. R0 and a uniform quadratic remainder bound also isolate the origin
+uniformly in theta. Thus
+
+    h_theta(x)=min(x,-Phi(theta,x))
+
+has a nonzero zero z_theta in the fixed annulus. This step does NOT require
+any limiting root to be simple, any common continuation component, or a
+continuous root selector. For an entire bounded-data cube, the polynomial
+convergence and remainder bounds are uniform, giving a common threshold.
+Set q_i=theta z_theta,i. For theta small all
+q_i<1; active coordinates satisfy Phi_i=0 and inactive coordinates satisfy
+Phi_i<=0. Therefore (S3) gives exact endpoint Nash with inactive Continue.
+
+There cannot be exactly one active coordinate j for M large. R0 for a
+zero-diagonal matrix implies each column has a strictly negative entry:
+otherwise the j-th unit vector would be a nonzero homogeneous LCP root.
+Choose Gamma_ij<0. With only j active, its inactive opponent i has
+
+    H_i=q_j[-Gamma_ij+q_j(M+c_i({i,j})-s_i)]>0
+
+once M+c_i({i,j})>s_i, contradicting inactive endpoint Nash. Consequently
+at least TWO rates are positive. Every player's opponents then contract,
+including active players, so the checked stationary endpoint compiler
+gives exact terminal Nash against all full behaviors and one fixed uniform
+payoff. A singleton-root boundary has not been silently treated as proper.
+
+### What this does and does not establish
+
+The construction works for arbitrary hard Gamma with nonzero degree,
+without a positive inverse or a specially nonsingular quadratic root. It
+is a genuine global field producer, but it still only solves the specified
+large-pair reward scale family. Section 9 already gives generic existing-
+source containment of that family in Fin4. This degree argument is not a
+back-transport to M=0, not a producer for arbitrary original reward data,
+and not a proof that every stationary-equilibrium branch continues.
+
+An early exact guard against overclaiming is the cyclic three-player
+Example 3 represented in `Literature/future/FleschThuijsmanAndVrieze1996.lean`:
+the actual declaration `example3_no_stationary_equilibrium` rules out exact
+stationary equilibrium in its original table. Its pair participant rewards
+are not a common sufficiently large M plus bounded fixed residuals. The
+present theorem changes those rewards and therefore does NOT imply a
+stationary equilibrium in that original example.
+
+I inspected `singleton_r0Degree_eq_one_of_no_uniformPayoff` and
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`Classification/LCP/SingletonDegreeCriterion.lean`. The former ASSUMES full
+R0 and then obtains degree one from original-game noUE; it does not supply
+R0 by itself. I also inspected the actual full-support residual constructor
+in `Diagnostics/Quitting/Collision/SingletonPacket/FullSupportProjectiveQBarResidual.lean`.
+No silent identification of its normalized-core matrix with an arbitrary
+raw full matrix is made here. The degree theorem above explicitly assumes
+the raw Gamma property it uses.
+
+Next serious question: can an actual original-table stationary or jointly
+varying-clock field acquire a nonzero annulus degree from hard Gamma WITHOUT
+introducing the large external pair reward scale? The present coercive
+quadratic is generated by that real reward scale, not by choosing a law.
+This missing step is substantive; renaming it a clock selector would not
+provide it.
