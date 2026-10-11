@@ -1121,6 +1121,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the repeated-solo outsider-buffer family specified below, for every real R | UE allowing a positive outsider collision reward at the joint phase. A final solo exit supplies its continuation buffer. All rates and values are produced from rewards. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: the two-buffer joint/solo family specified below, for every real R | UE allowing all six outsider collision coordinates at the joint phase to be positive, under two weighted raw inequalities. Signed collision rewards and the zero-final-phase boundary are included. This is a reviewed mathematical result awaiting formalization. |
 | Fin4: all tables in an open sixty-coordinate neighborhood of the explicit two-joint-phase rational table specified below | UE with rates and a fixed target produced from the table. Every singleton and collision reward may vary; only two solo phases require refinement. This is a reviewed mathematical result awaiting formalization. |
+| Fin4: the four-joint-phase reward cylinder specified below | Exact terminal Nash and a fixed UE payoff, with eight proper hazards produced from raw rewards. Thirty-two coordinates lie in a fixed open neighborhood, twelve have only upper bounds, and sixteen are arbitrary finite reals. This is reviewed mathematics awaiting formalization. |
 | Fin4: the global two-joint cyclic-child family specified below, for every real R | UE with simultaneous quitting at both retained joint phases. The rates and target are produced from rewards, including the outsider halfspace boundaries. This is reviewed mathematics awaiting formalization. |
 | Fin4: the zero-premium joint-phase family specified below, for every real R and σ≥0 | UE with both joint participants at their singleton rewards and a possibly positive outsider collision payoff. Rates and a fixed target are produced; an opposite-sign pair core is allowed. This is reviewed mathematics awaiting formalization. |
 | Fin4: the negative-premium cyclic-child completion family specified below | UE for arbitrary signed own rewards, with an exact terminal Nash profile and one fixed target produced from raw entries. Both scheduled joint participants have negative premiums. Twenty-eight normalized coordinates are unrestricted. This is reviewed mathematics awaiting formalization. |
@@ -1339,6 +1340,57 @@ The neighborhood can retain disjoint premium traps {0,3} and {1,2}, with
 no weak leaver in {0,3}; the protected-leaver criteria therefore do not
 cover it. The exact stationary exclusion at its center concerns player 3
 kept quiet, not every stationary support or relabeling.
+
+The **four-joint-phase cylinder** uses the repeating schedule
+
+    {0,1}, {1,2}, {2,3}, {0,3}.
+
+Its rational center r* on the proper nonempty coalitions is
+
+| S | r*(S) |
+| --- | --- |
+| 0 | (1,4,0,0) |
+| 1 | (4,1,0,0) |
+| 2 | (0,0,1,4) |
+| 3 | (0,0,4,1) |
+| 01 | (5,9/2,13/2,10) |
+| 02 | (−3,−3,−3,−3) |
+| 03 | (2,5/4,2,2) |
+| 12 | (2,2,2,5/4) |
+| 13 | (−3,−3,−3,−3) |
+| 23 | (13/2,10,5,9/2) |
+| 012 | (−3,−3,15/2,−3) |
+| 013 | (−3,2,−3,−3) |
+| 023 | (15/2,−3,−3,−3) |
+| 123 | (−3,−3,−3,2) |
+
+There is one δ>0 such that the following raw conditions suffice. All four
+recipient coordinates of each singleton and each scheduled pair differ
+from r* by less than δ: thirty-two two-sided conditions. The twelve
+coordinates
+
+    (02;0,2), (13;1,3), (012;0,2), (013;1,3),
+    (023;0,2), (123;1,3)
+
+are at most their center values plus δ, with no lower bounds. The other
+sixteen coordinates, including the grand row, are arbitrary finite reals.
+The notation (S;i,j) lists the two recipient coordinates in row S.
+
+A nonsingular eight-equation actual policy system produces all eight
+hazards in (1/4,3/4). Each unscheduled player Continues. Deleted-opponent
+survival contracts over a period, so the same profile is exact terminal
+Nash against every complete behavioral replacement and supplies one fixed
+uniform payoff. Off-path payoff monotonicity removes the lower bounds on
+the twelve coordinates; the sixteen free coordinates never enter their
+recipient's unilateral comparison.
+
+The [complete four-phase producer](exports/FOUR_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md)
+includes exact center values, the rate Jacobian, unrestricted-deviation
+control and an asymmetric completion outside the compared raw producers,
+including every induced-Nash persistent-base/free-set selection. It does
+not give a numerical radius, imply that four phases are necessary, or
+exclude stationary equilibria. No reduction of arbitrary tables to this
+cylinder is known.
 
 The **global two-joint cyclic-child criterion** has parameters
 a,b,c,h₁,h₂,H>0, abc>1, U,V≥1, ξ,η>0, p₁≤a−h₁, p₂≤0,

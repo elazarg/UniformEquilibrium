@@ -104,3 +104,36 @@ not audited by this review. In particular this PASS does not establish
 that every table in the neighborhood avoids all existing sources, or that
 the center lacks other types of equilibrium. An independent coverage check
 is still needed for any strict-new-coverage export claim.
+
+## Bounded final-document addendum
+
+I checked `notes/CODEX_TURING_BOX__FOUR_JOINT_PHASE_CYLINDER.md`, SHA256
+`42782d67edba1fb65ed8f7059c03a94650d49f907023beef98c91996df48c1da`,
+against the soundness review above. The assembled statement and proof
+faithfully carry the reviewed proper-row center, four values, eight owner
+equalities, eight inactive margins, full Jacobian and its determinant. The
+derivative recurrence and its center forcing are transcribed correctly.
+I additionally recomputed rational Gaussian elimination after precisely the
+row swaps (0,1) and (2,3). All eight new displayed diagonal pivots match:
+
+    249, 504, 63746/63, 85850/83, -40163520/3219173,
+    842743233/98440, 97699680/4928323, -35849887725/606632.
+
+Their exact product is 16435089066040617600000, with positive net row-swap
+sign, as claimed.
+
+The strengthening from a raw sixty-coordinate ball to the open proper-row
+neighborhood times ANY finite grand row is valid: every equation, prescribed
+outcome and unilateral-deviation outcome uses at most a triple. It loses no
+contraction or local-Nash hypothesis. The same proper-row radius therefore
+works independently of the four grand entries.
+
+With radius at most one, the largest absolute proper center reward is ten,
+so the uniform reachable-reward bound M=11 is valid even when the grand row
+has arbitrarily large finite entries. This is the only reward bound needed
+by the deviation telescoping and finite-horizon estimate; the grand row
+cannot be realized under any replacement. The selecting-date zero, complete
+behavioral deviations, private independence, fixed target before accuracy,
+and existential-only radius qualifications are all retained. Bounded
+final-document PASS; this addendum is not a fresh coverage audit or a new
+Lean/export seal.

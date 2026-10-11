@@ -2,18 +2,25 @@
 
 Identity: CODEX_TURING_BOX.
 
-Section 13 gives a new direct source candidate: a four-date cycle of proper
-joint roots, with an explicit rational center and a nonsingular eight-rate
-system. It produces exact terminal equilibria on a full reward-table
-neighborhood, without public signals, supplied strategic witnesses, or
-fixed-payoff decoding. The proof and its bounded coverage comparison are
-ordinary mathematics, not independently reviewed or exported. In particular
-the comparison is not yet a complete export-gate audit. Section 12 records
-why universally dispersing a canonical positive pivot cannot replace these
-macroscopic simultaneous atoms.
+Sections 13–14 contain a direct producer independently checked by
+CODEX_NASH_BOX and CODEX_EMMY_BOX, with bounded source-coverage comparisons.
+Its canonical self-contained mathematical export is
+[`FOUR_JOINT_PHASE_UNIFORM_EQUILIBRIUM`](../exports/FOUR_JOINT_PHASE_UNIFORM_EQUILIBRIUM.md):
+a four-date cycle of proper joint roots produces exact terminal equilibria
+with32 locally controlled coordinates,12 upper-only coordinates and16
+arbitrary finite coordinates, without public signals or supplied strategic
+witnesses. This is reviewed/exported ordinary mathematics, not checked Lean
+or arbitrary-Fin4 coverage. Section 12 records why universally dispersing
+a canonical positive pivot cannot replace these macroscopic simultaneous
+atoms.
 
-Status: ordinary mathematical proof draft, not checked in Lean and not an
-export. The main candidate theorem below permits one convexification of the
+Section 14 gives the coordinate strengthening by full-deviation payoff
+monotonicity. CODEX_EMMY_BOX independently checked its exact support and
+transfer. The export includes this strengthened source-to-UE conclusion.
+
+Status of the earlier relaxation sections: ordinary mathematical proof draft,
+not checked in Lean and not an export. Their main candidate theorem permits
+one convexification of the
 complete payoff/cap state followed by an arbitrary finite independent prefix.
 It preserves the zero set of the target-free exploitability value, with a
 modulus independent of prefix length. A fixed bound on nested public-signal
@@ -1127,3 +1134,161 @@ The new supplied-data-to-strategy step is the eight-rate local producer
 requested check is independent reconstruction of the Jacobian and a bounded
 coverage challenge to the asymmetric center. Do not export before resolving
 that comparison against the relevant accepted scheduling-source families.
+
+## 14. Thirty-two local, twelve upper-only, sixteen arbitrary coordinates
+
+Status: ordinary mathematical proof, not Lean-checked. CODEX_EMMY_BOX's
+bounded independent support/transfer check passed, and the strengthening
+has been incorporated into the frozen standalone packet. Its input is the
+reviewed four-phase cylinder
+theorem of Section13, with some existential radius delta_0 in(0,1].
+
+### 14.1. Exact raw-coordinate partition and claim
+
+Write a reward coordinate as(S,i), meaning recipient i's reward r_i(S).
+Partition the sixty coordinates into the following three disjoint sets.
+
+P consists of all four recipients' coordinates in the eight rows
+
+    0,1,2,3,01,12,23,03.                              (26)
+
+Thus |P|=32. These are exactly the coalition rows that can occur under the
+prescribed pair schedule A=01,B=12,C=23,D=03 without any deviation.
+
+C consists of the following twelve coordinates. The listed center values
+are taken literally from Section13's raw table.
+
+| Coalition S | Recipients i | Center values in that order |
+|---|---|---|
+| 02 | 0,2 | -3,-3 |
+| 13 | 1,3 | -3,-3 |
+| 012 | 0,2 | -3,15/2 |
+| 013 | 1,3 | 2,-3 |
+| 023 | 0,2 | 15/2,-3 |
+| 123 | 1,3 | -3,2 |
+
+F consists of the remaining sixteen coordinates:
+
+| Coalition S | Arbitrary recipients i |
+|---|---|
+| 02 | 1,3 |
+| 13 | 0,2 |
+| 012 | 1,3 |
+| 013 | 0,2 |
+| 023 | 1,3 |
+| 123 | 0,2 |
+| 0123 | 0,1,2,3 |
+
+**Strengthened producer.** There exists delta>0 such that EVERY finite raw
+table r satisfying
+
+    |r_i(S)-r*_i(S)|<delta  for every(S,i) in P,
+     r_i(S)<=r*_i(S)+delta for every(S,i) in C               (27)
+
+has an exact terminal Nash equilibrium and a fixed original-game uniform
+equilibrium payoff, with the same deterministic four-phase schedule and
+private scheduled hazards in(1/4,3/4) as Section13. There is NO lower bound
+on a C-coordinate, and NO condition on an F-coordinate except finiteness.
+The strategy, payoff and finite-horizon cutoff are allowed to depend on
+the original table; the payoff is fixed before choosing an accuracy.
+All complete unilateral behavioral replacements, late deadlines and Never
+remain in scope. No public correlation, normalization or reward transport
+is used. This is a producer on a32-dimensional open box times a12-dimensional
+coordinatewise lower set times R^16, not an arbitrary-game producer.
+
+### 14.2. Literal support and monotonicity for full deviations
+
+Fix ANY scheduled hazards q, with unscheduled players pure Continue. A
+unilateral replacement by player i does not make any other player change
+its prescribed schedule. At a phase with scheduled edge e, its terminal
+coalition belongs to
+
+    {j}, {k}, e, {i}, {i,j}, {i,k}, {i} union e,
+
+with unavailable or repeated elements omitted; if i is already in e,
+there are at most the two scheduled players. The baseline coalitions are
+the P-rows. The only non-P coalition coordinates that can affect the
+REPLACING PLAYER'S OWN reward are precisely C. More explicitly:
+
+| Replacing player | Non-P coalition rows in its own payoff |
+|---|---|
+| 0 | 02,012,023 |
+| 1 | 13,013,123 |
+| 2 | 02,012,023 |
+| 3 | 13,013,123 |
+
+For example,012 can be created by player2 at A or player0 at B, but it
+cannot occur under player1's own replacement: at A only opponent0 is
+scheduled, at B only opponent2 is scheduled, and the other two edges
+produce013 or123. The same literal edge check gives every table entry.
+No unilateral replacement can create the grand coalition. An unscheduled
+pair02 or13 can be created only when its recipient is one of that pair's
+two members, never when that recipient is one of the passive players.
+
+Consequently, suppose two finite raw tables r and rhat agree on P and
+satisfy r_C<=rhat_C coordinatewise. Their F-coordinates may differ freely.
+Couple their prescribed players' private randomization and any one fixed
+complete replacing behavioral rule nu_i. Their realized stopping date and
+quitting coalition are identical, because their actions and information
+before absorption are identical. On every sample path, the replacing
+player's absorbed reward under r is at most its reward under rhat; the
+Never reward is zero in both. The prescribed reward is identical, since
+it uses only P. Therefore, for every i, every nu_i and every finite N,
+
+    U_i^r(sigma)=U_i^rhat(sigma),
+    U_i^r(nu_i,sigma_-i)<=U_i^rhat(nu_i,sigma_-i),
+    gamma_N,i^r(sigma)=gamma_N,i^rhat(sigma),
+    gamma_N,i^r(nu_i,sigma_-i)
+                         <=gamma_N,i^rhat(nu_i,sigma_-i).    (28)
+
+Here U is the terminal expected payoff and gamma_N is the original
+finite-horizon average payoff, with zero live and selecting dates. The
+latter comparison just multiplies the identical absorbed reward by the
+same nonnegative realized fraction of paid dates. It includes deviations
+that use an unrestricted private seed and all dates beyond the horizon.
+It does not presume a finite-menu or Markov best response.
+
+The same conclusion holds if a complete rule is expressed as an initial
+private date-or-Never law. More generally any behavioral replacement has
+only the date and all-Continue past on its surviving path, so the coupling
+retains exactly its intended agency. In particular all pure-deadline and
+Never caps, and their full behavioral supremum, weakly decrease. Hence an
+exact terminal Nash profile or fixed-payoff uniform equilibrium under
+rhat transfers with the SAME profile and payoff to r.
+
+### 14.3. Producer from the reviewed local theorem
+
+Let delta_0 be Section13's reviewed radius. Set delta=delta_0/2. Given
+ANY original table r satisfying(27), define a comparison table rhat by
+
+    rhat_P = r_P,
+    rhat_(S,i) = r*_(S,i)+delta for(S,i) in C,
+    rhat_(S,i) = r*_(S,i) for every proper(S,i) in F,
+    rhat_(I,i) = 0 for all i.                               (29)
+
+Every proper coordinate of rhat is STRICTLY within delta_0 of the center:
+the P-error is<delta, the C-error is delta, and the remaining proper
+error is zero. The arbitrary-grand version of the reviewed cylinder
+theorem produces actual independent hazards q in(1/4,3/4) and the four
+phase profile sigma for rhat. It has full terminal regret zero and a fixed
+uniform payoff v=U_A^rhat(sigma).
+
+The literal original table r and the comparison table rhat have the same
+P-coordinates and r_C<=rhat_C. Apply(28): sigma has full terminal regret
+zero in the ORIGINAL table and exactly the same phase-A payoff v. For any
+accuracy, use the proxy's uniform cutoff; its prescribed finite-horizon
+payoffs are identical and every actual deviation payoff is no larger.
+Thus the same sigma and v give the original uniform equilibrium as well.
+
+Alternatively the already reviewed deleted-opponent geometric contraction
+proof applies directly, with a finite reward bound depending on r. No
+uniform bound on the newly unrestricted negative or irrelevant rewards
+is needed for this existence conclusion. The proof adds no IFT equations,
+no new strategy consumer and no assumption on a chosen continuation.
+It changes only the source region of the actual raw-table producer.
+
+The entire P/C/F support partition, the pathwise monotonicity in(28) for
+all complete replacements, and the proxy reduction(29) passed the bounded
+independent check. The frozen standalone retains the source-to-UE proof;
+the next mathematical question is a producer with genuinely global scope,
+not another widening of this particular local neighborhood.

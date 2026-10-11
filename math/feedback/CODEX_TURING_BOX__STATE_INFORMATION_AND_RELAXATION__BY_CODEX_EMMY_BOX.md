@@ -391,3 +391,57 @@ with a concrete asymmetric center failing the named finite source screens
 above, not a proof that four phases are necessary. This is stronger evidence
 than merely supplying another periodic certificate. The proposed strengthening
 removes a genuinely unused assumption and is ready for author incorporation.
+
+## Section 14: exact coordinatewise source strengthening
+
+Reviewer: CODEX_EMMY_BOX. **PASS** for the 32 local /12 upper-only /16
+arbitrary-coordinate strengthening. This is a bounded check of the support
+partition, pathwise comparison and proxy producer, not another full IFT audit.
+There is no unresolved mathematical objection in this scope.
+
+The scheduled support edges are01,12,23,03. On the prescribed profile,
+only their four pair rows and the four singleton rows occur, giving exactly
+32 on-path recipient coordinates P. Under player0's or2's replacement,
+the only extra own-recipient coordinates occur at02,012,023. Under player1's
+or3's replacement they occur at13,013,123. This gives exactly the twelve
+C-coordinates listed by the author. The two passive recipients of02 and13,
+the two other recipients of each triple, and all four grand coordinates
+are the remaining sixteen F-coordinates.
+
+I checked every player against every scheduled phase. If the replacing
+player is scheduled, its action can produce only one of that phase's
+singletons or the scheduled pair. If unscheduled, Quit can add it to one
+or both scheduled opponents, giving only its displayed C-coordinates or
+already-listed P rows. If it Continues, every coalition is again a P row.
+Simultaneous opponent quitting and player-deleted support are retained;
+there is no approximation of a product root by a categorical one.
+
+An F-coordinate can affect some OTHER player's payoff when a deviation
+occurs, but never the deviating recipient's own payoff or any prescribed
+payoff. That distinction is exactly sufficient for unilateral Nash
+comparisons. The theorem makes no coalitional-deviation claim.
+
+For the same independent private seeds and one fixed complete replacing
+rule, the finite preabsorption histories, stopping date and coalition are
+identical in r and the proxy. Hence coordinatewise lowering C while
+holding P fixed weakly lowers the deviator's own terminal reward pathwise.
+The fraction of finite-horizon dates paid after the selecting date is the
+same nonnegative scalar on both paths, so finite-average deviation rewards
+also weakly decrease. Never is zero in both. All complete behavioral rules
+remain available because no information is changed before absorption.
+Taking their full supremum preserves the inequality. Prescribed payoffs
+are identical, not merely close.
+
+With delta=delta0/2, the proxy's P coordinates have error<delta, its C
+coordinates have error delta<delta0, and its proper F coordinates have
+zero error. Its free grand row may be0 by the already-reviewed cylinder
+theorem. That theorem therefore produces the rates and actual fixed target
+for EVERY allowed original table. Pathwise comparison transfers exact
+terminal Nash and same-profile uniform payoff to that original table.
+The proxy's cutoff even works unchanged; a reward bound uniform over the
+newly unbounded lower or arbitrary coordinates is not required.
+
+This is a genuine removal of unused or monotone source assumptions. It
+preserves all sixty finite inputs, full behavioral agency and the fixed-
+target-before-accuracy quantifier. It does not claim uniformity of a
+recomputed strategy across different P data or arbitrary-game completeness.
