@@ -5214,3 +5214,100 @@ reopened in Section28 remain the only semantic consumers used here. A
 narrow search in MathUE and the quitting Terminal/Root subtrees for total
 correlation, full coarse and correlated-root entropy found no matching
 declaration; the formulas above are ordinary proofs, not Lean claims.
+
+### Whole reset-word obstruction: counterfactual tails cannot all be erased
+
+There is a stronger, calendar-uniform falsification of this particular
+operation. Call a joint clock law COALITIONAL if in every sample either
+all clocks are Never or one nonempty coalition quits at one finite date
+and every outsider is literal Never. The finite date and coalition can
+be arbitrarily correlated, with an arbitrarily large finite support.
+
+For K10 there exists c>0 such that every such law nu satisfies
+
+    full-coarse violation(nu) + sqrt(I(nu)) >= c.       (30.10)
+
+This is NOT a positive gap against arbitrary independent clock laws:
+K10 has UE by the reviewed chamber family. It excludes a whole proposed
+correlated-source normalization that removes all counterfactual tails.
+Here full-coarse violation is max(0,max_i(C_i-v_i)).
+
+Proof. If(30.10) were false, take nu_n with violation and information
+tending0, and let P_n be the product of its marginals. Pinsker and
+bounded payoff coupling give TV(P_n,nu_n)->0 and full regret(P_n)->0.
+Consequently for every pair i,j,
+
+    Pr_(P_n)(T_i,T_j finite and T_i!=T_j) -> 0.          (30.11)
+
+This uses support of the ACTUAL correlated laws, not compactness of an
+unbounded calendar. Pass to a subsequence so all finite-clock masses
+p_i,n converge to p_i. If all p_i=0, P_n tends the all-Never product in
+TV, whose full regret is1. If exactly one label i has p_i>0, erase every
+other finite clock; this changes TV by at most sum_(j!=i)p_j,n->0. In
+that product the successor j=i+1 has prescribed payoff0, while Quit0
+pays 1+Pr(T_i=0)>=1, independently of the owner's entire clock law.
+Both alternatives contradict vanishing full regret.
+
+Otherwise at least two p_i are positive. Condition the active labels'
+laws on their clocks being finite, obtaining probability vectors a_i,n
+on the countable finite dates. Equation(30.11) says
+
+    sum_t a_i,n(t)a_j,n(t) -> 1
+
+for any two active labels. This forces a common concentrating atom t_n.
+Indeed the dot product is at most max_t a_i,n(t), so choose an atom
+t_n of almost maximal mass; a_i,n(t_n)->1. The same dot-product limit
+then forces a_j,n(t_n)->1. Comparing every other active label with i
+uses the SAME t_n. No boundedness or convergence of t_n is assumed.
+
+Replace each active finite clock by t_n and each inactive clock by
+Never. The product changes by TV tending0. After a subsequence its
+finite probabilities converge to q in[0,1]^4. Test the finite deadline
+t_n, deadline t_n+1, and literal Never BEFORE taking the limit. These
+reply values are polynomials of q, independent of t_n. Write Q_i(q)
+for Quit at the common date and N_i(q) for Never. The limiting prescribed
+payoff and later reply are
+
+    U_i=q_i Q_i+(1-q_i)N_i,
+    L_i=N_i+prod_(j!=i)(1-q_j),                         (30.12)
+
+since every own singleton is1. Vanishing full regret implies
+U_i>=Q_i,N_i,L_i. The first two inequalities make q a mixed Nash point
+of the Boolean root game with continuation0. The exact no-sure-root
+lemma in the canonical chamber packet excludes q_i=1 for every i:
+a sure owner's opposite and predecessor strictly Continue, the successor
+strictly joins, and the owner strictly withdraws. Thus all q_i<1.
+But U_i>=Q_i then gives N_i>=Q_i, hence U_i<=N_i<L_i by(30.12), a final
+contradiction. This proves(30.10) by the sequential characterization of
+a strictly positive infimum. No numerical constant or finite-horizon
+compactness assumption is needed.
+
+Now fix ANY finite seed mu with I(mu)>0. Every finite word of the reset
+operation is exactly
+
+    a*(shifted mu) + (1-a)*nu,
+
+where a is the product of its empty-root probabilities and nu is
+coalitional. Formula(30.4) gives I(word)>=a I(mu). If endpoint information
+were tending0 along any words, a would tend0. The endpoints would then
+be TV-close to coalitional nu. Their nearby product marginals, together
+with endpoint full-coarse violation tending0, would satisfy precisely
+the contradiction above. Therefore no sequence of these words can have
+BOTH endpoint information and full-coarse violation tending0.
+
+This covers ALL correlated root laws, ALL finite word lengths, arbitrary
+intermediate violations and moving payoff targets, from ANY fixed
+positive-information finite seed. It does not exclude arbitrary changing
+seeds whose own information already tends0, general laws with retained
+counterfactual tails, or the larger operation of arbitrary correlated
+prefixes WITHOUT blanket Never completion. It also does not say that a
+single reset cannot strictly improve a source. The global research
+direction must retain or reconstruct multi-date counterfactual tails;
+repeated source-independent absorption resets are not a complete route.
+
+This proof reuses only the explicit K10 table and the exact no-sure-root
+argument in `exports/PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md`.
+A narrow search in the quitting Root/Terminal and Diagnostics subtrees
+for one-finite-date, coalitional-clock and one-shot-full-Nash statements
+did not locate this information/source restriction. It remains ordinary
+unreviewed supporting mathematics, not an export or a new reward class.

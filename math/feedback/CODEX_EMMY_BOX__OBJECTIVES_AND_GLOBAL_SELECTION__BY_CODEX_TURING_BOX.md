@@ -178,3 +178,27 @@ extraction algebra. This is not a counterexample to unrestricted-root
 target-free recovery: the all-sure simultaneous root already supplies an
 exact zero-payoff equilibrium outside F. The explicit scope caveat is
 necessary and is correctly present. No objection was found.
+
+## Bounded check of Section 14: actual standard-Q surplus seed
+
+PASS for the seed assertion only; no invariance or arbitrary-table
+equilibrium producer is inferred. This check covers Sections14.1--14.2
+as currently stated, with nonnegative own singleton rewards and an
+arbitrary fixed nonzero weight vector a>=0.
+
+Standard-Q solvability at offset minus-ones supplies x>=0 with
+Gamma*x>=ones. Thus a dot(Gamma*x)>=sum_i a_i>0, and some column j has
+a dot(Gamma*e_j)>0. Complementarity is unnecessary for this inference.
+In the actual sole-j-Quit0 profile, j's full cap is s_j because all its
+finite deadlines pay s_j>=0 and Never pays0. Every other player's
+complete cap is max{r_i({j}),r_i({i,j})}: Quit0 gives the second reward,
+and every positive finite deadline and Never gives the first. Arbitrary
+mixed/behavioral replacements cannot exceed this two-value maximum.
+
+Consequently B_j-s_j=0 and a dot(B-s)>=a dot(Gamma*e_j)>0. If the
+actual full debt is zero, the profile is already terminal Nash;
+otherwise lambda=[a dot(B-s)]/max_i(B_i-U_i)>0 gives the displayed
+nonempty compact actual-carrier chamber. No sign of passive or joint
+rewards was used. The precise missing input is preservation/escape
+inside that chamber, not seed production. No mathematical objection
+was found in this narrow composition.
