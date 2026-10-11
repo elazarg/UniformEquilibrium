@@ -7209,3 +7209,114 @@ The open producer question is what forces access to good such words for
 arbitrary strictly positive-own Fin4 data as accuracy varies. Neither the
 sum selector, the arbitrary annotation, finite-error certification, nor
 fixed-discount compactness supplies that global argument.
+
+### 37.8 The exact/approximate-source fork and a one-sided cap ledger
+
+Status: supporting ordinary mathematics, independently unreviewed. No new
+UE reward class or complete producer is asserted. The ENTIRE exact source
+question(F1) is still open. The finite words in37.7 neither establish it
+nor demonstrate that exact discounted equilibria are an inadequate source.
+
+Here are two one-sided comparisons that apply to arbitrary finite tables,
+not only the passive-nonnegative K10 table. Fix a player i with own
+singleton s_i>=0, rewards bounded in absolute value by M, and alpha in(0,1).
+Write lambda=1-alpha. Against ANY fixed independent opponent clocks let
+B_i be the full original cap and C_i^alpha the full discounted cap. Then
+
+    C_i^alpha<=B_i+M lambda.                         (F9)
+
+To check every deadline and Never, let h_t be the unconditional probability
+that the FIRST opponent absorption is at t, a_t its expected unjoined
+reward contribution, and A_t=sum_(u<=t)a_u. The original Quit-k payoff is
+f_k=sum_(t<k)a_t+e_k, where e_k includes the joined reward at k and own
+singleton on opponent survival. The original Quit-(t+1) comparison and
+s_i>=0 give
+
+    A_t<=f_(t+1)+M h_(t+1)<=B_i+M h_(t+1).
+
+The literal Abel identity for the discounted Quit-k payoff is
+
+    g_k=alpha^k f_k+lambda sum_(t<k)alpha^t A_t.
+
+Its coefficients of B_i sum to1, and sum_t h_t<=1. Hence
+g_k<=B_i+M lambda. For Never the corresponding identity is
+g_Never=lambda sum_(t>=0)alpha^t A_t, with the same bound.
+This proves(F9) for all complete private replacements. It is one-sided:
+late positive rewards can make B_i-C_i^alpha large.
+
+There is a second bound for EVERY actual discounted Nash profile p:
+
+    U_i(p)>=v_i^alpha(p)-M lambda.                    (F10)
+
+No nonnegative passive-reward assumption is used. At a date t with
+positive original joint survival J_t, conditional tails remain discounted
+Nash, because a player may preserve its pre-t law and replace its own
+conditional tail. If L_i(t) is the current opponent Continue probability,
+its actual normalized discounted continuation value obeys
+
+    v_i(t)>=Q_i(t)>=-M[1-L_i(t)].
+
+The first inequality is the COMPLETE immediate-Quit deviation, and the
+second uses only s_i>=0. Absolute summation of actual absorption rewards
+gives the exact identity
+
+    U_i(p)-v_i(0)=lambda sum_(t>=1) J_t v_i(t).
+
+Since J_t is at most the opponent survival O_i(t), and
+sum_t O_i(t)[1-L_i(t)]<=1, the negative part is at most M lambda.
+Zero-reach tails contribute zero, so no sequential optimality is asserted
+there. Literal Never contributes zero to both payoff sums.
+
+In particular, for every player of a nonnegative-own table and every
+member of the ENTIRE D_alpha,
+
+    B_i-v_i^alpha>=-M lambda,
+    0<=B_i-U_i<=B_i-v_i^alpha+M lambda.
+
+Thus producing a component with small positive cap defect
+max_i(B_i-v_i^alpha)_+ would suffice. This isolates a useful objective but
+does NOT produce its minimizer tending to0. A root-prefix minimization
+test still encounters the all-Continue barrier: if continuation values
+are above own singletons, a nonzero improving root is not forced.
+No universal descent or implication from standard-Q is claimed.
+
+There is also an exact FIXED-alpha comparison between the exact and
+approximate source objectives. Assume all own singletons are positive,
+and use37.6. For eta>=0 let
+
+    m_alpha(eta)=inf{E_original(p): E_alpha(p)<=eta},
+
+where BOTH defects use all complete unilateral replacements and the
+profile ranges over all independent complete clocks. Then
+
+    lim_(eta down0) m_alpha(eta)=m_alpha(0).            (F11)
+
+Indeed a near-minimizing sequence with eta down0 has a subsequence in the
+compact product of one-point-compactified clock-law spaces. Discounted
+payoff and cap are continuous, so its limit lies in D_alpha. That limit
+has joint Never mass0 by37.6. At such a limit the original prescribed
+payoff is continuous: finite-prefix truncation is continuous and the
+remaining payoff is at most M times joint survival. The original full
+cap is lower semicontinuous, including Never, by the nonnegative-own
+finite-deadline supremum formula. Hence E_original at the limiting exact
+component is at most the lower limit of the candidate errors. The reverse
+inequality follows because every exact component is eta-admissible.
+This does not require two-sided cap continuity or uniform deleted
+termination. Infima over the approximate sets need not be attained.
+
+The order of limits is essential. Equation(F11) is NOT a uniform modulus
+as alpha tends to1. It therefore does not validate replacing the exact
+source by errors merely o(1-alpha), nor does it turn a single finite-word
+certificate into an exact D_alpha component. At a FIXED alpha, however,
+arbitrarily accurate words whose ORIGINAL errors remain bounded by e
+would yield an exact component with original error at most e, by the
+displayed argument. Unrealized bounded annotations are not by themselves
+evidence that a larger approximate-source family is required.
+
+The live fork is consequently precise: either force such original-good
+words while taking their discounted residual to0 at each fixed alpha,
+or exploit a genuinely joint alpha/residual family whose original caps
+are controlled directly without claiming exact-source membership. Both
+remain allowed. Neither fixed-alpha compactness, the new one-sided
+ledger, nor the finite numerical branch currently chooses between them
+or establishes arbitrary-data branch access.
