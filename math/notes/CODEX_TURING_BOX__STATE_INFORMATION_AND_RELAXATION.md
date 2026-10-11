@@ -4095,6 +4095,18 @@ question is how to produce
 or select the necessary macroscopic hazard structure from arbitrary
 collision data; this result supplies no such selection.
 
+The sum-of-values estimate(S8) above genuinely uses the GLOBAL small-
+hazard premise: arbitrary later collisions cannot simply be omitted.
+Section3.3 of `CODEX_EMMY_BOX__OPPONENT_COINCIDENCE_BARRIER` supplies a
+separate finite-prefix strengthening. With the same delta and
+kappa=1/(1000000M), full regret eta<=kappa/2 forces a date with original
+joint reach>kappa and some conditional hazard>delta. It stops at first
+reach<=kappa; on the initial hazard-time window, all arbitrary suffix
+reward is weighted by at most4kappa, adding21M*kappa to the value-sum
+error. The present global-premise theorem needs no correction, but its
+earlier proof alone did not assert this stronger localization. A bounded
+dependency check is recorded in the feedback under that note's stem.
+
 ## 26. Whole positive-Never-bonus selection with jointly changing menus
 
 Status: global producer question, with a complete ordinary candidate
@@ -6584,3 +6596,12 @@ an exact overlap-source component or an all-errors producer. The next
 global selection argument must add leverage beyond the finite concave-
 game existence proof, or this regularizer should be parked as an exact-
 source hypothesis with no established production advantage.
+
+A bounded later overlap lookup found the SAME common-mixture cost in
+`CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE`, subsection DR3. That
+existing note already states its bounded full-response endpoint and shows
+that it does not repair increasing density-box approximations. DR4 also
+excludes automatic better-reply security after common calendar escape.
+Those facts are not new results here and do not exclude the entire FULL
+regularized correspondence. The present distinct calculation is the
+K10 restriction36.5, not introducing the cost or re-proving that endpoint.

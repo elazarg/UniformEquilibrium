@@ -8,7 +8,11 @@ polynomial potential for one explicit actual table, not merely a selected
 cubic ansatz. A separate ten-edge certificate does the same even with
 EVERY endpoint nonnegative and in the convex hull of actual terminal
 rewards. Neither certificate is a chronological cycle or an independent-law
-realization. The actual all-degree/barrier question remains open.
+realization. Section3.3 gives a separate ordinary necessary-mode proof:
+on the paired singleton matrix, sufficiently small FULL regret forces a
+macroscopic root at uniformly positive original joint reach, even when the
+suffix hazards are arbitrary. This is not an exact-Nash compactness theorem.
+The actual all-degree/barrier question remains open.
 
 ## 1. Exact negative-endpoint question
 
@@ -264,6 +268,113 @@ source `exists_fin4_finiteClockStoppingLaws_exploitability_le`
 (`UniformEquilibrium/Quitting/Paths/QuantitativeFiniteClockSource.lean`)
 approximates the UNKNOWN global infimum, not zero. No new producer or
 barrier follows by rebuilding that compression.
+
+### 3.3. Macroscopic activity cannot first occur at vanishing joint reach
+
+This is a separate ordinary proof, not independently checked or a positive-gap
+barrier. It strengthens the all-small-conditional-hazard exclusion in
+`CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md` Section25.3 in one
+specific way: the first macroscopic root occurs at uniformly positive
+ORIGINAL joint reach. It does not transport a cap to a different calendar.
+
+Keep the singleton matrix R=I+4P, where P exchanges opposite mates, but
+allow ANY collision rewards of absolute value at most M, M>=4. Let q_i(t)
+be an actual independent profile's conditional hazards, J_t its joint
+survival before date t, and eta its maximum FULL unrestricted regret. Put
+
+    delta=1/(10000M),       kappa=1/(1000000M).
+
+Claim. If eta<=kappa/2, some finite date t satisfies
+
+    J_t>kappa,             max_i q_i(t)>delta.          (7b)
+
+Thus every full-regret-zero sequence has a macroscopic conditional root
+at nonvanishing joint reach. At that date some ORIGINAL unconditional
+private atom is larger than kappa*delta. This is a necessary profile-mode
+condition, not an equilibrium producer or an unrestricted gap bound.
+
+Proof. Replacing one's private Never branch by a late deadline gives
+limiting gain equal to joint Never mass, because own singleton is1 and
+all finite opponent tails vanish. Hence J_infinity<=eta. Suppose(7b)
+fails. There is a finite first T with J_T<=kappa, since
+J_infinity<=eta<kappa. Every date t<T then has all q_i(t)<=delta.
+Future hazards AFTER T remain completely arbitrary.
+
+Write v_t for the ACTUAL conditional prescribed tail value, Q_it for
+Quit-now value, C_it for Continue-now value. The following estimates use
+only legal complete unilateral laws, without replacing the actual suffix:
+
+    v_ti=q_i(t)Q_it+(1-q_i(t))C_it,
+    J_t(Q_it-v_ti)<=eta,
+    sum_window J_t*q_i(t)*(v_ti-Q_it)_+<=eta.           (7c)
+
+For the last inequality, suppress one's quitting exactly at dates of a
+finite window with C_it>Q_it, retain its old hazards elsewhere, and then
+revert to its ACTUAL suffix. Finite Bellman telescoping gives gain
+sum J'_t*q_i(t)*(C_it-Q_it)_+, where J'_t>=J_t. This implies(7c).
+
+Set h_it=-log(1-q_i(t)), h_t=sum_i h_it, s_t=sum_(u<t)h_u.
+On the prefix t<T one has h_t<=5delta and J_t=exp(-s_t). Let T0 be
+the first date with s_T0>=1; it exists and T0<=T. Every endpoint up to
+T0 has J_t>=1/4. Interpolate the v_t linearly in hazard time s, and put
+a_i=h_it/h_t on each positive cell. Ignore zero cells. On[0,1], elementary
+logarithm/exponential bounds and the exact payoff recursion give
+
+    v'=v-Ra+e,  a>=0, sum a=1, ||e||_infinity<=50Mdelta,
+    v_i>=1-tau, tau=4Mdelta+4eta,
+    integral_0^1 (v-1) dot a <=20eta+48Mdelta.         (7d)
+
+Here |Q_it-1|<=4Mdelta; one-date simultaneous stopping mass is at most
+(3/2)delta*sum_i q_i(t); and the exact cell endpoint increment satisfies
+||v_(t+1)-v_t||_infinity<=4M h_t. These facts plus(7c) give(7d).
+They do NOT require small hazards after T.
+
+The missing sum-of-values estimate is obtained by accounting separately
+for that arbitrary suffix. Conditional on ANY used endpoint t<=T0,
+first collision BEFORE T has probability at most2delta: at each prefix
+date collision probability is at most2delta times absorption probability,
+so summing against reach telescopes. First absorption AT/AFTER T has
+probability at most J_T/J_t<=4kappa. Conditional Never mass is at most
+4eta. Every singleton reward sums to5, whereas every coalition reward
+sum has absolute value at most4M. Consequently
+
+    |sum_i v_i-5|<=sigma,
+    sigma=20eta+12Mdelta+21Mkappa.                    (7e)
+
+This estimate, preserved by interpolation, is the essential finite-prefix
+repair. Merely assuming small hazards on the initial hazard-time interval
+would not justify it; a far enough reached cutoff is needed.
+
+For completeness the quadratic contradiction is retained. Put g=v-1,
+A=I-4P, W=g^T A g, x=g+tau*1>=0. For nonnegative x of mass L,
+-(3/2)L^2<=x^T A x<=L^2, and
+
+    W=x^T A x+6tau*sum x-12tau^2.
+
+The stated constants imply tau<=.0008, sigma<=.0033,
+sigma+4tau<=.0065, hence everywhere -1.6<=W<=1.1 and ||g||_1<=1.05.
+Using AR=-15I and A1=-3*1 gives the exact derivative
+
+    W'=2W-6*sum g+30g dot a+2g^T A e.
+
+Equations(7d),(7e) imply
+
+    W(1)-W(0)<=-3.8+6sigma+600eta+2040Mdelta
+               <=-3.5162<-2.7,
+
+contradicting the range of W. This proves(7b).
+
+Conditional use and exact remaining seam. Matching the original prefix
+before s, then making any complete replacement, shows that the actual
+tail's full regret is at most eta/J_s. Whenever eta/J_s<=kappa/2, the
+same conclusion applies to that tail, with relative reach kappa.
+For an approximate-equilibrium sequence, condition at the dates in(7b)
+and shift those actual tails to0. Their full regrets still tend0, and some
+date0 hazard stays above delta. Independence survives this product
+conditioning. This does NOT give an actual exact Nash limit: subsequent
+calendar intervals and finite mass can escape to infinity. Nor does it
+justify deleting a diffuse interval between successive macroscopic roots;
+Section3.2 shows why preserving prescribed ordering is not enough.
 
 ## 4. Complete cubic exclusion by ten rational exact edges
 
