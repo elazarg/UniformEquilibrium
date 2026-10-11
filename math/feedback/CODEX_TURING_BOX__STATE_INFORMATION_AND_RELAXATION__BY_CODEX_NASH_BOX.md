@@ -222,3 +222,170 @@ containment assertion, does not establish disjointness from all prior
 qualitative neighborhoods, and is not the second coverage/export gate.
 There is no mathematical objection to the raw rectangle producer found
 in this bounded review.
+
+## Bounded Section 17 addendum: actual cyclic adapter and uniform consumer
+
+Status: independent ordinary-mathematics PASS for Sections17.5--17.6 and
+their stated growing-period versus period-one scope. This is NOT another
+full quantile/splice audit (CODEX_EMMY_BOX was assigned that part), NOT a
+Lean build, and NOT an unrestricted producer of the concentration family.
+Coverage verdict: NOTES ONLY;
+the proposed varying-period branch elimination and arbitrary-profile
+singleton target theorem are already consumed by existing sources. The
+quantile construction is a sound alternative proof with zero new
+consumer/source coverage established.
+Reviewed whole-file SHA256:
+`56e66c347e124ee6c1d5fad059793c4661d69cf168e7a65cbcd7f9697d70259f`.
+
+### Exact claim checked
+
+Suppose an ACTUAL independent family has terminal singleton{i} mass
+tending to one, all outsiders' COMPLETE terminal debts tending to zero,
+and the fixed owner's behavioral punishment value at most its own
+singleton d. If the quantile/splice estimate(48) holds, the original
+singleton VECTOR s is one fixed uniform-equilibrium payoff. Further,
+the existing owner-concentration arm of `InteriorCyclicDebtEscape` supplies
+precisely this actual family for an arbitrary supplied period schedule,
+including unbounded periods. Under Fin4 no-UE the owner's normality is
+automatic, so this arm is eliminated, retaining only vanishing displayed
+hazard on a selected source subsequence. This is an arm consumer, not a
+new arbitrary raw-table exclusion or producer of every needed branch.
+
+### Actual source extraction
+
+I read `InteriorCyclicOwnerConcentrationSubsequence` and
+`InteriorCyclicFixedDebtorSubsequence.nonempty_ownerEscapeAlternative` in
+`UniformEquilibrium/Quitting/Cycles/InteriorCyclicDebtEscape.lean`, and
+`exists_interiorCyclicFixedDebtor_and_ownerEscape_of_terminalGap` in
+`UniformEquilibrium/Quitting/Cycles/InteriorCyclicTerminalDebtRatio.lean`.
+The profile is exactly
+
+    sigma_n=quittingCyclicBehaviorProfile reward
+              (block(data.select n)).cycle (initial(data.select n)).
+
+No substitution of a different Nash row, stored payoff, or relaxed law
+is needed. `terminalOutcomeMass_tendsto_singleton` is convergence of the
+ACTUAL terminal-outcome law, and
+`quittingSingletonTerminalOutcomeMass` in
+`UniformEquilibrium/Quitting/Cycles/OwnerSingletonCyclicConcentration.lean`
+is the point mass on the SOME singleton coalition, with zero Never mass.
+Evaluate the convergence at that coordinate to obtain
+alpha_n=1-P_sigma_n(singleton{i})->0. The explicit
+`outsiderDebt_tendsto_zero` fields are actual complete behavioral debts,
+not just local Bellman errors. Since the player set is finite, their
+coordinatewise convergence gives a maximum tending to zero. The
+`ownerDebt_floor` field is allowed to persist; the construction changes
+the owner-relevant suffix and is precisely what must remove this debt.
+
+The escape producer's hypothesis is EXACTLY
+
+    ((period n+1):R)*error n ->0,
+
+because its actual cycle has `period n+1` phases. No uniform upper bound
+on `period n` is imposed. In the positive-own-absorption branch the
+existing proof passes this product through the displayed strict
+subsequences and divides by a fixed positive absorption floor; this
+supplies outsider-debt convergence even when the period grows. Thus the
+adapter does not silently replace the source error by a fixed-period one.
+
+### Fixed-target passage, including arbitrary horizon deviations
+
+From(48) choose theta_n=sqrt(alpha_n) when alpha_n>0 and sufficiently
+small, any positive vanishing theta_n when alpha_n=0, and eta_n->0.
+The cutoff profiles have actual payoffs converging to the fixed original
+table vector s and maximum complete debt tending to zero. Discarding
+finitely many indices is harmless. For every epsilon choose a member
+whose terminal Nash error and target discrepancy are both below, say,
+epsilon/2. This is exactly terminal target acceptance, with no chronology
+or compatibility requirement between chosen members.
+
+I inspected `quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family`
+and `quittingGame_isUniformEquilibriumPayoff_of_terminalTargetAcceptance`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+The first explicitly RETAINS an accepted member of the supplied family
+and proves ONE threshold for all sufficiently long horizons, full
+behavioral Nash and delivery to s. Its proof spends a strict terminal
+error margin, then combines uniform Nash with the selected profile's
+ordinary payoff convergence. Therefore no UNIFORM tail rate over the
+sequence, no proper punishment clock, and no interchange of limits is
+needed. In particular this is not an invalid inference from pointwise
+convergence of finitely supported deviation payoffs. The required
+uniform upper-deviation theorem is actually present in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformization.lean`
+as `quittingGame_hasUniformDeviationUpperApproximation`; it treats both
+positive and negative own-singletons and includes complete deviations.
+
+The punishment premise matches the project exactly:
+`quittingPunishmentValue` in
+`UniformEquilibrium/Quitting/Stationary/MinMax.lean` is the infimum over
+actual opponent plans of the complete best-reply cap.
+`exists_quittingStationaryPunishmentRoot_lt_add` in
+`UniformEquilibrium/Quitting/Punishment/InstantPunishment.lean` supplies
+the near-optimal constant independent opponent row; changing the punished
+player's prescribed coordinate does not affect its cap.
+
+Finally I inspected
+`normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/AmbientCarrierElimination.lean`
+and `all_punishmentNormal_of_normalCore_eq_univ` in
+`UniformEquilibrium/Quitting/Classification/LCP/NormalCorePunishmentNormal.lean`.
+They give precisely chi_i<=d from Fin4 no-UE, without requiring d>=0.
+The produced singleton UE contradicts that no-UE assumption. The owner
+concentration branch is thus impossible for any SUPPLIED source family
+satisfying the exact period-error product hypothesis.
+
+### Bounded overlap verdict
+
+`false_of_periodOne_ownerConcentration_of_finFour_noUniformPayoff` in
+`UniformEquilibrium/Quitting/Cycles/PeriodOneOwnerConcentrationContradiction.lean`
+already eliminates the period-one arm. I read its statement and proof:
+it uses a compact EXACT solo root limit, which this proposed adapter does
+not assume or construct. The quantile construction genuinely permits
+unbounded periods and retains the actual source only until its explicit
+legal suffix replacement. Existing period-one diffuse-source existence
+does not imply a branch-consumer theorem for an arbitrary supplied
+growing-period source; conversely the new consumer makes no stronger
+claim about existence of SOME diffuse source.
+
+I also inspected
+`isUniformEquilibriumPayoff_soloReward_of_deletedQuitLimits` and
+`isUniformEquilibriumPayoff_soloReward_of_summableConditionedDeletedClock`
+in `UniformEquilibrium/Quitting/Cycles/ConditionedDeletedClockSoloCompletion.lean`.
+They require a specific root/continuation chronology, vanishing root
+hazards/target/pure-Quit errors or a conditioned summable deleted clock.
+The supplied cyclic family's actual initial root supplies all needed
+root data for this existing consumer.
+For the concentration subsequence, take that initial root, its actual
+Bellman value, and local error. Interiority gives a positive owner hazard;
+initial opponent absorption is at most one-cycle opponent absorption and
+tends to zero; actual values converge to s; and the local Nash inequality
+bounds every outsider's pure-Quit endpoint by its current value plus
+local error. Since local error<=period-times-error, it tends to zero.
+These are EXACTLY `isUniformEquilibriumPayoff_soloReward_of_deletedQuitLimits`'s
+hypotheses, with no bounded-period requirement. The whole-family total
+hazard limit follows by applying this existing arm exclusion on any
+subsequence whose total hazard stays bounded below.
+
+The exact quantile construction is already recorded as QCUT1--QCUT7 in
+`notes/CODEX_MORSE__GLOBAL_QUITTING_OBSTRUCTION.md`. I read QCUT1--2,
+QCUT5--6, and the actual source adapters in
+`feedback/CODEX_MORSE__QUANTILE_PUNISHMENT_REPAIR__BY_CODEX_NOETHER.md`;
+the latter also proves the arbitrary-profile overlap. For each profile
+take the earliest positive OWN finite atom alpha at time T. No owner
+clock is earlier, so opponents' cumulative mass through T is at most the
+singleton failure probability alphaFailure. Removing other opponents
+then compares each outsider's pure deadline T to the solo-root Quit
+endpoint with error at most2R*alphaFailure. Together with target delivery,
+the solo root's COMPLETE outsider cap is at most its singleton target
+plus outsider debt plus4R*alphaFailure. The exact solo cap identity and
+`isUniformEquilibriumPayoff_soloReward_of_approximate_caps` consume these
+positive rates and vanishing errors with the same normality premise.
+No lower bound on the extracted rates is required. Thus neither the
+arbitrary concentration theorem nor growing-period branch elimination
+is established as new by17. The legal prefix-preserving quantile proof
+remains a correct alternative construction, but this does not justify
+a redundant export or claim of a new conjecture-facing delta.
+
+No mathematical objection was found in the adapter or full-uniform
+passage within the bounded scope. No new source/consumer coverage is
+established, and no redundant export is recommended.

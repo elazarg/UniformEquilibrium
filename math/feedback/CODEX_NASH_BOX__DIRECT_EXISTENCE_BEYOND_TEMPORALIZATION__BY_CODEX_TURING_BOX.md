@@ -212,3 +212,213 @@ a claim that the game lacks mixed stationary equilibria.
 No mathematical objection to Section 8's source-to-UE chain remains within
 this independent review. Coverage beyond the exact fixture tests above is
 reserved for the separately assigned review.
+
+## Section 12: independent producer and bounded whole-selection review
+
+Reviewed snapshot: whole-notebook SHA-256
+`e474baaaa03aa84fe6cc620e530a1b4c4132254fda2583f1b60ca269d7c20f79`.
+Scope: Section 12 only. Verdict: PASS for its ordinary mathematical
+source-to-terminal-Nash-to-fixed-uniform-payoff argument, the implicit-function
+extension, and the finite named source exclusions below. This is not a Lean
+check, exhaustive novelty theorem, stationary nonexistence result, or proof
+that every older unquantified IFT neighborhood is disjoint.
+
+The claim checked is a raw four-player producer with the printed sixteen
+paired singleton entries, twelve participant-pair upper bounds, and thirty-two
+arbitrary finite coordinates. Its schedule is the chronological owner word
+`(0,2,1,3)`, with independent proper owner hazard
+`q=(sqrt(5)-1)/2`. Deviations replace complete private laws, including all
+finite deadlines, unbounded laws and Never. The output is exact terminal Nash
+at every phase and the same profile witnesses each fixed phase target as a
+uniform-equilibrium payoff. The neighborhood version perturbs the sixteen
+singletons, permits twelve pair coordinates to decrease without bound, and
+leaves the same thirty-two coordinates arbitrary.
+
+### Actual values, all local endpoints, and all unused rewards
+
+I reconstructed the geometric four-phase evaluation from the raw singleton
+rows, rather than treating the displayed continuation vector as supplied.
+With `c=1-q` and `H=(3+sqrt(5))/2`, it gives exactly
+
+    U0=(1,H,c,1), U2=(1,c,1,H),
+    U1=(H,1,1,c), U3=(c,1,H,1).
+
+All sixteen coordinate residuals `U_t-q*r({j_t})-c*U_(t+1)` are zero.
+Each owner has value one immediately before and after its coin. For the
+twelve inactive endpoints, solving `c+q*r_i({i,j_t})<=U_ti` gives:
+
+| owner phase | inactive recipient: pair cap |
+| --- | --- |
+| 0 | 1:T, 2:0, 3:1 |
+| 2 | 0:1, 1:0, 3:T |
+| 1 | 0:T, 2:1, 3:0 |
+| 3 | 0:0, 1:1, 2:T |
+
+Here `T=(5+sqrt(5))/2`. These are exactly the twelve printed pair
+participant bounds, including their asymmetric cross-pair orientation.
+At the strict completion the four mate endpoint gaps are
+`(7-3*sqrt(5))/4>0`, and the other eight gaps are
+`(sqrt(5)-1)/4>0`. No endpoint is missing.
+
+Every unilateral replacement can meet at most one scheduled opponent at
+any live date. Thus its terminal coalition has size at most two; in a pair
+the deviator is a participant. All twelve passive pair, sixteen triple and
+four grand recipient entries are genuinely irrelevant to the deviator's
+own payoff, even under simultaneous Quit and arbitrary history-dependent
+behavior. They need only be finite for a table-specific reward bound.
+
+### Complete caps, Never and the horizon quantifiers
+
+Deleting any player leaves three independent proper coins per four dates,
+so its opponent survival is bounded by `(c^3)^floor(n/4)` from every phase.
+The two endpoint inequalities give a bounded Bellman supersolution for
+every replacement. Iteration leaves a remainder bounded by twice a finite
+table reward bound times that opponent survival. This vanishes also for
+Never and unbounded complete laws. The actual prescribed profile attains
+its exact evaluated values, hence full terminal regret is zero.
+
+The same opponent clock bounds the selecting time of every replacement.
+Summing its survival gives at most `4/(1-c^3)`; the stated extra one in
+`C=1+4/(1-c^3)` safely handles indexing of the selecting date. Therefore
+terminal-to-average error is at most `M*C/N` for prescribed play and for
+every complete replacement, with `M` fixed from the original finite table.
+The full finite-horizon gain bound `2*M*C/N` follows. This proves one fixed
+phase target before accuracy, with one fixed profile for all accuracies;
+it does not require any closure or target-preservation assumption.
+
+I inspected the actual hypotheses of
+`quittingSubBellmanValue_le_superSolution_of_survival_zero` and
+`quittingCyclicHazardTerminalValue_le_add_of_quitError_and_continueUpperBound`
+in `UniformEquilibrium/Quitting/Cycles/CyclicSupersolution.lean`, and
+`finiteAverage_delivery_le_of_opponentLiveCesaro_bound` and
+`finiteAverage_deviation_gain_le_of_exact_terminalNash_and_opponentLiveCesaro_bound`
+in `UniformEquilibrium/Quitting/Cycles/PeriodicFiniteHorizonRate.lean`.
+The ordinary proof supplies their relevant semantic hypotheses; no new Lean
+adapter or build is claimed by this review.
+
+### Owner field and implicit-function quantifiers
+
+Independent symbolic expansion of the actual policy evaluation gives
+`(1-P)*(U_(t+1),j_t-1)=F_t` with exactly the printed field. Exposing the
+three other clocks and then the returning owner's clock proves the same
+identity for arbitrary nearby singleton rows, replacing one by that
+owner's own singleton. Thus zeros are actual owner indifferences, not
+zeros of a field with an independently chosen continuation value.
+
+At the golden root I obtain the circulant offsets
+`A=-2-q`, `B=2-q`, `D=3*q-2`, and determinant
+
+    det J=(-2205+945*sqrt(5))/2 < 0.
+
+The four row eigenvalues are the stated `q-2`, `3*(2-q)`, and
+`-(2-q)+/-4*q*i`. The claimed field and determinant therefore agree
+exactly, not just numerically. Properness and all twelve strict inactive
+gaps persist on an open neighborhood of the sixteen singleton entries
+and twelve pair entries. Choose one smaller common radius there. For
+upper-only pair data, compare to the proxy table with every relevant pair
+entry at its strict-completion value plus that radius. The policy's values
+depend only on singletons; decreasing a pair entry only decreases its
+positive-coefficient inactive Quit endpoint. This proves the full
+unbounded-below twelve-coordinate conclusion. Arbitrarily large unused
+finite rewards affect only the table-specific horizon constant, not IFT,
+the selected hazards, policy evaluation, or endpoint inequalities.
+
+### Entire sure-owner and child-certificate screens
+
+I explicitly reconstructed all pure-opponent gain rows of every induced
+sure-owner game. For owner `j`, its mate and the noncollider other than
+`kappa(j)` each have gain tuple `(-1/2,-1,-1,-2)` against the four actions
+of their other two nonowners. These strict pointwise signs imply strict
+dominance against every mixed product law. Both must Continue in ANY
+induced mixed equilibrium. The remaining player then has gain `1/2`
+and must Quit. Thus the complete induced Nash set really is the single
+point printed in (12.6), for each of the four possible owners.
+
+At that point the owner's Quit-minus-Continue is `-1/2`, and the
+all-opponents-Continue mass is zero. No punishment value can repair it.
+For a partial free set the free Nash conditions and omitted players'
+no-join inequalities extend to a full induced Nash profile. For bases
+of size at least two, all base leave, free Nash and outsider join signs
+would make a full zero-tail one-shot Nash root with a sure owner, already
+excluded. This checks whole selection, not a finite sample of pure roots.
+The corresponding literal definitions and adapter were read in
+`UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean` and
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseNashSemanticAdapter.lean`:
+`quittingPersistentBaseUtility`, `quittingPersistentBaseNashSet`,
+`quittingPersistentBaseRoot`,
+`nonempty_quittingPersistentBaseCertificate_of_inducedNash`, and
+`exists_uniformPayoff_of_persistentBase_inducedNash_signs`.
+
+For every nonempty proper child, the four-cycle `kappa` provides a member
+`j` whose positive collider lies outside. At the child row `{j}`, that
+outsider's joining gain is `1/2`; every child's advance donor gain is
+zero or `-1/2`. Nonmember withdrawal gains vanish. The sole member's
+withdrawal gain is its chosen floor minus one. Patient floor is at most
+one; deadline/cancellation floor is at most zero; evaluated security uses
+an explicit minimum with zero; terminal security uses a maximum of a
+nonpositive zero floor and an LP value at most its singleton one.
+All five gains are therefore nonpositive, including singleton children.
+No nonnegative donor weights can dominate the positive join row.
+
+This matches `WithdrawalFutureJoinKind.gain` and
+`WithdrawalFutureJoinRewardCertificate.join_row` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinRaw.lean`.
+I read the actual restart and LP-floor definitions in
+`PatientWithdrawalRaw.lean`, `DeadlineWithdrawalRaw.lean`,
+`DeadlineWithdrawalRestartPointwiseCore.lean`,
+`DeadlineWithdrawalSecurityMixedPointwise.lean`, and
+`DeadlineWithdrawalSecurityLP.lean` in that same directory. In particular
+the terminal-security floor is NOT assumed nonpositive: the singleton LP
+bound is indispensable and correctly used here. This validates the
+all-child F/J-only exclusions and hence their stronger N/F/J variants.
+
+### Balanced cycles and the other finite named comparisons
+
+The balanced-certificate exclusion is valid for arbitrary finite owner
+words, not just the displayed word. From a positive owner phase, both
+nonmate coordinates become strictly greater than one. Until another
+positive owner appears, repeated positive old-owner phases preserve its
+own coordinate one and further increase those two coordinates. The first
+different positive owner must therefore be the mate, where its reward
+four forces the old owner's next coordinate below one. Opponent divergence
+ensures that first different owner exists. This contradicts the actual
+`soloFloor` field in both `BalancedSingletonCycleCertificate` and its
+`WithBounds` version, inspected in
+`UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`.
+Zero-hazard phases do not affect the argument. The signed source's positive
+predecessor Hamiltonian cycle is also impossible for the two-transposition
+positive singleton graph; I checked `SignedFourCycleSingletonData` in
+`UniformEquilibrium/Quitting/Cycles/SignedFourCycleRewardAdapter.lean`.
+The new calendar indeed escapes a certificate restriction, not the actual
+full deviation inequalities.
+
+The additional literal raw screens in Section 12.7 also pass bounded
+inspection under every relabeling. In `PairedCycleSchedule.lean`, the
+actual `RawRegion.eq_partner_of_singleton_lt` conflicts with two below-own
+opponents per recipient. In `CrossedMatchingPhaseSource.lean`, the strict
+and weak favorite caps would require `7/2<=1`; the inverse source forces
+a cross scheduled partner and still caps the mate this way. In
+`BelowSingletonJointPhaseSource.lean`, exact scheduled singleton identities
+force scale one, and `premium<-1` forces negative joining reward, whereas
+each cross pair has a positive participant joining reward `1/2`.
+The two-pair join-cap export fails its joining-versus-partner condition
+for every partition (mate `7/2<4`; a negative cross participant `-1/2<0`).
+
+I inspected the singleton hypotheses in
+`UniformEquilibrium/Quitting/Paths/TwoPairGroupExclusion.lean` and
+`TwoPairCrossMassRewardExclusion.lean`: any designated pair has a mate
+singleton with strictly positive pair-average surplus, while either
+designated recipient has its positive mate singleton surplus three.
+These contradict the respective required nonpositive singleton rows.
+Finally the two four-joint exported literal reward regions do not contain
+this fixture: favorite participant `7/2` is too far from the first
+export's five with its radius at most `1/2`, and fails the second export's
+exact favorite participant identities. The singleton graph forces any
+admissible relabeling to preserve the favorite matching. These are
+stated-region exclusions only; the earlier mechanisms are not claimed
+incapable of finding some other equilibrium in this solved table.
+
+No mathematical objection remains within this bounded review. In
+particular this review does not upgrade the finite named comparisons to
+an exhaustive classification of all source interfaces or all older
+qualitative local neighborhoods.

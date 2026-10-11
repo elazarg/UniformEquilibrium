@@ -401,3 +401,83 @@ Current next question: an operation improving the ATTAINED minimum (6),
 or a whole-correspondence obstruction, rather than another arbitrary bad
 equilibrium branch. The exact nonstationary calibration above is evidence
 for this source, not a proof of arbitrary-table completeness.
+
+## 10. Global penalty selection: a genuine truncation, but no relative error control
+
+Status: ordinary proof draft. This is a selection over the WHOLE constrained
+strategy domain, not over a supplied equilibrium branch. It does not prove(Q).
+Fix a,delta as above and let E_a be the owner's CONSTRAINED response debt;
+for i!=a let E_i=D_i be its unrestricted debt. On the compact constrained
+domain every E_i is continuous. Indeed the prescribed payoff functions are
+uniform limits of finite-cylinder functions by Section2. The same estimate
+holds uniformly over every legal replacement: when the owner is the
+deviator its replacements still belong to K_delta, and otherwise its
+prescribed clock still belongs to K_delta. Taking a maximum over the fixed
+compact replacement-law set therefore preserves continuity.
+
+For Lambda>0 maximize
+
+    J_Lambda(p)=sum_(b!=a) p_b(Never)-Lambda sum_i E_i(p).
+
+The Never atoms are upper semicontinuous on the compactified law space,
+so a maximum exists. An exact constrained Nash point gives J_Lambda>=0.
+Consequently every maximizer satisfies
+
+    sum_i E_i <= (|I|-1)/Lambda.                              (7)
+
+There is an actual global tail-deletion property. Fix b!=a and let
+m=Pr(H<=T_b<Never). Move all this finite tail mass to Never. Its Never
+bonus increases by m. Against any legal response of any recipient, the
+outcome can change only when this tail event occurs and the owner's clock
+survives H. These events are independent, and the owner's prescribed or
+legally replaced law has survival at most c^H. Thus every relevant payoff
+changes by at most 2R m c^H. The constrained cap of b is unchanged (b's
+opponents did not change); every other relevant cap changes by at most
+the same bound. It is enough to bound the total debt change by
+
+    4R |I| m c^H.
+
+If 4R |I| Lambda c^H<1, any m>0 would strictly increase J_Lambda.
+Therefore EVERY maximizer has all nonowner finite clock supports below
+such an H; the nonowners may retain positive Never mass. In particular
+H can be chosen of order log(Lambda)/delta.
+
+This gives bounded-tail APPROXIMATE constrained Nash profiles, not exact
+ones. Section4's final-clock exit needs exact nonowner response
+inequalities. Here the error bound(7) is of order 1/Lambda, while the
+owner survival near the selected cutoff can itself be of that order.
+After conditioning, error/reach need not vanish. Taking Lambda to infinity
+recovers exact constrained Nash but also sends H to infinity. There is no
+proved interchange of these operations, and no resulting UE producer.
+
+### An exact falsifier of an abstract linear repair principle
+
+The following FINITE response game is only a test of generic equilibrium
+repair, not a quitting-game counterexample or a falsifier of(Q). Three
+players choose A or N, with independent N probabilities x,y,z. Give A
+payoff zero and let the N-minus-A expected advantages be
+
+    d_1=y-2z-yz,  d_2=z-2x-xz,  d_3=x-2y-xy.
+
+These multilinear formulas define an ordinary finite game. Its UNIQUE
+Nash point is x=y=z=0. If x>0, best response requires y>=2z+yz.
+If y=0 this forces z=0, but then d_3=x>0 contradicts z=0. Cycling the
+argument makes all three coordinates positive. Their best-response
+inequalities y>=2z, z>=2x, x>=2y then contradict each other. At the
+all-zero point all three unused N actions are weak best replies.
+
+At x=y=z=t>0, each advantage is -t-t^2 and each debt is t^2+t^3.
+Thus
+
+    (x+y+z)-Lambda sum_i D_i = 3t-3Lambda(t^2+t^3)>0
+
+for all sufficiently small positive t, whereas its value at the unique
+Nash point is zero. A Never-bonus/linear-debt penalty need not maximize
+at an exact equilibrium, however large its coefficient is. Weakly best
+unused actions also cannot automatically be activated while preserving
+equilibrium. This invalidates those ABSTRACT repair steps; the special
+quitting-clock structure might still permit a different joint operation.
+
+Current next question: control the NORMALIZED continuation debt globally,
+or reorganize tails so that the final-clock exit does not divide an
+unconditioned approximation error by a vanishing reach probability.
