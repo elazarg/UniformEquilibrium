@@ -5626,3 +5626,151 @@ still missing; postcollision normality alone does not supply it. The next
 substantive task is an endpoint-feasible variation of the singleton-team
 completion, or a genuinely different whole-law operation, not another
 finite-calendar bound or normalization interface.
+
+## 33. Singleton-root completion pays a reference-relative punishment cost
+
+Status: ordinary mathematics, unreviewed. This is an exact full-law
+variation with a successful four-active test, and a necessary inequality
+at a global minimum. It does not exclude a positive minimum or produce
+UE for arbitrary data. Unlike Section30's Never reset, it retains a
+multi-date counterfactual opponent team. The payoff target may move.
+
+### Exact finite operation, including every full reply
+
+Let mu be any finite full-coarse clock law, with prescribed values v_i,
+full caps C_i, marginals m_i and information I(mu). Prepend a new date0
+and shift all old finite dates by1. Choose an owner i, a probability
+0<q<1, and ANY joint opponent law kappa on the shifted old calendar,
+possibly with Never atoms. With probability1-q use shifted mu; with
+probability q set T_i=0 and sample T_-i from kappa. All clocks in kappa
+are strictly after0. Write s_j=r_j({j}), and f_i^kappa(h) for owner i's
+pure reply against this ACTUAL correlated opponent law. Then
+
+    u_i=(1-q)v_i+q s_i,
+    u_j=(1-q)v_j+q r_j({i})                  (j!=i).
+
+Owner i's new Quit0 reply pays s_i. Every later deadline, including
+Never, pays
+
+    (1-q)f_i^mu(h)+q f_i^kappa(h).
+
+For j!=i, Quit0 pays (1-q)s_j+q r_j({i,j}); every later deadline pays
+(1-q)f_j^mu(h)+q r_j({i}). These identities include the omitted late
+deadline and literal Never separately. Thus the following are SUFFICIENT
+for exact full coarse obedience, without replacing a sum of reply
+functions by an unjustified equality of their maxima:
+
+    u_i>=s_i,
+    (1-q)(v_i-C_i)+q(s_i-C_i(kappa))>=0,
+    (1-q)(v_j-s_j)+q[r_j({i})-r_j({i,j})]>=0   (j!=i).   (33.1)
+
+The later replies of j!=i are already safe since v_j>=C_j. In particular,
+if every v_j>s_j, and C_i(kappa)<=s_i, all these conditions hold for
+sufficiently small q. No equilibrium of a deleted child is invoked.
+
+### Exact information and the whole-minimum obstruction
+
+For probability laws a,b put JS_q(a,b)=H((1-q)a+qb)-(1-q)H(a)-qH(b).
+The new root event is observable from owner i's clock and its bit is
+independent of every other root bit (all those bits are Continue). Entropy
+decomposition, with all tail distributions retained, gives exactly
+
+    I(new)=(1-q)I(mu)+q I(kappa)
+                 +sum_(j!=i) JS_q(m_j,kappa_j).         (33.2)
+
+For finite alphabets, if every kappa_j is absolutely continuous with
+respect to m_j, the right derivative at q=0 is
+
+    -I(mu)+I(kappa)+sum_(j!=i) KL(kappa_j||m_j)
+      = -I(mu)+KL(kappa || product_(j!=i)m_j).          (33.3)
+
+If a marginal absolute-continuity condition fails, the derivative may
+instead be +infinity. The switching charge cannot be discarded.
+
+Here is the genuine global-minimality consequence. Suppose a full-coarse
+law attains the information infimum rho>0 over ALL calendars, every
+v_j>s_j, and the variation above is available with its finite lifts.
+Then EVERY opponent punishment with C_i(kappa)<=s_i and finite relative
+entropy must satisfy
+
+    KL(kappa || product_(j!=i)m_j) >= rho.             (33.4)
+
+Moreover EVERY coarse constraint is binding: v_i=C_i for all i. Indeed,
+if v_i>C_i, choose kappa=product m_-i. Its cap is bounded, so the positive
+old slack makes(33.1) hold for small q even when its cap exceeds s_i;
+the derivative in(33.3) is then -rho. Both conclusions concern the entire
+global minimum, not one selected auxiliary equilibrium.
+
+The finite-lift hypothesis in this consequence is part of its scope:
+for a law-valued limit source, take literal finite source/punishment pairs
+on the corresponding old calendars, require convergence of their full
+reply functions, relative entropies and strict inequalities in(33.1),
+and apply the finite operation before taking the limit. This paragraph
+does NOT assert that arbitrary non-realizable limit punishments have such
+lifts. The fully finite test below needs no limit-source assumption.
+
+Normality only supplies a punishment VALUE. It does not bound(33.4)'s
+reference-relative information price. This is the exact surviving global
+obstruction, not a new value-to-KL theorem. The new leverage over a blanket
+reset is that a successful completion can keep all survivor marginals in
+the old supports and pay only a finite Jensen--Shannon switching charge.
+
+### Exact four-active successful test
+
+Use the K10 table of Section24 and the full-coarse law assigning mass1/5
+to each adjacent pair and to the grand coalition at one common date;
+all nonmembers play Never. It has v=C=(12/5,...,12/5), each marginal
+finite mass3/5, and information
+
+    I_old=4h(3/5)-log5.
+
+Take owner0, q=1/10, and an INDEPENDENT opponent completion at shifted
+date1 with finite probabilities
+
+    (p_1,p_2,p_3)=(3/5,1/10,3/5),
+
+otherwise Never. Its full owner0 cap is47/50<1: Quit1 pays39/125,
+every strictly later finite deadline pays47/50, and Never pays199/250.
+The completed source has five old atoms each9/50, plus the eight atoms
+(0,T1,T2,T3) with weight (1/10) times the displayed product probabilities.
+This is a complete exact13-atom specification. Its payoffs and full pure
+reply values, in deadline order0,1,2,Never, are
+
+    i   u_i       replies
+    0   113/50    1, 1839/1250, 1127/500, 5599/2500
+    1   54/25     11/10, 36/25, 54/25, 54/25
+    2   64/25     9/10, 46/25, 64/25, 64/25
+    3   54/25     4/5, 36/25, 54/25, 54/25.
+
+Every deadline>=2 has the displayed deadline2 value, so this is FULL
+coarse, not merely finite-menu coarse. The exact information is
+
+    I_new=(9/10)I_old+h(11/20)-(9/10)h(3/5)-(1/10)h(1/10).
+
+Rational log-series enclosures with32 terms prove I_old>1.08,
+I_new<1.025 and I_old-I_new>0.058. Floating values1.0826087556 and
+1.0242678961 are corroboration only. The first-order punishment price is
+KL(Ber(1/10)||Ber(3/5))=0.5506612476...<I_old. Thus an actual singleton
+counterfactual team, not a literal Never reset, can pay its switching
+charge and lower information while moving the entire payoff.
+
+### Source inspection and remaining question
+
+`IsQuittingNormalPlayer` in
+`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean` means
+quittingPunishmentValue<=own singleton, not a statement about a chosen
+opponent marginal or about a child's equilibrium. The definition in
+`Stationary/MinMax.lean` is the infimum over independent behavioral
+opponent plans of the unrestricted terminal best-reply value;
+`quittingPunishmentValue_eq_stationaryPunishmentValue` computes this
+infimum by constant product roots and does not assert attainment.
+`all_punishmentNormal_of_normalCore_eq_univ` in
+`Classification/LCP/NormalCorePunishmentNormal.lean` supplies normality
+on the full normal core. For nonnegative own singletons normality also
+follows directly from `quittingPunishmentValue_le_max_solo`.
+
+The remaining conjecture-facing task is to use GLOBAL source selection
+to violate(33.4), or to reach a different payoff/support chamber where
+this completion is cheaper. The successful test is not a universal local
+cost estimate, a convergence family, a new UE class, or a license to
+fix the original source/payoff while repeating this one move.
