@@ -33,6 +33,12 @@ and its growing-period source composition. Our reconstruction duplicated
 that result and supplies no new mathematical coverage. The remaining
 all-hazards-small source-selection problem is still open.
 
+Section 18 gives an unreviewed, exact grammar falsifier: even on the fixed
+paired singleton matrix, no uniformly bounded-period producer restricted
+to at most two active players per root covers every collision completion.
+The exhibited family is solved by a sure triple, so this is not a new UE
+exclusion or a refutation of a solved-game-or-pair-source disjunction.
+
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits
 one convexification of the
@@ -1774,3 +1780,426 @@ Our independent reconstruction supplies confirmation, not a new producer,
 consumer, or source extension. The genuinely open next question is how
 to produce and consume the remaining all-hazards-small family without
 public correlation or restricting complete private-clock deviations.
+
+## 18. A fixed-period pair-root grammar cannot cover all completions
+
+Status: ordinary proof draft, not independently reviewed or Lean-checked.
+This is a direction-changing restriction test, not an export candidate,
+new solved-table class, or positive-gap example against every private law.
+
+### 18.1. Exact raw family and claimed grammar failure
+
+For each real K>=4, define a four-player quitting table G_K as follows.
+The singleton rows are
+
+    r(0)=(1,4,0,0), r(1)=(4,1,0,0),
+    r(2)=(0,0,1,4), r(3)=(0,0,4,1).
+
+For every pair S, each participant receives4 and every nonparticipant0.
+For every triple S, each participant receives K and its nonparticipant0.
+The grand row is(-1,-1,-1,-1). Live and Never rewards are zero. Coins
+are independent across players and dates; a deviation replaces the entire
+private date-or-Never law. Let E_K(sigma) be maximum full terminal regret,
+over all players and all such replacements.
+
+Fix any positive integer L. The tested grammar P_L consists of ALL
+L-periodic independent root arrays q_(t,i) in[0,1], subject only to at
+most two positive coordinates at every phase. Support labels may change
+arbitrarily between phases and between reward tables or accuracies.
+Sure roots, empty roots, unused players and every initial phase are allowed.
+Only the prescribed profile is restricted; deviations are unrestricted.
+
+Claim: there exist K_L>=4 and gamma_L>0 such that
+
+    K>=K_L and sigma in P_L  ==>  E_K(sigma)>=gamma_L.     (52)
+
+The thresholds are existential, not numerically produced. Taking the
+maximum threshold and minimum gap over L=1,...,H gives the same conclusion
+for every grammar with period at most a fixed H. This is an exact family
+of restricted-strategy falsifiers, not an explicit numerical K threshold.
+
+Every G_K is nevertheless solved. At date zero let players0,1,2 Quit
+surely and player3 Never. Participants receive K; a withdrawal receives
+the pair's nonparticipant reward0. Player3 receives0 and a join receives
+grand reward-1. This is exact terminal Nash against all replacements,
+and its fixed target(K,K,K,0) is a uniform-equilibrium payoff. The first
+root has three active players, outside P_L.
+
+### 18.2. The vanishing-total-hazard boundary is impossible
+
+Suppose(52) fails. Choose K_n>=n and L-periodic pair-root profiles with
+full regret epsilon_n->0. Since the root array is a fixed finite cube,
+pass to a convergent subsequence q_n->q*. On prescribed play only
+singleton and pair coalitions can occur. All its recipient rewards are
+in[0,4], independent of K_n. In contrast, immediate Quit by any replacing
+player yields at least1: its resulting coalition has size at most three,
+and its own rewards there are respectively1,4,K_n. Consequently
+
+    U_n,i>=1-epsilon_n.                               (53)
+
+First exclude q*=0. Let a_n,i=sum_t q_n,t,i and A_n=sum_i a_n,i.
+All-zero profiles already have regret1, so A_n>0 eventually. Extract
+w_i=lim a_n,i/A_n with w>=0 and sum_i w_i=1. Since L is fixed and all
+hazards tend to zero, one period has singleton-i first-stop mass
+a_n,i+O(A_n^2), pair mass O(A_n^2), and total absorption probability
+A_n+O(A_n^2). Geometric repetition therefore gives
+
+    U_n,i -> v_i=w_i+4*w_m(i),                        (54)
+
+where m exchanges0 with1 and2 with3. This expansion uses only bounded
+prescribed singleton/pair rewards; the diverging triple rewards never
+appear. It also proves the analogous deleted-player expansion whenever
+w_i<1:
+
+    payoff_i(Never,sigma_n,-i) -> (v_i-w_i)/(1-w_i).    (55)
+
+Indeed deleting i replaces A_n by A_n-a_n,i, keeps the opponents'
+first-order singleton masses, and still permits only bounded singleton
+and pair rewards on the deviating path. Equation(53) gives v_i>=1,
+equivalently Gamma*w>=0 for the hard paired singleton matrix.
+
+This already forces every w_i strictly positive. Put A=w0+w1 and
+B=w2+w3. Neither can be zero, since the other group's rows would be
+negative. The four inequalities are
+
+    3*w1>=B, 3*w0>=B, 3*w3>=A, 3*w2>=A.
+
+Thus all w_i>0 and all w_i<1. Never's full-regret bound and(55) now give
+
+    w_i*(v_i-1)/(1-w_i)<=0.
+
+Together with v_i>=1 this forces every v_i=1. But(54) has
+sum_i v_i=5, a contradiction. Thus the limiting root array has positive
+total hazard. This is the complete-deviation check at the null boundary;
+one-row local Nash errors alone would not suffice.
+
+### 18.3. Sure roots are impossible, and triple deviations remove pairs
+
+There is no sure coordinate in q*. Otherwise choose the first phase t
+in the initial period containing one. Every earlier limiting root has
+all coordinates strictly below one, so its joint probability of reaching
+t is bounded below by a positive constant. Choose a sure player a there.
+The limiting root has at most one further potentially active player b.
+There is an inactive player i whose favorite mate is not a. If b is its
+mate, b cannot stop alone while a quits surely; if b is not its mate,
+no possible singleton at that root pays i positively. Pair absorption
+pays i zero in either case. Therefore i's conditional prescribed payoff
+at phase t tends to zero: the chance of surviving a's coin tends to zero,
+and all later prescribed payoffs are bounded by4. Immediate Quit still
+pays at least1. Following prescribed behavior before t and deviating
+there gives a positive initial gain, contradicting epsilon_n->0.
+
+It follows that the joint reach of EACH of the L phases is bounded
+below. Let s_n,t be that joint reach. Copying the prescribed behavior
+before t and then using any complete replacement implies that every
+conditional suffix debt is at most epsilon_n/s_n,t. In particular each
+immediate Quit endpoint is at most4+epsilon_n/s_n,t.
+
+At a phase with active pair a,b, choose any inactive player i. Its pure
+Quit receives K_n on the simultaneous a,b-quit event, while all its other
+possible rewards are nonnegative. Hence
+
+    K_n*q_n,t,a*q_n,t,b <= 4+epsilon_n/s_n,t.
+
+Thus every limiting root has at most ONE positive coordinate. The limit
+is an actual singleton calendar with positive total hazard, proper roots,
+and every phase payoff at least1. Its actual values converge from those
+of q_n, since the joint geometric denominator stays strictly positive and
+all prescribed rewards are the same bounded singleton/pair rows.
+
+### 18.4. The limit would be a forbidden balanced singleton calendar
+
+At a positive limiting root with owner j and hazard p in(0,1), j's
+immediate Quit endpoint tends to1. Indeed the only possible additional
+active coordinate tends to zero, and j's endpoint only uses its singleton
+one and pair-participant four, never K_n. The conditional Nash bounds
+on both Quit and Continue, together with the policy mixture and p>0,
+force the limiting actual value u_t,j=1. More explicitly, if delta is
+the conditional debt bound, the policy identity bounds
+`|u_t,j-Quit_t,j|` by delta times a constant depending only on p.
+
+The limit therefore has the exact singleton arc, all-player floor1 and
+active owner value1. At any empty phase, assign the next positive phase's
+owner; the values remain unchanged until that phase, so its active-value
+condition also holds. At least two distinct owners occur: otherwise a
+nonmate of the sole owner would have payoff zero, contradicting the
+floor. Thus every deleted player has a positive opponent clock.
+
+For completeness, such a balanced calendar is impossible for these
+singleton rows at ANY finite period. Start at a positive owner-j phase.
+The next j value remains1. Each nonmate i has singleton reward zero at
+j's stop, so its next value is u_t,i/(1-p)>1. Follow to the first
+different positive owner. All intervening positive j phases keep j's
+value1 and increase the nonmates' values, so that first different owner
+must be m(j). Its reward four to j forces j's following value
+`(1-4*a)/(1-a)<1`, violating the floor. Opponent divergence ensures that
+different owner exists. This is exactly the previously known balanced
+singleton obstruction, not a newly claimed lemma here.
+
+All compactness alternatives have contradicted epsilon_n->0. Therefore
+there cannot be K_n->infinity with inf_(sigma in P_L)E_Kn(sigma)->0,
+which is equivalent to the uniform-tail positive gap(52).
+
+### 18.5. Source boundary and next mechanism
+
+The initial bounded overlap route was the interior-cyclic/vanishing-hazard
+heading in [the current frontier](../FRONTIER.md), followed by
+`PeriodOneNormalizedSourceLimit.selectedNeverPayoff_tendsto` and the
+same-source endpoint calculations in
+`UniformEquilibrium/Quitting/Cycles/PeriodOneVanishingHazardEndpointLimits.lean`.
+The null-boundary calculation above is an elementary fixed-period version,
+proved explicitly rather than transferred without matching hypotheses.
+The generic balanced obstruction is
+`BalancedSingletonCycleCertificate.exists_escortCycle` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonEscort.lean`;
+`not_nonempty_balancedSingletonCycleCertificate` in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedCycleExclusion.lean`
+records it for the paired capped-clock family. Its separate family
+hypotheses are not assumed for G_K; the common-singleton proof is given
+above. Narrow checks in the maintained frontier/toolkit and the bounded
+periodic-format note found no identical arity test. This is not an
+exhaustive novelty assertion.
+
+The falsified implication is UNIVERSAL completion coverage by a fixed
+period bound and pair-only roots, even permitting arbitrary distant
+support selection and approximate rather than exact Nash. It says
+nothing against unbounded periods, three-/four-active roots, or a
+disjunction that first consumes already-solved persistent-base cases.
+The fixtures are precisely solved by the latter source. No remaining
+counterexample class has shrunk.
+
+The next global construction must admit genuinely larger simultaneous
+roots or explicitly discharge those solved-base alternatives before
+restricting its grammar. Another pair-calendar neighborhood would not
+resolve the obstacle tested here.
+
+## 19. Macroscopic owner clocks with rare compensated pair collisions
+
+Status: complete ordinary proof draft, not independently reviewed or
+Lean-checked. This is a constructive vertical test after the already-solved
+base alternatives have been excluded. It supplies an exact raw-data
+producer on the family below, not arbitrary collision completions or a
+global Fin4 theorem. No export claim is made.
+
+### 19.1. Raw family, independent policy and parameter threshold
+
+Keep the sixteen paired singleton entries of Section18. Put
+
+    T=(5+sqrt(5))/2,
+    T<A<4,
+    D=sqrt((4-A)/(A-1)),  J=(A-1)*D,
+    0<B<=J,
+    C=(1-D)*(1-J),
+    K>C/(1-sqrt(D))^2.
+
+In this range 0<D<(3-sqrt(5))/2<1 and 0<J<1, so C>0 and the lower
+bound on K is positive. Define the complete nonsingleton table by
+
+| S | r(S) |
+| --- | --- |
+| 01 | (A,A,K,K) |
+| 02 | (B,K,-B,K) |
+| 03 | (-B,K,K,B) |
+| 12 | (K,-B,B,K) |
+| 13 | (K,B,K,-B) |
+| 23 | (K,K,A,A) |
+| 012 | (K-1,K-1,K-1,K) |
+| 013 | (K-1,K-1,K,K-1) |
+| 023 | (K-1,K,K-1,K-1) |
+| 123 | (K,K-1,K-1,K-1) |
+| 0123 | (-1,-1,-1,-1) |
+
+There is no normalization or modification of these original rewards.
+Live and Never pay zero, randomization is private and independent, and
+every deviation replaces a complete behavioral law, including Never.
+
+Set
+
+    x=C/K,  s=1-D+x,
+    a=(s+sqrt(s^2-4*x))/2,
+    b=(s-sqrt(s^2-4*x))/2.                            (56)
+
+The bound on K says 0<x<(1-sqrt(D))^2. Hence the discriminant is
+positive, 0<b<a<1, and
+
+    ab=x,       (1-a)*(1-b)=D.                       (57)
+
+Indeed the discriminant factors as
+`[x-(1-sqrt(D))^2]*[x-(1+sqrt(D))^2]`; positive roots sum to s, and
+their Continue probabilities have positive sum 2-s and product D.
+In particular neither root reaches or exceeds one.
+
+Use the four-date singleton-owner word0,2,1,3, but at each date give
+its favorite mate the second hazard b. Thus the actual joint roots are
+
+    phase0: q0=a, q1=b;
+    phase1: q2=a, q3=b;
+    phase2: q1=a, q0=b;
+    phase3: q3=a, q2=b.
+
+All omitted players Continue. These are ordinary independent Boolean
+roots; no common random seed is used. Both roots are proper at every
+phase, and the policy is selected from A,K before any accuracy.
+
+### 19.2. Actual values and both owner equations
+
+Let tau=(0 2 1 3), and let tau act on payoff coordinates in the usual
+way. Both the raw table and the root calendar are equivariant under
+this permutation/phase shift. Define
+
+    L=1+(A-1)*b,      H=1+(A-1)*a,
+    W=K*x+D*L,        Z=K*x+D*H,
+    U0=(L,H,W,Z),     Ut=tau^t(U0).                  (58)
+
+These will be shown to be ACTUAL policy values, not supplied arbitrary
+continuations. At phase0 the two active players' pure Quit endpoints
+are L and H. Their Continue endpoints are respectively
+
+    4*b+(1-b)*Z,       4*a+(1-a)*W.
+
+Thus both active players are indifferent exactly when
+
+    Z=1+(A-4)*b/(1-b),
+    W=1+(A-4)*a/(1-a).                              (59)
+
+Equations(57) and the definitions of D,J,C imply(59). To verify this
+without assuming it, subtract the two equations after replacing W,Z
+by(58). Their difference, divided by a-b, is precisely
+
+    D^2=(4-A)/(A-1).
+
+Their sum reduces to
+
+    K*x=(1-D)*(1-(A-1)*D)=C,
+
+using a+b=1-D+x. Both identities hold by construction, so neither
+owner equation has been discarded.
+
+For passive player2 at phase0, the only nonzero absorbed reward is
+the pair01 reward K, of probability x. Joint Continue has probability
+D, and the next phase's player2 value is L. Therefore its policy
+recursion is W=K*x+D*L. The same argument gives player3's recursion
+Z=K*x+D*H. The active policy recursions follow from(59) and their
+indifference. Thus ALL sixteen coordinate policy recursions hold,
+by equivariance. Joint survival per period is D^4<1, so these bounded
+recursions uniquely identify the actual geometric policy values.
+
+### 19.3. Every inactive endpoint, not merely owner indifference
+
+At phase0, player2's pure Quit endpoint is
+
+    Q2=D+B*(b-a)+(K-1)*x,
+
+and player3's is
+
+    Q3=D+B*(a-b)+(K-1)*x.
+
+These account respectively for no opponent Quit, either sole opponent,
+and both opponents. In particular the triple term is the ORIGINAL
+K-1, not a clipped or discarded reward. Continue equals W or Z by
+actual policy evaluation. The endpoint margins are exactly
+
+    W-Q2=J*b+B*(a-b)+x >0,
+    Z-Q3=a*(J-B)+B*b+x >0.                           (60)
+
+They are positive because 0<B<=J and a>b>0. Equivariance checks all
+eight inactive endpoints at the other three phases. Along with both
+active equalities per phase, this verifies all sixteen local endpoint
+pairs. Simultaneous pair quits and the triples caused by a unilateral
+Quit are explicitly included.
+
+### 19.4. Complete caps, fixed target and large-K limit
+
+Each player has one a coin and one b coin per period. Deleting that
+player leaves three of each, with opponent survival D^3<1 per period.
+The exact policy equations and endpoint inequalities therefore iterate
+to a bound on EVERY complete replacement, with vanishing remainder
+controlled by the deleted geometric clock. Pure Never and arbitrarily
+late deadlines satisfy the same comparison. The profile is exact
+terminal Nash at every initial phase.
+
+For any finite bound M on the original table's absolute rewards, the
+same profile has delivery error at most M*C_hor/N and full horizon
+regret at most2*M*C_hor/N, where
+
+    C_hor=1+4/(1-D^3).
+
+This is the same source-free terminal-to-average comparison used in
+Sections13 and15. It proves every fixed actual value Ut in(58) is one
+uniform-equilibrium payoff, chosen before accuracy. The table-specific
+M may grow with K; no bound uniform over changing reward tables is
+needed. The calendar and targets need not be inherited from any old
+certificate or approximate family.
+
+At fixed A,B and K->infinity,
+
+    a -> 1-D,    b ~ (1-J)/K,
+    K*ab=C.
+
+Thus a macroscopic independent owner clock coexists with a genuinely
+rare joint collision. Its passive reward K compensates the vanishing
+probability and retains a finite continuation contribution. The actual
+policy remains geometrically proper uniformly in this limit, because
+the deleted survival remains D^3. Dropping the rare collision BEFORE
+evaluating its payoff would destroy the construction.
+
+At the boundary A downarrow T, J approaches1, C approaches0 and
+the limiting profile approaches the golden singleton calendar
+`a=(sqrt(5)-1)/2, b=0`. For A>T the positive rare mate hazard and
+passive pair transfer repair that calendar's violated favorite-join
+cap. This gives a concrete continuation mechanism through a reward
+threshold, not an arbitrary local IFT neighborhood or ancestry claim.
+
+An exact small parameter instance is A=19/5, B=1/2, K=10. Here
+D=1/sqrt(14), J=sqrt(14)/5, and(56) is an exact radical policy.
+Numerically a is about0.725771 and b about0.0254085, only as a check;
+the source and proof above are exact.
+
+### 19.5. Whole persistent-base failure and bounded source boundary
+
+This family is not merely the easy solved-base counterexample of
+Section18. For EVERY sure owner j, its mate has joining-minus-passive
+gain A-4<0 when the other nonowners Continue. Its other noncollider
+has gain -B<0. If one further nonowner quits, either player's gain is
+`(K-1)-K=-1`; if both do it is `-1-K<0`. Both are strictly dominated
+Quitters in the ENTIRE induced mixed game. The remaining nonowner
+kappa(j), with kappa=(0 3 1 2), then has gain B>0 and Quits surely.
+The full induced Nash set is this unique point. There owner j gets
+-B by Quit and0 by Continue, while all-opponents-Continue mass is
+zero. No punishment value can repair its leave gain B. Consequently
+ALL sure-owner punishment-tail selections and ALL larger persistent
+base/free selections fail, by the same full-extension argument as in
+Nash's checked singleton-calendar source. This is a whole-correspondence
+calculation, not selected pure-root evidence.
+
+The same nonempty-proper-child witness remains valid: choose member
+j with kappa(j) outside and use coalition{j}. Outsider joining gain is
+B>0, while every permitted donor's advance gain is zero, A-4, or -B.
+All five withdrawal gains are nonpositive because their singleton
+restart floors are at most the own singleton one. Thus every named
+nonnegative-weight F/J and N/F/J raw child certificate also fails.
+
+The singleton matrix is unchanged, so the balanced/signed-four-cycle
+obstructions and degree-one paired matrix boundary are unchanged. The
+golden raw source fails its favorite-participant cap A<=T; both earlier
+four-joint exports require favorite participant near or equal to5,
+whereas A<4. The two-pair join-cap producer fails every partition:
+the favorite pairing has A<4, and either cross pairing contains a
+participant -B below its passive singleton zero. These are bounded
+named-source checks, not exhaustive novelty. Other accepted raw classes
+must be checked before any export consideration.
+
+The narrow declarations used are the actual persistent-base induced
+game and semantic adapter recorded in Section13; the generic full
+endpoint comparison in
+`UniformEquilibrium/Quitting/Cycles/CyclicSupersolution.lean`; and the
+exact terminal/fixed-profile consumers in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+No new Lean file, build result, or source-completeness assertion is made.
+
+Concrete next question: can this rare-joint/passive-transfer synthesis
+be selected from arbitrary remaining collision data, rather than from
+the exact compensation identities printed above? The current proof
+does NOT supply that global selection. Its useful ingredient is that
+large owner clocks and rare joint events must be evaluated together;
+neither uniformly tiny roots nor a fixed singleton alphabet captures it.

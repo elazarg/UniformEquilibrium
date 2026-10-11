@@ -14,7 +14,9 @@ generic containment and a failed separation attempt. Section 10 records
 a global degree replacement for the local nonsingular-root producer;
 its proof remains unreviewed and it does not yet supply new coverage.
 No strict-new-coverage claim is made.
-All arguments are ordinary mathematics, not Lean-checked or exported.
+All arguments are ordinary mathematics, not Lean-checked. Except for the
+canonical Section 12 packet linked below, these exploratory arguments are
+not exported.
 Section 7 gives a genuinely
 different global cap-minimization/minimax producer for affine opposed-team
 games, but a complete singleton-matrix check places that whole class inside
@@ -38,6 +40,14 @@ review. This is reviewed ordinary mathematics, NOT Lean-implemented. No
 completeness over all existing supplied-object verifiers is claimed. The
 packet, rather than this exploratory section, is canonical. Global
 nonstationary selection remains the independent research lane.
+
+Section 13 develops a global exact record-tail compactification inside a
+single-owner constrained-Nash correspondence. It removes improper-clock
+finite tails by a joint compact limit, not by conditioning approximate
+equilibria. An ordinary UNREVIEWED resonance proof then excludes sources
+with only two proper clocks at a rate chosen generically before selecting
+the correspondence. This is a proposed strict source reduction, not a new
+solved raw-table class or an unrestricted equilibrium producer.
 
 Central conclusion: NONE of the no-go results below refutes existential
 selection from the FULL private-Never-bonus equilibrium correspondence.
@@ -1918,3 +1928,305 @@ The canonical packet includes those exact tests. This is not exhaustive
 strategy-source novelty or a stationary-nonexistence claim. The live next
 question is a genuinely global nonstationary selection operation, not
 tuning this center or manufacturing additional isolated calendars.
+
+## 13. Exact record compactification and the two-proper-clock face
+
+Status: complete ordinary proof draft, NOT independently checked and NOT
+Lean-implemented. The constrained-Nash compactness and record operation
+are developed in CODEX_EMMY_BOX's
+[`SINGLE_OWNER_COMPACTIFICATION.md`](CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION.md),
+Sections 2--5, 8 and 11. The new proposed operation below is joint
+record-tail compactification, followed by exact two-clock combinatorics.
+It is not an assertion that positive Never mass means literal Never.
+
+### 13.1. Exact data and proposed source reduction
+
+There are finitely many players (the application is Fin4), complete
+independent stopping laws on the nonnegative integer dates and Never,
+terminal coalition rewards r_i(S), Never/preabsorption reward zero, and
+unrestricted unilateral replacement laws. Fix R>0 with |r_i(S)|<=R.
+Write E(p)=max_i(B_i(p)-U_i(p)) for literal full terminal exploitability.
+Suppose there is an actual global gap
+
+    E(p)>=gamma>0 for EVERY independent complete profile p.       (13.1)
+
+Select an owner a with s=r_a({a})>=0. Fix delta in (0,1), c=1-delta,
+and let K_delta be the owner's convex law set
+
+    Pr(T_a>=t)<=c^t for every integer t>=0.                       (13.2)
+
+Let N_(a,delta) consist of exact Nash profiles for the game in which ONLY
+the owner is restricted to K_delta. Every nonowner retains all complete
+laws, including Never. A proper clock means p_i(Never)=0; an unbounded
+proper clock additionally survives every finite date with positive
+probability. This is an exact correspondence, not approximate Nash.
+
+For each b!=a put
+
+    s_b=r_b({b}),  v_b=r_b({a}),  B_b=r_b({a,b}),
+    u_b=r_a({b}),  A_b=r_a({a,b}).
+
+Assume these finite generic inequalities for each b:
+
+    s, u_b, A_b are pairwise distinct;
+    B_b!=s_b,  v_b!=s_b,  v_b!=B_b.                              (13.3)
+
+When lambda_b=(v_b-s_b)/(B_b-s_b) belongs to (0,1), require
+
+    c^d!=(1-lambda_b)^k for ALL positive integers d,k.            (13.4)
+
+The rate c is selected BEFORE selecting any profile in N_(a,delta).
+For fixed rewards, the forbidden set is countable, so (13.4) permits c
+arbitrarily close to1. Also choose
+
+    2R delta<gamma.                                             (13.5)
+
+Proposed conclusion: EVERY p in the nonempty compact N_(a,delta) has
+at least THREE proper clocks. Moreover this correspondence contains a
+profile in which every clock is either unbounded proper or literal Never,
+with the smallest proper-clock count occurring anywhere in the
+correspondence. Thus in Fin4 its support-minimal exact source has three
+or four unbounded proper clocks and literal Never everywhere else.
+
+This is a reduction of an actual globally produced counterexample source,
+not a claim that its remaining three/four-clock face is empty. The proof
+does not preserve the original profile or payoff while taking a limit.
+
+### 13.2. Compactness and exact record facts used
+
+For completeness, here is the source mathematics used from Emmy's note.
+The law space on N_0 union {Never}, with its one-point compactification,
+is compact; its weak topology is convergence of every finite atom.
+K_delta is closed and compact and its laws are uniformly proper. Censoring
+the owner's law to Quit by date H changes any relevant payoff by at most
+2R c^(H+1). This estimate is uniform over all legal replacements: if the
+owner deviates, its replacement is still in K_delta; otherwise its
+prescribed clock remains in K_delta. The censored payoff depends on only
+finitely many atoms. Thus all constrained-game payoff functions are jointly
+continuous, uniformly over unilateral replacement laws. Exact response
+inequalities consequently define a closed correspondence N_(a,delta).
+
+Nonemptiness follows by finite approximation and finite mixed Nash. Force
+the owner to Quit by H and restrict nonowners to dates0,...,H and Never.
+The owner's legal laws form a finite polytope; regarding its finitely many
+vertices as pure actions reduces this to an ordinary finite game. The
+independent mixture of these laws is precisely the owner's resulting law.
+Take a joint compact cluster as H increases. Every legal owner reply can
+be forced to Quit by H with the uniform error above. Every fixed nonowner
+reply is approximated by its finite head and a Never tail. Continuity passes
+all response inequalities, proving nonemptiness. This uses genuine finite
+Nash, not exact Nash on a finite common clock menu as a supposed full-cap
+solution.
+
+Against fixed opponents let f(t) be the owner's payoff from deadline t.
+An owner law in K_delta couples with G~Geom(delta), Pr(G>=t)=c^t, so
+T<=G. Therefore its optimal constrained value is
+
+    E[max_(0<=u<=G) f(u)].                                    (13.6)
+
+For the reverse inequality, choose a maximizing deadline through each
+realized G. Any optimal owner law satisfies f(T)=max_(u<=G)f(u) almost
+surely in its monotone coupling. In particular every positive owner atom
+is a WEAK running-record date. At every STRICT running record H,
+
+    Pr(T_a>=H)=c^H.                                            (13.7)
+
+Indeed G>=H forces T>=H, and T>=H implies G>=H. If joint reach to H is
+positive, conditioning all clocks on surviving to H and resetting time
+gives another point of the SAME N_(a,delta). The owner's conditional
+survival is at most c^u by (13.7). Conversely every K_delta suffix can
+be spliced into its old surviving mass c^H. A profitable conditional
+replacement would improve the old payoff by its gain times the positive
+joint reach. The same splicing argument applies to every unrestricted
+nonowner reply. There is NO approximate error divided by reach.
+
+Two exact exits are needed, as established in Emmy's Sections4--5 and11:
+
+- A bounded proper clock supplies an actually reached profile with full
+  exploitability at most 2R delta. At the earliest last proper date every
+  nonowner has zero full conditional debt. If a nonowner is sure to Quit,
+  the owner's only profitable-delay case forces its conditional current
+  hazard to be at most delta; if the owner is sure to Quit, small legal
+  delayed-atom transfers show it is already a full best reply.
+- If only the owner is proper, late conditional nonowner laws tend to
+  literal Never in total variation. Nonowner full Nash persists on every
+  reached tail; the owner's full debt tends to zero because its own
+  singleton is nonnegative. This contradicts any fixed gap.
+
+By (13.1) and (13.5), every profile in N_(a,delta) therefore has at least
+two proper clocks, all proper clocks are unbounded, and every finite
+date has positive joint reach.
+
+If the owner cap is attained at a finite deadline, its FIRST attaining
+date is a strict record. The reached record tail belongs to N_(a,delta),
+and immediate Quit attains its FULL conditional cap. It is a legal
+K_delta reply. Conditional owner optimality and nonowner full Nash make
+that tail exact full terminal Nash, contradicting (13.1). Consequently
+the owner full cap is never attained at a finite date. Since at least
+one opponent is proper, f(t) tends to its Never payoff w. An unbounded
+optimal owner cannot have cap>w: the strict maximum would then have
+only bounded maximizers, forcing bounded optimal support by (13.6).
+Thus
+
+    f(t)<w for EVERY finite t,  f(t)->w.                         (13.8)
+
+There are infinitely many strict record dates, tending to infinity.
+
+### 13.3. Joint compactification removes improper tails exactly
+
+Fix any p in N_(a,delta). At its strict record dates H_n->infinity,
+form the EXACT reached conditional profiles p^(n). They all lie in the
+same compact N_(a,delta). Extract a joint weak cluster q in that set.
+For every originally improper player j,
+
+    Pr(T_j=Never | T_j>=H_n)
+      =p_j(Never)/Pr(T_j>=H_n) -> 1.                            (13.9)
+
+So q_j is literal Never, even in total variation. A formerly proper
+player is NOT assumed to remain proper under weak convergence.
+Instead, its possible loss of properness is controlled by the exact
+source and the global exits. Specifically, if p had exactly two proper
+players a,b, then q has no proper players outside {a,b}. The owner a
+remains proper because q_a belongs to K_delta. The owner-only-proper
+exit rules out b becoming improper; the bounded-proper exit rules out
+its becoming bounded proper. Thus q has exactly the two unbounded
+proper clocks a,b and literal Never at every other coordinate.
+
+More generally, choose p with minimum proper-clock count m over the
+nonempty correspondence; the finite integer minimum is attained by the
+definition of minimum. For the cluster q just constructed, every originally
+improper coordinate becomes literal Never and every proper coordinate
+of q was proper in p. If any such coordinate lost properness, q in the
+same correspondence would have fewer than m proper clocks, impossible.
+Hence q retains precisely those m proper clocks, all unbounded, and is
+literal Never elsewhere. This is a genuinely joint global selection
+operation. It is not unilateral tail deletion and it does not rely on
+continuity of properness or of the owner's unrestricted full cap.
+
+### 13.4. Exact literal-two-clock resonance lemma
+
+Suppose q in this exact correspondence has only a,b non-Never, both
+unbounded proper, and satisfies (13.8). Abbreviate u=u_b, A=A_b,
+s_b,v,B,lambda=lambda_b. Let x_t,y_t be the actual conditional Quit
+hazards of a,b at date t, and S_a(t),S_b(t)>0 their survival probabilities.
+The owner's pure deadline value is exactly
+
+    f(t)=u+S_b(t)[s-u+y_t(A-s)].                                (13.10)
+
+The nonowner b's pure deadline value is
+
+    g(t)=v+S_a(t)[s_b-v+x_t(B-s_b)].                            (13.11)
+
+Because b is a full best reply with unbounded support and g(t)->v,
+its full value and cap equal v. Every date with y_t>0 therefore obeys
+
+    x_t(B-s_b)=v-s_b.                                          (13.12)
+
+If B=s_b but v!=s_b, this is impossible. When B!=s_b, any lambda
+outside [0,1] is impossible. The generic conditions exclude lambda=0;
+lambda=1 would make the owner sure to Quit at a finite b atom and hence
+bounded proper, also impossible. We may therefore assume 0<lambda<1,
+and
+
+    y_t>0 => x_t=lambda>0 => f(t)=max_(h<=t)f(h).                (13.13)
+
+The last implication uses optimality (13.6). Weak record plateaus are
+allowed throughout; only selected strict records use equality (13.7).
+
+If s>u, every quiet date y_t=0 would have f(t)>u, contrary to (13.8).
+Thus b is active EVERY date, x_t=lambda every date, and two positive
+strict record dates H<K give
+
+    c^(K-H)=S_a(K)/S_a(H)=(1-lambda)^(K-H).                     (13.14)
+
+Assume now s<u; (13.3) excludes s=u.
+
+Case A<s. A first b-active date after a quiet date would have
+f(t)<f(t-1): its survival S_b is unchanged during the preceding quiet
+interval and its active correction y_t(A-s) is negative. This contradicts
+(13.13). Since b has unbounded proper support, b must therefore be active
+at EVERY date, and (13.14) again follows from two strict records.
+
+Case s<A<u. Consider a consecutive block of b-active dates [H,K),
+finite or infinite. A finite block's first date H is a strict record:
+at H=0 this is the convention; otherwise the preceding quiet plateau
+is itself at the current running maximum, because at the last preceding
+b-active date L the following quiet date increases its value by
+
+    S_b(L)y_L(u-A)>0.
+
+The first active date then increases that quiet baseline by
+S_b(H)y_H(A-s)>0. The first quiet date K after any finite block likewise
+strictly increases f(K-1), which is the running maximum by (13.13).
+Both H and K are strict records, so the consecutive hazards give (13.14).
+If instead the active block is infinite, all its hazards are lambda and
+f(t)<u tends to u, so it contains infinitely many strict records and
+two of them again give (13.14). This covers arbitrarily long blocks and
+unbounded quiet gaps, not just periodic patterns.
+
+Case A>u (and s<u). After ANY b-active date L, its following quiet
+baseline is strictly below f(L), since
+
+    f(L)-[u+S_b(L+1)(s-u)]=S_b(L)y_L(A-u)>0.                    (13.15)
+
+Every subsequent quiet date before the next b atom has the same baseline.
+It is not even a weak record and consequently has x_t=0. The finite
+quiet prefix before the first b atom need not have this property, but
+can be discarded. There are infinitely many strict records by (13.8);
+after the first b atom every strict record is b-active. Choose any two
+such records H<K, let d=K-H, and let k be the number of b-active dates
+in [H,K). Each active date has owner hazard lambda, each quiet date
+has owner hazard zero, and k>=1. Hence
+
+    c^d=S_a(K)/S_a(H)=(1-lambda)^k.                             (13.16)
+
+These cases exhaust the pairwise-distinct s,u,A. Every case contradicts
+the rate choice (13.4). Thus the exact literal-two-clock source cannot
+exist. Section13.3 now excludes EVERY original constrained source with
+only two proper clocks, even when its other clocks have positive finite
+mass as well as positive Never mass. The improper-tail errors are removed
+by exact compactification BEFORE applying the resonance identity.
+
+### 13.5. Counterexample normalization and precise remaining question
+
+The finite generic inequalities are not an extra restriction on the
+possible existence of a counterexample. If (13.1) holds and every terminal
+reward coordinate changes by at most epsilon, all prescribed and unilateral
+replacement payoffs change by at most epsilon. The new full exploitability
+is at least gamma-2epsilon for EVERY actual profile. If no own singleton
+is positive, all-Never is exact Nash, so a hypothetical counterexample
+has an owner with positive singleton; keep it positive during perturbation.
+Avoiding the finitely many equalities in (13.3) is possible in every raw
+reward neighborhood. Choose one such perturbed table first, then one
+small rate satisfying (13.4)--(13.5), then its full correspondence.
+
+This does NOT identify the perturbed game's selected source with an old
+one. It also does not claim a uniform separation from the forbidden
+resonance set, which is countable and may be dense. The obstruction is
+an exact equality only after exact record compactification.
+
+Exact source declarations inspected for this attempt:
+
+- `KernelGame.mixed_nash_exists_of_bounded` and
+  `KernelGame.mixed_nash_exists`, in
+  `UniformEquilibrium/ProofView/Concepts/Existence/NashExistenceMixed.lean`;
+- `exists_exactFiniteDeadlineTimingNash` and
+  `mixedNash_isQuittingFiniteDeadlineNash`, in
+  `UniformEquilibrium/Quitting/Terminal/FiniteDeadlineNashExistence.lean`;
+- the full-gap and all-errors terminal-to-uniform declarations in
+  Section1. The constrained correspondence and its record-tail facts
+  above are ordinary mathematics, not attributed to those Lean declarations.
+
+Narrow existing-mechanism checks also inspected
+`hasEscapeAwareQuantileClockCompressionAtBound` in
+`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`,
+and the finite-clock semantic-density/infimum results in
+`CommonQuantileClockApproximation.lean`. They already supply unrestricted
+payoff/CAP compression, but not a zero-debt selector. Merely compressing
+a response law is therefore not the new producer claimed here.
+
+The concrete next question is whether the remaining support-minimal
+THREE-proper-clock source, with one literal Never outsider in Fin4,
+admits a joint nonowner operation lowering its owner deficiency or an
+exact continuation reduction. No reduction from three proper clocks to
+two, and no equilibrium producer for that remaining face, is proved.

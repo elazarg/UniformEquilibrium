@@ -6,9 +6,15 @@ Status: ACTIVE ORDINARY PROOF DRAFT, not Lean
 implemented and not an export candidate. This is a distinct mechanism from
 the closed portfolio/quiet-lift route. An unconditional compact constrained-
 Nash producer is available, with exact exits when a proper clock is bounded
-or when the owner is the only proper clock. The genuinely missing step is
-a GLOBAL selection or joint-law operation in the remaining case of at least
-two unbounded proper clocks. No arbitrary-Fin4 UE theorem is claimed.
+or when the owner is the only proper clock. Section11 adds exact re-rooting
+at reached strict owner records and a reached finite-cap-attainment exit.
+Section12 supplies a compact strict-record invariant hull with a fixed
+minimal proper-player set and uniform conditional termination in bounded
+blocks, conditional on a positive terminal gap. The genuinely missing step
+is a GLOBAL selection or joint-law operation
+in the remaining case of at least two unbounded proper clocks and an owner
+cap attained ONLY at Never. Section10's global penalty selector does not
+control error relative to tail reach. No arbitrary-Fin4 UE theorem is claimed.
 The bounded-support exit in Section4 has a bounded independent ordinary
 check in `../feedback/CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION__BY_CODEX_NASH_BOX.md`;
 that check does not cover the producer or the missing global selection.
@@ -481,3 +487,228 @@ quitting-clock structure might still permit a different joint operation.
 Current next question: control the NORMALIZED continuation debt globally,
 or reorganize tails so that the final-clock exit does not divide an
 unconditioned approximation error by a vanishing reach probability.
+
+## 11. Exact record re-rooting inside the SAME correspondence
+
+Status: ordinary proof draft, with a bounded independent check in
+`../feedback/CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION__BY_CODEX_NASH_BOX.md`
+conditional on Section3's exact optimal quantile/value formula. This operation
+uses EXACT constrained Nash, not Section10's approximants. Its force is
+that no error is divided by reach. Positive joint reach is indispensable.
+
+Fix p in N_(a,delta). Let f(t) be the owner's full finite-deadline payoff
+against p_-a. Suppose t is a STRICT record date:
+
+    f(t)>max_(0<=u<t) f(u),
+
+where date0 is a record by convention. Couple the optimal owner T with
+G~Geom(delta) by common quantiles, so T<=G. Section3's exact value formula
+and optimality imply
+
+    f(T)=max_(0<=u<=G) f(u) almost surely.
+
+If G>=t, the right side is at least f(t), strictly larger than every
+payoff at an earlier date; hence T>=t. Conversely T>=t implies G>=t.
+Consequently the owner constraint is EXACTLY binding at every strict
+record:
+
+    Pr(T_a>=t)=Pr(G>=t)=c^t.                            (8)
+
+Now assume the joint survival to t is positive. Condition each independent
+clock on surviving to t and rebase the calendar to zero. The owner's
+conditional law lies in K_delta, since for every u>=0,
+
+    Pr(T_a>=t+u | T_a>=t)<=c^(t+u)/c^t=c^u.
+
+Conversely ANY conditional replacement in K_delta can be spliced into
+the old owner's surviving mass: its later survival is at most
+c^t*c^u=c^(t+u), and earlier constraints are unchanged. A profitable
+conditional constrained reply would therefore be a profitable original
+reply multiplied by positive joint reach. All nonowner full response
+inequalities likewise pass by legal suffix replacement. Thus the reached
+record tail belongs to the SAME N_(a,delta), with the SAME owner and rate.
+
+### Finite owner-cap attainment is an exact exit on the reached face
+
+Assume s_a>=0 and the full owner cap B_a is attained by a finite deadline.
+Let t* be the FIRST maximizing deadline. This is a strict record. If its
+joint reach is positive, apply(8). Against the conditioned opponents,
+immediate Quit attains the complete tail cap: any tail finite deadline or
+Never corresponds to an original reply at or after t*, while the earlier
+opponent-absorption contribution is identical and the positive opponent
+survival multiplies every remaining payoff. Immediate Quit belongs to
+K_delta. Conditional constrained optimality therefore makes the owner's
+prescribed tail payoff equal to its FULL cap. Nonowners already have zero
+full tail debt. The reached record tail is exact terminal Nash, lies in
+N_(a,delta), and produces a fixed uniform payoff by the semantic consumer.
+In particular eta_(a,delta)=0 in this reached finite-attainment case.
+
+One cannot omit reach. For example, take two players with
+
+    r(0)=(1,0), r(1)=(2,1), r(01)=(0,3).
+
+Owner0 Geom(delta), player1 sure Quit0, is exact constrained Nash.
+Owner finite values are f(0)=0 and f(t)=2 for t>=1; its full loss is2delta.
+Player1's deadline values are c^t*(1+2delta), so date0 is its full best
+reply. The first owner maximizing date is1 and its owner constraint binds,
+but JOINT reach to1 is zero. No conditional equilibrium can be read there.
+This illustrates the failed unrestricted implication, not a counterexample
+to the corrected reached statement or to UE existence.
+
+### Exact remaining global minimum problem
+
+Suppose the original table has a fixed positive full terminal gap gamma.
+Choose delta<gamma/(2R) BEFORE applying Section4. Then no p in
+N_(a,delta) can contain a bounded proper clock, since that clock would
+produce an actual full profile of regret at most2Rdelta<gamma. Section5
+also excludes the owner-only-proper case. Thus every relevant profile has
+at least two proper clocks, all proper clocks unbounded; every finite date
+has positive joint reach. Finite owner-cap attainment is now impossible
+by the reached exit above.
+
+For these profiles Section8 gives B_a equal to the owner's Never value.
+All finite f(t) are STRICTLY below B_a, and f(t)->B_a because an opponent
+is proper. There are therefore infinitely many strict record dates. Each
+record tail is again in the same N_(a,delta). If p minimizes the attained
+owner loss eta_(a,delta), all its reached record tails have owner loss at
+least eta_(a,delta). The other players' full debts remain exactly zero.
+
+This gives a concrete global invariant to test, not a contradiction:
+an attained constrained minimum with a nonattained Never cap, infinitely
+many EXACT binding re-rootings, and no smaller-loss record continuation.
+The missing operation must improve this minimum by changing joint laws
+or the owner/rate selection. Conditioning Section10's approximate points
+does not establish this invariant and cannot replace exact re-rooting.
+
+## 12. A minimal strict-record hull has uniform conditional termination
+
+Status: ordinary proof draft, not independently checked. This is an exact
+source reduction, not a new equilibrium producer or a claim that recurrence
+alone solves the remaining selection problem. All probabilities below are
+for the original independent private clocks. No public mixing is introduced.
+
+Assume the original finite table has a positive full terminal gap gamma:
+every independent law profile has max_i D_i>=gamma. Fix an owner a with
+s_a>=0 and fix 0<delta<min(1,gamma/(2R)). Let c=1-delta. Use Sections2,
+4,5,8,11, including their distinctions between constrained and full caps.
+Every p in the SAME compact correspondence N_(a,delta) then has:
+
+- at least two proper clocks, all proper clocks unbounded;
+- full owner cap attained only at Never, approached by infinitely many
+  strict finite records;
+- positive joint survival at every finite date and D_a>=gamma.
+
+There are a subset A containing a, with |A|>=2, and a nonempty compact
+set K of actual profiles in N_(a,delta) such that:
+
+1. Every player in A is proper and unbounded at every point of K. Every
+   player outside A is literally Never at every point of K.
+2. K is invariant under conditioning and rebasing at ANY strict owner
+   record, including date0. All such conditionings have positive reach.
+3. There are finite positive integers M,N such that for every p in K,
+   every i in A, and every calendar date u>=0,
+
+       Pr_p(T_i>=u+M+2N | T_i>=u) <= 1/2.             (9)
+
+   In particular every player's conditional residual clock is uniformly
+   proper over ALL calendar tails, not merely at owner record dates.
+   No uniform one-date hazard floor is asserted.
+4. Consecutive strict owner record dates are at most N dates apart.
+   The full payoff and cap functions are continuous on K.
+
+### Construction and weak-limit support bookkeeping
+
+Among ALL points of N_(a,delta), choose p with the smallest number k of
+proper clocks. This integer minimum exists because the correspondence is
+nonempty and the count takes values in a finite set; no semicontinuity of
+the count is being assumed. Let A be p's proper-player labels.
+
+Take strict owner records t_n->infinity and condition p at t_n. The tails
+belong to the SAME N_(a,delta) by Section11. If j is originally improper,
+write z_j=Pr_p(T_j=Never)>0. Its conditional finite mass is
+
+    Pr_p(t_n<=T_j<Never)/Pr_p(T_j>=t_n) -> 0,
+
+since the numerator tends to0 and the denominator is at least z_j.
+Thus its conditioned law tends to literal Never in total variation.
+Take any joint weak cluster q of the record tails. Closedness of N gives
+q in N, and every label outside A is literal Never. At most k labels can
+therefore be proper at q. Minimality of k among ALL N forces all labels
+in A to remain proper. The bounded-proper exit also makes them unbounded.
+This is the exact reason a proper label cannot be lost in the limit.
+
+Now let K be the closure of ALL strict-record tails of q, including q.
+The same argument applies to each point of this closure: it lies in N,
+has every outside-A clock literal Never, and cannot have fewer than k
+proper clocks. Hence all A clocks are proper and unbounded throughout K.
+
+To verify invariance, suppose q_n are strict-record tails of q converging
+to x in K, and t is a strict record for x. Finite deadline payoffs are
+continuous in finite cylinders, so t is also a strict record for q_n for
+all sufficiently large n. Conditional laws at fixed t are continuous
+whenever each survival probability is positive; this holds at x. A strict
+record of a strict-record tail is a strict record of the original profile:
+the intermediate record already dominates every earlier deadline, and
+rebasing changes later payoff differences by a common positive opponent
+survival factor. Thus the t-tail of q_n is again one of q's strict-record
+tails. Taking its limit shows that the t-tail of x belongs to K.
+
+### Uniform properness, uniformly frequent records, and all-tail bound
+
+For fixed i in A, the functions p -> Pr_p(T_i>=m) are continuous finite-tail
+cylinders on K, decrease in m, and have pointwise limit Pr_p(T_i=Never)=0.
+Compactness therefore gives uniform convergence to0. Equivalently, use
+the decreasing closed sets {p: Pr_p(T_i>=m)>=epsilon}. For each i, choose
+a common M with
+
+    sup_(p in K, i in A) Pr_p(T_i>=M) <= 1/2.
+
+Every recipient has at least one distinct uniformly proper opponent since
+|A|>=2. Truncating any unilateral reply at a large finite date changes its
+payoff only when that opponent also survives that date. This gives uniform
+finite-cylinder approximation of ALL full caps on K, and proves cap
+continuity there. In particular the owner's pure-deadline payoff f_p(m)
+approaches its Never cap B_a(p) uniformly on K; one can directly bound the
+difference by 2R times one proper opponent's survival to m.
+
+Immediate Quit is legal in K_delta, so U_a(p)>=f_p(0). Since D_a(p)>=gamma,
+
+    B_a(p)-f_p(0) >= gamma.
+
+Choose N>=1 with |f_p(N)-B_a(p)|<gamma/2 uniformly on K. Then
+f_p(N)>f_p(0)+gamma/2, so every p in K has a new strict record by date N.
+Invariance applies the same assertion after EVERY strict record; therefore
+successive strict record dates have gaps at most N.
+
+For an arbitrary calendar u, choose the next owner record v>=u, with
+v-u<=N. Choose the first owner record w>=v+M; the record-gap bound gives
+w<=v+M+N<=u+M+2N. Invariance at v and uniform properness give
+
+    Pr(T_i>=w) <= Pr(T_i>=v+M)
+                 <= (1/2)Pr(T_i>=v)
+                 <= (1/2)Pr(T_i>=u).
+
+Monotonicity of survival then proves(9). All denominators are positive
+because every active clock is unbounded. This argument does not divide an
+approximate Nash error by any reach probability.
+
+### Exact remaining issue
+
+The compact hull has an attained minimum of owner full loss, and every
+strict-record continuation remains inside the hull with no smaller loss
+than that minimum. Uniform properness and bounded record gaps may depend
+on delta and the selected hull; no delta-independent clock bound follows.
+Stationary bad constrained branches can themselves have all these compact
+recurrence properties. Consequently(9) is NOT a contradiction to a positive
+gap and does NOT remove the need for a joint law or owner-selection operation.
+The next concrete question is whether this exact uniformly terminating
+source admits a loss-improving operation when at least three proper labels
+remain. The two-literal-proper-clock case is being tested independently.
+
+Narrow overlap/source inspection for this section used the existing
+`CompactStoppingLaw` topology and bridge in
+`MathUE/ProbabilityMassFunction/CompactStoppingLaw.lean`, and searched the
+previously inspected `OpponentTightTerminalSemanticRealization.lean` and
+`CompactStoppingLawCapUpperBound.lean` for uniform-proper/minimal-proper
+statements. This section makes no Lean-implementation claim and does not
+replace their distinct semantic-minimum results.
