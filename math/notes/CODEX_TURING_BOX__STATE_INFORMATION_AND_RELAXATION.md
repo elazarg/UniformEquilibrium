@@ -25,6 +25,13 @@ component with controlled physical-tail error, NOT an exact discounted Nash
 component, an all-errors rule, or new reward-table coverage. The missing
 global assertion is access to such good words for arbitrary positive-own data.
 
+Section37.9 retires an attempted ALL-player proper-clock envelope source by
+an exact whole-feasible-class cash-out test. The obstruction covers every
+asymmetric positive envelope-rate vector and every auxiliary component;
+it does NOT exclude the discounted source, which allows one proper label
+and selective Never. This is a method guardrail on an already-solved table,
+not a new UE counterexample restriction.
+
 Section36 tests a bounded ENDOGENOUS clock-overlap penalty, rather than a
 fixed-prior entropy source or a private Never transfer. Finite-menu source
 existence follows from own-strategy concavity. A Nash source on the FULL
@@ -7320,3 +7327,67 @@ are controlled directly without claiming exact-source membership. Both
 remain allowed. Neither fixed-alpha compactness, the new one-sided
 ledger, nor the finite numerical branch currently chooses between them
 or establishes arbitrary-data branch access.
+
+### 37.9 All-player proper envelopes lose an indispensable one-owner exit
+
+Status: elementary ordinary UNREVIEWED method falsifier. This disposes of
+the proposed source below; no new UE reward class or original-game
+nonexistence is asserted.
+
+For arbitrary asymmetric rates delta_i in(0,1), consider the independent
+private domains
+
+    K_(delta_i)={p_i: Pr(T_i>=t, including Never)
+                       <=(1-delta_i)^t for every finite t>=0}.
+
+An auxiliary source would be ANY exact Nash component of the ORIGINAL
+terminal game on the product of these domains. Original regret still
+permits every complete deadline/Never replacement. The hoped-for selector
+was the infimum of original regret over ALL such components and ALL rate
+vectors tending coordinatewise to0, with no symmetry restriction. Each
+K_(delta_i) forces its private clock to be proper. This differs from30.1's
+C_delta, which exempts Never and bounds only the finite tail; its old
+whole-source theorem is not being transferred by set inclusion.
+
+The entire proposed selector fails on the following literal FOUR-player
+table. For every nonempty quitter coalition S set
+
+    r_i(S)=1 if S={i};
+    r_i(S)=0 if i belongs to S and |S|>=2;
+    r_i(S)=2 if i does not belong to S;
+    live/Never=0.
+
+In fact EVERY independent complete profile with at least TWO proper
+labels has full cap B_i=2 for EVERY player. At least one opponent of each
+i is proper, so literal Never earns2 almost surely. No outcome reward
+exceeds2, proving the upper bound as well. Joint absorption is certain.
+At a singleton terminal coalition the total reward is7; at a coalition
+of size k>=2 it is2(4-k)<=4. Hence
+
+    sum_i U_i<=7,
+    sum_i(B_i-U_i)>=1,
+    E_original=max_i(B_i-U_i)>=1/4.
+
+This applies to EVERY feasible profile in every product of K_(delta_i),
+therefore to ALL auxiliary Nash components for EVERY positive asymmetric
+rate vector, independently of its limit order. It is stronger than a bad
+selected component and does not need a source-existence assertion.
+
+Nevertheless fix any owner j, prescribe its sure Quit0, and prescribe
+Never to all others. The owner earns1, while any complete response against
+all-Never opponents earns at most1. Every outsider earns2, the largest
+reward in the table. This is an exact unrestricted terminal Nash profile.
+It is also an exact discounted Nash profile for EVERY alpha in(0,1):
+absorption is at0, the owner can only lower its own singleton payoff by
+delay, and outsider deviations cannot exceed2. Thus the ENTIRE original
+discounted source passes this calibration by retaining one proper label.
+
+The source is retired, not repaired by different rates or another
+component search. The general lesson is the mathematical restriction:
+requiring two proper prescribed labels needs an alternative arm admitting
+one proper label. Properness of ALL clocks is not a harmless approximation
+to selective Never, even though proper laws are weakly dense and all own
+singletons here are strictly positive. No analogy with the shared joint-
+survival constraint is used; that constraint can retain selective Never.
+The live arbitrary-table question remains37.8's good-component/actual-word
+selection with the complete original caps, not an all-proper substitute.
