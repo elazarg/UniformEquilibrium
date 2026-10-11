@@ -65,6 +65,14 @@ full gap. This is ordinary mathematics, not a Lean check, UE counterexample
 or counterexample-class exclusion; the same table has explicit original
 exploitability1/N. The universal negative-tax exact selector is retired.
 
+Section 23 tests the ENTIRE realized-absorption discounted Nash source,
+with nonstationary clocks and selective Never allowed. The source exists
+automatically; whether its best original regret tends to0 remains open.
+An exact switching calibration defeats a fixed-active-face heuristic,
+but supplies no whole-correspondence conclusion. The current missing
+operation is a global viability-kernel estimate covering macroscopic
+roots and arbitrary switching, or an actual good component.
+
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits
 one convexification of the
@@ -3070,3 +3078,168 @@ approximate menu Nash laws are not covered. Section21's negative-payoff
 sentinel pump remains valid on its different table, but is not universally
 produced. The next mechanism must allow something beyond this entire
 negative-tax source class, not merely select another branch of it.
+
+## 23. Entire realized-discount correspondence: the global test remains open
+
+This is a different source attempt, not a further private-transfer variant.
+The source exists unconditionally. No conclusion about its best ORIGINAL
+terminal regret is proved here. The switching calibration below is ordinary
+unreviewed mathematics, not a new equilibrium class or an export candidate.
+
+### 23.1. Exact global question and actual source
+
+For an arbitrary finite four-player quitting table, let X=ℕ∪{Never} with
+the one-point compactification topology. Each player chooses an independent
+countably additive law on X. For 0<α<1 define
+
+    U_i^α(p)=E_p[α^τ r_i(S) 1{τ<Never}],
+
+where τ is the first finite planned clock and S its quitting coalition.
+Never pays0. Let D_α be the ENTIRE exact Nash correspondence for these
+discounted objectives, with all complete unilateral replacement laws
+allowed. Neither stationarity nor properness of any specified player is
+required. The proposed global source statement is
+
+    liminf_(α↑1) inf_(p∈D_α) E_original(p)=0.       (D1)
+
+Both the laws and their payoff targets may change with α. The terminal
+all-errors endpoint would select a fixed uniform payoff afterward. A bad
+stationary branch, or even a bad nonstationary branch, does not falsify(D1).
+
+This source is genuinely automatic. The discounted terminal kernel on X⁴
+is continuous: near AllNever its magnitude is bounded by Mα^min(T_i),
+which tends to0; near any finite first date, the relevant finite atoms and
+ties stabilize. Thus the product mixed game is compact and continuous.
+Alternatively the tracked Fink theorem already supplies a stationary
+discounted Nash member at every α. No original reward translation or
+private planned-action payment is used.
+
+The exact tracked source anchors inspected are
+`StochasticGame.exists_isDiscountedStationaryBellmanEq_bounded` and
+`IsDiscountedStationaryBellmanEq.isDiscountedεNash`
+(`UniformEquilibrium/ProofView/Concepts/Stochastic/Equilibrium/Discounted/Fink.lean`),
+and `discountedAuxEU_quittingGame_none`
+(`UniformEquilibrium/Quitting/Bellman/Discounted/PayoffBridge.lean`). The
+repository normalized stage payoff is α times the displayed U^α, because
+the live stage itself pays0; that common positive factor does not change
+Nash. `quittingDiscountedLiveValue_eq_rootPayoff` and
+`quittingDiscountedDenominator_mul_endpointDifference`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedDisplacement.lean`)
+retain actual discounted values and endpoint inequalities. They do not
+select a favorable original terminal law.
+
+The bounded overlap check found only narrower stopped operations:
+`CODEX_FRECHET_CYCLE__DEGREE_ONE_GERM_SCHEDULING_AND_MACROSCOPIC_EXIT_BOUNDARY.md`
+concatenates small points of a supplied stationary germ; its own scope
+explicitly leaves the global discounted-component question open.
+`CODEX_RADO_BOUNDARY__DISCOUNTED_LOCALIZATION_SOURCE_CONNECTION_STOP.md`
+tests stationary auxiliary roots and self-return. Neither is an all-
+nonstationary, entire-correspondence obstruction to(D1).
+
+### 23.2. Solan's hard calibration, including exact support switches
+
+Use the three-player table G_ε of Solan, *The Dynamics of the Nash
+Correspondence and n-Player Stochastic Games* (2001), Figure1:
+
+| S | reward |
+| --- | --- |
+| 0 | (1,3,0) |
+| 1 | (0,1,3) |
+| 2 | (3,0,1) |
+| 01 | (1+ε,0,1) |
+| 02 | (0,1,1+ε) |
+| 12 | (1,1+ε,0) |
+| 012 | (0,0,0) |
+
+Here 0<ε<1/3 is fixed, not the desired equilibrium accuracy. The primary
+source is https://www.math.tau.ac.il/~eilons/value4.pdf, Sections2–3.
+The paper's bounded-terminal consequence and the already-known UE/no-
+exact-terminal-Nash distinction motivate this test. The printed definition
+of its abstract admissible set permits unbounded annotations; that larger
+formal statement is NOT needed or asserted here. A fourth player can be
+padded with reward−1 whenever it joins and0 otherwise, core rewards
+depending only on the core coalition and being0 when it is empty. The
+displayed calibrated profiles keep that player literally Never.
+
+Put λ=1−α. There is an exact three-date ROTATING-PAIR discounted Nash
+branch for all sufficiently small λ>0:
+
+    qA=(a,b,0), qB=(0,a,b), qC=(b,0,a),
+    uA=(1+εb,1−a,w), with the values rotated likewise.
+
+The full owner equations and the passive Bellman equation are precisely
+
+    1+εb = α(1−b)w,
+    1−a = 3a+α(1−a)(1+εb),
+    w = 3b−2ab+α(1−a)²(1−b).                     (D2)
+
+At λ=0 they have a=b=0,w=1. Their Jacobian in(a,b,w) has determinant
+ε−3. The ordinary implicit-function theorem gives
+
+    a = [(1−3ε)/(3−ε)]λ+O(λ²),
+    b = [8/(3−ε)]λ+O(λ²),
+    w = 1+[(11+7ε)/(3−ε)]λ+O(λ²).
+
+Both active probabilities are strictly between0 and1. At phaseA the
+inactive player's Quit value is(1−b)(1+εa), and its Continue value is w.
+Their difference has positive leading coefficient
+
+    [19+6ε+3ε²]/(3−ε).
+
+The rotated inequalities are identical. These root inequalities plus the
+bounded discounted telescope verify Nash against ALL complete deadlines,
+Never and their mixtures. All three clocks and all deleted-opponent clocks
+are proper. Thus support can switch at every date in an exact source;
+a fixed-active-face argument is not WLOG.
+
+This is nevertheless another BAD component, not a falsifier of(D1).
+As λ↓0, the original first-quitter singleton masses tend to1/3 each,
+collision mass tends to0, and the two opponents' first-singleton masses
+after deleting any owner tend to1/2 each. This follows by the exact
+three-date geometric survival account: each player's total first-order
+rate per period is a+b. Consequently original payoffs tend to4/3,
+Never replies tend to3/2, and the full cap tends to3/2. For the last
+assertion every pure deadline is, up to O(λ), an interpolation between
+the own singleton1 and the eventual Never value3/2; the period-prefix
+formula includes the complete Never limit. Hence ORIGINAL full regret
+tends to1/6. The symmetric stationary branch has the same limiting loss.
+None of this bounds the infimum over the other components.
+
+### 23.3. The genuinely missing global operation
+
+For the displayed core table, no core player can be a sure quitter at a
+reached date of a discounted Nash profile. For example q0=1 forces q1=0
+(joining earns0, whereas finite Continue earns at least1), then q2=1
+(joining earns1+ε rather than0), then owner0 strictly prefers Continue3
+to Quit0. The other cases rotate. The comparisons apply to any
+nonnegative continuation values. Thus every finite surviving tail is
+reached and is exact discounted Nash with the SAME discount and table.
+
+Let C be the convex hull of0 and the seven displayed reward vectors.
+Define T_α(K) as the set of root Nash payoff vectors against continuation
+αv with v∈K. The sets T_α^m(C) are nested, nonempty and compact. Their
+intersection K_α is EXACTLY the payoff set of all discounted Nash clocks
+for this calibration: actual tails give one inclusion; compact nested
+selection gives a bounded infinite root spine for the other, and α^t
+makes its terminal remainder vanish against arbitrary full deviations.
+This equality uses the no-sure argument above; it is not asserted for
+arbitrary tables with off-path punishment tails.
+
+The attempted global estimate is
+
+    sup_(v∈K_α) ||v−(1,1,1)|| = O(1−α).           (D3, UNPROVED)
+
+Unlike the fixed-face heuristic, this quantifies over macroscopic roots,
+all support switches, all infinite calendars and the entire viability
+kernel. A proof would require a true global invariant or contraction;
+the local Jacobian and the rotating-pair calculation do not supply it.
+Even qualitative convergence to the corner, without its rate or a
+separate full-response account, would not settle(D1).
+
+The concrete obstruction in this attempt is a possible long excursion
+through two-owner faces and macroscopic roots before returning to a
+small-hazard region. The one-shot map can amplify a passive coordinate,
+so a coordinatewise maximum argument fails. No exclusion of those
+excursions, no good exact discounted component, and no full-source
+falsifier is claimed. The next actual test is(D3) or an explicit component
+violating it; another isolated bad branch would not advance the question.

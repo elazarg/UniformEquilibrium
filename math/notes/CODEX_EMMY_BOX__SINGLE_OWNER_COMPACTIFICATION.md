@@ -27,6 +27,11 @@ Section14 begins the stronger calibration on the canonicalized perturbed
 Solan three-player game, which has UE but no exact Nash. It determines the
 ENTIRE nonowner response correspondence to a fixed geometric owner, but
 does not determine the minimum over all owner laws in K_delta.
+Sections14.4--14.5 add unreviewed ordinary proofs that all three core-owner
+correspondences are equivalent under the canonical shift, every core clock
+is proper, owner-zero dates are completely quiet, and the owner's entire
+pure-deadline payoff sequence is nondecreasing. The attained maximum
+principle on the remaining FLAT plateaux is still unproved.
 
 ## 1. Self-contained end-to-end question
 
@@ -860,8 +865,8 @@ Question: on this fixed table, does
 
 Allowing every owner law in K_delta is essential. Cyclic symmetry of the
 raw g-table makes the corresponding raw-owner minima equal; no favorable
-owner selection is hidden by choosing label0. The canonical shift has not
-been claimed to preserve the full nonowner-as-owner correspondences.
+owner selection is hidden by choosing label0. Section14.4 verifies the
+canonical-shift correspondence for EVERY core-owner choice as well.
 
 ### 14.1. Exact theorem with the owner law FIXED to Geom(delta)
 
@@ -1026,3 +1031,193 @@ For the cyclic RAW three-player table the three owner choices are symmetric.
 For the canonical Fin4 table with an extra zero-singleton label, excluding
 owner0 alone would NOT exclude every owner permitted in Section1. No
 all-owner Fin4 falsification is claimed here.
+
+### 14.4. Properness and the exact three-core-owner quantifiers
+
+Status: ORDINARY PROOF DRAFT, not independently reviewed. Fix
+0<e<1 and 0<delta<1/2. Every source in N_(0,delta) for the raw
+three-player table has ALL THREE clocks proper and unbounded.
+
+First the sure-hazard exclusions used in Section14.3 can be stated without
+fixing the owner clock. If owner0 quits surely at a reached date, player1
+strictly Continues and player2 strictly Quits. Owner0 then strictly prefers
+Continue, and may choose the minimum budget-compatible hazard, which is
+at most delta<1. If player1 quits surely, player2 strictly Continues and
+owner0 strictly Quits, giving the already excluded case. If player2 quits
+surely, owner0 strictly Continues and therefore uses a hazard at most
+delta; player1's Quit-minus-Continue difference is
+1+e-h*(2+e)>0, giving the excluded sure player1 case. All finite joint
+reaches are positive. In particular a proper clock cannot be bounded.
+
+Every nonowner has Never as a full best reply: an improper clock actually
+supports Never, while a proper unbounded clock supports arbitrarily late
+optimal finite dates, whose payoffs converge to Never because owner0 is
+proper. Let Y1(t),Y2(t) be the resulting conditional raw Never values.
+If player1 were improper, its conditional finite mass would tend to zero.
+Then Y2(t) would tend to zero, since raw player2 receives zero when only
+owner0 quits. But its immediate Quit payoff
+(1-x(t))*(1+e*h(t)) tends to at least1. This contradicts Never optimality.
+Thus player1 is proper. If player2 were improper, its conditional finite
+mass would tend to zero and Y1(t) would tend to3, because owner0 remains
+proper in every finite tail. Its immediate Quit payoff is at most1+e<3.
+Consequently x(t)=0 at every sufficiently late date, contradicting the
+proper unbounded player1 clock. Thus player2 is proper as well.
+
+Now choose ANY core owner a in {0,1,2}. On the entire constrained product
+K_(a,delta) times the two unrestricted nonowner-law spaces, absorption is
+almost sure, simply because the chosen owner is proper. The canonical
+shift subtracts exactly1 from prescribed payoffs of recipients1,2 and
+zero from recipient0, independently of the profile. The same constants
+apply to EVERY legal constrained-owner competitor and EVERY complete
+nonowner deviation: either the deviator remains proper by K_delta, or a
+distinct proper owner is retained. Hence the ENTIRE constrained Nash
+correspondence is identical before and after the canonical shift, for
+every core owner. This argument does not presuppose opponent properness.
+
+Raw cyclic symmetry and the preceding properness result now imply that
+all source clocks are proper for each core-owner choice. Consequently
+EVERY unrestricted owner deviation also retains a distinct proper clock;
+the full owner cap and its actual payoff shift by the same constant.
+The three complete owner-loss minima, and not merely their constrained
+payoff objectives, are therefore equal. An owner0 obstruction would cover
+all three CORE owner choices. A fourth padded owner is still a separate
+quantifier and is not silently removed by this argument.
+
+### 14.5. An exact zero-hazard lemma removes owner payoff dips
+
+Status: ORDINARY PROOF DRAFT, not independently reviewed. Here assume
+0<e<=1/2. The following is a two-stage calculation, not an inference from
+negative periodic searches. It uses full nonowner best replies, including
+Never, at both stages.
+
+Local lemma. Suppose the owner's current hazard is0 and its next hazard
+is b in(0,1). Let x,y and x',y' be the current and next nonowner hazards,
+all less than1. Let Y1,Y2 and Y1',Y2' be their raw Never values. Assume
+the exact recursions and full-response support inequalities
+
+    Y1=(1-y)*Y1',             Y2=3*x+(1-x)*Y2',
+    Y1>=1+e*y,               equality if x>0,
+    Y2>=1-x,                 equality if y>0,
+    Y1'>=(1-b)*(1+e*y'),      equality if x'>0,
+    Y2'>=(1-x')*(1+e*b),      equality if y'>0.           (14.8)
+
+The owner's conditional gain from Quitting at the next rather than the
+current stage is
+
+    L=y*(3-2*x)+(1-x)*(1-y)*(1-y')*(1+e*x')
+         -(1-y)*(1+e*x).                                (14.9)
+
+Then L<=0. Equality is possible ONLY when x=y=x'=y'=0.
+Thus if either stage has nonowner activity, L<0.
+
+Proof. The common algebraic bound is easiest to isolate. For
+0<=x<=1/4 and 0<=y<1 put
+
+    A=(1+e*y)/(1-y),          B=(1-4*x)/(1-x),
+    z(b)=(A/(1-b)-1)/e,      w(b)=1-B/(1+e*b),
+    F(b)=y*(3-2*x)+(1-x)*(1-y)*(1-z(b))*(1+e*w(b))
+            -(1-y)*(1+e*x).
+
+Whenever 0<=z(b)<=1, the product in F is strictly decreasing in b:
+its first factor has derivative -A/[e*(1-b)^2]<=-1/e,
+its second factor is at least1 and has derivative
+e^2*B/(1+e*b)^2<=e^2, and its first factor belongs to[0,1].
+Therefore its derivative is at most -1/e+e^2<0.
+At b=0 direct expansion gives
+
+    F(0)=(2*e-1)*x+(2-1/e)*y+(1/e-3-5*e)*x*y<=0.       (14.10)
+
+Indeed the x coefficient is nonpositive. If the xy coefficient is
+nonpositive, both remaining terms are nonpositive. Otherwise x<=1/4
+bounds the total y coefficient by
+(5-3/e-5*e)/4<0, since 3/e+5*e>=2*sqrt(15)>5.
+For b>0 this gives F(b)<0 whenever the expression is feasible.
+
+If y>0, (14.8) gives Y2'=B in[0,1], hence x<=1/4,
+and Y1'>=A>1. Both next nonowner hazards must be positive: y'=0
+would force x'>0 from Y2'<=1<1+e*b and then Y1'=1-b<1;
+x'=0 with y'>0 would give Y2'=1+e*b>1. Thus
+x'=w(b) and y'>=z(b). Feasibility gives 0<=z(b)<=y'<1,
+so (14.9) is at most F(b)<0.
+
+If y=0 and x>0, then Y1'=1. If x'=0, (14.9) is at most
+-(1+e)*x<0. Otherwise y'=b/[e*(1-b)]>0, and
+Y2'>=B gives x'<=w(b). For x<=1/4 the same F(b) bound applies.
+For x>1/4 the crude bound (1-y')*(1+e*x')<1+e gives
+
+    L<e-(1+2*e)*x<=(2*e-1)/4<=0.
+
+Finally let x=y=0. Then Y1',Y2'>=1. If x'>0, both next
+hazards are positive and (14.8) gives
+y'>=b/[e*(1-b)] and x'<=e*b/(1+e*b); this is again
+the strictly negative F(b) bound with x=y=0. If x'=0,
+then L=-y'<=0, with equality exactly when y'=0. This proves
+the local lemma, including all zero-support cases.
+
+Application to the ENTIRE source. At a K_delta-optimal owner clock,
+every positive finite owner atom is at a weak running record of its
+pure-deadline payoff f, by the exact quantile equality in Section3.
+All source clocks are proper and unbounded by Section14.4.
+Suppose h(t)=0 and let u>t be the first subsequent positive owner
+hazard; it exists by properness. If there is a nonowner-active date in
+[t,u), choose the LAST such date v. Every intervening date between
+v and u is completely quiet, so its removal identifies the values and
+Quit endpoint immediately after v with those at u. The local lemma
+then says f(u)<f(v), contradicting the weak-record requirement at u.
+Thus every nonowner hazard in[t,u) is zero. Applying the quiet case
+of the same lemma across this completely quiet block gives
+f(u)<=f(t), with equality only if both nonowner hazards at u are zero.
+The weak-record requirement forces equality. In particular
+
+    h(t)=0 ==> x(t)=y(t)=0,                             (14.11)
+
+and the first subsequent positive owner date is also nonowner-quiet.
+No calendar deletion or change of probability mode has been asserted
+to preserve the constrained equilibrium; quiet stages are identified
+only inside this exact comparison of payoffs and Never values.
+
+It follows that the ENTIRE sequence f(t) is nondecreasing.
+Two consecutive positive owner dates are weak records, so their f values
+cannot decrease. A zero-owner run is completely quiet, including its
+first subsequent positive owner date; f is constant through that run,
+and the endpoint is a weak record. This also covers a positive owner
+date immediately preceding the run. Therefore
+
+    f(t+1)>=f(t) for EVERY calendar date t.               (14.12)
+
+Consequently every strict increase is a strict owner record and binds
+S0(t+1)=c^(t+1). In particular
+
+    f(t+1)>f(t) ==> h(t)<=delta.                         (14.13)
+
+All remaining non-geometric freedom is on genuinely FLAT payoff
+plateaux. A hypothesized escape by a dip followed by record recovery
+is impossible on this exact source. This is a source refinement, not
+a proof that all flat-plateau allocations are geometric.
+
+There is also an attained, rather than merely supremal, global object.
+For a sufficiently small fixed e for which the bounded form of the
+paper's no-exact-Nash conclusion applies, every p in N has its owner
+cap only at Never: a reached finite cap maximizer would give exact
+full Nash by Section11. All source clocks are proper, and compactness
+of N therefore makes their properness uniform on the WHOLE N.
+The full owner cap is continuous there by uniform opponent censoring.
+Every profile has a next strict owner record. The open sets
+{p:f_p(j)>f_p(0)}, j finite, cover compact N, so some finite J_delta
+bounds the next strict-record date uniformly. Exact record re-rooting
+in the same N then bounds every successive strict-record gap by
+J_delta. Every calendar hazard is consequently a hazard at an offset
+at most J_delta from a strict-record tail belonging to N. The finitely
+many offset hazard functions are continuous on compact N, since all
+their finite survival denominators are positive. Hence
+
+    H_delta=max_(p in N, t>=0) h_p(t)                    (14.14)
+
+is actually attained. Always H_delta>=m_delta>=delta.
+By(14.13), any hypothetical H_delta>delta must occur on a FLAT
+payoff plateau. Proving that such a global maximum cannot occur on
+a flat plateau would give H_delta=delta, all owner hazards equal
+delta by the survival budget, and the whole-correspondence obstruction
+described in(14.7). That final flat-plateau maximum principle remains
+UNPROVED. In particular the local lemma does not authorize an
+earliest-atom redistribution while keeping nonowner best replies fixed.

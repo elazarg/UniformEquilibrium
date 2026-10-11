@@ -67,6 +67,14 @@ out EVERY all-proper solution, hence every strictly positive cyclic solution
 at every period for small error. This is an unreviewed mechanism falsifier,
 not a failure of global approximate selection or new UE coverage.
 
+Section16 tests the first step of a response-and-optimization path on the
+original rational calibration: fixing its GOOD uniform proper pivot and
+recomputing the other three players as EXACT full best replies is disastrous.
+Every such completion has pivot loss6-5/N, although the SAME pivot with
+three Never opponents has full loss1/N. Thus even exactifying only the
+nonowners is not a harmless preprocessing operation. This is an unreviewed
+internal calculation, not a failure of joint approximate selection.
+
 Central conclusion: NONE of the no-go results below refutes existential
 selection from the FULL private-Never-bonus equilibrium correspondence.
 The same auxiliary games have rigorously bad exact selections and good
@@ -2767,3 +2775,126 @@ best joining value is its date0 atom h. Thus the original game has UE and
 this is only another exact-regularization falsifier. It is not a padding
 claim or unrestricted strategy-class obstruction. No further development
 of this failed producer is intended.
+
+## 16. Global response optimization: exactifying the nonowners fails first
+
+### Proposed route and its first assertion
+
+A natural end-to-end attempt is to let the positive pivot choose an arbitrary
+proper clock, solve the other three players' response game, and optimize the
+pivot's FULL deviation loss over the entire response correspondence. Proper
+pivot clocks guarantee actual absorption and continuity of all nonowner
+payoffs. Finite-support pivot clocks make the response game genuinely finite:
+every date after the pivot's last date is outcome-equivalent to Never for a
+nonowner. No public correlation or source ancestry is involved.
+
+Before treating exact nonowner response as harmless, test the assertion that
+near-equilibrium nonowner laws can be replaced by exact responses without
+creating a fixed pivot loss. The following original-table calculation refutes
+that assertion, even when the pivot law is held fixed and is already part of
+a vanishing-full-regret family. It does NOT refute existential selection over
+ALL pivot laws and ALL approximate nonowner responses.
+
+Use the complete rational table of Section2, including its original dummy
+payoff rule. Fix N>=1 and fix player0's proper law to be uniform on
+{0,...,N-1}. Players1,2,3 retain unrestricted independent complete clock laws.
+By an exact response completion we mean that EACH of1,2,3 is a full best reply
+to the other three laws; player0 is not required to best reply.
+
+**Ordinary, unreviewed proposition.** Every exact response completion has
+player1 quitting surely at N-1 and players2,3 placing no finite mass below N.
+Their arbitrary clocks at and after N, including Never, are outcome-irrelevant.
+Consequently the pivot's original unrestricted loss is EXACTLY
+
+    B_0-U_0 = 7-(1+5/N) = 6-5/N.                       (16.1)
+
+By contrast the SAME fixed pivot with players1,2,3 literally Never has
+full exploitability exactly1/N. These are already-solved calibration games,
+not a new UE class.
+
+### Full-response proof, including off-path dummy clocks
+
+Work at a date t<N with positive joint reach. The pivot's conditional hazard
+is h=1/(N-t). Conditional Nash for a nonowner follows by replacing only its
+reached suffix; this uses a positive opponent survival factor, not an assumed
+subgame-perfect profile. At a reached date, player3's Quit payoff is strictly
+negative: it is minus the probability of a current core quit, which is at
+least h>0. Its complete Never replacement has nonnegative payoff on every
+core clock tuple. Hence player3 cannot quit at any reached date t<N.
+
+This does NOT discard player3's off-path clocks. In particular, after a
+different player's sure quit, the dummy may schedule a later finite quit.
+The next argument works against those clocks too.
+
+At t<=N-2, write q for player2's current hazard. If player1 quits now, its
+conditional reward is
+
+    Q_1 = h*(8-2q)+(1-h)*5q.
+
+Instead let player1 Continue now and quit surely at t+1. The current absorbed
+reward is7 whenever the pivot or player2 quits. On surviving that date, the
+next pivot hazard is h'=h/(1-h). At t+1, whenever the pivot quits, player1's
+reward is at least6, regardless of player2 or the dummy; all other rewards
+to a quitting player1 are nonnegative. A dummy-only quit at t+1 is impossible
+under this replacement because player1 also quits there. Therefore this
+complete replacement improves the conditional reward by at least
+
+    7*[h+(1-h)q]+(1-h)(1-q)*6h' - Q_1
+      = 5h+(2-6h)q > 0.                              (16.2)
+
+Indeed h<=1/2: if2-6h>=0 use5h>0; otherwise the lower bound is2-h>0.
+No hypothesis on unreached continuation best replies was used. Thus player1
+has zero hazard at every reached date before N-1.
+
+At such a date player2's Quit reward is5h, since player1 has zero hazard.
+Continuing for one date then quitting gives at least7h from current pivot
+absorption and nonnegative reward thereafter, a STRICT gain of at least2h.
+Thus player2 also has zero current hazard. Together with the dummy result,
+induction proves positive joint reach and zero nonowner hazards through all
+dates before N-1; no hidden bounded-proper or zero-reach branch is omitted.
+
+At N-1 the pivot quits surely. Player3 must Continue. Player2's Quit reward
+is5+q_1<=6, while Continue gives7, independently of q_1. Hence player2 must
+Continue. Player1's Quit reward is8 and Continue gives7, so player1 quits
+surely. This classifies all reached response behavior and proves the claimed
+clock support statements. Finite clocks at or after N may be arbitrary;
+they do not change the resulting full-response inequalities.
+
+Player0 quits alone at its first N-1 possible dates, and jointly with1 at its
+last date, giving U_0=1+5/N. Its deadlines before N-1 give1, date N-1 gives6,
+and every later deadline or Never gives7. This proves (16.1), including all
+unbounded and mixed replacements by pure-clock extremality.
+
+For comparison, against three Never laws the prescribed vector is(1,7,7,0).
+For t<N the two active nonpivot gains are
+
+    f_1(t)-7=(7t+8)/N-7,
+    f_2(t)-7=(7t+5)/N-7.
+
+The first maximum is1/N; the second is negative. All later and Never values
+are7. The dummy's finite gains are nonpositive and the pivot is fully optimal.
+Hence the comparison profile has EXACT full exploitability1/N.
+
+Source declarations inspected: `quittingFiniteDeadlineTimingGame`,
+`quittingFiniteDeadlineTimingProfile`, and the payoff adapters in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingGame.lean`;
+`timingLawTail_isNash_of_isNash_of_positiveContinue` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingRecursion.lean`.
+The fixed-pivot response proposition above is ordinary mathematics, not a
+claim that those declarations implement it.
+
+### Consequence for the genuinely global question
+
+The discarded restriction is exact response completion at a fixed good pivot,
+not finite menus, large collisions, selective Never, or global joint law
+changes. The response errors1/N at the good profile are essential: exactifying
+them forces player1's entire clock to the last pivot atom and raises the
+pivot's loss from0 to6-5/N. There is no uniform error-to-exact-response repair
+in this family. In particular a global proof cannot quietly replace approximate
+nonowner response correspondences by exact ones and optimize afterward.
+
+Concrete next question: identify a JOINT approximation-preserving operation
+on all four laws which can exploit these tiny nonowner slacks, while retaining
+macroscopic collisions on tables where diffusion fails. No producer for this
+operation is established here; this failed first step will not be repaired by
+tuning its constants or restricting to one response component.
