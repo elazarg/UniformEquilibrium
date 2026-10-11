@@ -4365,3 +4365,68 @@ and joint law changes. The meaningful next question is whether such
 extinction can be USED with all original caps controlled, rather than
 merely assumed away by a source-preserving construction. No universal
 calendar-extension producer has been obtained.
+
+### The almost-sure bridge alternative has an exposed outsider
+
+The following test DOES permit approximation and arbitrary payoff motion.
+Consider any sequence k->infinity of actual profiles consisting of one
+arbitrary independent root, then the k pair roots above, then an arbitrary
+complete tail. Assume only the imposed pair relations(25.3), legal rates,
+and S->0. The first root need not be exact or have the old support; the
+tail need not satisfy(25.1), be periodic, or retain the old selected law.
+There is NO such family with complete original regret tending0.
+
+Proof. From(25.3), for each fixed pair-root index t,
+
+    x_t -> 0,
+    y_t -> 1/2.
+
+Indeed x_t<=2^(t-k), while the exact survival identity
+S=1-2*Y+2*Y/2^k forces Y->1/2. Iteration of the continuous y-map at its
+fixed point1/2 gives the second limit. The two rates are not being replaced
+by unconditional clock atoms.
+
+Player3 Continues throughout the pair string. At its first T roots,
+player1's probability of quitting tends0; if player2 quits alone,
+recipient3 receives0. Pair survival through these T roots tends2^(-T).
+Every actual tail value is bounded in absolute value by10, whatever the
+post-bridge policy. Thus the prescribed player3 value at bridge entry
+tends0, first taking k->infinity and then T->infinity. But its pure Quit
+payoff at the FIRST pair root is
+
+    Q_3=1-x_1+y_1-3*x_1*y_1 -> 3/2.              (25.7)
+
+It remains to check that the initial root cannot hide this gain. The
+literal K10 root game has NO Nash point with any sure quitter, for ANY
+continuation vector in[-10,10]^4: if j Quits surely, its opposite and
+predecessor have Quit-minus-Continue at most-1 against every choice of the
+other nonowners. They Continue surely. The successor then has gain2 and
+Quits surely; owner j would strictly prefer Continue, receiving0 instead
+of-1. This contradiction uses actual singleton/pair/triple/grand entries
+and is independent of the supplied continuation.
+
+If a sequence of full-clock regrets tended0, every first root would have
+binary-root regret tending0, by the deviations that change only that
+root and follow the actual tail afterward. Its actual tail vector is in
+the compact box[-10,10]^4. Compactness and continuity of the binary game
+therefore force first-root JOINT Continue probability to stay bounded
+away from0 along that sequence: otherwise a subsequence would converge
+to a root Nash point with a sure quitter. This is a selected-sequence
+argument, not an assumption of exact auxiliary Nash.
+
+Preserve player3's original first-root coin and change only its reached
+bridge continuation to Quit at the first pair root. This legal complete
+replacement gains exactly first-root joint reach times
+Q_3 minus player3's prescribed bridge-entry value. By(25.7) that gain is
+bounded away from0, a contradiction. QED.
+
+The early outsider is the decisive counterfactual: exponentially small
+JOINT reach at the END of the bridge does not screen its available reply
+at bridge ENTRY. A bounded direct full-cap search over the eight seam/
+pair-end parameters also worsened as k increased; those numerical failures
+are not used in this argument. This retires the proposed extinct
+two-owner bridge operation, NOT all approximate laws on the word, all
+macroscopic returns, or the K10 UE question. Nonextinct approximate
+families with moving/vanishing seams have not been excluded. A genuinely
+new construction must change the overlap structure so this outsider is
+actually compensated or screened in its own deleted-clock experiment.
