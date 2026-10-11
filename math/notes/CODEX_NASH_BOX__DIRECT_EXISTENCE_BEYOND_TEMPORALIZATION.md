@@ -57,6 +57,11 @@ unproved. A fully rational four-active test lowers information from>1.08
 to<0.705 while changing the exact full-coarse payoff12/5 to187/150.
 The all-subset information and value/cap recursion supplies a fixed-size
 state for jointly chosen root words; no all-errors assertion follows.
+Section28 derives the compact, ACTUALLY ATTAINABLE state obstruction a
+positive global infimum would produce when a strict full-coarse anchor
+exists. It also rules out one boundary face on K10 by an explicit uniform
+information descent, not by exact auxiliary Nash. The remaining global
+endpoint-controllability assertion is open.
 
 Status: active independent research, resumed 2026-10-11. Section 8 now gives
 a positive candidate independently checked for soundness: sufficiently large pair-participation
@@ -4705,3 +4710,168 @@ objective values are not promoted as another numerical milestone. The
 precise live question remains whether whole-source/global-minimizer choice
 forces a calendar-uniform improvement, rather than whether more local
 optimization can lower one table's finite constant.
+
+## 28. The attainable compact state obstruction of a positive global minimum
+
+### Hypotheses and exact source, not arbitrary abstract states
+
+This is ordinary unreviewed supporting mathematics, NOT a UE producer or
+new raw-table exclusion. Fix a four-player reward table with |r_i(B)|<=R,
+R>0, live payoff0, and a fixed finite FULL coarse source sigma with strict
+margin gamma>0 against every original deadline and Never. All approximate
+and exact deviations below are complete independent replacements. The
+strict anchor is present on K10; Section31/32 of CODEX_TURING_BOX's owned
+state notebook supplies a separate ordinary raw-source/selected-gap
+reduction. That composition is not re-proved or silently assumed for every
+unperturbed reward table here.
+
+Let K_N and I_N be Section27's ENTIRE finite-menu full-coarse set and
+information minimum, for N at least the anchor's finite menu size. Assume
+rho=inf_N I_N>0. This is the specific global obstruction to be contradicted.
+If the original game has a uniform full exploitability gap g>0, bounded
+payoff coupling and Pinsker give
+
+    g<=4R*TV(mu,product marginals)<=sqrt(8)*R*sqrt(I(mu)),
+    rho>=g^2/(8R^2)>0.                                (28.1)
+
+The semantic premise is the actual
+`not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`, whose
+declaration/imports were reopened, together with the positive all-errors
+endpoint `quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `Terminal/TargetTail/TerminalUniformPayoffSelection.lean`. No claim that
+these Lean declarations formalize the entropy argument is made. A narrow
+search for total-correlation/root-information lemmas in MathUE and the
+quitting subtree found no corresponding entropy-control declaration.
+
+For each global minimizer mu_N, store x_N=(v_i,C_i,J_A) as in(27.4). These
+states are BOUNDED, not merely fixed-dimensional: |v_i|,|C_i|<=R, and
+
+    0<=J_A<=J_I=I_N<=I(sigma)                           (28.2)
+
+by monotonicity of total correlation under deleting coordinates. Thus
+subsequences have state limits. More generally let S be ALL limits of
+states of full-coarse finite laws whose information tends rho. This is
+nonempty and compact; diagonal selection proves closedness inside the
+bounded box. Every x in S satisfies C<=v and J_I=rho. Each is realized by
+an actual sequence of complete correlated clock laws. NO abstract point
+obeying only entropy inequalities is being inserted into S.
+
+### Dimension-free repair permits drifting calendars and endpoint control
+
+For arbitrary finite laws mu,sigma on one common calendar, introduce the
+Bernoulli mixture label Z in nu=(1-w)mu+w sigma. For every coordinate set A,
+
+    J_A(nu)= (1-w)J_A(mu)+w J_A(sigma)
+                 +sum_(i in A) I(X_i;Z)-I(X_A;Z).
+
+Consequently the correction lies between -h(w) and (|A|-1)h(w) for nonempty
+A; empty/singleton information is exactly zero. In particular information
+is continuous under this repair, uniformly in calendar length, whenever
+the input subset informations are bounded. The upper inequality is the
+dimension-free mixture calculation already recorded independently in
+CODEX_TURING_BOX's Section35.2; the lower inequality here follows from
+I(X_A;Z)<=h(w). No bound of the form w*log(calendar size) is used.
+
+If mu has full coarse violation at most epsilon, choose
+w=epsilon/(epsilon+gamma). Linearity of EVERY fixed-deadline margin makes
+nu exact full-coarse. Its value/cap state differs from mu's by at most2Rw
+per coordinate: caps are suprema of reply rows that are uniformly within
+2Rw. The same finite sigma embeds in all sufficiently large calendars.
+
+Fix x in S and ANY finite word W of correlated root laws, using(27.4).
+Intermediate states need not be coarse obedient. Suppose only the final
+state x'=W(x) obeys C'<=v'. Apply exactly the same word to a sequence
+realizing x. Continuity of the finite-state recursion gives endpoint coarse
+violation epsilon_n->0 and information J'_I,n->J'_I. Repair with sigma on
+the final calendar. The preceding inequalities imply
+
+    J'_I>=rho.                                           (28.3)
+
+Moreover, if J'_I=rho, the repaired laws' ALL24 state coordinates converge
+to x', so x' belongs to S. Thus S is closed under all endpoint-feasible
+information-nonincreasing finite root words. This is an actual necessary
+obstruction produced by the ENTIRE minimum correspondence, not a chosen
+bad branch, a fixed payoff target, or a requirement of intermediate exact
+auxiliary equilibrium.
+
+The open finite-state task is to exclude such an ATTAINABLE positive-rho
+barrier using some whole root word (or a genuinely different full-law
+operation). Equation(28.3) is not itself a contradiction or an existence
+theorem. In particular S cannot be replaced by the full entropy-inequality
+box, and local numerical minimizers do not supply its points.
+
+### What exact independent root equilibria imply, and what they do not
+
+Define d_i=J_I-J_(I\{i})>=0. For any independent root law with hazard q_i,
+information production is zero and(27.4) gives
+
+    J'_I<=rho-q_i*d_i.                                  (28.4)
+
+Every Nash point of the finite Boolean root game with all-Continue payoff
+v gives an endpoint-feasible control because C<=v. Finite-game Nash exists;
+its actual root payoff caps the two pure root actions, and replacing v by
+C only weakens the later-response constraint. Therefore(28.3) forces
+q_i*d_i=0 for EVERY such root Nash point, not only a selected component.
+Every player with d_i>0 is protected from all this exact-root activity.
+
+There are at least two protected players. Indeed chain rules give
+J_I<=sum_i d_i and d_i<=sum_(j!=i)d_j. These are finite entropy inequalities
+and pass to S. For the second, expand I(X_i;X_-i) by the chain rule over
+the other coordinates; each conditional term is at most
+H(X_j)-H(X_j|X_-j)=d_j. This does not assert that limiting private laws
+exist or that labels with d_i=0 are literal Never.
+
+This exact-root protection is NOT enough to close the global argument:
+all-Continue can be the whole root Nash correspondence at a high
+continuation vector. Correlated root controls and temporary information
+increase remain genuinely different allowed operations.
+
+### A uniform positive descent on the K10 neutral face
+
+There is nonetheless an exact face test of the new operation. Let x in S
+have v_i=1 for all four players, with arbitrary C_i<=1 and attainable
+subset informations. Choose pi(empty)=1-4a and pi({i})=a for every i,
+all other masses zero, 0<a<=1/8. Literal singleton/pair rows of K10 give
+
+    u_i=1+a,
+    Q_i=1-2a,
+    B_i+alpha_i C_i<=1+a.
+
+Thus the root control is exactly endpoint-feasible, with no root Nash
+requirement. Its information is
+
+    I(pi)=(1-4a)log(1-4a)-4(1-a)log(1-a)
+         =sum_(k>=2)(4^k-4)a^k/[k(k-1)]<=16a^2.
+
+By(27.4) and sum_i d_i>=rho,
+
+    J'_I=rho+I(pi)-a*sum_i d_i<=rho+16a^2-a*rho.
+
+Take a=min(1/8,rho/32). Then J'_I<=rho-a*rho/2<rho, contradicting(28.3).
+Hence the ENTIRE compact global-minimum state set S has no point on this
+neutral payoff face. This is a calendar-uniform supporting descent lemma,
+not another optimized numerical constant and not K10 UE existence.
+
+For context, K10's finite root game at v_i>1 for all i has only the
+all-Continue Nash point. No sure quitter can occur by the literal strict
+opposite/predecessor/successor argument of Section25. With finite odds
+x_j=q_j/(1-q_j), a mixing owner i would require
+
+    0=1-v_i-x_(i+1)-4x_(i+2)+2x_(i-1)
+           -2*sum_(j<k, j,k!=i)x_j*x_k-product_(j!=i)x_j.   (28.5)
+
+A one-player active support has negative gap. Any two-player support has
+an active owner with negative coefficient against the other. For three
+active players choose the owner whose predecessor is absent: every
+remaining coefficient is negative. With all four active, summing(28.5)
+gives 4-sum_i v_i-3 sum_j x_j-4 sum_(j<k)x_j*x_k
+-sum_(j<k<l)x_j*x_k*x_l<0, impossible. This explains why protection from
+exact root Nash alone can be vacuous in the strict high-payoff chamber;
+it does not restrict arbitrary correlated controls or whole-word steering.
+
+The missing global assertion is still substantial: steer ANY attainable
+positive-minimum state past those protected chambers with net information
+decrease, allowing payoff movement and intermediate coarse violations.
+No proof of that assertion, no whole-control falsifier, and no new solved
+reward class is claimed.

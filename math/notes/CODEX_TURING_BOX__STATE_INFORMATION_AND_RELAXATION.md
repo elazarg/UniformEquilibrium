@@ -6838,3 +6838,65 @@ This is not an exhaustive root count, a calendar completeness theorem or
 a whole-source obstruction. No fixed period or support pattern is retained
 as a restriction in(F1). The failed enclosure and these diagnostics give
 no license to discard macroscopic roots or arbitrary switching calendars.
+
+### 37.5 A whole-correspondence Never-cap reduction
+
+The following is ordinary UNREVIEWED supporting mathematics, not production
+of a good component. Impose37.2's hypotheses and, additionally,
+
+    r_i(S)>=0 whenever i is not in the nonempty coalition S.
+
+For EVERY fixed alpha in(0,1), EVERY p in the ENTIRE D_alpha, EVERY player
+i and EVERY reached date t, the original unrestricted best response is
+Never. This assertion includes all finite deadlines, not only the support
+of p_i. It applies to K10, whose passive rewards are0,1,4 or10.
+
+Here is a direct proof and exact gap ledger. At a reached date write q_i
+for its own hazard, L_i for opponent survival through the current root,
+J=product_j(1-q_j), Q_i for its current Quit reward, and B_i for current
+opponent absorption reward when it Continues. Write v_i,u_i,W_i for the
+discounted prescribed, original prescribed and original Never values of
+the conditional tail. A prime denotes the next conditional tail. All
+these values are actual, and q_i<1 by37.2.
+
+Discounted Never earns nonnegative reward, so v_i>=0 at EVERY tail. The
+prescribed Bellman identities, with e_i=u_i-v_i, give
+
+    e_i=J*(e_i'+(1-alpha)*v_i').
+
+Joint termination makes the residual vanish on iteration. Consequently
+e_i>=0. Since Continue is in support, discounted root Nash also gives
+
+    v_i=B_i+alpha*L_i*v_i',          Q_i<=v_i.
+
+Thus the original Continue value is
+
+    B_i+L_i*u_i'=u_i+[q_i/(1-q_i)]*e_i >=u_i.
+
+Iterating this inequality while holding i out, and using the actual deleted
+termination of37.2, proves W_i>=u_i>=v_i>=Q_i. For any finite deadline h,
+split its payoff at h. Replacing its terminal Q_i(h) by W_i(h) only raises
+the payoff, and the resulting value is precisely Never. Therefore its full
+original cap is W_i, as asserted. No unlabelled calendar transport or
+deviation-class restriction has occurred.
+
+In particular the source question(F1) on this subclass is EXACTLY selection
+of components for which max_i[W_i(p)-u_i(p)] tends to0. With d_i=W_i-u_i,
+the same identities give the nonnegative, exact recurrence
+
+    d_i(t)=L_i(t)*d_i(t+1)
+           +[q_i(t)/(1-q_i(t))]*e_i(t).                    (F4)
+
+Equivalently d_i(0) is the sum of the latter charges weighted by the actual
+opponent survival to t. The residual again vanishes by deleted termination.
+Hence an actual macroscopic own hazard at positive opponent reach forces
+small e_i there in any low-original-gap discounted family. This uses own
+and opponent reaches separately: replacing either by joint reach would
+change the identity.
+
+The charges in(F4) have one sign, but no global component-selection descent
+has been proved. Conditional re-rooting keeps a law in D_alpha but may
+increase a different player's d_i. The bad symmetric K10 branch of37.3
+has exactly these Never caps. Thus this reduction removes the deadline
+search for this ENTIRE correspondence; it neither asserts(F1), supplies
+the required component, nor excludes unrestricted original UE families.
