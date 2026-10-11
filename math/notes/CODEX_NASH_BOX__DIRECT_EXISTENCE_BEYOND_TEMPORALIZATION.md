@@ -5687,6 +5687,20 @@ respect to m_j, the right derivative at q=0 is
 If a marginal absolute-continuity condition fails, the derivative may
 instead be +infinity. The switching charge cannot be discarded.
 
+There is also an exact finite-q formula, stronger than the derivative.
+Writing m_j^q=(1-q)m_j+q kappa_j, the identity
+JS_q(m_j,kappa_j)=q KL(kappa_j||m_j)-KL(m_j^q||m_j) gives
+
+    I(new)-I(mu)
+      =q[KL(kappa||product m_-i)-I(mu)]
+                       -sum_(j!=i) KL(m_j^q||m_j).     (33.3a)
+
+Thus a price equal to I(mu) still yields STRICT improvement whenever at
+least one survivor marginal changes. In particular an independent
+punishment of positive price equal to rho cannot occur at the positive
+global minimum described next. This is a finite-q conclusion, not a
+strict inequality inferred from a zero first derivative.
+
 Here is the genuine global-minimality consequence. Suppose a full-coarse
 law attains the information infimum rho>0 over ALL calendars, every
 v_j>s_j, and the variation above is available with its finite lifts.
@@ -5694,6 +5708,11 @@ Then EVERY opponent punishment with C_i(kappa)<=s_i and finite relative
 entropy must satisfy
 
     KL(kappa || product_(j!=i)m_j) >= rho.             (33.4)
+
+For an INDEPENDENT punishment the inequality is strict: equality with
+rho>0 forces a changed survivor marginal and(33.3a) contradicts global
+minimality. For a correlated punishment with every marginal unchanged,
+equality alone need not strictly decrease information.
 
 Moreover EVERY coarse constraint is binding: v_i=C_i for all i. Indeed,
 if v_i>C_i, choose kappa=product m_-i. Its cap is bounded, so the positive
@@ -5774,3 +5793,132 @@ to violate(33.4), or to reach a different payoff/support chamber where
 this completion is cheaper. The successful test is not a universal local
 cost estimate, a convergence family, a new UE class, or a license to
 fix the original source/payoff while repeating this one move.
+
+## 34. Reference completion after the first two quitting labels
+
+Status: exact ordinary finite-law theorem, unreviewed. This is a new
+payoff-preserving improvement operation on the ENTIRE coarse source set,
+not only a law-valued-limit variation. It requires no punishment input,
+preserves every full original response and may change all marginals.
+It does not eliminate the strategically relevant first-two-label law.
+
+### A full semantic skeleton and an actual finite completion
+
+For a complete finite clock tuple x record Z(x) as follows. If all clocks
+are Never, use one all-Never symbol. Otherwise record the first finite
+time t and its exact coalition B. If |B|>=2 stop. If B={i}, also record
+the first finite time u of the other players and its coalition A, or
+record that all other clocks are Never. Thus Z stops as soon as TWO
+different player labels have finite clocks. No later clocks are recorded.
+
+Every prescribed terminal payoff and EVERY unilateral pure deadline/Never
+payoff is a function of Z alone. Deleting any player other than a sole
+first quitter leaves the original first event. Deleting a sole first
+quitter exposes exactly the recorded second event. Comparing the new
+deadline with t and u also determines every possible new tie. In the
+all-others-Never branch a finite owner deadline gives its singleton and
+Never gives0. These observations cover all agency, not just prescribed
+terminal outcomes or coincidence probabilities.
+
+Let mu be ANY finite correlated complete clock law, p=product m_i its own
+product marginals. For every positive-mu skeleton fiber, p gives that
+fiber positive mass. Define the ACTUAL finite law
+
+    T(mu)(x)=mu_Z(Z(x)) * p(x)/p_Z(Z(x)).               (34.1)
+
+Zero-mu fibers receive zero mass. On a two-or-more-first-label fiber,
+this keeps the fixed first clocks and independently samples every
+survivor from its UNCONDITIONAL m_j conditioned to be after t. On a
+sole-first/second-event fiber, keep those fixed clocks and independently
+sample the remaining survivors from m_j conditioned to be after u.
+These are not necessarily the old CONDITIONAL survivor marginals.
+The reference is always the original own product p, never a product
+substituted into a correlated payoff calculation.
+
+The skeleton law is unchanged. Therefore(34.1) preserves every U_i and
+EVERY original pure-response function pointwise, including omitted late
+deadlines and literal Never. In particular it takes exact full-coarse
+laws to exact full-coarse laws on the SAME literal finite calendar.
+There is no new deadline insertion, continuum strategy or hidden limit
+realization in this operation.
+
+### Exact information payment and global-minimum consequence
+
+Relative-entropy disintegration gives
+
+    I(mu)=KL(mu_Z||p_Z)
+             +sum_z mu_Z(z) KL(mu(.|z)||p(.|z)).
+
+For nu=T(mu), KL(nu||p)=KL(mu_Z||p_Z). The standard marginal
+decomposition of KL, with p the product of the OLD marginals, then gives
+
+    I(nu)+sum_i KL(nu_i||m_i)
+       =I(mu)-sum_z mu_Z(z) KL(mu(.|z)||p(.|z)).        (34.2)
+
+Thus information cannot increase. This pays both the conditional
+correlation removal and the marginal change, without a discarded
+switching charge. The marginal-reference difference matters: replacing
+by the product of the old conditional survivor marginals proves less.
+
+Let rho be the global finite-calendar information infimum. For EVERY
+full-coarse minimizing sequence mu_k, with I(mu_k)->rho, (34.2) proves
+
+    sum_z mu_(k,Z)(z) KL(mu_k(.|z)||p_k(.|z))
+       +sum_i KL(T(mu_k)_i||m_(k,i)) ->0.              (34.3)
+
+Indeed T(mu_k) remains a literal finite full-coarse source, hence its
+information is at least rho. This WHOLE-sequence conclusion does not
+depend on the unreviewed ordered-limit attainment draft in Section32.
+If a literal finite global minimum exists, its conditional law on EVERY
+skeleton fiber is the reference-product conditional law, and T fixes it.
+
+Equivalently a global minimum minimizes convex KL to its OWN product
+reference: for every full-coarse nu,
+
+    KL(nu||p)=I(nu)+sum_i KL(nu_i||m_i)>=rho=KL(mu||p).
+
+This does not exchange min and max for total correlation. That ordinary
+Lagrangian dual is zero as recorded by CODEX_TURING_BOX; the present
+fixed-reference KL projection is a different convex problem. No finite
+Slater multiplier bound is inferred when the anchor's atoms are outside
+the current reference support.
+
+### Why normality still does not close the singleton completion
+
+An exact finite entropy ledger identifies the surviving cost. Suppose
+every prescribed first event is a singleton. Put
+
+    w_i(t)=Pr_mu(i is sole first quitter at t),
+    kappa_(i,t)=law(T_-i | i sole first at t).
+
+Since the disjoint (i,t) events have total mass1,
+
+    sum_(i,t) w_i(t) KL(kappa_(i,t)||product m_-i)
+       =I(mu)+A(mu),
+    A(mu)=sum_(i,t) w_i(t) log[m_i(t)/w_i(t)]>=0.       (34.4)
+
+To verify this, on such a fiber the owner clock is fixed and the full
+reference density is m_i(t) times product m_-i. Expanding KL(mu||p)
+therefore gives the cost above plus sum w log[w/m_i(t)]. No independence
+of kappa is assumed. The charge A is exactly the expected negative log
+of the probability of being first, conditional on the owner's own clock.
+
+Consequently the conditional team costs need not average at most I(mu).
+They average I(mu)+A: sharing clock dates between an actual first role
+and a later counterfactual role can pay a positive additional price.
+Moreover full COARSE obedience does not imply
+C_i(kappa_(i,t))<=s_i. The owner may use positive margins on other first-
+event branches to offset a bad conditional team. Normality supplies some
+independent punishment, not either this conditional-cap bound or a bound
+on A. This is why replacing each branch by a child's equilibrium, or
+averaging branch prices while dropping A, does not prove(33.4) false.
+
+Equation(34.2) is useful global leverage: all genuinely irrelevant
+post-second-clock dependence can be removed while lowering information,
+and every minimizing sequence already has vanishing such defect. The
+unresolved source is its first-two-clock distribution, including order-one
+collisions and the singleton owner's FULL counterfactual constraints.
+This is not a new UE class, a proof that rho=0, or an invitation to fix
+the original first-two law. The next operation must jointly move those
+first/second roles and their punishment prices, rather than normalize
+the irrelevant tails again.
