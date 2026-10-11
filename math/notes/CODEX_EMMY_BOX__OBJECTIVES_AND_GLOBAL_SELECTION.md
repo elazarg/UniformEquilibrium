@@ -45,7 +45,9 @@ comparisons do not assert an exhaustive classification of UE producers.
 Section18 is a different, UNREVIEWED global-source attempt: impose one
 shared joint-survival budget rather than fixing a constrained owner.
 The exact source exists and its nonnegative-own full-regret minimum is
-attained. No small-regret selection theorem or new UE class follows yet.
+attained. Section18.7 supplies a complete positive whole-minimum calibration
+on the canonical Solan table, using rotating singleton bursts and exact
+binding-date agency. No arbitrary-table selector or new UE class follows.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -2292,3 +2294,189 @@ but the shared budget can force finite atoms with f_i(t)<Never_i. Can a
 joint re-equilibration select components where the TOTAL cost of those
 forced atoms tends to0, or is that cost uniformly positive over ALL
 components? The properness and record conclusions do not decide this.
+
+### 18.7. A good shared-budget component: rotating bursts and binding anchors
+
+Status: COMPLETE ORDINARY UNREVIEWED proof on the literal three-player
+table of Section18.6. This positively resolves the whole-minimum
+calibration(18.2) THERE. It does not assert an arbitrary-table selector,
+a new UE reward class, a stationary approximation or a Fin4 padding claim.
+The construction itself uses NO no-exact-Nash paper theorem. Here any
+fixed 0<e<=1/3 is permitted, not only the qualitative small-e interval.
+
+Theorem. There are delta_k down to0 and actual independent profiles
+p^k in N_(delta_k), with EVERY legal complete-law source replacement
+checked, such that their ORIGINAL full behavioral regrets satisfy
+
+    E(p^k)<2*delta_k ->0.
+
+Their raw terminal payoffs tend to(1,2,1), and their canonical payoffs
+tend to(1,1,0). Consequently the ENTIRE attained minima obey
+
+    liminf_(delta down to0) min_(p in N_delta) E(p)=0
+
+on this table. Other components may be bad. This is precisely the
+quantifier that the fixed-owner test could not pass; no comparison with
+one selected stationary component is being substituted for it.
+
+Construction. Put r=(1+e)/e and, for k>=2, define
+
+    G_t=sum_(j=0)^(t-1) r^j,       G_0=0,
+    delta=1/[2*(G_k+2)],           c=1-delta,
+    b_t=r^t*delta/[1-delta*G_t]     (0<=t<k),
+    R=1-delta*G_k=1/2+2*delta.                       (18.4)
+
+All b_t lie in(0,1). Their exact survival products and growth identities
+are
+
+    product_(s<t)(1-b_s)=1-delta*G_t,
+    b_0=delta,   b_(t+1)=r*b_t/(1-b_t),
+    product_(s<k)(1-b_s)=R.                          (18.5)
+
+In particular b_t>=delta, strictly if t>0. Let L be the LEAST positive
+integer with c^L<=R, and set
+
+    P=c^L,      h=1-P/R.
+
+Then R<c^k, so L>=k+1, and 0<=h<delta by minimality. One phase of
+length L schedules ONLY its owner to Quit, with hazards
+
+    b_0,...,b_(k-1), then L-k-1 zero hazards, then h.  (18.6)
+
+Its survival is P. Schedule phase owners0,1,2, then repeat these three
+phases forever, using independent private coins. Every player and every
+deleted-opponent profile is proper. There is no public random seed.
+
+This is a macroscopic-burst construction, not dilution. Indeed delta_k
+decreases geometrically, while b_(k-1)->1/(2+e)>0. The physical phase
+length L is of order1/delta, leaving a long quiet interval after the
+burst. The final atom h may be zero; no positive-hazard assumption is
+needed at every binding date.
+
+Exact shared-budget feasibility. During the first k roots, each hazard
+is at least delta, so survival after j<=k roots is at most c^j. During
+the subsequent quiet roots it is R<c^(L-1)<=c^j for j<=L-1. At the
+phase end it is P=c^L. Multiplying these inequalities by P for every
+completed phase proves(18.1) at EVERY physical date. In particular
+every phase end is binding, and the first root of each phase also binds.
+No independent per-player envelope is imposed.
+
+The response-curve bound that makes the construction work. Ignore a
+recipient's own quits and examine a phase owned by its successor: the
+recipient receives0 if that owner quits, and receives1+e*b if it Quits
+against the owner's current hazard b. Writing s for the owner's
+survival BEFORE a root, the pure-deadline payoff from the phase start is
+s*(1+e*b). At each of the first k roots this is EXACTLY
+
+    [1-delta*G_t]*(1+e*b_t)=1+e*delta,                (18.7)
+
+because G_t=e*(r^t-1). At quiet roots it is R, and at the final root
+it is R*(1+e*h)<=1+e*delta. Thus its entire successor-phase response
+curve is at most1+e*delta, despite the macroscopic final burst hazard.
+
+In the phase owned by its predecessor, the recipient receives3 upon
+that owner's quit, and0 if it joins the owner. Its pure-deadline payoff
+from the phase start is
+
+    3*(1-s)+s*(1-b)=3-2*s-s*b <=3-2*s*(1-b)<=3-2*P.
+
+The endpoint after that phase is3-2P. During a recipient's OWN phase
+there are no opponent quits, so all its finite deadlines have exactly
+the same payoff.
+
+From an own phase to the next own phase, the two opponent phases are
+successor then predecessor. The own-deadline baseline1 therefore changes
+to
+
+    F(P)=3*P*(1-P)+P^2=3P-2P^2.
+
+Every intervening successor-phase deadline is at most1+e*delta, and
+every predecessor-phase deadline is at most F(P), after including the
+preceding successor survival P. The chosen parameters ensure
+
+    P>=c*R>=1/2+delta,       P<=R<7/10,
+    F(P)-1=(2P-1)*(1-P)>=3*delta/5>=e*delta.         (18.8)
+
+Indeed k>=2 and r>=4 give delta<=1/14<1/10. Thus EVERY deadline before
+the end of the NEXT own phase is bounded by its own-phase value. Those
+values are nondecreasing from cycle to cycle. For player1's initial
+prefix, the single predecessor phase is bounded by3-2P, its first own-
+phase value. For player2's initial prefix, the successor/predecessor
+pair is bounded by F(P), its first own-phase value. Player0 starts in
+its own phase. These observations cover the noncyclic initial seam.
+
+Equivalently, if
+
+    T_(i,n)=(3n+i+1)*L-1       (n>=0)
+
+is player i's nth own-phase end, every finite deadline <=T_(i,n) has
+payoff at most w_(i,n), and EVERY prescribed atom in that own phase
+earns exactly w_(i,n). This is a global response-curve running maximum,
+not merely a local binary-root condition.
+
+Complete source best replies. At T_(i,n) the opponents' survival product
+is P^(2n+i). Hence EVERY shared-budget feasible replacement q_i obeys
+
+    Pr_(q_i)(T_i>T_(i,n))
+       <=c^((3n+i+1)*L)/P^(2n+i)=P^(n+1).             (18.9)
+
+The prescribed own law has EXACTLY this survival. Couple prescribed and
+replacement clocks by their common quantile. If a prescribed draw lies
+in own phase n, inequality(18.9) places the replacement draw no later
+than T_(i,n). Its payoff is at most w_(i,n), exactly the prescribed draw's
+payoff. The replacement has no Never mass, since(18.9) tends to0.
+Integrating proves that NO feasible COMPLETE replacement improves.
+Thus p^k belongs to N_delta. This proves source agency directly and
+does not presume that root Nash with a supplied continuation suffices.
+
+Original FULL caps and regrets. The same running maxima tend to literal
+Never payoffs, so EVERY finite deadline is below Never. Arbitrary mixed
+replacements are their mixtures; the full caps, including Never, are
+
+    B=(3P/(1+P), 3/(1+P), 3P/(1+P)).
+
+Only singleton coalitions ever occur on the prescribed path. Their
+probabilities are(1,P,P^2)/(1+P+P^2), so
+
+    U=(1+3P^2, 3+P, 3P+P^2)/(1+P+P^2),
+    B-U=(1,P,P^2)*(2P-1)/[(1+P)*(1+P+P^2)].          (18.10)
+
+Consequently E is the first displayed debt coordinate. Since
+0<=2P-1<=4*delta and P>=1/2, E<=32*delta/21<2*delta.
+The canonical finite-terminal shifts preserve these FULL regrets too:
+every unrestricted deviation retains two distinct proper opponents.
+This is not inferred merely from their preservation of source utilities.
+As P tends to1/2, the stated fixed payoff limits follow. The existing
+terminal-all-errors/compact-payoff consumer gives uniform equilibrium
+with that FIXED target, if this already-solved table is used as an
+equilibrium construction; the present result's purpose is source selection.
+
+Exact rational control. For e=1/10 and k=2,
+
+    delta=1/28,  b=(1/28,11/27),  R=4/7,
+    L=16,  P=(27/28)^16,
+    h=1-(7/4)*(27/28)^16.
+
+The phase contains those first two hazards, thirteen quiet roots, and h;
+the private calendar has48 dates per period. Exact rational enumeration
+of all first-period deadlines and Never gives
+
+    U approximately(1.035149990,1.901952497,1.062897513),
+    B-U approximately(.040348781,.022548733,.012601257).
+
+The exact assertions are(18.4)--(18.10), not these rounded displays.
+All first-period pure deadlines lie below the exact B, and the own-phase
+values dominate every earlier deadline through their binding end. Later
+periods follow the same affine opponent-survival recursion. No numerical
+optimization, omitted late response or collision cancellation is used.
+
+Direction change and remaining gap. The entire FIXED-owner source fails
+on this canonical table, but sharing stopping responsibility passes its
+whole-minimum test. The successful operation preserves macroscopic
+singleton bursts while moving the necessary record payment to separated
+binding dates. Although each such source has all three clocks proper,
+no arbitrary table is forced to choose this properness pattern. The
+unresolved global question is how arbitrary raw game data can select
+analogous response-curve phase maxima and binding anchors, or some other
+good shared component. Neither compactness nor standard-Q supplies that
+selection. This result is a calibration, not new Fin4 reward coverage.

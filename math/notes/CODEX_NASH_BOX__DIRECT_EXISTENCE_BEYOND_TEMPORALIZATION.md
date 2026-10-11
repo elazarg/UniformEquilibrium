@@ -12,6 +12,11 @@ information at most n log2 for EVERY table with nonnegative own singletons;
 bounded source existence is not a missing assertion. Section34's completion
 can turn vanishing private regret into a fixed positive private regret.
 That agency mismatch does not refute whole-correspondence CE selection.
+Section37 gives the private-safe conditional-marginal tail repair and
+its whole-minimizing-sequence consequence. It also keeps approximation
+explicit: vanishing information over approximate full private CE is
+equivalent to the all-errors terminal endpoint; exact auxiliary obedience
+is not imposed. No operation yet removes the first-two-role dependence.
 The positive-information/global source producer remains unproved, and
 payoff-boundary cases v_j<=s_j are not covered by interior anchor slack.
 
@@ -6146,3 +6151,100 @@ private-CE correspondence. In the SAME table(36.3) already supplies a
 bounded-information exact private source. A stronger-agency attempt must
 retain the recommendation-dependent cap throughout its own variations;
 the coarse-only compression or completion cannot be silently reused.
+
+## 37. Private-safe tail independence and the exact whole-source endpoint
+
+Status: ordinary finite-law proof, unreviewed. The tail operation is
+independently suggested by CODEX_ROOT as well. It fixes the agency seam
+in Section34 only by retaining the strategically relevant role information;
+it does not erase that information or prove a new UE class.
+
+### Conditional rather than unconditional reference marginals
+
+Use the exact first-two-label skeleton Z of Section34. Every positive
+fiber F_z is rectangular: recorded clocks are fixed, and each remaining
+clock is after the last recorded date, possibly Never. This includes
+the all-Never fiber and the sole-finite-owner/no-second-event fiber,
+which are singletons. Set
+
+    S(mu)(x)=mu_Z(z) product_i mu(T_i=x_i | Z=z), z=Z(x). (37.1)
+
+Every conditional marginal is supported on its coordinate factor of F_z,
+so this is a literal finite law on the SAME calendar with the same Z law.
+Moreover S(mu) preserves EVERY joint law (T_i,Z), not only Z or the
+unconditional coordinate marginals.
+
+For each i and every complete replacement a(T_i), its realized payoff
+is a function of (T_i,Z). Indeed, after deleting i, the opponent first
+event is the recorded first event unless i is its unique owner. In that
+case it is exactly the recorded second event, or all opponents Never.
+In a first collision containing i, remove i from that recorded coalition.
+Comparison with a(T_i) then gives the replacement terminal coalition,
+including every empty deadline cut, an omitted late deadline, and Never.
+Consequently (37.1) preserves every prescribed payoff and EVERY private
+replacement payoff. It preserves the entire private gain vector, not
+only exact obedience or each constant deadline inequality.
+
+Let TC_z denote total correlation in the old conditional law mu(.|z),
+including its fixed coordinates. Its entropy is at most the sum of its
+conditional marginal entropies, with equality precisely at their product.
+Because the unconditional marginals and Z law are unchanged,
+
+    I(S(mu))=I(mu)-sum_z mu_Z(z) TC_z.                  (37.2)
+
+This is idempotent: S preserves its own conditional marginals on every
+fiber. Unlike Section34, it pays no marginal-switching term and imposes
+no unconditional reference completion. On the owner/punisher family
+(36.5), Z already determines every clock, so S fixes the law exactly.
+In particular it cannot repair that family's synchronized information
+or convert its private obedience into independence.
+
+### Whole approximate source, with no exactification requirement
+
+For epsilon>=0 define rho(epsilon) as the infimum of I(mu) over ALL
+literal finite-calendar laws whose FULL private-clock gain is at most
+epsilon for each player. The calendar, payoff, marginals and support
+may all depend on epsilon. Section18 gives
+
+    0<=rho(epsilon)<=rho(0)<=n log2,
+    rho_star=lim_(epsilon down0) rho(epsilon) exists.   (37.3)
+
+For any minimizing sequence epsilon_k->0 with information tending
+rho_star, (37.1)--(37.2) preserve its errors. Since
+rho(epsilon_k)<=I(S(mu_k))<=I(mu_k), they imply
+
+    sum_z mu_(k,Z)(z) TC_(k,z) ->0.                   (37.4)
+
+Thus the WHOLE approximate private source can be normalized to conditionally
+independent irrelevant tails without any attained-limit assertion,
+strict private anchor, or horizon-dependent repair. The remaining
+information is in Z and its coordinate posteriors, not these conditional
+tail copulas.
+
+The desired zero-information endpoint is equivalent to the original
+all-errors terminal endpoint, not merely a stronger exact-CE assertion.
+For one direction, if mu has private gain<=epsilon and p is the product
+of its marginals, then averaging recommendation constraints gives
+coarse gain<=epsilon. With |r_i|<=R and Pinsker,
+
+    full_original_gap(p)<=epsilon+4R sqrt(I(mu)/2).    (37.5)
+
+Every complete deadline and Never is included. Conversely, if p is ANY
+independent complete finite-law profile with full gap<=epsilon, its
+recommendation-dependent best replacement has exactly that same gain:
+opponents are independent of one's recommendation, so every own type
+faces the same full cap C_i. Summing its conditional gains gives C_i-U_i.
+Thus p itself is an epsilon private CE with I(p)=0. Existing full-cap
+finite compression transfers the all-errors terminal endpoint to finite
+laws when needed; the inspected declarations remain those in Section18.
+
+Hence rho_star=0 is exactly the conjecture-facing independence producer
+on this finite-law source. It is NOT established by source nonemptiness,
+(37.2), or ordinary finite-game CE existence. The stronger statement
+rho(0)=0 would be sufficient but is not assumed. This explicitly retains
+approximation rather than exactifying the whole auxiliary source.
+
+The next actual operation must move the first/second roles and their
+private posterior response values. Conditional tail normalization alone
+leaves them unchanged, and the payoff-boundary cases v_j<=s_j remain
+genuine global-selection branches.
