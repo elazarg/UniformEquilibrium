@@ -84,6 +84,15 @@ rational period12 joint calendar has full regret below1/300; the live
 constructive question is whether overlapping three-player seams support an
 all-errors rule rather than a fixed two-actor alphabet.
 
+Section25.3 gives a complete ordinary proof candidate excluding an entire
+all-conditional-hazards-small approximate-equilibrium mode for EVERY fixed
+bounded collision completion of these paired singleton columns. It uses
+one legal finite suppression deviation and a finite hazard-time interval;
+no compactification or assumed complementarity adapter remains in that
+argument. This is not independently checked, not arbitrary-Fin4 coverage,
+and not a UE counterexample: a prospective equilibrium may retain large
+conditional hazards and change its whole calendar across accuracies.
+
 Status of the earlier relaxation sections: ordinary mathematical proof draft,
 not checked in Lean and not an export. Their main candidate theorem permits
 one convexification of the
@@ -3729,3 +3738,237 @@ finite individual hazard totals. It must not assume that small root errors
 are small FULL terminal debts. If this adapter survives, it excludes a
 genuine all-hazards-small approximate-equilibrium mode for arbitrary fixed
 collision completions of these singletons; it does not itself produce UE.
+
+The compactification route above remains an unproved route as stated.
+Section25.3 instead proves the intended exclusion directly on one finite
+hazard-time interval, without taking any limit of profiles or controls.
+
+### 25.3 Full-profile diffuse-mode exclusion by a finite hazard window
+
+Status: complete ordinary proof candidate, not independently checked or
+Lean-checked. This is a whole-mode exclusion for actual private profiles,
+not a producer or a fixed-target decoding statement.
+
+#### Exact finite data and quantifiers
+
+Let I=Z/4Z, let P exchange opposite mates, and let the singleton reward
+matrix be R=I+4P: a singleton quitter earns1, its mate earns4, and its
+other two opponents earn0. Fix ANY original collision completion with
+
+    |r_i(S)|≤M for every i and every nonempty S, where M≥4.
+
+Never and live rewards are0. Every player chooses a private complete
+quitting law on dates0,1,... and Never; the four laws are independent.
+Equivalently, its live-date conditional Quit hazards are q_i(t). Full
+regret D_i is the supremum gain over ALL complete unilateral replacement
+laws, including all finite deadlines and Never. Set η=max_i D_i.
+
+Claim. Every such profile with
+
+    sup_(i,t) q_i(t)≤δ:=1/(10000M)
+
+has η>1/10000. The assertion is uniform over all bounded collision
+completions, all calendars, finite or infinite individual cumulative
+hazards, and positive private Never masses. It does not bound the largest
+UNCONDITIONAL date atom. In particular a proper uniform finite clock has
+last conditional hazard1 and does not satisfy the premise.
+
+Proof. Suppose instead that η≤1/10000. The proof below also applies when
+the maximum conditional hazard is smaller than δ. Throughout use this
+fixed upper bound δ, so Mδ≤1/10000 and δ≤1/16.
+
+#### Three consequences of actual complete unilateral agency
+
+Put
+
+    J_t=product_(u<t) product_i(1−q_i(u)),
+
+and let v_t be the actual prescribed payoff vector conditional on all
+four clocks surviving to date t. Each finite J_t is positive. Let Q_it
+be player i's immediate-Quit payoff against the three opponent hazards,
+and let C_it be its immediate-Continue payoff with the ACTUAL prescribed
+tail v_(t+1). Thus
+
+    v_ti=q_i(t)Q_it+(1−q_i(t))C_it,       |v_ti|≤M.       (S3)
+
+First, the joint all-Never probability J_infinity is at most η. Replace
+only player i's private Never branch by a deterministic date n, keeping
+all its finite-date probabilities unchanged. On the event that all
+opponents are Never this eventually gains its own singleton reward1.
+The probability that a finite opponent clock survives to n tends to0,
+so boundedness of rewards gives limiting gain equal to the product of
+all four private Never probabilities, namely J_infinity. Each replacing
+law is legal, hence J_infinity≤D_i≤η. This argument does not condition a
+private Never payment on game reach or normalize the original Never value.
+
+Second, match one's prescribed hazards before t and then Quit surely at
+t. Its root gain is exactly J_t(Q_it−v_ti). Consequently
+
+    v_ti≥Q_it−η/J_t,        |Q_it−1|≤4Mδ.              (S4)
+
+For the latter estimate, an opponent quits with probability at most3δ;
+the endpoint differs from the own singleton1 by at most M+1 on that
+event, and3(M+1)≤4M for M≥4.
+
+Third, on ANY finite date window suppress one's quitting precisely at
+dates for which C_it>Q_it; retain its original hazard at the other dates
+and revert to the original tail after the window. This is ONE legal
+complete replacement law. Write J'_t for its joint reach. Reducing one's
+hazards gives J'_t≥J_t. Finite Bellman telescoping, with the same actual
+tail v after the window, gives its exact gain
+
+    sum_window J'_t q_i(t)(C_it−Q_it)_+.
+
+The sum is nonnegative and at most D_i. Equation(S3) therefore implies
+
+    sum_window J_t q_i(t)(v_ti−Q_it)_+≤η.               (S5)
+
+In fact telescoping gives the stronger coefficient q_i/(1−q_i), but
+the displayed weaker bound is sufficient. This step uses a full legal
+deviation; it does NOT infer full regret from a sum of unweighted root
+errors.
+
+#### Hazard time and a controlled exact interpolation
+
+Define h_it=−log(1−q_i(t)), h_t=sum_i h_it and s_t=sum_(u<t)h_u. Thus
+J_t=exp(−s_t). Because J_infinity≤η<exp(−1), there is a finite first
+index T with s_T≥1. Ignore zero-hazard cells, on which v_t=v_(t+1).
+For a positive cell put a_it=h_it/h_t and linearly interpolate v_t,
+v_(t+1) on [s_t,s_(t+1)]. Let a(s)=a_t there. Then a≥0 and sum a=1.
+
+The elementary logarithm inequalities give
+
+    q_i≤h_i≤q_i/(1−δ),  h_i−q_i≤δh_i,  h_t≤5δ.
+
+In particular s_T≤1+5δ<log4 and J_t≥1/4 on every used cell and endpoint.
+All constructions below use only the FINITE original dates before T.
+
+Let A_t be the unconditional one-date expected stopping reward vector,
+including every simultaneous coalition. Its singleton coefficient for
+player i differs from h_it by at most4δh_it. Its total collision
+probability is at most sum_(i<j)q_iq_j≤(3/2)δh_t. Therefore
+
+    ||A_t−R h_vector_t||_infinity≤6Mδh_t.
+
+The exact prescribed recursion is v_t=A_t+exp(−h_t)v_(t+1). Rewriting it
+and using exp(h)≤2, exp(h)−1≤2h and exp(h)−1−h≤h² for h≤5/16 gives
+
+    v_(t+1)−v_t=h_t(v_t−Ra_t)+E_t,
+    ||E_t||_infinity≤27Mδh_t,
+    ||v_(t+1)−v_t||_infinity≤4Mh_t.                    (S6)
+
+For completeness, the three error terms are
+(exp(h)−1−h)v_t, −(exp(h)−1)R h_vector_t and
+−exp(h)(A_t−R h_vector_t). Their norms sum to at most
+3Mh_t²+12Mδh_t≤27Mδh_t. The final bound follows from
+||v_t−Ra_t||≤2M and27δ≤2.
+
+It follows that the finite linear interpolation, restricted to[0,1],
+satisfies almost everywhere
+
+    v'=v−Ra+e,       ||e||_infinity≤50Mδ.              (S7)
+
+Indeed replacing v_t by the interpolated v costs at most4Mh_t≤20Mδ.
+No convergence, compactness or relaxed control theorem is being assumed.
+
+#### The reached value box and integrated complementarity error
+
+At any date, collision probability is at most(3/2)δ sum_i q_i, whereas
+absorption probability is at least(1−(3/2)δ)sum_i q_i. Thus collision
+probability is at most2δ times absorption probability. Summing against
+tail reach shows that the probability of first absorption by a collision
+is at most2δ, for EVERY tail, including tails with positive Never mass.
+On the used endpoints, conditional Never probability is
+J_infinity/J_t≤4η. Singleton reward sums are exactly5. Hence(S4) and
+bounded collision rewards give
+
+    v_i(s)≥1−τ,             τ=4Mδ+4η,
+    |sum_i v_i(s)−5|≤σ,     σ=12Mδ+20η.               (S8)
+
+The second bound follows from5 times conditional Never plus
+(4M+5) times conditional collision probability;8M+10≤12M.
+Linear interpolation preserves both bounds.
+
+Put g=v−1. For any s in cell t, equations(S4),(S6) imply
+
+    g_i(s)≤(v_ti−Q_it)_++24Mδ.
+
+Using(S5), J_t≥1/4 and h_it≤q_i/(1−δ), the sum of h_it times the first
+term over all cells before T is at most5η, for each i. Over a partial
+last cell the nonnegative upper bounds may simply be extended over the
+whole cell. Since s_T<2, summing over all four players gives
+
+    integral_0^1 g(s)·a(s) ds≤20η+48Mδ.               (S9)
+
+This is the required complementarity estimate with the correct reached
+weights. It allows changes of active support and arbitrary nonstationary
+hazards; no player is singled out globally.
+
+#### Quadratic contradiction on this finite window
+
+Let A=I−4P and W=gᵀAg. Put x=g+τ*1≥0 and κ=σ+4τ. Equation(S8) gives
+sum x≤1+κ. For any nonnegative x of mass L,
+
+    −(3/2)L²≤xᵀAx≤L².
+
+To see the lower bound, write each mate pair's sum and difference as
+b,d. Its quadratic contribution is−(3/2)b²+(5/2)d², and the sum of the
+two pair-sum squares is at most L². Moreover
+
+    W=xᵀAx+6τ sum x−12τ².
+
+Here τ≤0.0008, σ≤0.0032 and κ≤0.0064. In particular, the deliberately
+looser estimates τ,κ≤0.01 imply everywhere on[0,1]
+
+    −1.6≤W≤1.1,          ||g||_1≤1.05.                (S10)
+
+Using AR=−15I, A1=−3*1 and(S7), exact differentiation gives
+
+    W'=2W−6 sum g+30g·a+2gᵀAe.
+
+The absolute error term is at most
+2*(1.05)*5*(50Mδ)≤600Mδ. Integrate over[0,1], apply(S8)–(S10), and obtain
+
+    W(1)−W(0)
+      ≤−3.8+6σ+30(20η+48Mδ)+600Mδ
+      =−3.8+6σ+600η+2040Mδ
+      ≤−3.5168.
+
+But(S10) requires W(1)−W(0)≥−2.7. This contradiction proves the claim.
+All probability comparisons retained simultaneous quits and Never; all
+profile modifications used in the proof are complete PRIVATE laws.
+
+#### Meaning and bounded prior-source check
+
+For this singleton matrix, any fixed-completion terminal approximate-Nash
+sequence with full regret tending to0 must retain a conditional hazard
+larger than1/(10000M) once its regret is below1/10000. The table may still
+have UE via macroscopic singleton/joint bursts, a boundary support change,
+or an entirely different calendar. No fixed public target or chronology
+across accuracies is imposed. This is a permanent exclusion of one actual
+profile mode, not an unrestricted positive-gap game or an equilibrium
+producer. It explains why universally diluting a good joint calendar is
+not a sound arbitrary-completion operation.
+
+The paired face obstruction itself is NOT a new ingredient. The inspected
+declarations `Math.PairedFacePotential.translated_face_drift_ge_one`
+(`MathUE/Analysis/Examples/PairedFacePotential.lean`) and
+`pairedFacePotential_boundedCompletion_face_drift`,
+`pairedFacePotential_boundedCompletion_not_fullRoot`
+(`UniformEquilibrium/Quitting/Examples/PairedFacePotentialBoundedCompletion.lean`)
+already give a coupled singleton-face potential and explicitly separate
+it from full-root inequalities. Their translated singleton rewards are
+our R/4. The associated geometry was inspected in
+`MathUE/Analysis/Examples/PairedFacePotentialGeometry.lean`. The bounded
+lookup in these files and the selected singleton-face circulation sources
+did not find the actual all-behavior small-hazard exclusion above; no
+exhaustive novelty claim is inferred. The distinct candidate contribution
+is(S3)–(S10), especially legal finite suppression and the finite-window
+transfer from FULL regret, not another face polynomial.
+
+Concrete requested check: adversarially test the full private-law
+suppression identity(S5), the Never-branch replacement, and the collision
+and interpolation error bounds before using this as a proved source-mode
+reduction. The remaining global mathematical question is how to produce
+or select the necessary macroscopic hazard structure from arbitrary
+collision data; this result supplies no such selection.
