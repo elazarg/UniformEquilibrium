@@ -26,6 +26,10 @@ Section3.5 is separate ordinary UNREVIEWED mathematics: an exact
 full-response parameter identity shows why large current collision rewards
 alone cannot consume(7g). Their strategic effect is a FUTURE opponent-
 coincidence preemption penalty, not a current collision penalty.
+Section3.6 is a separate ordinary UNREVIEWED full-cap falsifier of one
+rotating-pair-burst construction. Its owner matching has a genuine golden
+root, but a passive player's deadline inside a quiet stretch defeats it.
+This is not an exclusion of all pair-root calendars.
 
 ## 1. Exact negative-endpoint question
 
@@ -741,6 +745,121 @@ another full-cap timing quantity; replacing it by actual triple/grand
 mass loses the distinction in(7s). A separate K-independent obstruction
 on pair-root calendars remains logically possible. Neither it nor a
 vanishing-C approximate family is established here.
+
+### 3.6. Rotating pair bursts match owners but fail an interior deadline
+
+Status: ordinary complete calculation, UNREVIEWED and not Lean-checked.
+This tests an actual private-clock construction, not just formal root
+annotations. It excludes the specified regular rotating-burst family;
+it does NOT exclude all pair calendars, macroscopic overlap, approximate
+equilibria on(1), or any endpoint degeneration not covered below.
+Its qualitative no-vanishing-regret conclusion also follows from
+Section3.4 because its actual terminal collision probability tends to0;
+the added information here is the explicit passive deadline and the
+otherwise viable golden owner-matching root.
+
+Fix A in(0,1), B in(0,1/2). For each integer k>=1 prescribe a proper
+periodic private-clock profile with four successive length-k phases
+
+    {0,1} -> {3,0} -> {2,3} -> {1,2} -> repeat.
+
+In the first phase the only nonzero conditional hazards are
+
+    a_t=q_0(t)=1/[2^(k-1-t)*(1/A+1)-1],
+    b_t=q_1(t)=1/[2+2^t*(1/B-2)],       0<=t<k.       (7x)
+
+Rotate both labels by-1 at each subsequent phase. These are legal
+independent private hazards. Each label has positive hazards in two
+phases, so each individual period survival is strictly less than1 and
+all four clocks are proper. The internal identities
+
+    a_(t+1)=2*a_t/(1-a_t),
+    b_(t+1)=b_t/[2*(1-b_t)]
+
+are the adjacent-pair owner-indifference kinematics. They do NOT by
+themselves certify actual continuation values or full response caps.
+Every prescribed date has at most two actors, so every opponent triple
+coincidence E_i is0. In particular ALL prescribed payoffs and ALL complete
+unilateral payoff differences are K-independent by(7s).
+
+The two individual survival products in the first phase telescope to
+
+    x_k=product_t(1-b_t)=1-2*B+2*B*2^(-k) -> x=1-2*B,
+    y_k=product_t(1-a_t)
+         =(1-A)/(1+A-A*2^(1-k)) -> y=(1-A)/(1+A).
+
+Thus x,y and r=x*y lie in(0,1). Also a_t*b_t<=C(A,B)*2^(-k)
+uniformly in t, so the probability of a pair collision during a phase
+is O(k*2^(-k)). The phase's actual weak-order law therefore converges
+to: player1 quits first with probability1-x; otherwise player0 quits
+with probability x*(1-y); otherwise both survive with probability r.
+The joint period survival tends to r^4<1. Bounded rewards and the
+periodic Bellman equations consequently identify the limits of the
+ACTUAL prescribed phase-entry values, rather than supplied annotations.
+Writing their first-phase vector as U, rotation by-1 gives
+
+    U0=x-r+r*U1,
+    U1=1-x+r*U2,
+    U2=4*(x-r)+r*U3,
+    U3=4*(1-x)+r*U0.                                (7y)
+
+Suppose for contradiction that the complete original exploitabilities
+of these profiles tend to0 along a subsequence. At the initial date,
+player1 mixes with the FIXED probability B in(0,1), while a_0->0.
+Immediate Quit1 pays1+a_0->1. Both immediate Quit and immediate
+Continue followed by the prescribed private tail are complete legal
+replacements. Since the prescribed value is their mixture, vanishing
+full regret forces both endpoint values to agree in the limit. Hence
+U1=1. Equations(7y) now give
+
+    U0=x,   U2=x/r,   U3=4*(1-x)+r*x,
+    1=4*r-4*r^2+r^3.
+
+The last equation factors as
+
+    0=(r-1)*(r^2-3*r+1).
+
+Since0<r<1, its unique possible value is
+
+    r=(3-sqrt(5))/2.                                (7z)
+
+Thus the owner matching itself is NOT the obstruction: it admits the
+golden root(7z).
+
+Now inspect the legal deadline m_k=floor(k/2) in the FIRST phase.
+Before that deadline player0's total quitting probability tends to0;
+after it player1's total quitting probability tends to0. Original joint
+reach to the deadline tends to x>0, and both current hazards tend to0.
+The actual conditional continuation value at this quiet middle tends to
+
+    W=(1-y+y*U1, y*U2, 4*(1-y)+y*U3, y*U0)
+     =(1,1,1/r,r),
+
+where the third equality uses r^2-3*r+1=0. Passive player3's immediate
+Quit payoff tends to its own singleton1. Following its original clock
+before m_k and then quitting at m_k is a complete legal replacement.
+Its ORIGINAL unconditioned gain therefore tends to
+
+    x*(1-r)>0.
+
+This contradicts the assumed vanishing full regret. Hence the specified
+family has strictly positive limiting inferior full exploitability for
+every fixed regular A,B. The same exclusion holds for parameters varying
+inside any fixed compact subset of (0,1)x(0,1/2), by subsequence
+compactness. No assertion about boundary choices A or B tending to their
+endpoints is made.
+
+The exact algebra in(7y)--(7z) was checked symbolically: multiplying
+U1-1 by1-r^4 gives x*(r-1)*(r^2-3*r+1), and multiplying W2-1/r by r
+gives the same cubic factor without x. No floating-point root search is
+used in this exclusion.
+
+Operational conclusion. A quiet stretch between an early recipient
+burst and a late donor burst creates a missing passive response even
+when the active-owner equations close. A successful actual construction
+must change this support/timing operation, not merely tune the matched
+golden rates. This calculation does not supply the sought whole-profile
+collision/cap barrier.
 
 ## 4. Complete cubic exclusion by ten rational exact edges
 
