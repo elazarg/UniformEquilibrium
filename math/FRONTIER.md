@@ -2605,6 +2605,34 @@ two-pair odds and specified singleton-word criteria. This is a raw-table
 existence class, not a producer for arbitrary inverse-positive tables or
 arbitrary quitting games. The new raw producer is not yet Lean-checked.
 
+### Signed single-column jackpots — reviewed mathematics
+
+The [signed single-column producer](exports/SIGNED_SINGLE_COLUMN_JACKPOT_UNIFORM_EQUILIBRIUM.md)
+requires only one strictly positive signed inverse column
+
+    v=σΓ⁻¹eₐ>0,           σ∈{−1,1},
+
+of an invertible singleton comparison matrix. The other inverse columns
+may have mixed signs. Choose one coalition S containing a, with
+d=|S|−1≥1, and A>0. For every bounded box of other nonsingleton entries,
+all sufficiently large M give an actual full-support stationary terminal
+Nash profile whenever rₐ(S)=σAM plus a bounded residual. Only this one
+reward coordinate grows. The same profile and its actual payoff give UE
+against every behavioral deviation. A negative σ gives a participatory
+penalty, not a reversal of utility ordering.
+
+The hazards have order M^(−1/d). Their positive leading root is explicit,
+and its rank-one Jacobian is automatically nonsingular. The producer also
+permits a fixed sufficiently small box of residuals growing as M^(1/d).
+It has no strategic witness input. An exact four-player family with mixed
+full inverse passes the one-column test and fails the compared whole
+sure-owner, proper-child, weighted-charge and crossed-face sources.
+
+This is reviewed ordinary mathematics awaiting formalization. It excludes
+the stated raw reward region from possible counterexamples; it neither
+forces an arbitrary table into that region nor solves a fixed table by
+varying its rewards with the requested accuracy.
+
 Standard Q alone is not an existence theorem.
 Neither a fixed small periodic class nor the proper-child extension tests
 are known to cover all remaining tables.
