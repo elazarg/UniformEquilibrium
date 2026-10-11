@@ -1148,6 +1148,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the opposite-sign matching-phase family specified below | UE from a directly produced proper two-phase terminal Nash profile, with one pair's passive values below own singletons and the other pair's above. Eight averaged-pair/triple caps suffice; individual cross-pair caps are unnecessary. This is reviewed mathematics awaiting formalization. |
 | Fin4: the signed inverse-column, pair-coefficient and twelve outsider-cap tests specified below | UE from a directly produced proper two-phase terminal Nash profile. The inverse may have negative columns, scheduled singleton comparisons may be favorable, and own rewards are signed. No utility ordering is reversed. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
+| Fin4: the passive-triple cap-chamber family specified below, with Kᵢ≥7 and Gᵢ<Kᵢ | A fixed UE payoff from compact constrained minimization in the actual full-cap carrier. The parameters are unequal and unbounded; no stationary profile or common exact-root chronology is assumed. This is reviewed mathematics awaiting formalization. |
 | Any finite player set with at least two players: Γ⁻¹ is strictly positive and each recipient has a selected containing coalition with a sufficiently large positive reward at its natural coalition-size scale | Exact full-support stationary terminal Nash and a fixed same-profile UE payoff. Singleton rewards are arbitrary signed reals; every other nonsingleton coordinate ranges over a fixed bounded box. The threshold is uniform on compact parameter sets. This is reviewed mathematics awaiting formalization. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -2666,6 +2667,44 @@ singleton-word selection sets. This is a bounded source comparison, not
 an exhaustive novelty claim over unnamed verifiers or unknown local radii.
 The theorem is reviewed ordinary mathematics awaiting formalization. It
 does not force arbitrary tables into this reward class.
+
+### Passive-triple cap chamber — reviewed mathematics
+
+The [full-cap chamber producer](exports/PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md)
+uses cyclic labels modulo four and the following raw terminal rewards:
+
+- Singleton {i}: owner 1, opposite player 4, neighbors 0.
+- Adjacent pair {i,i+1}: player i gets −1, player i+1 gets 2,
+  outsiders get 1.
+- Opposite pair: members get 0, outsiders get 1.
+- Triple missing i: members get −1, outsider i gets Kᵢ.
+- Grand coalition: player i gets Gᵢ.
+
+For every finite real parameter choice Kᵢ≥7 and Gᵢ<Kᵢ, the original game
+has a fixed uniform-equilibrium payoff. Live and Never rewards are zero.
+No uniform parameter bound, exact terminal equilibrium, stationary profile,
+or explicit limiting payoff is asserted.
+
+Writing U for prescribed payoff, B for the unrestricted behavioral cap,
+and E=maxᵢ(Bᵢ−Uᵢ), an actual seed lies in the compact nonconvex chamber
+
+    minᵢ Bᵢ≤1,       sumᵢ Bᵢ−4≥(8/5)E.
+
+At positive regret, every cap-Nash root has support at most three and
+preserves this chamber. A nonzero root exists at every positive-regret
+chamber minimum and scales E by a joint Continue probability strictly below
+one. Compact minimization therefore supplies an actual-carrier diagonal,
+and the full behavioral consumer yields UE. No continuous Nash selector,
+convexification, or cross-accuracy chronological splice is used.
+
+The member Kᵢ=10, Gᵢ=9 satisfies the full-core standard-Q/non-projective-Q-bar
+singleton hard-class conditions and has no exact stationary Nash profile.
+It also fails the compared whole induced-base, universal quiet-child,
+response-quotient, weighted-charge and specified finite-calendar sources.
+These are bounded source comparisons, not an exhaustive classification of
+all possible certificates. Producing an analogous actual seed and invariant
+region for every remaining table is open. The result is reviewed ordinary
+mathematics, not a new checked Lean declaration.
 
 Standard Q alone is not an existence theorem.
 Neither a fixed small periodic class nor the proper-child extension tests

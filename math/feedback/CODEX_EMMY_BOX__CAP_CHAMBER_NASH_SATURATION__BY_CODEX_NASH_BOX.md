@@ -327,3 +327,38 @@ whole-source comparisons above remain a witness of new coverage within
 this family; no assertion that every member avoids every older producer
 is needed or made. This is an independent ordinary-mathematics gate, not
 a Lean verification or a self-export.
+
+## 7. Final standalone incorporation: hash-specific PASS
+
+I checked the final standalone packet
+`notes/CODEX_EMMY_BOX__PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md`,
+SHA256 `76de843a4167f6d5ed2e468861ae6900fbeb3605b8f679dac2615ac5cdae40c3`.
+**PASS** for faithful incorporation of the reviewed theorem with ONLY
+K_i>=7 and finite G_i<K_i, its positive-debt-only chamber argument,
+literal actual seed, complete-deviation consumer, and bounded center
+comparisons. No new mathematical hypothesis or stronger conclusion has
+been introduced by assembly.
+
+The final seed wording correctly distinguishes a fixed participant-1
+triple from a variable passive-triple coordinate. The stationary
+polynomial, whole positive singleton-word calculation, seven candidate
+response partitions, and negative-determinant quotient requirement
+faithfully preserve the checked scope. The source comparisons concern
+the ONE K10 center, not disjointness of the entire family from all older
+classes or arbitrary qualitative neighborhoods.
+
+I also reopened the exact conclusions of
+`quittingLiftDeletedProfile_outsideDebt_le_add_neverExcess_of_withdrawalFutureJoin`
+in `UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`
+and `quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt_add_slack`
+in `UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockChildDeletionAdapter.lean`.
+Both bound outsider FULL debt universally by weighted actual child debts
+plus a finite multiple of child joint-Never mass. The printed sole-owner
+child witness has both right-hand terms zero and omitted-successor debt2,
+so the final whole-child/whole-weight exclusion is accurate. It does not
+exclude a new favorable-child-only consumer. The induced-base comparison
+is correctly tied to full rows implying a sure full root, not merely a
+selected pure child witness.
+
+This is the final-byte incorporation verdict, not a further generic
+source census, Lean verification, or export action.

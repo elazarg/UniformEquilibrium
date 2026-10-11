@@ -375,3 +375,37 @@ only all-Continue when all caps lie above own singletons. Here low-minimum
 cap plus surplus rules out that stall, and surplus also excludes full support
 exactly where it is needed. No argument currently produces comparable
 geometry for every arbitrary hard residual table.
+
+## 7. Final standalone: faithful-incorporation PASS
+
+I read the ENTIRE final standalone
+`notes/CODEX_EMMY_BOX__PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md`,
+SHA256
+`76de843a4167f6d5ed2e468861ae6900fbeb3605b8f679dac2615ac5cdae40c3`.
+PASS for faithful mathematical incorporation and self-containment. This is
+a bounded final-document check, not a repeated audit of the unchanged proof.
+
+The exact K_i>=7, G_i<K_i hypotheses, actual-clock and FULL-response
+quantifiers, positive-debt-only invariance, full-support exclusion, literal
+seed, attained minimum and fixed-target consumer are all retained. No new
+uniform rate, exact terminal Nash, selected continuation premise, or
+arbitrary-game completeness assertion has entered. Negative grand entries
+and the K_i=7 endpoint are accurately covered. The boundary examples
+G_i=K_i and G_i>K_i are accurate in the private-clock interpretation.
+
+Its center comparisons faithfully incorporate the independently checked
+degree/actual-response-partition, stationary, boxed/weighted, entire-base,
+punishment0, universal-child and bounded phase-template results above.
+The P/L sums are explicitly OUTSIDER insertion sums over nonempty proper
+coalitions. The universal quiet-child witness has exactly zero joint-Never
+mass, so ANY finite Never slack vanishes; it is not being dropped by a
+limiting argument. The golden-word comparison includes the checked positive
+owner-equation uniqueness and retains its proper-positive/named-word scope.
+It does not assert disjointness from an unknown distant qualitative IFT
+neighborhood.
+
+The standalone has no dependency on conference notes or review history.
+The listed existing Lean declarations are semantic anchors, not a claim
+that the new raw-family theorem has already been implemented. The proposed
+handoff asks that the chamber and seed be proved rather than made input
+fields. No unresolved mathematical objection remains in this exact scope.
