@@ -1682,8 +1682,10 @@ progress but does not supply the required closed invariant domain.
 
 ## 17. Two raw ledgers and proper-subset acyclicity produce a chamber
 
-Status: ordinary UNREVIEWED complete proof draft. This is a finite raw
-reward-class theorem, not an arbitrary-table selection theorem. The
+Status: independently reviewed ordinary mathematics, not Lean-checked.
+The canonical complete theorem is
+[`TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md`](../exports/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md).
+This is a finite raw reward-class theorem, not an arbitrary-table selection theorem. The
 actual carrier, finite Nash existence and diagonal-to-uniform consumer
 are existing checked semantics; the raw guards and minimization below
 are ordinary mathematics. Here E=max_i(B_i-U_i), NOT total debt.
@@ -2154,3 +2156,139 @@ shared responsibility permits macroscopic record atoms giving min E->0,
 or whether every shared component still has a uniform original loss.
 Either conclusion must cover all private laws and the exact normalization;
 a bad symmetric component alone does not decide it.
+
+### 18.6. Whole-source properness on the perturbed Solan table
+
+Status: ORDINARY UNREVIEWED proof, supporting the whole-minimum test,
+not a positive-regret lower bound or an equilibrium construction. Fix
+0<e<min(1/10,e0), where e0 is a qualitative small-perturbation interval
+on which the BOUNDED actual-profile reading of Solan2001 Theorem2.1
+excludes an exact absorbing Nash profile. No numerical e0 is asserted.
+Use the literal raw rows
+
+    g(0)=(1,3,0),       g(1)=(0,1,3),       g(2)=(3,0,1),
+    g(01)=(1+e,0,1),   g(02)=(0,1,1+e),   g(12)=(1,1+e,0),
+    g(012)=(0,0,0).
+
+The canonical table subtracts1 from EVERY nonempty terminal reward of
+recipients1,2, with Never still0; its own singletons are(1,0,0).
+For every shared-budget feasible profile and every legal source deviation,
+absorption is certain. These finite-terminal shifts are therefore constant
+on EVERY source comparison. The ENTIRE N_delta correspondence is identical
+for the raw and canonical tables, before any properness claim is used.
+
+Claim. For EVERY delta in(0,1) and EVERY p in N_delta, all three private
+clocks are proper and unbounded. Every finite joint reach is positive.
+Binding dates A_p(t)=c^(t+1) occur arbitrarily late. Every player's
+ORIGINAL full cap, in either normalization, is its literal Never payoff.
+At fixed delta the entire source has uniform individual properness, and
+the attained minimum of original full regret is strictly positive. There
+is NO asserted bound on this minimum as delta decreases to0.
+
+Here and below all source comparisons replace a COMPLETE own law. Moving
+any positive portion of a finite atom to an earlier date, or of Never to
+any finite date, only decreases joint survival and is always feasible.
+Consequently each supported finite date is a weak running record of its
+pure-deadline response curve. An improper clock has Never as a full best
+reply when its own singleton is nonnegative: moving Never mass proves
+Never>=every finite deadline, while Section18.3 proves the reverse cap
+inequality. Neither statement says that a forced finite atom is full-best.
+
+Step1: no reached sure hazard. Suppose i quits surely at the first such
+reached date t. Every other player's arbitrary conditional-tail replacement
+is feasible: i retains zero survival from t onward. For i itself, move a
+sufficiently small portion of its t atom to ANY fixed finite deadline N>t.
+Only the FINITE window t,...,N-1 gains joint survival, and each budget there
+is strictly positive, so the portion can be chosen legally. Restricted
+optimality implies that i's current Quit payoff dominates every finite
+conditional deadline. Its nonnegative singleton puts Never below their
+supremum. The reached tail is thus an exact full Nash profile of the
+canonical game. Restoring the two recipient constants gives a raw full
+Nash profile as well: every non-i deviation retains proper i and gets the
+same constant; for i a deviation's added constant is at most the prescribed
+constant1. Its continuation payoffs are actual expectations in[0,3], so
+the bounded paper consequence excludes it. Hence every finite survival
+denominator is positive, and every proper clock is unbounded.
+
+Step2: binding dates are unbounded. Otherwise choose T after the last
+binding date. All constraints from T onward are strictly slack. Any
+positive finite atom in this reached tail can be moved by a sufficiently
+small amount to ANY other finite tail date: only finitely many strictly
+slack inequalities change. Hence every supported finite date has the
+maximum finite-deadline payoff. An improper clock's Never mass is also
+optimal by the preceding always-legal earlier move. Nonnegative own
+singletons ensure Never is below the finite cap. The entire conditional
+profile is therefore full Nash; since joint termination is certain, its
+prescribed restored payoff receives the entire constant, whereas every
+deviation receives at most that constant. Again raw full Nash follows,
+contrary to the bounded paper consequence.
+
+At a binding date b the conditional laws AFTER b belong to the SAME
+N_delta. Indeed
+
+    A_p(b+1+u)/A_p(b) <= c^(u+1).
+
+Any feasible conditional replacement changes nothing before b and, after
+b, satisfies the original budget after multiplication by A_p(b)>0.
+Its payoff gain is the conditional gain times the positive joint reach,
+so exact source optimality transfers without an error/reach division.
+
+Step3: at least two clocks are proper. Joint absorption supplies one.
+If only a is proper, choose b receiving raw0 when a alone quits. Player b
+has positive Never mass, so Never is a full best reply. The other improper
+player's conditional finite mass tends to0 at late dates. The raw conditional
+Never payoff of b is at most3 times that mass and tends to0. But its
+immediate-Quit payoff is
+
+    (1-q_other)*(1+e*q_a) >= 1-q_other ->1.
+
+This is a contradiction. Raw/canonical comparisons for b differ by a
+constant, since b retains the distinct proper a under every full deviation.
+
+Step4: exactly two proper clocks are impossible. Suppose the third has
+positive Never mass. Re-root along the arbitrarily late binding dates of
+Step2. These exact tails stay in compact N_delta, while the third conditional
+law converges in TOTAL VARIATION to literal Never. A weak limit stays in
+N_delta by Section18.2, and Step3 forces both remaining clocks proper.
+Thus an exact source exists with two proper clocks and the third literal
+Never. Among the two active labels choose i receiving raw0 when its only
+opponent j quits. Its raw Never payoff is0, while its date0 Quit payoff is
+1+e*q_j(0)>=1. Its finite-deadline payoffs tend to0 because j is proper.
+Since i is proper and unbounded, it has supported arbitrarily late atoms
+with payoff below1. Moving one earlier to date0 is feasible and profitable.
+Contradiction. Thus ALL three clocks are proper in every source component.
+
+Step5: the caps and the fixed-delta compactness conclusion. For each player,
+positive supported deadlines t_n tend to infinity. Earlier moves give
+f_i(t_n)>=f_i(s) for EVERY fixed s<t_n. The proper opponents imply
+f_i(t_n)->f_i(Never), so Never dominates every finite deadline and is the
+full cap. The same reasoning applies at EVERY reached conditional tail,
+whether or not that tail itself is in N_delta, because the corresponding
+earlier moves implement legally in the original source.
+
+All laws are proper on compact N_delta. The continuous functions S_i(H)
+decrease pointwise to0, so Dini's theorem gives uniform properness of each
+label on the entire source at fixed delta. Uniform censoring of any one
+distinct opponent makes full response caps continuous there. Therefore
+E is continuous and attains its minimum. This minimum is positive: a zero
+would be an exact Nash profile, whose full deviations all retain a distinct
+proper clock, hence also a raw exact Nash profile. No step gives delta-
+UNIFORM properness or a delta-uniform positive lower bound.
+
+The source audit here reuses the literal Figure1 and BOUNDED actual-profile
+reading of Solan2001 Theorem2.1 inspected for the single-owner notebook
+Section14, with the transcription in
+`literature/SOLAN_2001__CLEANED_TEXT.md`. The printed admissible-sequence
+statement without a boundedness hypothesis is NOT used. The finite-deadline
+limit is also the actual checked declaration
+`quittingTerminalPayoff_update_finiteTime_tendsto_of_profile` in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`.
+The nonnegative finite-terminal shift theorem in
+`UniformEquilibrium/Quitting/Terminal/TerminalAffineNashTransfer.lean`
+was inspected; its existing bounded-error transport is not claimed new.
+
+Remaining whole-source question. Here B_i=Never_i in every component,
+but the shared budget can force finite atoms with f_i(t)<Never_i. Can a
+joint re-equilibration select components where the TOTAL cost of those
+forced atoms tends to0, or is that cost uniformly positive over ALL
+components? The properness and record conclusions do not decide this.

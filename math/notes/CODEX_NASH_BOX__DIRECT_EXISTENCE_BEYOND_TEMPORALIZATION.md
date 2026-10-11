@@ -2,7 +2,18 @@
 
 Author: CODEX_NASH_BOX.
 
-Current checkpoint: Section30 retires the entire absorbed-tail Never-reset
+Current checkpoint: Sections33--34 give actual finite-law singleton
+completion and first-two-event reference completion, with their exact
+information charges. Section35 removes the ordered-limit assumption from
+the uniformly interior coarse-binding consequence. Section36 tests FULL
+private-clock recommendation obedience as a distinct source: a bounded-
+information exact four-active source exists, but Section34's completion
+can turn vanishing private regret into a fixed positive private regret.
+That agency mismatch does not refute whole-correspondence CE selection.
+The positive-information/global source producer remains unproved, and
+payoff-boundary cases v_j<=s_j are not covered by interior anchor slack.
+
+Section30 retires the entire absorbed-tail Never-reset
 word operation on K10, not the whole correlated-law route. Section31 gives
 uniform finite compression of the bounded-information FULL coarse source
 set. Section32 is an unreviewed law-valued minimizing-source proof draft
@@ -5922,3 +5933,202 @@ This is not a new UE class, a proof that rho=0, or an invitation to fix
 the original first-two law. The next operation must jointly move those
 first/second roles and their punishment prices, rather than normalize
 the irrelevant tails again.
+
+## 35. Uniform-interior coarse binding needs no attained source
+
+Status: ordinary finite-law proof, unreviewed. This strengthens only the
+interior branch of Section33; it does not move an arbitrary minimizing
+sequence into that branch.
+
+Let |r_i(S)|<=R, let rho>0 be the infimum of total correlation over ALL
+finite-calendar full-coarse laws, and let mu_k be ANY minimizing sequence.
+Write v_(k,i), C_(k,i) for prescribed payoffs and full unconditional caps.
+Assume there is delta>0 such that
+
+    v_(k,j)-s_j>=delta for every j and all sufficiently large k. (35.1)
+
+Then every coordinate's coarse slack tends to zero:
+
+    max_i[v_(k,i)-C_(k,i)] ->0.                           (35.2)
+
+Suppose otherwise. Along a subsequence, fix i with v_i-C_i>=epsilon>0.
+Apply Section33 with kappa=product of the OLD opponent marginals, and
+choose one fixed
+
+    0<q<=min{delta/[2(delta+2R)],
+             epsilon/[2(epsilon+2R)]}.                  (35.3)
+
+The new owner's earliest reply is safe because v_i>=s_i. Its later
+coarse margin is at least (1-q)epsilon-2Rq. Every other player's new
+earliest-reply margin is at least (1-q)delta-2Rq; their later margins
+are the old margins multiplied by1-q. Thus the result is full-coarse.
+The completion has zero internal information and EVERY surviving marginal
+equals its old marginal. Consequently the exact Section33 identity is
+
+    I(new_mu_k)=(1-q)I(mu_k).                            (35.4)
+
+This contradicts rho>0 and I(mu_k)->rho. No original-calendar or
+ordered-limit minimizer is assumed.
+
+The same contradiction applies to asymptotically full-coarse sources
+whose information tends to the exact-source infimum: their later negative
+margins remain vanishing, and the selected fixed strict coarse anchor
+repairs these at vanishing information cost as in Sections28/31. This
+uses the legitimate nearby positive-gap-table anchor selection, not an
+anchor theorem for every unperturbed table.
+
+Nothing here proves(35.1). At v_j=s_j the new earliest-reply inequality
+requires the actual insertion guard r_j(i)>=r_j(ij); at v_j<s_j even the
+zero-prefix limit exposes a new profitable earliest deadline. Those are
+genuine different source-selection branches. The strict anchor's own
+payoff slack cannot be imported into a whole-source information minimum.
+
+## 36. Private-clock recommendation agency: a positive source and an exact seam failure
+
+Status: ordinary exact source tests, unreviewed. This changes the source
+agency, not the original conjecture's independent behavioral strategy
+mode. No unconditional zero-information theorem follows.
+
+### The stronger source and its primary existence theorem
+
+A finite clock law mu is an epsilon private-clock CE if, for every i and
+EVERY map a from i's recommended complete clock to a finite deadline or
+Never,
+
+    E_mu r_i(T) >= E_mu r_i(a(T_i),T_-i)-epsilon.      (36.1)
+
+Randomized maps add no power. Before termination a player's only public
+history is survival, so a recommendation-dependent complete replacement
+also covers unrestricted behavioral deviations in this extended game.
+This is stronger than coarse obedience, which only tests constant a.
+For a finite calendar, its full gain is exactly
+
+    sum_t max{0, max_h sum_(x:x_i=t) mu(x)
+                         [r_i(h,x_-i)-r_i(x)]},       (36.2)
+
+where h runs through every occupied/empty deadline cut, one strictly
+late finite deadline, and literal Never. Omitted late is not identified
+with Never.
+
+Primary source inspected: E. Solan and R. V. Vohra, *Correlated Equilibrium
+in Quitting Games*, Mathematics of Operations Research26(3),601--610(2001),
+[author PDF](https://www.math.tau.ac.il/~eilons/quitting11.pdf),
+Definitions2.1--2.2, Theorem2.3, Lemma4.1 and Section4.2. The theorem gives
+uniform approximate equilibrium with a single private preplay signal.
+Outside its stationary-UE branch, the proof recommends literal finite
+clocks, so it supplies(36.1) directly. It does NOT state exact CE, bounded
+total correlation, or independent strategies. The daily payoff may be
+chosen0 for project semantics. Private recommendation agency is the
+explicit difference from the original game, not a transported Nash claim.
+
+The genuine new candidate is selection over the ENTIRE approximate
+private-CE correspondence with total correlation tending to zero. A
+bounded-information approximate source is already a substantive first
+assertion on arbitrary hard data; the printed source's synchronized
+punishment clocks do not establish it. Section34's coarse completion
+cannot be assumed to preserve(36.1), as the exact four-active test below
+shows.
+
+### An exact bounded-information private CE on the four-active K10 table
+
+Use the literal Section24 K10 table: singleton owner1, opposite4, other
+recipients0; adjacent pair donor-1, successor2, outsiders1; opposite pair
+members0, outsiders1; triple members-1, outside10; grand9; Never0.
+Choose J uniformly in Z/4 and B uniformly in{0,1}, independently. Set
+
+    T_J=0,
+    T_(J+1)=2-B,
+    T_(J+2)=T_(J+3)=1+B.                            (36.3)
+
+These are eight complete clock tuples, each of mass1/8. Conditional on
+being the owner, the opponent first coalition is either the successor
+singleton or the mate/predecessor pair, each with probability1/2.
+The owner's deadline0 pays1; deadline1 pays-1; every later finite deadline
+and Never pay1/2. Thus the owner has no private deviation.
+
+Conditional on any player's recommendation1 or2, the owner is uniform
+over the other three labels: each opponent punishment marginal is the
+same uniform law on{1,2}. Its prescribed payoff is4/3. Joining at0 pays
+(-1+0+2)/3=1/3, and every later deadline/Never pays4/3. Therefore(36.3) is
+an EXACT full private-clock CE. Its unconditional v=(5/4,...,5/4) and
+C=(9/8,...,9/8). Each marginal is(1/4,3/8,3/8), and the eight joint
+atoms are equiprobable, giving
+
+    I(mu)=4h(1/4)=2.2493405784... .                     (36.4)
+
+All these values were independently recomputed here by Fraction
+enumeration of the eight atoms, every own recommendation, deadlines0--3
+and Never. This is a positive stronger-agency source calibration on an
+already-solved four-active table, not new UE coverage or a small-error
+independent profile. In particular its positive COARSE slack does not
+allow the Section35 product completion to be imported into private CE:
+the new recommended owner would know that its punishment team changed.
+
+The construction's reusable input is a family of jointly correlated
+owner-punishment laws whose marginal for each nonowner is independent of
+the hidden owner. Here the correlated two-block clock assignment provides
+that masking while making every owner replacement safe. This input is
+NOT obtained from punishment VALUE normality alone.
+
+### Section34 fails private obedience uniformly along an approximate-CE source
+
+For each M>=1 use this same K10 table. Choose J uniform, Q uniform in
+{0,...,M-1}, P uniform in{M,...,2M-1}, independently, and recommend
+
+    T_J=Q, T_(J+1)=P, T_(J+2)=T_(J+3)=P+1.          (36.5)
+
+This is the literal owner/punisher signal pattern of the primary source.
+The designated owner has no profitable recommendation-dependent deviation:
+preempting pays1, joining its successor punisher pays-1, and waiting past
+that punisher pays0. An interior late recommendation hides the owner
+uniformly among the other three labels, giving prescribed payoff4/3;
+preempting gives1 and the join average is1/3. The final late endpoint
+instead gives prescribed payoff2, also safe. Only recommendation M reveals
+that the player is the punisher of its predecessor, with prescribed0.
+Its best reply is deadline0, worth1+1/M. Hence the ENTIRE private-clock
+gain of(36.5), for each player, is exactly
+
+    epsilon_M=(M+1)/(4M^2) ->0.                         (36.6)
+
+This was checked by exact complete recommendation/deadline enumeration
+at M=4,8,16. Its total correlation is2log M+O(1), not uniformly bounded.
+
+Apply the exact Section34 map T to(36.5). Its first owner/time and second
+successor-punisher/time remain fixed, but the two later survivors now draw
+independently from the OLD common marginal conditioned to exceed P.
+That marginal has early mass1/(4M) at each0,...,M-1, late mass1/(4M)
+at M,3/(4M) at each M+1,...,2M-1, and2/(4M) at2M.
+
+Let M be divisible by4, k=M/4 and H=M+k. Consider the LEGAL private map:
+if one's recommended clock belongs to[M,H], quit at0; otherwise retain
+the recommendation. A survivor's chance of a recommendation<=H given
+P<H is
+
+    phi_P=3(H-P)/(6M-3P-1).
+
+There are three possible nonowner roles. As a punisher of one's
+predecessor, the payoff improvement is1+1/M. As a survivor of one's
+successor it is1-2/M. As a survivor of one's mate it is-3-1/M. Thus the
+map's EXACT expected gain, the same for all four recipients, is
+
+    G_M=[(k+1)(1+1/M)
+          -(2+3/M) sum_(P=M)^(H-1) phi_P]/(4M).       (36.7)
+
+Since the sum is at most3k(k+1)/[2(3M-3k-1)],
+
+    G_M >= (M+4)(12M^2+M-8)/[32M^2(9M-4)] >1/32.    (36.8)
+
+The last strict inequality reduces to
+3M^3+53M^2-4M-32>0, valid for M>=4. Direct independent generation of the
+completed laws at M=4 and8 gives respectively480 and6528 atoms, mass1,
+and gains7/64 and8829/117760, exactly agreeing with(36.7).
+
+Therefore an approximate private-CE sequence with error tending0 can be
+sent by Section34 to laws having private regret uniformly>1/32, even
+though EVERY unconditional full response and payoff is preserved exactly.
+The failed implication is uniform private-obedience preservation by this
+specific reference completion, not existence/selection over the whole
+private-CE correspondence. In the SAME table(36.3) already supplies a
+bounded-information exact private source. A stronger-agency attempt must
+retain the recommendation-dependent cap throughout its own variations;
+the coarse-only compression or completion cannot be silently reused.

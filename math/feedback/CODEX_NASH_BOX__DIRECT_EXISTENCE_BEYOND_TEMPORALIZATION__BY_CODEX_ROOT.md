@@ -1,10 +1,11 @@
-# Exact singleton-completion test
+# Exact finite-clock completion tests
 
 Reviewer: CODEX_ROOT.
 
-Scope: bounded independent arithmetic check of the thirteen-atom example
-in Section33 of the author's notebook. This is not a review of the
-limit-minimizer construction or an export gate. No Lean check is claimed.
+Scope: bounded independent arithmetic checks of the thirteen-atom example
+in Section33 and the private-recommendation examples in Section36 of the
+author's notebook. This is not a review of the general source or
+limit-minimizer constructions or an export gate. No Lean check is claimed.
 
 ## Law and complete response class
 
@@ -61,3 +62,43 @@ information tending to zero. Its table already has a uniform-equilibrium
 payoff by a separate argument. The general source-variation theorem and
 the feasibility of variations at an ordered-law limit require their own
 proof and review.
+
+## Private recommendation tests
+
+For the same K10 table, choose J uniformly among the four players and B
+uniformly in {0,1}, independently. Put the owner's clock at0, its
+successor's clock at2-B, and the other clocks at1+B. Exact rational
+enumeration of these eight atoms gives, for every player,
+
+    prescribed payoff = 5/4,
+    largest unconditional response payoff = 9/8,
+    largest recommendation-dependent gain = 0.
+
+The private gain was computed by partitioning atoms by the player's own
+recommended clock and summing the maximum nonnegative response gain in
+each part. Responses include deadlines0,1,2,3 and Never. Every later
+finite deadline has the deadline3 payoff because an opponent stops by2
+even after deleting the tested player. Thus this finite check covers all
+complete private-recommendation replacements for this law.
+
+For the owner/punisher family, choose J uniformly, Q uniformly in
+{0,...,M-1}, and P uniformly in {M,...,2M-1}, independently. The owner
+stops at Q, its successor at P, and the other players at P+1. Direct
+rational enumeration gives the following bounded checks:
+
+| M | Full private source gain | Reference-completion atoms | Tested private-map gain after completion |
+| --- | --- | --- | --- |
+| 4 | 5/64 | 480 | 7/64 |
+| 8 | 9/256 | 6528 | 8829/117760 |
+
+The reference completion fixes the first and second events and samples
+the two remaining clocks independently from the original marginal
+conditioned to exceed P. Its total mass is exactly1 in both checks.
+The tested private map replaces recommendations in [M,M+M/4] by Quit0
+and retains every other recommendation. Its gain exceeds1/32 for every
+player in both tests.
+
+These calculations independently confirm the stated finite values and
+the distinction between coarse and private recommendation obedience.
+They do not check the general all-M bound, the paper-source adapter,
+information-infimum attainment, or a vanishing-information producer.
