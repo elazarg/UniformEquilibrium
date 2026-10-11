@@ -8,6 +8,14 @@ universal exclusion restricted to the two-player table and Proposition 4's
 extraction obstruction restricted to the stated root alphabet. The review is
 [`CODEX_EMMY_BOX__OBJECTIVES_AND_GLOBAL_SELECTION__BY_CODEX_TURING_BOX.md`](../feedback/CODEX_EMMY_BOX__OBJECTIVES_AND_GLOBAL_SELECTION__BY_CODEX_TURING_BOX.md).
 No Lean implementation, export, or new game-class coverage is claimed.
+Section12 is a separate unreviewed ordinary proof: positive weighted
+coercivity of the COMPLETE stationary odds field forces an already covered
+persistent sure-quitter base. It does not obstruct finite-annulus degree
+arguments for scaled raw reward classes.
+Section13 is a new unreviewed complete proof draft: exogenous public Markov
+roots with regeneration rate kappa and pointwise total hazard delta can be
+replaced by actual private stationary clocks with full-debt loss at most
+40R*delta/kappa. A source producing delta/kappa->0 is NOT established.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -749,3 +757,413 @@ cases, and Proposition 4's finite-tree/full-cap calculation and restricted
 scope also passed the same bounded review. A whole-tree account now needs
 an actual operation synthesizing new joint roots; an improved accumulated
 bound for the tested child/prefix selection cannot suffice.
+
+## 12. A complete far-odds account collapses to a persistent base
+
+Status: ORDINARY PROOF, not independently reviewed or Lean checked. This
+is a direction-changing overlap result, not a new UE producer.
+
+### 12.1 Self-contained question and exact complete field
+
+Fix ANY finite quitting table on n>=2 players, with zero live/Never rewards,
+private independent clocks and unrestricted complete unilateral deviations.
+No sign, normality or matrix hypothesis is imposed. Can coercivity of a
+single nonnegative weighted sum of the ACTUAL stationary endpoint field
+give a new global stationary-existence mechanism?
+
+For nonnegative odds x_i=q_i/(1-q_i), define finite polynomials
+
+    D_i(x)=product_(j!=i)(1+x_j),
+    a_i(x)=sum_(T subset I\{i}) r_i(T union{i})*product_(j in T)x_j,
+    b_i(x)=sum_(nonempty T subset I\{i}) r_i(T)*product_(j in T)x_j,
+    F_i(x)=D_i(x)*[a_i(x)-b_i(x)]-a_i(x).
+
+These are defined on the whole closed nonnegative orthant. With the actual
+stationary alpha_i=1/D_i, Q_i=a_i/D_i and B_i=b_i/D_i, one has EXACTLY
+
+    F_i=D_i^2*[(1-alpha_i)*Q_i-B_i].                (12.1)
+
+Thus this is the self-consistent stationary endpoint field, not a prescribed
+continuation annotation. No terminal law or cap is averaged or convexified.
+
+Assume there is w>=0, w!=0 such that
+
+    sum_i w_i*F_i(x) -> +infinity
+        as ||x||_infinity -> infinity through x>=0.  (12.2)
+
+For example, a common positive quadratic lower bound outside a compact set
+would imply(12.2). Let A={i:w_i>0}.
+
+### 12.2 Exact consequence: all completions are leave-safe on A
+
+**Proposition.** Condition(12.2) forces |A|>=2 and, for every i in A and
+every U subset I\A,
+
+    r_i((A\{i}) union U) <= r_i(A union U).         (12.3)
+
+In particular the table is already covered by the tracked persistent-base
+arbitrary-completion producer.
+
+**Proof.** If A={i}, take x_i=t and every other coordinate0. Since F_i
+does not depend on its own odds, F_i=0 along this unbounded ray, contradicting
+(12.2). Hence A has at least two labels.
+
+Fix i in A and U outside A. Put T=(A\{i}) union U; it is nonempty. Set
+x_j=t for j in T and x_j=0 otherwise. The polynomials a_i,b_i on this ray
+have degree at most |T|, with top coefficients r_i(T union{i}) and r_i(T).
+Also D_i=(1+t)^|T|. Therefore
+
+    F_i(x(t))=[r_i(T union{i})-r_i(T)]*t^(2|T|)
+                                      +O(t^(2|T|-1)).
+
+Every other positive-weight recipient j is in T. Its own odds never enters
+F_j, so on the SAME ray its degree is at most2(|T|-1). Recipients outside A
+have weight0. If the bracket above were negative, the weighted sum would
+tend to-minus infinity, contradicting(12.2). It must be nonnegative. This
+is exactly(12.3), with no strictness inferred at a zero leading coefficient.
+
+The argument uses an actual boundary support and its leading monomial,
+not finite-player label stabilization, a first-order condition, or a
+convexity claim about independent laws. This proves the proposition.
+
+### 12.3 Existing full-agency consumer and the failed novelty implication
+
+Condition(12.3) is precisely
+`QuittingPersistentBaseComplementLeaveSafe reward A`, defined in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseArbitraryCompletionEscape.lean`.
+In that file,
+`exists_quittingPersistentBaseCertificate_of_complementLeaveSafe` selects
+an actual independent mixed Nash point for ALL complementary players,
+and `exists_exactTerminalNash_and_uniformPayoff_of_complementLeaveSafe`
+extends it to an exact stationary terminal Nash against every complete
+behavioral deviation and a same-profile uniform payoff. These declarations,
+their leave-safe definition and their finite-game selection were reopened.
+No supplied strategic witness or restriction on complementary rewards is
+an input.
+
+Concretely all players of A quit surely at date0. At every realized
+complementary coalition U, each base player weakly prefers to stay by(12.3).
+The complementary players use the selected finite simultaneous-game Nash.
+Because |A|>=2, even after any one player deviates a sure opponent remains;
+absorption occurs at date0. Every full behavioral replacement therefore
+reduces to its initial mixed action, and the same comparison holds for
+every finite-average horizon. This verifies the complete-agency conclusion
+without invoking any asymptotic odds or restricted stationary test.
+
+The ordinary odds expansion is consistent with
+`quittingRootCoalitionMass_eq_continueMass_mul_prod_odds` in
+`UniformEquilibrium/Quitting/Root/InteriorCoalitionOdds.lean`, which was also
+read; that declaration does not itself establish the new implication(12.3).
+
+Consequently a positive weighted coercivity certificate for the COMPLETE
+stationary odds field is not a way to escape all sure-base source classes:
+it logically forces one of them. This does NOT apply to a small-hazard
+scaled leading field whose coercivity is used only to bound an intermediate
+annulus. Its higher-order actual odds coefficients may have negative far
+faces, so(12.2) can fail even when a finite-annulus degree defect produces
+an actual equilibrium. A useful global selector must control an appropriate
+finite region or use another legal operation; imposing full far-odds
+coercivity would unnecessarily return to the solved persistent-base lane.
+
+Current next question: can an actual finite-annulus selection or a joint-law
+operation give full cap control without presupposing either an absorbing
+sure base or a designated large-reward scaling of the input table?
+
+## 13. Fast public regeneration admits an honest private replacement
+
+Status: COMPLETE ORDINARY PROOF DRAFT, unreviewed and not Lean checked.
+This is a new legal joint-clock operation, not an arbitrary-game producer
+or a new raw-table UE class. Unlike the iid operation, it allows retained
+public Markov memory. Its source premise is substantive: regeneration must
+be fast relative to the pointwise conditional quit hazard. No general
+sunspot existence theorem is claimed to supply that premise.
+
+### 13.1 Self-contained statement and information
+
+Fix a finite quitting game with |r_i(S)|<=R, zero live and Never payoff,
+and independent private randomization. Let Omega be a finite public-state
+set. Choose a probability mu, a mu-invariant transition matrix K, and
+0<kappa<=1. The EXOGENOUS public state evolves by
+
+    P(x,y)=(1-kappa)*K(x,y)+kappa*mu(y).                  (13.1)
+
+The initial law nu may be arbitrary. At each live date every player sees
+the current state x. Conditional on x, player i independently Quits with
+probability q_i(x), using fresh private randomness. Subsequent state
+transitions follow P independently of those private coins. The public
+deviator may use the ENTIRE observed public-state history and arbitrary
+private randomization; changing one's actions does not change P.
+
+Assume the POINTWISE bound
+
+    sum_i q_i(x)<=delta<=kappa/4      for every x.         (13.2)
+
+Define lambda_i=sum_x mu(x)*q_i(x). Replace the entire public protocol by
+actual PRIVATE INDEPENDENT stationary clocks with hazards lambda_i; a zero
+hazard means Never. No public state, seed, signal or shared randomization
+is retained in the replacement.
+
+For every player the prescribed terminal payoffs and complete caps satisfy
+
+    |U_i(private)-U_i(public)| <=20R*delta/kappa,
+    B_i(private) <= B_i(public)+20R*delta/kappa.           (13.3)
+
+Here the public cap permits all signal-informed deviations, and the private
+cap permits every complete independent behavioral replacement, including
+all finite deadlines and Never. Thus
+
+    E(private)<=E(public)+40R*delta/kappa.                (13.4)
+
+For initial law nu=mu the constants20 and40 improve to16 and32 by the
+same proof. Constants are not the purpose of the result.
+
+More fundamentally, for EVERY subset J of players, the public and private
+FIRST STOPPED CLOCK/COALITION laws can be coupled to agree with probability
+at least1-10delta/kappa. The stopped outcome includes the absolute date,
+the entire simultaneous coalition, and literal Never. This holds uniformly
+even if the total averaged hazard of J is arbitrarily tiny. It is the
+relative-error statement needed when J is an opponent-deleted set.
+
+### 13.2 Regeneration blocks and a signed one-mark comparison
+
+First take initial law mu. Realize(13.1) by independent reset coins after
+each date. Between two resets, the block length N has geometric law on
+{1,2,...} with parameter kappa. The block starts at mu; within it the state
+uses K. N is independent of the within-block K trajectory and private coins.
+Because mu K=mu, EVERY state marginal inside a block conditional on N=n
+is mu. Blocks, including their lengths and whole trajectories, are iid.
+Attach iid blocks of exactly the same geometric lengths to the private
+stationary profile; this is only a coupling device, not its strategy.
+
+Fix ANY J, and put L=sum_(j in J)lambda_j<=delta. Conditional on N=n,
+draw all potential coins through all n dates even if an earlier coin would
+have stopped play. Let V count all such potential Quit marks. In either
+system EV=nL. A block's actual first-stop outcome is either no stop or
+(k,S), where1<=k<=n and nonempty S subset J.
+
+Introduce the common finite SIGNED measure rho_n with total mass1:
+
+    rho_n(no stop)=1-nL,
+    rho_n(k,{j})=lambda_j for every k,j,
+    rho_n(k,S)=0 when |S|>=2.                            (13.5)
+
+It need not be a probability measure when nL>1; the proof never couples
+to it or treats its negative mass as a probability. It is only used in
+the triangle inequality for the half-l1 norm of finite signed measures.
+
+For either actual block law p_n, its no-stop mass is at least1-nL by the
+union bound, and each first-singleton mass is at most lambda_j by its
+unconditional one-date marginal. Thus
+
+    (1/2)||p_n-rho_n||_1
+        =nL-Pr(first stop is a singleton)
+        =E[V-1_{first stop singleton}]
+        <=E[V(V-1)] <=n^2*delta*L.                     (13.6)
+
+The first inequality is POINTWISE: V=0 or1 gives zero; when V>=2, both
+V-1 and V are bounded by V(V-1). The last inequality sums ordered pairs
+of distinct potential marks. At a common date their conditional product
+sum is at most(sum_J q)^2<=delta*sum_J q. At different dates, conditional
+independence of the private coins gives E[h(X_s)h(X_t)]<=delta*E h(X_s),
+where h=sum_J q. Each expectation E h is L. The same bound holds in the
+private product system with h=L. This step uses no mixing estimate or
+positive lower bound on L.
+
+The common signed measure and triangle inequality therefore give the
+actual probability-law comparison
+
+    TV(p_n,p'_n)<=2*n^2*delta*L.                         (13.7)
+
+Its validity for LONG blocks with nL>1 is important: no geometric-block
+tail is discarded at an error independent of the rare opponent rate.
+
+### 13.3 Couple until actual absorption, without dividing by a rare rate
+
+Given each shared N, maximally couple the two finite first-stop block
+laws. Repeated blocks give iid coupled pairs. Write beta for the chance
+that one block's first-stop outcomes differ and p00 for the chance that
+both have no stop. Then
+
+    beta<=2delta*L*E[N^2],
+    E[N]=1/kappa,       E[N^2]=(2-kappa)/kappa^2.         (13.8)
+
+The private chance a' of a stop within one block satisfies
+
+    a'>=E[V]-E[V(V-1)]
+       >=L/kappa-delta*L*(2-kappa)/kappa^2
+       >=L/(2kappa).                                   (13.9)
+
+The first inequality follows pointwise from1_{V>0}>=V-V(V-1).
+If L>0, the probability of a mismatching block before any matched stop is
+at most
+
+    beta/(1-p00) <=beta/a' <=8delta/kappa.               (13.10)
+
+Indeed p00 is at most the private no-stop probability1-a'. Before that
+first nonempty-or-mismatching block, both systems have continued through
+identical absolute calendar lengths. A matched stopped block agrees in
+its precise date and coalition. This proves the complete first-stop-law
+coupling, not just a comparison of eventual recipient payoffs.
+
+If L=0, stationarity and nonnegativity imply no player's potential mark
+in J ever occurs almost surely; both first-stop laws are literal Never.
+No division by L is made in that case. It also covers an empty J.
+
+For arbitrary initial nu, couple the first geometric block length and
+declare failure if either system stops before the first reset. Each
+probability is at most delta E[N]=delta/kappa. If neither stops, the
+following public block begins at mu and the stationary argument applies.
+The total failure probability is at most10delta/kappa. The private future
+remains independent stationary Bernoulli play after the reset; fake block
+boundaries introduce no dependence into its marginal strategy law.
+
+### 13.4 Every deadline, Never, and the semantic consumer
+
+Apply the coupling with J=I to compare prescribed terminal rewards.
+Agreement of terminal coalitions gives identical rewards, and every
+disagreement costs at most2R. This proves the first line of(13.3).
+
+For player i use J=I\{i}. Insert the SAME deterministic deadline h, or
+Never, into both coupled opponent first-stop laws. If opponents stop
+before h, at h, or after h, the completed coalition is respectively their
+coalition, its union with{i}, or{i}. Literal Never is retained. Exact
+agreement of the opponent stopped outcome therefore implies agreement
+for EVERY inserted deadline simultaneously. The bound20Rdelta/kappa is
+uniform over h and includes Never.
+
+Every complete PRIVATE behavioral replacement is an independent mixture
+of those deadlines and Never on the unique live history. The public cap
+contains every deterministic deadline ignoring the public state. Taking
+the supremum proves the second line of(13.3), then(13.4). Nothing attempts
+to identify public informed replies with private replies.
+
+Consequently, if ONE fixed raw game has such public profiles with
+
+    epsilon_m=E(public_m)->0,
+    delta_m/kappa_m->0,
+
+the actual private profiles above have complete terminal debts tending
+to0. The inspected declaration
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`
+then selects one fixed uniform-equilibrium payoff. This existence-level
+consumer does not require pretending that every produced profile has a
+uniform opponent geometric bound when a deleted set is all Never.
+
+### 13.5 Exact boundaries and what is genuinely missing
+
+For kappa=1 there is no retained public state after a date. This recovers
+the iid operation in Section9 of
+`CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md`, with weaker constants;
+that proof was read for the comparison. Here kappa<1 permits genuine
+state memory across arbitrarily many dates. A constant nonempty-coalition
+reward table supplies a simple positive exact-public-Nash test with any
+such public-state process and positive average opponent rates: all full
+caps and prescribed payoffs are1, and the private replacement is also exact.
+
+Fast regeneration cannot be deleted from this STOPPED-LAW/PAYOFF comparison.
+For an exact family take two public states with mu=(1/2,1/2), K=Id,
+kappa=delta^2, and at state0 let only player0 Quit with probability delta,
+while at state1 only player1 Quits with probability delta/10. The initial
+law is mu. Conditional on state j, absorption precedes the first reset
+with probability h_j/[h_j+kappa-h_j*kappa]->1. Thus the eventual first
+label tends to(1/2,1/2). The replacement has private hazards
+(delta/2,delta/20), so its first-singleton label probabilities tend to
+(10/11,1/11), with collision mass tending to0. A bounded indicator reward
+for first label0 separates prescribed payoffs by9/22 in the limit.
+This is NOT asserted to be an approximate public Nash family; it falsifies
+only removal of the ratio hypothesis from the general law/payoff comparison.
+
+The zero-regeneration persistent-bit exact public Nash and forbidden
+private target in Section6 remain a separate full-cap boundary test.
+Small EXPECTED total hazard cannot replace(13.2), even at kappa=1: rare
+public all-sure grand-coalition draws produce the earlier iid simultaneous-
+quitting counterexample. Both probability mode and regeneration matter.
+
+A narrow search of the quitting Root/Stationary and Diagnostics subtrees
+for Markov public roots, Doeblin reset and regeneration/hazard comparison
+found no matching declaration. No exhaustive novelty claim is made. The
+proof above is not a citation to an external mixing theorem.
+
+What this changes: the iid/no-memory restriction is dispensable for an
+actual full-agency replacement operation. What remains open is a genuine
+PRODUCER from arbitrary game data (or from a fixed no-UE hypothesis) of
+public approximate equilibria satisfying delta/kappa->0. Existing general
+sunspot protocols have history-dependent macrostates; they must not be
+assigned a uniform reset rate merely because fresh iid noise is present.
+The next concrete test is source-level: whether a known public producer
+has such a stationary Doeblin component after removing solved exits, or
+whether its strategic memory necessarily evolves on the absorption scale.
+
+### 13.6 Bounded application test against the actual kiloblock source
+
+The primary source inspected is Solan--Solan, *Quitting Games and Linear
+Complementarity Problems*, source file `sunspot9.tex` in the local source
+archive, its construction of kiloblocks in Section3.3.5. It partitions play
+into K+1 ordered kiloblocks, selects a type at block beginnings, retains
+that type during a block of C_k dates, and prescribes perpetual Continue
+in the final kiloblock. A fresh noise draw at every date does not reset
+that retained type or counter.
+
+The corresponding exact definitions read in
+`Literature/SolanAndSolan2020.lean` are `KiloblockPhase`, `KiloblockMode`,
+`precedingKiloblockPhase`, `phaseAfterAttempt`, `nextKiloblockMode`, and
+`exists_kiloblockBlueprint`. The latter deliberately chooses each mesh
+strictly greater than1 and guarantees a small within-attempt quit hazard.
+The control state retains a deterministic remaining-date counter. There
+is also a correction in that transcription: failed advance-type attempts
+move to the next kiloblock, whereas failed restart-type attempts restart
+the current one. The prose partition alone must not be used to replace
+both by a common restart.
+
+This literal source does NOT provide(13.1)–(13.2). At decision-date
+resolution, a nonfinal state with remaining count at least2 goes to the
+same type with a decremented count on survival; a remaining-count1 state
+goes to a type-selection phase. Such disjoint next-state supports preclude
+a common one-step reset law with positive kappa on those states. The
+ordered macro-index and final Continue tail are additional retained state,
+not noise that can be averaged independently. Deleting inactive draw
+stages does not delete the within-attempt counter.
+
+This is a failure of the PROPOSED DIRECT APPLICATION, not a proof that no
+regrouping, different public producer or conditional extraction can ever
+supply fast regeneration. Regrouping by a mesh length would replace the
+per-date bound by a block absorption bound and would require a new complete
+deadline/cap argument; one cannot simply use the old delta at that scale.
+No new UE counterexample-class narrowing follows from the present review.
+
+### 13.7 A global source obstruction, not just a missing adapter
+
+There is a stronger reason NOT to propose fast regeneration as the universal
+public source. Fix ANY raw table whose singleton comparison matrix Gamma
+is R0 and with at least one strictly positive own singleton. There cannot
+be a family of public profiles satisfying(13.1)–(13.2) for which BOTH
+
+    E(public_m)->0,          delta_m/kappa_m->0.           (13.11)
+
+This holds even if the finite public-state sets and every Markov parameter
+vary with m. Indeed(13.4) would give actual PRIVATE stationary profiles with
+full debts tending to0 and total hazards at most delta_m->0, because
+kappa_m<=1. Apply Proposition3 to these profiles using a trivial one-point
+signal. Its all-Continue alternative is excluded by the positive own
+singleton, and its other alternative gives a nonzero homogeneous standard
+LCP solution Gamma*w>=0, w_i(Gamma*w)_i=0 on the simplex. This contradicts
+R0. The already independently checked Proposition3 treats vertex weights
+and zero total hazards separately, so no improper division is hidden here.
+
+Equivalently there exists a strictly positive, table-dependent lower bound
+on E(public)+40Rdelta/kappa throughout this public source class: otherwise
+a sequence approaching its zero infimum would satisfy(13.11). This is a
+WHOLE-source obstruction, not one badly selected public-state branch.
+
+For the paired-hard matrix in Section7 with own singletons1, R0 is already
+known. Its own-private stationary profile from a large-reward construction
+can exist at a small BUT FIXED hazard for each fixed table; this does not
+contradict the obstruction as delta->0 at that SAME table. No game is
+claimed to lack UE. The result instead identifies exactly why fast-mixing
+diffuse public production cannot close the generic R0 residual regime.
+
+Decision: retain13.1–13.4 as an honest operation, but retire its proposed
+universal-source role. A public-memory route that reaches this regime must
+retain strategic state on the absorption time scale or use a replacement
+that is genuinely nonstationary/macroscopic, not stationary averaging.

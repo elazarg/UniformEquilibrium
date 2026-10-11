@@ -780,6 +780,60 @@ tests of a different construction. Their failure cannot be counted again
 as failure of the positive-inverse producer, or as evidence of a positive
 all-behavior gap.
 
+## Correlation removal does not supply independent existence
+
+Three concrete tests distinguish failure of a selection operation from
+failure of UE. Their supporting arguments are ordinary mathematics in
+the named notebooks; no new Lean or counterexample-class seal is asserted
+here.
+
+First, Section23 of
+`CODEX_NASH_BOX__DIRECT_EXISTENCE_BEYOND_TEMPORALIZATION.md` starts from
+a full coarse-obedient law of complete clocks. Independent root coins
+preserve full coarse obedience when their product root is Nash against
+the law's actual payoff. They also erase some clock correlation whenever
+the selected root has sufficient activity. Both are honest operations.
+But on the perturbed Solan calibration, a strict coarse anchor with payoff
+(4/3,4/3,4/3) has only the all-Continue root in its ENTIRE root-Nash
+correspondence. Every finite permitted prefix is a common delay, and its
+distance from every product clock law stays at least 1/32. The game has UE.
+This falsifies universal recovery from an arbitrary fixed anchor, not
+joint selection of another source, another payoff and independent clocks.
+
+Second, Section35.3 of
+`CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md` explains why an
+ordinary convex-duality argument cannot supply that joint selection.
+For finite joint laws, total correlation is nonnegative and vanishes on
+every pure joint atom. For any nonempty linear coarse-obedience set,
+its ordinary nonnegative-multiplier Lagrangian dual has value exactly zero:
+the inner minimization is attained at a pure atom maximizing the combined
+linear constraint, and feasibility makes the resulting dual value
+nonpositive. This remains true with a strict feasible anchor. It is a
+duality-gap obstruction to this particular proof operation, not a positive
+lower bound on the primal correlation minimum. Independence has not become
+a convex constraint by choosing entropy as the objective.
+
+Third, Section13.7 of
+`CODEX_EMMY_BOX__OBJECTIVES_AND_GLOBAL_SELECTION.md` tests fast public
+regeneration. When every instantaneous hazard is small relative to the
+public reset rate, honest averaging produces a private stationary profile
+with controlled complete regret. A universal producer with both errors
+tending to zero would therefore produce stationary profiles with vanishing
+total hazard. The homogeneous complementarity obstruction excludes that
+conclusion on an R0 singleton matrix with a positive own singleton. The
+whole fast-regenerating source is too restrictive there, even though the
+game may have a macroscopic or nonstationary equilibrium.
+
+The common methodological risk is demanding an exact auxiliary invariant
+while removing the information that makes it easy to satisfy. These tests
+do not prove that every successful proof must violate that invariant, or
+that correlation methods are exhausted. They do justify changing the
+operation rather than refining a frozen-source selector or invoking
+ordinary Slater duality again. Concrete alternatives may vary payoff and
+clock laws jointly, retain strategic memory on the absorption scale, or
+allow controlled auxiliary errors while directly decreasing original full
+regret. Each still needs its own producer and unrestricted-response proof.
+
 ## Sources inspected and next question
 
 - `ideas/NONLOCALITY_TECHNIQUE_CATALOGUE.md`.

@@ -893,3 +893,125 @@ these singleton rows and a fixed bounded completion must retain some
 conditional hazard above 1/(10000M). It does not exclude macroscopic
 bursts, selective Never laws or changing calendars, and therefore does
 not imply UE nonexistence for any of the covered tables.
+
+## Section 27: whole nonnegative private-bonus selector
+
+Status: bounded independent ordinary-mathematics PASS for Section 27 at
+whole-file SHA256
+`31357df74f3cf7ff76790d5a9e48dbe39533b89b050aab7b87c8d68b2169db3d`.
+Only this section was reviewed in this check. No Lean checking, export
+gate, or reward-table nonexistence conclusion is asserted.
+
+The checked claim is literal: for the fifteen specified canonical Fin4
+rows, EVERY finite common menu with N at least one and EVERY private
+planned-Never bonus vector in [0,1/100]^4 has every exact auxiliary Nash
+component idle before its last date, with dummy3 playing literal Never
+and original full pivot gain greater than 1/3. This includes zero bonuses
+and all four coordinates. The same original game has the actual uniform
+equilibrium payoff (1,0,3,1). Thus the result refutes the entire proposed
+exact auxiliary selector on its stated domain, not the unrestricted
+joint approximate-profile question.
+
+I reconstructed the actual core table by subtracting (0,1,1) from the
+OLD table at every nonempty core absorption, and checked the dummy-only
+and dummy-joining rows separately. In particular the shift is NOT a
+constant on arbitrary improper profiles. For fixed opponents, its exact
+own-law identity is U_old=U_actual+c_i-c_i z_i Z_i; replacing the bonus by
+b_old=b+c_i Z_i makes the two auxiliary objectives differ by the constant
+c_i for EVERY complete own replacement. This verifies (P4), including
+the opponents' Never factor and the sign.
+
+The conditional private ledger (P3) also checks directly: suffix
+replacement changes original payoff with joint reach but private payment
+with own reach. Therefore beta_i=b_i/opponent-survival, and
+beta_i(t)=alpha_i(t) beta_i(t+1) when all current hazards are below one.
+This is why the ordinary root continuation can be the NEXT AUGMENTED
+value despite bonuses being paid after opponents stop. No small bound
+on these conditional bonuses is used. The inspected declaration
+`timingLawTail_isNash_of_isNash_of_positiveContinue` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingRecursion.lean`
+states the unmodified tail result under positive continuation; it does
+not itself formalize this private-payment calculation.
+
+For (P1), direct old-row enumeration gives exactly the displayed
+Quit-minus-Continue expression. The three-active odds sum is strictly
+negative when w is coordinatewise at least one; the two-active exclusion
+and the unique-one-coordinate backward propagation follow. I separately
+checked the first-sure-date argument instead of improperly applying this
+ordinary-root lemma at zero continuation. At the first sure date m,
+predecessor Continue is strict even after its nonnegative private bonus,
+successor hazard one would permit the owner's profitable Never, and the
+shifted augmented vector has the required unique coordinate one. Earlier
+roots have positive continuation, so only the eventual owner can act.
+If the successor mixes at m, all later finite actions have shifted payoff
+minus one, whereas the used action has shifted payoff two. Its positive
+remaining mass must use Never, forcing beta=3 and b=3 Pr(T_owner>=m).
+The USED date-m action then has shifted original-root payoff minus one
+plus b, below the guaranteed finite Quit0 floor one. This contradiction
+uses no omitted date and remains valid when m=N-1. The zero-successor
+case gives the same floor contradiction. Hence all three core Never
+masses are strictly positive in the three-core restriction.
+
+The pre-final threshold (P5) is exhaustive. Latest pre-final activity
+leaves one final augmented coordinate one, forcing its predecessor
+inactive at the final date; backward propagation makes that predecessor
+literal Never throughout. A zero final successor needs bonus at least
+one to reach its Quit floor. A positive final successor forces positive
+final owner activity and uses both final finite and Never actions. Their
+OLD root values are respectively -1+3l_owner+2z_owner and -1+z_owner.
+Indifference gives b_old=3l_owner+z_owner, and the finite Quit0 floor gives
+3l_owner+2z_owner>=2, hence b_old>=1. There is no uncharged private bonus
+or root-survival factor in this calculation.
+
+All three subsequent canonical threshold contradictions check with the
+literal recipient payoffs. In the label2 case, z0,z1>=1-eta bounds the
+pivot augmented payoff by 13eta<1. In the label1 case, z0,z2>=1-eta and
+the player2 finite Quit floor imply 1-z1<7eta; total finite absorption is
+then at most 9eta and the pivot augmented payoff at most 55eta<1. Label0
+is immediate. Thus every auxiliary component, not merely a selected
+continuation branch, is idle until the final menu date.
+
+I independently expanded the actual final pure endpoints:
+
+    Q0=1+q2-q1*q2,       W0=6q1-q2+q1*q2;
+    Q1=q0-q0*q2,        W1=-2q0+5q2+2q0*q2;
+    Q2=q1-q0*q1,        W2=5q0-2q1+2q0*q1.
+
+Subtracting the relevant bonus and converting to odds reproduces
+(P6)--(P8) exactly. The exhaustive support exclusions force q0,q1>0.
+For positive q2, (P6) forbids x1>=3/5 outright, while (P8) and (P7)
+give x0<=3x1/5 and x2<=3x0/5. For q2=0 the two displayed exact formulas
+follow. Thus all final hazards are at most 3/8. The omitted-date pivot
+gain is exactly (1-q1)(1-q2)-q0*b0; its displayed lower bound exceeds
+1/3 by 257/4800. This cap is an original complete unilateral deviation,
+not an auxiliary best-response claim.
+
+The fourth-player reduction also survives the zero-bonus boundary.
+Never weak dominance alone is insufficient, but a used earliest finite
+date d forces b3=0 and Pr(d<=min_core T<infinity)=0. Zero joint core
+survival at d would give an earlier sure core date, already excluded
+while the dummy is inactive. Positive joint core survival and independent
+laws instead force every core finite atom below d. The restrictions to
+F_d are EXACT auxiliary core Nash with unchanged bonuses: their finite
+actions beat the dummy, and all-core-Never gives core reward zero whether
+or not the dummy later quits. If d=0 the pivot's immediate Quit already
+contradicts equilibrium. Otherwise the core omitted deadline d is LEGAL
+in the original larger menu, a simultaneous dummy quit leaves its core
+reward unchanged, and its auxiliary gain exceeds 1/3-eta. This proves
+literal dummy Never for every component, rather than relying on strict
+dominance that fails when b3=0.
+
+Finally the explicit UE bypass is actual full-response mathematics.
+At h=2/5 I checked all three phase vector equations exactly. Within a
+phase the values lie in [1,4], the active owner's two endpoints equal
+one, and an inactive player's Quit surplus is at most
+q=1-h^(1/k). Bellman telescoping against ANY complete replacement sums
+that surplus with the deviator's reached Quit probabilities, whose sum
+is at most one. Deleted-opponent period survival h^2 removes all tail
+remainders uniformly, including Never deviations. Every core opponent
+is proper in this construction, so the actual canonical shift subtracts
+c_i for EVERY response, not only on the prescribed path. Dummy payoff
+one is maximal. This gives exact fixed target (1,0,3,1), original full
+regret at most q tending to zero, and uniform finite-average transfer by
+the same deleted-opponent geometric tails. No conflict with the source
+selector falsifier or implication of UE nonexistence remains.

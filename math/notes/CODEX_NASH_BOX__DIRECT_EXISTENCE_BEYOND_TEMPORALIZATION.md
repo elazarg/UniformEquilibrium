@@ -10,6 +10,26 @@ An exact four-active nearest-projection calculation falsifies a naive
 alternating projection/marginalization rule, not existential selection
 over the whole correlated correspondence. This supporting mathematics
 is ordinary and unreviewed; it is not new UE coverage or an export.
+Sections19–20 develop selective actual-clock normalization and an exact
+joint product/coarse-source descent chamber on the four-active test.
+The latter has genuine joint descent directions, including a symmetry-
+breaking direction invisible to a symmetric-only optimizer. No argument
+yet escapes every positive nonsmooth minimum across growing calendars.
+Section21 removes irrelevant post-collision correlation exactly, while
+an all-calendar opponent-team calculation shows why singleton fibers
+cannot be independently rounded by the same local operation. The
+global joint source/product producer remains missing.
+Section22 gives an exact two-date strict COARSE anchor on the known-UE,
+no-exact-Nash Solan calibration, including its canonical payoff shift.
+Thus the full coarse-distance relaxation does not lose that calibration
+through a horizon-dependent repair constant. This is a positive test of
+the relaxation, not an arbitrary-table producer or new UE coverage.
+Section23 gives an exact independent-root coordinate-erasure operation
+on full coarse sources, but the complete root-prefix hull of the strict
+Solan anchor is stuck. Thus exact coarse-preserving root prefixes cannot
+be the universal independence producer from an arbitrary anchor. The
+global source/product selection problem is not refuted; source changes
+and approximation remain necessary live freedoms.
 
 Status: active independent research, resumed 2026-10-11. Section 8 now gives
 a positive candidate independently checked for soundness: sufficiently large pair-participation
@@ -92,14 +112,20 @@ with terminal continuation componentwise at least the own singleton has
 original full regret at least1. This ordinary unreviewed first-test
 falsifier retires the exact truncation selector, not joint approximation.
 
-Central conclusion: NONE of the no-go results below refutes existential
-selection from the FULL private-Never-bonus equilibrium correspondence.
-The same auxiliary games have rigorously bad exact selections and good
-exact selections. Weak continuity of their compactified clock games fails,
-but this does not prohibit the good selections. Section 6 calculates the
-two limit orders for the entire correspondence and states the remaining
-unproved sufficient theorem. The unrestricted approximate-selection
-question is still broader than that auxiliary theorem.
+Current source verdict: Section6's universal exact nonnegative-private-
+Never-bonus selector is now RETIRED by the independently checked whole-
+correspondence counterexample in Section27 of
+`CODEX_TURING_BOX__STATE_INFORMATION_AND_RELAXATION.md` (frozen SHA256
+`31357df74f3cf7ff76790d5a9e48dbe39533b89b050aab7b87c8d68b2169db3d`).
+That canonical Fin4 game has original full regret greater than1/3 at
+EVERY auxiliary Nash for EVERY menu and every bonus in[0,1/100]^4,
+yet has actual UE payoff(1,0,3,1). My bounded adversarial PASS is saved
+in the feedback file for that notebook. This is an internal mechanism
+falsifier, not UE nonexistence. Section6's own double-limit calculation
+remains valid: its SAME calibration game has bad and good selections,
+so neither bad branches nor failure of weak continuity alone proved
+the later universal-source no-go. The unrestricted joint approximate-
+selection question remains live and strictly broader.
 
 The artificial restriction tested first is exact Nash selection on a common
 finite clock menu, even after changing every terminal reward coordinate by a
@@ -679,7 +705,7 @@ then removing perturbations is not a valid test of joint menu/bonus
 selection. This exact calculation does not claim the first limit is zero
 for arbitrary tables.
 
-### Exact remaining sufficient theorem, not a new universal restriction
+### Exact sufficient theorem: subsequently falsified as a universal source
 
 One genuinely global positive idea was to lower common private bonuses
 from a value B > 2R. At that upper value Never strictly dominates every
@@ -703,8 +729,9 @@ question permits arbitrary independent approximate products, simultaneous
 choice of deadline and accuracy, and no inter-accuracy nesting. It asks
 for E_N <= epsilon and L_0 <= epsilon on the SAME law.
 
-A sufficient private-bonus theorem would be the following, currently
-UNPROVED here:
+A sufficient private-bonus theorem would be the following. It was not
+proved here and is NOW FALSIFIED, with whole-correspondence quantifiers,
+by the canonical Fin4 Section27 counterexample linked at the top:
 
     For every canonical four-player reward table and epsilon > 0,
     there exist N, bonuses b_0=0 and 0 <= b_i <= epsilon (i != 0),
@@ -736,13 +763,12 @@ decides the GLOBAL selection problem. The full-correspondence limit-order
 calculation shows precisely why fixed-menu perturbation failure is not an
 obstruction to choosing menu and bonus together.
 
-Concrete next question: can a global equilibrium-correspondence argument
-prove the displayed sufficient theorem for arbitrary canonical data,
-using the actual L_0 including unused-Never slack? No exact temporal ancestry
-is needed, and the inspected all-errors endpoint allows new laws and
-deadlines at every accuracy. Recommendation: retain that genuinely global
-problem as open and viable; do not infer a no-go from bad branches, compact
-weak-continuity failure, or the exact-root bonus transport identity.
+The whole-correspondence counterexample supersedes the earlier open
+question here; it is not inferred from bad branches, compact weak-
+continuity failure or exact-root bonus transport. Do not keep attempting
+to prove this universal exact source. The current live operation is
+Sections18–20's genuinely joint coarse-source/product approximation,
+which neither requires auxiliary exact Nash nor freezes a pivot law.
 
 All displayed cyclic finite-response equalities were checked
 by exact rational enumeration at x=3/4 for K=1,...,5; this is a computation
@@ -3275,6 +3301,19 @@ an arbitrary nearest-projection/marginalization descent rule, NOT
 existence of a good global minimizer in (18.3), not all nearest
 projections, and not an equilibrium theorem for the raw table.
 
+There is a separate exact limit on the positive anchor calculation.
+At this SAME product p, recommendation Quit0 has a positive
+Quit0-to-late1 coefficient (56+i)/256 for recipient i. Any law which
+recommends one sole finite owner and Never to everyone else contributes
+ZERO to this coefficient: whenever i receives Quit0 under that law,
+it faces only Never opponents and both finite deadlines pay its own1.
+This remains true for arbitrary mixtures of such owner laws over all
+dates. Thus mixing p with ANY family of these pure-owner anchors while
+retaining positive weight on p cannot satisfy (18.1). The rational
+calibration's finite recommendations were already exact and did not
+have this problem. A genuine global anchor operation must also alter
+finite recommendation incentives; tail-only owner anchoring does not.
+
 ### Exact remaining gap and next attempt
 
 No theorem here forces the attained correlations d_N to vanish. The
@@ -3293,3 +3332,682 @@ strictly improved by a joint clock refinement and selective correlated
 terminal anchors, without assuming an already low-regret product law?
 Until that is answered, this is a tested global relaxation with a
 producer gap, not progress closing the Fin4 conjecture.
+
+### Coarse obedience removes an unnecessary information restriction
+
+The rounding estimate (18.2) actually needs only UNCONDITIONAL
+obedience. Let K_N instead impose
+
+    E_mu u_i >= E_(mu_-i) u_i(b,T_-i)                    (18.5)
+
+for every i and every b in{0,...,N,Never}, without conditioning on its
+own recommendation. This is a coarse-correlated relaxation, not a
+claim that an informed mediator recipient would obey. C_N is contained
+in K_N, so the same unconditional source proves nonemptiness. The
+same TV argument and complete-deadline boundary prove (18.2) for K_N.
+Insisting on full private-recommendation obedience was an additional
+sufficient restriction, not part of the original target or its rounding
+consumer.
+
+For the four-active raw table above, let sigma be uniform on the FOUR
+adjacent pairs, all quitting at date0. Every player receives3/4. Against
+sigma_-i, immediate Quit0 earns -1/4, while EVERY finite deadline>=1
+and Never earns1/2. Thus sigma has strict coarse margin at least
+gamma=1/4 against EVERY complete constant replacement, uniformly over
+N. It is also a full one-date correlated equilibrium, but its delayed
+placement would not have this coarse margin against earlier quitting.
+The earlier-q and the one-date-AFTER-all-opponents cap are both included
+in this calculation; there is no all-opponents-Never event under this
+two-quitter anchor.
+
+Consequently, for ANY supplied actual finite product p with full
+original regret eta, define
+
+    w=eta/(eta+gamma),   mu=(1-w)p+w*sigma.
+
+Each coefficient in (18.5) is at most (1-w)eta-w*gamma=0. Hence mu is
+an exact FULL coarse-correlated source and TV(mu,p)<=w. Conversely,
+for any mu in K_N, the TV comparison gives eta(p)<=4R*TV(mu,p).
+Thus, writing f_N(p)=min_(mu in K_N)TV(mu,p), this specific table has
+the dimension-independent comparison
+
+    eta(p)/(4R) <= f_N(p) <= eta(p)/(eta(p)+1/4) <=4eta(p).   (18.6)
+
+This is a genuine exact joint repair, but it requires a SUPPLIED p.
+The global minimum of f_N over product p vanishes precisely when the
+original finite-clock full-regret infimum vanishes. In particular the
+existence and strict interior of the coarse relaxation alone have not
+added an existence theorem for the hard table. A global optimizer or
+a clock-refinement argument is still needed. The full-CE nearest
+projection falsifier above does not automatically falsify this larger
+coarse correspondence.
+
+There is one useful uniform dual consequence, not a UE conclusion.
+For any linear objective h with |h_S|<=1/2, the support-function LP
+max_(mu in K_N)h.mu has dual variables lambda_j>=0 for the gain
+constraints A_j.mu<=0 and a mass multiplier c. At an optimum,
+
+    c+sum_j lambda_j A_j(S)>=h_S  for every S.
+
+Its value c lies in[-1/2,1/2]. Averaging against the strict anchor
+gives c-gamma*sum lambda_j>=h.sigma>=-1/2, hence
+sum lambda_j<=1/gamma=4. This removes a dimension-dependent multiplier
+blow-up in this coarse saddle on the four-active calibration. It does
+NOT force the product domain to be convex, allow a minimax exchange,
+or prevent deadline dual mass from drifting to a late boundary.
+
+The next global test should use these bounded duals and genuinely
+joint clock refinements, rather than repeat full recommendation repair
+or infer independence from the existence of a correlated LP solution.
+
+## 19. Selective quiet-root refinement without erasing collisions
+
+Status: ordinary unreviewed supporting proof. This is a transformation
+of an ACTUAL supplied product profile, not a producer, a strict regret
+improvement or a new solved raw-table class. Its proposed use is to
+standardize quiet portions of a global minimization sequence while
+retaining macroscopic collision strata. No such global argument is
+complete here.
+
+Fix any finite n=4 table with |r_i(S)|<=R and any independent complete
+clock profile represented by live-date hazards q_i(t). Fix0<delta<=1/4.
+At every date with max_i q_i(t)<=delta, choose an arbitrary finite
+integer K_t>=1 and replace the one root by K_t consecutive roots with
+
+    q'_i=1-(1-q_i(t))^(1/K_t).
+
+Every other root is left as one UNCHANGED simultaneous root. No dates
+are inserted before a retained macro root except by subdividing an
+already existing quiet root. Individual survival across a block is
+exactly preserved, as are all private Never masses. This also applies
+to off-path root sequences after zero prescribed joint reach.
+
+Claim: every player's prescribed terminal payoff changes by at most
+6Rdelta; its unrestricted pure-clock deviation cap changes by at most
+10Rdelta. Hence its full regret changes by at most16Rdelta, uniformly
+in all K_t, the number of quiet blocks, calendar complexity and positive
+Never masses. No unit-own-singleton hypothesis is needed.
+
+Proof. Couple each original player's Bernoulli quit decision in a block
+to whether its first micro quit occurs in that block. These events are
+independent across players and have exactly their original probabilities.
+The first NONEMPTY BLOCK is identical in the two plays. In a quiet
+block the stopping coalition can differ only if at least two players
+planned to quit somewhere in it. Write x=sum_i q_i and beta for its
+absorption probability. Then
+
+    Pr(two planned quits)<=sum_(i<j)q_i q_j<=(3/2)delta*x,
+    beta>=x-(3/2)delta*x,
+    Pr(two planned quits)<=3delta*beta.
+
+The last inequality uses delta<=1/4. Sum against block reach: the
+weighted absorption probabilities over ANY subset of blocks sum to
+at most one. Thus the prescribed stopping coalition differs with
+probability at most3delta, giving the 6Rdelta payoff bound. Macro
+coalitions and the all-Never outcome are preserved exactly by this
+coupling.
+
+For a deviation of player i, repeat the argument for its THREE
+opponents alone. In a quiet block their double-planned-quit probability
+is at most delta*x_-i, while their absorption probability is at least
+(1-delta)x_-i. Their pre-deadline coalition mismatch probability over
+all blocks is therefore at most2delta. This is weighted by OPPONENT
+reach, not prescribed joint reach, so it remains valid when i was the
+sole proper/sure quitter in the original prescribed play.
+
+Map any new micro deadline to the original root containing it. At its
+quiet deadline block the comparison can additionally differ whenever
+ANY opponent planned a quit there, whose conditional probability is
+at most3delta. At a retained macro deadline root this extra error is
+zero. Hence payoff differences are at most
+2R*(2delta+3delta)=10Rdelta. Conversely each old deadline maps to the
+FIRST micro date of its block and has the same bound. Never has just
+the pre-deadline opponent mismatch bound4Rdelta. These two deadline
+maps and the unchanged Never option prove the two-sided cap bound.
+All complete unilateral behaviors are private mixtures of deadlines
+and Never on the unique live history, so the cap is genuinely full.
+Combining prescribed and cap estimates proves the regret bound.
+
+The per-micro hazard satisfies
+q'_i<=-log(1-q_i)/K_t<=q_i/[K_t(1-delta)], so quiet roots may be made
+arbitrarily fine without diluting any retained collision root. The
+calculation DOES NOT justify uniform dilation of macro roots: new
+within-block deviations can then create a non-small preemption or
+withdrawal gain.
+
+Bounded source comparison: the inspected declaration
+`isAsymptoticNash_quittingSerializedRoots` in
+`UniformEquilibrium/Quitting/Root/SequentialSerializationEquilibrium.lean`
+already serializes an ALL-small-hazard supplied Fin4 profile and gives
+full regret error+32*M*hazardBound, under unit solo exits. It is not
+a small-hazard producer. The present selective, survival-preserving
+subdivision leaves arbitrary macro roots intact and uses separate
+deleted-opponent reach for every cap. No exhaustive novelty claim is
+made. The original global producer gap remains; refinement alone
+does not show that a positive minimum can be improved.
+
+### Uniform macro count and quiet hazard-time budget
+
+There is a compatible approximate normalization of EVERY actual profile.
+Fix0<epsilon<1. For each i let S_i(t) be its private survival before t.
+If S_i ever falls to epsilon or below, keep its clock before the FIRST
+such date and move its remaining finite mass to Never. Otherwise leave
+that clock alone. Each clock changes by TV at most epsilon, so the
+product payoff changes by at most8R*epsilon. Every opponent cap changes
+by at most6R*epsilon, and full regret by at most14R*epsilon.
+
+After this normalization, the total number of dates having ANY hazard
+larger than delta is at most
+
+    4*[1+ceil(log(1/epsilon)/(-log(1-delta)))].
+
+Indeed each such hazard of player i multiplies S_i by at most1-delta,
+and no hazards after the first survival-threshold crossing are kept.
+If that threshold is never crossed, total survival stays above epsilon,
+which gives the same count. Different players' macro dates may coincide,
+so summing their individual counts is only an upper bound.
+
+Writing h_i(t)=-log(1-q_i(t)), the TOTAL hazard time on quiet dates
+is at most
+
+    4*[log(1/epsilon)-log(1-delta)].
+
+Before a threshold crossing, total log survival loss is less than
+log(1/epsilon). If the crossing occurs on a quiet date its overshoot
+is at most -log(1-delta); if it occurs on a macro date, that macro
+loss is not counted in the quiet budget. If there is no crossing,
+the infinite log loss is at most log(1/epsilon). Thus neither bound
+assumes that any originally improper clock becomes literally Never.
+
+These are actual full-semantic estimates, not just prescribed joint
+reach estimates. Together with quiet subdivision they supply a finite
+macro skeleton and bounded quiet hazard-time budget at fixed
+epsilon,delta, independent of the original calendar length. Macro
+collision rows remain untouched. This is consistent with the raw
+four-active diffuse exclusion: some macro hazard must remain in any
+good source, and none is being diluted here.
+
+Two boundary issues prevent silently calling this a compact global
+producer. A zero-hazard quiet date still gives a PREEMPTIVE deadline
+before the next macro root; deleting all such dates can change caps.
+A hybrid limit must retain whether each gap contains a quiet date,
+even when its hazard-time length tends to zero. Adjacent macro roots
+have no new quiet preemption opportunity inserted between them.
+Also an infinite string of quiet dates may have finite total hazard
+time and positive opponent Never mass. Its limiting FINITE-late cap
+is outside payoff plus s_i times all-opponents-Never probability,
+whereas literal Never omits that term. These remain separate boundary
+actions. No unproved continuity or compactness assertion about such
+hybrid limits is used in the preceding coupling and budget proofs.
+
+The missing global mathematical step is still an improvement/existence
+argument in this hybrid class, not the supply of a finite calendar,
+small hazards everywhere, or an exact auxiliary Nash correspondence.
+
+## 20. An exact joint coarse-saddle chamber on the four-active table
+
+Status: ordinary unreviewed supporting mathematics. This is a tested
+optimization operation for the actual four-active table of Section18,
+not an all-errors producer or a new solved reward class. Unlike the
+failed nearest-source/marginalization rule, the source law changes
+jointly with the product law. No payoff-monotonicity claim is made.
+
+Use menu{0,Never}, with COMPLETE replacements Quit0, every finite
+date>=1, and Never. Let p be the actual product with hazards q_i at0.
+Write P_0=p(empty), b_i=p({i}), B=sum_i b_i, and P_A for the total
+probability of the four cyclic adjacent pairs. Define
+
+    a=(1-B)/5.
+
+Suppose the following explicit chamber conditions hold:
+
+    a>=0,  a<=P_0,  a>=p({i,i+1}) for every i,
+    -3a-b_(i+1)-4b_(i+2)+2b_(i-1)<=0 for every i.       (20.1)
+
+Indices are modulo4. Put mu(empty)=a, mu({i})=b_i,
+mu({i,i+1})=a for each adjacent pair, and mu=0 elsewhere.
+Its mass is5a+B=1. For recipient i its three UNCONDITIONAL
+deviation gains are exactly
+
+    Quit0: -3a-b_(i+1)-4b_(i+2)+2b_(i-1),
+    finite>=1: 0,
+    Never: -a-b_i.
+
+Consequently mu lies in the FULL coarse correspondence K_1. Here the
+finite>=1 replacement is not identified with Never: it earns the own
+singleton on the all-opponents-Never event. That event is already
+included in the zero displayed late coefficient. There is no omitted
+deadline or conditional recommendation claim.
+
+In this entire chamber the nearest-source distance is EXACTLY
+
+    f_1(p)=min_(nu in K_1)TV(nu,p)
+          =4/5-(4/5)B-P_A.                            (20.2)
+
+Proof of optimality, independent of an LP solver. Sum the four late
+deviation gains at a pure coalition S. The resulting coefficient A(S)
+is4 on empty,0 on singletons,-1 on adjacent pairs,8 on opposite pairs,
+6 on triples and50 on the grand coalition. Every nu in K_1 satisfies
+E_nu A<=0. Define w(S) to be1 on empty/opposite pairs/triples/grand,
+1/5 on singletons, and0 on adjacent pairs. Pointwise
+
+    0<=w<=1,   w(S)<=(1+A(S))/5.
+
+Hence E_nu w<=1/5. For z_S=min(nu_S,p_S),
+z_S<=w(S)nu_S+[1-w(S)]p_S, so
+
+    sum z_S<=1/5+(4/5)B+P_A.
+
+This is the lower bound in(20.2). Under(20.1), the displayed mu has
+overlap a+B+P_A=1/5+(4/5)B+P_A, proving attainment and equality.
+
+At q_i=1/4 all chamber inequalities are strict except the intentionally
+binding late obedience equalities. Here b_i=27/256,a=37/320 and
+
+    f_1=103/320,    partial f_1/partial q_i=-3/16.
+
+Thus a sufficiently small increase of ANY ONE hazard, WITH simultaneous
+reoptimization of the coarse source as above, strictly decreases the
+actual global nearest-source distance. This is a real product/source
+coordinate-LP descent, not just a marginal change under a fixed source.
+In contrast, holding this particular mu fixed makes q_i=1/4 the unique
+TV-minimizing single-player coordinate against the other three 1/4
+hazards: overlap has slope39/64 below1/4 and -15/64 above it, until
+the empty-overlap breakpoint, after which the slope decreases further.
+Alternating a fixed-source product step with a source step can therefore
+miss an available simultaneous product/source direction.
+
+Along the symmetric line q_i=q, formula(20.2) becomes
+
+    f_1(q)=4/5-(4/5)q(1-q)^2(4+q).
+
+For example q=1/3 still satisfies(20.1) and has f_1=116/405,
+strictly below103/320. The corresponding ORIGINAL full regret is2/3,
+whereas q=1/4 has35/64. Metric descent is not regret descent; only a
+proved sequence f->0 would activate the4R*f full-response bound.
+
+Even the positive minimum of this symmetric line is not a joint trap.
+Its unique interior minimum is
+
+    q_*=(sqrt(41)-5)/4,
+    f_1(q_*)=(799-123sqrt(41))/40.
+
+It lies in(7/20,9/25), strictly inside the chamber. At the symmetric
+point the mixed derivative for opposite players is
+
+    partial_0 partial_2 f_1=(-7+3sqrt(41))/10>0.
+
+Keep q_1=q_3=q_* and replace q_0,q_2 by q_*+h,q_*-h.
+For every sufficiently small nonzero h the chamber still holds and,
+because(20.2) is affine in each individual hazard, the change is EXACTLY
+
+    f_1(new)-f_1(old)=-[(-7+3sqrt(41))/10]*h^2<0.
+
+Thus an actual asymmetric joint update escapes the symmetric optimum.
+This is not permission to impose symmetry, average marginal hazards,
+or dilute the macro collision root. The tested operation changes both
+independent marginal laws and the exact coarse source. All arithmetic
+above was recomputed with exact rationals/symbolic radicals; the proof
+does not use a numerical optimizer's claim of global optimality.
+
+### The genuinely missing global assertion
+
+For a fixed menu, f_N is a polyhedral convex distance as a function of
+the JOINT law but is composed with a nonconvex product map. On each
+single dual chamber it is multi-affine in the separate private laws.
+The calculation above exploits this structure, including joint moves
+when coordinatewise or symmetry-restricted moves stall. It does not
+exclude a positive minimum at a junction of several dual chambers.
+Adding later dates changes both the product domain and the complete
+late-deviation boundary; strict coarse feasibility alone does not
+prove an improving direction there.
+
+The coherent prospective route is: use the unconditional source from
+Section18, globally reoptimize source AND product rather than perform
+fixed-source marginalization, retain macro roots under Section19's
+selective refinement, and show that a positive junction minimum admits
+a finite joint calendar extension with smaller distance. This last
+calendar-escape assertion is UNPROVED. Its required output is an actual
+product law, not correlated play, not an exact auxiliary equilibrium,
+and not simply the instruction to select a low-regret profile. No
+general minimax interchange, compactness-to-Nash inference or producer
+claim is being made.
+
+Bounded source inspection for this test additionally included
+`minimumTerminalSemantic_maximumDebt_allPlayersTie` in
+`UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean`,
+`quittingRootWeightedOpponentAbsorptionDebtCharge_le_drift_add_defect`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostate.lean`,
+and `exists_finiteDeadlineTimingProfile_approximation` in
+`UniformEquilibrium/Quitting/Terminal/FiniteMenuFullProfileApproximation.lean`.
+They respectively supply a positive-minimum tie restriction, a
+coordinate-matched dynamic ledger, and approximation of a SUPPLIED
+actual profile. None supplies the missing global calendar escape.
+
+## 21. Exact post-collision erasure and the singleton team boundary
+
+Status: ordinary unreviewed supporting mathematics. This is one exact
+global source simplification and a decisive test of extending it, not
+an equilibrium producer or a narrowed counterexample reward class.
+The correspondence is the FULL COARSE K_N of Section18, not privately
+conditioned correlated obedience. All complete constant deadlines and
+Never remain in the constraints.
+
+### Multi-quitter fibers can be independently completed exactly
+
+Fix any finite clock menu, any product law p and any coarse source
+mu in K_N. For a finite t and S with at least two members, let F_(t,S)
+be the fiber where t is the first finite clock and S is EXACTLY the
+set of clocks equal to t. Other coordinates are strictly after t,
+possibly Never. Every original payoff and EVERY pure unilateral
+replacement payoff is constant on this fiber. Indeed a replacement
+at b<t is sole quitting, at b=t gives S union {i}, and at b>t or Never
+gives S minus {i} if i belongs to S, and S otherwise. This last set
+is nonempty precisely because |S|>=2. The future clocks do not enter
+any of these outcomes.
+
+Consequently replace mu's conditional law on EACH such fiber by p's
+conditional law, retaining the fiber mass. If p gives the fiber zero
+mass, choose any completion. This preserves every prescribed payoff,
+every complete pure-response payoff, and hence membership in K_N.
+For positive p-fiber mass, the new conditional law is literally the
+product of the other players' laws conditioned to be after t. It does
+not require new correlation inside the irrelevant future clocks.
+
+This replacement never increases TV(mu,p), and is optimal among all
+allocations with the same masses on these fibers: on a fiber with
+mu-mass m and p-mass P, the l1 contribution is at least |m-P|, with
+equality for the proportional p-completion. Thus a nearest-source
+minimizer can always be chosen in this canonical form. The all-Never
+fiber and every singleton first-quitter fiber are left unchanged.
+This is not a full privately conditioned CE transformation: changing
+the recipient's recommendation can change its conditional constraints.
+
+### Serious four-active test: the safe operation is not yet a descent rule
+
+Apply this to Section20's symmetric one-date chamber with root hazard
+x, singleton mass b=x(1-x)^3 and a=(1-4b)/5. Append a new date at which
+each product clock that was Never quits with probability z, leaving
+the original root unchanged. Complete the source's adjacent-pair
+collision fibers with those same independent future clocks, using
+the exact transformation above, but leave its singleton and empty
+fibers unchanged. This is still a FULL coarse source for the longer
+menu, since all of its coarse payoff coefficients are unchanged.
+
+For all sufficiently small z>0, a remains below the new product's
+all-Never mass. In each adjacent-pair fiber a exceeds the product's
+fiber mass, so the entire product-fiber mass still contributes to
+overlap. But each unchanged singleton source now overlaps only
+b(1-z)^3 of product mass. The resulting distance is EXACTLY
+
+    TV(new source,new product)
+       = f_1(old product)+4b[1-(1-z)^3] > f_1(old product).
+
+Thus safe completion of irrelevant collision tails alone is NOT the
+missing calendar-escape operation, even on the four-active chamber.
+This does not refute joint source reoptimization. As a separate exact
+LP experiment, x=1/3,z=1/100 admits a different two-date coarse source
+within distance 2226629/7812500, below the exact old value116/405.
+All its nonnegativity, mass and complete coarse inequalities were
+checked rationally; no global two-date optimum is asserted. That
+experiment changes the singleton/empty source masses as well. The
+point is structural, not the numerical size of this improvement.
+
+### A singleton fiber cannot be rounded by independent opponent tails
+
+Here is an exact all-calendar obstruction to the naive next step.
+First use players0,1,2 and only record recipient0's payoffs:
+
+    r0({0})=1,  r0({1})=1, r0({2})=0,
+    r0({0,1})=0, r0({0,2})=1,
+    r0({1,2})=r0({0,1,2})=1.
+
+The other recipients' payoffs can be zero; their own singletons are
+then zero, so these are canonical signs. A CORRELATED opponent law
+which puts probability1/2 on (T1,T2)=(0,Never) and1/2 on(Never,0)
+gives recipient0 response cap exactly1/2. Quit0, every later finite
+deadline and Never each earn1/2, so this covers every complete response.
+
+In contrast EVERY pair of independent complete opponent clocks has
+response cap at least2/3. First prove it for finite menus, backwards.
+At a live root let a be player1's hazard and let y be player2's
+Continue probability. Recipient0's immediate Quit payoff is
+
+    Q=1-a*y.
+
+If it Continues and then uses a best deadline in the surviving tail,
+its payoff is a+(1-a)y*v, where v is that tail's response cap. The
+terminal all-Never tail has cap1, because a later finite deadline
+earns the own singleton. Inductively assume v>=2/3. Either Q>=2/3,
+or ay>1/3, in which case the Continue payoff is at least
+
+    a+2(1-a)/(9a)
+       >=2sqrt(2)/3-2/9 >2/3.
+
+The middle inequality is AM--GM and the last follows from sqrt(2)>4/3.
+Hazards equal to one and zero all-Continue probability cause no gap:
+in the latter case the continuation multiplier is zero. Backward
+choice is a legal pure deadline, since the sole live public history
+is unanimous Continue.
+
+For arbitrary infinite or improper independent clocks, move only
+finite atoms at dates>=N to Never. Their total moved mass tends to
+zero, and boundedness gives uniform convergence of ALL deadline and
+Never payoffs, hence of their suprema. The finite-menu lower bound
+therefore passes to every complete opponent pair. This is a uniform
+independence gap of at least1/6, not merely a one-date obstruction.
+
+There is also a literal Fin4 padding, without pretending a zero-payoff
+quitter is harmless. Keep the above r0 on coalitions with nonempty
+intersection with {0,1,2}, ignoring membership of player3, and set
+r0({3})=1. Give every other recipient zero on every coalition. For
+EVERY recipient0 response, allowing player3 to quit can only replace
+a later payoff in {0,1} by the payoff1; joining never changes the
+core payoff. Thus pointwise recipient0's payoff is at least the
+three-player payoff with the same clocks0,1,2. Every independent
+three-opponent completion consequently still has cap>=2/3, whereas
+the correlated pair above with player3=Never still has cap1/2. Own
+singletons are exactly(1,0,0,0). This auxiliary comparison is not a
+positive-gap game; its original game has the obvious pure equilibrium
+player0 Quit0 and all others Never.
+
+This falsifies a specific local rounding assertion: an arbitrary
+correlated deleted tail on a singleton first-quitter fiber cannot
+always be replaced by independent tails while retaining that owner's
+full response cap. It does not falsify a simultaneous change of root
+law, source masses and all private clocks. In particular it is not
+another exact-auxiliary-Nash no-go or a counterexample to the saddle
+route's existential joint calendar extension.
+
+### Remaining global work
+
+The exact completion theorem locates all nontrivial future correlation
+inside singleton first-quitter fibers. The team example shows why
+this is not automatically a reduction to known three-player UE: that
+theorem produces equilibria for the three players' OWN rewards, not
+an independent team minimizing a FOURTH player's entire response cap.
+A global improving move must redistribute singleton/collision/empty
+source mass and product clocks together, rather than independently
+repair each deleted tail. The first missing producer assertion remains
+Section20's escape from a positive joint calendar minimum; no proof
+of it is supplied here.
+
+Narrow source search found no post-collision correlated completion
+declaration in the chosen terminal/paths subtree. The literal finite
+clock definitions inspected are `QuittingFiniteDeadlineTimingAction`,
+`quittingFiniteDeadlineTimingGame` and
+`quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingGame.lean`.
+The pure-outcome anchor is
+`quittingTerminalPayoff_pureTimeProfileBehavior_eq_firstStoppingOutcome`
+in `UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean`.
+The complete-response affine and late/Never distinctions were checked
+against `quittingTerminalPayoff_stoppingLawProfile_update_eq_expect`
+and `quittingTerminalPayoff_stoppingLawProfile_late_pure_eq_never_add`
+in `UniformEquilibrium/Quitting/Terminal/FiniteOpponentLateResponse.lean`.
+None is claimed to formalize the correlated-source transformation or
+the independent-team lower bound proved above.
+
+## 22. A strict two-date coarse anchor on the Solan calibration
+
+Status: ordinary exact calculation, unreviewed. This tests the global
+coarse relaxation on a known-UE game with no exact terminal Nash. It
+does not introduce an exact auxiliary-Nash selector, prove a new table
+class or close the global independence producer.
+
+Use the ORIGINAL three-player Solan table already transcribed from the
+primary paper in Section14.4, with 0<e<1/3:
+
+    g(0)=(1,3,0),       g(1)=(0,1,3),       g(2)=(3,0,1),
+    g(01)=(1+e,0,1),    g(02)=(0,1,1+e),    g(12)=(1,1+e,0),
+    g(012)=(0,0,0),     g(Never outcome)=(0,0,0).
+
+Define a=(2-e)/3. Let A be the uniform law on the three cyclic
+rotations of the COMPLETE clock tuple (0,1,Never). Let B be uniform
+on the three tuples with one clock equal to1 and the other two equal
+to Never. Set sigma=a*A+(1-a)*B. This is a correlated clock law, not
+an independent original strategy. Every prescribed path absorbs in
+a singleton and U_i(sigma)=4/3 for every recipient i.
+
+By cyclic symmetry it suffices to calculate recipient0. The constant
+replacement values under A and B are:
+
+    replacement            A value            B value
+    Quit0                   (2+e)/3            1
+    Quit1                   (4+e)/3            (2+e)/3
+    any finite deadline>=2  1                  4/3
+    Never                   1                  1.
+
+These rows exhaust ALL complete pure-clock deviations; the values
+after1 are constant because every finite prescribed clock is0 or1.
+Therefore the margins U_i minus replacement payoff under sigma are
+
+    Quit0:                  [1+a*(1-e)]/3,
+    Quit1:                  (2-e-2*a)/3=a/3,
+    any finite deadline>=2: a/3,
+    Never:                  1/3.
+
+The FULL coarse margin is gamma=a/3=(2-e)/9>0. In particular this one
+two-date law is a strict anchor for EVERY larger clock menu, with no
+Hoffman/error-bound constant depending on the horizon. The hidden
+future clock at1 is essential: a lottery of sole owners all quitting
+at the last date has binding last-to-late constraints instead.
+
+The canonical translation in Section14.4 subtracts c=(0,1,1) from
+every nonempty absorption payoff, leaving Never payoff zero. Every
+finite unilateral deadline absorbs surely, so its margin is unchanged.
+Prescribed play also absorbs surely. Under a Never replacement, the
+only newly nonabsorbing event is the B branch whose sole owner was
+the replaced player, with probability (1-a)/3. Thus the new Never
+margin is 1/3-c_i*(1-a)/3, equal to1/3 for recipient0 and a/3 for
+recipients1,2. The SAME sigma still has full strict coarse margin
+gamma on the literal canonical table; this is not an unjustified
+constant-shift argument on improper laws.
+
+Consequently for ANY supplied actual finite product profile p of
+this canonical table, with FULL original regret eta, the law
+
+    mu=(1-w)*p+w*sigma,       w=eta/(eta+gamma)
+
+is exactly FULL coarse obedient and TV(mu,p)<=w. The converse
+eta<=4R*TV(mu,p) is Section18's unrestricted rounding estimate.
+Hence low-regret joint profiles on this calibration do lie uniformly
+close to exact full coarse sources, despite the absence of exact
+terminal Nash. No claim is made that this mixture itself is independent
+or that strict coarse sources exist for every arbitrary table. The
+first missing step remains a global product/source improvement or
+existence argument, not the repair of an already good profile.
+
+The table and source semantics are the same primary-paper reading and
+actual finite-deadline declarations recorded in Sections14.4 and21;
+no further literature theorem is used here. A rational e=1/10 LP first
+suggested a=19/30 and gamma=19/90; all displayed formulas above were
+then calculated symbolically and cover the entire stated e interval.
+
+## 23. Independent-root erasure: exact operation and an entire stuck seed hull
+
+Ordinary unreviewed mathematics. This is a concrete first test of a
+different correlation-erasure operation, not another exact auxiliary-game
+existence claim or a new UE reward class.
+
+Let mu be a finite law of COMPLETE private clocks which obeys every
+unconditional original-game unilateral replacement (FULL coarse obedience).
+Let v be its actual expected terminal payoff, with Never outcome0. Draw an
+independent product binary root q, independently also of mu. A root quitter
+gets new clock0; a continuer gets its old clock shifted by1. Denote this
+coordinatewise channel by K_q. If q is Nash in the finite binary root game
+with all-Continue continuation v, then K_q mu is again FULL coarse obedient.
+
+Indeed a constant replacement Quit0 earns its root Quit endpoint Q_i.
+A later deadline or Never earns at most B_i+alpha_i*v_i, because mu's
+corresponding complete tail replacement earns at most v_i. The prescribed
+payoff is q_i*Q_i+(1-q_i)*(B_i+alpha_i*v_i), which root Nash bounds above
+both endpoints. Mixtures of complete clocks exhaust arbitrary behavioral
+replacements. No independent original-game realization of v is assumed.
+
+There is also an exact raw-clock TV identity. For ANY product law p, and
+ANY B subset I, write mu_(I\B),p_(I\B) for the projected clock laws.
+The event that precisely B quits at new date0 is observable in the complete
+clock tuple and has the SAME mass under both prefixed laws. These events
+are disjoint, and on each the surviving clock map is injective. Therefore
+
+    TV(K_q mu,K_q p)
+      =sum_B Pr_q(B)*TV(mu_(I\B),p_(I\B)).
+
+In particular this never exceeds TV(mu,p), and if every q_i>0 its drop
+is at least product_i(q_i)*TV(mu,p), since the empty-coordinate projection
+has distance0. K_q p is still an honest product law. This is actual
+coordinate erasure, not a claim that a payoff-based root operation generally
+decreases terminal regret. The narrow inspected source
+`Quitting/ControllerTester/RenewableBarrierSaturation.lean` treats universal
+semantic prefix hulls, not this full coarse/clock-law TV identity; a phrase
+search in the concrete terminal/controller subtrees found no matching
+coarse-prefix declaration.
+
+### Exact decisive seed test
+
+Apply the operation to the STRICT full coarse anchor sigma of Section22
+on Solan's three-player G_e,0<e<1/3. Its actual payoff is
+v=(4/3,4/3,4/3). With cyclic player indices, put A=q_(i+1), B=q_(i+2).
+The actual root Quit-minus-Continue difference is
+
+    g_i(A,B)=-1/3+(4/3+e)*A-(8/3)*B+(2/3-e)*A*B.
+
+Its derivative in B is strictly negative on the whole unit square.
+Moreover
+
+    g_i(A,A)=-1/3+(e-4/3)*A+(2/3-e)*A^2<0,
+
+since this convex quadratic has negative values at both endpoints0,1.
+Thus g_i>=0 forces q_(i+1)>q_(i+2). At any Nash root, q_i>0 forces
+g_i>=0, hence q_(i+1)>0. One active player forces all three active; their
+three strict cyclic inequalities then contradict each other. Consequently
+the ENTIRE root-Nash correspondence at v consists only of all-Continue.
+
+Every finite exact-root prefix word from sigma is therefore a mere common
+time delay. No such word erases any clock correlation. This obstruction
+is quantitative: under sigma, all-Never has probability0, whereas each
+individual Never atom is z=(2-a)/3>=4/9, with a=(2-e)/3. If a product
+law p had TV(p,sigma)=d<1/32, then each p_i(Never)>=4/9-d, so
+
+    d >= p(all Never) >= (4/9-d)^3
+       > (4/9-1/32)^3 > 1/32,
+
+a contradiction. The same bound holds after every common delay. It
+compares with ALL independent complete clock laws, not just laws on the
+old finite menu.
+
+This falsifies universal correlation erasure by exact coarse-preserving
+root prefixes FROM AN ARBITRARY STRICT ANCHOR, including the whole root
+selector/prefix correspondence at this seed. It does not falsify selecting
+another coarse law jointly with a product profile: this known game has UE,
+and Section22 already explains how its low-regret products approach other
+exact coarse sources. Nor does it falsify approximate non-Nash prefixes
+with a charged global coarse repair. Requiring exact root preservation is
+therefore not adopted as the next global producer assumption.
+
+Concrete remaining question: can a genuinely JOINT variation of the
+coarse law and product profile use the bounded coarse dual to escape every
+positive global minimum, rather than preserving this seed or its payoff?
+The prefix identity may be one allowed variation, but is not a completeness
+claim or a substitute for that global step.
