@@ -34,6 +34,13 @@ lowered-cap Nash roots have an absorption-weighted error charge and
 strictly improve debt from every positive-debt low-cap point. An exact
 rational prefix escapes Section15's stall but exits the low-cap face;
 no preserved-region or minimum-specific escape theorem is proved.
+Section17 is a separate ordinary UNREVIEWED complete finite-player
+raw-class proof draft. Two finite weighted reward ledgers, proper-support
+premium peeling, and proper-subset insertion acyclicity produce and
+preserve an actual cap chamber and escape its positive-debt minimum.
+Its four-player test has no stationary exact Nash and defeats the
+whole weighted-floor/upper-average and boxed-charge selections checked
+there. No exhaustive source census or independent review is claimed.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -1667,3 +1674,277 @@ The next global question is therefore preservation or return of the
 low-cap geometry under a genuinely joint operation. Simply replacing
 an exact cap-Nash root by a lowered-cap Nash root supplies immediate
 progress but does not supply the required closed invariant domain.
+
+## 17. Two raw ledgers and proper-subset acyclicity produce a chamber
+
+Status: ordinary UNREVIEWED complete proof draft. This is a finite raw
+reward-class theorem, not an arbitrary-table selection theorem. The
+actual carrier, finite Nash existence and diagonal-to-uniform consumer
+are existing checked semantics; the raw guards and minimization below
+are ordinary mathematics. Here E=max_i(B_i-U_i), NOT total debt.
+
+### 17.1. Exact finite data and theorem
+
+Let I be any finite set with at least two players. A quitting game has
+arbitrary finite real reward vectors r(S) for every nonempty S subset I,
+zero live payoff and zero Never payoff. Players use independent private
+randomness; every unilateral behavioral replacement is allowed. Put
+s_i=r_i({i}) and assume s_i>=0. Fix nonzero weights a_i>=0. For every
+nonempty proper S define TWO DIFFERENT polynomials in the raw rewards:
+
+    H_a(S)=sum_i a_i[r_i(S)-s_i],
+    J_a(S)=sum_(i notin S) a_i[r_i(S union{i})-r_i(S)].
+
+Assume the following finite guards.
+
+1. H_a(S)>=0 for every nonempty proper S, and H_a({j})>0 for at least
+   one player j.
+2. J_a(S)<=0 for every nonempty proper S.
+3. Every nonempty proper A has a flat participant: there is i in A such
+   that r_i(S)<=s_i for EVERY nonempty S subset A containing i. Equivalently
+   there is no proper nonempty premium trap, with the full coalition left
+   unrestricted.
+4. The directed graph with i->j, i!=j, exactly when
+   r_j({i,j})>r_j({i}) has no directed cycle contained in a proper subset
+   of I. Equivalently every nonempty proper induced subgraph has a sink.
+
+THEOREM. These raw hypotheses imply a uniform-equilibrium payoff in the
+original game against unrestricted behavioral deviations. No profile,
+continuation, best response, root selector, invariant carrier, or small
+error sequence is an input. In particular the grand-row rewards enter
+only guard2 on penultimate coalitions and guard3 does not constrain the
+full coalition.
+
+The strict singleton clause can instead be obtained from full standard-Q
+of the singleton comparison matrix and nonzero a>=0 by Section14.1.
+The direct clause above avoids imposing standard-Q when it is unnecessary.
+
+### 17.2. Actual seed and compact constrained domain
+
+Let player j Quit0 surely and every other player Never. Its ACTUAL full
+semantics is
+
+    U_i=r_i({j}),
+    B_j=s_j,
+    B_i=max{r_i({j}),r_i({i,j})} for i!=j.
+
+For j the only alternative is Never0, so B_j=s_j uses s_j>=0. For each
+other player, Quit0 and a positive finite deadline/Never give exactly
+the two displayed rewards. Every private response law is a mixture of
+these complete pure responses. Thus there is no deadline truncation.
+
+Write L_a(B)=sum_i a_i(B_i-s_i). Since B>=U coordinatewise,
+L_a(B)>=H_a({j})>0. If E=0 this actual profile already supplies the
+terminal Nash and fixed-target uniform conclusion. Otherwise set
+lambda=L_a(B)/E>0 using THIS produced profile.
+
+Let S_actual be the closed carrier of all actual full pairs(U,B),
+without any convexification. It is compact and invariant under every
+fixed product root. The following closed subset is nonempty:
+
+    C={(U,B) in S_actual:
+          min_i(B_i-s_i)<=0, L_a(B)>=lambda E(U,B)}.       (17.1)
+
+No global lower bound B>=0 is needed or asserted.
+
+### 17.3. Exact cap-root identities and full-support exclusion
+
+At any actual semantic pair use the two-action finite root game with
+all-Continue continuation B. For a root q put c=product_i(1-q_i), and
+let Q_i and C_i be its forced-Quit and forced-Continue endpoints, the
+latter retaining the full suffix cap B_i. Every exact Nash root obeys
+
+    B'=cB+sum_(S nonempty) p_q(S)r(S),
+    B_i'-U_i'=c(B_i-U_i),                 E'=cE.          (17.2)
+
+These identities extend to the closed actual carrier for any fixed
+selected root. No continuity of Nash selection or cap attainment is
+used. A root with some q_i=1 gives E'=0 immediately, hence a diagonal
+in the actual carrier and the desired conclusion. We may therefore
+assume no such root occurs when proving a contradiction to no UE.
+
+If q has full support and every q_i<1, write z_i=q_i/(1-q_i)>0. Active
+indifference divided by opponent joint survival gives the literal identity
+
+    B_i-s_i=sum_(empty!=A subset I\{i}) z_A
+                           [r_i(A union{i})-r_i(A)].
+
+Consequently
+
+    L_a(B)=sum_(empty!=S proper subset I) z_S J_a(S)<=0. (17.3)
+
+At a positive-E point of C, however, L_a(B)>=lambda E>0. Thus EVERY
+cap-Nash root there has proper support, unless it already supplies a
+zero-debt diagonal by c=0.
+
+### 17.4. Preservation under every remaining cap-Nash root
+
+Let A={i:q_i>0} be proper and nonempty. Guard3 supplies a flat i in A.
+Every forced-Quit coalition for i is a subset of A containing i, hence
+Q_i<=s_i. Supported Nash optimality gives B_i'=Q_i<=s_i, including sure
+probabilities. Thus the low-cap condition is preserved.
+
+All terminal root coalitions are nonempty proper subsets, so guard1 and
+(17.2) give
+
+    L_a(B')=cL_a(B)+sum_(S nonempty) p_q(S)H_a(S)
+            >=cL_a(B)>=lambda cE=lambda E'.             (17.4)
+
+All Continue simply fixes the pair. Therefore EVERY cap-Nash root from
+a positive-E chamber point either supplies the conclusion outright or
+remains in C with E'=cE. This is the preservation step missing in the
+arbitrary-point test of Section15.
+
+### 17.5. Escape is needed only at the attained minimum
+
+Suppose C has attained minimum E*>0, at(U*,B*). If any B_i*<s_i,
+all Continue is not Nash (Quit pays s_i), so finite-game Nash existence
+supplies a nonzero root. It yields a smaller-E point in C by the preceding
+argument, or a diagonal, a contradiction.
+
+Otherwise every B_i*>=s_i. The low set
+
+    L={i:B_i*=s_i}
+
+is nonempty and PROPER, since L_a(B*)>0. Guard4 gives a sink i in L.
+Let only i Quit at the root with a sufficiently small p in(0,1).
+Owner i is indifferent because its two endpoints are s_i and B_i*=s_i.
+For another player j, Continue minus Quit is exactly
+
+    (1-p)(B_j*-s_j)+p[r_j({i})-r_j({i,j})].            (17.5)
+
+For j in L this is nonnegative because i is a sink. For j outside L
+the first gap is strictly positive, so (17.5)>=0 for all sufficiently
+small p>0, simultaneously by finiteness. This is a nonzero FULL Nash
+root, including every inactive player's inequality, not a Nash root
+of only the owner subgame.
+
+Its prefix remains in C and has E'=(1-p)E*<E*, a contradiction. Hence
+the compact minimum is zero. Diagonal membership produces actual
+profiles with full terminal regret tending to zero and payoffs converging
+to ONE fixed target. The existing full-behavior uniform consumer gives
+the theorem. Strategy-class completeness, arbitrary-game preservation,
+and an algorithm for one convergent root spine are NOT claimed.
+
+### 17.6. Exact four-player test, different from the exported fixed rows
+
+Take I=Z/4 and unit weights. Own singletons are1, the opposite singleton
+recipient gets4, the other two singleton recipients get0. On the
+adjacent pair {i,i+1}, recipient i gets-1, i+1 gets2, and BOTH outsiders
+get3/2. On an opposite pair both participants get0 and BOTH outsiders
+get2. On any triple the three participants get-1 and its omitted
+recipient gets10. Every grand recipient gets9. All Never rewards0.
+
+The exact finite ledgers are
+
+    H(singleton)=1, H(adjacent pair)=0,
+    H(opposite pair)=0, H(triple)=3;
+    J(singleton)=-3, J(adjacent pair)=-5,
+    J(opposite pair)=-6, J(triple)=-1.
+
+Positive own premiums in a PROPER coalition occur only at the successor
+participant of an adjacent pair. A trap therefore must contain every
+predecessor and is all4. The positive insertion graph is exactly the
+directed Hamiltonian cycle i->i+1, so both guards3/4 hold. The sole-owner0
+seed has
+
+    U=(1,0,4,0), B=(1,2,4,0), E=2, L=3, lambda=3/2.
+
+This differs substantively from the exported passive-triple chamber's
+fixed pair outsider rewards1. That theorem's more delicate Nash-conditioned
+H account is not invoked here: every proper raw terminal H is nonnegative.
+
+### 17.7. Whole weight and boxed-charge comparisons on this test
+
+These are bounded comparisons, not an exhaustive producer census. For
+the sole full trap, every nonzero nonnegative upper-average weight fails
+the grand test, which is8sum_i w_i>0. For a global weighted FLOOR,
+sum the four singleton inserted-premium inequalities: their left sides
+sum to -2sum_i w_i<0. Thus no nonzero nonnegative floor weights work.
+The pair OUTSIDER changes do not affect these singleton inserted premiums.
+
+For the only full trap, P(S)=sum_(i notin S)[r_i(S union{i})-1] and
+J(S) have the exact values
+
+    singleton: P=-2,J=-3;
+    adjacent pair: P=-4,J=-5;
+    opposite pair: P=-4,J=-6;
+    triple: P=8,J=-1.
+
+Every valid boxed-charge selection therefore has delta<=2,tau>=8,
+gap<=3,loss<=1. Its maximal threshold is at most
+
+    4sqrt(2/8)(3+2/8)=13/2 <4+4*10.
+
+Thus the WHOLE boxed-charge predicate, and its support-local
+upper-average alternative, fail. This is not failure of merely one
+selected weight or coefficient tuple.
+
+### 17.8. No stationary exact Nash on the test
+
+First there is no stage Nash root with a sure player, for ANY continuation.
+If i is sure, opposite i+2 has joining-minus-Continue differences-4,
+-5/2 or-1 as zero, one or two other nonowners quit, so strictly Continues.
+Predecessor i-1 then has differences-1 or-5/2 and strictly Continues.
+Successor i+1 joins for2 versus0. Owner i then receives-1 and withdraws
+for0, a contradiction.
+
+Now suppose q is stationary exact terminal Nash. All q_i<1 by this
+argument, and q is nonzero because all Never has a profitable Quit1.
+Every stationary pure-Never response has nonnegative payoff, as all
+passive rewards are nonnegative, so all B_i=U_i>=0.
+
+Full support is impossible: its eventual terminal law has strictly
+positive singleton probabilities and EVERY terminal H>=0 (including
+grand H=32), hence sum B-4>0; (17.3) instead gives sum B-4<0.
+One active owner is impossible because its successor prefers joining2
+to passive0. For adjacent two-player support, the successor's Never
+value is0 whereas its Quit value is1+a>0. For opposite two-player
+support, Never gives4 whereas Quit gives1-b<1.
+
+For support three rotate to q=(a,b,c,0), with a,b,c>0. Player0 has
+
+    Q0=1-2b-c+bc,
+    b0=c(4-(5/2)b),
+    Q0-b0=1-2b-5c+(7/2)bc>=0,
+
+the last inequality following from active indifference
+Q0=b0+(1-b)(1-c)B0 and B0>=0. Thus b<1/2 and
+c<=(1-2b)/(5-(7/2)b)<=1/5. Player1's Quit endpoint is
+
+    Q1=1-2c+a(1-c)>=1-2c>=3/5.
+
+Its Never payoff is2ac/(a+c-ac)<=2c<=2/5, since only the simultaneous
+opposite pair {0,2} gives it a nonzero passive reward. But stationarity
+and a positive own hazard imply its full value equals this Never
+payoff: opponents terminate surely, and exact root indifference
+U1=b1+alpha1 U1 solves U1=b1/(1-alpha1). Contradiction.
+
+Hence every stationary exact Nash is excluded. This defeats every sound
+raw producer whose conclusion is an exact stationary product profile,
+without restricting its parameter choices. It does not exclude small
+stationary regret or independently audit all nonstationary producers.
+
+### 17.9. Declaration audit and remaining question
+
+The proper-support low-cap argument is the already checked signed-reward
+declaration `exists_successor_le_singleton_of_exactRoot_nontrap_support`
+in `UniformEquilibrium/Quitting/Classification/CommonQuittingPremiumLeaver.lean`.
+Its trap definition and negation were read in
+`MathUE/FiniteCoalitionPremiumCore.lean` and
+`UniformEquilibrium/Quitting/Classification/QuittingPremiumSupportPeelingOrder.lean`.
+The exact weighted definitions and full-coalition identities were read
+in `UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapLeavers.lean`.
+The WHOLE boxed coefficients and threshold were read in
+`BoxedQuittingNashCharges.lean`, `BoxedQuittingNashChargeOdds.lean` and
+`BoxedQuittingNashChargeReturn.lean` in the same classification directory.
+The actual carrier/full-prefix/diagonal consumer declarations are those
+listed explicitly in the passive-triple cap-chamber export, Section1;
+they were reread for this use. No Lean instance or new build is claimed.
+
+The theorem removes supplied strategic inputs on a finite raw chamber
+class, not the arbitrary-table gap: standard-Q supplies its singleton
+seed clause but does not supply guards1--4. The requested independent
+check is the COMPLETE §§17.1--17.8 proof, especially zero-weight/weak
+boundary cases, full-support odds signs, and the purported nonstationary
+test. A separate bounded overlap check must precede any export request.
