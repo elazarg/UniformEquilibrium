@@ -15,6 +15,10 @@ least THREE strict singleton H values. Checked reward-closedness then
 returns UE for the original table, including when all singleton H values
 were0. This is internal pending independent proof review; no export,
 Lean implementation, arbitrary-table theorem or new seal is asserted.
+The self-contained frozen review candidate is
+[`Graph-free H/J and proper-flat Fin4 UE`](CODEX_TURING_BOX__GRAPH_FREE_HJ_FLAT_FIN4_UNIFORM_EQUILIBRIUM.md).
+Section42 separately investigates genuine additional class coverage;
+soundness of the candidate and nonredundancy are different review gates.
 
 Section40 is a new ordinary UNREVIEWED whole-class falsifier of one
 proposed triangle operation. An exact positive-own Fin4 table satisfies
@@ -9188,3 +9192,456 @@ arbitrary Fin4 UE. The Section38 export is unchanged. The concrete
 next action is independent falsification of the COMPLETE candidate,
 especially the paid-prefix/minimum consumer; no further unfunded
 zero-H branch is needed to state this raw-class theorem.
+
+## 42. Enlarged-class coverage: a hard candidate and an exact failed edit
+
+Status: supporting ordinary mathematics and explicitly labeled
+experiments. The frozen Section41 proof candidate is UNCHANGED.
+Neither40.1 nor40.4 is a new coverage witness: the first has an immediate
+pure equilibrium and the second has a safe stationary quiet extension.
+The following table is a CANDIDATE for a genuine coverage witness, not
+a completed whole-source noncoverage theorem. One tempting further
+edit already fails because it creates an exact immediate Nash family.
+
+### 42.1 Four-entry modification with unchanged singleton matrix
+
+Start from the unmodified cyclic K10/G9 hard table in Section6 of
+`exports/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md`,
+not Section38's two-exception version. Own singletons and a_i are1.
+Change exactly four entries:
+
+    r_0(02)=5, r_1(12)=-3, r_2(12)=1, r_3(12)=9/2.
+
+The complete literal candidate is
+
+| S | r(S), in player order0,1,2,3 |
+| --- | --- |
+| 0 | (1,0,4,0) |
+| 1 | (0,1,0,4) |
+| 2 | (4,0,1,0) |
+| 3 | (0,4,0,1) |
+| 01 | (-1,2,3/2,3/2) |
+| 02 | (5,2,0,2) |
+| 03 | (2,3/2,3/2,-1) |
+| 12 | (3/2,-3,1,9/2) |
+| 13 | (2,0,2,0) |
+| 23 | (3/2,3/2,-1,2) |
+| 012 | (-1,-1,-1,10) |
+| 013 | (-1,-1,10,-1) |
+| 023 | (-1,10,-1,-1) |
+| 123 | (10,-1,-1,-1) |
+| 0123 | (9,9,9,9) |
+
+Exact finite enumeration in rational arithmetic gives singleton H=1,
+singleton J=(-3,-4,0,-3); H(02)=5 and every other pair H=0;
+J(01)=-5,J(02)=-6,J(03)=-5,J(12)=-8,J(13)=-6,J(23)=-5;
+every triple has H=3,J=-1. Flat participants for triples012,013,023,123
+are respectively2,3,2,1; their EVERY participant subrow is at most1.
+Pairs have a flat member (in particular2 in02 and either1 or2 in12).
+The insertion graph is exactly
+
+    0->1->2->0,       2->3->0.
+
+Thus the table satisfies the final graph-free class, but its bare012
+violates the two-ledger and sink-or-receiver graph guards. It is not a
+literal member of the accepted passive-triple packet's prescribed
+singleton/pair/triple template. These guard/template separations alone
+do NOT establish new UE coverage.
+
+The singleton comparison matrix is EXACTLY the old hard matrix
+
+    Gamma=[0,-1,3,-1; -1,0,-1,3; 3,-1,0,-1; -1,3,-1,0],
+    det Gamma=45,
+    Gamma^-1=(1/15)[2,3,7,3;3,2,3,7;7,3,2,3;3,7,3,2].
+
+Hence all previously checked facts depending ONLY on that matrix
+remain unchanged: standard-Q, R0, degree1; every deleted triple has
+determinant6 and a negative inverse diagonal; positive singleton
+graph is an opposite matching. This is substitution into the same
+raw matrix, not an assertion that higher-coalition producers remain
+unchanged. Actual response quotients still require a fresh check.
+
+### 42.2 Complete sure-owner induced selection for the four-entry table
+
+All passive rewards are nonnegative, so literal Never guarantees each
+player a nonnegative payoff. Accordingly every sound actual punishment
+lower value and full actual cap is>=0. Fix a sure owner at the root.
+The other players' root endpoints are independent of any continuation.
+The following exhausts the ENTIRE induced Nash selection, not just one
+root. All support/boundary choices are included.
+
+Owner0: opposite2 strictly Continues for EVERY pure choice of1,3:
+its joining gaps are negative at the four corners, including
+r_2(02)-r_2(0)=-4 and grand9 versus passive triple10. Once2 Continues,
+predecessor3 has both gaps negative and Continues; successor1 surely
+Quits. Owner0's Q_0=-1, b_0=0, alpha_0=0. No continuation repairs it.
+
+Owner1: opposite3 has all four strict negative joining gaps and
+Continues. Predecessor0 then has negative gaps whether2 Continues or
+Quits; hence0 Continues and successor2 surely Quits. Owner1 has
+Q_1=-3,b_1=0,alpha_1=0. No continuation repairs it.
+
+Owner2: predecessor1 has all four strict negative joining gaps and
+Continues. Put x=q_0,y=q_3. The remaining exact gaps are
+
+    g_0=1-(7/2)y,       g_3=2-5x.
+
+Their entire anti-coordination Nash set consists of(x,y)=(1,0),(0,1)
+and(2/5,2/7). For the first pure root Q_2=0,b_2=4; for the second
+Q_2=-1,b_2=0. At the mixed root
+
+    Q_2=1/7,       b_2=46/35,       alpha_2=3/7.
+
+Thus Q_2<b_2+alpha_2 B_2 for EVERY B_2>=0 at ALL three induced
+roots. In particular no nonnegative actual punishment floor supports
+the owner. The mixed computation includes the passive pair03 reward3/2.
+
+Owner3: opposite1 has four negative gaps and Continues. Predecessor2
+then Continues and successor0 surely Quits. Owner3 has
+Q_3=-1,b_3=0,alpha_3=0. No continuation repairs it.
+
+Consequently no full cap-Nash root with a sure label exists at any
+nonnegative continuation. This excludes the entire sure-owner actual-
+punishment-floor producer, and sure labels in exact stationary Nash.
+The assertion is NOT about arbitrary signed unrealized continuations.
+The inspected producer semantics are the same named sources as38.10,
+including `singletonBase_inducedNash_floorExcess_semantics` and
+`PersistentBaseInducedGame.lean`; no new supplied-floor restriction is
+being imposed to force this exclusion.
+
+### 42.3 Whole weighted-floor and boxed-charge selections already fail
+
+For ANY nonnegative weight w, the global inserted-premium floor at
+coalition{1} is
+
+    -2w_0-w_3>=0,
+
+because the remaining inserted rewards are r_2(12)=s_2=1. It forces
+w_0=w_3=0. The same floor at{3} is
+
+    w_0-w_1-2w_2>=0,
+
+which then forces w_1=w_2=0. Thus NO nonzero nonnegative global-floor
+weight exists. The grand row makes the full coalition a premium trap;
+proper flatness excludes every proper trap. In particular the ENTIRE
+weight selection in `HasWeightedQuittingTrapLeavers` fails on the full
+trap, not just unit weights. The global weighted upper-average
+alternative also fails for every nonzero nonnegative weight: at the
+grand row its surplus is8 sum_i w_i>0.
+
+The ENTIRE `QuittingTrapChargeCoefficients` selection fails even before
+its numerical threshold. Its full-trap singleton comparison at{2}
+requires the leave sum to be at most a STRICT negative gap, but that
+leave sum is J({2})=0. No positive gap parameter can satisfy it. These
+are literal consequences of the definitions opened in
+`UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapLeavers.lean`
+and `UniformEquilibrium/Quitting/Classification/BoxedQuittingNashCharges.lean`.
+
+The following subsections complete the quiet/protected, quotient and
+exact-stationary comparisons. An initial bounded floating-point search
+found no interior stationary full Nash; that experiment was NOT used
+as an exclusion. Section42.7 now supplies the exact all-support proof.
+
+### 42.4 A stronger-looking quiet-child edit is already covered
+
+Starting from42.1, make four MORE edits:
+
+    r_0(01)=0,       r_0(03)=1,
+    r_2(03)=5/2,     r_3(013)=2.
+
+These eight total changes retain all H/J/flat guards and the same
+insertion graph. They create useful universal quiet-child falsifiers:
+child012 can use the exact pair01 equilibrium and omitted3 gains
+2-3/2=1/2; child013 can use sole1 and omitted2 gains1-0=1. Every other
+proper child has a suitable sole-owner exact Nash whose positive
+outgoing arrows all go outside. Thus EVERY child has zero-debt,
+zero-joint-Never actual data refuting its universal outside-debt bound.
+
+BUT the table is already solved by a different complete selector.
+Prescribe player1 sure Quit0, player0 Quit0 with probability x and
+otherwise Never, and players2,3 Never. For
+
+    2/7<=x<=8/9,
+
+this is exact unrestricted Nash. Player0 is indifferent0. Player2's
+root joining gap is1-(7/2)x<=0, and player3's is-4+(9/2)x<=0. Since
+player1 surely quits at0, these are their complete response tests.
+Owner1's Quit payoff is1+x; its best response after Continue can earn
+only1-x (if player0 has not quit, it can quit later alone for1), hence
+it strictly prefers Quit. At x=1/2 the actual full diagonal is
+
+    U=B=(0,3/2,3/4,11/4).
+
+This exact immediate equilibrium disproves the candidate's intended
+noncoverage. The failed implication was: eliminating EVERY universal
+quiet-child certificate, while preserving singleton obstructions,
+also eliminates sure-owner selection. It does NOT. An earlier hasty
+owner1 argument missed the continuum of induced Nash roots with0
+indifferent. That mistake was reported immediately to the coordinator
+and is corrected here; it does not affect the frozen proof candidate.
+
+The eight-entry variant is RETIRED as a new coverage witness. The
+four-entry table42.1 is the table used in EVERY following comparison.
+
+### 42.5 Complete protected and raw quiet-family exclusions
+
+Every player has participant reward-1 in a proper triple, below its
+own singleton1. Consequently NO player satisfies nonnegative
+participant premiums on all participant coalitions. The maximal
+protected set is empty. Since grand9 makes I a premium trap, neither
+`IsCommonQuittingPremiumLeaver` nor ANY protected set can supply
+`HasSupportSpecificQuittingLeavers`, even with weak leave inequalities.
+This excludes EVERY protected/common/support-specific selection and
+the weak-leave reward-closure producer. The literal definitions were
+opened in `CommonQuittingPremiumLeaver.lean` and
+`SupportSpecificQuittingPremiumLeavers.lean`; the weak producer is
+`exists_uniformEquilibriumPayoff_of_supportSpecific_weakLeave` in
+`Classification/Existence/SupportSpecificQuittingPremiumLeaversRewardClosure.lean`.
+All these paths are below `UniformEquilibrium/Quitting/`.
+
+For each nonempty proper child C OTHER THAN012, choose a sole owner j
+whose positive outgoing insertion arrows ALL go outside C. Such an
+owner exists by the literal graph in42.1. For the pairs01,02,03,12,13,23
+choose respectively1,0,0,2,1,3; for triples013,023,123 choose1,0,3;
+singletons use their own member. Sole-j-Quit0 and every other child
+player Never is exact unrestricted child Nash: every child joining
+reward is at most its passive singleton reward, and the owner can get
+only1 or Never0. Its joint-Never mass is0. At least one omitted player
+can join with a STRICT positive insertion gap, since every j has an
+outgoing arrow and none lies in C. Thus ANY universal inequality
+
+    outside debt<=sum_(i in C) w_i child_debt_i+rho*jointNever,
+
+with finite nonnegative weights and finite rho, is false for that
+child. This excludes whole quiet-certificate selections, not one
+chosen child equilibrium or one chosen weight.
+
+The only remaining child is012 with outsider3. It need not have an
+exact child Nash supplied here: a DIRECT raw F/J contradiction suffices.
+Use the singleton coalition A={2}. For nonnegative advance weights
+lambda, the future advance row is
+
+    1-r_3(2)=1 <= -3lambda_0+lambda_1,
+
+after discarding any nonpositive withdrawal contribution. The joining
+advance row is
+
+    r_3(23)-r_3(2)=2 <= lambda_0-3lambda_1,
+
+again after discarding nonpositive withdrawal. Adding gives
+
+    3<=-2lambda_0-2lambda_1<=0,                       (C1)
+
+an exact contradiction. The same argument excludes capped-clock
+certificates, whose advance and joining weights coincide, including
+arbitrary Never slack; the N row was not used. It also excludes ALL
+FIVE literal `WithdrawalFutureJoinKind` choices, with EVERY nonnegative
+advance and withdrawal weight selection. To check the discarded signs:
+withdrawal gain is0 for a nonmember of A, and for its member2 equals
+the applicable restart floor minus own singleton1. The patient floor
+is at most max(1,0)=1; the deadline zero/passive floor is<=0; evaluated
+security uses a nonpositive floor; terminal security is at most1 by
+`deadlineWithdrawalSecurityValue_le_singleton` and the zero-floor bound;
+cancellation uses the deadline floor. Thus gain_2({2})<=0 in EVERY
+kind. A future withdrawal coefficient is either its nonnegative weight
+or0. There is no hidden sign assumption or uncomputed security choice.
+
+Sources opened: `QuietExtension/WithdrawalFutureJoinRaw.lean`,
+`PatientWithdrawalRaw.lean`, `DeadlineWithdrawalRaw.lean`,
+`DeadlineWithdrawalRestartPointwiseCore.lean`,
+`DeadlineWithdrawalSecurityLP.lean`, and
+`CappedClockPointwiseDomination.lean`. The actual full-debt consumers
+are `quittingLiftDeletedProfile_outsideDebt_le_add_neverExcess_of_withdrawalFutureJoin`
+in `WithdrawalFutureJoinFixedTarget.lean` and
+`quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt_add_slack`
+in `CappedClockChildDeletionAdapter.lean`. All these files are below
+`UniformEquilibrium/Quitting/Classification/`. The consumers retain the
+full behavioral caps and include the actual joint-Never residual, so
+the zero-debt zero-Never child tests above apply to their EXACT output.
+For012 the finite raw certificate itself is impossible by(C1).
+
+An independent EXACT rational LP computation also declared all three
+distinct raw-row systems infeasible (patient/cancellation, deadline/
+evaluated-security, terminal-security). Its Farkas output was future{2}
+plus THREE joining{2} rows, giving7<=-8lambda_1<=0. This is experimental
+arithmetic corroboration; the shorter direct(C1) is the proof. Arbitrary
+Never slack cannot affect it. Additive F/J allowances necessarily obey
+futureError+joinError>=3, so they cannot tend to0 on this fixed table.
+
+### 42.6 Every actual response-quotient choice is exhausted
+
+Use the ACTUAL zero-discount stationary residual, not a raw reward
+average or a chosen singleton quotient:
+
+    F_i(q)=(1-alpha_i)Q_i-b_i.
+
+The declaration `quittingSingletonBlockRowSum_eq_of_responseInvariant`
+in `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`
+forces equal Gamma row sums to each block whenever literal residual
+rows are equal on the block-constant unit cube. Exact enumeration of
+all15 set partitions leaves precisely the seven shown below. This
+exhausts all surjective block maps, up to renaming blocks; the required
+representative section forces surjectivity. Every nondiscrete survivor
+fails ACTUAL response invariance at the indicated exact block-constant
+point. The residual values were computed from the full table42.1.
+
+| blocks | q | unequal original residuals |
+| --- | --- | --- |
+| 0123 | (1/2,1/2,1/2,1/2) | F0=-61/64, F1=-55/32 |
+| 01\|23 | (0,0,1/2,1/2) | F0=-1/16, F1=-31/16 |
+| 02\|13 | (0,1/2,0,1/2) | F0=-5/16, F2=-1/2 |
+| 02\|1\|3 | (0,0,0,1/2) | F0=3/4, F2=0 |
+| 03\|12 | (0,1/2,1/2,0) | F0=-5/8, F3=-7/4 |
+| 0\|13\|2 | (0,0,1/2,0) | F1=-1/2, F3=3/4 |
+| 0\|1\|2\|3 | arbitrary | discrete Gamma, determinant45, degree1 |
+
+The necessary row tests reject the other eight partitions before any
+choice of representative. Only the discrete quotient survives; its
+matrix is Gamma up to simultaneous row/column relabeling. Its positive
+determinant45 defeats
+`finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+in `UniformEquilibrium/Diagnostics/Quitting/FinFourResponseQuotientCriterion.lean`.
+The degree-not-one quotient producer likewise fails at the remaining
+degree1 quotient. Both the response-invariance definition and this
+negative-determinant exit were opened directly.
+
+For completeness, Gamma is R0: every principal block of size>=2 is
+invertible; a singleton homogeneous complementary support is impossible
+because its column has a negative external neighbor entry. At offset
+ones its ENTIRE strictly complementary solution set is empty support,
+four adjacent supports with coordinates(1,1), and four triple supports
+with rotated coordinates(1/2,5/2,1/2). Singletons cannot solve their
+diagonal equation, opposite pairs would need negative coordinates,
+and the full support gives x=-ones. Their determinant indices are
+1,-1,+1 respectively, hence degree1-4+4=1. This is the same exact
+singleton calculation as38.9; the table edits did not change Gamma.
+Every deleted triple's inverse still has a negative diagonal entry, so
+the entire raw deleted nonnegative-inverse triple selection also fails.
+The positive singleton graph is an opposite matching, not a positive
+three- or four-cycle. No change to higher rewards is being silently
+ignored when checking ACTUAL quotients: those used the full residual
+values in the table above.
+
+### 42.7 Exact stationary Nash does not exist, over ALL supports
+
+This is an ordinary exact exclusion, superseding the earlier numerical
+screen. It is about exact stationary product Nash, NOT a positive gap
+over stationary profiles or unrestricted nonstationary profiles.
+Passive rewards are nonnegative, so literal Never guarantees>=0 and
+every exact stationary value v is nonnegative. A sure rate is impossible
+by the ENTIRE induced selections in42.2 applied to continuation v>=0.
+All-Never fails because every own singleton is1. The remaining
+positive rates lie strictly between0 and1.
+
+Full support is impossible. Stationary terminal probabilities of all
+singletons are positive. Every proper coalition has H>=0, all
+singletons have H=1, and grand H=32. Thus L(v)=sum_i(v_i-1)>0.
+But full-support Nash indifference gives the exact odds identity
+L(v)=sum_(empty!=S proper)z_S J(S)<=0, a contradiction.
+
+One-player support fails because its positive-arrow successor can
+join profitably. Adjacent two-player supports01,12,23,30 fail because
+the successor's Never payoff is0 while its Quit endpoint is respectively
+1+q_0,1,1+q_2,1+q_3>0. Opposite supports02 and13 fail because player2
+and player1 respectively get4 by Never and at most1 by Quit. This
+exhausts supports of size at most2.
+
+For the three-player supports use active indifference: v_i=Q_i and
+also v_i=b_i/(1-alpha_i), since Never is a best response when the
+own rate is interior and the stationary opponents are unchanged.
+Hence Q_i>=b_i and v_i>=0. No equation for an inactive fourth player
+is needed to disprove these supports.
+
+On support013 set a=q_0,b=q_1,c=q_3. Flat player3 has
+
+    Q_3-b_3=1-2a-5b+(7/2)ab>=0.
+
+For a>=1/2 the left side is nonpositive at both b endpoints and
+strictly negative for b>0; hence a<1/2. Rearranging gives
+b<=(1-2a)/(5-(7/2)a)<=1/5. Middle player0 has
+Q_0=1+c-2b-bc>=1-2b>=3/5, while its Never payoff is
+2bc/(b+c-bc)<=2b<=2/5. Contradiction.
+
+On support023 set a=q_3,b=q_0,c=q_2. Flat player2 has the SAME
+inequality1-2a-5b+(7/2)ab>=0, so b<=1/5. Middle player3 has
+Q_3=1+c-2b-bc>=3/5 and Never payoff2bc/(b+c-bc)<=2/5.
+The new r_0(02)=5 is not used in either of these two players' rows,
+so this is the literal modified-table calculation, not an assumed
+rotation symmetry.
+
+On support123 set a=q_2,b=q_3,c=q_1. Flat player1 has
+
+    Q_1-b_1=1-4a-5b+(11/2)ab>=0.
+
+Endpoint checking first gives a<1/4, then
+b<=(1-4a)/(5-(11/2)a)<=1/5. Middle player2 has
+Q_2=1-2b>=3/5 (the changed r_2(12)=1 cancels the c term), and
+Never payoff2bc/(b+c-bc)<=2/5. Again contradiction.
+
+For the NEW bare support012 write a=q_0,b=q_1,c=q_2. Exact endpoints
+give
+
+    Q_0=1-2b+4c-4bc,       b_0=4c-(5/2)bc,
+    Q_1=1+a-4c+ac,         b_1=2ac,
+    Q_2=1-a-ab,            b_2=4a-(5/2)ab.
+
+From Q_0>=b_0 obtain b<=1/2. From Q_2>=b_2 obtain
+a<=[5-(3/2)b]^-1<=2/7. Active player1 has
+0<=Q_1=Never_1=2ac/(a+c-ac)<=2a, hence
+
+    (1-a)/(4-a)<=c<=(1+a)/(4-a),
+    5/26<=c<=9/26<3/8.
+
+But active0's EXACT stationary residual must vanish and equals
+
+    F_0=b(1-2b)-c[3-(7/2)b+2b^2]+4c^2(1-b)^2.
+
+Since c<=3/8 and0<=b<=1/2,
+
+    3-(7/2)b+2b^2-4c(1-b)^2
+      >=3/2-b/2+b^2/2>=11/8,
+    b(1-2b)<=1/8.
+
+Therefore F_0<=1/8-(11/8)c<=-29/208<0, contradiction.
+Every support is exhausted. Thus NO exact stationary product Nash
+exists for the four-entry table. In particular every sound raw family
+whose conclusion PRODUCES an exact stationary product Nash is excluded,
+not just one chosen hazard or support. An exact instantaneous absorbing
+root would be stationary, consistently with42.2.
+
+### 42.8 Coverage checkpoint and precise remaining scope
+
+The literal four-entry table is admitted by the frozen graph-free
+H/J/proper-flat theorem. It is outside BOTH prior raw graph-chamber
+packets regardless of weights or relabeling, because bare012 violates
+their graph guard. All six triangle insertion differences have strict
+signs, so sufficiently nearby tables still violate those graph guards.
+It is outside the accepted passive-triple packet's literal family even
+up to relabeling: its participant pair reward5 is neither-1,0 nor2,
+the only participant pair rewards in that own-singleton1 template.
+
+The completed applicable selector comparisons are: unchanged singleton
+R0/degree1 and deleted inverse data; ALL actual response quotients;
+ALL protected/common/support-specific choices including weak leave;
+ALL nonzero global-floor weight choices; ALL boxed charge coefficients;
+ALL sure-owner induced Nash/punishment-floor choices at nonnegative
+actual floors; ALL child choices and all five raw withdrawal F/J kinds
+plus capped-clock certificates; and ALL exact stationary Nash supports.
+The equations and exact witness points are retained above. No supplied
+object was selected merely to make a screen fail.
+
+What is NOT proved: a positive terminal regret gap for unrestricted
+laws, a positive gap for stationary laws, exclusion of approximate
+stationary families at all errors, or noncoverage by EVERY conceivable
+supplied-strategy verifier or unknown distant implicit neighborhood.
+Those assertions are unnecessary for the NAMED raw-producer comparisons:
+their actual finite guards/whole selections are the ones disproved
+above. Nor is the full Fin4 conjecture settled. The graph-free theorem
+is an existence result on the stated restricted raw class.
+
+The frozen proof's two independent soundness reviews have passed,
+as reported by the coordinator; no export acceptance is inferred.
+This complete coverage checkpoint is now ready for a FOCUSED independent
+review checking the table, the selector exclusions, and whether an
+applicable existing raw producer or accepted packet was missed. The
+review must decide that nonredundancy gate before any export assembly.
