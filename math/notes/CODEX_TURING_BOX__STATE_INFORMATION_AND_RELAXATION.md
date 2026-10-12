@@ -8335,3 +8335,19 @@ branches and the Never tail, with its newly born finite response tests
 paid in the same total-debt comparison. Late-only first-order insertion
 does not provide it. No new export, counterexample class or conditional
 compiler is proposed by(W11)--(W12).
+
+Two bounded overlap checks delimit the next variation. The unreviewed
+DG statement in
+[`Nonbijective singleton source`](CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE.md)
+chooses a FRESH native table before small own raises. Its surviving
+one-future mode still has a PureNever owner and fixes the joint original
+Never PRODUCT across full minima, not the individual Never masses. It
+supplies no funded whole-law change. Therefore that mode cannot occur
+under the extra passport-plus-inverse assumptions of(W12), but DG alone
+does not fund the general coupled variation. The complete observer clips
+in NC.46 of
+[`Quit-time compactification`](CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md)
+are retained for arbitrary two-supplier finite conditionals; their total
+finite/Never masses are FIXED. Changing those masses or an observer's
+whole law lies outside its exact calendar-only no-go. These are statement
+and relevance checks, not independent audits of either foreign proof.

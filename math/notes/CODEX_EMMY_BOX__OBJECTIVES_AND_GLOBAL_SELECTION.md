@@ -80,6 +80,13 @@ constraint, and excludes regular fully active initial roots at WHOLE
 total-debt minima on the canonical Solan calibration. The remaining
 zero-atom/credit-equality faces are not resolved. No arbitrary-table or
 whole-source vanishing-regret conclusion is claimed.
+Section18.15 is a separate UNREVIEWED finite-amplitude tail operation.
+An actual end-binding prefix remains source-optimal when its tail is
+replaced by a source with coordinatewise higher first records. Its exact
+full-debt change is a weighted cap/payoff comparison over the ENTIRE tail
+correspondence. On the Solan calibration this gives far-tail improvements
+with all initial records fixed. The required improvement at an arbitrary
+whole-source minimum remains open; no new UE class is claimed.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -3521,3 +3528,172 @@ operation. Terminal decomposition continues to use the declarations
 already opened in18.13, and the original Nash/behavioral semantics are
 unchanged. The symbolic checks of(18.33) and the finite cost difference
 use exact polynomial identities, not numerical optimizer output.
+
+### 18.15. Finite-amplitude tail replacement behind a binding block
+
+Status: ORDINARY UNREVIEWED supporting mathematics. This is a legal joint
+change of all tail laws, not a root game at supplied actual payoffs and not
+a universal repair from a fixed seed. It gives the concrete full-source
+comparison required by this operation and a positive exact calibration.
+It does not produce that comparison at an arbitrary source minimum.
+
+Fix delta, c=1-delta, and a source p in N_delta. Suppose the joint budget
+binds at the end of its first L>=1 dates. Let W be that ACTUAL prefix,
+let w_i>0 be each player's survival through W, and put
+
+    S=product_i w_i=c^L,       h_i=product_(j!=i)w_j=S/w_i.
+
+The actual conditional tail z0 belongs to the SAME N_delta. Indeed every
+remaining joint constraint divides by S=c^L, and a profitable feasible
+complete tail replacement would be a profitable original replacement on
+the positive-reach event that the prefix survives. For any source tail z,
+write m_i(z) for its first-supported finite-deadline payoff, or U_i(z) if
+its own law is literal Never. Section18.14 proves
+
+    m_i(z)=U_i(z)-V_(i,z)'(1+).
+
+**Monotone-record tail replacement.** If z is ANY other element of N_delta
+with
+
+    m_i(z)>=m_i(z0) for every i,                           (18.34)
+
+then the actual independent concatenation W followed by z also belongs
+to N_delta. The tail clocks may change by order one; no total-variation
+smallness or common price is required.
+
+Here is the complete agency proof. In the finite L-date budget game of
+Section18.12, the actual prefix W is generalized Nash at terminal credit
+m(z0). For a feasible own prefix competitor eta, let x be its probability
+of surviving W and g_i(eta) its absorption payoff within W. The terminal
+constraint says x<=w_i. Raising the terminal credit from m_i(z0) to m_i(z)
+adds x*h_i*[m_i(z)-m_i(z0)] to the competitor, but adds
+S*[m_i(z)-m_i(z0)] to the prescribed law. Thus W is still generalized Nash
+at m(z); this argument applies separately to EVERY player.
+
+Every legal COMPLETE competitor with prefix eta has tail credit w_i/x
+when x>0. Concavity of the actual tail value function gives
+
+    x*h_i*V_(i,z)(w_i/x)
+        <=x*h_i*m_i(z)+S*[U_i(z)-m_i(z)].
+
+Consequently its full payoff is at most its finite-game payoff at m(z)
+plus the fixed constant S*[U_i(z)-m_i(z)]. The prescribed law attains
+equality. At x=0 the tail term is0, and the same bound holds because
+U_i(z)>=m_i(z). This verifies arbitrary complete own replacements,
+including Never whenever feasible, not just the finite menu. Feasibility
+of W followed by z is immediate before the seam and follows from
+S=c^L afterwards. This proves the operation.
+
+For completeness, the finite-game necessity used above does not assume
+that a supplied root game knows the full source agency. If eta improves
+the finite payoff at m(z0), mix it with the actual prefix with weight
+epsilon. The mixed terminal mass tends to w_i from below. The exact
+right-affine credit value from Section18.14 then turns the finite payoff
+gain into a profitable COMPLETE deviation for all sufficiently small
+epsilon. Thus the finite comparison is forced by the actual source.
+
+**The full-regret comparison, not just agency.** Now assume s>=0 and that
+the original table has no exact terminal Nash. Section18.13 then makes
+every full cap on N_delta the literal Never payoff. Define a_i(W) to be
+player i's expected payoff from opponent absorption within W when i
+never quits, and u_i^stop(W) its prescribed payoff from absorption within
+W. These two prefix quantities are fixed under tail replacement. Exactly,
+
+    B_i(W followed by z)=a_i(W)+h_i*B_i(z),
+    U_i(W followed by z)=u_i^stop(W)+S*U_i(z).
+
+Thus the total-debt change from replacing z0 by z is
+
+    D(Wz)-D(Wz0)
+       =sum_i h_i*[B_i(z)-B_i(z0)]
+                     -S*sum_i[U_i(z)-U_i(z0)].             (18.35)
+
+Equivalently define the ACTUAL tail functional
+
+    F_W(z)=sum_i B_i(z)/w_i-sum_i U_i(z)
+          =D(z)+sum_i(1/w_i-1)*B_i(z).
+
+The operation improves full total debt exactly when
+
+    F_W(z)<F_W(z0),  subject to z in N_delta and(18.34).     (18.36)
+
+In particular, at a GLOBAL minimum p of D over the ENTIRE source, every
+one of its binding-prefix tails z0 minimizes F_W over the whole record-
+upward portion(18.34) of N_delta. This is a finite-amplitude necessary
+condition, with all tail labels free to change jointly. It does not
+follow merely from first-order root stationarity. The cap weights 1/w_i
+are real deleted-survival weights; replacing them by joint survival would
+lose the full deviation account.
+
+The initial record vector need not change. If every player has an atom
+inside W, its first supported deadline and the opponents' laws through
+that date are fixed, so m_i(Wz) is independent of z. If player i has no
+prefix atom, then its new initial record is a_i(W)+h_i*m_i(z). Thus(18.34)
+also ensures coordinatewise nondecrease of the initial record vector;
+it preserves that vector exactly when every player acts inside W.
+
+**Exact positive test: splice behind a long balanced Solan prefix.** Use
+the literal three-player table of18.7, 0<e<=1/3. For its delta_k choose
+h=1-(1-delta_k)^(1/3), and let p_bad have all three clocks Geom(h).
+This is the exact shared component checked in18.14, with
+
+    m_i(p_bad)=Q=(1-h)*(1+e*h)<1,
+    B_i(p_bad)=B_bad=(3-2h)/(2-h).
+
+Let z=p^k be the burst component of18.7 at the SAME delta_k. Its first
+records, computed at the beginnings of the three initial own phases, are
+
+    m(z)=(1,3-2P,3P-2P^2)>=(1,1,1),
+    sum_i B_i(z)=3*(1+2P)/(1+P) ->4,
+    3*B_bad ->9/2.
+
+The inequalities use 1/2<=P<=7/10 and are exact, not rounded optimizer
+output. Hence(18.34) holds. For any H>=1, retain H roots of p_bad and then
+splice in z. Each prefix date binds, all three players have an atom in
+the prefix, and the new ACTUAL profile lies in N_delta with EXACTLY the
+same initial record vector(Q,Q,Q).
+
+Put alpha=(1-h)^2 and c=(1-h)^3.
+
+The cap formula in this example is DIRECT, so it needs no no-exact-Nash
+paper hypothesis. The burst tail has every B_i>=1 by(18.10). At a symmetric
+root its opponent stopping term is b=3h-2h^2, its Quit endpoint is Q<1,
+and its full Continue cap is b+alpha*B_i>=b+alpha=1+h-h^2>=1.
+Thus Continue dominates Quit. Its Never value is the same b+alpha*B_i
+and stays at least1. Backward through any number H of these roots proves
+that every spliced profile has literal Never as every full cap. The bad
+geometric profile has the same property from its explicit B_bad>1.
+Accordingly(18.37) holds on the ENTIRE stated range0<e<=1/3, without
+invoking the narrower qualitative no-exact-Nash range of Section18.13.
+
+The exact full comparison is
+
+    D(p_bad[0:H] followed by z)-D(p_bad)
+       =alpha^H*[sum_i B_i(z)-3*B_bad]
+                      -c^H*[sum_i U_i(z)-3*U_i(p_bad)].    (18.37)
+
+For every sufficiently large k the first bracket is strictly negative.
+The second bracket is bounded, and(c/alpha)^H=(1-h)^H tends0 as H tends
+to infinity at that fixed delta_k. Therefore(18.37) is strictly negative
+for EVERY sufficiently large H. These improving profiles converge weakly
+to p_bad while preserving all of its first records. The bad component
+is not even a weak local D minimum for those delta_k. This uses an actual
+far-tail change, not a local reweighting of one fixed root.
+
+This positive test is still on an already-solved game and gives no new
+UE reward coverage. Nor does it contradict the small-prefix obstruction
+of18.11: the tail is changed by order one, and the splice only gives a
+strict decrease from the bad component, not arbitrarily small regret
+from that fixed component. The unresolved arbitrary-table implication
+is precisely(18.36) at a positive whole-source minimum, possibly after
+jointly changing the binding prefix as well. No existence of a record-
+upward improving tail is assumed or proved in general.
+
+Source check. A narrow search in Quitting/Root and Quitting/Terminal for
+credit, first-support and budget-tail splicing found no matching source
+operation. The finite/full equivalence is derived above from18.12--18.14;
+the deleted-survival debt propagation itself already has tracked APIs in
+Quitting/Root/TerminalDebtGreenAccount.lean, including
+quittingRootSequenceTerminalDebt_le_opponentGreenDefectSum_boundedTail.
+No novelty is claimed for that propagation identity or the behavioral
+response reduction, and no new Lean declaration is asserted here.
