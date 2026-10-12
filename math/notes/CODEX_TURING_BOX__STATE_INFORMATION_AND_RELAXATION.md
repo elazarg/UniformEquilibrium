@@ -2,17 +2,31 @@
 
 Identity: CODEX_TURING_BOX.
 
-Section38 is a complete ordinary UNREVIEWED raw-class extension of the
-two-ledger chamber theorem. Its new finite-game escape permits every
+Section38 is an independently reviewed ordinary raw-class extension of the
+two-ledger chamber theorem, now exported as
+[`Sink-or-receiver cap chamber`](../exports/SINK_OR_RECEIVER_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md).
+Its new finite-game escape permits every
 proper tied-face insertion graph having a sink OR a universal recipient.
 For Fin4 this excludes only induced BARE directed triangles, rather than
 all proper directed cycles. A modified exact hard witness passes the new
 guards and fails the old graph guard. The proof retains all inactive
 root inequalities and the original full behavioral caps. Its bounded
 whole-source comparisons are recorded separately from the theorem; no
-exhaustive novelty, Lean implementation or export is claimed. The next
-requested check is independent falsification of Section38, particularly
-the perturbed-root escape and the entire induced-owner comparison.
+exhaustive novelty or Lean implementation is claimed. Both CODEX_NASH_BOX
+and CODEX_EMMY_BOX independently checked its soundness and the stated
+whole-selection comparisons in their feedback files below. The frozen
+export is canonical; the notebook retains the original argument.
+
+Section39 begins a different global test on the ORIGINAL finite-word
+control problem, without root-Nash restrictions or a fixed old tail.
+Its elementary ordinary unreviewed lemma shows that a continuous potential
+nonincreasing under EVERY independent root prefix is already constant on
+ALL semantic states with two proper clocks. Such a potential cannot rank
+the good and bad components of the no-sure-root discounted source. This
+retires a globally monotone Lyapunov shortcut, not whole-word selection,
+discounted selection or any UE reward class. The live question permits
+intermediate regret increases and arbitrary joint changes of the whole
+private calendar.
 
 Section37 returns to the ENTIRE realized-discounted Nash correspondence,
 with arbitrary calendars, components and selective Never. Section37.6
@@ -7406,7 +7420,10 @@ selection with the complete original caps, not an all-proper substitute.
 
 ## 38. Sink-or-receiver escape for a two-ledger cap chamber
 
-Status: complete ordinary proof candidate, UNREVIEWED. This changes a raw
+Status: independently reviewed ordinary mathematics, exported as
+[`Sink-or-receiver cap chamber`](../exports/SINK_OR_RECEIVER_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md).
+Both independent reviews are in the feedback files linked near the top.
+This changes a raw
 reward guard of the reviewed two-ledger theorem, not merely the description
 of a supplied source. Nothing below is claimed implemented in Lean. The
 finite-game boundary argument develops Nash's Section38 weak-face lemma;
@@ -7950,6 +7967,207 @@ remains toward arbitrary Fin4 is not chronology but raw preservation:
 standard-Q supplies the strict singleton seed, yet does NOT supply the
 proper-coalition H/J signs or the flat participant on every proper
 support. Bare directed triangles also remain outside this particular
-escape lemma. The current request is ONE independent falsification of
-this complete theorem and its bounded witness comparisons before any
-export decision, not another engineered reward-neighborhood expansion.
+escape lemma. The canonical exported packet contains the self-contained
+theorem and bounded witness comparisons. No arbitrary-table preservation
+theorem is inferred from this raw-class result.
+
+## 39. Whole-word control: proper-clock saturation and the remaining boundary
+
+Status: supporting ordinary UNREVIEWED mathematics. The controller value
+and invariant/barrier dual are ALREADY implemented; they are not a new
+producer here. The extra calculation below is an operation-level saturation
+fact and a Never-face restriction, not a UE reward-class exclusion.
+
+### 39.1 Exact source and bounded overlap check
+
+There are n>=2 players and |r_i(S)|<=M, with M>0. The game has original
+terminal rewards, live/Never0, independent private clocks, and unrestricted
+complete replacements. Put s_i=r_i({i}). In the invariant reward box
+Z=[-M,M]^(2n), write z=(U,B). An independent product root q acts by
+
+    (T_q z).U_i = g_i(q)+c(q)U_i,
+    (T_q z).B_i = max{Q_i(q), b_i(q)+alpha_i(q)B_i},            (W1)
+
+where c=product_j(1-q_j), alpha_i=product_(j!=i)(1-q_j), g is
+the prescribed current absorption contribution, Q is current Quit value,
+and b is current opponent absorption contribution. For a chronological
+word W, T_W means its backward composition. Every root and every word
+is allowed; no intermediate Nash, cap bound, payoff target or regret
+monotonicity is imposed. The physical seed is actual AllNever,
+
+    e_Never=(0,s_+), s_+,i=max{0,s_i}.
+
+The positive part is essential for signed own singletons: literal Never
+earns0 against AllNever, as well as the finite Quit option earning s_i.
+
+Finite words from this seed give ALL finite-support independent laws on
+dates/Never. Their closure is the actual semantic carrier K. This exact
+statement is `quittingControllerTester_reachableClosure_eq_carrier` in
+`UniformEquilibrium/Quitting/ControllerTester/ControllerValue.lean`.
+The target-free value and greatest USC barrier are already in
+`UniformEquilibrium/Quitting/ControllerTester/FunctionBarrierDuality.lean`
+and the packet
+[`Controller--tester value and barrier duality`](../formalized/QUITTING_CONTROLLER_TESTER_VALUE_AND_BARRIER_DUALITY.md).
+The source files were opened, including the definition
+`QuittingControllerUpperSemicontinuousBarrier`, its `le_prefix` direction,
+and `quittingControllerTesterFunctionBarrier_isGreatest`.
+`RenewableBarrierSaturation.lean` supplies universal-prefix hull invariance
+and the mandatory-Never saturation, not the proper-clock statement below.
+
+Thus the global original-game question is the implemented one:
+
+    eta(r)=inf_W E(T_W e_Never)=0,
+    E(U,B)=max_i(B_i-U_i).                                  (W2)
+
+The useful freedom is choosing the WHOLE word anew, including interior
+clock births and intermediate cap increases. Fixed-tail repair is not
+being asserted. Section37.9's cash-out example already shows why an old
+tail with two proper labels can exclude every good endpoint on a solved
+table, although AllNever itself admits a one-date exact equilibrium.
+
+### 39.2 The common contraction is deleted-opponent survival
+
+For fixed q, (W1) gives, in the common sup norm,
+
+    ||T_q z-T_q z'|| <= (max_i alpha_i(q)) ||z-z'||.
+
+The prescribed coefficient c is no larger than each alpha_i, and max
+of a constant and an affine function is Lipschitz with the affine slope.
+For a word W of length H the stronger direct bound is
+
+    ||T_W z-T_W z'|| <= L_W ||z-z'||,
+    L_W=max_i product_(t<H) alpha_i(q(t)).                    (W3)
+
+For prescribed clocks this factor is max_i Pr(T_-i>=H). This is NOT
+joint survival. If at least TWO marginal clocks are proper, then every
+deleted opponent set contains a proper clock, so L_W tends to0 along
+the finite prefixes. Mere a.s. joint absorption, or just ONE proper
+marginal, does not suffice.
+
+In particular the canonical word value
+
+    Q(z)=inf_W E(T_W z)
+
+is 2-Lipschitz on Z: E is 2-Lipschitz, all words are 1-Lipschitz,
+and the infimum of uniformly Lipschitz functions has that same bound.
+This improves USC regularity but, by itself, supplies NO selection
+theorem. Its implemented monotonicity is
+
+    Q(z)<=Q(T_q z),                                         (W4)
+
+not the opposite Lyapunov direction. Distance to K has the opposite
+direction, dist(T_q z,K)<=dist(z,K), simply because K is invariant.
+Both facts are automatic from the original control system; neither is
+evidence that eta vanishes.
+
+### 39.3 Saturation of every root-monotone barrier
+
+Let F be USC on the ENTIRE invariant reward box Z and suppose
+
+    F(z)<=F(T_q z) for every z in Z and every product root q.  (W5)
+
+Then F takes its GLOBAL MAXIMUM on every actual semantic state of a
+profile having at least TWO proper marginal clocks. The same statement
+holds with domain K and global maximum taken only over K. No hypothesis
+on reward signs or root equilibrium is used.
+
+Proof. If a word W has L_W<1, its map is a contraction of Z, with a
+unique fixed point x_W. Iterating from any z converges to x_W, while
+(W5) makes F nondecreasing. USC gives F(x_W)>=F(z) for every z. The
+fixed point belongs to K because iteration from e_Never remains in K.
+For the K-domain version the same argument starts from z in K.
+
+Now let p have two proper clocks and let W_H be its first H roots.
+For all sufficiently large H, L_H<1. Its actual conditional semantic
+tail z_H lies in Z, and z(p)=T_(W_H) z_H. Therefore
+
+    ||z(p)-x_(W_H)|| <=2M L_H ->0.
+
+All x_(W_H) have the SAME global maximum of F. USC at z(p) proves the
+claim. With a continuous potential satisfying the REVERSE inequality,
+the same argument gives the global MINIMUM instead. This reverse version
+does not use the greatest-USC-subbarrier convention.
+
+Consequently a state potential globally monotone under every legal
+prefix cannot rank good and bad components of Section37.2's discounted
+source: that ENTIRE source has two proper clocks. A control argument
+requiring strict monotone improvement at every bad proper-clock state
+is false at this level of generality. This does not refute nonmonotone
+whole-word search, Nash-restricted monotonicity, or the exported chamber
+argument, whose descent is only at its constrained minimum.
+
+There is a concrete interpretation for Q. Define
+
+    gamma_2(r)=inf{E(p): p independent complete, with >=2 proper clocks}.
+
+Then Q(z)=gamma_2 on EVERY actual state with two proper clocks, and
+gamma_2 is the global maximum of Q on Z. Indeed prefixing such a law
+preserves its two proper labels, so Q(z)>=gamma_2. Conversely Q(z)<=E(z)
+on those states, and saturation makes their Q value a common constant;
+taking the infimum of E gives the reverse inequality. Thus automatic
+continuity does not force Q(e_Never) or gamma_2 to vanish.
+
+### 39.4 A quantitative one-owner/Never alternative
+
+The same contraction gives a small source-level consequence. For ANY
+actual independent profile p, put z_i=Pr_p(T_i=Never) and
+O=max_i product_(j!=i) z_j. Then
+
+    E(p)>=gamma_2(r)-4M O.                                  (W6)
+
+For prefixes with L_H<1 compare p to the periodic fixed point x_(W_H).
+That fixed point is realized by a repeated word with two proper labels,
+and its E is at least gamma_2. Apply E's Lipschitz bound to the preceding
+2M L_H comparison and let H tend to infinity. If L_H=1 for every H,
+then O=1 and (W6) is trivial since 0<=gamma_2<=2M.
+
+Suppose additionally s_i>=s_*>0. The literal Never response W_i and
+late finite deadline responses give
+
+    B_i>=W_i+s_i product_(j!=i) z_j.
+
+Every other prescribed own pure deadline earns at most B_i. The own
+Never atom therefore forces
+
+    B_i-U_i>=s_i product_j z_j,
+    product_j z_j<=E(p)/s_*.                                (W7)
+
+If gamma_2>0 and E(p)<=gamma_2/2, some player i consequently satisfies
+
+    z_j>=gamma_2/(8M) for EVERY j!=i,
+    z_i<=8M E(p)/(s_* gamma_2).                              (W8)
+
+This is a literal private-clock Never-atom statement, not an unlabelled
+chronological limit. It follows by choosing i with O_-i=O in(W6), noting
+O>=gamma_2/(8M), and dividing(W7) by O. In particular, if a vanishing-
+regret family exists while gamma_2 stays positive for this FIXED table,
+after a subsequence exactly one marginal becomes almost proper and
+EVERY other Never atom stays uniformly positive. Conversely gamma_2=0
+already gives actual all-errors terminal approximate equilibria and the
+usual fixed-target UE consumer. No existence of the family in(W8) is
+being asserted.
+
+### 39.5 Bird's-eye verdict and next exact question
+
+The exported chamber mechanism genuinely allows global constrained
+minimization without a chronological compiler. It does NOT show that
+arbitrary hard data possess its raw H/J preservation or flat-support
+conditions. Increasing the list of guarded reward regions is therefore
+not yet a convincing end-to-end route for arbitrary Fin4.
+
+The whole-word source here has the correct broad agency, but (W2) is
+already the conjecture's exact control formulation. The new saturation
+test rules out a generic globally monotone state-Lyapunov shortcut; it
+does not solve the value. Selective Never is still essential: the solved
+cash-out example has eta=0 while gamma_2>=1/4.
+
+The next source-level fork is precise: either force gamma_2=0 on the
+genuinely unresolved data, OR produce a low-error one-owner/Never family
+when that bulk value is positive. In the second arm one must establish
+the missing EXISTENCE from the raw table; (W8) only identifies the face
+that an already-supplied successful family would have to approach.
+Neither continuity of Q, stopping order, standard-Q, nor the present
+contraction argument supplies either arm. Whole-word support changes
+and intermediate regret increases remain free. No new auxiliary
+correspondence, generic potential interface, export or UE-class result
+is proposed here.
