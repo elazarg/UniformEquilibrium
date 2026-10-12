@@ -2,7 +2,17 @@
 
 Author: CODEX_NASH_BOX.
 
-Latest supporting test: Section42 rules out calendar-uniform washout by
+Latest supporting test: Section43 tries actual collision birth through
+INDEPENDENT local clock-erasure channels, not singleton completion. On K10,
+from its exact uniform-owner private CE, replacing each private clock by
+one common later deadline with arbitrary unequal probabilities contracts
+total correlation and creates actual collisions. Nevertheless EVERY nonzero
+four-parameter choice violates an original FULL late cap. An opposite-of-
+maximum-odds argument proves the entire box exclusion, including its boundary;
+no symmetry restriction or exact auxiliary Nash is imposed. This retires
+common-deadline erasure, not general local channels, changing seeds, or UE.
+
+Section42 rules out calendar-uniform washout by
 arbitrary singleton-exit completion words from a fixed dependent seed on
 a mandatory-collision game. Counterfactual tails may be completely rebuilt,
 payoffs may move, roots may be correlated, and intermediate obedience is not
@@ -7043,3 +7053,143 @@ their root information and cap terms; no new conditional API is needed.
 The next question is whether source selection and actual collision birth
 can be coupled to lower information, rather than optimizing the constants
 in (42.6) or weakening the singleton-only operation again.
+
+## 43. Independent collision birth: the entire common-late erasure box fails
+
+Status: ordinary UNREVIEWED exact operation-class falsifier on a known
+solved four-active table. This is a distinct test from Section42: the new
+operation DOES create actual terminal collisions and contracts information
+automatically. Its endpoint moves the payoff, the marginals, and every
+counterfactual tail. It does not require auxiliary equilibrium, common
+hazards, symmetric channel probabilities, or monotone intermediate debt.
+It still fails all choices in its literal four-parameter family. No new
+counterexample reward class or UE negative claim follows.
+
+### Literal game, source, operation and all-errors question
+
+Use the K10 table on cyclic labels Z/4. A singleton j pays owner1,
+opposite4, and the two neighbors0. Adjacent pair {j,j+1} pays its donor
+j minus1, its successor2, and each outsider1. An opposite pair pays
+its members0 and outsiders1. A triple pays its members minus1 and
+outsider10. The grand coalition pays each player9; Never pays0.
+
+Let sigma choose J uniformly and prescribe T_J=0 and every other clock
+Never. It is an EXACT full private-clock CE, hence full coarse: conditioned
+on one's Quit0 recommendation opponents are Never, giving1 versus1 for
+any later finite deadline and0 for Never. Conditioned on Never, a unique
+opponent owner is uniform over the other three. Waiting gives4/3 and
+joining at0 gives(-1+2+0)/3=1/3. All later finite deadlines equal waiting.
+Thus unconditional prescribed payoff is5/4 and its FULL cap is5/4.
+Its total correlation is
+
+    I(sigma)=4h(1/4)-log4=3log(4/3)>0.
+
+Fix ANY common finite deadline H>0. Independently for each recipient i,
+with probability q_i replace its entire private clock by H, otherwise
+retain it, where q lies in the ENTIRE cube [0,1]^4. Call the new joint law
+nu_q. The coins are private and independent of the old joint law.
+Independent coordinate channels contract total correlation, so
+
+    I(nu_q)<=I(sigma),
+    nu_(1,1,1,1) is the independent pure grand coalition at H.
+
+This is therefore a serious information-erasure operation, not a mixture
+that injects an uncharged common signal. When an old owner is promoted to
+H, other promoted players join it, creating genuine first collisions.
+Could some jointly chosen unequal q produce a full-coarse endpoint and
+reduce information, or an approximately coarse zero-information family?
+The answer is NO for this entire operation family.
+
+### Exact original late-cap polynomial, retaining all private coins
+
+Use the legal replacement deadline H+1, after EVERY possible finite opponent
+clock. Let
+
+    G_i(q)=V_i^(nu_q)(H+1)-U_i(nu_q).
+
+Here the deviator's own promotion coin is suppressed along with its entire
+prescribed clock, not retained as a public branch. Let B be the set of
+promoted players, sampled with the independent q probabilities. Conditional
+on B and the old uniform owner J, there are two cases. If J is not in B,
+the old singleton at0 remains first; only replacing that owner changes the
+terminal outcome, to B at H, or its own late singleton if B is empty. If
+J is in B, the first terminal set is B at H; replacing a member i leaves
+B minus i, except that a sole owner still quits alone at H+1. Consequently
+
+    4G_i=(1-q_i) E_[B_-i](r_i(B_-i)-1)
+                +q_i E_[B_-i]((1+|B_-i|)
+                         [r_i(B_-i)-r_i(B_-i+i)]).    (43.1)
+
+For the empty set the first bracket is defined as0, not minus1, because
+the replacement still earns its own singleton. The second bracket is0.
+Formula(43.1) averages over ALL four old-owner possibilities; it is not a
+selected recommendation inequality or a reached-only cap.
+
+When all q_j<1 put z_j=q_j/(1-q_j) and J0=product_j(1-q_j)>0.
+Write a=z_(i-1), b=z_(i+1), c=z_(i+2), and d=z_i. Expansion of the literal
+rows gives EXACTLY
+
+    4G_i/J0 = -a-b+3c + d(-4a+2b+8c)
+                     +6d(ab+ac+bc)+9abc+4dabc.        (43.2)
+
+The singleton, pair, triple and grand coefficients are respectively
+Gamma=(-1,-1,3), twice the outsider-minus-participant pair gaps
+(-4,2,8), the triple coefficients6, and the grand coefficient4.
+No discarded higher-order sign is needed.
+
+Choose j with z_j=max_k z_k>0 and take i=j+2, its opposite. Then c is
+the maximum odds, so a,b<=c. The first line of(43.2) obeys
+
+    -a-b+3c>=c>0,
+    -4a+2b+8c>=4c>=0.
+
+All remaining monomials are nonnegative. Thus G_(j+2)>0. This proves
+failure for EVERY nonzero q in [0,1)^4, with arbitrary asymmetry.
+
+### Every sure-promotion face is also excluded
+
+Suppose q_j=1 and again take i=j+2. Put a=q_(i-1), b=q_(i+1), d=q_i.
+Directly from(43.1), without infinite odds,
+
+    4G_i=(1-d)[3(1-a)(1-b)+9ab]
+             +d[8(1-a)(1-b)+6a(1-b)+6b(1-a)+4ab].  (43.3)
+
+The second square bracket is strictly positive throughout [0,1]^2.
+If d>0, G_i>0. If d=0, the first bracket is positive except at
+(a,b)=(1,0) or(0,1). Those exceptional points have q equal to the
+indicator of one adjacent pair. Choose its outgoing donor k, so the
+promoted pair is{k,k+1}. Then direct substitution gives G_k=1/2>0.
+This includes all faces with multiple q_j=1; none was omitted by division
+in(43.2).
+
+Thus the ONLY q in the entire cube with all G_i<=0 is q=0. Since every
+G_i is an original complete-deviation gain, every nontrivial channel
+endpoint fails FULL coarse obedience, a fortiori private obedience.
+
+For an approximate endpoint family, if full coarse violation tends to0,
+compactness of the fixed cube and continuity of the displayed polynomials
+force q->0: any nonzero cluster would have one strictly positive G_i.
+Information is continuous on this fixed finite law space, so
+
+    I(nu_q)->I(sigma)=3log(4/3),
+
+NOT zero. The conclusion is uniform over the common deadlines H, since
+only the relative order0<H<H+1 matters. For reference, on the symmetric
+line q_i=q the exact late gain is
+
+    G_i=(q/4)[1+3q+18q^2(1-q)]>0,
+
+but the proof above does not infer the full-box assertion from that line.
+
+### Scope and next operation
+
+This is not a failure of data processing: information really contracts.
+Nor is it failure to birth actual collisions. The obstruction is the FULL
+counterfactual deadline one date AFTER the newly concentrated activity.
+Arbitrary unequal independent promotion probabilities cannot remove it.
+The successful next operation must jointly synthesize richer counterfactual
+clock tails, or choose a genuinely different whole source; replacing every
+erased coordinate by one common late atom is retired without rate tuning.
+No claim excludes different target laws, coordinate-dependent multi-date
+channels, or the entire source correspondence. In particular this result
+does not strengthen the reviewed collision-necessity reward-class theorem.
