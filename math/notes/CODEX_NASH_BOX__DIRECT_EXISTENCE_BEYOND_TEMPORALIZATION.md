@@ -2,6 +2,15 @@
 
 Author: CODEX_NASH_BOX.
 
+Section47 excludes the ENTIRE two-active-clock class for Section44's
+family, retaining A dependence: for A>=4, any profile with two players
+literal Never has unrestricted terminal regret>1/(100 A^2). The other two
+laws may be arbitrary, unbounded and improper. By coupling, any all-errors
+construction needs at least three clock laws with a fixed positive finite
+mass floor depending on A. This retires the lower-payoff two-clock collapse,
+not the full table or three/four-clock chronologies. A genuine third role,
+possibly in counterfactual tails, remains to be constructed.
+
 Section46 gives an actual ALL-INDEPENDENT-STOPPING-LAWS inequality for
 Section44's A=30000 table. Every all-errors low-regret sequence has limiting
 mean payoff at most A-1376299/125000. In particular the correlated source's
@@ -7799,3 +7808,189 @@ ordinary finite-prefix performance argument above, not a claim that this
 whole-law bound has been checked in Lean. No paper theorem or Lean build is
 used, no new strategy-class completeness claim is made, and no export is
 requested for this supporting payoff-region result.
+
+## 47. The entire two-active-clock class fails, even at low payoff targets
+
+Status: ordinary UNREVIEWED theorem and proof for the exact Section44
+reward family with ANY A>=4. This is a negative strategy-class result,
+not a positive gap against all behavioral profiles. It arose from trying
+an actual low-payoff construction with two adjacent active players;
+neither stationary scans nor finite-calendar failures establish the claim.
+The proof below covers every complete independent stopping law of the two
+active players, including unbounded laws, positive Never mass and all
+possible calendars. The other two players are literal Never.
+
+### Statement
+
+For the Section44 reward family, A>=4, every behavioral profile with at
+least two players literal Never has
+
+    max_i(C_i-U_i)>1/(100 A^2).                       (47.1)
+
+This applies to the actual A=30000 table. In particular no sequence
+collapsing to two complete clock laws can supply its all-errors terminal
+endpoint. It does not show that a three/four-law construction fails.
+
+By cyclic symmetry there are two cases: active players adjacent, say0,3,
+or opposite, say0,2. If fewer than two laws are nontrivial, include any
+additional literal Never law in the selected pair. Suppose, toward a
+contradiction, every coordinate terminal regret is at most epsilon, with
+
+    0<epsilon<=1/(100 A^2).
+
+All complete pure deadlines and Never are included in each C_i.
+
+### Adjacent pair: two one-dimensional recurrences constrain the opposite reward
+
+With players1,2 Never, the active recipients0,3 have payoff sums
+
+    r_0(0)+r_3(0)=1,
+    r_0(3)+r_3(3)=1,
+    r_0(03)+r_3(03)=2-1=1.
+
+Hence U_0+U_3=1-N<=1, where N is joint Never probability. Player3's literal
+Never earns0 against ANY law of0. Conversely player0's stationary hazard
+1/2 earns exactly1 against ANY law of3: every finite pure deadline of3
+has expected reward0 against that coin, because its simultaneous payoff-1
+and strictly-earlier own-stop payoff1 have equal probabilities; Never
+also earns0 for3, and the coin ensures absorption. Thus
+
+    1-epsilon<=U_0<=1+epsilon,
+    -epsilon<=U_3<=epsilon.                            (47.2)
+
+Write S_i(t)=P(T_i>=t), q_i(t)=P(T_i=t)/S_i(t) when S_i(t)>0,
+and F_i(t)=1-S_i(t). Zero-survival hazards may be chosen arbitrarily.
+Player3's pure deadline t earns
+
+    S_0(t)(1-2q_0(t))<=C_3<=2epsilon.
+
+Therefore
+
+    S_0(t+1)<=S_0(t)/2+epsilon,
+    S_0(t)<=2^(-t)+2epsilon.                           (47.3)
+
+Player0's pure deadline t earns
+
+    S_3(t)(1+q_3(t))<=C_0<=1+2epsilon.
+
+Writing the date-t mass of3 as a_3(t), this means
+a_3(t)<=F_3(t)+2epsilon. Consequently
+
+    F_3(t+1)<=2F_3(t)+2epsilon,
+    F_3(t)<=2epsilon(2^t-1).                           (47.4)
+
+The probability W=P(T_3<=T_0, T_3 finite) is bounded, for EVERY integer t,
+by the union event T_3<t or T_0>=t. Equations(47.3)--(47.4) give
+
+    W<=2epsilon*2^t+2^(-t).
+
+Choose an integer t>=0 with sqrt(2epsilon)<=2^(-t)<2sqrt(2epsilon).
+Then
+
+    W<3sqrt(2epsilon).                                (47.5)
+
+The inactive player1 has actual payoff U_1=A W: it receives A precisely
+when3 is in the first coalition, and0 when0 quits alone. But its own
+deadline0 payoff, with x=q_0(0), y=q_3(0), is
+
+    1+x+(A-2)y+2xy>=1+x>=3/2-epsilon,
+
+where the last inequality follows from(47.3) at date0. Epsilon-Nash thus
+forces A W>=3/2-2epsilon>=1. This contradicts(47.5), since
+
+    3sqrt(2epsilon)<=3sqrt(2)/(10A)<1/A.
+
+The two recurrences control arbitrary laws, not stationary hazards. Their
+cutoff t is selected only for the estimate; it does not change the profile.
+
+### Opposite pair: tie mass cannot protect both inactive players
+
+Now players1,3 Never. Let n_0,n_2 be the two active Never masses and
+W=P(T_0=T_2 finite) their tie probability. Both inactive prescribed values
+are exactly A W.
+
+For either active player, pure finite deadlines tending to infinity have
+payoffs converging to its Never payoff plus the opponent's Never mass.
+This is a bounded-convergence calculation: a finite opponent clock
+eventually stops strictly earlier and pays A, while an opponent Never
+allows the late quitter to obtain its own singleton1. Since every pure
+reply value is bounded by C_i, the prescribed mixture has debt at least
+its own Never mass times the gap between C_i and its Never payoff. Hence
+
+    n_0 n_2<=epsilon.                                 (47.6)
+
+Partition the actual outcomes for player0 into both-finite strict0-first,
+strict2-first, tie, and the two one-finite/one-Never events. If E_0 is the
+both-finite strict0-first probability and G_0=P(T_0 finite,T_2 Never),
+the exact gain from player0 switching to Never is
+
+    (A-1)E_0+W-G_0<=epsilon.
+
+Thus W<=epsilon+n_2. The other player's identical calculation gives
+W<=epsilon+n_0. Using(47.6),
+
+    W<=epsilon+sqrt(epsilon).                         (47.7)
+
+At date0 write x=q_0(0), y=q_2(0). The two inactive Quit payoffs are
+
+    Q_1=1+x-2y+(A+2)xy,
+    Q_3=1+y-2x+(A+2)xy.
+
+Their sum is at least1 throughout[0,1]^2: the bilinear expression
+2-x-y+2(A+2)xy has corner values2,1,1,2(A+2). At least one inactive
+player therefore has C_i>=1/2. Epsilon-Nash forces
+
+    A W>=1/2-epsilon>=1/4.
+
+But(47.7) and epsilon<=1/(100A^2) give
+
+    W<=1/(100A^2)+1/(10A)<1/(4A),
+
+a contradiction. This completes(47.1).
+
+### A nonvanishing third law is necessary, not merely a nonzero third coin
+
+Let R=A+2 and delta=1/(100A^2). If two players each have total finite
+clock mass at most eta, replace those two laws by literal Never. The
+joint-law coupling fails with probability at most2eta. Against ANY fixed
+unilateral replacement the same bound holds (and is smaller when the
+replaced coordinate is the deviator). Every expected payoff and every
+unrestricted cap therefore changes by at most4R eta, and every regret
+by at most8R eta. Equation(47.1) implies for the ORIGINAL profile
+
+    max_i(C_i-U_i)>delta-8R eta.                      (47.8)
+
+Thus a profile with max regret at most delta/2 must have at least three
+players whose complete clock laws have finite mass greater than
+delta/(16R). This is a fixed positive floor for fixed A, although small.
+It concerns the finite mass of complete laws, not the actual probability
+that those players appear in the first coalition, and not properness.
+Counterfactual tails may carry some of the required third law.
+
+### Construction consequence and remaining question
+
+The low-payoff two-clock construction is retired as an all-errors route.
+Its owners can become nearly optimal in their two-player timing contest,
+and rare opposite singleton rewards can protect the inactive players at
+a few finite accuracies. Equations(47.3)--(47.7) show that this protection
+cannot survive accuracy tending to zero for fixed A. Adding arbitrarily
+small third-clock mass is also insufficient by(47.8).
+
+The next question is an ACTUAL three/four-law construction, with a third
+finite mass floor retained, that balances the cyclic positive joining
+roles. A child three-player equilibrium alone does not solve it: for the
+child0,1,3, player1 quitting surely at date0 is exact child Nash, but the
+deleted player2 then joins for2 instead of its prescribed0. No whole-child
+selection or quiet extension is inferred from that failed supplied point.
+
+Bounded source check for this pivot: I read
+`QuittingThreePlayerStrategyClass.of_normalizedThreePlayer` and
+`exists_exactStationaryTerminalNash_of_normalizedInfeasibleMixture` in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`.
+Their actual alternative produces some stationary or small-hazard child
+profiles; it is NOT a completeness theorem for all child UE payoffs and
+does not cap an omitted fourth player's deviations. I also read
+`exists_terminalProfile_smallExploitability_smallNever_of_nonnegativeSingleton`
+in `UniformEquilibrium/Quitting/Classification/ThreePlayer/NonnegativeSingletonEarlyAbsorption.lean`.
+Neither result is claimed to supply the missing extension on this table.
+No Lean check or literature theorem is used in the ordinary proofs above.
