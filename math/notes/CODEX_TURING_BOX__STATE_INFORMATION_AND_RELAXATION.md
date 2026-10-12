@@ -8351,3 +8351,51 @@ are retained for arbitrary two-supplier finite conditionals; their total
 finite/Never masses are FIXED. Changing those masses or an observer's
 whole law lies outside its exact calendar-only no-go. These are statement
 and relevance checks, not independent audits of either foreign proof.
+
+### 39.8 The old-finite mass transport was not funded
+
+The attempted operation changed an owner's OLD finite conditional and
+its total finite/Never mass together. It was not just the graft of39.7.
+For fixed other laws its own cap stays fixed, but every observer cap is
+the maximum over ALL earlier, simultaneous, intervening, late and Never
+responses. There is no proved inequality paying the earlier maxima from
+an improvement of the late envelope. The attempted global-minimum
+argument is parked at that exact missing comparison; the global-minimum
+passport itself is neither refuted nor weakened.
+
+Here is a minimal exact check of the FAILED endpoint-only comparison,
+not a positive-minimum source or a no-UE table. Two players have
+
+    r({0})=(1,1), r({1})=(0,2), r({0,1})=(0,0), Never=0.
+
+Player1 always prescribes Never. Initially player0 has mass1/2 at date0
+and1/2 at Never. Its actual pair is
+
+    U=(1/2,1/2), B=(1,3/2), sum debt=3/2.
+
+Change player0 to masses1/16 at0,9/16 at1 and3/8 at Never. This retains
+an OLD finite branch, transports part of it to a later date, and moves
+some Never mass into that same later date. Now U=(5/8,5/8). Player0's
+cap remains1. Player1's complete pure-response values are
+
+    Quit0:15/8; Quit1:13/16;
+    every finite date>=2:11/8; Never:5/8.
+
+Thus B=(1,15/8) and TRUE sum debt=13/8>3/2. Keeping only the late
+finite envelope would instead give the false debt estimate9/8<3/2.
+No inserted empty date or illegal response is involved: date0 was an
+available original response throughout. The rise comes from reducing
+the old preemptive atom at that date. Every arbitrary replacement is a
+mixture of these pure responses, so no additional cap is omitted.
+Sure Quit0 by player0 is an exact original Nash profile with payoff(1,1);
+the example does not satisfy a positive global-minimum hypothesis.
+
+The substantive failure is therefore a funding failure, not a theorem
+that coupled changes cannot improve a true minimum. Recasting the same
+unpaid maximum as a new interface would add no leverage. The next test
+returns to the raw chamber problem left by Section38: whether a whole
+three-player replacement can handle its bare tied triangles while the
+fourth player's ENTIRE original cap is controlled. This is an attempted
+raw-class extension, not a prescribed-tail compiler; the H/J ledgers and
+proper flat-participant hypotheses remain fixed. The universal claim
+about EVERY child equilibrium is not assumed.
