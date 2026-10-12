@@ -2666,3 +2666,113 @@ operation controlling that account, it is not a replacement for the
 whole shared-source selection question. The next question remains an
 actual joint responsibility change that lowers the attained ORIGINAL
 full-regret minimum, not minimization of the unamplified payment alone.
+
+### 18.9. A positive tail floor makes exact shared sources too strong
+
+Status: ORDINARY UNREVIEWED complete operation falsifier. This retires a
+different, apparently easier joint-source producer; it does NOT falsify
+the hard joint budget(18.1), whose tail floor is0. No new UE table class,
+Fin4 counterexample, or export is claimed.
+
+Question. Soften the joint budget to
+
+    A_p(t)<=b_t=1-alpha+alpha*c^(t+1),
+                 0<alpha<1, 0<c<1.                         (18.14)
+
+For EVERY player and EVERY unrestricted replacement q, the law
+alpha*Quit0+(1-alpha)*q is feasible against any opponents: its finite
+survival is at most1-alpha<=b_t. Therefore an exact generalized Nash
+for ORIGINAL utilities would automatically have E<=2M*alpha. If such
+components existed at every alpha, their selection problem would be
+solved without any raw reward ledger. The problem is existence, not the
+displayed regret estimate.
+
+General positive-floor theorem. Let b_t be ANY positive joint-survival
+budget with inf_t b_t>=beta for some beta in(0,1]. Suppose the reward table
+has AT LEAST ONE
+strictly positive own singleton s_a>0; other own singletons may have
+arbitrary signs. If an exact independent generalized Nash for this budget
+exists, the ORIGINAL game has an exact full terminal Nash profile, at
+some positively reached conditional tail. In particular, a table with
+no exact terminal Nash has NO such shared source. This covers every
+component and every private law, not only stationary or geometric ones.
+
+Proof, joint Never. Write rho=product_i Pr(T_i=Never). If rho>0, player a
+has positive Never mass. Move that ENTIRE own Never mass to a finite
+deadline H. This only accelerates its clock and is therefore feasible.
+The gain tends, as H tends to infinity, to
+
+    s_a*rho>0,
+
+by the exact finite-deadline limit in Section18.3. Some finite H improves,
+contradicting source optimality. Hence rho=0 and A_p(t) tends to0.
+
+Proof, positive reach. First suppose every finite joint reach is positive.
+Choose T so A_p(T-1)<beta. Retain the prescribed private law before T
+and replace ANY player's ENTIRE conditional tail law after T. Before T
+the budget is unchanged, and from T onward the new joint survival is
+at most A_p(T-1)<beta<=b_t. Thus EVERY complete conditional deviation is
+source-legal, without an approximation, a missing Never action, or an
+error/reach division. Exact source optimality, divided by the positive
+joint probability of reaching T, proves that the actual conditional
+profile is full exact terminal Nash.
+
+Proof, a zero-reach boundary. Otherwise let H be the first date with
+A_p(H)=0, so A_p(H-1)>0 and some current conditional hazard is1.
+For ANY player's conditional complete deviation, mix it with its original
+conditional law with a positive weight kappa<=beta. Before H this changes
+nothing. From H onward the prescribed joint survival is0 and the new
+survival is at most kappa*A_p(H-1)<=beta. It is source-legal. A positive
+full conditional gain would give a positive initial source gain multiplied
+by kappa*A_p(H-1). Consequently the actual H-tail is again full exact
+terminal Nash. This proves the theorem without a no-sure-root hypothesis.
+
+Actual relevant falsifier. Use the literal Solan table G_e in Section18.6,
+with OWN singletons(1,1,1), for any0<e<e0 in the qualitative bounded
+no-exact-Nash interval explained there. Its actual terminal Nash would
+produce a bounded completely absorbing root-Nash sequence, forbidden by
+the bounded form of Solan2001 Theorem2.1. The paper's printed UNBOUNDED
+admissible-sequence claim is NOT used. All finite prefixes would be
+reached: if player0 were sure at a root, player1 would strictly Continue,
+then player2 would strictly Quit, then player0 would strictly withdraw;
+rotate this argument for the other sure labels. A positive own singleton
+also rules out joint Never in a full Nash, exactly as above.
+Thus for EVERY alpha,c in(0,1)
+the ENTIRE shared-soft source(18.14) is EMPTY on this already-solved
+three-player UE game. No finite threshold for e0, padding, or UE
+counterexample is inferred. The original canonical source(18.1) is
+nonempty and Section18.7 constructs good components; its vanishing tail
+budget is the exact distinction.
+
+Small sign-boundary control. If all participating players receive-1 and
+every absent recipient receives0, then on two players the profile
+T0=alpha*Geom(1-c)+(1-alpha)*Never, T1=Never is exact generalized Nash
+for(18.14). Player0 minimizes its forced finite mass alpha, and player1
+gets0 by Never versus at most0 from any replacement. At EVERY reached
+tail player0 still has positive finite mass, strictly loses against full
+Never, and so that conditional profile is not full Nash. Thus the
+positive-singleton argument excluding joint Never is not dispensable.
+
+Quantitative normalization boundary. The same proof gives a useful
+separate statement, not an approximate-source producer. Let p be an
+epsilon-generalized Nash under a budget b_t>=beta, and let s_a>0.
+Moving its Never mass to late deadlines gives rho<=epsilon/s_a. If
+epsilon<s_a*beta/2, choose the FIRST date T with A_p(T)<=beta/2; then
+A_p(T-1)>beta/2, with A_p(-1)=1. For any complete conditional deviation
+at T, use the mixture weight
+
+    kappa=beta/[2*A_p(T-1)]<=1.
+
+Every future prescribed survival is<=beta/2; the mixture increases it by
+at most kappa*A_p(T-1)=beta/2. Hence the mixed deviation is source-legal.
+Its initial gain is exactly(beta/2) times its full conditional gain.
+The actual T-tail therefore has ORIGINAL full regret at most
+2epsilon/beta for ALL players and complete deviations, including Never.
+This handles a crossing root of arbitrary size and even A_p(T)=0.
+
+Thus a positive-floor source does provide a controlled relative-reach
+normalization, but EXACT source existence already entails exact original
+Nash existence. Approximate source existence with epsilon tending to0
+remains a genuinely joint equilibrium-production problem, not a compact
+fixed-point consequence. Restoring a positive tail floor cannot supply
+the missing automatic selector for the hard shared source.
