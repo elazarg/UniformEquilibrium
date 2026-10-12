@@ -2,7 +2,7 @@
 
 Author: CODEX_NASH_BOX.
 
-Latest candidate: Section39 strengthens the FULL COARSE global-minimum
+Latest candidate: Sections39--40 strengthen the FULL COARSE global-minimum
 obstruction, under the same strict-anchor/actual-sequence hypotheses as
 Section28 and nonnegative own singletons. A positive minimum would force
 EVERY finite root Nash at EVERY minimizing state to be all-Continue,
@@ -12,8 +12,13 @@ solo washout; it is ordinary UNREVIEWED mathematics. Consequently the
 zero/one-unprotected-label modes are uniformly interior pointwise. With
 two unprotected labels, a payoff-boundary state must have all four
 coordinates singleton-tight and an explicit two-column blocking pattern.
-Neither the interior punishment-price branch nor that exceptional boundary
-is excluded. This is not a private-CE variation or new solved raw class.
+Section40 excludes that exceptional boundary after generic selection of
+pair-participant rewards, preserving own singletons and the singleton
+matrix. For the NEW selected surviving positive-gap table, S has a uniform
+all-coordinate interior floor and every full coarse cap binds. Its entire
+root Nash correspondence is inert. The interior punishment-information
+price obstruction remains OPEN. These are not private-CE variations or
+new solved raw classes; both sections remain unreviewed.
 
 Current checkpoint: Sections33--34 give actual finite-law singleton
 completion and first-two-event reference completion, with their exact
@@ -6614,3 +6619,147 @@ interior punishment-price branch (even though its entire root Nash
 correspondence is now inert), or use this exceptional two-unprotected
 boundary's joint-role structure in a full-law variation. Private CE has
 additional conditional constraints and does not inherit this proof.
+
+## 40. Generic pair-participant selection removes the entire coarse boundary
+
+Status: ordinary UNREVIEWED composition with Section39. This is a
+counterexample-SELECTION reduction, not a theorem that every unperturbed
+minimum source is interior. Its only new finite-dimensional ingredient is
+the two-column cone calculation below. It does not control the remaining
+interior punishment prices or prove rho=0.
+
+### Exact generic hypotheses and conclusion on the selected table
+
+For four players define the zero-diagonal matrix
+
+    H_ij=r_i({j})-r_i({i,j}), i!=j.
+
+Call H pair-generic here if
+
+    H_ij !=0 for every i!=j;
+    det H_({j,l},{i,k}) !=0 whenever {i,k,j,l}=I.       (40.1)
+
+There are12 entry conditions and6 complementary two-by-two minor
+conditions; ordering the two rows or columns does not affect nonvanishing.
+Assume Section28's strict anchor, s>=0, rho>0 and(40.1). Then
+
+    EVERY x=(v,C,J) in S has v_i>s_i for every i;
+    there is delta>0 with v_i-s_i>=delta on ALL S;
+    C_i=v_i for every x in S and every i.             (40.2)
+
+The second assertion is genuine uniformity over the entire compact S,
+not just one selected point. The third uses Section35's finite minimizing-
+sequence variation, not an ordered-time minimizer.
+
+### The protected-row interval is strict, so protected mass can be born
+
+Section39 already treats zero or one unprotected label. If a boundary
+exists with two unprotected labels i,k, its proof gives v=s on all four
+coordinates and a probability a supported positively on{i,k} with H a>=0.
+It also gives the two distinct protected blockers j,l, relabeled so that
+
+    H_ji<0<H_jk,  H_lk<0<H_li,
+    H_ik>=0, H_ki>=0.                                  (40.3)
+
+By the nonzero entry hypotheses, the last two inequalities are strict.
+Write t=a_k/a_i>0. The two protected constraints are exactly
+
+    -H_ji/H_jk <= t <= H_li/(-H_lk).                  (40.4)
+
+The relevant disjoint two-by-two minor is
+
+    D=H_ji*H_lk-H_jk*H_li.
+
+Feasibility of(40.4) gives D<=0. By(40.1), D<0, hence the lower endpoint
+of(40.4) is STRICTLY smaller than its upper endpoint. Choose t in the
+interior and normalize the corresponding a supported on{i,k}. Now
+Ha>0 on the protected rows j,l and also on i,k, since H_ik,H_ki>0.
+
+For sufficiently small eta>0 the normalized vector
+
+    b=(a+eta*e_j+eta*e_l)/(1+2eta)
+
+still has H b>0 in ALL four rows. In particular it has protected mass.
+At v=s the singleton root lottery of Section38 with distribution b is
+exact full-coarse feasible, and its information change is
+
+    I(pi)-lambda sum_m b_m d_m
+       <=lambda^2-lambda sum_m b_m d_m<0
+
+for small lambda>0, because d_j,d_l>0. This contradicts rho. Thus no
+boundary exists, establishing the first assertion of(40.2). Compactness
+of S gives its uniform delta. Any positive coarse slack at any point of
+S would persist along a realizing sequence whose all-coordinate singleton
+gaps are uniformly positive; Section35 gives a fixed-q, fixed positive
+information drop on that sequence. Therefore all caps bind.
+
+The minor hypothesis really removes a degeneracy; entrywise nonzero
+alone does not justify strictification. For example
+
+    H=[ 0, 1,-1,-1;
+        1, 0,-1,-1;
+       -1, 1, 0,-1;
+        1,-1,-1, 0 ]
+
+has every off-diagonal entry nonzero. Its ENTIRE probability cone
+{a>=0:sum a=1,H a>=0} is the single point a=(1/2,1/2,0,0).
+Indeed the last two rows sum to-a_2-a_3, forcing a_2=a_3=0; the two
+remaining inequalities then force a_0=a_1. The complementary minor is0.
+This is a cone-boundary example, not a quitting-game counterexample or
+a claim that this H supports a positive information minimum.
+
+### Why a hypothetical counterexample can be selected pair-generic
+
+The12 H off-diagonal entries depend independently and affinely on the12
+PAIR PARTICIPANT reward coordinates r_i({i,j}). These are distinct raw
+coordinates. Every entry polynomial and every complementary minor
+polynomial in(40.1) is nonzero as a polynomial in those free coordinates.
+The union of their finitely many zero sets has empty interior. Thus within
+ANY positive raw radius one can enforce(40.1) by changing only these12
+coordinates, leaving EVERY singleton reward and the singleton matrix
+Gamma_ij=r_i({j})-s_i exactly unchanged.
+
+The actual robustness declaration reopened for this step is
+`abs_quittingTerminalExploitabilityInf_sub_le_of_reward_close` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`.
+It states the uniform2-Lipschitz bound on the global infimum over all
+behavioral profiles. It does not merely preserve a bounded strategy class.
+If a table has positive full gap g, any perturbation of sup norm<g/4
+still has gap>g/2.
+
+For an arbitrary hypothetical nonnegative-own Fin4 counterexample,
+Section32 of CODEX_TURING_BOX's owned state notebook first selects a
+nearby surviving positive-gap table with a strict finite FULL coarse
+anchor. That selection changes only passive singleton entries. Its
+source proof uses actual full-normal-core/standard-Q consequences and
+the owner/blocker anchor, not an assumed anchor on every original table.
+Apply the pair-generic perturbation next, within a sufficiently small
+remaining gap radius. The own singletons and the now-selected Gamma stay
+unchanged. The same positive-image and strict row-blocker hypotheses
+therefore remain available; the owner/blocker construction permits
+arbitrary bounded collision rewards, so it supplies a strict anchor for
+the final table too (its calendar and margin may change).
+
+Now form the ENTIRE coarse source and S for this FINAL table. A positive
+terminal gap gives rho>0 by Pinsker exactly as in Section28, and(40.2)
+applies. No old payoff, old source, old entropy state, or chronology is
+transported between reward tables. If the starting own vector was
+(1,0,0,0), it remains precisely that vector.
+
+### What has and has not changed globally
+
+The boundary branch is no longer a necessary separate task in a
+contradiction proof that is permitted to select a nearby positive-gap
+table. The resulting whole-minimum source has one uniform all-coordinate
+singleton gap, binding full coarse constraints, and only all-Continue
+root Nash at every state. This is stronger than importing slack from the
+strict anchor itself.
+
+What remains is NOT an attained-calendar technicality: Section33's
+counterfactual opponent-completion price can still exceed rho for every
+available independent punishment. Normality bounds its VALUE, not its
+relative entropy to the old opponent marginals. Removing that global
+price obstruction, by a feasible joint first/second-role change or a
+different actual-law operation, is the next task. Full private obedience
+would require additional conditional inequalities and is not inferred
+from(40.2).
