@@ -8291,6 +8291,12 @@ that inverse positivity alone produces a uniform equilibrium.
 The assumption n_i>0 is essential: no expression1/n_i or conclusion(W12)
 is asserted at an n_i=0 boundary. In particular this is not a statement
 about all carrier minima independently of the displayed source assumptions.
+Since the right side of(W12) is strictly below1, every owner at THIS
+source has positive original finite mass as well as positive Never mass.
+Thus any canonical source mode containing a PureNever owner is excluded
+in this additional inverse-nonnegative sublane, not on arbitrary singleton
+data. This is a source-mode restriction rather than a new solved reward
+class.
 
 For the paired hard singleton data s_i=1 and
 
