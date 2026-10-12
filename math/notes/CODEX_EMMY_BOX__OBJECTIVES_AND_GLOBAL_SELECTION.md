@@ -65,6 +65,14 @@ Continue-optimal prefixes cannot turn a uniformly positive-debt seed into
 small full regret on the K10 table. This includes every exact binding-prefix
 word from18.10, even when roots are jointly reselected. It does not falsify
 the entire shared correspondence, which may select a good seed elsewhere.
+Section18.13 is a separate UNREVIEWED whole-correspondence reduction. If
+own singletons are nonnegative and the table has no exact terminal Nash,
+every shared component has at least two proper clocks, every proper clock
+is unbounded, and every player's full cap at EVERY reached tail is literal
+Never. The entire source and all its full regrets then survive arbitrary
+finite-recipient row translations, so strictly positive terminal rewards
+may be assumed for this unresolved selection problem. Never need NOT be
+a budget-feasible replacement. This is no zero-regret selection theorem.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -3142,3 +3150,186 @@ two or more proper labels but a one-proper exact Nash. So no universal
 repair theorem from an arbitrary fixed seed is being proposed, even with
 macroscopic neutral blocks. Any general theorem must select across the
 whole correspondence, allowing a different proper face when necessary.
+
+### 18.13. The entire hard source has Never caps; its sign normalization is exact
+
+Status: ORDINARY UNREVIEWED mathematics, not a new UE class or a completed
+selector. This is a reduction of the ENTIRE source, including every clock
+law and every complete behavioral deviation. It does not retain a selected
+initial tail or assume that each proper clock has a conditional hazard floor.
+
+Question. Fix the exact upper budget(18.1), delta>0, a finite table with
+s_i>=0, and suppose the ORIGINAL game has no exact terminal Nash profile.
+What unrestricted caps can ANY p in N_delta have? Can negative passive
+rewards be removed without changing this whole-source selection question?
+
+Claim. For EVERY p in N_delta:
+
+1. At least two of its private clocks are proper.
+2. Every proper clock has unbounded finite support. Consequently every
+   finite calendar date has positive joint reach.
+3. At EVERY reached conditional tail and for EVERY player, its full
+   behavioral cap is its literal Never payoff.
+4. If constants l_i are added to recipient i's reward at EVERY nonempty
+   coalition, leaving live and Never payoff0, the ENTIRE N_delta is
+   unchanged and every p in it has EXACTLY the same full regret vector.
+
+The no-exact-Nash hypothesis is used in1--2, not silently strengthened to
+nonexistence of stationary Nash. The proof uses18.2's compactness and exact
+closedness of N_delta; these remain ordinary mathematics, not Lean claims.
+
+#### A bounded proper clock yields an exact original Nash tail
+
+Suppose instead that p has a proper clock of bounded support. Let H be
+the earliest LAST support date among all such clocks, and choose one such
+player a. Every player has positive probability of reaching H: otherwise
+another clock would be proper with an earlier last date. Condition all
+independent clocks on reaching H, and call this actual tail q. Player a
+quits at its first tail date surely.
+
+Fix any player i and any finite tail deadline T. Retain i's whole law
+strictly before H, and mix an epsilon fraction of its conditional tail
+with this pure deadline. No budget constraint before H changes. If i!=a,
+player a still quits surely at H, so all later joint constraints remain0
+and the replacement is legal for any epsilon. If i=a, possible increased
+joint survival occurs only on the FINITE interval from H through the new
+deadline minus1. Each budget bound there is strictly positive, while the
+old joint survival is0. Thus a sufficiently small epsilon>0 is legal.
+
+Exact source agency, divided by the positive own and opponent reach at H,
+therefore gives U_i(q)>=f_i(T,q_-i) for EVERY finite deadline. For s_i>=0,
+literal Never is at most the limit supremum of these finite responses.
+Affinity in a complete private law proves that q is a full exact terminal
+Nash profile. This contradicts the hypothesis. In particular the exit is
+EXACT, with no O(delta) residual: the shared constraint becomes slack when
+one prescribed proper clock is finished. A separate fixed-owner constraint
+would not have this property for a different constrained owner.
+
+#### A sole proper clock also yields an exact original Nash profile
+
+Every feasible source has at least one proper clock, because its joint
+Never mass is0 and the private laws are independent. Suppose a is its ONLY
+proper label. First, there must be infinitely many binding budget dates.
+If there are none, mixing any pure finite deadline with the prescribed law
+by a sufficiently small epsilon is legal: only finitely many strictly
+slack constraints can increase. Then all finite responses are bounded by
+U, and s>=0 controls Never, giving full Nash directly. If there are only
+finitely many bindings, condition after the last one. Exact matching-prefix
+agency and the binding normalization place that tail in the SAME N_delta,
+now with no bindings, again giving a full original Nash profile.
+
+Take binding dates b_n tending to infinity and condition after b_n. The
+resulting independent tails q^n belong to N_delta EXACTLY, without dividing
+an approximate Nash error by their reach. Every improper j converges in
+total variation to literal Never, since
+
+    Pr(b_n<T_j<infinity)/Pr(T_j>b_n) -> 0,
+
+the denominator tending to its positive Never mass. Compactness and
+closedness of N_delta give a weak cluster q in N_delta with all j!=a
+literal Never. Feasibility then says
+
+    Pr_q(T_a>t)<=c^(t+1) for every t,
+
+so a is proper. It earns s_a against those Never opponents, and its full
+cap is max(s_a,0)=s_a. Each other player may now use ANY complete law:
+a alone funds every joint budget. Thus its source optimality is already
+full optimality. This is an exact original Nash profile, contradiction.
+Only the sole proper player's own nonnegative singleton was needed in
+this last step; no sign condition on passive rewards was used.
+
+#### Never is the full cap, not necessarily a legal constrained replacement
+
+The preceding two exits imply1--2. Fix any reached tail and player i.
+If i is improper, it has positive conditional Never mass. Move a positive
+portion of that mass to ANY finite deadline. This only accelerates the own
+clock, so every original joint upper constraint weakly decreases. Exact
+source agency implies that Never weakly dominates that finite deadline.
+
+If i is proper, its conditional support is unbounded. For any fixed finite
+deadline T, choose supported finite dates u_n>=T tending to infinity.
+Moving a portion of an atom at u_n to T likewise accelerates the clock,
+and is legal while retaining the entire earlier original history. Hence
+
+    f_i(u_n)>=f_i(T).
+
+There is another proper opponent, so the opponent Never product is0.
+The actual late-deadline identity gives f_i(u_n)->f_i(Never). Therefore
+Never dominates EVERY finite deadline here also. Pure date-or-Never
+extremality proves3. This argument applies at arbitrary conditional tails,
+whether or not their shifted budget is the original exponential budget.
+
+Feasibility must NOT be inferred from this cap identification. In the
+exact two-player source of18.10, both hazards are1/10 and c=81/100.
+Both full caps equal Never=2, while both U=31/19<2. Replacing either clock
+by Never leaves joint survival(9/10)^(t+1), which is GREATER than
+(81/100)^(t+1). It violates the source budget. At least two proper clocks
+guarantee absorption after every full deviation, not this stronger rate.
+
+#### Exact whole-source finite-row translation
+
+Let r_i^l(S)=r_i(S)+l_i for EVERY nonempty S; live/Never remain0. Every
+budget-feasible prescribed profile and every feasible own replacement
+absorbs surely. Its payoff therefore changes by exactly l_i. All source
+best-response inequalities are unchanged, and
+
+    N_delta(r^l)=N_delta(r)
+
+as literal sets of independent complete clock profiles, for every delta.
+By1, deleting any one player from any source profile leaves a proper
+opponent. Thus EVERY unrestricted replacement also absorbs surely. Its
+payoff changes by the SAME l_i, proving
+
+    B_i(r^l,p)=B_i(r,p)+l_i,
+    U_i(r^l,p)=U_i(r,p)+l_i,
+    d_i(r^l,p)=d_i(r,p)                 for ALL p in N_delta.
+
+Choose finite l_i large enough to make EVERY terminal reward strictly
+positive. This does not require transporting an old source to a different
+law or selecting another component: the whole correspondence and its
+entire regret spectrum are literally unchanged. It is valid under the
+stated no-exact-Nash/nonnegative-own assumptions. Section18.4's negative
+singleton falsifier does not satisfy them; its one-proper source is exactly
+where full-response translation need not be constant.
+
+#### What this changes and what it does not prove
+
+For the unresolved no-exact-Nash lane of(18.2), negative terminal reward
+signs can now be removed EXACTLY before analyzing any source minimum.
+All source debts are genuine waiting losses R_i-U_i at every tail, not
+finite-cap escape charges. Writing J for joint root survival, alpha_i for
+opponent root survival, q_i for own hazard, and b_i for its opponent-only
+stopping reward, the exact conditional identities are
+
+    R_i=b_i+alpha_i*R_i',
+    R_i>=Q_i,
+    d_i=J*d_i'+q_i*(R_i-Q_i).
+
+Joint source termination makes the bounded remainder vanish. Hence
+
+    d_i(p)=sum_t jointReach(t)*q_i(t)*(R_i(t)-Q_i(t)),
+
+with every summand nonnegative. This is a whole actual-law ledger, not a
+prefix preservation theorem or a proof that its sum tends0.
+
+The next target is QUANTITATIVE at a whole-correspondence minimum: a
+macroscopic block plus jointly reselected tail must beat D_min whenever
+D_min exceeds a vanishing allowance omega(delta). Strict descent at EVERY
+positive fixed-delta minimum is false:18.6 proves that the canonical Solan
+game has an attained strictly positive minimum for each fixed delta,
+while18.7 gives its O(delta) good components. The present reduction does
+not manufacture the required vanishing allowance or imply that a global
+minimum can be reached from an arbitrary fixed bad seed.
+
+Source audit: the actual late-deadline formula and finite-response cap
+bound were reopened in
+`UniformEquilibrium/Quitting/Terminal/CompactStoppingLawCapUpperBound.lean`:
+`quittingTerminalPayoff_update_finiteTime_tendsto_never_add_opponentNever_mul_singleton`
+and
+`quittingCompactStoppingLawProfile_cap_le_finiteBound_add_opponentNeverProduct_mul_negPart`.
+The literal-profile specialization was reopened in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`,
+`quittingTerminalPayoff_update_finiteTime_tendsto_of_profile`.
+These declarations justify the cited terminal/behavioral semantics, not
+the new shared-source exits or selector claim. No Lean check or export
+is asserted for18.13.
