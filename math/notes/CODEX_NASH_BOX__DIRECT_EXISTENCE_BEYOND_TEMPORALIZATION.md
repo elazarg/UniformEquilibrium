@@ -6839,8 +6839,14 @@ The owner's new Quit0 is safe since its value remains at least s_i. Its later
 full reply violation is at most (1-q)e+q epsilon_n if the old full coarse
 violation is e. Every other player's later violation is at most (1-q)e.
 Consequently every fixed number of these prefixes remains full approximately
-coarse with error tending to zero. All old finite dates and kappa_n are shifted
-by one at each step; the completion is otherwise exactly the SAME law.
+coarse with error tending to zero. At repetition k+1 the old law is shifted
+by one, and the fresh completion uses the SAME common calendar translation
+k+1 of the original kappa_n as the old opponent law. Thus the fresh completion
+has k additional initial Continue dates, rather than being reinserted at a
+different relative position. These delays preserve its owner cap bound:
+earlier deadlines give s_i, and every later deadline or Never is an original
+completion response; s_i>=0 also handles an all-Never opponent realization.
+The completion is otherwise exactly the SAME law.
 
 Write m_j^(k) for the opponent marginals after k prefixes, translated back to
 their original dates. They obey
