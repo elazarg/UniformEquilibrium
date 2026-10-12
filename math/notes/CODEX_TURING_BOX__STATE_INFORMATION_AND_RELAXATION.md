@@ -9,10 +9,18 @@ graph is a bare triangle on012. Nevertheless EVERY actual profile with
 player3 prescribed literal Never has unrestricted maximum terminal debt
 at least4/9. Thus no selection from the ENTIRE three-player equilibrium
 correspondence on012 can solve the parent by that quiet lift. The full
-table has a global sink3 and an exact sole-3 equilibrium; it does NOT
+table in40.1 has a global sink3 and an exact sole-3 equilibrium; it does NOT
 refute the raw-class extension, an actual positive-minimum passport, or
 a mechanism allowing player3 to act. The next test removes that easy
 global-sink/pure-equilibrium dispatch while retaining all original caps.
+Sections40.4--40.5 now supply that second exact test: an ACTUAL tied-triple
+pair inside the seeded H/J chamber, on a no-sink/no-pure table, has only
+all Continue as a full finite cap-Nash root. Nevertheless an explicit
+whole-three-player stationary replacement reaches an exact diagonal in
+the SAME chamber. This separates finite-root escape from whole-calendar
+escape. The test pair is not a chamber minimizer (its E=2 exceeds the
+seed's E=1), so no positive-minimum impossibility is inferred. Neither
+test supplies new arbitrary-table coverage or a new conditional compiler.
 
 Section38 is an independently reviewed ordinary raw-class extension of the
 two-ledger chamber theorem, now exported as
@@ -8563,3 +8571,199 @@ carrier/diagonal declarations listed in38.10. A narrow search in the
 QuietExtension subtree found conditional debt-lift producers, not a
 raw H/J implication supplying this quiet selection. No Lean command,
 implementation, Literature claim or export is used here.
+
+### 40.4 An actual tied-triangle chamber point after the easy dispatches
+
+This is a SECOND table, not a silent modification of40.1. It has a global
+no-sink graph, no pure coalition equilibrium, and an actual tied-triple
+point in the very chamber constructed from its strict singleton seed.
+Its complete finite cap-root game at that point has ONLY all Continue.
+The conclusion is about that point, not the attained chamber minimum.
+
+Players, own singletons, weights, information and deviations are as in
+40.1. Replace the table by the following complete rational rows:
+
+    S       r(S)
+    0       (1,-1,1,4)
+    1       (1,1,-1,13/4)
+    2       (-1,1,1,3)
+    3       (2,2,2,1)
+    01      (0,0,1,3)
+    02      (0,1,0,3)
+    03      (3,2,2,1)
+    12      (1,0,0,3)
+    13      (2,0,2,1)
+    23      (2,2,0,1)
+    012     (0,0,0,4)
+    013     (0,0,3,1)
+    023     (0,3,0,1)
+    123     (3,0,0,1)
+    0123    (0,0,0,0).
+
+The complete proper H/J ledger is
+
+    S           H       J
+    0           1      -3
+    1           1/4    -9/4
+    2           0      -2
+    3           3      -3
+    01,02,12    0      -3
+    03          4      -4
+    13,23       1      -4
+    012         0      -4
+    013,023,123 0      -3.
+
+Every child is flat on EVERY participant subcoalition of012, and3 is
+flat on every proper set containing3. The full insertion graph is
+
+    0->1, 1->2, 2->0, 3->0.
+
+All four vertices have an outgoing arrow, and012 is the only bare
+proper triangle. There is no pure equilibrium coalition. A sole child
+j induces its successor to join (0>-1); a sole3 induces0 to join (3>2).
+In a child pair its donor prefers to leave (1>0); in012 any member
+prefers to leave (1>0). In ANY proper coalition containing3 and another
+player,3 prefers to leave (passive reward at least3 versus participant1).
+In the grand coalition3 prefers to leave (4>0). All Continue fails at
+the original zero Never continuation because all own singletons are1.
+These checks exhaust every pure coalition and every pure corner.
+
+For the strict seed, prescribe sure Quit0 to1 and Never to everyone
+else. The EXACT unrestricted semantic pair is
+
+    U_seed=(1,1,-1,13/4), B_seed=(1,1,0,13/4),
+    E_seed=1,             L(B_seed)=5/4.
+
+Player2 can join1 at0 for0 or wait for-1; all other cap coordinates
+are their sole-owner row values. Thus lambda=5/4 is the raw chamber
+constant supplied by THIS actual strict seed, with H({1})=1/4>0.
+
+Now prescribe sure Quit1 to0, and Never to all others. The complete
+response lists are
+
+    player0: any finite deadline1, Never0;
+    player1: Quit0 earns1, Quit1 earns0, later/Never earns-1;
+    player2: Quit0 earns1, Quit1 earns0, later/Never earns1;
+    player3: Quit0 or Quit1 earns1, later/Never earns4.
+
+Here "any finite deadline1" means payoff1 at EVERY finite deadline;
+the owner's original prescribed date is1. Hence
+
+    U=(1,-1,1,4), B=(1,1,1,4), E=2, L(B)=3.
+
+This is an ACTUAL source with tied set012 and strict outsider cap4>1.
+It belongs to the SAME seeded chamber: min(B-s)=0 and
+L(B)=3 >= (5/4)*2=5/2. No formal cap vector outside the actual carrier
+has been substituted.
+
+At this B, player3's forced-Continue payoff in EVERY root is at least3:
+every nonempty child row gives it at least3 and the empty child row
+uses continuation B_3=4. Its forced-Quit payoff is at most1. Thus3
+strictly Continues in every full finite cap-Nash root. With q_3=0,
+the other three root differences are exactly
+
+    g_0=q_2-q_1-q_1 q_2,
+    g_1=q_0-q_2-q_0 q_2,
+    g_2=q_1-q_0-q_0 q_1.                             (T5)
+
+One active label gives its inactive successor a positive gap. Two
+active labels give one supported member a strictly negative gap.
+With all three active, the sum of(T5) is the strictly negative sum of
+pair products, while every supported gap must be nonnegative. These
+cases also include sure rates; they exhaust the product cube. All
+Continue is therefore the UNIQUE full finite cap-Nash root.
+
+This realizes the packet's finite regression INSIDE the actual seeded
+H/J chamber, even after global sinks and pure equilibria are dispatched.
+It refutes an attempted pointwise finite-root escape from those facts.
+It does NOT refute a minimum-specific escape: E=2 already exceeds the
+retained seed's E=1. In particular do not apply an unconstrained global
+total-debt minimum lemma to a minimum of max debt E constrained to C.
+Those are different optimization problems, and only the latter belongs
+to the raw chamber proof.
+
+### 40.5 An exact whole-three-player exit in that same chamber
+
+The second table also supplies a useful POSITIVE calibration of the
+proposed replacement. Its child-only game is cyclically symmetric.
+Let x be the unique root in(0,1) of
+
+    x^3+x^2+x=1.
+
+Existence and uniqueness follow from strict increase of the left side,
+whose values bracket1 at1/2 and3/5. Give EACH child the stationary
+independent Quit hazard q=1-x at every date, and prescribe Never to3.
+All three child clocks are proper geometric laws; joint termination
+has probability1. Put v=x^2.
+
+For any child its one-date forced-Quit payoff is x^2: Quit alone pays1,
+and every participating pair or triple pays0. Its stationary prescribed
+one-date reward is q*x, so its total prescribed terminal payoff is
+
+    q*x/(1-x^3)=x/(1+x+x^2)=x^2=v.                  (T6)
+
+The two passive singleton contributions cancel exactly. Its pure Never
+replacement has reward q^2 per surviving date and deleted-opponent
+survival x^2, giving
+
+    q^2/(1-x^2)=(1-x)/(1+x)=x^2=v.                 (T7)
+
+The last equalities in(T6),(T7) are precisely the cubic identity. A
+finite deadline has expected payoff v as well: each preceding Continue
+date followed by the same future value v gives
+
+    q^2+x^2 v=v,
+
+and the final forced-Quit payoff is v. Equivalently this finite
+Bellman induction is justified by v=(1-x)/(1+x). Every replacement law
+is a mixture of these finite deadlines and literal Never. Hence the
+children's COMPLETE unrestricted caps are all v, with zero child debt.
+
+For player3, every realized child-only coalition has reward at least3;
+every coalition containing3 has reward at most1. For each deterministic
+child clock tuple with finite first quit, prescribing Never to3 gives
+at least as much as EVERY finite replacement deadline: waiting past
+the first child quit leaves the same outcome, while preempting or
+joining earns at most1. The exceptional all-child-Never tuple has
+probability0. Taking expectations proves B_3=U_3, not merely a bound
+on stationary deviations.
+
+Its exact payoff is
+
+    v_3=[(41/4)x^2+9(1-x)x+4(1-x)^2]/(1+x+x^2)
+       =[(21/4)x^2+x+4]/(1+x+x^2).
+
+Thus the actual profile is exact terminal Nash at the fixed target
+
+    (x^2,x^2,x^2,v_3).
+
+It is a diagonal in the SAME chamber: each child cap x^2<1, and
+
+    L(v)=3x^2+v_3-4=(5/4)x^3>0.                   (T8)
+
+All finite-horizon uniform deviations are supplied by the checked
+exact-terminal-Nash semantic endpoint, not by an assertion that
+terminal averages equal finite-horizon payoffs. The target is fixed
+before accuracy. No public correlation, payment or supplied safe tail
+is required in this concrete construction.
+
+This is an exact example-level existence mechanism, not new raw-class
+coverage: the second table has the strong outside patient dominance
+used above and may already lie in a checked quiet-extension family.
+The significance of the calculation is that a whole-triple stationary
+replacement changes the actual child caps from1 to x^2 and moves
+directly to a diagonal, although EVERY finite exact cap-Nash prefix
+at the old pair was inert. It does not prove that this replacement
+exists at arbitrary bare-triangle chamber minima, or that every child
+equilibrium lifts. The first table in40.1 continues to refute the latter
+source-independent quiet-selection claim.
+
+Current concrete next question: at a genuine positive MINIMUM of E
+over the H/J chamber, can an actual whole-calendar replacement for the
+tied triple be chosen that retains the low face and weighted ledger
+while paying the fourth player's ENTIRE cap? The available exact
+tests now separate the issues: raw guards and actual chamber membership
+alone do not give finite-root escape; quiet-child existence alone does
+not give outside safety; and a nonlocal safe triple replacement can
+exist even when the old finite root game is completely inert. No new
+unpaid transport or weakened supplied-safe-child interface is proposed.
