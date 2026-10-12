@@ -28,6 +28,13 @@ discounted selection or any UE reward class. The live question permits
 intermediate regret increases and arbitrary joint changes of the whole
 private calendar.
 
+Section39.7 extracts a finite dual consequence of the already reviewed
+late-branch graft inequalities at an actual positive total-debt minimum.
+For an entrywise nonnegative singleton inverse it forces every final
+finite c-wall to be active and bounds each original Never atom. The
+paired hard singleton matrix satisfies the resulting first-order system
+at equality, so this does not supply descent or new raw-table coverage.
+
 Section37 returns to the ENTIRE realized-discounted Nash correspondence,
 with arbitrary calendars, components and selective Never. Section37.6
 removes the no-sure-root hypothesis from its fixed-discount MINIMUM source:
@@ -8219,3 +8226,106 @@ This sharpens the live question rather than answering it: an actual
 all-nonproper boundary improvement must FORCE gamma_2=0 from surviving
 raw data. Reapplying properization to a supplied UE family only confirms
 the already available completeness theorem.
+
+### 39.7 A dual test for simultaneous late-branch grafts
+
+This is an ordinary unreviewed supporting deduction from(Q5) in
+[`Least-Never multiple-bridge source`](../exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md),
+not production of that source or a new minimum-attainment assertion.
+More explicitly, assume s_i>0 and there are actual independent finite
+clock profiles p^k whose prescribed payoff U^k, full behavioral cap B^k,
+literal Never-response value R^k and ORIGINAL Never masses n^k converge
+to U,B,R,n. Assume n_i>0 for every i, sum_i(B_i-U_i)=delta>0 is the
+GLOBAL all-profile total-debt infimum, and the following common-source
+graft pairs are attainable limits of actual profiles for every attainable
+tail pair(u,b):
+
+    U_i^g=U_i+(product_j n_j)u_i,
+    B_i^g=max{B_i,R_i+(product_(j!=i)n_j)b_i}.
+
+The reviewed marked source supplies precisely these properties. No
+integer-calendar minimizer or attained original clock law is required.
+The convergence must retain R and n, not only(U,B). Conversely a bare
+semantic minimum without that passport has not been shown here to supply
+the graft hypothesis. Put S=sum_i s_i>0, Gamma_ij=r_i({j})-s_i (including
+Gamma_ii=0), and C={i:kappa_i=s_i}, where
+
+    kappa_i=(B_i-R_i)/product_(j!=i)n_j.
+
+The point defining C is the final EMPTY finite deadline, not literal
+Never and not the final point of a newly conditioned suffix. The reviewed
+thin-word graft inequality states, for EVERY simplex vector lambda,
+
+    sum_(i in C) (Gamma lambda)_i^+/n_i
+        >= S + 1^T Gamma lambda.                            (W10)
+
+There is consequently ONE vector theta, independent of lambda, with
+
+    theta_i=0 for i notin C,
+    0<=theta_i<=1/n_i for i in C,
+    (theta-1)^T Gamma >= S 1^T                              (W11)
+
+coordinatewise. To see this, let Theta be the displayed compact box.
+For each lambda the left side of(W10) is
+max_(theta in Theta) theta^T Gamma lambda. Finite bilinear minimax
+interchanges max_Theta and min_simplex. Equivalently, if the convex
+compact image {theta^T Gamma:theta in Theta} missed the upper orthant
+above S1^T+1^T Gamma, a strict separating functional could be chosen
+nonnegative; normalize it to lambda. Its strict separation contradicts
+(W10). Thus the image meets that orthant. Notice that the target's
+j-th coordinate is exactly sum_i r_i({j}).
+
+Suppose additionally Gamma is invertible and Gamma^-1 is entrywise
+nonnegative. Right multiplication preserves(W11), giving
+
+    theta^T >= 1^T + S 1^T Gamma^-1.
+
+Every inverse column is nonzero, so each of its nonnegative column sums
+is strictly positive. In particular theta_i>0 for EVERY i. Therefore
+
+    C=I,
+    n_i <= [1+S(1^T Gamma^-1)_i]^-1.                       (W12)
+
+This is a restriction on the supplied minimum source. It does not say
+that inverse positivity alone produces a uniform equilibrium.
+The assumption n_i>0 is essential: no expression1/n_i or conclusion(W12)
+is asserted at an n_i=0 boundary. In particular this is not a statement
+about all carrier minima independently of the displayed source assumptions.
+
+For the paired hard singleton data s_i=1 and
+
+    Gamma=[0,-1,3,-1; -1,0,-1,3;
+           3,-1,0,-1; -1,3,-1,0],
+    Gamma^-1=(1/15)[2,3,7,3;3,2,3,7;
+                         7,3,2,3;3,7,3,2],
+
+every inverse column sums to1. Hence every c-wall is active and every
+original n_i<=1/5. The entire first-order system nevertheless permits
+
+    C=I, n_i=1/5, theta_i=5:
+    (theta-1)^T Gamma=4 1^T=S1^T.
+
+This is an exact feasible certificate for ALL simplex tests(W10), not
+an actual positive-minimum profile or a UE counterexample. It falsifies
+the proposed algebraic step that hard inverse-positive singleton
+geometry alone makes the first-order late graft inequalities inconsistent.
+The matrix's determinant is45, and its actual R0 degree is1; positivity
+of its inverse is not the negative-determinant inverse criterion.
+
+The dependency read here is the source packet's complete(Q1)--(Q6)
+graft/thin-word derivation. Its Gamma definition agrees with
+`quittingProjectiveLCPMatrix` in
+`UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`.
+The exact matrix/inverse and degree calculation are independently
+recorded in Section7.1 of
+[`Passive-triple cap chamber`](../exports/PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md).
+No source, fixed chronology or minimum is transported by an upward
+recipient-row shift: Gamma stays fixed but S and the selected minimizer
+change. Such shifts can therefore make(W12) stronger without creating
+a contradiction with a lower bound on Never for a DIFFERENT table.
+
+The next genuinely missing step is a coupled variation of OLD finite
+branches and the Never tail, with its newly born finite response tests
+paid in the same total-debt comparison. Late-only first-order insertion
+does not provide it. No new export, counterexample class or conditional
+compiler is proposed by(W11)--(W12).

@@ -73,6 +73,13 @@ Never. The entire source and all its full regrets then survive arbitrary
 finite-recipient row translations, so strictly positive terminal rewards
 may be assumed for this unresolved selection problem. Never need NOT be
 a budget-feasible replacement. This is no zero-regret selection theorem.
+Section18.14 is a separate UNREVIEWED variational calculation. The credit
+intercept is exactly the payoff of the first supported finite deadline.
+Joint redistribution of two initial hazards preserves every survival
+constraint, and excludes regular fully active initial roots at WHOLE
+total-debt minima on the canonical Solan calibration. The remaining
+zero-atom/credit-equality faces are not resolved. No arbitrary-table or
+whole-source vanishing-regret conclusion is claimed.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -3333,3 +3340,184 @@ The literal-profile specialization was reopened in
 These declarations justify the cited terminal/behavioral semantics, not
 the new shared-source exits or selector claim. No Lean check or export
 is asserted for18.13.
+
+### 18.14. First records and a genuine joint clock variation at source minima
+
+Status: ORDINARY UNREVIEWED supporting mathematics. This is a variational
+test over the ENTIRE exact source, not a new UE class. The Solan conclusion
+below is a necessary condition at a whole-source minimum, not another bad
+component offered as a whole-correspondence falsifier.
+
+Question. Can one vary two private clocks jointly while preserving EVERY
+joint survival constraint, and use such variations at the attained minimum
+of original TOTAL debt D over N_delta? The previous binding-prefix test
+left its credit derivative implicit. Its intercept actually has a direct
+complete-law meaning.
+
+#### The intercept is the first supported response record
+
+Fix p in N_delta. If p_i has finite mass, let a_i be its FIRST finite
+support date and put m_i=f_i(a_i,p_-i). Then the value function of18.10
+satisfies, for every k>1 sufficiently close to1,
+
+    V_i(k)=m_i+k*(U_i-m_i),
+    kappa_i=U_i-m_i,                 Psi_i=m_i.       (18.28)
+
+This is exact, not a first-order approximation. If p_i is literal Never,
+put m_i=U_i; its opponents alone fund the budget, all own laws are feasible,
+and V_i is constant on[1,infinity), so(18.28) still holds.
+
+Proof. Before a_i the prescribed own survival is1, so its opponents already
+satisfy every budget bound there. For ANY law q feasible with credit k,
+
+    q/k+(1-1/k)*Quit(a_i)
+
+is feasible with original credit1: before a_i its survival is at most1;
+from a_i onward it is S_q/k. Original source agency gives
+
+    U_i >= V_i(k)/k+(1-1/k)*m_i.
+
+Conversely, multiply the entire prescribed suffix strictly after a_i,
+including its Never atom, by k and give a_i the remaining mass
+1-k*(1-p_i(a_i)). For k close to1 this is a nonnegative probability law.
+It preserves survival1 before a_i and scales every later survival by k,
+so it is feasible with credit k. Its payoff is m_i+k*(U_i-m_i).
+The two inequalities prove(18.28). In particular source agency gives
+U_i>=m_i, and the derivative is a genuine forced-first-record loss, not
+an arbitrarily selected multiplier.
+
+#### Preserving the entire budget while changing who funds its first date
+
+Suppose p has a binding initial root q, with r_i=1-q_i and product r_i=c.
+Its conditional tail z belongs to the SAME N_delta. Retain z literally.
+For two distinct labels i,j replace
+
+    r_i by exp(x)*r_i,       r_j by exp(-x)*r_j,       (18.29)
+
+and retain every other root coordinate. Whenever these stay in(0,1],
+every prescribed joint survival at EVERY date stays unchanged. These
+are independent private laws with new first coins, not a correlated
+transfer of realized stopping times.
+
+By18.10 and(18.28), the new profile is source Nash exactly when
+
+    Q_l(q') <= b_l(q')+alpha_l(q')*m_l(z)  for EVERY l. (18.30)
+
+The test includes inactive players and every complete replacement law.
+If all inequalities in(18.30) are strict at q and both changed root
+hazards are positive, both sufficiently small signs of x are admissible.
+The root costs cannot be optimized without this strategic test.
+
+Under18.13 the exact full-cap account, with z fixed, is
+
+    D(q' prefixed to z)=c*D(z)+L(q'),
+    L(q')=sum_l q'_l*(R_l(q')-Q_l(q')),
+    R_l(q')=b_l(q')+alpha_l(q')*B_l(z).                (18.31)
+
+Thus this operation can be tested at a WHOLE attained source minimum,
+without dividing an approximate equilibrium error by a small reach.
+Existence of the D minimum follows by the same lower-semicontinuity
+argument as18.3; this does not assert a delta-uniform truncation rate.
+
+#### A whole-minimum restriction on the canonical Solan calibration
+
+Use the literal three-player table from18.7, explicitly
+
+    r0=(1,3,0), r1=(0,1,3), r2=(3,0,1),
+    r01=(1+e,0,1), r02=(0,1,1+e), r12=(1,1+e,0),
+    r012=(0,0,0),                         Never=0.
+
+Assume 0<e<=1/3 is also inside the qualitative no-exact-Nash range of
+Solan2001 Theorem2.1, as used in18.6, and 0<delta<=1/10. At ANY local
+minimum of D over the ENTIRE N_delta whose initial budget is binding,
+at least one of the following occurs:
+
+* some initial private hazard is0; or
+* at least one of the complete-law inequalities(18.30) is equality.
+
+In particular a fully active root with every credit-Continue inequality
+strict cannot be even a local minimum, irrespective of its actual tail.
+
+Proof. Write B_l=B_l(z). Every Never cap lies in[0,3]. More importantly,
+
+    B0+B1+B2 <= 6.                                  (18.32)
+
+Couple the three independent tail clocks on their actual product space.
+B0 is 3 times Pr(T2<T1 finite)+Pr(T1=T2 finite), and the other formulas
+are obtained cyclically. For EACH triple of realized clocks, the number
+of cyclic strict comparisons is at most2. If a finite equality occurs,
+the weighted count 3*(strict comparisons)+(finite pair equalities) is
+at most4, or3 when all three dates agree. Thus the count is always at
+most6, including Never cases. Taking expectation proves(18.32).
+
+If exactly one root player l quits, its contribution to L is B_l-1.
+With exactly two quitters, their total contribution is2-e; with all
+three it is3. Hence, writing q_l=1-r_l,
+
+    L=sum_l (B_l-1)*q_l*product_(j!=l)r_j
+                         +(2-e)*Pr(exactly two)+3*Pr(all three).
+
+For the log-transfer direction(18.29) on i,j, with k the third label,
+its exact second derivative at x=0 is
+
+    H_ij=r_i*[r_k*(B_j-2+2e)-(1+e)]
+                    +r_j*[r_k*(B_i-2+2e)-(1+e)].       (18.33)
+
+Sum over all three pairs. Since c<=r_l<=1, B_l>=0, and(18.32) holds,
+
+    sum_(i<j)H_ij
+      =2*sum_l (B_l-2+2e)*product_(j!=l)r_j
+                                    -2*(1+e)*sum_l r_l
+      <=12-12*(1-e)*c^2-6*(1+e)*c
+      <=12-8*c^2-8*c <= -42/25 < 0.
+
+The penultimate inequality uses e<=1/3 and c>=9/10. Thus one pair
+direction has strictly negative second derivative. If every q_l>0 and
+every inequality(18.30) is strict, this direction is available with
+both small signs. A local minimum would have zero first derivative in
+each such direction and nonnegative second derivative, contradiction.
+This proof uses ACTUAL joint clock comparisons to control the tail caps;
+it does not regard arbitrary vectors in[0,3]^3 as attainable.
+
+#### Exact positive variation and the boundary it leaves open
+
+For a direct check take all three clocks Geom(h), 0<h<1, c=(1-h)^3.
+Their pure response curve is strictly increasing to
+
+    B=(3-2h)/(2-h),              Q=(1-h)*(1+e*h).
+
+The geometric own law is the stochastically latest feasible law, so this
+is an exact shared source. Its tail has first record m_l=Q. At the initial
+root every credit-Continue margin is
+
+    h*[1+(1-2e)*h+(3e-1)*h^2-e*h^3] >= h > 0
+
+for 0<=e<=1/3. Change q0=h+x and
+q1=h-(1-h)*x/(1-h-x), keeping q2=h. The initial and every later joint
+survival are unchanged. For any sufficiently small nonzero x, complete
+source agency persists and the exact cost change is
+
+    L(q')-L(q)=-C(e,h)*x^2/(1-h-x),
+    C(e,h)=[3-2e+(-2+5e)*h-2e*h^2]/(2-h) > 0.
+
+For the last sign, the numerator is affine in e. At e=0 it is3-2h>0;
+at e=1/3 it is(7-h-2h^2)/3>0. Therefore the regular symmetric geometric
+component is excluded from the WHOLE D minimum by a legal joint change,
+not merely by comparison with the separately supplied burst component.
+
+This does NOT prove that a minimum has just one initial quitter, or that
+its original regret tends0. The exact remaining faces are zero root atoms,
+active credit-Continue equalities, and source minima whose initial budget
+is strict. On a strict-budget root, active own first atoms need not have
+a strict waiting margin, so the preceding open-set variation is not
+automatically available. Resolving those faces requires a macroscopic
+end-binding block and joint tail reselection, not repeated weakening of
+the regular-root lemma. No new export or strategy-class completeness is
+claimed for this supporting variational restriction.
+
+Source check. The bounded search in Quitting/Root and Quitting/Terminal
+for credit, first support and rebalancing found no matching whole-source
+operation. Terminal decomposition continues to use the declarations
+already opened in18.13, and the original Nash/behavioral semantics are
+unchanged. The symbolic checks of(18.33) and the finite cost difference
+use exact polynomial identities, not numerical optimizer output.

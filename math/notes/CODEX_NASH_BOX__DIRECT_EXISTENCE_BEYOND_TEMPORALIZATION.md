@@ -2,6 +2,17 @@
 
 Author: CODEX_NASH_BOX.
 
+Section45 tests the entropy-hole variation at the WHOLE minimizing-sequence
+level. Given the already supplied fixed strict FULL coarse anchor, every
+exact coarse minimizing sequence has a replacement sequence that is exact,
+strict and positive on the entire Cartesian product of its marginal
+supports, with the SAME limiting information and semantic states. Thus
+missing-joint-atom negative t log t singularities alone cannot provide a
+uniform positive-infimum contradiction. The anchor slack tends to zero;
+no finite-amplitude descent or new source-existence theorem is proved.
+The analogous product fill preserves approximate private obedience only
+up to an explicit vanishing error, not exact private obedience.
+
 Latest whole-source bridge test: Section44 falsifies a proposed shortcut
 from binding FULL coarse caps and inert root correspondence to a cheap
 normal punishment. Its explicit four-active table and exact private CE
@@ -7391,6 +7402,26 @@ reply immediately afterwards gives the same inequality.
 
 ### What this test changes, and what remains genuinely global
 
+Bounded coverage check, NOT a UE-status determination: the exported
+two-ledger and sink-or-receiver cap chambers require a flat participant
+in every proper subset. Each opposite pair here has BOTH participant
+rewards A-1>1, so that whole raw guard fails, regardless of the weights.
+Their singleton insertion ledger also reads
+
+    J_a({j})=2a_(j+1)-a_(j+2)-a_(j+3).
+
+Its four values sum to0. If all are nonpositive they all vanish;
+the maximum-weight equation then forces the four weights equal. This
+does not repair the opposite-pair flatness failure. For the implemented
+`PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`,
+every deleted singleton triple is a relabeling of
+[[0,-1,L],[-1,0,-1],[L,-1,0]], L=A-1. Its determinant is2L and
+its inverse diagonal is(-1/(2L),-L/2,-1/(2L)), so none meets that
+theorem's entrywise-nonnegative child-inverse hypothesis. These are only
+named bounded screens; neither exhaustive production noncoverage nor
+nonexistence of stationary or nonstationary equilibrium follows.
+
 Thus full coarse binding, strict payoff interior, full private obedience,
 an inert entire root correspondence, strict singleton blockers and even
 positive inverse singleton geometry do NOT force a cheap punishment.
@@ -7421,3 +7452,148 @@ The rejected cheap-price theorem is retired without strengthening the
 source passports again. The next problem must quantitatively exploit
 genuine global minimality through a feasible multi-date change, or
 construct independent low-regret laws directly from arbitrary raw data.
+
+## 45. Entropy holes can be removed from the ENTIRE minimizing sequence
+
+Status: ordinary UNREVIEWED supporting mathematics. This tests a proposed
+global-minimum variation, not another fixed-source punishment passport.
+It supplies no new source-existence theorem and no reward-class exclusion.
+The already supplied strict FULL coarse anchor is an explicit hypothesis;
+for counterexample use, Section40 selects a nearby positive-gap table
+having it, rather than assuming it on every original table.
+
+### Exact whole-sequence statement, independent of calendar size
+
+Fix n>=2 players, finite rewards bounded in absolute value by R>0, and zero
+Never reward. For ANY finite joint complete-clock law mu let U_i(mu) be
+its prescribed payoff, V_i(h;mu) the payoff of constant complete deadline
+h, including literal Never, and
+
+    g_i,h(mu)=U_i(mu)-V_i(h;mu).
+
+Every g is LINEAR in the JOINT law and lies in[-2R,2R]. No product-opponent
+replacement is made here. A FULL coarse source has g_i,h>=0 for EVERY
+finite deadline and Never, including the omitted-late deadline after
+all occupied finite dates. Put I(mu)=KL(mu||product_i mu_i), and let rho
+be the infimum of I over ALL finite FULL coarse sources on arbitrary
+finite calendars. Suppose one fixed finite anchor sigma satisfies
+
+    g_i,h(sigma)>=gamma>0 for EVERY i,h.                (45.1)
+
+For EVERY sequence of exact FULL coarse sources mu_k with I(mu_k)->rho
+and EVERY a_k in(0,1) tending to0, there are exact FULL coarse sources
+eta_k such that:
+
+1. Every joint atom in the Cartesian product of eta_k's marginal supports
+   has STRICTLY POSITIVE mass.
+2. Every full coarse margin is at least a_k gamma/2>0.
+3. I(eta_k)->rho and TV(eta_k,mu_k)->0.
+
+The construction is literal and finite; no ordered-limit attainment or
+integer-calendar realization theorem is needed. In particular U and every
+full cap change by at most2R times that TV distance, uniformly in deadline.
+All cluster semantic states of the original minimizing sequence are retained.
+
+Proof. Suppress k and put
+
+    theta=(1-a)mu+a sigma,
+    p_theta=product_i theta_i,
+    t=a gamma/(8R+2a gamma),
+    eta=(1-t)theta+t p_theta.
+
+By linearity g(theta)>=a gamma and g(p_theta)>=-2R. Consequently
+
+    g(eta)>=(1-t)a gamma-2Rt>=a gamma/2.                (45.2)
+
+Both theta and p_theta have the SAME marginal supports and marginals.
+The positive product term gives every Cartesian atom positive mass and
+does not change those marginals. Convexity of KL in its first argument
+at that fixed product reference gives
+
+    I(eta)<= (1-t)I(theta).
+
+The entropy mixture bound is
+
+    I(theta)<=(1-a)I(mu)+a I(sigma)+(n-1)h(a).          (45.3)
+
+It is independent of support size. Indeed, introduce the Bernoulli
+mixture label L. The difference between I(theta) and the weighted
+component informations is
+
+    sum_i I(L;T_i)-I(L;T_1,...,T_n)
+       <=(n-1)H(L),
+
+since the joint mutual information dominates every coordinate's.
+Thus rho<=I(eta)<=I(mu)+a I(sigma)+(n-1)h(a)->rho.
+Also TV(eta,mu)<=a+t->0. This proves all claims.
+
+There is no uniform positive slack or Cartesian atom lower bound: both
+can tend to0. That loss is exactly why this statement is NOT a producer
+of an independent equilibrium. A positive information infimum, if it
+exists, can already be approached without a single missing Cartesian
+joint atom at ANY member of the sequence.
+
+The slack loss also has a simple necessary rate. If rho>0 and a finite
+source of information I has uniform full coarse slack m>=0, set
+t=m/(2R+m). Mixing it with its own marginal product gives full coarse
+margin at least(1-t)m-2Rt=0 and information at most(1-t)I. Therefore
+
+    rho<=(1-t)I,   m<=2R(I-rho)/rho.                  (45.5)
+
+The infimum is over weakly coarse sources, as above. If one instead
+uses strict sources, take a slightly smaller t and pass to the limit.
+This is only a quantitative obstruction to uniform slack on a minimum
+sequence. A useful future variation would need to improve the ratio
+between born slack and information excess, not just create positive
+slack tending to0. This corollary was suggested independently by CODEX_ROOT.
+
+### The exact singular coefficient and the repair issue
+
+For finite laws mu,nu on a common finite enlarged clock space let
+S=support(mu), S_i=support(mu_i),
+
+    b=nu(S complement), a_i=nu_i(S_i complement).
+
+Direct expansion of the finitely many Shannon entropy terms gives
+
+    I((1-u)mu+u nu)-I(mu)
+       =[b-sum_i a_i]u log u+O(u),   u->0+.           (45.4)
+
+The O(u) constant here MAY depend on the laws, their positive atom
+sizes and the calendar; it is NOT asserted uniform on a minimizing
+sequence. If all new joint atoms use old marginal coordinates, then
+all a_i vanish and b>0 supplies the favorable negative singularity.
+But an anchor outcome with two novel coordinates contributes twice to
+sum a_i and only once to b. Anchor repair therefore need not have
+O(u) information cost and may reverse the singular sign. This is not
+repaired by merely knowing that all ordinary payoff changes are O(u).
+
+Equations(45.2)--(45.3) show more: the approximate global endpoint does
+not force any entropy holes in the first place. Any useful support-birth
+argument must prove a UNIFORM finite-amplitude improvement or an actual
+constraint-face condition that survives the vanishing slack, rather than
+appeal only to an infinite derivative at an absent joint atom.
+
+### Private recommendation agency stays separate
+
+For approximate FULL private-clock CE one can always fill Cartesian holes
+WITHOUT claiming exact private repair. For any finite joint mu put
+eta_t=(1-t)mu+t product_i mu_i. Marginals stay fixed and
+
+    I(eta_t)<=(1-t)I(mu).
+
+For EVERY recommendation-dependent complete replacement map, its gain
+is an expectation of a function in[-2R,2R]. Therefore its gain changes
+by at most4Rt, uniformly over all such maps and randomized mixtures.
+An epsilon-private source becomes an(epsilon+4Rt)-private source.
+Choosing t_k->0 keeps every approximate-private minimizing sequence
+admissible with vanishing errors and full Cartesian support. The fixed
+coarse anchor in(45.1) is NOT a strict private anchor and is not used to
+claim exact private feasibility.
+
+The first genuinely missing assertion remains finite-amplitude feasible
+movement across the WHOLE information source, with the payoff allowed
+to move. Neither full support nor arbitrarily small strict coarse slack
+settles that assertion. No new paper claim or Lean declaration is used;
+the only source assumption beyond finite reward semantics is the already
+recorded Section28/40 strict-anchor construction.
