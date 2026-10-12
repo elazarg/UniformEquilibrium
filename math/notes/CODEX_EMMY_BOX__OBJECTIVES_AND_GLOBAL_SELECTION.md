@@ -96,6 +96,13 @@ to Never and decreases full regret from at least1/4 to O(delta), while
 preserving the original initial records. The table already has an exact
 Nash profile; this is an operation test, not new UE coverage or a proof
 that the whole-source minimum tends0 on arbitrary data.
+Section18.17 is a separate UNREVIEWED exact failure of decoupled tail
+selection. At arbitrarily small delta, a globally debt-minimizing tail
+passes the relaxed splice thresholds but raises the complete profile's
+debt from O(delta) to more than1/2. The prefix is actual and end-binding.
+The table has exact Nash, so this does NOT refute the supplied uniform-
+gap problem or joint prefix/tail optimization; it rules out discarding
+the prefix's deleted-survival weights when choosing the tail.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -3923,3 +3930,143 @@ admit an end-binding prefix W and a jointly selected z in N_delta with
 m(z)>=rho(W) and F_W(z)<F_W(z0), for arbitrarily small delta? The old
 threshold m(z0) is now unnecessary. The new explicit thresholds still
 do not produce such a tail, and the prefix itself may need reselection.
+
+### 18.17. A globally optimal tail can be macroscopically wrong for its prefix
+
+Status: ORDINARY UNREVIEWED exact operation falsifier. The table below
+already has exact terminal Nash. It therefore does NOT satisfy a
+supplied uniform positive exploitability gap and does not falsify the
+gap-aware whole-source question. Nor does it conflict with the positive
+fixed-delta minima on the solved Solan table. Its target is the narrower
+decoupled implication: choosing a global D-minimizer in N_delta, even
+one that passes ALL relaxed prefix thresholds, need not improve or even
+approximately preserve full debt after that prefix.
+
+Use the four-player table of18.16: own singleton1, multiquitter-member
+reward3/2, outsider reward2, and Never/live0. Fix an integer L≥2 and put
+
+    δ=1/L,     c=1−δ,     ε=δ/2=1/(2L),
+    q=(δ−ε)/(1−ε)=1/(2L−1).
+
+Choose distinct players j,k. As before, z_j is the exact terminal Nash
+source assigning j a Geom(δ) clock and every other player literal Never.
+Let V be one root at which j quits with probability q and k with
+probability ε, independently, and both other players Continue. Its
+joint survival is (1−q)(1−ε)=c. Define z0=V followed by z_j.
+
+#### The old tail is an exact source with small positive debt
+
+For player j at V, its current Quit value is1+ε/2 and its opponent-only
+absorbed payoff is2ε. Continuing to its own sole-owner tail gives
+2ε+(1−ε)*1=1+ε, strictly larger than its current Quit value. For k the
+current Quit value is1+q/2, while continuing to its outsider tail gives2.
+For either remaining player, current Quit pays1+δ/2 and continuing pays2.
+Thus every relaxed threshold for V is less than1, whereas all coordinates
+of m(z_j) are at least1. The exact criterion18.38 proves z0∈N_δ,
+including complete feasible unilateral-response optimality.
+
+Full original caps here are computed directly, not by18.13. Player j
+can use any finite date after V, receiving1+ε. A deadline at V pays only
+1+ε/2; literal Never pays2ε. Thus B_j(z0)=1+ε. Every other player's cap
+is2, achieved by Never against the proper opponent j. Consequently
+
+    d_j(z0)=qε/2,
+    d_k(z0)=ε*(1−q/2),
+    d_i(z0)=0 for i∉{j,k},
+    D(z0)=ε.                                             (18.43)
+
+Both root quit hazards are positive, so the first records are
+
+    m_j(z0)=1+ε/2,     m_k(z0)=1+q/2,
+    m_i(z0)=2 for i∉{j,k}.
+
+In particular every coordinate is at least1. The literal-Never players'
+records in this statement are their prescribed U-values, as in18.14.
+
+#### An actual macroscopic prefix with four thresholds equal to1
+
+Put S=c^L and θ=1−S. Let W consist of L dates. At date0, only j has a
+positive quit hazard, equal to θ; every player Continue at dates1,...,L−1.
+The joint survival after every date of W is S. Since S≤c^(t+1) for
+0≤t<L and equality holds at t=L−1, this is an actual feasible end-binding
+prefix, with w_j=S, w_i=1 for i≠j, h_j=1 and h_i=S for i≠j.
+
+For j, every finite deadline inside W pays1 and there is no opponent
+absorption, giving a_j(W)=0, M_j(W)=1 and ρ_j(W)=1. For i≠j, the
+opponent-only absorbed PAYOFF is a_i(W)=2θ. Quitting at date0 pays
+1+θ/2. Quitting at ANY silent date1,...,L−1 pays2θ+S=1+θ, which is
+strictly larger. The requirement L≥2 is essential to this calculation.
+It includes every deadline despite their zero prescribed stopping mass.
+Therefore
+
+    M_i(W)=1+θ,
+    ρ_i(W)=[1+θ−2θ]/S=1       for EVERY i.               (18.44)
+
+Both z0 and z_k, the exact sole-owner-k source, have m-coordinatewise
+at least1. Hence Wz0 and Wz_k belong to the SAME N_δ by18.38. In
+particular the counterexample is not caused by losing shared-budget
+feasibility, prefix optimality or complete own agency at the splice.
+
+#### Globally minimizing tail debt reverses the desired comparison
+
+For Wz0, player j's full cap is1+ε, attained after W and V. All finite
+deadlines inside W pay1, so none replaces that cap. Its prescribed
+payoff is θ+S*U_j(z0). The remaining caps stay2. Thus
+
+    d_j(Wz0)=θ ε+S qε/2,
+    d_k(Wz0)=S ε*(1−q/2),
+    d_i(Wz0)=0 for i∉{j,k},
+    D(Wz0)=ε=1/(2L) → 0.                               (18.45)
+
+In contrast, z_k is a GLOBAL D-minimizer in N_δ: it is full exact Nash,
+so D(z_k)=0<D(z0). After W, however, player j's full cap is2 and its
+prescribed payoff is θ+2S=2−θ. For player k, the full cap is1+θ,
+attained at any silent date of W or afterward; it equals its prescribed
+payoff2θ+S. All other players get their maximal payoff2. Therefore
+
+    d_j(Wz_k)=θ,     d_i(Wz_k)=0 for i≠j,
+    D(Wz_k)=E(Wz_k)=θ>1/2.                              (18.46)
+
+The final strict bound holds for every L≥2: Bernoulli's inequality gives
+(1+1/(L−1))^(L−1)≥2, hence c^(L−1)≤1/2 and c^L<1/2.
+Thus the legally spliced globally debt-minimizing tail turns a complete
+source with debt tending0 into a complete source with uniformly positive
+debt, at arbitrarily small δ. The exact increase is θ−ε>0.
+
+The prefix-weighted objective correctly distinguishes these tails. For
+this W, all continuation caps under comparison dominate the finite W
+deadlines, so the exact debt comparison directly gives
+
+    F_W(z)=D(z)+(1/S−1)*B_j(z),
+    F_W(z0)=ε+(θ/S)*(1+ε),
+    F_W(z_k)=2θ/S,
+    S*[F_W(z_k)−F_W(z0)]=θ−ε.                           (18.47)
+
+This use of the comparison is verified by the direct caps above; it
+does not import18.13's inapplicable no-exact-Nash assumption. Since
+1/S−1 is order one here, even the limit δ→0 does not remove the deleted-
+survival preference. The prefix has length of order1/δ, not bounded
+length, and its initial hazard is macroscopic.
+
+The other globally minimizing tail z_j makes Wz_j exact Nash, with
+debt0. Accordingly the failed implication is NOT the existence of a
+good jointly selected prefix/tail pair, or that EVERY D-minimizer is
+bad after W. It is that global unweighted tail debt minimization alone
+certifies an improving splice. A selector retaining the prefix-weighted
+objective, its cap coordinates, or its actual owner can avoid this
+example. Whether a supplied uniform all-profile gap supplies such a
+joint selector is unresolved; no further conditional interface is
+asserted as progress toward deciding Fin4.
+
+Source and scope. The only ingredients are the explicit literal table,
+the exact complete-law criterion18.38, and direct finite/Never cap
+calculations. The bounded terminal-cap source dependencies recorded at
+the end of18.16 remain the relevant ones. No new Lean declaration or
+literature claim is used, and no Lean check or export is claimed.
+
+Concrete next question. Under a supplied uniform positive original
+exploitability gap, can whole-source optimality constrain the prefix's
+deleted-survival-weighted cap charges strongly enough to yield an
+improving admissible tail as δ→0? This example requires retaining those
+charges; replacing that question by independent unweighted minimization
+would silently discard an order-one term.

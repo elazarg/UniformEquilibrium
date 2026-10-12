@@ -2,6 +2,20 @@
 
 Identity: CODEX_TURING_BOX.
 
+Section41 is a serious ordinary UNREVIEWED raw-class theorem candidate.
+It removes BOTH the graph guard and the strict-singleton-seed assumption
+from the H/J/proper-flat Fin4 class. First, a bare triangle's positive-
+forward-product orientation has a distant exact finite root; the other
+orientation has an explicit small NON-Nash prefix with only quadratic
+full-cap defects, paid by a strict singleton H surplus in that triangle.
+An exact flat-row correction preserves the low face without a strict-
+pair hypothesis. Finally, an arbitrarily small raise of EVERY passive
+singleton reward preserves H/J and proper flatness while producing at
+least THREE strict singleton H values. Checked reward-closedness then
+returns UE for the original table, including when all singleton H values
+were0. This is internal pending independent proof review; no export,
+Lean implementation, arbitrary-table theorem or new seal is asserted.
+
 Section40 is a new ordinary UNREVIEWED whole-class falsifier of one
 proposed triangle operation. An exact positive-own Fin4 table satisfies
 the H/J and proper-flat-participant guards, and its ONLY excluded proper
@@ -8767,3 +8781,410 @@ alone do not give finite-root escape; quiet-child existence alone does
 not give outside safety; and a nonlocal safe triple replacement can
 exist even when the old finite root game is completely inert. No new
 unpaid transport or weakened supplied-safe-child interface is proposed.
+
+## 41. Paid small prefixes and reward closure remove the graph guard
+
+Status: ordinary UNREVIEWED COMPLETE PROOF CANDIDATE for an unconditional
+finite-reward class theorem. This is a raw-data producer, not a compiler
+assuming a supplied root, safe child, cap selector or continuation. The
+proof uses the ACTUAL full-cap carrier and a constrained minimum of
+maximum debt E, not an unconstrained total-debt minimum. Independent
+review is requested before any export.
+
+### 41.1 Finite raw statement and corollaries
+
+Let I have exactly four players. Choose arbitrary finite real reward
+vectors r(S) for every nonempty S subset I. Live and Never rewards are0;
+private randomization is independent; deviations replace one player's
+ENTIRE behavioral law. Set s_i=r_i({i})>=0 and choose weights a_i>=0,
+not all zero. For every nonempty proper S put
+
+    H(S)=sum_i a_i[r_i(S)-s_i],
+    J(S)=sum_(i notin S) a_i[r_i(S union{i})-r_i(S)].
+
+For the intermediate theorem, assume the SAME original raw guards as
+Section38. Section41.7 subsequently removes the strictness and graph
+requirements by an explicit reward perturbation and checked closure:
+
+1. H(S)>=0 on every nonempty proper S, with H({j})>0 for some j.
+2. J(S)<=0 on every nonempty proper S.
+3. Every nonempty proper A contains a flat participant i: for EVERY
+   nonempty S subset A containing i, r_i(S)<=s_i.
+
+For distinct i,j put h_ij=r_i({i,j})-r_i({j}); j->i means h_ij>0.
+For each proper triple T inducing EXACTLY a bare directed triangle,
+label its unique directed cycle0->1->2->0 locally and put
+
+    p_0=h_02>0, p_1=h_10>0, p_2=h_21>0,
+    n_0=-h_01>=0, n_1=-h_12>=0, n_2=-h_20>=0,
+    P=p_0 p_1 p_2,       N=n_0 n_1 n_2.
+
+The products are independent of the starting vertex of the cyclic label.
+Replace the old graph guard by the weaker finite condition:
+
+4. For EVERY bare proper triangle T, either P>N, or H({j})>0 for
+   at least one j in T.
+
+THEOREM CANDIDATE. These raw guards imply an original-game uniform-
+equilibrium payoff against unrestricted behavioral deviations: ONE
+target v is selected before accuracy, and every epsilon>0 has an actual
+independent profile and threshold giving epsilon payoff delivery and
+epsilon Nash bounds at ALL later horizons. No strategic object is input.
+All additional checks are finitely many comparisons of raw rewards.
+
+COROLLARY. If TWO different singleton H values are strict, guard4 is
+automatic, since every three-element subset meets that two-element set.
+Hence H/J/proper-flat Fin4 with two strict singleton surpluses has UE
+with NO insertion-graph restriction whatsoever.
+
+If exactly one singleton H is strict, at owner j, the only branch not
+closed by this FIXED-TABLE prefix argument is the bare triangle
+T=I\{j} with N>=P and H({i})=0 for all i in T. Section41.7 removes
+this local payment obstruction at the EXISTENCE level, rather than
+claiming an unfunded prefix at that original table. H/J and proper
+flatness remain genuine restrictions in the final theorem.
+
+The exact table in40.4 qualifies: H({0})=1, H({1})=1/4, and its bare
+triangle has P=N=1. Its actual finite-root stall explains why exact
+finite Nash escape alone cannot establish this extension.
+
+### 41.2 Exact arbitrary-root full-cap account
+
+Let S_actual be the compact closure of ALL actual prescribed-payoff/
+full-cap pairs (U,B). It retains B>=U and is invariant under a fixed
+product prefix. Write d_i=B_i-U_i, E=max_i d_i, L(B)=sum_i a_i(B_i-s_i).
+A carrier point is not silently identified with an actual clock law.
+
+For ANY root q put c=product_i(1-q_i), alpha_i=product_(j!=i)(1-q_j),
+
+    Q_i=E[r_i(A union{i})],
+    b_i=E[r_i(A) 1_(A nonempty)],
+    C_i=b_i+alpha_i B_i,       g_i=Q_i-C_i,
+    Delta_i=q_i(-g_i)_+ +(1-q_i)(g_i)_+.
+
+Here A is the independent opponent quitter set and x_+=max(x,0).
+Exact prefixing gives B_i'=max(Q_i,C_i), and direct subtraction gives
+
+    d_i'=c d_i+Delta_i,
+    B_i'=q_i Q_i+(1-q_i)C_i+Delta_i,
+    E'<=cE+Delta_max.                                  (R1)
+
+If the root support is proper, every nonempty root coalition is proper,
+and weighted summation gives the EXACT identity
+
+    L(B')=c L(B)+sum_(S nonempty) p_q(S)H(S)
+                         +sum_i a_i Delta_i.            (R2)
+
+No Nash assumption is present. These equations retain every early,
+simultaneous, intervening, late and Never response in the ORIGINAL cap.
+All Delta vanish at a full cap-Nash root. For the small non-Nash roots
+below they are quadratic and are explicitly paid.
+
+The checked exact debt identity is
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_add_capDefect`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CapDebtBellmanReduction.lean`.
+The exact defect decomposition is
+`quittingRootCoordinateNashDefect_eq_actionProbability_mul_posPart`
+in `UniformEquilibrium/Quitting/Root/NashDefect.lean`.
+The checked first-order endpoint bound is
+`abs_quittingRootEndpointDifference_sub_solo_sub_tail_sub_collisionFlow_le`
+in `UniformEquilibrium/Quitting/Root/FirstOrderProductFlow.lean`:
+at B_i=s_i its linear mismatch vanishes and the error is bounded by
+4M times the squared total root rate. The ordinary finite expansion
+below is the same elementary calculation. None of those declarations
+asserts the raw class theorem or supplies its root direction.
+
+### 41.3 P>N gives a distant original full Nash root
+
+LEMMA. Suppose B>=s, its tied set T={i:B_i=s_i} is a bare proper
+triple, and P>N. The finite game with all-Continue vector B has a
+nonzero FULL Nash root. No H/J or flatness is needed for this lemma.
+
+The endpoint-difference linearization on T at zero is h q, where
+
+    h=[[0,-n_0,p_0], [p_1,0,-n_1], [-n_2,p_2,0]].
+
+There is w>0 with w-transpose*h strictly positive in EVERY column.
+The necessary strict cyclic inequalities are
+
+    w_1 p_1>w_2 n_2,
+    w_2 p_2>w_0 n_0,
+    w_0 p_0>w_1 n_1.
+
+For a fully explicit choice, first replace n_i by n_i+eta for small
+eta>0 with their product still<P. Choose sigma>1 with
+sigma^2 product_i(n_i+eta)<P; take w_0=1,
+w_2=sigma(n_0+eta)/p_2, w_1=sigma(n_2+eta)w_2/p_1.
+The first two inequalities are strict by sigma>1; the third follows
+from the product bound. This also handles zero reverse coefficients.
+
+Suppose all Continue is the ONLY original full Nash root. Add epsilon
+to the Quit payoff of EACH tied player and select any perturbed finite
+Nash root q^epsilon. Compactness and the closed Nash inequalities imply
+q^epsilon->0: every subsequential limit is original Nash and hence zero.
+The outsider k strictly prefers Continue at zero since B_k>s_k, so its
+rate q_k^epsilon=0 for all small epsilon by continuity and Nash optimality.
+Writing t=sum_(i in T)q_i^epsilon, finite expansion gives g=h q+O(t^2).
+There are mu>0 and finite K with
+
+    sum_i w_i g_i >= mu*t-K*t^2 >=0
+
+near zero. Thus the perturbed weighted gap is at least
+epsilon*sum_i w_i>0. Some tied player strictly prefers Quit and has
+q_i^epsilon=1, contradicting q^epsilon->0. A nonzero ORIGINAL full root
+therefore exists. No nonzero perturbed limit, selector or degree theorem
+is asserted; this is the universal-recipient perturbation method with
+a positive weighted linear sum in place of one positive row.
+
+### 41.4 N>=P: an exact flat-row correction and a paid prefix
+
+LEMMA. Suppose (U,B) is in S_actual, E>0, B>=s, its tied set T is a
+bare proper triple, N>=P, H({j})>0 for some j in T, and
+L(B)>=lambda E for lambda>0. Under H>=0 and the original proper-flat
+guard, some FIXED independent root supported on T has E'<E and
+retains BOTH inequalities of the same low-face chamber. Its fourth
+player's COMPLETE cap is included.
+
+Choose a flat participant of T by guard3 and cyclically relabel it0.
+Since N>=P>0, every n_i is STRICTLY positive. Choose z>0 with h z<=0
+and (h z)_0=0, explicitly
+
+    z_1=1,       z_2=n_0/p_0,
+    p_2/n_2 <= z_0 <= n_1 n_0/(p_1 p_0).
+
+The interval is nonempty exactly because N>=P, and both endpoints
+are positive. Equality N=P is included; then all three linear gaps
+vanish. The exact flat player's tied gap, with outsider rate0, is
+
+    g_0=-n_0 q_1+p_0 q_2+kappa q_1 q_2,
+    kappa=r_0(T)-r_0({1,2})+n_0-p_0.
+
+For tau>0 sufficiently small set
+
+    q_0=tau z_0,       q_1=tau z_1,
+    q_2=n_0 q_1/(p_0+kappa q_1),       q_k=0.           (R3)
+
+Because p_0>0 its denominator stays positive. All three rates are
+in(0,1), q_i=tau z_i+O(tau^2), and direct substitution gives g_0=0
+EXACTLY. Every coalition in player0's forced-Quit endpoint is a subset
+of T containing0. Flatness therefore gives
+
+    B_0'=Q_0=C_0<=s_0.                                (R4)
+
+There is no strict-pair assumption and no second-order low-face gap.
+
+For every tied player i, finite expansion gives
+g_i=tau(h z)_i+O(tau^2). Since h z<=0, its positive part is O(tau^2),
+its negative part is O(tau), and q_i=O(tau). Hence Delta_i=O(tau^2).
+For the outsider, g_k(0)=s_k-B_k<0, so g_k<0 near zero by continuity;
+with q_k=0 this gives Delta_k=0 EXACTLY and d_k'=c d_k. The strict
+outsider cap margin at this actual tied-face source is the condition
+replacing40.5's much stronger pointwise Never dominance. Every future
+outside response is still in C_k=b_k+alpha_k B_k.
+
+Let Z=sum_(i in T)z_i>0. For some finite K and small tau_0>0, all
+0<tau<tau_0 satisfy
+
+    Delta_max<=K tau^2,       1-c>=(Z/2)tau,
+    p_q({j})>=(z_j/2)tau.
+
+The constants may depend on the table and minimizing pair; no uniform
+rate over games is claimed. For sufficiently small positive tau,
+
+    E'<=E-(EZ/2)tau+K tau^2 < E.
+
+By(R2), H>=0 and a>=0,
+
+    L(B')-lambda E'
+      >=c[L(B)-lambda E]+p_q({j})H({j})-lambda Delta_max
+      >=(z_j H({j})/2)tau-lambda K tau^2 >=0.            (R5)
+
+The actual strict singleton H payment funds the ENTIRE quadratic root
+defect. Together(R4),(R5) preserve the chamber; if E'=0 a diagonal
+already results. The fixed selected root preserves S_actual by the
+continuity of actual prefixing, including at closure points. No child
+equilibrium, safe supplied tail, altered lambda or Nash root is assumed.
+
+### 41.5 Complete raw producer from a constrained minimum
+
+Choose a strict singleton owner j and its actual sure-Quit0/Never
+seed. Its full pair satisfies U_i=r_i({j}), B_j=s_j (since s_j>=0),
+and B_i=max{r_i({j}),r_i({i,j})} for i!=j. Hence
+L(B)>=H({j})>0 and min(B-s)<=0. If E=0 the seed already solves the
+game. Otherwise fix lambda=L(B)/E>0 and the nonempty compact chamber
+
+    C={(U,B) in S_actual: min_i(B_i-s_i)<=0,
+                                L(B)>=lambda E}.
+
+At a positive-E point of C, EVERY full cap-Nash root either yields
+a diagonal or preserves C with E'=cE. For completeness: a sure rate
+gives c=0 and all Delta_i=0, hence a diagonal. Otherwise supported
+rates are interior. Full support with odds z_i=q_i/(1-q_i)>0 and
+active indifference would give
+
+    B_i-s_i=sum_(empty!=A subset I\{i})z_A
+                  [r_i(A union{i})-r_i(A)],
+    L(B)=sum_(empty!=S proper)z_S J(S)<=0,
+
+contrary to L(B)>=lambda E>0. So support A is proper. When nonempty,
+its flat participant i has Q_i<=s_i, and supported Nash optimality
+gives B_i'=Q_i. All Delta vanish, and(R1),(R2) give E'=cE and
+L(B')>=cL(B)>=lambda E'. All Continue fixes the input.
+
+Suppose the attained minimum E* on C is positive. If some B_i<s_i,
+all Continue is not Nash; finite Nash existence supplies a nonzero
+full root and the preceding exact preservation/contraction contradicts
+minimality. Otherwise B>=s. The tied set T is nonempty by the low face
+and proper because L(B)>0. A sink or universal recipient gives a
+nonzero full root by Section38.2, with the same contradiction. Every
+set of size at most2 has such a vertex. On three vertices the ONLY
+remaining graph is a bare directed triangle. If P>N use41.3. Otherwise
+N>=P, guard4 supplies a strict singleton H in T and41.4 gives a
+smaller-E point in C directly. All cases, including zero reverse
+coefficients and P=N, are exhausted. Hence min_C E=0.
+
+The minimizing diagonal B=U=v belongs to S_actual. Actual independent
+profiles therefore have BOTH payoff and FULL cap tending to this SAME
+v. The checked full-behavior diagonal consumer in38.10 supplies the
+fixed-target uniform conclusion. No exact terminal equilibrium for
+the whole raw class, chronological selector or public correlation is
+asserted. The input consists exclusively of finitely many raw rewards
+and weights satisfying finite comparisons.
+
+Zero weights do not cause an exception: no weight is divided by and
+the seed's strict H makes lambda positive regardless of which weight
+vanishes. Own singletons may be0; their nonnegativity is used only in
+the owner's exact seed cap. The only denominators are positive p_i,
+positive n_i where N>=P>0, and the denominator in(R3) proved positive
+near zero. Grand rewards have no added restriction beyond the original
+J guard on triples. Inactive fourth-player caps and Nash inequalities
+are retained at every use of full Nash existence and in(R1)--(R5).
+
+### 41.6 Source check and independent review request
+
+Bounded searches in the Root subtree, the named weighted-trap module,
+Emmy's passive-triple chamber note and existing feedback on this note
+did not identify a prior weighted perturbation theorem asserting
+w-transpose*h>0 implies nonzero full root. This is a bounded comparison,
+not an exhaustive novelty claim. Even if41.3 is already available in
+another form, the paid NON-Nash prefix and chamber consumer in41.4
+are the mathematical step supporting this raw theorem. The exact
+generic sources inspected are named in41.2 and38.10; no Lean builds
+or source edits were made.
+
+The exact tests are40.1 (whole quiet selection can fail) and40.4
+(actual finite-root uniqueness despite chamber membership). Both have
+two strict singleton H values, so the raw theorem admits both; its
+corrected paid prefix applies to the latter. These tests do not verify
+the general theorem, whose proof remains ordinary unreviewed mathematics.
+The Section38 export is unchanged.
+
+Requested independent checks: falsify(R1),(R2); verify the full-root
+perturbation for P>N; verify the rational flat-row correction and
+quadratic full-cap defects for N>=P, including equality; and audit
+the compact-minimum proof against zero weights, zero own singletons
+and the unrestricted fourth-player cap. Also check the passive-singleton
+perturbation and reward-limit passage in41.7. No export before those
+reviews.
+
+At a fixed original table, an N>=P bare triangle whose THREE singleton
+H values are all0 still supplies no linear H payment in(R5). Nothing
+above asserts an unpaid prefix there. The following approximation
+argument eliminates that obstruction for existence without requiring
+such a prefix or supplying a favorable child lift.
+
+### 41.7 Passive-singleton raises remove BOTH remaining raw guards
+
+FINAL RAW THEOREM CANDIDATE. Let I have exactly four players, with
+arbitrary finite real terminal reward vectors r(S) on nonempty S,
+live/Never reward0, independent private strategies and unrestricted
+behavioral deviations. Suppose there are weights a_i>=0, not all0,
+such that s_i=r_i({i})>=0 and, for EVERY nonempty proper S,
+
+    sum_i a_i[r_i(S)-s_i]>=0,
+    sum_(i notin S) a_i[r_i(S union{i})-r_i(S)]<=0.
+
+Suppose also that EVERY nonempty proper A has a participant i in A
+with r_i(S)<=s_i for EVERY nonempty S subset A containing i.
+Then the original quitting game has a uniform-equilibrium payoff
+against unrestricted behavioral deviations. ONE target is fixed
+before accuracy. NO strict H inequality and NO insertion-graph guard
+are assumed. This is a producer from finite raw data, not a theorem
+assuming any supplied strategy, root, cap selector or limiting target.
+
+PROOF from41.1--41.5. Write A_*=sum_i a_i>0. For EVERY epsilon>0
+define the literal nearby table
+
+    r_i^epsilon(S)=r_i(S)+epsilon
+        if S={j} for some j!=i,
+    r_i^epsilon(S)=r_i(S) otherwise.
+
+These are PASSIVE singleton entries only. Own singletons s_i are
+unchanged, so their nonnegativity is unchanged. Direct finite sums give
+
+    H^epsilon({j})=H({j})+epsilon(A_*-a_j),
+    J^epsilon({j})=J({j})-epsilon(A_*-a_j).
+
+For |S|>=2, BOTH H^epsilon(S)=H(S) and J^epsilon(S)=J(S): neither
+r_i(S), r_i(S union{i}) nor any own singleton has been altered.
+Thus all original H>=0 and J<=0 guards survive. Every participant-
+flat comparison survives LITERALLY: for i in S, the changed-entry
+condition S={j},j!=i is impossible. Consequently the SAME flat
+participant works for each proper A, including every triple.
+
+There is at most one j with A_*-a_j=0. Indeed, such an equality
+means that every other weight is0, since all weights are nonnegative;
+two such equalities would force ALL weights to be0. Hence at least
+THREE different singleton H^epsilon values are strictly positive.
+Every triple meets this strict set, and there is a strict seed. The
+two-strict corollary of41.1 therefore applies to r^epsilon, regardless
+of its insertion graph or either cycle-product orientation. It is NOT
+necessary to preserve the original insertion graph or to put epsilon
+below its positive insertion gains. Every epsilon>0 produces a table
+covered by the intermediate theorem.
+
+Finally |r_i^epsilon(S)-r_i(S)|<=epsilon for every coordinate. Each
+nearby table therefore has a uniform-equilibrium payoff by41.5.
+Uniform-payoff existence is closed under this reward approximation by
+the CHECKED declaration
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables`
+in `UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`,
+which delegates to
+`quittingGame_exists_uniformEquilibriumPayoff_of_arbitrarily_close_rewards`
+in `UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/UniformPayoffExistenceClosure.lean`.
+The latter's statement expressly permits different targets and profiles
+at different nearby tables and selects a fixed target for the limit
+table. These declarations were opened, including the fixed-skeleton
+reduction, rather than inferred from a conference note.
+
+An equivalent terminal route makes the quantifiers especially explicit.
+For ANY fixed actual behavioral profile, prescribed terminal payoff
+changes by at most epsilon and EVERY deviating terminal payoff changes
+by at most epsilon; the absorption law and deviation space are reward-
+independent. Taking unrestricted response suprema preserves the first
+bound. Thus each debt, and maximum debt, changes by at most2epsilon.
+This is exactly the checked
+`abs_quittingContinuationBestResponseValue_sub_le_of_reward_close`
+and `abs_quittingTerminalExploitability_sub_le_of_reward_close`
+in the same robustness module. Given original accuracy delta>0, use
+epsilon=delta/4 and a nearby terminal profile with maximum debt at
+most delta/2, furnished directly by the nearby diagonal carrier in41.5.
+Reuse the SAME private strategy laws at r. Original debt is at most
+delta/2+2epsilon=delta. Hence terminal approximate Nash profiles exist
+at EVERY original accuracy. The checked
+`quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`
+then chooses ONE original target before accuracy. No convergence or
+synchronization of the nearby target vectors v^epsilon is required.
+
+This closes the ALL-ZERO-singleton-H boundary as well: strictness is
+created only in the nearby games and is not asserted at the original
+table. Zero weights and zero own singletons cause no new exception.
+No normalization or universal reward bound is imposed; a finite table
+is bounded automatically, and the checked closure permits these finite
+coordinatewise perturbations. The final class remains restricted by
+the displayed H/J and proper-flat conditions; this is NOT a proof of
+arbitrary Fin4 UE. The Section38 export is unchanged. The concrete
+next action is independent falsification of the COMPLETE candidate,
+especially the paid-prefix/minimum consumer; no further unfunded
+zero-H branch is needed to state this raw-class theorem.
