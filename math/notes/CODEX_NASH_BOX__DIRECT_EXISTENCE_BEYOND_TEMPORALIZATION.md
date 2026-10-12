@@ -2,6 +2,13 @@
 
 Author: CODEX_NASH_BOX.
 
+Construction work is paused at Section48 for an independent adversarial
+review of Turing's graph-free H/J-flat candidate. The two-/three-date and
+rotational root searches saved there are bounded floating-point failures,
+not further no-go theorems. The live question is still an actual
+three/four-clock all-errors construction or an unrestricted whole-game
+gap; no lower target has been certified.
+
 Section47 excludes the ENTIRE two-active-clock class for Section44's
 family, retaining A dependence: for A>=4, any profile with two players
 literal Never has unrestricted terminal regret>1/(100 A^2). The other two
@@ -7994,3 +8001,44 @@ does not cap an omitted fourth player's deviations. I also read
 in `UniformEquilibrium/Quitting/Classification/ThreePlayer/NonnegativeSingletonEarlyAbsorption.lean`.
 Neither result is claimed to supply the missing extension on this table.
 No Lean check or literature theorem is used in the ordinary proofs above.
+
+## 48. Three/four-clock construction checkpoint before independent review
+
+Status: exploratory calculations, except for the elementary root identity
+below. No new UE class or whole-game obstruction is claimed.
+
+For the fixed Section44 table I tried an all-proper two-date periodic word
+with active players0,1,3 and player2 Never. Newton searches of the six
+interior root-indifference equations found no candidate. I then tested
+four-date cyclic words whose successive root hazards are rotations of one
+base hazard vector, with rotations by1,2 or3, and base supports
+{0,1}, {0,2}, {0,1,3} or all four players. The analogous interior-equation
+searches also found no candidate. These are floating-point searches of
+small, imposed periodic classes, not certificates of their nonexistence
+and certainly not strategy-class completeness. They should not become
+successively stronger low-support exclusions.
+
+A useful exact parametrization remains available for a root at which all
+opponent Continue probabilities are positive. Write x_j=q_j/(1-q_j) for
+the hazard odds, and let v_i be the ACTUAL continuation payoff after all
+Continue. Dividing player i's Quit-minus-Continue difference by the
+opponents' empty-coalition probability gives H_i(x)-v_i, where, cyclically,
+
+    H_i(x)=1-x_(i+1)-x_(i+2)+2x_(i+3)
+             -x_(i+1)x_(i+2)+2x_(i+1)x_(i+3)
+             +2x_(i+2)x_(i+3)-x_(i+1)x_(i+2)x_(i+3).
+
+This follows directly from the nonempty insertion gains in Section46:
+singleton-opponent gains (-1,-1,2), two-opponent gains (-1,2,2), and
+three-opponent gain -1. In particular H has no A dependence, whereas the
+root's actual Quit endpoint and resulting payoff DO depend on A. For an
+interior own hazard root indifference is exactly v_i=H_i(x); for an
+inactive own hazard the Nash inequality is v_i>=H_i(x). Nothing here
+allows replacing the actual continuation by a freely selected cap vector.
+
+Concrete resumption question: can actual root payoff transitions, with
+different active faces or a nonperiodic calendar, connect these odds
+equations while retaining a genuine third/fourth complete law? A root
+Nash iteration that enters an inert high-payoff region would not be a
+producer. Conversely, the failed small periodic searches do not exclude
+slower drift, boundary words, or nonperiodic all-errors constructions.
