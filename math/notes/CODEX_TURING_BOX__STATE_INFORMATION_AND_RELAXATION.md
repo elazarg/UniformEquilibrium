@@ -8171,3 +8171,51 @@ contraction argument supplies either arm. Whole-word support changes
 and intermediate regret increases remain free. No new auxiliary
 correspondence, generic potential interface, export or UE-class result
 is proposed here.
+
+### 39.6 The normal-core overlap removes a tempting false target
+
+For this subsection let I=Fin4.
+
+This is an ordinary supporting deduction using the reviewed whole-pair
+completion theorem, not a new source construction. Suppose s_i>=0 for
+every player, some s_k>0, and every row has a distinct witness j with
+r_i({j})<=s_i. Then
+
+    original UE exists  iff  gamma_2(r)=0.                 (W9)
+
+The reverse implication is the terminal all-errors consumer. For the
+forward implication take actual profiles p_m with E(p_m)->0. The proof
+of(W7), using ONLY the positive coordinate k, gives
+
+    nu_m=Pr(AllNever)<=E(p_m)/s_k ->0.
+
+If z_j,m is the j-th Never mass, min_j z_j,m<=nu_m^(1/n).
+After a subsequence freeze one j whose Never mass tends to0. Move that
+whole atom to one finite deadline, leaving all other laws unchanged.
+The j-th clock becomes proper. Every prescribed payoff changes by at
+most2M z_j,m, its own full cap is unchanged, and every other full cap
+changes by at most2M z_j,m, uniformly over ALL original replacements.
+Thus full max regret changes by at most4M z_j,m and still tends to0.
+
+These new profiles lie in P_abs. The whole-carrier equality K_fin=K_abs
+in [Four finite clocks at original minima](../exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md)
+now approximates their ENTIRE payoff/cap pairs by profiles in P_fin.
+Here P_fin literally means EVERY owner's Never mass is0, not merely
+finite support with a remaining Never atom or joint a.s. absorption.
+A diagonal choice gives all-four-proper profiles with E->0, proving(W9).
+The equality applies under the displayed row witnesses and nonnegative
+own singletons; it does not manufacture those hypotheses on another table.
+
+In particular full normal core supplies the row witnesses on the
+counterexample locus. A proposed KNOWN-UE, no-exact-Nash example with
+gamma_2>0 cannot lie on this nonnegative-own/full-normal-core locus.
+If all own singletons are0, AllNever itself is exact Nash; hence the
+no-exact-Nash qualification supplies some s_k>0 when s>=0. Positive
+gamma_2 there is already equivalent to no UE, not an easier solved-game
+calibration to seek. Outside the row-witness locus the cash-out guardrail
+remains valid.
+
+This sharpens the live question rather than answering it: an actual
+all-nonproper boundary improvement must FORCE gamma_2=0 from surviving
+raw data. Reapplying properization to a supplied UE family only confirms
+the already available completeness theorem.
