@@ -1149,7 +1149,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: the signed inverse-column, pair-coefficient and twelve outsider-cap tests specified below | UE from a directly produced proper two-phase terminal Nash profile. The inverse may have negative columns, scheduled singleton comparisons may be favorable, and own rewards are signed. No utility ordering is reversed. This is reviewed mathematics awaiting formalization. |
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: the passive-triple cap-chamber family specified below, with Kᵢ≥7 and Gᵢ<Kᵢ | A fixed UE payoff from compact constrained minimization in the actual full-cap carrier. The parameters are unequal and unbounded; no stationary profile or common exact-root chronology is assumed. This is reviewed mathematics awaiting formalization. |
-| Any finite player set with at least two players: nonnegative own singletons and the two-ledger/proper-support tests below | UE from a produced actual seed and a preserved nonconvex full-cap chamber. The criterion includes a full sixty-coordinate Fin4 open region and assumes no strategic witnesses. This is reviewed mathematics awaiting formalization. |
+| Any finite player set with at least two players: nonnegative own singletons, the two-ledger/proper-support tests, and sink-or-receiver escape below | UE from a produced actual seed and a preserved nonconvex full-cap chamber. Proper insertion cycles are allowed under the graph test. The criterion includes a full sixty-coordinate Fin4 open region and assumes no strategic witnesses. This is reviewed mathematics awaiting formalization. |
 | Any finite player set with at least two players: Γ⁻¹ is strictly positive and each recipient has a selected containing coalition with a sufficiently large positive reward at its natural coalition-size scale | Exact full-support stationary terminal Nash and a fixed same-profile UE payoff. Singleton rewards are arbitrary signed reals; every other nonsingleton coordinate ranges over a fixed bounded box. The threshold is uniform on compact parameter sets. This is reviewed mathematics awaiting formalization. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -2728,9 +2728,9 @@ general, invariant-region preservation, or nonzero-root escape. Producing
 a suitable preserved region and escape operation for every remaining
 table is open.
 
-### Two raw ledgers and proper-support chambers — reviewed mathematics
+### Two raw ledgers and sink-or-receiver chambers — reviewed mathematics
 
-The [two-ledger producer](exports/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md)
+The [sink-or-receiver producer](exports/SINK_OR_RECEIVER_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md)
 applies to any finite player set I with at least two members, zero live/Never
 payoffs, and nonnegative own singletons sᵢ=rᵢ({i}). For nonzero weights a≥0,
 define, on nonempty proper coalitions S,
@@ -2744,8 +2744,9 @@ The sufficient raw-table conditions are:
 - Jₐ(S)≤0 for every such S.
 - Every nonempty proper A contains a player i with rᵢ(S)≤sᵢ for every
   nonempty S⊆A containing i.
-- The graph i→j defined by rⱼ({i,j})>rⱼ({i}) has no directed cycle
-  contained in a proper subset of I.
+- On every nonempty proper induced subset, the graph i→j defined by
+  rⱼ({i,j})>rⱼ({i}) has either a sink (no outgoing arrow within that subset)
+  or a universal recipient (an incoming arrow from every other vertex).
 
 The game then has a fixed uniform-equilibrium payoff against unrestricted
 behavioral deviations. The sole-owner seed is produced directly. H preserves
@@ -2754,19 +2755,36 @@ the proper-support condition preserves a low cap; the graph condition supplies
 a nonzero root at a positive constrained minimum. Exact cap-Nash debt scaling
 then forces a zero-regret point in the closed actual carrier. No continuous
 selector, convexification, temporal splice, or supplied return certificate is
-used.
+used. At a universal recipient, a finite-game perturbation and the closed Nash
+graph prove existence of a nonzero original root; no subsidy is used in the
+quitting game. In Fin4 the graph test says exactly that no proper triple induces
+a bare directed triangle with all three reverse arrows absent. Two-cycles and
+chorded triangles are allowed.
 
-A full sixty-coordinate Fin4 region is explicit: take the cyclic singleton
+An exact admitted Fin4 table has cyclic singleton rows (owner 1, opposite 4,
+neighbors 0), adjacent pairs (donor −1, successor 2, outsiders 3/2), opposite
+pairs (members 0, outsiders 2), triples (members −1, outsider 10), and grand
+rewards 9, except r₀({0,1})=1/2 and r₂({0,1,2})=2. Its insertion graph is the
+Hamiltonian cycle 0→1→2→3→0 plus 1→0, so the proper two-cycle excludes it from
+the proper-acyclicity criterion. The packet checks the whole stationary,
+induced-base, universal-child, and named weight/template selections, not just
+one unfavorable choice. These comparisons are not an exhaustive theorem
+census.
+
+A full sixty-coordinate Fin4 region in the
+[proper-acyclic subclass](exports/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md)
+is explicit: take the cyclic singleton
 rows (owner 1, opposite 4, neighbors 0), adjacent pairs (donor −1, successor 2,
 outsiders 7/4), opposite pairs (members 0, outsiders 9/4), triples (members −1,
 outsider 10), and grand rewards 9. Every table at entrywise distance below
 1/100 from this center satisfies the criterion, with all sixty entries free
-to vary. The packet's bounded comparisons with existing producers concern
-a separately specified exact witness, not every point in this ball.
+to vary. The bounded whole-selection comparisons above concern the exact
+two-cycle witness, not every point in this ball.
 
 This is an unconditional reward-class theorem in ordinary mathematics, not
 a new Lean declaration or an arbitrary-table producer. Standard Q supplies
-the strict singleton seed but not the other raw conditions. The general
+the strict singleton seed but not proper-coalition ledger signs, a flat
+participant on every proper support, or the graph guard. The general
 preserved-region or alternative-existence problem remains open.
 
 Standard Q alone is not an existence theorem.
