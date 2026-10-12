@@ -87,6 +87,15 @@ full-debt change is a weighted cap/payoff comparison over the ENTIRE tail
 correspondence. On the Solan calibration this gives far-tail improvements
 with all initial records fixed. The required improvement at an arbitrary
 whole-source minimum remains open; no new UE class is claimed.
+Section18.16 gives an UNREVIEWED exact relaxation of the tail operation:
+the required new first record is an explicit normalized maximum of ALL
+earlier finite deadlines, which can be strictly below the old tail's
+first record. A quantile-layer proof covers every feasible complete own
+replacement. An exact four-player test changes three proper tail labels
+to Never and decreases full regret from at least1/4 to O(delta), while
+preserving the original initial records. The table already has an exact
+Nash profile; this is an operation test, not new UE coverage or a proof
+that the whole-source minimum tends0 on arbitrary data.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -3697,3 +3706,220 @@ Quitting/Root/TerminalDebtGreenAccount.lean, including
 quittingRootSequenceTerminalDebt_le_opponentGreenDefectSum_boundedTail.
 No novelty is claimed for that propagation identity or the behavioral
 response reduction, and no new Lean declaration is asserted here.
+
+### 18.16. The exact tail threshold is the past deadline maximum
+
+Status: ORDINARY UNREVIEWED supporting mathematics. This relaxes18.34
+without changing the actual prefix or weakening complete source agency.
+It does not prove a vanishing whole-source minimum. The finite test below
+has a full exact Nash profile and is not a counterexample to the conjecture.
+In particular the positive fixed-delta minima on the no-exact-Nash Solan
+calibration remain in force.
+
+Question. Fix delta,c and an actual p in N_delta. Let W be its first L
+dates, L>=1, with positive end survival S=c^L. Let w_i>0 be own survival
+through W and h_i=product_(j!=i)w_j=S/w_i. Can the source tail z0 be
+replaced by an arbitrary z in N_delta whose first record falls BELOW
+m_i(z0) in some coordinates? The complete finite-game test18.22 admits
+an explicit answer; one need not retain the stronger18.34.
+
+All finite dates of W are indexed0,...,L-1. For each player i define:
+
+    a_i(W) = expected recipient-i reward from opponent absorption
+             within W when i never quits;
+    f_i^W(t) = recipient-i payoff from the pure own deadline t,
+               against the fixed actual opponent laws through W;
+    M_i(W) = max_(0<=t<L) f_i^W(t);
+    rho_i(W) = [M_i(W)-a_i(W)]/h_i.
+
+Here a_i is an absorbed PAYOFF account, not an absorption probability.
+Every finite deadline inside W is included in M_i, including dates with
+zero prescribed own or opponent stopping mass. Positive final w_j makes
+every player's and every opponent's reach positive at every date of W;
+there are no zero-reach dates silently discarded in this setting. The
+deadline at the first date AFTER W is not included in M_i.
+
+**Exact replacement criterion.** The actual independent concatenation
+W followed by z belongs to N_delta if and only if
+
+    a_i(W)+h_i*m_i(z) >= M_i(W) for EVERY i,          (18.38)
+
+equivalently m_i(z)>=rho_i(W) for every i. In particular
+rho_i(W)<=m_i(z0), and the inequality can be strict. These are explicit
+past-record thresholds, not chosen continuation values or LP prices.
+
+#### Every modified prefix law: the additional quantile layers
+
+Fix i and keep the opponents' ENTIRE prefix laws fixed. Put
+A_i(t)=product_(j!=i)Pr(T_j>t), which is positive throughout W. The own
+feasibility constraints are exactly the CDF lower bounds
+
+    Pr(T_i<=t) >= ell_i(t),
+    ell_i(t)=max{0, max_(0<=u<=t)[1-c^(u+1)/A_i(u)]}.
+
+The prescribed prefix is feasible. Since its final survival is w_i and
+the final joint budget binds, ell_i(L-1)=1-w_i. Indeed feasibility gives
+c^(u+1)/A_i(u)>=Pr(T_i>u)>=w_i for every u<L, and equality holds at
+u=L-1. Thus the opponents and the actual end-binding budget determine
+exactly1-w_i forced finite quantile layers.
+
+Write F_i(t)=max_(0<=s<=t)f_i^W(s). For almost every v in(0,1-w_i), put
+
+    d_i(v)=min{t<L: ell_i(t)>=v},
+    Z_i=integral_(0 to1-w_i) F_i(d_i(v)) dv.
+
+For ANY feasible replacement prefix, its increasing quantile tau(v)
+satisfies tau(v)<=d_i(v) on those forced layers. Its payoff on each
+such layer is consequently at most F_i(d_i(v)). This comparison uses
+the new law's CDF constraints directly; it does not assume its hazards
+equal the old hazards, or modify just one last survival coordinate.
+
+The upper bound Z_i is attainable with terminal mass exactly w_i. For
+v<1-w_i choose the FIRST maximizer of f_i^W on0,...,d_i(v); for the
+remaining layers choose terminal Continue. The first maximizing date is
+nondecreasing as d_i(v) increases, so this is a legitimate own quantile
+law. It satisfies every CDF lower bound. No randomization is shared with
+opponents; the uniform quantile is a private draw.
+
+Let g_i(W) be the prescribed player's expected absorption payoff WITHIN
+W, including opponent absorption on its terminal-Continue draws. The
+actual W is finite-game optimal at terminal credit m_i(z0), by18.22.
+Replacing only its forced layers by the preceding maximizers leaves
+its terminal probability w_i fixed. It would be profitable unless
+
+    g_i(W)=Z_i+w_i*a_i(W).                            (18.39)
+
+The opposite inequality is already the pointwise forced-layer bound,
+so equality follows. This is the only optimality fact about the old
+prefix used in the additional-layer argument.
+
+Now take ANY feasible new own prefix eta, with terminal probability x.
+The end constraint gives0<=x<=w_i. Its first1-w_i quantile layers obey
+the SAME pointwise bound giving Z_i. Its additional w_i-x finite layers
+each pay at most M_i(W). Its terminal layers contribute x*a_i(W).
+Therefore, for every real terminal credit m,
+
+    g_i(eta)+x*h_i*m
+      <= Z_i+(w_i-x)*M_i(W)+x*[a_i(W)+h_i*m].        (18.40)
+
+The prescribed value at that credit is
+Z_i+w_i*[a_i(W)+h_i*m], by18.39. Hence the prescribed prefix is a
+best reply at credit m if a_i(W)+h_i*m>=M_i(W). Conversely, if this
+inequality fails, move any small positive amount of prescribed terminal
+mass to a maximizing finite deadline. This accelerates the clock and
+is feasible at EVERY prefix constraint, with strictly positive gain.
+Thus the finite prefix test is exactly18.38, for arbitrary old and new
+hazards and arbitrary earlier binding or slack dates.
+
+For clarity, complete tail agency is still required. For x>0 a complete
+replacement following eta may choose any tail feasible at credit w_i/x.
+With V_(i,z) from18.10 and kappa_i(z)=U_i(z)-m_i(z), its full value is
+at most
+
+    g_i(eta)+x*h_i*V_(i,z)(w_i/x)
+      <=g_i(eta)+x*h_i*m_i(z)+S*kappa_i(z).
+
+Combine18.40 with18.38 to bound this by the actual prescribed payoff
+g_i(W)+S*U_i(z). The x=0 case follows from kappa_i(z)>=0. If18.38
+fails, the small terminal-to-maximizing-deadline change just described
+has a strict finite-game gain. For a sufficiently small change the
+EXACT right-affine credit value18.28 converts this into a profitable
+complete original deviation, as in18.12. This proves both directions
+of18.38 against every complete own law, including feasible Never.
+
+#### Exact four-player face change at the same budget
+
+Take four players and the literal table
+
+    r_i(S)=1       if S={i};
+    r_i(S)=3/2     if i belongs to S and |S|>=2;
+    r_i(S)=2       if i does not belong to S;
+    live/Never=0.
+
+Fix0<h<1, put r=1-h, alpha=r^3, c=r^4, delta=1-c. Let p_bad have
+four independent Geom(h) clocks. Each player's current Quit payoff and
+opponent-only root absorption account are respectively
+
+    Q=(3-alpha)/2>1,        b=2*(1-alpha).
+
+Against these opponents the pure finite response curve is
+
+    f(t)=2+(Q-2)*alpha^t,
+
+strictly increasing to2. The own shared-budget constraint is exactly
+Pr(T_i>t)<=r^(t+1), so Geom(h) is the stochastically latest feasible
+law and is an exact source best reply. Thus p_bad belongs to N_delta;
+all four of its first records are Q and all four full caps are2.
+
+EVERY actual profile with at least two proper labels has all full caps2:
+deleting any one player leaves a proper opponent, and Never receives2
+almost surely. A singleton outcome has total reward7. A multiquitter
+outcome of size k>=2 has total reward8-k/2<=7. Consequently every such
+profile has total full debt at least1 and maximum full regret at least1/4.
+In particular this is a uniform bound on p_bad, not numerical evidence.
+
+Retain just its first root W. This prefix is end-binding, with w_i=r,
+h_i=alpha, a_i(W)=b and M_i(W)=Q. Its exact thresholds are
+
+    rho_i(W)=(Q-b)/alpha=3/2-1/(2*alpha)<1.           (18.41)
+
+Choose an owner j. Let z_j prescribe a proper Geom(delta) clock to j
+and literal Never to every other player. The owner alone funds every
+shared constraint. It earns its singleton1; every outsider earns2,
+the largest reward in the table. This is a full exact terminal Nash
+profile and an element of N_delta, with
+
+    m_j(z_j)=B_j(z_j)=U_j(z_j)=1,
+    m_i(z_j)=B_i(z_j)=U_i(z_j)=2 for i!=j.
+
+The owner's new tail record1 is STRICTLY BELOW its old tail record Q,
+so18.34 does not authorize this direct replacement. Nevertheless18.41
+and18.38 prove that W followed by z_j belongs to the SAME N_delta.
+Its four initial records remain EXACTLY Q, since every player has a
+positive atom in the retained root. Three proper tail labels have been
+changed to Never, with all finite-prefix and complete-tail agency intact.
+
+The full caps here must be computed directly: this table has exact Nash,
+so18.13's no-exact-Nash reduction is inapplicable. For the owner, the
+Continue cap b+alpha=2-alpha exceeds Q by(1-alpha)/2. For every outsider,
+the Continue cap is b+2alpha=2, again above Q. Hence the exact debts are
+
+    d_j(Wz_j)=h*(1-alpha)/2,
+    d_i(Wz_j)=h*(1+alpha)/2 for i!=j,
+    D(Wz_j)=h*(2+alpha),
+    E(Wz_j)=h*(1+alpha)/2<=h<=delta.                  (18.42)
+
+Thus for h<1/4 full maximum regret drops from at least1/4 to at most h;
+for h<1/3 total debt drops from at least1 to less than1. This is a
+finite-amplitude whole-tail change, with the original initial records
+fixed and with a decrease in one of the NEW TAIL records. It verifies
+that forcing all new tail records to dominate the old ones can exclude
+a useful direct reselection, even though the complete source agency
+only requires the weaker explicit past maxima.
+
+The whole source minimum on this table is already0, because z_j itself
+is exact Nash. The calculation supplies no obstruction at a positive
+whole-source minimum, no new UE class, and no justification for strict
+descent at every positive fixed-delta minimum on the Solan table. Its
+role is to keep the next arbitrary-table attempt from retaining an
+unnecessary old-tail record barrier or a fixed proper-label face.
+
+Source check. The own quantile envelope generalizes the fixed-geometric
+private-record calculation already present in Section3 of
+`CODEX_EMMY_BOX__SINGLE_OWNER_COMPACTIFICATION.md`; no novelty is claimed
+for quantile dominance itself. The bounded source searches and exact
+terminal cap declarations reopened for18.13--18.15 remain the source
+dependencies. In this session the exact positive/negative semantic
+endpoints were reopened as well:
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`
+and `not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap`
+in `UniformEquilibrium/Quitting/Terminal/ExploitabilityGap.lean`.
+No Lean command, external write, new export or completeness claim is made.
+
+Concrete next question. Assuming one supplied UNIFORM positive original
+exploitability gap against all profiles, can a D-minimizing whole source
+admit an end-binding prefix W and a jointly selected z in N_delta with
+m(z)>=rho(W) and F_W(z)<F_W(z0), for arbitrarily small delta? The old
+threshold m(z0) is now unnecessary. The new explicit thresholds still
+do not produce such a tail, and the prefix itself may need reselection.
