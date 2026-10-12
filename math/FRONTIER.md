@@ -1150,6 +1150,7 @@ mathematical results supply sufficient criteria or quantitative constructions:
 | Fin4: det Γ<0 and Γ⁻¹≥0 entrywise | UE for every signed singleton level and nonsingleton completion. |
 | Fin4: the passive-triple cap-chamber family specified below, with Kᵢ≥7 and Gᵢ<Kᵢ | A fixed UE payoff from compact constrained minimization in the actual full-cap carrier. The parameters are unequal and unbounded; no stationary profile or common exact-root chronology is assumed. This is reviewed mathematics awaiting formalization. |
 | Any finite player set with at least two players: nonnegative own singletons, the two-ledger/proper-support tests, and sink-or-receiver escape below | UE from a produced actual seed and a preserved nonconvex full-cap chamber. Proper insertion cycles are allowed under the graph test. The criterion includes a full sixty-coordinate Fin4 open region and assumes no strategic witnesses. This is reviewed mathematics awaiting formalization. |
+| Fin4: nonnegative own singletons and the two-ledger/proper-flat tests below, without graph or strict-seed conditions | UE against unrestricted behavioral deviations. A paid non-Nash prefix closes the remaining triangle case. This is independently reviewed ordinary mathematics; additional coverage beyond the other existence criteria is not yet established, so it is not in the export queue. |
 | Any finite player set with at least two players: Γ⁻¹ is strictly positive and each recipient has a selected containing coalition with a sufficiently large positive reward at its natural coalition-size scale | Exact full-support stationary terminal Nash and a fixed same-profile UE payoff. Singleton rewards are arbitrary signed reals; every other nonsingleton coordinate ranges over a fixed bounded box. The threshold is uniform on compact parameter sets. This is reviewed mathematics awaiting formalization. |
 | Fin4: Γ is R0 and its integer LCP degree is not +1 | UE. Degree is the total Brouwer degree of x↦min(x,Γx+b), not a polynomial degree; no regularity premise is required. |
 | Fin4: a stationary-response-invariant partition has quotient A that is R0 with degree not +1 | UE, including signed rewards. The partition condition is a finite system of linear identities in the raw table; the root is produced, not supplied. |
@@ -2786,6 +2787,34 @@ a new Lean declaration or an arbitrary-table producer. Standard Q supplies
 the strict singleton seed but not proper-coalition ledger signs, a flat
 participant on every proper support, or the graph guard. The general
 preserved-region or alternative-existence problem remains open.
+
+### Graph-free Fin4 ledger criterion — reviewed internal mathematics
+
+For four players, the same definitions of Hₐ and Jₐ give a stronger
+sufficient criterion. Assume sᵢ≥0, nonzero a≥0, Hₐ(S)≥0 and Jₐ(S)≤0 for
+every nonempty proper S, and a flat participant on every nonempty proper
+support A. These conditions alone imply a fixed uniform-equilibrium payoff
+against unrestricted behavioral deviations. Neither the insertion-graph
+condition nor strict positivity of any original singleton Hₐ is required.
+
+The proof minimizes maximum debt on the produced constrained full-cap
+chamber, not on the unconstrained carrier. At a bare tied triangle, the
+product of forward insertion gains either exceeds the product of reverse
+losses, giving a nonzero exact root by finite-game perturbation, or admits
+a small non-Nash prefix. An exact correction preserves one flat cap; all
+root defects are quadratic in its rate, while debt contraction and a strict
+singleton surplus are linear. The surplus pays the full cap error without
+changing the chamber. Raising only passive singleton rewards preserves
+the Hₐ/Jₐ inequalities and participant flatness and creates enough strict
+singleton surpluses; reward-closedness then removes that perturbation.
+
+The [complete proof](notes/CODEX_TURING_BOX__GRAPH_FREE_HJ_FLAT_FIN4_UNIFORM_EQUILIBRIUM.md)
+has two independent affirmative soundness reviews. It is not a Lean theorem.
+Its displayed calibration has an existing quiet-child stationary equilibrium;
+an actual nonredundancy witness against the other existence criteria remains
+unestablished. Thus the raw implication is proved in reviewed mathematics,
+but its extra counterexample-class coverage is not claimed and it is not an
+export. The unrestricted Fin4 problem remains open.
 
 Standard Q alone is not an existence theorem.
 Neither a fixed small periodic class nor the proper-child extension tests
