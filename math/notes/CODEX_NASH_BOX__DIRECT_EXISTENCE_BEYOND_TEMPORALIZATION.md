@@ -2,6 +2,19 @@
 
 Author: CODEX_NASH_BOX.
 
+Latest candidate: Section39 strengthens the FULL COARSE global-minimum
+obstruction, under the same strict-anchor/actual-sequence hypotheses as
+Section28 and nonnegative own singletons. A positive minimum would force
+EVERY finite root Nash at EVERY minimizing state to be all-Continue,
+including roots on unprotected labels. The proof combines two distinct
+planned prefix quitters, full-cap-safe information erasure, and compact
+solo washout; it is ordinary UNREVIEWED mathematics. Consequently the
+zero/one-unprotected-label modes are uniformly interior pointwise. With
+two unprotected labels, a payoff-boundary state must have all four
+coordinates singleton-tight and an explicit two-column blocking pattern.
+Neither the interior punishment-price branch nor that exceptional boundary
+is excluded. This is not a private-CE variation or new solved raw class.
+
 Current checkpoint: Sections33--34 give actual finite-law singleton
 completion and first-two-event reference completion, with their exact
 information charges. Section35 removes the ordered-limit assumption from
@@ -6372,3 +6385,232 @@ new singleton-Quit recommendations face the full old cap. Equation
 The next whole-law task remains to move first/second roles and their
 punishment costs in these surviving modes; (38.1) is not a zero-information
 producer and does not justify further exact auxiliary selection.
+
+## 39. Two distinct planned quitters eliminate all active minimum-source roots
+
+Status: candidate ordinary proof, UNREVIEWED. This is a genuinely stronger
+whole-source consequence than Section28's exclusion of simultaneous
+unprotected root quitters. It uses FULL COARSE obedience only. No
+recommendation-dependent root-feasibility claim is made. No new reward-table
+class or zero-information theorem follows yet.
+
+### Exact statement and inspected consumer
+
+Fix a finite player set, bounded rewards, s_i=r_i({i})>=0 for every i,
+and Section28's actual finite strict full-coarse anchor. Suppose its global
+full-coarse information infimum rho is positive. Let S be EXACTLY Section28's
+compact set of actual-sequence states (v,C,J), not an abstract entropy box.
+Then, for EVERY x in S,
+
+    the finite Boolean root game at continuation v
+    has only the all-Continue Nash point.                    (39.1)
+
+In particular v>=s at every x. This does not assume all labels protected.
+The remaining information-price problem is still global, not solved by
+(39.1). The number of players need not be four for (39.1).
+
+The final actual-strategy consumer was reopened directly:
+`isεAsymptoticNash_soloStationary_exact`,
+`isεAsymptoticNash_soloStationary_exact_iff`, and
+`isUniformEquilibriumPayoff_soloReward_of_inactive` in
+`UniformEquilibrium/Quitting/Punishment/OwnerSoloCertification.lean`.
+These require precisely s_i>=0 and, for some q in(0,1],
+
+    (1-q)s_j+q r_j({i,j}) <= r_j({i}) for every j!=i. (39.2)
+
+They quantify over unrestricted behavioral deviations. No independent
+punishment construction or punishment-normality hypothesis is needed:
+all nonowners literally Never already punish the owner to max(s_i,0)=s_i.
+
+A narrow nearby-source check also inspected
+`quittingTerminalSemanticPair_stationarySolo_of_outsiderEndpoint_le` and
+the washout statements in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSingletonTightMinimumFaceIteration.lean`.
+Those treat a different semantic-debt minimum. The new ingredient here is
+the global INFORMATION minimum's full-law erasure after TWO distinct
+planned prefix quitters, including different dates.
+
+### A legal erasure does not require coincident quitting dates
+
+Suppose an i-only independent prefix of length L>=1 precedes an arbitrary
+old joint clock law mu. Each prefix root allows only i to quit, independently
+of mu. Put P=Pr(i survives every prefix root). If i quits in this prefix,
+its actual clock is <L; all other clocks are >=L or Never.
+
+Prepend a new root at which only a distinct k can quit, with probability q.
+On the OBSERVABLE event
+
+    F={T_k=0, T_i belongs to the old finite i-prefix},
+    Pr(F)=q(1-P),                                         (39.3)
+
+the two planned finite clocks precede every clock of I\{i,k}. They need not
+be equal. Deleting ANY one player leaves at least one of these two finite
+prefix quitters. Hence the joint future law of I\{i,k} is irrelevant to
+every prescribed terminal payoff and EVERY constant complete replacement
+deadline/Never payoff, including deadlines in empty cuts and after all
+old finite clocks.
+
+Conditional on F and the prefix clock of i, that future law is exactly
+the old marginal mu_(I\{i,k}), independent of both prefix randomizations.
+Replace it by the product of its own marginals ONLY on F. This preserves
+all unconditional clock marginals, as well as all prescribed and full
+coarse reply payoffs. The KL/entropy chain rule gives the exact decrease
+
+    q(1-P) I(mu_(I\{i,k})).                              (39.4)
+
+No tail is removed on a singleton-only event. Both distinct finite clocks
+are present on F and supply the full-deviation safety.
+
+A reward-free exact check used i=0,k=1, prefix probabilities1/3 and2/5,
+planned i-clock1, k-clock0, and a perfectly correlated two-clock tail
+(3,3)/(4,4), each with probability1/2. Replacing that tail by its product
+only on F preserves the terminal COALITION law under every player's
+deadlines0,...,5 and Never, as well as every marginal. The information
+saving is exactly(2/15)log2. This finite check corroborates the argument;
+the proof above is calendar- and reward-independent.
+
+### A decorated compact solo-prefix family, retaining finite-law lifts
+
+Assume contrary to(39.1) that some x0 in S has an active root Nash.
+Section28 already implies each active label i has d_i=J_I-J_-i=0.
+If two labels were active, erase the remaining tail on their joint root-
+Quit event: its limiting information is rho, because
+
+    0<=J_I-J_(I\{i,k})<=d_i+d_k=0.
+
+That gives a strict improvement, exactly as in Section28. Thus only one
+label i is active, at a rate q0>0. After this root, its value and full cap
+are BOTH s_i. Indeed its root Quit-minus-Continue difference is s_i-v_i;
+if q0<1 it is zero, and if q0=1 it is nonnegative. The old C_i<=v_i,
+and the exact new cap is max(s_i,C_i).
+
+Starting with this initial root, consider ALL further finite i-only Nash
+prefix words. Store their full state together with
+
+    P=product of all their i-Continue probabilities,
+    0<=P<=1-q0.                                          (39.5)
+
+Let K be the closure of these decorated states. It is compact. Every
+member has v_i=C_i=s_i, fixed subset-information vector J, and belongs to
+S. More importantly, it retains literal finite-law lifts with an i-prefix
+of mass at least q0, not merely an abstract state representation.
+
+Here is the uniform justification when word lengths drift. An i-only root
+acts on each J_A by identity if i is absent, and by
+(1-q)J_A+q J_(A\{i}) otherwise. Since d_i=0, deletion of i changes no
+limiting subset information: 0<=J_A-J_(A\{i})<=d_i. These maps are
+nonexpansive in the entire information vector. The value and full-cap
+maps are also nonexpansive in sup norm: values are affine mixtures with
+coefficients<=1, and each cap is the maximum of a fixed new-Quit row and
+an affine old-cap row with coefficient<=1. Thus ANY finite i-word,
+however long, applied to a sufficiently accurate actual realization of
+x0 has the desired approximate state and vanishing full-coarse violation.
+Strict-anchor repair tends0 in information uniformly in the calendar.
+This proves membership in S and the finite-lift assertion for EVERY
+point of K. No original integer-calendar minimizer is asserted.
+
+For y in K, any root Nash with a positive k!=i is impossible. Protected
+k are already forbidden by Section28. For unprotected k, apply that root
+to the decorated actual realizations and then(39.3)--(39.4). Since both
+d_i=d_k=0, the erased old remaining-tail information tends rho; the
+strict saving is at least q*q0*rho. The full-coarse error remains
+vanishing and strict-anchor repair cannot absorb that fixed saving.
+Consequently EVERY root Nash at y is supported on i alone.
+
+### A zero solo rate is not a compact escape
+
+Put H_ji=r_j({i})-r_j({i,j}) for j!=i. Since v_i=s_i, the set of root
+Nash rates is exactly the nonempty interval
+
+    Q(y)={q in[0,1]: (1-q)(v_j-s_j)+q H_ji>=0, all j!=i}.
+                                                               (39.6)
+
+Let qmax(y)=max Q(y). If it were0, all-Continue would be the ONLY root
+Nash at y, so v>=s. Some boundary coordinate j must satisfy
+
+    v_j=s_j and H_ji<0.                                 (39.7)
+
+Otherwise every negative H_ji would have strict initial slack and a
+small positive i-rate would be feasible. Apply Section38's finite-game
+boundary lemma to B={j:v_j=s_j}. It gives a probability a supported on B
+with H a>=0 on B, where H has zero diagonal. Condition(39.7) forces
+a!=e_i.
+
+Use the singleton root lottery pi(empty)=1-lambda,
+pi({j})=lambda*a_j. Section38 proves its exact full-coarse feasibility
+for small lambda, and I(pi)<=lambda^2. Its root information saving is
+lambda sum_j a_j d_j. In ADDITION, on every event where a newly quitting
+unprotected k!=i is followed by a finite i-prefix clock, erase the
+remaining old tail as in(39.3). These disjoint events give the limiting
+extra saving lambda(1-P)rho sum_(k!=i,d_k=0) a_k. Thus
+
+    I(new) <= rho+lambda^2-lambda D_eff,
+    D_eff=sum_j a_j d_j
+       +(1-P)rho sum_(k!=i,d_k=0) a_k >0.               (39.8)
+
+The strict positivity uses a!=e_i, d_i=0 and1-P>=q0>0: any other mass
+is either protected or a distinct unprotected quitter. Both operations
+are applied to the finite lifts before repairing their vanishing coarse
+violations. Choosing lambda<D_eff contradicts rho. Hence
+
+    qmax(y)>0 for every y in K.                         (39.9)
+
+The rate has a UNIFORM positive floor on K; this is not inferred from
+pointwise positivity without continuity. If there are no negative H_ji,
+qmax=1. Otherwise nonemptiness of Q implies v_j-s_j>=0 for each H_ji<0,
+and its upper endpoint is explicitly
+
+    qmax=min_(j:H_ji<0) (v_j-s_j)/(v_j-s_j-H_ji).       (39.10)
+
+All other inequalities supply lower bounds or no bound; nonemptiness
+ensures they do not reduce this upper endpoint. The denominators are
+strictly positive constants plus v_j-s_j. Therefore qmax is continuous
+on K, and compactness plus(39.9) gives a positive minimum.
+
+Iterate the maximum-rate i-root. The decorated prefixes stay in K, and
+P tends0 geometrically. Their values tend r({i}), since exactly
+
+    v_j(P)=P*v_(0,j)+(1-P)r_j({i}).                     (39.11)
+
+At a limiting state with v=r({i}), (39.9) supplies a q*>0 satisfying
+(39.2). The inspected owner-solo theorem now gives an actual independent
+stationary exact terminal Nash profile, with nonowners literally Never.
+Alternatively, truncate its geometric owner clock: the independent
+finite laws have full gap<=2R(1-q*)^N, including the forced last deadline
+and Never. Repair with the strict anchor; its information tends0 by the
+dimension-free mixture bound. This directly contradicts rho>0 and proves
+(39.1).
+
+### Precise remaining Fin4 payoff-boundary shape
+
+For four players at least two labels are protected. By(39.1), v>=s and
+the Section38 boundary lemma applies at EVERY point of S. A boundary
+probability a with protected mass immediately lowers information by
+Section38. Hence, at a positive minimum, every such a must be supported
+on the at most two unprotected labels.
+
+If there are no unprotected labels, a boundary is impossible by Section38.
+If there is just one, a would be a pure e_i. Then H_ji>=0 on every
+boundary row, so a small positive i-only rate is root Nash (strict slack
+handles the other rows), contrary to(39.1). Thus in both modes
+
+    v_j>s_j for EVERY j.                               (39.12)
+
+If there are exactly two unprotected labels i,k and a boundary exists,
+both lie in B and a_i,a_k>0; otherwise the same pure-column argument
+applies. Their boundary rows give H_ik>=0 and H_ki>=0. Because NO pure
+i-root or pure k-root is feasible, each has a boundary blocker:
+
+    H_ji<0 for some protected j in B,
+    H_lk<0 for some protected l in B.
+
+The condition H a>=0 forces H_jk>0 and H_li>0, so j and l are distinct.
+There are only four players. Therefore B is ALL four labels, v=s, and
+the two protected rows have opposite strict blocking signs. This is a
+specific surviving boundary, NOT a contradiction or an excluded table.
+
+The next global question is still genuinely open: eliminate the uniformly
+interior punishment-price branch (even though its entire root Nash
+correspondence is now inert), or use this exceptional two-unprotected
+boundary's joint-role structure in a full-law variation. Private CE has
+additional conditional constraints and does not inherit this proof.

@@ -54,6 +54,11 @@ Section18.8 is a separate UNREVIEWED common-price refinement, with an
 actual arbitrary-data producer but no original-regret selection theorem.
 An exact good shared component need not admit those common prices.
 No arbitrary-table selector or new UE class follows.
+Sections18.9--18.10 are separate UNREVIEWED operation tests. A positive
+joint-tail floor makes an exact source entail exact original Nash; a
+binding-prefix test for the hard source instead requires the WHOLE
+continuation budget-credit value, not only its actual payoff and cap.
+Neither test falsifies the hard source's whole-minimum question.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -2776,3 +2781,150 @@ Nash existence. Approximate source existence with epsilon tending to0
 remains a genuinely joint equilibrium-production problem, not a compact
 fixed-point consequence. Restoring a positive tail floor cannot supply
 the missing automatic selector for the hard shared source.
+
+### 18.10. Exact binding-prefix agency uses continuation credit
+
+Status: ORDINARY UNREVIEWED supporting mathematics, not an arbitrary-table
+selector or a new UE class. This tests a concrete proposed joint operation
+inside the SAME hard-budget correspondence, including every complete own
+replacement. The narrow search for budget-credit/relaxed-budget value
+functions in Quitting/Root, Quitting/Terminal and the two neighboring BOX
+notebooks found no matching claim. No new Lean declaration is asserted.
+
+Fix delta,c and p in N_delta. For fixed tail opponents p_-i define
+
+    V_i(k)=max U_i(law,p_-i) over laws with
+            S_law(t)*A_-i(t)<=k*c^(t+1) for every t,   k>=0.
+
+For every finite k the feasible set is nonempty compact convex, and its
+payoff is continuous by the uniform joint-tail bound k*c^(t+1).
+Consequently the displayed maximum exists. Mixing feasible laws proves
+that V_i is nondecreasing and concave in k; it is bounded between-M and M.
+V_i(1)=U_i(p). Quit0 is feasible at k=0. Thus its finite right derivative
+
+    kappa_i=V_i'(1+) satisfies
+    0<=kappa_i<=U_i(p)-V_i(0)<=U_i(p)-f_i(0)<=2M.
+
+When s_i>=0, every finite deadline becomes feasible at some finite k,
+and Never is below the limit of finite deadlines. Hence
+
+    lim_(k->infinity)V_i(k)=B_i(p).
+
+In particular positive full debt implies kappa_i>0: concavity and
+monotonicity would make V_i constant after1 if kappa_i=0. The converse
+need not be inferred from a supplied choice of an LP multiplier; kappa_i
+is the actual one-sided value derivative.
+
+Prefix operation. Choose an independent root q with
+
+    product_i(1-q_i)=c.
+
+All q_i<1. Prepend it to p, using fresh independent private coins. This
+new actual profile is feasible for the SAME budget. Write r_i=1-q_i,
+alpha_i=product_(j!=i)(1-q_j)=c/r_i, and let Q_i,B_i^stop denote the
+root Quit endpoint and the nonempty-opponent stopping term. These are
+not the full cap B_i(p).
+
+Every legal COMPLETE replacement has some root Continue mass x in[0,r_i].
+If x>0, its conditional tail must obey exactly the relaxed budget
+
+    S_law(t)*A_-i(t)<=(r_i/x)*c^(t+1).
+
+There is no omitted tail constraint: the root condition is x<=r_i, and
+the later conditions are precisely this display. Its best possible total
+payoff is therefore
+
+    J_i(x)=(1-x)*Q_i+x*B_i^stop
+                        +x*alpha_i*V_i(r_i/x),
+    J_i(0)=Q_i.
+
+The perspective of a concave function is concave, so J_i is concave on
+[0,r_i], continuously extended at0. The prescribed choice uses x=r_i
+and the maximizing tail p_i. Its left derivative at that endpoint is
+
+    J_i'(r_i-)=B_i^stop+alpha_i*(U_i-kappa_i)-Q_i.
+
+A concave function is maximized at its right endpoint exactly when this
+left derivative is nonnegative. Thus the complete, necessary-and-sufficient
+preservation test is
+
+    prefix_q(p) belongs to N_delta iff, for EVERY i,
+    Q_i<=B_i^stop+alpha_i*Psi_i,
+                    Psi_i=U_i-kappa_i.                    (18.15)
+
+This is an exact legal joint operation, not a claim that a suitable root
+always exists. Its strategic continuation is the individual budget-value
+intercept Psi, not the actual U or full B, nor a common price supplied
+independently of the profile.
+
+Full-regret account. Under(18.15), Q_i is below both the actual Continue
+endpoint and the full Continue cap. The unrestricted prefix cap is the
+latter. Thus, putting d_i=B_i(p)-U_i(p),
+
+    d_i'=alpha_i*d_i
+          +q_i*(B_i^stop+alpha_i*U_i-Q_i).             (18.16)
+
+This shows the competing effects: other players' root quitting contracts
+the debt, but the forced own root atom can increase it. Feasibility and
+exact constrained agency do not by themselves give descent.
+
+A finite exact extremum consequence. For the single-owner binding root
+q_k=delta and q_j=0 otherwise, preservation is equivalent to
+
+    Psi_k>=s_k,
+    c*(Psi_j-s_j)>=delta*[r_j({j,k})-r_j({k})]  (j!=k).
+
+Then d_k'=d_k+delta*(U_k-s_k) and d_j'=c*d_j for j!=k.
+At a minimizer of TOTAL full debt D=sum_i d_i over N_delta, every such
+admissible owner must consequently satisfy
+
+    B_k(p)-s_k>=D,
+
+since D'-D=delta*[B_k(p)-s_k-D] exactly. This is a restriction at the
+WHOLE attained correspondence minimum, not a statement that its admissible
+owner exists. In particular a low-cap owner with positive own debt cannot
+pass the first inequality: Psi_k<=U_k=B_k-d_k<s_k. The old low-cap
+escape operation is therefore not inherited automatically by this source.
+
+Exact small test of the missing continuation state. Two players have
+
+    r({0})=(1,2), r({1})=(2,1), r({0,1})=(4,4).
+
+Take delta=19/100,c=81/100, and both private clocks geometric with hazard
+1/10. Their joint survival exactly equals c^(t+1). Against the other clock,
+the finite response curve is strictly increasing:
+
+    f(t)=2-(7/10)*(9/10)^t.
+
+The source's own survival must be at most(9/10)^(t+1), so its geometric
+law is the stochastically latest feasible law and maximizes this curve.
+Thus p is an actual member of N_delta, with
+
+    U_i=31/19, B_i=2, V_i(0)=13/10,
+    V_i(k)=13/10+k*(63/190) near k=1,
+    kappa_i=63/190, Psi_i=13/10.
+
+Now prepend q=(19/100,0), whose joint survival is exactly c. Both root
+Continue endpoints at the ACTUAL U exceed their root Quit endpoints.
+For player1 they are respectively3233/1900 and157/100. Nonetheless this
+prefix is NOT source Nash: move a mass epsilon,0<epsilon<=1/10, from
+player1's date1 atom to date0. This accelerates its clock and is legal.
+Its date1 response is1433/1000, while its date0 response is157/100.
+The complete deviation gains exactly137*epsilon/1000. Equivalently
+the player1 left derivative in(18.15) is-137/1000.
+
+There is no whole-source obstruction in this table: both players Quit0
+is a full exact Nash with payoff4 and also belongs to N_delta. The test
+falsifies only the proposed preservation implication from one-stage
+Continue optimality at actual U. It is not another bad component offered
+as evidence against the whole minimum.
+
+Current direction. The binding-prefix operation is now checked against
+the exact complete-law seam, not an assumed convex attainable-law set
+or a generic equilibrium-repair principle. To consume it globally one
+must produce, at a positive minimum, an admissible root satisfying(18.15)
+whose actual debt account(18.16) strictly decreases. Neither standard-Q,
+the shared source's compactness, nor the bounded common prescribed price
+proves those simultaneous requirements. Merely naming Psi as a new state
+would add an unconsumed interface; the next mathematical target is that
+minimum-specific selection or a different joint responsibility operation.
