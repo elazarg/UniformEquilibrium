@@ -2,6 +2,18 @@
 
 Author: CODEX_NASH_BOX.
 
+Latest whole-source bridge test: Section44 falsifies a proposed shortcut
+from binding FULL coarse caps and inert root correspondence to a cheap
+normal punishment. Its explicit four-active table and exact private CE
+have all values/caps equal30000, information<4/7, and only all-Continue
+root Nash, yet EVERY normal completion for EVERY owner has relative
+information price>1. The singleton matrix even has strictly positive
+inverse and strict negative neighbor entries. This is NOT a global
+information minimum, UE counterexample, or raw-class exclusion. The
+missing use of genuine global minimality cannot be replaced by these
+strong source-local passports. The next attempt must quantitatively use
+that minimum or produce independent profiles from actual game data.
+
 Latest supporting test: Section43 tries actual collision birth through
 INDEPENDENT local clock-erasure channels, not singleton completion. On K10,
 from its exact uniform-owner private CE, replacing each private clock by
@@ -7193,3 +7205,219 @@ erased coordinate by one common late atom is retired without rate tuning.
 No claim excludes different target laws, coordinate-dependent multi-date
 channels, or the entire source correspondence. In particular this result
 does not strengthen the reviewed collision-necessity reward-class theorem.
+
+## 44. Binding caps and an inert root correspondence do not buy a cheap punishment
+
+Status: ordinary UNREVIEWED exact falsifier of a proposed bridge in the
+WHOLE-source argument. This is not another clock-erasure parameter test.
+The tested assertion would replace the global-minimum hypothesis by
+properties already known at that minimum: nonnegative own singletons,
+FULL coarse cap binding, strict interior values, and an entirely inert
+root Nash correspondence. Even adding full private obedience, negative
+singleton blockers and a strictly positive singleton-matrix inverse does
+not suffice. The counterexample is one explicit four-active source; it
+is NOT asserted to minimize information over its whole game's sources.
+
+### The rejected assertion and literal sixty-coordinate table
+
+For a finite joint complete-clock law mu, let p be the product of its
+marginals and I(mu)=KL(mu||p). A normal completion for owner i is ANY
+joint complete law kappa of its three opponents with ORIGINAL full cap
+C_i(kappa)<=s_i. Completions need not be independent or drawn from a
+fixed finite menu. Its relative price is
+
+    P_i(mu,kappa)=KL(kappa||p_-i),
+
+with infinity allowed. A tempting sufficient theorem for Section41 was:
+if mu is FULL coarse, C_i(mu)=v_i>s_i for every i, and every exact
+Boolean root Nash at continuation v is all-Continue, then SOME owner
+admits a normal completion with P_i<=I(mu). The following exact table
+falsifies this statement, even with FULL private-clock CE in place of
+coarse obedience. Keep A=30000 fixed throughout this section.
+
+Players are Z/4 and Never pays0. Every row below lists recipients0,1,2,3.
+
+| Terminal coalition | Reward vector |
+| --- | --- |
+| 0 | (1,0,A,0) |
+| 1 | (0,1,0,A) |
+| 2 | (A,0,1,0) |
+| 3 | (0,A,0,1) |
+| 01 | (-1,2,A,A) |
+| 12 | (A,-1,2,A) |
+| 23 | (A,A,-1,2) |
+| 03 | (2,A,A,-1) |
+| 02 | (A-1,A,A-1,A) |
+| 13 | (A,A-1,A,A-1) |
+| 012 | (A-1,A+2,A+2,A) |
+| 013 | (A+2,A+2,A,A-1) |
+| 023 | (A+2,A,A-1,A+2) |
+| 123 | (A,A-1,A+2,A+2) |
+| 0123 | (A-1,A-1,A-1,A-1) |
+
+Equivalently every pair's participant insertion gain is+2 from one's
+predecessor, and-1 from either other opponent. For a triple missing j,
+its participant j+1 has insertion gain-1 and its other participants have
+gain+2; all pair-outsider and triple-outsider levels are A. Every grand
+insertion gain is-1. These gains, rather than large raw levels, control
+the entire root argument below.
+
+The singleton comparison matrix is Gamma_ii=0, neighbor entries-1 and
+opposite entries A-1. Writing D=(A-1)(A-3)(A+1), its inverse is the
+circulant matrix with diagonal2/D, neighbor entries(A-1)/D and opposite
+entry((A-1)^2-2)/D. Direct multiplication gives the identity and every
+entry is strictly positive. Each row also has two strict negative
+neighbor entries. No uninspected Q-matrix or degree claim is inferred
+from this calculation.
+
+### Exact full private CE, binding caps and information
+
+Let mu put probability1/7 on EACH of the four triples quitting at0
+(the omitted player Never), and probability3/7 on everyone quitting at0.
+Every player's finite mass is6/7 and Never mass1/7.
+
+Conditioned on one's Quit0 recommendation, the three containing triples
+each have conditional mass1/6 and the grand coalition has mass1/2.
+Own prescribed value is
+
+    [(A-1)+(A+2)+(A+2)]/6+(A-1)/2=A.
+
+Removing oneself leaves at least two opponents at0, and EVERY resulting
+opponent coalition pays that recipient A. Thus any strictly later finite
+deadline and literal Never give A, exactly the prescribed conditional
+value. Conditioned on one's Never recommendation, all three opponents
+quit at0: following gives A, joining gives A-1, and any later deadline
+gives A. Randomized recommendation-dependent complete replacements are
+mixtures of these conditional pure replies. Hence mu is an EXACT FULL
+private-clock CE. In particular
+
+    v_i=C_i=A,   V_i(Quit0)=A-1/7,
+    V_i(h)=V_i(Never)=A   for every finite h>=1.
+
+Its positive information is
+
+    I(mu)=4h(1/7)-H(1/7,1/7,1/7,1/7,3/7)
+         =(3/7)log(3/7)-(24/7)log(6/7)<4/7.          (44.1)
+
+The last inequality uses the negative first term and
+-log(6/7)<=1/6. Information is positive because mu is not the product
+of its nondegenerate marginals.
+
+### The ENTIRE root Nash correspondence at continuation v is inert
+
+For a product root q write D_i(q)=QuitValue_i-ContinueValue_i, with
+all-Continue continuation A. Every active player q_i>0 must have D_i>=0.
+Any nonempty proper support S of the directed four-cycle has a source
+i in S whose predecessor is absent. Every nonempty opponent subset in
+that support has insertion gain-1 for i: this includes the whole triple
+when |S|=3. Writing P0 for its opponent all-Continue probability,
+
+    D_i=(1-A)P0-(1-P0)<0.
+
+Thus any nonzero Nash root would have ALL FOUR players active, including
+possibly sure quitters. Since each nonempty insertion gain is at most2,
+
+    0<=D_i<=2-(A+1) product_(j!=i)(1-q_j).
+
+Put epsilon=2/(A+1). The second-smallest of the four Continue
+probabilities is at most tau=epsilon^(1/3): the product excluding the
+smallest is at least its cube and at most epsilon. Hence some TWO q's
+are at least1-tau. Change those two to1, obtaining qbar.
+
+Define g_i(empty)=0 and g_i(B)=r_i(B+i)-r_i(B) for nonempty opponent
+B. Its range lies in[-1,2]. The negative empty continuation term gives
+
+    D_i(q)<=E_q g_i<=E_qbar g_i+6tau.                 (44.2)
+
+Indeed coupling the two changed Bernoulli coordinates costs probability
+at most2tau and payoff range3. The factor6 is only a convenient bound;
+no optimization is needed.
+
+If the two sure coordinates of qbar are adjacent j,j+1, take i=j-1.
+The triple containing those sure opponents and i has source i and gain-1;
+adding the fourth player gives the grand gain-1. Therefore E_qbar g_i=-1.
+If the sure coordinates are opposite j,j+2, put x=qbar_(j-1),
+y=qbar_(j+1). Their two own expected insertion gains are
+
+    E_qbar g_j=-1+3x(1-y),
+    E_qbar g_(j+2)=-1+3y(1-x).
+
+At least one is at most-1/4, since
+min{x(1-y),y(1-x)}<=1/4. This proof includes boundaries and additional
+sure coordinates. The selected recipient is active in the original root
+because all four were active. Finally
+
+    epsilon=2/30001<1/24^3,
+    6tau<1/4.
+
+Equation(44.2) makes some active D_i strictly negative, a contradiction.
+All-Continue itself is strict Nash since A>1. Consequently it is the
+ONLY exact root Nash at v, with no support, sure-face or relabeling
+choice omitted. The argument does not assert stationary nonexistence
+at other payoff vectors or the absence of nonstationary equilibria.
+
+### EVERY normal completion has price greater than1
+
+Fix ANY owner i and ANY complete opponent law kappa with full original
+cap at most s_i=1. If its price is infinite there is nothing to prove.
+Otherwise absolute continuity to p_-i forces every opponent clock to
+belong to{0,Never}. This is a consequence of finite price, not a restriction
+placed on the original completion correspondence.
+
+Under p_-i each opponent independently quits at0 with probability6/7.
+Let G consist of no opponent quitting, or exactly ONE of the two neighbor
+opponents quitting. Then
+
+    p_-i(G)=(1+6+6)/7^3=13/343.
+
+On its complement B, a sole opposite, an opponent pair, or the opponent
+triple quits; recipient i's payoff from quitting at1 is A. On G that
+deadline pays1 when all opponents Never and0 otherwise. Normality
+therefore implies kappa(B)<=1/A.
+
+Binary KL contraction, h(b)<=log2, and p_-i(B)<=1 give
+
+    P_i(mu,kappa)
+      >=(1-kappa(B))log(343/13)-log2
+      >=(1-1/A)log(343/13)-log2
+       >2log2>1>I(mu).                                (44.3)
+
+Here A>=4 and343/13>16 suffice for the strict comparison. It is uniform
+over EVERY owner and EVERY normal complete completion, not only product
+punishments, literal Never, or a numerically selected KL minimizer. A
+common translation of source and completion makes no change: the
+translated support has one common finite date and the analogous legal
+reply immediately afterwards gives the same inequality.
+
+### What this test changes, and what remains genuinely global
+
+Thus full coarse binding, strict payoff interior, full private obedience,
+an inert entire root correspondence, strict singleton blockers and even
+positive inverse singleton geometry do NOT force a cheap punishment.
+The uniform price obstruction at a hypothetical GLOBAL minimum in
+Section41 is compatible with all these local conditions. This source
+does not refute that obstruction or global information minimization;
+no claim identifies it with the global minimum, and no positive
+exploitability gap or uncovered-table certificate is supplied.
+
+An independent Fraction enumeration checked the five actual atoms,
+all conditional prescribed/reply rows, all unconditional deadline/Never
+caps, the inverse product,255 nonzero roots on{0,1/3,2/3,1}^4 and the
+sure-pair formulas. The grid is corroboration only; the entire-root and
+entire-completion proofs are(44.2)--(44.3).
+
+Source inspection for this attempt: the conjecture proposition in
+`UniformEquilibrium/Quitting/Conjecture/Basic.lean`; the endpoint declaration
+`quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
+in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`;
+and the precise conditional path result
+`successorPath_mem_and_absorptionSum_le_of_linearDefect` in
+`UniformEquilibrium/Quitting/Paths/StrictAllContinueBasinSuccessorPath.lean`.
+The last result controls a supplied approximate-root path and explicitly
+does not produce one; nothing here treats root inertness as global
+source isolation. No Lean checks or publication theorem are used.
+
+The rejected cheap-price theorem is retired without strengthening the
+source passports again. The next problem must quantitatively exploit
+genuine global minimality through a feasible multi-date change, or
+construct independent low-regret laws directly from arbitrary raw data.
