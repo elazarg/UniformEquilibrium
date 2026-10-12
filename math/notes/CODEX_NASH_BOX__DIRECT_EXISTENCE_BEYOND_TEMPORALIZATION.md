@@ -2,6 +2,16 @@
 
 Author: CODEX_NASH_BOX.
 
+Section46 gives an actual ALL-INDEPENDENT-STOPPING-LAWS inequality for
+Section44's A=30000 table. Every all-errors low-regret sequence has limiting
+mean payoff at most A-1376299/125000. In particular the correlated source's
+payoff (A,A,A,A) cannot be rounded into independent approximate Nash play,
+even by completely changing its calendar and target-free source laws. The
+proof sums actual played-Quit losses and covers arbitrary unbounded clocks
+and Never. This is a PAYOFF-REGION exclusion, NOT a positive gap against all
+profiles or a UE counterexample. Lower equilibrium targets remain open; the
+construction search must now use them rather than preserve the A target.
+
 Section45 tests the entropy-hole variation at the WHOLE minimizing-sequence
 level. Given the already supplied fixed strict FULL coarse anchor, every
 exact coarse minimizing sequence has a replacement sequence that is exact,
@@ -7597,3 +7607,195 @@ to move. Neither full support nor arbitrarily small strict coarse slack
 settles that assertion. No new paper claim or Lean declaration is used;
 the only source assumption beyond finite reward semantics is the already
 recorded Section28/40 strict-anchor construction.
+
+## 46. An actual whole-law upper chamber for the A=30000 table
+
+Status: ordinary UNREVIEWED theorem and proof. This is the first resumed
+actual-law test of Section44's literal table, not a statement about only
+stationary profiles or roots with continuation fixed at A. It excludes one
+payoff region over ALL independent complete stopping laws. It does not
+exclude all equilibrium payoff targets and supplies no UE counterexample.
+
+### Statement, information and agency
+
+Use precisely the sixty terminal coordinates in Section44, with A=30000,
+independent private behavioral randomization, the unique public live history,
+and Never payoff zero. A player may replace its whole behavioral strategy.
+For ANY profile of independent complete stopping laws on Nat plus Never,
+let U_i be its expected terminal payoff, C_i its unrestricted behavioral cap,
+and rho=sum_i(C_i-U_i). All rewards lie in[-1,A+2], and all these terminal
+debts are nonnegative. Then
+
+    mean_i U_i <= A-1376299/125000+(1470049/6000)rho.       (46.1)
+
+Consequently any sequence with unrestricted terminal regret tending to zero
+in every coordinate has limiting mean payoff at most
+
+    A-1376299/125000 = A-11.010392.
+
+If mean U>=A, some player's unrestricted terminal regret exceeds1/100.
+This conclusion allows arbitrary new calendars, unbounded stopping laws,
+improper laws and arbitrary movement of the four individual payoffs.
+It requires the ONE restriction mean U>=A. No argument below derives that
+restriction from low regret, so it is not a whole-game positive-gap result.
+
+### Accumulating actual played-Quit losses
+
+Write q_i(t) for the live hazard, p(t)=product_i P(T_i>=t) for actual joint
+live reach, and u_i(t) for the actual terminal value of the suffix starting
+live at date t. Define suffixes also at histories of zero reach by the given
+strategy; always u_i(t)>=-1. At date t let Q_i and B_i be the literal Quit
+and Continue endpoint values with continuation u_i(t+1), and put
+
+    d_i(t)=Q_i-B_i,
+    ell_i(t)=q_i(t) max(-d_i(t),0).
+
+For EVERY finite T, the permitted unilateral replacement that suppresses
+exactly the negative-d_i Quit coins before T, and follows the original
+strategy afterwards, earns gain
+
+    sum_(t<T) p_alt(t) ell_i(t),
+
+where p_alt is its modified joint live reach. This is an exact finite
+telescoping identity: using u_i(t) as potential, the one-date improvement
+is ell_i(t); the identical original suffix at T cancels the remainder.
+Each suppressed coin only increases that player's live survival, so
+p_alt(t)>=p(t). Taking increasing finite T gives
+
+    C_i-U_i >= sum_(t>=0) p(t) ell_i(t).                 (46.2)
+
+No infinite modified policy, opponent properness, terminal-tail limit or
+interchange of conditioning and supremum is needed. Each finite replacement
+is legal and its gain is capped by C_i-U_i. All summands are nonnegative.
+The argument is valid for arbitrary complete behavioral deviations because
+it constructs a particular permitted deviation; no restriction on C_i is
+imposed.
+
+### Any two nearly sure hazards spend a fixed amount of debt
+
+Set tau=1/25. Call a root marked if two of its hazards are at least1-tau.
+At EVERY marked root, for ANY suffix value vector u'>=-1,
+
+    sum_i q_i max(B_i-Q_i,0) >= 6/125.                 (46.3)
+
+Here the root can have any active support, any additional sure coordinates,
+and any payoff vector. To prove this, use Section44's nonempty insertion
+gains g_i(E)=r_i(E+i)-r_i(E), which lie in[-1,2], and set g_i(empty)=0.
+For the actual endpoint difference,
+
+    d_i=E g_i+(1-u'_i)P(opponent empty)
+        <=E g_i+2P(opponent empty).                    (46.4)
+
+Changing one opponent hazard by at most tau changes E g_i by at most3tau.
+
+First suppose the nearly sure pair is opposite, j,j+2. Set those two
+hazards to1 for this calculation. With x=q_(j-1), y=q_(j+1), their two
+own expected insertion gains are
+
+    -1+3x(1-y),   -1+3y(1-x).
+
+At least one is at most-1/4, since
+min{x(1-y),y(1-x)}<=1/4. For its recipient i only ONE changed coordinate
+is an opponent. Returning that coordinate to the original root costs at
+most3tau; its opponent-empty probability is at most tau. Equation(46.4)
+therefore gives d_i<=-1/4+5tau=-1/20. Its original hazard is at least24/25,
+so ell_i>=6/125.
+
+Now suppose the pair is adjacent, j,j+1, and put y=q_(j-1). For i=j-1,
+setting the pair to1 gives insertion gain-1 regardless of the remaining
+opponent. Undoing both changes and using the two nearly sure opponents
+in the empty probability gives
+
+    d_(j-1)<=-1+6tau+2tau^2=-473/625.
+
+If y>1/5, its played-Quit loss is greater than473/3125>6/125. If y<=1/5,
+consider recipient j instead. With opponent j+1 set to1 its expected
+insertion gain is -1+3y(1-q_(j+2))<=-1+3y. Undoing this ONE change and
+bounding the empty term gives
+
+    d_j<=-1+3y+5tau<=-1/5.
+
+Since q_j>=24/25, ell_j>=24/125>6/125. This completes all marked roots.
+In particular the selected losing participant is always actually played;
+the proof never infers an active support from a high payoff target.
+
+By(46.2), summing over marked dates gives
+
+    sum_(marked t) p(t) <=(125/6)rho.                 (46.5)
+
+The actual absorption mass on those dates is no larger.
+
+### Unmarked roots necessarily create low-social-payoff coalitions
+
+Call a terminal coalition bad if it is a singleton or an adjacent pair.
+Let beta(q) be the probability of a bad coalition at a root, and
+h(q)=1-product_i(1-q_i) its absorption probability. At an unmarked root,
+
+    beta(q)>=(49/62500)h(q).                          (46.6)
+
+Choose j with largest hazard q_j. The other three hazards are at most24/25.
+The event in which j quits, its opposite j+2 continues, and its two
+neighbors do not BOTH quit consists entirely of bad coalitions. Thus
+
+    beta(q)>=q_j(1-q_(j+2))(1-q_(j-1)q_(j+1))
+            >=q_j*(1/25)*(49/625).
+
+Since h(q)<=sum_i q_i<=4q_j, equation(46.6) follows. The all-Continue
+root is included. No conditional stationarity or bounded calendar is used.
+
+Let N=P(all players Never), and let B be the actual probability of a bad
+first terminal coalition. Summing(46.6) with actual reach weights and
+using(46.5) gives
+
+    B>=(49/62500)[1-N-(125/6)rho].                    (46.7)
+
+The bracket is allowed to be negative; the inequality remains valid.
+
+The social average at a singleton is(A+1)/4, at an adjacent pair is
+A/2+1/4, at an opposite pair is A-1/2, at a triple is A+3/4, and at the
+grand coalition is A-1. Consequently
+
+    mean U <=(A+3/4)(1-N)-((A+1)/2)B
+           <=[A+3/4-((A+1)/2)(49/62500)](1-N)
+                +((A+1)/2)(49/62500)(125/6)rho.
+
+The coefficient of(1-N) is positive. Dropping N and substituting A=30000
+gives(46.1). Exact rational arithmetic gives, under mean U>=A,
+
+    rho>=8257794/183756125>1/25,
+
+so one of the four coordinate regrets exceeds1/100.
+
+### What this does and does not tell the actual construction
+
+This rules out an arbitrary-law approximation to the correlated A target,
+not just exact roots at that target. It also shows why an independent
+low-regret construction must retain an appreciable singleton/adjacent-pair
+component: low regret bounds the total reach of roots with two nearly sure
+hazards, and the remaining roots create bad first coalitions quantitatively.
+It does NOT show that such low-payoff play is impossible. In particular
+positive global-minimum cap roots being all-Continue does not force their
+cap vector to equal A, and equation(46.1) cannot be applied as a contradiction
+to an arbitrary hypothetical minimum without a separate cap-region theorem.
+
+The next concrete question is whether the needed low-payoff, low-regret
+chronology can be constructed, with the rare opposite-singleton rewards
+paying for the neighbors' early Quit alternatives. The four-singleton
+calendar at this table fails its positive adjacent-pair joining endpoint;
+one cannot fix it merely by splitting its large owner coin, since that
+would remove the negative-pair threat protecting the other low coordinate.
+An actual construction needs changed collision/continuation roles.
+
+Source inspection: the exact terminal/all-errors and gap declarations listed
+in Section44 were reopened. The finite-law independent realization was
+checked through `quittingFiniteDeadlineTimingProfile` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineTimingGame.lean` and the
+displayed-menu-only scope through `IsQuittingFiniteDeadlineNash` in
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineReplyCap.lean`.
+For local loss bookkeeping I inspected
+`quittingRootCoordinateNashDefect_eq_actionProbability_mul_posPart` in
+`UniformEquilibrium/Quitting/Root/NashDefect.lean`; equation(46.2) is the
+ordinary finite-prefix performance argument above, not a claim that this
+whole-law bound has been checked in Lean. No paper theorem or Lean build is
+used, no new strategy-class completeness claim is made, and no export is
+requested for this supporting payoff-region result.
