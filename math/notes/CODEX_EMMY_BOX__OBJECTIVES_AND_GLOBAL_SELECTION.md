@@ -59,6 +59,12 @@ joint-tail floor makes an exact source entail exact original Nash; a
 binding-prefix test for the hard source instead requires the WHOLE
 continuation budget-credit value, not only its actual payoff and cap.
 Neither test falsifies the hard source's whole-minimum question.
+Section18.11 is a separate UNREVIEWED whole-operation consequence of the
+reviewed actual collision-necessity theorem: arbitrarily many small
+Continue-optimal prefixes cannot turn a uniformly positive-debt seed into
+small full regret on the K10 table. This includes every exact binding-prefix
+word from18.10, even when roots are jointly reselected. It does not falsify
+the entire shared correspondence, which may select a good seed elsewhere.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -2928,3 +2934,110 @@ the shared source's compactness, nor the bounded common prescribed price
 proves those simultaneous requirements. Merely naming Psi as a new state
 would add an unconsumed interface; the next mathematical target is that
 minimum-specific selection or a different joint responsibility operation.
+
+### 18.11. Small binding-prefix words cannot repair a positive-debt seed
+
+Status: ORDINARY UNREVIEWED complete operation falsifier, not a whole-source
+falsifier or a new UE-class exclusion. Its input is the independently
+reviewed Section3.4 collision-necessity theorem in
+`CODEX_EMMY_BOX__OPPONENT_COINCIDENCE_BARRIER.md`; the new conclusion is an
+exact constraint on ALL small Continue-optimal prefix words, including
+those whose seed already has macroscopic collisions. This is not an
+attempt to make the final profile globally diffuse.
+
+Fix the literal K=10 four-player table of that theorem: singleton own1,
+opposite4, neighbors0; adjacent pair donor-1, successor2, outsiders1;
+opposite pair members0, outsiders1; triple participants-1, outsider10;
+grand9. For ANY actual independent private-clock profile p put
+
+    E(p)=max_i[B_i(p)-U_i(p)],
+    beta(p)=Pr(first finite quitting coalition has size at least2).
+
+The reviewed theorem supplies one table-dependent gamma>0 such that
+
+    E(p)+beta(p)>=gamma             for EVERY actual p.      (18.17)
+
+That theorem keeps full finite-deadline/Never/behavioral agency and
+arbitrary independent laws. The table itself has UE by the frozen
+passive-triple cap-chamber theorem; no positive full-gap claim is intended.
+
+Operation. Starting from an arbitrary actual seed p, prepend a FINITE word
+of arbitrary independent product roots. Roots may be selected jointly,
+depend on all current semantic data, and have different absorption rates
+theta_l, subject only to
+
+    0<=theta_l=1-product_i(1-q_li)<=delta<=1/2,
+    Q_li<=b_li+alpha_li*U_(tail_l),i     for EVERY i,l.        (18.18)
+
+Thus Continue is weakly preferred at the ACTUAL prescribed continuation,
+not merely for active players. The exact complete-law binding prefixes
+in18.10 satisfy this: their stronger endpoint test uses Psi<=U. Nothing
+here assumes that an arbitrary Continue-optimal root preserves N_delta.
+
+Write S=product_l(1-theta_l), the probability of reaching the original
+seed, and let p' be the actual word-prefixed profile. Then
+
+    E(p')>=S*E(p),
+    beta(p')<=2delta*(1-S)+S*beta(p).                       (18.19)
+
+Proof of the first bound. At one root abbreviate the actual Continue
+endpoint by C_i=b_i+alpha_i*U_i. Under Q_i<=C_i, its full cap is the
+Continue cap, so the exact coordinate account is
+
+    d_i'=alpha_i*d_i+q_i*(C_i-Q_i)>=c*d_i,
+                     c=product_j(1-q_j).
+
+Iterate for EACH fixed recipient before taking the maximum. This is the
+full-cap account, not a restricted-root regret estimate.
+
+Proof of the second bound. At one root, put t=sum_i q_i and let b denote
+its probability of at least two quitters. For theta<=1/2,
+
+    t<=-log(1-theta)<=2theta,
+    b<=sum_(i<j)q_i*q_j<=t^2/2<=2theta^2<=2delta*theta.
+
+The first inequality follows from log(1-x)<=-x, including the zero root;
+theta<1 excludes sure probabilities. Multiply by the root's preceding
+joint reach and sum. The first-absorption telescope is exactly
+sum_l(reach_l*theta_l)=1-S. Collision AFTER reaching the seed contributes
+exactly S*beta(p), independently of the prefix. This proves(18.19).
+
+Combining(18.17)--(18.19), if e=E(p)>0, gives the explicit lower bound
+
+    E(p') >= e*(gamma-2delta)/(e+beta(p)).                    (18.20)
+
+Indeed S<=E(p')/e, so
+gamma<=E(p')+2delta+S*beta(p)
+       <=2delta+E(p')*(1+beta(p)/e).
+If the seed family satisfies e>=e0>0, then beta(p)<=1 yields
+
+    E(p')>= e0*(gamma-2delta)/(1+e0).
+
+For delta<=gamma/4 this is a uniform positive constant, independent of
+word length, ALL root selections, and all seed collision patterns. If
+beta(p)=0, the sharper bound is E(p')>=gamma-2delta.
+
+The same structural fork can be read without constants. If the prefixes
+erase the seed's reach, they erase its possible collision contribution,
+while creating only O(delta) new collisions; the actual collision theorem
+then prevents small full regret. If the seed remains reached, the exact
+debt lower bound retains an order-one fraction of its positive debt.
+The seed may have arbitrary macroscopic support and simultaneous quits;
+this is stronger than applying a globally small-hazard obstruction to
+the final profile.
+
+Consequence for the current mechanism. Repeating exact binding prefixes
+from18.10 cannot be a general repair algorithm from uniformly bad shared
+components on this table, even with unrestricted global choice of the
+entire word. It could still preserve or improve already good components,
+and does NOT refute
+`liminf_delta min_(p in N_delta) E(p)=0`.
+
+To obtain a new component by prefixing, one must permit either a
+macroscopic root (which creates strict joint-budget slack), or a seed
+whose full debt is already small. In the former case keeping the old tail
+unchanged is not generally a legal exact-response operation: the new slack
+enlarges each reached player's complete tail budget. A genuinely joint
+tail re-equilibration, or a selection principle over the whole source,
+is therefore load-bearing. The next question is that slack-consuming
+operation, not another one-stage root selector at U, B, or Psi.
