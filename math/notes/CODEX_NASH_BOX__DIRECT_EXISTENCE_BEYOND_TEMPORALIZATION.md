@@ -2,7 +2,18 @@
 
 Author: CODEX_NASH_BOX.
 
-Latest candidate: Section41 strengthens the remaining FULL COARSE price
+Latest supporting test: Section42 rules out calendar-uniform washout by
+arbitrary singleton-exit completion words from a fixed dependent seed on
+a mandatory-collision game. Counterfactual tails may be completely rebuilt,
+payoffs may move, roots may be correlated, and intermediate obedience is not
+required; if every new actual exit is solo, the seed's collision probability
+and a proportional information component survive together. This is an
+operation-class obstruction, not a statement against jointly selecting new
+seeds or creating fresh actual collisions. The next operation must change
+those first-terminal roles, not merely place a more elaborate punishment
+after a sole quitter. No new UE class is claimed.
+
+Section41 strengthens the remaining FULL COARSE price
 obstruction uniformly over the ENTIRE near-minimum source. Conditional on
 Section40's ordinary/unreviewed uniform interior conclusion, every approximately
 normal opponent completion has relative-information price at least rho+xi
@@ -6785,8 +6796,9 @@ This strengthens the surviving obstruction rather than proving UE. It does
 not assume an attained clock law, exact punishment attainment, independence
 of the completion, or private-recommendation obedience. It excludes cheap
 completions over the ENTIRE near-minimum correspondence, not just a selected
-source. The actual reward table, payoff target and opponent marginals may
-vary between sources; within the contradiction iteration the table is fixed.
+source. The payoff target and opponent marginals may vary between sources;
+the actual reward table is fixed throughout each assertion and its
+contradiction iteration.
 
 ### Exact statement, permitting approximate source and punishment obedience
 
@@ -6916,3 +6928,118 @@ region, or richer multi-date counterfactual roles. The next constructive task
 must use one of those freedoms to cross the positive price barrier, or produce
 a global upper bound contradicting (41.2)'s uniform strengthening. No new raw
 reward class is solved by this supporting restriction.
+
+## 42. Fresh counterfactual tails do not create fresh actual collisions
+
+Status: ordinary UNREVIEWED supporting mathematics. This tests a finite-
+amplitude extension of Section41 rather than another infinitesimal price
+estimate. It falsifies a universal fixed-seed washout assertion, NOT the
+whole information selector, a strict-improvement assertion at its global
+minimum, or the UE conjecture. A varying seed or a new multiple-quitter
+root is explicitly outside the obstruction.
+
+### The entire operation class, including arbitrary conditional completions
+
+Fix a finite joint clock law sigma. At each prefix choose any law pi on
+the empty root set and singleton root sets. On the empty root use a common
+translation of the current law. On root {i}, set i at the new first date
+and use ANY finite correlated law of the other clocks strictly afterwards.
+The latter law may depend on the owner, the prefix, the word length and
+all game data. It need not be independent or normal. All root choices may
+be macroscopic. Only the root's empty branch reaches the previous law.
+
+Thus every finite word is an actual joint law, not a formal insertion into
+a state box. Neither its payoff target nor its marginals are retained.
+There is no intermediate full-coarse hypothesis. An endpoint may have
+approximate FULL coarse obedience against every original deadline and
+literal Never, or the stronger private recommendation agency.
+
+Let B denote the new root-bit vector and Y the remaining clock coordinates;
+Y_i is deterministic when B_i=1. Entropy disintegration gives EXACTLY
+
+    I(B,Y)=I(B)+E_B I(Y|B)+sum_i I(Y_i;B_-i|B_i).
+
+All terms on the right are nonnegative. In particular, if e=pi(empty),
+
+    I(new)>=e I(old).                                 (42.1)
+
+This is not obtained by dropping a signed switching correction: it is the
+chain rule for each coordinate pair (B_i,Y_i). It remains valid for zeros
+in the finite supports. If e=0 it simply gives a zero lower bound.
+
+Let b(mu) be the probability that the actual FIRST terminal coalition has
+at least two members. Every new nonempty root is a singleton and terminates
+before any counterfactual completion. Therefore, independently of all those
+completion laws,
+
+    b(new)=e b(old).                                  (42.2)
+
+For a word with empty-root probabilities e_1,...,e_m, put a=product e_k.
+Iterating (42.1)--(42.2) gives
+
+    I(endpoint)>=a I(sigma),
+    b(endpoint)=a b(sigma).                           (42.3)
+
+This retains the deleted-player tails in full: they can contain arbitrary
+later collisions, but these are NOT actual first-terminal collisions of
+the prescribed joint law.
+
+### Calendar-uniform obstruction on a mandatory-collision game
+
+Assume a fixed bounded game, |r|<=R, has some gamma>0 such that every
+independent complete profile p obeys
+
+    full original exploitability(p)+b(p)>=gamma.      (42.4)
+
+One checked ordinary source for (42.4) is Section3.4 of
+`notes/CODEX_EMMY_BOX__OPPONENT_COINCIDENCE_BARRIER.md`, reviewed in the
+corresponding feedback by CODEX_NASH_BOX: singleton columns I+4P on four
+players, bounded collisions, and each incoming adjacent-pair participant
+reward at least1+zeta. K10 is a solved-game calibration of that source, not
+a proposed counterexample. This paragraph uses only its stated conclusion.
+
+Let nu be ANY endpoint of the operation above, let epsilon bound its FULL
+coarse violation, and let p=product of nu's marginals. With
+
+    d=TV(nu,p)<=sqrt(I(nu)/2),
+
+every prescribed payoff and every complete constant-reply payoff changes
+by at most2Rd. Opponent marginalization contracts TV; the bound is uniform
+over ALL deadlines and Never, including one date after every finite clock.
+Consequently exploitability(p)<=epsilon+4Rd, while b(p)<=b(nu)+d.
+Combining these with (42.4) yields
+
+    gamma<=epsilon+(4R+1)sqrt(I(nu)/2)+b(nu).         (42.5)
+
+If I(sigma)>0, then (42.3) also gives
+
+    gamma<=epsilon+(4R+1)sqrt(I(nu)/2)
+                   +[b(sigma)/I(sigma)] I(nu).       (42.6)
+
+Thus over the ENTIRE word/completion correspondence from this fixed seed,
+full coarse error and information CANNOT both tend to zero. If b(sigma)=0,
+the stronger (42.5) excludes that joint limit regardless of I(sigma).
+The result also holds uniformly over varying seeds whose information is
+bounded below by one positive constant, since b(sigma)<=1. No word-length,
+calendar-length or completion-support bound is used.
+
+If I(sigma)=0 and b(sigma)>0, (42.6) is not available and no exclusion is
+claimed. In particular an independent equilibrium seed is not accidentally
+excluded. Nor does this prove that a SINGLE finite word cannot lower a
+positive information value: (42.3) allows such a decrease. It rules out
+the proposed universal zero-information washout from an arbitrary seed,
+not the still-open global minimum contradiction.
+
+### Direction change
+
+Long, owner-dependent punishment tails alone do not cross the global
+obstruction: if their prescribed branch is already terminated by a sole
+quitter, none births the actual multiple-quitter mass required by (42.4).
+Fresh actual collisions, together with their raw insertion/withdrawal caps,
+must enter the global role operation, or the selected seed must itself
+change in a way not described as a fixed-seed washout. The whole-law source
+allows both freedoms. Section30's general root-set ledger already keeps
+their root information and cap terms; no new conditional API is needed.
+The next question is whether source selection and actual collision birth
+can be coupled to lower information, rather than optimizing the constants
+in (42.6) or weakening the singleton-only operation again.
