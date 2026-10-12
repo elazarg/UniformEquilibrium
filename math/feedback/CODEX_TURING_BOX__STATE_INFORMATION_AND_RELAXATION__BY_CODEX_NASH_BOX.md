@@ -1015,3 +1015,151 @@ one is maximal. This gives exact fixed target (1,0,3,1), original full
 regret at most q tending to zero, and uniform finite-average transfer by
 the same deleted-opponent geometric tails. No conflict with the source
 selector falsifier or implication of UE nonexistence remains.
+
+## Independent adversarial review of Section 38: sink-or-receiver escape
+
+Verdict: PASS for the ordinary mathematical theorem and the stated bounded
+coverage comparisons. This is not a Lean implementation, an arbitrary-table
+UE theorem, or an exhaustive census of qualitative neighborhoods. I reviewed
+Section 38 of the frozen Git snapshot `adc8bee7`, whole-note SHA256
+`b0a46c226b09db9d21660ef0e323f243a1f8c8377d3f6ad18042ef28ab854f59`,
+without consulting another review verdict. I found no mathematical objection.
+
+### Finite escape and the complete unrestricted consumer
+
+The finite escape lemma is valid on the FULL player set. The sink case retains
+every strictly positive inactive margin outside the tied face simultaneously.
+For a universal receiver, adding epsilon only to its own Quit payoff preserves
+the finite Nash existence hypotheses. If the original all-Continue root were
+unique, compactness and the closed finite Nash graph would force every selected
+perturbed root to zero. Players outside the tied set must then be exactly
+inactive. On that face the receiver's ORIGINAL endpoint difference has zero
+constant term, strictly positive coefficients on every singleton opponent
+hazard, and remainder bounded by a constant times the square of their sum.
+It is nonnegative near zero, including the all-zero opponent boundary. Its
+perturbed difference is therefore strictly positive, forcing its own hazard
+to one and contradicting convergence to zero. This proves existence of a
+nonzero ORIGINAL full root; it does not claim a nonzero perturbed-root limit.
+The argument handles a singleton tied set and makes no hidden quasi-strictness
+or selector-continuity assumption.
+
+The finite bare-triangle guardrail is also correct. I independently reconstructed
+its pure endpoint differences and obtained exactly
+`g_i=q_(i-1)-q_(i+1)-q_(i-1)q_(i+1)`. The one-, two-, and three-active support
+exclusions exhaust the cube, including sure hazards. This is only a root-game
+example, not a quitting-game counterexample. The Fin4 graph equivalence follows
+from counting indegrees/outdegrees and correctly allows two-cycles and chorded
+triangles.
+
+I reopened `quittingTerminalSemanticCarrier`,
+`exists_terminalProfile_sequence_tendsto_semanticPair`,
+`quittingTerminalSemanticCarrier_isCompact`,
+`continuous_quittingTerminalSemanticPrefix`, and
+`quittingTerminalSemanticPrefix_mem_carrier` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`; the two cap-Nash
+identities in `UniformEquilibrium/Quitting/Root/CapNashRootStack.lean`; and
+`isUniformEquilibriumPayoff_of_diagonal_mem_terminalSemanticCarrier` in
+`UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean`.
+Their actual-carrier and unrestricted-response scope matches the proof. The
+printed root prefix formulas include the inactive players' max endpoint, which
+is essential. At cap-Nash roots every debt scales by joint Continue mass.
+The positive seed has an ACTUAL full cap because the owner's Never payoff is
+zero and its own singleton is nonnegative.
+
+At a positive-debt chamber point, full support with no sure hazard contradicts
+the J ledger. A proper active support has a participant whose every used Quit
+coalition pays at most its own singleton; this preserves the low face. The
+H ledger preserves the surplus inequality. A sure hazard gives a carrier
+diagonal immediately, so no missing grand-row H hypothesis is used. The compact
+minimum either has a cap strictly below its singleton, where all Continue is
+not Nash, or has a nonempty PROPER tied set, where the finite escape applies.
+Every nonzero root strictly lowers the positive maximum debt. A zero-debt
+carrier point then gives one fixed target via the named full-behavior consumer.
+Neither actual realization of the closure point nor cross-accuracy ancestry is
+assumed. Zero weight coordinates cause no gap: nonzero weighted surplus still
+forces a proper tied set and a positive chamber parameter.
+
+### Exact witness and whole-selection comparisons
+
+I reconstructed all fifteen nonempty reward rows from the literal rule and its
+two exceptions in independent Fraction arithmetic. All H/J values, flat
+participants, insertion arrows, and the seed `(U,B)=((1,0,4,0),(1,2,4,0))`
+agree. Thus this is genuinely outside the OLD proper-acyclic graph guard, while
+satisfying the new raw theorem. The actual conclusion is a new raw sufficient
+class, not just a new verifier for a supplied carrier.
+
+The sure-owner exclusions are exhaustive rather than selected-root checks.
+The opposite/player3 pure endpoint tables are strictly negative in every pure
+opponent configuration, forcing literal Continue. Owner0's remaining two-player
+game has no pure corner and its unique mixed point is `(8/9,2/5)`; I obtained
+`Q0=-1/45`, `b0=32/45`, `alpha0=1/15` independently. The other three induced
+games have exactly the stated pure points and owner endpoints `Q=-1,b=0,alpha=0`.
+Every full root with any sure label is therefore excluded for continuations in
+the actual reward box, and all nonnegative punishment tails are excluded.
+For a singleton base, a partial free set satisfying the remaining join tests
+would already be a FULL induced equilibrium and is included in this exclusion;
+for a larger base the leave/join tests produce a full zero-tail Nash root with
+a sure label. I inspected the actual predicates and consumer
+`exists_uniformPayoff_of_persistentBase_inducedNash_signs` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseNashSemanticAdapter.lean`,
+the induced utility in `UniformEquilibrium/Quitting/Root/PersistentBaseInducedGame.lean`,
+and `quittingSingletonBaseOwnerFloorExcess_nonpos_iff` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`.
+The proof correctly does NOT exclude arbitrary very negative continuations.
+
+I enumerated all fourteen proper nonempty children. Each prescribed witness is
+an exact FULL child equilibrium with zero joint-Never mass, and at least one
+omitted recipient has the printed strictly positive complete deadline gain.
+In particular the exceptional children 01 and 013 use both sure owners, and
+the changed triple coordinate supplies the required omitted-player gain 1/2.
+The universal conclusions in
+`quittingLiftDeletedProfile_outsideDebt_le_add_neverExcess_of_withdrawalFutureJoin`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`)
+and `quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt_add_slack`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockChildDeletionAdapter.lean`)
+are consequently impossible for every child selection. This conclusion does
+not exclude a source selecting only a different favorable child equilibrium.
+
+The whole stationary support exclusion is valid. I checked every displayed
+three-active endpoint polynomial by its Boolean-corner coefficients. The
+nonnegative Never floor justifies `Q-b_abs>=0`; the resulting end hazard bound
+is at most 1/5. The middle player's Quit lower bounds and Never upper bound
+then contradict stationary indifference. Sure, empty, one-, two-, and
+four-active cases cover all remaining supports. Thus ALL exact stationary
+producers, not merely their symmetric components, fail on the witness.
+
+I independently enumerated the singleton LCP supports and all fifteen set
+partitions. The nine regular roots have actual indices `1-4+4=1`; all deleted
+triples have determinant 6 and a negative inverse diagonal. The seven
+row-invariant partitions and all six displayed full-response mismatches agree
+exactly. I reopened `quittingSingletonBlockRowSum_eq_of_responseInvariant` in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean` and
+`finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+in `UniformEquilibrium/Diagnostics/Quitting/FinFourResponseQuotientCriterion.lean`:
+its negative determinant guard really does fail for the sole surviving discrete
+quotient. I also reopened the literal all-child nonnegative inverse predicate
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`.
+
+The full set is the only premium trap. Using the actual global floor definition
+in `UniformEquilibrium/Quitting/Classification/WeightedQuittingTrapLeavers.lean`,
+the four singleton tests have coefficient sum `(-1/2,-2,-2,-2)`, excluding EVERY
+nonzero nonnegative weight. The grand row excludes all upper-average weights.
+The literal boxed coefficient fields in
+`UniformEquilibrium/Quitting/Classification/BoxedQuittingNashCharges.lean`
+and cardinality-four threshold in `BoxedQuittingNashChargeOdds.lean` give
+`delta<=2`, `gap<=3`, `tau>=8`, `loss<=1`, hence threshold at most 13/2.
+The required threshold in `HasBoxedQuittingNashCharges`
+(`BoxedQuittingNashChargeReturn.lean`) is at least 44, so the WHOLE coefficient
+selection fails.
+
+The remaining bounded comparisons respect their stated scope. The exact
+singleton matrix forces opposite favorites and has no positive three-cycle;
+pair participant signs defeat every matching of the named strict pair
+templates. The positive proper four-singleton word has its unique golden
+owner solution, and the incoming participant reward 2 violates the nonmate
+caps in either orientation. This excludes that entire named positive word,
+not all calendars. The previous two chamber exports fail their actual raw
+guards: the fixed passive-pair rows differ in the first, and the proper
+two-cycle violates the second's graph hypothesis. The note explicitly leaves
+unquantified qualitative neighborhoods and unnamed mechanisms unclassified;
+my PASS has the same bounded scope.
