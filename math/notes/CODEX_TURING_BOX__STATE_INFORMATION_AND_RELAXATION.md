@@ -2,6 +2,18 @@
 
 Identity: CODEX_TURING_BOX.
 
+Section40 is a new ordinary UNREVIEWED whole-class falsifier of one
+proposed triangle operation. An exact positive-own Fin4 table satisfies
+the H/J and proper-flat-participant guards, and its ONLY excluded proper
+graph is a bare triangle on012. Nevertheless EVERY actual profile with
+player3 prescribed literal Never has unrestricted maximum terminal debt
+at least4/9. Thus no selection from the ENTIRE three-player equilibrium
+correspondence on012 can solve the parent by that quiet lift. The full
+table has a global sink3 and an exact sole-3 equilibrium; it does NOT
+refute the raw-class extension, an actual positive-minimum passport, or
+a mechanism allowing player3 to act. The next test removes that easy
+global-sink/pure-equilibrium dispatch while retaining all original caps.
+
 Section38 is an independently reviewed ordinary raw-class extension of the
 two-ledger chamber theorem, now exported as
 [`Sink-or-receiver cap chamber`](../exports/SINK_OR_RECEIVER_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md).
@@ -8399,3 +8411,155 @@ fourth player's ENTIRE original cap is controlled. This is an attempted
 raw-class extension, not a prescribed-tail compiler; the H/J ledgers and
 proper flat-participant hypotheses remain fixed. The universal claim
 about EVERY child equilibrium is not assumed.
+
+## 40. A whole quiet-triangle falsifier with the raw guards retained
+
+Status: ordinary proved UNREVIEWED scoped counterexample. This is NOT a
+uniform-equilibrium counterexample, an export, a positive-minimum source,
+or a theorem that every whole-three-player replacement fails. It rules
+out one complete strategy class, with its independent fourth cap intact.
+
+### 40.1 Exact question, finite table and guards
+
+The attempted unconditional implication was: in the Fin4 H/J chamber
+class with proper-flat participants, when a proper triple L is a bare
+directed triangle, some selected approximate equilibrium of the WHOLE
+three-player game on L can be extended to arbitrarily small parent debt
+by prescribing Never to the omitted player. This is weaker than requiring
+EVERY child equilibrium to lift. The following example refutes even that
+existential selection claim.
+
+Players are0,1,2,3, all live and Never payoffs are0, all own singletons
+are1, and all weights are1. All nonempty rows, in coordinate order0123,
+are the following integers:
+
+    S       r(S)
+    0       (1,0,4,0)
+    1       (4,1,0,0)
+    2       (0,4,1,0)
+    3       (2,2,2,1)
+    01      (0,1,5,0)
+    02      (1,4,0,0)
+    03      (0,2,2,1)
+    12      (4,0,1,0)
+    13      (2,0,2,1)
+    23      (2,2,0,1)
+    012     (0,0,4,0)
+    013     (0,0,3,1)
+    023     (0,3,0,1)
+    123     (3,0,0,1)
+    0123    (0,0,0,0).
+
+Writing H(S)=sum_i r_i(S)-4 and
+J(S)=sum_(i notin S)[r_i(S union{i})-r_i(S)], the complete proper ledger is
+
+    S           H       J
+    0,1,2       1      -2
+    3           3      -6
+    01          2       0
+    02,12       1      -3
+    03,13,23    1      -4
+    012         0       0
+    013,023,123 0      -3.
+
+Every singleton has its owner flat. Both members of every child pair
+have participant reward at most1. For012, player0 is flat on ALL its
+participant subcoalitions: rewards1,0,1,0 on0,01,02,012. Every proper
+set containing3 has player3 flat, since its participant rewards there
+are exactly1. Thus the entire proper-flat guard holds, not just a
+condition on the selected triple.
+
+The complete insertion graph is
+
+    0->1, 1->2, 2->0, 0->3, 1->3, 2->3.
+
+The ONLY proper triple without a sink or a universal recipient is012,
+whose graph is bare. Every proper triple containing3 has sink3 and
+universal recipient3. All H are nonnegative with strict singletons,
+and all J are nonpositive. These fourteen exact guards and the graph
+were independently enumerated by CODEX_ROOT after the author's check.
+That arithmetic check is not an independent review of a class theorem.
+
+### 40.2 Positive gap for EVERY child law, including all Nash components
+
+Let the three children use ANY independent private behavioral laws,
+with arbitrary calendars, finite or infinite support, memory and Never
+masses. Prescribe literal Never to player3. Let q_i be the probability
+that child i quits at the initial date0, and put P=q_0 q_1 q_2. This is
+the probability of all three child Quit0 actions by private independence.
+Every deviation below is a legal complete unilateral replacement.
+
+Player3 receives0 on EVERY child-only coalition and on Never, so U_3=0.
+Its pure Quit0 replacement receives1 except when ALL three children
+quit at0, in which case the grand row gives0. Hence
+
+    d_3=B_3-U_3 >= 1-P.                              (T1)
+
+Player0's pure Never replacement receives4 whenever children1 and2
+both quit at0: the outcome is12, independently of player0's old law.
+All player0 child-only rewards are nonnegative, so
+
+    B_0 >= 4 q_1 q_2 >= 4P.                          (T2)
+
+Its prescribed payoff is at most4 everywhere. On the event that all
+three children quit at0 it is exactly r_0(012)=0. Therefore
+
+    U_0 <= 4(1-P),       d_0 >= 8P-4.                (T3)
+
+For maximum full terminal debt E, (T1),(T3) give
+
+    9E >= 8(1-P)+(8P-4)=4,       E>=4/9.             (T4)
+
+These are ex-ante expectation inequalities. No supremum is moved past
+conditioning or expectation. The two exhibited responses merely lower
+bound the ORIGINAL unrestricted caps; no deadline, late-only or bounded
+response class replaces them. Nothing about child Nash optimality was
+used. Consequently (T4) holds simultaneously for EVERY profile in
+the entire quiet-child strategy class, including every approximate
+child equilibrium supplied by the known three-player theorem.
+
+This also excludes a diagonal in the closure of the semantic pairs of
+that quiet class, because E is continuous on finite semantic pairs and
+the same lower bound holds before taking closure. It does not exclude
+the diagonal of the full actual semantic carrier.
+
+### 40.3 Exact scope, the easy parent equilibrium and next question
+
+The full game has an exact terminal Nash profile: prescribe sure Quit0
+to3 and Never to all children. Its payoff is(2,2,2,1). Each child joining
+at0 receives0 instead of2; waiting receives2 because3 already quit. The
+owner receives1 from Quit0 or any later finite quit if it deviates, and0
+from Never. This is a full-behavior verification and immediately gives
+the same uniform payoff target at all accuracies.
+
+Thus the example has a GLOBAL insertion sink3 and a pure equilibrium.
+It is NOT a counterexample to a class proof that dispatches those cases
+before reaching the hard actual chamber. In fact r_3(S)<=1 for all S,
+so every actual cap satisfies B_3<=s_3=1: a putative tied012 chamber
+point with B_3>s_3 is impossible in this table. That exact semantic
+ceiling is another reason not to identify this raw operation falsifier
+with an actual positive-minimum branch.
+
+What survives is a meaningful method restriction: H/J and proper flatness
+alone do not make even ONE favorable whole-child equilibrium available
+to a prescribed-quiet omitted player. A source-independent quiet lift
+cannot close the bare-triangle branch. A successful raw-class proof
+must use its actual cap/minimum facts or allow the fourth player to act.
+The concrete next test is the no-pure-equilibrium, global-no-sink branch,
+with an actual tied-triple cap source rather than a formal B chosen
+outside the realizable carrier. This note does not abandon that route.
+
+The bounded source reopened for this question is
+`QuittingThreePlayerStrategyClass.of_card_le_three` in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardAllSigns.lean`.
+Its actual stationary-or-small-hazard terminal alternatives control ALL
+child behavioral deviations at every positive error. The fixed-target
+consumer is separate; no child-target selection is being inferred from
+that statement alone. The original cap identities reopened are
+`quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash` and
+`quittingTerminalSemanticPrefix_envelope_eq_rootSuccessorPayoff_of_capNash`
+in `UniformEquilibrium/Quitting/Root/CapNashRootStack.lean`, and the actual
+carrier/diagonal declarations listed in38.10. A narrow search in the
+QuietExtension subtree found conditional debt-lift producers, not a
+raw H/J implication supplying this quiet selection. No Lean command,
+implementation, Literature claim or export is used here.
