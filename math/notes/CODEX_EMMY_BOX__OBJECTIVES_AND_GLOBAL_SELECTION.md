@@ -3041,3 +3041,104 @@ enlarges each reached player's complete tail budget. A genuinely joint
 tail re-equilibration, or a selection principle over the whole source,
 is therefore load-bearing. The next question is that slack-consuming
 operation, not another one-stage root selector at U, B, or Psi.
+
+### 18.12. A retained-tail return must be budget-neutral; its exact finite test
+
+Status: ORDINARY UNREVIEWED mathematics. This determines the actual legal
+block operation left open by18.11. It does not produce such a block or
+assert descent at the whole-source minimum.
+
+Fix s>=0 and p in N_delta with E(p)>0. Prepend an arbitrary L-date product
+word, keeping exactly p as the conditional tail after all L dates survive.
+Write S>0 for this joint prefix survival, and suppose the FINAL profile
+p' is again in N_delta. Intermediate conditioned tails need not belong to
+N_delta, and intermediate roots may be macroscopic. Then necessarily
+
+    S=c^L.                                                   (18.21)
+
+Proof. Some finite budget constraint of p must bind. Otherwise, mixing
+p_i with any pure finite deadline by a sufficiently small positive amount
+is legal: only finitely many strictly slack constraints can increase, and
+after that deadline all constraints weakly decrease. Thus p_i dominates
+every finite deadline for every i. Nonnegative own singletons place Never
+below their supremum, giving E(p)=0, contradiction. At a binding tail
+date, prefix feasibility now implies S<=c^L.
+
+If S<c^L, put k=c^L/S>1. For any i with d_i(p)>0, Section18.10 gives
+lim_(h->infinity)V_i(h)=B_i>V_i(1)=U_i. Concavity implies
+V_i(k)>U_i for EVERY k>1, not only large k. Retain that player's whole
+prefix law and replace its conditional tail by a V_i(k)-maximizer. Every
+prefix constraint remains unchanged, and every later constraint is
+precisely the k-relaxed tail constraint. The original payoff gain is
+S*[V_i(k)-U_i]>0. This contradicts source optimality of p'. Hence(18.21).
+
+In particular a SINGLE retained-tail prefix of positive reach can preserve
+a positive-debt component only at exact root absorption delta. A strictly
+slack macroscopic root requires a different tail component. A longer
+word can instead spend its initial slack inside the block and RETURN to
+the binding budget at its end; that is a genuinely different legal
+variation, not a succession of binding prefixes.
+
+Complete finite reduction. Take a word satisfying every prefix budget and
+(18.21). Let r_i>0 be player i's probability of surviving the whole word;
+write A_-i=product_(j!=i)r_j, so r_i*A_-i=c^L. Define the finite L-date
+game with the same finite absorption rewards, one terminal Continue action,
+and all-Continue terminal vector
+
+    Psi_i=U_i(p)-kappa_i,       kappa_i=V_i'(1+).
+
+Players choose ENTIRE distributions over the L finite dates and terminal
+Continue. Allowed replacements must satisfy every prefix joint-survival
+constraint against the other prefix laws, including the final one. Then
+
+    p' belongs to N_delta
+      iff the word is a generalized Nash profile of this FINITE game.
+                                                               (18.22)
+
+This statement includes arbitrary complete original tail replacements,
+not only the finite menu's terminal action. Here is the exact argument.
+For a feasible own prefix competitor eta, let x be its terminal Continue
+mass. The final constraint gives x<=r_i. Let g_i(eta) denote its original
+expected reward from absorption within the block. Its best COMPLETE
+payoff after choosing eta is
+
+    F_i(eta)=g_i(eta)+x*A_-i*V_i(r_i/x),
+
+with the second term0 when x=0. Its finite-game payoff is
+G_i(eta)=g_i(eta)+x*A_-i*Psi_i. Concavity gives, for k>=1,
+V_i(k)<=U_i+kappa_i*(k-1), and hence
+
+    F_i(eta)<=G_i(eta)+r_i*A_-i*kappa_i.
+
+Equality holds at the prescribed prefix law. Thus finite-game optimality
+implies complete original source optimality. Conversely, if a feasible
+eta strictly improves G_i, mix it with the prescribed prefix law with
+weight epsilon. Feasibility is convex in that ONE law. Since its terminal
+mass approaches r_i from below, the definition of the right derivative
+of V_i at1 gives
+
+    F_i((1-epsilon)*prescribed+epsilon*eta)
+      =F_i(prescribed)+epsilon*[G_i(eta)-G_i(prescribed)]
+                         +o(epsilon).
+
+This is a profitable complete deviation for small epsilon. The equivalence
+follows. Boundedness of V justifies the endpoint x=0, and its attained
+finite-credit optimizers realize every comparison.
+
+What is and is not automatic. Finite generalized Nash existence supplies
+components of the block game, but does NOT force their FINAL survival to
+be c^L, nor produce a full-regret improving one. A slack-ended component
+cannot simply be appended to the retained bad tail; the preceding proof
+rules that out. Thus the finite-dimensional target is an end-binding,
+macroscopically active block at Psi, selected jointly with a source tail,
+whose ORIGINAL full-regret account improves. It is not a root game at U
+or B, and changing its terminal vector to secure Nash existence would
+change its complete original agency.
+
+The whole source/tail must remain selectable. In particular finite
+prefixing retains all proper tail labels whenever S>0; the known
+cash-out examples have a positive full-gap floor for every profile with
+two or more proper labels but a one-proper exact Nash. So no universal
+repair theorem from an arbitrary fixed seed is being proposed, even with
+macroscopic neutral blocks. Any general theorem must select across the
+whole correspondence, allowing a different proper face when necessary.
