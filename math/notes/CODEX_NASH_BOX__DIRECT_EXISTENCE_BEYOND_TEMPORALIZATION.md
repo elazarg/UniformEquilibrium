@@ -2,7 +2,20 @@
 
 Author: CODEX_NASH_BOX.
 
-Latest candidate: Sections39--40 strengthen the FULL COARSE global-minimum
+Latest candidate: Section41 strengthens the remaining FULL COARSE price
+obstruction uniformly over the ENTIRE near-minimum source. Conditional on
+Section40's ordinary/unreviewed uniform interior conclusion, every approximately
+normal opponent completion has relative-information price at least rho+xi
+for one xi>0, even when the completion is correlated. Equality or asymptotic
+equality is impossible: repeat the SAME completion, its reference price can
+only fall, and the owner's payoff approaches its singleton while information
+stays minimal. This is a whole-source necessary condition, not a UE producer.
+The joint rare-owner formula retains its root-information and marginal-switch
+terms; averaging different owners does not remove the first-order price gap.
+Finite-amplitude multi-date variations remain open. No private-CE preservation
+is asserted.
+
+Sections39--40 strengthen the FULL COARSE global-minimum
 obstruction, under the same strict-anchor/actual-sequence hypotheses as
 Section28 and nonnegative own singletons. A positive minimum would force
 EVERY finite root Nash at EVERY minimizing state to be all-Continue,
@@ -6763,3 +6776,137 @@ price obstruction, by a feasible joint first/second-role change or a
 different actual-law operation, is the next task. Full private obedience
 would require additional conditional inequalities and is not inferred
 from(40.2).
+
+## 41. A uniform strict punishment-price gap over the whole interior source
+
+Status: ordinary UNREVIEWED mathematics, conditional on Section28's actual
+finite-source framework and the uniform interior conclusion of Section40.
+This strengthens the surviving obstruction rather than proving UE. It does
+not assume an attained clock law, exact punishment attainment, independence
+of the completion, or private-recommendation obedience. It excludes cheap
+completions over the ENTIRE near-minimum correspondence, not just a selected
+source. The actual reward table, payoff target and opponent marginals may
+vary between sources; within the contradiction iteration the table is fixed.
+
+### Exact statement, permitting approximate source and punishment obedience
+
+Let rho>0 be the infimum of total correlation over all finite FULL coarse
+clock sources for a fixed finite table with strict anchor. Assume every state
+in Section28's compact set S has
+
+    v_j-s_j>=delta>0 for every j.                       (41.1)
+
+For a finite source mu with marginals m_j, an owner i, and ANY finite joint
+opponent law kappa, put
+
+    P_i(mu,kappa)=KL(kappa || product_(j!=i)m_j).
+
+An infinite price is allowed. Then there are epsilon0>0 and xi>0 such that
+EVERY finite mu and kappa satisfying
+
+    full coarse violation(mu)<=epsilon<=epsilon0,
+    I(mu)<=rho+epsilon,
+    C_i(kappa)<=s_i+epsilon
+
+satisfy P_i(mu,kappa)>=rho+xi, for EVERY owner i. Here C_i is the original
+complete-deviation cap, not a child-game equilibrium condition. Sources with
+information slightly below rho due to approximate obedience are included.
+The strict anchor repairs them with information change tending to zero.
+The conclusion is vacuous when no finite-price completion is available;
+normality alone does not guarantee its absolute continuity to these marginals.
+
+### Repeating a near-cheap completion is the contradiction
+
+Suppose the conclusion fails. There are epsilon_n->0, full approximately
+coarse finite mu_n with I(mu_n)<=rho+epsilon_n, owners i_n and completions
+kappa_n with C_i(kappa_n)<=s_i+epsilon_n and
+
+    P_i(mu_n,kappa_n)<=rho+o(1).                        (41.2)
+
+Pass to a fixed owner subsequence. Strict-anchor repair implies I(mu_n)->rho
+and every state cluster belongs to S. Thus eventually every original payoff
+has singleton gap at least d=delta/2. Set
+
+    q=d/[2(d+2R)]>0,
+
+where |r|<=R and R>0. For any current payoff vector with these d gaps,
+Section33's singleton prefix using kappa_n retains an early-deadline margin
+for every other player of at least
+
+    (1-q)d-2Rq=d/2.
+
+The owner's new Quit0 is safe since its value remains at least s_i. Its later
+full reply violation is at most (1-q)e+q epsilon_n if the old full coarse
+violation is e. Every other player's later violation is at most (1-q)e.
+Consequently every fixed number of these prefixes remains full approximately
+coarse with error tending to zero. All old finite dates and kappa_n are shifted
+by one at each step; the completion is otherwise exactly the SAME law.
+
+Write m_j^(k) for the opponent marginals after k prefixes, translated back to
+their original dates. They obey
+
+    m_j^(k)=(1-q)^k m_j+[1-(1-q)^k] kappa_j.
+
+By convexity of KL in its second argument,
+
+    P_i^(k)=I(kappa)+sum_(j!=i) KL(kappa_j||m_j^(k))
+              <=P_i^(0).                              (41.3)
+
+No TV-to-KL continuity claim is used. Section33's EXACT finite-q identity gives
+
+    I(mu^(k+1))
+       <=(1-q)I(mu^(k))+q P_i^(k)
+       <=max{I(mu),P_i^(0)}=rho+o(1).                  (41.4)
+
+Approximate coarse repair gives the reverse lower bound rho-o(1). Inductively,
+for EVERY FIXED k the prefixed states have all cluster points in the SAME S,
+so their singleton gaps are again eventually at least d. This supplies the
+margin needed for the next prefix and justifies the induction; neither a
+growing-word limit nor unproved intermediate source preservation is used.
+
+But the owner's prescribed value is exactly
+
+    v_i^(k)-s_i=(1-q)^k(v_i-s_i)<=2R(1-q)^k.
+
+Choose one finite k before letting n tend to infinity, with the right side
+less than delta/2. Its states still cluster in S by (41.4), contradicting
+(41.1). This proves the claimed UNIFORM positive price excess. It also closes
+Section33's equality loophole for correlated completions with unchanged
+marginals: those can be repeated without any switching-price growth.
+
+### Joint singleton roles: exact entropy ledger, not a free averaging step
+
+For comparison, choose a probability vector a on owners and 0<lambda<1.
+At a fresh date,
+with probability 1-lambda use shifted mu, and with probability lambda*a_i
+let ONLY i Quit while its opponents use kappa_i strictly after that date.
+This is a genuinely joint root/continuation law, not independent root mixing.
+Write pi for its root-set law: empty mass 1-lambda and singleton mass lambda*a_i.
+For finite prices set
+
+    m_j^lambda=[(1-lambda)m_j+
+                      lambda*sum_(i!=j)a_i kappa_(i,j)]/(1-lambda*a_j).
+
+Entropy disintegration gives the exact identity
+
+    I(new)-I(mu)
+      =lambda[sum_i a_i P_i(mu,kappa_i)-I(mu)] + I(pi)
+          -sum_j(1-lambda*a_j) KL(m_j^lambda||m_j),    (41.5)
+    I(pi)=sum_j h(lambda*a_j)-h(lambda)-lambda H(a).
+
+This follows by expanding the joint entropy by the mutually exclusive role
+label and each marginal entropy by its own new Quit0 bit. It includes role
+switching among ALL completions, even if each kappa_i is correlated. For a
+fixed finite source, the root information and final marginal KL terms are
+O(lambda^2), so the derivative is exactly the average price minus I(mu).
+Under the whole-source gap just proved it is strictly positive for sufficiently
+near-minimal sources and approximately normal completions. Joint owner choice
+therefore does not eliminate the first-order price obstruction by averaging.
+
+This is NOT a calendar-uniform forbidden neighborhood: quadratic coefficients
+can diverge with small reference atoms. Nor does (41.5) rule out a finite-
+amplitude joint change, intermediate information increase, a different payoff
+region, or richer multi-date counterfactual roles. The next constructive task
+must use one of those freedoms to cross the positive price barrier, or produce
+a global upper bound contradicting (41.2)'s uniform strengthening. No new raw
+reward class is solved by this supporting restriction.
