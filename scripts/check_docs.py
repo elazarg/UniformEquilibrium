@@ -18,7 +18,6 @@ FRONTIER_PATH = ROOT / "docs" / "QuittingProofFrontier.json"
 CORE_LIVE_DOCS = (
     ROOT / "README.md",
     ROOT / "AGENTS.md",
-    ROOT / "CLAUDE.md",
     ROOT / "CONTRIBUTING.md",
     ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md",
     ROOT / "Literature" / "README.md",

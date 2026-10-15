@@ -241,12 +241,22 @@ NC.44 has its own independent mathematical PASS from Morse; NC.43's PASS
 was not used to silently certify the enlargement. Three-plus suppliers, future
 finite mass, and the both-later-only two-supplier residual remain open.
 
-NC.45 is a new, unreviewed fresh-source restriction: avoid six proper
+NC.45 is a new, independently reviewed fresh-source restriction: avoid six proper
 native joining determinants BEFORE t, then use the full small-own budget
 to show that the two-supplier/zero-future source has exactly one PureNever
 bridge and three strictly later-only cap owners. This excludes canonical I
 ONLY in that specified mode; the resulting canonical-II mode is still open.
-No NC.43/44 review is being extended to this extra generic choice.
+It has its own focused mathematical PASS from Brouwer; no NC.43/44 review
+was extended to this extra generic choice. The source remains unconsumed.
+
+NC.46 keeps the complete cost of changing BOTH finite conditional laws
+at that reduced source while preserving their Never amounts. The two
+finite suppliers' entire caps stay fixed, and exact tie/order probabilities
+plus the two observers' FULL clips give the debt difference. A displayed
+coefficient-dominance chamber retires every calendar-only repair, not a
+source mode. Outside it one precise full-cap funding inequality remains
+open. Neither that account nor the supplied crossing singleton signs
+are being counted as a solution of the one-hinge residual.
 
 NC.41 now constructs a true-overlap candidate with complete cap control:
 independent two-owner tail survivors give a STRAIGHT trace of singleton
@@ -28126,7 +28136,9 @@ algebra only. The proof above supplies the source contradiction.
 
 ## NC.45: a generic fresh source fixes the complete two-supplier cap census
 
-Status: COMPLETE ORDINARY PROOF DRAFT, not independently reviewed.
+Status: COMPLETE ORDINARY PROOF, with a separate focused mathematical
+PASS in `CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION__BY_CODEX_BROUWER.md`
+(NC.45 review of frozen SHA87775ac0…). No Lean check or export seal.
 This is a further FRESH-source restriction, not a silent enlargement
 of NC.43 or NC.44's reviewed table. Its additional generic choice is
 made on the own-zero native slice BEFORE choosing any raise or scale.
@@ -28290,3 +28302,157 @@ attempt to infer (NC.45b) from the previously reviewed distinctness data.
 The new determinant avoidance and its placement BEFORE t are essential
 to the present proof. The current native choice satisfies that added
 condition by the proper-polynomial argument, not by this regression.
+
+## NC.46: complete two-law calendar cost at the surviving one-hinge minimum
+
+Status: COMPLETE SUPPORTING ACCOUNT AND ONE CLASS NO-GO, ordinary and
+unreviewed. No source mode is excluded by this section. This is the
+actual whole-conditional-law test after NC.45, not another cap selector
+or a modification of the retired root-only-supplier word.
+
+### NC46a. Supplied singleton signs and exact absorbing joining constraints
+
+Fix the selected NC.45 minimum. The finite suppliers i,l have root
+rates x,y∈(0,1), ν=(1−x)(1−y), strictly later-only caps, and
+
+    α_i=r_i({l})−r_i({i,l})>0,
+    α_l=r_l({i})−r_l({i,l})>0,
+    A_pair=α_i+α_l,
+    δ=νS+xy A_pair,             S=Σ_a s_a.
+
+Use A_pair here to distinguish the pair cost from the native absorbing
+gap A of NC.43. The strict cap-minus-own margins give Γ_il,Γ_li>0.
+Both PureNever observers k,h are c-active, so NC.43 gives each a
+positive singleton comparison to at least one finite supplier. On the
+other hand the actual no-UE singleton-column blocker theorem supplies
+a negative recipient in each of columns i,l. The opposite finite
+recipient has its strictly positive mutual comparison, so each such
+blocker must be k or h. Neither observer can block BOTH columns.
+Within-row distinctness excludes zero. Therefore their two finite
+singleton columns are exactly CROSS-SIGNED:
+
+    either Γ_ki<0<Γ_kl and Γ_hl<0<Γ_hi,
+    or     Γ_kl<0<Γ_ki and Γ_hi<0<Γ_hl.          (NC.46a)
+
+The named primary input is
+`exists_singletonColumnBlockerCertificate_of_fourPlayer_noUniform`
+in `UniformEquilibrium/Quitting/Classification/LCP/FourPlayerSingletonColumnBlockers.lean`.
+Its recipient-row orientation was inspected; this is not inferred
+from a row-blocker theorem or a guessed negative premium pair.
+
+The true absorbing floor also prices actual joining to each supplier.
+At the pure-i absorbing profile, i cannot gain by withdrawing to0
+because s_i>0, and l's joining premium is −α_l<0. Hence its ENTIRE
+sum debt is just the two remaining positive joining gains. Similarly
+for pure l. With p_aj=r_a({a,j})−r_a({j}),
+
+    p_ki⁺+p_hi⁺≥δ_abs,
+    p_kl⁺+p_hl⁺≥δ_abs.                         (NC.46b)
+
+No alignment of these joiners with the singleton blockers is assumed.
+Each statement concerns the actual normalized pure profile, not an
+incoming earlier-absorption word or a participant/triple sign shortcut.
+
+### NC46b. Arbitrary independent finite conditionals, ALL caps retained
+
+Keep each supplier's TOTAL finite probability x,y and literal Never
+mass fixed, but replace its ENTIRE finite conditional by ANY proper
+law F_i,F_l on the nonnegative integer dates. They are privately and
+independently sampled, like all original stopping laws. Keep k,h
+PureNever. The conditionals may have infinite support. Write
+
+    P_tie=Pr(i,l both finite and their dates tie),
+    P_il=Pr(i,l both finite and i's date is earlier),
+    P_li=Pr(i,l both finite and l's date is earlier).
+
+Thus P_tie+P_il+P_li=xy. These are actual unconditional event
+probabilities, not a coupling chosen between the two private dates.
+
+The ENTIRE caps of i,l are unchanged:
+
+    B_i=s_i+yΓ_il,       B_l=s_l+xΓ_li.
+
+For example, against a finite l draw, quitting before it pays s_i,
+strictly below the passive r_i({l}); tying pays r_i({i,l}), also
+strictly below that passive value. Waiting past that draw attains the
+passive value. Against l-Never a finite deadline pays s_i. Therefore
+every deadline is bounded by the displayed B_i and finite deadlines
+tending to infinity converge to it by bounded convergence. Literal
+Never is below it by (1−y)s_i>0. This prices every moving finite
+deadline and every behavioral mixture, even when the finite supremum
+is not attained. The argument for l is identical.
+
+The exact played debts consequently are
+
+    d_i=νs_i+α_i P_tie+Γ_il P_il,
+    d_l=νs_l+α_l P_tie+Γ_li P_li.
+
+For each observer a∈{k,h}, let R_a be its ACTUAL Never payoff under
+these two changed independent laws and let B_a be its ENTIRE response
+cap. The late-finite limit is E_a=R_a+νs_a. Define the full clipping
+
+    L_a=B_a−E_a≥0.
+
+Then d_a=νs_a+L_a exactly. This definition retains original-root,
+preemption, all joining and after-date replies, plus literal Never.
+An observer's simultaneous reply against both finite suppliers uses
+its TRUE triple reward r_a({a,i,l}); no selected pair or singleton
+bound replaces it. An actual four-owner reply is unreachable in this
+particular operation because the fourth owner remains PureNever.
+Never is strictly below E_a; E_a is a limit of actual finite replies,
+not an identification with literal Never.
+
+Summing gives the COMPLETE all-player identity
+
+    D−δ=(Γ_il−A_pair)P_il
+          +(Γ_li−A_pair)P_li+L_k+L_h.           (NC.46c)
+
+It includes the changed prescribed payoffs as well as both full
+observer caps. The joint Never is still exactly ν. No tail is
+claimed to minimize, and no root in this operation is assumed Nash.
+
+### NC46c. Exact retirement boundary and the remaining funding inequality
+
+If A_pair≤min(Γ_il,Γ_li), this ENTIRE fixed-Never/two-conditional-law
+operation cannot lower debt: every term in (NC.46c) is nonnegative.
+If the comparison is strict, every genuine separation of the two
+finite clocks costs at least
+
+    [min(Γ_il,Γ_li)−A_pair](P_il+P_li).
+
+Independent proper conditionals with no strict-order probability must
+both be the SAME Dirac law, so that boundary is just a common shift
+of the original single root, apart from the observer clips. This is
+a class no-go, not elimination of an actual positive-minimum source.
+The global floor already excludes below-δ competitors; the useful
+increment is the exact reason every calendar in this chamber loses.
+
+Outside that chamber the ACTUAL unresolved funding test is
+
+    L_k+L_h < (A_pair−Γ_il)P_il
+                       +(A_pair−Γ_li)P_li.    (NC.46d)
+
+The cross-signed singleton data and joining floors (NC.46a–b) do not
+by themselves bound these full clips or select a favorable order.
+In particular reciprocal singleton signs cannot be substituted for
+participant or triple comparisons. An equality in (NC.46c) preserves
+ν and does not contradict least Never; a strict improvement is needed
+for this fixed-marginal operation. If a strict improvement were found
+with infinite-support conditionals, their finite truncations preserve
+it using uniform full-cap TV control against that FIXED margin.
+
+No source argument currently forces A_pair>min(Γ_il,Γ_li) or funds
+(NC.46d). Thus a calendar-only repair is retired in the displayed
+dominance chamber; the next live operation there must also change
+the suppliers' Never amounts or one of the two observers' whole laws.
+The independent NC.45 PASS supplies its source geometry, not this
+missing global funding inequality or a full quitting-game solution.
+
+Algebra falsification check:349 exact rational signed tables/profiles
+with arbitrary four-date supplier conditionals verified both unchanged
+supplier caps, both exact played debts, every observer deadline/Never
+cap, and (NC.46c). The original k tie was imposed using its actual
+triple entry and h's complete root gap was negative. The67 cases in
+the dominance chamber all had D≥the original debt. These checks do
+not assert a global-minimum or positive-gap source; the source signs
+and actual original minimum are supplied separately above.

@@ -12,7 +12,8 @@ noncomputable section
 
 namespace Math
 
-open scoped BigOperators
+open Filter
+open scoped BigOperators Topology
 
 variable {ι : Type*} [Fintype ι]
 
@@ -54,6 +55,27 @@ theorem booleanEndpointInterpolant_at_endpoint (coefficient : (ι → Bool) → 
     booleanEndpointInterpolant coefficient (booleanEndpoint endpoint) = coefficient endpoint := by
   classical
   simp [booleanEndpointInterpolant, booleanEndpointWeight_at_endpoint]
+
+/-- An eventual exact Boolean interpolation identity passes to limits along any nontrivial
+filter. Coordinate weights are arbitrary reals and the finite coordinate type may be empty. -/
+theorem eq_booleanEndpointInterpolant_of_tendsto
+    {α : Type*} {filter : Filter α} [filter.NeBot] (parameters : ι → ℝ)
+    (values : α → ℝ) (coefficients : α → (ι → Bool) → ℝ)
+    (value : ℝ) (endpoint : (ι → Bool) → ℝ)
+    (hidentity : ∀ᶠ k in filter,
+      values k = booleanEndpointInterpolant (coefficients k) parameters)
+    (hvalue : Tendsto values filter (𝓝 value))
+    (hendpoints : ∀ vertex, Tendsto (fun k => coefficients k vertex) filter
+      (𝓝 (endpoint vertex))) :
+    value = booleanEndpointInterpolant endpoint parameters := by
+  classical
+  have hpoly : Tendsto
+      (fun k => booleanEndpointInterpolant (coefficients k) parameters) filter
+      (𝓝 (booleanEndpointInterpolant endpoint parameters)) := by
+    unfold booleanEndpointInterpolant
+    exact tendsto_finsetSum Finset.univ fun vertex _ =>
+      (hendpoints vertex).mul_const (booleanEndpointWeight vertex parameters)
+  exact tendsto_nhds_unique hvalue (hpoly.congr' (hidentity.mono fun _ h => h.symm))
 
 section CoordinateLines
 

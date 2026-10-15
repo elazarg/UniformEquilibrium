@@ -1867,6 +1867,226 @@ theorem remark1_exists_restrictedLinearizedNash {A B : Type} [Fintype A] [Fintyp
     rw [hself, hother] at hbound
     exact hbound
 
+/-- The subset floor extended to the empty set; at positive full cardinality it equals one. -/
+def remark1CardinalityFloor (m : ℕ) (δ : ℝ) (k : ℕ) : ℝ :=
+  if k = 0 then 0 else δ ^ (m - k)
+
+open Classical in
+/-- The small-delta cardinality floors are supermodular on the literal finite action subsets. -/
+theorem remark1_cardinalityFloor_supermodular {A : Type*} [Fintype A]
+    {δ : ℝ} (hδ : 0 ≤ δ) (hhalf : δ ≤ 1 / 2) (U V : Finset A) :
+    remark1CardinalityFloor (Fintype.card A) δ U.card +
+        remark1CardinalityFloor (Fintype.card A) δ V.card ≤
+      remark1CardinalityFloor (Fintype.card A) δ (U ∪ V).card +
+        remark1CardinalityFloor (Fintype.card A) δ (U ∩ V).card := by
+  classical
+  by_cases hUempty : U = ∅
+  · simp [hUempty, remark1CardinalityFloor]
+  by_cases hVempty : V = ∅
+  · simp [hVempty, remark1CardinalityFloor]
+  have hUpos : 0 < U.card := Finset.card_pos.mpr (Finset.nonempty_iff_ne_empty.mpr hUempty)
+  have hVpos : 0 < V.card := Finset.card_pos.mpr (Finset.nonempty_iff_ne_empty.mpr hVempty)
+  have hUle : U.card ≤ (U ∪ V).card := Finset.card_le_card Finset.subset_union_left
+  have hVle : V.card ≤ (U ∪ V).card := Finset.card_le_card Finset.subset_union_right
+  have hUnionpos : 0 < (U ∪ V).card := hUpos.trans_le hUle
+  have hUnionle : (U ∪ V).card ≤ Fintype.card A := by
+    simpa only [Finset.card_univ] using Finset.card_le_card (Finset.subset_univ (U ∪ V))
+  have hcards := Finset.card_union_add_card_inter U V
+  have hδOne : δ ≤ 1 := by linarith
+  simp only [remark1CardinalityFloor, ite_eq_right (Nat.ne_of_gt hUpos),
+    ite_eq_right (Nat.ne_of_gt hVpos), ite_eq_right (Nat.ne_of_gt hUnionpos)]
+  by_cases hInterempty : U ∩ V = ∅
+  · simp only [hInterempty, Finset.card_empty, ite_true, add_zero]
+    simp only [hInterempty, Finset.card_empty, add_zero] at hcards
+    have hexU : Fintype.card A - U.card =
+        (Fintype.card A - (U ∪ V).card) + V.card := by omega
+    have hexV : Fintype.card A - V.card =
+        (Fintype.card A - (U ∪ V).card) + U.card := by omega
+    rw [hexU, hexV, pow_add, pow_add]
+    have hpowU : δ ^ U.card ≤ δ := by
+      simpa only [pow_one] using
+        pow_le_pow_of_le_one hδ hδOne (Nat.succ_le_of_lt hUpos)
+    have hpowV : δ ^ V.card ≤ δ := by
+      simpa only [pow_one] using
+        pow_le_pow_of_le_one hδ hδOne (Nat.succ_le_of_lt hVpos)
+    have hbase : 0 ≤ δ ^ (Fintype.card A - (U ∪ V).card) := pow_nonneg hδ _
+    calc
+      _ ≤ δ ^ (Fintype.card A - (U ∪ V).card) * δ +
+          δ ^ (Fintype.card A - (U ∪ V).card) * δ :=
+        add_le_add (mul_le_mul_of_nonneg_left hpowV hbase)
+          (mul_le_mul_of_nonneg_left hpowU hbase)
+      _ = δ ^ (Fintype.card A - (U ∪ V).card) * (2 * δ) := by ring
+      _ ≤ δ ^ (Fintype.card A - (U ∪ V).card) * 1 :=
+        mul_le_mul_of_nonneg_left (by linarith) hbase
+      _ = _ := mul_one _
+  · have hInterpos : 0 < (U ∩ V).card :=
+      Finset.card_pos.mpr (Finset.nonempty_iff_ne_empty.mpr hInterempty)
+    simp only [ite_eq_right (Nat.ne_of_gt hInterpos)]
+    have hexU : Fintype.card A - U.card =
+        (Fintype.card A - (U ∪ V).card) + ((U ∪ V).card - U.card) := by omega
+    have hexV : Fintype.card A - V.card =
+        (Fintype.card A - (U ∪ V).card) + ((U ∪ V).card - V.card) := by omega
+    have hexInter : Fintype.card A - (U ∩ V).card =
+        (Fintype.card A - (U ∪ V).card) + ((U ∪ V).card - U.card) +
+          ((U ∪ V).card - V.card) := by omega
+    rw [hexU, hexV, hexInter]
+    simp only [pow_add]
+    have hfactor : 0 ≤ δ ^ (Fintype.card A - (U ∪ V).card) *
+        (1 - δ ^ ((U ∪ V).card - U.card)) * (1 - δ ^ ((U ∪ V).card - V.card)) :=
+      mul_nonneg (mul_nonneg (pow_nonneg hδ _)
+        (sub_nonneg.mpr (pow_le_one₀ hδ hδOne)))
+        (sub_nonneg.mpr (pow_le_one₀ hδ hδOne))
+    apply sub_nonneg.mp
+    convert hfactor using 1
+    ring
+
+private theorem remark1_card_pos_of_mem {A : Type*} [Fintype A] {δ : ℝ}
+    {x : A → ℝ} (hx : x ∈ remark1RestrictedStrategies A δ) : 0 < Fintype.card A := by
+  by_contra hnot
+  let : IsEmpty A := Fintype.card_eq_zero_iff.mp (Nat.eq_zero_of_not_pos hnot)
+  have hsum := (GameTheory.Math.Probability.mem_simplexWeights.mp hx.1).2
+  simp at hsum
+
+/-- Literal domain membership supplies the extended lower bound also for empty and full subsets. -/
+theorem remark1_allSubset_mass_lowerBound {A : Type*} [Fintype A] {δ : ℝ}
+    {x : A → ℝ} (hx : x ∈ remark1RestrictedStrategies A δ) (U : Finset A) :
+    remark1CardinalityFloor (Fintype.card A) δ U.card ≤ ∑ i ∈ U, x i := by
+  classical
+  have hsum := (GameTheory.Math.Probability.mem_simplexWeights.mp hx.1).2
+  have hcard := remark1_card_pos_of_mem hx
+  by_cases hUempty : U = ∅
+  · simp [hUempty, remark1CardinalityFloor]
+  by_cases hUfull : U = Finset.univ
+  · rw [hUfull, Finset.card_univ]
+    simp only [remark1CardinalityFloor, ite_eq_right (Nat.ne_of_gt hcard),
+      Nat.sub_self, pow_zero]
+    exact hsum.symm.le
+  · have hU : U.Nonempty := Finset.nonempty_iff_ne_empty.mpr hUempty
+    have hproper : U ⊂ Finset.univ :=
+      Finset.ssubset_iff_subset_ne.mpr ⟨Finset.subset_univ _, hUfull⟩
+    simpa only [remark1CardinalityFloor, ite_eq_right (Nat.ne_of_gt (Finset.card_pos.mpr hU))]
+      using hx.2 U hU hproper
+
+open Classical in
+/-- Tight literal subsets are closed under union and intersection in the small-delta domain. -/
+theorem remark1_tightSets_union_inter {A : Type*} [Fintype A] {δ : ℝ}
+    (hδ : 0 ≤ δ) (hhalf : δ ≤ 1 / 2) {x : A → ℝ}
+    (hx : x ∈ remark1RestrictedStrategies A δ) (U V : Finset A)
+    (hU : (∑ i ∈ U, x i) = remark1CardinalityFloor (Fintype.card A) δ U.card)
+    (hV : (∑ i ∈ V, x i) = remark1CardinalityFloor (Fintype.card A) δ V.card) :
+    (∑ i ∈ U ∪ V, x i) =
+        remark1CardinalityFloor (Fintype.card A) δ (U ∪ V).card ∧
+      (∑ i ∈ U ∩ V, x i) =
+        remark1CardinalityFloor (Fintype.card A) δ (U ∩ V).card := by
+  classical
+  have hidentity := Finset.sum_union_inter (s₁ := U) (s₂ := V) (f := x)
+  rw [hU, hV] at hidentity
+  have hsuper := remark1_cardinalityFloor_supermodular hδ hhalf U V
+  have hUnion := remark1_allSubset_mass_lowerBound hx (U ∪ V)
+  have hInter := remark1_allSubset_mass_lowerBound hx (U ∩ V)
+  constructor <;> linarith
+
+private theorem remark1_fullSet_tight {A : Type*} [Fintype A] {δ : ℝ}
+    {x : A → ℝ} (hx : x ∈ remark1RestrictedStrategies A δ) :
+    (∑ i : A, x i) = remark1CardinalityFloor (Fintype.card A) δ (Fintype.card A) := by
+  simp only [remark1CardinalityFloor, ite_eq_right (Nat.ne_of_gt (remark1_card_pos_of_mem hx)),
+    Nat.sub_self, pow_zero]
+  exact (GameTheory.Math.Probability.mem_simplexWeights.mp hx.1).2
+
+open Classical in
+private theorem remark1_tightFamily_sup_inf {A : Type*} [Fintype A] {δ : ℝ}
+    (hδ : 0 ≤ δ) (hhalf : δ ≤ 1 / 2) {x : A → ℝ}
+    (hx : x ∈ remark1RestrictedStrategies A δ)
+    (family : Finset (Finset A)) (hfamily : family.Nonempty)
+    (htight : ∀ W ∈ family,
+      (∑ i ∈ W, x i) = remark1CardinalityFloor (Fintype.card A) δ W.card) :
+    ((∑ i ∈ family.sup' hfamily id, x i) =
+      remark1CardinalityFloor (Fintype.card A) δ (family.sup' hfamily id).card) ∧
+    ((∑ i ∈ family.inf' hfamily id, x i) =
+      remark1CardinalityFloor (Fintype.card A) δ (family.inf' hfamily id).card) := by
+  revert htight
+  induction hfamily using Finset.Nonempty.cons_induction with
+  | singleton W =>
+    intro htight
+    simpa using And.intro (htight W (by simp)) (htight W (by simp))
+  | cons W family hW hfamily ih =>
+    intro htight
+    have hWtight := htight W (Finset.mem_cons_self _ _)
+    have hrest := ih (fun T hT => htight T (Finset.mem_cons_of_mem hT))
+    constructor
+    · rw [Finset.sup'_cons (b := W) (hb := hW) hfamily id, Finset.sup_eq_union]
+      exact (remark1_tightSets_union_inter hδ hhalf hx W
+        (family.sup' hfamily id) hWtight hrest.1).1
+    · rw [Finset.inf'_cons (b := W) (hb := hW) hfamily id, Finset.inf_eq_inter]
+      exact (remark1_tightSets_union_inter hδ hhalf hx W
+        (family.inf' hfamily id) hWtight hrest.2).2
+
+/-- Strict subset excess supplies a donor and receiver with positive slack in every
+constraint whose mass would decrease under their coordinate exchange. -/
+theorem remark1_exists_unblocked_exchange {A : Type*} [Fintype A] {δ : ℝ}
+    (hδ : 0 ≤ δ) (hhalf : δ ≤ 1 / 2) {x : A → ℝ}
+    (hx : x ∈ remark1RestrictedStrategies A δ) (U : Finset A)
+    (hexcess : remark1CardinalityFloor (Fintype.card A) δ U.card < ∑ i ∈ U, x i) :
+    ∃ donor ∈ U, ∃ receiver ∉ U, ∀ W : Finset A, donor ∈ W → receiver ∉ W →
+      remark1CardinalityFloor (Fintype.card A) δ W.card < ∑ i ∈ W, x i := by
+  classical
+  have hUne : U.Nonempty := by
+    by_contra hnot
+    have hUempty := Finset.not_nonempty_iff_eq_empty.mp hnot
+    simp [hUempty, remark1CardinalityFloor] at hexcess
+  by_contra hblocked
+  push Not at hblocked
+  let tight : Finset A → Prop := fun W =>
+    (∑ i ∈ W, x i) = remark1CardinalityFloor (Fintype.card A) δ W.card
+  let blocking : A → Finset (Finset A) := fun donor =>
+    Finset.univ.powerset.filter (fun W => tight W ∧ donor ∈ W)
+  have hblocking : ∀ donor, (blocking donor).Nonempty := by
+    intro donor
+    refine ⟨Finset.univ, ?_⟩
+    simp only [blocking, Finset.mem_filter, Finset.mem_powerset]
+    exact ⟨Finset.subset_univ _,
+      by simpa only [tight, Finset.card_univ] using remark1_fullSet_tight hx,
+      Finset.mem_univ _⟩
+  let core : A → Finset A := fun donor => (blocking donor).inf' (hblocking donor) id
+  have hcoreTight : ∀ donor, tight (core donor) := by
+    intro donor
+    exact (remark1_tightFamily_sup_inf hδ hhalf hx (blocking donor) (hblocking donor)
+      (fun W hW => (Finset.mem_filter.mp hW).2.1)).2
+  have hcoreSelf : ∀ donor, donor ∈ core donor := by
+    intro donor
+    apply (Finset.mem_inf' (hblocking donor)).mpr
+    intro W hW
+    exact (Finset.mem_filter.mp hW).2.2
+  have hcoreSubset : ∀ donor ∈ U, core donor ⊆ U := by
+    intro donor hdonor receiver hreceiver
+    by_contra houtside
+    obtain ⟨W, hdonorW, hreceiverW, hWle⟩ := hblocked donor hdonor receiver houtside
+    have hWtight : tight W :=
+      le_antisymm hWle (remark1_allSubset_mass_lowerBound hx W)
+    have hWmem : W ∈ blocking donor := by
+      simp only [blocking, Finset.mem_filter, Finset.mem_powerset]
+      exact ⟨Finset.subset_univ _, hWtight, hdonorW⟩
+    exact hreceiverW (((Finset.mem_inf' (hblocking donor)).mp hreceiver) W hWmem)
+  let cores : Finset (Finset A) := U.image core
+  have hcores : cores.Nonempty := hUne.image core
+  have hcoreUnion : cores.sup' hcores id = U := by
+    ext donor
+    constructor
+    · intro hmem
+      obtain ⟨W, hW, hdonorW⟩ := (Finset.mem_sup' hcores).mp hmem
+      obtain ⟨owner, howner, rfl⟩ := Finset.mem_image.mp hW
+      exact hcoreSubset owner howner hdonorW
+    · intro hdonor
+      exact (Finset.mem_sup' hcores).mpr
+        ⟨core donor, Finset.mem_image.mpr ⟨donor, hdonor, rfl⟩, hcoreSelf donor⟩
+  have hUnionTight := (remark1_tightFamily_sup_inf hδ hhalf hx cores hcores
+    (by
+      intro W hW
+      obtain ⟨donor, _, rfl⟩ := Finset.mem_image.mp hW
+      exact hcoreTight donor)).1
+  rw [hcoreUnion] at hUnionTight
+  exact (ne_of_lt hexcess) hUnionTight.symm
+
 /-! ## Section 4: Remark 2
 
 The alternative payoff is the liminf of expected finite averages, rather than

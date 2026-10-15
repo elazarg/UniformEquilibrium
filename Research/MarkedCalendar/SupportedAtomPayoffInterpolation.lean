@@ -212,76 +212,6 @@ private theorem eventually_atomEndpoint_weights
   filter_upwards [eventually_all.mpr howner] with k hk
   exact fun vertex i cell => hk i vertex cell
 
-private def cellPayoff (laws : ι → FinDist (Option ℕ)) (reward : Finset ι → ℝ)
-    (sample : ι → Cell laws) : ℝ :=
-  reward (outcomeLabelsEquiv
-    (quittingFirstStoppingOutcome (fun i => originalChoice (sample i))))
-
-private def cellReplyPayoff (laws : ι → FinDist (Option ℕ)) (who : ι)
-    (choice : Option ℕ) (reward : Finset ι → ℝ) (sample : ι → Cell laws) : ℝ :=
-  reward (outcomeLabelsEquiv (quittingFirstStoppingOutcome
-    (Function.update (fun i => originalChoice (sample i)) who choice)))
-
-omit [DecidableEq ι] in
-private theorem expect_cellPayoff (laws : ι → FinDist (Option ℕ))
-    (p : ι → FinDist (Cell laws)) (reward : Finset ι → ℝ) :
-    (FinDist.pi p).expect (cellPayoff laws reward) =
-      ((FinDist.pi (fun i => referenceOriginalLaw laws (p i))).map
-        quittingFirstStoppingOutcome).expect
-        (fun outcome => reward (outcomeLabelsEquiv outcome)) := by
-  rw [← referenceCellProduct_map_originalChoice, FinDist.map_comp, FinDist.expect_map]
-  rfl
-
-private theorem referenceCellProduct_map_update (laws : ι → FinDist (Option ℕ))
-    (p : ι → FinDist (Cell laws)) (who : ι) (choice : Option ℕ) :
-    (FinDist.pi p).map (fun sample =>
-      Function.update (fun i => originalChoice (sample i)) who choice) =
-      FinDist.pi (Function.update (fun i => referenceOriginalLaw laws (p i))
-        who (FinDist.pure choice)) := by
-  classical
-  let read := fun i (cell : Cell laws) => if i = who then choice else originalChoice cell
-  have hread : (fun sample : ι → Cell laws =>
-      Function.update (fun i => originalChoice (sample i)) who choice) =
-      (fun (sample : ι → Cell laws) i => read i (sample i)) := by
-    funext sample i
-    simp only [read, Function.update_apply]
-  rw [hread, ← FinDist.pi_map]
-  apply congrArg FinDist.pi
-  funext i
-  by_cases hi : i = who
-  · subst i
-    simp only [read, ite_true, Function.update_self, FinDist.map_const]
-  · simp only [read, hi, ite_false, Function.update_of_ne hi, referenceOriginalLaw]
-
-private theorem expect_cellReplyPayoff (laws : ι → FinDist (Option ℕ))
-    (p : ι → FinDist (Cell laws)) (who : ι) (choice : Option ℕ)
-    (reward : Finset ι → ℝ) :
-    (FinDist.pi p).expect (cellReplyPayoff laws who choice reward) =
-      ((FinDist.pi (Function.update (fun i => referenceOriginalLaw laws (p i))
-        who (FinDist.pure choice))).map quittingFirstStoppingOutcome).expect
-        (fun outcome => reward (outcomeLabelsEquiv outcome)) := by
-  rw [← referenceCellProduct_map_update, FinDist.map_comp, FinDist.expect_map]
-  rfl
-
-omit [DecidableEq ι] [Nonempty ι] in
-private theorem interpolation_of_source_limits (parameters : ι → ℝ)
-    (values : ℕ → ℝ) (coefficients : ℕ → (ι → Bool) → ℝ)
-    (value : ℝ) (endpoint : (ι → Bool) → ℝ)
-    (hidentity : ∀ᶠ k in atTop,
-      values k = _root_.Math.booleanEndpointInterpolant (coefficients k) parameters)
-    (hvalue : Tendsto values atTop (𝓝 value))
-    (hendpoints : ∀ vertex, Tendsto (fun k => coefficients k vertex) atTop
-      (𝓝 (endpoint vertex))) :
-    value = _root_.Math.booleanEndpointInterpolant endpoint parameters := by
-  classical
-  have hpoly : Tendsto
-      (fun k => _root_.Math.booleanEndpointInterpolant (coefficients k) parameters) atTop
-      (𝓝 (_root_.Math.booleanEndpointInterpolant endpoint parameters)) := by
-    unfold _root_.Math.booleanEndpointInterpolant
-    exact tendsto_finsetSum Finset.univ fun vertex _ =>
-      (hendpoints vertex).mul_const (_root_.Math.booleanEndpointWeight vertex parameters)
-  exact tendsto_nhds_unique hvalue (hpoly.congr' (hidentity.mono fun _ h => h.symm))
-
 private def signedAtomBound : ι → NNReal :=
   fun _ => ⟨(3 / 2 : ℝ) * Fintype.card ι, by positivity⟩
 
@@ -318,13 +248,14 @@ theorem signedAtom_payoff_eq_booleanEndpointInterpolant
   have hvalue := tendsto_reference_outcome_expect source replacement subsequence hE hc
     signedAtomBound hweights (tendsto_referenceLaw_signedAtomReplacement source subsequence
       hE hlaws active atoms directions (fun i => parameters i.1) hparameters) reward
-  refine interpolation_of_source_limits parameters _ (fun k vertex =>
+  refine _root_.Math.eq_booleanEndpointInterpolant_of_tendsto parameters _ (fun k vertex =>
     ((FinDist.pi (fun i => referenceOriginalLaw (source (subsequence k))
       (atomEndpointReplacement source active atoms directions vertex (subsequence k) i))).map
         quittingFirstStoppingOutcome).expect
       (fun outcome => reward (outcomeLabelsEquiv outcome))) _ _ ?_ hvalue ?_
   · filter_upwards [hfinite] with k hk
-    simpa only [expect_cellPayoff] using hk (cellPayoff (source (subsequence k)) reward)
+    simpa only [expect_referenceCellPayoff] using
+      hk (referenceCellPayoff (source (subsequence k)) reward)
   · intro vertex
     exact tendsto_reference_outcome_expect source
       (atomEndpointReplacement source active atoms directions vertex) subsequence hE hc
@@ -370,14 +301,14 @@ theorem signedAtom_finite_reply_eq_booleanEndpointInterpolant
   have hvalue := tendsto_reference_finite_reply_expect source replacement subsequence hE hc
     signedAtomBound hweights (tendsto_referenceLaw_signedAtomReplacement source subsequence
       hE hlaws active atoms directions (fun i => parameters i.1) hparameters) who reward dates ht
-  refine interpolation_of_source_limits parameters _ (fun k vertex =>
+  refine _root_.Math.eq_booleanEndpointInterpolant_of_tendsto parameters _ (fun k vertex =>
     ((FinDist.pi (Function.update (fun i => referenceOriginalLaw (source (subsequence k))
       (atomEndpointReplacement source active atoms directions vertex (subsequence k) i))
         who (FinDist.pure (some (dates k))))).map quittingFirstStoppingOutcome).expect
       (fun outcome => reward (outcomeLabelsEquiv outcome))) _ _ ?_ hvalue ?_
   · filter_upwards [hfinite] with k hk
-    simpa only [expect_cellReplyPayoff] using
-      hk (cellReplyPayoff (source (subsequence k)) who (some (dates k)) reward)
+    simpa only [expect_referenceCellReplyPayoff] using
+      hk (referenceCellReplyPayoff (source (subsequence k)) who (some (dates k)) reward)
   · intro vertex
     exact tendsto_reference_finite_reply_expect source
       (atomEndpointReplacement source active atoms directions vertex) subsequence hE hc
@@ -422,14 +353,14 @@ theorem signedAtom_never_reply_eq_booleanEndpointInterpolant
   have hvalue := tendsto_reference_never_reply_expect source replacement subsequence hE hc
     signedAtomBound hweights (tendsto_referenceLaw_signedAtomReplacement source subsequence
       hE hlaws active atoms directions (fun i => parameters i.1) hparameters) who reward
-  refine interpolation_of_source_limits parameters _ (fun k vertex =>
+  refine _root_.Math.eq_booleanEndpointInterpolant_of_tendsto parameters _ (fun k vertex =>
     ((FinDist.pi (Function.update (fun i => referenceOriginalLaw (source (subsequence k))
       (atomEndpointReplacement source active atoms directions vertex (subsequence k) i))
         who (FinDist.pure none))).map quittingFirstStoppingOutcome).expect
       (fun outcome => reward (outcomeLabelsEquiv outcome))) _ _ ?_ hvalue ?_
   · filter_upwards [hfinite] with k hk
-    simpa only [expect_cellReplyPayoff] using
-      hk (cellReplyPayoff (source (subsequence k)) who none reward)
+    simpa only [expect_referenceCellReplyPayoff] using
+      hk (referenceCellReplyPayoff (source (subsequence k)) who none reward)
   · intro vertex
     exact tendsto_reference_never_reply_expect source
       (atomEndpointReplacement source active atoms directions vertex) subsequence hE hc

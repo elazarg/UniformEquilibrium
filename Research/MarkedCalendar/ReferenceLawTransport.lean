@@ -262,4 +262,63 @@ theorem referenceOpponentProduct_real_response_none
 
 end Replies
 
+section PayoffDictionaries
+
+variable [DecidableEq ι]
+
+/-- The literal original terminal observable on an old-cell tuple. -/
+def referenceCellPayoff (laws : ι → FinDist (Option ℕ)) (reward : Finset ι → ℝ)
+    (sample : ι → Cell laws) : ℝ :=
+  reward (outcomeLabelsEquiv
+    (quittingFirstStoppingOutcome (fun i => originalChoice (sample i))))
+
+/-- The same observable after any original finite or Never reply. -/
+def referenceCellReplyPayoff (laws : ι → FinDist (Option ℕ)) (who : ι)
+    (choice : Option ℕ) (reward : Finset ι → ℝ) (sample : ι → Cell laws) : ℝ :=
+  reward (outcomeLabelsEquiv (quittingFirstStoppingOutcome
+    (Function.update (fun i => originalChoice (sample i)) who choice)))
+
+omit [DecidableEq ι] in
+theorem expect_referenceCellPayoff (laws : ι → FinDist (Option ℕ))
+    (p : ι → FinDist (Cell laws)) (reward : Finset ι → ℝ) :
+    (FinDist.pi p).expect (referenceCellPayoff laws reward) =
+      ((FinDist.pi (fun i => referenceOriginalLaw laws (p i))).map
+        quittingFirstStoppingOutcome).expect
+        (fun outcome => reward (outcomeLabelsEquiv outcome)) := by
+  rw [← referenceCellProduct_map_originalChoice, FinDist.map_comp, FinDist.expect_map]
+  rfl
+
+theorem referenceCellProduct_map_update (laws : ι → FinDist (Option ℕ))
+    (p : ι → FinDist (Cell laws)) (who : ι) (choice : Option ℕ) :
+    (FinDist.pi p).map (fun sample =>
+      Function.update (fun i => originalChoice (sample i)) who choice) =
+      FinDist.pi (Function.update (fun i => referenceOriginalLaw laws (p i))
+        who (FinDist.pure choice)) := by
+  classical
+  let read := fun i (cell : Cell laws) => if i = who then choice else originalChoice cell
+  have hread : (fun sample : ι → Cell laws =>
+      Function.update (fun i => originalChoice (sample i)) who choice) =
+      (fun (sample : ι → Cell laws) i => read i (sample i)) := by
+    funext sample i
+    simp only [read, Function.update_apply]
+  rw [hread, ← FinDist.pi_map]
+  apply congrArg FinDist.pi
+  funext i
+  by_cases hi : i = who
+  · subst i
+    simp only [read, ite_true, Function.update_self, FinDist.map_const]
+  · simp only [read, hi, ite_false, Function.update_of_ne hi, referenceOriginalLaw]
+
+theorem expect_referenceCellReplyPayoff (laws : ι → FinDist (Option ℕ))
+    (p : ι → FinDist (Cell laws)) (who : ι) (choice : Option ℕ)
+    (reward : Finset ι → ℝ) :
+    (FinDist.pi p).expect (referenceCellReplyPayoff laws who choice reward) =
+      ((FinDist.pi (Function.update (fun i => referenceOriginalLaw laws (p i))
+        who (FinDist.pure choice))).map quittingFirstStoppingOutcome).expect
+        (fun outcome => reward (outcomeLabelsEquiv outcome)) := by
+  rw [← referenceCellProduct_map_update, FinDist.map_comp, FinDist.expect_map]
+  rfl
+
+end PayoffDictionaries
+
 end GameTheory.MarkedCalendarChart

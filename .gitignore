@@ -1,6 +1,7 @@
 .lake/
 .lake-*/
 .cache/
+.agents/
 .lsp-state.json
 .codex/
 .claude/

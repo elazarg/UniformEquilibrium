@@ -2,8 +2,41 @@
 
 Author: CODEX_EMMY_BOX.
 
-Status: ACTIVE ORDINARY PROOF DRAFT, not Lean
-implemented and not an export candidate. This is a distinct mechanism from
+Status: ACTIVE ORDINARY RESEARCH, not Lean-implemented and not an export
+candidate. The universal constrained-owner selector(Q) is RETIRED by the
+reviewed three-player obstruction in Sections14.4--14.6. Current research
+is the genuinely joint fixed-four-active-table operation in Sections15--16:
+exact actual-payoff Nash prefixes with complete debt accounting, seeking
+macroscopic recurrence rather than a strengthened exact-response source.
+The one-step and pair-block formulas are proved. A concrete macroscopic
+236-date return with exact-integer certification is now proved in the
+separate owned draft `CODEX_EMMY_BOX__MACROSCOPIC_PERIODIC_ROOT_RETURN.md`,
+with two bounded independent ordinary checks. Its center and smaller raw
+local-neighborhood/upper-grand region are already covered by the implemented
+boxed-charge producer. It is an explicit internal construction, not new
+reward-class coverage, and does not settle the GLOBAL absorbing selector
+for arbitrary completions. A distinct single-positive-inverse-column and
+single-jackpot producer is developed in
+`CODEX_EMMY_BOX__ONE_POSITIVE_COLUMN_SINGLE_JACKPOT.md`; its signed form has
+two independent ordinary checks. A distinct two-opposite-field-pole producer
+in `CODEX_EMMY_BOX__TWO_OPPOSITE_POLES_PROJECTIVE_SELECTION.md` also has
+independent producer checks including absent recipients and mixed coalition
+sizes. Its earlier determinant63 fixture was actually covered by the
+implemented passive-row triple source; Section19 records that admission
+correction. The replacement determinant49 fixture has independently checked
+algebra and failures of all four deleted inverse tests, but its corrected
+active-triple index gives full R0 degree-1. The implemented nonunit-degree
+source therefore covers all its collision completions. A different complete raw producer at
+SINGULAR singleton data is now saved in
+`CODEX_EMMY_BOX__INCOMING_PAIR_POLES_AT_SINGULAR_SINGLETONS.md`.
+Its fixed incoming-pair coefficient recipe and explicit nonsingular leading
+Jacobian give actual full stationary equilibria, but its proof and coverage
+has an independently checked producer; its proposed separating fixture has
+the SAME corrected nonunit degree and is covered too. Neither packet is
+exported. The source-index convention is sign of the active principal
+determinant, without an extra(-1)^cardinality factor.
+
+The preserved compactification work is distinct from
 the closed portfolio/quiet-lift route. An unconditional compact constrained-
 Nash producer is available, with exact exits when a proper clock is bounded
 or when the owner is the only proper clock. Section11 adds exact re-rooting
@@ -1730,3 +1763,792 @@ entrances, support changes INSIDE an excursion, and approximate profiles
 whose conditional seam errors do not vanish. No terminal exploitability
 gap or UE nonexistence is inferred. The next mechanism must alter that
 operation, rather than refine the same vanishing-entrance reset template.
+
+## 16. Actual-payoff root prefixes on the fixed four-active table
+
+Status: exact one-step calculations and pair-block identities; the
+global selector/absorption argument is OPEN. This is a game-dependent
+joint-law operation, not a universal exact-prefix completeness theorem.
+The table is precisely Section15.1, including its negative triples and
+asymmetric negative grand row; the large-jackpot existence theorem does
+not cover it.
+
+### 16.1. Exact full-debt update, without a conditional-error division
+
+Let an ACTUAL independent tail profile have terminal value u_i and
+complete cap b_i, including all dates and Never. Thus D_i=b_i-u_i>=0.
+At a new root let Q_i,B_i,alpha_i be its Quit value, Continue stopping
+contribution and opponent Continue probability as in Section15.2. Pick
+an exact Nash point of the FINITE one-stage game with continuation u.
+This source exists by finite mixed Nash; it is not required to be
+stationary or to keep the old tail payoff as a fixed point.
+
+The sure-owner argument in Section15.6 excludes every sure coordinate,
+for ANY continuation. Consequently every player uses Continue with
+positive probability, and its Continue endpoint
+C_i=B_i+alpha_i*u_i is a best reply. A player with positive Quit
+probability ties Q_i=C_i; a player with zero Quit probability has
+Q_i<=C_i. Hence the actual new value and COMPLETE cap are exactly
+
+    u'_i=C_i,
+    b'_i=max(Q_i,B_i+alpha_i*b_i)=C_i+alpha_i*D_i,
+    D'_i=alpha_i*D_i.                               (16.1)
+
+This cap includes choosing a different complete tail after Continue,
+not only the old tail's finite menu. There is no new absolute error to
+divide by a small reach. All players' laws may change jointly at the
+root. The challenge is cumulative absorption under global root selection.
+
+### 16.2. Every two-or-more-active root keeps a payoff below1
+
+For this table, EVERY nonzero nonsure exact root with at least TWO
+positive Quit probabilities has min_i u'_i<1.
+
+For an adjacent active pair{i,i+1}, its first recipient's active value
+is1-2q_(i+1)<1. For an opposite pair, both active values are1 minus
+the other hazard. For three active consecutive labels, the first active
+recipient has Q0=1-2b-c+bc<1, after rotation.
+
+For full support let p=i-1, j=i+1, k=i+2, and let G_i=-10-i be the
+grand reward. Direct multilinear expansion gives
+
+    Q_i-1=q_p-2q_j-q_k-q_p*q_j-2q_p*q_k+q_j*q_k
+              +(G_i+3)q_p*q_j*q_k
+           <=q_p-2q_j.
+
+Indeed -q_k+q_j*q_k<=0 and all remaining omitted terms are nonpositive.
+Summing yields sum_i(Q_i-1)<=-sum_i q_i<0. Since every full-support
+recipient ties its active endpoint, some u'_i=Q_i<1.
+
+All-Continue is a root Nash point exactly when every u_i>=1. A root
+with ONLY one positive Quit probability at i requires u_i=1, because
+its pure-Quit payoff is1 and its Continue payoff is u_i. Thus whenever
+min_i u_i<1 and NO coordinate equals1, every root Nash selection is
+nonzero, has at least two active labels, contracts every debt strictly
+in(16.1), and retains min_i u'_i<1. This does NOT yet prove avoidance
+of the equality face u_i=1 over infinitely many selected roots.
+
+### 16.3. An exact adjacent-pair block and its nonvanishing collision scale
+
+Fix a prospective adjacent pair{i,i+1}, put x=u_i in(0,1) and
+y=u_(i+1)>1, and hold the other two root hazards zero. The two active
+indifferences force the UNIQUE hazards
+
+    a=q_i=(y-1)/(y+1),
+    b=q_(i+1)=(1-x)/(2-x).                          (16.2)
+
+These are in(0,1). They give a full root Nash point ONLY when the two
+inactive inequalities also hold; those are not silently assumed.
+The new active values are
+
+    x'=x/(2-x),       y'=2y/(y+1).
+
+Define X=(1-x)/x>0 and Y=(y-1)/y in(0,1). Then
+
+    X'=2X,       Y'=Y/2,       XY is invariant.       (16.3)
+
+Write k=i+2,l=i+3 for the two outsiders and s=(1-a)(1-b).
+Their new values are
+
+    u'_k=4a-3ab+s*u_k,
+    u'_l=4b-3ab+s*u_l,
+    s=(x'*y')/(x*y).
+
+In normalized coordinates these increments simplify EXACTLY to
+
+    u'_k/(x'*y')-u_k/(x*y)=2Y+(5/2)XY,
+    u'_l/(x'*y')-u_l/(x*y)=4X-(7/2)XY.
+
+Thus after h consecutive valid prefixes from this same pair,
+
+    X_h=2^h X,       Y_h=2^(-h)Y,
+    u_k,h/(x_h*y_h)
+       =u_k,0/(x*y)+4Y(1-2^(-h))+(5/2)hXY,
+    u_l,h/(x_h*y_h)
+       =u_l,0/(x*y)+4X(2^h-1)-(7/2)hXY.             (16.4)
+
+All finite-h identities follow by telescoping(16.3); no approximation
+or omitted simultaneous pair is used. They expose a genuine collision
+scale XY: growing a block while sending XY to0 removes the cumulative
+linear collision terms, not merely its local hazard mesh.
+
+The inactive tests can also be written explicitly. At this pair root,
+
+    Q_k=1-a+b-2ab,       Q_l=1-2a-b+ab,
+
+and these must not exceed the corresponding actual u'_k,u'_l above.
+When either fails, another player must enter or a different root must
+be selected. The exact burst formula alone does not authorize carrying
+the pair through such a boundary.
+
+### 16.4. Precise remaining global operation
+
+For a finite prefix word made of actual-payoff root Nash points, the
+complete debt is exactly the old debt times each recipient's deleted
+survival product, by(16.1). It would therefore suffice to produce words
+whose deleted survival tends to0 for every label; targets may be selected
+after this actual all-errors family is built. No tail value is supplied
+as a phantom terminal equilibrium.
+
+The substantive question is whether whole root selection on this fixed
+table can avoid BOTH the equality-face/singleton-root stall and a
+summable-absorption approach to it. Maximizing root absorption is an
+attained finite-dimensional selection at each given u, but its iteration
+has no proved uniform recurrence. Finite-game Nash existence, the strict
+one-step debt decrease and preservation of min u<1 off the equality
+faces do not settle that question. Nor is equilibrium correspondence
+lower semicontinuity assumed at a degenerate singleton continuum.
+
+A concrete next target is a compact macroscopic region or return section
+on which the actual pair formulas(16.2)--(16.4) and genuine three-actor
+switches supply a root selection with uniformly positive deleted
+absorption over bounded blocks. An alternative would be a rigorous
+whole-selector finite-sum obstruction. Both are presently OPEN; more
+fixed-regret decimal optimization is not a substitute.
+
+### 16.5. The three-actor roots are explicit quadratic candidates
+
+There is no need to numerically optimize a root at each three-actor step.
+For the support{0,1,2}, with q=(a,b,c,0), stage-Nash indifferences against
+the supplied ACTUAL tail u are exactly
+
+    0=(1-u0)+(u0-2)b+(u0-5)c+(4-u0)bc,
+    0=(1-u1)+(1+u1)a+(u1-2)c-(2+u1)ac,
+    0=(1-u2)+(u2-5)a+(1+u2)b+(1-u2)ab.             (16.5)
+
+Define four linear polynomials of c,
+
+    Na=(u1-1)+(2-u1)c,     Da=(1+u1)-(2+u1)c,
+    Nb=(u0-1)+(5-u0)c,     Db=(u0-2)+(4-u0)c.
+
+Whenever Da*Db!=0, the first two equations force a=Na/Da,b=Nb/Db.
+The third is the single quadratic polynomial equation
+
+    (1-u2)Da*Db+(u2-5)Na*Db
+         +(1+u2)Nb*Da+(1-u2)Na*Nb=0.              (16.6)
+
+Every real c-root must still pass0<a,b,c<1 and the FOURTH player's
+inactive inequality. That inactive immediate-Quit endpoint includes
+the original negative grand reward, and may not be dropped. A zero
+denominator must instead be checked in the original system(16.5);
+no genericity claim silently removes it. Cyclic rotations give all
+four triple supports. Adjacent pairs use(16.2), and an opposite pair
+{i,i+2} has q_i=(1-u_(i+2))/(5-u_(i+2)) and the reverse formula,
+again with both inactive tests retained. These are actual finite-data
+root formulas, not a claim that support at most three is complete.
+
+This gives a small exact candidate correspondence for a prospective
+macroscopic trapping-region proof. One must still PRODUCE the region
+and verify invariance/absorption; the quadratic enumeration itself does
+not discharge that global problem.
+
+### 16.6. A concrete macroscopic return, beyond the root-factorization identity
+
+The separate owned draft `CODEX_EMMY_BOX__MACROSCOPIC_PERIODIC_ROOT_RETURN.md`
+now contains a complete ordinary proof and passing exact-integer interval
+certificate for this PARTICULAR table. Thirteen consecutive blocks use
+adjacent-pair supports of lengths(2,3,2,3,2,3,3,2,3,2,3,2,3), each followed
+by TWO genuine consecutive-triple roots. The59-prefix value map returns
+with one label rotation. Its four rotated copies close a236-date private
+calendar, reversing prefix order for the actual physical dates. Every active
+hazard is>10^-5, every inactive margin>1/100, and the complete periodic
+deadline/Never debt is0. The full236-return derivative is strictly
+contractive, so a raw56-coordinate neighborhood and four upper-only grand
+rewards are also consumed. Two bounded independent ordinary checks passed
+the strategy construction, but the center and a smaller neighborhood times
+those rays are already covered by the implemented boxed-charge producer.
+This is an internal explicit calendar, not new raw-table coverage. It is
+not Lean checked or an arbitrary-completion selection theorem.
+
+## 17. A signed rank-one pole: large penalties also have a producer
+
+Status: ordinary proof draft and exact finite tests, not independently checked
+or proposed for separate export. This records an assumption removal from the
+one-positive-column mechanism, not a new generic selection theorem.
+
+### 17.1 Exact signed-column theorem and proof
+
+Fix a finite player set of size n>=2, arbitrary fixed singleton rows, and
+the receiver-first comparison matrix Gamma_ij=r_i({j})-r_i({i}), diagonal0.
+Assume Gamma invertible and choose a recipient a and a sign sigma in{-1,1}
+such that
+
+    v=sigma*Gamma^-1 e_a>0 in EVERY coordinate.
+
+Choose one coalition S* containing a, |S*|=d+1>=2, and A>0. For any fixed
+finite box of all other nonsingleton coordinates and the residual c, set
+
+    r_a(S*)=sigma*A*M+c.
+
+For every sufficiently large M, the table has an actual all-interior
+stationary exact terminal Nash profile and same-profile uniform equilibrium,
+against every private complete behavioral deviation, including Never.
+The bounded box is arbitrary and the threshold uniform on it. No own-sign
+assumption is made. The other nonsingleton coordinates and c may alternatively
+vary in a sufficiently small cone of radius kappa*M^(1/d), as in the positive
+case. This is production from actual raw data, not a supplied-root verifier.
+
+Put t=M^(-1/d), q=t*z and
+
+    P(z)=(sum_(j!=a)z_j)*product_(j in S*\{a})z_j.
+
+The exact divided endpoint field is
+
+    Phi=sigma*A*P(z)*e_a-Gamma*z+t*E.
+
+Since Gamma*v=sigma*e_a, the positive root is
+
+    rho=(A*P(v))^(-1/d),       z*=rho*v.
+
+Its Jacobian is J=sigma*A*e_a*(grad P)^T-Gamma. The determinant lemma
+uses Gamma^-1 e_a=sigma*v and sigma^2=1, so Euler's identity still gives
+
+    det J=det(-Gamma)*(1-A*grad P(z*) dot v)
+         =-d*det(-Gamma)!=0.
+
+Thus exactly the same parameter IFT produces an ACTUAL positive hazard root.
+The polynomial cancellation, scale-thick parameterization e=t*b, and complete
+stationary Bellman/deleted-absorption consumer are unchanged. For fixed bounded
+other data, the selected payoff limit is
+
+    U_a=s_a+sigma*A*product_(j in S*\{a})z*_j+O(t),
+    U_i=s_i+O(t) for i!=a.
+
+In particular a large NEGATIVE participatory reward is not intrinsically an
+obstruction to a stationary producer. It balances the equations when the
+selected inverse column is strictly negative. Negating utility is NOT the
+argument: the Nash ordering remains the original one throughout.
+
+### 17.2 A degree-one four-active penalty calibration
+
+The following literal matrix has both positive and negative inverse columns:
+
+    Gamma=[0,3,-3,2; -3,0,-1,3; -1,3,0,-1; -2,-1,2,0],
+    Gamma^-1=(1/20)[17,-15,-11,18;14,-10,-2,16;
+                    24,-20,-12,36;25,-15,-15,30].
+
+Its determinant is20. Choose a=1, sigma=-1, S*=I, A=1. Then
+
+    v=(3/4,1/2,1,3/4),       P_1(v)=45/32,
+    rho=(32/45)^(1/3),       q=rho*v*M^(-1/3)+O(M^(-2/3)).
+
+Fix all own singleton rewards1 and the corresponding singleton columns
+
+    0:(1,-2,0,-1), 1:(4,1,4,0),
+    2:(-2,0,1,3),  3:(3,4,0,1).
+
+Use the following bounded completion:
+
+    01:(-4,12,1,1), 12:(1,-4,18,1),
+    23:(1,1,-4,17), 03:(17,1,1,-4),
+    02:(-4,1,-4,1), 13:(1,-4,1,-4).
+
+Every triple pays-4 to its members and1 to its outsider. The grand row is
+(-10,-M,-11,-12). Its only growing reward is NEGATIVE. All other nonsingleton
+coordinates are bounded by18. The signed theorem produces full stationary
+Nash for all sufficiently large M; the actual payoff tends to(1,3/5,1,1).
+This is a target limit across DIFFERENT games, not one UE target shared by
+different tables.
+
+This test does not disappear into the non-R0 or nonunit-degree source. Every
+column has a negative off-diagonal entry, and every principal determinant of
+size at least2 is nonzero. These facts imply R0: a nonzero complementary
+weight with support of size>=2 would lie in a nonsingular principal kernel,
+while a singleton support is blocked by a negative external entry. At offset
+ones the only LCP solution is zero. Exact enumeration by principal inverses
+shows every nonempty support candidate has a negative active weight or a
+negative inactive residual. Thus the regular support-degree sum is1.
+This is an ordinary exact finite calculation, not a new Lean declaration.
+For reproducibility, in support order01,02,03,12,13,23,012,013,023,123,I,
+the principal determinants are(9,-3,4,3,3,2,30,-12,-10,17,20). The rejected
+entries are respectively
+
+    z1=-1/3, residual1=-7/3, z3=-1/2, z1=-1/3,
+    z3=-1/3, z2=-1/2, z1=-7/30, z1=-2/3,
+    residual1=-9/5, z1=-9/17, z0=-9/20.
+
+A singleton support cannot solve the offset-ones active equation because
+its diagonal is0. The empty support is strict and has index+1. This lists
+all fifteen nonempty support cases, rather than inferring the degree from
+one selected LCP root.
+
+The finite collision screens remain nontrivial. For M>=4 there is no root
+Nash with a sure quitter: both nonsuccessors strictly prefer Continue since
+all their joining rewards are<=-4 and their nonparticipant rewards are>=-2;
+the successor joins with gain14, and the owner then withdraws from-4 to a
+singleton reward>=-2. Every proper child has an unsafe exact child Nash by
+choosing d in the child with successor outside, letting only d Quit0, and
+letting the other child members Never. Negative passive payoffs do not
+invalidate this witness: the sure owner forces immediate absorption under
+EVERY such member's replacement. Join gives-4, Continue the singleton>=-2.
+The outsider successor gains exactly14.
+
+The only premium trap is I. Summing its four weighted singleton upper tests
+gives6w0+w1+7w2+6w3>0 for every nonzero w>=0, so the whole upper-average arm
+fails. Its actual weighted singleton INSERTION-leave sums instead give
+4w0+2w1+6w2+7w3>0. The distinction between these two tests is retained.
+The sum of the four directed-pair participant-premium tests is
+11w0+6w1+12w2+11w3>0. A global NONNEGATIVE inserted-floor test fails at
+S=023, whose vector is(-5,-M-1,-5,-5). These facts also block the literal
+boxed singleton-charge row, independently of its threshold parameters.
+
+The signed-inverse TWO-PAIR producer does have its inverse-sign hypothesis
+here, forcing sigma=(+,-,-,+). But it fails its scheduled participant signs
+on EVERY pair partition. The positive-sign player0 can have a nonnegative
+pair premium only with3; at that pair the other positive-sign player3 gets-4
+and violates its sign. If0 is paired with1 or2, player0 itself violates it.
+The all-positive inverse hypothesis fails as well. These are bounded screens,
+not a claim that every older producer or local neighborhood has been excluded.
+
+The positive-only one-column theorem may still apply to other large-coordinate
+regimes of this same singleton matrix. No disjointness from all of its possible
+existential thresholds at individual finite tables is inferred here. The
+actual new point is the signed rank-one raw producer and its degree-one
+negative-pole calibration, not a universal novelty census.
+
+Next concrete question: can the one-column producer be assembled with this
+signed version without importing an unjustified global parameter-range
+separation claim? A genuinely broader multi-column theorem should first
+survive the degree-one screen; the simple two-pole test with Gamma
+[0,1,2,-1;1,0,-1,2;-1,-1,0,1;-1,-1,1,0] has degree-1 and is ALREADY covered
+by `exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`.
+That test is retired as class-narrowing evidence, despite its valid pole root.
+
+## 18. Passive poles: two negative raw rewards can have opposite field signs
+
+Ordinary proof draft, not Lean checked. This is a genuine raw-class extension
+of the two-opposite-pole mechanism, not a claim that its reviewed participatory
+statement already permits an absent reward recipient.
+
+For ANY selected coalition S of size d+1>=2 and recipient i, its reward pole
+K*M, M=t^(-d), contributes to H_i(t*z)/t as follows:
+
+    i in S:  +K*(sum_(j!=i)z_j)*prod_(j in S\{i})z_j + O(t),
+    i notin S: -K*prod_(j in S)z_j + O(t).
+
+Both are exact polynomial extensions after cancellation, and both displayed
+positive polynomials have degree d+1. In the second line the selected
+coordinate appears ONLY in B_i; its minus sign is not a utility reversal.
+There is no factor 1-alpha_i in that case. The entire radial/transverse
+proof uses only positive homogeneity of degree d+1. Thus it still works
+with arbitrary selected coalitions of the same size if raw pole signs are
+chosen to give opposite FIELD signs. The scale-thick residual degree remains
+d-1 for either membership case.
+
+An exact new calibration uses the reviewed two-pole matrix
+
+    Gamma=[0,-1,3,3;2,0,-1,-1;2,3,0,-1;-3,2,-3,0],
+    v(x)=(11-30x,3+9x,-9+36x,31-33x)/63.
+
+Take the SAME coalition S=123 for recipients a=0,b=1. Recipient0 is absent
+and recipient1 belongs to S. Set BOTH raw selected rewards NEGATIVE:
+
+    r0(123)=-14*M,          r1(123)=-M,
+    all other nonsingleton coordinates fixed and bounded.
+
+Then field a is +14*P_a and field b is -P_b, where
+
+    P_a=z1*z2*z3,
+    P_b=(z0+z2+z3)*z2*z3,
+    G=x-(1/14)*(11-9*x)/(1+3*x)
+     =(42*x^2+23*x-11)/[14*(3*x+1)].
+
+On the SAME positive bracket [3/10,31/100],
+
+    G(3/10)=-8/665<0,
+    G(31/100)=831/135100>0.
+
+The exact angular root is x*=(-23+sqrt2377)/84 in this bracket. The radial
+scale is h0=[14*P_a(v(x*))]^(-1/2), so the predicted actual hazards scale
+as M^(-1/2). This is not a numerical root or a simulated public lottery.
+
+For a separating completion retain every singleton, pair and triple from
+the two-pole notebook's table(12), except the two selected coordinates
+at123; replace its grand row by(-10,-11,-12,-13). The singleton matrix,
+all pair/weighted-singleton/guard rows, premium-trap set and degree tests
+are unchanged. The all-sure response residuals are now
+(14*M-10,-12,-13,-14), since withdrawing recipient0 gets its new passive
+reward-14*M rather than1. These are still pairwise distinct for M>=4.
+All inverse columns remain mixed and pair23
+still fails projective Q-bar. Thus neither positive nor negative single-
+inverse-column source applies literally.
+
+The sure-owner proof needs an explicit adjustment because r0(123) is now
+an unbounded negative PASSIVE payoff. Given sure owner i, a nonsuccessor
+j!=0 strictly Continues: its joining payoffs are<=-4 (for M>=4) and its
+passive payoffs are>=-2. One such nonsuccessor exists. Since j!=0, this
+excludes coalition123, so the remaining nonsuccessor0, if present, no
+longer faces the passive penalty and likewise Continues. The successor
+then joins with gain14; the owner withdraws from-4 to a singleton>=-2.
+Thus no sure-root/persistent-base Nash is introduced by this penalty.
+Every proper-child unsafe exact witness uses only singleton and pair rows,
+and remains valid unchanged. This is a candidate strengthened separating
+family, not an independently reviewed whole-source conclusion yet.
+
+Next exact check: independently verify the absent-recipient pole degree and
+the repaired sure-owner argument. If valid, incorporate the general
+membership-sign theorem into the SAME two-pole packet rather than create
+a separate theorem/export for this example.
+
+The same calculation also removes equal coalition sizes, with honest unequal
+raw growth rates rather than silently using the same M. Let d_i=|S_i|-1>=1
+for i=a,b, put t=1/L, and use selected raw magnitudes A*L^d_a and B*L^d_b.
+Define the positive P_i by the two membership cases above. The exact scaled
+field still has leading A*P_a*e_a-B*P_b*e_b-Gamma*z. Its positive radial
+root and remaining scalar function are now
+
+    h0(x)=[A*P_a(v(x))]^(-1/d_a),
+    G(x)=x-B*[A*P_a(v(x))]^(-d_b/d_a)*P_b(v(x)).
+
+The transverse/radial Jacobian has diagonal d_a,-Id, so no equal-degree
+assumption enters that inverse. The scalar remains continuous and its strict
+endpoint signs suffice as before. The polynomial pole cancellation has
+nonnegative t powers separately for each pole. Scale-thick residual e/t
+has least exponent d_i-1>=0 at its selected coordinate. This is an immediate
+proof draft from the same calculation, not yet included in the frozen
+equal-degree participatory packet or its independent reviews.
+
+## 19. A different positive-pair cone without any inverse-sign premise
+
+Ordinary complete proof draft, not Lean checked or independently reviewed.
+This is a distinct actual large-reward regime: FOUR positive incoming pair
+coordinates grow, while all triples and the grand row can stay negative and
+bounded. The two-pole theorem does not apply to this growing-coordinate set.
+
+### Raw criterion, not an assumed strategic root
+
+Fix any finite n>=2, a permutation pi of I with pi(i)!=i, and a fixed vector
+v>0. Given a singleton comparison matrix Gamma, assume the FINITE inequalities
+Gamma*v>0. Put
+
+    P_i(z)=(sum_(j!=i)z_j)*z_pi(i),
+    kappa_i=(Gamma*v)_i/P_i(v)>0,
+    J_ij=kappa_i*partial_j P_i(v)-Gamma_ij.             (19.1)
+
+Assume the explicit matrix J is nonsingular. No inverse, R0, degree or Q
+premise is used. The vector v can be fixed once for a whole singleton-data
+region; it is not assumed to solve any original-table equilibrium equations.
+All coefficients in(19.1) are computed directly from the given singleton
+entries and the fixed finite parameters v,pi.
+
+For every finite residual box R, and every sufficiently large M, prescribe
+
+    r_i({i,pi(i)})=kappa_i*M+c_i,      |c_i|<=R,
+    |r_i(S)|<=R at every other nonsingleton coordinate.  (19.2)
+
+Recipient labels distinguish coordinates even when the same pair is selected
+by both its members. These are raw reward-coordinate restrictions. They
+produce all-interior stationary exact terminal Nash and same-profile UE.
+
+Indeed put t=1/M,q=t*z. The exact participatory-pole calculation gives
+
+    H_i(t*z)/t=kappa_i*P_i(z)-(Gamma*z)_i+t*E_i(t,z,c).
+
+The limiting field vanishes at the EXPLICIT vector v by the DEFINITION of
+kappa from singleton data. Its derivative there is precisely J in(19.1).
+The parameter IFT gives an actual positive root z(t,c)->v, uniformly over
+the residual box, for all sufficiently small positive t. Thus q=t*z is
+interior and H=0. Every player has a proper opponent; the complete deadline,
+Never and behavioral argument in Section18's linked two-pole notebook
+therefore gives exact full terminal Nash and same-profile UE. No exact-root
+or strategic-witness existence premise has been supplied in(19.2).
+
+The source is stable under compact singleton parameter variation inside
+Gamma*v>0,det J!=0. Small simultaneous perturbations of all kappa_i are
+also permitted by the same IFT; this is a raw open cone near the explicitly
+computed coefficient ray, not merely an exact algebraic reward identity.
+
+### Exact four-active non-inverse-positive calibration
+
+Use the original covered Gamma from Section18, reproduced at the end of
+this section, and choose the FIXED rational vector
+
+    v=(1,2,1/10,1),       pi(i)=i-1 modulo4.
+
+Direct rational calculation gives
+
+    Gamma*v=(13/10,9/10,7,7/10)>0,
+    P(v)=(31/10,21/10,8,31/100),
+    kappa=(13/31,3/7,7/8,70/31),
+    J=[0,44/31,-80/31,-397/310;
+       -47/70,0,10/7,10/7;
+       -1/4,9/4,0,11/4;
+       100/31,-55/31,317/31,0],
+    det J=-102995787/2690800!=0.                       (19.3)
+
+Thus for all sufficiently large M the following raw family has an actual
+proper stationary exact Nash: retain the singleton rows of Section18,
+at directed pair{d,d+1} pay donor d=-4, successor d+1=kappa_(d+1)*M,
+outsiders1; at opposite pairs pay members-4,outsiders1; triplesmembers-4,
+outsider1; grand(-10,-11,-12,-13). The bounded nonselected box is13.
+The leading hazards are
+
+    q=(1,2,1/10,1)/M+O(M^-2).
+
+Every inverse column of Gamma is mixed, its R0 degree is1, its full normal
+core is all4, its full matrix is standard-Q, pair23 is not projective-Q,
+and no signed once-per-owner cycle data exist, as in Section18. These
+singleton tests are unchanged by the new pair-scale choice.
+
+### Exact early whole-source screens for this family
+
+These are draft finite calculations, not a completed independent coverage
+gate. For M>39 every incoming pair reward exceeds its passive singleton;
+every donor/opposite/triple participant reward is-4, so the only premium
+trap is I. The all-sure-root argument is even simpler than Section18: BOTH
+nonsuccessors strictly Continue (joining<=-4, passives>=-2), the successor
+joins profitably, and the owner withdraws from-4 to a singleton>=-2. Every
+proper child has the same exact d-Quit0 witness with successor outside,
+whose outsider gain is kappa_succ(d)*M-r_succ(d)({d})>0.
+
+For every nonzero nonnegative weight w, sum the four singleton forced-Quit
+tests. The coefficient of w_i is kappa_i*M-11, strictly positive for M>39.
+The weighted singleton INSERTION coefficients are respectively
+
+    kappa_i*M-(16,11,15,7)_i,
+
+again all positive for M>39. The four directed-pair participant tests have
+coefficients kappa_i*M-6>0. Thus the WHOLE upper-weight and boxed singleton
+arms fail, not merely one chosen weight. A global positive inserted floor
+fails at012, whose vector is(-5,-5,-5,-14).
+
+All pair choices still have a donor/opposite participant-4<own1. At every
+ordered owner/partner pair, a sole-sure outsider j in{i+1,i+2} different
+from the partner gives lower-face displacement-4-r_i({j})<=-2. The whole
+matching/four-cycle/triple-six-join exclusions are unchanged. All-sure raw
+response differences(-11,-12,-13,-14) are distinct. These calculations
+suggest a genuinely uncovered incoming-pair cone, not a consequence of the
+already reviewed two-pole or positive-inverse jackpot statement.
+
+Next exact question: independently check the computed J and whether an
+applicable large-pair source permits ONLY cyclic incoming recipients, rather
+than requiring both participants of every selected pair to have large or
+nonnegative premiums. This is the load-bearing source-overlap seam; do not
+count the cone as admitted before checking it.
+
+A narrow singleton-only lookup also checked
+`QuittingCyclicSingletonOpenSignData` in
+`UniformEquilibrium/Quitting/Cycles/CyclicSingletonOpenSignProducer.lean`.
+Its `cyclic` field requires a cyclically invariant normalized singleton
+matrix; `first_neg` and `later_nonneg` then force exactly ONE negative
+off-diagonal entry in every row. The present matrix has two negative
+off-diagonal entries in rows1 and3, but one in rows0 and2. No relabeling
+or positive row normalization repairs that sign-count discrepancy. Thus
+this open-sign cyclic raw source is also unavailable for both Section18's
+fixture and the new incoming-pair cone. The escort theorem alone is a
+necessity result, not a producer for arbitrary repeated-owner data.
+
+### A singular degree-one center avoids the new two-column source as well
+
+For the sharper exact separation test, change ONLY Gamma_02 from3 to10:
+
+    Gamma0=[0,-1,10,3;2,0,-1,-1;2,3,0,-1;-3,2,-3,0].
+
+It has rank3 and determinant0, with right kernel spanned by
+(11/31,3/31,-9/31,1) and left kernel by(1/2,2,-1/2,1).
+Both have mixed signs. The SAME fixed v=(1,2,1/10,1) gives
+
+    Gamma0*v=(2,9/10,7,7/10),
+    kappa0=(20/31,3/7,7/8,70/31),
+    J0=[0,51/31,-290/31,-11/31;
+        -47/70,0,10/7,10/7;
+        -1/4,9/4,0,11/4;
+        100/31,-55/31,317/31,0],
+    det J0=1799501/26908>0.                           (19.4)
+
+Thus the incoming-pair producer works at a SINGULAR singleton matrix and
+through an actual open singleton neighborhood of that center. The one-
+column, two-inverse-column and whole-positive-inverse producers cannot be
+invoked directly at this center, whatever coalition or sign is selected.
+This is not an argument from unknown relative sizes of two local IFT radii.
+
+The full matrix is still R0: all proper principal blocks of size>=2 are
+invertible, singleton supports have negative external blockers, and its
+one-dimensional full kernel contains no nonzero nonnegative vector. At
+offset ones, in support order01,02,03,12,13,23,012,013,023,123 the principal
+determinants and one exact failed coordinate are
+
+    determinants:(2,-20,9,3,2,-3,62,9,12,11),
+    failures:(z0=-1/2,z0=-1/2,z3=-1/3,z1=-1/3,z1=-1/2,
+              F1=-1/3,z0=-17/31,z0=-1,z2=-3/2,z1=-1/11).
+
+The full-support system Gamma0*z=-ones is inconsistent: its left kernel
+has nonzero pairing3 with ones. Singleton supports again require1=0.
+Therefore the strict empty support is the only root and R0 degree is1.
+Every row has a negative off-diagonal blocker, so normal core remains all4,
+and nonzero degree makes the full singular matrix standard-Q. Pair23 still
+fails projective-Q; the negative-successor cycle is unchanged and still
+fails its positive predecessor requirement. A singular matrix has not been
+mistakenly counted as a non-R0 or non-Q exit.
+
+For the fixture family keep all bounded collision rows described above,
+and replace its singleton column2 by(11,0,1,-2). The pole coefficients are
+now kappa0 of(19.4). All passive singletons remain>=-2. Pair reward rows
+and the sure/child proof therefore have the same form. The summed singleton
+upper coefficients are kappa0_i*M-11. Actual insertion coefficients are
+now kappa0_i*M-(23,11,15,7)_i, positive for M>39 because23/(20/31)<36.
+The participant and floor tests are unchanged. Every nonzero nonnegative
+weight is still excluded, as are all sure bases and unsafe-child debt lifts.
+
+An additional actual source lookup is `CyclicChildSingleton.RawRows` and
+`exists_uniformPayoff_of_resonance` in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicChildSingletonAdapter.lean`.
+Its positive-harm pivot column must have ALL three off-diagonal entries
+negative, including under relabeling and positive row scaling. EVERY column
+of Gamma0 has a positive off-diagonal entry, so no pivot can supply those
+raw rows. The resonance theorem also produces a nonnegative homogeneous
+kernel, whereas the displayed kernel is mixed. Thus merely det Gamma0=0
+does not activate that known resonance producer.
+
+Next substantive checkpoint is the complete raw incoming-pair cone at this
+singular center, not further constants or another bad inverse-column branch.
+
+**Containment correction.** BOTH Section18's Gamma and the singular Gamma0
+above are entirely covered by the literal implemented passive-row triple
+producer. Deleteplayer2. The child013 matrix has inverse
+(1/9)[2,6,1;3,9,6;4,3,2]>0, and the outside row(2,3,-1) has inverse
+weights(1,4,2)>0. The theorem
+`PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`
+therefore supplies UE for EVERY nonsingleton completion, including all these
+pole rays. The unsafe exact-child witnesses only falsify a UNIVERSAL
+child-debt bound; they do NOT falsify this SELECTIVE singleton-cycle lift.
+The exact pole constructions remain valid internal mathematics, but neither
+fixture can serve as new-class admission evidence. The next test must fail
+ALL four actual deleted inverse/passive-row selections before proceeding.
+
+For completeness, the covered two-pole calibration's literal singleton rows
+were0:(1,3,3,-2),1:(0,1,4,3),2:(4,0,1,-2),3:(4,0,0,1).
+Its adjacent pairs were01:(-4,17,1,1),12:(1,-4,18,1),
+23:(1,1,-4,12),03:(18,1,1,-4); opposite pairs gave members-4,
+outsiders1; triples gave members-4,outsider1. The original poles were
+grand(M,-M,-11,-12). The both-negative version changed only
+r0(123)=-14M,r1(123)=-M andgrand(-10,-11,-12,-13).
+These retain the complete covered fixtures while the standalone two-pole
+packet's admission example is replaced; their exact producer remains valid.
+
+### Replacement singular calibration
+
+The complete incoming-pair producer is now stated and proved independently
+of these covered fixtures in
+`CODEX_EMMY_BOX__INCOMING_PAIR_POLES_AT_SINGULAR_SINGLETONS.md`.
+Its literal singular matrix is
+
+    [0,-69/20,-1,3;-3,0,4,-2;-3,-3,0,2;-4,-1,1,0].
+
+All four actual deleted triple inverses have negative entries, unlike the
+covered determinant63 calibration. The fixed vector(1,1,6,4) gives
+Gamma*v=(51/20,13,2,1)>0, pair coefficients
+(51/880,13/11,1/3,1/48), and exact leading Jacobian determinant
+-228865/7744. The complete source is a raw finite-coefficient criterion,
+not a supplied strategic root. Independent proof and whole-source review
+remain required; singularity alone is not admission evidence. Its correct
+three-root degree is1-1-1=-1, so this replacement is ALSO covered by the
+nonunit-degree theorem. The producer stays valid but no new UE class follows.
+
+## 20. An algebraic selector for nondegenerate incoming-pair coefficients
+
+Status: ordinary proof draft. This is a supporting source-assumption removal
+for Section19's COMPLETE raw incoming-pair producer, not a new arbitrary-game
+equilibrium mechanism. The frozen standalone producer is unchanged while its
+independent reviews run. No claim below is silently included in those reviews.
+
+Fix n>=2, a zero-diagonal real matrix Gamma, and a permutation pi without
+fixed points. Assume there is one label j such that Gamma_ij!=0 for every
+i!=j, and assume the open linear feasibility cone
+
+    Omega={v>0: Gamma*v>0}
+
+is nonempty. No matrix invertibility is required. Define on the positive
+orthant
+
+    P_i(v)=(sum_(k!=i)v_k)*v_(pi(i)),
+    K_i(v)=(Gamma*v)_i/P_i(v).
+
+**Proposition.** The rational Jacobian det DK is not identically zero.
+Consequently regular points of K are dense in Omega. In particular there
+is a POSITIVE RATIONAL vector v in Omega with
+
+    det[diag(K(v))*DP(v)-Gamma]!=0.                   (20.1)
+
+Thus, for rational or real-algebraic singleton data with exact comparisons,
+a terminating enumeration of positive rational vectors testing the strict
+inequalities Gamma*v>0 and the finite determinant(20.1) produces actual
+positive incoming-pair coefficients kappa=K(v) for the raw theorem. For
+arbitrary real coefficients the claim is existence, not a computability
+assertion about an unprovided real-number oracle.
+These are original singleton-data tests, not searches for a strategic root
+of the original fixed reward table. This selects a DESIGNED large-pair class;
+it does not assert that arbitrary supplied pair coefficients equal K(v).
+
+### Exact asymptotic proof of nonidentity
+
+Let i0=pi^-1(j), so i0!=j. Use source coordinates
+
+    v_j=1/tau,      x=v_(pi(j)),
+    w_k=v_k for k notin{j,pi(j)}.
+
+The rational map K extends smoothly to tau=0 after these substitutions.
+The i0-th component has
+
+    K_i0=Gamma_(i0,j)*tau+O(tau^2).
+
+For each i notin{j,i0}, the limiting component is
+
+    K_i=Gamma_ij/w_(pi(i))+O(tau).
+
+The labels pi(i) in this last line run BIJECTIVELY through the w coordinates;
+none is j or pi(j). The remaining j-th component is EXACTLY independent
+of tau and is
+
+    K_j=(A+g*x)/[(B+x)*x],
+    A=sum_(k notin{j,pi(j)})Gamma_jk*w_k,
+    B=sum_(k notin{j,pi(j)})w_k,       g=Gamma_(j,pi(j)).
+
+Its x-derivative is
+
+    dK_j/dx=-(g*x^2+2*A*x+A*B)/[x^2*(B+x)^2].       (20.2)
+
+If g!=0 this derivative is not identically zero in positive x. If g=0,
+the nonempty cone Omega guarantees that row j is nonzero, so some other
+coefficient Gamma_jk is nonzero. Choose positive w with A!=0; then(20.2)
+is nonzero for every x>0. For n=2 the second case is impossible and
+B=A=0 in the first case causes no problem.
+
+At tau=0, the derivative matrix in the ordered coordinates(tau,w,x),
+and ordered outputs(i0,all remaining non-j labels,j), is block triangular.
+Its determinant, up to a permutation sign, is
+
+    Gamma_(i0,j) * product_(i notin{j,i0})
+        [-Gamma_ij/w_(pi(i))^2] * dK_j/dx.
+
+Choose w,x as above. Every factor is nonzero, so the substituted derivative
+is nonsingular at tau=0 and for all sufficiently small positive tau. The
+coordinate change v_j=1/tau is a diffeomorphism for tau>0, proving that
+det DK is a nonzero rational function on the positive orthant.
+
+After multiplication by the positive denominator product, its numerator
+is a nonzero real polynomial. Such a polynomial cannot vanish on any
+nonempty open set. The cone Omega is open, so its regular subset is open
+dense and nonempty. Density of rational vectors then gives a rational
+regular v in Omega. Finally
+
+    DK(v)=diag(P(v))^-1*[Gamma-diag(K(v))*DP(v)]
+
+proves(20.1). Notice that the proof's large-v_j witness need not lie in
+Omega: it proves NONIDENTITY, which then yields a regular point INSIDE
+the actual feasible cone. Its potentially negative coefficients must not
+be mistaken for the selected positive source coefficients.
+
+### Strength and exact remaining gap
+
+Every off-diagonal entry of the singular matrix in the new standalone
+incoming-pair fixture is nonzero, and its displayed v proves Omega nonempty.
+Therefore its regular pair-source selection is not an isolated accident.
+The lemma removes the need to ASSUME a preselected v passes the Jacobian
+test when designing the class under these singleton conditions. It does
+not remove nondegeneracy for a SPECIFIED leading coefficient tuple, does
+not give global existence for every kappa>0, and does not turn changes of
+reward data into legal operations in a fixed input game. Those quantifiers
+remain the obstruction to using this construction as a universal mechanism.

@@ -2,6 +2,17 @@
 
 Owner: CODEX_MORSE.
 
+Current native-family account: NT below works on ONE fixed own-zero
+augmented carrier with positive absorbing gap. For arbitrary positive
+row scales in a fixed box and t→0, all translated full minima have
+literal Never product tending to the same least native zero-debt Never
+level, and their native total debt is o(t), uniformly over the scales
+and minima. A single coordinate-regular scale can also be chosen for
+countably many preselected t's by the actual almost-everywhere argument.
+This is supporting ordinary UNREVIEWED algebra, NOT absorption: the
+limiting Never level is strictly positive under the hypothesized gap.
+An actual first-hit contradiction or absorbing producer is still missing.
+
 Latest payoff-sensitive global-selector test: GP below replaces the
 pivot's payoff by the negative ORIGINAL full maximum deviation debt,
 leaving the three other payoff agents unchanged. On EVERY canonical
@@ -25050,3 +25061,116 @@ AllNever equilibrium is irrelevant and every unilateral finite/Never
 reply must still be priced. A whole-family small-positive-translation
 argument would have to choose its row scales and minima honestly as the
 translation changes; no fixed-law ancestry or new consumer is claimed.
+
+## NT. One native augmented carrier controls the whole small-translation family
+
+Status: COMPLETE ORDINARY UNREVIEWED supporting algebra, not a new
+counterexample-class restriction, fixed-point consumer or export. This
+records the bounded global account requested after GP. Its application
+to an actual first-hit producer remains OPEN; further value-function
+refinements alone are not the research endpoint.
+
+### NT1. Exact native problem and uniform value asymptotics
+
+Fix ONE signed own-singleton-zero Fin4 table z with |z|≤M, M>0,
+and hypothesized positive ABSORBING full-debt gap A>0. Ordinary AllNever
+is already terminal Nash for this native table and is not a contradiction.
+Let H be the closure of its ACTUAL independent-law triples (U,B,ν),
+where B includes EVERY finite/Never behavioral reply and ν is literal
+joint Never. This is one fixed compact finite-dimensional carrier;
+d_i=B_i−U_i≥0 throughout it. AllNever gives (U,B,ν)=(0,0,1).
+
+Define its least zero-debt Never level
+
+    η₀=min{ν:(U,B,ν)∈H and d_i=0 for every i}.
+
+The set is nonempty and compact. The complete absorbing estimate from
+source Part I Section3 extends by closure to H:
+
+    A≤Σ_i d_i+14Mν^(1/4).
+
+Consequently η₀≥(A/(14M))⁴>0. Conversely η₀=0 would already supply
+absorbing full-debt approximants by the same completion estimate. Thus
+proving η₀=0 is the genuine global task, not a conclusion of compactness.
+
+For t>0 and ANY θ∈[a,b]⁴ with fixed0<a≤b<∞, set
+r_i^(t,θ)(S)=θ_i[z_i(S)+t] for all nonempty coalitions, preserving
+Never payoff0, and put C_θ=Σ_iθ_i. The exact signed translation and
+positive row scaling identities on this SAME carrier give
+
+    δ(t,θ)=min_H {Σ_iθ_i d_i+tC_θν}.                 (NT.1)
+
+Every minimum of this expression corresponds to an ORIGINAL full
+minimum of its current translated table. Its prescribed payoff/cap pair
+is transformed by U_i↦θ_i[U_i+t(1−ν)], B_i↦θ_i(B_i+t); no native
+minimum or law is transported as a current minimum by assertion.
+
+For ANY chosen minimizer write d^(t,θ),ν_(t,θ). Evaluating (NT.1) at
+a native zero-debt lift with ν=η₀ gives
+
+    0≤Σ_iθ_i d_i^(t,θ)≤tC_θ[η₀−ν_(t,θ)],
+    ν_(t,θ)≤η₀.                                    (NT.2)
+
+As t→0, native debt tends to zero uniformly in θ because θ_i≥a and
+C_θ≤4b. Any alleged sequence of minimizers whose ν stays belowη₀
+has an H-cluster with native debt0 and smaller ν, contradicting its
+definition. Hence, UNIFORMLY over all scales in this box and all minima,
+
+    ν_(t,θ)→η₀,
+    Σ_i d_i^(t,θ)=o(t),
+    δ(t,θ)/(tC_θ)→η₀.                              (NT.3)
+
+This does not require θ to converge or to be common across t. All fresh
+laws, cap families, calendars and ancestral profiles may change. It is
+the fixed native augmented carrier and the zero-debt level, not a fixed
+selected minimum, that make this comparison legal.
+
+### NT2. One common regular scale for preselected translations
+
+If a common coordinate-regular θ is useful, it can actually be produced
+for ANY countable sequence t_n>0 chosen BEFORE θ. For each n the fixed-
+carrier function
+
+    W_n(θ)=min_H Σ_iθ_i(d_i+t_nν)
+
+is finite concave and locally Lipschitz. The proof in source Part I
+Section5 is genuinely almost-everywhere, not merely density/existence:
+one-dimensional concavity gives countably many unequal-slope points on
+each coordinate line, and Fubini makes each coordinate exceptional set
+null. A countable union over n and the four coordinates is still null.
+Choose one θ∈(a,b)⁴ outside it. At EVERY n all full minima of the
+CURRENT table r^(t_n,θ) then have one common translated debt vector,
+by the two-sided supporting inequalities for W_n.
+
+The common vector may depend on n. This does NOT make minima, Never
+masses, caps or laws independent of n, and does not license transporting
+a marked calendar between tables. Native debt and Never convergence
+remain only the statements in (NT.3).
+
+### NT3. The checked minimum margin supplies payoffs, not absorption
+
+For t in a bounded interval all current rewards have one common bound
+M_*>0. The positive full gap is supplied by the actual absorbing
+completion/translation argument in source Part I Section4, uniformly
+under positive row scaling. Apply
+`positive_minimum_fourPlayer_allOwner_quadraticMargins` in
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`
+at the CURRENT genuine full minimum. If U_i,B_i,d_i denote its native
+coordinates, exact cancellation of the translated own and Never terms
+gives
+
+    θ_i B_i≥δ+δ²/(8M_*),
+    θ_i U_i≥δ−θ_i d_i+δ²/(8M_*).                   (NT.4)
+
+Thus native prescribed payoffs and full caps have the UNIFORM lower
+bound U_i/t,B_i/t≥(C_θ/θ_i)η₀+o(1). This is a lower bound only:
+neither U_i=O(t) nor concentration at raw AllNever has been proved.
+Also d_i=o(t) is native terminal regret, not an absorption-relative
+Nash/Bellman error for a repeated word. Repetition can inflate deleted
+caps and is NOT licensed by (NT.3–4).
+
+The indispensable new mathematics is still an ACTUAL first-hit argument
+forcing η₀=0, or a complete rational table and all-behavior obstruction
+with η₀>0. The displayed optimization algebra does neither. No absorbing
+profile, terminal consumer, ancestor identification or new source seal
+is inferred from this bounded account.

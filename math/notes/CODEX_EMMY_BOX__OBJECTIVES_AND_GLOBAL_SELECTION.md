@@ -103,6 +103,28 @@ debt from O(delta) to more than1/2. The prefix is actual and end-binding.
 The table has exact Nash, so this does NOT refute the supplied uniform-
 gap problem or joint prefix/tail optimization; it rules out discarding
 the prefix's deleted-survival weights when choosing the tail.
+Section18.18 is separate UNREVIEWED supporting mathematics and a retired
+selector. Arbitrary finite data admit a STATIONARY exact shared-budget
+source with full complete-law agency. But on the checked Solan--Vieille
+Fin4 boundary table the ENTIRE stationary-source subclass has uniformly
+positive original regret for arbitrarily small delta, while the whole
+source minimum is already0. Even each date's forced loss tends0 there;
+its accumulation does not. This is not an all-profile gap or a failure
+of the whole N_delta correspondence. Stationary joint selection is not
+being retained as the global mechanism.
+Section18.19 is a separate UNREVIEWED ordinary raw-data producer. Jointly
+solving the two phases of the checked Solan--Vieille equilibrium gives an
+exact full-behavior Nash profile on an OPEN neighborhood of all fifty-six
+proper-coalition reward entries; the four grand-coalition entries are
+arbitrary. The active-equation Jacobian is proved nonsingular, inactive
+inequalities are strict, and every deleted-player clock contracts. Thus
+the WHOLE shared-source minimum is0 for every sufficiently small delta
+throughout this cylinder. This is a local counterexample-class exclusion,
+not a proof that the entire N_delta minimum tends0 on arbitrary Fin4 data.
+The cylinder can be chosen disjoint from every nonzero nonnegative H/J
+ledger class, and contains tables violating proper-flatness and weak solo
+exit preference. No export, Lean check, or exhaustive coverage claim is
+made; independent falsification of the joint branch is requested.
 
 The concrete finding is an objective-independent obstruction to one restricted
 operation: freeze an infinite sequence of public root signals, retaining a
@@ -4070,3 +4092,491 @@ deleted-survival-weighted cap charges strongly enough to yield an
 improving admissible tail as δ→0? This example requires retaining those
 charges; replacing that question by independent unweighted minimization
 would silently discard an order-one term.
+
+### 18.18. Stationary source production is complete; stationary selection fails
+
+Status: ORDINARY UNREVIEWED source producer and an exact consequence of
+named Lean declarations. The producer below is not claimed Lean-checked.
+The stationary obstruction is already established in the named source;
+no novelty is claimed for nonstationarity of that example. This section
+records a genuinely different attempted global mechanism and why it is
+retired: select a complete stationary shared-budget equilibrium at each
+δ, then optimize among ALL such equilibria. Its source agency survives,
+but even its whole-subclass regret conclusion is false as δ→0.
+
+#### A finite-dimensional arbitrary-data source producer
+
+Fix arbitrary finite real rewards, any finite nonempty player set, and
+0<δ<1, c=1−δ. No singleton sign assumption is needed for this producer.
+For stationary rates q∈[0,1]^I put
+
+    β(q)=∏[i] (1−q_i),
+    α_i=∏[j≠i] (1−q_j),
+    Q_i=expected reward if i Quits at the current root,
+    b_i=opponent-only absorbed payoff at that root.
+
+The stationary terminal payoff on β≤c is
+
+    u_i(q)=[q_i Q_i+(1−q_i)b_i]/[1−(1−q_i)α_i].     (18.48)
+
+Given the opponents, the feasible STATIONARY own rates are the interval
+[ℓ_i,1], where
+
+    ℓ_i=0                         if α_i≤c,
+    ℓ_i=1−c/α_i                   if α_i>c.
+
+The interval endpoints are continuous in the opponents, including α_i=0
+and α_i=c. On the feasible graph the denominator in18.48 is at leastδ,
+so utility is continuous there. If α_i<1, its own-rate derivative has
+constant sign, the sign of Q_i−b_i/(1−α_i). If α_i=1, all opponents
+Never and every feasible positive rate earns the same own singleton.
+Thus every stationary best-response set is a nonempty compact interval.
+Its graph is closed by continuity and the continuous feasible interval.
+Kakutani on the full rate cube produces a generalized stationary fixed
+point q. Joint feasibility follows at the fixed point from any player's
+chosen own-rate constraint. Convexity of the joint feasible set is not
+assumed.
+
+The important audit is that this finite-dimensional fixed point is an
+EXACT member of the original N_δ against EVERY feasible complete clock
+law, not just against constant-hazard deviations. Fix its opponents.
+Their joint survival is α_i^(t+1), so a feasible complete own law obeys
+
+    S_i(t)≤(c/α_i)^(t+1)       if α_i>c,
+
+and has no additional constraint if α_i≤c. For α_i<1, put
+B_i^N=b_i/(1−α_i). Its pure finite response curve is exactly
+
+    f_i(T)=B_i^N+(Q_i−B_i^N)*α_i^T,
+
+and literal Never pays B_i^N. If Q_i>B_i^N, this curve is decreasing,
+Quit0 is globally optimal, and the stationary best response is q_i=1.
+If Q_i<B_i^N, it is increasing. The latest feasible clock is Geom(ℓ_i)
+when ℓ_i>0 and literal Never when ℓ_i=0, exactly the stationary best
+response. Quantile dominance checks EVERY feasible law. If equality
+holds, every response pays the same value. For α_i=0 the same conclusion
+follows directly: Quit0 pays Q_i, and any later deadline/Never pays b_i.
+For α_i=1 every feasible clock is proper and all its finite deadlines
+pay s_i, so all feasible complete laws earn s_i regardless of its sign.
+These cases exhaust the opponents and prove complete agency.
+
+Thus N_δ always contains a stationary profile. This supplies a simpler
+arbitrary-data nonemptiness proof than18.2, but NOT compactness of the
+entire correspondence or small original regret. It introduces no new
+strategic interface or assumed tail witness.
+
+#### Exact Fin4 failure of the ENTIRE stationary-subclass selector
+
+Take the literal `SolanVieilleBoundary.boundaryReward` in
+`UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryTable.lean`,
+with own singletons1. The declaration
+`SolanVieilleBoundary.no_stationary_terminalApproximateEquilibrium`
+in `UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryNonstationarity.lean`
+provides a fixed ε₀>0 such that no stationary behavioral profile is
+terminal ε-Nash for ANY 0<ε<ε₀. Put γ=ε₀/2. In particular EVERY
+stationary profile has full maximum regret greater thanγ, and so
+
+    inf {E(p): p∈N_δ and p is stationary} ≥ γ
+                     for EVERY 0<δ<1.              (18.49)
+
+The subclass is nonempty by the preceding complete producer, so this
+is not an empty-infimum artifact. It is a UNIFORM gap on a restricted
+subclass, not the original all-profile positive-gap hypothesis.
+
+The same table has an exact period-two full-behavior terminal Nash
+profile, by `FourPlayerPairedSingleton.periodTwoProfile_isExactTerminalNash`
+in `UniformEquilibrium/Quitting/Examples/BlockPair/FourPlayerPairedSingletonPeriodTwo.lean`.
+The named `oddRoot_continueMass` and `evenRoot_continueMass` in that
+file give the SAME joint survival factor
+
+    ρ=periodTwoParameter*periodTwoSecondary ∈(0,1)
+
+at every date. Consequently this exact profile is budget-feasible for
+every 0<δ≤1−ρ. Full Nash implies restricted source optimality. Hence
+the ENTIRE source minimum on this table is0 for all such δ. The failure
+in18.49 is therefore purely a stationary selection failure, not even a
+positive whole-source fixed-δ minimum. It does not contradict the
+different solved Solan calibration's positive fixed-δ minimum in18.6.
+
+#### Forced-layer loss can remain order one despite O(δ) rates
+
+There is a sharper comparison with the played-Quit-loss ledger. EVERY
+stationary source on this boundary table has all rates below1. Otherwise
+the cases in the complete-agency proof make it a full stationary Nash
+profile: non-sure players have a sure opponent, so their shared constraint
+is vacuous; any sure player's best stationary response1 is also its full
+best response. If it is the sole quitter, its singleton1 dominates Never0.
+This contradicts18.49.
+
+There must also be at least two proper stationary labels. With only one,
+the owner earns its maximal singleton1, while all other players choose
+Never from a feasible interval beginning at0; their stationary best
+response is then full-best by the response-curve calculation. That again
+would be a full stationary Nash profile. Thus α_i<1 for every player.
+
+Since q_i<1, stationary optimality gives Q_i≤B_i^N for every i, so all
+full caps are Never. If every positive-rate player had equality, all
+prescribed payoffs would equal their full caps, again impossible. Some
+positive-rate player strictly prefers Continue and therefore takes its
+positive lower feasible rate ℓ_i. This forces β=c. Consequently
+
+    0≤q_i≤δ for EVERY i,
+    B_i−U_i = q_i*(B_i−Q_i)/δ,
+    Δ_i=q_i*(B_i−Q_i)=δ*d_i.                       (18.50)
+
+In particular every local forced-Quit charge tends0 withδ, but some
+coordinate has charge at leastγδ. Its actual-reach-weighted total is
+
+    ∑[t≥0] c^t Δ_i = Δ_i/(1−c)=d_i > γ
+
+for a coordinate attaining E. The horizon of order1/δ cancels the small
+per-date charge. No negative losses, unavailable deviations or price
+normalization are involved: every cap is literal Never and the complete
+budget optimizer is already checked. This is an exact stationary example
+of why small forcing at EACH date does not discharge cumulative loss.
+
+Direction change. The stationary fixed-point source exists for arbitrary
+data, but optimizing that ENTIRE subclass cannot decide the conjecture
+even on the displayed solved Fin4 table. It is therefore retired as a
+global small-δ mechanism, not repaired by a further stationary selector,
+rate constant or local loss bound. Whole-source tail availability must
+retain genuinely nonstationary components and their accumulated quantile
+credits. The original supplied-uniform-gap joint prefix/tail question is
+still open; no strict descent from positivity at one fixedδ is asserted.
+
+Source audit. The three named example modules and their imports were
+opened at the exact declarations above. The source nonstationarity and
+period-two claims are not paper inferences. The finite Kakutani source
+argument and its complete response-curve upgrade are ordinary mathematics
+not checked in Lean. No Lean command, export, or source-file edit was made.
+
+Concrete next question. Can a supplied all-profile gap force a change in
+an actual nonstationary binding-block pattern that BOTH releases its
+accumulated forced-quantile loss and retains its full continuation cap
+ledger? Any proposed bound based only on per-date rates or losses already
+fails18.50; any independent unweighted tail choice already fails18.47.
+
+### 18.19. A joint nonstationary producer on an open proper-row cylinder
+
+Status: ORDINARY UNREVIEWED complete local class theorem. This is a change
+of mechanism after18.18, not an asserted solution of the remaining global
+source problem. Instead of selecting a stationary constrained equilibrium
+or independently replacing a tail, solve two actual phases and BOTH of
+their continuation vectors simultaneously. The result produces exact Nash
+play from raw data in a full proper-row neighborhood. In particular it
+excludes that neighborhood under the original ALL-PROFILE gap hypothesis.
+It proves no arbitrary-table vanishing-minimum claim.
+
+#### Raw statement and the actual profile
+
+Let I={0,1,2,3}, live payoff0, and let r* be the literal
+`SolanVieilleBoundary.boundaryReward`. Its proper rows are
+
+| S | r*(S) |
+| --- | --- |
+| 0 | (1,4,0,0) |
+| 1 | (4,1,0,0) |
+| 2 | (0,0,1,4) |
+| 3 | (0,0,4,1) |
+| 01 | (1,1,1,1) |
+| 02 | (1,1,1,0) |
+| 03 | (1,0,1,1) |
+| 12 | (0,1,1,1) |
+| 13 | (1,1,0,1) |
+| 23 | (1,1,1,1) |
+| 012 | (1,0,0,0) |
+| 013 | (0,1,0,0) |
+| 023 | (0,0,0,1) |
+| 123 | (0,0,1,0) |
+
+There exists η>0 such that EVERY finite real reward table r satisfying
+
+    max[∅≠S⊊I, i∈I] |r_i(S)−r*_i(S)| < η             (18.51)
+
+has an exact unrestricted terminal Nash profile of period2. There is NO
+restriction on r(I). The fifty-six entries in18.51 vary independently;
+there are no symmetry, ledger-weight, flatness, or sign-pattern hypotheses.
+η is existential, not a numerically certified radius.
+
+At phase A, only players0,2 may Quit, with Continue probabilities x,y.
+At phase B, only players1,3 may Quit, with Continue probabilities u,v.
+All four probabilities are smooth functions of the proper rows near r*,
+and can be kept in(1/2,7/8). Every live date uses independent private coins.
+The phase is the deterministic parity of the publicly known date, not an
+additional public random signal. Every unilateral behavioral replacement,
+including literal Never, is permitted in the Nash assertion.
+
+As a consequence the actual period-two profile belongs to N_δ and has
+D=E=0 for EVERY 0<δ≤15/64: each phase's joint survival is less than49/64,
+so every joint prefix survival is at most(49/64)^(t+1). Exact full Nash
+implies optimality against every budget-feasible complete replacement.
+Thus, on this entire raw cylinder,
+
+    min[p∈N_δ] D(p) = min[p∈N_δ] E(p) = 0
+                              for 0<δ≤15/64.       (18.52)
+
+This is stronger than merely choosing a good unweighted tail behind a
+fixed prefix. Both phases, all prescribed coordinates, and all four full
+caps are produced together. It is nevertheless only a local raw class.
+
+#### Four active equations, with no freely supplied continuation vector
+
+For any r and (x,y,u,v), define the unconditioned absorbed-payoff accounts
+
+    T^A_i=(1−x)y r_i(0)+x(1−y)r_i(2)
+                            +(1−x)(1−y)r_i(02),
+    T^B_i=(1−u)v r_i(1)+u(1−v)r_i(3)
+                            +(1−u)(1−v)r_i(13).
+
+The active pure-Quit rewards are
+
+    Q^A_0=y r_0(0)+(1−y)r_0(02),
+    Q^A_2=x r_2(2)+(1−x)r_2(02),
+    Q^B_1=v r_1(1)+(1−v)r_1(13),
+    Q^B_3=u r_3(3)+(1−u)r_3(13).
+
+Define BOTH proposed phase values by the following explicit formulas:
+
+    V^A_0=Q^A_0,                   V^A_2=Q^A_2,
+    V^B_1=Q^B_1,                   V^B_3=Q^B_3,
+    V^B_0=T^B_0+uv V^A_0,          V^B_2=T^B_2+uv V^A_2,
+    V^A_1=T^A_1+xy V^B_1,          V^A_3=T^A_3+xy V^B_3.
+
+These are polynomial functions of actual raw rewards and the four coins,
+not unproduced strategic input. The four active-indifference equations are
+
+    Φ_0=(1−y)r_0(2)+y V^B_0−Q^A_0=0,
+    Φ_2=(1−x)r_2(0)+x V^B_2−Q^A_2=0,
+    Φ_1=(1−v)r_1(3)+v V^A_1−Q^B_1=0,
+    Φ_3=(1−u)r_3(1)+u V^A_3−Q^B_3=0.              (18.53)
+
+For example Φ_0=0 says that player0's Continue endpoint, against player2's
+current coin and the ACTUAL opposite-phase candidate value, equals its
+Quit endpoint. Consequently its prescribed phase-A payoff equals
+(1−x)Q^A_0+x Q^A_0=V^A_0. The analogous identities give the other three
+active Bellman coordinates. The four inactive Bellman coordinates are
+already the definitions above. Hence18.53 gives the complete recursions
+
+    V^A=T^A+xy V^B,                 V^B=T^B+uv V^A. (18.54)
+
+Since xyuv<1, the recursions have a unique bounded periodic solution.
+The values produced above are therefore the actual terminal prescribed
+values of the displayed private profile, not just formal continuation
+values satisfying some local inequalities.
+
+#### Nondegeneracy in all four coins, not only in the symmetric subfamily
+
+Let P(a)=44a⁴−7a³−26a²+a+3. Select its root
+
+    37/50<a<3/4,                  b=(4a²−1)/(3a²).
+
+The existing exact construction gives P(a)=0, 1/2<b<3/4, and
+
+    b(1−a+3b−2ab)=1,              a²(4−3b)=1.       (18.55)
+
+For r=r*,18.53 becomes the polynomial system, in its displayed order,
+
+    Φ_0=y(1−u+3v−2uv)−1,
+    Φ_2=xu(4−3v)−1,
+    Φ_1=v(1−x+3y−2xy)−1,
+    Φ_3=ux(4−3y)−1.                               (18.56)
+
+Its root is (x,y,u,v)=(a,b,a,b). It is essential to check the FULL
+four-variable Jacobian: persistence in the two-variable symmetric slice
+would not imply robustness under arbitrary raw reward perturbations.
+
+Here is a direct kernel check. Put C=b(1+2b)>0. For any infinitesimal
+(dx,dy,du,dv), subtracting the second and fourth linearized equations gives
+
+    3a²(dy−dv)=0.
+
+Subtracting the first and third gives
+
+    C(dx−du)+(1−a)(dy−dv)=0.
+
+Thus every kernel vector has dx=du and dy=dv. On that symmetric subspace
+the remaining two equations have the Jacobian of
+
+    f(a,b)=b(1−a+3b−2ab)−1,
+    g(a,b)=a²(4−3b)−1.
+
+Along g=0, b=b(a)=(4a²−1)/(3a²), and exact elimination gives
+
+    f(a,b(a))=(1−a)P(a)/(9a⁴).
+
+At the selected root its derivative is
+
+    d/da f(a,b(a))=(1−a)P'(a)/(9a⁴)>0.
+
+Indeed P'(a)=176a³−21a²−52a+1>0 on the stated isolating interval;
+this is also the named exact monotonicity calculation in the source.
+Since g_b=−3a², the two-variable determinant is
+
+    det D(f,g)=g_b * d/da f(a,b(a))
+             =−(1−a)P'(a)/(3a²)<0.                 (18.57)
+
+Thus the four-variable kernel is zero. Equivalently its full determinant
+is 3a²b(1+2b) times18.57, hence nonzero. No Jacobian sign or nonsingularity
+is inferred from a numerical root, a one-dimensional quartic alone, or a
+constrained local minimum.
+
+The ordinary finite-dimensional implicit function theorem now supplies
+a smooth local solution (x(r),y(r),u(r),v(r)) of18.53 for ALL fifty-six
+independent proper-row perturbations. Shrink a positive proper-row box
+until all four coins stay in(1/2,7/8). This is an actual raw-data producer.
+The branch is unique locally in the four coins; no global equilibrium
+uniqueness is claimed. The grand row is absent from the equations and
+will also be absent from every unilateral endpoint below.
+
+#### Strict inactive inequalities and the COMPLETE behavioral caps
+
+At r*, the resulting phase values are
+
+    V^A=(1,1/b,1,1/a),            V^B=(1/b,1,1/a,1).
+
+The phase-A inactive Quit-minus-Continue gaps for players1,3 are
+
+    a+b−ab−1/b <0,               1−1/a <0,
+
+and the phase-B gaps for players0,2 are the same two strict values.
+These are strictly negative since a,b<1 and a+b−ab<1<1/b.
+Each perturbed inactive gap is a polynomial expression in proper rewards,
+the selected coins and the explicit V values. For example player1's
+phase-A Quit reward is
+
+    xy r_1(1)+(1−x)y r_1(01)+x(1−y)r_1(12)
+                            +(1−x)(1−y)r_1(012),
+
+and its Continue reward is V^A_1. Thus strict negativity survives on a
+smaller common proper-row box. At its selected profile every active
+player is indifferent and every inactive player strictly prefers Continue
+against the actual next-phase value. These verify all eight exact root
+Nash inequalities, not just the four equations used for production.
+
+A unilateral deviator never faces more than two active opponents, so at
+most THREE players can Quit together under the prescribed profile or ANY
+one-player replacement. The grand row is never used. Every player's
+opponents contain at least one prescribed positive-hazard player at EACH
+phase, with Continue probability less than7/8. Their joint survival
+through T dates is therefore at most(7/8)^T, uniformly over the deviator's
+entire behavioral strategy and private randomization.
+
+For completeness, apply the endpoint Nash inequalities successively
+through T dates, keeping V^A or V^B as the terminal value when nobody has
+yet stopped. Any current mixed action is bounded by its phase value,
+regardless of the deviator's previous private coins. This gives deviation
+terminal payoff up to T plus its live continuation value at most the
+initial V coordinate. The absolute unpaid tail is bounded by a constant
+times(7/8)^T, because only proper rewards and bounded V values can occur.
+Let T→∞. Every complete behavioral deviation, including Never, pays at
+most V. Prescribed play pays exactly V by18.54. Hence its unrestricted
+full caps are EXACTLY V, at BOTH phases and every live suffix.
+
+In the source's cyclic terminology, joint cycle survival is xyuv<1,
+every deleted-player cycle product is <1, and so the cycle is admissible
+by its contracting branch. There is no unpaid Never boundary. The named
+admissible-cycle compiler therefore consumes precisely the produced
+Bellman identities and root Nash inequalities. Exact terminal Nash also
+gives the fixed-target uniform payoff V^A by the exact terminal-to-uniform
+compiler. Neither a profile depending on the requested accuracy nor a
+target varying with accuracy is being substituted for this conclusion.
+In fact this SAME period-two profile works uniformly: against every own
+replacement, absorption time has an expectation bounded by the geometric
+opponent tail. The difference between expected terminal reward and its
+expected finite-horizon average is therefore O(1/horizon), uniformly over
+all deviations. The phase value is fixed before the accuracy. This direct
+observation uses the proved deleted-clock contraction; exact local Nash
+without that boundary check would not justify it.
+
+#### Coverage: an actual nonstationary family, separated from H/J ledgers
+
+This is local raw-table coverage, not a universal classification. It is
+not merely the previously checked period-two point or its one-parameter
+paired collision family: all fifty-six proper entries vary independently,
+and arbitrary grand entries are allowed. The numerical size of the open
+box, and overlap with every other existing class, are not established.
+
+There is a clean exact separation from the nonnegative-weight H/J class.
+For weights a_i≥0, write H_a(S)=∑[i] a_i(r_i(S)−s_i), where s_i=r_i(i).
+On r*, summing H over the four cross pairs gives
+
+    H_a(02)+H_a(03)+H_a(12)+H_a(13)=−∑[i] a_i.       (18.58)
+
+Under a proper-row perturbation of sup norm less thanη, each coordinate
+of the coefficient on the left changes by at most8η: four pair entries
+and four copies of its own singleton. Choose η<1/8. Then for EVERY
+nonzero a≥0 the sum remains strictly negative. At least one proper H_a
+is negative, so NO such weight satisfies all proper H_a≥0, regardless
+of J. The entire smaller cylinder is outside that ledger hypothesis,
+not just outside a chosen normalization or a strictly positive-weight
+variant. The same radius argument allows every own singleton to remain
+positive. This separation uses the raw proper rows, not a conjectured
+hard-residual consequence.
+
+The cylinder also contains actual tables with no proper-flatness or weak
+solo-exit preference: change only
+
+    r_0(02)=1+ε,                   r_2(02)=1+ε
+
+for any sufficiently small ε>0, leave every other entry of r* unchanged,
+including r*(I)=(−1,−1,−1,−1). Both participants in the proper pair02 now
+exceed their own singleton, so that pair has no flat participant. The
+produced exact equilibrium persists, and18.58 becomes
+
+    (−1+ε)(a_0+a_2)−a_1−a_3<0
+
+for every nonzero a≥0 when ε<1. This is an actual equilibrium family
+witness, not merely a guard separation with an unproduced strategy.
+
+Nonstationarity is genuinely needed on a smaller full-table neighborhood.
+Let γ>0 be the boundary's fixed stationary exploitability gap from18.49.
+Changing all sixty rewards by at mostζ changes the full exploitability of
+EVERY fixed profile by at most2ζ. Thus every stationary profile on any
+such table has exploitability at least γ−2ζ. In particular ζ<γ/4 leaves
+a positive stationary gap, while the joint phase producer gives exact
+nonstationary Nash. This applies to the preceding two-entry witnesses
+for ε small enough. It does not apply uniformly to arbitrarily changed
+grand rows, which could themselves create a sure grand-coalition Nash
+equilibrium. The grand-free producer and this small-full-table stationary
+exclusion are separate assertions.
+
+Therefore an original positive ALL-PROFILE terminal gap cannot occur
+anywhere in18.51, for ANY grand row. The global source question remains
+open outside this explicitly produced nonstationary raw cylinder. No
+claim that positivity at a fixed δ supplies a descent step is used.
+
+Source audit. The bounded route was the nonstationary example and the
+admissible-cycle compiler in docs/TOOLKIT.md. Opened declarations:
+`periodTwoPolynomial_strictMonoOn`,
+`exists_periodTwoParameter_mem_isolatingInterval`,
+`periodTwo_active_identity_first`, `periodTwo_active_identity_second`,
+`oddRoot_endpointDifference`, `evenRoot_endpointDifference`,
+`inactivePairGap_neg`, `inactivePrimaryGap_neg`, and
+`periodTwoProfile_isExactTerminalNash` in
+`UniformEquilibrium/Quitting/Examples/BlockPair/FourPlayerPairedSingletonPeriodTwo.lean`;
+the literal `boundaryReward` in
+`UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryTable.lean`;
+`isQuittingCycleAdmissible_of_contracts`,
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_admissible`, and
+`isUniformEquilibriumPayoff_terminal_of_admissible_quittingCyclicContinuationBlock`
+in `UniformEquilibrium/Quitting/Cycles/AdmissibleCycleTerminalEquilibrium.lean`;
+`quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact` in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`;
+`abs_quittingTerminalExploitability_sub_le_of_reward_close` in
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`;
+and `no_stationary_terminalApproximateEquilibrium` in
+`UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryNonstationarity.lean`.
+A narrow search of the paired-example subtree found the exact point and
+one-parameter producer, but no matching full proper-row persistence
+statement. This is a bounded overlap check, not proof of project-wide
+novelty. The Jacobian calculation, implicit-function producer, grand-free
+coverage, and H-ledger separation above are ordinary mathematics not
+checked in Lean. No Lean command, file edit outside this notebook, commit,
+or export was made.
+
+Concrete next check. Independently try to falsify the FULL four-variable
+Jacobian reduction and the complete-cap/irrelevant-grand-row argument.
+If they survive, this gives a genuine nonstationary local raw producer
+and18.52, but still supplies no global source selector away from the
+produced cylinder. Do not relabel this local exclusion as arbitrary Fin4
+coverage.

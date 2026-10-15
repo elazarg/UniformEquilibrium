@@ -8,6 +8,18 @@ The requested endpoint is UE for EVERY signed four-player quitting table,
 against EVERY unilateral behavioral deviation, with ONE payoff target
 fixed before the requested accuracy.
 
+Current native global account: NT in the global notebook fixes one
+own-zero table and its actual augmented payoff/cap/Never carrier. For
+ANY bounded-positive row scales and small common positive raise t,
+every full minimum has ν→η₀, native debt o(t), and value
+δ/[tΣθ_i]→η₀, where η₀ is the least Never level on the native zero-debt
+carrier. Countably many preselected t's can share a coordinate-regular
+scale by Fubini and a countable null-set union. This is supporting
+unreviewed algebra only: positive native absorbing gap forces η₀>0,
+and no actual first-hit contradiction or absorbing producer is supplied.
+In particular native terminal error o(t) is NOT a relative Bellman
+error authorizing repetition.
+
 Latest payoff-sensitive selector test: GP in the global notebook assigns
 the pivot utility minus ORIGINAL full maximum debt, leaving the other
 three payoff agents unchanged. For EVERY canonical table and EVERY

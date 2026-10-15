@@ -185,6 +185,17 @@ seam-only negative-plane argument, with no unresolved mathematical
 objection. See [Morse's review](../feedback/CODEX_BROUWER__NONBIJECTIVE_SINGLETON_SOURCE__BY_CODEX_MORSE.md).
 No total funding, full-II, Lean or export claim follows.
 
+DG below is a COMPLETE ORDINARY, UNREVIEWED fresh-source restriction:
+after fixing a native own-zero table off six observer determinants and
+twelve explicit proper homogeneous resultants, EVERY sufficiently small
+positive terminal-row raise, with any allowed regular recipient scales,
+excludes a ROOT-ONLY sole-future owner in case II. Both possible
+finite-amplitude limits and both geometric-hazard endpoints are retained.
+Thus the sole future owner is LATER-ONLY at one fresh source; its
+saturated debt then fixes original joint Never on the whole minimum
+fibre. This is not a funded move, unchanged-table conclusion or complete
+one-future/II consumer. Its exact bounded proof awaits independent check.
+
 The requested independent UR1–UR5 review of Morse's sixteen-control family
 is complete: mathematical PASS, with precise bounded prior-criterion
 separations but the full existential-producer union still UNRESOLVED.
@@ -18953,4 +18964,413 @@ for u, v in [(Q(1), Q(0)), (Q(0), Q(1)), (Q(2), Q(-3))]:
     assert 2*(2*u*v+u*w-v*w) == 2*(u*u+v*v) > 0
 print('PASS: 400 exact field/gradient/Hessian/endpoint/negative-tangent checks;'
       ' mixed-sign positive-plane control')
+```
+
+## DG: the sole future owner is later-only at a fresh small-own source
+
+Status: COMPLETE ORDINARY, UNREVIEWED ACTUAL-SOURCE RESTRICTION.
+This selects a FRESH native table before any terminal-row raise or
+minimum. It does not change the already selected table in DC–DF.
+The target is an actual full-global-minimum exclusion, not a local
+gain ledger or supplied-profile verifier. No export or Lean seal.
+
+### DG1. Statement and finite generic conditions fixed before t
+
+Assume an actual Fin4 quitting game has no uniform-equilibrium payoff.
+The reviewed source normalization and signed row translation provide
+an own-zero native table with positive ABSORBING gap. Scale into the
+open half cube and perturb WITHIN the own-zero affine slice while
+preserving that gap. Choose the perturbation to satisfy the following
+finite generic conditions, then FIX the resulting native table Z.
+Write A=Δ_abs(Z)>0 and L=max_(h,S)|Z_h(S)|>0. Every native own is0
+and every recipient row has distinct nonempty entries.
+
+For distinct owners i,p,q,k put
+
+    Γ_h=Z_h({k}),           P_h=Z_h({h,k})       (h≠k),
+    d_{hp}=Z_h({h,p})−Z_h({p}),
+    d_{hq}=Z_h({h,q})−Z_h({q}),
+    d_{hpq}=Z_h({h,p,q})−Z_h({p,q})             (h=i,k),
+    d_pq=Z_p({p,q})−Z_p({q}),
+    d_qp=Z_q({p,q})−Z_q({p}).
+
+Require the SIX observer determinants
+
+    Δ_{i,k;p,q}=d_{ip}d_{kq}−d_{iq}d_{kp}≠0.       (DG.1)
+
+These are the same additional native determinants as NC.45: the
+unordered supplier pair has two complementary observers. Observer
+or supplier interchange changes at most the sign.
+
+For each ordered pair (i,k), with complementary UNORDERED pair {p,q},
+put
+
+    u=Γ_q d_pq,    v=Γ_p d_qp,    w=d_pq d_qp,
+    R_{i,k;p,q}
+      =(u d_{ip}+v d_{iq}−wΓ_i)d_{kpq}
+                       −(u d_{kp}+v d_{kq})d_{ipq}.
+
+Require all TWELVE resultants
+
+    R_{i,k;p,q}≠0.                                (DG.2)
+
+Supplier interchange leaves this polynomial unchanged. Every Γ_h
+and every displayed joining gap is nonzero by native row distinctness.
+
+Each determinant is proper on the own-zero slice: its four joining
+gaps can independently take values (1,0,0,1) using non-own entries
+of the two observer rows. Each R is also proper there. Set
+Γ_p=Γ_q=d_pq=d_qp=1, so u=v=w=1; set
+d_{ip}=d_{iq}=d_{kp}=d_{kq}=0, Γ_i=d_{kpq}=1 and d_{ipq}=0.
+All these assignments use independent non-own row coordinates and
+give R=−1. These properness witnesses need not satisfy row distinctness
+or belong to the eventual native gap set.
+
+The finite union of these proper polynomial zero sets and the row
+equality hyperplanes has empty interior in the own-zero slice. The
+positive absorbing-gap subset of the open half cube is nonempty and
+open by the reviewed all-profile perturbation bound. Thus the required
+Z exists there. No minimum or cap class has been chosen at this point.
+
+For t>0 and θ∈(1/2,1)⁴ define the FULL reward table
+
+    r_h^(t,θ)(S)=θ_h[Z_h(S)+t]   for EVERY nonempty S,
+    r_h^(t,θ)(AllNever)=0,       s_h=θ_h t.       (DG.3)
+
+Every Γ or joining difference for this table is θ_h times the native
+one: terminal-row translation cancels. Hence Δ scales by θ_iθ_k,
+and R scales by θ_iθ_pθ_qθ_k. The latter is a degree-four polynomial
+homogeneous of degree ONE in each of the four recipient rows. These
+generic avoidances survive EVERY allowed positive recipient scale,
+not merely scales close to1.
+
+There exists t₀=t₀(Z)>0 such that for EVERY 0<t<t₀, EVERY coordinate-
+regular θ∈(1/2,1)⁴, and EVERY selected least-original-Never/max-A
+minimum of r^(t,θ), its case-II ONE-FUTURE mode has k LATER-ONLY.
+Equivalently the ROOT-ONLY k label remaining in DC is absent at this
+fresh source. One can choose t also below NC.43/NC.45's fixed bounds,
+retaining their separate reviewed zero-future restrictions. No assertion
+is made about general case I, zero future, two or more future owners,
+or a source table selected before these additional avoidances.
+
+### DG2. The actual source, native debt and complete clock formulas
+
+For every sufficiently small t, signed translation and completion give
+positive full gap for Z+t, while its absorbing gap remains A. Positive
+row scales preserve a positive full gap, give absorbing gap>A/2 and
+
+    δ_(t,θ)≤D_r(AllNever)=tΣ_hθ_h<4t<A/2.
+
+Coordinate-regular scales give the common positive minimum debt vector
+on the fixed carrier. The reviewed source and max-A selection therefore
+apply afresh. No old minimum, chronology or suffix is transported.
+
+Suppose there were arbitrarily small t with a selected one-future
+minimum and ROOT-ONLY future owner. CW/DA/DB give an ACTUAL global
+minimum with the same full (U,B,original ν), root rates and max-A
+membership:
+
+    i=PureNever,
+    p=bδ₀+(1−b)δ_Never,    q=aδ₀+(1−a)δ_Never,
+    k=fF_ζ+(1−f)δ_Never,
+    F_ζ(t)=ζ(1−ζ)^(t−1)   (integer t≥1),
+    0<a,b,f<1,   0<ζ≤1.
+
+Its exact full-cap labels are Q_i=E_i, Q_p<E_p, Q_q<E_q and
+Q_k>R_k+C s_k, where C=(1−b)(1−a). This root-only k label is
+preserved by CW because k's root cap and whole full cap are preserved.
+All raw clocks, literal Never and the possibly unattained END supremum
+are exactly those of DC; no second-clock compression is used.
+
+At THESE SAME actual independent laws the exact all-law translation
+and scaling identities give
+
+    D_r(P)=Σ_h θ_h d_h^Z(P)+t(Σ_hθ_h)ν(P).
+
+Consequently D_Z(P)≤2D_r(P)<8t. By native absorbing completion,
+
+    A≤D_Z(P)+14Lν(P)^(1/4).
+
+For all sufficiently small t this forces
+ν(P)≥c₀:=(A/(28L))⁴>0. Each individual Never mass is at least
+the product ν, so 1−a,1−b,1−f≥c₀. This bound uses the NATIVE
+absorbing gap, not a false positive native full gap: AllNever at Z
+has debt0.
+
+Put ℓ_h=max(ζP_h,Γ_h), η_h=ℓ_h−Γ_h≥0 for h≠k. Native root/later
+gaps are unchanged by the positive terminal-row translations/scales.
+Using all finite/Never caps, not a lower selected ledger, the exact
+native individual debts at these laws are
+
+    d_i^Z=Cfη_i,
+    d_p^Z=Cfη_p+bγ_p,     γ_p=(1−a)fℓ_p−a d_pq>0,
+    d_q^Z=Cfη_q+aγ_q,     γ_q=(1−b)fℓ_q−b d_qp>0,
+    d_k^Z=g_k>0,                                      (DG.4)
+
+where the exact two observer gaps are, with x=b/(1−b), y=a/(1−a),
+
+    0=g_i/C=x d_{ip}+y d_{iq}+xy d_{ipq}−fℓ_i,
+    g_k/C=x d_{kp}+y d_{kq}+xy d_{kpq}.                (DG.5)
+
+At own0, native Never can TIE END. It cannot exceed it, so the same
+complete cap max(Q,E) remains valid; the translation identity also
+proves this directly. Formula(DG.4) includes all nonnegative residuals.
+
+### DG3. A complete failure-sequence contradiction: f*>0
+
+If the uniform t₀ assertion failed, choose t_n→0, regular θ_n and
+one such selected minimum for each n. There are only finitely many
+owner assignments; fix one along a subsequence. By compactness extract
+
+    θ_n→θ*∈[1/2,1]⁴,
+    (b_n,a_n,f_n,ζ_n)→(b*,a*,f*,ζ*)∈[0,1]⁴,
+    (1−b*),(1−a*),(1−f*)≥c₀.
+
+Every native debt tends to0. All expressions in(DG.4–5) are continuous
+on this parameter set, including ζ*=0 and1; taking their limits is
+only an algebraic limiting argument. It does NOT identify escaping
+finite mass with original Never or assert an actual ζ=0 geometric law.
+
+First suppose f*>0. Then C*>0 and(DG.4) force η_i*=η_p*=η_q*=0,
+so ℓ_h*=Γ_h for all h≠k. Also a*,b*>0. Indeed if b*=0<a*,
+zero q debt forces γ_q*=f*Γ_q=0, impossible since Γ_q≠0. The
+reverse case is symmetric. If a*=b*=0, the i bridge in(DG.5) gives
+f*Γ_i=0, also impossible. Thus γ_p*=γ_q*=0 and
+
+    x*=f*X,    y*=f*Y,
+    X=Γ_q/d_qp=u/w,    Y=Γ_p/d_pq=v/w.             (DG.6)
+
+Here X,Y>0 and w,u,v≠0. Native k debt tends to0, so both equations
+in(DG.5), after division by f*, become
+
+    Xd_{ip}+Yd_{iq}−Γ_i+f*XYd_{ipq}=0,
+    Xd_{kp}+Yd_{kq}    +f*XYd_{kpq}=0.             (DG.7)
+
+Eliminating f* gives
+
+    [(Xd_{ip}+Yd_{iq}−Γ_i)XYd_{kpq}
+       −(Xd_{kp}+Yd_{kq})XYd_{ipq}]w³
+      =uv R_{i,k;p,q}=0.
+
+This contradicts(DG.2). Both triple observer replies are indispensable
+to this eliminant; neither was replaced by a pair-only expression.
+No extra tail tie, sign of a joining gap or hazard differentiation
+was assumed. In particular this arm also covers ζ*=0 or1.
+
+### DG4. The f*=0 arm and actual two-sided source stationarity
+
+If f*=0, (DG.4) implies a*b*=0: if both were positive, zero p
+debt would force d_pq=0, contrary to row distinctness. The i bridge
+in(DG.5) now forces the remaining rate, if any, to0, since d_{ip}
+and d_{iq} are nonzero. Hence
+
+    b*=a*=f*=0.                                  (DG.8)
+
+Use the ACTUAL global minimum at EACH n, not stationarity of this
+degenerate limit. Keep its ζ_n and whole finite conditional fixed,
+and vary b,a,f on a two-sided legal open box. All three coordinates
+are strictly between0 and1. The strict p,q later-only and k root-only
+gaps persist in a sufficiently small box, whose radius need not be
+uniform in n. The ENTIRE cap formula of DF2 is exactly
+
+    D=max(F₀,F₁),
+    F₀=Q_i+E_p+E_q+Q_k−Σ_hU_h,
+    F₁=E_i+E_p+E_q+Q_k−Σ_hU_h.                  (DG.9)
+
+These are multiaffine amplitude polynomials and F₀=F₁=δ at the
+source. All FIRST/END ties, moving finite clocks and Never remain
+included in E_h; holding ζ fixed retains their ordering. Global
+minimum implies there is µ_n∈[0,1] with
+
+    ∇[(1−µ_n)F₀+µ_nF₁]=0                       (DG.10)
+
+at the source. For completeness, if0 were outside the segment joining
+the two active gradients, let v be its nearest point to0. The direction
+−v has strictly negative dot product with BOTH gradients, since the
+nearest-point inequality gives v·gradient≥|v|²>0. Both F branches
+would decrease on a legal short step, contradicting the true minimum.
+This also covers µ=0 or1 without assuming smoothness of the full cap.
+
+At the POLYNOMIAL endpoint b=a=f=0, for each fixed table r^(t,θ),
+direct root-polynomial differentiation gives
+
+    ∂_bF₀=θ_kd_{kp}+θ_id_{ip}−S,
+    ∂_bF₁=θ_kd_{kp}−S,
+    ∂_aF₀=θ_kd_{kq}+θ_id_{iq}−S,
+    ∂_aF₁=θ_kd_{kq}−S,
+    S=tΣ_hθ_h.                                  (DG.11)
+
+This endpoint evaluation does NOT claim those branch labels are true
+at AllNever. It evaluates the exact SAME branch polynomials used on
+each source box. Their derivative formulas are jointly continuous in
+the table and amplitude parameters, uniformly for ζ∈[0,1]. Extract
+µ_n→µ* and take limits in the b,a parts of(DG.10), using(DG.8–11):
+
+    θ*_k d_{kp}+(1−µ*)θ*_i d_{ip}=0,
+    θ*_k d_{kq}+(1−µ*)θ*_i d_{iq}=0.             (DG.12)
+
+The determinant of these two native joining columns is nonzero by
+(DG.1). It forces θ*_k=0, contrary to θ*_k≥1/2. Thus this arm
+also fails. ζ_n may tend to0 or1: there is no two-sided ζ variation,
+no omitted root gap and no assumed uniform positive source box.
+
+Both failure-sequence arms are impossible. This proves existence of
+ONE t₀(Z)>0 uniformly over every allowed regular scale and every
+selected one-future minimum. Choose the final t below that bound
+and all desired earlier fixed source bounds, THEN choose regular
+scales and least-Never/max-A data. No final law is matched across t.
+
+### DG5. Exact consequence for whole-law funding, and nonclaims
+
+At this fresh source the surviving one-future k is later-only. Its
+exact source debt is therefore
+
+    d*_k=ν₀s_k.
+
+Every augmented full minimum at this SAME table has the same d*_k.
+P5, extended by closure with the original literal ν coordinate, gives
+νs_k≤d*_k, whereas least-original-Never gives ν≥ν₀. Since s_k>0,
+EVERY full minimum consequently has ν=ν₀. This fixes the joint product,
+not any individual Never mass, and supplies no debt-nonincreasing move.
+
+At ANY ACTUAL full minimum, equality d_k=νs_k also forces k's full
+cap to equal its limiting late-finite value and every prescribed finite
+k draw of positive mass to be a full best reply. Indeed write own debt
+as the average of the nonnegative pure-response slacks B_k−V_k(t).
+The Never contribution alone is at least νs_k, because
+B_k≥V_k(Never)+ν_(−k)s_k. Equality, positive original n_k, and
+nonnegative finite slacks give both conclusions. If k has no finite
+mass at another minimum, its finite-conditional assertion is vacuous.
+No unattained END cap is silently replaced by a playable finite reply.
+
+The two suppliers remain paid and later-only, and DF's actual-k positive
+alignment remains available at this fresh source. The outstanding task
+is a funded change of their and k's ENTIRE finite laws with ALL observer
+caps priced. A competitor need not preserve ν unless it is itself a
+full minimum. No full one-future or II consumer, arbitrary-old-table
+restriction, source ancestry across t, or generic UE producer is proved.
+
+### DG6. Primary lookup and exact positive/negative checks
+
+Reused source inputs were checked against Part I P4–P10, fixed-carrier
+regular scaling, literal-Never augmentation and source Section14.3 in
+`exports/LEAST_NEVER_MULTIPLE_BRIDGE_SOURCE.md`. The native additional
+six-determinant choice agrees with Noether's NC.45, independently
+reviewed in `feedback/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION__BY_CODEX_BROUWER.md`;
+this proof makes its own fresh choice and does not enlarge that already
+selected table. DC's actual geometric adapter and full formulas, and
+DF2's complete amplitude box, are reused without changing their proofs.
+The tracked generic ingredient is
+`exists_geometric_pivot_payoff_eq_and_caps_le` in
+`UniformEquilibrium/Quitting/Terminal/GeometricPivotCapDomination.lean`;
+its ACTUAL-source equality adapter is reviewed CW, not an assertion
+of that generic theorem alone. The debt bound is
+`prod_stoppingLaw_none_mul_singleton_le_terminalDebt` in
+`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`.
+No Lean implementation or compilation was performed.
+
+The finite polynomial witnesses show BOTH added generic ingredients
+are essential to this proof, not inferred from row distinctness. In
+the f*>0 eliminant, X=Y=1, f*=1/4, d_{ip}=d_{iq}=d_{ipq}=1,
+Γ_i=9/4, d_{kp}=1,d_{kq}=−2,d_{kpq}=4 make both equations(DG.7)
+zero and R=0. In the AllNever arm, d_{ip}=2,d_{iq}=−2,d_{kp}=−1,
+d_{kq}=1 and µ=1/2 satisfy(DG.12) with positive unit row scales and
+Δ=0. These are exact algebraic degeneracy controls, NOT asserted
+positive-minimum game examples. Properness is separately witnessed
+by R=−1 and a nonzero determinant above.
+
+An independent standard-library rational checker ran600 signed native
+tables and verified(DG.11), terminal-translation cancellation, the
+row-homogeneity of Δ and R and the fully cleared eliminant. It also
+checked the properness and both degeneracy controls. The calculation
+tests the algebra, not the hypothetical source's existence; the
+failure-sequence argument supplies the uniform source conclusion.
+The remaining all-later-only whole-law funding question is OPEN.
+
+Runnable exact checker (Python standard library only):
+
+```python
+from fractions import Fraction as F
+from random import Random
+rng = Random(46146)
+i, p, q, k = 0, 1, 2, 3
+def eliminant(rows):
+    dpq = rows[p][(1<<p)|(1<<q)]-rows[p][1<<q]
+    dqp = rows[q][(1<<p)|(1<<q)]-rows[q][1<<p]
+    gp = rows[p][1<<k]-rows[p][1<<p]
+    gq = rows[q][1<<k]-rows[q][1<<q]
+    u, v, w = gq*dpq, gp*dqp, dpq*dqp
+    joins = {h: (rows[h][(1<<h)|(1<<p)]-rows[h][1<<p],
+                 rows[h][(1<<h)|(1<<q)]-rows[h][1<<q],
+                 rows[h][(1<<h)|(1<<p)|(1<<q)]-rows[h][(1<<p)|(1<<q)])
+             for h in (i, k)}
+    aip, aiq, aipq = joins[i]
+    akp, akq, akpq = joins[k]
+    gi = rows[i][1<<k]-rows[i][1<<i]
+    R = (u*aip+v*aiq-w*gi)*akpq-(u*akp+v*akq)*aipq
+    Delta = aip*akq-aiq*akp
+    return R, Delta, (u, v, w, joins, gi)
+for trial in range(600):
+    Z = []
+    for h in range(4):
+        vals = rng.sample([j for j in range(-60, 61) if j], 14)
+        row = {1<<h: F(0)}
+        row.update({s: F(v, 120) for s, v in zip(
+            (s for s in range(1, 16) if s != 1<<h), vals)})
+        Z.append(row)
+    theta = [F(rng.randrange(51, 100), 100) for _ in range(4)]
+    t = F(rng.randrange(1, 12), 1000)
+    hz = F(rng.randrange(1, 100), 100)
+    r = [{s: theta[h]*(v+t) for s, v in row.items()}
+         for h, row in enumerate(Z)]
+    def branches(b, a, f):
+        C = (1-b)*(1-a)
+        R = [b*(1-a)*row[1<<p]+(1-b)*a*row[1<<q]
+             +b*a*row[(1<<p)|(1<<q)] for row in r]
+        U = [R[h]+C*f*r[h][1<<k] for h in range(4)]
+        Q = [None]*4
+        for h in (i, k):
+            Q[h] = (C*r[h][1<<h]+b*(1-a)*r[h][(1<<h)|(1<<p)]
+                    +(1-b)*a*r[h][(1<<h)|(1<<q)]
+                    +b*a*r[h][(1<<h)|(1<<p)|(1<<q)])
+        E = []
+        for h in (i, p, q):
+            ell = max(hz*(r[h][(1<<h)|(1<<k)]-r[h][1<<h]),
+                      r[h][1<<k]-r[h][1<<h])
+            if h == i:
+                E.append(R[h]+C*(r[h][1<<h]+f*ell))
+            if h == p:
+                E.append(a*r[h][1<<q]+(1-a)*(r[h][1<<h]+f*ell))
+            if h == q:
+                E.append(b*r[h][1<<p]+(1-b)*(r[h][1<<h]+f*ell))
+        return Q[i]+E[1]+E[2]+Q[k]-sum(U), sum(E)+Q[k]-sum(U)
+    origin = branches(F(0), F(0), F(0))
+    S = sum(r[h][1<<h] for h in range(4))
+    assert origin == (S, S)
+    for root, var in ((p, (F(1), F(0), F(0))),
+                      (q, (F(0), F(1), F(0)))):
+        at = branches(*var)
+        di = r[i][(1<<i)|(1<<root)]-r[i][1<<root]
+        dk = r[k][(1<<k)|(1<<root)]-r[k][1<<root]
+        assert at[0]-origin[0] == di+dk-S
+        assert at[1]-origin[1] == dk-S
+    R0, D0, data = eliminant(Z)
+    R1, D1, _ = eliminant(r)
+    assert R1 == R0*theta[i]*theta[p]*theta[q]*theta[k]
+    assert D1 == D0*theta[i]*theta[k]
+    u, v, w, joins, gi = data
+    X, Y = u/w, v/w
+    A = X*joins[i][0]+Y*joins[i][1]-gi
+    B = X*Y*joins[i][2]
+    K = X*joins[k][0]+Y*joins[k][1]
+    T = X*Y*joins[k][2]
+    assert (A*T-K*B)*w**3 == u*v*R0
+assert (F(0)+F(0)-F(1))*F(1)-F(0)*F(0) == -1
+f, Ai, Bi, Ak, Bk = F(1,4), F(-1,4), F(1), F(-1), F(4)
+assert Ai+f*Bi == Ak+f*Bk == Ai*Bk-Ak*Bi == 0
+mu = F(1,2)
+dip, diq, dkp, dkq = map(F, (2, -2, -1, 1))
+assert dkp+(1-mu)*dip == dkq+(1-mu)*diq == dip*dkq-diq*dkp == 0
+print('PASS: 600 exact derivative/translation/homogeneity/resultant checks;'
+      ' properness and two excluded-degeneracy controls')
 ```

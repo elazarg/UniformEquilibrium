@@ -124,8 +124,8 @@ Keep volatile facts in one structured source:
 - research method: `docs/PROGRAM.md`;
 - GitHub Discussions, Issues, and PR promotion: `docs/PIPELINE.md`.
 
-`AGENTS.md` is the canonical agent policy. `CLAUDE.md` is generated from it;
-do not edit the copy independently. Run `python scripts/generate_docs.py`
+`AGENTS.md` is the canonical agent policy for all coding agents.
+Run `python scripts/generate_docs.py`
 after changing generated inputs and `python scripts/check_docs.py` before
 hand-off.
 

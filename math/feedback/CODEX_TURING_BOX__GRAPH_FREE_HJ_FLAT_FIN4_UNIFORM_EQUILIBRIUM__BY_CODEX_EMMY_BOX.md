@@ -395,3 +395,274 @@ identified. Remaining COVERAGE question: exhibit and audit a genuinely
 nonredundant raw-table family rather than the calibration's quiet-child
 stationary family. The optional cardinal strengthening need not delay
 the exact Fin4 result and must not silently change the reviewed snapshot.
+
+## 11. Independent final-packet and coverage review, frozen cb7ef9ec
+
+Reviewed `notes/CODEX_TURING_BOX__GRAPH_FREE_HJ_FLAT_FIN4_PACKET_DRAFT.md`
+completely, all905 lines, at SHA-256
+`cb7ef9ece47a9319859abc8ba76c5aa7c6a4c7abec3a3b5814b4f2b8f8e13e3d`.
+The hash was verified before and during this review. This is a new independent
+check of the packet's actual witness and quantified exclusions, not adoption
+of another review. All calculations below are ordinary mathematics. No Lean
+command, author-note edit, export, staging, commit or push was performed.
+
+Exact-hash verdict:
+
+- Main raw theorem and Sections1--8: SOUNDNESS PASS, consistent with the
+  earlier independently reconstructed proof. No new strategic input or
+  mathematical objection was found.
+- New witness and bounded complete-selector exclusions: the mathematical
+  separation succeeds with the two explicit repairs below. It is a genuine
+  witness beyond the named raw selections and fixed calendar families, not
+  the old quiet-child stationary calibration.
+- FINAL CONTENT AT THIS EXACT HASH: REPAIR REQUIRED. Section9.1 has a wrong
+  block-constant test point and wrong values at that printed point.
+  Section9.5 unnecessarily asserts continuity of literal Never where it can
+  fail. Neither error requires changing the raw theorem, witness table or
+  intended coverage conclusion. A new final-content hash needs confirmation
+  after these repairs; this review does not silently approve changed bytes.
+
+### 11.1. Required point correction in the response-quotient census
+
+For partition `0|13|2`, the printed q=(0,1/2,0,0) is NOT block-constant:
+players1 and3 belong to the same block but have different rates. Moreover,
+the actual residuals there are F_1=0 and F_3=−7/4, not the printed values.
+This point therefore does not prove failure of the actual invariant-cube
+predicate at the stated partition.
+
+REPAIR: replace that point by
+
+    q=(0,0,1/2,0).
+
+It is block-constant, and direct evaluation gives EXACTLY the packet's
+intended residuals F_1=−1/2 and F_3=3/4. Only the coordinate location of
+the half-rate needs changing. All other displayed residual pairs are
+correct at their displayed block-constant points.
+
+Independently enumerating the15 partitions from the raw Gamma block-row
+sums leaves precisely the seven partitions printed in the packet. Thus
+this repair completes the original exhaustive census, not a reduced census.
+The actual source predicate is `QuittingResponseInvariantOnUnitCube`, and
+its necessary derivative test is
+`quittingSingletonBlockRowSum_eq_of_responseInvariant`, both in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`.
+The zero-discount `quittingDiscountedDisplacement` in
+`UniformEquilibrium/Quitting/Stationary/DiscountedDisplacement.lean` is
+exactly F=(1−alpha)Q−b. No singleton-only response equivalence is assumed.
+
+### 11.2. Required continuity correction in exact-stationary reward closure
+
+At a nonzero stationary root the prescribed terminal formula and finite
+root endpoints are continuous, but literal Never need NOT be continuous.
+On this same table take q_0=1/2, q_2=epsilon>0, q_1=q_3=0. Player0's
+Never payoff is4 for every epsilon>0, but0 at epsilon=0. This refutes the
+printed general sentence that its Never floor is continuous at a nonzero
+joint-absorption root. The example need not be Nash to refute that asserted
+continuity property.
+
+The intended closure argument nevertheless has a complete repair. If
+exact stationary roots q^n on converging tables have a nonzero limit q,
+joint absorption stays bounded away from0. Actual stationary values and
+finite Quit/Continue endpoints pass continuously to the limit, so q
+satisfies exact stationary Bellman recursion and finite root Nash.
+For a player with alpha_i<1, opponents absorb almost surely, so iterating
+the endpoint inequalities controls EVERY behavioral replacement including
+Never. If alpha_i=1, this player is the sole positive-rate label, its
+actual prescribed value is its own singleton1, and literal Never pays0.
+The singleton remains nonnegative; there is no unpaid Never deviation.
+Thus the limit is full terminal Nash, contradicting the proved exclusion.
+
+This is also exactly the contracting-or-nonnegative-singleton boundary in
+`IsQuittingCycleZeroDeviationMismatchAt` and
+`isZeroAsymptoticNash_quittingCyclicBehaviorProfile_of_admissible` in
+`UniformEquilibrium/Quitting/Cycles/AdmissibleCycleTerminalEquilibrium.lean`.
+No continuity of full caps or Never payoffs is needed. The separate q=0
+case in Section9.5 is correct: normalized rates give a nonzero homogeneous
+Gamma-complementary vector, contradicting R0. Hence the claimed closure
+exclusion for exact stationary producers survives after the sentence and
+argument are replaced explicitly.
+
+### 11.3. Independent raw-table and root checks
+
+I recalculated every H and J, all flat-member tests, the entire insertion
+matrix, Gamma and its inverse, and the indicated response values using
+exact rational arithmetic. The table satisfies the raw theorem:
+
+- H(singletons)=(1,1,1,1), J(singletons)=(−3,−4,0,−3).
+- H(02)=5; all other pair H=0. Pair J values are exactly
+  (−5,−6,−5,−8,−6,−5) in the packet's order.
+- Every triple has H=3 and J=−1. The listed flat triple members are valid.
+  Every proper nonempty coalition has a flat participant.
+- The insertion matrix is
+
+      h=[0,−1,1,2; 2,0,−3,−4; −4,1,0,−1; −1,−4,2,0].
+
+  Its positive arrows are exactly the printed five. On012, P=2 and N=12,
+  so this is genuinely the reverse-product paid-prefix branch. Every
+  singleton has strict H, so the needed quadratic charge has a produced
+  funding label, not an assumed favorable one.
+
+Gamma has determinant45 and precisely the printed strictly positive
+inverse. All six two-player principal determinants are either−1 or−9;
+every triple determinant is6. A homogeneous complementary support of
+size at least2 is impossible by invertibility. A singleton support has
+an external negative Gamma entry. This verifies R0 and its stated stable
+neighborhood directly. Each triple inverse has negative diagonal entries,
+so every raw nonnegative-inverse triple choice fails. The source
+`childMatrix` in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`
+is the literal deleted singleton block. The discrete response quotient
+therefore has degree1 and positive determinant, not either named escape.
+
+I also reconstructed the whole sure-owner induced correspondences. The
+three dominance reductions for owners0,1,3 are correct. For owner2,
+player1 strictly Continues; the residual two-player gaps are
+1−(7/2)y and2−5x. They have exactly the two pure roots and one mixed
+root printed. At the mixed root (x,y)=(2/5,2/7), the exact owner accounts
+are Q_2=1/7, b_2=46/35, alpha_2=3/7. In particular b_2 already exceeds
+Q_2, even at zero continuation. Every case fails owner optimality at
+EVERY nonnegative continuation.
+
+All passive recipient rewards are nonnegative, so literal Never gives
+every player at least0 against arbitrary opponents. Consequently both
+full caps and the ACTUAL `quittingPunishmentValue` are nonnegative. The
+actual singleton-base floor condition is b_i+alpha_i*punishment_i<=Q_i,
+as `quittingSingletonBaseOwnerFloorExcess_nonpos_iff` in
+`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PersistentBaseConcreteGap.lean`
+states; it is not merely Q_i>=punishment_i. The printed calculation
+excludes this exact floor condition, including owner2's positive Q.
+Partial free carriers cannot help a complete nonpositive-excess screen:
+the missing free labels must still satisfy their outsider joining
+inequalities. Multiple sure labels are included by choosing any one
+as owner and retaining the others in its induced correspondence.
+
+### 11.4. Weighted, protected, boxed and quiet-extension quantifiers
+
+The global floor obstruction uses the ACTUAL inserted-premium definition
+over every coalition, not only coalitions inside a trap. Its two coefficient
+rows are (−2,0,0,−1) and(1,−1,−2,0). Their sum is strictly negative on
+the normalized nonnegative weight simplex. Thus nonzero weights, weights
+approaching its boundary, and unnormalized diverging weights are all
+excluded, including reward closure. The grand row makes the full set a
+trap, so the trap predicates cannot become vacuous. Each player's strict
+proper-triple participant deficit excludes every protected participant;
+the definitions do not permit a merely selected favorable subrow instead.
+
+For the boxed criterion, singleton{2}'s inserted-premium sum is1, whereas
+`QuittingTrapChargeCoefficients.singleton` requires it to be at most a
+strictly negative number. No coefficient or threshold can cure this; its
+strict sign also excludes reward closure. At grand, every nonzero
+nonnegative upper-average weight gives surplus8 times its total mass,
+so that distinct alternative fails too. The all-Quit root correctly
+falsifies the ALL-root `HasProductLowQuittingPremium` predicate, not a
+different support-local statement.
+
+For all thirteen tested children I checked the displayed sole owner,
+strictly negative internal joins, and an actual strictly positive omitted
+join. These are full unrestricted child Nash laws with zero joint-Never
+mass, so ANY universal outside-debt bound of the stated form is false,
+at every nonnegative child-weight choice and finite Never slack.
+For child012 the A={2} rows are exactly
+
+    1<=−3lambda_0+lambda_1,       2<=lambda_0−3lambda_1,
+
+after discarding the nonpositive withdrawal terms. I read the five gain,
+futureWeight and restart-floor definitions in
+`WithdrawalFutureJoinRaw.lean` and its named quiet-extension dependencies.
+The discarded terms really are nonpositive for every kind: nonmembers'
+gain is0; the singleton member's restart floor is no greater than its
+positive singleton. In particular terminal security uses the actual
+`deadlineWithdrawalSecurityValue_le_singleton`, not an unsupported0
+upper bound. The same contradiction applies to the capped-clock rows.
+Its member2 advance coefficient is identically0 under perturbation,
+while the summed other coefficients remain negative. Arbitrary large
+weights do not invalidate the reward-neighborhood contradiction.
+
+The inspected full behavioral consumers are
+`quittingLiftDeletedProfile_outsideDebt_le_add_neverExcess_of_withdrawalFutureJoin`
+in `WithdrawalFutureJoinFixedTarget.lean` and
+`quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt_add_slack`
+in `CappedClockChildDeletionAdapter.lean`, in that directory. The packet
+correctly separates these UNIVERSAL raw certificates from a conditional
+consumer supplied only with one favorable actual child equilibrium.
+
+### 11.5. Nonstationary calendars and transport: independent confirmation
+
+The named paired raw definitions were checked in place. In
+`PairedCycleSchedule.lean`, the exact
+`RawRegion.eq_partner_of_singleton_lt` allows at most one below-own
+singleton per recipient. Here each row has two. For `RawSource`,
+`WeakRawSource`, `InverseRawSource`, `ScheduledPairCapSource` in
+`CrossedMatchingPhaseSource.lean`, and `BelowSingleton.RawFamily` in
+`BelowSingletonJointPhaseSource.lean`, BOTH off-scheduled participant
+pairs must be capped by the recipient's singleton (strictly below for
+the last family). Player0's two positive premiums at02 and03 defeat
+EVERY matching. These signs are strict, affine-invariant under positive
+recipient scaling, and remain under reward closure.
+
+The separate passive-reward ray's specified mate-pair participants A,A
+both exceed own1; every target pair has a participant strictly below1.
+This necessary-premium exclusion is correct for that entire raw family,
+all relabelings and positive recipient-affine images and their closure.
+The actual family definition was checked in the author's notebook
+Section19.1, rather than inferred from a selected four-phase solution.
+
+I independently derived the complete four-positive-singleton field(15).
+Its opposite-equation subtraction has the stated strictly positive
+coefficient determinant, forcing all four Continue probabilities equal.
+The unique proper solution is u=(3−sqrt(5))/2. The edited pair02 then
+gives the actual positive deviation (3sqrt(5)−5)/2. Favorite-adjacent
+orders are also correctly rejected without assuming symmetric hazards.
+This is a whole ordering/rate exclusion for exactly one positive proper
+phase per owner, not a search over selected numeric schedules.
+
+The balanced-singleton mesh certificate must instead be tested through
+its actual `arc`, `active`, `soloFloor` and `opponentDivergence` fields
+in `BalancedSingletonCertificate.lean`. The packet's separate soloFloor
+failure on THESE four-positive-singleton words is correct: favorite-
+adjacent orders force a coordinate below1 immediately after the favorite;
+the nonadjacent field has value u<1 before the owner's phase. Finite-root
+collision optimality is not substituted for mesh optimality.
+
+The signed-four-cycle source requires a strict positive predecessor
+four-cycle in Gamma in BOTH spectral branches; the actual singleton
+graph is only a matching. The cyclic-child `RawTable` requires a
+strict positive child three-cycle, also absent. I read these literal
+fields, as well as the two-pair group and cross-mass raw reward entrances:
+grand defeats every designated pair-average bound, and every potential
+designated recipient has a favorable singleton defeating the cross-mass
+bound. No stronger conditional supplied-source consumer is excluded.
+
+Finally the passive-triple family's own/low singleton values pin every
+recipient affine scale and shift to1 and0. Its participant pair values
+remain in{−1,0,2}, never5. The sequence argument is valid even for
+unbounded triple/grand parameters: finite relabelings have a fixed
+subsequence, and the low/own rows force scale→1 and shift→0. This is
+table-membership transport only; it never assumes that changing every
+terminal reward by a constant preserves literal Never payoff0.
+
+### 11.6. Precisely surviving coverage and strategic-input verdict
+
+After the two stated content repairs, this new table is admitted by the
+new COMPLETE raw producer and excluded by the compared complete raw
+selections, exact stationary producers (including their reward closure),
+and the specifically bounded nonstationary raw/calendar families.
+The old quiet-child stationary overlap has been genuinely removed.
+
+It does NOT exclude all-errors approximate stationary witnesses, every
+balanced-singleton certificate with arbitrary period/repeated owners,
+longer or mixed calendars, arbitrary favorable-child extension, or an
+unknown distant implicit neighborhood. In particular the four-positive-
+singleton argument is not a classification of the whole general
+`BalancedSingletonCycleCertificate` type. The final scope paragraph
+already makes these necessary limitations explicit. None is an input
+or missing step in the main raw H/J+flat proof.
+
+No unproduced strategic input was found in Sections1--8 or introduced
+by the witness comparisons. The theorem still obtains its seed, closed
+carrier, constrained minimum, finite root/paid-prefix escape, diagonal,
+actual approximants and original fixed target internally. Its reward
+closure correctly allows nearby targets to vary and selects one original
+target. The two frozen-byte corrections above concern final-content
+accuracy in coverage proofs, not the existence theorem's mathematical
+mechanism. Final-hash approval remains pending their explicit repair.

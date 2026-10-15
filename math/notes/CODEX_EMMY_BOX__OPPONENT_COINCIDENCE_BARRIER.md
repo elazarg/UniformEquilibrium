@@ -1,9 +1,12 @@
 # Opponent-coincidence barriers and a cubic moment obstruction
 
 Status: INTERNAL ordinary mathematics and exact rational computation, not
-Lean checked. No positive invariant barrier,
-unrestricted positive gap, uniform equilibrium, or new solved raw class is
-claimed. The completed calculation in Section4 excludes EVERY cubic
+Lean checked. No reviewed positive invariant barrier, unrestricted positive
+gap, uniform equilibrium, or new solved raw class is claimed here.
+Section7 is a separate UNREVIEWED extension of the frozen full-cap chamber
+candidate: it proposes uniform-equilibrium existence for the entire raw
+family7<=K<=30. It is not an established conclusion of the earlier barrier
+calculations. The completed calculation in Section4 excludes EVERY cubic
 polynomial potential for one explicit actual table, not merely a selected
 cubic ansatz. A separate ten-edge certificate does the same even with
 EVERY endpoint nonnegative and in the convex hull of actual terminal
@@ -1046,3 +1049,107 @@ permit compensating solo/adjacent-pair mass. The finite moment circulation
 in Section4 has no chronological concatenation or independent-law
 purification theorem. Raising polynomial degree, averaging the private
 clock laws, or serializing collisions does not resolve these seams.
+
+## 7. Separate unreviewed chamber extension: an interval of raw tables
+
+Status: ordinary complete proof extension, UNREVIEWED. The fixed-K10
+candidate `notes/CODEX_EMMY_BOX__CAP_CHAMBER_NASH_SATURATION.md` is frozen
+at SHA256
+`9dc27819b96e8d881ae46107b5480349474f1512c8468a17839e2de95056f3da`.
+Nothing in this section changes that reviewed target or silently enlarges
+its stated scope. The following records the exact parameter dependence
+needed for a separate check.
+
+Claim. For EVERY real K in[7,30], the ORIGINAL table(1) has a fixed
+uniform-equilibrium payoff, with actual independent prescribed clocks and
+ALL complete behavioral replacements. No stationary or exact terminal
+Nash profile is asserted. This is a claim about the raw reward table, not
+a supplied-cap or supplied-clock conditional interface.
+
+Use U for prescribed payoff, B for the FULL cap, D=max_i(B_i-U_i),
+c=product_i(1-q_i), and S_K for the CLOSED actual semantic carrier.
+Never obtains only passive rewards0,1,4,K, so B>=0 on S_K. All reward
+coordinates are bounded for each fixed K. The literal seed of the frozen
+candidate remains EXACTLY
+
+    U=(1/4,5/4,1/4,5/4), B=(1/2,5/2,1/2,5/2), D=5/4.
+
+Its full cap computation encounters no triple or grand rewards and is
+therefore independent of K.
+
+Every cap-Nash root still has no sure coordinate: the only comparison
+using the variable rows is grand-minus-passive-triple, which is
+(K-1)-K=-1. The support-one, adjacent-pair, opposite-pair, and
+three-support endpoint equalities and low-cap bounds in the frozen
+candidate involve only coalition rows of size at most three with the
+recipient INSIDE. They are unchanged by K. In particular the opposite
+and three-support cases still have sum_i q_i<=1; the adjacent case has
+its second hazard at most1/2.
+
+For full support put z_i=q_i/(1-q_i), and for recipient i let
+x=z_(i-1), y=z_(i+2), w=z_(i+1), T=xy+xw+yw, V=xyw. The exact numerator
+of Quit and the opponent-stop term are now
+
+    P_i=1+2x-w-T+(K-1)V,
+    N_i=4y+T+KV.
+
+Consequently active cap indifference cancels K COMPLETELY:
+
+    B_i=P_i-N_i=1+2x-w-4y-2T-V.
+
+Input B>=0 again implies Z=sum z_i<=4/3 and s=sum q_i<=1. In original
+probability coordinates the exact sum of active Quit endpoints is
+
+    sum_i Q_i-4=-2s-Aq-2Oq+(K+2)E3q,
+
+where Aq is the adjacent pair sum, Oq the opposite pair sum, and E3q
+the elementary symmetric cubic. Hence K<=30 and E3q<=s^3/16 give
+
+    sum_i B_i'-4 <= -2s+2s^3-Aq-2Oq < 0.
+
+The last inequality holds at EVERY full-support root: 0<s<=1 and
+Aq+2Oq>0. It includes K=30; no strict endpoint hypothesis is hidden.
+Thus every nonzero root support again has an output cap at most1, and
+all Continue preserves an input minimum at most1.
+
+For total cap surplus, the only altered terminal totals are K-3 on a
+triple and4K-4 on the grand coalition. The exact ledger is
+
+    sum B'-4=c*(sum B-4)+H_K,
+    H_K=P1-P_adj-2P_opp+(K-7)P3+(4K-8)P4.
+
+For opposite, three-support and full-support roots, s<=1 implies
+P1>=2P2 by the exact odds/Cauchy argument in the frozen proof. Therefore
+
+    H_K=(P1-2P2)+P_adj+(K-7)P3+(4K-8)P4>=0
+
+for K>=7. Adjacent roots still have H_K=a+b-3ab>=0 because no triple
+or grand event is possible. Singleton and zero roots are immediate.
+The lower endpoint K=7 is included: zero triple charge is harmless.
+
+Thus EVERY cap-Nash root for every B>=0 preserves both inequalities
+
+    min B<=1 ==> min B'<=1,
+    sum B'-4>=c*(sum B-4).
+
+There is no upper-bound premise on B in these two algebraic statements.
+The compact actual chamber
+
+    {(U,B) in S_K: min B<=1, sum B-4 >= (8/5)D}
+
+is nonempty by the unchanged full-cap seed and invariant under EVERY
+cap-Nash root. At a positive-debt minimum its cap sum exceeds4. If its
+minimum cap is below1, finite Nash existence supplies a nonzero root.
+Otherwise the same axis-root construction along a cycle edge from cap1
+to cap>1 supplies one; this uses only singleton and pair rows and is
+independent of K. Exact debt scaling D'=cD then contradicts minimality.
+The attained zero-debt point in S_K supplies a fixed target and actual
+independent terminal approximants. The SAME checked full-behavior
+terminal-to-uniform consumer applies separately for each K.
+
+Boundary of the extension. This is not an argument for all K>=0 or an
+arbitrary-table producer. The interval is obtained by preserving TWO
+actual cap inequalities, not by scaling away joint absorption. It imposes
+no small-hazard condition, no bound on period or support size, and no
+convexity of attainable independent laws. An open raw-coordinate
+neighborhood or structural completeness claim is NOT inferred from it.

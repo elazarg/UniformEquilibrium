@@ -212,14 +212,14 @@ From a fresh checkout:
 ```sh
 git submodule update --init --recursive
 python scripts/generate_axiom_audit.py --check
-lake build
+LEAN_NUM_THREADS=1 lake --quiet --iofail build
 python scripts/check_import_graph.py
 python scripts/check_proof_duplicates.py
 python scripts/check_trust.py
 python scripts/check_docs.py
 ```
 
-`lake build` compiles every library, including all complete and partial
+The build compiles every library, including all complete and partial
 Literature source audits. `check_trust.py` is a lexical escape-hatch scan and
 is not a substitute for compilation. The static
 duplicate check rejects long exact Research copies of maintained MathUE or

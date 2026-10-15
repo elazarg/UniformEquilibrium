@@ -2,12 +2,17 @@
 
 Author: CODEX_NASH_BOX.
 
-Construction work is paused at Section48 for an independent adversarial
-review of Turing's graph-free H/J-flat candidate. The two-/three-date and
-rotational root searches saved there are bounded floating-point failures,
-not further no-go theorems. The live question is still an actual
-three/four-clock all-errors construction or an unrestricted whole-game
-gap; no lower target has been certified.
+Construction work resumed after the independent soundness and focused
+coverage reviews of Turing's graph-free H/J-flat candidate. Those separate
+verdicts are recorded in the owned GRAPH_FREE_HJ feedback file, Section8.
+Section50 now gives an ordinary-mathematics construction of an EXACT
+terminal Nash profile for Section44's literal A=30000 table: a120-date
+periodic private-hazard calendar, with all four complete clocks proper.
+Its three-parameter existence step has an explicit rational interval /
+Brouwer certificate, and its consumer caps unrestricted behavioral
+deviations. The construction is NOT Lean-checked and independent review
+is pending. It does not settle general Fin4 or establish an A-family
+theorem. Section49's0.143-Nash profile remains calibration only.
 
 Section47 excludes the ENTIRE two-active-clock class for Section44's
 family, retaining A dependence: for A>=4, any profile with two players
@@ -25,8 +30,8 @@ payoff (A,A,A,A) cannot be rounded into independent approximate Nash play,
 even by completely changing its calendar and target-free source laws. The
 proof sums actual played-Quit losses and covers arbitrary unbounded clocks
 and Never. This is a PAYOFF-REGION exclusion, NOT a positive gap against all
-profiles or a UE counterexample. Lower equilibrium targets remain open; the
-construction search must now use them rather than preserve the A target.
+profiles or a UE counterexample. Section50 constructs a lower equilibrium
+target for the literal A=30000 member, without preserving the A target.
 
 Section45 tests the entropy-hole variation at the WHOLE minimizing-sequence
 level. Given the already supplied fixed strict FULL coarse anchor, every
@@ -8042,3 +8047,409 @@ equations while retaining a genuine third/fourth complete law? A root
 Nash iteration that enters an inert high-payoff region would not be a
 producer. Conversely, the failed small periodic searches do not exclude
 slower drift, boundary words, or nonperiodic all-errors constructions.
+
+## 49. Resumption after review: actual finite clocks, not stationary scanning
+
+Status: one exact finite-accuracy calculation, together with bounded
+numerical searches. No new no-UE class narrowing or all-errors producer.
+The independent review task is complete in
+`feedback/CODEX_TURING_BOX__GRAPH_FREE_HJ_FLAT_FIN4_UNIFORM_EQUILIBRIUM__BY_CODEX_NASH_BOX.md`;
+the conference construction problem is not complete.
+
+I tested asymmetric complete laws supported on five finite dates and
+Never, optimizing the ORIGINAL terminal regrets. The response menu was
+NOT truncated at the last prescribed date. If prescribed finite dates
+are0,...,T-1, every deadline h>=T has exactly the payoff
+
+    V_i(h)=V_i(Never)+s_i product_(j!=i)P(T_j=Never).
+
+Thus the full cap is the maximum of the T finite-date values, Never,
+and this one late value. This is a finite evaluation of the ORIGINAL
+complete cap; it is not a restriction on deviations. Actual payoff is
+the own-law average of these response values. The relevant named
+consumer is `sSup_range_quittingTerminalPayoff_update_eq_pureTime` in
+`UniformEquilibrium/Quitting/Cycles/BehaviorPureTimeExtremality.lean`;
+I inspected its statement and the pure-time update identity. The earlier
+sure-opponent special case was also checked in `Terminal/FiniteDeadlineCapSelection.lean`.
+No Lean build or new implementation was made.
+
+### An exact lower-payoff finite-accuracy profile
+
+For A=30000, independently draw each clock from the following row.
+All entries in the table are integer numerators with common denominator
+10^9. The last column is literal Never, not an extra finite deadline.
+
+| player | 0 | 1 | 2 | 3 | 4 | Never |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 1000000000 | 0 | 0 |
+| 1 | 142831755 | 285659106 | 571471548 | 34505 | 109 | 2977 |
+| 2 | 999813178 | 161424 | 12779 | 0 | 250 | 12369 |
+| 3 | 0 | 0 | 0 | 0 | 845608012 | 154391988 |
+
+Every row sums exactly to10^9. I evaluated all seven pure response values
+(dates0,...,4, Never, and a strictly later date) in rational arithmetic.
+The resulting bounds are
+
+    U0 in(29998.765465,29998.765466),  0<=C0-U0<10^-7,
+    U1 in(-0.142818,-0.142817),       C1-U1<0.143,
+    U2 in(1.142831,1.142832),         C2-U2<0.00015,
+    U3 in(4286.989112,4286.989113),    C3-U3=0.
+
+The maximum is attained for player1, exactly
+
+    C1-U1=71421286200949013/500000000000000000.
+
+Here C1=0.000025238 is attained at date3, and C2=1.142980687
+is attained at date2. Player0's largest response is date4, and player3's
+date4, Never and late responses coincide. Hence this is an actual
+unrestricted terminal0.143-Nash profile, with mean payoff about8571.69,
+far below the correlated source's A target. This is ONLY one fixed
+accuracy. No accuracy tending to0, fixed equilibrium target, payoff
+neighborhood, or reward-family conclusion follows from it.
+
+The profile came from numerical minimization followed by rational
+rounding and an independent exact cap evaluation. Initial searches at
+three, five and eight finite dates had maximal regrets about1.009,
+0.433 and0.944 respectively; a focused five-date refinement reached
+about0.143. Analytic gradients of the smoothed objective were checked
+against finite differences. These are local optimization outcomes,
+not lower bounds, and differing date counts were not compared as global
+optima. Further improvement of this fixed-accuracy constant is not a
+research objective.
+
+### Variable-face tests and the important failed inference
+
+I also allowed two-date periodic words with DIFFERENT active sets at
+the two dates, rather than the common support or common rotated base
+tested in48. There are24 such support pairs, up to cyclic relabeling
+and exchanging the two dates, with at least three players in their
+union. A bounded interior Newton search with24 starts per pair found
+no full-cap Nash candidate. Only proper positive active rates were
+accepted; inactive endpoint inequalities were tested separately. This
+does not prove nonexistence in any of these classes. It should not
+turn into a catalogue of successively larger periodic exclusions.
+
+The five-date profile suggests the geometric adjacent-clock pattern
+1:2:4 for player1, with rare counterfactual clocks later. I tested the
+tempting construction of repeatedly prepending an adjacent1,2 root.
+In the IDEAL relation U1=-c, U2=C2=1+c, C1=0, choosing
+
+    q1=c/(2+c),             q2>=1/2
+
+preserves U1'=-c/(2+c), U2'=C2'=1+c/(2+c), and C1'=0
+whenever the outside caps are still Continue. Thus one payer's debt
+really contracts, even though the donor's root is not Nash when q2>1/2.
+BUT the outside player's payoff obeys
+
+    U3'=A q1+(1-q1)(1-q2)U3.
+
+Repeated half-scale prefixes drive U3 toward0, while player3's early
+Quit endpoint stays bounded away from0. The outside-cap condition
+therefore eventually fails. A particularly simple exact geometric seed
+with both1 and2 proper by date2 makes every later third clock irrelevant
+even counterfactually; that specialization is merely the two-active
+class already retired in47. It is NOT a new three-clock producer or a
+new obstruction. The failed implication is that contracting the old
+debts while checking the current outside cap yields a repeatable
+all-errors chronology. It does not: the outside cap must be paid again
+at later stages.
+
+Concrete next question: can a genuinely three/four-active collision
+phase replace this terminal outside-cap failure, paying ALL earlier
+deadline maxima with an ACTUAL tail and preserving a vanishing debt
+budget? Any such tail must be produced, not substituted as a free cap
+vector. The alternative conjecture-facing direction is a whole-law
+inequality covering these lower-payoff targets, not another comparison
+with the correlated A target or a longer stationary scan.
+
+## 50. Exact120-date periodic Nash for the literal A=30000 table
+
+Status: ordinary mathematics with an explicit, successfully evaluated
+EXACT RATIONAL interval certificate. Not Lean-checked; independent review
+is pending. This closes the actual-table construction question, subject
+to that review. It is not a general four-player theorem, nor a claim for
+every A in the reward family. The preceding fixed-accuracy and bounded
+numerical failures are not used as proof.
+
+### 50.1. Finite data, agency, and conclusion
+
+Fix A=30000, players0,1,2,3 cyclically, live reward0, and the following
+nonempty-coalition reward table. This restates Section44's table to make
+the new proof independently checkable.
+
+| coalition | reward vector |
+| --- | --- |
+| 0 | (1,0,A,0) |
+| 1 | (0,1,0,A) |
+| 2 | (A,0,1,0) |
+| 3 | (0,A,0,1) |
+| 01 | (-1,2,A,A) |
+| 12 | (A,-1,2,A) |
+| 23 | (A,A,-1,2) |
+| 03 | (2,A,A,-1) |
+| 02 | (A-1,A,A-1,A) |
+| 13 | (A,A-1,A,A-1) |
+| 012 | (A-1,A+2,A+2,A) |
+| 013 | (A+2,A+2,A,A-1) |
+| 023 | (A+2,A,A-1,A+2) |
+| 123 | (A,A-1,A+2,A+2) |
+| 0123 | (A-1,A-1,A-1,A-1) |
+
+The profile below uses independent private Bernoulli Quit coins at each
+live date, with a deterministic120-date calendar repeated forever.
+Only survival (all previous players Continue) and calendar time are
+used. No public or private correlating device is supplied. Each player's
+complete law is an independent, proper, unbounded stopping-time law.
+
+Claim: the profile is EXACT terminal Nash against every unilateral
+behavioral replacement, including arbitrary unbounded clocks and Never.
+Consequently its own fixed terminal payoff is a uniform-equilibrium
+payoff. This is stronger than an accuracy-dependent family for this one
+literal table. A convenient choice of calendar origin gives payoff
+
+    (e,a,1+c,d),
+
+where the rigorously constructed parameters satisfy
+
+    0.99998 < a < 0.999982,
+    2.78 < 1+c < 2.79,
+    29996.57 < d < 29996.58,
+    2.563 < e < 2.564.
+
+Thus the new target is not the correlated (A,A,A,A) source. Up to cyclic
+permutation it is approximately
+
+    (0.999981366850680, 2.781791494581324,
+     29996.577441977009, 2.563927659666548).
+
+### 50.2. Actual root equations and an adjacent-pair phase
+
+For a positive-Continue product root with hazard odds x_j=q_j/(1-q_j),
+Section48's directly verified insertion identity gives
+
+    Quit_i - Continue_i = alpha_i [H_i(x)-v_i],
+
+where v is the ACTUAL all-Continue continuation and alpha_i is opponents'
+Continue probability. In particular, this is not a freely substituted
+cap vector. The formula for H is
+
+    H_i=1-x_(i+1)-x_(i+2)+2x_(i+3)
+          -x_(i+1)x_(i+2)+2x_(i+1)x_(i+3)
+          +2x_(i+2)x_(i+3)-x_(i+1)x_(i+2)x_(i+3).
+
+Suppose a continuation is v=(a,1+c,d,e), with0<a<1 and c>0. Use only
+players0,1, with
+
+    q0=c/(2+c),              q1=(1-a)/(2-a).
+                                                       (50.1)
+
+Both are strictly between0 and1. Their odds are c/2 and1-a, so
+H0=a and H1=1+c exactly. They are indifferent, not approximate best
+replies. The new actual payoffs are
+
+    a' = a/(2-a),            c' = c/(2+c),
+    d' = A q0 + alpha d,     e' = A q1 + alpha e,
+    alpha=(1-q0)(1-q1).                              (50.2)
+
+The first two equalities follow by evaluating the actual Quit endpoints
+on coalitions0,1,01. The latter two use the literal passive rewards:
+player2 gets A exactly when0 quits, and player3 gets A exactly when1
+quits, unless both Continue. The root is Nash precisely when its two
+inactive inequalities also hold:
+
+    d >= 1-c/2+2(1-a)+c(1-a),
+    e >= 1-c/2-(1-a)-(c/2)(1-a).                    (50.3)
+
+Iterate(50.2) n times, always using the resulting ACTUAL continuation.
+Set Y=(1-a)/a and beta=c/(1+c). Direct telescoping gives
+
+    a_n=1/(1+2^n Y),
+    c_n=beta/(2^n-beta),
+    w_n=a_n(1+c_n)/[a(1+c)],
+
+    d_n=w_n[d+A a c(1-2^(-n)+nY)],
+    e_n=w_n[e+A(1-a)(1+c)(2^n-1-n beta/2)].          (50.4)
+
+Here w_n is the JOINT survival of the n pair roots. To check the sums,
+q0 at step k equals c_(k+1), and
+
+    alpha_k=(a_(k+1)/a_k)((1+c_(k+1))/(1+c_k)).
+
+Dividing the d recurrence by w_(k+1) reduces its increments to
+A a c(2^(-k-1)+Y). Dividing the e recurrence by w_(k+1) reduces them to
+A(1-a)(1+c)(2^k-beta/2). Summing proves(50.4). No approximation in A
+or in the small hazards is used.
+
+### 50.3. A three-active handover and exact rotation equations
+
+Take N=29. After those29 backward pair prefixes, insert a root with
+hazards (p,r,s,0), all three nonzero. Denote gamma=(1-p)(1-r)(1-s).
+Its actual Quit endpoints, from the displayed literal table, are
+
+    Q0=(1-s)(1-2r)+(A-1)s,
+    Q1=1+p-2s+(A+2)ps,
+    Q2=1+(A-2)p+r+2pr.                              (50.5)
+
+The inactive player's Continue endpoint is
+
+    C3=A[r+(1-r)ps]+gamma e_N.                     (50.6)
+
+Define parameters from the bridge hazards by
+
+    a=Q1,
+    c=(A-2)p+r+2pr,
+    e=Q0,
+    d=A[r+(1-r)ps]+gamma e_N.                      (50.7)
+
+There is no implicit definition of d here: e_N in(50.4) depends only on
+a,c,e, which have already been defined from p,r,s. Thus(50.7) makes all
+four output coordinates equal to the cyclic rotation
+
+    R(a,1+c,d,e)=(e,a,1+c,d).
+
+The three active Nash equalities for the bridge are
+
+    a_N = h0 := 2-1/[(1-r)(1-s)],
+    1+c_N = h1 := 1-s/(1-s)+2p/[(1-p)(1-s)],
+    d_N = h2 := 1-p/(1-p)+2r/[(1-r)(1-p)].          (50.8)
+
+These are exactly H0,H1,H2 for odds(p/(1-p),r/(1-r),s/(1-s),0).
+The fourth Nash inequality is e_N>=H3 at those odds. Thus the problem
+has become a THREE-variable zero problem with fully specified rational
+functions and no unknown tail profile or cap annotation.
+
+Use scaled coordinates z=(P,S,B), with
+
+    p=P/A,          s=S/A,          r=1/2-B/A.
+
+Let G(z) be the rational map
+
+    G=(A(a_N-h0), A^2(c_N-h1+1), d_N-h2).          (50.9)
+
+All quantities in G are defined by(50.4),(50.7),(50.8), with A=30000 and
+N=29. Scaling improves the arithmetic conditioning only; G=0 is
+equivalent to all three exact equalities in(50.8).
+
+### 50.4. Explicit rational existence certificate
+
+Let z0 be the following integer vector divided by10^40:
+
+    (12819019568161180890608596459369770540224,
+     25638776810687373213237860107919564836367,
+     20317914498540361607701072752343139839161).
+
+Let K={z: ||z-z0||_infinity<=10^(-20)}. Define M as the following integer
+matrix divided by10^30:
+
+    [  5840085719526558893734060,
+       11245844011627984355995900,
+       87610726930501105590501845404 ]
+    [  11681067357805952514050999,
+       55824013745224633276654316,
+       175235796990475533160283868103 ]
+    [ -250023850439070062042610156950,
+       27916014765958908959925082,
+       337672375200683018510429536766 ].
+
+Exact rational interval evaluation, reproduced below, gives
+
+    ||M G(z0)||_infinity < 10^(-38),
+    sup_(z in K)||Id-M DG(z)||_infinity < 10^(-10). (50.10)
+
+All denominators of the rational functions are nonzero throughout K.
+The infinity matrix norm means maximum absolute ROW SUM. Hence the map
+T(z)=z-MG(z) sends K into itself, because
+
+    ||T(z)-z0|| <= 10^(-38)+10^(-10)10^(-20)
+                 < 10^(-20).
+
+Brouwer supplies a fixed point z* in K. Since Id-M DG(z0) has norm<1,
+M DG(z0) and therefore M are invertible. Thus G(z*)=0. This step is an
+existence proof, not an assertion that rounded floating-point coordinates
+solve the equations.
+
+The SAME rational box, without shrinking it around the unknown root,
+proves all the remaining root guards. For every n=0,...,28, evaluate
+(50.4) and set x0=c_n/2, x1=1-a_n. The two actual inactive losses obey
+
+    [d_n-(1-x0+2x1+2x0x1)]/[(1+x0)(1+x1)] > 9/10,
+    [e_n-(1-x0-x1-x0x1)]/[(1+x0)(1+x1)] > 9/10.  (50.11)
+
+Every active pair and bridge hazard lies in(10^(-10),3/5). The inactive
+bridge loss gamma[e_N-H3] is>10000. Finally the macro-block's joint
+survival sigma=w_N gamma lies in
+
+    17*10^(-6) < sigma < 19*10^(-6).              (50.12)
+
+These are deliberately coarse bounds, not optimized constants. The
+active pair equalities are identities; the active bridge equalities
+follow from G(z*)=0, not from interval rounding. Consequently EVERY
+root in the macro-block is exact Nash against its actual continuation.
+
+### 50.5. Chronological compilation and unrestricted deviations
+
+For each n=0,...,28 let q^(n) be(50.1) applied to the continuation
+v_n=(a_n,1+c_n,d_n,e_n). Backward prefixing these roots in the order
+q^(0),q^(1),...,q^(28) produces v_29 from v_0=u. Prefixing the bridge
+q*=(p,r,s,0) then produces R u exactly. Therefore the CHRONOLOGICAL
+macro word is
+
+    W=(q*,q^(28),q^(27),...,q^(0)),
+
+of length30: its terminal continuation is u and its leading value is
+R u. Do not confuse backward construction order with calendar order.
+The reward table is cyclically invariant, and R acts on hazard vectors
+by R(q0,q1,q2,q3)=(q3,q0,q1,q2). Repeat the120-date word
+
+    W, R^(-1)W, R^(-2)W, R^(-3)W                 (50.13)
+
+forever. Leading and trailing values match at every join:
+
+    R u -> u -> R^(-1)u -> R^(-2)u -> R u.
+
+Thus the construction assigns a consistent bounded periodic actual-value
+candidate to every live date, with Bellman equality for the prescribed
+product action and both unilateral endpoints no larger than that value.
+
+The product of all four players' Continue probabilities during W is
+sigma. Each player experiences each of those four roles once during the
+four rotated blocks. Hence EACH player's individual survival over the
+full120-date period is sigma. Against ANY complete unilateral deviation
+by player i, the probability that all three opponents survive k periods
+is sigma^(3k). In particular it tends to0, uniformly over the deviator.
+Every original clock is proper; opponent-only absorption is also sure.
+
+For completeness, iterate the one-stage endpoint inequalities for an
+arbitrary behavioral replacement through k periods. They give
+
+    E[reward_i on absorption before120k]
+      + E[1_(still live at120k) v_i(120k)] <= v_i(0).
+
+The value candidates are bounded (there are finitely many dates), and
+the remaining-live probability is at most sigma^(3k). Letting k tend to
+infinity proves that the deviator's ORIGINAL terminal payoff is no
+larger than v_i(0). For prescribed play the Bellman equalities give
+equality, so the candidates really are the actual terminal payoffs.
+This simultaneously validates the tail and proves its complete caps;
+no independent executable tail at a freely selected vector was assumed.
+
+Consequently this is exact terminal Nash, with payoff R u when W starts
+at date0. The named downstream semantic consumer is
+`quittingGame_isUniformEquilibriumPayoff_of_terminalNash_exact` in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
+I inspected that statement and
+`quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact`
+there: the SAME profile works for every positive accuracy, with only the
+finite-horizon threshold changing. This is exactly the fixed-target
+quantifier required here. Neither declaration is being claimed as a
+Lean verification of this new source construction.
+
+### 50.6. Reproduction of every finite certificate bound
+
+The following standalone Python uses ONLY integer/rational arithmetic
+for the certificate. It does not call a numerical solver or a floating-
+point library. Interval operations take exact endpoint minima/maxima;
+the D wrapper propagates derivative enclosures by the ordinary sum,
+product and quotient rules. All assertions below were evaluated
+successfully. They establish(50.10)--(50.12) and the payoff bounds, not
+just an approximate residual at one numerical point.

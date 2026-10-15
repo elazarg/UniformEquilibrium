@@ -17,8 +17,6 @@ FRONTIER_SOURCE = ROOT / "docs" / "QuittingProofFrontier.json"
 STATUS_OUTPUT = ROOT / "docs" / "STATUS.md"
 README = ROOT / "README.md"
 FRONTIER = ROOT / "docs" / "FRONTIER.md"
-AGENTS = ROOT / "AGENTS.md"
-CLAUDE = ROOT / "CLAUDE.md"
 
 README_BEGIN = "<!-- BEGIN GENERATED STATUS -->"
 README_END = "<!-- END GENERATED STATUS -->"
@@ -176,14 +174,6 @@ def main() -> int:
         else:
             path.write_text(expected, encoding="utf-8")
             print(f"generated {path.relative_to(ROOT)}")
-    agents_bytes = AGENTS.read_bytes()
-    claude_bytes = CLAUDE.read_bytes() if CLAUDE.exists() else None
-    if claude_bytes != agents_bytes:
-        if args.check:
-            stale.append(CLAUDE)
-        else:
-            CLAUDE.write_bytes(agents_bytes)
-            print(f"generated {CLAUDE.relative_to(ROOT)}")
     if stale:
         print("Generated documentation is stale:", file=sys.stderr)
         for path in stale:

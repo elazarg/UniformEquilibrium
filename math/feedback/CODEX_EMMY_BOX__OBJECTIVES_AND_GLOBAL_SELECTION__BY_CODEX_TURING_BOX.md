@@ -510,3 +510,213 @@ This supports the claimed positive shared-budget calibration on the
 literal three-player table, not an arbitrary-table selector. In
 particular, earlier fixed-owner or unconditional all-proper selector
 falsifiers do not transfer to the whole shared-budget correspondence.
+
+## Scoped initial Section18.19 math and producer-overlap check
+
+This is an INDEPENDENT INITIAL check of Section18.19 only, not a full
+export/novelty gate or an audit of the whole notebook. I reconstructed its
+four-variable equations from the printed proper rows before comparing
+the named existing paired/phase producers. No Lean command or author-note
+edit was performed. The conclusions below are ordinary mathematics.
+
+Verdict: no mathematical gap found in the local cylinder producer at
+this stage. The four-variable IFT, actual-value realization, unrestricted
+cap proof and arbitrary-grand assertion pass this check. Existing generic
+CONSUMERS already realize this two-pair architecture once its hazards
+and passive endpoints are supplied, but they do not themselves produce
+those hazards throughout this cylinder. The bounded RAW producer check
+did not find whole-cylinder redundancy. There IS a concrete coverage
+correction: the printed two-entry perturbation witness is already covered
+by the existing crossed-matching raw producer.
+
+### Independent four-variable and cap calculation
+
+At the literal center all participant pair entries equal own1. Thus the
+four active Quit endpoints equal1, and direct evaluation gives
+
+    V^B_0=1-u+3v-2uv,       V^B_2=u(4-3v),
+    V^A_1=1-x+3y-2xy,       V^A_3=x(4-3y).
+
+These give precisely the four printed equations18.56. I independently
+computed their full Jacobian in variable order(x,y,u,v) and equation
+order(Phi_0,Phi_2,Phi_1,Phi_3). At(a,b,a,b), subtraction of rows2 and4
+gives3a^2(dy-dv); subtraction of rows1 and3 gives
+
+    b(1+2b)(dx-du)+(1-a)(dy-dv).
+
+So every kernel vector is symmetric. The remaining two-variable
+Jacobian is D(f,g), where f=b(1-a+3b-2ab)-1 and
+g=a^2(4-3b)-1. Direct algebra gives BOTH identities
+
+    f(a,(4a^2-1)/(3a^2))=(1-a)P(a)/(9a^4),
+    det D_4 Phi=3a^2 b(1+2b) det D(f,g).
+
+Since P(a)=0 and the source's exact isolating interval has P'(a)>0,
+det D(f,g)=-(1-a)P'(a)/(3a^2)<0. The full determinant is nonzero,
+with precisely the printed positive multiplicative factor. This is a
+four-variable check, not an inference from a symmetric slice alone.
+
+For arbitrary nearby proper rows, the displayed eight candidate value
+coordinates and four active equations are polynomial. The active
+equations make the four remaining Bellman coordinates hold; the inactive
+ones are definitions. The full two-phase recursion has unique bounded
+solution because xyuv<1, so these are actual values, not independently
+supplied continuations. Ordinary IFT therefore selects all four coins
+smoothly for all fifty-six independent proper-row parameters, even though
+some coordinates are unused by the equations. Shrinking one common box
+retains the proper coins and all strict inactive inequalities.
+
+The center's inactive forced-Quit expectations at phase A are exactly
+x+y-xy for player1 and1 for player3, giving the printed gaps against
+1/b and1/a; phase B has the analogous two values. Thus all eight root
+inequalities, not only the active equations, persist.
+
+Under an arbitrary complete one-player replacement, at most three
+players can Quit at any date: only two opponents can be prescribed
+active at a phase. The grand coalition is consequently absent from
+EVERY prescribed and deviating endpoint, not merely absent from the four
+equations. Each deleted opponent set has a positive prescribed hazard
+at every phase and its survival contracts by at least7/8 per date.
+Finite Bellman iteration therefore controls an arbitrary entire
+behavioral replacement with a residual tending to0 geometrically,
+including Never. The selected prescribed values equal the full caps.
+This justifies exact terminal Nash at both phases and the same-profile
+fixed-target uniform conclusion; local root Nash alone would not do so.
+
+The N_delta membership also checks: each date has joint survival at
+most49/64, so its cumulative survival meets the original shared budget
+for every0<delta<=15/64. Full Nash implies optimality in the smaller
+budget-feasible replacement set. No new global minimum selection follows.
+
+### Actual overlap: the two-entry witness is already a raw source
+
+Let only r_0(02)=r_2(02)=1+epsilon change, with epsilon>0, as printed
+in Section18.19. For the existing schedule02|13, the favorite involution
+is(0 1)(2 3), scheduled partners are(0 2)(1 3), and the other partners
+are(0 3)(1 2). All singleton favorite rewards are4>own1, scheduled and
+other singleton rewards are0<1. Every scheduled pair reward exceeds
+its scheduled singleton0. Every off-schedule participant pair reward
+is still1, and every off-schedule joining triple reward is0 or1.
+
+These are EXACTLY every field of
+`PairedCycle.CrossedMatching.RawSource` in
+`UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`.
+Its `exists_uniformEquilibriumPayoff` therefore already covers that whole
+two-entry family, for EVERY grand row. This example loses proper-flatness
+but is not a new UE coverage witness. Nor would replacing its producer
+proof by a four-variable IFT change that fact.
+
+### Bounded whole-cylinder comparisons and a corrected test direction
+
+The following checks are against complete named producer selections,
+not against one numerical root or distance from a theorem's center.
+
+1. `PairedCycle.RawRegion`, including all schedules and positive
+   recipient-affine images, does NOT contain the center. Every recipient
+   has TWO below-own singleton quitters, whereas
+   `RawRegion.eq_partner_of_singleton_lt` permits only its unique partner.
+   These strict signs persist under the proposed small proper-row changes.
+   Consequently `exists_exact_allSuffix_uniformPayoff_of_rawRegion`,
+   its open-region/affine entrances, and the generic paired cleared-field
+   interval construction do not already give the whole cylinder.
+
+2. The crossed-matching sources do cover the center and the preceding
+   two-entry direction, but NOT a full open cylinder. For an explicit
+   improved test, change only
+
+       r_0(02)=1+epsilon, r_2(02)=1+epsilon,
+       r_0(03)=1+epsilon,
+
+   keep EVERY other entry equal to the boundary table, and take epsilon
+   arbitrarily small and positive. Player0 now has TWO participant pair
+   rewards above own1. Every pair partition leaves one of these pairs
+   off-schedule, violating its necessary own-singleton joining cap.
+   This excludes ALL `RawSource`, `WeakRawSource`, `InverseRawSource`
+   and `ScheduledPairCapSource` choices, and the stricter off-schedule
+   caps in `PairedCycle.BelowSingleton.RawFamily`. The strict surplus
+   obstruction is invariant under positive recipient-affine membership
+   transport and relabeling. The IFT producer still supplies the actual
+   exact equilibrium for this three-entry perturbation. Its pair02 also
+   has no flat participant.
+
+3. The below-singleton full-table neighborhood is not merely at a
+   different numerical center: its conclusion
+   `HasBelowSingletonExactProfile` requires every phase coordinate to be
+   STRICTLY below its own singleton. On the boundary AND the three-entry
+   perturbation, all participant pair rewards are at least own1.
+   In any proper two-pair schedule each active Quit endpoint is therefore
+   at least1. Active indifference makes its actual active-phase value
+   at least1 as well. Hence NO such below-singleton profile exists there,
+   regardless of that neighborhood's unquantified radius or relabeling.
+   This rejects the conclusion of `exists_reward_supnorm_radius` itself,
+   not merely literal membership in its special raw family.
+
+4. `PairedCubicStationaryExample.exists_local_stationary_branch` and
+   any other entrance concluding an exact stationary product Nash cannot
+   cover the boundary's fixed stationary-gap point. For the preceding
+   three-entry perturbation with original grand(-1,-1,-1,-1), choose
+   epsilon below a quarter of that gap. Uniform reward robustness leaves
+   a positive gap for EVERY stationary profile. Thus the same exact
+   nonstationary witness lies outside those entire stationary selections;
+   no assumption about their numerical neighborhood radii is needed.
+
+5. `PairedCollisionReward.exists_uniformEquilibriumPayoff` covers the
+   existing one-parameter table, but not this three-entry direction.
+   Its literal family has the SAME parameter c in ALL twelve participant
+   pair entries. The perturbed row0 has participant pair entries
+   1,1+epsilon,1+epsilon, which cannot be made constant by relabeling.
+   For positive recipient-affine images, the unchanged singleton lows0
+   and owns1 force each shift0 and scale1; favorite4 forces the same
+   favorite matching. Thus such images cannot repair the discrepancy.
+
+The conditional `twoPair_exact_terminal_and_fixedProfile` is a sound
+existing consumer for supplied proper hazards and passive endpoint tests.
+It is not, without an existence theorem supplying those hazards, a raw
+producer of the whole cylinder. The Section18.19 IFT calculation supplies
+precisely that missing local synthesis. No arbitrary-table or all-calendar
+completeness is being claimed.
+
+### Named source scope and disposition
+
+The bounded source route was the maintained paired/phase entries in
+docs/TOOLKIT.md, followed by these actual files/declarations:
+
+- `periodTwoPolynomial_strictMonoOn`,
+  `exists_periodTwoParameter_mem_isolatingInterval` and the endpoint/profile
+  declarations in
+  `UniformEquilibrium/Quitting/Examples/BlockPair/FourPlayerPairedSingletonPeriodTwo.lean`;
+  `boundaryReward` and the fixed stationary exclusion in
+  `UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryTable.lean` and
+  `UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryNonstationarity.lean`.
+- `RawRegion.eq_partner_of_singleton_lt` in
+  `UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean`;
+  the literal `OwnBounds`/`PassiveBounds` in
+  `MathUE/PairedAffineIntervalEstimates.lean`;
+  `centerReward` and the raw/open/affine entrances in
+  `UniformEquilibrium/Quitting/Cycles/PairedCycleRegionCenter.lean`,
+  `PairedCycleOpenRegion.lean` and `PairedCycleAffineEquilibrium.lean`.
+- The four crossed/matching raw source structures in
+  `UniformEquilibrium/Quitting/Cycles/CrossedMatchingPhaseSource.lean`,
+  and `RawFamily` in `BelowSingletonJointPhaseSource.lean`.
+- `twoPairActiveValue`, `twoPairPostValue`, `twoPair_policy_and_nash`
+  and `twoPair_exact_terminal_and_fixedProfile` in
+  `UniformEquilibrium/Quitting/Cycles/TwoPairExactCertificate.lean`.
+- `exists_local_odds_branch`, `HasBelowSingletonExactProfile` and
+  `exists_reward_supnorm_radius` in
+  `UniformEquilibrium/Quitting/Examples/BelowSingletonJointPhaseLocalPersistence.lean`;
+  `exists_local_stationary_branch` in
+  `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`.
+- `reward` in
+  `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardTable.lean`,
+  its scalar `PeriodicRates` producer in `PairedCollisionRewardPeriodic.lean`,
+  and its all-parameter existence theorem in `PairedCollisionRewardExistence.lean`.
+
+A narrow local-persistence/implicit-function search in the chosen Cycles
+and BlockPair subtrees found the fixture-specific below-singleton and
+stationary neighborhoods, not an already generic center-parametrized
+theorem that supplies this boundary cylinder. This is a bounded finding,
+not proof of noncoverage by every accepted packet, unknown large implicit
+neighborhood, longer phase producer or other verifier. No full export
+gate was attempted. The existing two-entry witness should be relabeled
+as calibration, and the three-entry direction is available if a later
+focused complete coverage gate is requested.

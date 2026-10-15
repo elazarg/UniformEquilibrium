@@ -155,7 +155,7 @@ Do not copy headline status into agent policy or free-standing essays. Run
 `python scripts/check_docs.py` before hand-off.
 
 Project-owned Markdown filenames use `UPPER_SNAKE_CASE.md`. This includes
-`README.md`, `AGENTS.md`, `CLAUDE.md`, and `CONTRIBUTING.md`; there are no naming
+`README.md`, `AGENTS.md`, and `CONTRIBUTING.md`; there are no naming
 exceptions. Stable identifiers remain prefixes, for example
 `Q194_SEMIALGEBRAIC_BARRIER_COMPLETENESS.md`.
 
