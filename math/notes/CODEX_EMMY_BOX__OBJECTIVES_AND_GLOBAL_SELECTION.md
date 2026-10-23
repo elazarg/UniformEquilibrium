@@ -37,7 +37,7 @@ no preserved-region or minimum-specific escape theorem is proved.
 Section17 is independently reviewed ordinary mathematics, not Lean-checked.
 Its complete raw finite-player theorem and sixty-coordinate open region
 are frozen in
-[`TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md`](../exports/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md).
+[`TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md`](../revisit/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md).
 Two finite weighted reward ledgers, proper-support premium peeling, and
 proper-subset insertion acyclicity produce and preserve an actual cap
 chamber and escape its positive-debt minimum. Its bounded whole-source
@@ -1763,7 +1763,7 @@ progress but does not supply the required closed invariant domain.
 
 Status: independently reviewed ordinary mathematics, not Lean-checked.
 The canonical complete theorem is
-[`TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md`](../exports/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md).
+[`TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md`](../revisit/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md).
 This is a finite raw reward-class theorem, not an arbitrary-table selection theorem. The
 actual carrier, finite Nash existence and diagonal-to-uniform consumer
 are existing checked semantics; the raw guards and minimization below

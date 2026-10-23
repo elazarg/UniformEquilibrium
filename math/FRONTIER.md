@@ -478,7 +478,7 @@ It is reusable after a proved same-table minimum-preserving reconstruction,
 not a consequence of having one supplied tied row. The tail need not itself
 minimize debt, and the tied player may have zero debt or zero Quit rate.
 
-The [complete ordinary-mathematical reduction](exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md)
+The [complete ordinary-mathematical reduction](revisit/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md)
 constructs the original-profile compact source, every moving finite/Never
 cap test, and signed old-law variations. A sign-adaptive worst-SUM reward
 comparison avoids at most 93 fixed contacts. Tiny recipient-row generic
@@ -1596,7 +1596,7 @@ minimization then excludes every smooth full-root potential. Equality in
 a pair comparison is handled by reward closure of UE, not by claiming
 closure of the stronger analytic exclusion.
 
-The [complete theorem](exports/PREMIUM_CORE_AT_MOST_TWO.md) includes an
+The [complete theorem](revisit/PREMIUM_CORE_AT_MOST_TWO.md) includes an
 explicit layered-premium table outside the named product-low,
 proper-child F/J, matrix, and response-quotient screens. Within the
 nonnegative-singleton, nonnegative-participant-premium class, any
@@ -1674,7 +1674,7 @@ below-singleton source. The same-domain minimum excludes the full-root
 potential. Perturbing only passive within-core rewards preserves every
 premium trap and supplies the weak boundary through UE reward closure.
 
-The [complete triple-core theorem](exports/JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md)
+The [complete triple-core theorem](revisit/JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md)
 includes signed and overlapping-trap fixtures outside the protected,
 weighted-leave and boxed-charge hypotheses, and an actual bad triple root
 that tests the existential, not universal, return conclusion. It does not
@@ -1701,7 +1701,7 @@ sources, and the full-root potential consumer gives UE. Passive reward
 perturbation supplies the weak signs while preserving both equalities
 and the premium core.
 
-The [complete mixed-sign theorem](exports/MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md)
+The [complete mixed-sign theorem](revisit/MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md)
 includes a rational table beyond the compared implemented and accepted raw
 criteria, including joining-attractive triple cores. It therefore removes
 an additional reward-table class from possible UE counterexamples. The two
@@ -1751,7 +1751,7 @@ criterion. Their pair-core specializations still require a leave comparison;
 they do not implement the separate mutual strict-join branch of the
 core-at-most-two theorem.
 
-The [complete proof and exact boundary tests](exports/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md)
+The [complete proof and exact boundary tests](revisit/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md)
 include a three-player core with a genuinely negative participant premium.
 The criterion does not cover traps with no common member, negative participant premiums of every
 possible protected member, or failed leave comparisons for all such members.
@@ -1774,7 +1774,7 @@ protected-floor domain. When every binding coordinate is protected, it
 uses the closed Nash graph at that actual minimum and an error negligible
 relative to absorption, not an unjustified return from a perturbed source.
 
-The [complete protected-set theorem](exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md)
+The [complete protected-set theorem](revisit/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md)
 contains a proper-three-player-core example requiring different protected
 leavers and having a negative participant premium. Its full-core case is
 already covered by the globally safe quiet-player composition below.
@@ -1806,7 +1806,7 @@ its singleton. A vanishing-absorption perturbation at this actual minimum
 contradicts the full-root drift inequality. Weak
 leave follows by increasing passive rewards and applying reward closure.
 
-The [complete weighted-floor theorem](exports/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md)
+The [complete weighted-floor theorem](revisit/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md)
 includes an open sixty-coordinate reward region with no individually
 protected player. It fails the implemented supportwise nonpositive-premium
 test: all members of one triple have strictly positive participant premiums
@@ -1854,7 +1854,7 @@ contradicting the source box. Nontrap supports already have a low active
 endpoint. Thus every absorbing exact root in this box has a low successor,
 which excludes a smooth full-root potential and activates the Fin4 consumer.
 
-The [complete boxed-charge theorem and exact tests](exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md)
+The [complete boxed-charge theorem and exact tests](revisit/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md)
 include triple and full-core examples for which every nonzero nonnegative
 linear forced-Quit-floor test fails. The full-core example also supplies a
 profitable omitted player for an exact equilibrium witness in every proper
@@ -2672,7 +2672,7 @@ does not force arbitrary tables into this reward class.
 
 ### Passive-triple cap chamber — reviewed mathematics
 
-The [full-cap chamber producer](exports/PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md)
+The [full-cap chamber producer](revisit/PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md)
 uses cyclic labels modulo four and the following raw terminal rewards:
 
 - Singleton {i}: owner 1, opposite player 4, neighbors 0.
@@ -2773,7 +2773,7 @@ one unfavorable choice. These comparisons are not an exhaustive theorem
 census.
 
 A full sixty-coordinate Fin4 region in the
-[proper-acyclic subclass](exports/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md)
+[proper-acyclic subclass](revisit/TWO_LEDGER_PROPER_SUPPORT_CHAMBER_UNIFORM_EQUILIBRIUM.md)
 is explicit: take the cyclic singleton
 rows (owner 1, opposite 4, neighbors 0), adjacent pairs (donor −1, successor 2,
 outsiders 7/4), opposite pairs (members 0, outsiders 9/4), triples (members −1,

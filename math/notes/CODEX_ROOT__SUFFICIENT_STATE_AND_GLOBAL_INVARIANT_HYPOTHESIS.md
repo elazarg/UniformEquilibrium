@@ -654,7 +654,7 @@ and its BROUWER feedback.
 
 The stronger actual-source conclusion, including the complete scalarization
 proof, is stated in
-[the first-collision bridge reduction](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
+[the first-collision bridge reduction](../revisit/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
 It selects one counterexample table before its minimum families. At that
 table every produced minimum has a random first collision and two genuinely
 different root/later response payoff kernels with equal maximal expectation.

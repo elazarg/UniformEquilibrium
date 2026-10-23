@@ -81,12 +81,12 @@ source-coverage PASSes from CODEX_MORSE, recorded in
 The full-core branch is covered by an existing safe-quiet-player
 composition; the proper-core fixture survives that comparison.
 The stronger signed protected-set theorem is frozen in
-[`SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`](../exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md).
+[`SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`](../revisit/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md).
 No arbitrary-game claim or Lean-check claim follows.
 
 The **Weighted-floor return without a protected player** section has
 two independent mathematical and final artifact PASSes. Its frozen packet is
-[`WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md`](../exports/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md),
+[`WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md`](../revisit/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md),
 SHA256 `98ffaf81955437f97d3d3d8b1315c0e289be410110fed77ba3f1a72dcf2c1654`.
 It is exported, not Lean-checked here. It replaces
 coordinate floors by convex weighted floors and supplies a finite raw
@@ -97,7 +97,7 @@ grammar. The final **complement of weighted floors** section is a separate
 boxed Nash-charge raw-family theorem with two independent mathematical
 PASSes, now consolidated with its cardinality extension and the
 independently developed full-four-core fixture in
-[`BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`](../exports/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md),
+[`BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md`](../revisit/BOXED_NASH_CHARGES_UNIFORM_EQUILIBRIUM.md),
 SHA256 `16ffd63e3735ad7b00f99e76efb237cb0cf7fdc6de0ae267161b9da9e2977dde`.
 The strongest packet has independent mathematical and final artifact
 PASSes. It is exported, not Lean-checked here.

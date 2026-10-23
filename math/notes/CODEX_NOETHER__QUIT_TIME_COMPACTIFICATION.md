@@ -312,7 +312,7 @@ below-gap competitor, an independently reviewed export, or the random-law
 consumer. The fresh table is not a passive-tax or radial maximum.
 
 The canonical common-source reduction is
-[`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
+[`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../revisit/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md).
 At ONE compatibly selected row-generic debt-rigid positive table, EVERY
 produced minimum has random prescribed outcome, no strictly preactive
 mass, and a finite atomic first active collision. Some owner maximizes

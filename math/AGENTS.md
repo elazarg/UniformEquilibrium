@@ -102,6 +102,16 @@ export review is mandatory once a serious complete result is available.
 Internal notes may preserve anything of mathematical value when its status is
 honest. `exports/` is different. It is not a showcase for promising ideas.
 
+Before handing work to the coordinator, curate it for durable mathematical
+value. Keep canonical proofs, useful exact counterexamples, unresolved
+objections, and the checks needed to reproduce them. Do not accumulate copies
+of exported proofs, per-attempt scripts, generated output already reproducible
+from a retained program, repeated reviews, or chronological coordination logs.
+A failed route earns space through a precise obstruction that still informs
+the research, not merely because the attempt happened. Superseded stages belong
+in Git. Record final review scope against the exact artifact reviewed; a
+summary or changed proof does not inherit approval automatically.
+
 Never self-export an unreviewed result. A packet may enter `exports/` only when
 it satisfies every criterion in [`exports/README.md`](exports/README.md), has
 no unresolved mathematical objection, and records the independent review that

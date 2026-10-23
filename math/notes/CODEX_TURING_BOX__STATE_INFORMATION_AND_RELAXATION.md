@@ -8362,7 +8362,7 @@ graft/thin-word derivation. Its Gamma definition agrees with
 `UniformEquilibrium/Quitting/Projective/SingletonLCP.lean`.
 The exact matrix/inverse and degree calculation are independently
 recorded in Section7.1 of
-[`Passive-triple cap chamber`](../exports/PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md).
+[`Passive-triple cap chamber`](../revisit/PASSIVE_TRIPLE_CAP_CHAMBER_UNIFORM_EQUILIBRIUM.md).
 No source, fixed chronology or minimum is transported by an upward
 recipient-row shift: Gamma stays fixed but S and the selected minimizer
 change. Such shifts can therefore make(W12) stronger without creating
