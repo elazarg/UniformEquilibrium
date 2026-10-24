@@ -8,10 +8,15 @@ A complete ordinary-mathematical boundary reduction: incoming decomposition
 continues beyond the global minimum fiber and reaches a nonnegative-cap
 tail with a zero observer cap. Its pivot debt is uniformly above the global
 minimum. Section 3 gives the precise finite/semantic-limit alternatives;
-Section 4 disproves unguarded three-player repair of that boundary.
+Section 4 disproves unguarded three-player repair of that boundary. Section 5
+reduces every one-zero-observer infinite head to a finite prefix followed by
+at most two diluted geometric clocks, preserving its complete semantic pair.
 
-The proof passed [independent adversarial review](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_BOUNDARY_ADVERSARY.md).
-It is not a Lean result or an export. Fin4 remains open: neither the
+Sections 1--4 passed [independent adversarial review](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_BOUNDARY_ADVERSARY.md)
+at the exact version pinned there. Section 5 passed
+[two independent reviews](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_GEOMETRIC_REVIEW.md),
+including an adversarial check, at the exact version recorded there.
+This is not a Lean result or an export. Fin4 remains open: neither the
 actual-minimum branch nor a repair that uses the boundary tail's
 global-minimum ancestry is resolved.
 
@@ -330,3 +335,191 @@ The full four-player game is solved: let players 1 and 2 Quit0 and let
 0 and 3 Never. Payoffs are (2,0,0,1); every full cap equals that payoff.
 Hence this control cannot exclude a global-minimum-derived zero face. Any
 successful consumer must use that additional global source ancestry.
+
+## 5. One zero observer: at most two geometric clocks after a finite prefix
+
+Joint argument with CODEX_BOUNDARY_CONSUMER_24. This is an exact head
+representation theorem, not a boundary repair or a reward-table exclusion.
+It applies to any finite I; no genericity assumption is needed.
+
+Suppose the infinite alternative in Section 3 has exactly one zero-cap
+observer i at Y=Y_infinity. Then the SAME pair X has a representation
+
+    X=Phi_w(Phi_Q(Y)),
+
+where w is a finite word and only p and i can act in Q. Each nonempty
+finite part in Q is a diluted geometric law
+
+    Pr(T_k=t)=f_k theta_k(1-theta_k)^t,
+    Pr(T_k=Never)=1-f_k,     0<f_k<1, 0<theta_k<=1.
+
+At most two such clocks are needed. The other head laws are Never.
+If B_p(Y)>0, one can arrange that only p acts in Q. If B_p(Y)=0, two
+clocks are needed only in the case analyzed below where the pivot's
+Never response is cap-active at every sufficiently late original cut.
+An empty Q or theta=1 is allowed. The tail Y is unchanged and remains
+abstract: Phi_Q(Y) is the limit of finite prefixes, not play after omega.
+
+### 5.1. Outcomes and finite moment replacement
+
+Pass beyond the last activity of every positive-cap observer. Write
+alpha_t,beta_t for the conditional finite masses of p,i in the remaining
+head, f_p=sum alpha, f_i=sum beta, N_k=1-f_k, and s=N_p N_i. These finite
+masses can be made arbitrarily small by taking a late cut. Let a,b,c be
+the probabilities of first coalitions {p},{i},{p,i}, respectively. Put
+
+    R_p(t)=sum_(u>=t)alpha_u,   R_i(t)=sum_(u>=t)beta_u,
+    c=sum_t alpha_t beta_t,
+    v=sum_t beta_t R_p(t),
+    a=f_p-v,   b=N_p f_i+v-c.
+
+Thus f_p,f_i,v,c determine every prescribed payoff with the same tail Y.
+Set G=Z_i({p}), J=Z_i({p,i}), A=Z_p({i}), C=Z_p({p,i}). Zero observer
+debt and N_i>0 force i's Never-through-head branch to attain its cap:
+
+    B_i=G f_p,
+    G R_p(t)>=J alpha_t for every t,
+    G R_p(t)=J alpha_t whenever beta_t>0.             (5.1)
+
+Indeed all head deadlines have value at most the cap, while the prescribed
+payoff averages them and the tail option G f_p with strictly positive
+weight N_i. Tail i payoff and cap are both zero. Equality of payoff and
+cap forces equality for that option and every supported deadline.
+
+Holding p fixed, any remaining i mass after a finite date can be placed
+on at most THREE of its old support dates, preserving its mass and the
+two moments (alpha_t,R_p(t)). This preserves a,b,c,s and i's cap. To see
+exact finite representability, a countable mean of a bounded subset of
+R^d belongs to its convex hull: if the mean is on a proper supporting
+face of the closed convex hull, every positive-weight point lies on that
+face, reducing dimension. Otherwise it is in the relative interior,
+which equals the relative interior of the convex hull itself. Induction
+and the finite-dimensional Caratheodory theorem give at most d+1 points.
+Apply this with d=2. No limiting date or extra Never atom is used.
+
+The same construction compresses p while holding i fixed, preserving
+f_p and the moments (beta_t,R_i(t)). In that case
+
+    v'=sum_t alpha_t R_i(t),
+    a=N_i f_p+v'-c,   b=f_i-v'.
+
+These operations retain each owner's original Never mass. Moving finite
+mass z changes every response against that owner by at most 2Mz, uniformly
+over all complete response laws.
+
+For any positive-cap observer j, every finite head deadline has absolute
+payoff at most M(f_p+f_i). Its Never-through-head cap is within
+2M(f_p+f_i) of B_j(Y)>0. For a sufficiently late initial cut the latter
+is strictly higher, uniformly over ALL redistributions preserving f_p,f_i.
+It equals j's prescribed payoff because its tail debt is zero. The same
+buffer applies to p when B_p(Y)>0; its cap is then
+
+    A f_i+N_i B_p(Y).                                (5.2)
+
+### 5.2. Positive pivot cap, or a strict finite pivot cap
+
+If B_p(Y)>0, compress i using the three-point construction. All payoffs,
+i's cap, the positive observer caps, and (5.2) are preserved exactly.
+The earlier finite prefix therefore still gives X. After i's last atom
+only p acts; Section 5.3 handles this suffix.
+
+If B_p(Y)=0, the pivot's semantic head cap equals its actual head cap.
+Its Never value is A f_i. If at a sufficiently late cut its cap b_p
+strictly exceeds A f_i, deadline values converging to A f_i show that
+b_p has a finite attainer. Keep a finite prefix containing that attainer.
+Choose a later R so all old deadlines at or after R are below b_p by a
+fixed margin, and 2M times i's remaining finite mass is smaller than that
+margin. Compress only that remaining i mass. Earlier deadlines, including
+the attainer, are unchanged; all later deadlines stay below b_p; Never
+is unchanged. The entire semantic pair is again preserved. This leaves
+only the case where pivot Never is cap-active at every sufficiently late
+cut, treated in Section 5.4.
+
+### 5.3. A solo suffix needs at most one geometric clock
+
+After the last i atom, take a further cut so the remaining finite mass
+satisfies the positive-observer buffers. Suppose only p acts there, with
+finite mass f>0. Its cap
+is B_p(Y)>=0, and its payoff is (1-f)U_p(Y). Exact i best response is
+
+    G R(t)>=J alpha_t for every t,    B_i=G f.        (5.3)
+
+If J<=G, putting all f at the first date preserves (5.3), all payoffs, and all
+caps. If J>G, feasibility of (5.3) forces G>0: G=0,J>0 forbids atoms,
+and for G<0 the inequality is impossible at any positive atom when
+J>G. Thus J>G>0, and the diluted geometric law with rate theta=G/J
+satisfies (5.3) with equality at every date. It preserves every outcome
+probability. The positive observer buffers remain valid. No finite law
+with f>0 can satisfy (5.3) in this strict-premium case, since its last
+atom has R(t)=alpha_t and would require J<=G.
+
+The identical argument handles a solo-i suffix with pivot tail cap zero
+and pivot Never optimal: replace (G,J) by (A,C). Observer i's own cap and
+payoff stay zero. Thus this suffix is one root when C<=A, or a diluted
+geometric clock with rate A/C when C>A>0; the other nonempty cases are
+infeasible. Throughout, earlier finite queries are retained by preserving
+the ENTIRE pair at the replaced cut, not merely its prescribed payoff.
+
+### 5.4. Zero pivot cap and a persistent Never optimum
+
+Choose a late cut with the positive-observer buffers. In addition to (5.1),
+pivot Never optimality says
+
+    B_p=A f_i,    A R_i(t)>=C beta_t for every t.     (5.4)
+
+If either finite mass is zero, Section 5.3 suffices. Assume f_p f_i>0.
+If G=0, (5.1) forces J<=0. Compress p to three old support dates using
+Section 5.1. Its cap is independent of its own law. Observer i's cap stays
+zero against ANY new p law because J<=0 and G=B_i(Y)=0; its payoff is
+preserved by the outcome moments. All positive observers keep their
+buffer. After the last p atom the remaining solo-i suffix is handled
+by Section 5.3. This includes G=J=0 and requires no division by G.
+
+Suppose G!=0. If c=0, (5.1) implies R_p(t)=0 at every i support date.
+All p atoms therefore precede the first i atom, and p has finite support.
+Keep that finite prefix and replace the remaining solo-i suffix. This
+does not assume a first or last atom for an infinite p law: their existence
+here follows from the displayed strict ordering and f_i>0.
+
+It remains that G!=0 and c>0. A contact with alpha_t beta_t>0 gives
+
+    r=G/J in (0,1],    v=c/r,
+    a=f_p-c/r,    b=N_p f_i+(1/r-1)c.
+
+Write k=c/(f_p f_i). Since R_p(t)<=f_p, (5.1) gives 0<k<=r.
+Multiplying (5.4) by alpha_t and summing gives the additional inequality
+
+    [C+A(1/r-1)] k<=A,                              (5.5)
+
+because sum_t alpha_t R_i(t)=f_p f_i-(1/r-1)c.
+Define
+
+    u=k r/[r-k(1-r)] in (0,1].
+
+Replace the two head laws by diluted geometrics with respective masses
+f_p,f_i and rates r,u. Their tie probability is exactly
+
+    f_p f_i r u/(r+u-r u)=c.
+
+Every i deadline now ties with Never, since alpha_t=r R_p(t) and Jr=G.
+Moreover (5.5) is EXACTLY C u<=A: multiply by the positive denominator
+r-k(1-r). Thus every pivot deadline is at most its Never value, since
+
+    deadline_p(t)=A f_i+(C u-A)R_i(t)<=A f_i.
+
+Both full caps, all outcome probabilities, and all positive observer caps
+are preserved. This proves the two-clock representation without any sign
+restriction on G,J,A,C or any finite-support assumption on the old head.
+
+For this final two-clock block its pivot debt has the explicit form
+
+    d_p(Phi_Q(Y))
+      =N_p N_i d_p(Y)+f_p f_i r(A-C u)/(r+u-r u).     (5.6)
+
+The second term is nonnegative by (5.5); it vanishes when C u=A.
+Here B_p(Y)=B_i(Y)=0 and U_p(Y)=-d_p(Y)<0. Formula (5.6) does not by
+itself give descent: Y has larger debt than the original minimum, and
+changing its head moments can destroy the earlier prefix's observer
+equalities. The other open cases are actual global minima and boundary
+tails with two or more zero observer caps. No new equilibrium class is
+claimed by this representation theorem.

@@ -80,6 +80,15 @@ after infinitely many dates. Observers with positive limiting caps become
 inactive eventually in this head; only the pivot and zero-cap observers
 can keep acting arbitrarily late.
 
+For a boundary with exactly ONE zero-cap observer, Section 5 now replaces
+the entire infinite head by a finite prefix followed by at most TWO
+diluted geometric clocks, preserving every payoff and full deviation cap
+and keeping the same boundary tail. This needs no genericity. A positive
+pivot tail cap leaves only a solo-pivot geometric suffix; the two-clock
+case has zero pivot and observer tail caps and an explicit rational pivot
+debt formula. This is an exact representation reduction, not a boundary
+repair. Boundary tails with two or more zero observer caps remain open.
+
 The infinite case supplies an actual nonabsorbing head P and an explicit
 limit comparison map. Write s for its joint Never mass, h_i for opponent
 Never mass, and e_i for its Never response payoff. Then

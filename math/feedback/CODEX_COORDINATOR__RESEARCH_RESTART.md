@@ -19,6 +19,10 @@ nonnegative-cap tail with a zero observer cap and a uniform tail-debt gap.
 The source map links its exact incoming decomposition and inherited
 comparison operator. That boundary still needs an observer-preserving
 repair; incoming and outgoing cap annotations cannot be identified.
+With exactly one zero observer, its head now reduces to a finite prefix
+and at most two diluted geometric clocks with the complete pair preserved.
+This removes arbitrary infinite head laws in that branch, not its abstract
+boundary tail or the earlier prefix's observer constraints.
 
 The source-realization theorem and the consolidated full-law controls are
 internal ordinary mathematics. No new Lean implementation is claimed.
