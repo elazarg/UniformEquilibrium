@@ -23,6 +23,10 @@ With exactly one zero observer, its head now reduces to a finite prefix
 and at most two diluted geometric clocks with the complete pair preserved.
 This removes arbitrary infinite head laws in that branch, not its abstract
 boundary tail or the earlier prefix's observer constraints.
+If all boundary caps are zero, the actual head instead attains the first
+finite plateau of the penalized problem, at a sharp corner shared with
+zero-Never minima. This now supplies an exact link between the two sources;
+the required observer-preserving change still remains open.
 
 The source-realization theorem and the consolidated full-law controls are
 internal ordinary mathematics. No new Lean implementation is claimed.

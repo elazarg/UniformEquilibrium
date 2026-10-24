@@ -104,6 +104,16 @@ decomposition. Incoming and outgoing budgets still have different cap
 annotations, and an unrelated lower-debt tail need not preserve observer
 optimality.
 
+If EVERY boundary cap is zero, Section 6 identifies an exact link to the
+penalized problem: with lambda=d_p(Y), the actual positive-Never head P
+globally minimizes d_p+lambda nu over the augmented partial-Nash carrier.
+Its minimum first reaches the absorbing value m at lambda and stays there
+for all larger penalties. The left derivative is at least nu(P)>0 and the
+right derivative is zero. Thus every such endpoint has the same debt and
+forces a finite plateau corner with both positive- and zero-Never minima.
+Excluding that coexistence remains open; generic envelope calculus does
+not exclude it.
+
 Section 4 gives an exact warning for the new endpoint: even a zero-cap
 observer whose Never action is optimal can lose by at least 1-nu-2epsilon
 under EVERY epsilon-Nash repair of the other three players with joint

@@ -11,9 +11,11 @@ minimum. Section 3 gives the precise finite/semantic-limit alternatives;
 Section 4 disproves unguarded three-player repair of that boundary. Section 5
 reduces every one-zero-observer infinite head to a finite prefix followed by
 at most two diluted geometric clocks, preserving its complete semantic pair.
+Section 6 identifies an all-zero-cap endpoint with the corner at the first
+plateau of the Never-penalized value function, linking the two minimum problems.
 
 Sections 1--4 passed [independent adversarial review](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_BOUNDARY_ADVERSARY.md)
-at the exact version pinned there. Section 5 passed
+at the exact version pinned there. Sections 5--6 passed
 [two independent reviews](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_GEOMETRIC_REVIEW.md),
 including an adversarial check, at the exact version recorded there.
 This is not a Lean result or an export. Fin4 remains open: neither the
@@ -523,3 +525,87 @@ changing its head moments can destroy the earlier prefix's observer
 equalities. The other open cases are actual global minima and boundary
 tails with two or more zero observer caps. No new equilibrium class is
 claimed by this representation theorem.
+
+## 6. An all-zero-cap endpoint forces a finite penalty plateau
+
+Joint argument with CODEX_MULTIPLE_ZERO_CONSUMPTION_25. This identifies
+additional global ancestry, not a contradiction or a new equilibrium class.
+It applies to the same finite-player setup; review is linked above.
+
+Let H be the compact closure of ALL actual tuples (U,B,N,e), retaining
+original marginal Never masses N and pure-Never response values e. Put
+
+    nu=product_i N_i,   C={Q in H: d_i(Q)=0 for i!=p},
+    f(r)=min_(Q in C)[d_p(Q)+r nu(Q)],      r>=0.
+
+Suppose Section 3 sends a NONREALIZED global C_p minimum X to an endpoint
+Y in C_p with EVERY cap zero. Write lambda=d_p(Y), so U(Y)=-lambda e_p, where
+e_p here denotes the coordinate unit vector, and m<lambda<=M. Let P be
+the actual incoming head: the finite word followed by Never, or the
+infinite head in Section 3. In both cases nu(P)>0 and X=Phi_P(Y).
+
+Then P is an ACTUAL global minimizer of f(lambda)=m, and
+
+    f(r)<m for 0<=r<lambda,     f(r)=m for r>=lambda,
+    f'_+(lambda)=0,             f'_-(lambda)>=nu(P)>0.       (6.1)
+
+Thus lambda is the first finite plateau parameter and a nondifferentiable
+corner. All all-zero-cap endpoints produced by Section 3 at this fixed
+table and pivot have the SAME debt lambda, regardless of the selected
+minimum, incoming head, or calendar. There is no assertion that other
+boundary endpoints have the same debt, or that the corner is impossible.
+
+### Zero Never mass and concatenation
+
+The projection of {Q in H:nu(Q)=0} onto (U,B) is exactly K. One inclusion
+follows by augmenting any absorbing realizing sequence and extracting its
+bounded N,e coordinates. Conversely, for actual Q_n tending to Q with
+nu(Q)=0, the least Never mass tends to zero, since
+
+    min_i N_i(Q_n)<=nu(Q_n)^(1/|I|).
+
+Move that mass to a finite date. The new profile absorbs, and coupling
+changes every payoff and full cap by at most 2M times the moved mass.
+Its pair still tends to Q's pair. Observer debts need only tend to zero;
+no exact observer repair is being inferred. Consequently
+
+    min_(Q in C,nu(Q)=0)d_p(Q)=m,       f(r)<=m for all r>=0. (6.2)
+
+For EVERY Q in H, K contains the pair
+
+    U'=U(Q)+nu(Q)U(Y),
+    B'_i=max(B_i(Q),e_i(Q)+h_i(Q)B_i(Y))=B_i(Q),
+    h_i(Q)=product_(j!=i)N_j(Q).                           (6.3)
+
+To construct it, approximate Q by actual heads, censor their sufficiently
+small finite tails to Never, and append an empty FINAL head date. That
+date makes the old Never response available as a finite query without
+changing the head's cap. Append an absorbing approximant of Y after this
+finite head. The exact concatenation formula prices all old and new
+responses. Uniform total-variation bounds and a diagonal limit give
+(6.3) in K. The last equality uses B(Y)=0 and B_i(Q)>=e_i(Q), which holds
+on H. No abstract head is executed before a tail at an infinite date.
+
+Equation (6.3) preserves every observer debt and gives pivot debt
+d_p(Q)+lambda nu(Q). For Q in C, global minimality therefore gives
+f(lambda)>=m. For the supplied actual head P equality holds, and its
+observer debts equal those of X. Thus
+
+    f(lambda)=m=d_p(P)+lambda nu(P),
+    0<nu(P)<=m/lambda<1.                                 (6.4)
+
+### The forced corner
+
+The minimum of affine functions with slopes nu in [0,1] is nondecreasing,
+concave and 1-Lipschitz. For r<lambda, comparing with P gives
+
+    f(r)<=m-(lambda-r)nu(P)<m.
+
+For r>=lambda, monotonicity and (6.2) give f(r)=m. The right derivative
+is zero; the displayed left secant bound and concavity give (6.1).
+At the corner an actual positive-Never minimizer coexists with zero-Never
+minimizing carrier points. This is the new source link; the general
+envelope calculus is already in the
+[penalty-transition note](CODEX_SOURCE_ESCAPE__CONSTRAINED_PENALTY_TRANSITION_BOUNDARY.md),
+Section 3. Its existing bounds do not rule out such a corner. No converse
+from a penalty plateau to an all-zero-cap incoming tail is proved here.
