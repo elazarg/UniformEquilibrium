@@ -65,35 +65,45 @@ must preserve the three observers' exact full best responses. The
 excludes actual minima whose observers have pure uniformly strict best
 replies, but it does not exclude general ties or infinite supports.
 
-Every NONREALIZED minimum reaches, through finitely many nonzero incoming
-minimum-to-minimum steps, a nonrealized minimum X_* for which EVERY
-nonzero exact factorization satisfies
+Every NONREALIZED minimum now admits the stronger
+[zero-observer boundary reduction](CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION.md).
+Incoming decomposition continues through higher-debt tails using words of
+at most two roots. It reaches, finitely or as a semantic limit, a tail in
 
-    X_*=prefix_q(Y),     0<c(q)<1,
-    Y in C_p,           d_p(Y)>=m+kappa,
+    F={Y in C_p: all B_i(Y)>=0, min_(i!=p) B_i(Y)=0},
+    d_p(Y)>=m+kappa_F,     kappa_F=min_F d_p-m>0.
 
-with one kappa>0. All such roots have activity bounded away from zero
-and continuation probability bounded away from zero. A sure incoming
-root would actually realize its pair. Infinite exact decompositions with
-vanishing joint survival also realize an initial global minimum: finite
-response bounds, observer zero debt and global minimality recover its
-complete caps.
+An infinite selected head has positive survival and summable hazards;
+vanishing survival would actually realize the original minimum. The
+boundary tail need not be an actual profile. No continuation is executed
+after infinitely many dates. Observers with positive limiting caps become
+inactive eventually in this head; only the pivot and zero-cap observers
+can keep acting arbitrarily late.
 
-The exact budget at X_* is
+The infinite case supplies an actual nonabsorbing head P and an explicit
+limit comparison map. Write s for its joint Never mass, h_i for opponent
+Never mass, and e_i for its Never response payoff. Then
 
-    R_p(q;B(Y)) <= m(1-c)-kappa c.
+    Phi(Z).U_i=U_i(P)+s U_i(Z),
+    Phi(Z).B_i=max(B_i(P),e_i+h_i B_i(Z)),
+    Phi(Y)=the original global minimum.
 
-The outgoing minimum bound has the opposite inequality at B(X_*).
-Those are DIFFERENT cap annotations. Active observers pin exact tail
-caps; an unrelated lower-debt tail need not preserve their optimality.
-The fixed-pivot note's Section 9 gives the exact compatibility conditions
-and the necessary increase in pivot root regret. The incoming note's
-Section 9 records the corresponding global fixed-observer-cap slice
-minimum. Neither result produces the required substitution.
+The boundary tail minimizes the pulled-back pivot objective on its fixed
+observer-cap slice. It does NOT minimize d_p on F. The old strict incoming
+tail-gap theorem remains valid, but a tail above m no longer stops
+decomposition. Incoming and outgoing budgets still have different cap
+annotations, and an unrelated lower-debt tail need not preserve observer
+optimality.
+
+Section 4 gives an exact warning for the new endpoint: even a zero-cap
+observer whose Never action is optimal can lose by at least 1-nu-2epsilon
+under EVERY epsilon-Nash repair of the other three players with joint
+Never mass nu. That control has equilibria elsewhere and lacks the global
+minimum ancestry; it refutes the unguarded repair, not Fin4.
 
 The next two proof questions are therefore: exclude an actual global
-minimum using complete-law best-response variations; or consume the
-strict incoming tail-debt gap with a valid joint observer repair.
+minimum using complete-law best-response variations; or repair the boundary
+tail while respecting its inherited comparison map and observer caps.
 
 ## Global reductions worth keeping in view
 

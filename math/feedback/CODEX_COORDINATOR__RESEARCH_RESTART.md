@@ -14,9 +14,11 @@ repeat its mathematics or retain a chronological activity log.
 The frozen [canonical pivot-exit theorem](../exports/UNIVERSAL_CANONICAL_PIVOT_EXIT_REDUCTION.md)
 is the current broad absorbing-source reduction. Its positive-cap exit
 still needs a consumer. The distinct global absorbing partial-Nash source
-leaves an actual-minimum branch and a nonrealized branch with a uniform
-incoming tail-debt gap. Incoming and outgoing budgets use different cap
-annotations, so they do not yet contradict one another.
+leaves an actual-minimum branch and a nonrealized branch now reduced to a
+nonnegative-cap tail with a zero observer cap and a uniform tail-debt gap.
+The source map links its exact incoming decomposition and inherited
+comparison operator. That boundary still needs an observer-preserving
+repair; incoming and outgoing cap annotations cannot be identified.
 
 The source-realization theorem and the consolidated full-law controls are
 internal ordinary mathematics. No new Lean implementation is claimed.
