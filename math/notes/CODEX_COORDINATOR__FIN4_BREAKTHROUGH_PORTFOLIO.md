@@ -11,6 +11,36 @@ an arbitrary-table producer or exhibited an unrestricted counterexample.
 The checked theorem boundary is in `docs/FRONTIER.md` and the named Lean
 sources. An exported mathematical proof is not a new Lean theorem.
 
+## Constructed equilibrium classes
+
+The [contracting-block theorem](../exports/TWO_CONTRACTING_BLOCKS_UNIFORM_EQUILIBRIUM.md)
+unifies four actual reward-table producers. It retains an explicit quantitative
+box, extends the construction across a signed singleton chamber with arbitrary
+finite passive rewards and computed participant thresholds, and supplies a
+complementary class with arbitrary nonnegative pair premiums. Every strategy
+and return value is produced from the stated reward conditions.
+
+For the fixed reference singleton matrix and additive passive completion,
+the fourth theorem removes the relative-premium restriction entirely: under
+its row0 participant caps, one positive bound works for both small premiums
+independently.
+The proof combines a positive cone, a constructed invariant graph and a
+hybrid pair/triple contraction. The target is fixed before accuracy, and
+the finite periodic approximations price all behavioral deviations.
+
+The exact calibration family defeats the checked stationary, sure-owner
+punishment, protected-player, ledger and universal child-debt criteria.
+The two independent artifact reviews are
+[here](../feedback/CODEX_PERIODIC_CLOSURE__DEADLOCK_CONTRACTION_BLOCK_UNIFORM_EQUILIBRIUM__BY_CODEX_ZERO_CAP_ADVERSARY.md)
+and [here](../feedback/CODEX_PERIODIC_CLOSURE__DEADLOCK_CONTRACTION_BLOCK_UNIFORM_EQUILIBRIUM__BY_CODEX_PERIODIC_ADVERSARY.md).
+These are restricted existence classes. Arbitrary participant rewards and
+the global-minimum obligations below remain open. A concrete next direction
+is to allow the two core owners' premiums to differ; some such directions
+require a pair prefix followed by a triple contraction. The
+[reverse-switch note](CODEX_PERIODIC_ADVERSARY__UNEQUAL_PREMIUM_REVERSE_SWITCH.md)
+keeps a reviewed unequal-direction producer and a broader wedge argument
+whose switching joins still await independent review.
+
 ## Model and the three different minimum problems
 
 Native rewards Z have own-singleton, live and AllNever payoffs zero.
@@ -114,14 +144,25 @@ forces a finite plateau corner with both positive- and zero-Never minima.
 Excluding that coexistence remains open; generic envelope calculus does
 not exclude it.
 
+The reviewed [weighted cap bound](CODEX_COORDINATOR__WEIGHTED_CAP_ABSORPTION_COERCIVITY.md)
+excludes specified zero-cap faces under two finite reward-table tests.
+If a nonnegative weight vector has strictly positive singleton column
+drift and strictly positive weighted forced-Quit rewards on every nonempty
+coalition, its weighted full cap bounds absorption probability from below.
+This applies to every actual profile and its semantic closure. Sparse
+weights exclude the entire face on which their supported caps vanish.
+The arbitrary-counterexample source does not supply those reward tests;
+the theorem therefore remains internal and does not close the boundary
+branch as a whole.
+
 Section 4 gives an exact warning for the new endpoint: even a zero-cap
 observer whose Never action is optimal can lose by at least 1-nu-2epsilon
 under EVERY epsilon-Nash repair of the other three players with joint
 Never mass nu. That control has equilibria elsewhere and lacks the global
 minimum ancestry; it refutes the unguarded repair, not Fin4.
 
-The next two proof questions are therefore: exclude an actual global
-minimum using complete-law best-response variations; or repair the boundary
+On this global-minimum route, the next two proof questions are: exclude an
+actual global minimum using complete-law best-response variations; or repair the boundary
 tail while respecting its inherited comparison map and observer caps.
 
 ## Global reductions worth keeping in view
@@ -137,7 +178,7 @@ chosen calendar or controller:
 
 The existence-class packets in `math/exports/` have independent raw reward
 criteria and complete producers. They are partial classes, not a coverage
-proof for arbitrary tables. Their final review evidence is consolidated in
+proof for arbitrary tables. Earlier review evidence is consolidated in
 [the export review record](../feedback/FIN4_EXPORT_REVIEWS.md).
 
 ## Proven obstructions to recurring shortcuts

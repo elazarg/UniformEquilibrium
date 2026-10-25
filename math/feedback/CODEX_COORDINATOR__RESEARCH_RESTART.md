@@ -11,6 +11,14 @@ for the exact three minimum problems, canonical proofs, and method
 obstructions. The map is the working entry point; this file does not
 repeat its mathematics or retain a chronological activity log.
 
+The [contracting-block packet](../exports/TWO_CONTRACTING_BLOCKS_UNIFORM_EQUILIBRIUM.md)
+is the current constructive result: it combines broad chamber criteria,
+unbounded pair-premium classes and a uniform small-premium rectangle with
+no relative-premium restriction. Its exact calibration and complete
+behavioral consumer are included; the source map links both final reviews.
+The next constructive question is independent core premiums, including
+reverse switches from pair prefixes into triple contractions.
+
 The frozen [canonical pivot-exit theorem](../exports/UNIVERSAL_CANONICAL_PIVOT_EXIT_REDUCTION.md)
 is the current broad absorbing-source reduction. Its positive-cap exit
 still needs a consumer. The distinct global absorbing partial-Nash source

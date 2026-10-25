@@ -12,8 +12,13 @@ This supplies a raw-table exclusion of boundary configurations in the
 [zero-observer reduction](CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION.md),
 including its all-zero endpoint. It does not give UE for every table passing
 the tests, exclude every finite penalty plateau, or close the remaining
-actual-minimum and other boundary branches. Export eligibility remains under
-review; no new existence class is claimed.
+actual-minimum and other boundary branches. Retained as an internal proved
+result under the export gate; no new existence class is claimed.
+
+The mathematical text in commit `76432c60` passed two independent reviews:
+[boundary review](../feedback/CODEX_COORDINATOR__WEIGHTED_CAP_ABSORPTION_COERCIVITY__BY_CODEX_BOUNDARY_ZEROS_27.md)
+and [adversarial review](../feedback/CODEX_COORDINATOR__WEIGHTED_CAP_ABSORPTION_COERCIVITY__BY_CODEX_CAP_ADVERSARY_28.md).
+Subsequent changes here concern this status paragraph only.
 
 Let I have n>=2 players. A bounded native table Z satisfies Z_i({i})=0,
 and live and AllNever rewards are zero. Fix M>=1 with |Z_i(A)|<=M.
