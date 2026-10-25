@@ -20,8 +20,25 @@ The [unequal-premium packet](../exports/UNEQUAL_PREMIUM_CONTRACTION_UNIFORM_EQUI
 adds a strict-cone region and a closed wedge of independent core premium
 ratios. Its monotone contraction includes the neutral switching boundary;
 its scale threshold is uniform on compact parameter subsets. Both final
-reviews are linked in the source map. Arbitrary unequal ratios remain open,
-including the concrete reference-background direction `(a,c)=(1/10,1)`.
+reviews are linked in the source map.
+
+The [three-diffuse-flow packet](../exports/THREE_DIFFUSE_FLOWS_UNEQUAL_PREMIUM_UNIFORM_EQUILIBRIUM.md)
+adds the raw region `0<=a<3, 0<c<=1, 21c-6+8a(19c+1)>=0`, with one small
+scale threshold on each compact subset, including a=0 and c=1. Its joined
+return and finite flow meshes cover the former stress test `(a,c)=(1/10,1)`.
+Combined with the older cone theorem, it covers every `0<a<3, 0<c<=1` on
+the reference additive calibration. Both final artifact reviews are linked
+in the source map. This is a proved existence class, not a numerical search;
+the proof gives no explicit numerical scale threshold. Crossed premium
+ratios outside the already covered subclasses remain concrete next targets.
+
+Two reviewed internal results refine the methods. The local cap collar
+excludes the calibration's entire absorbing face `B0=B1=B3=0` under raw
+reward tests that succeed where all older global weighted tests fail. The
+exact-Nash nonattainment theorem excludes every exact terminal Nash profile
+on the sufficiently small independent-premium calibration, while leaving
+approximate equilibria possible. Both proofs and their limits are linked
+in the source map; neither is presented as an arbitrary-table closure.
 
 The frozen [canonical pivot-exit theorem](../exports/UNIVERSAL_CANONICAL_PIVOT_EXIT_REDUCTION.md)
 is the current broad absorbing-source reduction. Its positive-cap exit

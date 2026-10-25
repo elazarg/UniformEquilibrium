@@ -51,11 +51,39 @@ The final independent reviews are
 [here](../feedback/UNEQUAL_PREMIUM_CONTRACTION_UNIFORM_EQUILIBRIUM__BY_CODEX_ACTUAL_MINIMUM_AUDIT.md)
 and [here](../feedback/UNEQUAL_PREMIUM_CONTRACTION_UNIFORM_EQUILIBRIUM__BY_CODEX_MACRO_ADVERSARY.md).
 
-These are restricted existence classes. They do not cover arbitrary unequal
-premiums, arbitrary participant rewards, or the global-minimum obligations
-below. One concrete remaining stress test on this background has
-`(a,c)=(1/10,1)`; failure of the current return constructions there is not a
-counterexample or an unrestricted impossibility theorem.
+The [three-diffuse-flow theorem](../exports/THREE_DIFFUSE_FLOWS_UNEQUAL_PREMIUM_UNIFORM_EQUILIBRIUM.md)
+produces uniform equilibria whenever
+
+    0<=a<3, 0<c<=1, Delta=21c-6+8a(19c+1)>=0,
+
+at sufficiently small positive beta, uniformly on each compact parameter
+subset. In particular one threshold works throughout the closed rectangle
+`0<=a<=2, 2/7<=c<=1`. No numerical scale threshold is asserted. Beyond the
+fixed singleton matrix, only seven passive entries, nine core participant
+entries and seven upper bounds in row0 are required. All other nonsingleton
+rewards and the four own-singleton levels are arbitrary finite numbers; the
+scale threshold is independent of these free coordinates.
+
+The proof joins a pair return and two triple-return arcs to a constructed
+analytic core graph. Three singleton flows, approximated by finite meshes,
+close the return. The finite periodic consumer controls every behavioral
+deviation and keeps the payoff target fixed before accuracy. The final
+independent reviews are
+[here](../feedback/THREE_DIFFUSE_FLOWS_UNEQUAL_PREMIUM_UNIFORM_EQUILIBRIUM__BY_CODEX_COLLAR_ADVERSARY.md)
+and [here](../feedback/THREE_DIFFUSE_FLOWS_UNEQUAL_PREMIUM_UNIFORM_EQUILIBRIUM__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
+
+For the reference additive calibration, combining this result with the
+strict-cone theorem covers EVERY `0<a<3, 0<c<=1` at sufficiently small scale.
+Indeed Delta<0 implies c<2/7 and
+`a<(6-21c)/(8(19c+1))<=3/4`; hence `8a<6<15(1-c)`, within the older cone.
+This union does not transfer the new theorem's free-coordinate scope to
+the older cone. The former stress test `(a,c)=(1/10,1)` is now covered.
+
+These remain restricted existence classes. Arbitrary singleton matrices,
+unequal premiums and participant rewards are not classified. On the
+reference background, crossed ratios `a<3,c>1` and `a>3,c<1`, after removing
+the subclasses already covered, are concrete next targets. The global
+minimum obligations below remain open.
 
 The internal [cap-region invariance theorem](CODEX_UNEQUAL_GLOBAL__NONNEGATIVE_CAP_ROOT_ACTIVITY.md)
 shows that, on the small-premium calibration, every full Nash root from
@@ -64,8 +92,17 @@ No output-sign assumption is needed. Such a root can activate player0 only
 alone at zero cap. Its
 exact control also shows why this cannot be applied to the canonical incoming
 head: that head prices observer deviations but may pay positive pivot regret.
-This restricts an exact-root method; it is not an additional counterexample
-exclusion or a solution of the all-zero boundary branch.
+The stronger internal
+[exact-Nash nonattainment theorem](CODEX_NEGATIVE_CAPS__EXACT_NASH_NONATTAINMENT.md)
+proves that the original calibration with own singleton levels1 has no
+exact terminal Nash profile for all sufficiently small independent positive
+premiums, even with arbitrary infinite behavioral laws and Never. It also
+proves that every zero-debt point of its original semantic closure has
+nonnegative native payoff. The proof rules out negative continuations along
+the complete infinite root sequence, rather than assuming nonnegativity at
+one end. This explains why an exact-profile search can fail on tables that
+do have uniform equilibria. It does not exclude approximate equilibria or
+identify observer-Nash incoming heads with full Nash roots.
 
 ## Model and the three different minimum problems
 
@@ -180,6 +217,20 @@ weights exclude the entire face on which their supported caps vanish.
 The arbitrary-counterexample source does not supply those reward tests;
 the theorem therefore remains internal and does not close the boundary
 branch as a whole.
+
+The [local cap-collar theorem](CODEX_GLOBAL_SYSTEMATIC__LOCAL_CAP_COLLAR.md)
+replaces the global forced-Quit positivity test with positive supported pair
+premiums and an isolated common nonpositive forced-Quit root. Together with
+strictly positive weighted singleton drift, these raw tests produce
+`max_(i in S) B_i >= delta*(1-nu)` for every actual profile and its augmented
+semantic closure. On the small-premium calibration, S={0,1,3} passes these
+tests although EVERY weight fails the older global forced-Quit test.
+Consequently the entire face `B0=B1=B3=0`, including the all-zero endpoint,
+is absent from its absorbing native closure. The note proves the exact
+translation for original own singleton levels1. Other zero-observer faces,
+the actual-minimum branch and arbitrary tables remain open; this restricted
+boundary exclusion is retained internally rather than counted as a global
+source theorem.
 
 Section 4 gives an exact warning for the new endpoint: even a zero-cap
 observer whose Never action is optimal can lose by at least 1-nu-2epsilon
