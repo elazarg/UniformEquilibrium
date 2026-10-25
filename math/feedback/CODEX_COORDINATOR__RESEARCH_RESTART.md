@@ -61,6 +61,22 @@ and the late-deadline limit; two strict observers always supply that gap.
 Neither the raw sign condition nor the needed debt descent is supplied
 for arbitrary counterexamples. Both final reviews are in the source map.
 
+Two exact controls delimit the next step. Strict Never margins and finite
+representation still permit a positive local pivot-debt minimum among
+complete-law exact-observer profiles, while an equilibrium exists elsewhere.
+Joint positivity of all four capacities can coexist with a positive regret
+floor for every stationary profile, even though a period-three UE exists.
+The source map links the complete proofs and reviews. Neither control is a
+counterexample to Fin4 or a new raw-table existence class.
+
+The reviewed [signed hard-table target](../notes/CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_TABLE.md)
+now gives a concrete arbitrary-premium test with the difficult singleton
+matrix and all four capacities positive. Exact Bernstein certificates
+exclude every stationary profile and every sure-quitter root against any
+actual continuation. Thus no exact terminal Nash profile has a bounded
+proper clock. Its UE status remains open; finite-calendar approximation
+and unrestricted behavioral equilibria are not excluded.
+
 The [nine-independent-premium packet](../exports/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
 adds a class with unequal participant rewards within each core row. All
 nine normalized premiums range in [1,2], subject only to
@@ -104,10 +120,21 @@ finite plateau of the penalized problem, at a sharp corner shared with
 zero-Never minima. This now supplies an exact link between the two sources;
 the required observer-preserving change still remains open.
 
+The same note's Section 7 supplies a universal source alternative, with
+two independent reviews: either an absorbing global minimum has all three
+observers Never-active, or a finite first penalty plateau is attained by
+both positive-Never and absorbing minima. At every positive penalty the
+pivot cap strictly exceeds the penalized minimum. At a source-supplied
+strict inverse-column pivot, every positive-Never minimum is all-END and
+obeys the inverse-axis Never-mass bound. This removes the all-zero incoming
+tail hypothesis from the alternative, but does not supply an actual head
+for a critical point or eliminate either surviving case.
+
 The source-realization theorem and the consolidated full-law controls are
 internal ordinary mathematics. No new Lean implementation is claimed.
-The all-END/constrained-minimum source was already available in a stronger
-form and is not a new increment.
+The earlier all-END/constrained-minimum source was already available;
+the new increment is its universal connection to the absorbing minimum
+through the alternative above, not another all-END existence claim.
 
 Only useful canonical results, final review evidence and reproducible
 checks belong in the next publication. Draft copies, repeated reviews,

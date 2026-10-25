@@ -13,11 +13,18 @@ reduces every one-zero-observer infinite head to a finite prefix followed by
 at most two diluted geometric clocks, preserving its complete semantic pair.
 Section 6 identifies an all-zero-cap endpoint with the corner at the first
 plateau of the Never-penalized value function, linking the two minimum problems.
+Section 7 gives a universal observer-END-or-finite-plateau alternative without
+requiring a nonrealized minimum or an all-zero incoming tail. It also extends
+the strict pivot margin to every positive penalty. The broader alternative
+does not retain Section6's actual-head realization.
 
 Sections 1--4 passed [independent adversarial review](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_BOUNDARY_ADVERSARY.md)
 at the exact version pinned there. Sections 5--6 passed
 [two independent reviews](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_GEOMETRIC_REVIEW.md),
 including an adversarial check, at the exact version recorded there.
+Section7 has separate review records
+[here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_GLOBAL_PLATEAU_REVIEW.md)
+and [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_LAST_DATE.md).
 This is not a Lean result or an export. Fin4 remains open: neither the
 actual-minimum branch nor a repair that uses the boundary tail's
 global-minimum ancestry is resolved.
@@ -609,3 +616,194 @@ envelope calculus is already in the
 [penalty-transition note](CODEX_SOURCE_ESCAPE__CONSTRAINED_PENALTY_TRANSITION_BOUNDARY.md),
 Section 3. Its existing bounds do not rule out such a corner. No converse
 from a penalty plateau to an all-zero-cap incoming tail is proved here.
+
+## 7. A universal observer-END-or-finite-plateau alternative
+
+Joint derivation with CODEX_GLOBAL_SELECTION_CREATIVE. This section uses a
+fixed native own-zero FIN4 table and its unrestricted actual-law carrier.
+It drops the earlier assumptions that the selected minimum is nonrealized
+or that an incoming boundary tail has all caps zero. It does not eliminate
+either new alternative or claim an actual realization of a semantic point.
+
+Retain H,C,nu,f from Section6 and set
+
+    C0={Y in C:nu(Y)=0},
+    m=min_(Y in C0)d_p(Y)>0,
+    M0={Y in C0:d_p(Y)=m}.
+
+Assume C0 is nonempty. These hypotheses follow from a positive native
+absorbing gap. The global absorbing source theorem also supplies
+
+    B_p(Y)>m at every Y in M0.                         (7.1)
+
+The source theorem is proved in
+[the absorbing partial-Nash note](CODEX_EXPENSIVE_EXIT__ABSORBING_PARTIAL_NASH_MINIMUM.md).
+Its strict pivot conclusion needs no positive observer-margin assumption.
+The properification argument of Section6 identifies C0 with the augmented
+absorbing slice: moving a least marginal Never mass to a finite date changes
+every prescribed and response payoff, including e, by a quantity tending to
+zero, and changes that marginal N by the same vanishing mass.
+
+For every actual law and therefore throughout H,
+
+    d_i>=N_i(B_i-e_i)>=0.                             (7.2)
+
+Consequently every point of C with nu>0 is observer-END, meaning B_i=e_i
+for all i!=p. Let E denote this closed subset of C.
+
+**Universal alternative.** At least one of the following holds:
+
+- Some absorbing global minimum in M0 belongs to E.
+- There are a finite lambda_*>m and Y_* in C with nu(Y_*)>0 such that
+
+      f(r)<m for 0<=r<lambda_*,
+      f(r)=m for r>=lambda_*,
+      d_p(Y_*)+lambda_* nu(Y_*)=m.                    (7.3)
+
+  Thus Y_* and EVERY point of M0 are global minimizers at the same critical
+  parameter. Y_* is observer-END, but may be only a semantic limit.
+
+The alternatives need not be disjoint. When the first fails, all critical
+minimizers with positive Never have a common positive Never lower bound.
+If p is a strict inverse-column pivot, the positive-Never critical point in
+the second alternative has ALL caps END-active, including the pivot.
+
+### Producing the transition from failure of the first alternative
+
+If M0 misses E, there is epsilon>0 such that
+
+    Y in C, nu(Y)>0, d_p(Y)<m  implies nu(Y)>=epsilon. (7.4)
+
+Otherwise take such points with nu tending to zero. They belong to E by
+(7.2). Compactness gives a limit in C0 with debt at most m, hence in M0
+intersect E, a contradiction.
+
+AllNever belongs to C with debt0 and nu1. Define
+
+    lambda_*=max_(Y in C,nu(Y)>0) (m-d_p(Y))_+/nu(Y).  (7.5)
+
+Every positive ratio comes from (7.4), so this is a finite attained maximum
+of a continuous function on the compact set nu>=epsilon. Its value is at
+least m by AllNever. A maximizer Y_* has positive ratio and positive nu.
+Formula(7.5) gives d_p+lambda_*nu>=m throughout C, with equality at Y_*
+and every point of M0. For r<lambda_*, comparison with Y_* gives
+
+    f(r)<=m-(lambda_*-r)nu(Y_*)<m.
+
+For r>=lambda_*, monotonicity and comparison with M0 give f(r)=m.
+This proves the transition, with lambda_*>m established below. Concavity
+of the compact affine envelope also gives
+
+    f'_+(lambda_*)=0,
+    f'_-(lambda_*)=max_{critical minimizers}nu>=nu(Y_*)>0. (7.6)
+
+The lower bound in(7.4) applies to every positive-Never critical minimizer,
+since its debt is m-lambda_*nu<m. There is no claim that these minimizers
+are actual clocks or share one calendar with an absorbing minimum.
+
+### Strict pivot margin for EVERY positive penalty
+
+For any fixed r>0 write mu=f(r). Compactness gives mu>0: a zero minimum
+would have both d_p=0 and nu=0, contrary to m>0. Also mu<=m. At a
+minimizer Y, every observer-Nash root q at B(Y) has, with c=product(1-q_i),
+
+    J_r(Y')=R_p(q;B)+c mu,
+    R_p(q;B)>=mu(1-c).                              (7.7)
+
+The exact finite-prefix formulas prove this at semantic points as before.
+Take an exact finite Nash root at continuation B-a e_p, where e_p now
+denotes the coordinate unit vector and a>=0. Its observers are unchanged
+and its pivot regret at B satisfies R_p<=a q_p H_p. For a<mu, (7.7)
+forces q=0. AllContinue being Nash then implies B_i>=0 for every observer
+and B_p>=a. Letting a increase to mu yields B_p>=mu.
+
+On the critical face B_p=mu, any zero-cap observer i must have
+
+    Delta_ip=Z_i({i,p})-Z_i({p})<=0.                 (7.8)
+
+Indeed, use a=mu+eta. Its pivot continuation is -eta, so q_p>0, and the
+same budget gives q_j<=(eta/mu)q_p for all observers j. For eta<mu these
+observers are nonsure and must have nonpositive Quit-minus-Continue gaps.
+If B_i=0 and Delta_ip=D>0, the event that neither other observer quits
+contributes q_p D. The remaining events cost at most2M each, giving
+
+    gap_i>=q_p[D(1-2eta/mu)-4M eta/mu]>0
+
+for small eta, a contradiction. This retains the q_p factor throughout;
+no lower bound on the selected root hazard or cap attainment is assumed.
+
+Consider K_r={Y in C:J_r(Y)=mu,B_p(Y)=mu}. It contains no zero-Never point:
+such a point would have d_p=mu<=m, hence mu=m and Y in M0, contradicting
+(7.1). If K_r were nonempty, choose a point with least N_p>0 on this compact
+face. By (7.8), a sufficiently small solo-pivot prefix of hazard t>0 is
+observer-Nash, since its observer gaps are
+
+    t Delta_ip-(1-t)B_i<=0.
+
+Its pivot cap stays mu and its pivot root regret is t mu. Formula(7.7)
+therefore leaves J_r=mu, while N_p becomes (1-t)N_p. This contradicts its
+choice on the SAME face. Thus for every r>0 and every minimizing Y,
+
+    B_p(Y)>f(r),       U_p(Y)>r nu(Y).                (7.9)
+
+This extends the old r<A restriction: the new argument uses the absorbing
+strict margin (7.1) to remove zero-Never points from the critical face,
+instead of requiring a Never collar on the entire minimizing set.
+At continuation B-f(r)e_p every exact Nash root is AllContinue: (7.7)
+first forces all observers to Continue, and (7.9) forces the pivot too.
+
+If lambda_*=m, AllNever would minimize J_m with cap B_p=0, contradicting
+B_p>=f(m)=m. Hence lambda_*>m as asserted.
+
+### The critical point is all-END at a strict inverse-column pivot
+
+Suppose v=Gamma^(-1)e_p>0, and put S=sum_i v_i, k=S-v_p>0. The existing
+inverse-axis construction in
+[the constrained-repair proof](CODEX_VARIATIONAL_ESCAPE__CONSTRAINED_REPAIR_AND_CONE_GRAFT_OBSTRUCTION.md),
+Section2, supplies semantic tails Q_T with all observer U=B=e=0 and
+
+    b(T)=B_p(Q_T)=e_p(Q_T)=(1-exp(-kT))/k,
+    u(T)=U_p(Q_T)=(1-exp(-ST))/S,
+    N_i(Q_T)=exp(-v_i T).
+
+Independent fine discrete clocks, an empty final head query and diagonal
+limits give these tails and their grafts in H. The empty query retains
+the old END cap; no continuous-time law or continuation after infinity is
+executed. Grafting Q_T onto an old positive-Never point preserves every
+observer payoff and cap and changes the pivot coordinates by
+
+    U_p'=U_p+nu u(T),
+    B_p'=max(B_p,e_p+(nu/N_p)b(T)),
+    nu'=nu exp(-ST).                                (7.10)
+
+At any positive-Never minimizer of J_r, if B_p>e_p then small T leaves
+B_p unchanged and decreases J_r by nu[u(T)+r(1-exp(-ST))]>0. Thus B_p=e_p.
+Together with (7.2), this proves all-END at Y_*. The increment in J_r is now
+
+    nu[b(T)/N_p-u(T)-r(1-exp(-ST))].
+
+Its nonnegative right derivative at zero gives
+
+    N_p<=1/(1+rS).                                  (7.11)
+
+Only positive nu and r>0 were needed here; r<A was used in the earlier
+argument solely to produce positive nu. At r=lambda_* the present
+alternative supplies it directly. A strict inverse-column pivot is
+available from the native positive-gap Fin4 source; it is not asserted
+for every possible pivot.
+
+### Relation to the stronger actual-head case
+
+Section6 already produces a plateau from an all-zero incoming tail and
+identifies its parameter with that tail's debt. Its positive-Never minimizer
+is an ACTUAL head. The universal alternative needs neither hypothesis,
+but loses both the actual-head realization and the explicit debt formula.
+The global ratio (7.5) replaces that formula.
+
+The remaining source cases are an observer-END absorbing global minimum,
+or a finite global transition with positive-Never and absorbing minimizers.
+At a strict inverse pivot the positive-Never transition point is all-END
+and satisfies the strict payoff and mass bounds above. Neither case is
+eliminated. In particular, finite calendarness or a strict margin at ONE
+selected absorbing minimum does not rule out an observer-END point at a
+different global minimum. No UE closure follows from the alternative.

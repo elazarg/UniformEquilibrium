@@ -295,6 +295,29 @@ scalar points; failure has a dual certificate supported on at most two
 observer rows. The arbitrary counterexample source does not automatically
 supply Lambda_p<=0.
 
+The [joint-positive-capacity control](CODEX_GLOBAL_SYSTEMATIC__JOINT_MARGIN_STATIONARY_OBSTRUCTION.md)
+rules out the proposed opposite-case shortcut. Its original own singletons
+are all1 and its capacities are (1,1/17,1/17,1/17), yet every stationary
+profile has regret bounded below by a positive constant and no absorbing
+finite-calendar exact Nash profile exists. An explicit period-three profile
+is UE. The stationary exclusion has a short exact rational interval checker
+and two full independent reviews. This solved control does not exclude a
+new counterexample class; it shows that joint capacity positivity still
+requires dynamic constructions.
+
+The separate [signed hard-table target](CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_TABLE.md)
+keeps the difficult singleton matrix and has capacities
+`(1,1/5,3/29,1/7)`. Its exact Bernstein checker excludes all 80 nonzero
+stationary support patterns and every root containing a sure quitter
+against any actual continuation. Consequently stationary regret has a
+positive floor, and an exact terminal Nash profile cannot have even one
+bounded proper clock. Two independent full reviews checked the table,
+polynomials and finite certificate. No nonnegative payoff weight or
+nonnegative participant row supplies the elementary positivity shortcuts.
+The table's UE status is OPEN: these are strategy-class exclusions, not
+an unrestricted positive-gap example. It is a concrete target for a
+dynamic producer outside the positive-premium calibration.
+
 For an ACTUAL native exact-observer profile, ONE strictly positive Never
 margin gives a finite-calendar representation of the entire (U,B,e,N)
 tuple, retaining the prescribed terminal outcome law. Its bounded proper
@@ -313,6 +336,15 @@ global minimality when present, but does not eliminate finite mixed-support
 minima or realize abstract carrier points. The complete independent reviews are
 [here](../feedback/CODEX_GLOBAL_SYSTEMATIC__TERMINAL_OBSERVER_MARGIN__BY_CODEX_LAST_DATE.md)
 and [here](../feedback/CODEX_GLOBAL_SYSTEMATIC__TERMINAL_OBSERVER_MARGIN__BY_CODEX_UNIFORM_CORE_REVIEW.md).
+
+The [strict-margin local-minimum control](CODEX_LAST_DATE__STRICT_NEVER_FULL_LAW_LOCAL_MINIMUM.md)
+shows why finite representation does not complete the argument. All three
+observers can be proper, have strict Never margins27/200, and mix on two
+dates, while pivot debt6/85 is locally minimal among ALL complete-law
+exact-observer profiles. This persists on an open native-table family with
+positive determinant, degree1 and a strict positive inverse column. Its
+global minimum is zero at a different explicit equilibrium. Thus local
+optimality cannot substitute for the source's global comparison property.
 
 Every NONREALIZED minimum now admits the stronger
 [zero-observer boundary reduction](CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION.md).
@@ -362,6 +394,23 @@ right derivative is zero. Thus every such endpoint has the same debt and
 forces a finite plateau corner with both positive- and zero-Never minima.
 Excluding that coexistence remains open; generic envelope calculus does
 not exclude it.
+
+Section 7 now gives a universal alternative without requiring an incoming
+all-zero tail. Write C for the augmented exact-observer carrier, C0 for
+its zero-Never slice, m>0 for its minimum pivot debt, and M0 for the full
+absorbing minimum set. Either M0 contains a point where every observer's
+Never option is optimal, or the penalized value
+`f(r)=min_C(d_p+r nu)` first reaches m at a finite `lambda_*>m`, attained
+by both positive-Never and absorbing minima. In the latter case, all
+positive-Never critical minimizers have a common positive Never-mass
+lower bound. At EVERY positive penalty and every minimizer,
+`B_p>f(r)` and `U_p>r nu`. For a strict inverse-column pivot supplied by
+the native positive-gap source, every positive-Never minimum is all-END
+and satisfies `N_p<=1/(1+r sum(v))`, where `Gamma v=e_p`, `v>0`.
+Both independent reviews cover this extension and its source adapters.
+Neither alternative is eliminated. A critical carrier point need not
+have an actual head representation; that stronger conclusion still
+requires Section 6's incoming all-zero boundary.
 
 The reviewed [weighted cap bound](CODEX_COORDINATOR__WEIGHTED_CAP_ABSORPTION_COERCIVITY.md)
 excludes specified zero-cap faces under two finite reward-table tests.
