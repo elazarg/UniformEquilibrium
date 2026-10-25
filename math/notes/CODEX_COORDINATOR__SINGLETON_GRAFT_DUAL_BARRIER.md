@@ -10,6 +10,8 @@ Nonnegative-direction optimality produces one dual vector
 which controls EVERY finite or infinite singleton-only graft with an empty
 boundary query, including signed singleton drift, inactive ENDs and subsequent
 changes in cap activity.
+Section 2 also records the resulting observer rigidity for arbitrary collision
+tails and for replacements at increasingly late cuts of a fixed actual source.
 No separate export is proposed without a substantive coverage assessment.
 
 ## 1. Question and original source
@@ -106,6 +108,48 @@ and 1-nu_Q=rho SUM x+O(rho^2). A fixed inactive kappa_i>0 clips its
 cap increment to zero for all sufficiently small rho. Dividing (3) by
 rho at a global minimum produces (1). No finite response attainer or
 uniform inactive margin across minima is assumed.
+
+### Observer rigidity for arbitrary attached tails
+
+The same exact formula also constrains collision tails in the partial-Nash
+problem. Suppose the old point is ALL-END, every N_i>0, and observer i has
+U_i=B_i=e_i. If its old response menu is retained, an arbitrary tail with
+payoff u_i and full cap b_i gives exactly
+
+    d_i'=H_i[(b_i)^+-N_i u_i],       u_i<=b_i.
+
+Thus, if N_i<1, exact observer preservation forces u_i=b_i=0. If N_i=1,
+it instead requires u_i=b_i>=0. These conditions are also sufficient for
+that observer. With epsilon=d_i'/H_i and N_i<1, the same formula gives
+
+    -epsilon/N_i<=u_i<=b_i<=epsilon/(1-N_i).
+
+Therefore vanishing observer debt forces both tail coordinates to zero.
+This conclusion allows simultaneous quits and negative intermediate values;
+it concerns the tail's initial payoff and full cap. It does not exclude
+zero-payoff collision tails or changes of the old prefix.
+
+For a fixed ACTUAL source, moving the replacement to increasingly late
+cuts does not avoid the condition by omitting the empty query. Its native
+forced-deadline payoffs V_i(T) converge to e_i=B_i: on any opponent sample
+with a finite quit, a sufficiently late deadline agrees with Never; on
+AllNever both pay zero. Bounded convergence applies. A replacement starting
+strictly after T retains Quit T and hence a cap at least B_i-o(1).
+The old head censored to Never converges in total variation to the source,
+so uniformly over bounded replacement tails its prescribed payoff and cap
+are
+
+    U_i'=U_i+nu u_i+o(1),
+    B_i'=max(B_i,e_i+H_i b_i)+o(1).
+
+The displayed observer formula therefore holds up to o(1). A bridge with
+a fixed positive initial value at an observer with N_i<1 cannot furnish
+vanishing observer debt by attachment at later cuts. Such an exchange must
+alter an earlier prefix with nonvanishing mass, or construct a tail whose
+initial payoff and cap both vanish there. This is a limitation of that
+attachment mechanism, not an additional counterexample exclusion. The
+formula was independently derived by CODEX_CLOSURE_STRATEGY,
+CODEX_ACTUAL_SOURCE_EXCHANGE and CODEX_CLOSURE_ADVERSARY.
 
 ## 3. One dual vector for all directions
 

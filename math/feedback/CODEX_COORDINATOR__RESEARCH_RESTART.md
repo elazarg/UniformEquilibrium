@@ -152,6 +152,18 @@ iteration have two independent reviews. Unless that absorbing case already
 occurs, the critical nonrealized source reaches a mixed zero-cap endpoint.
 These endpoints and actual critical minima remain unresolved.
 
+Section 9 now selects one subcritical penalty `0<r<m`, with
+`0<mu=f(r)<=r<m`. Every selected minimum has positive Never mass and is
+ALL-END. The inherited all-zero endpoint is impossible: head and graft
+comparisons force a neutral tail whose iteration would reach absorbing
+debt `mu<m`. This leaves only actual global minima and nonrealized minima
+with inherited mixed endpoints. Two independent scoped reviews pass.
+The existing zero-face classification also makes every selected source
+strictly positive-cap after generic joining-determinant perturbation;
+that is reuse, not a new result, and does not make its endpoint a minimum.
+The required construction is fixed positive improvement of `d_p+r nu`
+while every observer debt tends to zero. It remains missing.
+
 The source-realization theorem and the consolidated full-law controls are
 internal ordinary mathematics. No new Lean implementation is claimed.
 The earlier all-END/constrained-minimum source was already available;

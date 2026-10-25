@@ -21,6 +21,10 @@ ALL-END minimum with strictly bounded pivot Never mass. The broader
 alternative does not retain Section6's actual-head realization. Section 8
 consumes an all-zero incoming endpoint of a nonrealized critical minimum:
 it forces an ALL-END absorbing global minimum with pivot Never mass zero.
+Section 9 selects a single subcritical penalty instead. Its all-zero endpoint
+is impossible, leaving only an actual ALL-END minimum or an inherited mixed
+endpoint. This avoids selecting the absorbing alternative as a separate
+source; it does not prove that absorbing ALL-END minima are absent.
 
 Sections 1--4 passed [independent adversarial review](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_BOUNDARY_ADVERSARY.md)
 at the exact version pinned there. Sections 5--6 passed
@@ -32,6 +36,9 @@ and [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_C
 including the final strict-column strengthening. Section8 has independent
 reviews in the latter record and
 [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_LAST_DATE.md).
+Section 9 has scoped independent reviews
+[here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_CLOSURE_ADVERSARY.md)
+and [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_MIXED_BOUNDARY_EXCHANGE.md).
 This is not a Lean result or an export. Fin4 remains open: neither the
 actual-minimum branch nor a repair that uses the boundary tail's
 global-minimum ancestry is resolved.
@@ -1024,3 +1031,102 @@ a nonnegative-cap endpoint with at least one zero observer cap. If that
 endpoint has ALL caps zero, the preceding equality argument consumes it.
 Mixed zero-cap endpoints are not consumed. This does not exclude actual critical minima or the
 ALL-END absorbing alternative, and does not prove a new UE class.
+
+## 9. One subcritical source leaves only actual minima or mixed endpoints
+
+This is a reduction of the remaining source obligations, not an equilibrium
+producer. Retain the augmented carrier H, observer-feasible set C, absorbing
+minimum m>0, and strict inverse-column pivot from Sections 7--8. Choose once
+and for all
+
+    0<r<m,   mu=f(r)=min_(Y in C)[d_p(Y)+r nu(Y)].
+
+AllNever gives mu<=r<m, and Section 7 gives mu>0. Every minimizing point has
+positive nu: otherwise its pivot debt is at least m. Every such point is
+ALL-END by the inverse-axis graft, has B_p>mu and U_p>r nu, and satisfies
+N_p<=1/(1+rS). No first-plateau parameter or choice of an absorbing minimum
+is needed for this selection.
+
+### Strict increase below the absorbing minimum
+
+If 0<=a<b and f(b)<m, any minimizer Y_b at b has positive Never mass. Hence
+
+    f(a)<=d_p(Y_b)+a nu(Y_b)
+         =f(b)-(b-a)nu(Y_b)<f(b).
+
+In particular, a value strictly below m has at most one parameter preimage.
+
+### The augmented incoming adapter still applies
+
+Take a nonrealized minimizing tuple Y at r. If an observer cap is already
+zero, Y itself is a mixed endpoint because B_p(Y)>mu>0. Otherwise all
+observer caps are positive. The incoming construction at the end of
+Section 8 uses only positive original Never masses, ALL-END activity, and
+positive observer caps to produce its first activity crossing. Those
+properties hold here. It does not use f(r)=m or the first-plateau property.
+
+Thus it supplies an actual positive-Never head P and an endpoint Q in C,
+with nonnegative ALL-END caps, positive nu(Q), and at least one zero
+observer cap. The full augmented semantic representation is
+
+    Y=Phi_P(Q),   nu(Y)=nu(P)nu(Q).
+
+For an infinite head, this is the finite-prefix limit already justified in
+Section 8, not execution of a tail after an infinite calendar. The actual
+head P is obtained by leaving its residual mass at literal Never.
+
+### An all-zero endpoint is impossible at this source
+
+Suppose all B_i(Q)=0 and put
+
+    R=d_p(Q)+r nu(Q)>0.
+
+Then U_i(Q)=0 for every observer. Retained-query grafting Q after any
+Z in C preserves observer feasibility and gives exactly
+
+    J_r(Z graft Q)=d_p(Z)+R nu(Z)=J_R(Z).
+
+Global minimality at r therefore gives f(R)>=mu. The inherited head P has
+the same observer payoff/cap as Y, so P itself belongs to C, and its exact
+head formula gives J_R(P)=J_r(Y)=mu. Consequently f(R)=f(r)=mu<m, and the
+strict-increase result forces R=r. Equivalently,
+
+    d_p(Q)=r(1-nu(Q)).
+
+All-END activity and zero caps give e(Q)=0. If nu(Q)<1, repeat the same
+retained-query graft after Y. Its full caps and observer payoffs stay
+unchanged, while
+
+    nu(Y_n)=nu(Y)nu(Q)^n,
+    d_p(Y_n)=mu-r nu(Y)nu(Q)^n.
+
+A compact limit lies in C with nu=0 and debt mu<m, contradicting the
+definition of m. If nu(Q)=1, every marginal Never mass equals one and the
+native coordinate bounds give U(Q)=B(Q)=e(Q)=0. Then Q is AllNever and
+Y=Phi_P(Q) is the actual tuple of P, contradicting nonrealizedness.
+
+The chosen subcritical source therefore has only these remaining cases:
+
+- an actual positive-Never ALL-END global minimum;
+- a nonrealized positive-Never ALL-END global minimum with an inherited
+  mixed endpoint: at least one observer cap is zero and at least one cap
+  is strictly positive.
+
+This sufficient route does not assert that ALL-END absorbing minima are
+absent. It avoids selecting them as an additional source case. Neither of
+the two remaining cases is eliminated here.
+
+### The quantitative improvement required for a contradiction
+
+For this one fixed r and mu, it is sufficient to produce actual profiles
+P_n and a constant c>0, independent of n, such that
+
+    d_i(P_n)->0 for every i!=p,
+    limsup_n [d_p(P_n)+r nu(P_n)]<=mu-c.
+
+Compactness of the SAME augmented carrier then supplies a point of C with
+J_r<=mu-c, contradicting its minimum. Approximate observer repair is
+therefore enough, but an improvement vanishing with its error is not.
+Every d_i here uses the full unilateral behavioral cap. This statement
+specifies the missing construction; it does not supply it or imply that
+arbitrary local/component-preserving edits can achieve it.

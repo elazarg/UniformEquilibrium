@@ -494,10 +494,30 @@ under EVERY epsilon-Nash repair of the other three players with joint
 Never mass nu. That control has equilibria elsewhere and lacks the global
 minimum ancestry; it refutes the unguarded repair, not Fin4.
 
-The universal source alternative organizes the next proof questions around
-ALL-END absorbing global minima, actual critical minima, and mixed
-zero-cap endpoints. The last case still needs a change that respects its
-inherited comparison map and observer caps.
+Section 9 simplifies the selected source: fix `0<r<m` and minimize
+`J_r=d_p+r nu`. Then `0<mu=f(r)<=r<m`, so every minimum has positive
+Never mass and is ALL-END. A nonrealized minimum cannot have an all-zero
+incoming endpoint: the actual head and arbitrary-head graft comparisons
+force a neutral tail, whose iteration would reach absorbing debt `mu<m`.
+There are therefore only two selected-source cases: an actual ALL-END
+global minimum, or a nonrealized one with an inherited mixed zero-cap
+endpoint. The two scoped Section 9 reviews are linked in the canonical
+note. This does not exclude absorbing ALL-END minima; this source choice
+avoids needing them as an additional case.
+
+The existing zero-face classification in the
+[absorbing source proof](CODEX_EXPENSIVE_EXIT__ABSORBING_PARTIAL_NASH_MINIMUM.md),
+Sections 4--7, also applies to `J_r`: its observer-only words multiply
+both debt and Never mass by the same survival. Thus after the established
+generic perturbation of joining determinants, every selected minimum has
+strictly positive caps. This is reused mathematics, not a new zero-face
+result. The inherited endpoint need not minimize `J_r` and retains its
+zero-cap constraints.
+
+The missing global exchange must produce actual profiles whose observer
+debts tend to zero and whose `J_r` stays below `mu` by one fixed positive
+amount. In the endpoint case it must respect the inherited head comparison.
+No such universal exchange is proved.
 
 ## Global reductions worth keeping in view
 
