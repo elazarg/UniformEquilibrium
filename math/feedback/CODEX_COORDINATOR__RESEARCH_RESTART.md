@@ -47,6 +47,17 @@ A uniform threshold for all three independently small premiums remains
 open, as do other joins, degenerating ratios and the arbitrary-table source
 problems.
 
+The internal [observer Never-margin theorem](../notes/CODEX_GLOBAL_SYSTEMATIC__TERMINAL_OBSERVER_MARGIN.md)
+gives a sharp raw-table test and the bound
+`min(B_i-e_i)<=max(0,Lambda_p)+4 sqrt(M D)`, where D is total observer
+regret and e is the literal Never-response vector. It applies to arbitrary
+signed tables and passes to augmented semantic limits. If Lambda_p<=0,
+some observer is Never-active at every partial-Nash source for that pivot.
+For actual profiles, two strict observer Never margins also imply exact
+finite-calendar representation of the entire payoff/cap/Never tuple.
+Neither the raw sign condition nor the needed debt descent is supplied
+for arbitrary counterexamples. Both final reviews are in the source map.
+
 The [nine-independent-premium packet](../exports/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
 adds a class with unequal participant rewards within each core row. All
 nine normalized premiums range in [1,2], subject only to
