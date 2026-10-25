@@ -33,13 +33,37 @@ punishment, protected-player, ledger and universal child-debt criteria.
 The two independent artifact reviews are
 [here](../feedback/CODEX_PERIODIC_CLOSURE__DEADLOCK_CONTRACTION_BLOCK_UNIFORM_EQUILIBRIUM__BY_CODEX_ZERO_CAP_ADVERSARY.md)
 and [here](../feedback/CODEX_PERIODIC_CLOSURE__DEADLOCK_CONTRACTION_BLOCK_UNIFORM_EQUILIBRIUM__BY_CODEX_PERIODIC_ADVERSARY.md).
-These are restricted existence classes. Arbitrary participant rewards and
-the global-minimum obligations below remain open. A concrete next direction
-is to allow the two core owners' premiums to differ; some such directions
-require a pair prefix followed by a triple contraction. The
-[reverse-switch note](CODEX_PERIODIC_ADVERSARY__UNEQUAL_PREMIUM_REVERSE_SWITCH.md)
-keeps a reviewed unequal-direction producer and a broader wedge argument
-whose switching joins still await independent review.
+The [unequal-premium theorem](../exports/UNEQUAL_PREMIUM_CONTRACTION_UNIFORM_EQUILIBRIUM.md)
+adds two regions for core premiums `(a beta,beta,c beta)` on the reference
+singleton/additive-passive background:
+
+- `a>0`, `0<c<5/9`, `8a<15(1-c)`;
+- `1<c<2`, `3c/2<=a<3`, including the neutral boundary `2a=3c`.
+
+Each compact subset has one sufficiently small scale threshold. A strict
+cone produces the first region. In the second, a concave physical boundary
+and a monotone contraction produce every pair/triple continuation, including
+unbounded pair prefixes. One continuous macro slack parameter produces the
+return without separate switch cases. The six row0 proper participant entries
+remain independent under their upper bounds. The proof and both exact
+separating rays include the full behavioral consumer and selector comparisons.
+The final independent reviews are
+[here](../feedback/UNEQUAL_PREMIUM_CONTRACTION_UNIFORM_EQUILIBRIUM__BY_CODEX_ACTUAL_MINIMUM_AUDIT.md)
+and [here](../feedback/UNEQUAL_PREMIUM_CONTRACTION_UNIFORM_EQUILIBRIUM__BY_CODEX_MACRO_ADVERSARY.md).
+
+These are restricted existence classes. They do not cover arbitrary unequal
+premiums, arbitrary participant rewards, or the global-minimum obligations
+below. One concrete remaining stress test on this background has
+`(a,c)=(1/10,1)`; failure of the current return constructions there is not a
+counterexample or an unrestricted impossibility theorem.
+
+The internal [root-activity restriction](CODEX_UNEQUAL_GLOBAL__NONNEGATIVE_CAP_ROOT_ACTIVITY.md)
+shows that, on the small-premium calibration, a full Nash root between
+nonnegative annotations can activate player0 only alone at zero cap. Its
+exact control also shows why this cannot be applied to the canonical incoming
+head: that head prices observer deviations but may pay positive pivot regret.
+This restricts an exact-root method; it is not an additional counterexample
+exclusion or a solution of the all-zero boundary branch.
 
 ## Model and the three different minimum problems
 

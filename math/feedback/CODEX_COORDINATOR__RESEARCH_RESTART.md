@@ -12,12 +12,16 @@ obstructions. The map is the working entry point; this file does not
 repeat its mathematics or retain a chronological activity log.
 
 The [contracting-block packet](../exports/TWO_CONTRACTING_BLOCKS_UNIFORM_EQUILIBRIUM.md)
-is the current constructive result: it combines broad chamber criteria,
+combines broad chamber criteria,
 unbounded pair-premium classes and a uniform small-premium rectangle with
 no relative-premium restriction. Its exact calibration and complete
 behavioral consumer are included; the source map links both final reviews.
-The next constructive question is independent core premiums, including
-reverse switches from pair prefixes into triple contractions.
+The [unequal-premium packet](../exports/UNEQUAL_PREMIUM_CONTRACTION_UNIFORM_EQUILIBRIUM.md)
+adds a strict-cone region and a closed wedge of independent core premium
+ratios. Its monotone contraction includes the neutral switching boundary;
+its scale threshold is uniform on compact parameter subsets. Both final
+reviews are linked in the source map. Arbitrary unequal ratios remain open,
+including the concrete reference-background direction `(a,c)=(1/10,1)`.
 
 The frozen [canonical pivot-exit theorem](../exports/UNIVERSAL_CANONICAL_PIVOT_EXIT_REDUCTION.md)
 is the current broad absorbing-source reduction. Its positive-cap exit
