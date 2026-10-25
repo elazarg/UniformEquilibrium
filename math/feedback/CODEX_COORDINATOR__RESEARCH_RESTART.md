@@ -11,17 +11,23 @@ for the exact three minimum problems, canonical proofs, and method
 obstructions. The map is the working entry point; this file does not
 repeat its mathematics or retain a chronological activity log.
 
-The [signed collision-bridge packet](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
-adds a producer outside the positive-premium/additive-passive calibration.
-An exact algebraic return and a finite repair through negative native
-values give one fixed payoff target and full debt
-`(0,0,0,max(K,0)delta)` at every requested accuracy. Its concrete repaired
-table defeats the complete stationary and sure-owner selections, as well
-as the applicable ordered-anchor, trap and passive-child raw criteria.
-The earlier negative-core table overlapped ordered anchors and is not
-counted as new coverage. The source map links the whole-proof reviews.
-The new class still fixes32 native coordinates, including `Z2(12)=0`;
-arbitrary signed tables remain open.
+The [signed collision-parameter packet](../exports/SIGNED_COLLISION_PARAMETER_UNIFORM_EQUILIBRIUM.md)
+now covers EVERY real `p=Z2(12)`, with31 other displayed native entries
+fixed, seven row0 upper bounds, all21 other nonsingleton entries involving
+player0 arbitrary, and arbitrary own-singleton levels. Positive p uses a
+limiting pair entrance with one vanishing residual. Nonpositive p uses
+one, two or three triple roots, with both transitions exactly certified.
+Three compact checkers supply the polynomial and2000-cell interval
+certificates; no generated center payload is retained. Both independent
+whole-export reviews are linked in the source map. Exact witnesses at
+p=1,-10,-100 defeat all stationary and sure-root selections.
+
+The earlier fixed-zero signed bridge retains its specific target and
+single-initial-error efficient calendar. Its class is contained in the new
+parameter theorem and is not counted twice. The earlier negative-core table
+already overlapped ordered anchors; that overlap remains explicitly corrected.
+The current family instead keeps the positive core-grand vector(11,2,1).
+Arbitrary-game Fin4 remains open.
 
 The [contracting-block packet](../exports/TWO_CONTRACTING_BLOCKS_UNIFORM_EQUILIBRIUM.md)
 combines broad chamber criteria,

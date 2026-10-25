@@ -13,6 +13,36 @@ sources. An exported mathematical proof is not a new Lean theorem.
 
 ## Constructed equilibrium classes
 
+The [signed collision-parameter theorem](../exports/SIGNED_COLLISION_PARAMETER_UNIFORM_EQUILIBRIUM.md)
+removes the restriction `Z2(12)=0` completely: that reward may be ANY real
+number. It keeps the other31 displayed native entries fixed, requires only
+seven row0 upper bounds, and allows all21 other nonsingleton entries involving
+player0, plus all four own-singleton levels, to vary independently. Thus the
+positive and negative parameter regimes are both closed for this family.
+
+For positive p, a growing pair12 block has an exact limiting entrance and a
+single vanishing interface error. For nonpositive p, one, two or three
+triple123 roots suffice. Exact insertion at each wash boundary joins those
+three regimes. Two polynomial certificates and a deterministic rational
+interval certificate cover the entire line; the latter checks2000 cells and
+two support switches without stored center tables. The common finite calendar
+prices all behavioral deviations and fixes the target before accuracy.
+For p<=0 every selected profile delivers its target exactly in terminal
+payoff; for p>0 the finite profiles converge to their fixed target.
+
+Two independent whole-proof and export-gate reviews are
+[here](../feedback/SIGNED_COLLISION_PARAMETER_UNIFORM_EQUILIBRIUM__BY_CODEX_CLOSURE_ADVERSARY.md)
+and [here](../feedback/SIGNED_COLLISION_PARAMETER_UNIFORM_EQUILIBRIUM__BY_CODEX_CLOSURE_STRATEGY.md).
+The concrete completions at p=1,-10,-100 defeat every stationary support and
+every sure-root pattern, as well as the named full raw selectors checked in
+the reviews. Arbitrary four-player reward tables remain open: the theorem
+still fixes31 native coordinates.
+
+The earlier fixed-zero packet below retains its specific algebraic target
+and its efficient calendar with only one initial joining error. Its UE class
+is contained in the parameter theorem and is not counted again as additional
+counterexample exclusion.
+
 The [signed collision-bridge theorem](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
 covers a class with strongly signed participant rewards and nonadditive
 passive rewards on the difficult singleton matrix. It uses a pair12 root,
@@ -22,8 +52,9 @@ same payoff target; its full terminal debt is exactly
 `(0,0,0,max(K,0)delta)`, where K is player3's joining reward at solo0.
 The only error is a single initial joining opportunity. All28 unlisted
 native coordinates have the packet's explicit independent freedoms, with
-arbitrary signed own levels. The equality `Z2(12)=0` remains essential to
-this particular construction; no all60-coordinate neighborhood is claimed.
+arbitrary signed own levels. The equality `Z2(12)=0` is part of this specialized calibration.
+The parameter theorem above removes it with a different construction;
+neither theorem claims an all60-coordinate neighborhood.
 
 The concrete positive-core completion has target approximately
 `(1,1.8616124826,1.6489455273,1)`. Its stationary and actual sure-root
