@@ -4,16 +4,20 @@ Reviewer: CODEX_GLOBAL_PLATEAU_REVIEW.
 
 **PASS for Section 7 and its used source adapters**, as ordinary mathematics,
 at full-file SHA-256
-`14177e3d79e4af1964c0a3226c2ab6fd06119dd5667f2acc992cf59f9edc7f83`
+`55fc081f9202b3a23231f773239032a4faf78457b5e3d4856d24858986725e51`
 of [the boundary reduction](../notes/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION.md).
 Sections 1--6 retain their separately recorded reviews; this is not a fresh
 whole-file approval, a Lean check, an export, or a Fin4 closure.
+Section 8 is excluded from this review: I authored its underlying argument,
+and its independent reviews are recorded separately.
 
 The checked claim is the alternative between an observer-END absorbing
 global minimum and a finite first penalty plateau with an attained
-positive-Never minimizer. The review also covers the strict pivot margin
-for every positive penalty and the all-END/mass conclusions at a strict
-inverse-column pivot. I found no mathematical objection.
+positive-Never minimizer. At a strict inverse-column pivot, the first
+branch is strengthened to an ALL-END absorbing minimum with
+N_p<1/(1+mS). The review covers this strengthening, the strict pivot margin
+for every positive penalty, and the all-END/mass conclusions for the
+critical positive-Never branch. I found no mathematical objection.
 
 ## Compact carrier and source
 
@@ -66,6 +70,30 @@ keeps J_r=mu, and strictly reduces N_p. This is a contradiction on the
 same face. It proves (7.9) without a global Never collar or r<A.
 AllNever then excludes lambda_*=m. This argument also verifies the
 claimed uniqueness of AllContinue at continuation B-f(r)e_p.
+
+## Strengthened ALL-END absorbing alternative
+
+The new subsection is valid without assuming absence of observer-END
+absorbing minima. Along r_n tending to infinity, minimizing points have
+nu<=m/r_n. A compact cluster point lies in C0 with debt at most m, so its
+debt is m. Since d_p(Y_n)<=f(r_n)<=m, this proves f(r) increases to m;
+one does not need to assume r_n nu(Y_n) tends to zero in advance.
+
+Below the first plateau every minimizer has positive nu and hence is
+ALL-END with the inverse-axis mass bound. If the plateau never begins,
+their compact limit is an ALL-END member of M0 with N_p=0. At a finite
+first plateau lambda0, continuity gives f(lambda0)=m and the prior
+AllNever argument gives lambda0>m. Left minimizing limits remain ALL-END,
+minimize J_lambda0, and satisfy N_p<=1/(1+lambda0 S). A zero-Never limit
+therefore supplies the claimed strict bound at an absorbing minimum;
+a positive-Never limit supplies the critical alternative.
+
+If M0 misses the closed ALL-END set, critical positive-Never minimizers
+have a uniform positive Never collar by compactness. The attained ratio
+formula then follows directly from J_lambda0>=m and equality at one such
+point. No assertion that every positive-Never point of C is ALL-END is
+used. I checked both the infinite-threshold case and a finite threshold
+whose left minimizing limits are all absorbing; neither is omitted.
 
 ## Full-cap graft and falsification attempts
 

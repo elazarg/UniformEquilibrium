@@ -407,10 +407,27 @@ lower bound. At EVERY positive penalty and every minimizer,
 `B_p>f(r)` and `U_p>r nu`. For a strict inverse-column pivot supplied by
 the native positive-gap source, every positive-Never minimum is all-END
 and satisfies `N_p<=1/(1+r sum(v))`, where `Gamma v=e_p`, `v>0`.
-Both independent reviews cover this extension and its source adapters.
+At such a pivot the absorbing alternative itself strengthens: one can
+select an ALL-END absorbing global minimum with
+`N_p<1/(1+m sum(v))`, or obtain the finite critical coexistence. If f(r)
+approaches m without reaching it at a finite penalty, the selected
+absorbing minimum has `N_p=0`. This follows by taking limits of ALL-END
+penalty minima, using the mass bound for every positive r. Both independent
+reviews cover the complete extension and its source adapters.
 Neither alternative is eliminated. A critical carrier point need not
 have an actual head representation; that stronger conclusion still
 requires Section 6's incoming all-zero boundary.
+
+Section 8 extends incoming decomposition to the positive-Never critical
+source while retaining all Never masses and offers. ALL-END activity
+propagates to every tail. An all-zero-cap endpoint must be neutral at the
+first penalty plateau; repeating that tail then produces an ALL-END
+absorbing global minimum with `N_p=0`. Thus, unless that absorbing case
+already occurs, a nonrealized critical minimum reaches a mixed boundary:
+at least one observer cap is zero and at least one cap is strictly positive.
+Actual critical minima and these mixed endpoints remain open. The two
+Section 8 reviews check the complete incoming adapter, not only a supplied
+head representation.
 
 The reviewed [weighted cap bound](CODEX_COORDINATOR__WEIGHTED_CAP_ABSORPTION_COERCIVITY.md)
 excludes specified zero-cap faces under two finite reward-table tests.
@@ -452,9 +469,10 @@ under EVERY epsilon-Nash repair of the other three players with joint
 Never mass nu. That control has equilibria elsewhere and lacks the global
 minimum ancestry; it refutes the unguarded repair, not Fin4.
 
-On this global-minimum route, the next two proof questions are: exclude an
-actual global minimum using complete-law best-response variations; or repair the boundary
-tail while respecting its inherited comparison map and observer caps.
+The universal source alternative organizes the next proof questions around
+ALL-END absorbing global minima, actual critical minima, and mixed
+zero-cap endpoints. The last case still needs a change that respects its
+inherited comparison map and observer caps.
 
 ## Global reductions worth keeping in view
 

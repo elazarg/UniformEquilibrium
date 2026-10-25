@@ -126,9 +126,19 @@ observers Never-active, or a finite first penalty plateau is attained by
 both positive-Never and absorbing minima. At every positive penalty the
 pivot cap strictly exceeds the penalized minimum. At a source-supplied
 strict inverse-column pivot, every positive-Never minimum is all-END and
-obeys the inverse-axis Never-mass bound. This removes the all-zero incoming
-tail hypothesis from the alternative, but does not supply an actual head
+obeys the inverse-axis Never-mass bound. At that pivot the absorbing
+alternative can also be chosen ALL-END, with
+`N_p<1/(1+m sum(v))`; if the first plateau is at infinity, it has `N_p=0`.
+This removes the all-zero incoming tail hypothesis from the alternative,
+but does not supply an actual head
 for a critical point or eliminate either surviving case.
+
+Section 8 further shows that an all-zero incoming endpoint of a
+nonrealized critical minimum forces an ALL-END absorbing global minimum
+with `N_p=0`. The complete augmented incoming adapter and neutral-tail
+iteration have two independent reviews. Unless that absorbing case already
+occurs, the critical nonrealized source reaches a mixed zero-cap endpoint.
+These endpoints and actual critical minima remain unresolved.
 
 The source-realization theorem and the consolidated full-law controls are
 internal ordinary mathematics. No new Lean implementation is claimed.

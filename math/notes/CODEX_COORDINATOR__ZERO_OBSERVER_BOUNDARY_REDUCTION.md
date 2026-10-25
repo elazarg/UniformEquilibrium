@@ -15,8 +15,12 @@ Section 6 identifies an all-zero-cap endpoint with the corner at the first
 plateau of the Never-penalized value function, linking the two minimum problems.
 Section 7 gives a universal observer-END-or-finite-plateau alternative without
 requiring a nonrealized minimum or an all-zero incoming tail. It also extends
-the strict pivot margin to every positive penalty. The broader alternative
-does not retain Section6's actual-head realization.
+the strict pivot margin to every positive penalty. At a source-supplied
+strict inverse-column pivot, the absorbing alternative strengthens to an
+ALL-END minimum with strictly bounded pivot Never mass. The broader
+alternative does not retain Section6's actual-head realization. Section 8
+consumes an all-zero incoming endpoint of a nonrealized critical minimum:
+it forces an ALL-END absorbing global minimum with pivot Never mass zero.
 
 Sections 1--4 passed [independent adversarial review](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_BOUNDARY_ADVERSARY.md)
 at the exact version pinned there. Sections 5--6 passed
@@ -24,7 +28,10 @@ at the exact version pinned there. Sections 5--6 passed
 including an adversarial check, at the exact version recorded there.
 Section7 has separate review records
 [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_GLOBAL_PLATEAU_REVIEW.md)
-and [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_LAST_DATE.md).
+and [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_GLOBAL_SYSTEMATIC.md),
+including the final strict-column strengthening. Section8 has independent
+reviews in the latter record and
+[here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_LAST_DATE.md).
 This is not a Lean result or an export. Fin4 remains open: neither the
 actual-minimum branch nor a repair that uses the boundary tail's
 global-minimum ancestry is resolved.
@@ -792,6 +799,74 @@ alternative supplies it directly. A strict inverse-column pivot is
 available from the native positive-gap Fin4 source; it is not asserted
 for every possible pivot.
 
+### At a strict inverse-column pivot, the absorbing alternative is ALL-END
+
+This strengthening was derived with CODEX_LAST_DATE. Assume the same
+strict inverse-column hypothesis and put
+
+    E_all={Y in C: B_i(Y)=e_i(Y) for EVERY player i},
+    lambda0=inf{r>=0:f(r)=m},
+
+with inf(empty)=infinity. Then the universal alternative strengthens to:
+
+- Some Y0 in M0 belongs to E_all and satisfies N_p(Y0)<1/(1+mS); or
+- the finite critical coexistence in(7.3) holds with lambda_*=lambda0>m
+  and a positive-Never ALL-END critical minimizer.
+
+This strengthens the first branch too: the pivot's cap is now END-active
+at some absorbing GLOBAL minimum. If lambda0=infinity, one can additionally
+choose that ALL-END minimum with N_p=0. These remain semantic statements;
+no actual clock or common calendar is inferred.
+
+First f(r) increases to m as r tends to infinity. Choose minimizing Y_n
+at r_n tending to infinity. Nonnegative debt gives
+
+    nu(Y_n)<=m/r_n ->0, d_p(Y_n)<=f(r_n)<=m.
+
+A compact cluster point therefore belongs to C0 and has debt at most m,
+hence exactly m. Since d_p(Y_n)<=f(r_n), the monotone limit of f is at
+least m, proving the claim. This argument does not need the inverse column.
+
+Whenever f(r)<m, EVERY minimizing point has positive nu: a zero-Never
+point would have debt at least m. The inverse-axis argument above makes
+all such minimizers ALL-END and gives N_p<=1/(1+rS).
+
+If lambda0=infinity, take the preceding sequence with r_n tending to
+infinity. Its minimizing points belong to the closed set E_all, and their
+N_p tend to zero by the mass bound. The compact cluster point is the
+asserted ALL-END member of M0 with N_p=0.
+
+If lambda0 is finite, continuity and monotonicity of f give f(lambda0)=m,
+strict inequality below lambda0 and the plateau above it. AllNever gives
+m=f(lambda0)<=lambda0. Equality lambda0=m would make AllNever a minimizer
+of J_m with B_p=0, contrary to B_p>=f(m)=m; hence lambda0>m.
+
+Take r_n increasing to lambda0 from below and choose minimizing Y_n.
+Every Y_n is ALL-END. A compact subsequence tends to Y_* satisfying
+
+    d_p(Y_*)+lambda0 nu(Y_*)=m,
+    B_i(Y_*)=e_i(Y_*) for every i,
+    N_p(Y_*)<=1/(1+lambda0 S).
+
+If nu(Y_*)=0, this gives the first alternative, with
+N_p(Y_*)<=1/(1+lambda0 S)<1/(1+mS). The infinite-plateau limit above
+also satisfies that strict bound because N_p=0. Otherwise it gives the
+second, with strict sub-plateau values and the plateau already proved.
+The alternatives need not be disjoint.
+
+In particular, if M0 misses E_all, lambda0 is finite and positive-Never
+critical minimizers exist. They all belong to E_all. A sequence of such
+critical minimizers with nu tending to zero would limit to M0 intersect
+E_all. Thus their Never masses have one common positive lower bound.
+Furthermore J_lambda0>=m throughout C and equality at a positive-Never
+critical point give the attained global formula
+
+    lambda0=max_(Y in C,nu(Y)>0) (m-d_p(Y))_+/nu(Y).
+
+This sharper conclusion does not assume that every positive-Never point
+of C is all-END; only its minimizing points are used. It also does not
+require observer-END activity to be absent at every absorbing minimum.
+
 ### Relation to the stronger actual-head case
 
 Section6 already produces a plateau from an all-zero incoming tail and
@@ -802,8 +877,150 @@ The global ratio (7.5) replaces that formula.
 
 The remaining source cases are an observer-END absorbing global minimum,
 or a finite global transition with positive-Never and absorbing minimizers.
-At a strict inverse pivot the positive-Never transition point is all-END
-and satisfies the strict payoff and mass bounds above. Neither case is
+At a strict inverse pivot, the alternatives can be sharpened to an ALL-END
+absorbing minimum with N_p<1/(1+mS), or an ALL-END positive-Never transition
+point satisfying the strict payoff and mass bounds above. Neither case is
 eliminated. In particular, finite calendarness or a strict margin at ONE
 selected absorbing minimum does not rule out an observer-END point at a
 different global minimum. No UE closure follows from the alternative.
+
+## 8. Critical all-zero endpoints force a proper-pivot absorbing minimum
+
+Derived with CODEX_NEVER_BOUNDARY_CREATIVE. This section concerns the
+same complete-law augmented carrier and the strict inverse-column pivot.
+
+Use Section 7:
+H is the compact closure of actual native (U,B,N,e), C imposes all observer
+debts zero, m>0 is the absorbing partial-Nash minimum, and lambda>m is a
+finite first plateau with f(lambda)=m. Choose a strict inverse-column pivot.
+Every positive-Never critical minimum is then ALL-END.
+
+**Boundary consequence.** If such a minimum is nonrealized, its incoming
+decomposition reaches a nonnegative-cap, ALL-END endpoint with positive
+Never mass and at least one zero observer cap. If every endpoint cap is
+zero, there is an ALL-END absorbing global minimum with N_p=0. Thus,
+unless that absorbing alternative already occurs, the endpoint also has
+at least one strictly positive cap. Actual critical minima and these
+mixed boundary endpoints remain open.
+
+### Neutral zero-cap tails force an absorbing ALL-END minimum
+
+Let Q in C satisfy all B_i(Q)=0 and 0<nu_Q<1. The ordinary retained-menu
+graft onto a positive-Never critical minimum Y has unchanged full caps,
+unchanged observer payoff, and
+
+    J_lambda(Y graft Q)-m
+      =nu_Y [d_p(Q)-lambda(1-nu_Q)].
+
+Consequently d_p(Q)>=lambda(1-nu_Q). Equality would make the graft another
+positive-Never critical minimum. It must be ALL-END by Section 7. Its pure
+Never values are e_i(Y)+h_i(Y)e_i(Q), while its full caps are B_i(Y)=e_i(Y).
+Since h_i(Y)>0, equality forces e_i(Q)=0 for EVERY i. (For observers this
+also follows from d_i(Q)=0 and N_i(Q)>0.)
+
+With equality and e(Q)=0, repeating this same retained-menu graft gives
+points Y_n in H with
+
+    B(Y_n)=B(Y), e(Y_n)=e(Y), U_obs(Y_n)=U_obs(Y),
+    N_i(Y_n)=N_i(Y) N_i(Q)^n,
+    U_p(Y_n)=U_p(Y)-lambda nu_Y(1-nu_Q^n),
+    d_p(Y_n)=m-lambda nu_Y nu_Q^n.
+
+Their limit has nu=0, observer debts zero, pivot debt m and all caps END-
+active. In fact N_p(Q)<1: the coupling bound
+`|U_p-e_p|<=2M(1-N_p)` passes to H, so equality N_p(Q)=1 would give
+U_p(Q)=e_p(Q)=0, whereas d_p(Q)=lambda(1-nu_Q)>0. Hence the limiting
+minimum has N_p=0. This proves the asserted ALL-END absorbing alternative,
+with a proper pivot in its retained Never coordinates. If this alternative
+is absent,
+
+    d_p(Q)>lambda(1-nu_Q)                         (A)
+
+for every such Q. The strict inequality is pointwise; no uniform margin
+near AllNever is asserted. If nu_Q=0, END activity is NOT automatic and
+this argument does not apply without separately supplying e(Q)=0.
+
+### An inherited all-zero endpoint supplies equality
+
+Suppose a positive-Never critical minimum Y has an actual positive-Never
+head P and endpoint Q in H, with all B(Q)=0, such that the semantic head map
+retains ALL coordinates and satisfies Y=Phi_P(Q). Finite-prefix limits are
+allowed; no continuation after an infinite calendar is executed. Assume
+Q in C and nu_Y=nu_P nu_Q, so nu_Q>0.
+
+Because B(Q)=0, Q has U_obs=0. Write
+
+    r=d_p(Q)+lambda nu_Q.
+
+For EVERY Z in C, grafting Q with a retained boundary query gives another
+point of C with J_lambda=d_p(Z)+r nu_Z. Global critical minimality therefore
+implies f(r)>=m; absorbing comparison gives equality. Hence r>=lambda by
+the first-plateau property.
+
+The head P itself has the same observer payoff/cap as Y and lies in C.
+The supplied representation gives J_r(P)=m. Since nu_P>0 and J_lambda(P)
+>=m, one also has r<=lambda. Therefore r=lambda.
+
+If nu_Q<1, this is the neutral equality just analyzed and supplies an
+ALL-END absorbing global minimum with N_p=0. If nu_Q=1, all marginal
+Never masses of Q equal one. Native coordinate bounds imply U(Q)=B(Q)=e(Q)
+=0, so Q is the AllNever tuple and Y is exactly the actual tuple of P.
+Consequently a NONREALIZED positive-Never critical minimum with this
+all-zero-cap incoming endpoint forces the ALL-END absorbing branch with
+N_p=0.
+
+### The incoming source adapter
+
+For an arbitrary critical source, Section 7 gives nonnegative observer caps
+and B_p>m. If an observer cap is already zero, take the source itself as
+the mixed boundary endpoint; it is not an all-zero endpoint. Otherwise
+all observer caps are positive, and the incoming construction in Sections
+1--3 extends to this positive-Never augmented source.
+Here nonrealized means that no actual profile realizes the entire tuple;
+nonrealizedness of its payoff/cap pair is a sufficient stronger condition.
+The only use of absorption in Section 1 was to ensure the first activity
+crossing. Here any positive observer cap supplies it instead:
+
+    B_i<=M(1-product_(j!=i)N_j)<=M(1-nu)<=M sum_t ell(q_t).
+
+Choose actual approximants whose every original Never mass is bounded
+below by half the corresponding positive source mass. Thus every
+conditional hazard is well defined and strictly below one. For approximants
+with observer caps at least mu/2, their total activity is at least
+mu/(2M), larger than the chosen delta<=mu/(64M). The same small-
+root bootstrap, observer deletion coupling and one/two-root compression
+therefore give an incoming word. The compressed pivot-only word also
+preserves limiting N and e: its total pivot mass is retained, observer
+head masses tend to zero, and the same coupling controls pure Never.
+The negative-cap incoming-root argument is unchanged.
+
+Retain N and e when extracting every conditional tuple. Positive original
+Never masses imply every incoming root is nonsure and, after every finite
+word w,
+
+    nu(source)=c(w) nu(tail), hence c(w)>=nu(source)>0.
+
+Thus an infinite selected head has summable activity automatically. The
+payoff/cap convergence argument is unchanged; Never coordinates converge
+by their product formulas, and e converges by
+
+    e_i(before)=P_i+H_i e_i(after).
+
+If the source is ALL-END, every descendant is ALL-END. Indeed B=e before
+and H_i>0 give
+
+    e_i(before)=B_i(before)
+      >=P_i+H_i B_i(after)>=P_i+H_i e_i(after)=e_i(before).
+
+Thus B_i(after)=e_i(after). The limiting endpoint retains this equality.
+The head map also preserves the augmented formulas
+
+    N_i(source)=N_i(P)N_i(Q),
+    e_i(source)=e_i(P)+h_i(P)e_i(Q).
+
+Nonrealizedness passes to every finite descendant, since an actual tail
+could be prefixed to realize the source. Activity lower bounds still force
+a nonnegative-cap endpoint with at least one zero observer cap. If that
+endpoint has ALL caps zero, the preceding equality argument consumes it.
+Mixed zero-cap endpoints are not consumed. This does not exclude actual critical minima or the
+ALL-END absorbing alternative, and does not prove a new UE class.
