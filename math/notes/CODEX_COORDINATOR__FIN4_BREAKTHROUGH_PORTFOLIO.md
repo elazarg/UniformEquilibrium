@@ -57,9 +57,11 @@ below. One concrete remaining stress test on this background has
 `(a,c)=(1/10,1)`; failure of the current return constructions there is not a
 counterexample or an unrestricted impossibility theorem.
 
-The internal [root-activity restriction](CODEX_UNEQUAL_GLOBAL__NONNEGATIVE_CAP_ROOT_ACTIVITY.md)
-shows that, on the small-premium calibration, a full Nash root between
-nonnegative annotations can activate player0 only alone at zero cap. Its
+The internal [cap-region invariance theorem](CODEX_UNEQUAL_GLOBAL__NONNEGATIVE_CAP_ROOT_ACTIVITY.md)
+shows that, on the small-premium calibration, every full Nash root from
+nonnegative continuations with player2 cap at most2 stays in that region.
+No output-sign assumption is needed. Such a root can activate player0 only
+alone at zero cap. Its
 exact control also shows why this cannot be applied to the canonical incoming
 head: that head prices observer deviations but may pay positive pivot regret.
 This restricts an exact-root method; it is not an additional counterexample
