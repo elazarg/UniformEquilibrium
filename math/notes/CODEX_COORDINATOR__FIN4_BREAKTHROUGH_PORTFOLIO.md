@@ -170,8 +170,33 @@ censuses, rather than inferring separation from unequal rewards alone.
 The final independent mathematical and export-gate reviews are
 [here](../feedback/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_CODEX_COLLAR_ADVERSARY.md)
 and [here](../feedback/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
-The unordered nine-parameter box remains open; an exact example in the
+The full unordered box [1,2]^9 remains open; an exact example in the
 packet shows why the pure triple graph alone cannot cover it.
+
+The [unordered-premium theorem](../exports/UNORDERED_NINE_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
+removes the ordering condition on a smaller pair-premium range: all six
+pair coefficients vary independently in [1,4/3], and all three triple
+coefficients independently in [1,2]. One beta0 works on this entire
+nine-dimensional rectangle. Thus the two accepted boxes are not nested:
+the ordered theorem permits larger pair premiums, while the unordered
+theorem covers new tables with h>d.
+
+On h>=d, a fixed weighted norm bounds the leading continuation map by
+71/72. An enlarged derivative class and exact vanishing-axis factors
+produce a uniform obstacle graph even at h=d. Its pair region stays legal
+under continuation. The ordered analytic graph handles d>=h. Neither
+continuity of the selected graphs across that split nor a supplied phase
+itinerary is required. A common macro slack closes the return for both
+halves, with the full finite-flow behavioral consumer included.
+
+The separating calibration adds Z3(13)=(1+theta)e, 0<theta<=1/3, to the
+previous nonhomogeneous table with Z1(123)=2e. It strictly violates the
+earlier order condition, and its full selector census still fails. Both
+final mathematical and export-gate reviews are
+[here](../feedback/UNORDERED_NINE_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_CODEX_COLLAR_ADVERSARY.md)
+and [here](../feedback/UNORDERED_NINE_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
+The full factor-two unordered box, arbitrary singleton matrices and the
+general source obligations remain open.
 
 The internal [cap-region invariance theorem](CODEX_UNEQUAL_GLOBAL__NONNEGATIVE_CAP_ROOT_ACTIVITY.md)
 shows that, on the small-premium calibration, every full Nash root from

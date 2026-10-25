@@ -52,8 +52,14 @@ adds a class with unequal participant rewards within each core row. All
 nine normalized premiums range in [1,2], subject only to
 Z2(12)>=Z3(13), with one small-scale threshold for the entire ordered box.
 The exact nonhomogeneous separating table and complete selector comparison
-establish coverage beyond the earlier equal-row constructions. Both final
-reviews are linked in the source map. The unordered box remains open.
+establish coverage beyond the earlier equal-row constructions. The separate
+[unordered-premium packet](../exports/UNORDERED_NINE_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
+removes the order condition when the six pair coefficients lie in [1,4/3],
+with the three triple coefficients still independent in [1,2]. Its common
+threshold includes h=d, and an exact h>d calibration establishes the
+additional coverage. The two boxes are not nested; the ordered result
+allows larger pair coefficients. Both packets' final reviews are linked
+in the source map. The full unordered [1,2]^9 box remains open.
 
 Two reviewed internal results refine the methods. The local cap collar
 now permits signed participant pair rewards when their weighted columns
