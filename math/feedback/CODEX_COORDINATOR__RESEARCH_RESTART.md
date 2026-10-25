@@ -40,7 +40,7 @@ small common scale for premiums `(a beta,beta,c beta)`. The source map gives
 the exhaustive case split and both final reviews. The internal
 [uniform-core theorem](../notes/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md)
 adds one common threshold near (3,1), across a=3 with c compact in (0,1),
-and across c=1 with a compact in (0,3). Its pair/triple constructions allow
+and across c=1 with a in any compact positive interval. Its pair/triple constructions allow
 switchbacks where necessary and control unbounded sheet counts on the
 right of a=3. Both complete reviews are linked in the source map.
 A uniform threshold for all three independently small premiums remains

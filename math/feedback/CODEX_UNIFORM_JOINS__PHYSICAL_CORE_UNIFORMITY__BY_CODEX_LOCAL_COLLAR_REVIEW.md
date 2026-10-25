@@ -8,9 +8,9 @@ or Lean verification. No Lean, commit or export operation was performed.
 Complete artifact reviewed:
 `math/notes/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md`, SHA256:
 
-`1805d0fe098483278f20241fc9d525d1ab7896224a83566e79ac1dcfcd6c3b83`.
+`017dc5933543558622bd308af5ddca54bd5c6085fa1b9654eb1ebafe1814de05`.
 
-The verdict covers the complete 1039-line artifact, including all three
+The verdict covers the complete 1282-line artifact, including all three
 local producers, the analytic joins and their common behavioral consumer.
 
 ## Exact conclusions checked
@@ -20,8 +20,8 @@ closed box around (a,c)=(3,1), including both sides of both boundaries.
 For each fixed compact c-interval inside (0,1), the second theorem supplies
 one threshold on a full two-sided strip around a=3. The right-side number
 of triple steps may diverge; the claimed constants do not depend on it.
-The third theorem supplies a two-sided c=1 band for compact a-intervals
-inside (0,3). These are uniform statements, not pointwise thresholds.
+The third theorem supplies a two-sided c=1 band for every compact positive
+a-interval, including intervals crossing3. These are uniform thresholds.
 
 All three conclusions use the stated seven passive entries, nine homogeneous
 core entries and row0 upper bounds. Other finite coordinates and signed
@@ -67,56 +67,26 @@ This argument requires no dominance of the negative eigenvalue modulus,
 so it also covers c<5/11. The exact solo3 axis at a=3 gives the transverse
 factor J_epsilon and its derivative versions for both K and its inverse.
 
-I symbolically verified the exact reverse map (U4). Each cone inequality
-is preserved with the stated uniform margins. In particular the scaled
-upper-u constraint has a positive limiting margin over its entire bounded
-U,Z domain, including the small negative lower U endpoint. The lower v
-bound, positive z bound and u+Mv bound have margins independent of a-3.
+I verified the reverse map (U4), its cone margins and angular descent.
+The final virtual ray has a fixed negative angular margin even when the
+number of steps diverges. Point and tangent errors carry the same epsilon
+factor as the contact ray's facet margins, so cone order controls them at
+every depth without accumulated local errors. Positive radial functionals
+and forward contraction give a common covered interval for all depths.
 
-The angular descent (U6)--(U7) is valid. For nonnegative next u it follows
-by division by the positive lower v multiplier. If next u is negative,
-small current tau has a uniformly negative next numerator, while larger
-tau supplies its own gap. Continuity extends this to a small negative tau
-interval. Thus the final ray has a fixed negative margin and the needed
-planes satisfy (U8), even when their number tends to infinity.
-
-The inverse contact curves are controlled by cone order, not by repeatedly
-adding local errors. The contact ray has facet margins proportional to
-epsilon, and both its point and tangent perturbations are O(epsilon*s).
-The positive reverse map preserves their relative order bounds at every
-depth. The positive functionals v and ell then give uniform relative
-errors and strictly positive radial derivatives. The forward contraction
-provides a common covered radial interval for all inverse depths.
-
-On returning to original coordinates, the transverse derivative estimate
-uses point and tangent comparisons to the same ray. This justifies
-|t|J_epsilon(x)<=C|x|v(t); no factor 1/epsilon appears. Consequently the
-exact angular curves have uniform relative errors. The multiplicative
-gap between consecutive linear angles keeps every exact seam ordered,
-including the last seam beyond u=0.
-
-The normalized sheet remainder in (U11) follows by combining two forward
-contraction factors with the lower bound on the linear normal. It decays
-as (C3*beta)^n. Uniform projection angles therefore yield a common IFT
-radius and C1 bounds for every needed sheet. This avoids a hidden
-inverse-domain or depth-dependent radius assumption.
-
-The corrected original-coordinate argument is essential and valid. On
-physical sectors, epsilon*u<=Cv and |A_n|u<=Cv. The longitudinal coordinate
-error is therefore multiplied by a sufficiently small plane slope. First
-absorbing the resulting C*rho*|z| term proves |z|<=Cv; substitution then
-gives the needed O(rho*v) value error. It is not claimed off those sectors.
-Later sheets keep a positive hazard margin. For the first sheet I verified
-the exact contact factor and its limiting positive unit (1-c)/(1+3c).
-The comparison between linear cap height and actual hazard has the required
-weighted vanishing-axis factor, rather than an unweighted O(beta*u) error.
-
-Normalized pair/first-preimage transversality excludes extra intersections
-uniformly at a=3. Exact descent and ordered boundaries put each sheet in
-its predecessor. The legal pair sector is invariant with a common ratio
-contraction, and the lower bound T>=Psi follows from its exact guard sign.
-Adjacent roots agree on every seam. All final root and radius bounds are
-independent of the number of sheets.
+The original-coordinate derivative estimate uses comparisons to the same
+ray and introduces no 1/epsilon. Consecutive multiplicative angular gaps
+keep exact seams ordered. The normalized sheet remainder decays as
+(C3*beta)^n; uniform projection angles give common IFT and C1 bounds.
+On physical sectors, epsilon*u and |A_n|u are bounded by Cv. Absorbing the
+C*rho*|z| term first proves |z|<=Cv and hence the required O(rho*v) error.
+This estimate is not asserted off those sectors. Later sheets retain
+positive hazard margins; the first sheet has an exact contact factor with
+positive limiting unit (1-c)/(1+3c). The cap-to-hazard comparison has the
+necessary vanishing-axis factor, not an unweighted O(beta*u) remainder.
+Normalized contact transversality excludes extra intersections at a=3.
+Ordered boundaries and exact descent place every sheet in its predecessor;
+the legal pair sector is invariant. Roots match on seams and T>=Psi.
 
 ## Left extension and c=1 crossing
 
@@ -153,6 +123,38 @@ guard gives T>=tcrit>=Psi on a common lower band. At c=1, the analytic
 correction lies in the upper class, with slope-slack numerator
 (1-k)(6k+1)>0. Its roots make it a fixed point, so uniqueness identifies
 both graphs. Margins are uniform on the fixed compact interval only.
+
+## The c=1 join above a=3 and the finite cover
+
+For compact a>3, the exact pair guard is w(A+Ly)-(1-c)y, with A bounded
+away from zero. The next ratio contracts uniformly by a factor tending to
+3c/(2a)<1, proving pair invariance without a radius divided by 1-c.
+The exact solo1 axis makes both scaled cap coordinates and the player2
+hazard divisible by delta=(1-c)/c. Thus the scaled map is analytic through
+delta0 on a fixed domain, and its normalized determinant stays nonzero.
+
+I checked (H7), the preserved cone and tau_next<=(tau-1)/2. They supply
+a common finite number of reverse seams. A zero-U last seam is handled
+by one extra strictly negative virtual seam. Projection and intersection
+transversality survive on a finite parameter cover. Normalized forward
+iterates, rather than inverse iterations on an unproved domain, supply
+common analytic equations. The extra equation defining the final seam
+need not itself define a graph. Three consecutive rays are independent.
+
+The first sheet's scaled hazard has an exact contact factor; later physical
+sectors have strict positive margins. The printed y,w formulas then give
+physical roots, exact predecessor descent and agreement at seams. Outside
+the legal pair sector, tcrit>Psi, so T>=Psi follows from physicality.
+Original pair illegality gives A U<cy(3+a*beta+u)<=CV before assuming scaled
+domain membership. Thus one original radius really covers the full quadrant.
+The height and root discrepancies are O(delta*v), giving the asserted
+continuous c=1 join to the all-pair graph, plus common contraction and axis
+bounds. No hidden factor 1/delta enters those bounds.
+
+The below3, corner and above3 intervals cover every compact positive
+a-interval with overlap. Minimum thresholds and maximum bounds give the
+full horizontal theorem. The per-game choice need only be continuous in
+cap inputs; parameterwise agreement across these three pieces is not used.
 
 ## Common return and behavioral consumer
 

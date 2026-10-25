@@ -60,7 +60,7 @@ has a uniform-equilibrium payoff. Neither beta1 nor the core radius depends
 on the number of triple steps on the right, which may diverge as a
 decreases to3. The left side uses a uniform analytic graph.
 
-**Two-sided c=1 theorem.** For every 0<a_-<=a_+<3, there exist eta,beta2>0
+**Two-sided c=1 theorem.** For every 0<a_-<=a_+<infinity, there exist eta,beta2>0
 such that every table above with
 
     a_-<=a<=a_+, 1-eta<=c<=1+eta, 0<beta<beta2                  (R2)
@@ -697,9 +697,10 @@ No continuity across a=3 is inferred merely from two existence constructions;
 the consumer needs continuous roots and axis values in the inputs of each
 game, together with the common bounds just proved.
 
-## 6. A uniform core crossing c=1 away from a=0,3
+## 6. A uniform core crossing c=1 on every compact positive a interval
 
-Fix 0<a_-<=a_+<3. First restrict to 1<=c<=1+eta. Use the exact dynamic
+Begin with 0<a_-<=a_+<3; intervals above3 and the finite cover follow
+below. First restrict to 1<=c<=1+eta. Use the exact dynamic
 complementarity operator(C4)--(C9), with T=Psi_beta+h. Here K1 is independent
 of v and K3 is independent of u; their respective direct-coordinate and z
 derivatives are positive on a common small domain. A pair step may return
@@ -906,7 +907,7 @@ The comparison T_beta>=Psi_beta is also uniform. On the pair surface,
 once the radius is small, because 1-a/3 has a positive lower bound.
 By(C6), this is tcrit_beta>=Psi_beta. The analytic graph therefore
 satisfies the same common core interface as the upper construction.
-Taking the minimum of the upper and lower thresholds proves(R2).
+Taking the minimum of the upper and lower thresholds proves(R2) when a_+<3.
 
 The two selected graphs agree at c=1 as well. There
 A=1/(1+2k), a=k(1+2k),0<k<1. The analytic correction h=T-Psi vanishes
@@ -917,6 +918,247 @@ Its v slope is O(u), so a common small radius puts it in(J5).
 Its physical roots make it a fixed point of(C9); uniqueness identifies
 it with the upper construction. This agreement is not required merely
 to take the minimum of the two existence thresholds.
+
+### Compact a intervals above3
+
+Now fix 3<a_-<=a_+<infinity. For c<1 the active triple wedge has
+u=O((1-c)v). Scaling this wedge gives an exact analytic map at c=1 and a
+uniform finite sheet count. Thus no diverging-depth estimate is needed in
+this case. The c>=1 side will be the invariant pair surface everywhere.
+
+#### A pair surface with a uniform invariant legal side
+
+Use the reference singleton/core data with premiums(a beta,beta,c beta),
+and put
+
+    Psi_beta(u,v)=u/3+v+k_beta uv,
+    k_beta=(9+a beta+3c beta)/[3(6+2a beta+3c beta)].
+    A=a/3-1>0, B=1-c, L=1+k_beta ac beta.
+
+At pair13 hazards
+
+    w=u/(3+a beta+u), y=v/(2+c beta+v),
+
+the exact quiet2 guard divided by beta is
+
+    g=A w-B y+L yw=w(A+Ly)-By.                    (H1)
+
+The pair surface is exactly invariant, with outer output
+(a beta w,c beta y). For c<1, a legal nonzero pair satisfies
+y/w<=(A+Ly)/B. The next hazard ratio is multiplied by
+
+    (c/a)*(3+a beta+a beta w)/(2+c beta+c beta y).
+
+It is at most a common q<1 because 3c/(2a)<1 uniformly. Choose rho and
+beta0 so q(1+L rho/A_min)<1, where A_min=a_-/3-1>0. Then
+
+    y_next/w_next <= q(A+Ly)/B <= A/B,
+
+which implies the next guard. This proves pair legality forever with a
+radius independent of B decreasing to zero. No division of the radius by
+1-c is used. When B=0 or B<0 every pair guard is nonnegative directly.
+
+#### The exact scaled problem is regular at c=1
+
+For c<1 set
+
+    delta=(1-c)/c, c=1/(1+delta),
+    u=delta U, v=V,
+    z_cap=3(t-u/3-v)/4=delta Z.                  (H2)
+
+The coordinate z_cap is a linear cap height, not the exact player2 hazard.
+Let F_beta be the exact triple cap map Q_beta o I_beta^-1. At c=1 the
+entire line (u,t,v)=(0,V,V) is exactly invariant: its root is
+
+    y=V/(2+beta+V), z=w=0,
+    Q=(0,beta y,beta y).
+
+Consequently the u and z_cap coordinates of
+F_beta(delta U,V,delta Z) vanish identically at delta0, for all small V
+and beta. Division by delta therefore gives an analytic scaled map
+
+    Fhat_beta,delta(U,V,Z)
+       =(F_u/delta,F_v,F_zcap/delta),            (H3)
+
+on one fixed small neighborhood, including delta=0. It still factors as
+beta times an analytic map vanishing at0. The same exact-axis argument
+makes the virtual player2 hazard divided by delta analytic there.
+
+The pair surface becomes
+
+    Z=(3/4)k_beta UV,                            (H4)
+
+with no degenerating coefficient. Its contact guard, divided by delta, is
+
+    g/delta=(A+Ly) U/(3+a beta+delta U)-c y,
+    y=V/(2+c beta+V).                            (H5)
+
+Hence its nonzero contact curve is analytic and uniformly transverse:
+at beta0 and the origin its tangent is
+
+    (U,V,Z)=(tau0,1,0),
+    tau0=9c/[2(a-3)].                            (H6)
+
+The exact contact curve satisfies U<=C V uniformly on the common domain.
+The pair-legal side has larger U/V; the entire remaining triple wedge
+therefore has U<=C V.
+
+#### Uniformly finite leading reverse seams
+
+Put alpha=(a-3)/(3a). In the scaled cap coordinates the inverse of the
+leading normalized triple matrix is exactly
+
+    U'=(1-alpha)U-2V+8Z/3,
+    V'=3alpha delta U/2+(2+delta/2)V+2delta Z,
+    Z'=-alpha U/2+V/2-2Z/3.                      (H7)
+
+This is analytic at delta0 and has determinant -4(1+delta)/a, bounded
+away from0 on the parameter rectangle. Starting at the contact ray(H6),
+the cone
+
+    V>=2alpha U, 0<=Z<=3V/8, U>=0               (H8)
+
+holds with a strict initial margin because
+2alpha tau0=3c/a<1 uniformly. As long as the next U is nonnegative,
+
+    Z'>=V/4-2Z/3>=0,
+    Z'<=V/2<=V'/4,
+    V'>=2V,
+    U'<=(1-alpha)U-V<U.
+
+The cone is preserved. With tau=U/V, every consecutive positive-U step
+satisfies
+
+    tau_next<=(tau-1)/2.                         (H9)
+
+The initial tau is at most tau_max=9/[2(a_--3)]. Thus a crossing U<=0
+occurs within 1+ceil(log2(1+tau_max)) steps. If a seam lands exactly on
+U=0, one further virtual seam has strictly negative U, while V,Z remain
+positive. One extra sheet suffices locally at such a parameter value.
+
+Let e_n be the successive inverse contact rays and e_-1 their first forward
+image. The ray e_-1 has Z=0 and U/V=(2a/(3c))tau0>tau0, strictly pair-legal.
+The nth sheet is the cone spanned by e_(n-1),e_n. The ratios U/V strictly
+decrease, so its outer projection is nonsingular. The last sheet is
+truncated at U=0. Even if its virtual endpoint has negative U, every point
+up to that truncation has nonnegative leading hazards. Its successors are
+earlier positive seam cones, and after n steps it lies in cone(e_-1,e0),
+inside the legal pair sector.
+
+These finite pair-preimage cones now lie on a genuinely compact,
+nondegenerate parameter rectangle including delta0,
+with a proved common finite depth bound. Projection and intersection
+transversality persist on a finite parameter cover. In particular no
+uncontrolled count of implicit-function estimates is being hidden.
+
+#### Exact finite sheets with common domains
+
+Write Fhat=beta Rhat. For each of the finitely many needed n, the normalized
+forward iterate
+
+    H_n=Fhat^n/beta^n
+
+is analytic through beta0 on a fixed neighborhood. Recursively
+H_0(x)=x and H_(n+1)=Rhat(beta^n H_n)/beta^n; removability follows from
+Rhat(0)=0. The exact nth pair-preimage sheet has equation
+
+    H_n,Z-(3/4)k_beta beta^n H_n,U H_n,V=0.       (H10)
+
+The tangent equations are precisely the leading reverse-seam planes just
+constructed.
+Their nonsingular outer projections give exact analytic sheet graphs
+Z=Z_n,beta,delta(U,V), with common radius and derivative bounds.
+Only sheets used for the physical prefix need these graph representations.
+The last seam may use the next normalized sheet equation without requiring
+that extra sheet itself to have a graph representation.
+
+Adjacent sheets meet in the exact inverse contact curves. These may be
+defined by their two normalized forward equations, rather than evaluating
+inverse iterates on a fixed domain. Three consecutive leading seam rays
+are independent: e_-1 and e0 are distinct rays in Z=0, and e1 has Z>0;
+invertibility propagates that independence. Thus the seam equations are
+uniformly transverse. Their ordered outer curves persist. Choose a final
+strictly negative-U virtual seam on each parameter patch, retaining an
+extra sheet when needed; the finite cover gives common constants.
+
+Select the pair surface on its legal side and the nth exact sheet on the
+sector between its two neighboring contact curves. The functions agree
+exactly at seams. For n>=2, the leading first player2 hazard divided by
+delta has a strict positive margin on the closed physical sector. For
+n=1, that scaled hazard vanishes exactly at the contact curve and has
+positive inward transverse derivative. Analytic factorization there,
+and ordinary strict-margin persistence on later sectors, give physical
+hazards uniformly down to delta0. The other hazards follow from the exact
+formulas
+
+    w/delta=[U(1-delta ztilde)+(1-a beta)ztilde]
+                 /[3+(delta U+a beta)(1-delta ztilde)],
+    y=[V(1-delta ztilde)+(1-c beta)delta ztilde]
+                 /[2+(V+c beta)(1-delta ztilde)],
+
+where the actual player2 hazard is delta ztilde>=0.
+
+The exact map sends each selected sheet to the preceding sector, by its
+forward defining equation and the ordered shared boundaries; sheet1 enters
+the invariant legal pair region. The roots match exactly at contact. Thus
+every continuation is produced, not merely supplied as a feasible surface.
+
+The resulting original height is at least Psi_beta exactly. Outside the
+pair-legal sector its pair guard is negative, so tcrit_beta>Psi_beta; the
+physical triple input is increasing in its player2 hazard and hence lies
+above tcrit_beta. On the pair sector equality holds.
+
+#### Returning to the full original quadrant and crossing c=1
+
+The scaled construction is only needed where U<=C V. This implication
+from original pair illegality does not presume scaled-domain membership:
+(H5) gives A U<cy(3+a beta+u)<=C V using u<=rho and A>=A_min.
+Choose the original radius so u+v<=rho and this inequality place U+V in
+the common scaled domain. Everywhere else select the pair surface, whose
+legal wash has the common radius proved above.
+
+On every active sector the scaled sheet height is O(V). Therefore
+
+    0<=T_beta(u,v)-Psi_beta(u,v)<=C delta v.       (H11)
+
+All selected hazards are O(u+v), with common constants. Scaled outer caps
+contract by C beta on the active wedge, and the original outer caps do so
+on both triple and pair sectors. The passive0 guard and geometrically
+summable tails give a continuous positive axis p+O(u+v) with uniform bounds.
+
+For c>=1 use the exact pair surface everywhere. Formula(H1) makes every
+guard legal because A>0 and B<=0. At c=1 this also handles the entire
+original quadrant. Bound(H11) shows uniform convergence of the lower-side
+graphs to that pair surface. On the active wedge, the extra player2 hazard
+and the change of the other hazards from the pair root are O(delta v);
+outside it the roots already agree. Thus selected roots and the axis also
+join continuously at c=1.
+
+### A finite cover gives the full horizontal theorem
+
+Fix any compact interval 0<a_-<=a_+<infinity. Let epsilon0>0 be the corner
+radius from(C1), shrunk below1/4. If nonempty, apply the below3 construction
+to
+
+    [a_-,min(a_+,3-epsilon0/2)]
+
+and the above3 construction to
+
+    [max(a_-,3+epsilon0/2),a_+].
+
+The corner box covers the middle interval [3-epsilon0,3+epsilon0]. These
+three pieces cover the whole a interval, with overlap. Ignore empty pieces.
+Take the minimum of their positive c-widths, beta thresholds, and core
+radii, and the maximum of their core bounds. This gives a single positive
+eta,beta2,rho,C for(R2), also after requiring eta<=1/4.
+
+For each raw game, choose any producer from a piece containing its a value.
+Each produces a graph and selected roots continuous in the cap inputs and
+satisfying the common estimates. A jointly continuous choice across the
+finite cover is neither inferred nor needed. Section7 consequently applies
+with one shared return ribbon, one finite pair slack bound, and one beta
+threshold for the entire compact positive a interval. This proves the full
+horizontal theorem while retaining just three headline conclusions.
 
 ## 7. Actual return, uniform constants, and full behavioral deviations
 
@@ -1014,7 +1256,8 @@ The corner result covers arbitrary beta-dependent ratio paths converging
 to(3,1). The two-sided band excludes deterioration caused by either approach
 to a=3 with c in a fixed compact subset of(0,1), including the unbounded
 right-side sheet count. The third theorem supplies a common threshold across
-c=1 for every fixed compact a interval inside(0,3). These claims do not give
+c=1 for every fixed compact positive a interval, including intervals
+that cross3. These claims do not give
 a common threshold as c tends0, as ratios grow unbounded, or on every
 positive ratio rectangle crossing other joins.
 

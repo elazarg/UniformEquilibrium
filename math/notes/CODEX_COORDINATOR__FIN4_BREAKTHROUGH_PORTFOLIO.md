@@ -119,13 +119,16 @@ now proves common thresholds through three joins:
 
 - one closed box around the corner (a,c)=(3,1);
 - a two-sided band around a=3 for each compact c-interval in (0,1);
-- a two-sided band around c=1 for each compact a-interval in (0,3).
+- a two-sided band around c=1 for every compact positive a-interval.
 
 The corner and upper c=1 constructions allow a pair root to return to
 triple play. The latter's weighted graph transform has limiting contraction
 factor `18a/(3+2a)^2<=3/4`. At a=3, one cone-order estimate controls every
 inverse sheet uniformly even when the number of sheets diverges. Exact
 solo-player axes give the parameter factors needed on the other sides.
+Above a=3, scaling the shrinking triple region by (1-c)/c gives analytic
+maps at c=1 and a uniformly finite sheet count. A finite cover by the
+lower-a, corner and upper-a constructions gives the full horizontal result.
 The common return and behavioral consumer then give actual UE thresholds;
 the result does not merely bound supplied continuations. The complete
 internal artifact has independent reviews
@@ -133,9 +136,9 @@ internal artifact has independent reviews
 and [here](../feedback/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
 
 This still does not give a uniform threshold on every positive ratio
-rectangle or for all three independently small premiums. For example,
-c=1 with a>3 away from the corner, the neutral join 2a=3c, and degenerate
-ratios require further control. No explicit numerical threshold is asserted.
+rectangle or for all three independently small premiums. The neutral join
+2a=3c and degenerate ratios require further control. No explicit numerical
+threshold is asserted.
 Arbitrary singleton matrices and participant rewards, and the global
 minimum obligations below, remain open.
 

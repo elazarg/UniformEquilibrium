@@ -4,7 +4,7 @@ Reviewer: CODEX_COLLAR_ADVERSARY.
 
 **Mathematical verdict: PASS.** No unresolved objection remains in the complete
 internal note. This review independently attempted to falsify the corner
-switchback constructions, weighted c=1 contraction and unbounded-depth
+switchback constructions, both c=1 constructions and unbounded-depth
 right-band argument. No other review was read. This is ordinary mathematics, not an export-gate decision
 or Lean verification. No Lean command ran.
 
@@ -12,7 +12,7 @@ Reviewed artifact:
 [CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md](../notes/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md).
 Exact SHA256:
 
-    1805d0fe098483278f20241fc9d525d1ab7896224a83566e79ac1dcfcd6c3b83
+    017dc5933543558622bd308af5ddca54bd5c6085fa1b9654eb1ebafe1814de05
 
 ## Exact accepted scope
 
@@ -20,7 +20,8 @@ For the stated native singleton matrix, seven passive entries, nine homogeneous
 core premiums and row0 upper bounds, the note proves three common-threshold
 UE statements: a closed neighborhood of (3,1); a two-sided a=3 band for each
 compact c-interval in (0,1); and a two-sided c=1 band for each compact
-a-interval in (0,3). Ratios may vary with beta inside these regions.
+a-interval in (0,infinity), including intervals crossing3. Ratios may vary
+with beta inside these regions.
 The right-side a=3 radius and threshold are independent of its unbounded
 sheet count.
 
@@ -28,7 +29,8 @@ The proof fixes a target for each game before accuracy. It covers complete
 unilateral behavioral replacements, including Never, with private independent
 randomization. Own levels and all unlisted rewards are arbitrary finite data;
 thresholds do not depend on their magnitudes. No joint parameter continuity
-across the left/right a=3 constructions is inferred. Uniformity as c tends
+across the left/right a=3 constructions or the horizontal finite cover is
+inferred. Uniformity as c tends
 zero, on all positive ratio rectangles, or on the whole premium cube remains
 unproved; Fin4 remains open.
 
@@ -190,6 +192,43 @@ has positive numerator (1-k)(6k+1). Fixed-point uniqueness identifies the
 two graphs. Weighted-metric parameter continuity is not asserted; ordinary
 C0 continuity follows from jointly continuous finite Picard iterates and
 a uniform geometric sup-norm error. This distinction is handled correctly.
+
+## Above3: the other c=1 construction and the horizontal cover
+
+For compact a>3, the scaled coordinates u=delta*U, v=V and
+z_cap=delta*Z are valid uniformly through delta=0. The exact solo1 axis
+makes the two transverse map coordinates and the actual player2 hazard
+divisible by delta analytically. The normalized map also remains divisible
+by beta. No ordinary Taylor estimate is used to replace these exact factors.
+
+I independently computed the scaled inverse matrix, its determinant
+-4(1+delta)/a, the forward contact ray and the exact pair guard. The cone
+gives tau_next<=(tau-1)/2 while successive U coordinates are positive.
+The bounded initial tau therefore gives a genuinely uniform finite depth.
+The crossing step retains positive V,Z. If it lands at U=0, one additional
+virtual seam has strictly negative U and positive V,Z. Only used sheet
+planes need graph projections; the last extra equation need not be a graph.
+
+Normalized forward iterates extend analytically through beta=0. Their
+tangent equations, not their entire beta=0 equations, are the linear
+planes. Nonsingular outer projection and adjacent-sheet transversality
+therefore justify a common implicit-function radius on the finite cover.
+For the first tangent sheet I obtained the explicit formula
+
+    Z=[9V-2(a-3)(1+delta)U]/[8a+12+(8a-15)delta].
+
+Its positive inward derivative persists by exact contact factorization.
+Later physical sectors have strictly positive scaled hazard margins.
+Ordered exact seams and the forward equations give actual sector descent
+to the uniformly invariant pair region, with matching selected roots.
+
+Original pair illegality implies U<=C V directly, before assuming membership
+in a scaled chart. Thus one original radius suffices for the full quadrant.
+The common bounds give 0<=T-Psi<=C*delta*v and O(delta*v) root differences,
+so graphs, roots and summable passive tails join the all-pair c>=1 side.
+Taking minima over the below3, corner and above3 pieces proves the full
+compact-positive-a theorem. Their graphs need not agree across overlaps:
+the consumer needs only each game's input continuity and common bounds.
 
 ## Shared return and complete behavioral consumer
 
