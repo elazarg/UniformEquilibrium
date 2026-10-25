@@ -21,9 +21,9 @@ complementary class with arbitrary nonnegative pair premiums. Every strategy
 and return value is produced from the stated reward conditions.
 
 For the fixed reference singleton matrix and additive passive completion,
-the fourth theorem removes the relative-premium restriction entirely: under
-its row0 participant caps, one positive bound works for both small premiums
-independently.
+the fourth theorem allows the common premium of rows1 and3 and the premium
+of row2 to be independently small: under its row0 participant caps, one
+positive bound works for both. Rows1 and3 share a premium in this theorem.
 The proof combines a positive cone, a constructed invariant graph and a
 hybrid pair/triple contraction. The target is fixed before accuracy, and
 the finite periodic approximations price all behavioral deviations.
@@ -79,11 +79,48 @@ Indeed Delta<0 implies c<2/7 and
 This union does not transfer the new theorem's free-coordinate scope to
 the older cone. The former stress test `(a,c)=(1/10,1)` is now covered.
 
-These remain restricted existence classes. Arbitrary singleton matrices,
-unequal premiums and participant rewards are not classified. On the
-reference background, crossed ratios `a<3,c>1` and `a>3,c<1`, after removing
-the subclasses already covered, are concrete next targets. The global
-minimum obligations below remain open.
+The [crossed-premium theorem](../exports/CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM.md)
+adds the following regions with the same seven-passive-entry, nine-core-entry
+and row0-cap requirements as the three-flow theorem:
+
+    U: 0<a<3, c>1, 2a<3c;
+    L: a>3, 0<c<1;
+    B: a=3, 0<c<1.
+
+On U, a contracting obstacle operator constructs a continuous switch between
+triple and pair roots. On L, an invariant cone for the reversed linear map
+orders finitely many physical continuation sheets; normalized forward
+equations continue them to positive beta and glue their exact boundaries.
+On B, an analytic graph contains an exact solo-player axis. A single
+two-dimensional intermediate-value argument consumes all three continuous
+cores, with the same finite-flow behavioral estimate. It requires no smooth
+axis map or choice of a continuous return-root curve. The final independent
+artifact reviews are
+[here](../feedback/CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM__BY_CODEX_COLLAR_ADVERSARY.md)
+and [here](../feedback/CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
+
+Together the accepted results now cover EVERY fixed positive premium ratio
+on the original homogeneous/additive calibration:
+
+    for every a,c>0 there is beta0(a,c)>0 such that
+    0<beta<beta0 implies UE for premiums(a beta,beta,c beta).
+
+The exhaustive case split is short. For a<3,c<=1, use the lower-strip union
+proved above. For a<3,c>1, use U when 2a<3c; otherwise c<2 and the earlier
+closed wedge applies. For a>=3,c<1, use L or B. For a>=3,c>=1, the earlier
+pair theorem applies: its two quiet-player inequalities reduce to
+`beta<=a beta/3` and `beta<=c beta`, and its remaining bounds hold at small
+scale. This union is asserted for the original calibration, without
+transferring the freer coordinate scope of one branch to another.
+
+The crossed theorem's threshold is uniform on compact subsets of U, L and
+B separately. A single threshold across their joins, or for all three
+independently small positive premiums, has not been proved. In particular,
+pointwise coverage of every fixed ratio does not give a uniform three-premium
+box. No explicit numerical threshold is asserted. The next concrete question
+on this family is uniform control as ratios approach switching boundaries
+or degenerate. Arbitrary singleton matrices and participant rewards, and the
+global minimum obligations below, remain open.
 
 The internal [cap-region invariance theorem](CODEX_UNEQUAL_GLOBAL__NONNEGATIVE_CAP_ROOT_ACTIVITY.md)
 shows that, on the small-premium calibration, every full Nash root from

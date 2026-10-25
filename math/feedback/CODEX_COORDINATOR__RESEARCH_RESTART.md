@@ -29,8 +29,18 @@ return and finite flow meshes cover the former stress test `(a,c)=(1/10,1)`.
 Combined with the older cone theorem, it covers every `0<a<3, 0<c<=1` on
 the reference additive calibration. Both final artifact reviews are linked
 in the source map. This is a proved existence class, not a numerical search;
-the proof gives no explicit numerical scale threshold. Crossed premium
-ratios outside the already covered subclasses remain concrete next targets.
+the proof gives no explicit numerical scale threshold.
+
+The [crossed-premium packet](../exports/CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM.md)
+adds both remaining crossed regions and the boundary a=3,c<1. Its three
+constructed cores feed one continuous return argument and the complete
+finite-flow behavioral consumer. Combined with the previous packets, EVERY
+fixed a,c>0 on the original additive calibration now has UE at sufficiently
+small common scale for premiums `(a beta,beta,c beta)`. The source map gives
+the exhaustive case split and both final reviews. This is a pointwise result
+in the ratios; a uniform threshold for all three independently small premiums
+has not been proved. Degenerating ratios and the arbitrary-table source
+problems remain concrete next targets.
 
 Two reviewed internal results refine the methods. The local cap collar
 excludes the calibration's entire absorbing face `B0=B1=B3=0` under raw
