@@ -37,10 +37,15 @@ constructed cores feed one continuous return argument and the complete
 finite-flow behavioral consumer. Combined with the previous packets, EVERY
 fixed a,c>0 on the original additive calibration now has UE at sufficiently
 small common scale for premiums `(a beta,beta,c beta)`. The source map gives
-the exhaustive case split and both final reviews. This is a pointwise result
-in the ratios; a uniform threshold for all three independently small premiums
-has not been proved. Degenerating ratios and the arbitrary-table source
-problems remain concrete next targets.
+the exhaustive case split and both final reviews. The internal
+[uniform-core theorem](../notes/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md)
+adds one common threshold near (3,1), across a=3 with c compact in (0,1),
+and across c=1 with a compact in (0,3). Its pair/triple constructions allow
+switchbacks where necessary and control unbounded sheet counts on the
+right of a=3. Both complete reviews are linked in the source map.
+A uniform threshold for all three independently small premiums remains
+open, as do other joins, degenerating ratios and the arbitrary-table source
+problems.
 
 The [nine-independent-premium packet](../exports/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
 adds a class with unequal participant rewards within each core row. All

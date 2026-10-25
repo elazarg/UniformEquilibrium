@@ -113,14 +113,31 @@ pair theorem applies: its two quiet-player inequalities reduce to
 scale. This union is asserted for the original calibration, without
 transferring the freer coordinate scope of one branch to another.
 
-The crossed theorem's threshold is uniform on compact subsets of U, L and
-B separately. A single threshold across their joins, or for all three
-independently small positive premiums, has not been proved. In particular,
-pointwise coverage of every fixed ratio does not give a uniform three-premium
-box. No explicit numerical threshold is asserted. The next concrete question
-on this family is uniform control as ratios approach switching boundaries
-or degenerate. Arbitrary singleton matrices and participant rewards, and the
-global minimum obligations below, remain open.
+The crossed export's threshold is uniform on compact subsets of U, L and
+B separately. The internal [uniform-core theorem](CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md)
+now proves common thresholds through three joins:
+
+- one closed box around the corner (a,c)=(3,1);
+- a two-sided band around a=3 for each compact c-interval in (0,1);
+- a two-sided band around c=1 for each compact a-interval in (0,3).
+
+The corner and upper c=1 constructions allow a pair root to return to
+triple play. The latter's weighted graph transform has limiting contraction
+factor `18a/(3+2a)^2<=3/4`. At a=3, one cone-order estimate controls every
+inverse sheet uniformly even when the number of sheets diverges. Exact
+solo-player axes give the parameter factors needed on the other sides.
+The common return and behavioral consumer then give actual UE thresholds;
+the result does not merely bound supplied continuations. The complete
+internal artifact has independent reviews
+[here](../feedback/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY__BY_CODEX_COLLAR_ADVERSARY.md)
+and [here](../feedback/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
+
+This still does not give a uniform threshold on every positive ratio
+rectangle or for all three independently small premiums. For example,
+c=1 with a>3 away from the corner, the neutral join 2a=3c, and degenerate
+ratios require further control. No explicit numerical threshold is asserted.
+Arbitrary singleton matrices and participant rewards, and the global
+minimum obligations below, remain open.
 
 The [nine-independent-premium theorem](../exports/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
 removes the equality of a player's three core participant rewards on an
