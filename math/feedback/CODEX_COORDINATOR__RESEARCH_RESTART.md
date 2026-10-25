@@ -42,9 +42,21 @@ in the ratios; a uniform threshold for all three independently small premiums
 has not been proved. Degenerating ratios and the arbitrary-table source
 problems remain concrete next targets.
 
+The [nine-independent-premium packet](../exports/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
+adds a class with unequal participant rewards within each core row. All
+nine normalized premiums range in [1,2], subject only to
+Z2(12)>=Z3(13), with one small-scale threshold for the entire ordered box.
+The exact nonhomogeneous separating table and complete selector comparison
+establish coverage beyond the earlier equal-row constructions. Both final
+reviews are linked in the source map. The unordered box remains open.
+
 Two reviewed internal results refine the methods. The local cap collar
-excludes the calibration's entire absorbing face `B0=B1=B3=0` under raw
-reward tests that succeed where all older global weighted tests fail. The
+now permits signed participant pair rewards when their weighted columns
+are positive and the common nonpositive root is isolated. It excludes the
+calibration's entire absorbing face `B0=B1=B3=0` and gives an open signed
+family where both the old positive-pair hypothesis and every global
+forced-Quit weight fail. These raw tests are not supplied for arbitrary
+counterexamples. The
 exact-Nash nonattainment theorem excludes every exact terminal Nash profile
 on the sufficiently small independent-premium calibration, while leaving
 approximate equilibria possible. Both proofs and their limits are linked

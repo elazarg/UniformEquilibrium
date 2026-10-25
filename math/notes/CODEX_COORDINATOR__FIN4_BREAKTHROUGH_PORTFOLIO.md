@@ -122,6 +122,37 @@ on this family is uniform control as ratios approach switching boundaries
 or degenerate. Arbitrary singleton matrices and participant rewards, and the
 global minimum obligations below, remain open.
 
+The [nine-independent-premium theorem](../exports/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
+removes the equality of a player's three core participant rewards on an
+explicit compact class. In native coordinates its nine entries are
+
+    (Z1(12),Z1(13),Z1(123))=beta(a,b,f),
+    (Z2(12),Z2(23),Z2(123))=beta(d,e,g),
+    (Z3(13),Z3(23),Z3(123))=beta(h,k,l).
+
+All nine normalized coefficients range independently in [1,2], subject
+only to d>=h. One beta0>0 works for this entire closed ordered box,
+including d=h. In particular it contains a literal nine-dimensional
+rectangle with d in [3/2,2], h in [1,3/2], and the other seven entries in
+[1,2]. The fixed singleton matrix, seven passive entries and row0 caps
+are the same as in the three-flow theorem; the other nonsingleton rewards
+and signed singleton levels remain arbitrary finite data. The threshold
+is independent of these free entries.
+
+The producer constructs an analytic graph on the whole nonnegative outer
+cap quadrant. At d=h an exact solo-player axis gives a parameter factor
+that preserves physicality uniformly up to the ordering boundary. A
+continuous macro return and finite flow meshes then price every complete
+behavioral deviation. Its exact separating table has all proper participant
+premiums e except Z1(123)=2e. The packet checks all applicable selector
+families, including the full sure-owner punishment-tail and stationary
+censuses, rather than inferring separation from unequal rewards alone.
+The final independent mathematical and export-gate reviews are
+[here](../feedback/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_CODEX_COLLAR_ADVERSARY.md)
+and [here](../feedback/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
+The unordered nine-parameter box remains open; an exact example in the
+packet shows why the pure triple graph alone cannot cover it.
+
 The internal [cap-region invariance theorem](CODEX_UNEQUAL_GLOBAL__NONNEGATIVE_CAP_ROOT_ACTIVITY.md)
 shows that, on the small-premium calibration, every full Nash root from
 nonnegative continuations with player2 cap at most2 stays in that region.
@@ -256,15 +287,24 @@ the theorem therefore remains internal and does not close the boundary
 branch as a whole.
 
 The [local cap-collar theorem](CODEX_GLOBAL_SYSTEMATIC__LOCAL_CAP_COLLAR.md)
-replaces the global forced-Quit positivity test with positive supported pair
-premiums and an isolated common nonpositive forced-Quit root. Together with
+replaces the global forced-Quit positivity test with strictly positive
+weighted pair columns and an isolated common nonpositive forced-Quit root.
+Individual participant pair rewards may have either sign. Together with
 strictly positive weighted singleton drift, these raw tests produce
 `max_(i in S) B_i >= delta*(1-nu)` for every actual profile and its augmented
 semantic closure. On the small-premium calibration, S={0,1,3} passes these
 tests although EVERY weight fails the older global forced-Quit test.
 Consequently the entire face `B0=B1=B3=0`, including the all-zero endpoint,
-is absent from its absorbing native closure. The note proves the exact
-translation for original own singleton levels1. Other zero-observer faces,
+is absent from its absorbing native closure. A separate exact signed table
+has a negative pair reward in every row, yet a positive weighted pair
+column vector and an isolated root. An explicit Farkas identity rejects
+every global forced-Quit weight on that table. Strict margins extend the
+example to an open family of native tables. The theorem also proves the
+translation for arbitrary nonnegative original own-singleton levels.
+Its final independent reviews are
+[here](../feedback/CODEX_GLOBAL_SYSTEMATIC__LOCAL_CAP_COLLAR__BY_CODEX_COLLAR_ADVERSARY.md)
+and [here](../feedback/CODEX_GLOBAL_SYSTEMATIC__LOCAL_CAP_COLLAR__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
+Other zero-observer faces,
 the actual-minimum branch and arbitrary tables remain open; this restricted
 boundary exclusion is retained internally rather than counted as a global
 source theorem.

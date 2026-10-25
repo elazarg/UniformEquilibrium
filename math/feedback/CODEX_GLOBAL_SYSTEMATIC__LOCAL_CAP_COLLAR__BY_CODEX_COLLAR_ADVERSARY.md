@@ -1,149 +1,146 @@
-# Adversarial review of the local cap collar
+# Adversarial review of the signed local cap collar
 
 Reviewer: CODEX_COLLAR_ADVERSARY.
 
-**Mathematical verdict: PASS.** No unresolved mathematical objection was
-found. This is an independent check of the complete ordinary-mathematical
-argument, including its unrestricted-law and semantic-closure conclusions.
-No other review was read. No Lean command ran; no new Lean result is claimed.
+**Mathematical verdict: PASS.** No unresolved mathematical objection remains
+in the signed-pair theorem, its semantic-closure conclusions or its strict
+nonredundancy example. No other review was read. This is ordinary mathematics;
+no Lean command ran and no new Lean theorem or UE existence class is claimed.
 
 Reviewed artifact:
 [CODEX_GLOBAL_SYSTEMATIC__LOCAL_CAP_COLLAR.md](../notes/CODEX_GLOBAL_SYSTEMATIC__LOCAL_CAP_COLLAR.md).
 Exact SHA256:
 
-    6b26cd97001aeb10a3b8c0a748b42c5c38719b4f08305403bfacb77f26cdbb9d
+    0a579ac7f2a3b06fd74daad481637c84f844ed21623bbd865556ce40926d1406
 
-## Claim and scope checked
+## Exact accepted claim
 
-The table has zero own-singleton, live and Never rewards. A supported
-probability weight has strictly positive singleton drift; supported pair
-participant rewards are strictly positive; and the supported forced-Quit
-polynomials have no common nonpositive point except the zero root.
-The theorem produces a positive constant delta such that every actual
-independent stopping-law profile satisfies
+Own-singleton, live and Never rewards are zero. A probability weight z with
+support S satisfies strictly positive weighted singleton and participant-pair
+drifts, z*Gamma>=gamma*1 and z*J>=mu*1. The supported forced-Quit polynomials
+have no common nonpositive point except q=0. Individual pairs and full caps
+may have either sign. Every actual independent stopping-law profile then has
 
-    max_(i in S) B_i >= delta * Pr(absorption).
+    max_(i in S) B_i >= delta * Pr(absorption), delta>0.
 
-Every absorbing semantic limit therefore has a supported cap at least delta.
-Neither exact Nash roots nor observer optimality are assumed. The result
-does not construct equilibria, eliminate the other boundary faces, or solve
-Fin4. Its native-payoff scope does not silently translate an original
-game's literal Never payoff.
+Every actual absorbing profile has supported maximum strictly above delta;
+its semantic closure has maximum at least delta. The augmented closure
+retaining Never masses has only the AllNever tuple at supported maximum zero.
+No Nash, observer, global-minimum or realization hypothesis is imposed.
 
-## Independent proof checks
+The calibration excludes its B0=B1=B3=0 face for the full stated premium
+range. The signed example and nearby tables exclude the all-zero face and
+strictly extend both earlier tests. Other boundary faces, actual partial-Nash
+minima and arbitrary Fin4 remain open.
 
-1. **Local reward bounds.** For an opponent hazard sum t, singleton events
-   have weighted probability at least t(1-t), while multiple-opponent
-   events have probability at most t squared divided by two. Since m<=M,
-   rho<=m/(4M) makes the stated supported Quit lower bound valid. The
-   passive error from its linear singleton part is at most 3M s squared
-   divided by two. The bound rho<=gamma/(8M) gives the claimed positive
-   weighted passive drift, with slack.
+## Independent signed proof audit
 
-2. **Root detection.** The third hypothesis says exactly that the maximum
-   supported Quit value is positive at every nonzero root. Its minimum
-   on the compact set sum q>=rho is therefore strictly positive. Thus a
-   supported cap maximum at most eta forces the root into the local box;
-   negative supported caps are then excluded by the local Quit bounds.
-   The finite positive-participant-row test proves this hypothesis on
-   the entire cube, not just its vertices. Singleton support of the
-   weight is impossible because its own singleton drift would be zero.
+The collision estimates are valid without participant signs. Replacing
+singleton-opponent event probabilities by q_j costs at most M*s squared;
+multiple-opponent events cost at most M*s squared/2. Thus the two linear
+expansion errors are at most 3M*s squared/2. The stated rho implies
 
-3. **Full-cap recursion.** Quit now versus Continue followed by a complete
-   best response gives B_i=max(Q_i,P_i+H_i C_i). Conditioning independent
-   laws on all players' survival preserves independence. In the collar,
-   every q_i is below one, so these actual conditional laws exist.
-   A supremum need not be attained for this recursion. The argument is
-   about the complete deviation supremum, not a selected continuation
-   payoff or a local Nash test.
+    zQ>=kappa*s, zP>=gamma*s/2, Q_i>=-M*s, |P_i|<=M*s.
 
-4. **The crucial bootstrap.** Initially the supported maximum is at most
-   delta, hence at most eta, and the weighted cap w is at most delta.
-   The upper tail bound C_i<=K w puts its supported maximum back below
-   eta. Applying the local sign conclusion to this actual tail supplies
-   C_i>=0 on the support. This justifies replacing H_i C_i by
-   (1-s)C_i in the weighted Continue inequality. It gives
+Root isolation gives a strictly positive minimum of max_S Q_i outside the
+rho ball. Thus b=max_S B_i<=eta forces s<rho, including possible sure roots.
+Every supported cap need not be nonnegative. Instead the weighted negative
+part is at most M*s, which gives
 
-       w >= gamma*s/2+(1-s)v,
-       w-v >= s*(gamma/2-w)/(1-s) >= gamma*s/4.
+    w=zB>=kappa*s>=0,
+    sum_i z_i*|B_i|<=C*w,
+    B_i<=A*w for i in S.
 
-   At later steps the invariant is: maximum at most eta and weighted cap
-   at most delta. The maximum itself is not claimed to decrease or to
-   remain at most delta. This distinction closes the otherwise plausible
-   gap in a weighted-cap argument with sparse weights.
+The last bound divides only by positive supported weights; sparse weights
+cause no missing coordinate condition. The inequality B_i>=-M*w/kappa
+also holds outside S, but the upper bound A*w is used only inside S.
 
-5. **Infinite laws and closure.** Summing the decrease gives total hazard
-   at most 4w_0/gamma. The product formula for survival and the union
-   bound give the absorption estimate. No bounded support, finite period,
-   eventual absorption, or interchange of an unattained supremum and a
-   limit is needed. For small initial cap the Never probability is at
-   least one half, proving the strict actual absorbing bound. Continuity
-   of the coordinate inequalities gives the nonstrict bound on the
-   absorbing carrier. Retaining the original Never masses also preserves
-   the global inequality on the augmented closure.
+The exact complete-response recursion is
+B_i=max(Q_i,P_i+H_i*B_i^+). Conditioning independent stopping laws on
+survival preserves independence; s<1/4 ensures each conditional law exists.
+Suprema need not be attained. Since B_i+M*s>=0 and H_i>=1/2,
 
-6. **Zero maximum.** If the supported maximum is zero, the global estimate
-   forces joint Never mass one. For every actual profile, all payoff,
-   cap and pure-Never response magnitudes are bounded by M times its
-   absorption probability: against opponents who all Never, own-singleton
-   and Never rewards are zero under every deviation. This estimate passes
-   to the augmented closure, so all coordinates equal the AllNever tuple.
+    B_i^+ <= 2(B_i+M*s) <= K*w <= eta, i in S.
 
-## Calibration and attempted falsification
+The local estimates therefore apply afresh to the actual tail. Writing
+v=zB^+, they give v>=0 and sum z_i*|B_i^+|<=C*v. The signed transport bound
 
-Exact rational multiplication gives
+    sum z_i*H_i*B_i^+ >= v-s*sum z_i*|B_i^+|
 
-    ((9,7,0,8)/24) Gamma = (1/4,11/24,1/4,1/4).
+is valid for negative as well as positive tail caps. Hence
 
-The strictly positive row0 participant rewards and positive supported
-pair rewards verify the detector and local tests on the calibration.
-Arbitrary finite nonsingleton passive rewards remain admissible after
-enlarging M; their higher-order contributions are explicitly estimated.
+    w>=gamma*s/2+(1-C*s)*v,
+    w-v>=s*(gamma/2-C*w)/(1-C*s)>=gamma*s/4.
 
-Negative caps really occur outside the collar. For example, when everybody
-quits at the first date, the calibration's full cap vector is
+Here C*s<=1/2 and w<=gamma/(4C). The invariant is supported maximum<=eta
+and weighted cap<=delta. The maximum is not asserted to decrease or stay
+below delta; the tail upper bound and weighted decrease together close the
+bootstrap. All displayed constants are positive and supply the needed bounds.
 
-    (10,0,-e,-1)
+Summing gives total conditional hazard at most 4w_initial/gamma. Product
+survival and the union bound imply 1-nu<=4b/gamma. Small b thus implies
+nu>=1/2; large b gives the global estimate directly. No bounded support,
+finite period or eventual absorption is assumed. Coordinate inequalities
+pass continuously to the stated closures.
 
-for 0<e<=1/10. Thus a proof assuming global nonnegative caps would fail.
-The present proof does not make that assumption, and its supported maximum
-is large on this control. Exact calculations also checked the sure
-coalitions 012 and 023 and all fifteen nonzero vertex roots. These finite
-controls supplement the full-cube anchor proof; they do not replace it.
+For any deviation, the payoff is zero when every opponent chooses Never;
+its absolute magnitude otherwise is at most M. Opponent non-Never probability
+is at most 1-nu for the prescribed profile. Thus |B_i| and |U_i| are bounded
+by M*(1-nu). This verifies the AllNever conclusion even for signed caps.
 
-The nonredundancy calculation quantifies over every nonnegative weight,
-including sparse weights. The two forced-Quit triple tests imply
-v1<epsilon/2 and v3<epsilon. Positive singleton columns then imply
-v0<3epsilon/2 and v2<9epsilon/4. Their sum is less than
-21epsilon/4<=21/40, contradicting unit total weight. Hence no alternate
-weight rescues the older global forced-Quit criterion in the stated range.
+## Strict signed example and robustness
 
-The original-calibration bridge was checked separately. A finite deadline
-forces absorption, so adding one to every nonempty reward adds exactly one
-to that deadline's offer. The native Never offer is the limit of finite
-deadline offers by bounded convergence and zero native own-singleton
-reward. The original Never offer adds only the probability that some
-opponent quits, so cannot exceed one plus the native full cap. This proves
-the stated exact cap translation for every profile, while prescribed
-payoffs translate by the actual absorption probability. On absorbing
-profiles and their pair closures both translations are exactly one.
-Literal Never remains zero in both games; no payoff-translation invariance
-of the entire original game is assumed.
+Exact symbolic checks reproduced all four Quit factorizations from the raw
+participant formula, by expanding every opponent coalition. Their positive
+second factors reduce root isolation to two cyclic inequalities with products
+6/7 and 3/5, forcing every q_i=0. Exact rational multiplication gives
 
-## Source correspondence
+    z*Gamma=(16,23,2,10)/30,
+    z*J=(1/20,1/30,3/50,1/210).
 
-The unconditional declaration
+Every row has a negative previous-neighbor pair, so no nonempty support
+passes the former individual-positive-pair hypothesis. I independently
+reconstructed the four coalition vectors and verified their weighted sum
+is (-166,-166,-166,-166). Therefore the displayed positive combination
+of global tests is -166 for every probability weight, including sparse ones.
+No alternative global weight can pass; positive singleton drift is not
+needed for this impossibility.
+
+The open-family conclusion is justified. Strict zJ controls all sufficiently
+small nonzero roots uniformly under small participant perturbations; on the
+remaining compact cube, max_i Q_i has a strictly positive minimum. The drift,
+negative pair in each row and negative certificate coefficients persist.
+All participant coordinates may vary independently near the example, and
+passive nonsingleton coordinates are arbitrary finite values. The latter
+alter numerical constants, not the structural tests. Positive original own
+levels add the missing free dimensions, giving the stated open original-table
+family without preserving the factorized participant formula.
+
+## Calibration, bridge and source correspondence
+
+The calibration weight gives z*Gamma=(6,11,6,6)/24. Positive supported pairs
+imply zJ>0, and the positive row0 anchor proves root isolation on the whole
+cube. Negative caps outside the collar are allowed. The retained global-test
+contradiction quantifies over every weight: v1<epsilon/2, v3<epsilon,
+v0<3epsilon/2 and v2<9epsilon/4 would sum to less than 21epsilon/4<1.
+Arbitrary finite passive rewards and the stated free participant entries
+remain admissible under the anchor and pair tests.
+
+For each ell_i>=0, every finite deadline absorbs surely and adds exactly
+ell_i to its native offer. Native Never is the bounded limit of finite
+deadlines because own native singletons vanish. Original Never adds only
+ell_i times opponent absorption, so cannot exceed ell_i+B_i(native).
+This proves exact cap translation for every profile; prescribed payoffs
+translate by ell_i*(1-nu). On absorbing closures both vectors translate by
+ell. Nonnegative ell is essential to this bridge and is explicitly assumed;
+literal live and Never payoffs are unchanged.
+
+The all-behavior recursion in
 `quittingContinuationBestResponseValue_rootThenContinuation_eq_max`
-in `UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean` states the
-complete-response recursion used above. The definition
-`quittingTerminalSemanticPrefix` and theorem
-`quittingTerminalSemanticPair_rootThenContinuation` in
-`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean` agree with the
-payoff/cap prefix semantics. These declarations were inspected statically.
-
-The incoming-decomposition note defines its boundary tails in the closure
-of actual absorbing pairs. The new separation therefore excludes
-B0=B1=B3=0 directly, including an all-zero endpoint, without requiring
-the tail to be realized or its incoming head to be fully Nash. It leaves
-the actual-minimum branch and boundary faces with a positive supported
-cap open. This is the correct conjecture-facing scope of the result.
+(`UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`) and the exact
+`quittingTerminalSemanticPrefix` / `quittingTerminalSemanticPair_rootThenContinuation`
+interfaces (`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`)
+were inspected statically. Their scopes match the proof. The incoming
+boundary source lies in the absorbing carrier, so the excluded faces are
+actually unavailable to it, without making its head fully Nash. This is a
+boundary reduction, not a UE producer or a closure of the remaining branches.
