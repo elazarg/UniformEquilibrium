@@ -52,8 +52,12 @@ gives a sharp raw-table test and the bound
 regret and e is the literal Never-response vector. It applies to arbitrary
 signed tables and passes to augmented semantic limits. If Lambda_p<=0,
 some observer is Never-active at every partial-Nash source for that pivot.
-For actual profiles, two strict observer Never margins also imply exact
-finite-calendar representation of the entire payoff/cap/Never tuple.
+For actual native profiles, one strict exact observer Never margin implies
+finite-calendar representation of the entire payoff/cap/Never-value/Never-mass
+tuple, preserving the prescribed terminal outcome law. Thus a native actual
+source without any finite-calendar realization must have all three observers
+Never-active. The original signed-table version uses a gap above both Never
+and the late-deadline limit; two strict observers always supply that gap.
 Neither the raw sign condition nor the needed debt descent is supplied
 for arbitrary counterexamples. Both final reviews are in the source map.
 

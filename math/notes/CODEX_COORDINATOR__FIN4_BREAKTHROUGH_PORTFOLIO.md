@@ -295,16 +295,23 @@ scalar points; failure has a dual certificate supported on at most two
 observer rows. The arbitrary counterexample source does not automatically
 supply Lambda_p<=0.
 
-For an ACTUAL exact-observer profile, two strictly positive Never margins
-already give a finite-calendar representation of its entire (U,B,e)
-tuple. Both observers have finite proper laws; every unilateral deviator
-faces one of those bounded clocks, so all mass after their last date may
-be moved to Never. With all three margins strict, the observers share one
-last support date and have strict joining comparisons there. A Never best
-reply need not have positive prescribed mass, and finite representation
-does not settle the finite mixed-support minimum branch. The complete
-independent reviews are
-[here](../feedback/CODEX_GLOBAL_SYSTEMATIC__TERMINAL_OBSERVER_MARGIN__BY_CODEX_COLLAR_ADVERSARY.md)
+For an ACTUAL native exact-observer profile, ONE strictly positive Never
+margin gives a finite-calendar representation of the entire (U,B,e,N)
+tuple, retaining the prescribed terminal outcome law. Its bounded proper
+clock protects every other player's response menu. The remaining scalar
+Never payoff is matched by independent two-atom tail clocks with fixed
+Never masses; finitely many weak orders and the intermediate value theorem
+produce them. The strict late-response gap protects the remaining cap.
+For original signed tables the exact sufficient condition is
+`U_i=B_i>max(e_i,e_i+r_i({i}) product_(j!=i)N_j)`; two strict observers
+always supply it. An actual native tuple that has no finite-calendar
+realization must therefore have ALL three observers Never-active.
+With all three margins strict, the observers also share one last support
+date and have strict joining comparisons there. A Never best reply need
+not have positive prescribed mass. The finite representation preserves
+global minimality when present, but does not eliminate finite mixed-support
+minima or realize abstract carrier points. The complete independent reviews are
+[here](../feedback/CODEX_GLOBAL_SYSTEMATIC__TERMINAL_OBSERVER_MARGIN__BY_CODEX_LAST_DATE.md)
 and [here](../feedback/CODEX_GLOBAL_SYSTEMATIC__TERMINAL_OBSERVER_MARGIN__BY_CODEX_UNIFORM_CORE_REVIEW.md).
 
 Every NONREALIZED minimum now admits the stronger

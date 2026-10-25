@@ -4,15 +4,15 @@ Reviewer: CODEX_UNIFORM_CORE_REVIEW.
 
 **Mathematical PASS.** No unresolved mathematical objection was found in the
 quantitative actual-profile inequality, its augmented-closure consequence,
-the sharp maximum formula, or the two-strict-observer finite-representation
-corollary. This is an internal ordinary-mathematics review, not an export-gate
+the sharp maximum formula, or the one-strict-player finite-calendar theorem
+with exact original Never masses. This is an internal ordinary-mathematics review, not an export-gate
 approval or a Lean check.
 
 Reviewed artifact:
 [CODEX_GLOBAL_SYSTEMATIC__TERMINAL_OBSERVER_MARGIN.md](../notes/CODEX_GLOBAL_SYSTEMATIC__TERMINAL_OBSERVER_MARGIN.md)
 
 SHA256:
-`b60bbb3884b09a1000dfac931b0b9a7dcbd16a2512f2db333038b890ff402e58`.
+`15fdf8297c7c2dc37c47cd4183b679278afc51bd8ff4f51413a60af35913ffa6`.
 
 ## Scope checked
 
@@ -29,6 +29,13 @@ joining-displacement lines. This applies to every actual profile, with no
 absorption or observer-optimality hypothesis. Its zero-debt consequence is
 sharp on both augmented semantic carriers and on actual absorbing
 exact-observer profiles.
+
+The full assembled artifact was read, including its finite-calendar theorem:
+one exact player satisfying B_i>max(e_i,END_i) gives a finite-calendar
+representation preserving the entire(U,B,e,N) tuple and the prescribed
+terminal outcome law. The one-player condition concerns actual laws only.
+The three-observer margin theorem additionally applies to nonrealized
+augmented carrier points through its quantitative closure argument.
 
 I checked the proof independently, focusing on the steps that could confuse
 actual response offers with carrier coordinates, lose independence under
@@ -128,17 +135,93 @@ This proves the statement for every augmented lift, without inventing an
 actual profile for a nonrealized carrier point. Which observer is
 Never-active may depend on the lift, as the note explicitly allows.
 
-## Two strict observers suffice for an actual finite calendar
+## One strict player and exact finite-calendar representation
 
-This addition also passes. Two exact observers with positive Never margins
-are proper, and each faces the other proper clock. Their used-action gaps
-therefore force both supports to be bounded. After choosing a bound T, move
-every player's mass after T to Never. Each possible unilateral deviator
-still faces at least one unchanged opponent stopping by T. Every prescribed
-payoff and every complete response payoff is consequently unchanged.
-Thus the entire tuple(U,B,e), not merely its prescribed payoff, has a
-finite-calendar realization. The assertion is confined to actual profiles;
-it makes no finite-representation claim for nonrealized augmented points.
+For arbitrary signed own levels, the late-deadline limit is
+
+    END_i=e_i+r_i({i}) product_(j!=i)N_j.
+
+The additional term is essential. On outcomes with a finite opponent,
+late responses agree with Never; on the all-opponent-Never event they
+receive the own singleton instead of zero. Bounded convergence proves the
+displayed limit without a proper-opponent premise.
+
+Under U_i=B_i>max(e_i,END_i), exactness puts all prescribed mass on
+maximizing responses. Never has a strict gap and all sufficiently late
+finite dates have a strict gap, so i has proper bounded support. An early
+maximizing date therefore exists; this is derived from exactness, not from
+an assumption that arbitrary caps are attained.
+
+Choose the note's cut T beyond that support and with the stated late-offer
+and residual-mass gaps. Under every unilateral replacement by j!=i,
+player i's unchanged clock still stops by T. Consequently all changes
+strictly after T preserve every j-response payoff, including Never, and
+preserve the prescribed first-coalition law. They also preserve every
+i-response offer at dates at most T. Only i's late menu and Never value
+need further control.
+
+The scalar compression is valid. Conditioning on every opponent being
+after T is a product event, so the conditional laws remain independent.
+Their original conditional Never probabilities n_j are held fixed.
+Hypothetical finite dates followed by independent finite/Never flags
+generate exactly these laws. After averaging just the flags, the passive
+payoff depends only on the finite dates' weak order, including ties.
+There are finitely many weak orders; all are represented by ranks on the
+same |I|-1 fresh dates. Thus their minimum and maximum bracket the actual
+conditional Never payoff.
+
+Interpolate each marginal independently between the two extremizing rank
+vectors using the SAME deterministic scalar lambda. The resulting expected
+passive payoff is polynomial in lambda. The intermediate value theorem
+matches the required scalar payoff exactly. The common parameter does not
+introduce shared randomness: the opponent draws themselves remain independent.
+Each opponent uses at most two fresh finite atoms, and its conditional
+Never mass is unchanged.
+
+Unconditioning retains every probability at dates at most T and every
+ORIGINAL Never mass. Only residual finite mass rho_j(T) moves, so the total
+variation distance of each marginal is at most rho_j(T). Independent
+coupling bounds every complete i-response payoff change by
+2M sum rho_j(T). This is uniform over all deadlines and Never. The scalar
+matching gives exact equality for Never; the strict late-offer gap keeps
+all new finite offers after T below B_i, and an early maximizing offer
+survives. Hence the full cap B_i is exactly preserved as well.
+
+The edge cases are covered. Conditional n_j=1 makes its unused hypothetical
+finite law irrelevant. If the all-opponents-after-T event has probability
+zero, one opponent stops by T surely; arbitrary relocation of the other
+residual finite masses cannot change any i-response outcome after T. No
+conditioning on a null event occurs. The argument applies for any finite
+number of players at least two, including a single opponent.
+
+For native own-zero tables END_i=e_i, so one strict exact observer suffices.
+If an actual native exact-observer tuple has no finite-calendar realization,
+ALL its observers must therefore be Never-active. In arbitrary original
+signed tables, two strict exact observers are proper and each has a proper
+opponent, making END_i=e_i and recovering the two-observer consequence.
+One strict Never margin alone does not establish the needed late gap when
+the own singleton is positive and every opponent has positive Never mass.
+
+The resulting finite calendar preserves(U,B,e,N), not only numerical debt
+or prescribed payoff. A realized minimum remains the same minimum tuple.
+No actual-law operation is asserted for a nonrealized compact-limit point.
+
+The equality-boundary example also passes. Against j's hazard1/2, player i's
+finite-deadline payoff is(1-2^(-t))+2^(-t)*1=1, and Never also pays1.
+The displayed profile is exact Nash with a bounded clock for i. In any
+finite-calendar representation preserving N_j=0, j's last positive atom
+alpha gives i the response1+alpha. Thus the full cap cannot stay1. The
+Fin4 embedding retains this contradiction because Never mass1 forces both
+added zero-payoff players to remain Never. This proves that a bounded exact
+clock alone cannot replace the theorem's strict gap; it is not a UE
+counterexample or a claim about nonrealized carriers.
+
+The narrow overlap search also inspected
+`CODEX_SPINOZA__FINITE_MARKED_ORDER_COMPACTNESS_AND_DIFFUSE_CLOCK_NO_GO.md`
+and `CALENDAR_POLYTOPE_UNIFORM_EQUILIBRIUM.md`. They retain weak-order
+distributions or convex calendar relaxations; neither supplies this
+independent two-atom scalar matching with fixed Never masses and protection
+of every response cap. No preexisting theorem of this scope was found there.
 
 ## Source correspondence and limitations
 
@@ -160,5 +243,6 @@ proof. A Never best response need not have positive prescribed Never mass,
 and the theorem supplies no observer repair or debt-descent step. The
 positive-Lambda witness need not realize a global partial-Nash minimum.
 The general margin argument extends to at least three players; the stated
-five-candidate computation is specific to Fin4. These limitations are
+five-candidate computation is specific to Fin4; the actual finite-calendar
+theorem instead holds from two players onward. These limitations are
 accurately retained, and arbitrary Fin4 remains open.

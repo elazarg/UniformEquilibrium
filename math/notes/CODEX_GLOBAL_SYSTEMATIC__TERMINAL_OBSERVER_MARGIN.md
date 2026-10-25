@@ -13,6 +13,11 @@ bound handles approximate observer optimality before passing to a limit.
 Thus failure of the raw strict-collision test forces a Never-active observer
 at an actual OR nonrealized global absorbing partial-Nash minimum.
 
+For actual profiles, Section5 also proves exact finite-calendar realization
+of the entire payoff/cap/Never-value/Never-mass tuple when one exact player
+has a strict gap above both Never and its late-deadline limit. In native
+own-zero tables, one strict observer Never margin suffices.
+
 ## 1. Original-game semantics and statement
 
 There are four players I, a pivot p, and observers S=I\{p}. Each privately
@@ -206,17 +211,125 @@ The strict opposite branch is also concrete. Any ACTUAL exact-observer
 profile with all three Never margins positive has the common terminal
 collision (4)--(5).
 
-A stronger finite-representation corollary needs only TWO strict observer
-margins. Exactness makes those two observers proper. Each then faces a
-proper opponent, so its deadline offers converge to Never and strictness
-bounds its entire prescribed support. Let T bound both supports. Move every
-player's mass after T to Never. Every unilateral deviator still faces at
-least one of these two unchanged clocks quitting by T. All prescribed
-payoffs, EVERY response payoff, full caps and Never offers are therefore
-unchanged. Thus the entire (U,B,e) tuple has a finite-calendar realization.
-Any actual exact-observer tuple lacking such a representation must have at
-least TWO Never-active observers. This assertion concerns actual profiles;
-it does not assign a realization to an abstract carrier point.
+### Exact finite-calendar realization from one late-cap gap
+
+This result holds for any finite game with at least two players. Let N_j
+be the ORIGINAL marginal Never masses and define
+
+    END_i=e_i+r_i({i}) product_(j!=i)N_j.
+
+**Finite-calendar theorem.** If an actual profile has one player i with
+
+    U_i=B_i>max(e_i,END_i),                              (10)
+
+there is an actual finite-calendar profile with EXACTLY the same (U,B,e,N)
+and the same prescribed terminal outcome law. No other player needs to
+be optimal. After a finite cut, each changed opponent needs at most two
+finite atoms among at most |I|-1 common dates. No abstract carrier point
+is asserted to have an actual realization.
+
+For a pure deadline t, coupling the opponent clocks and bounded convergence
+give V_i(t)->END_i. On an outcome with some finite opponent clock, a late
+deadline agrees with Never. When all opponents Never, it pays r_i({i})
+instead of zero. This proves the limit for arbitrary signed original tables.
+
+Put kappa=B_i-max(e_i,END_i)>0. Exactness implies that every used response
+attains B_i. Thus i uses no Never and has bounded finite support, say up to
+T0. Choose T>=T0 such that
+
+    sup_(t>T)V_i(t)<=B_i-3kappa/4,
+    2M sum_(j!=i)rho_j(T)<kappa/4,
+    rho_j(T)=Pr(T<clock_j<Never).                        (11)
+
+The residual finite masses tend to zero. Prescribed play stops by T0;
+every deviator j!=i still faces this unchanged clock. Therefore changes
+strictly after T leave the prescribed terminal law, U, and EVERY response
+payoff of every j!=i unchanged. They also leave i's offers through T
+unchanged, including an attained maximizing deadline. Only its late offers
+and its Never value need control.
+
+### Scalar weak-order compression with fixed Never masses
+
+Conditional on every opponent's clock being strictly after T, including
+Never, the opponent laws remain independent. First suppose this event has
+positive probability. Write each conditional law as
+
+    nu_j=n_j Never+(1-n_j)mu_j,
+
+where mu_j is a proper finite-date law. If n_j=1, choose any mu_j because
+it is never used. Let psi be i's conditional passive payoff when i Never.
+
+Generate these laws by independently drawing hypothetical finite dates t_j
+from mu_j and independent finite/Never flags with probabilities 1-n_j,n_j.
+For a deterministic vector t, average only the flags and call the passive
+payoff Phi_n(t). It depends solely on the WEAK ORDER of the finite t_j:
+which dates tie and which groups come first. There are finitely many such
+ordered partitions of the |I|-1 opponents. All are realized by ranks
+0,...,|I|-2 on common fresh dates after T.
+
+The actual psi averages these finitely many values. Choose rank vectors
+t_minus,t_plus attaining their minimum and maximum. Then
+
+    Phi_n(t_minus)<=psi<=Phi_n(t_plus).
+
+For a deterministic lambda in[0,1], replace each conditional opponent law by
+
+    n_j Never+(1-n_j)[(1-lambda)delta_(t_minus,j)
+                                    +lambda delta_(t_plus,j)].
+
+The opponents randomize independently. Their expected passive payoff is a
+continuous polynomial in lambda with the two displayed endpoint values.
+The intermediate value theorem gives a lambda with payoff exactly psi.
+The parameter is common and deterministic; this is not a correlated lottery
+over coalitions. Each n_j is unchanged, and the claimed two-atom and common-
+date bounds follow.
+
+Uncondition, retaining all probabilities through T. Every original Never
+mass is unchanged. Only the distribution of residual finite mass rho_j(T)
+has changed, so the full marginal total variation is at most rho_j(T).
+Independent coupling bounds the change in every i-response payoff by
+2M sum_j rho_j(T), uniformly over the complete response menu. Matching psi
+preserves e_i exactly, because all earlier outcomes are retained.
+
+If the conditioning event has probability zero, some opponent stops by T
+surely. Relocate each remaining residual finite mass to a fresh finite date,
+retaining all Never masses. This has the same total-variation bound and
+cannot change any i-response outcome after T. No zero-probability conditional
+law is used.
+
+Keep i's bounded clock unchanged. All new laws have finite support plus
+Never. The preceding argument preserves U,e,N and every other player's B.
+Player i's early maximizing offer is unchanged; (11) keeps every new late
+finite offer below B_i, while its exact Never offer is also below B_i.
+Its full cap is therefore exactly B_i. This proves (10).
+
+### Native and original-table consequences
+
+For native own-zero tables END_i=e_i. Thus ONE exact observer with
+B_i>e_i suffices for finite-calendar realization of the entire (U,B,e,N).
+Any actual native exact-observer tuple lacking such a realization must
+have ALL its observers Never-active. A realized global absorbing minimum
+with one strict observer margin has the SAME minimizing tuple on a finite
+calendar. The proof preserves its minimizing property, rather than merely
+approximating its value.
+
+For arbitrary original signed tables, TWO exact observers with strict
+Never margins still suffice. Both are proper, so each has a proper opponent
+and END_i=e_i. Either therefore satisfies (10). A single strict Never
+margin alone does not supply (10) when its own singleton is positive and
+every opponent has positive Never mass.
+
+The strict late-cap gap is essential, even when an exact player's own clock
+is already bounded. In a two-player native game, give player i rewards
+0 at {i}, 1 at {j}, and 2 at {i,j}; give j zero everywhere. Let i Quit0
+surely and let j use the proper geometric law with hazard1/2. Every finite
+deadline and Never gives i exactly1. Thus U=B=e=(1,0) and N=(0,0), an
+absorbing exact Nash profile. Any finite-calendar profile with these Never
+masses makes j proper with a last atom of mass alpha>0. Quitting at that
+last date gives i exactly1+alpha, contradicting B_i=1. Hence this entire
+tuple has no finite-calendar realization. Adding two zero-payoff players
+whose Never masses are1 embeds the same obstruction in Fin4. The example
+already has UE and only shows why equality in (10) cannot be included.
 
 Neither branch supplies debt descent. A Never-active observer need not use
 Never with positive probability. At a terminal strict collision, changing
@@ -242,5 +355,7 @@ Inspected semantic declarations were
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`).
 No Lean command ran. The margin formula and quantitative inequality extend
 to any number of players at least three, with all but one exact observers;
-two observers are needed for the proper-opponent and common-final-date
+two observers are needed for their proper-opponent and common-final-date
 arguments. The five-candidate computation bound above is specific to Fin4.
+The finite-calendar theorem instead applies to any finite number of players
+at least two and requires only the one player's exactness and gap (10).
