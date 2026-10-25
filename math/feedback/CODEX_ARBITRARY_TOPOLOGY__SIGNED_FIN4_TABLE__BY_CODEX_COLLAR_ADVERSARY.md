@@ -6,10 +6,10 @@ export, or Lean claim.
 
 Complete reviewed
 [note](../notes/CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_TABLE.md):
-SHA256 `1f3815857c0df1aab93a929234e15663955f53e2293bcde0589f930c3d0f0584`.
+SHA256 `5fbdb574ac7aaba83588d4b57a3f086b35d6d8d817c64f614e53978cc91f3474`.
 Complete reviewed
 [checker](../experiments/CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_STATIONARY_CHECK.py):
-SHA256 `0c3dd850b01c1e3fe2caf7ca5b47ea07df492ea2f5943f5a691d025659ab3431`.
+SHA256 `8b3adbe7b0fb76b64f40f8b108fcbf45d31a8c22c7e9b59cdb8e5d26c1ab580b`.
 I read the whole proof and implementation without consulting another review.
 
 ## Mathematical scope and table
@@ -19,8 +19,10 @@ capacities for all four pivots, but a strictly positive terminal regret floor
 over every fixed stationary hazard vector. Complete behavioral deviations,
 including Never, are included. It also has no Nash root with a sure quitter
 against any actual continuation caps, hence no absorbing exact finite-calendar
-Nash profile. Unrestricted nonstationary approximate-equilibrium existence
-remains open; no approximate finite-calendar exclusion is asserted.
+Nash profile. UE existence is now recorded in the separately reviewed
+[collision-bridge export](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md);
+this review certifies neither that producer nor its complete export gate.
+No approximate finite-calendar exclusion is asserted.
 
 I independently parsed all sixty rational rewards from the printed table and
 compared them with the checker. All agree. The singleton matrix is exactly
@@ -32,9 +34,20 @@ principal matrix, and a singleton support violates a negative outsider entry.
 
 I recomputed all A and C rows and evaluated every possible endpoint or pairwise
 intersection of their affine lines. The four maxima and maximizing arguments
-are exactly those printed: `1,1/5,3/29,1/7`. The three specified negative pair
+are exactly those printed: `2,1/5,3/29,1/7`. The three specified negative pair
 joining gaps also follow directly from the raw rewards. Row shifts cancel in
 these differences, without shifting live play or AllNever.
+
+The table under this pin has `Z3(123)=1`. I checked the corrected coverage
+statement: its predecessor with `Z3(123)=-5` was already covered by ordered
+anchor blocks `0|123`, with respective weights `1` and `(1,1,3)`.
+For the repaired table, every nonempty proper marked set has an outgoing
+positive singleton edge, so the anchor passive condition forces the marked
+set to be all four players. In any ordered partition, the first block meeting
+coalition123 then contains a positive-weight core participant, and all its
+participation rewards on123 are strictly positive `(11,2,1)`. The required
+nonpositive weighted sum is impossible. This excludes every marked set,
+ordered partition and admissible weight choice for that particular criterion.
 
 ## Full-response stationary adapter
 
@@ -92,9 +105,9 @@ most `2^-E`, chosen strictly below `1/K`. Excluding the zero point along with
 that cube causes no loss: the original pattern requires a nonzero profile,
 and the original AllNever profile was handled separately.
 
-Independent recomputation gives full-support `K=159656/25`; `2^-13<1/K`.
-The checker reproduced `898` total nodes and `213` for the full interior.
-Its output was `EXACT RATIONAL PASS: all 80 nonzero supports excluded; 898 nodes`.
+Independent recomputation gives full-support `K=161672/25`; `2^-13<1/K`.
+The checker reproduced `978` total nodes and `249` for the full interior.
+Its output was `EXACT RATIONAL PASS: all 80 nonzero supports excluded; 978 nodes`.
 
 ## Sure roots over arbitrary actual continuations
 
@@ -115,7 +128,7 @@ printed table and verified their equality with ROOT. They are multiaffine,
 so the degree-two Bernstein machinery remains valid. Its 65 tested patterns
 are exactly those containing a fixed sure coordinate. No solo shortcut or
 origin pruning is invoked in this mode. Exact execution reproduced the second
-line: `EXACT RATIONAL PASS: all 65 sure-root patterns excluded; 325 nodes`.
+line: `EXACT RATIONAL PASS: all 65 sure-root patterns excluded; 369 nodes`.
 
 An absorbing finite-calendar profile has a first reached sure root. Exact
 full-response Nash passes to every reached conditional tail. At that root,

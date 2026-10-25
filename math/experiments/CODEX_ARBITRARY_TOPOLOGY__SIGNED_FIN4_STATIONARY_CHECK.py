@@ -9,7 +9,7 @@ Z = [
  [0,0,3,0,-1,0,-12,-13,3,-3,2,-7,-6,-7,-8,-5],
  [0,2,0,-1,1,5,-100,6,-3,3,-100,8,9,-8,11,-9],
  [0,2,-2,-10,0,-10,0,-9,-1,-5,-1,10,3,-3,2,8],
- [0,-1,-2,-12,1,7,-6,11,0,1,0,-10,-100,Q(15,2),-5,Q(21,2)],
+ [0,-1,-2,-12,1,7,-6,11,0,1,0,-10,-100,Q(15,2),1,Q(21,2)],
 ]
 Z = [[Q(x) for x in row] for row in Z]
 G = [[Z[i][1 << j] for j in range(4)] for i in range(4)]
@@ -136,8 +136,8 @@ def exclude(pat,polynomials=F):
 
 if __name__=='__main__':
  total=sum(exclude(pat) for pat in product((0,1,2),repeat=4) if any(pat))
- assert total==898,total
- print('EXACT RATIONAL PASS: all 80 nonzero supports excluded; 898 nodes')
+ assert total==978,total
+ print('EXACT RATIONAL PASS: all 80 nonzero supports excluded; 978 nodes')
  roots=sum(exclude(pat,ROOT) for pat in product((0,1,2),repeat=4) if 1 in pat)
- assert roots==325,roots
- print('EXACT RATIONAL PASS: all 65 sure-root patterns excluded; 325 nodes')
+ assert roots==369,roots
+ print('EXACT RATIONAL PASS: all 65 sure-root patterns excluded; 369 nodes')

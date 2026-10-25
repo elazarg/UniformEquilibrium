@@ -11,6 +11,18 @@ for the exact three minimum problems, canonical proofs, and method
 obstructions. The map is the working entry point; this file does not
 repeat its mathematics or retain a chronological activity log.
 
+The [signed collision-bridge packet](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
+adds a producer outside the positive-premium/additive-passive calibration.
+An exact algebraic return and a finite repair through negative native
+values give one fixed payoff target and full debt
+`(0,0,0,max(K,0)delta)` at every requested accuracy. Its concrete repaired
+table defeats the complete stationary and sure-owner selections, as well
+as the applicable ordered-anchor, trap and passive-child raw criteria.
+The earlier negative-core table overlapped ordered anchors and is not
+counted as new coverage. The source map links the whole-proof reviews.
+The new class still fixes32 native coordinates, including `Z2(12)=0`;
+arbitrary signed tables remain open.
+
 The [contracting-block packet](../exports/TWO_CONTRACTING_BLOCKS_UNIFORM_EQUILIBRIUM.md)
 combines broad chamber criteria,
 unbounded pair-premium classes and a uniform small-premium rectangle with
@@ -69,13 +81,13 @@ floor for every stationary profile, even though a period-three UE exists.
 The source map links the complete proofs and reviews. Neither control is a
 counterexample to Fin4 or a new raw-table existence class.
 
-The reviewed [signed hard-table target](../notes/CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_TABLE.md)
+The reviewed [signed table control](../notes/CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_TABLE.md)
 now gives a concrete arbitrary-premium test with the difficult singleton
 matrix and all four capacities positive. Exact Bernstein certificates
 exclude every stationary profile and every sure-quitter root against any
 actual continuation. Thus no exact terminal Nash profile has a bounded
-proper clock. Its UE status remains open; finite-calendar approximation
-and unrestricted behavioral equilibria are not excluded.
+proper clock. The signed collision bridge now supplies a UE for this same
+repaired table, confirming the need for a nonstationary approximation.
 
 The [nine-independent-premium packet](../exports/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
 adds a class with unequal participant rewards within each core row. All

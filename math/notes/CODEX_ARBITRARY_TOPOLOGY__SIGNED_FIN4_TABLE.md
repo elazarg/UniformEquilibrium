@@ -2,19 +2,26 @@
 
 Owner: CODEX_ARBITRARY_TOPOLOGY.
 
-**Complete stationary and exact finite-calendar exclusions, with an exact
-rational checker.** Independent review status is recorded in accompanying
-feedback. This is ordinary mathematics, not a Lean result or an export.
-The uniform-equilibrium status of this table is not decided here. In particular,
-the result is not a counterexample to Fin4.
+**Complete stationary and bounded-proper-clock exact exclusions, with an
+exact rational checker.** Independent review status is recorded in
+accompanying feedback. This is ordinary mathematics, not a Lean result or
+an export. An explicit nonstationary uniform-equilibrium producer for this
+table is proved in
+[the signed collision-bridge export](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md).
+This table is not proposed as a counterexample to Fin4.
 
-The table has the same singleton matrix as the current difficult reference
-family, but strongly signed and unequal nonsingleton rewards. All four raw
+The table has the same singleton matrix as the difficult reference family,
+but strongly signed and unequal nonsingleton rewards. All four raw
 observer-margin capacities are positive. Nevertheless stationary profiles
-have a strictly positive terminal exploitability floor, and no absorbing
-exact finite-calendar Nash profile exists. The concrete remaining
-question is to construct nonstationary approximate equilibria for this SAME
-table, or derive a valid obstruction against unrestricted behavioral profiles.
+have a strictly positive terminal exploitability floor, and no exact terminal
+Nash profile can have a bounded proper clock. These exclusions identify
+strategy classes that the nonstationary producer must leave.
+
+The earlier version with Z3({1,2,3})=-5 was already covered by
+[ordered nonpositive anchor blocks](../exports/ORDERED_NONPOSITIVE_ANCHOR_BLOCKS_UNIFORM_EQUILIBRIUM.md);
+it is not a new existence class. The table below uses Z3({1,2,3})=+1 instead.
+The collision-bridge export checks this repaired table against that prior
+coverage and supplies its new producer.
 
 ## 1. Complete original game
 
@@ -41,7 +48,7 @@ nonempty coalitions ONLY. Thus every original own singleton is1.
 | 013 | -7 | 8 | 10 | -10 |
 | 23 | -6 | 9 | 3 | -100 |
 | 023 | -7 | -8 | -3 | 15/2 |
-| 123 | -8 | 11 | 2 | -5 |
+| 123 | -8 | 11 | 2 | 1 |
 | 0123 | -5 | -9 | 8 | 21/2 |
 
 The singleton matrix is
@@ -72,7 +79,7 @@ Observers in each row below are listed in increasing player order:
 
 | p | A^p | Lambda_p | maximizing t |
 | --- | --- | --- | --- |
-| 0 | (2,3,1) | 1 | 0 |
+| 0 | (2,3,7) | 2 | 0 |
 | 1 | (-1,2,1/2) | 1/5 | 3/10 |
 | 2 | (-9,5,2) | 3/29 | 22/29 |
 | 3 | (-1,1,1) | 1/7 | 2/7 |
@@ -156,15 +163,15 @@ Here is the proof represented by its finite calculation.
 
    Thus a sufficiently small origin cube contains no nonzero common zero.
    The checker verifies its constant and linear coefficients before using
-   this exclusion. For the full support K=159656/25 and t<=2^(-13) suffices.
+   this exclusion. For the full support K=161672/25 and t<=2^(-13) suffices.
 
-The search exhausts all patterns after898 nodes, including213 for the
+The search exhausts all patterns after978 nodes, including249 for the
 full interior. A million-node or depth limit raises an unresolved-case
 failure; it is never accepted as exclusion. Run
 
     python math/experiments/CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_STATIONARY_CHECK.py
 
-The first output line is `EXACT RATIONAL PASS: all 80 nonzero supports excluded; 898 nodes`.
+The first output line is `EXACT RATIONAL PASS: all 80 nonzero supports excluded; 978 nodes`.
 The code is the retained exact certificate; preliminary numerical and SMT
 searches play no part in this theorem.
 
@@ -192,13 +199,13 @@ would also satisfy the Nash signs for the FOUR fixed polynomials
     J_i=Delta_i-H_i L_i.                                 (3)
 
 The same checker constructs(3) directly and excludes all65 patterns
-containing a sure coordinate, in325 nodes. It reuses only the exact
+containing a sure coordinate, in369 nodes. It reuses only the exact
 Bernstein bounds, valid linear combinations of equality rows, and closed
 subdivisions from Section3. There is no origin exclusion in this mode,
 because every tested pattern has a fixed sure coordinate. Its second
 output line is
 
-    EXACT RATIONAL PASS: all 65 sure-root patterns excluded; 325 nodes
+    EXACT RATIONAL PASS: all 65 sure-root patterns excluded; 369 nodes
 
 Consequently no root with a sure quitter can be Nash against ANY actual
 continuation caps for this original game.
@@ -243,5 +250,6 @@ The semantic target and terminal endpoint inspected are
 `UniformEquilibrium/Quitting/Conjecture/Basic.lean` and
 `quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
 in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
-No Lean source was edited or built. The next task is the nonstationary
-producer for this exact raw table, not another stationary search.
+No Lean source was edited or built. The linked nonstationary producer
+establishes a uniform equilibrium for this table; arbitrary Fin4 reward
+tables remain open.

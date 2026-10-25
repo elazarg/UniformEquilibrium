@@ -13,6 +13,31 @@ sources. An exported mathematical proof is not a new Lean theorem.
 
 ## Constructed equilibrium classes
 
+The [signed collision-bridge theorem](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
+covers a class with strongly signed participant rewards and nonadditive
+passive rewards on the difficult singleton matrix. It uses a pair12 root,
+a triple123 root and a finite44-root repair through negative native values.
+An exact quintic identity closes the return. Every profile delivers the
+same payoff target; its full terminal debt is exactly
+`(0,0,0,max(K,0)delta)`, where K is player3's joining reward at solo0.
+The only error is a single initial joining opportunity. All28 unlisted
+native coordinates have the packet's explicit independent freedoms, with
+arbitrary signed own levels. The equality `Z2(12)=0` remains essential to
+this particular construction; no all60-coordinate neighborhood is claimed.
+
+The concrete positive-core completion has target approximately
+`(1,1.8616124826,1.6489455273,1)`. Its stationary and actual sure-root
+exclusions are proved in the [signed table note](CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_TABLE.md).
+The earlier negative-core table was already covered by ordered nonpositive
+anchors and is not counted as new coverage. The exported class instead has
+core participant vector `(11,2,1)` on123; complete ordered-anchor, trap,
+passive-child and other applicable selector comparisons were checked.
+Whole-proof reviews are
+[here](../feedback/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM__BY_CODEX_LAST_DATE.md)
+and [here](../feedback/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM__BY_CODEX_SIGNED_BRIDGE_REVIEW.md),
+with a separate
+[coverage and mathematical audit](../feedback/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM__BY_CODEX_GLOBAL_SYSTEMATIC.md).
+
 The [contracting-block theorem](../exports/TWO_CONTRACTING_BLOCKS_UNIFORM_EQUILIBRIUM.md)
 unifies four actual reward-table producers. It retains an explicit quantitative
 box, extends the construction across a signed singleton chamber with arbitrary
@@ -305,18 +330,18 @@ and two full independent reviews. This solved control does not exclude a
 new counterexample class; it shows that joint capacity positivity still
 requires dynamic constructions.
 
-The separate [signed hard-table target](CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_TABLE.md)
+The separate [signed table control](CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_TABLE.md)
 keeps the difficult singleton matrix and has capacities
-`(1,1/5,3/29,1/7)`. Its exact Bernstein checker excludes all 80 nonzero
+`(2,1/5,3/29,1/7)`. Its exact Bernstein checker excludes all 80 nonzero
 stationary support patterns and every root containing a sure quitter
 against any actual continuation. Consequently stationary regret has a
 positive floor, and an exact terminal Nash profile cannot have even one
 bounded proper clock. Two independent full reviews checked the table,
 polynomials and finite certificate. No nonnegative payoff weight or
 nonnegative participant row supplies the elementary positivity shortcuts.
-The table's UE status is OPEN: these are strategy-class exclusions, not
-an unrestricted positive-gap example. It is a concrete target for a
-dynamic producer outside the positive-premium calibration.
+The signed collision-bridge theorem now supplies its UE. Thus these
+strategy-class exclusions coexist with a proved behavioral producer;
+they are not evidence of an unrestricted positive gap.
 
 For an ACTUAL native exact-observer profile, ONE strictly positive Never
 margin gives a finite-calendar representation of the entire (U,B,e,N)

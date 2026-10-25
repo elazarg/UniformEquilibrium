@@ -11,9 +11,13 @@ approval, or an exclusion of unrestricted nonstationary equilibria.
 Reviewed artifacts:
 
 - [Complete table and proof](../notes/CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_TABLE.md),
-  SHA256 `1f3815857c0df1aab93a929234e15663955f53e2293bcde0589f930c3d0f0584`.
+  SHA256 `5fbdb574ac7aaba83588d4b57a3f086b35d6d8d817c64f614e53978cc91f3474`.
 - [Retained exact checker](../experiments/CODEX_ARBITRARY_TOPOLOGY__SIGNED_FIN4_STATIONARY_CHECK.py),
-  SHA256 `0c3dd850b01c1e3fe2caf7ca5b47ea07df492ea2f5943f5a691d025659ab3431`.
+  SHA256 `8b3adbe7b0fb76b64f40f8b108fcbf45d31a8c22c7e9b59cdb8e5d26c1ab580b`.
+
+The final source change only updates the producer status and export link.
+Reverting those statements reconstructs the previously reviewed source hash
+exactly; the mathematical proof and checker are unchanged.
 
 ## 1. Table, singleton screens and observer margins
 
@@ -29,10 +33,19 @@ has a negative exterior entry. No implication from these screens to all
 arbitrary-counterexample hypotheses is claimed.
 
 I also independently computed the four capacities by checking endpoints and
-all pairwise line intersections. They are exactly 1, 1/5, 3/29 and 1/7 at
+all pairwise line intersections. They are exactly 2, 1/5, 3/29 and 1/7 at
 the stated maximizing hazards. The joining-gap arithmetic and its transitive
 orientation check. These positive capacities concern attainable observer
 margins; they do not themselves supply a whole-game equilibrium.
+
+The reviewed input has Z3({1,2,3})=+1. I rebuilt all gain polynomials and
+reran both independent rational box audits for this input; the previous
+-5 computation is not used as a certificate for the changed table. The
+opening overlap correction is valid: at the previous value -5, singleton
+anchor order (0,3,2,1) satisfies the displayed raw conditions of
+[ordered nonpositive anchor blocks](../exports/ORDERED_NONPOSITIVE_ANCHOR_BLOCKS_UNIFORM_EQUILIBRIUM.md).
+The +1 value breaks that particular order. Complete nonredundancy of the
+separate equilibrium producer is outside this class-exclusion review.
 
 ## 2. The stationary response menu
 
@@ -58,13 +71,13 @@ excluded in original coordinates by the own-singleton payoff one.
 ## 3. Exact finite coverage and code audit
 
 I inspected the complete checker and ran its documented command. It reports
-all 80 nonzero support patterns excluded, with 898 visited nodes. I also
+all 80 nonzero support patterns excluded, with 978 visited nodes. I also
 performed a separate exact reconstruction: the polynomials were rebuilt
 from the printed coalition vectors, and each box bound was recomputed by
 direct affine substitution into the original power polynomials followed by
 rational Bernstein conversion. This second calculation did not use the
 retained restriction, inversion or integer-subdivision routines. It obtained
-the same 80 exclusions and 898 nodes, including 213 for the full interior.
+the same 80 exclusions and 978 nodes, including 249 for the full interior.
 
 The relevant code invariants check:
 
@@ -95,7 +108,7 @@ absolute value at most t^2 for t=max q_i<=1. Multiplying by the inverse gives
 The discarded origin boxes satisfy t<=2^(-E)<1/K. Their only possible common
 zero is the origin, which is outside the actual interior-support pattern.
 The zero-K branch is also sound. I independently obtained the full-support
-constant K=159656/25 and its valid exponent E=13. No floating computation,
+constant K=161672/25 and its valid exponent E=13. No floating computation,
 solver status or saved search output is used as an exclusion premise.
 
 ## 4. Sure roots over arbitrary actual continuation caps
@@ -127,11 +140,11 @@ is made or needed.
 I independently rebuilt all four J_i from the printed table and checked
 the added checker mode. The 65 patterns are exactly those with at least one
 fixed-one coordinate. The same direct-affine, rational Bernstein audit
-reproduced all 325 nodes and excluded every pattern. There is no origin
+reproduced all 369 nodes and excluded every pattern. There is no origin
 pruning and no solo-interior shortcut in this mode. Although Gamma need not
 be the linear part of J, its inverse still gives valid linear combinations
-of active equalities. The unchanged stationary mode also reproduces its
-original 898-node result.
+of active equalities. The stationary mode also reproduces its
+978-node result.
 
 The finite-calendar adapter is sound. A bounded proper clock has a finite
 last possible date, so some root no later than that date has a sure owner.
@@ -147,8 +160,8 @@ proper clock, irrespective of the other clocks' support sizes. Every
 absorbing finite-calendar independent profile has a bounded proper clock:
 otherwise every player has positive Never mass, giving positive AllNever
 probability by independence. Thus the claimed exact finite-calendar
-exclusion follows. The final added bounded-clock sentence is the direct
-stronger consequence of the same proof.
+exclusion follows. The bounded-clock statement is the direct stronger
+consequence of the same proof.
 
 This supplies no positive global regret floor over finite calendars. Their
 first sure root can become arbitrarily unlikely as the calendar varies;
@@ -189,9 +202,14 @@ I inspected `quittingUniformEquilibriumPayoffConjecture` in
 `quittingGame_exists_uniformEquilibriumPayoff_iff_terminalNash_all_errors`
 in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`.
 The latter requires approximate terminal Nash profiles without a stationary
-restriction. The stationary and bounded-proper-clock exclusions do not
-settle the uniform-equilibrium status of the printed table. They do not
-exclude periodic profiles with no sure root, approximate finite-calendar
-equilibria, or unrestricted behavioral approximate equilibria.
+restriction. The class exclusions proved here do not imply nonexistence of
+uniform equilibrium. The separately reviewed
+[signed collision-bridge export](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
+now proves a uniform equilibrium for this table using nonstationary profiles.
+
+This review remains an independent audit of the class-exclusion note and
+its exact checker. The reviewer coauthored the separate producer's finite
+consumer and does not claim an independent review of that producer or its
+export gate. Arbitrary Fin4 tables remain open.
 
 No author note was edited and no Lean source was changed or built.
