@@ -1,4 +1,4 @@
-# Independent review: uniform physical cores across switching boundaries
+# Independent review: uniform physical cores and compact positive ratios
 
 Reviewer: CODEX_LOCAL_COLLAR_REVIEW. Date: 2026-10-25.
 **Mathematical verdict: PASS.** No unresolved objection.
@@ -8,174 +8,171 @@ or Lean verification. No Lean, commit or export operation was performed.
 Complete artifact reviewed:
 `math/notes/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md`, SHA256:
 
-`017dc5933543558622bd308af5ddca54bd5c6085fa1b9654eb1ebafe1814de05`.
+`389023e99244e6eaba4e5fa6b0a51ca93f4ad270a7074c800b8e41363d1172ad`.
 
-The verdict covers the complete 1282-line artifact, including all three
-local producers, the analytic joins and their common behavioral consumer.
+The verdict covers the whole 1677-line artifact, all local producers,
+the return and behavioral consumer, and the restricted compact-cover theorem.
 
 ## Exact conclusions checked
 
-The corner theorem supplies one positive radius and scale threshold on a
-closed box around (a,c)=(3,1), including both sides of both boundaries.
-For each fixed compact c-interval inside (0,1), the second theorem supplies
-one threshold on a full two-sided strip around a=3. The right-side number
-of triple steps may diverge; the claimed constants do not depend on it.
-The third theorem supplies a two-sided c=1 band for every compact positive
-a-interval, including intervals crossing3. These are uniform thresholds.
+The corner theorem supplies one threshold on a closed box about(3,1).
+The vertical and horizontal theorems supply two-sided neighborhoods of a=3
+and c=1 for every compact positive interval of the other coordinate.
+The dynamic theorem has one threshold on each compact subset of
+0<a<=3,c>1, including a=3 and without a condition on2a-3c.
+These four statements allow exactly the seven fixed passive entries, nine
+homogeneous core entries and row0 bounds stated in the note. Other finite
+coordinates and signed own levels are free. Their magnitudes affect meshes
+and horizons, not the common beta thresholds.
 
-All three conclusions use the stated seven passive entries, nine homogeneous
-core entries and row0 upper bounds. Other finite coordinates and signed
-own levels are unrestricted. The targets precede accuracy, and all complete
-behavioral deviations, including Never, are covered. No threshold on every
-positive ratio rectangle or the whole positive premium cube is claimed.
+The compact-positive-ratio theorem has the narrower, fully specified
+sixty-entry additive calibration of Section9. The proof does not transfer
+the old cone theorem to unqueried free coordinates. All targets precede
+accuracy; all complete behavioral deviations and Never are covered.
+Neither arbitrary-table Fin4 nor uniformity at ratio degenerations is claimed.
 
-## Dynamic corner graph
+## Corner and vertical cores below c=1
 
-I recomputed (C10), the pair identity, residual sign and player2 formula.
-The pair correction is exactly h(beta K)/P. On the triple branch the
-residual at zero makes J(x,0)>Psi, preserving nonnegativity exactly.
-At contact both roots, player2 outputs and guards agree. A pair step may
-feed a triple step; pair invariance is not assumed.
+I checked the exact pair identity, residual and player2 output. The dynamic
+corner operator agrees on contact and preserves h>=0. Finite coordinate
+increments give its strict downward residual slope and global Lipschitz
+bounds without differentiability at switches. The positive-part term has
+an extra beta factor. The selected-root bound gives a weighted contraction
+with limiting coefficient2/3, uniformly below3/4 after the stated choices.
+At(3,1), the exact pair graph is fixed. Every successor remains on the graph.
 
-The candidate Lipschitz bounds control h(beta K)/beta by finite increments.
-Its possible adverse z slope is at most delta*(11/2+O(theta)); the residual
-therefore remains strictly decreasing with the displayed m>0. Its positive
-value at zero is bounded by C*epsilon*(u+v), giving a unique clipped root
-of that size. All trial arguments stay inside the fixed candidate domain.
-
-The coordinate root bounds (C16) hold also when one compared root is zero.
-Together with J_z=4/3+O(theta), they give the invariant Lipschitz class.
-The positive-part contribution carries an additional beta factor and is
-controlled without differentiability or regularity of the contact set.
-In the weighted distance, the root comparison uses the selected-root bound
-|K|_1<=(1+Ctheta)(u+v). The limiting contraction coefficient is 2/3,
-and the stated choices make it uniformly below 3/4. Thus Banach produces
-the full graph on the corner box. No beta0 extension of an arbitrary
-candidate h(beta K)/beta is required.
-
-At the central ratio (3,1), the exact guard is nonnegative and the zero
-correction is fixed, proving T=Psi there. Parameter continuity for beta>0
-and continuity in graph inputs follow from the uniform contraction.
-All successor caps remain on the graph and contract by O(beta).
-
-## Right-band control at arbitrarily many sheets
-
-The full analytic linearization is legitimate: L_beta is invertible with
-norm O(beta) and inverse norm O(1/beta), while the quadratic graph operator
-has contraction factor O(beta). Its normalization is removable at beta0.
-This argument requires no dominance of the negative eigenvalue modulus,
-so it also covers c<5/11. The exact solo3 axis at a=3 gives the transverse
-factor J_epsilon and its derivative versions for both K and its inverse.
-
-I verified the reverse map (U4), its cone margins and angular descent.
+On the right of a=3, the analytic linearization uses O(beta) derivative,
+O(1/beta) inverse and quadratic transform contraction O(beta); no negative
+spectral dominance is required. The exact solo3 axis gives the transverse
+vanishing factor. I checked the reverse cone map and angular descent.
 The final virtual ray has a fixed negative angular margin even when the
-number of steps diverges. Point and tangent errors carry the same epsilon
-factor as the contact ray's facet margins, so cone order controls them at
-every depth without accumulated local errors. Positive radial functionals
-and forward contraction give a common covered interval for all depths.
+number of sheets diverges. Point and tangent errors carry the same a-3
+factor as the cone margins, so order controls all depths without accumulating
+local errors. Radial positivity and forward contraction supply common domains.
 
-The original-coordinate derivative estimate uses comparisons to the same
-ray and introduces no 1/epsilon. Consecutive multiplicative angular gaps
-keep exact seams ordered. The normalized sheet remainder decays as
-(C3*beta)^n; uniform projection angles give common IFT and C1 bounds.
-On physical sectors, epsilon*u and |A_n|u are bounded by Cv. Absorbing the
-C*rho*|z| term first proves |z|<=Cv and hence the required O(rho*v) error.
-This estimate is not asserted off those sectors. Later sheets retain
-positive hazard margins; the first sheet has an exact contact factor with
-positive limiting unit (1-c)/(1+3c). The cap-to-hazard comparison has the
-necessary vanishing-axis factor, not an unweighted O(beta*u) remainder.
-Normalized contact transversality excludes extra intersections at a=3.
-Ordered boundaries and exact descent place every sheet in its predecessor;
-the legal pair sector is invariant. Roots match on seams and T>=Psi.
+The normalized sheet remainder decays as(C*beta)^n. Uniform projection
+angles give common IFT bounds. Returning to original coordinates uses
+(a-3)u<=Cv and |A_n|u<=Cv on physical sectors; absorbing the small |z|
+term first yields |z|<=Cv and then the needed O(rho*v) error. The first
+sheet has an exact contact factor with positive unit(1-c)/(1+3c); later
+sheets retain strict hazard margins. Ordered seams and exact predecessor
+descent yield physical roots agreeing at contact, with T>=Psi throughout.
 
-## Left extension and c=1 crossing
+On the left, the exact solo3 line makes the quadratic axis remainder
+proportional to3-a. The stated threshold comparisons and positive v margins
+therefore give a common physical graph including a=3. Taking the minimum
+of the left and right thresholds proves the lower vertical band.
 
-The pulled-back invariant plane on the left has the stated tangent and
-uniform analytic bounds. At a=3 its exact solo3 line forces the quadratic
-axis remainder to carry the factor 3-a. I checked both threshold subtraction
-formulas and the positive v derivatives. Integrating with common C2 bounds
-proves both lower comparisons by kappa*((3-a)u+v), including the boundary
-axis. This supplies the common left threshold and hence the two-sided band.
-No continuity across a=3 is inferred from unrelated existence statements;
-the consumer needs input continuity for each game and the proved common bounds.
+## Uniform horizontal cores
 
-For the upper c=1 crossing, I verified the derivative table and all scalar
-identities in (J7)--(J16). Monotonicity of h in u makes the K1 contribution
-help the downward residual slope. The exact c>=1 boundary sign gives
-z_h=O(u) and K1<=(3a/(3+2a)+small)u, validating the /u metric even on
-arbitrarily thin sectors. Its closed class is complete and its coordinate
-comparisons remain within the stated triangular domain.
+For compact a inside(0,3), I checked the derivative identities and the
+/u metric construction above c=1. Monotonicity in u makes the K1 term
+favorable, and the exact boundary sign gives z=O(u). The selected output
+bound controls the metric on thin sectors. Strict coordinate residual
+signs yield at most one switch; contact gluing preserves the global class.
+The contraction coefficient18a/(3+2a)^2 is at most3/4 by(2a-3)^2>=0.
+Uniform convergence of continuous Picard iterates supplies C0 continuity;
+no weighted-metric parameter continuity is presumed.
 
-The residual increases strictly in u, so there is at most one switch on a
-fixed-v interval. Exact contact gluing preserves global u monotonicity.
-The upper u slope has the positive slack in (J14); the v slope coefficient
-3/(3+2a) is uniformly below one. Small D followed by small eta,rho,beta
-preserves both bounds. The weighted contraction coefficient is exactly
-18a/(3+2a)^2 at the limit; its bound 3/4 follows from (2a-3)^2>=0.
-Thus the proof does not assume smoothness across a switch or pair invariance.
-Weighted-metric parameter continuity is not asserted: uniform convergence
-of the continuous Picard iterates supplies ordinary C0 continuity instead.
+The lower analytic graph has an exact solo1 axis at c=1, so its axis
+remainder carries1-c. Physicality and T>=tcrit>=Psi follow with common
+bounds. At c=1 it lies in the upper class and is a fixed point; uniqueness
+identifies the two graphs. This agreement is proved rather than inferred.
 
-The new lower-side analytic argument is complete. The c=1 polynomial
-factor and exact solo1 axis give the (1-c)v^2 remainder factor. Uniform
-u slope and axis comparison imply physicality, while the nonpositive pair
-guard gives T>=tcrit>=Psi on a common lower band. At c=1, the analytic
-correction lies in the upper class, with slope-slack numerator
-(1-k)(6k+1)>0. Its roots make it a fixed point, so uniqueness identifies
-both graphs. Margins are uniform on the fixed compact interval only.
+For compact a>3, the legal pair ratio contracts with limit3c/(2a)<1.
+The exact solo1 axis makes the two scaled cap coordinates and player2
+hazard divisible by delta=(1-c)/c. I recomputed the scaled inverse matrix
+and its determinant. Its cone gives tau_next<=(tau-1)/2, hence a common
+finite sheet count through delta0. A zero-U last seam is handled by one
+extra negative virtual seam. Normalized forward equations give common
+analytic domains; the extra seam equation need not itself define a graph.
 
-## The c=1 join above a=3 and the finite cover
+The first sheet has a contact factor and later physical sectors have strict
+margins. The printed hazard formulas prove exact physicality and descent.
+Original pair illegality implies A*U<cy(3+a*beta+u)<=Cv before scaled-domain
+membership is used. Thus one original radius covers the full quadrant.
+Height and root discrepancies are O(delta*v), proving the continuous join
+to the pair producer at c=1. Below3, corner and above3 neighborhoods cover
+every compact positive a-interval. No continuous choice across pieces is used.
 
-For compact a>3, the exact pair guard is w(A+Ly)-(1-c)y, with A bounded
-away from zero. The next ratio contracts uniformly by a factor tending to
-3c/(2a)<1, proving pair invariance without a radius divided by 1-c.
-The exact solo1 axis makes both scaled cap coordinates and the player2
-hazard divisible by delta=(1-c)/c. Thus the scaled map is analytic through
-delta0 on a fixed domain, and its normalized determinant stays nonzero.
+## Entire upper strip, including a=3
 
-I checked (H7), the preserved cone and tau_next<=(tau-1)/2. They supply
-a common finite number of reverse seams. A zero-U last seam is handled
-by one extra strictly negative virtual seam. Projection and intersection
-transversality survive on a finite parameter cover. Normalized forward
-iterates, rather than inverse iterations on an unproved domain, supply
-common analytic equations. The extra equation defining the final seam
-need not itself define a graph. Three consecutive rays are independent.
+I recomputed M_* and its derivative polynomial. The displayed lower bound
+on that polynomial proves M_*>=m(a,1)=(4a+6)/9. Since f>=0, q(M) decreases,
+and q(M_*)<=18a/(3+2a)^2<=3/4. Compactness permits one epsilon_D satisfying
+all three strict requirements. The stated second requirement has at least
+1/3 initial slack. I checked both exact u margins for the chosen B;
+each is a strictly positive bounded multiple of f=(3-a)/9.
 
-The first sheet's scaled hazard has an exact contact factor; later physical
-sectors have strict positive margins. The printed y,w formulas then give
-physical roots, exact predecessor descent and agreement at seams. Outside
-the legal pair sector, tcrit>Psi, so T>=Psi follows from physicality.
-Original pair illegality gives A U<cy(3+a*beta+u)<=CV before assuming scaled
-domain membership. Thus one original radius really covers the full quadrant.
-The height and root discrepancies are O(delta*v), giving the asserted
-continuous c=1 join to the all-pair graph, plus common contraction and axis
-bounds. No hidden factor 1/delta enters those bounds.
+Residual monotonicity in z uses the lower v slope-D, while K1's u
+monotonicity helps. The exact positive boundary bound gives z<=Cfu and
+K1<=Cu. Future arguments and coordinatewise comparison points fit the fixed
+triangle. At active inputs and contact, the guard implies v,y,K3=O(fu).
+I independently recomputed the exact R0,u formula; K3 is exactly independent
+of u, so every adverse u error remains O(f*theta). The identity at z=0 and
+a bounded mixed derivative likewise give(J-Psi)_u=O(f*theta).
 
-The below3, corner and above3 intervals cover every compact positive
-a-interval with overlap. Minimum thresholds and maximum bounds give the
-full horizontal theorem. The per-game choice need only be continuous in
-cap inputs; parameterwise agreement across these three pieces is not used.
+These relative estimates preserve both u inequalities as f tends to zero.
+The exact pair cancellation gives u slope O(beta*f), without an unscaled
+positive-part derivative error. Every residual zero for f>0 crosses upward,
+so two switches along a fixed-v interval are impossible. Exact contact
+agreement then gives global u bounds. At f=0 the class contains only h=0;
+the pair guard is nonnegative everywhere, as required.
 
-## Common return and behavioral consumer
+The lower-v argument legitimately retains the same finite-difference slope
+q in the numerator and denominator. Coordinate-path differences supply
+p in[0,B], q in[-D,tau] without a chain-rule assumption. The coarse root
+bound controls the divided remainder. Phi increases with p; at p=0 its
+q derivative has the required negative sign because
+(c/2)m-(3c/2)d=c(2a+3)/9>0. Thus its minimum occurs at p=0,q=tau.
+The margin D-4d/(3m)=epsilon_D controls the lower v bound uniformly.
+The upper bound and one-switch property follow from strict residual-v
+monotonicity. Pair v increments fit the same class after shrinking beta.
 
-For every core, the passive0 guard follows from its fixed positive input
-margin and the row0 upper bounds. Summable hazards give the common continuous
-axis estimate S=p+O(u+v). Unbounded free rewards are not queried there.
+The /u value comparison yields q(M)+O(theta)<=4/5. Here the positive-part
+term costs only O(beta), so it need not carry the derivative's f factor.
+Banach produces exact roots at every continuation, including pair-to-triple
+switchbacks. Contact outputs agree. The estimates T-Psi<=Cfu and z<=Cfu
+also establish the exact-pair join at a=3. The closed quadrant a>=3,c>=1
+has an independently verified legal invariant pair producer. Combining it
+with the dynamic strip and corner gives the full positive vertical theorem.
 
-The cited return geometry is parameter-independent at beta0. The corner
-and c=1 bands use c>2/3; the a=3 strip uses D-U+eta*U/3<0 after shrinking
-eta. These give common negative entry faces. Fixed finite pair slack gives
-the positive face before beta is chosen. The common axis estimate preserves
-both return faces. Miranda produces an actual entrance and return without
-a normalized graph limit or continuous return-root selection.
+## Actual return and behavioral consumer
 
-The referenced finite periodic consumer applies with all of its hypotheses
-supplied: exact roots, viable singleton segments, fixed target, vanishing
-wash seam and opponent absorption at least x per word. Its estimates price
-every behavioral law, charge mesh error only at quitting, and sum seam
-error over at most 1/x expected visits. The finite-horizon bound and signed
-level translation are valid under that uniform opponent absorption.
-Only queried pair rewards enter the mesh constant; they do not affect the
-common beta thresholds. The cited source interfaces match this usage.
+All producers supply the passive0 guard, common contraction and continuous
+axis p+O(u+v). The shared return ribbon has strict transverse signs before
+beta is chosen. Endpoint entry signs follow from D-2V/3<0 near c=1,
+D-U<0 near a=3 and in the pair quadrant, and D-V<0 in the upper strip.
+One bounded pair slack supplies the positive entry face. Common small beta
+preserves all signs; Miranda needs only C0 continuity and yields an actual
+return and entrance. The same fixed target is then used for every accuracy.
 
-All three uniform theorems follow; broader uniformity remains open as stated.
+The finite periodic consumer gives delivery E_N/x and regret
+C_join*d_max+2E_N/x for every complete behavioral law. Mesh error is charged
+once at quitting; seam error sums over at most1/x expected visits. Opponent
+absorption removes the Never remainder and permits signed-level translation.
+The bound2M_r*L/(x*H) is uniform over deviations. Unlisted finite pair entries
+affect only the mesh and horizon. No strategic witness remains supplied.
+
+## Compact cover, source scope and remaining frontier
+
+I checked the exact scopes of the three incoming frozen results: crossed
+L, the lower diffuse Delta>=0 region, and the strict additive cone.
+Each explicitly provides compact-uniform thresholds. If Delta<=0 with
+positive a,c, then c<2/7 and a<=3/4, placing the point strictly inside
+the cone. This supplies genuine open overlap even at Delta=0.
+
+The two-sided horizontal and vertical theorems handle their interfaces.
+The pair quadrant, L, full dynamic strip and strict lower regions handle
+every other point. Each neighborhood has one threshold, so a finite open
+subcover of the given compact set gives a positive common minimum. The
+sixty-entry calibration meets every incoming reward hypothesis. No continuity
+of producer or target selection across the cover is necessary.
+
+The final sequence consequence is correctly limited to beta tending to zero
+in this calibration: counterexample ratios must leave every positive compact
+set, hence have a subsequence with a coordinate tending to zero or infinity.
+The proof does not manufacture such a sequence from an arbitrary game.
+The cited terminal, flow and path declarations match the supplied-data
+consumer. This remains ordinary mathematics, with no new Lean seal or
+arbitrary-table closure inferred from the compact-ratio theorem.

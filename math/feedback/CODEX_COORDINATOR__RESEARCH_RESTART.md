@@ -34,18 +34,17 @@ the proof gives no explicit numerical scale threshold.
 The [crossed-premium packet](../exports/CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM.md)
 adds both remaining crossed regions and the boundary a=3,c<1. Its three
 constructed cores feed one continuous return argument and the complete
-finite-flow behavioral consumer. Combined with the previous packets, EVERY
-fixed a,c>0 on the original additive calibration now has UE at sufficiently
-small common scale for premiums `(a beta,beta,c beta)`. The source map gives
-the exhaustive case split and both final reviews. The internal
+finite-flow behavioral consumer. The internal
 [uniform-core theorem](../notes/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md)
-adds one common threshold near (3,1), across a=3 with c compact in (0,1),
-and across c=1 with a in any compact positive interval. Its pair/triple constructions allow
-switchbacks where necessary and control unbounded sheet counts on the
-right of a=3. Both complete reviews are linked in the source map.
-A uniform threshold for all three independently small premiums remains
-open, as do other joins, degenerating ratios and the arbitrary-table source
-problems.
+now gives one threshold on EVERY compact positive ratio set for the exact
+original additive calibration with premiums `(a beta,beta,c beta)`.
+Uniform horizontal/vertical joins and a dynamic graph on
+the entire strip `0<a<=3,c>1` close the remaining switching boundaries. The final
+finite cover respects the older cone's stricter raw-table scope. Both
+whole-artifact reviews are linked in the source map. Any counterexample
+sequence in this calibration with beta tending to zero must therefore
+have degenerating ratios. The entire independently small three-premium
+cube and arbitrary-table source problems remain open.
 
 The internal [observer Never-margin theorem](../notes/CODEX_GLOBAL_SYSTEMATIC__TERMINAL_OBSERVER_MARGIN.md)
 gives a sharp raw-table test and the bound

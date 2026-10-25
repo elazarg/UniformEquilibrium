@@ -5,15 +5,17 @@ Owner: CODEX_UNIFORM_JOINS.
 **Complete internal ordinary-mathematics argument.** Independent review status
 is recorded in the accompanying feedback. This is not an export or a Lean
 theorem.
-Fin4 remains open. No uniform theorem for all positive ratio boxes or for the
-whole positive three-premium cube is claimed.
+Fin4 remains open. Uniformity on every compact positive ratio set is proved
+below only for the original additive calibration. No threshold on the whole
+positive three-premium cube or arbitrary-table closure is claimed.
 
-The contribution is uniformity through three joins where separate fixed-ratio
-existence thresholds do not supply it. This note is the canonical combined
-record: it retains the core proofs and applies the existing exact return and
+The contribution is uniformity through the switching boundaries, together
+with a compact-cover theorem for the original additive calibration; separate
+fixed-ratio thresholds do not supply these conclusions. This note is the
+canonical combined record: it retains the core proofs and applies the existing exact return and
 behavioral consumer, without copying their complete geometry again.
 
-## 1. Raw data and the three uniform conclusions
+## 1. Raw data and uniform conclusions
 
 There are four players0,1,2,3, one live state, and independent private
 Continue/Quit choices at each live date. The first nonempty quitting coalition
@@ -51,14 +53,15 @@ has a uniform-equilibrium payoff. These are single constants for the entire
 closed box, including both sides of a=3 and c=1. The ratios may depend
 arbitrarily on beta within that box.
 
-**Two-sided a=3 theorem.** For every 0<c_-<=c_+<1, there exist eta,beta1>0
+**Two-sided a=3 theorem.** For every 0<c_-<=c_+<infinity, there exist eta,beta1>0
 such that every table above with
 
     3-eta<=a<=3+eta, c_-<=c<=c_+, 0<beta<beta1                  (R1)
 
 has a uniform-equilibrium payoff. Neither beta1 nor the core radius depends
 on the number of triple steps on the right, which may diverge as a
-decreases to3. The left side uses a uniform analytic graph.
+decreases to3. Below c=1 the left side uses an analytic graph; above c=1
+the dynamic region below supplies it.
 
 **Two-sided c=1 theorem.** For every 0<a_-<=a_+<infinity, there exist eta,beta2>0
 such that every table above with
@@ -69,12 +72,25 @@ has a uniform-equilibrium payoff. One threshold and one core radius work
 on both sides of c=1. The upper-side producer permits arbitrary pair/triple
 switchbacks and assumes no eventual invariant pair tail.
 
-All three thresholds are independent of ell and of all free reward coordinates.
+**Dynamic-region theorem.** For every compact subset K of
+
+    0<a<=3, c>1,                                               (N0)
+
+one positive beta_K works for every table above with(a,c) in K and
+0<beta<beta_K. The compact set may meet a=3. Pair steps may return to
+triples; no invariant pair-tail premise or sign restriction on2a-3c is used.
+
+These thresholds are independent of ell and of all free reward coordinates.
 The flow mesh and finite-horizon threshold may depend on the magnitudes of
 those finite rewards. The conclusion is one fixed payoff target for each
 game before accuracy is chosen: for every positive accuracy there is one
 behavioral profile delivering that target and bounding every full unilateral
 deviation over all sufficiently long finite horizons.
+
+**Original-calibration corollary.** For the narrower fully specified additive
+calibration in Section9, every compact K contained in(0,infinity)^2 has one
+beta_K>0 valid for all(a,c) in K. This corollary does not inherit the free
+reward coordinates allowed in the four local statements above.
 
 ## 2. Common core data and the consumer required
 
@@ -112,7 +128,7 @@ continuous positive axis limit satisfying
 The exact return geometry and the unrestricted behavioral consumer are
 already proved in Sections2--4 of
 [CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM.md](../exports/CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM.md).
-Section7 below checks every new uniform input to that consumer explicitly.
+Section8 below checks every new uniform input to that consumer explicitly.
 Only its supplied data interface is reused; all graphs here are constructed
 from the raw rewards.
 
@@ -615,7 +631,7 @@ independent of N.
 Finally the uniform bound T_beta<=C(u+v) makes every selected hazard O(u+v)
 and every successor outer cap O(beta(u+v)). The passive0 guard and geometric
 tail argument therefore have common constants. They give the claimed
-continuous axis with S_beta=p+O(u+v), and hence Section7 applies with one
+continuous axis with S_beta=p+O(u+v), and hence Section8 applies with one
 positive beta threshold throughout this right-hand band. The endpoint a=3 is supplied next.
 
 ## 5. A uniform analytic graph on the left, including a=3
@@ -692,7 +708,8 @@ The passive guard and geometric-tail argument from Section3 have common
 constants. This supplies(C3) on the entire left strip including a=3.
 
 Taking common smaller eta and radius, and the minimum of the left and right
-thresholds, proves the local producer on the full two-sided band(R1).
+thresholds, proves the local producer on(R1) when c_+<1. Section7 extends
+that conclusion to every compact positive c interval.
 No continuity across a=3 is inferred merely from two existence constructions;
 the consumer needs continuous roots and axis values in the inputs of each
 game, together with the common bounds just proved.
@@ -1155,12 +1172,308 @@ eta,beta2,rho,C for(R2), also after requiring eta<=1/4.
 For each raw game, choose any producer from a piece containing its a value.
 Each produces a graph and selected roots continuous in the cap inputs and
 satisfying the common estimates. A jointly continuous choice across the
-finite cover is neither inferred nor needed. Section7 consequently applies
+finite cover is neither inferred nor needed. Section8 consequently applies
 with one shared return ribbon, one finite pair slack bound, and one beta
 threshold for the entire compact positive a interval. This proves the full
-horizontal theorem while retaining just three headline conclusions.
+horizontal theorem.
 
-## 7. Actual return, uniform constants, and full behavioral deviations
+## 7. A dynamic core throughout 0<a<=3,c>1
+
+Fix a compact subset K of(N0). Use exactly the rational roots, pair identity,
+residual and dynamic operator(C4)--(C9), now with the following candidate
+class. K1 is independent of v and K3 is independent of u, and their direct
+coordinate and z derivatives are positive on the common small domain.
+The proof retains the same finite-difference candidate v slope in two
+coupled terms; discarding that coupling would give a smaller region.
+The a=3 endpoint is included by keeping every u error proportional to3-a.
+
+### Uniform parameter choices and the closed candidate class
+
+Put
+
+    f=(3-a)/9>=0, d=(c-1)/2,
+    m=(8a+27c-15)/18,
+    D_min=4d/(3m), M_*=m-(3c/2)D_min
+                       =m-c(c-1)/m.             (N3)
+
+The lower v bound must exceed D_min, while downward residual monotonicity
+requires a positive M=m-(3c/2)D. We choose these constants together rather
+than prescribe D independently of a.
+
+First D_min<2d/c: since d>0, this is equivalent to3m>2c, or
+8a+15c>15, which holds throughout(N0). Next write
+s=4a/9-5/6, so m=3c/2+s. Direct differentiation gives
+
+    m^2 partial_c M_*
+      =P(c)=15c^2/8+(5/2)cs+(3/2)s^2+s,
+    P(1)=(8a^2+12a)/27>=0,
+    P(c)-P(1)=(c-1)[15(c+1)/8+5s/2]>=0.
+
+The last bracket is at least5/3 for c>=1 and s>=-5/6. Thus M_* is
+nondecreasing in c, and
+
+    M_*>=M_*(a,1)=m(a,1)=(4a+6)/9>4a/9.        (N5)
+
+For f>=0 define q(M)=4a/(9M)+16af/(9M^2), a decreasing function of M.
+Consequently
+
+    q(M_*)<=q(m(a,1))=18a/(3+2a)^2<=3/4.
+
+By compactness choose one epsilon_D>0, common on K, and set
+
+    D=D_min+epsilon_D, M=m-(3c/2)D,
+    B=(f/2)[4/(3M)+3/a],
+
+so that D<2d/c, M>4a/9+1/3 and q(M)<39/50 everywhere on K. Such a
+choice exists: the first gap is continuous and strictly positive on K,
+the second has at least1/3 slack before the perturbation, and q(M_*)<=3/4 has
+uniform slack below39/50. All these quantities are bounded on K; in
+particular B is a bounded positive multiple of f and vanishes exactly
+when a=3.
+
+Choose a small fixed tau>0. Candidates have h(0,v)=0 and coordinate
+increment bounds
+
+    0<=h(u2,v)-h(u1,v)<=B(u2-u1)             (u2>=u1),
+    -D(v2-v1)<=h(u,v2)-h(u,v1)<=tau(v2-v1)   (v2>=v1).        (N4)
+
+Thus 0<=h<=Bu. Zero belongs to this closed class, which is complete in
+
+    d_u(h1,h2)=sup_(u>0)|h1-h2|/u.
+
+Work on a fixed triangle u+v<=rho; all future arguments are placed in
+u'+v'<=rho/4 by a common small beta choice. Coordinatewise intermediate
+comparisons therefore remain in the candidate's domain.
+
+### Exact scalar margins on the full closed region
+
+The smooth leading derivatives at fixed z are
+
+    R_0,u=f, R_0,v=-d, R_0,z=-m,
+    K1,u=a/3, K1,z=4a/3,
+    K3,v=c/2, K3,z=3c/2,
+    J_z=4/3, (J-Psi)_u=(J-Psi)_v=0.             (N6)
+
+The relevant exact margins are
+
+    f-aB/3=f(9M-4a)/(18M),
+    B-4f/(3M)=f(9M-4a)/(6aM),
+    D-4d/(3m)=epsilon_D>0,
+    d-(c/2)D>0.                                (N7)
+
+The first two u margins are proportional to f; their coefficients stay
+strictly positive on K. The active-wedge estimates below retain that factor
+in every u error. The v margins stay strictly positive even at a=3.
+
+The selected first outer output will satisfy, at the limiting constants,
+
+    K1/u<=a/3+(4a/3)f/M.
+
+The resulting metric contraction factor is
+
+    q(M)=4a/(9M)+16af/(9M^2)<39/50.             (N8)
+
+None of these choices or bounds uses a positive lower bound on f.
+
+### Clipped roots and the exact active-wedge factor
+
+Let theta=rho+beta. Uniform smooth errors from(N6) are O(theta).
+Since h is nondecreasing in its first coordinate, its K1 contribution
+favors downward monotonicity in z. Its most adverse K3 contribution uses
+v slope -D. Finite-increment comparison therefore gives downward residual
+slope at least M-C theta>0. At fixed z,
+
+    R_h,v<=-d+(c/2)D+C theta<0.                 (N9)
+
+A common upper bound on the downward z slope also holds. Because c>1
+and h>=0, the exact boundary identity implies
+
+    [R_h(x,0)]_+<=f u.
+
+Every positive residual thus has a unique positive zero, with
+
+    0<z_h<=f u/(M-C theta),
+    K1(x,z_h)<=[a/3+(4a/3)f/(M-C theta)]u.        (N10)
+
+The rational hazard formulas are nonnegative there and O(u+v). Monotone
+comparison gives continuous clipped roots and common coordinate Lipschitz
+bounds, including across z_h=0.
+
+For f>0, every active input and every contact also satisfy a stronger
+localization. From R_h(x,0)>=0 and h>=0, formula(C8) gives
+
+    (c-1)y0+(1+k_beta ac beta)y0 w0<=3f w0,
+    y0<=C f u, v<=C f u.                        (N11)
+
+Consequently selected z, y and K3 are O(fu). At fixed z, exact differentiation
+of the smooth residual gives
+
+    R_0,u=w_u[3f-y+(a/3)z-a beta k_beta K3(1-z)].
+
+Since w_u=1/3+O(theta), throughout a slightly enlarged active wedge,
+
+    R_0,u=f+O(f theta), K1,u=a/3+O(theta),
+    f(9M-4a)/(18M)-C f theta<=R_h,u<=f+C f theta. (N12)
+
+The candidate comparison uses K3's EXACT independence of u; no unscaled
+cross term is present.
+
+The direct u increment of J-Psi also carries f. At z=0,
+
+    J(x,0)-Psi_beta(x)=beta R_0(x,0)/P.
+
+On the wedge, R_0=O(fu) and R_0,u=O(f), so its u derivative is O(beta f).
+Changing z from0 to O(fu) contributes O(f rho) through a bounded mixed
+u,z derivative. Hence
+
+    (J-Psi)_u=O(f theta)                        (N13)
+
+on every selected triple. This exact localization replaces a nonuniform
+generic O(theta) estimate as a tends3.
+
+### Class preservation, including the coupled lower-v estimate
+
+Nonnegativity of Uh is exact. On a pair it is h(beta K)/P. On a triple,
+R_h(x,0)>0 implies Psi_beta(x)<J(x,0), and J increases with z.
+At u=0, R_h((0,v),0)=-(c-1)y<=0, so Uh(0,v)=0.
+
+For f>0, the u output increment on a triple is positive and at most
+
+    4f/(3M)+C f theta.
+
+This lies below B by the RELATIVE second margin in(N7), with common
+choices independent of f. On a pair, the exact formula h(beta K)/P is
+nondecreasing in u, with u slope O(beta f). It too lies in[0,B].
+One must use this exact pair cancellation: separately estimating the
+positive-part correction in(C9) would lose the necessary factor f.
+
+Every residual zero for f>0 lies in(N11), and(N12) is strictly positive
+on a neighborhood of that zero. Every zero therefore crosses upward
+as u increases, so there is at most one switch on a fixed-v u interval.
+The branch formulas agree there, giving the global u increment bounds.
+
+For the lower-v bound it is essential to retain the SAME candidate
+v slope in the residual numerator and denominator. Take two active roots
+at fixed u and write their differences as Delta v, Delta z. Decompose the
+future correction along a coordinate path:
+
+    Delta h/beta=p Delta K1+q Delta K3,
+    p in[0,B], q in[-D,tau].
+
+This is an exact finite-difference decomposition; no differentiability of
+h or nonsingularity of its evaluation map is presumed. K1's independence
+of v gives
+
+    Delta K1=(4a/3+O(theta))Delta z,
+    Delta K3=(c/2+O(theta))Delta v
+                       +(3c/2+O(theta))Delta z.
+
+The SAME q therefore appears in both coefficients of the residual
+difference. The coarse clipped-root Lipschitz bound controls the errors
+after division by Delta v. The triple output quotient is
+
+    phi(p,q)+O(theta),
+    phi(p,q)=-(4/3)[d+(c/2)q]
+                  /[m+(4a/3)p+(3c/2)q].        (N14)
+
+Its numerator is positive, since d-(c/2)D>0, and its denominator
+is at least M>0. Phi increases with p, so its minimum has p=0. There
+
+    (c/2)m-(3c/2)d=c(2a+3)/9>0,
+
+which makes phi decrease with q. The minimum is therefore at q=tau:
+
+    triple v quotient>=-4d/(3m)-C(tau+theta).    (N15)
+
+Choose tau first and theta next, using the strictly positive third
+margin in(N7), to make this greater than -D. Its upper bound is strictly
+negative by(N9), up to a small smooth error, so it is below tau.
+
+On a pair the v quotient of h(beta K)/P lies between -C beta D and
+C beta(tau+B rho). These lie in[-D,tau] after shrinking beta. The positive
+allowance tau handles the denominator derivative without assuming exact
+monotonicity on the pair branch. Since(N9) is globally strict, there is at
+most one branch switch along a fixed-u v interval. Exact contact agreement
+then proves the global v increment bounds.
+
+At f=0 the class has B=0 and h=0 identically. The guard is
+g=(c-1)y+(1+3c beta k_beta)yw>=0, so U0=0 and the pair root is selected
+everywhere. No positive u derivative is asserted at this endpoint.
+This proves preservation of the entire closed class on K.
+
+### Uniform contraction and actual continuation
+
+For e=d_u(h1,h2),
+
+    |h1(beta K)-h2(beta K)|/beta<=e K1.
+
+Monotone clipped-root comparison and(N10) give
+
+    |z_h1-z_h2|
+       <=e u[a/3+(4a/3)f/(M-C theta)]/(M-C theta).
+
+Using(C9), the metric contraction is at most
+
+    (4/3+O(theta))
+       [a/3+(4a/3)f/(M-C theta)]/(M-C theta)+C beta
+       =q(M)+O(theta)<=4/5.
+
+The positive-part correction costs only O(beta)e in this VALUE comparison;
+no u-derivative estimate without the f factor is used. Banach's theorem
+produces the unique fixed graph.
+
+At the fixed point the pair's player2 output is T_beta(beta K), dominating
+its Quit endpoint, and the triple equation gives beta W=T_beta(beta K).
+Players1 and3 satisfy their exact indifference equations. At contact the
+roots and outputs coincide. The selected roots are continuous, their
+outer caps contract by C beta, and every hazard is O(u+v). Passive0's
+small-hazard guard and uniformly geometric tails therefore give a continuous
+positive axis S_beta=p+O(u+v), with common constants.
+
+The graph satisfies 0<=T-Psi<=Bu<=Cfu and its extra triple hazard is O(fu).
+Thus it joins the exact pair producer at a=3. Finally c>1 and T>=u/3+v
+give the shared macro's strict endpoint bound
+D_macro-aU_macro/3-cV_macro<D_macro-V_macro<0. A bounded pair slack gives
+the opposite sign. Section8 verifies the continuous ribbon/Miranda return
+and finite behavioral consumer with one common UE threshold on K.
+
+### The exact pair quadrant and the full vertical join
+
+For a>=3,c>=1, the exact pair surface Psi_beta itself supplies a local
+producer. Its guard from(C8) is
+
+    g=(c-1)y+(a/3-1)w+(1+k_beta ac beta)yw>=0.
+
+Identity(C6) preserves the surface. The outer output(a beta w,c beta y)
+contracts by C beta uniformly on every bounded parameter set, while hazards
+are O(u+v). The passive guard and continuous axis have the same uniform
+bounds as before. The macro entry is strictly negative since
+D_macro-aU_macro/3-cV_macro<=D_macro-U_macro<0. This is a direct uniform
+producer on compact subsets of the closed pair quadrant.
+
+Fix a compact c interval[c_-,c_+] contained in(1,infinity). Choose eta>0
+with3-eta>0. The entire closed left band
+[3-eta,3]x[c_-,c_+] lies in(N0), so the dynamic-region theorem gives one
+threshold. The right band[3,3+eta]x[c_-,c_+] is in the pair quadrant.
+Their minimum threshold gives(R1) throughout this upper c interval.
+
+For an arbitrary compact positive c interval, let epsilon0 be the corner
+radius. Apply the lower-c result of Sections4--5 to
+[c_-,min(c_+,1-epsilon0/2)] when nonempty, the just-proved upper result to
+[max(c_-,1+epsilon0/2),c_+] when nonempty, and use the corner box for the
+middle. Ignore empty pieces. The intervals overlap and cover the original
+interval. Take the minimum
+of the positive a-widths, beta thresholds and core radii, and the maximum
+of the core bounds. This proves the full vertical theorem(R1). As in the
+horizontal cover, only input-continuity for each fixed table is needed;
+a jointly continuous selection across parameter overlaps is not asserted.
+
+Every point with0<a<3,c>1 now has an open neighborhood with a common
+threshold, without dividing at the upper neutral wall2a=3c. The compact-cover
+argument below uses these actual uniform neighborhoods; a mere union of
+pointwise thresholds would not suffice.
+
+## 8. Actual return, uniform constants, and full behavioral deviations
 
 The cited frozen export's return geometry is independent of a,c at beta0.
 It consists of a pair13 macro with spectator slack sigma, a direct macro
@@ -1169,7 +1482,7 @@ Its physical ribbon has two opposite strict return signs, a fixed positive
 opponents' absorption lower bound x per loop, and strict quiet0 guards.
 The positive-beta charts depend continuously on a,c,beta, with perturbation
 bounds uniform on bounded parameter sets once a finite slack bound M is fixed.
-Each of the parameter sets(C1),(R1),(R2) is bounded.
+Each fixed parameter set(C1),(R1),(R2), or compact K in(N0), is bounded.
 
 At the fixed diffuse endpoint, put
 
@@ -1189,6 +1502,9 @@ obeys the common strict bound
 
     E_beta=D-T_beta(a beta U,c beta V)/beta
           <=D-aU/3-cV<0.
+
+For a compact subset of(N0), c>1 gives the same uniform margin through
+D-aU/3-cV<D-V<0. The exact pair quadrant uses D-aU/3-cV<=D-U<0.
 
 For the two-sided band, c>=c_->0 and a>=3-eta. The second identity gives
 
@@ -1218,7 +1534,7 @@ uniformly on the full ribbon, with P in a fixed positive compact interval.
 It preserves the two strict return signs. The graph-entry signs just proved
 supply the other two faces. The frozen export's two-dimensional
 intermediate-value argument therefore produces an actual simultaneous
-return and graph entrance for every raw table in any of the three uniform regions.
+return and graph entrance for every raw table in any of the stated uniform regions.
 It needs no C1 axis, normalized graph limit, or continuous selection of
 return roots. Fix one returned loop for each game before choosing accuracy.
 
@@ -1246,26 +1562,105 @@ arbitrary stopping laws and Never. Signed singleton levels cancel exactly
 on sure absorption. For a word of length L and reward bound M_r, the
 finite-horizon comparison error is at most2M_r L/(x H) at horizon H.
 Choosing N and the mesh for each accuracy, then H sufficiently large,
-proves the fixed-target uniform-equilibrium conclusion. This proves all three
-raw-table theorems, rather than leaving a continuation or profile supplied.
+proves the fixed-target uniform-equilibrium conclusion. This proves the four
+raw-table statements, rather than leaving a continuation or profile supplied.
 
-## 8. Scope and the next uniformity question
+## 9. Every compact positive ratio set for the original additive calibration
 
-Pointwise existence of beta0(a,c)>0 does not imply the uniform theorems above.
-The corner result covers arbitrary beta-dependent ratio paths converging
-to(3,1). The two-sided band excludes deterioration caused by either approach
-to a=3 with c in a fixed compact subset of(0,1), including the unbounded
-right-side sheet count. The third theorem supplies a common threshold across
-c=1 for every fixed compact positive a interval, including intervals
-that cross3. These claims do not give
-a common threshold as c tends0, as ratios grow unbounded, or on every
-positive ratio rectangle crossing other joins.
+The following corollary has a narrower raw scope than Sections1--8. Define
+the original sixty-entry calibration by ell_i=1 and the displayed Gamma,
+with
 
-The concrete next question is to obtain one produced threshold on every
-compact subset of positive(a,c), including remaining regime boundaries such
-as2a=3c away from the neighborhoods treated here. Such a general uniformity
-theorem is not assumed, and it would still not supply a uniform threshold
-as ratios approach0 or grow without bound.
+    Z_i(A)=sum_(j in A) Gamma_ij whenever i is not in A,
+
+on every nonempty passive coalition. For every proper nonsingleton coalition
+containing its owner, take the four participant rows to be
+
+    (beta,a beta,beta,c beta),
+
+and set the native grand reward vector to
+
+    (10,-2,-beta,-1).
+
+Original absorbing rewards are r_i(A)=1+Z_i(A); live and Never remain zero.
+No entries in this calibration are left free. It satisfies the raw scope of
+each local theorem above when beta is small, and it also satisfies the
+stronger passive/additional-participant hypotheses of the older strict-cone
+result. This explicit common calibration is essential to the synthesis.
+
+**Compact-ratio theorem.** For every compact K contained in(0,infinity)^2
+there is beta_K>0 such that every game in this calibration with(a,c) in K
+and0<beta<beta_K has a uniform-equilibrium payoff.
+
+Here are the exact incoming results used, with their scopes kept distinct:
+
+- [CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM.md](../exports/CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM.md)
+  has compact-uniform thresholds on the open region L={a>3,0<c<1}.
+- [THREE_DIFFUSE_FLOWS_UNEQUAL_PREMIUM_UNIFORM_EQUILIBRIUM.md](../exports/THREE_DIFFUSE_FLOWS_UNEQUAL_PREMIUM_UNIFORM_EQUILIBRIUM.md)
+  has compact-uniform thresholds on0<=a<3,0<c<=1 with
+  Delta(a,c)=21c-6+8a(19c+1)>=0.
+- [UNEQUAL_PREMIUM_CONTRACTION_UNIFORM_EQUILIBRIUM.md](../exports/UNEQUAL_PREMIUM_CONTRACTION_UNIFORM_EQUILIBRIUM.md)
+  has compact-uniform thresholds on the strict cone
+  a>0,0<c<5/9,8a<15(1-c). It requires all additive passive rewards and
+  the homogeneous proper participant rows, including entries containing0.
+  Its larger restrictions are why this corollary does not claim the free
+  coordinates of the newer packets.
+
+We verify that every point of the positive ratio plane has an OPEN
+neighborhood with one threshold, rather than assuming that pointwise
+thresholds admit a common lower bound.
+
+If c=1, theorem(R2), applied to a small compact a interval about the point,
+supplies a neighborhood with a common threshold. If a=3, theorem(R1),
+applied to a small compact positive c interval, does the same. These
+statements cover their intersection and provide actual neighborhoods on
+both sides of the interfaces.
+
+Away from those interfaces, use the following strict open regions:
+
+1. If a>3,c>1, take a compact small neighborhood inside the pair quadrant
+   and use its direct uniform producer from Section7.
+2. If a>3,c<1, take a compact small neighborhood inside L.
+3. If a<3,c>1, the point is in the INTERIOR of(N0), so the dynamic
+   theorem gives a compact neighborhood throughout this entire region.
+4. If a<3,c<1 and Delta>0, take a compact small neighborhood in that
+   strict lower-diffuse region. If Delta<=0, then c<2/7 and a<=3/4.
+   Thus c<5/9 and
+
+       8a<=6<75/7<15(1-c).
+
+   The point is strictly inside the old cone, including every point where
+   Delta=0. This supplies the required open overlap at that boundary.
+
+Each neighborhood carries a common positive threshold from its stated
+compact-uniform producer. Cover the given compact K by finitely many such
+open neighborhoods and take the minimum of those thresholds and1. Every
+parameter in K belongs to at least one neighborhood, and beta below this
+minimum meets its producer's hypotheses. All tables are in the exact common
+calibration just specified. This proves the compact-ratio theorem without
+assuming continuity of any choice of producer or target across the cover.
+
+## 10. Scope and the remaining ratio degenerations
+
+The local broad-scope theorems now give uniform horizontal and vertical
+joins for every compact positive interval, and the dynamic region covers
+the entire strip0<a<=3,c>1. The finite-cover
+conclusion for ALL compact positive ratio sets is asserted only for the
+original additive calibration in Section9. It is not silently promoted to
+the newer packets' free-coordinate raw scope.
+
+For example, suppose a sequence of games in that calibration has
+beta_n tending to0 and none of the games has UE. Then(a_n,c_n) must leave
+every compact subset of(0,infinity)^2: infinitely many points in one such
+compact set would eventually have beta_n below its positive threshold.
+After passing to a subsequence, at least one of a_n,c_n must approach0 or
+grow without bound. This is a necessary condition for such a counterexample
+sequence, not a reduction of every game to a sequence of this form.
+
+No common threshold as ratios degenerate, no existence claim at all premium
+scales, and no arbitrary-table Fin4 closure follows. The next concrete
+question is whether one of these ratio degenerations admits a uniform
+producer after a suitable change of scale.
 
 Semantic declarations inspected for the consumer are
 `quittingUniformEquilibriumPayoffConjecture` in

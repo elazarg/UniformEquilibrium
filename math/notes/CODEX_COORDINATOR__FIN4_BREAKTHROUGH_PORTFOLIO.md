@@ -99,48 +99,51 @@ artifact reviews are
 [here](../feedback/CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM__BY_CODEX_COLLAR_ADVERSARY.md)
 and [here](../feedback/CROSSED_PREMIUM_HYBRID_DIFFUSE_FLOW_UNIFORM_EQUILIBRIUM__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
 
-Together the accepted results now cover EVERY fixed positive premium ratio
-on the original homogeneous/additive calibration:
+The internal [uniform-core theorem](CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md)
+now gives the stronger uniform conclusion on the original additive calibration:
 
-    for every a,c>0 there is beta0(a,c)>0 such that
-    0<beta<beta0 implies UE for premiums(a beta,beta,c beta).
+    for every compact K contained in (0,infinity)^2 there is beta_K>0
+    such that every (a,c) in K and 0<beta<beta_K gives UE
+    for core premiums (a beta,beta,c beta).
 
-The exhaustive case split is short. For a<3,c<=1, use the lower-strip union
-proved above. For a<3,c>1, use U when 2a<3c; otherwise c<2 and the earlier
-closed wedge applies. For a>=3,c<1, use L or B. For a>=3,c>=1, the earlier
-pair theorem applies: its two quiet-player inequalities reduce to
-`beta<=a beta/3` and `beta<=c beta`, and its remaining bounds hold at small
-scale. This union is asserted for the original calibration, without
-transferring the freer coordinate scope of one branch to another.
+This uses the fully specified original sixty-entry calibration: singleton
+levels1, Gamma as above, all passive rewards additive, all proper
+participant rows (beta,a beta,beta,c beta), and native grand vector
+(10,-2,-beta,-1). It does not transfer the newer packets' free-coordinate
+scope to the older strict-cone theorem used in the cover.
 
-The crossed export's threshold is uniform on compact subsets of U, L and
-B separately. The internal [uniform-core theorem](CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY.md)
-now proves common thresholds through three joins:
+The local results retain the freer seven-passive-entry scope. They give
+two-sided bands across a=3 for every compact positive c interval and across
+c=1 for every compact positive a interval. A new dynamic graph works
+uniformly on compact subsets of
 
-- one closed box around the corner (a,c)=(3,1);
-- a two-sided band around a=3 for each compact c-interval in (0,1);
-- a two-sided band around c=1 for every compact positive a-interval.
+    0<a<=3, c>1.
 
-The corner and upper c=1 constructions allow a pair root to return to
-triple play. The latter's weighted graph transform has limiting contraction
-factor `18a/(3+2a)^2<=3/4`. At a=3, one cone-order estimate controls every
-inverse sheet uniformly even when the number of sheets diverges. Exact
-solo-player axes give the parameter factors needed on the other sides.
-Above a=3, scaling the shrinking triple region by (1-c)/c gives analytic
-maps at c=1 and a uniformly finite sheet count. A finite cover by the
-lower-a, corner and upper-a constructions gives the full horizontal result.
-The common return and behavioral consumer then give actual UE thresholds;
-the result does not merely bound supplied continuations. The complete
-internal artifact has independent reviews
+One producer covers this entire strip, including the neutral wall 2a=3c
+and the a=3 boundary. Keeping the same candidate slope in a derivative's
+numerator and denominator, then choosing the slope bounds jointly,
+removes the earlier parameter restrictions. Retaining each factor 3-a
+keeps the proof uniform at a=3. The graph transform has contraction below
+4/5 and allows pair/triple switchbacks.
+The other joins use exact solo-player axes, scaled finite sheets, and a
+cone-order comparison when the number of sheets diverges.
+
+Every positive ratio point consequently has an open neighborhood with a
+common threshold. A finite cover proves the compact-ratio theorem, using
+the lower diffuse/strict-cone overlap, the full upper strip, L, and the
+exact pair quadrant. All strategy and return data are produced;
+the finite-flow consumer prices unrestricted behavioral deviations. The
+complete internal artifact has independent reviews
 [here](../feedback/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY__BY_CODEX_COLLAR_ADVERSARY.md)
 and [here](../feedback/CODEX_UNIFORM_JOINS__PHYSICAL_CORE_UNIFORMITY__BY_CODEX_LOCAL_COLLAR_REVIEW.md).
 
-This still does not give a uniform threshold on every positive ratio
-rectangle or for all three independently small premiums. The neutral join
-2a=3c and degenerate ratios require further control. No explicit numerical
-threshold is asserted.
-Arbitrary singleton matrices and participant rewards, and the global
-minimum obligations below, remain open.
+Thus a counterexample sequence in that calibration with beta tending to
+zero must leave every compact positive ratio set. For any fixed bound on
+the ratio of largest to smallest core premium, sufficiently small premiums
+are covered uniformly. Degenerating ratios, a uniform threshold for the
+entire positive three-premium cube, and arbitrary signed tables remain
+open. No explicit numerical threshold or reduction of arbitrary games to
+this calibration is asserted.
 
 The [nine-independent-premium theorem](../exports/NINE_INDEPENDENT_CORE_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
 removes the equality of a player's three core participant rewards on an
