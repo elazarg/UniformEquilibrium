@@ -13,6 +13,50 @@ sources. An exported mathematical proof is not a new Lean theorem.
 
 ## Constructed equilibrium classes
 
+The [weighted collision-dominance theorem](../exports/WEIGHTED_COLLISION_DOMINANCE_UNIFORM_EQUILIBRIUM.md)
+replaces separate large-reward rays by a uniform region with any number of
+favorable coordinates, including different coalition sizes and passive
+recipients. Choose signed positive columns of an active principal inverse
+whose outside images are positive. With collision coordinate scale
+`|Z_i(D)|^(1/(|D|-1))`, let G be the largest favorable scale and B the
+largest unfavorable scale. Explicit constants give stationary UE whenever
+`G>=L0, B<=cG`. The full behavioral consumer and every strategic witness
+are supplied. Constants are uniform on compact sets satisfying the strict
+singleton tests; singular singleton limits remain outside this statement.
+
+In Fin4 there are at most43 support/recipient-subset tests. Their successful
+regions can be made disjoint by taking the first successful test, leaving
+an explicit unresolved complement. Thus a counterexample with G large
+must have a competing unfavorable coordinate of comparable weighted scale
+for EVERY applicable test. The complete separating family has two growing
+coordinates of sizes L^2 and L^3 and lies outside all compared single-pole
+boxes. Proper active sets also handle selected mixed columns of the full
+inverse. Two final-artifact reviews are
+[here](../feedback/WEIGHTED_COLLISION_DOMINANCE_UNIFORM_EQUILIBRIUM__BY_TOPOLOGY.md)
+and [here](../feedback/WEIGHTED_COLLISION_DOMINANCE_UNIFORM_EQUILIBRIUM__BY_BEST_RESPONSE.md).
+This is a new raw existence class; it does not remove all stationary-free
+sources or close either global-minimum obligation.
+
+The [negative-pair outer dichotomy](../exports/NEGATIVE_PAIR_OUTER_DICHOTOMY_UNIFORM_EQUILIBRIUM.md)
+closes both signs and the equality boundary of the formerly obstructing
+outside inverse weight W2 within its displayed singleton geometry. It
+requires Gamma10<0, a positive-inverse child023, positive determinant and
+a strict inverse column0. One scalar quadratic produces the new return;
+an exact switch joins it to the old return when W2=0. It retains the ten
+arbitrary finite core remainders, 21 free joining entries, seven row0 caps
+and arbitrary own levels. Every sufficiently large K relative to 1+|p|
+is covered on its stated negative-p region. This is a complete geometry
+branch, not all matrices with a cyclic child.
+
+The former failed-return control is now inside this theorem. Its complete
+completion at p=-1,u=10 has no stationary equilibrium and no sure-owner
+root for every K>=100: the retained exact checker verifies1002/359 nodes.
+The final reviews are
+[here](../feedback/NEGATIVE_PAIR_OUTER_DICHOTOMY_UNIFORM_EQUILIBRIUM__BY_COVERAGE.md)
+and [here](../feedback/NEGATIVE_PAIR_OUTER_DICHOTOMY_UNIFORM_EQUILIBRIUM__BY_BEST_RESPONSE.md).
+A positive-Gamma10 control still fails both return choices, so changing
+that sign is a substantive remaining obligation.
+
 The [explicit singleton-chamber theorem](../exports/EXPLICIT_SINGLETON_CHAMBER_UNIFORM_EQUILIBRIUM.md)
 replaces local coefficient restrictions by eight singleton signs and three
 explicit rational inequalities. Ten core collision entries are arbitrary
@@ -35,8 +79,10 @@ for every `K>=100,p=0`. The canonical checker verifies the ray with
 and [here](../feedback/EXPLICIT_SINGLETON_CHAMBER_UNIFORM_EQUILIBRIUM__BY_BEST_RESPONSE.md).
 This is additional raw-table coverage, not a new global-minimum reduction.
 It does not contain the older neighborhood's negative-u perturbations.
-An exact singleton matrix outside the new chamber under every admissible
+An exact singleton matrix outside that chamber under every admissible
 labeling is included in the packet; its outer-return inequality fails.
+The complementary return theorem above now handles that matrix with its
+stated collision conditions.
 
 The [central positive-wedge theorem](../exports/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
 covers `K>=C, 0<=p<=beta0 K` on the reference signed family, for some finite
