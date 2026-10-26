@@ -22,6 +22,15 @@ excludes every stationary support and sure-root pattern for all K>=100,
 verified by `--uniform-k 0 10`. The singleton chamber itself is not exhaustive,
 and both global-minimum cases remain open.
 
+The [central positive-wedge packet](../exports/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
+adds `K>=C, 0<=p<=beta0 K` on the reference signed family, with existential
+finite C and positive beta0. Uniform backward-iterate estimates and an exact
+all-length pair guard supply the complete fixed-target behavioral consumer.
+Both independent whole-proof reviews are linked in the source map. The
+canonical `--uniform-k 1` certificate excludes every stationary support and
+sure-root pattern on `p=1,K>=100`. The intervals between the central wedges
+and outer cones, and the arbitrary-game minimum cases, remain open.
+
 The [robust central negative-wedge packet](../exports/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
 proves UE for `p<=0, K>=C(1+|p|/6)`, for one finite existential C and one
 fixed neighborhood of the other 26 nontrivial coefficients. Uniform finite

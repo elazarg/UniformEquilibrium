@@ -38,6 +38,26 @@ It does not contain the older neighborhood's negative-u perturbations.
 An exact singleton matrix outside the new chamber under every admissible
 labeling is included in the packet; its outer-return inequality fails.
 
+The [central positive-wedge theorem](../exports/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
+covers `K>=C, 0<=p<=beta0 K` on the reference signed family, for some finite
+C and positive beta0. Both constants are existential. This permits unbounded
+positive p; it does not extend all the preceding theorem's coefficient
+freedoms to positive p. Its backward map has a fixed line and two contracting
+directions, including a negative eigenvalue. Uniform estimates with the
+correct variable-dependent contraction rate construct every sufficiently long
+core, while exact deletion joins consecutive lengths. An exact inequality
+prices every finite pair prefix, leaving one vanishing entrance error.
+The target remains fixed before the approximation and mesh.
+
+Both full independent reviews are
+[here](../feedback/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM__BY_COVERAGE.md)
+and [here](../feedback/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM__BY_ADVERSARY.md).
+The separating ray `p=1,K>=100` has no stationary equilibrium or actual sure
+root; the canonical checker proves this with `--uniform-k 1`. It reaches the
+new theorem above any value of its unknown threshold. The regions between
+the central wedges and the earlier outer cones remain unclosed, as do both
+arbitrary-game global-minimum cases.
+
 The [robust central negative-wedge theorem](../exports/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
 adds one finite constant `C>=100` and one fixed coefficient neighborhood
 covering every `p<=0, K>=C(1+|p|/6)`. The other 26 nontrivial displayed
@@ -51,10 +71,10 @@ Its independent whole-artifact reviews are
 and [here](../feedback/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM__BY_STATIONARY_GENERAL.md).
 The canonical completion has no stationary equilibrium and no actual sure
 root for EVERY `K>=100,p=0`; the exact checker now proves this whole ray,
-not just isolated values. It therefore separates the new class regardless
+not just isolated values. It therefore separates the class regardless
 of the uncomputed threshold. It adds coverage beyond the scalar family and
-both cones below; the positive central region and arbitrary-game minimum cases
-remain open.
+both cones below; the positive central region now has the separate result
+above, while the arbitrary-game minimum cases remain open.
 
 The [boundary inverse-column theorem](../exports/BOUNDARY_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md)
 extends the large-reward stationary producer beyond strictly positive inverse
