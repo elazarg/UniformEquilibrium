@@ -1,7 +1,8 @@
 """Exact stationary and sure-root exclusions for a rational quitting table.
 Standard library only. Native table columns are coalition masks 0,...,15;
 original nonempty rewards are 1+Z, while live/Never remains zero.
-An optional rational CLI argument sets Z_2({1,2}); its default is zero.
+Optional rational CLI arguments set p=Z_2({1,2}) and K=-Z_1({1,2});
+their defaults are zero and 100.
 """
 from fractions import Fraction as Q
 from itertools import product
@@ -9,11 +10,14 @@ from math import comb, lcm
 import sys
 
 pair_premium = Q(0)
+pair_cost = Q(100)
 if __name__ == '__main__':
- if len(sys.argv) > 2:
-  raise SystemExit('usage: SIGNED_FIN4_STATIONARY_CHECK.py [rational_pair_premium]')
- if len(sys.argv) == 2:
+ if len(sys.argv) > 3:
+  raise SystemExit('usage: SIGNED_FIN4_STATIONARY_CHECK.py [p] [K]')
+ if len(sys.argv) >= 2:
   pair_premium = Q(sys.argv[1])
+ if len(sys.argv) == 3:
+  pair_cost = Q(sys.argv[2])
 Z = [
  [0,0,3,0,-1,0,-12,-13,3,-3,2,-7,-6,-7,-8,-5],
  [0,2,0,-1,1,5,-100,6,-3,3,-100,8,9,-8,11,-9],
@@ -21,6 +25,7 @@ Z = [
  [0,-1,-2,-12,1,7,-6,11,0,1,0,-10,-100,Q(15,2),1,Q(21,2)],
 ]
 Z[2][6] = pair_premium
+Z[1][6] = -pair_cost
 Z = [[Q(x) for x in row] for row in Z]
 G = [[Z[i][1 << j] for j in range(4)] for i in range(4)]
 
@@ -146,8 +151,8 @@ def exclude(pat,polynomials=F):
 
 if __name__=='__main__':
  total=sum(exclude(pat) for pat in product((0,1,2),repeat=4) if any(pat))
- if pair_premium==0:assert total==978,total
- print(f'EXACT RATIONAL PASS: p={pair_premium}; all 80 nonzero supports excluded; {total} nodes')
+ if pair_premium==0 and pair_cost==100:assert total==978,total
+ print(f'EXACT RATIONAL PASS: K={pair_cost}, p={pair_premium}; all 80 nonzero supports excluded; {total} nodes')
  roots=sum(exclude(pat,ROOT) for pat in product((0,1,2),repeat=4) if 1 in pat)
- if pair_premium==0:assert roots==369,roots
- print(f'EXACT RATIONAL PASS: p={pair_premium}; all 65 sure-root patterns excluded; {roots} nodes')
+ if pair_premium==0 and pair_cost==100:assert roots==369,roots
+ print(f'EXACT RATIONAL PASS: K={pair_cost}, p={pair_premium}; all 65 sure-root patterns excluded; {roots} nodes')

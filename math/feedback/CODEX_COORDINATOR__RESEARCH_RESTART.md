@@ -11,6 +11,15 @@ for the exact three minimum problems, canonical proofs, and method
 obstructions. The map is the working entry point; this file does not
 repeat its mathematics or retain a chronological activity log.
 
+The [two-premium packet](../exports/UNBOUNDED_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
+adds two unbounded regions with `Z1(12)=-K` and `Z2(12)=p`:
+`K>=100, p>=2K`, and `K>=0, p<=-max(200,2K)`. The entire regions have exact
+arithmetic certificates and complete fixed-target behavioral consumers.
+Two full independent reviews are linked in the source map. The separating
+completions `(200,400)` and `(150,-300)` exclude every stationary support
+and actual sure-root pattern. This extends the fixed `K=100` family;
+the remaining parameter plane and both global-minimum cases remain open.
+
 The [signed collision-parameter packet](../exports/SIGNED_COLLISION_PARAMETER_UNIFORM_EQUILIBRIUM.md)
 now covers EVERY real `p=Z2(12)`, with31 other displayed native entries
 fixed, seven row0 upper bounds, all21 other nonsingleton entries involving

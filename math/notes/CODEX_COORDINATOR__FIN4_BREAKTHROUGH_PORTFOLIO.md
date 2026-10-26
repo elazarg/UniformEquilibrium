@@ -13,6 +13,24 @@ sources. An exported mathematical proof is not a new Lean theorem.
 
 ## Constructed equilibrium classes
 
+The [two-premium theorem](../exports/UNBOUNDED_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
+extends the signed collision family to `Z1(12)=-K, Z2(12)=p` in both regions
+`K>=100, p>=2K` and `K>=0, p<=-max(200,2K)`. Both coordinates vary
+independently subject to these inequalities, with 30 other displayed native
+entries fixed and the same seven upper bounds, 21 free joining entries and
+arbitrary own-singleton levels. A finite pair approximation handles the
+positive region; three exact core roots handle the negative region. Two
+compact rational interval checkers certify the entire regions without
+stored numerical payloads. The full behavioral proof fixes the target
+before accuracy. Independent whole-artifact reviews are
+[here](../feedback/UNBOUNDED_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_CONE_REVIEW_ONE.md)
+and [here](../feedback/UNBOUNDED_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_CONE_REVIEW_TWO.md).
+Exact completions at `(K,p)=(200,400)` and `(150,-300)` defeat all stationary
+supports and all actual sure-root patterns and cannot be relabeled or
+positively rescaled into the preceding `K=100` family. The two cones leave
+the rest of the parameter plane open; they do not settle either global
+minimum case or arbitrary Fin4.
+
 The [signed collision-parameter theorem](../exports/SIGNED_COLLISION_PARAMETER_UNIFORM_EQUILIBRIUM.md)
 removes the restriction `Z2(12)=0` completely: that reward may be ANY real
 number. It keeps the other31 displayed native entries fixed, requires only
