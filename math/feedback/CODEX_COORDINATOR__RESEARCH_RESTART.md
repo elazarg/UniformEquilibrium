@@ -11,6 +11,15 @@ for the exact three minimum problems, canonical proofs, and method
 obstructions. The map is the working entry point; this file does not
 repeat its mathematics or retain a chronological activity log.
 
+The [boundary inverse-column packet](../exports/BOUNDARY_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md)
+adds a general large-reward stationary producer. A matrix condition supplies
+complementary hazards at the zero entries of a nonnegative inverse column.
+The theorem persists on an open singleton neighborhood, including mixed-sign
+selected columns, and allows a growing box of other rewards. Both whole-proof
+reviews are linked in the source map. On the signed-family singleton matrix
+this covers sufficiently large positive `Z1(12)` with arbitrary bounded other
+collision rewards. It does not resolve either global-minimum case.
+
 The [two-premium packet](../exports/UNBOUNDED_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
 adds two unbounded regions with `Z1(12)=-K` and `Z2(12)=p`:
 `K>=100, p>=2K`, and `K>=0, p<=-max(200,2K)`. The entire regions have exact

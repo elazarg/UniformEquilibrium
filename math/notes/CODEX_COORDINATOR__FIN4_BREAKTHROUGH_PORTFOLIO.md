@@ -13,6 +13,24 @@ sources. An exported mathematical proof is not a new Lean theorem.
 
 ## Constructed equilibrium classes
 
+The [boundary inverse-column theorem](../exports/BOUNDARY_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md)
+extends the large-reward stationary producer beyond strictly positive inverse
+columns. For a signed nonnegative column, it solves the positive coordinates
+and supplies the remaining complementary hazards when the relevant inverse
+block has a strictly semimonotone inverse; a P-matrix is a finite sufficient
+test. In Fin4 the new boundary has one zero coordinate and requires a
+positive inverse diagonal there. The producer works for arbitrary bounded
+completions, a growing box of other rewards, and an open neighborhood of
+singleton entries, including mixed-sign selected inverse columns. All
+strategic witnesses and the fixed target are produced. Both full reviews are
+[here](../feedback/BOUNDARY_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM__BY_COLUMN_REVIEW_ONE.md)
+and [here](../feedback/BOUNDARY_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM__BY_JACKPOT_BOUNDARY_REVIEW.md).
+Its explicit four-player ray excludes every sure-owner root, every stated
+child-debt selection, and the compared complete raw selectors. This supplies
+a general stationary existence class; it does not eliminate the remaining
+stationary-free arbitrary-table sources. No numerical large-reward threshold
+is asserted.
+
 The [two-premium theorem](../exports/UNBOUNDED_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
 extends the signed collision family to `Z1(12)=-K, Z2(12)=p` in both regions
 `K>=100, p>=2K` and `K>=0, p<=-max(200,2K)`. Both coordinates vary
