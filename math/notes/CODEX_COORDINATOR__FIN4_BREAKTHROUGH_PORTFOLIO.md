@@ -13,6 +13,24 @@ sources. An exported mathematical proof is not a new Lean theorem.
 
 ## Constructed equilibrium classes
 
+The [robust central negative-wedge theorem](../exports/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
+adds one finite constant `C>=100` and one fixed coefficient neighborhood
+covering every `p<=0, K>=C(1+|p|/6)`. The other 26 nontrivial displayed
+coefficients vary independently in that neighborhood, while the seven row0
+upper bounds, 21 free joining entries and arbitrary own levels retain their
+scope. The constants are existential. The new mechanism is a uniform
+construction of arbitrarily long finite cores and exact joining of consecutive
+length branches, with the entire behavioral and fixed-target consumer proved.
+Its independent whole-artifact reviews are
+[here](../feedback/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM__BY_ORBIT_REVIEW.md)
+and [here](../feedback/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM__BY_STATIONARY_GENERAL.md).
+The canonical completion has no stationary equilibrium and no actual sure
+root for EVERY `K>=100,p=0`; the exact checker now proves this whole ray,
+not just isolated values. It therefore separates the new class regardless
+of the uncomputed threshold. It adds coverage beyond the scalar family and
+both cones below; the positive central region and arbitrary-game minimum cases
+remain open.
+
 The [boundary inverse-column theorem](../exports/BOUNDARY_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md)
 extends the large-reward stationary producer beyond strictly positive inverse
 columns. For a signed nonnegative column, it solves the positive coordinates

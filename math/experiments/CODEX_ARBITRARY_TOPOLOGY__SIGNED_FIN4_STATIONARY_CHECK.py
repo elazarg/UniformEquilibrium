@@ -3,6 +3,7 @@ Standard library only. Native table columns are coalition masks 0,...,15;
 original nonempty rewards are 1+Z, while live/Never remains zero.
 Optional rational CLI arguments set p=Z_2({1,2}) and K=-Z_1({1,2});
 their defaults are zero and 100.
+Alternatively --uniform-k proves both exclusions for every K>=100 at p=0.
 """
 from fractions import Fraction as Q
 from itertools import product
@@ -11,13 +12,16 @@ import sys
 
 pair_premium = Q(0)
 pair_cost = Q(100)
+uniform_k = False
 if __name__ == '__main__':
- if len(sys.argv) > 3:
-  raise SystemExit('usage: SIGNED_FIN4_STATIONARY_CHECK.py [p] [K]')
- if len(sys.argv) >= 2:
-  pair_premium = Q(sys.argv[1])
- if len(sys.argv) == 3:
-  pair_cost = Q(sys.argv[2])
+ args = sys.argv[1:]
+ if args == ['--uniform-k']:
+  uniform_k = True
+ else:
+  if len(args)>2 or any(a.startswith('--') for a in args):
+   raise SystemExit('usage: SIGNED_FIN4_STATIONARY_CHECK.py [p] [K] | --uniform-k')
+  if args:pair_premium = Q(args[0])
+  if len(args)==2:pair_cost = Q(args[1])
 Z = [
  [0,0,3,0,-1,0,-12,-13,3,-3,2,-7,-6,-7,-8,-5],
  [0,2,0,-1,1,5,-100,6,-3,3,-100,8,9,-8,11,-9],
@@ -79,12 +83,20 @@ def restrict(p,pat,free):
  return clean(out)
 
 def exclude(pat,polynomials=F):
+ if uniform_k and polynomials is F and pat[0]==0 and pat[2]==2 and (pat[1]!=0 or pat[3]!=0):
+  return 1 # F2>0: Q2=w(3-y)>=0, P2=-2y-w+2yw<0.
+ # Increasing K decreases row1 by a nonnegative multiple of
+ # (1-q0)q2(1-q3), with an additional factor (1-H1) for F.
+ # A formerly active/sure row therefore requires its baseline value >=0;
+ # a quiet row imposes no useful baseline inequality.
+ relaxed=uniform_k and pat[2]!=0 and pat[0]!=1 and pat[3]!=1
  free=[i for i in range(4) if pat[i]==2];d=len(free)
  ps=[restrict(p,pat,free) for p in polynomials]
  tags=['eq' if v==2 else 'le' if v==0 else 'ge' for v in pat]
+ if relaxed:tags[1]='ignore' if pat[1]==0 else 'ge'
  if not d:
   vals=[p.get((),Q(0)) for p in ps]
-  assert any(v>0 if t=='le' else v<0 for v,t in zip(vals,tags))
+  assert any(v>0 if t=='le' else v<0 if t=='ge' else v!=0 if t=='eq' else False for v,t in zip(vals,tags))
   return 1
  if d==1 and 1 not in pat:
   j=free[0]
@@ -94,6 +106,9 @@ def exclude(pat,polynomials=F):
  if d>=2:
   A=[[G[i][j] for j in free] for i in free];V=inverse(A)
   if 1 not in pat:
+   if relaxed and 1 in free:
+    # V*ps=-q+V*R>=0 still gives q<=V*R and the same origin bound.
+    assert all(row[free.index(1)]>=0 for row in V),(pat,V)
    for ii,i in enumerate(free):
     assert ps[i].get((0,)*d,Q(0))==0
     for j in range(d):
@@ -104,12 +119,14 @@ def exclude(pat,polynomials=F):
    if not K:return 1
    E=1
    while Q(1,2**E)>=1/K:E+=1
-  extra=[]
+  extra=[];etags=[]
   for row in V:
    p={}
    for c,j in zip(row,free):p=add(p,scale(ps[j],c))
    extra.append(p)
-  ps+=extra;tags+=['eq']*d
+   v=row[free.index(1)] if relaxed and 1 in free else Q(0)
+   etags.append('ge' if v>0 else 'le' if v<0 else 'eq')
+  ps+=extra;tags+=etags
  inds=list(product(range(3),repeat=d));loc={a:i for i,a in enumerate(inds)};size=len(inds)
  Bs=[]
  for p in ps:
@@ -134,7 +151,7 @@ def exclude(pat,polynomials=F):
  stack=[(Bs,(0,)*d,(0,)*d)];nodes=0
  while stack:
   bs,ks,ds=stack.pop();nodes+=1
-  if any((min(r)>0 or max(r)<0) if t=='eq' else min(r)>0 if t=='le' else max(r)<0 for r,t in zip(bs,tags)):continue
+  if any((min(r)>0 or max(r)<0) if t=='eq' else min(r)>0 if t=='le' else max(r)<0 if t=='ge' else False for r,t in zip(bs,tags)):continue
   if E is not None and all(ds[i]>=E and ks[i]+1<=2**(ds[i]-E) for i in range(d)):continue
   assert nodes<=1000000 and max(ds)<=35, ('UNRESOLVED',pat,ks,ds)
   axis=min(range(d),key=lambda i:ds[i]);left=[];right=[]
@@ -151,8 +168,9 @@ def exclude(pat,polynomials=F):
 
 if __name__=='__main__':
  total=sum(exclude(pat) for pat in product((0,1,2),repeat=4) if any(pat))
- if pair_premium==0 and pair_cost==100:assert total==978,total
- print(f'EXACT RATIONAL PASS: K={pair_cost}, p={pair_premium}; all 80 nonzero supports excluded; {total} nodes')
+ if pair_premium==0 and pair_cost==100:assert total==(862 if uniform_k else 978),total
+ scope='every K>=100, p=0' if uniform_k else f'K={pair_cost}, p={pair_premium}'
+ print(f'EXACT RATIONAL PASS: {scope}; all 80 nonzero supports excluded; {total} nodes')
  roots=sum(exclude(pat,ROOT) for pat in product((0,1,2),repeat=4) if 1 in pat)
  if pair_premium==0 and pair_cost==100:assert roots==369,roots
- print(f'EXACT RATIONAL PASS: K={pair_cost}, p={pair_premium}; all 65 sure-root patterns excluded; {roots} nodes')
+ print(f'EXACT RATIONAL PASS: {scope}; all 65 sure-root patterns excluded; {roots} nodes')

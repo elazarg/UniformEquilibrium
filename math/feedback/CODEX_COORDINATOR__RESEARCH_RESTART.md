@@ -11,6 +11,17 @@ for the exact three minimum problems, canonical proofs, and method
 obstructions. The map is the working entry point; this file does not
 repeat its mathematics or retain a chronological activity log.
 
+The [robust central negative-wedge packet](../exports/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
+proves UE for `p<=0, K>=C(1+|p|/6)`, for one finite existential C and one
+fixed neighborhood of the other 26 nontrivial coefficients. Uniform finite
+orbit estimates and exact support-boundary deletion cover all sufficiently
+large K, including arbitrarily long cores. Both complete independent reviews
+are linked in the source map. The canonical completion excludes every
+stationary support and every actual sure-root pattern for ALL `K>=100,p=0`;
+the retained checker proves this with `--uniform-k`. This supplies new
+nonstationary examples beyond any value of the uncomputed C. Arbitrary Fin4
+and both global-minimum cases remain open.
+
 The [boundary inverse-column packet](../exports/BOUNDARY_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md)
 adds a general large-reward stationary producer. A matrix condition supplies
 complementary hazards at the zero entries of a nonnegative inverse column.
