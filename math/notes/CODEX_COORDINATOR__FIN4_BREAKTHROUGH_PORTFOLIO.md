@@ -11,6 +11,47 @@ an arbitrary-table producer or exhibited an unrestricted counterexample.
 The checked theorem boundary is in `docs/FRONTIER.md` and the named Lean
 sources. An exported mathematical proof is not a new Lean theorem.
 
+## An explicit partition of the remaining work
+
+The [residual partition](CODEX_COORDINATOR__FIN4_RESIDUAL_PARTITION.md)
+organizes generic singleton matrices into ten pointed observer sign
+templates. For fixed observer magnitudes, the remaining tests are affine
+inequalities on a two-dimensional outside row. Child counts0/1/2 and
+positive full inverse-column counts1/2/3/4 refine those same polygons.
+The normalization is matrix algebra; it is not a transformation of the
+original game or its collision rewards.
+
+The no-child, one-pivot branch has exactly one sign pattern up to
+permutation, four strict polynomial inequalities and four remaining generic
+sign subcases. Its entire sign orbit, with any number of pivots, has the
+simpler exact criterion R>0 and det Gamma>0; three cofactor signs specify
+all additional pivots, and all eight combinations occur. A small exact
+matrix has no cyclic positive-inverse child and only one positive full
+column, so neither choosing another pivot nor choosing a cyclic child is
+a universal exit. The one-pivot branch has exactly ten applicable signed
+weighted-dominance tests. Across every generic residual matrix, the same
+source argument supplies at least one such positive direction per recipient.
+
+The separate global-source partition has five actual eventual-owner cases
+and five inherited endpoint cap patterns. None is declared solved. The
+two-owner actual case now has explicit necessary interval tests using the
+two quiet observers, including a stronger contact-rate test when late
+pivot-only atoms are impossible. These can remove that branch for a given
+table/pivot; they do not replace the other source obligations. One compact
+exact checker verifies the matrix controls and the interval boundary cases.
+The matrix and source classifications are distinct axes, with no assumed
+incidence exclusions between them.
+
+The [no-child benchmark](CODEX_COORDINATOR__NO_CHILD_FIN4_BENCHMARK.md)
+completes the one-pivot matrix by a four-cycle of joining premiums. At M=14,
+an exact rational certificate excludes all80 nonzero stationary patterns
+and all65 sure-owner root patterns. Complete trap, anchor, ledger, pair and
+the audited scalar-circuit selections also fail. This does not prove that
+the game lacks UE. Under a hypothetical positive absorbing gap, the actual
+source cases I2, I3p and I3o are excluded throughout M>11. Only F and I4
+survive on the actual side; inherited endpoints remain separate. An exact
+admissible last root shows that F requires a global argument.
+
 ## Constructed equilibrium classes
 
 The [weighted collision-dominance theorem](../exports/WEIGHTED_COLLISION_DOMINANCE_UNIFORM_EQUILIBRIUM.md)
@@ -84,25 +125,28 @@ labeling is included in the packet; its outer-return inequality fails.
 The complementary return theorem above now handles that matrix with its
 stated collision conditions.
 
-The [central positive-wedge theorem](../exports/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
-covers `K>=C, 0<=p<=beta0 K` on the reference signed family, for some finite
-C and positive beta0. Both constants are existential. This permits unbounded
-positive p; it does not extend all the preceding theorem's coefficient
-freedoms to positive p. Its backward map has a fixed line and two contracting
-directions, including a negative eigenvalue. Uniform estimates with the
-correct variable-dependent contraction rate construct every sufficiently long
-core, while exact deletion joins consecutive lengths. An exact inequality
-prices every finite pair prefix, leaving one vanishing entrance error.
-The target remains fixed before the approximation and mesh.
+The [all-nonnegative-premium theorem](../exports/ALL_NONNEGATIVE_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
+covers **every `K>=C, p>=0`** in the reference signed family, with one finite
+C independent of p. It also proves the explicit region
+`K>=0, p>=max(1,2K)`. Four overlapping ratio intervals give complete coverage:
+a hybrid core with supports12/23/123 includes p=0 uniformly; a saddle core
+handles the intermediate band; a pure3 return and the outer construction
+cover the rest. All roots, continuations and the fixed-target behavioral
+consumer are produced. No numerical C or coefficient neighborhood is claimed.
+The seven row0 caps, 21 free joining entries and arbitrary own levels retain
+their scope.
 
-Both full independent reviews are
-[here](../feedback/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM__BY_COVERAGE.md)
-and [here](../feedback/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM__BY_ADVERSARY.md).
-The separating ray `p=1,K>=100` has no stationary equilibrium or actual sure
-root; the canonical checker proves this with `--uniform-k 1`. It reaches the
-new theorem above any value of its unknown threshold. The regions between
-the central wedges and the earlier outer cones remain unclosed, as do both
-arbitrary-game global-minimum cases.
+This contains the entire existence class of the
+[central positive-wedge packet](../exports/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM.md),
+whose frozen proof remains available; its coverage is not counted again.
+The separating ray p=K/1000 is beyond the former central spectral mechanism.
+On every K>=100, 0<=p<=K/100, exact certificates exclude all80 stationary
+patterns and all65 sure-root patterns in1046/371 nodes. Complete compared
+raw selectors also fail on the ray. The two fresh whole-artifact reviews are
+[here](../feedback/ALL_NONNEGATIVE_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_FRESH_REVIEW.md)
+and [here](../feedback/ALL_NONNEGATIVE_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_SECOND_FRESH_REVIEW.md).
+Negative intermediate ratios, bounded-K positive tables outside the explicit
+cone, and both arbitrary-game global-minimum cases remain open.
 
 The [robust central negative-wedge theorem](../exports/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
 adds one finite constant `C>=100` and one fixed coefficient neighborhood
